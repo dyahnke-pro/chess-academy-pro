@@ -51343,5 +51343,188 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-kings-gambit-endgame",
+    "openingId": "kings-gambit",
+    "criticalPositionFen": "4R3/ppk2r2/2p5/3P2P1/2P2pp1/1P6/P5P1/5K2 b - - 0 43",
+    "title": "King's Gambit ENDGAME — two passers, one rook (Berg vs Grandelius)",
+    "overview": "Berg–Grandelius 2015 shows the reward at the far end of the Kieseritzky: an extra pawn in a rook ending. White owns a queenside majority that becomes a d-passer, plus the far-advanced g-pawn — two passed pawns on opposite wings, and Black's lone rook cannot blockade both. R+P endings of this shape arise in 27% of the Kieseritzky games that simplify; the conversion technique is pure rook-behind-the-passer.",
+    "pawnBreaks": [
+      "cxd5 — recapture creates the d5 runner"
+    ],
+    "pieceManeuvers": [
+      "Rd8 then Rg8 — the rook shuttles between both passers",
+      "g6 — march the g-pawn behind the rook"
+    ],
+    "strategicThemes": [
+      "Two passed pawns on opposite wings",
+      "Rook behind the passed pawn"
+    ],
+    "endgameTransitions": [
+      "Opposite-wing passers overload the lone rook"
+    ],
+    "playableLines": [
+      {
+        "fen": "4R3/ppk2r2/2p5/3P2P1/2P2pp1/1P6/P5P1/5K2 b - - 0 43",
+        "moves": [
+          "cxd5",
+          "cxd5",
+          "Kd6",
+          "Rd8+",
+          "Kc7",
+          "Rg8",
+          "Kd6",
+          "g6",
+          "Rd7",
+          "Rf8"
+        ],
+        "annotations": [
+          "Black snatches the d5-pawn — but it only opens the file and hands White a runner after the recapture.",
+          "Recapture. Now the d5-pawn is passed: Black has nothing on the c- or e-file to stop it, and a second front opens.",
+          "Black's king hurries back to blockade the d-pawn before it rolls.",
+          "The rook checks from behind on d8 — the textbook post for a rook escorting a passer — and shoves the king off the blockade square.",
+          "The king steps aside to c7.",
+          "And now the rook swings to the OTHER passer, the g-pawn. One rook cannot shepherd one passed pawn AND stop another on the far wing — that is the whole point.",
+          "The king shuffles back toward the d-pawn, but it can't be in two places.",
+          "The g-pawn marches with the rook behind it. Black's king is on the wrong side of the board.",
+          "Black lashes his rook to the d-pawn and goes fully passive — the only way to hold one passer, at the cost of the other.",
+          "The rook keeps cutting in. Black is paralyzed on both wings and the pawns will simply queen."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "cxd5 — Black grabs a pawn",
+          "cxd5 — recapture, make the runner",
+          "Kd6 — Black blockades",
+          "Rd8+ — rook behind the passer",
+          "Kc7 — king dodges",
+          "Rg8 — swing to the g-pawn",
+          "Kd6 — can't watch both",
+          "g6 — march the passer",
+          "Rd7 — Black goes passive",
+          "Rf8 — keep cutting in"
+        ],
+        "title": "Grandelius is overloaded by two passers",
+        "intro": "An extra pawn becomes two passers on opposite wings — watch one rook fail to hold both.",
+        "sources": [
+          "https://lichess.org/Qn9yHQoH",
+          "https://www.chess.com/openings/Kings-Gambit-Accepted-Kieseritzky-Gambit",
+          "https://en.wikipedia.org/wiki/King%27s_Gambit"
+        ]
+      }
+    ]
   }
 ]
