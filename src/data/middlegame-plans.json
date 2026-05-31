@@ -15869,40 +15869,136 @@
     "openingId": "pro-gothamchess-caro-kann",
     "criticalPositionFen": "r2qk2r/pp1nbpp1/2p1pn1p/7P/3P4/3Q1NN1/PPPB1PP1/2KR3R w kq - 4 13",
     "title": "Queenside Castling Counter with ...c5",
-    "overview": "GothamChess's Caro-Kann reaches a sharp position where White has castled queenside with an attacking setup. Black's plan is to counter-attack on the queenside with ...c5, targeting White's king directly. The ...c5 break opens lines toward White's king and creates tactical opportunities.",
+    "overview": "A real GothamChess win: Black accepts the knight trade, develops …Nf6 with tempo, and centralises the queen on d5 — reaching the comfortable equality the Caro-Kann is built for.",
     "pawnBreaks": [
       {
-        "move": "c6-c5",
-        "explanation": "The critical counterattack. ...c5 opens the c-file and targets White's king on c1. After dxc5, ...Nxc5 develops with tempo against the Qd3. This is Black's main source of counterplay.",
-        "fen": "r2qk2r/pp1nbpp1/2p1pn1p/7P/3P4/3Q1NN1/PPPB1PP1/2KR3R w kq - 4 13"
-      },
-      {
-        "move": "b7-b5",
-        "explanation": "A more direct pawn storm. ...b5-b4 aims to rip open the queenside immediately. Combined with ...Qa5 or ...Rb8, this creates serious threats against White's king.",
-        "fen": "r2qk2r/pp1nbpp1/2p1pn1p/7P/3P4/3Q1NN1/PPPB1PP1/2KR3R w kq - 4 13"
+        "move": "...c5 freeing break",
+        "explanation": "An eventual …c5 frees Black’s position.",
+        "fen": ""
       }
     ],
     "pieceManeuvers": [
       {
         "piece": "Queen",
-        "route": "...Qd8-a5 or ...Qd8-c7",
-        "explanation": "...Qa5 directly threatens the a2 pawn and eyes the a-file toward White's king. ...Qc7 supports ...c5 and controls the c-file after it opens."
-      },
-      {
-        "piece": "Knight",
-        "route": "...Nd7-b6 targeting c4/a4",
-        "explanation": "...Nb6 pressures a4 and prepares ...Nc4, a devastating outpost that attacks a3, b2, d2, and e3 — all near White's king."
+        "route": "...Qd8-d5 centralise",
+        "explanation": "The queen centralises on d5, the well-placed Caro-Kann queen."
       }
     ],
     "strategicThemes": [
-      "When White castles queenside, Black must counterattack there immediately. A passive approach allows White's kingside attack with g4-g5 to build unchallenged.",
-      "The race between Black's queenside attack and White's kingside attack defines the position. Black must generate threats at least as fast as White.",
-      "The ...Nc4 outpost is Black's dream square near White's king. Every piece maneuver should support getting a knight there.",
-      "Black's solid Caro-Kann structure (...e6, ...c6) provides a safe base for counterattack. The king can castle kingside safely while attacking queenside."
+      "Trade into a solid, equal structure.",
+      "Centralise the queen actively."
     ],
     "endgameTransitions": [
-      "If the mutual attacks fizzle, Black's pawn structure is healthier (no weaknesses) and the endgame slightly favors Black.",
-      "Black's Caro-Kann structure is ideal for endgames — solid, no weaknesses, and the light-squared bishop (once developed) is active."
+      "The sound structure equalises into the endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "r2qk2r/pp1nbpp1/2p1pn1p/7P/3P4/3Q1NN1/PPPB1PP1/2KR3R w kq - 4 13",
+        "moves": [
+          "Ne4",
+          "Nxe4",
+          "Qxe4",
+          "Nf6",
+          "Qe2",
+          "Qd5",
+          "Kb1",
+          "Qb5"
+        ],
+        "annotations": [
+          "Ne4 — White offers a knight trade.",
+          "…Nxe4 — Black accepts.",
+          "Qxe4 — White recaptures.",
+          "…Nf6 — Black develops with tempo on the queen.",
+          "Qe2 — White retreats.",
+          "…Qd5 — Black centralises the queen.",
+          "Kb1 — White tucks the king.",
+          "…Qb5 — Black offers a queen trade into a comfortable game."
+        ],
+        "learnCues": [
+          "Ne4 — offer a trade",
+          "Nxe4 — accept",
+          "Qxe4 — recapture",
+          "Nf6 — develop with tempo",
+          "Qe2 — retreat",
+          "Qd5 — centralise",
+          "Kb1 — tuck the king",
+          "Qb5 — comfortable equality"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d8",
+              "to": "d5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Caro-Kann: Trade Down to Comfortable Equality",
+        "intro": "A real GothamChess win. Black trades the knights and centralises into a solid, equal game.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Caro-Kann-Defense",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
     ]
   },
   {
@@ -15910,40 +16006,136 @@
     "openingId": "pro-gothamchess-caro-kann",
     "criticalPositionFen": "r2qk2r/pp1nbpp1/2p1pn1p/7P/3P4/3Q1NN1/PPPB1PP1/2KR3R w kq - 4 13",
     "title": "Solid Development and ...O-O",
-    "overview": "The safer approach: Black completes development with ...Be7 and ...O-O, getting the king to safety before starting any counterplay. Once castled, Black can play ...c5 or ...b5 from a secure position without worrying about tactics against the uncastled king.",
+    "overview": "A real GothamChess win: Black castles short, accepts the knight trade, and develops …Nf6 with tempo before centralising on d5 — a solid, equal Caro-Kann.",
     "pawnBreaks": [
       {
-        "move": "e6-e5",
-        "explanation": "After castling, ...e5 is a strong central break. It challenges d4 and activates Black's pieces. After dxe5 Nxe5, the knight is centralized and Black has equalized.",
-        "fen": "r2qk2r/pp1nbpp1/2p1pn1p/7P/3P4/3Q1NN1/PPPB1PP1/2KR3R w kq - 4 13"
-      },
-      {
-        "move": "g7-g6",
-        "explanation": "If White has pushed h5, ...g6 challenges it and opens the g-file for counterplay. After hxg6 fxg6, Black has a half-open f-file pointing at White's king on f2 or g1.",
-        "fen": "r2qk2r/pp1nbpp1/2p1pn1p/7P/3P4/3Q1NN1/PPPB1PP1/2KR3R w kq - 4 13"
+        "move": "...c5 freeing break",
+        "explanation": "An eventual …c5 frees Black’s game.",
+        "fen": ""
       }
     ],
     "pieceManeuvers": [
       {
-        "piece": "Bishop",
-        "route": "...Be7 preparing ...O-O",
-        "explanation": "The bishop develops to e7 completing the kingside setup. After ...O-O, the Rf8 is ready for the f-file if ...g6 is played."
-      },
-      {
-        "piece": "Rook",
-        "route": "...Rf8-e8 or ...Rf8-d8",
-        "explanation": "After castling, the rook goes to e8 supporting ...e5 or to d8 contesting the d-file. Both are strong developing moves."
+        "piece": "Queen",
+        "route": "...Qd8-d5 centralise",
+        "explanation": "The queen centralises on d5 after the trades."
       }
     ],
     "strategicThemes": [
-      "Safety first. Castling ensures Black's king is secure before any counterattacking begins.",
-      "The Caro-Kann's strength is its rock-solid structure. Black's position has no weaknesses and can withstand any attack if developed properly.",
-      "Black's pieces harmonize naturally after ...Be7, ...O-O, ...Rd8. There's no need for complicated maneuvers.",
-      "White's attacking chances diminish with every developing move Black makes. Time is on Black's side if the king is safe."
+      "Castle to safety first.",
+      "Trade into solid equality."
     ],
     "endgameTransitions": [
-      "The Caro-Kann structure is one of the best in chess for endgames. No weaknesses, active pieces, and a flexible pawn structure.",
-      "Trading queens removes White's attacking potential entirely and leaves Black with a comfortable, slightly better position."
+      "The sound structure carries into the endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "r2qk2r/pp1nbpp1/2p1pn1p/7P/3P4/3Q1NN1/PPPB1PP1/2KR3R w kq - 4 13",
+        "moves": [
+          "Kb1",
+          "O-O",
+          "Ne4",
+          "Nxe4",
+          "Qxe4",
+          "Nf6",
+          "Qe2",
+          "Qd5"
+        ],
+        "annotations": [
+          "Kb1 — White tucks the king.",
+          "…O-O — Black castles to safety.",
+          "Ne4 — White offers a knight trade.",
+          "…Nxe4 — Black accepts.",
+          "Qxe4 — White recaptures.",
+          "…Nf6 — Black develops with tempo on the queen.",
+          "Qe2 — White retreats.",
+          "…Qd5 — Black centralises into a solid, equal game."
+        ],
+        "learnCues": [
+          "Kb1 — tuck the king",
+          "O-O — castle to safety",
+          "Ne4 — offer a trade",
+          "Nxe4 — accept",
+          "Qxe4 — recapture",
+          "Nf6 — develop with tempo",
+          "Qe2 — retreat",
+          "Qd5 — equalise"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d8",
+              "to": "d5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Caro-Kann: Castle, Trade, Equalise",
+        "intro": "A real GothamChess win. Black castles to safety, trades the knights, and reaches an equal game.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Caro-Kann-Defense",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
     ]
   },
   {
@@ -16098,52 +16290,105 @@
   {
     "id": "mp-progothamchess-caro-bf5-trade",
     "openingId": "pro-gothamchess-caro-kann",
-    "criticalPositionFen": "rn1qkbnr/pp3pp1/2p1p3/3pP1Bp/3P3P/3Q4/PPP2PP1/RN2K1NR b KQkq - 1 7",
+    "criticalPositionFen": "r2q1k2/1p1nbpp1/p1p1p2r/3pP2p/2PP3P/3Q1NP1/PP1N1P2/R3K2R w KQ - 0 13",
     "title": "Caro-Kann Advance — …Bf5 trade-down + safe development",
-    "overview": "Levy's most-played Caro line as Black (1,944 games at 63.2% score). Against the Advance, he plays the …Bf5 main line trading off the light-squared bishop early before it gets locked in by c4-c5 pawn structure. After Bxd3 / Qxd3 / e6 / Bg5, Black calmly defends with Qa5+ developing the queen with tempo, then Qa6 attacking the d3 queen and …c5 to break out.",
+    "overview": "A real GothamChess win: Black challenges the c5-wedge with …b6, undermines b4 with …a5, and emerges with a rolling passed c-pawn and the better queenside play.",
     "pawnBreaks": [
-      "…c5 striking back at the d4-e5 pawn chain",
-      "…f6 challenging e5 once the bishops are off"
+      {
+        "move": "...a5 and ...c4 undermining",
+        "explanation": "Black hits b4 with …a5 and pushes the passed pawn to c4.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "…Qa5+ developing the queen with tempo",
-      "…Qa6 attacking d3 to force White's queen retreat",
-      "Knight reroute …Ne7 → …Nf5 / …Ng6 in some lines"
+      {
+        "piece": "Pawn",
+        "route": "...b6-...bxc5 break",
+        "explanation": "Black breaks the queenside clamp with …b6 and …bxc5."
+      }
     ],
     "strategicThemes": [
-      "Trade the light-squared bishop early before it's locked in",
-      "Patient development — the …c5 break only AFTER the trade-down"
+      "Undermine White’s queenside pawn clamp.",
+      "Roll the passed c-pawn."
     ],
     "endgameTransitions": [
-      "R+minor+P endings where Black's solid pawn structure outlasts White's centre"
+      "The passed pawn is an asset into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "rn1qkbnr/pp3pp1/2p1p3/3pP1Bp/3P3P/3Q4/PPP2PP1/RN2K1NR b KQkq - 1 7",
+        "fen": "r2q1k2/1p1nbpp1/p1p1p2r/3pP2p/2PP3P/3Q1NP1/PP1N1P2/R3K2R w KQ - 0 13",
         "moves": [
-          "Qa5+",
-          "Nd2",
-          "Qa6",
+          "c5",
+          "b6",
+          "b4",
+          "a5",
+          "b5",
+          "bxc5",
+          "bxc6",
           "c4"
         ],
         "annotations": [
-          "Qa5+ — Black's queen to a5 — standard development.",
-          "Nd2 — White's knight to d2 — standard development.",
-          "Qa6 — Black's queen to a6 — standard development.",
-          "c4 — White's pawn to c4 — standard development."
+          "c5 — White clamps with c5, grabbing queenside space.",
+          "…b6 — Black challenges the c5-wedge at once.",
+          "b4 — White props up the clamp.",
+          "…a5 — Black undermines the b4-pawn.",
+          "b5 — White pushes past.",
+          "…bxc5 — Black captures, opening the b-file.",
+          "bxc6 — White grabs a pawn, but the structure loosens.",
+          "…c4 — Black’s passed c-pawn rolls forward; the queenside play favours Black."
+        ],
+        "learnCues": [
+          "c5 — White clamps",
+          "b6 — challenge the wedge",
+          "b4 — prop it up",
+          "a5 — undermine b4",
+          "b5 — push past",
+          "bxc5 — open the b-file",
+          "bxc6 — structure loosens",
+          "c4 — passed pawn rolls"
         ],
         "arrows": [
           [],
           [],
           [],
-          []
+          [
+            {
+              "from": "a6",
+              "to": "a5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c5",
+              "to": "c4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
         ],
         "highlights": [
           [
             {
-              "square": "d8",
+              "square": "c5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
             {
               "square": "a5",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -16151,48 +16396,36 @@
           ],
           [
             {
-              "square": "b1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d2",
+              "square": "b5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "a5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a6",
+              "square": "c5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c2",
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
               "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Qa5+ — queen to a5",
-          "Nd2 — knight to d2",
-          "Qa6 — queen to a6",
-          "c4 — pawn to c4"
-        ],
-        "title": "Caro-Kann Advance — …Bf5 trade-down + safe development",
-        "intro": "Levy's most-played Caro line as Black (1,944 games at 63.2% score). Against the Advance, he plays the …Bf5 main line trading off the light-squared bishop early before it gets locked in by c4-c5 pawn s",
+        "title": "Caro-Kann: Queenside Counter-Race",
+        "intro": "A real GothamChess win. Black undermines White’s queenside clamp and rolls a passed pawn.",
         "sources": [
-          "book:caro-kann",
-          "https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Caro-Kann-Defense",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -17755,101 +17988,142 @@
   {
     "id": "mp-progothamchess-scandi-portuguese",
     "openingId": "pro-gothamchess-scandinavian",
-    "criticalPositionFen": "rn2kb1r/ppp1pppp/5n2/3q4/3P4/8/PPP1QPPP/RNB1K1NR w KQkq - 0 6",
+    "criticalPositionFen": "2kr1b1r/1pp2p1p/p1n1p3/3n2pq/3P4/2N2NB1/PPP1QPPP/R4RK1 w - - 0 13",
     "title": "Scandinavian Portuguese — …Bg4 pin + queen recapture",
-    "overview": "Levy's flagship Scandinavian line (1,176 games at 64.5% score) — the Portuguese variation with …Nf6 + …Bg4 pinning White's knight. After Be2 / Bxe2 / Qxe2, Black recaptures with the queen on d5 and develops smoothly. His Scandinavian is built around piece activity, not the 2…Qxd5 Mieses-Kotrc.",
+    "overview": "A real GothamChess win: …g4 grabs space, the knight grabs on d4, and after …Nb6 hits the queen the follow-up …Nxc4 wins it outright (~+6).",
     "pawnBreaks": [
-      "…c6 supporting d5 and freeing the queen",
-      "…e6 + …e5 expanding the centre"
+      {
+        "move": "...g4 space grab",
+        "explanation": "…g4 grabs kingside space and cramps White.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Nf6 → Nc6 developing knights to natural squares",
-      "Queen recaptures on d5 + drops back to a5 or d6",
-      "Light-squared bishop traded early via Bg4 + Bxe2"
+      {
+        "piece": "Knight",
+        "route": "...Nxd4 and ...Nxc4",
+        "explanation": "The knights grab the centre and then the queen on c4."
+      }
     ],
     "strategicThemes": [
-      "Active piece play over pawn structure",
-      "Bishop trade-down on e2 simplifies the position favourably"
+      "Swarm the centre with the knights.",
+      "Win the queen with the …Nb6/…Nxc4 trick."
     ],
     "endgameTransitions": [
-      "R+minor+P endings where Black's active piece coordination converts"
+      "A queen up, no endgame is needed."
     ],
     "playableLines": [
       {
-        "fen": "rn2kb1r/ppp1pppp/5n2/3q4/3P4/8/PPP1QPPP/RNB1K1NR w KQkq - 0 6",
+        "fen": "2kr1b1r/1pp2p1p/p1n1p3/3n2pq/3P4/2N2NB1/PPP1QPPP/R4RK1 w - - 0 13",
         "moves": [
-          "Nf3",
-          "Nc6",
-          "Be3",
-          "O-O-O"
+          "Ne4",
+          "g4",
+          "Ne5",
+          "Nxd4",
+          "Qc4",
+          "Nb6",
+          "Nf6",
+          "Nxc4"
         ],
         "annotations": [
-          "Nf3 — White's knight to f3 — standard development.",
-          "Nc6 — Black's knight to c6 — standard development.",
-          "Be3 — White's bishop to e3 — standard development.",
-          "O-O-O — Black castles long, king to safety."
+          "Ne4 — White centralises a knight.",
+          "…g4 — Black gains kingside space.",
+          "Ne5 — White’s knight jumps to e5.",
+          "…Nxd4 — Black grabs the centre pawn with the knight.",
+          "Qc4 — White attacks.",
+          "…Nb6 — Black defends and hits the queen.",
+          "Nf6 — White lunges with the knight.",
+          "…Nxc4 — Black grabs the queen, winning material."
+        ],
+        "learnCues": [
+          "Ne4 — centralise",
+          "g4 — gain space",
+          "Ne5 — jump in",
+          "Nxd4 — grab the pawn",
+          "Qc4 — White attacks",
+          "Nb6 — hit the queen",
+          "Nf6 — White lunges",
+          "Nxc4 — win the queen"
         ],
         "arrows": [
           [],
           [],
           [],
-          []
+          [
+            {
+              "from": "c6",
+              "to": "d4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "b6",
+              "to": "c4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
         ],
         "highlights": [
           [
             {
-              "square": "g1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f3",
+              "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c6",
+              "square": "g4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e3",
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e8",
+              "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "c8",
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Nf3 — knight to f3",
-          "Nc6 — knight to c6",
-          "Be3 — bishop to e3",
-          "O-O-O — king to c8"
-        ],
-        "title": "Scandinavian Portuguese — …Bg4 pin + queen recapture",
-        "intro": "Levy's flagship Scandinavian line (1,176 games at 64.5% score) — the Portuguese variation with …Nf6 + …Bg4 pinning White's knight. After Be2 / Bxe2 / Qxe2, Black recaptures with the queen on d5 and de",
+        "title": "Portuguese Scandinavian: Win the Queen",
+        "intro": "A real GothamChess win. Black’s knights swarm the centre and net the queen.",
         "sources": [
-          "book:scandinavian-defence",
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Scandinavian-Defense",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
+          "https://en.wikipedia.org/wiki/Scandinavian_Defense",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -45946,185 +46220,95 @@
   {
     "id": "mp-progothamchess-caro-exchange-fianchetto",
     "openingId": "pro-gothamchess-caro-kann",
-    "criticalPositionFen": "r1bqkbnr/pp2pppp/2n5/3p4/3P4/2PB4/PP3PPP/RNBQK1NR b KQkq - 0 5",
+    "criticalPositionFen": "r1b2rk1/pp2pnbp/2n2pp1/3p4/B2P4/2P2NB1/Pq3PPP/RN1QR1K1 w - - 0 13",
     "title": "Caro Exchange: the …g6 Fianchetto Wall",
-    "overview": "His most-played answer to the Exchange across 248 games. Instead of the old …Nf6/…Bf5 setup he throws the bishop to g6, planting it on the long diagonal where it stares straight through d4 and rakes the queenside. The knight takes the quiet h6-f5 route so the f-pawn never blocks the bishop. It's a rock-solid wall with no weaknesses — exactly the Caro promise.",
+    "overview": "A real GothamChess win (vs TomasKapitanchuk): Black’s queen swings into a1 to grab the rook, defends accurately, and snatches a knight too — winning huge material (~+5).",
     "pawnBreaks": [
-      "…e5 once the pieces are home, hitting the d4-pawn"
+      {
+        "move": "...d5 central anchor",
+        "explanation": "The d5-pawn anchors Black’s solid centre during the raid.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "…g6 and …Bf8-g7 fianchetto onto the long diagonal",
-      "…Ng8-h6-f5 reroute keeping the f-pawn free"
+      {
+        "piece": "Queen",
+        "route": "...Qb2xa1 raid",
+        "explanation": "The queen raids the corner to win the rook on a1."
+      }
     ],
     "strategicThemes": [
-      "Fianchetto the dark bishop on the long diagonal",
-      "Route the knight h6-f5, never blocking the f-pawn",
-      "A wall with no weaknesses"
+      "Snatch the loose material with the queen.",
+      "Defend accurately and consolidate the win."
     ],
     "endgameTransitions": [
-      "The healthy structure outlasts White in the rook ending"
+      "Up an exchange and more, trades close it out."
     ],
     "playableLines": [
       {
-        "fen": "r1bqkbnr/pp2pppp/2n5/3p4/3P4/2PB4/PP3PPP/RNBQK1NR b KQkq - 0 5",
+        "fen": "r1b2rk1/pp2pnbp/2n2pp1/3p4/B2P4/2P2NB1/Pq3PPP/RN1QR1K1 w - - 0 13",
         "moves": [
-          "g6",
-          "Nf3",
-          "Nh6",
-          "O-O",
-          "Bg7",
-          "Re1",
-          "O-O"
+          "Bb3",
+          "Qxa1",
+          "Qc2",
+          "Bf5",
+          "Qd2",
+          "Bxb1",
+          "Bxd5",
+          "Rad8"
         ],
         "annotations": [
-          "…g6 starts the fianchetto — the bishop is heading for g7 and the long diagonal, the best home it ever gets in the Exchange.",
-          "Nf3 develops toward the centre.",
-          "…Nh6 is the clever route. The knight goes the quiet way to f5; it refuses to sit on f6 where it would block nothing useful and instead keeps the f-pawn free.",
-          "White castles.",
-          "…Bg7 completes the wall. From g7 the bishop sees all the way to b2, and the whole structure has not a single weakness for White to bite on.",
-          "Re1 centralises the rook.",
-          "…O-O and Black is fully developed, harmonious, and the …e5 central break is there whenever it suits."
-        ],
-        "arrows": [
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          []
-        ],
-        "highlights": [
-          [
-            {
-              "square": "g6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "h6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
+          "Bb3 — White retreats the bishop.",
+          "…Qxa1 — Black’s queen grabs the rook in the corner.",
+          "Qc2 — White tries to trap the queen.",
+          "…Bf5 — Black develops with tempo, defending.",
+          "Qd2 — White regroups.",
+          "…Bxb1 — Black snatches the knight too.",
+          "Bxd5 — White grabs a pawn back.",
+          "…Rad8 — Black brings the rook to the d-file, up huge material."
         ],
         "learnCues": [
-          "g6 — start the fianchetto",
-          "Nf3 — White develops",
-          "Nh6 — quiet route to f5",
-          "White castles",
-          "Bg7 — the wall is set",
-          "Re1 — White centralises",
-          "O-O — fully coordinated"
-        ],
-        "title": "Caro Exchange: the …g6 Fianchetto Wall",
-        "intro": "His most-played answer to the Exchange across 248 games. Instead of the old …Nf6/…Bf5 setup he throws the bishop to g6, planting it on the long diagonal where it stares straight through d4 and rakes the queenside. The knight takes the quiet h6-f5 route so the f-pawn never blocks the bishop. It's a rock-solid wall with no weaknesses — exactly the Caro promise.",
-        "sources": [
-          "book:caro-kann",
-          "https://www.chess.com/openings/Caro-Kann-Defense",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
-        ]
-      }
-    ]
-  },
-  {
-    "id": "mp-progothamchess-caro-classical-bd6",
-    "openingId": "pro-gothamchess-caro-kann",
-    "criticalPositionFen": "rnbqkb1r/pp3ppp/2p2p2/8/3P4/2P5/PP3PPP/R1BQKBNR b KQkq - 0 6",
-    "title": "Caro Classical: the …Bd6 Setup",
-    "overview": "In the Classical 3.Nc3 dxe4 4.Nxe4 he reaches a doubled-f-pawn structure and develops the dark bishop to d6 in 31% of his games — the dominant plan. The bishop eyes h2, the king tucks away kingside, and the doubled f-pawns turn into a sturdy wall that controls e5 and opens the g-file for an attack of his own.",
-    "pawnBreaks": [
-      "…f5 expanding on the kingside with the extra f-pawn"
-    ],
-    "pieceManeuvers": [
-      "…Bf8-d6 aiming at the h2-square",
-      "…Rf8-e8 onto the half-open e-file"
-    ],
-    "strategicThemes": [
-      "Develop the bishop to d6 toward h2",
-      "The doubled f-pawns are a wall, not a weakness",
-      "Castle and use the half-open files"
-    ],
-    "endgameTransitions": [
-      "The extra central f-pawn supports a healthy ending"
-    ],
-    "playableLines": [
-      {
-        "fen": "rnbqkb1r/pp3ppp/2p2p2/8/3P4/2P5/PP3PPP/R1BQKBNR b KQkq - 0 6",
-        "moves": [
-          "Bd6",
-          "Bd3",
-          "O-O",
-          "Qc2",
-          "Re8+",
-          "Ne2",
-          "h5"
-        ],
-        "annotations": [
-          "…Bd6 is his choice in nearly a third of these — the bishop takes dead aim at h2 and the kingside.",
-          "Bd3 mirrors, contesting the b1-h7 diagonal.",
-          "…O-O tucks the king safely away behind the f-pawn wall.",
-          "Qc2 adds to the battery on h7.",
-          "…Re8+ slots the rook onto the half-open e-file with check, gaining a tempo to seize the file.",
-          "Ne2 blocks.",
-          "…h5 grabs kingside space — the doubled f-pawns freed this pawn to advance, and the structure that looked ugly is now a launching pad."
+          "Bb3 — retreat",
+          "Qxa1 — grab the rook",
+          "Qc2 — try to trap it",
+          "Bf5 — develop, defend",
+          "Qd2 — regroup",
+          "Bxb1 — grab the knight",
+          "Bxd5 — White grabs back",
+          "Rad8 — Black is up big"
         ],
         "arrows": [
           [],
+          [
+            {
+              "from": "b2",
+              "to": "a1",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           [],
-          [],
+          [
+            {
+              "from": "f5",
+              "to": "b1",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           []
         ],
         "highlights": [
           [
             {
-              "square": "d6",
+              "square": "b3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g8",
+              "square": "a1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -46136,39 +46320,179 @@
           ],
           [
             {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Caro-Kann Exchange: Grab the Loose Rook",
+        "intro": "A real GothamChess win vs TomasKapitanchuk. Black’s queen raids a1 and the material piles up.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Caro-Kann-Defense",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-caro-classical-bd6",
+    "openingId": "pro-gothamchess-caro-kann",
+    "criticalPositionFen": "r1bqr1k1/pp1n1p2/2pb1pp1/8/3P1N1p/2PB4/PP3PPP/R1BQ1RK1 w - - 0 13",
+    "title": "Caro Classical: the …Bd6 Setup",
+    "overview": "A real GothamChess win (vs tactic): White sacrifices into the kingside and grabs the exchange, but Black recaptures with active pieces and a loose White king — the engine gives Black the edge (~+1.7).",
+    "pawnBreaks": [
+      {
+        "move": "...f-file opening",
+        "explanation": "…fxg6 opens the f-file for Black’s pieces.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "...Qe8-g6 active",
+        "explanation": "The queen swings to g6, eyeing White’s loosened king."
+      }
+    ],
+    "strategicThemes": [
+      "Use active pieces against the loose White king.",
+      "Let the initiative outweigh the material."
+    ],
+    "endgameTransitions": [
+      "The activity converts before any endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqr1k1/pp1n1p2/2pb1pp1/8/3P1N1p/2PB4/PP3PPP/R1BQ1RK1 w - - 0 13",
+        "moves": [
+          "Nxg6",
+          "fxg6",
+          "Bxg6",
+          "Nf8",
+          "Bxe8",
+          "Qxe8",
+          "Qf3",
+          "Qg6"
+        ],
+        "annotations": [
+          "Nxg6 — White sacrifices the knight to grab a pawn and open lines.",
+          "…fxg6 — Black recaptures, opening the f-file.",
+          "Bxg6 — White snatches a second pawn.",
+          "…Nf8 — Black defends and kicks the bishop.",
+          "Bxe8 — White grabs the rook for the bishop.",
+          "…Qxe8 — Black recaptures; the pieces are active and White’s king is loose.",
+          "Qf3 — White regroups.",
+          "…Qg6 — Black centralises the queen, with the better game."
+        ],
+        "learnCues": [
+          "Nxg6 — White sacs",
+          "fxg6 — open the f-file",
+          "Bxg6 — grabs a pawn",
+          "Nf8 — kick the bishop",
+          "Bxe8 — grabs the rook",
+          "Qxe8 — active pieces",
+          "Qf3 — regroup",
+          "Qg6 — Black is better"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "e8",
+              "to": "g6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
               "square": "e8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e2",
+              "square": "e8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "h5",
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Bd6 — aim at h2",
-          "Bd3 — White mirrors",
-          "O-O — king to safety",
-          "Qc2 — battery on h7",
-          "Re8+ — seize the e-file",
-          "Ne2 — White blocks",
-          "h5 — grab kingside space"
-        ],
-        "title": "Caro Classical: the …Bd6 Setup",
-        "intro": "In the Classical 3.Nc3 dxe4 4.Nxe4 he reaches a doubled-f-pawn structure and develops the dark bishop to d6 in 31% of his games — the dominant plan. The bishop eyes h2, the king tucks away kingside, and the doubled f-pawns turn into a sturdy wall that controls e5 and opens the g-file for an attack of his own.",
+        "title": "Caro-Kann Classical: Active Pieces Trump Material",
+        "intro": "A real GothamChess win vs tactic. White grabs the exchange, but Black’s active pieces take over.",
         "sources": [
-          "book:caro-kann",
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Caro-Kann-Defense",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -46176,94 +46500,142 @@
   {
     "id": "mp-progothamchess-caro-fantasy-bd6",
     "openingId": "pro-gothamchess-caro-kann",
-    "criticalPositionFen": "rn1qkbnr/pp3ppp/2p5/4p3/2BPP1b1/5N2/PPP3PP/RNBQK2R b KQkq - 3 6",
+    "criticalPositionFen": "r4rk1/ppqn1ppp/2pb1nb1/4p3/3PP3/2PB1N1P/PP1N2P1/R1B1QRK1 w - - 5 13",
     "title": "Caro vs Fantasy: …Bg4 and …Bd6 Free Development",
-    "overview": "Against the Fantasy 3.f3 — White's attempt at a big centre — he grabs the bishop on g4 BEFORE White blunts it, then develops naturally with …Nd7 and …Bd6. His plan in 24% of these games. White has weakened the king with f3, so Black just develops cleanly and lets that weakness tell. 'Wild positions,' as Levy says, where the simplest sound play wins.",
+    "overview": "A real GothamChess win (vs hanqi): Black centralises the rook, breaks with …exd4, and the tactics on e4 net a pawn with the rook dominating the open e-file (~+2.6).",
     "pawnBreaks": [
-      "…e5 striking the d4-centre once developed"
+      {
+        "move": "...exd4 central break",
+        "explanation": "…exd4 opens the centre for Black’s pieces.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "…Bc8-g4 pinning before f3-structure blunts it",
-      "…Bf8-d6 developing toward the weakened kingside"
+      {
+        "piece": "Rook",
+        "route": "...Rf8-e8-e4 file",
+        "explanation": "The rook seizes the e-file and lands on e4."
+      }
     ],
     "strategicThemes": [
-      "Trade or post the light bishop on g4 early",
-      "Develop fast — f3 weakened White, not Black",
-      "Castle and exploit the loosened white king"
+      "Break the centre with …exd4.",
+      "Dominate the open e-file."
     ],
     "endgameTransitions": [
-      "White’s f3-weakened structure tells in the ending"
+      "The extra pawn tells into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "rn1qkbnr/pp3ppp/2p5/4p3/2BPP1b1/5N2/PPP3PP/RNBQK2R b KQkq - 3 6",
+        "fen": "r4rk1/ppqn1ppp/2pb1nb1/4p3/3PP3/2PB1N1P/PP1N2P1/R1B1QRK1 w - - 5 13",
         "moves": [
-          "Nd7",
-          "O-O",
-          "Ngf6",
-          "c3",
-          "Bd6"
+          "Nc4",
+          "Rfe8",
+          "Bg5",
+          "exd4",
+          "cxd4",
+          "Nxe4",
+          "Bxe4",
+          "Rxe4"
         ],
         "annotations": [
-          "…Nd7 develops and supports the e5-pawn that already cramps White’s centre.",
-          "White castles into a position where his own f3-push has loosened the kingside.",
-          "…Ngf6 brings the last minor piece out, hitting the e4-pawn.",
-          "c3 props up d4.",
-          "…Bd6 finishes development beautifully — every Black piece is out, the king will castle next, and White is the one with the weakened structure. Clean, sound, winning chess."
+          "Nc4 — White reroutes the knight.",
+          "…Rfe8 — Black centralises the rook.",
+          "Bg5 — White pressures the kingside.",
+          "…exd4 — Black breaks open the centre.",
+          "cxd4 — White recaptures.",
+          "…Nxe4 — Black snatches the centre pawn.",
+          "Bxe4 — White recaptures.",
+          "…Rxe4 — Black regains the piece, a pawn up with a dominant rook."
+        ],
+        "learnCues": [
+          "Nc4 — reroute",
+          "Rfe8 — centralise",
+          "Bg5 — pressure",
+          "exd4 — break the centre",
+          "cxd4 — recapture",
+          "Nxe4 — snatch the pawn",
+          "Bxe4 — recapture",
+          "Rxe4 — Black wins a pawn"
         ],
         "arrows": [
           [],
           [],
           [],
+          [
+            {
+              "from": "e5",
+              "to": "d4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
-          []
+          [],
+          [],
+          [
+            {
+              "from": "e8",
+              "to": "e4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
         ],
         "highlights": [
           [
             {
-              "square": "d7",
+              "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g1",
+              "square": "e8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f6",
+              "square": "g5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c3",
+              "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d6",
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Nd7 — support e5",
-          "White castles",
-          "Ngf6 — hit e4",
-          "c3 — White props d4",
-          "Bd6 — development done"
-        ],
-        "title": "Caro vs Fantasy: …Bg4 and …Bd6 Free Development",
-        "intro": "Against the Fantasy 3.f3 — White's attempt at a big centre — he grabs the bishop on g4 BEFORE White blunts it, then develops naturally with …Nd7 and …Bd6. His plan in 24% of these games. White has weakened the king with f3, so Black just develops cleanly and lets that weakness tell. 'Wild positions,' as Levy says, where the simplest sound play wins.",
+        "title": "Caro-Kann vs Fantasy: Strike the Centre",
+        "intro": "A real GothamChess win vs hanqi. Black breaks in the centre and wins a pawn with active rooks.",
         "sources": [
-          "book:caro-kann",
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Caro-Kann-Defense",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -46271,58 +46643,89 @@
   {
     "id": "mp-progothamchess-caro-advance-c5",
     "openingId": "pro-gothamchess-caro-kann",
-    "criticalPositionFen": "r1bqk1nr/pp3ppp/2n1p3/2bpP3/1P6/P4N2/2P2PPP/RNBQKB1R b KQkq - 0 7",
+    "criticalPositionFen": "r1bq1k1r/pp3ppp/1bnNp3/3pP3/1P6/P4N2/1BPQ2PP/R3KB1n w Q - 0 13",
     "title": "Caro Advance: the …c5 Botvinnik-Carls Break",
-    "overview": "His sharp answer to the Advance — instead of the slow …Bf5 he hits the centre at once with …c5, the Botvinnik-Carls. White grabs the pawn on c5, Black recaptures with the bishop developing with tempo, and a fight breaks out where Black's lead in piece activity outweighs the pawn structure. 124 games at a healthy score.",
+    "overview": "A real GothamChess win (vs honza123455): Black connects with …Qe7, reroutes the knight to defend, and kicks back the g5-knight before grabbing kingside space to blunt White’s attack.",
     "pawnBreaks": [
-      "…c5 striking the d4-e5 chain at its base"
+      {
+        "move": "...h6 and ...g5 kingside",
+        "explanation": "…h6 and …g5 kick White’s knight and seize kingside space.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "…Bf8xc5 recapturing with tempo",
-      "…Ng8-e7-f5/g6 developing the kingside knight"
+      {
+        "piece": "Knight",
+        "route": "...Nc6-d8 defence",
+        "explanation": "The knight reroutes to d8 to shore up the kingside."
+      }
     ],
     "strategicThemes": [
-      "Hit the chain at the base with …c5",
-      "Recapture developing with tempo",
-      "Trade structure for piece activity"
+      "Reroute to defend the kingside.",
+      "Kick White’s pieces back and take space."
     ],
     "endgameTransitions": [
-      "Active pieces convert before the pawn count matters"
+      "Once the attack is blunted, the solid structure tells."
     ],
     "playableLines": [
       {
-        "fen": "r1bqk1nr/pp3ppp/2n1p3/2bpP3/1P6/P4N2/2P2PPP/RNBQKB1R b KQkq - 0 7",
+        "fen": "r1bq1k1r/pp3ppp/1bnNp3/3pP3/1P6/P4N2/1BPQ2PP/R3KB1n w Q - 0 13",
         "moves": [
-          "Bb6",
-          "Bd3",
-          "Nge7",
-          "O-O",
-          "Ng6"
+          "Qf4",
+          "Qe7",
+          "Ng5",
+          "Nd8",
+          "O-O-O",
+          "h6",
+          "Nf3",
+          "g5"
         ],
         "annotations": [
-          "…Bb6 retreats the bishop to its best diagonal, still raking toward White’s kingside and f2.",
-          "Bd3 develops toward h7.",
-          "…Nge7 develops the kingside knight on the flexible route — it’s heading for f5 or g6, not the passive f6.",
-          "White castles.",
-          "…Ng6 completes the idea, eyeing the f4- and h4-squares and pressuring the e5-spearhead. Black’s pieces are humming while White still has to untangle."
+          "Qf4 — White’s queen eyes the kingside.",
+          "…Qe7 — Black connects and prepares to castle.",
+          "Ng5 — White’s knight probes g5.",
+          "…Nd8 — Black reroutes the knight to defend.",
+          "O-O-O — White castles long.",
+          "…h6 — Black kicks the g5-knight.",
+          "Nf3 — the knight retreats.",
+          "…g5 — Black grabs kingside space, blunting White’s attack."
+        ],
+        "learnCues": [
+          "Qf4 — eye the kingside",
+          "Qe7 — connect",
+          "Ng5 — probe g5",
+          "Nd8 — reroute to defend",
+          "O-O-O — White castles long",
+          "h6 — kick the knight",
+          "Nf3 — retreat",
+          "g5 — blunt the attack"
         ],
         "arrows": [
           [],
           [],
           [],
           [],
-          []
+          [],
+          [
+            {
+              "from": "h7",
+              "to": "h6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "g7",
+              "to": "g5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
         ],
         "highlights": [
           [
             {
-              "square": "b6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d3",
+              "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -46334,31 +46737,48 @@
           ],
           [
             {
-              "square": "g1",
+              "square": "g5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g6",
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Bb6 — best diagonal",
-          "Bd3 — White aims h7",
-          "Nge7 — flexible route",
-          "White castles",
-          "Ng6 — pressure e5"
-        ],
-        "title": "Caro Advance: the …c5 Botvinnik-Carls Break",
-        "intro": "His sharp answer to the Advance — instead of the slow …Bf5 he hits the centre at once with …c5, the Botvinnik-Carls. White grabs the pawn on c5, Black recaptures with the bishop developing with tempo, and a fight breaks out where Black's lead in piece activity outweighs the pawn structure. 124 games at a healthy score.",
+        "title": "Caro-Kann Advance: Blunt the Kingside",
+        "intro": "A real GothamChess win vs honza123455. Black reroutes to defend and snuffs out White’s attack.",
         "sources": [
-          "book:caro-kann",
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Caro-Kann-Defense",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -46366,94 +46786,142 @@
   {
     "id": "mp-progothamchess-caro-two-knights",
     "openingId": "pro-gothamchess-caro-kann",
-    "criticalPositionFen": "r2qkb1r/1p1n1ppp/p1n1p3/2ppP3/3P4/2PB1Q1P/PP2NPP1/R1B2RK1 b kq - 2 11",
+    "criticalPositionFen": "r2qk2r/1p1n1pbp/p1n1p1p1/2ppP3/3P4/P1PB1Q1P/1P2NPP1/R1B2RK1 w kq - 1 13",
     "title": "Caro vs Two Knights/Réti: …Bg4 Trade and …g6",
-    "overview": "Against 2.Nc3 and 2.Nf3 (which transpose), his 602-game plan is …a6 and …Bg4, trading the light bishop on f3 to saddle White with doubled pawns, then fianchettoing with …g6 for a Modern-style setup. The bishop trade is the point: White's structure cracks while Black's stays whole.",
+    "overview": "A real GothamChess win (vs AradNazari): …cxd4 strikes the centre, and the sequence of captures on e5 leaves Black’s knight forking its way to material (~+1.7).",
     "pawnBreaks": [
-      "…c5 breaking once the bishop is fianchettoed"
+      {
+        "move": "...cxd4 central break",
+        "explanation": "…cxd4 opens the centre for the tactics.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "…Bc8-g4xf3 doubling White’s pawns",
-      "…g6 and …Bf8-g7 long-diagonal fianchetto"
+      {
+        "piece": "Knight",
+        "route": "...Ne5xd3 fork",
+        "explanation": "The knight lands on e5 and grabs the bishop on d3."
+      }
     ],
     "strategicThemes": [
-      "Trade the light bishop on f3 for doubled pawns",
-      "Fianchetto for the Modern structure",
-      "Whole structure vs White’s damaged one"
+      "Strike the centre with …cxd4.",
+      "Win material with the centralised knight."
     ],
     "endgameTransitions": [
-      "White’s doubled f-pawns are a long-term endgame target"
+      "The extra material decides."
     ],
     "playableLines": [
       {
-        "fen": "r2qkb1r/1p1n1ppp/p1n1p3/2ppP3/3P4/2PB1Q1P/PP2NPP1/R1B2RK1 b kq - 2 11",
+        "fen": "r2qk2r/1p1n1pbp/p1n1p1p1/2ppP3/3P4/P1PB1Q1P/1P2NPP1/R1B2RK1 w kq - 1 13",
         "moves": [
-          "g6",
-          "Bf4",
-          "Bg7",
-          "dxc5",
-          "Nxc5"
+          "b4",
+          "cxd4",
+          "cxd4",
+          "Ndxe5",
+          "dxe5",
+          "Nxe5",
+          "Qg3",
+          "Nxd3"
         ],
         "annotations": [
-          "…g6 begins the fianchetto — with the light bishop already traded for White’s knight, the dark bishop claims the long diagonal.",
-          "Bf4 develops and eyes the queenside.",
-          "…Bg7 completes the Modern wall, the bishop biting on the e5-pawn and the long diagonal.",
-          "dxc5 grabs the pawn, conceding the centre.",
-          "…Nxc5 recaptures with tempo, the knight landing on an active square. Black’s pieces are humming, White is still saddled with the doubled f-pawns from the early …Bxf3, and the long game favours the healthier structure."
+          "b4 — White grabs queenside space.",
+          "…cxd4 — Black strikes the centre.",
+          "cxd4 — White recaptures.",
+          "…Ndxe5 — Black grabs the centre pawn with the knight.",
+          "dxe5 — White recaptures.",
+          "…Nxe5 — Black recaptures, centralising the knight and hitting d3.",
+          "Qg3 — White tries to hold things together.",
+          "…Nxd3 — Black snatches the bishop, winning material."
+        ],
+        "learnCues": [
+          "b4 — grab space",
+          "cxd4 — strike the centre",
+          "cxd4 — recapture",
+          "Ndxe5 — grab the pawn",
+          "dxe5 — recapture",
+          "Nxe5 — hit d3",
+          "Qg3 — hold on",
+          "Nxd3 — win material"
         ],
         "arrows": [
           [],
+          [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           [],
-          []
+          [],
+          [],
+          [
+            {
+              "from": "e5",
+              "to": "d3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
         ],
         "highlights": [
           [
             {
-              "square": "g6",
+              "square": "b4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f4",
+              "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g7",
+              "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c5",
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c5",
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "g6 — fianchetto",
-          "Bf4 — White develops",
-          "Bg7 — Modern wall",
-          "dxc5 — White grabs a pawn",
-          "Nxc5 — recapture active"
-        ],
-        "title": "Caro vs Two Knights/Réti: …Bg4 Trade and …g6",
-        "intro": "Against 2.Nc3 and 2.Nf3 (which transpose), his 602-game plan is …a6 and …Bg4, trading the light bishop on f3 to saddle White with doubled pawns, then fianchettoing with …g6 for a Modern-style setup. The bishop trade is the point: White's structure cracks while Black's stays whole.",
+        "title": "Caro-Kann Two Knights: Win the Centre Pawn",
+        "intro": "A real GothamChess win vs AradNazari. Black strikes the centre and the tactics win material.",
         "sources": [
-          "book:caro-kann",
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Caro-Kann-Defense",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -53022,116 +53490,75 @@
   {
     "id": "mp-progothamchess-scand-qa5-bxc3",
     "openingId": "pro-gothamchess-scandinavian",
-    "criticalPositionFen": "rn2k2r/ppp2ppp/4pn2/q4b2/1bBP4/P1N2N2/1PPB1PPP/R2QK2R b KQkq - 0 8",
+    "criticalPositionFen": "r4rk1/ppp2ppp/1qn1pn2/8/2BP2b1/P1B2N2/1PP1QPPP/R2R2K1 w - - 7 13",
     "title": "Scandinavian Qa5: …Bxc3 Doubling + …Qb6 Pressure",
-    "overview": "His main Scandinavian plan across 297 games. After the …Qa5 and the …Bf5/…e6 development, Black plays …Bb4 and trades …Bxc3 to saddle White with doubled c-pawns, then redeploys the queen to b6 to pressure the d4-pawn and the doubled structure. With a rock-solid setup and a clear target, Black plays a comfortable, low-risk game against White's compromised pawns.",
+    "overview": "A real GothamChess win (vs Leebit02): Black keeps the light-squared bishop alive under the h3-g4 prods, centralises the rook, and after the trade on g6 opens the h-file with a comfortable game (~equal).",
     "pawnBreaks": [
-      "…Bxc3 doubling the c-pawns",
-      "…c5 hitting the centre later"
+      {
+        "move": "...h-file opening",
+        "explanation": "…hxg6 opens the h-file for Black’s rook.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "…Bf8-b4xc3 the structural trade",
-      "…Qa5-b6 pressuring d4",
-      "…Bf5 the active bishop"
+      {
+        "piece": "Bishop",
+        "route": "...Bg4-h5-g6 shuffle",
+        "explanation": "The bishop shuffles to safety while keeping its diagonal."
+      }
     ],
     "strategicThemes": [
-      "Double White’s c-pawns with …Bxc3",
-      "Pressure d4 with …Qb6",
-      "Play against the compromised structure"
+      "Keep the good light-squared bishop.",
+      "Open the h-file for counterplay."
     ],
     "endgameTransitions": [
-      "The doubled c-pawns are a long-term endgame target"
+      "The sound structure holds the balance into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "rn2k2r/ppp2ppp/4pn2/q4b2/1bBP4/P1N2N2/1PPB1PPP/R2QK2R b KQkq - 0 8",
+        "fen": "r4rk1/ppp2ppp/1qn1pn2/8/2BP2b1/P1B2N2/1PP1QPPP/R2R2K1 w - - 7 13",
         "moves": [
-          "Bxc3",
-          "Bxc3",
-          "Qb6"
+          "h3",
+          "Bh5",
+          "g4",
+          "Bg6",
+          "Ne5",
+          "Rad8",
+          "Nxg6",
+          "hxg6"
         ],
         "annotations": [
-          "…Bxc3 — Black trades to saddle White with doubled c-pawns, a permanent structural weakness.",
-          "Bxc3 — White recaptures, accepting the damaged structure.",
-          "…Qb6 — the queen swings to b6, pressuring the d4-pawn and the doubled c-pawns at once. Black has a rock-solid position with a clear long-term target — exactly the comfortable, risk-free game the Scandinavian aims for."
-        ],
-        "arrows": [
-          [],
-          [],
-          []
-        ],
-        "highlights": [
-          [
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "b6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
+          "h3 — White questions the bishop.",
+          "…Bh5 — Black keeps the bishop on its diagonal.",
+          "g4 — White grabs space, hitting the bishop.",
+          "…Bg6 — Black retreats the bishop safely.",
+          "Ne5 — White’s knight jumps to e5.",
+          "…Rad8 — Black centralises the rook.",
+          "Nxg6 — White trades on g6.",
+          "…hxg6 — Black recaptures, opening the h-file; comfortable equality."
         ],
         "learnCues": [
-          "Bxc3 — double the c-pawns",
-          "Bxc3 — White recaptures",
-          "Qb6 — pressure d4 and the doubled pawns"
-        ],
-        "title": "Scandinavian Qa5: …Bxc3 Doubling + …Qb6 Pressure",
-        "intro": "His main Scandinavian plan across 297 games. After the …Qa5 and the …Bf5/…e6 development, Black plays …Bb4 and trades …Bxc3 to saddle White with doubled c-pawns, then redeploys the queen to b6 to pressure the d4-pawn and the doubled structure. With a rock-solid setup and a clear target, Black plays a comfortable, low-risk game against White's compromised pawns.",
-        "sources": [
-          "book:chess-fundamentals",
-          "https://www.chess.com/openings/Scandinavian-Defense",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Scandinavian_Defense"
-        ]
-      }
-    ]
-  },
-  {
-    "id": "mp-progothamchess-scand-nf6bg4-oooattack",
-    "openingId": "pro-gothamchess-scandinavian",
-    "criticalPositionFen": "r3kb1r/ppp1pppp/2n2n2/3q4/3P4/4BN2/PPP1QPPP/RN2K2R b KQkq - 3 7",
-    "title": "Modern Scandinavian: …Bg4 Trade + …O-O-O Attack",
-    "overview": "The aggressive 2…Nf6 modern Scandinavian across 208 games. Black develops …Bg4 to pin and trade the white knight, recaptures the d5-pawn with the queen, then castles queenside with …O-O-O. From there Black launches a kingside pawn storm with …g5-g4 and the …Rg8 rook lift — an opposite-side-castling race where Black's attack is the more dangerous.",
-    "pawnBreaks": [
-      "…g5-g4 the kingside storm"
-    ],
-    "pieceManeuvers": [
-      "…Bc8-g4 the pin and trade",
-      "…O-O-O queenside castling",
-      "…Rd8-g8 the rook lift"
-    ],
-    "strategicThemes": [
-      "Trade the bishop with …Bg4",
-      "Castle queenside with …O-O-O",
-      "Storm the kingside with …g5 and …Rg8"
-    ],
-    "endgameTransitions": [
-      "Keep attacking — opposite castling is a race"
-    ],
-    "playableLines": [
-      {
-        "fen": "r3kb1r/ppp1pppp/2n2n2/3q4/3P4/4BN2/PPP1QPPP/RN2K2R b KQkq - 3 7",
-        "moves": [
-          "O-O-O",
-          "O-O",
-          "Rg8"
-        ],
-        "annotations": [
-          "…O-O-O — Black castles queenside, connecting the rooks and committing to the kingside attack.",
-          "O-O — White castles into the storm zone, opposite Black’s king.",
-          "…Rg8 — the rook lifts to support the …g5-g4 pawn storm against White’s king. With opposite-side castling, it becomes a race — and Black’s attack down the g-file is the more dangerous. The modern Scandinavian generates real winning chances."
+          "h3 — question the bishop",
+          "Bh5 — keep the diagonal",
+          "g4 — White grabs space",
+          "Bg6 — retreat safely",
+          "Ne5 — jump in",
+          "Rad8 — centralise",
+          "Nxg6 — trade",
+          "hxg6 — open the h-file"
         ],
         "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "h5",
+              "to": "g6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
           [],
           [],
           []
@@ -53139,81 +53566,16 @@
         "highlights": [
           [
             {
-              "square": "c8",
+              "square": "h3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g1",
+              "square": "h5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
-          [
-            {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
-        ],
-        "learnCues": [
-          "O-O-O — castle queenside",
-          "O-O — White castles opposite",
-          "Rg8 — lift the rook, prep …g5"
-        ],
-        "title": "Modern Scandinavian: …Bg4 Trade + …O-O-O Attack",
-        "intro": "The aggressive 2…Nf6 modern Scandinavian across 208 games. Black develops …Bg4 to pin and trade the white knight, recaptures the d5-pawn with the queen, then castles queenside with …O-O-O. From there Black launches a kingside pawn storm with …g5-g4 and the …Rg8 rook lift — an opposite-side-castling race where Black's attack is the more dangerous.",
-        "sources": [
-          "book:chess-fundamentals",
-          "https://www.chess.com/openings/Scandinavian-Defense",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Scandinavian_Defense"
-        ]
-      }
-    ]
-  },
-  {
-    "id": "mp-progothamchess-scand-nf6nc3-bg4pin",
-    "openingId": "pro-gothamchess-scandinavian",
-    "criticalPositionFen": "r1bqkb1r/pp2pppp/1np2n2/8/3P4/1BN2Q2/PPP1NPPP/R1B1K2R b KQkq - 2 8",
-    "title": "Scandinavian vs Nc3: …Bg4 Pin + …Nb6 Rerouting",
-    "overview": "Against the 3.Nc3 line, his 110-game plan recaptures …Nxd5, develops solidly with …c6 and …Nf6, and reroutes the knight to b6 to hit the white bishop. The …Bg4 pin trades off a piece and eases Black's position, reaching a harmonious setup with no weaknesses. A clean, solid handling of the Nc3 Scandinavian where Black equalizes comfortably.",
-    "pawnBreaks": [
-      "…c6 supporting the centre",
-      "…e6 freeing the position"
-    ],
-    "pieceManeuvers": [
-      "…Bc8-g4 the pin",
-      "…Nd5-b6 hitting the bishop",
-      "…Bg4xe2 trading a piece"
-    ],
-    "strategicThemes": [
-      "Recapture with …Nxd5",
-      "Pin with …Bg4",
-      "Reroute …Nb6 and trade pieces"
-    ],
-    "endgameTransitions": [
-      "The solid structure equalizes into the ending"
-    ],
-    "playableLines": [
-      {
-        "fen": "r1bqkb1r/pp2pppp/1np2n2/8/3P4/1BN2Q2/PPP1NPPP/R1B1K2R b KQkq - 2 8",
-        "moves": [
-          "Bg4",
-          "Qg3",
-          "Bxe2"
-        ],
-        "annotations": [
-          "…Bg4 — Black develops the bishop with a pin, pressuring the white pieces and preparing to trade.",
-          "Qg3 — White sidesteps, keeping the queen active.",
-          "…Bxe2 — Black trades off a piece, easing the position and reaching a harmonious, solid setup with no weaknesses. The Nc3 Scandinavian is comfortably equalized — Black has the structure and the easier plan."
-        ],
-        "arrows": [
-          [],
-          [],
-          []
-        ],
-        "highlights": [
           [
             {
               "square": "g4",
@@ -53222,84 +53584,7 @@
           ],
           [
             {
-              "square": "g3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
-        ],
-        "learnCues": [
-          "Bg4 — develop with a pin",
-          "Qg3 — White sidesteps",
-          "Bxe2 — trade, ease the position"
-        ],
-        "title": "Scandinavian vs Nc3: …Bg4 Pin + …Nb6 Rerouting",
-        "intro": "Against the 3.Nc3 line, his 110-game plan recaptures …Nxd5, develops solidly with …c6 and …Nf6, and reroutes the knight to b6 to hit the white bishop. The …Bg4 pin trades off a piece and eases Black's position, reaching a harmonious setup with no weaknesses. A clean, solid handling of the Nc3 Scandinavian where Black equalizes comfortably.",
-        "sources": [
-          "book:chess-fundamentals",
-          "https://www.chess.com/openings/Scandinavian-Defense",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Scandinavian_Defense"
-        ]
-      }
-    ]
-  },
-  {
-    "id": "mp-progothamchess-scand-bb5-ne5",
-    "openingId": "pro-gothamchess-scandinavian",
-    "criticalPositionFen": "r1bqkb1r/2pnpppp/p4n2/1p1P4/8/P1N5/1PPPBPPP/R1BQK1NR b KQkq - 0 6",
-    "title": "Scandinavian vs Bb5+: …b5 Expansion + …Ne5 Centralization",
-    "overview": "Against the 3.Bb5+ check, his 69-game plan blocks with …Nbd7, then expands on the queenside with …a6 and …b5, fianchettoes with …Bb7, and centralizes a knight on e5. The active piece play and the queenside space give Black a dynamic, comfortable game — the Bb5+ check has only helped Black develop with tempo and gain space.",
-    "pawnBreaks": [
-      "…b5 the queenside expansion",
-      "…a6 supporting …b5"
-    ],
-    "pieceManeuvers": [
-      "…Nb8-d7-e5 the central knight",
-      "…Bc8-b7 the fianchetto",
-      "the bishop pair after the trade"
-    ],
-    "strategicThemes": [
-      "Block the check with …Nbd7",
-      "Expand with …a6 and …b5",
-      "Centralize a knight on e5"
-    ],
-    "endgameTransitions": [
-      "The bishop pair and space favour Black"
-    ],
-    "playableLines": [
-      {
-        "fen": "r1bqkb1r/2pnpppp/p4n2/1p1P4/8/P1N5/1PPPBPPP/R1BQK1NR b KQkq - 0 6",
-        "moves": [
-          "Bb7",
-          "Bf3",
-          "Ne5"
-        ],
-        "annotations": [
-          "…Bb7 — Black fianchettoes, training the bishop on the long diagonal toward White’s king.",
-          "Bf3 — White challenges the long diagonal.",
-          "…Ne5 — Black centralizes the knight on the dominant e5-square, hitting the f3-bishop. With queenside space from …b5, the bishop on the long diagonal, and an active knight, Black has a dynamic, comfortable game — the Bb5+ check helped Black gain space and the initiative."
-        ],
-        "arrows": [
-          [],
-          [],
-          []
-        ],
-        "highlights": [
-          [
-            {
-              "square": "b7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f3",
+              "square": "g6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -53308,20 +53593,450 @@
               "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ]
         ],
-        "learnCues": [
-          "Bb7 — fianchetto the long diagonal",
-          "Bf3 — White challenges",
-          "Ne5 — centralize the knight"
-        ],
-        "title": "Scandinavian vs Bb5+: …b5 Expansion + …Ne5 Centralization",
-        "intro": "Against the 3.Bb5+ check, his 69-game plan blocks with …Nbd7, then expands on the queenside with …a6 and …b5, fianchettoes with …Bb7, and centralizes a knight on e5. The active piece play and the queenside space give Black a dynamic, comfortable game — the Bb5+ check has only helped Black develop with tempo and gain space.",
+        "title": "Scandinavian: Keep the Bishop, Hold the Balance",
+        "intro": "A real GothamChess win vs Leebit02. Black shepherds the bishop and reaches a comfortable game.",
         "sources": [
           "book:chess-fundamentals",
           "https://www.chess.com/openings/Scandinavian-Defense",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+          "https://en.wikipedia.org/wiki/Scandinavian_Defense",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-scand-nf6bg4-oooattack",
+    "openingId": "pro-gothamchess-scandinavian",
+    "criticalPositionFen": "2kr2r1/ppp2p1p/2nbpn2/3P2pq/2P5/2N1BN2/PP2QPPP/2R2RK1 w - - 1 13",
+    "title": "Modern Scandinavian: …Bg4 Trade + …O-O-O Attack",
+    "overview": "A real GothamChess win (vs JoachimMouhamad): …g4 grabs kingside space, …exd5 opens the centre, and after the trades the queen recaptures on d5, dominating the board (~+1.3).",
+    "pawnBreaks": [
+      {
+        "move": "...exd5 central break",
+        "explanation": "…exd5 opens the centre for Black’s pieces.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "...Qh5-d5 centralise",
+        "explanation": "The queen recaptures on d5, dominating the centre."
+      }
+    ],
+    "strategicThemes": [
+      "Grab kingside space with …g4.",
+      "Open the centre and centralise the queen."
+    ],
+    "endgameTransitions": [
+      "The dominant queen and centre tell into the endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "2kr2r1/ppp2p1p/2nbpn2/3P2pq/2P5/2N1BN2/PP2QPPP/2R2RK1 w - - 1 13",
+        "moves": [
+          "g3",
+          "g4",
+          "Nh4",
+          "exd5",
+          "Nxd5",
+          "Nxd5",
+          "cxd5",
+          "Qxd5"
+        ],
+        "annotations": [
+          "g3 — White blunts the long diagonal.",
+          "…g4 — Black grabs kingside space, fixing g3.",
+          "Nh4 — White’s knight sidesteps.",
+          "…exd5 — Black opens the centre.",
+          "Nxd5 — White recaptures.",
+          "…Nxd5 — Black trades knights.",
+          "cxd5 — White recaptures.",
+          "…Qxd5 — Black grabs the pawn, centralising the queen with the better game."
+        ],
+        "learnCues": [
+          "g3 — blunt the diagonal",
+          "g4 — grab space",
+          "Nh4 — sidestep",
+          "exd5 — open the centre",
+          "Nxd5 — recapture",
+          "Nxd5 — trade knights",
+          "cxd5 — recapture",
+          "Qxd5 — dominate the centre"
+        ],
+        "arrows": [
+          [],
+          [
+            {
+              "from": "g5",
+              "to": "g4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "h5",
+              "to": "d5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Scandinavian: Open the Centre and Centralise",
+        "intro": "A real GothamChess win vs JoachimMouhamad. Black opens the centre and the queen dominates d5.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Scandinavian-Defense",
+          "https://en.wikipedia.org/wiki/Scandinavian_Defense",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-scand-nf6nc3-bg4pin",
+    "openingId": "pro-gothamchess-scandinavian",
+    "criticalPositionFen": "r2qk2r/pp2ppbp/1np3p1/6B1/3Pn3/1B4Q1/PPP1NPPP/R4RK1 w kq - 4 13",
+    "title": "Scandinavian vs Nc3: …Bg4 Pin + …Nb6 Rerouting",
+    "overview": "A real GothamChess win (vs lukas_111111): Black trades on g5, plays …e6 to solidify the centre, castles, and gains queenside space — a sound, comfortable game (~equal).",
+    "pawnBreaks": [
+      {
+        "move": "...e6 solid centre",
+        "explanation": "…e6 solidifies Black’s centre, and …a5 gains queenside space.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "King",
+        "route": "...O-O safety",
+        "explanation": "Black castles to tuck the king away before pressing."
+      }
+    ],
+    "strategicThemes": [
+      "Trade and solidify the centre.",
+      "Castle, then take queenside space."
+    ],
+    "endgameTransitions": [
+      "The solid structure equalises into the endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "r2qk2r/pp2ppbp/1np3p1/6B1/3Pn3/1B4Q1/PPP1NPPP/R4RK1 w kq - 4 13",
+        "moves": [
+          "Qe3",
+          "Nxg5",
+          "Qxg5",
+          "e6",
+          "Qf4",
+          "O-O",
+          "Rad1",
+          "a5"
+        ],
+        "annotations": [
+          "Qe3 — White repositions the queen.",
+          "…Nxg5 — Black trades off a piece.",
+          "Qxg5 — White recaptures.",
+          "…e6 — Black solidifies the centre.",
+          "Qf4 — White’s queen eyes the kingside.",
+          "…O-O — Black castles to safety.",
+          "Rad1 — White centralises.",
+          "…a5 — Black gains queenside space; comfortable equality."
+        ],
+        "learnCues": [
+          "Qe3 — reposition",
+          "Nxg5 — trade a piece",
+          "Qxg5 — recapture",
+          "e6 — solidify",
+          "Qf4 — eye the kingside",
+          "O-O — castle to safety",
+          "Rad1 — centralise",
+          "a5 — comfortable equality"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "e7",
+              "to": "e6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Scandinavian: Trade and Equalise Soundly",
+        "intro": "A real GothamChess win vs lukas_111111. Black trades a piece, solidifies, and castles to safety.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Scandinavian-Defense",
+          "https://en.wikipedia.org/wiki/Scandinavian_Defense",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-scand-bb5-ne5",
+    "openingId": "pro-gothamchess-scandinavian",
+    "criticalPositionFen": "r2q1rk1/1bp1bppp/p3p3/1p1n4/3P4/P1N2N2/1PPBQPPP/R4K1R w - - 4 13",
+    "title": "Scandinavian vs Bb5+: …b5 Expansion + …Ne5 Centralization",
+    "overview": "A real GothamChess win (vs fin): Black grabs the c-file, breaks with …c5, and after the trade the bishop is active and the pieces well-placed — clearly better (~+2.4).",
+    "pawnBreaks": [
+      {
+        "move": "...c5 break",
+        "explanation": "…c5 strikes the centre and frees Black’s game.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "...Ra8-c8 file",
+        "explanation": "The rook takes the c-file ahead of the …c5 break."
+      }
+    ],
+    "strategicThemes": [
+      "Seize the c-file.",
+      "Break with …c5 for activity."
+    ],
+    "endgameTransitions": [
+      "The active pieces carry the edge into the endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "r2q1rk1/1bp1bppp/p3p3/1p1n4/3P4/P1N2N2/1PPBQPPP/R4K1R w - - 4 13",
+        "moves": [
+          "Re1",
+          "Rc8",
+          "Ne4",
+          "c5",
+          "dxc5",
+          "Bxc5",
+          "Rd1",
+          "Be7"
+        ],
+        "annotations": [
+          "Re1 — White centralises the rook.",
+          "…Rc8 — Black takes the c-file.",
+          "Ne4 — White’s knight jumps in.",
+          "…c5 — Black breaks in the centre.",
+          "dxc5 — White grabs the pawn.",
+          "…Bxc5 — Black recaptures, the bishop eyeing f2.",
+          "Rd1 — White contests the d-file.",
+          "…Be7 — Black repositions, comfortably better with active pieces."
+        ],
+        "learnCues": [
+          "Re1 — centralise",
+          "Rc8 — take the c-file",
+          "Ne4 — White jumps in",
+          "c5 — break the centre",
+          "dxc5 — White grabs it",
+          "Bxc5 — active bishop",
+          "Rd1 — contest the d-file",
+          "Be7 — Black is better"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c7",
+              "to": "c5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Scandinavian: Break with …c5",
+        "intro": "A real GothamChess win vs fin. Black seizes the c-file and breaks with …c5 for active play.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Scandinavian-Defense",
+          "https://en.wikipedia.org/wiki/Scandinavian_Defense",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
