@@ -63720,5 +63720,469 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-petrovdefence-main-endgame",
+    "openingId": "petrov-defence",
+    "criticalPositionFen": "6k1/p3R1pp/5p2/8/2r2P2/P7/6PP/6K1 b - - 0 33",
+    "title": "Petrov Endgame: the Active Rook Holds",
+    "overview": "The Petrov's reward is the rook ending, and Black holds it the only way rook endings are held — with ACTIVITY. The rook swings to the fourth rank, snaps off the a3-pawn, and the outside passed a-pawn becomes the trump that balances the game. Anand vs Kramnik, the textbook active-rook draw.",
+    "pawnBreaks": [
+      {
+        "move": "…a5 the outside passed pawn",
+        "explanation": "…a5 the outside passed pawn",
+        "fen": "6k1/p3R1pp/5p2/8/2r2P2/P7/6PP/6K1 b - - 0 33"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Ra4 the active rook on the fourth",
+        "explanation": "…Ra4 the active rook on the fourth"
+      }
+    ],
+    "strategicThemes": [
+      "The active rook",
+      "The outside passed a-pawn",
+      "Hold the balance with activity"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "6k1/p3R1pp/5p2/8/2r2P2/P7/6PP/6K1 b - - 0 33",
+        "moves": [
+          "Ra4",
+          "Rb7",
+          "h6",
+          "f5",
+          "Rxa3",
+          "Kf2",
+          "h5",
+          "g3",
+          "a5",
+          "Ra7"
+        ],
+        "annotations": [
+          "…Ra4 swings the rook to the fourth rank — in single-rook endings the rook belongs active, never passive.",
+          "Rb7 grabs the seventh rank in return.",
+          "…h6 makes luft and frees the king.",
+          "White advances f5, fixing the kingside structure.",
+          "…Rxa3 snaps off the a3-pawn — the active rook collects the queenside foot soldier.",
+          "Kf2 hurries the king toward the centre.",
+          "…h5 grabs kingside space, fixing White's pawns as targets.",
+          "g3 holds the kingside together.",
+          "…a5 pushes the outside passed pawn — the trump of the active-rook ending.",
+          "Ra7 swings behind to blockade the runner; the active rook and outside passer give Black a comfortable, equal hold."
+        ],
+        "learnCues": [
+          "…Ra4 — rook to the fourth.",
+          "Rb7 — White takes the seventh.",
+          "…h6 — luft for the king.",
+          "f5 — White fixes pawns.",
+          "…Rxa3 — grab the a-pawn.",
+          "Kf2 — White hurries up.",
+          "…h5 — grab kingside space.",
+          "g3 — White holds it.",
+          "…a5 — push the outside passer.",
+          "Ra7 — White blockades; Black holds."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [],
+          [],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          []
+        ],
+        "title": "Petrov Endgame: the Active Rook Holds",
+        "sources": [
+          "concept:pos-open-file",
+          "concept:pawn-passed",
+          "https://lichess.org/E1ql7q9G"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-oldindiandefence-main-endgame",
+    "openingId": "old-indian-defence",
+    "criticalPositionFen": "6k1/p2r1p1p/2R3p1/8/5P2/8/P5PP/5K2 w - - 0 39",
+    "title": "Old Indian Endgame: King Activity Holds",
+    "overview": "The restrained Old Indian steers into a single-rook ending, and Black holds it with the two pillars of rook-ending technique: an active rook and a centralised king. The …f5 break grabs space, the king marches up, and the balance never wavers. Gelfand vs Miton, a clean equal hold.",
+    "pawnBreaks": [
+      {
+        "move": "…f5 the freeing break",
+        "explanation": "…f5 the freeing break",
+        "fen": "6k1/p2r1p1p/2R3p1/8/5P2/8/P5PP/5K2 w - - 0 39"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Re7 the active rook",
+        "explanation": "…Re7 the active rook"
+      },
+      {
+        "piece": "",
+        "route": "…Kf7 the king to the centre",
+        "explanation": "…Kf7 the king to the centre"
+      }
+    ],
+    "strategicThemes": [
+      "The active rook",
+      "King activity",
+      "The …f5 freeing break"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "6k1/p2r1p1p/2R3p1/8/5P2/8/P5PP/5K2 w - - 0 39",
+        "moves": [
+          "Ra6",
+          "Re7",
+          "Kf2",
+          "f5",
+          "Kf3",
+          "Kf7",
+          "a4",
+          "Ke8",
+          "h3",
+          "Kf7",
+          "g4"
+        ],
+        "annotations": [
+          "White's rook probes the sixth rank.",
+          "…Re7 keeps the rook active and guards the seventh rank.",
+          "Kf2 centralises the white king.",
+          "…f5 — the freeing pawn break, claiming space and activity in the rook ending.",
+          "Kf3 marches the king up.",
+          "…Kf7 brings the black king toward the centre — king activity is everything here.",
+          "a4 fixes the queenside.",
+          "…Ke8 repositions the king flexibly.",
+          "h3 makes luft.",
+          "…Kf7 keeps the king centralised and active.",
+          "g4 challenges f5; Black's active rook and centralised king hold the balance comfortably."
+        ],
+        "learnCues": [
+          "Ra6 — White probes.",
+          "…Re7 — keep the rook active.",
+          "Kf2 — White centralises.",
+          "…f5 — the freeing break.",
+          "Kf3 — White marches up.",
+          "…Kf7 — king to the centre.",
+          "a4 — White fixes queenside.",
+          "…Ke8 — reposition flexibly.",
+          "h3 — White makes luft.",
+          "…Kf7 — king stays active.",
+          "g4 — White challenges; Black holds."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [],
+          [],
+          [],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255,214,0,0.88)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Old Indian Endgame: King Activity Holds",
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-open-file",
+          "https://lichess.org/etOw15Vo"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-semislav-main-endgame",
+    "openingId": "semi-slav",
+    "criticalPositionFen": "8/4kp2/8/4p3/r1pr4/7R/P1R2PP1/5K2 b - - 0 37",
+    "title": "Semi-Slav Endgame: Centralise and Simplify",
+    "overview": "The sharp Semi-Slav burns down to a double-rook ending, and Black holds by centralising the king and trading a pair of rooks toward a dead-equal single-rook position. King to the centre, swap when offered, hold the balance — Radjabov vs Anand.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Ke6 to d5 — the king marches to the centre",
+        "explanation": "…Ke6 to d5 — the king marches to the centre"
+      },
+      {
+        "piece": "",
+        "route": "…Rg4 the active rook",
+        "explanation": "…Rg4 the active rook"
+      }
+    ],
+    "strategicThemes": [
+      "King to the centre",
+      "Simplify with a rook trade",
+      "Hold the single-rook ending"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "8/4kp2/8/4p3/r1pr4/7R/P1R2PP1/5K2 b - - 0 37",
+        "moves": [
+          "Ke6",
+          "Ke2",
+          "Rg4",
+          "Rh6+",
+          "Rg6",
+          "Rxg6+",
+          "fxg6",
+          "Kd2",
+          "Kd5",
+          "Kc3"
+        ],
+        "annotations": [
+          "…Ke6 begins the king march to the centre, the heart of every rook ending.",
+          "Ke2 brings the white king up too.",
+          "…Rg4 activates the rook against the kingside pawns.",
+          "Rh6+ checks and offers a rook trade.",
+          "…Rg6 offers to swap a pair of rooks, simplifying toward the hold.",
+          "Rxg6+ takes.",
+          "…fxg6 recaptures, reaching a clean single-rook ending.",
+          "Kd2 centralises.",
+          "…Kd5 plants the king on the dominant central square.",
+          "Kc3 mirrors; the centralised kings and active rook balance the position — a comfortable hold."
+        ],
+        "learnCues": [
+          "…Ke6 — the king marches.",
+          "Ke2 — White comes up.",
+          "…Rg4 — activate the rook.",
+          "Rh6+ — check, offer a trade.",
+          "…Rg6 — swap a pair of rooks.",
+          "Rxg6+ — White takes.",
+          "…fxg6 — clean single-rook ending.",
+          "Kd2 — White centralises.",
+          "…Kd5 — the dominant centre king.",
+          "Kc3 — mirror; Black holds."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "title": "Semi-Slav Endgame: Centralise and Simplify",
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-open-file",
+          "https://lichess.org/T1cCsEbd"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-queensindian-main-endgame",
+    "openingId": "queens-indian",
+    "criticalPositionFen": "8/8/1pb1p2p/2k5/r1P3P1/4P3/4BK2/R7 w - - 0 53",
+    "title": "Queen's Indian Endgame: Active Rook and Bishop Hold",
+    "overview": "The Queen's Indian's light-square fight resolves into a rook-and-bishop ending, and Black holds it with activity: the rook seizes the seventh rank, the king centralises toward the pawns, and the bishop takes a commanding central post. Tomashevsky vs Carlsen — Carlsen's textbook active defence.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Ra2 the rook to the seventh",
+        "explanation": "…Ra2 the rook to the seventh"
+      },
+      {
+        "piece": "",
+        "route": "…Be4 the central bishop",
+        "explanation": "…Be4 the central bishop"
+      }
+    ],
+    "strategicThemes": [
+      "The active rook on the seventh",
+      "King and bishop activity",
+      "Hold the R+B ending"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "8/8/1pb1p2p/2k5/r1P3P1/4P3/4BK2/R7 w - - 0 53",
+        "moves": [
+          "Rg1",
+          "Ra2",
+          "g5",
+          "hxg5",
+          "Rxg5+",
+          "Kd6",
+          "Ke1",
+          "Ra5",
+          "Rg6",
+          "Be4"
+        ],
+        "annotations": [
+          "White's rook swings to the g-file.",
+          "…Ra2 plants the rook on the seventh rank — active-rook technique in the bishop ending.",
+          "g5 strikes at the kingside pawns.",
+          "…hxg5 opens the h-file and keeps the structure intact.",
+          "Rxg5+ recaptures with check.",
+          "…Kd6 centralises the king toward the queenside pawns.",
+          "Ke1 brings the white king back.",
+          "…Ra5 keeps the rook active, covering both wings.",
+          "Rg6 pressures the e6-pawn.",
+          "…Be4 centralises the bishop on a commanding square; the active rook and strong bishop hold the equal ending."
+        ],
+        "learnCues": [
+          "Rg1 — White to the g-file.",
+          "…Ra2 — rook to the seventh.",
+          "g5 — White strikes.",
+          "…hxg5 — open the h-file.",
+          "Rxg5+ — White recaptures.",
+          "…Kd6 — centralise the king.",
+          "Ke1 — White comes back.",
+          "…Ra5 — keep the rook active.",
+          "Rg6 — White pressures e6.",
+          "…Be4 — commanding bishop; Black holds."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [],
+          [],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          []
+        ],
+        "title": "Queen's Indian Endgame: Active Rook and Bishop Hold",
+        "sources": [
+          "concept:pos-open-file",
+          "concept:pos-center",
+          "https://lichess.org/BrG40tmB"
+        ]
+      }
+    ]
   }
 ]
