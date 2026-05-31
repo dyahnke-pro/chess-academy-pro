@@ -40,7 +40,7 @@ const BERLIN: LessonScript = {
     b({
       id: 'berlin-open', moves: 'e4 e5 Nf3 Nc6 Bb5 Nf6',
       highlights: [{ square: 'f6', color: KEY }, { square: 'e4', color: SOFT }],
-      say: "3…Nf6 — the Berlin Defense. Instead of …a6 chasing the bishop, Black develops directly and attacks the e4-pawn. The Berlin became famous when Kramnik used it to draw Kasparov in 2000; Carlsen plays it as Black against the world's best.",
+      say: "…Nf6 — the Berlin Defense. Instead of …a6 chasing the bishop, Black develops directly and attacks the e4-pawn. The Berlin became famous when Kramnik used it to draw Kasparov in 2000; Carlsen plays it as Black against the world's best.",
       sayShort: '…Nf6 — Berlin.',
     }),
     b({
@@ -136,7 +136,7 @@ const STEINITZ: LessonScript = {
     b({
       id: 'st-open', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 d6',
       highlights: [{ square: 'd6', color: KEY }],
-      say: "After 3…a6 4.Ba4, Black plays …d6 — the Steinitz Defense Deferred. Solid, classical, no early central commitment. Black wants to play …Bd7 + …Nf6 + …Be7 + …O-O slowly, then break with …b5 or …f5 once ready.",
+      say: "After …a6 Ba4, Black plays …d6 — the Steinitz Defense Deferred. Solid, classical, no early central commitment. Black wants to play …Bd7 + …Nf6 + …Be7 + …O-O slowly, then break with …b5 or …f5 once ready.",
       sayShort: '…d6 — Steinitz Deferred.',
     }),
     b({

@@ -33,7 +33,7 @@ export const PRO_GOTHAMCHESS_CLOSED_SICILIAN_LESSON: LessonScript = {
       arrows: [{ from: 'b5', to: 'c6', color: VIS }],
       highlights: [{ square: 'c3', color: SOFT }, { square: 'b5', color: KEY }],
       say:
-        "Another way Levy dodges Open Sicilian theory: 2.Nc3, the Closed Sicilian move order. We develop the knight first, then bring the bishop to b5 to lean on the c6-knight. The message is the same as the Rossolimo — we steer the game into calm, understandable waters and make Black solve real problems with no memorised lines to lean on.",
+        "Another way Levy dodges Open Sicilian theory: Nc3, the Closed Sicilian move order. We develop the knight first, then bring the bishop to b5 to lean on the c6-knight. The message is the same as the Rossolimo — we steer the game into calm, understandable waters and make Black solve real problems with no memorised lines to lean on.",
       sayShort: 'Bb5 — pressure c6.',
     }),
     b({

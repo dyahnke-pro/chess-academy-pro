@@ -44,7 +44,7 @@ const OO_ANTI_GRUNFELD: LessonScript = {
     b({
       id: 'kia-og-setup', moves: 'Nf3 Nf6 g3 g6 e4 Bg7 e5',
       highlights: [H('e5', ATK), H('f6', SOFT)],
-      say: "Anti-Grünfeld setup: after 1.Nf3 ...Nf6 2.g3 ...g6 3.e4 ...Bg7 we play 4.e5! attacking the knight on f6. The pawn wedge is the trap — Black has to move the knight cleanly or pay the price.",
+      say: "Anti-Grünfeld setup: after Nf3 ...Nf6 g3 ...g6 e4 ...Bg7 we play e5! attacking the knight on f6. The pawn wedge is the trap — Black has to move the knight cleanly or pay the price.",
       sayShort: 'e5 — attack the knight.',
     }),
     b({
@@ -77,7 +77,7 @@ const D6_E5_QUEEN_TRADE: LessonScript = {
     b({
       id: 'kia-d6-setup', moves: 'Nf3 Nf6 c4 g6 Nc3 Bg7 e4 O-O d4',
       highlights: [H('d4', KEY), H('e4', SOFT)],
-      say: "After 5.d4 in the symmetric KID transposition, White has the broad centre. Black needs to challenge with ...e5 or play ...d6 carefully. The careless ...d6 — Black's natural KID move — actually loses the queen-trade race here.",
+      say: "After d4 in the symmetric KID transposition, White has the broad centre. Black needs to challenge with ...e5 or play ...d6 carefully. The careless ...d6 — Black's natural KID move — actually loses the queen-trade race here.",
       sayShort: 'd4 — broad centre.',
     }),
     b({
@@ -110,7 +110,7 @@ const BE7_QGD_PIN: LessonScript = {
     b({
       id: 'kia-be7-setup', moves: 'Nf3 Nf6 d4 d5 c4 e6 Nc3',
       highlights: [H('c3', SOFT), H('d4', KEY)],
-      say: "Queen's Gambit transposition: after 1.Nf3 ...Nf6 2.d4 ...d5 3.c4 ...e6 4.Nc3 we have the QGD structure. The critical decision for Black is which bishop to develop first. The Be7 move IS the textbook play but the timing matters.",
+      say: "Queen's Gambit transposition: after Nf3 ...Nf6 d4 ...d5 c4 ...e6 Nc3 we have the QGD structure. The critical decision for Black is which bishop to develop first. The Be7 move IS the textbook play but the timing matters.",
       sayShort: 'Nc3 — QGD structure.',
     }),
     b({
@@ -176,7 +176,7 @@ const NB6_ANTI_ALEKHINE: LessonScript = {
     b({
       id: 'kia-nb6-setup', moves: 'Nf3 g6 e4 Nf6 e5 Nd5 c4',
       highlights: [H('c4', KEY), H('d5', ATK)],
-      say: "Anti-Alekhine setup. After Black's hyper-modern ...g6 + ...Nf6 + ...Nd5, we play 4.c4 chasing the knight to b6. The retreat Nb6 looks safe but it lets White play c5 cramping Black's queenside permanently.",
+      say: "Anti-Alekhine setup. After Black's hyper-modern ...g6 + ...Nf6 + ...Nd5, we play c4 chasing the knight to b6. The retreat Nb6 looks safe but it lets White play c5 cramping Black's queenside permanently.",
       sayShort: 'c4 — chase the knight.',
     }),
     b({

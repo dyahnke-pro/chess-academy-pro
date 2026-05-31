@@ -207,7 +207,7 @@ export const PRO_NARODITSKY_CARO_KANN_LESSON: LessonScript = {
       highlights: [{ square: 'b5', color: KEY }, { square: 'f6', color: KEY }, { square: 'f4', color: KEY }],
       say:
         "The middlegame plan crystallizes from his actual games at this position. Three ideas show up across his decisive Advance-c5 games. First — b5 expanding queenside: claiming the long diagonal for our Bb7, opening the c-file fully, and creating queenside space. Second — f6 hitting the e5-pawn: challenging the spearhead, opening the position for our pieces. Third — the knight jumping Nf4 to land on the prize square, threatening Nxd3 trading off White's good bishop or just sitting in a beautiful outpost. Whichever White's setup invites, we have a plan ready.",
-      sayShort: 'Middlegame: b5, f6, or Nf4 — pick what fits.',
+      sayShort: 'Middlegame: b5, f6, or Nf4.',
     }),
     // ============ ENDGAME STRUCTURE BEAT ============
     b({

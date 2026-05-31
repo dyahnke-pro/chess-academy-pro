@@ -103,7 +103,7 @@ const H3_BG4_STRUCTURE: LessonScript = {
       id: 'h3-setup',
       moves: 'e4 c6 Nf3 d5 Nc3 Bg4',
       highlights: [H('g4'), H('f3', SOFT)],
-      say: "After 3.Nc3 Black plays ...Bg4 pinning the f3-knight against the queen. This is the Caro's structural advantage: the light-square bishop comes OUTSIDE the pawn chain. The pin is the trap-setter.",
+      say: "After Nc3 Black plays ...Bg4 pinning the f3-knight against the queen. This is the Caro's structural advantage: the light-square bishop comes OUTSIDE the pawn chain. The pin is the trap-setter.",
       sayShort: '...Bg4 — pin Nf3.',
     }),
     b({
@@ -149,8 +149,8 @@ const DXE4_QXD1_KING: LessonScript = {
       id: 'dxe4-setup',
       moves: 'e4 c6 Nf3 d5 d3',
       highlights: [H('d3', SOFT)],
-      say: "After 3.d3 (White's quiet sideline), Black plays the standard ...dxe4 challenging the centre. White's correct response is Nxe4 (recapture with the knight). The wrong response — and surprisingly common at amateur level — is dxe4.",
-      sayShort: '3.d3 — quiet sideline.',
+      say: "After d3 (White's quiet sideline), Black plays the standard ...dxe4 challenging the centre. White's correct response is Nxe4 (recapture with the knight). The wrong response — and surprisingly common at amateur level — is dxe4.",
+      sayShort: 'd3 — quiet sideline.',
     }),
     b({
       id: 'dxe4-take',

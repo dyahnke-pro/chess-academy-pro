@@ -1056,9 +1056,27 @@ npx vitest run src/data/lessons/ src/data/pro-repertoires.test.ts \
   src/data/modelGames.test.ts src/data/modelGames-orientation.test.ts \
   src/data/middlegamePlanThemes.test.ts \
   src/data/narrationAccuracy.test.ts src/data/variationMiddlegameDepth.test.ts \
-  src/data/proRepLessonCoverage.test.ts   # G9.3 Gates A/B/C — see below
+  src/data/proRepLessonCoverage.test.ts \  # G9.3 Gates A/B/C — see below
+  src/data/proRepNarrationVoice.test.ts    # G9.4 voice-contract gate — see below
 npm run ship-check       # must print READY TO PUSH
 ```
+
+🚨 **G9.4 PRO-REP SPOKEN-VOICE GATE — `proRepNarrationVoice.test.ts` (locked
+David 2026-05-31).** The masterclass voice rules (no move-number prefixes in
+spoken prose, `sayShort` ≤ 8 words) were enforced on the masterclass set via
+registry.ts / narrationAccuracy — but pro-rep lessons live in the runtime
+`LESSONS` map only, so their spoken `say`/`sayShort` text was an UNGATED swamp.
+A full voice walk (2026-05-31) caught **62 move-number prefixes** ("1.e4",
+"2.Nc3", "3…d5" — Polly reads "2." as "two", producing robotic "two knight to
+c3" lines) + **6 over-length cues** across the `pro{Gothamchess,Naroditsky}*.ts`
+lesson files. This gate scans every pro-rep lesson's `say`/`sayShort` literals
+and FAILS the build on either violation. Baseline-free — all were fixed. Stats
+are EXEMPT and preserved ("73.4%", "1,475 games", "200-year"): the move-number
+regex requires a SAN token right after the number+dot, so a decimal/comma never
+trips it. When you author a NEW pro-rep lesson, spell moves as "Nc3" / "…d5"
+(never "2.Nc3"); keep every `sayShort` to ≤ 8 words. The stripper used for the
+sweep: regex `\d{1,2}(\.|…|\.\.\.)(?=[NBRQKO]|[a-h][1-8x])` → "" (white) / "…"
+(black), applied only inside `say:`/`sayShort:` literals.
 
 🚨 **G9.3 GATE CHECKS (the 2026-05-31 additions — must pass before ship):**
 - **Gate A — `proRepLessonCoverage`:** every `pro-*` opening in

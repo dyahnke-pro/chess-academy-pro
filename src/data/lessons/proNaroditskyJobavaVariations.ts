@@ -39,7 +39,7 @@ const E6_FRENCH: LessonScript = {
     b({
       id: 'e6-open', moves: 'd4 d5 Nc3 e6',
       highlights: [{ square: 'e6', color: KEY }],
-      say: "1.d4 d5 2.Nc3 e6 — Black plays a French-style setup, supporting d5 with the e6-pawn. The locked centre suits our tactical Jobava style: we don't need the centre to open to attack, the Bf4 + Nc3 combination provides the pressure.",
+      say: "d4 d5 Nc3 e6 — Black plays a French-style setup, supporting d5 with the e6-pawn. The locked centre suits our tactical Jobava style: we don't need the centre to open to attack, the Bf4 + Nc3 combination provides the pressure.",
       sayShort: '…e6 — French setup.',
     }),
     b({
@@ -90,7 +90,7 @@ const C6_SLAV: LessonScript = {
     b({
       id: 'c6-open', moves: 'd4 d5 Nc3 c6',
       highlights: [{ square: 'c6', color: KEY }],
-      say: "1.d4 d5 2.Nc3 c6 — Black plays Slav-style, supporting d5 with the c-pawn. The setup is solid but passive. We continue with our Jobava system development: Bf4 + e3 + Nf3 + Bd3.",
+      say: "d4 d5 Nc3 c6 — Black plays Slav-style, supporting d5 with the c-pawn. The setup is solid but passive. We continue with our Jobava system development: Bf4 + e3 + Nf3 + Bd3.",
       sayShort: '…c6 — Slav setup.',
     }),
     b({

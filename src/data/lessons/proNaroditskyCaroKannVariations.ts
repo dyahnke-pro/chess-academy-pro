@@ -632,7 +632,7 @@ const ADVANCE_C5: LessonScript = {
       id: 'adv-c5-open',
       moves: 'e4 c6 d4 d5 e5',
       highlights: [{ square: 'e5', color: KEY }, { square: 'd5', color: SOFT }],
-      say: "3.e5 — White's Advance Variation, locking the centre and cramping our kingside. The pawn on e5 looks threatening but it's also vulnerable: our coming ...c5 break + ...Nc6 + piece pressure will destabilise the whole chain.",
+      say: "e5 — White's Advance Variation, locking the centre and cramping our kingside. The pawn on e5 looks threatening but it's also vulnerable: our coming ...c5 break + ...Nc6 + piece pressure will destabilise the whole chain.",
       sayShort: 'e5 — Advance, prepare to undermine.',
     }),
     b({
@@ -697,7 +697,7 @@ const ADVANCE_BF5: LessonScript = {
       id: 'adv-bf5-open',
       moves: 'e4 c6 d4 d5 e5 Bf5',
       highlights: [{ square: 'f5', color: KEY }],
-      say: "3.e5 ...Bf5 — the classical Advance treatment. Black develops the light-square bishop OUTSIDE the pawn chain (the Caro's defining advantage over the French Defense). The Bf5 supports the kingside AND prepares ...e6 + classical development.",
+      say: "e5 ...Bf5 — the classical Advance treatment. Black develops the light-square bishop OUTSIDE the pawn chain (the Caro's defining advantage over the French Defense). The Bf5 supports the kingside AND prepares ...e6 + classical development.",
       sayShort: '...Bf5 — bishop outside the chain.',
     }),
     b({
@@ -755,7 +755,7 @@ const PANOV: LessonScript = {
       id: 'panov-open',
       moves: 'e4 c6 d4 d5 exd5 cxd5 c4',
       highlights: [{ square: 'c4', color: KEY }, { square: 'd5', color: SOFT }],
-      say: "Panov-Botvinnik Attack: 4.c4 challenges our d5-pawn directly. White accepts an Isolated Queen's Pawn structure in exchange for active piece play — this is the most aggressive way to play against the Caro-Kann.",
+      say: "Panov-Botvinnik Attack: c4 challenges our d5-pawn directly. White accepts an Isolated Queen's Pawn structure in exchange for active piece play — this is the most aggressive way to play against the Caro-Kann.",
       sayShort: 'c4 — Panov IQP fight.',
     }),
     b({
@@ -820,7 +820,7 @@ const D3_SIDELINE: LessonScript = {
       id: 'd3-open',
       moves: 'e4 c6 d3 d5 Nd2',
       highlights: [{ square: 'd3', color: SOFT }, { square: 'd2', color: KEY }],
-      say: "2.d3 — White's quiet KIA-style sideline. The d3 supports e4 modestly; White will follow with Nd2 + g3 + Bg2 fianchetto. Black answers with classical central play.",
+      say: "d3 — White's quiet KIA-style sideline. The d3 supports e4 modestly; White will follow with Nd2 + g3 + Bg2 fianchetto. Black answers with classical central play.",
       sayShort: 'd3 — KIA-style quiet.',
     }),
     b({

@@ -190,7 +190,7 @@ const BC4_SOZIN: LessonScript = {
     b({
       id: 'sozin-open', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bc4',
       highlights: [{ square: 'c4', color: KEY }, { square: 'f7', color: SOFT }],
-      say: "6.Bc4 — the Sozin / Fischer Attack. White aims the bishop directly at f7, threatening tactics with Bxf7+ in some lines. This is the most aggressive Najdorf treatment. The correct response is the calm ...e6 closing the diagonal.",
+      say: "Bc4 — the Sozin / Fischer Attack. White aims the bishop directly at f7, threatening tactics with Bxf7+ in some lines. This is the most aggressive Najdorf treatment. The correct response is the calm ...e6 closing the diagonal.",
       sayShort: 'Bc4 — Sozin/Fischer.',
     }),
     b({

@@ -40,8 +40,8 @@ const NC3_TWO_KNIGHTS: LessonScript = {
     b({
       id: 'tk-open', moves: 'e4 Nf6 Nc3',
       highlights: [{ square: 'c3', color: KEY }],
-      say: "2.Nc3 — White refuses to chase our knight with e5, developing instead. The position transposes toward a Vienna or Two Knights structure. We're happy: Black already has the …Nf6 developed and the rest follows classically.",
-      sayShort: '2.Nc3 — refused chase.',
+      say: "Nc3 — White refuses to chase our knight with e5, developing instead. The position transposes toward a Vienna or Two Knights structure. We're happy: Black already has the …Nf6 developed and the rest follows classically.",
+      sayShort: 'Nc3 — refused chase.',
     }),
     b({
       id: 'tk-e5', moves: 'e4 Nf6 Nc3 e5',
