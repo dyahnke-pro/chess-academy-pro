@@ -8049,17 +8049,27 @@
   {
     "id": "mp-frenchdefence-burn",
     "openingId": "french-defence",
-    "criticalPositionFen": "r2q1rk1/pbpnbppp/1p2p3/8/3PN3/3B1N2/PPPQ1PPP/1K1R3R w - - 2 12",
+    "criticalPositionFen": "rnbqk2r/ppp1bp1p/4pp2/8/3PN3/8/PPP2PPP/R2QKBNR w KQkq - 0 7",
     "title": "Burn: The Bishop Pair Unleashed",
     "overview": "Black has the two bishops and a flawless structure; White has castled queenside and will storm the kingside. The plan: complete the fianchetto on b7, redeploy the knight, and break with …c5 to rip open lines for the bishop pair against White's king on b1. The bishops do the talking.",
     "pawnBreaks": [
-      "…c5 to open lines for the bishops at the b1-king",
-      "…b5–b4 the queenside lever"
+      {
+        "move": "…c5 — challenge the centre",
+        "explanation": "Once developed, …c5 strikes at d4 and frees Black’s game in the Burn structure.",
+        "fen": "rnbqk2r/ppp1bp1p/4pp2/8/3PN3/8/PPP2PPP/R2QKBNR w KQkq - 0 7"
+      }
     ],
     "pieceManeuvers": [
-      "…Bb7 on the long diagonal",
-      "…Nf6 hitting the e4-knight",
-      "…Qb8/…Rc8 down the c-file"
+      {
+        "piece": "Knight",
+        "route": "…Nc6-b4 — harass the queen and the king",
+        "explanation": "The knight develops then jumps to b4, hitting the queen and the squares near White’s king."
+      },
+      {
+        "piece": "Queen",
+        "route": "…Qd5 — centralize and offer the trade",
+        "explanation": "Black centralizes the queen to defuse White’s attack and reach a comfortable ending."
+      }
     ],
     "strategicThemes": [
       "The bishop pair",
@@ -8071,96 +8081,111 @@
     ],
     "playableLines": [
       {
-        "fen": "r2q1rk1/pbpnbppp/1p2p3/8/3PN3/3B1N2/PPPQ1PPP/1K1R3R w - - 2 12",
+        "fen": "rnbqk2r/ppp1bp1p/4pp2/8/3PN3/8/PPP2PPP/R2QKBNR w KQkq - 0 7",
         "moves": [
-          "Qf4",
-          "Nf6",
-          "c4",
-          "Qb8"
+          "Qd3",
+          "Nc6",
+          "O-O-O",
+          "Nb4",
+          "Qb3",
+          "Qd5",
+          "Qxd5",
+          "Nxd5"
         ],
         "annotations": [
-          "White centralises the queen on f4, preparing the kingside advance.",
-          "Black challenges the centre with …Nf6, hitting the e4-knight and gaining time.",
-          "White grabs space with c4 to blunt the b7-bishop.",
-          "Black regroups …Qb8, clearing d8 for a rook and eyeing the b-file — the bishop pair and the …c5 break give Black a rich, target-rich middlegame."
+          "White develops the queen, eyeing kingside and centre after the Burn's …dxe4 trade.",
+          "…Nc6 develops and immediately leans on the d4-pawn — the Burn gives Black a solid structure with easy piece play.",
+          "White castles long, committing to opposite wings.",
+          "…Nb4! The knight jumps to b4, attacking the d3-queen and eyeing the c2- and d3-squares near White's king.",
+          "White sidesteps to b3.",
+          "…Qd5 centralizes, offering a queen trade that defuses White's attacking intentions.",
+          "White trades queens.",
+          "…Nxd5 recaptures, the knight landing on the dominant d5-outpost. With queens off and a sound, symmetrical structure, Black is comfortable and has the easier endgame — Anand outplayed Gashimov from here."
         ],
-        "title": "The Two Bishops",
         "arrows": [
           [],
-          [
-            {
-              "from": "f6",
-              "to": "e4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
+          [],
           [],
           []
         ],
+        "title": "The Burn Simplification (Gashimov–Anand)",
         "highlights": [
           [
             {
-              "square": "f4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d2",
+              "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f6",
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e4",
+              "square": "d4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "c4",
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "c2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b7",
+              "square": "d3",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "b8",
+              "square": "b3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d8",
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "c5",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
+        "intro": "Black develops actively and trades into a comfortable game.",
         "sources": [
           "book:french-defence",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/French_Defence"
         ],
         "learnCues": [
-          "Qf4 — centralise, prep the advance",
-          "Nf6 — hit the e4-knight",
-          "c4 — blunt the b7-bishop",
-          "Qb8 — clear d8, eye the b-file"
+          "Qd3 — White develops the queen",
+          "…Nc6 — develop, pressure d4",
+          "O-O-O — White castles long",
+          "…Nb4 — leap in, hit the queen",
+          "Qb3 — White sidesteps",
+          "…Qd5 — centralize, offer the trade",
+          "Qxd5 — White trades queens",
+          "…Nxd5 — recapture on the outpost"
         ]
       }
     ]
