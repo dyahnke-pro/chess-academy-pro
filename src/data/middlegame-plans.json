@@ -27660,17 +27660,27 @@
   {
     "id": "mp-scandinaviandefence-gubinsky",
     "openingId": "scandinavian-defence",
-    "criticalPositionFen": "rn1qkb1r/ppp2ppp/4pn2/7b/2BP4/2N2N1P/PPP2PP1/R1BQK2R w KQkq - 1 8",
+    "criticalPositionFen": "rn1qkb1r/ppp1pppp/5n2/8/3P2b1/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 3 6",
     "title": "Scandinavian: Patient Gubinsky Solidity",
     "overview": "The …Qd8 Gubinsky-Melts: the queen home and the position impregnable. Black has the light bishop active on the b1-h7 diagonal and a solid, French-like structure with no target. The plan is patience — complete development, keep the bishop strong, and exploit White's g4-style loosening of his own king over the long term.",
     "pawnBreaks": [
-      "…c6 and …e5 break when prepared",
-      "…c5 in some lines"
+      {
+        "move": "…c6 and …e6 — the solid pawn triangle",
+        "explanation": "The Caro-like wall gives Black a structure with no weaknesses, the foundation of the …Qd8 Gubinsky-Melts.",
+        "fen": "rn1qkb1r/ppp1pppp/5n2/8/3P2b1/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 3 6"
+      }
     ],
     "pieceManeuvers": [
-      "…Bg4–h5–g6 to the long diagonal",
-      "…Nbd7 and …Be7",
-      "…c6 solid base"
+      {
+        "piece": "Bishop",
+        "route": "…Bg4xf3 — trade into the solid structure",
+        "explanation": "Black swaps the bishop for the knight to reach a low-risk, weakness-free position."
+      },
+      {
+        "piece": "Queen",
+        "route": "…Qd5 — centralize against the loosened king",
+        "explanation": "After White’s g4, the queen exploits the holes and offers a trade."
+      }
     ],
     "strategicThemes": [
       "Patient solidity",
@@ -27682,66 +27692,46 @@
     ],
     "playableLines": [
       {
-        "fen": "rn1qkb1r/ppp2ppp/4pn2/7b/2BP4/2N2N1P/PPP2PP1/R1BQK2R w KQkq - 1 8",
+        "fen": "rn1qkb1r/ppp1pppp/5n2/8/3P2b1/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 3 6",
         "moves": [
+          "h3",
+          "Bxf3",
+          "Qxf3",
+          "c6",
+          "Ne2",
+          "e6",
           "g4",
-          "Bg6",
-          "Ne5",
-          "Bb4"
+          "Qd5"
         ],
         "annotations": [
-          "g4 lunges to grab the bishop, but it loosens White's own kingside.",
-          "…Bg6 calmly retreats to the great b1-h7 diagonal, unharmed.",
-          "Ne5 occupies the centre.",
-          "…Bb4 pins and develops, completing a solid setup while White's g4-weakened king becomes a long-term target."
+          "White questions the pinning bishop with h3.",
+          "…Bxf3 trades the bishop for the knight — in the Gubinsky-Melts, Black happily swaps off to reach a rock-solid, low-risk structure.",
+          "White recaptures with the queen.",
+          "…c6 builds the little pawn triangle, the heart of this …Qd8 system: a Caro-like wall that gives Black a position with no weaknesses.",
+          "White reroutes the knight toward g3.",
+          "…e6 completes the solid shell and opens the f8-bishop's path.",
+          "White lunges with g4, grabbing kingside space — but the advance loosens White's own king.",
+          "…Qd5! Black centralizes the queen, offering a trade and exploiting the holes g4 created. This is the Gubinsky-Melts blueprint: trade pieces, build the c6-e6 wall, and let White's over-extension become the target. Carlsen outplayed Caruana from exactly this footing."
         ],
-        "title": "Scandinavian: Patient Gubinsky Solidity",
         "arrows": [
           [],
-          [
-            {
-              "from": "g6",
-              "to": "h7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
+          [],
           [],
           []
         ],
+        "title": "The Gubinsky Wall (Caruana–Carlsen)",
         "highlights": [
           [
             {
-              "square": "g4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g2",
+              "square": "h3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
-            {
-              "square": "g6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b1",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "h7",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "f3",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -27749,11 +27739,37 @@
           ],
           [
             {
-              "square": "b4",
+              "square": "f3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "f8",
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
@@ -27762,16 +27778,21 @@
             }
           ]
         ],
+        "intro": "Black trades down and builds the solid c6-e6 wall.",
         "sources": [
-          "book:scandinavian-defence",
-          "concept:pos-development",
+          "concept:pos-center",
+          "concept:pawn-chain",
           "https://en.wikipedia.org/wiki/Scandinavian_Defense"
         ],
         "learnCues": [
-          "g4 — grab the bishop, loosen the king",
-          "Bg6 — calm retreat, unharmed",
-          "Ne5 — occupy the centre",
-          "Bb4 — pin and develop; target g4"
+          "h3 — question the bishop",
+          "…Bxf3 — trade for the solid structure",
+          "Qxf3 — White recaptures",
+          "…c6 — build the pawn triangle",
+          "Ne2 — White reroutes",
+          "…e6 — complete the shell",
+          "g4 — White grabs space, loosens",
+          "…Qd5 — centralize, target the holes"
         ]
       }
     ]
