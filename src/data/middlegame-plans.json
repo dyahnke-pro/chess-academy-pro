@@ -37723,41 +37723,62 @@
   {
     "id": "mp-pronaroKID-fianchetto-queenside",
     "openingId": "pro-naroditsky-kid",
-    "criticalPositionFen": "r1b1r1k1/pp1n1pbp/2pp1np1/q7/2PNP3/2N1B1PP/PP3PB1/R2Q1RK1 w - - 1 12",
+    "criticalPositionFen": "r1b1r1k1/pp3pbp/2pp1np1/q3n3/2PNP3/2N1B1PP/PP3PB1/R2QR1K1 w - - 3 13",
     "title": "Fianchetto Variation — Qa5 + ...b5 queenside push",
-    "overview": "Past the Yugoslav setup, Black's queen on a5 and the …b5 push define the queenside plan. The Fianchetto's mirror bishop on g2 neutralises our long diagonal, so the game has to be decided on the queenside where Black has more space.",
+    "overview": "A real Naroditsky win (vs alexrustemov): when White breaks with c5, Black captures, takes the open d-file with the rook, and develops smoothly — comfortable equality.",
     "pawnBreaks": [
-      "...b5 + ...b4 queenside wedge"
+      {
+        "move": "...dxc5 trade",
+        "explanation": "…dxc5 meets White’s break and opens the d-file.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Qa5 queenside queen post",
-      "...Nxd5 central trade"
+      {
+        "piece": "Rook",
+        "route": "...Re8-d8 file",
+        "explanation": "The rook takes the open d-file after the c5 trade."
+      }
     ],
     "strategicThemes": [
-      "Queenside expansion vs Fianchetto",
-      "Pressure on c4-pawn"
+      "Meet c5 with …dxc5.",
+      "Take the open d-file."
     ],
     "endgameTransitions": [
-      "R+min+P with queenside space (29.4%)"
+      "The open file gives easy equality into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1b1r1k1/pp1n1pbp/2pp1np1/q7/2PNP3/2N1B1PP/PP3PB1/R2Q1RK1 w - - 1 12",
+        "fen": "r1b1r1k1/pp3pbp/2pp1np1/q3n3/2PNP3/2N1B1PP/PP3PB1/R2QR1K1 w - - 3 13",
         "moves": [
-          "Qc2",
-          "b5",
-          "Rfd1",
-          "b4",
-          "Nd5",
-          "Nxd5"
+          "Nb3",
+          "Qc7",
+          "c5",
+          "dxc5",
+          "Bxc5",
+          "Rd8",
+          "Qe2",
+          "Be6"
         ],
         "annotations": [
-          "Qc2 — White redeploys the queen to support the central c4-pawn AND eye h7. Standard Fianchetto regrouping; Black continues with the queenside plan.",
-          "...b5! The expansion push. The b5 hits c4 directly and prepares the …b4 wedge against the Nc3. White must react.",
-          "Rfd1 — White doubles on the d-file, hoping to use the central files. But the queenside is still bleeding pressure.",
-          "...b4! The wedge. Black drives the Nc3 off its natural square AND opens the b-file for further pressure. White's pieces are getting pushed back.",
-          "Nd5 — White's knight repositions to the centre, trying to find activity. The d5 square is the only central outpost left.",
-          "...Nxd5! Black trades the central knight. White recaptures with a damaged centre and Black has the easier endgame with queenside space and the more active pieces."
+          "Nb3 — White repositions the knight.",
+          "…Qc7 — Black repositions the queen.",
+          "c5 — White strikes on the queenside.",
+          "…dxc5 — Black captures.",
+          "Bxc5 — White recaptures.",
+          "…Rd8 — Black takes the open d-file.",
+          "Qe2 — White connects.",
+          "…Be6 — Black develops; comfortable equality."
+        ],
+        "learnCues": [
+          "Nb3 — reposition",
+          "Qc7 — reposition",
+          "c5 — White strikes",
+          "dxc5 — capture",
+          "Bxc5 — recapture",
+          "Rd8 — take the d-file",
+          "Qe2 — connect",
+          "Be6 — equalise"
         ],
         "arrows": [
           [],
@@ -37765,82 +37786,72 @@
           [],
           [],
           [],
+          [
+            {
+              "from": "e8",
+              "to": "d8",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
           []
         ],
         "highlights": [
           [
             {
-              "square": "d1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c2",
+              "square": "b3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b5",
+              "square": "c7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d1",
+              "square": "c5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b4",
+              "square": "c5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
+              "square": "c5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f6",
+              "square": "d8",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d5",
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Qc2 — queen redeploys",
-          "...b5! — expansion",
-          "Rfd1 — central files",
-          "...b4 — wedge",
-          "Nd5 — White seeks activity",
-          "...Nxd5 — trade central knight"
-        ],
-        "title": "Fianchetto Variation — Qa5 + ...b5 queenside push",
-        "intro": "Past the Yugoslav setup, Black's queen on a5 and the …b5 push define the queenside plan. The Fianchetto's mirror bishop on g2 neutralises our long diagonal, so the game has to be decided on the queenside where Black has more space.",
+        "title": "KID Fianchetto: Equalise on the d-file",
+        "intro": "A real Naroditsky win vs alexrustemov. Black meets the c5 break and takes the open file.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Kings-Indian-Defense",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Defence",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -37849,39 +37860,62 @@
   {
     "id": "mp-pronaroKID-antikidnf3-yugoslav",
     "openingId": "pro-naroditsky-kid",
-    "criticalPositionFen": "r1b1r1k1/pp1n1pbp/2pp1np1/q7/2PNP3/2N3PP/PP3PB1/R1BQR1K1 w - - 1 12",
+    "criticalPositionFen": "r1b1r1k1/pp3pbp/2pp1np1/q3n3/2P1P3/2N3PP/PPN2PB1/R1BQR1K1 w - - 3 13",
     "title": "Anti-KID Nf3 — Yugoslav transposition",
-    "overview": "The Anti-KID Nf3 transposes into Fianchetto-Yugoslav structures. Black plays the same queenside expansion plan — …Qa5 + …b5 — with the same goal of fighting on the side where the Fianchetto's mirror bishop is weakest.",
+    "overview": "A real Naroditsky win (vs Firouzja2003!): Black grabs the e4-pawn, the queen snatches the rook on e1, and …Nf3+ forks to keep the extra material — clearly winning (~+3.5).",
     "pawnBreaks": [
-      "...b5 queenside expansion"
+      {
+        "move": "...Nxe4 central grab",
+        "explanation": "…Nxe4 grabs the centre pawn before the tactics.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "...Qa5 + ...a6 + ...b5 Yugoslav plan"
+      {
+        "piece": "Knight",
+        "route": "...Ne5-f3+ fork",
+        "explanation": "The knight forks from f3 to cement the material edge."
+      }
     ],
     "strategicThemes": [
-      "Same Yugoslav plan as Fianchetto"
+      "Grab the centre, then the rook.",
+      "Cement the win with the …Nf3+ fork."
     ],
     "endgameTransitions": [
-      "R+min+P with queenside space (23.3%)"
+      "The extra material decides."
     ],
     "playableLines": [
       {
-        "fen": "r1b1r1k1/pp1n1pbp/2pp1np1/q7/2PNP3/2N3PP/PP3PB1/R1BQR1K1 w - - 1 12",
+        "fen": "r1b1r1k1/pp3pbp/2pp1np1/q3n3/2P1P3/2N3PP/PPN2PB1/R1BQR1K1 w - - 3 13",
         "moves": [
-          "Qc2",
-          "a6",
-          "Rd1",
-          "b5",
-          "Nd5",
-          "Nxd5"
+          "Ne3",
+          "Be6",
+          "Bf1",
+          "Nxe4",
+          "Nxe4",
+          "Qxe1",
+          "Qxe1",
+          "Nf3+"
         ],
         "annotations": [
-          "Qc2 — White's queen redeployment, same theme as Fianchetto. Supports c4 and prepares queenside development.",
-          "...a6 — Black prepares the b5 push with the standard Panno-style move order. The a6 also denies White's potential Nb5 ideas.",
-          "Rd1 — White's rook lifts to the central file, controlling d-file.",
-          "...b5! The expansion push, opening the b-file and challenging White's c4-pawn.",
-          "Nd5 — White seeks central activity with the knight outpost.",
-          "...Nxd5! Black trades the centralised knight, leaving White with a damaged structure. Same theme as the Fianchetto, just from a slightly different move order."
+          "Ne3 — White repositions the knight.",
+          "…Be6 — Black develops.",
+          "Bf1 — White retreats.",
+          "…Nxe4 — Black grabs the centre pawn.",
+          "Nxe4 — White recaptures.",
+          "…Qxe1 — Black’s queen grabs the rook.",
+          "Qxe1 — White recaptures.",
+          "…Nf3+ — Black forks with the knight, winning material."
+        ],
+        "learnCues": [
+          "Ne3 — reposition",
+          "Be6 — develop",
+          "Bf1 — retreat",
+          "Nxe4 — grab the centre",
+          "Nxe4 — recapture",
+          "Qxe1 — grab the rook",
+          "Qxe1 — recapture",
+          "Nf3+ — fork, win material"
         ],
         "arrows": [
           [],
@@ -37889,26 +37923,50 @@
           [],
           [],
           [],
-          []
+          [
+            {
+              "from": "a5",
+              "to": "e1",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "e5",
+              "to": "f3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
         ],
         "highlights": [
           [
             {
-              "square": "d1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c2",
+              "square": "e3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "a7",
+              "square": "e6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "a6",
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -37916,55 +37974,27 @@
             {
               "square": "e1",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d1",
+              "square": "e1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
+              "square": "f3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Qc2 — redeploy",
-          "...a6 — Panno prep",
-          "Rd1 — central file",
-          "...b5! — expansion",
-          "Nd5 — central outpost",
-          "...Nxd5 — trade"
-        ],
-        "title": "Anti-KID Nf3 — Yugoslav transposition",
-        "intro": "The Anti-KID Nf3 transposes into Fianchetto-Yugoslav structures. Black plays the same queenside expansion plan — …Qa5 + …b5 — with the same goal of fighting on the side where the Fianchetto's mirror bishop is weakest.",
+        "title": "KID: …Qxe1 and the …Nf3+ Fork",
+        "intro": "A real Naroditsky win vs Firouzja2003. Black grabs the rook and forks his way to a winning game.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Kings-Indian-Defense",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Defence",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -38073,40 +38103,72 @@
     "openingId": "pro-naroditsky-kid",
     "criticalPositionFen": "2r2r2/1p1nppkp/p2pb1p1/q7/2P1P3/1PN2P2/P2QB1PP/3R1RK1 w - - 0 16",
     "title": "Sämisch — Panno queenside trade-down",
-    "overview": "Past the trade-down sequence in the Sämisch, Black has reached a R+B+N endgame structure with the active bishop on e6 (the g7-bishop has been traded off). The plan from here is the central knight trade + the queenside conversion.",
+    "overview": "A real Naroditsky win (vs igrok6996): Black strikes …b5 on the queenside while White pushes the kingside, and after the trades Black’s counterplay is in full swing (~+0.7).",
     "pawnBreaks": [
-      "queenside ...b5 expansion"
+      {
+        "move": "...b5 queenside counter",
+        "explanation": "…b5 strikes on the queenside, the thematic Sämisch counter.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "...Bxd5 force doubled pawns",
-      "...Rfc8 c-file pressure"
+      {
+        "piece": "Bishop",
+        "route": "...Be6-f7 reroute",
+        "explanation": "The bishop drops to f7 to support the queenside play."
+      }
     ],
     "strategicThemes": [
-      "Queenside expansion before White attack",
-      "Structural conversion"
+      "Counter on the queenside with …b5.",
+      "Keep the king safe while pushing."
     ],
     "endgameTransitions": [
-      "R+B+P with structural edge (29.7%)"
+      "The queenside play carries into the endgame."
     ],
     "playableLines": [
       {
         "fen": "2r2r2/1p1nppkp/p2pb1p1/q7/2P1P3/1PN2P2/P2QB1PP/3R1RK1 w - - 0 16",
         "moves": [
-          "Nd5",
-          "Qxd2",
-          "Rxd2",
-          "Bxd5",
-          "exd5"
+          "f4",
+          "f6",
+          "Kh1",
+          "b5",
+          "f5",
+          "Bf7",
+          "fxg6",
+          "hxg6"
         ],
         "annotations": [
-          "Nd5 — White's knight tries the central outpost. Black's queen is on a5 and the d5-knight pressures the c7-square.",
-          "...Qxd2 — Black takes the queen trade. The endgame simplification favours Black: the Be6 + active rooks + queenside space.",
-          "Rxd2 — forced recapture. The position is now a R+B+N endgame with Black's pieces more active.",
-          "...Bxd5! Black trades the bishop for the central knight. The trade gives White a weak d5-pawn AND opens the e-file for Black's rook.",
-          "exd5 — White recaptures with the e-pawn, leaving an isolated d-pawn and damaging the structure. Black's queenside space + open files convert in the R+min+P endgame."
+          "f4 — White expands in the centre.",
+          "…f6 — Black braces the centre.",
+          "Kh1 — White tucks the king.",
+          "…b5 — Black strikes on the queenside, the thematic Sämisch counter.",
+          "f5 — White pushes on.",
+          "…Bf7 — Black repositions the bishop.",
+          "fxg6 — White opens the f-file.",
+          "…hxg6 — Black recaptures; the queenside counterplay is in full swing."
+        ],
+        "learnCues": [
+          "f4 — White expands",
+          "f6 — brace",
+          "Kh1 — tuck the king",
+          "b5 — queenside counter",
+          "f5 — White pushes",
+          "Bf7 — reposition",
+          "fxg6 — open the f-file",
+          "hxg6 — counterplay rolls"
         ],
         "arrows": [
           [],
+          [],
+          [],
+          [
+            {
+              "from": "b7",
+              "to": "b5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           [],
@@ -38115,66 +38177,59 @@
         "highlights": [
           [
             {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
+              "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "a5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d2",
+              "square": "f6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d2",
+              "square": "h1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
+              "square": "b5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e4",
+              "square": "f5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d5",
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Nd5 — central outpost",
-          "...Qxd2 trade queens",
-          "Rxd2 forced",
-          "...Bxd5 trade",
-          "exd5 — isolated d-pawn"
-        ],
-        "title": "Sämisch — Panno queenside trade-down",
-        "intro": "Past the trade-down sequence in the Sämisch, Black has reached a R+B+N endgame structure with the active bishop on e6 (the g7-bishop has been traded off). The plan from here is the central knight trade + the queenside conversion.",
+        "title": "KID Sämisch: the …b5 Queenside Counter",
+        "intro": "A real Naroditsky win vs igrok6996. Black strikes …b5 and gets full queenside counterplay.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Kings-Indian-Defense",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Defence",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -38185,35 +38240,72 @@
     "openingId": "pro-naroditsky-kid",
     "criticalPositionFen": "rnbqr1k1/5pbp/p1pp2p1/3n4/Np1PPN2/5P2/PP1BB1PP/R2QK2R b KQ - 3 13",
     "title": "Petrosian — central infiltration via ...Nxe4",
-    "overview": "Past the queenside expansion, Black has the knight on d5 and the position has resolved toward central play. The …Nxe4 break + …Rxe4 sequence wins the e4-pawn AND damages White's structure.",
+    "overview": "A real Naroditsky win (vs penguingm1): Black trades on f4, strikes …d5, and challenges the e5-wedge with …f6 — opening the f-file with the better structure (~+0.6).",
     "pawnBreaks": [
-      "...b5-b4 queenside expansion"
+      {
+        "move": "...d5 and ...f6 break",
+        "explanation": "…d5 and …f6 strike the centre and open lines.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "...Nxe4 central piece grab"
+      {
+        "piece": "Pawn",
+        "route": "...fxe5 file-opening",
+        "explanation": "…fxe5 opens the f-file for Black’s rook."
+      }
     ],
     "strategicThemes": [
-      "Queenside-then-central attack"
+      "Break the centre with …d5 and …f6.",
+      "Open the f-file for active play."
     ],
     "endgameTransitions": [
-      "R+B+P with extra pawn (28.4%)"
+      "The better structure tells into the endgame."
     ],
     "playableLines": [
       {
         "fen": "rnbqr1k1/5pbp/p1pp2p1/3n4/Np1PPN2/5P2/PP1BB1PP/R2QK2R b KQ - 3 13",
         "moves": [
-          "Bxd4",
-          "Bxb4",
-          "Bxb2",
-          "Rb1"
+          "Nxf4",
+          "Bxf4",
+          "d5",
+          "e5",
+          "f6",
+          "O-O",
+          "fxe5",
+          "dxe5"
         ],
         "annotations": [
-          "...Bxd4! Black grabs the d4-pawn. The pawn is undefended (White’s knight has left c3 for a4) and the Bg7 has been waiting for this entire opening to strike along the long diagonal.",
-          "Bxb4 — White takes the b4-pawn in return, removing Black's queenside wedge. Material is balanced after the trade, but Black's bishop on d4 is dominant.",
-          "...Bxb2 — Black's bishop continues the diagonal raid, grabbing another pawn. White's queenside pawn structure is collapsing.",
-          "Rb1 — White's rook attacks the bishop. The bishop will retreat next, but Black has converted the queenside expansion into material gain. Two pawns up + active bishop = winning position."
+          "…Nxf4 — Black trades off a piece.",
+          "Bxf4 — White recaptures.",
+          "…d5 — Black strikes the centre.",
+          "e5 — White pushes past.",
+          "…f6 — Black challenges the e5-wedge.",
+          "O-O — White castles.",
+          "…fxe5 — Black opens the f-file.",
+          "dxe5 — White recaptures; Black has the better structure and open lines."
+        ],
+        "learnCues": [
+          "Nxf4 — trade a piece",
+          "Bxf4 — recapture",
+          "d5 — strike the centre",
+          "e5 — White pushes",
+          "f6 — challenge the wedge",
+          "O-O — castle",
+          "fxe5 — open the f-file",
+          "dxe5 — Black is better"
         ],
         "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "d6",
+              "to": "d5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
           [],
           [],
           [],
@@ -38222,55 +38314,59 @@
         "highlights": [
           [
             {
-              "square": "g7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
+              "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b4",
+              "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b2",
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "a1",
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "b1",
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "...Bxd4! grab pawn",
-          "Bxb4 — White takes back",
-          "...Bxb2 — long-diagonal raid",
-          "Rb1 — attack bishop"
-        ],
-        "title": "Petrosian — central infiltration via ...Nxe4",
-        "intro": "Past the queenside expansion, Black has the knight on d5 and the position has resolved toward central play. The …Nxe4 break + …Rxe4 sequence wins the e4-pawn AND damages White's structure.",
+        "title": "KID Petrosian: Strike with …d5 and …f6",
+        "intro": "A real Naroditsky win vs penguingm1. Black breaks the centre and opens lines for the pieces.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Kings-Indian-Defense",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Defence",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -38279,43 +38375,74 @@
   {
     "id": "mp-pronaroKID-fourpawns-reroute",
     "openingId": "pro-naroditsky-kid",
-    "criticalPositionFen": "r1bq1rk1/pp1n1pbp/3n2p1/2pPp3/2P1P3/2NBBN2/PP4PP/R2Q1RK1 w - - 6 12",
+    "criticalPositionFen": "r1bq1rk1/pp1n2bp/3n2p1/2pPpp2/2P1P3/P1NBBN2/1P4PP/R2Q1RK1 w - - 0 13",
     "title": "Four Pawns — ...f5 kingside storm + Nd6 prize square",
-    "overview": "Past the locked centre with d5, Black's …Ne8-Nd6 reroute has landed and the …f5 break is queued. The plan: undermine the e4-pawn, open the f-file, exploit the open lines and active pieces.",
+    "overview": "A real Naroditsky win (vs Indianlad): Black plays the thematic …f4 clamp and reroutes the bishop toward the kingside, setting up the classic KID attack — a balanced, double-edged game.",
     "pawnBreaks": [
-      "...f5 kingside storm"
+      {
+        "move": "...f4 kingside clamp",
+        "explanation": "…f4 clamps the kingside, the thematic KID lever.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "...Ne8-Nd6 prize square reroute"
+      {
+        "piece": "Bishop",
+        "route": "...Bg7-f6-e7 reroute",
+        "explanation": "The bishop reroutes via f6 to e7, heading for the kingside attack."
+      }
     ],
     "strategicThemes": [
-      "Undermine the Four Pawns chain"
+      "Clamp the kingside with …f4.",
+      "Reroute pieces for the attack."
     ],
     "endgameTransitions": [
-      "Open lines + active pieces (23.0%)"
+      "The kingside play is the point, not an endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1bq1rk1/pp1n1pbp/3n2p1/2pPp3/2P1P3/2NBBN2/PP4PP/R2Q1RK1 w - - 6 12",
+        "fen": "r1bq1rk1/pp1n2bp/3n2p1/2pPpp2/2P1P3/P1NBBN2/1P4PP/R2Q1RK1 w - - 0 13",
         "moves": [
-          "a3",
-          "f5",
-          "exf5",
-          "gxf5",
-          "Bg5",
-          "Bf6"
+          "b4",
+          "b6",
+          "Nd2",
+          "f4",
+          "Bf2",
+          "Bf6",
+          "Kh1",
+          "Be7"
         ],
         "annotations": [
-          "a3 — White prepares b4 queenside expansion. Standard Four Pawns plan, but slow.",
-          "...f5! The kingside pawn storm launches. Black challenges the e4-pawn directly and prepares to open the f-file.",
-          "exf5 — White trades, hoping for simplification. But the trade leaves an isolated d5-pawn AND opens lines toward White's king.",
-          "...gxf5 — Black recaptures with the g-pawn. The doubled pawn structure looks ugly but it covers e4 AND the half-open g-file points at White's king.",
-          "Bg5 — White's bishop activates, attacking the f6-square. Standard development.",
-          "...Bf6 — Black's bishop defends and offers a trade. The Bf6 + Bg7 are both well-placed; the trade favours the attacker (Black)."
+          "b4 — White expands on the queenside.",
+          "…b6 — Black braces.",
+          "Nd2 — White reroutes a knight.",
+          "…f4 — Black clamps the kingside, the thematic KID lever.",
+          "Bf2 — White retreats the bishop.",
+          "…Bf6 — Black reroutes the bishop toward the kingside.",
+          "Kh1 — White tucks the king.",
+          "…Be7 — Black regroups for the kingside attack; balanced."
+        ],
+        "learnCues": [
+          "b4 — White expands",
+          "b6 — brace",
+          "Nd2 — reroute",
+          "f4 — clamp the kingside",
+          "Bf2 — retreat",
+          "Bf6 — reroute the bishop",
+          "Kh1 — tuck the king",
+          "Be7 — ready the attack"
         ],
         "arrows": [
           [],
           [],
+          [],
+          [
+            {
+              "from": "f5",
+              "to": "f4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           [],
@@ -38324,77 +38451,59 @@
         "highlights": [
           [
             {
-              "square": "a2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a3",
+              "square": "b4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f5",
+              "square": "b6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f5",
+              "square": "d2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f5",
+              "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g5",
+              "square": "f2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
-            {
-              "square": "g7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "f6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
+          ],
+          [
+            {
+              "square": "h1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ]
         ],
-        "learnCues": [
-          "a3 — queenside prep",
-          "...f5! storm",
-          "exf5 trade",
-          "...gxf5 — half-open g-file",
-          "Bg5 activate",
-          "...Bf6 defend"
-        ],
-        "title": "Four Pawns — ...f5 kingside storm + Nd6 prize square",
-        "intro": "Past the locked centre with d5, Black's …Ne8-Nd6 reroute has landed and the …f5 break is queued. The plan: undermine the e4-pawn, open the f-file, exploit the open lines and active pieces.",
+        "title": "KID Four Pawns: Clamp with …f4",
+        "intro": "A real Naroditsky win vs Indianlad. Black clamps the kingside and reroutes for the attack.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Kings-Indian-Defense",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Defence",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -42143,37 +42252,80 @@
   {
     "id": "mp-pronaroKID-antikidnf3-rooklift",
     "openingId": "pro-naroditsky-kid",
-    "criticalPositionFen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N2NPP/PP3PB1/R1BQR1K1 b - - 2 10",
+    "criticalPositionFen": "r1b1r1k1/pp3pbp/2pp1np1/q3n3/2P1P3/2N3PP/PP2NPB1/R1BQR1K1 w - - 3 13",
     "title": "Anti-KID Nf3 — Re8 + ...Bg4 pin counter",
-    "overview": "Alternative to the Yugoslav plan: the ...Re8 + ...Bg4 setup pinning White's f3-knight against the queen, forcing concessions.",
+    "overview": "A real Naroditsky win (vs Salem-AR): …Bxh3 rips open the kingside, and the …Nf3+/…Nxe1+ fork collects the rook before …Nxe4 grabs a pawn too — up the exchange (~+1.1).",
     "pawnBreaks": [
-      "...exd4 open the file"
+      {
+        "move": "...Bxh3 open the king",
+        "explanation": "…Bxh3 sacrifices to open White’s king for the knight fork.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "...Re8 rook lift"
+      {
+        "piece": "Knight",
+        "route": "...Ne5-f3-e1 fork",
+        "explanation": "The knight forks from f3 and grabs the rook on e1."
+      }
     ],
     "strategicThemes": [
-      "Central pressure setup"
+      "Open the king with …Bxh3.",
+      "Win the exchange with the …Nf3 fork."
     ],
     "endgameTransitions": [
-      "R+B+N central files"
+      "Up the exchange, trades close it out."
     ],
     "playableLines": [
       {
-        "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N2NPP/PP3PB1/R1BQR1K1 b - - 2 10",
+        "fen": "r1b1r1k1/pp3pbp/2pp1np1/q3n3/2P1P3/2N3PP/PP2NPB1/R1BQR1K1 w - - 3 13",
         "moves": [
-          "Re8",
-          "Qc2",
-          "exd4",
-          "Nxd4"
+          "b3",
+          "Bxh3",
+          "Bxh3",
+          "Nf3+",
+          "Kg2",
+          "Nxe1+",
+          "Qxe1",
+          "Nxe4"
         ],
         "annotations": [
-          "...Re8 — Black's rook to the e-file pressuring the e4-pawn.",
-          "Qc2 — White's queen supports e4 AND prepares queenside development.",
-          "...exd4 — Black opens the e-file with the trade.",
-          "Nxd4 — White recaptures. The rook on e8 now has full pressure on e4 and the position is balanced."
+          "b3 — White prepares to fianchetto.",
+          "…Bxh3 — Black sacrifices the bishop to rip open the kingside.",
+          "Bxh3 — White recaptures.",
+          "…Nf3+ — Black’s knight forks with check.",
+          "Kg2 — the king sidesteps.",
+          "…Nxe1+ — Black grabs the rook with check.",
+          "Qxe1 — White recaptures.",
+          "…Nxe4 — Black snatches a central pawn, up the exchange."
+        ],
+        "learnCues": [
+          "b3 — prep fianchetto",
+          "Bxh3 — sac, open the king",
+          "Bxh3 — recapture",
+          "Nf3+ — fork with check",
+          "Kg2 — sidestep",
+          "Nxe1+ — grab the rook",
+          "Qxe1 — recapture",
+          "Nxe4 — up the exchange"
         ],
         "arrows": [
+          [],
+          [
+            {
+              "from": "c8",
+              "to": "h3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "e5",
+              "to": "f3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           [],
@@ -42182,31 +42334,19 @@
         "highlights": [
           [
             {
-              "square": "f8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e8",
+              "square": "b3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c2",
+              "square": "h3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
+              "square": "h3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -42214,23 +42354,39 @@
             {
               "square": "f3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d4",
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "...Re8 pressure",
-          "Qc2 defend",
-          "...exd4 open",
-          "Nxd4 recapture"
-        ],
-        "title": "Anti-KID Nf3 — Re8 + ...Bg4 pin counter",
-        "intro": "Alternative to the Yugoslav plan: the ...Re8 + ...Bg4 setup pinning White's f3-knight against the queen, forcing concessions.",
+        "title": "KID: …Bxh3 Sacrifice Wins the Exchange",
+        "intro": "A real Naroditsky win vs Salem-AR. A bishop sac on h3 leads to a knight fork that nets the rook.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Kings-Indian-Defense",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Defence",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -42239,37 +42395,74 @@
   {
     "id": "mp-pronaroKID-makogonov-nc5",
     "openingId": "pro-naroditsky-kid",
-    "criticalPositionFen": "r1bq1rk1/pp3pbp/n1pp2p1/3Pp3/2P1Pn2/2N1BN1P/PP2BPP1/R2Q1RK1 w - - 3 11",
+    "criticalPositionFen": "r1bq1rk1/pp3pbp/n2p2p1/2pPp3/2P1P3/2N1BN1P/PP2RPP1/R2Q2K1 w - - 0 13",
     "title": "Makogonov — ...Nc5 queenside outpost",
-    "overview": "Alternative to the kingside storm: the ...Nc5 outpost on the queenside hitting e4 and dominating dark squares.",
+    "overview": "A real Naroditsky win (vs Tobias_Koelle): …f5 opens the kingside, and after the trade Black reroutes the knight to c7 for active KID counterplay — a balanced, double-edged game.",
     "pawnBreaks": [
-      "...f5-f4 kingside storm"
+      {
+        "move": "...f5 break",
+        "explanation": "…f5 opens the kingside for Black’s counterplay.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "...Na6-Nc5 reroute"
+      {
+        "piece": "Knight",
+        "route": "...Na6-c7 reroute",
+        "explanation": "The knight reroutes to c7, supporting …b5 and …e6."
+      }
     ],
     "strategicThemes": [
-      "Kingside attack + queenside outpost"
+      "Open the kingside with …f5.",
+      "Reroute the knight for counterplay."
     ],
     "endgameTransitions": [
-      "R+B+N kingside attack"
+      "The active counterplay holds the balance."
     ],
     "playableLines": [
       {
-        "fen": "r1bq1rk1/pp3pbp/n1pp2p1/3Pp3/2P1Pn2/2N1BN1P/PP2BPP1/R2Q1RK1 w - - 3 11",
+        "fen": "r1bq1rk1/pp3pbp/n2p2p1/2pPp3/2P1P3/2N1BN1P/PP2RPP1/R2Q2K1 w - - 0 13",
         "moves": [
-          "Re1",
+          "Qd2",
           "f5",
-          "Bxf4",
-          "exf4"
+          "exf5",
+          "gxf5",
+          "Bg5",
+          "Qd7",
+          "Rae1",
+          "Nc7"
         ],
         "annotations": [
-          "Re1 — White's rook supports the e-file.",
-          "...f5 — Black's pawn storm launches with the knight already on f4.",
-          "Bxf4 — White trades the dark-square bishop for the Nf4.",
-          "...exf4 — Black's e5-pawn captures back diagonally, opening the e-file for the rook AND fixing the f4-pawn as a structural target. The kingside attack continues with the open e-file and the half-open f-file."
+          "Qd2 — White connects.",
+          "…f5 — Black strikes on the kingside.",
+          "exf5 — White captures.",
+          "…gxf5 — Black recaptures, opening the g-file.",
+          "Bg5 — White’s bishop probes.",
+          "…Qd7 — Black connects.",
+          "Rae1 — White centralises.",
+          "…Nc7 — Black reroutes the knight; a balanced KID with kingside play."
+        ],
+        "learnCues": [
+          "Qd2 — connect",
+          "f5 — strike the kingside",
+          "exf5 — capture",
+          "gxf5 — open the g-file",
+          "Bg5 — probe",
+          "Qd7 — connect",
+          "Rae1 — centralise",
+          "Nc7 — reroute, counterplay"
         ],
         "arrows": [
+          [],
+          [
+            {
+              "from": "f7",
+              "to": "f5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
           [],
           [],
           [],
@@ -42278,19 +42471,11 @@
         "highlights": [
           [
             {
-              "square": "f1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e1",
+              "square": "d2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
-            {
-              "square": "f7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "f5",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -42298,35 +42483,47 @@
           ],
           [
             {
-              "square": "e3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f4",
+              "square": "f5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e5",
+              "square": "f5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "f4",
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Re1 support",
-          "...f5 storm",
-          "Bxf4 trade",
-          "...exf4 — open f-file"
-        ],
-        "title": "Makogonov — ...Nc5 queenside outpost",
-        "intro": "Alternative to the kingside storm: the ...Nc5 outpost on the queenside hitting e4 and dominating dark squares.",
+        "title": "KID Makogonov: …f5 Counterplay",
+        "intro": "A real Naroditsky win vs Tobias_Koelle. Black strikes …f5 and reroutes for active play.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Kings-Indian-Defense",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Defence",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -42335,37 +42532,74 @@
   {
     "id": "mp-pronaroKID-saemisch-central",
     "openingId": "pro-naroditsky-kid",
-    "criticalPositionFen": "rnbq1rk1/1p2ppbp/p2p1np1/2p5/2PPP3/2N1BP2/PP1Q2PP/R3KBNR w KQ - 0 8",
+    "criticalPositionFen": "2rq1rk1/1p2ppbp/p2pbnp1/8/2PBP3/1PN2P2/P2Q2PP/3RKB1R w K - 1 13",
     "title": "Sämisch — ...c5 central counter early",
-    "overview": "Alternative to the Bronstein/Panno trade-down: the active ...c5 central counter-strike before White's kingside attack lands.",
+    "overview": "A real Naroditsky win (vs igrok6996): Black eyes the queenside with …Qa5, reroutes the knight to d7, and after the dark bishops come off braces with …f6 for a balanced Sämisch.",
     "pawnBreaks": [
-      "...b5 queenside expansion"
+      {
+        "move": "...c5 / ...b5 counter",
+        "explanation": "Black aims for the queenside …c5/…b5 counter in the Sämisch.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "...a-file rook activation"
+      {
+        "piece": "Knight",
+        "route": "...Nf6-d7 reroute",
+        "explanation": "The knight reroutes to d7 to support …c5 and …e5."
+      }
     ],
     "strategicThemes": [
-      "Counter-attack queenside before White attack lands"
+      "Trade the dark bishops.",
+      "Reroute the knight for counterplay."
     ],
     "endgameTransitions": [
-      "R+B+N with queenside majority"
+      "The balanced structure holds into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "rnbq1rk1/1p2ppbp/p2p1np1/2p5/2PPP3/2N1BP2/PP1Q2PP/R3KBNR w KQ - 0 8",
+        "fen": "2rq1rk1/1p2ppbp/p2pbnp1/8/2PBP3/1PN2P2/P2Q2PP/3RKB1R w K - 1 13",
         "moves": [
-          "d5",
-          "b5",
-          "cxb5",
-          "axb5"
+          "Be2",
+          "Qa5",
+          "O-O",
+          "Nd7",
+          "Bxg7",
+          "Kxg7",
+          "f4",
+          "f6"
         ],
         "annotations": [
-          "d5 — White closes the centre, gaining queenside space.",
-          "...b5 — Black's queenside expansion immediately challenges the c4-pawn.",
-          "cxb5 — White trades the c-pawn.",
-          "...axb5 — Black recaptures with the a-pawn, opening the a-file for the rook AND creating queenside pawn majority."
+          "Be2 — White develops.",
+          "…Qa5 — Black eyes the queenside.",
+          "O-O — White castles.",
+          "…Nd7 — Black reroutes the knight.",
+          "Bxg7 — White trades the dark-squared bishops.",
+          "…Kxg7 — Black recaptures.",
+          "f4 — White expands in the centre.",
+          "…f6 — Black braces; a balanced Sämisch."
+        ],
+        "learnCues": [
+          "Be2 — develop",
+          "Qa5 — eye the queenside",
+          "O-O — castle",
+          "Nd7 — reroute",
+          "Bxg7 — trade bishops",
+          "Kxg7 — recapture",
+          "f4 — White expands",
+          "f6 — brace, balanced"
         ],
         "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f6",
+              "to": "d7",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           [],
@@ -42374,55 +42608,59 @@
         "highlights": [
           [
             {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
+              "square": "e2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b5",
+              "square": "a5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b5",
+              "square": "g1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "a6",
+              "square": "d7",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "b5",
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "d5 lock",
-          "...b5 expand",
-          "cxb5 trade",
-          "...axb5 — open a-file"
-        ],
-        "title": "Sämisch — ...c5 central counter early",
-        "intro": "Alternative to the Bronstein/Panno trade-down: the active ...c5 central counter-strike before White's kingside attack lands.",
+        "title": "KID Sämisch: Reroute and Brace",
+        "intro": "A real Naroditsky win vs igrok6996. Black trades the dark bishops and sets up counterplay.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Kings-Indian-Defense",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Defence",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -42431,37 +42669,74 @@
   {
     "id": "mp-pronaroKID-petrosian-re8",
     "openingId": "pro-naroditsky-kid",
-    "criticalPositionFen": "rnbq1rk1/5pbp/p1pp1np1/1p6/3PP3/2N1BP2/PP2N1PP/R2QKB1R w KQ - 0 10",
+    "criticalPositionFen": "rnbqr1k1/5pbp/p1pp2p1/3n4/Np1PPN2/4BP2/PP2B1PP/R2QK2R w KQ - 2 13",
     "title": "Petrosian — ...Re8 + ...h5 kingside expansion",
-    "overview": "Alternative to the long-diagonal Bxd4 raid: the ...Re8 + ...h5 setup gaining kingside space.",
+    "overview": "A real Naroditsky win (vs penguingm1): Black trades on f4 and strikes …d5/…f6, opening the f-file for active counterplay — a balanced, dynamic game.",
     "pawnBreaks": [
-      "...h5-h4 kingside expansion"
+      {
+        "move": "...d5 central break",
+        "explanation": "…d5 strikes the centre and opens lines.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "...Re8 rook lift"
+      {
+        "piece": "Pawn",
+        "route": "...f6-...fxe5 file",
+        "explanation": "…f6 and …fxe5 open the f-file for Black."
+      }
     ],
     "strategicThemes": [
-      "Slow kingside expansion + queenside space"
+      "Strike the centre with …d5.",
+      "Open the f-file for counterplay."
     ],
     "endgameTransitions": [
-      "R+B+N positional grind"
+      "The active pieces hold the balance."
     ],
     "playableLines": [
       {
-        "fen": "rnbq1rk1/5pbp/p1pp1np1/1p6/3PP3/2N1BP2/PP2N1PP/R2QKB1R w KQ - 0 10",
+        "fen": "rnbqr1k1/5pbp/p1pp2p1/3n4/Np1PPN2/4BP2/PP2B1PP/R2QK2R w KQ - 2 13",
         "moves": [
-          "Nf4",
-          "Re8",
-          "Be2",
-          "h5"
+          "Bd2",
+          "Nxf4",
+          "Bxf4",
+          "d5",
+          "e5",
+          "f6",
+          "O-O",
+          "fxe5"
         ],
         "annotations": [
-          "Nf4 — White's knight to the central outpost.",
-          "...Re8 — Black coordinates the rook on the e-file.",
-          "Be2 — White completes development.",
-          "...h5 — Black's kingside expansion begins. The h5 push prepares ...h4 cramping White's kingside."
+          "Bd2 — White repositions the bishop.",
+          "…Nxf4 — Black trades a piece.",
+          "Bxf4 — White recaptures.",
+          "…d5 — Black strikes the centre.",
+          "e5 — White pushes past.",
+          "…f6 — Black challenges the wedge.",
+          "O-O — White castles.",
+          "…fxe5 — Black opens the f-file with active play; balanced."
+        ],
+        "learnCues": [
+          "Bd2 — reposition",
+          "Nxf4 — trade a piece",
+          "Bxf4 — recapture",
+          "d5 — strike the centre",
+          "e5 — White pushes",
+          "f6 — challenge it",
+          "O-O — castle",
+          "fxe5 — open the f-file"
         ],
         "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d6",
+              "to": "d5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           [],
@@ -42470,9 +42745,11 @@
         "highlights": [
           [
             {
-              "square": "e2",
+              "square": "d2",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
               "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -42480,45 +42757,47 @@
           ],
           [
             {
-              "square": "f8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e8",
+              "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e2",
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "h7",
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "h5",
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Nf4 outpost",
-          "...Re8 coordinate",
-          "Be2 develop",
-          "...h5 expand"
-        ],
-        "title": "Petrosian — ...Re8 + ...h5 kingside expansion",
-        "intro": "Alternative to the long-diagonal Bxd4 raid: the ...Re8 + ...h5 setup gaining kingside space.",
+        "title": "KID Petrosian: Open the Centre with …d5",
+        "intro": "A real Naroditsky win vs penguingm1. The same central break, reaching an active, balanced game.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Kings-Indian-Defense",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Defence",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -42527,94 +42806,141 @@
   {
     "id": "mp-pronaroKID-fourpawns-counter",
     "openingId": "pro-naroditsky-kid",
-    "criticalPositionFen": "r1bq1rk1/pp1n1pbp/3n2p1/2pPp3/2P1P3/2NBBN2/PP4PP/R2Q1RK1 w - - 6 12",
+    "criticalPositionFen": "r1bq1rk1/p2n1pbp/1p1n2p1/2pPp3/2P1P3/2NBBN2/PP2Q1PP/R4RK1 w - - 0 13",
     "title": "Four Pawns — ...Nbd7-Nb6 reroute attacking c4",
-    "overview": "Alternative to the kingside storm: the ...Nbd7-Nb6 reroute targeting White's c4-pawn directly.",
+    "overview": "A real Naroditsky win (vs Antony-soprano01): Black strikes …f5, clamps with …f4, and rolls …g5 — the textbook KID kingside storm against White’s queenside play — a sharp, balanced race.",
     "pawnBreaks": [
-      "...c5 wedge"
+      {
+        "move": "...f5-f4 and ...g5 storm",
+        "explanation": "…f5-f4 clamps and …g5 storms the kingside.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "...Nd7-Nb6 reroute"
+      {
+        "piece": "Queen",
+        "route": "...Qd8-e7 support",
+        "explanation": "The queen comes to e7 to back the kingside pawns."
+      }
     ],
     "strategicThemes": [
-      "Target c4 in the Four Pawns chain"
+      "Race on the kingside with …f5-f4-g5.",
+      "Out-storm White’s queenside play."
     ],
     "endgameTransitions": [
-      "R+B+N with active minor pieces"
+      "The mutual storms decide before any endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1bq1rk1/pp1n1pbp/3n2p1/2pPp3/2P1P3/2NBBN2/PP4PP/R2Q1RK1 w - - 6 12",
+        "fen": "r1bq1rk1/p2n1pbp/1p1n2p1/2pPp3/2P1P3/2NBBN2/PP2Q1PP/R4RK1 w - - 0 13",
         "moves": [
-          "Qd2",
-          "Nb6",
-          "a4",
-          "a5"
+          "Rae1",
+          "Qe7",
+          "a3",
+          "f5",
+          "b4",
+          "f4",
+          "Bf2",
+          "g5"
         ],
         "annotations": [
-          "Qd2 — White's queen connects the rooks.",
-          "...Nb6 — Black's second knight reroutes to b6 attacking c4.",
-          "a4 — White prevents ...a5 expansion.",
-          "...a5 — Black mirrors with the queenside push, fixing the a-pawn structure AND preparing ...Na6-Nc5 reroute toward the c4-pawn. The locked queenside doesn't help White's space advantage and Black has the better minor pieces."
+          "Rae1 — White centralises a rook.",
+          "…Qe7 — Black connects, backing the kingside.",
+          "a3 — White prepares b4.",
+          "…f5 — Black strikes on the kingside.",
+          "b4 — White expands on the queenside.",
+          "…f4 — Black clamps with the f-pawn.",
+          "Bf2 — White retreats the bishop.",
+          "…g5 — Black storms the kingside; the typical KID race."
+        ],
+        "learnCues": [
+          "Rae1 — centralise",
+          "Qe7 — back the pawns",
+          "a3 — prep b4",
+          "f5 — strike",
+          "b4 — White expands",
+          "f4 — clamp",
+          "Bf2 — retreat",
+          "g5 — storm the kingside"
         ],
         "arrows": [
           [],
           [],
           [],
-          []
+          [
+            {
+              "from": "f7",
+              "to": "f5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "g6",
+              "to": "g5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
         ],
         "highlights": [
           [
             {
-              "square": "d1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d2",
+              "square": "e1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b6",
+              "square": "e7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "a2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a4",
+              "square": "a3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "a7",
+              "square": "f5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "a5",
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Qd2 connect",
-          "...Nb6 attack c4",
-          "a4 prevent",
-          "...a5 — counter"
-        ],
-        "title": "Four Pawns — ...Nbd7-Nb6 reroute attacking c4",
-        "intro": "Alternative to the kingside storm: the ...Nbd7-Nb6 reroute targeting White's c4-pawn directly.",
+        "title": "KID Four Pawns: the …f5-f4-g5 Race",
+        "intro": "A real Naroditsky win vs Antony-soprano01. Black storms the kingside in the classic KID race.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Kings-Indian-Defense",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Defence",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
