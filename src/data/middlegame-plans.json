@@ -7065,20 +7065,25 @@
     "id": "mp-fourknightsgame-glek",
     "openingId": "four-knights-game",
     "title": "Glek System: the Knight to the f5 Outpost",
-    "criticalPositionFen": "r1bq1rk1/1pp2pp1/p1np1n1p/4p3/4P3/2NPPNPP/PPP3B1/R2Q1RK1 b - - 0 10",
+    "criticalPositionFen": "r1bqkb1r/ppp2ppp/2n5/3np3/8/2N2NP1/PPPP1P1P/R1BQKB1R w KQkq - 0 6",
     "overview": "The Glek's quiet fianchetto setup hides a concrete plan: trade the dark-squared bishops, recapture toward the centre to open the f-file, and reroute the knight via h4 to the f5 outpost. There, supported by the g2-bishop and the f-file rook, White builds a patient but real kingside initiative.",
     "pawnBreaks": [
       {
-        "move": "e3-e4 front",
-        "explanation": "Recapturing fxe3 builds a broad e3-e4 pawn front and opens the f-file for the rook.",
-        "fen": "r1bq1rk1/1pp2pp1/p1np1n1p/4p3/4P3/2NPPNPP/PPP3B1/R2Q1RK1 b - - 0 10"
+        "move": "e4-e5 — the central break",
+        "explanation": "Supported by Re1, the e5 advance opens the long diagonal for the fianchettoed bishop and seizes the centre.",
+        "fen": "r1bqkb1r/ppp2ppp/2n5/3np3/8/2N2NP1/PPPP1P1P/R1BQKB1R w KQkq - 0 6"
       }
     ],
     "pieceManeuvers": [
       {
-        "piece": "Knight",
-        "route": "Nf3-h4-f5",
-        "explanation": "The king-knight reroutes via h4 to the dominant f5 outpost, where it cannot be chased by a pawn."
+        "piece": "Bishop",
+        "route": "Bf1-g2 — the long-diagonal fianchetto",
+        "explanation": "The Glek’s key bishop rakes from g2 toward Black’s queenside and centre."
+      },
+      {
+        "piece": "Rook",
+        "route": "Rf1-e1 — back the e5-break",
+        "explanation": "The rook supports the central advance that opens lines for the bishop."
       }
     ],
     "strategicThemes": [
@@ -7091,88 +7096,103 @@
     ],
     "playableLines": [
       {
-        "title": "Glek System: the Knight to the f5 Outpost",
-        "fen": "r1bq1rk1/1pp2pp1/p1np1n1p/4p3/4P3/2NPPNPP/PPP3B1/R2Q1RK1 b - - 0 10",
+        "fen": "r1bqkb1r/ppp2ppp/2n5/3np3/8/2N2NP1/PPPP1P1P/R1BQKB1R w KQkq - 0 6",
         "moves": [
-          "Ne7",
-          "Nh4",
-          "c6",
-          "Nf5"
+          "Bg2",
+          "Nxc3",
+          "bxc3",
+          "Bc5",
+          "O-O",
+          "O-O",
+          "Re1",
+          "Bb6"
         ],
         "annotations": [
-          "…Ne7 — Black reroutes the knight toward the centre via e7.",
-          "Nh4 — White's knight hops to h4, aiming for the f5 outpost.",
-          "…c6 — Black takes queenside space with c6.",
-          "Nf5! — the knight lands on the f5 outpost, dominating from the centre of Black's camp."
-        ],
-        "sources": [
-          "book:four-knights-game",
-          "concept:pos-development",
-          "https://en.wikipedia.org/wiki/Four_Knights_Game"
-        ],
-        "learnCues": [
-          "Ne7 — reroute the knight",
-          "Nh4 — aim for the f5 outpost",
-          "c6 — queenside space",
-          "Nf5 — land the outpost"
+          "Bg2 completes the Glek's signature fianchetto — the bishop rakes the long diagonal, the modern Four Knights' whole idea.",
+          "Black trades on c3.",
+          "bxc3 recaptures toward the centre, accepting doubled c-pawns in return for the half-open b-file and a broad pawn front.",
+          "Black develops the bishop actively.",
+          "White castles, the fianchettoed king perfectly safe.",
+          "…O-O — Black castles too.",
+          "Re1 supports a future e4-e5 advance, the central break the Glek aims for.",
+          "…Bb6 retreats the bishop to safety. White has the comfortable Glek setup: the long-diagonal bishop, the half-open b-file, and the e5-break in hand — Mamedyarov outplayed Kramnik from this harmonious position."
         ],
         "arrows": [
           [],
-          [
-            {
-              "from": "h4",
-              "to": "f5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
+          [],
           [],
           []
         ],
+        "title": "The Glek Fianchetto (Mamedyarov–Kramnik)",
         "highlights": [
           [
             {
-              "square": "e7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c6",
+              "square": "g2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "h4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c7",
+              "square": "c3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f5",
+              "square": "c3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "h4",
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "intro": "White fianchettoes and prepares the e5-break.",
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Four_Knights_Game"
+        ],
+        "learnCues": [
+          "Bg2 — the Glek fianchetto",
+          "…Nxc3 — Black trades",
+          "bxc3 — recapture, open the b-file",
+          "…Bc5 — Black develops",
+          "O-O — White castles safely",
+          "…O-O — Black castles",
+          "Re1 — support the e5-break",
+          "…Bb6 — retreat the bishop"
         ]
       }
     ]
