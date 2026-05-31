@@ -29,7 +29,7 @@ const NF6_BXC6_DOUBLED: LessonScript = {
   openingId: 'pro-naroditsky-ruy-lopez', title: 'Weapon: Nf6 in Ba4 line walks into Bxc6 doubled-pawns (Wesley So victim)', minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
   beats: [
     b({ id: 'ruy-nf6-setup', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4', highlights: [H('a4', SOFT)],
-      say: "After 4.Ba4 in the Ruy Lopez Closed system, Black's choice is critical. The classical move is ...Nf6 (Morphy Defense) — but in this specific move order, 106 opponents played it and lost the Bxc6 trade race. Largest Ruy trap pattern by far.",
+      say: "After Ba4 in the Ruy Lopez Closed system, Black's choice is critical. The classical move is ...Nf6 (Morphy Defense) — but in this specific move order, 106 opponents played it and lost the Bxc6 trade race. Largest Ruy trap pattern by far.",
       sayShort: 'Ba4 — set the trap.' }),
     b({ id: 'ruy-nf6-blunder', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6', highlights: [H('f6', ATK)],
       say: "...Nf6 — the standard move. But our exchange variation timing is sharper. 106 opponents including GM Wesley So (2787), Coldplace (2833), and GM_dmitrij (2878) walked into the Bxc6 + doubled pawns trap.",
@@ -48,7 +48,7 @@ const ND6_BERLIN_HIKARU: LessonScript = {
   openingId: 'pro-naroditsky-ruy-lopez', title: 'Weapon: Nd6 in Berlin Defense (Hikaru victim)', minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
   beats: [
     b({ id: 'ruy-nd6-setup', moves: 'e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4', highlights: [H('d4', KEY)],
-      say: "Berlin Defense with the standard 5.d4 attacking move. Black's correct continuation is ...Nd6 (the textbook Berlin endgame) — but in the specific move order, the natural recapture is the trap.",
+      say: "Berlin Defense with the standard d4 attacking move. Black's correct continuation is ...Nd6 (the textbook Berlin endgame) — but in the specific move order, the natural recapture is the trap.",
       sayShort: 'd4 — Berlin attack.' }),
     b({ id: 'ruy-nd6-blunder', moves: 'e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6', highlights: [H('d6', SOFT)],
       say: "...Nd6 — the textbook move that 42 opponents played, including HIKARU NAKAMURA (2894). The Berlin Endgame transition is supposed to be fine, but the immediate Bxc6+dxe5 sequence is sharper than Black anticipated.",

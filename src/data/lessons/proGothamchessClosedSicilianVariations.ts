@@ -24,7 +24,7 @@ const MAIN: LessonScript = {
   beats: [
     b({ id: 'open', moves: 'e4 c5 Nc3 Nc6 Bb5 Nd4 Nf3',
       arrows: [{ from: 'b5', to: 'c6', color: VIS }], highlights: [{ square: 'c3', color: SOFT }, { square: 'd4', color: KEY }],
-      say: "The 2.Nc3 move order — another way Levy dodges Open Sicilian theory. We develop the knight, lean on c6 with Bb5, and when Black leaps into d4 to muddy things, we calmly question the knight with Nf3. No panic, no theory — just sensible developing moves.",
+      say: "The Nc3 move order — another way Levy dodges Open Sicilian theory. We develop the knight, lean on c6 with Bb5, and when Black leaps into d4 to muddy things, we calmly question the knight with Nf3. No panic, no theory — just sensible developing moves.",
       sayShort: 'Nf3 — challenge the d4-knight.' }),
     b({ id: 'trade', moves: 'e4 c5 Nc3 Nc6 Bb5 Nd4 Nf3 Nxb5 Nxb5 a6 Nc3 d6 d4',
       arrows: [{ from: 'd2', to: 'd4', color: VIS }], highlights: [{ square: 'd4', color: KEY }, { square: 'c5', color: SOFT }],

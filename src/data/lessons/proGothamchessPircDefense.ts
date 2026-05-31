@@ -33,7 +33,7 @@ export const PRO_GOTHAMCHESS_PIRC_DEFENSE_LESSON: LessonScript = {
       arrows: [{ from: 'f8', to: 'a3', color: SOFT }],
       highlights: [{ square: 'g6', color: KEY }],
       say:
-        "The Pirc — 1.e4 d6 and 2…Nf6, 3…g6. This is hypermodern chess: we INVITE White to build a giant pawn centre, because a big centre is also a big target. We fianchetto the bishop to g7, aim it down the long diagonal, and prepare to chip the whole thing down.",
+        "The Pirc — e4 d6 and …Nf6, …g6. This is hypermodern chess: we INVITE White to build a giant pawn centre, because a big centre is also a big target. We fianchetto the bishop to g7, aim it down the long diagonal, and prepare to chip the whole thing down.",
       sayShort: 'g6 — invite the big centre.',
     }),
     b({

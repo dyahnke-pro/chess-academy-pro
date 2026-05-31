@@ -33,7 +33,7 @@ export const PRO_GOTHAMCHESS_FRENCH_DEFENSE_LESSON: LessonScript = {
       arrows: [{ from: 'd5', to: 'e4', color: VIS }],
       highlights: [{ square: 'e4', color: SOFT }],
       say:
-        "The French — 1.e4 e6, then …d5. Against the main 3.Nc3 we play the Rubinstein: dxe4, trading off the centre right away. Some say it's passive. Levy plays it as a coiled spring — we're about to take on a striking pawn structure that most opponents have no idea how to meet.",
+        "The French — e4 e6, then …d5. Against the main Nc3 we play the Rubinstein: dxe4, trading off the centre right away. Some say it's passive. Levy plays it as a coiled spring — we're about to take on a striking pawn structure that most opponents have no idea how to meet.",
       sayShort: 'dxe4 — the Rubinstein trade.',
     }),
     b({

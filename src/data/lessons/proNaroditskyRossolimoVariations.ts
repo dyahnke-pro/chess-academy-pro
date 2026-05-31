@@ -41,7 +41,7 @@ const NC6_ROSSOLIMO: LessonScript = {
     b({
       id: 'nc6-open', moves: 'e4 c5 Nf3 Nc6 Bb5',
       highlights: [{ square: 'b5', color: KEY }, { square: 'c6', color: SOFT }],
-      say: "After 2…Nc6, we play 3.Bb5 — the Rossolimo proper. The bishop pins the knight against the e5-square (where Black would want to push the e-pawn), and immediately sidesteps every Open Sicilian theory book Black has prepared.",
+      say: "After …Nc6, we play Bb5 — the Rossolimo proper. The bishop pins the knight against the e5-square (where Black would want to push the e-pawn), and immediately sidesteps every Open Sicilian theory book Black has prepared.",
       sayShort: 'Bb5 — Rossolimo pin.',
     }),
     b({
@@ -93,7 +93,7 @@ const E6_TAIMANOV: LessonScript = {
     b({
       id: 'e6-open', moves: 'e4 c5 Nf3 e6 d4',
       highlights: [{ square: 'd4', color: KEY }, { square: 'e6', color: SOFT }],
-      say: "2…e6 — Black tries to transpose to a Kan or Taimanov. We play d4! Against this move order, the Open Sicilian is the right answer. We're well-prepared in Taimanov structures and Black gets a real fight instead of the easy Rossolimo trade.",
+      say: "…e6 — Black tries to transpose to a Kan or Taimanov. We play d4! Against this move order, the Open Sicilian is the right answer. We're well-prepared in Taimanov structures and Black gets a real fight instead of the easy Rossolimo trade.",
       sayShort: 'd4 — Open Sicilian.',
     }),
     b({
@@ -197,7 +197,7 @@ const C3_SIDELINE: LessonScript = {
     b({
       id: 'c3-open', moves: 'e4 c5 Nf3 d6 c3',
       highlights: [{ square: 'c3', color: KEY }],
-      say: "3.c3 — instead of the Bb5+ Moscow line, we play the quiet c3 sideline preparing d4. This is the Alapin-style structure where we accept slower piece play in exchange for a small structural edge.",
+      say: "c3 — instead of the Bb5+ Moscow line, we play the quiet c3 sideline preparing d4. This is the Alapin-style structure where we accept slower piece play in exchange for a small structural edge.",
       sayShort: 'c3 — quiet setup.',
     }),
     b({
@@ -249,7 +249,7 @@ const BC4_VS_D6: LessonScript = {
     b({
       id: 'bc4-open', moves: 'e4 c5 Nf3 d6 Bc4',
       highlights: [{ square: 'c4', color: KEY }],
-      say: "3.Bc4 — instead of Bb5+ checking, we play the Italian-style Bc4 aiming directly at f7. The bishop on c4 is more aggressive than Bb5+ but slower; Black gets time to develop AND we avoid the early trade.",
+      say: "Bc4 — instead of Bb5+ checking, we play the Italian-style Bc4 aiming directly at f7. The bishop on c4 is more aggressive than Bb5+ but slower; Black gets time to develop AND we avoid the early trade.",
       sayShort: 'Bc4 — Italian setup.',
     }),
     b({

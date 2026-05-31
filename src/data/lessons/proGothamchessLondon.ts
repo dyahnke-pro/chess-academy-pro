@@ -29,7 +29,7 @@ export const PRO_GOTHAMCHESS_LONDON_LESSON: LessonScript = {
       id: 'open',
       moves: 'd4 d5 Nf3 Nf6',
       say:
-        "The London — Levy's bread-and-butter with 1.d4. The beauty of it: we play almost the same setup whatever Black does. d4, Nf3, and the pieces come out on autopilot. Black mirrors with d5 and Nf6.",
+        "The London — Levy's bread-and-butter with d4. The beauty of it: we play almost the same setup whatever Black does. d4, Nf3, and the pieces come out on autopilot. Black mirrors with d5 and Nf6.",
       sayShort: 'd4 Nf3 — the London setup.',
     }),
     b({

@@ -42,7 +42,7 @@ const VS_SYMMETRIC: LessonScript = {
     b({
       id: 'sym-open', moves: 'Nf3 g6 g3 Bg7 Bg2 d6',
       highlights: [{ square: 'g2', color: KEY }, { square: 'g7', color: SOFT }],
-      say: "1.Nf3 …g6 — Black mirrors our fianchetto. The position becomes a positional fight with both bishops on the long diagonal. The key insight: with mirror development, the first side to break the symmetry productively wins the middlegame.",
+      say: "Nf3 …g6 — Black mirrors our fianchetto. The position becomes a positional fight with both bishops on the long diagonal. The key insight: with mirror development, the first side to break the symmetry productively wins the middlegame.",
       sayShort: 'g3 — mirror fianchettos.',
     }),
     b({
@@ -95,7 +95,7 @@ const VS_RETI_D5: LessonScript = {
     b({
       id: 'd5-open', moves: 'Nf3 d5 g3 Nf6 Bg2 c5',
       highlights: [{ square: 'd5', color: SOFT }, { square: 'c5', color: KEY }],
-      say: "1.Nf3 …d5 — Black claims the centre right away. We fianchetto regardless: g3, Bg2. After …c5 Black has the classical centre, but our system development is unbothered. The KIA works against ANY Black setup; that's the whole point.",
+      say: "Nf3 …d5 — Black claims the centre right away. We fianchetto regardless: g3, Bg2. After …c5 Black has the classical centre, but our system development is unbothered. The KIA works against ANY Black setup; that's the whole point.",
       sayShort: '…d5 — Reti structure.',
     }),
     b({
@@ -147,7 +147,7 @@ const VS_PIRC_D6: LessonScript = {
     b({
       id: 'd6-open', moves: 'Nf3 d6 g3 g6 Bg2 Bg7',
       highlights: [{ square: 'd6', color: KEY }, { square: 'g7', color: SOFT }],
-      say: "1.Nf3 …d6 — Black plays a Pirc-style quiet setup. We continue our system development: g3, Bg2. The d6 is solid but doesn't challenge our centre yet, so we get to set up the broadest possible KIA structure.",
+      say: "Nf3 …d6 — Black plays a Pirc-style quiet setup. We continue our system development: g3, Bg2. The d6 is solid but doesn't challenge our centre yet, so we get to set up the broadest possible KIA structure.",
       sayShort: '…d6 — Pirc setup.',
     }),
     b({
@@ -199,7 +199,7 @@ const VS_E5_OPEN: LessonScript = {
     b({
       id: 'e5-open', moves: 'Nf3 e5',
       highlights: [{ square: 'e5', color: KEY }],
-      say: "1.Nf3 ...e5 — Black plays the most aggressive response, treating our Nf3 as if it were a regular 1.e4 opening. The pawn on e5 attacks our knight, but we grab it: 2.Nxe5 starts the Reti gambit-accepted line.",
+      say: "Nf3 ...e5 — Black plays the most aggressive response, treating our Nf3 as if it were a regular e4 opening. The pawn on e5 attacks our knight, but we grab it: Nxe5 starts the Reti gambit-accepted line.",
       sayShort: '...e5 — Black overcommits.',
     }),
     b({
@@ -263,7 +263,7 @@ const VS_C6_SLAV: LessonScript = {
     b({
       id: 'c6-open', moves: 'Nf3 c6',
       highlights: [{ square: 'c6', color: KEY }],
-      say: "1.Nf3 ...c6 — Black plays the Slav-like setup, supporting a future ...d5 push. The c6 is solid but slow; we develop our KIA system with full freedom.",
+      say: "Nf3 ...c6 — Black plays the Slav-like setup, supporting a future ...d5 push. The c6 is solid but slow; we develop our KIA system with full freedom.",
       sayShort: '...c6 — Slav-like.',
     }),
     b({
@@ -321,7 +321,7 @@ const VS_B6_OWEN: LessonScript = {
     b({
       id: 'b6-open', moves: 'Nf3 b6',
       highlights: [{ square: 'b6', color: KEY }],
-      say: "1.Nf3 ...b6 — Black plays the Owen-style hypermodern setup, fianchettoing the queen-bishop first. The b6 gives White free central space.",
+      say: "Nf3 ...b6 — Black plays the Owen-style hypermodern setup, fianchettoing the queen-bishop first. The b6 gives White free central space.",
       sayShort: '...b6 — hypermodern.',
     }),
     b({
@@ -385,7 +385,7 @@ const VS_E6_FRENCH: LessonScript = {
     b({
       id: 'e6-open', moves: 'Nf3 e6',
       highlights: [{ square: 'e6', color: KEY }],
-      say: "1.Nf3 ...e6 — Black plays a French-style setup, supporting a future ...d5. The e6 commits Black to a slow positional fight. We transpose into the KIA-vs-French structure where White's plans are well-known.",
+      say: "Nf3 ...e6 — Black plays a French-style setup, supporting a future ...d5. The e6 commits Black to a slow positional fight. We transpose into the KIA-vs-French structure where White's plans are well-known.",
       sayShort: '...e6 — French setup.',
     }),
     b({

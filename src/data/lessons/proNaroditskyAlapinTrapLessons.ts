@@ -252,7 +252,7 @@ const PREMATURE_D4: LessonScript = {
       id: 'pre-setup',
       moves: 'e4 c5 c3 Nc6',
       highlights: [H('c6'), H('d4', SOFT)],
-      say: "After 2…Nc6, the temptation is enormous: White is fully set up for d4 with c3 supporting it. But pushing d4 NOW is the cardinal sin of the Alapin — Black has options that cost you the entire opening.",
+      say: "After …Nc6, the temptation is enormous: White is fully set up for d4 with c3 supporting it. But pushing d4 NOW is the cardinal sin of the Alapin — Black has options that cost you the entire opening.",
       sayShort: 'After …Nc6 — d4 looks ready, but isn\'t.',
     }),
     b({
@@ -273,7 +273,7 @@ const PREMATURE_D4: LessonScript = {
       id: 'pre-fix',
       moves: 'e4 c5 c3 Nc6 Nf3',
       highlights: [H('f3')],
-      say: "The fix: WAIT. After 2.c3, do NOT play d4 immediately. Play Nf3 first, develop normally, and let Black declare. If Black plays …Nf6 we play e5 cramping; if …e6 we transpose into French-Advance territory; if …d6 we play d4 with time. The d4-push timing is the whole opening — get it wrong and you're playing a worse Open Sicilian.",
+      say: "The fix: WAIT. After c3, do NOT play d4 immediately. Play Nf3 first, develop normally, and let Black declare. If Black plays …Nf6 we play e5 cramping; if …e6 we transpose into French-Advance territory; if …d6 we play d4 with time. The d4-push timing is the whole opening — get it wrong and you're playing a worse Open Sicilian.",
       sayShort: 'Fix: Nf3 first — let Black declare.',
     }),
   ],

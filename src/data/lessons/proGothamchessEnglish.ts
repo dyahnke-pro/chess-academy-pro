@@ -31,7 +31,7 @@ export const PRO_GOTHAMCHESS_ENGLISH_LESSON: LessonScript = {
       moves: 'c4 Nf6 Nc3 g6',
       highlights: [{ square: 'c4', color: SOFT }],
       say:
-        "The English — 1.c4. A flank opening, but Levy plays it with a punch. Black heads for a King's-Indian set-up with g6, planning to fianchetto. Fine — we're going to grab the whole centre and play for a kingside attack.",
+        "The English — c4. A flank opening, but Levy plays it with a punch. Black heads for a King's-Indian set-up with g6, planning to fianchetto. Fine — we're going to grab the whole centre and play for a kingside attack.",
       sayShort: 'c4 — the flank opening.',
     }),
     b({

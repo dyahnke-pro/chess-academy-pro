@@ -33,7 +33,7 @@ export const PRO_GOTHAMCHESS_TROMPOWSKY_LESSON: LessonScript = {
       arrows: [{ from: 'g5', to: 'f6', color: VIS }],
       highlights: [{ square: 'f6', color: KEY }],
       say:
-        "The Trompowsky — 1.d4 Nf6 2.Bg5. Out comes the bishop on move two, straight at the f6-knight. This is Levy's anti-everything weapon: we sidestep all of Black's prepared Indian defences and make him solve fresh problems from move two.",
+        "The Trompowsky — d4 Nf6 Bg5. Out comes the bishop on move two, straight at the f6-knight. This is Levy's anti-everything weapon: we sidestep all of Black's prepared Indian defences and make him solve fresh problems from move two.",
       sayShort: 'Bg5 — straight at the knight.',
     }),
     b({

@@ -78,7 +78,7 @@ export const PRO_NAR_ALAPIN_LESSON: LessonScript = {
       arrows: [{ from: 'd1', to: 'd6', color: VIS }],
       highlights: [{ square: 'd6', color: KEY }, { square: 'g1', color: SOFT }],
       say: "exd6 en passant! Then Qxd6 and we castle short. Black's queen is exposed in the centre, our king is safe, our bishop on b3 stares at f7, and we're ahead in development by a tempo. From here Naroditsky's plan is a4-a5-a6 cramping Black's queenside.",
-      sayShort: 'exd6 + O-O — open the centre, king safe.',
+      sayShort: 'exd6, O-O — centre open, king safe.',
     }),
     b({
       id: 'trade-bishops', moves: 'e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6 Qxe6',
@@ -215,7 +215,7 @@ export const PRO_NAR_KID_LESSON: LessonScript = {
       id: 'mar-del-plata', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 Nc6 Be3',
       highlights: [{ square: 'd4', color: KEY }, { square: 'c6', color: SOFT }],
       say: "exd4 / Nxd4 / Re8 — the modern Mar del Plata mainline. Our rook lifts to the open e-file, the knight on c6 hits the d4-knight, and the kingside expansion …Nh5 + …Nf4 is coming next. Naroditsky's classical KID treatment.",
-      sayShort: 'Mar del Plata — rook to e8, attack queued.',
+      sayShort: 'Mar del Plata — Re8, attack queued.',
     }),
     b({
       id: 'kingside-storm', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 Nc6 Be3 Nh5 Qd2 Nf4',
@@ -362,14 +362,14 @@ export const PRO_NAR_JOBAVA_LESSON: LessonScript = {
       id: 'open', moves: 'd4 d5 Nc3',
       highlights: [{ square: 'c3', color: KEY }],
       say: "The Jobava London. Nc3 instead of the boring Nf3 — we're saying we want a tactical fight, not a positional grind. Naroditsky popularized this for amateur play because it leads to sharp middlegames that punish under-prepared opponents.",
-      sayShort: '2.Nc3 — tactical fight, not London grind.',
+      sayShort: 'Nc3 — tactical fight, not London grind.',
     }),
     b({
       id: 'bishop', moves: 'd4 d5 Nc3 Nf6 Bf4',
       arrows: [{ from: 'f4', to: 'b8', color: VIS }],
       highlights: [{ square: 'f4', color: KEY }],
       say: "Nf6 / Bf4 — the Jobava bishop placement. From f4 the bishop covers the long diagonal AND eyes c7 (Black's queenside hangs on its support). This is the bishop's natural square in this system, unlike the regular London where it sits on the meek e3-d2 diagonal.",
-      sayShort: 'Bf4 — aim at c7 and the long diagonal.',
+      sayShort: 'Bf4 — eye c7, the long diagonal.',
     }),
     b({
       id: 'central-strike', moves: 'd4 d5 Nc3 Nf6 Bf4 c5 Nf3 cxd4 Qxd4',

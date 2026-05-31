@@ -27,7 +27,7 @@ const NF6_NXF6_GXF6: LessonScript = {
   openingId: 'pro-naroditsky-jobava-london', title: 'Weapon: Nf6 lets Nxf6+ wreck Black\'s kingside (Firouzja 3x!)', minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
   beats: [
     b({ id: 'job-f6-setup', moves: 'd4 d5 Nc3 e6 e4 dxe4 Nxe4', highlights: [H('e4', SOFT)],
-      say: "After 2.Nc3 e6 3.e4 dxe4 4.Nxe4, our knight sits centralised. Black needs to challenge it carefully. The natural ...Nf6 is the wrong move — it walks straight into Nxf6+.",
+      say: "After Nc3 e6 e4 dxe4 Nxe4, our knight sits centralised. Black needs to challenge it carefully. The natural ...Nf6 is the wrong move — it walks straight into Nxf6+.",
       sayShort: 'Nxe4 — centralised.' }),
     b({ id: 'job-f6-blunder', moves: 'd4 d5 Nc3 e6 e4 dxe4 Nxe4 Nf6', highlights: [H('f6', ATK)],
       say: "...Nf6?? — Black attacks the e4-knight, but the trade is in our favour. 29 opponents made this move including FIROUZJA THREE TIMES (3020, 3016, 2997). The Nxf6+ wreck-the-kingside response.",

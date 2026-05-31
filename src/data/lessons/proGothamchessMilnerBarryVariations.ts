@@ -79,7 +79,7 @@ const BD7: LessonScript = {
       highlights: [{ square: 'd4', color: SOFT }],
       say:
         "Black collects the pawn the same way, and the queen plants itself on d4. He's a pawn up with a developed bishop on d7 this time — but his king is still in the centre and his kingside is bare. Our lead in development and our attacking chances are more than enough.",
-      sayShort: 'Qxd4 — a pawn up, king in the centre.',
+      sayShort: 'Qxd4 — a pawn up, king centred.',
     }),
     b({
       id: 'mg-nc3',

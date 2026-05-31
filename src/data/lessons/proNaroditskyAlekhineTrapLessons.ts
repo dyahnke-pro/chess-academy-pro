@@ -65,8 +65,8 @@ const FXE5_NXE4_HIKARU: LessonScript = {
   openingId: 'pro-naroditsky-alekhine', title: 'Weapon: fxe5 in Anti-Vienna f4 line (Hikaru victim)', minutes: 3, orientation: 'black', kind: 'trap', sources: SRC,
   beats: [
     b({ id: 'alek-hik-setup', moves: 'e4 Nf6 Nc3 e5 f4 d5', highlights: [H('d5', KEY)],
-      say: "Anti-Vienna with 2.Nc3 e5 3.f4 — White plays the King's Gambit Declined-style attack. Black answers ...d5 challenging the centre. The wrong White move is the natural-looking fxe5.",
-      sayShort: '3.f4 ...d5.' }),
+      say: "Anti-Vienna with Nc3 e5 f4 — White plays the King's Gambit Declined-style attack. Black answers ...d5 challenging the centre. The wrong White move is the natural-looking fxe5.",
+      sayShort: 'f4 ...d5.' }),
     b({ id: 'alek-hik-blunder', moves: 'e4 Nf6 Nc3 e5 f4 d5 fxe5', highlights: [H('e5', ATK)],
       say: "fxe5?? — White takes the pawn but loses material to ...Nxe4. 17 opponents fell into this including Hikaru Nakamura (3316!) and Konavets (3067).",
       sayShort: 'fxe5 — Hikaru\'s mistake.' }),
@@ -84,7 +84,7 @@ const BB5_ND4_FORK: LessonScript = {
   openingId: 'pro-naroditsky-alekhine', title: 'Weapon: Bb5 in Anti-Vienna lets ...Nd4 fork', minutes: 3, orientation: 'black', kind: 'trap', sources: SRC,
   beats: [
     b({ id: 'alek-bb5-setup', moves: 'e4 Nf6 Nc3 e5 Nf3 Nc6', highlights: [H('c6', SOFT)],
-      say: "Two Knights Alekhine reached via 2.Nc3 e5. Black develops normally. The correct White move is d4 (challenging the centre) or Bc4 (Sicilian-like). The wrong move is Bb5.",
+      say: "Two Knights Alekhine reached via Nc3 e5. Black develops normally. The correct White move is d4 (challenging the centre) or Bc4 (Sicilian-like). The wrong move is Bb5.",
       sayShort: '...Nc6 — develop.' }),
     b({ id: 'alek-bb5-blunder', moves: 'e4 Nf6 Nc3 e5 Nf3 Nc6 Bb5', highlights: [H('b5', ATK)],
       say: "Bb5?? — Ruy Lopez-style pin attempt, but here it's premature. 15 opponents played this. The Nd4 fork is the punishment.",
@@ -103,7 +103,7 @@ const BC4_MODERN_TRADE: LessonScript = {
   openingId: 'pro-naroditsky-alekhine', title: 'Weapon: Bc4 + Nd7 in Modern Alekhine', minutes: 3, orientation: 'black', kind: 'trap', sources: SRC,
   beats: [
     b({ id: 'alek-bc4-setup', moves: 'e4 Nf6 e5 Nd5 Nf3 d6 d4 dxe5 Nxe5 c6', highlights: [H('c6', SOFT)],
-      say: "Modern Alekhine reached via 5.Nxe5 c6 — Black supports the d5-knight. The correct White move is Be2 or g3 (quiet development). The wrong move is the aggressive-looking Bc4.",
+      say: "Modern Alekhine reached via Nxe5 c6 — Black supports the d5-knight. The correct White move is Be2 or g3 (quiet development). The wrong move is the aggressive-looking Bc4.",
       sayShort: '...c6 — support d5.' }),
     b({ id: 'alek-bc4-blunder', moves: 'e4 Nf6 e5 Nd5 Nf3 d6 d4 dxe5 Nxe5 c6 Bc4', highlights: [H('c4', ATK), H('d5', SOFT)],
       say: "Bc4?? — White's bishop attacks the d5-knight, but the knight has a safe square AND Black gets to swap centralized pieces. 12 opponents including RaunakSadhwani2005 (3080).",

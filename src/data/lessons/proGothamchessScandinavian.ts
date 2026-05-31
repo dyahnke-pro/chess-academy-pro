@@ -34,7 +34,7 @@ export const PRO_GOTHAMCHESS_SCANDINAVIAN_LESSON: LessonScript = {
       arrows: [{ from: 'd8', to: 'd5', color: VIS }],
       highlights: [{ square: 'd5', color: KEY }],
       say:
-        "The Scandinavian — 1.e4 d5, challenging the centre on move one. After White takes, we recapture with the queen, Qxd5. Yes, the queen comes out early; the old rule says don't. But Levy loves this because everything Black plays from here is natural, forcing, and easy to remember.",
+        "The Scandinavian — e4 d5, challenging the centre on move one. After White takes, we recapture with the queen, Qxd5. Yes, the queen comes out early; the old rule says don't. But Levy loves this because everything Black plays from here is natural, forcing, and easy to remember.",
       sayShort: 'Qxd5 — grab the centre back.',
     }),
     b({

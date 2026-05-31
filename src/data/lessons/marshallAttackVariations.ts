@@ -1,12 +1,11 @@
 import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } from '../../types';
 // Marshall Attack variation lessons (black). Data spine ma__d4-decline (G3),
 // sound ≥20-ply (engine −0.08, equal). Keyed openingId::name.
-const KEY = 'rgba(255,214,0,0.88)';
-const VIS = 'rgba(40,185,95,0.92)';
+const KEY='rgba(255,214,0,0.88)';
+const VIS='rgba(40,185,95,0.92)';
 const A = (from: string, to: string, color = VIS): AnnotationArrow => ({ from, to, color });
 const H = (square: string, color = KEY): AnnotationHighlight => ({ square, color });
-interface BeatInit { id: string; moves: string; say: string; sayShort?: string; arrows?: AnnotationArrow[]; highlights?: AnnotationHighlight[]; }
-function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return { ...rest, moves: moves.trim().split(/\s+/) }; }
+function b(init: Omit<LessonBeat, 'moves'> & { moves: string }): LessonBeat {const{moves,...rest}=init;return{...rest,moves:moves.trim().split(/\s+/)};}
 const SRC=['concept:pos-initiative','concept:tac-sacrifice','https://en.wikipedia.org/wiki/Marshall_Attack'];
 export const MARSHALL_ATTACK_VARIATION_LESSONS: Record<string, LessonScript> = {
   'marshall-attack::d4 Decline (White avoids the gambit)': {

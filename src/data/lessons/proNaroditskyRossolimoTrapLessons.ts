@@ -31,7 +31,7 @@ const NGE7_DOUBLED_PAWNS: LessonScript = {
   openingId: 'pro-naroditsky-rossolimo', title: 'Weapon: Nge7 walks into Bxc6 doubled-pawns', minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
   beats: [
     b({ id: 'ross-nge7-setup', moves: 'e4 c5 Nf3 Nc6 Bb5 e6 O-O', highlights: [H('b5'), H('c6', SOFT)],
-      say: "After 3.Bb5 in the Rossolimo proper + Black's ...e6 setup, we castle calmly. Black's classical development move would be ...a6 chasing the bishop OR ...Nge7 preparing development. The Nge7 move walks into a structural trap.",
+      say: "After Bb5 in the Rossolimo proper + Black's ...e6 setup, we castle calmly. Black's classical development move would be ...a6 chasing the bishop OR ...Nge7 preparing development. The Nge7 move walks into a structural trap.",
       sayShort: 'O-O — set the trap.' }),
     b({ id: 'ross-nge7-blunder', moves: 'e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7', highlights: [H('e7', ATK), H('c6', SOFT)],
       say: "...Nge7?? — the natural-looking development move actually concedes the structural fight. 58 opponents played this including Firouzja2003 (3068) and dogsofwar (2946). The trick is the Bxc6 trade timing.",
@@ -50,7 +50,7 @@ const A6_MOSCOW_TRADE: LessonScript = {
   openingId: 'pro-naroditsky-rossolimo', title: 'Weapon: ...a6 in Moscow Bb5+ Nd7 line', minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
   beats: [
     b({ id: 'ross-a6-setup', moves: 'e4 c5 Nf3 d6 Bb5+ Nd7 O-O', highlights: [H('d7', SOFT)],
-      say: "After 3.Bb5+ Nd7 (the blockade) + 4.O-O, Black needs to decide how to develop. The ...a6 push attacks our bishop but ALSO loses tempo because the bishop trade is fine for us.",
+      say: "After Bb5+ Nd7 (the blockade) + O-O, Black needs to decide how to develop. The ...a6 push attacks our bishop but ALSO loses tempo because the bishop trade is fine for us.",
       sayShort: 'O-O — Moscow setup.' }),
     b({ id: 'ross-a6-blunder', moves: 'e4 c5 Nf3 d6 Bb5+ Nd7 O-O a6', highlights: [H('a6', ATK)],
       say: "...a6?? — Black asks the question but our answer is Bxd7+! The trade simplifies favorably AND Black's d7-knight has no good square to develop. 36 opponents played this including Salem-AR (2946) and Kriari (2861).",
@@ -88,7 +88,7 @@ const CXD4_MOSCOW: LessonScript = {
   openingId: 'pro-naroditsky-rossolimo', title: 'Weapon: cxd4 lets us recapture with the queen', minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
   beats: [
     b({ id: 'ross-cxd4-setup', moves: 'e4 c5 Nf3 d6 Bb5+ Nd7 d4', highlights: [H('d4', KEY)],
-      say: "A sharper Moscow with immediate 4.d4. Black needs to decide whether to take or maintain tension. The cxd4 take is wrong because of the queen recapture.",
+      say: "A sharper Moscow with immediate d4. Black needs to decide whether to take or maintain tension. The cxd4 take is wrong because of the queen recapture.",
       sayShort: 'd4 — sharp Moscow.' }),
     b({ id: 'ross-cxd4-blunder', moves: 'e4 c5 Nf3 d6 Bb5+ Nd7 d4 cxd4', highlights: [H('d4', ATK)],
       say: "...cxd4 — 13 opponents took the pawn here including Firouzja2003 (2907) and Jospem (2968). The trade looks safe but the queen recapture wins time.",

@@ -129,7 +129,7 @@ const ANTI_FRENCH: LessonScript = {
       highlights: [{ square: 'd5', color: KEY }, { square: 'e5', color: SOFT }],
       say:
         "Here's the plan. We keep the tension and pick our moment to release it: cxd5 to open the c-file for our rooks, or a later e4 to challenge the centre and free the Bb2's diagonal. The whole game is about that long diagonal and the half-open c-file. It's slow, it's strategic, and with the extra tempo it's a position where White presses and never risks much. Quintessential English.",
-      sayShort: 'cxd5 / e4 — open it for the bishop.',
+      sayShort: 'cxd5 then e4 — open the bishop.',
     }),
   ],
 };

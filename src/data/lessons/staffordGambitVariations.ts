@@ -1,10 +1,9 @@
-import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } from '../../types';
+import type { LessonScript, LessonBeat, AnnotationHighlight } from '../../types';
 // Stafford trap variations (black, kind:roadmap). Winning/mating trap lines from
 // gambits.json (engine MATE / +4.4), chess.js-legal (G3). Honest surprise weapon.
-const KEY = 'rgba(255,214,0,0.88)';
+const KEY='rgba(255,214,0,0.88)';
 const H = (square: string, color = KEY): AnnotationHighlight => ({ square, color });
-interface BeatInit { id: string; moves: string; say: string; sayShort?: string; arrows?: AnnotationArrow[]; highlights?: AnnotationHighlight[]; }
-function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return { ...rest, moves: moves.trim().split(/\s+/) }; }
+function b(init: Omit<LessonBeat, 'moves'> & { moves: string }): LessonBeat {const{moves,...rest}=init;return{...rest,moves:moves.trim().split(/\s+/)};}
 const SRC=['concept:tac-sacrifice','concept:pos-initiative','https://en.wikipedia.org/wiki/Petrov%27s_Defence'];
 export const STAFFORD_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
   'stafford-gambit::Bg5 — the Stafford Mate': {
