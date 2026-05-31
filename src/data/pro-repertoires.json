@@ -2286,6 +2286,111 @@
         "https://www.chess.com/openings/Pirc-Defense",
         "https://api.chess.com/pub/player/gothamchess/games/archives"
       ]
+    },
+    {
+      "id": "pro-hikaru-nimzo-larsen",
+      "playerId": "hikaru",
+      "eco": "A01",
+      "name": "Nimzo-Larsen Attack (Hikaru)",
+      "color": "white",
+      "style": "Hypermodern, Flexible",
+      "pgn": "b3 e5 Bb2 Nc6 e3 Nf6 Bb5 Bd6 Na3 Na5 Be2 a6 c4 O-O Nc2 Nc6 d4 exd4 exd4 Re8 Nf3 Bf8 d5",
+      "overview": "Hikaru Nakamura's favourite surprise weapon — the move 1.b3, which he plays at blitz and rapid against the world's best (he beat Ding Liren with it in 2021). Across his games it scores a remarkable 87% over 7,481 outings. The whole idea is hypermodern: instead of fighting for the centre with pawns, White fianchettoes the bishop to b2 onto the longest diagonal, lets Black build a classical centre, then undermines it with e3, c4 and the d4-break until the b2-bishop rakes an open road to Black's king. Both positional and tactical — slow maneuvering, then sudden blows on the long diagonal. Its biggest practical edge: opponents simply have no booked-up theory here, and they're effectively playing a reversed Sicilian a tempo down.",
+      "keyIdeas": [
+        "Fianchetto the bishop to b2 — the whole game amplifies its long diagonal toward e5 and g7.",
+        "Stay flexible with e3 and keep f4/d4 in reserve; opponents have no prepared lines.",
+        "Break with d4 (and often d5) to open the centre once the pieces support it — the b2-bishop bursts to life.",
+        "Treat many lines as a reversed Sicilian with an extra tempo: a comfortable, low-risk pull at speed."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "1...e5 Main Line",
+          "pgn": "b3 e5 Bb2 Nc6 e3 Nf6 Bb5 Bd6 Na3 Na5 Be2 a6 c4 O-O Nc2 Nc6 d4 exd4 exd4 Re8 Nf3 Bf8 d5",
+          "explanation": "His most-played line (1,315 games). After 1...e5 White fianchettoes, pins with Bb5, reroutes the knight Na3-c2 to support d4, and breaks the centre open — the b2-bishop dominates the resulting middlegame.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Nimzowitsch%E2%80%93Larsen_Attack",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        },
+        {
+          "name": "1...d5",
+          "pgn": "b3 d5 Bb2 Nf6 Nf3 g6 e3 Bg7 d4 O-O c4 c6 Nbd2 Bg4 Bd3",
+          "explanation": "His most common reply to face (1,848 games, 88%). Against the solid 1...d5 White plays a reversed-London double fianchetto setup (Nf3, e3, d4, c4) and presses on the long diagonal.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Nimzowitsch%E2%80%93Larsen_Attack",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        },
+        {
+          "name": "1...Nf6",
+          "pgn": "b3 Nf6 Bb2 g6 e3 Bg7 Nf3 O-O d4 d6 Be2 Nbd7 O-O b6 c4 Bb7 Qc2 Re8",
+          "explanation": "1,709 games at 89%. Black develops flexibly; White builds the big d4/c4 centre behind the b2-bishop and contests the long diagonal with his own fianchetto.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Nimzowitsch%E2%80%93Larsen_Attack",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        },
+        {
+          "name": "1...c5",
+          "pgn": "b3 c5 Bb2 Nc6 e3 Nf6 Nf3 g6 d4 cxd4 Nxd4 Bg7 Be2 O-O O-O",
+          "explanation": "415 games. A reversed Sicilian where White's extra tempo tells: d4 opens the position and the b2-bishop eyes the kingside.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Nimzowitsch%E2%80%93Larsen_Attack",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        },
+        {
+          "name": "1...b6 Symmetric",
+          "pgn": "b3 b6 Bb2 Bb7 Nf3 Nf6 e3 e6 d4 Be7 Bd3 O-O Nbd2",
+          "explanation": "392 games. Black mirrors the fianchetto; White's extra tempo lets him grab the centre first with d4 and Bd3.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Nimzowitsch%E2%80%93Larsen_Attack",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        },
+        {
+          "name": "1...g6",
+          "pgn": "b3 g6 Bb2 Nf6 e3 Bg7 Nf3 O-O d4 d6 Be2 Nbd7 O-O Re8 c4",
+          "explanation": "300 games at 89%. Against the kingside fianchetto White takes the full centre with d4/c4 and plays for a space advantage.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Nimzowitsch%E2%80%93Larsen_Attack",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        },
+        {
+          "name": "1...e6",
+          "pgn": "b3 e6 Bb2 d5 e3 Nf6 Nf3 Be7 d4 O-O Bd3 c5 O-O Nc6 c4 cxd4 Nxd4",
+          "explanation": "287 games at 90% — his best-scoring line. Black goes for a French-like structure; White builds d4/c4 and uses the open lines after the central trades.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Nimzowitsch%E2%80%93Larsen_Attack",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:chess-fundamentals",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Nimzowitsch%E2%80%93Larsen_Attack",
+        "https://api.chess.com/pub/player/hikaru/games/archives"
+      ]
     }
   ]
 }

@@ -58,12 +58,11 @@ describe('Pro Repertoire PGN Legality', () => {
 
   it('has the expected number of openings', () => {
     // Slate-wipe 2026-05-28 (David): every player except Naroditsky
-    // and GothamChess (Levy Rozman) had their pro-rep builds cleared
-    // back to a names-only roster entry, pending a ground-up rebuild
-    // under the G9.1 deep-build doctrine. Naroditsky carries 10 +
-    // GothamChess 18 = 28. Bump this as each remaining player is
-    // rebuilt.
-    expect(proRepertoire.openings).toHaveLength(28);
+    // and GothamChess (Levy Rozman) had their pro-rep builds cleared.
+    // Naroditsky 10 + GothamChess 18 = 28. Hikaru build started
+    // 2026-05-31 (David's pick) under the G9.1 deep-build doctrine:
+    // +1 Nimzo-Larsen = 29. Bump this as each Hikaru opening lands.
+    expect(proRepertoire.openings).toHaveLength(29);
   });
 
   it('every opening has a valid playerId', () => {
@@ -73,14 +72,12 @@ describe('Pro Repertoire PGN Legality', () => {
     }
   });
 
-  it('only the kept players (Naroditsky + GothamChess) carry openings', () => {
-    // Slate-wipe 2026-05-28 (David): "clear the pro repertoire builds
-    // for all players except Naroditsky and Levy Rozman — everything
-    // wiped clean except for their names." So the other 12 players
-    // remain in the roster (names only) with ZERO openings until they
-    // get rebuilt under the G9.1 doctrine. Only Naroditsky and
-    // GothamChess carry builds for now.
-    const KEPT = new Set(['naroditsky', 'gothamchess']);
+  it('only the active-build players carry openings', () => {
+    // Slate-wipe 2026-05-28 (David): builds cleared for all but Naroditsky
+    // and Levy. Hikaru build started 2026-05-31 (David's pick) under the
+    // G9.1 doctrine — he now carries builds too. The remaining roster
+    // players stay names-only (ZERO openings) until each is rebuilt.
+    const KEPT = new Set(['naroditsky', 'gothamchess', 'hikaru']);
     const counts: Record<string, number> = {};
     for (const opening of entries) {
       counts[opening.playerId] = (counts[opening.playerId] ?? 0) + 1;
