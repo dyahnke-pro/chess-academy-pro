@@ -61924,5 +61924,861 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-grunfelddefence-bc4",
+    "openingId": "grunfeld-defence",
+    "criticalPositionFen": "r5k1/pp2p1bp/3q2p1/n7/3PP1P1/4B3/P3N1PP/R2Q1K2 w - - 1 16",
+    "title": "Grünfeld Classical Bc4: Win the Loose g-Pawn",
+    "overview": "In the Bc4 Classical Black has weathered the storm and the queen turns active. The centralised queen swings to grab White's loose g4-pawn, the long-diagonal g7-bishop keeps pressing the centre, and the rook seizes the open c-file — Black emerges a clean pawn up.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Qe6 then …Qxg4 wins the pawn on g4",
+        "explanation": "…Qe6 then …Qxg4 wins the pawn on g4"
+      },
+      {
+        "piece": "",
+        "route": "…Rc8 to the open c-file",
+        "explanation": "…Rc8 to the open c-file"
+      }
+    ],
+    "strategicThemes": [
+      "Win the loose g4-pawn",
+      "The long-diagonal bishop",
+      "Open c-file pressure"
+    ],
+    "endgameTransitions": [
+      "The extra pawn and the g7-bishop tell in the ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "r5k1/pp2p1bp/3q2p1/n7/3PP1P1/4B3/P3N1PP/R2Q1K2 w - - 1 16",
+        "moves": [
+          "Kg1",
+          "Qe6",
+          "Qd3",
+          "Qxg4",
+          "Rf1",
+          "Rc8",
+          "h3",
+          "Qd7"
+        ],
+        "annotations": [
+          "White tucks the king into the corner.",
+          "…Qe6 centralises the queen, targeting White's loose g4-pawn.",
+          "Qd3 defends and steps off the d-file.",
+          "…Qxg4 snaps off the weak g-pawn, the queen raking the kingside with an extra pawn in hand.",
+          "Rf1 reconnects the rook to the kingside.",
+          "…Rc8 swings the rook to the open c-file, the long-diagonal bishop already pressing.",
+          "h3 questions the active queen.",
+          "…Qd7 retreats to safety, Black a clean pawn up with the bishop on the long diagonal."
+        ],
+        "learnCues": [
+          "Kg1 — king to the corner.",
+          "…Qe6 — centralise, hit g4.",
+          "Qd3 — White defends.",
+          "…Qxg4 — grab the loose pawn!",
+          "Rf1 — White reconnects.",
+          "…Rc8 — seize the c-file.",
+          "h3 — White questions the queen.",
+          "…Qd7 — retreat, a pawn up."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          []
+        ],
+        "title": "Grünfeld Classical Bc4: Win the Loose g-Pawn",
+        "sources": [
+          "concept:pos-bishop-pair",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-grunfelddefence-modernrb1",
+    "openingId": "grunfeld-defence",
+    "criticalPositionFen": "rn3rk1/pR2ppbp/6p1/8/3PP3/5B2/q2B1PPP/3Q1RK1 b - - 0 14",
+    "title": "Grünfeld Modern Rb1: Cash the Centre and the Files",
+    "overview": "In the modern Rb1 Exchange Black's pieces are humming and the queen sits deep. The g7-bishop cashes in on the loose centre, the rooks pour onto the open d- and c-files, and the last knight develops — Black is active with an extra central pawn.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Rd8 to the d-file",
+        "explanation": "…Rd8 to the d-file"
+      },
+      {
+        "piece": "",
+        "route": "…Na6 develops toward c5",
+        "explanation": "…Na6 develops toward c5"
+      },
+      {
+        "piece": "",
+        "route": "…Rac8 doubles on the c-file",
+        "explanation": "…Rac8 doubles on the c-file"
+      }
+    ],
+    "strategicThemes": [
+      "Cash the loose centre",
+      "Doubled rooks on the open files",
+      "Active piece play"
+    ],
+    "endgameTransitions": [
+      "The extra central pawn carries into the ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "rn3rk1/pR2ppbp/6p1/8/3PP3/5B2/q2B1PPP/3Q1RK1 b - - 0 14",
+        "moves": [
+          "Bxd4",
+          "Bb4",
+          "Rd8",
+          "Qc1",
+          "Na6",
+          "Bxe7",
+          "Rac8",
+          "Qf4"
+        ],
+        "annotations": [
+          "…Bxd4 grabs the central pawn, the long-diagonal bishop cashing in on White's loose centre.",
+          "Bb4 develops with a gain of tempo on the back rank.",
+          "…Rd8 contests the d-file and shields the back rank.",
+          "Qc1 regroups the queen toward the kingside.",
+          "…Na6 develops the last piece, heading for c7 or c5.",
+          "Bxe7 grabs the e7-pawn, but the trade only frees Black's game.",
+          "…Rac8 doubles the rooks onto the open c-file, seizing the initiative.",
+          "Qf4 centralises; Black is active with the extra central pawn and rooks on the files."
+        ],
+        "learnCues": [
+          "…Bxd4 — cash the centre.",
+          "Bb4 — White develops, tempo.",
+          "…Rd8 — take the d-file.",
+          "Qc1 — White regroups.",
+          "…Na6 — develop toward c5.",
+          "Bxe7 — White grabs e7.",
+          "…Rac8 — double on the c-file.",
+          "Qf4 — White centralises."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255,214,0,0.88)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          []
+        ],
+        "title": "Grünfeld Modern Rb1: Cash the Centre and the Files",
+        "sources": [
+          "concept:pos-open-file",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-qgd-bf4",
+    "openingId": "qgd",
+    "criticalPositionFen": "r4rk1/2qn1ppp/1pp1pb2/p1Pp4/1P1P1P2/P1N2NP1/4QPKP/R4R2 w - - 4 17",
+    "title": "QGD Bf4: the b-File and the …Bd8 Reroute",
+    "overview": "Against the engine-era Bf4 lines Black plays on the queenside: the rook lifts to the b-file, the knight trades off White's strong e5-outpost, and the dark bishop reroutes via d8 toward the queenside — solid, active, fully equal.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Rfb8 to the b-file",
+        "explanation": "…Rfb8 to the b-file"
+      },
+      {
+        "piece": "",
+        "route": "…Bd8 reroutes toward the queenside",
+        "explanation": "…Bd8 reroutes toward the queenside"
+      }
+    ],
+    "strategicThemes": [
+      "Queenside play on the b-file",
+      "Trade White’s e5 knight",
+      "Reroute the dark bishop"
+    ],
+    "endgameTransitions": [
+      "The sound structure holds into the ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "r4rk1/2qn1ppp/1pp1pb2/p1Pp4/1P1P1P2/P1N2NP1/4QPKP/R4R2 w - - 4 17",
+        "moves": [
+          "Ne5",
+          "Rfb8",
+          "Rfb1",
+          "h6",
+          "Qc2",
+          "Nxe5",
+          "fxe5",
+          "Bd8"
+        ],
+        "annotations": [
+          "Ne5 posts the knight aggressively in the centre.",
+          "…Rfb8 swings the rook to the b-file, the queenside Black's zone of play.",
+          "Rfb1 contests the b-file.",
+          "…h6 makes luft and secures the kingside before the queenside battle.",
+          "Qc2 lifts the queen toward both wings.",
+          "…Nxe5 trades off White's strong knight, easing the pressure.",
+          "fxe5 recaptures, fixing the pawn chain.",
+          "…Bd8 reroutes the bishop toward a5 or b6, pressuring the queenside; Black is solid and active."
+        ],
+        "learnCues": [
+          "Ne5 — White posts the knight.",
+          "…Rfb8 — to the b-file.",
+          "Rfb1 — White contests it.",
+          "…h6 — luft, secure the king.",
+          "Qc2 — White lifts the queen.",
+          "…Nxe5 — trade the strong knight.",
+          "fxe5 — White recaptures.",
+          "…Bd8 — reroute to the queenside."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [],
+          [],
+          [],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255,214,0,0.88)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "QGD Bf4: the b-File and the …Bd8 Reroute",
+        "sources": [
+          "concept:pos-open-file",
+          "concept:pos-outpost",
+          "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-qga-smyslov",
+    "openingId": "qga",
+    "criticalPositionFen": "rn5r/1p2kppp/p3pn2/1bb5/8/1P2PN2/P2NBPPP/R1B2RK1 w - - 1 12",
+    "title": "QGA Smyslov: Activate on the Open Files",
+    "overview": "With the queens already off, the Smyslov turns into a harmonious queenless middlegame. Black completes development, plants the rooks on the central d- and c-files, and activates the bishop — the pieces are fully coordinated and equal.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Nbd7 completes development",
+        "explanation": "…Nbd7 completes development"
+      },
+      {
+        "piece": "",
+        "route": "…Rhd8 to the d-file",
+        "explanation": "…Rhd8 to the d-file"
+      },
+      {
+        "piece": "",
+        "route": "…Rac8 to the c-file",
+        "explanation": "…Rac8 to the c-file"
+      }
+    ],
+    "strategicThemes": [
+      "Activate the rooks on the open files",
+      "Harmonious queenless development",
+      "Equal, active piece play"
+    ],
+    "endgameTransitions": [
+      "The active pieces give a comfortable queenless game"
+    ],
+    "playableLines": [
+      {
+        "fen": "rn5r/1p2kppp/p3pn2/1bb5/8/1P2PN2/P2NBPPP/R1B2RK1 w - - 1 12",
+        "moves": [
+          "Nc4",
+          "Nbd7",
+          "Bb2",
+          "Rhd8",
+          "Rfc1",
+          "Rac8",
+          "Ne1",
+          "Bb4"
+        ],
+        "annotations": [
+          "Nc4 centralises the knight in the queenless middlegame.",
+          "…Nbd7 develops the last piece, completing Black's harmonious setup.",
+          "Bb2 fianchettoes onto the long diagonal.",
+          "…Rhd8 activates the rook on the central d-file.",
+          "Rfc1 contests the c-file.",
+          "…Rac8 brings the second rook toward the open lines.",
+          "Ne1 reroutes toward d3.",
+          "…Bb4 activates the bishop, pressuring the d2-knight; Black's pieces are fully active and equal."
+        ],
+        "learnCues": [
+          "Nc4 — White centralises.",
+          "…Nbd7 — finish developing.",
+          "Bb2 — White fianchettoes.",
+          "…Rhd8 — rook to the d-file.",
+          "Rfc1 — White takes the c-file.",
+          "…Rac8 — second rook joins.",
+          "Ne1 — White reroutes.",
+          "…Bb4 — activate, press d2."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "QGA Smyslov: Activate on the Open Files",
+        "sources": [
+          "concept:pos-open-file",
+          "concept:end-bishop-vs-knight",
+          "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-queensindian-miles",
+    "openingId": "queens-indian",
+    "criticalPositionFen": "rn3rk1/pb2bppp/1q1ppn2/2p5/Q1P2B2/2N2NP1/PP2PPBP/R2R2K1 w - - 0 12",
+    "title": "Queen’s Indian Miles: the …b5 Queenside Lever",
+    "overview": "The …Ba6 Miles fights for the light squares; the follow-up is queenside. Black develops the knight, backs the b-file, and readies the …a6-…b5 lever to undermine White's c4/b4 queenside chain while the b7-bishop watches the long diagonal.",
+    "pawnBreaks": [
+      {
+        "move": "…a6 readies the …b5 break",
+        "explanation": "…a6 readies the …b5 break",
+        "fen": "rn3rk1/pb2bppp/1q1ppn2/2p5/Q1P2B2/2N2NP1/PP2PPBP/R2R2K1 w - - 0 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Nbd7 develops the knight",
+        "explanation": "…Nbd7 develops the knight"
+      },
+      {
+        "piece": "",
+        "route": "…Rfb8 backs the b-file",
+        "explanation": "…Rfb8 backs the b-file"
+      }
+    ],
+    "strategicThemes": [
+      "Queenside …b5 counterplay",
+      "Light-square control",
+      "The long-diagonal bishop"
+    ],
+    "endgameTransitions": [
+      "The queenside play and the b7-bishop hold the balance"
+    ],
+    "playableLines": [
+      {
+        "fen": "rn3rk1/pb2bppp/1q1ppn2/2p5/Q1P2B2/2N2NP1/PP2PPBP/R2R2K1 w - - 0 12",
+        "moves": [
+          "Rab1",
+          "Nbd7",
+          "b4",
+          "Rfb8",
+          "a3",
+          "a6",
+          "Qc2",
+          "Qc7"
+        ],
+        "annotations": [
+          "Rab1 prepares the b4 queenside expansion.",
+          "…Nbd7 develops the knight toward the centre and kingside.",
+          "b4 grabs queenside space and clamps c5.",
+          "…Rfb8 backs the b-file for the coming …b5 lever.",
+          "a3 supports the b4-pawn.",
+          "…a6 readies the …b5 break to undermine White's queenside chain.",
+          "Qc2 reinforces the queenside.",
+          "…Qc7 places the queen behind the c-file with active queenside counterplay."
+        ],
+        "learnCues": [
+          "Rab1 — White preps b4.",
+          "…Nbd7 — develop the knight.",
+          "b4 — White grabs space.",
+          "…Rfb8 — back the b-file.",
+          "a3 — White supports b4.",
+          "…a6 — ready the …b5 break.",
+          "Qc2 — White reinforces.",
+          "…Qc7 — queen behind the c-file."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255,214,0,0.88)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255,214,0,0.88)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255,214,0,0.88)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          []
+        ],
+        "title": "Queen’s Indian Miles: the …b5 Queenside Lever",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-bishop-pair",
+          "https://en.wikipedia.org/wiki/Queen%27s_Indian_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-petrovdefence-steinitz",
+    "openingId": "petrov-defence",
+    "criticalPositionFen": "r2r2k1/pp1b1p1p/3b2pB/6Q1/3P4/2qB4/P4PPP/R4RK1 w - - 0 16",
+    "title": "Petrov Steinitz: Trade Down and Grab b2",
+    "overview": "In the modern 3.d4 Steinitz Black neutralises by trading the dark bishops, then the active queen raids the loose b2-pawn while the rooks contest the open c-file — comfortable equality with an extra pawn in hand.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Bf8 offers the bishop trade",
+        "explanation": "…Bf8 offers the bishop trade"
+      },
+      {
+        "piece": "",
+        "route": "…Rac8 to the open c-file",
+        "explanation": "…Rac8 to the open c-file"
+      }
+    ],
+    "strategicThemes": [
+      "Trade the dark bishops",
+      "Raid the loose b2-pawn",
+      "Open c-file pressure"
+    ],
+    "endgameTransitions": [
+      "The extra pawn gives a pleasant ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "r2r2k1/pp1b1p1p/3b2pB/6Q1/3P4/2qB4/P4PPP/R4RK1 w - - 0 16",
+        "moves": [
+          "Rfd1",
+          "Bf8",
+          "Bxf8",
+          "Rxf8",
+          "Rac1",
+          "Qb2",
+          "Bc4",
+          "Rac8"
+        ],
+        "annotations": [
+          "Rfd1 centralises the rook on the d-file.",
+          "…Bf8 offers to trade the dark bishops, easing Black's defence.",
+          "Bxf8 takes the bishop.",
+          "…Rxf8 recaptures, the rook comfortable on f8.",
+          "Rac1 contests the c-file.",
+          "…Qb2 grabs the loose b2-pawn, the active queen deep in White's camp.",
+          "Bc4 activates the bishop toward f7.",
+          "…Rac8 contests the open c-file, Black active with an extra pawn."
+        ],
+        "learnCues": [
+          "Rfd1 — White centralises.",
+          "…Bf8 — offer the bishop trade.",
+          "Bxf8 — White takes.",
+          "…Rxf8 — recapture.",
+          "Rac1 — White takes the c-file.",
+          "…Qb2 — raid the b2-pawn!",
+          "Bc4 — White activates.",
+          "…Rac8 — contest the c-file."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [],
+          [],
+          [],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [
+            {
+              "square": "b2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          []
+        ],
+        "title": "Petrov Steinitz: Trade Down and Grab b2",
+        "sources": [
+          "concept:pos-open-file",
+          "concept:pawn-passed",
+          "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-philidordefence-exchange",
+    "openingId": "philidor-defence",
+    "criticalPositionFen": "r1bqrbk1/1p3ppp/2np1n2/p1p5/4PP2/1NN2B2/PPP3PP/R1BQR1K1 w - - 0 12",
+    "title": "Philidor Exchange: the …d5 Freeing Break",
+    "overview": "After the central exchange Black's pieces find active squares and head for the thematic …d5 break. The knight leaps to the b4-outpost and …d5 liberates the position, equalising with free, active piece play.",
+    "pawnBreaks": [
+      {
+        "move": "…d5 the freeing break",
+        "explanation": "…d5 the freeing break",
+        "fen": "r1bqrbk1/1p3ppp/2np1n2/p1p5/4PP2/1NN2B2/PPP3PP/R1BQR1K1 w - - 0 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Nb4 to the outpost",
+        "explanation": "…Nb4 to the outpost"
+      }
+    ],
+    "strategicThemes": [
+      "The …d5 freeing break",
+      "The …Nb4 outpost",
+      "Free, active development"
+    ],
+    "endgameTransitions": [
+      "The freed pieces give a comfortable game"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqrbk1/1p3ppp/2np1n2/p1p5/4PP2/1NN2B2/PPP3PP/R1BQR1K1 w - - 0 12",
+        "moves": [
+          "a4",
+          "Nb4",
+          "Be3",
+          "d5"
+        ],
+        "annotations": [
+          "a4 grabs queenside space and fixes the a5-pawn.",
+          "…Nb4 leaps to a strong outpost, pressuring c2 and d3.",
+          "Be3 develops the bishop and pressures c5.",
+          "…d5 — the thematic freeing break, striking the centre and liberating Black's pieces for full equality."
+        ],
+        "learnCues": [
+          "a4 — White grabs space.",
+          "…Nb4 — leap to the outpost.",
+          "Be3 — White develops.",
+          "…d5 — the freeing break!"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255,214,0,0.88)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255,214,0,0.88)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Philidor Exchange: the …d5 Freeing Break",
+        "sources": [
+          "concept:pos-outpost",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Philidor_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-slavdefence-geller",
+    "openingId": "slav-defence",
+    "criticalPositionFen": "rn1qkb1r/pb3ppp/4p3/1p2P1N1/2pP4/2P5/5PPP/R1BQKB1R w KQkq - 2 11",
+    "title": "Slav Geller Gambit: Consolidate the Extra Pawn",
+    "overview": "Black has snatched the c4-pawn; against White's sharp Qh5/Qg4 sortie the job is to consolidate. …g6 calmly blunts the queen, the pieces develop, the bishop centralises on d5, and Black emerges a clean pawn up with a solid position.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Be7 develops and readies castling",
+        "explanation": "…Be7 develops and readies castling"
+      },
+      {
+        "piece": "",
+        "route": "…Bd5 centralises the bishop",
+        "explanation": "…Bd5 centralises the bishop"
+      },
+      {
+        "piece": "",
+        "route": "…Nc6 develops with pressure",
+        "explanation": "…Nc6 develops with pressure"
+      }
+    ],
+    "strategicThemes": [
+      "Consolidate the extra pawn",
+      "Blunt the queen sortie",
+      "Central light-square control"
+    ],
+    "endgameTransitions": [
+      "The extra pawn decides if the game simplifies"
+    ],
+    "playableLines": [
+      {
+        "fen": "rn1qkb1r/pb3ppp/4p3/1p2P1N1/2pP4/2P5/5PPP/R1BQKB1R w KQkq - 2 11",
+        "moves": [
+          "Qh5",
+          "g6",
+          "Qg4",
+          "Be7",
+          "Be2",
+          "Bd5",
+          "Bf3",
+          "Nc6"
+        ],
+        "annotations": [
+          "Qh5 lunges the queen out, hunting the kingside in the sharp Geller.",
+          "…g6 calmly blunts the queen sortie, the extra pawn safe.",
+          "Qg4 sidesteps and keeps the queen active.",
+          "…Be7 develops the bishop, completing the kingside and readying castling.",
+          "Be2 develops toward the queenside light squares.",
+          "…Bd5 centralises the bishop on the powerful central square, gripping the light squares.",
+          "Bf3 challenges the strong bishop.",
+          "…Nc6 develops with pressure on d4 and e5; Black is consolidated a clean pawn up."
+        ],
+        "learnCues": [
+          "Qh5 — White lunges out.",
+          "…g6 — blunt the queen.",
+          "Qg4 — White sidesteps.",
+          "…Be7 — develop, ready O-O.",
+          "Be2 — White develops.",
+          "…Bd5 — centralise the bishop.",
+          "Bf3 — White challenges it.",
+          "…Nc6 — develop, a pawn up."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255,214,0,0.88)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Slav Geller Gambit: Consolidate the Extra Pawn",
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-initiative",
+          "https://en.wikipedia.org/wiki/Slav_Defense"
+        ]
+      }
+    ]
   }
 ]
