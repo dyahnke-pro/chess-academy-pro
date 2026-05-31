@@ -247,29 +247,34 @@
     ],
     "variations": [
       {
-        "name": "Smith-Morra: Classical Setup",
-        "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 d6 Bc4 e6 O-O Nf6 Qe2 Be7 Rd1 O-O",
-        "explanation": "The main line where Black plays a standard Sicilian setup. White develops harmoniously with Bc4, O-O, Qe2, and Rd1 — every piece on its ideal Smith-Morra square. The setup is complete and ready for the typical e5 or Nd5 tactical breaks."
+        "name": "Classical Defence (…d6 & …e6)",
+        "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 d6 Bc4 e6 O-O Be7 Qe2 Nf6 Rd1 e5 Be3 O-O Rac1 Bg4",
+        "explanation": "Black's solid Scheveningen box; White gets the ideal Morra setup — Bc4, Qe2, rooks on the open c- and d-files, and the permanent d5-hole. Full compensation for the pawn.",
+        "sources": [
+          "book:smith-morra-gambit",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit"
+        ]
       },
       {
-        "name": "Smith-Morra: Fianchetto Defense",
-        "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 g6 Bc4 Bg7 e5",
-        "explanation": "Black fianchettos with g6 and Bg7. White pushes e5 to cramp Black's position — the central pawn restricts the Bg7 diagonal and prevents Black's typical Sicilian d5 break. White's initiative continues on the kingside."
+        "name": "Alapin Declined (2…Nf6)",
+        "pgn": "e4 c5 d4 cxd4 c3 Nf6 e5 Nd5 Nf3 Nc6 cxd4 d6 Bc4 Nb6 Bb5 dxe5 Nxe5 Bd7 Nxd7 Qxd7 Nc3 e6 O-O Be7",
+        "explanation": "Black declines with …Nf6; White answers e5 and transposes to a comfortable Alapin Sicilian — no pawn given, just a freer game.",
+        "sources": [
+          "book:smith-morra-gambit",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit"
+        ]
       },
       {
-        "name": "Smith-Morra Declined: d3 Push",
-        "pgn": "e4 c5 d4 cxd4 c3 d3 Bxd3 Nc6 Nf3 d6 O-O Nf6",
-        "explanation": "Black declines by pushing d3 instead of taking on c3. This avoids the gambit but gives White a free developing move with Bxd3 — the resulting position resembles a Maroczy Bind where White has a comfortable space advantage and Black's d3 pawn becomes a long-term target."
-      },
-      {
-        "name": "Smith-Morra: Siberian Trap",
-        "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 d6 Bc4 e6 O-O Nf6 Qe2 Be7 Rd1 O-O Bf4",
-        "explanation": "The Siberian setup. After Black completes development and castles, White plays Bf4 — the pin on the d-file (Rd1 backing up the open file) sets up the famous Siberian Trap tactical motif where Nd5 explodes the centre."
-      },
-      {
-        "name": "Smith-Morra: Taylor Defense",
-        "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 e6 Bc4 a6 O-O Nge7 Bg5 h6 Bh4 b5 Bb3",
-        "explanation": "The Taylor Defense with a6 and Nge7 is a common amateur setup. White plays Bg5 to create a pin, and after the bishop retreat dance Bh4 + Bb3 keeps the bishop active — Black's b5 expansion needs to be met carefully but White's piece coordination remains intact."
+        "name": "d3 Return Declined",
+        "pgn": "e4 c5 d4 cxd4 c3 d3 Bxd3 Nc6 c4 g6 Nc3 Bg7 Nf3 d6 O-O Nf6 h3 O-O Be3 Nd7 Rc1 Nde5",
+        "explanation": "Black returns the pawn with …d3; White recaptures and clamps with c4 — a Maróczy Bind giving a durable space edge worth more than the pawn.",
+        "sources": [
+          "book:smith-morra-gambit",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit"
+        ]
       }
     ],
     "trapLines": [],
