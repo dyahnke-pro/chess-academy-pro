@@ -6846,5 +6846,41 @@
     "middlegameTheme": "a4 queenside space, the Nd5 outpost, central space.",
     "lessonSummary": "Gain space with a4, jump Nd5, and press the central edge.",
     "variation": "Evans Gambit Declined"
+  },
+  {
+    "id": "mg-dutch-classical-main",
+    "openingId": "dutch-defence",
+    "white": "Esipenko, Andrey",
+    "black": "Amin, B.",
+    "whiteElo": 2642,
+    "blackElo": 2683,
+    "result": "0-1",
+    "year": 2019,
+    "event": "World Blitz 2019",
+    "pgn": "d4 f5 g3 Nf6 Bg2 e6 Nf3 Be7 O-O O-O c4 d6 Nc3 Qe8 Bf4 Qh5 Rc1 c6 b4 Nbd7 b5 Nb6 bxc6 bxc6 c5 dxc5 dxc5 Nbd5 Bd6 Bxd6 cxd6 f4 Nxd5 cxd5 gxf4 Ne4 e3 Nxd6 Ne5 Qe8 Rc6 Nf5 Qg4 Kh8 Rfc1 Bb7 Rc7 Rc8 Rxc8 Bxc8 Rc7 Ba6 e4 Qb8 Rc1 Qb2 Nd3 Bxd3",
+    "studentSide": "black",
+    "overview": "Amin demonstrates the Classical Dutch against Esipenko: the ...e6/...Be7 setup is solid, and the queen lift ...Qe8-h5 swings the attack to the kingside, the heart of the Classical Dutch plan. A model of generating a kingside initiative from the …f5 structure.",
+    "criticalMoments": [],
+    "middlegameTheme": "The ...Qe8-h5 queen lift, kingside attack.",
+    "lessonSummary": "Set up solidly, lift the queen via e8-h5, and attack the king.",
+    "variation": "Classical Be7 Line"
+  },
+  {
+    "id": "mg-budapest-main",
+    "openingId": "budapest-gambit",
+    "white": "Adhiban, Baskaran",
+    "black": "Ponkratov, P.",
+    "whiteElo": 2674,
+    "blackElo": 2604,
+    "result": "0-1",
+    "year": 2015,
+    "event": "World Blitz 2015",
+    "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 a3 Ngxe5 Nxe5 Nxe5 e3 Bxd2+ Qxd2 d6 Be2 O-O b4 a5 O-O b6 c5 dxc5 Qd5 Bg4 f3 Ng6 fxg4 Nxf4 Rxf4 Qxe3+ Rf2 axb4 Qf3 Qe5 Bc4 Qxa1+",
+    "studentSide": "black",
+    "overview": "Ponkratov shows the Budapest Gambit's tricky activity against Adhiban: ...Ng4 regains the e5-pawn with pressure, ...Bb4+ and ...Qe7 pile onto e5 and develop with tempo, and Black's lead in development creates immediate problems. A model of the Budapest's practical venom.",
+    "criticalMoments": [],
+    "middlegameTheme": "...Ng4 and ...Qe7 to regain e5 with the initiative.",
+    "lessonSummary": "Hop ...Ng4, pressure e5 with ...Qe7, and develop with tempo.",
+    "variation": "Budapest Gambit: Main Bf4 Line"
   }
 ]

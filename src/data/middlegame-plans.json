@@ -2780,16 +2780,27 @@
   {
     "id": "mp-budapestgambit-main",
     "openingId": "budapest-gambit",
-    "criticalPositionFen": "r1b2rk1/ppp1qppp/3p4/4n3/2P2B2/P3P3/1P1QBPPP/R3K2R w KQ - 0 12",
+    "criticalPositionFen": "rnbqkb1r/pppp1ppp/5n2/4p3/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
     "title": "Budapest: Activity Around the e5-Knight",
     "overview": "Out of the gambit Black has recouped the pawn and reached the position the Budapest is all about: a strong knight on e5, harmonious pieces, and the initiative. The plan is pure activity — develop the light bishop to f5, swing a rook to the e-file behind the e5-knight, and press White's slightly loose position. The surprise gambit has handed Black an easy, fighting game.",
     "pawnBreaks": [
-      "…d5 to free the position when fully prepared",
-      "…f5 to support the e5-knight and gain space"
+      {
+        "move": "…Ngxe5 — regain the gambit pawn",
+        "explanation": "With three attackers on e5, Black recovers the pawn with active pieces.",
+        "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3"
+      }
     ],
     "pieceManeuvers": [
-      "…Bf5 to the active b1–h7 diagonal",
-      "…Rfe8 to the e-file behind the e5-knight"
+      {
+        "piece": "Knight",
+        "route": "…Nf6-g4 — attack e5",
+        "explanation": "The knight hops forward to win back the gambit pawn."
+      },
+      {
+        "piece": "Queen",
+        "route": "…Qe7 — pile on e5",
+        "explanation": "The queen adds the decisive third attacker to the gambit pawn."
+      }
     ],
     "strategicThemes": [
       "The strong e5-knight",
@@ -2801,85 +2812,92 @@
     ],
     "playableLines": [
       {
-        "fen": "r1b2rk1/ppp1qppp/3p4/4n3/2P2B2/P3P3/1P1QBPPP/R3K2R w KQ - 0 12",
+        "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
         "moves": [
-          "O-O",
-          "Bf5",
-          "Rfd1",
-          "Rfe8"
+          "dxe5",
+          "Ng4",
+          "Bf4",
+          "Nc6",
+          "Nf3",
+          "Bb4+",
+          "Nbd2",
+          "Qe7"
         ],
         "annotations": [
-          "O-O — White completes development and tucks the king away.",
-          "…Bf5 — the light bishop takes an active diagonal, eyeing c2 and the white queenside.",
-          "Rfd1 contests the open d-file.",
-          "…Rfe8 swings the rook to the e-file, backing the strong e5-knight and the central squares. There is the recouped Budapest: the gambit pawn long since regained, every piece active, and a comfortable, fighting game with surprise on Black’s side."
+          "dxe5 — White grabs the gambit pawn, accepting the Budapest's challenge.",
+          "…Ng4! The knight leaps forward to attack the e5-pawn, the Budapest's whole point — the pawn cannot be held comfortably.",
+          "White defends e5 with Bf4.",
+          "…Nc6 develops and adds a second attacker to the e5-pawn.",
+          "White develops the knight to f3.",
+          "…Bb4+! A check that develops with tempo, forcing White to block awkwardly.",
+          "White interposes the knight on d2.",
+          "…Qe7! The queen piles onto e5 — three attackers now bear down on the gambit pawn, and Black will regain it with active, harmonious pieces. Ponkratov outplayed Adhiban from this energetic footing."
         ],
-        "learnCues": [
-          "O-O — White castles.",
-          "…Bf5 — active diagonal.",
-          "Rfd1 — White’s d-file.",
-          "…Rfe8 — back the e5-knight."
-        ],
-        "sources": [
-          "concept:pos-initiative",
-          "concept:pos-development",
-          "https://en.wikipedia.org/wiki/Budapest_Gambit"
-        ],
-        "title": "Budapest: Activity Around the e5-Knight",
         "arrows": [
           [],
-          [
-            {
-              "from": "f5",
-              "to": "c2",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
+          [],
           [],
           []
         ],
+        "title": "The Budapest Gambit (Adhiban–Ponkratov)",
         "highlights": [
           [
             {
-              "square": "g1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e1",
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f5",
+              "square": "g4",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c2",
+              "square": "e5",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "d1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f1",
+              "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e8",
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "f8",
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
@@ -2887,6 +2905,22 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "intro": "Black regains the gambit pawn with active pieces.",
+        "sources": [
+          "concept:pos-initiative",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Budapest_Gambit"
+        ],
+        "learnCues": [
+          "dxe5 — White grabs the pawn",
+          "…Ng4 — attack e5",
+          "Bf4 — defend e5",
+          "…Nc6 — second attacker",
+          "Nf3 — White develops",
+          "…Bb4+ — develop with check",
+          "Nbd2 — White blocks",
+          "…Qe7 — third attacker on e5"
         ]
       }
     ]
@@ -4889,17 +4923,27 @@
   {
     "id": "mp-dutchdefence-classical",
     "openingId": "dutch-defence",
-    "criticalPositionFen": "rnbq1rk1/pp2b1pp/2p1pn2/3p1p2/2PP4/1P3NP1/PB2PPBP/RN1Q1RK1 b - - 1 8",
+    "criticalPositionFen": "rnbqkb1r/pppp2pp/4pn2/5p2/3P4/6P1/PPP1PPBP/RNBQK1NR w KQkq - 0 4",
     "title": "Dutch Classical: Flexible Outpost Play",
     "overview": "The flexible Classical with …Be7: Black keeps the choice between a Stonewall structure and a central break, plants a knight on e4, and recaptures …fxe4 for a cramping pawn and the half-open f-file. Sound, adaptable, and quietly aggressive.",
     "pawnBreaks": [
-      "…e5 or the …fxe4 cramp",
-      "…c5 to challenge d4"
+      {
+        "move": "…e5 — the central break",
+        "explanation": "Supported by …d6, the …e5 break opens lines for Black’s kingside attack.",
+        "fen": "rnbqkb1r/pppp2pp/4pn2/5p2/3P4/6P1/PPP1PPBP/RNBQK1NR w KQkq - 0 4"
+      }
     ],
     "pieceManeuvers": [
-      "…Ne4 the central outpost",
-      "…Bd7–e8–h5 reroute",
-      "…Nbd7 development"
+      {
+        "piece": "Queen",
+        "route": "…Qe8-h5 — the kingside lift",
+        "explanation": "The queen swings to the kingside, the Classical Dutch’s attacking idea."
+      },
+      {
+        "piece": "Bishop",
+        "route": "…Be7 — flexible development",
+        "explanation": "The Classical setup keeps the structure flexible for …e5."
+      }
     ],
     "strategicThemes": [
       "The e4 outpost and …fxe4 cramp",
@@ -4911,75 +4955,40 @@
     ],
     "playableLines": [
       {
-        "fen": "rnbq1rk1/pp2b1pp/2p1pn2/3p1p2/2PP4/1P3NP1/PB2PPBP/RN1Q1RK1 b - - 1 8",
+        "fen": "rnbqkb1r/pppp2pp/4pn2/5p2/3P4/6P1/PPP1PPBP/RNBQK1NR w KQkq - 0 4",
         "moves": [
-          "Bd7",
-          "Nbd2",
-          "Be8",
-          "Ne5",
-          "Ne4"
+          "Nf3",
+          "Be7",
+          "O-O",
+          "O-O",
+          "c4",
+          "d6",
+          "Nc3",
+          "Qe8"
         ],
         "annotations": [
-          "…Bd7 unpins and begins the bishop’s reroute toward the kingside.",
-          "Nbd2 develops behind the centre.",
-          "…Be8 — the bishop heads for h5, swinging around the pawn chain to the attack.",
-          "Ne5 plants a knight in the centre, contesting the key square.",
-          "…Ne4 seizes the eternal outpost — the knight sits unevictable on e4, the springboard for every Stonewall kingside attack."
+          "Nf3 develops, the main-line setup against the Classical Dutch.",
+          "…Be7 develops the bishop, the Classical (as opposed to Stonewall) approach keeping the structure flexible.",
+          "White castles.",
+          "…O-O — Black castles, ready to begin kingside operations.",
+          "White expands with c4, claiming queenside space.",
+          "…d6 supports a future …e5 break and keeps the centre flexible.",
+          "White develops the knight to c3.",
+          "…Qe8! The signature Classical Dutch move: the queen lifts toward h5, swinging the attack to the kingside where Black's …f5 structure points. Amin outplayed Esipenko with this thematic plan."
         ],
-        "title": "Dutch Classical: Flexible Outpost Play",
         "arrows": [
           [],
           [],
-          [
-            {
-              "from": "e8",
-              "to": "h5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
           [],
           []
         ],
+        "title": "The Classical Dutch (Esipenko–Amin)",
         "highlights": [
           [
-            {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "f3",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -4987,26 +4996,62 @@
           ],
           [
             {
-              "square": "e4",
+              "square": "e7",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "f6",
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Bd7 — start the reroute",
-          "Nbd2 — develop",
-          "Be8 — head for h5",
-          "Ne5 — contest the centre",
-          "Ne4 — eternal outpost"
-        ],
+        "intro": "Black sets up solidly and lifts the queen to attack.",
         "sources": [
-          "book:dutch-defence",
-          "concept:att-kingside-storm",
+          "concept:pos-initiative",
+          "concept:pos-development",
           "https://en.wikipedia.org/wiki/Dutch_Defence"
+        ],
+        "learnCues": [
+          "Nf3 — White develops",
+          "…Be7 — the Classical setup",
+          "O-O — White castles",
+          "…O-O — castle, ready to attack",
+          "c4 — White expands",
+          "…d6 — flexible, prepare …e5",
+          "Nc3 — White develops",
+          "…Qe8 — the queen lift toward h5"
         ]
       }
     ]
