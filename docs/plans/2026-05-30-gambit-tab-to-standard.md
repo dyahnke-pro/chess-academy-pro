@@ -123,15 +123,32 @@ pre-masterclass surface; the good builds sit one id away on the Masterclass tab.
        REAL master game walked into the ending, board-verified, gate-green:
        - [x] Benko — `mp-benkogambit-endgame` (Cossin–MVL 2008, R+minor, Nxg3 no-recapture). 29e9255
        - [x] King's — `mp-kings-gambit-endgame` (Berg–Grandelius 2015, R+P two-passers). f225428
-       - [ ] Evans — endgame plan (data: see gambit-endgames/ev__*; pick cleanest student win)
-       - [ ] Budapest — endgame plan + MODEL GAMES (0 today; student=black wins)
-       - [ ] Albin — endgame plan (R+P/R+minor 50%) + MODEL GAMES (0 today)
+       - [x] Evans — `mp-evansgambit-endgame` (Stevic–Rogic 1995, Bxf7+ liquidation). c5987b4
+       - [x] Budapest — `mp-budapestgambit-endgame` (Galiana–Anagnostopoulos, two-weaknesses) + 2 model games. c5987b4/19ea416
+       - [x] Albin — `mp-albincountergambit-endgame` (Shumiakina–Raetsky, active-king R+P) + 2 model games. c5987b4/19ea416
+       **GROUP A COMPLETE** — 5 curated openings on the tab, all with MG plans + endgame plans + model games, gate-green.
        Pattern (per plan): read gambit-endgames/<v>.json rep game → verify line legal +
        capture FENs → author board-true two-register annotations + orange highlights +
        learnCues + sources → bump manifest endgamePlans → run middlegamePlanThemes +
        openingManifests + middlegamePlanner gates.
-4. [ ] Group B full builds, one opening at a time (Smith-Morra/Danish/Scotch/Vienna/
-       Stafford/Marshall/Englund) — lesson + plans + endgame + model games + pitfalls.
+4. [~] Group B full builds (Scotch/Vienna/Danish/Smith-Morra/Stafford/Marshall/Englund).
+       Endgame data surveyed (gambit-endgames/): 6 of 7 have a clean ≥8-ply student-win
+       ending; Stafford self-hides (sharp, no clean ending — correct, like King's
+       Classical-Declined). ⚠️ BOARD-ACCURACY DISCIPLINE: several rep-game slices do NOT
+       cleanly show the student winning (e.g. Scotch `Rxb5` is met by `cxb5`, an even
+       trade — NOT a material win). Only author a slice whose board facts genuinely
+       demonstrate the student edge; verify every claim with chess.js before writing prose.
+       - [x] Marshall — `mp-marshallattack-endgame` (Leko–Kramnik 2007, verified clean). 3e0d3a8
+       - [ ] Smith-Morra / Vienna / Danish / Englund — re-verify the rep slice (or pick a
+             deeper segment / different game) before authoring; skip+self-hide if no clean
+             student-win demo exists. Scotch slice is NOT clean as-is.
+       - [ ] **THE BIG REMAINING LIFT — LessonScripts (G9.3 Gate A) for all 7.** Without a
+             registered LessonScript each Group B Watch still falls to legacy WalkthroughMode.
+             Per opening: author main + per-variation LessonScripts on the STEP-2/3 data
+             spines (two registers, lead-the-eye, sources), register in lessons/index.ts,
+             add opening-manifests entry, then the full gate suite (lessonIntegrity,
+             narrationAccuracy, lessonDepth, wlppNarration, lessonSources) applies.
+       - [ ] Group B model games (student-side wins) + pitfalls (common-mistakes) per opening.
 5. [ ] Gate wiring (depth gate + coverage gate over gambits.json).
 6. [ ] `npm run ship-check` green → land on main → 3-instrument audit per id.
 
