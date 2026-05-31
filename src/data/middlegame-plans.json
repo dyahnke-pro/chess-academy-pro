@@ -23706,25 +23706,25 @@
     "id": "mp-queensgambit-slav",
     "openingId": "queens-gambit",
     "title": "Slav: Build the Big Centre with e4",
-    "criticalPositionFen": "r2q1rk1/pp1n1ppp/2p1pn2/5b2/PbBP4/2N1PN2/1P2QPPP/R1B2RK1 w - - 5 10",
+    "criticalPositionFen": "rnbqkb1r/pp2pppp/2p2n2/3p4/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 2 4",
     "overview": "Against the solid Slav, White recovers the pawn and then claims the full centre with e4, gaining the space and the bishop pair. The e4-e5 advance cramps Black and hands White a durable spatial pull.",
     "pawnBreaks": [
       {
-        "move": "e4",
-        "explanation": "e4 builds the d4+e4 centre and hits the f5-bishop, gaining time and space.",
-        "fen": "r2q1rk1/pp1n1ppp/2p1pn2/5b2/PbBP4/2N1PN2/1P2QPPP/R1B2RK1 w - - 5 10"
-      },
-      {
-        "move": "e5",
-        "explanation": "e5 advances the centre, cramping Black and opening lines toward his king.",
-        "fen": "r2q1rk1/pp1n1ppp/2p1pn2/5b2/PbBP4/2N1PN2/1P2QPPP/R1B2RK1 w - - 5 10"
+        "move": "e3-e4 — the central break",
+        "explanation": "Once developed, e4 expands the centre and opens lines for White’s pieces.",
+        "fen": "rnbqkb1r/pp2pppp/2p2n2/3p4/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 2 4"
       }
     ],
     "pieceManeuvers": [
       {
+        "piece": "Pawn",
+        "route": "a4 — fix the queenside, regain c4",
+        "explanation": "The a4-push is the engine of White’s main-line edge."
+      },
+      {
         "piece": "Bishop",
-        "route": "Bc4-d3",
-        "explanation": "The bishop reroutes to d3 to challenge the g6-bishop once the centre advances."
+        "route": "Bf1xc4 — recover the pawn actively",
+        "explanation": "The bishop regains the pawn from an active diagonal."
       }
     ],
     "strategicThemes": [
@@ -23737,37 +23737,26 @@
     ],
     "playableLines": [
       {
-        "title": "Slav: Build the Big Centre with e4",
-        "fen": "r2q1rk1/pp1n1ppp/2p1pn2/5b2/PbBP4/2N1PN2/1P2QPPP/R1B2RK1 w - - 5 10",
+        "fen": "rnbqkb1r/pp2pppp/2p2n2/3p4/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 2 4",
         "moves": [
-          "e4",
-          "Bg6",
-          "Bd3",
-          "Re8",
-          "e5",
-          "Nd5"
+          "Nc3",
+          "dxc4",
+          "a4",
+          "Bf5",
+          "e3",
+          "e6",
+          "Bxc4",
+          "Bb4"
         ],
         "annotations": [
-          "e4 — White claims the broad centre and hits the f5-bishop.",
-          "…Bg6 — the bishop retreats to safety along the diagonal.",
-          "Bd3 — White lines up to challenge the g6-bishop once the centre advances.",
-          "…Re8 — Black contests the e-file before the storm.",
-          "e5 — the pawn storms on, cramping Black and clearing the road toward g6.",
-          "…Nd5 — Black blockades on d5, but White's space advantage is real and lasting."
-        ],
-        "learnCues": [
-          "e4 — claim the big centre",
-          "…Bg6 — the bishop retreats",
-          "Bd3 — challenge the g6-bishop",
-          "…Re8 — Black holds the e-file",
-          "e5 — the storm advances",
-          "…Nd5 — Black blockades, White has space"
-        ],
-        "sources": [
-          "book:queens-gambit",
-          "concept:pos-center",
-          "concept:pos-space",
-          "https://en.wikipedia.org/wiki/Slav_Defense"
+          "Nc3 develops, the main-line Slav setup.",
+          "…dxc4 takes the pawn, the Slav's principled approach.",
+          "a4! White stops …b5 and prepares to regain the c4-pawn — the key main-line move.",
+          "…Bf5 develops the bishop actively before …e6.",
+          "e3 prepares to recapture on c4.",
+          "…e6 supports the centre.",
+          "White regains the pawn with Bxc4, the bishop actively placed.",
+          "…Bb4 pins the c3-knight. White has a harmonious setup with central space and the slightly easier game — Ivanchuk outplayed Morozevich from here."
         ],
         "arrows": [
           [],
@@ -23775,81 +23764,76 @@
           [],
           [],
           [],
+          [],
+          [],
           []
         ],
+        "title": "White vs the Slav (Ivanchuk–Morozevich)",
         "highlights": [
           [
             {
-              "square": "e4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "g6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f5",
+              "square": "c3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
-            {
-              "square": "d3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g6",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "e8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f8",
+              "square": "a4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e5",
+              "square": "f5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g6",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "d5",
+              "square": "e3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "f6",
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "intro": "White regains the pawn and presses the central space.",
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Slav_Defense"
+        ],
+        "learnCues": [
+          "Nc3 — the Slav setup",
+          "…dxc4 — take the pawn",
+          "a4 — stop …b5, regain c4",
+          "…Bf5 — develop the bishop",
+          "e3 — prepare Bxc4",
+          "…e6 — support the centre",
+          "Bxc4 — regain the pawn",
+          "…Bb4 — pin the knight"
         ]
       }
     ]
@@ -35022,20 +35006,25 @@
     "id": "mp-siciliansveshnikov-antisvesh",
     "openingId": "sicilian-sveshnikov",
     "title": "Anti-Sveshnikov: Free, Equal Development",
-    "criticalPositionFen": "r1bq1rk1/pp1pbpp1/2n2n1p/4p3/2B1P3/2N2N2/PPP2PPP/R1BQ1RK1 w - - 4 9",
+    "criticalPositionFen": "r1bqkb1r/pp1p1ppp/2n2n2/4p3/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
     "overview": "Against the quiet 6.Nf3 Black develops actively, trades on e3 to deny White any edge, and challenges the centre with Be6 — a comfortable, fully equal game.",
     "pawnBreaks": [
       {
-        "move": "d5 (eventual)",
-        "explanation": "With easy development Black can aim for a later d5 break.",
-        "fen": "r1bq1rk1/pp1pbpp1/2n2n1p/4p3/2B1P3/2N2N2/PPP2PPP/R1BQ1RK1 w - - 4 9"
+        "move": "…d5 — the central break",
+        "explanation": "The …d5 strike equalizes at once against the quiet 6.Nf3.",
+        "fen": "r1bqkb1r/pp1p1ppp/2n2n2/4p3/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6"
       }
     ],
     "pieceManeuvers": [
       {
         "piece": "Bishop",
-        "route": "Bf8-c5xe3",
-        "explanation": "Develop actively and trade off White's dark bishop."
+        "route": "…Bf8-b4 — pin with tempo",
+        "explanation": "The bishop pins and supports the …d5 break."
+      },
+      {
+        "piece": "Queen",
+        "route": "…Qxd5 — centralize",
+        "explanation": "The queen recaptures actively in the centre."
       }
     ],
     "strategicThemes": [
@@ -35048,23 +35037,26 @@
     ],
     "playableLines": [
       {
-        "title": "Anti-Sveshnikov: Free, Equal Development",
-        "fen": "r1bq1rk1/pp1pbpp1/2n2n1p/4p3/2B1P3/2N2N2/PPP2PPP/R1BQ1RK1 w - - 4 9",
+        "fen": "r1bqkb1r/pp1p1ppp/2n2n2/4p3/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
         "moves": [
-          "Qe2",
-          "Bc5",
-          "Be3",
-          "Bxe3",
-          "Qxe3",
-          "d6"
+          "Nf3",
+          "Bb4",
+          "Bd3",
+          "d5",
+          "exd5",
+          "Qxd5",
+          "O-O",
+          "Bxc3"
         ],
         "annotations": [
-          "Qe2 — a quiet, edgeless try that lets Black free his pieces.",
-          "Bc5 — Black develops with bite.",
-          "Be3 — White offers a trade.",
-          "Bxe3 — Black takes off the dark bishop.",
-          "Qxe3 — recapturing into a symmetrical, dead-equal middlegame.",
-          "d6 — free the bishop; Black is fully equal."
+          "Nf3 — the quiet Anti-Sveshnikov, declining to plant a knight on d5 and instead retreating to f3.",
+          "…Bb4! Black pins the c3-knight, developing with tempo and preparing the central break.",
+          "White develops the bishop to d3.",
+          "…d5! The thematic central strike, challenging e4 and seizing the initiative — exactly what the quiet retreat allows.",
+          "White trades on d5.",
+          "…Qxd5 recaptures, the queen centralized and active.",
+          "White castles.",
+          "…Bxc3 trades to damage White's structure, leaving Black with active pieces, central control, and easy equality against the timid setup."
         ],
         "arrows": [
           [],
@@ -35072,82 +35064,80 @@
           [],
           [],
           [],
+          [],
+          [],
           []
         ],
+        "title": "The Anti-Sveshnikov 6.Nf3 (equalizing)",
         "highlights": [
           [
             {
-              "square": "e2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d1",
+              "square": "f3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e7",
+              "square": "b4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c1",
+              "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e3",
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "c5",
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e2",
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d6",
+              "square": "g1",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d7",
+              "square": "c3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
+        "intro": "Black strikes with ...d5 and equalizes actively.",
         "sources": [
-          "concept:pos-outpost",
           "concept:pos-center",
+          "concept:pos-initiative",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
         ],
         "learnCues": [
-          "Qe2 — develop quietly",
-          "Bc5 — develop with bite",
-          "Be3 — offer a trade",
-          "Bxe3 — take the dark bishop",
-          "Qxe3 — recapture, no edge",
-          "d6 — free the bishop, equal"
+          "Nf3 — the quiet retreat",
+          "…Bb4 — pin with tempo",
+          "Bd3 — White develops",
+          "…d5 — the central strike",
+          "exd5 — White trades",
+          "…Qxd5 — recapture, centralize",
+          "O-O — White castles",
+          "…Bxc3 — trade, damage the structure"
         ]
       }
     ]

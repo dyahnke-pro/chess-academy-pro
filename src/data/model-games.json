@@ -6882,5 +6882,41 @@
     "middlegameTheme": "...Ng4 and ...Qe7 to regain e5 with the initiative.",
     "lessonSummary": "Hop ...Ng4, pressure e5 with ...Qe7, and develop with tempo.",
     "variation": "Budapest Gambit: Main Bf4 Line"
+  },
+  {
+    "id": "mg-queensgambit-slav-response",
+    "openingId": "queens-gambit",
+    "white": "Ivanchuk, Vassily",
+    "black": "Morozevich, Alexander",
+    "whiteElo": 2787,
+    "blackElo": 2755,
+    "result": "1-0",
+    "year": 2007,
+    "event": "Wch Blitz 3rd",
+    "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Bf5 e3 e6 Bxc4 Bb4 O-O Nbd7 Nh4 Bg4 f3 Bh5 g4 Nd5 Ng2 Bg6 Na2 Be7 e4 N5b6 Bb3 a5 Nc3 O-O f4 h6 f5 exf5 gxf5 Bh7 Nf4 Kh8 Be3 Bg5 Qf3 Qe7 Rae1 Qb4 Qd1 Rad8 Qc2 Nf6 Kh1 Rxd4 Bxd4 Qxd4 Rd1 Qe3 Rd3 Qc5 Rdf3 Nbd7 Nd3 Qd4 Qe2 Ng4 Rg3 Nge5 Rd1 Qb6 Ba2 Bf6 Nf4 Bg5 Nh3 Bf6 Nf4 Bh4 Rg2 Nf6 Nd3 Qc7 Qe3 Rd8 Qf4 Rxd3 Rxd3 Bg5 Rd8+ Qxd8 Qxe5 Bg8 Qc5 Nd7 Qf2 Ne5 Rg1 Qd3 Rd1 Qh3 Qg2 Qh4 h3 Bf6 Ne2 b5 axb5 cxb5",
+    "studentSide": "white",
+    "overview": "Ivanchuk shows White's side of the main-line Slav against Morozevich: a4 fixes the queenside and regains the c4-pawn, e3 and Bxc4 complete a harmonious setup, and White's central space and slight initiative convert against a world-class opponent. A model of pressing the Slav for an edge.",
+    "criticalMoments": [],
+    "middlegameTheme": "a4 to regain c4, central space and the small edge.",
+    "lessonSummary": "Play a4, recover the pawn, and press the central space.",
+    "variation": "Slav Defence Response"
+  },
+  {
+    "id": "mg-sicilian-antisveshnikov-nf3",
+    "openingId": "sicilian-sveshnikov",
+    "white": "Gantner, Matthias",
+    "black": "Shaarbaf, M.",
+    "whiteElo": 2451,
+    "blackElo": 2384,
+    "result": "0-1",
+    "year": 2006,
+    "event": "Champions Challenge 172nd",
+    "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Nf3 Bb4 Bd3 d5 exd5 Qxd5 O-O Bxc3 bxc3 e4 Bxe4 Qxd1 Bxc6+ bxc6 Rxd1 O-O Bg5 Nd5 c4 Nb4 Be7 Nxc2 Bxf8 Nxa1 Bc5 Be6 Rxa1 Bxc4 a3 f6 Rb1 a6 h3 Rd8 Rb7 Rd5 Bb4 a5 Bc3 a4 Nd4 c5 Nc6 Rd3 Bb2 Kf8 Kh2 Rd2 Kg3 Bd5 Rb8+ Kf7 Nd8+ Kg6 Bc1 Rd3+ Be3 c4 Kf4 c3 Rc8 Bb3 Nb7 c2 g4 h5 Rc7 h4 Ke4 Rd1 Rc5 Rh1 f4 Rxh3 f5+ Kh7 Nd6 Rh2 Nc8 h3 Ne7 Re2 Kf3 Rxe3+ Kxe3 h2 Ng6 h1=Q Rc8 c1=Q+",
+    "studentSide": "black",
+    "overview": "Black shows that the quiet Anti-Sveshnikov 6.Nf3 gives Black easy equality: ...Bb4 pins, ...d5 strikes the centre at once, and after the exchanges Black's active pieces and central control give a comfortable game. A model of meeting the Sveshnikov-avoiding lines with energetic central play.",
+    "criticalMoments": [],
+    "middlegameTheme": "...d5 central break, active piece play.",
+    "lessonSummary": "Pin with ...Bb4, break with ...d5, and equalize actively.",
+    "variation": "Anti-Sveshnikov: 6.Nf3 Quiet Retreat"
   }
 ]
