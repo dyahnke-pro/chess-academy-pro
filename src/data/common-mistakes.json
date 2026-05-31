@@ -413,6 +413,18 @@
         "concept:pos-center",
         "https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence"
       ]
+    },
+    {
+      "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/3PP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 5",
+      "wrongMove": "Nb6",
+      "correctMove": "Nxc3",
+      "explanation": "Retreating with 5...Nb6 hands White exactly what the Grünfeld is built to attack: a big, unchallenged e4/d4 centre and a free game. The whole point is 5...Nxc3 6.bxc3 — fracturing White's queenside pawns — and only THEN besieging the centre with ...Bg7, ...c5 and ...Nc6. Trade on c3 first; don't retreat.",
+      "shortNarration": "Nxc3 first; Nb6 gives White the centre",
+      "sources": [
+        "concept:pos-center",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence"
+      ]
     }
   ],
   "scotch-game": [
@@ -1097,6 +1109,18 @@
       "explanation": "In the Four Pawns Attack (f4), engine sees both moves as similar. But 7…Bg7 walks into 8.e5 (the natural pawn push) with Black's knight getting kicked from f6. 7…Nbd7 first defends the knight indirectly (after e5 dxe5 fxe5 Ng4 Nf3 the knight has the escape square e6 already controlled). Practical edge: with Nbd7 first, Black's pieces stay coordinated; with Bg7 first you face an immediate central push.",
       "shortNarration": "…Nbd7 — accurate vs the Four Pawns.",
       "sources": [
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Modern_Benoni"
+      ]
+    },
+    {
+      "fen": "rnbq1rk1/pp3pbp/3p1np1/2pP4/4P3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 3 9",
+      "wrongMove": "b5",
+      "correctMove": "Re8",
+      "explanation": "The ...b5 lever is the heart of the Benoni — but fired too early it just drops a pawn: 9...b5? 10.Bxb5 and there is no compensation, because b5 isn't yet supported. Prepare it first — 9...Re8 (then ...Na6/...Nbd7 and ...a6) — and unleash ...b5 only once it's backed up.",
+      "shortNarration": "Re8 first; ...b5 now just drops a pawn",
+      "sources": [
+        "concept:pos-space",
         "concept:pos-development",
         "https://en.wikipedia.org/wiki/Modern_Benoni"
       ]
@@ -2586,6 +2610,20 @@
         "concept:pos-center",
         "concept:pos-development",
         "https://en.wikipedia.org/wiki/Albin_Countergambit"
+      ]
+    }
+  ],
+  "sicilian-najdorf": [
+    {
+      "fen": "rnbqkb1r/1p2pppp/p2p1n2/6B1/3NP3/2N5/PPP2PPP/R2QKB1R b KQkq - 1 6",
+      "wrongMove": "e5",
+      "correctMove": "e6",
+      "explanation": "Against the 6.Bg5 pin, 6...e5? concedes the d5-square for good: the f6-knight is pinned and can't fight for it, so White calmly clamps with a3 and Nd5, enjoying a lasting positional bind on the hole. The flexible 6...e6 keeps d5 covered and the structure sound — the Najdorf's main road.",
+      "shortNarration": "e6 keeps d5 covered; e5 leaves a hole",
+      "sources": [
+        "concept:pos-center",
+        "concept:pos-outpost",
+        "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
       ]
     }
   ]
