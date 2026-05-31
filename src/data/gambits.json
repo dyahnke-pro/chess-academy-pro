@@ -89,52 +89,22 @@
     ],
     "variations": [
       {
-        "name": "Vienna Gambit: Main Line with Ng8 Retreat",
-        "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5 Ng8 Nf3",
-        "explanation": "The main line. After 3.f4 exf4 4.e5 the Nf6 has no good square except back to g8 — Black has wasted three tempi on the knight by move 4. Nf3 develops and prepares d4 to dominate the center with the moved-back knight unable to defend.",
+        "name": "Gambit Accepted (…exf4)",
+        "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5 Ng8 Nf3 d6 d4 dxe5 Qe2 Nc6 Bxf4 Bg4 O-O-O Bxf3 gxf3 Qe7",
+        "explanation": "…exf4 is greedy: e5! sends the knight back to g8, White builds a giant centre and a winning lead in development (engine >+3).",
         "sources": [
-          "book:vienna-game",
-          "concept:pos-development",
+          "concept:pos-initiative",
+          "concept:tac-sacrifice",
           "https://en.wikipedia.org/wiki/Vienna_Game"
         ]
       },
       {
-        "name": "Vienna Gambit: Qe7 Variation",
-        "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5",
-        "explanation": "After 4.e5 Black can pin the e5 pawn with ...Qe7 instead of retreating the knight. White plays Qe2 to defend e5 and continues developing — the position remains sharp with both sides racing to complete development.",
+        "name": "Qf3 Setup (vs …d5)",
+        "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 dxc3 Be6 Bf4 Be7 O-O-O c6 Qg3 g6 Nf3 Qa5",
+        "explanation": "Against …d5, Qf3 hits the e4-knight and supports a queenside-castling attack with the e5-wedge — a pleasant aggressive edge.",
         "sources": [
-          "book:vienna-game",
-          "concept:pos-development",
-          "https://en.wikipedia.org/wiki/Vienna_Game"
-        ]
-      },
-      {
-        "name": "Frankenstein-Dracula Variation",
-        "pgn": "e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Nc6 Nb5 g6 Qf3 f5 Qd5 Qe7 Nxc7+ Kd8 Nxa8 b6 d3 Bb7 Qf3 Nd4",
-        "explanation": "The wildly named Frankenstein-Dracula arises after 3.Bc4 Nxe4. This is one of the sharpest positions in all of chess — both sides are throwing punches from move 4. White plays Qh5 threatening Qxf7 mate. Knowing this line is essential if you play the Vienna — one wrong move and the game is over for either side.",
-        "sources": [
-          "book:vienna-game",
-          "concept:pos-development",
-          "https://en.wikipedia.org/wiki/Vienna_Game"
-        ]
-      },
-      {
-        "name": "Vienna Gambit: Nd5 Variation",
-        "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5",
-        "explanation": "Black can also place the knight on d5 instead of retreating to g8. From the position after 4.e5, White's pieces can develop naturally; the d-file and f-file both open as the structure simplifies, giving White attacking chances on the kingside.",
-        "sources": [
-          "book:vienna-game",
-          "concept:pos-development",
-          "https://en.wikipedia.org/wiki/Vienna_Game"
-        ]
-      },
-      {
-        "name": "Vienna Gambit: Pierce Gambit",
-        "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5 Ng8 Nf3",
-        "explanation": "The Pierce Gambit transposes to the main Vienna Gambit position after 5.Nf3. From here White can choose between d4 / Bc4 / Bd3 setups; the Pierce specifically delays the bishop development to keep more flexibility.",
-        "sources": [
-          "book:vienna-game",
-          "concept:pos-development",
+          "concept:pos-initiative",
+          "concept:tac-sacrifice",
           "https://en.wikipedia.org/wiki/Vienna_Game"
         ]
       }

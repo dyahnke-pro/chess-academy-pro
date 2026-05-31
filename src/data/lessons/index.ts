@@ -131,6 +131,7 @@ import { SMITH_MORRA_GAMBIT_VARIATION_LESSONS } from './smithMorraGambitVariatio
 import { SCOTCH_GAMBIT_LESSON } from './scotchGambit';
 import { SCOTCH_GAMBIT_VARIATION_LESSONS } from './scotchGambitVariations';
 import { VIENNA_GAMBIT_LESSON } from './viennaGambit';
+import { VIENNA_GAMBIT_VARIATION_LESSONS } from './viennaGambitVariations';
 import { DANISH_GAMBIT_LESSON } from './danishGambit';
 import { MARSHALL_ATTACK_LESSON } from './marshallAttack';
 import { STAFFORD_GAMBIT_LESSON } from './staffordGambit';
@@ -291,6 +292,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...BUDAPEST_GAMBIT_VARIATION_LESSONS,
   ...SMITH_MORRA_GAMBIT_VARIATION_LESSONS,
   ...SCOTCH_GAMBIT_VARIATION_LESSONS,
+  ...VIENNA_GAMBIT_VARIATION_LESSONS,
   ...ALBIN_COUNTERGAMBIT_VARIATION_LESSONS,
   ...SCHLIEMANN_DEFENCE_VARIATION_LESSONS,
   ...QUEENS_GAMBIT_VARIATION_LESSONS,
