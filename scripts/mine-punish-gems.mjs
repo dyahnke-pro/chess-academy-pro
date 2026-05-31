@@ -288,6 +288,23 @@ const OPENING_SEEDS = {
   // Sicilian Dragon — Black. Seed = the Dragon tabiya (the repertoire variations
   // carry no move lists, so pin the base seed explicitly rather than derive it).
   'sicilian-dragon': { studentChar: 'b', baseSeed: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'g6'] },
+  // Pro repertoires (2026-05-31 depth build) — gems mine the amateur explorer at
+  // the opening's identity position, so the seed is the SHORT defining prefix.
+  'pro-gothamchess-qgd':            { studentChar: 'b', baseSeed: ['d4', 'd5', 'c4', 'e6'] },
+  'pro-naroditsky-caro-kann':       { studentChar: 'b', baseSeed: ['e4', 'c6', 'd4', 'd5'] },
+  'pro-naroditsky-alapin':          { studentChar: 'w', baseSeed: ['e4', 'c5', 'c3'] },
+  'pro-naroditsky-najdorf':         { studentChar: 'b', baseSeed: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6'] },
+  'pro-naroditsky-kid':             { studentChar: 'b', baseSeed: ['d4', 'Nf6', 'c4', 'g6', 'Nc3', 'Bg7'] },
+  'pro-naroditsky-alekhine':        { studentChar: 'b', baseSeed: ['e4', 'Nf6', 'e5', 'Nd5'] },
+  'pro-naroditsky-kia':             { studentChar: 'w', baseSeed: ['Nf3', 'Nf6', 'g3'] },
+  'pro-naroditsky-rossolimo':       { studentChar: 'w', baseSeed: ['e4', 'c5', 'Nf3', 'Nc6', 'Bb5'] },
+  'pro-naroditsky-jobava-london':   { studentChar: 'w', baseSeed: ['d4', 'd5', 'Nc3', 'Nf6', 'Bf4'] },
+  'pro-naroditsky-ruy-lopez':       { studentChar: 'w', baseSeed: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5'] },
+  'pro-naroditsky-fantasy-caro':    { studentChar: 'w', baseSeed: ['e4', 'c6', 'd4', 'd5', 'f3'] },
+  'pro-gothamchess-trompowsky':     { studentChar: 'w', baseSeed: ['d4', 'Nf6', 'Bg5'] },
+  'pro-gothamchess-english':        { studentChar: 'w', baseSeed: ['c4'] },
+  'pro-gothamchess-kia':            { studentChar: 'w', baseSeed: ['Nf3', 'd5', 'g3'] },
+  'pro-gothamchess-closed-sicilian': { studentChar: 'w', baseSeed: ['e4', 'c5', 'Nc3'] },
 };
 function loadRepertoire() {
   try {
