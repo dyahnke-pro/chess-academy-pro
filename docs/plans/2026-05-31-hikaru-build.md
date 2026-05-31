@@ -72,3 +72,21 @@ from the voice corpus) + 7 variation lessons + middlegame plans (the data spines
 + gems (run mine-punish-gems with hikaru seeds) + endgames (e5-main/nf6/g6 R+minor+P
 from real games) + model games (his wins, already picked) + pitfalls + register +
 pro-repertoires.json entry + PRO_DATA_REVISION bump. Then gates + ship + audit.
+
+---
+## HIKARU COMPLETE (2026-05-31) — all 5 openings + variation voice
+All 5 data-discovered openings built to G9.1 shape + hand-authored variation voice:
+- Nimzo-Larsen 1.b3 (main + 7 var), Grand Prix/Closed Sicilian (main + 3 var),
+  Réti (main + 3 var), Modern 1...g6 (main + 4 var), Caro-Kann (main + 3 var).
+- 25 lessons total, all gates green (board-accuracy, coverage Gate A, depth Gate B,
+  voice G9.4, sources). Shipped to main.
+
+### Gems: data-honest
+Closed Sicilian / Pirc / Caro yielded 0 gems (system/solid openings — opponents make
+no refutable amateur blunders, same as Trompowsky/QGD). Nimzo-Larsen/Réti mining in
+progress. Gems are opportunistic — built where the data yields them, not forced.
+
+### Endgame opportunity (next): Nimzo-Larsen e5-main / nf6 / g6 variations carry
+R+minor+P endgame data in their deep-build files — author per the locked endgame rule
+(real game → transition FEN → conversion). Pirc/Modern + Caro are middlegame/positional
+(self-hide where no decisive ending). Same honest scope as the other pros.
