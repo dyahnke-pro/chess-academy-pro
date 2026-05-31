@@ -38,7 +38,17 @@ weapon. Complements Gotham's "Stafford-refute" (Gotham = White beats it; Rosen
 - [x] STEP 14b: closed two gate holes (proRepNarrationVoice + proRepPlanAccuracy now
       cover any `pro-` player, not just gothamchess/naroditsky)
 - [x] STEP 15: gate tests green (11 files, 3344 tests) + `npm run ship-check` = READY TO PUSH
-- [ ] STEP 16: push to main + 3-instrument audit
+- [x] STEP 16: pushed to main (commits 9f4fc4b + audit 1833935) + post-deploy audit
+      GREEN on live prod — 7/7: page renders, main Watch + all 5 variation Watch
+      lessons are the curated LessonPlayer (Gate A), 0 legacy fallbacks. Bundle
+      CD060Dtb confirmed to contain pro-ericrosen-stafford.
+
+## Routed to David (not verifiable headless)
+- Live VOICE/narration (Polly TTS) firing on the Watch/Learn lessons — the
+  audit-stream listener can't capture sustained TTS in headless. Verify on a
+  real device that Ruth speaks the beats.
+- The audit-stream showed 0 events (no live client open during the run); pull
+  again with the app open on your phone to see the navigation/voice events.
 
 ## G9.3 four hard gates
 - A: every variation has a registered LessonScript (no legacy WalkthroughMode)
