@@ -3,6 +3,32 @@
 > Doctrine: `docs/plans/2026-05-29-masterclass-data-rebuild-doctrine.md`.
 > Diagnostic: `audit-reports/lesson-tails.json` (ranked tail-overhang report).
 
+## MIDDLEGAME-PLAN ≥8-PLY PASS (2026-05-31) — 65 of 85 done, 20 honest leaves
+Every masterclass middlegame-plan playableLine should be ≥8 plies, sourced from
+the REAL game that reached the position (David's directive). Started at 85 short
+(<8-ply) masterclass plans; **65 done** (extended along real masters
+continuations OR re-anchored to a sourced student-side-win model game), each
+gate-green and on `main`. Tooling built: `extend-plan-line.mjs` (fen= masters
+continuation), `source-variation-model-game.mjs` + `source-by-prefix.mjs`
+(student-win game sourcing w/ amateur-explorer fallback), `extract-game-segment.mjs`.
+
+**The 20 remaining are HONEST LEAVES** (per "empty > generic > invented" + the
+wins-only model-game rule) — each is sound on a DB-validated line; none has a
+clean real extension:
+- **No sourceable master-quality student-win game** (solid equalizing lines whose
+  masters topGames skew to the higher-rated/other side; only amateur <2400 wins
+  exist, below the masterclass bar): benoni-main, grunfeld-main, petrov-main,
+  philidor-main, old-indian-main, dutch-main, dutch-ilyinzhenevsky, fk-italian,
+  reti-antislav, queensgambit-minority (game ADDED for the tab; plan stays on its
+  on-theme b4-b5 minority attack, +1 not sourceable at that exact FEN).
+- **Sharp forced theory where extending = inventing moves (G3 forbidden)**:
+  najdorf-poisoned (game ADDED), najdorf-ng4, sveshnikov-chelyabinsk, benko-zaitsev.
+- **Offbeat lines with no matching real game**: birds-nimzo, birds-stonewall,
+  trompowsky-main/e6/raptor, sicilian-dragon-chinese.
+These can be revisited if/when a real master game surfaces; the plans are sound
+as-is. NOT a defect — a deliberate, rule-driven stopping point.
+
+
 ## SCOPE CORRECTION (2026-05-30) — diagnostic-driven, NOT all 42
 The diagnostic proved most masterclass lessons are ALREADY on deep+common data
 lines (overhang 0): caro-kann (main m13/742g), its Advance/Panov/Tartakower,
