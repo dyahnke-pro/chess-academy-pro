@@ -164,8 +164,14 @@ pre-masterclass surface; the good builds sit one id away on the Masterclass tab.
              - [x] smith-morra-gambit (+0.79 full-comp middlegame). 9804e00
              - [x] scotch-gambit (+0.31, temporary sac, e5 wedge + doubled c-pawns). 0ebdbf5
              - [x] vienna-gambit (3…d5 main line, 0.00 sharp opposite-castling). e4c914b
-             - [ ] danish-gambit (comp ~−0.7), marshall-attack (comp ~−1.1, black — use a
-                   ≥20-ply sound segment; the Marshall main line is fine for Black).
+             - [x] danish-gambit (…d5 antidote, 0.00 balanced IQP). 5deb3ba
+             - [x] marshall-attack (…d5 sac → …Qh3 attack, ~−0.4 full comp). fe8c993
+             - [x] stafford-gambit + englund-gambit (kind:roadmap trap-showcases, winning
+                   trap lines +4.8/+3.6, honestly framed as surprise weapons). cb83844
+             **ALL 7 GROUP B MAIN LESSONSCRIPTS DONE — coverage verified: every gambit-tab
+             opening (5 Group A + 7 Group B) resolves a curated LessonScript. No legacy
+             auto-narration left on the tab. G9.3 Gate A satisfied tab-wide.**
+       - [ ] per-variation LessonScripts (the data-derived tab sets) — the deeper polish layer.
              - [ ] stafford-gambit / englund-gambit: lesson = the WINNING trap line already in
                    gambits.json (Stafford h3→Bxf2+ queen win; Englund Qb4+ raid). Use `kind:'roadmap'`
                    if <20 plies (sharp trap resolves early — like the Budapest Adler/Fajarowicz subs).
