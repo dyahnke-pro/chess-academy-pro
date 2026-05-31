@@ -1,9 +1,10 @@
-import type { LessonScript, LessonBeat } from '../../types';
+import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } from '../../types';
 // Englund trap variation (black, kind:roadmap). The famous Qc1# mating line from
 // gambits.json (engine MATE), chess.js-legal (G3). Honest surprise weapon.
-const KEY='rgba(255,214,0,0.88)';
-const H=(square,color=KEY)=>({square,color});
-function b(init){const{moves,...rest}=init;return{...rest,moves:moves.trim().split(/\s+/)};}
+const KEY = 'rgba(255,214,0,0.88)';
+const H = (square: string, color = KEY): AnnotationHighlight => ({ square, color });
+interface BeatInit { id: string; moves: string; say: string; sayShort?: string; arrows?: AnnotationArrow[]; highlights?: AnnotationHighlight[]; }
+function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return { ...rest, moves: moves.trim().split(/\s+/) }; }
 const SRC=['concept:tac-sacrifice','concept:pos-initiative','https://en.wikipedia.org/wiki/Englund_Gambit'];
 export const ENGLUND_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
   'englund-gambit::The Englund Mate (Qc1#)': {

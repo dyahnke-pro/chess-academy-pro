@@ -2,9 +2,10 @@ import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } f
 // Danish Gambit variation lessons (white). Data spine da__schlechter (G3), sound
 // ≥20-ply (engine −0.78, gambit compensation). The full two-pawn-accepted spine
 // runs to −2.1 (an unsound Bxf7+ over-walk) — NOT taught. Keyed openingId::name.
-const KEY='rgba(255,214,0,0.88)';const VIS='rgba(40,185,95,0.92)';
-const A=(from,to,color=VIS)=>({from,to,color});const H=(square,color=KEY)=>({square,color});
-function b(init){const{moves,...rest}=init;return{...rest,moves:moves.trim().split(/\s+/)};}
+const KEY = 'rgba(255,214,0,0.88)';
+const H = (square: string, color = KEY): AnnotationHighlight => ({ square, color });
+interface BeatInit { id: string; moves: string; say: string; sayShort?: string; arrows?: AnnotationArrow[]; highlights?: AnnotationHighlight[]; }
+function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return { ...rest, moves: moves.trim().split(/\s+/) }; }
 const SRC=['concept:pos-initiative','concept:pos-development','https://en.wikipedia.org/wiki/Danish_Gambit'];
 export const DANISH_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
   'danish-gambit::Schlechter Defence (…Nc6 & …Bb4)': {
