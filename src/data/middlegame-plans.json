@@ -51526,5 +51526,536 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-evansgambit-endgame",
+    "openingId": "evans-gambit",
+    "criticalPositionFen": "4r1k1/1pp2p1p/p1b2R2/P1b5/2B5/5PP1/7P/R4K2 b - - 0 29",
+    "title": "Evans ENDGAME — the development lead cashes via Bxf7+ (Stevic vs Rogic)",
+    "overview": "Stevic–Rogic 1995 shows where the Evans' lead in development goes when Black avoids the worst: a tactical liquidation into a winning R+B vs R ending. When Black tries to free himself with …Bd4, the bishop crashes through on f7 and the loose Black pieces fall one by one. R+minor endings of this kind decide 33% of the Declined games — the gambit pawn long forgotten, the activity decisive.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      "Bxf7+ — the bishop strikes f7",
+      "Rxc6 — collect the loose bishop"
+    ],
+    "strategicThemes": [
+      "Development lead cracks loose pieces",
+      "Liquidate into a winning rook-and-bishop ending"
+    ],
+    "endgameTransitions": [
+      "Tactics net material into a winning R+B vs R"
+    ],
+    "playableLines": [
+      {
+        "fen": "4r1k1/1pp2p1p/p1b2R2/P1b5/2B5/5PP1/7P/R4K2 b - - 0 29",
+        "moves": [
+          "Bd4",
+          "Bxf7+",
+          "Kg7",
+          "Rxc6",
+          "Bxa1",
+          "Rxc7",
+          "Re5",
+          "Bd5+",
+          "Kf6",
+          "Bxb7"
+        ],
+        "annotations": [
+          "Black tries to free himself with the bishop to d4, hoping to blur the development gap.",
+          "But the lead bites: Bxf7+ cracks the king. The Evans is built to reach exactly this loose-piece strike.",
+          "The king must step up — capturing on f7 only walks into more.",
+          "Now the rook scoops the bishop on c6. Black's pieces were a tempo short all game, and the bill comes due.",
+          "Black grabs the a1-rook in return — but it isn't enough.",
+          "The rook takes c7 with tempo. Tally it: a rook given, a bishop and pawns taken, and the active pieces kept.",
+          "Black scrambles for rook activity.",
+          "A check from d5 buys another tempo.",
+          "The king runs to f6.",
+          "And b7 falls. White is up material with the bishop pair into a winning ending — the Evans development edge, paid in full."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "…Bd4 — Black tries to free up",
+          "Bxf7+ — crack the king",
+          "…Kg7 — forced",
+          "Rxc6 — win the bishop",
+          "…Bxa1 — Black grabs a rook",
+          "Rxc7 — take with tempo",
+          "…Re5 — seek activity",
+          "Bd5+ — gain a tempo",
+          "…Kf6 — king runs",
+          "Bxb7 — winning ending"
+        ],
+        "title": "The Evans cracks f7 and liquidates",
+        "intro": "Black's loose pieces fall to Bxf7+ — watch the development lead convert into a winning ending.",
+        "sources": [
+          "https://lichess.org/f7Z55PY6",
+          "https://www.chess.com/openings/Evans-Gambit",
+          "https://en.wikipedia.org/wiki/Evans_Gambit"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-budapestgambit-endgame",
+    "openingId": "budapest-gambit",
+    "criticalPositionFen": "6k1/1p2r1pp/2p5/2P3p1/1P6/6P1/7P/5RK1 w - - 0 44",
+    "title": "Budapest ENDGAME — two weaknesses up a pawn (Galiana vs Anagnostopoulos)",
+    "overview": "Galiana Salom–Anagnostopoulos 1994: the Budapest reaches a clean rook ending with Black a pawn to the good. The winning method is textbook — up a pawn, create a SECOND weakness with the h-pawn, swing the rook to the active third rank, and bring the king. R+P endings of this shape arise in 20% of the Adler games; the conversion is pure two-weaknesses technique.",
+    "pawnBreaks": [
+      "h6-h5-h4 — roll the h-pawn for a second weakness"
+    ],
+    "pieceManeuvers": [
+      "Re3 then Rb3 — rook to the active third rank, hitting b4"
+    ],
+    "strategicThemes": [
+      "Up a pawn: create a second weakness",
+      "Active rook + king march"
+    ],
+    "endgameTransitions": [
+      "Two weaknesses convert the extra pawn"
+    ],
+    "playableLines": [
+      {
+        "fen": "6k1/1p2r1pp/2p5/2P3p1/1P6/6P1/7P/5RK1 w - - 0 44",
+        "moves": [
+          "Rd1",
+          "h6",
+          "Rd4",
+          "h5",
+          "h3",
+          "Re3",
+          "Kf2",
+          "Rb3",
+          "Kg2",
+          "Kh7"
+        ],
+        "annotations": [
+          "White's rook drops back to defend.",
+          "Black starts the textbook method: a pawn up, you make a SECOND weakness — the h-pawn begins its march.",
+          "White centralizes the rook.",
+          "h5 rolls on, gaining kingside space and fixing targets for later.",
+          "White makes luft.",
+          "The rook swings to the third rank — the active post, eyeing both b4 and the kingside.",
+          "White's king heads for the center.",
+          "Rb3 hits the b4-pawn. Now White defends on two fronts — the second weakness doing its work.",
+          "White shuffles back.",
+          "And Black's king sets off to join in. Extra pawn plus two weaknesses is a textbook win."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Rd1 — White defends",
+          "…h6 — make a second weakness",
+          "Rd4 — centralize",
+          "…h5 — roll the pawn",
+          "h3 — luft",
+          "…Re3 — active third rank",
+          "Kf2 — king centralizes",
+          "…Rb3 — hit b4",
+          "Kg2 — White waits",
+          "…Kh7 — king joins"
+        ],
+        "title": "Budapest two-weaknesses conversion",
+        "intro": "A pawn up — watch the h-pawn make a second weakness and the rook turn active.",
+        "sources": [
+          "https://lichess.org/EO5WwHrN",
+          "https://www.chess.com/openings/Budapest-Gambit",
+          "https://en.wikipedia.org/wiki/Budapest_Gambit"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-albincountergambit-endgame",
+    "openingId": "albin-countergambit",
+    "criticalPositionFen": "3r2k1/ppp5/7p/5Pp1/2P5/P7/1P5R/1K6 b - - 0 40",
+    "title": "Albin ENDGAME — active king + kingside majority (Shumiakina vs Raetsky)",
+    "overview": "Shumiakina–Raetsky 1995: the Albin's gambit pawn returns and then some, reaching a rook ending where Black is a pawn up with a kingside majority. The method is the rook-ending bible — activate the king first, keep the rook active (never passive), and roll the majority. R+P endings decide 50% of the Lasker-Trap lines; here the technique is clean.",
+    "pawnBreaks": [
+      "h5-h4 — roll the kingside majority"
+    ],
+    "pieceManeuvers": [
+      "Rf8 active rook; Kf6 marches to f5"
+    ],
+    "strategicThemes": [
+      "Activate the king first in a rook ending",
+      "Roll the extra-pawn majority"
+    ],
+    "endgameTransitions": [
+      "Kingside majority + active king convert"
+    ],
+    "playableLines": [
+      {
+        "fen": "3r2k1/ppp5/7p/5Pp1/2P5/P7/1P5R/1K6 b - - 0 40",
+        "moves": [
+          "Kg7",
+          "Re2",
+          "Rf8",
+          "Re5",
+          "h5",
+          "Kc2",
+          "Kf6",
+          "Ra5",
+          "h4"
+        ],
+        "annotations": [
+          "A pawn up in a rook ending, Black activates the king first — the golden rule.",
+          "White's rook seeks counterplay on the e-file.",
+          "Black's rook swings to f8, pressing the f5-pawn and staying active — never passive in a rook ending.",
+          "White centralizes on e5, holding f5.",
+          "Black pushes h5, rolling the kingside majority forward.",
+          "White's king hurries over.",
+          "The king marches to f6, heading for f5 — king activity decides rook endings.",
+          "White grabs at the a-pawn for counterplay.",
+          "h4 rolls on. Black's extra pawn, active king, and majority carry the ending."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "…Kg7 — king first",
+          "Re2 — White seeks play",
+          "…Rf8 — active rook",
+          "Re5 — hold f5",
+          "…h5 — roll the majority",
+          "Kc2 — White hurries",
+          "…Kf6 — march to f5",
+          "Ra5 — counterplay",
+          "…h4 — pawn rolls"
+        ],
+        "title": "Albin active-king rook ending",
+        "intro": "A pawn up — watch the king activate and the kingside majority roll.",
+        "sources": [
+          "https://lichess.org/hUJEP8OQ",
+          "https://www.chess.com/openings/Albin-Countergambit",
+          "https://en.wikipedia.org/wiki/Albin_Countergambit"
+        ]
+      }
+    ]
   }
 ]

@@ -129,7 +129,7 @@
   "evans-gambit": {
     "variations": 8,
     "middlegamePlans": 4,
-    "endgamePlans": 0,
+    "endgamePlans": 1,
     "modelGames": 4,
     "weapons": 0,
     "warnings": 0,
@@ -336,7 +336,7 @@
   "budapest-gambit": {
     "variations": 7,
     "middlegamePlans": 1,
-    "endgamePlans": 0,
+    "endgamePlans": 1,
     "modelGames": 0,
     "weapons": 0,
     "warnings": 0,
@@ -345,7 +345,7 @@
   "albin-countergambit": {
     "variations": 3,
     "middlegamePlans": 1,
-    "endgamePlans": 0,
+    "endgamePlans": 1,
     "modelGames": 0,
     "weapons": 0,
     "warnings": 0,
