@@ -131,6 +131,8 @@ import { SCOTCH_GAMBIT_LESSON } from './scotchGambit';
 import { VIENNA_GAMBIT_LESSON } from './viennaGambit';
 import { DANISH_GAMBIT_LESSON } from './danishGambit';
 import { MARSHALL_ATTACK_LESSON } from './marshallAttack';
+import { STAFFORD_GAMBIT_LESSON } from './staffordGambit';
+import { ENGLUND_GAMBIT_LESSON } from './englundGambit';
 import { ALBIN_COUNTERGAMBIT_LESSON } from './albinCountergambit';
 import { ALBIN_COUNTERGAMBIT_VARIATION_LESSONS } from './albinCountergambitVariations';
 import { SCHLIEMANN_DEFENCE_LESSON } from './schliemannDefence';
@@ -200,6 +202,8 @@ const LESSONS: Record<string, LessonScript> = {
   [VIENNA_GAMBIT_LESSON.openingId]: VIENNA_GAMBIT_LESSON,
   [DANISH_GAMBIT_LESSON.openingId]: DANISH_GAMBIT_LESSON,
   [MARSHALL_ATTACK_LESSON.openingId]: MARSHALL_ATTACK_LESSON,
+  [STAFFORD_GAMBIT_LESSON.openingId]: STAFFORD_GAMBIT_LESSON,
+  [ENGLUND_GAMBIT_LESSON.openingId]: ENGLUND_GAMBIT_LESSON,
   [ALBIN_COUNTERGAMBIT_LESSON.openingId]: ALBIN_COUNTERGAMBIT_LESSON,
   [SCHLIEMANN_DEFENCE_LESSON.openingId]: SCHLIEMANN_DEFENCE_LESSON,
   [QUEENS_GAMBIT_LESSON.openingId]: QUEENS_GAMBIT_LESSON,
