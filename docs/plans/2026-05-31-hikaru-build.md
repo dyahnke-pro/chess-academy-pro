@@ -81,10 +81,28 @@ All 5 data-discovered openings built to G9.1 shape + hand-authored variation voi
 - 25 lessons total, all gates green (board-accuracy, coverage Gate A, depth Gate B,
   voice G9.4, sources). Shipped to main.
 
-### Gems: data-honest
-Closed Sicilian / Pirc / Caro yielded 0 gems (system/solid openings — opponents make
-no refutable amateur blunders, same as Trompowsky/QGD). Nimzo-Larsen/Réti mining in
-progress. Gems are opportunistic — built where the data yields them, not forced.
+### Gems: re-checked (David: "gems are always checked — amateurs play these lines")
+First pass mined 0 from the curated variation pgns — WRONG conclusion. Per-node engine
+re-audit (every anchored opponent node, Stockfish-graded) found the real cause: Hikaru's
+repertoire curates the QUIET mainline (`…Bf5`, `…Bg4`), so the variation pgns walk equal
+lines. The gems live in the OPPONENT's amateur side-tries the pgns never visit — exactly
+where Naroditsky's/Gotham's Caro gems came from (Fantasy f3, h4-lunge, dxc5). Added
+`EXTRA_WALK` seeds to `mine-punish-gems.mjs` (the common dubious tries the student FACES),
+re-mined → **6 real gems**, all engine-verified + DB-anchored + masters-vetoed + narrated:
+- Caro-Kann ×5 — Fantasy `dxe5`/`Nxd4`→…Qh4+ attacks (confirmed +1.0/+1.1/+1.2), the
+  `Ne5` lunge (positional +0.8), Two Knights `Neg5` rim-hunt (positional +0.7).
+- Closed Sicilian ×1 — Black's `…Nf6` into the f-pawn → `e5!` tempo + towering centre
+  (confirmed +1.0).
+- Pirc/Modern ×0 — Black's solid `…a6/…b5` setups hold vs the Austrian/150 tries (honest empty).
+- Nimzo-Larsen / Réti ×0 — STRUCTURAL: 1.b3 anchors only ~5 plies in the Lichess opening
+  DB (Hikaru's `…e3` leaves book at move 5), Réti-into-b3 only 3. Below the gem
+  spine-anchor gate (≥6, G3) — no DB anchor = no gem, correctly enforced, NOT a bug.
+
+**Rule for future solid-system pro builds:** a positional repertoire's gems live in the
+opponent's side-tries, not the curated mainline. When a pro's variation pgns mine 0, seed
+`EXTRA_WALK` with the common dubious opponent moves the student will face BEFORE concluding
+"no gems." Every gem is still DB-anchored + masters-vetoed + engine-graded — the seed only
+directs the walk.
 
 ### Endgame opportunity (next): Nimzo-Larsen e5-main / nf6 / g6 variations carry
 R+minor+P endgame data in their deep-build files — author per the locked endgame rule

@@ -3383,6 +3383,52 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     learn: ['', '', '', '', '', '', '', '', '', '', 'Qb3 — hit b7 and the bishop.', 'Nf4 — muddy it.', 'Bxe6 — trade first.', 'Nxe6 — recapture.', 'Qxb7 — grab the pawn.', '', '', 'dxe5 — White is a pawn up.'],
     sources: ['concept:tac-double-attack', 'concept:pos-material', 'https://www.chess.com/openings/Sicilian-Defense-Alapin-Variation'],
   },
+
+  // ── Hikaru pro-rep gems (2026-05-31). Solid/positional repertoire, so the
+  // gems live in the OPPONENT's amateur side-tries the curated mainline pgns
+  // don't walk (EXTRA_WALK seeds in mine-punish-gems.mjs). Engine-verified,
+  // DB-anchored, masters-vetoed. Caro Fantasy: White grabs the centre pawn and
+  // walks into …Qh4+ regaining it with a raging attack on the un-castled king.
+  'pro-hikaru-caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5:dxe5': {
+    watch: ['', '', '', '', '', '', '', '', 'dxe5?! — greedily grabbing the pawn while the king sits in the centre and the f-file gapes open.', 'Qh4+! — the punch; the check rakes the open king and forks the e4-pawn along the fourth rank.', 'Kd2 — castling is gone for good; the king has to walk out into the open.', 'Qf4+ — the queen keeps the king on the run.', '', 'Qxe4+ — the centre pawn drops back with check, material is level and White is shattered.', '', 'Bf5 — the light bishop springs out, hounding the queen and the loose king.', 'c3 — White begs for shelter, but Black has a raging attack for nothing.'],
+    learn: ['', '', '', '', '', '', '', '', 'dxe5 — greedy, king stuck in the centre', 'Qh4+ — check and fork e4', 'Kd2 — castling lost', 'Qf4+ — chase the king', '', 'Qxe4+ — win the pawn back', '', 'Bf5 — the bishop piles in', 'c3 — Black attacks for free'],
+    sources: ['concept:pos-king-safety', 'concept:pos-initiative', 'https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation', 'https://api.chess.com/pub/player/hikaru/games/archives'],
+  },
+  // Caro Fantasy: …exd4 first, then Nxd4 walks into the same …Qh4+ fork; Black
+  // regains the pawn with check and emerges a pawn up with the safer king.
+  'pro-hikaru-caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_exd4:Nxd4': {
+    watch: ['', '', '', '', '', '', '', '', '', '', 'Nxd4?! — recapturing with the knight walks into the very same fork; the king still cannot castle.', 'Qh4+! — check, and the e4-pawn hangs on the fourth rank.', '', 'Qxe4+ — Black scoops the centre pawn with check and the safer king.', '', 'Qxe2+ — trading the queens straight into a clean, comfortable edge.', '', 'Nf6 — Black emerges a pawn to the good with the sounder structure.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', 'Nxd4 — walks into the fork', 'Qh4+ — check and hit e4', '', 'Qxe4+ — grab the pawn with check', '', 'Qxe2+ — trade into an edge', '', 'Nf6 — a clean pawn up', ''],
+    sources: ['concept:pos-king-safety', 'concept:pos-initiative', 'https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation', 'https://api.chess.com/pub/player/hikaru/games/archives'],
+  },
+  // Caro Fantasy: after the bishops trade on e6, Nxd4 again invites …Qh4+ and a
+  // crushing lead in development against the stranded king on f1.
+  'pro-hikaru-caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_exd4_Bc4_Be6_Bxe6_fxe6:Nxd4': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nxd4?! — again the recapture invites the check, and the king is denied castling.', 'Qh4+! — the queen leaps to the open fourth rank with check.', '', 'Bc5 — bearing down on the d4-knight and the stranded f1-king.', '', 'Nd7 — the last piece joins with a commanding lead in development.', '', 'Nh6 — swinging toward f5 and g4 to swarm; Black is clearly better.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nxd4 — invites the check', 'Qh4+ — check, open fourth rank', '', 'Bc5 — hit the knight and king', '', 'Nd7 — develop the attack', '', 'Nh6 — swarm in, clearly better', ''],
+    sources: ['concept:pos-king-safety', 'concept:pos-initiative', 'https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation', 'https://api.chess.com/pub/player/hikaru/games/archives'],
+  },
+  // Caro Fantasy: …Ne5 lunges with no support; Black calmly develops, the knight
+  // is kicked, and Black keeps the freer, sounder game.
+  'pro-hikaru-caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_exd4_Bc4_Be6_Bxe6_fxe6_O-O_Nf6:Ne5': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Ne5?! — the knight jumps in with no support and can simply be challenged away.', 'Be7 — calm development; the e5-knight has no real threat and must retreat.', '', '', '', 'Qc8 — quietly sidestepping; Black is rock-solid with the freer game.', '', 'h6 — kicking the knight back for good; Black is comfortably better.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Ne5 — a knight with no support', 'Be7 — develop and ignore it', '', '', '', 'Qc8 — sidestep, stay solid', '', 'h6 — kick it back, better', ''],
+    sources: ['concept:pos-development', 'concept:pos-center', 'https://www.chess.com/openings/Caro-Kann-Defense', 'https://api.chess.com/pub/player/hikaru/games/archives'],
+  },
+  // Caro Two Knights: …Neg5 chases a cheap attack with no follow-up; …h6 and …g5
+  // hunt the knight back to g1 while Black seizes the centre.
+  'pro-hikaru-caro-kann:e4_c6_Nc3_d5_Nf3_dxe4_Nxe4_Nf6:Neg5': {
+    watch: ['', '', '', '', '', '', '', '', 'Neg5?! — chasing a cheap attack, but the knight has no follow-up and gets hunted down.', 'h6 — the simple question: where is the g5-knight going?', '', 'g5 — clamping the rim so the knight can never come back to f4 or g5.', '', 'c5 — seizing the centre while White untangles the knight all the way back to g1.', '', 'Bg7 — the bishop rakes the long diagonal; Black has taken over.', ''],
+    learn: ['', '', '', '', '', '', '', '', 'Neg5 — a knight with no follow-up', 'h6 — ask the knight to move', '', 'g5 — fix it on the rim', '', 'c5 — seize the centre', '', 'Bg7 — Black takes over', ''],
+    sources: ['concept:pos-development', 'concept:pos-space', 'https://www.chess.com/openings/Caro-Kann-Defense-Two-Knights-Attack', 'https://api.chess.com/pub/player/hikaru/games/archives'],
+  },
+  // Grand Prix (student White): Black's …Nf6 develops into the f-pawn; e5! gains
+  // a tempo and a towering centre, Bb5/Bxc6 fixes the structure.
+  'pro-hikaru-closed-sicilian:e4_c5_Nc3_Nc6_f4_g6_Nf3_Bg7_Bc4_e6_O-O:Nf6': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', 'Nf6?! — developing into the teeth of the f-pawn; it invites a tempo-gaining push.', 'e5! — the pawn storms up, kicking the knight and grabbing the centre with gain of time.', '', 'Bb5 — pinning and pressing c6 to fix the structure before Black can untangle.', '', 'Bxc6 — trading to damage the pawns and keep the clamp.', '', 'd4 — a towering protected centre; the space and initiative leave White clearly on top.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', 'Nf6 — walks into the f-pawn', 'e5 — push, grab the centre', '', 'Bb5 — pin and pressure c6', '', 'Bxc6 — damage the pawns', '', 'd4 — a towering centre, on top', ''],
+    sources: ['concept:pos-center', 'concept:pos-space', 'https://www.chess.com/openings/Sicilian-Defense-Grand-Prix-Attack', 'https://api.chess.com/pub/player/hikaru/games/archives'],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {

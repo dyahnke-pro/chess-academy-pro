@@ -247,8 +247,12 @@ async function mine(openingId, studentChar, walkLine, eng, scanned, extraPlies =
             // Final, honest gate: still clearly better, a real jump from the
             // baseline, AND backed by material (not just engine initiative).
             if (engineCp >= EDGE_CP && (engineCp - E0) >= JUMP_CP && (matDelta >= 0 || isMate)) {
-              const materialCrush = matDelta >= 1 || isMate;
-              const tier = (engineCp >= WEAPON_CP && materialCrush) ? 'confirmed' : 'positional';
+              // Tier off the engine eval (the gate's contract): ≥ +1.0 = confirmed
+              // (decisive — a winning attack OR won material), +0.5..+1.0 =
+              // positional. The matDelta ≥ 0 ship-gate above already rejects
+              // over-rated initiative (student DOWN material), so a +1.0 here is a
+              // real crush whether the win is material or a forced attack (Qh4+).
+              const tier = engineCp >= WEAPON_CP ? 'confirmed' : 'positional';
               const playLine = [...line, best.cand.san, ...punishSeq];
               gems.push({
                 openingId, lineMoves: line.join(' '), inaccuracy: best.cand.san,
@@ -312,6 +316,41 @@ const OPENING_SEEDS = {
   'pro-hikaru-pirc-modern':        { studentChar: 'b', baseSeed: ['e4', 'g6'] },
   'pro-hikaru-caro-kann':          { studentChar: 'b', baseSeed: ['e4', 'c6'] },
 };
+
+// EXTRA_WALK — common AMATEUR side-tries the student will FACE that aren't in
+// the pro's "his-response" curated pgns. A solid/positional repertoire (Hikaru's
+// Nimzo-Larsen, Closed Sicilian, Caro, Modern) curates the quiet mainline, so
+// the variation pgns walk equal lines with no refutation. But amateurs at the
+// student's level throw the dubious f3-Fantasy, the h4-lunge, the premature
+// dxc5/d5 — REAL inaccuracies the masterclass should arm the student to punish
+// (exactly what Naroditsky's + Gotham's Caro gems came from). These seeds just
+// DIRECT the walk toward those positions; every gem is still DB-anchored +
+// masters-vetoed + engine-graded by the same gates — nothing is invented. Each
+// entry is an array of SAN move-lists (the line up to where the opponent's try
+// lands), walked node-by-node like any variation line.
+const EXTRA_WALK = {
+  // Caro-Kann (student=Black) — punish White's offbeat tries.
+  'pro-hikaru-caro-kann': [
+    ['e4', 'c6', 'd4', 'd5', 'f3'],                          // Fantasy
+    ['e4', 'c6', 'd4', 'd5', 'e5', 'Bf5', 'h4'],            // Advance h4-lunge
+    ['e4', 'c6', 'd4', 'd5', 'e5', 'c5', 'dxc5'],           // Advance dxc5 grab
+    ['e4', 'c6', 'Nc3', 'd5', 'Nf3', 'dxe4', 'Nxe4', 'Nf6'], // Two Knights dxe4
+    ['e4', 'c6', 'd4', 'd5', 'exd5', 'cxd5', 'Bd3', 'Nc6', 'c3'], // Exchange
+  ],
+  // Pirc/Modern (student=Black) — punish White's overreach.
+  'pro-hikaru-pirc-modern': [
+    ['e4', 'g6', 'd4', 'Bg7', 'Nc3', 'd6', 'f4'],           // Austrian Attack
+    ['e4', 'g6', 'd4', 'Bg7', 'Nc3', 'd6', 'Be3', 'a6', 'Qd2'], // 150 Attack
+    ['e4', 'g6', 'd4', 'Bg7', 'Nc3', 'd6', 'Bc4'],          // Bc4 aggression
+  ],
+  // Closed Sicilian / Grand Prix (student=White) — punish Black's loose setups.
+  'pro-hikaru-closed-sicilian': [
+    ['e4', 'c5', 'Nc3', 'Nc6', 'f4', 'd5'],                 // ...d5 break early
+    ['e4', 'c5', 'Nc3', 'Nc6', 'f4', 'e5'],                 // ...e5 weakening
+    ['e4', 'c5', 'Nc3', 'Nc6', 'f4', 'g6', 'Nf3', 'Bg7', 'Bc4', 'e6'], // ...e6 vs Bc4
+  ],
+};
+
 function loadRepertoire() {
   try {
     const raw = JSON.parse(readFileSync('src/data/repertoire.json', 'utf-8'));
@@ -385,7 +424,7 @@ const seedKey = (s) => s.join(' ');
     const scanned = new Set(); // FENs already scanned (shared across this opening's lines)
     // The short base seed extends down the amateur trunk (extraPlies large);
     // each full variation line is walked as-is (extraPlies small).
-    const lines = [cfg.baseSeed, ...variationLines(opening)];
+    const lines = [cfg.baseSeed, ...variationLines(opening), ...(EXTRA_WALK[id] ?? [])];
     const uniqueLines = [...new Map(lines.map((l) => [seedKey(l), l])).values()];
     console.log(`[mine] ${id} (student=${cfg.studentChar}) — ${uniqueLines.length} lines`);
     for (const wl of uniqueLines) {
