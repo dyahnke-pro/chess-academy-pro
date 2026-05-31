@@ -16752,144 +16752,142 @@
   {
     "id": "mp-progothamchess-french-rubinstein",
     "openingId": "pro-gothamchess-milner-barry",
-    "criticalPositionFen": "rnbqkb1r/ppp2p1p/4pp2/8/3P4/5N2/PPP2PPP/R1BQKB1R b KQkq - 1 6",
+    "criticalPositionFen": "2kr1br1/ppp2p1p/2n2p2/4p3/3q4/5BPP/PPP1QP2/R1B2RK1 w - - 4 13",
     "title": "French Rubinstein — broken kingside + bishop pair",
-    "overview": "Levy's French Defense as Black — his Rubinstein 4...dxe4 line at 1,596 games / 62.7% score. After 5.Nxe4 Nf6 6.Nxf6+ gxf6, Black accepts doubled f-pawns in exchange for the open g-file and active piece play. The plan: develop Nc6 / Bg4 with pressure on the open g-file.",
+    "overview": "A real GothamChess win (vs spajsije): the bishops and rooks come to their best squares and then b4 expands on the queenside, the long-term compensation for the Milner-Barry pawn.",
     "pawnBreaks": [
-      "…e5 striking back at White's centre",
-      "…c5 challenging d4",
-      "…f5 expanding the kingside in some lines"
+      {
+        "move": "b4 queenside expansion",
+        "explanation": "b4 gains queenside space, the lasting compensation for the gambit pawn.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Nc6 developing the queen's knight",
-      "Bg4 pinning and trading the f3-knight",
-      "Active queen swings to support …e5"
+      {
+        "piece": "Rook",
+        "route": "Ra1-d1 central file",
+        "explanation": "The rook takes the central d-file as White builds before expanding."
+      }
     ],
     "strategicThemes": [
-      "Bishop pair compensates for the doubled pawns",
-      "Open g-file is the recurring attacking lever"
+      "Develop fully, then expand with b4 on the queenside.",
+      "Trust the activity as compensation for the pawn."
     ],
     "endgameTransitions": [
-      "Endings with the bishop pair plus active king on the g-file"
+      "The space and activity offset the pawn deep into the game."
     ],
     "playableLines": [
       {
-        "fen": "rnbqkb1r/ppp2p1p/4pp2/8/3P4/5N2/PPP2PPP/R1BQKB1R b KQkq - 1 6",
+        "fen": "2kr1br1/ppp2p1p/2n2p2/4p3/3q4/5BPP/PPP1QP2/R1B2RK1 w - - 4 13",
         "moves": [
-          "Nc6",
-          "g3",
-          "e5",
+          "Be3",
+          "Qd7",
+          "Rad1",
+          "Bd6",
           "Bg2",
-          "Bg4",
-          "h3",
-          "Bxf3"
+          "Kb8",
+          "b4",
+          "Ne7"
         ],
         "annotations": [
-          "Nc6 — Black's knight to c6 — standard development.",
-          "g3 — White's pawn to g3 — standard development.",
-          "e5 — Black's pawn to e5 — standard development.",
-          "Bg2 — White's bishop to g2 — standard development.",
-          "Bg4 — Black's bishop to g4 — standard development.",
-          "h3 — White's pawn to h3 — standard development.",
-          "Bxf3 — Black's bishop captures on f3 — material exchange."
+          "Be3 — developing the bishop, eyeing the queenside.",
+          "…Qd7 — Black connects his pieces.",
+          "Rad1 — the rook takes the central d-file.",
+          "…Bd6 — developing toward the kingside.",
+          "Bg2 — repositioning the bishop onto the long diagonal.",
+          "…Kb8 — tucking the king away.",
+          "b4 — gaining queenside space; the gambit compensation rolls.",
+          "…Ne7 — developing, but White’s pressure is full value for the pawn."
+        ],
+        "learnCues": [
+          "Be3 — develop, eye queenside",
+          "Qd7 — connect",
+          "Rad1 — take the d-file",
+          "Bd6 — develop",
+          "Bg2 — long diagonal",
+          "Kb8 — tuck the king",
+          "b4 — expand queenside",
+          "Ne7 — full compensation"
         ],
         "arrows": [
           [],
           [],
+          [
+            {
+              "from": "a1",
+              "to": "d1",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           [],
-          [],
+          [
+            {
+              "from": "b2",
+              "to": "b4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           []
         ],
         "highlights": [
           [
             {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
               "square": "b8",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "c6",
+              "square": "b4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "h2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f3",
+              "square": "e7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Nc6 — knight to c6",
-          "g3 — pawn to g3",
-          "e5 — pawn to e5",
-          "Bg2 — bishop to g2",
-          "Bg4 — bishop to g4",
-          "h3 — pawn to h3",
-          "Bxf3 — bishop to f3"
-        ],
-        "title": "French Rubinstein — broken kingside + bishop pair",
-        "intro": "Levy's French Defense as Black — his Rubinstein 4...dxe4 line at 1,596 games / 62.7% score. After 5.Nxe4 Nf6 6.Nxf6+ gxf6, Black accepts doubled f-pawns in exchange for the bishop pair and active piec",
+        "title": "Milner-Barry: Queenside Expansion for the Pawn",
+        "intro": "A real GothamChess win vs spajsije. White centralises the rooks and rolls the queenside pawns as gambit compensation.",
         "sources": [
-          "book:french-defence",
-          "https://www.chess.com/openings/French-Defense",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/French-Defense-Advance-Variation",
+          "https://en.wikipedia.org/wiki/French_Defence",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -17040,88 +17038,136 @@
   {
     "id": "mp-progothamchess-kia-system-attack",
     "openingId": "pro-gothamchess-kia",
-    "criticalPositionFen": "rnbqkbnr/ppp1pppp/8/3p4/8/4PN2/PPPP1PPP/RNBQKB1R b KQkq - 0 2",
+    "criticalPositionFen": "rnbqk2r/pp3p1p/2p2bpP/2P1p3/3Pp1P1/4P3/PP1N1P2/R1BQKB1R w KQkq - 0 13",
     "title": "KIA — system development + e3 reinforcement",
-    "overview": "Gotham's KIA system at 771 games / 71.1% — his highest-scoring opening. After Nf3 + g3 + Bg2 + O-O + d3 + Nbd2 + e4, the system is the same every game. The e3 supports central play before the e4 push.",
+    "overview": "A real GothamChess win: the central tension resolves into a mass trade, queens included, and White is left pressing a small, comfortable edge with the more active pieces.",
     "pawnBreaks": [
-      "e3 reinforcing central squares",
-      "e4 central thrust later",
-      "c4 in some lines"
+      {
+        "move": "d4 central break",
+        "explanation": "The d4 break resolves the centre into White’s favour.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "…Nf6 + …e6 classical development",
-      "Bg2 on the long diagonal",
-      "Knight reroute via Nbd2 → Nf1 → Ng3"
+      {
+        "piece": "Bishop",
+        "route": "Bc1-f4 develop",
+        "explanation": "The bishop swings to f4 with tempo as the position simplifies."
+      }
     ],
     "strategicThemes": [
-      "System play — same setup every game",
-      "Long-diagonal pressure from Bg2"
+      "Let the centre trade off into a comfortable game.",
+      "Activate the bishops in the simplified position."
     ],
     "endgameTransitions": [
-      "Often R+minor+P with the Bg2 dominating the long diagonal"
+      "The pleasanter pieces carry a nagging edge into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/4PN2/PPPP1PPP/RNBQKB1R b KQkq - 0 2",
+        "fen": "rnbqk2r/pp3p1p/2p2bpP/2P1p3/3Pp1P1/4P3/PP1N1P2/R1BQKB1R w KQkq - 0 13",
         "moves": [
-          "Nf6",
-          "c4",
-          "e6"
+          "Nxe4",
+          "exd4",
+          "exd4",
+          "Qxd4",
+          "Qxd4",
+          "Bxd4",
+          "Bf4",
+          "Bxg4"
         ],
         "annotations": [
-          "Nf6 — Black's knight to f6 — standard development.",
-          "c4 — White's pawn to c4 — standard development.",
-          "e6 — Black's pawn to e6 — standard development."
+          "Nxe4 — snapping off the centre pawn.",
+          "…exd4 — Black strikes back in the centre.",
+          "exd4 — recapturing to keep the centre.",
+          "…Qxd4 — grabbing the pawn.",
+          "Qxd4 — offering the queen trade.",
+          "…Bxd4 — the queens come off.",
+          "Bf4 — developing the bishop with tempo.",
+          "…Bxg4 — Black grabs a pawn, but White’s pieces are the more active."
+        ],
+        "learnCues": [
+          "Nxe4 — take the pawn",
+          "exd4 — strike back",
+          "exd4 — recapture",
+          "Qxd4 — grab it",
+          "Qxd4 — offer the swap",
+          "Bxd4 — queens off",
+          "Bf4 — develop with tempo",
+          "Bxg4 — White presses"
         ],
         "arrows": [
           [],
           [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c1",
+              "to": "f4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           []
         ],
         "highlights": [
           [
             {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f6",
+              "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c4",
+              "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e7",
+              "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "e6",
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Nf6 — knight to f6",
-          "c4 — pawn to c4",
-          "e6 — pawn to e6"
-        ],
-        "title": "KIA — system development + e3 reinforcement",
-        "intro": "Gotham's KIA system at 771 games / 71.1% — his highest-scoring opening. After Nf3 + g3 + Bg2 + O-O + d3 + Nbd2 + e4, the system is the same every game. The e3 supports central play before the e4 push.",
+        "title": "King’s Indian Attack: Simplify and Press",
+        "intro": "A real GothamChess win. The KIA setup invites central trades; White comes out with the more pleasant pieces.",
         "sources": [
-          "book:kings-indian-attack",
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Kings-Indian-Attack",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Attack",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -17263,88 +17309,142 @@
   {
     "id": "mp-progothamchess-ponziani-d4-thrust",
     "openingId": "pro-gothamchess-ponziani",
-    "criticalPositionFen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+    "criticalPositionFen": "r2q1rk1/1pp2ppp/1nn1b3/p2pP3/3P4/PQP2N2/4BPPP/R1B2RK1 w - - 0 13",
     "title": "Ponziani — d4 thrust + e5 cramping + Nd5",
-    "overview": "Gotham's Ponziani from 82 games at 65.9%. The c3 + d4 setup creates an aggressive central structure. After …exd4, White plays e5 cramping Black's pieces and forcing the knight to d5 where it's exposed to tempo-gaining attacks.",
+    "overview": "A real GothamChess win: the bishop comes to d3 and the queen to c2, forming a battery on the b1-h7 diagonal pointed straight at Black’s king while the dark-squared bishop joins from g5.",
     "pawnBreaks": [
-      "…exd4 — Black captures the d-pawn",
-      "e4-e5 cramping push forcing the knight to retreat",
-      "c3 + d4 central pawn chain"
+      {
+        "move": "e4-e5 central space",
+        "explanation": "The e-pawn anchors the centre so the kingside battery can operate.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Knight forced to Nd5 — exposed to tempo-gaining attacks",
-      "Queen swings to b3 in some lines",
-      "Bishop development to b5 or c4"
+      {
+        "piece": "Bishop",
+        "route": "Bf1-d3 battery",
+        "explanation": "The bishop lands on d3 to form a battery with the c2-queen aimed at h7."
+      }
     ],
     "strategicThemes": [
-      "Aggressive central play",
-      "Knight on d5 is a structural cramp on Black"
+      "Build the Bd3 + Qc2 battery toward h7.",
+      "Bring every piece to bear on the king."
     ],
     "endgameTransitions": [
-      "Sharp middlegames — endgames are rare in this line"
+      "If the attack is parried, the central pawns still tell."
     ],
     "playableLines": [
       {
-        "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+        "fen": "r2q1rk1/1pp2ppp/1nn1b3/p2pP3/3P4/PQP2N2/4BPPP/R1B2RK1 w - - 0 13",
         "moves": [
-          "exd4",
-          "e5",
-          "Nd5"
+          "Bf4",
+          "a4",
+          "Qc2",
+          "Ne7",
+          "Bd3",
+          "Ng6",
+          "Bg5",
+          "Qd7"
         ],
         "annotations": [
-          "exd4 — Black's pawn captures on d4 — material exchange.",
-          "e5 — White's pawn to e5 — standard development.",
-          "Nd5 — Black's knight to d5 — standard development."
+          "Bf4 — developing the bishop to an active diagonal.",
+          "…a4 — Black grabs queenside space.",
+          "Qc2 — the queen eyes the b1-h7 diagonal toward Black’s king.",
+          "…Ne7 — the knight reroutes to defend.",
+          "Bd3 — lining the bishop up with the queen, a battery aimed at h7.",
+          "…Ng6 — covering the kingside light squares.",
+          "Bg5 — the dark-squared bishop swings to g5 to join in.",
+          "…Qd7 — Black untangles, but every White piece points at the king."
+        ],
+        "learnCues": [
+          "Bf4 — active bishop",
+          "a4 — Black takes space",
+          "Qc2 — eye the diagonal",
+          "Ne7 — reroute to defend",
+          "Bd3 — battery toward h7",
+          "Ng6 — cover the kingside",
+          "Bg5 — bishop joins in",
+          "Qd7 — White’s aim holds"
         ],
         "arrows": [
           [],
           [],
+          [],
+          [],
+          [
+            {
+              "from": "e2",
+              "to": "d3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "f4",
+              "to": "g5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           []
         ],
         "highlights": [
           [
             {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
+              "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
+              "square": "a4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f6",
+              "square": "c2",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d5",
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "exd4 — pawn to d4",
-          "e5 — pawn to e5",
-          "Nd5 — knight to d5"
-        ],
-        "title": "Ponziani — d4 thrust + e5 cramping + Nd5",
-        "intro": "Gotham's Ponziani from 82 games at 65.9%. The c3 + d4 setup creates an aggressive central structure. After …exd4, White plays e5 cramping Black's pieces and forcing the knight to d5 where it's exposed",
+        "title": "Ponziani: the Bd3 + Qc2 Kingside Battery",
+        "intro": "A real GothamChess win vs Train_Your_Dragon. White lines the bishop and queen up on the b1-h7 diagonal, aiming at the king.",
         "sources": [
-          "book:ponziani",
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Ponziani-Opening",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
+          "https://en.wikipedia.org/wiki/Ponziani_Opening",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -48635,44 +48735,235 @@
   {
     "id": "mp-progothamchess-ponziani-main-qb3",
     "openingId": "pro-gothamchess-ponziani",
-    "criticalPositionFen": "r1bqkb1r/pppp1ppp/1nn5/4P3/3P4/1Q3N2/PP3PPP/RNB1KB1R b KQkq - 0 7",
+    "criticalPositionFen": "r3k2r/1ppqbpp1/pnn1b2p/3pP3/3P4/1Q2BN2/PP1NBPPP/R4RK1 w kq - 4 13",
     "title": "Ponziani Main: the Qb3 + Bb5 Centre Bind",
-    "overview": "His main Ponziani plan across the 40-game main line. After 3.c3 and 4.d4, White grabs the centre with e5, chases the knight to d5, then probes with Qb3 hitting the knight and b7. After …Nb6 and cxd4, White has a strong d4/e5 pawn duo and develops Bb5 to pin and pressure, the classic Ponziani central bind backed by the bishop.",
+    "overview": "A real GothamChess win (vs Train_Your_Dragon): a3 restrains Black, the queen steps to c2, and White trades off the knight that reaches c4 — keeping the better structure and the central pawns.",
     "pawnBreaks": [
-      "the e5/d4 pawn duo cramping Black"
+      {
+        "move": "a3 restraint",
+        "explanation": "a3 takes the b4-square away before White expands.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Qd1-b3 probing the knight and b7",
-      "Bf1-b5 the pin on c6",
-      "the central pawn duo"
+      {
+        "piece": "Knight",
+        "route": "Nxc4 trade",
+        "explanation": "White swaps off Black’s active knight on c4 to keep the cleaner structure."
+      }
     ],
     "strategicThemes": [
-      "Build the e5/d4 centre",
-      "Probe with Qb3",
-      "Pin and pressure with Bb5"
+      "Restrain Black’s knight with a3 before expanding.",
+      "Trade off the active piece to keep the structural edge."
     ],
     "endgameTransitions": [
-      "The space edge favours White in simplification"
+      "The healthier pawns favour White in the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1bqkb1r/pppp1ppp/1nn5/4P3/3P4/1Q3N2/PP3PPP/RNB1KB1R b KQkq - 0 7",
+        "fen": "r3k2r/1ppqbpp1/pnn1b2p/3pP3/3P4/1Q2BN2/PP1NBPPP/R4RK1 w kq - 4 13",
         "moves": [
-          "d6",
-          "Bb5",
-          "Be6"
+          "a3",
+          "Na5",
+          "Qc2",
+          "Nac4",
+          "Nxc4",
+          "Nxc4",
+          "Bc1",
+          "O-O-O"
         ],
         "annotations": [
-          "…d6 — Black strikes at the e5-pawn to free the position.",
-          "Bb5 — White develops with a pin, tying the c6-knight to the defence and adding pressure to the centre.",
-          "…Be6 — Black develops and challenges the Qb3. White’s big e5/d4 centre and the active bishop give a pleasant, space-gaining edge from this little-known opening."
+          "a3 — a restraining move, taking b4 away from Black’s knight.",
+          "…Na5 — the knight reroutes toward the c4 outpost.",
+          "Qc2 — the queen steps off the d-file, connecting and eyeing the kingside.",
+          "…Nac4 — the knight reaches the c4 square.",
+          "Nxc4 — trading off the active knight at once.",
+          "…Nxc4 — recapturing, keeping a piece on the outpost.",
+          "Bc1 — rerouting the bishop to a better diagonal.",
+          "…O-O-O — Black castles long into a passive position."
+        ],
+        "learnCues": [
+          "a3 — take b4 away",
+          "Na5 — reroute",
+          "Qc2 — connect, eye kingside",
+          "Nac4 — reach c4",
+          "Nxc4 — trade it off",
+          "Nxc4 — recapture",
+          "Bc1 — reroute the bishop",
+          "O-O-O — Black is passive"
         ],
         "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d2",
+              "to": "c4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           []
         ],
         "highlights": [
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Ponziani: Trade the Active Knight on c4",
+        "intro": "A real GothamChess win vs Train_Your_Dragon. White restrains, then swaps off Black’s active knight to keep a clean structural edge.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Ponziani-Opening",
+          "https://en.wikipedia.org/wiki/Ponziani_Opening",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-ponziani-d5-qa4",
+    "openingId": "pro-gothamchess-ponziani",
+    "criticalPositionFen": "r3k2r/1ppbbqpp/p1n2pn1/2P1p3/3P4/5N2/PP2BPPP/RNBQ1RK1 w kq - 1 13",
+    "title": "Ponziani vs 3…d5: the Qa4 Pin + d4 Centre",
+    "overview": "The Ponziani aims for a quick d4 and a big pawn centre. A real GothamChess win (vs penguingm1): d5 seizes space and shoves the knight back, then d6 wedges into Black’s camp. The cramping pawn leaves Black tied up.",
+    "pawnBreaks": [
+      {
+        "move": "d5-d6 wedge",
+        "explanation": "The d-pawn marches to d5 and on to d6, wedging into Black’s position and cramping him.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb1-c3 develop",
+        "explanation": "The last minor piece comes to c3 to support the centre."
+      }
+    ],
+    "strategicThemes": [
+      "Use the d4-d5-d6 pawn to gain space and cramp Black.",
+      "Develop quickly behind the advanced centre."
+    ],
+    "endgameTransitions": [
+      "The space edge persists into the endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "r3k2r/1ppbbqpp/p1n2pn1/2P1p3/3P4/5N2/PP2BPPP/RNBQ1RK1 w kq - 1 13",
+        "moves": [
+          "d5",
+          "Nb4",
+          "d6",
+          "cxd6",
+          "cxd6",
+          "Bd8",
+          "Nc3",
+          "O-O"
+        ],
+        "annotations": [
+          "d5 — the centre pawn jabs forward, seizing space and shoving the knight back.",
+          "…Nb4 — the knight hops to b4 looking for activity.",
+          "d6 — pressing on; the advanced pawn wedges deep into Black’s camp.",
+          "…cxd6 — Black challenges the intruder.",
+          "cxd6 — recapturing toward the centre; the d6-pawn cramps Black badly.",
+          "…Bd8 — the bishop tucks back to untangle.",
+          "Nc3 — bringing the last minor piece into play.",
+          "…O-O — Black finally castles, but the d6-wedge leaves him passive."
+        ],
+        "learnCues": [
+          "d5 — jab, gain space",
+          "Nb4 — seek activity",
+          "d6 — wedge in deep",
+          "cxd6 — challenge it",
+          "cxd6 — cramp Black",
+          "Bd8 — untangle",
+          "Nc3 — develop",
+          "O-O — Black stays cramped"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "d4",
+              "to": "d5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "d5",
+              "to": "d6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
           [
             {
               "square": "d6",
@@ -48681,95 +48972,42 @@
           ],
           [
             {
-              "square": "b5",
+              "square": "d6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
-        ],
-        "learnCues": [
-          "d6 — Black hits e5",
-          "Bb5 — pin the knight",
-          "Be6 — Black challenges the queen"
-        ],
-        "title": "Ponziani Main: the Qb3 + Bb5 Centre Bind",
-        "intro": "His main Ponziani plan across the 40-game main line. After 3.c3 and 4.d4, White grabs the centre with e5, chases the knight to d5, then probes with Qb3 hitting the knight and b7. After …Nb6 and cxd4, White has a strong d4/e5 pawn duo and develops Bb5 to pin and pressure, the classic Ponziani central bind backed by the bishop.",
-        "sources": [
-          "book:chess-fundamentals",
-          "https://www.chess.com/openings/Ponziani-Opening",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Ponziani_Opening"
-        ]
-      }
-    ]
-  },
-  {
-    "id": "mp-progothamchess-ponziani-d5-qa4",
-    "openingId": "pro-gothamchess-ponziani",
-    "criticalPositionFen": "r1b1kb1r/ppp1n1pp/2n2p2/1B1qp3/Q2P4/2P2N2/PP3PPP/RNB1K2R b KQkq - 0 7",
-    "title": "Ponziani vs 3…d5: the Qa4 Pin + d4 Centre",
-    "overview": "Against the principled 3…d5 counter, his 33-game plan is the critical Qa4 line: the queen pins the c6-knight to defend e5, Bb5 piles on the pin, and after the central exchanges White plays d4 to claim the centre. Black's …f6 weakens the kingside, and White's lead in development and central control give a comfortable game against the main Ponziani antidote.",
-    "pawnBreaks": [
-      "d2-d4 claiming the centre"
-    ],
-    "pieceManeuvers": [
-      "Qd1-a4 pinning the c6-knight",
-      "Bf1-b5 doubling the pin",
-      "Nf3-d2 rerouting after …e4"
-    ],
-    "strategicThemes": [
-      "Pin the knight with Qa4",
-      "Exploit the weakened …f6",
-      "Claim the centre with d4"
-    ],
-    "endgameTransitions": [
-      "Black’s kingside weaknesses linger into the ending"
-    ],
-    "playableLines": [
-      {
-        "fen": "r1b1kb1r/ppp1n1pp/2n2p2/1B1qp3/Q2P4/2P2N2/PP3PPP/RNB1K2R b KQkq - 0 7",
-        "moves": [
-          "e4",
-          "Nfd2"
-        ],
-        "annotations": [
-          "…e4 — Black pushes the pawn to gain space and kick the f3-knight.",
-          "Nfd2 — White reroutes the knight toward the e4-pawn and the c4/b3 squares, eyeing the over-extended pawn as a target. With Black’s …f6 weakening the king and White’s pieces well-placed, White has the easier, more harmonious game against the 3…d5 counter."
-        ],
-        "arrows": [
-          [],
-          []
-        ],
-        "highlights": [
-          [
-            {
-              "square": "e4",
+              "square": "d6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d2",
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "e4 — Black gains space",
-          "Nfd2 — reroute, target e4"
-        ],
-        "title": "Ponziani vs 3…d5: the Qa4 Pin + d4 Centre",
-        "intro": "Against the principled 3…d5 counter, his 33-game plan is the critical Qa4 line: the queen pins the c6-knight to defend e5, Bb5 piles on the pin, and after the central exchanges White plays d4 to claim the centre. Black's …f6 weakens the kingside, and White's lead in development and central control give a comfortable game against the main Ponziani antidote.",
+        "title": "Ponziani: the d5-d6 Space Wedge",
+        "intro": "A real GothamChess win vs penguingm1. The Ponziani’s early d4-d5 grabs the centre, then d6 wedges deep and cramps Black.",
         "sources": [
           "book:chess-fundamentals",
           "https://www.chess.com/openings/Ponziani-Opening",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Ponziani_Opening"
+          "https://en.wikipedia.org/wiki/Ponziani_Opening",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -48777,76 +49015,142 @@
   {
     "id": "mp-progothamchess-ponziani-nxe4-gambit",
     "openingId": "pro-gothamchess-ponziani",
-    "criticalPositionFen": "r2q1rk1/pbpp1ppp/1b6/3Qp3/8/2P2N2/PP2KnPP/RNB2BR1 w - - 0 11",
+    "criticalPositionFen": "r2q1rk1/pQpp1ppp/1b6/8/3Np1n1/2P5/PP2K1PP/RNB2BR1 w - - 2 13",
     "title": "Ponziani 4…Nxe4: the dxc6 Gambit Refutation",
-    "overview": "Against the greedy 4…Nxe4, his 14-game forcing line is a sharp gambit refutation. White plays d5 and dxc6, and when Black tries the …Bxf2+ trick, the king walks to e2 and White's Qd5 and cxb7 win material by force, capturing the b7-bishop with Qxb7. The chaos resolves in White's favour — a concrete demonstration that 4…Nxe4 is dubious.",
+    "overview": "A real GothamChess win (vs ZackyyD): for the gambit pawn White plants the queen on d5 and then d6, dominating the centre and cramping Black while development flows.",
     "pawnBreaks": [
-      "d5 and dxc6 cracking the centre",
-      "cxb7 winning material"
+      {
+        "move": "e4 central anchor",
+        "explanation": "The e-pawn anchors the centre so the queen can dominate.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Qd1-d5 the central queen",
-      "Qd5xb7 winning the bishop",
-      "Rg1 saving the rook"
+      {
+        "piece": "Queen",
+        "route": "Qd5-d6 domination",
+        "explanation": "The queen seizes d5 and burrows into d6, cramping Black’s position."
+      }
     ],
     "strategicThemes": [
-      "Refute 4…Nxe4 with dxc6",
-      "Walk the king to safety on e2",
-      "Win material with Qxb7"
+      "Use the lead in development the gambit buys.",
+      "Dominate the central squares with the queen."
     ],
     "endgameTransitions": [
-      "White emerges up material from the forcing line"
+      "The activity is worth more than the pawn well into the late middlegame."
     ],
     "playableLines": [
       {
-        "fen": "r2q1rk1/pbpp1ppp/1b6/3Qp3/8/2P2N2/PP2KnPP/RNB2BR1 w - - 0 11",
+        "fen": "r2q1rk1/pQpp1ppp/1b6/8/3Np1n1/2P5/PP2K1PP/RNB2BR1 w - - 2 13",
         "moves": [
-          "Qxb7",
-          "e4",
-          "Nd4"
+          "h3",
+          "Ne5",
+          "Qd5",
+          "Re8",
+          "Be3",
+          "c6",
+          "Qd6",
+          "Nc4"
         ],
         "annotations": [
-          "Qxb7 — White snaps off the bishop, emerging from the wild complications a clear piece to the good.",
-          "…e4 — Black lashes out for activity, trying to generate threats against the exposed king.",
-          "…Nd4+ — Black checks, but White’s king is safe enough and the extra material decides. The forcing line has refuted 4…Nxe4: White is winning."
+          "h3 — a quiet move, denying g4 and making luft.",
+          "…Ne5 — the knight centralises.",
+          "Qd5 — the queen seizes the centre, eyeing f7 and the knight.",
+          "…Re8 — defending and developing the rook.",
+          "Be3 — completing development.",
+          "…c6 — challenging the centralised queen.",
+          "Qd6 — the queen burrows into d6, cramping Black.",
+          "…Nc4 — Black hits back, but the lead in development is worth the pawn."
+        ],
+        "learnCues": [
+          "h3 — luft, deny g4",
+          "Ne5 — centralise",
+          "Qd5 — seize the centre",
+          "Re8 — defend",
+          "Be3 — develop",
+          "c6 — challenge the queen",
+          "Qd6 — burrow in, cramp",
+          "Nc4 — White has full value"
         ],
         "arrows": [
           [],
           [],
+          [
+            {
+              "from": "b7",
+              "to": "d5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d5",
+              "to": "d6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           []
         ],
         "highlights": [
           [
             {
-              "square": "b7",
+              "square": "h3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e4",
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d4",
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Qxb7 — win the bishop",
-          "e4 — Black seeks activity",
-          "Nd4 — White is up a piece"
-        ],
-        "title": "Ponziani 4…Nxe4: the dxc6 Gambit Refutation",
-        "intro": "Against the greedy 4…Nxe4, his 14-game forcing line is a sharp gambit refutation. White plays d5 and dxc6, and when Black tries the …Bxf2+ trick, the king walks to e2 and White's Qd5 and cxb7 win material by force, capturing the b7-bishop with Qxb7. The chaos resolves in White's favour — a concrete demonstration that 4…Nxe4 is dubious.",
+        "title": "Ponziani Gambit: the Dominant Central Queen",
+        "intro": "A real GothamChess win vs ZackyyD. The gambit pawn buys time; the queen seizes the centre and burrows into Black’s camp.",
         "sources": [
           "book:chess-fundamentals",
           "https://www.chess.com/openings/Ponziani-Opening",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Ponziani_Opening"
+          "https://en.wikipedia.org/wiki/Ponziani_Opening",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -48854,43 +49158,75 @@
   {
     "id": "mp-progothamchess-antisic-g6-d4break",
     "openingId": "pro-gothamchess-anti-sicilian",
-    "criticalPositionFen": "r1bqk1nr/p2pppbp/2p3p1/2p5/4P3/2P2N2/PP1P1PPP/RNBQ1RK1 b kq - 0 6",
+    "criticalPositionFen": "r1bq1rk1/p3ppbp/2p3p1/8/Q2nNB2/5N2/PP3PPP/R4RK1 w - - 0 13",
     "title": "Rossolimo vs …g6: Bxc6 Doubling + the d4 Break",
-    "overview": "His core Rossolimo method, seen in every one of his Bb5 wins. Against the …g6 fianchetto, White trades Bxc6 to saddle Black with doubled c-pawns, then builds with c3 and strikes d4 to open the centre while Black's structure is compromised. The two healthy pawn-islands versus Black's three, plus the central break, give White the lasting structural edge.",
+    "overview": "A real GothamChess win: the pieces come off on d4, queens included, and White emerges with the more comfortable position and the easier pieces to play.",
     "pawnBreaks": [
-      "c3-d4 the central break",
-      "d4 opening the centre"
+      {
+        "move": "d4 central break",
+        "explanation": "The d4 break invites the mass trade that simplifies into White’s edge.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Bb5xc6 doubling the c-pawns",
-      "the c3/d4 pawn duo",
-      "Nf3 supporting d4"
+      {
+        "piece": "Rook",
+        "route": "Ra1-c1 c-file",
+        "explanation": "The rook swings to c1 to work the c-file in the simplified position."
+      }
     ],
     "strategicThemes": [
-      "Double the c-pawns with Bxc6",
-      "Build c3 then strike d4",
-      "Play against the doubled pawns"
+      "Simplify into a comfortable middlegame.",
+      "Use the c-file once the heavy trades are done."
     ],
     "endgameTransitions": [
-      "The healthier structure wins the long game"
+      "The simpler position carries a small but real edge into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1bqk1nr/p2pppbp/2p3p1/2p5/4P3/2P2N2/PP1P1PPP/RNBQ1RK1 b kq - 0 6",
+        "fen": "r1bq1rk1/p3ppbp/2p3p1/8/Q2nNB2/5N2/PP3PPP/R4RK1 w - - 0 13",
         "moves": [
-          "Nh6",
-          "d4",
-          "cxd4",
-          "cxd4"
+          "Nxd4",
+          "Qxd4",
+          "Qxd4",
+          "Bxd4",
+          "Rac1",
+          "Bf5",
+          "Nc3",
+          "e5"
         ],
         "annotations": [
-          "…Nh6 — Black develops the knight toward f5, eyeing the centre.",
-          "d4 — the break. With Black’s queenside pawns doubled, White opens the centre to exploit the superior structure.",
-          "…cxd4 — Black takes; declining leaves White a big centre.",
-          "cxd4 — White recaptures, leaving a healthy d4-pawn against Black’s doubled c-pawns. The structural edge is permanent — White has the easier game with the better pawns."
+          "Nxd4 — recapturing and inviting the trades in the centre.",
+          "…Qxd4 — Black takes the knight.",
+          "Qxd4 — offering the queen trade.",
+          "…Bxd4 — recapturing; the queens are off the board.",
+          "Rac1 — activating the rook toward the c-file.",
+          "…Bf5 — developing the bishop.",
+          "Nc3 — developing, gripping the centre.",
+          "…e5 — Black claims space, but White’s position is the easier to handle."
+        ],
+        "learnCues": [
+          "Nxd4 — invite trades",
+          "Qxd4 — Black takes",
+          "Qxd4 — offer the swap",
+          "Bxd4 — queens off",
+          "Rac1 — work the c-file",
+          "Bf5 — develop",
+          "Nc3 — grip the centre",
+          "e5 — White is comfier"
         ],
         "arrows": [
           [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "a1",
+              "to": "c1",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           []
@@ -48898,12 +49234,6 @@
         "highlights": [
           [
             {
-              "square": "h6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
               "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
@@ -48917,23 +49247,47 @@
           [
             {
               "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Nh6 — Black eyes f5",
-          "d4 — the central break",
-          "cxd4 — Black must take",
-          "cxd4 — superior structure"
-        ],
-        "title": "Rossolimo vs …g6: Bxc6 Doubling + the d4 Break",
-        "intro": "His core Rossolimo method, seen in every one of his Bb5 wins. Against the …g6 fianchetto, White trades Bxc6 to saddle Black with doubled c-pawns, then builds with c3 and strikes d4 to open the centre while Black's structure is compromised. The two healthy pawn-islands versus Black's three, plus the central break, give White the lasting structural edge.",
+        "title": "Anti-Sicilian: Trade Down to a Better Game",
+        "intro": "A real GothamChess win. White trades the heavy pieces in the centre and steers into a pleasant, simpler position.",
         "sources": [
           "book:chess-fundamentals",
-          "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Rossolimo_Variation"
+          "https://www.chess.com/openings/Sicilian-Defense",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -49084,45 +49438,107 @@
   {
     "id": "mp-progothamchess-mb-main-fstorm",
     "openingId": "pro-gothamchess-milner-barry",
-    "criticalPositionFen": "r3kb1r/1p1bnppp/p3p3/3pP3/3q4/2NB4/PP2QPPP/R1B2R1K b kq - 3 12",
+    "criticalPositionFen": "r3kb1r/1p1b1ppp/p1n1p3/3pP3/3q4/2NB4/PP2QPPP/R1B2R1K w kq - 4 13",
     "title": "Milner-Barry Gambit: the f4-f5 Kingside Storm",
-    "overview": "The heart of the Milner-Barry: White sacrifices the d4-pawn for a lead in development and a kingside attack. With Black's queen offside and the e5-wedge cramping, White rolls the f-pawn — f4 and f5 pry open the king's position while the Bd3, Qe2, and Nc3 all point at the kingside. A pawn for a raging initiative against the French.",
+    "overview": "A real GothamChess win: f4 launches the kingside storm, and when Black counters with …g5 White recaptures and the dark-squared bishop joins the attack on the king.",
     "pawnBreaks": [
-      "f4-f5 the kingside storm",
-      "e5 the cramping wedge"
+      {
+        "move": "f4-f5 storm",
+        "explanation": "The f-pawn storms to f4 and on toward f5 to crack the kingside.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Bd3 the h7-battery bishop",
-      "Qe2 supporting the attack",
-      "Nc3 the developed knight"
+      {
+        "piece": "Bishop",
+        "route": "Bc1-d2-f4 support",
+        "explanation": "The bishop reroutes via d2 to recapture on f4 and support the storm."
+      }
     ],
     "strategicThemes": [
-      "Sacrifice d4 for the initiative",
-      "Storm with f4-f5",
-      "Attack the French king"
+      "Storm the kingside with the f-pawn.",
+      "Reroute the bishop to support the advance."
     ],
     "endgameTransitions": [
-      "Keep attacking — the gambit is for the initiative, not the ending"
+      "The attack aims to decide before any endgame."
     ],
     "playableLines": [
       {
-        "fen": "r3kb1r/1p1bnppp/p3p3/3pP3/3q4/2NB4/PP2QPPP/R1B2R1K b kq - 3 12",
+        "fen": "r3kb1r/1p1b1ppp/p1n1p3/3pP3/3q4/2NB4/PP2QPPP/R1B2R1K w kq - 4 13",
         "moves": [
-          "Rc8",
-          "f4"
+          "f4",
+          "Bc5",
+          "a3",
+          "g5",
+          "Bd2",
+          "gxf4",
+          "Bxf4",
+          "O-O-O"
         ],
         "annotations": [
-          "…Rc8 — Black develops the rook, trying to use the open c-file.",
-          "f4 — the storm begins. White grabs kingside space and prepares f5 to crack open Black’s king, the pieces all converging on the kingside. The gambit pawn has bought a powerful attacking initiative."
+          "f4 — the f-pawn storms forward, the Milner-Barry attacking plan.",
+          "…Bc5 — developing with tempo.",
+          "a3 — a useful restraining move on the queenside.",
+          "…g5 — Black counters on the kingside.",
+          "Bd2 — rerouting the bishop to support f4.",
+          "…gxf4 — opening the g-file.",
+          "Bxf4 — recapturing; the bishop now eyes the kingside.",
+          "…O-O-O — Black castles long, but White’s storm is rolling."
+        ],
+        "learnCues": [
+          "f4 — storm forward",
+          "Bc5 — develop",
+          "a3 — restrain",
+          "g5 — Black counters",
+          "Bd2 — support f4",
+          "gxf4 — open the g-file",
+          "Bxf4 — bishop eyes the king",
+          "O-O-O — storm rolls on"
         ],
         "arrows": [
+          [
+            {
+              "from": "f2",
+              "to": "f4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
           [],
           []
         ],
         "highlights": [
           [
             {
-              "square": "c8",
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -49131,19 +49547,27 @@
               "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ]
         ],
-        "learnCues": [
-          "Rc8 — Black eyes the c-file",
-          "f4 — the kingside storm"
-        ],
-        "title": "Milner-Barry Gambit: the f4-f5 Kingside Storm",
-        "intro": "The heart of the Milner-Barry: White sacrifices the d4-pawn for a lead in development and a kingside attack. With Black's queen offside and the e5-wedge cramping, White rolls the f-pawn — f4 and f5 pry open the king's position while the Bd3, Qe2, and Nc3 all point at the kingside. A pawn for a raging initiative against the French.",
+        "title": "Milner-Barry: the f4-f5 Pawn Storm",
+        "intro": "A real GothamChess win. The f-pawn storms forward, the signature Milner-Barry kingside plan.",
         "sources": [
           "book:chess-fundamentals",
-          "https://www.chess.com/openings/French-Defense-Advance-Variation-Milner-Barry-Gambit",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/French_Defence"
+          "https://www.chess.com/openings/French-Defense-Advance-Variation",
+          "https://en.wikipedia.org/wiki/French_Defence",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -49642,42 +50066,80 @@
   {
     "id": "mp-progothamchess-stafford-consolidate",
     "openingId": "pro-gothamchess-stafford-refute",
-    "criticalPositionFen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/3P4/PPP1BPPP/RNBQK2R b KQkq - 2 6",
+    "criticalPositionFen": "r3k2r/ppp1qpp1/1bp5/4Pb1p/3P4/2P3PP/PP2BK2/RNBQ3R w kq - 1 13",
     "title": "Stafford Refuted: d3 + Be2, Trade Off the Attack",
-    "overview": "The refutation he plays every time. Black gambits a pawn for a dangerous-looking attack, but White stays calm: d3 blunts the bishop, Be2 prepares to trade off Black's attacking pieces, and when Black lunges …Ng4, White simply takes it. After the queens come off, White is a clean pawn up with no weaknesses — the Stafford's traps only work if White panics. Trade, consolidate, and win the endgame.",
+    "overview": "A real GothamChess win: against the Stafford’s tricks White just develops, routes the knight to a fine square, tucks the king to g2 and consolidates the extra piece.",
     "pawnBreaks": [
-      "d3 blunting the attack",
-      "g3 securing the kingside"
+      {
+        "move": "e4-e5 anchor",
+        "explanation": "The e5-pawn anchors the centre while White untangles.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Bf1-e2 preparing to trade the attackers",
-      "Be2xg4 removing the attacking knight",
-      "the consolidating queen trade"
+      {
+        "piece": "Knight",
+        "route": "Na3-c4-e5 reroute",
+        "explanation": "The knight reroutes via c4 to the dominant e5 square as White consolidates."
+      }
     ],
     "strategicThemes": [
-      "Stay calm against the gambit",
-      "Trade off the attacking pieces",
-      "Convert the extra pawn"
+      "Develop and tuck the king before cashing in.",
+      "Keep the extra piece; refuse needless complications."
     ],
     "endgameTransitions": [
-      "The extra pawn wins the simplified ending"
+      "A piece up, any trade brings the win closer."
     ],
     "playableLines": [
       {
-        "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/3P4/PPP1BPPP/RNBQK2R b KQkq - 2 6",
+        "fen": "r3k2r/ppp1qpp1/1bp5/4Pb1p/3P4/2P3PP/PP2BK2/RNBQ3R w kq - 1 13",
         "moves": [
-          "Ng4",
-          "Bxg4",
-          "Qh4",
-          "g3"
+          "Na3",
+          "O-O-O",
+          "Nc4",
+          "f6",
+          "Kg2",
+          "fxe5",
+          "Nxe5",
+          "c5"
         ],
         "annotations": [
-          "…Ng4 — Black lunges the knight at f2 and h2, the typical Stafford attacking try.",
-          "Bxg4 — White calmly removes the attacker; there is no need to fear the gambit.",
-          "…Qh4 — Black throws the queen at the kingside, hunting for a trap.",
-          "g3 — White blunts the queen and trades everything off. Once the attackers are gone, White is a clean pawn up with a safe king — the Stafford refuted by simple, calm consolidation."
+          "Na3 — developing the knight, heading for c4.",
+          "…O-O-O — Black castles long, hunting activity for the pawn.",
+          "Nc4 — the knight reaches the fine c4 square.",
+          "…f6 — Black strikes at the centre.",
+          "Kg2 — calmly tucking the king and connecting the rooks.",
+          "…fxe5 — opening the f-file.",
+          "Nxe5 — recapturing; the knight dominates e5.",
+          "…c5 — Black seeks counterplay, but White is a piece up and consolidated."
+        ],
+        "learnCues": [
+          "Na3 — head for c4",
+          "O-O-O — Black seeks play",
+          "Nc4 — fine square",
+          "f6 — strike the centre",
+          "Kg2 — tuck the king",
+          "fxe5 — open the f-file",
+          "Nxe5 — dominate e5",
+          "c5 — White is winning"
         ],
         "arrows": [
+          [
+            {
+              "from": "b1",
+              "to": "a3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "a3",
+              "to": "c4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
           [],
           [],
           [],
@@ -49686,42 +50148,60 @@
         "highlights": [
           [
             {
-              "square": "g4",
+              "square": "a3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g4",
+              "square": "c8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "h4",
+              "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g3",
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Ng4 — the Stafford lunge",
-          "Bxg4 — calmly take the attacker",
-          "Qh4 — Black hunts a trap",
-          "g3 — blunt the queen, consolidate"
-        ],
-        "title": "Stafford Refuted: d3 + Be2, Trade Off the Attack",
-        "intro": "The refutation he plays every time. Black gambits a pawn for a dangerous-looking attack, but White stays calm: d3 blunts the bishop, Be2 prepares to trade off Black's attacking pieces, and when Black lunges …Ng4, White simply takes it. After the queens come off, White is a clean pawn up with no weaknesses — the Stafford's traps only work if White panics. Trade, consolidate, and win the endgame.",
+        "title": "Stafford Gambit: Consolidate the Extra Piece",
+        "intro": "A real GothamChess win. White refuses the complications, tucks the king safely, and the extra material decides.",
         "sources": [
           "book:chess-fundamentals",
-          "https://www.chess.com/openings/Stafford-Gambit",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
+          "https://www.chess.com/openings/Petrovs-Defense-Stafford-Gambit",
+          "https://en.wikipedia.org/wiki/Petrov%27s_Defence",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]

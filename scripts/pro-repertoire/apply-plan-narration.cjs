@@ -29,6 +29,13 @@ const SRC = {
   'pro-naroditsky-kid': ['book:chess-fundamentals', 'https://www.chess.com/openings/Kings-Indian-Defense', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence', 'https://api.chess.com/pub/player/danielnaroditsky/games/archives'],
   'pro-naroditsky-alapin': ['book:chess-fundamentals', 'https://www.chess.com/openings/Sicilian-Defense-Alapin-Variation', 'https://en.wikipedia.org/wiki/Alapin_Variation', 'https://api.chess.com/pub/player/danielnaroditsky/games/archives'],
   'pro-naroditsky-caro-kann': ['book:chess-fundamentals', 'https://www.chess.com/openings/Caro-Kann-Defense', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence', 'https://api.chess.com/pub/player/danielnaroditsky/games/archives'],
+  'pro-gothamchess-anti-sicilian': ['book:chess-fundamentals', 'https://www.chess.com/openings/Sicilian-Defense', 'https://en.wikipedia.org/wiki/Sicilian_Defence', 'https://api.chess.com/pub/player/gothamchess/games/archives'],
+  'pro-gothamchess-kia': ['book:chess-fundamentals', 'https://www.chess.com/openings/Kings-Indian-Attack', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack', 'https://api.chess.com/pub/player/gothamchess/games/archives'],
+  'pro-gothamchess-stafford-refute': ['book:chess-fundamentals', 'https://www.chess.com/openings/Petrovs-Defense-Stafford-Gambit', 'https://en.wikipedia.org/wiki/Petrov%27s_Defence', 'https://api.chess.com/pub/player/gothamchess/games/archives'],
+  'pro-gothamchess-milner-barry': ['book:chess-fundamentals', 'https://www.chess.com/openings/French-Defense-Advance-Variation', 'https://en.wikipedia.org/wiki/French_Defence', 'https://api.chess.com/pub/player/gothamchess/games/archives'],
+  'pro-naroditsky-alekhine': ['book:chess-fundamentals', 'https://www.chess.com/openings/Alekhines-Defense', 'https://en.wikipedia.org/wiki/Alekhine%27s_Defence', 'https://api.chess.com/pub/player/danielnaroditsky/games/archives'],
+  'pro-naroditsky-jobava-london': ['book:chess-fundamentals', 'https://www.chess.com/openings/Jobava-London-System', 'https://en.wikipedia.org/wiki/London_System', 'https://api.chess.com/pub/player/danielnaroditsky/games/archives'],
+  'pro-naroditsky-kia': ['book:chess-fundamentals', 'https://www.chess.com/openings/Kings-Indian-Attack', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack', 'https://api.chess.com/pub/player/danielnaroditsky/games/archives'],
 };
 const PLAYER = (op) => (op.includes('naroditsky') ? 'Naroditsky' : 'GothamChess');
 
