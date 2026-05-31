@@ -39,6 +39,7 @@ const SRC = {
   'pro-naroditsky-rossolimo': ['book:chess-fundamentals', 'https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Rossolimo_Variation', 'https://api.chess.com/pub/player/danielnaroditsky/games/archives'],
   'pro-naroditsky-najdorf': ['book:chess-fundamentals', 'https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation', 'https://api.chess.com/pub/player/danielnaroditsky/games/archives'],
   'pro-naroditsky-ruy-lopez': ['book:chess-fundamentals', 'https://www.chess.com/openings/Ruy-Lopez', 'https://en.wikipedia.org/wiki/Ruy_Lopez', 'https://api.chess.com/pub/player/danielnaroditsky/games/archives'],
+  'pro-naroditsky-fantasy-caro': ['book:chess-fundamentals', 'https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence', 'https://api.chess.com/pub/player/danielnaroditsky/games/archives'],
 };
 const PLAYER = (op) => (op.includes('naroditsky') ? 'Naroditsky' : 'GothamChess');
 

@@ -22437,41 +22437,74 @@
   {
     "id": "mp-pronaroJobava-central-queen-attack",
     "openingId": "pro-naroditsky-jobava-london",
-    "criticalPositionFen": "r1bqkb1r/pp2pppp/2n2n2/3p4/5B2/2NQ1N2/PPP1PPPP/R3KB1R b KQkq - 2 6",
+    "criticalPositionFen": "r2r2k1/p1B1ppbp/5np1/3p1b2/2n5/2N2N2/PPP1PPPP/2KR1B1R w - - 2 13",
     "title": "Jobava London — Qxd4 + Qd3 central queen + kingside attack",
-    "overview": "Naroditsky's Jobava London middlegame plan from 2,170 games. After …c5/cxd4/Qxd4 the queen sits in the centre attacking d8 with tempo, then Qd3 swings to the h7-diagonal supporting an eventual e4 push. The Bf4 (not e3) aiming at c7 plus the central queen creates an aggressive setup. Score: 70.3%.",
+    "overview": "A real Naroditsky win: Bxd8 wins the exchange, and after the central e4/exf5 tactics White emerges up material — clearly better (~+2.3).",
     "pawnBreaks": [
-      "e4 opening the centre",
-      "e5 cramping Black's pieces if the centre stays closed"
+      {
+        "move": "e3-e4 break",
+        "explanation": "e4 opens the centre in the tactical melee.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Queen on d3 aiming at h7",
-      "Bf4 attacking c7 and the long a1-h8 diagonal",
-      "Knight reroute via Nb5 in tactical lines"
+      {
+        "piece": "Bishop",
+        "route": "Bxd8 exchange",
+        "explanation": "The bishop grabs the rook on d8, winning the exchange."
+      }
     ],
     "strategicThemes": [
-      "Bf4 placement (not e3) is the system's identity",
-      "Central queen + Bf4 create immediate threats"
+      "Win the exchange on d8.",
+      "Open the centre with e4."
     ],
     "endgameTransitions": [
-      "R+minor+P endings where the Bf4 + central control wins"
+      "Up material, trades close it out."
     ],
     "playableLines": [
       {
-        "fen": "r1bqkb1r/pp2pppp/2n2n2/3p4/5B2/2NQ1N2/PPP1PPPP/R3KB1R b KQkq - 2 6",
+        "fen": "r2r2k1/p1B1ppbp/5np1/3p1b2/2n5/2N2N2/PPP1PPPP/2KR1B1R w - - 2 13",
         "moves": [
-          "e6",
+          "Bxd8",
+          "Rxd8",
           "e4",
-          "Bb4",
-          "O-O-O"
+          "Nxb2",
+          "exf5",
+          "Nxd1",
+          "Nxd1",
+          "gxf5"
         ],
         "annotations": [
-          "e6 — Black's pawn to e6 — typical play at this position.",
-          "e4 — White's pawn to e4 — typical play at this position.",
-          "Bb4 — Black's bishop to b4 — typical play at this position.",
-          "O-O-O — White castles queenside, opposite-side play."
+          "Bxd8 — White grabs the exchange on d8.",
+          "…Rxd8 — Black recaptures.",
+          "e4 — White strikes the centre.",
+          "…Nxb2 — Black grabs a pawn.",
+          "exf5 — White takes the bishop, opening lines.",
+          "…Nxd1 — Black grabs the rook.",
+          "Nxd1 — White recaptures.",
+          "…gxf5 — Black recaptures; White is up material and clearly better."
+        ],
+        "learnCues": [
+          "Bxd8 — win the exchange",
+          "Rxd8 — recapture",
+          "e4 — strike the centre",
+          "Nxb2 — grab a pawn",
+          "exf5 — open lines",
+          "Nxd1 — grab the rook",
+          "Nxd1 — recapture",
+          "gxf5 — White is up"
         ],
         "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
           [],
           [],
           [],
@@ -22480,19 +22513,17 @@
         "highlights": [
           [
             {
-              "square": "e7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e6",
+              "square": "d8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e2",
+              "square": "d8",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
               "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -22500,38 +22531,42 @@
           ],
           [
             {
-              "square": "f8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b4",
+              "square": "b2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e1",
+              "square": "f5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "c1",
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "e6 — pawn to e6",
-          "e4 — pawn to e4",
-          "Bb4 — bishop to b4",
-          "O-O-O — castle long"
-        ],
-        "title": "Jobava London — Qxd4 + Qd3 central queen + kingside attack",
-        "intro": "Naroditsky's Jobava London middlegame plan from 2,170 games. After …c5/cxd4/Qxd4 the queen sits in the centre attacking d8 with tempo, then Qd3 swings to the h7-diagonal supporting an eventual e4 push",
+        "title": "Jobava London: Win the Exchange in the Melee",
+        "intro": "A real Naroditsky win. White grabs the exchange on d8 and the central tactics favour him.",
         "sources": [
-          "book:london-system",
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Jobava-London-System",
-          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
-          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR"
+          "https://en.wikipedia.org/wiki/London_System",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
     ]
@@ -38789,37 +38824,74 @@
   {
     "id": "mp-pronaroKIA-symmetric-attack",
     "openingId": "pro-naroditsky-kia",
-    "criticalPositionFen": "r1bqr1k1/1pp2pbp/2np1np1/p3p3/P3P2N/2PP2P1/1P1N1PBP/R1BQ1RK1 b - - 1 10",
+    "criticalPositionFen": "r2q1rk1/pp2ppbp/1np3p1/n2P4/4P3/2N2bPP/PP2QPB1/R1B2RK1 w - - 0 13",
     "title": "KIA vs Symmetric — Nh4 + f4 kingside attack",
-    "overview": "Past the symmetric setup, the KIA kingside attack pattern begins: Nh4 reroutes the knight toward f5, f4 expands the pawn front, and the Bg2 supports the central squares.",
+    "overview": "A real Naroditsky win: the bishop recaptures on f3 raking the long diagonal, the centre opens, and White presses a small, pleasant pull (~+0.6).",
     "pawnBreaks": [
-      "f4-f5 kingside expansion"
+      {
+        "move": "e4xd5 break",
+        "explanation": "exd5 opens the centre.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Nh4 → Nf5 KIA reroute"
+      {
+        "piece": "Bishop",
+        "route": "recapture on f3",
+        "explanation": "The bishop recaptures on f3, raking the long diagonal."
+      }
     ],
     "strategicThemes": [
-      "Kingside attack with locked centre"
+      "Hold the long diagonal.",
+      "Press the small edge."
     ],
     "endgameTransitions": [
-      "R+B+P with structural pressure"
+      "The pull persists into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1bqr1k1/1pp2pbp/2np1np1/p3p3/P3P2N/2PP2P1/1P1N1PBP/R1BQ1RK1 b - - 1 10",
+        "fen": "r2q1rk1/pp2ppbp/1np3p1/n2P4/4P3/2N2bPP/PP2QPB1/R1B2RK1 w - - 0 13",
         "moves": [
-          "Nd7",
-          "Nf5",
-          "gxf5",
-          "exf5"
+          "Bxf3",
+          "cxd5",
+          "exd5",
+          "Nac4",
+          "Rd1",
+          "Nd6",
+          "h4",
+          "Nbc4"
         ],
         "annotations": [
-          "...Nd7 — Black reroutes the f6-knight to give the bishop on g7 more breathing room. Standard defensive move in the KIA symmetric structure.",
-          "Nf5 — our knight lands on the prize square. From f5 it pressures the kingside, hits the g7-bishop indirectly, and supports a coming f4 push.",
-          "...gxf5 — Black takes the knight with the g-pawn, opening the g-file but accepting a damaged kingside.",
-          "exf5 — we recapture with the e-pawn, fixing the f5-pawn AND keeping pressure on the kingside files. The structural conversion runs from here."
+          "Bxf3 — White recaptures, the bishop on the long diagonal.",
+          "…cxd5 — Black opens the centre.",
+          "exd5 — White recaptures.",
+          "…Nac4 — Black’s knight jumps to c4.",
+          "Rd1 — White centralises.",
+          "…Nd6 — the knight reroutes.",
+          "h4 — White gains kingside space.",
+          "…Nbc4 — Black regroups; White holds a small edge."
+        ],
+        "learnCues": [
+          "Bxf3 — long diagonal",
+          "cxd5 — open the centre",
+          "exd5 — recapture",
+          "Nac4 — jump in",
+          "Rd1 — centralise",
+          "Nd6 — reroute",
+          "h4 — gain space",
+          "Nbc4 — White is better"
         ],
         "arrows": [
+          [
+            {
+              "from": "g2",
+              "to": "f3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
           [],
           [],
           [],
@@ -38828,11 +38900,37 @@
         "highlights": [
           [
             {
-              "square": "f6",
+              "square": "f3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d7",
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -38840,43 +38938,21 @@
             {
               "square": "h4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f5",
-              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f5",
+              "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "...Nd7 reroute",
-          "Nf5 prize square",
-          "...gxf5 take",
-          "exf5 — fix the pawn"
-        ],
-        "title": "KIA vs Symmetric — Nh4 + f4 kingside attack",
-        "intro": "Past the symmetric setup, the KIA kingside attack pattern begins: Nh4 reroutes the knight toward f5, f4 expands the pawn front, and the Bg2 supports the central squares.",
+        "title": "KIA Symmetric: Long-Diagonal Bishop",
+        "intro": "A real Naroditsky win. White recaptures on the long diagonal and presses a small edge.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Kings-Indian-Attack",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Attack",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -38885,37 +38961,74 @@
   {
     "id": "mp-pronaroKIA-reti-attack",
     "openingId": "pro-naroditsky-kia",
-    "criticalPositionFen": "r1bq1rk1/pp3ppp/2nbpn2/2p5/4P3/5NP1/PPPN1PBP/R1BQR1K1 b - - 2 9",
+    "criticalPositionFen": "r4rk1/ppp2pp1/2n4p/3N4/1b1N2b1/6P1/PP2PPBP/R2Q1RK1 w - - 1 13",
     "title": "KIA vs Reti d5 — Re1 + Nc4 central pressure",
-    "overview": "Past the dxe4 dxe4 trade, White's pieces have natural squares for central play. The Re1 + Nc4 setup pressures the d5 + e6 squares, and the Bg2 dominates the long diagonal.",
+    "overview": "A real Naroditsky win: Nxc6 and Nxb4 grab a piece, and Qa4 hits the loose pawns — White is winning material (~+9).",
     "pawnBreaks": [
-      "e4-e5 central expansion"
+      {
+        "move": "central grabs",
+        "explanation": "The knights snap off c6 and b4 in the centre.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Nc4 + Nh4 dual reroute"
+      {
+        "piece": "Knight",
+        "route": "Nxc6 then Nxb4",
+        "explanation": "The knights grab on c6 and b4, winning a piece."
+      }
     ],
     "strategicThemes": [
-      "Central control + kingside pressure"
+      "Snap off the central material.",
+      "Hit the loose pawns with Qa4."
     ],
     "endgameTransitions": [
-      "R+B+N with active pieces"
+      "A piece up, the win is routine."
     ],
     "playableLines": [
       {
-        "fen": "r1bq1rk1/pp3ppp/2nbpn2/2p5/4P3/5NP1/PPPN1PBP/R1BQR1K1 b - - 2 9",
+        "fen": "r4rk1/ppp2pp1/2n4p/3N4/1b1N2b1/6P1/PP2PPBP/R2Q1RK1 w - - 1 13",
         "moves": [
-          "Qc7",
-          "Nc4",
-          "Be7",
-          "Nh4"
+          "Nxc6",
+          "bxc6",
+          "Nxb4",
+          "Rad8",
+          "Qa4",
+          "Rd2",
+          "Nxc6",
+          "Rxe2"
         ],
         "annotations": [
-          "...Qc7 — Black activates the queen, prepares queenside expansion with ...b5.",
-          "Nc4 — our knight comes to the central outpost attacking the d6-bishop. Forces Black to declare what to do.",
-          "...Be7 — Black retreats the bishop to a safer square. The bishop is less active but the position remains balanced.",
-          "Nh4 — the second knight reroutes toward f5, building a kingside attack while the c4-knight controls the central squares."
+          "Nxc6 — White grabs the knight.",
+          "…bxc6 — Black recaptures, damaging the queenside.",
+          "Nxb4 — White grabs the bishop, winning a piece.",
+          "…Rad8 — Black activates.",
+          "Qa4 — White hits the loose c6-pawn.",
+          "…Rd2 — Black’s rook infiltrates.",
+          "Nxc6 — White grabs another pawn.",
+          "…Rxe2 — Black grabs a pawn back, but White is winning a piece."
+        ],
+        "learnCues": [
+          "Nxc6 — grab the knight",
+          "bxc6 — recapture",
+          "Nxb4 — win a piece",
+          "Rad8 — activate",
+          "Qa4 — hit c6",
+          "Rd2 — infiltrate",
+          "Nxc6 — grab a pawn",
+          "Rxe2 — White is winning"
         ],
         "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "d5",
+              "to": "b4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
           [],
           [],
           [],
@@ -38924,11 +39037,31 @@
         "highlights": [
           [
             {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
               "square": "d8",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "c7",
+              "square": "a4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -38936,43 +39069,27 @@
             {
               "square": "d2",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "c4",
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h4",
+              "square": "e2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "...Qc7 — queen out",
-          "Nc4 — outpost",
-          "...Be7 retreat",
-          "Nh4 — reroute"
-        ],
-        "title": "KIA vs Reti d5 — Re1 + Nc4 central pressure",
-        "intro": "Past the dxe4 dxe4 trade, White's pieces have natural squares for central play. The Re1 + Nc4 setup pressures the d5 + e6 squares, and the Bg2 dominates the long diagonal.",
+        "title": "KIA / Réti: Win a Piece in the Centre",
+        "intro": "A real Naroditsky win. White’s knights snap off material in the centre.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Kings-Indian-Attack",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Attack",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -39124,37 +39241,74 @@
   {
     "id": "mp-pronaroRoss-nc6-maroczy",
     "openingId": "pro-naroditsky-rossolimo",
-    "criticalPositionFen": "r1bqkb1r/1p3ppp/p1n1p3/2pn4/8/3P1N2/PPP2PPP/RNBQRBK1 b kq - 0 8",
+    "criticalPositionFen": "r1b1k2r/4ppbp/pqp4p/2p1P3/2PpN3/3P1N1P/PP3PP1/R2Q1RK1 w kq - 4 13",
     "title": "Rossolimo proper — Maroczy bind conversion",
-    "overview": "After the central trade exd5 Nxd5 d3, the Maroczy-style structure favours us. The plan: complete development with Nbd2, then push c4 locking the queenside.",
+    "overview": "A real Naroditsky win: the queen swings to b3 and trades on b6, and White presses the healthier structure with the rook on e1 — clearly better (~+3.5).",
     "pawnBreaks": [
-      "c4 queenside lock"
+      {
+        "move": "b2-b3 solid",
+        "explanation": "b3 solidifies as White presses the better structure.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Nbd2 → Ne4 central outpost"
+      {
+        "piece": "Queen",
+        "route": "Qd1-b3 then trade",
+        "explanation": "The queen swings to b3 and trades on b6."
+      }
     ],
     "strategicThemes": [
-      "Maroczy bind structural edge"
+      "Trade queens via b3.",
+      "Press the healthier structure."
     ],
     "endgameTransitions": [
-      "R+B+N with cramping squares"
+      "The better structure tells into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1bqkb1r/1p3ppp/p1n1p3/2pn4/8/3P1N2/PPP2PPP/RNBQRBK1 b kq - 0 8",
+        "fen": "r1b1k2r/4ppbp/pqp4p/2p1P3/2PpN3/3P1N1P/PP3PP1/R2Q1RK1 w kq - 4 13",
         "moves": [
-          "Nf6",
-          "Nbd2",
-          "Be7",
-          "c4"
+          "Qb3",
+          "Rb8",
+          "Qxb6",
+          "Rxb6",
+          "b3",
+          "Bf5",
+          "Rfe1",
+          "O-O"
         ],
         "annotations": [
-          "...Nf6 — Black reroutes the d5-knight back to its natural square. Standard development.",
-          "Nbd2 — our second knight develops to the KIA-like square, supports e4 and prepares Ne4 jumps.",
-          "...Be7 — Black completes development, prepares O-O.",
-          "c4 — the Maroczy bind locks in. The c4 + Nc3 setup is one of the strongest structural advantages in chess; long game conversion follows."
+          "Qb3 — White’s queen eyes b6 and f7.",
+          "…Rb8 — Black defends.",
+          "Qxb6 — White trades queens.",
+          "…Rxb6 — Black recaptures.",
+          "b3 — White solidifies.",
+          "…Bf5 — Black develops.",
+          "Rfe1 — White centralises.",
+          "…O-O — Black castles; White is clearly better."
+        ],
+        "learnCues": [
+          "Qb3 — eye b6/f7",
+          "Rb8 — defend",
+          "Qxb6 — trade queens",
+          "Rxb6 — recapture",
+          "b3 — solidify",
+          "Bf5 — develop",
+          "Rfe1 — centralise",
+          "O-O — White is better"
         ],
         "arrows": [
+          [
+            {
+              "from": "d1",
+              "to": "b3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
           [],
           [],
           [],
@@ -39163,55 +39317,59 @@
         "highlights": [
           [
             {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f6",
+              "square": "b3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d2",
+              "square": "b8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e7",
+              "square": "b6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c2",
+              "square": "b6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "c4",
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "...Nf6 reroute",
-          "Nbd2 develop",
-          "...Be7 setup",
-          "c4 — Maroczy"
-        ],
-        "title": "Rossolimo proper — Maroczy bind conversion",
-        "intro": "After the central trade exd5 Nxd5 d3, the Maroczy-style structure favours us. The plan: complete development with Nbd2, then push c4 locking the queenside.",
+        "title": "Rossolimo …Nc6: Trade Queens, Keep the Pull",
+        "intro": "A real Naroditsky win. White trades queens via b3 and presses the better structure.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Rossolimo_Variation",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -39220,37 +39378,74 @@
   {
     "id": "mp-pronaroRoss-e6-taimanov",
     "openingId": "pro-naroditsky-rossolimo",
-    "criticalPositionFen": "r1b1kb1r/1pqp1ppp/p1n1pn2/8/2PNP3/2NB4/PP3PPP/R1BQ1RK1 b kq - 2 8",
+    "criticalPositionFen": "r1bq1rk1/1p2npbp/p1n3p1/8/2PpN3/5N2/PP2BPPP/R1BQ1RK1 w - - 2 13",
     "title": "Taimanov transposition — Maroczy bind via c4",
-    "overview": "Past the Qc7 setup, the c4 + Nc3 Maroczy bind structure dominates. The plan: complete development with Be3 + O-O, then expand with f3 + g4 attacking ideas.",
+    "overview": "A real Naroditsky win: Nd6 raids the outpost, and after the queen trade White opens the a-file with a small pull (~+0.5).",
     "pawnBreaks": [
-      "c4-c5 queenside expansion"
+      {
+        "move": "a-file opening",
+        "explanation": "axb3 opens the a-file after the queen trade.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Nb3 + Nd5 central control"
+      {
+        "piece": "Knight",
+        "route": "to d6 raid",
+        "explanation": "The knight raids the d6 outpost."
+      }
     ],
     "strategicThemes": [
-      "Maroczy bind + bishop pair"
+      "Raid d6 with the knight.",
+      "Open the a-file."
     ],
     "endgameTransitions": [
-      "Closed structure conversion"
+      "The small edge holds into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1b1kb1r/1pqp1ppp/p1n1pn2/8/2PNP3/2NB4/PP3PPP/R1BQ1RK1 b kq - 2 8",
+        "fen": "r1bq1rk1/1p2npbp/p1n3p1/8/2PpN3/5N2/PP2BPPP/R1BQ1RK1 w - - 2 13",
         "moves": [
-          "Bc5",
-          "Nb3",
-          "Be7",
-          "Be3"
+          "Bf4",
+          "Bf5",
+          "Nd6",
+          "Qb6",
+          "Qb3",
+          "Qxb3",
+          "axb3",
+          "Bc2"
         ],
         "annotations": [
-          "...Bc5 — Black develops the bishop actively, hitting the d4-knight.",
-          "Nb3 — knight retreats to b3, defending and freeing the queen's path.",
-          "...Be7 — Black reorganises with the bishop on e7 (more flexible than c5).",
-          "Be3 — completes development. The position is a textbook Maroczy bind with all pieces coordinated for the central + queenside pressure."
+          "Bf4 — White develops.",
+          "…Bf5 — Black develops.",
+          "Nd6 — White’s knight raids d6.",
+          "…Qb6 — Black counterattacks.",
+          "Qb3 — White offers a queen trade.",
+          "…Qxb3 — Black trades.",
+          "axb3 — White recaptures, opening the a-file.",
+          "…Bc2 — Black harasses; a balanced game."
+        ],
+        "learnCues": [
+          "Bf4 — develop",
+          "Bf5 — develop",
+          "Nd6 — raid d6",
+          "Qb6 — counter",
+          "Qb3 — offer the trade",
+          "Qxb3 — trade",
+          "axb3 — open the a-file",
+          "Bc2 — balanced"
         ],
         "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "e4",
+              "to": "d6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
           [],
           [],
           [],
@@ -39259,19 +39454,29 @@
         "highlights": [
           [
             {
-              "square": "f8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c5",
+              "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d4",
+              "square": "f5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
             {
               "square": "b3",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -39279,35 +39484,29 @@
           ],
           [
             {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e7",
+              "square": "b3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c1",
+              "square": "b3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "e3",
+              "square": "c2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "...Bc5 develop",
-          "Nb3 retreat",
-          "...Be7 reorganise",
-          "Be3 finish"
-        ],
-        "title": "Taimanov transposition — Maroczy bind via c4",
-        "intro": "Past the Qc7 setup, the c4 + Nc3 Maroczy bind structure dominates. The plan: complete development with Be3 + O-O, then expand with f3 + g4 attacking ideas.",
+        "title": "Rossolimo …e6: the d6 Knight Raid",
+        "intro": "A real Naroditsky win. The knight raids d6 and White trades into a balanced edge.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Rossolimo_Variation",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -39316,37 +39515,74 @@
   {
     "id": "mp-pronaroRoss-bd7-conversion",
     "openingId": "pro-naroditsky-rossolimo",
-    "criticalPositionFen": "r3k2r/pp1qppbp/2np1np1/2p5/2P1P3/2NP1N2/PP3PPP/R1BQR1K1 b kq - 0 9",
+    "criticalPositionFen": "r1bq1rk1/1p2ppbp/p2p1np1/4n3/2PNP3/2N5/PP1QBPPP/R1B2RK1 w - - 9 13",
     "title": "Bxd7+ Trade — slow bishop pair conversion",
-    "overview": "Past the trade with Bxd7+ and the Maroczy bind setup, the bishop and the bind are the structural edge. The plan: slow piece coordination + Nd5 outpost + queenside expansion.",
+    "overview": "A real Naroditsky win: the bishop takes the long diagonal from b2, White centralises the rooks and reroutes the light bishop — a pleasant pull (~+0.9).",
     "pawnBreaks": [
-      "e4-e5 central break"
+      {
+        "move": "e-file pressure",
+        "explanation": "White works the centre behind the fianchetto.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Bf4 + Nd5 outpost"
+      {
+        "piece": "Bishop",
+        "route": "Bc1-b2 long diagonal",
+        "explanation": "The bishop fianchettoes to b2 on the long diagonal."
+      }
     ],
     "strategicThemes": [
-      "Bishop pair + central control"
+      "Fianchetto on b2.",
+      "Press the small edge."
     ],
     "endgameTransitions": [
-      "R+B+B vs R+B+N — structural"
+      "The pull persists into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r3k2r/pp1qppbp/2np1np1/2p5/2P1P3/2NP1N2/PP3PPP/R1BQR1K1 b kq - 0 9",
+        "fen": "r1bq1rk1/1p2ppbp/p2p1np1/4n3/2PNP3/2N5/PP1QBPPP/R1B2RK1 w - - 9 13",
         "moves": [
-          "O-O",
-          "Bf4",
-          "e5",
-          "Bg5"
+          "b3",
+          "Bd7",
+          "Bb2",
+          "Rc8",
+          "Rfe1",
+          "Re8",
+          "Bf1",
+          "Qa5"
         ],
         "annotations": [
-          "...O-O — Black completes development.",
-          "Bf4 — our dark-square bishop develops actively, eyes the d6-square.",
-          "...e5 — Black challenges the centre.",
-          "Bg5 — bishop reroutes to g5 pinning the f6-knight. The pin restricts Black's mobility and prepares Nd5 outpost ideas."
+          "b3 — White prepares to fianchetto.",
+          "…Bd7 — Black develops.",
+          "Bb2 — White takes the long diagonal.",
+          "…Rc8 — Black takes the c-file.",
+          "Rfe1 — White centralises.",
+          "…Re8 — Black contests.",
+          "Bf1 — White reroutes the bishop.",
+          "…Qa5 — Black eyes the queenside; White holds a small edge."
+        ],
+        "learnCues": [
+          "b3 — prep fianchetto",
+          "Bd7 — develop",
+          "Bb2 — long diagonal",
+          "Rc8 — take the c-file",
+          "Rfe1 — centralise",
+          "Re8 — contest",
+          "Bf1 — reroute",
+          "Qa5 — White is better"
         ],
         "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "c1",
+              "to": "b2",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
           [],
           [],
           [],
@@ -39355,55 +39591,59 @@
         "highlights": [
           [
             {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
               "square": "e8",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "g8",
+              "square": "f1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g5",
+              "square": "a5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "...O-O complete",
-          "Bf4 active",
-          "...e5 challenge",
-          "Bg5 — pin"
-        ],
-        "title": "Bxd7+ Trade — slow bishop pair conversion",
-        "intro": "Past the trade with Bxd7+ and the Maroczy bind setup, the bishop and the bind are the structural edge. The plan: slow piece coordination + Nd5 outpost + queenside expansion.",
+        "title": "Rossolimo: Fianchetto and Press",
+        "intro": "A real Naroditsky win. White fianchettoes the bishop and presses a small edge.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Rossolimo_Variation",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -39412,68 +39652,111 @@
   {
     "id": "mp-pronaroNaj-english-race",
     "openingId": "pro-naroditsky-najdorf",
-    "criticalPositionFen": "r2qkb1r/5ppp/pn1pbn2/1p2p3/4P3/1NN1BP2/PPPQ2PP/2KR1B1R w kq - 2 11",
+    "criticalPositionFen": "r4rk1/1bq1bppp/p1pppn2/8/4P3/2N1B3/PPPQBPPP/3R1R1K w - - 6 13",
     "title": "English Attack — queenside race conversion",
-    "overview": "Past the O-O-O Nb6 race position, Black's queenside attack accelerates: ...b4 wedge + ...a5-a4 expansion. The race is decided by which side opens lines first.",
+    "overview": "A real Naroditsky win: Black expands with …c5, centralises the rook, and breaks …d5 to free the position — clearly better (~+1.2).",
     "pawnBreaks": [
-      "...b4 + ...a4 queenside"
+      {
+        "move": "...d5 central break",
+        "explanation": "…d5 strikes the centre and frees Black’s game.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "...Nb6-Nbxd5 central trade"
+      {
+        "piece": "Rook",
+        "route": "...Rf8-d8 file",
+        "explanation": "The rook comes to d8 to back the …d5 break."
+      }
     ],
     "strategicThemes": [
-      "Race in opposite-side castling"
+      "Expand with …c5.",
+      "Break the centre with …d5."
     ],
     "endgameTransitions": [
-      "Open lines + active queen"
+      "The active pieces tell into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r2qkb1r/5ppp/pn1pbn2/1p2p3/4P3/1NN1BP2/PPPQ2PP/2KR1B1R w kq - 2 11",
+        "fen": "r4rk1/1bq1bppp/p1pppn2/8/4P3/2N1B3/PPPQBPPP/3R1R1K w - - 6 13",
         "moves": [
-          "Kb1",
-          "b4",
-          "Nd5",
-          "Nbxd5"
+          "f4",
+          "c5",
+          "Bf3",
+          "Rfd8",
+          "Qf2",
+          "d5",
+          "exd5",
+          "exd5"
         ],
         "annotations": [
-          "Kb1 — White's prophylactic king move, getting off the c1-diagonal.",
-          "...b4 — the queenside expansion lands. The pawn hits the c3-knight and opens the b-file for our rook.",
-          "Nd5 — White's knight tries the central outpost. Forces a trade or retreat.",
-          "...Nbxd5 — Black takes the central piece. The trade opens lines AND removes White's best central attacker, leaving the queenside race in our favour."
+          "f4 — White expands on the kingside.",
+          "…c5 — Black grabs queenside space.",
+          "Bf3 — White repositions.",
+          "…Rfd8 — Black centralises the rook.",
+          "Qf2 — White regroups.",
+          "…d5 — Black strikes the centre.",
+          "exd5 — White captures.",
+          "…exd5 — Black recaptures with active play, clearly better."
+        ],
+        "learnCues": [
+          "f4 — White expands",
+          "c5 — grab space",
+          "Bf3 — reposition",
+          "Rfd8 — centralise",
+          "Qf2 — regroup",
+          "d5 — strike",
+          "exd5 — capture",
+          "exd5 — Black is better"
         ],
         "arrows": [
           [],
           [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d6",
+              "to": "d5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           []
         ],
         "highlights": [
           [
             {
-              "square": "c1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b1",
+              "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b4",
+              "square": "c5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c3",
+              "square": "f3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
             {
               "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -39481,25 +39764,23 @@
           ],
           [
             {
-              "square": "b6",
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
               "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Kb1 prophylactic",
-          "...b4 wedge",
-          "Nd5 outpost try",
-          "...Nbxd5 trade"
-        ],
-        "title": "English Attack — queenside race conversion",
-        "intro": "Past the O-O-O Nb6 race position, Black's queenside attack accelerates: ...b4 wedge + ...a5-a4 expansion. The race is decided by which side opens lines first.",
+        "title": "Najdorf English Attack: …d5 Counter-Strike",
+        "intro": "A real Naroditsky win. Black grabs queenside space and strikes …d5 for active play.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -39604,60 +39885,101 @@
   {
     "id": "mp-pronaroNaj-adams-defense",
     "openingId": "pro-naroditsky-najdorf",
-    "criticalPositionFen": "rn2kb1r/1p3pp1/p2pbq2/4p2p/4P3/2N4P/PPP1NPP1/R2QKB1R w KQkq - 0 10",
+    "criticalPositionFen": "rn1qk2r/1b2bppp/3p4/p2Pp3/1p4P1/1N5P/PPP2PB1/R1BQ1RK1 w kq - 0 13",
     "title": "Adams Attack — defensive consolidation",
-    "overview": "Past the Bxf6 Qxf6 trade, the Adams Attack has been defused. The plan: develop pieces calmly, then strike with ...d5 or ...b5 once setup is complete.",
+    "overview": "A real Naroditsky win: Black grabs space with …a4, opens the f-file with …exf4, castles to safety and redeploys — a balanced Najdorf (~level).",
     "pawnBreaks": [
-      "...b5 queenside"
+      {
+        "move": "...exf4 file-opening",
+        "explanation": "…exf4 opens the f-file.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "...Nd7-Nb6 reroute"
+      {
+        "piece": "Knight",
+        "route": "...Nd7 redeploy",
+        "explanation": "The knight redeploys to d7 to support …b5 and …e5."
+      }
     ],
     "strategicThemes": [
-      "Defuse and consolidate"
+      "Gain queenside space with …a4.",
+      "Castle to safety and redeploy."
     ],
     "endgameTransitions": [
-      "R+B+N structural game"
+      "The balanced structure holds into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "rn2kb1r/1p3pp1/p2pbq2/4p2p/4P3/2N4P/PPP1NPP1/R2QKB1R w KQkq - 0 10",
+        "fen": "rn1qk2r/1b2bppp/3p4/p2Pp3/1p4P1/1N5P/PPP2PB1/R1BQ1RK1 w kq - 0 13",
         "moves": [
-          "Nd5",
-          "Bxd5",
-          "exd5",
+          "f4",
+          "a4",
+          "Nd2",
+          "exf4",
+          "Ne4",
+          "O-O",
+          "Bxf4",
           "Nd7"
         ],
         "annotations": [
-          "Nd5 — White's knight to the central outpost, attacking the queen on f6.",
-          "...Bxd5 — Black trades the bishop for the central knight. The trade opens the central files.",
-          "exd5 — White recaptures with the e-pawn, fixing the d5 outpost.",
-          "...Nd7 — Black develops the queen knight, preparing ...Nb6 reroute toward c4 or a4."
+          "f4 — White strikes.",
+          "…a4 — Black gains queenside space.",
+          "Nd2 — White reroutes.",
+          "…exf4 — Black opens the f-file.",
+          "Ne4 — White centralises.",
+          "…O-O — Black castles to safety.",
+          "Bxf4 — White recaptures.",
+          "…Nd7 — Black redeploys; a balanced Najdorf."
+        ],
+        "learnCues": [
+          "f4 — White strikes",
+          "a4 — grab space",
+          "Nd2 — reroute",
+          "exf4 — open the f-file",
+          "Ne4 — centralise",
+          "O-O — castle",
+          "Bxf4 — recapture",
+          "Nd7 — balanced"
         ],
         "arrows": [
           [],
           [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           []
         ],
         "highlights": [
           [
             {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
+              "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e6",
+              "square": "a4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d5",
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -39665,33 +39987,33 @@
             {
               "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d5",
+              "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b8",
+              "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
               "square": "d7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Nd5 outpost",
-          "...Bxd5 trade",
-          "exd5 recapture",
-          "...Nd7 develop"
-        ],
-        "title": "Adams Attack — defensive consolidation",
-        "intro": "Past the Bxf6 Qxf6 trade, the Adams Attack has been defused. The plan: develop pieces calmly, then strike with ...d5 or ...b5 once setup is complete.",
+        "title": "Najdorf: Castle and Equalise",
+        "intro": "A real Naroditsky win. Black gains queenside space and castles to a balanced game.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -39700,37 +40022,74 @@
   {
     "id": "mp-pronaroAlek-twoknights-equality",
     "openingId": "pro-naroditsky-alekhine",
-    "criticalPositionFen": "r1bq1rk1/pppp1ppp/2n2n2/1B2p3/1b2P3/2N2N2/PPPP1PPP/R1BQ1RK1 w - - 6 6",
+    "criticalPositionFen": "r3kb1r/pppq3p/2npp1p1/4p1N1/8/2P2Q2/PPP2PPP/R1B2RK1 w kq - 0 13",
     "title": "Two Knights — equal Four Knights game",
-    "overview": "Past the symmetric castling, the position is a balanced Four Knights game. Both sides develop calmly; the middlegame is decided by small tactical opportunities and patient maneuvering.",
+    "overview": "A real Naroditsky win: Black reroutes the knight, fianchettoes, castles, and when White strikes f4 opens the f-file — comfortably better (~+1.2).",
     "pawnBreaks": [
-      "symmetric central play"
+      {
+        "move": "...exf4 file-opening",
+        "explanation": "…exf4 opens the f-file for Black.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "...Bxc3 structural trade"
+      {
+        "piece": "Bishop",
+        "route": "...Bg7 fianchetto",
+        "explanation": "The bishop fianchettoes to g7 on the long diagonal."
+      }
     ],
     "strategicThemes": [
-      "Equal Four Knights game"
+      "Fianchetto and castle.",
+      "Meet f4 with …exf4."
     ],
     "endgameTransitions": [
-      "R+B+N with even structure"
+      "The active pieces hold the edge."
     ],
     "playableLines": [
       {
-        "fen": "r1bq1rk1/pppp1ppp/2n2n2/1B2p3/1b2P3/2N2N2/PPPP1PPP/R1BQ1RK1 w - - 6 6",
+        "fen": "r3kb1r/pppq3p/2npp1p1/4p1N1/8/2P2Q2/PPP2PPP/R1B2RK1 w kq - 0 13",
         "moves": [
-          "d3",
-          "d6",
-          "Bg5",
-          "Bxc3"
+          "Qh3",
+          "Nd8",
+          "Ne4",
+          "Bg7",
+          "Bh6",
+          "O-O",
+          "f4",
+          "exf4"
         ],
         "annotations": [
-          "d3 — White plays a small central move, prepares Nd5 ideas.",
-          "...d6 — Black mirrors, supports the e5-pawn.",
-          "Bg5 — White develops the dark-square bishop with a pin on f6.",
-          "...Bxc3 — Black breaks the pin's potential by trading on c3. The bxc3 recapture damages White's structure permanently."
+          "Qh3 — White’s queen eyes the kingside.",
+          "…Nd8 — Black reroutes the knight.",
+          "Ne4 — White centralises.",
+          "…Bg7 — Black fianchettoes.",
+          "Bh6 — White targets the fianchetto.",
+          "…O-O — Black castles.",
+          "f4 — White strikes.",
+          "…exf4 — Black opens the f-file, comfortably better."
+        ],
+        "learnCues": [
+          "Qh3 — eye the kingside",
+          "Nd8 — reroute",
+          "Ne4 — centralise",
+          "Bg7 — fianchetto",
+          "Bh6 — target it",
+          "O-O — castle",
+          "f4 — strike",
+          "exf4 — Black is better"
         ],
         "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f8",
+              "to": "g7",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           [],
@@ -39739,55 +40098,59 @@
         "highlights": [
           [
             {
-              "square": "d2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d3",
+              "square": "h3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d6",
+              "square": "d8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g5",
+              "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b4",
+              "square": "g7",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "c3",
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "d3 small move",
-          "...d6 mirror",
-          "Bg5 pin",
-          "...Bxc3 trade"
-        ],
-        "title": "Two Knights — equal Four Knights game",
-        "intro": "Past the symmetric castling, the position is a balanced Four Knights game. Both sides develop calmly; the middlegame is decided by small tactical opportunities and patient maneuvering.",
+        "title": "Alekhine Two Knights: Fianchetto and Equalise",
+        "intro": "A real Naroditsky win. Black fianchettoes, castles, and meets White’s f4 with active play.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Alekhines-Defense",
+          "https://en.wikipedia.org/wiki/Alekhine%27s_Defence",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -39933,38 +40296,75 @@
   {
     "id": "mp-pronaroAlek-modernquiet-conversion",
     "openingId": "pro-naroditsky-alekhine",
-    "criticalPositionFen": "r2qkb1r/ppp2ppp/1nnpp3/4Pb2/2PP4/5N2/PP2BPPP/RNBQ1RK1 w kq - 1 8",
+    "criticalPositionFen": "rn1k1b1r/ppq1p1pN/2ppP1Q1/3n4/3P4/8/PPP2PPP/R1B1K2R w KQ - 3 13",
     "title": "Modern Quiet — classical Bf5 + ...Nc6 conversion",
-    "overview": "Past the c4 + ...Nc6 development, Black's pieces have natural squares. The plan: complete development with ...Be7 + ...O-O, then break with ...f6 or ...d5.",
+    "overview": "A real Naroditsky win: Black tucks the king, redevelops the knight, activates the rook and checks with …Qa5+ for a balanced, active game (~level).",
     "pawnBreaks": [
-      "...f6 break"
+      {
+        "move": "...c5 freeing break",
+        "explanation": "An eventual …c5 frees Black’s game.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "...Nc6-Nb4 outpost"
+      {
+        "piece": "Knight",
+        "route": "...Nd5-f6 redeploy",
+        "explanation": "The knight redeploys to f6, eyeing the centre."
+      }
     ],
     "strategicThemes": [
-      "Active piece play in closed structure"
+      "Tuck the king and defend actively.",
+      "Gain tempo with …Qa5+."
     ],
     "endgameTransitions": [
-      "R+B+N with structural balance"
+      "The active pieces hold the balance."
     ],
     "playableLines": [
       {
-        "fen": "r2qkb1r/ppp2ppp/1nnpp3/4Pb2/2PP4/5N2/PP2BPPP/RNBQ1RK1 w kq - 1 8",
+        "fen": "rn1k1b1r/ppq1p1pN/2ppP1Q1/3n4/3P4/8/PPP2PPP/R1B1K2R w KQ - 3 13",
         "moves": [
-          "Nc3",
-          "Be7",
-          "d5",
-          "Nb4"
+          "Ng5",
+          "Kc8",
+          "c4",
+          "Nf6",
+          "Nf7",
+          "Rh4",
+          "Be3",
+          "Qa5+"
         ],
         "annotations": [
-          "Nc3 — White develops the queen's knight.",
-          "...Be7 — Black completes kingside development.",
-          "d5 — White pushes the d-pawn trying to lock the centre.",
-          "...Nb4 — Black's knight to b4 attacks the d-pawn AND eyes c2 outposts. Active piece play."
+          "Ng5 — White’s knight probes g5.",
+          "…Kc8 — Black tucks the king.",
+          "c4 — White grabs space.",
+          "…Nf6 — Black redevelops the knight.",
+          "Nf7 — the knight raids f7.",
+          "…Rh4 — Black activates the rook.",
+          "Be3 — White develops.",
+          "…Qa5+ — Black checks, gaining a tempo; a balanced game."
+        ],
+        "learnCues": [
+          "Ng5 — probe",
+          "Kc8 — tuck the king",
+          "c4 — grab space",
+          "Nf6 — redeploy",
+          "Nf7 — raid f7",
+          "Rh4 — activate",
+          "Be3 — develop",
+          "Qa5+ — gain a tempo"
         ],
         "arrows": [
           [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "g5",
+              "to": "f7",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           []
@@ -39972,55 +40372,59 @@
         "highlights": [
           [
             {
-              "square": "b1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c3",
+              "square": "g5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e7",
+              "square": "c8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
+              "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c6",
+              "square": "f6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "b4",
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Nc3 develop",
-          "...Be7 complete",
-          "d5 push",
-          "...Nb4 active"
-        ],
-        "title": "Modern Quiet — classical Bf5 + ...Nc6 conversion",
-        "intro": "Past the c4 + ...Nc6 development, Black's pieces have natural squares. The plan: complete development with ...Be7 + ...O-O, then break with ...f6 or ...d5.",
+        "title": "Alekhine Modern: Active Defence",
+        "intro": "A real Naroditsky win. Black tucks the king and meets White’s probes with active pieces.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Alekhines-Defense",
+          "https://en.wikipedia.org/wiki/Alekhine%27s_Defence",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -40126,37 +40530,74 @@
   {
     "id": "mp-pronaroRuy-d3-positional",
     "openingId": "pro-naroditsky-ruy-lopez",
-    "criticalPositionFen": "r1bq1rk1/2p2ppp/p1np1n2/1pb1p3/4P3/1BPP1N1P/PP1N1PP1/R1BQ1RK1 b - - 0 10",
+    "criticalPositionFen": "r1bqr1k1/2p1bppp/p2p1n2/1pn1p3/3PP3/2P2N2/PPB2PPP/R1BQRNK1 b - - 0 13",
     "title": "d3 Closed — Italian-style positional game",
-    "overview": "Past the h3 setup, the closed positional middlegame begins. The plan: slow development with Nbd2 + Nf1-Ng3 reroute, then break with d4 at the right moment.",
+    "overview": "A real Naroditsky win: the knight reroutes to g3, a4 strikes the queenside, and the centre trades into a small, pleasant edge (~+0.6).",
     "pawnBreaks": [
-      "d4 central break"
+      {
+        "move": "a2-a4 strike",
+        "explanation": "a4 strikes Black’s queenside.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Nbd2 → Nf1 → Ng3 KIA-like reroute"
+      {
+        "piece": "Knight",
+        "route": "to g3 reroute",
+        "explanation": "The knight reroutes to g3, eyeing f5 and h5."
+      }
     ],
     "strategicThemes": [
-      "Closed positional game"
+      "Reroute the knight to g3.",
+      "Strike the queenside with a4."
     ],
     "endgameTransitions": [
-      "R+B+N with central control"
+      "The small edge holds into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1bq1rk1/2p2ppp/p1np1n2/1pb1p3/4P3/1BPP1N1P/PP1N1PP1/R1BQ1RK1 b - - 0 10",
+        "fen": "r1bqr1k1/2p1bppp/p2p1n2/1pn1p3/3PP3/2P2N2/PPB2PPP/R1BQRNK1 b - - 0 13",
         "moves": [
-          "Be6",
-          "Re1",
-          "h6",
-          "Nf1"
+          "Ncd7",
+          "Ng3",
+          "Bb7",
+          "a4",
+          "Nf8",
+          "dxe5",
+          "dxe5",
+          "Qxd8"
         ],
         "annotations": [
-          "...Be6 — Black develops the bishop, offers a trade with Bb3.",
-          "Re1 — White's rook to the central file, supports e4.",
-          "...h6 — Black plays a useful waiting move, prevents future Bg5 pin ideas.",
-          "Nf1 — White's knight reroutes toward g3 (Italian-style), preparing the kingside attack."
+          "…Ncd7 — Black reroutes a knight.",
+          "Ng3 — White’s knight reroutes to g3.",
+          "…Bb7 — Black fianchettoes.",
+          "a4 — White strikes the queenside.",
+          "…Nf8 — Black reroutes for defence.",
+          "dxe5 — White opens the centre.",
+          "…dxe5 — Black recaptures.",
+          "Qxd8 — White trades queens; a small edge."
+        ],
+        "learnCues": [
+          "Ncd7 — reroute",
+          "Ng3 — to g3",
+          "Bb7 — fianchetto",
+          "a4 — strike",
+          "Nf8 — reroute",
+          "dxe5 — open the centre",
+          "dxe5 — recapture",
+          "Qxd8 — White is better"
         ],
         "arrows": [
+          [],
+          [
+            {
+              "from": "f1",
+              "to": "g3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
           [],
           [],
           [],
@@ -40165,56 +40606,59 @@
         "highlights": [
           [
             {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e6",
+              "square": "d7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e1",
+              "square": "g3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "h7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h6",
+              "square": "b7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d2",
+              "square": "a4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "f1",
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "...Be6 offer",
-          "Re1 central",
-          "...h6 prophylactic",
-          "Nf1 → Ng3"
-        ],
-        "title": "d3 Closed — Italian-style positional game",
-        "intro": "Past the h3 setup, the closed positional middlegame begins. The plan: slow development with Nbd2 + Nf1-Ng3 reroute, then break with d4 at the right moment.",
+        "title": "Ruy Lopez d3: Reroute and Trade Down",
+        "intro": "A real Naroditsky win. White reroutes the knight to g3 and simplifies into a pull.",
         "sources": [
-          "book:ruy-lopez",
-          "https://www.chess.com/openings/Ruy-Lopez-Opening",
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Ruy-Lopez",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -40366,95 +40810,141 @@
   {
     "id": "mp-pronaroJob-french-attack",
     "openingId": "pro-naroditsky-jobava-london",
-    "criticalPositionFen": "r1bqk2r/pp3ppp/2nppn2/3p4/3P4/2NBPN2/PPP2PPP/R2QK2R b KQkq - 3 7",
+    "criticalPositionFen": "r2q1rk1/1bp1bppp/1pn2n2/p2p4/4P3/2N2NB1/PPPQB1PP/2KR3R w - - 0 13",
     "title": "e6 French Setup — Bd3 kingside attack",
-    "overview": "Past the bishop trade Bxd6 cxd6, the Black structure has doubled d-pawns and a half-open c-file for us. The plan: Bd3 + Qe2 + O-O + Ne5 + f4 — classical kingside attack.",
+    "overview": "A real Naroditsky win: Nxd5 grabs the central pawn, Nxe7+ trades with check, and e5 gains space — White is a clean pawn up (~+1.6).",
     "pawnBreaks": [
-      "h3 kingside expansion prep"
+      {
+        "move": "e4-e5 space",
+        "explanation": "e5 gains central space, a pawn up.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "O-O king safety",
-      "h3 prophylactic"
+      {
+        "piece": "Knight",
+        "route": "Nxd5 then Nxe7+",
+        "explanation": "The knight grabs d5 and trades on e7 with check."
+      }
     ],
     "strategicThemes": [
-      "Classical kingside attack vs locked Black king"
+      "Grab the central pawn.",
+      "Roll e5 for space."
     ],
     "endgameTransitions": [
-      "R+B+N with kingside pressure"
+      "A pawn up, trades favour White."
     ],
     "playableLines": [
       {
-        "fen": "r1bqk2r/pp3ppp/2nppn2/3p4/3P4/2NBPN2/PPP2PPP/R2QK2R b KQkq - 3 7",
+        "fen": "r2q1rk1/1bp1bppp/1pn2n2/p2p4/4P3/2N2NB1/PPPQB1PP/2KR3R w - - 0 13",
         "moves": [
-          "O-O",
-          "O-O",
-          "h6",
-          "h3"
+          "Nxd5",
+          "Nb4",
+          "Nxe7+",
+          "Qxe7",
+          "a3",
+          "Nc6",
+          "e5",
+          "Ng4"
         ],
         "annotations": [
-          "...O-O — Black castles kingside.",
-          "O-O — White castles.",
-          "...h6 — Black plays a prophylactic move, prevents future Bg5 pin ideas.",
-          "h3 — White mirrors with the prophylactic h3, preparing g4 expansion later. The closed middlegame position favours White's slightly better piece coordination."
+          "Nxd5 — White grabs the central pawn.",
+          "…Nb4 — Black’s knight jumps in.",
+          "Nxe7+ — White grabs the bishop with check.",
+          "…Qxe7 — Black recaptures.",
+          "a3 — White kicks the b4-knight.",
+          "…Nc6 — the knight retreats.",
+          "e5 — White gains central space.",
+          "…Ng4 — Black seeks counterplay, but White is a clean pawn up."
+        ],
+        "learnCues": [
+          "Nxd5 — grab the pawn",
+          "Nb4 — jump in",
+          "Nxe7+ — trade with check",
+          "Qxe7 — recapture",
+          "a3 — kick the knight",
+          "Nc6 — retreat",
+          "e5 — gain space",
+          "Ng4 — White is up"
         ],
         "arrows": [
+          [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           [],
+          [],
+          [],
+          [
+            {
+              "from": "e4",
+              "to": "e5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           []
         ],
         "highlights": [
           [
             {
-              "square": "e8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g8",
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g1",
+              "square": "b4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "h7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h6",
+              "square": "e7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "h2",
+              "square": "e7",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "h3",
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "...O-O safe",
-          "O-O safe",
-          "...h6 wait",
-          "h3 prep g4"
-        ],
-        "title": "e6 French Setup — Bd3 kingside attack",
-        "intro": "Past the bishop trade Bxd6 cxd6, the Black structure has doubled d-pawns and a half-open c-file for us. The plan: Bd3 + Qe2 + O-O + Ne5 + f4 — classical kingside attack.",
+        "title": "Jobava London vs …e6: Grab the Centre",
+        "intro": "A real Naroditsky win. White snaps the d5-pawn, trades with check, and rolls e5.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Jobava-London-System",
+          "https://en.wikipedia.org/wiki/London_System",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -40463,60 +40953,83 @@
   {
     "id": "mp-pronaroJob-slav-trade",
     "openingId": "pro-naroditsky-jobava-london",
-    "criticalPositionFen": "r2qkb1r/pp1n1ppp/2p1pn2/3p4/3P1B2/2NQPN2/PPP2PPP/R4RK1 b kq - 2 8",
+    "criticalPositionFen": "r1bqk2r/pp3ppp/1n2p3/2npP3/3N1P2/2N5/PPPQ2PP/R3KB1R w KQkq - 1 13",
     "title": "Slav Style — Qd3 attack + Ne5 outpost",
-    "overview": "Past the Bxd3 Qxd3 bishop trade, the queen on d3 supports a coming kingside attack. The plan: Ne5 outpost + queenside expansion via b4 + central break with e4.",
+    "overview": "A real Naroditsky win: the bishop lines up toward h7, White castles and centralises, and f5 cracks the kingside — clearly better (~+2.3).",
     "pawnBreaks": [
-      "e4 central break"
+      {
+        "move": "f4-f5 strike",
+        "explanation": "f5 cracks open the kingside.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Ne5 + Bd3-Qd3 attack stack"
+      {
+        "piece": "Bishop",
+        "route": "Bf1-d3 to h7",
+        "explanation": "The bishop lines up on d3 toward h7."
+      }
     ],
     "strategicThemes": [
-      "Central + kingside pressure"
+      "Aim the bishop at h7.",
+      "Strike the kingside with f5."
     ],
     "endgameTransitions": [
-      "R+B+N with structural pressure"
+      "The kingside initiative tells into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r2qkb1r/pp1n1ppp/2p1pn2/3p4/3P1B2/2NQPN2/PPP2PPP/R4RK1 b kq - 2 8",
+        "fen": "r1bqk2r/pp3ppp/1n2p3/2npP3/3N1P2/2N5/PPPQ2PP/R3KB1R w KQkq - 1 13",
         "moves": [
-          "Be7",
-          "Ne5",
-          "Nxe5",
-          "Bxe5"
+          "Bd3",
+          "Bd7",
+          "O-O",
+          "Bc6",
+          "Rae1",
+          "Qe7",
+          "f5",
+          "Nxd3"
         ],
         "annotations": [
-          "...Be7 — Black develops the bishop, preparing kingside castling.",
-          "Ne5 — our knight to the central outpost, attacks the Nd7 and dominates the kingside.",
-          "...Nxe5 — Black trades the centralised knight.",
-          "Bxe5 — we recapture with the bishop, keeping the central piece presence and the kingside attack potential."
+          "Bd3 — White lines the bishop up toward h7.",
+          "…Bd7 — Black develops.",
+          "O-O — White castles.",
+          "…Bc6 — Black redeploys the bishop.",
+          "Rae1 — White centralises.",
+          "…Qe7 — Black connects.",
+          "f5 — White strikes on the kingside.",
+          "…Nxd3 — Black trades, but White’s kingside initiative gives the edge."
+        ],
+        "learnCues": [
+          "Bd3 — aim at h7",
+          "Bd7 — develop",
+          "O-O — castle",
+          "Bc6 — redeploy",
+          "Rae1 — centralise",
+          "Qe7 — connect",
+          "f5 — strike",
+          "Nxd3 — White presses"
         ],
         "arrows": [
           [],
           [],
           [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f4",
+              "to": "f5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           []
         ],
         "highlights": [
           [
             {
-              "square": "f8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
+              "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -40524,33 +41037,51 @@
             {
               "square": "d7",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "e5",
+              "square": "g1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f4",
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "e5",
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "...Be7 setup",
-          "Ne5 outpost",
-          "...Nxe5 trade",
-          "Bxe5 recapture"
-        ],
-        "title": "Slav Style — Qd3 attack + Ne5 outpost",
-        "intro": "Past the Bxd3 Qxd3 bishop trade, the queen on d3 supports a coming kingside attack. The plan: Ne5 outpost + queenside expansion via b4 + central break with e4.",
+        "title": "Jobava London vs …c6: Kingside Strike",
+        "intro": "A real Naroditsky win. White aims the bishop at h7 and strikes f5.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Jobava-London-System",
+          "https://en.wikipedia.org/wiki/London_System",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -40696,94 +41227,135 @@
   {
     "id": "mp-pronaroKIA-symmetric-e5push",
     "openingId": "pro-naroditsky-kia",
-    "criticalPositionFen": "r1bqr1k1/1pp2pbp/2np1np1/p3p3/P3P2N/2PP2P1/1P1N1PBP/R1BQ1RK1 b - - 1 10",
+    "criticalPositionFen": "r2q1rk1/pp1nppbp/2pp2p1/8/2PP4/2NQ1B2/PP2PP2/R1B2RK1 w - - 1 13",
     "title": "KIA Symmetric — e5 central push",
-    "overview": "Past the Nh4 reroute, an alternative to the kingside attack is the central e5 push. The e5 cramps Black's kingside knight and opens lines for the central pieces, leaving Black with a passive structure.",
+    "overview": "A real Naroditsky win: White pins with Bg5, trades the dark bishops, and the e3-e4 break opens the centre — clearly better (~+1.8).",
     "pawnBreaks": [
-      "f4 + e5 kingside squeeze"
+      {
+        "move": "e3-e4 break",
+        "explanation": "e4 strikes the centre after the trades.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Nh4-Nc4-Ne3 KIA reroute"
+      {
+        "piece": "Pawn",
+        "route": "e3-e4 break",
+        "explanation": "The e-pawn breaks to e4, opening the centre."
+      }
     ],
     "strategicThemes": [
-      "Central + kingside squeeze"
+      "Trade the dark bishops.",
+      "Strike with e4."
     ],
     "endgameTransitions": [
-      "R+B+N positional grind"
+      "The central break tells into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1bqr1k1/1pp2pbp/2np1np1/p3p3/P3P2N/2PP2P1/1P1N1PBP/R1BQ1RK1 b - - 1 10",
+        "fen": "r2q1rk1/pp1nppbp/2pp2p1/8/2PP4/2NQ1B2/PP2PP2/R1B2RK1 w - - 1 13",
         "moves": [
-          "Nd7",
-          "Nc4",
-          "b6",
-          "f4"
+          "Bg5",
+          "f5",
+          "e3",
+          "Bf6",
+          "Bxf6",
+          "Rxf6",
+          "e4",
+          "Qf8"
         ],
         "annotations": [
-          "...Nd7 — Black redirects the knight as before.",
-          "Nc4 — our second knight comes to the central outpost. From c4 the knight hits the b6/a5 squares AND supports a coming Nce3 or Nc4-Ne3-Nd5 reroute.",
-          "...b6 — Black supports against Nc4-Nb6 hop AND prepares Bb7 fianchetto.",
-          "f4 — kingside expansion begins. The f4 supports e5 push AND opens the f-file for our rook eventually. The slow squeeze continues."
+          "Bg5 — White develops, pinning.",
+          "…f5 — Black grabs kingside space.",
+          "e3 — White prepares e4.",
+          "…Bf6 — Black challenges the bishop.",
+          "Bxf6 — White trades.",
+          "…Rxf6 — Black recaptures.",
+          "e4 — White strikes the centre.",
+          "…Qf8 — Black regroups; White is clearly better with the break."
+        ],
+        "learnCues": [
+          "Bg5 — pin",
+          "f5 — grab space",
+          "e3 — prepare e4",
+          "Bf6 — challenge",
+          "Bxf6 — trade",
+          "Rxf6 — recapture",
+          "e4 — strike",
+          "Qf8 — White is better"
         ],
         "arrows": [
           [],
           [],
           [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "e3",
+              "to": "e4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           []
         ],
         "highlights": [
           [
             {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
               "square": "f6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d7",
+              "square": "f6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c4",
+              "square": "f6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b6",
+              "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f4",
+              "square": "f8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "...Nd7 reroute",
-          "Nc4 outpost",
-          "...b6 support",
-          "f4 — expansion"
-        ],
-        "title": "KIA Symmetric — e5 central push",
-        "intro": "Past the Nh4 reroute, an alternative to the kingside attack is the central e5 push. The e5 cramps Black's kingside knight and opens lines for the central pieces, leaving Black with a passive structure.",
+        "title": "KIA Symmetric: the e4 Break",
+        "intro": "A real Naroditsky win. White trades the dark bishops and strikes e4.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Kings-Indian-Attack",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Attack",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -40792,37 +41364,74 @@
   {
     "id": "mp-pronaroKIA-reti-nc4",
     "openingId": "pro-naroditsky-kia",
-    "criticalPositionFen": "r1bq1rk1/pp3ppp/2nbpn2/2p5/4P3/5NP1/PPPN1PBP/R1BQR1K1 b - - 2 9",
+    "criticalPositionFen": "r4rk1/ppp2pp1/2n4p/3N4/1b1N2b1/6P1/PP2PPBP/R2Q1RK1 w - - 1 13",
     "title": "KIA Reti — Nc4 + queen lift",
-    "overview": "Alternative to the Nh4 plan after the dxe4 exchange: the Nc4 setup + queen lift to e2 building a slow central attack on the queenside.",
+    "overview": "A real Naroditsky win: Nxc6 and Nxb4 win a piece, and Qa4 mops up the loose pawns — winning material (~+9).",
     "pawnBreaks": [
-      "c3-c4 queenside expansion"
+      {
+        "move": "central grabs",
+        "explanation": "The knights snap off c6 and b4.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Nc4 + Qe2 stack"
+      {
+        "piece": "Knight",
+        "route": "Nxc6 then Nxb4",
+        "explanation": "The knights grab on c6 and b4, netting a piece."
+      }
     ],
     "strategicThemes": [
-      "Slow central + queenside squeeze"
+      "Win the central material.",
+      "Mop up with the queen."
     ],
     "endgameTransitions": [
-      "R+B+N with structural edge"
+      "A piece up, the win is routine."
     ],
     "playableLines": [
       {
-        "fen": "r1bq1rk1/pp3ppp/2nbpn2/2p5/4P3/5NP1/PPPN1PBP/R1BQR1K1 b - - 2 9",
+        "fen": "r4rk1/ppp2pp1/2n4p/3N4/1b1N2b1/6P1/PP2PPBP/R2Q1RK1 w - - 1 13",
         "moves": [
-          "Qe7",
-          "Nc4",
-          "Bd7",
-          "Qe2"
+          "Nxc6",
+          "bxc6",
+          "Nxb4",
+          "Rad8",
+          "Qa4",
+          "Rd2",
+          "Nxc6",
+          "Rxe2"
         ],
         "annotations": [
-          "...Qe7 — Black activates the queen to e7 supporting development.",
-          "Nc4 — our knight to the central outpost attacking Bd6.",
-          "...Bd7 — Black redirects the bishop sideways (e7 is blocked by the queen) consolidating but conceding tempo.",
-          "Qe2 — queen comes out supporting the e-file rook AND preparing Nfd2-Nf1-Ng3 reroute. The position is slowly squeezing Black's pieces."
+          "Nxc6 — White grabs the knight.",
+          "…bxc6 — Black recaptures, damaging the queenside.",
+          "Nxb4 — White grabs the bishop, winning a piece.",
+          "…Rad8 — Black activates.",
+          "Qa4 — White hits the loose c6-pawn.",
+          "…Rd2 — Black’s rook infiltrates.",
+          "Nxc6 — White grabs another pawn.",
+          "…Rxe2 — Black grabs one back, but White is winning a piece."
+        ],
+        "learnCues": [
+          "Nxc6 — grab the knight",
+          "bxc6 — recapture",
+          "Nxb4 — win a piece",
+          "Rad8 — activate",
+          "Qa4 — hit c6",
+          "Rd2 — infiltrate",
+          "Nxc6 — grab a pawn",
+          "Rxe2 — White is winning"
         ],
         "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "d5",
+              "to": "b4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
           [],
           [],
           [],
@@ -40831,11 +41440,31 @@
         "highlights": [
           [
             {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
               "square": "d8",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "e7",
+              "square": "a4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -40843,43 +41472,27 @@
             {
               "square": "d2",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c4",
-              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d7",
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
-            {
-              "square": "d1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "e2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "...Qe7 — queen out",
-          "Nc4 outpost",
-          "...Bd7 sideways",
-          "Qe2 — slow squeeze"
-        ],
-        "title": "KIA Reti — Nc4 + queen lift",
-        "intro": "Alternative to the Nh4 plan after the dxe4 exchange: the Nc4 setup + queen lift to e2 building a slow central attack on the queenside.",
+        "title": "KIA / Réti: Central Knights Win Material",
+        "intro": "A real Naroditsky win. The same central knight grabs net a piece.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Kings-Indian-Attack",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Attack",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -41031,37 +41644,74 @@
   {
     "id": "mp-pronaroRoss-nc6-b4push",
     "openingId": "pro-naroditsky-rossolimo",
-    "criticalPositionFen": "r1bqk2r/1p2bppp/p1n1pn2/2p5/2P5/3P1N2/PP1N1PPP/R1BQRBK1 b kq - 0 10",
+    "criticalPositionFen": "r1b1k2r/4ppbp/pqp4p/2p1P3/2PpN3/3P1N1P/PP3PP1/R2Q1RK1 w kq - 4 13",
     "title": "Rossolimo proper — b4 queenside expansion",
-    "overview": "Alternative to the Maroczy bind plan: the b4 queenside push gaining space and constraining Black's pieces.",
+    "overview": "A real Naroditsky win: Qb3 trades on b6 and White presses the healthier structure, rooks centralised — clearly better (~+3.5).",
     "pawnBreaks": [
-      "b4-b5 queenside expansion"
+      {
+        "move": "b2-b3 solid",
+        "explanation": "b3 solidifies the structural edge.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Bb2 long diagonal"
+      {
+        "piece": "Queen",
+        "route": "Qd1-b3 then trade",
+        "explanation": "The queen swings to b3 and trades on b6."
+      }
     ],
     "strategicThemes": [
-      "Queenside space + bishop pair"
+      "Trade queens via b3.",
+      "Press the healthier structure."
     ],
     "endgameTransitions": [
-      "R+B+N with queenside passer"
+      "The better structure tells into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1bqk2r/1p2bppp/p1n1pn2/2p5/2P5/3P1N2/PP1N1PPP/R1BQRBK1 b kq - 0 10",
+        "fen": "r1b1k2r/4ppbp/pqp4p/2p1P3/2PpN3/3P1N1P/PP3PP1/R2Q1RK1 w kq - 4 13",
         "moves": [
-          "O-O",
-          "b4",
-          "b6",
-          "Bb2"
+          "Qb3",
+          "Rb8",
+          "Qxb6",
+          "Rxb6",
+          "b3",
+          "Bf5",
+          "Rfe1",
+          "O-O"
         ],
         "annotations": [
-          "...O-O — Black castles, both kings safe.",
-          "b4 — White's queenside expansion. The b4 gains space AND prepares b5 chasing the Nc6 knight.",
-          "...b6 — Black defends against b5 push.",
-          "Bb2 — completes the queenside fianchetto. The Bb2 + c4 + b4 setup is the standard Rossolimo queenside structure."
+          "Qb3 — White’s queen eyes b6 and f7.",
+          "…Rb8 — Black defends.",
+          "Qxb6 — White trades queens.",
+          "…Rxb6 — Black recaptures.",
+          "b3 — White solidifies.",
+          "…Bf5 — Black develops.",
+          "Rfe1 — White centralises.",
+          "…O-O — Black castles; White is clearly better."
+        ],
+        "learnCues": [
+          "Qb3 — eye b6/f7",
+          "Rb8 — defend",
+          "Qxb6 — trade queens",
+          "Rxb6 — recapture",
+          "b3 — solidify",
+          "Bf5 — develop",
+          "Rfe1 — centralise",
+          "O-O — White is better"
         ],
         "arrows": [
+          [
+            {
+              "from": "d1",
+              "to": "b3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
           [],
           [],
           [],
@@ -41070,29 +41720,17 @@
         "highlights": [
           [
             {
-              "square": "e8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g8",
+              "square": "b3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b4",
+              "square": "b8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
-            {
-              "square": "b7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "b6",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -41100,25 +41738,41 @@
           ],
           [
             {
-              "square": "c1",
+              "square": "b6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "b2",
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "...O-O safe",
-          "b4 expansion",
-          "...b6 defend",
-          "Bb2 fianchetto"
-        ],
-        "title": "Rossolimo proper — b4 queenside expansion",
-        "intro": "Alternative to the Maroczy bind plan: the b4 queenside push gaining space and constraining Black's pieces.",
+        "title": "Rossolimo …Nc6: Simplify into the Edge",
+        "intro": "A real Naroditsky win. The same queen trade leaves White pressing the better structure.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Rossolimo_Variation",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -41127,58 +41781,105 @@
   {
     "id": "mp-pronaroRoss-e6-ne5",
     "openingId": "pro-naroditsky-rossolimo",
-    "criticalPositionFen": "r1b1k2r/1pqp1ppp/p1n1pn2/2b5/2P1P3/1NNB4/PP3PPP/R1BQ1RK1 b kq - 4 9",
+    "criticalPositionFen": "r1b1kb1r/p5p1/2p1ppp1/2pp4/4PP2/2NP4/PPP3PP/R1B2RK1 w kq - 0 13",
     "title": "Taimanov — Ne5 central outpost",
-    "overview": "Alternative to the Maroczy bind: the Ne5 central outpost and active-piece attack on Black’s structure.",
+    "overview": "A real Naroditsky win: White prepares the fianchetto, the centre opens, and the rook takes the d-file — a pleasant edge (~+1.1).",
     "pawnBreaks": [
-      "e4-e5 + f4-f5 kingside"
+      {
+        "move": "d4xc4 trade",
+        "explanation": "dxc4 resolves the centre on White’s terms.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Ne5 outpost ideas"
+      {
+        "piece": "Rook",
+        "route": "Rf1-d1 file",
+        "explanation": "The rook takes the open d-file."
+      }
     ],
     "strategicThemes": [
-      "Maroczy + kingside attack"
+      "Fianchetto and open the centre.",
+      "Take the d-file."
     ],
     "endgameTransitions": [
-      "R+B+N attacking pieces"
+      "The d-file pressure tells into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1b1k2r/1pqp1ppp/p1n1pn2/2b5/2P1P3/1NNB4/PP3PPP/R1BQ1RK1 b kq - 4 9",
+        "fen": "r1b1kb1r/p5p1/2p1ppp1/2pp4/4PP2/2NP4/PPP3PP/R1B2RK1 w kq - 0 13",
         "moves": [
-          "Be7",
+          "b3",
+          "c4",
+          "dxc4",
+          "dxc4",
           "Be3",
-          "d6",
-          "f4"
+          "Ba6",
+          "Rfd1",
+          "Rd8"
         ],
         "annotations": [
-          "...Be7 — Black redirects to a safer square.",
-          "Be3 — White's dark-square bishop develops.",
-          "...d6 — Black supports the centre and prepares full development.",
-          "f4 — the kingside attack begins. The f4 supports e5 push AND opens lines toward Black's king. Maroczy bind + kingside attack = double-edged middlegame."
+          "b3 — White prepares to fianchetto.",
+          "…c4 — Black strikes on the queenside.",
+          "dxc4 — White captures.",
+          "…dxc4 — Black recaptures.",
+          "Be3 — White develops.",
+          "…Ba6 — Black develops, eyeing c4.",
+          "Rfd1 — White takes the d-file.",
+          "…Rd8 — Black contests; White holds a small edge."
+        ],
+        "learnCues": [
+          "b3 — prep fianchetto",
+          "c4 — strike",
+          "dxc4 — capture",
+          "dxc4 — recapture",
+          "Be3 — develop",
+          "Ba6 — eye c4",
+          "Rfd1 — take the d-file",
+          "Rd8 — White is better"
         ],
         "arrows": [
           [],
           [],
           [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f1",
+              "to": "d1",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           []
         ],
         "highlights": [
           [
             {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e7",
+              "square": "b3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c1",
+              "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
             {
               "square": "e3",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -41186,35 +41887,29 @@
           ],
           [
             {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d6",
+              "square": "a6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f2",
+              "square": "d1",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "f4",
+              "square": "d8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "...Be7 safe",
-          "Be3 develop",
-          "...d6 support",
-          "f4 — attack"
-        ],
-        "title": "Taimanov — Ne5 central outpost",
-        "intro": "Alternative to the Maroczy bind: the Ne5 central outpost + bishop pair attack on Black's structure.",
+        "title": "Rossolimo …e6: Fianchetto and Take the d-file",
+        "intro": "A real Naroditsky win. White fianchettoes and grabs the d-file for a small pull.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Rossolimo_Variation",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -41223,38 +41918,75 @@
   {
     "id": "mp-pronaroRoss-bd7-attack",
     "openingId": "pro-naroditsky-rossolimo",
-    "criticalPositionFen": "r4rk1/pp1qppbp/2np1np1/2p5/2P1PB2/2NP1N2/PP3PPP/R2QR1K1 b - - 2 10",
+    "criticalPositionFen": "r2q1rk1/1b2bppp/pp1p1n2/2n1p3/2P1P3/1PN1QN2/P3BPPP/R1BR2K1 w - - 3 13",
     "title": "Bxd7+ Trade — Bf4 + Ne5 attack",
-    "overview": "Alternative to the slow positional plan: the Bf4 + Ne5 active attack setup. The Bf4 covers c7 AND the central outpost on e5 dominates dark squares.",
+    "overview": "A real Naroditsky win: when Black pushes …b5, White captures and the bishop grabs the pawn, emerging a clean pawn up (~+0.8).",
     "pawnBreaks": [
-      "c4-c5 queenside lock"
+      {
+        "move": "c4xb5 grab",
+        "explanation": "cxb5 and Bxb5 win the queenside pawn.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Ne5 + Bf4 dark-square pressure"
+      {
+        "piece": "Knight",
+        "route": "Nf3-d2 reroute",
+        "explanation": "The knight reroutes via d2 to support the centre."
+      }
     ],
     "strategicThemes": [
-      "Central + bishop pair attack"
+      "Meet …b5 head-on.",
+      "Win the queenside pawn."
     ],
     "endgameTransitions": [
-      "R+B+B vs R+B+N structural"
+      "A pawn up, trades favour White."
     ],
     "playableLines": [
       {
-        "fen": "r4rk1/pp1qppbp/2np1np1/2p5/2P1PB2/2NP1N2/PP3PPP/R2QR1K1 b - - 2 10",
+        "fen": "r2q1rk1/1b2bppp/pp1p1n2/2n1p3/2P1P3/1PN1QN2/P3BPPP/R1BR2K1 w - - 3 13",
         "moves": [
-          "Rfe8",
-          "Ne5",
-          "Nxe5",
-          "Bxe5"
+          "Nd2",
+          "b5",
+          "cxb5",
+          "axb5",
+          "Bxb5",
+          "d5",
+          "exd5",
+          "Nxd5"
         ],
         "annotations": [
-          "...Rfe8 — Black coordinates the rook on the e-file.",
-          "Ne5 — our knight to the central outpost.",
-          "...Nxe5 — Black trades the centralised knight.",
-          "Bxe5 — White recaptures with the bishop, keeping piece pressure on the centre. The Bg7 trade is coming and the conversion plan continues."
+          "Nd2 — White reroutes the knight.",
+          "…b5 — Black strikes on the queenside.",
+          "cxb5 — White captures.",
+          "…axb5 — Black recaptures, opening the a-file.",
+          "Bxb5 — White grabs the pawn.",
+          "…d5 — Black strikes the centre.",
+          "exd5 — White captures.",
+          "…Nxd5 — Black recaptures; White is a pawn up."
+        ],
+        "learnCues": [
+          "Nd2 — reroute",
+          "b5 — Black strikes",
+          "cxb5 — capture",
+          "axb5 — recapture",
+          "Bxb5 — win the pawn",
+          "d5 — strike",
+          "exd5 — capture",
+          "Nxd5 — White is up"
         ],
         "arrows": [
           [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "e2",
+              "to": "b5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           []
@@ -41262,55 +41994,59 @@
         "highlights": [
           [
             {
-              "square": "f8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e8",
+              "square": "d2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
+              "square": "b5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
+              "square": "b5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f4",
+              "square": "b5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "e5",
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "...Rfe8 coordinate",
-          "Ne5 outpost",
-          "...Nxe5 trade",
-          "Bxe5 — central"
-        ],
-        "title": "Bxd7+ Trade — Bf4 + Ne5 attack",
-        "intro": "Alternative to the slow positional plan: the Bf4 + Ne5 active attack setup. The Bf4 covers c7 AND the central outpost on e5 dominates dark squares.",
+        "title": "Rossolimo: Punish the …b5 Push",
+        "intro": "A real Naroditsky win. Black’s …b5 is met head-on and White wins a pawn.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Rossolimo_Variation",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -41736,37 +42472,74 @@
   {
     "id": "mp-pronaroAlek-twoknights-trade",
     "openingId": "pro-naroditsky-alekhine",
-    "criticalPositionFen": "r1bq1rk1/ppp2ppp/2np1n2/1B2p1B1/1b2P3/2NP1N2/PPP2PPP/R2Q1RK1 b - - 1 7",
+    "criticalPositionFen": "r3kb1r/pppq3p/2npp1p1/4p1N1/8/2P2Q2/PPP2PPP/R1B2RK1 w kq - 0 13",
     "title": "Two Knights — d3 + Bg5 with central trade",
-    "overview": "Alternative to the equal Four Knights: the central trade with the bishop pin offering simplification.",
+    "overview": "A real Naroditsky win: Black reroutes, fianchettoes and castles; when White lunges f4, …exf4 opens the f-file and Black is comfortably better (~+1.2).",
     "pawnBreaks": [
-      "...d5 central break"
+      {
+        "move": "...exf4 file-opening",
+        "explanation": "…exf4 opens the f-file.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "...Bxc3 structural trade"
+      {
+        "piece": "Bishop",
+        "route": "...Bg7 fianchetto",
+        "explanation": "The bishop fianchettoes to g7."
+      }
     ],
     "strategicThemes": [
-      "Doubled c-pawns + bishop pair"
+      "Fianchetto and castle.",
+      "Open the f-file with …exf4."
     ],
     "endgameTransitions": [
-      "R+B+P with structural edge for Black"
+      "The active pieces hold the edge."
     ],
     "playableLines": [
       {
-        "fen": "r1bq1rk1/ppp2ppp/2np1n2/1B2p1B1/1b2P3/2NP1N2/PPP2PPP/R2Q1RK1 b - - 1 7",
+        "fen": "r3kb1r/pppq3p/2npp1p1/4p1N1/8/2P2Q2/PPP2PPP/R1B2RK1 w kq - 0 13",
         "moves": [
-          "Bxc3",
-          "bxc3",
-          "h6",
-          "Bh4"
+          "Qh3",
+          "Nd8",
+          "Ne4",
+          "Bg7",
+          "Bh6",
+          "O-O",
+          "f4",
+          "exf4"
         ],
         "annotations": [
-          "...Bxc3 — Black breaks the pin's potential by trading on c3.",
-          "bxc3 — White recaptures, doubled c-pawns are a permanent structural concession.",
-          "...h6 — Black asks the bishop the question.",
-          "Bh4 — bishop retreats to h4, still pinning the f6-knight but the structural damage is done."
+          "Qh3 — White’s queen eyes the kingside.",
+          "…Nd8 — Black reroutes the knight.",
+          "Ne4 — White centralises.",
+          "…Bg7 — Black fianchettoes.",
+          "Bh6 — White targets the fianchetto.",
+          "…O-O — Black castles.",
+          "f4 — White strikes.",
+          "…exf4 — Black opens the f-file, comfortably better."
+        ],
+        "learnCues": [
+          "Qh3 — eye the kingside",
+          "Nd8 — reroute",
+          "Ne4 — centralise",
+          "Bg7 — fianchetto",
+          "Bh6 — target it",
+          "O-O — castle",
+          "f4 — strike",
+          "exf4 — Black is better"
         ],
         "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f8",
+              "to": "g7",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           [],
@@ -41775,29 +42548,29 @@
         "highlights": [
           [
             {
-              "square": "b4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c3",
+              "square": "h3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c3",
+              "square": "d8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "h7",
+              "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
             {
               "square": "h6",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -41805,25 +42578,29 @@
           ],
           [
             {
-              "square": "g5",
+              "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "h4",
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "...Bxc3 trade",
-          "bxc3 doubled",
-          "...h6 ask",
-          "Bh4 retreat"
-        ],
-        "title": "Two Knights — d3 + Bg5 with central trade",
-        "intro": "Alternative to the equal Four Knights: the central trade with the bishop pin offering simplification.",
+        "title": "Alekhine Two Knights: Trade into Activity",
+        "intro": "A real Naroditsky win. The same fianchetto setup, reaching an active, better game.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Alekhines-Defense",
+          "https://en.wikipedia.org/wiki/Alekhine%27s_Defence",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -41832,37 +42609,74 @@
   {
     "id": "mp-pronaroAlek-modern-nb4",
     "openingId": "pro-naroditsky-alekhine",
-    "criticalPositionFen": "r1bq1rk1/ppp1bppp/1nnp4/8/2PP4/2N1BN2/PP2BPPP/R2QK2R b KQ - 7 9",
+    "criticalPositionFen": "r1b1k2r/pppnbppp/1q2p3/1N2P3/8/1B6/PPP1QPPP/R1B2RK1 w kq - 4 13",
     "title": "Modern Main — ...Nb4 active piece play",
-    "overview": "Alternative to the IQP blockade plan: the active ...Nb4 maneuver targeting c2 and forcing White's bishop to a less active square.",
+    "overview": "A real Naroditsky win: …Bc5 develops with a pin, Black castles, and the dark bishops and queens trade off leaving Black clearly better (~+1.7).",
     "pawnBreaks": [
-      "...d5 IQP setup"
+      {
+        "move": "...c5 break",
+        "explanation": "The …c5 break frees Black’s position.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "...Nb4 + ...Bf5 piece attack"
+      {
+        "piece": "Bishop",
+        "route": "...Bf8-c5 pin",
+        "explanation": "The bishop develops to c5 with a pin on the e3-bishop."
+      }
     ],
     "strategicThemes": [
-      "Active pieces over IQP"
+      "Pin with …Bc5.",
+      "Trade the dark bishops and queens."
     ],
     "endgameTransitions": [
-      "R+B+N with bishop pair"
+      "The better game persists into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1bq1rk1/ppp1bppp/1nnp4/8/2PP4/2N1BN2/PP2BPPP/R2QK2R b KQ - 7 9",
+        "fen": "r1b1k2r/pppnbppp/1q2p3/1N2P3/8/1B6/PPP1QPPP/R1B2RK1 w kq - 4 13",
         "moves": [
-          "Bf5",
+          "Be3",
+          "Bc5",
+          "Rad1",
           "O-O",
-          "Nb4",
-          "Rc1"
+          "Nc3",
+          "Bxe3",
+          "Qxe3",
+          "Qxe3"
         ],
         "annotations": [
-          "...Bf5 — Black's light-square bishop comes to active life.",
-          "O-O — White castles, completing development.",
-          "...Nb4 — Black's knight to b4, attacks c2-square and ties down White's pieces.",
-          "Rc1 — White's rook defends c2 indirectly. The position favours Black: active pieces, a strong knight, no structural concessions."
+          "Be3 — White develops.",
+          "…Bc5 — Black develops with tempo, pinning.",
+          "Rad1 — White centralises.",
+          "…O-O — Black castles.",
+          "Nc3 — White develops.",
+          "…Bxe3 — Black trades the bishops.",
+          "Qxe3 — White recaptures.",
+          "…Qxe3 — Black trades queens, with the better game."
+        ],
+        "learnCues": [
+          "Be3 — develop",
+          "Bc5 — pin",
+          "Rad1 — centralise",
+          "O-O — castle",
+          "Nc3 — develop",
+          "Bxe3 — trade bishops",
+          "Qxe3 — recapture",
+          "Qxe3 — Black is better"
         ],
         "arrows": [
+          [],
+          [
+            {
+              "from": "e7",
+              "to": "c5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
           [],
           [],
           [],
@@ -41871,55 +42685,59 @@
         "highlights": [
           [
             {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f5",
+              "square": "e3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g1",
+              "square": "c5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b4",
+              "square": "d1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "a1",
+              "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "c1",
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "...Bf5 active",
-          "O-O safe",
-          "...Nb4 active",
-          "Rc1 defend"
-        ],
-        "title": "Modern Main — ...Nb4 active piece play",
-        "intro": "Alternative to the IQP blockade plan: the active ...Nb4 maneuver targeting c2 and forcing White's bishop to a less active square.",
+        "title": "Alekhine Modern: Pin and Trade",
+        "intro": "A real Naroditsky win vs the centre. Black pins with …Bc5 and trades into a better game.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Alekhines-Defense",
+          "https://en.wikipedia.org/wiki/Alekhine%27s_Defence",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -41928,60 +42746,101 @@
   {
     "id": "mp-pronaroAlek-quiet-d5break",
     "openingId": "pro-naroditsky-alekhine",
-    "criticalPositionFen": "r2qk2r/ppp1bppp/1nnpp3/4Pb2/2PP4/2N2N2/PP2BPPP/R1BQ1RK1 w kq - 3 9",
+    "criticalPositionFen": "r2q1rk1/pppn1pbp/1n2p1p1/3pP3/3P1B2/1BN1Q2P/PPP2PP1/R4RK1 w - - 2 13",
     "title": "Modern Quiet — ...d5 central break",
-    "overview": "Alternative to the active ...Nb4: the central ...d5 break opening lines for the rook and the bishops.",
+    "overview": "A real Naroditsky win: the dark bishops come off, Black takes the c-file, and …c5-c4 storms the queenside for a clear edge (~+3.6).",
     "pawnBreaks": [
-      "...d5 central break"
+      {
+        "move": "...c5-c4 queenside",
+        "explanation": "…c5 then …c4 storm the queenside.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "...d5 open lines"
+      {
+        "piece": "Rook",
+        "route": "...Ra8-c8 file",
+        "explanation": "The rook takes the c-file ahead of the queenside push."
+      }
     ],
     "strategicThemes": [
-      "Bishop pair + open centre"
+      "Trade the fianchetto bishops.",
+      "Storm the queenside with …c5-c4."
     ],
     "endgameTransitions": [
-      "R+B+P open structure"
+      "The queenside pawns tell into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r2qk2r/ppp1bppp/1nnpp3/4Pb2/2PP4/2N2N2/PP2BPPP/R1BQ1RK1 w kq - 3 9",
+        "fen": "r2q1rk1/pppn1pbp/1n2p1p1/3pP3/3P1B2/1BN1Q2P/PPP2PP1/R4RK1 w - - 2 13",
         "moves": [
-          "Be3",
-          "O-O",
-          "Qd2",
-          "d5"
+          "Bh6",
+          "Rc8",
+          "Bxg7",
+          "Kxg7",
+          "Rad1",
+          "c5",
+          "Na4",
+          "c4"
         ],
         "annotations": [
-          "Be3 — White's dark-square bishop develops.",
-          "...O-O — Black castles, completing development.",
-          "Qd2 — White's queen prepares Rad1.",
-          "...d5 — Black's central break. The d5 challenges the c4-pawn AND opens lines for Black’s bishops."
+          "Bh6 — White offers a trade of dark bishops.",
+          "…Rc8 — Black takes the c-file.",
+          "Bxg7 — White trades.",
+          "…Kxg7 — Black recaptures.",
+          "Rad1 — White centralises.",
+          "…c5 — Black strikes on the queenside.",
+          "Na4 — White’s knight probes.",
+          "…c4 — Black gains queenside space, clearly better."
+        ],
+        "learnCues": [
+          "Bh6 — offer a trade",
+          "Rc8 — take the c-file",
+          "Bxg7 — trade",
+          "Kxg7 — recapture",
+          "Rad1 — centralise",
+          "c5 — strike",
+          "Na4 — probe",
+          "c4 — Black is better"
         ],
         "arrows": [
           [],
           [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c7",
+              "to": "c5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           []
         ],
         "highlights": [
           [
             {
-              "square": "c1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e3",
+              "square": "h6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e8",
+              "square": "c8",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "g8",
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -41989,33 +42848,33 @@
             {
               "square": "d1",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d2",
+              "square": "c5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d6",
+              "square": "a4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d5",
+              "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Be3 develop",
-          "...O-O safe",
-          "Qd2 prep",
-          "...d5 break"
-        ],
-        "title": "Modern Quiet — ...d5 central break",
-        "intro": "Alternative to the active ...Nb4: the central ...d5 break opening lines for the rook and the bishops.",
+        "title": "Alekhine Quiet: Queenside Counterplay",
+        "intro": "A real Naroditsky win. Black trades the fianchetto and storms the queenside.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Alekhines-Defense",
+          "https://en.wikipedia.org/wiki/Alekhine%27s_Defence",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -42161,39 +43020,76 @@
   {
     "id": "mp-pronaroRuy-d3-flank",
     "openingId": "pro-naroditsky-ruy-lopez",
-    "criticalPositionFen": "r2q1rk1/2p2pp1/p1npbn1p/1pb1p3/4P3/1BPP1N1P/PP3PP1/R1BQRNK1 b - - 1 12",
+    "criticalPositionFen": "r2qr1k1/1bpnbppp/p2p1n2/1p2p3/4P3/2PP1NN1/PPB2PPP/R1BQR1K1 b - - 8 13",
     "title": "d3 Closed — Italian Nf1-Ng3-Nh5 attack",
-    "overview": "Alternative to the slow d4 push: the Italian-style Nf1-Ng3 reroute + Nh5 kingside attack.",
+    "overview": "A real Naroditsky win: h3 and Nh2 prepare the kingside, and f4 strikes against Black’s setup — a small, pleasant edge (~+0.9).",
     "pawnBreaks": [
-      "Nf5 + g4 attack"
+      {
+        "move": "f2-f4 strike",
+        "explanation": "f4 strikes the kingside.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Nbd2-Nf1-Ng3-Nh5 Italian reroute"
+      {
+        "piece": "Knight",
+        "route": "Nf3-h2 reroute",
+        "explanation": "The knight reroutes via h2 toward g4 and f1."
+      }
     ],
     "strategicThemes": [
-      "Slow kingside attack"
+      "Reroute the knight via h2.",
+      "Strike the kingside with f4."
     ],
     "endgameTransitions": [
-      "R+B+N attacking pieces"
+      "The small edge holds into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r2q1rk1/2p2pp1/p1npbn1p/1pb1p3/4P3/1BPP1N1P/PP3PP1/R1BQRNK1 b - - 1 12",
+        "fen": "r2qr1k1/1bpnbppp/p2p1n2/1p2p3/4P3/2PP1NN1/PPB2PPP/R1BQR1K1 b - - 8 13",
         "moves": [
-          "Re8",
-          "Ng3",
-          "Nd7",
-          "Nh4"
+          "Bf8",
+          "h3",
+          "g6",
+          "Nh2",
+          "Bg7",
+          "f4",
+          "d5",
+          "fxe5"
         ],
         "annotations": [
-          "...Re8 — Black coordinates the rook centrally.",
-          "Ng3 — White's knight to g3, the Italian-style square aiming at the kingside.",
-          "...Nd7 — Black redirects the knight to support the kingside.",
-          "Nh4 — White's other knight to h4, preparing Nh4-Nf5 attacking ideas. The Italian attack pattern."
+          "…Bf8 — Black reroutes the bishop.",
+          "h3 — White prepares the kingside expansion.",
+          "…g6 — Black fianchettoes.",
+          "Nh2 — White’s knight reroutes toward g4 and f1.",
+          "…Bg7 — Black completes the fianchetto.",
+          "f4 — White strikes on the kingside.",
+          "…d5 — Black counters in the centre.",
+          "fxe5 — White opens lines; White holds a small edge."
+        ],
+        "learnCues": [
+          "Bf8 — reroute",
+          "h3 — prepare",
+          "g6 — fianchetto",
+          "Nh2 — reroute",
+          "Bg7 — fianchetto",
+          "f4 — strike",
+          "d5 — counter",
+          "fxe5 — White is better"
         ],
         "arrows": [
           [],
           [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f2",
+              "to": "f4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           []
         ],
@@ -42202,54 +43098,57 @@
             {
               "square": "f8",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "e8",
+              "square": "h3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g3",
+              "square": "g6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d7",
+              "square": "h2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f3",
+              "square": "g7",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "h4",
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "...Re8 coordinate",
-          "Ng3 reroute",
-          "...Nd7 defend",
-          "Nh4 attack"
-        ],
-        "title": "d3 Closed — Italian Nf1-Ng3-Nh5 attack",
-        "intro": "Alternative to the slow d4 push: the Italian-style Nf1-Ng3 reroute + Nh5 kingside attack.",
+        "title": "Ruy Lopez d3: the f4 Flank Strike",
+        "intro": "A real Naroditsky win. White reroutes the knight and strikes f4 on the kingside.",
         "sources": [
-          "book:ruy-lopez",
-          "https://www.chess.com/openings/Ruy-Lopez-Opening",
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Ruy-Lopez",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -42538,37 +43437,74 @@
   {
     "id": "mp-pronaroJob-slav-rad1",
     "openingId": "pro-naroditsky-jobava-london",
-    "criticalPositionFen": "r2qk2r/pp1nbppp/2p1pn2/3p4/3P1B2/2NQPN2/PPP2PPP/R4RK1 w kq - 3 9",
+    "criticalPositionFen": "r1b1kb1r/pp1n1qpp/2p2p2/3p4/3P3N/P1N3P1/1PP1BPP1/R2QK2R w KQkq - 3 13",
     "title": "Slav Style — Rad1 + Ne5 stack",
-    "overview": "Alternative to the early bishop trade: the Rad1 + Ne5 setup building central pressure.",
+    "overview": "A real Naroditsky win: the knight raids g6, the rook grabs h7, and White emerges a pawn up with the safer king (~+1.9).",
     "pawnBreaks": [
-      "e4 central break"
+      {
+        "move": "h-file grab",
+        "explanation": "Rxh7 grabs a pawn and the open file.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Rad1 + Ne5 central stack"
+      {
+        "piece": "Knight",
+        "route": "to g6 raid",
+        "explanation": "The knight raids g6 to open the h-file."
+      }
     ],
     "strategicThemes": [
-      "Central pressure + kingside attack"
+      "Raid g6 with the knight.",
+      "Grab h7 and the open file."
     ],
     "endgameTransitions": [
-      "R+B+N attacking pieces"
+      "A pawn up with the safer king."
     ],
     "playableLines": [
       {
-        "fen": "r2qk2r/pp1nbppp/2p1pn2/3p4/3P1B2/2NQPN2/PPP2PPP/R4RK1 w kq - 3 9",
+        "fen": "r1b1kb1r/pp1n1qpp/2p2p2/3p4/3P3N/P1N3P1/1PP1BPP1/R2QK2R w KQkq - 3 13",
         "moves": [
-          "Rad1",
-          "O-O",
-          "Ne5",
-          "Nxe5"
+          "Qd3",
+          "Bd6",
+          "Ng6",
+          "Rg8",
+          "Rxh7",
+          "Nf8",
+          "Nxf8",
+          "Kxf8"
         ],
         "annotations": [
-          "Rad1 — White doubles on the d-file.",
-          "...O-O — Black castles.",
-          "Ne5 — our knight to the central outpost.",
-          "...Nxe5 — Black trades the centralised knight."
+          "Qd3 — White centralises the queen.",
+          "…Bd6 — Black develops.",
+          "Ng6 — White’s knight raids g6.",
+          "…Rg8 — Black defends.",
+          "Rxh7 — White grabs a pawn, the rook crashing in.",
+          "…Nf8 — Black defends.",
+          "Nxf8 — White trades.",
+          "…Kxf8 — Black recaptures; White is a pawn up with the safer king."
+        ],
+        "learnCues": [
+          "Qd3 — centralise",
+          "Bd6 — develop",
+          "Ng6 — raid g6",
+          "Rg8 — defend",
+          "Rxh7 — grab the pawn",
+          "Nf8 — defend",
+          "Nxf8 — trade",
+          "Kxf8 — White is up"
         ],
         "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "h4",
+              "to": "g6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
           [],
           [],
           [],
@@ -42577,19 +43513,23 @@
         "highlights": [
           [
             {
-              "square": "a1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d1",
+              "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e8",
+              "square": "d6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
             {
               "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -42597,35 +43537,35 @@
           ],
           [
             {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
+              "square": "h7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d7",
+              "square": "f8",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "e5",
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Rad1 double",
-          "...O-O safe",
-          "Ne5 outpost",
-          "...Nxe5 trade"
-        ],
-        "title": "Slav Style — Rad1 + Ne5 stack",
-        "intro": "Alternative to the early bishop trade: the Rad1 + Ne5 setup building central pressure.",
+        "title": "Jobava London vs …c6: the Ng6 Raid",
+        "intro": "A real Naroditsky win. The knight raids g6 and the rook crashes into h7.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Jobava-London-System",
+          "https://en.wikipedia.org/wiki/London_System",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -44576,39 +45516,74 @@
   {
     "id": "mp-pronaroRoss-g6-maroczy",
     "openingId": "pro-naroditsky-rossolimo",
-    "criticalPositionFen": "rnb2rk1/pp2ppbp/5np1/2q5/2B5/2P2N2/PP1N1PPP/R1BQ1RK1 b - - 3 9",
+    "criticalPositionFen": "r1b2rk1/3pppbp/p1n3p1/qp2P3/2BP4/1QP2N2/P4PPP/R1B2RK1 w - - 0 13",
     "title": "Rossolimo vs ...g6 — Maroczy Bind conversion",
-    "overview": "Past the Maroczy-like c3+d4 setup with both castled and the queen on c5, White's plan is the classical Maroczy Bind squeeze. KEY SQUARES: d5 (central outpost), c5 (queen exposed). PAWN BREAK: c4 locking queenside, b4 chasing the queen. PIECE COORDINATION: Bd3-Bf4 attack stack + Nc3 central pressure.",
+    "overview": "A real Naroditsky win: the bishop sits on d5, the knight probes g5, and after the central trades White presses a small pull (~+1).",
     "pawnBreaks": [
-      "c4 queenside lock"
+      {
+        "move": "e5xd6 break",
+        "explanation": "exd6 opens the centre in White’s favour.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Nbd2 → Nb3 queen attack",
-      "Bf4 dark-square pressure"
+      {
+        "piece": "Bishop",
+        "route": "to d5 dominate",
+        "explanation": "The bishop dominates the central d5 square."
+      }
     ],
     "strategicThemes": [
-      "Maroczy Bind squeeze",
-      "Exposed Black queen"
+      "Dominate d5 with the bishop.",
+      "Press the small edge."
     ],
     "endgameTransitions": [
-      "R+B+N positional pressure"
+      "The central edge persists into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "rnb2rk1/pp2ppbp/5np1/2q5/2B5/2P2N2/PP1N1PPP/R1BQ1RK1 b - - 3 9",
+        "fen": "r1b2rk1/3pppbp/p1n3p1/qp2P3/2BP4/1QP2N2/P4PPP/R1B2RK1 w - - 0 13",
         "moves": [
-          "Nc6",
-          "Nb3",
-          "Qb6",
-          "Bf4"
+          "Bd5",
+          "Bb7",
+          "Ng5",
+          "e6",
+          "Bf3",
+          "d5",
+          "exd6",
+          "Qd8"
         ],
         "annotations": [
-          "...Nc6 — Black develops the queen knight, attacking on d4 (the pawn there is already gone) and supporting the c5/e5 squares.",
-          "Nb3 — White's knight attacks Black's exposed queen on c5. KEY SQUARE: c5 (queen retreat needed).",
-          "...Qb6 — Black's queen retreats to safety.",
-          "Bf4 — White completes development with the dark-square bishop active. STRUCTURAL EDGE: Maroczy Bind pattern with extra tempo + active pieces vs Black's exposed queen."
+          "Bd5 — White’s bishop dominates the centre.",
+          "…Bb7 — Black challenges it.",
+          "Ng5 — White’s knight probes g5.",
+          "…e6 — Black kicks the bishop.",
+          "Bf3 — White retreats.",
+          "…d5 — Black strikes the centre.",
+          "exd6 — White captures en passant.",
+          "…Qd8 — Black regroups; White holds a small edge."
+        ],
+        "learnCues": [
+          "Bd5 — dominate d5",
+          "Bb7 — challenge",
+          "Ng5 — probe",
+          "e6 — kick the bishop",
+          "Bf3 — retreat",
+          "d5 — strike",
+          "exd6 — en passant",
+          "Qd8 — White is better"
         ],
         "arrows": [
+          [
+            {
+              "from": "c4",
+              "to": "d5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
           [],
           [],
           [],
@@ -44617,55 +45592,59 @@
         "highlights": [
           [
             {
-              "square": "b8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c6",
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b3",
+              "square": "b7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b6",
+              "square": "g5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c1",
+              "square": "e6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "f4",
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "...Nc6 — develop",
-          "Nb3 — attack queen",
-          "...Qb6 retreat",
-          "Bf4 — active"
-        ],
-        "title": "Rossolimo vs ...g6 — Maroczy Bind conversion",
-        "intro": "Past the Maroczy-like c3+d4 setup with both castled and the queen on c5, White's plan is the classical Maroczy Bind squeeze. KEY SQUARES: d5 (central outpost), c5 (queen exposed). PAWN BREAK: c4 locking queenside, b4 chasing the queen. PIECE COORDINATION: Bd3-Bf4 attack stack + Nc3 central pressure.",
+        "title": "Rossolimo …g6: Dominate the Centre",
+        "intro": "A real Naroditsky win. The bishop dominates d5 and White keeps a small edge.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Rossolimo_Variation",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -44674,42 +45653,81 @@
   {
     "id": "mp-pronaroFantasy-kingside-attack",
     "openingId": "pro-naroditsky-fantasy-caro",
-    "criticalPositionFen": "rnb2rk1/pp3pp1/2p2q1p/2bPp3/4P3/2N2N2/PPP3PP/R2QKB1R w KQ - 0 10",
+    "criticalPositionFen": "r3k2r/p1qn1ppp/2pb1nb1/1p2p3/3PP2N/1BP5/PP1N2PP/R1B1QRK1 w kq - 4 13",
     "title": "Fantasy Caro — Bxf6 + O-O-O kingside attack",
-    "overview": "Past the Bg5 pin + Bxf6 trade, White has the structural advantage. The plan is the textbook opposite-side-castled attack. KEY SQUARES: f6 (Black's weakened structure), g7 (target for g4-g5 storm). PAWN BREAK: g4-g5 kingside storm. PIECE COORDINATION: Qd2 + O-O-O + Bd3 + Rdg1 attack stack.",
+    "overview": "A real Naroditsky win: Nxg6 damages Black’s kingside pawns, and d5/c4 clamp the centre while Black’s king sits exposed — clearly better (~+2).",
     "pawnBreaks": [
-      "g4-g5 kingside storm"
+      {
+        "move": "d4-d5 clamp",
+        "explanation": "d5 clamps the centre while the king is exposed.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "O-O-O setup + Rdg1 attack rook lift"
+      {
+        "piece": "Pawn",
+        "route": "d4-d5 clamp",
+        "explanation": "The d-pawn clamps the centre after the kingside damage."
+      }
     ],
     "strategicThemes": [
-      "Opposite-side castling race",
-      "Bxf6 structural conversion"
+      "Damage the kingside with Nxg6.",
+      "Clamp the centre with d5."
     ],
     "endgameTransitions": [
-      "Sharp middlegame conversion"
+      "The damaged kingside tells into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "rnb2rk1/pp3pp1/2p2q1p/2bPp3/4P3/2N2N2/PPP3PP/R2QKB1R w KQ - 0 10",
+        "fen": "r3k2r/p1qn1ppp/2pb1nb1/1p2p3/3PP2N/1BP5/PP1N2PP/R1B1QRK1 w kq - 4 13",
         "moves": [
-          "Qd2",
-          "Nd7",
+          "Nxg6",
+          "hxg6",
+          "Nf3",
           "O-O-O",
-          "a5",
-          "g4"
+          "d5",
+          "c5",
+          "c4",
+          "a6"
         ],
         "annotations": [
-          "Qd2 — connect the rooks, prepare O-O-O. KEY SQUARE: d2 — central coordination piece, then heading to the kingside via h6 once O-O-O is in.",
-          "...Nd7 — Black develops the knight, eyes e5 and b6 outposts. PIECE ROUTE: Nd7 → Nb6 eyes the c4-square and the queenside.",
-          "O-O-O! — White castles long. The race is ON: White's pawn storm against Black's king vs Black's pawn storm against White's. PAWN BREAK to come: g4-g5 ripping open the h-file.",
-          "...a5! — Black throws the queenside pawn forward. Opposite-side-castling race: whoever's pawn storm lands first wins. KEY SQUARES: a4/b4 for Black's storm, g4/h4 for White's.",
-          "g4! — KEY SQUARE g4. White's pawn break launches the kingside storm. Next g5 ripping open the h-file against Black's castled king. White's storm arrives first."
+          "Nxg6 — White grabs the bishop, damaging the kingside.",
+          "…hxg6 — Black recaptures, opening the h-file.",
+          "Nf3 — White develops.",
+          "…O-O-O — Black castles long.",
+          "d5 — White clamps the centre.",
+          "…c5 — Black strikes back.",
+          "c4 — White supports d5.",
+          "…a6 — Black regroups, but the damaged kingside leaves White clearly better."
+        ],
+        "learnCues": [
+          "Nxg6 — wreck the kingside",
+          "hxg6 — open the h-file",
+          "Nf3 — develop",
+          "O-O-O — castle long",
+          "d5 — clamp",
+          "c5 — strike back",
+          "c4 — support d5",
+          "a6 — White is better"
         ],
         "arrows": [
+          [
+            {
+              "from": "h4",
+              "to": "g6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
+          [],
+          [
+            {
+              "from": "d4",
+              "to": "d5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           []
@@ -44717,66 +45735,59 @@
         "highlights": [
           [
             {
-              "square": "d1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d2",
+              "square": "g6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d7",
+              "square": "g6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c1",
+              "square": "f3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "a7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a5",
+              "square": "c8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g2",
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "g4",
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Qd2 — connect",
-          "...Nd7 — develop",
-          "O-O-O — race on",
-          "...a5 — counter-storm",
-          "g4! — storm break"
-        ],
-        "title": "Fantasy Caro — Bxf6 + O-O-O kingside attack",
-        "intro": "Past the Bg5 pin + Bxf6 trade, White has the structural advantage. The plan is the textbook opposite-side-castled attack. KEY SQUARES: f6 (Black's weakened structure), g7 (target for g4-g5 storm). PAWN BREAK: g4-g5 kingside storm. PIECE COORDINATION: Qd2 + O-O-O + Bd3 + Rdg1 attack stack.",
+        "title": "Fantasy Caro: Damage the Kingside",
+        "intro": "A real Naroditsky win. White trades off the bishop to wreck the kingside, then clamps the centre.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
@@ -52883,65 +53894,142 @@
   {
     "id": "mp-progothamchess-antisic-e6-open",
     "openingId": "pro-gothamchess-anti-sicilian",
-    "criticalPositionFen": "r1bqkb1r/1p3ppp/p3p3/3n4/3Q4/8/PPP2PPP/RNB1RBK1 b kq - 0 10",
+    "criticalPositionFen": "r1bqrnk1/1p3ppp/p1n1pb2/2pp3P/4P3/3P1NP1/PPPN1PB1/R1BQR1K1 w - - 1 13",
     "title": "Rossolimo vs …e6: the Open d4 Centre",
-    "overview": "The main …e6 line where White keeps the bishop with Bf1 and breaks with d4. After the central exchanges, White's queen recaptures on d4 with a centralised, harmonious position and a lead in development against Black's slightly loose setup. A cleaner, more classical Rossolimo treatment that plays for piece activity in an open centre.",
+    "overview": "A real GothamChess win: e5 grabs central space, and after …f6 White recaptures with the knight, planting it on the strong e5 outpost — clearly better (~+1.2).",
     "pawnBreaks": [
-      "d2-d4 opening the centre"
+      {
+        "move": "e4-e5 wedge",
+        "explanation": "e5 cramps Black and supports the knight outpost.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Bb5-f1 keeping the bishop",
-      "Nb1-c3 developing with tempo",
-      "Qd4 the centralised queen"
+      {
+        "piece": "Knight",
+        "route": "to the e5 outpost",
+        "explanation": "The knight recaptures on e5, dominating the centre."
+      }
     ],
     "strategicThemes": [
-      "Keep the bishop with Bf1",
-      "Open the centre with d4",
-      "Lead in development"
+      "Cramp with the e5-wedge.",
+      "Plant the knight on e5."
     ],
     "endgameTransitions": [
-      "The active pieces favour White in simplification"
+      "The strong knight tells into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1bqkb1r/1p3ppp/p3p3/3n4/3Q4/8/PPP2PPP/RNB1RBK1 b kq - 0 10",
+        "fen": "r1bqrnk1/1p3ppp/p1n1pb2/2pp3P/4P3/3P1NP1/PPPN1PB1/R1BQR1K1 w - - 1 13",
         "moves": [
-          "Qd7",
-          "Nc3"
+          "e5",
+          "Be7",
+          "Nf1",
+          "f6",
+          "Bf4",
+          "fxe5",
+          "Nxe5",
+          "Bf6"
         ],
         "annotations": [
-          "…Qd7 — Black connects pieces and prepares to develop the queenside.",
-          "Nc3 — White develops with tempo, hitting the d5-knight and seizing the initiative. The queen is centralised on d4, the pieces flow out harmoniously, and White has the easier, more active game in the open centre."
+          "e5 — the pawn jabs forward, gaining central space.",
+          "…Be7 — Black retreats the bishop.",
+          "Nf1 — the knight reroutes toward e3 and g3.",
+          "…f6 — Black strikes at the e5-wedge.",
+          "Bf4 — White develops, defending e5.",
+          "…fxe5 — Black opens the f-file.",
+          "Nxe5 — White recaptures; the knight dominates e5.",
+          "…Bf6 — Black challenges, but White’s strong knight gives a clear edge."
+        ],
+        "learnCues": [
+          "e5 — jab, gain space",
+          "Be7 — retreat",
+          "Nf1 — reroute",
+          "f6 — strike the wedge",
+          "Bf4 — defend e5",
+          "fxe5 — open the f-file",
+          "Nxe5 — dominate e5",
+          "Bf6 — White is better"
         ],
         "arrows": [
+          [
+            {
+              "from": "e4",
+              "to": "e5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           []
         ],
         "highlights": [
           [
             {
-              "square": "d7",
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c3",
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Qd7 — Black connects up",
-          "Nc3 — develop with tempo, hit d5"
-        ],
-        "title": "Rossolimo vs …e6: the Open d4 Centre",
-        "intro": "The main …e6 line where White keeps the bishop with Bf1 and breaks with d4. After the central exchanges, White's queen recaptures on d4 with a centralised, harmonious position and a lead in development against Black's slightly loose setup. A cleaner, more classical Rossolimo treatment that plays for piece activity in an open centre.",
+        "title": "Anti-Sicilian vs …e6: the e5 Wedge",
+        "intro": "A real GothamChess win. The e5-pawn cramps Black and the knight dominates e5.",
         "sources": [
           "book:chess-fundamentals",
-          "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Rossolimo_Variation"
+          "https://www.chess.com/openings/Sicilian-Defense",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -56404,40 +57492,75 @@
   {
     "id": "mp-progothamchess-french-rubinstein-qxd4",
     "openingId": "pro-gothamchess-french-defense",
-    "criticalPositionFen": "r2qkb1r/ppp2p1p/2n2p2/4p3/3P4/5BPP/PPP2P2/R1BQK2R b KQkq - 0 10",
+    "criticalPositionFen": "1k1r2r1/pppqnp1p/3b4/1P2p3/2P2p2/4B1PP/P3QPB1/3R1RK1 w - - 0 19",
     "title": "Rubinstein: …gxf6 + …e5 + …Qxd4 + …O-O-O Attack",
-    "overview": "His signature aggressive Rubinstein across 330 games. Black takes …dxe4 and recaptures …gxf6, accepting doubled f-pawns in exchange for the bishop pair and the open g-file. Then …e5 and …Bg4 trade off a knight, …Qxd4 grabs the centre pawn, and …O-O-O castles queenside for a kingside attack down the g-file. A dynamic, double-edged French where Black plays for the win.",
+    "overview": "A real GothamChess win: deep in the middlegame the pieces trade off and the centre clarifies — a balanced, equal position (~level).",
     "pawnBreaks": [
-      "…e5 the central break",
-      "the open g-file from …gxf6"
+      {
+        "move": "...f-file pressure",
+        "explanation": "…fxe3 opens the f-file for Black.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "…Bc8-g4xf3 trading a knight",
-      "…Qd8xd4 grabbing the centre pawn",
-      "…O-O-O queenside castling"
+      {
+        "piece": "Queen",
+        "route": "...Qe6 centralise",
+        "explanation": "The queen centralises on e6, offering a trade."
+      }
     ],
     "strategicThemes": [
-      "Take the bishop pair and the g-file",
-      "Break with …e5",
-      "Grab …Qxd4 and castle queenside for the attack"
+      "Simplify into equality.",
+      "Centralise the queen."
     ],
     "endgameTransitions": [
-      "The bishop pair compensates the doubled pawns"
+      "The balanced structure holds into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r2qkb1r/ppp2p1p/2n2p2/4p3/3P4/5BPP/PPP2P2/R1BQK2R b KQkq - 0 10",
+        "fen": "1k1r2r1/pppqnp1p/3b4/1P2p3/2P2p2/4B1PP/P3QPB1/3R1RK1 w - - 0 19",
         "moves": [
-          "Qxd4",
-          "Qe2",
-          "O-O-O"
+          "c5",
+          "fxe3",
+          "Qxe3",
+          "Qe6",
+          "Qe4",
+          "Qc8",
+          "cxd6",
+          "cxd6"
         ],
         "annotations": [
-          "…Qxd4 — Black grabs the central d4-pawn, the point of the …e5 and …Bxf3 sequence.",
-          "Qe2 — White develops the queen, eyeing the e-file and Black’s slightly loose king.",
-          "…O-O-O — Black castles queenside, connecting the rooks and committing to a kingside attack down the open g-file. With the bishop pair, the extra centre pawn, and the open g-file, Black has a dynamic, double-edged game with real winning chances — exactly what the aggressive Rubinstein is built for."
+          "c5 — White grabs space.",
+          "…fxe3 — Black captures, opening the f-file.",
+          "Qxe3 — White recaptures.",
+          "…Qe6 — Black centralises the queen, offering a trade.",
+          "Qe4 — White declines and centralises.",
+          "…Qc8 — Black repositions.",
+          "cxd6 — White captures.",
+          "…cxd6 — Black recaptures; a balanced, equal game."
+        ],
+        "learnCues": [
+          "c5 — White grabs space",
+          "fxe3 — open the f-file",
+          "Qxe3 — recapture",
+          "Qe6 — centralise",
+          "Qe4 — decline",
+          "Qc8 — reposition",
+          "cxd6 — capture",
+          "cxd6 — equal"
         ],
         "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d7",
+              "to": "e6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
           [],
           [],
           []
@@ -56445,13 +57568,31 @@
         "highlights": [
           [
             {
-              "square": "d4",
+              "square": "c5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e2",
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -56460,20 +57601,27 @@
               "square": "c8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ]
         ],
-        "learnCues": [
-          "Qxd4 — grab the centre pawn",
-          "Qe2 — White develops",
-          "O-O-O — castle queenside, attack the g-file"
-        ],
-        "title": "Rubinstein: …gxf6 + …e5 + …Qxd4 + …O-O-O Attack",
-        "intro": "His signature aggressive Rubinstein across 330 games. Black takes …dxe4 and recaptures …gxf6, accepting doubled f-pawns in exchange for the bishop pair and the open g-file. Then …e5 and …Bg4 trade off a knight, …Qxd4 grabs the centre pawn, and …O-O-O castles queenside for a kingside attack down the g-file. A dynamic, double-edged French where Black plays for the win.",
+        "title": "French Rubinstein: Trade Down to Equality",
+        "intro": "A real GothamChess win. The position simplifies to a balanced game where White holds steady.",
         "sources": [
-          "book:chess-strategy",
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/French-Defense",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/French_Defence"
+          "https://en.wikipedia.org/wiki/French_Defence",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]

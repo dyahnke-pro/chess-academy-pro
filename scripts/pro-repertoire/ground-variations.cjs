@@ -69,8 +69,10 @@ function movesFromPgn(pgn) {
 }
 function consider(sans, meta) {
   if (sans.length < 24) return;
+  const CAP = 46; // no match/anchor needs beyond ~ply 44; cap replay for speed
   const c = new Chess(); const fens = [''];
-  for (let i = 0; i < sans.length; i++) { let r; try { r = c.move(sans[i]); } catch { break; } if (!r) break; fens.push(c.fen()); }
+  const stop = Math.min(sans.length, CAP);
+  for (let i = 0; i < stop; i++) { let r; try { r = c.move(sans[i]); } catch { break; } if (!r) break; fens.push(c.fen()); }
   const len = fens.length - 1;
   for (let P = 5; P <= len; P++) {
     const k = fen4(fens[P]);
@@ -101,7 +103,7 @@ for (const { dir, re } of ARCHIVES) {
       let game; try { game = JSON.parse(line); } catch { continue; }
       if (!game.pgn) continue;
       scanned++;
-      if (scanned % 30000 === 0) console.error(`  …${scanned} games, grounded ${grounded.size}/${want.size ? Object.keys(ENTRY).length + Object.keys(WALKBACK).length : 0}`);
+      if (scanned % 20000 === 0) { console.error(`  …${scanned} games, grounded ${grounded.size}/${Object.keys(ENTRY).length + Object.keys(WALKBACK).length}`); fs.writeFileSync('audit-reports/grounded-variations.json', JSON.stringify(result, null, 2)); fs.writeFileSync('audit-reports/grounded-variations-candidates.json', JSON.stringify(candidates)); }
       const w = (game.pgn.match(/\[White "([^"]+)"/) || [])[1] || '?';
       const res = (game.pgn.match(/\[Result "([^"]+)"/) || [])[1] || '?';
       const studentWhite = re.test(w);
