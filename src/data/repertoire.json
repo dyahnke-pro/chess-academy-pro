@@ -1461,12 +1461,12 @@
     "trapLines": [
       {
         "name": "Nxf7 Refutation",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 Ng4 O-O Qh4 h3 Nxf2 Rxf2 Bxf2+ Kh1",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 Ng4 O-O Qh4 h3 Nxf2 Rxf2 Bxf2+ Kh1 Bxh3",
         "explanation": "If White plays the rare Nxc6 line instead of the main 3.Nxe5, Black can build a devastating kingside attack. The ...Bc5 and ...Ng4 combination targets f2 with lethal force, and after ...Nxf2 Rxf2 Bxf2+, the king is exposed. The queen invades to e1 with check, and Black's pieces coordinate for a winning attack. White's extra pawn is irrelevant when the king is under constant fire from Black's bishops and queen."
       },
       {
         "name": "Wrong Move Order Punishment",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nxe4 Qe2 Qe7 Qxe4 d6 d4 dxe5 dxe5 Nc6 Bf4 Qb4+ Nc3 Qxb2",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nxe4 Qe2 Qe7 Qxe4 d6 d4 dxe5 dxe5 Nc6 Bf4 Qb4+ Nc3 Qxb2 Nd5 Qxa1+",
         "explanation": "If Black plays the wrong order with 3...Nxe4 instead of 3...d6, White gets Qe2 pinning the knight against the king. However, Black can still salvage the position by heading for the endgame with ...Qe7. After the queen trade and pawn exchanges, the resulting endgame is tricky but playable. The key is not to panic at the Qe2 pin but to trade queens and rely on the structural balance to achieve a drawable position."
       },
       {
@@ -2511,7 +2511,7 @@
     "trapLines": [
       {
         "name": "Petrosian Counterblow",
-        "pgn": "d4 Nf6 c4 e6 Nf3 b6 a3 Bb7 Nc3 d5 cxd5 Nxd5 Qc2 Be7 e4 Nxc3 bxc3 O-O Bd3 c5 O-O Qc7 Qe2 Nc6 dxc5 bxc5 e5 Nd4 Nxd4 cxd4 Bb5 dxc3 Bf4 Qc5",
+        "pgn": "d4 Nf6 c4 e6 Nf3 b6 a3 Bb7 Nc3 d5 cxd5 Nxd5 Qc2 Be7 e4 Nxc3 bxc3 O-O Bd3 c5 O-O Qc7 Qe2 Nc6 dxc5 bxc5 e5 Nd4 Nxd4 cxd4 Bb5 dxc3 Bf4 Qc5 Rfd1 Rfd8 Ba4 Rxd1+",
         "explanation": "In the Petrosian system, Black's thematic ...c5 counterblow undermines White's center at the critical moment. After the exchanges, Black's ...Nd4 is a devastating centralization that exploits White's loose structure. The c3 pawn becomes a powerful passed pawn that diverts White's pieces from the attack. Black's queen and bishops coordinate to create threats on both flanks while the passed pawn marches forward. This line demonstrates why White must be careful not to overextend the e4-e5 push."
       }
     ],
@@ -3060,12 +3060,12 @@
     "trapLines": [
       {
         "name": "Anderssen Attack",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Bc5 d4 exd4 O-O d6 cxd4 Bb6 Nc3 Bg4 Qa4 Bd7 Qb3 Na5 Bxf7+ Kf8 Qa3 Bxd4 Nxd4 Qf6 Be3 Ne7 Rad1 c5 Be6",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Bc5 d4 exd4 O-O d6 cxd4 Bb6 Nc3 Bg4 Qa4 Bd7 Qb3 Na5 Bxf7+ Kf8 Qa3 Bxd4 Nxd4 Qf6 Be3 Ne7 Rad1 c5 Be6 Bxe6 Nxe6+ Qxe6 Qxa5 Kf7 Nb5 Rhd8 Nc7 Qxe4 Nxa8",
         "explanation": "The Anderssen Attack ramps up pressure with Nc3, Qa4, and Qb3 creating dual threats against f7 and b7. When Black tries to defend with Bd7 and Na5, the devastating Bxf7+ sacrifice rips open the king position. After Kf8, the queen retreats to a3 pinning the d6 pawn to the king, and every piece joins the attack. Be6 at the end cuts off Black's coordination entirely, leaving the king stranded on f8 with no counterplay."
       },
       {
         "name": "Knight Fork Counter",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d3 Qb3 Qf6 e5 Qg6 Bxd3 Nge7 Ba3 O-O Nbd2 Bb6 Rae1 d6 exd6 cxd6 Ne4 Be6 Qd1 d5 Neg5 Bd7 Bd6 Rfe8 Bxe7 Rxe7 Rxe7 Nxe7",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d3 Qb3 Qf6 e5 Qg6 Bxd3 Nge7 Ba3 O-O Nbd2 Bb6 Rae1 d6 exd6 cxd6 Ne4 Be6 Qd1 d5 Neg5 Bd7 Bd6 Rfe8 Bxe7 Rxe7 Rxe7 Nxe7 Bxg6",
         "explanation": "When Black tries the tricky ...d3 counter-gambit to disrupt White's center, White calmly recaptures with the bishop and develops with tempo via Ba3 and Nbd2. The knight reroutes to e4 establishing a powerful outpost, then jumps to g5 creating dual threats. After Bd6 seizes the dark squares and forces the exchange of Black's rook, White emerges with superior piece activity and a lasting initiative against Black's weakened structure."
       }
     ],
