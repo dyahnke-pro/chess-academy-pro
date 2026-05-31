@@ -6467,7 +6467,9 @@
           "e5",
           "Qg6",
           "Nxc3",
-          "Nge7"
+          "Nge7",
+          "Ba3",
+          "O-O"
         ],
         "annotations": [
           "Qb3 — the queen joins the battery aimed at f7.",
@@ -6475,7 +6477,9 @@
           "e5 — White gains space and hits the queen.",
           "…Qg6 — the queen is shoved to g6.",
           "Nxc3 — White regains a pawn, fully developed.",
-          "…Nge7 — Black tries to untangle."
+          "…Nge7 — Black tries to untangle.",
+          "Ba3! The bishop slices onto the a3-f8 diagonal, freezing Black's king in the centre by stopping it from castling — the Compromised Defence's classic punishment for grabbing two pawns.",
+          "Black castles anyway, returning material to escape — but White has emerged from the Compromised Defence with the initiative and a raging attack for the gambit pawns, every piece pointed at the black king."
         ],
         "sources": [
           "book:evans-gambit",
@@ -6488,7 +6492,9 @@
           "e5 — gain space, hit the queen",
           "Qg6 — shoved away",
           "Nxc3 — regain a pawn",
-          "Nge7 — try to untangle"
+          "Nge7 — try to untangle",
+          "Ba3 — freeze the king, hit f8",
+          "O-O — Black bails out under fire"
         ],
         "arrows": [
           [],
@@ -6499,6 +6505,8 @@
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
+          [],
+          [],
           [],
           [],
           [],
@@ -6568,6 +6576,22 @@
               "square": "e7",
               "color": "rgba(255, 165, 0, 0.55)"
             },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
             {
               "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -12812,13 +12836,21 @@
           "Nd2",
           "O-O",
           "Rb1",
-          "b6"
+          "b6",
+          "d5",
+          "Ne7",
+          "Qc2",
+          "g6"
         ],
         "annotations": [
           "Nd2 reroutes toward c4 and the blockade.",
           "…O-O completes development behind the clamp.",
           "Rb1 eyes the b-file.",
-          "…b6 supports …c5/…a5 and keeps the c4-pawn fixed as a permanent target."
+          "…b6 supports …c5/…a5 and keeps the c4-pawn fixed as a permanent target.",
+          "White closes the centre with d5, hoping to free the light-squared bishop — but this fixes the pawn chain and hands Black clear targets on the dark squares.",
+          "…Ne7 reroutes the knight toward g6 and f5, heading for the holes in White's camp while the doubled c-pawns stay fixed and weak.",
+          "White repositions the queen to c2.",
+          "…g6 prepares …Ng6 and …f5, completing the Hübner blueprint: blockade the doubled c-pawns, manoeuvre against them, and the structural damage White accepted becomes the decisive long-term factor."
         ],
         "title": "Nimzo Hübner: Blockade the Doubled Pawns",
         "arrows": [
@@ -12829,6 +12861,10 @@
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
+          [],
+          [],
+          [],
+          [],
           [],
           [],
           []
@@ -12889,6 +12925,30 @@
               "square": "c4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ]
         ],
         "sources": [
@@ -12900,7 +12960,11 @@
           "Nd2 — reroute toward c4",
           "O-O — complete behind the clamp",
           "Rb1 — eye the b-file",
-          "b6 — keep c4 fixed as a target"
+          "b6 — keep c4 fixed as a target",
+          "d5 — White closes the centre",
+          "…Ne7 — reroute toward f5",
+          "Qc2 — White regroups",
+          "…g6 — prepare …Ng6/…f5 blockade"
         ]
       }
     ]
