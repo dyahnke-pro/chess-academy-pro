@@ -133,7 +133,9 @@ import { SCOTCH_GAMBIT_VARIATION_LESSONS } from './scotchGambitVariations';
 import { VIENNA_GAMBIT_LESSON } from './viennaGambit';
 import { VIENNA_GAMBIT_VARIATION_LESSONS } from './viennaGambitVariations';
 import { DANISH_GAMBIT_LESSON } from './danishGambit';
+import { DANISH_GAMBIT_VARIATION_LESSONS } from './danishGambitVariations';
 import { MARSHALL_ATTACK_LESSON } from './marshallAttack';
+import { MARSHALL_ATTACK_VARIATION_LESSONS } from './marshallAttackVariations';
 import { STAFFORD_GAMBIT_LESSON } from './staffordGambit';
 import { ENGLUND_GAMBIT_LESSON } from './englundGambit';
 import { ALBIN_COUNTERGAMBIT_LESSON } from './albinCountergambit';
@@ -293,6 +295,8 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...SMITH_MORRA_GAMBIT_VARIATION_LESSONS,
   ...SCOTCH_GAMBIT_VARIATION_LESSONS,
   ...VIENNA_GAMBIT_VARIATION_LESSONS,
+  ...DANISH_GAMBIT_VARIATION_LESSONS,
+  ...MARSHALL_ATTACK_VARIATION_LESSONS,
   ...ALBIN_COUNTERGAMBIT_VARIATION_LESSONS,
   ...SCHLIEMANN_DEFENCE_VARIATION_LESSONS,
   ...QUEENS_GAMBIT_VARIATION_LESSONS,

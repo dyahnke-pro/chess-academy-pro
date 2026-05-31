@@ -143,29 +143,14 @@
     ],
     "variations": [
       {
-        "name": "Danish Gambit: Full Accepted with e5 Push",
-        "pgn": "e4 e5 d4 exd4 c3 dxc3 Bc4 cxb2 Bxb2 Nf6 e5",
-        "explanation": "Black takes both pawns and tries to hold on. After 4...cxb2 5.Bxb2 + Nf6, White plays e5 to kick the knight away from its defensive post. White's bishops on c4 + b2 are both pointed at Black's kingside — the position is the textbook Danish attacking setup."
-      },
-      {
-        "name": "Danish Gambit: d5 Return (Schlechter Defense)",
-        "pgn": "e4 e5 d4 exd4 c3 dxc3 Bc4 cxb2 Bxb2 d5 Bxd5 Nf6 Bxf7+ Kxf7 Qxd8 Bb4+ Qd2 Bxd2+ Nxd2",
-        "explanation": "The strongest defense — Black returns a pawn with d5 to break up White's attack. After the long forced exchange Bxd5 + Bxf7+ + Qxd8 + Bb4+ trades, the resulting position has Black with the bishop pair and king exposed but full development. Roughly balanced."
-      },
-      {
-        "name": "Danish Gambit: One Pawn Accepted with d5",
-        "pgn": "e4 e5 d4 exd4 c3 d5 exd5 Qxd5 cxd4 Nc6 Nf3 Bb4+",
-        "explanation": "Black takes one pawn but counters with d5 instead of dxc3. After exd5 Qxd5 cxd4, White has an isolated d-pawn but active pieces; the Bb4+ check forces a defensive decision before White can complete development."
-      },
-      {
-        "name": "Danish Gambit: Bb4+ Intermezzo",
-        "pgn": "e4 e5 d4 exd4 c3 dxc3 Bc4 cxb2 Bxb2",
-        "explanation": "The classic Danish Gambit setup — both pawns sacrificed for the b2-bishop on the long diagonal plus the c4-bishop targeting f7. The Bb4+ intermezzo (after this position) is one of Black's main attempts to disrupt White's coordination."
-      },
-      {
-        "name": "Danish Gambit: Lindehn Continuation",
-        "pgn": "e4 e5 d4 exd4 c3 dxc3 Bc4 cxb2 Bxb2",
-        "explanation": "Same starting position as the main Danish Gambit accepted. The Lindehn approach features a slower buildup with Qb3 + e5 — playing for the long-term initiative rather than immediate sacrificial blows."
+        "name": "Schlechter Defence (…Nc6 & …Bb4)",
+        "pgn": "e4 e5 d4 exd4 c3 dxc3 Nxc3 Nc6 Bc4 Bb4 Nf3 d6 O-O Bxc3 bxc3 Nf6 Bg5 O-O Re1 Bg4",
+        "explanation": "Black declines the second pawn with …Nc6/…Bb4; White keeps a one-pawn gambit with the bishop pair, open lines and full compensation.",
+        "sources": [
+          "concept:pos-initiative",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Danish_Gambit"
+        ]
       }
     ],
     "trapLines": [],
@@ -337,53 +322,13 @@
     ],
     "variations": [
       {
-        "name": "Marshall Attack: Classical Main Line",
-        "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Be3 Bg4 Qd3 Rae8 Nd2 Re6 a4 Qh5 axb5",
-        "explanation": "The classical main line where Black builds the attack step by step. After Qh4 + g3 Qh3 the queen settles on h3; the Rae8 + Re6 rook lift is the key Marshall motif — every piece coordinates toward White's king while White's a4 + axb5 try to generate counterplay on the queenside.",
+        "name": "d4 Decline (White avoids the gambit)",
+        "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 d4 exd4 e5 Ne4",
+        "explanation": "White declines with 9.d4 rather than grabbing on d5; Black equalises easily with …exd4 and the …Ne4 outpost — none of the gambit's risk, full equality.",
         "sources": [
-          "book:ruy-lopez",
-          "concept:pos-center",
-          "https://en.wikipedia.org/wiki/Ruy_Lopez"
-        ]
-      },
-      {
-        "name": "Marshall Attack: Bf5 Modern Setup",
-        "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Bf5",
-        "explanation": "A more modern approach where Black develops the bishop to f5 before committing the queen. This is considered more precise by theory, as it avoids some defensive resources. The bishop on f5 controls d3 and supports the upcoming Re8 + rook-lift attack.",
-        "sources": [
-          "book:ruy-lopez",
-          "concept:pos-center",
-          "https://en.wikipedia.org/wiki/Ruy_Lopez"
-        ]
-      },
-      {
-        "name": "Marshall Attack: Re6 Rook Lift",
-        "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Qf3 Bg4 Qg2",
-        "explanation": "When White plays Qf3 to challenge the queen, Black has Bg4 + Qg2 — even trading queens, the rook lift Re8-Re2 invades the second rank. Black's piece activity creates an unpleasant endgame for White to defend despite the trades.",
-        "sources": [
-          "book:ruy-lopez",
-          "concept:pos-center",
-          "https://en.wikipedia.org/wiki/Ruy_Lopez"
-        ]
-      },
-      {
-        "name": "Marshall Attack: d5-d4 Pawn Storm",
-        "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re2",
-        "explanation": "After Re2 (a more passive defense by White), Black still has the typical Marshall plan of Bd6 + Qh4 + Bf5/Bg4 building toward the kingside. The f5-f4 pawn storm idea later in the game completely destroys White's kingside pawn cover.",
-        "sources": [
-          "book:ruy-lopez",
-          "concept:pos-center",
-          "https://en.wikipedia.org/wiki/Ruy_Lopez"
-        ]
-      },
-      {
-        "name": "Marshall Attack: Spassky Variation",
-        "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Re4",
-        "explanation": "Named after Spassky's brilliant games. The Re4 defense places the rook actively to block the attack, but Black responds with Bf5 to attack the rook — shifting the bishop to gain time and continuing the kingside pressure.",
-        "sources": [
-          "book:ruy-lopez",
-          "concept:pos-center",
-          "https://en.wikipedia.org/wiki/Ruy_Lopez"
+          "concept:pos-initiative",
+          "concept:tac-sacrifice",
+          "https://en.wikipedia.org/wiki/Marshall_Attack"
         ]
       }
     ],
