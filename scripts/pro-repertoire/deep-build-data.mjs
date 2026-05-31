@@ -237,6 +237,43 @@ const OPENINGS = {
       'd6':       { label: '1...d6 (196 games)',     prefix: ['b3','d6','Bb2'] },
     },
   },
+  'pirc-modern': {
+    color: 'black',
+    studentUsername: 'Hikaru',
+    variations: {
+      'main-be3':   { label: 'vs Be3 + Qd2 (150-style)', prefix: ['e4','g6','d4','Bg7','Nc3','a6','Be3'] },
+      'nf3':        { label: 'vs Nf3 Classical',         prefix: ['e4','g6','d4','Bg7','Nf3'] },
+      'nc3-c6':     { label: '...c6 setup',              prefix: ['e4','g6','d4','Bg7','Nc3','c6'] },
+      'austrian-f4': { label: 'vs Austrian f4',          prefix: ['e4','g6','d4','Bg7','Nc3','a6','f4'] },
+    },
+  },
+  'hikaru-reti': {
+    color: 'white',
+    studentUsername: 'Hikaru',
+    variations: {
+      'kia-d4':   { label: 'Réti into d4/b3 system', prefix: ['Nf3','Nf6','b3','g6','Bb2'] },
+      'vs-d5':    { label: 'vs ...d5',               prefix: ['Nf3','d5','b3'] },
+      'vs-c5':    { label: 'vs ...c5',               prefix: ['Nf3','c5','b3'] },
+    },
+  },
+  'hikaru-closed-sicilian': {
+    color: 'white',
+    studentUsername: 'Hikaru',
+    variations: {
+      'grand-prix-f4': { label: 'Grand Prix f4 + f5', prefix: ['e4','c5','Nc3','Nc6','f4'] },
+      'g6-line':       { label: 'vs ...g6',            prefix: ['e4','c5','Nc3','Nc6','f4','g6'] },
+      'e6-line':       { label: 'vs ...e6',            prefix: ['e4','c5','Nc3','Nc6','f4','e6'] },
+    },
+  },
+  'hikaru-caro-kann': {
+    color: 'black',
+    studentUsername: 'Hikaru',
+    variations: {
+      'advance-bf5': { label: 'vs Advance 3.e5 Bf5', prefix: ['e4','c6','d4','d5','e5','Bf5'] },
+      'exchange':    { label: 'vs Exchange/Panov',    prefix: ['e4','c6','d4','d5','exd5'] },
+      'two-knights': { label: 'vs Two Knights',       prefix: ['e4','c6','Nc3'] },
+    },
+  },
 };
 
 const opening = OPENINGS[OPENING_ID];

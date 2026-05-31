@@ -239,6 +239,34 @@ const OPENINGS = {
     minPrefix: ['e4', 'g6'],
     maxDepth: 80,
   },
+  'hikaru-reti': {
+    name: 'Réti / King\'s Indian Attack',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['Nf3'],
+    maxDepth: 80,
+  },
+  'hikaru-closed-sicilian': {
+    name: 'Closed / Grand Prix Sicilian',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'c5', 'Nc3'],
+    maxDepth: 80,
+  },
+  'hikaru-d3': {
+    name: 'King\'s Pawn d3 (Mengarini)',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'e5', 'd3'],
+    maxDepth: 80,
+  },
+  'hikaru-caro-kann': {
+    name: 'Caro-Kann (Black)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['e4', 'c6'],
+    maxDepth: 80,
+  },
 };
 
 const cfg = OPENINGS[OPENING_ID];
