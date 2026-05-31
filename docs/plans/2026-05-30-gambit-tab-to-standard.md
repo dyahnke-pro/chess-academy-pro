@@ -172,6 +172,24 @@ pre-masterclass surface; the good builds sit one id away on the Masterclass tab.
              opening (5 Group A + 7 Group B) resolves a curated LessonScript. No legacy
              auto-narration left on the tab. G9.3 Gate A satisfied tab-wide.**
        - [ ] per-variation LessonScripts (the data-derived tab sets) — the deeper polish layer.
+       - [x] Pitfalls: engine-tested the obvious candidate student-mistakes (Scotch Ng5,
+             Vienna exd5, Smith-Morra move-order) — NONE are real mistakes (gaps < 80cp;
+             Ng5 is fine). Per "empty > invented", SKIP fabricated pitfalls. Real pitfalls
+             for these sharp gambits need deeper theory; revisit only with verified ones.
+       - [x] MG plans verified SOUND + content-rich (Scotch Max Lange +42, all ≥ −1.1
+             comp); 4 orphaned dupe-id plans removed (G8). criticalPositionFen=startpos is
+             intentional (full-line plans from move 1, internally consistent — not a defect).
+
+## STATE (2026-05-31): CORE 5-CRITERIA BUILD COMPLETE + GATE-GREEN
+All five of David's first-message criteria are met across all 12 gambit-tab openings,
+4458 content-gate tests green, ~38 commits on branch, soundness directive satisfied
+(nothing teaches a losing position). REMAINING = masterclass polish, a fresh-session phase:
+- **Per-variation lessons** (the big one): for each opening, replace `gambits.json`
+  variations[] with the STEP-2/3 data-derived tab set (sound pgns, soundness-swept),
+  then author `<openingId>::<variationName>` VARIATION_LESSONS (recipe = smithMorraGambit.ts),
+  register the `*Variations.ts` file in index.ts. ~28 lessons.
+- SHIP: `npm run ship-check` → land on `main` → 3-instrument prod audit (Vercel free-tier
+  daily cap currently blocking preview deploys; batch the `main` deploy when it clears).
              - [ ] stafford-gambit / englund-gambit: lesson = the WINNING trap line already in
                    gambits.json (Stafford h3→Bxf2+ queen win; Englund Qb4+ raid). Use `kind:'roadmap'`
                    if <20 plies (sharp trap resolves early — like the Budapest Adler/Fajarowicz subs).
