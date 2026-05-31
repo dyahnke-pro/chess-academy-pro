@@ -64184,5 +64184,214 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-qga-main-endgame",
+    "openingId": "qga",
+    "criticalPositionFen": "8/6kp/R5p1/8/P3B3/6P1/1b1r1PKP/8 b - - 0 49",
+    "title": "QGA Endgame: Active Rook Holds the R+B",
+    "overview": "The QGA's free development carries into a rook-and-bishop ending, and Black holds it with pure activity: the rook crashes onto the seventh rank, the bishop stays central and annoying, and White's passed a-pawn is harried from behind. So vs Caruana — the active-defence draw.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Ra2 the rook to the seventh",
+        "explanation": "…Ra2 the rook to the seventh"
+      },
+      {
+        "piece": "",
+        "route": "…Bd4 the central bishop",
+        "explanation": "…Bd4 the central bishop"
+      }
+    ],
+    "strategicThemes": [
+      "The active rook on the seventh",
+      "Active bishop",
+      "Hold the R+B ending"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "8/6kp/R5p1/8/P3B3/6P1/1b1r1PKP/8 b - - 0 49",
+        "moves": [
+          "Bd4",
+          "Rd6",
+          "Rxf2+",
+          "Kh3",
+          "Be3",
+          "a5",
+          "Ra2",
+          "a6",
+          "Bg1",
+          "Kg4"
+        ],
+        "annotations": [
+          "…Bd4 centralises the bishop, gripping key squares in the R+B ending.",
+          "Rd6 swings the white rook to the sixth.",
+          "…Rxf2+ — the active rook crashes onto the seventh with check, the soul of R+B defence.",
+          "Kh3 steps the king aside.",
+          "…Be3 keeps the bishop active and covers the kingside.",
+          "a5 pushes the passed a-pawn.",
+          "…Ra2 keeps the rook on the seventh, harrying White's pawns and king.",
+          "a6 advances the runner further.",
+          "…Bg1 keeps the bishop active near the white king.",
+          "Kg4 centralises the king; Black's active rook and bishop hold the balance comfortably."
+        ],
+        "learnCues": [
+          "…Bd4 — centralise the bishop.",
+          "Rd6 — White to the sixth.",
+          "…Rxf2+ — rook to the seventh!",
+          "Kh3 — king steps aside.",
+          "…Be3 — keep the bishop active.",
+          "a5 — White pushes the passer.",
+          "…Ra2 — harry from the seventh.",
+          "a6 — White advances it.",
+          "…Bg1 — bishop stays annoying.",
+          "Kg4 — White centralises; Black holds."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          []
+        ],
+        "title": "QGA Endgame: Active Rook Holds the R+B",
+        "sources": [
+          "concept:pos-open-file",
+          "concept:pos-center",
+          "https://lichess.org/ZVxAM9oJ"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-nimzoindian-main-endgame",
+    "openingId": "nimzo-indian",
+    "criticalPositionFen": "6k1/1p4p1/6rp/1P6/P7/4B2K/4bP2/2R5 b - - 0 37",
+    "title": "Nimzo Endgame: Trade into Opposite Bishops",
+    "overview": "The Nimzo's structural fight resolves into a rook-and-bishop ending, and Black steers to the safest fortress in chess: trade the rooks and reach OPPOSITE-COLOURED bishops, where the extra pawn can never break through. Ding vs Carlsen — the textbook drawing method.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Rf5 offer the rook trade",
+        "explanation": "…Rf5 offer the rook trade"
+      },
+      {
+        "piece": "",
+        "route": "…Bd3 the active bishop",
+        "explanation": "…Bd3 the active bishop"
+      }
+    ],
+    "strategicThemes": [
+      "Trade rooks into opposite bishops",
+      "The drawing fortress",
+      "King activity"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "6k1/1p4p1/6rp/1P6/P7/4B2K/4bP2/2R5 b - - 0 37",
+        "moves": [
+          "Rf6",
+          "Rc5",
+          "Bd3",
+          "a5",
+          "Rf5",
+          "Rxf5",
+          "Bxf5+",
+          "Kg3",
+          "Kf7",
+          "Kf4"
+        ],
+        "annotations": [
+          "…Rf6 centralises the rook actively.",
+          "Rc5 swings the white rook to the fifth.",
+          "…Bd3 activates the bishop, covering both wings.",
+          "a5 pushes the passed pawn.",
+          "…Rf5 offers the rook trade, simplifying toward a drawn bishop ending.",
+          "Rxf5 takes.",
+          "…Bxf5+ recaptures with check — the bishops are opposite-coloured, the safest fortress in chess.",
+          "Kg3 centralises the white king.",
+          "…Kf7 brings the king up; with opposite bishops the extra pawn can never break through.",
+          "Kf4 centralises; a comfortable, drawn bishop ending."
+        ],
+        "learnCues": [
+          "…Rf6 — centralise the rook.",
+          "Rc5 — White to the fifth.",
+          "…Bd3 — activate the bishop.",
+          "a5 — White pushes the passer.",
+          "…Rf5 — offer the rook trade.",
+          "Rxf5 — White takes.",
+          "…Bxf5+ — opposite bishops, a fortress!",
+          "Kg3 — White centralises.",
+          "…Kf7 — king up; pawn can’t break through.",
+          "Kf4 — drawn bishop ending."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [],
+          [],
+          [],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "title": "Nimzo Endgame: Trade into Opposite Bishops",
+        "sources": [
+          "concept:pos-open-file",
+          "concept:pos-center",
+          "https://lichess.org/ZIpTRHrr"
+        ]
+      }
+    ]
   }
 ]
