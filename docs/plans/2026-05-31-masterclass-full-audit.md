@@ -14,8 +14,25 @@
 > - ✅ **Fixed 21 pre-existing tsc errors** on main (gambit variation helper
 >   types) that were blocking the prod deploy — folded into the parallel
 >   session's fix on rebase.
-> - ⏳ **Remaining supporting layers** (per-variation middlegame plans, endgame
->   plans, pitfalls) — see "Remaining work" below. The real opening→middlegame
+> - ✅ **Middlegame-plans layer — 16 per-variation plans shipped** across the
+>   cluster (benoni, KID, grünfeld ×3, two-knights ×3, semi-slav, qgd, qga,
+>   queens-indian, petrov, philidor, slav). Every plan: anchored at the
+>   variation lesson's terminus (Gate C), the REAL most-played master
+>   continuation (explorer ≥3 games/ply — zero invented moves, FENs read
+>   straight from the skeleton), both registers, lead-the-eye highlights on the
+>   named squares, verified student theme-square landing. The build script
+>   self-validated theme-landing + legality + no-promise BEFORE writing — it
+>   caught a FEN I'd mistyped (a fabricated Fried-Liver position) and refused
+>   to write. Cluster mgPlans went 1→2-4 each; gates green (middlegamePlanThemes,
+>   FenCoherence, planner lead-eye, MiddlegamePlansSection). Commits cab589e +
+>   f01682f.
+> - ⏳ **Remaining layers — endgame plans + pitfalls — need engine access.**
+>   Pitfalls require eval-verifying that the "wrong move" is actually bad, and
+>   Stockfish isn't node-runnable in this sandbox (browser wasm; no native
+>   binary) — route to CI / David's machine. Endgame plans are grounded in the
+>   real model-game tails (data I have) but the conversion-TECHNIQUE prose is
+>   un-gated for accuracy (narrationFactCheck only catches attacks/eyes/forks),
+>   so it's careful per-game work best done deliberately, not sprayed. The
 >   move skeletons for the cluster are pre-pulled at
 >   `docs/plans/.skeletons/2026-05-31-cluster-mg-continuations.json` (Gate D
 >   groundwork — explorer most-played continuations at each variation terminus,
