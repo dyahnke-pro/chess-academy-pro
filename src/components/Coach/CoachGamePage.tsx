@@ -836,6 +836,18 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // context snapshot reflects "user is on the play screen."
   useEffect(() => {
     useCoachSessionStore.getState().setCurrentRoute('/coach/play');
+    // David 2026-05-31: board-reset-mid-game diagnosis. A silent
+    // re-mount (route replace, parent re-key, ErrorBoundary recovery)
+    // would reset every useState — including the game — to its initial
+    // value, which LOOKS like a board reset. This fires on every fresh
+    // mount; if one shows up in the audit-stream at the moment the
+    // board cleared, the reset was a re-mount, not a reset callback.
+    void logAppAudit({
+      kind: 'coach-play-mounted',
+      category: 'subsystem',
+      source: 'CoachGamePage',
+      summary: 'CoachGamePage mounted — fresh game state',
+    });
   }, []);
 
   // Subscribe to pending narration from the agent. When the LLM emits
@@ -1526,6 +1538,19 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   }, [game]);
 
   const handleRestart = useCallback((opts?: { keepRequestedOpening?: boolean }) => {
+    // David 2026-05-31: board-reset-mid-game diagnosis. A reset that
+    // fires while moves are on the board is almost certainly a bug
+    // (only the explicit Restart button / a chat reset_board / a color
+    // change should reset). Log WHO called us + how many half-moves
+    // were live + a short stack so the next occurrence names its
+    // trigger in the audit-stream instead of vanishing.
+    void logAppAudit({
+      kind: 'coach-play-reset',
+      category: 'subsystem',
+      source: 'CoachGamePage.handleRestart',
+      summary: `reset — liveHalfMoves=${moveCountRef.current}`,
+      details: (new Error('reset-trace').stack ?? '').split('\n').slice(0, 9).join('\n'),
+    });
     // Explicit restart — drop the resumable snapshot so we don't
     // auto-load the abandoned game on next visit. Also clear the
     // pre-variation snapshot so return_to_game from a later chat
@@ -1572,6 +1597,13 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
 
   // Color change handler — resets the game with the new color
   const handleColorChange = useCallback((color: 'white' | 'black') => {
+    void logAppAudit({
+      kind: 'coach-play-reset',
+      category: 'subsystem',
+      source: 'CoachGamePage.handleColorChange',
+      summary: `reset via color change → ${color} — liveHalfMoves=${moveCountRef.current}`,
+      details: (new Error('reset-trace').stack ?? '').split('\n').slice(0, 9).join('\n'),
+    });
     setPlayerColor(color);
     game.resetGame();
     moveCountRef.current = 0;
@@ -2755,8 +2787,11 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       }
     };
 
-    // Small delay to feel natural
-    const timer = setTimeout(() => void makeCoachMove(), 800);
+    // Small delay to feel natural. David 2026-05-31: trimmed 800→250ms
+    // — 800ms of dead wait stacked on top of the engine analyses made
+    // the coach feel sluggish; 250ms still reads as a beat of "thought"
+    // without the lag.
+    const timer = setTimeout(() => void makeCoachMove(), 250);
 
     return () => {
       abortController.abort();
@@ -2868,29 +2903,24 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // below — without that move, game.turn never flips and the coach-turn
     // effect never fires. On timeout we proceed with null analysis; the
     // classification logic handles null gracefully.
+    // David 2026-05-31: the post-move and pre-move analyses are
+    // INDEPENDENT positions, but were awaited SEQUENTIALLY at depth 12 —
+    // two full engine calls stacked before the player's move could be
+    // committed to `game` (which is what flips the turn and lets the
+    // coach start thinking). Run them together and at depth 10 — the
+    // depth the rest of this file already uses for eval-bar + blunder
+    // classification — so the coach starts replying roughly one engine
+    // call sooner. Each still has its own 5s timeout; a throw/timeout on
+    // either leaves the corresponding analysis null (handled below).
     let analysis: StockfishAnalysis | null = null;
-    try {
-      const wrapped = await withTimeout(
-        stockfishEngine.analyzePosition(moveResult.fen, 12),
-        5_000,
-        'player-move-analysis-after',
-      );
-      analysis = wrapped.ok ? wrapped.value : null;
-    } catch {
-      // If analysis throws, default to null (existing classification handles it)
-    }
-
-    // Analyze the position BEFORE the player's move (for best move comparison).
     let preAnalysis: StockfishAnalysis | null = null;
-    try {
-      const wrappedPre = await withTimeout(
-        stockfishEngine.analyzePosition(preFen, 12),
-        5_000,
-        'player-move-analysis-before',
-      );
-      preAnalysis = wrappedPre.ok ? wrappedPre.value : null;
-    } catch {
-      // If pre-analysis throws, we'll use simpler classification
+    {
+      const [afterRes, beforeRes] = await Promise.allSettled([
+        withTimeout(stockfishEngine.analyzePosition(moveResult.fen, 10), 5_000, 'player-move-analysis-after'),
+        withTimeout(stockfishEngine.analyzePosition(preFen, 10), 5_000, 'player-move-analysis-before'),
+      ]);
+      if (afterRes.status === 'fulfilled' && afterRes.value.ok) analysis = afterRes.value.value;
+      if (beforeRes.status === 'fulfilled' && beforeRes.value.ok) preAnalysis = beforeRes.value.value;
     }
 
     // Update eval bar + engine lines
