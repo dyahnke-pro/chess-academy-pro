@@ -6542,5 +6542,41 @@
     "middlegameTheme": "The ...e5 centre, the ...f5 break, bishop pair.",
     "lessonSummary": "Seize the centre with ...e5, break with ...f5, and play actively.",
     "variation": "Sveshnikov: Kalashnikov (4...e5 5.Nb5 d6)"
+  },
+  {
+    "id": "mg-pirc-defence-150-attack",
+    "openingId": "pirc-defence",
+    "white": "Caruana, F.",
+    "black": "Nepomniachtchi, I.",
+    "whiteElo": 2819,
+    "blackElo": 2775,
+    "result": "0-1",
+    "year": 2019,
+    "event": "GCT Rapid Paris 2019",
+    "pgn": "e4 d6 d4 Nf6 Nc3 g6 Be3 Bg7 Qd2 a6 Bh6 O-O O-O-O b5 Bxg7 Kxg7 f3 Nc6 h4 e5 Nge2 b4 Nd5 h5 Nxb4 Nxd4 Nxd4 exd4 Nc6 Qe8 Nxd4 Qa4 Kb1 c5 Ne2 Rb8 b3 Be6 Qc3 c4 Nf4 Rfc8 Rd4 cxb3 Nxe6+ fxe6 axb3 Qe8 Qd2 a5 Ba6 Rc6 Rxd6 Rbb6 Rxc6 Qxc6 Be2 a4 b4 Qc5 c3 Qf2 Rd1 Qxg2 Qe3 Rb7 Rg1 Qh2 Qg5 Ng4 Re1 Qf2 Qd2 Ne5 Rf1 Qxh4 f4 Rd7 Qe1 Qxe1+ Rxe1 Nf7 Kc2 e5 f5 h4 fxg6 Kxg6 b5 Kg5 c4 h3 c5 Kf4 b6 Nd8 Bb5 Rh7 c6 Nxc6 Bxc6 Rh6 Bd7 h2 b7 Rb6 Bc8 a3 Kc3 Kg3 Ra1 a2 Be6 Rxb7 Bb3 Ra7 Kc4 Rh7 Kc5 h1=Q Rxh1 Rxh1 Bxa2 Kf4 Bd5 Re1",
+    "studentSide": "black",
+    "overview": "Nepomniachtchi shows how to defuse the dangerous 150 Attack against Caruana: the early ...a6 and ...b5 generate immediate queenside counterplay, racing against White's Bh6/O-O-O/h4 kingside assault. In opposite-castling Pircs Black does not defend — Black attacks first, and the faster storm wins.",
+    "criticalMoments": [],
+    "middlegameTheme": "...a6/...b5 queenside race vs the 150 Attack.",
+    "lessonSummary": "Meet the 150 with ...a6/...b5 and storm the queenside first.",
+    "variation": "150 Attack"
+  },
+  {
+    "id": "mg-pirc-defence-austrian-attack",
+    "openingId": "pirc-defence",
+    "white": "Motylev, Alexander",
+    "black": "Vajda, Levente",
+    "whiteElo": 2570,
+    "blackElo": 2454,
+    "result": "0-1",
+    "year": 2001,
+    "event": "Ciocaltea Memorial",
+    "pgn": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O Bd3 Na6 O-O c5 d5 Nc7 a4 a6 a5 Nb5 Bd2 Bd7 Re1 Nxc3 bxc3 Bg4 c4 Nd7 Rb1 Rb8 Rb3 e5 f5 Bf6 h3 Bxf3 Qxf3 Bg5 Bc3 Qe7 Reb1 b6 axb6 Rb7 Ba5 Rfb8 c3 Qf8 Bc2 Qh6 Qd1 gxf5 exf5 Nf6 R3b2 Be3+ Kh1 Kh8 Ba4 Rg8 Bc6 Ne4 Qf3 Ng3+ Qxg3 Rxg3 Bxb7 Bc1 Re2 Qf4 Bc6 Rxh3+",
+    "studentSide": "black",
+    "overview": "Vajda shows the Pirc's counterpunching spirit against the Austrian Attack's big f4 centre: the ...c5 break challenges d4 at once, and after d5 the knight reroutes via c7 to b5 to pressure White's queenside. A model of meeting maximum central aggression with precise counterplay.",
+    "criticalMoments": [],
+    "middlegameTheme": "The ...c5 break, ...Nc7-b5 queenside pressure.",
+    "lessonSummary": "Strike with ...c5, reroute ...Nc7-b5, and counter the big centre.",
+    "variation": "Austrian Attack"
   }
 ]
