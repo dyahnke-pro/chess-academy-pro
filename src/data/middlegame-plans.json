@@ -23214,15 +23214,27 @@
   {
     "id": "mp-qgd-main",
     "openingId": "qgd",
-    "criticalPositionFen": "1r3rk1/pp4pp/2pqpn2/4N3/3P4/1QR5/PP3PPP/4R1K1 w - - 2 19",
+    "criticalPositionFen": "rnbqk2r/ppp1bppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR w KQkq - 4 5",
     "title": "QGD: Blockading the Isolated d-Pawn",
     "overview": "Out of the Orthodox freeing sequence Black has reached the ideal anti-IQP set-up: White is saddled with an isolated pawn on d4, and Black's job is the textbook two-step — first blockade the pawn with a knight on d5, then pile the heavy pieces onto the d-file until the weakness falls or White ties himself in knots defending it.",
     "pawnBreaks": [
-      "…c5 to liquidate into a favourable structure"
+      {
+        "move": "…c5 — the freeing break",
+        "explanation": "After …Bb7, the …c5 break challenges d4 and completes Black’s equalization.",
+        "fen": "rnbqk2r/ppp1bppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR w KQkq - 4 5"
+      }
     ],
     "pieceManeuvers": [
-      "…Nf6-d5 to blockade the isolated d4-pawn",
-      "…Rd8 onto the d-file against d4"
+      {
+        "piece": "Bishop",
+        "route": "…Bc8-b7 — solve the problem bishop",
+        "explanation": "The Tartakower’s key idea: the light-squared bishop reaches the long diagonal via …b6."
+      },
+      {
+        "piece": "Pawn",
+        "route": "…h6 and …b6 — gain tempo, free the bishop",
+        "explanation": "Black questions the pin and prepares the bishop’s development."
+      }
     ],
     "strategicThemes": [
       "Blockading the isolated d4-pawn",
@@ -23234,86 +23246,103 @@
     ],
     "playableLines": [
       {
-        "fen": "1r3rk1/pp4pp/2pqpn2/4N3/3P4/1QR5/PP3PPP/4R1K1 w - - 2 19",
+        "fen": "rnbqk2r/ppp1bppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR w KQkq - 4 5",
         "moves": [
-          "Qa4",
-          "Nd5",
-          "Rcc1",
-          "Rbd8"
+          "e3",
+          "O-O",
+          "Nf3",
+          "h6",
+          "Bh4",
+          "b6",
+          "Be2",
+          "Bb7"
         ],
         "annotations": [
-          "Qa4 probes the queenside, looking for counterplay.",
-          "…Nd5 — the knight settles on the perfect blockade square right in front of the isolated d4-pawn, immovable and dominant.",
-          "Rcc1 regroups the rook to defend.",
-          "…Rbd8 swings the rook onto the d-file, training the heavy pieces directly on the isolated d4-pawn. Blockade first, then pile up — the textbook way to grind down an isolated queen pawn."
+          "e3 supports the centre, the solid main-line QGD setup.",
+          "…O-O — Black castles, completing kingside development.",
+          "White develops the knight to f3.",
+          "…h6 questions the pinning bishop, gaining a useful tempo and clarifying White's intentions.",
+          "White maintains the pin with Bh4.",
+          "…b6! The Tartakower's key move: Black prepares …Bb7 to develop the problem light-squared bishop onto the long diagonal, solving the QGD's traditional difficulty.",
+          "White develops the bishop to e2.",
+          "…Bb7 completes the Tartakower setup. Black's once-passive bishop now rakes the long diagonal, the centre is solid, and Black has comfortable equality with active pieces — Short outplayed Nikolic from this reliable footing."
         ],
-        "learnCues": [
-          "Qa4 — White probes.",
-          "…Nd5 — blockade the IQP.",
-          "Rcc1 — White regroups.",
-          "…Rbd8 — rook onto d4."
-        ],
-        "sources": [
-          "book:qgd",
-          "concept:pos-outpost",
-          "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
-        ],
-        "title": "QGD: Blockading the Isolated d-Pawn",
         "arrows": [
+          [],
+          [],
+          [],
+          [],
           [],
           [],
           [],
           []
         ],
+        "title": "The QGD Tartakower (Nikolic–Short)",
         "highlights": [
           [
             {
-              "square": "a4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b3",
+              "square": "e3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "c1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c3",
+              "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d8",
+              "square": "f3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "b8",
+              "square": "h6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "intro": "Black frees the problem bishop with ...b6/...Bb7.",
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+        ],
+        "learnCues": [
+          "e3 — support the centre",
+          "…O-O — castle",
+          "Nf3 — White develops",
+          "…h6 — question the bishop",
+          "Bh4 — maintain the pin",
+          "…b6 — prepare …Bb7",
+          "Be2 — White develops",
+          "…Bb7 — free the problem bishop"
         ]
       }
     ]
@@ -35628,17 +35657,27 @@
   {
     "id": "mp-slavdefence-main",
     "openingId": "slav-defence",
-    "criticalPositionFen": "r2q1rk1/pp1n1pp1/2p1pnbp/8/PbBPP2B/2N2N2/1P2QPPP/R4RK1 b - - 1 12",
+    "criticalPositionFen": "rnbqkb1r/pp2pppp/2p2n2/8/2pP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5",
     "title": "Slav: Trade on c3, then Win the e4-Pawn",
     "overview": "A concrete tactical plan: Black trades the dark bishop on c3 to fracture White’s queenside pawns, and the same move loosens White’s centre — the e4-pawn falls to …Bxe4, because Qxe4 runs into …Nxe4, the f6-knight winning the queen. Black emerges a clean pawn up.",
     "pawnBreaks": [
-      "…Bxc3 fractures White’s queenside",
-      "win the loose e4-pawn"
+      {
+        "move": "…c5 — the freeing break",
+        "explanation": "After developing, …c5 challenges d4 and completes Black’s equalization in the Slav.",
+        "fen": "rnbqkb1r/pp2pppp/2p2n2/8/2pP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5"
+      }
     ],
     "pieceManeuvers": [
-      "…Bxc3 damaging the structure",
-      "…Bxe4 grabbing the centre pawn",
-      "…Nf6 guarding e4 / hitting the queen"
+      {
+        "piece": "Bishop",
+        "route": "…Bc8-f5 — the good bishop out early",
+        "explanation": "The Slav’s signature: the light-squared bishop develops actively before …e6 shuts it in."
+      },
+      {
+        "piece": "Bishop",
+        "route": "…Bf8-b4 — pin with tempo",
+        "explanation": "The dark-squared bishop pins the knight and pressures the centre."
+      }
     ],
     "strategicThemes": [
       "Damage the queenside structure",
@@ -35650,39 +35689,70 @@
     ],
     "playableLines": [
       {
-        "fen": "r2q1rk1/pp1n1pp1/2p1pnbp/8/PbBPP2B/2N2N2/1P2QPPP/R4RK1 b - - 1 12",
+        "fen": "rnbqkb1r/pp2pppp/2p2n2/8/2pP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5",
         "moves": [
-          "Bxc3",
-          "bxc3",
-          "Bxe4"
+          "a4",
+          "Bf5",
+          "e3",
+          "e6",
+          "Bxc4",
+          "Bb4",
+          "O-O",
+          "O-O"
         ],
         "annotations": [
-          "…Bxc3 trades the dark bishop to fracture White’s queenside pawns — and it loosens the centre.",
-          "bxc3 recaptures, but now the e4-pawn is only defended by the queen.",
-          "…Bxe4! wins the central pawn. Qxe4 fails to …Nxe4 — the f6-knight snaps off the queen. Black is a clean pawn to the good."
+          "a4 stops Black's …b5 and prepares to regain the c4-pawn, the main-line Slav approach.",
+          "…Bf5! The defining Slav move: the light-squared bishop develops actively OUTSIDE the pawn chain before …e6 locks it in — exactly the freedom the French and QGD bishops never get.",
+          "White prepares to recapture on c4 with e3.",
+          "…e6 supports the centre and opens the f8-bishop's path, the bishop already solved on f5.",
+          "White regains the pawn with Bxc4.",
+          "…Bb4 pins the c3-knight, developing with tempo and pressuring the centre.",
+          "White castles.",
+          "…O-O — Black castles into a comfortable, well-developed position: the good bishop active on f5, a solid structure, and easy equality. This is the Slav's promise, and Caruana outplayed So from here."
         ],
-        "learnCues": [
-          "…Bxc3 — fracture the queenside",
-          "bxc3 — recapture, e4 loose",
-          "…Bxe4 — win the pawn (Qxe4? …Nxe4)"
-        ],
-        "sources": [
-          "concept:pos-center",
-          "concept:pawn-doubled",
-          "https://en.wikipedia.org/wiki/Slav_Defense"
-        ],
-        "title": "Slav: Trade on c3, then Win the e4-Pawn",
         "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
           [],
           [],
           []
         ],
+        "title": "The Main-Line Slav (So–Caruana)",
         "highlights": [
           [
             {
-              "square": "c3",
+              "square": "a4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
             {
               "square": "b4",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -35690,64 +35760,33 @@
           ],
           [
             {
-              "square": "c3",
+              "square": "g1",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e4",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "e4",
+              "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f6",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
-        "intro": {
-          "say": "Black’s plan is concrete: trade the dark bishop on c3 to damage White’s structure, then snap off the loose e4-pawn — Qxe4 runs into …Nxe4, the knight winning the queen.",
-          "sayShort": "Trade on c3, then win the e4-pawn.",
-          "arrows": [
-            {
-              "from": "b4",
-              "to": "c3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "g6",
-              "to": "e4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "f6",
-              "to": "e4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "c3",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "e4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ]
-        }
+        "intro": "Black develops the bishop to f5 and equalizes comfortably.",
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Slav_Defense"
+        ],
+        "learnCues": [
+          "a4 — stop …b5, regain c4",
+          "…Bf5 — the good bishop out early",
+          "e3 — prepare Bxc4",
+          "…e6 — support the centre",
+          "Bxc4 — White regains the pawn",
+          "…Bb4 — pin, develop with tempo",
+          "O-O — White castles",
+          "…O-O — castle, comfortable equality"
+        ]
       }
     ]
   },
