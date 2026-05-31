@@ -174,7 +174,7 @@
   "benko-gambit": {
     "variations": 7,
     "middlegamePlans": 4,
-    "endgamePlans": 0,
+    "endgamePlans": 1,
     "modelGames": 4,
     "weapons": 0,
     "warnings": 0,

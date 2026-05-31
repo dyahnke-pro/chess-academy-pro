@@ -51173,5 +51173,175 @@
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
     ]
+  },
+  {
+    "id": "mp-benkogambit-endgame",
+    "openingId": "benko-gambit",
+    "criticalPositionFen": "1r4k1/4p2p/3p1np1/B1pP4/4P3/nP4PP/1R4K1/4R3 b - - 0 28",
+    "title": "Benko ENDGAME — the queenside pawns outgun the exchange (MVL, Black)",
+    "overview": "In Cossin–Vachier-Lagrave 2008 the Benko reaches its archetypal endgame: Black has rook + two knights against rook + rook + bishop, materially a hair down, but the two active knights and the queenside pawns — the gambit's whole investment — more than compensate. This plan walks MVL's conversion: the knight grabs the c4 outpost, the rook collects b3, pieces come off, and a clean tactic nets a second pawn. R+minor endings of this shape arise in 53% of the fully-accepted games that reach an endgame.",
+    "pawnBreaks": [
+      "c5 and the b-file pawns roll once pieces trade"
+    ],
+    "pieceManeuvers": [
+      "Nc4 — knight seizes the c4 outpost",
+      "Rxb3 — rook collects the b3 pawn",
+      "Nh5 then g3 — knight raids the kingside"
+    ],
+    "strategicThemes": [
+      "Two active knights + pawns vs the exchange",
+      "Trade pieces to let the queenside pawns decide"
+    ],
+    "endgameTransitions": [
+      "The queenside majority converts in the rook ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "1r4k1/4p2p/3p1np1/B1pP4/4P3/nP4PP/1R4K1/4R3 b - - 0 28",
+        "moves": [
+          "Nc4",
+          "Ra2",
+          "Rxb3",
+          "Bd2",
+          "Nxd2",
+          "Rxd2",
+          "Nh5",
+          "e5",
+          "Nxg3"
+        ],
+        "annotations": [
+          "The knight jumps to c4 — the outpost the Benko dreams about. It hits the a5-bishop and rakes toward b2; with two knights this active, Black's slight material deficit barely matters.",
+          "White tucks the rook back to a2, out of the knight's reach.",
+          "The b3-pawn falls. This is the gambit's whole point arriving in the endgame — the queenside pressure finally cashes a pawn, and the material balance tips Black's way.",
+          "White heads the bishop to d2, hoping to trade a pair of minors and blunt Black's piece activity before the pawns roll.",
+          "Black takes the bishop. Every trade now helps the side whose pawns are the long-term trump — fewer pieces, same dangerous majority.",
+          "White recaptures. The picture has cleared: White's extra exchange against Black's knight and the rolling c- and d-pawns, with Black's pieces far more active.",
+          "The knight swings to h5, eyeing the g3-pawn — the next target on the board's other wing.",
+          "White lunges in the center, looking for counterplay before the queenside has the final word.",
+          "Nxg3 snaps off a second pawn — and White cannot recapture: Kxg3 would walk straight into the rook on b3 raking the open third rank. The active pieces and the pawns have outweighed the exchange."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nc4 — the c4 outpost",
+          "Ra2 — rook dodges",
+          "Rxb3 — the pawn falls",
+          "Bd2 — White offers a trade",
+          "Nxd2 — take the bishop",
+          "Rxd2 — pieces come off",
+          "Nh5 — swing to the kingside",
+          "e5 — White's last try",
+          "Nxg3 — second pawn, no recapture"
+        ],
+        "title": "MVL converts the Benko endgame",
+        "intro": "Black's two knights and queenside pawns against White's exchange — watch the pieces come off and the pawns decide.",
+        "sources": [
+          "https://lichess.org/KSaxYURM",
+          "https://www.chess.com/openings/Benko-Gambit-Accepted",
+          "https://en.wikipedia.org/wiki/Benko_Gambit"
+        ]
+      }
+    ]
   }
 ]
