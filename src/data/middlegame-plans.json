@@ -8467,17 +8467,27 @@
   {
     "id": "mp-frenchdefence-fortknox",
     "openingId": "french-defence",
-    "criticalPositionFen": "r2qk2r/pp2bppp/2p1pn2/8/3P4/2PB1Q2/PP3PPP/R1B1R1K1 w kq - 0 12",
+    "criticalPositionFen": "rn1qkbnr/pppb1ppp/4p3/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5",
     "title": "Fort Knox: The Impregnable Setup",
     "overview": "The bad bishop is gone — traded on f3 — and Black is left with a symmetrical, weakness-free fortress. There is nothing for White to attack. The plan is patient: complete development, castle, contest the e-file, and prepare a freeing …c5 or …e5 break at leisure. Offer White nothing.",
     "pawnBreaks": [
-      "…c5 or …e5 freeing break, once fully developed",
-      "Keep the structure flawless"
+      {
+        "move": "…c5 — free the position",
+        "explanation": "After trading the bishops, …c5 challenges d4 and opens lines for Black’s sound pieces.",
+        "fen": "rn1qkbnr/pppb1ppp/4p3/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5"
+      }
     ],
     "pieceManeuvers": [
-      "…O-O and …Re8 to the e-file",
-      "…Qc7 and …Rad8 centralising",
-      "…Nd7–f6 covering e4 and d5"
+      {
+        "piece": "Bishop",
+        "route": "…Bd7-c6 — solve the bad bishop",
+        "explanation": "The light-squared bishop reaches the long diagonal to trade off White’s best piece — the Fort Knox’s whole idea."
+      },
+      {
+        "piece": "Knight",
+        "route": "…Ngf6 — challenge e4",
+        "explanation": "Black develops and offers to trade White’s active knight."
+      }
     ],
     "strategicThemes": [
       "A fortress with no weaknesses",
@@ -8489,88 +8499,103 @@
     ],
     "playableLines": [
       {
-        "fen": "r2qk2r/pp2bppp/2p1pn2/8/3P4/2PB1Q2/PP3PPP/R1B1R1K1 w kq - 0 12",
+        "fen": "rn1qkbnr/pppb1ppp/4p3/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5",
         "moves": [
-          "Bg5",
+          "Nf3",
+          "Bc6",
+          "Bd3",
+          "Nd7",
           "O-O",
-          "Rad1",
-          "Re8"
+          "Ngf6",
+          "Nc3",
+          "Be7"
         ],
         "annotations": [
-          "Bg5 pins the f6-knight.",
-          "…O-O brings the king to safety; the structure is flawless, with nothing for White to attack.",
-          "Rad1 piles onto the d-file.",
-          "…Re8 seizes the e-file, the one open line in this fortress — Black trades down it and holds the balance with ease."
+          "White develops the knight, having the freer game against the solid Fort Knox.",
+          "…Bc6! The Fort Knox's signature: the light-squared bishop — usually France's problem piece — reaches the great a8-h1 diagonal, where it trades off White's best attacker.",
+          "White develops the bishop.",
+          "…Nd7 develops toward f6 and supports the solid structure.",
+          "White castles.",
+          "…Ngf6 challenges the e4-knight and completes the kingside, offering to trade White's active pieces.",
+          "White develops the knight.",
+          "…Be7 readies castling. Black has the Fort Knox blueprint: trade off the light-squared bishops, keep a rock-solid structure with no weaknesses, and steer toward an endgame where the position's soundness tells — exactly the grind Duda used to beat Gukesh."
         ],
-        "title": "The Fortress",
         "arrows": [
-          [
-            {
-              "from": "g5",
-              "to": "f6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
+          [],
           [],
           [],
           []
         ],
+        "title": "The Fort Knox Solidity (Gukesh–Duda)",
         "highlights": [
           [
             {
-              "square": "g5",
+              "square": "f3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "c1",
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
             {
               "square": "f6",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a1",
+              "square": "c3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f8",
+              "square": "e7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Bg5 — pin f6",
-          "O-O — king safe",
-          "Rad1 — the d-file",
-          "Re8 — seize the e-file"
-        ],
+        "intro": "Black trades the bad bishop and builds the solid wall.",
         "sources": [
           "book:french-defence",
-          "concept:pos-center",
+          "concept:pos-development",
           "https://en.wikipedia.org/wiki/French_Defence"
+        ],
+        "learnCues": [
+          "Nf3 — White develops",
+          "…Bc6 — the bishop to the long diagonal",
+          "Bd3 — White develops",
+          "…Nd7 — develop toward f6",
+          "O-O — White castles",
+          "…Ngf6 — challenge e4",
+          "Nc3 — White develops",
+          "…Be7 — ready to castle"
         ]
       }
     ]
@@ -9034,17 +9059,27 @@
   {
     "id": "mp-frenchdefence-tarrasch",
     "openingId": "french-defence",
-    "criticalPositionFen": "r1b1k2r/ppq3pp/2nbpn2/3p4/3P4/3B1N2/PP2NPPP/R1BQ1RK1 w kq - 4 12",
+    "criticalPositionFen": "rnbqkb1r/pp1n1ppp/4p3/2ppP3/3P1P2/8/PPPN2PP/R1BQKBNR w KQkq - 0 6",
     "title": "Tarrasch: Siege of the Isolated Pawn",
     "overview": "The exchanges have left White with an isolated d4-pawn — the strategic heart of the Tarrasch. Black's plan is textbook: blockade the d5-square, line up against d4, and aim the …Bd6/…Qc7 battery at h2. The isolated pawn is a long-term target Black can press for the whole game.",
     "pawnBreaks": [
-      "Black restrains White's d4–d5 break and blockades d5",
-      "…e5 only once d4 is safely won"
+      {
+        "move": "…b5-b4 — undermine the c3-base",
+        "explanation": "The queenside pawn storm attacks White’s pawn chain where it is anchored, the closed-Tarrasch plan.",
+        "fen": "rnbqkb1r/pp1n1ppp/4p3/2ppP3/3P1P2/8/PPPN2PP/R1BQKBNR w KQkq - 0 6"
+      }
     ],
     "pieceManeuvers": [
-      "…Nf6 and …Bd7 blockading d5",
-      "…Bd6 + …Qc7 battery on h2",
-      "…Nh5 eyeing f4"
+      {
+        "piece": "Rook",
+        "route": "…Rb8 — support the …b5-b4 storm",
+        "explanation": "The rook backs the queenside expansion before it rolls."
+      },
+      {
+        "piece": "Knight",
+        "route": "…Nc6 — pressure d4",
+        "explanation": "The knight targets the base of White’s pawn chain."
+      }
     ],
     "strategicThemes": [
       "Play against the isolated d4-pawn",
@@ -9056,69 +9091,48 @@
     ],
     "playableLines": [
       {
-        "fen": "r1b1k2r/ppq3pp/2nbpn2/3p4/3P4/3B1N2/PP2NPPP/R1BQ1RK1 w kq - 4 12",
+        "fen": "rnbqkb1r/pp1n1ppp/4p3/2ppP3/3P1P2/8/PPPN2PP/R1BQKBNR w KQkq - 0 6",
         "moves": [
-          "Bg5",
-          "O-O",
-          "Bh4",
-          "Nh5"
+          "c3",
+          "Nc6",
+          "Ndf3",
+          "Rb8",
+          "Bd3",
+          "b5",
+          "Ne2",
+          "g6"
         ],
         "annotations": [
-          "White pins the f6-knight with Bg5, leaning on the blockade of d5.",
-          "Black castles into safety, ready to pile on the isolated d4-pawn.",
-          "White keeps the pin with Bh4.",
-          "Black breaks free with …Nh5, eyeing the f4-square and unmasking the …Bd6/…Qc7 battery on h2 — the d4-pawn stays a permanent target."
+          "White buttresses the centre with c3, the closed Tarrasch's broad pawn front.",
+          "…Nc6 develops and pressures d4, the base of White's chain.",
+          "White reroutes the knight to f3.",
+          "…Rb8! The rook swings behind the b-pawn for the queenside expansion — Black builds the …b5-b4 lever that attacks White's chain at its c3-anchor.",
+          "White develops the bishop.",
+          "…b5! The queenside lever rolls forward, gaining space and preparing …b4 to undermine c3.",
+          "White repositions the knight toward g3.",
+          "…g6 opens the way for the fianchetto and contests the kingside, completing a flexible setup. Black has the standard closed-Tarrasch picture: pressure on d4, the …b5-b4 storm rolling, and the c3-base of White's chain under fire — Ponomariov outplayed Shirov from this footing."
         ],
-        "title": "Siege of the d4-Pawn",
         "arrows": [
-          [
-            {
-              "from": "g5",
-              "to": "f6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
           [],
           [],
-          [
-            {
-              "from": "h5",
-              "to": "f4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "d6",
-              "to": "h2",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
         ],
+        "title": "The Closed Tarrasch Expansion (Shirov–Ponomariov)",
         "highlights": [
           [
             {
-              "square": "g5",
+              "square": "c3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f6",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "d5",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e8",
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
@@ -9128,47 +9142,56 @@
           ],
           [
             {
-              "square": "h4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g5",
+              "square": "f3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "h5",
+              "square": "b8",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "f6",
+              "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "f4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
             {
-              "square": "h2",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
             {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
+        "intro": "Black expands on the queenside to undermine the pawn chain.",
         "sources": [
           "book:french-defence",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/French_Defence"
         ],
         "learnCues": [
-          "Bg5 — pin, lean on d5",
-          "O-O — castle, pile on d4",
-          "Bh4 — keep the pin",
-          "Nh5 — eye f4; d4 a target"
+          "c3 — White props the centre",
+          "…Nc6 — pressure d4",
+          "Ndf3 — White reroutes",
+          "…Rb8 — ready …b5-b4",
+          "Bd3 — White develops",
+          "…b5 — the queenside lever",
+          "Ne2 — White repositions",
+          "…g6 — prepare the fianchetto"
         ]
       }
     ]

@@ -6316,11 +6316,11 @@
     "event": "GCT Blitz Paris 2019",
     "pgn": "e4 c6 Nf3 d5 Nc3 Bg4 h3 Bxf3 Qxf3 e6 d4 dxe4 Nxe4 Qxd4 Bd3 Nd7 c3 Qd5 Qg3 Ngf6 Nxf6+ Nxf6 Bc2 O-O-O Be3 Qa5 O-O Nd5 Bd4 Qc7 Qf3 c5 Be3 Qe5 Rfe1 Bd6 g3 Qf6 Qg2 Kb8 a4 h5 Be4 h4 g4 Nxe3 Rxe3 Bf4 Ree1 Rd7 a5 Rhd8 a6 b6 Bc6 Rd2 Bb5 Qe7 Qf3 g5 Bf1 Qd7 c4 Kc7 b4 Kd6 bxc5+ bxc5 Rab1 Rc8 Re4 Ke7 Rxf4 gxf4 Rb7 Rc7 Qxf4 Rd6 Qg5+ Kf8 Qe5 Ke7 Rb8 Rc8 Rb7 Rc7 Bg2 f6 Qf4 Rxb7 axb7 Qc7 Qh6 Rd1+ Bf1 Kd7 Qxf6 Qxb7 Qf7+ Kc8 Qxe6+ Qd7 Qe4 Kc7 g5 Qd4 Qe7+ Kb6 g6 Qd3 Qf6+ Ka5",
     "studentSide": "black",
-    "variation": "Two Knights Variation",
     "overview": "Mamedyarov shows the Two Knights Caro's resource: after the early …Bxf3 trade Black gets a rock-solid structure, parks a knight on the d5-outpost, seizes the d-file, and outplays White across a long middlegame. A model of patient Caro counterplay turning into the full point.",
     "criticalMoments": [],
     "middlegameTheme": "Solid structure, the d5-outpost, patient counterplay.",
-    "lessonSummary": "Trade on f3, hold the structure, dominate d5, and grind the advantage home."
+    "lessonSummary": "Trade on f3, hold the structure, dominate d5, and grind the advantage home.",
+    "variation": "Two Knights Variation"
   },
   {
     "id": "mg-caro-kann-panov-botvinnik-attack",
@@ -6334,11 +6334,11 @@
     "event": "FIDE-Wch k.o. f",
     "pgn": "e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 e6 Nf3 Be7 cxd5 Nxd5 Bd3 Nc6 O-O O-O Re1 Bf6 Be4 Nce7 h4 Nf5 Qd3 Nxc3 bxc3 h6 h5 Nd6 Ne5 Nxe4 Qxe4 Bxe5 dxe5 f5 Qe2 Bd7 Rd1 Bb5 Qf3 Qe8 Bf4 Rc8 Rd4 Rc4 Rad1 Qf7 Rxc4 Bxc4 a3 Rc8 Rd4 Kh7 Bd2 Bd5 Qh3 b5 a4 bxa4 Rxa4 Rc4 Rxc4 Bxc4 Qh4 Bb5 c4 Be8 c5 Qd7 Bc3 Qd3 Qd4 Qxd4 Bxd4 a5 c6 Bxc6 f3 f4 Bb2 Be8 Bc1 a4 Bxf4 a3 Be3 Bxh5 Kf2 Be8 Bd4 Bc6 Bc3 a2 g3 h5 g4 h4",
     "studentSide": "black",
-    "variation": "Panov-Botvinnik Attack",
     "overview": "Karpov's masterclass against the Panov: he meets White's isolated queen's pawn with textbook technique — every piece to its best blockading square, trades that leave the d-pawn weak and undefended, and a relentless squeeze until it falls. The definitive lesson in playing AGAINST the IQP.",
     "criticalMoments": [],
     "middlegameTheme": "Blockade and pressure the isolated queen’s pawn.",
-    "lessonSummary": "Blockade the IQP on d5, trade pieces, then win the weak pawn."
+    "lessonSummary": "Blockade the IQP on d5, trade pieces, then win the weak pawn.",
+    "variation": "Panov-Botvinnik Attack"
   },
   {
     "id": "mg-caro-kann-tartakower-breyer-variation",
@@ -6352,10 +6352,28 @@
     "event": "2nd Kasimdzhanov Cup 2024",
     "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ exf6 Bc4 Bd6 Qe2+ Be7 Nf3 Na6 O-O O-O h3 Nc7 a4 Re8 Qd3 Nd5 Bd2 Be6 Rfe1 Qd7 Bb3 Bf5 Qf1 h5 a5 Bd6 Rxe8+ Rxe8 Re1 Be4 Qe2 Re7 Qd1 g5 Ne5 Bxe5 dxe5 Rxe5 Bc3 Bxg2 Bxe5 Qxh3 Bh2 Bf3 Re8+ Kg7 Qf1 Qg4+ Bg3 h4 Kh2 hxg3+ fxg3 Nf4 Re3 Qh5+ Kg1 Nh3+ Kh2 g4 Qc4 Ng5+ Kg1 Qh1+",
     "studentSide": "black",
-    "variation": "Tartakower/Breyer Variation",
     "overview": "Maghsoodloo demonstrates the dynamic side of the Tartakower …exf6 Caro: the doubled f-pawns are no weakness — they hand Black the half-open e-file and a healthy central mass. He builds with …g5-g4 and …h5-h4 and crashes through on the kingside with a knight sacrifice. The solid Caro showing its teeth.",
     "criticalMoments": [],
     "middlegameTheme": "Half-open e-file, central pawn mass, kingside storm.",
-    "lessonSummary": "Embrace the …exf6 structure, take the e-file, and storm the king."
+    "lessonSummary": "Embrace the …exf6 structure, take the e-file, and storm the king.",
+    "variation": "Tartakower/Breyer Variation"
+  },
+  {
+    "id": "mg-french-defence-fort-knox-variation",
+    "openingId": "french-defence",
+    "white": "Gukesh, D.",
+    "black": "Duda, J.",
+    "whiteElo": 2758,
+    "blackElo": 2726,
+    "result": "0-1",
+    "year": 2023,
+    "event": "Armageddon Grand Final W",
+    "pgn": "e4 e6 d4 d5 Nd2 dxe4 Nxe4 Bd7 Nf3 Bc6 Bd3 Nd7 O-O Ngf6 Nc3 Be7 Ne5 Nxe5 dxe5 Nd7 Qe2 O-O Rd1 Bg5 f4 Be7 Be3 g6 Be4 Bxe4 Nxe4 Qc8 Rd3 Nb6 Rf1 Nd5 Bc5 Bxc5+ Nxc5 b6 Ne4 Qa6 b3 Qxa2 Qf2 h5 Rd2 Qa3 c4 Ne7 Nf6+ Kg7 Rd7 Rfd8 Rfd1 Rxd7 Rxd7 Nf5 h3 h4 Ne4 Qxb3 Ng5 Qb1+ Kh2 Ng3",
+    "studentSide": "black",
+    "overview": "Duda shows the Fort Knox is more than a solid wall: after trading the light-squared bishops, Black builds a rock-solid structure, manoeuvres the knight to the d5-outpost, and gradually outplays Gukesh, snatching queenside pawns to convert. The model for the Fort Knox grind.",
+    "criticalMoments": [],
+    "middlegameTheme": "Trade the light bishops, blockade d5, grind the queenside.",
+    "lessonSummary": "Swap the bad bishop, plant a knight on d5, and outplay White slowly.",
+    "variation": "Fort Knox Variation"
   }
 ]
