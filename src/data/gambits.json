@@ -279,15 +279,15 @@
     "id": "stafford-gambit",
     "eco": "C42",
     "name": "Stafford Gambit",
-    "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5",
+    "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 h3 Nxe4 dxe4 Bxf2+ Kxf2 Qxd1",
     "color": "black",
-    "style": "Trappy, Surprise Weapon",
-    "overview": "The Stafford Gambit was invented by American master Joseph Stafford in the 1950s and dismissed as unsound by every serious analyst for nearly 70 years. The opening lived in obscurity until IM Eric Rosen began posting Stafford trap videos to YouTube in 2018-2019; his content quickly accumulated millions of views and made the Stafford a household name among online chess players. Today, the gambit has a cult following — objectively dubious, but practically devastating. After White takes on e5 and c6, Black gets wide-open lines and incredible piece activity targeting f2 and the White king. Every natural-looking move for White walks into a hidden trap.",
+    "style": "Tactical, trap-based surprise weapon",
+    "overview": "The Stafford is a surprise TRAP weapon, not a sound system — objectively Black is down a pawn after 4…dxc6, so play it knowing the risk. Its venom is the lightning-fast development of both bishops and the knight onto White's king: one greedy or natural-looking move (h3?, Bg5?, Nc3?) and Black's pieces crash through on f2 and e4. Every line shown here ends with Black WINNING — these are the traps to spring, not a claim that the Stafford is equal.",
     "keyIdeas": [
-      "Sacrifice a pawn for rapid development and open lines targeting the White king and f2 square",
-      "The open d-file and diagonals create immediate tactical threats that are hard to see",
-      "Bc5 aiming at f2 combined with Ng4 is the classic attacking pattern — the two pieces coordinate perfectly",
-      "White must know specific theory or faces dozens of hidden traps — most players at club level don't"
+      "Both bishops fly out (…Bc5 and …Bg4/…Bf5) aiming at f2 and the white king before White consolidates.",
+      "…Nxe4 is the recurring shot: a careless bishop or knight move lets the e4-pawn fall with a discovered attack on the queen.",
+      "…Bxf2+ rips open the king; after Kxf2, …Qxd1 or …Ng4+ collects the queen.",
+      "It is a one-shot surprise: against accurate d3-Be2-O-O play Black is simply worse — see the warnings."
     ],
     "traps": [
       "After 4...dxc6 5.d3 Bc5, if White plays the natural 6.Be2, then Ng4 threatens Bxf2+ followed by Ne3 forking the queen and rook.",
@@ -301,32 +301,43 @@
     ],
     "variations": [
       {
-        "name": "Stafford Gambit: Bg5 Main Trap Line",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5",
-        "explanation": "The signature Stafford setup. After 4.Nxe5 Nc6 5.Nxc6 dxc6, Black has open lines + the bishop pair as compensation. d3 + Bc5 sets up the famous trap — if White plays the natural Bg5, the Nxe4 + Bxd8 + Bxf2+ + Bg4+ king hunt awaits."
+        "name": "h3 — the f2 Strike (main)",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 h3 Nxe4 dxe4 Bxf2+ Kxf2 Qxd1",
+        "explanation": "6.h3? looks like a useful luft but walks into 6…Nxe4! 7.dxe4 Bxf2+ 8.Kxf2 Qxd1 — Black wins the queen. The most common practical trap.",
+        "sources": [
+          "https://www.chess.com/openings/Russian-Game-Stafford-Gambit",
+          "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
+        ]
       },
       {
-        "name": "Stafford Gambit: Ng4 Direct Attack",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 Ng4 Bxg4",
-        "explanation": "The Ng4 attack — Black sacrifices the knight directly. After Bxg4 the typical Stafford follow-up Bxf2+ drags the king out; Black's piece activity plus the open lines create enormous practical problems for White."
+        "name": "Bg5 — the Stafford Mate",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Bg5 Nxe4 Bxd8 Bxf2+ Ke2 Bg4#",
+        "explanation": "6.Bg5? pins nothing important; 6…Nxe4! 7.Bxd8 Bxf2+ 8.Ke2 Bg4# is checkmate — the famous Stafford mating net where the queen sac leads to mate.",
+        "sources": [
+          "https://www.chess.com/openings/Russian-Game-Stafford-Gambit",
+          "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
+        ]
       },
       {
-        "name": "Stafford Gambit: h5 Pawn Storm",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5",
-        "explanation": "The h5 variation prepares to crack open the h-file against White's castled king. After Be2 h5, Black aims for Ng4 + hxg4 to fly the h-file open — even engines struggle to find clean defensive paths once Black's attack rolls forward."
-      },
-      {
-        "name": "Stafford Gambit: Nc3 Variation",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 Nc3 Bc5",
-        "explanation": "When White plays Nc3 instead of d3, Black still has the Bc5 + Ng4 battery available. The natural attack on f2 (combined with Qd4 threats) means White must be extremely careful — the standard Stafford traps still apply."
-      },
-      {
-        "name": "Stafford Gambit: e5 Push Line",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4",
-        "explanation": "After 5.e5, Black plays Ne4 — the centralized knight controls key squares and supports the typical Bxf2+ tactical resources. Black's piece activity continues to compensate for the pawn deficit."
+        "name": "Nc3 — the Knight Raid",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 Nc3 Bc5 d3 Ng4 Bf4 Nxf2 Qd2 Nxh1",
+        "explanation": "After 5.Nc3 Bc5 6.d3 Ng4, the knight lands on f2: 7.Bf4 Nxf2 8.Qd2 Nxh1 wins the exchange and keeps the attack.",
+        "sources": [
+          "https://www.chess.com/openings/Russian-Game-Stafford-Gambit",
+          "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
+        ]
       }
     ],
-    "trapLines": [],
+    "trapLines": [
+      {
+        "name": "The Stafford Mate",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Bg5 Nxe4 Bxd8 Bxf2+ Ke2 Bg4#",
+        "explanation": "6.Bg5? Nxe4! 7.Bxd8 Bxf2+ 8.Ke2 Bg4# — checkmate. The signature Stafford trap.",
+        "sources": [
+          "https://www.chess.com/openings/Russian-Game-Stafford-Gambit"
+        ]
+      }
+    ],
     "warningLines": [
       {
         "name": "White Plays d3-Be2-O-O Accurately",
@@ -433,15 +444,15 @@
     "id": "englund-gambit",
     "eco": "A40",
     "name": "Englund Gambit",
-    "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Nc3 Bb4 Rb1 Qa3",
+    "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Bc3 Bb4",
     "color": "black",
-    "style": "Trappy, Unorthodox",
-    "overview": "The Englund Gambit is named after Swedish master Fritz Englund who promoted the line in the early 1900s — he even organized a 1932 tournament in Stockholm where all participants were required to play 1.d4 e5 as Black! Despite this enthusiastic championing, the gambit was widely dismissed as unsound for nearly a century. Modern players use it almost exclusively as a surprise weapon: most 1.d4 players have never studied 1.d4 e5 because every reasonable opening book tells you the move is bad. That ignorance is exactly Black's edge — the traps are so well-hidden that even strong opponents fall for them. NOTE: the entire opening is essentially off-master-game theory — Lichess Explorer shows zero high-level masters playing 1...e5 against 1.d4. The lines come from popular online and amateur theory.",
+    "style": "Tactical, trap-based surprise weapon",
+    "overview": "The Englund Gambit (1…e5) is a surprise TRAP weapon — objectively Black is a clean pawn down with no full compensation, so it is a practical try, not a sound opening. Its whole point is the …Qe7 / …Qb4+ raid: if White grabs space naturally with Bf4, Black's queen jumps to b4 with check, snaps b2, and the …Bb4 pin can even end in mate. Every line here ends with Black WINNING — spring the trap, but know the risk (see the warnings).",
     "keyIdeas": [
-      "Sacrifice the e5 pawn to shatter White's normal d4 development routine — opponents expecting a Queen's Gambit or Indian Defense are thrown into unfamiliar tactical territory from move one",
-      "Qe7 pins the e5 pawn to White's king — if White isn't careful, the pawn drops back for free",
-      "Rapid development with Nf6, Ng4, and Bc5 creates tactical threats against the f2 square",
-      "The surprise factor alone wins many games — opponents waste time and clock trying to figure out what's happening"
+      "…Qe7 eyes both the e5-pawn and the b4-h4 check that powers the whole gambit.",
+      "…Qb4+ forks: the check picks up b2 and pins along the queenside.",
+      "…Bb4 pins the c3-bishop to the queen — the motif behind the …Qc1# mating trap.",
+      "Against the accurate 4.Nbd2 / quiet returns, Black simply has too little — it is a one-shot weapon."
     ],
     "traps": [
       "After 3.Nf3 Qe7 4.Bf4 Qb4+ — the famous Englund trap. If White blocks with Bd2, Qxb2 attacks the rook and wins a pawn with interest.",
@@ -455,32 +466,34 @@
     ],
     "variations": [
       {
-        "name": "Englund Gambit: Qb4+ Main Trap Line",
-        "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Nc3 Bb4 Rb1 Qa3 Nd5 Bxd2+ Qxd2 Kd8 Rb3 Qa5 e4 Nxe5 Nxe5 Qxd2+ Kxd2 Nf6 Nxf7+ Ke8 Nxf6+ gxf6",
-        "explanation": "The infamous Qb4+ trick — Black threatens Qxb2 winning the rook. Even after White defends with Bd2 and Nc3, the queen invades to b2. After Rb1 Qa3 Nd5, the position is chaotic and full of tricks. Black has real practical chances despite the objective assessment."
+        "name": "Qb4+ Raid (main)",
+        "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Bc3 Bb4",
+        "explanation": "4.Bf4? Qb4+ 5.Bd2 Qxb2 6.Bc3 Bb4! — Black has won the b2-pawn and pins the bishop; White is already lost.",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Englund_Gambit",
+          "https://www.chess.com/openings/Englund-Gambit"
+        ]
       },
       {
-        "name": "Englund Gambit: Soller Variation (f6 Regain)",
-        "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bg5 f6 exf6 Nxf6 Nc3 d5 e3 Bf5 Bd3 Bxd3 Qxd3 O-O-O O-O Kb8 Nd4 Nxd4 exd4 Rd6 f4 Qe8 Rae1 Qd7 Re5 Ng4 Re8+ Qxe8",
-        "explanation": "Black plays f6 to regain the pawn immediately. After exf6 Nxf6, Black has decent development and an open f-file. The Bf5 exchange simplifies into a playable middlegame. This is the most respectable line of the Englund and the one you should aim for against stronger opponents."
-      },
-      {
-        "name": "Englund Gambit: Zilbermints with Nge7",
-        "pgn": "d4 e5 dxe5 Nc6 Nf3 Nge7 Nc3 Ng6 Bg5 Be7 Bxe7 Qxe7 e3 Ncxe5 Nxe5 Nxe5 Be2 O-O O-O d6 f4 Nc6 Bf3 Bf5 Nd5 Qd7 Qd2 Rae8 Rae1 Re6 c3 Rfe8",
-        "explanation": "The Zilbermints Variation with Nge7-Ng6 recovers the pawn more slowly but with better piece placement. The knight on g6 targets e5 and Black can recapture without weakening the pawn structure. This is a more positional approach that avoids the worst tactical pitfalls."
-      },
-      {
-        "name": "Englund Gambit: Hartlaub-Charlick Gambit",
-        "pgn": "d4 e5 dxe5 d6 exd6 Bxd6 Nf3 Nf6 e3 O-O Be2 Nc6 O-O Re8 Nc3 Bg4 Nd4 Bxe2 Qxe2 Nxd4 exd4 Rxe2 Nxe2 Qe7 d5 Re8 Nc3 Bc5 Be3 Ng4 Bxc5 Qxc5",
-        "explanation": "An alternative move order where Black plays d6 to recover the pawn on d6 instead of Nc6. This leads to a position where Black has good piece activity and rapid development. After Bxd6 and O-O, Black has natural squares for every piece and the open e-file provides counterplay."
-      },
-      {
-        "name": "Englund Gambit: d6 Trick with Bg4",
-        "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Nc3 Nxe5 Nxe5 Qxe5 e3 Nf6 Bd3 d5 O-O Bg4 f3 Bh5 e4 dxe4 fxe4 Bg6 Bg5 Bxe4 Bxe4 Nxe4 Nxe4 Qxe4 Bd8 Rxd8",
-        "explanation": "The d6 trick involves Black delaying development to recover the pawn through piece exchanges. After Nxe5 Qxe5, Black has regained material equality. The Bg4 pin creates tactical ideas and after the complex sequence, Black reaches a roughly equal endgame. Not the most ambitious but practical."
+        "name": "The Englund Mate (Qc1#)",
+        "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Bc3 Bb4 Qd2 Bxc3 Qxc3 Qc1#",
+        "explanation": "7.Qd2? Bxc3 8.Qxc3 Qc1# — the famous Englund Gambit checkmate, the queen delivering mate on c1.",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Englund_Gambit",
+          "https://www.chess.com/openings/Englund-Gambit"
+        ]
       }
     ],
-    "trapLines": [],
+    "trapLines": [
+      {
+        "name": "The Englund Mate",
+        "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Bc3 Bb4 Qd2 Bxc3 Qxc3 Qc1#",
+        "explanation": "…Bb4 pins, and 8.Qxc3 Qc1# mates. The signature Englund trap.",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Englund_Gambit"
+        ]
+      }
+    ],
     "warningLines": []
   }
 ]
