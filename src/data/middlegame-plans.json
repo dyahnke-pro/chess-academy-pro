@@ -33736,20 +33736,25 @@
     "id": "mp-siciliannajdorf-6g3",
     "openingId": "sicilian-najdorf",
     "title": "6.g3 Fianchetto: Easy Equality",
-    "criticalPositionFen": "1rbq1rk1/1p1nbppp/p2p1n2/4p3/P3P3/2N3P1/1PP1NPBP/R1BQ1RK1 w - - 1 11",
+    "criticalPositionFen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N3P1/PPP2P1P/R1BQKB1R b KQkq - 0 6",
     "overview": "Against the quiet g3 fianchetto Black takes the centre with e5, develops smoothly, and reroutes the rook to b8 to prepare the b5 break despite a4 — comfortable equality with all the winning chances.",
     "pawnBreaks": [
       {
-        "move": "b5",
-        "explanation": "b5 expands once prepared, even after White's a4.",
-        "fen": "1rbq1rk1/1p1nbppp/p2p1n2/4p3/P3P3/2N3P1/1PP1NPBP/R1BQ1RK1 w - - 1 11"
+        "move": "…b5-b4 — the queenside lever",
+        "explanation": "Black expands with …b5 and can push …b4 to challenge the c3-knight, the Najdorf counterplay even against the fianchetto.",
+        "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N3P1/PPP2P1P/R1BQKB1R b KQkq - 0 6"
       }
     ],
     "pieceManeuvers": [
       {
-        "piece": "Rook",
-        "route": "Ra8-b8",
-        "explanation": "The rook swings to b8 to back the b5 break."
+        "piece": "Knight",
+        "route": "…Nb8-d7 — challenge the d5-outpost",
+        "explanation": "The knight develops to contest or trade White’s strong d5-knight."
+      },
+      {
+        "piece": "Pawn",
+        "route": "…e5 and …b5 — claim the centre and queenside",
+        "explanation": "The …e5 wedge plus …b5 expansion gives Black space on both fronts."
       }
     ],
     "strategicThemes": [
@@ -33762,34 +33767,60 @@
     ],
     "playableLines": [
       {
-        "title": "6.g3 Fianchetto: Easy Equality",
-        "fen": "1rbq1rk1/1p1nbppp/p2p1n2/4p3/P3P3/2N3P1/1PP1NPBP/R1BQ1RK1 w - - 1 11",
+        "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N3P1/PPP2P1P/R1BQKB1R b KQkq - 0 6",
         "moves": [
-          "Be3",
+          "e5",
+          "Nde2",
+          "Be7",
+          "Bg2",
           "b5",
-          "axb5",
-          "axb5"
+          "Nd5",
+          "Nbd7",
+          "Nec3"
         ],
         "annotations": [
-          "Be3 develops, but Black already has the queenside in his sights.",
-          "…b5 — the thematic Najdorf lever, striking at a4 and prying open the queenside where the b8-rook already waits.",
-          "axb5 opens the a-file.",
-          "…axb5 — the a-file is Black’s, the b8-rook rakes the half-open b-file, and the queenside initiative rolls at White’s king."
+          "…e5! The Najdorf's central thrust, claiming space and kicking the d4-knight even against the quiet fianchetto setup.",
+          "White retreats the knight to e2, planning to reroute it.",
+          "…Be7 develops, readying castling and keeping the dark squares solid.",
+          "White completes the fianchetto with Bg2.",
+          "…b5! Black expands on the queenside, gaining space and preparing …Bb7 and …b4 — the standard Najdorf counterplay.",
+          "White posts the knight on the d5-outpost.",
+          "…Nbd7 develops and prepares to challenge or trade the d5-knight, completing Black's harmonious setup.",
+          "White's other knight returns to c3 to support d5. Black has the ideal Najdorf-vs-fianchetto picture: the e5 wedge, queenside space, and easy development — Vachier-Lagrave outplayed Giri from here."
         ],
         "arrows": [
           [],
           [],
           [],
+          [],
+          [],
+          [],
+          [],
           []
         ],
+        "title": "Najdorf vs the Fianchetto (Giri–Vachier-Lagrave)",
         "highlights": [
           [
             {
-              "square": "e3",
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "c1",
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -33797,55 +33828,42 @@
             {
               "square": "b5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "b8",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "b5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a4",
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b5",
+              "square": "d7",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "a6",
+              "square": "c3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b8",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
-        "learnCues": [
-          "Be3 — develop",
-          "b5 — the lever",
-          "axb5 — open the a-file",
-          "axb5 — queenside rolls"
-        ],
+        "intro": "Black answers 6.g3 with the ...e5 wedge and ...b5 expansion.",
         "sources": [
-          "concept:att-queenside-attack",
           "concept:pos-center",
+          "concept:pos-space",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
+        ],
+        "learnCues": [
+          "…e5 — the central wedge",
+          "Nde2 — White reroutes",
+          "…Be7 — develop, ready to castle",
+          "Bg2 — the fianchetto",
+          "…b5 — queenside expansion",
+          "Nd5 — White's outpost",
+          "…Nbd7 — challenge the d5-knight",
+          "Nec3 — White supports d5"
         ]
       }
     ]
