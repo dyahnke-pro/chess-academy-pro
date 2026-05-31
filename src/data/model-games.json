@@ -6375,5 +6375,23 @@
     "middlegameTheme": "Trade the light bishops, blockade d5, grind the queenside.",
     "lessonSummary": "Swap the bad bishop, plant a knight on d5, and outplay White slowly.",
     "variation": "Fort Knox Variation"
+  },
+  {
+    "id": "mg-four-knights-game-rubinstein-variation-4-bb5-nd4",
+    "openingId": "four-knights-game",
+    "white": "Morozevich, Alexander",
+    "black": "Svidler, Peter",
+    "whiteElo": 2760,
+    "blackElo": 2769,
+    "result": "1-0",
+    "year": 2013,
+    "event": "Thessaloniki FIDE GP",
+    "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Nd4 Ba4 Bc5 Nxe5 O-O Nd3 Bb6 e5 Ne8 Nd5 c6 Ne3 d5 O-O f6 c3 Nf5 b4 Qc7 b5 fxe5 Ba3 Rf6 Nb4 e4 bxc6 Rh6 h3 Nh4 Nbxd5 Qe5 cxb7 Nf3+ Qxf3 exf3 bxa8=Q",
+    "studentSide": "white",
+    "overview": "Morozevich shows how to handle the Rubinstein's 4...Nd4: rather than the drawish trade, he keeps pieces on with Ba4 and Nxe5, accepts a gambit-style structure, and outplays Svidler with active piece play and the e5-wedge. A model of fighting for the advantage against Black's equalizing try.",
+    "criticalMoments": [],
+    "middlegameTheme": "Keep pieces on, the e5-wedge, active fighting play.",
+    "lessonSummary": "Avoid the trade with Ba4, grab e5, and play for the initiative.",
+    "variation": "Rubinstein Variation: 4.Bb5 Nd4"
   }
 ]

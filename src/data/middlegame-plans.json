@@ -7491,20 +7491,25 @@
     "id": "mp-fourknightsgame-rubinstein",
     "openingId": "four-knights-game",
     "title": "Rubinstein: the d4-Break that Unleashes the Bishops",
-    "criticalPositionFen": "r1bq1rk1/1pp2ppp/1p1p1n2/4p3/4P3/2PP1B2/PP3PPP/R1BQ1RK1 b - - 0 11",
+    "criticalPositionFen": "r1bqkb1r/pppp1ppp/5n2/1B2p3/3nP3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5",
     "overview": "Having met the Rubinstein's …Nd4 with the calm Be2 and traded off Black's active b6-bishop, White holds the bishop pair in a sound position. The c3-pawn was played for one reason: to support the thematic d4-break that opens the centre and turns the two bishops loose.",
     "pawnBreaks": [
       {
-        "move": "d3-d4",
-        "explanation": "The d4-break opens the centre at the moment White's bishops are ready to dominate the long diagonals.",
-        "fen": "r1bq1rk1/1pp2ppp/1p1p1n2/4p3/4P3/2PP1B2/PP3PPP/R1BQ1RK1 b - - 0 11"
+        "move": "e4-e5 — the central wedge",
+        "explanation": "White expands in the centre to cramp Black and convert the extra pawn.",
+        "fen": "r1bqkb1r/pppp1ppp/5n2/1B2p3/3nP3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5"
       }
     ],
     "pieceManeuvers": [
       {
-        "piece": "Queen",
-        "route": "Qd1-d4",
-        "explanation": "After the central exchanges the queen recaptures on d4, centralised and supporting the open-position bishops."
+        "piece": "Bishop",
+        "route": "Bb5-a4 — keep the tension",
+        "explanation": "The bishop avoids the trade to play for the advantage rather than equality."
+      },
+      {
+        "piece": "Knight",
+        "route": "Nf3xe5-d3 — grab and hold the pawn",
+        "explanation": "The knight wins the central pawn, then reroutes to d3 to consolidate."
       }
     ],
     "strategicThemes": [
@@ -7517,36 +7522,26 @@
     ],
     "playableLines": [
       {
-        "title": "Rubinstein: the d4-Break that Unleashes the Bishops",
-        "fen": "r1bq1rk1/1pp2ppp/1p1p1n2/4p3/4P3/2PP1B2/PP3PPP/R1BQ1RK1 b - - 0 11",
+        "fen": "r1bqkb1r/pppp1ppp/5n2/1B2p3/3nP3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5",
         "moves": [
-          "c5",
-          "d4",
-          "cxd4",
-          "cxd4",
-          "exd4",
-          "Qxd4"
+          "Ba4",
+          "Bc5",
+          "Nxe5",
+          "O-O",
+          "Nd3",
+          "Bb6",
+          "e5",
+          "Ne8"
         ],
         "annotations": [
-          "…c5 — Black clamps the d4-square with c5.",
-          "d4! — the thematic break; White opens the centre for the bishop pair.",
-          "…cxd4 — Black captures on d4.",
-          "cxd4 — White recaptures, keeping a broad centre on d4 and e4.",
-          "…exd4 — Black takes again on d4.",
-          "Qxd4 — the queen recaptures on d4, centralised, the open lines favouring the two bishops."
-        ],
-        "sources": [
-          "book:four-knights-game",
-          "concept:pos-development",
-          "https://en.wikipedia.org/wiki/Four_Knights_Game"
-        ],
-        "learnCues": [
-          "c5 — clamp the d4-square",
-          "d4 — the thematic break",
-          "cxd4 — capture on d4",
-          "cxd4 — keep a broad centre",
-          "exd4 — take again",
-          "Qxd4 — centralise, bishops favoured"
+          "Ba4! Avoiding the drawish trade on d4 — White keeps the bishop and plays for more, the ambitious answer to the Rubinstein.",
+          "Black develops the bishop actively to c5.",
+          "Nxe5! White snatches the central pawn, accepting some structural risk for a clear extra pawn and the e5-wedge.",
+          "Black castles, seeking development for the pawn.",
+          "White repositions the knight to d3, holding the extra material and shoring up the position.",
+          "…Bb6 retreats the bishop to safety.",
+          "e5! White expands, the central pawn cramping Black and gaining space for the pieces.",
+          "…Ne8 retreats the harassed knight. White is a clean pawn up with the e5-wedge and the more active game — Morozevich converted exactly this against Svidler."
         ],
         "arrows": [
           [],
@@ -7554,62 +7549,25 @@
           [],
           [],
           [],
+          [],
+          [],
           []
         ],
+        "title": "Fighting the Rubinstein (Morozevich–Svidler)",
         "highlights": [
           [
             {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d3",
+              "square": "a4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "c5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -7617,14 +7575,50 @@
           ],
           [
             {
-              "square": "d4",
+              "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d1",
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "intro": "White avoids the trade and plays for the extra pawn.",
+        "sources": [
+          "concept:pos-initiative",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Four_Knights_Game"
+        ],
+        "learnCues": [
+          "Ba4 — avoid the trade, keep the bishop",
+          "…Bc5 — Black develops",
+          "Nxe5 — grab the central pawn",
+          "…O-O — Black castles",
+          "Nd3 — hold the extra pawn",
+          "…Bb6 — retreat",
+          "e5 — expand, cramp Black",
+          "…Ne8 — Black retreats"
         ]
       }
     ]
