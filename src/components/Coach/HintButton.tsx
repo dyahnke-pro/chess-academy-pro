@@ -9,10 +9,10 @@ interface HintButtonProps {
 }
 
 const LEVEL_LABELS: Record<HintLevel, string> = {
-  0: 'Show Answer',
-  1: 'Show Answer',
-  2: 'Show Answer',
-  3: 'Answer Shown',
+  0: 'Hint',
+  1: 'Hint',
+  2: 'Hint',
+  3: 'Hint Shown',
 };
 
 const LEVEL_COLORS: Record<HintLevel, { className: string; rgb: string | null; glow: string; glowHover: string }> = {

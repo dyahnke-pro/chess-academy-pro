@@ -313,7 +313,7 @@ describe('PracticeMode', () => {
   it('shows hint button on player turn', () => {
     renderPractice();
     expect(screen.getByTestId('hint-button')).toBeInTheDocument();
-    expect(screen.getByText('Show Answer')).toBeInTheDocument();
+    expect(screen.getByText('Hint')).toBeInTheDocument();
     expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '0');
   });
 

@@ -294,9 +294,13 @@ describe('HINT prompt discipline (verbatim guarantees)', () => {
     expect(HINT_TIER_2_ADDITION).toMatch(/disambiguate/);
   });
 
-  it('Tier 3 asks for the move plus the plan it enables', () => {
-    expect(HINT_TIER_3_ADDITION).toMatch(/2-3 sentences/);
+  it('Tier 3 caps length and forbids inventing tactics', () => {
+    // The full answer is a quick hint, not a lecture — hard numeric cap
+    // (G5: caps are numeric, not soft phrasing) + an anti-hallucination
+    // grounding clause so the brain stops inventing pins/forks/skewers.
+    expect(HINT_TIER_3_ADDITION).toMatch(/MAX 2 sentences/);
+    expect(HINT_TIER_3_ADDITION).toMatch(/MAX 40 words/);
     expect(HINT_TIER_3_ADDITION).toMatch(/move itself/);
-    expect(HINT_TIER_3_ADDITION).toMatch(/plan it enables/);
+    expect(HINT_TIER_3_ADDITION).toMatch(/do NOT invent tactics/);
   });
 });
