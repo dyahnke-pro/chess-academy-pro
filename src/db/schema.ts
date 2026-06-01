@@ -12,6 +12,7 @@ import type {
   MetaRecord,
   MistakePuzzle,
   ModelGame,
+  ProGameReference,
   MiddlegamePlan,
   GeneratedContent,
   OpeningWeakSpot,
@@ -52,6 +53,7 @@ class ChessAcademyDB extends Dexie {
   meta!: EntityTable<MetaRecord, 'key'>;
   mistakePuzzles!: EntityTable<MistakePuzzle, 'id'>;
   modelGames!: EntityTable<ModelGame, 'id'>;
+  proGameReferences!: EntityTable<ProGameReference, 'id'>;
   middlegamePlans!: EntityTable<MiddlegamePlan, 'id'>;
   generatedContent!: EntityTable<GeneratedContent, 'id'>;
   openingWeakSpots!: EntityTable<OpeningWeakSpot, 'id'>;
@@ -664,6 +666,34 @@ class ChessAcademyDB extends Dexie {
       findSquareAttempts: 'id, timestamp, target, correct, color',
       // Shared misconception bucket (Discussion Practice + Game Review +
       // import auto-analysis). The Training Plan reads it for drills.
+      misconceptionTags: 'id, tag, source, status, createdAt, openingId, sourceGameId',
+    }).upgrade(async () => {
+      // Brand-new store; no migration.
+    });
+
+    // v29 — pro game references: the coach's breadth layer of real
+    // player games for teaching + walkthroughs (David 2026-06-01).
+    this.version(29).stores({
+      puzzles: 'id, rating, *themes, srsDueDate, userRating',
+      openings: 'id, eco, name, color, isRepertoire, isFavorite',
+      games: 'id, source, eco, date, isMasterGame, openingId',
+      flashcards: 'id, openingId, type, srsDueDate',
+      profiles: 'id',
+      sessions: 'id, date, profileId',
+      meta: 'key',
+      mistakePuzzles: 'id, sourceGameId, classification, srsDueDate, status, sourceMode, gamePhase',
+      modelGames: 'id, openingId',
+      proGameReferences: 'id, playerId, openingId, proOpeningId, variation',
+      middlegamePlans: 'id, openingId',
+      generatedContent: 'id, openingId, type, generatedAt',
+      openingWeakSpots: 'id, openingId, failCount, lastFailedAt',
+      classifiedTactics: 'id, sourceGameId, tacticType, playerColor, createdAt',
+      setupPuzzles: 'id, tacticType, difficulty, srsDueDate, status, sourceGameId',
+      openingNarrations: 'id, openingName, variation, moveSan, fen, approved',
+      cachedOpenings: 'normalizedName, eco, generatedAt',
+      endgameProgress: 'id, lessonId, lastPlayedAt',
+      srsOpeningCards: 'id, openingId, nextReviewAt, [openingId+nextReviewAt]',
+      findSquareAttempts: 'id, timestamp, target, correct, color',
       misconceptionTags: 'id, tag, source, status, createdAt, openingId, sourceGameId',
     }).upgrade(async () => {
       // Brand-new store; no migration.

@@ -32,6 +32,7 @@ import { loadAnnotationContextForLive } from './sources/annotationContext';
 import { loadBookGroundingForLive } from './sources/bookGrounding';
 import { loadMiddlegamePlanForLive } from './sources/middlegamePlan';
 import { loadModelGamesForLive } from './sources/modelGames';
+import { loadPlayerGamesForLive } from './sources/playerGames';
 import { deepseekProvider } from './providers/deepseek';
 import { anthropicProvider } from './providers/anthropic';
 import { COACH_TOOLS, getTool, getToolDefinitions } from './tools/registry';
@@ -482,6 +483,48 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
         category: 'subsystem',
         source: 'coachService.ask.modelGames',
         summary: `model games load failed: ${(err as Error)?.message?.slice(0, 120) ?? 'unknown'}`,
+      });
+    }
+  }
+
+  // Pro player game references (the breadth layer of REAL pro games,
+  // src/data/pro-game-references.json). Scoped to the pro opening when
+  // the surface passes proOpeningId; otherwise matched by base opening
+  // id across every pro who plays the line. The brain walks + cites a
+  // pro's actual games during teaching + walkthroughs instead of the
+  // ~2 hand-narrated model games alone. (David 2026-06-01.)
+  if (!input.liveState.playerGames && (hasOpeningSignal || input.liveState.proOpeningId)) {
+    try {
+      const games = loadPlayerGamesForLive({
+        openingName: input.liveState.lichessSnapshot?.name,
+        moveHistory: input.liveState.moveHistory ?? [],
+        proOpeningId: input.liveState.proOpeningId ?? null,
+      });
+      if (games) {
+        input = {
+          ...input,
+          liveState: { ...input.liveState, playerGames: games },
+        };
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'coachService.ask.playerGames',
+          summary: `loaded ${games.games.length}/${games.totalAvailable} player game ref(s) for ${games.openingName}${games.playerId ? ` (player=${games.playerId})` : ''}`,
+        });
+      } else {
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'coachService.ask.playerGames',
+          summary: `no-match: openingName="${input.liveState.lichessSnapshot?.name ?? '?'}" proOpeningId="${input.liveState.proOpeningId ?? '?'}"`,
+        });
+      }
+    } catch (err) {
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'coachService.ask.playerGames',
+        summary: `player games load failed: ${(err as Error)?.message?.slice(0, 120) ?? 'unknown'}`,
       });
     }
   }

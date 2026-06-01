@@ -1,12 +1,39 @@
 #!/usr/bin/env node
-// Pull every monthly archive for a chess.com player and write one
-// JSONL line per game to data/sources/<player>-chesscom.jsonl.
+// Pull monthly archives for a chess.com player and write one JSONL line
+// per game to data/sources/<player>-chesscom/<YYYY-MM>.jsonl.
 // Public API, no auth needed. Idempotent: skips months already on disk.
+//
+// Date filtering (David 2026-06-01 — "recent games, past two years"):
+//   --since YYYY-MM   only fetch archives at/after this month
+//   --years N         only fetch the most recent N years
+// Default (no flag): every available archive (unchanged).
 
 import fs from 'node:fs';
 import path from 'node:path';
 
 const PLAYER = process.argv[2] || 'danielnaroditsky';
+
+function argVal(flag) {
+  const eq = process.argv.find((a) => a.startsWith(`${flag}=`));
+  if (eq) return eq.split('=')[1];
+  const i = process.argv.indexOf(flag);
+  if (i !== -1 && process.argv[i + 1] && !process.argv[i + 1].startsWith('--')) return process.argv[i + 1];
+  return null;
+}
+
+/** Lower bound "YYYY-MM" from --since / --years, or null for all. */
+function computeSince() {
+  const since = argVal('--since');
+  if (since && /^\d{4}-\d{2}$/.test(since)) return since;
+  const years = Number(argVal('--years'));
+  if (years > 0) {
+    const d = new Date();
+    d.setFullYear(d.getFullYear() - years);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  }
+  return null;
+}
+const SINCE = computeSince();
 const OUT_DIR = path.join('data', 'sources', `${PLAYER}-chesscom`);
 const SUMMARY_PATH = path.join(OUT_DIR, '_summary.json');
 const UA = 'chess-academy-pro pro-repertoire builder (dyahnke@gmail.com)';
@@ -36,10 +63,15 @@ async function main() {
   const archives = await fetchJson(`https://api.chess.com/pub/player/${PLAYER}/games/archives`);
   console.log(`[fetch] ${archives.archives.length} monthly archives`);
 
-  const months = archives.archives.map((url) => {
+  let months = archives.archives.map((url) => {
     const m = url.match(/(\d{4})\/(\d{2})$/);
     return { url, ym: `${m[1]}-${m[2]}` };
   });
+  if (SINCE) {
+    const before = months.length;
+    months = months.filter((m) => m.ym >= SINCE); // lexicographic works for YYYY-MM
+    console.log(`[fetch] --since ${SINCE}: ${months.length}/${before} archives in range`);
+  }
 
   let totalGames = 0;
   let totalNew = 0;
