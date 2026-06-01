@@ -391,6 +391,13 @@ const OPENINGS = {
     minPrefix: ['d4', 'Nf6', 'c4', 'g6'],
     maxDepth: 80,
   },
+  'carlsen-french-black': {
+    name: 'French Defense (Black)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['e4', 'e6'],
+    maxDepth: 80,
+  },
 };
 
 const cfg = OPENINGS[OPENING_ID];
