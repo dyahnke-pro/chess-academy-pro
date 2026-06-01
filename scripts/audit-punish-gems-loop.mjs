@@ -33,6 +33,7 @@ import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
+import { seedUnlockedOpenings } from './audit-lib/idb-unlock.mjs';
 import { mkdir, writeFile, readFile } from 'node:fs/promises';
 
 const URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
@@ -197,6 +198,19 @@ async function ensureWeapons(page, id) {
   const st = await openDetail(page, id);
   if (st !== 'card' && st !== 'detail') return st; // notfound / timeout
   if (await gemPlayable(page)) return 'card';
+  // SEED the progression UNLOCKED in IndexedDB (G1 #4 + 2026-06-01 problem-solve).
+  // The expert-pass CLICK does NOT surface the gems — they live INSIDE the
+  // ladder, and the runtime markRungComplete/unlock write stalls in the sandbox.
+  // Seeding `linesUnlockedAll` makes the unlocked STATE a READ (areWeaponsUnlocked
+  // → true), so the gems surface and can be PLAYED. Proven on prod 2026-06-01:
+  // 4 gem-watch buttons surfaced after the seed. The runtime unlock-WRITE
+  // persistence is the separate fake-indexeddb unit-test / real-device concern.
+  const seed = await seedUnlockedOpenings(page, [id]);
+  if (seed.ok && seed.updated > 0) {
+    const st2 = await openDetail(page, id); // reload so React reads the unlocked state
+    if ((st2 === 'card' || st2 === 'detail') && await gemPlayable(page)) return 'card';
+  }
+  // Fallback: the expert-pass two-tap (rarely needed once seeding works).
   const btn = page.locator('[data-testid="weapons-unlock-all-btn"]').first();
   if (await btn.isVisible().catch(() => false)) {
     await btn.click().catch(() => {});       // tap 1: arm the confirm
@@ -207,7 +221,7 @@ async function ensureWeapons(page, id) {
       if (await gemPlayable(page)) return 'card';
     }
   }
-  return 'locked'; // sandbox: unlock write stalled (G1) — gem probes are device/prod-only
+  return 'locked'; // even seeding failed — gem probes are device/prod-only
 }
 async function exitPlayer(page) {
   // The player exposes a back/exit affordance; fall back to browser back.
