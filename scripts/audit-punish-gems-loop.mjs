@@ -115,7 +115,41 @@ async function makeCtx(browser) {
 
 async function bootSeed(page) {
   await page.goto(`${URL}/`, { waitUntil: 'networkidle' });
-  await page.waitForTimeout(12000);
+  // Fresh-context onboarding bubble blocks every click until dismissed (G1
+  // caveat #5). Pick a skill band and wait for it to detach.
+  try {
+    const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
+    if (await bubble.isVisible({ timeout: 8000 }).catch(() => false)) {
+      await page.locator('[data-testid="skill-band-intermediate"]').click().catch(() => {});
+      await bubble.waitFor({ state: 'detached', timeout: 15000 }).catch(() => {});
+    }
+  } catch { /* no bubble */ }
+  // Pro-rep entries land ~30s into the deferred seed, full seed ~50s (G1 caveat
+  // #6) — 12s was far too short for a pro-gothamchess opening to be in Dexie.
+  // Poll the openings store until it fills past the base repertoire, cap ~60s.
+  for (let i = 0; i < 30; i++) {
+    await page.waitForTimeout(2000);
+    const n = await page.evaluate(async () => {
+      try {
+        const dbs = await indexedDB.databases();
+        const name = (dbs.find((d) => /chess/i.test(d.name || '')) || {}).name;
+        if (!name) return 0;
+        return await new Promise((res) => {
+          const req = indexedDB.open(name);
+          req.onsuccess = () => {
+            const db = req.result;
+            if (!db.objectStoreNames.contains('openings')) { res(0); return; }
+            const tx = db.transaction('openings', 'readonly').objectStore('openings').count();
+            tx.onsuccess = () => res(tx.result); tx.onerror = () => res(0);
+          };
+          req.onerror = () => res(0);
+          setTimeout(() => res(-1), 4000); // open stalled (sandbox write-stall)
+        });
+      } catch { return 0; }
+    }).catch(() => 0);
+    if (n >= 100) return;       // seeded well past base — pro entries present
+    if (n === -1 && i >= 5) return; // IDB stalled (sandbox) — proceed, caller handles
+  }
 }
 async function openDetail(page, id) {
   await page.goto(`${URL}/openings/${id}`, { waitUntil: 'domcontentloaded' });
