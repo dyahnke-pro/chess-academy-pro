@@ -70,4 +70,15 @@ describe('middlegame-plan FEN side-to-move coherence gate', () => {
     }
     expect(mismatches).toEqual([]);
   });
+
+  // Regression gate (2026-06-01): a plan with no `criticalPositionFen` renders
+  // a MiniBoard tile with an undefined FEN, which crashed the WHOLE opening
+  // detail page through the ErrorBoundary (8 Aman pro-rep pages went white).
+  // Every plan MUST carry a non-empty criticalPositionFen.
+  it('every plan has a non-empty criticalPositionFen', () => {
+    const missing = PLANS
+      .filter((p) => typeof p.criticalPositionFen !== 'string' || !p.criticalPositionFen.trim())
+      .map((p) => p.id);
+    expect(missing).toEqual([]);
+  });
 });
