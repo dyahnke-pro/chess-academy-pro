@@ -30,6 +30,10 @@ on:
         description: 'Space-separated audit script basenames (no path). Default: core set.'
         required: false
         default: ''
+      audit_opening:
+        description: 'Scope the loop audit to ONE opening id (blank = full sweep).'
+        required: false
+        default: ''
 
 # A newer push supersedes an in-flight audit of an older build.
 concurrency:
@@ -116,6 +120,54 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: audit-reports-${{ steps.sha.outputs.short }}
+          path: audit-reports/
+          if-no-files-found: warn
+          retention-days: 14
+
+  # The LOOP AUDIT (David 2026-06-01: "audit" = the punish-gems loop 3-pass
+  # contract). It CANNOT run in the Claude Code sandbox — its gem-unlock step
+  # WRITES to the openings IndexedDB store, which stalls in the sandbox
+  # Chromium (CLAUDE.md G1 #4). A GitHub runner uses real Chromium with no
+  # write-stall, so the 3-pass contract can actually complete here. Separate
+  # job + longer timeout so the multi-tier sweep doesn't crowd the core set.
+  loop-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    env:
+      PROD_URL: https://chess-academy-pro.vercel.app
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund --prefer-offline
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Resolve short SHA
+        id: sha
+        run: echo "short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+      - name: Wait for prod to serve this build
+        env:
+          EXPECTED_SHA: ${{ steps.sha.outputs.short }}
+          TIMEOUT_MS: '900000'
+          INTERVAL_MS: '15000'
+        run: node scripts/wait-for-prod-build.mjs
+      - name: Run the punish-gems loop audit (3-pass contract) against prod
+        env:
+          AUDIT_SMOKE_URL: https://chess-academy-pro.vercel.app
+          # Scope to one player/opening set via workflow_dispatch when needed;
+          # blank = the full masterclass + pro-rep sweep.
+          AUDIT_OPENING: ${{ github.event.inputs.audit_opening }}
+        run: node scripts/audit-punish-gems-loop.mjs
+      - name: Upload loop-audit reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: loop-audit-${{ steps.sha.outputs.short }}
           path: audit-reports/
           if-no-files-found: warn
           retention-days: 14
