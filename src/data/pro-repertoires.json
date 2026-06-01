@@ -3230,6 +3230,28 @@
             "https://www.chess.com/openings/Ruy-Lopez-Opening",
             "https://api.chess.com/pub/player/fabianocaruana/games/archives"
           ]
+        },
+        {
+          "name": "Berlin Endgame",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 dxc6 dxe5 Nf5 Qxd8+ Kxd8 h3 Bd7 Rd1 Kc8",
+          "explanation": "68 games. Against the Berlin, Caruana castles and goes into the famous queenless endgame — Qxd8+ trades queens, Black loses castling, and White grinds the healthier kingside structure. His World-Championship-level speciality.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Ruy-Lopez-Opening",
+            "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+          ]
+        },
+        {
+          "name": "Open Variation",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Nxe4 d4 b5 Bb3 d5 dxe5 Be6 Nbd2 Nc5 c3 Be7 Bc2",
+          "explanation": "28 games. When Black grabs e4 in the Open Ruy, Caruana strikes the centre with d4, challenges the e4-knight with Nbd2, and preserves the light-squared bishop with Bc2 for slow pressure on the weakened light squares.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Ruy-Lopez-Opening",
+            "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+          ]
         }
       ],
       "sources": [
@@ -3859,6 +3881,42 @@
             "https://www.chess.com/openings/French-Defense",
             "https://api.chess.com/pub/player/fabianocaruana/games/archives"
           ]
+        },
+        {
+          "name": "Advance 3.e5",
+          "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Bd7 Be2 Nge7 O-O Ng6",
+          "explanation": "20 games. Against the Advance, Caruana strikes the d4-base with …c5 and …Nc6, frees his light bishop with …Bd7, and reroutes the king knight via …Nge7-g6 to press the e5-pawn — textbook French counterplay.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pawn-minority-attack",
+            "https://en.wikipedia.org/wiki/French_Defence",
+            "https://www.chess.com/openings/French-Defense",
+            "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+          ]
+        },
+        {
+          "name": "Tarrasch 3.Nd2",
+          "pgn": "e4 e6 d4 d5 Nd2 Be7 Ngf3 Nf6 e5 Nfd7 c3 c5 Bd3",
+          "explanation": "25 games. Caruana meets the Tarrasch with the flexible …Be7, lets White grab space with e5, then hits back with …c5 against the d4-base — the classic Tarrasch middlegame where Black has the freer breaks.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pawn-minority-attack",
+            "https://en.wikipedia.org/wiki/French_Defence",
+            "https://www.chess.com/openings/French-Defense",
+            "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+          ]
+        },
+        {
+          "name": "Exchange 3.exd5",
+          "pgn": "e4 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bd3 Bd6 O-O O-O",
+          "explanation": "13 games. The symmetrical Exchange French. Caruana mirrors White, develops actively, and plays the open position for a win — fighting for the e-file and the first pawn break rather than accepting the draw.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pawn-minority-attack",
+            "https://en.wikipedia.org/wiki/French_Defence",
+            "https://www.chess.com/openings/French-Defense",
+            "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+          ]
         }
       ],
       "sources": [
@@ -3891,6 +3949,18 @@
           "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 c5 Be3 Qb6 Nc3 Nc6 O-O cxd4 Nxd4 Nxd4",
           "explanation": "The Advance Variation and the Caro's whole point — ...Bf5 develops the light bishop outside the chain, then ...c5 and ...Qb6 pressure White's centre into a comfortable game.",
           "sources": [
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
+            "https://www.chess.com/openings/Caro-Kann-Defense",
+            "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+          ]
+        },
+        {
+          "name": "Exchange 3.exd5",
+          "pgn": "e4 c6 d4 d5 exd5 cxd5 Bd3 Nc6 c3 Nf6 Bf4 Bg4 Qb3",
+          "explanation": "12 games. In the Exchange Caro, …cxd5 frees the light-squared bishop outside the chain. Caruana develops it actively to g4, sets up sound symmetric play, and holds the queenside probe with ease.",
+          "sources": [
+            "book:chess-fundamentals",
             "concept:pos-development",
             "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
             "https://www.chess.com/openings/Caro-Kann-Defense",

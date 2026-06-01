@@ -14,6 +14,11 @@ other databases."*
 - Lichess **masters explorer** (app proxy) — OTB aggregate + topGames w/ ids.
 - Lichess **game-export** (app proxy) — full PGNs. TWIC — reachable backup.
 
+## SHIPPED + PROD-VERIFIED (main 07788e0e, bundle index-CVK3DfyX)
+P1 + P3 below landed on main and the post-deploy audit is green:
+`audit-coach-player-games` → 797 refs load on prod (caruana+naroditsky,
+sources otb+chess.com, shapeOk). modelGames + proGameReferences gates green.
+
 ## Done (gate-green)
 - **P1 — game references 0 → 317.** `extract-caruana-otb.mjs` classifies the
   6,007 games into his 8 openings (by move prefix), tags variation by ECO,
