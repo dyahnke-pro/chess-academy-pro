@@ -3824,7 +3824,7 @@
           "pgn": "e4 e5 f4 Nc6 Nf3 d6 Bc4 Bg4 O-O Nf6 Nc3 Be7 d3 O-O fxe5 Nxe5",
           "explanation": "When Black declines with …Nc6, Samay builds the dream King's-Gambit setup with no pawn given: Nf3, Bc4, castle, Nc3 and d3. Then he opens the f-file with fxe5 and piles pieces on f7 — the attack simply arrives a move later.",
           "sources": [
-            "concept:att-attack",
+            "concept:att-kingside-storm",
             "https://api.chess.com/pub/player/samayraina/games/archives",
             "https://www.chess.com/openings/Kings-Gambit-Declined"
           ]
@@ -3843,7 +3843,7 @@
       "trapLines": [],
       "warningLines": [],
       "sources": [
-        "concept:att-attack",
+        "concept:att-kingside-storm",
         "https://api.chess.com/pub/player/samayraina/games/archives"
       ]
     },

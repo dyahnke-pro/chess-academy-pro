@@ -97,9 +97,30 @@ tabs 20→~40 · model games 24→~45 · **middlegame plans 8→~45** · pitfall
 - `scripts/pro-repertoire/samay-middlegame-patterns.mjs` — middlegame plan clusters
 - `scripts/pro-repertoire/samay-middlegame-patterns.mjs` + `pick-samay-endgame-game.mjs`
 
-## Status / order
-P1 data ✅ · P2 spines captured ✅ · P3 rebuild per opening — IN PROGRESS.
-Order (worst first): caro-white → french-white → sicilian-black → open-sicilian
-→ open-e5 → ruy(+King's Gambit) → italian(verify) → scandi(keep).
-Each opening committed atomically; repertoire never left in a broken state
-(un-rebuilt openings keep their current working lines until their turn).
+## SESSION RESULT (2026-06-01)
+
+DONE (committed + pushed, each atomic + gate-green):
+- **sicilian-black REBUILT** — main → …e5 Kalashnikov (697g) + all 4 variations
+  → his real responses (Bc4 626g, Alapin …d5 332g, Rossolimo …Nd4 214g, Closed
+  555g). Old Najdorf (≈2g) scrapped.
+- **open-e5 REBUILT** — main → Italian Pianissimo (he faces Bc4 most); Ruy
+  demoted to a variation.
+- **King's Gambit ADDED** — his missing 824-game weapon (Bishop's Gambit + KGD
+  + Falkbeer), new opening + lessons + entry + tab-plan resolver + index reg.
+- **Plans 11→14** — data-grounded main breaks for the 3 rebuilt openings.
+- **Model games 24→41** — real-win pulls, ~6/opening (near Naroditsky 49).
+- **Pitfalls 10→14** — tactically-verified / textbook-documented only.
+
+HONEST CEILING (the doctrine forbids fabrication):
+- Deeper per-variation **plans** can't be data-grounded — his 22k corpus thins
+  past the opening (vs Naroditsky's 140k); beyond the main breaks there aren't
+  ≥5-game continuations. Endgame plans stay at 3 (clean teachable games only;
+  ruy/open-e5/scandi candidates are blitz-scrappy/opponent-blunder → self-hide).
+- More **pitfalls/gems** need engine verification — no native Stockfish here;
+  route to `mine-punish-gems.yml` CI per doctrine.
+- Naroditsky's literal 81 plans / 48 pitfalls / 53 tabs are NOT honestly
+  reachable from Samay's smaller corpus without inventing. The data-faithful
+  spines (the real defect) + near-parity models ARE done.
+
+PRE-EXISTING, NOT SAMAY: `proRepTabPlanCoverage` red on 4 `pro-caruana-*`
+variations (another build's missing resolvers); left untouched.

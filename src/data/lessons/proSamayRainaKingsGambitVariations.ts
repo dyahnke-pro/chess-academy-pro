@@ -8,7 +8,7 @@ const A = (from: string, to: string, color = VIS): AnnotationArrow => ({ from, t
 interface BeatInit { id: string; moves: string; say: string; sayShort: string; arrows?: AnnotationArrow[]; highlights?: AnnotationHighlight[]; }
 function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return { ...rest, moves: moves.trim().split(/\s+/) }; }
 const OID = 'pro-samayraina-kings-gambit';
-const SRC = ['concept:att-attack', 'concept:pos-development', 'https://www.chess.com/openings/Kings-Gambit', 'https://api.chess.com/pub/player/samayraina/games/archives'];
+const SRC = ['concept:att-kingside-storm', 'concept:pos-development', 'https://www.chess.com/openings/Kings-Gambit', 'https://api.chess.com/pub/player/samayraina/games/archives'];
 
 const VS_DECLINED: LessonScript = {
   openingId: OID, title: "vs King's Gambit Declined (…Nc6)", minutes: 5,

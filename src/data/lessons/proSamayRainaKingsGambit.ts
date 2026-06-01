@@ -9,7 +9,7 @@ const VIS = 'rgba(40,185,95,0.92)'; const KEY = 'rgba(255,214,0,0.88)'; const SO
 const A = (from: string, to: string, color = VIS): AnnotationArrow => ({ from, to, color });
 interface BeatInit { id: string; moves: string; say: string; sayShort: string; arrows?: AnnotationArrow[]; highlights?: AnnotationHighlight[]; }
 function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return { ...rest, moves: moves.trim().split(/\s+/) }; }
-const SRC = ['concept:att-attack', 'concept:pos-center', 'https://www.chess.com/openings/Kings-Gambit', 'https://api.chess.com/pub/player/samayraina/games/archives'];
+const SRC = ['concept:att-kingside-storm', 'concept:pos-center', 'https://www.chess.com/openings/Kings-Gambit', 'https://api.chess.com/pub/player/samayraina/games/archives'];
 
 export const PRO_SAMAYRAINA_KINGS_GAMBIT_LESSON: LessonScript = {
   openingId: 'pro-samayraina-kings-gambit', title: "Samay's King's Gambit — the Bishop's Gambit", minutes: 8,
