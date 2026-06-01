@@ -332,6 +332,70 @@ const OPENING_SEEDS = {
 // entry is an array of SAN move-lists (the line up to where the opponent's try
 // lands), walked node-by-node like any variation line.
 const EXTRA_WALK = {
+  // ── Aman Hambleton (2026-06-01): opponent amateur side-tries he faces. ──
+  'pro-aman-sicilian-kan': [
+    ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'a6', 'Nc3', 'Qc7', 'f4'],
+    ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'a6', 'Bd3', 'Nf6', 'Nc3', 'Qc7', 'O-O', 'd6', 'f4'],
+    ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'a6', 'Nc3', 'Qc7', 'g3', 'Nf6', 'Bg2', 'Nc6'],
+    ['e4', 'c5', 'c3', 'd5', 'exd5', 'Qxd5', 'd4', 'Nf6', 'Na3'],
+    ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'Nc6', 'Nb5', 'd6'],
+  ],
+  'pro-aman-nimzo-indian': [
+    ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'Qc2', 'O-O', 'a3', 'Bxc3+', 'Qxc3', 'b6'],
+    ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'a3', 'Bxc3+', 'bxc3', 'c5'],
+    ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'f3', 'd5'],
+    ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'Bg5', 'h6', 'Bh4', 'c5'],
+    ['d4', 'Nf6', 'c4', 'e6', 'Nf3', 'Bb4+', 'Nbd2', 'b6'],
+  ],
+  'pro-aman-caro-kann': [
+    ['e4', 'c6', 'd4', 'd5', 'f3'],
+    ['e4', 'c6', 'd4', 'd5', 'e5', 'Bf5', 'h4'],
+    ['e4', 'c6', 'd4', 'd5', 'e5', 'c5', 'dxc5'],
+    ['e4', 'c6', 'd4', 'd5', 'Bd3'],
+    ['e4', 'c6', 'Nf3', 'd5', 'Nc3', 'Bg4', 'h3', 'Bxf3', 'Qxf3', 'e6', 'd4', 'dxe4'],
+  ],
+  'pro-aman-reti': [
+    ['Nf3', 'd5', 'd4', 'Nf6', 'c4', 'dxc4'],
+    ['Nf3', 'd5', 'd4', 'Nf6', 'c4', 'e6', 'Nc3', 'c5', 'cxd5', 'exd5'],
+    ['Nf3', 'g6', 'e4', 'Bg7', 'd4', 'd6', 'Nc3', 'Nf6', 'Be2', 'O-O', 'O-O', 'Nc6'],
+    ['Nf3', 'Nf6', 'g3', 'd5', 'Bg2', 'c6', 'O-O', 'Bf5', 'd3', 'e6', 'Nbd2', 'h6'],
+    ['Nf3', 'c5', 'e4', 'Nc6', 'Bb5', 'g6', 'Bxc6', 'dxc6'],
+  ],
+  'pro-aman-ruy-lopez': [
+    ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'f5'],
+    ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'Nd4'],
+    ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'Nge7'],
+    ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'b5', 'Bb3', 'Na5'],
+    ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'Nf6', 'O-O', 'Nxe4', 'd4', 'b5', 'Bb3', 'd5', 'dxe5', 'Be6', 'c3', 'Bc5'],
+  ],
+  'pro-aman-open-sicilian': [
+    ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'g6', 'Be3', 'Bg7', 'f3', 'O-O', 'Qd2', 'Nc6', 'O-O-O'],
+    ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Be2', 'e5', 'Nb3', 'Be7'],
+    ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'Nc6', 'Bg5', 'e6', 'Qd2'],
+    ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Bc4'],
+    ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'g6'],
+  ],
+  'pro-aman-rossolimo': [
+    ['e4', 'c5', 'Nf3', 'Nc6', 'Bb5', 'g6', 'Bxc6', 'bxc6', 'O-O', 'Bg7', 'Re1', 'Nf6', 'e5'],
+    ['e4', 'c5', 'Nf3', 'Nc6', 'Bb5', 'e6', 'O-O', 'Nge7', 'c3', 'a6', 'Ba4', 'b5'],
+    ['e4', 'c5', 'Nf3', 'd6', 'Bb5+', 'Bd7', 'Bxd7+', 'Qxd7', 'O-O', 'Nc6', 'c3'],
+    ['e4', 'c5', 'Nf3', 'Nc6', 'Bb5', 'Nd4'],
+    ['e4', 'c5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Bxc6', 'dxc6', 'O-O'],
+  ],
+  'pro-aman-french-white': [
+    ['e4', 'e6', 'd4', 'd5', 'Nc3', 'Bb4', 'e5', 'c5', 'a3', 'Bxc3+', 'bxc3', 'Ne7', 'Qg4'],
+    ['e4', 'e6', 'd4', 'd5', 'Nc3', 'Nf6', 'Bg5', 'Be7', 'e5', 'Nfd7', 'h4'],
+    ['e4', 'e6', 'd4', 'd5', 'Nc3', 'dxe4', 'Nxe4', 'Nd7', 'Nf3', 'Ngf6', 'Nxf6+', 'Nxf6'],
+    ['e4', 'e6', 'd4', 'd5', 'e5', 'c5', 'c3', 'Nc6', 'Nf3', 'Qb6', 'Bd3'],
+    ['e4', 'e6', 'd4', 'd5', 'Nc3', 'Bb4', 'e5', 'Ne7', 'a3', 'Bxc3+', 'bxc3', 'b6'],
+  ],
+  'pro-aman-anti-caro': [
+    ['e4', 'c6', 'Nc3', 'd5', 'Nf3', 'dxe4', 'Nxe4', 'Bf5'],
+    ['e4', 'c6', 'Nc3', 'd5', 'Nf3', 'dxe4', 'Nxe4', 'Nd7'],
+    ['e4', 'c6', 'Nc3', 'd5', 'Nf3', 'Bg4', 'h3', 'Bxf3', 'Qxf3', 'Nf6'],
+    ['e4', 'c6', 'Nc3', 'd5', 'Nf3', 'Nf6', 'e5', 'Nfd7'],
+    ['e4', 'c6', 'Nc3', 'd5', 'Nf3', 'g6', 'd4'],
+  ],
   // ── Caruana (2026-06-01): opponent side-tries his curated spine skips. ──
   // Ruy (student=White): punish Black's offbeat replies to the Spanish.
   'pro-caruana-ruy-lopez': [
