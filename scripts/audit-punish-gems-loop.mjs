@@ -32,9 +32,15 @@
 import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 import { mkdir, writeFile, readFile } from 'node:fs/promises';
 
 const URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
+// Instrument 3 (G1): the narration listener sidecar. When AUDIT_LISTENER_URL
+// is set, every page points its auditStreamUrl localStorage at the local
+// listener so the app POSTs its voice/speak/narration events there — proving
+// Ruth ACTUALLY SPOKE in the running app, not just that /api/tts was hit.
+const LISTENER_URL = process.env.AUDIT_LISTENER_URL || '';
 
 // Data-driven: only WEAPON-tier gems (engine-verified ≥+0.5) surface, so the
 // audit tests exactly the openings that actually have a weapon — not a
@@ -107,6 +113,13 @@ const lineSig = (dicts) => dicts.map(destToken).join('-');
 async function makeCtx(browser) {
   const ctx = await browser.newContext(sandboxContextOptions());
   const page = await ctx.newPage();
+  // Instrument 3: route the app's audit POSTs to the local listener sidecar.
+  const listenerUrl = process.env.AUDIT_LISTENER_URL || LISTENER_URL;
+  if (listenerUrl) {
+    await ctx.addInitScript(({ url, secret }) => {
+      try { localStorage.setItem('auditStreamUrl', url); localStorage.setItem('auditStreamSecret', secret); } catch { /* */ }
+    }, { url: listenerUrl, secret: LOCAL_LISTENER_SECRET });
+  }
   const ev = { pageerrors: [], consoleErrors: [], tts: [] };
   page.on('pageerror', (e) => ev.pageerrors.push(String(e).slice(0, 200)));
   page.on('console', (m) => { if (m.type() === 'error' && !isNoise(m.text())) ev.consoleErrors.push(m.text().slice(0, 200)); });
@@ -535,6 +548,15 @@ async function continuityPreflight() {
     console.log('\n[loop] CONTRACT DEFERRED — no engine-graded weapon gems present. Run the mine-punish-gems Action (Stockfish) to populate, then re-run.');
     process.exit(2);
   }
+  // Instrument 3: spin up the listener sidecar (if not already pointed at one).
+  let listener = null;
+  if (!process.env.AUDIT_LISTENER_URL) {
+    try {
+      listener = await startAuditListener();
+      process.env.AUDIT_LISTENER_URL = listener.url;
+      console.log(`[loop] narration listener sidecar: ${listener.url}`);
+    } catch (e) { console.log(`[loop] listener sidecar unavailable: ${String(e).slice(0, 80)}`); }
+  }
   const exe = await resolveChromiumExecutable();
   const browser = await chromium.launch({ executablePath: exe, headless: true, args: sandboxLaunchArgs() });
   const report = { url: URL, ts: new Date().toISOString(), passes: [] };
@@ -550,6 +572,15 @@ async function continuityPreflight() {
     else { console.log(`[loop] Pass ${level}: ${errs.length} ERROR(S) — streak reset`); errs.forEach((e) => console.log(`   ✗ ${e}`)); clean = 0; }
   }
   await browser.close();
+  // Instrument 3 report: what the listener actually captured from the running app.
+  if (listener) {
+    const captured = listener.getCapturedEvents();
+    const voice = captured.filter((e) => /voice|speak|narration|tts/i.test(e.kind || ''));
+    console.log(`\n[loop] listener sidecar captured ${captured.length} audit event(s), ${voice.length} voice/narration event(s) in-app`);
+    if (voice.length) voice.slice(0, 8).forEach((e) => console.log(`   ♪ ${e.kind} ${(e.source || '')} ${(e.summary || '').slice(0, 70)}`));
+    report.listener = { total: captured.length, voice: voice.length, sample: voice.slice(0, 12) };
+    await listener.stop().catch(() => {});
+  }
   await mkdir('audit-reports', { recursive: true }).catch(() => {});
   await writeFile(`audit-reports/punish-gems-loop-${ONLY || 'all'}-${report.ts.replace(/[:.]/g, '-')}.json`, JSON.stringify(report, null, 2));
   const threeClean = clean === 3;
