@@ -90,3 +90,20 @@ D=move skeleton before prose.
 If interrupted: trees land in `data/sources/chessbrah-trees/`, deep data in
 `chessbrah-deep/`, voice in `chessbrah-voice/`. Resume at the first unchecked
 STEP. The crown jewel (Sicilian Kan) is the depth template; replicate its shape.
+
+## POST-DEPLOY AUDIT + CRASH FIX (2026-06-01)
+The 3-instrument prod audit (G1) caught a **real P0 crash**: 8 of 9 Aman pro
+detail pages white-screened (ErrorBoundary), only the Sicilian Kan rendered.
+Root cause: 11 first-pass Aman middlegame plans shipped WITHOUT a
+`criticalPositionFen` field; `MiniBoard.parseFenPosition` did `fen.split(' ')`
+on undefined → threw inside a useMemo → took down the whole page. Kan's plans
+had the field, so it survived.
+- **Fix:** backfilled `criticalPositionFen` from each plan's `playableLines[0].fen`
+  (the real continuation start — Gate C continuity holds); hardened `MiniBoard`
+  to render an empty board on a missing/blank FEN instead of crashing.
+- **Regression gate:** `middlegamePlanFenCoherence.test.ts` now asserts EVERY
+  plan has a non-empty `criticalPositionFen`.
+- **Verified:** local rebuild + Playwright probe — all 9 openings render (tabs
+  6-8, no error screen). Re-running prod audit after the Vercel deploy.
+This is exactly why G1 exists: green unit tests didn't catch it; the live-UI
+audit did.
