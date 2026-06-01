@@ -165,6 +165,20 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
     }
   }, [idx, beats.length, onComplete]);
 
+  // Audit-only deterministic completion hook — gated behind the `auditMoveHook`
+  // flag (mirrors PlayableLinePlayer's window.__playMove). The full-play audit
+  // (scripts/audit-fullplay-prod.mjs) calls window.__lessonToEnd() to drive the
+  // lesson to its final beat, firing onComplete → markRungComplete, WITHOUT
+  // depending on headless TTS resolving the voice-gated auto-advance (which
+  // flakes to 0 voice events in headless and stalls the progression). No effect
+  // in the real app — the flag is never set there.
+  useEffect(() => {
+    try { if (localStorage.getItem('auditMoveHook') !== '1') return; } catch { return; }
+    const w = window as unknown as { __lessonToEnd?: () => void };
+    w.__lessonToEnd = () => { goToStep(beats.length - 1); };
+    return () => { (window as unknown as { __lessonToEnd?: () => void }).__lessonToEnd = undefined; };
+  }, [goToStep, beats.length]);
+
   // Play this beat's moves ONE AT A TIME from the longest common prefix
   // with the previously-shown line — a linear path the eye can follow,
   // never a multi-move jump. Each move adds a trail arrow that stays on

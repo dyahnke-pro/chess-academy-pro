@@ -127,6 +127,7 @@ export type AuditKind =
   | 'coach-brain-ask-received'
   | 'coach-brain-envelope-assembled'
   | 'coach-brain-provider-called'
+  | 'coach-brain-provider-retry'
   | 'coach-brain-tool-called'
   // Coach-tab full audit #19 — split for filterability. The
   // catch-all `coach-brain-tool-called` covers successful

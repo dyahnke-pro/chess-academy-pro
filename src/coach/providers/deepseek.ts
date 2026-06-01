@@ -16,6 +16,7 @@
  */
 import { getCoachChatResponse } from '../../services/coachApi';
 import { parseActions } from '../../services/coachActionDispatcher';
+import { logAppAudit } from '../../services/appAuditor';
 import type {
   AssembledEnvelope,
   Provider,
@@ -56,30 +57,58 @@ async function callDeepSeek(
   // if DeepSeek's call errors.
   const task = options?.task ?? 'chat_response';
   const maxTokens = options?.maxTokens ?? DEFAULT_MAX_TOKENS;
-  const promise = getCoachChatResponse(
-    [{ role: 'user', content: userMessage }],
-    systemPrompt,
-    onChunk,
-    task,
-    maxTokens,
-    'medium',
-    'deepseek',
-    undefined,        // skipPersonality — coach lane
-    options?.grounding, // WO-COACH-MASTER-INTEGRATION
-  );
-  const timeout = new Promise<string>((_, reject) =>
-    setTimeout(() => reject(new Error('coach-brain-deepseek-timeout')), PROVIDER_TIMEOUT_MS),
-  );
+
+  // One attempt of the underlying call, raced against PROVIDER_TIMEOUT_MS.
+  // The race is what bounds a hang: getCoachChatResponse has its OWN
+  // cross-provider fallback, but that only fires when a call THROWS — a
+  // merely-slow call (commonly a serverless cold start) never throws, so the
+  // timeout has to convert "slow" into a rejection here.
+  const attempt = (stream: boolean): Promise<string> => {
+    const promise = getCoachChatResponse(
+      [{ role: 'user', content: userMessage }],
+      systemPrompt,
+      stream ? onChunk : undefined,
+      task,
+      maxTokens,
+      'medium',
+      'deepseek',
+      undefined,        // skipPersonality — coach lane
+      options?.grounding, // WO-COACH-MASTER-INTEGRATION
+    );
+    const timeout = new Promise<string>((_, reject) =>
+      setTimeout(() => reject(new Error('coach-brain-deepseek-timeout')), PROVIDER_TIMEOUT_MS),
+    );
+    return Promise.race([promise, timeout]);
+  };
+
   let raw: string;
   try {
-    raw = await Promise.race([promise, timeout]);
+    raw = await attempt(true);
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    return {
-      text: `(coach-brain provider error: ${message})`,
-      toolCalls: [],
-      raw: { error: message },
-    };
+    // The first call timed out / failed. Previously this surfaced a
+    // "(coach-brain provider error: …)" bubble with NO retry — the outer
+    // race preempted getCoachChatResponse's provider fallback. Retry ONCE:
+    // the retry re-enters that cross-provider fallback AND the underlying
+    // function/edge is now warm, so a cold-start timeout recovers instead of
+    // dead-ending. Streaming is OFF on the retry so we never double-emit the
+    // chunks the first (failed) attempt may have started.
+    const firstMessage = err instanceof Error ? err.message : String(err);
+    void logAppAudit({
+      kind: 'coach-brain-provider-retry',
+      category: 'subsystem',
+      source: 'deepseekProvider.call',
+      summary: `deepseek retry after: ${firstMessage}`,
+    });
+    try {
+      raw = await attempt(false);
+    } catch (retryErr) {
+      const message = retryErr instanceof Error ? retryErr.message : String(retryErr);
+      return {
+        text: `(coach-brain provider error: ${message})`,
+        toolCalls: [],
+        raw: { error: message },
+      };
+    }
   }
   return buildResponse(raw);
 }

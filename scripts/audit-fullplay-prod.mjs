@@ -216,6 +216,12 @@ async function highlightedSquares() {
     const voice = listener.getCapturedEvents().slice(before).filter((e) => /voice|speak|narration/i.test(e.kind || ''));
     rec(`${rung}: narration fired (listener)`, voice.length > 0, `${voice.length} voice events, reached beat ${maxBeat}/${total}`);
     rec(`${rung}: highlights painted`, litBeats > 0, `${litBeats} beats lit`);
+    // Deterministically drive the lesson to its final beat so onComplete →
+    // markRungComplete fires even when headless TTS flaked (0 voice events) and
+    // the voice-gated auto-advance stalled. Uses the auditMoveHook-gated
+    // window.__lessonToEnd exposed by LessonPlayer.
+    await page.evaluate(() => { const w = window; if (typeof w.__lessonToEnd === 'function') w.__lessonToEnd(); }).catch(() => {});
+    await page.waitForTimeout(1200);
   }
   // Play a PlayableLinePlayer to completion (skip demo → memory → play moves).
   async function driveLinePlayer() {

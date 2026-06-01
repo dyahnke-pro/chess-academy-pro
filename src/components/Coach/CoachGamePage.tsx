@@ -47,6 +47,7 @@ import { narrateMove } from '../../services/coachAgentRunner';
 import { useSettings } from '../../hooks/useSettings';
 import { getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
 import { DEFAULT_TIME_CONTROL_ID, TIME_CONTROLS, getTimeControlById } from '../../services/chessClock';
+import { shouldPersistFinishedGame } from '../../utils/coachGamePersistence';
 import { useChessClock } from '../../hooks/useChessClock';
 import { coachService } from '../../coach/coachService';
 import { withTimeout } from '../../coach/withTimeout';
@@ -1841,16 +1842,6 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   );
 
   // Resign handler
-  const handleResign = useCallback(() => {
-    const keyMoments = findKeyMoments(gameState.moves);
-    setGameState((prev) => ({
-      ...prev,
-      status: 'postgame',
-      result: 'loss',
-      keyMoments,
-    }));
-  }, [gameState.moves]);
-
   // Inject coach message into the Game Chat panel (hints, takeback msgs)
   const coachSay = useCallback((text: string): void => {
     gameChatRef.current?.injectAssistantMessage(text);
@@ -1878,7 +1869,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // Finalize a finished game (checkmate/stalemate OR flag-on-time) — shared by
   // the chess.js game-over effect and the clock's onFlag so both paths persist
   // identically. `endReason` distinguishes a time-out for the saved tags.
-  const finalizeGame = useCallback((result: 'win' | 'loss' | 'draw', endReason?: 'time'): void => {
+  const finalizeGame = useCallback((result: 'win' | 'loss' | 'draw', endReason?: 'time' | 'resign'): void => {
     if (gameState.status !== 'playing') return;
 
     // Conversion-drill close: if this game was launched from a blown winning
@@ -1907,6 +1898,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       difficulty === 'hard' ? 'Hard' : '',
       gameState.hintsUsed === 0 ? 'NoHints' : '',
       endReason === 'time' ? 'Time' : '',
+      endReason === 'resign' ? 'Resign' : '',
     ].filter(Boolean);
 
     const annotations = movesToAnnotations(gameState.moves, playerColor);
@@ -1934,6 +1926,14 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       clockRemainingMs: clocked ? [...clockHistoryRef.current] : undefined,
     };
 
+    // Persistence floor: a finished game must clear MIN_PERSIST_PLIES before
+    // we save it + run the mistake/habit/weakness pipeline. Filters out
+    // trivial misclick-resignations / abandons (David 2026-06-01). Applied
+    // to every ending — resign, checkmate, timeout — consistently. The UI
+    // still transitions to the review (status set above) so the user sees
+    // the game ended; only persistence + analysis is gated.
+    if (!shouldPersistFinishedGame(gameState.moves.length)) return;
+
     void db.games.add(gameRecord).then(() => {
       if (!activeProfile) return;
       void detectBadHabitsFromGame(gameState.moves, activeProfile);
@@ -1942,6 +1942,14 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       });
     });
   }, [gameState.status, gameState.moves, gameState.hintsUsed, gameState.gameId, playerColor, difficulty, game.history, activeProfile, playerRating, targetStrength, detectedOpening, timeControl, convDrill, initialGameFen]);
+
+  // Resign — route through finalizeGame so a resigned game is SAVED and
+  // ANALYSED like any other loss (David 2026-06-01: resigned games carry the
+  // blunder that lost them — the highest-value game to learn from). Declared
+  // AFTER finalizeGame so the dependency reference is initialised (TDZ-safe).
+  const handleResign = useCallback(() => {
+    finalizeGame('loss', 'resign');
+  }, [finalizeGame]);
 
   // Live game clock. Paused while exploring variations / practice positions so
   // the player isn't flagged for time spent off the main game board.
