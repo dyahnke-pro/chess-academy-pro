@@ -76,12 +76,24 @@ for (const { key, lesson } of samay) {
     // 4. highlights should be a move square or a square the narration names
     const moveSquares = new Set();
     { const cc = new Chess(); for (const mv of beat.moves) { const r = cc.move(mv); if (r) { moveSquares.add(r.from); moveSquares.add(r.to); } } }
-    const namedSquares = new Set([...text.matchAll(/\b([a-h][1-8])\b/g)].map((x) => x[1].toLowerCase()));
+    // squares named in the narration — bare ("d5", "d5-pawn") AND embedded in a
+    // SAN token ("Nf5" names f5, "Bxd3" names d3) so a planned move counts.
+    const namedSquares = new Set([
+      ...[...text.matchAll(/([a-h][1-8])/g)].map((x) => x[1].toLowerCase()),
+    ]);
+    // arrow endpoints are valid lead-the-eye anchors: a highlight on an arrow's
+    // from/to square points the eye where the arrow leads.
+    const arrowSquares = new Set();
+    for (const a of (beat.arrows || [])) { if (a.from) arrowSquares.add(a.from); if (a.to) arrowSquares.add(a.to); }
+    // blue/context (SOFT) highlights are a sanctioned context affordance and do
+    // not need to be named — only yellow KEY highlights carry the "narration
+    // names this square" contract.
+    const isContext = (h) => typeof h.color === 'string' && /80\s*,\s*140\s*,\s*255/.test(h.color);
     for (const h of (beat.highlights || [])) {
-      const sq = h.square; if (!sq) continue;
-      if (!moveSquares.has(sq) && !namedSquares.has(sq)) {
+      const sq = h.square; if (!sq || isContext(h)) continue;
+      if (!moveSquares.has(sq) && !namedSquares.has(sq) && !arrowSquares.has(sq)) {
         // advisory only — not all highlights must be named; report as soft
-        F(`${key}/${beat.id}: highlight ${sq} not a move square nor named in narration (ADVISORY)`);
+        F(`${key}/${beat.id}: KEY highlight ${sq} not a move square, arrow endpoint, nor named in narration (ADVISORY)`);
       }
     }
   }

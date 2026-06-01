@@ -60,7 +60,7 @@ const STEINITZ: LessonScript = {
       say: "Re1 piles on e5, and after Black releases with …exd4 we recapture with the knight, reaching an Open-Sicilian-style position with a strong knight on d4 and a clear space edge. Black is solid but passive — perfect to squeeze.",
       sayShort: 'Re1, Nxd4 — central grip.' }),
     b({ id: 'plan', moves: 'e4 e5 Nf3 Nc6 Bb5 d6 d4 Bd7 Nc3 Nf6 O-O Be7 Re1 exd4 Nxd4 O-O',
-      arrows: [A('d4', 'f5'), A('b5', 'f1')], highlights: [{ square: 'f5', color: SOFT }, { square: 'd5', color: KEY }],
+      arrows: [A('d4', 'f5'), A('b5', 'f1')], highlights: [{ square: 'f5', color: KEY }, { square: 'e5', color: SOFT }],
       say: "The plan: keep the space advantage, reroute the light bishop, and probe with Nd4-f5 or the central e4-e5 break. Black's lack of space means any inaccuracy lets White seize the initiative. Pure positional pressure.",
       sayShort: 'Plan: keep space, probe Nf5/e5.' }),
   ],
