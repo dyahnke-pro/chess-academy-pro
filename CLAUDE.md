@@ -1394,6 +1394,19 @@ ask"), never as a check-in. A masterclass build runs to full parity
 (lessons + gems + traps + model games + quizzes + audits) without asking
 whether to proceed.
 
+**RE-LOCKED, EMPHATIC (David 2026-06-01): "OF COURSE I DO! If I give a
+task do not stop until that task is 100% complete."** This explicitly bans
+the end-of-turn "Want me to run the next pass, or hold here?" / "Should I
+keep going?" check-in — David called it a "stupid question." When a task
+has obvious further passes/depth (a LOOP audit that "gets harder each
+pass", a multi-opening build, a sweep), RUN THEM ALL to completion without
+asking. A loop audit runs pass after pass until it can't find anything
+more to fix; a build runs to full parity. Offering to continue is the same
+failure as asking permission to continue — don't. The ONLY sanctioned stop
+is a genuine data/plan fork (playbook §0.5), never a "is this enough?"
+check-in. If you catch yourself ending a turn with a question whose
+answer is obviously "yes, finish it" — delete it and do the work.
+
 When David says "you can drop the formality" or "talk to me like a
 person", that's the SIGNAL that I'm slipping back into corporate
 voice — recalibrate immediately.
