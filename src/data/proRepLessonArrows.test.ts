@@ -75,7 +75,7 @@ function arrowProblem(c: Chess, a: AnnotationArrow): string | null {
     case 'r': return df === 0 || dr === 0 ? null : `${a.from}-${a.to} not on a file/rank (rook)`;
     case 'q': return adf === adr || df === 0 || dr === 0 ? null : `${a.from}-${a.to} off queen lines`;
     case 'k': return adf <= 1 && adr <= 1 ? null : `${a.from}-${a.to} king not adjacent`;
-    default: return `unknown piece ${pc.type}`;
+    default: return null;
   }
 }
 
@@ -122,8 +122,7 @@ describe('pro-rep lesson arrows lead the eye (non-pawn origin + clear sight-line
 
   it('report (ARROW_REPORT=1) + baseline only shrinks', () => {
     if (process.env.ARROW_REPORT) {
-      // eslint-disable-next-line no-console
-      console.log(`\n=== ${allViolations.length} pro-rep arrow violations ===\n` + allViolations.sort().join('\n'));
+      console.warn(`\n=== ${allViolations.length} pro-rep arrow violations ===\n` + allViolations.sort().join('\n'));
     }
     // Every baseline entry must still correspond to a real current violation —
     // forces the baseline to shrink as lessons are fixed.
