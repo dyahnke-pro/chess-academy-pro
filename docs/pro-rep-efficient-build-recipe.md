@@ -103,12 +103,19 @@ pro-rep lives in the runtime `LESSONS` map, OUTSIDE the registry, so a few
 quality gates that protect masterclass openings DON'T fire on it. Run them
 manually with a throwaway script before shipping:
 
-1. **Arrows** — green vision arrows must originate on a **NON-PAWN** piece with
-   a clear sight-line (the `lessonIntegrity`/lead-eye gate is registry-scoped, so
-   it WON'T catch a pro-rep arrow on a pawn push). Walk every plan line: for each
-   arrow, assert `chess.get(from)` is a non-pawn piece and `from→to` is a legal
-   move from that frame. (I had 2 arrows on `a2-a3`/`b4-b5` pawn pushes — moved
-   them onto the knight/bishop moves in the same line.)
+1. **Arrows — NOW GATED for LESSON arrows (David 2026-06-01 "gate the arrows!").**
+   `src/data/proRepLessonArrows.test.ts` (in ship-check) enforces, for every
+   arrow on every pro-rep LESSON beat: non-pawn origin + valid piece GEOMETRY
+   (`from→to` on the piece's knight-hop/diagonal/file-rank line). It deliberately
+   ALLOWS the thematic long-diagonal aim (a `b2→g7` fianchetto arrow blocked by
+   pawns is correct lead-the-eye), and skips move-path arrows (vacated origin) +
+   pawn-push arrows. New lessons must pass clean (Carlsen does); a 6-entry
+   SHRINKING baseline grandfathers pre-existing cross-pro quirks.
+   Still run the STRICTER dev checker `scripts/pro-repertoire/_arrowcheck.mjs`
+   "<sans>" <from> <to> while authoring to also catch sight-lines blocked by your
+   OWN pieces (that's a style call the gate can't make without false-positiving
+   the fianchetto aim). **PLAN-LINE arrows (middlegame-plans.json) are still
+   ungated** — verify those with the dev checker by hand.
 2. **Narration board-accuracy** — `proRepPlanAccuracy` DOES gate pro-rep (it
    caught 4 of my "two bishops" claims where no real 2-vs-1 existed on the
    board). A "bishop pair"/"two bishops" claim requires a frame in the line
