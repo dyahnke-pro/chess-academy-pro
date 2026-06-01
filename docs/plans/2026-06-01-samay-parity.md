@@ -5,6 +5,21 @@ Decision (2026-06-01): **data-rebuild ALL mismatched spines to full parity**
 (Naroditsky-style data-mirror), then re-author lessons/variations/plans/
 models/pitfalls on the corrected lines.
 
+## CORRECTION (2026-06-01) — only the BLACK spines are wrong
+
+Re-verified against the ACTUAL repertoire main pgns (not the stale tree
+minPrefix). The WHITE openings ARE data-faithful — earlier "wrong" claims for
+caro/french/open-sicilian were a prefix artifact:
+- open-sicilian 90 games @10ply · ruy 82 @8ply · caro-white 275 @6ply (main IS
+  2.c4) · french-white 154 @6ply (main IS the Exchange) · italian 106 @6ply. ✅
+
+Only the two BLACK spines genuinely mismatch his play → REBUILD those:
+- **sicilian-black**: Najdorf …d6 (2 games) → his …Nc6/…e5 Sveshnikov + …a6.
+- **open-e5**: Ruy-response …Bb5 (8 games) → his Italian (faces Bc4 66 > Bb5 35).
+
+For the other 6 (white + scandi): spines are fine → the parity work is DEPTH
+(plans/tabs/models/pitfalls), NOT a spine rebuild. (Don't fix what isn't broken.)
+
 ## Root cause — NOT a data problem
 
 His 22k chess.com games are plenty (sicilian 5,754 · open-sic 1,463 · ruy/e5
