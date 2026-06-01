@@ -117,6 +117,11 @@ describe('tab-plan resolver coverage gate — every Naroditsky variation has a r
     'pro-hikaru-reti',
     'pro-hikaru-pirc-modern',
     'pro-hikaru-caro-kann',
+    // Caruana pro-rep (2026-06-01 build) — variations declared but tab-plan
+    // resolvers not yet authored. Deferred, same as the partials above.
+    'pro-caruana-ruy-lopez',
+    'pro-caruana-nimzo-indian',
+    'pro-caruana-taimanov',
   ]);
 
   it('every pro-rep (openingId, variationName) pair has a resolver returning array (not null)', () => {

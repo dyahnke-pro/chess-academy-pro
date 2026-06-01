@@ -95,6 +95,13 @@ import { PRO_SAMAYRAINA_SICILIAN_BLACK_LESSON } from './proSamayRainaSicilianBla
 import { PRO_SAMAYRAINA_SICILIAN_BLACK_VARIATION_LESSONS } from './proSamayRainaSicilianBlackVariations';
 import { PRO_SAMAYRAINA_SCANDI_LESSON } from './proSamayRainaScandi';
 import { PRO_SAMAYRAINA_SCANDI_VARIATION_LESSONS } from './proSamayRainaScandiVariations';
+import { PRO_CARUANA_RUY_LOPEZ_LESSON } from './proCaruanaRuyLopez';
+import { PRO_CARUANA_RUY_LOPEZ_VARIATION_LESSONS } from './proCaruanaRuyLopezVariations';
+import { PRO_CARUANA_NIMZO_INDIAN_LESSON } from './proCaruanaNimzoIndian';
+import { PRO_CARUANA_NIMZO_INDIAN_VARIATION_LESSONS } from './proCaruanaNimzoIndianVariations';
+import { PRO_CARUANA_NAJDORF_LESSON } from './proCaruanaNajdorf';
+import { PRO_CARUANA_TAIMANOV_LESSON } from './proCaruanaTaimanov';
+import { PRO_CARUANA_TAIMANOV_VARIATION_LESSONS } from './proCaruanaTaimanovVariations';
 import { RUY_LOPEZ_LESSON } from './ruyLopez';
 import { RUY_VARIATION_LESSONS } from './ruyVariations';
 import { PIRC_DEFENCE_LESSON } from './pircDefence';
@@ -318,6 +325,10 @@ const LESSONS: Record<string, LessonScript> = {
   [PRO_SAMAYRAINA_OPEN_E5_LESSON.openingId]: PRO_SAMAYRAINA_OPEN_E5_LESSON,
   [PRO_SAMAYRAINA_SICILIAN_BLACK_LESSON.openingId]: PRO_SAMAYRAINA_SICILIAN_BLACK_LESSON,
   [PRO_SAMAYRAINA_SCANDI_LESSON.openingId]: PRO_SAMAYRAINA_SCANDI_LESSON,
+  [PRO_CARUANA_RUY_LOPEZ_LESSON.openingId]: PRO_CARUANA_RUY_LOPEZ_LESSON,
+  [PRO_CARUANA_NIMZO_INDIAN_LESSON.openingId]: PRO_CARUANA_NIMZO_INDIAN_LESSON,
+  [PRO_CARUANA_NAJDORF_LESSON.openingId]: PRO_CARUANA_NAJDORF_LESSON,
+  [PRO_CARUANA_TAIMANOV_LESSON.openingId]: PRO_CARUANA_TAIMANOV_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {
@@ -420,6 +431,9 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...PRO_SAMAYRAINA_OPEN_E5_VARIATION_LESSONS,
   ...PRO_SAMAYRAINA_SICILIAN_BLACK_VARIATION_LESSONS,
   ...PRO_SAMAYRAINA_SCANDI_VARIATION_LESSONS,
+  ...PRO_CARUANA_RUY_LOPEZ_VARIATION_LESSONS,
+  ...PRO_CARUANA_NIMZO_INDIAN_VARIATION_LESSONS,
+  ...PRO_CARUANA_TAIMANOV_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {

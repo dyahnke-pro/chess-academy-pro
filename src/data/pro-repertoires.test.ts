@@ -63,7 +63,7 @@ describe('Pro Repertoire PGN Legality', () => {
     // David's pick): +5 (Nimzo-Larsen, Closed Sicilian, Réti, Modern,
     // Caro-Kann) = 33. Eric Rosen (2026-05-31): +1 (Stafford) = 34.
     // Bump this as each remaining player is rebuilt.
-    expect(proRepertoire.openings).toHaveLength(49);
+    expect(proRepertoire.openings).toHaveLength(53);
   });
 
   it('every opening has a valid playerId', () => {
@@ -79,7 +79,7 @@ describe('Pro Repertoire PGN Legality', () => {
     // (+5) and Eric Rosen (+1 Stafford). The remaining roster players stay
     // names-only (ZERO openings) until each is rebuilt. Add a player here
     // as their first build lands.
-    const KEPT = new Set(['naroditsky', 'gothamchess', 'hikaru', 'ericrosen', 'samayraina']);
+    const KEPT = new Set(['naroditsky', 'gothamchess', 'hikaru', 'ericrosen', 'samayraina', 'caruana']);
     const counts: Record<string, number> = {};
     for (const opening of entries) {
       counts[opening.playerId] = (counts[opening.playerId] ?? 0) + 1;
