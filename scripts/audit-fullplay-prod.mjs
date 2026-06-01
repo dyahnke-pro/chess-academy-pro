@@ -55,6 +55,15 @@ async function dismissOverlays() {
     await page.locator('[data-testid="page-help-close"]').click().catch(() => {}); await page.waitForTimeout(400);
   }
 }
+// Robust button tap: scroll into view, try a real click, fall back to a direct
+// DOM click (fires React onClick regardless of a transient overlay / stability
+// quirk — the walkthrough-btn click was timing out on actionability).
+async function tap(sel) {
+  const el = page.locator(sel).first();
+  await el.scrollIntoViewIfNeeded({ timeout: 3000 }).catch(() => {});
+  try { await el.click({ timeout: 3000 }); return true; }
+  catch { return el.evaluate((n) => n.click()).then(() => true).catch(() => false); }
+}
 // Play a move by clicking the from-square then the to-square.
 async function clickMove(from, to) {
   await page.locator(`[data-square="${from}"]`).click({ timeout: 4000 }).catch(() => {});
@@ -122,7 +131,7 @@ async function highlightedSquares() {
       beats++;
       const next = page.locator('[data-testid="lesson-continue-next"]').first();
       if (!(await next.isVisible().catch(() => false))) break;
-      await next.click().catch(() => {});
+      await next.evaluate((n)=>n.click()).catch(()=>{});
       await page.waitForTimeout(700);
       if (!(await page.locator('[data-testid="lesson-player"]').isVisible().catch(() => false))) break;
     }
@@ -132,12 +141,12 @@ async function highlightedSquares() {
   }
   // Play a PlayableLinePlayer to completion (skip demo → memory → play moves).
   async function driveLinePlayer() {
-    if (await page.locator('[data-testid="skip-to-memory"]').isVisible().catch(() => false)) { await page.locator('[data-testid="skip-to-memory"]').click().catch(() => {}); await page.waitForTimeout(700); }
+    if (await page.locator('[data-testid="skip-to-memory"]').isVisible().catch(() => false)) { await tap('[data-testid="skip-to-memory"]'); await page.waitForTimeout(700); }
     for (const ply of mainPlies) { await clickMove(ply.from, ply.to); }
   }
   async function backToDetail() {
     for (const sel of ['[data-testid="line-player-back"]', '[data-testid="lesson-player"] [aria-label="Exit" i]', '[aria-label="Back" i]']) {
-      const b = page.locator(sel).first(); if (await b.isVisible().catch(() => false)) { await b.click().catch(() => {}); break; }
+      if (await page.locator(sel).first().isVisible().catch(() => false)) { await tap(sel); break; }
     }
     await page.waitForTimeout(800);
     if (!(await page.locator('[data-testid="walkthrough-btn"]').isVisible().catch(() => false))) {
@@ -151,7 +160,7 @@ async function highlightedSquares() {
     const locked = await page.locator(`[data-testid="${btn}"][data-locked="true"]`).count().catch(() => 0);
     if (locked) { rec(`${rung}: still LOCKED (prior rung didn't unlock it) — progression gap`, false); continue; }
     const before = listener.getCapturedEvents().length;
-    await page.locator(`[data-testid="${btn}"]`).click().catch(() => {});
+    await tap(`[data-testid="${btn}"]`);
     const kind = await whichPlayer();
     rec(`${rung}: player opened`, kind !== 'none', `player=${kind}`);
     if (kind === 'lesson') await driveLessonPlayer(rung, before);
@@ -165,7 +174,7 @@ async function highlightedSquares() {
   // 5. PLAY — launches OpeningPlayMode locked to the line
   const playLocked = await page.locator('[data-testid="play-btn"][data-locked="true"]').count().catch(() => 0);
   if (playLocked) rec('play: still LOCKED after practice — progression gap', false);
-  else { await page.locator('[data-testid="play-btn"]').click().catch(() => {}); await page.waitForTimeout(2500);
+  else { await tap('[data-testid="play-btn"]'); await page.waitForTimeout(2500);
     rec('play: launched (no crash)', pageErrors.length === 0, pageErrors[0] || '');
     await page.goto(`${URL}/openings/${ONLY}`, { waitUntil: 'domcontentloaded' }); await page.waitForTimeout(2000); await dismissOverlays(); }
 
