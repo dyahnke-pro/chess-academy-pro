@@ -3616,13 +3616,13 @@
       "name": "Open Games / …e5 (Samay Raina)",
       "color": "black",
       "style": "Classical, Solid",
-      "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O",
-      "overview": "Samay answers 1.e4 with the classical …e5 (3,000+ games) — fighting for the centre head-on. Against the Ruy he plays the rock-solid Closed Main with …a6, …Nf6, …Be7 and …b5; against the Italian he mirrors with …Bc5; against the Scotch and Four Knights he equalises with principled piece play. It is the most respected, most principled defense to 1.e4.",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3 d6 O-O O-O Re1 a6 a4 Ba7",
+      "overview": "Samay answers 1.e4 with the classical …e5 — fighting for the centre head-on. From his own games the opening he faces most after …e5 is the Italian, so the main line is the Giuoco Pianissimo: …Bc5-a7 keeping the strong diagonal, a slow maneuvering game where understanding beats theory. Against the Ruy he switches to the rock-solid Closed Main, and against the Scotch and Four Knights he equalises with principled piece play.",
       "keyIdeas": [
-        "The Chigorin maneuver …Na5 hits the b3-bishop, then …c5 challenges White's d4 and grabs queenside space.",
-        "Hold the e5-centre firmly and look for the …d5 freeing break.",
-        "In the Italian, …Bc5-a7 keeps the strong diagonal safe from b4 ideas.",
-        "Against the Scotch, …Bb4 pins and the …d5 break frees the position."
+        "In the Italian, …Bc5-a7 keeps the powerful a7-g1 diagonal safe from b4 ideas.",
+        "Hold the e5-centre firmly, reroute …Ne7-g6, and look for the …d5 freeing break.",
+        "Against the Ruy, the Chigorin …Na5 hits the b3-bishop, then …c5 grabs queenside space.",
+        "Against the Scotch, …Bb4 pins and the …d5 break frees the position with the bishop pair."
       ],
       "traps": [
         "In the Four Knights, …Bxc3 at the right moment doubles White's pawns and gives a clear queenside target.",
@@ -3634,13 +3634,13 @@
       ],
       "variations": [
         {
-          "name": "vs Italian (3.Bc4)",
-          "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3 d6 O-O O-O Re1 a6 a4 Ba7",
-          "explanation": "Against the Italian we mirror with …Bc5 and tuck it to a7, reaching a symmetrical Pianissimo. Black has every resource White does; reroute …Ne7-g6 and prepare the …d5 break to free the position.",
+          "name": "vs Ruy Lopez (3.Bb5)",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O",
+          "explanation": "When White tries the Spanish, Samay plays the rock-solid Closed Main: …a6, …Nf6, …Be7, …b5 and …d6. The plan is the Chigorin maneuver …Na5 hitting the b3-bishop, then …c5 to challenge d4 and the …d5 break — a complete, dynamic counter to the Ruy.",
           "sources": [
             "concept:pos-development",
             "https://api.chess.com/pub/player/samayraina/games/archives",
-            "https://www.chess.com/openings/Italian-Game"
+            "https://www.chess.com/openings/Ruy-Lopez"
           ]
         },
         {
