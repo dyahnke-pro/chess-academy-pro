@@ -17,7 +17,7 @@
 // Run directly: `node scripts/session-secrets.mjs`
 // Also wired as a SessionStart hook in .claude/settings.json.
 
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 
 const SECRETS = [
   { env: 'DEEPSEEK_KEY', use: 'primary coach/brain LLM (client → api.deepseek.com); bakes into the build' },
@@ -60,6 +60,43 @@ try {
   }
 } catch {
   lines.push('git pre-push hook: install skipped (run `npm run install-hooks` to gate pushes)');
+}
+
+// Dependency-completeness guard. The sandbox `npm install` intermittently
+// SKIPS a declared dep — e.g. @capacitor/app, a native plugin npm omits on an
+// ERESOLVE — leaving it in package.json but absent from node_modules. eslint's
+// type-aware rules then see that plugin's whole API as `any` and emit phantom
+// `no-unsafe-*` ERRORS, which fail ship-check and force --no-verify pushes
+// (the 2026-06-01 "10 errors in useAndroidBackButton" false alarm). Detect
+// declared deps missing from node_modules and reconcile so every session
+// starts from a complete install. Fast: a no-op when complete; skipped
+// entirely when node_modules isn't there yet (the setup step owns that).
+try {
+  if (existsSync('node_modules') && existsSync('package.json')) {
+    const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
+    const declared = { ...(pkg.dependencies ?? {}), ...(pkg.devDependencies ?? {}) };
+    const missing = Object.keys(declared).filter(
+      (name) => !existsSync(`node_modules/${name}/package.json`),
+    );
+    if (missing.length) {
+      const { execSync } = await import('node:child_process');
+      // Many missing → a fresh/half-built tree: full reconcile. A few missing
+      // → the targeted skip-bug: install just those by exact spec (proven to
+      // pull in deps the bulk install dropped).
+      const cmd = missing.length > 20
+        ? 'npm install --no-audit --no-fund'
+        : `npm install ${missing.map((n) => `${n}@${declared[n]}`).join(' ')} --no-save --no-audit --no-fund`;
+      execSync(cmd, { stdio: 'ignore' });
+      const still = missing.filter((name) => !existsSync(`node_modules/${name}/package.json`));
+      const head = missing.slice(0, 6).join(', ') + (missing.length > 6 ? '…' : '');
+      lines.push(
+        `deps: reconciled ${missing.length - still.length}/${missing.length} missing (${head})` +
+        (still.length ? ` — STILL missing: ${still.join(', ')}` : ''),
+      );
+    }
+  }
+} catch (e) {
+  lines.push(`deps: completeness check skipped (${String(e?.message ?? e).slice(0, 80)})`);
 }
 
 console.log(lines.join('\n'));
