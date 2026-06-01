@@ -3995,7 +3995,7 @@
       "name": "Caro-Kann",
       "color": "black",
       "style": "solid",
-      "pgn": "e4 c6 Nf3 d5 Nc3 Bg4 h3 Bxf3 Qxf3 e6 d3 Nd7 g3 Ngf6 Bg2 Bb4 O-O O-O Qe2 e5",
+      "pgn": "e4 c6 Nf3 d5 Nc3 Bg4 h3 Bxf3 Qxf3 e6 d3 Nd7 g3 Ngf6 Bg2 Bb4 O-O O-O",
       "overview": "The soundest defence to e4. Against the Two Knights, Caruana plays the classical ...Bg4, trades the light bishop before it gets trapped, builds the solid wall, and breaks with ...e5 for full equality.",
       "keyIdeas": [
         "...Bg4 develops the light bishop OUTSIDE the chain and pins the knight.",
@@ -4008,7 +4008,7 @@
       "variations": [
         {
           "name": "Advance 3.e5 Bf5",
-          "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 c5 Be3 Qb6 Nc3 Nc6 O-O cxd4 Nxd4 Nxd4",
+          "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 c5 Be3 Qb6 Nc3 Nc6 O-O",
           "explanation": "The Advance Variation and the Caro's whole point — ...Bf5 develops the light bishop outside the chain, then ...c5 and ...Qb6 pressure White's centre into a comfortable game.",
           "sources": [
             "concept:pos-development",
