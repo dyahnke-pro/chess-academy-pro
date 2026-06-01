@@ -3223,7 +3223,7 @@
         },
         {
           "name": "Open vs ...e6",
-          "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 Qc7 Be3 a6 Bd3",
+          "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 Qc7 Be3 a6 Bd3 Nf6 O-O",
           "explanation": "203 games. The Open Sicilian vs the ...e6 Taimanov — the d4-knight and the English-Attack bishops aim at Black’s king.",
           "sources": [
             "book:chess-fundamentals",
@@ -3321,7 +3321,7 @@
         },
         {
           "name": "Scotch d4",
-          "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Nb3 Bb6 a4",
+          "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Nb3 Bb6 a4 a6 Nc3 d6",
           "explanation": "63 games. The Scotch opens the centre at once; Nb3 and a4 chase the bishop and grab space with tempo.",
           "sources": [
             "book:chess-fundamentals",
@@ -3409,7 +3409,7 @@
         },
         {
           "name": "Bogo-Indian Bb4+",
-          "pgn": "d4 Nf6 c4 e6 Nf3 Bb4+ Nbd2 b6 a3 Bxd2+ Bxd2",
+          "pgn": "d4 Nf6 c4 e6 Nf3 Bb4+ Nbd2 b6 a3 Bxd2+ Bxd2 Bb7 g3 O-O",
           "explanation": "31 games. Blocking the check with Nbd2 and meeting ...Bxd2 with Bxd2 wins the two bishops and a free centre.",
           "sources": [
             "book:chess-fundamentals",
@@ -3769,7 +3769,7 @@
         },
         {
           "name": "Winawer Bb4",
-          "pgn": "e4 e6 d4 d5 Nc3 Bb4 e5 c5 a3 Bxc3+ bxc3 Nc6",
+          "pgn": "e4 e6 d4 d5 Nc3 Bb4 e5 c5 a3 Bxc3+ bxc3 Nc6 Nf3 Qa5",
           "explanation": "32 games. The sharpest French: ...Bxc3 doubles White’s pawns for permanent dark-square control and a rich imbalance.",
           "sources": [
             "book:chess-fundamentals",

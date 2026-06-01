@@ -27,6 +27,7 @@ import { getProEricRosenBudapestTabPlanIds } from '../services/proEricRosenBudap
 import { getProEricRosenClosedSicilianTabPlanIds } from '../services/proEricRosenClosedSicilianTabPlans';
 import { getProEricRosenScandinavianTabPlanIds } from '../services/proEricRosenScandinavianTabPlans';
 import { getProEricRosenFrenchTabPlanIds } from '../services/proEricRosenFrenchTabPlans';
+import { getProCarlsenTabPlanIds } from '../services/proCarlsenTabPlans';
 
 interface ProRepEntry {
   id: string;
@@ -51,6 +52,7 @@ const RESOLVERS: Array<(openingId: string, tabKey: string) => string[] | null> =
   getProEricRosenClosedSicilianTabPlanIds,
   getProEricRosenScandinavianTabPlanIds,
   getProEricRosenFrenchTabPlanIds,
+  getProCarlsenTabPlanIds,
 ];
 
 function resolve(openingId: string, variationName: string): string[] | null {
