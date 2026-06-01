@@ -3694,6 +3694,180 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     watch: ["","","","","","","","","","","c5?! — White grabs queenside space, but the pawn is overextended and undefended by pieces.","…b6! — undermining the c5-pawn at its base; White cannot hold the chain together.","","","","After …axb6 opens the a-file and …Ba6 pins down the shattered queenside pawns, Black is clearly better — about +0.8.","","",""],
     learn: ["","","","","","","","","","","","…b6 — undermine the overextended pawn","","","","","","",""],
   },
+
+  // ═══════════════════ Aman Hambleton (chessbrah) gems ═══════════════════
+  // Mined from his 35k-game corpus + Stockfish-confirmed. Arrays auto-sized to
+  // each playLine; narration placed at the inaccuracy + punish + follow-ups.
+  "pro-aman-sicilian-kan:e4_c5_Nf3_e6_d4_cxd4_Nxd4_a6_Nc3_Qc7_Bd3_Nf6_O-O_d6_f4_Nbd7:f5": {
+    sources: ["concept:pos-center","concept:pos-initiative","https://www.chess.com/openings/Sicilian-Defense-Kan-Variation"],
+    watch: ["","","","","","","","","","","","","","","","","f5?! — White lunges in the centre before finishing development; the e5-square and the a7-g1 diagonal both go soft.","…Qb6! — the queen swings to b6, hitting d4 and the weakened g1-diagonal at once.","","…e5! — Black strikes back; the d4-knight has no good square and White cracks.","","…exd4 — the centre collapses in Black’s favour.","","…Qd8 — regrouping a clean pawn to the good.",""],
+    learn: ["","","","","","","","","","","","","","","","","","…Qb6 — hit d4 and the diagonal","","…e5 — strike the loose centre","","…exd4 — collapse the centre","","",""],
+  },
+  "pro-aman-sicilian-kan:e4_c5_c3_Nf6_e5_Nd5_d4_cxd4_Nf3_Nc6_Bc4_Nb6:Bxf7+": {
+    sources: ["concept:tac-sacrifice","concept:pos-king-safety","https://www.chess.com/openings/Sicilian-Defense-Alapin-Variation"],
+    watch: ["","","","","","","","","","","","","Bxf7+?! — a hopeful sacrifice, but with no pieces ready to follow up it just donates a bishop.","…Kxf7 — Black takes the gift; the king walks one square and is safe behind the e6/d-pawns.","","…Kg8 — the king tucks away; White has nothing for the piece.","","…e6 — the centre stays shut, the extra piece tells.","","…h6 — calm, up a clean piece.",""],
+    learn: ["","","","","","","","","","","","","","…Kxf7 — take it, king is safe","","…Kg8 — tuck the king away","","…e6 — shut the centre","","",""],
+  },
+  "pro-aman-sicilian-kan:e4_c5_Nf3_e6_d4_cxd4_Nxd4_a6_Nc3_Qc7_f4_Bb4:Bd3": {
+    sources: ["concept:tac-pin","concept:tac-fork","https://www.chess.com/openings/Sicilian-Defense-Kan-Variation"],
+    watch: ["","","","","","","","","","","","","Bd3?! — developing into the pin; the c3-knight is loose and d4 is undefended behind it.","…Bxc3+! — removing the defender with check; the d4-knight falls next.","","…Qxc3+ — the queen forks king and the hanging d4-knight.","","…Qxd4 — collecting the second piece; Black is decisively up material.","","…Qb6 — consolidating, winning.",""],
+    learn: ["","","","","","","","","","","","","","…Bxc3+ — remove the defender, check","","…Qxc3+ — fork king and knight","","…Qxd4 — collect the loose knight","","",""],
+  },
+  "pro-aman-sicilian-kan:e4_c5_Nf3_e6_d4_cxd4_Nxd4_a6_Bd3_Nf6_Nc3_Qc7_O-O_d6_f4_Be7:e5": {
+    sources: ["concept:pos-center","concept:pos-initiative","https://www.chess.com/openings/Sicilian-Defense-Kan-Variation"],
+    watch: ["","","","","","","","","","","","","","","","","e5?! — White rips the centre open prematurely, leaving the e5-pawn weak and the king’s cover thin.","…dxe5 — Black takes; the recapture leaves White a loose pawn and no attack.","","…Qxe5 — the queen scoops the pawn, eyeing the long diagonal and h2.","","…Qc7 — retreating with the extra pawn banked.","","…Bd7 — finishing development, clearly better.",""],
+    learn: ["","","","","","","","","","","","","","","","","","…dxe5 — take the loose push","","…Qxe5 — grab the centre pawn","","…Qc7 — bank the pawn","","",""],
+  },
+  "pro-aman-sicilian-kan:e4_c5_Nf3_e6_d4_cxd4_Nxd4_a6_Nc3_Qc7_g3_Nf6:Bf4": {
+    sources: ["concept:tac-fork","concept:pos-center","https://www.chess.com/openings/Sicilian-Defense-Kan-Variation"],
+    watch: ["","","","","","","","","","","","","Bf4?! — the bishop develops to a square Black’s centre break hits with tempo.","…e5! — fork: the pawn attacks the f4-bishop and grabs the centre at once.","Bxe5 — White takes the pawn, but the bishop is overloaded.","…Qxe5 — recapturing, hitting b2 and centralising with material gained.","","…Qc5 — the queen sidesteps, holding the edge and the bishop pair.","","…d6 — solidifying, clearly on top.",""],
+    learn: ["","","","","","","","","","","","","","…e5 — fork the bishop, take centre","","…Qxe5 — recapture, hit b2","","…Qc5 — hold the edge","","",""],
+  },
+  "pro-aman-sicilian-kan:e4_c5_c3_d5_exd5_Qxd5_d4_Nf6_Na3_cxd4:Bc4": {
+    sources: ["concept:tac-fork","concept:pos-initiative","https://www.chess.com/openings/Sicilian-Defense-Alapin-Variation"],
+    watch: ["","","","","","","","","","","Bc4?! — White hits the queen but leaves g2 hanging and the king uncastled.","…Qxg2! — the queen grabs the loose pawn and attacks the h1-rook.","Qf3 — White must defend with a trade offer.","…Qxf3 — Black trades into a clean extra pawn.","","…a6 — quietly taking b5 away, a pawn up.","","…e5 — claiming the centre, decisively better.",""],
+    learn: ["","","","","","","","","","","","…Qxg2 — grab the pawn, hit the rook","","…Qxf3 — trade into a pawn up","","…a6 — deny b5","","",""],
+  },
+  "pro-aman-nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_Qc2_O-O_Nf3_d5_Bg5_h6:h4": {
+    sources: ["concept:tac-sacrifice","concept:pos-king-safety","https://www.chess.com/openings/Nimzo-Indian-Defense"],
+    watch: ["","","","","","","","","","","","","h4?! — White refuses to part with the pinning bishop, but leaving it en prise just drops a piece.","…hxg5! — Black simply takes the bishop; an open h-file is not worth a whole piece.","hxg5 — White reopens the file in desperation.","…Ne4 — the knight leaps to the strong central outpost, blocking the file.","","…g6 — calmly shutting the attack down, a clean piece up.","","…Bxc3+ — trading off to kill counterplay, decisively ahead.",""],
+    learn: ["","","","","","","","","","","","","","…hxg5 — just take the bishop","","…Ne4 — outpost, block the file","","…g6 — shut it down","","",""],
+  },
+  "pro-aman-nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_Qc2_O-O_Nf3_d5_Bg5_h6_Bh4_Nbd7:Ne5": {
+    sources: ["concept:pos-center","concept:pos-initiative","https://www.chess.com/openings/Nimzo-Indian-Defense"],
+    watch: ["","","","","","","","","","","","","","","Ne5?! — the knight jumps in unsupported just as Black is ready to hit the centre.","…c5! — striking d4 at once; the centre and the loose e5-knight both come under fire.","e3 — propping up d4.","…Qa5 — pinning and pressuring c3, increasing the bind.","Bxf6 — White gives up the bishop pair.","…Nxf6 — recapturing comfortably.","","…Ne4 — back to the outpost, clearly better.",""],
+    learn: ["","","","","","","","","","","","","","","","…c5 — hit the centre and the knight","","…Qa5 — pin and pressure c3","","…Nxf6 — recapture, keep the bind","","",""],
+  },
+  "pro-aman-nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_e3_O-O_Bd3_d5:c5": {
+    sources: ["concept:pos-center","concept:pos-initiative","https://www.chess.com/openings/Nimzo-Indian-Defense"],
+    watch: ["","","","","","","","","","","c5?! — White grabs queenside space, but the pawn is overextended and unsupported.","…b6! — undermining the c5-pawn at its base; the chain cannot hold.","cxb6 — White releases the tension.","…Bxc3+ — first removing the defender with check.","","…axb6 — opening the a-file onto White’s shattered queenside.","","…Ba6 — the bishop rakes the weak c4/queenside, Black clearly better.",""],
+    learn: ["","","","","","","","","","","","…b6 — undermine the overextended pawn","","…Bxc3+ — remove the defender","","…axb6 — open the a-file","","…Ba6 — rake the weak pawns",""],
+  },
+  "pro-aman-nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_f3_d5:Bd2": {
+    sources: ["concept:pos-center","concept:pos-structure","https://www.chess.com/openings/Nimzo-Indian-Defense"],
+    watch: ["","","","","","","","","Bd2?! — passive; it neither recaptures the centre nor supports c4, so Black just grabs the pawn.","…dxc4! — Black snatches c4; with f3 weakening the kingside, holding it is awkward for White.","e3 — trying to round up c4.","…c5! — counterstriking d4 before White regains the pawn.","","…cxd4 — opening lines while a pawn up.","","…dxc3 — Black wins material in the exchange and keeps the extra pawn.",""],
+    learn: ["","","","","","","","","","…dxc4 — grab the loose pawn","","…c5 — counterstrike d4","","…cxd4 — open lines, stay ahead","","",""],
+  },
+  "pro-aman-caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_exd4:Nxd4": {
+    sources: ["concept:tac-fork","concept:pos-king-safety","https://www.chess.com/openings/Caro-Kann-Defense"],
+    watch: ["","","","","","","","","","","Nxd4?! — recapturing with the knight invites the check; the king cannot castle out of it.","…Qh4+! — check on the open fourth rank, and the e4-pawn hangs at the same time.","g3 — blocking the check.","…Qxe4+ — the queen scoops e4 with check, regaining the pawn with the safer king.","","…Qxe2+ — Black trades into a clean pawn-up ending.","","…Nf6 — developing, comfortably better.",""],
+    learn: ["","","","","","","","","","","","…Qh4+ — check and win e4","","…Qxe4+ — take the pawn with check","","…Qxe2+ — trade into a pawn up","","",""],
+  },
+  "pro-aman-caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_exd4_Bc4_Be6_Bxe6_fxe6:Nxd4": {
+    sources: ["concept:tac-fork","concept:pos-initiative","https://www.chess.com/openings/Caro-Kann-Defense"],
+    watch: ["","","","","","","","","","","","","","","Nxd4?! — again the recapture walks into the check with the king stuck in the centre.","…Qh4+! — the queen leaps to the open fourth rank; White must block or run.","Kf1 — the king loses castling rights.","…e5 — the pawn rolls forward, hitting d4 and seizing the centre.","","…Nf6 — developing with tempo toward the open king.","","…Qh5 — keeping the queen active, Black clearly on top.",""],
+    learn: ["","","","","","","","","","","","","","","","…Qh4+ — check, strand the king","","…e5 — roll the centre forward","","…Nf6 — develop at the king","","",""],
+  },
+  "pro-aman-caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_exd4_Bc4_Be6_Bxe6_fxe6_O-O_Nf6:Ne5": {
+    sources: ["concept:pos-center","concept:pos-initiative","https://www.chess.com/openings/Caro-Kann-Defense"],
+    watch: ["","","","","","","","","","","","","","","","","Ne5?! — the knight jumps in but has no support and can simply be challenged away.","…Be7! — calm development; the e5-knight has no real threat and must give ground.","Bf4 — trying to hold the outpost.","…O-O — Black tucks the king away, a pawn to the good.","","…Nbd7 — challenging the e5-knight directly.","","…Qe8 — repositioning, Black comfortably better.",""],
+    learn: ["","","","","","","","","","","","","","","","","","…Be7 — ignore it, stay solid","","…O-O — king to safety","","…Nbd7 — challenge the knight","","",""],
+  },
+  "pro-aman-reti:Nf3_g6_d4_Bg7_e4_d6_c3_Nf6_Bd3_O-O_O-O_Nc6_h3_e5_Re1:exd4": {
+    sources: ["concept:pos-center","concept:pos-space","https://www.chess.com/openings/Reti-Opening"],
+    watch: ["","","","","","","","","","","","","","","","exd4?! — Black releases the central tension too early, handing White a strong mobile pawn centre.","cxd4 — recapturing toward the centre; White has the big e4/d4 duo.","","Bf1 — calmly retreating the bishop, keeping the centre intact.","","e5 — the centre rolls forward, gaining space and kicking the f6-knight.","","a3 — denying b4, White clearly better with the space bind.",""],
+    learn: ["","","","","","","","","","","","","","","","","cxd4 — build the big centre","","Bf1 — keep the centre","","e5 — roll forward, gain space","","",""],
+  },
+  "pro-aman-reti:Nf3_Nf6_g3_d5_Bg2_c6_O-O_Bf5_d3_e6_Nbd2_h6_Re1:Bd6": {
+    sources: ["concept:tac-fork","concept:pos-center","https://www.chess.com/openings/Reti-Opening"],
+    watch: ["","","","","","","","","","","","","","Bd6?! — the bishop blocks the d-pawn and stands in the path of e4 with nothing guarding f5.","e4! — the central break forks: it hits the f5-bishop and threatens e5 onto the d6-bishop.","Bh7 — the bishop flees to the corner, out of play.","e5 — the pawn jabs forward with tempo, forking d6 and f6.","","exf6 — White wins a clean piece via the fork.","Qxf6 — Black recaptures the pawn but stays a piece down.","a4 — gaining space, completely winning.",""],
+    learn: ["","","","","","","","","","","","","","","e4 — break, fork bishop and centre","","e5 — jab forward, fork again","","exf6 — collect the piece","","",""],
+  },
+  "pro-aman-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nf6_d3_Bc5_c3:Ng4": {
+    sources: ["concept:tac-fork","concept:pos-king-safety","https://www.chess.com/openings/Ruy-Lopez-Opening"],
+    watch: ["","","","","","","","","","Ng4?! — the knight lunges at f2 with no backup; White just castles and it is stranded.","O-O — castling calmly; f2 is covered and the g4-knight has overstayed.","","h3 — questioning the intruder.","Nf6 — it must retreat, having lost time.","Bxc6 — picking the moment to take.","","Nxe5 — White wins the e5-pawn cleanly, a pawn up with the better structure.",""],
+    learn: ["","","","","","","","","","","O-O — castle, f2 is fine","","h3 — kick the intruder","","Bxc6 — damage the structure","","Nxe5 — win the pawn",""],
+  },
+  "pro-aman-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nf6_d3_Bc5_c3_O-O_O-O:a6": {
+    sources: ["concept:pos-structure","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez-Opening"],
+    watch: ["","","","","","","","","","","","a6?! — questioning the bishop a tempo too early; the e5-pawn is loose and White grabs it.","Bxc6 — taking, doubling Black’s pawns.","dxc6 — recapturing toward the centre.","Nxe5 — White wins e5; the c5-bishop’s eye on f2 is not enough.","","Nf3 — the knight retreats with the extra pawn banked.","","h3 — calmly questioning the pin, White a clean pawn up.",""],
+    learn: ["","","","","","","","","","","","","Bxc6 — double the pawns","","Nxe5 — win the e-pawn","","Nf3 — bank the pawn","","h3 — break the pin",""],
+  },
+  "pro-aman-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_f5_d3_fxe4_dxe4_Nf6_Nc3:d6": {
+    sources: ["concept:pos-king-safety","concept:pos-structure","https://www.chess.com/openings/Ruy-Lopez-Opening-Schliemann-Defense"],
+    watch: ["","","","","","","","","","","","d6?! — too slow against the Schliemann; White seizes the initiative against the loosened kingside.","a3 — a useful waiting move, keeping b4 covered and the bishop safe.","Be6 — Black develops.","Ng5 — jumping at the e6-bishop and the weak light squares.","","f4 — opening lines toward the exposed king.","","O-O — White completes development with a clear initiative.",""],
+    learn: ["","","","","","","","","","","","","a3 — useful waiting move","","Ng5 — jump at the weak squares","","f4 — open lines at the king","","O-O — finish, press",""],
+  },
+  "pro-aman-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_f5_d3_fxe4_dxe4_Nf6_Nc3_Bb4_O-O:d6": {
+    sources: ["concept:tac-fork","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez-Opening-Schliemann-Defense"],
+    watch: ["","","","","","","","","","","","","","d6?! — leaving the b4-bishop loose and the centre soft; White jumps in with tempo.","Nd5! — the knight lands on the dominant outpost, hitting the b4-bishop and f6-knight.","Bc5 — the bishop sidesteps.","b4! — gaining space and harassing the bishop further.","","Bg5 — piling on the pinned f6-knight.","","a4 — the queenside roll continues, White clearly on top.",""],
+    learn: ["","","","","","","","","","","","","","","Nd5 — seize the outpost with tempo","","b4 — gain space, harass","","Bg5 — pile on the pin","","",""],
+  },
+  "pro-aman-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_f5_d3_fxe4_dxe4_Nf6_Nc3_Bb4_O-O_Bxc3_bxc3:Nxe4": {
+    sources: ["concept:tac-pin","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez-Opening-Schliemann-Defense"],
+    watch: ["","","","","","","","","","","","","","","","Nxe4?! — grabbing the pawn opens the e-file straight at the uncastled king.","Re1! — the rook slams onto the open e-file, pinning the e4-knight against the king.","Nf6 — the knight must scramble back.","Bxc6 — removing the defender of e5.","","Rxe5+ — the rook wins the pawn with check; the king is stuck.","","c4 — White consolidates, up material with a raging initiative.",""],
+    learn: ["","","","","","","","","","","","","","","","","Re1 — pin on the open file","","Bxc6 — remove e5’s guard","","Rxe5+ — win the pawn, check","","",""],
+  },
+  "pro-aman-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nd4_Nxd4_exd4_O-O:Qg5": {
+    sources: ["concept:tac-fork","concept:pos-king-safety","https://www.chess.com/openings/Ruy-Lopez-Opening-Bird-Variation"],
+    watch: ["","","","","","","","","","Qg5?! — the queen sortie eyes g2 and the bishop, but it is loose and easily hit with tempo.","Bc4 — developing while covering g2 and eyeing f7.","","d3 — opening the c1-bishop onto the exposed queen.","Qh5 — the queen is chased again.","Qxh5 — White trades, punishing the wasted time.","","Re1 — White is up a clear initiative with the bishop pair.",""],
+    learn: ["","","","","","","","","","","Bc4 — develop, cover g2, hit f7","","d3 — open the bishop on the queen","","Qxh5 — trade, punish lost time","","Re1 — press the edge",""],
+  },
+  "pro-aman-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nd4_Nxd4_exd4_O-O_c6_Bc4:Bc5": {
+    sources: ["concept:tac-sacrifice","concept:pos-king-safety","https://www.chess.com/openings/Ruy-Lopez-Opening-Bird-Variation"],
+    watch: ["","","","","","","","","","","","Bc5?! — defending d4 but walking onto the f7-fork; the king has not castled.","Bxf7+! — the bishop strike rips the king off its castling square for a lasting bind.","Kf8 — the king is stuck in the centre.","Bb3 — the bishop retreats safely, keeping the spoils.","","a4 — clamping the queenside shut.","","d3 — White calmly develops, a pawn up with Black’s king stranded.",""],
+    learn: ["","","","","","","","","","","","","Bxf7+ — strip the castling square","","Bb3 — retreat, keep the bind","","a4 — clamp the queenside","","d3 — develop, king stranded",""],
+  },
+  "pro-aman-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nge7_O-O_a6_Ba4_b5_Bb3:Na5": {
+    sources: ["concept:tac-sacrifice","concept:tac-fork","https://www.chess.com/openings/Ruy-Lopez-Opening"],
+    watch: ["","","","","","","","","","","","Na5?! — chasing the bishop with a rim-knight leaves e5 fatally under-defended.","Nxe5! — the knight grabs e5; if Black takes on b3, Qh5 forks king and knight.","Nxb3 — Black grabs the bishop.","Qh5! — the double attack: mate on f7 and the loose b3-knight both hang.","Ng6 — Black must defend f7.","axb3 — White recovers the piece, a clean pawn up with the initiative.","","d4 — seizing the centre, White clearly winning.",""],
+    learn: ["","","","","","","","","","","","","Nxe5 — grab the pawn, set the fork","","Qh5 — double attack f7 and b3","","axb3 — recover, stay a pawn up","","d4 — seize the centre",""],
+  },
+  "pro-aman-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Ba4_Nf6_O-O_Nxe4_d4_b5_Bb3_d5_dxe5:Bc5": {
+    sources: ["concept:tac-pin","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez-Opening-Open-Variation"],
+    watch: ["","","","","","","","","","","","","","","","Bc5?! — in the Open Ruy this lets White strike; the d5-pawn is overloaded.","Bxd5! — the bishop takes the key pawn, exploiting the pin on the e6/f7 squares.","Bxf2+ — Black tries a desperado.","Kh1 — the king steps aside, the check spent for nothing.","","Bxe4 — White wins the e4-knight, now up multiple pawns.","","Rxd1 — recapturing, White completely winning.",""],
+    learn: ["","","","","","","","","","","","","","","","","Bxd5 — take the overloaded pawn","","Kh1 — sidestep the check","","Bxe4 — win the knight","","",""],
+  },
+  "pro-aman-rossolimo:e4_c5_Nf3_Nc6_d4_cxd4_Nxd4_e5_Nb5:Qa5+": {
+    sources: ["concept:tac-fork","concept:pos-initiative","https://www.chess.com/openings/Sicilian-Defense"],
+    watch: ["","","","","","","","","","Qa5+?! — the check looks active but the queen is misplaced and d6 is fatally weak.","Qd2 — calmly blocking and offering the trade; White keeps the d6-outpost in sight.","Qd8 — the queen must retreat, time lost.","N1c3 — developing toward the d5/d6 holes.","","Nd6+! — the knight leaps into the hole with check, a monster outpost.","Bxd6 — Black must give up the bishop pair.","Qxd6 — White dominates with the queen on d6 and Black’s structure in ruins.",""],
+    learn: ["","","","","","","","","","","Qd2 — block, eye d6","","N1c3 — develop at the holes","","Nd6+ — leap into the hole, check","","Qxd6 — dominate",""],
+  },
+  "pro-aman-french-white:e4_e6_d4_d5_Nc3_Nf6_e5_Nfd7_f4_c5_Nf3_Nc6_Be3_Qb6_Na4:Qb4+": {
+    sources: ["concept:tac-fork","concept:pos-initiative","https://www.chess.com/openings/French-Defense-Steinitz-Variation"],
+    watch: ["","","","","","","","","","","","","","","","Qb4+?! — the check chases nothing; after c3 the queen is hit again and offside.","c3 — blocking with tempo, gaining a move on the queen.","Qa5 — the queen retreats awkwardly.","Nxc5! — the knight grabs c5, exploiting the offside black queen.","","dxc5 — White is a clean pawn up with a big space bind.","","b4 — clamping the queenside, White clearly better.",""],
+    learn: ["","","","","","","","","","","","","","","","","c3 — block with tempo","","Nxc5 — grab the pawn","","dxc5 — a pawn up, big bind","","",""],
+  },
+  "pro-aman-french-white:e4_e6_d4_d5_Nc3_Bb4_e5_c5_a3_Bxc3+_bxc3:c4": {
+    sources: ["concept:pos-king-safety","concept:pos-initiative","https://www.chess.com/openings/French-Defense-Winawer-Variation"],
+    watch: ["","","","","","","","","","","","c4?! — releasing the central tension hands White a free hand on the kingside; Black’s king has no shelter.","Qg4! — the queen swings to g4, eyeing g7 and the dark squares.","g6 — Black weakens the dark squares to defend.","h4! — the rook’s pawn charges in to pry open the king.","","Ne2 — developing toward g3/f4 and the attack.","","Qf3 — White centralises the queen with a crushing initiative.",""],
+    learn: ["","","","","","","","","","","","","Qg4 — swing at the dark squares","","h4 — storm the king","","Ne2 — develop into the attack","","Qf3 — press home",""],
+  },
+  "pro-aman-french-white:e4_e6_d4_d5_e5_c5_c3:c4": {
+    sources: ["concept:pos-space","concept:pos-structure","https://www.chess.com/openings/French-Defense-Advance-Variation"],
+    watch: ["","","","","","","","c4?! — releasing the tension lets White clamp the queenside and play on both wings unopposed.","b3! — undermining the c4-pawn at once; Black cannot hold the over-advanced pawn.","b5 — trying to brace it.","a4! — striking the base of the chain.","","b4 — the wedge clamps the queenside for good.","","a5 — White’s queenside pawns roll, a lasting space bind.",""],
+    learn: ["","","","","","","","","b3 — undermine the c4-pawn","","a4 — strike the base","","b4 — clamp the queenside","","a5 — roll the pawns",""],
+  },
+  "pro-aman-french-white:e4_e6_d4_d5_Nc3_Bb4_e5_Ne7_a3_Bxc3+_bxc3:Ng6": {
+    sources: ["concept:pos-king-safety","concept:pos-space","https://www.chess.com/openings/French-Defense-Winawer-Variation"],
+    watch: ["","","","","","","","","","","","Ng6?! — the knight heads for f4 but it takes time, and White’s h-pawn comes with tempo.","h4! — the rook’s pawn lunges, gaining space and threatening h5 to trap the knight.","h5 — Black blocks but loosens the kingside.","Bg5! — the bishop pins and presses, the g6-knight awkward.","","Nh3 — heading for f4, the strong square.","","Nf4 — the knight lands on f4, White with a clear kingside initiative.",""],
+    learn: ["","","","","","","","","","","","","h4 — storm, threaten h5","","Bg5 — pin and press","","Nh3 — reroute to f4","","Nf4 — dominant square",""],
+  },
+  "pro-aman-french-white:e4_e6_d4_d5_Nc3_Bb4_e5_Ne7_a3_Bxc3+_bxc3_b6_Qg4:Ba6": {
+    sources: ["concept:tac-sacrifice","concept:pos-king-safety","https://www.chess.com/openings/French-Defense-Winawer-Variation"],
+    watch: ["","","","","","","","","","","","","","Ba6?! — chasing the f1-bishop ignores the threat to g7; the king is still in the centre.","Qxg7! — the queen grabs g7, smashing into the uncastled position; the h8-rook is loose.","Kd7 — the king must run, castling gone forever.","Qxf7 — White scoops a second pawn with continuing threats.","","Kxf1 — recapturing; White is two pawns up with Black’s king exposed.","","Ne2 — developing, White completely winning.",""],
+    learn: ["","","","","","","","","","","","","","","Qxg7 — smash the uncastled king","","Qxf7 — take a second pawn","","Kxf1 — two pawns up","","",""],
+  },
+  "pro-aman-anti-caro:e4_c6_Nc3_d5_Nf3_dxe4_Nxe4_Nf6_Nxf6+:gxf6": {
+    sources: ["concept:pos-structure","concept:pos-center","https://www.chess.com/openings/Caro-Kann-Defense-Two-Knights-Attack"],
+    watch: ["","","","","","","","","","gxf6?! — recapturing toward the centre shatters Black’s kingside pawns and exposes the king.","d4 — White builds the big centre, ready to exploit the damage.","Bf5 — Black develops the bishop.","Be2 — calm development, eyeing the long-term structural edge.","","O-O — White castles into the safer position.","","Re1 — White centralises with a lasting structural advantage.",""],
+    learn: ["","","","","","","","","","","d4 — build the centre","","Be2 — develop, keep the edge","","O-O — safer king","","Re1 — press the structure",""],
+  },
+  "pro-aman-anti-caro:e4_c6_Nc3_d5_Nf3_Bg4_h3_Bxf3_Qxf3_e6_d4:c5": {
+    sources: ["concept:tac-pin","concept:pos-center","https://www.chess.com/openings/Caro-Kann-Defense-Two-Knights-Attack"],
+    watch: ["","","","","","","","","","","","c5?! — striking the centre while behind in development just opens lines for White’s bishops.","Bb5+! — the check develops with tempo, exploiting Black’s loose king in the centre.","Nc6 — Black blocks.","exd5 — opening the centre while ahead in development.","","Nxd5! — the knight grabs the central pawn, the open lines decisive.","","O-O — White castles with a crushing lead in development.",""],
+    learn: ["","","","","","","","","","","","","Bb5+ — develop with check","","exd5 — open the centre","","Nxd5 — grab the pawn, dominate","","O-O — finish, crush",""],
+  },
+  "pro-aman-anti-caro:e4_c6_Nc3_d5_Nf3_dxe4_Nxe4_Nf6_Qe2:Nbd7": {
+    sources: ["concept:tac-mate","concept:tac-fork","https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"],
+    watch: ["","","","","","","","","Qe2 — the quiet queen move sets a famous trap: the e4-knight eyes d6 with the queen behind it.","Nbd7?? — the natural developing move walks into mate; it blocks the king’s escape and allows the fork.","Nd6# — smothered mate! The knight lands on d6 covering c8 and f7, and the boxed-in king has no flight square."],
+    learn: ["","","","","","","","","Qe2 — quiet move, hidden trap","","Nd6# — smothered mate"],
+  },
+  "pro-aman-anti-caro:e4_c6_Nc3_d5_Nf3_Bg4_h3_Bxf3_Qxf3_Nf6_e5:Ng8": {
+    sources: ["concept:pos-space","concept:pos-center","https://www.chess.com/openings/Caro-Kann-Defense-Two-Knights-Attack"],
+    watch: ["","","","","","","","","","","e5 — gaining space and kicking the f6-knight after Black gave up the bishop pair.","Ng8?! — the full retreat is passive; the knight undevelops and White seizes the centre.","d4 — building the big pawn centre with a huge space edge.","","Bd3 — developing the bishop toward the kingside light squares.","","dxc5 — opening lines while ahead.","","Bf4 — White develops with a commanding space advantage.",""],
+    learn: ["","","","","","","","","","","","","d4 — build the centre","","Bd3 — develop at the king","","dxc5 — open lines ahead","","Bf4 — command the space",""],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
