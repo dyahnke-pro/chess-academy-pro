@@ -3649,6 +3649,36 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     watch: ["","","","","","","","","","","","","","…h5?? — trying to hold the pin, but it collapses tactically.","hxg4! — taking the bishop; after …hxg4 Ng5 White crashes through on f7.","","","","Ng5 and Nxf7 win decisive material — the engine reads +2.3, three pawns up.","","",""],
     learn: ["","","","","","","","","","","","","","","hxg4 — take it and crash through","","","","","","",""],
   },
+  "pro-caruana-kid:d4_Nf6_c4_g6_Nc3_Bg7_e4_d6_h3_O-O:f4": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Kings-Indian-Defense"],
+    watch: ["","","","","","","","","","","f4?! — White overextends with the Four-Pawns idea but the centre is loose.","…Nh5! — hitting the f4-pawn and heading for the great f4/g3 squares; Black grabs the initiative.","","","","After …Ng3 forking the rook, Black is clearly better — the overextension backfires.","","",""],
+    learn: ["","","","","","","","","","","","…Nh5 — hit f4, grab the initiative","","","","","","",""],
+  },
+  "pro-caruana-kid:d4_Nf6_c4_g6_Nc3_Bg7_e4_d6_Nf3_O-O_Be2_e5_dxe5_dxe5:Nxe5": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Kings-Indian-Defense"],
+    watch: ["","","","","","","","","","","","","","","Nxe5?! — greedily grabbing the e5-pawn, but it walks into a queen trade that wins it back with interest.","…Qxd1+! — the zwischenzug; after …Nxe4 Black regains the pawn with a dominant position.","","","","After …Bxe5 and …Nc6 Black is clearly better with the bishop pair and the active pieces.","","",""],
+    learn: ["","","","","","","","","","","","","","","","…Qxd1+ — trade and regain the pawn","","","","","","",""],
+  },
+  "pro-caruana-caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5:dxe5": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Caro-Kann-Defense"],
+    watch: ["","","","","","","","","dxe5?! — grabbing the pawn opens the king while it sits in the centre.","…Qh4+! — the check rakes the open king and forks the e4-pawn; Black regains material with a raging attack.","","","","After …Qxe4+ and …Bf5 Black has a winning attack against the stranded king.","","",""],
+    learn: ["","","","","","","","","","…Qh4+ — check and fork e4","","","","","","",""],
+  },
+  "pro-caruana-caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_exd4:Nxd4": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Caro-Kann-Defense"],
+    watch: ["","","","","","","","","","","Nxd4?! — recapturing with the knight walks straight into the fork; the king cannot castle.","…Qh4+! — check, and the e4-pawn hangs on the fourth rank; Black wins it back with the safer king.","","","","After the queens trade Black emerges a clean pawn up — the engine reads +1.1.","","",""],
+    learn: ["","","","","","","","","","","","…Qh4+ — check and win e4","","","","","","",""],
+  },
+  "pro-caruana-caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_exd4_Bc4_Be6_Bxe6_fxe6:Nxd4": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Caro-Kann-Defense"],
+    watch: ["","","","","","","","","","","","","","","Nxd4?! — again the recapture invites the check; the king is denied castling.","…Qh4+! — the queen leaps to the open fourth rank; with …Bc5 and …Nd7 Black piles in.","","","","Black gets a crushing lead in development against the stranded f1-king.","","",""],
+    learn: ["","","","","","","","","","","","","","","","…Qh4+ — check, swarm the king","","","","","","",""],
+  },
+  "pro-caruana-caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_exd4_Bc4_Be6_Bxe6_fxe6_O-O_Nf6:Ne5": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Caro-Kann-Defense"],
+    watch: ["","","","","","","","","","","","","","","","","Ne5?! — the knight jumps in with no support and can simply be challenged away.","…Be7! — calm development; the e5-knight has no real threat and must retreat, leaving Black better.","","","","Black is comfortably better with the extra pawn and the sounder structure.","","",""],
+    learn: ["","","","","","","","","","","","","","","","","","…Be7 — ignore it, stay solid","","","","","","",""],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
