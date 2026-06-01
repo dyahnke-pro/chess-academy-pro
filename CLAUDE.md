@@ -2862,6 +2862,31 @@ Consequences:
 
 ## Post-Deploy Audit (MANDATORY — run after EVERY build)
 
+### 🚨 "AUDIT" = THE LOOP AUDIT PROTOCOL (David 2026-06-01, LOCKED).
+
+When David says **"audit"** (or "run the audit" / "loop audit protocol"), he
+means the **`scripts/audit-punish-gems-loop.mjs` 3-PASS CONTRACT** — not a
+one-shot Playwright pass. This is the default audit instrument now; reach for
+it whenever he says the word "audit" without naming another script.
+
+The protocol (per the matrix row below + §G1):
+- **3-PASS CONTRACT:** MET only on **3 CONSECUTIVE error-free passes**; EACH
+  pass touches EVERY function and digs DEEPER; ANY error resets the streak to 0.
+- Covers ALL masterclass + pro-rep openings — every variation tab's WLPP
+  buttons + Watch/Learn lessons + gems + the `/api/tts` voice contract
+  (Watch=prose / Learn=cue / Practice=silent). Verifies CORRECTNESS, not mounts.
+- Run it against the **LIVE prod URL** by default (verify the bundle hash
+  advanced past your push first); localhost is the fallback only when prod is
+  provably stale/cap-blocked — say so explicitly.
+- Parallelize per-opening with `AUDIT_OPENING=<id>`; scope to a player's set
+  when that's what changed.
+- Command: `AUDIT_SANDBOX=1 AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app node scripts/audit-punish-gems-loop.mjs`
+
+The other `scripts/audit-*-loop.mjs` (mistakes-quality, money, openings-
+interactive, weaknesses, training-loop) are surface-specific loops — use them
+when the change is on THAT surface, but the unqualified word "audit" defaults
+to the punish-gems loop above.
+
 ### 🚨 AUDITS ARE LIVING — UPDATE THE AUDIT BEFORE YOU RUN IT (David 2026-05-24, LOCKED)
 
 **After EVERY build/change, it is YOUR job to update the relevant audit
