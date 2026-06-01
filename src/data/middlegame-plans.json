@@ -70480,44 +70480,41 @@
   {
     "id": "mp-prosamaysicb-d5break",
     "openingId": "pro-samayraina-sicilian-black",
-    "criticalPositionFen": "r1bqk2r/p2p1ppp/2p2n2/4p1B1/1b2P3/2N5/PPP2PPP/R2QKB1R w KQkq - 4 8",
+    "criticalPositionFen": "r1bq1rk1/p2pbppp/2p2n2/4p3/2B1P3/2N5/PPP2PPP/R1BQ1RK1 w - - 6 9",
     "title": "Kalashnikov — the …d5 break (his data plan)",
-    "overview": "In Samay's Kalashnikov the whole point of the …Nc6/…e5 + …bxc6 centre is the …d5 break — it appears in 12% of his middlegames and scores 54%. The break uncoils Black's pawn front, opens the position for the bishop pair, and cracks the files toward White's king.",
+    "overview": "In Samay's Kalashnikov the whole point of the …Nc6/…e5 + …bxc6 centre is the …d5 break — it appears in 12% of his middlegames and scores 54%. Castle FIRST (so the king is safe), then strike: …d5 uncoils Black's pawn front, opens the position, and the pawn rolls to d4 to cramp White's knight.",
     "pawnBreaks": [
-      "d5 — the central break frees the bishop pair"
+      "d5 — the central break frees the position",
+      "d4 — roll the pawn and cramp the knight"
     ],
-    "pieceManeuvers": [
-      "Qf6 — centralise the queen on the long diagonal"
-    ],
+    "pieceManeuvers": [],
     "strategicThemes": [
-      "Big pawn centre + bishop pair",
-      "Open the position with …d5"
+      "Big pawn centre after castling",
+      "Open with …d5, push to …d4"
     ],
     "endgameTransitions": [
-      "A mobile d5-pawn and the bishop pair into the ending"
+      "A protected …d4 wedge and space into the ending"
     ],
     "playableLines": [
       {
-        "fen": "r1bqk2r/p2p1ppp/2p2n2/4p1B1/1b2P3/2N5/PPP2PPP/R2QKB1R w KQkq - 4 8",
+        "fen": "r1bq1rk1/p2pbppp/2p2n2/4p3/2B1P3/2N5/PPP2PPP/R1BQ1RK1 w - - 6 9",
         "moves": [
-          "Bxf6",
-          "Qxf6",
-          "Qd3",
+          "Re1",
           "d5",
           "exd5",
-          "cxd5"
+          "cxd5",
+          "Bb3",
+          "d4"
         ],
         "annotations": [
-          "White trades on f6 to chip at Black's grip on d5 before the break can land.",
-          "…Qxf6 — recapture with the queen, keeping the big centre and eyeing the long diagonal.",
-          "White centralises the queen to guard e4 and meet the coming break.",
-          "…d5! The thematic break. Black's pawn front uncoils, the centre opens for the two bishops, and the files crack toward White.",
-          "exd5 — White captures, but the c- and e-files now point at White's position.",
-          "…cxd5 — recapture; Black has a mobile d5-pawn, the bishop pair, and the freer game. The Kalashnikov's promise delivered."
+          "White centralises the rook on the e-file, eyeing e5.",
+          "…d5! Now that Black is safely castled, the central break is perfectly timed — the pawn front uncoils and the position opens.",
+          "exd5 — White captures, but Black's pieces are ready to flood the open lines.",
+          "…cxd5 — recapture; the c-file opens toward White's queenside and Black has a mobile centre.",
+          "White retreats the bishop off the d5-pawn's path.",
+          "…d4! The pawn rolls on, cramping White's knight and seizing space. Black's central majority and harmonious pieces give the freer, more pleasant game."
         ],
         "arrows": [
-          [],
-          [],
           [],
           [
             {
@@ -70527,36 +70524,24 @@
             }
           ],
           [],
-          []
+          [],
+          [],
+          [
+            {
+              "from": "d5",
+              "to": "d4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
         ],
         "highlights": [
           [
             {
-              "square": "g5",
+              "square": "f1",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d3",
+              "square": "e1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -70589,18 +70574,38 @@
               "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ]
         ],
         "learnCues": [
-          "Bxf6 — trade off the d5-guard",
-          "…Qxf6 — recapture, keep the centre",
-          "Qd3 — guard e4",
-          "…d5 — the freeing break!",
-          "exd5 — files crack open",
-          "…cxd5 — bishop pair, mobile centre"
+          "Re1 — eye the e-file",
+          "…d5 — break, safely castled",
+          "exd5 — lines open",
+          "…cxd5 — mobile centre",
+          "Bb3 — retreat the bishop",
+          "…d4 — roll on, cramp the knight"
         ],
         "title": "Kalashnikov — the …d5 break (his data plan)",
-        "intro": "In Samay's Kalashnikov the whole point of the …Nc6/…e5 + …bxc6 centre is the …d5 break — it appears in 12% of his middlegames and scores 54%. The break uncoils Black's pawn front, opens the position for the bishop pair, and cracks the files toward White's king.",
+        "intro": "In Samay's Kalashnikov the whole point of the …Nc6/…e5 + …bxc6 centre is the …d5 break — it appears in 12% of his middlegames and scores 54%. Castle FIRST (so the king is safe), then strike: …d5 uncoils Black's pawn front, opens the position, and the pawn rolls to d4 to cramp White's knight.",
         "sources": [
           "https://www.chess.com/openings/Sicilian-Defense-Kalashnikov-Variation",
           "https://api.chess.com/pub/player/samayraina/games/archives",
