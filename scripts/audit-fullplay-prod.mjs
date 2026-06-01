@@ -71,6 +71,23 @@ async function clickMove(from, to) {
   await page.locator(`[data-square="${to}"]`).click({ timeout: 4000 }).catch(() => {});
   await page.waitForTimeout(450);
 }
+// Enable voice + full narration in the profile so the lesson SPEAKS (the audit
+// must verify narration; voiceEnabled defaults to false). Mirrors the reference
+// audit's profiles-store write. Caller reloads after so the store re-reads.
+async function enableVoice() {
+  await page.evaluate(async () => {
+    const dbs = await indexedDB.databases();
+    const nm = (dbs.find((d) => /chess/i.test(d.name || '')) || {}).name; if (!nm) return;
+    await new Promise((res) => {
+      const q = indexedDB.open(nm);
+      q.onsuccess = () => { const db = q.result; if (!db.objectStoreNames.contains('profiles')) return res();
+        const tx = db.transaction('profiles', 'readwrite'); const ps = tx.objectStore('profiles'); const g = ps.getAll();
+        g.onsuccess = () => { for (const p of g.result) { p.preferences = p.preferences || {}; p.preferences.voiceEnabled = true; p.preferences.coachNarration = 'full'; ps.put(p); } };
+        tx.oncomplete = () => res(); };
+      q.onerror = () => res(); setTimeout(res, 5000);
+    });
+  }).catch(() => {});
+}
 // Read which squares currently carry a highlight (inline background on [data-square]).
 async function highlightedSquares() {
   return page.evaluate(() => {
@@ -102,6 +119,10 @@ async function highlightedSquares() {
     const n = await page.evaluate(async () => { try { const dbs = await indexedDB.databases(); const nm = (dbs.find((d) => /chess/i.test(d.name||''))||{}).name; if (!nm) return 0; return await new Promise((r) => { const q = indexedDB.open(nm); q.onsuccess = () => { const db = q.result; if (!db.objectStoreNames.contains('openings')) return r(0); const t = db.transaction('openings','readonly').objectStore('openings').count(); t.onsuccess = () => r(t.result); t.onerror = () => r(0); }; q.onerror = () => r(0); setTimeout(() => r(-1), 4000); }); } catch { return 0; } });
     if (n >= 100) { console.log(`  seed ready (${n} openings)`); break; }
   }
+  // enable voice + full narration so the lesson SPEAKS (then reload to apply)
+  await enableVoice();
+  await page.reload({ waitUntil: 'domcontentloaded' }).catch(() => {});
+  await page.waitForTimeout(3000);
 
   // 2. open the detail page
   await page.goto(`${URL}/openings/${ONLY}`, { waitUntil: 'domcontentloaded' });
@@ -123,21 +144,29 @@ async function highlightedSquares() {
     }
     return 'none';
   }
-  // Step a curated LessonPlayer through all beats; verify narration+highlights.
+  // Step a curated LessonPlayer through ALL beats. The lesson AUTO-advances
+  // (voice-gated); we poll the "Beat X / N" progress, let auto-advance work,
+  // and nudge lesson-next if it stalls (headless TTS). Capture highlights +
+  // listener narration per beat. Reaching the final beat fires onComplete →
+  // markRungComplete. Never click lesson-continue-next mid-lesson (that's the
+  // end-only next-lesson button).
   async function driveLessonPlayer(rung, before) {
-    let litBeats = 0, beats = 0;
-    for (let i = 0; i < 40; i++) {
+    let litBeats = 0, maxBeat = 0, lastCur = -1, stuck = 0, total = 0;
+    for (let i = 0; i < 80; i++) {
+      const prog = await page.locator('[data-testid="lesson-progress"]').innerText().catch(() => '');
+      const m = prog.match(/(\d+)\s*\/\s*(\d+)/); const cur = m ? +m[1] : 0; total = m ? +m[2] : total;
       const lit = await highlightedSquares(); if (lit.length) litBeats++;
-      beats++;
-      const next = page.locator('[data-testid="lesson-continue-next"]').first();
-      if (!(await next.isVisible().catch(() => false))) break;
-      await next.evaluate((n)=>n.click()).catch(()=>{});
-      await page.waitForTimeout(700);
+      maxBeat = Math.max(maxBeat, cur);
+      if (total && cur >= total) break;                 // atEnd → onComplete fired
       if (!(await page.locator('[data-testid="lesson-player"]').isVisible().catch(() => false))) break;
+      if (cur === lastCur) { stuck++; if (stuck >= 2) { await page.locator('[data-testid="lesson-next"]').first().evaluate((n) => n.click()).catch(() => {}); } if (stuck > 12) break; }
+      else stuck = 0;
+      lastCur = cur;
+      await page.waitForTimeout(1400);
     }
     const voice = listener.getCapturedEvents().slice(before).filter((e) => /voice|speak|narration/i.test(e.kind || ''));
-    rec(`${rung}: narration fired (listener)`, voice.length > 0, `${voice.length} voice events over ${beats} beats`);
-    rec(`${rung}: highlights painted`, litBeats > 0, `${litBeats}/${beats} beats lit`);
+    rec(`${rung}: narration fired (listener)`, voice.length > 0, `${voice.length} voice events, reached beat ${maxBeat}/${total}`);
+    rec(`${rung}: highlights painted`, litBeats > 0, `${litBeats} beats lit`);
   }
   // Play a PlayableLinePlayer to completion (skip demo → memory → play moves).
   async function driveLinePlayer() {
