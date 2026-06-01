@@ -51,15 +51,16 @@ async function drive(testidSel, id, label, expectMount = true) {
   const present = (await b.count()) > 0;
   if (!present) return { present: false };
   await b.click().catch(() => {});
-  await page.waitForTimeout(3500);
+  await page.waitForTimeout(3000);
   let mounted = (await squares()) >= 64;
-  // prod-latency tolerance: a slow lesson mount gets ONE retry-wait + re-click,
-  // so a single lag doesn't fail the pass. A still-empty board after this is a
-  // REAL no-mount (not hidden).
-  if (!mounted) { await page.waitForTimeout(3500); mounted = (await squares()) >= 64; }
-  if (!mounted) { await b.click().catch(() => {}); await page.waitForTimeout(3500); mounted = (await squares()) >= 64; }
+  // prod-latency tolerance: ONE retry-wait so a slow mount doesn't false-fail;
+  // a still-empty board after it is a REAL no-mount (not hidden).
+  if (!mounted) { await page.waitForTimeout(3000); mounted = (await squares()) >= 64; }
   const fired = tts.slice(before).filter((t) => !warmup(t));
-  await exitPlayer(); await openDetail(id);
+  // exit via the player's back button (fast); only full-reload if that didn't
+  // return us to the detail page (keeps state stable without the slow renav).
+  await exitPlayer();
+  if (!(await page.locator('[data-testid="opening-detail"]').count())) await openDetail(id);
   return { present: true, mounted, fired };
 }
 
