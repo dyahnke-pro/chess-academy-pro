@@ -96,48 +96,63 @@ async function highlightedSquares() {
   const mainPlies = plies(opening.pgn);
   console.log(`  main line: ${mainPlies.length} plies`);
 
-  // 3. WATCH — open demo, step through verifying highlights+narration, then memory-replay to complete
-  const beforeWatch = listener.getCapturedEvents().length;
-  await page.locator('[data-testid="walkthrough-btn"]').click().catch(() => {});
-  const demoUp = await page.locator('[data-testid="line-player-demo"]').isVisible({ timeout: 8000 }).catch(() => false);
-  rec('Watch: demo phase opened', demoUp);
-  if (demoUp) {
-    // step the demo forward, checking highlight presence + narration each move
-    let litMoves = 0;
-    for (let i = 0; i < mainPlies.length; i++) {
-      const lit = await highlightedSquares();
-      if (lit.length) litMoves++;
-      await page.locator('[data-testid="demo-play-pause"]').click().catch(() => {}); // ensure playing
-      await page.waitForTimeout(900);
+  // Which player opened after clicking a rung? curated → LessonPlayer (beats);
+  // DB-only / Learn-fallback → PlayableLinePlayer (demo→memory).
+  async function whichPlayer() {
+    for (let i = 0; i < 10; i++) {
+      if (await page.locator('[data-testid="lesson-player"]').isVisible().catch(() => false)) return 'lesson';
+      if (await page.locator('[data-testid="line-player-demo"]').isVisible().catch(() => false)) return 'demo';
+      if (await page.locator('[data-testid="line-player-memory"]').isVisible().catch(() => false)) return 'memory';
+      await page.waitForTimeout(800);
     }
-    rec('Watch: highlights painted during demo', litMoves > 0, `${litMoves}/${mainPlies.length} plies lit`);
-    const watchVoice = listener.getCapturedEvents().slice(beforeWatch).filter((e) => /voice|speak|narration/i.test(e.kind || ''));
-    rec('Watch: narration fired (listener)', watchVoice.length > 0, `${watchVoice.length} voice events`);
-    // jump to memory and replay the moves to COMPLETE the rung
-    await page.locator('[data-testid="skip-to-memory"]').click().catch(() => {});
-    await page.waitForTimeout(800);
-    for (const ply of mainPlies) { await clickMove(ply.from, ply.to); }
-    const done = await page.locator('[data-testid="line-player-complete"]').isVisible({ timeout: 8000 }).catch(() => false)
-      || await page.locator('[data-testid="rung-done-watch"]').isVisible().catch(() => false);
-    rec('Watch: completed (line-player-complete / rung-done-watch)', done);
-    await page.locator('[data-testid="line-player-back"]').click().catch(() => {}); await page.waitForTimeout(800);
+    return 'none';
   }
-  await dismissOverlays();
-
-  // 4. LEARN / PRACTICE — play the moves; rung must complete + unlock next
-  for (const [rung, btn] of [['learn', 'learn-btn'], ['practice', 'practice-btn']]) {
-    const locked = await page.locator(`[data-testid="${btn}"][data-locked="true"]`).count().catch(() => 0);
-    if (locked) { rec(`${rung}: still LOCKED after prior rung — progression gap`, false); continue; }
-    await page.locator(`[data-testid="${btn}"]`).click().catch(() => {});
-    await page.waitForTimeout(1500);
-    // skip any demo to memory
+  // Step a curated LessonPlayer through all beats; verify narration+highlights.
+  async function driveLessonPlayer(rung, before) {
+    let litBeats = 0, beats = 0;
+    for (let i = 0; i < 40; i++) {
+      const lit = await highlightedSquares(); if (lit.length) litBeats++;
+      beats++;
+      const next = page.locator('[data-testid="lesson-continue-next"]').first();
+      if (!(await next.isVisible().catch(() => false))) break;
+      await next.click().catch(() => {});
+      await page.waitForTimeout(700);
+      if (!(await page.locator('[data-testid="lesson-player"]').isVisible().catch(() => false))) break;
+    }
+    const voice = listener.getCapturedEvents().slice(before).filter((e) => /voice|speak|narration/i.test(e.kind || ''));
+    rec(`${rung}: narration fired (listener)`, voice.length > 0, `${voice.length} voice events over ${beats} beats`);
+    rec(`${rung}: highlights painted`, litBeats > 0, `${litBeats}/${beats} beats lit`);
+  }
+  // Play a PlayableLinePlayer to completion (skip demo → memory → play moves).
+  async function driveLinePlayer() {
     if (await page.locator('[data-testid="skip-to-memory"]').isVisible().catch(() => false)) { await page.locator('[data-testid="skip-to-memory"]').click().catch(() => {}); await page.waitForTimeout(700); }
     for (const ply of mainPlies) { await clickMove(ply.from, ply.to); }
-    const done = await page.locator('[data-testid="line-player-complete"]').isVisible({ timeout: 8000 }).catch(() => false)
-      || await page.locator(`[data-testid="rung-done-${rung}"]`).isVisible().catch(() => false);
-    rec(`${rung}: completed`, done);
-    await page.locator('[data-testid="line-player-back"]').click().catch(() => {}); await page.waitForTimeout(800);
+  }
+  async function backToDetail() {
+    for (const sel of ['[data-testid="line-player-back"]', '[data-testid="lesson-player"] [aria-label="Exit" i]', '[aria-label="Back" i]']) {
+      const b = page.locator(sel).first(); if (await b.isVisible().catch(() => false)) { await b.click().catch(() => {}); break; }
+    }
+    await page.waitForTimeout(800);
+    if (!(await page.locator('[data-testid="walkthrough-btn"]').isVisible().catch(() => false))) {
+      await page.goto(`${URL}/openings/${ONLY}`, { waitUntil: 'domcontentloaded' }); await page.waitForTimeout(1500);
+    }
     await dismissOverlays();
+  }
+
+  // 3-4. Drive each rung in order; each must complete + unlock the next.
+  for (const [rung, btn] of [['watch', 'walkthrough-btn'], ['learn', 'learn-btn'], ['practice', 'practice-btn']]) {
+    const locked = await page.locator(`[data-testid="${btn}"][data-locked="true"]`).count().catch(() => 0);
+    if (locked) { rec(`${rung}: still LOCKED (prior rung didn't unlock it) — progression gap`, false); continue; }
+    const before = listener.getCapturedEvents().length;
+    await page.locator(`[data-testid="${btn}"]`).click().catch(() => {});
+    const kind = await whichPlayer();
+    rec(`${rung}: player opened`, kind !== 'none', `player=${kind}`);
+    if (kind === 'lesson') await driveLessonPlayer(rung, before);
+    else if (kind !== 'none') await driveLinePlayer();
+    const done = await page.locator(`[data-testid="rung-done-${rung}"]`).isVisible({ timeout: 6000 }).catch(() => false)
+      || await page.locator('[data-testid="line-player-complete"]').isVisible().catch(() => false);
+    rec(`${rung}: rung completed (rung-done-${rung})`, done);
+    await backToDetail();
   }
 
   // 5. PLAY — launches OpeningPlayMode locked to the line
