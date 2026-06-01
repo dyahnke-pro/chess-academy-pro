@@ -42,18 +42,31 @@ const page = await ctx.newPage();
 const pageErrors = [];
 page.on('pageerror', (e) => pageErrors.push(String(e).slice(0, 160)));
 
+async function dismissBubble() {
+  // The strength-calibration onboarding bubble OVERLAYS the whole content
+  // (board + buttons) and RE-APPEARS after a reload (the enableVoice reload was
+  // re-triggering it → it sat on top of e2, intercepting every pointer event —
+  // the root cause of the board moves + buttons needing workarounds).
+  for (let i = 0; i < 6; i++) {
+    const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
+    if (!(await bubble.isVisible().catch(() => false))) return;
+    await page.locator('[data-testid="skill-band-intermediate"]').click().catch(() => {});
+    await bubble.waitFor({ state: 'detached', timeout: 12000 }).catch(() => {});
+    await page.waitForTimeout(400);
+  }
+}
 async function dismissOverlays() {
+  await dismissBubble();
   // The page-help-modal auto-opens on the openings detail page and INTERCEPTS
-  // ladder clicks (caveat #5). Its real dismiss is data-testid="page-help-close"
-  // — a generic button selector misses it (was the player=none bug).
+  // ladder clicks (caveat #5). Its real dismiss is data-testid="page-help-close".
   for (const sel of ['[data-testid="page-help-close"]', '[data-testid="page-help-modal"] button', '[aria-label="Close" i]']) {
     const b = page.locator(sel).first();
     if (await b.isVisible().catch(() => false)) { await b.click().catch(() => {}); await page.waitForTimeout(400); }
   }
-  // confirm the modal is gone
   for (let i = 0; i < 5 && (await page.locator('[data-testid="page-help-modal"]').isVisible().catch(() => false)); i++) {
     await page.locator('[data-testid="page-help-close"]').click().catch(() => {}); await page.waitForTimeout(400);
   }
+  await dismissBubble();
 }
 // Robust button tap: scroll into view, try a real click, fall back to a direct
 // DOM click (fires React onClick regardless of a transient overlay / stability
