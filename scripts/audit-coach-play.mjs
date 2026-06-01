@@ -268,15 +268,42 @@ async function main() {
   // and "square not on board" fired (diagnosed 2026-05-27). Clear
   // whatever's open before each click.
   async function clearFirstRunOverlays() {
-    const calib = page.locator('[data-testid="strength-calibration-bubble"]');
-    if (await calib.count()) {
-      await page.getByText('Intermediate', { exact: false }).first().click({ timeout: 4000 }).catch(() => undefined);
-      await calib.waitFor({ state: 'detached', timeout: 20000 }).catch(() => undefined);
-    }
-    const help = page.locator('[data-testid="page-help-modal"]');
-    if (await help.count()) {
-      await page.keyboard.press('Escape');
-      await help.waitFor({ state: 'detached', timeout: 10000 }).catch(() => undefined);
+    // A surface's page-help modal can open a beat AFTER navigation
+    // settles (it pops on the dashboard / coach-home / play surface with
+    // a delay), so a too-early dismissal misses it and the NEXT click is
+    // intercepted. Wait briefly for either overlay to appear first.
+    await Promise.race([
+      page.locator('[data-testid="page-help-modal"]').waitFor({ state: 'visible', timeout: 1500 }).catch(() => undefined),
+      page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'visible', timeout: 1500 }).catch(() => undefined),
+    ]);
+    // Both overlays can re-open per-surface and Escape alone proved
+    // unreliable on the page-help "order of operations" modal (it kept
+    // intercepting the coach-action-play click). Loop: answer the
+    // calibration bubble, then DISMISS page-help via its explicit close
+    // button (fallback: Escape, then backdrop) until neither is present.
+    for (let i = 0; i < 4; i++) {
+      let acted = false;
+      const calib = page.locator('[data-testid="strength-calibration-bubble"]');
+      if (await calib.count()) {
+        acted = true;
+        await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 4000 })
+          .catch(() => page.getByText('Intermediate', { exact: false }).first().click({ timeout: 4000 }).catch(() => undefined));
+        await calib.waitFor({ state: 'detached', timeout: 20000 }).catch(() => undefined);
+      }
+      const help = page.locator('[data-testid="page-help-modal"]');
+      if (await help.count()) {
+        acted = true;
+        const close = page.locator('[data-testid="page-help-close"]');
+        if (await close.count()) await close.first().click({ timeout: 4000 }).catch(() => undefined);
+        else await page.keyboard.press('Escape').catch(() => undefined);
+        await help.waitFor({ state: 'detached', timeout: 10000 }).catch(() => undefined);
+        if (await help.count()) {
+          // Last resort: click the backdrop (closes on container click).
+          await help.first().click({ position: { x: 5, y: 5 }, timeout: 2000 }).catch(() => undefined);
+          await help.waitFor({ state: 'detached', timeout: 6000 }).catch(() => undefined);
+        }
+      }
+      if (!acted) break;
     }
   }
 
@@ -288,12 +315,14 @@ async function main() {
   });
 
   await record('coach-hub', async () => {
+    await clearFirstRunOverlays(); // dashboard page-help can still be up
     await page.getByRole('link', { name: 'Coach' }).first().click();
     await page.locator('[data-testid="coach-home-page"]').waitFor({ timeout: 15000 });
     await clearFirstRunOverlays(); // PageHelp "How the Coach works" pops here
   });
 
   await record('coach-play-render', async () => {
+    await clearFirstRunOverlays(); // coach-home page-help can intercept the tile
     await page.locator('[data-testid="coach-action-play"]').click();
     // Wait for the play surface to settle — the board takes time to
     // render plus the brain emits app-init and surface-migrated audits.
