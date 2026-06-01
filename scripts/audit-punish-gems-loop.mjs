@@ -504,10 +504,16 @@ async function continuityPreflight() {
       let ok = true;
       for (const m of vm) { const b = c.fen(); try { c.move(m); } catch { /* */ } if (c.fen() === b) { ok = false; break; } }
       if (!ok) { errs.push(`CONTINUITY ${id} [${v.name}]: variation line illegal/discontinuous`); continue; }
-      // branches from the spine: shares ≥2 opening plies with the main line
+      // Branches from the spine: must share the opening up to (and including)
+      // the STUDENT's first move — the earliest legitimate branch point. For a
+      // WHITE opening the opening is identified at ply 1 (1.c4 / 1.Nf3 / 1.d4),
+      // so a variation defined by Black's different first reply correctly shares
+      // just 1 ply; for a BLACK opening it's identified at ply 2 (1.e4 c6), so a
+      // real variation must share ≥2. Below that floor it's a cold/unrelated line.
+      const minShared = String(o.color).toLowerCase() === 'white' ? 1 : 2;
       let shared = 0;
       while (shared < spine.length && shared < vm.length && spine[shared] === vm[shared]) shared++;
-      if (shared < 2) errs.push(`CONTINUITY ${id} [${v.name}]: variation does not branch from the opening spine (shares ${shared} plies)`);
+      if (shared < minShared) errs.push(`CONTINUITY ${id} [${v.name}]: variation does not branch from the opening spine (shares ${shared} plies, need ${minShared})`);
     }
   }
   return errs;
