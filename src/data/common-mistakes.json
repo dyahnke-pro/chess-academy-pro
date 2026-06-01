@@ -3224,5 +3224,81 @@
         "https://www.chess.com/openings/Scandinavian-Defense"
       ]
     }
+  ],
+  "pro-caruana-ruy-lopez": [
+    {
+      "fen": "r1bqkbnr/2pp1ppp/p1n5/1p2p3/B3P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5",
+      "wrongMove": "Bxb5",
+      "correctMove": "Bb3",
+      "explanation": "After …b5 it is tempting to grab the pawn with Bxb5, but it loses a piece to …axb5, when the a8-rook recaptures the bishop. Retreat to b3 instead, keeping the bishop on the strong a2-g8 diagonal and a healthy game.",
+      "shortNarration": "Bxb5 hangs to …axb5; play Bb3.",
+      "sources": [
+        "concept:pos-material",
+        "https://www.chess.com/openings/Ruy-Lopez-Opening"
+      ]
+    }
+  ],
+  "pro-caruana-italian": [
+    {
+      "fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQK2R w KQ - 1 6",
+      "wrongMove": "Bxf7+",
+      "correctMove": "O-O",
+      "explanation": "The Greek-gift sacrifice Bxf7+ looks tempting, but here it is simply unsound — after …Kxf7 White has no follow-up and is just down a bishop for one pawn. The modern Italian is a slow, strategic game: castle, and build the Pianissimo squeeze instead of sacrificing.",
+      "shortNarration": "Bxf7+ is unsound here; just castle.",
+      "sources": [
+        "concept:pos-material",
+        "https://www.chess.com/openings/Italian-Game"
+      ]
+    }
+  ],
+  "pro-caruana-najdorf": [
+    {
+      "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+      "wrongMove": "e5",
+      "correctMove": "a6",
+      "explanation": "Playing …e5 immediately, before …a6, walks into Nb5 — the knight leaps to a strong square hitting d6 and eyeing c7, and Black has no good way to chase it. Always insert …a6 first: it controls b5, and only then is …e5 the principled central break.",
+      "shortNarration": "Premature …e5 allows Nb5; play …a6 first.",
+      "sources": [
+        "concept:pos-development",
+        "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation"
+      ]
+    },
+    {
+      "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP1BPPP/R1BQK2R b KQkq - 1 6",
+      "wrongMove": "b5",
+      "correctMove": "e5",
+      "explanation": "The immediate …b5 is loose — it weakens the queenside and lets White hit back with a4 before Black is developed. The principled move is …e5, grabbing the centre and gaining time on the d4-knight. Claim the centre first, then expand on the queenside.",
+      "shortNarration": "Loose …b5; grab the centre with …e5.",
+      "sources": [
+        "concept:pos-center",
+        "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation"
+      ]
+    }
+  ],
+  "pro-caruana-taimanov": [
+    {
+      "fen": "r1bqkbnr/3p1ppp/p1p1p3/8/4P3/2NB4/PPP2PPP/R1BQK2R b KQkq - 1 7",
+      "wrongMove": "e5",
+      "correctMove": "d5",
+      "explanation": "Locking the centre with …e5 hands White a permanent grip on the d5-square and a fine outpost. The right break is …d5, hitting e4 head-on and freeing Black's game. Strike the centre, don't fix it.",
+      "shortNarration": "Don't lock with …e5; strike with …d5.",
+      "sources": [
+        "concept:pos-center",
+        "https://www.chess.com/openings/Sicilian-Defense-Taimanov-Variation"
+      ]
+    }
+  ],
+  "pro-caruana-caro-kann": [
+    {
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/3B4/PPP2PPP/RNBQK1NR b KQkq - 1 3",
+      "wrongMove": "g6",
+      "correctMove": "dxe4",
+      "explanation": "When White plays the loose Bd3 before defending e4, the e4-pawn simply hangs — grab it with …dxe4! After Bxe4 Nf6 Black develops with tempo and is comfortably equal. Don't play a quiet move like …g6 and let White off the hook; punish the inaccuracy.",
+      "shortNarration": "Bd3 drops e4 — take it with …dxe4.",
+      "sources": [
+        "concept:pos-material",
+        "https://www.chess.com/openings/Caro-Kann-Defense"
+      ]
+    }
   ]
 }
