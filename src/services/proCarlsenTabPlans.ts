@@ -12,6 +12,12 @@ const PLANS: Record<string, Record<string, string[]>> = {
   'pro-carlsen-nimzo': { main: ['mp-procarlsen-nimzo-qside', 'mp-procarlsen-nimzo-endgame'] },
   'pro-carlsen-kid': { main: ['mp-procarlsen-kid-f5storm'] },
   'pro-carlsen-french': { main: ['mp-procarlsen-french-qbreak'] },
+  'pro-carlsen-scandinavian': { main: ['mp-carlsen-scandinavian-c5'] },
+  'pro-carlsen-caro-kann': { main: ['mp-carlsen-caro-c5'] },
+  'pro-carlsen-modern': { main: ['mp-carlsen-modern-c5'] },
+  'pro-carlsen-closed-sicilian': { main: ['mp-carlsen-closedsic-f5'] },
+  'pro-carlsen-reti': { main: ['mp-carlsen-reti-e5'] },
+  'pro-carlsen-kings-gambit': { main: ['mp-carlsen-kg-d4'] },
 };
 
 export function getProCarlsenTabPlanIds(openingId: string, tabKey: string): string[] | null {
