@@ -3604,6 +3604,51 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     watch: ["","","","","","","","","","","","","","","","","Bg5? — a clear inaccuracy. There is a concrete punishment.","…Qxd4 — the strong reply that leaves Black clearly better.","","The follow-up is decisive — Black consolidates the winning advantage.","","","","",""],
     learn: ["","","","","","","","","","","","","","","","","","…Qxd4 — the punishment","","","","","","",""],
   },
+  "pro-caruana-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_f5_d3_fxe4_dxe4_Nf6_Nc3:d6": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez-Opening"],
+    watch: ["","","","","","","","","","","","…d6?! — too passive in this sharp Schliemann; it hands White a free hand in the centre.","a3 — a quiet improving move; White keeps the bishop, eyes the kingside, and stands clearly better.","","","","White is comfortably on top with the safer king and the better structure.","","",""],
+    learn: ["","","","","","","","","","","","","a3 — White is clearly better","","","","","","",""],
+  },
+  "pro-caruana-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_f5_d3_fxe4_dxe4_Nf6_Nc3_Bb4_O-O:d6": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez-Opening"],
+    watch: ["","","","","","","","","","","","","","…d6?! — slow; it lets White seize the d5-outpost with tempo.","Nd5! — the knight leaps to the dominant outpost, hitting the b4-bishop and f6-knight at once.","","","","After the trades on f6 White has a crushing grip — the engine reads +1.8.","","",""],
+    learn: ["","","","","","","","","","","","","","","Nd5 — the dominant outpost","","","","","","",""],
+  },
+  "pro-caruana-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_f5_d3_fxe4_dxe4_Nf6_Nc3_Bb4_O-O_Bxc3_bxc3:Nxe4": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez-Opening"],
+    watch: ["","","","","","","","","","","","","","","","…Nxe4?? — grabbing the pawn loses; the e-file opens onto Black’s king.","Re1! — pinning and winning back the piece with a raging attack on the exposed king.","","","","After Bxc6 and Rxe5+ White is winning by force — the engine reads +2.0.","","",""],
+    learn: ["","","","","","","","","","","","","","","","","Re1 — pin and crush","","","","","","",""],
+  },
+  "pro-caruana-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nd4_Nxd4_exd4_O-O:Qg5": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez-Opening"],
+    watch: ["","","","","","","","","","…Qg5?! — the early queen sortie is loose; it just loses time.","Bc4! — developing with tempo, eyeing f7 and gaining a clear lead in development.","","","","White’s pieces flood out while the black queen is chased around — a clear +1.4.","","",""],
+    learn: ["","","","","","","","","","","Bc4 — develop with tempo","","","","","","",""],
+  },
+  "pro-caruana-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nd4_Nxd4_exd4_O-O_c6_Bc4:Bc5": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez-Opening"],
+    watch: ["","","","","","","","","","","","…Bc5?? — walking into the Greek gift; f7 is fatally weak.","Bxf7+! — the sacrifice wins; after …Kf8 White is a clean pawn up with a raging attack.","","","","White retreats the bishop with a winning material and positional edge — +2.4.","","",""],
+    learn: ["","","","","","","","","","","","","Bxf7+ — the Greek gift wins","","","","","","",""],
+  },
+  "pro-caruana-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nge7_O-O_a6_Ba4:h6": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez-Opening"],
+    watch: ["","","","","","","","","","…h6?! — a slow, weakening move that ignores the centre.","d4! — striking the centre at once while Black dawdles, opening lines for the better-placed pieces.","","","","White’s central break leaves him clearly better — +0.9.","","",""],
+    learn: ["","","","","","","","","","","d4 — strike the centre","","","","","","",""],
+  },
+  "pro-caruana-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nge7_O-O_a6_Ba4_b5_Bb3_Ng6_c3:Bc5": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez-Opening"],
+    watch: ["","","","","","","","","","","","","","…Bc5?! — the natural-looking development walks into a central break.","d4! — the pawn strikes, and after the trades White wins material and the centre.","","","","White emerges a pawn up with the dominant centre — +1.1.","","",""],
+    learn: ["","","","","","","","","","","","","","","d4 — break and win material","","","","","","",""],
+  },
+  "pro-caruana-italian:e4_e5_Nf3_Nc6_Bc4_Bc5_c3:h6": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Italian-Game"],
+    watch: ["","","","","","","","…h6?! — a slow move in a position that demands development.","b4! — gaining space and material; the bishop is hit and White rolls the queenside.","","","","After b5 and Bxd5 White is a clean pawn up with a big initiative — +1.7.","","",""],
+    learn: ["","","","","","","","","b4 — gain space and a pawn","","","","","","",""],
+  },
+  "pro-caruana-italian:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d3_d6_O-O_Bg4_h3:h5": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Italian-Game"],
+    watch: ["","","","","","","","","","","","","","…h5?? — trying to hold the pin, but it collapses tactically.","hxg4! — taking the bishop; after …hxg4 Ng5 White crashes through on f7.","","","","Ng5 and Nxf7 win decisive material — the engine reads +2.3, three pawns up.","","",""],
+    learn: ["","","","","","","","","","","","","","","hxg4 — take it and crash through","","","","","","",""],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
