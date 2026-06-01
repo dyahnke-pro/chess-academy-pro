@@ -3271,6 +3271,66 @@
           ]
         }
       ]
+    },
+    {
+      "id": "pro-aman-nimzo-indian",
+      "playerId": "aman",
+      "eco": "E32",
+      "name": "Nimzo-Indian Defense (Aman)",
+      "color": "black",
+      "style": "Hypermodern, Positional",
+      "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 Nf3 dxc4 Bxc4 c5",
+      "overview": "Aman Hambleton's second Black weapon (1,140 games, 73.9%) — the Nimzo-Indian, the most respected answer to 1.d4. The defining move …Bb4 pins the c3-knight, fighting for the e4-square with pieces instead of pawns and threatening to wreck White's structure by trading on c3. In the main Rubinstein lines Black follows with …d5, …dxc4 and the freeing …c5 break, reaching a dynamic, comfortable middlegame where the pin still bites. Pure hypermodern chess: control the centre with pressure, then strike.",
+      "keyIdeas": [
+        "Pin the c3-knight with …Bb4 to fight for the e4-square.",
+        "Trade on c3 only when it damages White’s pawns or wins control of e4.",
+        "Break with …d5 and …c5 to open the position for the active pieces.",
+        "Keep the structure sound — equalise from a solid base, then outplay."
+      ],
+      "traps": [],
+      "warnings": [
+        "The …Bb4 bishop is your trump — don’t trade it off cheaply; trade only to damage White’s pawns or win the e4-square."
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:chess-fundamentals",
+        "concept:pos-development",
+        "https://www.chess.com/openings/Nimzo-Indian-Defense",
+        "https://api.chess.com/pub/player/chessbrah/games/archives"
+      ],
+      "variations": [
+        {
+          "name": "Rubinstein (e3)",
+          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 Nf3 dxc4 Bxc4 c5",
+          "explanation": "His main line. Against the solid e3, Black castles, plays …d5, captures …dxc4 with tempo, and breaks with …c5 for a comfortable, dynamic game.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Nimzo-Indian-Defense"
+          ]
+        },
+        {
+          "name": "Bogo-Indian (3.Nf3 Bb4+)",
+          "pgn": "d4 Nf6 c4 e6 Nf3 Bb4+ Bd2 Be7 g3 d5 Bg2 O-O",
+          "explanation": "477 games. When White plays Nf3 first, …Bb4+ provokes Bd2, then …Be7 keeps a sound Catalan-style structure with the bishop pair intact.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Nimzo-Indian-Defense"
+          ]
+        },
+        {
+          "name": "Classical (4.Qc2)",
+          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O e4 d6 e5 Nfd7",
+          "explanation": "121 games. Against Qc2 Black castles and meets the big e4-centre with …d6 and …Nfd7, ready to undermine with …c5 or …f6.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Nimzo-Indian-Defense"
+          ]
+        }
+      ]
     }
   ]
 }

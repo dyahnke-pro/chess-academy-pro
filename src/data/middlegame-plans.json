@@ -69690,5 +69690,269 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-proamannimzo-rubinstein",
+    "openingId": "pro-aman-nimzo-indian",
+    "title": "The …c5 Break and Pressure on d4",
+    "overview": "After …dxc4 lures the bishop to c4, Black strikes with …c5 to hit d4. With …Nc6 piling on and the trades opening the centre, Black reaches the comfortable, active Nimzo middlegame.",
+    "pawnBreaks": [
+      "...c5 central break"
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "knight",
+        "route": "...Nc6 pressure on d4",
+        "explanation": "The knight develops to c6, adding a hit on the d4-pawn."
+      }
+    ],
+    "strategicThemes": [
+      "Break with …c5 and pressure White’s d-pawn"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/ppp2ppp/4pn2/8/1bBP4/2N1PN2/PP3PPP/R1BQK2R b KQ - 0 7",
+        "moves": [
+          "c5",
+          "O-O",
+          "Nc6",
+          "a3",
+          "cxd4",
+          "exd4",
+          "Be7",
+          "d5"
+        ],
+        "annotations": [
+          "…c5 strikes the d4-pawn.",
+          "White castles.",
+          "…Nc6 piles on d4.",
+          "White gains space with a3.",
+          "…cxd4 opens the centre.",
+          "White recaptures.",
+          "…Be7 keeps the bishop, eyeing the d-pawn.",
+          "White pushes d5 to free himself."
+        ],
+        "learnCues": [
+          "…c5 — strike d4",
+          "O-O — castle",
+          "…Nc6 — pile on d4",
+          "a3 — gain space",
+          "…cxd4 — open centre",
+          "exd4 — recapture",
+          "…Be7 — keep the bishop",
+          "d5 — White frees"
+        ],
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "b8",
+              "to": "c6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "b4",
+              "to": "e7",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Nimzo-Indian-Defense"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-proamannimzo-classical",
+    "openingId": "pro-aman-nimzo-indian",
+    "title": "Undermining the Big Centre with …c5 and …Bxc3",
+    "overview": "Against the Qc2 big-centre setup, the knight sits on d7 and the break comes with …c5. The well-timed …Bxc3 damages White's pawns, and …dxe5 dissolves the centre before White's space can be made to count.",
+    "pawnBreaks": [
+      "...c5 central break"
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "bishop",
+        "route": "...Bxc3 structural trade",
+        "explanation": "The bishop takes on c3 to inflict doubled pawns when the moment is right."
+      }
+    ],
+    "strategicThemes": [
+      "Undermine the e4/d4 centre with …c5 and the well-timed …Bxc3"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/pppn1ppp/3pp3/4P3/1bPP4/2N5/PPQ2PPP/R1B1KBNR w KQ - 1 7",
+        "moves": [
+          "Bd3",
+          "c5",
+          "dxc5",
+          "Bxc3+",
+          "bxc3",
+          "dxe5",
+          "Nf3",
+          "Nc6"
+        ],
+        "annotations": [
+          "White develops the bishop.",
+          "…c5 hits the centre.",
+          "White takes on c5.",
+          "…Bxc3+ damages the pawns.",
+          "White recaptures, doubling pawns.",
+          "…dxe5 dissolves the big centre.",
+          "White develops.",
+          "…Nc6 targets the weakened pawns."
+        ],
+        "learnCues": [
+          "Bd3 — develop",
+          "…c5 — hit the centre",
+          "dxc5 — White takes",
+          "…Bxc3 — damage pawns",
+          "bxc3 — doubled",
+          "…dxe5 — dissolve centre",
+          "Nf3 — develop",
+          "…Nc6 — target the pawns"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "b4",
+              "to": "c3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "b8",
+              "to": "c6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Nimzo-Indian-Defense"
+        ]
+      }
+    ]
   }
 ]

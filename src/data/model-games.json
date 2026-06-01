@@ -8562,5 +8562,104 @@
     "sourceUrl": "https://www.chess.com/game/live/147141692864",
     "studentSide": "black",
     "overview": "Hambleton's Alapin in action: a bullet win over undefined (undefined) in 2025. Watch the …Nf6/…Nd5/…d5 equalizer that frees Black’s pieces and dissolves White’s space. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-nimzo-indian-rubinstein-e3-0",
+    "openingId": "pro-aman-nimzo-indian",
+    "result": "0-1",
+    "year": 2024,
+    "event": "chess.com bullet (2024-08-24)",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 c5 Ne2 cxd4 exd4 d5 O-O dxc4 Bxc4 a6 a3 Be7 Bd3 Bd7 Ng3 Bc6 Be3 Nbd7 Rc1 Rc8 h3 g6 Re1 Nd5 Bh6 Re8 Nce4 N7f6 Nc5 Bd6 Nge4 Nxe4 Bxe4 Bf4 Bxf4 Nxf4 Bxc6 Rxc6 Nxb7 Qg5 Qf3 Rxc1 Rxc1 Nxh3+ Qxh3 Qxc1+ Kh2 Qc7+",
+    "sourceUrl": "https://www.chess.com/game/live/118205862865",
+    "studentSide": "black",
+    "overview": "Hambleton's Rubinstein Nimzo in action: a bullet win over undefined (undefined) in 2024. Watch the …d5/…c5 break dissolving White’s centre while the …Bb4 pin keeps biting. A model of the plan converting against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-nimzo-indian-rubinstein-e3-1",
+    "openingId": "pro-aman-nimzo-indian",
+    "result": "0-1",
+    "year": 2024,
+    "event": "chess.com blitz (2024-07-30)",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O a3 Bxc3+ bxc3 c5 Ne2 Nc6 Ng3 d5 cxd5 exd5 Bd3 Re8 O-O b6 f3 h5 Ra2 Be6 Re2 Qd7 h4 Rac8 Bb2 Na5 Qe1 cxd4 cxd4 Nc4 Ba1 Qa4 e4 Qxa3 Bxc4 Rxc4 e5 Nh7 Nxh5 Rec8 Qg3 g6 Nf6+ Nxf6 exf6 Rc1 Bb2 Rxf1+ Kxf1 Qd3 Ke1 Qb1+ Kf2 Rc2 Qb8+ Kh7 Qf8 Rxe2+ Kxe2 Qxb2+ Kd3 Bf5+ Ke3 Qc3+ Ke2 Bd3+ Ke3 Bb5+ Kf2 Qxd4+ Kg3 Qxf6",
+    "sourceUrl": "https://www.chess.com/game/live/116046582537",
+    "studentSide": "black",
+    "overview": "Hambleton's Rubinstein Nimzo in action: a blitz win over undefined (undefined) in 2024. Watch the …d5/…c5 break dissolving White’s centre while the …Bb4 pin keeps biting. A model of the plan converting against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-nimzo-indian-rubinstein-e3-2",
+    "openingId": "pro-aman-nimzo-indian",
+    "result": "0-1",
+    "year": 2024,
+    "event": "chess.com blitz (2024-10-28)",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd2 b6 Nf3 Bb7 Bd3 c5 a3 Bxc3 Bxc3 Ne4 Bxe4 Bxe4 dxc5 bxc5 Qd6 Nc6 Qxc5 a5 Qd6 a4 Rd1 Ra7 Qg3 f6 O-O Qb8 Qxb8 Rxb8 Rd6 Kf7 Nd2 Bg6 e4 Ke7 Rd3 Rab7 f3 Ne5 Re3 Rc8 Rc1 Ke8 Bxe5 fxe5 b4 axb3 Rxb3 Ra7 c5 d5 exd5 exd5 Re3 Re7 Rce1 Rxc5 Rxe5 Rxe5 Rxe5+ Kd7 f4 Kd6 Re1 Rc2 Rd1 Ra2 h3 Bc2 Rc1 d4 Kf2 Kd5 Ke2 Be4 g4 Rxa3 Rc7 Bd3+ Kf2 Ra2 Ke1 Ra1+ Kf2 Ra2 Rd7+ Kc5 Ke1 Ra1+ Kf2 Ra2 Rxg7 Rxd2+ Kf3 Kd5 f5 Rd1 Rxh7 Rf1+ Kg2 Rf4 Rd7+ Ke5 Kg3 Rf1 h4 Rg1+ Kf3 Rf1+ Kg2 Rf4 Kg3 Rf1 h5 Be4 h6 Rg1+ Kh4 Kf4 Kh5 Rxg4 h7 Rg1 Kh6 Rh1+ Kg7 Rxh7+ Kxh7 Bxf5+ Kg7 Bxd7 Kf6 Bf5 Ke7 d3 Kd6 d2 Ke7 d1=Q Kf6 Qd5 Ke7 Qe6+ Kf8 Qd7 Kg8 Bg6 Kh8 Qh7#",
+    "sourceUrl": "https://www.chess.com/game/live/123855676831",
+    "studentSide": "black",
+    "overview": "Hambleton's Rubinstein Nimzo in action: a blitz win over undefined (undefined) in 2024. Watch the …d5/…c5 break dissolving White’s centre while the …Bb4 pin keeps biting. A model of the plan converting against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-nimzo-indian-bogo-nf3-0",
+    "openingId": "pro-aman-nimzo-indian",
+    "result": "0-1",
+    "year": 2026,
+    "event": "chess.com bullet (2026-04-15)",
+    "pgn": "d4 Nf6 c4 e6 Nf3 Bb4+ Bd2 Be7 Nc3 d5 Bf4 O-O e3 c5 cxd5 Nxd5 dxc5 Nxc3 Qxd8 Rxd8 bxc3 Bxc5 Be2 Nc6 O-O Bd7 Rfd1 Be8 Nd4 Na5 Nb3 Bb6 Bf3 Bc6 Nxa5 Bxa5 Bxc6 bxc6 c4 f6 Bd6 Rd7 Bc5 Rad8 Rxd7 Rxd7 Kf1 e5 Rb1 Kf7 Rb2 Bc3 Rc2 Ba5 Ke2 e4 Rb2 f5 Bd4 g5 g3 f4 gxf4 gxf4 Rb8 f3+ Kf1 c5 Rb5 Bb6 Bc3 Rd1+ Be1 Ra1 a4 Rxa4 Rb1 Rxc4 Rd1 Ke6 Bd2 Bc7 Bc1 Bxh2 Ba3 Rc3 Bb2 Rc2 Bg7 Bd6 Ra1 c4 Ke1 Bb4+ Kf1 a5 Rb1 c3 Kg1 Kd5 Rd1+ Rd2 Rc1 c2 Kh2 Ba3 Bb2 Bxb2",
+    "sourceUrl": "https://www.chess.com/game/live/167327370488",
+    "studentSide": "black",
+    "overview": "Hambleton's Bogo-Indian Nimzo in action: a bullet win over undefined (undefined) in 2026. Watch the …Bb4+ / …Be7 setup reaching a sound, comfortable structure with the bishop pair. A model of the plan converting against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-nimzo-indian-bogo-nf3-1",
+    "openingId": "pro-aman-nimzo-indian",
+    "result": "0-1",
+    "year": 2026,
+    "event": "chess.com blitz (2026-05-26)",
+    "pgn": "d4 Nf6 c4 e6 Nf3 Bb4+ Nbd2 d5 Qa4+ Nc6 a3 Bd6 c5 Be7 b4 O-O Bb2 Bd7 Qc2 a6 e3 Qe8 Bd3 g6 h4 b6 h5 Nxh5 g4 Nf6 g5 Ng4 Rg1 e5 dxe5 bxc5 bxc5 Be6 Nb3 Rb8 Rc1 Rxb3 Qxb3 d4 Qa4 Ncxe5 Qxe8 Nxf3+ Ke2 Nxg1+ Rxg1 Rxe8 Bxd4 Bxg5 Bxa6 Ra8 Bd3 Rxa3 Be4 Ra2+",
+    "sourceUrl": "https://www.chess.com/game/live/169279665012",
+    "studentSide": "black",
+    "overview": "Hambleton's Bogo-Indian Nimzo in action: a blitz win over undefined (undefined) in 2026. Watch the …Bb4+ / …Be7 setup reaching a sound, comfortable structure with the bishop pair. A model of the plan converting against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-nimzo-indian-bogo-nf3-2",
+    "openingId": "pro-aman-nimzo-indian",
+    "result": "0-1",
+    "year": 2025,
+    "event": "chess.com bullet (2025-09-30)",
+    "pgn": "d4 Nf6 c4 e6 Nf3 Bb4+ Bd2 Be7 g3 d5 Bg2 O-O O-O c6 Qc2 a5 Rd1 b5 c5 Ne4 b3 Nd7 Bf4 g5 Be3 f5 h4 g4 Nfd2 Bf6 Nf1 e5 f3 gxf3 exf3 exd4 Bxd4 Bxd4+ Rxd4 Qf6 Qb2 Nexc5 Qf2 Ne6 Rd2 Qxa1 Rb2 f4 gxf4 a4 Nfd2 a3 Rc2 Qf6 Rxc6 Ra6 Qg3+ Kh8 Rc2 Nxf4 Nf1 Rg8",
+    "sourceUrl": "https://www.chess.com/game/live/143734871736",
+    "studentSide": "black",
+    "overview": "Hambleton's Bogo-Indian Nimzo in action: a bullet win over undefined (undefined) in 2025. Watch the …Bb4+ / …Be7 setup reaching a sound, comfortable structure with the bishop pair. A model of the plan converting against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-nimzo-indian-classical-qc2-0",
+    "openingId": "pro-aman-nimzo-indian",
+    "result": "0-1",
+    "year": 2026,
+    "event": "chess.com bullet (2026-03-14)",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O e4 d6 Bd2 e5 d5 a5 Bd3 Nbd7 Nge2 Nc5 O-O Nxd3 Qxd3 Bd7 Bg5 h6 Bh4 g5 Bg3 Nh5 Nd1 f5 exf5 Bxf5 Qb3 Nf4 Nec3 Qf6 Ne3 Bd3 Rfd1 Qg6 a3 Bxc3 bxc3 b6 Rd2 Qh7 Rad1 Bg6 h4 Rae8 c5 bxc5 Qb7 Bh5 Re1 Qg7 hxg5 hxg5 Nc4 Ra8 Qb1 a4 Qe4 Bg6 Qe3 Rab8 Na5 Rb5 Nc6 Rb3 Rc1 Rf7 Qe1 Nd3 Rxd3 Bxd3 Qd2 Bf5 Na5 Qh6 Nxb3 axb3 f3 c4 a4 Rh7 a5 Kg7 Kf2 Rh8 a6 Ra8 Ra1 g4 Qb2 gxf3 gxf3 Qg6 Ke3 Qg5+ Ke2 Qg6 Kf2 Kf7",
+    "sourceUrl": "https://www.chess.com/game/live/165917554746",
+    "studentSide": "black",
+    "overview": "Hambleton's Classical Qc2 Nimzo in action: a bullet win over undefined (undefined) in 2026. Watch meeting the big e4-centre with …d6 and …Nfd7, then chipping away at it. A model of the plan converting against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-nimzo-indian-classical-qc2-1",
+    "openingId": "pro-aman-nimzo-indian",
+    "result": "0-1",
+    "year": 2023,
+    "event": "chess.com blitz (2023-07-25)",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 d6 Nf3 O-O Bd2 b6 e4 Bb7 Bd3 e5 a3 Bxc3 Bxc3 exd4 Bxd4 Nxe4 Bxe4 Bxe4 Qxe4 Re8 Be5 Nd7 O-O Nxe5 Nd2 Qf6 Qc2 Nc6 Rfe1 a5 Ne4 Qg6 Re3 Nd4 Qd3 Nf5 Re2 Re6 Rae1 Rae8 g3 Ne7 f4 h6 b4 axb4 axb4 Nc6 b5 Nb4 Qf3 f5 Nc3 Nc2 Qd5 Nxe1 Rxe1 Qf7 Rf1 Re1 Qd3 R8e3 Qd4 Qe6 Rxe1 Rxe1+ Kf2 Rh1 Kg2 Rc1 Qd2 Qe1 Qd5+ Kh8 Kh3 Qxc3 Qxf5 Qxc4 Qc8+ Qg8 Qd7 Rc5 g4 Qf8 f5 Kh7 Kg3 Qf6 Qe8 Qe5+",
+    "sourceUrl": "https://www.chess.com/game/live/84042675347",
+    "studentSide": "black",
+    "overview": "Hambleton's Classical Qc2 Nimzo in action: a blitz win over undefined (undefined) in 2023. Watch meeting the big e4-centre with …d6 and …Nfd7, then chipping away at it. A model of the plan converting against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-nimzo-indian-classical-qc2-2",
+    "openingId": "pro-aman-nimzo-indian",
+    "result": "0-1",
+    "year": 2025,
+    "event": "chess.com bullet (2025-03-12)",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O e4 d6 Nf3 Nc6 e5 Nd7 Bg5 Qe8 a3 Bxc3+ Qxc3 dxe5 dxe5 Nc5 Bh4 a5 Be2 a4 O-O b6 Rad1 Bb7 Nd4 Nxe5 Nb5 Ng6 Bg3 Rc8 Nxc7 Rxc7 Bxc7 Qc6 Qg3 Ne4 Qf4 Nxf4",
+    "sourceUrl": "https://www.chess.com/game/live/135506367227",
+    "studentSide": "black",
+    "overview": "Hambleton's Classical Qc2 Nimzo in action: a bullet win over undefined (undefined) in 2025. Watch meeting the big e4-centre with …d6 and …Nfd7, then chipping away at it. A model of the plan converting against a strong opponent."
   }
 ]

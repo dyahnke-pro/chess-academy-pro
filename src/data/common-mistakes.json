@@ -3150,5 +3150,43 @@
         "https://www.chess.com/openings/Sicilian-Defense-Kan-Variation"
       ]
     }
+  ],
+  "pro-aman-nimzo-indian": [
+    {
+      "fen": "rnbq1rk1/ppp2ppp/4pn2/3p4/1bPP4/2NBPN2/PP3PPP/R1BQK2R b KQ - 1 6",
+      "wrongMove": "Nbd7",
+      "correctMove": "dxc4",
+      "explanation": "A routine …Nbd7 lets White play cxd5 and untangle comfortably with the tension resolved in his favour. The accurate move is …dxc4 — capture FIRST, dragging the bishop to c4 with tempo, and only then strike with …c5. Timing the capture is what gives the Nimzo its bite.",
+      "shortNarration": "…dxc4 first, then …c5.",
+      "sources": [
+        "concept:pos-development",
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Nimzo-Indian-Defense"
+      ]
+    },
+    {
+      "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PPQ1PPPP/R1B1KBNR b KQkq - 3 4",
+      "wrongMove": "Bxc3+",
+      "correctMove": "O-O",
+      "explanation": "Trading …Bxc3+ immediately is exactly what the Qc2 move was designed for: White recaptures with the queen, suffers NO doubled pawns, and keeps the bishop pair. Don't hand White the trade for free — castle first with …O-O, keep the pin, and trade only when it damages the pawns.",
+      "shortNarration": "…O-O first; keep the pin.",
+      "sources": [
+        "concept:pos-development",
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Nimzo-Indian-Defense"
+      ]
+    },
+    {
+      "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/5N2/PP1BPPPP/RN1QKB1R b KQkq - 3 4",
+      "wrongMove": "Bxd2+",
+      "correctMove": "Be7",
+      "explanation": "In the Bogo, …Bxd2+ trades off your good bishop and helps White develop the queen or knight to d2 with a free tempo. Retreat …Be7 instead: White's bishop sits passively on d2 where it was provoked, and Black keeps a sound structure with the bishop pair.",
+      "shortNarration": "…Be7 — keep the bishop.",
+      "sources": [
+        "concept:pos-development",
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Nimzo-Indian-Defense"
+      ]
+    }
   ]
 }
