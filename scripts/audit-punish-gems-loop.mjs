@@ -194,9 +194,27 @@ const squares = (p) => p.locator('[data-square]').count();
 // write-stall (no buttons ever appear) is mistaken for unlocked and the later
 // gem-button clicks time out instead of skipping.
 const gemPlayable = async (p) => (await p.locator('[data-testid^="gem-watch-"]').count().catch(() => 0)) > 0;
+// Dismiss the onboarding bubble + the auto-opening page-help modal that
+// intercept pointer events (G1 #5). EVERY re-navigation can re-open the modal,
+// so call this after each openDetail before driving WLPP/gem clicks — without
+// it a gem-watch click hangs 30s on an intercepted pointer and the pass throws.
+async function dismissModals(page) {
+  const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
+  if (await bubble.isVisible({ timeout: 1500 }).catch(() => false)) {
+    await page.locator('[data-testid="skill-band-intermediate"]').click().catch(() => {});
+    await bubble.waitFor({ state: 'detached', timeout: 8000 }).catch(() => {});
+  }
+  const modal = page.locator('[data-testid="page-help-modal"]');
+  if (await modal.count().catch(() => 0)) {
+    await page.locator('[data-testid="page-help-close"]').first().click({ timeout: 3000 }).catch(() => {});
+    await page.keyboard.press('Escape').catch(() => {});
+    await modal.waitFor({ state: 'detached', timeout: 5000 }).catch(() => {});
+  }
+}
 async function ensureWeapons(page, id) {
   const st = await openDetail(page, id);
   if (st !== 'card' && st !== 'detail') return st; // notfound / timeout
+  await dismissModals(page);
   if (await gemPlayable(page)) return 'card';
   // SEED the progression UNLOCKED in IndexedDB (G1 #4 + 2026-06-01 problem-solve).
   // The expert-pass CLICK does NOT surface the gems — they live INSIDE the
@@ -208,6 +226,7 @@ async function ensureWeapons(page, id) {
   const seed = await seedUnlockedOpenings(page, [id]);
   if (seed.ok && seed.updated > 0) {
     const st2 = await openDetail(page, id); // reload so React reads the unlocked state
+    await dismissModals(page); // the reload re-opens the page-help modal — clear it so gem clicks land
     if ((st2 === 'card' || st2 === 'detail') && await gemPlayable(page)) return 'card';
   }
   // Fallback: the expert-pass two-tap (rarely needed once seeding works).
