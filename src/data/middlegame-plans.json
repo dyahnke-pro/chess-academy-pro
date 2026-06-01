@@ -73989,7 +73989,8 @@
           "https://www.chess.com/openings/Nimzo-Indian-Defense"
         ]
       }
-    ]
+    ],
+    "criticalPositionFen": "rnbq1rk1/ppp2ppp/4pn2/8/1bBP4/2N1PN2/PP3PPP/R1BQK2R b KQ - 0 7"
   },
   {
     "id": "mp-proamannimzo-classical",
@@ -74121,7 +74122,8 @@
           "https://www.chess.com/openings/Nimzo-Indian-Defense"
         ]
       }
-    ]
+    ],
+    "criticalPositionFen": "rnbq1rk1/pppn1ppp/3pp3/4P3/1bPP4/2N5/PPQ2PPP/R1B1KBNR w KQ - 1 7"
   },
   {
     "id": "mp-proamancaro-advance",
@@ -74253,7 +74255,8 @@
           "https://www.chess.com/openings/Caro-Kann-Defense"
         ]
       }
-    ]
+    ],
+    "criticalPositionFen": "r2qkb1r/pp1nnppp/2p1p1b1/3pP3/3P3N/8/PPP1BPPP/RNBQ1RK1 w kq - 6 8"
   },
   {
     "id": "mp-proamancaro-twoknights",
@@ -74389,7 +74392,8 @@
           "https://www.chess.com/openings/Caro-Kann-Defense"
         ]
       }
-    ]
+    ],
+    "criticalPositionFen": "rnbqk2r/pp3ppp/2pb1p2/8/8/2P2N2/PP1P1PPP/R1BQKB1R w KQkq - 1 7"
   },
   {
     "id": "mp-proamanreti-d5",
@@ -74525,7 +74529,8 @@
           "https://www.chess.com/openings/Reti-Opening"
         ]
       }
-    ]
+    ],
+    "criticalPositionFen": "rnbq1rk1/p3bppp/1p3n2/2pp4/3P4/2NBPN2/PP3PPP/R1BQ1RK1 w - - 0 9"
   },
   {
     "id": "mp-proamanreti-g6",
@@ -74651,7 +74656,8 @@
           "https://www.chess.com/openings/Reti-Opening"
         ]
       }
-    ]
+    ],
+    "criticalPositionFen": "r1bq1rk1/ppp2pb1/2np1npp/4p3/3PP3/2PB1N1P/PP3PP1/RNBQR1K1 w - - 0 9"
   },
   {
     "id": "mp-proamanruy-morphy",
@@ -74783,7 +74789,8 @@
           "https://www.chess.com/openings/Ruy-Lopez-Opening"
         ]
       }
-    ]
+    ],
+    "criticalPositionFen": "r1bq1rk1/2p1bppp/p2p1n2/np2p3/4P3/1BP2N1P/PP1P1PP1/RNBQR1K1 w - - 1 10"
   },
   {
     "id": "mp-proamanopensic-najdorf",
@@ -74915,7 +74922,8 @@
           "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation"
         ]
       }
-    ]
+    ],
+    "criticalPositionFen": "rn1q1rk1/1p2bppp/p2pbn2/4p3/4P3/1NN1B3/PPP1BPPP/R2Q1RK1 w - - 6 10"
   },
   {
     "id": "mp-proamanross-g6",
@@ -75053,7 +75061,8 @@
           "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation"
         ]
       }
-    ]
+    ],
+    "criticalPositionFen": "r1bqk2r/p1npppbp/2p3p1/2p1P3/2P5/5N2/PP1P1PPP/RNBQR1K1 w kq - 1 9"
   },
   {
     "id": "mp-proamanfrench-winawer",
@@ -75185,7 +75194,8 @@
           "https://www.chess.com/openings/French-Defense"
         ]
       }
-    ]
+    ],
+    "criticalPositionFen": "rnb1k2r/ppq1nppp/4p3/2ppP3/3P3P/P1P5/2P2PP1/R1BQKBNR w KQkq - 1 8"
   },
   {
     "id": "mp-proamananticaro-bg4",
@@ -75321,7 +75331,8 @@
           "https://www.chess.com/openings/Caro-Kann-Defense-Two-Knights-Attack"
         ]
       }
-    ]
+    ],
+    "criticalPositionFen": "r2qk2r/pp1n1ppp/2pbpn2/8/3P4/2NQ3P/PPP1BPP1/R1B1K2R w KQkq - 5 10"
   },
   {
     "id": "mp-carlsen-scandinavian-c5",
