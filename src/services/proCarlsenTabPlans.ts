@@ -16,7 +16,6 @@ const PLANS: Record<string, Record<string, string[]>> = {
 
 export function getProCarlsenTabPlanIds(openingId: string, tabKey: string): string[] | null {
   if (!openingId.startsWith('pro-carlsen')) return null;
-  const m = PLANS[openingId];
-  if (!m) return null;
+  const m = PLANS[openingId] ?? {};
   return m[tabKey.toLowerCase()] ?? [];
 }

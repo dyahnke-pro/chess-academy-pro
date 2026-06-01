@@ -5125,6 +5125,364 @@
           ]
         }
       ]
+    },
+    {
+      "id": "pro-carlsen-scandinavian",
+      "playerId": "carlsen",
+      "eco": "B01",
+      "name": "Scandinavian Defense (Carlsen)",
+      "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nf6 Nf3 a6 g3 b5 Bg2 Bb7 O-O e6",
+      "color": "black",
+      "style": "Solid, Surprise",
+      "overview": "A theory-light surprise weapon Carlsen wheels out to dodge preparation — 499 games at 67%. Black takes on d5, recaptures with the queen and tucks it to the modern d6 square, then builds a sound a6/b5 setup with a fianchetto on b7 and a quick queenside expansion. No weaknesses, the good bishop developed, a clear plan.",
+      "keyIdeas": [
+        "Recapture Qxd5 and retreat to the safe modern d6 square.",
+        "Build a6/b5 and fianchetto to b7 — grab queenside space.",
+        "Develop the light bishop OUTSIDE the chain, the Scandinavian's edge over the French.",
+        "Low theory, rock-solid — drag the opponent out of book."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "3…Qa5 Main",
+          "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 c6 Nf3 Bf5 Bc4 e6 O-O Nf6",
+          "explanation": "The classical Qa5 — the queen stays active while c6, Bf5 and e6 build a sturdy shell with the good bishop free.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "vs 2.Nc3",
+          "pgn": "e4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ exf6 d4 Bd6 Nf3 O-O Bd3 Re8",
+          "explanation": "When White defends e4 with Nc3, Black grabs the pawn and develops Nf6; after the trade exf6 the bishop pair and open e-file give an active game.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-bishop-pair",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Modern 2…Nf6",
+          "pgn": "e4 d5 exd5 Nf6 d4 Nxd5 Nf3 g6 Be2 Bg7 O-O O-O c4 Nb6",
+          "explanation": "The modern move-order: regain d5 with the knight and fianchetto, avoiding the early Qxd5 tempo loss — a flexible central setup.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-center",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "3…Qd8 Solid",
+          "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd8 d4 Nf6 Nf3 Bg4 Be2 e6 O-O Be7",
+          "explanation": "The ultra-solid retreat: the queen goes home, Black plays Nf6, Bg4 and e6 with no weaknesses and resilient, grinding play.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:chess-fundamentals",
+        "concept:pos-development",
+        "concept:pos-space",
+        "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+      ]
+    },
+    {
+      "id": "pro-carlsen-caro-kann",
+      "playerId": "carlsen",
+      "eco": "B12",
+      "name": "Caro-Kann (Carlsen)",
+      "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 a5 O-O a4 Nc3 Nd7",
+      "color": "black",
+      "style": "Solid, Strategic",
+      "overview": "The French without the bad bishop — 514 games at 72%. c6 supports d5, and against the Advance the light-squared bishop escapes to f5 BEFORE e6 locks it in. Black gets a rock-solid pawn chain, the good bishop active, and a clear queenside plan with a5-a4 and the c5 break.",
+      "keyIdeas": [
+        "Develop Bf5 outside the chain before e6 — the Caro's whole point.",
+        "Clamp the queenside with a5-a4 and reroute the knight via d7.",
+        "Undermine the e5-pawn and prepare the c5 break.",
+        "A French structure with a far happier light-squared bishop."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "vs Two Knights",
+          "pgn": "e4 c6 Nc3 d5 Nf3 dxe4 Nxe4 Nf6 Nxf6+ exf6 d4 Bd6 Bd3 O-O",
+          "explanation": "Against the Two Knights, d5 and Nf6 hit the e4-knight; after the trade exf6 the bishop pair and the open e-file give a comfortable game.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-bishop-pair",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Exchange",
+          "pgn": "e4 c6 d4 d5 exd5 cxd5 Bd3 Nc6 c3 Nf6 Bf4 Bg4 Qb3 Qd7",
+          "explanation": "The Exchange frees Black completely: the light bishop is already unobstructed, and Nc6, Nf6, Bg4 give a balanced game where understanding decides.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "vs 2.Nf3 d3 (KIA)",
+          "pgn": "e4 c6 Nf3 d5 d3 dxe4 dxe4 Qxd1+ Kxd1 Nf6 Nbd2 Bg4",
+          "explanation": "Against the quiet d3 King-Indian-Attack, d5 forces the queens off and strips White castling rights; Nf6 and Bg4 leave Black pressing in the endgame.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-initiative",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:chess-fundamentals",
+        "concept:pawn-chain",
+        "concept:pos-development",
+        "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+      ]
+    },
+    {
+      "id": "pro-carlsen-modern",
+      "playerId": "carlsen",
+      "eco": "B06",
+      "name": "Modern Defense (Carlsen)",
+      "pgn": "e4 g6 d4 Bg7 Nc3 d6 Be3 a6 f4 b5 Nf3 Nd7 Bd3 Bb7",
+      "color": "black",
+      "style": "Hypermodern, Flexible",
+      "overview": "The ultimate flexible system — 535 games at 77%. g6 and Bg7 cede the centre, then Black chips at it with d6, a6/b5 and a timely c5 or e5. Both bishops rake the long diagonals, and the bigger White's centre grows, the bigger the target Black detonates from the flanks.",
+      "keyIdeas": [
+        "Fianchetto Bg7 and cede the centre — then undermine it.",
+        "Expand with a6/b5 and fianchetto the second bishop to b7.",
+        "Detonate the centre with c5 or e5 at the right moment.",
+        "Maximum flexibility — keep every counter-break in reserve."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "Classical Nf3",
+          "pgn": "e4 g6 d4 Bg7 Nf3 d6 Bd3 Nf6 O-O O-O Re1 e5",
+          "explanation": "Against the calm Nf3/Bd3, Black mirrors with d6, Nf6 and e5, a sound Pirc-style central break that brings the g7-bishop to life.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-center",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "vs Nc3 with …c6/…d5",
+          "pgn": "e4 g6 d4 Bg7 Nc3 c6 Nf3 d5 h3 Nf6 Bd3 O-O O-O",
+          "explanation": "The Gurgenidze-style c6 prepares d5 in one go, challenging the centre directly for a sound, Caro-flavoured structure with the bishop on g7.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-center",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "vs Austrian f4",
+          "pgn": "e4 g6 d4 Bg7 Nc3 d6 f4 Nf6 Nf3 O-O Bd3 Nc6",
+          "explanation": "Against the aggressive Austrian Attack, Nf6 and Nc6 pressure the big centre, preparing the e5 or c5 lever to blow it open.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:chess-fundamentals",
+        "concept:pos-space",
+        "concept:pos-development",
+        "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+      ]
+    },
+    {
+      "id": "pro-carlsen-closed-sicilian",
+      "playerId": "carlsen",
+      "eco": "B23",
+      "name": "Closed Sicilian / Grand Prix (Carlsen)",
+      "pgn": "e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 a3 d6 Bc4 e6 O-O Nge7 d3",
+      "color": "white",
+      "style": "Attacking, Anti-Sicilian",
+      "overview": "Carlsen's anti-Sicilian sidestep — 285 games at 76%. Skip the Open theory entirely: Nc3, f4 and a direct kingside attack with f4-f5. The bishop drops to c4 eyeing f7, White castles, and the queen swings to e1-h4 for a Grand Prix mating attack. Simple, aggressive, dangerous at every level.",
+      "keyIdeas": [
+        "Play Nc3 and f4 — dodge Open Sicilian theory entirely.",
+        "Aim the bishop at f7 and prepare the f4-f5 kingside break.",
+        "Swing the queen e1-h4 for a direct attack on the king.",
+        "A low-theory, high-aggression way to fight the Sicilian."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "vs …d6",
+          "pgn": "e4 c5 Nc3 d6 f4 g6 Nf3 Bg7 Bb5+ Bd7 a4 Nc6 O-O Nf6",
+          "explanation": "Against an early d6, the Bb5+ check disrupts Black with a tempo; a4 clamps the queenside and White keeps the f4-f5 attack in reserve.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-space",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "vs …e6",
+          "pgn": "e4 c5 Nc3 e6 g3 d5 Bg2 Nf6 Nge2 Be7 O-O O-O",
+          "explanation": "Against e6, White switches to a King-Indian-Attack fianchetto, pressing the light squares with the g2-bishop and a later e4-e5 push.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Bb5 vs …Nc6",
+          "pgn": "e4 c5 Nc3 Nc6 Bb5 Nd4 Nf3 a6 Bd3 Nf6 O-O d6",
+          "explanation": "A Rossolimo flavour: Bb5 pressures c6, and after Nd4 White keeps the bishop on the attacking diagonal with a comfortable space edge.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:chess-fundamentals",
+        "concept:att-kingside-storm",
+        "concept:pos-space",
+        "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+      ]
+    },
+    {
+      "id": "pro-carlsen-reti",
+      "playerId": "carlsen",
+      "eco": "A05",
+      "name": "Réti / KIA (Carlsen)",
+      "pgn": "Nf3 d5 g3 Nf6 Bg2 e6 O-O Be7 d3 O-O Nbd2 c5 e4 Nc6",
+      "color": "white",
+      "style": "Hypermodern, Flexible",
+      "overview": "Carlsen's universal 1.Nf3 hypermodern — 1,113 games at 80%, his best-scoring White system. g3, Bg2, O-O and a slow build, keeping every transposition open. The fianchettoed bishop rakes the long diagonal, and the King's-Indian-Attack e4 push launches a kingside attack. Low-risk, low-theory, built to outplay rather than out-prepare.",
+      "keyIdeas": [
+        "Fianchetto Bg2 — the long light diagonal is the weapon.",
+        "Restrained d3, then Nbd2 and the e4 break on your own terms.",
+        "Launch the King-Indian-Attack kingside storm with e5 and Ng3.",
+        "Stay flexible — transpose toward your best structures."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "Réti into c4 vs …Nf6",
+          "pgn": "Nf3 Nf6 c4 g6 Nc3 Bg7 e4 d6 d4 O-O Be2 e5",
+          "explanation": "When Black fianchettoes, White seizes the full c4/e4/d4 centre a tempo up on a King-Indian — exactly the space and structure he wants.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-center",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "vs …c5 Symmetric",
+          "pgn": "Nf3 c5 g3 Nc6 Bg2 g6 O-O Bg7 c4 e6 Nc3 Nge7 d4",
+          "explanation": "Against c5, White fianchettoes into a Symmetric English/Réti and opens with d4 at the right moment, a small lasting pull a tempo up.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-space",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "vs …e6 (Catalan)",
+          "pgn": "Nf3 e6 g3 d5 Bg2 Nf6 O-O Be7 d3 O-O Nbd2 c5 e4",
+          "explanation": "The signature KIA build — Nbd2 and e4 gain kingside space and free the bishop for the e5 advance and an Nf1-g3-h4 attack.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:att-kingside-storm",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:chess-fundamentals",
+        "concept:pos-space",
+        "concept:pos-development",
+        "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+      ]
+    },
+    {
+      "id": "pro-carlsen-kings-gambit",
+      "playerId": "carlsen",
+      "eco": "C33",
+      "name": "King's Gambit (Carlsen)",
+      "pgn": "e4 e5 f4 exf4 Nf3 g5 h4 g4 Ne5 Nf6 Bc4 d5 exd5 Bd6",
+      "color": "white",
+      "style": "Romantic, Attacking",
+      "overview": "Carlsen's romantic surprise weapon — 170 games at 74%. Sacrifice the f-pawn to rip open the f-file and seize a roaring lead in development. Main line = the Kieseritzky, the knight planted on e5 eyeing f7 while the h-file opens at Black's king. A true gambit: White is down a pawn by design, banking on the attack and the calculation.",
+      "keyIdeas": [
+        "Offer the f-pawn for the open f-file and a development lead.",
+        "The Kieseritzky knight on e5 is a monster eyeing f7.",
+        "Aim the bishop at f7 and open lines toward the king.",
+        "Trade a pawn for initiative — a calculator's playground."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "Falkbeer 2…d5",
+          "pgn": "e4 e5 f4 d5 exd5 exf4 Nf3 Nf6 Bb5+ c6 dxc6 Nxc6",
+          "explanation": "The Falkbeer Counter-Gambit returns the pawn for activity; White develops with tempo via Bb5+ and grabs the pawn back with the sounder structure.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Bishop's Gambit 3.Bc4",
+          "pgn": "e4 e5 f4 exf4 Bc4 Nf6 Nc3 c6 d4 d5 exd5 Bd6",
+          "explanation": "The Bishop Gambit develops Bc4 at once, aiming at f7; Nc3 and d4 build a huge centre and a development lead for the pawn.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-center",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Declined …Bc5",
+          "pgn": "e4 e5 f4 Bc5 Nf3 d6 Nc3 Nf6 Bc4 Nc6 d3 O-O",
+          "explanation": "In the Declined, Black eyes f2 with Bc5; White develops naturally, keeps the f4-pawn restraining d5, and presses on the half-open f-file.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-space",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:chess-fundamentals",
+        "concept:att-kingside-storm",
+        "concept:pos-initiative",
+        "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+      ]
     }
   ]
 }
