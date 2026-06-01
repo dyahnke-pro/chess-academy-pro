@@ -18,7 +18,7 @@ name: Post-deploy Playwright audit (prod)
 
 on:
   push:
-    branches: [main]
+    branches: [main, ci-audit]
     # Skip pure non-runtime changes that can't regress a surface.
     paths-ignore:
       - '**/*.md'
@@ -46,6 +46,8 @@ permissions:
 jobs:
   audit:
     runs-on: ubuntu-latest
+    # ci-audit is the on-demand fire for the LOOP audit only — skip the core set.
+    if: github.ref != 'refs/heads/ci-audit'
     timeout-minutes: 45
     env:
       PROD_URL: https://chess-academy-pro.vercel.app
@@ -151,6 +153,9 @@ jobs:
         id: sha
         run: echo "short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
       - name: Wait for prod to serve this build
+        # On the ci-audit on-demand fire there's nothing to deploy — audit
+        # whatever prod currently serves. Only wait when this build is a main push.
+        if: github.ref == 'refs/heads/main'
         env:
           EXPECTED_SHA: ${{ steps.sha.outputs.short }}
           TIMEOUT_MS: '900000'
