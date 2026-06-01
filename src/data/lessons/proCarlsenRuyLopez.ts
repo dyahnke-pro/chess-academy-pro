@@ -1,10 +1,10 @@
 import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } from '../../types';
 
 // Pro Magnus Carlsen — Ruy Lopez / Open Games, WHITE. 1,113 games (online + OTB),
-// 73%. The Spanish is Carlsen's lifelong main weapon vs 1...e5; in his hands it's
+// 73%. The Spanish is Carlsen's lifelong main weapon vs ...e5; in his hands it's
 // the ultimate slow-squeeze opening — a tiny structural edge nursed for fifty
 // moves. Main line = the Closed Ruy with the modern anti-Marshall a4. Spine
-// reaches the Spanish middlegame tabiya. Variations cover his complete 1.e4 e5.
+// reaches the Spanish middlegame tabiya. Variations cover his complete e4 e5.
 
 const VIS = 'rgba(40,185,95,0.92)';
 const KEY = 'rgba(255,214,0,0.88)';

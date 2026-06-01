@@ -3192,6 +3192,600 @@
         "https://www.chess.com/openings/French-Defense",
         "https://api.chess.com/pub/player/imrosen/games/archives"
       ]
+    },
+    {
+      "id": "pro-carlsen-open-sicilian",
+      "playerId": "carlsen",
+      "eco": "B90",
+      "name": "Open Sicilian (Carlsen)",
+      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 f3 Be7 Qd2 O-O",
+      "color": "white",
+      "style": "Attacking, Positional",
+      "overview": "Carlsen's most-played and best-scoring White weapon — 1,118 games across his online and tournament career at nearly 77%. He meets the Sicilian head-on with the Open, taking the d4-square and playing for the whole board. The main line is the Najdorf English Attack (Be3, f3, Qd2, O-O-O and a kingside pawn storm), the modern positional-attacking treatment that lets him attack while keeping a sound structure. Against ...Nc6 he often steers into the Rossolimo for a slow structural squeeze; against ...e6 he plays the Open with the d4-knight as the dream piece.",
+      "keyIdeas": [
+        "Meet the Sicilian with the principled Open d4 — take d4 for a piece.",
+        "The English Attack: Be3, f3, Qd2, castle long and storm the kingside with g4-g5.",
+        "The d5-square is the heart of the Najdorf — fight for it every move.",
+        "Mix in the Rossolimo and quiet anti-Sicilians to dodge the heaviest theory."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "Rossolimo vs ...Nc6",
+          "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1 d5 d3",
+          "explanation": "244 games. Against ...Nc6 Carlsen sidesteps theory with the Rossolimo Bb5, keeping the bishop pair in reserve and squeezing a small structural edge.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-space",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Open vs ...e6",
+          "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 Qc7 Be3 a6 Bd3",
+          "explanation": "203 games. The Open Sicilian vs the ...e6 Taimanov — the d4-knight and the English-Attack bishops aim at Black’s king.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-outpost",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Moscow Bb5+",
+          "pgn": "e4 c5 Nf3 d6 Bb5+ Nd7 a4 Nf6 Nc3 g6 a5 Bg7 O-O",
+          "explanation": "108 games. The quiet Moscow check ducks the sharp Najdorf theory and clamps the queenside with a4-a5.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-space",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Classical Bc4",
+          "pgn": "e4 c5 Nf3 d6 Bc4 Nf6 d3 Nc6 O-O e6 Bb3 Be7 c3 O-O",
+          "explanation": "106 games. An Italian-Sicilian hybrid: Bc4-b3 eyes f7, a restrained d3 build, then the d4 lever at the perfect moment.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Hyperaccelerated ...g6",
+          "pgn": "e4 c5 Nf3 g6 d4 cxd4 Nxd4 Bg7 c4 Nc6 Be3",
+          "explanation": "31 games. Against the early fianchetto, the Maroczy Bind with c4 and e4 smothers Black’s ...d5 break.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-space",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:chess-fundamentals",
+        "concept:att-kingside-storm",
+        "concept:pos-space",
+        "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+      ]
+    },
+    {
+      "id": "pro-carlsen-ruy-lopez",
+      "playerId": "carlsen",
+      "eco": "C88",
+      "name": "Ruy Lopez (Carlsen)",
+      "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O a4 b4 d3 d6 Nbd2",
+      "color": "white",
+      "style": "Positional, Strategic",
+      "overview": "The Spanish is Carlsen's lifelong main weapon against 1...e5 — 1,113 games. In his hands it is the ultimate slow-squeeze opening: a tiny structural edge nursed for fifty moves until the opponent cracks. The main line is the Closed Ruy with the modern anti-Marshall a4, avoiding the sharp Marshall Gambit and keeping the game positional. The Spanish bishop on b3, the Re1 overprotection of e4, and the knight tour Nbd2-f1-g3 are the signature themes.",
+      "keyIdeas": [
+        "Pressure the e5-pawn via its defender on c6 — a permanent question.",
+        "The Spanish bishop on b3 aims at f7; the knight tours d2-f1-g3 to the kingside.",
+        "Re1 overprotects e4 so the bishop never has to retreat to defend.",
+        "Dodge the Marshall with a4 and grind the resulting positional middlegame."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "Italian Bc4",
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Bc5 O-O d6 c3 a5",
+          "explanation": "218 games. The modern Giuoco Pianissimo: a restrained d3 build, then d4 when the pieces are perfectly placed.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Berlin vs ...Nf6",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 d3 Bc5 Bxc6 dxc6 O-O Nd7 c3",
+          "explanation": "211 games. The Anti-Berlin d3 dodges the drawish endgame; Bxc6 doubles the c-pawns for a long technical edge.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pawn-minority-attack",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "vs Petrov ...Nf6",
+          "pgn": "e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 Bd6 O-O O-O c4 c6 Re1",
+          "explanation": "144 games. Against the solid Petrov, c4 and Re1 pry open the only imbalance available.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-center",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Scotch d4",
+          "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Nb3 Bb6 a4",
+          "explanation": "63 games. The Scotch opens the centre at once; Nb3 and a4 chase the bishop and grab space with tempo.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-initiative",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Four Knights Nc3",
+          "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nxd4 Bb4 Nxc6 bxc6 Bd3 d5 exd5 cxd5 O-O O-O",
+          "explanation": "59 games. A classical central break that leaves Black with an isolated, doubled-pawn structure to nurse against.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pawn-minority-attack",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:chess-fundamentals",
+        "concept:pos-space",
+        "concept:pos-bishop-pair",
+        "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+      ]
+    },
+    {
+      "id": "pro-carlsen-queens-pawn",
+      "playerId": "carlsen",
+      "eco": "D37",
+      "name": "Queen’s Pawn (Carlsen)",
+      "pgn": "d4 Nf6 c4 e6 Nf3 d5 Nc3 Bb4 cxd5 exd5 Bf4 Ne4 Rc1",
+      "color": "white",
+      "style": "Positional, Strategic",
+      "overview": "Carlsen's 1.d4 is a universal positional system — 1,107 games. He fights for the centre with c4, develops flexibly, and steers into a slow technical squeeze. The main line is the QGD where the Ragozin pin is met by the cxd5 exchange and the Bf4 structure, fixing Black with an isolated d5-pawn to nurse for the whole game. The repertoire flexes into the Catalan, the Nimzo, the Queen's Indian and a big-centre answer to the King's Indian.",
+      "keyIdeas": [
+        "Fight for d5 with c4; trade into structures with one permanent target.",
+        "The Bf4 + Rc1 setup piles on the d5-pawn and the half-open c-file.",
+        "Against the King’s Indian, take the whole centre with e4 and defend calmly.",
+        "The Catalan bishop on g2 is a slow-burning pressure that lasts all game."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "vs King's Indian g6",
+          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O",
+          "explanation": "329 games. Carlsen grabs the full centre with e4 and meets the King’s Indian with calm, solid development.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-space",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Nimzo-Indian Nc3",
+          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 Nf3 c5",
+          "explanation": "306 games. The Rubinstein e3 system plays for the bishop pair in an open position against the Nimzo pin.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-bishop-pair",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Catalan g3",
+          "pgn": "d4 Nf6 c4 e6 Nf3 d5 g3 Be7 Bg2 O-O O-O dxc4 Qc2 a6 Qxc4",
+          "explanation": "92 games. The Open Catalan regains the c4-pawn with the queen and keeps a lasting space edge and the great g2-bishop.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Queen's Indian b6",
+          "pgn": "d4 Nf6 c4 e6 Nf3 b6 g3 Ba6 b3 Bb4+ Bd2 Be7 Bg2 c6",
+          "explanation": "55 games. g3 contests the light squares and the fianchettoed bishop gives White the freer, easier game.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Bogo-Indian Bb4+",
+          "pgn": "d4 Nf6 c4 e6 Nf3 Bb4+ Nbd2 b6 a3 Bxd2+ Bxd2",
+          "explanation": "31 games. Blocking the check with Nbd2 and meeting ...Bxd2 with Bxd2 wins the two bishops and a free centre.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-bishop-pair",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:chess-fundamentals",
+        "concept:pos-space",
+        "concept:pawn-minority-attack",
+        "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+      ]
+    },
+    {
+      "id": "pro-carlsen-sicilian",
+      "playerId": "carlsen",
+      "eco": "B99",
+      "name": "Sicilian Defense (Carlsen)",
+      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Qc7 Bxf6 gxf6",
+      "color": "black",
+      "style": "Dynamic, Counter-attacking",
+      "overview": "The Sicilian is Carlsen's deepest defence to 1.e4 — 1,351 games across online and tournament play. He plays the whole Sicilian universe; the main line here is the sharp Najdorf with 6.Bg5, where Black accepts doubled f-pawns for the bishop pair, the open g-file and dynamic counterplay. He meets the Rossolimo with the flexible ...g6, the Open ...Nc6 with the Sveshnikov-flavoured ...e5, and the anti-Sicilians with principled central breaks.",
+      "keyIdeas": [
+        "The Najdorf's ...a6 is prophylaxis and queenside preparation in one.",
+        "Against 6.Bg5, ...gxf6 trades structure for the bishop pair and the g-file.",
+        "Strike the centre with ...e5 or expand the queenside with ...b5.",
+        "Defuse the anti-Sicilians with ...d5 or the calm gambit-accepting setups."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "vs Rossolimo Bb5",
+          "pgn": "e4 c5 Nf3 Nc6 Bb5 g6 O-O Bg7 Re1 e5 Bxc6 dxc6 d3 Qc7",
+          "explanation": "362 games equivalent. Carlsen meets the Rossolimo with ...g6, grabs the centre with ...e5 and keeps the two bishops.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-bishop-pair",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Taimanov ...e6",
+          "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Bd3 Nf6 O-O",
+          "explanation": "280 games. The flexible Taimanov-Kan: ...e6 and ...a6, a low-profile structure that springs ...b5-b4.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-initiative",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Open vs ...Nc6",
+          "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6",
+          "explanation": "114 games. The Sveshnikov ...e5 seizes the initiative; Black trades the d5-square for active piece play and a queenside roller.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-initiative",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "vs Alapin c3",
+          "pgn": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 Bg4 Be2 e6 O-O Nc6",
+          "explanation": "92 games. Against the Alapin, ...d5 hits the centre at once; the queen on d5 can’t be chased and Black equalises easily.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-center",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "vs Smith-Morra / d4",
+          "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 e6 Bc4 a6 O-O Nge7",
+          "explanation": "58 games. Accept the gambit pawn, then a solid ...e6/...a6/...Nge7 setup defuses all the compensation.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:chess-fundamentals",
+        "concept:pos-initiative",
+        "concept:pos-bishop-pair",
+        "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+      ]
+    },
+    {
+      "id": "pro-carlsen-1e5",
+      "playerId": "carlsen",
+      "eco": "C95",
+      "name": "1...e5 / Ruy Lopez (Carlsen)",
+      "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d6 h3 Na5 Bc2 c5 d4",
+      "color": "black",
+      "style": "Classical, Solid",
+      "overview": "Meeting 1.e4 with 1...e5 is Carlsen's most classical choice — 1,011 games — a drawing-weapon-turned-winning-machine. The main line is the Closed Ruy with the Chigorin ...Na5 and ...c5 plan, a deep strategic marathon where Black is solid as granite. He also wields the famous Berlin endgame, the rock-solid Italian setups, and clean antidotes to the Scotch and Four Knights.",
+      "keyIdeas": [
+        "Meet the centre with the centre — the most classical decision in chess.",
+        "The Chigorin ...Na5 chases off White’s strong b3-bishop, then ...c5 grabs space.",
+        "The Berlin endgame is a fortress: bishop pair and structure for castling rights.",
+        "Hit e4 with ...Nf6 against the Italian, Scotch and Four Knights for instant equality."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "vs Italian Bc4",
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 O-O O-O Re1 d6 a4",
+          "explanation": "252 games. Against the quiet d3 Italian, Black mirrors with ...Be7, ...d6 and a supremely solid, near-symmetrical game.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Berlin ...Nf6",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 dxc6 dxe5 Nf5 Qxd8+ Kxd8 h3 Ke8 Nc3 Ne7",
+          "explanation": "155 games. The Berlin Wall: queens come off, Black’s king walks to e8, and the bishop pair holds a famous fortress.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-bishop-pair",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "vs Anti-Marshall d3",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O d3 d6 c3 Na5 Bc2",
+          "explanation": "56 games. When White avoids the Marshall with d3, Black plays the same Chigorin ...Na5 to trade the strong bishop.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-space",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "vs Scotch d4",
+          "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nxc6 bxc6 e5 Qe7 Qe2 Nd5",
+          "explanation": "42 games. ...Nf6 is the reliable antidote; the knight reaches the d5-outpost and Black targets the loose e5-pawn.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-outpost",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "vs Four Knights",
+          "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6",
+          "explanation": "47 games. Symmetry is Black’s friend: ...Bb4 mirrors the pin and equality comes naturally.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:chess-fundamentals",
+        "concept:pos-center",
+        "concept:pos-space",
+        "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+      ]
+    },
+    {
+      "id": "pro-carlsen-nimzo",
+      "playerId": "carlsen",
+      "eco": "E54",
+      "name": "Nimzo-Indian / QGD (Carlsen)",
+      "pgn": "d4 Nf6 c4 e6 Nf3 d5 Nc3 Be7 Bf4 O-O e3 c5 dxc5 Bxc5",
+      "color": "black",
+      "style": "Strategic, Solid",
+      "overview": "Carlsen's main answer to 1.d4 starts with the most reliable move-order in chess: ...Nf6 and ...e6, becoming the Nimzo if White plays Nc3 or a sound QGD otherwise — 605 games. The main line is the QGD with ...Be7 against the Bf4 system, equalising cleanly with the ...c5 break. The repertoire flexes into the Nimzo pin, the Queen's Indian, the Open Catalan and the Bogo-Indian.",
+      "keyIdeas": [
+        "...Nf6/...e6 is the flexible move-order — Nimzo if Nc3, sound QGD otherwise.",
+        "Equalise the QGD cleanly with the thematic ...c5 freeing break.",
+        "The Nimzo ...Bb4 pins c3 and fights for the dark squares and e4.",
+        "The Open Catalan ...dxc4 with ...a6 and ...b5 frees Black’s game with tempo."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "Nimzo-Indian Bb4",
+          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 Nf3 c5 O-O Nc6",
+          "explanation": "211 games. The Nimzo pin against the Rubinstein system: ...d5 and ...c5 hit the centre and the bishop on b4 nags forever.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Queen's Indian b6",
+          "pgn": "d4 Nf6 c4 e6 Nf3 b6 g3 Ba6 b3 Bb4+ Bd2 Be7 Bg2 c6 Bc3 d5",
+          "explanation": "100 games. ...Ba6 pressures c4 and ...c6/...d5 challenges the centre for a sound, equal game.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-center",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "vs Catalan g3",
+          "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6",
+          "explanation": "55 games. The Open Catalan: ...d5 then ...dxc4 grabs the pawn for time and frees the position with ...a6 and ...b5.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Bogo-Indian Bb4+",
+          "pgn": "d4 Nf6 c4 e6 Nf3 Bb4+ Nbd2 O-O a3 Be7 e4 d6 Be2 Nbd7",
+          "explanation": "54 games. A low-theory ...Bb4+ develops with tempo and heads for a comfortable King’s-Indian-style ...e5 break.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-space",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:chess-fundamentals",
+        "concept:pos-development",
+        "concept:pos-center",
+        "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+      ]
+    },
+    {
+      "id": "pro-carlsen-kid",
+      "playerId": "carlsen",
+      "eco": "E97",
+      "name": "King’s Indian Defense (Carlsen)",
+      "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Be2 O-O Nf3 e5 O-O Nc6 d5 Ne7",
+      "color": "black",
+      "style": "Aggressive, Dynamic",
+      "overview": "The King's Indian is Carlsen's most combative answer to 1.d4 — 300 games. Black cedes the centre, fianchettoes on g7, then blows the centre up with ...e5 and a kingside pawn storm. The main line is the Classical Mar del Plata, the great opposite-wing race. The repertoire also covers the Fianchetto, the Grünfeld set-up, the Makogonov and the Sämisch.",
+      "keyIdeas": [
+        "Cede the centre, then attack it: ...Bg7, ...d6, ...e5 and a kingside storm.",
+        "In the locked Mar del Plata, race White: ...Ne7-g6, ...f5-f4, ...g5-g4.",
+        "Against the Fianchetto, play the more positional version with central control.",
+        "The Grünfeld ...d5 attacks White’s big centre with pieces from the flanks."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "Fianchetto g3",
+          "pgn": "d4 Nf6 c4 g6 g3 Bg7 Bg2 O-O Nc3 d6 Nf3 Nbd7 O-O e5 e4 Re8 h3",
+          "explanation": "37 games. Against the solid Fianchetto, Black plays the ...e5 break and a more positional, manoeuvring King’s Indian.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-center",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Grünfeld ...d5",
+          "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Bc4 c5 Ne2 Nc6 Be3 O-O",
+          "explanation": "48 games. The hypermodern Grünfeld: let White build a big centre, then smash it with ...c5 and the g7-bishop.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-center",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Makogonov h3",
+          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 h3 O-O Be3 e5 d5 Nbd7",
+          "explanation": "15 games. The slow h3 is met by ...e5 and the ...Nbd7-c5 reroute hitting e4, with ...f5 to follow.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-outpost",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Sämisch f3",
+          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 e5 Nge2 Nc6 d5 Nd4",
+          "explanation": "13 games. Meet the aggressive Sämisch with ...e5; the knight lands on the monster d4-outpost and Black races on the kingside.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-outpost",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:chess-fundamentals",
+        "concept:att-kingside-storm",
+        "concept:pos-outpost",
+        "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+      ]
+    },
+    {
+      "id": "pro-carlsen-french",
+      "playerId": "carlsen",
+      "eco": "C11",
+      "name": "French Defense (Carlsen)",
+      "pgn": "e4 e6 d4 d5 Nc3 Nf6 e5 Nfd7 f4 c5 Nf3 Nc6 Be3 a6 Qd2 b5",
+      "color": "black",
+      "style": "Solid, Counter-attacking",
+      "overview": "The French is a solid, counter-attacking answer to 1.e4 — 317 games. Black builds a strong pawn chain and strikes at the centre with ...c5 and ...f6. The main line is the Classical/Steinitz with 4.e5, where Black hits the base of the chain on d4 and rolls the queenside with ...a6 and ...b5. The repertoire covers the Tarrasch, the Advance, the Exchange and the sharp Winawer.",
+      "keyIdeas": [
+        "Build the ...e6/...d5 pawn chain, then strike its base on d4 with ...c5.",
+        "Pile up on d4 with ...Nc6 and roll the queenside with ...a6 and ...b5.",
+        "Reroute the knight via ...Nge7-f5 to the dream square hitting d4.",
+        "The Winawer ...Bb4xc3 shatters White’s queenside for the dark squares."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "vs Tarrasch Nd2",
+          "pgn": "e4 e6 d4 d5 Nd2 c5 Ngf3 cxd4 Nxd4 Nc6 Bb5 Bd7 Nxc6 bxc6 Bd3",
+          "explanation": "54 games. Punish the passive Nd2 with an immediate ...c5 for easy, active development and full equality.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "vs Advance e5",
+          "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Bd7 Be2 cxd4 cxd4 Nge7 Na3 Nf5",
+          "explanation": "56 games. The classic Advance antidote: ...c5 on the base, then ...Nge7-f5 to the dream square attacking d4.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pawn-chain",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "vs Exchange",
+          "pgn": "e4 e6 d4 d5 exd5 exd5 Nf3 Bd6 c4 Nf6 Nc3 O-O",
+          "explanation": "39 games. Welcome the symmetry: the freed bishop goes to d6 and Black develops actively to play for a win.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        },
+        {
+          "name": "Winawer Bb4",
+          "pgn": "e4 e6 d4 d5 Nc3 Bb4 e5 c5 a3 Bxc3+ bxc3 Nc6",
+          "explanation": "32 games. The sharpest French: ...Bxc3 doubles White’s pawns for permanent dark-square control and a rich imbalance.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pawn-chain",
+            "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:chess-fundamentals",
+        "concept:pawn-chain",
+        "concept:pos-initiative",
+        "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+      ]
     }
   ]
 }

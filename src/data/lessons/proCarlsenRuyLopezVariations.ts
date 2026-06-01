@@ -2,7 +2,7 @@ import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } f
 
 // Pro Magnus Carlsen — Ruy Lopez / Open Games per-variation Watch lessons.
 // Student = WHITE. Hand-authored from his combined-corpus data spines.
-// Board-accurate, two registers, G9.4 voice. Carlsen's complete 1.e4 e5.
+// Board-accurate, two registers, G9.4 voice. Carlsen's complete e4 e5.
 
 const VIS = 'rgba(40,185,95,0.92)';
 const KEY = 'rgba(255,214,0,0.88)';
@@ -44,7 +44,7 @@ const SCOTCH: LessonScript = {
   beats: [
     b({ id: 'd4', moves: 'e4 e5 Nf3 Nc6 d4', highlights: [H('d4')], say: "The Scotch — an early d4 that blasts the centre open immediately. Carlsen reaches for it when he wants a fresh, less-charted fight than the Ruy. The pawn trade in the middle hands White easy development and a lead in piece activity.", sayShort: 'd4 — open the centre at once.' }),
     b({ id: 'nb3', moves: 'e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Nb3 Bb6', arrows: [A('b3', 'c5')], highlights: [H('b6')], say: "Black hits the knight with the bishop and White retreats to b3, gaining a tempo by chasing the bishop to b6. White's pieces flow out naturally; Black must spend time regrouping. Small gains in time and space — the Carlsen currency.", sayShort: 'Nb3 — chase with tempo.' }),
-    b({ id: 'a4', moves: 'e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Nb3 Bb6 a4', highlights: [H('a4')], say: "a4 lunges up the board, threatening a5 to trap or chase the b6-bishop and grab queenside space. White is the one asking all the questions. A pleasant, slightly better position with no risk — exactly what Carlsen orders against 1...e5.", sayShort: 'a4 — harass the bishop, grab space.' }),
+    b({ id: 'a4', moves: 'e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Nb3 Bb6 a4 a6 Nc3 d6', highlights: [H('a4')], say: "a4 lunges up the board, threatening a5 to trap or chase the b6-bishop and grab queenside space. White is the one asking all the questions. A pleasant, slightly better position with no risk — exactly what Carlsen orders against ...e5.", sayShort: 'a4 — harass the bishop, grab space.' }),
   ],
 };
 

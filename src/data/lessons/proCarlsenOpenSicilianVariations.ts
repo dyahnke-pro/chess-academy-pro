@@ -27,7 +27,7 @@ const TAIMANOV: LessonScript = {
   beats: [
     b({ id: 'open', moves: 'e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3', arrows: [A('d4', 'c6')], highlights: [H('d4')], say: "Against the flexible ...e6 Taimanov, Magnus opens the centre and grabs the d4 outpost for the knight. The knight on d4 is the dream Sicilian piece — central, untouchable, and eyeing both wings.", sayShort: 'Open it — the d4 knight.' }),
     b({ id: 'be3', moves: 'e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 Qc7 Be3', highlights: [H('e3')], say: "Black plays the typical Qc7, eyeing the e5-square and the c-file. White develops the bishop to e3, the same English-Attack idea — point the dark-squared bishop at the queenside and prepare to castle long and storm.", sayShort: 'Be3 — English-Attack setup.' }),
-    b({ id: 'bd3', moves: 'e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 Qc7 Be3 a6 Bd3', highlights: [H('d3')], say: "Bd3 develops onto the b1-h7 diagonal — the kingside attacker's bishop, waiting for the centre to open so it can train on Black's king. White is fully mobilised and ready to castle long; the heavy pieces will follow the bishops across. A classic Sicilian attacking machine.", sayShort: 'Bd3 — the attacker\'s diagonal.' }),
+    b({ id: 'bd3', moves: 'e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 Qc7 Be3 a6 Bd3 Nf6 O-O', highlights: [H('d3')], say: "Bd3 develops onto the b1-h7 diagonal — the kingside attacker's bishop, waiting for the centre to open so it can train on Black's king. White is fully mobilised and ready to castle long; the heavy pieces will follow the bishops across. A classic Sicilian attacking machine.", sayShort: 'Bd3 — the attacker\'s diagonal.' }),
   ],
 };
 
