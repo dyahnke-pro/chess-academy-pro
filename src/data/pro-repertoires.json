@@ -3674,24 +3674,24 @@
     {
       "id": "pro-samayraina-sicilian-black",
       "playerId": "samayraina",
-      "eco": "B90",
-      "name": "Sicilian Najdorf (Samay Raina)",
+      "eco": "B32",
+      "name": "Sicilian …e5 Kalashnikov (Samay Raina)",
       "color": "black",
       "style": "Aggressive, Fighting",
-      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O",
-      "overview": "The Sicilian is Samay's biggest Black defense (5,700+ games) and his weapon of choice is the Najdorf — the most respected, most-analysed opening in chess. …a6 controls b5 and keeps maximum flexibility; …e5 grabs central space; and Black plays for the full point with queenside expansion and pressure on e4. Against the anti-Sicilians he stays principled and solid.",
+      "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 e5 Nxc6 bxc6 Nc3 Nf6 Bg5 Bb4",
+      "overview": "The Sicilian is Samay's biggest Black defense (5,700+ games) and his real weapon — straight from his own games — is the …Nc6/…e5 Kalashnikov, not the textbook Najdorf. He meets the Open Sicilian with …Nc6 and the thematic …e5, kicking the d4-knight and claiming the centre. After Nxc6 bxc6 he gets a broad pawn front, the two bishops, and a half-open b-file, then piles on e4 with …Nf6 and …Bb4. Against the anti-Sicilians he stays principled and solid.",
       "keyIdeas": [
-        "…a6 is the key Najdorf move — it controls b5, prepares …b5 expansion, and keeps everything flexible.",
-        "…e5 grabs the centre and kicks the knight; the d5-concession is the principled Najdorf bargain.",
-        "Expand with …b5 and …Bb7 to pressure e4, and contest d5 with …Be6 and …Nbd7.",
-        "Against the Alapin, …Nf6 and …Nd5 centralise; the e5-pawn becomes a target."
+        "…Nc6 and …e5 is the heart of his Sicilian — hit the d4-knight and grab central space, not the slow Najdorf.",
+        "After Nxc6, recapture with …bxc6: a big c6/e5 pawn front, the bishop pair, and a half-open b-file.",
+        "Develop …Nf6 and …Bb4 to pin the c3-knight and pressure e4; break with …d5 at the right moment.",
+        "Against the Alapin (2.c3), …d5 equalises in the centre; against Bb5 lines, …Nd4 is his go-to."
       ],
       "traps": [
         "Versus the Alapin (2.c3), …d6 undermines the e5-pawn and leaves White with an isolated d-pawn to attack.",
         "In Closed-Sicilian opposite-castling races, …b5-b4 gets Black's queenside attack in first."
       ],
       "warnings": [
-        "The Najdorf concedes d5 after …e5 — make sure your queenside and e4-pressure counterplay is real before committing.",
+        "The …e5 push concedes the d5-square — make sure your e4-pressure and bishop-pair activity is real before committing.",
         "Against the Moscow/Maroczy, don't lash out with …b5 prematurely; build with …a6 and …Nd7-c5 first."
       ],
       "variations": [

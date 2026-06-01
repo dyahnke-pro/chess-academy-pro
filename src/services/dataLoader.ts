@@ -113,7 +113,7 @@ const SEED_KEY = 'db_seeded_v12';
  * compared byte-for-byte to the meta key, so any change triggers a
  * full content refresh.
  */
-const PRO_DATA_REVISION = '2026-05-31-samayraina-8-openings';
+const PRO_DATA_REVISION = '2026-06-01-samay-sicilian-kalashnikov-rebuild';
 const PRO_REVISION_KEY = 'pro_data_revision';
 // Bump when repertoire.json CONTENT changes need to reach already-seeded
 // devices (the base repertoire is otherwise only loaded on first install).
