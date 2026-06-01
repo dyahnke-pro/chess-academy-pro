@@ -1,0 +1,3325 @@
+{
+  "player": "magnuscarlsen",
+  "openingId": "carlsen-sicilian-black",
+  "openingName": "Sicilian Defense (Black)",
+  "color": "black",
+  "minPrefix": [
+    "e4",
+    "c5"
+  ],
+  "generatedAt": "2026-06-01T00:10:36.761Z",
+  "totals": {
+    "totalGamesScanned": 9336,
+    "gamesMatchingOpening": 729,
+    "minBranchGames": 5,
+    "minTrieGames": 5
+  },
+  "rootStats": {
+    "games": 729,
+    "wins": 476,
+    "draws": 104,
+    "losses": 149,
+    "scorePct": "72.4"
+  },
+  "spine": {
+    "sans": [
+      "Nf3",
+      "d6",
+      "d4",
+      "cxd4",
+      "Nxd4",
+      "Nf6",
+      "Nc3",
+      "a6",
+      "Bg5",
+      "e6",
+      "f4"
+    ],
+    "prefixPlies": 2,
+    "totalPlies": 13
+  },
+  "variations": [
+    {
+      "depthFromOriginPrefix": 1,
+      "prefixToHere": [
+        "Nf3"
+      ],
+      "branchSan": "e6",
+      "games": 158,
+      "wins": 100,
+      "draws": 25,
+      "losses": 33,
+      "scorePct": "71.2",
+      "continuation": [
+        "e6",
+        "d4",
+        "cxd4",
+        "Nxd4",
+        "a6",
+        "Nc3",
+        "Qc7",
+        "Bd3",
+        "Nf6",
+        "O-O"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/5675960437",
+          "opp": "Parhamov",
+          "oppElo": 2936,
+          "date": 1604345578
+        },
+        {
+          "url": "https://www.chess.com/game/live/5676201552",
+          "opp": "Parhamov",
+          "oppElo": 3109,
+          "date": 1604348122
+        },
+        {
+          "url": "https://www.chess.com/game/live/55551629527",
+          "opp": "Bigfish1995",
+          "oppElo": 3058,
+          "date": 1661813007
+        },
+        {
+          "url": "https://www.chess.com/game/live/55552812403",
+          "opp": "Bigfish1995",
+          "oppElo": 3037,
+          "date": 1661814189
+        },
+        {
+          "url": "https://www.chess.com/game/live/55554659251",
+          "opp": "Bigfish1995",
+          "oppElo": 3075,
+          "date": 1661816146
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 1,
+      "prefixToHere": [
+        "Nf3"
+      ],
+      "branchSan": "Nc6",
+      "games": 142,
+      "wins": 88,
+      "draws": 26,
+      "losses": 28,
+      "scorePct": "71.1",
+      "continuation": [
+        "Nc6",
+        "Bb5",
+        "e6",
+        "O-O",
+        "Nge7",
+        "b3",
+        "a6",
+        "Bxc6",
+        "Nxc6",
+        "Bb2",
+        "d6",
+        "d4",
+        "cxd4",
+        "Nxd4"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/55565962561",
+          "opp": "Bigfish1995",
+          "oppElo": 3029,
+          "date": 1661827137
+        },
+        {
+          "url": "https://www.chess.com/game/live/62666948501",
+          "opp": "DanielNaroditsky",
+          "oppElo": 3085,
+          "date": 1668928221
+        },
+        {
+          "url": "https://www.chess.com/game/live/62670524687",
+          "opp": "DanielNaroditsky",
+          "oppElo": 3094,
+          "date": 1668931623
+        },
+        {
+          "url": "https://www.chess.com/game/live/62670627663",
+          "opp": "DanielNaroditsky",
+          "oppElo": 3084,
+          "date": 1668932047
+        },
+        {
+          "url": "https://www.chess.com/game/live/62676022727",
+          "opp": "DanielNaroditsky",
+          "oppElo": 3111,
+          "date": 1668937506
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 0,
+      "prefixToHere": [],
+      "branchSan": "c3",
+      "games": 62,
+      "wins": 35,
+      "draws": 11,
+      "losses": 16,
+      "scorePct": "65.3",
+      "continuation": [
+        "c3",
+        "d5",
+        "exd5",
+        "Nf6",
+        "Bb5+",
+        "Nbd7",
+        "d4",
+        "a6",
+        "Be2",
+        "Nxd5",
+        "Nf3",
+        "e6",
+        "O-O",
+        "b6",
+        "c4",
+        "N5f6",
+        "Nc3",
+        "Bb7",
+        "Re1",
+        "cxd4"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/62657931753",
+          "opp": "DanielNaroditsky",
+          "oppElo": 3076,
+          "date": 1668919052
+        },
+        {
+          "url": "https://www.chess.com/game/live/62658539813",
+          "opp": "DanielNaroditsky",
+          "oppElo": 3076,
+          "date": 1668919635
+        },
+        {
+          "url": "https://www.chess.com/game/live/65302276847",
+          "opp": "exoticprincess",
+          "oppElo": 3052,
+          "date": 1671563633
+        },
+        {
+          "url": "https://www.chess.com/game/live/65302874219",
+          "opp": "exoticprincess",
+          "oppElo": 3044,
+          "date": 1671564129
+        },
+        {
+          "url": "https://www.chess.com/game/live/66696158227",
+          "opp": "Oleksandr_Bortnyk",
+          "oppElo": 3018,
+          "date": 1672957603
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 2,
+      "prefixToHere": [
+        "Nf3",
+        "d6"
+      ],
+      "branchSan": "Bb5+",
+      "games": 55,
+      "wins": 38,
+      "draws": 8,
+      "losses": 9,
+      "scorePct": "76.4",
+      "continuation": [
+        "Bb5+",
+        "Nd7",
+        "O-O",
+        "a6",
+        "Bd3",
+        "Ngf6",
+        "Re1",
+        "g6",
+        "c3"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/59275817705",
+          "opp": "DanielNaroditsky",
+          "oppElo": 3155,
+          "date": 1665537292
+        },
+        {
+          "url": "https://www.chess.com/game/live/59284200645",
+          "opp": "DanielNaroditsky",
+          "oppElo": 3176,
+          "date": 1665545465
+        },
+        {
+          "url": "https://www.chess.com/game/live/59285970265",
+          "opp": "DanielNaroditsky",
+          "oppElo": 3181,
+          "date": 1665547215
+        },
+        {
+          "url": "https://www.chess.com/game/live/61873155613",
+          "opp": "SantoBlue",
+          "oppElo": 3038,
+          "date": 1668134427
+        },
+        {
+          "url": "https://www.chess.com/game/live/61942117245",
+          "opp": "SantoBlue",
+          "oppElo": 3026,
+          "date": 1668203285
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 0,
+      "prefixToHere": [],
+      "branchSan": "d4",
+      "games": 54,
+      "wins": 41,
+      "draws": 3,
+      "losses": 10,
+      "scorePct": "78.7",
+      "continuation": [
+        "d4",
+        "cxd4",
+        "c3",
+        "dxc3",
+        "Nxc3",
+        "Nc6",
+        "Nf3",
+        "e6",
+        "Bc4"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/56504955819",
+          "opp": "NikoTheodorou",
+          "oppElo": 3042,
+          "date": 1662766092
+        },
+        {
+          "url": "https://www.chess.com/game/live/56506194995",
+          "opp": "NikoTheodorou",
+          "oppElo": 3034,
+          "date": 1662767401
+        },
+        {
+          "url": "https://www.chess.com/game/live/59353205423",
+          "opp": "LacusSomniorum",
+          "oppElo": 2983,
+          "date": 1665614611
+        },
+        {
+          "url": "https://www.chess.com/game/live/59356160017",
+          "opp": "LacusSomniorum",
+          "oppElo": 3017,
+          "date": 1665617361
+        },
+        {
+          "url": "https://www.chess.com/game/live/59356748541",
+          "opp": "LacusSomniorum",
+          "oppElo": 3009,
+          "date": 1665617718
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 0,
+      "prefixToHere": [],
+      "branchSan": "Nc3",
+      "games": 44,
+      "wins": 25,
+      "draws": 9,
+      "losses": 10,
+      "scorePct": "67.0",
+      "continuation": [
+        "Nc3",
+        "Nc6",
+        "Bb5",
+        "Nd4",
+        "Nf3"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/58143626783",
+          "opp": "joppie2",
+          "oppElo": 2986,
+          "date": 1664404952
+        },
+        {
+          "url": "https://www.chess.com/game/live/59239876207",
+          "opp": "andrzej",
+          "oppElo": 2427,
+          "date": 1665501418
+        },
+        {
+          "url": "https://www.chess.com/game/live/61870810609",
+          "opp": "SantoBlue",
+          "oppElo": 3028,
+          "date": 1668132348
+        },
+        {
+          "url": "https://www.chess.com/game/live/61872546927",
+          "opp": "SantoBlue",
+          "oppElo": 3046,
+          "date": 1668133878
+        },
+        {
+          "url": "https://www.chess.com/game/live/61941078805",
+          "opp": "SantoBlue",
+          "oppElo": 3032,
+          "date": 1668202555
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 1,
+      "prefixToHere": [
+        "Nf3"
+      ],
+      "branchSan": "a6",
+      "games": 27,
+      "wins": 19,
+      "draws": 1,
+      "losses": 7,
+      "scorePct": "72.2",
+      "continuation": [
+        "a6",
+        "c3",
+        "e6",
+        "d4",
+        "d5"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/73253712921",
+          "opp": "joppie2",
+          "oppElo": 2973,
+          "date": 1679514862
+        },
+        {
+          "url": "https://www.chess.com/game/live/73260344553",
+          "opp": "Njal28",
+          "oppElo": 3070,
+          "date": 1679521524
+        },
+        {
+          "url": "https://www.chess.com/game/live/73260962069",
+          "opp": "Njal28",
+          "oppElo": 3059,
+          "date": 1679522254
+        },
+        {
+          "url": "https://www.chess.com/game/live/77483564941",
+          "opp": "vi_pranav",
+          "oppElo": 2996,
+          "date": 1683744762
+        },
+        {
+          "url": "https://www.chess.com/game/live/91902621321",
+          "opp": "vugarrasulov",
+          "oppElo": 3011,
+          "date": 1698164188
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 7,
+      "prefixToHere": [
+        "Nf3",
+        "d6",
+        "d4",
+        "cxd4",
+        "Nxd4",
+        "Nf6",
+        "Nc3"
+      ],
+      "branchSan": "g6",
+      "games": 19,
+      "wins": 10,
+      "draws": 3,
+      "losses": 6,
+      "scorePct": "60.5",
+      "continuation": [
+        "g6",
+        "Be3",
+        "a6",
+        "f3",
+        "Bg7",
+        "Qd2",
+        "h5"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/73261524107",
+          "opp": "Njal28",
+          "oppElo": 3049,
+          "date": 1679522736
+        },
+        {
+          "url": "https://www.chess.com/game/live/78522046413",
+          "opp": "Bigfish1995",
+          "oppElo": 3093,
+          "date": 1684783334
+        },
+        {
+          "url": "https://www.chess.com/game/live/78522768833",
+          "opp": "Bigfish1995",
+          "oppElo": 3085,
+          "date": 1684784134
+        },
+        {
+          "url": "https://www.chess.com/game/live/85961973483",
+          "opp": "Bigfish1995",
+          "oppElo": 3103,
+          "date": 1692223359
+        },
+        {
+          "url": "https://www.chess.com/game/live/95659824437",
+          "opp": "Qochari",
+          "oppElo": 2962,
+          "date": 1701921330
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 2,
+      "prefixToHere": [
+        "Nf3",
+        "d6"
+      ],
+      "branchSan": "c3",
+      "games": 14,
+      "wins": 11,
+      "draws": 0,
+      "losses": 3,
+      "scorePct": "78.6",
+      "continuation": [
+        "c3",
+        "Nf6",
+        "Bd3",
+        "Nc6"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/55564155281",
+          "opp": "Bigfish1995",
+          "oppElo": 3035,
+          "date": 1661825157
+        },
+        {
+          "url": "https://www.chess.com/game/live/66686564021",
+          "opp": "vi_pranav",
+          "oppElo": 3008,
+          "date": 1672947857
+        },
+        {
+          "url": "https://www.chess.com/game/live/73600149307",
+          "opp": "fizmat_64",
+          "oppElo": 2883,
+          "date": 1679861249
+        },
+        {
+          "url": "https://www.chess.com/game/live/105486680607",
+          "opp": "Oleksandr_Bortnyk",
+          "oppElo": 3047,
+          "date": 1711748142
+        },
+        {
+          "url": "https://www.chess.com/game/live/118011598443",
+          "opp": "DanielNaroditsky",
+          "oppElo": 3156,
+          "date": 1724272883
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 4,
+      "prefixToHere": [
+        "Nf3",
+        "d6",
+        "d4",
+        "cxd4"
+      ],
+      "branchSan": "Qxd4",
+      "games": 13,
+      "wins": 10,
+      "draws": 0,
+      "losses": 3,
+      "scorePct": "76.9",
+      "continuation": [
+        "Qxd4",
+        "Nf6",
+        "Nc3",
+        "Nc6",
+        "Qd3"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/64209193877",
+          "opp": "LacusSomniorum",
+          "oppElo": 3053,
+          "date": 1670470440
+        },
+        {
+          "url": "https://www.chess.com/game/live/66701520475",
+          "opp": "DanielNaroditsky",
+          "oppElo": 3049,
+          "date": 1672963026
+        },
+        {
+          "url": "https://www.chess.com/game/live/68503301917",
+          "opp": "DanielNaroditsky",
+          "oppElo": 3081,
+          "date": 1674764422
+        },
+        {
+          "url": "https://www.chess.com/game/live/68506397135",
+          "opp": "DanielNaroditsky",
+          "oppElo": 3062,
+          "date": 1674767516
+        },
+        {
+          "url": "https://www.chess.com/game/live/71192731859",
+          "opp": "PopMilan95",
+          "oppElo": 2983,
+          "date": 1677453837
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 1,
+      "prefixToHere": [
+        "Nf3"
+      ],
+      "branchSan": "g6",
+      "games": 12,
+      "wins": 8,
+      "draws": 2,
+      "losses": 2,
+      "scorePct": "75.0",
+      "continuation": [
+        "g6",
+        "c3"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/55552194355",
+          "opp": "Bigfish1995",
+          "oppElo": 3047,
+          "date": 1661813511
+        },
+        {
+          "url": "https://www.chess.com/game/live/64348217979",
+          "opp": "Duhless",
+          "oppElo": 3105,
+          "date": 1670609332
+        },
+        {
+          "url": "https://www.chess.com/game/live/64348365543",
+          "opp": "Duhless",
+          "oppElo": 3114,
+          "date": 1670609681
+        },
+        {
+          "url": "https://www.chess.com/game/live/82496394393",
+          "opp": "HVillagra",
+          "oppElo": 2946,
+          "date": 1688757268
+        },
+        {
+          "url": "https://www.chess.com/game/live/94347098183",
+          "opp": "Krakozia",
+          "oppElo": 2949,
+          "date": 1700608389
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 7,
+      "prefixToHere": [
+        "Nf3",
+        "d6",
+        "d4",
+        "cxd4",
+        "Nxd4",
+        "Nf6",
+        "Nc3"
+      ],
+      "branchSan": "Bd7",
+      "games": 10,
+      "wins": 8,
+      "draws": 2,
+      "losses": 0,
+      "scorePct": "90.0",
+      "continuation": [
+        "Bd7",
+        "Bg5",
+        "e6"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/61868374715",
+          "opp": "SantoBlue",
+          "oppElo": 3018,
+          "date": 1668129685
+        },
+        {
+          "url": "https://www.chess.com/game/live/62672326817",
+          "opp": "DanielNaroditsky",
+          "oppElo": 3076,
+          "date": 1668933483
+        },
+        {
+          "url": "https://www.chess.com/game/live/62748597807",
+          "opp": "spicycaterpillar",
+          "oppElo": 3058,
+          "date": 1669010157
+        },
+        {
+          "url": "https://www.chess.com/game/live/66613204833",
+          "opp": "SpeedofLight0",
+          "oppElo": 2975,
+          "date": 1672874250
+        },
+        {
+          "url": "https://www.chess.com/game/live/92707236721",
+          "opp": "Njal28",
+          "oppElo": 3074,
+          "date": 1698968487
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 8,
+      "prefixToHere": [
+        "Nf3",
+        "d6",
+        "d4",
+        "cxd4",
+        "Nxd4",
+        "Nf6",
+        "Nc3",
+        "a6"
+      ],
+      "branchSan": "Be3",
+      "games": 10,
+      "wins": 8,
+      "draws": 1,
+      "losses": 1,
+      "scorePct": "85.0",
+      "continuation": [
+        "Be3",
+        "e6"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/110046749347",
+          "opp": "AlexeiShirov",
+          "oppElo": 2915,
+          "date": 1716308401
+        },
+        {
+          "url": "https://www.chess.com/game/live/117815933517",
+          "opp": "gurelediz",
+          "oppElo": 3122,
+          "date": 1724077112
+        },
+        {
+          "url": "https://www.chess.com/game/live/117816546321",
+          "opp": "gurelediz",
+          "oppElo": 3114,
+          "date": 1724077787
+        },
+        {
+          "url": "https://www.chess.com/game/live/117992381757",
+          "opp": "gurelediz",
+          "oppElo": 3127,
+          "date": 1724253584
+        },
+        {
+          "url": "https://www.chess.com/game/live/162824825249",
+          "opp": "ChesswithAkeem",
+          "oppElo": 2571,
+          "date": 1768511462
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 0,
+      "prefixToHere": [],
+      "branchSan": "Be2",
+      "games": 9,
+      "wins": 6,
+      "draws": 0,
+      "losses": 3,
+      "scorePct": "66.7",
+      "continuation": [
+        "Be2",
+        "Nc6"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/89502673557",
+          "opp": "BlueWizzard",
+          "oppElo": 2887,
+          "date": 1695764209
+        },
+        {
+          "url": "https://www.chess.com/game/live/105488340247",
+          "opp": "Oleksandr_Bortnyk",
+          "oppElo": 3055,
+          "date": 1711749508
+        },
+        {
+          "url": "https://www.chess.com/game/live/105489570969",
+          "opp": "Oleksandr_Bortnyk",
+          "oppElo": 3054,
+          "date": 1711750814
+        },
+        {
+          "url": "https://www.chess.com/game/live/112486873011",
+          "opp": "Oleksandr_Bortnyk",
+          "oppElo": 3061,
+          "date": 1718748643
+        },
+        {
+          "url": "https://www.chess.com/game/live/154767403551",
+          "opp": "mwpchess",
+          "oppElo": 2637,
+          "date": 1760454591
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 8,
+      "prefixToHere": [
+        "Nf3",
+        "d6",
+        "d4",
+        "cxd4",
+        "Nxd4",
+        "Nf6",
+        "Nc3",
+        "a6"
+      ],
+      "branchSan": "Be2",
+      "games": 7,
+      "wins": 6,
+      "draws": 1,
+      "losses": 0,
+      "scorePct": "92.9",
+      "continuation": [
+        "Be2",
+        "e5",
+        "Nb3",
+        "Be7"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/70494122347",
+          "opp": "BilodeauA",
+          "oppElo": 2997,
+          "date": 1676755299
+        },
+        {
+          "url": "https://www.chess.com/game/live/73171520935",
+          "opp": "IamSchrodingersCat",
+          "oppElo": 2538,
+          "date": 1679432815
+        },
+        {
+          "url": "https://www.chess.com/game/live/120944999991",
+          "opp": "Snowflake",
+          "oppElo": 2980,
+          "date": 1727206213
+        },
+        {
+          "url": "https://www.chess.com/game/live/132525639449",
+          "opp": "Njal28",
+          "oppElo": 3076,
+          "date": 1738786911
+        },
+        {
+          "url": "https://www.chess.com/game/live/142087840059",
+          "opp": "theredking89",
+          "oppElo": 2875,
+          "date": 1747774512
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 9,
+      "prefixToHere": [
+        "Nf3",
+        "d6",
+        "d4",
+        "cxd4",
+        "Nxd4",
+        "Nf6",
+        "Nc3",
+        "a6",
+        "Bg5"
+      ],
+      "branchSan": "Nbd7",
+      "games": 7,
+      "wins": 3,
+      "draws": 1,
+      "losses": 3,
+      "scorePct": "50.0",
+      "continuation": [
+        "Nbd7",
+        "Bc4"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/88144125271",
+          "opp": "Njal28",
+          "oppElo": 3114,
+          "date": 1694405251
+        },
+        {
+          "url": "https://www.chess.com/game/live/144330148752",
+          "opp": "Sina-Movahed",
+          "oppElo": 3125,
+          "date": 1760549545
+        },
+        {
+          "url": "https://www.chess.com/game/live/157364250633",
+          "opp": "Sicilian_Maestro789",
+          "oppElo": 2863,
+          "date": 1763050743
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 10,
+      "prefixToHere": [
+        "Nf3",
+        "d6",
+        "d4",
+        "cxd4",
+        "Nxd4",
+        "Nf6",
+        "Nc3",
+        "a6",
+        "Bg5",
+        "e6"
+      ],
+      "branchSan": "Qf3",
+      "games": 7,
+      "wins": 2,
+      "draws": 3,
+      "losses": 2,
+      "scorePct": "50.0",
+      "continuation": [
+        "Qf3"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/67908857715",
+          "opp": "BuLolo",
+          "oppElo": 3030,
+          "date": 1674170327
+        },
+        {
+          "url": "https://www.chess.com/game/live/68687087749",
+          "opp": "BuLolo",
+          "oppElo": 3011,
+          "date": 1674948450
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 1,
+      "prefixToHere": [
+        "Nf3"
+      ],
+      "branchSan": "b6",
+      "games": 6,
+      "wins": 4,
+      "draws": 0,
+      "losses": 2,
+      "scorePct": "66.7",
+      "continuation": [
+        "b6",
+        "d4",
+        "cxd4"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/78793201211",
+          "opp": "Rud_Makarian",
+          "oppElo": 3004,
+          "date": 1685054196
+        },
+        {
+          "url": "https://www.chess.com/game/live/84663835481",
+          "opp": "johnathan113",
+          "oppElo": 2741,
+          "date": 1690925219
+        },
+        {
+          "url": "https://www.chess.com/game/live/93133942293",
+          "opp": "Crazy_girl99",
+          "oppElo": 2656,
+          "date": 1699395412
+        },
+        {
+          "url": "https://www.chess.com/game/live/144244913554",
+          "opp": "Parhamov",
+          "oppElo": 3132,
+          "date": 1760366562
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 2,
+      "prefixToHere": [
+        "Nf3",
+        "d6"
+      ],
+      "branchSan": "Bc4",
+      "games": 6,
+      "wins": 5,
+      "draws": 0,
+      "losses": 1,
+      "scorePct": "83.3",
+      "continuation": [
+        "Bc4",
+        "Nf6",
+        "d3",
+        "Nc6",
+        "O-O"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/58232383979",
+          "opp": "Salem-AR",
+          "oppElo": 2977,
+          "date": 1664493676
+        },
+        {
+          "url": "https://www.chess.com/game/live/96258790289",
+          "opp": "igrok6996",
+          "oppElo": 3028,
+          "date": 1702520082
+        },
+        {
+          "url": "https://www.chess.com/game/live/110049735769",
+          "opp": "vugarrasulov",
+          "oppElo": 2981,
+          "date": 1716311206
+        },
+        {
+          "url": "https://www.chess.com/game/live/116786411659",
+          "opp": "ALieRaiseAFireOozeUh",
+          "oppElo": 3095,
+          "date": 1723047762
+        },
+        {
+          "url": "https://www.chess.com/game/live/158407645589",
+          "opp": "GHANDEEVAM2003",
+          "oppElo": 3199,
+          "date": 1764094469
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 2,
+      "prefixToHere": [
+        "Nf3",
+        "d6"
+      ],
+      "branchSan": "Nc3",
+      "games": 5,
+      "wins": 4,
+      "draws": 0,
+      "losses": 1,
+      "scorePct": "80.0",
+      "continuation": [
+        "Nc3"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/124212007863",
+          "opp": "artooon",
+          "oppElo": 3098,
+          "date": 1730473399
+        },
+        {
+          "url": "https://www.chess.com/game/live/144490776679",
+          "opp": "jefferyx",
+          "oppElo": 3155,
+          "date": 1750177773
+        },
+        {
+          "url": "https://www.chess.com/game/live/155378797397",
+          "opp": "jefferyx",
+          "oppElo": 3115,
+          "date": 1761065412
+        },
+        {
+          "url": "https://www.chess.com/game/live/163917040128",
+          "opp": "KazakhFighter04",
+          "oppElo": 3064,
+          "date": 1769605893
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 7,
+      "prefixToHere": [
+        "Nf3",
+        "d6",
+        "d4",
+        "cxd4",
+        "Nxd4",
+        "Nf6",
+        "Nc3"
+      ],
+      "branchSan": "e6",
+      "games": 5,
+      "wins": 3,
+      "draws": 0,
+      "losses": 2,
+      "scorePct": "60.0",
+      "continuation": [
+        "e6"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/143770986964",
+          "opp": "Neferpitou27",
+          "oppElo": 3124,
+          "date": 1759314146
+        },
+        {
+          "url": "https://www.chess.com/game/live/154178197787",
+          "opp": "IlanSchnaider",
+          "oppElo": 2920,
+          "date": 1759864627
+        },
+        {
+          "url": "https://www.chess.com/game/live/154179997963",
+          "opp": "rezamahdavi2008",
+          "oppElo": 3021,
+          "date": 1759866428
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 8,
+      "prefixToHere": [
+        "Nf3",
+        "d6",
+        "d4",
+        "cxd4",
+        "Nxd4",
+        "Nf6",
+        "Nc3",
+        "a6"
+      ],
+      "branchSan": "h3",
+      "games": 5,
+      "wins": 3,
+      "draws": 1,
+      "losses": 1,
+      "scorePct": "70.0",
+      "continuation": [
+        "h3"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/150554894285",
+          "opp": "Robert_Angier",
+          "oppElo": 3000,
+          "date": 1756241704
+        },
+        {
+          "url": "https://www.chess.com/game/live/158401644657",
+          "opp": "HVillagra",
+          "oppElo": 2987,
+          "date": 1764088140
+        },
+        {
+          "url": "https://www.chess.com/game/live/147791651542",
+          "opp": "TheMandaIorian",
+          "oppElo": 3108,
+          "date": 1767970299
+        }
+      ]
+    }
+  ],
+  "tree": {
+    "games": 729,
+    "wins": 476,
+    "draws": 104,
+    "losses": 149,
+    "children": {
+      "Nf3": {
+        "games": 552,
+        "wins": 362,
+        "draws": 81,
+        "losses": 109,
+        "children": {
+          "e6": {
+            "games": 158,
+            "wins": 100,
+            "draws": 25,
+            "losses": 33,
+            "children": {
+              "d4": {
+                "games": 94,
+                "wins": 58,
+                "draws": 15,
+                "losses": 21,
+                "children": {
+                  "cxd4": {
+                    "games": 93,
+                    "wins": 58,
+                    "draws": 15,
+                    "losses": 20,
+                    "children": {
+                      "Nxd4": {
+                        "games": 90,
+                        "wins": 56,
+                        "draws": 14,
+                        "losses": 20,
+                        "children": {
+                          "a6": {
+                            "games": 72,
+                            "wins": 43,
+                            "draws": 12,
+                            "losses": 17,
+                            "children": {
+                              "Nc3": {
+                                "games": 25,
+                                "wins": 12,
+                                "draws": 5,
+                                "losses": 8,
+                                "children": {
+                                  "Qc7": {
+                                    "games": 13,
+                                    "wins": 6,
+                                    "draws": 3,
+                                    "losses": 4,
+                                    "children": {
+                                      "Bd3": {
+                                        "games": 7,
+                                        "wins": 3,
+                                        "draws": 2,
+                                        "losses": 2,
+                                        "children": {
+                                          "Nf6": {
+                                            "games": 5,
+                                            "wins": 2,
+                                            "draws": 1,
+                                            "losses": 2,
+                                            "children": {
+                                              "O-O": {
+                                                "games": 5,
+                                                "wins": 2,
+                                                "draws": 1,
+                                                "losses": 2,
+                                                "children": {}
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "b5": {
+                                    "games": 12,
+                                    "wins": 6,
+                                    "draws": 2,
+                                    "losses": 4,
+                                    "children": {
+                                      "Bd3": {
+                                        "games": 7,
+                                        "wins": 2,
+                                        "draws": 2,
+                                        "losses": 3,
+                                        "children": {
+                                          "Bb7": {
+                                            "games": 5,
+                                            "wins": 1,
+                                            "draws": 2,
+                                            "losses": 2,
+                                            "children": {
+                                              "O-O": {
+                                                "games": 5,
+                                                "wins": 1,
+                                                "draws": 2,
+                                                "losses": 2,
+                                                "children": {
+                                                  "Nc6": {
+                                                    "games": 5,
+                                                    "wins": 1,
+                                                    "draws": 2,
+                                                    "losses": 2,
+                                                    "children": {}
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "c4": {
+                                "games": 17,
+                                "wins": 8,
+                                "draws": 5,
+                                "losses": 4,
+                                "children": {
+                                  "Nf6": {
+                                    "games": 16,
+                                    "wins": 7,
+                                    "draws": 5,
+                                    "losses": 4,
+                                    "children": {
+                                      "Nc3": {
+                                        "games": 16,
+                                        "wins": 7,
+                                        "draws": 5,
+                                        "losses": 4,
+                                        "children": {
+                                          "Qc7": {
+                                            "games": 16,
+                                            "wins": 7,
+                                            "draws": 5,
+                                            "losses": 4,
+                                            "children": {
+                                              "a3": {
+                                                "games": 10,
+                                                "wins": 5,
+                                                "draws": 2,
+                                                "losses": 3,
+                                                "children": {
+                                                  "b6": {
+                                                    "games": 9,
+                                                    "wins": 4,
+                                                    "draws": 2,
+                                                    "losses": 3,
+                                                    "children": {}
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "Bd3": {
+                                "games": 21,
+                                "wins": 16,
+                                "draws": 1,
+                                "losses": 4,
+                                "children": {
+                                  "Bc5": {
+                                    "games": 10,
+                                    "wins": 7,
+                                    "draws": 0,
+                                    "losses": 3,
+                                    "children": {
+                                      "Nb3": {
+                                        "games": 10,
+                                        "wins": 7,
+                                        "draws": 0,
+                                        "losses": 3,
+                                        "children": {
+                                          "Be7": {
+                                            "games": 7,
+                                            "wins": 5,
+                                            "draws": 0,
+                                            "losses": 2,
+                                            "children": {
+                                              "Qg4": {
+                                                "games": 5,
+                                                "wins": 3,
+                                                "draws": 0,
+                                                "losses": 2,
+                                                "children": {}
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "Qc7": {
+                                    "games": 7,
+                                    "wins": 5,
+                                    "draws": 1,
+                                    "losses": 1,
+                                    "children": {
+                                      "O-O": {
+                                        "games": 5,
+                                        "wins": 4,
+                                        "draws": 1,
+                                        "losses": 0,
+                                        "children": {
+                                          "Nf6": {
+                                            "games": 5,
+                                            "wins": 4,
+                                            "draws": 1,
+                                            "losses": 0,
+                                            "children": {}
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "Nc6": {
+                            "games": 14,
+                            "wins": 11,
+                            "draws": 1,
+                            "losses": 2,
+                            "children": {
+                              "Nc3": {
+                                "games": 12,
+                                "wins": 10,
+                                "draws": 0,
+                                "losses": 2,
+                                "children": {
+                                  "Qc7": {
+                                    "games": 9,
+                                    "wins": 8,
+                                    "draws": 0,
+                                    "losses": 1,
+                                    "children": {
+                                      "Be3": {
+                                        "games": 5,
+                                        "wins": 4,
+                                        "draws": 0,
+                                        "losses": 1,
+                                        "children": {
+                                          "a6": {
+                                            "games": 5,
+                                            "wins": 4,
+                                            "draws": 0,
+                                            "losses": 1,
+                                            "children": {}
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "g3": {
+                "games": 9,
+                "wins": 8,
+                "draws": 0,
+                "losses": 1,
+                "children": {}
+              },
+              "c3": {
+                "games": 30,
+                "wins": 19,
+                "draws": 6,
+                "losses": 5,
+                "children": {
+                  "Nf6": {
+                    "games": 7,
+                    "wins": 2,
+                    "draws": 2,
+                    "losses": 3,
+                    "children": {
+                      "e5": {
+                        "games": 6,
+                        "wins": 2,
+                        "draws": 2,
+                        "losses": 2,
+                        "children": {
+                          "Nd5": {
+                            "games": 6,
+                            "wins": 2,
+                            "draws": 2,
+                            "losses": 2,
+                            "children": {}
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "d5": {
+                    "games": 23,
+                    "wins": 17,
+                    "draws": 4,
+                    "losses": 2,
+                    "children": {
+                      "exd5": {
+                        "games": 16,
+                        "wins": 11,
+                        "draws": 4,
+                        "losses": 1,
+                        "children": {
+                          "Qxd5": {
+                            "games": 5,
+                            "wins": 3,
+                            "draws": 1,
+                            "losses": 1,
+                            "children": {
+                              "d4": {
+                                "games": 5,
+                                "wins": 3,
+                                "draws": 1,
+                                "losses": 1,
+                                "children": {
+                                  "Nf6": {
+                                    "games": 5,
+                                    "wins": 3,
+                                    "draws": 1,
+                                    "losses": 1,
+                                    "children": {}
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "exd5": {
+                            "games": 11,
+                            "wins": 8,
+                            "draws": 3,
+                            "losses": 0,
+                            "children": {
+                              "d4": {
+                                "games": 9,
+                                "wins": 7,
+                                "draws": 2,
+                                "losses": 0,
+                                "children": {
+                                  "Nc6": {
+                                    "games": 8,
+                                    "wins": 7,
+                                    "draws": 1,
+                                    "losses": 0,
+                                    "children": {
+                                      "Bb5": {
+                                        "games": 8,
+                                        "wins": 7,
+                                        "draws": 1,
+                                        "losses": 0,
+                                        "children": {
+                                          "Nf6": {
+                                            "games": 5,
+                                            "wins": 4,
+                                            "draws": 1,
+                                            "losses": 0,
+                                            "children": {
+                                              "O-O": {
+                                                "games": 5,
+                                                "wins": 4,
+                                                "draws": 1,
+                                                "losses": 0,
+                                                "children": {
+                                                  "Be7": {
+                                                    "games": 5,
+                                                    "wins": 4,
+                                                    "draws": 1,
+                                                    "losses": 0,
+                                                    "children": {
+                                                      "dxc5": {
+                                                        "games": 5,
+                                                        "wins": 4,
+                                                        "draws": 1,
+                                                        "losses": 0,
+                                                        "children": {
+                                                          "Bxc5": {
+                                                            "games": 5,
+                                                            "wins": 4,
+                                                            "draws": 1,
+                                                            "losses": 0,
+                                                            "children": {}
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "e5": {
+                        "games": 7,
+                        "wins": 6,
+                        "draws": 0,
+                        "losses": 1,
+                        "children": {}
+                      }
+                    }
+                  }
+                }
+              },
+              "b3": {
+                "games": 11,
+                "wins": 5,
+                "draws": 2,
+                "losses": 4,
+                "children": {
+                  "a6": {
+                    "games": 5,
+                    "wins": 2,
+                    "draws": 1,
+                    "losses": 2,
+                    "children": {}
+                  }
+                }
+              },
+              "Nc3": {
+                "games": 6,
+                "wins": 3,
+                "draws": 1,
+                "losses": 2,
+                "children": {
+                  "a6": {
+                    "games": 5,
+                    "wins": 3,
+                    "draws": 1,
+                    "losses": 1,
+                    "children": {}
+                  }
+                }
+              }
+            }
+          },
+          "d6": {
+            "games": 205,
+            "wins": 142,
+            "draws": 26,
+            "losses": 37,
+            "children": {
+              "d4": {
+                "games": 122,
+                "wins": 84,
+                "draws": 16,
+                "losses": 22,
+                "children": {
+                  "cxd4": {
+                    "games": 122,
+                    "wins": 84,
+                    "draws": 16,
+                    "losses": 22,
+                    "children": {
+                      "Nxd4": {
+                        "games": 108,
+                        "wins": 73,
+                        "draws": 16,
+                        "losses": 19,
+                        "children": {
+                          "Nf6": {
+                            "games": 108,
+                            "wins": 73,
+                            "draws": 16,
+                            "losses": 19,
+                            "children": {
+                              "Nc3": {
+                                "games": 104,
+                                "wins": 69,
+                                "draws": 16,
+                                "losses": 19,
+                                "children": {
+                                  "a6": {
+                                    "games": 65,
+                                    "wins": 45,
+                                    "draws": 10,
+                                    "losses": 10,
+                                    "children": {
+                                      "h3": {
+                                        "games": 5,
+                                        "wins": 3,
+                                        "draws": 1,
+                                        "losses": 1,
+                                        "children": {}
+                                      },
+                                      "Bg5": {
+                                        "games": 24,
+                                        "wins": 10,
+                                        "draws": 7,
+                                        "losses": 7,
+                                        "children": {
+                                          "Nbd7": {
+                                            "games": 7,
+                                            "wins": 3,
+                                            "draws": 1,
+                                            "losses": 3,
+                                            "children": {
+                                              "Bc4": {
+                                                "games": 5,
+                                                "wins": 3,
+                                                "draws": 0,
+                                                "losses": 2,
+                                                "children": {}
+                                              }
+                                            }
+                                          },
+                                          "e6": {
+                                            "games": 17,
+                                            "wins": 7,
+                                            "draws": 6,
+                                            "losses": 4,
+                                            "children": {
+                                              "f4": {
+                                                "games": 9,
+                                                "wins": 5,
+                                                "draws": 3,
+                                                "losses": 1,
+                                                "children": {}
+                                              },
+                                              "Qf3": {
+                                                "games": 7,
+                                                "wins": 2,
+                                                "draws": 3,
+                                                "losses": 2,
+                                                "children": {}
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "Be2": {
+                                        "games": 7,
+                                        "wins": 6,
+                                        "draws": 1,
+                                        "losses": 0,
+                                        "children": {
+                                          "e5": {
+                                            "games": 7,
+                                            "wins": 6,
+                                            "draws": 1,
+                                            "losses": 0,
+                                            "children": {
+                                              "Nb3": {
+                                                "games": 6,
+                                                "wins": 5,
+                                                "draws": 1,
+                                                "losses": 0,
+                                                "children": {
+                                                  "Be7": {
+                                                    "games": 6,
+                                                    "wins": 5,
+                                                    "draws": 1,
+                                                    "losses": 0,
+                                                    "children": {}
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "Be3": {
+                                        "games": 10,
+                                        "wins": 8,
+                                        "draws": 1,
+                                        "losses": 1,
+                                        "children": {
+                                          "e6": {
+                                            "games": 8,
+                                            "wins": 7,
+                                            "draws": 0,
+                                            "losses": 1,
+                                            "children": {}
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "Bd7": {
+                                    "games": 10,
+                                    "wins": 8,
+                                    "draws": 2,
+                                    "losses": 0,
+                                    "children": {
+                                      "Bg5": {
+                                        "games": 6,
+                                        "wins": 4,
+                                        "draws": 2,
+                                        "losses": 0,
+                                        "children": {
+                                          "e6": {
+                                            "games": 6,
+                                            "wins": 4,
+                                            "draws": 2,
+                                            "losses": 0,
+                                            "children": {}
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "g6": {
+                                    "games": 19,
+                                    "wins": 10,
+                                    "draws": 3,
+                                    "losses": 6,
+                                    "children": {
+                                      "Be3": {
+                                        "games": 11,
+                                        "wins": 6,
+                                        "draws": 1,
+                                        "losses": 4,
+                                        "children": {
+                                          "a6": {
+                                            "games": 8,
+                                            "wins": 3,
+                                            "draws": 1,
+                                            "losses": 4,
+                                            "children": {
+                                              "f3": {
+                                                "games": 5,
+                                                "wins": 1,
+                                                "draws": 1,
+                                                "losses": 3,
+                                                "children": {
+                                                  "Bg7": {
+                                                    "games": 5,
+                                                    "wins": 1,
+                                                    "draws": 1,
+                                                    "losses": 3,
+                                                    "children": {
+                                                      "Qd2": {
+                                                        "games": 5,
+                                                        "wins": 1,
+                                                        "draws": 1,
+                                                        "losses": 3,
+                                                        "children": {
+                                                          "h5": {
+                                                            "games": 5,
+                                                            "wins": 1,
+                                                            "draws": 1,
+                                                            "losses": 3,
+                                                            "children": {}
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "e6": {
+                                    "games": 5,
+                                    "wins": 3,
+                                    "draws": 0,
+                                    "losses": 2,
+                                    "children": {}
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "Qxd4": {
+                        "games": 13,
+                        "wins": 10,
+                        "draws": 0,
+                        "losses": 3,
+                        "children": {
+                          "Nf6": {
+                            "games": 12,
+                            "wins": 10,
+                            "draws": 0,
+                            "losses": 2,
+                            "children": {
+                              "Nc3": {
+                                "games": 10,
+                                "wins": 8,
+                                "draws": 0,
+                                "losses": 2,
+                                "children": {
+                                  "Nc6": {
+                                    "games": 8,
+                                    "wins": 6,
+                                    "draws": 0,
+                                    "losses": 2,
+                                    "children": {
+                                      "Qd3": {
+                                        "games": 5,
+                                        "wins": 5,
+                                        "draws": 0,
+                                        "losses": 0,
+                                        "children": {}
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "Bc4": {
+                "games": 6,
+                "wins": 5,
+                "draws": 0,
+                "losses": 1,
+                "children": {
+                  "Nf6": {
+                    "games": 6,
+                    "wins": 5,
+                    "draws": 0,
+                    "losses": 1,
+                    "children": {
+                      "d3": {
+                        "games": 5,
+                        "wins": 4,
+                        "draws": 0,
+                        "losses": 1,
+                        "children": {
+                          "Nc6": {
+                            "games": 5,
+                            "wins": 4,
+                            "draws": 0,
+                            "losses": 1,
+                            "children": {
+                              "O-O": {
+                                "games": 5,
+                                "wins": 4,
+                                "draws": 0,
+                                "losses": 1,
+                                "children": {}
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "c3": {
+                "games": 14,
+                "wins": 11,
+                "draws": 0,
+                "losses": 3,
+                "children": {
+                  "Nf6": {
+                    "games": 14,
+                    "wins": 11,
+                    "draws": 0,
+                    "losses": 3,
+                    "children": {
+                      "Bd3": {
+                        "games": 6,
+                        "wins": 4,
+                        "draws": 0,
+                        "losses": 2,
+                        "children": {
+                          "Nc6": {
+                            "games": 6,
+                            "wins": 4,
+                            "draws": 0,
+                            "losses": 2,
+                            "children": {}
+                          }
+                        }
+                      },
+                      "h3": {
+                        "games": 6,
+                        "wins": 5,
+                        "draws": 0,
+                        "losses": 1,
+                        "children": {}
+                      }
+                    }
+                  }
+                }
+              },
+              "Bb5+": {
+                "games": 55,
+                "wins": 38,
+                "draws": 8,
+                "losses": 9,
+                "children": {
+                  "Nd7": {
+                    "games": 36,
+                    "wins": 25,
+                    "draws": 4,
+                    "losses": 7,
+                    "children": {
+                      "O-O": {
+                        "games": 23,
+                        "wins": 15,
+                        "draws": 3,
+                        "losses": 5,
+                        "children": {
+                          "a6": {
+                            "games": 20,
+                            "wins": 12,
+                            "draws": 3,
+                            "losses": 5,
+                            "children": {
+                              "Bd3": {
+                                "games": 14,
+                                "wins": 10,
+                                "draws": 1,
+                                "losses": 3,
+                                "children": {
+                                  "Ngf6": {
+                                    "games": 14,
+                                    "wins": 10,
+                                    "draws": 1,
+                                    "losses": 3,
+                                    "children": {
+                                      "Re1": {
+                                        "games": 14,
+                                        "wins": 10,
+                                        "draws": 1,
+                                        "losses": 3,
+                                        "children": {
+                                          "g6": {
+                                            "games": 7,
+                                            "wins": 5,
+                                            "draws": 0,
+                                            "losses": 2,
+                                            "children": {
+                                              "c3": {
+                                                "games": 6,
+                                                "wins": 4,
+                                                "draws": 0,
+                                                "losses": 2,
+                                                "children": {}
+                                              }
+                                            }
+                                          },
+                                          "b5": {
+                                            "games": 5,
+                                            "wins": 3,
+                                            "draws": 1,
+                                            "losses": 1,
+                                            "children": {}
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "d4": {
+                        "games": 5,
+                        "wins": 4,
+                        "draws": 0,
+                        "losses": 1,
+                        "children": {}
+                      }
+                    }
+                  },
+                  "Bd7": {
+                    "games": 15,
+                    "wins": 11,
+                    "draws": 4,
+                    "losses": 0,
+                    "children": {
+                      "Bxd7+": {
+                        "games": 13,
+                        "wins": 9,
+                        "draws": 4,
+                        "losses": 0,
+                        "children": {
+                          "Qxd7": {
+                            "games": 10,
+                            "wins": 7,
+                            "draws": 3,
+                            "losses": 0,
+                            "children": {
+                              "O-O": {
+                                "games": 7,
+                                "wins": 5,
+                                "draws": 2,
+                                "losses": 0,
+                                "children": {
+                                  "Nf6": {
+                                    "games": 7,
+                                    "wins": 5,
+                                    "draws": 2,
+                                    "losses": 0,
+                                    "children": {
+                                      "Re1": {
+                                        "games": 6,
+                                        "wins": 4,
+                                        "draws": 2,
+                                        "losses": 0,
+                                        "children": {
+                                          "Nc6": {
+                                            "games": 6,
+                                            "wins": 4,
+                                            "draws": 2,
+                                            "losses": 0,
+                                            "children": {
+                                              "c3": {
+                                                "games": 6,
+                                                "wins": 4,
+                                                "draws": 2,
+                                                "losses": 0,
+                                                "children": {
+                                                  "e6": {
+                                                    "games": 6,
+                                                    "wins": 4,
+                                                    "draws": 2,
+                                                    "losses": 0,
+                                                    "children": {
+                                                      "d4": {
+                                                        "games": 6,
+                                                        "wins": 4,
+                                                        "draws": 2,
+                                                        "losses": 0,
+                                                        "children": {
+                                                          "cxd4": {
+                                                            "games": 6,
+                                                            "wins": 4,
+                                                            "draws": 2,
+                                                            "losses": 0,
+                                                            "children": {
+                                                              "cxd4": {
+                                                                "games": 6,
+                                                                "wins": 4,
+                                                                "draws": 2,
+                                                                "losses": 0,
+                                                                "children": {
+                                                                  "d5": {
+                                                                    "games": 6,
+                                                                    "wins": 4,
+                                                                    "draws": 2,
+                                                                    "losses": 0,
+                                                                    "children": {
+                                                                      "e5": {
+                                                                        "games": 6,
+                                                                        "wins": 4,
+                                                                        "draws": 2,
+                                                                        "losses": 0,
+                                                                        "children": {
+                                                                          "Ng8": {
+                                                                            "games": 5,
+                                                                            "wins": 3,
+                                                                            "draws": 2,
+                                                                            "losses": 0,
+                                                                            "children": {}
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "Nc3": {
+                "games": 5,
+                "wins": 4,
+                "draws": 0,
+                "losses": 1,
+                "children": {}
+              }
+            }
+          },
+          "Nc6": {
+            "games": 142,
+            "wins": 88,
+            "draws": 26,
+            "losses": 28,
+            "children": {
+              "Bb5": {
+                "games": 77,
+                "wins": 53,
+                "draws": 10,
+                "losses": 14,
+                "children": {
+                  "g6": {
+                    "games": 23,
+                    "wins": 15,
+                    "draws": 3,
+                    "losses": 5,
+                    "children": {
+                      "O-O": {
+                        "games": 17,
+                        "wins": 10,
+                        "draws": 3,
+                        "losses": 4,
+                        "children": {
+                          "Bg7": {
+                            "games": 17,
+                            "wins": 10,
+                            "draws": 3,
+                            "losses": 4,
+                            "children": {
+                              "c3": {
+                                "games": 8,
+                                "wins": 4,
+                                "draws": 2,
+                                "losses": 2,
+                                "children": {
+                                  "Nf6": {
+                                    "games": 5,
+                                    "wins": 2,
+                                    "draws": 1,
+                                    "losses": 2,
+                                    "children": {
+                                      "Re1": {
+                                        "games": 5,
+                                        "wins": 2,
+                                        "draws": 1,
+                                        "losses": 2,
+                                        "children": {}
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "Re1": {
+                                "games": 7,
+                                "wins": 4,
+                                "draws": 1,
+                                "losses": 2,
+                                "children": {
+                                  "e5": {
+                                    "games": 6,
+                                    "wins": 4,
+                                    "draws": 1,
+                                    "losses": 1,
+                                    "children": {
+                                      "Bxc6": {
+                                        "games": 6,
+                                        "wins": 4,
+                                        "draws": 1,
+                                        "losses": 1,
+                                        "children": {
+                                          "dxc6": {
+                                            "games": 6,
+                                            "wins": 4,
+                                            "draws": 1,
+                                            "losses": 1,
+                                            "children": {
+                                              "d3": {
+                                                "games": 5,
+                                                "wins": 3,
+                                                "draws": 1,
+                                                "losses": 1,
+                                                "children": {}
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "e6": {
+                    "games": 24,
+                    "wins": 15,
+                    "draws": 2,
+                    "losses": 7,
+                    "children": {
+                      "O-O": {
+                        "games": 12,
+                        "wins": 7,
+                        "draws": 1,
+                        "losses": 4,
+                        "children": {
+                          "Nge7": {
+                            "games": 11,
+                            "wins": 6,
+                            "draws": 1,
+                            "losses": 4,
+                            "children": {
+                              "b3": {
+                                "games": 5,
+                                "wins": 2,
+                                "draws": 1,
+                                "losses": 2,
+                                "children": {
+                                  "a6": {
+                                    "games": 5,
+                                    "wins": 2,
+                                    "draws": 1,
+                                    "losses": 2,
+                                    "children": {
+                                      "Bxc6": {
+                                        "games": 5,
+                                        "wins": 2,
+                                        "draws": 1,
+                                        "losses": 2,
+                                        "children": {
+                                          "Nxc6": {
+                                            "games": 5,
+                                            "wins": 2,
+                                            "draws": 1,
+                                            "losses": 2,
+                                            "children": {
+                                              "Bb2": {
+                                                "games": 5,
+                                                "wins": 2,
+                                                "draws": 1,
+                                                "losses": 2,
+                                                "children": {
+                                                  "d6": {
+                                                    "games": 5,
+                                                    "wins": 2,
+                                                    "draws": 1,
+                                                    "losses": 2,
+                                                    "children": {
+                                                      "d4": {
+                                                        "games": 5,
+                                                        "wins": 2,
+                                                        "draws": 1,
+                                                        "losses": 2,
+                                                        "children": {
+                                                          "cxd4": {
+                                                            "games": 5,
+                                                            "wins": 2,
+                                                            "draws": 1,
+                                                            "losses": 2,
+                                                            "children": {
+                                                              "Nxd4": {
+                                                                "games": 5,
+                                                                "wins": 2,
+                                                                "draws": 1,
+                                                                "losses": 2,
+                                                                "children": {}
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "Bxc6": {
+                        "games": 10,
+                        "wins": 7,
+                        "draws": 1,
+                        "losses": 2,
+                        "children": {
+                          "bxc6": {
+                            "games": 10,
+                            "wins": 7,
+                            "draws": 1,
+                            "losses": 2,
+                            "children": {}
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "Nf6": {
+                    "games": 13,
+                    "wins": 12,
+                    "draws": 1,
+                    "losses": 0,
+                    "children": {
+                      "Nc3": {
+                        "games": 6,
+                        "wins": 5,
+                        "draws": 1,
+                        "losses": 0,
+                        "children": {}
+                      }
+                    }
+                  },
+                  "e5": {
+                    "games": 7,
+                    "wins": 4,
+                    "draws": 3,
+                    "losses": 0,
+                    "children": {
+                      "O-O": {
+                        "games": 6,
+                        "wins": 3,
+                        "draws": 3,
+                        "losses": 0,
+                        "children": {
+                          "Bd6": {
+                            "games": 6,
+                            "wins": 3,
+                            "draws": 3,
+                            "losses": 0,
+                            "children": {}
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "g5": {
+                    "games": 9,
+                    "wins": 7,
+                    "draws": 0,
+                    "losses": 2,
+                    "children": {
+                      "Nxg5": {
+                        "games": 5,
+                        "wins": 5,
+                        "draws": 0,
+                        "losses": 0,
+                        "children": {
+                          "Nf6": {
+                            "games": 5,
+                            "wins": 5,
+                            "draws": 0,
+                            "losses": 0,
+                            "children": {}
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "d4": {
+                "games": 34,
+                "wins": 18,
+                "draws": 8,
+                "losses": 8,
+                "children": {
+                  "cxd4": {
+                    "games": 34,
+                    "wins": 18,
+                    "draws": 8,
+                    "losses": 8,
+                    "children": {
+                      "Nxd4": {
+                        "games": 34,
+                        "wins": 18,
+                        "draws": 8,
+                        "losses": 8,
+                        "children": {
+                          "Nf6": {
+                            "games": 19,
+                            "wins": 10,
+                            "draws": 6,
+                            "losses": 3,
+                            "children": {
+                              "Nc3": {
+                                "games": 19,
+                                "wins": 10,
+                                "draws": 6,
+                                "losses": 3,
+                                "children": {
+                                  "e5": {
+                                    "games": 11,
+                                    "wins": 6,
+                                    "draws": 3,
+                                    "losses": 2,
+                                    "children": {
+                                      "Ndb5": {
+                                        "games": 9,
+                                        "wins": 5,
+                                        "draws": 3,
+                                        "losses": 1,
+                                        "children": {
+                                          "d6": {
+                                            "games": 9,
+                                            "wins": 5,
+                                            "draws": 3,
+                                            "losses": 1,
+                                            "children": {
+                                              "Bg5": {
+                                                "games": 5,
+                                                "wins": 2,
+                                                "draws": 2,
+                                                "losses": 1,
+                                                "children": {
+                                                  "a6": {
+                                                    "games": 5,
+                                                    "wins": 2,
+                                                    "draws": 2,
+                                                    "losses": 1,
+                                                    "children": {
+                                                      "Na3": {
+                                                        "games": 5,
+                                                        "wins": 2,
+                                                        "draws": 2,
+                                                        "losses": 1,
+                                                        "children": {
+                                                          "b5": {
+                                                            "games": 5,
+                                                            "wins": 2,
+                                                            "draws": 2,
+                                                            "losses": 1,
+                                                            "children": {}
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "e6": {
+                            "games": 8,
+                            "wins": 6,
+                            "draws": 0,
+                            "losses": 2,
+                            "children": {
+                              "Nc3": {
+                                "games": 7,
+                                "wins": 5,
+                                "draws": 0,
+                                "losses": 2,
+                                "children": {
+                                  "Qc7": {
+                                    "games": 7,
+                                    "wins": 5,
+                                    "draws": 0,
+                                    "losses": 2,
+                                    "children": {}
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "g6": {
+                            "games": 6,
+                            "wins": 1,
+                            "draws": 2,
+                            "losses": 3,
+                            "children": {
+                              "c4": {
+                                "games": 6,
+                                "wins": 1,
+                                "draws": 2,
+                                "losses": 3,
+                                "children": {
+                                  "Bg7": {
+                                    "games": 5,
+                                    "wins": 1,
+                                    "draws": 2,
+                                    "losses": 2,
+                                    "children": {
+                                      "Be3": {
+                                        "games": 5,
+                                        "wins": 1,
+                                        "draws": 2,
+                                        "losses": 2,
+                                        "children": {
+                                          "Qb6": {
+                                            "games": 5,
+                                            "wins": 1,
+                                            "draws": 2,
+                                            "losses": 2,
+                                            "children": {}
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "Bc4": {
+                "games": 11,
+                "wins": 5,
+                "draws": 2,
+                "losses": 4,
+                "children": {
+                  "e6": {
+                    "games": 10,
+                    "wins": 4,
+                    "draws": 2,
+                    "losses": 4,
+                    "children": {
+                      "O-O": {
+                        "games": 8,
+                        "wins": 3,
+                        "draws": 1,
+                        "losses": 4,
+                        "children": {
+                          "a6": {
+                            "games": 5,
+                            "wins": 2,
+                            "draws": 1,
+                            "losses": 2,
+                            "children": {}
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "c3": {
+                "games": 8,
+                "wins": 6,
+                "draws": 2,
+                "losses": 0,
+                "children": {
+                  "e5": {
+                    "games": 7,
+                    "wins": 6,
+                    "draws": 1,
+                    "losses": 0,
+                    "children": {
+                      "Bc4": {
+                        "games": 6,
+                        "wins": 6,
+                        "draws": 0,
+                        "losses": 0,
+                        "children": {
+                          "Nf6": {
+                            "games": 6,
+                            "wins": 6,
+                            "draws": 0,
+                            "losses": 0,
+                            "children": {}
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "Nc3": {
+                "games": 9,
+                "wins": 5,
+                "draws": 3,
+                "losses": 1,
+                "children": {}
+              }
+            }
+          },
+          "g6": {
+            "games": 12,
+            "wins": 8,
+            "draws": 2,
+            "losses": 2,
+            "children": {
+              "c3": {
+                "games": 6,
+                "wins": 5,
+                "draws": 1,
+                "losses": 0,
+                "children": {}
+              },
+              "d4": {
+                "games": 5,
+                "wins": 3,
+                "draws": 1,
+                "losses": 1,
+                "children": {}
+              }
+            }
+          },
+          "a6": {
+            "games": 27,
+            "wins": 19,
+            "draws": 1,
+            "losses": 7,
+            "children": {
+              "c3": {
+                "games": 11,
+                "wins": 6,
+                "draws": 0,
+                "losses": 5,
+                "children": {
+                  "e6": {
+                    "games": 7,
+                    "wins": 4,
+                    "draws": 0,
+                    "losses": 3,
+                    "children": {
+                      "d4": {
+                        "games": 7,
+                        "wins": 4,
+                        "draws": 0,
+                        "losses": 3,
+                        "children": {
+                          "d5": {
+                            "games": 7,
+                            "wins": 4,
+                            "draws": 0,
+                            "losses": 3,
+                            "children": {}
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "c4": {
+                "games": 6,
+                "wins": 5,
+                "draws": 0,
+                "losses": 1,
+                "children": {}
+              },
+              "Nc3": {
+                "games": 5,
+                "wins": 5,
+                "draws": 0,
+                "losses": 0,
+                "children": {}
+              }
+            }
+          },
+          "b6": {
+            "games": 6,
+            "wins": 4,
+            "draws": 0,
+            "losses": 2,
+            "children": {
+              "d4": {
+                "games": 5,
+                "wins": 3,
+                "draws": 0,
+                "losses": 2,
+                "children": {
+                  "cxd4": {
+                    "games": 5,
+                    "wins": 3,
+                    "draws": 0,
+                    "losses": 2,
+                    "children": {}
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Nc3": {
+        "games": 44,
+        "wins": 25,
+        "draws": 9,
+        "losses": 10,
+        "children": {
+          "Nc6": {
+            "games": 18,
+            "wins": 12,
+            "draws": 3,
+            "losses": 3,
+            "children": {
+              "Nf3": {
+                "games": 6,
+                "wins": 4,
+                "draws": 2,
+                "losses": 0,
+                "children": {}
+              },
+              "Bb5": {
+                "games": 8,
+                "wins": 6,
+                "draws": 1,
+                "losses": 1,
+                "children": {
+                  "Nd4": {
+                    "games": 6,
+                    "wins": 5,
+                    "draws": 1,
+                    "losses": 0,
+                    "children": {
+                      "Nf3": {
+                        "games": 5,
+                        "wins": 4,
+                        "draws": 1,
+                        "losses": 0,
+                        "children": {}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "e6": {
+            "games": 10,
+            "wins": 5,
+            "draws": 3,
+            "losses": 2,
+            "children": {
+              "Nf3": {
+                "games": 6,
+                "wins": 2,
+                "draws": 2,
+                "losses": 2,
+                "children": {
+                  "a6": {
+                    "games": 5,
+                    "wins": 1,
+                    "draws": 2,
+                    "losses": 2,
+                    "children": {}
+                  }
+                }
+              }
+            }
+          },
+          "a6": {
+            "games": 8,
+            "wins": 5,
+            "draws": 1,
+            "losses": 2,
+            "children": {}
+          },
+          "d6": {
+            "games": 6,
+            "wins": 2,
+            "draws": 1,
+            "losses": 3,
+            "children": {}
+          }
+        }
+      },
+      "d4": {
+        "games": 54,
+        "wins": 41,
+        "draws": 3,
+        "losses": 10,
+        "children": {
+          "cxd4": {
+            "games": 52,
+            "wins": 39,
+            "draws": 3,
+            "losses": 10,
+            "children": {
+              "c3": {
+                "games": 48,
+                "wins": 36,
+                "draws": 3,
+                "losses": 9,
+                "children": {
+                  "dxc3": {
+                    "games": 28,
+                    "wins": 21,
+                    "draws": 1,
+                    "losses": 6,
+                    "children": {
+                      "Nxc3": {
+                        "games": 28,
+                        "wins": 21,
+                        "draws": 1,
+                        "losses": 6,
+                        "children": {
+                          "Nc6": {
+                            "games": 27,
+                            "wins": 20,
+                            "draws": 1,
+                            "losses": 6,
+                            "children": {
+                              "Nf3": {
+                                "games": 27,
+                                "wins": 20,
+                                "draws": 1,
+                                "losses": 6,
+                                "children": {
+                                  "d6": {
+                                    "games": 10,
+                                    "wins": 9,
+                                    "draws": 0,
+                                    "losses": 1,
+                                    "children": {
+                                      "Bc4": {
+                                        "games": 10,
+                                        "wins": 9,
+                                        "draws": 0,
+                                        "losses": 1,
+                                        "children": {
+                                          "e6": {
+                                            "games": 10,
+                                            "wins": 9,
+                                            "draws": 0,
+                                            "losses": 1,
+                                            "children": {
+                                              "O-O": {
+                                                "games": 10,
+                                                "wins": 9,
+                                                "draws": 0,
+                                                "losses": 1,
+                                                "children": {}
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "e6": {
+                                    "games": 14,
+                                    "wins": 8,
+                                    "draws": 1,
+                                    "losses": 5,
+                                    "children": {
+                                      "Be2": {
+                                        "games": 5,
+                                        "wins": 4,
+                                        "draws": 1,
+                                        "losses": 0,
+                                        "children": {}
+                                      },
+                                      "Bc4": {
+                                        "games": 6,
+                                        "wins": 2,
+                                        "draws": 0,
+                                        "losses": 4,
+                                        "children": {}
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "Nf6": {
+                    "games": 6,
+                    "wins": 4,
+                    "draws": 1,
+                    "losses": 1,
+                    "children": {
+                      "e5": {
+                        "games": 6,
+                        "wins": 4,
+                        "draws": 1,
+                        "losses": 1,
+                        "children": {
+                          "Nd5": {
+                            "games": 6,
+                            "wins": 4,
+                            "draws": 1,
+                            "losses": 1,
+                            "children": {
+                              "Bc4": {
+                                "games": 5,
+                                "wins": 3,
+                                "draws": 1,
+                                "losses": 1,
+                                "children": {
+                                  "Nb6": {
+                                    "games": 5,
+                                    "wins": 3,
+                                    "draws": 1,
+                                    "losses": 1,
+                                    "children": {
+                                      "Bb3": {
+                                        "games": 5,
+                                        "wins": 3,
+                                        "draws": 1,
+                                        "losses": 1,
+                                        "children": {}
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "d3": {
+                    "games": 6,
+                    "wins": 5,
+                    "draws": 1,
+                    "losses": 0,
+                    "children": {
+                      "Bxd3": {
+                        "games": 6,
+                        "wins": 5,
+                        "draws": 1,
+                        "losses": 0,
+                        "children": {
+                          "Nc6": {
+                            "games": 5,
+                            "wins": 4,
+                            "draws": 1,
+                            "losses": 0,
+                            "children": {
+                              "c4": {
+                                "games": 5,
+                                "wins": 4,
+                                "draws": 1,
+                                "losses": 0,
+                                "children": {}
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "c3": {
+        "games": 62,
+        "wins": 35,
+        "draws": 11,
+        "losses": 16,
+        "children": {
+          "d5": {
+            "games": 38,
+            "wins": 25,
+            "draws": 6,
+            "losses": 7,
+            "children": {
+              "exd5": {
+                "games": 37,
+                "wins": 24,
+                "draws": 6,
+                "losses": 7,
+                "children": {
+                  "Nf6": {
+                    "games": 33,
+                    "wins": 21,
+                    "draws": 5,
+                    "losses": 7,
+                    "children": {
+                      "d4": {
+                        "games": 9,
+                        "wins": 6,
+                        "draws": 2,
+                        "losses": 1,
+                        "children": {
+                          "Nxd5": {
+                            "games": 5,
+                            "wins": 3,
+                            "draws": 1,
+                            "losses": 1,
+                            "children": {}
+                          }
+                        }
+                      },
+                      "Qa4+": {
+                        "games": 5,
+                        "wins": 2,
+                        "draws": 2,
+                        "losses": 1,
+                        "children": {
+                          "Nbd7": {
+                            "games": 5,
+                            "wins": 2,
+                            "draws": 2,
+                            "losses": 1,
+                            "children": {}
+                          }
+                        }
+                      },
+                      "Bb5+": {
+                        "games": 16,
+                        "wins": 11,
+                        "draws": 1,
+                        "losses": 4,
+                        "children": {
+                          "Nbd7": {
+                            "games": 16,
+                            "wins": 11,
+                            "draws": 1,
+                            "losses": 4,
+                            "children": {
+                              "d4": {
+                                "games": 13,
+                                "wins": 8,
+                                "draws": 1,
+                                "losses": 4,
+                                "children": {
+                                  "a6": {
+                                    "games": 13,
+                                    "wins": 8,
+                                    "draws": 1,
+                                    "losses": 4,
+                                    "children": {
+                                      "Be2": {
+                                        "games": 13,
+                                        "wins": 8,
+                                        "draws": 1,
+                                        "losses": 4,
+                                        "children": {
+                                          "Nxd5": {
+                                            "games": 13,
+                                            "wins": 8,
+                                            "draws": 1,
+                                            "losses": 4,
+                                            "children": {
+                                              "Nf3": {
+                                                "games": 12,
+                                                "wins": 8,
+                                                "draws": 1,
+                                                "losses": 3,
+                                                "children": {
+                                                  "e6": {
+                                                    "games": 12,
+                                                    "wins": 8,
+                                                    "draws": 1,
+                                                    "losses": 3,
+                                                    "children": {
+                                                      "O-O": {
+                                                        "games": 11,
+                                                        "wins": 7,
+                                                        "draws": 1,
+                                                        "losses": 3,
+                                                        "children": {
+                                                          "b6": {
+                                                            "games": 10,
+                                                            "wins": 6,
+                                                            "draws": 1,
+                                                            "losses": 3,
+                                                            "children": {
+                                                              "c4": {
+                                                                "games": 9,
+                                                                "wins": 6,
+                                                                "draws": 1,
+                                                                "losses": 2,
+                                                                "children": {
+                                                                  "N5f6": {
+                                                                    "games": 9,
+                                                                    "wins": 6,
+                                                                    "draws": 1,
+                                                                    "losses": 2,
+                                                                    "children": {
+                                                                      "Nc3": {
+                                                                        "games": 7,
+                                                                        "wins": 5,
+                                                                        "draws": 1,
+                                                                        "losses": 1,
+                                                                        "children": {
+                                                                          "Bb7": {
+                                                                            "games": 7,
+                                                                            "wins": 5,
+                                                                            "draws": 1,
+                                                                            "losses": 1,
+                                                                            "children": {
+                                                                              "Re1": {
+                                                                                "games": 5,
+                                                                                "wins": 3,
+                                                                                "draws": 1,
+                                                                                "losses": 1,
+                                                                                "children": {
+                                                                                  "cxd4": {
+                                                                                    "games": 5,
+                                                                                    "wins": 3,
+                                                                                    "draws": 1,
+                                                                                    "losses": 1,
+                                                                                    "children": {}
+                                                                                  }
+                                                                                }
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "Nf6": {
+            "games": 8,
+            "wins": 3,
+            "draws": 1,
+            "losses": 4,
+            "children": {
+              "e5": {
+                "games": 8,
+                "wins": 3,
+                "draws": 1,
+                "losses": 4,
+                "children": {
+                  "Nd5": {
+                    "games": 8,
+                    "wins": 3,
+                    "draws": 1,
+                    "losses": 4,
+                    "children": {}
+                  }
+                }
+              }
+            }
+          },
+          "e6": {
+            "games": 9,
+            "wins": 5,
+            "draws": 2,
+            "losses": 2,
+            "children": {
+              "d4": {
+                "games": 9,
+                "wins": 5,
+                "draws": 2,
+                "losses": 2,
+                "children": {
+                  "d5": {
+                    "games": 9,
+                    "wins": 5,
+                    "draws": 2,
+                    "losses": 2,
+                    "children": {
+                      "exd5": {
+                        "games": 6,
+                        "wins": 4,
+                        "draws": 1,
+                        "losses": 1,
+                        "children": {
+                          "exd5": {
+                            "games": 6,
+                            "wins": 4,
+                            "draws": 1,
+                            "losses": 1,
+                            "children": {}
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Be2": {
+        "games": 9,
+        "wins": 6,
+        "draws": 0,
+        "losses": 3,
+        "children": {
+          "Nc6": {
+            "games": 7,
+            "wins": 4,
+            "draws": 0,
+            "losses": 3,
+            "children": {}
+          }
+        }
+      }
+    }
+  }
+}

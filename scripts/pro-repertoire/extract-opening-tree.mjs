@@ -341,6 +341,56 @@ const OPENINGS = {
     minPrefix: ['e4', 'c5', 'Nc3'],
     maxDepth: 80,
   },
+  // ── Magnus Carlsen (data-discovery candidates) ──
+  'carlsen-open-sicilian': {
+    name: 'Open Sicilian (White)',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'c5', 'Nf3'],
+    maxDepth: 80,
+  },
+  'carlsen-d4-c4': {
+    name: 'Queen\'s Pawn / Catalan (White)',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['d4', 'Nf6', 'c4'],
+    maxDepth: 80,
+  },
+  'carlsen-e4e5-white': {
+    name: 'Open Games / Italian (White)',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'e5', 'Nf3'],
+    maxDepth: 80,
+  },
+  'carlsen-1e5-black': {
+    name: '1...e5 / Berlin (Black)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['e4', 'e5'],
+    maxDepth: 80,
+  },
+  'carlsen-sicilian-black': {
+    name: 'Sicilian Defense (Black)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['e4', 'c5'],
+    maxDepth: 80,
+  },
+  'carlsen-nimzo-qgd-black': {
+    name: 'Nimzo / QGD (Black)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['d4', 'Nf6', 'c4', 'e6'],
+    maxDepth: 80,
+  },
+  'carlsen-kid-black': {
+    name: "King's Indian / Grünfeld (Black)",
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['d4', 'Nf6', 'c4', 'g6'],
+    maxDepth: 80,
+  },
 };
 
 const cfg = OPENINGS[OPENING_ID];

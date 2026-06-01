@@ -1,3 +1,56 @@
+# PLAN — Pro-Rep Build: MAGNUS CARLSEN repertoire (2026-06-01)
+
+**Player:** `carlsen` (Magnus Carlsen) · chess.com `magnuscarlsen` · 9,336
+games on disk (gitignored — re-fetch: `node scripts/pro-repertoire/fetch-chesscom.mjs magnuscarlsen`).
+**Scope (David):** a MULTI-opening repertoire, matching the standard of the
+existing pro-reps (Gotham 18 / Naroditsky 10 / Rosen 8 / Hikaru 5). Build to
+full G9.1 parity per opening; **2-3 model games per variation** (David: "more
+than just one game"). Push straight to `main`.
+
+## The 5 signature openings (data-derived, frequency-ranked)
+
+| # | id | Line | Games | Score | Spine terminus |
+|---|---|---|---|---|---|
+| 1 | `pro-carlsen-open-sicilian` | Open Sicilian (W) | 588 | 80% | Najdorf Classical 6.Be2 e5 |
+| 2 | `pro-carlsen-ruy-lopez` | Ruy/Open Games (W) | 507 | 76% | Closed Ruy c3 d5 |
+| 3 | `pro-carlsen-sicilian` | Sicilian (B) | 729 | 72% | Najdorf English Attack Bg5 |
+| 4 | `pro-carlsen-berlin` | 1...e5 / Berlin (B) | 367 | 66% | Berlin endgame line |
+| 5 | `pro-carlsen-kid` | King's Indian (B) | 164 | 75% | Classical KID e5 |
+
+Trees: `data/sources/magnuscarlsen-trees/carlsen-*.json`.
+
+### Variation tabs per opening (from tree frequency)
+- **Open Sicilian (W):** Najdorf (main) · Rossolimo vs ...Nc6 (138g) · Taimanov vs ...e6 (82g) · Sozin Bc4 (72g) · Moscow Bb5+ (48g) · 2...Nf6 (28g)
+- **Ruy/Open Games (W):** Closed Ruy (main) · Italian Bc4 (121g) · Berlin (68g) · Petrov (64g) · Scotch d4 (39g) · Anti-Berlin d3 (34g)
+- **Sicilian (B):** Najdorf Bg5 (main) · Taimanov ...e6 (158g) · Rossolimo (142g) · Alapin c3 (62g) · Moscow Bb5+ (55g) · Smith-Morra d4 (54g)
+- **Berlin (B):** Berlin endgame (main) · Italian Bc4 (89g) · Open Berlin Nxe4 (38g) · Steinitz ...d6 (27g) · Scotch d4 (25g) · Four Knights (25g)
+- **KID (B):** Classical (main) · Fianchetto g3 (22g) · Nf3 system (29g) · Makogonov h3 (11g)
+
+## Build order (G9.3 Gate D + efficient-recipe layers, batched across all 5)
+- [x] STEP 0-3 — fetch · trees · variation ID (above)
+- [ ] STEP 4-5 — deep-build per variation + honest plan/endgame counts
+- [ ] STEP 6 — voice corpus (Magnus per-opening teaching, web)
+- [ ] LAYER 1 (Gate A) — LessonScripts main+variations, all 5
+- [ ] LAYER 2 — model games (≥2/variation, wins only, hand overview)
+- [ ] LAYER 3 (Gate C) — middlegame plans anchored at spine terminus
+- [ ] LAYER 4 — pitfalls (ENGINE-verified)
+- [ ] LAYER 5 — endgames (real game → ending, only where data supports)
+- [ ] pro-repertoires.json entries · register LESSONS/VARIATION_LESSONS · bump PRO_DATA_REVISION
+- [ ] STEP 15 — gates + `npm run ship-check` → READY TO PUSH
+- [ ] STEP 16 — push main + 3-instrument audit + Gate A/B watch-depth prod audit
+
+## Decisions log
+- 2026-06-01: Carlsen picked; Sicilian-White spine (14-ply) > d4-c4 (8-ply).
+- 2026-06-01: Scoped to 5 openings (David: "more than one opening"), matching
+  the Hikaru build count; coherent White(e4) + Black(vs e4 ×2, vs d4) coverage.
+
+## Next-session pickup
+Resume at first unchecked LAYER. Each opening must be COMPLETE (Gate A lesson +
+plans + ≥2 model games + entry + registered) before ship — no half-builds (G9.3).
+
+---
+---
+
 # PLAN — Masterclass DATA-REBUILD (2026-05-29, scope-corrected 2026-05-30)
 
 > Doctrine: `docs/plans/2026-05-29-masterclass-data-rebuild-doctrine.md`.
