@@ -42,6 +42,33 @@ ones** — a G9.1 violation. Data-faithful modal spines (from
 NB King's Gambit (f4) is his 2nd-most White vs e5 (824) — a whole opening
 missing from his repertoire; consider adding as a new opening.
 
+## TURNKEY REBUILD SPECS (data-derived, game counts in parens)
+
+### sicilian-black (rebuild main + ALL variations — current main+vars are
+theory-default, 0–3 games each)
+- **MAIN — Open Sicilian …Nc6/…e5 (Kalashnikov)** [697g]:
+  `e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 e5 Nxc6 bxc6 Nc3 Nf6 Bg5 Bb4` (…h6/…O-O)
+- **vs Bc4 (Bowdler, his #1 anti-Sic, 626g):** `e4 c5 Bc4 e6 Nf3 d5 exd5 exd5
+  Bb5+ Nc6 O-O Nf6 Re1+ Be7 Nc3 O-O d3`
+- **vs Alapin 2.c3 (332g) — …d5 (not …Nf6):** `e4 c5 c3 d5 exd5 Qxd5 d4 Nf6
+  Nf3 Bg4 Be2 e6 O-O Be7 h3 Bh5`
+- **vs Rossolimo Bb5 (214g) — …Nd4:** `e4 c5 Nf3 Nc6 Bb5 Nd4 Nxd4 cxd4 O-O e5
+  c3 Bc5 cxd4 Bxd4 Nc3 Nf6`
+- **vs Closed Nc3 (555g):** `e4 c5 Nc3 Nc6 Nf3 e6 d4 cxd4 Nxd4 Bc5 Nxc6 bxc6
+  Bd3 d5 exd5 cxd5 O-O`
+
+### open-e5 (rebuild — make Italian the MAIN; he's an …e5 player, 428g total)
+- **MAIN — vs Italian Bc4 (66g):** `e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Bc5 …` (Giuoco/
+  Two Knights, …Nf6 then …Bc5)
+- **vs Ruy Bb5 (35g) — Bird's …Nd4:** `e4 e5 Nf3 Nc6 Bb5 Nd4 Nxd4 exd4 d3 a6
+  Bc4 b5 Bb3 Bc5 O-O Nf6`
+- **vs Scotch d4 (15g):** `e4 e5 Nf3 Nc6 d4 exd4 Nxd4 …`
+- **vs Four Knights Nc3 (18g):** `e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 d6 d4 …`
+
+### MISSING WEAPON — King's Gambit (white vs e5, 824 games — his 2nd-most!)
+Consider a NEW opening `pro-samayraina-kings-gambit`: `e4 e5 f4 …` — he plays
+it 824 times. Currently absent entirely.
+
 ## Parity targets (per-layer, vs Naroditsky 81 plans/53 tabs/49 models)
 
 tabs 20→~40 · model games 24→~45 · **middlegame plans 8→~45** · pitfalls
