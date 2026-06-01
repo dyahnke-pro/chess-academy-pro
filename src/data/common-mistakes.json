@@ -3340,5 +3340,43 @@
         "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation"
       ]
     }
+  ],
+  "pro-aman-rossolimo": [
+    {
+      "fen": "r1bqkbnr/pp1ppp1p/2n3p1/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+      "wrongMove": "Ba4",
+      "correctMove": "Bxc6",
+      "explanation": "Keeping the bishop with Ba4 here misses the whole point: against the …g6 fianchetto, Bxc6 is right — it doubles Black's pawns and damages the structure behind the Dragon bishop. The structural gain is worth the bishop pair. Trade now, then clamp the centre.",
+      "shortNarration": "Bxc6 — take the doubled pawns.",
+      "sources": [
+        "concept:pos-development",
+        "book:sicilian-rossolimo",
+        "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation"
+      ]
+    },
+    {
+      "fen": "r1bqk2r/p2pppbp/2p2np1/2p5/4P3/5N2/PPPP1PPP/RNBQR1K1 w kq - 4 7",
+      "wrongMove": "d3",
+      "correctMove": "e5",
+      "explanation": "A passive d3 lets Black untangle with …d6 and …O-O, and the doubled pawns stop hurting. The thematic e5 is the move: gain space, kick the knight, and use the pawn majority to cramp Black and blunt the g7-bishop. Push, don't sit.",
+      "shortNarration": "e5 — clamp, don’t sit on d3.",
+      "sources": [
+        "concept:pos-development",
+        "book:sicilian-rossolimo",
+        "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation"
+      ]
+    },
+    {
+      "fen": "r1bqkb1r/1p1pnppp/p1n1p3/1Bp5/4P3/5N2/PPPP1PPP/RNBQR1K1 w kq - 0 6",
+      "wrongMove": "Bxc6",
+      "correctMove": "Bf1",
+      "explanation": "Against the …e6 setup, trading …Bxc6 here just helps Black — the doubled pawns aren't weak with the bishop still home, and Black gets the bishop pair for free. Retreat Bf1 instead: keep the bishop pair and reroute it to a better diagonal. The Rossolimo Bxc6 trade is for the …g6 lines, not this one.",
+      "shortNarration": "Bf1 — keep the bishop here.",
+      "sources": [
+        "concept:pos-development",
+        "book:sicilian-rossolimo",
+        "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation"
+      ]
+    }
   ]
 }

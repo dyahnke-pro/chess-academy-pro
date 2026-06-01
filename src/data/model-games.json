@@ -8949,6 +8949,105 @@
     "overview": "Hambleton's Exchange in action: a blitz win over undefined (undefined) in 2019. Watch the Exchange structure with the long-term kingside pawn majority. A clean model of the plan working against a strong opponent."
   },
   {
+    "id": "mg-pro-aman-rossolimo-g6-fianch-0",
+    "openingId": "pro-aman-rossolimo",
+    "result": "1-0",
+    "year": 2019,
+    "event": "chess.com blitz (2019-12-12)",
+    "pgn": "e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 bxc6 O-O Bg7 Re1 Nh6 c3 O-O d4 cxd4 cxd4 d5 e5 f6 exf6 exf6 Nbd2 Re8 Rxe8+ Qxe8 Nb3 Nf7 Bd2 Bf5 Rc1 g5 Na5 Rc8 Bb4 h5 Qe1 Be4 Nd2 g4 Nxe4 dxe4 Qc3 f5 Nxc6 Kh8 Qc4 e3 d5 Ne5 Qc2 exf2+ Kxf2 g3+ Kg1 Ng4 Bc5 gxh2+ Kh1 Qd7 Rd1 Re8 Qd3 Re4 b4 Qe8 Qf1 h4 d6 Qxc6 d7 Bf6 Rd6 Qc7 Qd1 Kg7 Rxf6 Kxf6 d8=Q+ Qxd8 Qxd8+ Kg6 Qxh4 Re2 Bd6 Rd2 Bxh2 Nf2+ Kg1 Ng4 Bg3 Rd1+ Be1 Ra1 Qg3 Rxa2 Qd6+ Kg5 Bd2+ Kh5 Qf4 Ra1+ Qf1 Rxf1+ Kxf1 Nf6 b5 a6 bxa6 Nd5 Bf4 Nb6 Be3 Na8 g3 Kg4 Bf4 Kf3 Ke1 Ke4 Kd2 Nb6 Kc3 Na8 Kb4 Kd5 Kb5 Nc7+ Kb6 Nxa6 Kxa6 Ke4 Kb6 Kf3 Kc7 Kg4 Kd6 Kf3 Kd7 Kg4 Ke8 Kh5 Kf7 Kg4 Ke7 Kf3 Ke6 Kg4 Kd5 Kh5 Kc4 Kg6 Kb3 Kf7 Kb2 Ke6 Ka1",
+    "sourceUrl": "https://www.chess.com/game/live/4293888563",
+    "studentSide": "white",
+    "overview": "Hambleton's Rossolimo vs …g6 in action: a blitz win over undefined (undefined) in 2019. Watch the Bxc6 doubling, the e5/c4/d4 clamp, and the blunted Dragon bishop. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-rossolimo-g6-fianch-1",
+    "openingId": "pro-aman-rossolimo",
+    "result": "1-0",
+    "year": 2023,
+    "event": "chess.com bullet (2023-08-10)",
+    "pgn": "e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 dxc6 O-O Qc7 Re1 e5 c3 c4 b3 cxb3 axb3 Bg4 h3 Bxf3 Qxf3 Be7 Ba3 Nf6 d4 O-O Nd2 Rfe8 dxe5 Qxe5 Nc4 Qe6 e5 Nd5 Bd6 Bd8 Rad1 a6 Nd2 Ba5 Ne4 Bd8 c4 Nb6 Nc5 Qc8 e6 fxe6 Ne4 Nd7 h4 Bxh4 Qh3 Be7 Qxe6+ Kg7 Bxe7",
+    "sourceUrl": "https://www.chess.com/game/live/85398030171",
+    "studentSide": "white",
+    "overview": "Hambleton's Rossolimo vs …g6 in action: a bullet win over undefined (undefined) in 2023. Watch the Bxc6 doubling, the e5/c4/d4 clamp, and the blunted Dragon bishop. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-rossolimo-g6-fianch-2",
+    "openingId": "pro-aman-rossolimo",
+    "result": "1-0",
+    "year": 2024,
+    "event": "chess.com bullet (2024-10-24)",
+    "pgn": "e4 c5 Nf3 Nc6 Bb5 g6 O-O Bg7 Re1 Nf6 Bxc6 dxc6 e5 Nd5 d3 Nc7 Nc3 Ne6 h3 O-O Ne4 f5 exf6 exf6 Bd2 b6 Bc3 Re8 a4 a5 Ned2 Ba6 b3 Qd7 Qc1 f5 Bxg7 Qxg7 Nf1 Nd4 Nxd4 cxd4 Qf4 Qd7 Nd2 c5 h4 Bb7 h5 Qc6 f3 gxh5 Nc4 Re6 Rxe6 Qxe6 Qc7 Qc6 Qxc6 Bxc6 Nxb6 Re8 Kf2 Kf7 Nc4 Ra8 Ne5+ Kf6 Nxc6 Ra6 Nxa5 Rxa5 Rh1 Kg6 Re1 Kf6 Re8 Ra6 Rf8+ Kg5 Rc8 Ra5 Rg8+ Kf6 Kg3 c4 dxc4 Ke5 Re8+ Kd6 Rd8+ Ke6 Rxd4 Ra6 Kf4 Rc6 Rd5 Kf6 Rxf5+ Kg6 Rg5+ Kh6 Rf5 Rg6 g3 Rg7 Re5 Kg6 Rg5+ Kf6 Rxg7",
+    "sourceUrl": "https://www.chess.com/game/live/123499795213",
+    "studentSide": "white",
+    "overview": "Hambleton's Rossolimo vs …g6 in action: a bullet win over undefined (undefined) in 2024. Watch the Bxc6 doubling, the e5/c4/d4 clamp, and the blunted Dragon bishop. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-rossolimo-e6-line-0",
+    "openingId": "pro-aman-rossolimo",
+    "result": "1-0",
+    "year": 2019,
+    "event": "chess.com blitz (2019-09-20)",
+    "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1 d5 exd5 Nxd5 d4 Nf6 Be3 Be7 c4 O-O Nc3 cxd4 Nxd4 Ne5 Bf4 Ng6 Bg3 Bd7 Qb3 h5 h3 h4 Bh2 Qc8 Rad1 Bc5 Nf3 Rd8 Ne5 Nxe5 Bxe5 Bc6 Qc2 Nd7 Bd4 Qc7 a3 Bxd4 Rxd4 Ne5 Rxh4 Ng6 Rg4 Rd7 Rd1 Rxd1 Qxd1 Rd8 Rd4 Rxd4 Qxd4 Nf4 b4 e5 Qe3 Qe7 g3 Ng6 c5 e4 Bg2 f5 Qd4 Ne5 a4 Nf3+ Bxf3 exf3 Qc4+ Kf8 Kf1 Qg5 Qf4 Qh5 h4 Kg8 b5 axb5 axb5 Bd7 c6 bxc6 b6 Qe8 b7 Kh7 b8=Q Qe6 Qbe5 Qb3 Qe1 Qc2 Kg1 Qd3 h5 Be8 h6 Bg6 hxg7 Qd8 Qh4+ Qxh4 gxh4 Kxg7 Qe7+ Kh6 Na4 f4 Nc5 Bf5 Qg5+ Kh7 Qxf5+ Kg7 Ne6+ Kg8 Qg6+ Kh8 Qg7#",
+    "sourceUrl": "https://www.chess.com/game/live/4048216821",
+    "studentSide": "white",
+    "overview": "Hambleton's Rossolimo vs …e6 in action: a blitz win over undefined (undefined) in 2019. Watch the Bf1 bishop-pair retreat and the comfortable open centre. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-rossolimo-e6-line-1",
+    "openingId": "pro-aman-rossolimo",
+    "result": "1-0",
+    "year": 2025,
+    "event": "chess.com blitz (2025-01-16)",
+    "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 Nd4 Nxd4 cxd4 c3 a6 Bf1 Nc6 b4 Bd6 Bb2 dxc3 dxc3 Qc7 Qh5 O-O Nd2 g6 Qh3 Be5 a3 Bg7 Rac1 a5 b5 Nb8 a4 d6 Ba3 Nd7 Nc4 Nc5 Rcd1 Rd8 Qe3 b6 e5 d5 Nxb6 Qxb6 Bxc5 Qb8 h4 h5 Bd3 Bd7 g4 hxg4 h5 Be8 hxg6 fxg6 Qg5 Qc7 Bd4 Qf7 Re3",
+    "sourceUrl": "https://www.chess.com/game/live/130756808883",
+    "studentSide": "white",
+    "overview": "Hambleton's Rossolimo vs …e6 in action: a blitz win over undefined (undefined) in 2025. Watch the Bf1 bishop-pair retreat and the comfortable open centre. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-rossolimo-e6-line-2",
+    "openingId": "pro-aman-rossolimo",
+    "result": "1-0",
+    "year": 2020,
+    "event": "chess.com blitz (2020-04-23)",
+    "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1 d5 d3 d4 c3 Ng6 a4 e5 Nbd2 Be7 g3 O-O h4 Bg4 Be2 Be6 Nc4 f6 h5 Nh8 Nh4 Nf7 Nf5 Re8 Qc2 Rc8 Kg2 b5 axb5 axb5 Nd2 Bf8 Nf3 c4 Bd2 cxd3 Qxd3 Bc4 Qb1 d3 Bd1 Qd7 N3h4 Red8 Rh1 b4 Ne3 Be6 Nhf5 Qb7 Bf3 Rb8 Qe1 bxc3 bxc3 Qb2 Ra6 Rb6 Rxb6 Qxb6 Qa1 Bc5 Rb1 Qc7 Qa4 g6 hxg6 hxg6 Nd5 Bxd5 exd5 gxf5 dxc6 e4 Bh5 Ne5 Rb7 Qxc6 Qa2+ Qd5 Qxd5+ Rxd5 Bf4 d2 c4 Nxc4 Bf7+ Kf8 Bxd5 e3 Rb8+",
+    "sourceUrl": "https://www.chess.com/game/live/4759256834",
+    "studentSide": "white",
+    "overview": "Hambleton's Rossolimo vs …e6 in action: a blitz win over undefined (undefined) in 2020. Watch the Bf1 bishop-pair retreat and the comfortable open centre. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-rossolimo-d6-moscow-0",
+    "openingId": "pro-aman-rossolimo",
+    "result": "1-0",
+    "year": 2022,
+    "event": "chess.com blitz (2022-12-20)",
+    "pgn": "e4 c5 Nf3 d6 Bb5+ Bd7 Bxd7+ Nxd7 O-O e6 Re1 Be7 c4 Ne5 d4 Nxf3+ gxf3 cxd4 Qxd4 Bf6 Qd3 Ne7 Nc3 O-O Bf4 Be5 Bg3 Nc6 f4 Bxc3 Qxc3 e5 Rad1 Qe7 Rd5 Rfd8 fxe5 dxe5 Bxe5 Qg5+ Bg3 Qg6 b4 Re8 f3 Rac8 b5 Nd8 c5 h5 Kf2 Ne6 Rg1 Qh6 Bd6 Red8 h4 Rd7 Qe5 Re8 Qxh5 Qf6 Be5 Qe7 Qh6 f6 Bxf6 Qf7 Bxg7 Nxg7 Rxg7+ Qxg7 Rg5 Ree7 c6 bxc6 bxc6 Rc7 Qd6 Kh7 Rxg7+ Rxg7 h5 Rcf7 Ke3 Rg1 c7 Rc1 Qg6+ Kh8 Qxf7 a5 Qe8+ Kh7 c8=Q",
+    "sourceUrl": "https://www.chess.com/game/live/65319020199",
+    "studentSide": "white",
+    "overview": "Hambleton's Moscow in action: a blitz win over undefined (undefined) in 2022. Watch the Moscow Bb5+ and the quiet Spanish-style central squeeze. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-rossolimo-d6-moscow-1",
+    "openingId": "pro-aman-rossolimo",
+    "result": "1-0",
+    "year": 2019,
+    "event": "chess.com blitz (2019-09-20)",
+    "pgn": "e4 c5 Nf3 d6 Bb5+ Nd7 c3 Nf6 Qe2 a6 Ba4 b5 Bc2 Bb7 O-O Rc8 Re1 e6 d3 Be7 Nbd2 O-O Nf1 Qc7 Ng3 Ne5 Nxe5 dxe5 a4 Rfd8 Be3 Bc6 axb5 axb5 Nf1 Qb7 Nd2 h6 h3 Nh7 Nb3 Qb6 Ra5 Nf8 Rea1 Ra8 Qe1 Rxa5 Rxa5 Ng6 Qa1 Nf4 Ra6 Qc7 Ra7 Bb7 Qa5 Qc8 Qxb5 Bc6 Qa6 Qxa6 Rxa6 Bb5 Ra7 Bg5 c4 Bc6 Nxc5 Rb8 b3 Ne2+ Kf1 Nd4 Bxd4 exd4 g3 Bd2 Ke2 Bc3 Na6 Rb6 f4 f5 Nc5 Be8 Ra6 Rxa6 Nxa6 Bh5+ Kf2 fxe4 dxe4 Bd2 b4 Be3+ Kf1 g5 c5 gxf4 gxf4 Bxf4 b5 Be8 Bd3 Kf8 b6 Bc6 Nb4 Ba4 c6 Ke7 c7 Kd7 Ba6 Bxc7 bxc7 Kxc7 Ke2 Kd6 Kd3 Ke5 Bb7 Bd7 Nc6+ Kf4 Kxd4 h5 Ne5 Ba4 Bc6 h4 Bxa4 Kg3 Bd7 Kxh3 Bxe6+ Kg3 Bf5 Kf4 Kd5 Kg5 Nf3+ Kf4 Nxh4 Kg5 Ke6 Kxh4 Kf6 Kg3 e5 Kf4 e6 Ke3 e7 Kd4 e8=Q Kc4 Qe4+ Kc5 Ke5 Kb5 Qd4 Kc6 Qd5+ Kc7 Qc4+ Kb6 Kd6 Kb7 Qc5 Kb8 Qb4+ Ka7 Be4 Ka6 Bd3+ Ka7 Be4",
+    "sourceUrl": "https://www.chess.com/game/live/4048340149",
+    "studentSide": "white",
+    "overview": "Hambleton's Moscow in action: a blitz win over undefined (undefined) in 2019. Watch the Moscow Bb5+ and the quiet Spanish-style central squeeze. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-rossolimo-d6-moscow-2",
+    "openingId": "pro-aman-rossolimo",
+    "result": "1-0",
+    "year": 2021,
+    "event": "chess.com blitz (2021-12-18)",
+    "pgn": "e4 c5 Nf3 d6 Bb5+ Nd7 c3 Nf6 Qe2 a6 Ba4 b5 Bc2 Bb7 O-O g6 d4 Bg7 Rd1 Qc7 Bd3 O-O Nbd2 e5 d5 c4 Bc2 Rae8 a4 Nh5 Nf1 Nf4 Bxf4 exf4 Qd2 Bh6 axb5 axb5 h3 Ne5 N1h2 Bc8 Qd4 Bg7 Qa7 Bb7 Qa5 Qc5 Qa3 Qxa3 Rxa3 Nd3 Bxd3 cxd3 Nd2 Ra8 Rb3 Ra5 Nhf3 Rfa8 c4 Ra1 Rxa1 Rxa1+ Kh2 b4 Rxb4 Ba6 Rb8+ Bf8 Ra8 Kg7 b4 Ra4 Ra7 Kg8 Nd4 Ra2 N4b3 Ra4 c5 Rxb4 Rxa6 dxc5 Rc6",
+    "sourceUrl": "https://www.chess.com/game/live/33535740453",
+    "studentSide": "white",
+    "overview": "Hambleton's Moscow in action: a blitz win over undefined (undefined) in 2021. Watch the Moscow Bb5+ and the quiet Spanish-style central squeeze. A clean model of the plan working against a strong opponent."
+  },
+  {
     "id": "mg-pro-aman-open-sicilian-najdorf-a6-0",
     "openingId": "pro-aman-open-sicilian",
     "result": "1-0",

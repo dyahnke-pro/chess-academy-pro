@@ -70618,6 +70618,144 @@
     ]
   },
   {
+    "id": "mp-proamanross-g6",
+    "openingId": "pro-aman-rossolimo",
+    "title": "Take d4 and Activate the Queen",
+    "overview": "After the centre is clamped, White grabs d4, recaptures with the queen, and swings it to h4 to eye the kingside dark squares Black weakened with …g6. The space edge plus active pieces give White a clear, lasting initiative.",
+    "pawnBreaks": [
+      "d4 central break"
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "queen",
+        "route": "Qd4-h4 toward the kingside",
+        "explanation": "The queen centralises on d4, then swings to h4 to pressure the weakened dark squares."
+      }
+    ],
+    "strategicThemes": [
+      "Play d4, recapture with the queen, and swing it to h4"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bqk2r/p1npppbp/2p3p1/2p1P3/2P5/5N2/PP1P1PPP/RNBQR1K1 w kq - 1 9",
+        "moves": [
+          "d4",
+          "cxd4",
+          "Qxd4",
+          "O-O",
+          "Qh4",
+          "Ne6",
+          "Nc3",
+          "Re8"
+        ],
+        "annotations": [
+          "d4 plays the central break.",
+          "…cxd4 trades.",
+          "Qxd4 centralises the queen.",
+          "…O-O tucks the king away.",
+          "Qh4 swings toward the kingside.",
+          "…Ne6 develops, eyeing d4.",
+          "Nc3 develops the last knight.",
+          "…Re8 contests the e-file."
+        ],
+        "learnCues": [
+          "d4 — central break",
+          "…cxd4 — trade",
+          "Qxd4 — centralise",
+          "…O-O — king safe",
+          "Qh4 — swing to the kingside",
+          "…Ne6 — develop",
+          "Nc3 — develop",
+          "…Re8 — contest e-file"
+        ],
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "d1",
+              "to": "d4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "d4",
+              "to": "h4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "book:sicilian-rossolimo",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation"
+        ]
+      }
+    ]
+  },
+  {
     "id": "mp-proamanopensic-najdorf",
     "openingId": "pro-aman-open-sicilian",
     "title": "Clamp d5 and Expand with c4",
@@ -70657,7 +70795,7 @@
           "exd5 recaptures, clamping the centre with a pawn.",
           "…g6 makes luft.",
           "c4 props d5 and grabs queenside space.",
-          "…b6 prepares to challenge."
+          "…b6 opens a second queenside front."
         ],
         "learnCues": [
           "Nd5 — the outpost",

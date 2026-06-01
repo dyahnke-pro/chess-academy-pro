@@ -60,7 +60,7 @@ const PLANS = [
     strategicThemes: ['Occupy d5, recapture with a pawn to clamp, then expand with c4'], endgameTransitions: [],
     fen: 'rn1q1rk1/1p2bppp/p2pbn2/4p3/4P3/1NN1B3/PPP1BPPP/R2Q1RK1 w - - 6 10',
     tail: ['Nd5', 'Nbd7', 'Qd3', 'Bxd5', 'exd5', 'g6', 'c4', 'b6'],
-    ann: ['Nd5 occupies the dominant outpost.', '…Nbd7 develops the last knight.', 'Qd3 centralises and eyes the kingside.', '…Bxd5 trades off the strong knight.', 'exd5 recaptures, clamping the centre with a pawn.', '…g6 makes luft.', 'c4 props d5 and grabs queenside space.', '…b6 prepares to challenge.'],
+    ann: ['Nd5 occupies the dominant outpost.', '…Nbd7 develops the last knight.', 'Qd3 centralises and eyes the kingside.', '…Bxd5 trades off the strong knight.', 'exd5 recaptures, clamping the centre with a pawn.', '…g6 makes luft.', 'c4 props d5 and grabs queenside space.', '…b6 opens a second queenside front.'],
     cues: ['Nd5 — the outpost', '…Nbd7 — develop', 'Qd3 — centralise', '…Bxd5 — trade', 'exd5 — clamp with a pawn', '…g6 — luft', 'c4 — grab space', '…b6 — second front'],
     arrSpec: [['c3', 'd5'], null, ['d1', 'd3'], null, null, null, null, null] },
 ];

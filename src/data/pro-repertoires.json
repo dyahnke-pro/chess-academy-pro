@@ -3503,6 +3503,66 @@
       ]
     },
     {
+      "id": "pro-aman-rossolimo",
+      "playerId": "aman",
+      "eco": "B31",
+      "name": "Rossolimo / Moscow (Aman)",
+      "color": "white",
+      "style": "Structural, Low-theory",
+      "pgn": "e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 bxc6 O-O Bg7 Re1 Nf6 e5 Nd5 c4 Nc7 d4",
+      "overview": "Aman Hambleton's clean Anti-Sicilian (214+ games, ~79%) — the Rossolimo (Bb5 vs …Nc6) and its Moscow cousin (Bb5+ vs …d6). It sidesteps the vast Open-Sicilian theory in favour of one simple, powerful idea: trade Bxc6 to double Black's pawns, then take the centre with e5, c4 and d4. The cramping pawns blunt the fianchettoed Dragon bishop and the doubled c-pawns become a permanent target. Against …e6 White keeps the bishop pair with Bf1; against …d6 the Moscow steers into a quiet Spanish-style squeeze. Low theory, clear plans, lasting structural edge.",
+      "keyIdeas": [
+        "Trade Bxc6 to inflict doubled pawns and a permanent target.",
+        "Take the centre with e5, c4 and d4 to cramp Black.",
+        "Blunt the fianchettoed g7-bishop with the e5-pawn wall.",
+        "vs …e6 keep the bishop pair (Bf1); vs …d6 play the Moscow squeeze."
+      ],
+      "traps": [],
+      "warnings": [
+        "You give up the bishop pair for the doubled pawns — make the structural damage count by clamping the centre, or Black’s two bishops come alive."
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:sicilian-rossolimo",
+        "concept:pos-development",
+        "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
+        "https://api.chess.com/pub/player/chessbrah/games/archives"
+      ],
+      "variations": [
+        {
+          "name": "vs …g6 (Bxc6)",
+          "pgn": "e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 bxc6 O-O Bg7 Re1 Nf6 e5 Nd5 c4 Nc7 d4 cxd4 Qxd4",
+          "explanation": "His main line. Bxc6 doubles the pawns; e5/c4/d4 clamps the centre and blunts the Dragon bishop for a lasting squeeze.",
+          "sources": [
+            "book:sicilian-rossolimo",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation"
+          ]
+        },
+        {
+          "name": "vs …e6",
+          "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1 d5 exd5 Nxd5 d4 Nf6 Be3 Be7 c4 O-O Nc3 cxd4 Nxd4",
+          "explanation": "97 games. Keep the bishop pair with Bf1 and reach an open classical centre with a small, comfortable edge.",
+          "sources": [
+            "book:sicilian-rossolimo",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation"
+          ]
+        },
+        {
+          "name": "Moscow vs …d6",
+          "pgn": "e4 c5 Nf3 d6 Bb5+ Nd7 c3 Nf6 Qe2 a6 Ba4 b5 Bc2 Bb7 O-O g6 d4 Bg7 Rd1",
+          "explanation": "The Moscow Bb5+: a quiet Spanish-style squeeze with the Ba4-Bc2 reroute and central pressure.",
+          "sources": [
+            "book:sicilian-rossolimo",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation"
+          ]
+        }
+      ]
+    },
+    {
       "id": "pro-aman-open-sicilian",
       "playerId": "aman",
       "eco": "B90",
