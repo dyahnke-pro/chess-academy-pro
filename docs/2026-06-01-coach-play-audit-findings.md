@@ -22,7 +22,19 @@ Run against LIVE prod (`https://chess-academy-pro.vercel.app`).
 
 ## Findings
 
-### Finding 1 — Resigning bypasses `finalizeGame` (CONFIRMED, deterministic)
+### Finding 1 — Resigning bypassed `finalizeGame` ✅ FIXED 2026-06-01
+
+**Fix shipped:** `handleResign` now routes through `finalizeGame('loss', 'resign')`
+instead of jumping straight to `postgame`, so a resigned game is saved to
+`db.games` and run through the mistake / bad-habit / weakness pipeline like
+any other loss. A shared **min-ply floor** (`MIN_PERSIST_PLIES = 6`,
+`src/utils/coachGamePersistence.ts`) gates persistence on EVERY ending
+(resign / checkmate / timeout) so a trivial misclick-resign doesn't litter
+history. Verified on localhost: `resign-persists-game — db.games 0→1`; the
+auto-analysis pipeline runs. `handleResign` was moved below `finalizeGame`
+(TDZ-safe dependency). Original analysis kept below for the record.
+
+
 
 `handleResign` (`CoachGamePage.tsx:1843`) and the `skip-to-review-btn`
 (`:4187`) set `status: 'postgame'` **directly**. The only code that writes

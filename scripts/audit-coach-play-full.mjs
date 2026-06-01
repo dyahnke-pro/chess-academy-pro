@@ -513,13 +513,27 @@ async function main() {
       );
     }
 
-    // Finding: did the resign path persist the game record at all?
-    const afterGames = await dexieCount('games');
-    if (afterGames <= beforeGames) {
-      report.findings.push('CONFIRMED: resign bypasses finalizeGame — db.games did NOT grow (game not persisted, automatic mistakePuzzles pipeline not run for resigned games).');
-      console.log('  [finding] resign did not persist the game to db.games');
+    // Fix #1 verification: a resigned game must now persist to db.games and
+    // run the automatic Stockfish mistake pipeline (poll — finalizeGame's
+    // db.games.add + generateMistakePuzzlesFromGame are async).
+    let afterGames = beforeGames, afterMistakesAuto = beforeMistakes;
+    for (let i = 0; i < 15; i++) {
+      afterGames = await dexieCount('games');
+      afterMistakesAuto = await dexieCount('mistakePuzzles');
+      if (afterGames > beforeGames) break;
+      await page.waitForTimeout(2000);
+    }
+    if (afterGames > beforeGames) {
+      pass('resign-persists-game', `db.games ${beforeGames}->${afterGames} (resign now routes through finalizeGame)`);
     } else {
-      report.findings.push('NOTE: db.games grew after resign — a persist path exists for resigned games.');
+      fail('resign-persists-game', `db.games stayed ${beforeGames} — resigned game NOT persisted`);
+    }
+    // The automatic pipeline writes mistakePuzzles from Stockfish (no LLM) —
+    // may be 0 if the blunder didn't match a concrete tactical motif.
+    if (afterMistakesAuto > beforeMistakes) {
+      pass('auto-mistake-pipeline', `mistakePuzzles ${beforeMistakes}->${afterMistakesAuto} (auto-analysed on game end)`);
+    } else {
+      console.log(`  [info] auto mistakePuzzles ${beforeMistakes}->${afterMistakesAuto} (pipeline ran; 0 = no concrete-tactic motif on the hang)`);
     }
   } catch (e) {
     fail('fatal', String(e?.stack ?? e?.message ?? e));
