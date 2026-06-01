@@ -70802,5 +70802,176 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-pro-caruana-najdorf-endgame",
+    "openingId": "pro-caruana-najdorf",
+    "criticalPositionFen": "8/6k1/3p2p1/3Pnp1p/2P5/8/2B3PP/7K w - - 0 40",
+    "title": "Najdorf ENDGAME — the Dominant Knight (vs KChor05)",
+    "overview": "From his Najdorf, Caruana converts a knight-versus-bishop ending: with the pawns fixed on both colours the knight is the better piece. The king marches into the centre — …Kf6-e5-d4 — while the knight on d3 ties White down, and Black simply collects the c4-pawn. The lesson: in a fixed-pawn ending the knight outshines the bishop, and the king is a fighting piece.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Kf6-e5-d4 king march, …Nd3 dominant knight",
+        "explanation": "Najdorf ENDGAME — the Dominant Knight (vs KChor05)"
+      }
+    ],
+    "strategicThemes": [
+      "Najdorf ENDGAME — the Dominant Knight (vs KChor05)"
+    ],
+    "endgameTransitions": [
+      "The opening structure converts directly into this winning ending."
+    ],
+    "playableLines": [
+      {
+        "fen": "8/6k1/3p2p1/3Pnp1p/2P5/8/2B3PP/7K w - - 0 40",
+        "moves": [
+          "Bb3",
+          "Kf6",
+          "g3",
+          "Nd3",
+          "Kg2",
+          "Ke5",
+          "Kf3",
+          "Kd4",
+          "Ba4",
+          "Kxc4"
+        ],
+        "annotations": [
+          "White tries to activate the bishop.",
+          "…Kf6 begins the king march toward the centre.",
+          "White makes luft.",
+          "…Nd3 plants the knight on a dominant central square, tying White down.",
+          "White shuffles the king.",
+          "…Ke5 — the king strides into the centre, a fighting piece in the ending.",
+          "White tries to hold.",
+          "…Kd4 — the king reaches the heart of the board, attacking c4.",
+          "White cannot defend everything.",
+          "…Kxc4 collects the pawn; the king-and-knight duo wins the ending."
+        ],
+        "learnCues": [
+          "Bb3 — White activates",
+          "…Kf6 — march the king",
+          "g3 — White waits",
+          "…Nd3 — the dominant knight",
+          "Kg2 — White shuffles",
+          "…Ke5 — the king fights",
+          "Kf3 — White holds",
+          "…Kd4 — into the heart",
+          "Ba4 — White is stretched",
+          "…Kxc4 — collect the pawn"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "e5",
+              "to": "d3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Najdorf ENDGAME — the Dominant Knight (vs KChor05)",
+        "intro": "From his Najdorf, Caruana converts a knight-versus-bishop ending: with the pawns fixed on both colours the knight is the better piece. The king marches into the centre — …Kf6-e5-d4 — while the knight on d3 ties White down, and Black simply collects the c4-pawn. The lesson: in a fixed-pawn ending the knight outshines the bishop, and the king is a fighting piece.",
+        "sources": [
+          "concept:pos-king-safety",
+          "concept:pos-material",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation",
+          "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation",
+          "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+        ]
+      }
+    ]
   }
 ]
