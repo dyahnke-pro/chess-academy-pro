@@ -23,6 +23,58 @@ export interface GemNarration {
 }
 
 export const GEM_NARRATION: Record<string, GemNarration> = {
+  // Carlsen Sicilian — the Siberian Trap (Smith-Morra). After …Qc7 + …Ng4,
+  // White's natural h3? loses on the spot: …Nd4! forks the e2-queen and
+  // threatens Qh2#. Engine-confirmed, Black wins the queen.
+  'pro-carlsen-sicilian:e4_c5_d4_cxd4_c3_dxc3_Nxc3_Nc6_Nf3_e6_Bc4_Qc7_O-O_Nf6_Qe2_Ng4:h3': {
+    sources: ['concept:tac-trap', 'concept:tac-fork', 'https://en.wikipedia.org/wiki/Siberian_Trap'],
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      '…Ng4 — the knight jumps to g4, quietly eyeing f2, h2 and the e2-queen. The Siberian trap is set.',
+      'h3? — White prods the g4-knight, but this is the losing move: it ignores the gathering storm against e2 and h2.',
+      '…Nd4! — the hammer. The knight forks the e2-queen, and capturing on d4 walks into Qh2 mate.',
+      '',
+      '…Nxe2+ — the other knight crashes through with check, winning the queen outright.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Ng4 — set the Siberian trap',
+      '',
+      'Nd4 — fork the queen, threaten Qh2#',
+      '',
+      'Nxe2+ — win the queen',
+      '',
+    ],
+  },
+  // Carlsen Nimzo/QGD — the Elephant Trap. After 4.Bg5 Nbd7 5.cxd5 exd5,
+  // White's Nxd5? loses a piece: …Nxd5! and the d8-queen only looks hanging —
+  // …Bb4+ wins it back and leaves Black a clean piece up. Engine-confirmed.
+  'pro-carlsen-nimzo:d4_d5_c4_e6_Nc3_Nf6_Bg5_Nbd7_cxd5_exd5:Nxd5': {
+    sources: ['concept:tac-trap', 'concept:tac-pin', 'https://en.wikipedia.org/wiki/Elephant_Trap'],
+    watch: [
+      '', '', '', '', '', '', '', '', '', '',
+      'Nxd5? — White grabs the d5-pawn, but the knight on d5 is loose: this loses a piece to the Elephant Trap.',
+      '…Nxd5! — Black recaptures. White banked on the pinned f6-knight, but the d7-knight takes, and the queen is only "hanging" by illusion.',
+      '',
+      '…Bb4+! — the quiet zwischenzug. The check forces the queen to block before White can ever cash in on d8.',
+      '',
+      '…Bxd2+ — Black takes the queen back with check.',
+      '',
+      '…Kxd8 — the king scoops the bishop. The dust settles with Black a clean piece up — the Elephant Trap.',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '',
+      '',
+      'Nxd5 — recapture, it is safe',
+      '',
+      'Bb4+ — the zwischenzug check',
+      '',
+      'Bxd2+ — win the queen back',
+      '',
+      'Kxd8 — a clean piece up',
+    ],
+  },
   // Two Knights (student = Black). Max Lange: 6.Bb5 Ne4, White lunges f3? —
   // ...Qh4+ rips open the uncastled king. Engine-confirmed, Black wins material.
   'two-knights-defence:e4_e5_Nf3_Nc6_Bc4_Nf6_d4_exd4_e5_d5_Bb5_Ne4_Nxd4_Bd7_Bxc6_bxc6:f3': {

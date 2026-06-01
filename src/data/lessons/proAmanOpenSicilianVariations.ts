@@ -58,7 +58,7 @@ export const PRO_AMAN_OPEN_SICILIAN_VARIATION_LESSONS: Record<string, LessonScri
       b({ id: 'f3', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Bg5 e6 Qd2 a6 O-O-O Bd7 f3 Be7 h4', highlights: [H('h4')],
         say: "f3 secures e4 and h4 begins the kingside pawn storm — the thematic Rauzer plan. White throws the h- and g-pawns at Black's king while the centre stays locked.",
         sayShort: 'h4 — launch the storm.' }),
-      b({ id: 'middlegame', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Bg5 e6 Qd2 a6 O-O-O Bd7 f3 Be7 h4 h6 Be3 h5 Kb1', highlights: [H('b1'), H('h5')],
+      b({ id: 'middlegame', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Bg5 e6 Qd2 a6 O-O-O Bd7 f3 Be7 h4 h6 Be3 h5 Kb1', highlights: [H('g4'), H('b1'), H('h5')],
         say: "Black tries to slow the storm with …h6 and …h5, but White tucks the king to b1 and keeps the initiative. White has the safer king, the attacking pawns, and the clear plan of g4 to crack open the kingside. A sharp, double-edged middlegame where White holds the trumps.",
         sayShort: 'Kb1 — safe, keep attacking.' }),
     ],

@@ -22,9 +22,16 @@
     <script>
       // Force SW update check on every page load
       if ('serviceWorker' in navigator) {
+        // r.update() rejects ("Failed to update a ServiceWorker … Not found")
+        // when the SW-script fetch transiently fails/races (cold headless
+        // context, CDN miss, mid-deploy). It's benign — the browser retries on
+        // the next load — but WITHOUT a catch it surfaces as an unhandled
+        // rejection / pageerror (caught in the 2026-06-01 loop audit). Swallow it.
         navigator.serviceWorker.getRegistrations().then(function(regs) {
-          regs.forEach(function(r) { r.update(); });
-        });
+          regs.forEach(function(r) {
+            try { var p = r.update(); if (p && p.catch) p.catch(function() {}); } catch (e) { /* ignore */ }
+          });
+        }).catch(function() {});
         // Reload once when a new SW activates
         var refreshing = false;
         navigator.serviceWorker.addEventListener('controllerchange', function() {

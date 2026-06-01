@@ -25,7 +25,7 @@ export const PRO_AMAN_ROSSOLIMO_VARIATION_LESSONS: Record<string, LessonScript> 
     kind: 'variation',
     sources: SRC,
     beats: [
-      b({ id: 'bxc6', moves: 'e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 bxc6 O-O Bg7 Re1', arrows: [A('b5', 'c6')], highlights: [H('c6')],
+      b({ id: 'bxc6', moves: 'e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 bxc6 O-O Bg7 Re1', arrows: [A('b5', 'c6')], highlights: [H('e5'), H('c6')],
         say: "Against the fianchetto, Bxc6 doubles Black's pawns and damages the structure behind the Dragon bishop. White castles and plays Re1, readying the e5 break.",
         sayShort: 'Bxc6 — double the pawns.' }),
       b({ id: 'e5', moves: 'e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 bxc6 O-O Bg7 Re1 Nf6 e5 Nd5 c4', highlights: [H('e5'), H('d5')],
@@ -49,7 +49,7 @@ export const PRO_AMAN_ROSSOLIMO_VARIATION_LESSONS: Record<string, LessonScript> 
     kind: 'variation',
     sources: SRC,
     beats: [
-      b({ id: 'oo', moves: 'e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1', highlights: [H('e1')],
+      b({ id: 'oo', moves: 'e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1', highlights: [H('c3'), H('d4'), H('e1')],
         say: "Against …e6, White castles and develops naturally; the bishop on b5 keeps its pressure while White prepares a healthy classical centre with c3 and d4.",
         sayShort: 'O-O — natural development.' }),
       b({ id: 'bf1', moves: 'e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1', arrows: [A('b5', 'f1')], highlights: [H('f1')],
@@ -76,7 +76,7 @@ export const PRO_AMAN_ROSSOLIMO_VARIATION_LESSONS: Record<string, LessonScript> 
       b({ id: 'bb5', moves: 'e4 c5 Nf3 d6 Bb5+', arrows: [A('f1', 'b5')], highlights: [H('b5')],
         say: "Against …d6, the Moscow Bb5-check is the Anti-Sicilian cousin of the Rossolimo. It forces Black to commit a blocker and steers the game into quiet, structural channels White understands well.",
         sayShort: 'Bb5+ — force a commitment.' }),
-      b({ id: 'c3', moves: 'e4 c5 Nf3 d6 Bb5+ Nd7 c3 Nf6 Qe2', highlights: [H('c3')],
+      b({ id: 'c3', moves: 'e4 c5 Nf3 d6 Bb5+ Nd7 c3 Nf6 Qe2', highlights: [H('d4'), H('c3')],
         say: "Black blocks with …Nd7; White plays c3 to prepare d4 and Qe2 to keep the bishop's options. A flexible, low-risk build-up aiming for a small, durable centre.",
         sayShort: 'c3 — prepare d4.' }),
       b({ id: 'ba4', moves: 'e4 c5 Nf3 d6 Bb5+ Nd7 c3 Nf6 Qe2 a6 Ba4 b5 Bc2', arrows: [A('a4', 'c2')], highlights: [H('c2')],

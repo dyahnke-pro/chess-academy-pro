@@ -32,7 +32,7 @@ export const PRO_AMAN_ROSSOLIMO_LESSON: LessonScript = {
     b({ id: 'g6', moves: 'e4 c5 Nf3 Nc6 Bb5 g6 Bxc6', arrows: [A('b5', 'c6')], highlights: [H('c6')],
       say: "When Black fianchettoes with …g6, White trades Bxc6 — doubling Black's pawns and damaging the structure that supports the dark-squared bishop. A concrete, permanent gain in exchange for the bishop pair.",
       sayShort: 'Bxc6 — double the pawns.' }),
-    b({ id: 'bxc6', moves: 'e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 bxc6 O-O Bg7 Re1', highlights: [H('c6'), H('e1')],
+    b({ id: 'bxc6', moves: 'e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 bxc6 O-O Bg7 Re1', highlights: [H('e5'), H('c6'), H('e1')],
       say: "Black recaptures …bxc6 and fianchettoes; White castles and plays Re1 to back the centre. The plan is taking shape: with Black's pawns doubled and the centre White's to push, the e5 break looms.",
       sayShort: 'Re1 — back the e5 push.' }),
     b({ id: 'e5', moves: 'e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 bxc6 O-O Bg7 Re1 Nf6 e5 Nd5 c4', highlights: [H('e5'), H('d5')],

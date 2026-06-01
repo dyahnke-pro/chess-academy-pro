@@ -78469,5 +78469,1679 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-carlsen-scandinavian-endgame",
+    "openingId": "pro-carlsen-scandinavian",
+    "criticalPositionFen": "8/1p3pk1/4p3/2p5/P1P5/6P1/1r6/4R1K1 b - - 0 44",
+    "title": "The Active Rook in the Rook Ending (vs Firouzja)",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "move": "…Rb4, …Rxa4 and …Rxc4 — the active rook rounds up the queenside",
+        "explanation": "From a 3…Qd6 Scandinavian where Carlsen beat Firouzja, the win is a model rook ending: the rook takes its most active square, snaps the loose queenside pawns, and shepherds the connected b- and c-pawns from behind.",
+        "fen": ""
+      }
+    ],
+    "strategicThemes": [
+      "From a 3…Qd6 Scandinavian where Carlsen beat Firouzja, the win is a model rook ending: the rook takes its most active square, snaps the loose queenside pawns, and shepherds the connected b- and c-pawns from behind."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "8/1p3pk1/4p3/2p5/P1P5/6P1/1r6/4R1K1 b - - 0 44",
+        "moves": [
+          "Rb4",
+          "Re4",
+          "Rxa4",
+          "Kf2",
+          "b5",
+          "Kf3",
+          "Rxc4",
+          "Re5"
+        ],
+        "annotations": [
+          "The rook swings to the fourth rank, attacking the a4- and c4-pawns at once — in a rook ending the rook belongs on its most active square, hunting targets.",
+          "White's rook tries to shelter the pawns.",
+          "Black snaps the a-pawn; the active rook collects material while staying behind the runners.",
+          "White's king hurries over.",
+          "The connected queenside pawns start to roll, supported from behind by the rook.",
+          "White centralises the king.",
+          "A second pawn falls, and Black's b- and c-pawns are a mobile, supported pair.",
+          "White attacks the c5-pawn, but the rook behind the runners keeps them safe."
+        ],
+        "learnCues": [
+          "…Rb4 — most active square",
+          "Re4 — shelter",
+          "…Rxa4 — grab the pawn",
+          "Kf2 — king hurries",
+          "…b5 — pawns roll",
+          "Kf3 — centralise",
+          "…Rxc4 — second pawn",
+          "Re5 — rook behind runners"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "The Active Rook in the Rook Ending (vs Firouzja)",
+        "intro": "From a 3…Qd6 Scandinavian where Carlsen beat Firouzja, the win is a model rook ending: the rook takes its most active square, snaps the loose queenside pawns, and shepherds the connected b- and c-pawns from behind.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-initiative",
+          "concept:pos-space",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-carlsen-caro-endgame",
+    "openingId": "pro-carlsen-caro-kann",
+    "criticalPositionFen": "3N2k1/p2R2bp/4rpp1/3p4/6p1/8/P4P1P/6K1 b - - 1 29",
+    "title": "Converting the Extra Pawns (vs Firouzja)",
+    "pawnBreaks": [
+      {
+        "move": "…f5 then …h5, the kingside majority advances",
+        "explanation": "From an Advance Caro-Kann with …Bf5 where Carlsen beat Firouzja, the technique is pure conversion: the rook takes its most active post, then the extra kingside pawns roll forward as a phalanx with the bishop guarding their path.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "move": "…Re6-a6, the rook to the open a-file",
+        "explanation": "From an Advance Caro-Kann with …Bf5 where Carlsen beat Firouzja, the technique is pure conversion: the rook takes its most active post, then the extra kingside pawns roll forward as a phalanx with the bishop guarding their path.",
+        "fen": ""
+      }
+    ],
+    "strategicThemes": [
+      "From an Advance Caro-Kann with …Bf5 where Carlsen beat Firouzja, the technique is pure conversion: the rook takes its most active post, then the extra kingside pawns roll forward as a phalanx with the bishop guarding their path."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "3N2k1/p2R2bp/4rpp1/3p4/6p1/8/P4P1P/6K1 b - - 1 29",
+        "moves": [
+          "Ra6",
+          "Rxd5",
+          "f5",
+          "Rd7",
+          "h5",
+          "Nf7",
+          "h4",
+          "Ng5",
+          "Bf6"
+        ],
+        "annotations": [
+          "The rook swings to the open a-file and the sixth rank, the most active post — activity first, before cashing in the extra pawns.",
+          "White grabs the d-pawn back, but Black keeps the bishop and the kingside majority.",
+          "Black's extra kingside pawns begin to advance, gaining space and a future passed pawn.",
+          "White's rook stays busy on the seventh.",
+          "The pawns roll forward as a phalanx, the bishop guarding their path.",
+          "White's knight repositions to blockade.",
+          "The passed pawn advances; every tempo counts in the race.",
+          "White's knight hops to a blockading square.",
+          "The bishop covers g5 and supports the runners — Black's pieces work as a unit."
+        ],
+        "learnCues": [
+          "…Ra6 — most active rook",
+          "Rxd5 — White takes back",
+          "…f5 — majority rolls",
+          "Rd7 — seventh rank",
+          "…h5 — phalanx",
+          "Nf7 — blockade",
+          "…h4 — advance",
+          "Ng5 — blockade",
+          "…Bf6 — bishop guards"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Converting the Extra Pawns (vs Firouzja)",
+        "intro": "From an Advance Caro-Kann with …Bf5 where Carlsen beat Firouzja, the technique is pure conversion: the rook takes its most active post, then the extra kingside pawns roll forward as a phalanx with the bishop guarding their path.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-space",
+          "concept:pos-initiative",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-carlsen-modern-endgame",
+    "openingId": "pro-carlsen-modern",
+    "criticalPositionFen": "2r2r2/p3ppk1/8/1p2Pp1p/3p1P1P/3P1P2/PP6/2R2RK1 b - - 0 26",
+    "title": "The Protected Passed Pawn (vs Erigaisi)",
+    "pawnBreaks": [
+      {
+        "move": "…a5, the queenside majority",
+        "explanation": "From a Modern where Carlsen beat Erigaisi, the d4-pawn is a protected passed pawn — the long-term trump. Black shores up the centre, opens a second front with the queenside majority, and keeps the rooks active around the runner.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "move": "…Rf8-g8, contesting the open g-file",
+        "explanation": "From a Modern where Carlsen beat Erigaisi, the d4-pawn is a protected passed pawn — the long-term trump. Black shores up the centre, opens a second front with the queenside majority, and keeps the rooks active around the runner.",
+        "fen": ""
+      }
+    ],
+    "strategicThemes": [
+      "From a Modern where Carlsen beat Erigaisi, the d4-pawn is a protected passed pawn — the long-term trump. Black shores up the centre, opens a second front with the queenside majority, and keeps the rooks active around the runner."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "2r2r2/p3ppk1/8/1p2Pp1p/3p1P1P/3P1P2/PP6/2R2RK1 b - - 0 26",
+        "moves": [
+          "e6",
+          "Kf2",
+          "a5",
+          "Rg1+",
+          "Kh6",
+          "Ke2",
+          "Rg8",
+          "Rxc8"
+        ],
+        "annotations": [
+          "Black shores up the centre and frees the king; the d4-pawn is a protected passed pawn, the long-term trump of the position.",
+          "White's king heads for the centre.",
+          "The queenside majority advances — a second front to stretch White's defence.",
+          "White checks along the g-file.",
+          "The king sidesteps and tucks away safely.",
+          "White centralises toward the d-pawn.",
+          "Black contests the open g-file, the rooks staying active.",
+          "White trades a pair of rooks, but the passed d-pawn and the queenside majority remain."
+        ],
+        "learnCues": [
+          "…e6 — protected passer",
+          "Kf2 — king to centre",
+          "…a5 — second front",
+          "Rg1+ — check",
+          "…Kh6 — tuck away",
+          "Ke2 — centralise",
+          "…Rg8 — contest g-file",
+          "Rxc8 — trade rooks"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "The Protected Passed Pawn (vs Erigaisi)",
+        "intro": "From a Modern where Carlsen beat Erigaisi, the d4-pawn is a protected passed pawn — the long-term trump. Black shores up the centre, opens a second front with the queenside majority, and keeps the rooks active around the runner.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-space",
+          "concept:pos-initiative",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-carlsen-closedsic-endgame",
+    "openingId": "pro-carlsen-closed-sicilian",
+    "criticalPositionFen": "5k2/5p2/2b1p1p1/2r4p/2PR1PP1/1B5P/2P2K2/8 w - - 0 36",
+    "title": "King March in the Minor-Piece Ending (vs DenLaz)",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "move": "Kf2-e3-d4-c3, the king marches to the queenside",
+        "explanation": "From a Grand Prix f4 Closed Sicilian where Carlsen converted an extra pawn, the king leads: with same-coloured bishops and a clean extra pawn, White centralises the king and marches it to the queenside where the extra pawn lives.",
+        "fen": ""
+      }
+    ],
+    "strategicThemes": [
+      "From a Grand Prix f4 Closed Sicilian where Carlsen converted an extra pawn, the king leads: with same-coloured bishops and a clean extra pawn, White centralises the king and marches it to the queenside where the extra pawn lives."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "5k2/5p2/2b1p1p1/2r4p/2PR1PP1/1B5P/2P2K2/8 w - - 0 36",
+        "moves": [
+          "Ke3",
+          "hxg4",
+          "hxg4",
+          "Ke7",
+          "Rd1",
+          "g5",
+          "Kd4",
+          "Kd6",
+          "Kc3+"
+        ],
+        "annotations": [
+          "The king steps toward the centre — in the endgame the king is a fighting piece, and the extra pawn means it should lead.",
+          "Black trades on g4.",
+          "White recaptures, keeping the healthy extra pawn and a clean structure.",
+          "Black's king tries to come across.",
+          "The rook takes the open file behind the action.",
+          "Black fixes the kingside.",
+          "The king strides into the centre, heading for the queenside.",
+          "Black's king bars the way.",
+          "The king sidesteps toward b4 and the extra queenside pawn."
+        ],
+        "learnCues": [
+          "Ke3 — king is a fighter",
+          "…hxg4 — trade",
+          "hxg4 — keep the extra pawn",
+          "…Ke7 — king across",
+          "Rd1 — open file",
+          "…g5 — fix",
+          "Kd4 — stride in",
+          "…Kd6 — bar the way",
+          "Kc3+ — toward b4"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "King March in the Minor-Piece Ending (vs DenLaz)",
+        "intro": "From a Grand Prix f4 Closed Sicilian where Carlsen converted an extra pawn, the king leads: with same-coloured bishops and a clean extra pawn, White centralises the king and marches it to the queenside where the extra pawn lives.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-space",
+          "concept:pos-initiative",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-carlsen-reti-endgame",
+    "openingId": "pro-carlsen-reti",
+    "criticalPositionFen": "3r4/1p6/4k1pp/P4p2/2R5/6PP/5PK1/8 w - - 0 40",
+    "title": "Rook Behind the Passed Pawn (vs Firouzja)",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "move": "Rc4-b4-b6 behind the a-pawn, and Kg2-f3-f4-e5 the king strides up",
+        "explanation": "From a KIA Réti where Carlsen beat Firouzja, two endgame laws decide it: the rook goes behind the passed a-pawn, and the king marches up the board. White creates a second front on the kingside and centralises the king on e5.",
+        "fen": ""
+      }
+    ],
+    "strategicThemes": [
+      "From a KIA Réti where Carlsen beat Firouzja, two endgame laws decide it: the rook goes behind the passed a-pawn, and the king marches up the board. White creates a second front on the kingside and centralises the king on e5."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "3r4/1p6/4k1pp/P4p2/2R5/6PP/5PK1/8 w - - 0 40",
+        "moves": [
+          "Rb4",
+          "Rd7",
+          "Rb6+",
+          "Kf7",
+          "h4",
+          "h5",
+          "Kf3",
+          "Kg7",
+          "Kf4",
+          "Kf7",
+          "Ke5"
+        ],
+        "annotations": [
+          "The rook drops behind the passed a-pawn — Tarrasch's rule: rooks belong behind passed pawns, pushing them and staying mobile.",
+          "Black's rook swings to the seventh for counterplay.",
+          "The rook checks and cuts the king off, clearing the path for the a-pawn.",
+          "Black's king retreats.",
+          "White opens a second front on the kingside — two weaknesses are harder to defend than one.",
+          "Black tries to fix the pawns.",
+          "The king begins its march up the board.",
+          "Black shuffles.",
+          "The king keeps advancing — activity is everything in rook endings.",
+          "Black waits.",
+          "The king reaches its dominant central post on e5, the hub for both the passed a-pawn and the kingside front."
+        ],
+        "learnCues": [
+          "Rb4 — behind the passer",
+          "…Rd7 — seventh rank",
+          "Rb6+ — cut the king",
+          "…Kf7 — retreat",
+          "h4 — second front",
+          "…h5 — fix",
+          "Kf3 — march up",
+          "…Kg7 — shuffle",
+          "Kf4 — keep coming",
+          "…Kf7 — wait",
+          "Ke5 — dominant centre"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Rook Behind the Passed Pawn (vs Firouzja)",
+        "intro": "From a KIA Réti where Carlsen beat Firouzja, two endgame laws decide it: the rook goes behind the passed a-pawn, and the king marches up the board. White creates a second front on the kingside and centralises the king on e5.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-initiative",
+          "concept:pos-space",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-carlsen-opensic-classical",
+    "openingId": "pro-carlsen-open-sicilian",
+    "criticalPositionFen": "r1bq1rk1/pp2bppp/2nppn2/2p5/4P3/1BPP1N2/PP3PPP/RNBQ1RK1 w - - 1 8",
+    "title": "The d4 Central Break",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "move": "Re1, d4 and Nbd2 — back the centre, break, reroute the knight",
+        "explanation": "In the Classical Bc4 Open Sicilian, Carlsen backs the e4-pawn with the rook, then strikes with the thematic d4 break — opening the centre for his better-placed pieces while the knight reroutes via d2.",
+        "fen": ""
+      }
+    ],
+    "strategicThemes": [
+      "In the Classical Bc4 Open Sicilian, Carlsen backs the e4-pawn with the rook, then strikes with the thematic d4 break — opening the centre for his better-placed pieces while the knight reroutes via d2."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp2bppp/2nppn2/2p5/4P3/1BPP1N2/PP3PPP/RNBQ1RK1 w - - 1 8",
+        "moves": [
+          "Re1",
+          "b5",
+          "d4",
+          "Bb7",
+          "Nbd2"
+        ],
+        "annotations": [
+          "The rook lifts to the open e-file, backing the e4-pawn before the central break.",
+          "Black expands on the queenside.",
+          "The thematic central break — d4 opens lines for White's harmoniously placed pieces.",
+          "Black develops the bishop to the long diagonal.",
+          "The knight reroutes toward f1 and g3, eyeing the kingside and the d5-square."
+        ],
+        "learnCues": [
+          "Re1 — back the centre",
+          "…b5 — Black expands",
+          "d4 — central break",
+          "…Bb7 — long diagonal",
+          "Nbd2 — reroute the knight"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "The d4 Central Break",
+        "intro": "In the Classical Bc4 Open Sicilian, Carlsen backs the e4-pawn with the rook, then strikes with the thematic d4 break — opening the centre for his better-placed pieces while the knight reroutes via d2.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-center",
+          "concept:pos-space",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-carlsen-ruy-italian",
+    "openingId": "pro-carlsen-ruy-lopez",
+    "criticalPositionFen": "r1bqk2r/1pp2ppp/2np1n2/p1b1p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 w kq - 0 7",
+    "title": "The Giuoco Pianissimo Build",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "move": "Re1, h3 and Nbd2 — the slow Italian build and knight reroute",
+        "explanation": "In the Italian, Carlsen plays the slow build: the rook to e1, the prophylactic h3 to stop the …Bg4 pin, then the classic Nbd2-f1-g3 reroute toward the kingside and d5.",
+        "fen": ""
+      }
+    ],
+    "strategicThemes": [
+      "In the Italian, Carlsen plays the slow build: the rook to e1, the prophylactic h3 to stop the …Bg4 pin, then the classic Nbd2-f1-g3 reroute toward the kingside and d5."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bqk2r/1pp2ppp/2np1n2/p1b1p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 w kq - 0 7",
+        "moves": [
+          "Re1",
+          "O-O",
+          "h3",
+          "h6",
+          "Nbd2",
+          "Ba7"
+        ],
+        "annotations": [
+          "The rook backs the e4-pawn on the open file.",
+          "Black castles to safety.",
+          "The key prophylactic move — h3 makes luft and rules out the …Bg4 pin.",
+          "Black mirrors with h6.",
+          "The knight begins the classic reroute toward f1 and g3, heading for the kingside and d5.",
+          "Black tucks the bishop back to a7, keeping the diagonal."
+        ],
+        "learnCues": [
+          "Re1 — back the centre",
+          "…O-O — castle",
+          "h3 — stop …Bg4",
+          "…h6 — mirror",
+          "Nbd2 — start the reroute",
+          "…Ba7 — keep the diagonal"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "a7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "The Giuoco Pianissimo Build",
+        "intro": "In the Italian, Carlsen plays the slow build: the rook to e1, the prophylactic h3 to stop the …Bg4 pin, then the classic Nbd2-f1-g3 reroute toward the kingside and d5.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-prophylaxis",
+          "concept:pos-center",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-carlsen-ruy-fourknights",
+    "openingId": "pro-carlsen-ruy-lopez",
+    "criticalPositionFen": "r1bq1rk1/p1p2ppp/5n2/3p4/1b6/2NB4/PPP2PPP/R1BQ1RK1 w - - 2 10",
+    "title": "Harmonious Piece Play",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "move": "Qf3, Bf4 and Rfe1 — harmonious development, trading into the better minor pieces",
+        "explanation": "In the symmetrical Four Knights, Carlsen relies on harmonious piece play: h3 for luft, the queen to f3, the bishop to f4 offering to trade Black's good bishop, and the rooks to the centre.",
+        "fen": ""
+      }
+    ],
+    "strategicThemes": [
+      "In the symmetrical Four Knights, Carlsen relies on harmonious piece play: h3 for luft, the queen to f3, the bishop to f4 offering to trade Black's good bishop, and the rooks to the centre."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/p1p2ppp/5n2/3p4/1b6/2NB4/PPP2PPP/R1BQ1RK1 w - - 2 10",
+        "moves": [
+          "h3",
+          "c6",
+          "Qf3",
+          "h6",
+          "Bf4",
+          "Bd6",
+          "Rfe1",
+          "Rb8"
+        ],
+        "annotations": [
+          "A useful luft move, controlling g4.",
+          "Black shores up the centre.",
+          "The queen takes an active post, eyeing the kingside.",
+          "Black makes his own luft.",
+          "The bishop develops with tempo, offering to trade Black's well-placed dark bishop.",
+          "Black declines and holds the diagonal.",
+          "The last piece joins — every White unit is harmonised.",
+          "Black contests the b-file."
+        ],
+        "learnCues": [
+          "h3 — luft",
+          "…c6 — shore up",
+          "Qf3 — active queen",
+          "…h6 — luft",
+          "Bf4 — offer the trade",
+          "…Bd6 — hold",
+          "Rfe1 — finish development",
+          "…Rb8 — contest the b-file"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Harmonious Piece Play",
+        "intro": "In the symmetrical Four Knights, Carlsen relies on harmonious piece play: h3 for luft, the queen to f3, the bishop to f4 offering to trade Black's good bishop, and the rooks to the centre.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-piece-activity",
+          "concept:pos-center",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-carlsen-qp-kid",
+    "openingId": "pro-carlsen-queens-pawn",
+    "criticalPositionFen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 1 7",
+    "title": "Queenside Space and the b4 Push",
+    "pawnBreaks": [
+      {
+        "move": "d5 and b4 — White grabs queenside space and pushes the bayonet",
+        "explanation": "Against the King's Indian, Carlsen grabs the centre with d5 and storms the queenside — the b4 push (the bayonet idea) attacks where White holds the space, opening the b-file for the rooks.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "Against the King's Indian, Carlsen grabs the centre with d5 and storms the queenside — the b4 push (the bayonet idea) attacks where White holds the space, opening the b-file for the rooks."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 1 7",
+        "moves": [
+          "Nc6",
+          "d5",
+          "Ne7",
+          "b4",
+          "a5",
+          "bxa5"
+        ],
+        "annotations": [
+          "Black develops the knight, pressing d4.",
+          "White seizes space and kicks the knight, planting the central wedge.",
+          "The knight reroutes toward the kingside, the King's-Indian plan.",
+          "The queenside storm begins — White attacks where he has the space.",
+          "Black strikes back at the pawn chain.",
+          "Opening the b-file for White's rooks."
+        ],
+        "learnCues": [
+          "…Nc6 — press d4",
+          "d5 — central wedge",
+          "…Ne7 — reroute",
+          "b4 — the bayonet",
+          "…a5 — strike back",
+          "bxa5 — open the b-file"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Queenside Space and the b4 Push",
+        "intro": "Against the King's Indian, Carlsen grabs the centre with d5 and storms the queenside — the b4 push (the bayonet idea) attacks where White holds the space, opening the b-file for the rooks.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-space",
+          "concept:pawn-minority-attack",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-carlsen-qp-catalan",
+    "openingId": "pro-carlsen-queens-pawn",
+    "criticalPositionFen": "rnbq1rk1/1pp1bppp/p3pn2/8/2QP4/5NP1/PP2PPBP/RNB2RK1 b - - 0 8",
+    "title": "Catalan Pressure on the Long Diagonal",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "move": "Qc2 and Bd2 — regroup the queen, the bishop eyes the long dark diagonal",
+        "explanation": "In the Open Catalan, Black holds the c-pawn with …b5; Carlsen recaptures the initiative by regrouping the queen to c2 and developing the bishop to d2, keeping the long-diagonal pressure that defines the Catalan.",
+        "fen": ""
+      }
+    ],
+    "strategicThemes": [
+      "In the Open Catalan, Black holds the c-pawn with …b5; Carlsen recaptures the initiative by regrouping the queen to c2 and developing the bishop to d2, keeping the long-diagonal pressure that defines the Catalan."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/1pp1bppp/p3pn2/8/2QP4/5NP1/PP2PPBP/RNB2RK1 b - - 0 8",
+        "moves": [
+          "b5",
+          "Qc2",
+          "Bb7",
+          "Bd2",
+          "Be4",
+          "Qc1"
+        ],
+        "annotations": [
+          "Black grabs space and tries to keep the extra pawn.",
+          "The queen drops to c2, eyeing the long diagonal and preparing a4 to undermine b5.",
+          "Black contests the diagonal.",
+          "The bishop heads for a5 or c3, the long-diagonal partner.",
+          "Black challenges the queen.",
+          "The queen sidesteps the hit, staying flexible."
+        ],
+        "learnCues": [
+          "…b5 — hold the pawn",
+          "Qc2 — eye the diagonal",
+          "…Bb7 — contest it",
+          "Bd2 — long-diagonal plan",
+          "…Be4 — challenge",
+          "Qc1 — sidestep"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Catalan Pressure on the Long Diagonal",
+        "intro": "In the Open Catalan, Black holds the c-pawn with …b5; Carlsen recaptures the initiative by regrouping the queen to c2 and developing the bishop to d2, keeping the long-diagonal pressure that defines the Catalan.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-piece-activity",
+          "concept:pos-initiative",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-carlsen-sic-opennc6",
+    "openingId": "pro-carlsen-sicilian",
+    "criticalPositionFen": "r1bqk2r/5ppp/p1np1b2/1p1Np3/4P3/N7/PPP2PPP/R2QKB1R w KQkq - 0 11",
+    "title": "Trading Down in the Sveshnikov",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "move": "…Bg5 and …Ne7 — trade the dark bishops, reroute the knight to d5",
+        "explanation": "In this Sveshnikov-style Open Sicilian, Black eases the cramp by trading the dark-squared bishops with …Bg5, reroutes the knight via e7 toward d5, castles, and opens the b-file for queenside counterplay.",
+        "fen": ""
+      }
+    ],
+    "strategicThemes": [
+      "In this Sveshnikov-style Open Sicilian, Black eases the cramp by trading the dark-squared bishops with …Bg5, reroutes the knight via e7 toward d5, castles, and opens the b-file for queenside counterplay."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bqk2r/5ppp/p1np1b2/1p1Np3/4P3/N7/PPP2PPP/R2QKB1R w KQkq - 0 11",
+        "moves": [
+          "c3",
+          "Bg5",
+          "Nc2",
+          "Ne7",
+          "Ncb4",
+          "O-O",
+          "a4",
+          "bxa4"
+        ],
+        "annotations": [
+          "White supports the d5-outpost.",
+          "Black offers to trade the dark-squared bishops, easing the cramped position.",
+          "White reroutes the knight.",
+          "The knight heads toward d5 or g6, challenging the outpost.",
+          "White probes the queenside.",
+          "Black tucks the king away.",
+          "White strikes at b5.",
+          "Black opens the b-file for counterplay."
+        ],
+        "learnCues": [
+          "c3 — hold d5",
+          "…Bg5 — trade bishops",
+          "Nc2 — reroute",
+          "…Ne7 — toward d5",
+          "Ncb4 — probe",
+          "…O-O — safety",
+          "a4 — strike b5",
+          "…bxa4 — open the b-file"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Trading Down in the Sveshnikov",
+        "intro": "In this Sveshnikov-style Open Sicilian, Black eases the cramp by trading the dark-squared bishops with …Bg5, reroutes the knight via e7 toward d5, castles, and opens the b-file for queenside counterplay.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-piece-activity",
+          "concept:pos-initiative",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-carlsen-1e5-antimarshall",
+    "openingId": "pro-carlsen-1e5",
+    "criticalPositionFen": "r1bq1rk1/2p1bppp/p2p1n2/np2p3/4P3/2PP1N2/PPB2PPP/RNBQR1K1 b - - 2 10",
+    "title": "The …c5 Chigorin Break",
+    "pawnBreaks": [
+      {
+        "move": "…c5 — the Chigorin queenside expansion behind the closed centre",
+        "explanation": "Against the Anti-Marshall d3, Carlsen builds the classic Chigorin setup: …c5 grabs queenside space behind the closed centre, the knight comes to c6, and …Re8 backs the e5-pawn and the central tension.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "move": "…Nc6 and …Re8 — develop and back the centre",
+        "explanation": "Against the Anti-Marshall d3, Carlsen builds the classic Chigorin setup: …c5 grabs queenside space behind the closed centre, the knight comes to c6, and …Re8 backs the e5-pawn and the central tension.",
+        "fen": ""
+      }
+    ],
+    "strategicThemes": [
+      "Against the Anti-Marshall d3, Carlsen builds the classic Chigorin setup: …c5 grabs queenside space behind the closed centre, the knight comes to c6, and …Re8 backs the e5-pawn and the central tension."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/2p1bppp/p2p1n2/np2p3/4P3/2PP1N2/PPB2PPP/RNBQR1K1 b - - 2 10",
+        "moves": [
+          "c5",
+          "Nbd2",
+          "Nc6",
+          "Nf1",
+          "h6",
+          "h3",
+          "Re8"
+        ],
+        "annotations": [
+          "Black gains queenside space — the classic Chigorin setup behind the closed centre.",
+          "White reroutes the knight toward g3.",
+          "The knight develops to its natural square, eyeing d4.",
+          "White continues the reroute.",
+          "Black makes luft and controls g5.",
+          "White mirrors.",
+          "The rook backs the e5-pawn and the central tension."
+        ],
+        "learnCues": [
+          "…c5 — Chigorin space",
+          "Nbd2 — reroute",
+          "…Nc6 — eye d4",
+          "Nf1 — reroute",
+          "…h6 — luft",
+          "h3 — mirror",
+          "…Re8 — back the centre"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "The …c5 Chigorin Break",
+        "intro": "Against the Anti-Marshall d3, Carlsen builds the classic Chigorin setup: …c5 grabs queenside space behind the closed centre, the knight comes to c6, and …Re8 backs the e5-pawn and the central tension.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-space",
+          "concept:pos-center",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-carlsen-nimzo-catalan",
+    "openingId": "pro-carlsen-nimzo",
+    "criticalPositionFen": "rnbq1rk1/1pp1bppp/p3pn2/8/2pP4/5NP1/PPQ1PPBP/RNB2RK1 w - - 0 8",
+    "title": "Holding the Pawn with …b5",
+    "pawnBreaks": [
+      {
+        "move": "…b5 — grab space and defend the extra c-pawn",
+        "explanation": "In the Open Catalan, Black grabs queenside space with …b5 to defend the extra pawn, fianchettoes the bishop to b7 against White's centre, and develops …Bd6 to aim at the kingside — a harmonious, combative setup.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "move": "…Bb7 and …Bd6 — the bishops eye White’s centre and kingside",
+        "explanation": "In the Open Catalan, Black grabs queenside space with …b5 to defend the extra pawn, fianchettoes the bishop to b7 against White's centre, and develops …Bd6 to aim at the kingside — a harmonious, combative setup.",
+        "fen": ""
+      }
+    ],
+    "strategicThemes": [
+      "In the Open Catalan, Black grabs queenside space with …b5 to defend the extra pawn, fianchettoes the bishop to b7 against White's centre, and develops …Bd6 to aim at the kingside — a harmonious, combative setup."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/1pp1bppp/p3pn2/8/2pP4/5NP1/PPQ1PPBP/RNB2RK1 w - - 0 8",
+        "moves": [
+          "Qxc4",
+          "b5",
+          "Qc2",
+          "Bb7",
+          "Bd2",
+          "Bd6"
+        ],
+        "annotations": [
+          "White regains the gambit pawn.",
+          "Black grabs queenside space and prepares to defend.",
+          "The queen eyes the long diagonal.",
+          "The bishop takes the long diagonal, pressuring e4 and the centre.",
+          "White develops the bishop.",
+          "The second bishop aims at White's kingside, completing a harmonious setup."
+        ],
+        "learnCues": [
+          "Qxc4 — regain the pawn",
+          "…b5 — grab space",
+          "Qc2 — eye the diagonal",
+          "…Bb7 — pressure e4",
+          "Bd2 — develop",
+          "…Bd6 — aim at the king"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Holding the Pawn with …b5",
+        "intro": "In the Open Catalan, Black grabs queenside space with …b5 to defend the extra pawn, fianchettoes the bishop to b7 against White's centre, and develops …Bd6 to aim at the kingside — a harmonious, combative setup.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-piece-activity",
+          "concept:pos-space",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-carlsen-french-advance",
+    "openingId": "pro-carlsen-french",
+    "criticalPositionFen": "r2qkb1r/pp1b1ppp/2n1p3/3pPn2/3P4/N4N2/PP2BPPP/R1BQK2R w KQkq - 3 9",
+    "title": "The …f6 Break vs the Advance",
+    "pawnBreaks": [
+      {
+        "move": "…f6 — strike the e5-chain at its head",
+        "explanation": "Against the French Advance, Carlsen completes development and strikes the pawn chain at its head with …f6 — recapturing toward the centre opens the position for Black's pieces, with the rook swinging to the half-open c-file.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "move": "…Rc8 — the rook takes the half-open c-file",
+        "explanation": "Against the French Advance, Carlsen completes development and strikes the pawn chain at its head with …f6 — recapturing toward the centre opens the position for Black's pieces, with the rook swinging to the half-open c-file.",
+        "fen": ""
+      }
+    ],
+    "strategicThemes": [
+      "Against the French Advance, Carlsen completes development and strikes the pawn chain at its head with …f6 — recapturing toward the centre opens the position for Black's pieces, with the rook swinging to the half-open c-file."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r2qkb1r/pp1b1ppp/2n1p3/3pPn2/3P4/N4N2/PP2BPPP/R1BQK2R w KQkq - 3 9",
+        "moves": [
+          "Nc2",
+          "Be7",
+          "O-O",
+          "O-O",
+          "Bd3",
+          "f6",
+          "Bxf5",
+          "exf5",
+          "Re1",
+          "Rc8"
+        ],
+        "annotations": [
+          "White repositions the knight.",
+          "Black develops and prepares to castle.",
+          "White castles.",
+          "Black tucks the king away.",
+          "White redeploys the bishop.",
+          "The thematic break — Black strikes the head of White's pawn chain.",
+          "White trades on f5.",
+          "Recapturing toward the centre, opening the e-file and freeing the position.",
+          "White contests the e-file.",
+          "The rook takes the half-open c-file for queenside pressure."
+        ],
+        "learnCues": [
+          "Nc2 — reposition",
+          "…Be7 — develop",
+          "O-O — castle",
+          "…O-O — safety",
+          "Bd3 — redeploy",
+          "…f6 — strike the chain",
+          "Bxf5 — trade",
+          "…exf5 — open lines",
+          "Re1 — contest the e-file",
+          "…Rc8 — the c-file"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "The …f6 Break vs the Advance",
+        "intro": "Against the French Advance, Carlsen completes development and strikes the pawn chain at its head with …f6 — recapturing toward the centre opens the position for Black's pieces, with the rook swinging to the half-open c-file.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-center",
+          "concept:pos-piece-activity",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
   }
 ]

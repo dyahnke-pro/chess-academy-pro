@@ -7205,5 +7205,50 @@
     "tier": "positional",
     "why": "In the English Four Knights, 7...Bc5?! walks into the fork trick: 8.Nxe5! Nxe5 9.d4! forks the c5-bishop and the e5-knight at once. White regains the piece and stays a pawn up with the better structure (about +0.9).",
     "materialDelta": 0
+  },
+  {
+    "openingId": "pro-carlsen-sicilian",
+    "lineMoves": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 e6 Bc4 Qc7 O-O Nf6 Qe2 Ng4",
+    "inaccuracy": "h3",
+    "freqPct": 21.4,
+    "games": 8036,
+    "practicalScore": 58,
+    "mainMove": "Rd1",
+    "punish": "Nd4",
+    "punishSeq": [
+      "Nd4",
+      "hxg4",
+      "Nxe2+",
+      "Bxe2"
+    ],
+    "playLine": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 e6 Bc4 Qc7 O-O Nf6 Qe2 Ng4 h3 Nd4 hxg4 Nxe2+ Bxe2",
+    "engineCp": 332,
+    "materialDelta": 4,
+    "tier": "confirmed",
+    "why": "At your level opponents play h3 here in 21% of games, prodding the g4-knight. Punish with Nd4 — the engine has Black clearly better (+3.3): Nxd4 walks into Qh2 mate, and hxg4 Nxe2+ wins the queen. The Siberian Trap."
+  },
+  {
+    "openingId": "pro-carlsen-nimzo",
+    "lineMoves": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 cxd5 exd5",
+    "inaccuracy": "Nxd5",
+    "freqPct": 18.1,
+    "games": 54230,
+    "practicalScore": 56,
+    "mainMove": "e3",
+    "punish": "Nxd5",
+    "punishSeq": [
+      "Nxd5",
+      "Bxd8",
+      "Bb4+",
+      "Qd2",
+      "Bxd2+",
+      "Kxd2",
+      "Kxd8"
+    ],
+    "playLine": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 cxd5 exd5 Nxd5 Nxd5 Bxd8 Bb4+ Qd2 Bxd2+ Kxd2 Kxd8",
+    "engineCp": 329,
+    "materialDelta": 2,
+    "tier": "confirmed",
+    "why": "At your level opponents play Nxd5 here in 18% of games, snatching the d5-pawn. Punish with Nxd5 — the engine has Black clearly better (+3.3): after Bxd8 Bb4+ Qd2 Bxd2+ Kxd2 Kxd8 Black emerges a clean piece up. The Elephant Trap."
   }
 ]
