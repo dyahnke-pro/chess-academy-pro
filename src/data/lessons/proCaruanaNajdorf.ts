@@ -20,7 +20,7 @@ export const PRO_CARUANA_NAJDORF_LESSON: LessonScript = {
   title: "Caruana's Najdorf",
   minutes: 10,
   orientation: 'black',
-  kind: 'main',
+  kind: 'variation',
   sources: SRC,
   beats: [
     b({ id: 'a6', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6', say: "The Najdorf — the most-analysed defence in chess and Caruana's fighting weapon against e4. The little move a6 is its soul: it controls b5, denies White the natural squares, and waits to see how White commits.", sayShort: '…a6 — the Najdorf move.', arrows: [A('a7', 'a6')], highlights: [H('a6')] }),

@@ -19,7 +19,7 @@ export const PRO_CARUANA_TAIMANOV_LESSON: LessonScript = {
   title: "Caruana's Taimanov Sicilian",
   minutes: 9,
   orientation: 'black',
-  kind: 'main',
+  kind: 'variation',
   sources: SRC,
   beats: [
     b({ id: 'e6', moves: 'e4 c5 Nf3 e6', say: "The Taimanov Sicilian — Caruana's flexible, less-forcing answer to e4. The early e6 keeps every option open, letting Black choose his structure based on what White reveals. Sound and rich in plans.", sayShort: '…e6 — the flexible Sicilian.', highlights: [H('e6')] }),

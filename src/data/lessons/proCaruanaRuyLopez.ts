@@ -19,7 +19,7 @@ export const PRO_CARUANA_RUY_LOPEZ_LESSON: LessonScript = {
   title: "Caruana's Ruy Lopez",
   minutes: 10,
   orientation: 'white',
-  kind: 'main',
+  kind: 'variation',
   sources: SRC,
   beats: [
     b({ id: 'bb5', moves: 'e4 e5 Nf3 Nc6 Bb5', say: "The Ruy Lopez — Caruana's lifelong White weapon. The bishop to b5 pressures the c6-knight that guards e5. The most classical opening in chess, and he plays it for the long, grinding edge it offers.", sayShort: 'Bb5 — the Ruy pressure.', arrows: [A('f1', 'b5')], highlights: [H('b5')] }),

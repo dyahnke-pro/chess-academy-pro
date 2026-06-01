@@ -19,7 +19,7 @@ export const PRO_CARUANA_NIMZO_INDIAN_LESSON: LessonScript = {
   title: "Caruana's Nimzo-Indian",
   minutes: 10,
   orientation: 'black',
-  kind: 'main',
+  kind: 'variation',
   sources: SRC,
   beats: [
     b({ id: 'bb4', moves: 'd4 Nf6 c4 e6 Nc3 Bb4', say: "The Nimzo-Indian — Caruana's principled answer to d4. The bishop pins the c3-knight, and behind it Black fights for the centre with pieces rather than pawns. One of the soundest defences in chess.", sayShort: '…Bb4 — pin the knight.', arrows: [A('f8', 'b4')], highlights: [H('b4')] }),
