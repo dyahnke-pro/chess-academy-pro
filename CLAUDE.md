@@ -123,21 +123,34 @@ The pattern (battle-tested 2026-05-16 + 2026-05-28):
    run `npm run dev > /tmp/vite.log 2>&1 &` first; intercept audit
    POSTs via `page.on('request', ...)` since they can't reach prod.
 
-4. **🚨 SANDBOX IndexedDB WRITE-STALL — don't burn hours on it (learned
-   2026-05-24).** In the sandbox-browser audits, IndexedDB *writes* to the
-   `openings` store STALL (a Dexie `db.openings.update`/`.get` from a click
-   handler never resolves; even a raw `indexedDB.open` times out). READS work
-   — which is why most audits pass — so any audit that drives a UI action
-   which WRITES openings (unlock ladder, favorites, rung completion via
-   `markRungComplete`, drill progress) will appear to "hang" or silently not
-   persist. This is the SANDBOX env, NOT a feature bug (reproduced with the
-   feature stashed). Do NOT debug it as app code. Instead: prove the write
-   LOGIC with a fake-indexeddb unit test (e.g. `openingService.ladder.test.ts`),
-   verify the UI up to the write (button states, arming), and route the
-   live-commit + persistence check to David on a real device / prod. When you
-   write a NEW audit that exercises an openings write, seed via
-   `loadFixtureIntoIDB` and expect the commit assertion to fail in-sandbox —
-   say so in the script header (see `audit-wlpp-unlock-budget.mjs`).
+4. **🚨 SANDBOX IndexedDB WRITE-STALL — UNLOCK THE PROGRESSION, do NOT "route
+   to David" (corrected David 2026-06-01; SUPERSEDES the old "don't burn hours
+   / route to David" guidance — that was the stale order that wrongly blocked
+   WLPP/gem audits).** In the sandbox browser the openings-store *write* a
+   click handler makes — rung completion via `markRungComplete`, the two-tap
+   unlock-all, favorites, drill progress — intermittently stalls. So an audit
+   that tries to ADVANCE the ladder by *completing* Watch (a write) hangs, and
+   Learn/Practice/Play and the weapon GEMS stay locked. The fix is NOT to give
+   up — it is to **UNLOCK THE PROGRESSION UP FRONT BY SEEDING, NOT CLICKING**:
+   before driving the surface, write each opening's `linesUnlockedAll` to
+   include the main line (`MAIN_LINE_INDEX = -1`) AND every variation index.
+   Then `isLineUnlockedAll` makes `isRungUnlocked` (every rung) AND
+   `areWeaponsUnlocked` (gems + traps) read TRUE — every WLPP button and every
+   gem is clickable with NO runtime ladder write. READS work, so you make the
+   UNLOCKED STATE a read. Seed it with a controlled `indexedDB` put at a quiet
+   moment (the deferred seed itself completes), e.g. `page.evaluate` opening
+   `ChessAcademyDB` and `store.put`-ing each opening with `linesUnlockedAll`
+   set; `scripts/audit-lib/idb-unlock.mjs` (`seedUnlockedOpenings(page, ids)`)
+   is the shared helper and `audit-samay-deep-prod.mjs` is the reference. THEN
+   drive Watch → Learn → Practice → Play → every gem and verify each (mount +
+   the `/api/tts` voice contract + the narration-listener events). The ONLY
+   thing that genuinely still needs a real device is confirming a FRESH runtime
+   unlock-WRITE *persists across reload* (that single commit-path assertion) —
+   prove that logic with the fake-indexeddb unit test
+   (`openingService.ladder.test.ts`) and flag the on-device persistence check.
+   That narrow caveat does NOT excuse skipping the ladder/gem audit. "Writes
+   stall so I can't drive past Watch" is now a STALE excuse: seed-unlock and
+   drive the whole loop.
 
 5. **Onboarding bubble blocks fresh-context audits.** A fresh
    Playwright context shows the strength-calibration bubble before any
@@ -158,22 +171,6 @@ The pattern (battle-tested 2026-05-16 + 2026-05-28):
    content. Pro-rep entries land at ~30s in; full seed completes by
    ~50s. The 35s wait was too tight for the 2026-05-28 Naroditsky
    rebuild audit (only Caro-Kann had landed in Dexie); bumped to 60s.
-
-4. **🚨 SANDBOX IndexedDB WRITE-STALL — don't burn hours on it (learned
-   2026-05-24).** In the sandbox-browser audits, IndexedDB *writes* to the
-   `openings` store STALL (a Dexie `db.openings.update`/`.get` from a click
-   handler never resolves; even a raw `indexedDB.open` times out). READS work
-   — which is why most audits pass — so any audit that drives a UI action
-   which WRITES openings (unlock ladder, favorites, rung completion via
-   `markRungComplete`, drill progress) will appear to "hang" or silently not
-   persist. This is the SANDBOX env, NOT a feature bug (reproduced with the
-   feature stashed). Do NOT debug it as app code. Instead: prove the write
-   LOGIC with a fake-indexeddb unit test (e.g. `openingService.ladder.test.ts`),
-   verify the UI up to the write (button states, arming), and route the
-   live-commit + persistence check to David on a real device / prod. When you
-   write a NEW audit that exercises an openings write, seed via
-   `loadFixtureIntoIDB` and expect the commit assertion to fail in-sandbox —
-   say so in the script header (see `audit-wlpp-unlock-budget.mjs`).
 
 **Cannot-run-Playwright is no longer a valid excuse in the sandbox.**
 The 2026-05-16 session shipped four PRs claiming "I can't run

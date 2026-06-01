@@ -25,7 +25,7 @@ const SVESHNIKOV: LessonScript = {
       say: "After d6 we pin and pressure the f6-knight with Bg5 — the knight that guards d5. Removing or distracting it is the whole battle: once it goes, the d5-square is ours forever.",
       sayShort: 'Bg5 — attack the d5-defender.' }),
     b({ id: 'na3', moves: 'e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Bxf6 gxf6 Na3 b5',
-      arrows: [A('a3', 'd5')], highlights: [{ square: 'd5', color: KEY }, { square: 'f6', color: SOFT }],
+      arrows: [A('a3', 'c4')], highlights: [{ square: 'd5', color: KEY }, { square: 'f6', color: SOFT }],
       say: "Black kicks the b5-knight and we trade on f6, shattering Black's kingside pawns. The knight reroutes via a3 toward c4 and d5. Black has the bishop pair and central pawns, but the chronic d5-weakness and the doubled f-pawns give White a long-term structural target — the main Sveshnikov battleground.",
       sayShort: 'Na3 — reroute toward d5.' }),
   ],

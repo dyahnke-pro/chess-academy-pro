@@ -43,7 +43,7 @@ const VS_FALKBEER: LessonScript = {
       sayShort: 'Nf3, d4, Bc4 — develop with tempo.' }),
     b({ id: 'plan', moves: 'e4 e5 f4 d5 exd5 exf4 Nf3 Nf6 d4 Nxd5 Bc4 Nb6 Bb3 Bg4 Bxf4',
       arrows: [A('b3', 'f7')], highlights: [{ square: 'f7', color: KEY }, { square: 'f4', color: SOFT }],
-      say: "The plan: regain f4 with the bishop, keep the strong b3-bishop on f7, and castle into a centre where White's freer pieces and pawn front carry the initiative. The Falkbeer is met with calm, classical development.",
+      say: "The plan: regain f4 with the bishop, keep the strong b3-bishop trained on f7, and castle into a centre where White's freer pieces and pawn front carry the initiative. The Falkbeer is met with calm, classical development.",
       sayShort: 'Plan: Bxf4, press f7, castle.' }),
   ],
 };

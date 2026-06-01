@@ -55,7 +55,7 @@ const VS_ROSSOLIMO: LessonScript = {
   beats: [
     b({ id: 'nd4', moves: 'e4 c5 Nf3 Nc6 Bb5 Nd4',
       arrows: [A('d4', 'b5')], highlights: [{ square: 'd4', color: KEY }, { square: 'b5', color: SOFT }],
-      say: "Against the Rossolimo Bb5, Samay's choice is the bold Nd4 — leaping into the centre and offering the trade. It hits the b5-bishop and, after the exchange, leaves Black with a strong pawn on d4 and easy development.",
+      say: "Against the Rossolimo Bb5, Samay's choice is the bold Nd4 — leaping into the centre and offering the trade. It hits the b5-bishop and seizes the d4-outpost; after White takes, Black recaptures toward the centre with easy, active development.",
       sayShort: '…Nd4 — central leap, hit b5.' }),
     b({ id: 'e5', moves: 'e4 c5 Nf3 Nc6 Bb5 Nd4 Nxd4 cxd4 O-O e5',
       highlights: [{ square: 'e5', color: KEY }, { square: 'd4', color: KEY }],
