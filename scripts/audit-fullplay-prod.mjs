@@ -86,15 +86,30 @@ async function squareCenter(sq) {
   const box = await page.locator(`[data-square="${sq}"]`).first().boundingBox().catch(() => null);
   return box ? { x: box.x + box.width / 2, y: box.y + box.height / 2 } : null;
 }
-async function clickMove(from, to) {
+async function dragOnce(from, to) {
   const a = await squareCenter(from), b = await squareCenter(to);
   if (!a || !b) return;
-  // real mouse drag (react-chessboard's primary move path)
   await page.mouse.move(a.x, a.y); await page.mouse.down(); await page.waitForTimeout(90);
   await page.mouse.move((a.x + b.x) / 2, (a.y + b.y) / 2, { steps: 6 });
   await page.mouse.move(b.x, b.y, { steps: 8 }); await page.waitForTimeout(90);
   await page.mouse.up();
-  await page.waitForTimeout(550);
+}
+// Play one move and CONFIRM it registered via the correct-flash, retrying on a
+// wrong-flash (a mis-landed drag). Paces on the flash so the next move never
+// fires before the previous settles (the 9/17 desync was racing the animation).
+async function clickMove(from, to) {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await dragOnce(from, to);
+    // wait for correct (accepted) or wrong (rejected) flash, up to ~2.5s
+    for (let i = 0; i < 12; i++) {
+      if (await page.locator('[data-testid="correct-flash"]').isVisible().catch(() => false)) return true;
+      if (await page.locator('[data-testid="wrong-flash"]').isVisible().catch(() => false)) break;
+      if (await page.locator('[data-testid="line-player-complete"]').isVisible().catch(() => false)) return true;
+      await page.waitForTimeout(220);
+    }
+    await page.waitForTimeout(700); // let a wrong-flash clear, then retry
+  }
+  return false;
 }
 // Enable voice + full narration in the profile so the lesson SPEAKS (the audit
 // must verify narration; voiceEnabled defaults to false). Mirrors the reference
