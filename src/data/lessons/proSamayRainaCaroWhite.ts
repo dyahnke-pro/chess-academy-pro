@@ -28,7 +28,7 @@ export const PRO_SAMAYRAINA_CARO_WHITE_LESSON: LessonScript = {
       sayShort: 'cxd5 — the IQP middlegame.' }),
     b({ id: 'plan', moves: 'e4 c6 c4 d5 exd5 cxd5 d4 Nf6 Nc3 Nc6 Bg5 e6 Nf3 Be7 cxd5 Nxd5',
       arrows: [A('f1', 'd3'), A('f3', 'e5')], highlights: [{ square: 'd5', color: KEY }, { square: 'h7', color: SOFT }],
-      say: "The IQP plan: develop Bd3 and Re1, plant a knight on e5, and use the d-pawn as a springboard for a kingside attack with ideas like Bxh7 or a knight sacrifice. The isolated pawn is dynamic, not weak — as long as we attack. If Black trades everything off, only then does the endgame favour Black, so we keep the pieces on and press.",
+      say: "The IQP plan: develop Bd3 and Re1, jump a knight into e5, and use the d-pawn as a springboard for a kingside attack with ideas like Bxh7 or a knight sacrifice. The isolated pawn is dynamic, not weak — as long as we attack. If Black trades everything off, only then does the endgame favour Black, so we keep the pieces on and press.",
       sayShort: 'Plan: Bd3, Ne5, attack the king.',
     }),
   ],
