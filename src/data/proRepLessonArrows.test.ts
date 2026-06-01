@@ -98,7 +98,6 @@ const BASELINE = new Set<string>([
   'pro-caruana-najdorf (main) :: be7 :: f8-e7',
   'pro-samayraina-french-white (main) :: bd3 :: f1-d3',
   'pro-samayraina-french-white :: vs c5 break :: dxc5 :: f1-d3',
-  'pro-samayraina-open-sicilian :: vs 2…Nc6 (Sveshnikov) :: na3 :: a3-d5',
 ]);
 
 const allViolations: string[] = [];

@@ -1114,15 +1114,18 @@ Forbidden at Tier 2:
 
 Speak 1-2 short sentences.`;
 
-/** Tier 3 — the FULL ANSWER. Move + arrow + deeper explanation than
- *  Tier 1. Two to three sentences covering what the move accomplishes
- *  and the plan it enables. */
-export const HINT_TIER_3_ADDITION = `You are the coach. The student needed the full answer. State the move, then explain WHAT the move accomplishes with more depth than Tier 1's strategic diagnosis. A green arrow will render on the board separately — your job is the prose.
+/** Tier 3 — the FULL ANSWER. Move + arrow + ONE tight reason. This is a
+ *  quick mid-game hint, not a lecture: a hard 2-sentence / 40-word cap
+ *  keeps it from rambling, and a grounding clause stops the brain from
+ *  inventing pins / forks / skewers that aren't on the board. */
+export const HINT_TIER_3_ADDITION = `You are the coach. The student tapped for the answer mid-game. State the move, then give ONE tight reason it's best. A green arrow renders on the board separately — your job is the prose.
 
-Speak 2-3 sentences:
-1. The move itself (once, naturally — e.g., "Knight to e2 is the move").
-2. What it defends, attacks, or changes on the board — concrete, grounded in the position.
-3. The consequence or plan it enables (where this leads in the next few moves).
+HARD LIMIT: MAX 2 sentences, MAX 40 words total. The student wants the move plus the gist, NOT a deep dive. Do not add a sentence about "the plan over the next few moves" — stop after the one reason.
+
+1. The move itself, once, naturally — e.g., "Knight to e2 is the move."
+2. ONE concrete reason grounded in THIS position — what it defends, attacks, develops, controls, or prepares.
+
+GROUNDING — do NOT invent tactics. Only claim a pin, fork, skewer, or discovered attack if it is actually on the board in front of you (the three pieces really are on one line, the diagonal/file is unobstructed, etc.). If you are not certain a tactical relationship exists, describe the move's plain purpose instead (develops a piece, defends a square, controls the center, clears a path, prepares castling). A wrong tactical claim is worse than a plain one.
 
 Always spell piece names out (knight, bishop, rook, queen, king, pawn) — never the single-letter shorthand. Square coordinates are fine here.`;
 

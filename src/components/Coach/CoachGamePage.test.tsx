@@ -197,9 +197,9 @@ describe('CoachGamePage', () => {
     expect(page).toBeInTheDocument();
   });
 
-  it('hint button displays Show Answer text at level 0', () => {
+  it('hint button displays Hint text at level 0', () => {
     render(<CoachGamePage />);
-    expect(screen.getByTestId('hint-button')).toHaveTextContent('Show Answer');
+    expect(screen.getByTestId('hint-button')).toHaveTextContent('Hint');
   });
 
   it('takeback button is disabled when no moves have been made', () => {

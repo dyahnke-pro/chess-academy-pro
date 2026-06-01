@@ -293,7 +293,7 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
             `Piece to move: ${pieceNameFromSymbol(pieceSymbol)} on ${from}.`;
         } else if (nextLevel === 3) {
           tierAddition = HINT_TIER_3_ADDITION;
-          tierContextLine = `Best move: ${best.bestMoveSan}. Explain WHY it's best with concrete depth — what it defends, attacks, or changes; the plan it enables next.`;
+          tierContextLine = `Best move: ${best.bestMoveSan}. Give ONE tight reason it's best — what it does in THIS position (defends / attacks / develops / controls / prepares). Max 2 sentences, max 40 words. Do not invent tactics that aren't on the board.`;
         } else {
           tierContextLine = `Best move (for your reference, DO NOT state it): ${best.bestMoveSan}. Diagnose the WHY in 1-2 sentences without naming any piece or square.`;
         }
