@@ -42,18 +42,35 @@ then fan out. Layers: lessons → model games → plans → pitfalls → endgame
       lessons (Gate A) + variation tabs + model games (student wins only) +
       middlegame plans + endgame (Kan) + engine/board-verified pitfalls +
       warnings + pro-rep entries + revision bump. Every gate green.
-      | Opening | Tabs | Models | Plans | Pitfalls |
-      |---|---|---|---|---|
-      | Sicilian Kan ⭐ | 4 | 12 | 4 + endgame | 3 |
-      | Nimzo-Indian | 3 | 9 | 2 | 3 |
-      | Caro-Kann | 3 | 9 | 2 | 3 |
-      | Réti/KIA | 3 | 9 | 2 | 3 |
-      | Ruy Lopez | 2 | 8 | 1 | 3 |
-      | Open Sicilian | 3 | 9 | 1 | 3 |
-      | Rossolimo | 3 | 9 | 1 | 3 |
-      | French (White) | 3 | 9 | 1 | 3 |
-      | Anti-Caro 2Kts | 2 | 6 | 1 | 3 |
+      | Opening | Tabs | Models | Gems | Warn | Pitfalls |
+      |---|---|---|---|---|---|
+      | Sicilian Kan ⭐ | 4 | 12 | 6 | 0 | 3 |
+      | Nimzo-Indian | 3 | 9 | 4 | 0 | 3 |
+      | Caro-Kann | 3 | 9 | 3 | 1 | 3 |
+      | Réti/KIA | 3 | 9 | 3 | 0 | 3 |
+      | Ruy Lopez | 2 | 8 | 9 | 0 | 3 |
+      | Open Sicilian | 3 | 9 | 0 | 0 | 3 |
+      | Rossolimo | 3 | 9 | 2 | 0 | 3 |
+      | French (White) | 3 | 9 | 5 | 1 | 3 |
+      | Anti-Caro 2Kts | 2 | 6 | 4 | 0 | 3 |
       Plans/models per opening = exactly what his data supports (no fabrication).
+
+## GEMS + TRAPS + WARNINGS PASS (2026-06-01, David: "don't stop until all
+   model games, end games, middle plans, traps, and what to watch out for")
+- **36 punish-gems mined + hand-narrated** (Building-Habits register, gate-green).
+  23 confirmed crushes incl. an anti-Caro smothered mate (Qe2 Nbd7?? Nd6#) and a
+  Ruy +5.0 Open-line crush. The gems ARE the weapon/trap section (same as Gotham,
+  which ships 0 trapLines + its weapons as gems).
+- **Hand-found 2 gems the bot missed** (David: "bots are missing things"): a Réti
+  KIA …d4 clamp and a Rossolimo …Nf4 rim-hop — added deeper EXTRA_WALK seeds for
+  the main Advance Caro / Reti / Rossolimo / Open Sicilian lines the shallow seeds
+  skipped, then re-mined.
+- **2 engine-verified warningLines** (Caro …b5 −0.7, French Qxg7 −1.0) feeding the
+  "watch out for" section alongside the 27 pitfalls. Most candidate warnings were
+  just equal (recipe LAYER-4 reality) — only the genuinely-punished ones shipped
+  (empty > invented).
+- Open Sicilian honestly carries 0 gems: at masters-depth the amateur tries don't
+  blunder hard enough — empty > fabricated.
 - [ ] STEP 6 — voice corpus per opening → `data/sources/chessbrah-voice/per-opening/`
 - [ ] STEP 7-8 — author + register lessons (LESSONS map only; G9.3 Gate A)
 - [ ] STEP 9 — middlegame + endgame plans (Gate C continuity)

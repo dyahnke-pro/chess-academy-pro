@@ -4813,10 +4813,17 @@
       ],
       "traps": [],
       "warnings": [
-        "In the Advance, never lock the light bishop in with an early …e6 before …Bf5 — that turns the Caro into a bad French."
+        "In the Advance, never lock the light bishop in with an early …e6 before …Bf5 — that turns the Caro into a bad French.",
+        "Don’t cling to the c4-pawn with …b5 in the Advance — give it back for piece activity; …b5 weakens c6 and the light squares."
       ],
       "trapLines": [],
-      "warningLines": [],
+      "warningLines": [
+        {
+          "name": "Clinging to the c4-pawn with …b5",
+          "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 Nd7 O-O Ne7 c4 dxc4 Bxc4 b5 Bd3 Bxd3 Qxd3",
+          "explanation": "In the Advance, grabbing and HOLDING the c4-pawn with …b5 is greedy. After Bd3 trades your good light-squared bishop and Qxd3, White is fully developed with a lasting lead in space and the d6/c5 squares to target — the engine reads about −0.7 for Black. The point of …dxc4 is to gain a tempo on the bishop and give the pawn back for free piece play, not to defend it with weakening pawn moves. Watch out for the …b5 reflex."
+        }
+      ],
       "sources": [
         "book:chess-fundamentals",
         "concept:pos-development",
@@ -5103,10 +5110,17 @@
       ],
       "traps": [],
       "warnings": [
-        "The Winawer gives Black queenside counterplay on the doubled c-pawns — get your kingside attack rolling with h4-h5 before Black’s …Qa5 / …c4 pressure arrives."
+        "The Winawer gives Black queenside counterplay on the doubled c-pawns — get your kingside attack rolling with h4-h5 before Black’s …Qa5 / …c4 pressure arrives.",
+        "In the Winawer, don’t grab g7 with the queen when Black has …cxd4 — the queen gets stranded on h7 and Black’s central break crashes through."
       ],
       "trapLines": [],
-      "warningLines": [],
+      "warningLines": [
+        {
+          "name": "Grabbing g7 too early with Qg4xg7",
+          "pgn": "e4 e6 d4 d5 Nc3 Bb4 e5 c5 Qg4 Ne7 Qxg7 Rg8 Qxh7 cxd4",
+          "explanation": "The Qg4 poisoned-pawn grab is a known trap — for WHITE. After …Ne7 defends g7, snatching it with Qxg7 Rg8 Qxh7 lets Black hit back with …cxd4: the queen on h7 is offside while Black rips open the centre with tempo against the uncastled white king — the engine reads about −1.0 for White. In Aman’s Winawer you play a3 and bxc3 to win the bishop pair and attack soundly; you don’t go pawn-hunting with the queen. Watch out for the Qxg7 grab when Black has …cxd4 ready."
+        }
+      ],
       "sources": [
         "book:french-defence",
         "concept:pos-development",
