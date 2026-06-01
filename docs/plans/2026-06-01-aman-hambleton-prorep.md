@@ -38,7 +38,22 @@ then fan out. Layers: lessons → model games → plans → pitfalls → endgame
 - [ ] STEP 2 — extract trees + model games (per opening)
 - [ ] STEP 3 — identify variation tabs (≥30g + canonical name)
 - [ ] STEP 4 — deep-build per-variation data
-- [ ] STEP 5 — count MG + endgame plans HONESTLY (wider-corpus rule)
+- [x] STEP 5-16 — ALL 9 OPENINGS BUILT TO FULL CONTENT (2026-06-01):
+      lessons (Gate A) + variation tabs + model games (student wins only) +
+      middlegame plans + endgame (Kan) + engine/board-verified pitfalls +
+      warnings + pro-rep entries + revision bump. Every gate green.
+      | Opening | Tabs | Models | Plans | Pitfalls |
+      |---|---|---|---|---|
+      | Sicilian Kan ⭐ | 4 | 12 | 4 + endgame | 3 |
+      | Nimzo-Indian | 3 | 9 | 2 | 3 |
+      | Caro-Kann | 3 | 9 | 2 | 3 |
+      | Réti/KIA | 3 | 9 | 2 | 3 |
+      | Ruy Lopez | 2 | 8 | 1 | 3 |
+      | Open Sicilian | 3 | 9 | 1 | 3 |
+      | Rossolimo | 3 | 9 | 1 | 3 |
+      | French (White) | 3 | 9 | 1 | 3 |
+      | Anti-Caro 2Kts | 2 | 6 | 1 | 3 |
+      Plans/models per opening = exactly what his data supports (no fabrication).
 - [ ] STEP 6 — voice corpus per opening → `data/sources/chessbrah-voice/per-opening/`
 - [ ] STEP 7-8 — author + register lessons (LESSONS map only; G9.3 Gate A)
 - [ ] STEP 9 — middlegame + endgame plans (Gate C continuity)

@@ -71018,5 +71018,141 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-proamananticaro-bg4",
+    "openingId": "pro-aman-anti-caro",
+    "title": "Centralise, Castle, and Press the d-file",
+    "overview": "With the bishop pair in hand, White castles, lifts the rook to d1 to back the centre, and re-routes the knight to e4 to dominate the central squares. The small space edge and the better minor pieces add up to a comfortable, pressing middlegame.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "knight",
+        "route": "Nc3-e4 central post",
+        "explanation": "The knight jumps to e4, dominating the centre and eyeing key squares."
+      }
+    ],
+    "strategicThemes": [
+      "Castle, take the d-file, and post the knight on e4"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r2qk2r/pp1n1ppp/2pbpn2/8/3P4/2NQ3P/PPP1BPP1/R1B1K2R w KQkq - 5 10",
+        "moves": [
+          "O-O",
+          "O-O",
+          "Rd1",
+          "Re8",
+          "Ne4",
+          "Nxe4",
+          "Qxe4",
+          "Nf6"
+        ],
+        "annotations": [
+          "O-O tucks the king away safely.",
+          "…O-O Black castles too.",
+          "Rd1 backs the d4-pawn and takes the file.",
+          "…Re8 contests the e-file.",
+          "Ne4 jumps to the dominant central post.",
+          "…Nxe4 trades it off.",
+          "Qxe4 recaptures, keeping the queen centralised.",
+          "…Nf6 hits the queen."
+        ],
+        "learnCues": [
+          "O-O — king safe",
+          "…O-O — Black castles",
+          "Rd1 — take the d-file",
+          "…Re8 — contest e-file",
+          "Ne4 — central post",
+          "…Nxe4 — trade",
+          "Qxe4 — centralise",
+          "…Nf6 — hit the queen"
+        ],
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "f1",
+              "to": "d1",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "c3",
+              "to": "e4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "d3",
+              "to": "e4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "book:caro-kann",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Caro-Kann-Defense-Two-Knights-Attack"
+        ]
+      }
+    ]
   }
 ]

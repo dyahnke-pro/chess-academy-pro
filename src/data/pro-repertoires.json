@@ -3681,6 +3681,56 @@
           ]
         }
       ]
+    },
+    {
+      "id": "pro-aman-anti-caro",
+      "playerId": "aman",
+      "eco": "B11",
+      "name": "Caro-Kann Two Knights (White) (Aman)",
+      "color": "white",
+      "style": "Easy, Effective",
+      "pgn": "e4 c6 Nc3 d5 Nf3 Bg4 h3 Bxf3 Qxf3 e6 d4 dxe4 Qxe4 Nf6 Qd3 Nbd7 Be2 Bd6 O-O O-O Rd1",
+      "overview": "Aman Hambleton's best-scoring White opening — an eye-popping 83.5% across 448 games — the Two Knights Attack against the Caro-Kann (2.Nc3 and 3.Nf3). It sidesteps the heavy Caro main lines entirely for fast, natural development: both knights out, meet the …Bg4 pin with h3 and Qxf3 to grab the bishop pair, then centralise the queen and reach a comfortable middlegame with more space and the better structure. No memorization, just good moves that score — the purest expression of the Building-Habits philosophy.",
+      "keyIdeas": [
+        "Develop both knights fast with Nc3 and Nf3 — sidestep the Caro theory.",
+        "Meet …Bg4 with h3 and Qxf3 to win the bishop pair.",
+        "Centralise the queen and keep a small, durable space edge.",
+        "Castle and press with central pressure — simple and effective."
+      ],
+      "traps": [],
+      "warnings": [
+        "The Two Knights is about smooth development, not a quick knockout — don’t over-press for an attack; convert the bishop pair and the space slowly."
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:caro-kann",
+        "concept:pos-development",
+        "https://www.chess.com/openings/Caro-Kann-Defense-Two-Knights-Attack",
+        "https://api.chess.com/pub/player/chessbrah/games/archives"
+      ],
+      "variations": [
+        {
+          "name": "Two Knights (…Bg4)",
+          "pgn": "e4 c6 Nc3 d5 Nf3 Bg4 h3 Bxf3 Qxf3 e6 d4 dxe4 Qxe4 Nf6 Qd3 Nbd7 Be2 Bd6 O-O O-O Rd1",
+          "explanation": "His main line (94 games). h3 and Qxf3 win the bishop pair; White centralises and presses with a comfortable space edge.",
+          "sources": [
+            "book:caro-kann",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Caro-Kann-Defense-Two-Knights-Attack"
+          ]
+        },
+        {
+          "name": "vs …dxe4",
+          "pgn": "e4 c6 Nc3 d5 Nf3 dxe4 Nxe4 Nf6 Qe2 Nxe4 Qxe4 Nd7 Bc4 Nf6 Ne5 e6 Qe2 Bd6 d4 O-O O-O",
+          "explanation": "When Black trades …dxe4 directly, White centralises the queen, plants a knight on e5, and reaches a dominant positional bind.",
+          "sources": [
+            "book:caro-kann",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Caro-Kann-Defense-Two-Knights-Attack"
+          ]
+        }
+      ]
     }
   ]
 }

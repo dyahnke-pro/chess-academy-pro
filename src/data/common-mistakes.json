@@ -3416,5 +3416,43 @@
         "https://www.chess.com/openings/French-Defense"
       ]
     }
+  ],
+  "pro-aman-anti-caro": [
+    {
+      "fen": "rn1qkbnr/pp2pppp/2p5/3p4/4P1b1/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 2 4",
+      "wrongMove": "Be2",
+      "correctMove": "h3",
+      "explanation": "Passively allowing the pin with Be2 lets Black keep the …Bg4 bishop comfortably. Play h3 first — question the bishop immediately. After …Bxf3 you recapture with the queen and pocket the bishop pair; if Black retreats, you've gained a free tempo. Always put the question.",
+      "shortNarration": "h3 — question the bishop.",
+      "sources": [
+        "concept:pos-development",
+        "book:caro-kann",
+        "https://www.chess.com/openings/Caro-Kann-Defense-Two-Knights-Attack"
+      ]
+    },
+    {
+      "fen": "rnbqkb1r/pp2pppp/2p2n2/8/4N3/5N2/PPPP1PPP/R1BQKB1R w KQkq - 1 5",
+      "wrongMove": "Nxf6+",
+      "correctMove": "Qe2",
+      "explanation": "Trading Nxf6+ helps Black develop — after …exf6 or …gxf6 Black solves all problems. The accurate Qe2 keeps the tension and the initiative: the centralised knight stays, and White retains the more active, flexible position. Don't release the pressure for free.",
+      "shortNarration": "Qe2 — keep the tension.",
+      "sources": [
+        "concept:pos-development",
+        "book:caro-kann",
+        "https://www.chess.com/openings/Caro-Kann-Defense-Two-Knights-Attack"
+      ]
+    },
+    {
+      "fen": "rn1qkbnr/pp3ppp/2p1p3/8/3Pp3/2N2Q1P/PPP2PP1/R1B1KB1R w KQkq - 0 7",
+      "wrongMove": "Qxf7+",
+      "correctMove": "Qxe4",
+      "explanation": "The flashy Qxf7+ is a blunder — after …Kxf7 White has simply given away the queen for a pawn. Recapture calmly with Qxe4, centralising on a strong square with the bishop pair and a comfortable edge. The Two Knights wins by quiet quality, not desperate sacrifices.",
+      "shortNarration": "Qxe4 — centralise, don’t blunder.",
+      "sources": [
+        "concept:pos-development",
+        "book:caro-kann",
+        "https://www.chess.com/openings/Caro-Kann-Defense-Two-Knights-Attack"
+      ]
+    }
   ]
 }

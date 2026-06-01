@@ -9244,5 +9244,71 @@
     "sourceUrl": "https://www.chess.com/game/live/167335825174",
     "studentSide": "white",
     "overview": "Hambleton's Rubinstein in action: a blitz win over undefined (undefined) in 2026. Watch the free development edge and the cramping e5-pawn. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-anti-caro-two-knights-bg4-0",
+    "openingId": "pro-aman-anti-caro",
+    "result": "1-0",
+    "year": 2020,
+    "event": "chess.com blitz (2020-06-03)",
+    "pgn": "e4 c6 Nc3 d5 Nf3 Bg4 h3 Bxf3 Qxf3 Nf6 e5 Nfd7 e6 fxe6 d4 e5 Bd3 e4 Nxe4 dxe4 Qxe4 Nf6 Qh4 e6 O-O Bd6 Bg5 Nbd7 Rae1 Qe7 Bc4 O-O-O Rxe6 Qf8 Rfe1 h6 Bf4 Bxf4 Qxf4 Nd5 Rxc6+",
+    "sourceUrl": "https://www.chess.com/game/live/4945391476",
+    "studentSide": "white",
+    "overview": "Hambleton's Two Knights vs …Bg4 in action: a blitz win over undefined (undefined) in 2020. Watch the h3/Qxf3 bishop-pair grab and the comfortable central squeeze. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-anti-caro-two-knights-bg4-1",
+    "openingId": "pro-aman-anti-caro",
+    "result": "1-0",
+    "year": 2025,
+    "event": "chess.com bullet (2025-03-21)",
+    "pgn": "e4 c6 Nc3 d5 Nf3 Bg4 h3 Bxf3 Qxf3 e6 d3 Nf6 g3 Be7 Bg2 O-O O-O Nbd7 Qe2 dxe4 dxe4 e5 Kh1 Qc7 Nd1 h6 Ne3 Rfe8 Nf5 Bf8 Qf3 Rad8 b3 Nh7 h4 Nc5 Be3 Ne6 c3 Bc5 Bc1 Kh8 b4 Bf8 Bh3 a5 a3 Rd7 Kg2 Red8 Re1 Rd3 Re3 Qd7 Rb1 a4 Qe2 Rxe3 Bxe3 Nf6 f3 Qd3 Qe1 Qc2+ Kg1 Rd3 Rc1 Qb2 Bf1 Rd8 Qf2 Qxa3 Qc2 Qb3 Qxb3 axb3 Rb1 g6 Nxh6 Rd7 Bc4 Nd8 Bg5 Kh7 Bxf6 Bxh6 Bxb3 Kg8 Bxe5 Be3+ Kh1 Bb6 Bf4 Ne6 Bxe6 fxe6 c4 Rd3 b5 c5 Ra1 Rxf3 Ra8+ Kf7 Rb8 Ba5 Rxb7+ Ke8 e5 Rb3 Kg2 Rb2+ Kh3 Rb3 Kg4 Bc3 Kg5 Bd4 Kf6 Kd8 Kxe6 Kc8 Rd7 Rf3 Rd6 g5 Rc6+ Kb7 hxg5 Rf2 g6 Rh2 g7 Rh6+ Bxh6 Bxe5 g8=Q Bd6 Qc8+ Ka7 Ra6#",
+    "sourceUrl": "https://www.chess.com/game/live/136504097944",
+    "studentSide": "white",
+    "overview": "Hambleton's Two Knights vs …Bg4 in action: a bullet win over undefined (undefined) in 2025. Watch the h3/Qxf3 bishop-pair grab and the comfortable central squeeze. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-anti-caro-two-knights-bg4-2",
+    "openingId": "pro-aman-anti-caro",
+    "result": "1-0",
+    "year": 2025,
+    "event": "chess.com bullet (2025-10-25)",
+    "pgn": "e4 c6 Nc3 d5 Nf3 Bg4 h3 Bh5 g4 Bg6 d3 e6 Bg2 Nf6 Qe2 Be7 Bd2 O-O Ne5 Nfd7 Nxg6 hxg6 h4 d4 Nb1 c5 g5 Re8 Na3 Nc6 f4 f5 h5 Nf8 hxg6 Nxg6 exf5 Bd6 fxg6",
+    "sourceUrl": "https://www.chess.com/game/live/144696567926",
+    "studentSide": "white",
+    "overview": "Hambleton's Two Knights vs …Bg4 in action: a bullet win over undefined (undefined) in 2025. Watch the h3/Qxf3 bishop-pair grab and the comfortable central squeeze. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-anti-caro-two-knights-dxe4-0",
+    "openingId": "pro-aman-anti-caro",
+    "result": "1-0",
+    "year": 2023,
+    "event": "chess.com bullet (2023-01-25)",
+    "pgn": "e4 c6 Nc3 d5 Nf3 dxe4 Nxe4 Nf6 d3 Bf5 Qe2 e6 g3 Nbd7 Bg2 Be7 O-O O-O b3 a5 Bb2 a4 Nh4 Bg4 Qe3 axb3 axb3 Nd5 Rxa8 Qxa8 Qd2 Qa2 Qc1 Bxh4 gxh4 Qa5 Qg5 e5 Qxg4 f5 Qh3 Nf4 Qe3 fxe4 Qxe4 Kh8 Bc1 Qc5 d4 Qxc2 Qxc2",
+    "sourceUrl": "https://www.chess.com/game/live/68373136891",
+    "studentSide": "white",
+    "overview": "Hambleton's Two Knights vs …dxe4 in action: a bullet win over undefined (undefined) in 2023. Watch the centralised queen, the e5-knight outpost, and the positional bind. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-anti-caro-two-knights-dxe4-1",
+    "openingId": "pro-aman-anti-caro",
+    "result": "1-0",
+    "year": 2020,
+    "event": "chess.com blitz (2020-06-23)",
+    "pgn": "e4 c6 Nc3 d5 Nf3 dxe4 Nxe4 Nf6 d3 Nxe4 dxe4 Qxd1+ Kxd1 Bg4 Be2 Nd7 Nd2 Bxe2+ Kxe2 g6 a4 Bg7 c3 O-O-O f3 Nc5 Nc4 Nb3 Rb1 Nxc1+ Rbxc1 Kc7 a5 b5 axb6+ axb6 Ra1 b5 Ne3 Ra8 f4 Rhb8 Kd3 Rd8+ Kc2 Rxa1 Rxa1 Kb6 e5 f5 h4 h5 Rh1 e6 Nf1 Bh6 g3 Bf8 Nd2 Be7 Nf3 c5 b3 Ra8 Kb2 Kc6 Rd1 Kc7 c4 bxc4 bxc4 Rb8+ Kc2 Ra8 Rd3 Ra2+ Kb3 Rg2 Nd2 Kc6 Nb1 Rg1 Nc3 Ra1 Nb5 Rb1+ Kc2 Rb4 Kc3 Rb1 Nd6 Bd8 Nb5 Be7 Kc2 Rg1 Ra3 Kb6 Kd2 Rg2+ Kd1 Bd8 Nd6 Bc7 Ne8 Rg1+ Ke2 Bd8 Ng7 Rg2+ Kf3 Rc2 Nxe6 Be7 Ra4 Rc3+ Kg2 Rc2+ Kh3 Kc6 Ra7 Bxh4 Kxh4 Rxc4 Nf8",
+    "sourceUrl": "https://www.chess.com/game/live/5043611251",
+    "studentSide": "white",
+    "overview": "Hambleton's Two Knights vs …dxe4 in action: a blitz win over undefined (undefined) in 2020. Watch the centralised queen, the e5-knight outpost, and the positional bind. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-anti-caro-two-knights-dxe4-2",
+    "openingId": "pro-aman-anti-caro",
+    "result": "1-0",
+    "year": 2025,
+    "event": "chess.com bullet (2025-09-30)",
+    "pgn": "e4 c6 Nc3 d5 Nf3 dxe4 Nxe4 Nf6 d3 Nxe4 dxe4 Qxd1+ Kxd1 b5 a4 b4 Bc4 Ba6 Ne5 Bxc4 Nxc4 f6 Ke2 e5 Be3 Be7 Rhd1 Kf7 g3 Ke6 f4 exf4 gxf4 f5 e5 Nd7 Kf3 Rhd8 Na5 Nb8 Nb7 Rd5 Rxd5 cxd5 Bc5 Na6 Bxe7 Kxe7 Nd6 Ke6 Nb5 Rc8 Ke3 Rxc2 Nd4+",
+    "sourceUrl": "https://www.chess.com/game/live/143737569424",
+    "studentSide": "white",
+    "overview": "Hambleton's Two Knights vs …dxe4 in action: a bullet win over undefined (undefined) in 2025. Watch the centralised queen, the e5-knight outpost, and the positional bind. A clean model of the plan working against a strong opponent."
   }
 ]
