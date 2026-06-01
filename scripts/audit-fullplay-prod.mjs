@@ -225,21 +225,22 @@ async function highlightedSquares() {
   }
   // Play a PlayableLinePlayer to completion (skip demo → memory → play moves).
   async function driveLinePlayer() {
-    if (await page.locator('[data-testid="skip-to-memory"]').isVisible().catch(() => false)) { await tap('[data-testid="skip-to-memory"]'); await page.waitForTimeout(700); }
-    // DIAGNOSTIC: what element actually sits at the first square's center? (is a
-    // pointer-event overlay intercepting the board — same root cause as the
-    // buttons needing a DOM-click fallback?)
-    const probe = await page.evaluate((sq) => {
-      const el = document.querySelector(`[data-square="${sq}"]`); if (!el) return 'no-square';
-      const r = el.getBoundingClientRect(); const top = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
-      if (!top) return 'none'; return `${top.tagName}.${(top.className && top.className.toString && top.className.toString().slice(0, 40)) || ''}#${top.id || ''}[ts=${top.getAttribute && top.getAttribute('data-testid') || ''}] sameAsSquare=${top === el || el.contains(top) || top.contains(el)}`;
-    }, mainPlies[0].from).catch((e) => 'probe-err ' + String(e).slice(0, 60));
-    console.log(`  [board probe @${mainPlies[0].from}] topElement = ${probe}`);
-    // Drive the player's OWN expected line via the audit hook (handles any
-    // length/content — the curated Learn line differs from opening.pgn). Falls
-    // back to dragging opening.pgn if the hook isn't present.
+    // Ensure the MEMORY phase (skip any demo), then wait for the audit hook to
+    // be installed — the effect that sets window.__nextExpected runs async after
+    // the player remounts, so an immediate check races it (was the Practice
+    // "hook absent" + drag-fallback; Learn happened to win the race).
+    for (let i = 0; i < 10; i++) {
+      if (await page.locator('[data-testid="skip-to-memory"]').isVisible().catch(() => false)) { await tap('[data-testid="skip-to-memory"]'); await page.waitForTimeout(600); }
+      if (await page.locator('[data-testid="line-player-memory"]').isVisible().catch(() => false)) break;
+      await page.waitForTimeout(500);
+    }
+    let hookLive = false;
+    for (let i = 0; i < 16; i++) {
+      hookLive = await page.evaluate(() => typeof window.__nextExpected === 'function').catch(() => false);
+      if (hookLive) break;
+      await page.waitForTimeout(400);
+    }
     let played = 0;
-    const hookLive = await page.evaluate(() => typeof window.__nextExpected === 'function').catch(() => false);
     if (hookLive) {
       for (let i = 0; i < 60; i++) {
         if (await page.locator('[data-testid="line-player-complete"]').isVisible().catch(() => false)) break;
