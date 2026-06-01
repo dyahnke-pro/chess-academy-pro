@@ -64,12 +64,18 @@ async function tap(sel) {
   try { await el.click({ timeout: 3000 }); return true; }
   catch { return el.evaluate((n) => n.click()).then(() => true).catch(() => false); }
 }
-// Play a move by clicking the from-square then the to-square.
+// Play a move by clicking the from-square then the to-square. force:true sends
+// real pointer events at the square center, bypassing the actionability
+// interception that needs the DOM-click fallback on buttons (react-chessboard's
+// onSquareClick needs a real click, not el.click()).
 async function clickMove(from, to) {
-  await page.locator(`[data-square="${from}"]`).click({ timeout: 4000 }).catch(() => {});
-  await page.waitForTimeout(180);
-  await page.locator(`[data-square="${to}"]`).click({ timeout: 4000 }).catch(() => {});
-  await page.waitForTimeout(450);
+  for (const sq of [from, to]) {
+    const el = page.locator(`[data-square="${sq}"]`).first();
+    await el.scrollIntoViewIfNeeded({ timeout: 2000 }).catch(() => {});
+    await el.click({ timeout: 3000, force: true }).catch(() => {});
+    await page.waitForTimeout(240);
+  }
+  await page.waitForTimeout(500);
 }
 // Enable voice + full narration in the profile so the lesson SPEAKS (the audit
 // must verify narration; voiceEnabled defaults to false). Mirrors the reference
