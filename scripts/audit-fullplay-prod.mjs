@@ -94,22 +94,15 @@ async function dragOnce(from, to) {
   await page.mouse.move(b.x, b.y, { steps: 8 }); await page.waitForTimeout(90);
   await page.mouse.up();
 }
-// Play one move and CONFIRM it registered via the correct-flash, retrying on a
-// wrong-flash (a mis-landed drag). Paces on the flash so the next move never
-// fires before the previous settles (the 9/17 desync was racing the animation).
+// Play one move via mouse drag, then settle. (Flash-pacing regressed this —
+// the correct-flash is too brief to catch and the retries re-dragged
+// already-played moves, desyncing; simple drag + settle got furthest.)
+// NOTE: reliably driving all of react-chessboard's moves via headless pointer
+// events is the open hard part — a test-only "submit SAN" hook on the board
+// would make this deterministic (see status notes).
 async function clickMove(from, to) {
-  for (let attempt = 0; attempt < 3; attempt++) {
-    await dragOnce(from, to);
-    // wait for correct (accepted) or wrong (rejected) flash, up to ~2.5s
-    for (let i = 0; i < 12; i++) {
-      if (await page.locator('[data-testid="correct-flash"]').isVisible().catch(() => false)) return true;
-      if (await page.locator('[data-testid="wrong-flash"]').isVisible().catch(() => false)) break;
-      if (await page.locator('[data-testid="line-player-complete"]').isVisible().catch(() => false)) return true;
-      await page.waitForTimeout(220);
-    }
-    await page.waitForTimeout(700); // let a wrong-flash clear, then retry
-  }
-  return false;
+  await dragOnce(from, to);
+  await page.waitForTimeout(650);
 }
 // Enable voice + full narration in the profile so the lesson SPEAKS (the audit
 // must verify narration; voiceEnabled defaults to false). Mirrors the reference
