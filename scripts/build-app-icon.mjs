@@ -2,15 +2,17 @@
 /**
  * Build the app icon + splash source art for Capacitor + PWA.
  *
- * Single source of truth for the brand mark: the gold knight (♞,
- * #c9a84c) on the near-black brand background (#0f0f0f) with a soft
- * radial glow behind the horse (David 2026-06-01: "I like the app
- * icon we use now maybe add the light glow behind the horse").
+ * The brand mark (David's final sign-off 2026-06-01):
+ *   - Dark background (#0f0f0f)
+ *   - Gold knight (♞) with a thin dark outline for crisp edges/contrast
+ *   - An EMERALD glow that hugs the knight's silhouette (lit from within),
+ *     not a circular halo. Built by blurring a bright-emerald copy of the
+ *     glyph and stacking it under the crisp knight.
  *
  * Outputs:
  *   assets/icon.png              1024² full-bleed   — Capacitor iOS/Android source
  *   assets/icon-foreground.png   1024² transparent  — Android adaptive foreground
- *   assets/icon-background.png   1024² full-bleed    — Android adaptive background
+ *   assets/icon-background.png   1024² solid dark    — Android adaptive background
  *   assets/splash.png            2732² (+ -dark)     — Capacitor splash source
  *   assets/splash-dark.png       2732²
  *   public/icons/icon-192.png    192²  maskable      — PWA manifest (fixes 404)
@@ -28,53 +30,64 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const GOLD = '#c9a84c';
-const BG = '#ffffff'; // David 2026-06-01: white background
-const KNIGHT = '#0a0a0a'; // black knight, gold glow behind
+const BG = '#0f0f0f'; // dark background
+const KNIGHT_FILL = '#d8b65e'; // gold knight
+const KNIGHT_STROKE = '#0f0f0f'; // thin dark outline for edge contrast
+const GLOW = '#7cf0a0'; // emerald glow (David sign-off)
+const GLOW_STACKS = 3; // how many times the blurred glow is layered (intensity)
+
+/** A single knight glyph as a PNG buffer (transparent background). */
+function knightSvg(size, { fill, stroke, strokeWidth, fontScale = 0.66, baselineScale = 0.72 }) {
+  const c = size / 2;
+  const fontSize = Math.round(size * fontScale);
+  const baseline = Math.round(size * baselineScale);
+  const strokeAttr = stroke
+    ? ` stroke="${stroke}" stroke-width="${strokeWidth}" paint-order="stroke"`
+    : '';
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><text x="${c}" y="${baseline}" font-size="${fontSize}" text-anchor="middle" fill="${fill}"${strokeAttr} font-family="DejaVu Sans, sans-serif">&#9822;</text></svg>`;
+}
+
+function toPng(svg) {
+  return sharp(Buffer.from(svg)).png().toBuffer();
+}
 
 /**
- * Full square icon: white bg + gold radial glow + centered BLACK knight.
- * Glow intensity = "B medium" baseline (pending David's final letter pick).
+ * Compose the mark: blurred emerald glow stacked under the crisp,
+ * outlined gold knight. `background`=false yields a transparent canvas
+ * (for the Android adaptive foreground).
  */
-function iconSvg(size, { background = true, knight = true, glow = true } = {}) {
-  const c = size / 2;
-  const fontSize = Math.round(size * 0.66);
-  const baseline = Math.round(size * 0.72); // optical-center the glyph
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-  <defs>
-    <radialGradient id="glow" cx="50%" cy="45%" r="46%">
-      <stop offset="0%" stop-color="${GOLD}" stop-opacity="0.85"/>
-      <stop offset="40%" stop-color="${GOLD}" stop-opacity="0.6"/>
-      <stop offset="100%" stop-color="${GOLD}" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
-  ${background ? `<rect width="${size}" height="${size}" fill="${BG}"/>` : ''}
-  ${glow ? `<circle cx="${c}" cy="${size * 0.45}" r="${size * 0.46}" fill="url(#glow)"/>` : ''}
-  ${knight ? `<text x="${c}" y="${baseline}" font-size="${fontSize}" text-anchor="middle" fill="${KNIGHT}" font-family="DejaVu Sans, sans-serif">&#9822;</text>` : ''}
-</svg>`;
+async function composeIcon(size, { background = true, fontScale = 0.66, baselineScale = 0.72 } = {}) {
+  const glowGlyph = await toPng(
+    knightSvg(size, { fill: GLOW, fontScale, baselineScale }),
+  );
+  const glow = await sharp(glowGlyph).blur(size * 0.03).png().toBuffer();
+  const crisp = await toPng(
+    knightSvg(size, {
+      fill: KNIGHT_FILL,
+      stroke: KNIGHT_STROKE,
+      strokeWidth: Math.round(size * 0.008),
+      fontScale,
+      baselineScale,
+    }),
+  );
+
+  const layers = [];
+  for (let i = 0; i < GLOW_STACKS; i++) layers.push({ input: glow });
+  layers.push({ input: crisp });
+
+  const canvas = sharp({
+    create: {
+      width: size,
+      height: size,
+      channels: 4,
+      background: background ? BG : { r: 0, g: 0, b: 0, alpha: 0 },
+    },
+  });
+  return canvas.composite(layers).png().toBuffer();
 }
 
-/** Splash: glow + knight, smaller mark, generous margin. */
-function splashSvg(size) {
-  const c = size / 2;
-  const fontSize = Math.round(size * 0.2);
-  const baseline = Math.round(size * 0.55);
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-  <defs>
-    <radialGradient id="glow" cx="50%" cy="48%" r="22%">
-      <stop offset="0%" stop-color="${GOLD}" stop-opacity="0.75"/>
-      <stop offset="45%" stop-color="${GOLD}" stop-opacity="0.3"/>
-      <stop offset="100%" stop-color="${GOLD}" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
-  <rect width="${size}" height="${size}" fill="${BG}"/>
-  <circle cx="${c}" cy="${size * 0.48}" r="${size * 0.22}" fill="url(#glow)"/>
-  <text x="${c}" y="${baseline}" font-size="${fontSize}" text-anchor="middle" fill="${KNIGHT}" font-family="DejaVu Sans, sans-serif">&#9822;</text>
-</svg>`;
-}
-
-async function png(svg, size, outPath) {
-  await sharp(Buffer.from(svg)).resize(size, size).png().toFile(resolve(ROOT, outPath));
+async function write(buf, size, outPath) {
+  await sharp(buf).resize(size, size).png().toFile(resolve(ROOT, outPath));
   console.log('  ✓', outPath);
 }
 
@@ -82,17 +95,25 @@ async function main() {
   await mkdir(resolve(ROOT, 'assets'), { recursive: true });
   await mkdir(resolve(ROOT, 'public/icons'), { recursive: true });
 
+  const icon1024 = await composeIcon(1024);
+  // Splash: smaller centered mark, generous margin.
+  const splash = await composeIcon(2732, { fontScale: 0.2, baselineScale: 0.56 });
+
   console.log('Capacitor source art (assets/):');
-  await png(iconSvg(1024), 1024, 'assets/icon.png');
-  await png(iconSvg(1024, { background: false }), 1024, 'assets/icon-foreground.png');
-  await png(iconSvg(1024, { knight: false, glow: true }), 1024, 'assets/icon-background.png');
-  await png(splashSvg(2732), 2732, 'assets/splash.png');
-  await png(splashSvg(2732), 2732, 'assets/splash-dark.png');
+  await write(icon1024, 1024, 'assets/icon.png');
+  await write(await composeIcon(1024, { background: false }), 1024, 'assets/icon-foreground.png');
+  // Adaptive background = solid brand dark.
+  await sharp({ create: { width: 1024, height: 1024, channels: 4, background: BG } })
+    .png()
+    .toFile(resolve(ROOT, 'assets/icon-background.png'));
+  console.log('  ✓ assets/icon-background.png');
+  await write(splash, 2732, 'assets/splash.png');
+  await write(splash, 2732, 'assets/splash-dark.png');
 
   console.log('PWA web icons (public/icons/) — fixes manifest 404s:');
-  await png(iconSvg(192), 192, 'public/icons/icon-192.png');
-  await png(iconSvg(512), 512, 'public/icons/icon-512.png');
-  await png(iconSvg(180), 180, 'public/icons/apple-touch-icon.png');
+  await write(icon1024, 192, 'public/icons/icon-192.png');
+  await write(icon1024, 512, 'public/icons/icon-512.png');
+  await write(icon1024, 180, 'public/icons/apple-touch-icon.png');
 
   console.log('Done.');
 }
