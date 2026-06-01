@@ -283,6 +283,32 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
     [currentMoveIndex, expectedMoves, lineComplete, playEncouragement, settings.moveQualityFlash, resetHints, opening.id, opening.name, currentFen, game],
   );
 
+  // Audit-only deterministic move hook — gated behind the `auditMoveHook`
+  // localStorage flag (no-op for real users). The full-play audit drives the
+  // Practice rung through window.__playMove / __nextExpected just like the
+  // Learn rung's PlayableLinePlayer, instead of fighting react-chessboard's
+  // headless pointer events. (Practice uses THIS component, not
+  // PlayableLinePlayer — which is why the audit's hook was absent here.)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try { if (localStorage.getItem('auditMoveHook') !== '1') return; } catch { return; }
+    type AuditWin = Window & {
+      __playMove?: (from: string, to: string) => void;
+      __nextExpected?: () => { from: string; to: string } | null;
+    };
+    const w = window as AuditWin;
+    w.__playMove = (from: string, to: string): void => { handleMove({ from, to } as MoveResult); };
+    w.__nextExpected = (): { from: string; to: string } | null => {
+      const e = expectedMoves[currentMoveIndex];
+      return e ? { from: e.from, to: e.to } : null;
+    };
+    return () => {
+      const ww = window as AuditWin;
+      ww.__playMove = undefined;
+      ww.__nextExpected = undefined;
+    };
+  }, [handleMove, expectedMoves, currentMoveIndex]);
+
   const handleUndo = useCallback((): void => {
     setShowWrongMove(false);
     setWrongSquare(null);
