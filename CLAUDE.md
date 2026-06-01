@@ -1400,6 +1400,16 @@ voice — recalibrate immediately.
 
 ## ⏰ Standing notes
 
+**David's devices (for audit-stream attribution).** When reading the
+audit stream to tell real use from bot traffic:
+- **David's computer** = macOS Safari, UA `Mozilla/5.0 (Macintosh; Intel
+  Mac OS X 10_15_7) AppleWebKit/605.1.15 ... Version/26.4 Safari/605.1.15`
+  (browser tab, `standaloneMode=false`, `isCapacitor=false`). This is him.
+- **NOT David** = the audit bots: `AuditCoachPlayBot/*` and any
+  `HeadlessChrome/*` UA. Ignore these when judging "did David use the app."
+- His iPhone (TestFlight Capacitor app / PWA standalone) will show
+  `isCapacitor=true` or `standaloneMode=true` — also him, different device.
+
 **The DB is the source of truth — the LLM only writes prose.**
 The Lichess opening database (`src/data/openings-lichess.json`,
 3,000+ entries) is the canonical source for move sequences, FENs,
