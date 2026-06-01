@@ -76,7 +76,7 @@ export const PRO_AMAN_RETI_VARIATION_LESSONS: Record<string, LessonScript> = {
       b({ id: 'g3', moves: 'Nf3 Nf6 g3 g6 Bg2 Bg7', arrows: [A('f1', 'g2')], highlights: [H('g2')],
         say: "The hypermodern Réti: White fianchettoes …g3 and Bg2, pressuring the centre from the long diagonal instead of occupying it. A flexible, low-risk setup that's hard to attack.",
         sayShort: 'Bg2 — pressure the long diagonal.' }),
-      b({ id: 'castle', moves: 'Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d3 d6', highlights: [H('d3')],
+      b({ id: 'castle', moves: 'Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d3 d6', highlights: [H('e4'), H('d3')],
         say: "Both sides castle and mirror the setup; d3 supports a later e4 break. White keeps everything flexible, ready to expand in the centre when the moment is right.",
         sayShort: 'd3 — prepare e4.' }),
       b({ id: 'e4', moves: 'Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d3 d6 Nbd2 Nbd7 e4', highlights: [H('e4')],

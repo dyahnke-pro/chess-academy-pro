@@ -1,10 +1,10 @@
 {
   "player": "samayraina",
   "openingId": "samay-caro-white",
-  "generatedAt": "2026-05-31T23:13:53.073Z",
+  "generatedAt": "2026-06-01T01:49:50.134Z",
   "totals": {
     "totalGamesScanned": 21825,
-    "matchingWins": 0
+    "matchingWins": 1
   },
   "candidates": [
     {
@@ -17,8 +17,22 @@
         "d5",
         "Nc3"
       ],
-      "games": [],
-      "totalCandidates": 0
+      "games": [
+        {
+          "url": "https://www.chess.com/game/live/73175078059",
+          "date": "2023-03-21",
+          "studentColor": "white",
+          "opponent": "HaakenS",
+          "opponentRating": 1872,
+          "studentRating": 1829,
+          "timeClass": "rapid",
+          "timeControl": "600",
+          "eco": "Caro Kann Defense 2.d4 d5 3.Nc3 dxe4",
+          "plyCount": 77,
+          "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2023.03.21\"]\n[Round \"-\"]\n[White \"samayraina\"]\n[Black \"HaakenS\"]\n[Result \"1-0\"]\n[CurrentPosition \"8/1pkn4/8/8/8/8/Q4PK1/8 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"B15\"]\n[ECOUrl \"https://www.chess.com/openings/Caro-Kann-Defense-2.d4-d5-3.Nc3-dxe4\"]\n[UTCDate \"2023.03.21\"]\n[UTCTime \"21:59:06\"]\n[WhiteElo \"1829\"]\n[BlackElo \"1872\"]\n[TimeControl \"600\"]\n[Termination \"samayraina won by resignation\"]\n[StartTime \"21:59:06\"]\n[EndDate \"2023.03.21\"]\n[EndTime \"22:16:48\"]\n[Link \"https://www.chess.com/game/live/73175078059\"]\n\n1. e4 {[%clk 0:09:53.1]} 1... c6 {[%clk 0:09:58.4]} 2. d4 {[%clk 0:09:44.7]} 2... d5 {[%clk 0:09:57.5]} 3. Nc3 {[%clk 0:09:38.7]} 3... dxe4 {[%clk 0:09:56.4]} 4. Bf4 {[%clk 0:09:24.4]} 4... Nf6 {[%clk 0:09:48.4]} 5. Bc4 {[%clk 0:08:57.4]} 5... Bf5 {[%clk 0:09:32.7]} 6. Nge2 {[%clk 0:07:28.1]} 6... e6 {[%clk 0:09:20.1]} 7. O-O {[%clk 0:07:22.6]} 7... Bd6 {[%clk 0:08:58.7]} 8. Bxd6 {[%clk 0:06:59.3]} 8... Qxd6 {[%clk 0:08:56.3]} 9. Ng3 {[%clk 0:06:54.3]} 9... Bg6 {[%clk 0:08:55]} 10. Re1 {[%clk 0:06:49]} 10... Nbd7 {[%clk 0:08:34.3]} 11. Ncxe4 {[%clk 0:06:18.9]} 11... Nxe4 {[%clk 0:08:31.2]} 12. Nxe4 {[%clk 0:06:13.9]} 12... Bxe4 {[%clk 0:08:30]} 13. Rxe4 {[%clk 0:06:12.5]} 13... Nf6 {[%clk 0:08:29.1]} 14. Re3 {[%clk 0:05:42.5]} 14... O-O-O {[%clk 0:08:19.8]} 15. c3 {[%clk 0:05:37.2]} 15... h5 {[%clk 0:07:48.6]} 16. b4 {[%clk 0:05:17.4]} 16... g5 {[%clk 0:07:33]} 17. b5 {[%clk 0:05:04.8]} 17... c5 {[%clk 0:06:47.7]} 18. Rd3 {[%clk 0:03:51.5]} 18... cxd4 {[%clk 0:06:17.2]} 19. Rxd4 {[%clk 0:03:43.7]} 19... Qc5 {[%clk 0:06:02.2]} 20. Qf3 {[%clk 0:02:17.5]} 20... Rxd4 {[%clk 0:05:56.8]} 21. cxd4 {[%clk 0:02:15.2]} 21... Qxd4 {[%clk 0:05:07.4]} 22. Rc1 {[%clk 0:01:45.6]} 22... Kb8 {[%clk 0:04:54.5]} 23. Qg3+ {[%clk 0:01:31.7]} 23... Ka8 {[%clk 0:04:29.7]} 24. Qc7 {[%clk 0:01:21.2]} 24... Qd7 {[%clk 0:03:48.9]} 25. Qa5 {[%clk 0:01:14.3]} 25... Rc8 {[%clk 0:03:40.2]} 26. h3 {[%clk 0:01:13.1]} 26... g4 {[%clk 0:03:23.9]} 27. b6 {[%clk 0:01:00.9]} 27... a6 {[%clk 0:03:11.1]} 28. Kh2 {[%clk 0:00:41.9]} 28... gxh3 {[%clk 0:03:02.6]} 29. Bxa6 {[%clk 0:00:38.4]} 29... Rxc1 {[%clk 0:02:45.6]} 30. Bb5+ {[%clk 0:00:34.6]} 30... Kb8 {[%clk 0:02:41.8]} 31. Bxd7 {[%clk 0:00:32.3]} 31... Nxd7 {[%clk 0:02:40.9]} 32. Qa7+ {[%clk 0:00:30.3]} 32... Kc8 {[%clk 0:02:39.9]} 33. Qa4 {[%clk 0:00:27.6]} 33... hxg2 {[%clk 0:02:35.4]} 34. Kxg2 {[%clk 0:00:26.6]} 34... Rc6 {[%clk 0:02:31.2]} 35. Qh4 {[%clk 0:00:24.2]} 35... Rxb6 {[%clk 0:02:27.6]} 36. Qxh5 {[%clk 0:00:23.1]} 36... Ra6 {[%clk 0:02:24.1]} 37. Qxf7 {[%clk 0:00:21.6]} 37... Rxa2 {[%clk 0:02:20.9]} 38. Qxe6 {[%clk 0:00:21.1]} 38... Kc7 {[%clk 0:02:20.2]} 39. Qxa2 {[%clk 0:00:19.9]} 1-0\n"
+        }
+      ],
+      "totalCandidates": 1
     }
   ]
 }

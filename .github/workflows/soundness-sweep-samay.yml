@@ -1,0 +1,54 @@
+name: Soundness sweep — Samay (engine, read-only)
+
+# Read-only engine check: evals the final position of every Samay lesson +
+# plan line from the student's POV and flags any secretly-losing line. No
+# content writes — it posts the report as a comment on PR #700 so it's
+# reviewable. Fire it by pushing any commit to the ci-soundness-samay branch,
+# or via workflow_dispatch.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ ci-soundness-samay ]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund --prefer-offline
+      - name: Install Stockfish
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y stockfish
+          which stockfish && (echo "uci"; echo "quit") | stockfish | grep -i "id name" || true
+      - name: Run Samay soundness sweep
+        id: sweep
+        env:
+          STOCKFISH_PATH: /usr/games/stockfish
+        run: |
+          node scripts/soundness-sweep-samay.mjs | tee sweep.out
+      - name: Post report to PR #700
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          {
+            echo "## Samay soundness sweep (engine, student POV)";
+            echo "Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}";
+            echo '```';
+            sed -n '/SAMAY SOUNDNESS SWEEP/,$p' sweep.out || cat sweep.out;
+            echo '```';
+          } > body.md
+          gh pr comment 700 --repo "${{ github.repository }}" --body-file body.md

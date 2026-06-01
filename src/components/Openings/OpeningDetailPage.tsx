@@ -67,6 +67,7 @@ import { getProSamayRainaCaroWhiteTabPlanIds } from '../../services/proSamayRain
 import { getProSamayRainaOpenE5TabPlanIds } from '../../services/proSamayRainaOpenE5TabPlans';
 import { getProSamayRainaSicilianBlackTabPlanIds } from '../../services/proSamayRainaSicilianBlackTabPlans';
 import { getProSamayRainaScandiTabPlanIds } from '../../services/proSamayRainaScandiTabPlans';
+import { getProSamayRainaKingsGambitTabPlanIds } from '../../services/proSamayRainaKingsGambitTabPlans';
 import { getProGothamchessCaroTabPlanIds } from '../../services/proGothamchessCaroTabPlans';
 import { getProGothamchessTrompowskyTabPlanIds } from '../../services/proGothamchessTrompowskyTabPlans';
 import { getProGothamchessEnglishTabPlanIds } from '../../services/proGothamchessEnglishTabPlans';
@@ -1362,6 +1363,7 @@ export function OpeningDetailPage(): JSX.Element {
     getProSamayRainaOpenE5TabPlanIds(opening.id, pircTabKey) ??
     getProSamayRainaSicilianBlackTabPlanIds(opening.id, pircTabKey) ??
     getProSamayRainaScandiTabPlanIds(opening.id, pircTabKey) ??
+    getProSamayRainaKingsGambitTabPlanIds(opening.id, pircTabKey) ??
     getPetrovDefenceTabPlanIds(opening.id, tabKey) ??
     getPhilidorDefenceTabPlanIds(opening.id, tabKey) ??
     getQgdTabPlanIds(opening.id, tabKey) ??

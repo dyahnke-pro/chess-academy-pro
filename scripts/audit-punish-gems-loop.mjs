@@ -30,6 +30,7 @@
  *   AUDIT_SMOKE_URL=http://localhost:5173 node scripts/audit-punish-gems-loop.mjs
  */
 import { chromium } from 'playwright';
+import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { mkdir, writeFile, readFile } from 'node:fs/promises';
 
@@ -115,7 +116,41 @@ async function makeCtx(browser) {
 
 async function bootSeed(page) {
   await page.goto(`${URL}/`, { waitUntil: 'networkidle' });
-  await page.waitForTimeout(12000);
+  // Fresh-context onboarding bubble blocks every click until dismissed (G1
+  // caveat #5). Pick a skill band and wait for it to detach.
+  try {
+    const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
+    if (await bubble.isVisible({ timeout: 8000 }).catch(() => false)) {
+      await page.locator('[data-testid="skill-band-intermediate"]').click().catch(() => {});
+      await bubble.waitFor({ state: 'detached', timeout: 15000 }).catch(() => {});
+    }
+  } catch { /* no bubble */ }
+  // Pro-rep entries land ~30s into the deferred seed, full seed ~50s (G1 caveat
+  // #6) — 12s was far too short for a pro-gothamchess opening to be in Dexie.
+  // Poll the openings store until it fills past the base repertoire, cap ~60s.
+  for (let i = 0; i < 30; i++) {
+    await page.waitForTimeout(2000);
+    const n = await page.evaluate(async () => {
+      try {
+        const dbs = await indexedDB.databases();
+        const name = (dbs.find((d) => /chess/i.test(d.name || '')) || {}).name;
+        if (!name) return 0;
+        return await new Promise((res) => {
+          const req = indexedDB.open(name);
+          req.onsuccess = () => {
+            const db = req.result;
+            if (!db.objectStoreNames.contains('openings')) { res(0); return; }
+            const tx = db.transaction('openings', 'readonly').objectStore('openings').count();
+            tx.onsuccess = () => res(tx.result); tx.onerror = () => res(0);
+          };
+          req.onerror = () => res(0);
+          setTimeout(() => res(-1), 4000); // open stalled (sandbox write-stall)
+        });
+      } catch { return 0; }
+    }).catch(() => 0);
+    if (n >= 100) return;       // seeded well past base — pro entries present
+    if (n === -1 && i >= 5) return; // IDB stalled (sandbox) — proceed, caller handles
+  }
 }
 async function openDetail(page, id) {
   await page.goto(`${URL}/openings/${id}`, { waitUntil: 'domcontentloaded' });
@@ -398,8 +433,98 @@ async function runPass(browser, level) {
   return { errs, skips };
 }
 
+// ─── CONTINUITY PREFLIGHT (David 2026-06-01: "this is a full play audit, bots
+//     are not trusted; check for continuity errors and lock it into scope"). ──
+// A deterministic, browser-INDEPENDENT replay — it does NOT depend on the flaky
+// sandbox browser (which David doesn't trust) or on the write-stalled unlock. It
+// proves every line the audit will PLAY is ONE continuous, gap-free line, so a
+// rung never jumps onto a different/illegal position. A continuity error here is
+// a HARD FAIL — the audit cannot be "met" over a broken line. The classes:
+//   1. Gem field continuity — playLine === lineMoves + inaccuracy + punishSeq,
+//      every move legal from the prior FEN (no board jump / no field drift), and
+//      the inaccuracy sits exactly at the spine boundary with the punish next.
+//   2. Gem narration continuity — watch/learn arrays match the playLine length
+//      (no slid cue) and the two keystone beats NAME their own move on their own
+//      ply (inaccuracy beat says the inaccuracy, punish beat says the punish).
+//   3. Variation↔spine continuity — every variation line branches FROM the
+//      opening spine (shares its opening plies) and is itself a legal, gap-free
+//      line — never a cold/unrelated position.
+async function continuityPreflight() {
+  const errs = [];
+  let proRep = [];
+  try { proRep = JSON.parse(await readFile('src/data/pro-repertoires.json', 'utf-8')).openings ?? []; } catch { /* none */ }
+  let NARR = {};
+  try {
+    const txt = await readFile('src/data/lessons/punishGemNarration.ts', 'utf-8');
+    // lightweight: we only need to know which gemIds have an entry + their array
+    // lengths/keystone text. Pull it via a tiny eval-free parse of the object keys.
+    NARR = txt; // searched by substring below (gemId + the keystone SAN)
+  } catch { /* none */ }
+  const gemId = (g) => `${g.openingId}:${g.lineMoves.replace(/\s+/g, '_')}:${g.inaccuracy}`;
+
+  for (const g of GEMS.filter((x) => WEAPON.has(x.tier))) {
+    const tag = `${g.openingId} ${g.inaccuracy}→${g.punish}`;
+    // 1. field continuity
+    const rebuilt = [g.lineMoves, g.inaccuracy, ...(g.punishSeq ?? [])].join(' ').replace(/\s+/g, ' ').trim();
+    if (rebuilt !== g.playLine.trim()) errs.push(`CONTINUITY ${tag}: playLine ≠ lineMoves+inaccuracy+punishSeq (field drift)`);
+    const setup = g.lineMoves.split(' ');
+    const play = g.playLine.split(' ');
+    if (play[setup.length] !== g.inaccuracy) errs.push(`CONTINUITY ${tag}: inaccuracy not at spine boundary (ply ${setup.length})`);
+    if (play[setup.length + 1] !== g.punish) errs.push(`CONTINUITY ${tag}: punish not immediately after inaccuracy`);
+    // legal gap-free replay
+    const c = new Chess();
+    for (const m of play) {
+      const before = c.fen();
+      try { c.move(m); } catch { /* surfaced below */ }
+      if (c.fen() === before) { errs.push(`CONTINUITY ${tag}: board JUMP — illegal/discontinuous move "${m}"`); break; }
+    }
+    // 2. narration continuity (only if a narration entry exists for this gem)
+    const id = gemId(g);
+    if (NARR.includes(`"${id}"`) || NARR.includes(`'${id}'`)) {
+      // keystone board-flow: the inaccuracy + punish beats must name their move.
+      // (array-length alignment is already hard-gated by punishGems.test; here we
+      // assert the two keystone tokens appear near the gemId block.)
+      const bare = (s) => s.replace(/[+#]/g, '');
+      const blockStart = Math.max(NARR.indexOf(`"${id}"`), NARR.indexOf(`'${id}'`));
+      const block = NARR.slice(blockStart, blockStart + 2400);
+      if (!block.includes(bare(g.inaccuracy))) errs.push(`CONTINUITY ${tag}: narration block omits inaccuracy token "${g.inaccuracy}"`);
+      if (!block.includes(bare(g.punish))) errs.push(`CONTINUITY ${tag}: narration block omits punish token "${g.punish}"`);
+    }
+  }
+  // 3. variation↔spine continuity for the weapon openings that are pro entries
+  for (const id of GEM_OPENINGS) {
+    const o = proRep.find((x) => x.id === id);
+    if (!o?.pgn || !Array.isArray(o.variations)) continue;
+    const spine = o.pgn.split(' ');
+    for (const v of o.variations) {
+      if (!v?.pgn) continue;
+      const vm = v.pgn.split(' ');
+      // legal, gap-free
+      const c = new Chess();
+      let ok = true;
+      for (const m of vm) { const b = c.fen(); try { c.move(m); } catch { /* */ } if (c.fen() === b) { ok = false; break; } }
+      if (!ok) { errs.push(`CONTINUITY ${id} [${v.name}]: variation line illegal/discontinuous`); continue; }
+      // branches from the spine: shares ≥2 opening plies with the main line
+      let shared = 0;
+      while (shared < spine.length && shared < vm.length && spine[shared] === vm[shared]) shared++;
+      if (shared < 2) errs.push(`CONTINUITY ${id} [${v.name}]: variation does not branch from the opening spine (shares ${shared} plies)`);
+    }
+  }
+  return errs;
+}
+
 (async () => {
   console.log(`[loop] weapon openings: ${GEM_OPENINGS.join(', ') || '(none)'} — primary: ${PRIMARY ?? '(none)'}`);
+  // FULL-PLAY audit, bots-not-trusted: continuity is verified deterministically
+  // BEFORE any browser work, so a write-stalled sandbox run still hard-checks
+  // every line's continuity. A continuity error fails the audit outright.
+  const continuityErrs = await continuityPreflight();
+  if (continuityErrs.length) {
+    console.log(`\n[loop] CONTINUITY PREFLIGHT: ${continuityErrs.length} ERROR(S) — FAIL`);
+    continuityErrs.forEach((e) => console.log(`   ✗ ${e}`));
+    process.exit(1);
+  }
+  console.log('[loop] continuity preflight: clean ✓ (every played line is gap-free + branches correctly)');
   if (!PRIMARY) {
     console.log('\n[loop] CONTRACT DEFERRED — no engine-graded weapon gems present. Run the mine-punish-gems Action (Stockfish) to populate, then re-run.');
     process.exit(2);
@@ -408,10 +533,12 @@ async function runPass(browser, level) {
   const browser = await chromium.launch({ executablePath: exe, headless: true, args: sandboxLaunchArgs() });
   const report = { url: URL, ts: new Date().toISOString(), passes: [] };
   let clean = 0;
+  let playSkipped = false; // any pass that SKIPPED the actual gem play (write-stall)
   for (const level of [1, 2, 3]) {
     process.stdout.write(`\n[loop] Pass ${level} (every function${level > 1 ? `, depth ${level}` : ''}) …\n`);
     const { errs, skips } = await runPass(browser, level);
     report.passes.push({ level, errors: errs, skips });
+    if (skips.some((s) => /locked|stall/i.test(s))) playSkipped = true;
     if (skips.length) { console.log(`[loop] Pass ${level}: ${skips.length} skip(s):`); skips.forEach((s) => console.log(`   ○ ${s}`)); }
     if (errs.length === 0) { clean++; console.log(`[loop] Pass ${level}: 0 errors ✓ (consecutive clean: ${clean})${skips.length ? ` [${skips.length} skipped]` : ''}`); }
     else { console.log(`[loop] Pass ${level}: ${errs.length} ERROR(S) — streak reset`); errs.forEach((e) => console.log(`   ✗ ${e}`)); clean = 0; }
@@ -419,7 +546,15 @@ async function runPass(browser, level) {
   await browser.close();
   await mkdir('audit-reports', { recursive: true }).catch(() => {});
   await writeFile(`audit-reports/punish-gems-loop-${ONLY || 'all'}-${report.ts.replace(/[:.]/g, '-')}.json`, JSON.stringify(report, null, 2));
-  const met = clean === 3;
-  console.log(`\n[loop] ${met ? 'CONTRACT MET — 3 consecutive error-free passes (every function, deepening)' : 'CONTRACT NOT MET — need 3 consecutive error-free passes'} (clean streak: ${clean}/3)`);
+  const threeClean = clean === 3;
+  // FULL-PLAY contract (David 2026-06-01): a skip is NOT a pass. If the gem play
+  // was never actually exercised (sandbox write-stall locked the weapons), the
+  // contract is NOT met — it is DEFERRED to a real device / prod where the
+  // unlock write lands. Continuity preflight already passed (hard floor); the
+  // full interactive play-through still owes a device/prod run.
+  const met = threeClean && !playSkipped;
+  if (met) console.log(`\n[loop] CONTRACT MET — continuity clean + 3 consecutive error-free passes with the gems actually PLAYED (clean streak: ${clean}/3)`);
+  else if (threeClean && playSkipped) console.log(`\n[loop] CONTRACT DEFERRED — continuity clean + 0 errors, but the gem PLAY-THROUGH was skipped (sandbox unlock write-stall). Full-play is owed on a real device / prod; a skip is not a pass.`);
+  else console.log(`\n[loop] CONTRACT NOT MET — need continuity clean + 3 consecutive error-free passes with gems played (clean streak: ${clean}/3${playSkipped ? ', play skipped' : ''})`);
   process.exit(met ? 0 : 1);
 })();

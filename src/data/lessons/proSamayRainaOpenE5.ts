@@ -1,34 +1,38 @@
 import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } from '../../types';
 
-// Pro Samay Raina — Open Games / …e5 (Black), 3,196 games. He answers 1.e4 with
-// …e5 and defends the Ruy/Italian classically. Two registers; no move-number
-// prefixes in spoken text; green vision arrows only.
+// Pro Samay Raina — Open Games / …e5 (Black). DATA-REBUILT 2026-06-01: after
+// 1.e4 e5 he FACES the Italian (Bc4) most often, so the main line is now the
+// Giuoco Pianissimo, not the Closed Ruy (which is demoted to a variation).
+// Two registers; no move-number prefixes in spoken text; green vision arrows.
 const VIS = 'rgba(40,185,95,0.92)'; const KEY = 'rgba(255,214,0,0.88)'; const SOFT = 'rgba(80,140,255,0.32)';
 const A = (from: string, to: string, color = VIS): AnnotationArrow => ({ from, to, color });
 interface BeatInit { id: string; moves: string; say: string; sayShort: string; arrows?: AnnotationArrow[]; highlights?: AnnotationHighlight[]; }
 function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return { ...rest, moves: moves.trim().split(/\s+/) }; }
-const SRC = ['concept:pos-development', 'concept:pos-center', 'https://www.chess.com/openings/Ruy-Lopez', 'https://api.chess.com/pub/player/samayraina/games/archives'];
+const SRC = ['concept:pos-development', 'concept:pos-center', 'https://www.chess.com/openings/Italian-Game-Giuoco-Pianissimo', 'https://api.chess.com/pub/player/samayraina/games/archives'];
 
 export const PRO_SAMAYRAINA_OPEN_E5_LESSON: LessonScript = {
-  openingId: 'pro-samayraina-open-e5', title: "Samay's …e5 — the Closed Ruy", minutes: 8,
+  openingId: 'pro-samayraina-open-e5', title: "Samay's …e5 — the Italian (Giuoco Pianissimo)", minutes: 8,
   orientation: 'black', kind: 'variation', sources: SRC,
   beats: [
-    b({ id: 'e5', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6',
-      arrows: [A('f6', 'e4')], highlights: [{ square: 'e5', color: KEY }, { square: 'f6', color: SOFT }],
-      say: "We answer e4 with the classical …e5 — fighting for the centre head-on. Against the Ruy we play the main line: …a6 to question the bishop, then …Nf6 hitting e4. This is the most respected, most principled defense to e4.",
-      sayShort: '…a6, …Nf6 — the Ruy main.' }),
-    b({ id: 'be7', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3',
-      arrows: [], highlights: [{ square: 'b5', color: KEY }, { square: 'a4', color: SOFT }],
-      say: "We develop …Be7, castle, and expand on the queenside with …b5, kicking the bishop to b3. …d6 supports e5 and opens the c8-bishop's diagonal. This is the rock-solid Closed Ruy setup that has served champions for a century.",
-      sayShort: '…b5, …d6 — solid Closed Ruy.' }),
-    b({ id: 'oo', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O',
-      highlights: [{ square: 'g8', color: SOFT }, { square: 'e5', color: KEY }],
-      say: "We castle into a complete, harmonious position. The centre holds firm on e5, every piece has a job, and Black has a clear plan to come — counterplay against White's centre on the queenside and in the centre itself.",
-      sayShort: '…O-O — harmonious and solid.' }),
-    b({ id: 'plan', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O',
-      arrows: [A('c6', 'a5')], highlights: [{ square: 'a5', color: SOFT }, { square: 'c5', color: KEY }],
-      say: "The plan: the Chigorin maneuver …Na5 to hit the b3-bishop, then …c5 to challenge White's coming d4 and grab queenside space. Black holds the centre, expands on the queenside, and looks for the …d5 break. A complete, dynamic counter to the Ruy.",
-      sayShort: 'Plan: …Na5, …c5, fight for d5.',
-    }),
+    b({ id: 'e5', moves: 'e4 e5 Nf3 Nc6',
+      highlights: [{ square: 'e5', color: KEY }, { square: 'd4', color: SOFT }],
+      say: "Samay answers e4 with the classical e5, fighting for the centre head-on, and develops Nc6 to defend it. This is the most principled reply to the king's-pawn.",
+      sayShort: '…e5, …Nc6 — claim the centre.' }),
+    b({ id: 'bc5', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5',
+      arrows: [A('c5', 'f2')], highlights: [{ square: 'c5', color: KEY }, { square: 'f2', color: SOFT }],
+      say: "After e5 the Italian is the opening he faces most. He mirrors with Bc5 — the most natural square — training the bishop straight at f2. A balanced, classical battle.",
+      sayShort: '…Bc5 — aim at f2.' }),
+    b({ id: 'pianissimo', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3',
+      arrows: [A('f6', 'e4')], highlights: [{ square: 'f6', color: KEY }, { square: 'e4', color: SOFT }],
+      say: "We develop Nf6, hitting e4, and after c3 and d3 the game settles into a Giuoco Pianissimo — the slow maneuvering struggle where understanding beats memorisation and Black is never worse.",
+      sayShort: '…Nf6 — into the Pianissimo.' }),
+    b({ id: 'ba7', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3 d6 O-O O-O Re1 a6 a4 Ba7',
+      highlights: [{ square: 'a7', color: KEY }, { square: 'g8', color: SOFT }],
+      say: "We castle and tuck the bishop to a7 — keeping the powerful a7-g1 diagonal while sidestepping b4 ideas. The position is symmetrical and rich; Black has every resource White does.",
+      sayShort: '…Ba7 — keep the diagonal, safe.' }),
+    b({ id: 'plan', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3 d6 O-O O-O Re1 a6 a4 Ba7',
+      arrows: [A('c6', 'e7')], highlights: [{ square: 'd5', color: KEY }, { square: 'e7', color: SOFT }],
+      say: "The plan: reroute Ne7-g6 toward the kingside, prepare the d5 break to free the position, and simply match White's slow improvements until the moment to strike in the centre. Equal, double-edged, and full of play.",
+      sayShort: 'Plan: …Ne7-g6, break with …d5.' }),
   ],
 };
