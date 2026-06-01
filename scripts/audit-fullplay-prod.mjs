@@ -64,18 +64,24 @@ async function tap(sel) {
   try { await el.click({ timeout: 3000 }); return true; }
   catch { return el.evaluate((n) => n.click()).then(() => true).catch(() => false); }
 }
-// Play a move by clicking the from-square then the to-square. force:true sends
-// real pointer events at the square center, bypassing the actionability
-// interception that needs the DOM-click fallback on buttons (react-chessboard's
-// onSquareClick needs a real click, not el.click()).
+// Play a move on the board. react-chessboard registers moves via drag OR
+// two-click depending on moveMethod — drive BOTH: a real mouse drag (down on
+// from-center, move to to-center, up), then fall back to click-click if the
+// board didn't advance. Returns whether the move appears to have registered
+// (the from-square no longer holds the moved piece image).
+async function squareCenter(sq) {
+  const box = await page.locator(`[data-square="${sq}"]`).first().boundingBox().catch(() => null);
+  return box ? { x: box.x + box.width / 2, y: box.y + box.height / 2 } : null;
+}
 async function clickMove(from, to) {
-  for (const sq of [from, to]) {
-    const el = page.locator(`[data-square="${sq}"]`).first();
-    await el.scrollIntoViewIfNeeded({ timeout: 2000 }).catch(() => {});
-    await el.click({ timeout: 3000, force: true }).catch(() => {});
-    await page.waitForTimeout(240);
-  }
-  await page.waitForTimeout(500);
+  const a = await squareCenter(from), b = await squareCenter(to);
+  if (!a || !b) return;
+  // real mouse drag (react-chessboard's primary move path)
+  await page.mouse.move(a.x, a.y); await page.mouse.down(); await page.waitForTimeout(90);
+  await page.mouse.move((a.x + b.x) / 2, (a.y + b.y) / 2, { steps: 6 });
+  await page.mouse.move(b.x, b.y, { steps: 8 }); await page.waitForTimeout(90);
+  await page.mouse.up();
+  await page.waitForTimeout(550);
 }
 // Enable voice + full narration in the profile so the lesson SPEAKS (the audit
 // must verify narration; voiceEnabled defaults to false). Mirrors the reference
