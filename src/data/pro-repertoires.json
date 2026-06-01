@@ -4002,7 +4002,13 @@
           ]
         }
       ],
-      "trapLines": [],
+      "trapLines": [
+        {
+          "name": "Najdorf Greed — …Nxe4 Drops a Piece",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 Nxe4 Nxe4",
+          "explanation": "Carlsen's English Attack starts 6.Bg5. The greedy 6…Nxe4?? snatches the e4-pawn but the knight on f6 was the only defender of the queen's diagonal — 7.Nxe4 simply wins a clean piece (the …Nxc3 zwischenzug fails to 8.Bxd8). A free piece against an unprepared Najdorf player."
+        }
+      ],
       "warningLines": [
         {
           "name": "Passive Bd2 vs ...Ng4",
@@ -4248,7 +4254,13 @@
           ]
         }
       ],
-      "trapLines": [],
+      "trapLines": [
+        {
+          "name": "Siberian Trap (vs the Smith-Morra)",
+          "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 e6 Bc4 Qc7 O-O Nf6 Qe2 Ng4 h3 Nd4",
+          "explanation": "Against the Smith-Morra Gambit, Black accepts and develops …Qc7 and …Nf6. When White plays the natural 8.Qe2 and meets …Ng4 with the automatic 9.h3??, the famous Siberian Trap springs: 9…Nd4! The knight forks the queen on e2, and 10.Nxd4 Qh2# is mate while 10.Qd1 Nxf3+ wins decisive material. One careless h3 and White is lost."
+        }
+      ],
       "warningLines": [
         {
           "name": "...Nxe4 drops the queen",
@@ -4332,7 +4344,13 @@
           ]
         }
       ],
-      "trapLines": [],
+      "trapLines": [
+        {
+          "name": "Fishing Pole Trap",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Ng4 h3 h5 hxg4 hxg4 Ne1 Qh4",
+          "explanation": "A famous attacking trap in the Ruy Lopez. Black dangles the g4-knight as bait — the 'fishing pole'. If White bites with 7.hxg4?? hxg4, the h-file rips open against the castled king: 8.Ne1 Qh4 and …Qh1# is unstoppable. Black is down a piece but mating. White must decline the knight; if he takes, he is lost."
+        }
+      ],
       "warningLines": [
         {
           "name": "Retreating ...Nf6 hands White the centre",
@@ -4406,7 +4424,13 @@
           ]
         }
       ],
-      "trapLines": [],
+      "trapLines": [
+        {
+          "name": "Elephant Trap (QGD)",
+          "pgn": "d4 Nf6 c4 e6 Nc3 d5 Bg5 Nbd7 cxd5 exd5 Nxd5 Nxd5 Bxd8 Bb4+ Qd2 Bxd2+ Kxd2 Kxd8",
+          "explanation": "The classic Elephant Trap. In the QGD, when White grabs the d5-pawn with 6.Nxd5?? thinking the f6-knight is pinned to the queen, Black plays 6…Nxd5! 7.Bxd8 Bb4+! — the in-between check. After 8.Qd2 Bxd2+ 9.Kxd2 Kxd8 Black has won a clean piece. A 200-year-old trap that still catches club players."
+        }
+      ],
       "warningLines": [
         {
           "name": "...Nxe4 loses material",

@@ -49,3 +49,4 @@ data/sources/*-families.json
 # Voice research: only the raw transcript pulls are ignored; the
 # hand-curated *.md notes are committed.
 data/sources/*-voice/transcripts/
+data/sources/carlsen-alts/

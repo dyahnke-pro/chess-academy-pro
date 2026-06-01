@@ -39,6 +39,10 @@
     "pro-gothamchess-anti-sicilian::Slow Development d4 Push": "mistake",
     "pro-ericrosen-stafford::Légal's Mate Trap (6.Bg5??)": "trap",
     "pro-ericrosen-qgd::Elephant Trap": "trap",
-    "pro-ericrosen-budapest::Kieninger Trap": "trap"
+    "pro-ericrosen-budapest::Kieninger Trap": "trap",
+    "pro-carlsen-open-sicilian::Najdorf Greed — …Nxe4 Drops a Piece": "trap",
+    "pro-carlsen-sicilian::Siberian Trap (vs the Smith-Morra)": "trap",
+    "pro-carlsen-nimzo::Elephant Trap (QGD)": "trap",
+    "pro-carlsen-1e5::Fishing Pole Trap": "mistake"
   }
 }

@@ -315,6 +315,16 @@ const OPENING_SEEDS = {
   'pro-hikaru-reti':               { studentChar: 'w', baseSeed: ['Nf3'] },
   'pro-hikaru-pirc-modern':        { studentChar: 'b', baseSeed: ['e4', 'g6'] },
   'pro-hikaru-caro-kann':          { studentChar: 'b', baseSeed: ['e4', 'c6'] },
+  // Magnus Carlsen (2026-06-01) — mine the amateur explorer at each opening's
+  // identity position for common opponent slips the engine refutes.
+  'pro-carlsen-open-sicilian':     { studentChar: 'w', baseSeed: ['e4', 'c5', 'Nf3'] },
+  'pro-carlsen-ruy-lopez':         { studentChar: 'w', baseSeed: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5'] },
+  'pro-carlsen-queens-pawn':       { studentChar: 'w', baseSeed: ['d4', 'Nf6', 'c4'] },
+  'pro-carlsen-sicilian':          { studentChar: 'b', baseSeed: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6'] },
+  'pro-carlsen-1e5':               { studentChar: 'b', baseSeed: ['e4', 'e5', 'Nf3', 'Nc6'] },
+  'pro-carlsen-nimzo':             { studentChar: 'b', baseSeed: ['d4', 'Nf6', 'c4', 'e6'] },
+  'pro-carlsen-kid':               { studentChar: 'b', baseSeed: ['d4', 'Nf6', 'c4', 'g6', 'Nc3', 'Bg7'] },
+  'pro-carlsen-french':            { studentChar: 'b', baseSeed: ['e4', 'e6', 'd4', 'd5'] },
 };
 
 // EXTRA_WALK — common AMATEUR side-tries the student will FACE that aren't in
