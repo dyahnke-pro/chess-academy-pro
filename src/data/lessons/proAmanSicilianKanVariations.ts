@@ -19,6 +19,36 @@ const SRC = [
 ];
 
 export const PRO_AMAN_SICILIAN_KAN_VARIATION_LESSONS: Record<string, LessonScript> = {
+  // ── Open Kan main line: Bd3 + f4 (127 games at this spine, 78%) ──
+  'pro-aman-sicilian-kan::Open Kan (Bd3 + f4)': {
+    openingId: 'pro-aman-sicilian-kan',
+    title: 'Open Kan — Bd3, f4, and the …b5 Race',
+    minutes: 9,
+    orientation: 'black',
+    kind: 'variation',
+    sources: SRC,
+    beats: [
+      b({ id: 'a6', moves: 'e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6', highlights: [H('a6'), H('b5')],
+        say: "The Kan's signature: …a6. It slams the door on Nb5 so White gets no knight hop into d6 or b5, and it clears the way for …b5, the queenside expansion that powers Black's whole plan.",
+        sayShort: '…a6 — stop Nb5, prep …b5.' }),
+      b({ id: 'qc7', moves: 'e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7', arrows: [A('d8', 'c7')], highlights: [H('c7')],
+        say: "…Qc7, the Bastrikov setup — the queen eyes the e5-square and the half-open c-file, discouraging White's e5 break and supporting the coming …b5 and …Bb7.",
+        sayShort: '…Qc7 — eye e5, back …b5.' }),
+      b({ id: 'nf6', moves: 'e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Bd3 Nf6', arrows: [A('g8', 'f6')], highlights: [H('e4')],
+        say: "White develops the bishop to d3; Black answers …Nf6, hitting the e4-pawn and making White attend to the centre before launching anything.",
+        sayShort: '…Nf6 — hit e4, develop.' }),
+      b({ id: 'd6', moves: 'e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Bd3 Nf6 O-O d6', highlights: [H('d6'), H('e5')],
+        say: "Both sides castle and …d6 builds the small Scheveningen shell — it controls e5 and gives the pieces a stable home. Solid first; the expansion comes next.",
+        sayShort: '…d6 — control e5, solid shell.' }),
+      b({ id: 'nbd7', moves: 'e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Bd3 Nf6 O-O d6 f4 Nbd7', arrows: [A('b8', 'd7')], highlights: [H('d7')],
+        say: "White grabs kingside space with f4; Black stays unfazed with …Nbd7 — flexible development ready to support the …b5 and …e5 breaks. The classic opposite-wings picture.",
+        sayShort: '…Nbd7 — flexible, ready to break.' }),
+      b({ id: 'b5', moves: 'e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Bd3 Nf6 O-O d6 f4 Nbd7 Kh1 b5', highlights: [H('b5'), H('b7')],
+        say: "White tucks the king with Kh1 and Black strikes …b5! The queenside expansion is the point of …a6 and …Qc7 — push where you're strong, ready for …Bb7 on the long diagonal and …b4 to kick the c3-knight. Both sides race on opposite wings, and Black is fully in the fight.",
+        sayShort: '…b5 — expand, race the queenside.' }),
+    ],
+  },
+
   // ── Taimanov with ...Nc6 (200 games, 81%) ──
   'pro-aman-sicilian-kan::Taimanov (...Nc6)': {
     openingId: 'pro-aman-sicilian-kan',

@@ -8430,5 +8430,137 @@
       "https://api.chess.com/pub/player/imrosen/games/archives",
       "https://www.chess.com/game/live/1831822310"
     ]
+  },
+  {
+    "id": "mg-pro-aman-sicilian-kan-open-main-0",
+    "openingId": "pro-aman-sicilian-kan",
+    "result": "0-1",
+    "year": 2022,
+    "event": "chess.com bullet (2022-11-21)",
+    "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Bd3 Nf6 O-O d6 f4 Nbd7 g4 b5 g5 b4 Nce2 Ng8 Be3 Bb7 Ng3 Nc5 h4 Ne7 h5 g6 Qg4 Bg7 Rad1 Nc6 Nf3 Bxb2 h6 O-O-O e5 Ne7 exd6 Rxd6 Ne5 Nf5 Nxf5 exf5 Bxf5+ Kb8 Rxd6 Qxd6 Rd1 Qc7 Nd7+ Nxd7 Bxd7 Qxc2 f5 Be5 Bf4 Qc5+ Kh2 Qf2+ Kh3 Bxf4 Qg1 Qf3+ Kh4 Qh5#",
+    "sourceUrl": "https://www.chess.com/game/live/62738390107",
+    "studentSide": "black",
+    "overview": "Hambleton's Open Kan in action: a bullet win over undefined (undefined) in 2022. Watch the …b5 queenside race against the f4 kingside storm — Black pushes where Black is strong and gets there first. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-sicilian-kan-open-main-1",
+    "openingId": "pro-aman-sicilian-kan",
+    "result": "0-1",
+    "year": 2024,
+    "event": "chess.com bullet (2024-05-02)",
+    "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Bd3 d6 Qe2 Nd7 Bd2 b5 a3 Bb7 O-O Nc5 Kh1 Nf6 b4 Nxd3 cxd3 Be7 Rac1 Qd7 f4 O-O g4 Rfc8 g5 Ne8 Be3 a5 Ncxb5 axb4 axb4 e5 fxe5 dxe5 Nf5 Bxb4 Rxc8 Rxc8 Qb2 Qxb5 Qxe5 Qxe5",
+    "sourceUrl": "https://www.chess.com/game/live/108366663823",
+    "studentSide": "black",
+    "overview": "Hambleton's Open Kan in action: a bullet win over undefined (undefined) in 2024. Watch the …b5 queenside race against the f4 kingside storm — Black pushes where Black is strong and gets there first. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-sicilian-kan-open-main-2",
+    "openingId": "pro-aman-sicilian-kan",
+    "result": "0-1",
+    "year": 2026,
+    "event": "chess.com blitz (2026-05-10)",
+    "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Bd3 Nc6 Nxc6 bxc6 O-O d5 Re1 Nf6 Qf3 Be7 Bf4 Qb7 Na4 O-O b3 dxe4 Bxe4 Nxe4 Rxe4 c5 Rae1 f6 Be3 Qc6 Rc4 Qxf3 gxf3 e5 Bxc5 Bxc5 Nxc5 Bf5 Kf1 Rfc8 Ke2 Rc6 Rd1 Rac8 b4 Be6 Rc3 Bxa2 Ke3 g5 Ra1 a5 Rxa2 axb4 Rd3 Rxc5 Ke4 Kf7 Kf5 e4+ Kxe4 Rxc2 Rd7+ Kg6 Raa7 Re8+ Kd3 Rxf2 Rxh7 Rxf3+ Kc4 Rf4+ Kb3 Re3+ Ka4 Ra3+ Kb5 Rxa7 Rxa7 Rf2",
+    "sourceUrl": "https://www.chess.com/game/live/168511652818",
+    "studentSide": "black",
+    "overview": "Hambleton's Open Kan in action: a blitz win over undefined (undefined) in 2026. Watch the …b5 queenside race against the f4 kingside storm — Black pushes where Black is strong and gets there first. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-sicilian-kan-taimanov-nc6-0",
+    "openingId": "pro-aman-sicilian-kan",
+    "result": "0-1",
+    "year": 2020,
+    "event": "chess.com blitz (2020-07-09)",
+    "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 Qc7 Be3 a6 Be2 Nf6 O-O Bb4 Na4 O-O c4 Be7 c5 Nxe4 Rc1 f5 Bf3 Ng5 Nb6 Rb8 Bxc6 dxc6 f4 Ne4 b4 Bf6 Qb3 Qf7 Nf3 Rd8 Ne5 Bxe5 fxe5 Rd5 Bf4 Bd7 Nxd5 cxd5 a4 Qe8 Ra1 g5 Be3 f4 Bc1 Rc8 Ra2 Qg6 Rc2 Qe8 Ra2 Bc6 Rd1 Qh5 Qf3 Qxf3 gxf3 Nc3 Rdd2 Nxa2 Rxa2 Kf7 Bb2 Kg6 Bd4 Kf5 Kf2 h5 h3 Rh8 Ra1 g4 h4 Rg8 Rg1 Bxa4 Ke2 Bb5+ Kf2 Ra8 Ra1 Bc6 Ke2 gxf3+ Kxf3 Rg8 Rf1 Rg4 Ke2 Bb5+",
+    "sourceUrl": "https://www.chess.com/game/live/5122930085",
+    "studentSide": "black",
+    "overview": "Hambleton's Taimanov in action: a blitz win over undefined (undefined) in 2020. Watch the …Nc6 / …Bb4 plan, pinning the knight and pressing e4 into an active, fighting middlegame. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-sicilian-kan-taimanov-nc6-1",
+    "openingId": "pro-aman-sicilian-kan",
+    "result": "0-1",
+    "year": 2025,
+    "event": "chess.com blitz (2025-09-30)",
+    "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 Qc7 Ncb5 Qb8 Bd3 a6 Nxc6 bxc6 Nd4 Nf6 O-O Bb7 Qe2 c5 Nf3 c4 Bxc4 Nxe4 c3 Be7 Bd3 Nf6 Bg5 h6 Bh4 O-O Ne5 Qc7 Rad1 d6 Nc4 Rad8 Rd2 Nd5 Bxe7 Nxe7 Rfd1 d5 Ne5 Rd6 Qh5 f6 Ng4 e5 Re2 Re6 Re3 f5 Rg3 e4 Nxh6+ Rxh6 Qxh6 Rf7 Qe6 Bc8 Qh6 Qxg3 Qb6 Qe5 Be2 Qe6 Qd8+ Kh7 Qc7 f4 Bf1 Qg6 Qe5 Bg4 Re1 Qf6 Qc7 Bf5 Qc5 Qe5 g3 Be6 Qd4 Qf5 Bg2 Ng6 Rd1 Ne5 c4 Nf3+ Bxf3 exf3 Qxf4 Qxf4 gxf4 dxc4 Rd4 Rf6 Kf1 Rh6 Ke1 Rxh2 Kd2 Rxf2+ Ke3 Rxb2 Re4 Bd5 Kxf3 Rxa2",
+    "sourceUrl": "https://www.chess.com/game/live/143730391060",
+    "studentSide": "black",
+    "overview": "Hambleton's Taimanov in action: a blitz win over undefined (undefined) in 2025. Watch the …Nc6 / …Bb4 plan, pinning the knight and pressing e4 into an active, fighting middlegame. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-sicilian-kan-taimanov-nc6-2",
+    "openingId": "pro-aman-sicilian-kan",
+    "result": "0-1",
+    "year": 2025,
+    "event": "chess.com blitz (2025-07-14)",
+    "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 Nf6 Ndb5 d6 Bf4 e5 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 Bg5 Nc2 O-O Be2 Rb8 O-O g6 Qd3 f5 Bf3 Kg7 Rad1 a5 Nde3 f4 Nd5 Be6 Qe2 h5 b3 Rf7 Na3 Rfb7 Nc2 Ne7 Nxe7 Bxe7 h3 Qc7 Rd3 Rb6 Rb1 Rc6 Qd2 Rc8 Na3 b4 cxb4 axb4 Nc4 Bxc4 bxc4 Rxc4 Rdb3 Rc2 Qxb4 Bh4 Rf1 Rxa2 Qe1 Qc5 Rb7+ Kh6 Bd1 Qd4 Rb3 Rc1 g3 Bxg3 Kg2 Rxf2+ Rxf2 Rxd1 Qxd1 Qxd1 Rfb2 Bh4 Kh2 Bg3+ Kg2 Qd4 Rf3 Bh4 Re2 Qc4 Kf1 d5 exd5 g5 d6 e4 Rxf4 gxf4 d7 f3 Kg1 Qxe2 d8=Q Qg2#",
+    "sourceUrl": "https://www.chess.com/game/live/140675929814",
+    "studentSide": "black",
+    "overview": "Hambleton's Taimanov in action: a blitz win over undefined (undefined) in 2025. Watch the …Nc6 / …Bb4 plan, pinning the knight and pressing e4 into an active, fighting middlegame. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-sicilian-kan-maroczy-c4-0",
+    "openingId": "pro-aman-sicilian-kan",
+    "result": "0-1",
+    "year": 2026,
+    "event": "chess.com bullet (2026-03-14)",
+    "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 c4 Qc7 Nc3 Nf6 f4 d6 Qf3 b6 Be2 Bb7 O-O Nbd7 Be3 Nc5 Qg3 Ncxe4 Nxe4 Nxe4 Qh3 Be7 Bf3 Nf6 Rae1 O-O b3 Rad8 Bf2 Bxf3 Qxf3 d5 h3 dxc4 f5 Bc5 fxe6 Rxd4 b4 Rd3 e7 Rxf3 bxc5 Rxf2 exf8=Q+ Kxf8 Rxf2 Qxc5 Kf1 c3 Rfe2 b5 Rd1 g6 Rd3 c2",
+    "sourceUrl": "https://www.chess.com/game/live/165916913340",
+    "studentSide": "black",
+    "overview": "Hambleton's Maróczy Bind in action: a bullet win over undefined (undefined) in 2026. Watch the hedgehog against the bind — patient …b6/…Bb7 pressure, then uncoiling with a pawn break. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-sicilian-kan-maroczy-c4-1",
+    "openingId": "pro-aman-sicilian-kan",
+    "result": "0-1",
+    "year": 2020,
+    "event": "chess.com blitz (2020-07-09)",
+    "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 c4 Qc7 Nc3 Nf6 Be2 d6 O-O b6 Be3 Bb7 f3 Nbd7 Rc1 Rc8 b4 Be7 a3 O-O Qd2 Rfd8 Rc2 Qb8 Rb1 h5 Qe1 Ne5 Na4 Nfd7 Rbc1 h4 Nb3 Bc6 b5 Ba8 bxa6 Qa7 Nc3 Nc5 Nd4 Ncd3 Qd1 Nxc1 Qxc1 Qxa6 c5 Qb7 cxb6 Nc4 Bxc4 Rxc4 Ndb5 h3 gxh3 d5 Nc7 d4 Bg5 dxc3 Bxe7 Qxb6+ Kg2 Rd2+",
+    "sourceUrl": "https://www.chess.com/game/live/5122881751",
+    "studentSide": "black",
+    "overview": "Hambleton's Maróczy Bind in action: a blitz win over undefined (undefined) in 2020. Watch the hedgehog against the bind — patient …b6/…Bb7 pressure, then uncoiling with a pawn break. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-sicilian-kan-maroczy-c4-2",
+    "openingId": "pro-aman-sicilian-kan",
+    "result": "0-1",
+    "year": 2024,
+    "event": "chess.com blitz (2024-07-15)",
+    "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 c4 Qc7 Nc3 d6 Be2 Nf6 O-O b6 f4 Bb7 Bf3 Nbd7 Kh1 Be7 Be3 O-O Rc1 Rac8 b3 Qb8 g4 Nc5 Qc2 Ba8 g5 Nfd7 Qg2 b5 cxb5 Nd3 Nc6 Bxc6 bxc6 Nxc1 Nd5 exd5 Rxc1 dxe4 Bxe4 Nc5 Bf5 Rc7 Bd4 Qb5 Qh3 g6 Qh6 f6 Bxg6 Qxc6+ Kg1 Bd8 Bf5 Qd5",
+    "sourceUrl": "https://www.chess.com/game/live/114806355017",
+    "studentSide": "black",
+    "overview": "Hambleton's Maróczy Bind in action: a blitz win over undefined (undefined) in 2024. Watch the hedgehog against the bind — patient …b6/…Bb7 pressure, then uncoiling with a pawn break. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-sicilian-kan-alapin-c3-0",
+    "openingId": "pro-aman-sicilian-kan",
+    "result": "0-1",
+    "year": 2020,
+    "event": "chess.com blitz (2020-12-09)",
+    "pgn": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6 Bc4 e6 O-O Be7 Qe2 O-O Rd1 Qb6 Nc3 Nxc3 bxc3 dxe5 dxe5 Rd8 Be3 Qc7 Bf4 Bd7 Bd3 Be8 Qe4 g6 h4 Rd5 Re1 Rad8 Bc4 Rc5 Be3 Ra5 Bf4 Ra4 Qe2 Nd4 cxd4 Qxc4 Qd2 Bc6 Bg5 Bxg5 Qxg5 Re8 Rac1 Qb4 Rxc6 bxc6 h5 Qe7 Qf4 c5 hxg6 fxg6 Re4 Rf8 Qd2 cxd4 Nxd4 Qd7 Qe3 Qd5 Rh4 Rf7 Qc3 Rc4 Qe3 Rd7 Nf3 Rxh4 Nxh4 Qd4 Qg5 Rf7 Nf3 Qa1+ Kh2 Qd1 Qg4 Qd5 Qg5 Kg7 Qe3 Rf5 Qxa7+ Rf7 Qe3 Qxa2 Nd4 Qd5 Nf3 h6 Qe2 g5 Qe3 Qc4 Qd2 Qf4+ Qxf4 Rxf4 Kg3 Kg6 Nd2 Kf5 Nf3 h5 Kh3 g4+ Kh2 gxf3 g3 Re4 Kh1 Kg4 Kg1 Re1+ Kh2 Kg5 Kh3 Rh1#",
+    "sourceUrl": "https://www.chess.com/game/live/5922688903",
+    "studentSide": "black",
+    "overview": "Hambleton's Alapin in action: a blitz win over undefined (undefined) in 2020. Watch the …Nf6/…Nd5/…d5 equalizer that frees Black’s pieces and dissolves White’s space. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-sicilian-kan-alapin-c3-1",
+    "openingId": "pro-aman-sicilian-kan",
+    "result": "0-1",
+    "year": 2026,
+    "event": "chess.com bullet (2026-04-15)",
+    "pgn": "e4 c5 c3 e6 d4 Nf6 e5 Nd5 Nf3 cxd4 cxd4 d6 a3 Be7 Bd3 O-O O-O Nc6 Qe2 Qb6 Qe4 g6 Bh6 Rd8 Nc3 Qxb2 Nxd5 exd5 Qf4 dxe5 dxe5 Be6 Rfe1 Rac8 h4 Qc3 Rad1 Qxa3 h5 Qb4 Qg3 Qg4 Qxg4 Bxg4 hxg6 hxg6 Ng5 Bxd1 Rxd1 Nxe5 Be2 Rc2 Bf1 Ng4 Re1 Bc5 Nh3 Nxh6",
+    "sourceUrl": "https://www.chess.com/game/live/167326063806",
+    "studentSide": "black",
+    "overview": "Hambleton's Alapin in action: a bullet win over undefined (undefined) in 2026. Watch the …Nf6/…Nd5/…d5 equalizer that frees Black’s pieces and dissolves White’s space. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-sicilian-kan-alapin-c3-2",
+    "openingId": "pro-aman-sicilian-kan",
+    "result": "0-1",
+    "year": 2025,
+    "event": "chess.com bullet (2025-12-25)",
+    "pgn": "e4 c5 c3 e6 d4 d5 e5 Nc6 Nf3 Qb6 Be2 Bd7 O-O Rc8 Na3 a6 Nc2 Nge7 Bd3 Ng6 dxc5 Bxc5 b4 Be7 Be3 Qc7 a4 Ncxe5 Nxe5 Nxe5 Be2 Bd6 Bd4 O-O f4 Nc6 Bd3 Nxd4 Nxd4 Qxc3 Ne2 Qxb4 Kh1 g6 Ng3 Bxf4 Rb1 Qd6 Rxb7 Bxg3 hxg3 a5 Qf3 e5 Bb5 Be6 Qf6 Rc7 Rxc7 Qxc7 g4 e4 g5 Qg3 Be2 Rc8 Rb1 e3 Bf3 Qh4+ Kg1 Qf2+ Kh1 e2 Qe5 Qf1+ Kh2 Qxb1 Qxe2 Qb8+ Kg1 Qf4 Kf2 Qxg5 Qa6 Qd2+ Kg3 Qg5+ Kh2 Qh4+ Kg1 Rc1+ Qf1 Rxf1+ Kxf1 d4 Ke2 Bc4+ Kd2 Qf2+ Kd1 Bb3+ Kc1 Qc2#",
+    "sourceUrl": "https://www.chess.com/game/live/147141692864",
+    "studentSide": "black",
+    "overview": "Hambleton's Alapin in action: a bullet win over undefined (undefined) in 2025. Watch the …Nf6/…Nd5/…d5 equalizer that frees Black’s pieces and dissolves White’s space. A clean model of the plan working against a strong opponent."
   }
 ]

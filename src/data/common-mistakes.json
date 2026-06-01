@@ -3112,5 +3112,43 @@
         "https://www.chess.com/openings/French-Defense"
       ]
     }
+  ],
+  "pro-aman-sicilian-kan": [
+    {
+      "fen": "rnbqkbnr/pp1p1ppp/4p3/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+      "wrongMove": "Qc7",
+      "correctMove": "a6",
+      "explanation": "The move order matters: playing …Qc7 before …a6 invites Nb5, hitting the queen and clamping the d6-square. In the Kan you almost always slot in …a6 first to take b5 away from the white knights, and only then bring the queen to c7.",
+      "shortNarration": "…a6 first — stop Nb5.",
+      "sources": [
+        "concept:pos-development",
+        "book:sicilian",
+        "https://www.chess.com/openings/Sicilian-Defense-Kan-Variation"
+      ]
+    },
+    {
+      "fen": "rnb1kb1r/1pqp1ppp/p3pn2/8/3NP3/2NB4/PPP2PPP/R1BQ1RK1 b kq - 5 7",
+      "wrongMove": "Bd6",
+      "correctMove": "d6",
+      "explanation": "…Bd6 looks active but it blocks the d-pawn and runs straight into White's f4-f5 plans, where the bishop becomes a target. The quiet …d6 is right: it builds the small Scheveningen shell, clamps the e5-square, and keeps the bishop's options open for …Be7 or …b5 and …Bb7.",
+      "shortNarration": "…d6 shell, not …Bd6.",
+      "sources": [
+        "concept:pos-development",
+        "book:sicilian",
+        "https://www.chess.com/openings/Sicilian-Defense-Kan-Variation"
+      ]
+    },
+    {
+      "fen": "r1b1kb1r/1pqp1ppp/p1n1pn2/8/3NP3/2N1B3/PPP1BPPP/R2Q1RK1 b kq - 3 8",
+      "wrongMove": "d5",
+      "correctMove": "Bb4",
+      "explanation": "Striking …d5 too early lets White open the centre with exd5 while Black is still uncastled and behind in development. Play the active …Bb4 first — it pins the c3-knight, keeps the pressure on e4, and saves the …d5 break for when Black is fully ready.",
+      "shortNarration": "…Bb4 first, …d5 is premature.",
+      "sources": [
+        "concept:pos-development",
+        "book:sicilian",
+        "https://www.chess.com/openings/Sicilian-Defense-Kan-Variation"
+      ]
+    }
   ]
 }
