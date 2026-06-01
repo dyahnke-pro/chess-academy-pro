@@ -45,7 +45,7 @@ function record(name, status, detail) {
 async function main() {
   const since = Date.now();
   const browser = await chromium.launch({
-    executablePath: resolveChromiumExecutable(),
+    executablePath: await resolveChromiumExecutable(),
     args: sandboxLaunchArgs(),
   });
   const context = await browser.newContext(sandboxContextOptions());
