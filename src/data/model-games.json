@@ -8624,7 +8624,7 @@
     "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 Bg5 h6 Bh4 Be7 Bg3 d6 a4 a5 c3 O-O Nbd2 g6 h3 Nh7 O-O Kg7 d4 Bf6 Qc2 Ng5 Rad1 Qe7 Kh1 Bd7 Rfe1 Rad8 Nh2 exd4 f4 Ne6 Ng4 dxc3 bxc3 Bh4 f5 Nc5 Bxh4 Qxh4 Nf3 Qh5 f6+ Kh7 Rd5 g5 e5+ Kh8 Nfh2 Be6 Rxc5 dxc5 Bxe6 fxe6 Qb3 Rde8 Qxb7 Nd8 Qxc7 Nf7 Qxa5 Qg6 Qxc5 h5 Nf2 Rc8 Qe3 Rc4 Ne4 g4 hxg4 hxg4 a5 Ra8 Qe2 Nxe5 Nd6 Rc5 Nb7 Rcxa5 Nxa5 Rxa5 Qf2 g3 Qb6 Qh6 Qd8+ Kh7 Qe7+ Kh8 Qe8+ Kh7 Qe7+ Kh8 Qg7+ Qxg7 fxg7+ Kxg7 Nf1 Nd3 Rxe6 Ra1 Kg1 Rc1 Re3 Rxc3 Rxg3+ Kf6 Kh2 Ke5 Re3+ Kd4 Rf3 Rc8 Ng3 Ne5 Ne2+ Ke4 Rh3 Ng4+ Kg3 Nf6 Rh4+ Ke3 Ng1 Ne4+ Kh3 Rc1 Kh2 Nd2 Rh3+ Kf2 Rf3+ Ke1",
     "sourceUrl": "https://www.chess.com/game/live/167859503018",
     "studentSide": "black",
-    "overview": "Carlsen vs Polish_fighter3000 (2858), 2026 — 1...e5: the Closed Ruy from Black's side — the Chigorin reroute and a long grind."
+    "overview": "Carlsen vs Polish_fighter3000 (2858), 2026 — ...e5: the Closed Ruy from Black's side — the Chigorin reroute and a long grind."
   },
   {
     "id": "mg-pro-carlsen-1e5-2",
@@ -8639,7 +8639,7 @@
     "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3 h6 b4 Bb6 a4 a6 O-O O-O Nbd2 d6 h3 Ba7 Re1 Ne7 Nf1 Ng6 Ng3 c6 Bb3 d5 exd5 Nxd5 Bd2 Re8 Qc2 Be6 Rad1 Qc7 c4 Ndf4 Bxf4 Nxf4 c5 Bxb3 Qxb3 a5 d4 exd4 Rxe8+ Rxe8 Rxd4 Rd8 Re4 axb4 Rxb4 Rd7 Re4 Bxc5 Qc4 Bxf2+ Kxf2 Nd3+ Ke3 Qxg3 Re8+ Kh7 Qe4+ g6 Re7 Qf2#",
     "sourceUrl": "https://www.chess.com/game/live/141368534472",
     "studentSide": "black",
-    "overview": "Carlsen vs Firouzja2003 (2852), 2025 — 1...e5: rock-solid 1...e5 turned into a winning endgame by superior technique."
+    "overview": "Carlsen vs Firouzja2003 (2852), 2025 — ...e5: rock-solid ...e5 turned into a winning endgame by superior technique."
   },
   {
     "id": "mg-pro-carlsen-1e5-3",
@@ -8654,7 +8654,7 @@
     "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 dxc6 dxe5 Nf5 Qxd8+ Kxd8 h3 h6 Nc3 Bd7 b3 a5 Bb2 c5 a4 Kc8 Rad1 Be6 Nd5 g5 c4 Ne7 Rfe1 b6 h4 g4 Nh2 h5 f4 Nf5 Nf1 Nxh4 Ng3 Kb7 Rf1 Nf5 Nxf5 Bxf5 e6 Rh6 e7 Bxe7 Nxe7 Bc2 Rc1 Bxb3 f5 Rd6 Be5 Rd3 Nd5 Re8 Rfe1 Bxa4 Bf4 Rxe1+ Rxe1 Bb3 Bxc7 Rxd5 cxd5 Kxc7 Re7+ Kd6 Rxf7 Bxd5 Ra7 Ke5 Ra6 Kxf5 Rxb6 a4 Rb5 a3 Rxc5 Ke4 Ra5 a2 Kf2 h4 Ke2 Kd4 Kd2 g3 Ra4+ Bc4",
     "sourceUrl": "https://www.chess.com/game/live/138675376026",
     "studentSide": "black",
-    "overview": "Carlsen vs LyonBeast (2841), 2025 — 1...e5: a classical 1...e5 where Black's resilience outlasts White's initiative."
+    "overview": "Carlsen vs LyonBeast (2841), 2025 — ...e5: a classical ...e5 where Black's resilience outlasts White's initiative."
   },
   {
     "id": "mg-pro-carlsen-nimzo-1",
@@ -8699,7 +8699,7 @@
     "pgn": "d4 Nf6 c4 e6 Nf3 Bb4+ Bd2 a5 a3 Bxd2+ Qxd2 b6 Nc3 Bb7 g3 O-O Bg2 Ne4 Nxe4 Bxe4 O-O a4 Qe3 Bb7 Qd3 f5 Ne5 Bxg2 Kxg2 d6 Nf3 Qf6 e4 Nc6 Rae1 Ra5 d5 fxe4 Qxe4 exd5 cxd5 Ne7 Rd1 Qf5 Qxe7 Qxf3+ Kg1 Rc5 Rd2 h6 Re1 Rf5 Re3 Rc1+ Re1 Rxe1+ Qxe1 Re5 Qc1 b5 h3 Kf8 h4 Ke8 Kh2 Kd8 Qh1 Qb3 Qg2 Re1 Qh3 Qf3 Qg2 Qf5 Qh3 Rh1+",
     "sourceUrl": "https://www.chess.com/member/magnuscarlsen",
     "studentSide": "black",
-    "overview": "Carlsen vs So,W (2822), 2017 — Nimzo / QGD: sound, flexible Black play against 1.d4 ground into a win."
+    "overview": "Carlsen vs So,W (2822), 2017 — Nimzo / QGD: sound, flexible Black play against d4 ground into a win."
   },
   {
     "id": "mg-pro-carlsen-kid-1",
