@@ -300,6 +300,13 @@ async function highlightedSquares() {
   // engine-graded weapon gems should surface playable tiles — a gem-less
   // opening (most of the solid Carlsen set) correctly shows none, so the
   // check is "gems unlock IFF the opening has them".
+  // getPunishGemsForTab filters gems by the SELECTED tab's spine; a gem whose
+  // line isn't a prefix of a variation's spine surfaces only on the MAIN tab
+  // (which returns all gems). After a reload the page can default to a
+  // variation tab, hiding such a gem — so explicitly select the main tab first.
+  if (await page.locator('[data-testid="variation-tab-main"]').isVisible().catch(() => false)) {
+    await tap('[data-testid="variation-tab-main"]'); await page.waitForTimeout(1200);
+  }
   const gemTiles = await page.locator('[data-testid^="punish-gem-"]').count().catch(() => 0);
   const gemPlayable = await page.locator('[data-testid^="gem-watch-"]').count().catch(() => 0);
   let weaponGemCount = 0;
