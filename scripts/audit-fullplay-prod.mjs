@@ -43,9 +43,16 @@ const pageErrors = [];
 page.on('pageerror', (e) => pageErrors.push(String(e).slice(0, 160)));
 
 async function dismissOverlays() {
-  for (const sel of ['[data-testid="page-help-modal"] button', '[aria-label="Close" i]']) {
+  // The page-help-modal auto-opens on the openings detail page and INTERCEPTS
+  // ladder clicks (caveat #5). Its real dismiss is data-testid="page-help-close"
+  // — a generic button selector misses it (was the player=none bug).
+  for (const sel of ['[data-testid="page-help-close"]', '[data-testid="page-help-modal"] button', '[aria-label="Close" i]']) {
     const b = page.locator(sel).first();
-    if (await b.isVisible().catch(() => false)) { await b.click().catch(() => {}); await page.waitForTimeout(300); }
+    if (await b.isVisible().catch(() => false)) { await b.click().catch(() => {}); await page.waitForTimeout(400); }
+  }
+  // confirm the modal is gone
+  for (let i = 0; i < 5 && (await page.locator('[data-testid="page-help-modal"]').isVisible().catch(() => false)); i++) {
+    await page.locator('[data-testid="page-help-close"]').click().catch(() => {}); await page.waitForTimeout(400);
   }
 }
 // Play a move by clicking the from-square then the to-square.
