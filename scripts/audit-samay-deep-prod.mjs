@@ -33,6 +33,13 @@ const fails = [];
 const fail = (m) => { fails.push(m); console.log('  ✗ ' + m); };
 const ok = (m) => console.log('  ✓ ' + m);
 const squares = () => page.locator('[data-square]').count().catch(() => 0);
+// poll for the lesson board to mount — returns as soon as ≥64 squares (fast
+// mounts resolve in ~1s instead of paying a fixed wait), cap maxMs.
+async function waitMounted(maxMs = 6500) {
+  const t0 = Date.now();
+  while (Date.now() - t0 < maxMs) { if ((await squares()) >= 64) return true; await page.waitForTimeout(400); }
+  return (await squares()) >= 64;
+}
 
 async function openDetail(id) {
   await page.goto(`${URL}/openings/${id}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
@@ -51,11 +58,8 @@ async function drive(testidSel, id, label, expectMount = true) {
   const present = (await b.count()) > 0;
   if (!present) return { present: false };
   await b.click().catch(() => {});
-  await page.waitForTimeout(3000);
-  let mounted = (await squares()) >= 64;
-  // prod-latency tolerance: ONE retry-wait so a slow mount doesn't false-fail;
-  // a still-empty board after it is a REAL no-mount (not hidden).
-  if (!mounted) { await page.waitForTimeout(3000); mounted = (await squares()) >= 64; }
+  const mounted = await waitMounted(7000); // polls; returns the instant it mounts
+  await page.waitForTimeout(700); // let the first narration request fire
   const fired = tts.slice(before).filter((t) => !warmup(t));
   // exit via the player's back button (fast); only full-reload if that didn't
   // return us to the detail page (keeps state stable without the slow renav).
