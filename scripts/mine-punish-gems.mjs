@@ -353,6 +353,13 @@ const EXTRA_WALK = {
     ['e4', 'c6', 'd4', 'd5', 'e5', 'c5', 'dxc5'],
     ['e4', 'c6', 'd4', 'd5', 'Bd3'],
     ['e4', 'c6', 'Nf3', 'd5', 'Nc3', 'Bg4', 'h3', 'Bxf3', 'Qxf3', 'e6', 'd4', 'dxe4'],
+    // hand-added (2026-06-01): his ACTUAL main Advance spine (e5 Bf5 Nf3 e6 Be2
+    // Nd7 O-O Ne7 Nh4) — the bot only had the f3-Fantasy + h4 sidelines, never
+    // walked the main where White's Nh4/g4 over-presses.
+    ['e4', 'c6', 'd4', 'd5', 'e5', 'Bf5', 'Nf3', 'e6', 'Be2', 'Nd7', 'O-O', 'Ne7', 'Nh4'],
+    ['e4', 'c6', 'd4', 'd5', 'e5', 'Bf5', 'Nf3', 'e6', 'Be2', 'c5', 'Be3', 'cxd4', 'Nxd4'],
+    ['e4', 'c6', 'd4', 'd5', 'e5', 'Bf5', 'Nc3', 'e6', 'g4'],
+    ['e4', 'c6', 'd4', 'd5', 'exd5', 'cxd5', 'Bd3', 'Nc6', 'c3', 'Qc7', 'Ne2', 'Bg4'],
   ],
   'pro-aman-reti': [
     ['Nf3', 'd5', 'd4', 'Nf6', 'c4', 'dxc4'],
@@ -360,6 +367,11 @@ const EXTRA_WALK = {
     ['Nf3', 'g6', 'e4', 'Bg7', 'd4', 'd6', 'Nc3', 'Nf6', 'Be2', 'O-O', 'O-O', 'Nc6'],
     ['Nf3', 'Nf6', 'g3', 'd5', 'Bg2', 'c6', 'O-O', 'Bf5', 'd3', 'e6', 'Nbd2', 'h6'],
     ['Nf3', 'c5', 'e4', 'Nc6', 'Bb5', 'g6', 'Bxc6', 'dxc6'],
+    // hand-added (2026-06-01): deeper KIA/double-fianchetto mains the bot's
+    // shallow seeds never walked.
+    ['Nf3', 'd5', 'g3', 'Nf6', 'Bg2', 'e6', 'O-O', 'Be7', 'd3', 'O-O', 'Nbd2', 'c5', 'e4', 'Nc6', 'Re1'],
+    ['Nf3', 'Nf6', 'g3', 'g6', 'Bg2', 'Bg7', 'O-O', 'O-O', 'd3', 'd6', 'e4', 'e5', 'Nc3'],
+    ['Nf3', 'd5', 'd4', 'Nf6', 'c4', 'c6', 'e3', 'Bf5', 'Nc3', 'e6', 'Nh4'],
   ],
   'pro-aman-ruy-lopez': [
     ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'f5'],
@@ -374,6 +386,12 @@ const EXTRA_WALK = {
     ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'Nc6', 'Bg5', 'e6', 'Qd2'],
     ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Bc4'],
     ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'g6'],
+    // hand-added (2026-06-01): Open Sicilian had ZERO gems — walk the amateur
+    // dragon/Najdorf side-tries (...Ng4, premature ...d5, the ...e5 Nf5 hop).
+    ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'g6', 'Be3', 'Bg7', 'f3', 'O-O', 'Qd2', 'Ng4'],
+    ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Be2', 'e6', 'O-O', 'Qc7', 'f4', 'b5'],
+    ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'e5', 'Nb3'],
+    ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'Nc6', 'Bg5', 'e6', 'Qd2', 'Be7', 'O-O-O', 'O-O', 'f4', 'h6'],
   ],
   'pro-aman-rossolimo': [
     ['e4', 'c5', 'Nf3', 'Nc6', 'Bb5', 'g6', 'Bxc6', 'bxc6', 'O-O', 'Bg7', 'Re1', 'Nf6', 'e5'],
@@ -381,6 +399,11 @@ const EXTRA_WALK = {
     ['e4', 'c5', 'Nf3', 'd6', 'Bb5+', 'Bd7', 'Bxd7+', 'Qxd7', 'O-O', 'Nc6', 'c3'],
     ['e4', 'c5', 'Nf3', 'Nc6', 'Bb5', 'Nd4'],
     ['e4', 'c5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Bxc6', 'dxc6', 'O-O'],
+    // hand-added (2026-06-01): the ...Qb6 line the bot stopped short of (verified
+    // +1.4 White), plus the early ...e5 Nb5 anti-Sicilian tries.
+    ['e4', 'c5', 'Nf3', 'Nc6', 'Bb5', 'e6', 'O-O', 'Nge7', 'c3', 'a6', 'Ba4', 'b5', 'Bc2', 'Qb6', 'd4'],
+    ['e4', 'c5', 'Nf3', 'Nc6', 'd4', 'cxd4', 'Nxd4', 'e5', 'Nb5'],
+    ['e4', 'c5', 'Nf3', 'd6', 'Bb5+', 'Nd7', 'O-O', 'a6', 'Bxd7+', 'Bxd7', 'Re1'],
   ],
   'pro-aman-french-white': [
     ['e4', 'e6', 'd4', 'd5', 'Nc3', 'Bb4', 'e5', 'c5', 'a3', 'Bxc3+', 'bxc3', 'Ne7', 'Qg4'],
