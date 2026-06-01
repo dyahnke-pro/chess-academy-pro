@@ -86,6 +86,11 @@ describe('tab-plan resolver coverage gate — every Naroditsky variation has a r
   // openings have full resolver coverage per STEP 12.5 — no
   // Naroditsky entries should appear in this baseline.
   const BASELINE_UNRESOLVED = new Set<string>([
+    // Aman Hambleton pro-rep (parallel build) — variations declared, tab-plan
+    // resolvers not yet authored. Grandfathered; drop as resolvers land.
+    'pro-aman-anti-caro', 'pro-aman-caro-kann', 'pro-aman-french-white',
+    'pro-aman-nimzo-indian', 'pro-aman-open-sicilian', 'pro-aman-reti',
+    'pro-aman-rossolimo', 'pro-aman-ruy-lopez', 'pro-aman-sicilian-kan',
     // Gothamchess pro-rep is a partial build — variations declared but
     // tab-plan resolvers not yet authored.
     'pro-gothamchess-anti-sicilian',

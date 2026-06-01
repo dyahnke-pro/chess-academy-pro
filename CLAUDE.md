@@ -1400,6 +1400,16 @@ voice — recalibrate immediately.
 
 ## ⏰ Standing notes
 
+**David's devices (for audit-stream attribution).** When reading the
+audit stream to tell real use from bot traffic:
+- **David's computer** = macOS Safari, UA `Mozilla/5.0 (Macintosh; Intel
+  Mac OS X 10_15_7) AppleWebKit/605.1.15 ... Version/26.4 Safari/605.1.15`
+  (browser tab, `standaloneMode=false`, `isCapacitor=false`). This is him.
+- **NOT David** = the audit bots: `AuditCoachPlayBot/*` and any
+  `HeadlessChrome/*` UA. Ignore these when judging "did David use the app."
+- His iPhone (TestFlight Capacitor app / PWA standalone) will show
+  `isCapacitor=true` or `standaloneMode=true` — also him, different device.
+
 **The DB is the source of truth — the LLM only writes prose.**
 The Lichess opening database (`src/data/openings-lichess.json`,
 3,000+ entries) is the canonical source for move sequences, FENs,
@@ -2334,6 +2344,37 @@ playbook holds the rules you MUST follow, in particular:
   variation tab, with full WLPP (Learn/Practice via the
   `getRuyTrapPlayableLine` converter). Weapon = opponent slips, you punish;
   warning = you must avoid — classify by who plays the punishing move.
+- **🔒 TRAPS/GEMS ARE FOUND BY HAND — NO MORE BOTS (LOCKED, David 2026-06-01,
+  emphatic: "Lock in finding traps by hand. No more bots.").** SUPERSEDES the
+  "primarily MINED" default below for pro-rep trap/gem discovery. The automated
+  `scripts/mine-punish-gems.mjs` bot is RETIRED as the discovery mechanism — its
+  fixed frequency thresholds (≥2% / ≥100 games) systematically MISS the spicy,
+  lower-frequency tactical traps a tactical player like GothamChess actually
+  teaches and plays. Going forward, traps/gems are HUMAN-CURATED: you go through
+  EACH variation and EACH opening BY HAND, line by line, and find the real traps
+  using chess understanding + the pro's own taught content (his videos /
+  Chessable / courses / actual games). This is NOT a licence to invent (G3 still
+  rules absolutely — LLMs cannot play chess): every trap is still GROUNDED and
+  VERIFIED, just discovered by hand instead of by the bot. The per-trap discipline:
+  1. **GROUND every move in a real source** — the amateur explorer
+     (`/api/lichess-explorer`, reachable, a database query NOT a "bot") for the
+     opponent's actual common slip + frequency, the masters DB / theory / the
+     pro's taught lines for the spine. Never a move from memory.
+  2. **chess.js-validate every move** for legality + correct orientation.
+  3. **STOCKFISH-VERIFY the refutation** (engine = a VERIFICATION TOOL, expressly
+     NOT one of the banned "bots" — it is the load-bearing guardrail David built
+     because LLMs hallucinate chess; it STAYS). The punish is the engine's best
+     move, graded at the quiet end of a best-play playout, tiered exactly as the
+     mining doctrine below (≥+1.0 confirmed, +0.5..+1.0 positional, drop below).
+  4. **GOOGLE-VERIFY against theory** before shipping — keep verified refutations,
+     drop anything theory says is fine.
+  5. **Author both-register narration + sources[]** so the gem SURFACES
+     (`isSurfaceableGem` = weapon tier + narration), exactly as today.
+  The output store, gem object shape, gate (`punishGems.test.ts`), and narration
+  sidecar are UNCHANGED — only the DISCOVERY step changes from bot-scan to
+  hand-curation. Do NOT re-introduce the auto-miner as the discovery path for
+  pro-rep traps; run each line by hand.
+
 - **🔒 PUNISH-GEMS DOCTRINE — the weapon-section spine (LOCKED, David
   2026-05-24).** The weapon section is primarily MINED punish-gems
   (`scripts/mine-punish-gems.mjs` → `src/data/punish-gems.json`), named traps

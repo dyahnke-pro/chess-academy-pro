@@ -75324,6 +75324,672 @@
     ]
   },
   {
+    "id": "mp-carlsen-scandinavian-c5",
+    "openingId": "pro-carlsen-scandinavian",
+    "criticalPositionFen": "rn2kb1r/1bp2ppp/p2qpn2/1p6/3P4/2N2NP1/PPP2PBP/R1BQ1RK1 w kq - 0 9",
+    "title": "The …c5 Central Break",
+    "pawnBreaks": [
+      {
+        "move": "…c5 central break",
+        "explanation": "From the modern Scandinavian, Black clamps with …b4, trades a pair of knights, and strikes with the …c5 break to free the position and challenge the d4-pawn.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "From the modern Scandinavian, Black clamps with …b4, trades a pair of knights, and strikes with the …c5 break to free the position and challenge the d4-pawn."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "rn2kb1r/1bp2ppp/p2qpn2/1p6/3P4/2N2NP1/PPP2PBP/R1BQ1RK1 w kq - 0 9",
+        "moves": [
+          "Re1",
+          "Nbd7",
+          "a4",
+          "b4",
+          "Ne4",
+          "Nxe4",
+          "Rxe4",
+          "c5"
+        ],
+        "annotations": [
+          "White centralises a rook.",
+          "Black develops the knight to d7.",
+          "White probes the queenside with a4.",
+          "Black clamps with …b4, fixing the queenside.",
+          "White centralises the knight.",
+          "Black trades it off, easing the position.",
+          "White recaptures on e4.",
+          "…c5 strikes at d4 — the freeing break that activates Black's whole position."
+        ],
+        "learnCues": [
+          "Re1 — centralise",
+          "…Nd7 — develop",
+          "a4 — probe",
+          "…b4 — clamp",
+          "Ne4 — centralise",
+          "…Nxe4 — trade off",
+          "Rxe4 — recapture",
+          "…c5 — the freeing break"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "The …c5 Central Break",
+        "intro": "From the modern Scandinavian, Black clamps with …b4, trades a pair of knights, and strikes with the …c5 break to free the position and challenge the d4-pawn.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-space",
+          "concept:pos-center",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-carlsen-caro-c5",
+    "openingId": "pro-carlsen-caro-kann",
+    "criticalPositionFen": "r2qkbnr/1p1n1ppp/2p1p3/3pPb2/p2P4/2N2N2/PPP1BPPP/R1BQ1RK1 w kq - 2 8",
+    "title": "Trade the Dark Bishops and …c5",
+    "pawnBreaks": [
+      {
+        "move": "…c5 break vs d4",
+        "explanation": "In the Advance Caro, Black trades the dark-squared bishops to ease the cramp, then breaks with …c5 to undermine White's centre and free the good light-squared bishop's diagonal.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "In the Advance Caro, Black trades the dark-squared bishops to ease the cramp, then breaks with …c5 to undermine White's centre and free the good light-squared bishop's diagonal."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r2qkbnr/1p1n1ppp/2p1p3/3pPb2/p2P4/2N2N2/PPP1BPPP/R1BQ1RK1 w kq - 2 8",
+        "moves": [
+          "Bg5",
+          "Be7",
+          "Bxe7",
+          "Qxe7",
+          "Re1",
+          "c5",
+          "dxc5",
+          "Nxc5"
+        ],
+        "annotations": [
+          "White pins with the bishop.",
+          "Black offers the trade with …Be7.",
+          "White takes the dark-squared bishop.",
+          "Black recaptures with the queen, unpinned and comfortable.",
+          "White centralises a rook.",
+          "…c5 strikes the base of the chain.",
+          "White takes on c5.",
+          "Black recaptures with the knight, fully equal with the good bishop free."
+        ],
+        "learnCues": [
+          "Bg5 — pin",
+          "…Be7 — offer trade",
+          "Bxe7 — take",
+          "…Qxe7 — recapture",
+          "Re1 — centralise",
+          "…c5 — the break",
+          "dxc5 — take",
+          "…Nxc5 — equal, bishop free"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Trade the Dark Bishops and …c5",
+        "intro": "In the Advance Caro, Black trades the dark-squared bishops to ease the cramp, then breaks with …c5 to undermine White's centre and free the good light-squared bishop's diagonal.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pawn-chain",
+          "concept:pos-development",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-carlsen-modern-c5",
+    "openingId": "pro-carlsen-modern",
+    "criticalPositionFen": "r2qk1nr/1bpnppbp/p2p2p1/1p6/3PPP2/2NBBN2/PPP3PP/R2QK2R w KQkq - 4 8",
+    "title": "Detonate the Centre with …c5",
+    "pawnBreaks": [
+      {
+        "move": "…c5 detonate the centre",
+        "explanation": "The Modern's whole point: invite White's big centre, then blow it up. Black castles, strikes with …c5, and after the trades the g7- and b7-bishops rake an opening position.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "The Modern's whole point: invite White's big centre, then blow it up. Black castles, strikes with …c5, and after the trades the g7- and b7-bishops rake an opening position."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r2qk1nr/1bpnppbp/p2p2p1/1p6/3PPP2/2NBBN2/PPP3PP/R2QK2R w KQkq - 4 8",
+        "moves": [
+          "O-O",
+          "c5",
+          "dxc5",
+          "dxc5",
+          "e5",
+          "Nb6"
+        ],
+        "annotations": [
+          "White castles.",
+          "…c5 detonates the centre, the Modern's thematic break.",
+          "White takes on c5.",
+          "Black recaptures, opening the long diagonal for the g7-bishop.",
+          "White pushes e5 to keep space.",
+          "…Nb6 eyes the c4- and d5-squares as Black's pieces flood in."
+        ],
+        "learnCues": [
+          "O-O — White castles",
+          "…c5 — detonate",
+          "dxc5 — take",
+          "…dxc5 — open the diagonal",
+          "e5 — push",
+          "…Nb6 — to c4/d5"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Detonate the Centre with …c5",
+        "intro": "The Modern's whole point: invite White's big centre, then blow it up. Black castles, strikes with …c5, and after the trades the g7- and b7-bishops rake an opening position.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-space",
+          "concept:pos-center",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-carlsen-closedsic-f5",
+    "openingId": "pro-carlsen-closed-sicilian",
+    "criticalPositionFen": "r1bqk2r/pp2npbp/2npp1p1/2p5/2B1PP2/P1NP1N2/1PP3PP/R1BQ1RK1 b kq - 0 8",
+    "title": "The f4-f5 Kingside Storm",
+    "pawnBreaks": [
+      {
+        "move": "f4-f5 kingside storm",
+        "explanation": "The Grand Prix attacking blueprint: swing the queen to h4 and break with f4-f5, prying open lines toward Black's king while Black counters on the queenside.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "The Grand Prix attacking blueprint: swing the queen to h4 and break with f4-f5, prying open lines toward Black's king while Black counters on the queenside."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bqk2r/pp2npbp/2npp1p1/2p5/2B1PP2/P1NP1N2/1PP3PP/R1BQ1RK1 b kq - 0 8",
+        "moves": [
+          "O-O",
+          "Qe1",
+          "b5",
+          "Qh4",
+          "b4",
+          "f5"
+        ],
+        "annotations": [
+          "Black castles into the coming storm.",
+          "White swings the queen toward the kingside via e1.",
+          "Black races with …b5 on the queenside.",
+          "The queen reaches h4, eyeing the kingside.",
+          "Black pushes …b4 to open lines.",
+          "f5 detonates the kingside — the Grand Prix break that cracks open Black's king."
+        ],
+        "learnCues": [
+          "O-O — Black castles",
+          "Qe1 — swing the queen",
+          "…b5 — counter-race",
+          "Qh4 — eye the king",
+          "…b4 — open lines",
+          "f5 — the storm breaks"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "The f4-f5 Kingside Storm",
+        "intro": "The Grand Prix attacking blueprint: swing the queen to h4 and break with f4-f5, prying open lines toward Black's king while Black counters on the queenside.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:att-kingside-storm",
+          "concept:pos-space",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-carlsen-reti-e5",
+    "openingId": "pro-carlsen-reti",
+    "criticalPositionFen": "r1bq1rk1/pp2bppp/2n1pn2/2pp4/4P3/3P1NP1/PPPN1PBP/R1BQ1RK1 w - - 1 8",
+    "title": "The KIA e5 Advance and Knight Tour",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "move": "Nf1-g3 with the e5 advance",
+        "explanation": "The King's-Indian-Attack blueprint: push e5 to gain kingside space, reroute the knight via f1 to g3, and storm with h4 toward Black's king.",
+        "fen": ""
+      }
+    ],
+    "strategicThemes": [
+      "The King's-Indian-Attack blueprint: push e5 to gain kingside space, reroute the knight via f1 to g3, and storm with h4 toward Black's king."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp2bppp/2n1pn2/2pp4/4P3/3P1NP1/PPPN1PBP/R1BQ1RK1 w - - 1 8",
+        "moves": [
+          "Re1",
+          "b5",
+          "e5",
+          "Nd7",
+          "Nf1",
+          "a5",
+          "h4"
+        ],
+        "annotations": [
+          "White centralises the rook behind the e-pawn.",
+          "Black expands on the queenside.",
+          "e5 gains kingside space and kicks the knight back.",
+          "Black's knight retreats to d7.",
+          "The knight begins its tour to f1 and on to g3.",
+          "Black pushes on the queenside.",
+          "h4 launches the kingside pawn storm toward Black's king."
+        ],
+        "learnCues": [
+          "Re1 — back the e-pawn",
+          "…b5 — expand",
+          "e5 — gain space",
+          "…Nd7 — retreat",
+          "Nf1 — the tour starts",
+          "…a5 — push",
+          "h4 — the storm"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "The KIA e5 Advance and Knight Tour",
+        "intro": "The King's-Indian-Attack blueprint: push e5 to gain kingside space, reroute the knight via f1 to g3, and storm with h4 toward Black's king.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:att-kingside-storm",
+          "concept:pos-space",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-carlsen-kg-d4",
+    "openingId": "pro-carlsen-kings-gambit",
+    "criticalPositionFen": "rnbqk2r/ppp2p1p/3b1n2/3PN3/2B2ppP/8/PPPP2P1/RNBQK2R w KQkq - 1 8",
+    "title": "Central Domination for the Gambit Pawn",
+    "pawnBreaks": [
+      {
+        "move": "d4 central clamp",
+        "explanation": "The King's Gambit payoff: castle, take the open f-file, and build the big d4 centre. White's lead in development and central control more than justify the sacrificed pawn.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "The King's Gambit payoff: castle, take the open f-file, and build the big d4 centre. White's lead in development and central control more than justify the sacrificed pawn."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "rnbqk2r/ppp2p1p/3b1n2/3PN3/2B2ppP/8/PPPP2P1/RNBQK2R w KQkq - 1 8",
+        "moves": [
+          "O-O",
+          "Bxe5",
+          "Re1",
+          "Qe7",
+          "c3",
+          "Nbd7",
+          "d4"
+        ],
+        "annotations": [
+          "White castles, banking the development lead.",
+          "Black grabs the e5-knight.",
+          "Re1 seizes the open e-file with a pin.",
+          "Black defends with …Qe7.",
+          "c3 prepares the big centre.",
+          "Black develops the knight.",
+          "d4 clamps the centre — the broad pawn front and the open files pay for the gambit pawn."
+        ],
+        "learnCues": [
+          "O-O — castle",
+          "…Bxe5 — take the knight",
+          "Re1 — the open file",
+          "…Qe7 — defend",
+          "c3 — prepare d4",
+          "…Nbd7 — develop",
+          "d4 — the central clamp"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Central Domination for the Gambit Pawn",
+        "intro": "The King's Gambit payoff: castle, take the open f-file, and build the big d4 centre. White's lead in development and central control more than justify the sacrificed pawn.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-center",
+          "concept:pos-initiative",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
     "id": "mp-proamanrossolimo-endgame",
     "openingId": "pro-aman-rossolimo",
     "criticalPositionFen": "1r2r1k1/p2ppp1p/b1p1n3/4B3/2P1N2p/1P6/P4PPP/3RR1K1 w - - 0 21",

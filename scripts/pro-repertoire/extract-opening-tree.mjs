@@ -462,6 +462,12 @@ const OPENINGS = {
     minPrefix: ['e4', 'e6'],
     maxDepth: 80,
   },
+  'carlsen-scandi': { name: 'Scandinavian Defense (Black)', color: 'black', studentMoves: [], minPrefix: ['e4','d5'], maxDepth: 80 },
+  'carlsen-caro': { name: 'Caro-Kann (Black)', color: 'black', studentMoves: [], minPrefix: ['e4','c6'], maxDepth: 80 },
+  'carlsen-modern': { name: 'Modern / Pirc (Black)', color: 'black', studentMoves: [], minPrefix: ['e4','g6'], maxDepth: 80 },
+  'carlsen-closed-sicilian': { name: 'Closed Sicilian / Grand Prix (White)', color: 'white', studentMoves: [], minPrefix: ['e4','c5','Nc3'], maxDepth: 80 },
+  'carlsen-reti': { name: 'Reti / Catalan (White)', color: 'white', studentMoves: [], minPrefix: ['Nf3'], maxDepth: 80 },
+  'carlsen-kings-gambit': { name: "King's Gambit (White)", color: 'white', studentMoves: [], minPrefix: ['e4','e5','f4'], maxDepth: 80 },
   // ===== SAMAY RAINA-SPECIFIC OPENINGS (classical 1.e4 / 1…e5) =====
   'samay-open-sicilian': { name: 'Open Sicilian (White)', color: 'white', studentMoves: [], minPrefix: ['e4', 'c5', 'Nf3'], maxDepth: 80 },
   'samay-ruy': { name: 'Ruy Lopez (White)', color: 'white', studentMoves: [], minPrefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5'], maxDepth: 80 },
