@@ -3192,6 +3192,142 @@
         "https://www.chess.com/openings/French-Defense",
         "https://api.chess.com/pub/player/imrosen/games/archives"
       ]
+    },
+    {
+      "id": "pro-caruana-ruy-lopez",
+      "playerId": "caruana",
+      "eco": "C65",
+      "name": "Ruy Lopez",
+      "color": "white",
+      "style": "positional",
+      "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 d3 Bc5 Bxc6 dxc6 Nbd2 Be6 O-O Bd6 Nb3 a5 a4 Nd7 Nbd2 f6",
+      "overview": "Caruana's lifelong White weapon. He meets the Berlin with the modern d3, trades on c6 to double Black's pawns, then maneuvers patiently — Nb3, a4 — to fix and press the queenside weakness. The textbook elite squeeze.",
+      "keyIdeas": [
+        "The modern d3 sidesteps the Berlin endgame and keeps a flexible, low-risk middlegame pull.",
+        "Bxc6 trades the bishop pair to saddle Black with doubled, weak queenside pawns — a permanent target.",
+        "Nb3 and a4 clamp the queenside, fixing Black's a5-pawn as a long-term weakness.",
+        "Patient maneuvering converts the structural edge — no forcing play, just a slow squeeze."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "Morphy …a6 Closed",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O a4 b4 a5 d6 c3 Rb8 h3",
+          "explanation": "When Black plays …a6, Caruana keeps the pin with Ba4 — the Closed Ruy. He strikes the queenside with a4, and after Black locks with …b4 the rich classical middlegame begins, Caruana's natural habitat.",
+          "sources": [
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Ruy_Lopez",
+            "https://www.chess.com/openings/Ruy-Lopez-Opening",
+            "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+          ]
+        }
+      ],
+      "sources": [
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Ruy_Lopez",
+        "https://www.chess.com/openings/Ruy-Lopez-Opening",
+        "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+      ]
+    },
+    {
+      "id": "pro-caruana-nimzo-indian",
+      "playerId": "caruana",
+      "eco": "E32",
+      "name": "Nimzo-Indian Defense",
+      "color": "black",
+      "style": "positional",
+      "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d6 Bg5 h6 Bh4 g5 Bg3 Ne4 Qc2 Nxg3",
+      "overview": "Caruana's principled answer to 1.d4. The Bb4 pin, then …Bxc3 trades the bishop pair to double White's pawns; the bold …g5/…Ne4 break wins the dark-squared bishop and leaves White's structure shattered.",
+      "keyIdeas": [
+        "The …Bb4 pin fights for the centre with pieces, not pawns — the soul of the Nimzo.",
+        "…Bxc3 surrenders the bishop pair to permanently damage White's queenside structure.",
+        "The …g5 and …Ne4 thrust grabs the initiative and forces White to part with the dark bishop.",
+        "…Nxg3 leaves White with shattered, doubled pawns and no good bishop — a comfortable game."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "Rubinstein with …c5",
+          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 c5 Bd3 Nc6 Nf3 Bxc3+ bxc3 d6 e4 e5 d5 Ne7 Nh4 g6",
+          "explanation": "Against the Rubinstein e3, Black hits the centre with …c5, trades on c3 to double White's pawns, and locks the centre with …d6/…e5. A sound blocked middlegame playing against the c-pawns.",
+          "sources": [
+            "concept:pawn-minority-attack",
+            "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence",
+            "https://www.chess.com/openings/Nimzo-Indian-Defense",
+            "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+          ]
+        }
+      ],
+      "sources": [
+        "concept:pawn-minority-attack",
+        "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence",
+        "https://www.chess.com/openings/Nimzo-Indian-Defense",
+        "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+      ]
+    },
+    {
+      "id": "pro-caruana-najdorf",
+      "playerId": "caruana",
+      "eco": "B92",
+      "name": "Sicilian Najdorf",
+      "color": "black",
+      "style": "aggressive",
+      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Be3 Be6 Nd5 Nbd7",
+      "overview": "Caruana's fighting weapon against 1.e4. The …a6 move controls b5 and waits; against the solid Be2 he grabs the centre with …e5, develops harmoniously, and contests the d5-outpost — a sound, rich Najdorf where Black plays on the queenside and the half-open c-file.",
+      "keyIdeas": [
+        "The …a6 move is the Najdorf's soul — controlling b5 and keeping every plan open.",
+        "The …e5 break grabs central space and kicks the d4-knight — the heart of the Najdorf.",
+        "…Be6 and …Nbd7 fight for the key d5-square against White's knight outpost.",
+        "Black's plans flow on the queenside and the half-open c-file."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [],
+      "sources": [
+        "concept:pos-king-safety",
+        "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation",
+        "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation",
+        "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+      ]
+    },
+    {
+      "id": "pro-caruana-taimanov",
+      "playerId": "caruana",
+      "eco": "B47",
+      "name": "Sicilian Taimanov",
+      "color": "black",
+      "style": "dynamic",
+      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 a6 Nxc6 bxc6 Bd3 d5 O-O Nf6 Qe2 Be7 Rd1 Qc7",
+      "overview": "Caruana's flexible answer to 1.e4. The early …e6 and …Nc6 challenge the centre; after Nxc6 Black gets the half-open b-file, the bishop pair, and a strong …d5 break for dynamic, balanced play.",
+      "keyIdeas": [
+        "The early …e6 keeps the structure flexible — Black chooses his plan based on White's setup.",
+        "…Nc6 pressures the d4-knight; after Nxc6 …bxc6 Black gets the half-open b-file and the bishop pair.",
+        "The …d5 break challenges White's e4 head-on and frees Black's game.",
+        "…Qc7 and the b-file give Black active counterplay in the middlegame."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "…Qc7 system",
+          "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Qc7 Nc3 a6 Be2 Nf6 O-O Bc5 Nb3 Be7 Kh1 d6 f4 Nc6",
+          "explanation": "Black develops the queen early to c7, slots in …a6, and provokes Nb3 with …Bc5 before regrouping. A flexible Scheveningen-style middlegame with counterplay on the c-file.",
+          "sources": [
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Sicilian_Defence,_Taimanov_Variation",
+            "https://www.chess.com/openings/Sicilian-Defense-Taimanov-Variation",
+            "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+          ]
+        }
+      ],
+      "sources": [
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Sicilian_Defence,_Taimanov_Variation",
+        "https://www.chess.com/openings/Sicilian-Defense-Taimanov-Variation",
+        "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+      ]
     }
   ]
 }

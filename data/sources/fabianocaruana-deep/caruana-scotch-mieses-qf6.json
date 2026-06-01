@@ -1,0 +1,38 @@
+{
+  "player": "fabianocaruana",
+  "openingId": "caruana-scotch",
+  "variationKey": "mieses-qf6",
+  "variation": {
+    "label": "Mieses …Qf6",
+    "prefix": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "d4",
+      "exd4",
+      "Nxd4",
+      "Qf6"
+    ]
+  },
+  "generatedAt": "2026-05-31T23:36:01.843Z",
+  "totalGames": 0,
+  "wins": 0,
+  "draws": 0,
+  "losses": 0,
+  "openingTerminusPly": 8,
+  "openingTerminusMove": 4,
+  "spineMoves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "Qf6"
+  ],
+  "gamesAtTerminus": 0,
+  "endgameTypeBreakdown": {},
+  "topModelGames": []
+}

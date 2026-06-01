@@ -31,6 +31,49 @@ fs.mkdirSync(OUT_DIR, { recursive: true });
 // SAN prefix that defines reaching its position. The "color" field
 // tells us which side the player is on (white/black).
 const OPENINGS = {
+  // ===== CARUANA (2026-05-31) =====
+  'caruana-ruy-lopez': {
+    color: 'white', studentUsername: 'FabianoCaruana',
+    variations: {
+      'berlin-d3': { label: 'Berlin/…Nf6 d3', prefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'Nf6', 'd3'] },
+      'morphy-a6': { label: 'Morphy …a6', prefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6'] },
+      'classical-bc5': { label: 'Classical …Bc5', prefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'Bc5'] },
+      'schliemann-f5': { label: 'Schliemann …f5', prefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'f5'] },
+    },
+  },
+  'caruana-scotch': {
+    color: 'white', studentUsername: 'FabianoCaruana',
+    variations: {
+      'main-nf6': { label: 'Main …Nf6', prefix: ['e4', 'e5', 'Nf3', 'Nc6', 'd4', 'exd4', 'Nxd4', 'Nf6'] },
+      'classical-bc5': { label: 'Classical …Bc5', prefix: ['e4', 'e5', 'Nf3', 'Nc6', 'd4', 'Bc5'] },
+      'steinitz-qh4': { label: 'Steinitz …Qh4', prefix: ['e4', 'e5', 'Nf3', 'Nc6', 'd4', 'exd4', 'Nxd4', 'Qh4'] },
+      'mieses-qf6': { label: 'Mieses …Qf6', prefix: ['e4', 'e5', 'Nf3', 'Nc6', 'd4', 'exd4', 'Nxd4', 'Qf6'] },
+    },
+  },
+  'caruana-nimzo-indian': {
+    color: 'black', studentUsername: 'FabianoCaruana',
+    variations: {
+      'classical-oo': { label: 'Classical Qc2 O-O', prefix: ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'Qc2', 'O-O'] },
+      'rubinstein-c5': { label: 'Rubinstein …c5', prefix: ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'e3', 'c5'] },
+      'classical-d5': { label: 'Classical …d5', prefix: ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'Qc2', 'd5'] },
+    },
+  },
+  'caruana-najdorf': {
+    color: 'black', studentUsername: 'FabianoCaruana',
+    variations: {
+      'english-bg5': { label: 'English Attack 6.Bg5', prefix: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Bg5'] },
+      'classical-be2': { label: 'Classical 6.Be2', prefix: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Be2'] },
+      'english-be3': { label: 'English Attack 6.Be3', prefix: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Be3'] },
+    },
+  },
+  'caruana-taimanov': {
+    color: 'black', studentUsername: 'FabianoCaruana',
+    variations: {
+      'main-nc6': { label: 'Main …Nc6', prefix: ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'Nc6'] },
+      'kan-a6': { label: 'Kan …a6', prefix: ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'a6'] },
+      'qc7': { label: '…Qc7 system', prefix: ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'Qc7'] },
+    },
+  },
   'pirc': {
     color: 'black',
     studentUsername: 'GothamChess',

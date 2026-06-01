@@ -1,0 +1,38 @@
+{
+  "player": "fabianocaruana",
+  "openingId": "caruana-taimanov",
+  "variationKey": "qc7",
+  "variation": {
+    "label": "…Qc7 system",
+    "prefix": [
+      "e4",
+      "c5",
+      "Nf3",
+      "e6",
+      "d4",
+      "cxd4",
+      "Nxd4",
+      "Qc7"
+    ]
+  },
+  "generatedAt": "2026-05-31T23:36:05.367Z",
+  "totalGames": 0,
+  "wins": 0,
+  "draws": 0,
+  "losses": 0,
+  "openingTerminusPly": 8,
+  "openingTerminusMove": 4,
+  "spineMoves": [
+    "e4",
+    "c5",
+    "Nf3",
+    "e6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "Qc7"
+  ],
+  "gamesAtTerminus": 0,
+  "endgameTypeBreakdown": {},
+  "topModelGames": []
+}
