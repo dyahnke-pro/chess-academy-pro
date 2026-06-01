@@ -1,0 +1,36 @@
+name: Soundness sweep — Samay (engine, read-only)
+
+# Read-only engine check: evals the final position of every Samay lesson +
+# plan line from the student's POV and flags any secretly-losing line. No
+# writes, no PR — results land in the run log. Fire it by pushing any commit
+# to the ci-soundness-samay branch, or via workflow_dispatch.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ ci-soundness-samay ]
+
+permissions:
+  contents: read
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund --prefer-offline
+      - name: Install Stockfish
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y stockfish
+          which stockfish && (echo "uci"; echo "quit") | stockfish | grep -i "id name" || true
+      - name: Run Samay soundness sweep
+        env:
+          STOCKFISH_PATH: /usr/games/stockfish
+        run: node scripts/soundness-sweep-samay.mjs
