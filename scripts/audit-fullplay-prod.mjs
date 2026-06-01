@@ -173,6 +173,8 @@ async function highlightedSquares() {
       if (await page.locator('[data-testid="lesson-player"]').isVisible().catch(() => false)) return 'lesson';
       if (await page.locator('[data-testid="line-player-demo"]').isVisible().catch(() => false)) return 'demo';
       if (await page.locator('[data-testid="line-player-memory"]').isVisible().catch(() => false)) return 'memory';
+      // Practice mounts the separate silent PracticeMode component.
+      if (await page.locator('[data-testid="practice-mode"]').isVisible().catch(() => false)) return 'practice';
       await page.waitForTimeout(800);
     }
     return 'none';
@@ -186,7 +188,13 @@ async function highlightedSquares() {
   async function driveLessonPlayer(rung, before) {
     let litBeats = 0, maxBeat = 0, lastCur = -1, stuck = 0, total = 0;
     for (let i = 0; i < 80; i++) {
-      const prog = await page.locator('[data-testid="lesson-progress"]').innerText().catch(() => '');
+      // The "X / N" count text lives in a SPAN sibling of the progress BAR
+      // (the bar div carries the testid but has no text). Walk up to the
+      // outer container that holds both, then read its text.
+      const prog = await page.locator('[data-testid="lesson-progress"]').evaluate((bar) => {
+        const outer = bar.parentElement && bar.parentElement.parentElement;
+        return outer ? outer.innerText : (bar.parentElement ? bar.parentElement.innerText : '');
+      }).catch(() => '');
       const m = prog.match(/(\d+)\s*\/\s*(\d+)/); const cur = m ? +m[1] : 0; total = m ? +m[2] : total;
       const lit = await highlightedSquares(); if (lit.length) litBeats++;
       maxBeat = Math.max(maxBeat, cur);
@@ -243,10 +251,16 @@ async function highlightedSquares() {
     rec(`${rung}: player opened`, kind !== 'none', `player=${kind}`);
     if (kind === 'lesson') await driveLessonPlayer(rung, before);
     else if (kind !== 'none') await driveLinePlayer();
-    const done = await page.locator(`[data-testid="rung-done-${rung}"]`).isVisible({ timeout: 6000 }).catch(() => false)
-      || await page.locator('[data-testid="line-player-complete"]').isVisible().catch(() => false);
-    rec(`${rung}: rung completed (rung-done-${rung})`, done);
+    // line-player-complete shows INSIDE the player; the rung-done-X checkmark
+    // renders on the DETAIL-page ladder (only visible after navigating back).
+    // So capture the in-player signal first, then go back and check the ladder.
+    const inPlayerComplete = (await page.locator('[data-testid="line-player-complete"]').isVisible().catch(() => false))
+      || (await page.locator('[data-testid="practice-complete"]').isVisible().catch(() => false));
+    await page.waitForTimeout(1200); // let onComplete → markRungComplete → loadOpening land
     await backToDetail();
+    const done = inPlayerComplete
+      || await page.locator(`[data-testid="rung-done-${rung}"]`).isVisible({ timeout: 8000 }).catch(() => false);
+    rec(`${rung}: rung completed (rung-done-${rung})`, done);
   }
 
   // 5. PLAY — launches OpeningPlayMode locked to the line
@@ -256,10 +270,22 @@ async function highlightedSquares() {
     rec('play: launched (no crash)', pageErrors.length === 0, pageErrors[0] || '');
     await page.goto(`${URL}/openings/${ONLY}`, { waitUntil: 'domcontentloaded' }); await page.waitForTimeout(2000); await dismissOverlays(); }
 
-  // 6. After the progression, are the GEMS unlocked?
+  // 6. After the progression, are the GEMS unlocked? Only openings that HAVE
+  // engine-graded weapon gems should surface playable tiles — a gem-less
+  // opening (most of the solid Carlsen set) correctly shows none, so the
+  // check is "gems unlock IFF the opening has them".
   const gemTiles = await page.locator('[data-testid^="punish-gem-"]').count().catch(() => 0);
   const gemPlayable = await page.locator('[data-testid^="gem-watch-"]').count().catch(() => 0);
-  rec('gems UNLOCKED by completing the progression', gemPlayable > 0, `${gemTiles} tiles, ${gemPlayable} playable`);
+  let weaponGemCount = 0;
+  try {
+    const gems = JSON.parse(await readFile('src/data/punish-gems.json', 'utf-8'));
+    weaponGemCount = gems.filter((g) => g.openingId === ONLY && (g.tier === 'confirmed' || g.tier === 'positional')).length;
+  } catch { /* none */ }
+  if (weaponGemCount > 0) {
+    rec('gems UNLOCKED by completing the progression', gemPlayable > 0, `${gemTiles} tiles, ${gemPlayable} playable (expected ${weaponGemCount})`);
+  } else {
+    rec('no weapon gems (correctly self-hidden)', gemPlayable === 0, `${gemTiles} tiles, ${gemPlayable} playable`);
+  }
 
   console.log('\n[fullplay] pageerrors:', pageErrors.length);
   pageErrors.slice(0, 5).forEach((e) => console.log('   !', e));
