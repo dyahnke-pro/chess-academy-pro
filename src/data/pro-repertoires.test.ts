@@ -52,18 +52,15 @@ describe('Pro Repertoire PGN Legality', () => {
     }
   });
 
-  it('has all 14 players', () => {
-    expect(proRepertoire.players).toHaveLength(14);
+  it('has all 15 players', () => {
+    expect(proRepertoire.players).toHaveLength(15);
   });
 
   it('has the expected number of openings', () => {
-    // Slate-wipe 2026-05-28 (David): every player except Naroditsky
-    // and GothamChess (Levy Rozman) had their pro-rep builds cleared.
-    // Naroditsky 10 + GothamChess 18 = 28. Hikaru build (2026-05-31,
-    // David's pick): +5 (Nimzo-Larsen, Closed Sicilian, Réti, Modern,
-    // Caro-Kann) = 33. Eric Rosen (2026-05-31): +1 (Stafford) = 34.
-    // Bump this as each remaining player is rebuilt.
-    expect(proRepertoire.openings).toHaveLength(57);
+    // Active builds under the G9.1 doctrine: GothamChess 18 + Naroditsky 10 +
+    // Aman 9 (2026-06-01) + Eric Rosen 8 + Caruana 8 + Samay Raina 8 +
+    // Carlsen 8 + Hikaru 5 = 74. Bump this as each remaining player is rebuilt.
+    expect(proRepertoire.openings).toHaveLength(74);
   });
 
   it('every opening has a valid playerId', () => {
@@ -79,7 +76,7 @@ describe('Pro Repertoire PGN Legality', () => {
     // (+5) and Eric Rosen (+1 Stafford). The remaining roster players stay
     // names-only (ZERO openings) until each is rebuilt. Add a player here
     // as their first build lands.
-    const KEPT = new Set(['naroditsky', 'gothamchess', 'hikaru', 'ericrosen', 'samayraina', 'caruana']);
+    const KEPT = new Set(['naroditsky', 'gothamchess', 'hikaru', 'ericrosen', 'samayraina', 'caruana', 'carlsen', 'aman']);
     const counts: Record<string, number> = {};
     for (const opening of entries) {
       counts[opening.playerId] = (counts[opening.playerId] ?? 0) + 1;
