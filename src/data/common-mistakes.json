@@ -3906,7 +3906,7 @@
       "fen": "rnbqkbnr/ppp2ppp/8/3pp3/4PP2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
       "wrongMove": "fxe5",
       "correctMove": "exd5",
-      "explanation": "Against the Falkbeer (2…d5), the greedy fxe5?? hands Black a raging initiative after …Qh4+ and the White king never recovers. exd5! is correct — take the d-pawn and meet …e4 with calm development. The engine's verdict is night and day.",
+      "explanation": "Against the Falkbeer Counter-Gambit (…d5), the greedy fxe5?? hands Black a raging initiative after …Qh4+ and the White king never recovers. exd5! is correct — take the d-pawn and meet …e4 with calm development. The engine's verdict is night and day.",
       "shortNarration": "exd5 — take d5, not the e-pawn",
       "sources": [
         "concept:pos-king-safety",
