@@ -3621,6 +3621,66 @@
           ]
         }
       ]
+    },
+    {
+      "id": "pro-aman-french-white",
+      "playerId": "aman",
+      "eco": "C18",
+      "name": "French Defense (White) (Aman)",
+      "color": "white",
+      "style": "Ambitious, Attacking",
+      "pgn": "e4 e6 d4 d5 Nc3 Bb4 e5 c5 a3 Bxc3+ bxc3 Ne7 h4 Qc7 Nf3",
+      "overview": "Aman Hambleton's ambitious answer to the French (448 games, 76.3%) — meet it with the full classical centre, d4 and Nc3, and against the Winawer pin …Bb4 push e5 to lock the centre and cramp Black. After …c5, a3 and the Bxc3 trade, White takes the bishop pair and a big pawn centre in exchange for doubled c-pawns — the Winawer bargain. The thematic h4 grabs kingside space and launches an attack while the centre stays locked. Against the Classical …Nf6 he plays Bg5 to shatter Black's kingside; against the Rubinstein …dxe4 he simply enjoys the freer, more developed game. Ambition over caution — take the centre and attack.",
+      "keyIdeas": [
+        "Build the full classical centre with d4 and Nc3.",
+        "vs Winawer: push e5 and accept doubled pawns for the bishop pair and a big centre.",
+        "Play the thematic h4 for kingside space and attack.",
+        "vs Classical: Bg5 to shatter the kingside; vs Rubinstein: enjoy the freer game."
+      ],
+      "traps": [],
+      "warnings": [
+        "The Winawer gives Black queenside counterplay on the doubled c-pawns — get your kingside attack rolling with h4-h5 before Black’s …Qa5 / …c4 pressure arrives."
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:french-defence",
+        "concept:pos-development",
+        "https://www.chess.com/openings/French-Defense",
+        "https://api.chess.com/pub/player/chessbrah/games/archives"
+      ],
+      "variations": [
+        {
+          "name": "Winawer (…Bb4)",
+          "pgn": "e4 e6 d4 d5 Nc3 Bb4 e5 c5 a3 Bxc3+ bxc3 Ne7 h4 Qc7 Nf3 b6",
+          "explanation": "His main line. e5 locks the centre, bxc3 takes the bishop pair, and h4 launches the thematic kingside attack.",
+          "sources": [
+            "book:french-defence",
+            "concept:pos-development",
+            "https://www.chess.com/openings/French-Defense"
+          ]
+        },
+        {
+          "name": "Classical (…Nf6)",
+          "pgn": "e4 e6 d4 d5 Nc3 Nf6 Bg5 dxe4 Nxe4 Be7 Bxf6 gxf6 Nf3 f5 Nc3 a6 g3 b5 Bg2 Bb7 O-O O-O Qe2",
+          "explanation": "111 games. Bg5 shatters Black’s kingside; White fianchettoes to g2 and presses the broken pawns.",
+          "sources": [
+            "book:french-defence",
+            "concept:pos-development",
+            "https://www.chess.com/openings/French-Defense"
+          ]
+        },
+        {
+          "name": "Rubinstein (…dxe4)",
+          "pgn": "e4 e6 d4 d5 Nc3 dxe4 Nxe4 Bd7 Nf3 Bc6 Bd3 Nd7 O-O Ngf6 Ned2 Be7 Re1 O-O Ne5 Nxe5 dxe5 Qd5 Nf3",
+          "explanation": "119 games. Black concedes the centre; White enjoys more space, smoother development, and a small lasting initiative.",
+          "sources": [
+            "book:french-defence",
+            "concept:pos-development",
+            "https://www.chess.com/openings/French-Defense"
+          ]
+        }
+      ]
     }
   ]
 }

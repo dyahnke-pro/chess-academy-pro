@@ -3378,5 +3378,43 @@
         "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation"
       ]
     }
+  ],
+  "pro-aman-french-white": [
+    {
+      "fen": "rnbqk1nr/pp3ppp/4p3/2ppP3/1b1P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 5",
+      "wrongMove": "dxc5",
+      "correctMove": "a3",
+      "explanation": "Grabbing dxc5 surrenders the proud d4-e5 pawn chain and lets Black equalise easily with …Nc6 and …Bxc5. The Winawer move is a3 — question the b4-bishop, force the …Bxc3 trade, and keep the big centre plus the bishop pair. Hold the chain, don't dissolve it.",
+      "shortNarration": "a3 — keep the chain, not dxc5.",
+      "sources": [
+        "concept:pos-development",
+        "book:french-defence",
+        "https://www.chess.com/openings/French-Defense"
+      ]
+    },
+    {
+      "fen": "rnb1k2r/ppq1nppp/4p3/2ppP3/3P3P/P1P5/2P2PP1/R1BQKBNR w KQkq - 1 8",
+      "wrongMove": "Bd3",
+      "correctMove": "Nf3",
+      "explanation": "Bd3 looks natural but it leaves the e5-pawn hanging — Black snaps it off with …Qxe5 and the whole centre collapses. Nf3 first: defend the e5-pawn that anchors White's space and attack, and only then bring the other pieces out. The pawn chain is sacred in the Winawer.",
+      "shortNarration": "Nf3 — defend e5 first.",
+      "sources": [
+        "concept:pos-development",
+        "book:french-defence",
+        "https://www.chess.com/openings/French-Defense"
+      ]
+    },
+    {
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/6B1/3Pp3/2N5/PPP2PPP/R2QKBNR w KQkq - 0 5",
+      "wrongMove": "f3",
+      "correctMove": "Nxe4",
+      "explanation": "Trying to hold the pawn with f3 weakens the king and hands Black active play after …exf3. Just recapture Nxe4 — White keeps a healthy structure, a small space edge, and the Bg5 pin to press Black's kingside. Don't grovel for a pawn; take back cleanly and develop.",
+      "shortNarration": "Nxe4 — recapture cleanly.",
+      "sources": [
+        "concept:pos-development",
+        "book:french-defence",
+        "https://www.chess.com/openings/French-Defense"
+      ]
+    }
   ]
 }

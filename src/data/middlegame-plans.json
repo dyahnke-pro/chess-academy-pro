@@ -70886,5 +70886,137 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-proamanfrench-winawer",
+    "openingId": "pro-aman-french-white",
+    "title": "The h4-h5 Kingside Storm",
+    "overview": "With the bishop pair and a locked centre, White rolls the h-pawn to h5 — gaining space, cramping Black's kingside, and opening lines for the attack. The thematic Winawer plan: lock the centre, then storm the king.",
+    "pawnBreaks": [
+      "h5 kingside storm"
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "bishop",
+        "route": "Bf1-b5 active check",
+        "explanation": "The bishop swings to b5 with check, developing with tempo toward the queenside."
+      }
+    ],
+    "strategicThemes": [
+      "Roll the h-pawn to h5 and storm the kingside"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "rnb1k2r/ppq1nppp/4p3/2ppP3/3P3P/P1P5/2P2PP1/R1BQKBNR w KQkq - 1 8",
+        "moves": [
+          "Nf3",
+          "b6",
+          "h5",
+          "h6",
+          "a4",
+          "Ba6",
+          "Bb5+",
+          "Bxb5"
+        ],
+        "annotations": [
+          "Nf3 defends the e5-pawn and develops.",
+          "…b6 prepares the bishop.",
+          "h5 storms forward, cramping the kingside.",
+          "…h6 tries to slow the pawn.",
+          "a4 gains queenside space.",
+          "…Ba6 develops, hitting f1.",
+          "Bb5+ develops with check.",
+          "…Bxb5 trades the bishops."
+        ],
+        "learnCues": [
+          "Nf3 — defend e5",
+          "…b6 — prepare bishop",
+          "h5 — storm forward",
+          "…h6 — slow it",
+          "a4 — grab space",
+          "…Ba6 — develop",
+          "Bb5+ — check",
+          "…Bxb5 — trade"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f1",
+              "to": "b5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "book:french-defence",
+          "concept:pos-development",
+          "https://www.chess.com/openings/French-Defense"
+        ]
+      }
+    ]
   }
 ]

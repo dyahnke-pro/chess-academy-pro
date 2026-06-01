@@ -9145,5 +9145,104 @@
     "sourceUrl": "https://www.chess.com/game/live/137397884686",
     "studentSide": "white",
     "overview": "Hambleton's Yugoslav Attack in action: a blitz win over undefined (undefined) in 2025. Watch the Yugoslav Attack — Be3, f3, Qd2, O-O-O and the h-pawn assault on the Dragon. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-french-white-winawer-bb4-0",
+    "openingId": "pro-aman-french-white",
+    "result": "1-0",
+    "year": 2026,
+    "event": "chess.com bullet (2026-04-15)",
+    "pgn": "e4 e6 d4 d5 Nc3 Bb4 e5 Ne7 a3 Bxc3+ bxc3 c5 Bd3 O-O h4 Nbc6 Nf3 f6 Bxh7+ Kxh7 Ng5+ Kg6 h5+ Kh6 Nxe6+ Kh7 Nxd8 Rxd8 h6 g6 exf6 Nf5 g4 Nd6 f3 Be6 Bf4 Nc4 Kf2 cxd4 cxd4 Bf7 Re1 Re8 c3 N6a5 Re7 Rxe7 fxe7 Re8 Bg5 Nc6 Qe2 b6 Re1 Nd6 Qe3 Nc4 Qf4 Kg8 Qf6",
+    "sourceUrl": "https://www.chess.com/game/live/167325154508",
+    "studentSide": "white",
+    "overview": "Hambleton's Winawer in action: a bullet win over undefined (undefined) in 2026. Watch the e5 clamp, the bishop pair, and the h4-h5 kingside storm. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-french-white-winawer-bb4-1",
+    "openingId": "pro-aman-french-white",
+    "result": "1-0",
+    "year": 2023,
+    "event": "chess.com blitz (2023-08-04)",
+    "pgn": "e4 e6 d4 d5 Nc3 Bb4 e5 c5 Bd2 Ne7 a3 Bxc3 Bxc3 O-O dxc5 Nbc6 Nf3 Ng6 Bd3 Qc7 Bxg6 fxg6 O-O b6 cxb6 axb6 Re1 Ba6 Nd4 Nxd4 Bxd4 g5 c3 h6 a4 Bc8 Qb3 Rb8 Qb4 Bd7 Qd6 Qc6 Qxc6 Bxc6 b4 Kh7 Reb1 b5 a5 Ra8 a6 Rfc8 Ra5 Kg6 f3 Kf5 g4+ Kg6 Kf2 Kf7 a7 Ke7 Rba1 Kd7 Ra6 Kc7 Rb6 Rf8 Bc5 d4 Rxc6+",
+    "sourceUrl": "https://www.chess.com/game/live/84876627463",
+    "studentSide": "white",
+    "overview": "Hambleton's Winawer in action: a blitz win over undefined (undefined) in 2023. Watch the e5 clamp, the bishop pair, and the h4-h5 kingside storm. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-french-white-winawer-bb4-2",
+    "openingId": "pro-aman-french-white",
+    "result": "1-0",
+    "year": 2025,
+    "event": "chess.com blitz (2025-04-15)",
+    "pgn": "e4 e6 d4 d5 Nc3 Bb4 e5 c5 a3 Bxc3+ bxc3 Nc6 Nf3 Bd7 a4 Qa5 Bd2 c4 Be2 O-O-O O-O f6 Re1 h6 h3 g5 exf6 Nxf6 Nh2 Rhf8 Bf3 Rde8 Ng4 Nxg4 Bxg4 Rf6 Re3 Ref8 Be1 Ne7 Qe2 Nf5 Re5 Kb8 f3 Ng7 h4 gxh4 Qe3 Nf5 Bxf5 Rxf5 Bxh4 Rxe5 Qxe5+ Ka8 Qg7 Rb8 Qxd7 Qxc3 Re1 Qxd4+ Bf2 Qd2 Qxe6 Qxc2 Qxd5 Qxa4 Qd4",
+    "sourceUrl": "https://www.chess.com/game/live/137404869766",
+    "studentSide": "white",
+    "overview": "Hambleton's Winawer in action: a blitz win over undefined (undefined) in 2025. Watch the e5 clamp, the bishop pair, and the h4-h5 kingside storm. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-french-white-classical-nf6-0",
+    "openingId": "pro-aman-french-white",
+    "result": "1-0",
+    "year": 2024,
+    "event": "chess.com blitz (2024-07-30)",
+    "pgn": "e4 e6 d4 d5 Nc3 Nf6 Bg5 dxe4 Nxe4 Be7 Bxf6 gxf6 Nf3 a6 g3 b5 Bg2 Bb7 Qe2 Nc6 O-O f5 Nc3 Nb4 a4 bxa4 Nxa4 O-O c3 Nd5 Ne5 Rb8 Nc5 Bxc5 dxc5 Nf6 Rfd1 Qe7 Bxb7 Rxb7 b4 Ne4 Qxa6 c6 Nxc6 Qc7 Rd3 Rc8 Nd4 Rbb8 Rad1 Ra8 Qc4 Nd6 Qb3 Ne4 Nxf5 Rcb8 Nh6+ Kg7 Nxf7 Nxc5 Qc4 Qxf7 Qxc5 Rb7 Qg5+ Kh8 Rd8+",
+    "sourceUrl": "https://www.chess.com/game/live/116048988941",
+    "studentSide": "white",
+    "overview": "Hambleton's Classical in action: a blitz win over undefined (undefined) in 2024. Watch the Bg5 trade shattering Black’s kingside and the Bg2 pressure. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-french-white-classical-nf6-1",
+    "openingId": "pro-aman-french-white",
+    "result": "1-0",
+    "year": 2026,
+    "event": "chess.com blitz (2026-04-14)",
+    "pgn": "e4 e6 d4 d5 Nc3 Nf6 Bg5 dxe4 Nxe4 Be7 Bxf6 gxf6 Nf3 a6 g3 f5 Nc3 b5 Bg2 Bb7 O-O O-O Qe2 Nd7 d5 Nc5 Rad1 Qc8 dxe6 Qxe6 Nd4 Qxe2 Ncxe2 Bxg2 Kxg2 Bf6 b3 Rfe8 Nf4 Bxd4 Rxd4 Rad8 Rxd8 Rxd8 Re1 Ne4 f3 Nc3 Nd3 c5 Re5 c4 bxc4 bxc4 Nb4 Rd2+ Kh3 f4 Rc5 Ne2 Rxc4 h5 Kh4 Kg7 Nd3 fxg3 hxg3 Ng1 Kxh5 Nxf3 Kg4 Ng1 Rc7 Ne2 Rc4 Kf6 Kf3 Rxc2 Ra4 Kg7 Rxa6 Nd4+ Ke4 Ne2 Kf3 Nd4+ Ke3 Nf5+ Kf4 Nd4 Ra7 Rc3 Ke4 Nc2 Ne5 Kf6 Nd3 Rc4+ Kf3 Rc3 Ra6+ Kg7 Rd6 Nb4 Ke2 Nxa2 Nf4 Ra3 Nh5+",
+    "sourceUrl": "https://www.chess.com/game/live/167280109456",
+    "studentSide": "white",
+    "overview": "Hambleton's Classical in action: a blitz win over undefined (undefined) in 2026. Watch the Bg5 trade shattering Black’s kingside and the Bg2 pressure. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-french-white-classical-nf6-2",
+    "openingId": "pro-aman-french-white",
+    "result": "1-0",
+    "year": 2024,
+    "event": "chess.com blitz (2024-10-28)",
+    "pgn": "e4 e6 d4 d5 Nc3 Nf6 Bg5 dxe4 Nxe4 Be7 Bxf6 Bxf6 Nf3 Nd7 Bc4 O-O Qd3 Be7 O-O-O c6 h4 b5 Bb3 Bb7 Neg5 Nf6 Ne5 c5 Ngxf7 Rxf7 Bxe6 Bd5 Nxf7 Qa5 Bxd5 Nxd5 Ng5 g6 dxc5 Nb4 Qb3+ Kh8 a3",
+    "sourceUrl": "https://www.chess.com/game/live/123854474973",
+    "studentSide": "white",
+    "overview": "Hambleton's Classical in action: a blitz win over undefined (undefined) in 2024. Watch the Bg5 trade shattering Black’s kingside and the Bg2 pressure. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-french-white-rubinstein-dxe4-0",
+    "openingId": "pro-aman-french-white",
+    "result": "1-0",
+    "year": 2025,
+    "event": "chess.com bullet (2025-10-25)",
+    "pgn": "e4 e6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ gxf6 Be3 Nc6 Qd2 b6 Ne2 Bb7 Nc3 Bb4 a3 Bxc3 Qxc3 Qd5 f3 O-O-O O-O-O Qa2 Bc4 Qa1+ Kd2 Nxd4 Bxd4",
+    "sourceUrl": "https://www.chess.com/game/live/144733857386",
+    "studentSide": "white",
+    "overview": "Hambleton's Rubinstein in action: a bullet win over undefined (undefined) in 2025. Watch the free development edge and the cramping e5-pawn. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-french-white-rubinstein-dxe4-1",
+    "openingId": "pro-aman-french-white",
+    "result": "1-0",
+    "year": 2018,
+    "event": "chess.com bullet (2018-10-13)",
+    "pgn": "e4 e6 d4 d5 Nc3 dxe4 Nxe4 Be7 Nf3 Nf6 Nxf6+ Bxf6 c3 O-O Bd3 Nd7 Qc2 c5 Bxh7+ Kh8 h4 g6 h5 Kxh7 hxg6+ Kg8 g7",
+    "sourceUrl": "https://www.chess.com/game/live/3139354764",
+    "studentSide": "white",
+    "overview": "Hambleton's Rubinstein in action: a bullet win over undefined (undefined) in 2018. Watch the free development edge and the cramping e5-pawn. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-french-white-rubinstein-dxe4-2",
+    "openingId": "pro-aman-french-white",
+    "result": "1-0",
+    "year": 2026,
+    "event": "chess.com blitz (2026-04-15)",
+    "pgn": "e4 e6 d4 d5 Nc3 dxe4 Nxe4 Bd7 Nf3 Bc6 Bd3 Nd7 O-O Ngf6 Ned2 Be7 Re1 O-O Ne5 Nxe5 dxe5 Qd5 Nf3 Nd7 c4 Qa5 Nd4 Nc5 Nxc6 bxc6 Bc2 Rad8 Qe2 Rd7 a3 Qa6 b4 Nb7 Qe4 g6 c5 Rfd8 Be3 Rd5 Bb3 Qd3 Bxd5 Qxd5 Qf4 a5 h3 Rd7 Rad1 Qxd1 Rxd1 Rxd1+ Kh2 Rb1 Qe4 Rb3 Qxc6 Nd8 Qe8+",
+    "sourceUrl": "https://www.chess.com/game/live/167335825174",
+    "studentSide": "white",
+    "overview": "Hambleton's Rubinstein in action: a blitz win over undefined (undefined) in 2026. Watch the free development edge and the cramping e5-pawn. A clean model of the plan working against a strong opponent."
   }
 ]
