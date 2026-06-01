@@ -3451,6 +3451,56 @@
           ]
         }
       ]
+    },
+    {
+      "id": "pro-aman-ruy-lopez",
+      "playerId": "aman",
+      "eco": "C84",
+      "name": "Ruy Lopez (Aman)",
+      "color": "white",
+      "style": "Classical, Positional",
+      "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O h3 d6 c3",
+      "overview": "Aman Hambleton's main weapon against 1…e5 (552 games, 75.5%) — the Ruy Lopez, the oldest and most respected open-game opening. Bb5 pressures the e5-defender from move three, and in the Closed Morphy lines White builds the big centre slowly with h3, c3 and the eventual d4, leaving Black cramped. The Spanish bishop reroutes Ba4-b3-c2, always finding a useful diagonal, while the knights manoeuvre toward the kingside. A long-term squeeze that rewards patience and good habits over memorized tactics.",
+      "keyIdeas": [
+        "Pin pressure on the c6-knight, the defender of e5.",
+        "Reroute the bishop Ba4-Bb3-Bc2 to keep it active and aimed at the king.",
+        "Build the big centre with h3, c3 and d4 — the Closed Ruy plan.",
+        "Manoeuvre the knights toward the kingside and squeeze."
+      ],
+      "traps": [],
+      "warnings": [
+        "The Ruy is a slow squeeze, not a quick attack — keep the centre tension, complete the c3/d4 build-up, and don’t release the pressure prematurely."
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:ruy-lopez",
+        "concept:pos-development",
+        "https://www.chess.com/openings/Ruy-Lopez-Opening",
+        "https://api.chess.com/pub/player/chessbrah/games/archives"
+      ],
+      "variations": [
+        {
+          "name": "Morphy (…a6)",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O h3 d6 c3 Na5 Bc2 c5 d4",
+          "explanation": "The Closed Morphy main line. White reroutes the bishop to c2 and plays the big d4 break for a space-rich, comfortable squeeze.",
+          "sources": [
+            "book:ruy-lopez",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Ruy-Lopez-Opening"
+          ]
+        },
+        {
+          "name": "Berlin (…Nf6)",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 d3 Bc5 c3 O-O O-O d6 h3 a6 Bxc6 bxc6 Re1 Ba7 Be3 Bxe3 Rxe3",
+          "explanation": "73 games. The modern d3 anti-Berlin avoids the drawish endgame and squeezes Black’s doubled c-pawns in a quiet middlegame.",
+          "sources": [
+            "book:ruy-lopez",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Ruy-Lopez-Opening"
+          ]
+        }
+      ]
     }
   ]
 }

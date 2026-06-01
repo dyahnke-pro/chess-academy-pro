@@ -70484,5 +70484,137 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-proamanruy-morphy",
+    "openingId": "pro-aman-ruy-lopez",
+    "title": "The Bc2 Reroute and the d4 Break",
+    "overview": "The Spanish bishop slides to c2 and White plays the central d4 push — the engine of the Closed Ruy. With the knights ready to swing toward the kingside, White converts the space edge into a lasting squeeze.",
+    "pawnBreaks": [
+      "d4 central break"
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "knight",
+        "route": "Nb1-d2 toward the kingside",
+        "explanation": "The queen’s knight reroutes via d2 toward f1-g3, the classic Ruy manoeuvre."
+      }
+    ],
+    "strategicThemes": [
+      "Reroute the bishop to c2 and play the big d4 break"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/2p1bppp/p2p1n2/np2p3/4P3/1BP2N1P/PP1P1PP1/RNBQR1K1 w - - 1 10",
+        "moves": [
+          "Bc2",
+          "c5",
+          "d4",
+          "Nd7",
+          "Nbd2",
+          "exd4",
+          "cxd4",
+          "Nc6"
+        ],
+        "annotations": [
+          "Bc2 reroutes the bishop toward the kingside.",
+          "…c5 fights for the centre.",
+          "d4 plays the big central break.",
+          "…Nd7 reroutes the knight.",
+          "Nbd2 heads for f1-g3.",
+          "…exd4 opens the centre.",
+          "cxd4 recaptures, holding the big pawn centre.",
+          "…Nc6 pressures d4."
+        ],
+        "learnCues": [
+          "Bc2 — reroute",
+          "…c5 — fight centre",
+          "d4 — the big break",
+          "…Nd7 — reroute",
+          "Nbd2 — toward g3",
+          "…exd4 — open",
+          "cxd4 — hold the centre",
+          "…Nc6 — pressure d4"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "b3",
+              "to": "c2",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "b1",
+              "to": "d2",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Ruy-Lopez-Opening"
+        ]
+      }
+    ]
   }
 ]

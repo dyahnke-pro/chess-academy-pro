@@ -3264,5 +3264,43 @@
         "https://www.chess.com/openings/Reti-Opening"
       ]
     }
+  ],
+  "pro-aman-ruy-lopez": [
+    {
+      "fen": "r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+      "wrongMove": "Bxc6",
+      "correctMove": "Ba4",
+      "explanation": "Capturing …Bxc6 this early (the Exchange) hands Black the bishop pair and a solid structure for free, throwing away the Ruy's whole long-term pressure. Retreat Ba4 instead: keep the bishop, keep the pin-pressure on the e5-defender, and play for the slow squeeze.",
+      "shortNarration": "Ba4 — keep the bishop’s pressure.",
+      "sources": [
+        "concept:pos-development",
+        "book:ruy-lopez",
+        "https://www.chess.com/openings/Ruy-Lopez-Opening"
+      ]
+    },
+    {
+      "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQR1K1 w - - 2 8",
+      "wrongMove": "d4",
+      "correctMove": "h3",
+      "explanation": "Rushing d4 before h3 walks into …Bg4 pinning the f3-knight, and the pressure on d4 becomes awkward. Play h3 first — it stops the pin and makes luft — and only then build the centre with c3 and d4. The Closed Ruy is about preparation, not haste.",
+      "shortNarration": "h3 first — stop …Bg4.",
+      "sources": [
+        "concept:pos-development",
+        "book:ruy-lopez",
+        "https://www.chess.com/openings/Ruy-Lopez-Opening"
+      ]
+    },
+    {
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+      "wrongMove": "Nxe5",
+      "correctMove": "d3",
+      "explanation": "Grabbing Nxe5 looks like a free pawn, but Black hits back with …Qe7 or …Nxe5 and regains it with fully active pieces — the pawn-snatch only helps Black develop. The clean modern choice is d3: sidestep the heavy Berlin theory, keep the queens on, and squeeze slowly with a sound structure.",
+      "shortNarration": "d3 — squeeze, don’t grab e5.",
+      "sources": [
+        "concept:pos-development",
+        "book:ruy-lopez",
+        "https://www.chess.com/openings/Ruy-Lopez-Opening"
+      ]
+    }
   ]
 }
