@@ -375,6 +375,47 @@ const OPENINGS = {
     minPrefix: ['Nf3'],
     maxDepth: 80,
   },
+  // He's a universal player — also a full 1.e4 repertoire as White.
+  // Ruy Lopez (e4 e5 Nf3 Nc6 Bb5) — 539g his most-played white e4 line.
+  'aman-ruy-lopez': {
+    name: 'Ruy Lopez',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5'],
+    maxDepth: 80,
+  },
+  // Open Sicilian (e4 c5 Nf3 d6 d4) — vs Najdorf/Scheveningen, 422g.
+  'aman-open-sicilian': {
+    name: 'Open Sicilian (vs …d6)',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'c5', 'Nf3', 'd6', 'd4'],
+    maxDepth: 80,
+  },
+  // Rossolimo/Moscow (e4 c5 Nf3 Nc6 Bb5) — 214g anti-Sicilian weapon.
+  'aman-rossolimo': {
+    name: 'Rossolimo / Moscow (Anti-Sicilian)',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'c5', 'Nf3', 'Nc6', 'Bb5'],
+    maxDepth: 80,
+  },
+  // French as White (e4 e6 d4 d5 Nc3) — 118+111g, Winawer/Classical.
+  'aman-french-white': {
+    name: 'French Defense (White)',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'e6', 'd4', 'd5', 'Nc3'],
+    maxDepth: 80,
+  },
+  // Anti-Caro Two Knights as White (e4 c6 Nc3) — 124+94g.
+  'aman-anti-caro': {
+    name: 'Caro-Kann Two Knights (White)',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'c6', 'Nc3'],
+    maxDepth: 80,
+  },
 };
 
 const cfg = OPENINGS[OPENING_ID];
