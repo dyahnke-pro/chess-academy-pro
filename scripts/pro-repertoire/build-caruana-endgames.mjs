@@ -7,6 +7,8 @@ const RUY = ['concept:pos-material', 'concept:pos-king-safety', 'https://en.wiki
 const IT = ['concept:pos-material', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Italian_Game', 'https://www.chess.com/openings/Italian-Game', 'https://api.chess.com/pub/player/fabianocaruana/games/archives'];
 const FR = ['concept:pos-material', 'concept:pawn-minority-attack', 'https://en.wikipedia.org/wiki/French_Defence', 'https://www.chess.com/openings/French-Defense', 'https://api.chess.com/pub/player/fabianocaruana/games/archives'];
 const KI = ['concept:pos-material', 'concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence', 'https://www.chess.com/openings/Kings-Indian-Defense', 'https://api.chess.com/pub/player/fabianocaruana/games/archives'];
+const NIM = ['concept:pos-material', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence', 'https://www.chess.com/openings/Nimzo-Indian-Defense', 'https://api.chess.com/pub/player/fabianocaruana/games/archives'];
+const CK = ['concept:pos-material', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence', 'https://www.chess.com/openings/Caro-Kann-Defense', 'https://api.chess.com/pub/player/fabianocaruana/games/archives'];
 
 // Endgame plans, grounded in a REAL Caruana game that played the same variation,
 // anchored at the transition FEN, teaching the conversion. id suffix -endgame.
@@ -103,6 +105,46 @@ const PLANS = [
       ['Bd4', '…Bd4 — the dark-squared bishop dominates the long diagonal, an unassailable monster. With the better minor piece and active rooks, Black presses the win.', '…Bd4 — the dominant bishop'],
     ],
     arrow: { at: 3, from: 'c5', to: 'd3' },
+  },
+  {
+    id: 'mp-pro-caruana-nimzo-indian-endgame', oid: 'pro-caruana-nimzo-indian', color: 'b', src: NIM,
+    fen: '2b1r1k1/1pp2pp1/8/3B3N/p1P3Pp/Pn5P/1P2r3/3R1RK1 b - - 1 29',
+    title: 'Nimzo ENDGAME — Active Rooks on the e-file (vs mishanick)',
+    overview: "From his Nimzo, Caruana converts a heavy-piece ending the principled way: the rooks seize the open e-file, infiltrate to the first rank, and the bishop swings to e6 to harass White's pawns while the b3-knight sits like a thorn. The lesson: in a rook ending the open file plus an outpost knight is worth a pawn — occupy the file, trade into the infiltration, and activate every piece.",
+    goals: ['e7', 'e1', 'e6'], pawn: null, piece: '…R2e7/…Re1 active rooks, …Be6 bishop activation, …Nb3 outpost',
+    line: [
+      ['R2e7', '…R2e7 doubles the rooks on the open e-file, the highway into White’s position.', '…R2e7 — double on the file'],
+      ['Rf4', 'White swings a rook to the fourth rank.', 'Rf4 — White activates'],
+      ['c6', '…c6 blunts the d5-bishop and shores up the queenside.', '…c6 — kick the bishop'],
+      ['Bg2', 'The bishop retreats to g2.', 'Bg2 — the bishop retreats'],
+      ['Re1+', '…Re1+ — a rook crashes through to the first rank with check.', '…Re1+ — crash through'],
+      ['Rxe1', 'White must trade rooks.', 'Rxe1 — forced trade'],
+      ['Rxe1+', '…Rxe1+ recaptures, still on the first rank with check.', '…Rxe1+ — stay on the rank'],
+      ['Kh2', 'The king steps up.', 'Kh2 — the king steps up'],
+      ['Be6', '…Be6 activates the bishop, eyeing c4; with the rook on the first rank and the knight on b3, Black’s pieces dominate and he presses the win.', '…Be6 — activate, eye c4'],
+      ['g5', 'White grabs kingside space.', 'g5 — White grabs space'],
+    ],
+    arrow: { at: 8, from: 'c8', to: 'e6' },
+  },
+  {
+    id: 'mp-pro-caruana-caro-kann-endgame', oid: 'pro-caruana-caro-kann', color: 'b', src: CK,
+    fen: 'r3kb1r/1p1n1pp1/2n1p2p/1p1pP3/3P2PP/P2NBN2/1P3P2/1R2K2R b Kkq - 0 21',
+    title: 'Caro-Kann ENDGAME — Queenside Play vs the e5-Chain (vs Nitzan_Steinberg)',
+    overview: "From his Caro-Kann, Caruana grinds out a closed maneuvering ending against White's e5-pawn chain. The plan is pure Caro: open a second front with …h5, activate the rook on the open h-file, reroute the knight via …Nb6 toward c4, swing the other rook to the fourth rank with …Ra4, and complete development with …Be7. The lesson: against a space-grabbing pawn chain you don't sit — create a second weakness on the wing and infiltrate with active pieces.",
+    goals: ['h5', 'b6', 'a4', 'e7'], pawn: '…h5 second front', piece: '…Ra4 active rook, …Nb6 reroute toward c4',
+    line: [
+      ['h5', '…h5 strikes at White’s kingside pawns, opening a second front.', '…h5 — a second front'],
+      ['gxh5', 'White captures on h5.', 'gxh5 — White takes'],
+      ['Rxh5', '…Rxh5 activates the rook on the open h-file.', '…Rxh5 — the open file'],
+      ['Bg5', 'The bishop eyes the kingside.', 'Bg5 — the bishop eyes f6'],
+      ['Nb6', '…Nb6 reroutes the knight toward the strong c4-square.', '…Nb6 — reroute toward c4'],
+      ['Ke2', 'White centralises the king.', 'Ke2 — the king centralises'],
+      ['Ra4', '…Ra4 swings the rook to the active fourth rank, pressuring d4 and the a3-pawn.', '…Ra4 — the active fourth rank'],
+      ['Be3', 'The bishop returns to guard d4.', 'Be3 — guard d4'],
+      ['Be7', '…Be7 completes development; with both rooks active and the knight eyeing c4, Black presses on both wings.', '…Be7 — finish developing'],
+      ['Rbc1', 'White contests the c-file.', 'Rbc1 — contest the c-file'],
+    ],
+    arrow: { at: 6, from: 'a8', to: 'a4' },
   },
 ];
 

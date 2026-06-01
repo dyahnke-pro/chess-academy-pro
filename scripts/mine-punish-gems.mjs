@@ -315,6 +315,9 @@ const OPENING_SEEDS = {
   'pro-hikaru-reti':               { studentChar: 'w', baseSeed: ['Nf3'] },
   'pro-hikaru-pirc-modern':        { studentChar: 'b', baseSeed: ['e4', 'g6'] },
   'pro-hikaru-caro-kann':          { studentChar: 'b', baseSeed: ['e4', 'c6'] },
+  // Caruana Najdorf carries no variation tabs (data fanned out online), so it
+  // can't auto-derive a seed — pin the canonical trunk so EXTRA_WALK fires.
+  'pro-caruana-najdorf':           { studentChar: 'b', baseSeed: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6'] },
 };
 
 // EXTRA_WALK — common AMATEUR side-tries the student will FACE that aren't in
@@ -345,13 +348,18 @@ const EXTRA_WALK = {
   ],
   // Najdorf (student=Black): punish White's overaggressive amateur tries.
   'pro-caruana-najdorf': [
-    ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Bc4'],  // Fischer-Sozin
-    ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'g4'],   // early g4
+    ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Bc4', 'e6'],         // Fischer-Sozin …e6
+    ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Bg5', 'e6'],         // Bg5 main
+    ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Be3', 'e5'],         // English Attack …e5
+    ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'f3', 'e5'],          // f3 English …e5
+    ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'h3', 'e5'],          // h3 …e5
   ],
   // Taimanov (student=Black): punish White's loose tries.
   'pro-caruana-taimanov': [
-    ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'Nc6', 'Nb5'],   // Ndb5 lunge
-    ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'Nc6', 'Nxc6'],  // premature trade
+    ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'Nc6', 'Nb5', 'd6'],            // Ndb5 …d6
+    ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'Nc6', 'Nc3', 'Qc7', 'Be3', 'a6'],  // …Qc7 main
+    ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'Nc6', 'Nc3', 'a6', 'Be2', 'Nf6'],  // …a6 main
+    ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'Nc6', 'Nc3', 'a6', 'g3', 'Nf6'],   // g3 fianchetto
   ],
   // KID (student=Black) — punish White's overextensions + tactical slips.
   'pro-caruana-kid': [
@@ -361,6 +369,14 @@ const EXTRA_WALK = {
     ['d4', 'Nf6', 'c4', 'g6', 'Nc3', 'Bg7', 'e4', 'd6', 'Nf3', 'O-O', 'Be2', 'e5', 'dxe5'],  // dxe5 release
     ['d4', 'Nf6', 'c4', 'g6', 'Nc3', 'Bg7', 'e4', 'd6', 'Nf3', 'O-O', 'Bd3'],        // passive Bd3
     ['d4', 'Nf6', 'c4', 'g6', 'g3'],                                                  // Fianchetto offshoots
+  ],
+  // Nimzo-Indian (student=Black) — punish White's amateur tries vs the Nimzo.
+  'pro-caruana-nimzo-indian': [
+    ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'Qc2', 'O-O', 'a3', 'Bxc3+', 'Qxc3', 'b6'],   // Classical Qc2
+    ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'e3', 'O-O', 'Bd3', 'd5', 'Nf3', 'c5'],        // Rubinstein
+    ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'a3', 'Bxc3+', 'bxc3', 'c5'],                   // Saemisch
+    ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'f3', 'd5'],                                    // Kmoch f3
+    ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'Bg5', 'h6', 'Bh4', 'c5'],                      // Leningrad Bg5
   ],
   // French (student=Black) — punish White's overaggressive amateur tries.
   'pro-caruana-french': [

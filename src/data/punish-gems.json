@@ -6064,5 +6064,80 @@
     "materialDelta": 1,
     "tier": "positional",
     "why": "At your level opponents play Ne5 here in 3% of games. Punish with the best move Be7 — the engine has Black clearly better (+0.8, +1 material)."
+  },
+  {
+    "openingId": "pro-caruana-najdorf",
+    "lineMoves": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 f3 e5",
+    "inaccuracy": "Nf5",
+    "freqPct": 3.8,
+    "games": 21919,
+    "practicalScore": 55,
+    "mainMove": "Nb3",
+    "punish": "d5",
+    "punishSeq": [
+      "d5",
+      "Bd3",
+      "Bxf5",
+      "exf5",
+      "Qb6",
+      "Qe2",
+      "Nc6",
+      "Bd2"
+    ],
+    "playLine": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 f3 e5 Nf5 d5 Bd3 Bxf5 exf5 Qb6 Qe2 Nc6 Bd2",
+    "engineCp": 104,
+    "materialDelta": 0,
+    "tier": "confirmed",
+    "why": "At your level opponents play Nf5 here in 4% of games. Punish with the best move d5 — the engine has Black winning (+1.0)."
+  },
+  {
+    "openingId": "pro-caruana-najdorf",
+    "lineMoves": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 h3 e5",
+    "inaccuracy": "Nf5",
+    "freqPct": 4.8,
+    "games": 10141,
+    "practicalScore": 54,
+    "mainMove": "Nde2",
+    "punish": "d5",
+    "punishSeq": [
+      "d5",
+      "Ng3",
+      "d4",
+      "Nb1",
+      "h5",
+      "Bd3",
+      "Nc6",
+      "a3"
+    ],
+    "playLine": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 h3 e5 Nf5 d5 Ng3 d4 Nb1 h5 Bd3 Nc6 a3",
+    "engineCp": 84,
+    "materialDelta": 0,
+    "tier": "positional",
+    "why": "At your level opponents play Nf5 here in 5% of games. Punish with the best move d5 — the engine has Black clearly better (+0.8)."
+  },
+  {
+    "openingId": "pro-caruana-nimzo-indian",
+    "lineMoves": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5",
+    "inaccuracy": "c5",
+    "freqPct": 2.3,
+    "games": 3375,
+    "practicalScore": 55,
+    "mainMove": "Ne2",
+    "punish": "b6",
+    "punishSeq": [
+      "b6",
+      "cxb6",
+      "Bxc3+",
+      "bxc3",
+      "axb6",
+      "Ne2",
+      "Ba6",
+      "Bc2"
+    ],
+    "playLine": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 c5 b6 cxb6 Bxc3+ bxc3 axb6 Ne2 Ba6 Bc2",
+    "engineCp": 83,
+    "materialDelta": 0,
+    "tier": "positional",
+    "why": "At your level opponents play c5 here in 2% of games. Punish with the best move b6 — the engine has Black clearly better (+0.8)."
   }
 ]

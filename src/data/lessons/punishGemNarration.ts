@@ -3679,6 +3679,21 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     watch: ["","","","","","","","","","","","","","","","","Ne5?! — the knight jumps in with no support and can simply be challenged away.","…Be7! — calm development; the e5-knight has no real threat and must retreat, leaving Black better.","","","","Black is comfortably better with the extra pawn and the sounder structure.","","",""],
     learn: ["","","","","","","","","","","","","","","","","","…Be7 — ignore it, stay solid","","","","","","",""],
   },
+  "pro-caruana-najdorf:e4_c5_Nf3_d6_d4_cxd4_Nxd4_Nf6_Nc3_a6_f3_e5:Nf5": {
+    sources: ["concept:pos-center","concept:pos-initiative","https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation"],
+    watch: ["","","","","","","","","","","","","Nf5?! — after …e5 hits the knight, White lunges to f5 hoping to provoke, but the piece has no support and just becomes a target.","…d5! — striking the centre at once; the e4-pawn is undermined and the loose f5-knight has nowhere good to go.","","","","After …Bxf5 trades the intruder and …Qb6 rakes b2 and d4, Black is clearly on top — the engine reads about +1.0.","","",""],
+    learn: ["","","","","","","","","","","","","","…d5 — strike the centre, trap the knight","","","","","","",""],
+  },
+  "pro-caruana-najdorf:e4_c5_Nf3_d6_d4_cxd4_Nxd4_Nf6_Nc3_a6_h3_e5:Nf5": {
+    sources: ["concept:pos-center","concept:pos-initiative","https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation"],
+    watch: ["","","","","","","","","","","","","Nf5?! — again the knight jumps to f5 with nothing behind it, inviting Black to claim the centre.","…d5! — the central break; the e4-point falls and the f5-knight is shoved back.","","","","After …d4 gains space and …h5 chases the sidelined g3-knight, Black has a clear positional bind.","","",""],
+    learn: ["","","","","","","","","","","","","","…d5 — break the centre, gain the bind","","","","","","",""],
+  },
+  "pro-caruana-nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_e3_O-O_Bd3_d5:c5": {
+    sources: ["concept:pos-center","concept:pos-initiative","https://www.chess.com/openings/Nimzo-Indian-Defense"],
+    watch: ["","","","","","","","","","","c5?! — White grabs queenside space, but the pawn is overextended and undefended by pieces.","…b6! — undermining the c5-pawn at its base; White cannot hold the chain together.","","","","After …axb6 opens the a-file and …Ba6 pins down the shattered queenside pawns, Black is clearly better — about +0.8.","","",""],
+    learn: ["","","","","","","","","","","","…b6 — undermine the overextended pawn","","","","","","",""],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
