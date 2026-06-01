@@ -456,6 +456,36 @@ export function PlayableLinePlayer({
     [phase, memoryMoveIndex, expectedMoves, showWrongFlash, showCorrectFlash, playMoveSound, playEncouragement, clearSelection, finishLine, mode, discussion, line.title],
   );
 
+  // Audit-only deterministic move hook — gated behind the `auditMoveHook`
+  // localStorage flag, so it is a NO-OP for every real user (no behaviour
+  // change, nothing exposed unless the flag is set). The full-play audit
+  // (scripts/audit-fullplay-prod.mjs) sets the flag and calls window.__playMove
+  // to submit a memory-phase move deterministically, instead of fighting
+  // react-chessboard's headless pointer events. Covers Learn/Practice for the
+  // main line AND the gems (they reuse this player).
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try { if (localStorage.getItem('auditMoveHook') !== '1') return; } catch { return; }
+    type AuditWin = Window & {
+      __playMove?: (from: string, to: string) => void;
+      __nextExpected?: () => { from: string; to: string } | null;
+    };
+    const w = window as AuditWin;
+    w.__playMove = (from: string, to: string): void => { handleMemoryMoveResult(from, to); };
+    // The audit drives the EXACT expected line (lesson's own sequence, whatever
+    // its length) rather than guessing the moves — call __nextExpected to read
+    // the next move the player is waiting for, then __playMove it.
+    w.__nextExpected = (): { from: string; to: string } | null => {
+      const e = expectedMoves[memoryMoveIndex];
+      return e ? { from: e.from, to: e.to } : null;
+    };
+    return () => {
+      const ww = window as AuditWin;
+      ww.__playMove = undefined;
+      ww.__nextExpected = undefined;
+    };
+  }, [handleMemoryMoveResult, expectedMoves, memoryMoveIndex]);
+
   const handlePieceDrop = useCallback(
     ({ sourceSquare, targetSquare }: PieceDropHandlerArgs): boolean => {
       if (phase !== 'memory' || !targetSquare) {

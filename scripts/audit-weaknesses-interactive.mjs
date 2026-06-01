@@ -49,7 +49,8 @@
  * sandbox even without the cert workaround.
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { attachAuditStreamTracker, attributeScenarioEvents } from './audit-lib/event-attribution.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -321,13 +322,14 @@ async function pass3(page, tracker) {
 }
 
 async function runOnePass(passFn, passNum, browser) {
-  const ctx = await browser.newContext({ viewport: { width: 414, height: 896 } });
+  const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 } });
   await ctx.addInitScript(({ url, secret }) => {
     try {
       window.localStorage.setItem('auditStreamUrl', url);
       window.localStorage.setItem('auditStreamSecret', secret);
     } catch {}
   }, { url: STREAM_URL, secret: SECRET });
+  await ctx.addInitScript(autoDismissCalibration);
   const page = await ctx.newPage();
   const tracker = attachAuditStreamTracker(page, STREAM_URL);
   // clearAllStorage navigates to about:blank which fires a transient
@@ -351,7 +353,7 @@ async function main() {
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
   const executablePath = await resolveChromiumExecutable(HEADED);
-  const browser = await chromium.launch({ headless: !HEADED, executablePath });
+  const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: !HEADED, executablePath });
 
   await runOnePass(pass1, 1, browser);
   await runOnePass(pass2, 2, browser);

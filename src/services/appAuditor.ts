@@ -471,6 +471,14 @@ export type AuditKind =
   //   tacticType?, phase?, openingEco? }. Effectiveness joined at
   //   query time with the next move-attempt on the same FEN.
   | 'hint-revealed'
+  // `coach-board-claim-blocked`: the runtime boardClaimValidator
+  //   disproved a free-text board claim in live coach prose (an
+  //   impossible pin, a piece named on a square it isn't on) and the
+  //   offending sentence was dropped before being spoken / displayed.
+  //   Carries { surface, sentence?, dropped?, violations[] }, fen. This
+  //   is the observability signal for the live-prose hallucination class
+  //   the build-time narrationAccuracy gate can't see.
+  | 'coach-board-claim-blocked'
   // `position-dwell`: time spent on a position before leaving it
   //   (moved away, navigated, session-end). Cheap timer pattern —
   //   emit on exit, not entry. Carries { surface, fen, dwellMs,

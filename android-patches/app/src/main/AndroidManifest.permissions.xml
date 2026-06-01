@@ -1,0 +1,18 @@
+<!--
+  Permission fragment for Chess Academy Pro (Android).
+
+  These <uses-permission> lines must be present inside the <manifest>
+  element of the Capacitor-generated
+  android/app/src/main/AndroidManifest.xml. They are NOT a full
+  manifest — the generated file owns the <application>/<activity>
+  block. `npm run setup:android` merges these in (idempotently).
+
+  - INTERNET            : AI coach, TTS, game import (usually default).
+  - RECORD_AUDIO        : microphone for voice chat with the coach.
+  - MODIFY_AUDIO_SETTINGS: manage audio route for reliable Polly TTS
+                          playback (Android twin of the iOS
+                          AVAudioSession patch).
+-->
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
+<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />

@@ -24,7 +24,8 @@
  * 3 consecutive clean runs are the stop condition.
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -512,10 +513,11 @@ async function main() {
   const executablePath = await resolveChromiumExecutable({
     preferred: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH,
   });
-  const browser = await chromium.launch({ headless: true, executablePath });
-  const ctx = await browser.newContext({ viewport: { width: 420, height: 900 } });
+  const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: true, executablePath });
+  const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 420, height: 900 } });
   await ctx.route('**/cdn.jsdelivr.net/**/*.svg', async (route) =>
     route.fulfill({ status: 200, contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"/>' }));
+  await ctx.addInitScript(autoDismissCalibration);
   const page = await ctx.newPage();
   page.on('console', (m) => { if (m.type() === 'error' && !noise(m.text())) consoleErrors.push({ text: m.text(), at: Date.now() }); });
   page.on('pageerror', (e) => { const msg = e.message || ''; if (!msg || msg === 'undefined' || !e.stack || noise(msg)) return; pageErrors.push({ text: msg, at: Date.now() }); });

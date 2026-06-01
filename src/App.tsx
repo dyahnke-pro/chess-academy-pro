@@ -86,6 +86,18 @@ import { GuidedGamePage } from './components/Kid/GuidedGamePage';
 import { NeonBoardMock } from './components/Board/NeonBoardMock';
 import { DebugAuditPage } from './components/Debug/DebugAuditPage';
 import { OpeningBlundersPage } from './components/Debug/OpeningBlundersPage';
+import { useAndroidBackButton } from './hooks/useAndroidBackButton';
+import { PrivacyPolicyPage } from './components/Legal/PrivacyPolicyPage';
+
+/**
+ * Mounted inside BrowserRouter so it can use router hooks. Wires the
+ * Android hardware/gesture back-button to in-app navigation (no-op on
+ * web + iOS). Renders nothing.
+ */
+function NativeBackButton(): null {
+  useAndroidBackButton();
+  return null;
+}
 
 export function App(): JSX.Element {
   const { isLoading, setLoading, setActiveProfile, setActiveTheme, activeProfile } =
@@ -260,7 +272,12 @@ export function App(): JSX.Element {
   return (
     <>
     <BrowserRouter>
+      <NativeBackButton />
       <Routes>
+        {/* Standalone legal route — no app chrome, so the production URL
+            (/privacy) doubles as the hosted privacy-policy link the App
+            Store + Google Play both require. */}
+        <Route path="/privacy" element={<PrivacyPolicyPage />} />
         <Route element={<AppLayout />}>
           <Route path="/" element={<ErrorBoundary><DashboardPage /></ErrorBoundary>} />
           {/* Openings */}

@@ -30,7 +30,8 @@
  * up on the next route mount.
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 import { attachAuditStreamTracker, attributeScenarioEvents } from './audit-lib/event-attribution.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -159,8 +160,8 @@ async function main() {
 
   const executablePath = await resolveChromiumExecutable(HEADED);
   if (executablePath) console.log(`[coach-plan] chromium = ${executablePath}`);
-  const browser = await chromium.launch({ headless: !HEADED, executablePath });
-  const ctx = await browser.newContext({
+  const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: !HEADED, executablePath });
+  const ctx = await browser.newContext({ ...sandboxContextOptions(),
     viewport: { width: 414, height: 896 },
     deviceScaleFactor: 2,
     userAgent: 'AuditCoachPlanBot/2.0 (chromium, rolodex)',
@@ -177,6 +178,8 @@ async function main() {
     },
     { url: STREAM_URL, secret: SECRET },
   );
+
+  await ctx.addInitScript(autoDismissCalibration);
 
   const page = await ctx.newPage();
 

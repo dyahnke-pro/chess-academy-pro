@@ -3794,5 +3794,137 @@
         "https://www.chess.com/openings/Caro-Kann-Defense-Two-Knights-Attack"
       ]
     }
+  ],
+  "pro-carlsen-queens-pawn": [
+    {
+      "fen": "rn1qk2r/p1pp1ppp/bp2pn2/8/1bPP4/1P3NP1/P3PP1P/RNBQKB1R w KQkq - 1 6",
+      "wrongMove": "Nbd2",
+      "correctMove": "Bd2",
+      "explanation": "Nbd2 blocks the c1-bishop and lets Black develop in comfort. Bd2 develops with tempo, challenges the b4-bishop, and keeps White flexible — the engine prefers it by nearly a pawn.",
+      "shortNarration": "Bd2 — challenge the bishop, stay flexible",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-piece-activity",
+        "https://www.chess.com/openings/Queens-Indian-Defense"
+      ]
+    }
+  ],
+  "pro-carlsen-french": [
+    {
+      "fen": "rnbqk1nr/ppp2ppp/3b4/3p4/2PP4/5N2/PP3PPP/RNBQKB1R b KQkq - 0 5",
+      "wrongMove": "Ne7",
+      "correctMove": "c6",
+      "explanation": "Ne7 blocks the bishop and invites cxd5, when White's pieces flood in and Black is nearly lost. c6 first shores up d5 and keeps the comfortable, solid Exchange French Carlsen is after.",
+      "shortNarration": "c6 — shore up d5, stay solid",
+      "sources": [
+        "concept:pos-center",
+        "concept:pos-development",
+        "https://www.chess.com/openings/French-Defense-Exchange-Variation"
+      ]
+    },
+    {
+      "fen": "r1bqkbnr/pp3ppp/2n1p3/1B1p4/3NP3/8/PPPN1PPP/R1BQK2R b KQkq - 2 6",
+      "wrongMove": "Qb6",
+      "correctMove": "Bd7",
+      "explanation": "Qb6 hits d4 but neglects development, and the queen soon becomes a target. Bd7 unpins the c6-knight and prepares to challenge White's strong knight and bishop — the engine clearly prefers finishing development first.",
+      "shortNarration": "Bd7 — unpin first, develop",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-piece-activity",
+        "https://www.chess.com/openings/French-Defense-Tarrasch-Variation"
+      ]
+    },
+    {
+      "fen": "r1bqk1nr/pp3ppp/2n1p3/2ppP3/3P4/P1P2N2/2P2PPP/R1BQKB1R b KQkq - 2 7",
+      "wrongMove": "cxd4",
+      "correctMove": "Qa5",
+      "explanation": "Releasing the tension with cxd4 hands White a free, mobile centre and the bishop pair for nothing. Qa5 keeps the pressure on c3 and d4 — the engine rates keeping the tension nearly a pawn better.",
+      "shortNarration": "Qa5 — keep the tension on c3/d4",
+      "sources": [
+        "concept:pos-center",
+        "concept:tac-pin",
+        "https://www.chess.com/openings/French-Defense-Winawer-Variation"
+      ]
+    }
+  ],
+  "pro-carlsen-scandinavian": [
+    {
+      "fen": "rnb1kbnr/ppp1pppp/3q4/8/3P4/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 4",
+      "wrongMove": "Nc6",
+      "correctMove": "Nf6",
+      "explanation": "Nc6 blocks the c-pawn and runs into d5, gaining time and space for White. Nf6 develops toward the centre, hits nothing loose, and keeps the queen's retreat open — the sound Scandinavian setup.",
+      "shortNarration": "Nf6 — develop, don't block the c-pawn",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-center",
+        "https://www.chess.com/openings/Scandinavian-Defense"
+      ]
+    }
+  ],
+  "pro-carlsen-modern": [
+    {
+      "fen": "rnbqk1nr/pp1pppbp/2p3p1/8/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 1 4",
+      "wrongMove": "e6",
+      "correctMove": "d5",
+      "explanation": "The passive e6 cedes the centre and shuts in the c8-bishop. d5! strikes White's big centre at once — the whole point of the c6/d5 Modern — and the engine has Black comfortable instead of cramped.",
+      "shortNarration": "d5 — strike the centre, free the bishop",
+      "sources": [
+        "concept:pos-center",
+        "concept:pos-piece-activity",
+        "https://www.chess.com/openings/Modern-Defense"
+      ]
+    }
+  ],
+  "pro-carlsen-closed-sicilian": [
+    {
+      "fen": "rnbqkb1r/pp3ppp/4pn2/2pp4/4P3/2N3P1/PPPP1PBP/R1BQK1NR w KQkq - 2 5",
+      "wrongMove": "Nge2",
+      "correctMove": "e5",
+      "explanation": "Nge2 is passive and lets Black equalise with …d4. e5! grabs space, kicks the f6-knight, and opens the long diagonal for the g2-bishop — the thematic Closed-Sicilian space grab the engine prefers.",
+      "shortNarration": "e5 — grab space, kick the knight",
+      "sources": [
+        "concept:pos-space",
+        "concept:pos-center",
+        "https://www.chess.com/openings/Sicilian-Defense-Closed"
+      ]
+    },
+    {
+      "fen": "r1bqkbnr/1p1ppppp/p7/1Bp5/3nP3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 5",
+      "wrongMove": "Nxd4",
+      "correctMove": "Bc4",
+      "explanation": "With …a6 already hitting the b5-bishop, Nxd4 drops a piece after …axb5 (or …cxd4 forking the c3-knight) — a one-move blunder. Bc4 retreats the bishop to its best diagonal and keeps a healthy edge.",
+      "shortNarration": "Bc4 — save the bishop, hold the edge",
+      "sources": [
+        "concept:tac-fork",
+        "concept:pos-piece-activity",
+        "https://www.chess.com/openings/Sicilian-Defense-Closed"
+      ]
+    }
+  ],
+  "pro-carlsen-kings-gambit": [
+    {
+      "fen": "rnbqkbnr/ppp2ppp/8/3pp3/4PP2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+      "wrongMove": "fxe5",
+      "correctMove": "exd5",
+      "explanation": "Against the Falkbeer Counter-Gambit (…d5), the greedy fxe5?? hands Black a raging initiative after …Qh4+ and the White king never recovers. exd5! is correct — take the d-pawn and meet …e4 with calm development. The engine's verdict is night and day.",
+      "shortNarration": "exd5 — take d5, not the e-pawn",
+      "sources": [
+        "concept:pos-king-safety",
+        "concept:pos-center",
+        "https://www.chess.com/openings/Kings-Gambit"
+      ]
+    },
+    {
+      "fen": "rnbqkb1r/pppp1p1p/5n2/4N3/4PppP/8/PPPP2P1/RNBQKB1R w KQkq - 2 6",
+      "wrongMove": "Nc3",
+      "correctMove": "d4",
+      "explanation": "In the Kieseritzky, the slow Nc3 lets Black consolidate the extra pawn. d4! is the critical move — building the big centre and opening lines for the attack that justifies the gambit. The engine strongly prefers d4.",
+      "shortNarration": "d4 — build the centre, justify the gambit",
+      "sources": [
+        "concept:pos-center",
+        "concept:att-kingside-storm",
+        "https://www.chess.com/openings/Kings-Gambit"
+      ]
+    }
   ]
 }

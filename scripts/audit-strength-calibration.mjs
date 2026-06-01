@@ -25,7 +25,7 @@
  *   AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app node scripts/audit-strength-calibration.mjs
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -40,8 +40,8 @@ const STREAM_URL_LOCAL = `${BASE_URL}/api/audit-stream`;
 async function main() {
   const executablePath = await resolveChromiumExecutable(HEADED);
   if (executablePath) console.log(`[calibration] chromium = ${executablePath}`);
-  const browser = await chromium.launch({ headless: !HEADED, executablePath });
-  const ctx = await browser.newContext({ viewport: { width: 414, height: 896 }, deviceScaleFactor: 2 });
+  const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: !HEADED, executablePath });
+  const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 }, deviceScaleFactor: 2 });
   await ctx.addInitScript(({ url, secret }) => {
     try {
       window.localStorage.setItem('auditStreamUrl', url);

@@ -34,6 +34,10 @@ import { coachService } from '../coach/coachService';
 import type { LiveState } from '../coach/types';
 import { voiceService } from '../services/voiceService';
 import {
+  validateBoardClaims,
+  stripDisprovenSentences,
+} from '../services/boardClaimValidator';
+import {
   getCachedStockfish,
   setCachedStockfish,
 } from './stockfishFenCache';
@@ -368,9 +372,29 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
         // tags never reach the user.
         let speechBuffer = '';
         let speechChain: Promise<void> = Promise.resolve();
+        // Runtime board-fact guard: a hint sentence that makes a PROVABLY
+        // false board claim (an impossible pin, a piece named on a square
+        // it isn't on) is dropped before it's ever spoken. This is the
+        // runtime counterpart to the build-time narrationAccuracy gate —
+        // live LLM prose was previously unchecked (the "Qb6 pins your
+        // knight" hallucination, 2026-06-01). Empty > invented: we only
+        // drop sentences the validator can DISPROVE; anything it's unsure
+        // about passes through untouched.
         const speakSentence = (sentence: string): void => {
           const cleaned = sentence.replace(TAG_STRIP_RE, '').trim();
           if (!cleaned) return;
+          const { violations } = validateBoardClaims(cleaned, fen);
+          if (violations.length > 0) {
+            void logAppAudit({
+              kind: 'coach-board-claim-blocked',
+              category: 'subsystem',
+              source: 'useHintSystem.boardClaimGuard',
+              summary: `dropped hint sentence — ${violations[0].kind}: ${violations[0].reason}`,
+              details: JSON.stringify({ surface: 'hint', sentence: cleaned, violations }),
+              fen,
+            });
+            return; // never speak a disproven board claim
+          }
           speechChain = speechChain
             .then(() => voiceService.speakForced(cleaned))
             .catch(() => undefined);
@@ -398,7 +422,24 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
           const tail = speechBuffer.replace(TAG_STRIP_RE, '').trim();
           if (tail) speakSentence(tail);
           speechBuffer = '';
-          response = answer.text.replace(TAG_STRIP_RE, '').trim();
+          // Mirror the spoken guard on the displayed bubble: strip any
+          // sentence whose board-claim the validator disproved so the
+          // student never SEES the hallucinated tactic either.
+          const stripped = stripDisprovenSentences(
+            answer.text.replace(TAG_STRIP_RE, '').trim(),
+            fen,
+          );
+          response = stripped.clean;
+          if (stripped.dropped.length > 0) {
+            void logAppAudit({
+              kind: 'coach-board-claim-blocked',
+              category: 'subsystem',
+              source: 'useHintSystem.boardClaimGuard.nudge',
+              summary: `stripped ${stripped.dropped.length} disproven sentence(s) from hint bubble`,
+              details: JSON.stringify({ surface: 'hint', dropped: stripped.dropped }),
+              fen,
+            });
+          }
         } catch (err) {
           const msg = err instanceof Error ? err.message : String(err);
           void logAppAudit({

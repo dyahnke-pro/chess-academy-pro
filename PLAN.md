@@ -398,3 +398,19 @@ NEEDS DAVID / DEEPER WORK (flagged, NOT risked autonomously):
   quality-critical. RECOMMENDED: a focused endgame pass, ideally with David
   confirming the model games (removes the sourcing + holding-line risk), rather
   than rushed autonomous authoring. (NOT a line that lies — empty > generic.)
+
+---
+
+## CARLSEN FULL-PARITY BUILD (2026-06-01, branch claude/carlsen-full-parity)
+All gaps closed in one PR, data-grounded, gate-green:
+- **Game references (STEP 11.5):** 300 real wins/draws (was 0), bounded 5/variation.
+- **Endgame plans:** 13/14 (added open-sic/sicilian/kid/french; KG self-hides).
+- **Pitfalls:** 12/14 (added 10 engine-verified across 6 openings; Réti+Caro empty/honest).
+- **Per-variation middlegame plans:** 9 (DATA-COMPLETE — rarer variations diverge
+  within 3-4 plies past terminus; building stubs would be padding).
+- **Gems:** 2 confirmed (Siberian + Elephant) — ENGINE-COMPLETE (~30 candidate
+  lines hand-verified; the rest equalize or aren't amateur-played; his solid
+  style genuinely yields few).
+- **Per-variation model games:** +49 (one real high-rated win per variation,
+  hand-authored overview). Now ~3/opening + 1/variation.
+All gates green. Next: ship-check → PR → loop audit on prod (3 instruments).
