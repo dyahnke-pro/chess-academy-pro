@@ -341,6 +341,40 @@ const OPENINGS = {
     minPrefix: ['e4', 'c5', 'Nc3'],
     maxDepth: 80,
   },
+  // ===== Aman Hambleton (chessbrah) — 2026-06-01 build =====
+  // His crown jewel: Sicilian ...e6 (Kan/Taimanov), 1231g 75.2% — most-played
+  // line in the whole 35k corpus by 2.5x. Public Lichess study of these games.
+  'aman-sicilian-kan': {
+    name: 'Sicilian Defense: Kan / Taimanov (...e6)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['e4', 'c5', 'Nf3', 'e6'],
+    maxDepth: 80,
+  },
+  // #2 black weapon: Nimzo-Indian (481g 78.4%) — Bogo ...Bb4+ folds in (201g).
+  'aman-nimzo-indian': {
+    name: 'Nimzo-Indian Defense',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['d4', 'Nf6', 'c4', 'e6'],
+    maxDepth: 80,
+  },
+  // Solid black backup: Caro-Kann (~380g ~75%).
+  'aman-caro-kann': {
+    name: 'Caro-Kann Defense',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['e4', 'c6'],
+    maxDepth: 80,
+  },
+  // Dominant white system: Réti / KIA (178 ECO + 1000s of prefix games).
+  'aman-reti': {
+    name: "Réti / King's Indian Attack",
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['Nf3'],
+    maxDepth: 80,
+  },
 };
 
 const cfg = OPENINGS[OPENING_ID];
