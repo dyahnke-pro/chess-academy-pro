@@ -107,3 +107,33 @@ had the field, so it survived.
   6-8, no error screen). Re-running prod audit after the Vercel deploy.
 This is exactly why G1 exists: green unit tests didn't catch it; the live-UI
 audit did.
+
+## LOOP AUDIT — deepening passes (2026-06-01)
+The loop that "gets harder each pass." Each pass tightened the checker and
+either found+fixed defects or confirmed clean. Run order + results:
+
+- **PASS A — static gate battery (6,828 checks):** arrows (sight-line),
+  plan board-accuracy, lesson coverage (Gate A), voice contract, middlegame
+  depth, FEN coherence, tab-plan resolver — all green.
+- **PASS B — lead-the-eye continuity:** caught **44 beats** naming a square in
+  spoken prose with NO marker leading the eye there. FIXED: +50 board-accurate
+  KEY highlights across all 9 openings (re-verified by the 5,085-check accuracy
+  gate — zero false markers). Shipped `925d5519`, prod-audited 38/38 green.
+- **PASS C — cross-surface continuity (lesson↔plan↔model↔gem):** model games
+  legal + in-family + hand-authored overviews + studentSide matches color;
+  gem playLines legal + extend their lineMoves; no dead variation tabs; lesson
+  spine agrees with entry pgn. All green. 1 key-idea↔lesson gap found+fixed
+  (Kan keyIdea said "…d5" break but the data line plays "…e5" — aligned).
+- **PASS D — pitfall board-truth (27 pitfalls):** valid FENs, both moves legal,
+  contrast, both registers, ZERO phantom-piece claims (2 initial flags were
+  confirmed false-positives — legit "<piece> to <sq>" move-descriptions, not
+  placement claims; checker tightened to "<piece> on <sq>" only).
+
+NEXT PASS (for the next session — the loop keeps deepening):
+- beat-to-beat narration SEMANTIC continuity (does each beat's idea follow from
+  the prior with no contradiction across the spine — needs LLM-judging, not
+  just board-truth).
+- gem `watch[]` lead-the-eye (same square-naming check applied to gem narration
+  arrays, not just lessons).
+- live interactive prod probe of Learn/Practice/Play rungs per variation (the
+  audit script currently asserts Watch+tabs+voice; extend to drive each rung).
