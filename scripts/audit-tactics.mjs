@@ -77,8 +77,10 @@ async function main() {
 
   const executablePath = await resolveExecutablePath(HEADED);
   if (executablePath) console.log(`[tactics] chromium  = ${executablePath}`);
-  const browser = await chromium.launch({ headless: !HEADED, executablePath });
+  const sandbox = process.env.AUDIT_SANDBOX === '1';
+  const browser = await chromium.launch({ headless: !HEADED, executablePath, args: sandbox ? ['--ignore-certificate-errors'] : [] });
   const ctx = await browser.newContext({
+    ...(sandbox ? { ignoreHTTPSErrors: true } : {}),
     viewport: { width: 414, height: 896 },
     deviceScaleFactor: 2,
     userAgent: 'AuditTacticsBot/1.0 (chromium)',

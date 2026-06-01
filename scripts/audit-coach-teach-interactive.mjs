@@ -23,7 +23,8 @@
  * along. Saves a JSON report to audit-reports/coach-teach-interactive-<iso>/.
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 // SANDBOX_CHROMIUM_ARGS workaround exists but this script has
 // scenario-level issues (welcome-line testid changed; coach-response
 // wait pattern broken) that surface once brain is unblocked. Keep
@@ -253,7 +254,7 @@ async function main() {
   const executablePath = await resolveChromiumExecutable({
     preferred: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH,
   });
-  const browser = await chromium.launch({
+  const browser = await chromium.launch({ args: sandboxLaunchArgs(),
     headless: !HEADED,
     executablePath,
     // Sandbox's chromium doesn't trust the CA chain for the public
@@ -262,10 +263,11 @@ async function main() {
     // audit can actually exercise the brain in the sandbox.
     args: ['--ignore-certificate-errors'],
   });
-  const ctx = await browser.newContext({
+  const ctx = await browser.newContext({ ...sandboxContextOptions(),
     viewport: { width: 1280, height: 800 },
     ignoreHTTPSErrors: true,
   });
+  await ctx.addInitScript(autoDismissCalibration);
   const page = await ctx.newPage();
 
   // Brain-reachability gate. This audit drives ~10 scenarios that
