@@ -3694,6 +3694,137 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     watch: ["","","","","","","","","","","c5?! — White grabs queenside space, but the pawn is overextended and undefended by pieces.","…b6! — undermining the c5-pawn at its base; White cannot hold the chain together.","","","","After …axb6 opens the a-file and …Ba6 pins down the shattered queenside pawns, Black is clearly better — about +0.8.","","",""],
     learn: ["","","","","","","","","","","","…b6 — undermine the overextended pawn","","","","","","",""],
   },
+  // ── GothamChess hand-found tactical gems (David 2026-06-01: "find traps by
+  //    hand. no more bots"). Each judged via probe-trap.mjs, engine-verified. ──
+  // Vienna Gambit: after e5 hits the f6-knight, 7…Qe7?! defends but tangles
+  // Black; Qe2 keeps the spearhead and White's centre rolls. +2.2.
+  "pro-gothamchess-vienna:e4_e5_Nc3_Nf6_f4_exf4_e5:Qe7": {
+    sources: ["concept:pos-center","concept:pos-space","https://en.wikipedia.org/wiki/Vienna_Game"],
+    watch: ["","","","","","","",
+      "Qe7?! — the queen props up the attacked f6-knight but boxes in the f8-bishop and steps onto the half-open e-file.",
+      "Qe2 — White bolsters the e5-spearhead and lines up on the e-file; the cramped f6-knight still has no good square.",
+      "Ng8 — the knight is shoved all the way home; Black has untangled nothing.",
+      "d4 — the e5 and d4 pawns clamp the centre while the Black king is stuck in the middle.",
+      "","","",
+      "Nxd5 — the knight scoops the d5-pawn, levelling material with a dominant centre and a huge lead in development.",
+      ""],
+    learn: ["","","","","","","",
+      "Qe7 — passive, blocks the bishop",
+      "Qe2 — hold e5, seize the e-file",
+      "",
+      "d4 — clamp the centre",
+      "","","",
+      "Nxd5 — round up the pawn, stay on top",
+      ""],
+  },
+  // Ponziani: after 9.e5 hits the f6-knight, 5…Ng4?! lunges to the rim; cxd4
+  // rebuilds the centre, h3 traps the knight on h6, Bxh6 wrecks the king. +1.1.
+  "pro-gothamchess-ponziani:e4_e5_Nf3_Nc6_c3_Nf6_d4_exd4_e5:Ng4": {
+    sources: ["concept:pos-center","concept:pos-king-safety","https://www.chess.com/openings/Ponziani-Opening"],
+    watch: ["","","","","","","","","",
+      "Ng4?! — the knight lunges to the edge to bite at e5, but it threatens nothing and hands White a target.",
+      "cxd4 — the student ignores the bluff and recaptures, restoring the broad d4-and-e5 pawn centre.",
+      "",
+      "h3 — the pawn jabs the g4-knight; with no square it must crawl to the rim on h6.",
+      "",
+      "Bxh6 — taking on h6 shatters Black's kingside; after gxh6 the king has no shelter and White keeps the bishop pair.",
+      "","",""],
+    learn: ["","","","","","","","","",
+      "Ng4 — lunges to the rim, no threat",
+      "cxd4 — rebuild the big centre",
+      "",
+      "h3 — kick the stray knight",
+      "",
+      "Bxh6 — smash the kingside",
+      "","",""],
+  },
+  // Ponziani: 5…Qe7?! defends the knight but jams the f8-bishop; cxd4 rebuilds
+  // the centre and Bb5 pins c6 for a comfortable pull. +0.6.
+  "pro-gothamchess-ponziani:e4_e5_Nf3_Nc6_c3_Nf6_d4_exd4_e5:Qe7": {
+    sources: ["concept:pos-center","concept:pos-development","https://www.chess.com/openings/Ponziani-Opening"],
+    watch: ["","","","","","","","","",
+      "Qe7?! — the queen defends the f6-knight but blocks the f8-bishop and clogs Black's whole kingside.",
+      "cxd4 — recapturing rebuilds the big pawn centre while Black stays tangled.",
+      "",
+      "Bb5 — pinning pressure on the c6-knight piles onto Black's cramped position; White is comfortably better.",
+      "","","","",""],
+    learn: ["","","","","","","","","",
+      "Qe7 — passive, blocks the bishop",
+      "cxd4 — rebuild the centre",
+      "",
+      "Bb5 — pin and press c6",
+      "","","","",""],
+  },
+  // Fantasy Caro: 4…Nf6?! develops with a hit on e4 but walks into 5.e5! — the
+  // knight is kicked to the rim and c4 clamps a space bind. +1.4.
+  "pro-gothamchess-fantasy-caro:e4_c6_d4_d5_f3_dxe4_fxe4:Nf6": {
+    sources: ["concept:pos-center","concept:pos-space","https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation"],
+    watch: ["","","","","","","",
+      "Nf6?! — developing with a hit on e4 looks natural, but it lets White gain a big tempo and a wedge.",
+      "e5 — the pawn jabs forward, kicking the f6-knight off its post and grabbing a broad space advantage.",
+      "",
+      "c4 — the pawn chases the d5-knight back to the passive c7-square, clamping the centre.",
+      "","","","",""],
+    learn: ["","","","","","","",
+      "Nf6 — natural, but invites e5",
+      "e5 — kick the knight, grab space",
+      "",
+      "c4 — chase the knight to c7",
+      "","","","",""],
+  },
+  // Caro Advance (h4–h5 line): 9…f6?! pokes at e5/g5 but cracks Black's own
+  // kingside with the king home; Bd3 swaps the good bishop for a lasting pull. +0.7.
+  "pro-gothamchess-caro-advance-white:e4_c6_d4_d5_e5_Bf5_h4_h5_Bg5:f6": {
+    sources: ["concept:pos-king-safety","concept:pos-space","https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation"],
+    watch: ["","","","","","","","","",
+      "f6?! — the pawn pokes at e5 and g5 but cracks open Black's own kingside while his king still sits on e8.",
+      "Bd3 — the student offers to swap Black's active f5-bishop; with the structure loosened, White keeps a lasting pull.",
+      "",
+      "Be3 — the dark bishop slides back to a safe diagonal; the holes around Black's king won't go away.",
+      "","","","",""],
+    learn: ["","","","","","","","","",
+      "f6 — loosens his own king",
+      "Bd3 — swap off the strong bishop",
+      "",
+      "Be3 — reroute, keep the edge",
+      "","","","",""],
+  },
+  // Caro Advance: 9…e6?? is a one-mover — the g5-bishop already aims at d8, so
+  // Bxd8 simply wins the queen for a bishop. +5.9.
+  "pro-gothamchess-caro-advance-white:e4_c6_d4_d5_e5_Bf5_h4_h5_Bg5:e6": {
+    sources: ["concept:tac-sacrifice","concept:pos-development","https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation"],
+    watch: ["","","","","","","","","",
+      "e6?? — a natural-looking pawn move that ignores the bishop already glaring down the g5-to-d8 diagonal.",
+      "Bxd8 — the bishop crashes through and wins the queen; after Kxd8 White is up a queen for a bishop.",
+      "Kxd8 — Black must recapture with the king, but the queen is gone.",
+      "","","",""],
+    learn: ["","","","","","","","","",
+      "e6 — opens the diagonal to d8",
+      "Bxd8 — win the queen",
+      "Kxd8 — Black is down a queen",
+      "","","",""],
+  },
+  // English Four Knights: 7…Bc5?! invites the fork trick — Nxe5! Nxe5 d4 spears
+  // the c5-bishop and the e5-knight at once; White regains the piece a pawn up. +0.9.
+  "pro-gothamchess-english:c4_e5_Nc3_Nf6_Nf3_Nc6_e3:Bc5": {
+    sources: ["concept:tac-fork","concept:pos-center","https://www.chess.com/openings/English-Opening"],
+    watch: ["","","","","","","",
+      "Bc5?! — a natural developing move that walks straight into the fork trick.",
+      "Nxe5 — the knight snaps the e5-pawn; if Black recaptures, d4 will skewer the c5-bishop and the e5-knight together.",
+      "",
+      "d4 — the fork! the pawn hits the c5-bishop and the e5-knight at once, and Black can't save both.",
+      "",
+      "dxe5 — the dust settles with White a pawn to the good and the more active pieces.",
+      "","",""],
+    learn: ["","","","","","","",
+      "Bc5 — walks into the fork trick",
+      "Nxe5 — snap the pawn",
+      "",
+      "d4 — fork bishop and knight",
+      "",
+      "dxe5 — win material, stay up",
+      "","",""],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
