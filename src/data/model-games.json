@@ -8760,5 +8760,104 @@
     "sourceUrl": "https://www.chess.com/game/live/143606969420",
     "studentSide": "black",
     "overview": "Hambleton's Exchange Caro in action: a bullet win over undefined (undefined) in 2025. Watch turning the symmetrical Exchange into an active, comfortable game with the …Bg4 pin. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-reti-vs-d5-qgd-0",
+    "openingId": "pro-aman-reti",
+    "result": "1-0",
+    "year": 2024,
+    "event": "chess.com bullet (2024-06-01)",
+    "pgn": "Nf3 d5 d4 e6 c4 Nf6 Nc3 Be7 cxd5 exd5 Bf4 c6 e3 Bf5 Bd3 Bxd3 Qxd3 Nbd7 O-O Nh5 Be5 O-O Rab1 a5 a3 Nxe5 dxe5 g6 g3 Ng7 Rfd1 Ne6 e4 d4 Nxd4 Qc8 Nf3 Re8 Kg2 Bf8 Qc4 Bg7 Ne2 Qc7 Rd2 Bxe5 Nxe5 Qxe5 f4 Qc5 Qxc5 Nxc5 e5 Kf8 Nc3 Ke7 Rbd1 Red8 Kf3 Rxd2 Rxd2 Ne6 Ne4 b5 Ke3 c5 Rd5 Rc8 Nd6 Rb8 Ne4 c4 g4 Nc7 Rc5 Ne6 Rd5 Nc7 Rd6 b4 f5 gxf5 gxf5 bxa3 bxa3 Rb3+ Kf4 Rxa3 Nf6 Rd3 Rc6 Nd5+ Nxd5+ Rxd5 Rxc4 Kf8 Ke4 Rb5 f6 Rb8 Kf5 Ra8 Ra4 h6 h4 Kg8 h5 Kh8 Kf4 Kg8 Kf5 Kf8 e6 fxe6+ Kg6 Ra6 Rc4 Ra8 Rc7 e5 Rh7 Kg8 f7+",
+    "sourceUrl": "https://www.chess.com/game/live/111000673219",
+    "studentSide": "white",
+    "overview": "Hambleton's Réti vs …d5 in action: a bullet win over undefined (undefined) in 2024. Watch the sound QGD structure, the small durable edge, and pressure on the d5-pawn. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-reti-vs-d5-qgd-1",
+    "openingId": "pro-aman-reti",
+    "result": "1-0",
+    "year": 2024,
+    "event": "chess.com bullet (2024-11-02)",
+    "pgn": "Nf3 d5 g3 Nd7 Bg2 e5 O-O c6 d3 Ngf6 c4 dxc4 dxc4 Bc5 Nc3 O-O Qc2 Re8 Rd1 Qc7 Ng5 h6 Nge4 Nxe4 Nxe4 Bf8 b3 f5 Nc3 e4 Bb2 Ne5 Rac1 Qf7 Na4 e3 f4 Ng4 Bd4 Be6 Nc5 Rad8 Nxe6 Rxe6 Bxa7 Rd2 Rxd2 exd2 Qxd2 Qe7 Bf3 Qa3 Bf2 Nxf2 Kxf2 Bc5+ Kg2 Kh7 Rc2 Ba7 Qd7 Rf6 c5 Bxc5 Qxb7 Be3 Qd7 Qb4 Qd3 Bb6 Qc3 Qd6 Qe5 Qd1 Rxc6 Qg1+ Kh3 Qf1+ Bg2 Qf2 Rxf6 gxf6 Qxf6 Qxe2 Qxf5+ Kg7 Be4 Qe3 Qg6+ Kf8 Qf5+ Ke7 Qe5+ Kd7 Bf5+ Kc6 Qxe3 Bxe3 Be4+ Kd6 Kg4 Bd4 Kf3 Bg7 h4 Bf8 h5 Kc5 Bd3 Kd4 Bc4 Kc5 a4 Kb4 Ke4 Ka5 Kf5 Kb4 g4 Bc5 g5 Be3 gxh6 Bd4 Kg6 Bh8 f5 Bc3 f6 Ka3 f7 Kb2 h7 Bb4 f8=Q Bc3 h8=Q Kb1 Qxc3 Ka2 Qd2+ Kb1 Qf1#",
+    "sourceUrl": "https://www.chess.com/game/live/124261764117",
+    "studentSide": "white",
+    "overview": "Hambleton's Réti vs …d5 in action: a bullet win over undefined (undefined) in 2024. Watch the sound QGD structure, the small durable edge, and pressure on the d5-pawn. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-reti-vs-d5-qgd-2",
+    "openingId": "pro-aman-reti",
+    "result": "1-0",
+    "year": 2021,
+    "event": "chess.com bullet (2021-09-02)",
+    "pgn": "Nf3 d5 d4 Nf6 c4 g6 e3 dxc4 Nc3 Bg7 h3 O-O Bxc4 c6 O-O Nbd7 e4 Nb6 Bb3 Ne8 Qe2 Nd7 Rd1 c5 dxc5 Qa5 Nd5 e6 Ne7+ Kh8 Nxc8 Nxc5 Nd6 Nxd6 Rxd6 Nxb3 Rb1 Nxc1 Rxc1 Rac8 Rxc8 Rxc8 b3 Rc1+ Rd1 Qc5 g3 Kg8 Rxc1 Qxc1+ Kg2 Qc7 Qb5 Bf8 Ng5 Qe7 Nf3 Bg7 h4 b6 Qc6 Bf8 e5 h6 h5 Qa3 hxg6 Qe7 gxf7+ Qxf7 Nd4 Bg7 f4 Qh5 Qxe6+ Kh8 Qc8+ Bf8 Qxf8+",
+    "sourceUrl": "https://www.chess.com/game/live/24331930103",
+    "studentSide": "white",
+    "overview": "Hambleton's Réti vs …d5 in action: a bullet win over undefined (undefined) in 2021. Watch the sound QGD structure, the small durable edge, and pressure on the d5-pawn. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-reti-vs-g6-kia-0",
+    "openingId": "pro-aman-reti",
+    "result": "1-0",
+    "year": 2019,
+    "event": "chess.com bullet (2019-01-09)",
+    "pgn": "Nf3 g6 g3 Bg7 Bg2 d6 O-O Bd7 d4 Qc8 Re1 Nc6 e4 Bh3 Bh1 h5 Nc3 h4 Be3 hxg3 fxg3 Bg4 Qd2 e5 d5 Bxf3 Bxf3 Nd4 Bg2 Qg4 Rf1 Nf6 Rf2 Qh5 h3 Nd7 Raf1 f5 Bxd4 exd4 Ne2 fxe4 Nxd4 O-O-O Ne6 Qe5 Qe3 Nb6 c4 Kb8 b3 Bh6 Qxe4 Qxe4 Bxe4 Be3 Kg2 Rde8 Bxg6 Rc8 Rf8 Nd7 Rxh8 Rxh8 h4 Ne5 Be4 c6 Rf8+ Rxf8 Nxf8 Kc7 Kh3 Kd8 Ng6 Nd7 dxc6 bxc6 Bxc6 Nf6 g4 Kc7 Bd5 Nh7 g5 Bxg5 hxg5 Nxg5+ Kg4 Nh7 Kf5 Kd7 Bg8 Kc6 Bxh7 d5 Ne7+ Kd6 Nxd5 Kc5 Ke4 a5 Kd3 Kd6 Kc3 Kc5 b4+ Kc6 bxa5 Kb7 Nb4 Kc7 Nd3 Kc6 Kd4 Kb7 c5 Kc7 Bg6 Kc6 Bf5 Kb7 Be4+ Ka6 Kd5 Ka7 Kd6 Ka6 Bf5 Kb5 c6 Kxa5 c7 Ka4 c8=Q Ka3 Qc5+ Kxa2 Qc3 Kb1 Qb2#",
+    "sourceUrl": "https://www.chess.com/game/live/3363587971",
+    "studentSide": "white",
+    "overview": "Hambleton's KIA vs …g6 in action: a bullet win over undefined (undefined) in 2019. Watch the big d4/e4 centre and the space-gaining kingside plan against the King’s Indian. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-reti-vs-g6-kia-1",
+    "openingId": "pro-aman-reti",
+    "result": "1-0",
+    "year": 2024,
+    "event": "chess.com bullet (2024-11-02)",
+    "pgn": "Nf3 g6 g3 Nf6 Bg2 Bg7 O-O O-O d4 d6 Nc3 c6 a4 Nbd7 a5 a6 e4 Qc7 h3 Re8 Re1 e5 Be3 exd4 Nxd4 Ne5 b3 Be6 Nxe6 Rxe6 Ne2 Rae8 Nd4 R6e7 c4 Ned7 f3 d5 Bf4 Qd8 cxd5 cxd5 Rc1 dxe4 Bc7 Qa8 Bd6 Bh6 f4 Qa7 Bxe7 Rxe7 Rc8+ Kg7 Kh2 e3 b4 Nf8 Qd3 e2 Rxe2 Rd7 Rd2 b6 Qc3 bxa5 bxa5 Kg8 Ra8 Qc7 Qxc7 Rxc7 Rxa6 Nh5 Ra8 Nxf4 Rb2 Nxg2 Kxg2 Be3 Nf3 Kg7 a6 Ne6 h4 h5 Rab8 Rc3 Ra2 Ba7 Rb7 Bc5 Ng5 Nxg5 hxg5 Rd3 a7 Bxa7 Raxa7 Rd8 Kh3 Kg8 Rxf7 Rf8 Rg7+ Kh8 Rh7+",
+    "sourceUrl": "https://www.chess.com/game/live/124261711465",
+    "studentSide": "white",
+    "overview": "Hambleton's KIA vs …g6 in action: a bullet win over undefined (undefined) in 2024. Watch the big d4/e4 centre and the space-gaining kingside plan against the King’s Indian. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-reti-vs-g6-kia-2",
+    "openingId": "pro-aman-reti",
+    "result": "1-0",
+    "year": 2024,
+    "event": "chess.com bullet (2024-02-21)",
+    "pgn": "Nf3 g6 d4 Bg7 e4 d6 c3 Nf6 Bd3 O-O h3 Nc6 O-O e5 Re1 h6 Be3 Re8 Nbd2 Bd7 Qc1 Nh5 d5 Ne7 Nf1 Nf4 Bxf4 exf4 Qxf4 g5 Qd2 Ng6 Rac1 Nf4 Ng3 Qf6 Nd4 h5 Ngf5 Bh8 Bf1 h4 g3 hxg3 fxg3 Ng6 Re2 c5 dxc6 bxc6 Rf2 Ne5 Nb3 Bxf5 exf5 d5 Rd1 Rad8 Qe2 Bg7 Qh5 Nc4 Bxc4 dxc4 Rxd8 Rxd8 Nd2 Rd3 Ne4 Qe5 Qg4 Re3 Re2 Rd3 Qxg5 Rd1+ Kg2 Qd5 f6 Qxg5 Nxg5 Bxf6 Ne4 Bg7 Rd2 Ra1 a3 f5 Nd6 Rb1 Nxc4 Bf6 Rf2 Kg7 Rxf5 Rd1 Ra5 Rc1 Rxa7+ Kg6 Ra6 Rc2+ Kf3 Rc1 Rxc6 Kf7 a4 Rf1+ Kg2 Ra1 a5 Bd8 Kf3 Ke7 Ra6 Kd7 Ke4 Kc7 b4 Kb7 Rd6 Bc7 Rg6 Kc8 Kd5 Rd1+ Kc6 Kd8 Rg8+ Ke7 Rg7+ Kf6 Rxc7 Rd3 Nb6 Rxc3+ Kb7 Ra3 b5 Ke6 Rc6+ Ke7 a6 Ra5 a7 Rxb5 a8=Q Re5 Qc8 Kf7 Qd7+ Re7 Rf6+ Kxf6 Nd5+ Ke5 Qxe7+ Kd4 Qg5 Kc5 Qf4 Kb5 Nc7+ Kc5 Qe5+ Kb4 Qd5 Kc3 g4 Kb4 g5 Kc3 g6 Kb2 h4 Ka3 h5 Kb4 h6 Kc3 g7 Kb2 Qg5 Ka3 h7 Kb4 h8=Q Kc3 Qhh4 Kb3 Qgg3+",
+    "sourceUrl": "https://www.chess.com/game/live/102241448347",
+    "studentSide": "white",
+    "overview": "Hambleton's KIA vs …g6 in action: a bullet win over undefined (undefined) in 2024. Watch the big d4/e4 centre and the space-gaining kingside plan against the King’s Indian. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-reti-double-fianch-0",
+    "openingId": "pro-aman-reti",
+    "result": "1-0",
+    "year": 2024,
+    "event": "chess.com bullet (2024-08-28)",
+    "pgn": "Nf3 Nf6 g3 d6 Bg2 Nbd7 O-O g6 d4 Bg7 Nc3 O-O e4 c6 a4 Qc7 Re1 e5 a5 a6 h3 Re8 Be3 Nf8 dxe5 dxe5 Bb6 Qb8 Nd2 Be6 Qe2 N8d7 Be3 Qc7 Nc4 h5 Red1 Bxc4 Qxc4 Nf8 Na4 Qc8 Nb6 Qc7 Nxa8 Rxa8 Bb6 Qe7 Rd3 Ne6 c3 h4 Rad1 hxg3 fxg3 Nh5 Kh2 Bh6 Rd7 Qf6 Rf1 Qg5 Qd3 Rf8 h4 Qg4 Bh3 Qxg3+ Qxg3 Nxg3 Kxg3 Nf4 Rxf4 Bxf4+ Kf3 Bc1 b4 Bb2 Bc5 Re8 Rxb7 Bc1 Bd7 Rd8 Be7 Ra8 Bxc6 Rc8 Bd5 Rxc3+ Ke2 Rc2+ Kd1 Rc3 Bf6 Rd3+ Kxc1 Rc3+ Kd2 Rc8 Rxf7 Rd8 Rg7+ Kf8 Rg8#",
+    "sourceUrl": "https://www.chess.com/game/live/118562885075",
+    "studentSide": "white",
+    "overview": "Hambleton's Double Fianchetto in action: a bullet win over undefined (undefined) in 2024. Watch the hypermodern fianchetto and the e4 break into a rich attacking middlegame. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-reti-double-fianch-1",
+    "openingId": "pro-aman-reti",
+    "result": "1-0",
+    "year": 2021,
+    "event": "chess.com bullet (2021-09-02)",
+    "pgn": "Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d3 d6 Nbd2 e5 e4 Nc6 h3 h6 Re1 Re8 a4 d5 c3 dxe4 dxe4 Qe7 Qe2 Rd8 b4 a5 b5 Nb8 Ba3 Qe8 Nc4 Nfd7 Red1 f6 Nh4 Kh7 Nf3 Nf8 h4 Be6 h5 Nbd7 hxg6+ Nxg6 Ne3 Qf7 Nd5 Bxd5 Rxd5 Nb6 Rxd8 Rxd8 Bh3 Qc4 Qxc4 Nxc4 Bf5 Nxa3 Rxa3 Bf8 Ra1 Kg7 Bxg6 Kxg6 Rc1 Kf7 Kf1 Bc5 Ke2 h5 Rh1 Kg6 Nh4+ Kf7 Nf5 Rh8 Rh3 Ke6 Rxh5 Kf7 Rxh8",
+    "sourceUrl": "https://www.chess.com/game/live/24331343267",
+    "studentSide": "white",
+    "overview": "Hambleton's Double Fianchetto in action: a bullet win over undefined (undefined) in 2021. Watch the hypermodern fianchetto and the e4 break into a rich attacking middlegame. A clean model of the plan working against a strong opponent."
+  },
+  {
+    "id": "mg-pro-aman-reti-double-fianch-2",
+    "openingId": "pro-aman-reti",
+    "result": "1-0",
+    "year": 2024,
+    "event": "chess.com bullet (2024-11-02)",
+    "pgn": "Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O c4 c6 Nc3 d5 d4 dxc4 a4 a5 Bg5 Na6 e3 Nb4 Qe2 Be6 Ne5 Re8 Nxc4 h6 Bxf6 Bxf6 Rfd1 Bg7 Rac1 Rc8 b3 Kh7 Ne4 Bd5 Nc5 Bxg2 Kxg2 Qc7 Qf3 Rcd8 Qxf7 Rf8 Qxg7+",
+    "sourceUrl": "https://www.chess.com/game/live/124265357559",
+    "studentSide": "white",
+    "overview": "Hambleton's Double Fianchetto in action: a bullet win over undefined (undefined) in 2024. Watch the hypermodern fianchetto and the e4 break into a rich attacking middlegame. A clean model of the plan working against a strong opponent."
   }
 ]

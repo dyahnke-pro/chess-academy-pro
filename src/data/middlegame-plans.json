@@ -70222,5 +70222,267 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-proamanreti-d5",
+    "openingId": "pro-aman-reti",
+    "title": "Knight to e5 and Central Pressure",
+    "overview": "From the QGD structure White expands the queenside with b3 and Bb2, then plants the knight on the dominant e5-outpost. The pieces pressure the centre and the slightly loose d5-pawn — the small, durable Réti edge made concrete.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "knight",
+        "route": "Nf3-e5 outpost",
+        "explanation": "The knight jumps to the e5-outpost, the engine of White’s pressure."
+      }
+    ],
+    "strategicThemes": [
+      "Fianchetto with b3/Bb2 and post the knight on e5"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/p3bppp/1p3n2/2pp4/3P4/2NBPN2/PP3PPP/R1BQ1RK1 w - - 0 9",
+        "moves": [
+          "b3",
+          "Nc6",
+          "Bb2",
+          "Bg4",
+          "Be2",
+          "Rc8",
+          "Ne5",
+          "Bxe2"
+        ],
+        "annotations": [
+          "b3 prepares the queenside fianchetto.",
+          "…Nc6 develops, hitting d4.",
+          "Bb2 takes the long diagonal.",
+          "…Bg4 pins the f3-knight.",
+          "Be2 breaks the pin.",
+          "…Rc8 loads the c-file.",
+          "Ne5 lands on the dominant outpost.",
+          "…Bxe2 trades off the bishop."
+        ],
+        "learnCues": [
+          "b3 — prep fianchetto",
+          "…Nc6 — hit d4",
+          "Bb2 — long diagonal",
+          "…Bg4 — pin",
+          "Be2 — break pin",
+          "…Rc8 — load c-file",
+          "Ne5 — the outpost",
+          "…Bxe2 — trade"
+        ],
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "c1",
+              "to": "b2",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "d3",
+              "to": "e2",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Reti-Opening"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-proamanreti-g6",
+    "openingId": "pro-aman-reti",
+    "title": "The d5 Space-Gaining Break",
+    "overview": "In the King's-Indian-Attack structure White finishes development and gains space with the d5 push, locking the centre on White's terms. The clamp gives White a free hand to expand where Black is weakest.",
+    "pawnBreaks": [
+      "d5 central push"
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "knight",
+        "route": "Nb1-d2 reroute",
+        "explanation": "The knight reroutes via d2 to support the centre and the e4-square."
+      }
+    ],
+    "strategicThemes": [
+      "Reroute Nbd2 and gain space with the d5 push"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/ppp2pb1/2np1npp/4p3/3PP3/2PB1N1P/PP3PP1/RNBQR1K1 w - - 0 9",
+        "moves": [
+          "Nbd2",
+          "a5",
+          "a3",
+          "a4",
+          "d5",
+          "Ne7",
+          "c4",
+          "b6"
+        ],
+        "annotations": [
+          "Nbd2 reroutes the knight toward the centre.",
+          "…a5 grabs queenside space.",
+          "a3 restrains the pawn.",
+          "…a4 fixes the queenside.",
+          "d5 gains central space and clamps.",
+          "…Ne7 reroutes the knight.",
+          "c4 props the d5-pawn.",
+          "…b6 opens a second front on the queenside."
+        ],
+        "learnCues": [
+          "Nbd2 — reroute",
+          "…a5 — grab space",
+          "a3 — restrain",
+          "…a4 — fix",
+          "d5 — clamp the centre",
+          "…Ne7 — reroute",
+          "c4 — prop d5",
+          "…b6 — second front"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "b1",
+              "to": "d2",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Reti-Opening"
+        ]
+      }
+    ]
   }
 ]

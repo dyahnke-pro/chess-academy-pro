@@ -3226,5 +3226,43 @@
         "https://www.chess.com/openings/Caro-Kann-Defense"
       ]
     }
+  ],
+  "pro-aman-reti": [
+    {
+      "fen": "rnbq1rk1/p1p1bppp/1p2pn2/3p4/2PP4/2NBPN2/PP3PPP/R1BQK2R w KQ - 0 7",
+      "wrongMove": "e4",
+      "correctMove": "cxd5",
+      "explanation": "Lunging e4 here is premature — it opens lines before White is fully coordinated and gives Black …dxe4 with active piece play. The accurate move is cxd5: resolve the centre first, fix a target on d5, and keep the small, durable edge. The Réti rewards patience, not haste.",
+      "shortNarration": "cxd5 first; e4 is premature.",
+      "sources": [
+        "concept:pos-development",
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Reti-Opening"
+      ]
+    },
+    {
+      "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/3PP3/2PB1N2/PP3PPP/RNBQK2R w KQ - 3 6",
+      "wrongMove": "e5",
+      "correctMove": "O-O",
+      "explanation": "Pushing e5 before castling overextends the centre and walks into …dxe5 and …Nfd7 hitting it, with White's king still in the middle. Castle first with O-O, complete development, and only then think about expanding. Safety before space.",
+      "shortNarration": "O-O first; e5 overextends.",
+      "sources": [
+        "concept:pos-development",
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Reti-Opening"
+      ]
+    },
+    {
+      "fen": "r1bq1rk1/pppnppbp/3p1np1/8/8/3P1NP1/PPPNPPBP/R1BQ1RK1 w - - 2 7",
+      "wrongMove": "c4",
+      "correctMove": "e4",
+      "explanation": "c4 is a reasonable move but it commits to a slow English-style game; the thematic King's-Indian-Attack break is e4, seizing the centre now that everything is developed behind it. e4 is the move the whole fianchetto setup was building toward.",
+      "shortNarration": "e4 — the thematic KIA break.",
+      "sources": [
+        "concept:pos-development",
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Reti-Opening"
+      ]
+    }
   ]
 }
