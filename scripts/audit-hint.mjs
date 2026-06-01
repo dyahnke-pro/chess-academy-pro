@@ -62,14 +62,16 @@ async function main() {
   };
 
   const browser = await chromium.launch({
-    executablePath: resolveChromiumExecutable(),
+    executablePath: await resolveChromiumExecutable(HEADED),
     headless: !HEADED,
     args: sandboxLaunchArgs(),
   });
   const context = await browser.newContext(sandboxContextOptions());
   const page = await context.newPage();
 
-  // Capture audit POSTs + TTS request bodies.
+  // Capture audit POSTs (body) + TTS GETs (text is a query param, NOT a
+  // POST body — /api/tts?text=...&voice=...). We capture on 'request' so
+  // a 401 on the audit-stream POST doesn't lose us the payload.
   page.on('request', (req) => {
     const url = req.url();
     if (url.includes('/api/audit-stream')) {
@@ -84,11 +86,9 @@ async function main() {
     }
     if (url.includes('/api/tts')) {
       try {
-        const body = req.postData();
-        if (body) {
-          const parsed = JSON.parse(body);
-          if (parsed && typeof parsed.text === 'string') ttsTexts.push(parsed.text);
-        }
+        const u = new URL(url);
+        const t = u.searchParams.get('text');
+        if (t) ttsTexts.push(t);
       } catch { /* ignore */ }
     }
   });
@@ -165,37 +165,44 @@ async function main() {
       const b = document.querySelector('[data-testid="hint-button"]');
       return b && b.getAttribute('data-level') === '3';
     }, { timeout: HINT_SETTLE_MS }).catch(() => undefined);
-    await page.waitForTimeout(6000); // let the streamed answer + TTS settle
+    await page.waitForTimeout(8000); // let the streamed answer + TTS settle
 
-    // Pull the displayed hint prose. Try common nudge testids; fall back
-    // to the answer captured off the audit stream.
-    let nudge = '';
-    for (const sel of ['[data-testid="hint-nudge"]', '[data-testid="hint-text"]', '[data-testid="coach-nudge"]']) {
-      const loc = page.locator(sel);
-      if (await loc.count()) { nudge = (await loc.first().innerText()).trim(); if (nudge) break; }
-    }
-    const brainAnswer = [...auditEvents].reverse().find((e) => e.kind === 'coach-brain-answer-returned');
+    // The hint prose is injected into the game-chat panel as an assistant
+    // message (CoachGamePage → injectAssistantMessage), and each spoken
+    // sentence is a /api/tts GET. Capture BOTH; the spoken text is the
+    // ground truth for what the student actually heard (post board-claim
+    // guard, which drops disproven sentences before they're spoken).
     const spoken = ttsTexts.slice(ttsBefore).filter((t) => t.replace(/[^a-z0-9]/gi, '').length > 1);
-    const spokenJoined = spoken.join(' ');
-    const measured = nudge || spokenJoined || (brainAnswer ? `(brain answer len ${brainAnswer?.details ?? ''})` : '');
+    const spokenJoined = spoken.join(' ').trim();
+    let chatLog = '';
+    const log = page.locator('[aria-label="In-game coach chat messages"]');
+    if (await log.count()) chatLog = (await log.first().innerText()).trim();
+    // Prefer the spoken text (what the student heard); fall back to the
+    // newest chunk of the chat log.
+    const measured = spokenJoined || chatLog.split('\n').filter(Boolean).slice(0, 3).join(' ').trim();
 
     const wc = wordCount(measured);
     const sc = sentenceCount(measured);
     const lower = measured.toLowerCase();
     const tacticHits = TACTIC_WORDS.filter((w) => lower.includes(w));
+    const blocked = auditEvents.filter((e) => e.kind === 'coach-board-claim-blocked');
 
     const detail = {
       label_level: await page.locator('[data-testid="hint-button"]').getAttribute('data-level'),
-      nudge_len_chars: measured.length,
+      measured_chars: measured.length,
       word_count: wc,
       sentence_count: sc,
-      tactic_words_present: tacticHits,
       spoken_segments: spoken.length,
-      measured_preview: measured.slice(0, 240),
+      tactic_words_present: tacticHits,
+      board_claim_blocked_events: blocked.length,
+      measured_preview: measured.slice(0, 280),
     };
-    // Soft assertions — log, don't hard-fail on LLM variance, but FAIL if
-    // the cap is grossly blown (the 650-char/6-sentence regression).
-    if (measured && wc > 70) throw new Error(`hint too long: ${wc} words / ${sc} sentences (cap is ~40w/2s) :: "${measured.slice(0, 160)}"`);
+    // HARD: a capture of NOTHING is not a pass — that's the hollow-green
+    // trap. We must have heard/seen the hint to judge it.
+    if (!measured) throw new Error('captured NO hint text (0 spoken segments, empty chat log) — cannot verify verbosity/grounding');
+    // The Tier-3 cap is ~40 words / 2 sentences; allow headroom for LLM
+    // variance but FAIL on the 650-char / 6-sentence regression class.
+    if (wc > 70) throw new Error(`hint too long: ${wc} words / ${sc} sentences (cap is ~40w/2s) :: "${measured.slice(0, 160)}"`);
     return detail;
   });
 
