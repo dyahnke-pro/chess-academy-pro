@@ -17,20 +17,33 @@ const MAX_ATTEMPTS = 6;       // safety cap (3 clean needed; allow a few resets)
 const NEED = 3;
 const env = { ...process.env };
 
-function runPass(depth) {
+function run(cmd, args, extraEnv) {
   return new Promise((resolve) => {
-    const p = spawn('node', ['scripts/audit-pro-aman-full-walk.mjs'], {
-      env: { ...env, WALK_DEPTH: String(depth) },
-      stdio: ['ignore', 'pipe', 'pipe'],
-    });
+    const p = spawn(cmd, args, { env: { ...env, ...extraEnv }, stdio: ['ignore', 'pipe', 'pipe'] });
     let out = '';
     p.stdout.on('data', (d) => { out += d; process.stdout.write(d); });
     p.stderr.on('data', (d) => { out += d; process.stderr.write(d); });
-    p.on('close', (code) => {
-      const m = out.match(/total:\s*(\d+)\s*PASS\s*\/\s*(\d+)\s*FAIL\s*\/\s*(\d+)\s*WARN/);
-      resolve({ code, pass: m ? +m[1] : null, fail: m ? +m[2] : null, warn: m ? +m[3] : null });
-    });
+    p.on('close', (code) => resolve({ code, out }));
   });
+}
+
+// ONE contract pass = (1) PLAY-THROUGH CONGRUENCY (chess.js replays every beat:
+// arrows correspond to real moves/sightlines, narration matches the board
+// frame-by-frame, line plays through to a middlegame) THEN (2) the live PROD
+// 3-instrument walk (UI + audit-stream + voice). A pass is CLEAN only if BOTH
+// come back error-free. This is the "actually play through the lines, arrows
+// confirmed correct, narration matches" requirement, IN the contract.
+async function runPass(depth) {
+  console.log(`\n  -- instrument 1: PLAY-THROUGH CONGRUENCY (chess.js replay) --`);
+  const cong = await run('npx', ['vitest', 'run', 'src/data/proRepAmanPlayThrough.test.ts']);
+  const congOk = cong.code === 0 && /Test Files\s+1 passed/.test(cong.out);
+  if (!congOk) { console.log('  ✗ congruency FAILED — skipping live walk this pass'); return { code: 1, pass: null, fail: 1, warn: null }; }
+  console.log('  ✓ congruency clean');
+
+  console.log(`\n  -- instrument 2: LIVE PROD full-play walk (depth ${depth}) --`);
+  const r = await run('node', ['scripts/audit-pro-aman-full-walk.mjs'], { WALK_DEPTH: String(depth) });
+  const m = r.out.match(/total:\s*(\d+)\s*PASS\s*\/\s*(\d+)\s*FAIL\s*\/\s*(\d+)\s*WARN/);
+  return { code: r.code, pass: m ? +m[1] : null, fail: m ? +m[2] : null, warn: m ? +m[3] : null };
 }
 
 let clean = 0;

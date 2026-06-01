@@ -83,7 +83,7 @@ export const PRO_AMAN_FRENCH_WHITE_VARIATION_LESSONS: Record<string, LessonScrip
         say: "White castles and tucks the knight to d2, keeping a flexible, harmonious setup. White has a small, durable space edge and the freer position — exactly the comfortable game the Rubinstein allows White.",
         sayShort: 'O-O — flexible, comfortable.' }),
       b({ id: 'middlegame', moves: 'e4 e6 d4 d5 Nc3 dxe4 Nxe4 Bd7 Nf3 Bc6 Bd3 Nd7 O-O Ngf6 Ned2 Be7 Re1 O-O Ne5 Nxe5 dxe5 Qd5 Nf3', arrows: [A('f3', 'e5')], highlights: [H('e5')],
-        say: "White posts the knight on e5 and, after trades, the e5-pawn cramps Black while White's pieces stay active. White reaches a pleasant middlegame: more space, the freer game, and the easy plan of pressing on the kingside. The Rubinstein gives White a small but lasting initiative.",
+        say: "White jumps a knight into e5 and, after the trades on e5, the e5-pawn cramps Black while White's pieces stay active. White reaches a pleasant middlegame: more space, the freer game, and the easy plan of pressing on the kingside. The Rubinstein gives White a small but lasting initiative.",
         sayShort: 'Ne5 — cramp, stay active.' }),
     ],
   },
