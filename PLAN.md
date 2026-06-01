@@ -41,18 +41,30 @@ Coverage: White answers 1...c5 / 1...e5 / 1.d4-setups; Black answers 1.e4
 - **Berlin (B):** Berlin endgame (main) · Italian Bc4 (89g) · Open Berlin Nxe4 (38g) · Steinitz ...d6 (27g) · Scotch d4 (25g) · Four Knights (25g)
 - **KID (B):** Classical (main) · Fianchetto g3 (22g) · Nf3 system (29g) · Makogonov h3 (11g)
 
-## Build order (G9.3 Gate D + efficient-recipe layers, batched across all 5)
-- [x] STEP 0-3 — fetch · trees · variation ID (above)
-- [ ] STEP 4-5 — deep-build per variation + honest plan/endgame counts
+## Build order (G9.3 Gate D + efficient-recipe layers, batched across all 8)
+- [x] STEP 0-3 — fetch · trees · variation ID
+- [x] STEP 4 — deep-build per variation (46 files, all 8 openings)
+- [ ] STEP 5 — honest MG/endgame plan counts (wider-corpus)
 - [ ] STEP 6 — voice corpus (Magnus per-opening teaching, web)
-- [ ] LAYER 1 (Gate A) — LessonScripts main+variations, all 5
-- [ ] LAYER 2 — model games (≥2/variation, wins only, hand overview)
+- [~] LAYER 1 (Gate A) — LessonScripts main+variations
+  - [x] #1 Open Sicilian: main (English Attack) + 5 variation lessons, arrows
+        self-verified (geometry checker `_arrowcheck.mjs`; fixed 7 blocked/pawn arrows)
+  - [ ] #2 Ruy · #3 Queen's Pawn · #4 Sicilian · #5 1...e5 · #6 Nimzo · #7 KID · #8 French
+- [ ] LAYER 2 — model games (≥2-3/variation, student WINS, **prefer OTB classical**,
+      hand overview ≥40 chars). NOTE deep-build topModelGames is thin → write a
+      broader corpus win-extractor (classical-first, high opp rating, decisive, deep).
 - [ ] LAYER 3 (Gate C) — middlegame plans anchored at spine terminus
-- [ ] LAYER 4 — pitfalls (ENGINE-verified)
+- [ ] LAYER 4 — pitfalls (ENGINE-verified; sign: studentEval = -rawEval)
 - [ ] LAYER 5 — endgames (real game → ending, only where data supports)
 - [ ] pro-repertoires.json entries · register LESSONS/VARIATION_LESSONS · bump PRO_DATA_REVISION
 - [ ] STEP 15 — gates + `npm run ship-check` → READY TO PUSH
 - [ ] STEP 16 — push main + 3-instrument audit + Gate A/B watch-depth prod audit
+
+## WIP location
+On branch `claude/pensive-knuth-Gzrws`, draft PR #698. Lands on `main` only when
+all 8 are gate-green (G9.3 — no half-builds in prod). Helper scripts:
+`scripts/pro-repertoire/_carlsen_spine.mjs` (spine FEN printer),
+`_arrowcheck.mjs` (vision-arrow geometry verifier).
 
 ## Decisions log
 - 2026-06-01: Carlsen picked; Sicilian-White spine (14-ply) > d4-c4 (8-ply).
