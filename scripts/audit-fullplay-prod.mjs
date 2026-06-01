@@ -183,7 +183,23 @@ async function highlightedSquares() {
   // Play a PlayableLinePlayer to completion (skip demo → memory → play moves).
   async function driveLinePlayer() {
     if (await page.locator('[data-testid="skip-to-memory"]').isVisible().catch(() => false)) { await tap('[data-testid="skip-to-memory"]'); await page.waitForTimeout(700); }
-    for (const ply of mainPlies) { await clickMove(ply.from, ply.to); }
+    // DIAGNOSTIC: what element actually sits at the first square's center? (is a
+    // pointer-event overlay intercepting the board — same root cause as the
+    // buttons needing a DOM-click fallback?)
+    const probe = await page.evaluate((sq) => {
+      const el = document.querySelector(`[data-square="${sq}"]`); if (!el) return 'no-square';
+      const r = el.getBoundingClientRect(); const top = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+      if (!top) return 'none'; return `${top.tagName}.${(top.className && top.className.toString && top.className.toString().slice(0, 40)) || ''}#${top.id || ''}[ts=${top.getAttribute && top.getAttribute('data-testid') || ''}] sameAsSquare=${top === el || el.contains(top) || top.contains(el)}`;
+    }, mainPlies[0].from).catch((e) => 'probe-err ' + String(e).slice(0, 60));
+    console.log(`  [board probe @${mainPlies[0].from}] topElement = ${probe}`);
+    let registered = 0;
+    for (const ply of mainPlies) {
+      await clickMove(ply.from, ply.to);
+      // did the from-square empty out? (rough move-registered signal)
+      const fromEmpty = await page.evaluate((sq) => { const el = document.querySelector(`[data-square="${sq}"]`); return el ? !el.querySelector('img,svg,[data-piece]') : false; }, ply.from).catch(() => false);
+      if (fromEmpty) registered++;
+    }
+    console.log(`  [line moves] ~${registered}/${mainPlies.length} from-squares emptied`);
   }
   async function backToDetail() {
     for (const sel of ['[data-testid="line-player-back"]', '[data-testid="lesson-player"] [aria-label="Exit" i]', '[aria-label="Back" i]']) {
