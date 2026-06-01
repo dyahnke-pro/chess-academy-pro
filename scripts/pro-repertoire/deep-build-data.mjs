@@ -74,6 +74,35 @@ const OPENINGS = {
       'qc7': { label: '…Qc7 system', prefix: ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'Qc7'] },
     },
   },
+  // ===== CARUANA round 2 (2026-06-01): the +4 openings =====
+  'caruana-italian': {
+    color: 'white', studentUsername: 'FabianoCaruana',
+    variations: {
+      'pianissimo': { label: 'Giuoco Pianissimo', prefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'c3', 'Nf6', 'd3'] },
+      'two-knights': { label: 'Two Knights …Nf6', prefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3'] },
+    },
+  },
+  'caruana-french': {
+    color: 'black', studentUsername: 'FabianoCaruana',
+    variations: {
+      'classical-be7': { label: 'Classical Steinitz …Be7', prefix: ['e4', 'e6', 'd4', 'd5', 'Nc3', 'Nf6', 'Bg5', 'Be7', 'e5'] },
+      'winawer': { label: 'Winawer …Bb4', prefix: ['e4', 'e6', 'd4', 'd5', 'Nc3', 'Bb4'] },
+    },
+  },
+  'caruana-caro-kann': {
+    color: 'black', studentUsername: 'FabianoCaruana',
+    variations: {
+      'two-knights-bg4': { label: 'Two Knights …Bg4', prefix: ['e4', 'c6', 'Nf3', 'd5', 'Nc3', 'Bg4'] },
+      'advance-bf5': { label: 'Advance 3.e5 …Bf5', prefix: ['e4', 'c6', 'd4', 'd5', 'e5', 'Bf5'] },
+    },
+  },
+  'caruana-kid': {
+    color: 'black', studentUsername: 'FabianoCaruana',
+    variations: {
+      'fianchetto': { label: 'Fianchetto g3', prefix: ['d4', 'Nf6', 'c4', 'g6', 'Nf3', 'Bg7', 'g3'] },
+      'classical-e4': { label: 'Classical Nc3 + e4', prefix: ['d4', 'Nf6', 'c4', 'g6', 'Nc3', 'Bg7', 'e4'] },
+    },
+  },
   'pirc': {
     color: 'black',
     studentUsername: 'GothamChess',
