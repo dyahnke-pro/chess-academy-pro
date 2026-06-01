@@ -20,6 +20,34 @@ QA + store paperwork, separable from the masterclass content build.
   (`.playAndRecord`, mix/bluetooth/speaker) so Polly TTS + Web Speech mic survive
   route changes.
 
+## Progress (2026-06-01 — session `app-play-store-readiness`)
+Code/config gaps that don't need David's machines/accounts are now DONE on
+this branch:
+- **GAP 1 (icons) — pipeline built + PWA icons fixed.** `@capacitor/assets`
+  installed; `scripts/build-app-icon.mjs` generates the brand mark (gold/black
+  knight + glow) into `assets/` (Capacitor source) AND `public/icons/`
+  (PWA). The runtime PWA manifest (`vite.config.ts`) + `index.html` now point
+  at real PNGs — **the old `/icons/icon-192.png` 404 is fixed.** `npm run
+  assets:generate` runs the icon build + `capacitor-assets generate` (wired
+  into `setup:ios`/`setup:android`). *Native sizes still need the native
+  projects generated on David's machine; final glow art pending David's pick.*
+- **GAP 3 #5 (Android back-button) — DONE.** `@capacitor/app` + `useAndroidBackButton`
+  hook (mounted in `App.tsx`): steps up routes, minimizes (not exits) at root.
+  No-op on web/iOS.
+- **GAP 2 (Android audio/mic) — DRAFTED.** `android-patches/` mirrors
+  `ios-patches/`: manifest perms fragment + `MainActivity.java` (WebView
+  `onPermissionRequest` mic grant + RECORD_AUDIO runtime request).
+  `scripts/apply-android-patches.mjs` merges them after `cap sync`. **Still
+  needs real-device verification — highest-risk item.**
+- **GAP 4 (privacy policy) — DONE (web layer).** `/privacy` standalone route
+  (`PrivacyPolicyPage`) renders chrome-free, so the prod URL
+  `https://chess-academy-pro.vercel.app/privacy` is the hosted policy URL both
+  stores require. Still need to fill the App Store privacy "nutrition label" +
+  Play "Data safety" forms (content drafted in §Store listing below).
+
+Remaining = David-gated (accounts, signing, devices, art lock) — see GAP 5/6
+and the §David's checklist at the bottom.
+
 ## The real gaps (what "production-ready" actually needs)
 
 ### GAP 1 — App icons + splash, both platforms (BLOCKER for store upload)
@@ -88,7 +116,78 @@ disclosure checklist. **I cannot (no SDKs/signing/devices here):** run
 4. **GAP 3 device QA** — David, on an Android phone (the load-bearing step).
 5. **GAP 5/6 accounts + listings + signing** — David, in parallel.
 
+## Store listing — drafts (fill the forms with these)
+
+**App name:** Chess Academy Pro
+**Subtitle (iOS, ≤30 chars):** Your AI chess coach
+**Short description (Play, ≤80):** AI chess coach that learns from your games — talk to it, train with it.
+**Category:** Education (primary), Games / Board (secondary)
+**Age rating:** 4+ / Everyone (no objectionable content; has a kids section).
+**Keywords (iOS):** chess,coach,training,openings,puzzles,tactics,endgame,AI,learn,improve
+**Privacy policy URL:** https://chess-academy-pro.vercel.app/privacy
+**Support URL:** (David — a simple page or the mailto works for v1)
+
+**Full description (both stores):**
+> Chess Academy Pro is an AI-powered chess coach that actually watches your
+> games. Import your Chess.com or Lichess history and it analyzes every move
+> with a real engine, then coaches you in plain language — ask it "why did I
+> lose that endgame?" and it answers from games you've actually played.
+>
+> • Talk to your coach by voice or text — it explains ideas, not just moves
+> • Opening masterclasses built from real master and pro games, taught
+>   move-by-move with arrows and narration
+> • Puzzles pulled from your own blunders, with spaced repetition so they stick
+> • Adaptive difficulty — play against a coach tuned to your level
+> • A friendly kids section for young learners
+> • Works offline — your training data stays on your device
+>
+> No account required. Free to start.
+
+**Data declarations (App Store privacy label + Play Data safety):**
+- **Data collected/linked to you:** none required (no account for core use).
+- **Data used, not linked:** product analytics tied to an anonymous device ID
+  (app functionality + analytics).
+- **Microphone:** used for voice chat; audio processed for speech-to-text,
+  **not stored, not shared.** Declare "Audio data → App functionality, not
+  collected/stored."
+- **Network:** chess positions/prompts → AI providers (DeepSeek/Anthropic);
+  text → AWS Polly (TTS); public username → Lichess/Chess.com on import. These
+  are processing-only, not sold.
+- **Optional:** cloud sync (Supabase) stores training data only when the user
+  opts in.
+
+## David's checklist (the machine/account/device steps I can't do)
+
+**Icon:** pick a glow option (session sent variants); I lock it into
+`assets/` + regenerate. Then on your Mac, `npm run setup:ios` /
+`setup:android` runs `capacitor-assets generate` to emit native sizes.
+
+**iOS (App Store):**
+1. `npm run setup:ios` on the Mac (regenerates `ios/`, applies AppDelegate
+   patch + icons). Confirm `Info.plist` has `NSMicrophoneUsageDescription`
+   (e.g. "Used for voice chat with your coach") + `ITSAppUsesNonExemptEncryption=false`.
+2. Xcode: distribution signing (cert + provisioning profile under your Apple
+   Developer account).
+3. App Store Connect: create the listing, upload screenshots (6.7" + 6.1" +
+   iPad if supported), paste metadata above, fill privacy label, submit.
+
+**Android (Play Store):**
+1. Google Play Console account ($25 one-time) if not already.
+2. `npm run setup:android` on the machine (generates `android/`, applies
+   patches + icons).
+3. **Generate a release keystore and BACK IT UP SECURELY** — losing it means
+   you can never update the app again. (Or use Play App Signing and keep the
+   upload key safe.)
+4. Build a signed AAB (`./gradlew bundleRelease` or Android Studio).
+5. **Test on a real Android phone FIRST** (GAP 3 checklist in
+   `android-patches/README.md`) — especially the WebView mic. This is the
+   load-bearing step; the Android shell has never run on a device.
+6. Play Console: create the listing, feature graphic (1024×500), screenshots,
+   metadata above, Data safety form, submit to a closed/internal track first.
+
 ## Next-session pickup
-Android is config-wired but never generated/tested. The first real action is
-GAP 2 (Android audio/mic) — that's where a WebView wrapper most often "breaks,"
-and it gates the voice features the app is built around.
+Web-layer gaps (icons pipeline, back-button, privacy, android-patches draft)
+are DONE on this branch. The next real action is David-gated: lock the icon
+glow, then GAP 2 device verification (Android WebView mic) — that's where a
+WebView wrapper most often breaks, and it gates the voice features. Until an
+Android phone confirms voice works, treat Android as unverified.
