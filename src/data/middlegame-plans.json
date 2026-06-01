@@ -72237,6 +72237,952 @@
     ]
   },
   {
+    "id": "mp-pro-caruana-ruy-lopez-endgame",
+    "openingId": "pro-caruana-ruy-lopez",
+    "criticalPositionFen": "k6r/1pp2p2/p1p1r3/4N3/4nP1p/2P5/PP5p/3R1R1K w - - 0 43",
+    "title": "Ruy ENDGAME — the Octopus Knight (vs Abund)",
+    "overview": "Out of his d3 Ruy, Caruana shows how an active knight rules a rook ending. The knight tours the board — Ng6, Nf8, Nd7, Ne5 — hopping into Black's camp, hitting pawns and harassing the rooks, while White's rooks own the open files. The lesson: in a rook ending a centralised, infiltrating knight is worth a tempo a move; keep it dancing.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "Ng6-Nf8-Nd7-Ne5 knight tour",
+        "explanation": "Ruy ENDGAME — the Octopus Knight (vs Abund)"
+      }
+    ],
+    "strategicThemes": [
+      "Ruy ENDGAME — the Octopus Knight (vs Abund)"
+    ],
+    "endgameTransitions": [
+      "The opening structure converts directly into this winning ending."
+    ],
+    "playableLines": [
+      {
+        "fen": "k6r/1pp2p2/p1p1r3/4N3/4nP1p/2P5/PP5p/3R1R1K w - - 0 43",
+        "moves": [
+          "Kxh2",
+          "Ng3",
+          "Rf2",
+          "f6",
+          "Ng6",
+          "Rh6",
+          "Nf8",
+          "Re8",
+          "Nd7"
+        ],
+        "annotations": [
+          "White first collects the loose h2-pawn.",
+          "Black tries to activate his own knight.",
+          "Rf2 keeps the rook active and shields the king.",
+          "Black props his structure.",
+          "Ng6 — the knight begins its tour into Black’s position.",
+          "Black contests with the rook.",
+          "Nf8 — the knight hops deeper, eyeing d7 and Black’s weak pawns.",
+          "Black shuffles.",
+          "Nd7 — the octopus knight lands in the heart of Black’s camp, forking the pawns and dominating. White is winning."
+        ],
+        "learnCues": [
+          "Kxh2 — grab the pawn",
+          "…Ng3 — Black activates",
+          "Rf2 — active rook",
+          "…f6 — prop the pawns",
+          "Ng6 — the knight tours",
+          "…Rh6 — contest",
+          "Nf8 — hop deeper",
+          "…Re8 — Black shuffles",
+          "Nd7 — the octopus knight"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f8",
+              "to": "d7",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Ruy ENDGAME — the Octopus Knight (vs Abund)",
+        "intro": "Out of his d3 Ruy, Caruana shows how an active knight rules a rook ending. The knight tours the board — Ng6, Nf8, Nd7, Ne5 — hopping into Black's camp, hitting pawns and harassing the rooks, while White's rooks own the open files. The lesson: in a rook ending a centralised, infiltrating knight is worth a tempo a move; keep it dancing.",
+        "sources": [
+          "concept:pos-material",
+          "concept:pos-king-safety",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez",
+          "https://www.chess.com/openings/Ruy-Lopez-Opening",
+          "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-caruana-italian-endgame",
+    "openingId": "pro-caruana-italian",
+    "criticalPositionFen": "6k1/1p3pp1/p1p2nnp/P3p3/1PN1P3/2Pr2PP/3N1P1K/4R3 w - - 0 29",
+    "title": "Italian ENDGAME — King and Rook Activity (vs michaelq2d5)",
+    "overview": "From his Pianissimo, Caruana converts a knight ending the modern way: activate the king. With queens off, the king walks up the board — Kg2-f1-e2 — to support the rook and the queenside majority, while the c4-knight blockades. The lesson: in a same-material ending the player whose king joins the fight first usually wins.",
+    "pawnBreaks": [
+      {
+        "move": "h4 fix the kingside",
+        "explanation": "Italian ENDGAME — King and Rook Activity (vs michaelq2d5)",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "Kg2-f1-e2 king march",
+        "explanation": "Italian ENDGAME — King and Rook Activity (vs michaelq2d5)"
+      }
+    ],
+    "strategicThemes": [
+      "Italian ENDGAME — King and Rook Activity (vs michaelq2d5)"
+    ],
+    "endgameTransitions": [
+      "The opening structure converts directly into this winning ending."
+    ],
+    "playableLines": [
+      {
+        "fen": "6k1/1p3pp1/p1p2nnp/P3p3/1PN1P3/2Pr2PP/3N1P1K/4R3 w - - 0 29",
+        "moves": [
+          "Rc1",
+          "Kf8",
+          "Kg2",
+          "Ke7",
+          "Kf1",
+          "h5",
+          "Ke2",
+          "Rd8",
+          "h4"
+        ],
+        "annotations": [
+          "Rc1 swings the rook to the half-open c-file behind the passed a-pawn.",
+          "Black brings his king toward the centre too.",
+          "Kg2 — the king starts its march to support the queenside.",
+          "Black hurries his king up.",
+          "Kf1 — the king keeps walking toward the centre.",
+          "Black grabs kingside space.",
+          "Ke2 — the king reaches the centre, ready to escort the queenside pawns.",
+          "Black contests the d-file.",
+          "h4 fixes the kingside; with the active king and the a-pawn, White presses for the win."
+        ],
+        "learnCues": [
+          "Rc1 — the c-file",
+          "…Kf8 — Black’s king comes",
+          "Kg2 — march the king",
+          "…Ke7 — Black hurries",
+          "Kf1 — keep walking",
+          "…h5 — Black expands",
+          "Ke2 — into the centre",
+          "…Rd8 — contest",
+          "h4 — fix and press"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Italian ENDGAME — King and Rook Activity (vs michaelq2d5)",
+        "intro": "From his Pianissimo, Caruana converts a knight ending the modern way: activate the king. With queens off, the king walks up the board — Kg2-f1-e2 — to support the rook and the queenside majority, while the c4-knight blockades. The lesson: in a same-material ending the player whose king joins the fight first usually wins.",
+        "sources": [
+          "concept:pos-material",
+          "concept:pos-king-safety",
+          "https://en.wikipedia.org/wiki/Italian_Game",
+          "https://www.chess.com/openings/Italian-Game",
+          "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-caruana-french-endgame",
+    "openingId": "pro-caruana-french",
+    "criticalPositionFen": "2k2r1r/1pp1np2/1n2p1p1/1p1pP1Np/3P1P1P/PP6/2P1N1P1/2KR3R b - - 0 19",
+    "title": "French ENDGAME — the …Nf5 Outpost (vs ilqar_74)",
+    "overview": "From his Classical French, Caruana simplifies early into a maneuvering ending and shows the French dream square: …Nf5. The knight lands on the hole in front of White's chain, untouchable and dominant, while the king walks to c7 and the knights reroute. The lesson: in the French, the f5-outpost for a knight is worth a pawn — plant it and the position plays itself.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Nf5 outpost, …Kc7 king march, …Nc8-e7 reroute",
+        "explanation": "French ENDGAME — the …Nf5 Outpost (vs ilqar_74)"
+      }
+    ],
+    "strategicThemes": [
+      "French ENDGAME — the …Nf5 Outpost (vs ilqar_74)"
+    ],
+    "endgameTransitions": [
+      "The opening structure converts directly into this winning ending."
+    ],
+    "playableLines": [
+      {
+        "fen": "2k2r1r/1pp1np2/1n2p1p1/1p1pP1Np/3P1P1P/PP6/2P1N1P1/2KR3R b - - 0 19",
+        "moves": [
+          "Nf5",
+          "Rh3",
+          "c6",
+          "Kb2",
+          "Kc7",
+          "Nc1",
+          "Nc8",
+          "c3",
+          "Nce7"
+        ],
+        "annotations": [
+          "…Nf5 — the knight occupies the great French outpost, dominant and immune.",
+          "White shuffles the rook.",
+          "…c6 shores up the centre and the d5-pawn.",
+          "White tucks the king.",
+          "…Kc7 — the king walks toward the centre, a fighting piece.",
+          "White reroutes his knight.",
+          "…Nc8 reroutes the other knight toward the kingside via e7.",
+          "White props his structure.",
+          "…Nce7 completes the regrouping; Black’s pieces are perfectly placed and he presses the win."
+        ],
+        "learnCues": [
+          "…Nf5 — the French outpost",
+          "Rh3 — White shuffles",
+          "…c6 — shore up d5",
+          "Kb2 — White tucks",
+          "…Kc7 — march the king",
+          "Nc1 — White reroutes",
+          "…Nc8 — reroute the knight",
+          "c3 — White props",
+          "…Nce7 — perfectly placed"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e7",
+              "to": "f5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "French ENDGAME — the …Nf5 Outpost (vs ilqar_74)",
+        "intro": "From his Classical French, Caruana simplifies early into a maneuvering ending and shows the French dream square: …Nf5. The knight lands on the hole in front of White's chain, untouchable and dominant, while the king walks to c7 and the knights reroute. The lesson: in the French, the f5-outpost for a knight is worth a pawn — plant it and the position plays itself.",
+        "sources": [
+          "concept:pos-material",
+          "concept:pawn-minority-attack",
+          "https://en.wikipedia.org/wiki/French_Defence",
+          "https://www.chess.com/openings/French-Defense",
+          "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-caruana-kid-endgame",
+    "openingId": "pro-caruana-kid",
+    "criticalPositionFen": "r5k1/1ppb4/3p2p1/2nPp1b1/p1P1P1P1/P1N4P/1PB2rN1/1K1R3R w - - 0 27",
+    "title": "KID ENDGAME — the …Nd3 Infiltration (vs rpragchess)",
+    "overview": "From his King's Indian, Caruana converts a heavy-piece ending with a knight infiltration. The …Nd3 jump forces a favourable trade, and the …Bd4 outpost dominates the dark squares while the rook doubles to the 2nd rank. The lesson: a knight on d3 (or the dark-squared bishop on d4) deep in the enemy camp is a permanent thorn that wins the ending.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Be3 outpost, …Nxd3 trade, …Bd4 dominance",
+        "explanation": "KID ENDGAME — the …Nd3 Infiltration (vs rpragchess)"
+      }
+    ],
+    "strategicThemes": [
+      "KID ENDGAME — the …Nd3 Infiltration (vs rpragchess)"
+    ],
+    "endgameTransitions": [
+      "The opening structure converts directly into this winning ending."
+    ],
+    "playableLines": [
+      {
+        "fen": "r5k1/1ppb4/3p2p1/2nPp1b1/p1P1P1P1/P1N4P/1PB2rN1/1K1R3R w - - 0 27",
+        "moves": [
+          "Ne1",
+          "Be3",
+          "Nd3",
+          "Nxd3",
+          "Rxd3",
+          "Bd4"
+        ],
+        "annotations": [
+          "White reroutes the knight to challenge Black’s active rook.",
+          "…Be3 — the bishop seizes a strong outpost, eyeing the queenside.",
+          "White’s knight jumps to d3, offering a trade.",
+          "…Nxd3 — Black takes on Black’s terms, eliminating White’s active piece.",
+          "White recaptures with the rook.",
+          "…Bd4 — the dark-squared bishop dominates the long diagonal, an unassailable monster. With the better minor piece and active rooks, Black presses the win."
+        ],
+        "learnCues": [
+          "Ne1 — reroute",
+          "…Be3 — the bishop outpost",
+          "Nd3 — White offers a trade",
+          "…Nxd3 — take the knight",
+          "Rxd3 — recapture",
+          "…Bd4 — the dominant bishop"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c5",
+              "to": "d3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "KID ENDGAME — the …Nd3 Infiltration (vs rpragchess)",
+        "intro": "From his King's Indian, Caruana converts a heavy-piece ending with a knight infiltration. The …Nd3 jump forces a favourable trade, and the …Bd4 outpost dominates the dark squares while the rook doubles to the 2nd rank. The lesson: a knight on d3 (or the dark-squared bishop on d4) deep in the enemy camp is a permanent thorn that wins the ending.",
+        "sources": [
+          "concept:pos-material",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Defence",
+          "https://www.chess.com/openings/Kings-Indian-Defense",
+          "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-caruana-nimzo-indian-endgame",
+    "openingId": "pro-caruana-nimzo-indian",
+    "criticalPositionFen": "2b1r1k1/1pp2pp1/8/3B3N/p1P3Pp/Pn5P/1P2r3/3R1RK1 b - - 1 29",
+    "title": "Nimzo ENDGAME — Active Rooks on the e-file (vs mishanick)",
+    "overview": "From his Nimzo, Caruana converts a heavy-piece ending the principled way: the rooks seize the open e-file, infiltrate to the first rank, and the bishop swings to e6 to harass White's pawns while the b3-knight sits like a thorn. The lesson: in a rook ending the open file plus an outpost knight is worth a pawn — occupy the file, trade into the infiltration, and activate every piece.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…R2e7/…Re1 active rooks, …Be6 bishop activation, …Nb3 outpost",
+        "explanation": "Nimzo ENDGAME — Active Rooks on the e-file (vs mishanick)"
+      }
+    ],
+    "strategicThemes": [
+      "Nimzo ENDGAME — Active Rooks on the e-file (vs mishanick)"
+    ],
+    "endgameTransitions": [
+      "The opening structure converts directly into this winning ending."
+    ],
+    "playableLines": [
+      {
+        "fen": "2b1r1k1/1pp2pp1/8/3B3N/p1P3Pp/Pn5P/1P2r3/3R1RK1 b - - 1 29",
+        "moves": [
+          "R2e7",
+          "Rf4",
+          "c6",
+          "Bg2",
+          "Re1+",
+          "Rxe1",
+          "Rxe1+",
+          "Kh2",
+          "Be6",
+          "g5"
+        ],
+        "annotations": [
+          "…R2e7 doubles the rooks on the open e-file, the highway into White’s position.",
+          "White swings a rook to the fourth rank.",
+          "…c6 blunts the d5-bishop and shores up the queenside.",
+          "The bishop retreats to g2.",
+          "…Re1+ — a rook crashes through to the first rank with check.",
+          "White must trade rooks.",
+          "…Rxe1+ recaptures, still on the first rank with check.",
+          "The king steps up.",
+          "…Be6 activates the bishop, eyeing c4; with the rook on the first rank and the knight on b3, Black’s pieces dominate and he presses the win.",
+          "White grabs kingside space."
+        ],
+        "learnCues": [
+          "…R2e7 — double on the file",
+          "Rf4 — White activates",
+          "…c6 — kick the bishop",
+          "Bg2 — the bishop retreats",
+          "…Re1+ — crash through",
+          "Rxe1 — forced trade",
+          "…Rxe1+ — stay on the rank",
+          "Kh2 — the king steps up",
+          "…Be6 — activate, eye c4",
+          "g5 — White grabs space"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c8",
+              "to": "e6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Nimzo ENDGAME — Active Rooks on the e-file (vs mishanick)",
+        "intro": "From his Nimzo, Caruana converts a heavy-piece ending the principled way: the rooks seize the open e-file, infiltrate to the first rank, and the bishop swings to e6 to harass White's pawns while the b3-knight sits like a thorn. The lesson: in a rook ending the open file plus an outpost knight is worth a pawn — occupy the file, trade into the infiltration, and activate every piece.",
+        "sources": [
+          "concept:pos-material",
+          "concept:pos-initiative",
+          "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence",
+          "https://www.chess.com/openings/Nimzo-Indian-Defense",
+          "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-caruana-caro-kann-endgame",
+    "openingId": "pro-caruana-caro-kann",
+    "criticalPositionFen": "r3kb1r/1p1n1pp1/2n1p2p/1p1pP3/3P2PP/P2NBN2/1P3P2/1R2K2R b Kkq - 0 21",
+    "title": "Caro-Kann ENDGAME — Queenside Play vs the e5-Chain (vs Nitzan_Steinberg)",
+    "overview": "From his Caro-Kann, Caruana grinds out a closed maneuvering ending against White's e5-pawn chain. The plan is pure Caro: open a second front with …h5, activate the rook on the open h-file, reroute the knight via …Nb6 toward c4, swing the other rook to the fourth rank with …Ra4, and complete development with …Be7. The lesson: against a space-grabbing pawn chain you don't sit — create a second weakness on the wing and infiltrate with active pieces.",
+    "pawnBreaks": [
+      {
+        "move": "…h5 second front",
+        "explanation": "Caro-Kann ENDGAME — Queenside Play vs the e5-Chain (vs Nitzan_Steinberg)",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Ra4 active rook, …Nb6 reroute toward c4",
+        "explanation": "Caro-Kann ENDGAME — Queenside Play vs the e5-Chain (vs Nitzan_Steinberg)"
+      }
+    ],
+    "strategicThemes": [
+      "Caro-Kann ENDGAME — Queenside Play vs the e5-Chain (vs Nitzan_Steinberg)"
+    ],
+    "endgameTransitions": [
+      "The opening structure converts directly into this winning ending."
+    ],
+    "playableLines": [
+      {
+        "fen": "r3kb1r/1p1n1pp1/2n1p2p/1p1pP3/3P2PP/P2NBN2/1P3P2/1R2K2R b Kkq - 0 21",
+        "moves": [
+          "h5",
+          "gxh5",
+          "Rxh5",
+          "Bg5",
+          "Nb6",
+          "Ke2",
+          "Ra4",
+          "Be3",
+          "Be7",
+          "Rbc1"
+        ],
+        "annotations": [
+          "…h5 strikes at White’s kingside pawns, opening a second front.",
+          "White captures on h5.",
+          "…Rxh5 activates the rook on the open h-file.",
+          "The bishop eyes the kingside.",
+          "…Nb6 reroutes the knight toward the strong c4-square.",
+          "White centralises the king.",
+          "…Ra4 swings the rook to the active fourth rank, pressuring d4 and the a3-pawn.",
+          "The bishop returns to guard d4.",
+          "…Be7 completes development; with both rooks active and the knight eyeing c4, Black presses on both wings.",
+          "White contests the c-file."
+        ],
+        "learnCues": [
+          "…h5 — a second front",
+          "gxh5 — White takes",
+          "…Rxh5 — the open file",
+          "Bg5 — the bishop eyes f6",
+          "…Nb6 — reroute toward c4",
+          "Ke2 — the king centralises",
+          "…Ra4 — the active fourth rank",
+          "Be3 — guard d4",
+          "…Be7 — finish developing",
+          "Rbc1 — contest the c-file"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "a8",
+              "to": "a4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Caro-Kann ENDGAME — Queenside Play vs the e5-Chain (vs Nitzan_Steinberg)",
+        "intro": "From his Caro-Kann, Caruana grinds out a closed maneuvering ending against White's e5-pawn chain. The plan is pure Caro: open a second front with …h5, activate the rook on the open h-file, reroute the knight via …Nb6 toward c4, swing the other rook to the fourth rank with …Ra4, and complete development with …Be7. The lesson: against a space-grabbing pawn chain you don't sit — create a second weakness on the wing and infiltrate with active pieces.",
+        "sources": [
+          "concept:pos-material",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
+          "https://www.chess.com/openings/Caro-Kann-Defense",
+          "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+        ]
+      }
+    ]
+  },
+  {
     "id": "mp-proamansiciliankan-open",
     "openingId": "pro-aman-sicilian-kan",
     "criticalPositionFen": "r1b1kb1r/2qn1ppp/p2ppn2/1p6/3NPP2/2NB4/PPP3PP/R1BQ1R1K w kq - 0 10",
