@@ -318,14 +318,16 @@ describe('reconcileProRepertoires — pick up JSON updates without wiping progre
   it('sweeps orphans for a player whose openings were wiped entirely (G8)', async () => {
     await seedFully();
     // Simulate an already-seeded device still carrying a slate-wiped
-    // player's openings (e.g. Carlsen) that no longer exist in the JSON.
-    // The roster-wide orphan sweep must delete them even though the
-    // player carries zero current JSON entries.
+    // player's openings: the player is still in the roster but now carries
+    // ZERO JSON entries. The per-player orphan sweep must delete the stale
+    // Dexie rows. NOTE: pick a roster player that genuinely has 0 openings
+    // (a placeholder) — a built player (carlsen, caruana, …) is NOT swept
+    // because its openings ARE in the JSON.
     const template = await db.openings.get('pro-naroditsky-caro-kann');
     expect(template).toBeDefined();
     if (!template) return;
-    const orphanId = 'pro-carlsen-ruy-lopez';
-    await db.openings.put({ ...template, id: orphanId, proPlayerId: 'carlsen' });
+    const orphanId = 'pro-dubov-ruy-lopez';
+    await db.openings.put({ ...template, id: orphanId, proPlayerId: 'dubov' });
     expect(await db.openings.get(orphanId)).toBeDefined();
 
     // Force reconcile.
