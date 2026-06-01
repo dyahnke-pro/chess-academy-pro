@@ -10530,7 +10530,7 @@
     "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 c6 Bd2 Bf5 Bc4 e6 Nf3 Nd7 Qe2 Ngf6 d5 cxd5 Nxd5 Qc5 Nxf6+ gxf6 Be3 Qa5+ c3 a6 Rd1 Be7 O-O Rg8 Bf4 Bg4 Qe4 O-O-O b4 Qa4 Bg3 Nb6 Qf4 e5 Nxe5 Rxd1 Nxg4 Bd6 Qf5+ Kb8 Bb3 Rxf1+ Kxf1 Qc6 Nxf6 Rd8 Ne4 Bxg3 hxg3 Ka7 Kg1 Nd5 Qe5 f6 Qd4+ Qb6 Nc5 Ne7 Qe4 Ng6 Bd5 f5 Qe6 Qxe6 Bxe6 Rd1+ Kh2 Rd2 f3 Ne7 a4 Rc2 c4 Rb2 b5 a5 Nd7 Rb4 b6+ Ka8 Nc5 Rxb6 Bd7 Rd6 Bb5 Kb8 Nd7+ Kc7 Ne5 Nc6 Nf7 Rf6 Ng5 h6 Nh3 Nd4 Nf4 Kd6 Be8 Rf8 Bg6 Rc8 Bf7 Nb3 Be6 Rf8 Bd5 Nc5 Ng6 Rb8 Nh4 Ke5 f4+ Kf6 Nf3 Nxa4 g4 fxg4 Ne5 Nc5 Nxg4+ Kg7 f5 Rf8 f6+ Rxf6",
     "sourceUrl": "https://www.chess.com/member/magnuscarlsen",
     "studentSide": "black",
-    "overview": "Carlsen vs Nakamura,Hi (2807), 2025 — Scandinavian: the 3…Qd6 Scandinavian — the …a6/…b5 setup and the long-diagonal bishop grind out the win."
+    "overview": "Carlsen vs Nakamura,Hi (2807), 2025 — Scandinavian: the …Qd6 Scandinavian — the …a6/…b5 setup and the long-diagonal bishop grind out the win."
   },
   {
     "id": "mg-carlsen-scandinavian-2",
@@ -10740,7 +10740,7 @@
     "pgn": "Nf3 d5 e3 Nf6 c4 dxc4 Bxc4 e6 O-O c5 Qe2 a6 a4 Nc6 Rd1 Be7 d4 cxd4 Nxd4 Nxd4 exd4 Bd7 Nc3 Bc6 Bf4 O-O Rd3 b5 Bb3 b4 d5 exd5 Nxd5 Nxd5 Bxd5 Bxd5 Qd2 Qb6 Rxd5 Rad8 g3 Qc6 Rxd8 Rxd8 Qe2 Bf6 a5 Re8 Be3 h5 Rd1 h4 gxh4 Bxh4 Rd4 Bg5 Rxb4 Bxe3 fxe3 Qc5 Rc4 Qxa5 Kf2 Qe5 h4 a5 b3 Rb8 Qc2 Qf6+ Ke2 Qe6 Qd3 Qh3 Rd4 Qh2+ Kf3 Qc7 Rd7 Qc6+ Qd5 Qf6+ Ke2 Rc8 h5 Rc2+ Kd1 Rf2 Rd8+ Kh7 Qe4+ Kh6 Rd4 Qg5 Kc1 Qc5+ Kd1 Qxh5+ Kc1 g5 Qc6+ f6 Qc8 Rf1+ Kc2 Qg6+ e4 g4 Kb2 g3 Qh3+ Kg7 Qxf1 g2 Qg1 Qg5 Kc2 Qc5+ Kb2 Qg5 Rc4 Qe5+ Ka2",
     "sourceUrl": "https://www.chess.com/game/live/138674276302",
     "studentSide": "white",
-    "overview": "Carlsen vs LyonBeast (2848), 2025 — Réti: the flexible 1.Nf3 system ground into a win from a tiny edge."
+    "overview": "Carlsen vs LyonBeast (2848), 2025 — Réti: the flexible Nf3 system ground into a win from a tiny edge."
   },
   {
     "id": "mg-carlsen-kings-gambit-1",
