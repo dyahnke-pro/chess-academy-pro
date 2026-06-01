@@ -58,9 +58,9 @@ export const PRO_AMAN_FRENCH_WHITE_VARIATION_LESSONS: Record<string, LessonScrip
       b({ id: 'nf3', moves: 'e4 e6 d4 d5 Nc3 Nf6 Bg5 dxe4 Nxe4 Be7 Bxf6 gxf6 Nf3 f5 Nc3', arrows: [A('e4', 'c3')], highlights: [H('f5')],
         say: "Black grabs the centre with …f5; White retreats Nc3, keeping the structure intact while Black's pawns become loose. White will target the weakened light squares and the broken kingside.",
         sayShort: 'Nc3 — target the weak pawns.' }),
-      b({ id: 'middlegame', moves: 'e4 e6 d4 d5 Nc3 Nf6 Bg5 dxe4 Nxe4 Be7 Bxf6 gxf6 Nf3 f5 Nc3 a6 g3 b5 Bg2 Bb7 O-O O-O Qe2', arrows: [A('f1', 'g2')], highlights: [H('g2')],
-        say: "White fianchettoes the bishop to g2, raking the long diagonal at Black's shattered kingside, and castles into a comfortable middlegame. White has the sounder structure, the better bishop, and the clear plan of pressing Black's weakened pawns. A pleasant, lasting edge.",
-        sayShort: 'Bg2 — rake the broken kingside.' }),
+      b({ id: 'middlegame', moves: 'e4 e6 d4 d5 Nc3 Nf6 Bg5 dxe4 Nxe4 Be7 Bxf6 gxf6 Nf3 f5 Nc3 a6 g3 b5 Bg2 Bb7 O-O O-O Qe2', arrows: [A('d1', 'e2')], highlights: [H('g2'), H('e2')],
+        say: "White's bishop already rakes the long diagonal from g2 at Black's shattered kingside, and now the queen centralises to e2 as White castles into a comfortable middlegame. White has the sounder structure, the better bishop, and the clear plan of pressing Black's weakened pawns. A pleasant, lasting edge.",
+        sayShort: 'Qe2 — centralise, press the weak pawns.' }),
     ],
   },
 
