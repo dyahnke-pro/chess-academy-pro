@@ -3877,6 +3877,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     sources: ["concept:pos-center","concept:pos-space","https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation"],
     watch: ["","","","","","","","","","","","","","","","Nf4?! — the knight hops to the rim where it can be kicked; Black falls behind in the centre.","d4! — White builds the big pawn centre, the f4-knight offside and out of play.","Ne6 — the knight scrambles back toward the centre.","d5! — the pawn jabs forward with tempo, gaining space and cramping Black.","","cxd5 — recapturing toward the centre, the pawn duo dominant.","","Nc3 — developing behind the big centre, White with a clear space advantage.",""],
     learn: ["","","","","","","","","","","","","","","","","d4 — build the big centre","","d5 — jab forward, gain space","","cxd5 — keep the pawn duo","","",""],
+  },
   // ── GothamChess hand-found tactical gems (David 2026-06-01: "find traps by
   //    hand. no more bots"). Each judged via probe-trap.mjs, engine-verified. ──
   // Vienna Gambit: after e5 hits the f6-knight, 7…Qe7?! defends but tangles
