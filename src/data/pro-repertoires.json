@@ -5314,7 +5314,13 @@
         }
       ],
       "trapLines": [],
-      "warningLines": [],
+      "warningLines": [
+        {
+          "name": "The Smothered Mate — …Ngf6??",
+          "pgn": "e4 c6 Nc3 d5 Nf3 dxe4 Nxe4 Nd7 Qe2 Ngf6 Nd6#",
+          "explanation": "The famous Caro-Kann smothered mate. After …dxe4 and …Nd7, the natural-looking …Ngf6?? walks straight into Nd6# — the knight forks the king from d6 and it is mate, the king boxed in by its own pieces on d7, e7, f7 and the d8-queen. The whole point of Qe2 was to set this trap. Always develop the OTHER knight first (…Ngf6 only after …Nd6 is covered), or play …Ndf6."
+        }
+      ],
       "sources": [
         "book:chess-fundamentals",
         "concept:pawn-chain",
@@ -5372,7 +5378,13 @@
         }
       ],
       "trapLines": [],
-      "warningLines": [],
+      "warningLines": [
+        {
+          "name": "Never grab e4 — …Nxe4??",
+          "pgn": "e4 g6 d4 Bg7 Nc3 d6 Nf3 Nf6 Bd3 Nxe4 Nxe4",
+          "explanation": "In the Modern, the e4-pawn is poisoned: …Nxe4?? simply drops a piece to Nxe4, because the knight is only defended once and White recaptures for free. Develop, fianchetto the second bishop, and prepare the …c5 or …e5 break — never snatch the pawn."
+        }
+      ],
       "sources": [
         "book:chess-fundamentals",
         "concept:pos-space",
@@ -5430,7 +5442,13 @@
         }
       ],
       "trapLines": [],
-      "warningLines": [],
+      "warningLines": [
+        {
+          "name": "Premature Nd5?? drops a piece",
+          "pgn": "e4 c5 Nc3 Nc6 f4 e6 Nf3 Nge7 Nd5 exd5",
+          "explanation": "Watch out for the tempting Nd5, hitting c7 and e7 — here it is just a blunder. …exd5 wins the knight outright, since nothing recaptures on d5. Complete development and prepare the f4-f5 break first; the Nd5 jump only works once it is genuinely supported."
+        }
+      ],
       "sources": [
         "book:chess-fundamentals",
         "concept:att-kingside-storm",
@@ -5546,7 +5564,13 @@
         }
       ],
       "trapLines": [],
-      "warningLines": [],
+      "warningLines": [
+        {
+          "name": "Bishop's Gambit — don't block with g3??",
+          "pgn": "e4 e5 f4 exf4 Bc4 Qh4+ g3 fxg3",
+          "explanation": "In the Bishop's Gambit, Black checks with …Qh4+ to provoke a weakness. Never block with g3?? — …fxg3 rips open the f- and h-files straight at White's exposed king, and after the recapture Black is winning by force. The correct move is the calm Kf1: White gives up castling but keeps the king safe and the development lead intact."
+        }
+      ],
       "sources": [
         "book:chess-fundamentals",
         "concept:att-kingside-storm",
