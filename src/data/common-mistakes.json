@@ -3188,5 +3188,43 @@
         "https://www.chess.com/openings/Nimzo-Indian-Defense"
       ]
     }
+  ],
+  "pro-aman-caro-kann": [
+    {
+      "fen": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+      "wrongMove": "e6",
+      "correctMove": "Bf5",
+      "explanation": "The cardinal Caro error: …e6 before …Bf5 locks the light-squared bishop inside the pawn chain — turning the Caro into a bad French and throwing away its whole point. Always play …Bf5 FIRST, getting the bishop OUTSIDE the chain, and only then …e6.",
+      "shortNarration": "…Bf5 first; …e6 traps the bishop.",
+      "sources": [
+        "concept:pos-development",
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Caro-Kann-Defense"
+      ]
+    },
+    {
+      "fen": "r2qkb1r/pp1nnppp/2p1p3/3pPb2/3P3N/8/PPP1BPPP/RNBQ1RK1 b kq - 5 7",
+      "wrongMove": "Be4",
+      "correctMove": "Bg6",
+      "explanation": "When White attacks the bishop with Nh4, …Be4 walks into f3 hitting the bishop and gaining time, and the bishop can get awkward. …Bg6 is the calm retreat — it keeps the good bishop on a safe diagonal where Nxg6 only opens the h-file for Black.",
+      "shortNarration": "…Bg6 — safe retreat, keep it.",
+      "sources": [
+        "concept:pos-development",
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Caro-Kann-Defense"
+      ]
+    },
+    {
+      "fen": "r2qkbnr/pp1n1ppp/2p1p3/3pPb2/3P4/5N2/PPP1BPPP/RNBQ1RK1 b kq - 3 6",
+      "wrongMove": "Bd6",
+      "correctMove": "Ne7",
+      "explanation": "…Bd6 looks natural but it bumps into White's e5-pawn and blocks the d-file the …c5 break wants to open. The knight reroute …Ne7-g6 is the plan — it pressures e5 and keeps the dark bishop free for a better square.",
+      "shortNarration": "…Ne7 reroute, not …Bd6.",
+      "sources": [
+        "concept:pos-development",
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Caro-Kann-Defense"
+      ]
+    }
   ]
 }

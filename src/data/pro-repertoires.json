@@ -3331,6 +3331,66 @@
           ]
         }
       ]
+    },
+    {
+      "id": "pro-aman-caro-kann",
+      "playerId": "aman",
+      "eco": "B12",
+      "name": "Caro-Kann Defense (Aman)",
+      "color": "black",
+      "style": "Solid, Classical",
+      "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 Nd7 O-O Ne7 Nh4 Bg6",
+      "overview": "Aman Hambleton's solid Black backup (986 games, 75.3%) — the Caro-Kann, his choice for a quieter, low-risk game. The whole point shows in the Advance: after e5 he plays the classical …Bf5, developing the light-squared bishop OUTSIDE the pawn chain — the very piece that stays trapped in the French. Black builds a solid wall behind the freed bishop, reroutes the knight toward g6, and plays for the …c5 and …f6 breaks against White's centre. Comfortable equality with no weaknesses.",
+      "keyIdeas": [
+        "Get the light bishop OUT to f5 before building the pawn chain.",
+        "Build the wall with …e6 and reroute …Ne7-g6 to pressure e5.",
+        "Break with …c5 and …f6 to challenge White’s advanced centre.",
+        "Low-risk, no weaknesses — outplay from a sound base."
+      ],
+      "traps": [],
+      "warnings": [
+        "In the Advance, never lock the light bishop in with an early …e6 before …Bf5 — that turns the Caro into a bad French."
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:chess-fundamentals",
+        "concept:pos-development",
+        "https://www.chess.com/openings/Caro-Kann-Defense",
+        "https://api.chess.com/pub/player/chessbrah/games/archives"
+      ],
+      "variations": [
+        {
+          "name": "Advance (…Bf5)",
+          "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 Nd7 O-O Ne7 Nh4 Bg6",
+          "explanation": "His main line. The classical …Bf5 frees the bishop; Black builds the wall, reroutes …Ne7-g6, and keeps the bishop with …Bg6 when White tries Nh4.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Caro-Kann-Defense"
+          ]
+        },
+        {
+          "name": "vs Two Knights (2.Nf3)",
+          "pgn": "e4 c6 Nf3 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ exf6 c3 Bd6 d4 O-O Bd3 Re8+ Be3 Bg4 Qc2 Nd7",
+          "explanation": "235 games. Trade in the centre with …dxe4, challenge with …Nf6, recapture …exf6, and develop …Bd6/…Re8/…Bg4 into an easy, sound middlegame.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Caro-Kann-Defense"
+          ]
+        },
+        {
+          "name": "vs Exchange (3.exd5)",
+          "pgn": "e4 c6 d4 d5 exd5 cxd5 Bd3 Nc6 c3 Qc7 Ne2 Bg4",
+          "explanation": "125 games. Symmetrical and easy: …Nc6, …Qc7 on the half-open c-file, and the active …Bg4 pin for full equality.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Caro-Kann-Defense"
+          ]
+        }
+      ]
     }
   ]
 }

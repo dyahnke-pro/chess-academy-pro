@@ -69954,5 +69954,273 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-proamancaro-advance",
+    "openingId": "pro-aman-caro-kann",
+    "title": "The …c5 Break Against the Advance",
+    "overview": "With the bishop already outside and the wall built, Black hits White's centre with …c5. The break opens lines for the pieces and dissolves White's space — the comfortable Caro plan in action.",
+    "pawnBreaks": [
+      "...c5 central break"
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "knight",
+        "route": "...Nc6 pressure",
+        "explanation": "The knight comes to c6 to hit d4."
+      }
+    ],
+    "strategicThemes": [
+      "Break with …c5 to challenge White’s advanced centre"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r2qkb1r/pp1nnppp/2p1p1b1/3pP3/3P3N/8/PPP1BPPP/RNBQ1RK1 w kq - 6 8",
+        "moves": [
+          "Nxg6",
+          "hxg6",
+          "Nd2",
+          "c5",
+          "c3",
+          "Nc6",
+          "dxc5",
+          "Nxc5"
+        ],
+        "annotations": [
+          "White trades the bishop.",
+          "…hxg6 recaptures, opening the h-file.",
+          "White redeploys.",
+          "…c5 strikes the centre.",
+          "White props d4.",
+          "…Nc6 piles on d4.",
+          "White takes.",
+          "…Nxc5 recaptures with a fine knight."
+        ],
+        "learnCues": [
+          "Nxg6 — trade",
+          "…hxg6 — open h-file",
+          "Nd2 — redeploy",
+          "…c5 — strike centre",
+          "c3 — prop d4",
+          "…Nc6 — pile on",
+          "dxc5 — White takes",
+          "…Nxc5 — recapture"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d7",
+              "to": "c6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Caro-Kann-Defense"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-proamancaro-twoknights",
+    "openingId": "pro-aman-caro-kann",
+    "title": "Easy Development and the …Bg4 Pin",
+    "overview": "In the Two Knights structure Black completes development smoothly — castle, rook to the half-open e-file, and the active …Bg4 pin. The harmonious pieces and sound structure give comfortable equality.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "bishop",
+        "route": "...Bg4 pin",
+        "explanation": "The bishop develops actively to g4, pinning a knight."
+      }
+    ],
+    "strategicThemes": [
+      "Develop smoothly and activate the bishop with …Bg4"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "rnbqk2r/pp3ppp/2pb1p2/8/8/2P2N2/PP1P1PPP/R1BQKB1R w KQkq - 1 7",
+        "moves": [
+          "d4",
+          "O-O",
+          "Bd3",
+          "Re8+",
+          "Be3",
+          "Bg4",
+          "Qc2",
+          "Nd7"
+        ],
+        "annotations": [
+          "White builds the centre.",
+          "…O-O tucks the king away.",
+          "White develops.",
+          "…Re8+ uses the half-open file with check.",
+          "White blocks.",
+          "…Bg4 develops with a pin.",
+          "White connects.",
+          "…Nd7 completes development."
+        ],
+        "learnCues": [
+          "d4 — build centre",
+          "…O-O — king safe",
+          "Bd3 — develop",
+          "…Re8+ — use the file",
+          "Be3 — block",
+          "…Bg4 — active pin",
+          "Qc2 — connect",
+          "…Nd7 — complete"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f8",
+              "to": "e8",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "c8",
+              "to": "g4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Caro-Kann-Defense"
+        ]
+      }
+    ]
   }
 ]
