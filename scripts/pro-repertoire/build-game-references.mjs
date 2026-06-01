@@ -54,6 +54,7 @@ const USERNAME = {
   gothamchess: 'gothamchess',
   hikaru: 'hikaru',
   ericrosen: 'imrosen',
+  samayraina: 'samayraina',
 };
 
 function slugify(s) {
@@ -75,6 +76,9 @@ if (proOpenings.length === 0) {
 const ALIAS = {
   'alapin-sicilian': 'alapin',
   'fantasy-caro': 'fantasy-caro',
+  // Samay tree keys carry a "samay-" prefix + descriptive suffix; map the
+  // ones token-overlap can't resolve onto their pro opening id.
+  'samay-scandi-black': 'scandi',
 };
 function resolvePro(pipelineOpeningId) {
   const want = ALIAS[pipelineOpeningId] || pipelineOpeningId;

@@ -9,6 +9,12 @@ import path from 'node:path';
 
 const PLAYER = process.argv[2] || 'danielnaroditsky';
 const OPENING_ID = process.argv[3] || 'caro-kann';
+// Strong-opponent floor. Default 2400 (GM corpus). Lower via env for
+// non-elite players whose opponents rarely break 2400 (e.g. a ~1900
+// streamer like Samay Raina — set MIN_OPP_RATING=1600 to surface his
+// strongest real wins). build-game-references ranks by opponent rating
+// desc + caps per variation, so the best games still surface first.
+const MIN_OPP_RATING = Number(process.env.MIN_OPP_RATING) || 2400;
 
 const SRC_DIR = path.join('data', 'sources', `${PLAYER}-chesscom`);
 const TREE_PATH = path.join('data', 'sources', `${PLAYER}-trees`, `${OPENING_ID}.json`);
@@ -86,7 +92,7 @@ for (const game of iterGames()) {
   if (mine !== 'win') continue;  // only WINS for model games
 
   const oppRating = them.rating || 0;
-  if (oppRating < 2400) continue;  // 2400+ filter (titled / strong)
+  if (oppRating < MIN_OPP_RATING) continue;  // strong-opponent filter
 
   // Find the deepest target this game matches
   let bestMatch = null;
@@ -124,7 +130,7 @@ fs.writeFileSync(OUT_PATH, JSON.stringify({ player: PLAYER, openingId: OPENING_I
 console.log(`[picker] wrote ${OUT_PATH}`);
 console.log();
 for (const t of candidates) {
-  console.log(`${t.label} (${t.totalCandidates} candidate wins ≥2400):`);
+  console.log(`${t.label} (${t.totalCandidates} candidate wins ≥${MIN_OPP_RATING}):`);
   for (const g of t.games.slice(0, 3)) {
     console.log(`  [${g.opponentRating}] vs ${g.opponent} | ${g.date} | ${g.timeClass} | ${g.plyCount} plies | ${g.url}`);
   }
