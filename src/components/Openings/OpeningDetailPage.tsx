@@ -58,6 +58,7 @@ import { getProEricRosenBudapestTabPlanIds } from '../../services/proEricRosenBu
 import { getProEricRosenClosedSicilianTabPlanIds } from '../../services/proEricRosenClosedSicilianTabPlans';
 import { getProEricRosenScandinavianTabPlanIds } from '../../services/proEricRosenScandinavianTabPlans';
 import { getProEricRosenFrenchTabPlanIds } from '../../services/proEricRosenFrenchTabPlans';
+import { getProCarlsenTabPlanIds } from '../../services/proCarlsenTabPlans';
 import { getProSamayRainaOpenSicilianTabPlanIds } from '../../services/proSamayRainaOpenSicilianTabPlans';
 import { getProSamayRainaRuyTabPlanIds } from '../../services/proSamayRainaRuyTabPlans';
 import { getProSamayRainaItalianTabPlanIds } from '../../services/proSamayRainaItalianTabPlans';
@@ -1353,6 +1354,7 @@ export function OpeningDetailPage(): JSX.Element {
     getProEricRosenClosedSicilianTabPlanIds(opening.id, pircTabKey) ??
     getProEricRosenScandinavianTabPlanIds(opening.id, pircTabKey) ??
     getProEricRosenFrenchTabPlanIds(opening.id, pircTabKey) ??
+    getProCarlsenTabPlanIds(opening.id, pircTabKey) ??
     getProSamayRainaOpenSicilianTabPlanIds(opening.id, pircTabKey) ??
     getProSamayRainaRuyTabPlanIds(opening.id, pircTabKey) ??
     getProSamayRainaItalianTabPlanIds(opening.id, pircTabKey) ??

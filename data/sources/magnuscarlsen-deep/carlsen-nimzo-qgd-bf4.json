@@ -1,0 +1,64 @@
+{
+  "player": "magnuscarlsen",
+  "openingId": "carlsen-nimzo",
+  "variationKey": "qgd-bf4",
+  "variation": {
+    "label": "QGD vs Bf4",
+    "prefix": [
+      "d4",
+      "Nf6",
+      "c4",
+      "e6",
+      "Nf3",
+      "d5",
+      "Nc3",
+      "Be7",
+      "Bf4"
+    ]
+  },
+  "generatedAt": "2026-06-01T00:19:18.581Z",
+  "totalGames": 21,
+  "wins": 5,
+  "draws": 7,
+  "losses": 9,
+  "openingTerminusPly": 16,
+  "openingTerminusMove": 8,
+  "spineMoves": [
+    "d4",
+    "Nf6",
+    "c4",
+    "e6",
+    "Nf3",
+    "d5",
+    "Nc3",
+    "Be7",
+    "Bf4",
+    "O-O",
+    "e3",
+    "c5",
+    "dxc5",
+    "Bxc5",
+    "a3",
+    "Nc6"
+  ],
+  "gamesAtTerminus": 4,
+  "endgameTypeBreakdown": {
+    "minor pieces + P": 1,
+    "Q+P": 1,
+    "middlegame (Q + pieces)": 1,
+    "R + minor + P": 1
+  },
+  "topModelGames": [
+    {
+      "url": "otb:2023.12.26:5631",
+      "opponent": "MaghsoodlooParham",
+      "opponentRating": 2742,
+      "studentRating": 2830,
+      "date": "2023-12-26",
+      "timeClass": "classical",
+      "outcome": "win",
+      "plyCount": 172,
+      "pgn": "[Event \"World Rapid 2023\"]\n[Site \"Samarkand UZB\"]\n[Date \"2023.12.26\"]\n[Round \"4.1\"]\n[White \"Maghsoodloo,Parham\"]\n[Black \"Carlsen,M\"]\n[Result \"0-1\"]\n[WhiteElo \"2742\"]\n[BlackElo \"2830\"]\n[ECO \"D37\"]\n\n1.d4 Nf6 2.c4 e6 3.Nf3 d5 4.Nc3 Be7 5.Bf4 O-O 6.e3 c5 7.dxc5 Bxc5 8.a3 Nc6\n9.Qc2 Re8 10.Rd1 e5 11.Bg5 d4 12.Nd5 Be7 13.Bxf6 Bxf6 14.Bd3 g6 15.Nxf6+ Qxf6\n16.Be4 Bf5 17.Bxf5 gxf5 18.exd4 Nxd4 19.Qc3 Rad8 20.Rd2 Qg6 21.Kf1 f4 22.Ne1 Qa6\n23.h4 Rc8 24.b3 b5 25.Kg1 bxc4 26.bxc4 Rxc4 27.Qh3 Qe6 28.Kh2 Qxh3+ 29.Kxh3 e4\n30.f3 e3 31.Rd1 h5 32.Nd3 e2 33.Rb1 Rc3 34.Nxf4 Nc2 35.Nd5 Rc6 36.Nb4 Nxa3\n37.Nxc6 Nxb1 38.Rxb1 e1=Q 39.Rxe1 Rxe1 40.Nxa7 f5 41.Kg3 Kf7 42.Nc6 Kf6 43.f4 Rd1\n44.Kf3 Ke6 45.Ke3 Re1+ 46.Kf2 Re4 47.g3 Kd5 48.Ne5 Ra4 49.Nf7 Ra2+ 50.Kf3 Ra7\n51.Ng5 Kd4 52.Ke2 Ra2+ 53.Kf3 Ra3+ 54.Kf2 Kd3 55.Ne6 Ra1 56.Nc5+ Kc4 57.Ne6 Kd5\n58.Ng5 Ra6 59.Ke3 Kc4 60.Nf7 Re6+ 61.Kf2 Kd3 62.Ne5+ Ke4 63.Nf7 Ra6 64.Ng5+ Kd3\n65.Nf7 Ra7 66.Ng5 Ra2+ 67.Kf3 Kd2 68.Kf2 Rc2 69.Ne6 Kd3+ 70.Kf3 Rc3 71.Kf2 Rc6\n72.Ng5 Ra6 73.Nf7 Ra2+ 74.Kf3 Ra3 75.Kf2 Ra7 76.Nd6 Rd7 77.Ne8 Rf7 78.Nd6 Rf6\n79.Ne8 Rg6 80.Kf3 Kc4 81.Kf2 Kc5 82.Nc7 Kc6 83.Na6 Rd6 84.Ke3 Kb5 85.Nc7+ Kb6\n86.Na8+ Kb7  0-1"
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "player": "magnuscarlsen",
+  "openingId": "carlsen-queens-pawn",
+  "variationKey": "nimzo",
+  "variation": {
+    "label": "Nimzo-Indian Nc3",
+    "prefix": [
+      "d4",
+      "Nf6",
+      "c4",
+      "e6",
+      "Nc3",
+      "Bb4"
+    ]
+  },
+  "generatedAt": "2026-06-01T00:19:21.037Z",
+  "totalGames": 233,
+  "wins": 142,
+  "draws": 60,
+  "losses": 31,
+  "openingTerminusPly": 17,
+  "openingTerminusMove": 9,
+  "spineMoves": [
+    "d4",
+    "Nf6",
+    "c4",
+    "e6",
+    "Nc3",
+    "Bb4",
+    "e3",
+    "O-O",
+    "Bd3",
+    "d5",
+    "a3",
+    "Bxc3+",
+    "bxc3",
+    "dxc4",
+    "Bxc4",
+    "c5",
+    "Ne2"
+  ],
+  "gamesAtTerminus": 3,
+  "endgameTypeBreakdown": {
+    "R+P": 2,
+    "R + minor + P": 1
+  },
+  "topModelGames": [
+    {
+      "url": "otb:2017.06.28:2204",
+      "opponent": "AronianL",
+      "opponentRating": 2793,
+      "studentRating": 2832,
+      "date": "2017-06-28",
+      "timeClass": "classical",
+      "outcome": "win",
+      "plyCount": 97,
+      "pgn": "[Event \"GCT Rapid YourNextMove\"]\n[Site \"Leuven BEL\"]\n[Date \"2017.06.28\"]\n[Round \"1.1\"]\n[White \"Carlsen,M\"]\n[Black \"Aronian,L\"]\n[Result \"1-0\"]\n[WhiteElo \"2832\"]\n[BlackElo \"2793\"]\n[ECO \"E49\"]\n\n1.d4 Nf6 2.c4 e6 3.Nc3 Bb4 4.e3 O-O 5.Bd3 d5 6.a3 Bxc3+ 7.bxc3 dxc4 8.Bxc4 c5\n9.Ne2 Qc7 10.Ba2 b6 11.O-O Ba6 12.Bb2 Nc6 13.Rc1 Rfd8 14.c4 cxd4 15.exd4 Ng4\n16.Ng3 Qf4 17.h3 Nf6 18.Ne2 Qh4 19.d5 exd5 20.cxd5 Ne7 21.Re1 Nexd5 22.Nd4 Bb7\n23.Nf3 Qh6 24.Ne5 Rf8 25.Nc6 Bxc6 26.Rxc6 Rad8 27.Qf3 Qd2 28.Re2 Qf4 29.Rxf6 gxf6\n30.Bxd5 Qxf3 31.Bxf3 Rfe8 32.Rc2 Rc8 33.Rxc8 Rxc8 34.Bxf6 b5 35.Kf1 a5 36.Ke2 b4\n37.axb4 axb4 38.Bd5 Rc5 39.Bb3 Rc6 40.Bd4 Kf8 41.Kd3 Ke7 42.Ke4 Rc1 43.Kd5 Kd7\n44.h4 Re1 45.g3 f5 46.Be3 Ke7 47.Kc4 Kf6 48.Kxb4 Ke5 49.Bc2  1-0"
+    },
+    {
+      "url": "https://www.chess.com/game/live/5675447595",
+      "opponent": "Parhamov",
+      "opponentRating": 2983,
+      "studentRating": 3004,
+      "date": "2020-11-02",
+      "timeClass": "blitz",
+      "outcome": "loss",
+      "plyCount": 84,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2020.11.02\"]\n[Round \"-\"]\n[White \"MagnusCarlsen\"]\n[Black \"Parhamov\"]\n[Result \"0-1\"]\n[CurrentPosition \"8/6pp/p4p2/7P/k2KP1P1/P1r2P2/2p5/1rR5 w - -\"]\n[Timezone \"UTC\"]\n[ECO \"E49\"]\n[ECOUrl \"https://www.chess.com/openings/Nimzo-Indian-Defense-Bishop-Attack-Classical-Botvinnik-System-7...dxc4-8.Bxc4-c5-9.Ne2\"]\n[UTCDate \"2020.11.02\"]\n[UTCTime \"17:46:23\"]\n[WhiteElo \"3004\"]\n[BlackElo \"2983\"]\n[TimeControl \"300+1\"]\n[Termination \"Parhamov won by resignation\"]\n[StartTime \"17:46:23\"]\n[EndDate \"2020.11.02\"]\n[EndTime \"17:57:58\"]\n[Link \"https://www.chess.com/game/live/5675447595\"]\n\n1. d4 {[%clk 0:05:00.9]} 1... Nf6 {[%clk 0:05:00.9]} 2. c4 {[%clk 0:05:00.7]} 2... e6 {[%clk 0:04:58.2]} 3. Nc3 {[%clk 0:05:00.7]} 3... Bb4 {[%clk 0:04:58.5]} 4. e3 {[%clk 0:04:59.2]} 4... O-O {[%clk 0:04:56.2]} 5. Bd3 {[%clk 0:04:59]} 5... d5 {[%clk 0:04:52.3]} 6. a3 {[%clk 0:04:56.7]} 6... Bxc3+ {[%clk 0:04:49.2]} 7. bxc3 {[%clk 0:04:57.6]} 7... dxc4 {[%clk 0:04:48.9]} 8. Bxc4 {[%clk 0:04:58.5]} 8... c5 {[%clk 0:04:47.2]} 9. Ne2 {[%clk 0:04:58.1]} 9... Nc6 {[%clk 0:04:47.1]} 10. O-O {[%clk 0:04:53.1]} 10... b6 {[%clk 0:04:47.1]} 11. Bb2 {[%clk 0:04:46.6]} 11... Bb7 {[%clk 0:04:44.3]} 12. Bd3 {[%clk 0:03:41.6]} 12... e5 {[%clk 0:04:40.7]} 13. Ng3 {[%clk 0:03:15.4]} 13... cxd4 {[%clk 0:04:00.1]} 14. cxd4 {[%clk 0:03:15.3]} 14... exd4 {[%clk 0:04:00.8]} 15. Rc1 {[%clk 0:03:02.8]} 15... Re8 {[%clk 0:03:42.5]} 16. e4 {[%clk 0:01:20.7]} 16... Nd7 {[%clk 0:02:55]} 17. Bb5 {[%clk 0:00:44.6]} 17... Nc5 {[%clk 0:02:54.8]} 18. f3 {[%clk 0:00:37.9]} 18... a6 {[%clk 0:01:39.2]} 19. Bxc6 {[%clk 0:00:37.4]} 19... Bxc6 {[%clk 0:01:39.6]} 20. Bxd4 {[%clk 0:00:23.9]} 20... Ba4 {[%clk 0:01:29.3]} 21. Bxc5 {[%clk 0:00:21.4]} 21... Bxd1 {[%clk 0:01:28.8]} 22. Rfxd1 {[%clk 0:00:22.3]} 22... Qxd1+ {[%clk 0:01:27.7]} 23. Rxd1 {[%clk 0:00:22.5]} 23... bxc5 {[%clk 0:01:28.1]} 24. Rc1 {[%clk 0:00:22.9]} 24... Rec8 {[%clk 0:01:22.7]} 25. Nf5 {[%clk 0:00:23]} 25... Kf8 {[%clk 0:01:22.6]} 26. Nd6 {[%clk 0:00:22.6]} 26... Rc7 {[%clk 0:01:18.6]} 27. Nc4 {[%clk 0:00:23.5]} 27... Rd8 {[%clk 0:01:14.9]} 28. Kf2 {[%clk 0:00:23.7]} 28... Rd4 {[%clk 0:01:04.4]} 29. Ke3 {[%clk 0:00:22.3]} 29... Ke7 {[%clk 0:00:50]} 30. h4 {[%clk 0:00:22.3]} 30... f6 {[%clk 0:00:49.5]} 31. g4 {[%clk 0:00:22.2]} 31... Kd7 {[%clk 0:00:42]} 32. h5 {[%clk 0:00:21.3]} 32... Kc6 {[%clk 0:00:28.1]} 33. Kf4 {[%clk 0:00:21.7]} 33... Kb5 {[%clk 0:00:19.6]} 34. Ne3 {[%clk 0:00:21.9]} 34... c4 {[%clk 0:00:19.7]} 35. Nd5 {[%clk 0:00:22.2]} 35... Rc5 {[%clk 0:00:16.3]} 36. Rb1+ {[%clk 0:00:11.4]} 36... Ka4 {[%clk 0:00:15]} 37. Ke3 {[%clk 0:00:09.9]} 37... Rd3+ {[%clk 0:00:14.7]} 38. Ke2 {[%clk 0:00:10.5]} 38... Rb3 {[%clk 0:00:12.8]} 39. Rc1 {[%clk 0:00:08.4]} 39... c3 {[%clk 0:00:12.5]} 40. Kd3 {[%clk 0:00:07.5]} 40... c2+ {[%clk 0:00:12.8]} 41. Kd4 {[%clk 0:00:06.2]} 41... Rb1 {[%clk 0:00:09.6]} 42. Nc3+ {[%clk 0:00:03.1]} 42... Rxc3 {[%clk 0:00:09.3]} 0-1\n"
+    },
+    {
+      "url": "otb:2020.11.02:3301",
+      "opponent": "MaghsoodlooParham",
+      "opponentRating": 2676,
+      "studentRating": 2862,
+      "date": "2020-11-02",
+      "timeClass": "classical",
+      "outcome": "loss",
+      "plyCount": 84,
+      "pgn": "[Event \"chess.com Speed 2020\"]\n[Site \"chess.com INT\"]\n[Date \"2020.11.02\"]\n[Round \"1.15\"]\n[White \"Carlsen,M\"]\n[Black \"Maghsoodloo,Parham\"]\n[Result \"0-1\"]\n[WhiteElo \"2862\"]\n[BlackElo \"2676\"]\n[ECO \"E49\"]\n\n1.d4 Nf6 2.c4 e6 3.Nc3 Bb4 4.e3 O-O 5.Bd3 d5 6.a3 Bxc3+ 7.bxc3 dxc4 8.Bxc4 c5\n9.Ne2 Nc6 10.O-O b6 11.Bb2 Bb7 12.Bd3 e5 13.Ng3 cxd4 14.cxd4 exd4 15.Rc1 Re8\n16.e4 Nd7 17.Bb5 Nc5 18.f3 a6 19.Bxc6 Bxc6 20.Bxd4 Ba4 21.Bxc5 Bxd1 22.Rfxd1 Qxd1+\n23.Rxd1 bxc5 24.Rc1 Rec8 25.Nf5 Kf8 26.Nd6 Rc7 27.Nc4 Rd8 28.Kf2 Rd4 29.Ke3 Ke7\n30.h4 f6 31.g4 Kd7 32.h5 Kc6 33.Kf4 Kb5 34.Ne3 c4 35.Nd5 Rc5 36.Rb1+ Ka4\n37.Ke3 Rd3+ 38.Ke2 Rb3 39.Rc1 c3 40.Kd3 c2+ 41.Kd4 Rb1 42.Nc3+ Rxc3  0-1"
+    }
+  ]
+}

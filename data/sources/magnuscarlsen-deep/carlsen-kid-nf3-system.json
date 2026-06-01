@@ -1,0 +1,83 @@
+{
+  "player": "magnuscarlsen",
+  "openingId": "carlsen-kid",
+  "variationKey": "nf3-system",
+  "variation": {
+    "label": "Classical Nf3",
+    "prefix": [
+      "d4",
+      "Nf6",
+      "c4",
+      "g6",
+      "Nc3",
+      "Bg7",
+      "e4",
+      "d6",
+      "Nf3"
+    ]
+  },
+  "generatedAt": "2026-06-01T00:19:09.564Z",
+  "totalGames": 48,
+  "wins": 27,
+  "draws": 13,
+  "losses": 8,
+  "openingTerminusPly": 14,
+  "openingTerminusMove": 7,
+  "spineMoves": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "e4",
+    "d6",
+    "Nf3",
+    "O-O",
+    "Be2",
+    "e5",
+    "O-O",
+    "Na6"
+  ],
+  "gamesAtTerminus": 4,
+  "endgameTypeBreakdown": {
+    "Q+P": 1,
+    "minor pieces + P": 2,
+    "R + minor + P": 1
+  },
+  "topModelGames": [
+    {
+      "url": "https://www.chess.com/game/live/77054462345",
+      "opponent": "BrandonJacobson",
+      "opponentRating": 2960,
+      "studentRating": 3246,
+      "date": "2023-05-05",
+      "timeClass": "blitz",
+      "outcome": "win",
+      "plyCount": 104,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2023.05.05\"]\n[Round \"-\"]\n[White \"BrandonJacobson\"]\n[Black \"MagnusCarlsen\"]\n[Result \"0-1\"]\n[CurrentPosition \"8/6k1/5pp1/P2Q4/4P2K/5q2/7P/8 w - -\"]\n[Timezone \"UTC\"]\n[ECO \"E94\"]\n[ECOUrl \"https://www.chess.com/openings/Kings-Indian-Defense-Orthodox-Glek-Defense-8.Re1-c6\"]\n[UTCDate \"2023.05.05\"]\n[UTCTime \"19:34:50\"]\n[WhiteElo \"2960\"]\n[BlackElo \"3246\"]\n[TimeControl \"180\"]\n[Termination \"MagnusCarlsen won on time\"]\n[StartTime \"19:34:50\"]\n[EndDate \"2023.05.05\"]\n[EndTime \"19:40:41\"]\n[Link \"https://www.chess.com/game/live/77054462345\"]\n\n1. d4 {[%clk 0:03:00]} 1... Nf6 {[%clk 0:02:58.6]} 2. c4 {[%clk 0:02:59.4]} 2... g6 {[%clk 0:02:57.7]} 3. Nc3 {[%clk 0:02:58.8]} 3... Bg7 {[%clk 0:02:56.9]} 4. e4 {[%clk 0:02:58.3]} 4... d6 {[%clk 0:02:56.5]} 5. Nf3 {[%clk 0:02:57.9]} 5... O-O {[%clk 0:02:53.1]} 6. Be2 {[%clk 0:02:57.4]} 6... e5 {[%clk 0:02:51.1]} 7. O-O {[%clk 0:02:57]} 7... Na6 {[%clk 0:02:50]} 8. Re1 {[%clk 0:02:55.4]} 8... c6 {[%clk 0:02:42.5]} 9. d5 {[%clk 0:02:53.2]} 9... Nc5 {[%clk 0:02:38.4]} 10. Qc2 {[%clk 0:02:52.4]} 10... a5 {[%clk 0:02:36.8]} 11. Be3 {[%clk 0:02:51.8]} 11... cxd5 {[%clk 0:02:29.8]} 12. cxd5 {[%clk 0:02:51.7]} 12... b6 {[%clk 0:02:29.1]} 13. Nd2 {[%clk 0:02:46.2]} 13... Ng4 {[%clk 0:02:27.4]} 14. Bxg4 {[%clk 0:02:40.9]} 14... Bxg4 {[%clk 0:02:27.3]} 15. Nc4 {[%clk 0:02:39.6]} 15... Rc8 {[%clk 0:02:17.7]} 16. f3 {[%clk 0:02:28.2]} 16... Nb7 {[%clk 0:01:44.9]} 17. Nxb6 {[%clk 0:02:24.1]} 17... Rc5 {[%clk 0:01:43.7]} 18. Nba4 {[%clk 0:02:19.1]} 18... Bd7 {[%clk 0:01:38.6]} 19. Nxc5 {[%clk 0:02:18.2]} 19... Nxc5 {[%clk 0:01:38.5]} 20. Bxc5 {[%clk 0:02:05]} 20... dxc5 {[%clk 0:01:38.4]} 21. Na4 {[%clk 0:02:04.6]} 21... Qg5 {[%clk 0:01:34.5]} 22. Nb6 {[%clk 0:01:59.4]} 22... Bh3 {[%clk 0:01:28.3]} 23. Kh1 {[%clk 0:01:55.2]} 23... Qf6 {[%clk 0:01:27.3]} 24. gxh3 {[%clk 0:01:51.3]} 24... Qxb6 {[%clk 0:01:25.3]} 25. Rac1 {[%clk 0:01:40.3]} 25... Bh6 {[%clk 0:01:24.7]} 26. Qxc5 {[%clk 0:01:33.7]} 26... Qf6 {[%clk 0:01:23.7]} 27. Rc3 {[%clk 0:01:29.5]} 27... Bd2 {[%clk 0:01:21.6]} 28. Rd1 {[%clk 0:01:26.1]} 28... Bxc3 {[%clk 0:01:19]} 29. Qxc3 {[%clk 0:01:26]} 29... Kg7 {[%clk 0:01:16.8]} 30. d6 {[%clk 0:01:22.2]} 30... Rc8 {[%clk 0:01:15.7]} 31. Qe3 {[%clk 0:01:13.6]} 31... Rd8 {[%clk 0:01:14.2]} 32. d7 {[%clk 0:01:12.6]} 32... Qe6 {[%clk 0:01:11.5]} 33. Qc3 {[%clk 0:00:51.3]} 33... Rxd7 {[%clk 0:00:53]} 34. Rxd7 {[%clk 0:00:51.2]} 34... Qxd7 {[%clk 0:00:52.8]} 35. Qxe5+ {[%clk 0:00:50.7]} 35... Kg8 {[%clk 0:00:52.3]} 36. Qxa5 {[%clk 0:00:43.7]} 36... Qd1+ {[%clk 0:00:47.9]} 37. Kg2 {[%clk 0:00:43.1]} 37... Qc2+ {[%clk 0:00:47.4]} 38. Kg3 {[%clk 0:00:42.6]} 38... Qxb2 {[%clk 0:00:47.3]} 39. a4 {[%clk 0:00:40.2]} 39... Qd4 {[%clk 0:00:46.4]} 40. Qa8+ {[%clk 0:00:25.2]} 40... Kg7 {[%clk 0:00:45.5]} 41. Kg2 {[%clk 0:00:18]} 41... Qd2+ {[%clk 0:00:44.4]} 42. Kg1 {[%clk 0:00:17.6]} 42... Qe1+ {[%clk 0:00:43.4]} 43. Kg2 {[%clk 0:00:17.2]} 43... Qe2+ {[%clk 0:00:43.3]} 44. Kg3 {[%clk 0:00:16.4]} 44... h5 {[%clk 0:00:43.1]} 45. h4 {[%clk 0:00:15.5]} 45... Qe1+ {[%clk 0:00:42.5]} 46. Kg2 {[%clk 0:00:15.1]} 46... Qxh4 {[%clk 0:00:41.7]} 47. a5 {[%clk 0:00:14.3]} 47... Qg5+ {[%clk 0:00:40.9]} 48. Kf2 {[%clk 0:00:13.9]} 48... h4 {[%clk 0:00:40.3]} 49. Qd5 {[%clk 0:00:12.5]} 49... Qf4 {[%clk 0:00:38.5]} 50. Kg2 {[%clk 0:00:10.9]} 50... h3+ {[%clk 0:00:37.8]} 51. Kxh3 {[%clk 0:00:08.7]} 51... Qxf3+ {[%clk 0:00:37.2]} 52. Kh4 {[%clk 0:00:08.6]} 52... f6 {[%clk 0:00:35.8]} 0-1\n"
+    },
+    {
+      "url": "https://www.chess.com/game/live/88279199969",
+      "opponent": "viditchess",
+      "opponentRating": 3086,
+      "studentRating": 3240,
+      "date": "2023-09-12",
+      "timeClass": "blitz",
+      "outcome": "loss",
+      "plyCount": 133,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2023.09.12\"]\n[Round \"-\"]\n[White \"viditchess\"]\n[Black \"MagnusCarlsen\"]\n[Result \"1-0\"]\n[CurrentPosition \"8/1B6/5K2/2k3p1/6P1/5P2/8/3b4 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"E94\"]\n[ECOUrl \"https://www.chess.com/openings/Kings-Indian-Defense-Orthodox-Glek-Defense-8.Be3\"]\n[UTCDate \"2023.09.12\"]\n[UTCTime \"17:35:20\"]\n[WhiteElo \"3086\"]\n[BlackElo \"3240\"]\n[TimeControl \"300+1\"]\n[Termination \"viditchess won by resignation\"]\n[StartTime \"17:35:20\"]\n[EndDate \"2023.09.12\"]\n[EndTime \"17:48:03\"]\n[Link \"https://www.chess.com/game/live/88279199969\"]\n\n1. d4 {[%clk 0:04:59.9]} 1... Nf6 {[%clk 0:04:58.3]} 2. c4 {[%clk 0:05:00.1]} 2... g6 {[%clk 0:04:59.1]} 3. Nc3 {[%clk 0:04:59.9]} 3... Bg7 {[%clk 0:04:59.8]} 4. e4 {[%clk 0:04:59.9]} 4... d6 {[%clk 0:05:00.5]} 5. Nf3 {[%clk 0:05:00.5]} 5... O-O {[%clk 0:05:00.2]} 6. Be2 {[%clk 0:05:01]} 6... e5 {[%clk 0:05:00.1]} 7. O-O {[%clk 0:05:00.7]} 7... Na6 {[%clk 0:04:58.9]} 8. Be3 {[%clk 0:05:00.1]} 8... Qe7 {[%clk 0:04:59.2]} 9. Bg5 {[%clk 0:04:59.7]} 9... exd4 {[%clk 0:04:34.9]} 10. Nxd4 {[%clk 0:04:58.7]} 10... c6 {[%clk 0:04:34.9]} 11. Re1 {[%clk 0:04:32.6]} 11... h6 {[%clk 0:04:17.1]} 12. Bh4 {[%clk 0:04:24.6]} 12... g5 {[%clk 0:04:17.2]} 13. Bg3 {[%clk 0:04:24.8]} 13... Nxe4 {[%clk 0:04:18]} 14. Bf3 {[%clk 0:03:19.8]} 14... Nxc3 {[%clk 0:04:17.9]} 15. Rxe7 {[%clk 0:03:19.8]} 15... Nxd1 {[%clk 0:04:16.9]} 16. Rxd1 {[%clk 0:03:20.7]} 16... Bf6 {[%clk 0:04:15.7]} 17. Ree1 {[%clk 0:03:13.4]} 17... Rd8 {[%clk 0:04:09.2]} 18. h3 {[%clk 0:03:08.3]} 18... Nb4 {[%clk 0:03:58.3]} 19. a3 {[%clk 0:02:58.7]} 19... Na6 {[%clk 0:03:49.7]} 20. b4 {[%clk 0:02:56.6]} 20... Nc7 {[%clk 0:03:34.3]} 21. b5 {[%clk 0:02:31.4]} 21... c5 {[%clk 0:03:23.2]} 22. Nb3 {[%clk 0:02:19.7]} 22... Be6 {[%clk 0:02:52.5]} 23. Rxd6 {[%clk 0:01:16.6]} 23... Rxd6 {[%clk 0:01:14.6]} 24. Bxd6 {[%clk 0:01:17.5]} 24... Ne8 {[%clk 0:01:14.9]} 25. Bxc5 {[%clk 0:01:17.4]} 25... Bxc4 {[%clk 0:01:14.6]} 26. Bxb7 {[%clk 0:01:16.1]} 26... Rd8 {[%clk 0:01:13.9]} 27. Bc6 {[%clk 0:01:15.3]} 27... Nd6 {[%clk 0:01:09.5]} 28. Na5 {[%clk 0:00:58]} 28... Bxb5 {[%clk 0:00:59.9]} 29. Rd1 {[%clk 0:00:58.1]} 29... Ne4 {[%clk 0:00:51.7]} 30. Rxd8+ {[%clk 0:00:47.2]} 30... Bxd8 {[%clk 0:00:51.6]} 31. Bxe4 {[%clk 0:00:40.8]} 31... Bxa5 {[%clk 0:00:51.6]} 32. Bxa7 {[%clk 0:00:41.5]} 32... Bd7 {[%clk 0:00:45.9]} 33. g4 {[%clk 0:00:38.9]} 33... Bc3 {[%clk 0:00:34.4]} 34. Kg2 {[%clk 0:00:35.9]} 34... Kg7 {[%clk 0:00:33.5]} 35. Kf3 {[%clk 0:00:33]} 35... h5 {[%clk 0:00:32.3]} 36. Bc5 {[%clk 0:00:29]} 36... hxg4+ {[%clk 0:00:32.4]} 37. hxg4 {[%clk 0:00:29.9]} 37... Ba4 {[%clk 0:00:32.7]} 38. Ke3 {[%clk 0:00:27.2]} 38... f6 {[%clk 0:00:26]} 39. f3 {[%clk 0:00:21]} 39... Kf7 {[%clk 0:00:25]} 40. Bb4 {[%clk 0:00:18.9]} 40... Bb2 {[%clk 0:00:10.5]} 41. Bd5+ {[%clk 0:00:18.9]} 41... Ke8 {[%clk 0:00:10.7]} 42. Kd3 {[%clk 0:00:18.4]} 42... Kd7 {[%clk 0:00:09.9]} 43. Kd2 {[%clk 0:00:13.4]} 43... Be5 {[%clk 0:00:05.6]} 44. Bc3 {[%clk 0:00:11.2]} 44... Kd6 {[%clk 0:00:05.8]} 45. Be4 {[%clk 0:00:10]} 45... Kc5 {[%clk 0:00:01.8]} 46. Bxe5 {[%clk 0:00:06.8]} 46... fxe5 {[%clk 0:00:02.7]} 47. Kc3 {[%clk 0:00:06.8]} 47... Bd1 {[%clk 0:00:03.4]} 48. Kd2 {[%clk 0:00:05.3]} 48... Ba4 {[%clk 0:00:03.5]} 49. Bc2 {[%clk 0:00:05.6]} 49... Bc6 {[%clk 0:00:03.2]} 50. Ke3 {[%clk 0:00:05.9]} 50... Kc4 {[%clk 0:00:02.4]} 51. a4 {[%clk 0:00:05.4]} 51... Kb4 {[%clk 0:00:02.3]} 52. Bd1 {[%clk 0:00:05.8]} 52... Bb7 {[%clk 0:00:01.9]} 53. Kd3 {[%clk 0:00:05.8]} 53... Bd5 {[%clk 0:00:01.6]} 54. Ke3 {[%clk 0:00:05.6]} 54... Bc6 {[%clk 0:00:02.3]} 55. Bc2 {[%clk 0:00:05.8]} 55... Bd5 {[%clk 0:00:02.7]} 56. Be4 {[%clk 0:00:05.6]} 56... Bb3 {[%clk 0:00:02.9]} 57. Bc6 {[%clk 0:00:05.9]} 57... Bc2 {[%clk 0:00:03.3]} 58. Kd2 {[%clk 0:00:05.8]} 58... Bg6 {[%clk 0:00:03.5]} 59. Bb5 {[%clk 0:00:05.9]} 59... Bf7 {[%clk 0:00:02.6]} 60. Kd3 {[%clk 0:00:06.1]} 60... Bg6+ {[%clk 0:00:02.9]} 61. Ke3 {[%clk 0:00:06.7]} 61... Bc2 {[%clk 0:00:03.4]} 62. Bd7 {[%clk 0:00:04.4]} 62... Bb3 {[%clk 0:00:01.4]} 63. Ke4 {[%clk 0:00:04.3]} 63... Bd1 {[%clk 0:00:01.8]} 64. Bc6 {[%clk 0:00:04]} 64... Kc5 {[%clk 0:00:02.3]} 65. Bb7 {[%clk 0:00:03]} 65... Bxa4 {[%clk 0:00:01.2]} 66. Kxe5 {[%clk 0:00:03.4]} 66... Bd1 {[%clk 0:00:01.5]} 67. Kf6 {[%clk 0:00:03.3]} 1-0\n"
+    },
+    {
+      "url": "otb:2023.09.12:5325",
+      "opponent": "ViditS",
+      "opponentRating": 2716,
+      "studentRating": 2839,
+      "date": "2023-09-12",
+      "timeClass": "classical",
+      "outcome": "loss",
+      "plyCount": 133,
+      "pgn": "[Event \"chess.com SpeedChess 2023\"]\n[Site \"chess.com INT\"]\n[Date \"2023.09.12\"]\n[Round \"1.9\"]\n[White \"Vidit,S\"]\n[Black \"Carlsen,M\"]\n[Result \"1-0\"]\n[WhiteElo \"2716\"]\n[BlackElo \"2839\"]\n[ECO \"E94\"]\n\n1.d4 Nf6 2.c4 g6 3.Nc3 Bg7 4.e4 d6 5.Nf3 O-O 6.Be2 e5 7.O-O Na6 8.Be3 Qe7\n9.Bg5 exd4 10.Nxd4 c6 11.Re1 h6 12.Bh4 g5 13.Bg3 Nxe4 14.Bf3 Nxc3 15.Rxe7 Nxd1\n16.Rxd1 Bf6 17.Ree1 Rd8 18.h3 Nb4 19.a3 Na6 20.b4 Nc7 21.b5 c5 22.Nb3 Be6\n23.Rxd6 Rxd6 24.Bxd6 Ne8 25.Bxc5 Bxc4 26.Bxb7 Rd8 27.Bc6 Nd6 28.Na5 Bxb5\n29.Rd1 Ne4 30.Rxd8+ Bxd8 31.Bxe4 Bxa5 32.Bxa7 Bd7 33.g4 Bc3 34.Kg2 Kg7 35.Kf3 h5\n36.Bc5 hxg4+ 37.hxg4 Ba4 38.Ke3 f6 39.f3 Kf7 40.Bb4 Bb2 41.Bd5+ Ke8 42.Kd3 Kd7\n43.Kd2 Be5 44.Bc3 Kd6 45.Be4 Kc5 46.Bxe5 fxe5 47.Kc3 Bd1 48.Kd2 Ba4 49.Bc2 Bc6\n50.Ke3 Kc4 51.a4 Kb4 52.Bd1 Bb7 53.Kd3 Bd5 54.Ke3 Bc6 55.Bc2 Bd5 56.Be4 Bb3\n57.Bc6 Bc2 58.Kd2 Bg6 59.Bb5 Bf7 60.Kd3 Bg6+ 61.Ke3 Bc2 62.Bd7 Bb3 63.Ke4 Bd1\n64.Bc6 Kc5 65.Bb7 Bxa4 66.Kxe5 Bd1 67.Kf6  1-0"
+    }
+  ]
+}

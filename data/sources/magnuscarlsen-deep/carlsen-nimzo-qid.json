@@ -1,0 +1,67 @@
+{
+  "player": "magnuscarlsen",
+  "openingId": "carlsen-nimzo",
+  "variationKey": "qid",
+  "variation": {
+    "label": "Queen's Indian b6",
+    "prefix": [
+      "d4",
+      "Nf6",
+      "c4",
+      "e6",
+      "Nf3",
+      "b6"
+    ]
+  },
+  "generatedAt": "2026-06-01T00:19:19.219Z",
+  "totalGames": 100,
+  "wins": 39,
+  "draws": 33,
+  "losses": 28,
+  "openingTerminusPly": 23,
+  "openingTerminusMove": 12,
+  "spineMoves": [
+    "d4",
+    "Nf6",
+    "c4",
+    "e6",
+    "Nf3",
+    "b6",
+    "g3",
+    "Ba6",
+    "b3",
+    "Bb4+",
+    "Bd2",
+    "Be7",
+    "Bg2",
+    "c6",
+    "Bc3",
+    "d5",
+    "Ne5",
+    "Nfd7",
+    "Nxd7",
+    "Nxd7",
+    "Nd2",
+    "O-O",
+    "O-O"
+  ],
+  "gamesAtTerminus": 3,
+  "endgameTypeBreakdown": {
+    "middlegame (Q + pieces)": 1,
+    "K+P": 1,
+    "minor pieces + P": 1
+  },
+  "topModelGames": [
+    {
+      "url": "otb:2006.02.05:482",
+      "opponent": "NielsenPH",
+      "opponentRating": 2644,
+      "studentRating": 2625,
+      "date": "2006-02-05",
+      "timeClass": "classical",
+      "outcome": "loss",
+      "plyCount": 79,
+      "pgn": "[Event \"Fibertex Cup Blindfold\"]\n[Site \"Aalborg DEN\"]\n[Date \"2006.02.05\"]\n[Round \"6\"]\n[White \"Nielsen,PH\"]\n[Black \"Carlsen,M\"]\n[Result \"1-0\"]\n[WhiteElo \"2644\"]\n[BlackElo \"2625\"]\n[ECO \"E15\"]\n\n1.d4 Nf6 2.c4 e6 3.Nf3 b6 4.g3 Ba6 5.b3 Bb4+ 6.Bd2 Be7 7.Bg2 c6 8.Bc3 d5\n9.Ne5 Nfd7 10.Nxd7 Nxd7 11.Nd2 O-O 12.O-O Rc8 13.e4 b5 14.Re1 dxe4 15.Bxe4 bxc4\n16.bxc4 Nb6 17.Qb3 c5 18.d5 Bf6 19.Rad1 exd5 20.Bxf6 Qxf6 21.cxd5 Rfd8 22.Bg2 c4\n23.Qa3 Bb7 24.Ne4 Qg6 25.Nc3 Ra8 26.Re7 Bc8 27.Rxa7 Rxa7 28.Qxa7 Bf5 29.Re1 h5\n30.h4 Qd6 31.a4 Ra8 32.Qb7 Qb4 33.Re3 Rf8 34.Qe7 Qb2 35.d6 Nxa4 36.Bc6 Qc1+\n37.Kg2 Rb8 38.Bxa4 Rb2 39.Rf3 Bh3+ 40.Kh2  1-0"
+    }
+  ]
+}

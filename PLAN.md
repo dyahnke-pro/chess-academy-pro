@@ -1,3 +1,83 @@
+# PLAN — Pro-Rep Build: MAGNUS CARLSEN repertoire (2026-06-01)
+
+**Player:** `carlsen` (Magnus Carlsen) · chess.com `magnuscarlsen` · 9,336
+games on disk (gitignored — re-fetch: `node scripts/pro-repertoire/fetch-chesscom.mjs magnuscarlsen`).
+**Scope (David):** a MULTI-opening repertoire (≥8), matching the standard of the
+existing pro-reps (Gotham 18 / Naroditsky 10 / Rosen 8 / Hikaru 5). Build to
+full G9.1 parity per opening; **2-3 model games per variation** (David: "more
+than just one game" — favour the OTB classical wins). Push straight to `main`.
+
+## Corpus: ONLINE + TOURNAMENT (David: "check tournament play as well")
+- Online (chess.com `magnuscarlsen`): 9,336 games (6,879 blitz / 2,122 bullet /
+  335 rapid; no classical).
+- **OTB tournament (pgnmentor `Carlsen.pgn`): 7,484 classical games**, converted
+  to chess.com JSONL (`_otb-tournament.jsonl`) and MERGED into the corpus.
+- **Tournament play VALIDATES the pick** — OTB top systems mirror online exactly
+  (W: Ruy/1.e4 e5, d4-c4, Open Sicilian; B: 1...e5, Nimzo/QGD, Sicilian, KID).
+- Spines now built on the COMBINED ~16.8k-game corpus → 300-1,351 games each,
+  tournament-authentic main lines. Model games favour the OTB classical wins.
+
+## The 8 signature openings (combined-corpus, frequency-ranked)
+
+| # | id | Line | Games | Score |
+|---|---|---|---|---|
+| 1 | `pro-carlsen-open-sicilian` | Open Sicilian (W) | 1118 | 77% |
+| 2 | `pro-carlsen-ruy-lopez` | Ruy Lopez / Open Games (W) | 1113 | 73% |
+| 3 | `pro-carlsen-queens-pawn` | Queen's Pawn / Catalan (W) | 1107 | 74% |
+| 4 | `pro-carlsen-sicilian` | Sicilian Defense (B) | 1351 | 69% |
+| 5 | `pro-carlsen-1e5` | 1...e5 / Ruy / Berlin (B) | 1011 | 61% |
+| 6 | `pro-carlsen-nimzo` | Nimzo-Indian / QGD (B) | 605 | 63% |
+| 7 | `pro-carlsen-kid` | King's Indian (B) | 300 | 67% |
+| 8 | `pro-carlsen-french` | French Defense (B) | 317 | 71% |
+
+Trees: `data/sources/magnuscarlsen-trees/carlsen-*.json` (combined corpus).
+Coverage: White answers 1...c5 / 1...e5 / 1.d4-setups; Black answers 1.e4
+(Sicilian + 1...e5 + French) and 1.d4 (Nimzo/QGD + KID).
+
+### Variation tabs per opening (from tree frequency)
+- **Open Sicilian (W):** Najdorf (main) · Rossolimo vs ...Nc6 (138g) · Taimanov vs ...e6 (82g) · Sozin Bc4 (72g) · Moscow Bb5+ (48g) · 2...Nf6 (28g)
+- **Ruy/Open Games (W):** Closed Ruy (main) · Italian Bc4 (121g) · Berlin (68g) · Petrov (64g) · Scotch d4 (39g) · Anti-Berlin d3 (34g)
+- **Sicilian (B):** Najdorf Bg5 (main) · Taimanov ...e6 (158g) · Rossolimo (142g) · Alapin c3 (62g) · Moscow Bb5+ (55g) · Smith-Morra d4 (54g)
+- **Berlin (B):** Berlin endgame (main) · Italian Bc4 (89g) · Open Berlin Nxe4 (38g) · Steinitz ...d6 (27g) · Scotch d4 (25g) · Four Knights (25g)
+- **KID (B):** Classical (main) · Fianchetto g3 (22g) · Nf3 system (29g) · Makogonov h3 (11g)
+
+## Build order (G9.3 Gate D + efficient-recipe layers, batched across all 8)
+- [x] STEP 0-3 — fetch · trees · variation ID
+- [x] STEP 4 — deep-build per variation (46 files, all 8 openings)
+- [ ] STEP 5 — honest MG/endgame plan counts (wider-corpus)
+- [ ] STEP 6 — voice corpus (Magnus per-opening teaching, web)
+- [~] LAYER 1 (Gate A) — LessonScripts main+variations
+  - [x] #1 Open Sicilian: main (English Attack) + 5 variation lessons, arrows
+        self-verified (geometry checker `_arrowcheck.mjs`; fixed 7 blocked/pawn arrows)
+  - [ ] #2 Ruy · #3 Queen's Pawn · #4 Sicilian · #5 1...e5 · #6 Nimzo · #7 KID · #8 French
+- [ ] LAYER 2 — model games (≥2-3/variation, student WINS, **prefer OTB classical**,
+      hand overview ≥40 chars). NOTE deep-build topModelGames is thin → write a
+      broader corpus win-extractor (classical-first, high opp rating, decisive, deep).
+- [ ] LAYER 3 (Gate C) — middlegame plans anchored at spine terminus
+- [ ] LAYER 4 — pitfalls (ENGINE-verified; sign: studentEval = -rawEval)
+- [ ] LAYER 5 — endgames (real game → ending, only where data supports)
+- [ ] pro-repertoires.json entries · register LESSONS/VARIATION_LESSONS · bump PRO_DATA_REVISION
+- [ ] STEP 15 — gates + `npm run ship-check` → READY TO PUSH
+- [ ] STEP 16 — push main + 3-instrument audit + Gate A/B watch-depth prod audit
+
+## WIP location
+On branch `claude/pensive-knuth-Gzrws`, draft PR #698. Lands on `main` only when
+all 8 are gate-green (G9.3 — no half-builds in prod). Helper scripts:
+`scripts/pro-repertoire/_carlsen_spine.mjs` (spine FEN printer),
+`_arrowcheck.mjs` (vision-arrow geometry verifier).
+
+## Decisions log
+- 2026-06-01: Carlsen picked; Sicilian-White spine (14-ply) > d4-c4 (8-ply).
+- 2026-06-01: Scoped to 5 openings (David: "more than one opening"), matching
+  the Hikaru build count; coherent White(e4) + Black(vs e4 ×2, vs d4) coverage.
+
+## Next-session pickup
+Resume at first unchecked LAYER. Each opening must be COMPLETE (Gate A lesson +
+plans + ≥2 model games + entry + registered) before ship — no half-builds (G9.3).
+
+---
+---
+
 # PLAN — Masterclass DATA-REBUILD (2026-05-29, scope-corrected 2026-05-30)
 
 > Doctrine: `docs/plans/2026-05-29-masterclass-data-rebuild-doctrine.md`.

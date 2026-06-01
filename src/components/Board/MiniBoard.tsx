@@ -7,8 +7,13 @@ const PIECE_UNICODE: Record<string, string> = {
   k: '\u265A', q: '\u265B', r: '\u265C', b: '\u265D', n: '\u265E', p: '\u265F',
 };
 
+const EMPTY_FEN = '8/8/8/8/8/8/8/8';
+
 function parseFenPosition(fen: string): (string | null)[][] {
-  const position = fen.split(' ')[0];
+  // Defensive: a missing/blank FEN must render an empty board, never crash the
+  // whole page through the parent ErrorBoundary (a single bad plan FEN took
+  // out 8 pro-rep detail pages, 2026-06-01).
+  const position = (typeof fen === 'string' && fen.trim() ? fen : EMPTY_FEN).split(' ')[0];
   return position.split('/').map((row) => {
     const squares: (string | null)[] = [];
     for (const ch of row) {

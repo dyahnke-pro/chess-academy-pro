@@ -1,0 +1,97 @@
+{
+  "player": "magnuscarlsen",
+  "openingId": "carlsen-sicilian",
+  "variationKey": "najdorf",
+  "variation": {
+    "label": "Najdorf vs Bg5",
+    "prefix": [
+      "e4",
+      "c5",
+      "Nf3",
+      "d6",
+      "d4",
+      "cxd4",
+      "Nxd4",
+      "Nf6",
+      "Nc3",
+      "a6"
+    ]
+  },
+  "generatedAt": "2026-06-01T00:19:10.164Z",
+  "totalGames": 127,
+  "wins": 78,
+  "draws": 30,
+  "losses": 19,
+  "openingTerminusPly": 17,
+  "openingTerminusMove": 9,
+  "spineMoves": [
+    "e4",
+    "c5",
+    "Nf3",
+    "d6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "Nf6",
+    "Nc3",
+    "a6",
+    "Bg5",
+    "e6",
+    "f4",
+    "Qc7",
+    "Bxf6",
+    "gxf6",
+    "Qd2"
+  ],
+  "gamesAtTerminus": 4,
+  "endgameTypeBreakdown": {
+    "R + minor + P": 2,
+    "middlegame (Q + pieces)": 2
+  },
+  "topModelGames": [
+    {
+      "url": "https://www.chess.com/game/live/64346442277",
+      "opponent": "Duhless",
+      "opponentRating": 3121,
+      "studentRating": 3271,
+      "date": "2022-12-09",
+      "timeClass": "bullet",
+      "outcome": "loss",
+      "plyCount": 121,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2022.12.09\"]\n[Round \"-\"]\n[White \"Duhless\"]\n[Black \"MagnusCarlsen\"]\n[Result \"1-0\"]\n[CurrentPosition \"5k2/3R4/r7/4pN1K/1p2P1P1/1Pb5/7P/8 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"B96\"]\n[ECOUrl \"https://www.chess.com/openings/Sicilian-Defense-Open-Najdorf-Variation...7.f4-Qc7-8.Bxf6-gxf6-9.Qd2\"]\n[UTCDate \"2022.12.09\"]\n[UTCTime \"17:36:52\"]\n[WhiteElo \"3121\"]\n[BlackElo \"3271\"]\n[TimeControl \"60+1\"]\n[Termination \"Duhless won by resignation\"]\n[StartTime \"17:36:52\"]\n[EndDate \"2022.12.09\"]\n[EndTime \"17:41:06\"]\n[Link \"https://www.chess.com/game/live/64346442277\"]\n\n1. e4 {[%clk 0:01:01]} 1... c5 {[%clk 0:01:01]} 2. Nf3 {[%clk 0:01:01.2]} 2... d6 {[%clk 0:01:00.6]} 3. d4 {[%clk 0:01:01.7]} 3... cxd4 {[%clk 0:01:01.5]} 4. Nxd4 {[%clk 0:01:02.1]} 4... Nf6 {[%clk 0:01:02.4]} 5. Nc3 {[%clk 0:01:02.8]} 5... a6 {[%clk 0:01:02.8]} 6. Bg5 {[%clk 0:01:02.7]} 6... e6 {[%clk 0:01:02.7]} 7. f4 {[%clk 0:01:02.7]} 7... Qc7 {[%clk 0:01:03.3]} 8. Bxf6 {[%clk 0:01:01.8]} 8... gxf6 {[%clk 0:01:04.2]} 9. Qd2 {[%clk 0:01:00.9]} 9... b5 {[%clk 0:01:04.5]} 10. O-O-O {[%clk 0:01:01.1]} 10... h5 {[%clk 0:01:04.1]} 11. Kb1 {[%clk 0:01:01.1]} 11... b4 {[%clk 0:01:03.3]} 12. Na4 {[%clk 0:00:56.1]} 12... Qb7 {[%clk 0:00:59.3]} 13. Bc4 {[%clk 0:00:50.1]} 13... Nc6 {[%clk 0:00:44.5]} 14. Rhe1 {[%clk 0:00:45.2]} 14... Be7 {[%clk 0:00:43.7]} 15. f5 {[%clk 0:00:41.8]} 15... Nxd4 {[%clk 0:00:42.9]} 16. Qxd4 {[%clk 0:00:42.1]} 16... Rb8 {[%clk 0:00:43.5]} 17. b3 {[%clk 0:00:39.1]} 17... Bd7 {[%clk 0:00:43.1]} 18. Qd3 {[%clk 0:00:38.8]} 18... a5 {[%clk 0:00:43.1]} 19. Qh3 {[%clk 0:00:37.6]} 19... e5 {[%clk 0:00:43.1]} 20. Rd5 {[%clk 0:00:32.3]} 20... Qc7 {[%clk 0:00:42.4]} 21. Nb2 {[%clk 0:00:28.8]} 21... Bc6 {[%clk 0:00:40.8]} 22. Red1 {[%clk 0:00:26.7]} 22... Bxd5 {[%clk 0:00:41]} 23. Bxd5 {[%clk 0:00:27.1]} 23... Bf8 {[%clk 0:00:41.6]} 24. Nc4 {[%clk 0:00:26]} 24... Ke7 {[%clk 0:00:42.1]} 25. Qh4 {[%clk 0:00:21.1]} 25... Rb5 {[%clk 0:00:39]} 26. Rd3 {[%clk 0:00:19.9]} 26... Rc5 {[%clk 0:00:38]} 27. Qg3 {[%clk 0:00:11.2]} 27... Bh6 {[%clk 0:00:35.3]} 28. Bxf7 {[%clk 0:00:11]} 28... Kxf7 {[%clk 0:00:21.1]} 29. Qg6+ {[%clk 0:00:11]} 29... Kf8 {[%clk 0:00:17]} 30. Rxd6 {[%clk 0:00:06.6]} 30... Bg7 {[%clk 0:00:14.5]} 31. Re6 {[%clk 0:00:05.9]} 31... Qf7 {[%clk 0:00:14.3]} 32. Nd6 {[%clk 0:00:06.6]} 32... Qxg6 {[%clk 0:00:11.5]} 33. fxg6 {[%clk 0:00:07.5]} 33... Bh6 {[%clk 0:00:12.4]} 34. Re8+ {[%clk 0:00:05.3]} 34... Kg7 {[%clk 0:00:12.8]} 35. Nf5+ {[%clk 0:00:06.2]} 35... Kxg6 {[%clk 0:00:13.7]} 36. Rxh8 {[%clk 0:00:06.7]} 36... Bd2 {[%clk 0:00:14.2]} 37. Rg8+ {[%clk 0:00:06.5]} 37... Kf7 {[%clk 0:00:14.5]} 38. Rg7+ {[%clk 0:00:06.9]} 38... Kf8 {[%clk 0:00:15.1]} 39. Rd7 {[%clk 0:00:06.4]} 39... Bc3 {[%clk 0:00:14.9]} 40. Kc1 {[%clk 0:00:06.4]} 40... a4 {[%clk 0:00:14.7]} 41. Kd1 {[%clk 0:00:06.4]} 41... axb3 {[%clk 0:00:15.1]} 42. axb3 {[%clk 0:00:06.5]} 42... Ra5 {[%clk 0:00:16]} 43. Ke2 {[%clk 0:00:06.7]} 43... Ra2 {[%clk 0:00:16]} 44. Kd3 {[%clk 0:00:05.5]} 44... Ra1 {[%clk 0:00:16.5]} 45. Kc4 {[%clk 0:00:06]} 45... Rg1 {[%clk 0:00:16.7]} 46. g3 {[%clk 0:00:05.8]} 46... Rg2 {[%clk 0:00:16.9]} 47. Kd5 {[%clk 0:00:06.3]} 47... Rxc2 {[%clk 0:00:16.7]} 48. Ke6 {[%clk 0:00:06.9]} 48... Ke8 {[%clk 0:00:15.8]} 49. Ng7+ {[%clk 0:00:06.9]} 49... Kf8 {[%clk 0:00:16]} 50. Kxf6 {[%clk 0:00:07.6]} 50... Rf2+ {[%clk 0:00:14.7]} 51. Nf5 {[%clk 0:00:08]} 51... Ke8 {[%clk 0:00:15.6]} 52. Ke6 {[%clk 0:00:08.5]} 52... Ra2 {[%clk 0:00:14.2]} 53. Nd6+ {[%clk 0:00:08]} 53... Kf8 {[%clk 0:00:14.2]} 54. Rd8+ {[%clk 0:00:08.2]} 54... Kg7 {[%clk 0:00:13.8]} 55. Nf5+ {[%clk 0:00:09]} 55... Kh7 {[%clk 0:00:14.2]} 56. Rd7+ {[%clk 0:00:09.1]} 56... Kg8 {[%clk 0:00:14.9]} 57. Kf6 {[%clk 0:00:08.7]} 57... Ra6+ {[%clk 0:00:14.4]} 58. Kg5 {[%clk 0:00:09.1]} 58... Ra3 {[%clk 0:00:13.8]} 59. Kg6 {[%clk 0:00:09.5]} 59... Ra6+ {[%clk 0:00:13.6]} 60. Kxh5 {[%clk 0:00:10.1]} 60... Kf8 {[%clk 0:00:14.5]} 61. g4 {[%clk 0:00:08.7]} 1-0\n"
+    },
+    {
+      "url": "otb:2020.04.07:2905",
+      "opponent": "SjugirovS",
+      "opponentRating": 2662,
+      "studentRating": 2876,
+      "date": "2020-04-07",
+      "timeClass": "classical",
+      "outcome": "win",
+      "plyCount": 82,
+      "pgn": "[Event \"Chess24 Banter Blitz Cup\"]\n[Site \"chess24.com INT\"]\n[Date \"2020.04.07\"]\n[Round \"6.6\"]\n[White \"Sjugirov,S\"]\n[Black \"Carlsen,M\"]\n[Result \"0-1\"]\n[WhiteElo \"2662\"]\n[BlackElo \"2876\"]\n[ECO \"B96\"]\n\n1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 a6 6.Bg5 e6 7.f4 Qc7 8.Bxf6 gxf6\n9.Qd2 h5 10.Be2 b5 11.Bf3 Bb7 12.O-O Nd7 13.f5 e5 14.Nb3 Bh6 15.Qd1 h4 16.Kh1 Rc8\n17.a3 Nb6 18.Na5 Ba8 19.Qd3 Ke7 20.Rad1 Bf4 21.h3 Rhd8 22.Qe2 Na4 23.Nxa4 bxa4\n24.Qxa6 Qxc2 25.Rd5 Bxd5 26.exd5 Kf8 27.Nc6 Re8 28.Qb7 Qd3 29.Rd1 Qb3 30.Qd7 Kg7\n31.Qxd6 Bg3 32.Qd7 e4 33.Bh5 Rf8 34.Nd4 Qxb2 35.Ne6+ Kh6 36.Nxf8 Rxf8 37.Qe7 Kg7\n38.Bg4 Qe5 39.Qb4 e3 40.Be2 Rd8 41.Qf4 Qxf4  0-1"
+    },
+    {
+      "url": "otb:2006.05.11:524",
+      "opponent": "PredojevicB",
+      "opponentRating": 2566,
+      "studentRating": 2646,
+      "date": "2006-05-11",
+      "timeClass": "classical",
+      "outcome": "win",
+      "plyCount": 80,
+      "pgn": "[Event \"XXXVI Bosnia GM\"]\n[Site \"Sarajevo BIH\"]\n[Date \"2006.05.11\"]\n[Round \"5\"]\n[White \"Predojevic,B\"]\n[Black \"Carlsen,M\"]\n[Result \"0-1\"]\n[WhiteElo \"2566\"]\n[BlackElo \"2646\"]\n[ECO \"B67\"]\n\n1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 a6 6.Bg5 e6 7.f4 Qc7 8.Bxf6 gxf6\n9.Qd2 Nc6 10.O-O-O Bd7 11.Kb1 Nxd4 12.Qxd4 Be7 13.Be2 h5 14.Rhf1 Qc5 15.Qd2 b5\n16.Bf3 Rc8 17.Ne2 h4 18.Nd4 b4 19.Rfe1 a5 20.e5 fxe5 21.fxe5 dxe5 22.Nb3 Qc7\n23.Nxa5 Ba4 24.Nb3 f5 25.Qe2 Kf7 26.Bh5+ Kg7 27.g4 hxg3 28.Rg1 Kf8 29.hxg3 Bf6\n30.g4 e4 31.Qd2 Qb6 32.Qg2 Qb8 33.gxf5 Qe5 34.Rd4 Bxb3 35.Qg6 Rxh5 36.axb3 Ke7\n37.c3 bxc3 38.Qxh5 c2+ 39.Kc1 Qf4+ 40.Rd2 Bxb2+  0-1"
+    },
+    {
+      "url": "otb:2009.11.17:1136",
+      "opponent": "KosteniukA",
+      "opponentRating": 2517,
+      "studentRating": 2801,
+      "date": "2009-11-17",
+      "timeClass": "classical",
+      "outcome": "win",
+      "plyCount": 74,
+      "pgn": "[Event \"World Blitz\"]\n[Site \"Moscow RUS\"]\n[Date \"2009.11.17\"]\n[Round \"25\"]\n[White \"Kosteniuk,A\"]\n[Black \"Carlsen,M\"]\n[Result \"0-1\"]\n[WhiteElo \"2517\"]\n[BlackElo \"2801\"]\n[ECO \"B67\"]\n\n1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 a6 6.Bg5 e6 7.f4 Qc7 8.Bxf6 gxf6\n9.Qd2 Nc6 10.O-O-O Bd7 11.Be2 h5 12.Kb1 Be7 13.Rhf1 Nxd4 14.Qxd4 Qc5 15.Qd2 b5\n16.Bf3 b4 17.Ne2 Rc8 18.Nc1 a5 19.Nd3 Qd4 20.Qe2 Bb5 21.Bxh5 a4 22.Bf3 Rxh2\n23.Qf2 Qc4 24.b3 Qc3 25.Qd2 axb3 26.cxb3 Qd4 27.Rfe1 Rc3 28.Nf2 Qxd2 29.Rxd2 Bd8\n30.Ng4 Rh8 31.Rxd6 Bd3+ 32.Kb2 Bc7 33.Rd4 Bxf4 34.Nxf6+ Ke7 35.e5 Bxe5 36.Ng8+ Kf8\n37.Rd8+ Kg7  0-1"
+    }
+  ]
+}

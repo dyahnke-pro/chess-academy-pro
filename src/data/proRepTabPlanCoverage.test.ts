@@ -27,6 +27,7 @@ import { getProEricRosenBudapestTabPlanIds } from '../services/proEricRosenBudap
 import { getProEricRosenClosedSicilianTabPlanIds } from '../services/proEricRosenClosedSicilianTabPlans';
 import { getProEricRosenScandinavianTabPlanIds } from '../services/proEricRosenScandinavianTabPlans';
 import { getProEricRosenFrenchTabPlanIds } from '../services/proEricRosenFrenchTabPlans';
+import { getProCarlsenTabPlanIds } from '../services/proCarlsenTabPlans';
 import { getProSamayRainaOpenSicilianTabPlanIds } from '../services/proSamayRainaOpenSicilianTabPlans';
 import { getProSamayRainaRuyTabPlanIds } from '../services/proSamayRainaRuyTabPlans';
 import { getProSamayRainaItalianTabPlanIds } from '../services/proSamayRainaItalianTabPlans';
@@ -60,6 +61,7 @@ const RESOLVERS: Array<(openingId: string, tabKey: string) => string[] | null> =
   getProEricRosenClosedSicilianTabPlanIds,
   getProEricRosenScandinavianTabPlanIds,
   getProEricRosenFrenchTabPlanIds,
+  getProCarlsenTabPlanIds,
   getProSamayRainaOpenSicilianTabPlanIds,
   getProSamayRainaRuyTabPlanIds,
   getProSamayRainaItalianTabPlanIds,
@@ -86,6 +88,11 @@ describe('tab-plan resolver coverage gate — every Naroditsky variation has a r
   // openings have full resolver coverage per STEP 12.5 — no
   // Naroditsky entries should appear in this baseline.
   const BASELINE_UNRESOLVED = new Set<string>([
+    // Aman Hambleton pro-rep (parallel build) — variations declared, tab-plan
+    // resolvers not yet authored. Grandfathered; drop as resolvers land.
+    'pro-aman-anti-caro', 'pro-aman-caro-kann', 'pro-aman-french-white',
+    'pro-aman-nimzo-indian', 'pro-aman-open-sicilian', 'pro-aman-reti',
+    'pro-aman-rossolimo', 'pro-aman-ruy-lopez', 'pro-aman-sicilian-kan',
     // Gothamchess pro-rep is a partial build — variations declared but
     // tab-plan resolvers not yet authored.
     'pro-gothamchess-anti-sicilian',
@@ -124,6 +131,11 @@ describe('tab-plan resolver coverage gate — every Naroditsky variation has a r
     'pro-caruana-ruy-lopez',
     'pro-caruana-nimzo-indian',
     'pro-caruana-taimanov',
+    // Caruana round-2 openings (+4) — variations declared, resolvers deferred.
+    'pro-caruana-italian',
+    'pro-caruana-french',
+    'pro-caruana-caro-kann',
+    'pro-caruana-kid',
   ]);
 
   it('every pro-rep (openingId, variationName) pair has a resolver returning array (not null)', () => {

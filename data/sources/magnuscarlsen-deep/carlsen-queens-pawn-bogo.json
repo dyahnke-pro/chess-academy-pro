@@ -1,0 +1,67 @@
+{
+  "player": "magnuscarlsen",
+  "openingId": "carlsen-queens-pawn",
+  "variationKey": "bogo",
+  "variation": {
+    "label": "Bogo-Indian Bb4+",
+    "prefix": [
+      "d4",
+      "Nf6",
+      "c4",
+      "e6",
+      "Nf3",
+      "Bb4+"
+    ]
+  },
+  "generatedAt": "2026-06-01T00:19:24.407Z",
+  "totalGames": 31,
+  "wins": 23,
+  "draws": 6,
+  "losses": 2,
+  "openingTerminusPly": 13,
+  "openingTerminusMove": 7,
+  "spineMoves": [
+    "d4",
+    "Nf6",
+    "c4",
+    "e6",
+    "Nf3",
+    "Bb4+",
+    "Nbd2",
+    "b6",
+    "a3",
+    "Bxd2+",
+    "Nxd2",
+    "Bb7",
+    "e3"
+  ],
+  "gamesAtTerminus": 3,
+  "endgameTypeBreakdown": {
+    "minor pieces + P": 1,
+    "middlegame (Q + pieces)": 2
+  },
+  "topModelGames": [
+    {
+      "url": "https://www.chess.com/game/live/148297857512",
+      "opponent": "vi_pranav",
+      "opponentRating": 3222,
+      "studentRating": 3304,
+      "date": "2026-01-21",
+      "timeClass": "blitz",
+      "outcome": "win",
+      "plyCount": 77,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2026.01.21\"]\n[Round \"-\"]\n[White \"MagnusCarlsen\"]\n[Black \"vi_pranav\"]\n[Result \"1-0\"]\n[CurrentPosition \"3R4/p3rppk/1p2P1n1/5Q1p/1P5P/5PP1/1qB3K1/8 b - - 6 39\"]\n[Timezone \"UTC\"]\n[ECO \"E11\"]\n[ECOUrl \"https://www.chess.com/openings/Bogo-Indian-Defense-Grunfeld-Variation-4...b6-5.a3-Bxd2\"]\n[UTCDate \"2026.01.21\"]\n[UTCTime \"14:10:27\"]\n[WhiteElo \"3304\"]\n[BlackElo \"3222\"]\n[TimeControl \"180\"]\n[Termination \"MagnusCarlsen won by resignation\"]\n[StartTime \"14:10:27\"]\n[EndDate \"2026.01.21\"]\n[EndTime \"14:15:31\"]\n[Link \"https://www.chess.com/game/live/148297857512\"]\n\n1. d4 {[%clk 0:03:00]} 1... Nf6 {[%clk 0:03:00]} 2. c4 {[%clk 0:02:59.7]} 2... e6 {[%clk 0:02:59.4]} 3. Nf3 {[%clk 0:02:59.5]} 3... Bb4+ {[%clk 0:02:58.3]} 4. Nbd2 {[%clk 0:02:58.9]} 4... b6 {[%clk 0:02:54.3]} 5. a3 {[%clk 0:02:57.9]} 5... Bxd2+ {[%clk 0:02:53.7]} 6. Nxd2 {[%clk 0:02:57]} 6... Bb7 {[%clk 0:02:53.6]} 7. e3 {[%clk 0:02:56.5]} 7... d6 {[%clk 0:02:52.5]} 8. Bd3 {[%clk 0:02:55.8]} 8... O-O {[%clk 0:02:48.5]} 9. O-O {[%clk 0:02:53.9]} 9... Nbd7 {[%clk 0:02:47.8]} 10. b4 {[%clk 0:02:52.9]} 10... e5 {[%clk 0:02:47.1]} 11. Bb2 {[%clk 0:02:51.8]} 11... Re8 {[%clk 0:02:46.5]} 12. d5 {[%clk 0:02:49.5]} 12... c6 {[%clk 0:02:43.3]} 13. e4 {[%clk 0:02:47.3]} 13... Nf8 {[%clk 0:02:42.4]} 14. Re1 {[%clk 0:02:39.4]} 14... Ng6 {[%clk 0:02:41.4]} 15. g3 {[%clk 0:02:38.9]} 15... Rc8 {[%clk 0:02:37.6]} 16. Rc1 {[%clk 0:02:36.6]} 16... Rc7 {[%clk 0:02:36.3]} 17. Nf1 {[%clk 0:02:34.2]} 17... Bc8 {[%clk 0:02:26.5]} 18. dxc6 {[%clk 0:02:32.3]} 18... Rxc6 {[%clk 0:02:23.1]} 19. Ne3 {[%clk 0:02:31]} 19... h5 {[%clk 0:02:20.3]} 20. h4 {[%clk 0:02:26.5]} 20... Ne7 {[%clk 0:02:19.5]} 21. Qe2 {[%clk 0:02:16.6]} 21... Bd7 {[%clk 0:02:13.7]} 22. Rcd1 {[%clk 0:02:13.5]} 22... Qc8 {[%clk 0:02:10.7]} 23. f3 {[%clk 0:02:12.3]} 23... Rc7 {[%clk 0:01:56]} 24. Bc2 {[%clk 0:02:07.9]} 24... Be6 {[%clk 0:01:36.5]} 25. Rxd6 {[%clk 0:02:06.1]} 25... Bxc4 {[%clk 0:01:35.7]} 26. Nxc4 {[%clk 0:02:04.6]} 26... Rxc4 {[%clk 0:01:35.6]} 27. Bb3 {[%clk 0:02:03.6]} 27... Rc6 {[%clk 0:01:33]} 28. Bxe5 {[%clk 0:01:55.4]} 28... Rxd6 {[%clk 0:01:24.9]} 29. Bxd6 {[%clk 0:01:55.3]} 29... Nf5 {[%clk 0:01:24.8]} 30. Rd1 {[%clk 0:01:45.5]} 30... Nxd6 {[%clk 0:01:04.4]} 31. Rxd6 {[%clk 0:01:45.4]} 31... Qc1+ {[%clk 0:01:04]} 32. Kg2 {[%clk 0:01:35]} 32... Qxa3 {[%clk 0:01:02.1]} 33. Qc4 {[%clk 0:01:33.3]} 33... Re7 {[%clk 0:00:58.6]} 34. Rd8+ {[%clk 0:01:17.6]} 34... Kh7 {[%clk 0:00:57.5]} 35. e5 {[%clk 0:01:17.2]} 35... Nd7 {[%clk 0:00:43.4]} 36. e6 {[%clk 0:01:01.1]} 36... Ne5 {[%clk 0:00:37.4]} 37. Qe4+ {[%clk 0:00:56.4]} 37... Ng6 {[%clk 0:00:36.6]} 38. Qf5 {[%clk 0:00:51.5]} 38... Qb2+ {[%clk 0:00:32.3]} 39. Bc2 {[%clk 0:00:49.5]} 1-0\n"
+    },
+    {
+      "url": "otb:2024.09.14:6336",
+      "opponent": "GazikViktor",
+      "opponentRating": 2561,
+      "studentRating": 2832,
+      "date": "2024-09-14",
+      "timeClass": "classical",
+      "outcome": "win",
+      "plyCount": 55,
+      "pgn": "[Event \"45th Olympiad 2024\"]\n[Site \"Budapest HUN\"]\n[Date \"2024.09.14\"]\n[Round \"4.9\"]\n[White \"Carlsen,M\"]\n[Black \"Gazik,Viktor\"]\n[Result \"1-0\"]\n[WhiteElo \"2832\"]\n[BlackElo \"2561\"]\n[ECO \"E11\"]\n\n1.d4 Nf6 2.c4 e6 3.Nf3 Bb4+ 4.Nbd2 b6 5.a3 Bxd2+ 6.Nxd2 Bb7 7.e3 O-O 8.Bd3 d5\n9.O-O dxc4 10.Nxc4 Qd5 11.f3 Rd8 12.Be2 Nc6 13.Qc2 Rac8 14.b3 b5 15.Nb2 e5\n16.Nd3 e4 17.Nc5 Nxd4 18.exd4 Qxd4+ 19.Kh1 exf3 20.gxf3 Ba8 21.Bg5 Rd5 22.Bxf6 Qxf6\n23.Ne4 Qf4 24.Qc1 Qh4 25.Rg1 Re5 26.Qc3 Rce8 27.Bxb5 R8e7 28.Rad1  1-0"
+    }
+  ]
+}

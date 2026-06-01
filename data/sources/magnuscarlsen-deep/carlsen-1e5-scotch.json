@@ -1,0 +1,69 @@
+{
+  "player": "magnuscarlsen",
+  "openingId": "carlsen-1e5",
+  "variationKey": "scotch",
+  "variation": {
+    "label": "vs Scotch d4",
+    "prefix": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "d4"
+    ]
+  },
+  "generatedAt": "2026-06-01T00:19:05.774Z",
+  "totalGames": 42,
+  "wins": 17,
+  "draws": 17,
+  "losses": 8,
+  "openingTerminusPly": 15,
+  "openingTerminusMove": 8,
+  "spineMoves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "Nf6",
+    "Nxc6",
+    "bxc6",
+    "e5",
+    "Qe7",
+    "Qe2",
+    "Nd5",
+    "c4"
+  ],
+  "gamesAtTerminus": 4,
+  "endgameTypeBreakdown": {
+    "R+P": 2,
+    "middlegame (Q + pieces)": 1,
+    "R + minor + P": 1
+  },
+  "topModelGames": [
+    {
+      "url": "otb:2021.12.29:4068",
+      "opponent": "Corrales JimenezF",
+      "opponentRating": 2530,
+      "studentRating": 2856,
+      "date": "2021-12-29",
+      "timeClass": "classical",
+      "outcome": "win",
+      "plyCount": 60,
+      "pgn": "[Event \"World Blitz 2021\"]\n[Site \"Warsaw POL\"]\n[Date \"2021.12.29\"]\n[Round \"1.1\"]\n[White \"Corrales Jimenez,F\"]\n[Black \"Carlsen,M\"]\n[Result \"0-1\"]\n[WhiteElo \"2530\"]\n[BlackElo \"2856\"]\n[ECO \"C45\"]\n\n1.e4 e5 2.Nf3 Nc6 3.d4 exd4 4.Nxd4 Nf6 5.Nxc6 bxc6 6.e5 Qe7 7.Qe2 Nd5 8.c4 Nb6\n9.Nc3 Ba6 10.b3 O-O-O 11.Bb2 Re8 12.f4 f6 13.O-O-O fxe5 14.Qxe5 Qxe5 15.fxe5 Rxe5\n16.Bd3 Re3 17.Rhe1 Bc5 18.Kc2 Rxe1 19.Rxe1 d5 20.cxd5 Bxd3+ 21.Kxd3 cxd5\n22.Nb5 a6 23.Rc1 Nd7 24.Nc3 Ne5+ 25.Kc2 Rf8 26.Nxd5 Rf2+ 27.Kb1 Nd3 28.Rxc5 Nxc5\n29.Bxg7 Rxg2 30.Nc3 Rxg7  0-1"
+    },
+    {
+      "url": "otb:2004.01.20:218",
+      "opponent": "PavasovicD",
+      "opponentRating": 2615,
+      "studentRating": 2484,
+      "date": "2004-01-20",
+      "timeClass": "classical",
+      "outcome": "loss",
+      "plyCount": 117,
+      "pgn": "[Event \"GMC\"]\n[Site \"Wijk aan Zee NED\"]\n[Date \"2004.01.20\"]\n[Round \"9\"]\n[White \"Pavasovic,D\"]\n[Black \"Carlsen,M\"]\n[Result \"1-0\"]\n[WhiteElo \"2615\"]\n[BlackElo \"2484\"]\n[ECO \"C45\"]\n\n1.e4 e5 2.Nf3 Nc6 3.d4 exd4 4.Nxd4 Nf6 5.Nxc6 bxc6 6.e5 Qe7 7.Qe2 Nd5 8.c4 Nb6\n9.Nc3 Qe6 10.Qe4 d5 11.exd6 cxd6 12.Bd3 Qxe4+ 13.Bxe4 Bb7 14.b3 g6 15.Bb2 Bg7\n16.O-O-O O-O-O 17.Bf3 c5 18.Nb5 Bxb2+ 19.Kxb2 Bxf3 20.gxf3 d5 21.cxd5 Nxd5\n22.Rd2 a6 23.Rhd1 axb5 24.Rxd5 Rxd5 25.Rxd5 Kc7 26.Rxc5+ Kb6 27.Re5 b4 28.Re7 Rd8\n29.Kc2 Ra8 30.Kb1 Rd8 31.Rxf7 Rd1+ 32.Kc2 Ra1 33.Kd3 Rxa2 34.Kc4 Rxf2 35.h4 Ka5\n36.Ra7+ Kb6 37.Rxh7 Rxf3 38.Kxb4 Rf4+ 39.Ka3 Kb5 40.Rh8 Rg4 41.Rb8+ Ka5 42.Ra8+ Kb5\n43.Ra4 Rg3 44.Re4 Rg2 45.Re5+ Kb6 46.Rg5 Rh2 47.Rxg6+ Kb5 48.Rg5+ Kb6 49.Rh5 Rg2\n50.Ka4 Rf2 51.Rh6+ Kb7 52.b4 Rf5 53.h5 Re5 54.b5 Re1 55.Rf6 Ra1+ 56.Kb4 Rb1+\n57.Kc5 Rc1+ 58.Kd6 Kb6 59.Rf5  1-0"
+    }
+  ]
+}
