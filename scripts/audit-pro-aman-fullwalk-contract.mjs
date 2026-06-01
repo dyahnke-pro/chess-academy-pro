@@ -35,9 +35,12 @@ function run(cmd, args, extraEnv) {
 // confirmed correct, narration matches" requirement, IN the contract.
 async function runPass(depth) {
   console.log(`\n  -- instrument 1: PLAY-THROUGH CONGRUENCY (chess.js replay) --`);
+  // vitest exits 0 iff every test passed — the reliable signal (its stdout is
+  // ANSI-coloured, so don't regex-scrape it). Belt-and-suspenders: also treat
+  // an explicit "failed" token as a fail.
   const cong = await run('npx', ['vitest', 'run', 'src/data/proRepAmanPlayThrough.test.ts']);
-  const congOk = cong.code === 0 && /Test Files\s+1 passed/.test(cong.out);
-  if (!congOk) { console.log('  ✗ congruency FAILED — skipping live walk this pass'); return { code: 1, pass: null, fail: 1, warn: null }; }
+  const congOk = cong.code === 0 && !/\bfailed\b/.test(cong.out.replace(/\[[0-9;]*m/g, ''));
+  if (!congOk) { console.log(`  ✗ congruency FAILED (exit ${cong.code}) — skipping live walk this pass`); return { code: 1, pass: null, fail: 1, warn: null }; }
   console.log('  ✓ congruency clean');
 
   console.log(`\n  -- instrument 2: LIVE PROD full-play walk (depth ${depth}) --`);
