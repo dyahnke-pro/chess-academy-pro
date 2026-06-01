@@ -1,0 +1,34 @@
+{
+  "player": "fabianocaruana",
+  "openingId": "caruana-scotch",
+  "variationKey": "classical-bc5",
+  "variation": {
+    "label": "Classical …Bc5",
+    "prefix": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "d4",
+      "Bc5"
+    ]
+  },
+  "generatedAt": "2026-05-31T23:36:01.184Z",
+  "totalGames": 0,
+  "wins": 0,
+  "draws": 0,
+  "losses": 0,
+  "openingTerminusPly": 6,
+  "openingTerminusMove": 3,
+  "spineMoves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "Bc5"
+  ],
+  "gamesAtTerminus": 0,
+  "endgameTypeBreakdown": {},
+  "topModelGames": []
+}

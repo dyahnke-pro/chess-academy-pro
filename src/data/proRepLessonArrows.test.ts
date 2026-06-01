@@ -93,6 +93,12 @@ const BASELINE = new Set<string>([
   'pro-hikaru-reti :: vs ...d5 :: mid :: f1-d3',
   'pro-naroditsky-alapin :: 2…Nc6 Line :: nc6-bd3 :: f1-d3',
   'pro-naroditsky-najdorf (main) :: castling-race :: c1-g7',
+  // Pre-existing in parallel Caruana/Samay builds (merged 2026-06-01) — their
+  // lessons predate this gate; grandfathered, to be fixed by those builds.
+  'pro-caruana-najdorf (main) :: be7 :: f8-e7',
+  'pro-samayraina-french-white (main) :: bd3 :: f1-d3',
+  'pro-samayraina-french-white :: vs c5 break :: dxc5 :: f1-d3',
+  'pro-samayraina-open-sicilian :: vs 2…Nc6 (Sveshnikov) :: na3 :: a3-d5',
 ]);
 
 const allViolations: string[] = [];

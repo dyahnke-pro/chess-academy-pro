@@ -59,6 +59,14 @@ import { getProEricRosenClosedSicilianTabPlanIds } from '../../services/proEricR
 import { getProEricRosenScandinavianTabPlanIds } from '../../services/proEricRosenScandinavianTabPlans';
 import { getProEricRosenFrenchTabPlanIds } from '../../services/proEricRosenFrenchTabPlans';
 import { getProCarlsenTabPlanIds } from '../../services/proCarlsenTabPlans';
+import { getProSamayRainaOpenSicilianTabPlanIds } from '../../services/proSamayRainaOpenSicilianTabPlans';
+import { getProSamayRainaRuyTabPlanIds } from '../../services/proSamayRainaRuyTabPlans';
+import { getProSamayRainaItalianTabPlanIds } from '../../services/proSamayRainaItalianTabPlans';
+import { getProSamayRainaFrenchWhiteTabPlanIds } from '../../services/proSamayRainaFrenchWhiteTabPlans';
+import { getProSamayRainaCaroWhiteTabPlanIds } from '../../services/proSamayRainaCaroWhiteTabPlans';
+import { getProSamayRainaOpenE5TabPlanIds } from '../../services/proSamayRainaOpenE5TabPlans';
+import { getProSamayRainaSicilianBlackTabPlanIds } from '../../services/proSamayRainaSicilianBlackTabPlans';
+import { getProSamayRainaScandiTabPlanIds } from '../../services/proSamayRainaScandiTabPlans';
 import { getProGothamchessCaroTabPlanIds } from '../../services/proGothamchessCaroTabPlans';
 import { getProGothamchessTrompowskyTabPlanIds } from '../../services/proGothamchessTrompowskyTabPlans';
 import { getProGothamchessEnglishTabPlanIds } from '../../services/proGothamchessEnglishTabPlans';
@@ -1346,6 +1354,14 @@ export function OpeningDetailPage(): JSX.Element {
     getProEricRosenScandinavianTabPlanIds(opening.id, pircTabKey) ??
     getProEricRosenFrenchTabPlanIds(opening.id, pircTabKey) ??
     getProCarlsenTabPlanIds(opening.id, pircTabKey) ??
+    getProSamayRainaOpenSicilianTabPlanIds(opening.id, pircTabKey) ??
+    getProSamayRainaRuyTabPlanIds(opening.id, pircTabKey) ??
+    getProSamayRainaItalianTabPlanIds(opening.id, pircTabKey) ??
+    getProSamayRainaFrenchWhiteTabPlanIds(opening.id, pircTabKey) ??
+    getProSamayRainaCaroWhiteTabPlanIds(opening.id, pircTabKey) ??
+    getProSamayRainaOpenE5TabPlanIds(opening.id, pircTabKey) ??
+    getProSamayRainaSicilianBlackTabPlanIds(opening.id, pircTabKey) ??
+    getProSamayRainaScandiTabPlanIds(opening.id, pircTabKey) ??
     getPetrovDefenceTabPlanIds(opening.id, tabKey) ??
     getPhilidorDefenceTabPlanIds(opening.id, tabKey) ??
     getQgdTabPlanIds(opening.id, tabKey) ??

@@ -1,0 +1,137 @@
+{
+  "player": "samayraina",
+  "openingId": "samay-scandi-black",
+  "generatedAt": "2026-05-31T23:13:56.404Z",
+  "totals": {
+    "totalGamesScanned": 21825,
+    "matchingWins": 0
+  },
+  "candidates": [
+    {
+      "id": "spine",
+      "label": "Main line (Advance c5)",
+      "pathSans": [
+        "e4",
+        "d5",
+        "exd5",
+        "Qxd5",
+        "Nc3",
+        "Qd8",
+        "Nf3",
+        "Nf6",
+        "Bc4",
+        "Nc6"
+      ],
+      "games": [],
+      "totalCandidates": 0
+    },
+    {
+      "id": "var-1",
+      "label": "Variation 1: exd5 c6",
+      "pathSans": [
+        "e4",
+        "d5",
+        "exd5",
+        "c6",
+        "dxc6",
+        "Nxc6"
+      ],
+      "games": [],
+      "totalCandidates": 0
+    },
+    {
+      "id": "var-2",
+      "label": "Variation 2:  e5",
+      "pathSans": [
+        "e4",
+        "d5",
+        "e5",
+        "Nc6"
+      ],
+      "games": [],
+      "totalCandidates": 0
+    },
+    {
+      "id": "var-3",
+      "label": "Variation 3: exd5 e6",
+      "pathSans": [
+        "e4",
+        "d5",
+        "exd5",
+        "e6",
+        "dxe6"
+      ],
+      "games": [],
+      "totalCandidates": 0
+    },
+    {
+      "id": "var-4",
+      "label": "Variation 4: exd5 Qxd5 Nc3 Qa5",
+      "pathSans": [
+        "e4",
+        "d5",
+        "exd5",
+        "Qxd5",
+        "Nc3",
+        "Qa5",
+        "Nf3",
+        "Nf6"
+      ],
+      "games": [],
+      "totalCandidates": 0
+    },
+    {
+      "id": "var-5",
+      "label": "Variation 5:  Nc3",
+      "pathSans": [
+        "e4",
+        "d5",
+        "Nc3"
+      ],
+      "games": [],
+      "totalCandidates": 0
+    },
+    {
+      "id": "var-6",
+      "label": "Variation 6: exd5 Qxd5 Nf3",
+      "pathSans": [
+        "e4",
+        "d5",
+        "exd5",
+        "Qxd5",
+        "Nf3"
+      ],
+      "games": [],
+      "totalCandidates": 0
+    },
+    {
+      "id": "var-7",
+      "label": "Variation 7: exd5 Qxd5 Nc3 Qe5+",
+      "pathSans": [
+        "e4",
+        "d5",
+        "exd5",
+        "Qxd5",
+        "Nc3",
+        "Qe5+"
+      ],
+      "games": [],
+      "totalCandidates": 0
+    },
+    {
+      "id": "var-8",
+      "label": "Variation 8: exd5 Qxd5 Nc3 Qd8 Bc4",
+      "pathSans": [
+        "e4",
+        "d5",
+        "exd5",
+        "Qxd5",
+        "Nc3",
+        "Qd8",
+        "Bc4"
+      ],
+      "games": [],
+      "totalCandidates": 0
+    }
+  ]
+}

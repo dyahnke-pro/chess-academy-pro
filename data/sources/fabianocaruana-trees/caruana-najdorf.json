@@ -1,0 +1,135 @@
+{
+  "player": "fabianocaruana",
+  "openingId": "caruana-najdorf",
+  "openingName": "Sicilian Najdorf (Caruana)",
+  "color": "black",
+  "minPrefix": [
+    "e4",
+    "c5",
+    "Nf3",
+    "d6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "Nf6",
+    "Nc3",
+    "a6"
+  ],
+  "generatedAt": "2026-05-31T23:15:21.749Z",
+  "totals": {
+    "totalGamesScanned": 6732,
+    "gamesMatchingOpening": 42,
+    "minBranchGames": 5,
+    "minTrieGames": 5
+  },
+  "rootStats": {
+    "games": 42,
+    "wins": 32,
+    "draws": 4,
+    "losses": 6,
+    "scorePct": "81.0"
+  },
+  "spine": {
+    "sans": [
+      "h3",
+      "e5"
+    ],
+    "prefixPlies": 10,
+    "totalPlies": 12
+  },
+  "variations": [
+    {
+      "depthFromOriginPrefix": 0,
+      "prefixToHere": [],
+      "branchSan": "Be3",
+      "games": 7,
+      "wins": 7,
+      "draws": 0,
+      "losses": 0,
+      "scorePct": "100.0",
+      "continuation": [
+        "Be3",
+        "e5",
+        "Nb3"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/91923604447",
+          "opp": "nochewycandy",
+          "oppElo": 2784,
+          "date": 1698185165
+        },
+        {
+          "url": "https://www.chess.com/game/live/95532717089",
+          "opp": "ActorXu",
+          "oppElo": 2857,
+          "date": 1701794389
+        },
+        {
+          "url": "https://www.chess.com/game/live/109553454609",
+          "opp": "ArtemDyachuk",
+          "oppElo": 2697,
+          "date": 1715814881
+        },
+        {
+          "url": "https://www.chess.com/game/live/133645160119",
+          "opp": "Firouzja2003",
+          "oppElo": 2873,
+          "date": 1739907536
+        },
+        {
+          "url": "https://www.chess.com/game/live/123220162508",
+          "opp": "lucasmito",
+          "oppElo": 2826,
+          "date": 1740352981
+        }
+      ]
+    }
+  ],
+  "tree": {
+    "games": 42,
+    "wins": 32,
+    "draws": 4,
+    "losses": 6,
+    "children": {
+      "h3": {
+        "games": 8,
+        "wins": 6,
+        "draws": 0,
+        "losses": 2,
+        "children": {
+          "e5": {
+            "games": 5,
+            "wins": 4,
+            "draws": 0,
+            "losses": 1,
+            "children": {}
+          }
+        }
+      },
+      "Be3": {
+        "games": 7,
+        "wins": 7,
+        "draws": 0,
+        "losses": 0,
+        "children": {
+          "e5": {
+            "games": 6,
+            "wins": 6,
+            "draws": 0,
+            "losses": 0,
+            "children": {
+              "Nb3": {
+                "games": 5,
+                "wins": 5,
+                "draws": 0,
+                "losses": 0,
+                "children": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

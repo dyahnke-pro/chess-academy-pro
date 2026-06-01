@@ -331,6 +331,45 @@ export interface ModelGameCriticalMoment {
   highlights?: AnnotationHighlight[];
 }
 
+/**
+ * A real game played by a pro, persisted as a coach reference so the
+ * coach has FULL access to a player's actual games during teaching +
+ * walkthroughs (David 2026-06-01). Built from the repertoire pipeline's
+ * committed artifacts by `scripts/pro-repertoire/build-game-references.mjs`
+ * into `src/data/pro-game-references.json` and loaded into Dexie. Unlike
+ * `ModelGame` (hand-narrated, ~2/opening), these are the BREADTH layer:
+ * many real games per variation, no per-move narration — the coach cites
+ * "Naroditsky beat a 3176 here" and can walk the actual moves.
+ */
+export interface ProGameReference {
+  id: string;
+  /** App player id (e.g. "naroditsky") — matches pro-repertoires.json playerId. */
+  playerId: string;
+  /** Base opening id for coach detectOpening matching (e.g. "caro-kann"). */
+  openingId: string;
+  /** The pro opening id (e.g. "pro-naroditsky-caro-kann") for exact scoping. */
+  proOpeningId: string;
+  /** Slugified variation key (e.g. "classical"). */
+  variation: string;
+  /** Human-readable variation label (e.g. "Classical (4...Bf5)"). */
+  variationLabel: string;
+  white: string;
+  black: string;
+  /** The side the pro (student) played — a losing game for this side is
+   *  excluded at build time (never cite the opening losing). */
+  studentSide: 'white' | 'black';
+  result: GameResult;
+  opponentRating: number | null;
+  date: string | null;
+  /** Where the game came from. */
+  source: 'chess.com' | 'otb' | 'lichess';
+  url: string | null;
+  eco: string | null;
+  plyCount: number;
+  /** Clean space-separated SAN (headers + clocks stripped), chess.js-validated. */
+  pgn: string;
+}
+
 export interface ModelGame {
   id: string;
   openingId: string;

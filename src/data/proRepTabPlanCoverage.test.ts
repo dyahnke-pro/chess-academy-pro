@@ -28,6 +28,14 @@ import { getProEricRosenClosedSicilianTabPlanIds } from '../services/proEricRose
 import { getProEricRosenScandinavianTabPlanIds } from '../services/proEricRosenScandinavianTabPlans';
 import { getProEricRosenFrenchTabPlanIds } from '../services/proEricRosenFrenchTabPlans';
 import { getProCarlsenTabPlanIds } from '../services/proCarlsenTabPlans';
+import { getProSamayRainaOpenSicilianTabPlanIds } from '../services/proSamayRainaOpenSicilianTabPlans';
+import { getProSamayRainaRuyTabPlanIds } from '../services/proSamayRainaRuyTabPlans';
+import { getProSamayRainaItalianTabPlanIds } from '../services/proSamayRainaItalianTabPlans';
+import { getProSamayRainaFrenchWhiteTabPlanIds } from '../services/proSamayRainaFrenchWhiteTabPlans';
+import { getProSamayRainaCaroWhiteTabPlanIds } from '../services/proSamayRainaCaroWhiteTabPlans';
+import { getProSamayRainaOpenE5TabPlanIds } from '../services/proSamayRainaOpenE5TabPlans';
+import { getProSamayRainaSicilianBlackTabPlanIds } from '../services/proSamayRainaSicilianBlackTabPlans';
+import { getProSamayRainaScandiTabPlanIds } from '../services/proSamayRainaScandiTabPlans';
 
 interface ProRepEntry {
   id: string;
@@ -53,6 +61,14 @@ const RESOLVERS: Array<(openingId: string, tabKey: string) => string[] | null> =
   getProEricRosenScandinavianTabPlanIds,
   getProEricRosenFrenchTabPlanIds,
   getProCarlsenTabPlanIds,
+  getProSamayRainaOpenSicilianTabPlanIds,
+  getProSamayRainaRuyTabPlanIds,
+  getProSamayRainaItalianTabPlanIds,
+  getProSamayRainaFrenchWhiteTabPlanIds,
+  getProSamayRainaCaroWhiteTabPlanIds,
+  getProSamayRainaOpenE5TabPlanIds,
+  getProSamayRainaSicilianBlackTabPlanIds,
+  getProSamayRainaScandiTabPlanIds,
 ];
 
 function resolve(openingId: string, variationName: string): string[] | null {
@@ -103,6 +119,16 @@ describe('tab-plan resolver coverage gate — every Naroditsky variation has a r
     'pro-hikaru-reti',
     'pro-hikaru-pirc-modern',
     'pro-hikaru-caro-kann',
+    // Caruana pro-rep (2026-06-01 build) — variations declared but tab-plan
+    // resolvers not yet authored. Deferred, same as the partials above.
+    'pro-caruana-ruy-lopez',
+    'pro-caruana-nimzo-indian',
+    'pro-caruana-taimanov',
+    // Caruana round-2 openings (+4) — variations declared, resolvers deferred.
+    'pro-caruana-italian',
+    'pro-caruana-french',
+    'pro-caruana-caro-kann',
+    'pro-caruana-kid',
   ]);
 
   it('every pro-rep (openingId, variationName) pair has a resolver returning array (not null)', () => {

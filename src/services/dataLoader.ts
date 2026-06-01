@@ -6,13 +6,14 @@ import repertoireData from '../data/repertoire.json';
 import proRepertoireData from '../data/pro-repertoires.json';
 import gambitData from '../data/gambits.json';
 import modelGamesData from '../data/model-games.json';
+import proGameReferencesData from '../data/pro-game-references.json';
 import middlegamePlansData from '../data/middlegame-plans.json';
 // Separate-lane gambit-tab plans (David 2026-05-27): own file so the masterclass
 // lane never touches them; merged into the shared plan store here at load time,
 // keyed by gambit-tab openingIds (gambit-*) so they never collide.
 import gambitPlansData from '../data/gambit-plans.json';
 import { CURATED_NARRATIONS } from '../data/opening-narrations';
-import type { OpeningRecord, FlashcardRecord, ModelGame, MiddlegamePlan } from '../types';
+import type { OpeningRecord, FlashcardRecord, ModelGame, ProGameReference, MiddlegamePlan } from '../types';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -485,6 +486,40 @@ export async function loadModelGamesData(): Promise<void> {
     ...entry,
   }));
   await db.modelGames.bulkPut(records);
+  // PRUNE orphans (G8). bulkPut only upserts, so a game DELETED from the
+  // JSON (e.g. a draw/loss replaced per the wins-only model-game rule)
+  // would otherwise linger in Dexie and keep surfacing in ModelGamesSection
+  // + coach grounding. Model games carry NO user progress (pure curated
+  // content keyed by id), so deleting any Dexie row no longer in the JSON
+  // is safe. (David 2026-06-01 — model games previously lacked this sweep.)
+  const validIds = new Set(records.map((r) => r.id));
+  const all = await db.modelGames.toArray();
+  const stale = all.filter((g) => !validIds.has(g.id)).map((g) => g.id);
+  if (stale.length > 0) {
+    await db.modelGames.bulkDelete(stale);
+  }
+}
+
+// ─── Pro Game References Loader ──────────────────────────────────────────────
+
+/**
+ * Load the coach's breadth layer of real player games (David 2026-06-01).
+ * Built by `scripts/pro-repertoire/build-game-references.mjs` into
+ * `src/data/pro-game-references.json`. Same contract as model games /
+ * plans: bulkPut upserts by id, rows carry no user progress, prune
+ * orphans every boot so a scrapped/rebuilt player's references never
+ * linger (G8). Re-run every boot so the coach + walkthroughs always see
+ * the current reference set.
+ */
+export async function loadProGameReferences(): Promise<void> {
+  const records = proGameReferencesData as ProGameReference[];
+  await db.proGameReferences.bulkPut(records);
+  const validIds = new Set(records.map((r) => r.id));
+  const all = await db.proGameReferences.toArray();
+  const stale = all.filter((g) => !validIds.has(g.id)).map((g) => g.id);
+  if (stale.length > 0) {
+    await db.proGameReferences.bulkDelete(stale);
+  }
 }
 
 // ─── Middlegame Plans Loader ─────────────────────────────────────────────────
@@ -636,6 +671,7 @@ function startDeferredSeed(): Promise<void> {
     await loadProRepertoireData();
     await loadGambitData();
     await loadModelGamesData();
+    await loadProGameReferences();
     await loadMiddlegamePlansData();
     await seedFlashcardsForRepertoire();
     await loadOpeningNarrations();
@@ -687,6 +723,11 @@ async function runSeedOnce(): Promise<void> {
   // as plans: bulkPut upserts by id, the rows carry no user progress, so
   // re-running every boot is safe and keeps ModelGamesSection current.
   await loadModelGamesData();
+
+  // Pro game references (the coach's breadth layer of real player games)
+  // — same every-boot contract: pure content, prune-on-load, keeps the
+  // coach + walkthroughs current as references are rebuilt. (David 2026-06-01.)
+  await loadProGameReferences();
 }
 
 export function seedDatabase(): Promise<void> {

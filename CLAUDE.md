@@ -1026,6 +1026,47 @@ opponent + decisive + deepest). Each entry in `src/data/model-games.json`:
 - `overview` = hand-authored (≥40 chars to pass `isNarratedModelGame`)
 - `criticalMoments[]` — optional at first; can add per-game later
 
+#### STEP 11.5 — 🚨 Build + commit the GAME REFERENCES (NON-NEGOTIABLE — David 2026-06-01)
+
+**Every repertoire build MUST persist the player's game data as a coach
+reference. This is not optional and not "model games" — it's the BREADTH
+layer that gives the coach FULL access to a pro's real games for teaching
++ walkthroughs.** Model games (STEP 11) are the DEPTH layer (~3-5 hand-
+narrated per variation); game references are the BREADTH layer (many real
+games per variation, full move lists, no per-move narration) so the coach
+can cite + walk "how Naroditsky beat a 3176 in this exact line."
+
+The pipeline writes its raw chess.com corpus to gitignored
+`data/sources/<username>-chesscom/` and throws it away — so without this
+step the games never reach runtime. Run:
+
+```bash
+# (optional) refresh recent games first — "past two years":
+node scripts/pro-repertoire/fetch-chesscom.mjs <username> --years 2
+# (classical players) pull real OTB tournament games:
+node scripts/pro-repertoire/fetch-otb-games.mjs <appPlayerId> \
+  --name "<Player Name>" --broadcast <lichessRoundId> [--pgn-url <twicUrl>] --since <YYYY-MM>
+# ALWAYS — aggregate committed trees/deep (+ any fresh chess.com/OTB) into
+# the SHIPPED, bounded reference:
+node scripts/pro-repertoire/build-game-references.mjs <appPlayerId>
+```
+
+This emits/merges `src/data/pro-game-references.json` (flat array,
+wins-only / never the student side losing, stripped chess.js-validated
+PGNs, source-tagged chess.com|otb|lichess, bounded per variation). It's
+loaded into Dexie (`proGameReferences` store) by
+`dataLoader.loadProGameReferences` (prune-on-load, every boot, G8) and
+surfaced to the coach two ways: the auto-injected `playerGames` envelope
+block (`src/coach/sources/playerGames.ts`) and the `lookup_player_games`
+tool (full games on demand). **A pro-rep build that skips this step ships
+a coach that can't see the player's actual games — that's an incomplete
+build.** Gates: `proGameReferences.test.ts` (legality + orientation +
+sources), `playerGames.test.ts`, `lookupPlayerGames.test.ts`.
+
+> Bundle note: the reference is a static import today (one prolific
+> player ≈ 470 KB, fine). When all 14 pros are in (~3-6 MB), switch to
+> lazy per-player fetch from `public/` — don't let it bloat the JS bundle.
+
 #### STEP 12 — Add common-mistakes entries (pitfalls)
 
 3-5 pitfalls per opening in `src/data/common-mistakes.json` keyed
@@ -1069,7 +1110,9 @@ npx vitest run src/data/lessons/ src/data/pro-repertoires.test.ts \
   src/data/middlegamePlanThemes.test.ts \
   src/data/narrationAccuracy.test.ts src/data/variationMiddlegameDepth.test.ts \
   src/data/proRepLessonCoverage.test.ts \  # G9.3 Gates A/B/C — see below
-  src/data/proRepNarrationVoice.test.ts    # G9.4 voice-contract gate — see below
+  src/data/proRepNarrationVoice.test.ts \  # G9.4 voice-contract gate — see below
+  src/data/proGameReferences.test.ts \     # STEP 11.5 game-reference gate
+  src/coach/sources/playerGames.test.ts src/coach/tools/cerebellum/lookupPlayerGames.test.ts
 npm run ship-check       # must print READY TO PUSH
 ```
 
@@ -1221,6 +1264,15 @@ provably stale; never claim a surface "shipped on prod" on localhost evidence.
     output. Don't skip the data extraction or the plan-count step.
     Especially: don't trust a small-sample analysis when a larger
     sample is available with the same scripts.
+
+11. **Every build SAVES the game references (STEP 11.5).** The pipeline
+    throws away the raw chess.com corpus (gitignored), so if you don't
+    run `build-game-references.mjs <player>` and commit
+    `pro-game-references.json`, the coach has NO access to the player's
+    real games for teaching/walkthroughs — only the ~2 hand-narrated
+    model games. Run it on every pro-rep build (and `--years 2` refresh
+    / `fetch-otb-games.mjs` for recency + OTB). The reference is the
+    coach's breadth layer; shipping a build without it is incomplete.
 
 Violating these gates wastes David's money and erodes trust faster
 than missing the underlying task. The shallow-work failure mode IS
@@ -2906,6 +2958,8 @@ After every `git push origin main`:
    | `/coach/chat` | `scripts/audit-coach-chat.mjs` |
    | `/coach/teach` (Learn) | `scripts/audit-coach-teach-unknown-line.mjs` (unknown / sub-line resolution + middlegame spine depth + leaf play-out prompt) |
    | coach surfaces (any) — master-play grounding | `scripts/audit-coach-master-integration.mjs` |
+   | coach surfaces (any) — player-game references | `scripts/audit-coach-player-games.mjs` (proGameReferences Dexie seed + shape; playerGames envelope event when a provider key is present) |
+   | `src/data/pro-game-references.json` (any pro-rep build) | `scripts/audit-coach-player-games.mjs` + `npx vitest run src/data/proGameReferences.test.ts` |
    | coach surfaces (any) — tactical-awareness wiring | `scripts/audit-coach-tactical-awareness.mjs` (verifies the TacticsLiveContext block fires + rating-adaptive lookahead lands in {1,2,4,6}) |
    | `/coach/endgame` + `/coach/session/middlegame` | `scripts/audit-coach-middlegame-endgame.mjs` (mode coverage matrix: which of Teach/Drill/Quiz/Trap/Play each surface supports today) |
    | `/coach/home` + tile nav | `scripts/audit-untouched-surfaces.mjs` |

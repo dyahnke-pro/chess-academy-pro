@@ -24,7 +24,7 @@ import path from 'node:path';
 import { Chess } from 'chess.js';
 
 const LESSON_DIR = path.join('src', 'data', 'lessons');
-const SCOPE_RE = /^proEricRosen.*\.ts$/;
+const SCOPE_RE = /^pro(EricRosen|SamayRaina).*\.ts$/;
 const CHECK = process.argv.includes('--check');
 
 function sanitizeFile(file) {

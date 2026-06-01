@@ -3113,6 +3113,194 @@
       ]
     }
   ],
+  "pro-samayraina-open-sicilian": [
+    {
+      "fen": "r1bqkb1r/pp1p1ppp/2n2n2/4p3/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+      "wrongMove": "Nb3",
+      "correctMove": "Ndb5",
+      "explanation": "After …e5 in the Sveshnikov, retreating Nb3 is passive and lets Black consolidate the centre comfortably. The principled move is Ndb5! — the knight heads for d6 and immediately pressures the d5-hole that …e5 created. Punish the weakness while it's fresh.",
+      "shortNarration": "Ndb5, not the passive Nb3.",
+      "sources": [
+        "https://api.chess.com/pub/player/samayraina/games/archives",
+        "concept:pos-outpost",
+        "https://www.chess.com/openings/Sicilian-Defense-Open"
+      ]
+    }
+  ],
+  "pro-samayraina-ruy": [
+    {
+      "fen": "r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+      "wrongMove": "Bxc6",
+      "correctMove": "Ba4",
+      "explanation": "Taking on c6 too early (the Exchange) is playable but throws away the Ruy's main asset — the long-term pin pressure on e5. In the main line we keep the bishop with Ba4, maintaining the tension and the slow build-up that makes the Ruy so dangerous. Only trade on c6 when you have a concrete structural reason.",
+      "shortNarration": "Keep the bishop with Ba4.",
+      "sources": [
+        "https://api.chess.com/pub/player/samayraina/games/archives",
+        "concept:pos-development",
+        "https://www.chess.com/openings/Ruy-Lopez"
+      ]
+    }
+  ],
+  "pro-samayraina-italian": [
+    {
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+      "wrongMove": "Ng5",
+      "correctMove": "d3",
+      "explanation": "The Fried Liver attempt with Ng5 leads to wild, heavily-analysed complications where one slip loses. Unless you've memorised the lines, the calm d3 is far better — it transposes to the quiet Pianissimo where understanding beats theory and you keep all the chances with none of the risk.",
+      "shortNarration": "Calm d3, not the sharp Ng5.",
+      "sources": [
+        "https://api.chess.com/pub/player/samayraina/games/archives",
+        "concept:pos-development",
+        "https://www.chess.com/openings/Italian-Game-Two-Knights-Defense"
+      ]
+    }
+  ],
+  "pro-samayraina-french-white": [
+    {
+      "fen": "rnbqkb1r/ppp2ppp/5n2/3p4/3P4/3B1N2/PPP2PPP/RNBQK2R b KQkq - 3 5",
+      "wrongMove": "Be7",
+      "correctMove": "Bd6",
+      "explanation": "In the Exchange French, developing the bishop passively to e7 wastes its potential. The active …Bd6 (mirroring White) points at h2 and keeps Black's chances alive. In a symmetrical structure, passive piece placement hands the opponent the initiative — always develop to the most active square.",
+      "shortNarration": "Active …Bd6, not passive …Be7.",
+      "sources": [
+        "https://api.chess.com/pub/player/samayraina/games/archives",
+        "concept:pos-development",
+        "https://www.chess.com/openings/French-Defense-Exchange-Variation"
+      ]
+    }
+  ],
+  "pro-samayraina-caro-white": [
+    {
+      "fen": "rnbqkbnr/pp2pppp/2p5/3P4/2P5/8/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
+      "wrongMove": "Qxd5",
+      "correctMove": "cxd5",
+      "explanation": "After the Panov's exd5, recapturing with the queen drops it into the centre where Nc3 chases it with tempo, handing White a big development lead. The correct recapture is …cxd5, keeping the structure sound. Never let your queen be a target in the opening.",
+      "shortNarration": "Recapture …cxd5, not …Qxd5.",
+      "sources": [
+        "https://api.chess.com/pub/player/samayraina/games/archives",
+        "concept:pos-development",
+        "https://www.chess.com/openings/Caro-Kann-Defense-Panov-Attack"
+      ]
+    }
+  ],
+  "pro-samayraina-open-e5": [
+    {
+      "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+      "wrongMove": "Nd4",
+      "correctMove": "a6",
+      "explanation": "The Bird's Defense …Nd4 is a sideline that gives White an easy game after Nxd4 exd4 d3. The principled main line is …a6, the Morphy move — it questions the bishop and keeps all of Black's options open. Play the most-tested move and reach the rich Closed Ruy structures.",
+      "shortNarration": "…a6, the Morphy main, not …Nd4.",
+      "sources": [
+        "https://api.chess.com/pub/player/samayraina/games/archives",
+        "concept:pos-development",
+        "https://www.chess.com/openings/Ruy-Lopez"
+      ]
+    }
+  ],
+  "pro-samayraina-sicilian-black": [
+    {
+      "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+      "wrongMove": "g6",
+      "correctMove": "a6",
+      "explanation": "…g6 commits to a Dragon, walking into the dangerous Yugoslav Attack (Be3, f3, Qd2, O-O-O, h4-h5). The Najdorf's …a6 is more flexible — it controls b5, keeps the kingside intact, and decides the setup only after White shows their hand. Flexibility is the Najdorf's great strength.",
+      "shortNarration": "Flexible …a6, not the committal …g6.",
+      "sources": [
+        "https://api.chess.com/pub/player/samayraina/games/archives",
+        "concept:pos-development",
+        "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation"
+      ]
+    }
+  ],
+  "pro-samayraina-scandi": [
+    {
+      "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3",
+      "wrongMove": "Qe5+",
+      "correctMove": "Qd8",
+      "explanation": "The greedy …Qe5+ (eyeing the e-file) just loses time after Be2 or Nge2, and the queen gets chased again. The modern, super-solid retreat is …Qd8 — the queen returns home completely safe and Black builds a sound Caro-like structure. Don't keep the queen exposed in the opening.",
+      "shortNarration": "Safe …Qd8, not the greedy …Qe5+.",
+      "sources": [
+        "https://api.chess.com/pub/player/samayraina/games/archives",
+        "concept:pos-development",
+        "https://www.chess.com/openings/Scandinavian-Defense"
+      ]
+    }
+  ],
+  "pro-caruana-ruy-lopez": [
+    {
+      "fen": "r1bqkbnr/2pp1ppp/p1n5/1p2p3/B3P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5",
+      "wrongMove": "Bxb5",
+      "correctMove": "Bb3",
+      "explanation": "After …b5 it is tempting to grab the pawn with Bxb5, but it loses a piece to …axb5, when the a8-rook recaptures the bishop. Retreat to b3 instead, keeping the bishop on the strong a2-g8 diagonal and a healthy game.",
+      "shortNarration": "Bxb5 hangs to …axb5; play Bb3.",
+      "sources": [
+        "concept:pos-material",
+        "https://www.chess.com/openings/Ruy-Lopez-Opening"
+      ]
+    }
+  ],
+  "pro-caruana-italian": [
+    {
+      "fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQK2R w KQ - 1 6",
+      "wrongMove": "Bxf7+",
+      "correctMove": "O-O",
+      "explanation": "The Greek-gift sacrifice Bxf7+ looks tempting, but here it is simply unsound — after …Kxf7 White has no follow-up and is just down a bishop for one pawn. The modern Italian is a slow, strategic game: castle, and build the Pianissimo squeeze instead of sacrificing.",
+      "shortNarration": "Bxf7+ is unsound here; just castle.",
+      "sources": [
+        "concept:pos-material",
+        "https://www.chess.com/openings/Italian-Game"
+      ]
+    }
+  ],
+  "pro-caruana-najdorf": [
+    {
+      "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+      "wrongMove": "e5",
+      "correctMove": "a6",
+      "explanation": "Playing …e5 immediately, before …a6, walks into Nb5 — the knight leaps to a strong square hitting d6 and eyeing c7, and Black has no good way to chase it. Always insert …a6 first: it controls b5, and only then is …e5 the principled central break.",
+      "shortNarration": "Premature …e5 allows Nb5; play …a6 first.",
+      "sources": [
+        "concept:pos-development",
+        "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation"
+      ]
+    },
+    {
+      "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP1BPPP/R1BQK2R b KQkq - 1 6",
+      "wrongMove": "b5",
+      "correctMove": "e5",
+      "explanation": "The immediate …b5 is loose — it weakens the queenside and lets White hit back with a4 before Black is developed. The principled move is …e5, grabbing the centre and gaining time on the d4-knight. Claim the centre first, then expand on the queenside.",
+      "shortNarration": "Loose …b5; grab the centre with …e5.",
+      "sources": [
+        "concept:pos-center",
+        "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation"
+      ]
+    }
+  ],
+  "pro-caruana-taimanov": [
+    {
+      "fen": "r1bqkbnr/3p1ppp/p1p1p3/8/4P3/2NB4/PPP2PPP/R1BQK2R b KQkq - 1 7",
+      "wrongMove": "e5",
+      "correctMove": "d5",
+      "explanation": "Locking the centre with …e5 hands White a permanent grip on the d5-square and a fine outpost. The right break is …d5, hitting e4 head-on and freeing Black's game. Strike the centre, don't fix it.",
+      "shortNarration": "Don't lock with …e5; strike with …d5.",
+      "sources": [
+        "concept:pos-center",
+        "https://www.chess.com/openings/Sicilian-Defense-Taimanov-Variation"
+      ]
+    }
+  ],
+  "pro-caruana-caro-kann": [
+    {
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/3B4/PPP2PPP/RNBQK1NR b KQkq - 1 3",
+      "wrongMove": "g6",
+      "correctMove": "dxe4",
+      "explanation": "When White plays the loose Bd3 before defending e4, the e4-pawn simply hangs — grab it with …dxe4! After Bxe4 Nf6 Black develops with tempo and is comfortably equal. Don't play a quiet move like …g6 and let White off the hook; punish the inaccuracy.",
+      "shortNarration": "Bd3 drops e4 — take it with …dxe4.",
+      "sources": [
+        "concept:pos-material",
+        "https://www.chess.com/openings/Caro-Kann-Defense"
+      ]
+    }
+  ],
   "pro-carlsen-open-sicilian": [
     {
       "fen": "rnbqkb1r/1p2pppp/p2p4/8/3NP1n1/2N1B3/PPP2PPP/R2QKB1R w KQkq - 2 7",

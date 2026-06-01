@@ -739,6 +739,10 @@ function formatLiveStateBlock(state: LiveState): string {
     const block = formatModelGamesSubBlock(state.modelGames);
     if (block) parts.push(block);
   }
+  if (state.playerGames) {
+    const block = formatPlayerGamesSubBlock(state.playerGames);
+    if (block) parts.push(block);
+  }
   if (state.moveHistory && state.moveHistory.length > 0) {
     parts.push(`- Move history: ${state.moveHistory.join(' ')}`);
   }
@@ -854,6 +858,39 @@ export function formatModelGamesSubBlock(
   }
   lines.push(
     `    CITE these games by name + year when teaching the opening. Reference the critical moments and concepts shown above. NEVER fabricate "Carlsen vs X 2020" / "Morphy vs Y" — if the game isn't in this block, you can't cite it. Use lichess_master_games if the student asks for a specific year/player combo you don't have.`,
+  );
+  return lines.join('\n');
+}
+
+/** Render the pro's REAL game references as a sub-block under [Live
+ *  state]. The breadth layer alongside model games: many of a pro's
+ *  actual games in this exact opening, with opponent + rating + result
+ *  + the move line. The brain walks/cites these in pro teaching +
+ *  walkthroughs ("here's how Naroditsky handled this against a 3176").
+ *  Empty string when zero games so the block adds zero tokens. */
+export function formatPlayerGamesSubBlock(
+  ctx: NonNullable<LiveState['playerGames']>,
+): string {
+  if (!ctx.games.length) return '';
+  const scope = ctx.playerId
+    ? `${ctx.games[0]?.player ?? ctx.playerId}'s`
+    : 'pro';
+  const lines: string[] = [
+    `- ${scope} REAL games (PRE-LOADED references, ${ctx.games.length}/${ctx.totalAvailable} for ${ctx.openingName}):`,
+  ];
+  for (const g of ctx.games) {
+    const rating = g.opponentRating ? ` (${g.opponentRating})` : '';
+    const date = g.date ? `, ${g.date}` : '';
+    const sideWord = g.studentSide === 'white' ? 'White' : 'Black';
+    lines.push(
+      `    [${g.id}] ${g.player} as ${sideWord} vs ${g.opponent}${rating}${date} — ${g.result} [${g.source}] · ${g.variationLabel}`,
+    );
+    const shown = g.pgnPrefix.split(' ').length;
+    const trunc = shown < g.plyCount ? `, first ${shown} shown` : '';
+    lines.push(`      Line (${g.plyCount} plies${trunc}): ${g.pgnPrefix}`);
+  }
+  lines.push(
+    `    These are the pro's ACTUAL games — real moves, real opponents. Walk them move-by-move when teaching the line; cite the opponent + rating to show the level. NEVER invent extra games or moves beyond what's shown; call lookup_player_games for the full game or more examples.`,
   );
   return lines.join('\n');
 }

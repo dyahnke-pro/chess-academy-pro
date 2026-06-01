@@ -398,6 +398,20 @@ const OPENINGS = {
     minPrefix: ['e4', 'e6'],
     maxDepth: 80,
   },
+  // ===== SAMAY RAINA-SPECIFIC OPENINGS (classical 1.e4 / 1…e5) =====
+  'samay-open-sicilian': { name: 'Open Sicilian (White)', color: 'white', studentMoves: [], minPrefix: ['e4', 'c5', 'Nf3'], maxDepth: 80 },
+  'samay-ruy': { name: 'Ruy Lopez (White)', color: 'white', studentMoves: [], minPrefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5'], maxDepth: 80 },
+  'samay-italian': { name: 'Italian Game (White)', color: 'white', studentMoves: [], minPrefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4'], maxDepth: 80 },
+  'samay-french-white': { name: 'French Defense (White)', color: 'white', studentMoves: [], minPrefix: ['e4', 'e6', 'd4', 'd5', 'Nc3'], maxDepth: 80 },
+  'samay-caro-white': { name: 'Caro-Kann (White)', color: 'white', studentMoves: [], minPrefix: ['e4', 'c6', 'd4', 'd5', 'Nc3'], maxDepth: 80 },
+  'samay-open-e5': { name: 'Open Games / …e5 (Black)', color: 'black', studentMoves: [], minPrefix: ['e4', 'e5'], maxDepth: 80 },
+  'samay-sicilian-black': { name: 'Sicilian Defense (Black)', color: 'black', studentMoves: [], minPrefix: ['e4', 'c5'], maxDepth: 80 },
+  'samay-scandi-black': { name: 'Scandinavian Defense (Black)', color: 'black', studentMoves: [], minPrefix: ['e4', 'd5'], maxDepth: 80 },
+  // ===== CARUANA round 2 (2026-06-01): +4 to reach 8 openings =====
+  'caruana-italian': { name: 'Italian Game (Caruana, White)', color: 'white', studentMoves: [], minPrefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4'], maxDepth: 80 },
+  'caruana-french': { name: 'French Defense (Caruana, Black)', color: 'black', studentMoves: [], minPrefix: ['e4', 'e6'], maxDepth: 80 },
+  'caruana-caro-kann': { name: 'Caro-Kann (Caruana, Black)', color: 'black', studentMoves: [], minPrefix: ['e4', 'c6'], maxDepth: 80 },
+  'caruana-kid': { name: "King's Indian Defense (Caruana, Black)", color: 'black', studentMoves: [], minPrefix: ['d4', 'Nf6', 'c4', 'g6'], maxDepth: 80 },
 };
 
 const cfg = OPENINGS[OPENING_ID];

@@ -329,6 +329,30 @@ const OPENING_SEEDS = {
 // entry is an array of SAN move-lists (the line up to where the opponent's try
 // lands), walked node-by-node like any variation line.
 const EXTRA_WALK = {
+  // ── Caruana (2026-06-01): opponent side-tries his curated spine skips. ──
+  // Ruy (student=White): punish Black's offbeat replies to the Spanish.
+  'pro-caruana-ruy-lopez': [
+    ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'f5'],                // Schliemann
+    ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'Nd4'],               // Bird's Defense
+    ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'Nge7'],              // Cozio
+    ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'b5', 'Bb3', 'Na5'],  // …Na5 chasing
+  ],
+  // Italian (student=White): punish Black's loose tries.
+  'pro-caruana-italian': [
+    ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'b4'],         // Evans Gambit territory
+    ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'Ng5'],        // Fried Liver / Two Knights
+    ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'c3', 'Nf6', 'd3', 'd6', 'O-O', 'Bg4'],  // …Bg4 pin
+  ],
+  // Najdorf (student=Black): punish White's overaggressive amateur tries.
+  'pro-caruana-najdorf': [
+    ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Bc4'],  // Fischer-Sozin
+    ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'g4'],   // early g4
+  ],
+  // Taimanov (student=Black): punish White's loose tries.
+  'pro-caruana-taimanov': [
+    ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'Nc6', 'Nb5'],   // Ndb5 lunge
+    ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'Nc6', 'Nxc6'],  // premature trade
+  ],
   // Caro-Kann (student=Black) — punish White's offbeat tries.
   'pro-hikaru-caro-kann': [
     ['e4', 'c6', 'd4', 'd5', 'f3'],                          // Fantasy
