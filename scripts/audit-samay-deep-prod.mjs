@@ -52,7 +52,18 @@ async function exitPlayer() {
   await page.waitForTimeout(600);
 }
 // click a WLPP/gem button, return {present, mounted, fired[]}
+// wait until /api/tts has been quiet for `quietMs` so a prior mode's straggler
+// request can't bleed into the next mode's capture window (esp. Practice=silent).
+async function drainTts(quietMs = 900, maxMs = 4000) {
+  const t0 = Date.now(); let last = tts.length, lastChange = Date.now();
+  while (Date.now() - t0 < maxMs) {
+    await page.waitForTimeout(250);
+    if (tts.length !== last) { last = tts.length; lastChange = Date.now(); }
+    else if (Date.now() - lastChange >= quietMs) return;
+  }
+}
 async function drive(testidSel, id, label, expectMount = true) {
+  await drainTts();
   const before = tts.length;
   const b = page.locator(testidSel).first();
   const present = (await b.count()) > 0;
