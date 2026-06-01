@@ -132,10 +132,20 @@ const A = {
     watch: { 15:'Bc5?! — in the Open Ruy this lets White strike; the d5-pawn is overloaded.', 16:'Bxd5! — the bishop takes the key pawn, exploiting the pin on the e6/f7 squares.', 17:'Bxf2+ — Black tries a desperado.', 18:'Kh1 — the king steps aside, the check spent for nothing.', 20:'Bxe4 — White wins the e4-knight, now up multiple pawns.', 22:'Rxd1 — recapturing, White completely winning.' },
     learn: { 16:'Bxd5 — take the overloaded pawn', 18:'Kh1 — sidestep the check', 20:'Bxe4 — win the knight' },
   },
+  'pro-aman-reti:Nf3_d5_g3_Nf6_Bg2_e6_O-O_Be7_d3_O-O_Nbd2_c5_e4:d4': {
+    sources: ['concept:pos-space','concept:pos-structure','https://www.chess.com/openings/Reti-Opening'],
+    watch: { 13:'d4?! — closing the centre hands White the e4-square and a free hand on the kingside; the d4-pawn becomes a target.', 14:'a4! — gaining queenside space and fixing Black’s structure before turning to the kingside.', 16:'e5 — the centre rolls forward, gaining space and clamping the f6-knight out.', 18:'Nc4 — the knight reroutes to the strong c4-outpost, eyeing the queenside holes.', 20:'Nfd2 — doubling knights toward c4/e4, White comfortably better with the space bind.' },
+    learn: { 14:'a4 — gain space, fix the structure', 16:'e5 — roll forward, clamp f6', 18:'Nc4 — reroute to the outpost' },
+  },
+  'pro-aman-rossolimo:e4_c5_Nf3_Nc6_Bb5_g6_Bxc6_bxc6_O-O_Bg7_Re1_Nf6_e5_Nd5_c4:Nf4': {
+    sources: ['concept:pos-center','concept:pos-space','https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation'],
+    watch: { 15:'Nf4?! — the knight hops to the rim where it can be kicked; Black falls behind in the centre.', 16:'d4! — White builds the big pawn centre, the f4-knight offside and out of play.', 17:'Ne6 — the knight scrambles back toward the centre.', 18:'d5! — the pawn jabs forward with tempo, gaining space and cramping Black.', 20:'cxd5 — recapturing toward the centre, the pawn duo dominant.', 22:'Nc3 — developing behind the big centre, White with a clear space advantage.' },
+    learn: { 16:'d4 — build the big centre', 18:'d5 — jab forward, gain space', 20:'cxd5 — keep the pawn duo' },
+  },
   'pro-aman-rossolimo:e4_c5_Nf3_Nc6_d4_cxd4_Nxd4_e5_Nb5:Qa5+': {
     sources: ['concept:tac-fork','concept:pos-initiative','https://www.chess.com/openings/Sicilian-Defense'],
-    watch: { 9:'Qa5+?! — the check looks active but the queen is misplaced and d6 is fatally weak.', 10:'Qd2 — calmly blocking and offering the trade; White keeps the d6-outpost in sight.', 11:'Qd8 — the queen must retreat, time lost.', 12:'N1c3 — developing toward the d5/d6 holes.', 14:'Nd6+! — the knight leaps into the hole with check, a monster outpost.', 15:'Bxd6 — Black must give up the bishop pair.', 16:'Qxd6 — White dominates with the queen on d6 and Black’s structure in ruins.' },
-    learn: { 10:'Qd2 — block, eye d6', 12:'N1c3 — develop at the holes', 14:'Nd6+ — leap into the hole, check', 16:'Qxd6 — dominate' },
+    watch: { 9:'Qa5+?! — the check looks active but the queen is misplaced and the d6-square is fatally weak.', 10:'N1c3 — developing with tempo toward the d5/d6 holes, ignoring the spite-check.', 11:'a6 — Black tries to chase the b5-knight.', 12:'Nd6+! — the knight leaps into the hole with check, a monster outpost forking the position.', 13:'Bxd6 — Black must give up the bishop pair.', 14:'Qxd6 — White dominates with the queen on d6 and Black’s structure in ruins.', 16:'Qc7 — keeping the bind, White clearly winning.' },
+    learn: { 10:'N1c3 — develop at the holes', 12:'Nd6+ — leap into the hole, check', 14:'Qxd6 — dominate' },
   },
   'pro-aman-french-white:e4_e6_d4_d5_Nc3_Nf6_e5_Nfd7_f4_c5_Nf3_Nc6_Be3_Qb6_Na4:Qb4+': {
     sources: ['concept:tac-fork','concept:pos-initiative','https://www.chess.com/openings/French-Defense-Steinitz-Variation'],
