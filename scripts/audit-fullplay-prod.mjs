@@ -101,8 +101,16 @@ async function dragOnce(from, to) {
 // events is the open hard part — a test-only "submit SAN" hook on the board
 // would make this deterministic (see status notes).
 async function clickMove(from, to) {
-  await dragOnce(from, to);
-  await page.waitForTimeout(650);
+  // Prefer the deterministic audit hook (window.__playMove, exposed by
+  // PlayableLinePlayer when auditMoveHook=1) — bypasses react-chessboard's
+  // flaky headless pointer handling. Fall back to a real drag if absent.
+  const used = await page.evaluate(({ f, t }) => {
+    const w = window;
+    if (typeof w.__playMove === 'function') { w.__playMove(f, t); return true; }
+    return false;
+  }, { f: from, t: to }).catch(() => false);
+  if (!used) await dragOnce(from, to);
+  await page.waitForTimeout(600);
 }
 // Enable voice + full narration in the profile so the lesson SPEAKS (the audit
 // must verify narration; voiceEnabled defaults to false). Mirrors the reference
@@ -138,7 +146,7 @@ async function highlightedSquares() {
   console.log(`\n[fullplay] ${ONLY} (${opening.color}) on ${URL}`);
   // 1. boot + listener wiring + dismiss bubble + seed
   await page.goto(`${URL}/`, { waitUntil: 'networkidle' });
-  await page.evaluate(({ url, secret }) => { localStorage.setItem('auditStreamUrl', url); localStorage.setItem('auditStreamSecret', secret); localStorage.setItem('x-audit-secret', secret); }, { url: listener.url, secret: LOCAL_LISTENER_SECRET });
+  await page.evaluate(({ url, secret }) => { localStorage.setItem('auditStreamUrl', url); localStorage.setItem('auditStreamSecret', secret); localStorage.setItem('x-audit-secret', secret); localStorage.setItem('auditMoveHook', '1'); }, { url: listener.url, secret: LOCAL_LISTENER_SECRET });
   try {
     const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
     if (await bubble.isVisible({ timeout: 8000 }).catch(() => false)) {
