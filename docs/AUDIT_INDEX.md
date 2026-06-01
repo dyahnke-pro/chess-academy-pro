@@ -98,3 +98,5 @@ Status legend: ✅ shipped · 🟡 partial · 🚧 in flight (another session) �
   for every other instance of the same pattern before declaring done.
 - **BEST fix.** Wire dead things, scrap redundancies, don't ship
   cosmetic patches.
+
+- `scripts/audit-samay-deep-prod.mjs` — deep Samay pro-rep audit: every opening × variation tab × WLPP, narration listener + `/api/tts` voice decode, against live prod. Watch + per-tab narration verified in-sandbox; Learn/Practice/Play require a real device (G1.4 ladder-write stall).
