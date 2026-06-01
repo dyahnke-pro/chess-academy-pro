@@ -69831,5 +69831,449 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-procarlsen-ruy-endgame",
+    "openingId": "pro-carlsen-ruy-lopez",
+    "criticalPositionFen": "1rb1r1k1/2p2pp1/p2p3p/3P4/2PP4/8/P2R1PPP/2R3NK b - - 0 25",
+    "title": "Converting the Queenside Majority (vs Aronian)",
+    "pawnBreaks": [
+      {
+        "move": "c4-c5 passed-pawn push",
+        "explanation": "From a Closed Ruy where Carlsen beat Aronian, the win flows from the c4-c5 passed-pawn push — the queenside majority rolls while the knight reroutes to support it.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "From a Closed Ruy where Carlsen beat Aronian, the win flows from the c4-c5 passed-pawn push — the queenside majority rolls while the knight reroutes to support it."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "1rb1r1k1/2p2pp1/p2p3p/3P4/2PP4/8/P2R1PPP/2R3NK b - - 0 25",
+        "moves": [
+          "a5",
+          "h3",
+          "Rb4",
+          "Nf3",
+          "Bf5",
+          "c5"
+        ],
+        "annotations": [
+          "Black grabs queenside space with the a-pawn.",
+          "White makes luft for the king.",
+          "Black's rook pressures the c4-pawn.",
+          "The knight reroutes toward the centre and kingside.",
+          "Black activates the bishop.",
+          "c5 rolls the passed pawn — the heart of White's winning plan in the queenside majority."
+        ],
+        "learnCues": [
+          "...a5 — queenside space",
+          "h3 — make luft",
+          "...Rb4 — pressure c4",
+          "Nf3 — reroute",
+          "...Bf5 — activate",
+          "c5 — push the passer"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Converting the Queenside Majority (vs Aronian)",
+        "intro": "From a Closed Ruy where Carlsen beat Aronian, the win flows from the c4-c5 passed-pawn push — the queenside majority rolls while the knight reroutes to support it.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-space",
+          "concept:pawn-minority-attack",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-procarlsen-1e5-endgame",
+    "openingId": "pro-carlsen-1e5",
+    "criticalPositionFen": "7k/6P1/4p3/r3n3/8/2P3p1/6PN/4R2K b - - 0 52",
+    "title": "The Active Rook in the Rook Endgame (vs Firouzja)",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "move": "...Ra1-c1 active rook wins c3",
+        "explanation": "A textbook rook-endgame conversion: round up the advanced g-pawn, centralise the knight, and swing the rook behind White's lines to win the c3-pawn. Activity is everything.",
+        "fen": ""
+      }
+    ],
+    "strategicThemes": [
+      "A textbook rook-endgame conversion: round up the advanced g-pawn, centralise the knight, and swing the rook behind White's lines to win the c3-pawn. Activity is everything."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "7k/6P1/4p3/r3n3/8/2P3p1/6PN/4R2K b - - 0 52",
+        "moves": [
+          "Kxg7",
+          "Nf1",
+          "Nd3",
+          "Rxe6",
+          "Ra1",
+          "Kg1",
+          "Rc1"
+        ],
+        "annotations": [
+          "Black rounds up the advanced g-pawn.",
+          "White's knight returns.",
+          "The knight centralises, hitting the c-pawn and shielding the king.",
+          "White grabs a pawn back.",
+          "The rook swings behind White's lines.",
+          "White's king steps up.",
+          "The rook lands on c1 behind the c3-pawn — the active rook is the whole point of the rook endgame."
+        ],
+        "learnCues": [
+          "Kxg7 — win the g-pawn",
+          "Nf1 — knight back",
+          "...Nd3 — centralise",
+          "Rxe6 — White grabs one",
+          "...Ra1 — swing behind",
+          "Kg1 — king up",
+          "...Rc1 — the active rook"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "a1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "The Active Rook in the Rook Endgame (vs Firouzja)",
+        "intro": "A textbook rook-endgame conversion: round up the advanced g-pawn, centralise the knight, and swing the rook behind White's lines to win the c3-pawn. Activity is everything.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-initiative",
+          "concept:pos-space",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-procarlsen-queenspawn-endgame",
+    "openingId": "pro-carlsen-queens-pawn",
+    "criticalPositionFen": "1B1b2k1/3N1pp1/2b1p2p/pN1p2nn/Pp1P4/4PPP1/1P2B1K1/8 w - - 0 34",
+    "title": "Dominant Knights on the Outposts (vs Firouzja)",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "move": "Ne5 and Nd6 dominant outposts",
+        "explanation": "A minor-piece endgame won by superior knights: one leaps to the e5-outpost, the other to d6, and the f4 advance fixes the kingside while the knights dominate Black's pieces.",
+        "fen": ""
+      }
+    ],
+    "strategicThemes": [
+      "A minor-piece endgame won by superior knights: one leaps to the e5-outpost, the other to d6, and the f4 advance fixes the kingside while the knights dominate Black's pieces."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "1B1b2k1/3N1pp1/2b1p2p/pN1p2nn/Pp1P4/4PPP1/1P2B1K1/8 w - - 0 34",
+        "moves": [
+          "Ne5",
+          "Be8",
+          "f4",
+          "f6",
+          "Nd6",
+          "Bxa4"
+        ],
+        "annotations": [
+          "The knight leaps to the e5-outpost, dominating the centre.",
+          "Black retreats the bishop.",
+          "f4 gains kingside space and supports the knights.",
+          "Black challenges the centre.",
+          "The second knight jumps to the d6-outpost, a monster deep in Black's camp.",
+          "Black grabs a pawn, but the dominant knights decide the game."
+        ],
+        "learnCues": [
+          "Ne5 — the e5 outpost",
+          "...Be8 — retreat",
+          "f4 — gain space",
+          "...f6 — challenge",
+          "Nd6 — the monster outpost",
+          "...Bxa4 — too late"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Dominant Knights on the Outposts (vs Firouzja)",
+        "intro": "A minor-piece endgame won by superior knights: one leaps to the e5-outpost, the other to d6, and the f4 advance fixes the kingside while the knights dominate Black's pieces.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-outpost",
+          "concept:pos-space",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-procarlsen-nimzo-endgame",
+    "openingId": "pro-carlsen-nimzo",
+    "criticalPositionFen": "6rk/1p5p/1np1Np2/p2p4/P2P2PK/4PR2/8/8 b - - 0 44",
+    "title": "King Activity in the Knight Endgame (vs Polish_fighter3000)",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "move": "...Kf7-g6 active king march",
+        "explanation": "A knight endgame won by the active king: reroute the knight, target White's advanced knight with the rook, and march the king up the board — the active king is decisive.",
+        "fen": ""
+      }
+    ],
+    "strategicThemes": [
+      "A knight endgame won by the active king: reroute the knight, target White's advanced knight with the rook, and march the king up the board — the active king is decisive."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "6rk/1p5p/1np1Np2/p2p4/P2P2PK/4PR2/8/8 b - - 0 44",
+        "moves": [
+          "Nd7",
+          "Kh5",
+          "Re8",
+          "Nf4",
+          "Kg7",
+          "Kh4",
+          "Kf7",
+          "Nh5",
+          "Kg6"
+        ],
+        "annotations": [
+          "The knight reroutes to a better square.",
+          "White's king tries to advance.",
+          "The rook attacks the e6-knight.",
+          "White defends the knight.",
+          "Black's king marches up.",
+          "White's king retreats.",
+          "The king keeps advancing.",
+          "White probes with the knight.",
+          "The king reaches g6 — the active king is decisive in the knight endgame."
+        ],
+        "learnCues": [
+          "...Nd7 — reroute",
+          "Kh5 — White advances",
+          "...Re8 — hit the knight",
+          "Nf4 — defend",
+          "...Kg7 — march up",
+          "Kh4 — retreat",
+          "...Kf7 — keep coming",
+          "Nh5 — probe",
+          "...Kg6 — the active king"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "King Activity in the Knight Endgame (vs Polish_fighter3000)",
+        "intro": "A knight endgame won by the active king: reroute the knight, target White's advanced knight with the rook, and march the king up the board — the active king is decisive.",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-initiative",
+          "concept:pos-space",
+          "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
+        ]
+      }
+    ]
   }
 ]

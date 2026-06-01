@@ -5,11 +5,11 @@
 
 const PLANS: Record<string, Record<string, string[]>> = {
   'pro-carlsen-open-sicilian': { main: ['mp-procarlsen-opensicilian-storm'] },
-  'pro-carlsen-ruy-lopez': { main: ['mp-procarlsen-ruy-knighttour'] },
-  'pro-carlsen-queens-pawn': { main: ['mp-procarlsen-queenspawn-battery'] },
+  'pro-carlsen-ruy-lopez': { main: ['mp-procarlsen-ruy-knighttour', 'mp-procarlsen-ruy-endgame'] },
+  'pro-carlsen-queens-pawn': { main: ['mp-procarlsen-queenspawn-battery', 'mp-procarlsen-queenspawn-endgame'] },
   'pro-carlsen-sicilian': { main: ['mp-procarlsen-sicilian-qstorm'] },
-  'pro-carlsen-1e5': { main: ['mp-procarlsen-1e5-chigorin'] },
-  'pro-carlsen-nimzo': { main: ['mp-procarlsen-nimzo-qside'] },
+  'pro-carlsen-1e5': { main: ['mp-procarlsen-1e5-chigorin', 'mp-procarlsen-1e5-endgame'] },
+  'pro-carlsen-nimzo': { main: ['mp-procarlsen-nimzo-qside', 'mp-procarlsen-nimzo-endgame'] },
   'pro-carlsen-kid': { main: ['mp-procarlsen-kid-f5storm'] },
   'pro-carlsen-french': { main: ['mp-procarlsen-french-qbreak'] },
 };
