@@ -3378,5 +3378,347 @@
         "https://www.chess.com/openings/Nimzo-Indian-Defense"
       ]
     }
+  ],
+  "pro-aman-sicilian-kan": [
+    {
+      "fen": "rnbqkbnr/pp1p1ppp/4p3/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+      "wrongMove": "Qc7",
+      "correctMove": "a6",
+      "explanation": "The move order matters: playing …Qc7 before …a6 invites Nb5, hitting the queen and clamping the d6-square. In the Kan you almost always slot in …a6 first to take b5 away from the white knights, and only then bring the queen to c7.",
+      "shortNarration": "…a6 first — stop Nb5.",
+      "sources": [
+        "concept:pos-development",
+        "book:sicilian",
+        "https://www.chess.com/openings/Sicilian-Defense-Kan-Variation"
+      ]
+    },
+    {
+      "fen": "rnb1kb1r/1pqp1ppp/p3pn2/8/3NP3/2NB4/PPP2PPP/R1BQ1RK1 b kq - 5 7",
+      "wrongMove": "Bd6",
+      "correctMove": "d6",
+      "explanation": "…Bd6 looks active but it blocks the d-pawn and runs straight into White's f4-f5 plans, where the bishop becomes a target. The quiet …d6 is right: it builds the small Scheveningen shell, clamps the e5-square, and keeps the bishop's options open for …Be7 or …b5 and …Bb7.",
+      "shortNarration": "…d6 shell, not …Bd6.",
+      "sources": [
+        "concept:pos-development",
+        "book:sicilian",
+        "https://www.chess.com/openings/Sicilian-Defense-Kan-Variation"
+      ]
+    },
+    {
+      "fen": "r1b1kb1r/1pqp1ppp/p1n1pn2/8/3NP3/2N1B3/PPP1BPPP/R2Q1RK1 b kq - 3 8",
+      "wrongMove": "d5",
+      "correctMove": "Bb4",
+      "explanation": "Striking …d5 too early lets White open the centre with exd5 while Black is still uncastled and behind in development. Play the active …Bb4 first — it pins the c3-knight, keeps the pressure on e4, and saves the …d5 break for when Black is fully ready.",
+      "shortNarration": "…Bb4 first, …d5 is premature.",
+      "sources": [
+        "concept:pos-development",
+        "book:sicilian",
+        "https://www.chess.com/openings/Sicilian-Defense-Kan-Variation"
+      ]
+    }
+  ],
+  "pro-aman-nimzo-indian": [
+    {
+      "fen": "rnbq1rk1/ppp2ppp/4pn2/3p4/1bPP4/2NBPN2/PP3PPP/R1BQK2R b KQ - 1 6",
+      "wrongMove": "Nbd7",
+      "correctMove": "dxc4",
+      "explanation": "A routine …Nbd7 lets White play cxd5 and untangle comfortably with the tension resolved in his favour. The accurate move is …dxc4 — capture FIRST, dragging the bishop to c4 with tempo, and only then strike with …c5. Timing the capture is what gives the Nimzo its bite.",
+      "shortNarration": "…dxc4 first, then …c5.",
+      "sources": [
+        "concept:pos-development",
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Nimzo-Indian-Defense"
+      ]
+    },
+    {
+      "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PPQ1PPPP/R1B1KBNR b KQkq - 3 4",
+      "wrongMove": "Bxc3+",
+      "correctMove": "O-O",
+      "explanation": "Trading …Bxc3+ immediately is exactly what the Qc2 move was designed for: White recaptures with the queen, suffers NO doubled pawns, and keeps the bishop pair. Don't hand White the trade for free — castle first with …O-O, keep the pin, and trade only when it damages the pawns.",
+      "shortNarration": "…O-O first; keep the pin.",
+      "sources": [
+        "concept:pos-development",
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Nimzo-Indian-Defense"
+      ]
+    },
+    {
+      "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/5N2/PP1BPPPP/RN1QKB1R b KQkq - 3 4",
+      "wrongMove": "Bxd2+",
+      "correctMove": "Be7",
+      "explanation": "In the Bogo, …Bxd2+ trades off your good bishop and helps White develop the queen or knight to d2 with a free tempo. Retreat …Be7 instead: White's bishop sits passively on d2 where it was provoked, and Black keeps a sound structure with the bishop pair.",
+      "shortNarration": "…Be7 — keep the bishop.",
+      "sources": [
+        "concept:pos-development",
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Nimzo-Indian-Defense"
+      ]
+    }
+  ],
+  "pro-aman-caro-kann": [
+    {
+      "fen": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+      "wrongMove": "e6",
+      "correctMove": "Bf5",
+      "explanation": "The cardinal Caro error: …e6 before …Bf5 locks the light-squared bishop inside the pawn chain — turning the Caro into a bad French and throwing away its whole point. Always play …Bf5 FIRST, getting the bishop OUTSIDE the chain, and only then …e6.",
+      "shortNarration": "…Bf5 first; …e6 traps the bishop.",
+      "sources": [
+        "concept:pos-development",
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Caro-Kann-Defense"
+      ]
+    },
+    {
+      "fen": "r2qkb1r/pp1nnppp/2p1p3/3pPb2/3P3N/8/PPP1BPPP/RNBQ1RK1 b kq - 5 7",
+      "wrongMove": "Be4",
+      "correctMove": "Bg6",
+      "explanation": "When White attacks the bishop with Nh4, …Be4 walks into f3 hitting the bishop and gaining time, and the bishop can get awkward. …Bg6 is the calm retreat — it keeps the good bishop on a safe diagonal where Nxg6 only opens the h-file for Black.",
+      "shortNarration": "…Bg6 — safe retreat, keep it.",
+      "sources": [
+        "concept:pos-development",
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Caro-Kann-Defense"
+      ]
+    },
+    {
+      "fen": "r2qkbnr/pp1n1ppp/2p1p3/3pPb2/3P4/5N2/PPP1BPPP/RNBQ1RK1 b kq - 3 6",
+      "wrongMove": "Bd6",
+      "correctMove": "Ne7",
+      "explanation": "…Bd6 looks natural but it bumps into White's e5-pawn and blocks the d-file the …c5 break wants to open. The knight reroute …Ne7-g6 is the plan — it pressures e5 and keeps the dark bishop free for a better square.",
+      "shortNarration": "…Ne7 reroute, not …Bd6.",
+      "sources": [
+        "concept:pos-development",
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Caro-Kann-Defense"
+      ]
+    }
+  ],
+  "pro-aman-reti": [
+    {
+      "fen": "rnbq1rk1/p1p1bppp/1p2pn2/3p4/2PP4/2NBPN2/PP3PPP/R1BQK2R w KQ - 0 7",
+      "wrongMove": "e4",
+      "correctMove": "cxd5",
+      "explanation": "Lunging e4 here is premature — it opens lines before White is fully coordinated and gives Black …dxe4 with active piece play. The accurate move is cxd5: resolve the centre first, fix a target on d5, and keep the small, durable edge. The Réti rewards patience, not haste.",
+      "shortNarration": "cxd5 first; e4 is premature.",
+      "sources": [
+        "concept:pos-development",
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Reti-Opening"
+      ]
+    },
+    {
+      "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/3PP3/2PB1N2/PP3PPP/RNBQK2R w KQ - 3 6",
+      "wrongMove": "e5",
+      "correctMove": "O-O",
+      "explanation": "Pushing e5 before castling overextends the centre and walks into …dxe5 and …Nfd7 hitting it, with White's king still in the middle. Castle first with O-O, complete development, and only then think about expanding. Safety before space.",
+      "shortNarration": "O-O first; e5 overextends.",
+      "sources": [
+        "concept:pos-development",
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Reti-Opening"
+      ]
+    },
+    {
+      "fen": "r1bq1rk1/pppnppbp/3p1np1/8/8/3P1NP1/PPPNPPBP/R1BQ1RK1 w - - 2 7",
+      "wrongMove": "c4",
+      "correctMove": "e4",
+      "explanation": "c4 is a reasonable move but it commits to a slow English-style game; the thematic King's-Indian-Attack break is e4, seizing the centre now that everything is developed behind it. e4 is the move the whole fianchetto setup was building toward.",
+      "shortNarration": "e4 — the thematic KIA break.",
+      "sources": [
+        "concept:pos-development",
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Reti-Opening"
+      ]
+    }
+  ],
+  "pro-aman-ruy-lopez": [
+    {
+      "fen": "r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+      "wrongMove": "Bxc6",
+      "correctMove": "Ba4",
+      "explanation": "Capturing …Bxc6 this early (the Exchange) hands Black the bishop pair and a solid structure for free, throwing away the Ruy's whole long-term pressure. Retreat Ba4 instead: keep the bishop, keep the pin-pressure on the e5-defender, and play for the slow squeeze.",
+      "shortNarration": "Ba4 — keep the bishop’s pressure.",
+      "sources": [
+        "concept:pos-development",
+        "book:ruy-lopez",
+        "https://www.chess.com/openings/Ruy-Lopez-Opening"
+      ]
+    },
+    {
+      "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQR1K1 w - - 2 8",
+      "wrongMove": "d4",
+      "correctMove": "h3",
+      "explanation": "Rushing d4 before h3 walks into …Bg4 pinning the f3-knight, and the pressure on d4 becomes awkward. Play h3 first — it stops the pin and makes luft — and only then build the centre with c3 and d4. The Closed Ruy is about preparation, not haste.",
+      "shortNarration": "h3 first — stop …Bg4.",
+      "sources": [
+        "concept:pos-development",
+        "book:ruy-lopez",
+        "https://www.chess.com/openings/Ruy-Lopez-Opening"
+      ]
+    },
+    {
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+      "wrongMove": "Nxe5",
+      "correctMove": "d3",
+      "explanation": "Grabbing Nxe5 looks like a free pawn, but Black hits back with …Qe7 or …Nxe5 and regains it with fully active pieces — the pawn-snatch only helps Black develop. The clean modern choice is d3: sidestep the heavy Berlin theory, keep the queens on, and squeeze slowly with a sound structure.",
+      "shortNarration": "d3 — squeeze, don’t grab e5.",
+      "sources": [
+        "concept:pos-development",
+        "book:ruy-lopez",
+        "https://www.chess.com/openings/Ruy-Lopez-Opening"
+      ]
+    }
+  ],
+  "pro-aman-open-sicilian": [
+    {
+      "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+      "wrongMove": "Nf5",
+      "correctMove": "Be2",
+      "explanation": "Hopping Nf5 looks aggressive but the knight is simply chased back by …e6 or …g6 with tempo, and White falls behind in development. The solid Be2 is the move — castle fast, keep a healthy position, and play for the d5-square. Don't chase shadows; develop.",
+      "shortNarration": "Be2 — develop, not Nf5.",
+      "sources": [
+        "concept:pos-development",
+        "book:sicilian",
+        "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation"
+      ]
+    },
+    {
+      "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/3NP3/2N5/PPP1BPPP/R1BQK2R w KQkq - 0 7",
+      "wrongMove": "Nf3",
+      "correctMove": "Nb3",
+      "explanation": "Retreating Nf3 blocks the f-pawn and bumps into …e4 ideas later, and the knight does nothing useful. Nb3 is correct: the knight stays active, eyes c5 and a5, and — crucially — White's whole plan now targets the d5-hole that …e5 created.",
+      "shortNarration": "Nb3 — keep the knight active.",
+      "sources": [
+        "concept:pos-development",
+        "book:sicilian",
+        "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation"
+      ]
+    },
+    {
+      "fen": "r1bqkb1r/1p3ppp/p1nppn2/6B1/3NP3/2N5/PPPQ1PPP/R3KB1R w KQkq - 0 8",
+      "wrongMove": "f4",
+      "correctMove": "O-O-O",
+      "explanation": "Lashing out with f4 before castling leaves White's king in the centre just as the position opens — a recipe for disaster against the Sicilian. Castle queenside first with O-O-O: connect the rooks, get the king safe, and only then launch the kingside pawn storm.",
+      "shortNarration": "O-O-O first; then attack.",
+      "sources": [
+        "concept:pos-development",
+        "book:sicilian",
+        "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation"
+      ]
+    }
+  ],
+  "pro-aman-rossolimo": [
+    {
+      "fen": "r1bqkbnr/pp1ppp1p/2n3p1/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+      "wrongMove": "Ba4",
+      "correctMove": "Bxc6",
+      "explanation": "Keeping the bishop with Ba4 here misses the whole point: against the …g6 fianchetto, Bxc6 is right — it doubles Black's pawns and damages the structure behind the Dragon bishop. The structural gain is worth the bishop pair. Trade now, then clamp the centre.",
+      "shortNarration": "Bxc6 — take the doubled pawns.",
+      "sources": [
+        "concept:pos-development",
+        "book:sicilian-rossolimo",
+        "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation"
+      ]
+    },
+    {
+      "fen": "r1bqk2r/p2pppbp/2p2np1/2p5/4P3/5N2/PPPP1PPP/RNBQR1K1 w kq - 4 7",
+      "wrongMove": "d3",
+      "correctMove": "e5",
+      "explanation": "A passive d3 lets Black untangle with …d6 and …O-O, and the doubled pawns stop hurting. The thematic e5 is the move: gain space, kick the knight, and use the pawn majority to cramp Black and blunt the g7-bishop. Push, don't sit.",
+      "shortNarration": "e5 — clamp, don’t sit on d3.",
+      "sources": [
+        "concept:pos-development",
+        "book:sicilian-rossolimo",
+        "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation"
+      ]
+    },
+    {
+      "fen": "r1bqkb1r/1p1pnppp/p1n1p3/1Bp5/4P3/5N2/PPPP1PPP/RNBQR1K1 w kq - 0 6",
+      "wrongMove": "Bxc6",
+      "correctMove": "Bf1",
+      "explanation": "Against the …e6 setup, trading …Bxc6 here just helps Black — the doubled pawns aren't weak with the bishop still home, and Black gets the bishop pair for free. Retreat Bf1 instead: keep the bishop pair and reroute it to a better diagonal. The Rossolimo Bxc6 trade is for the …g6 lines, not this one.",
+      "shortNarration": "Bf1 — keep the bishop here.",
+      "sources": [
+        "concept:pos-development",
+        "book:sicilian-rossolimo",
+        "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation"
+      ]
+    }
+  ],
+  "pro-aman-french-white": [
+    {
+      "fen": "rnbqk1nr/pp3ppp/4p3/2ppP3/1b1P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 5",
+      "wrongMove": "dxc5",
+      "correctMove": "a3",
+      "explanation": "Grabbing dxc5 surrenders the proud d4-e5 pawn chain and lets Black equalise easily with …Nc6 and …Bxc5. The Winawer move is a3 — question the b4-bishop, force the …Bxc3 trade, and keep the big centre plus the bishop pair. Hold the chain, don't dissolve it.",
+      "shortNarration": "a3 — keep the chain, not dxc5.",
+      "sources": [
+        "concept:pos-development",
+        "book:french-defence",
+        "https://www.chess.com/openings/French-Defense"
+      ]
+    },
+    {
+      "fen": "rnb1k2r/ppq1nppp/4p3/2ppP3/3P3P/P1P5/2P2PP1/R1BQKBNR w KQkq - 1 8",
+      "wrongMove": "Bd3",
+      "correctMove": "Nf3",
+      "explanation": "Bd3 looks natural but it leaves the e5-pawn hanging — Black snaps it off with …Qxe5 and the whole centre collapses. Nf3 first: defend the e5-pawn that anchors White's space and attack, and only then bring the other pieces out. The pawn chain is sacred in the Winawer.",
+      "shortNarration": "Nf3 — defend e5 first.",
+      "sources": [
+        "concept:pos-development",
+        "book:french-defence",
+        "https://www.chess.com/openings/French-Defense"
+      ]
+    },
+    {
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/6B1/3Pp3/2N5/PPP2PPP/R2QKBNR w KQkq - 0 5",
+      "wrongMove": "f3",
+      "correctMove": "Nxe4",
+      "explanation": "Trying to hold the pawn with f3 weakens the king and hands Black active play after …exf3. Just recapture Nxe4 — White keeps a healthy structure, a small space edge, and the Bg5 pin to press Black's kingside. Don't grovel for a pawn; take back cleanly and develop.",
+      "shortNarration": "Nxe4 — recapture cleanly.",
+      "sources": [
+        "concept:pos-development",
+        "book:french-defence",
+        "https://www.chess.com/openings/French-Defense"
+      ]
+    }
+  ],
+  "pro-aman-anti-caro": [
+    {
+      "fen": "rn1qkbnr/pp2pppp/2p5/3p4/4P1b1/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 2 4",
+      "wrongMove": "Be2",
+      "correctMove": "h3",
+      "explanation": "Passively allowing the pin with Be2 lets Black keep the …Bg4 bishop comfortably. Play h3 first — question the bishop immediately. After …Bxf3 you recapture with the queen and pocket the bishop pair; if Black retreats, you've gained a free tempo. Always put the question.",
+      "shortNarration": "h3 — question the bishop.",
+      "sources": [
+        "concept:pos-development",
+        "book:caro-kann",
+        "https://www.chess.com/openings/Caro-Kann-Defense-Two-Knights-Attack"
+      ]
+    },
+    {
+      "fen": "rnbqkb1r/pp2pppp/2p2n2/8/4N3/5N2/PPPP1PPP/R1BQKB1R w KQkq - 1 5",
+      "wrongMove": "Nxf6+",
+      "correctMove": "Qe2",
+      "explanation": "Trading Nxf6+ helps Black develop — after …exf6 or …gxf6 Black solves all problems. The accurate Qe2 keeps the tension and the initiative: the centralised knight stays, and White retains the more active, flexible position. Don't release the pressure for free.",
+      "shortNarration": "Qe2 — keep the tension.",
+      "sources": [
+        "concept:pos-development",
+        "book:caro-kann",
+        "https://www.chess.com/openings/Caro-Kann-Defense-Two-Knights-Attack"
+      ]
+    },
+    {
+      "fen": "rn1qkbnr/pp3ppp/2p1p3/8/3Pp3/2N2Q1P/PPP2PP1/R1B1KB1R w KQkq - 0 7",
+      "wrongMove": "Qxf7+",
+      "correctMove": "Qxe4",
+      "explanation": "The flashy Qxf7+ is a blunder — after …Kxf7 White has simply given away the queen for a pawn. Recapture calmly with Qxe4, centralising on a strong square with the bishop pair and a comfortable edge. The Two Knights wins by quiet quality, not desperate sacrifices.",
+      "shortNarration": "Qxe4 — centralise, don’t blunder.",
+      "sources": [
+        "concept:pos-development",
+        "book:caro-kann",
+        "https://www.chess.com/openings/Caro-Kann-Defense-Two-Knights-Attack"
+      ]
+    }
   ]
 }

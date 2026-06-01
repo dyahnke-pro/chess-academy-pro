@@ -361,6 +361,99 @@ const OPENINGS = {
       'two-knights': { label: 'vs Two Knights',       prefix: ['e4','c6','Nc3'] },
     },
   },
+  // ===== Aman Hambleton (chessbrah) — 2026-06-01 build =====
+  'aman-sicilian-kan': {
+    color: 'black',
+    studentUsername: 'chessbrah',
+    variations: {
+      'open-main':    { label: 'Open Kan (Nc3 Qc7 Bd3 f4)', prefix: ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'a6', 'Nc3', 'Qc7', 'Bd3'] },
+      'bd3-early':    { label: 'Bd3 early (4…a6 5.Bd3)', prefix: ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'a6', 'Bd3'] },
+      'taimanov-nc6': { label: 'Taimanov (…Nc6)', prefix: ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'Nc6'] },
+      'maroczy-c4':   { label: 'Maróczy Bind (c4)', prefix: ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'a6', 'c4'] },
+      'alapin-c3':    { label: 'vs Alapin (2.c3)', prefix: ['e4', 'c5', 'c3'] },
+      'kia-g3':       { label: 'vs KIA (g3)', prefix: ['e4', 'c5', 'Nf3', 'e6', 'g3'] },
+      'nc3-2':        { label: 'vs 2.Nc3', prefix: ['e4', 'c5', 'Nc3'] },
+    },
+  },
+  'aman-nimzo-indian': {
+    color: 'black',
+    studentUsername: 'chessbrah',
+    variations: {
+      'rubinstein-e3': { label: 'Rubinstein (e3)', prefix: ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'e3'] },
+      'bogo-nf3':      { label: 'Bogo-Indian (3.Nf3 Bb4+)', prefix: ['d4', 'Nf6', 'c4', 'e6', 'Nf3', 'Bb4+'] },
+      'classical-qc2': { label: 'Classical (4.Qc2)', prefix: ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'Qc2'] },
+      'catalan-g3':    { label: 'vs Catalan/g3', prefix: ['d4', 'Nf6', 'c4', 'e6', 'g3'] },
+      'samisch-f3':    { label: 'vs Sämisch (f3)', prefix: ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'f3'] },
+    },
+  },
+  'aman-caro-kann': {
+    color: 'black',
+    studentUsername: 'chessbrah',
+    variations: {
+      'advance-bf5':  { label: 'Advance (…Bf5)', prefix: ['e4', 'c6', 'd4', 'd5', 'e5', 'Bf5'] },
+      'two-knights':  { label: 'vs Two Knights (2.Nf3)', prefix: ['e4', 'c6', 'Nf3'] },
+      'nc3-2':        { label: 'vs 2.Nc3', prefix: ['e4', 'c6', 'Nc3'] },
+      'exchange':     { label: 'vs Exchange (3.exd5)', prefix: ['e4', 'c6', 'd4', 'd5', 'exd5'] },
+    },
+  },
+  'aman-reti': {
+    color: 'white',
+    studentUsername: 'chessbrah',
+    variations: {
+      'vs-d5-qgd':    { label: 'vs …d5 (QGD/Slav structures)', prefix: ['Nf3', 'd5'] },
+      'vs-g6-kia':    { label: 'vs …g6 (KIA/e4)', prefix: ['Nf3', 'g6'] },
+      'double-fianch': { label: 'Double Fianchetto (g3)', prefix: ['Nf3', 'Nf6', 'g3'] },
+      'vs-c5-rossolimo': { label: 'vs …c5 (e4 → Rossolimo)', prefix: ['Nf3', 'c5'] },
+      'vs-e5':        { label: 'vs …e5', prefix: ['Nf3', 'e5'] },
+    },
+  },
+  'aman-ruy-lopez': {
+    color: 'white',
+    studentUsername: 'chessbrah',
+    variations: {
+      'morphy-a6':   { label: 'Morphy (…a6)', prefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6'] },
+      'berlin':      { label: 'Berlin (…Nf6)', prefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'Nf6'] },
+      'classical-bc5': { label: 'Classical (…Bc5)', prefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'Bc5'] },
+      'exchange-a6': { label: 'Exchange (Bxc6)', prefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Bxc6'] },
+    },
+  },
+  'aman-open-sicilian': {
+    color: 'white',
+    studentUsername: 'chessbrah',
+    variations: {
+      'najdorf-a6':   { label: 'vs Najdorf (…a6)', prefix: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6'] },
+      'scheveningen-e6': { label: 'vs Scheveningen (…e6)', prefix: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'e6'] },
+      'classical-nc6': { label: 'vs Classical (…Nc6)', prefix: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'Nc6'] },
+      'dragon-g6':    { label: 'vs Dragon (…g6)', prefix: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'g6'] },
+    },
+  },
+  'aman-rossolimo': {
+    color: 'white',
+    studentUsername: 'chessbrah',
+    variations: {
+      'g6-fianch':  { label: 'vs …g6 (Bxc6)', prefix: ['e4', 'c5', 'Nf3', 'Nc6', 'Bb5', 'g6'] },
+      'e6-line':    { label: 'vs …e6', prefix: ['e4', 'c5', 'Nf3', 'Nc6', 'Bb5', 'e6'] },
+      'd6-moscow':  { label: 'Moscow vs …d6', prefix: ['e4', 'c5', 'Nf3', 'd6', 'Bb5+'] },
+    },
+  },
+  'aman-french-white': {
+    color: 'white',
+    studentUsername: 'chessbrah',
+    variations: {
+      'winawer-bb4': { label: 'Winawer (…Bb4)', prefix: ['e4', 'e6', 'd4', 'd5', 'Nc3', 'Bb4'] },
+      'classical-nf6': { label: 'Classical (…Nf6)', prefix: ['e4', 'e6', 'd4', 'd5', 'Nc3', 'Nf6'] },
+      'rubinstein-dxe4': { label: 'Rubinstein (…dxe4)', prefix: ['e4', 'e6', 'd4', 'd5', 'Nc3', 'dxe4'] },
+    },
+  },
+  'aman-anti-caro': {
+    color: 'white',
+    studentUsername: 'chessbrah',
+    variations: {
+      'two-knights-bg4': { label: 'Two Knights (…Bg4)', prefix: ['e4', 'c6', 'Nc3', 'd5', 'Nf3', 'Bg4'] },
+      'two-knights-dxe4': { label: 'Two Knights (…dxe4)', prefix: ['e4', 'c6', 'Nc3', 'd5', 'Nf3', 'dxe4'] },
+      'g6-line':     { label: 'vs …g6', prefix: ['e4', 'c6', 'Nc3', 'd5', 'Nf3', 'g6'] },
+    },
+  },
   // ── Magnus Carlsen (combined online + OTB corpus) ──
   'carlsen-open-sicilian': {
     color: 'white',
