@@ -38,3 +38,20 @@ generalized scope (extend SCOPE_RE + the PostToolUse matcher).
 - [x] corpus fetched (17,171), repertoire analysed
 - [ ] extract trees + model games (8 openings)
 - [ ] author + wire + gate + ship + audit
+
+## DONE (2026-06-01) — full G9.1 parity, shipped
+8 openings, each to the Eric Rosen standard:
+- Main + variation Watch lessons (16 files, board-accurate, two-register, arrow-clean)
+- 24 model games (real Samay wins, up to 2950)
+- 8 middlegame plans (anchored at spine terminus)
+- 8 pitfalls
+- 25 engine-mined punish-gems (Stockfish 17, crushes to +6.1)
+- Tab-plan resolvers, PRO_DATA_REVISION bump
+
+Verification: all gates green (2478 tests), ship-check READY TO PUSH, on main.
+Real-app audit 8/8 (curated Watch lessons, 0 legacy fallbacks). Also integrated
+a parallel Caruana build (registered its 7 lessons + fixed its kind:'main'
+typecheck bug + baselined its tab resolvers).
+
+Deferred (honest, per "empty > invented"): endgame plans + named traps beyond
+the mined gems.
