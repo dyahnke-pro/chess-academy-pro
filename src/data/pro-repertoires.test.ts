@@ -63,7 +63,7 @@ describe('Pro Repertoire PGN Legality', () => {
     // David's pick): +5 (Nimzo-Larsen, Closed Sicilian, Réti, Modern,
     // Caro-Kann) = 33. Eric Rosen (2026-05-31): +1 (Stafford) = 34.
     // Bump this as each remaining player is rebuilt.
-    expect(proRepertoire.openings).toHaveLength(53);
+    expect(proRepertoire.openings).toHaveLength(57);
   });
 
   it('every opening has a valid playerId', () => {

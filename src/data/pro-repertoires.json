@@ -3784,6 +3784,154 @@
         "concept:pos-development",
         "https://api.chess.com/pub/player/samayraina/games/archives"
       ]
+    },
+    {
+      "id": "pro-caruana-italian",
+      "playerId": "caruana",
+      "eco": "C54",
+      "name": "Italian Game",
+      "color": "white",
+      "style": "positional",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3 d6 O-O O-O Re1 a6 a4 Ba7 Nbd2 Be6 Bxe6 fxe6",
+      "overview": "Caruana's modern Giuoco Pianissimo: the quiet c3+d3 setup, slow maneuvering with Re1, a4 and Nbd2, then Bxe6 to saddle Black with a weak isolated e6-pawn and press it.",
+      "keyIdeas": [
+        "Bc4 eyes f7; c3+d3 is the modern slow Italian, not the old gambit.",
+        "a4 restrains Black’s ...b5 and gains queenside space.",
+        "Nbd2 reroutes toward f1/g3 and keeps the structure flexible.",
+        "Bxe6 gives Black a weak isolated e6-pawn — the structural target."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "Two Knights 3...Nf6",
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Bc5 c3 d6 O-O O-O Re1 a6 a4 Ba7 Nbd2 Be6",
+          "explanation": "Against the Two Knights move-order Caruana transposes to the same Pianissimo structure — Re1, a4, Nbd2 — building the slow positional pull he converts.",
+          "sources": [
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Italian_Game",
+            "https://www.chess.com/openings/Italian-Game",
+            "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+          ]
+        }
+      ],
+      "sources": [
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Italian_Game",
+        "https://www.chess.com/openings/Italian-Game",
+        "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+      ]
+    },
+    {
+      "id": "pro-caruana-french",
+      "playerId": "caruana",
+      "eco": "C11",
+      "name": "French Defense",
+      "color": "black",
+      "style": "solid",
+      "pgn": "e4 e6 d4 d5 Nc3 Nf6 Bg5 Be7 e5 Nfd7 Bxe7 Qxe7 f4 a6 Nf3 c5 Qd2 Nc6 dxc5 Qxc5",
+      "overview": "Caruana's solid Classical French. ...Be7 breaks the pin, ...Nfd7 retreats under e5, the bishops trade, and ...c5 strikes the base of White's pawn chain for active, no-bad-bishop play.",
+      "keyIdeas": [
+        "...d5 challenges the centre at once — the French’s counterattacking core.",
+        "...Be7 (Classical) calmly breaks the Bg5 pin.",
+        "After the bishop trade Black has no bad bishop and a clear plan.",
+        "...c5 strikes the base of the d4-e5 pawn chain."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "Winawer 3...Bb4",
+          "pgn": "e4 e6 d4 d5 Nc3 Bb4 e5 c5 a3 Bxc3+ bxc3 Ne7 Qg4 Qc7 Qxg7 Rg8 Qxh7 cxd4",
+          "explanation": "The Winawer: ...Bb4 pins and ...Bxc3 doubles White's pawns, then ...c5 and the poisoned-pawn main line give Black a raging counterattack against the shattered queenside.",
+          "sources": [
+            "concept:pawn-minority-attack",
+            "https://en.wikipedia.org/wiki/French_Defence",
+            "https://www.chess.com/openings/French-Defense",
+            "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+          ]
+        }
+      ],
+      "sources": [
+        "concept:pawn-minority-attack",
+        "https://en.wikipedia.org/wiki/French_Defence",
+        "https://www.chess.com/openings/French-Defense",
+        "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+      ]
+    },
+    {
+      "id": "pro-caruana-caro-kann",
+      "playerId": "caruana",
+      "eco": "B11",
+      "name": "Caro-Kann",
+      "color": "black",
+      "style": "solid",
+      "pgn": "e4 c6 Nf3 d5 Nc3 Bg4 h3 Bxf3 Qxf3 e6 d3 Nd7 g3 Ngf6 Bg2 Bb4 O-O O-O Qe2 e5",
+      "overview": "The soundest defence to e4. Against the Two Knights, Caruana plays the classical ...Bg4, trades the light bishop before it gets trapped, builds the solid wall, and breaks with ...e5 for full equality.",
+      "keyIdeas": [
+        "...Bg4 develops the light bishop OUTSIDE the chain and pins the knight.",
+        "...Bxf3 trades it off with no concession; ...e6 builds the solid wall.",
+        "...Bb4 pins the c3-knight, fighting for e4.",
+        "...e5 seizes the centre and equalises fully."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "Advance 3.e5 Bf5",
+          "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 c5 Be3 Qb6 Nc3 Nc6 O-O cxd4 Nxd4 Nxd4",
+          "explanation": "The Advance Variation and the Caro's whole point — ...Bf5 develops the light bishop outside the chain, then ...c5 and ...Qb6 pressure White's centre into a comfortable game.",
+          "sources": [
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
+            "https://www.chess.com/openings/Caro-Kann-Defense",
+            "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+          ]
+        }
+      ],
+      "sources": [
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
+        "https://www.chess.com/openings/Caro-Kann-Defense",
+        "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+      ]
+    },
+    {
+      "id": "pro-caruana-kid",
+      "playerId": "caruana",
+      "eco": "E68",
+      "name": "King's Indian Defense",
+      "color": "black",
+      "style": "dynamic",
+      "pgn": "d4 Nf6 c4 g6 Nf3 Bg7 g3 O-O Bg2 d6 O-O Nbd7 Nc3 e5 e4 c6 h3 Qb6 Re1 exd4",
+      "overview": "Caruana's combative King's Indian against the solid Fianchetto. Fianchetto with ...Bg7, support the centre with ...d6/...c6, strike with ...e5, then ...exd4 opens the long diagonal for dynamic play.",
+      "keyIdeas": [
+        "...Bg7 fianchettoes onto the long diagonal — hand White the centre as a target.",
+        "...e5 is the soul of the King’s Indian, challenging d4 head-on.",
+        "...c6 is flexible, preparing ...Qb6 and covering d5.",
+        "...exd4 opens the long diagonal for the g7-bishop and active play."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "Classical 5.Nc3 + e4",
+          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O Nc6 d5 Ne7 Ne1 Nd7",
+          "explanation": "Against the Classical with e4, Black plays the main-line ...Nc6, meets d5 with ...Ne7, and reroutes the knights (...Ne1 by White, ...Nd7 by Black) for the thematic kingside pawn storm.",
+          "sources": [
+            "concept:pos-center",
+            "https://en.wikipedia.org/wiki/King%27s_Indian_Defence",
+            "https://www.chess.com/openings/Kings-Indian-Defense",
+            "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+          ]
+        }
+      ],
+      "sources": [
+        "concept:pos-center",
+        "https://en.wikipedia.org/wiki/King%27s_Indian_Defence",
+        "https://www.chess.com/openings/Kings-Indian-Defense",
+        "https://api.chess.com/pub/player/fabianocaruana/games/archives"
+      ]
     }
   ]
 }

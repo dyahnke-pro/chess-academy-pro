@@ -102,6 +102,14 @@ import { PRO_CARUANA_NIMZO_INDIAN_VARIATION_LESSONS } from './proCaruanaNimzoInd
 import { PRO_CARUANA_NAJDORF_LESSON } from './proCaruanaNajdorf';
 import { PRO_CARUANA_TAIMANOV_LESSON } from './proCaruanaTaimanov';
 import { PRO_CARUANA_TAIMANOV_VARIATION_LESSONS } from './proCaruanaTaimanovVariations';
+import { PRO_CARUANA_ITALIAN_LESSON } from './proCaruanaItalian';
+import { PRO_CARUANA_ITALIAN_VARIATION_LESSONS } from './proCaruanaItalianVariations';
+import { PRO_CARUANA_FRENCH_LESSON } from './proCaruanaFrench';
+import { PRO_CARUANA_FRENCH_VARIATION_LESSONS } from './proCaruanaFrenchVariations';
+import { PRO_CARUANA_CARO_KANN_LESSON } from './proCaruanaCaroKann';
+import { PRO_CARUANA_CARO_KANN_VARIATION_LESSONS } from './proCaruanaCaroKannVariations';
+import { PRO_CARUANA_KID_LESSON } from './proCaruanaKID';
+import { PRO_CARUANA_KID_VARIATION_LESSONS } from './proCaruanaKIDVariations';
 import { RUY_LOPEZ_LESSON } from './ruyLopez';
 import { RUY_VARIATION_LESSONS } from './ruyVariations';
 import { PIRC_DEFENCE_LESSON } from './pircDefence';
@@ -329,6 +337,10 @@ const LESSONS: Record<string, LessonScript> = {
   [PRO_CARUANA_NIMZO_INDIAN_LESSON.openingId]: PRO_CARUANA_NIMZO_INDIAN_LESSON,
   [PRO_CARUANA_NAJDORF_LESSON.openingId]: PRO_CARUANA_NAJDORF_LESSON,
   [PRO_CARUANA_TAIMANOV_LESSON.openingId]: PRO_CARUANA_TAIMANOV_LESSON,
+  [PRO_CARUANA_ITALIAN_LESSON.openingId]: PRO_CARUANA_ITALIAN_LESSON,
+  [PRO_CARUANA_FRENCH_LESSON.openingId]: PRO_CARUANA_FRENCH_LESSON,
+  [PRO_CARUANA_CARO_KANN_LESSON.openingId]: PRO_CARUANA_CARO_KANN_LESSON,
+  [PRO_CARUANA_KID_LESSON.openingId]: PRO_CARUANA_KID_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {
@@ -434,6 +446,10 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...PRO_CARUANA_RUY_LOPEZ_VARIATION_LESSONS,
   ...PRO_CARUANA_NIMZO_INDIAN_VARIATION_LESSONS,
   ...PRO_CARUANA_TAIMANOV_VARIATION_LESSONS,
+  ...PRO_CARUANA_ITALIAN_VARIATION_LESSONS,
+  ...PRO_CARUANA_FRENCH_VARIATION_LESSONS,
+  ...PRO_CARUANA_CARO_KANN_VARIATION_LESSONS,
+  ...PRO_CARUANA_KID_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {
