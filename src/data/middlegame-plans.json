@@ -70616,5 +70616,137 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-proamanopensic-najdorf",
+    "openingId": "pro-aman-open-sicilian",
+    "title": "Clamp d5 and Expand with c4",
+    "overview": "White lands the knight on the d5-outpost, and after the trade a pawn recaptures to clamp the centre permanently. Then c4 props the d5-pawn and gains queenside space — the weakness on d5 becomes a battering ram.",
+    "pawnBreaks": [
+      "c4 queenside space"
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "knight",
+        "route": "Nc3-d5 outpost",
+        "explanation": "The knight occupies the d5-outpost, the square …e5 left weak."
+      }
+    ],
+    "strategicThemes": [
+      "Occupy d5, recapture with a pawn to clamp, then expand with c4"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "rn1q1rk1/1p2bppp/p2pbn2/4p3/4P3/1NN1B3/PPP1BPPP/R2Q1RK1 w - - 6 10",
+        "moves": [
+          "Nd5",
+          "Nbd7",
+          "Qd3",
+          "Bxd5",
+          "exd5",
+          "g6",
+          "c4",
+          "b6"
+        ],
+        "annotations": [
+          "Nd5 occupies the dominant outpost.",
+          "…Nbd7 develops the last knight.",
+          "Qd3 centralises and eyes the kingside.",
+          "…Bxd5 trades off the strong knight.",
+          "exd5 recaptures, clamping the centre with a pawn.",
+          "…g6 makes luft.",
+          "c4 props d5 and grabs queenside space.",
+          "…b6 prepares to challenge."
+        ],
+        "learnCues": [
+          "Nd5 — the outpost",
+          "…Nbd7 — develop",
+          "Qd3 — centralise",
+          "…Bxd5 — trade",
+          "exd5 — clamp with a pawn",
+          "…g6 — luft",
+          "c4 — grab space",
+          "…b6 — second front"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "d1",
+              "to": "d3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "book:sicilian",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation"
+        ]
+      }
+    ]
   }
 ]

@@ -3501,6 +3501,66 @@
           ]
         }
       ]
+    },
+    {
+      "id": "pro-aman-open-sicilian",
+      "playerId": "aman",
+      "eco": "B90",
+      "name": "Open Sicilian vs …d6 (Aman)",
+      "color": "white",
+      "style": "Principled, Aggressive",
+      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Be3 Be6 Nd5",
+      "overview": "Aman Hambleton's principled answer to the …d6 Sicilians (894 games, 76.3%) — the Open Sicilian, taking the centre with d4 and playing for fast development and the half-open d-file. Against the Najdorf he chooses the solid Be2 setup: castle quickly, retreat Nb3 when Black plays …e5, and pile onto the d5-square that …e5 weakens. When Black develops with …Nc6 he switches to the aggressive Richter-Rauzer with Bg5 and opposite-side castling. Either way the plan is the same Open-Sicilian logic: grab the centre, find the weakness, and press it.",
+      "keyIdeas": [
+        "Take the centre with d4 and develop quickly down the half-open d-file.",
+        "vs Najdorf: solid Be2, then Nb3 and clamp the d5-square …e5 weakens.",
+        "vs …Nc6: aggressive Bg5 Richter-Rauzer with O-O-O and a kingside storm.",
+        "Find the structural weakness and press it long-term."
+      ],
+      "traps": [],
+      "warnings": [
+        "In the Open Sicilian Black gets queenside counterplay fast — finish development and castle before launching, or the …b5 and …d5 breaks arrive first."
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:sicilian",
+        "concept:pos-development",
+        "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation",
+        "https://api.chess.com/pub/player/chessbrah/games/archives"
+      ],
+      "variations": [
+        {
+          "name": "vs Najdorf (…a6)",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Be3 Be6 Nd5 Nbd7 Qd3 Bxd5 exd5",
+          "explanation": "His main line. Solid Be2, retreat Nb3 vs …e5, and clamp the weak d5-square with the knight (and a pawn after the trade).",
+          "sources": [
+            "book:sicilian",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation"
+          ]
+        },
+        {
+          "name": "vs Classical (…Nc6)",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Bg5 e6 Qd2 a6 O-O-O Bd7 f3 Be7 h4 h6 Be3 h5 Kb1",
+          "explanation": "The aggressive Richter-Rauzer: Bg5 pin, O-O-O, and a kingside pawn storm against Black’s king.",
+          "sources": [
+            "book:sicilian",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation"
+          ]
+        },
+        {
+          "name": "vs Dragon (…g6)",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 O-O Qd2 Nc6 O-O-O d5 Qe1 e5 Nxc6 bxc6",
+          "explanation": "The Yugoslav Attack vs the Dragon: Be3, f3, Qd2, O-O-O and the thematic h4-h5 assault on the fianchettoed king.",
+          "sources": [
+            "book:sicilian",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation"
+          ]
+        }
+      ]
     }
   ]
 }
