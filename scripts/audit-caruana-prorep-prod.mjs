@@ -24,12 +24,12 @@ const MIDDLEGAME_MOVES = 12;
 const OPENINGS = [
   { id: "pro-caruana-ruy-lopez", gems: 7 },
   { id: "pro-caruana-italian", gems: 2 },
-  { id: "pro-caruana-najdorf", gems: 0 },
+  { id: "pro-caruana-najdorf", gems: 2 },
   { id: "pro-caruana-taimanov", gems: 0 },
-  { id: "pro-caruana-nimzo-indian", gems: 0 },
+  { id: "pro-caruana-nimzo-indian", gems: 1 },
   { id: "pro-caruana-french", gems: 0 },
-  { id: "pro-caruana-caro-kann", gems: 0 },
-  { id: "pro-caruana-kid", gems: 0 },
+  { id: "pro-caruana-caro-kann", gems: 4 },
+  { id: "pro-caruana-kid", gems: 2 },
 ];
 
 const results = [];
