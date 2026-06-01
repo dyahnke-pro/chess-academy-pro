@@ -1,0 +1,72 @@
+{
+  "player": "magnuscarlsen",
+  "openingId": "carlsen-ruy-lopez",
+  "variationKey": "berlin",
+  "variation": {
+    "label": "Berlin vs ...Nf6",
+    "prefix": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "Bb5",
+      "Nf6"
+    ]
+  },
+  "generatedAt": "2026-06-01T00:19:26.373Z",
+  "totalGames": 211,
+  "wins": 103,
+  "draws": 79,
+  "losses": 29,
+  "openingTerminusPly": 17,
+  "openingTerminusMove": 9,
+  "spineMoves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "Nf6",
+    "d3",
+    "Bc5",
+    "Bxc6",
+    "dxc6",
+    "O-O",
+    "Nd7",
+    "c3",
+    "O-O",
+    "d4",
+    "Bd6",
+    "Bg5"
+  ],
+  "gamesAtTerminus": 3,
+  "endgameTypeBreakdown": {
+    "middlegame (Q + pieces)": 1,
+    "Q+P": 1,
+    "R + minor + P": 1
+  },
+  "topModelGames": [
+    {
+      "url": "otb:2021.12.29:4069",
+      "opponent": "SjugirovS",
+      "opponentRating": 2680,
+      "studentRating": 2856,
+      "date": "2021-12-29",
+      "timeClass": "classical",
+      "outcome": "win",
+      "plyCount": 147,
+      "pgn": "[Event \"World Blitz 2021\"]\n[Site \"Warsaw POL\"]\n[Date \"2021.12.29\"]\n[Round \"2.1\"]\n[White \"Carlsen,M\"]\n[Black \"Sjugirov,S\"]\n[Result \"1-0\"]\n[WhiteElo \"2856\"]\n[BlackElo \"2680\"]\n[ECO \"C65\"]\n\n1.e4 e5 2.Nf3 Nc6 3.Bb5 Nf6 4.d3 Bc5 5.Bxc6 dxc6 6.O-O Nd7 7.c3 O-O 8.d4 Bd6\n9.Bg5 Qe8 10.Re1 h6 11.Bh4 c5 12.Bg3 Qe7 13.d5 Re8 14.a4 a5 15.Na3 Nf8 16.Nd2 Ng6\n17.Ndc4 b6 18.Nb5 Rb8 19.b4 cxb4 20.Ncxd6 cxd6 21.cxb4 axb4 22.Qb3 Bd7 23.Qxb4 Bxb5\n24.Qxb5 Rec8 25.Rec1 Qd8 26.Rab1 Ne7 27.Rxc8 Rxc8 28.h3 Ra8 29.f3 Nc8 30.Bf2 Qc7\n31.Bxb6 Nxb6 32.Qxb6 Qc2 33.Ra1 Qc3 34.Ra2 Qc4 35.Qb2 Kh7 36.Kh2 Rxa4 37.Rxa4 Qxa4\n38.Qb7 f6 39.Qe7 Qa3 40.h4 h5 41.Qe8 Kh6 42.Qh8+ Kg6 43.Qf8 Qb4 44.Qe8+ Kh6\n45.Qc8 Qd2 46.Qf5 Qe3 47.Kh3 Qc1 48.Kh2 Qd2 49.Qc8 Qf4+ 50.Kh3 Qd2 51.Qd8 Qb4\n52.g4 hxg4+ 53.Kxg4 Kh7 54.Qe8 Qd2 55.Qh5+ Kg8 56.Kf5 Qc3 57.Ke6 Qc8+ 58.Kxd6 Qd8+\n59.Kc6 Qc8+ 60.Kb5 Qb7+ 61.Kc4 Qa6+ 62.Kc3 Qa3+ 63.Kd2 Qb4+ 64.Ke2 Qb2+ 65.Kf1 Qc1+\n66.Kg2 Qd2+ 67.Kh3 Qd1 68.Qf5 Kf7 69.Qe6+ Kg6 70.Qg4+ Kf7 71.Qg2 f5 72.h5 Kf8\n73.Kh4 Qd2 74.Qxd2  1-0"
+    },
+    {
+      "url": "otb:2022.12.29:4650",
+      "opponent": "TomashevskyE",
+      "opponentRating": 2694,
+      "studentRating": 2859,
+      "date": "2022-12-29",
+      "timeClass": "classical",
+      "outcome": "win",
+      "plyCount": 53,
+      "pgn": "[Event \"World Blitz 2022\"]\n[Site \"Almaty KAZ\"]\n[Date \"2022.12.29\"]\n[Round \"4.1\"]\n[White \"Carlsen,M\"]\n[Black \"Tomashevsky,E\"]\n[Result \"1-0\"]\n[WhiteElo \"2859\"]\n[BlackElo \"2694\"]\n[ECO \"C65\"]\n\n1.e4 e5 2.Nf3 Nc6 3.Bb5 Nf6 4.d3 Bc5 5.Bxc6 dxc6 6.O-O Nd7 7.c3 O-O 8.d4 Bd6\n9.Bg5 f6 10.Bh4 c5 11.Bg3 Qe7 12.Re1 Kh8 13.Na3 cxd4 14.cxd4 Bxa3 15.bxa3 exd4\n16.Qxd4 Nc5 17.e5 Ne6 18.exf6 Qxf6 19.Qc4 c6 20.Rad1 Ng5 21.Nxg5 Qxg5 22.h4 Qf6\n23.Rd6 Qf5 24.Re7 b5 25.Qd4 Qg4 26.Be5 Qxd4 27.Bxd4  1-0"
+    }
+  ]
+}

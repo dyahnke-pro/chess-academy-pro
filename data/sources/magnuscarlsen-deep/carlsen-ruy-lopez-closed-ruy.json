@@ -1,0 +1,78 @@
+{
+  "player": "magnuscarlsen",
+  "openingId": "carlsen-ruy-lopez",
+  "variationKey": "closed-ruy",
+  "variation": {
+    "label": "Closed Ruy (anti-Marshall a4)",
+    "prefix": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "Bb5",
+      "a6",
+      "Ba4",
+      "Nf6",
+      "O-O",
+      "Be7"
+    ]
+  },
+  "generatedAt": "2026-06-01T00:19:25.031Z",
+  "totalGames": 134,
+  "wins": 78,
+  "draws": 37,
+  "losses": 19,
+  "openingTerminusPly": 20,
+  "openingTerminusMove": 10,
+  "spineMoves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "a6",
+    "Ba4",
+    "Nf6",
+    "O-O",
+    "Be7",
+    "Re1",
+    "b5",
+    "Bb3",
+    "O-O",
+    "a4",
+    "b4",
+    "d3",
+    "d6",
+    "Nbd2",
+    "Be6"
+  ],
+  "gamesAtTerminus": 3,
+  "endgameTypeBreakdown": {
+    "R + minor + P": 2,
+    "middlegame (Q + pieces)": 1
+  },
+  "topModelGames": [
+    {
+      "url": "otb:2021.07.11:3912",
+      "opponent": "SoW",
+      "opponentRating": 2772,
+      "studentRating": 2847,
+      "date": "2021-07-11",
+      "timeClass": "classical",
+      "outcome": "win",
+      "plyCount": 57,
+      "pgn": "[Event \"San Fermin Masters Final\"]\n[Site \"chess24.com INT\"]\n[Date \"2021.07.11\"]\n[Round \"2.3\"]\n[White \"Carlsen,M\"]\n[Black \"So,W\"]\n[Result \"1-0\"]\n[WhiteElo \"2847\"]\n[BlackElo \"2772\"]\n[ECO \"C88\"]\n\n1.e4 e5 2.Nf3 Nc6 3.Bb5 a6 4.Ba4 Nf6 5.O-O Be7 6.Re1 b5 7.Bb3 O-O 8.a4 b4\n9.d3 d6 10.Nbd2 Be6 11.Nc4 Rb8 12.a5 Na7 13.d4 Nxe4 14.Rxe4 d5 15.Rxe5 dxc4\n16.Rxe6 cxb3 17.Rxa6 Nb5 18.cxb3 Qd5 19.Qc2 c5 20.dxc5 Bxc5 21.Be3 Bxe3 22.fxe3 Rfc8\n23.Rb6 Ra8 24.Rd1 Rxc2 25.Rxd5 Nc7 26.Rd7 h6 27.Nd4 Rc1+ 28.Kf2 Rxa5 29.Rc6  1-0"
+    },
+    {
+      "url": "otb:2009.01.04:1007",
+      "opponent": "SvidlerP",
+      "opponentRating": 2723,
+      "studentRating": 2776,
+      "date": "2009-01-04",
+      "timeClass": "classical",
+      "outcome": "win",
+      "plyCount": 69,
+      "pgn": "[Event \"Aker CC Rapid\"]\n[Site \"Gjovik NOR\"]\n[Date \"2009.01.04\"]\n[Round \"5\"]\n[White \"Carlsen,M\"]\n[Black \"Svidler,P\"]\n[Result \"1-0\"]\n[WhiteElo \"2776\"]\n[BlackElo \"2723\"]\n[ECO \"C88\"]\n\n1.e4 e5 2.Nf3 Nc6 3.Bb5 a6 4.Ba4 Nf6 5.O-O Be7 6.Re1 b5 7.Bb3 O-O 8.a4 b4\n9.d3 d6 10.Nbd2 Be6 11.Bxe6 fxe6 12.Nf1 Qd7 13.Ng3 Nd8 14.c3 bxc3 15.bxc3 c5\n16.d4 exd4 17.cxd4 Nc6 18.Ba3 Rac8 19.dxc5 dxc5 20.Qe2 Nb4 21.Qc4 Rfd8 22.Ne5 Qe8\n23.Qxe6+ Kf8 24.Qc4 Bd6 25.Nf3 Bxg3 26.hxg3 Qf7 27.Qe2 Qe6 28.Ng5 Qe5 29.f4 Qd4+\n30.Kh1 Rc6 31.Bxb4 cxb4 32.Rad1 Qb6 33.e5 Nd5 34.e6 Ke7 35.Qh5  1-0"
+    }
+  ]
+}

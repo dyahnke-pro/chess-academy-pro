@@ -1,0 +1,67 @@
+{
+  "player": "magnuscarlsen",
+  "openingId": "carlsen-open-sicilian",
+  "variationKey": "moscow",
+  "variation": {
+    "label": "Moscow Bb5+",
+    "prefix": [
+      "e4",
+      "c5",
+      "Nf3",
+      "d6",
+      "Bb5+"
+    ]
+  },
+  "generatedAt": "2026-06-01T00:19:15.914Z",
+  "totalGames": 108,
+  "wins": 66,
+  "draws": 33,
+  "losses": 9,
+  "openingTerminusPly": 14,
+  "openingTerminusMove": 7,
+  "spineMoves": [
+    "e4",
+    "c5",
+    "Nf3",
+    "d6",
+    "Bb5+",
+    "Nd7",
+    "a4",
+    "Nf6",
+    "Nc3",
+    "g6",
+    "a5",
+    "Bg7",
+    "O-O",
+    "O-O"
+  ],
+  "gamesAtTerminus": 3,
+  "endgameTypeBreakdown": {
+    "R+P": 2,
+    "K+P": 1
+  },
+  "topModelGames": [
+    {
+      "url": "https://www.chess.com/game/live/80338357707",
+      "opponent": "dalmatinac101",
+      "opponentRating": 2717,
+      "studentRating": 2903,
+      "date": "2023-06-12",
+      "timeClass": "rapid",
+      "outcome": "win",
+      "plyCount": 87,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2023.06.12\"]\n[Round \"-\"]\n[White \"MagnusCarlsen\"]\n[Black \"dalmatinac101\"]\n[Result \"1-0\"]\n[CurrentPosition \"7k/8/1R1p2K1/4pP2/3p2P1/1P3r2/8/8 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"B51\"]\n[ECOUrl \"https://www.chess.com/openings/Sicilian-Defense-Canal-Attack-3...Nd7-4.a4-Nf6-5.Nc3\"]\n[UTCDate \"2023.06.12\"]\n[UTCTime \"19:49:45\"]\n[WhiteElo \"2903\"]\n[BlackElo \"2717\"]\n[TimeControl \"600+2\"]\n[Termination \"MagnusCarlsen won by resignation\"]\n[StartTime \"19:49:45\"]\n[EndDate \"2023.06.12\"]\n[EndTime \"20:12:30\"]\n[Link \"https://www.chess.com/game/live/80338357707\"]\n\n1. e4 {[%clk 0:10:02]} 1... c5 {[%clk 0:10:01.8]} 2. Nf3 {[%clk 0:10:02.7]} 2... d6 {[%clk 0:09:59.8]} 3. Bb5+ {[%clk 0:10:03.5]} 3... Nd7 {[%clk 0:09:56.4]} 4. a4 {[%clk 0:10:04]} 4... Nf6 {[%clk 0:09:57]} 5. Nc3 {[%clk 0:10:03.6]} 5... g6 {[%clk 0:09:55.4]} 6. a5 {[%clk 0:09:59.4]} 6... Bg7 {[%clk 0:09:54.4]} 7. O-O {[%clk 0:10:00.2]} 7... O-O {[%clk 0:09:50.1]} 8. Re1 {[%clk 0:09:58.6]} 8... a6 {[%clk 0:09:50.8]} 9. Bf1 {[%clk 0:09:59.4]} 9... b5 {[%clk 0:09:49.7]} 10. axb6 {[%clk 0:09:59.6]} 10... Bb7 {[%clk 0:09:37.6]} 11. Ra2 {[%clk 0:09:30.4]} 11... Qxb6 {[%clk 0:09:18.9]} 12. b3 {[%clk 0:09:29.8]} 12... Ng4 {[%clk 0:07:01.1]} 13. h3 {[%clk 0:08:45.7]} 13... Nge5 {[%clk 0:06:50.6]} 14. Nd5 {[%clk 0:08:22]} 14... Nxf3+ {[%clk 0:06:17.4]} 15. Qxf3 {[%clk 0:08:22.1]} 15... Qd8 {[%clk 0:06:19.3]} 16. Bb2 {[%clk 0:07:38.1]} 16... Bxb2 {[%clk 0:04:49.7]} 17. Rxb2 {[%clk 0:07:38.8]} 17... a5 {[%clk 0:04:17.5]} 18. Ra2 {[%clk 0:07:36.4]} 18... e6 {[%clk 0:03:58.5]} 19. Nc3 {[%clk 0:07:25.7]} 19... Ne5 {[%clk 0:03:59.9]} 20. Qg3 {[%clk 0:07:12.5]} 20... Nc6 {[%clk 0:03:59.3]} 21. Nb5 {[%clk 0:07:09.2]} 21... e5 {[%clk 0:03:58.2]} 22. Bc4 {[%clk 0:06:39.3]} 22... Nd4 {[%clk 0:03:48.8]} 23. Nxd4 {[%clk 0:05:41]} 23... cxd4 {[%clk 0:03:50.7]} 24. d3 {[%clk 0:05:39]} 24... Kh8 {[%clk 0:03:01.7]} 25. Rea1 {[%clk 0:05:36.8]} 25... f5 {[%clk 0:02:58.4]} 26. f3 {[%clk 0:05:38]} 26... fxe4 {[%clk 0:02:49.5]} 27. dxe4 {[%clk 0:05:25.6]} 27... Bc6 {[%clk 0:02:17.9]} 28. Qe1 {[%clk 0:05:14.7]} 28... Qg5 {[%clk 0:02:08.3]} 29. h4 {[%clk 0:05:12.5]} 29... Qf4 {[%clk 0:01:45.1]} 30. Rxa5 {[%clk 0:05:10.9]} 30... Rxa5 {[%clk 0:01:47]} 31. Rxa5 {[%clk 0:05:11.2]} 31... g5 {[%clk 0:01:43.2]} 32. hxg5 {[%clk 0:04:57]} 32... Qxg5 {[%clk 0:01:43]} 33. Ra6 {[%clk 0:04:55.1]} 33... Rc8 {[%clk 0:01:17.7]} 34. Rb6 {[%clk 0:01:48.1]} 34... h5 {[%clk 0:00:58.5]} 35. Kh2 {[%clk 0:01:34.6]} 35... h4 {[%clk 0:00:51.8]} 36. Be6 {[%clk 0:01:31.3]} 36... Rc7 {[%clk 0:00:49.5]} 37. Kh3 {[%clk 0:01:03.3]} 37... Qd8 {[%clk 0:00:06.7]} 38. Bf5 {[%clk 0:00:41.6]} 38... Bd7 {[%clk 0:00:04.6]} 39. Qxh4+ {[%clk 0:00:30.4]} 39... Qxh4+ {[%clk 0:00:06.5]} 40. Kxh4 {[%clk 0:00:32.1]} 40... Bxf5 {[%clk 0:00:07.9]} 41. exf5 {[%clk 0:00:34]} 41... Rxc2 {[%clk 0:00:09]} 42. g4 {[%clk 0:00:34.7]} 42... Rc3 {[%clk 0:00:06.9]} 43. Kg5 {[%clk 0:00:28.1]} 43... Rxf3 {[%clk 0:00:07.9]} 44. Kg6 {[%clk 0:00:28.4]} 1-0\n"
+    },
+    {
+      "url": "otb:2023.06.12:4945",
+      "opponent": "SaricIv",
+      "opponentRating": 2670,
+      "studentRating": 2853,
+      "date": "2023-06-12",
+      "timeClass": "classical",
+      "outcome": "win",
+      "plyCount": 87,
+      "pgn": "[Event \"AimChess Play-In Match\"]\n[Site \"chess.com INT\"]\n[Date \"2023.06.12\"]\n[Round \"1.1\"]\n[White \"Carlsen,M\"]\n[Black \"Saric,Iv\"]\n[Result \"1-0\"]\n[WhiteElo \"2853\"]\n[BlackElo \"2670\"]\n[ECO \"B51\"]\n\n1.e4 c5 2.Nf3 d6 3.Bb5+ Nd7 4.a4 Nf6 5.Nc3 g6 6.a5 Bg7 7.O-O O-O 8.Re1 a6\n9.Bf1 b5 10.axb6 Bb7 11.Ra2 Qxb6 12.b3 Ng4 13.h3 Nge5 14.Nd5 Nxf3+ 15.Qxf3 Qd8\n16.Bb2 Bxb2 17.Rxb2 a5 18.Ra2 e6 19.Nc3 Ne5 20.Qg3 Nc6 21.Nb5 e5 22.Bc4 Nd4\n23.Nxd4 cxd4 24.d3 Kh8 25.Rea1 f5 26.f3 fxe4 27.dxe4 Bc6 28.Qe1 Qg5 29.h4 Qf4\n30.Rxa5 Rxa5 31.Rxa5 g5 32.hxg5 Qxg5 33.Ra6 Rc8 34.Rb6 h5 35.Kh2 h4 36.Be6 Rc7\n37.Kh3 Qd8 38.Bf5 Bd7 39.Qxh4+ Qxh4+ 40.Kxh4 Bxf5 41.exf5 Rxc2 42.g4 Rc3\n43.Kg5 Rxf3 44.Kg6  1-0"
+    }
+  ]
+}

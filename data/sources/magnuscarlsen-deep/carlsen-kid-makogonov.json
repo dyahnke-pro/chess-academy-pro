@@ -1,0 +1,85 @@
+{
+  "player": "magnuscarlsen",
+  "openingId": "carlsen-kid",
+  "variationKey": "makogonov",
+  "variation": {
+    "label": "Makogonov h3",
+    "prefix": [
+      "d4",
+      "Nf6",
+      "c4",
+      "g6",
+      "Nc3",
+      "Bg7",
+      "e4",
+      "d6",
+      "h3"
+    ]
+  },
+  "generatedAt": "2026-06-01T00:19:08.958Z",
+  "totalGames": 15,
+  "wins": 4,
+  "draws": 4,
+  "losses": 7,
+  "openingTerminusPly": 17,
+  "openingTerminusMove": 9,
+  "spineMoves": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "e4",
+    "d6",
+    "h3",
+    "Nbd7",
+    "Be3",
+    "e5",
+    "d5",
+    "Nc5",
+    "Qc2",
+    "a5",
+    "g4"
+  ],
+  "gamesAtTerminus": 3,
+  "endgameTypeBreakdown": {
+    "minor pieces + P": 2,
+    "middlegame (Q + pieces)": 1
+  },
+  "topModelGames": [
+    {
+      "url": "https://www.chess.com/game/live/148593025056",
+      "opponent": "Chesswizard_2007",
+      "opponentRating": 3112,
+      "studentRating": 3285,
+      "date": "2026-01-28",
+      "timeClass": "blitz",
+      "outcome": "win",
+      "plyCount": 64,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2026.01.28\"]\n[Round \"-\"]\n[White \"Chesswizard_2007\"]\n[Black \"MagnusCarlsen\"]\n[Result \"0-1\"]\n[CurrentPosition \"1r4k1/5pb1/3p2p1/2p1p1Pp/2P1N3/1p2B2P/1P1QBP2/q1K3RR w - - 5 33\"]\n[Timezone \"UTC\"]\n[ECO \"E71\"]\n[ECOUrl \"https://www.chess.com/openings/Kings-Indian-Defense-Makogonov-Variation-5...Nbd7\"]\n[UTCDate \"2026.01.28\"]\n[UTCTime \"09:53:03\"]\n[WhiteElo \"3112\"]\n[BlackElo \"3285\"]\n[TimeControl \"180\"]\n[Termination \"MagnusCarlsen won by checkmate\"]\n[StartTime \"09:53:03\"]\n[EndDate \"2026.01.28\"]\n[EndTime \"09:56:45\"]\n[Link \"https://www.chess.com/game/live/148593025056\"]\n\n1. d4 {[%clk 0:03:00]} 1... Nf6 {[%clk 0:03:00]} 2. c4 {[%clk 0:02:59.4]} 2... g6 {[%clk 0:02:59.5]} 3. Nc3 {[%clk 0:02:58.7]} 3... Bg7 {[%clk 0:02:59.4]} 4. e4 {[%clk 0:02:58.3]} 4... d6 {[%clk 0:02:58.5]} 5. h3 {[%clk 0:02:58]} 5... Nbd7 {[%clk 0:02:57.7]} 6. Be3 {[%clk 0:02:56.8]} 6... e5 {[%clk 0:02:57.1]} 7. d5 {[%clk 0:02:56]} 7... Nc5 {[%clk 0:02:56.5]} 8. Qc2 {[%clk 0:02:55.3]} 8... a5 {[%clk 0:02:55.5]} 9. g4 {[%clk 0:02:53.5]} 9... h5 {[%clk 0:02:37.6]} 10. g5 {[%clk 0:02:52.7]} 10... Nfd7 {[%clk 0:02:36]} 11. Nf3 {[%clk 0:02:48.4]} 11... O-O {[%clk 0:02:34.9]} 12. O-O-O {[%clk 0:02:45]} 12... Nb6 {[%clk 0:02:33.2]} 13. Be2 {[%clk 0:02:35.2]} 13... Bd7 {[%clk 0:02:31.8]} 14. Kb1 {[%clk 0:02:33]} 14... Nba4 {[%clk 0:02:30.9]} 15. Nd2 {[%clk 0:02:24.2]} 15... Nxc3+ {[%clk 0:02:29.1]} 16. Qxc3 {[%clk 0:02:24.1]} 16... Qe7 {[%clk 0:02:19.2]} 17. Rdg1 {[%clk 0:02:09.2]} 17... c6 {[%clk 0:02:14.9]} 18. dxc6 {[%clk 0:02:02]} 18... bxc6 {[%clk 0:02:13.3]} 19. Qc2 {[%clk 0:01:45.7]} 19... Ne6 {[%clk 0:02:10]} 20. Nf3 {[%clk 0:01:42.1]} 20... c5 {[%clk 0:02:08.8]} 21. Qd1 {[%clk 0:01:36.4]} 21... a4 {[%clk 0:02:05.5]} 22. Nd2 {[%clk 0:01:32.6]} 22... Rfb8 {[%clk 0:02:02.4]} 23. Ka1 {[%clk 0:01:30.8]} 23... Nd4 {[%clk 0:02:01.1]} 24. Nb1 {[%clk 0:01:26.3]} 24... Bc6 {[%clk 0:01:51.9]} 25. Nc3 {[%clk 0:01:23.4]} 25... Qb7 {[%clk 0:01:50.6]} 26. Qd2 {[%clk 0:01:15.6]} 26... Nb3+ {[%clk 0:01:46.6]} 27. axb3 {[%clk 0:01:14.6]} 27... axb3+ {[%clk 0:01:46.5]} 28. Kb1 {[%clk 0:01:14.1]} 28... Bxe4+ {[%clk 0:01:41.3]} 29. Nxe4 {[%clk 0:00:49.6]} 29... Ra1+ {[%clk 0:01:39.4]} 30. Kxa1 {[%clk 0:00:49.4]} 30... Qa7+ {[%clk 0:01:36.7]} 31. Kb1 {[%clk 0:00:49.1]} 31... Qa2+ {[%clk 0:01:35.7]} 32. Kc1 {[%clk 0:00:49]} 32... Qa1# {[%clk 0:01:35.5]} 0-1\n"
+    },
+    {
+      "url": "https://www.chess.com/game/live/150540493881",
+      "opponent": "Parhamov",
+      "opponentRating": 3176,
+      "studentRating": 3348,
+      "date": "2025-08-26",
+      "timeClass": "blitz",
+      "outcome": "loss",
+      "plyCount": 123,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2025.08.26\"]\n[Round \"-\"]\n[White \"Parhamov\"]\n[Black \"MagnusCarlsen\"]\n[Result \"1-0\"]\n[Tournament \"https://www.chess.com/tournament/live/early-titled-tuesday-blitz-august-26-2025-5874941\"]\n[CurrentPosition \"8/8/8/1Kp5/1PP5/P2n4/2k5/8 b - - 2 62\"]\n[Timezone \"UTC\"]\n[ECO \"E71\"]\n[ECOUrl \"https://www.chess.com/openings/Kings-Indian-Defense-Makogonov-Variation-5...Nbd7\"]\n[UTCDate \"2025.08.26\"]\n[UTCTime \"16:47:07\"]\n[WhiteElo \"3176\"]\n[BlackElo \"3348\"]\n[TimeControl \"180+1\"]\n[Termination \"Parhamov won on time\"]\n[StartTime \"16:47:07\"]\n[EndDate \"2025.08.26\"]\n[EndTime \"16:56:02\"]\n[Link \"https://www.chess.com/game/live/150540493881\"]\n\n1. d4 {[%clk 0:03:00.9]} 1... Nf6 {[%clk 0:02:59.7]} 2. c4 {[%clk 0:02:59.8]} 2... g6 {[%clk 0:03:00.4]} 3. Nc3 {[%clk 0:02:56.4]} 3... Bg7 {[%clk 0:03:00.8]} 4. e4 {[%clk 0:02:56.3]} 4... d6 {[%clk 0:03:01.2]} 5. h3 {[%clk 0:02:55.5]} 5... Nbd7 {[%clk 0:02:58.9]} 6. Be3 {[%clk 0:02:54.6]} 6... e5 {[%clk 0:02:59.1]} 7. d5 {[%clk 0:02:53]} 7... Nc5 {[%clk 0:02:59.1]} 8. Qc2 {[%clk 0:02:51.5]} 8... a5 {[%clk 0:02:59.7]} 9. g4 {[%clk 0:02:47.6]} 9... Nfd7 {[%clk 0:02:29.9]} 10. Nf3 {[%clk 0:02:46.3]} 10... Nb6 {[%clk 0:02:30.3]} 11. Nd2 {[%clk 0:02:45.9]} 11... Bd7 {[%clk 0:02:24.6]} 12. Be2 {[%clk 0:02:43.6]} 12... Bf6 {[%clk 0:02:21.8]} 13. Nf3 {[%clk 0:02:42.2]} 13... h6 {[%clk 0:02:21.6]} 14. O-O-O {[%clk 0:02:22]} 14... Qe7 {[%clk 0:02:21.7]} 15. Kb1 {[%clk 0:02:20.9]} 15... Bg5 {[%clk 0:02:03.5]} 16. Nxg5 {[%clk 0:01:34.5]} 16... hxg5 {[%clk 0:02:04.4]} 17. Qd2 {[%clk 0:01:35.2]} 17... f6 {[%clk 0:01:58.9]} 18. Bxc5 {[%clk 0:01:35.5]} 18... dxc5 {[%clk 0:01:59.5]} 19. d6 {[%clk 0:01:36.1]} 19... cxd6 {[%clk 0:02:00.4]} 20. Qxd6 {[%clk 0:01:36.8]} 20... Bc6 {[%clk 0:02:00.1]} 21. Qd3 {[%clk 0:01:23]} 21... Kf7 {[%clk 0:01:55.5]} 22. Nd5 {[%clk 0:01:23.1]} 22... Bxd5 {[%clk 0:01:52.9]} 23. exd5 {[%clk 0:01:22.8]} 23... Rad8 {[%clk 0:01:46.6]} 24. d6 {[%clk 0:01:07.4]} 24... Qe6 {[%clk 0:01:39.9]} 25. Bf3 {[%clk 0:01:08]} 25... Rd7 {[%clk 0:01:33.9]} 26. Be4 {[%clk 0:00:55.8]} 26... Kg7 {[%clk 0:01:13.2]} 27. Bxg6 {[%clk 0:00:50.9]} 27... Rhd8 {[%clk 0:01:12.9]} 28. Bf5 {[%clk 0:00:34.1]} 28... Rxd6 {[%clk 0:01:05.7]} 29. Qxd6 {[%clk 0:00:31.8]} 29... Qxd6 {[%clk 0:01:05.1]} 30. Rxd6 {[%clk 0:00:32.4]} 30... Rxd6 {[%clk 0:01:06]} 31. b3 {[%clk 0:00:33.1]} 31... Nd7 {[%clk 0:00:53.2]} 32. h4 {[%clk 0:00:33.2]} 32... gxh4 {[%clk 0:00:53.1]} 33. Rxh4 {[%clk 0:00:32.7]} 33... Nf8 {[%clk 0:00:53.8]} 34. Rh5 {[%clk 0:00:25.2]} 34... Rd2 {[%clk 0:00:50.7]} 35. f3 {[%clk 0:00:24.4]} 35... Rf2 {[%clk 0:00:41.7]} 36. Be4 {[%clk 0:00:24.4]} 36... b6 {[%clk 0:00:42.3]} 37. g5 {[%clk 0:00:15]} 37... f5 {[%clk 0:00:42.2]} 38. Bxf5 {[%clk 0:00:13.4]} 38... Rxf3 {[%clk 0:00:42.9]} 39. Bc2 {[%clk 0:00:14.2]} 39... Rf4 {[%clk 0:00:40.2]} 40. Rh6 {[%clk 0:00:14]} 40... e4 {[%clk 0:00:38.5]} 41. Rxb6 {[%clk 0:00:07.6]} 41... e3 {[%clk 0:00:25.4]} 42. Rb7+ {[%clk 0:00:07.1]} 42... Rf7 {[%clk 0:00:25.5]} 43. Rxf7+ {[%clk 0:00:06.6]} 43... Kxf7 {[%clk 0:00:26.4]} 44. Kc1 {[%clk 0:00:07.4]} 44... Ne6 {[%clk 0:00:26.6]} 45. Kd1 {[%clk 0:00:03.8]} 45... Nd4 {[%clk 0:00:25.5]} 46. Bd3 {[%clk 0:00:04.1]} 46... Ke6 {[%clk 0:00:25.8]} 47. Ke1 {[%clk 0:00:04.5]} 47... Nf3+ {[%clk 0:00:12.5]} 48. Ke2 {[%clk 0:00:04.5]} 48... Nxg5 {[%clk 0:00:13.2]} 49. Kxe3 {[%clk 0:00:05.2]} 49... Ke5 {[%clk 0:00:13.9]} 50. Bc2 {[%clk 0:00:04.8]} 50... Ne6 {[%clk 0:00:13.9]} 51. Bd1 {[%clk 0:00:05]} 51... Nd4 {[%clk 0:00:13.7]} 52. Kd3 {[%clk 0:00:05.6]} 52... Nc6 {[%clk 0:00:13.7]} 53. Kc3 {[%clk 0:00:06.1]} 53... Nb4 {[%clk 0:00:14]} 54. Kb2 {[%clk 0:00:03.6]} 54... Kd4 {[%clk 0:00:13.7]} 55. Bc2 {[%clk 0:00:03.7]} 55... Ke3 {[%clk 0:00:12.8]} 56. Bb1 {[%clk 0:00:03.8]} 56... Kd4 {[%clk 0:00:08]} 57. Ka3 {[%clk 0:00:02.7]} 57... Kc3 {[%clk 0:00:06.5]} 58. Ka4 {[%clk 0:00:02.4]} 58... Kb2 {[%clk 0:00:07]} 59. a3 {[%clk 0:00:02.8]} 59... Kxb1 {[%clk 0:00:04.9]} 60. Kxa5 {[%clk 0:00:03.3]} 60... Nd3 {[%clk 0:00:03.6]} 61. b4 {[%clk 0:00:03.4]} 61... Kc2 {[%clk 0:00:02.5]} 62. Kb5 {[%clk 0:00:02]} 1-0\n"
+    },
+    {
+      "url": "otb:2025.08.26:7169",
+      "opponent": "MaghsoodlooParham",
+      "opponentRating": 2695,
+      "studentRating": 2839,
+      "date": "2025-08-26",
+      "timeClass": "classical",
+      "outcome": "loss",
+      "plyCount": 123,
+      "pgn": "[Event \"Titled Tue 26th Aug Early\"]\n[Site \"chess.com INT\"]\n[Date \"2025.08.26\"]\n[Round \"10\"]\n[White \"Maghsoodloo,Parham\"]\n[Black \"Carlsen,M\"]\n[Result \"1-0\"]\n[WhiteElo \"2695\"]\n[BlackElo \"2839\"]\n[ECO \"E71\"]\n\n1.d4 Nf6 2.c4 g6 3.Nc3 Bg7 4.e4 d6 5.h3 Nbd7 6.Be3 e5 7.d5 Nc5 8.Qc2 a5 9.g4 Nfd7\n10.Nf3 Nb6 11.Nd2 Bd7 12.Be2 Bf6 13.Nf3 h6 14.O-O-O Qe7 15.Kb1 Bg5 16.Nxg5 hxg5\n17.Qd2 f6 18.Bxc5 dxc5 19.d6 cxd6 20.Qxd6 Bc6 21.Qd3 Kf7 22.Nd5 Bxd5 23.exd5 Rad8\n24.d6 Qe6 25.Bf3 Rd7 26.Be4 Kg7 27.Bxg6 Rhd8 28.Bf5 Rxd6 29.Qxd6 Qxd6 30.Rxd6 Rxd6\n31.b3 Nd7 32.h4 gxh4 33.Rxh4 Nf8 34.Rh5 Rd2 35.f3 Rf2 36.Be4 b6 37.g5 f5\n38.Bxf5 Rxf3 39.Bc2 Rf4 40.Rh6 e4 41.Rxb6 e3 42.Rb7+ Rf7 43.Rxf7+ Kxf7 44.Kc1 Ne6\n45.Kd1 Nd4 46.Bd3 Ke6 47.Ke1 Nf3+ 48.Ke2 Nxg5 49.Kxe3 Ke5 50.Bc2 Ne6 51.Bd1 Nd4\n52.Kd3 Nc6 53.Kc3 Nb4 54.Kb2 Kd4 55.Bc2 Ke3 56.Bb1 Kd4 57.Ka3 Kc3 58.Ka4 Kb2\n59.a3 Kxb1 60.Kxa5 Nd3 61.b4 Kc2 62.Kb5  1-0"
+    }
+  ]
+}

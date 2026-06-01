@@ -1,0 +1,59 @@
+{
+  "player": "magnuscarlsen",
+  "openingId": "carlsen-queens-pawn",
+  "variationKey": "ragozin",
+  "variation": {
+    "label": "QGD / Ragozin Nc3",
+    "prefix": [
+      "d4",
+      "Nf6",
+      "c4",
+      "e6",
+      "Nf3",
+      "d5",
+      "Nc3"
+    ]
+  },
+  "generatedAt": "2026-06-01T00:19:23.764Z",
+  "totalGames": 168,
+  "wins": 105,
+  "draws": 45,
+  "losses": 18,
+  "openingTerminusPly": 14,
+  "openingTerminusMove": 7,
+  "spineMoves": [
+    "d4",
+    "Nf6",
+    "c4",
+    "e6",
+    "Nf3",
+    "d5",
+    "Nc3",
+    "Bb4",
+    "cxd5",
+    "exd5",
+    "Bf4",
+    "Ne4",
+    "Rc1",
+    "Nc6"
+  ],
+  "gamesAtTerminus": 3,
+  "endgameTypeBreakdown": {
+    "K+P": 1,
+    "middlegame (Q + pieces)": 1,
+    "minor pieces + P": 1
+  },
+  "topModelGames": [
+    {
+      "url": "otb:2020.04.26:2943",
+      "opponent": "GiriA",
+      "opponentRating": 2764,
+      "studentRating": 2863,
+      "date": "2020-04-26",
+      "timeClass": "classical",
+      "outcome": "loss",
+      "plyCount": 66,
+      "pgn": "[Event \"Carlsen Inv Prelim\"]\n[Site \"chess24.com INT\"]\n[Date \"2020.04.26\"]\n[Round \"5.2\"]\n[White \"Carlsen,M\"]\n[Black \"Giri,A\"]\n[Result \"0-1\"]\n[WhiteElo \"2863\"]\n[BlackElo \"2764\"]\n[ECO \"D38\"]\n\n1.d4 Nf6 2.c4 e6 3.Nf3 d5 4.Nc3 Bb4 5.cxd5 exd5 6.Bf4 Ne4 7.Rc1 Nc6 8.Nd2 g5\n9.Be3 Nxc3 10.bxc3 Ba3 11.Rb1 f5 12.g3 Bd6 13.Rg1 O-O 14.h4 f4 15.gxf4 g4\n16.Rb5 Ne7 17.f5 h5 18.Bg5 c6 19.Rb2 Rxf5 20.e4 Rxg5 21.hxg5 Ng6 22.e5 Bf8\n23.Bd3 Nf4 24.Nf1 Qxg5 25.f3 Nxd3+ 26.Qxd3 Qc1+ 27.Kf2 Qxb2+ 28.Nd2 Bf5 29.Qxf5 Qxd2+\n30.Kg3 Qxc3 31.Kh4 Qxd4 32.Rg3 Bg7 33.f4 Rf8  0-1"
+    }
+  ]
+}

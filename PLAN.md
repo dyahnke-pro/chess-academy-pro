@@ -2,22 +2,37 @@
 
 **Player:** `carlsen` (Magnus Carlsen) · chess.com `magnuscarlsen` · 9,336
 games on disk (gitignored — re-fetch: `node scripts/pro-repertoire/fetch-chesscom.mjs magnuscarlsen`).
-**Scope (David):** a MULTI-opening repertoire, matching the standard of the
+**Scope (David):** a MULTI-opening repertoire (≥8), matching the standard of the
 existing pro-reps (Gotham 18 / Naroditsky 10 / Rosen 8 / Hikaru 5). Build to
 full G9.1 parity per opening; **2-3 model games per variation** (David: "more
-than just one game"). Push straight to `main`.
+than just one game" — favour the OTB classical wins). Push straight to `main`.
 
-## The 5 signature openings (data-derived, frequency-ranked)
+## Corpus: ONLINE + TOURNAMENT (David: "check tournament play as well")
+- Online (chess.com `magnuscarlsen`): 9,336 games (6,879 blitz / 2,122 bullet /
+  335 rapid; no classical).
+- **OTB tournament (pgnmentor `Carlsen.pgn`): 7,484 classical games**, converted
+  to chess.com JSONL (`_otb-tournament.jsonl`) and MERGED into the corpus.
+- **Tournament play VALIDATES the pick** — OTB top systems mirror online exactly
+  (W: Ruy/1.e4 e5, d4-c4, Open Sicilian; B: 1...e5, Nimzo/QGD, Sicilian, KID).
+- Spines now built on the COMBINED ~16.8k-game corpus → 300-1,351 games each,
+  tournament-authentic main lines. Model games favour the OTB classical wins.
 
-| # | id | Line | Games | Score | Spine terminus |
-|---|---|---|---|---|---|
-| 1 | `pro-carlsen-open-sicilian` | Open Sicilian (W) | 588 | 80% | Najdorf Classical 6.Be2 e5 |
-| 2 | `pro-carlsen-ruy-lopez` | Ruy/Open Games (W) | 507 | 76% | Closed Ruy c3 d5 |
-| 3 | `pro-carlsen-sicilian` | Sicilian (B) | 729 | 72% | Najdorf English Attack Bg5 |
-| 4 | `pro-carlsen-berlin` | 1...e5 / Berlin (B) | 367 | 66% | Berlin endgame line |
-| 5 | `pro-carlsen-kid` | King's Indian (B) | 164 | 75% | Classical KID e5 |
+## The 8 signature openings (combined-corpus, frequency-ranked)
 
-Trees: `data/sources/magnuscarlsen-trees/carlsen-*.json`.
+| # | id | Line | Games | Score |
+|---|---|---|---|---|
+| 1 | `pro-carlsen-open-sicilian` | Open Sicilian (W) | 1118 | 77% |
+| 2 | `pro-carlsen-ruy-lopez` | Ruy Lopez / Open Games (W) | 1113 | 73% |
+| 3 | `pro-carlsen-queens-pawn` | Queen's Pawn / Catalan (W) | 1107 | 74% |
+| 4 | `pro-carlsen-sicilian` | Sicilian Defense (B) | 1351 | 69% |
+| 5 | `pro-carlsen-1e5` | 1...e5 / Ruy / Berlin (B) | 1011 | 61% |
+| 6 | `pro-carlsen-nimzo` | Nimzo-Indian / QGD (B) | 605 | 63% |
+| 7 | `pro-carlsen-kid` | King's Indian (B) | 300 | 67% |
+| 8 | `pro-carlsen-french` | French Defense (B) | 317 | 71% |
+
+Trees: `data/sources/magnuscarlsen-trees/carlsen-*.json` (combined corpus).
+Coverage: White answers 1...c5 / 1...e5 / 1.d4-setups; Black answers 1.e4
+(Sicilian + 1...e5 + French) and 1.d4 (Nimzo/QGD + KID).
 
 ### Variation tabs per opening (from tree frequency)
 - **Open Sicilian (W):** Najdorf (main) · Rossolimo vs ...Nc6 (138g) · Taimanov vs ...e6 (82g) · Sozin Bc4 (72g) · Moscow Bb5+ (48g) · 2...Nf6 (28g)

@@ -1,0 +1,71 @@
+{
+  "player": "magnuscarlsen",
+  "openingId": "carlsen-nimzo",
+  "variationKey": "bogo",
+  "variation": {
+    "label": "Bogo-Indian Bb4+",
+    "prefix": [
+      "d4",
+      "Nf6",
+      "c4",
+      "e6",
+      "Nf3",
+      "Bb4+"
+    ]
+  },
+  "generatedAt": "2026-06-01T00:19:20.401Z",
+  "totalGames": 54,
+  "wins": 30,
+  "draws": 14,
+  "losses": 10,
+  "openingTerminusPly": 17,
+  "openingTerminusMove": 9,
+  "spineMoves": [
+    "d4",
+    "Nf6",
+    "c4",
+    "e6",
+    "Nf3",
+    "Bb4+",
+    "Nbd2",
+    "O-O",
+    "a3",
+    "Be7",
+    "e4",
+    "d6",
+    "Be2",
+    "Nbd7",
+    "Qc2",
+    "e5",
+    "Nb1"
+  ],
+  "gamesAtTerminus": 3,
+  "endgameTypeBreakdown": {
+    "R + minor + P": 2,
+    "minor pieces + P": 1
+  },
+  "topModelGames": [
+    {
+      "url": "https://www.chess.com/game/live/1701361752",
+      "opponent": "Grischuk",
+      "opponentRating": 2790,
+      "studentRating": 2866,
+      "date": "2016-08-23",
+      "timeClass": "blitz",
+      "outcome": "win",
+      "plyCount": 92,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2016.08.23\"]\n[Round \"-\"]\n[White \"Grischuk\"]\n[Black \"MagnusCarlsen\"]\n[Result \"0-1\"]\n[CurrentPosition \"3r4/R7/5k2/5n2/8/P3p3/1P6/4K3 w - -\"]\n[Timezone \"UTC\"]\n[ECO \"E11\"]\n[ECOUrl \"https://www.chess.com/openings/Bogo-Indian-Defense-Grunfeld-Variation...6.e4-d6-7.Be2-Nbd7\"]\n[UTCDate \"2016.08.23\"]\n[UTCTime \"17:25:49\"]\n[WhiteElo \"2790\"]\n[BlackElo \"2866\"]\n[TimeControl \"300+2\"]\n[Termination \"MagnusCarlsen won by resignation\"]\n[StartTime \"17:25:49\"]\n[EndDate \"2016.08.23\"]\n[EndTime \"17:35:59\"]\n[Link \"https://www.chess.com/game/live/1701361752\"]\n\n1. d4 {[%clk 0:05:02]} 1... Nf6 {[%clk 0:04:58.9]} 2. c4 {[%clk 0:05:02.4]} 2... e6 {[%clk 0:05:00]} 3. Nf3 {[%clk 0:05:03.1]} 3... Bb4+ {[%clk 0:05:00.8]} 4. Nbd2 {[%clk 0:05:02.9]} 4... O-O {[%clk 0:05:01.4]} 5. a3 {[%clk 0:05:04.1]} 5... Be7 {[%clk 0:05:03]} 6. e4 {[%clk 0:05:05.1]} 6... d6 {[%clk 0:05:04.5]} 7. Be2 {[%clk 0:05:06.2]} 7... Nbd7 {[%clk 0:05:03.4]} 8. Qc2 {[%clk 0:05:06.9]} 8... e5 {[%clk 0:04:58.1]} 9. Nb1 {[%clk 0:04:58.3]} 9... c5 {[%clk 0:04:06.7]} 10. dxe5 {[%clk 0:04:47.6]} 10... Nxe5 {[%clk 0:04:02.4]} 11. Nxe5 {[%clk 0:04:25.3]} 11... dxe5 {[%clk 0:04:03.2]} 12. Nc3 {[%clk 0:04:27.2]} 12... Be6 {[%clk 0:04:02.8]} 13. O-O {[%clk 0:04:24.3]} 13... Qc7 {[%clk 0:03:42.3]} 14. Be3 {[%clk 0:04:21.3]} 14... Rfd8 {[%clk 0:03:43.2]} 15. Nd5 {[%clk 0:04:07.5]} 15... Bxd5 {[%clk 0:03:43.4]} 16. cxd5 {[%clk 0:04:09.4]} 16... Rac8 {[%clk 0:03:31.9]} 17. Rac1 {[%clk 0:04:03.7]} 17... Ne8 {[%clk 0:03:31.5]} 18. Bg4 {[%clk 0:03:51.2]} 18... Rb8 {[%clk 0:03:25.7]} 19. Bxc5 {[%clk 0:03:32.3]} 19... Qxc5 {[%clk 0:03:27.6]} 20. Qxc5 {[%clk 0:03:33.4]} 20... Bxc5 {[%clk 0:03:26.8]} 21. Rxc5 {[%clk 0:03:35.3]} 21... Nd6 {[%clk 0:03:28.6]} 22. f3 {[%clk 0:03:26.3]} 22... g6 {[%clk 0:03:22.2]} 23. h4 {[%clk 0:03:12.6]} 23... f5 {[%clk 0:03:19.9]} 24. exf5 {[%clk 0:03:04.8]} 24... gxf5 {[%clk 0:03:20.8]} 25. Bh3 {[%clk 0:03:05.8]} 25... Rd7 {[%clk 0:03:17.7]} 26. g4 {[%clk 0:03:00.6]} 26... Kf7 {[%clk 0:03:16.8]} 27. gxf5 {[%clk 0:02:37.6]} 27... Kf6 {[%clk 0:03:17.4]} 28. Kf2 {[%clk 0:02:39]} 28... Rbd8 {[%clk 0:03:16.7]} 29. Ke3 {[%clk 0:01:57.5]} 29... Rg7 {[%clk 0:03:12.3]} 30. h5 {[%clk 0:01:22]} 30... Rg3 {[%clk 0:03:12.2]} 31. Bg4 {[%clk 0:01:21.6]} 31... Rg8 {[%clk 0:03:12.7]} 32. Kf2 {[%clk 0:01:11.2]} 32... R3xg4 {[%clk 0:03:13.4]} 33. fxg4 {[%clk 0:01:08.6]} 33... Ne4+ {[%clk 0:03:14.4]} 34. Kf3 {[%clk 0:00:51.7]} 34... Nxc5 {[%clk 0:03:16.3]} 35. Rc1 {[%clk 0:00:52.8]} 35... Nb3 {[%clk 0:03:13.7]} 36. Rc7 {[%clk 0:00:53.4]} 36... Nd4+ {[%clk 0:03:14.9]} 37. Kf2 {[%clk 0:00:49.7]} 37... Rxg4 {[%clk 0:03:15.7]} 38. Rxh7 {[%clk 0:00:49]} 38... Rf4+ {[%clk 0:03:10.6]} 39. Ke1 {[%clk 0:00:49.5]} 39... e4 {[%clk 0:03:09.3]} 40. d6 {[%clk 0:00:43.1]} 40... Rxf5 {[%clk 0:03:03.1]} 41. h6 {[%clk 0:00:38.2]} 41... e3 {[%clk 0:02:57.7]} 42. d7 {[%clk 0:00:35.9]} 42... Rd5 {[%clk 0:02:56.8]} 43. Rg7 {[%clk 0:00:28.7]} 43... Nf5 {[%clk 0:02:55.8]} 44. d8=Q+ {[%clk 0:00:23.4]} 44... Rxd8 {[%clk 0:02:56.8]} 45. Rxb7 {[%clk 0:00:25.3]} 45... Nxh6 {[%clk 0:02:58.1]} 46. Rxa7 {[%clk 0:00:25.1]} 46... Nf5 {[%clk 0:02:59.3]} 0-1\n"
+    },
+    {
+      "url": "otb:2016.08.23:1985",
+      "opponent": "GrischukA",
+      "opponentRating": 2754,
+      "studentRating": 2857,
+      "date": "2016-08-23",
+      "timeClass": "classical",
+      "outcome": "win",
+      "plyCount": 92,
+      "pgn": "[Event \"chess.com SF Blitz 5m+2spm 2016\"]\n[Site \"chess.com INT\"]\n[Date \"2016.08.23\"]\n[Round \"3\"]\n[White \"Grischuk,A\"]\n[Black \"Carlsen,M\"]\n[Result \"0-1\"]\n[WhiteElo \"2754\"]\n[BlackElo \"2857\"]\n[ECO \"E11\"]\n\n1.d4 Nf6 2.c4 e6 3.Nf3 Bb4+ 4.Nbd2 O-O 5.a3 Be7 6.e4 d6 7.Be2 Nbd7 8.Qc2 e5\n9.Nb1 c5 10.dxe5 Nxe5 11.Nxe5 dxe5 12.Nc3 Be6 13.O-O Qc7 14.Be3 Rfd8 15.Nd5 Bxd5\n16.cxd5 Rac8 17.Rac1 Ne8 18.Bg4 Rb8 19.Bxc5 Qxc5 20.Qxc5 Bxc5 21.Rxc5 Nd6\n22.f3 g6 23.h4 f5 24.exf5 gxf5 25.Bh3 Rd7 26.g4 Kf7 27.gxf5 Kf6 28.Kf2 Rbd8\n29.Ke3 Rg7 30.h5 Rg3 31.Bg4 Rg8 32.Kf2 R3xg4 33.fxg4 Ne4+ 34.Kf3 Nxc5 35.Rc1 Nb3\n36.Rc7 Nd4+ 37.Kf2 Rxg4 38.Rxh7 Rf4+ 39.Ke1 e4 40.d6 Rxf5 41.h6 e3 42.d7 Rd5\n43.Rg7 Nf5 44.d8=Q+ Rxd8 45.Rxb7 Nxh6 46.Rxa7 Nf5  0-1"
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "player": "magnuscarlsen",
+  "openingId": "carlsen-open-sicilian",
+  "variationKey": "sozin-bc4",
+  "variation": {
+    "label": "vs ...d6 Bc4",
+    "prefix": [
+      "e4",
+      "c5",
+      "Nf3",
+      "d6",
+      "Bc4"
+    ]
+  },
+  "generatedAt": "2026-06-01T00:19:16.600Z",
+  "totalGames": 106,
+  "wins": 77,
+  "draws": 15,
+  "losses": 14,
+  "openingTerminusPly": 19,
+  "openingTerminusMove": 10,
+  "spineMoves": [
+    "e4",
+    "c5",
+    "Nf3",
+    "d6",
+    "Bc4",
+    "Nf6",
+    "d3",
+    "Nc6",
+    "O-O",
+    "e6",
+    "Bb3",
+    "Be7",
+    "c3",
+    "O-O",
+    "Re1",
+    "b5",
+    "d4",
+    "Bb7",
+    "Nbd2"
+  ],
+  "gamesAtTerminus": 3,
+  "endgameTypeBreakdown": {
+    "R + minor + P": 2,
+    "middlegame (Q + pieces)": 1
+  },
+  "topModelGames": [
+    {
+      "url": "https://www.chess.com/game/live/90694806003",
+      "opponent": "kirillshevchenko",
+      "opponentRating": 2979,
+      "studentRating": 3280,
+      "date": "2023-10-10",
+      "timeClass": "blitz",
+      "outcome": "win",
+      "plyCount": 81,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2023.10.10\"]\n[Round \"-\"]\n[White \"MagnusCarlsen\"]\n[Black \"kirillshevchenko\"]\n[Result \"1-0\"]\n[Tournament \"https://www.chess.com/tournament/live/early-titled-tuesday-blitz-october-10-2023-4318636\"]\n[CurrentPosition \"2b3k1/p4Nb1/3P1nP1/8/1Np1P2R/1nP3K1/r1B4R/8 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"B50\"]\n[ECOUrl \"https://www.chess.com/openings/Sicilian-Defense...7.O-O-O-O-8.Re1-b5\"]\n[UTCDate \"2023.10.10\"]\n[UTCTime \"16:36:41\"]\n[WhiteElo \"3280\"]\n[BlackElo \"2979\"]\n[TimeControl \"180+1\"]\n[Termination \"MagnusCarlsen won by resignation\"]\n[StartTime \"16:36:41\"]\n[EndDate \"2023.10.10\"]\n[EndTime \"16:43:12\"]\n[Link \"https://www.chess.com/game/live/90694806003\"]\n\n1. e4 {[%clk 0:03:00.9]} 1... c5 {[%clk 0:02:49.2]} 2. Nf3 {[%clk 0:03:00.3]} 2... d6 {[%clk 0:02:49]} 3. Bc4 {[%clk 0:03:00.2]} 3... Nf6 {[%clk 0:02:48.1]} 4. d3 {[%clk 0:03:00.3]} 4... Nc6 {[%clk 0:02:46.3]} 5. O-O {[%clk 0:02:59]} 5... e6 {[%clk 0:02:46.5]} 6. Bb3 {[%clk 0:02:58]} 6... Be7 {[%clk 0:02:44.5]} 7. c3 {[%clk 0:02:57.2]} 7... O-O {[%clk 0:02:44.8]} 8. Re1 {[%clk 0:02:57.1]} 8... b5 {[%clk 0:02:43.7]} 9. d4 {[%clk 0:02:56.9]} 9... Bb7 {[%clk 0:02:39.1]} 10. Nbd2 {[%clk 0:02:54.7]} 10... Rc8 {[%clk 0:02:38.3]} 11. h3 {[%clk 0:02:47.9]} 11... h6 {[%clk 0:02:37.5]} 12. Nf1 {[%clk 0:02:37.4]} 12... e5 {[%clk 0:02:04.1]} 13. d5 {[%clk 0:02:11]} 13... Na5 {[%clk 0:02:03.9]} 14. Bc2 {[%clk 0:02:10.5]} 14... b4 {[%clk 0:01:32.6]} 15. g4 {[%clk 0:02:04.3]} 15... Nd7 {[%clk 0:01:19.1]} 16. Ng3 {[%clk 0:01:58.9]} 16... bxc3 {[%clk 0:01:00.9]} 17. bxc3 {[%clk 0:01:58.5]} 17... c4 {[%clk 0:01:01.7]} 18. Nf5 {[%clk 0:01:57.8]} 18... Nc5 {[%clk 0:01:02.1]} 19. h4 {[%clk 0:01:55]} 19... Ba6 {[%clk 0:00:58]} 20. Bxh6 {[%clk 0:01:54.2]} 20... gxh6 {[%clk 0:00:54.1]} 21. Qd2 {[%clk 0:01:51.9]} 21... Re8 {[%clk 0:00:52.8]} 22. Qxh6 {[%clk 0:01:51.2]} 22... Bf8 {[%clk 0:00:52.7]} 23. Qh5 {[%clk 0:01:48.5]} 23... Qf6 {[%clk 0:00:49.5]} 24. g5 {[%clk 0:01:48.6]} 24... Qg6 {[%clk 0:00:32.7]} 25. Qg4 {[%clk 0:01:48]} 25... Nd3 {[%clk 0:00:33.4]} 26. h5 {[%clk 0:01:47.6]} 26... Qh7 {[%clk 0:00:33.8]} 27. g6 {[%clk 0:01:47.6]} 27... fxg6 {[%clk 0:00:33.9]} 28. hxg6 {[%clk 0:01:48.5]} 28... Qh1+ {[%clk 0:00:25.3]} 29. Kxh1 {[%clk 0:01:44.5]} 29... Nxf2+ {[%clk 0:00:26.2]} 30. Kg2 {[%clk 0:01:44.8]} 30... Nxg4 {[%clk 0:00:27.1]} 31. Rh1 {[%clk 0:01:43.5]} 31... Rc7 {[%clk 0:00:24.3]} 32. Rh4 {[%clk 0:01:41.6]} 32... Nf6 {[%clk 0:00:22.6]} 33. Rah1 {[%clk 0:01:40.8]} 33... Bg7 {[%clk 0:00:22.8]} 34. Nxd6 {[%clk 0:01:36.9]} 34... Rb8 {[%clk 0:00:21.7]} 35. Kg3 {[%clk 0:01:27]} 35... Rb2 {[%clk 0:00:20.9]} 36. R1h2 {[%clk 0:01:24.8]} 36... Bc8 {[%clk 0:00:15.4]} 37. Nf7 {[%clk 0:01:18.8]} 37... Rxa2 {[%clk 0:00:08.3]} 38. N3xe5 {[%clk 0:01:16.5]} 38... Nb3 {[%clk 0:00:03.9]} 39. d6 {[%clk 0:01:14]} 39... Rb7 {[%clk 0:00:03.1]} 40. Nc6 {[%clk 0:01:11.2]} 40... Rb4 {[%clk 0:00:02.8]} 41. Nxb4 {[%clk 0:01:09.5]} 1-0\n"
+    },
+    {
+      "url": "otb:2023.10.10:5490",
+      "opponent": "ShevchenkoKirill",
+      "opponentRating": 2671,
+      "studentRating": 2839,
+      "date": "2023-10-10",
+      "timeClass": "classical",
+      "outcome": "win",
+      "plyCount": 81,
+      "pgn": "[Event \"Titled Tue 10th Oct Early\"]\n[Site \"chess.com INT\"]\n[Date \"2023.10.10\"]\n[Round \"9\"]\n[White \"Carlsen,M\"]\n[Black \"Shevchenko,Kirill\"]\n[Result \"1-0\"]\n[WhiteElo \"2839\"]\n[BlackElo \"2671\"]\n[ECO \"B50\"]\n\n1.e4 c5 2.Nf3 d6 3.Bc4 Nf6 4.d3 Nc6 5.O-O e6 6.Bb3 Be7 7.c3 O-O 8.Re1 b5\n9.d4 Bb7 10.Nbd2 Rc8 11.h3 h6 12.Nf1 e5 13.d5 Na5 14.Bc2 b4 15.g4 Nd7 16.Ng3 bxc3\n17.bxc3 c4 18.Nf5 Nc5 19.h4 Ba6 20.Bxh6 gxh6 21.Qd2 Re8 22.Qxh6 Bf8 23.Qh5 Qf6\n24.g5 Qg6 25.Qg4 Nd3 26.h5 Qh7 27.g6 fxg6 28.hxg6 Qh1+ 29.Kxh1 Nxf2+ 30.Kg2 Nxg4\n31.Rh1 Rc7 32.Rh4 Nf6 33.Rah1 Bg7 34.Nxd6 Rb8 35.Kg3 Rb2 36.R1h2 Bc8 37.Nf7 Rxa2\n38.N3xe5 Nb3 39.d6 Rb7 40.Nc6 Rb4 41.Nxb4  1-0"
+    },
+    {
+      "url": "otb:2023.07.08:5023",
+      "opponent": "SaricIv",
+      "opponentRating": 2657,
+      "studentRating": 2835,
+      "date": "2023-07-08",
+      "timeClass": "classical",
+      "outcome": "win",
+      "plyCount": 117,
+      "pgn": "[Event \"SuperUnited Blitz 2023\"]\n[Site \"Zagreb CRO\"]\n[Date \"2023.07.08\"]\n[Round \"4.1\"]\n[White \"Carlsen,M\"]\n[Black \"Saric,Iv\"]\n[Result \"1-0\"]\n[WhiteElo \"2835\"]\n[BlackElo \"2657\"]\n[ECO \"B50\"]\n\n1.e4 c5 2.Nf3 d6 3.Bc4 Nf6 4.d3 Nc6 5.O-O e6 6.Bb3 Be7 7.c3 O-O 8.Re1 b5\n9.d4 Bb7 10.Nbd2 cxd4 11.cxd4 Rc8 12.Nf1 Qc7 13.Bg5 h6 14.Bd2 Na5 15.Bxa5 Qxa5\n16.Ng3 Rc7 17.d5 e5 18.Nf5 Rfc8 19.Nxe5 dxe5 20.d6 Bxd6 21.Qxd6 Kh7 22.Qxe5 Re8\n23.Qg3 g6 24.Qh4 Nh5 25.Nd6 Ree7 26.h3 Qb4 27.Rad1 a5 28.Re3 a4 29.a3 Qc5\n30.Rc3 Qb6 31.Rxc7 Qxc7 32.Bxf7 Rxf7 33.Nxf7 Qxf7 34.Qd8 Bc6 35.Rd6 Be8 36.e5 Ng7\n37.Qf6 Qc4 38.Rd8 Qc1+ 39.Kh2 Qc5 40.Qf4 Qe7 41.Rd6 h5 42.Qf6 Qc7 43.Rd8 Qc5\n44.e6 Qc7+ 45.f4 Qc6 46.Qe5 h4 47.e7 Nf5 48.Qb8 Ng7 49.Qe5 Nf5 50.Qb8 Ng7\n51.Rc8 Qd7 52.Qc7 Qd3 53.Qc3 Qd6 54.Qe5 Qd7 55.Rd8 Qc6 56.Qe1 Nf5 57.Qc3 Nxe7\n58.Qe5 Nf5 59.Rxe8  1-0"
+    }
+  ]
+}
