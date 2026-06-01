@@ -3796,6 +3796,58 @@
       ]
     },
     {
+      "id": "pro-samayraina-kings-gambit",
+      "playerId": "samayraina",
+      "eco": "C33",
+      "name": "King's Gambit (Samay Raina)",
+      "color": "white",
+      "style": "Romantic, Attacking",
+      "pgn": "e4 e5 f4 exf4 Bc4 Nf6 Nc3 d6 d4 Nc6 Bxf4 Bg4 Nf3",
+      "overview": "The King's Gambit is Samay's second-favourite answer to …e5 (800+ games) and the purest expression of his attacking style. f4 offers a pawn to rip open the f-file and seize the centre; his choice is the Bishop's Gambit, Bc4, aiming at f7 and developing at speed rather than rushing to regain the pawn. Black is objectively fine with accurate defense, but the practical attacking chances — opposite-side castling, central pawn rollers, a rook on the f-file — are enormous, and exactly where Samay's tactics thrive.",
+      "keyIdeas": [
+        "Bishop's Gambit: Bc4 first, eyeing f7, develop fast and let the f4-pawn wait.",
+        "Grab the broad centre with Nc3 and d4; the lead in development is the gambit's compensation.",
+        "Recapture f4 with the bishop (Bxf4), castle queenside, and storm the kingside.",
+        "Even when Black declines, open the f-file with fxe5 and pile pieces on f7."
+      ],
+      "traps": [
+        "After O-O-O the d4-d5 and e4-e5 breaks blow the centre open while Black is still developing.",
+        "On the f-file, doubling a rook behind f4-f5 and Bxf7 sacrifices recur against a slow defense."
+      ],
+      "warnings": [
+        "It's a gambit — if the attack stalls, the missing pawn tells; keep the initiative or don't enter it.",
+        "Respect …Qh4+ ideas in the Bishop's Gambit: Kf1 is fine, but know the follow-up before allowing it."
+      ],
+      "variations": [
+        {
+          "name": "vs King's Gambit Declined (…Nc6)",
+          "pgn": "e4 e5 f4 Nc6 Nf3 d6 Bc4 Bg4 O-O Nf6 Nc3 Be7 d3 O-O fxe5 Nxe5",
+          "explanation": "When Black declines with …Nc6, Samay builds the dream King's-Gambit setup with no pawn given: Nf3, Bc4, castle, Nc3 and d3. Then he opens the f-file with fxe5 and piles pieces on f7 — the attack simply arrives a move later.",
+          "sources": [
+            "concept:att-attack",
+            "https://api.chess.com/pub/player/samayraina/games/archives",
+            "https://www.chess.com/openings/Kings-Gambit-Declined"
+          ]
+        },
+        {
+          "name": "vs Falkbeer (…d5)",
+          "pgn": "e4 e5 f4 d5 exd5 exf4 Nf3 Nf6 d4 Nxd5 Bc4 Nb6 Bb3 Bg4 Bxf4",
+          "explanation": "Against the Falkbeer counter-strike …d5, Samay takes exd5 and develops with tempo — Nf3, d4, Bc4 bouncing the knight, then Bxf4 to regain the pawn. White keeps the strong b3-bishop on f7 and the freer, better-structured position.",
+          "sources": [
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/samayraina/games/archives",
+            "https://www.chess.com/openings/Falkbeer-Countergambit"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "concept:att-attack",
+        "https://api.chess.com/pub/player/samayraina/games/archives"
+      ]
+    },
+    {
       "id": "pro-caruana-italian",
       "playerId": "caruana",
       "eco": "C54",

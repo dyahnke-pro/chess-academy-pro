@@ -35,6 +35,7 @@ import { getProSamayRainaCaroWhiteTabPlanIds } from '../services/proSamayRainaCa
 import { getProSamayRainaOpenE5TabPlanIds } from '../services/proSamayRainaOpenE5TabPlans';
 import { getProSamayRainaSicilianBlackTabPlanIds } from '../services/proSamayRainaSicilianBlackTabPlans';
 import { getProSamayRainaScandiTabPlanIds } from '../services/proSamayRainaScandiTabPlans';
+import { getProSamayRainaKingsGambitTabPlanIds } from '../services/proSamayRainaKingsGambitTabPlans';
 
 interface ProRepEntry {
   id: string;
@@ -67,6 +68,7 @@ const RESOLVERS: Array<(openingId: string, tabKey: string) => string[] | null> =
   getProSamayRainaOpenE5TabPlanIds,
   getProSamayRainaSicilianBlackTabPlanIds,
   getProSamayRainaScandiTabPlanIds,
+  getProSamayRainaKingsGambitTabPlanIds,
 ];
 
 function resolve(openingId: string, variationName: string): string[] | null {
