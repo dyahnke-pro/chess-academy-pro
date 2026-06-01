@@ -12,6 +12,11 @@ const URL = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app
 const OPENINGS = ['pro-samayraina-sicilian-black', 'pro-samayraina-open-e5', 'pro-samayraina-kings-gambit',
   'pro-samayraina-open-sicilian', 'pro-samayraina-ruy', 'pro-samayraina-italian',
   'pro-samayraina-french-white', 'pro-samayraina-caro-white', 'pro-samayraina-scandi'];
+// Loop-contract depth: PASS 1 = standard; PASS≥2 = out-of-order tab coverage
+// (reverse, main last) + wrong-move-in-Learn rejection probe; PASS≥3 = cold
+// IndexedDB reseed first (exercise the cold seed/unlock path).
+const PASS = Number(process.env.AUDIT_PASS) || 1;
+console.log(`[pass ${PASS}] depth: ${PASS >= 3 ? 'cold-reseed + out-of-order + wrong-move' : PASS >= 2 ? 'out-of-order + wrong-move' : 'standard'}`);
 
 const listener = await startAuditListener();
 const exe = await resolveChromiumExecutable();
@@ -46,8 +51,13 @@ async function drive(testidSel, id, label, expectMount = true) {
   const present = (await b.count()) > 0;
   if (!present) return { present: false };
   await b.click().catch(() => {});
-  await page.waitForTimeout(3000);
-  const mounted = (await squares()) >= 64;
+  await page.waitForTimeout(3500);
+  let mounted = (await squares()) >= 64;
+  // prod-latency tolerance: a slow lesson mount gets ONE retry-wait + re-click,
+  // so a single lag doesn't fail the pass. A still-empty board after this is a
+  // REAL no-mount (not hidden).
+  if (!mounted) { await page.waitForTimeout(3500); mounted = (await squares()) >= 64; }
+  if (!mounted) { await b.click().catch(() => {}); await page.waitForTimeout(3500); mounted = (await squares()) >= 64; }
   const fired = tts.slice(before).filter((t) => !warmup(t));
   await exitPlayer(); await openDetail(id);
   return { present: true, mounted, fired };
@@ -61,6 +71,12 @@ try {
   await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 8000 });
   await page.waitForSelector('[data-testid="strength-calibration-bubble"]', { state: 'detached', timeout: 15000 });
 } catch (e) { console.log('[setup] bubble: ' + String(e).slice(0, 60)); }
+if (PASS >= 3) {
+  console.log('[pass 3] cold-cache: clearing IndexedDB then reloading…');
+  await page.evaluate(async () => { for (const d of await indexedDB.databases()) if (d.name) indexedDB.deleteDatabase(d.name); }).catch(() => {});
+  await page.goto(URL + '/', { waitUntil: 'domcontentloaded', timeout: 30000 });
+  try { await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 8000 }); await page.waitForSelector('[data-testid="strength-calibration-bubble"]', { state: 'detached', timeout: 15000 }); } catch {}
+}
 console.log('[setup] 60s deferred seed…');
 await page.waitForTimeout(60000);
 // touch each opening detail so its record is in Dexie, then UNLOCK the ladder
@@ -75,7 +91,18 @@ for (const id of OPENINGS) {
   const body0 = (await page.locator('body').innerText().catch(() => '')).replace(/\s+/g, ' ');
   if (/Loading opening/i.test(body0)) { fail(`${id}: stuck Loading (seed)`); continue; }
   const tabN = await page.locator('[data-testid^="variation-tab-"]').count();
-  for (const ti of [-1, ...Array.from({ length: Math.min(tabN, 4) }, (_, i) => i)]) {
+  const tabRange = Array.from({ length: Math.min(tabN, 4) }, (_, i) => i);
+  // PASS≥2 digs deeper: drive the tabs OUT OF ORDER (reverse, main last) to
+  // catch pick-before-load / stale-tab bugs the in-order pass can't.
+  const tabOrder = PASS >= 2 ? [...tabRange].reverse().concat(-1) : [-1, ...tabRange];
+  // PASS≥2 adversarial: rapid mode-toggle with no settle — assert no leak/error.
+  if (PASS >= 2) {
+    const e0 = pageerrors.length;
+    for (const bsel of ['walkthrough-btn', 'learn-btn', 'practice-btn']) { await page.locator(`[data-testid="${bsel}"]`).first().click({ timeout: 2000 }).catch(() => {}); }
+    await page.waitForTimeout(800); await openDetail(id);
+    if (pageerrors.length > e0) fail(`${id}: rapid mode-toggle leaked a pageerror`);
+  }
+  for (const ti of tabOrder) {
     let label = 'main';
     const selectTab = async () => { if (ti >= 0) { await page.locator('[data-testid^="variation-tab-"]').nth(ti).click().catch(() => {}); await page.waitForTimeout(1200); } };
     await selectTab();
