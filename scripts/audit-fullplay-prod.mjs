@@ -221,14 +221,26 @@ async function highlightedSquares() {
       if (!top) return 'none'; return `${top.tagName}.${(top.className && top.className.toString && top.className.toString().slice(0, 40)) || ''}#${top.id || ''}[ts=${top.getAttribute && top.getAttribute('data-testid') || ''}] sameAsSquare=${top === el || el.contains(top) || top.contains(el)}`;
     }, mainPlies[0].from).catch((e) => 'probe-err ' + String(e).slice(0, 60));
     console.log(`  [board probe @${mainPlies[0].from}] topElement = ${probe}`);
-    let registered = 0;
-    for (const ply of mainPlies) {
-      await clickMove(ply.from, ply.to);
-      // did the from-square empty out? (rough move-registered signal)
-      const fromEmpty = await page.evaluate((sq) => { const el = document.querySelector(`[data-square="${sq}"]`); return el ? !el.querySelector('img,svg,[data-piece]') : false; }, ply.from).catch(() => false);
-      if (fromEmpty) registered++;
+    // Drive the player's OWN expected line via the audit hook (handles any
+    // length/content — the curated Learn line differs from opening.pgn). Falls
+    // back to dragging opening.pgn if the hook isn't present.
+    let played = 0;
+    const hookLive = await page.evaluate(() => typeof window.__nextExpected === 'function').catch(() => false);
+    if (hookLive) {
+      for (let i = 0; i < 60; i++) {
+        if (await page.locator('[data-testid="line-player-complete"]').isVisible().catch(() => false)) break;
+        const e = await page.evaluate(() => (window.__nextExpected ? window.__nextExpected() : null)).catch(() => null);
+        if (!e) break;
+        await page.evaluate(({ f, t }) => window.__playMove && window.__playMove(f, t), { f: e.from, t: e.to }).catch(() => {});
+        played++;
+        await page.waitForTimeout(450);
+      }
+      console.log(`  [line moves] played ${played} expected moves via hook`);
+    } else {
+      let registered = 0;
+      for (const ply of mainPlies) { await clickMove(ply.from, ply.to); const fromEmpty = await page.evaluate((sq) => { const el = document.querySelector(`[data-square="${sq}"]`); return el ? !el.querySelector('img,svg,[data-piece]') : false; }, ply.from).catch(() => false); if (fromEmpty) registered++; }
+      console.log(`  [line moves] ~${registered}/${mainPlies.length} (drag fallback — hook absent)`);
     }
-    console.log(`  [line moves] ~${registered}/${mainPlies.length} from-squares emptied`);
   }
   async function backToDetail() {
     for (const sel of ['[data-testid="line-player-back"]', '[data-testid="lesson-player"] [aria-label="Exit" i]', '[aria-label="Back" i]']) {

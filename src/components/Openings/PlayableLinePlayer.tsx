@@ -466,10 +466,25 @@ export function PlayableLinePlayer({
   useEffect(() => {
     if (typeof window === 'undefined') return;
     try { if (localStorage.getItem('auditMoveHook') !== '1') return; } catch { return; }
-    const w = window as Window & { __playMove?: (from: string, to: string) => void };
+    type AuditWin = Window & {
+      __playMove?: (from: string, to: string) => void;
+      __nextExpected?: () => { from: string; to: string } | null;
+    };
+    const w = window as AuditWin;
     w.__playMove = (from: string, to: string): void => { handleMemoryMoveResult(from, to); };
-    return () => { delete (window as Window & { __playMove?: (from: string, to: string) => void }).__playMove; };
-  }, [handleMemoryMoveResult]);
+    // The audit drives the EXACT expected line (lesson's own sequence, whatever
+    // its length) rather than guessing the moves — call __nextExpected to read
+    // the next move the player is waiting for, then __playMove it.
+    w.__nextExpected = (): { from: string; to: string } | null => {
+      const e = expectedMoves[memoryMoveIndex];
+      return e ? { from: e.from, to: e.to } : null;
+    };
+    return () => {
+      const ww = window as AuditWin;
+      ww.__playMove = undefined;
+      ww.__nextExpected = undefined;
+    };
+  }, [handleMemoryMoveResult, expectedMoves, memoryMoveIndex]);
 
   const handlePieceDrop = useCallback(
     ({ sourceSquare, targetSquare }: PieceDropHandlerArgs): boolean => {
