@@ -3263,7 +3263,13 @@
         }
       ],
       "trapLines": [],
-      "warningLines": [],
+      "warningLines": [
+        {
+          "name": "Passive Bd2 vs ...Ng4",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 Ng4 Bd2 Qb6 f3 Qxd4",
+          "explanation": "Watch out: when ...Ng4 hits the e3-bishop, the passive retreat Bd2 surrenders White's whole initiative. The active Bg5 is far stronger — here Black equalises comfortably and the English-Attack pressure evaporates."
+        }
+      ],
       "sources": [
         "book:chess-fundamentals",
         "concept:att-kingside-storm",
@@ -3341,7 +3347,13 @@
         }
       ],
       "trapLines": [],
-      "warningLines": [],
+      "warningLines": [
+        {
+          "name": "Nxe5 walks into ...Qd4",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 Nxe5 Qd4 Nf3 Qxe4+",
+          "explanation": "Watch out: after the early exchange on c6, grabbing the e5-pawn with Nxe5 runs into ...Qd4!, forking the knight and the e4-pawn. Black regains the pawn with the bishop pair and an easy game — White had nothing to gain."
+        }
+      ],
       "sources": [
         "book:chess-fundamentals",
         "concept:pos-space",
@@ -3497,7 +3509,13 @@
         }
       ],
       "trapLines": [],
-      "warningLines": [],
+      "warningLines": [
+        {
+          "name": "...Nxe4 drops the queen",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 Nxe4 Nxe4 h6 Bh4",
+          "explanation": "Watch out: against the Bg5 Najdorf, the greedy ...Nxe4 loses material on the spot — Nxe4 nets a clean piece for a single pawn, and the even sharper Bxd8 wins the queen outright. Always meet Bg5 with the solid ...e6."
+        }
+      ],
       "sources": [
         "book:chess-fundamentals",
         "concept:pos-initiative",
@@ -3575,7 +3593,13 @@
         }
       ],
       "trapLines": [],
-      "warningLines": [],
+      "warningLines": [
+        {
+          "name": "Retreating ...Nf6 hands White the centre",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nf6 dxe5 Ne4 Qe2",
+          "explanation": "Watch out: in the Open Berlin, retreating the knight with ...Nf6 allows dxe5 and a big, free White centre. The whole point is ...Nd6!, hitting the b5-bishop and steering into the famous balanced endgame."
+        }
+      ],
       "sources": [
         "book:chess-fundamentals",
         "concept:pos-center",
@@ -3643,7 +3667,13 @@
         }
       ],
       "trapLines": [],
-      "warningLines": [],
+      "warningLines": [
+        {
+          "name": "...Nxe4 loses material",
+          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O e4 Nxe4 Qxe4 d5",
+          "explanation": "Watch out: in this sharp Nimzo with an early e4, grabbing the pawn with ...Nxe4 loses material to Nxe4. Hit the centre the right way with ...d5."
+        }
+      ],
       "sources": [
         "book:chess-fundamentals",
         "concept:pos-development",
@@ -3711,7 +3741,13 @@
         }
       ],
       "trapLines": [],
-      "warningLines": [],
+      "warningLines": [
+        {
+          "name": "...Nxe4 drops a piece",
+          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Be2 O-O Nf3 e5 O-O Nxe4 Nxe4 exd4",
+          "explanation": "Watch out: in the Classical King's Indian, the natural-looking ...Nxe4 just drops a piece to Nxe4. Develop with ...Nc6 and play for the thematic ...f5 kingside storm instead."
+        }
+      ],
       "sources": [
         "book:chess-fundamentals",
         "concept:att-kingside-storm",
