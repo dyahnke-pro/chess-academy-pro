@@ -57,10 +57,9 @@ describe('Pro Repertoire PGN Legality', () => {
   });
 
   it('has the expected number of openings', () => {
-    // Active builds under the G9.1 doctrine: GothamChess 18 + Carlsen 14 +
-    // Naroditsky 10 + Aman 9 (2026-06-01) + Eric Rosen 8 + Caruana 8 +
-    // Samay Raina 8 + Hikaru 5 = 80. Bump this as each remaining player is rebuilt.
-    expect(proRepertoire.openings).toHaveLength(80);
+    // Active builds (G9.1): GothamChess 18 + Carlsen 14 + Naroditsky 10 + Aman 9
+    // + Eric Rosen 8 + Caruana 8 + Samay Raina 9 (incl. King's Gambit) + Hikaru 5 = 81.
+    expect(proRepertoire.openings).toHaveLength(81);
   });
 
   it('every opening has a valid playerId', () => {

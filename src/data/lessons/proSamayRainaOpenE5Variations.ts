@@ -9,22 +9,22 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const OID = 'pro-samayraina-open-e5';
 const SRC = ['concept:pos-development', 'concept:pos-center', 'https://www.chess.com/openings/Italian-Game', 'https://api.chess.com/pub/player/samayraina/games/archives'];
 
-const VS_ITALIAN: LessonScript = {
-  openingId: OID, title: 'vs Italian (3.Bc4)', minutes: 6,
+const VS_RUY: LessonScript = {
+  openingId: OID, title: 'vs Ruy Lopez (3.Bb5)', minutes: 6,
   orientation: 'black', kind: 'variation', sources: SRC,
   beats: [
-    b({ id: 'bc5', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3',
-      arrows: [], highlights: [{ square: 'c5', color: KEY }, { square: 'f2', color: SOFT }],
-      say: "Against the Italian we mirror with …Bc5, the most natural square, pointing at f2. After c3 and d3 we are in a Giuoco Pianissimo — a slow, equal maneuvering game where understanding decides.",
-      sayShort: '…Bc5 — classical and equal.' }),
-    b({ id: 'develop', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3 d6 O-O O-O Re1 a6 a4 Ba7',
-      arrows: [], highlights: [{ square: 'a7', color: KEY }],
-      say: "We complete development, castle, and tuck the bishop to a7 where it keeps the strong diagonal but stays safe from b4 ideas. The position is symmetrical and rich; Black has every resource White does.",
-      sayShort: '…Ba7 — keep the diagonal.' }),
-    b({ id: 'plan', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3 d6 O-O O-O Re1 a6 a4 Ba7',
-      arrows: [A('c6', 'e7')], highlights: [{ square: 'd5', color: KEY }, { square: 'e7', color: SOFT }],
-      say: "The plan: reroute …Ne7-g6 toward the kingside, prepare the …d5 break to free the position, and contest the centre. In the Pianissimo Black simply matches White's slow improvements and strikes with …d5 at the right moment.",
-      sayShort: 'Plan: …Ne7-g6, break with …d5.' }),
+    b({ id: 'a6-nf6', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6',
+      arrows: [A('f6', 'e4')], highlights: [{ square: 'a6', color: KEY }, { square: 'f6', color: SOFT }],
+      say: "When White tries the Ruy with Bb5, we play the main line: a6 to question the bishop, then Nf6 hitting e4. The most respected, most principled answer to the Spanish.",
+      sayShort: '…a6, …Nf6 — the Ruy main.' }),
+    b({ id: 'be7', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3',
+      highlights: [{ square: 'b5', color: KEY }, { square: 'b3', color: SOFT }],
+      say: "We develop Be7, castle, and expand with b5, kicking the bishop to b3; d6 then supports e5 and frees the c8-bishop. This is the rock-solid Closed Ruy that has served champions for a century.",
+      sayShort: '…b5, …d6 — solid Closed Ruy.' }),
+    b({ id: 'plan', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O',
+      arrows: [A('c6', 'a5')], highlights: [{ square: 'a5', color: SOFT }, { square: 'c5', color: KEY }],
+      say: "The plan: the Chigorin maneuver Na5 to hit the b3-bishop, then c5 to challenge White's coming d4 and grab queenside space. Black holds the centre, expands, and looks for the d5 break — a complete, dynamic counter to the Ruy.",
+      sayShort: 'Plan: …Na5, …c5, fight for d5.' }),
   ],
 };
 
@@ -67,7 +67,7 @@ const VS_FOUR_KNIGHTS: LessonScript = {
 };
 
 export const PRO_SAMAYRAINA_OPEN_E5_VARIATION_LESSONS: Record<string, LessonScript> = {
-  [`${OID}::vs Italian (3.Bc4)`]: VS_ITALIAN,
+  [`${OID}::vs Ruy Lopez (3.Bb5)`]: VS_RUY,
   [`${OID}::vs Scotch (3.d4)`]: VS_SCOTCH,
   [`${OID}::vs Four Knights (3.Nc3)`]: VS_FOUR_KNIGHTS,
 };

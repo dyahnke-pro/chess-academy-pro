@@ -1,10 +1,10 @@
 {
   "player": "samayraina",
   "openingId": "samay-ruy",
-  "generatedAt": "2026-05-31T23:13:50.047Z",
+  "generatedAt": "2026-06-01T01:48:20.194Z",
   "totals": {
     "totalGamesScanned": 21825,
-    "matchingWins": 0
+    "matchingWins": 19
   },
   "candidates": [
     {
@@ -34,8 +34,22 @@
         "Rxe5",
         "c6"
       ],
-      "games": [],
-      "totalCandidates": 0
+      "games": [
+        {
+          "url": "https://www.chess.com/game/live/74811218603",
+          "date": "2023-04-09",
+          "studentColor": "white",
+          "opponent": "stefanseidler",
+          "opponentRating": 1819,
+          "studentRating": 1789,
+          "timeClass": "rapid",
+          "timeControl": "600",
+          "eco": "Ruy Lopez Opening Marshall Attack Modern Main Line 12...Bd6 13.Re1 Qh4",
+          "plyCount": 37,
+          "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2023.04.09\"]\n[Round \"-\"]\n[White \"samayraina\"]\n[Black \"stefanseidler\"]\n[Result \"1-0\"]\n[CurrentPosition \"r1b1RQk1/6pp/p1p4b/1p6/3P3q/2P4P/PP3PP1/RN4K1 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C89\"]\n[ECOUrl \"https://www.chess.com/openings/Ruy-Lopez-Opening-Marshall-Attack-Modern-Main-Line-12...Bd6-13.Re1-Qh4\"]\n[UTCDate \"2023.04.09\"]\n[UTCTime \"20:30:10\"]\n[WhiteElo \"1789\"]\n[BlackElo \"1819\"]\n[TimeControl \"600\"]\n[Termination \"samayraina won by checkmate\"]\n[StartTime \"20:30:10\"]\n[EndDate \"2023.04.09\"]\n[EndTime \"20:34:05\"]\n[Link \"https://www.chess.com/game/live/74811218603\"]\n\n1. e4 {[%clk 0:10:00]} 1... e5 {[%clk 0:09:59.9]} 2. Nf3 {[%clk 0:09:59.6]} 2... Nc6 {[%clk 0:09:58.3]} 3. Bb5 {[%clk 0:09:58.2]} 3... a6 {[%clk 0:09:56.5]} 4. Ba4 {[%clk 0:09:57.6]} 4... Nf6 {[%clk 0:09:55.7]} 5. O-O {[%clk 0:09:56.1]} 5... Be7 {[%clk 0:09:53.8]} 6. Re1 {[%clk 0:09:55]} 6... b5 {[%clk 0:09:50.7]} 7. Bb3 {[%clk 0:09:53.7]} 7... O-O {[%clk 0:09:49.6]} 8. c3 {[%clk 0:09:49.6]} 8... d5 {[%clk 0:09:47.8]} 9. exd5 {[%clk 0:09:37.9]} 9... Nxd5 {[%clk 0:09:47.7]} 10. Nxe5 {[%clk 0:09:32.4]} 10... Nxe5 {[%clk 0:09:47.6]} 11. Rxe5 {[%clk 0:09:32.3]} 11... c6 {[%clk 0:09:46.8]} 12. d4 {[%clk 0:09:13.9]} 12... Bd6 {[%clk 0:09:45.2]} 13. Re1 {[%clk 0:09:09.3]} 13... Qh4 {[%clk 0:09:44]} 14. h3 {[%clk 0:08:36.1]} 14... Nf4 {[%clk 0:09:26.7]} 15. Bxf4 {[%clk 0:08:27.9]} 15... Bxf4 {[%clk 0:09:25.5]} 16. Qf3 {[%clk 0:08:06.8]} 16... Bh6 {[%clk 0:09:13.3]} 17. Bxf7+ {[%clk 0:07:26.1]} 17... Rxf7 {[%clk 0:09:04]} 18. Re8+ {[%clk 0:07:24.6]} 18... Rf8 {[%clk 0:08:51.2]} 19. Qxf8# {[%clk 0:07:23.3]} 1-0\n"
+        }
+      ],
+      "totalCandidates": 1
     },
     {
       "id": "var-1",
@@ -52,8 +66,35 @@
         "O-O",
         "Nf6"
       ],
-      "games": [],
-      "totalCandidates": 0
+      "games": [
+        {
+          "url": "https://www.chess.com/game/live/84814424507",
+          "date": "2023-08-03",
+          "studentColor": "white",
+          "opponent": "iwasnotexpectingthat",
+          "opponentRating": 1831,
+          "studentRating": 1921,
+          "timeClass": "rapid",
+          "timeControl": "600",
+          "eco": "Ruy Lopez Opening Old Steinitz Defense",
+          "plyCount": 39,
+          "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2023.08.03\"]\n[Round \"-\"]\n[White \"samayraina\"]\n[Black \"iwasnotexpectingthat\"]\n[Result \"1-0\"]\n[CurrentPosition \"r3r1k1/1bp2p2/p1np1qpp/1p1P4/1P2P3/P2Q1N1P/2B2PP1/R3R1K1 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C62\"]\n[ECOUrl \"https://www.chess.com/openings/Ruy-Lopez-Opening-Old-Steinitz-Defense\"]\n[UTCDate \"2023.08.03\"]\n[UTCTime \"15:09:43\"]\n[WhiteElo \"1921\"]\n[BlackElo \"1831\"]\n[TimeControl \"600\"]\n[Termination \"samayraina won by resignation\"]\n[StartTime \"15:09:43\"]\n[EndDate \"2023.08.03\"]\n[EndTime \"15:13:44\"]\n[Link \"https://www.chess.com/game/live/84814424507\"]\n\n1. e4 {[%clk 0:10:00]} 1... e5 {[%clk 0:09:59.9]} 2. Nf3 {[%clk 0:09:59.9]} 2... Nc6 {[%clk 0:09:54.5]} 3. Bb5 {[%clk 0:09:58.7]} 3... d6 {[%clk 0:09:44.3]} 4. h3 {[%clk 0:09:56.7]} 4... Bd7 {[%clk 0:09:42.6]} 5. O-O {[%clk 0:09:50.1]} 5... Nf6 {[%clk 0:09:41.2]} 6. Re1 {[%clk 0:09:47.8]} 6... Be7 {[%clk 0:09:39.1]} 7. c3 {[%clk 0:09:43.6]} 7... O-O {[%clk 0:09:37.4]} 8. d4 {[%clk 0:09:42.5]} 8... exd4 {[%clk 0:09:35.7]} 9. cxd4 {[%clk 0:09:42.1]} 9... a6 {[%clk 0:09:34.7]} 10. Ba4 {[%clk 0:09:40.6]} 10... Re8 {[%clk 0:09:28.4]} 11. Nc3 {[%clk 0:09:25.1]} 11... b5 {[%clk 0:09:24.6]} 12. Bc2 {[%clk 0:09:22.4]} 12... Bc8 {[%clk 0:09:07.8]} 13. a3 {[%clk 0:09:20]} 13... Bb7 {[%clk 0:09:04.3]} 14. b4 {[%clk 0:09:14.7]} 14... Bf8 {[%clk 0:08:49.1]} 15. Qd3 {[%clk 0:09:03.5]} 15... g6 {[%clk 0:08:29.2]} 16. Bg5 {[%clk 0:08:52.5]} 16... Bg7 {[%clk 0:08:27]} 17. Nd5 {[%clk 0:08:46.6]} 17... h6 {[%clk 0:08:06.7]} 18. Bxf6 {[%clk 0:08:35.8]} 18... Bxf6 {[%clk 0:07:59.5]} 19. Nxf6+ {[%clk 0:08:29.4]} 19... Qxf6 {[%clk 0:07:56.7]} 20. d5 {[%clk 0:08:17.7]} 1-0\n"
+        },
+        {
+          "url": "https://www.chess.com/game/live/84579223781",
+          "date": "2023-07-31",
+          "studentColor": "white",
+          "opponent": "mks4",
+          "opponentRating": 1788,
+          "studentRating": 1803,
+          "timeClass": "rapid",
+          "timeControl": "600",
+          "eco": "Ruy Lopez Opening Old Steinitz Defense",
+          "plyCount": 31,
+          "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2023.07.31\"]\n[Round \"-\"]\n[White \"samayraina\"]\n[Black \"mks4\"]\n[Result \"1-0\"]\n[CurrentPosition \"r4rk1/pp2bpp1/2p2q1p/4p3/2Q1P3/2N4P/PPP2PP1/3RR1K1 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C62\"]\n[ECOUrl \"https://www.chess.com/openings/Ruy-Lopez-Opening-Old-Steinitz-Defense\"]\n[UTCDate \"2023.07.31\"]\n[UTCTime \"21:50:24\"]\n[WhiteElo \"1803\"]\n[BlackElo \"1788\"]\n[TimeControl \"600\"]\n[Termination \"samayraina won - game abandoned\"]\n[StartTime \"21:50:24\"]\n[EndDate \"2023.07.31\"]\n[EndTime \"21:55:48\"]\n[Link \"https://www.chess.com/game/live/84579223781\"]\n\n1. e4 {[%clk 0:09:51.3]} 1... e5 {[%clk 0:09:58.1]} 2. Nf3 {[%clk 0:09:50]} 2... Nc6 {[%clk 0:09:56.6]} 3. Bb5 {[%clk 0:09:48]} 3... d6 {[%clk 0:09:54.3]} 4. h3 {[%clk 0:09:40.4]} 4... Bd7 {[%clk 0:09:49.9]} 5. O-O {[%clk 0:09:38]} 5... Nf6 {[%clk 0:09:47.3]} 6. Re1 {[%clk 0:09:36]} 6... h6 {[%clk 0:09:44.4]} 7. d4 {[%clk 0:09:29.2]} 7... exd4 {[%clk 0:09:34.8]} 8. Nxd4 {[%clk 0:09:23.5]} 8... Nxd4 {[%clk 0:09:33.2]} 9. Bxd7+ {[%clk 0:09:21.1]} 9... Nxd7 {[%clk 0:09:19.6]} 10. Qxd4 {[%clk 0:09:21]} 10... Ne5 {[%clk 0:09:11.9]} 11. Bf4 {[%clk 0:08:38]} 11... Qf6 {[%clk 0:09:03.6]} 12. Bxe5 {[%clk 0:08:33.3]} 12... dxe5 {[%clk 0:09:01.5]} 13. Qd5 {[%clk 0:08:19.9]} 13... c6 {[%clk 0:08:53.4]} 14. Qc4 {[%clk 0:08:00.3]} 14... Be7 {[%clk 0:08:51]} 15. Nc3 {[%clk 0:07:50.8]} 15... O-O {[%clk 0:08:49]} 16. Rad1 {[%clk 0:07:41]} 1-0\n"
+        }
+      ],
+      "totalCandidates": 2
     },
     {
       "id": "var-2",
@@ -69,8 +110,48 @@
         "d6",
         "h3"
       ],
-      "games": [],
-      "totalCandidates": 0
+      "games": [
+        {
+          "url": "https://www.chess.com/game/live/92409634247",
+          "date": "2023-10-30",
+          "studentColor": "white",
+          "opponent": "cheeseman2005",
+          "opponentRating": 1809,
+          "studentRating": 1807,
+          "timeClass": "rapid",
+          "timeControl": "600",
+          "eco": "Ruy Lopez Opening Classical Defense 4.O O d6",
+          "plyCount": 73,
+          "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2023.10.30\"]\n[Round \"-\"]\n[White \"samayraina\"]\n[Black \"cheeseman2005\"]\n[Result \"1-0\"]\n[CurrentPosition \"6r1/8/p7/2R4p/k4R2/3rBK2/PP6/8 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C64\"]\n[ECOUrl \"https://www.chess.com/openings/Ruy-Lopez-Opening-Classical-Defense-4.O-O-d6\"]\n[UTCDate \"2023.10.30\"]\n[UTCTime \"12:54:42\"]\n[WhiteElo \"1807\"]\n[BlackElo \"1809\"]\n[TimeControl \"600\"]\n[Termination \"samayraina won by resignation\"]\n[StartTime \"12:54:42\"]\n[EndDate \"2023.10.30\"]\n[EndTime \"13:08:20\"]\n[Link \"https://www.chess.com/game/live/92409634247\"]\n\n1. e4 {[%clk 0:09:45.2]} 1... e5 {[%clk 0:09:47]} 2. Nf3 {[%clk 0:09:43.9]} 2... Nc6 {[%clk 0:09:39.2]} 3. Bb5 {[%clk 0:09:43.2]} 3... Bc5 {[%clk 0:09:27.2]} 4. O-O {[%clk 0:09:40.5]} 4... d6 {[%clk 0:09:24.2]} 5. h3 {[%clk 0:09:34.9]} 5... Nf6 {[%clk 0:09:11.7]} 6. c3 {[%clk 0:09:32.3]} 6... Nxe4 {[%clk 0:09:07.3]} 7. d4 {[%clk 0:09:27.7]} 7... exd4 {[%clk 0:08:44.9]} 8. cxd4 {[%clk 0:09:20]} 8... Bb4 {[%clk 0:08:20.9]} 9. d5 {[%clk 0:08:47.2]} 9... a6 {[%clk 0:08:19.5]} 10. Bxc6+ {[%clk 0:08:45.1]} 10... bxc6 {[%clk 0:08:17.1]} 11. Qd4 {[%clk 0:08:43.8]} 11... Nxf2 {[%clk 0:07:15.5]} 12. Qxb4 {[%clk 0:08:18.5]} 12... Nd3 {[%clk 0:07:09.7]} 13. Qe4+ {[%clk 0:08:14.5]} 13... Ne5 {[%clk 0:07:08]} 14. Nxe5 {[%clk 0:08:13.7]} 14... dxe5 {[%clk 0:07:07.9]} 15. Qxe5+ {[%clk 0:08:11.9]} 15... Qe7 {[%clk 0:07:07.3]} 16. Qxg7 {[%clk 0:08:07]} 16... Rf8 {[%clk 0:07:00.8]} 17. Bd2 {[%clk 0:07:31]} 17... Qc5+ {[%clk 0:06:56.8]} 18. Kh1 {[%clk 0:07:26.6]} 18... Qxd5 {[%clk 0:06:48.6]} 19. Re1+ {[%clk 0:07:19.1]} 19... Be6 {[%clk 0:06:46]} 20. Bb4 {[%clk 0:07:08.3]} 20... c5 {[%clk 0:06:44.2]} 21. Nc3 {[%clk 0:07:07.2]} 21... Qc6 {[%clk 0:06:27.5]} 22. Ba3 {[%clk 0:06:42.1]} 22... O-O-O {[%clk 0:06:26.3]} 23. Qe5 {[%clk 0:06:34.5]} 23... Bxh3 {[%clk 0:06:21.4]} 24. Ne4 {[%clk 0:06:24.5]} 24... Rde8 {[%clk 0:05:25.5]} 25. Qxc5 {[%clk 0:06:16.8]} 25... Bxg2+ {[%clk 0:05:21.7]} 26. Kxg2 {[%clk 0:06:13.4]} 26... Rg8+ {[%clk 0:05:13.8]} 27. Kf3 {[%clk 0:06:04.5]} 27... Qg6 {[%clk 0:04:42.7]} 28. Nd6+ {[%clk 0:05:00.9]} 28... Qxd6 {[%clk 0:04:36.6]} 29. Qxd6 {[%clk 0:04:59]} 29... cxd6 {[%clk 0:04:36.5]} 30. Bxd6 {[%clk 0:04:53]} 30... Rd8 {[%clk 0:04:28.1]} 31. Bf4 {[%clk 0:04:48.7]} 31... h5 {[%clk 0:03:53.6]} 32. Rac1+ {[%clk 0:03:44.5]} 32... Kb7 {[%clk 0:03:45.8]} 33. Re7+ {[%clk 0:03:39]} 33... Kb6 {[%clk 0:03:43.6]} 34. Rxf7 {[%clk 0:03:36.9]} 34... Rd3+ {[%clk 0:03:29.6]} 35. Be3+ {[%clk 0:03:35.4]} 35... Kb5 {[%clk 0:03:19.8]} 36. Rc5+ {[%clk 0:03:34.6]} 36... Ka4 {[%clk 0:03:09.8]} 37. Rf4+ {[%clk 0:03:33.1]} 1-0\n"
+        },
+        {
+          "url": "https://www.chess.com/game/live/118526879883",
+          "date": "2024-08-27",
+          "studentColor": "white",
+          "opponent": "Beto02castro",
+          "opponentRating": 1754,
+          "studentRating": 1788,
+          "timeClass": "rapid",
+          "timeControl": "600",
+          "eco": "Ruy Lopez Opening Classical Defense 4.O O d6",
+          "plyCount": 107,
+          "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2024.08.27\"]\n[Round \"-\"]\n[White \"samayraina\"]\n[Black \"Beto02castro\"]\n[Result \"1-0\"]\n[CurrentPosition \"8/8/8/1R6/2Q2k2/5p2/5P2/6K1 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C64\"]\n[ECOUrl \"https://www.chess.com/openings/Ruy-Lopez-Opening-Classical-Defense-4.O-O-d6\"]\n[UTCDate \"2024.08.27\"]\n[UTCTime \"19:42:34\"]\n[WhiteElo \"1788\"]\n[BlackElo \"1754\"]\n[TimeControl \"600\"]\n[Termination \"samayraina won by checkmate\"]\n[StartTime \"19:42:34\"]\n[EndDate \"2024.08.27\"]\n[EndTime \"20:02:10\"]\n[Link \"https://www.chess.com/game/live/118526879883\"]\n\n1. e4 {[%clk 0:10:00]} 1... e5 {[%clk 0:09:58.6]} 2. Nf3 {[%clk 0:09:59.5]} 2... Nc6 {[%clk 0:09:54.2]} 3. Bb5 {[%clk 0:09:57.6]} 3... Bc5 {[%clk 0:09:51.9]} 4. O-O {[%clk 0:09:56.4]} 4... d6 {[%clk 0:09:50.1]} 5. h3 {[%clk 0:09:55.5]} 5... Bd7 {[%clk 0:09:47.8]} 6. c3 {[%clk 0:09:54.1]} 6... a6 {[%clk 0:09:43.2]} 7. Ba4 {[%clk 0:09:51.3]} 7... f5 {[%clk 0:09:38.3]} 8. exf5 {[%clk 0:09:48.1]} 8... Bxf5 {[%clk 0:09:36.4]} 9. d4 {[%clk 0:09:47.6]} 9... exd4 {[%clk 0:09:18.5]} 10. cxd4 {[%clk 0:09:47.5]} 10... b5 {[%clk 0:08:54.1]} 11. Bb3 {[%clk 0:09:31.6]} 11... Bb6 {[%clk 0:08:34.6]} 12. Re1+ {[%clk 0:09:27.1]} 12... Nge7 {[%clk 0:08:33.1]} 13. Bg5 {[%clk 0:09:23.8]} 13... Qd7 {[%clk 0:08:26.4]} 14. Nc3 {[%clk 0:09:09.6]} 14... O-O-O {[%clk 0:07:36.4]} 15. Nd5 {[%clk 0:08:49]} 15... Nxd5 {[%clk 0:07:04]} 16. Bxd5 {[%clk 0:08:40.7]} 16... Rde8 {[%clk 0:06:36.8]} 17. Bxc6 {[%clk 0:08:32.8]} 17... Qxc6 {[%clk 0:06:35.3]} 18. d5 {[%clk 0:08:31.7]} 18... Qc5 {[%clk 0:06:19.8]} 19. Be3 {[%clk 0:08:05.5]} 19... Rxe3 {[%clk 0:06:17.8]} 20. Rxe3 {[%clk 0:08:02.1]} 20... Qc4 {[%clk 0:05:29.9]} 21. Rc3 {[%clk 0:07:48.7]} 21... Qf4 {[%clk 0:05:28]} 22. Rac1 {[%clk 0:07:19.7]} 22... g5 {[%clk 0:05:24.5]} 23. Rc6 {[%clk 0:07:14.8]} 23... Kd7 {[%clk 0:05:11.9]} 24. Qd2 {[%clk 0:04:32.3]} 24... Qg3 {[%clk 0:04:02.3]} 25. Rxb6 {[%clk 0:03:41.7]} 25... Qf4 {[%clk 0:03:50.1]} 26. Qxf4 {[%clk 0:03:38.1]} 26... gxf4 {[%clk 0:03:50]} 27. Rbc6 {[%clk 0:03:35.3]} 27... Rg8 {[%clk 0:03:43.4]} 28. Rxc7+ {[%clk 0:02:44.9]} 28... Kd8 {[%clk 0:03:40]} 29. Nh4 {[%clk 0:02:14.2]} 29... Bxh3 {[%clk 0:03:35.1]} 30. R1c3 {[%clk 0:02:02.6]} 30... Bg4 {[%clk 0:03:19.8]} 31. Rxh7 {[%clk 0:01:56.1]} 31... f3 {[%clk 0:03:15.4]} 32. g3 {[%clk 0:01:51.4]} 32... Re8 {[%clk 0:03:10.4]} 33. Rc1 {[%clk 0:01:33.9]} 33... Re2 {[%clk 0:03:06.7]} 34. Ng6 {[%clk 0:01:32]} 34... Rxb2 {[%clk 0:02:59.1]} 35. Nf4 {[%clk 0:01:30.4]} 35... Bf5 {[%clk 0:02:49]} 36. Rg7 {[%clk 0:01:22.5]} 36... Rxa2 {[%clk 0:02:46.2]} 37. Ne6+ {[%clk 0:01:16.2]} 37... Bxe6 {[%clk 0:02:33.4]} 38. dxe6 {[%clk 0:01:14.9]} 38... Re2 {[%clk 0:02:17.5]} 39. e7+ {[%clk 0:00:54.6]} 39... Rxe7 {[%clk 0:02:13.5]} 40. Rxe7 {[%clk 0:00:52.2]} 40... Kxe7 {[%clk 0:02:13.4]} 41. Rc6 {[%clk 0:00:50.9]} 41... Ke6 {[%clk 0:02:03.6]} 42. Rxa6 {[%clk 0:00:45.3]} 42... Kd5 {[%clk 0:02:02.4]} 43. Rb6 {[%clk 0:00:32.1]} 43... Kc5 {[%clk 0:02:00.1]} 44. Rb8 {[%clk 0:00:30.3]} 44... b4 {[%clk 0:01:57.9]} 45. g4 {[%clk 0:00:19.1]} 45... d5 {[%clk 0:01:56.9]} 46. g5 {[%clk 0:00:18.5]} 46... d4 {[%clk 0:01:56]} 47. g6 {[%clk 0:00:18.4]} 47... d3 {[%clk 0:01:53]} 48. g7 {[%clk 0:00:18.3]} 48... d2 {[%clk 0:01:51.5]} 49. Rd8 {[%clk 0:00:17.6]} 49... b3 {[%clk 0:01:46.1]} 50. Rxd2 {[%clk 0:00:14.7]} 50... b2 {[%clk 0:01:45.3]} 51. Rxb2 {[%clk 0:00:13.6]} 51... Kd4 {[%clk 0:01:14.2]} 52. g8=Q {[%clk 0:00:13.5]} 52... Ke5 {[%clk 0:01:13.4]} 53. Rb5+ {[%clk 0:00:11.7]} 53... Kf4 {[%clk 0:01:09]} 54. Qc4# {[%clk 0:00:10.9]} 1-0\n"
+        },
+        {
+          "url": "https://www.chess.com/game/live/80449229371",
+          "date": "2023-06-14",
+          "studentColor": "white",
+          "opponent": "pkmurthy",
+          "opponentRating": 1666,
+          "studentRating": 1677,
+          "timeClass": "rapid",
+          "timeControl": "600",
+          "eco": "Ruy Lopez Opening Classical Defense 4.O O d6",
+          "plyCount": 39,
+          "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2023.06.14\"]\n[Round \"-\"]\n[White \"samayraina\"]\n[Black \"pkmurthy\"]\n[Result \"1-0\"]\n[CurrentPosition \"r4rk1/p1p2pp1/5R1p/2pP4/8/2P1P2P/P5P1/R2Q2K1 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C64\"]\n[ECOUrl \"https://www.chess.com/openings/Ruy-Lopez-Opening-Classical-Defense-4.O-O-d6\"]\n[UTCDate \"2023.06.14\"]\n[UTCTime \"02:37:44\"]\n[WhiteElo \"1677\"]\n[BlackElo \"1666\"]\n[TimeControl \"600\"]\n[Termination \"samayraina won by resignation\"]\n[StartTime \"02:37:44\"]\n[EndDate \"2023.06.14\"]\n[EndTime \"02:40:11\"]\n[Link \"https://www.chess.com/game/live/80449229371\"]\n\n1. e4 {[%clk 0:10:00]} 1... e5 {[%clk 0:09:59.9]} 2. Nf3 {[%clk 0:09:59.6]} 2... Nc6 {[%clk 0:09:58.5]} 3. Bb5 {[%clk 0:09:58.5]} 3... Bc5 {[%clk 0:09:57.6]} 4. O-O {[%clk 0:09:56.1]} 4... d6 {[%clk 0:09:54.4]} 5. h3 {[%clk 0:09:54.4]} 5... Bd7 {[%clk 0:09:52.9]} 6. c3 {[%clk 0:09:53.6]} 6... h6 {[%clk 0:09:51.5]} 7. d4 {[%clk 0:09:52.9]} 7... exd4 {[%clk 0:09:50.4]} 8. cxd4 {[%clk 0:09:52.2]} 8... Bb6 {[%clk 0:09:49.2]} 9. e5 {[%clk 0:09:44.4]} 9... dxe5 {[%clk 0:09:47.6]} 10. Bxc6 {[%clk 0:09:33.7]} 10... Bxc6 {[%clk 0:09:44.2]} 11. Nxe5 {[%clk 0:09:33.1]} 11... Nf6 {[%clk 0:09:31.6]} 12. Re1 {[%clk 0:09:27.6]} 12... O-O {[%clk 0:09:29.8]} 13. Nxc6 {[%clk 0:09:26.6]} 13... bxc6 {[%clk 0:09:27.8]} 14. Be3 {[%clk 0:09:17]} 14... Nd5 {[%clk 0:09:20.8]} 15. Nc3 {[%clk 0:09:14]} 15... Nxe3 {[%clk 0:09:17.3]} 16. fxe3 {[%clk 0:09:13.2]} 16... Ba5 {[%clk 0:09:05.4]} 17. Rf1 {[%clk 0:09:00.9]} 17... c5 {[%clk 0:09:02.7]} 18. d5 {[%clk 0:08:54.7]} 18... Bxc3 {[%clk 0:08:55.3]} 19. bxc3 {[%clk 0:08:53.7]} 19... Qf6 {[%clk 0:08:53.6]} 20. Rxf6 {[%clk 0:08:51.8]} 1-0\n"
+        }
+      ],
+      "totalCandidates": 3
     },
     {
       "id": "var-3",
@@ -87,8 +168,48 @@
         "c3",
         "d6"
       ],
-      "games": [],
-      "totalCandidates": 0
+      "games": [
+        {
+          "url": "https://www.chess.com/game/live/98592320261",
+          "date": "2024-01-10",
+          "studentColor": "white",
+          "opponent": "GM_Ruthvik",
+          "opponentRating": 2170,
+          "studentRating": 1704,
+          "timeClass": "rapid",
+          "timeControl": "600",
+          "eco": "Ruy Lopez Opening Berlin Beverwijk Zukertort Gambit",
+          "plyCount": 44,
+          "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2024.01.10\"]\n[Round \"-\"]\n[White \"samayraina\"]\n[Black \"GM_Ruthvik\"]\n[Result \"1-0\"]\n[CurrentPosition \"r4rk1/5p1p/p1p2Q2/1p1Pp3/4P3/2N1q3/PP4PP/3R1R1K w - -\"]\n[Timezone \"UTC\"]\n[ECO \"C64\"]\n[ECOUrl \"https://www.chess.com/openings/Ruy-Lopez-Opening-Berlin-Beverwijk-Zukertort-Gambit\"]\n[UTCDate \"2024.01.10\"]\n[UTCTime \"02:24:11\"]\n[WhiteElo \"1704\"]\n[BlackElo \"2170\"]\n[TimeControl \"600\"]\n[Termination \"samayraina won by resignation\"]\n[StartTime \"02:24:11\"]\n[EndDate \"2024.01.10\"]\n[EndTime \"02:29:08\"]\n[Link \"https://www.chess.com/game/live/98592320261\"]\n\n1. e4 {[%clk 0:10:00]} 1... e5 {[%clk 0:10:00]} 2. Nf3 {[%clk 0:09:57.5]} 2... Nc6 {[%clk 0:09:56.8]} 3. Bb5 {[%clk 0:09:55.7]} 3... Nf6 {[%clk 0:09:54.9]} 4. O-O {[%clk 0:09:54.2]} 4... Bc5 {[%clk 0:09:49.2]} 5. c3 {[%clk 0:09:51.4]} 5... d6 {[%clk 0:09:47.9]} 6. d4 {[%clk 0:09:47.6]} 6... exd4 {[%clk 0:09:47.8]} 7. cxd4 {[%clk 0:09:46.7]} 7... Bb6 {[%clk 0:09:47]} 8. d5 {[%clk 0:09:41.5]} 8... a6 {[%clk 0:09:44.5]} 9. Ba4 {[%clk 0:09:40.2]} 9... Bxf2+ {[%clk 0:09:33]} 10. Rxf2 {[%clk 0:09:28.3]} 10... b5 {[%clk 0:09:32.9]} 11. Bc2 {[%clk 0:09:18.3]} 11... Ne5 {[%clk 0:09:30.8]} 12. Nxe5 {[%clk 0:09:13.8]} 12... dxe5 {[%clk 0:09:30.7]} 13. Bg5 {[%clk 0:09:10.8]} 13... c6 {[%clk 0:09:24.1]} 14. Qf3 {[%clk 0:08:57]} 14... Qa5 {[%clk 0:08:59.5]} 15. Bxf6 {[%clk 0:08:32.1]} 15... gxf6 {[%clk 0:08:43.5]} 16. Qxf6 {[%clk 0:08:32]} 16... Qe1+ {[%clk 0:08:42.2]} 17. Rf1 {[%clk 0:08:28.2]} 17... Qe3+ {[%clk 0:08:41.9]} 18. Kh1 {[%clk 0:08:25.5]} 18... O-O {[%clk 0:08:36.6]} 19. Nc3 {[%clk 0:08:11.3]} 19... Bg4 {[%clk 0:08:33]} 20. Rae1 {[%clk 0:07:51.6]} 20... Qd2 {[%clk 0:08:32]} 21. Bd1 {[%clk 0:07:42.7]} 21... Bxd1 {[%clk 0:07:44.9]} 22. Rxd1 {[%clk 0:07:36.7]} 22... Qe3 {[%clk 0:07:44.3]} 1-0\n"
+        },
+        {
+          "url": "https://www.chess.com/game/live/90891513457",
+          "date": "2023-10-12",
+          "studentColor": "white",
+          "opponent": "Buh11",
+          "opponentRating": 1833,
+          "studentRating": 1873,
+          "timeClass": "rapid",
+          "timeControl": "600",
+          "eco": "Ruy Lopez Opening Berlin Beverwijk Zukertort Gambit",
+          "plyCount": 63,
+          "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2023.10.12\"]\n[Round \"-\"]\n[White \"samayraina\"]\n[Black \"Buh11\"]\n[Result \"1-0\"]\n[CurrentPosition \"8/1B2k1p1/3p3p/2p5/2P1p2P/8/P4PP1/6K1 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C64\"]\n[ECOUrl \"https://www.chess.com/openings/Ruy-Lopez-Opening-Berlin-Beverwijk-Zukertort-Gambit\"]\n[UTCDate \"2023.10.12\"]\n[UTCTime \"23:12:33\"]\n[WhiteElo \"1873\"]\n[BlackElo \"1833\"]\n[TimeControl \"600\"]\n[Termination \"samayraina won by resignation\"]\n[StartTime \"23:12:33\"]\n[EndDate \"2023.10.12\"]\n[EndTime \"23:18:17\"]\n[Link \"https://www.chess.com/game/live/90891513457\"]\n\n1. e4 {[%clk 0:10:00]} 1... e5 {[%clk 0:09:59.3]} 2. Nf3 {[%clk 0:09:58.7]} 2... Nc6 {[%clk 0:09:58.3]} 3. Bb5 {[%clk 0:09:58.2]} 3... Nf6 {[%clk 0:09:57.3]} 4. O-O {[%clk 0:09:57.1]} 4... Bc5 {[%clk 0:09:57.2]} 5. c3 {[%clk 0:09:53.8]} 5... d6 {[%clk 0:09:56.5]} 6. d4 {[%clk 0:09:50.4]} 6... exd4 {[%clk 0:09:46.7]} 7. cxd4 {[%clk 0:09:48.1]} 7... Bb6 {[%clk 0:09:29.1]} 8. d5 {[%clk 0:09:43.6]} 8... a6 {[%clk 0:09:04.3]} 9. Ba4 {[%clk 0:09:42.2]} 9... Nxe4 {[%clk 0:08:54.9]} 10. dxc6 {[%clk 0:09:28.4]} 10... O-O {[%clk 0:08:52]} 11. Nc3 {[%clk 0:08:59]} 11... Nc5 {[%clk 0:08:43.9]} 12. cxb7 {[%clk 0:08:50.8]} 12... Bxb7 {[%clk 0:08:38.9]} 13. Bc2 {[%clk 0:08:50]} 13... Qf6 {[%clk 0:08:32.6]} 14. Nd5 {[%clk 0:08:37.2]} 14... Bxd5 {[%clk 0:08:24.6]} 15. Qxd5 {[%clk 0:08:30.8]} 15... Rfe8 {[%clk 0:08:09.2]} 16. Bg5 {[%clk 0:08:27.1]} 16... Qe6 {[%clk 0:08:04.8]} 17. Qxe6 {[%clk 0:08:15.3]} 17... Nxe6 {[%clk 0:08:02]} 18. Bd2 {[%clk 0:08:09.6]} 18... Nd4 {[%clk 0:08:00.4]} 19. Nxd4 {[%clk 0:08:07.2]} 19... Bxd4 {[%clk 0:08:00.3]} 20. Bc3 {[%clk 0:08:01.6]} 20... Bxc3 {[%clk 0:07:52.5]} 21. bxc3 {[%clk 0:08:00.7]} 21... Re2 {[%clk 0:07:51.5]} 22. Bd3 {[%clk 0:07:58.8]} 22... Re5 {[%clk 0:07:48.9]} 23. Rfe1 {[%clk 0:07:56.9]} 23... f6 {[%clk 0:07:47.1]} 24. Rxe5 {[%clk 0:07:48.4]} 24... fxe5 {[%clk 0:07:44.7]} 25. Rb1 {[%clk 0:07:45.1]} 25... Ra7 {[%clk 0:07:38]} 26. h4 {[%clk 0:07:33.6]} 26... Kf8 {[%clk 0:07:36.1]} 27. Rb4 {[%clk 0:07:30]} 27... h6 {[%clk 0:07:34.1]} 28. Ra4 {[%clk 0:07:28.8]} 28... Ke7 {[%clk 0:07:32.1]} 29. Rxa6 {[%clk 0:07:25.6]} 29... Rxa6 {[%clk 0:07:27.1]} 30. Bxa6 {[%clk 0:07:25.5]} 30... c5 {[%clk 0:07:26.7]} 31. c4 {[%clk 0:07:20.1]} 31... e4 {[%clk 0:07:18.5]} 32. Bb7 {[%clk 0:07:17.5]} 1-0\n"
+        },
+        {
+          "url": "https://www.chess.com/game/live/144834444336",
+          "date": "2025-10-28",
+          "studentColor": "white",
+          "opponent": "kb_lord7",
+          "opponentRating": 1671,
+          "studentRating": 1688,
+          "timeClass": "rapid",
+          "timeControl": "600",
+          "eco": "Ruy Lopez Opening Berlin Beverwijk Zukertort Gambit",
+          "plyCount": 35,
+          "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2025.10.28\"]\n[Round \"-\"]\n[White \"samayraina\"]\n[Black \"kb_lord7\"]\n[Result \"1-0\"]\n[CurrentPosition \"r1bqr1k1/2p2ppp/p4n2/1p1P4/1P1QPB2/P1N5/2B3PP/R4R1K b - - 0 18\"]\n[Timezone \"UTC\"]\n[ECO \"C64\"]\n[ECOUrl \"https://www.chess.com/openings/Ruy-Lopez-Opening-Berlin-Beverwijk-Zukertort-Gambit\"]\n[UTCDate \"2025.10.28\"]\n[UTCTime \"14:08:36\"]\n[WhiteElo \"1688\"]\n[BlackElo \"1671\"]\n[TimeControl \"600\"]\n[Termination \"samayraina won by resignation\"]\n[StartTime \"14:08:36\"]\n[EndDate \"2025.10.28\"]\n[EndTime \"14:11:54\"]\n[Link \"https://www.chess.com/game/live/144834444336\"]\n\n1. e4 {[%clk 0:09:59.9]} 1... e5 {[%clk 0:09:57.3]} 2. Nf3 {[%clk 0:09:59.3]} 2... Nc6 {[%clk 0:09:55.9]} 3. Bb5 {[%clk 0:09:58.3]} 3... Nf6 {[%clk 0:09:46.8]} 4. O-O {[%clk 0:09:52.6]} 4... Bc5 {[%clk 0:09:44.1]} 5. c3 {[%clk 0:09:42.1]} 5... d6 {[%clk 0:09:41.7]} 6. d4 {[%clk 0:09:38.2]} 6... exd4 {[%clk 0:09:39.8]} 7. cxd4 {[%clk 0:09:36.8]} 7... Bb4 {[%clk 0:09:38.8]} 8. d5 {[%clk 0:09:27.3]} 8... a6 {[%clk 0:09:36.8]} 9. Ba4 {[%clk 0:09:19.6]} 9... b5 {[%clk 0:09:35.6]} 10. Bc2 {[%clk 0:09:16.8]} 10... Ne5 {[%clk 0:09:25.2]} 11. Nxe5 {[%clk 0:09:10.8]} 11... dxe5 {[%clk 0:09:25.1]} 12. f4 {[%clk 0:08:53.4]} 12... exf4 {[%clk 0:09:08.1]} 13. Bxf4 {[%clk 0:08:53.3]} 13... O-O {[%clk 0:09:08]} 14. a3 {[%clk 0:08:20]} 14... Ba5 {[%clk 0:09:05.3]} 15. b4 {[%clk 0:08:15.6]} 15... Bb6+ {[%clk 0:09:04.7]} 16. Kh1 {[%clk 0:08:04.7]} 16... Re8 {[%clk 0:09:04.2]} 17. Nc3 {[%clk 0:07:58.9]} 17... Bd4 {[%clk 0:09:00.4]} 18. Qxd4 {[%clk 0:07:56.3]} 1-0\n"
+        }
+      ],
+      "totalCandidates": 3
     },
     {
       "id": "var-4",
@@ -107,8 +228,48 @@
         "O-O",
         "Bc5"
       ],
-      "games": [],
-      "totalCandidates": 0
+      "games": [
+        {
+          "url": "https://www.chess.com/game/live/91124324161",
+          "date": "2023-10-15",
+          "studentColor": "white",
+          "opponent": "andreabedo",
+          "opponentRating": 1809,
+          "studentRating": 1899,
+          "timeClass": "rapid",
+          "timeControl": "600",
+          "eco": "Ruy Lopez Opening Morphy Defense Columbus Variation...5.O O b5 6.Bb3 Bc5 7.c3",
+          "plyCount": 119,
+          "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2023.10.15\"]\n[Round \"-\"]\n[White \"samayraina\"]\n[Black \"andreabedo\"]\n[Result \"1-0\"]\n[CurrentPosition \"5k2/6PK/8/8/8/8/8/8 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C78\"]\n[ECOUrl \"https://www.chess.com/openings/Ruy-Lopez-Opening-Morphy-Defense-Columbus-Variation...5.O-O-b5-6.Bb3-Bc5-7.c3\"]\n[UTCDate \"2023.10.15\"]\n[UTCTime \"15:53:47\"]\n[WhiteElo \"1899\"]\n[BlackElo \"1809\"]\n[TimeControl \"600\"]\n[Termination \"samayraina won by resignation\"]\n[StartTime \"15:53:47\"]\n[EndDate \"2023.10.15\"]\n[EndTime \"16:01:29\"]\n[Link \"https://www.chess.com/game/live/91124324161\"]\n\n1. e4 {[%clk 0:09:58.6]} 1... e5 {[%clk 0:09:56.9]} 2. Nf3 {[%clk 0:09:54.9]} 2... Nc6 {[%clk 0:09:55.7]} 3. Bb5 {[%clk 0:09:54.3]} 3... a6 {[%clk 0:09:52.1]} 4. Ba4 {[%clk 0:09:53.4]} 4... b5 {[%clk 0:09:48.8]} 5. Bb3 {[%clk 0:09:52.5]} 5... Nf6 {[%clk 0:09:46.2]} 6. O-O {[%clk 0:09:51.2]} 6... Bc5 {[%clk 0:09:29.1]} 7. c3 {[%clk 0:09:48.8]} 7... Nxe4 {[%clk 0:09:25.8]} 8. d4 {[%clk 0:09:46.9]} 8... exd4 {[%clk 0:09:21.3]} 9. cxd4 {[%clk 0:09:44.8]} 9... Bb6 {[%clk 0:09:00.7]} 10. Re1 {[%clk 0:09:35.1]} 10... d5 {[%clk 0:08:47.2]} 11. Nc3 {[%clk 0:09:30.6]} 11... Be6 {[%clk 0:08:42.4]} 12. Nxe4 {[%clk 0:09:28.7]} 12... dxe4 {[%clk 0:08:39.2]} 13. Rxe4 {[%clk 0:09:28.6]} 13... O-O {[%clk 0:08:25.6]} 14. Bxe6 {[%clk 0:09:19.3]} 14... fxe6 {[%clk 0:08:23.6]} 15. Rxe6 {[%clk 0:09:17.5]} 15... Nxd4 {[%clk 0:08:22]} 16. Nxd4 {[%clk 0:09:14.7]} 16... Qxd4 {[%clk 0:08:19.4]} 17. Be3 {[%clk 0:09:11.1]} 17... Qxd1+ {[%clk 0:08:10.1]} 18. Rxd1 {[%clk 0:09:09.6]} 18... Bxe3 {[%clk 0:08:09.4]} 19. fxe3 {[%clk 0:09:09.1]} 19... c5 {[%clk 0:08:05.5]} 20. Rd7 {[%clk 0:09:07.3]} 20... Rad8 {[%clk 0:08:02.4]} 21. Rxd8 {[%clk 0:09:04]} 21... Rxd8 {[%clk 0:08:01.1]} 22. Rxa6 {[%clk 0:09:03.6]} 22... Rd2 {[%clk 0:07:59.1]} 23. Rc6 {[%clk 0:09:00.2]} 23... c4 {[%clk 0:07:53.8]} 24. b3 {[%clk 0:08:47.8]} 24... cxb3 {[%clk 0:07:49.7]} 25. axb3 {[%clk 0:08:47]} 25... Rd3 {[%clk 0:07:49.1]} 26. b4 {[%clk 0:08:43.1]} 26... Rxe3 {[%clk 0:07:47.5]} 27. Rc5 {[%clk 0:08:42.3]} 27... Rb3 {[%clk 0:07:42.6]} 28. Rxb5 {[%clk 0:08:41.7]} 28... Kf7 {[%clk 0:07:41.1]} 29. Rb7+ {[%clk 0:08:37.1]} 29... Kg6 {[%clk 0:07:37.5]} 30. b5 {[%clk 0:08:35.6]} 30... Kf6 {[%clk 0:07:34.6]} 31. b6 {[%clk 0:08:34.6]} 31... h5 {[%clk 0:07:25.6]} 32. Rb8 {[%clk 0:08:29.5]} 32... Kg6 {[%clk 0:07:19.6]} 33. b7 {[%clk 0:08:27.6]} 33... Kf7 {[%clk 0:07:11.7]} 34. Kf2 {[%clk 0:08:24.7]} 34... g5 {[%clk 0:07:09.5]} 35. g3 {[%clk 0:08:20.8]} 35... Kg7 {[%clk 0:06:47.5]} 36. h3 {[%clk 0:08:18.3]} 36... Kf7 {[%clk 0:06:45.5]} 37. Ke2 {[%clk 0:08:10]} 37... Kg7 {[%clk 0:06:36.5]} 38. g4 {[%clk 0:08:04.5]} 38... hxg4 {[%clk 0:06:34.9]} 39. hxg4 {[%clk 0:08:03.8]} 39... Kf7 {[%clk 0:06:34.2]} 40. Kd2 {[%clk 0:08:00]} 40... Ke7 {[%clk 0:06:22.6]} 41. Kc2 {[%clk 0:07:59.3]} 41... Rb5 {[%clk 0:06:12.2]} 42. Kc3 {[%clk 0:07:53.6]} 42... Kd7 {[%clk 0:06:11.1]} 43. Kc4 {[%clk 0:07:52.7]} 43... Rb6 {[%clk 0:05:57.2]} 44. Kc5 {[%clk 0:07:50.8]} 44... Rb2 {[%clk 0:05:42.3]} 45. Rg8 {[%clk 0:07:43.6]} 45... Rxb7 {[%clk 0:05:36.4]} 46. Rg7+ {[%clk 0:07:42.6]} 46... Kc8 {[%clk 0:05:35.4]} 47. Rxb7 {[%clk 0:07:42]} 47... Kxb7 {[%clk 0:05:34.4]} 48. Kd5 {[%clk 0:07:41.6]} 48... Kc7 {[%clk 0:05:34]} 49. Ke5 {[%clk 0:07:41.3]} 49... Kd7 {[%clk 0:05:33.6]} 50. Kf5 {[%clk 0:07:41]} 50... Ke7 {[%clk 0:05:33.2]} 51. Kxg5 {[%clk 0:07:40.7]} 51... Kf7 {[%clk 0:05:32.9]} 52. Kh6 {[%clk 0:07:40.3]} 52... Kg8 {[%clk 0:05:32.3]} 53. Kg6 {[%clk 0:07:37.5]} 53... Kh8 {[%clk 0:05:30.7]} 54. Kf7 {[%clk 0:07:35.9]} 54... Kh7 {[%clk 0:05:30.1]} 55. g5 {[%clk 0:07:35.6]} 55... Kh8 {[%clk 0:05:28.9]} 56. Kf6 {[%clk 0:07:27.8]} 56... Kg8 {[%clk 0:05:28.1]} 57. Kg6 {[%clk 0:07:26.9]} 57... Kf8 {[%clk 0:05:26.1]} 58. Kh7 {[%clk 0:07:25.9]} 58... Kf7 {[%clk 0:05:25.4]} 59. g6+ {[%clk 0:07:25.4]} 59... Kf8 {[%clk 0:05:24.5]} 60. g7+ {[%clk 0:07:24.2]} 1-0\n"
+        },
+        {
+          "url": "https://www.chess.com/game/live/84465776231",
+          "date": "2023-07-30",
+          "studentColor": "white",
+          "opponent": "AjWo",
+          "opponentRating": 1733,
+          "studentRating": 1793,
+          "timeClass": "rapid",
+          "timeControl": "600",
+          "eco": "Ruy Lopez Opening Morphy Defense Columbus Variation...5.O O b5 6.Bb3 Bc5 7.c3",
+          "plyCount": 47,
+          "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2023.07.30\"]\n[Round \"-\"]\n[White \"samayraina\"]\n[Black \"AjWo\"]\n[Result \"1-0\"]\n[CurrentPosition \"r3rk2/2p2p1p/pb1p1B1Q/1p6/4qP2/1B6/PP3P1K/R5R1 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C78\"]\n[ECOUrl \"https://www.chess.com/openings/Ruy-Lopez-Opening-Morphy-Defense-Columbus-Variation...5.O-O-b5-6.Bb3-Bc5-7.c3\"]\n[UTCDate \"2023.07.30\"]\n[UTCTime \"14:17:52\"]\n[WhiteElo \"1793\"]\n[BlackElo \"1733\"]\n[TimeControl \"600\"]\n[Termination \"samayraina won by checkmate\"]\n[StartTime \"14:17:52\"]\n[EndDate \"2023.07.30\"]\n[EndTime \"14:31:21\"]\n[Link \"https://www.chess.com/game/live/84465776231\"]\n\n1. e4 {[%clk 0:10:00]} 1... e5 {[%clk 0:09:56.2]} 2. Nf3 {[%clk 0:09:58.2]} 2... Nc6 {[%clk 0:09:53.5]} 3. Bb5 {[%clk 0:09:56.4]} 3... a6 {[%clk 0:09:49.3]} 4. Ba4 {[%clk 0:09:46.7]} 4... b5 {[%clk 0:09:47]} 5. Bb3 {[%clk 0:09:37.5]} 5... Nf6 {[%clk 0:09:41.6]} 6. O-O {[%clk 0:09:28.4]} 6... Bc5 {[%clk 0:09:32.7]} 7. c3 {[%clk 0:09:16.7]} 7... O-O {[%clk 0:09:19.5]} 8. d4 {[%clk 0:09:14.3]} 8... exd4 {[%clk 0:09:17]} 9. cxd4 {[%clk 0:09:14.2]} 9... Bb6 {[%clk 0:09:04.6]} 10. Bg5 {[%clk 0:08:40.4]} 10... d6 {[%clk 0:08:25.7]} 11. Nc3 {[%clk 0:08:25.7]} 11... Bg4 {[%clk 0:08:13.5]} 12. Nd5 {[%clk 0:08:05.4]} 12... Nxd4 {[%clk 0:07:33.9]} 13. Nxf6+ {[%clk 0:07:26.7]} 13... gxf6 {[%clk 0:07:29.4]} 14. Bh6 {[%clk 0:07:25.7]} 14... Re8 {[%clk 0:07:17.3]} 15. h3 {[%clk 0:06:38.2]} 15... Nxf3+ {[%clk 0:07:11.3]} 16. gxf3 {[%clk 0:06:38.1]} 16... Bxh3 {[%clk 0:07:04.5]} 17. f4 {[%clk 0:05:52.4]} 17... Qe7 {[%clk 0:05:32.2]} 18. Qf3 {[%clk 0:04:59.2]} 18... Qxe4 {[%clk 0:04:46.5]} 19. Qxh3 {[%clk 0:04:49.5]} 19... Qg6+ {[%clk 0:04:40.7]} 20. Kh2 {[%clk 0:04:27.4]} 20... Kh8 {[%clk 0:04:11.1]} 21. Rg1 {[%clk 0:04:23.2]} 21... Qe4 {[%clk 0:03:51.5]} 22. Bg7+ {[%clk 0:03:35.6]} 22... Kg8 {[%clk 0:03:45.6]} 23. Bxf6+ {[%clk 0:03:12.3]} 23... Kf8 {[%clk 0:03:43.3]} 24. Qh6# {[%clk 0:03:00.4]} 1-0\n"
+        },
+        {
+          "url": "https://www.chess.com/game/live/136080110398",
+          "date": "2025-03-09",
+          "studentColor": "white",
+          "opponent": "khesports",
+          "opponentRating": 1614,
+          "studentRating": 1626,
+          "timeClass": "rapid",
+          "timeControl": "600",
+          "eco": "Ruy Lopez Opening Morphy Defense Columbus Variation...5.O O b5 6.Bb3 Bc5 7.c3",
+          "plyCount": 51,
+          "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2025.03.09\"]\n[Round \"-\"]\n[White \"samayraina\"]\n[Black \"khesports\"]\n[Result \"1-0\"]\n[CurrentPosition \"5r2/1b3p1k/pp1p1Npp/1p1Pr3/4PQ1q/P7/1P3PPP/2R2RK1 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C78\"]\n[ECOUrl \"https://www.chess.com/openings/Ruy-Lopez-Opening-Morphy-Defense-Columbus-Variation...5.O-O-b5-6.Bb3-Bc5-7.c3\"]\n[UTCDate \"2025.03.09\"]\n[UTCTime \"16:30:42\"]\n[WhiteElo \"1626\"]\n[BlackElo \"1614\"]\n[TimeControl \"600\"]\n[Termination \"samayraina won by resignation\"]\n[StartTime \"16:30:42\"]\n[EndDate \"2025.03.09\"]\n[EndTime \"16:42:50\"]\n[Link \"https://www.chess.com/game/live/136080110398\"]\n\n1. e4 {[%clk 0:09:58.9]} 1... e5 {[%clk 0:09:58.8]} 2. Nf3 {[%clk 0:09:58.3]} 2... Nc6 {[%clk 0:09:57.6]} 3. Bb5 {[%clk 0:09:57.5]} 3... a6 {[%clk 0:09:56.1]} 4. Ba4 {[%clk 0:09:56.1]} 4... b5 {[%clk 0:09:54.6]} 5. Bb3 {[%clk 0:09:55.1]} 5... Nf6 {[%clk 0:09:51.6]} 6. O-O {[%clk 0:09:53.5]} 6... Bc5 {[%clk 0:09:47.5]} 7. c3 {[%clk 0:09:48.8]} 7... O-O {[%clk 0:09:42.6]} 8. d4 {[%clk 0:09:37.9]} 8... exd4 {[%clk 0:09:23.8]} 9. cxd4 {[%clk 0:09:34.8]} 9... Bb6 {[%clk 0:09:16.9]} 10. Bg5 {[%clk 0:09:25]} 10... d6 {[%clk 0:09:02.4]} 11. Nc3 {[%clk 0:09:07.6]} 11... h6 {[%clk 0:08:46.5]} 12. Bxf6 {[%clk 0:09:06.2]} 12... Qxf6 {[%clk 0:08:44.3]} 13. Nd5 {[%clk 0:09:05]} 13... Qg6 {[%clk 0:08:33.8]} 14. Nxb6 {[%clk 0:09:03.8]} 14... cxb6 {[%clk 0:08:29.1]} 15. Bd5 {[%clk 0:08:55.3]} 15... Bb7 {[%clk 0:08:09]} 16. Nh4 {[%clk 0:08:11.3]} 16... Qf6 {[%clk 0:07:43.2]} 17. Nf5 {[%clk 0:07:45.2]} 17... Kh7 {[%clk 0:07:14.1]} 18. Rc1 {[%clk 0:06:20.2]} 18... Rac8 {[%clk 0:06:11.5]} 19. a3 {[%clk 0:06:11.1]} 19... g6 {[%clk 0:05:48.2]} 20. Ne3 {[%clk 0:05:44.3]} 20... Ba8 {[%clk 0:05:29.5]} 21. Bxc6 {[%clk 0:05:25.1]} 21... Bxc6 {[%clk 0:05:05.1]} 22. d5 {[%clk 0:05:24.1]} 22... Bb7 {[%clk 0:04:59.5]} 23. Qd2 {[%clk 0:05:07]} 23... Rce8 {[%clk 0:04:35.8]} 24. Ng4 {[%clk 0:05:03.6]} 24... Qh4 {[%clk 0:04:15.8]} 25. Qf4 {[%clk 0:05:02.4]} 25... Re5 {[%clk 0:03:34.2]} 26. Nf6+ {[%clk 0:04:55.7]} 1-0\n"
+        }
+      ],
+      "totalCandidates": 3
     },
     {
       "id": "var-5",
@@ -129,8 +290,22 @@
         "c3",
         "d6"
       ],
-      "games": [],
-      "totalCandidates": 0
+      "games": [
+        {
+          "url": "https://www.chess.com/game/live/78355245087",
+          "date": "2023-05-20",
+          "studentColor": "white",
+          "opponent": "Mentaldacier",
+          "opponentRating": 1652,
+          "studentRating": 1703,
+          "timeClass": "rapid",
+          "timeControl": "600",
+          "eco": "Ruy Lopez Opening Morphy Defense Columbus Variation...8.d4 Bb6 9.h3 O O",
+          "plyCount": 93,
+          "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2023.05.20\"]\n[Round \"-\"]\n[White \"samayraina\"]\n[Black \"Mentaldacier\"]\n[Result \"1-0\"]\n[CurrentPosition \"8/4N3/pbb3R1/np2k3/1Q3pN1/2Pp3P/P5P1/7K b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C78\"]\n[ECOUrl \"https://www.chess.com/openings/Ruy-Lopez-Opening-Morphy-Defense-Columbus-Variation...8.d4-Bb6-9.h3-O-O\"]\n[UTCDate \"2023.05.20\"]\n[UTCTime \"20:55:43\"]\n[WhiteElo \"1703\"]\n[BlackElo \"1652\"]\n[TimeControl \"600\"]\n[Termination \"samayraina won by checkmate\"]\n[StartTime \"20:55:43\"]\n[EndDate \"2023.05.20\"]\n[EndTime \"21:15:27\"]\n[Link \"https://www.chess.com/game/live/78355245087\"]\n\n1. e4 {[%clk 0:09:59.2]} 1... e5 {[%clk 0:09:57.4]} 2. Nf3 {[%clk 0:09:58.7]} 2... Nc6 {[%clk 0:09:56]} 3. Bb5 {[%clk 0:09:57.8]} 3... a6 {[%clk 0:09:52.9]} 4. Ba4 {[%clk 0:09:56.4]} 4... Nf6 {[%clk 0:09:51.1]} 5. O-O {[%clk 0:09:54.9]} 5... b5 {[%clk 0:09:48.9]} 6. Bb3 {[%clk 0:09:53.7]} 6... Bc5 {[%clk 0:09:46.1]} 7. c3 {[%clk 0:09:41.7]} 7... d6 {[%clk 0:09:41]} 8. d4 {[%clk 0:09:32.3]} 8... Bb6 {[%clk 0:09:39.8]} 9. h3 {[%clk 0:09:05.5]} 9... O-O {[%clk 0:09:36.9]} 10. Re1 {[%clk 0:08:59.2]} 10... Bb7 {[%clk 0:09:31.7]} 11. d5 {[%clk 0:08:37.2]} 11... Na5 {[%clk 0:09:26.6]} 12. Bc2 {[%clk 0:08:35.6]} 12... Qd7 {[%clk 0:09:07.9]} 13. Bg5 {[%clk 0:08:16]} 13... h6 {[%clk 0:08:59.5]} 14. Bxf6 {[%clk 0:08:08.2]} 14... gxf6 {[%clk 0:08:58.2]} 15. Nh4 {[%clk 0:07:53.5]} 15... Kh7 {[%clk 0:08:31.7]} 16. Nf5 {[%clk 0:07:49.9]} 16... Rg8 {[%clk 0:08:18.6]} 17. Nd2 {[%clk 0:07:40.7]} 17... Rg6 {[%clk 0:08:09.4]} 18. Nf3 {[%clk 0:07:38.8]} 18... Rag8 {[%clk 0:08:05.6]} 19. N3h4 {[%clk 0:07:37.7]} 19... Rg5 {[%clk 0:07:54.3]} 20. Qd2 {[%clk 0:06:42.9]} 20... Nc4 {[%clk 0:07:48.7]} 21. Qe2 {[%clk 0:06:40.6]} 21... c6 {[%clk 0:06:53.7]} 22. Kh1 {[%clk 0:06:29.6]} 22... Nxb2 {[%clk 0:06:35.9]} 23. f4 {[%clk 0:06:27.6]} 23... exf4 {[%clk 0:06:13.3]} 24. e5 {[%clk 0:06:25.7]} 24... Kh8 {[%clk 0:05:57.6]} 25. Nxh6 {[%clk 0:05:35.3]} 25... cxd5 {[%clk 0:03:59.7]} 26. Bf5 {[%clk 0:04:45.7]} 26... Rxf5 {[%clk 0:03:45.6]} 27. N6xf5 {[%clk 0:04:38.4]} 27... Rg5 {[%clk 0:03:17.8]} 28. exf6 {[%clk 0:03:59.1]} 28... Nc4 {[%clk 0:02:18.8]} 29. Qe8+ {[%clk 0:03:23.3]} 29... Qxe8 {[%clk 0:02:10.3]} 30. Rxe8+ {[%clk 0:03:22.6]} 30... Kh7 {[%clk 0:02:08.1]} 31. Re7 {[%clk 0:03:18.9]} 31... Na5 {[%clk 0:01:46.6]} 32. Rxf7+ {[%clk 0:03:09.2]} 32... Kg8 {[%clk 0:01:46]} 33. Nh6+ {[%clk 0:02:38.3]} 33... Kh8 {[%clk 0:01:39.9]} 34. Re1 {[%clk 0:01:35.8]} 34... Bc6 {[%clk 0:01:12.3]} 35. N4f5 {[%clk 0:01:21.7]} 35... d4 {[%clk 0:00:55.3]} 36. Rf8+ {[%clk 0:01:17.3]} 36... Kh7 {[%clk 0:00:52.1]} 37. Re7+ {[%clk 0:01:16.2]} 37... Kg6 {[%clk 0:00:50.6]} 38. Rg7+ {[%clk 0:00:50.9]} 38... Kh5 {[%clk 0:00:48.3]} 39. Rxg5+ {[%clk 0:00:47.6]} 39... Kxg5 {[%clk 0:00:46.6]} 40. f7 {[%clk 0:00:44.6]} 40... d3 {[%clk 0:00:28.4]} 41. Rg8+ {[%clk 0:00:40.9]} 41... Kf6 {[%clk 0:00:20.2]} 42. f8=Q+ {[%clk 0:00:38.7]} 42... Ke6 {[%clk 0:00:19.8]} 43. Rg6+ {[%clk 0:00:37.5]} 43... Kd5 {[%clk 0:00:18.6]} 44. Qxd6+ {[%clk 0:00:35.9]} 44... Kc4 {[%clk 0:00:17.3]} 45. Qb4+ {[%clk 0:00:34.2]} 45... Kd5 {[%clk 0:00:15.8]} 46. Ne7+ {[%clk 0:00:31.3]} 46... Ke5 {[%clk 0:00:08.9]} 47. Ng4# {[%clk 0:00:31.2]} 1-0\n"
+        }
+      ],
+      "totalCandidates": 1
     },
     {
       "id": "var-6",
@@ -165,8 +340,48 @@
         "Ba4",
         "b5"
       ],
-      "games": [],
-      "totalCandidates": 0
+      "games": [
+        {
+          "url": "https://www.chess.com/game/live/93598742837",
+          "date": "2023-11-13",
+          "studentColor": "white",
+          "opponent": "giorgiskripnichenko",
+          "opponentRating": 1763,
+          "studentRating": 1814,
+          "timeClass": "rapid",
+          "timeControl": "600",
+          "eco": "Ruy Lopez Opening Cozio Defense 4.O O a6 5.Ba4",
+          "plyCount": 51,
+          "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2023.11.13\"]\n[Round \"-\"]\n[White \"samayraina\"]\n[Black \"giorgiskripnichenko\"]\n[Result \"1-0\"]\n[CurrentPosition \"5Qk1/6pp/p6B/1pp1p3/4P3/1P6/2q3PP/5R1K b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C60\"]\n[ECOUrl \"https://www.chess.com/openings/Ruy-Lopez-Opening-Cozio-Defense-4.O-O-a6-5.Ba4\"]\n[UTCDate \"2023.11.13\"]\n[UTCTime \"07:16:11\"]\n[WhiteElo \"1814\"]\n[BlackElo \"1763\"]\n[TimeControl \"600\"]\n[Termination \"samayraina won by checkmate\"]\n[StartTime \"07:16:11\"]\n[EndDate \"2023.11.13\"]\n[EndTime \"07:21:57\"]\n[Link \"https://www.chess.com/game/live/93598742837\"]\n\n1. e4 {[%clk 0:09:59.9]} 1... e5 {[%clk 0:09:56.5]} 2. Nf3 {[%clk 0:09:59.3]} 2... Nc6 {[%clk 0:09:54.2]} 3. Bb5 {[%clk 0:09:57.4]} 3... Nge7 {[%clk 0:09:50.3]} 4. O-O {[%clk 0:09:50.5]} 4... a6 {[%clk 0:09:46.7]} 5. Ba4 {[%clk 0:09:45]} 5... b5 {[%clk 0:09:45.2]} 6. Bb3 {[%clk 0:09:38.5]} 6... f5 {[%clk 0:09:42.5]} 7. exf5 {[%clk 0:09:35.5]} 7... Nxf5 {[%clk 0:09:40.9]} 8. Re1 {[%clk 0:09:35.3]} 8... d6 {[%clk 0:09:39.4]} 9. d3 {[%clk 0:09:26.7]} 9... Be7 {[%clk 0:09:36.9]} 10. Nc3 {[%clk 0:09:17.7]} 10... Ncd4 {[%clk 0:09:36.2]} 11. Nxd4 {[%clk 0:09:12.7]} 11... Nxd4 {[%clk 0:09:33.9]} 12. f4 {[%clk 0:09:00.2]} 12... Nxb3 {[%clk 0:09:31.4]} 13. axb3 {[%clk 0:08:55.7]} 13... O-O {[%clk 0:09:30.2]} 14. fxe5 {[%clk 0:08:55.2]} 14... dxe5 {[%clk 0:09:28.7]} 15. Ne4 {[%clk 0:08:44.7]} 15... Bb7 {[%clk 0:09:20.7]} 16. Qg4 {[%clk 0:08:37.1]} 16... c5 {[%clk 0:08:27.1]} 17. Bh6 {[%clk 0:08:27.8]} 17... Bf6 {[%clk 0:08:17]} 18. Rf1 {[%clk 0:08:08.4]} 18... Bxe4 {[%clk 0:08:04.6]} 19. dxe4 {[%clk 0:08:00.4]} 19... Qd4+ {[%clk 0:07:57.1]} 20. Kh1 {[%clk 0:07:57.1]} 20... Ra7 {[%clk 0:07:55.3]} 21. Rf5 {[%clk 0:07:33.6]} 21... Raf7 {[%clk 0:07:33.8]} 22. Raf1 {[%clk 0:07:28.2]} 22... Qxb2 {[%clk 0:07:20.2]} 23. Rxf6 {[%clk 0:07:23.8]} 23... Qxc2 {[%clk 0:07:12.9]} 24. Rxf7 {[%clk 0:07:20.2]} 24... Rxf7 {[%clk 0:07:11.4]} 25. Qc8+ {[%clk 0:07:17.7]} 25... Rf8 {[%clk 0:07:09.9]} 26. Qxf8# {[%clk 0:07:17.1]} 1-0\n"
+        },
+        {
+          "url": "https://www.chess.com/game/live/83262439873",
+          "date": "2023-07-16",
+          "studentColor": "white",
+          "opponent": "big_man777",
+          "opponentRating": 1737,
+          "studentRating": 1723,
+          "timeClass": "rapid",
+          "timeControl": "600",
+          "eco": "Ruy Lopez Opening Cozio Defense 4.O O a6 5.Ba4",
+          "plyCount": 129,
+          "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2023.07.16\"]\n[Round \"-\"]\n[White \"samayraina\"]\n[Black \"big_man777\"]\n[Result \"1-0\"]\n[CurrentPosition \"2K5/3Pr3/5k2/3Q4/8/8/8/8 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C60\"]\n[ECOUrl \"https://www.chess.com/openings/Ruy-Lopez-Opening-Cozio-Defense-4.O-O-a6-5.Ba4\"]\n[UTCDate \"2023.07.16\"]\n[UTCTime \"16:05:52\"]\n[WhiteElo \"1723\"]\n[BlackElo \"1737\"]\n[TimeControl \"600\"]\n[Termination \"samayraina won - game abandoned\"]\n[StartTime \"16:05:52\"]\n[EndDate \"2023.07.16\"]\n[EndTime \"16:22:44\"]\n[Link \"https://www.chess.com/game/live/83262439873\"]\n\n1. e4 {[%clk 0:09:59.9]} 1... e5 {[%clk 0:09:57.6]} 2. Nf3 {[%clk 0:09:58.7]} 2... Nc6 {[%clk 0:09:48.9]} 3. Bb5 {[%clk 0:09:55.1]} 3... Nge7 {[%clk 0:09:33.5]} 4. O-O {[%clk 0:09:46.1]} 4... a6 {[%clk 0:09:31.9]} 5. Ba4 {[%clk 0:09:42.8]} 5... b5 {[%clk 0:09:30.7]} 6. Bb3 {[%clk 0:09:38.1]} 6... Ng6 {[%clk 0:09:28.6]} 7. c3 {[%clk 0:09:36.4]} 7... Na5 {[%clk 0:09:27]} 8. Bc2 {[%clk 0:09:34.8]} 8... c5 {[%clk 0:09:22.4]} 9. d4 {[%clk 0:09:30.4]} 9... exd4 {[%clk 0:09:21.1]} 10. cxd4 {[%clk 0:09:30.3]} 10... c4 {[%clk 0:09:10.2]} 11. Re1 {[%clk 0:09:24.4]} 11... Be7 {[%clk 0:09:03.1]} 12. Nc3 {[%clk 0:09:18.6]} 12... O-O {[%clk 0:08:59.9]} 13. Nd5 {[%clk 0:09:16.9]} 13... Bb7 {[%clk 0:08:07]} 14. Nxe7+ {[%clk 0:09:09.5]} 14... Qxe7 {[%clk 0:07:07.1]} 15. d5 {[%clk 0:08:55.9]} 15... d6 {[%clk 0:06:57.2]} 16. Nd4 {[%clk 0:08:36.2]} 16... Bc8 {[%clk 0:06:41.7]} 17. Qh5 {[%clk 0:08:06.8]} 17... b4 {[%clk 0:06:20.7]} 18. Nf5 {[%clk 0:07:40.1]} 18... Bxf5 {[%clk 0:06:13.4]} 19. Qxf5 {[%clk 0:07:38.8]} 19... b3 {[%clk 0:06:04.2]} 20. axb3 {[%clk 0:07:33.8]} 20... Nxb3 {[%clk 0:06:00.2]} 21. Bxb3 {[%clk 0:07:32.9]} 21... cxb3 {[%clk 0:05:58.9]} 22. Bg5 {[%clk 0:07:30.2]} 22... f6 {[%clk 0:05:50.5]} 23. Bf4 {[%clk 0:07:25.7]} 23... a5 {[%clk 0:05:43.8]} 24. Ra4 {[%clk 0:07:22.8]} 24... Rfe8 {[%clk 0:05:31.9]} 25. f3 {[%clk 0:07:16.7]} 25... Qc7 {[%clk 0:05:21.1]} 26. Bd2 {[%clk 0:07:07.2]} 26... Qc2 {[%clk 0:05:04.1]} 27. Bc3 {[%clk 0:06:58.1]} 27... Ne5 {[%clk 0:04:52.2]} 28. Rxa5 {[%clk 0:06:35.5]} 28... Rxa5 {[%clk 0:04:44.5]} 29. Bxa5 {[%clk 0:06:32.9]} 29... Qxb2 {[%clk 0:04:40.6]} 30. f4 {[%clk 0:06:29]} 30... Nd3 {[%clk 0:04:37.4]} 31. Rf1 {[%clk 0:06:26.3]} 31... Qa2 {[%clk 0:04:30.8]} 32. Bc3 {[%clk 0:06:19.8]} 32... Qc2 {[%clk 0:04:25.5]} 33. Bxf6 {[%clk 0:06:04.3]} 33... gxf6 {[%clk 0:04:21.2]} 34. Qxf6 {[%clk 0:06:03.3]} 34... b2 {[%clk 0:04:13.5]} 35. Qg5+ {[%clk 0:05:58.5]} 35... Kf8 {[%clk 0:04:10]} 36. Qf6+ {[%clk 0:05:57.9]} 36... Kg8 {[%clk 0:04:08.3]} 37. Qg5+ {[%clk 0:05:56]} 37... Kf7 {[%clk 0:04:05.3]} 38. e5 {[%clk 0:05:42.3]} 38... Qf2+ {[%clk 0:03:46.2]} 39. Rxf2 {[%clk 0:05:37.6]} 39... Nxf2 {[%clk 0:03:43.3]} 40. Kxf2 {[%clk 0:05:35.6]} 40... b1=Q {[%clk 0:03:35.1]} 41. Qf6+ {[%clk 0:05:31.9]} 41... Kg8 {[%clk 0:03:21.5]} 42. Qxd6 {[%clk 0:05:27.9]} 42... Qc2+ {[%clk 0:03:16.3]} 43. Kg3 {[%clk 0:05:26.4]} 43... Qg6+ {[%clk 0:03:13.1]} 44. Qxg6+ {[%clk 0:05:25.5]} 44... hxg6 {[%clk 0:03:12.3]} 45. Kg4 {[%clk 0:05:19.1]} 45... Kg7 {[%clk 0:03:09.2]} 46. Kg5 {[%clk 0:05:11.1]} 46... Rf8 {[%clk 0:03:06.5]} 47. g4 {[%clk 0:05:10.4]} 47... Rd8 {[%clk 0:03:04.4]} 48. d6 {[%clk 0:05:09.3]} 48... Kf7 {[%clk 0:03:01.7]} 49. f5 {[%clk 0:05:00.3]} 49... gxf5 {[%clk 0:02:59.7]} 50. gxf5 {[%clk 0:04:57.9]} 50... Rg8+ {[%clk 0:02:58.5]} 51. Kf4 {[%clk 0:04:57]} 51... Rd8 {[%clk 0:02:52.3]} 52. e6+ {[%clk 0:04:52.1]} 52... Kf6 {[%clk 0:02:48.7]} 53. d7 {[%clk 0:04:51.5]} 53... Rb8 {[%clk 0:02:44.7]} 54. Ke4 {[%clk 0:04:42.9]} 54... Rb4+ {[%clk 0:02:41.3]} 55. Kd5 {[%clk 0:04:41.5]} 55... Rb2 {[%clk 0:02:37.8]} 56. Kc6 {[%clk 0:04:31.2]} 56... Rd2 {[%clk 0:02:34.7]} 57. Kc7 {[%clk 0:04:27.3]} 57... Rc2+ {[%clk 0:02:27.1]} 58. Kd8 {[%clk 0:04:24.8]} 58... Kxf5 {[%clk 0:02:24]} 59. e7 {[%clk 0:04:16.9]} 59... Re2 {[%clk 0:02:16.2]} 60. e8=Q {[%clk 0:04:11.9]} 60... Rxh2 {[%clk 0:02:12.4]} 61. Qf8+ {[%clk 0:04:03.3]} 61... Ke6 {[%clk 0:02:10.5]} 62. Qg8+ {[%clk 0:04:00.1]} 62... Kf6 {[%clk 0:02:06.8]} 63. Qd5 {[%clk 0:03:54.3]} 63... Rh7 {[%clk 0:01:59.5]} 64. Kc7 {[%clk 0:03:49.8]} 64... Re7 {[%clk 0:01:54.2]} 65. Kc8 {[%clk 0:03:33.9]} 1-0\n"
+        },
+        {
+          "url": "https://www.chess.com/game/live/136350069442",
+          "date": "2025-03-17",
+          "studentColor": "white",
+          "opponent": "janibek0425",
+          "opponentRating": 1629,
+          "studentRating": 1670,
+          "timeClass": "rapid",
+          "timeControl": "600",
+          "eco": "Ruy Lopez Opening Cozio Defense 4.O O a6 5.Ba4",
+          "plyCount": 69,
+          "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2025.03.17\"]\n[Round \"-\"]\n[White \"samayraina\"]\n[Black \"janibek0425\"]\n[Result \"1-0\"]\n[CurrentPosition \"2r5/2pn4/3p1pkp/p2Pr3/Pp2P1Pp/5Q1P/1P6/2R2RK1 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C60\"]\n[ECOUrl \"https://www.chess.com/openings/Ruy-Lopez-Opening-Cozio-Defense-4.O-O-a6-5.Ba4\"]\n[UTCDate \"2025.03.17\"]\n[UTCTime \"03:54:18\"]\n[WhiteElo \"1670\"]\n[BlackElo \"1629\"]\n[TimeControl \"600\"]\n[Termination \"samayraina won on time\"]\n[StartTime \"03:54:18\"]\n[EndDate \"2025.03.17\"]\n[EndTime \"04:08:28\"]\n[Link \"https://www.chess.com/game/live/136350069442\"]\n\n1. e4 {[%clk 0:09:59.9]} 1... e5 {[%clk 0:09:57]} 2. Nf3 {[%clk 0:09:59.4]} 2... Nc6 {[%clk 0:09:54.8]} 3. Bb5 {[%clk 0:09:58.2]} 3... Nge7 {[%clk 0:09:52.7]} 4. O-O {[%clk 0:09:54.2]} 4... a6 {[%clk 0:09:51.7]} 5. Ba4 {[%clk 0:09:53.2]} 5... b5 {[%clk 0:09:50.6]} 6. Bb3 {[%clk 0:09:52.2]} 6... d6 {[%clk 0:09:43.4]} 7. h3 {[%clk 0:09:50.5]} 7... h6 {[%clk 0:09:41]} 8. c3 {[%clk 0:09:49.6]} 8... g6 {[%clk 0:09:36.9]} 9. d4 {[%clk 0:09:48.9]} 9... exd4 {[%clk 0:09:33.4]} 10. cxd4 {[%clk 0:09:48.8]} 10... Bg7 {[%clk 0:09:31.4]} 11. Re1 {[%clk 0:09:47.5]} 11... O-O {[%clk 0:09:29.3]} 12. Nc3 {[%clk 0:09:38.6]} 12... Kh7 {[%clk 0:09:15.5]} 13. a4 {[%clk 0:08:52.8]} 13... b4 {[%clk 0:09:08.3]} 14. Ne2 {[%clk 0:08:51.5]} 14... a5 {[%clk 0:09:05]} 15. Ng3 {[%clk 0:08:49.8]} 15... Ba6 {[%clk 0:07:52.2]} 16. Be3 {[%clk 0:08:46.5]} 16... Ng8 {[%clk 0:07:09.8]} 17. d5 {[%clk 0:08:30.7]} 17... Ne5 {[%clk 0:07:03.8]} 18. Nxe5 {[%clk 0:08:29.8]} 18... Bxe5 {[%clk 0:07:01.7]} 19. Bd4 {[%clk 0:08:29]} 19... Qe7 {[%clk 0:06:51.3]} 20. Rc1 {[%clk 0:08:18.3]} 20... Rac8 {[%clk 0:06:46.2]} 21. Qd2 {[%clk 0:07:20]} 21... Rfe8 {[%clk 0:05:43.5]} 22. f4 {[%clk 0:07:13.1]} 22... Bxd4+ {[%clk 0:05:10.8]} 23. Qxd4 {[%clk 0:07:11.1]} 23... Qh4 {[%clk 0:05:09.4]} 24. Qf2 {[%clk 0:06:55.1]} 24... Re7 {[%clk 0:04:38.9]} 25. f5 {[%clk 0:06:53]} 25... g5 {[%clk 0:04:27.1]} 26. f6 {[%clk 0:06:48.7]} 26... Re5 {[%clk 0:04:08.3]} 27. Bc2 {[%clk 0:06:46.8]} 27... Kg6 {[%clk 0:03:48.9]} 28. Qf3 {[%clk 0:06:30.9]} 28... Nxf6 {[%clk 0:03:27]} 29. Nf5 {[%clk 0:06:28.9]} 29... Qh5 {[%clk 0:03:02.2]} 30. g4 {[%clk 0:06:26.7]} 30... Qh4 {[%clk 0:01:25.3]} 31. Nxh4+ {[%clk 0:06:24.5]} 31... gxh4 {[%clk 0:01:23.9]} 32. Bd3 {[%clk 0:06:17.6]} 32... Bxd3 {[%clk 0:01:00.6]} 33. Qxd3 {[%clk 0:06:17.5]} 33... Nd7 {[%clk 0:00:48.9]} 34. Rf1 {[%clk 0:06:11.1]} 34... f6 {[%clk 0:00:17.1]} 35. Qf3 {[%clk 0:06:07.4]} 1-0\n"
+        }
+      ],
+      "totalCandidates": 3
     },
     {
       "id": "var-8",
@@ -184,8 +399,48 @@
         "Nf6",
         "O-O"
       ],
-      "games": [],
-      "totalCandidates": 0
+      "games": [
+        {
+          "url": "https://www.chess.com/game/live/164805111656",
+          "date": "2026-02-17",
+          "studentColor": "white",
+          "opponent": "dq_555",
+          "opponentRating": 1912,
+          "studentRating": 1760,
+          "timeClass": "rapid",
+          "timeControl": "600",
+          "eco": "Ruy Lopez Opening Morphy Defense Modern Steinitz Defense",
+          "plyCount": 101,
+          "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2026.02.17\"]\n[Round \"-\"]\n[White \"samayraina\"]\n[Black \"dq_555\"]\n[Result \"1-0\"]\n[CurrentPosition \"8/8/8/5k2/1P3P2/5K2/PP3P2/8 b - - 0 51\"]\n[Timezone \"UTC\"]\n[ECO \"C71\"]\n[ECOUrl \"https://www.chess.com/openings/Ruy-Lopez-Opening-Morphy-Defense-Modern-Steinitz-Defense\"]\n[UTCDate \"2026.02.17\"]\n[UTCTime \"07:02:19\"]\n[WhiteElo \"1760\"]\n[BlackElo \"1912\"]\n[TimeControl \"600\"]\n[Termination \"samayraina won by resignation\"]\n[StartTime \"07:02:19\"]\n[EndDate \"2026.02.17\"]\n[EndTime \"07:20:26\"]\n[Link \"https://www.chess.com/game/live/164805111656\"]\n\n1. e4 {[%clk 0:10:00]} 1... e5 {[%clk 0:10:00]} 2. Nf3 {[%clk 0:09:55.8]} 2... Nc6 {[%clk 0:09:57.2]} 3. Bb5 {[%clk 0:09:52.4]} 3... a6 {[%clk 0:09:52.6]} 4. Ba4 {[%clk 0:09:50]} 4... d6 {[%clk 0:09:49]} 5. h3 {[%clk 0:09:45.4]} 5... Nf6 {[%clk 0:09:43.1]} 6. O-O {[%clk 0:09:41.7]} 6... Bd7 {[%clk 0:09:40.4]} 7. Re1 {[%clk 0:09:28.8]} 7... b5 {[%clk 0:09:32.7]} 8. Bb3 {[%clk 0:09:26.8]} 8... Na5 {[%clk 0:09:21.8]} 9. c3 {[%clk 0:09:09]} 9... Nxb3 {[%clk 0:09:18.9]} 10. Qxb3 {[%clk 0:09:03]} 10... Be7 {[%clk 0:09:09.7]} 11. d4 {[%clk 0:09:01.6]} 11... O-O {[%clk 0:08:57.3]} 12. dxe5 {[%clk 0:08:52.3]} 12... dxe5 {[%clk 0:08:50.1]} 13. Nxe5 {[%clk 0:08:50.1]} 13... Be6 {[%clk 0:08:45.9]} 14. Qc2 {[%clk 0:08:47]} 14... Bc5 {[%clk 0:07:56.2]} 15. Bg5 {[%clk 0:07:48.4]} 15... h6 {[%clk 0:07:21.5]} 16. Bh4 {[%clk 0:07:45.2]} 16... g5 {[%clk 0:06:53.3]} 17. Bg3 {[%clk 0:07:39.2]} 17... Nh5 {[%clk 0:06:42.7]} 18. Bh2 {[%clk 0:07:14.2]} 18... Qf6 {[%clk 0:06:12.8]} 19. Ng4 {[%clk 0:06:12.8]} 19... Bxg4 {[%clk 0:05:45.8]} 20. hxg4 {[%clk 0:06:12.7]} 20... Nf4 {[%clk 0:05:44.4]} 21. Nd2 {[%clk 0:05:39]} 21... Rad8 {[%clk 0:05:37.9]} 22. Nf3 {[%clk 0:05:23.5]} 22... Qe6 {[%clk 0:05:20.2]} 23. Bxf4 {[%clk 0:05:07.5]} 23... gxf4 {[%clk 0:05:16.7]} 24. g5 {[%clk 0:04:34.4]} 24... hxg5 {[%clk 0:04:50.5]} 25. Nxg5 {[%clk 0:04:31.8]} 25... Qg4 {[%clk 0:04:48.6]} 26. Nf3 {[%clk 0:03:56.6]} 26... Kg7 {[%clk 0:04:31.9]} 27. Rad1 {[%clk 0:02:58.9]} 27... Rxd1 {[%clk 0:04:29]} 28. Qxd1 {[%clk 0:02:48]} 28... Rh8 {[%clk 0:04:22.7]} 29. Ne5 {[%clk 0:02:29.6]} 29... Qh4 {[%clk 0:02:33.9]} 30. Qg4+ {[%clk 0:02:26.5]} 30... Qxg4 {[%clk 0:02:33]} 31. Nxg4 {[%clk 0:02:26.4]} 31... Rd8 {[%clk 0:02:21.9]} 32. Re2 {[%clk 0:02:11.6]} 32... Rd1+ {[%clk 0:02:15]} 33. Kh2 {[%clk 0:02:10.2]} 33... Bd6 {[%clk 0:02:05.1]} 34. e5 {[%clk 0:02:08.2]} 34... Bc5 {[%clk 0:01:57.5]} 35. Nf6 {[%clk 0:02:04.2]} 35... Be7 {[%clk 0:01:45]} 36. Ne8+ {[%clk 0:01:56.6]} 36... Kg6 {[%clk 0:01:29.2]} 37. Nxc7 {[%clk 0:01:52.6]} 37... Rd8 {[%clk 0:01:14.1]} 38. e6 {[%clk 0:01:50.5]} 38... Kf6 {[%clk 0:01:01.5]} 39. exf7 {[%clk 0:01:44.6]} 39... Kxf7 {[%clk 0:01:01.4]} 40. Nxa6 {[%clk 0:01:43.9]} 40... Rh8+ {[%clk 0:00:58.2]} 41. Kg1 {[%clk 0:01:42.3]} 41... Ra8 {[%clk 0:00:57.4]} 42. Nb4 {[%clk 0:01:35.9]} 42... Rd8 {[%clk 0:00:55.8]} 43. Rxe7+ {[%clk 0:01:33]} 43... Kxe7 {[%clk 0:00:52.3]} 44. Nc6+ {[%clk 0:01:32.6]} 44... Kd7 {[%clk 0:00:51.4]} 45. Nxd8 {[%clk 0:01:32.5]} 45... Kxd8 {[%clk 0:00:51.3]} 46. Kf1 {[%clk 0:01:30]} 46... Kd7 {[%clk 0:00:50.6]} 47. Ke2 {[%clk 0:01:29.7]} 47... Ke6 {[%clk 0:00:50.5]} 48. Kf3 {[%clk 0:01:29.6]} 48... Ke5 {[%clk 0:00:50.4]} 49. g3 {[%clk 0:01:29]} 49... Kf5 {[%clk 0:00:50.3]} 50. gxf4 {[%clk 0:01:27.2]} 50... b4 {[%clk 0:00:50]} 51. cxb4 {[%clk 0:01:26.1]} 1-0\n"
+        },
+        {
+          "url": "https://www.chess.com/game/live/88376348339",
+          "date": "2023-09-13",
+          "studentColor": "white",
+          "opponent": "x-5880619266",
+          "opponentRating": 1826,
+          "studentRating": 1830,
+          "timeClass": "rapid",
+          "timeControl": "600",
+          "eco": "Ruy Lopez Opening Morphy Defense Modern Steinitz Defense",
+          "plyCount": 37,
+          "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2023.09.13\"]\n[Round \"-\"]\n[White \"samayraina\"]\n[Black \"x-5880619266\"]\n[Result \"1-0\"]\n[CurrentPosition \"r2qR3/2p2pkp/p4bp1/np1P4/8/1BN2Q1P/PPP2P2/4R1K1 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C71\"]\n[ECOUrl \"https://www.chess.com/openings/Ruy-Lopez-Opening-Morphy-Defense-Modern-Steinitz-Defense\"]\n[UTCDate \"2023.09.13\"]\n[UTCTime \"20:33:18\"]\n[WhiteElo \"1830\"]\n[BlackElo \"1826\"]\n[TimeControl \"600\"]\n[Termination \"samayraina won by resignation\"]\n[StartTime \"20:33:18\"]\n[EndDate \"2023.09.13\"]\n[EndTime \"20:40:23\"]\n[Link \"https://www.chess.com/game/live/88376348339\"]\n\n1. e4 {[%clk 0:09:58.1]} 1... e5 {[%clk 0:09:59.1]} 2. Nf3 {[%clk 0:09:57.4]} 2... Nc6 {[%clk 0:09:57.2]} 3. Bb5 {[%clk 0:09:56.9]} 3... a6 {[%clk 0:09:56.2]} 4. Ba4 {[%clk 0:09:55.1]} 4... d6 {[%clk 0:09:55.5]} 5. h3 {[%clk 0:09:52.8]} 5... Nf6 {[%clk 0:09:49.6]} 6. O-O {[%clk 0:09:50]} 6... Nxe4 {[%clk 0:09:30.4]} 7. d4 {[%clk 0:09:46.5]} 7... b5 {[%clk 0:09:18.6]} 8. Bb3 {[%clk 0:09:28.9]} 8... Be6 {[%clk 0:09:00.5]} 9. d5 {[%clk 0:09:26.8]} 9... Bxh3 {[%clk 0:08:41.5]} 10. gxh3 {[%clk 0:09:20.2]} 10... Na5 {[%clk 0:08:21.8]} 11. Re1 {[%clk 0:09:13.5]} 11... Nf6 {[%clk 0:08:12.2]} 12. Bg5 {[%clk 0:09:02.4]} 12... Be7 {[%clk 0:08:05.8]} 13. Nc3 {[%clk 0:08:59.2]} 13... g6 {[%clk 0:07:24.7]} 14. Nxe5 {[%clk 0:08:44.8]} 14... dxe5 {[%clk 0:06:37.1]} 15. Rxe5 {[%clk 0:08:42.2]} 15... O-O {[%clk 0:06:31.9]} 16. Qf3 {[%clk 0:08:24.9]} 16... Kg7 {[%clk 0:05:45.9]} 17. Rae1 {[%clk 0:08:14.9]} 17... Re8 {[%clk 0:05:30.2]} 18. Bxf6+ {[%clk 0:08:04.1]} 18... Bxf6 {[%clk 0:05:25.3]} 19. Rxe8 {[%clk 0:08:02.9]} 1-0\n"
+        },
+        {
+          "url": "https://www.chess.com/game/live/94417948317",
+          "date": "2023-11-22",
+          "studentColor": "white",
+          "opponent": "lusalentinu",
+          "opponentRating": 1752,
+          "studentRating": 1752,
+          "timeClass": "rapid",
+          "timeControl": "600",
+          "eco": "Ruy Lopez Opening Morphy Defense Modern Steinitz Defense",
+          "plyCount": 71,
+          "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2023.11.22\"]\n[Round \"-\"]\n[White \"samayraina\"]\n[Black \"lusalentinu\"]\n[Result \"1-0\"]\n[CurrentPosition \"5R2/6p1/p3k2p/8/P1PN4/6PP/2r2PK1/8 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C71\"]\n[ECOUrl \"https://www.chess.com/openings/Ruy-Lopez-Opening-Morphy-Defense-Modern-Steinitz-Defense\"]\n[UTCDate \"2023.11.22\"]\n[UTCTime \"18:48:39\"]\n[WhiteElo \"1752\"]\n[BlackElo \"1752\"]\n[TimeControl \"600\"]\n[Termination \"samayraina won by resignation\"]\n[StartTime \"18:48:39\"]\n[EndDate \"2023.11.22\"]\n[EndTime \"19:01:44\"]\n[Link \"https://www.chess.com/game/live/94417948317\"]\n\n1. e4 {[%clk 0:09:54.9]} 1... e5 {[%clk 0:09:58.7]} 2. Nf3 {[%clk 0:09:51.7]} 2... Nc6 {[%clk 0:09:57.2]} 3. Bb5 {[%clk 0:09:51.2]} 3... a6 {[%clk 0:09:56]} 4. Ba4 {[%clk 0:09:49]} 4... d6 {[%clk 0:09:51.7]} 5. h3 {[%clk 0:09:46]} 5... Nf6 {[%clk 0:09:50.5]} 6. O-O {[%clk 0:09:43.2]} 6... Nxe4 {[%clk 0:09:48.9]} 7. d4 {[%clk 0:09:38.5]} 7... Bd7 {[%clk 0:09:39.3]} 8. Bxc6 {[%clk 0:09:13]} 8... Bxc6 {[%clk 0:09:35.1]} 9. dxe5 {[%clk 0:09:11.9]} 9... Be7 {[%clk 0:09:07.8]} 10. exd6 {[%clk 0:08:44.4]} 10... Nxd6 {[%clk 0:09:05.6]} 11. Re1 {[%clk 0:08:37.8]} 11... O-O {[%clk 0:09:03.5]} 12. Nc3 {[%clk 0:08:33]} 12... Bf6 {[%clk 0:08:51.8]} 13. Nd5 {[%clk 0:08:16.5]} 13... Bxd5 {[%clk 0:08:35.7]} 14. Qxd5 {[%clk 0:08:14.3]} 14... c6 {[%clk 0:08:30.7]} 15. Qb3 {[%clk 0:07:56]} 15... Qc7 {[%clk 0:08:16.5]} 16. Bf4 {[%clk 0:07:54.3]} 16... Rad8 {[%clk 0:07:56.3]} 17. Rad1 {[%clk 0:07:46.3]} 17... Be7 {[%clk 0:07:43.7]} 18. c4 {[%clk 0:06:56.8]} 18... Qc8 {[%clk 0:07:09.9]} 19. Rxe7 {[%clk 0:06:43.6]} 19... Nf5 {[%clk 0:06:54.5]} 20. Rxd8 {[%clk 0:06:19.4]} 20... Rxd8 {[%clk 0:06:45]} 21. Rc7 {[%clk 0:05:35.5]} 21... Qe6 {[%clk 0:06:32.5]} 22. Qxb7 {[%clk 0:05:19.4]} 22... Rd1+ {[%clk 0:06:29.2]} 23. Kh2 {[%clk 0:05:17.6]} 23... Nd6 {[%clk 0:05:59]} 24. Bxd6 {[%clk 0:05:06.5]} 24... Qxd6+ {[%clk 0:05:57]} 25. g3 {[%clk 0:05:00.6]} 25... h6 {[%clk 0:05:46.8]} 26. Rxf7 {[%clk 0:04:46]} 26... Qg6 {[%clk 0:05:16]} 27. Qc8+ {[%clk 0:04:11]} 27... Kh7 {[%clk 0:05:14.5]} 28. Rf8 {[%clk 0:03:53.7]} 28... Qe4 {[%clk 0:04:55.5]} 29. Rh8+ {[%clk 0:03:46.5]} 29... Kg6 {[%clk 0:04:53.8]} 30. Qxc6+ {[%clk 0:03:09.6]} 30... Qxc6 {[%clk 0:04:51.4]} 31. Ne5+ {[%clk 0:03:08.6]} 31... Kf6 {[%clk 0:04:43.9]} 32. Nxc6 {[%clk 0:03:06.1]} 32... Rd2 {[%clk 0:04:41.4]} 33. Kg2 {[%clk 0:02:59.2]} 33... Rxb2 {[%clk 0:04:40]} 34. a4 {[%clk 0:02:51]} 34... Rc2 {[%clk 0:04:38.5]} 35. Rf8+ {[%clk 0:02:42]} 35... Ke6 {[%clk 0:04:36.9]} 36. Nd4+ {[%clk 0:02:38.9]} 1-0\n"
+        }
+      ],
+      "totalCandidates": 3
     }
   ]
 }

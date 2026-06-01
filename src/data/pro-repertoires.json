@@ -3647,13 +3647,13 @@
       "name": "Open Games / …e5 (Samay Raina)",
       "color": "black",
       "style": "Classical, Solid",
-      "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O",
-      "overview": "Samay answers 1.e4 with the classical …e5 (3,000+ games) — fighting for the centre head-on. Against the Ruy he plays the rock-solid Closed Main with …a6, …Nf6, …Be7 and …b5; against the Italian he mirrors with …Bc5; against the Scotch and Four Knights he equalises with principled piece play. It is the most respected, most principled defense to 1.e4.",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3 d6 O-O O-O Re1 a6 a4 Ba7",
+      "overview": "Samay answers 1.e4 with the classical …e5 — fighting for the centre head-on. From his own games the opening he faces most after …e5 is the Italian, so the main line is the Giuoco Pianissimo: …Bc5-a7 keeping the strong diagonal, a slow maneuvering game where understanding beats theory. Against the Ruy he switches to the rock-solid Closed Main, and against the Scotch and Four Knights he equalises with principled piece play.",
       "keyIdeas": [
-        "The Chigorin maneuver …Na5 hits the b3-bishop, then …c5 challenges White's d4 and grabs queenside space.",
-        "Hold the e5-centre firmly and look for the …d5 freeing break.",
-        "In the Italian, …Bc5-a7 keeps the strong diagonal safe from b4 ideas.",
-        "Against the Scotch, …Bb4 pins and the …d5 break frees the position."
+        "In the Italian, …Bc5-a7 keeps the powerful a7-g1 diagonal safe from b4 ideas.",
+        "Hold the e5-centre firmly, reroute …Ne7-g6, and look for the …d5 freeing break.",
+        "Against the Ruy, the Chigorin …Na5 hits the b3-bishop, then …c5 grabs queenside space.",
+        "Against the Scotch, …Bb4 pins and the …d5 break frees the position with the bishop pair."
       ],
       "traps": [
         "In the Four Knights, …Bxc3 at the right moment doubles White's pawns and gives a clear queenside target.",
@@ -3665,13 +3665,13 @@
       ],
       "variations": [
         {
-          "name": "vs Italian (3.Bc4)",
-          "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3 d6 O-O O-O Re1 a6 a4 Ba7",
-          "explanation": "Against the Italian we mirror with …Bc5 and tuck it to a7, reaching a symmetrical Pianissimo. Black has every resource White does; reroute …Ne7-g6 and prepare the …d5 break to free the position.",
+          "name": "vs Ruy Lopez (3.Bb5)",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O",
+          "explanation": "When White tries the Spanish, Samay plays the rock-solid Closed Main: …a6, …Nf6, …Be7, …b5 and …d6. The plan is the Chigorin maneuver …Na5 hitting the b3-bishop, then …c5 to challenge d4 and the …d5 break — a complete, dynamic counter to the Ruy.",
           "sources": [
             "concept:pos-development",
             "https://api.chess.com/pub/player/samayraina/games/archives",
-            "https://www.chess.com/openings/Italian-Game"
+            "https://www.chess.com/openings/Ruy-Lopez"
           ]
         },
         {
@@ -3705,31 +3705,41 @@
     {
       "id": "pro-samayraina-sicilian-black",
       "playerId": "samayraina",
-      "eco": "B90",
-      "name": "Sicilian Najdorf (Samay Raina)",
+      "eco": "B32",
+      "name": "Sicilian …e5 Kalashnikov (Samay Raina)",
       "color": "black",
       "style": "Aggressive, Fighting",
-      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O",
-      "overview": "The Sicilian is Samay's biggest Black defense (5,700+ games) and his weapon of choice is the Najdorf — the most respected, most-analysed opening in chess. …a6 controls b5 and keeps maximum flexibility; …e5 grabs central space; and Black plays for the full point with queenside expansion and pressure on e4. Against the anti-Sicilians he stays principled and solid.",
+      "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 e5 Nxc6 bxc6 Nc3 Nf6 Bg5 Bb4",
+      "overview": "The Sicilian is Samay's biggest Black defense (5,700+ games) and his real weapon — straight from his own games — is the …Nc6/…e5 Kalashnikov, not the textbook Najdorf. He meets the Open Sicilian with …Nc6 and the thematic …e5, kicking the d4-knight and claiming the centre. After Nxc6 bxc6 he gets a broad pawn front, the two bishops, and a half-open b-file, then piles on e4 with …Nf6 and …Bb4. Against the anti-Sicilians he stays principled and solid.",
       "keyIdeas": [
-        "…a6 is the key Najdorf move — it controls b5, prepares …b5 expansion, and keeps everything flexible.",
-        "…e5 grabs the centre and kicks the knight; the d5-concession is the principled Najdorf bargain.",
-        "Expand with …b5 and …Bb7 to pressure e4, and contest d5 with …Be6 and …Nbd7.",
-        "Against the Alapin, …Nf6 and …Nd5 centralise; the e5-pawn becomes a target."
+        "…Nc6 and …e5 is the heart of his Sicilian — hit the d4-knight and grab central space, not the slow Najdorf.",
+        "After Nxc6, recapture with …bxc6: a big c6/e5 pawn front, the bishop pair, and a half-open b-file.",
+        "Develop …Nf6 and …Bb4 to pin the c3-knight and pressure e4; break with …d5 at the right moment.",
+        "Against the Alapin (2.c3), …d5 equalises in the centre; against Bb5 lines, …Nd4 is his go-to."
       ],
       "traps": [
         "Versus the Alapin (2.c3), …d6 undermines the e5-pawn and leaves White with an isolated d-pawn to attack.",
         "In Closed-Sicilian opposite-castling races, …b5-b4 gets Black's queenside attack in first."
       ],
       "warnings": [
-        "The Najdorf concedes d5 after …e5 — make sure your queenside and e4-pressure counterplay is real before committing.",
+        "The …e5 push concedes the d5-square — make sure your e4-pressure and bishop-pair activity is real before committing.",
         "Against the Moscow/Maroczy, don't lash out with …b5 prematurely; build with …a6 and …Nd7-c5 first."
       ],
       "variations": [
         {
+          "name": "vs Bc4 (Bowdler)",
+          "pgn": "e4 c5 Bc4 e6 Nf3 d5 exd5 exd5 Bb5+ Nc6 O-O Nf6 Re1+ Be7 Nc3 O-O d3",
+          "explanation": "The early Bc4 is Samay's most-faced anti-Sicilian (600+ games). He answers …e6 and …d5, striking the centre and hitting the c4-bishop with tempo. After the trade he develops naturally — …Nc6, …Nf6, …Be7, …O-O — and equalises comfortably with the freer pieces against White's loose bishop sorties.",
+          "sources": [
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/samayraina/games/archives",
+            "https://www.chess.com/openings/Bowdler-Attack"
+          ]
+        },
+        {
           "name": "vs Alapin (2.c3)",
-          "pgn": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6 Bc4 Nb6 Bb5 dxe5 Nxe5 Bd7",
-          "explanation": "Against the Alapin, …Nf6 provokes e5 and …Nd5 centralises. …cxd4 and …Nc6 hit the centre, …d6 undermines e5, and Black plays against White's isolated d-pawn — a comfortable, fully-equal game.",
+          "pgn": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 Bg4 Be2 e6 O-O Be7 h3 Bh5",
+          "explanation": "Against the Alapin's c3, Samay plays the principled …d5, hitting e4 at once. After …Qxd5 he develops …Nf6 and pins with …Bg4, finishing with …e6 and …Be7. Black develops with purpose and plays against White's isolated d-pawn — the clearer targets in a fully-equal game.",
           "sources": [
             "concept:pawn-isolated",
             "https://api.chess.com/pub/player/samayraina/games/archives",
@@ -3737,21 +3747,21 @@
           ]
         },
         {
-          "name": "vs Bb5+ (Moscow)",
-          "pgn": "e4 c5 Nf3 d6 Bb5+ Bd7 Bxd7+ Qxd7 c4 Nc6 Nc3 g6 d4 cxd4 Nxd4 Bg7",
-          "explanation": "The Moscow: …Bd7 and …Qxd7 trade off White's bishop into a solid structure. Against the Maroczy Bind we fianchetto with …Bg7, trade a pair of knights to relieve the cramp, and expand with …a6 and …b5.",
+          "name": "vs Rossolimo (Bb5)",
+          "pgn": "e4 c5 Nf3 Nc6 Bb5 Nd4 Nxd4 cxd4 O-O e5 c3 Bc5 cxd4 Bxd4 Nc3 Nf6",
+          "explanation": "Against the Rossolimo Bb5, Samay's go-to is the bold …Nd4, leaping into the centre and hitting the bishop. After the trade he clamps with …e5 and posts the bishop actively on c5/d4, playing for the initiative with the freer, more active game and a broad pawn front.",
           "sources": [
             "concept:pos-space",
             "https://api.chess.com/pub/player/samayraina/games/archives",
-            "https://www.chess.com/openings/Sicilian-Defense-Moscow-Variation"
+            "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation"
           ]
         },
         {
           "name": "vs Closed (2.Nc3)",
-          "pgn": "e4 c5 Nc3 Nc6 g3 g6 Bg2 Bg7 d3 d6 Be3 e5 Qd2 Nge7 Nge2 O-O",
-          "explanation": "Against the Closed Sicilian we mirror with …g6 and …Bg7, grab central space with …e5, and launch the queenside expansion with …a6, …Rb8 and …b5-b4. In the opposite-wings race, Black's queenside play is the faster.",
+          "pgn": "e4 c5 Nc3 Nc6 Nf3 e6 d4 cxd4 Nxd4 Bc5 Nxc6 bxc6 Bd3 d5 exd5 cxd5 O-O",
+          "explanation": "When White's Nc3 setup opens with d4 it transposes toward an Open Sicilian; Samay meets it with …Nc6 and …e6, develops the bishop with bite to c5, and after the trades breaks with …d5 to free the position. Black castles into a comfortable middlegame with active pieces and no weaknesses.",
           "sources": [
-            "concept:att-queenside-attack",
+            "concept:pos-development",
             "https://api.chess.com/pub/player/samayraina/games/archives",
             "https://www.chess.com/openings/Sicilian-Defense-Closed"
           ]
@@ -3813,6 +3823,58 @@
       "warningLines": [],
       "sources": [
         "concept:pos-development",
+        "https://api.chess.com/pub/player/samayraina/games/archives"
+      ]
+    },
+    {
+      "id": "pro-samayraina-kings-gambit",
+      "playerId": "samayraina",
+      "eco": "C33",
+      "name": "King's Gambit (Samay Raina)",
+      "color": "white",
+      "style": "Romantic, Attacking",
+      "pgn": "e4 e5 f4 exf4 Bc4 Nf6 Nc3 d6 d4 Nc6 Bxf4 Bg4 Nf3",
+      "overview": "The King's Gambit is Samay's second-favourite answer to …e5 (800+ games) and the purest expression of his attacking style. f4 offers a pawn to rip open the f-file and seize the centre; his choice is the Bishop's Gambit, Bc4, aiming at f7 and developing at speed rather than rushing to regain the pawn. Black is objectively fine with accurate defense, but the practical attacking chances — opposite-side castling, central pawn rollers, a rook on the f-file — are enormous, and exactly where Samay's tactics thrive.",
+      "keyIdeas": [
+        "Bishop's Gambit: Bc4 first, eyeing f7, develop fast and let the f4-pawn wait.",
+        "Grab the broad centre with Nc3 and d4; the lead in development is the gambit's compensation.",
+        "Recapture f4 with the bishop (Bxf4), castle queenside, and storm the kingside.",
+        "Even when Black declines, open the f-file with fxe5 and pile pieces on f7."
+      ],
+      "traps": [
+        "After O-O-O the d4-d5 and e4-e5 breaks blow the centre open while Black is still developing.",
+        "On the f-file, doubling a rook behind f4-f5 and Bxf7 sacrifices recur against a slow defense."
+      ],
+      "warnings": [
+        "It's a gambit — if the attack stalls, the missing pawn tells; keep the initiative or don't enter it.",
+        "Respect …Qh4+ ideas in the Bishop's Gambit: Kf1 is fine, but know the follow-up before allowing it."
+      ],
+      "variations": [
+        {
+          "name": "vs King's Gambit Declined (…Nc6)",
+          "pgn": "e4 e5 f4 Nc6 Nf3 d6 Bc4 Bg4 O-O Nf6 Nc3 Be7 d3 O-O fxe5 Nxe5",
+          "explanation": "When Black declines with …Nc6, Samay builds the dream King's-Gambit setup with no pawn given: Nf3, Bc4, castle, Nc3 and d3. Then he opens the f-file with fxe5 and piles pieces on f7 — the attack simply arrives a move later.",
+          "sources": [
+            "concept:att-kingside-storm",
+            "https://api.chess.com/pub/player/samayraina/games/archives",
+            "https://www.chess.com/openings/Kings-Gambit-Declined"
+          ]
+        },
+        {
+          "name": "vs Falkbeer (…d5)",
+          "pgn": "e4 e5 f4 d5 exd5 exf4 Nf3 Nf6 d4 Nxd5 Bc4 Nb6 Bb3 Bg4 Bxf4",
+          "explanation": "Against the Falkbeer counter-strike …d5, Samay takes exd5 and develops with tempo — Nf3, d4, Bc4 bouncing the knight, then Bxf4 to regain the pawn. White keeps the strong b3-bishop on f7 and the freer, better-structured position.",
+          "sources": [
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/samayraina/games/archives",
+            "https://www.chess.com/openings/Falkbeer-Countergambit"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "concept:att-kingside-storm",
         "https://api.chess.com/pub/player/samayraina/games/archives"
       ]
     },
