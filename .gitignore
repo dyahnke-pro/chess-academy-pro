@@ -40,6 +40,11 @@ docs/audit-runs/2026-05-19-openings-interactive-loop/checkpoint*.json
 # Pro-repertoire raw game corpora — regeneratable via
 # scripts/pro-repertoire/fetch-chesscom.mjs (~500MB per pro).
 data/sources/*-chesscom/
+# OTB corpora: raw pgnmentor downloads + the derived jsonl the reference
+# builder ingests are regeneratable (extract-caruana-otb.mjs / fetch-otb-games.mjs).
+# The committed artifact is src/data/pro-game-references.json.
+data/sources/*-pgnmentor/
+data/sources/*-otb/
 # Per-signature stats are huge (~100MB for a prolific player). They're
 # regeneratable via scripts/pro-repertoire/analyze-games.mjs once the
 # raw corpus is in place. The committed derived artifacts are the
