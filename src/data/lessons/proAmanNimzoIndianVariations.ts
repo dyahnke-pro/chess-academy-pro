@@ -25,7 +25,7 @@ export const PRO_AMAN_NIMZO_INDIAN_VARIATION_LESSONS: Record<string, LessonScrip
     kind: 'variation',
     sources: SRC,
     beats: [
-      b({ id: 'bb4', moves: 'd4 Nf6 c4 e6 Nc3 Bb4', arrows: [A('f8', 'b4')], highlights: [H('c3')],
+      b({ id: 'bb4', moves: 'd4 Nf6 c4 e6 Nc3 Bb4', arrows: [A('f8', 'b4')], highlights: [H('e4'), H('c3')],
         say: "…Bb4 pins the c3-knight — the Nimzo's defining idea, fighting for e4 with a piece and threatening to wreck White's pawns on c3.",
         sayShort: '…Bb4 — the Nimzo pin.' }),
       b({ id: 'd5', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5', highlights: [H('d5')],
@@ -82,7 +82,7 @@ export const PRO_AMAN_NIMZO_INDIAN_VARIATION_LESSONS: Record<string, LessonScrip
       b({ id: 'd6', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O e4 d6', highlights: [H('d6'), H('e5')],
         say: "White grabs the big centre with e4; Black answers …d6, preparing to undermine it with …e5. Against a broad pawn centre, you don't panic — you strike at it with a timely pawn break.",
         sayShort: '…d6 — prepare …e5.' }),
-      b({ id: 'nfd7', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O e4 d6 e5 Nfd7', arrows: [A('f6', 'd7')], highlights: [H('d7')],
+      b({ id: 'nfd7', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O e4 d6 e5 Nfd7', arrows: [A('f6', 'd7')], highlights: [H('c5'), H('d7')],
         say: "White lunges e5; Black retreats the knight to d7, sidestepping and keeping it ready to hit the e5-pawn and support the …c5 or …f6 breaks. White's centre looks big but it's overextended, and Black will chip away at it from a solid, flexible base.",
         sayShort: '…Nfd7 — sidestep, hit e5.' }),
     ],

@@ -52,7 +52,7 @@ export const PRO_AMAN_ANTI_CARO_VARIATION_LESSONS: Record<string, LessonScript> 
       b({ id: 'nxe4', moves: 'e4 c6 Nc3 d5 Nf3 dxe4 Nxe4 Nf6 Qe2', arrows: [A('d1', 'e2')], highlights: [H('e2')],
         say: "When Black trades …dxe4 directly, Nxe4 recaptures and Qe2 prepares to keep the centralised knight or recapture on e4 with the queen — a slightly offbeat order that scores brilliantly.",
         sayShort: 'Qe2 — flexible recapture.' }),
-      b({ id: 'qxe4', moves: 'e4 c6 Nc3 d5 Nf3 dxe4 Nxe4 Nf6 Qe2 Nxe4 Qxe4 Nd7 Bc4', arrows: [A('f1', 'c4')], highlights: [H('c4')],
+      b({ id: 'qxe4', moves: 'e4 c6 Nc3 d5 Nf3 dxe4 Nxe4 Nf6 Qe2 Nxe4 Qxe4 Nd7 Bc4', arrows: [A('f1', 'c4')], highlights: [H('f7'), H('c4')],
         say: "After the knight trade the queen sits proudly on e4, and Bc4 develops actively, aiming at the f7-square. White's pieces are coordinated and active while Black is still untangling.",
         sayShort: 'Bc4 — active, eye f7.' }),
       b({ id: 'ne5', moves: 'e4 c6 Nc3 d5 Nf3 dxe4 Nxe4 Nf6 Qe2 Nxe4 Qxe4 Nd7 Bc4 Nf6 Ne5', arrows: [A('f3', 'e5')], highlights: [H('e5')],

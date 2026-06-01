@@ -26,7 +26,7 @@ export const PRO_AMAN_RETI_LESSON: LessonScript = {
   kind: 'variation',
   sources: SRC,
   beats: [
-    b({ id: 'nf3', moves: 'Nf3', arrows: [A('g1', 'f3')], highlights: [H('f3')],
+    b({ id: 'nf3', moves: 'Nf3', arrows: [A('g1', 'f3')], highlights: [H('e5'), H('d4'), H('f3')],
       say: "Aman's most-played White move — Nf3. It develops a piece, controls the central e5- and d4-squares, and keeps every plan open. The Réti is flexibility itself: see what Black does, then choose the ideal structure.",
       sayShort: 'Nf3 — flexible first move.' }),
     b({ id: 'd5', moves: 'Nf3 d5 d4', highlights: [H('d4')],

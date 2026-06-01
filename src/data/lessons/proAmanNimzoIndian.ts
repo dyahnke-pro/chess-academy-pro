@@ -32,7 +32,7 @@ export const PRO_AMAN_NIMZO_INDIAN_LESSON: LessonScript = {
     b({ id: 'e6', moves: 'd4 Nf6 c4 e6', highlights: [H('e6')],
       say: "…e6 opens the diagonal for the dark-squared bishop and prepares the defining move of the whole system. Black isn't building a big centre — Black is preparing to fight for control of it with pieces.",
       sayShort: '…e6 — free the dark bishop.' }),
-    b({ id: 'bb4', moves: 'd4 Nf6 c4 e6 Nc3 Bb4', arrows: [A('f8', 'b4')], highlights: [H('c3')],
+    b({ id: 'bb4', moves: 'd4 Nf6 c4 e6 Nc3 Bb4', arrows: [A('f8', 'b4')], highlights: [H('e4'), H('c3')],
       say: "…Bb4 — the Nimzo-Indian. The bishop pins the c3-knight, fighting for the e4-square and threatening to damage White's pawns by trading on c3. This is hypermodern chess: control the centre with pieces and pressure, not pawns.",
       sayShort: '…Bb4 — the Nimzo pin.' }),
     b({ id: 'oo', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 e3 O-O', highlights: [H('g8')],
