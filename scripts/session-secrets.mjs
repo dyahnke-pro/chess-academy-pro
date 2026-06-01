@@ -23,6 +23,7 @@ const SECRETS = [
   { env: 'DEEPSEEK_KEY', use: 'primary coach/brain LLM (client → api.deepseek.com); bakes into the build' },
   { env: 'ANTHROPIC_KEY', use: 'fallback LLM provider' },
   { env: 'AUDIT_STREAM_SECRET', use: 'x-audit-secret for GET /api/audit-stream (gate G2)' },
+  { env: 'VERCEL_TOKEN', use: 'Vercel API/CLI auth — deploy + manage project settings (e.g. Ignored Build Step to disable preview builds)' },
 ];
 
 const present = [];

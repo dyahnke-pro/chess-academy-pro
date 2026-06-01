@@ -2761,7 +2761,26 @@ on `main`, push to `main`, it deploys to production. If a harness/tool
 spins up a feature branch by default, OVERRIDE it and go to main unless
 David says otherwise.
 
-**🚨 THE WEB-SESSION BRANCH + DRAFT-PR DEFAULT IS NOT AN EXCEPTION —
+**🚨 PRODUCTION IS THE DEFAULT — NO PREVIEW BUILDS AT ALL (David 2026-06-01,
+re-locked).** Verbatim intent: *"I don't want you to make preview builds
+anymore. I want the default for cc to be production."* This is the standing
+target for every Claude Code session: commit + push straight to `main`,
+which deploys to production — never a feature branch, never a PR-preview,
+unless David **explicitly** asks for one in that session. Preview builds
+also burn the Vercel 100-builds/day cap, which is the other reason to kill
+them. Two enforcement layers:
+- **Claude Code side (the branch I push):** default to `main`. If the
+  web-session harness seeds a feature branch, override it (per the rule
+  above). The lasting fix is the environment/trigger config in the Claude
+  Code web UI (set the working branch to the default branch).
+- **Vercel side (kill previews at the source):** the project's **Ignored
+  Build Step** (Settings → Git) is set to build ONLY `main` —
+  `bash -c 'if [ "$VERCEL_GIT_COMMIT_REF" = "main" ]; then exit 1; else exit 0; fi'`
+  (exit 1 = build, exit 0 = skip). With a `VERCEL_TOKEN` in the env config a
+  session can set this via the Vercel API; otherwise it's a one-time
+  dashboard toggle. This stops preview builds even if some branch is pushed.
+
+
 OVERRIDE IT (David 2026-05-26, emphatic: "always push to main production
 unless told otherwise").** Claude Code web sessions are frequently
 configured to "develop on branch `claude/<...>`" and open a draft PR.
