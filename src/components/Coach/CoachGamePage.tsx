@@ -53,6 +53,7 @@ import { withTimeout } from '../../coach/withTimeout';
 import { emergencyPickMove } from '../../coach/coachTurnFallback';
 import type { LiveState } from '../../coach/types';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
+import { isCriticalThreat } from '../../services/tacticAlertService';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
 import { validateTacticClaims } from '../../services/tacticClaimValidator';
 import { getScenarioTemplate } from '../../services/coachTemplates';
@@ -2707,7 +2708,22 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             postCoachAnalysis.topLines.map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate })),
             playerColorCode,
           );
-          const threats = upcoming.filter((u) => u.beneficiary === 'opponent' && u.depthAhead <= 2);
+          // CRITICALITY GATE (David 2026-06-01: "stop calling out every pin
+          // even if it's not critical — mainly in the opening"). The tactic
+          // detector flags every geometric pattern in the PV, so a harmless
+          // opening pin (Bb5xc6-style) used to fire a "Watch out". Only
+          // announce a threat that actually MATTERS — a forced mate or the
+          // opponent genuinely winning material — via isCriticalThreat. The
+          // bar is stricter in the opening, where non-critical patterns
+          // cluster.
+          const fullMoveNumber = Number.parseInt(result.fen.split(' ')[5] ?? '1', 10) || 1;
+          const isOpening = fullMoveNumber <= 8;
+          const threats = upcoming.filter(
+            (u) =>
+              u.beneficiary === 'opponent' &&
+              u.depthAhead <= 2 &&
+              isCriticalThreat(u, playerColorCode, isOpening),
+          );
           if (threats.length > 0) {
             const threat = threats[0];
             // The opponent's move that sets up the tactic. line[i]

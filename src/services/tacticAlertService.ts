@@ -15,6 +15,7 @@ import { Chess } from 'chess.js';
 import { detectTacticType } from './missedTacticService';
 import { getStoredTacticalProfile } from './tacticalProfileService';
 import type { TacticType, StockfishAnalysis } from '../types';
+import type { UpcomingTactic } from '../types/tacticTypes';
 
 // ─── Teaching Content ─────────────────────────────────────────────────────────
 
@@ -242,6 +243,41 @@ export function getTacticLookahead(playerRating: number): number {
   if (playerRating < 1400) return 2;  // Improver: 1 full move ahead
   if (playerRating < 1800) return 4;  // Intermediate: 2 full moves ahead — calculate
   return 6;                            // Advanced (1800+): 3 full moves ahead — calculate the whole sequence
+}
+
+/** Centipawn bar a proactive tactic alert must clear to be spoken. The
+ *  opening bar is higher: shallow, non-critical patterns (a harmless
+ *  pin) cluster there, and David's directive (2026-06-01) was to stop
+ *  calling those out. */
+export const CRITICAL_THREAT_CP = 150;          // 1.5 pawns — middlegame+
+export const CRITICAL_THREAT_CP_OPENING = 250;  // 2.5 pawns — opening
+
+/**
+ * Is an upcoming OPPONENT tactic worth a proactive "Watch out" alert?
+ *
+ * The tactic detector flags every geometric pattern in the Stockfish PV
+ * — including pins that win nothing. Announcing those (David: "it points
+ * out every pin even if it's not critical … mainly in the opening") is
+ * noise. A threat is CRITICAL only when it actually matters: a forced
+ * mate, or the opponent genuinely winning material. The source PV line's
+ * eval is the signal — a pin in an equal opening line scores ~0; a real
+ * material-winning tactic tanks the student's eval.
+ *
+ * @param tactic       The upcoming tactic (carries the source PV line's
+ *                     eval + mate).
+ * @param playerColor  The student's color — used to read the eval, which
+ *                     is stored from WHITE's perspective.
+ * @param isOpening    Apply the stricter opening bar.
+ */
+export function isCriticalThreat(
+  tactic: Pick<UpcomingTactic, 'lineEval' | 'lineMate'>,
+  playerColor: 'w' | 'b',
+  isOpening: boolean,
+): boolean {
+  if (tactic.lineMate !== null) return true; // a forced mate is always worth it
+  const studentEval = playerColor === 'w' ? tactic.lineEval : -tactic.lineEval;
+  const bar = isOpening ? CRITICAL_THREAT_CP_OPENING : CRITICAL_THREAT_CP;
+  return studentEval <= -bar; // opponent winning by ≥ the bar
 }
 
 /**

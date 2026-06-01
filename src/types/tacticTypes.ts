@@ -58,6 +58,14 @@ export interface UpcomingTactic {
   fen: string;
   /** The SAN sequence leading to the tactic */
   line: string[];
+  /** Eval (centipawns, WHITE's perspective) of the Stockfish PV line this
+   *  tactic was detected in. Used to gate non-critical alerts: a pin in an
+   *  equal opening line scores ~0; a real material-winning tactic does
+   *  not. */
+  lineEval: number;
+  /** Mate distance of the source PV line (null when no forced mate). Any
+   *  mate in an opponent-beneficiary line is alert-worthy. */
+  lineMate: number | null;
 }
 
 /** Piece name lookup for human-readable descriptions */

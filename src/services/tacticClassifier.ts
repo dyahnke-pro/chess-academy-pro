@@ -750,6 +750,8 @@ export function scanUpcomingTactics(
             pattern,
             fen: fenAfter,
             line: [...sanLine],
+            lineEval: line.evaluation,
+            lineMate: line.mate,
           });
         }
       }
