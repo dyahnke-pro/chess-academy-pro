@@ -1,0 +1,40 @@
+{
+  "player": "samayraina",
+  "openingId": "samay-caro-white",
+  "openingName": "Caro-Kann (White)",
+  "color": "white",
+  "minPrefix": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "Nc3"
+  ],
+  "generatedAt": "2026-05-31T23:13:52.599Z",
+  "totals": {
+    "totalGamesScanned": 21825,
+    "gamesMatchingOpening": 2,
+    "minBranchGames": 5,
+    "minTrieGames": 5
+  },
+  "rootStats": {
+    "games": 2,
+    "wins": 1,
+    "draws": 0,
+    "losses": 1,
+    "scorePct": "50.0"
+  },
+  "spine": {
+    "sans": [],
+    "prefixPlies": 5,
+    "totalPlies": 5
+  },
+  "variations": [],
+  "tree": {
+    "games": 2,
+    "wins": 1,
+    "draws": 0,
+    "losses": 1,
+    "children": {}
+  }
+}

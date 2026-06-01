@@ -1,0 +1,40 @@
+{
+  "player": "samayraina",
+  "openingId": "samay-french-white",
+  "openingName": "French Defense (White)",
+  "color": "white",
+  "minPrefix": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "Nc3"
+  ],
+  "generatedAt": "2026-05-31T23:13:51.654Z",
+  "totals": {
+    "totalGamesScanned": 21825,
+    "gamesMatchingOpening": 3,
+    "minBranchGames": 5,
+    "minTrieGames": 5
+  },
+  "rootStats": {
+    "games": 3,
+    "wins": 1,
+    "draws": 1,
+    "losses": 1,
+    "scorePct": "50.0"
+  },
+  "spine": {
+    "sans": [],
+    "prefixPlies": 5,
+    "totalPlies": 5
+  },
+  "variations": [],
+  "tree": {
+    "games": 3,
+    "wins": 1,
+    "draws": 1,
+    "losses": 1,
+    "children": {}
+  }
+}

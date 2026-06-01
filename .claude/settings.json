@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "f=$(jq -r '.tool_input.file_path // .tool_response.filePath // empty'); case \"$f\" in *src/data/lessons/proEricRosen*) node scripts/sanitize-lesson-arrows.mjs >/dev/null 2>&1 || true;; esac",
+            "command": "f=$(jq -r '.tool_input.file_path // .tool_response.filePath // empty'); case \"$f\" in *src/data/lessons/proEricRosen*|*src/data/lessons/proSamayRaina*) node scripts/sanitize-lesson-arrows.mjs >/dev/null 2>&1 || true;; esac",
             "statusMessage": "Sanitizing lesson arrows"
           }
         ]

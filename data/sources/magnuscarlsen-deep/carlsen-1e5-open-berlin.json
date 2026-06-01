@@ -1,0 +1,87 @@
+{
+  "player": "magnuscarlsen",
+  "openingId": "carlsen-1e5",
+  "variationKey": "open-berlin",
+  "variation": {
+    "label": "Berlin ...Nf6",
+    "prefix": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "Bb5",
+      "Nf6"
+    ]
+  },
+  "generatedAt": "2026-06-01T00:19:04.440Z",
+  "totalGames": 155,
+  "wins": 59,
+  "draws": 63,
+  "losses": 33,
+  "openingTerminusPly": 23,
+  "openingTerminusMove": 12,
+  "spineMoves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "Nf6",
+    "O-O",
+    "Nxe4",
+    "d4",
+    "Nd6",
+    "Bxc6",
+    "dxc6",
+    "dxe5",
+    "Nf5",
+    "Qxd8+",
+    "Kxd8",
+    "h3",
+    "h6",
+    "Rd1+",
+    "Ke8",
+    "Nc3",
+    "Ne7",
+    "b3"
+  ],
+  "gamesAtTerminus": 3,
+  "endgameTypeBreakdown": {
+    "R + minor + P": 3
+  },
+  "topModelGames": [
+    {
+      "url": "https://www.chess.com/game/live/2443480625",
+      "opponent": "Grischuk",
+      "opponentRating": 2854,
+      "studentRating": 3021,
+      "date": "2017-11-21",
+      "timeClass": "blitz",
+      "outcome": "win",
+      "plyCount": 44,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2017.11.21\"]\n[Round \"-\"]\n[White \"Grischuk\"]\n[Black \"MagnusCarlsen\"]\n[Result \"0-1\"]\n[CurrentPosition \"r1br4/ppp2kp1/5p1p/2p2N2/5n2/1P5P/PBP1RPP1/R5K1 w - -\"]\n[Timezone \"UTC\"]\n[ECO \"C67\"]\n[ECOUrl \"https://www.chess.com/openings/Ruy-Lopez-Opening-Berlin-lHermet-Berlin-Wall-Defense-9.Rd1-Ke8-10.Nc3-h6-11.h3\"]\n[UTCDate \"2017.11.21\"]\n[UTCTime \"20:41:04\"]\n[WhiteElo \"2854\"]\n[BlackElo \"3021\"]\n[TimeControl \"180+2\"]\n[Termination \"MagnusCarlsen won by resignation\"]\n[StartTime \"20:41:04\"]\n[EndDate \"2017.11.21\"]\n[EndTime \"20:46:38\"]\n[Link \"https://www.chess.com/game/live/2443480625\"]\n\n1. e4 {[%clk 0:03:01.9]} 1... e5 {[%clk 0:03:00.1]} 2. Nf3 {[%clk 0:03:03.6]} 2... Nc6 {[%clk 0:03:01]} 3. Bb5 {[%clk 0:03:05.3]} 3... Nf6 {[%clk 0:03:01.1]} 4. O-O {[%clk 0:03:05.5]} 4... Nxe4 {[%clk 0:01:55.6]} 5. d4 {[%clk 0:03:04.8]} 5... Nd6 {[%clk 0:01:56.4]} 6. Bxc6 {[%clk 0:03:05.8]} 6... dxc6 {[%clk 0:01:58.3]} 7. dxe5 {[%clk 0:03:06.6]} 7... Nf5 {[%clk 0:02:00]} 8. Qxd8+ {[%clk 0:03:08.2]} 8... Kxd8 {[%clk 0:02:01.5]} 9. h3 {[%clk 0:03:10.1]} 9... h6 {[%clk 0:02:00.5]} 10. Rd1+ {[%clk 0:03:10.2]} 10... Ke8 {[%clk 0:02:01.8]} 11. Nc3 {[%clk 0:03:12.1]} 11... Ne7 {[%clk 0:01:55.3]} 12. b3 {[%clk 0:03:12.3]} 12... Ng6 {[%clk 0:01:53.4]} 13. Bb2 {[%clk 0:03:11.7]} 13... Be7 {[%clk 0:01:52.7]} 14. Ne4 {[%clk 0:03:04.3]} 14... c5 {[%clk 0:01:36.5]} 15. Nc3 {[%clk 0:02:47.1]} 15... Nf4 {[%clk 0:01:32.6]} 16. e6 {[%clk 0:02:28.2]} 16... f6 {[%clk 0:01:24]} 17. Re1 {[%clk 0:02:02.4]} 17... Nxe6 {[%clk 0:01:18.6]} 18. Nd5 {[%clk 0:02:03.2]} 18... Kf7 {[%clk 0:01:17]} 19. Nh4 {[%clk 0:02:04.6]} 19... Rd8 {[%clk 0:01:09.3]} 20. Nxe7 {[%clk 0:02:01.3]} 20... Kxe7 {[%clk 0:01:10.4]} 21. Nf5+ {[%clk 0:01:59.3]} 21... Kf7 {[%clk 0:01:11.7]} 22. Re2 {[%clk 0:01:57.9]} 22... Nf4 {[%clk 0:01:04.4]} 0-1\n"
+    },
+    {
+      "url": "otb:2017.11.21:2348",
+      "opponent": "GrischukA",
+      "opponentRating": 2750,
+      "studentRating": 2832,
+      "date": "2017-11-21",
+      "timeClass": "classical",
+      "outcome": "win",
+      "plyCount": 44,
+      "pgn": "[Event \"chess.com Speed 3m+2spm 2017\"]\n[Site \"chess.com INT\"]\n[Date \"2017.11.21\"]\n[Round \"3.15\"]\n[White \"Grischuk,A\"]\n[Black \"Carlsen,M\"]\n[Result \"0-1\"]\n[WhiteElo \"2750\"]\n[BlackElo \"2832\"]\n[ECO \"C67\"]\n\n1.e4 e5 2.Nf3 Nc6 3.Bb5 Nf6 4.O-O Nxe4 5.d4 Nd6 6.Bxc6 dxc6 7.dxe5 Nf5 8.Qxd8+ Kxd8\n9.h3 h6 10.Rd1+ Ke8 11.Nc3 Ne7 12.b3 Ng6 13.Bb2 Be7 14.Ne4 c5 15.Nc3 Nf4\n16.e6 f6 17.Re1 Nxe6 18.Nd5 Kf7 19.Nh4 Rd8 20.Nxe7 Kxe7 21.Nf5+ Kf7 22.Re2 Nf4  0-1"
+    },
+    {
+      "url": "otb:2015.06.17:1774",
+      "opponent": "CaruanaF",
+      "opponentRating": 2805,
+      "studentRating": 2876,
+      "date": "2015-06-17",
+      "timeClass": "classical",
+      "outcome": "loss",
+      "plyCount": 89,
+      "pgn": "[Event \"3rd Norway Chess 2015\"]\n[Site \"Stavanger NOR\"]\n[Date \"2015.06.17\"]\n[Round \"2.4\"]\n[White \"Caruana,F\"]\n[Black \"Carlsen,M\"]\n[Result \"1-0\"]\n[WhiteElo \"2805\"]\n[BlackElo \"2876\"]\n[ECO \"C67\"]\n\n1.e4 e5 2.Nf3 Nc6 3.Bb5 Nf6 4.O-O Nxe4 5.d4 Nd6 6.Bxc6 dxc6 7.dxe5 Nf5 8.Qxd8+ Kxd8\n9.h3 h6 10.Rd1+ Ke8 11.Nc3 Ne7 12.b3 Bf5 13.Nd4 Bh7 14.Bb2 Rd8 15.Nce2 Nd5\n16.c4 Nb4 17.Nf4 Rg8 18.g4 Na6 19.Nf5 Nc5 20.Rxd8+ Kxd8 21.Rd1+ Kc8 22.Ba3 Ne6\n23.Nxe6 Bxa3 24.Nexg7 Bf8 25.e6 Bxf5 26.Nxf5 fxe6 27.Ng3 Be7 28.Kg2 Rf8 29.Rd3 Rf7\n30.Nh5 Bd6 31.Rf3 Rh7 32.Re3 Re7 33.f4 Ba3 34.Kf3 Bb2 35.Re2 Bc3 36.g5 Kd7\n37.Kg4 Re8 38.Ng3 Rh8 39.h4 b6 40.h5 c5 41.g6 Re8 42.f5 exf5+ 43.Kf4 Rh8\n44.Nxf5 Bf6 45.Rg2  1-0"
+    }
+  ]
+}

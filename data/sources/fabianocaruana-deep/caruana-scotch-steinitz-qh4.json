@@ -1,0 +1,38 @@
+{
+  "player": "fabianocaruana",
+  "openingId": "caruana-scotch",
+  "variationKey": "steinitz-qh4",
+  "variation": {
+    "label": "Steinitz …Qh4",
+    "prefix": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "d4",
+      "exd4",
+      "Nxd4",
+      "Qh4"
+    ]
+  },
+  "generatedAt": "2026-05-31T23:36:01.504Z",
+  "totalGames": 0,
+  "wins": 0,
+  "draws": 0,
+  "losses": 0,
+  "openingTerminusPly": 8,
+  "openingTerminusMove": 4,
+  "spineMoves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "Qh4"
+  ],
+  "gamesAtTerminus": 0,
+  "endgameTypeBreakdown": {},
+  "topModelGames": []
+}

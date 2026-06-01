@@ -1,0 +1,360 @@
+{
+  "player": "samayraina",
+  "openingId": "samay-scandi-black",
+  "openingName": "Scandinavian Defense (Black)",
+  "color": "black",
+  "minPrefix": [
+    "e4",
+    "d5"
+  ],
+  "generatedAt": "2026-05-31T23:13:55.843Z",
+  "totals": {
+    "totalGamesScanned": 21825,
+    "gamesMatchingOpening": 126,
+    "minBranchGames": 5,
+    "minTrieGames": 5
+  },
+  "rootStats": {
+    "games": 126,
+    "wins": 54,
+    "draws": 12,
+    "losses": 60,
+    "scorePct": "47.6"
+  },
+  "spine": {
+    "sans": [
+      "exd5",
+      "Qxd5",
+      "Nc3",
+      "Qd8",
+      "Nf3",
+      "Nf6",
+      "Bc4",
+      "Nc6"
+    ],
+    "prefixPlies": 2,
+    "totalPlies": 10
+  },
+  "variations": [
+    {
+      "depthFromOriginPrefix": 1,
+      "prefixToHere": [
+        "exd5"
+      ],
+      "branchSan": "c6",
+      "games": 24,
+      "wins": 11,
+      "draws": 1,
+      "losses": 12,
+      "scorePct": "47.9",
+      "continuation": [
+        "c6",
+        "dxc6",
+        "Nxc6"
+      ],
+      "bestUrls": []
+    },
+    {
+      "depthFromOriginPrefix": 0,
+      "prefixToHere": [],
+      "branchSan": "e5",
+      "games": 15,
+      "wins": 8,
+      "draws": 1,
+      "losses": 6,
+      "scorePct": "56.7",
+      "continuation": [
+        "e5",
+        "Nc6"
+      ],
+      "bestUrls": []
+    },
+    {
+      "depthFromOriginPrefix": 1,
+      "prefixToHere": [
+        "exd5"
+      ],
+      "branchSan": "e6",
+      "games": 9,
+      "wins": 4,
+      "draws": 2,
+      "losses": 3,
+      "scorePct": "55.6",
+      "continuation": [
+        "e6",
+        "dxe6"
+      ],
+      "bestUrls": []
+    },
+    {
+      "depthFromOriginPrefix": 3,
+      "prefixToHere": [
+        "exd5",
+        "Qxd5",
+        "Nc3"
+      ],
+      "branchSan": "Qa5",
+      "games": 9,
+      "wins": 3,
+      "draws": 2,
+      "losses": 4,
+      "scorePct": "44.4",
+      "continuation": [
+        "Qa5",
+        "Nf3",
+        "Nf6"
+      ],
+      "bestUrls": []
+    },
+    {
+      "depthFromOriginPrefix": 0,
+      "prefixToHere": [],
+      "branchSan": "Nc3",
+      "games": 7,
+      "wins": 2,
+      "draws": 0,
+      "losses": 5,
+      "scorePct": "28.6",
+      "continuation": [
+        "Nc3"
+      ],
+      "bestUrls": []
+    },
+    {
+      "depthFromOriginPrefix": 2,
+      "prefixToHere": [
+        "exd5",
+        "Qxd5"
+      ],
+      "branchSan": "Nf3",
+      "games": 7,
+      "wins": 2,
+      "draws": 0,
+      "losses": 5,
+      "scorePct": "28.6",
+      "continuation": [
+        "Nf3"
+      ],
+      "bestUrls": []
+    },
+    {
+      "depthFromOriginPrefix": 3,
+      "prefixToHere": [
+        "exd5",
+        "Qxd5",
+        "Nc3"
+      ],
+      "branchSan": "Qe5+",
+      "games": 5,
+      "wins": 0,
+      "draws": 1,
+      "losses": 4,
+      "scorePct": "10.0",
+      "continuation": [
+        "Qe5+"
+      ],
+      "bestUrls": []
+    },
+    {
+      "depthFromOriginPrefix": 4,
+      "prefixToHere": [
+        "exd5",
+        "Qxd5",
+        "Nc3",
+        "Qd8"
+      ],
+      "branchSan": "Bc4",
+      "games": 5,
+      "wins": 0,
+      "draws": 1,
+      "losses": 4,
+      "scorePct": "10.0",
+      "continuation": [
+        "Bc4"
+      ],
+      "bestUrls": []
+    }
+  ],
+  "tree": {
+    "games": 126,
+    "wins": 54,
+    "draws": 12,
+    "losses": 60,
+    "children": {
+      "exd5": {
+        "games": 93,
+        "wins": 38,
+        "draws": 10,
+        "losses": 45,
+        "children": {
+          "Qxd5": {
+            "games": 55,
+            "wins": 21,
+            "draws": 7,
+            "losses": 27,
+            "children": {
+              "Nc3": {
+                "games": 45,
+                "wins": 17,
+                "draws": 7,
+                "losses": 21,
+                "children": {
+                  "Qe5+": {
+                    "games": 5,
+                    "wins": 0,
+                    "draws": 1,
+                    "losses": 4,
+                    "children": {}
+                  },
+                  "Qa5": {
+                    "games": 9,
+                    "wins": 3,
+                    "draws": 2,
+                    "losses": 4,
+                    "children": {
+                      "Nf3": {
+                        "games": 6,
+                        "wins": 2,
+                        "draws": 1,
+                        "losses": 3,
+                        "children": {
+                          "Nf6": {
+                            "games": 5,
+                            "wins": 2,
+                            "draws": 1,
+                            "losses": 2,
+                            "children": {}
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "Qd8": {
+                    "games": 25,
+                    "wins": 11,
+                    "draws": 4,
+                    "losses": 10,
+                    "children": {
+                      "Nf3": {
+                        "games": 18,
+                        "wins": 9,
+                        "draws": 3,
+                        "losses": 6,
+                        "children": {
+                          "Nf6": {
+                            "games": 13,
+                            "wins": 6,
+                            "draws": 2,
+                            "losses": 5,
+                            "children": {
+                              "Bc4": {
+                                "games": 8,
+                                "wins": 3,
+                                "draws": 2,
+                                "losses": 3,
+                                "children": {
+                                  "Nc6": {
+                                    "games": 5,
+                                    "wins": 3,
+                                    "draws": 0,
+                                    "losses": 2,
+                                    "children": {}
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "Bc4": {
+                        "games": 5,
+                        "wins": 0,
+                        "draws": 1,
+                        "losses": 4,
+                        "children": {}
+                      }
+                    }
+                  }
+                }
+              },
+              "Nf3": {
+                "games": 7,
+                "wins": 2,
+                "draws": 0,
+                "losses": 5,
+                "children": {}
+              }
+            }
+          },
+          "c6": {
+            "games": 24,
+            "wins": 11,
+            "draws": 1,
+            "losses": 12,
+            "children": {
+              "dxc6": {
+                "games": 14,
+                "wins": 5,
+                "draws": 1,
+                "losses": 8,
+                "children": {
+                  "Nxc6": {
+                    "games": 8,
+                    "wins": 2,
+                    "draws": 1,
+                    "losses": 5,
+                    "children": {}
+                  },
+                  "e5": {
+                    "games": 5,
+                    "wins": 2,
+                    "draws": 0,
+                    "losses": 3,
+                    "children": {}
+                  }
+                }
+              }
+            }
+          },
+          "e6": {
+            "games": 9,
+            "wins": 4,
+            "draws": 2,
+            "losses": 3,
+            "children": {
+              "dxe6": {
+                "games": 7,
+                "wins": 4,
+                "draws": 2,
+                "losses": 1,
+                "children": {}
+              }
+            }
+          }
+        }
+      },
+      "e5": {
+        "games": 15,
+        "wins": 8,
+        "draws": 1,
+        "losses": 6,
+        "children": {
+          "Nc6": {
+            "games": 5,
+            "wins": 1,
+            "draws": 1,
+            "losses": 3,
+            "children": {}
+          }
+        }
+      },
+      "Nc3": {
+        "games": 7,
+        "wins": 2,
+        "draws": 0,
+        "losses": 5,
+        "children": {}
+      }
+    }
+  }
+}

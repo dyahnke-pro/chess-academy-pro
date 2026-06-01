@@ -5,7 +5,7 @@
 // catch prose-form board claims ("the rook on f8" when none is there). A
 // self-audit of the Eric Rosen build caught a false "rook on f8" claim plus ~80
 // arrows drawn from a pawn or an empty square (move-trails). This gate locks
-// those fixes in for every Eric Rosen lesson:
+// those fixes in for every pro-rep lesson:
 //   - every arrow's `from` square holds a NON-PAWN piece at the beat's position
 //     (green vision arrows lead the eye from a resting piece; move/pawn squares
 //      are shown by highlights — the masterclass lead-the-eye doctrine);
@@ -20,7 +20,7 @@ import { getLessonScript, getVariationLessonScript } from './index';
 import type { LessonScript } from '../../types';
 
 const PRO = (proRep.openings as Array<{ id: string; variations?: { name: string }[] }>)
-  .filter((o) => o.id.startsWith('pro-ericrosen-'));
+  .filter((o) => o.id.startsWith('pro-ericrosen-') || o.id.startsWith('pro-samayraina-'));
 
 const lessons: { label: string; l: LessonScript }[] = [];
 for (const op of PRO) {
@@ -40,7 +40,7 @@ function boardAt(moves: string[]): Chess {
   return c;
 }
 
-describe('Eric Rosen lesson arrows originate on a resting non-pawn piece', () => {
+describe('pro-rep lesson arrows originate on a resting non-pawn piece', () => {
   it('has no arrow from an empty square or a pawn', () => {
     const bad: string[] = [];
     for (const { label, l } of lessons) {

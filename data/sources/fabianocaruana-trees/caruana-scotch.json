@@ -1,0 +1,40 @@
+{
+  "player": "fabianocaruana",
+  "openingId": "caruana-scotch",
+  "openingName": "Scotch Game (Caruana)",
+  "color": "white",
+  "minPrefix": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "d4"
+  ],
+  "generatedAt": "2026-05-31T23:15:20.955Z",
+  "totals": {
+    "totalGamesScanned": 6732,
+    "gamesMatchingOpening": 3,
+    "minBranchGames": 5,
+    "minTrieGames": 5
+  },
+  "rootStats": {
+    "games": 3,
+    "wins": 3,
+    "draws": 0,
+    "losses": 0,
+    "scorePct": "100.0"
+  },
+  "spine": {
+    "sans": [],
+    "prefixPlies": 5,
+    "totalPlies": 5
+  },
+  "variations": [],
+  "tree": {
+    "games": 3,
+    "wins": 3,
+    "draws": 0,
+    "losses": 0,
+    "children": {}
+  }
+}

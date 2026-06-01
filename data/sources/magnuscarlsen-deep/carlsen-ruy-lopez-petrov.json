@@ -1,0 +1,71 @@
+{
+  "player": "magnuscarlsen",
+  "openingId": "carlsen-ruy-lopez",
+  "variationKey": "petrov",
+  "variation": {
+    "label": "vs Petrov ...Nf6",
+    "prefix": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nf6"
+    ]
+  },
+  "generatedAt": "2026-06-01T00:19:27.005Z",
+  "totalGames": 145,
+  "wins": 84,
+  "draws": 42,
+  "losses": 19,
+  "openingTerminusPly": 18,
+  "openingTerminusMove": 9,
+  "spineMoves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "Nxe5",
+    "d6",
+    "Nf3",
+    "Nxe4",
+    "d4",
+    "d5",
+    "Bd3",
+    "Bd6",
+    "O-O",
+    "O-O",
+    "c4",
+    "c6",
+    "Re1",
+    "Bf5"
+  ],
+  "gamesAtTerminus": 4,
+  "endgameTypeBreakdown": {
+    "R+P": 2,
+    "R + minor + P": 1,
+    "K+P": 1
+  },
+  "topModelGames": [
+    {
+      "url": "https://www.chess.com/game/live/89494772535",
+      "opponent": "lachesisQ",
+      "opponentRating": 2845,
+      "studentRating": 2949,
+      "date": "2023-09-26",
+      "timeClass": "rapid",
+      "outcome": "win",
+      "plyCount": 93,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2023.09.26\"]\n[Round \"-\"]\n[White \"MagnusCarlsen\"]\n[Black \"lachesisQ\"]\n[Result \"1-0\"]\n[CurrentPosition \"8/3P4/5R1p/3r2pk/1p6/6PP/5PK1/8 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C42\"]\n[ECOUrl \"https://www.chess.com/openings/Petrovs-Defense-Classical-Attack-Marshall-Variation-Staunton-Variation-9.Re1-Bf5\"]\n[UTCDate \"2023.09.26\"]\n[UTCTime \"19:13:56\"]\n[WhiteElo \"2949\"]\n[BlackElo \"2845\"]\n[TimeControl \"900+3\"]\n[Termination \"MagnusCarlsen won by resignation\"]\n[StartTime \"19:13:56\"]\n[EndDate \"2023.09.26\"]\n[EndTime \"19:44:28\"]\n[Link \"https://www.chess.com/game/live/89494772535\"]\n\n1. e4 {[%clk 0:15:03]} 1... e5 {[%clk 0:15:03]} 2. Nf3 {[%clk 0:15:04.5]} 2... Nf6 {[%clk 0:15:05.4]} 3. Nxe5 {[%clk 0:15:06.9]} 3... d6 {[%clk 0:15:07.7]} 4. Nf3 {[%clk 0:15:09.6]} 4... Nxe4 {[%clk 0:15:10.2]} 5. d4 {[%clk 0:15:12.3]} 5... d5 {[%clk 0:15:12.2]} 6. Bd3 {[%clk 0:15:15.1]} 6... Bd6 {[%clk 0:15:14.3]} 7. O-O {[%clk 0:15:17.8]} 7... O-O {[%clk 0:15:16.4]} 8. c4 {[%clk 0:15:19.5]} 8... c6 {[%clk 0:15:18.5]} 9. Re1 {[%clk 0:15:20.8]} 9... Bf5 {[%clk 0:15:19.3]} 10. Nc3 {[%clk 0:15:23.4]} 10... Nxc3 {[%clk 0:14:45]} 11. bxc3 {[%clk 0:15:26.3]} 11... Bxd3 {[%clk 0:14:34.6]} 12. Qxd3 {[%clk 0:15:29.2]} 12... dxc4 {[%clk 0:14:18.2]} 13. Qxc4 {[%clk 0:15:32.1]} 13... Nd7 {[%clk 0:13:16.1]} 14. Qb3 {[%clk 0:15:31.2]} 14... Qc7 {[%clk 0:12:47.4]} 15. c4 {[%clk 0:15:29.8]} 15... Rfe8 {[%clk 0:12:43.9]} 16. g3 {[%clk 0:15:28.2]} 16... b6 {[%clk 0:12:31.9]} 17. Bb2 {[%clk 0:14:42.9]} 17... Bf8 {[%clk 0:11:53.9]} 18. a4 {[%clk 0:14:38.4]} 18... a6 {[%clk 0:11:43.9]} 19. Kg2 {[%clk 0:14:34.8]} 19... h6 {[%clk 0:11:44.9]} 20. Rxe8 {[%clk 0:13:55]} 20... Rxe8 {[%clk 0:11:46.2]} 21. Bc1 {[%clk 0:13:52.9]} 21... Rb8 {[%clk 0:11:36.2]} 22. Qc2 {[%clk 0:12:26.1]} 22... Re8 {[%clk 0:10:42]} 23. a5 {[%clk 0:10:37.6]} 23... b5 {[%clk 0:10:33.7]} 24. cxb5 {[%clk 0:10:39.2]} 24... axb5 {[%clk 0:10:36.6]} 25. Bf4 {[%clk 0:10:34]} 25... Bd6 {[%clk 0:10:20.3]} 26. Bxd6 {[%clk 0:10:32.3]} 26... Qxd6 {[%clk 0:10:23.2]} 27. a6 {[%clk 0:10:18.6]} 27... Ra8 {[%clk 0:10:23.1]} 28. a7 {[%clk 0:10:13.2]} 28... Qc7 {[%clk 0:09:27.1]} 29. Ra6 {[%clk 0:09:58.4]} 29... Nf8 {[%clk 0:07:08.3]} 30. Qc5 {[%clk 0:08:20.9]} 30... Ne6 {[%clk 0:05:52.7]} 31. Rxc6 {[%clk 0:07:23.3]} 31... Qb7 {[%clk 0:05:54.4]} 32. Qb6 {[%clk 0:05:03.4]} 32... Rxa7 {[%clk 0:05:54.3]} 33. d5 {[%clk 0:05:03.6]} 33... Nf8 {[%clk 0:05:47.3]} 34. Qc5 {[%clk 0:04:40.3]} 34... Nd7 {[%clk 0:04:48.2]} 35. Rc8+ {[%clk 0:03:36]} 35... Kh7 {[%clk 0:04:48.7]} 36. Qc2+ {[%clk 0:03:38.7]} 36... g6 {[%clk 0:04:50.9]} 37. Qc3 {[%clk 0:03:36.6]} 37... Nf6 {[%clk 0:04:52.2]} 38. d6 {[%clk 0:03:34.8]} 38... b4 {[%clk 0:04:39]} 39. Qc7 {[%clk 0:03:14.4]} 39... g5 {[%clk 0:02:21.9]} 40. Qxb7 {[%clk 0:02:47.2]} 40... Rxb7 {[%clk 0:02:22.1]} 41. Rc7 {[%clk 0:02:49.2]} 41... Rb5 {[%clk 0:02:14]} 42. Rxf7+ {[%clk 0:02:47.3]} 42... Kg6 {[%clk 0:02:15.5]} 43. d7 {[%clk 0:02:50]} 43... Rd5 {[%clk 0:02:16.7]} 44. Ne5+ {[%clk 0:02:42]} 44... Kf5 {[%clk 0:02:18]} 45. Ng4 {[%clk 0:02:44.6]} 45... Kxg4 {[%clk 0:01:57.3]} 46. Rxf6 {[%clk 0:02:46.9]} 46... Kh5 {[%clk 0:01:50.7]} 47. h3 {[%clk 0:02:47.8]} 1-0\n"
+    },
+    {
+      "url": "otb:2023.09.26:5451",
+      "opponent": "NepomniachtchiI",
+      "opponentRating": 2771,
+      "studentRating": 2839,
+      "date": "2023-09-26",
+      "timeClass": "classical",
+      "outcome": "win",
+      "plyCount": 93,
+      "pgn": "[Event \"AI Cup Div 1 W\"]\n[Site \"chess.com INT\"]\n[Date \"2023.09.26\"]\n[Round \"2.3\"]\n[White \"Carlsen,M\"]\n[Black \"Nepomniachtchi,I\"]\n[Result \"1-0\"]\n[WhiteElo \"2839\"]\n[BlackElo \"2771\"]\n[ECO \"C42\"]\n\n1.e4 e5 2.Nf3 Nf6 3.Nxe5 d6 4.Nf3 Nxe4 5.d4 d5 6.Bd3 Bd6 7.O-O O-O 8.c4 c6\n9.Re1 Bf5 10.Nc3 Nxc3 11.bxc3 Bxd3 12.Qxd3 dxc4 13.Qxc4 Nd7 14.Qb3 Qc7 15.c4 Rfe8\n16.g3 b6 17.Bb2 Bf8 18.a4 a6 19.Kg2 h6 20.Rxe8 Rxe8 21.Bc1 Rb8 22.Qc2 Re8\n23.a5 b5 24.cxb5 axb5 25.Bf4 Bd6 26.Bxd6 Qxd6 27.a6 Ra8 28.a7 Qc7 29.Ra6 Nf8\n30.Qc5 Ne6 31.Rxc6 Qb7 32.Qb6 Rxa7 33.d5 Nf8 34.Qc5 Nd7 35.Rc8+ Kh7 36.Qc2+ g6\n37.Qc3 Nf6 38.d6 b4 39.Qc7 g5 40.Qxb7 Rxb7 41.Rc7 Rb5 42.Rxf7+ Kg6 43.d7 Rd5\n44.Ne5+ Kf5 45.Ng4 Kxg4 46.Rxf6 Kh5 47.h3  1-0"
+    }
+  ]
+}

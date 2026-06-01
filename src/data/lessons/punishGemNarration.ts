@@ -3479,6 +3479,176 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     watch: ["","","","","","","","","","","","","","","Qb3? — defending c4 but stepping into a Cambridge Springs tactic; the queen and knight are loose.","…dxc4! — the pawn grab springs the trap, opening lines against the pinned c3-knight.","","…Bxc3+ — wrecking White's structure, and the follow-up wins the g5-bishop.","","…Qxg5 — Black snaps off the bishop and emerges a clean piece up.","","",""],
     learn: ["","","","","","","","","","","","","","","","…dxc4 — spring the trap","","…Bxc3+ — wreck the structure","","…Qxg5 — win the bishop","","",""],
   },
+  "pro-samayraina-open-sicilian:e4_c5_Nf3_Nc6_d4_cxd4_Nxd4_e5_Nb5:Qa5+": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Sicilian-Defense-Open"],
+    watch: ["","","","","","","","","","Qa5+? — this loses by force. There is a concrete punishment.","N1c3! The refutation — White wins material or breaks through by force.","","The follow-up is decisive — White consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","N1c3 — the punishment","","","","","","",""],
+  },
+  "pro-samayraina-open-sicilian:e4_c5_Nf3_Nc6_d4_cxd4_Nxd4_Nf6_Nc3_e5_Ndb5_d6_Bg5_a6_Bxf6:Qxf6": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Sicilian-Defense-Open"],
+    watch: ["","","","","","","","","","","","","","","","Qxf6? — the wrong recapture. …gxf6 was forced; taking with the queen allows a family fork.","Nc7+! The fork — the knight forks the king and the a8-rook. After …Kd8 Nxa8 White wins the exchange.","","The follow-up is decisive — White consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","","","","","","","Nc7+ — the family fork","","","","","","",""],
+  },
+  "pro-samayraina-open-sicilian:e4_c5_Nf3_e6_d4_cxd4_Nxd4_Nc6_Nc3_Qc7_Be2_a6_O-O_Nf6_Be3_Bb4_f3:b5": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Sicilian-Defense-Open"],
+    watch: ["","","","","","","","","","","","","","","","","","b5? — this loses by force. There is a concrete punishment.","a4! The refutation — White wins material or breaks through by force.","","The follow-up is decisive — White consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","","","","","","","","","a4 — the punishment","","","","","","",""],
+  },
+  "pro-samayraina-open-sicilian:e4_c5_Nf3_g6_d4_cxd4_Nxd4_Nf6_Nc3_Bg7_Be2:Qa5": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Sicilian-Defense-Open"],
+    watch: ["","","","","","","","","","","","Qa5? — this loses by force. There is a concrete punishment.","Nb3! The refutation — White wins material or breaks through by force.","","The follow-up is decisive — White consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","","","Nb3 — the punishment","","","","","","",""],
+  },
+  "pro-samayraina-open-sicilian:e4_c5_Nf3_g6_d4_cxd4_Nxd4_Nf6_Nc3_Bg7_Be2_Nc6_Be3:Qa5": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Sicilian-Defense-Open"],
+    watch: ["","","","","","","","","","","","","","Qa5? — a clear inaccuracy. There is a concrete punishment.","Nb3 — the strong reply that leaves White clearly better.","","The follow-up is decisive — White consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","","","","","Nb3 — the punishment","","","","","","",""],
+  },
+  "pro-samayraina-ruy:e4_e5_Nf3_Nc6_Bb5_Nf6_O-O_Nxe4_d4:Nxd4": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez"],
+    watch: ["","","","","","","","","","Nxd4? — this loses by force. There is a concrete punishment.","Nxd4! The refutation — White wins material or breaks through by force.","","The follow-up is decisive — White consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","Nxd4 — the punishment","","","","","","",""],
+  },
+  "pro-samayraina-ruy:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6_dxc6_O-O_f6_d4_exd4_Nxd4:Bc5": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez"],
+    watch: ["","","","","","","","","","","","","","Bc5? — developing into a check. The c5-bishop has no protection and White wins it by force.","Qh5+! A check that also forks — after …g6 the queen snaps the c5-bishop, then takes c6 with another check. A clean piece up.","","The follow-up is decisive — White consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","","","","","Qh5+ — check and win the bishop","","","","","","",""],
+  },
+  "pro-samayraina-ruy:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6_dxc6_O-O_f6_d4_exd4_Nxd4_c5_Nb3:Be6": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez"],
+    watch: ["","","","","","","","","","","","","","","","Be6? — a clear inaccuracy. There is a concrete punishment.","Qe2 — the strong reply that leaves White clearly better.","","The follow-up is decisive — White consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","","","","","","","Qe2 — the punishment","","","","","","",""],
+  },
+  "pro-samayraina-ruy:e4_e5_Nf3_Nc6_Bb5_d6_d4:a6": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez"],
+    watch: ["","","","","","","","a6? — kicking the bishop loses a pawn in this exact position. The d4-tension is not yet resolved.","Bxc6+! and dxe5 — White wins the e5-pawn cleanly because the pin and the central tension favour White.","","The follow-up is decisive — White consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","Bxc6+ then dxe5 — win the pawn","","","","","","",""],
+  },
+  "pro-samayraina-ruy:e4_e5_Nf3_Nc6_Bb5_d6_d4_Bd7_Nc3:Be7": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez"],
+    watch: ["","","","","","","","","","Be7? — this loses by force. There is a concrete punishment.","Bxc6! The refutation — White wins material or breaks through by force.","","The follow-up is decisive — White consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","Bxc6 — the punishment","","","","","","",""],
+  },
+  "pro-samayraina-ruy:e4_e5_Nf3_Nc6_Bb5_d6_d4_Bd7_Nc3_Nf6_O-O_Be7_Re1_exd4_Nxd4:Ne5": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez"],
+    watch: ["","","","","","","","","","","","","","","","Ne5? — a clear inaccuracy. There is a concrete punishment.","Nf5 — the strong reply that leaves White clearly better.","","The follow-up is decisive — White consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","","","","","","","Nf5 — the punishment","","","","","","",""],
+  },
+  "pro-samayraina-italian:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4:Bb6": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Italian-Game"],
+    watch: ["","","","","","","","","","","","Bb6? — this loses by force. There is a concrete punishment.","e5! The refutation — White wins material or breaks through by force.","","The follow-up is decisive — White consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","","","e5 — the punishment","","","","","","",""],
+  },
+  "pro-samayraina-italian:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4_Bb4+_Nc3:O-O": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Italian-Game"],
+    watch: ["","","","","","","","","","","","","","O-O? — a clear inaccuracy. There is a concrete punishment.","Bg5 — the strong reply that leaves White clearly better.","","The follow-up is decisive — White consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","","","","","Bg5 — the punishment","","","","","","",""],
+  },
+  "pro-samayraina-italian:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4_Bb4+_Nc3_Nxe4_O-O:d5": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Italian-Game"],
+    watch: ["","","","","","","","","","","","","","","","d5? — this loses by force. There is a concrete punishment.","Nxd5! The refutation — White wins material or breaks through by force.","","The follow-up is decisive — White consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","","","","","","","Nxd5 — the punishment","","","","","","",""],
+  },
+  "pro-samayraina-italian:e4_e5_Nf3_Nc6_Bc4_Nf6_d3_Be7_O-O_O-O_Re1:d5": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Italian-Game"],
+    watch: ["","","","","","","","","","","","d5? — this loses by force. There is a concrete punishment.","exd5! The refutation — White wins material or breaks through by force.","","The follow-up is decisive — White consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","","","exd5 — the punishment","","","","","","",""],
+  },
+  "pro-samayraina-caro-white:e4_c6_d4_d5_exd5_cxd5_Bd3_Nc6_c3_Nf6_Bf4_Bg4_Qb3:b6": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Caro-Kann-Defense-Panov-Attack"],
+    watch: ["","","","","","","","","","","","","","b6? — a clear inaccuracy. There is a concrete punishment.","h3 — the strong reply that leaves White clearly better.","","The follow-up is decisive — White consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","","","","","h3 — the punishment","","","","","","",""],
+  },
+  "pro-samayraina-caro-white:e4_c6_d4_d5_exd5_cxd5_Bd3_Nc6_c3_Nf6_Bf4_Bg4_Qb3_Qd7_Nd2_e6_Ngf3:Be7": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Caro-Kann-Defense-Panov-Attack"],
+    watch: ["","","","","","","","","","","","","","","","","","Be7? — a clear inaccuracy. There is a concrete punishment.","Ne5 — the strong reply that leaves White clearly better.","","The follow-up is decisive — White consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","","","","","","","","","Ne5 — the punishment","","","","","","",""],
+  },
+  "pro-samayraina-french-white:e4_e6_d4_d5_exd5_exd5_Bd3_Bd6_Nf3_Ne7_O-O_O-O_Re1:Bg4": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/French-Defense-Exchange-Variation"],
+    watch: ["","","","","","","","","","","","","","Bg4? — the pin ignores the loose h7-pawn. White has the classic Greek-gift sacrifice.","Bxh7+! The Greek gift — …Kxh7 Ng5+ and the queen swings to the h-file; the king is hunted down.","","The follow-up is decisive — White consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","","","","","Bxh7+ — the Greek gift","","","","","","",""],
+  },
+  "pro-samayraina-french-white:e4_e6_d4_d5_exd5_exd5_Bd3_Bd6_Nf3_Ne7_O-O_O-O_Re1_Bg4_c3:c6": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/French-Defense-Exchange-Variation"],
+    watch: ["","","","","","","","","","","","","","","","c6? — too slow; the kingside is already fatally weak. The Greek gift lands.","Bxh7+! The bishop sacrifice rips open the king — Ng5+ and the queen follow for a decisive attack.","","The follow-up is decisive — White consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","","","","","","","Bxh7+ — sac and attack","","","","","","",""],
+  },
+  "pro-samayraina-open-e5:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4_Bb4+_Nc3_Nxe4:Qe2": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez"],
+    watch: ["","","","","","","","","","","","","","","Qe2? — this loses by force. There is a concrete punishment.","…d5! The refutation — Black wins material or breaks through by force.","","The follow-up is decisive — Black consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","","","","","","…d5 — the punishment","","","","","","",""],
+  },
+  "pro-samayraina-open-e5:e4_e5_Nf3_Nc6_d4_exd4:Ng5": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez"],
+    watch: ["","","","","","","Ng5? — this loses by force. There is a concrete punishment.","…Be7! The refutation — Black wins material or breaks through by force.","","The follow-up is decisive — Black consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","…Be7 — the punishment","","","","","","",""],
+  },
+  "pro-samayraina-sicilian-black:e4_c5_c3_Nf6_e5_Nd5_d4_cxd4_Nf3_Nc6_cxd4_d6:Bb5": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Sicilian-Defense"],
+    watch: ["","","","","","","","","","","","","Bb5? — this loses by force. There is a concrete punishment.","…Qa5+! The refutation — Black wins material or breaks through by force.","","The follow-up is decisive — Black consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","","","","…Qa5+ — the punishment","","","","","","",""],
+  },
+  "pro-samayraina-sicilian-black:e4_c5_c3_Nf6_e5_Nd5_d4_cxd4_Nf3_Nc6_cxd4_d6_Bc4_Nb6_Bb5_dxe5:d5": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Sicilian-Defense"],
+    watch: ["","","","","","","","","","","","","","","","","d5? — this loses by force. There is a concrete punishment.","…a6! The refutation — Black wins material or breaks through by force.","","The follow-up is decisive — Black consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","","","","","","","","…a6 — the punishment","","","","","","",""],
+  },
+  "pro-samayraina-scandi:e4_d5_exd5_Qxd5_Nc3_Qa5_d4_c6_Bd2_Qc7_Nf3_Nf6_Bc4_Bg4:Bxf7+": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Scandinavian-Defense"],
+    watch: ["","","","","","","","","","","","","","","Bxf7+? — a tempting but unsound sacrifice; the king is perfectly safe after taking.","…Kxf7! Black simply grabs the bishop. White has nothing for the piece — the sac is refuted.","","The follow-up is decisive — Black consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","","","","","","…Kxf7 — take it, refute the sac","","","","","","",""],
+  },
+  "pro-samayraina-scandi:e4_d5_exd5_Qxd5_Nc3_Qd8_d4_Nf6_Nf3_c6_Bc4_Bg4_h3_Bxf3_Qxf3_e6:Bg5": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Scandinavian-Defense"],
+    watch: ["","","","","","","","","","","","","","","","","Bg5? — a clear inaccuracy. There is a concrete punishment.","…Qxd4 — the strong reply that leaves Black clearly better.","","The follow-up is decisive — Black consolidates the winning advantage.","","","","",""],
+    learn: ["","","","","","","","","","","","","","","","","","…Qxd4 — the punishment","","","","","","",""],
+  },
+  "pro-caruana-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_f5_d3_fxe4_dxe4_Nf6_Nc3:d6": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez-Opening"],
+    watch: ["","","","","","","","","","","","…d6?! — too passive in this sharp Schliemann; it hands White a free hand in the centre.","a3 — a quiet improving move; White keeps the bishop, eyes the kingside, and stands clearly better.","","","","White is comfortably on top with the safer king and the better structure.","","",""],
+    learn: ["","","","","","","","","","","","","a3 — White is clearly better","","","","","","",""],
+  },
+  "pro-caruana-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_f5_d3_fxe4_dxe4_Nf6_Nc3_Bb4_O-O:d6": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez-Opening"],
+    watch: ["","","","","","","","","","","","","","…d6?! — slow; it lets White seize the d5-outpost with tempo.","Nd5! — the knight leaps to the dominant outpost, hitting the b4-bishop and f6-knight at once.","","","","After the trades on f6 White has a crushing grip — the engine reads +1.8.","","",""],
+    learn: ["","","","","","","","","","","","","","","Nd5 — the dominant outpost","","","","","","",""],
+  },
+  "pro-caruana-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_f5_d3_fxe4_dxe4_Nf6_Nc3_Bb4_O-O_Bxc3_bxc3:Nxe4": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez-Opening"],
+    watch: ["","","","","","","","","","","","","","","","…Nxe4?? — grabbing the pawn loses; the e-file opens onto Black’s king.","Re1! — pinning and winning back the piece with a raging attack on the exposed king.","","","","After Bxc6 and Rxe5+ White is winning by force — the engine reads +2.0.","","",""],
+    learn: ["","","","","","","","","","","","","","","","","Re1 — pin and crush","","","","","","",""],
+  },
+  "pro-caruana-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nd4_Nxd4_exd4_O-O:Qg5": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez-Opening"],
+    watch: ["","","","","","","","","","…Qg5?! — the early queen sortie is loose; it just loses time.","Bc4! — developing with tempo, eyeing f7 and gaining a clear lead in development.","","","","White’s pieces flood out while the black queen is chased around — a clear +1.4.","","",""],
+    learn: ["","","","","","","","","","","Bc4 — develop with tempo","","","","","","",""],
+  },
+  "pro-caruana-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nd4_Nxd4_exd4_O-O_c6_Bc4:Bc5": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez-Opening"],
+    watch: ["","","","","","","","","","","","…Bc5?? — walking into the Greek gift; f7 is fatally weak.","Bxf7+! — the sacrifice wins; after …Kf8 White is a clean pawn up with a raging attack.","","","","White retreats the bishop with a winning material and positional edge — +2.4.","","",""],
+    learn: ["","","","","","","","","","","","","Bxf7+ — the Greek gift wins","","","","","","",""],
+  },
+  "pro-caruana-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nge7_O-O_a6_Ba4:h6": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez-Opening"],
+    watch: ["","","","","","","","","","…h6?! — a slow, weakening move that ignores the centre.","d4! — striking the centre at once while Black dawdles, opening lines for the better-placed pieces.","","","","White’s central break leaves him clearly better — +0.9.","","",""],
+    learn: ["","","","","","","","","","","d4 — strike the centre","","","","","","",""],
+  },
+  "pro-caruana-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nge7_O-O_a6_Ba4_b5_Bb3_Ng6_c3:Bc5": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez-Opening"],
+    watch: ["","","","","","","","","","","","","","…Bc5?! — the natural-looking development walks into a central break.","d4! — the pawn strikes, and after the trades White wins material and the centre.","","","","White emerges a pawn up with the dominant centre — +1.1.","","",""],
+    learn: ["","","","","","","","","","","","","","","d4 — break and win material","","","","","","",""],
+  },
+  "pro-caruana-italian:e4_e5_Nf3_Nc6_Bc4_Bc5_c3:h6": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Italian-Game"],
+    watch: ["","","","","","","","…h6?! — a slow move in a position that demands development.","b4! — gaining space and material; the bishop is hit and White rolls the queenside.","","","","After b5 and Bxd5 White is a clean pawn up with a big initiative — +1.7.","","",""],
+    learn: ["","","","","","","","","b4 — gain space and a pawn","","","","","","",""],
+  },
+  "pro-caruana-italian:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d3_d6_O-O_Bg4_h3:h5": {
+    sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Italian-Game"],
+    watch: ["","","","","","","","","","","","","","…h5?? — trying to hold the pin, but it collapses tactically.","hxg4! — taking the bishop; after …hxg4 Ng5 White crashes through on f7.","","","","Ng5 and Nxf7 win decisive material — the engine reads +2.3, three pawns up.","","",""],
+    learn: ["","","","","","","","","","","","","","","hxg4 — take it and crash through","","","","","","",""],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {

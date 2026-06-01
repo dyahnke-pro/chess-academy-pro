@@ -1,0 +1,18 @@
+import fs from 'node:fs';
+const url=(o)=>({'pro-carlsen-open-sicilian':'https://www.chess.com/openings/Sicilian-Defense','pro-carlsen-ruy-lopez':'https://www.chess.com/openings/Ruy-Lopez','pro-carlsen-sicilian':'https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation','pro-carlsen-1e5':'https://www.chess.com/openings/Ruy-Lopez-Berlin-Defense','pro-carlsen-kid':'https://www.chess.com/openings/Kings-Indian-Defense','pro-carlsen-nimzo':'https://www.chess.com/openings/Nimzo-Indian-Defense'}[o]);
+const P={
+ 'pro-carlsen-open-sicilian':[{fen:'rnbqkb1r/1p2pppp/p2p4/8/3NP1n1/2N1B3/PPP2PPP/R2QKB1R w KQkq - 2 7',wrongMove:'Bd2',correctMove:'Bg5',explanation:"When the knight jumps to g4 hitting the bishop on e3, retreating passively to d2 lets Black off the hook. Play Bg5! — the bishop stays active, pins nothing but harasses Black, and keeps White's initiative rolling in the Open Sicilian.",shortNarration:'Meet ...Ng4 with Bg5, not passive Bd2.',concept:'pos-initiative'}],
+ 'pro-carlsen-ruy-lopez':[{fen:'r1bqkbnr/1pp2ppp/p1p5/4p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5',wrongMove:'Nxe5',correctMove:'O-O',explanation:"After Bxc6 dxc6, grabbing the e5-pawn with Nxe5 walks straight into ...Qd4!, forking the knight on e5 and the pawn on e4. Black regains the pawn with a fine game. Just castle and keep the small, safe structural edge.",shortNarration:"Don't take e5 — ...Qd4 forks. Castle.",concept:'tac-trap'}],
+ 'pro-carlsen-sicilian':[{fen:'rnbqkb1r/1p2pppp/p2p1n2/6B1/3NP3/2N5/PPP2PPP/R2QKB1R b KQkq - 1 6',wrongMove:'Nxe4',correctMove:'e6',explanation:"Against the Bg5 Najdorf, never snatch the e4-pawn — after ...Nxe4 White plays Bxd8, and ...Nxc3 Bxc7 leaves White a clean piece up. Play the solid ...e6, the main line that keeps everything sound.",shortNarration:'Never ...Nxe4 — Bxd8 wins the queen.',concept:'tac-trap'}],
+ 'pro-carlsen-1e5':[{fen:'r1bqkb1r/pppp1ppp/2n5/1B2p3/3Pn3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 5',wrongMove:'Nf6',correctMove:'Nd6',explanation:"In the Open Berlin, after d4 don't retreat the knight to f6 — White answers dxe5 with a big, free centre. The whole point of the Berlin is ...Nd6!, hitting the bishop on b5 and keeping the balance into the famous endgame.",shortNarration:'...Nd6, not ...Nf6 — hit the bishop.',concept:'pos-development'}],
+ 'pro-carlsen-kid':[{fen:'rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 1 7',wrongMove:'Nxe4',correctMove:'Nc6',explanation:"In the Classical King's Indian, never grab the e4-pawn — ...Nxe4 simply drops a piece to Nxe4. Develop with ...Nc6, heading for the thematic ...e5 tension and the ...f5 kingside storm.",shortNarration:'Never ...Nxe4 — it just drops a piece.',concept:'pos-development'}],
+ 'pro-carlsen-nimzo':[{fen:'rnbq1rk1/pppp1ppp/4pn2/8/1bPPP3/2N5/PPQ2PPP/R1B1KBNR b KQ - 0 5',wrongMove:'Nxe4',correctMove:'d5',explanation:"In this sharp Nimzo line with an early e4, grabbing the pawn with ...Nxe4 loses material to Nxe4. Strike the centre the principled way with ...d5, challenging White's broad pawn front head-on.",shortNarration:'...d5, not ...Nxe4 — keep the material.',concept:'pos-center'}],
+};
+const cm=JSON.parse(fs.readFileSync('src/data/common-mistakes.json','utf8'));
+let n=0;
+for(const [id,arr] of Object.entries(P)){
+  cm[id]=arr.map(e=>({fen:e.fen,wrongMove:e.wrongMove,correctMove:e.correctMove,explanation:e.explanation,shortNarration:e.shortNarration,sources:[`concept:${e.concept}`,url(id)]}));
+  n+=arr.length;
+}
+fs.writeFileSync('src/data/common-mistakes.json',JSON.stringify(cm,null,2)+'\n');
+console.log('pitfalls +'+n+' across '+Object.keys(P).length+' openings');

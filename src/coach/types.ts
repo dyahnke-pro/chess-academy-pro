@@ -190,6 +190,20 @@ export interface LiveState {
    *  moments instead of fabricating game citations. Quiet when no
    *  curated games are registered for the opening. */
   modelGames?: LiveModelGameContext;
+  /** Pro player game references for the current opening, drawn from
+   *  `src/data/pro-game-references.json` (the coach's breadth layer of
+   *  REAL pro games). Populated by `coachService.ask` when an opening
+   *  is recognized AND we have reference games for it. Scoped to a
+   *  single pro when `proOpeningId` is set; otherwise spans every pro
+   *  who plays the opening. Quiet when no references exist. (David
+   *  2026-06-01.) */
+  playerGames?: LivePlayerGamesContext;
+  /** When the surface is a SPECIFIC pro opening (e.g. the
+   *  /openings/pro/... detail page or a pro walkthrough), the pro
+   *  opening id (e.g. "pro-naroditsky-caro-kann"). Scopes player-game
+   *  references to that one pro instead of every pro who plays the
+   *  line. Optional — base-openingId matching covers the rest. */
+  proOpeningId?: string;
   /** Ground-truth SAN list for surfaces analyzing a SPECIFIC played
    *  game (game review). These are the moves actually played — chess.js-
    *  validated, real, legal — so the master-play claim validator treats
@@ -264,6 +278,40 @@ export interface LiveModelGameContext {
       annotation: string;
       concept: string;
     }>;
+  }>;
+}
+
+/** Pro player game references for the current opening, drawn from
+ *  `src/data/pro-game-references.json` via Dexie. The BREADTH layer
+ *  alongside the hand-narrated `modelGames`: many of a pro's REAL
+ *  games per variation (full move list, opponent + rating + result +
+ *  source), so the coach can say "Naroditsky beat a 3176 in this exact
+ *  line" and walk the actual moves during teaching + walkthroughs.
+ *  See `src/coach/sources/playerGames.ts`. (David 2026-06-01.) */
+export interface LivePlayerGamesContext {
+  /** App player id whose games these are (e.g. "naroditsky"), when scoped. */
+  playerId: string | null;
+  /** Base opening id resolved for the lookup (e.g. "caro-kann"). */
+  openingId: string;
+  openingName: string;
+  /** Total reference games available for this opening (full set in Dexie). */
+  totalAvailable: number;
+  games: Array<{
+    id: string;
+    /** Display name of the pro who played this game. */
+    player: string;
+    studentSide: 'white' | 'black';
+    opponent: string;
+    opponentRating: number | null;
+    result: string;
+    date: string | null;
+    source: 'chess.com' | 'otb' | 'lichess';
+    variationLabel: string;
+    /** First ~40 plies of clean SAN — enough to walk the line in a
+     *  lesson. The full game lives in Dexie / the lookup_player_games
+     *  tool if the brain needs the whole thing. */
+    pgnPrefix: string;
+    plyCount: number;
   }>;
 }
 

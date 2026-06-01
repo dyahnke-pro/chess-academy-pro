@@ -177,6 +177,7 @@ const GATE_TESTS = [
   'src/data/proRepLessonAccuracy.test.ts',     // G9.3 — pro-rep lesson narration is board-accurate + reaches a middlegame
   'src/data/proRepPlanAccuracy.test.ts',       // pro-rep middlegame-plan narration is board-accurate (hyphenated + bishop-pair claims)
   'src/data/proRepNarrationVoice.test.ts',     // pro-rep lesson spoken voice: no move-number prefixes, sayShort <=8 words (David 2026-05-31)
+  'src/data/proRepLessonArrows.test.ts',       // pro-rep lesson arrows: non-pawn origin + valid piece geometry (David 2026-06-01 "gate the arrows!")
   'src/data/variationMiddlegameDepth.test.ts',
   'src/data/openingManifests.test.ts',
   'src/data/modelGames.test.ts',

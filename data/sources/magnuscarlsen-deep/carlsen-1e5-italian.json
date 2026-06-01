@@ -1,0 +1,70 @@
+{
+  "player": "magnuscarlsen",
+  "openingId": "carlsen-1e5",
+  "variationKey": "italian",
+  "variation": {
+    "label": "vs Italian Bc4",
+    "prefix": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "Bc4"
+    ]
+  },
+  "generatedAt": "2026-06-01T00:19:03.849Z",
+  "totalGames": 252,
+  "wins": 115,
+  "draws": 82,
+  "losses": 55,
+  "openingTerminusPly": 16,
+  "openingTerminusMove": 8,
+  "spineMoves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Nf6",
+    "d3",
+    "Be7",
+    "O-O",
+    "O-O",
+    "Re1",
+    "d6",
+    "a4",
+    "Na5",
+    "Ba2",
+    "c5"
+  ],
+  "gamesAtTerminus": 4,
+  "endgameTypeBreakdown": {
+    "middlegame (Q + pieces)": 1,
+    "R + minor + P": 2,
+    "R+P": 1
+  },
+  "topModelGames": [
+    {
+      "url": "https://www.chess.com/game/live/64193614163",
+      "opponent": "GMWSO",
+      "opponentRating": 3050,
+      "studentRating": 3212,
+      "date": "2022-12-07",
+      "timeClass": "bullet",
+      "outcome": "win",
+      "plyCount": 72,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2022.12.07\"]\n[Round \"-\"]\n[White \"GMWSO\"]\n[Black \"MagnusCarlsen\"]\n[Result \"0-1\"]\n[CurrentPosition \"5rk1/2r2qp1/p1nR3p/P3p3/2N1P3/2P4n/QP3PP1/4R1K1 w - -\"]\n[Timezone \"UTC\"]\n[ECO \"C55\"]\n[ECOUrl \"https://www.chess.com/openings/Italian-Game-Two-Knights-Modern-Bishops-Opening...8.Ba2-c5-9.c3-Nc6-10.Na3\"]\n[UTCDate \"2022.12.07\"]\n[UTCTime \"23:10:29\"]\n[WhiteElo \"3050\"]\n[BlackElo \"3212\"]\n[TimeControl \"60+1\"]\n[Termination \"MagnusCarlsen won by resignation\"]\n[StartTime \"23:10:29\"]\n[EndDate \"2022.12.07\"]\n[EndTime \"23:13:37\"]\n[Link \"https://www.chess.com/game/live/64193614163\"]\n\n1. e4 {[%clk 0:01:01]} 1... e5 {[%clk 0:01:01]} 2. Nf3 {[%clk 0:01:00.3]} 2... Nc6 {[%clk 0:01:01.3]} 3. Bc4 {[%clk 0:01:00.7]} 3... Nf6 {[%clk 0:01:01.5]} 4. d3 {[%clk 0:01:01.3]} 4... Be7 {[%clk 0:01:01.6]} 5. O-O {[%clk 0:01:01.5]} 5... O-O {[%clk 0:01:02.4]} 6. Re1 {[%clk 0:01:02]} 6... d6 {[%clk 0:01:02.6]} 7. a4 {[%clk 0:01:01.8]} 7... Na5 {[%clk 0:01:02.3]} 8. Ba2 {[%clk 0:01:02.2]} 8... c5 {[%clk 0:01:02.9]} 9. Na3 {[%clk 0:01:01.2]} 9... Nc6 {[%clk 0:01:02.6]} 10. c3 {[%clk 0:01:00.9]} 10... a6 {[%clk 0:01:03.2]} 11. h3 {[%clk 0:01:00.2]} 11... h6 {[%clk 0:01:03.6]} 12. Nc2 {[%clk 0:00:57.9]} 12... Be6 {[%clk 0:01:04]} 13. Ne3 {[%clk 0:00:56.2]} 13... Bxa2 {[%clk 0:01:03.5]} 14. Rxa2 {[%clk 0:00:57.1]} 14... d5 {[%clk 0:01:04]} 15. exd5 {[%clk 0:00:57.2]} 15... Nxd5 {[%clk 0:01:04.9]} 16. Nc4 {[%clk 0:00:55.1]} 16... f6 {[%clk 0:01:04.4]} 17. Qb3 {[%clk 0:00:54.9]} 17... Rf7 {[%clk 0:00:55.9]} 18. Qxb7 {[%clk 0:00:50.9]} 18... Qc8 {[%clk 0:00:54.4]} 19. Qb3 {[%clk 0:00:47.1]} 19... Rb8 {[%clk 0:00:53.5]} 20. Qc2 {[%clk 0:00:46.2]} 20... Bf8 {[%clk 0:00:54]} 21. Ra1 {[%clk 0:00:44.4]} 21... Qe6 {[%clk 0:00:51.8]} 22. Bd2 {[%clk 0:00:42.8]} 22... Rd7 {[%clk 0:00:52.1]} 23. Rad1 {[%clk 0:00:40.5]} 23... Qf7 {[%clk 0:00:52.7]} 24. Bc1 {[%clk 0:00:35.8]} 24... Rbd8 {[%clk 0:00:52.5]} 25. a5 {[%clk 0:00:34.5]} 25... Rb8 {[%clk 0:00:51.2]} 26. Qa4 {[%clk 0:00:33.9]} 26... Rc7 {[%clk 0:00:50.5]} 27. Nfd2 {[%clk 0:00:33.3]} 27... Rb5 {[%clk 0:00:48]} 28. Ne4 {[%clk 0:00:32]} 28... Qe6 {[%clk 0:00:47.7]} 29. Ned2 {[%clk 0:00:28.1]} 29... Qf7 {[%clk 0:00:46.1]} 30. Qa2 {[%clk 0:00:26.1]} 30... Rb8 {[%clk 0:00:42.4]} 31. Ne4 {[%clk 0:00:25.6]} 31... Rd8 {[%clk 0:00:40]} 32. Be3 {[%clk 0:00:23]} 32... f5 {[%clk 0:00:35.8]} 33. Bxc5 {[%clk 0:00:12.2]} 33... fxe4 {[%clk 0:00:35.9]} 34. Bxf8 {[%clk 0:00:12.1]} 34... Rxf8 {[%clk 0:00:36.2]} 35. dxe4 {[%clk 0:00:12.6]} 35... Nf4 {[%clk 0:00:26.2]} 36. Rd6 {[%clk 0:00:06.9]} 36... Nxh3+ {[%clk 0:00:22.7]} 0-1\n"
+    },
+    {
+      "url": "otb:2016.06.11:1911",
+      "opponent": "KramnikV",
+      "opponentRating": 2812,
+      "studentRating": 2855,
+      "date": "2016-06-11",
+      "timeClass": "classical",
+      "outcome": "win",
+      "plyCount": 110,
+      "pgn": "[Event \"GCT Blitz Paris 2016\"]\n[Site \"Paris FRA\"]\n[Date \"2016.06.11\"]\n[Round \"5.3\"]\n[White \"Kramnik,V\"]\n[Black \"Carlsen,M\"]\n[Result \"0-1\"]\n[WhiteElo \"2812\"]\n[BlackElo \"2855\"]\n[ECO \"C55\"]\n\n1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6 4.d3 Be7 5.O-O O-O 6.Re1 d6 7.a4 Na5 8.Ba2 c5\n9.Nbd2 Nc6 10.c3 Be6 11.Bxe6 fxe6 12.b4 cxb4 13.cxb4 Nxb4 14.Qb3 d5 15.Nxe5 Rc8\n16.Rb1 Nc2 17.Rf1 Nd4 18.Qd1 Qc7 19.Ndf3 dxe4 20.dxe4 Nxf3+ 21.Nxf3 Nxe4\n22.Qe2 Qc4 23.Qxc4 Rxc4 24.Rxb7 Bc5 25.Bb2 Nf6 26.Ng5 Re8 27.a5 h6 28.Nf7 Re7\n29.Rxe7 Bxe7 30.Ne5 Rc2 31.Bd4 Bc5 32.Nc6 a6 33.Ra1 Bd6 34.Bxf6 Rxc6 35.Bd4 Bc7\n36.g3 Kf7 37.Kg2 h5 38.Kf3 e5 39.Be3 Ke6 40.Ra4 Kd5 41.g4 g6 42.gxh5 gxh5\n43.Rh4 Rf6+ 44.Ke2 Rf5 45.Bb6 Bd6 46.f3 Be7 47.Ra4 Rg5 48.Kf1 Rg6 49.Ra2 Rc6\n50.Rd2+ Ke6 51.Kg2 Rc3 52.Re2 Kf5 53.Re4 Rc2+ 54.Kh3 Bg5 55.Be3 Rc3  0-1"
+    }
+  ]
+}

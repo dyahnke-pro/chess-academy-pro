@@ -342,8 +342,6 @@ const OPENINGS = {
     maxDepth: 80,
   },
   // ===== Aman Hambleton (chessbrah) — 2026-06-01 build =====
-  // His crown jewel: Sicilian ...e6 (Kan/Taimanov), 1231g 75.2% — most-played
-  // line in the whole 35k corpus by 2.5x. Public Lichess study of these games.
   'aman-sicilian-kan': {
     name: 'Sicilian Defense: Kan / Taimanov (...e6)',
     color: 'black',
@@ -351,7 +349,6 @@ const OPENINGS = {
     minPrefix: ['e4', 'c5', 'Nf3', 'e6'],
     maxDepth: 80,
   },
-  // #2 black weapon: Nimzo-Indian (481g 78.4%) — Bogo ...Bb4+ folds in (201g).
   'aman-nimzo-indian': {
     name: 'Nimzo-Indian Defense',
     color: 'black',
@@ -359,7 +356,6 @@ const OPENINGS = {
     minPrefix: ['d4', 'Nf6', 'c4', 'e6'],
     maxDepth: 80,
   },
-  // Solid black backup: Caro-Kann (~380g ~75%).
   'aman-caro-kann': {
     name: 'Caro-Kann Defense',
     color: 'black',
@@ -367,7 +363,6 @@ const OPENINGS = {
     minPrefix: ['e4', 'c6'],
     maxDepth: 80,
   },
-  // Dominant white system: Réti / KIA (178 ECO + 1000s of prefix games).
   'aman-reti': {
     name: "Réti / King's Indian Attack",
     color: 'white',
@@ -375,8 +370,6 @@ const OPENINGS = {
     minPrefix: ['Nf3'],
     maxDepth: 80,
   },
-  // He's a universal player — also a full 1.e4 repertoire as White.
-  // Ruy Lopez (e4 e5 Nf3 Nc6 Bb5) — 539g his most-played white e4 line.
   'aman-ruy-lopez': {
     name: 'Ruy Lopez',
     color: 'white',
@@ -384,7 +377,6 @@ const OPENINGS = {
     minPrefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5'],
     maxDepth: 80,
   },
-  // Open Sicilian (e4 c5 Nf3 d6 d4) — vs Najdorf/Scheveningen, 422g.
   'aman-open-sicilian': {
     name: 'Open Sicilian (vs …d6)',
     color: 'white',
@@ -392,7 +384,6 @@ const OPENINGS = {
     minPrefix: ['e4', 'c5', 'Nf3', 'd6', 'd4'],
     maxDepth: 80,
   },
-  // Rossolimo/Moscow (e4 c5 Nf3 Nc6 Bb5) — 214g anti-Sicilian weapon.
   'aman-rossolimo': {
     name: 'Rossolimo / Moscow (Anti-Sicilian)',
     color: 'white',
@@ -400,7 +391,6 @@ const OPENINGS = {
     minPrefix: ['e4', 'c5', 'Nf3', 'Nc6', 'Bb5'],
     maxDepth: 80,
   },
-  // French as White (e4 e6 d4 d5 Nc3) — 118+111g, Winawer/Classical.
   'aman-french-white': {
     name: 'French Defense (White)',
     color: 'white',
@@ -408,7 +398,6 @@ const OPENINGS = {
     minPrefix: ['e4', 'e6', 'd4', 'd5', 'Nc3'],
     maxDepth: 80,
   },
-  // Anti-Caro Two Knights as White (e4 c6 Nc3) — 124+94g.
   'aman-anti-caro': {
     name: 'Caro-Kann Two Knights (White)',
     color: 'white',
@@ -416,6 +405,77 @@ const OPENINGS = {
     minPrefix: ['e4', 'c6', 'Nc3'],
     maxDepth: 80,
   },
+  // ── Magnus Carlsen (data-discovery candidates) ──
+  'carlsen-open-sicilian': {
+    name: 'Open Sicilian (White)',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'c5', 'Nf3'],
+    maxDepth: 80,
+  },
+  'carlsen-d4-c4': {
+    name: 'Queen\'s Pawn / Catalan (White)',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['d4', 'Nf6', 'c4'],
+    maxDepth: 80,
+  },
+  'carlsen-e4e5-white': {
+    name: 'Open Games / Italian (White)',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'e5', 'Nf3'],
+    maxDepth: 80,
+  },
+  'carlsen-1e5-black': {
+    name: '1...e5 / Berlin (Black)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['e4', 'e5'],
+    maxDepth: 80,
+  },
+  'carlsen-sicilian-black': {
+    name: 'Sicilian Defense (Black)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['e4', 'c5'],
+    maxDepth: 80,
+  },
+  'carlsen-nimzo-qgd-black': {
+    name: 'Nimzo / QGD (Black)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['d4', 'Nf6', 'c4', 'e6'],
+    maxDepth: 80,
+  },
+  'carlsen-kid-black': {
+    name: "King's Indian / Grünfeld (Black)",
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['d4', 'Nf6', 'c4', 'g6'],
+    maxDepth: 80,
+  },
+  'carlsen-french-black': {
+    name: 'French Defense (Black)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['e4', 'e6'],
+    maxDepth: 80,
+  },
+  // ===== SAMAY RAINA-SPECIFIC OPENINGS (classical 1.e4 / 1…e5) =====
+  'samay-open-sicilian': { name: 'Open Sicilian (White)', color: 'white', studentMoves: [], minPrefix: ['e4', 'c5', 'Nf3'], maxDepth: 80 },
+  'samay-ruy': { name: 'Ruy Lopez (White)', color: 'white', studentMoves: [], minPrefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5'], maxDepth: 80 },
+  'samay-italian': { name: 'Italian Game (White)', color: 'white', studentMoves: [], minPrefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4'], maxDepth: 80 },
+  'samay-french-white': { name: 'French Defense (White)', color: 'white', studentMoves: [], minPrefix: ['e4', 'e6', 'd4', 'd5', 'Nc3'], maxDepth: 80 },
+  'samay-caro-white': { name: 'Caro-Kann (White)', color: 'white', studentMoves: [], minPrefix: ['e4', 'c6', 'd4', 'd5', 'Nc3'], maxDepth: 80 },
+  'samay-open-e5': { name: 'Open Games / …e5 (Black)', color: 'black', studentMoves: [], minPrefix: ['e4', 'e5'], maxDepth: 80 },
+  'samay-sicilian-black': { name: 'Sicilian Defense (Black)', color: 'black', studentMoves: [], minPrefix: ['e4', 'c5'], maxDepth: 80 },
+  'samay-scandi-black': { name: 'Scandinavian Defense (Black)', color: 'black', studentMoves: [], minPrefix: ['e4', 'd5'], maxDepth: 80 },
+  // ===== CARUANA round 2 (2026-06-01): +4 to reach 8 openings =====
+  'caruana-italian': { name: 'Italian Game (Caruana, White)', color: 'white', studentMoves: [], minPrefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4'], maxDepth: 80 },
+  'caruana-french': { name: 'French Defense (Caruana, Black)', color: 'black', studentMoves: [], minPrefix: ['e4', 'e6'], maxDepth: 80 },
+  'caruana-caro-kann': { name: 'Caro-Kann (Caruana, Black)', color: 'black', studentMoves: [], minPrefix: ['e4', 'c6'], maxDepth: 80 },
+  'caruana-kid': { name: "King's Indian Defense (Caruana, Black)", color: 'black', studentMoves: [], minPrefix: ['d4', 'Nf6', 'c4', 'g6'], maxDepth: 80 },
 };
 
 const cfg = OPENINGS[OPENING_ID];
