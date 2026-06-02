@@ -121,15 +121,20 @@ async function gotoSurface(page, path, mount) {
  *  `before` snapshot. Without this the next question reads the stale
  *  ack ("Board's set… your move") as if it were the answer (the pass-1
  *  false failures). Bounded so a silent move never hangs the run. */
-async function drainAck(page, beforeCount, maxMs = 16000) {
+async function drainAck(page, beforeCount, growMs = 55000) {
   const t0 = Date.now();
-  while (Date.now() - t0 < maxMs) {
+  let grew = false;
+  while (Date.now() - t0 < growMs) {
     const c = await page.locator('[data-testid="chat-message-assistant"]').count();
-    if (c > beforeCount) break;
+    if (c > beforeCount) { grew = true; break; }
     await page.waitForTimeout(500);
   }
+  if (!grew) return; // silent intent — nothing to drain
+  // The ack is an LLM-generated reply that streams in; stabilize its
+  // text so it is FULLY landed before the next askLLM snapshots `before`.
   let prev = -1, stable = 0;
-  while (Date.now() - t0 < maxMs) {
+  const s0 = Date.now();
+  while (Date.now() - s0 < 14000) {
     await page.waitForTimeout(600);
     const a = await snap(page);
     const cur = a[a.length - 1] || '';
@@ -142,7 +147,7 @@ async function setBoard(page, fen) {
   const input = page.locator('[data-testid="chat-text-input"]');
   await input.click(); await input.fill(`set the board to ${fen}`);
   await page.locator('[data-testid="chat-send-btn"]').click();
-  await drainAck(page, beforeCount);
+  await drainAck(page, beforeCount, 55000); // set-board ack is a guaranteed LLM reply (can be slow)
   return scrapeFen(page);
 }
 async function playMove(page, san) {
@@ -152,7 +157,7 @@ async function playMove(page, san) {
   await input.click(); await input.fill(`play ${san}`);
   await page.locator('[data-testid="chat-send-btn"]').click();
   for (let i = 0; i < 22; i++) { await page.waitForTimeout(800); const now = await scrapeFen(page); if (now && now !== before) break; }
-  await drainAck(page, beforeCount);
+  await drainAck(page, beforeCount, 22000); // coach reply narration may lag the move
   return scrapeFen(page);
 }
 async function clearIDB(page) {
