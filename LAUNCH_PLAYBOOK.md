@@ -506,5 +506,94 @@ for real.
 
 ---
 
+## 5. Store listing copy
+
+Tagline / subtitle (use on screenshots + top of both listings):
+
+> **Learn, play, identify your weaknesses, drill them shut.**
+
+### 5a. Google Play — long description
+
+Play indexes the long description for search, so it's keyword-rich
+but written to read like a human. No named pros — the content moat
+is the data-built masterclasses + the voice coach, not borrowed
+names.
+
+---
+
+**Chess Academy Pro — your AI chess coach**
+
+Learn chess the way a grandmaster would teach you: out loud, move by
+move, with the board lighting up exactly where to look. Chess Academy
+Pro is an AI-powered chess coach that talks you through every opening,
+tactic, and endgame — pointing arrows at the threats, naming the plan,
+and adapting to your level as you improve.
+
+**One connected training loop — not a pile of features**
+
+Most chess apps hand you puzzles in one corner and openings in another
+and leave you to figure out what to study. Chess Academy Pro closes the
+loop. Every game you play is analyzed, your mistakes are sorted into the
+patterns you keep missing, and those weaknesses flow straight into your
+next puzzles, openings, and lessons. Spaced repetition brings the hard
+ones back until they stick, the coach teaches the idea behind each one,
+and your progress feeds the next session. **Learn, play, identify your
+weaknesses, drill them shut** — a complete training loop that always
+knows what you should work on next.
+
+**Openings that teach, not memorize**
+
+Every opening is a guided masterclass. Watch the coach narrate the main
+line, then Learn it move by move, Practice it in silence, and Play it
+against the engine — all on one screen. The lines aren't pulled from a
+dusty book; they're built from millions of real master games, so you're
+studying what the strongest players actually play. Lead-the-eye arrows
+and highlights move your attention to the right square as the coach
+speaks, so you understand the idea instead of just copying moves.
+
+**Tactics and puzzles that stick**
+
+Train with thousands of hand-curated tactics puzzles — forks, pins,
+skewers, sacrifices, mating nets — backed by spaced repetition so the
+patterns you miss come back until they're automatic. The difficulty
+adapts to your rating automatically, keeping every puzzle in the sweet
+spot between too easy and too hard.
+
+**Real analysis, real feedback**
+
+A full-strength Stockfish engine reviews your games, finds your
+mistakes, and the coach explains *why* a move was wrong and what to play
+instead — in plain language, not engine jargon. Those mistakes don't
+just disappear — they become the weaknesses your training loop targets
+next.
+
+**Endgames, middlegame plans, and more**
+
+Master the endgames that decide real games, learn the middlegame plans
+that flow naturally out of your openings, and study the traps and
+tactical shots hiding in every line — each one taught with the same
+voice-guided, arrow-led clarity.
+
+**Built for every level**
+
+From your first opening to your first 2000, the coach meets you where
+you are and pushes you forward. There's even a dedicated kids mode with
+friendly, encouraging lessons designed for young players.
+
+Chess Academy Pro is the coach in your pocket that never gets tired of
+explaining — and never loses track of what you need to work on. Install
+it, pick an opening, and start improving today.
+
+---
+
+**TODO before paste:** verify the specific claims against the codebase
+(puzzle count, opening count, "to your first 2000") so a store reviewer
+can't flag an unverifiable specific. App Store (iOS) title/subtitle/
+keyword-field variants still to draft — the iOS body isn't indexed, so
+that copy optimizes differently (front-load the hook, pack the 100-char
+keyword field).
+
+---
+
 *End of playbook v1. Update as you learn. Commit changes
 incrementally so future-you can see what worked and what didn't.*
