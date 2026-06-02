@@ -716,6 +716,9 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   let currentEnvelope: AssembledEnvelope = envelope;
   const useStreaming = !!options.onChunk && typeof provider.callStreaming === 'function';
   let lastResponse: ProviderResponse = { text: '', toolCalls: [] };
+  // Hoisted so the post-loop collapse-retry can re-call the provider with
+  // the same grounding/task/maxTokens (see the collapse guard below).
+  let lastProviderCallOptions: Parameters<typeof provider.call>[1];
 
   for (let trip = 1; trip <= maxRoundTrips; trip++) {
     // Refresh liveFen between trips ONLY (trip > 1). Trip 1 uses the
@@ -802,6 +805,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             grounding: autoGrounding,
           }
         : undefined;
+    lastProviderCallOptions = providerCallOptions;
     lastResponse = useStreaming && options.onChunk && provider.callStreaming
       ? await provider.callStreaming(currentEnvelope, options.onChunk, providerCallOptions)
       : await provider.call(currentEnvelope, providerCallOptions);
@@ -1082,6 +1086,37 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   // is lowercase, "White…" → "h" is lowercase, "OK,…" → no lower after
   // the cap, "I think" → space after the letter). The audit fires whenever
   // it trips so prod telemetry can pin the streaming source for a real fix.
+  // ── Collapse guard ────────────────────────────────────────────────
+  // Production audit (2026-06-02): tool-use turns on the STREAMING path
+  // intermittently (~25-30%) return an empty or single-char ("C") final
+  // text — the post-tool synthesis is lost at the stream's content-block
+  // boundary, so the user gets nothing. We can't watch the keyed stream
+  // from here, but we CAN detect the collapse (tools dispatched yet the
+  // answer is empty/trivial) and recover it with ONE non-streaming retry
+  // on the same (post-tool) envelope — the non-streaming path doesn't hit
+  // the streaming boundary bug, so it returns the real synthesis. Bounded
+  // to a single extra call, fires only on the rare collapse.
+  const looksCollapsed = (t: string): boolean => t.replace(/[^A-Za-z0-9]/g, '').length <= 1;
+  if (dispatchedIds.length > 0 && useStreaming && looksCollapsed(lastResponse.text)) {
+    void logAppAudit({
+      kind: 'coach-brain-empty-collapse-retry',
+      category: 'subsystem',
+      source: 'coachService.ask',
+      summary: `tool-turn answer collapsed ("${lastResponse.text.slice(0, 4)}") on ${input.surface}; retrying non-streaming`,
+      details: JSON.stringify({ surface: input.surface, provider: provider.name, tools: dispatchedIds.length, dispatchedToolNames }),
+    });
+    try {
+      const recovered = await provider.call(currentEnvelope, lastProviderCallOptions);
+      if (recovered.text && !looksCollapsed(recovered.text)) {
+        // Stream the recovered text to any listener so the bubble fills.
+        if (options.onChunk) options.onChunk(stripLeadingArtifact(recovered.text));
+        lastResponse = { ...recovered };
+      }
+    } catch {
+      // Recovery is best-effort; fall through with whatever we have.
+    }
+  }
+
   const rawText = lastResponse.text;
   const deartifacted = stripLeadingArtifact(rawText);
   if (deartifacted !== rawText) {
