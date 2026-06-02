@@ -24,7 +24,7 @@ const T = 70_000;
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const OUT_DIR = `audit-reports/coach-byhand-${stamp}`;
 const PMAP = { wP: 'P', wN: 'N', wB: 'B', wR: 'R', wQ: 'Q', wK: 'K', bP: 'p', bN: 'n', bB: 'b', bR: 'r', bQ: 'q', bK: 'k' };
-const ACK_SIG = /board'?s?\s+(?:is\s+)?set|you'?re\s+playing\s+(?:white|black)|position is set|taking too long|try again in a moment/i;
+const ACK_SIG = /board'?s?\s+(?:is\s+)?set|position\s+set|you'?re\s+playing\s+(?:white|black)|position is set|taking too long|try again in a moment|drill lines|lines just loaded|what'?s your next test|reach the end of the walkthrough/i;
 const log = (s) => console.log(s);
 const transcript = [];
 
@@ -137,12 +137,15 @@ async function runRound(page, round) {
     });
   }
 
-  // LEARN — two DIFFERENT openings back-to-back (tests context-bleed + no-deflect fixes)
-  await guard('teach', async () => {
-    await gotoS(page, '/coach/teach', 'coach-teach-page');
+  // LEARN — two DIFFERENT openings back-to-back on /coach/chat (tests
+  // context-bleed + no-deflect fixes). On /coach/chat the brain answers
+  // directly; /coach/teach intercepts opening NAMES into walkthrough
+  // loads (intended there), which confounds a question-answer test.
+  await guard('learn', async () => {
+    await gotoS(page, '/coach/chat', 'coach-chat-page');
     const o1 = pick(OPENINGS, round), o2 = pick(OPENINGS, round + 2);
-    rec(round, 'teach', 'opening-A', `What are the key strategic ideas in ${o1}?`, await ask(page, `What are the key strategic ideas in ${o1}?`), null, `judge accuracy for ${o1}`);
-    rec(round, 'teach', 'opening-B-nobleed', `Now switch — what about ${o2}? Key ideas?`, await ask(page, `Now switch — what about ${o2}? Key ideas?`), null, `must answer ${o2}, NOT bleed ${o1}, NOT deflect`);
+    rec(round, 'learn', 'opening-A', `What are the key strategic ideas in ${o1}?`, await ask(page, `What are the key strategic ideas in ${o1}?`), null, `judge accuracy for ${o1}`);
+    rec(round, 'learn', 'opening-B-nobleed', `Now switch — what are the key ideas in ${o2}?`, await ask(page, `Now switch — what are the key ideas in ${o2}?`), null, `must answer ${o2}, NOT bleed ${o1}, NOT deflect`);
   });
 
   // DASHBOARD — opening resolution
