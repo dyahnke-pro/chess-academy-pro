@@ -298,7 +298,11 @@ const FAMILIES = [
 
 async function prepareSurface(page, family, variant, onPlay) {
   if (family.surface === 'chat') { await gotoSurface(page, '/coach/chat', 'coach-chat-page'); return false; }
-  if (!onPlay) { await gotoSurface(page, '/coach/play', 'coach-game-page'); await pickWhite(page); }
+  // setpos ALWAYS gets a FRESH play session: a second consecutive
+  // set_board in the same session leaves the coach reasoning on the
+  // PRIOR position (stale-fen — caught 2026-06-02). A fresh set_board
+  // propagates correctly (proven by the diagnostic).
+  if (family.surface === 'setpos' || !onPlay) { await gotoSurface(page, '/coach/play', 'coach-game-page'); await pickWhite(page); }
   if (family.surface === 'setpos') { await setBoard(page, variant.fen); }
   else if (family.surface === 'game') { await playMove(page, 'e4'); await playMove(page, 'Nf3'); let b = await playMove(page, 'Bc4'); if (!b) await playMove(page, 'Be2'); }
   return true;
