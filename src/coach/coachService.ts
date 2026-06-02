@@ -1087,22 +1087,27 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   // the cap, "I think" → space after the letter). The audit fires whenever
   // it trips so prod telemetry can pin the streaming source for a real fix.
   // ── Collapse guard ────────────────────────────────────────────────
-  // Production audit (2026-06-02): tool-use turns on the STREAMING path
-  // intermittently (~25-30%) return an empty or single-char ("C") final
-  // text — the post-tool synthesis is lost at the stream's content-block
-  // boundary, so the user gets nothing. We can't watch the keyed stream
-  // from here, but we CAN detect the collapse (tools dispatched yet the
-  // answer is empty/trivial) and recover it with ONE non-streaming retry
-  // on the same (post-tool) envelope — the non-streaming path doesn't hit
-  // the streaming boundary bug, so it returns the real synthesis. Bounded
-  // to a single extra call, fires only on the rare collapse.
+  // Production audit (2026-06-02): the STREAMING path intermittently
+  // (~25-30%) returns an empty or single-char ("C") final text — the
+  // synthesis is lost at the stream's content-block boundary, so the user
+  // gets nothing (originally seen on tool questions, but it also hits
+  // plain streamed turns: the cerebellum tools are handled INSIDE
+  // getCoachChatResponse, so coachService often dispatches zero
+  // [[ACTION]] tools and `dispatchedIds` is 0 even when the brain used a
+  // tool — the empty answer is the symptom regardless). We can't watch
+  // the keyed stream from here, but we CAN detect the collapse (a
+  // streamed answer that is empty / <=1 alphanumeric char — never a
+  // legitimate coach reply) and recover it with ONE non-streaming retry
+  // on the same envelope. The non-streaming path doesn't hit the
+  // streaming boundary bug, so it returns the real synthesis. Bounded to
+  // a single extra call; fires only on the rare collapse.
   const looksCollapsed = (t: string): boolean => t.replace(/[^A-Za-z0-9]/g, '').length <= 1;
-  if (dispatchedIds.length > 0 && useStreaming && looksCollapsed(lastResponse.text)) {
+  if (useStreaming && looksCollapsed(lastResponse.text)) {
     void logAppAudit({
       kind: 'coach-brain-empty-collapse-retry',
       category: 'subsystem',
       source: 'coachService.ask',
-      summary: `tool-turn answer collapsed ("${lastResponse.text.slice(0, 4)}") on ${input.surface}; retrying non-streaming`,
+      summary: `streamed answer collapsed ("${lastResponse.text.slice(0, 4)}") on ${input.surface}; retrying non-streaming`,
       details: JSON.stringify({ surface: input.surface, provider: provider.name, tools: dispatchedIds.length, dispatchedToolNames }),
     });
     try {

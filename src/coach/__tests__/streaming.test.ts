@@ -98,6 +98,26 @@ describe('coachService.ask — streaming', () => {
     expect(chunks.join('')).toContain('real synthesized answer'); // recovered text streamed too
   });
 
+  it('recovers a collapsed streamed turn even when NO [[ACTION]] tool was dispatched', async () => {
+    // Cerebellum tools (stockfish_eval, lichess lookups) are handled inside
+    // getCoachChatResponse, so coachService often dispatches zero tools yet
+    // the streamed answer still collapses to empty/"C". The retry must fire
+    // on the collapse regardless of dispatchedIds.
+    const callSpy = vi.fn(
+      async (): Promise<ProviderResponse> => ({ text: 'The Poisoned Pawn queen is not trapped; White plays e5/f5 for the initiative.', toolCalls: [], raw: {} }),
+    );
+    const callStreamingSpy = vi.fn(
+      async (): Promise<ProviderResponse> => ({ text: '', toolCalls: [], raw: {} }), // collapse, no tools
+    );
+    const mockProvider: Provider = { name: 'deepseek', call: callSpy, callStreaming: callStreamingSpy };
+    const answer = await coachService.ask(
+      { surface: 'standalone-chat', ask: 'Poisoned Pawn?', liveState: { surface: 'standalone-chat', currentRoute: '/coach/chat' } },
+      { providerOverride: mockProvider, onChunk: () => {}, maxToolRoundTrips: 1 },
+    );
+    expect(callSpy).toHaveBeenCalledTimes(1); // recovery fired despite 0 tools
+    expect(answer.text).toContain('not trapped');
+  });
+
   it('does NOT retry when a streaming tool-turn returns a real answer', async () => {
     const callSpy = vi.fn();
     const callStreamingSpy = vi.fn(
