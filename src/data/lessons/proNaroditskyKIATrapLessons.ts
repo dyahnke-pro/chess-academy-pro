@@ -137,20 +137,20 @@ const BE7_QGD_PIN: LessonScript = {
 // TRAP 4: 12 games — same Be7 pin vs Hikaru (3121!) in slightly different move order
 const BE7_HIKARU_PIN: LessonScript = {
   openingId: 'pro-naroditsky-kia',
-  title: 'Weapon: Be7 vs Bg5 pin (Hikaru victim, QGD inverted)',
+  title: 'Weapon: Be7 vs Bg5 pin (top-GM victim, QGD inverted)',
   minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
   beats: [
     b({
       id: 'kia-hik-setup', moves: 'Nf3 d5 c4 e6 d4 Nf6 Nc3',
       highlights: [H('c3', SOFT)],
-      say: "QGD reached via the KIA move order. Hikaru himself played the wrong response from here — at this exact position with these exact prior moves. The trap that catches even the world's best blitz player.",
+      say: "QGD reached via the KIA move order. A top GM played the wrong response from here — at this exact position with these exact prior moves. The trap that catches even the world's best blitz player.",
       sayShort: 'Nc3 — QGD ready.',
     }),
     b({
       id: 'kia-hik-blunder', moves: 'Nf3 d5 c4 e6 d4 Nf6 Nc3 Be7',
       highlights: [H('e7', ATK)],
-      say: "...Be7?? — Hikaru's exact move. 12 opponents played this including Hikaru (3121), Hrant_ChessMood (2947), and penguingm1 in three different games. The Bg5 pin response is the trap.",
-      sayShort: '...Be7 — Hikaru\'s mistake.',
+      say: "...Be7?? — a top GM's exact move. 12 opponents played this including a 3121-rated GM, Hrant_ChessMood (2947), and penguingm1 in three different games. The Bg5 pin response is the trap.",
+      sayShort: '...Be7 — A top grandmaster\'s mistake.',
     }),
     b({
       id: 'kia-hik-pin', moves: 'Nf3 d5 c4 e6 d4 Nf6 Nc3 Be7 Bg5',
@@ -161,7 +161,7 @@ const BE7_HIKARU_PIN: LessonScript = {
     b({
       id: 'kia-hik-cash', moves: 'Nf3 d5 c4 e6 d4 Nf6 Nc3 Be7 Bg5 h6 Bxf6 Bxf6 e3',
       highlights: [H('e3', KEY)],
-      say: "...h6 Bxf6 ...Bxf6 e3 — White trades the bishop and consolidates with e3. Black's bishop pair claim is gone (the dark-square bishop traded), the f6-bishop has limited mobility, and White has the classical positional plan: c5 lock + queenside expansion. Hikaru lost this exact way.",
+      say: "...h6 Bxf6 ...Bxf6 e3 — White trades the bishop and consolidates with e3. Black's bishop pair claim is gone (the dark-square bishop traded), the f6-bishop has limited mobility, and White has the classical positional plan: c5 lock + queenside expansion. A top GM lost this exact way.",
       sayShort: 'e3 — consolidate the win.',
     }),
   ],
@@ -205,7 +205,7 @@ const TRAPS: TrapEntry[] = [
   { name: 'O-O lets us crash through with exf6 (Anti-Grünfeld)', lesson: OO_ANTI_GRUNFELD },
   { name: 'd6 + e5 trade hands us the better endgame', lesson: D6_E5_QUEEN_TRADE },
   { name: 'Be7 vs Bg5 pin in QGD-style structure', lesson: BE7_QGD_PIN },
-  { name: 'Be7 vs Bg5 pin (Hikaru victim)', lesson: BE7_HIKARU_PIN },
+  { name: 'Be7 vs Bg5 pin (top-GM victim)', lesson: BE7_HIKARU_PIN },
   { name: 'Nb6 vs c5 cramping (Anti-Alekhine setup)', lesson: NB6_ANTI_ALEKHINE },
 ];
 

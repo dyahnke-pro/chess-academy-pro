@@ -20,14 +20,14 @@ const SRC = [
 
 export const PRO_AMAN_NIMZO_INDIAN_LESSON: LessonScript = {
   openingId: 'pro-aman-nimzo-indian',
-  title: "Aman's Nimzo-Indian — Pin, Pressure, Punch the Centre",
+  title: "This repertoire's Nimzo-Indian — Pin, Pressure, Punch the Centre",
   minutes: 10,
   orientation: 'black',
   kind: 'variation',
   sources: SRC,
   beats: [
     b({ id: 'nf6', moves: 'd4 Nf6', arrows: [A('g8', 'f6')], highlights: [H('e4')],
-      say: "Against the queen's pawn, …Nf6 controls e4 and keeps every Indian setup open. Aman's second-favourite Black weapon — flexible, principled, and rich in ideas.",
+      say: "Against the queen's pawn, …Nf6 controls e4 and keeps every Indian setup open. This repertoire's second-favourite Black weapon — flexible, principled, and rich in ideas.",
       sayShort: '…Nf6 — control e4.' }),
     b({ id: 'e6', moves: 'd4 Nf6 c4 e6', highlights: [H('e6')],
       say: "…e6 opens the diagonal for the dark-squared bishop and prepares the defining move of the whole system. Black isn't building a big centre — Black is preparing to fight for control of it with pieces.",

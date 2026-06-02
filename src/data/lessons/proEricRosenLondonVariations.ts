@@ -44,7 +44,7 @@ const VS_D5: LessonScript = {
       sayShort: 'Bxd6 — trade Black’s good bishop.' }),
     b({ id: 'castle', moves: 'd4 d5 Bf4 Nf6 e3 c5 Nf3 Nc6 Nbd2 cxd4 exd4 Bf5 c3 e6 Be2 Bd6 Bxd6 Qxd6 O-O',
       arrows: [A('f3', 'e5')], highlights: [{ square: 'e5', color: KEY }, { square: 'g1', color: SOFT }],
-      say: "We castle into a comfortable, risk-free middlegame: the c3-d4 wall, the half-open e-file, and the standard plan of Ne5 and a minority push on the queenside. Nothing flashy — just a pleasant edge Rosen converts against very strong opposition.",
+      say: "We castle into a comfortable, risk-free middlegame: the c3-d4 wall, the half-open e-file, and the standard plan of Ne5 and a minority push on the queenside. Nothing flashy — just a pleasant edge this repertoire converts against very strong opposition.",
       sayShort: 'O-O — risk-free edge, aim Ne5.' }),
   ],
 };
@@ -68,7 +68,7 @@ const VS_E6: LessonScript = {
       sayShort: 'Bd3 — battery on h7.' }),
     b({ id: 'plan', moves: 'd4 Nf6 Bf4 e6 e3 d5 Nf3 Bd6 Ne5 O-O Nd2 c5 c3 Nc6 Bd3',
       arrows: [A('d1', 'f3')], highlights: [{ square: 'f7', color: KEY }],
-      say: "The attacking blueprint from here: Qf3 or Qh5 joining the bishop and knight, f4 to lock the outpost, then a kingside pawn storm. Against a passive …e6 setup, Rosen turns the quiet London into a direct assault on f7 and h7.",
+      say: "The attacking blueprint from here: Qf3 or Qh5 joining the bishop and knight, f4 to lock the outpost, then a kingside pawn storm. Against a passive …e6 setup, this repertoire turns the quiet London into a direct assault on f7 and h7.",
       sayShort: 'Plan: f4, queen up, storm the king.' }),
   ],
 };
@@ -92,7 +92,7 @@ const VS_C5: LessonScript = {
       sayShort: 'Nc4 — hit the queen, gain tempo.' }),
     b({ id: 'develop', moves: 'd4 Nf6 Bf4 c5 e3 Qb6 Na3 d6 Nc4 Qc7 Nf3 g6 h3 Bg7 Be2',
       highlights: [{ square: 'c4', color: KEY }, { square: 'd4', color: SOFT }],
-      say: "We finish with Nf3, h3 to deny Black's pieces g4, and Be2. White is fully developed with the better-placed pieces and a rock-solid centre, having calmly defused Black's most aggressive try. Rosen scores heavily from here.",
+      say: "We finish with Nf3, h3 to deny Black's pieces g4, and Be2. White is fully developed with the better-placed pieces and a rock-solid centre, having calmly defused Black's most aggressive try. This repertoire scores heavily from here.",
       sayShort: 'Be2 — defused, better placed.' }),
   ],
 };
@@ -116,7 +116,7 @@ const VS_D6: LessonScript = {
       sayShort: 'Qd2, O-O-O — opposite-side castling.' }),
     b({ id: 'h4', moves: 'd4 Nf6 Bf4 d6 Nc3 g6 e4 Bg7 Qd2 O-O O-O-O c6 h4',
       arrows: [], highlights: [{ square: 'h4', color: KEY }, { square: 'g6', color: KEY }],
-      say: "h4! The storm begins. With opposite castling we throw the h-pawn at Black's fianchetto: h4-h5 will pry open the h-file straight onto the king. Bxh6 and a rook-lift follow. This is the most dangerous weapon in Rosen's London — calm setup, violent finish.",
+      say: "h4! The storm begins. With opposite castling we throw the h-pawn at Black's fianchetto: h4-h5 will pry open the h-file straight onto the king. Bxh6 and a rook-lift follow. This is the most dangerous weapon in this repertoire's London — calm setup, violent finish.",
       sayShort: 'h4 — storm the fianchetto.' }),
   ],
 };

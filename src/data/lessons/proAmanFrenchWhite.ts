@@ -19,7 +19,7 @@ const SRC = [
 
 export const PRO_AMAN_FRENCH_WHITE_LESSON: LessonScript = {
   openingId: 'pro-aman-french-white',
-  title: "Aman's French — the Winawer Bind",
+  title: "This repertoire's French — the Winawer Bind",
   minutes: 10,
   orientation: 'white',
   kind: 'variation',

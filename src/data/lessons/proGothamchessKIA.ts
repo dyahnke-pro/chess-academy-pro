@@ -16,7 +16,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 
 export const PRO_GOTHAMCHESS_KIA_LESSON: LessonScript = {
   openingId: 'pro-gothamchess-kia',
-  title: "GothamChess's King's Indian Attack — One Setup, Every Game",
+  title: "This repertoire's King's Indian Attack — One Setup, Every Game",
   minutes: 11,
   orientation: 'white',
   kind: 'variation',

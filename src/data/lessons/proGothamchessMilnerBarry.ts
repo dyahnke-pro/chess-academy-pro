@@ -14,7 +14,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 
 export const PRO_GOTHAMCHESS_MILNER_BARRY_LESSON: LessonScript = {
   openingId: 'pro-gothamchess-milner-barry',
-  title: "GothamChess's Milner-Barry Gambit — a Pawn for the Storm",
+  title: "This repertoire's Milner-Barry Gambit — a Pawn for the Storm",
   minutes: 12,
   orientation: 'white',
   kind: 'variation',
@@ -30,7 +30,7 @@ export const PRO_GOTHAMCHESS_MILNER_BARRY_LESSON: LessonScript = {
       moves: 'e4 e6 d4 d5 e5',
       highlights: [{ square: 'e5', color: KEY }],
       say:
-        "Against the French, Levy plays the Advance — e5, grabbing space and locking Black's light-squared bishop inside the pawn chain. But this is the sharp version: we're going to offer a pawn for a kingside attack.",
+        "Against the French, this repertoire plays the Advance — e5, grabbing space and locking Black's light-squared bishop inside the pawn chain. But this is the sharp version: we're going to offer a pawn for a kingside attack.",
       sayShort: "e5 — the Advance.",
     }),
     b({

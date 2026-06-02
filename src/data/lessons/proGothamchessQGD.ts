@@ -16,7 +16,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 
 export const PRO_GOTHAMCHESS_QGD_LESSON: LessonScript = {
   openingId: 'pro-gothamchess-qgd',
-  title: "GothamChess's Queen's Gambit Declined — the …c5 Freeing Break",
+  title: "This repertoire's Queen's Gambit Declined — the …c5 Freeing Break",
   minutes: 11,
   orientation: 'black',
   kind: 'variation',

@@ -16,7 +16,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 
 export const PRO_GOTHAMCHESS_ITALIAN_LESSON: LessonScript = {
   openingId: 'pro-gothamchess-italian',
-  title: "GothamChess's Italian — the c3-d4 Giuoco into the IQP",
+  title: "This repertoire's Italian — the c3-d4 Giuoco into the IQP",
   minutes: 11,
   orientation: 'white',
   kind: 'variation',
@@ -32,7 +32,7 @@ export const PRO_GOTHAMCHESS_ITALIAN_LESSON: LessonScript = {
       moves: 'e4 e5 Nf3 Nc6',
       highlights: [{ square: 'e5', color: SOFT }],
       say:
-        "The Italian — Levy's classical answer to e4 e5. We develop the knight to f3, hitting e5, and Black defends with Nc6. Old, principled chess: pieces out fast, aim everything at f7.",
+        "The Italian — This repertoire's classical answer to e4 e5. We develop the knight to f3, hitting e5, and Black defends with Nc6. Old, principled chess: pieces out fast, aim everything at f7.",
       sayShort: 'Nf3 Nc6 — the open game.',
     }),
     b({

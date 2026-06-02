@@ -39,7 +39,7 @@ const TAIMANOV: LessonScript = {
       sayShort: '…Bb4 — pin and counter-attack.' }),
     b({ id: 'plan', moves: 'e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 Qc7 Be3 a6 Qd2 Nf6 O-O-O Bb4',
       arrows: [], highlights: [{ square: 'b5', color: KEY }, { square: 'c3', color: SOFT }],
-      say: "The plan in the opposite-castling fight: …Bxc3 to wreck White's king cover, then …b5-…b4 and …Rb8 storming the queenside. With the bishop pair gone and the c-file open, Black's attack is the faster one. Rosen thrives in this chaos.",
+      say: "The plan in the opposite-castling fight: …Bxc3 to wreck White's king cover, then …b5-…b4 and …Rb8 storming the queenside. With the bishop pair gone and the c-file open, Black's attack is the faster one. This repertoire thrives in this chaos.",
       sayShort: 'Plan: …Bxc3, …b5-b4 storm.' }),
   ],
 };
@@ -63,7 +63,7 @@ const ROSSOLIMO: LessonScript = {
       sayShort: '…Bxf3 — grab d4, solid Hedgehog.' }),
     b({ id: 'plan', moves: 'e4 c5 Nf3 Nc6 Bb5 d6 O-O Bd7 Re1 a6 Bf1 Bg4 h3 Bxf3 Qxf3 e6',
       arrows: [A('f8', 'e7'), A('d8', 'c7')], highlights: [{ square: 'd4', color: KEY }],
-      say: "The plan from here is classic Hedgehog: …Be7, …O-O, …Qc7 and …Rfc8, control d4 and d5, and wait for White to overextend before striking with …b5 or …d5. Rosen neutralises the Rossolimo into a comfortable, fighting game.",
+      say: "The plan from here is classic Hedgehog: …Be7, …O-O, …Qc7 and …Rfc8, control d4 and d5, and wait for White to overextend before striking with …b5 or …d5. This repertoire neutralises the Rossolimo into a comfortable, fighting game.",
       sayShort: 'Plan: Hedgehog setup, then …b5/…d5.' }),
   ],
 };
@@ -103,7 +103,7 @@ const CLOSED: LessonScript = {
       sayShort: 'Transpose into the Taimanov.' }),
     b({ id: 'taimanov', moves: 'e4 c5 Nc3 e6 Nf3 Nc6 d4 cxd4 Nxd4 Qc7 Be3 a6 Qd2 Nf6 O-O-O Bb4',
       arrows: [A('b4', 'c3')], highlights: [{ square: 'c7', color: KEY }, { square: 'b4', color: KEY }],
-      say: "…Qc7 and …a6 reach the exact low-commitment Taimanov setup from the main repertoire, and when White castles long, …Nf6 and …Bb4 pin the knight and launch the …b5-…b4 counter-attack. One opening to learn, reached by several move orders — the whole point of Rosen's flexible …e6 Sicilian.",
+      say: "…Qc7 and …a6 reach the exact low-commitment Taimanov setup from the main repertoire, and when White castles long, …Nf6 and …Bb4 pin the knight and launch the …b5-…b4 counter-attack. One opening to learn, reached by several move orders — the whole point of this repertoire's flexible …e6 Sicilian.",
       sayShort: '…Bb4 — same Taimanov counter.' }),
   ],
 };

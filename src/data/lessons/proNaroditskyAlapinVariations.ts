@@ -270,7 +270,7 @@ const D6_MAINLINE: LessonScript = {
       moves: 'e4 c5 c3 d6 d4 cxd4 cxd4 Nf6 Nc3 g6 h3',
       arrows: [{ from: 'h2', to: 'h3', color: VIS }, { from: 'g4', to: 'g4', color: SOFT }],
       highlights: [{ square: 'h3', color: KEY }],
-      say: "h3 — his 18% pick at this position, the highest of any move. The prophylaxis is critical: stops …Bg4 pinning our Nf3 (which we haven't played yet) AND prepares an eventual g4 kingside expansion. Slow but principled.",
+      say: "h3 — the 18% pick at this position, the highest of any move. The prophylaxis is critical: stops …Bg4 pinning our Nf3 (which we haven't played yet) AND prepares an eventual g4 kingside expansion. Slow but principled.",
       sayShort: 'h3 — prophylaxis + g4 prep.',
     }),
     b({

@@ -16,16 +16,16 @@ const SRC = ['book:chess-fundamentals', 'https://en.wikipedia.org/wiki/Scandinav
 
 export const PRO_CARLSEN_SCANDINAVIAN_LESSON: LessonScript = {
   openingId: 'pro-carlsen-scandinavian',
-  title: "Carlsen's Scandinavian — the 3…Qd6 Surprise",
+  title: "This repertoire's Scandinavian — the 3…Qd6 Surprise",
   minutes: 11,
   orientation: 'black',
   kind: 'variation',
   sources: SRC,
   beats: [
-    b({ id: 'qxd5', moves: 'e4 d5 exd5 Qxd5 Nc3 Qd6', highlights: [H('d6'), H('d5')], say: "The Scandinavian — Black hits the centre with d5 on move one, trades, and recaptures with the queen. The modern touch is Qd6: the queen sits safely out of the way of the c3-knight, eyeing the centre and the kingside. A low-theory surprise Carlsen uses to drag opponents out of their preparation.", sayShort: 'Qd6 — the modern, safe square.' }),
+    b({ id: 'qxd5', moves: 'e4 d5 exd5 Qxd5 Nc3 Qd6', highlights: [H('d6'), H('d5')], say: "The Scandinavian — Black hits the centre with d5 on move one, trades, and recaptures with the queen. The modern touch is Qd6: the queen sits safely out of the way of the c3-knight, eyeing the centre and the kingside. A low-theory surprise this repertoire uses to drag opponents out of their preparation.", sayShort: 'Qd6 — the modern, safe square.' }),
     b({ id: 'nf6', moves: 'e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nf6 Nf3 a6', highlights: [H('a6'), H('f6')], say: "Black develops the knight to f6 and plays the useful a6 — ruling out Nb5 ideas against the queen and preparing the queenside expansion. The structure is solid and symmetrical; Black has no weaknesses and a clear plan. Patience first, activity later.", sayShort: 'Nf6, a6 — solid, prep ...b5.' }),
     b({ id: 'b5', moves: 'e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nf6 Nf3 a6 g3 b5', arrows: [A('b5', 'b4')], highlights: [H('b5')], say: "The point of the setup — b5, grabbing queenside space and preparing to fianchetto the light-squared bishop to b7. Black builds a harmonious position where every piece has a natural home, then plays for the …b4 break and pressure down the long diagonal.", sayShort: 'b5 — queenside space, prep ...Bb7.' }),
-    b({ id: 'bb7', moves: 'e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nf6 Nf3 a6 g3 b5 Bg2 Bb7 O-O e6', arrows: [A('b7', 'g2')], highlights: [H('b7'), H('e6')], say: "Bishop to b7, raking the long light diagonal toward White's king, and …e6 completes a rock-solid pawn shell. Black has reached a comfortable, fully-developed middlegame with the bishop pair and easy play — exactly the kind of low-risk, slightly-unusual position Carlsen outplays people in.", sayShort: 'Bb7, e6 — the long diagonal, solid.' }),
+    b({ id: 'bb7', moves: 'e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nf6 Nf3 a6 g3 b5 Bg2 Bb7 O-O e6', arrows: [A('b7', 'g2')], highlights: [H('b7'), H('e6')], say: "Bishop to b7, raking the long light diagonal toward White's king, and …e6 completes a rock-solid pawn shell. Black has reached a comfortable, fully-developed middlegame with the bishop pair and easy play — exactly the kind of low-risk, slightly-unusual position this repertoire outplays people in.", sayShort: 'Bb7, e6 — the long diagonal, solid.' }),
   ],
 };
 

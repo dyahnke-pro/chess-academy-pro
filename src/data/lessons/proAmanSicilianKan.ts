@@ -22,17 +22,17 @@ const SRC = [
 
 export const PRO_AMAN_SICILIAN_KAN_LESSON: LessonScript = {
   openingId: 'pro-aman-sicilian-kan',
-  title: "Aman's Sicilian Kan — Flexible by Design",
+  title: "This repertoire's Sicilian Kan — Flexible by Design",
   minutes: 11,
   orientation: 'black',
   kind: 'variation',
   sources: SRC,
   beats: [
     b({ id: 'c5', moves: 'e4 c5', highlights: [H('c5'), H('d4')],
-      say: "The Sicilian — Aman's number-one weapon, the most-played line in his whole library. …c5 stakes a claim on d4 and fights for the centre asymmetrically, the fighting answer to e4.",
+      say: "The Sicilian — This repertoire's number-one weapon, the most-played line in the whole library. …c5 stakes a claim on d4 and fights for the centre asymmetrically, the fighting answer to e4.",
       sayShort: '…c5 — the fighting Sicilian.' }),
     b({ id: 'e6', moves: 'e4 c5 Nf3 e6', highlights: [H('e6'), H('a6')],
-      say: "…e6 is the Kan and Taimanov move order — quiet, flexible, low-theory. It keeps the choice open between …a6 and …Nc6, and it builds a small, solid pawn shell instead of committing early. This is Aman's habit: get a sound structure, then outplay.",
+      say: "…e6 is the Kan and Taimanov move order — quiet, flexible, low-theory. It keeps the choice open between …a6 and …Nc6, and it builds a small, solid pawn shell instead of committing early. This is this repertoire's habit: get a sound structure, then outplay.",
       sayShort: '…e6 — flexible Kan setup.' }),
     b({ id: 'a6', moves: 'e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6', highlights: [H('d6'), H('a6'), H('b5')],
       say: "After the centre trade, here's the Kan's signature: …a6. It does two jobs — it slams the door on Nb5, so White gets no knight hop into d6 or b5, and it clears the way for …b5, the queenside expansion that powers Black's whole plan.",

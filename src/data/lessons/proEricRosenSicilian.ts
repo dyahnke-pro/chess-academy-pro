@@ -24,7 +24,7 @@ const SRC = [
 
 export const PRO_ERICROSEN_SICILIAN_LESSON: LessonScript = {
   openingId: 'pro-ericrosen-sicilian',
-  title: "Rosen's Sicilian — the Accelerated Dragon",
+  title: "This repertoire's Sicilian — the Accelerated Dragon",
   minutes: 8,
   orientation: 'black',
   kind: 'variation',
@@ -75,7 +75,7 @@ export const PRO_ERICROSEN_SICILIAN_LESSON: LessonScript = {
       id: 'plan', moves: 'e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 c4 Bg7 Be3 Nf6 Nc3 O-O Be2 d6 O-O Nxd4 Bxd4 Bd7 Qd2 a5',
       arrows: [A('f6', 'd7')],
       highlights: [{ square: 'c5', color: KEY }, { square: 'a4', color: SOFT }],
-      say: "The middlegame blueprint: reroute the knight via d7 to c5, push …a4 to cramp the queenside, trade the dark-squared bishops to weaken White's grip, and aim for the …b5 or …f5 break. Patient, positional, and exactly how Rosen out-grinds strong opponents from the Maroczy.",
+      say: "The middlegame blueprint: reroute the knight via d7 to c5, push …a4 to cramp the queenside, trade the dark-squared bishops to weaken White's grip, and aim for the …b5 or …f5 break. Patient, positional, and exactly how this repertoire out-grinds strong opponents from the Maroczy.",
       sayShort: 'Plan: …Nc5, …a4, break with …b5.',
     }),
   ],

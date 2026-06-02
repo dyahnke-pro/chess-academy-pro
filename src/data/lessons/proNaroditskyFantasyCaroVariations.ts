@@ -34,7 +34,7 @@ const DXE4: LessonScript = {
       moves: 'e4 c6 d4 d5 f3 dxe4 fxe4',
       arrows: [A('f3', 'e4')],
       highlights: [H('e4'), H('d4')],
-      say: "When Black grabs the pawn with …dxe4, Naroditsky recaptures with the f-pawn — exactly the point of the Fantasy. White ends up with the broad e4-d4 centre and a half-open f-file pointed at f7, while Black has handed back the only piece of central tension.",
+      say: "When Black grabs the pawn with …dxe4, this repertoire recaptures with the f-pawn — exactly the point of the Fantasy. White ends up with the broad e4-d4 centre and a half-open f-file pointed at f7, while Black has handed back the only piece of central tension.",
       sayShort: 'fxe4 — broad centre, f-file open.',
     }),
     b({
@@ -42,7 +42,7 @@ const DXE4: LessonScript = {
       moves: 'e4 c6 d4 d5 f3 dxe4 fxe4 c5 d5',
       arrows: [A('d4', 'd5')],
       highlights: [H('d5')],
-      say: "Black hits the centre with …c5; Naroditsky answers d5, ramming the pawn forward into a space-gaining wedge instead of releasing the tension. The pawn cramps Black and clamps down on e6 and c6.",
+      say: "Black hits the centre with …c5; this repertoire answers d5, ramming the pawn forward into a space-gaining wedge instead of releasing the tension. The pawn cramps Black and clamps down on e6 and c6.",
       sayShort: 'd5 — the cramping wedge.',
     }),
     b({
@@ -65,7 +65,7 @@ const DXE4: LessonScript = {
       moves: 'e4 c6 d4 d5 f3 dxe4 fxe4 c5 d5 e6 Nc3 exd5 exd5 Bd6 Nf3 Ne7 Bd3 O-O O-O Bf5 Ng5',
       arrows: [A('f3', 'g5')],
       highlights: [H('g5'), H('f7')],
-      say: "Both kings tuck away, Black offers a bishop trade with …Bf5, and Naroditsky's knight jumps into g5 — eyeing f7 and the kingside light squares. White keeps the passed pawn, the bishop pair pressure, and the initiative.",
+      say: "Both kings tuck away, Black offers a bishop trade with …Bf5, and this repertoire's knight jumps into g5 — eyeing f7 and the kingside light squares. White keeps the passed pawn, the bishop pair pressure, and the initiative.",
       sayShort: 'Ng5 — leap at the kingside.',
     }),
     b({
@@ -94,7 +94,7 @@ const G6: LessonScript = {
       moves: 'e4 g6 Nc3 Bg7 d4 c6 f3 d5 Be3',
       arrows: [A('c1', 'e3')],
       highlights: [H('e3'), H('d4')],
-      say: "Against Black's Modern fianchetto with …g6 and …Bg7, Naroditsky builds the same big-pawn centre and develops the dark-squared bishop to e3, bracing the d4-pawn that the g7-bishop is staring at. Solid, classical chess.",
+      say: "Against Black's Modern fianchetto with …g6 and …Bg7, this repertoire builds the same big-pawn centre and develops the dark-squared bishop to e3, bracing the d4-pawn that the g7-bishop is staring at. Solid, classical chess.",
       sayShort: 'Be3 — brace the centre.',
     }),
     b({
@@ -110,7 +110,7 @@ const G6: LessonScript = {
       moves: 'e4 g6 Nc3 Bg7 d4 c6 f3 d5 Be3 dxe4 fxe4 e5 Nf3 exd4 Bxd4',
       arrows: [A('e3', 'd4')],
       highlights: [H('d4')],
-      say: "Naroditsky develops the knight to f3, Black captures on d4, and White recaptures with the bishop — the dark-squared bishop now dominates the long diagonal, contesting Black's fianchettoed g7-bishop directly.",
+      say: "This repertoire develops the knight to f3, Black captures on d4, and White recaptures with the bishop — the dark-squared bishop now dominates the long diagonal, contesting Black's fianchettoed g7-bishop directly.",
       sayShort: 'Bxd4 — seize the long diagonal.',
     }),
     b({
@@ -125,7 +125,7 @@ const G6: LessonScript = {
       moves: 'e4 g6 Nc3 Bg7 d4 c6 f3 d5 Be3 dxe4 fxe4 e5 Nf3 exd4 Bxd4 Bxd4 Qxd4 Qxd4 Nxd4 Nf6 O-O-O',
       arrows: [A('e1', 'c1')],
       highlights: [H('d1')],
-      say: "Black develops the knight to f6, and Naroditsky castles long — bringing the rook to the open d-file behind the strong knight in one move. Every White piece is now working; Black still has to untangle.",
+      say: "Black develops the knight to f6, and this repertoire castles long — bringing the rook to the open d-file behind the strong knight in one move. Every White piece is now working; Black still has to untangle.",
       sayShort: 'O-O-O — rook to the open d-file.',
     }),
     b({
@@ -154,7 +154,7 @@ const QB6: LessonScript = {
       moves: 'e4 c6 d4 d5 f3 Qb6 Nc3',
       arrows: [A('b1', 'c3')],
       highlights: [H('c3'), H('b6')],
-      say: "Black's …Qb6 eyes the b2-pawn and tries to disrupt White's set-up before it's finished. Naroditsky ignores the threat and develops the knight to c3 — in the Fantasy, the lead in development matters more than a wing pawn.",
+      say: "Black's …Qb6 eyes the b2-pawn and tries to disrupt White's set-up before it's finished. This repertoire ignores the threat and develops the knight to c3 — in the Fantasy, the lead in development matters more than a wing pawn.",
       sayShort: 'Nc3 — develop, ignore b2.',
     }),
     b({
@@ -178,7 +178,7 @@ const QB6: LessonScript = {
       moves: 'e4 c6 d4 d5 f3 Qb6 Nc3 e5 dxe5 d4 Nce2 Bc5 Nf4 d3 Ngh3 dxc2 Qxc2',
       arrows: [A('d1', 'c2')],
       highlights: [H('c2')],
-      say: "Black pushes …d3 and grabs on c2, winning a pawn — but Naroditsky has developed the second knight to h3 and simply recaptures with the queen on c2. White has given a pawn; in return every piece is out and Black's king is still stranded in the centre.",
+      say: "Black pushes …d3 and grabs on c2, winning a pawn — but this repertoire has developed the second knight to h3 and simply recaptures with the queen on c2. White has given a pawn; in return every piece is out and Black's king is still stranded in the centre.",
       sayShort: 'Qxc2 — a pawn for a huge lead.',
     }),
     b({

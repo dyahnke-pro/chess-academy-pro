@@ -45,7 +45,7 @@ const NF6_BXC6_DOUBLED: LessonScript = {
 
 // TRAP 2: 42g — Berlin Nd6 lets Hikaru fall into queen-trade endgame
 const ND6_BERLIN_HIKARU: LessonScript = {
-  openingId: 'pro-naroditsky-ruy-lopez', title: 'Weapon: Nd6 in Berlin Defense (Hikaru victim)', minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
+  openingId: 'pro-naroditsky-ruy-lopez', title: 'Weapon: Nd6 in Berlin Defense (top-GM victim)', minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
   beats: [
     b({ id: 'ruy-nd6-setup', moves: 'e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4', highlights: [H('d4', KEY)],
       say: "Berlin Defense with the standard d4 attacking move. Black's correct continuation is ...Nd6 (the textbook Berlin endgame) — but in the specific move order, the natural recapture is the trap.",
@@ -57,7 +57,7 @@ const ND6_BERLIN_HIKARU: LessonScript = {
       say: "Bxc6 ...dxc6 dxe5 — the standard Berlin sequence but here Black's knight on d6 is loose. Now the queen trade favors White.",
       sayShort: 'dxe5 — Berlin endgame.' }),
     b({ id: 'ruy-nd6-cash', moves: 'e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 dxc6 dxe5 Nf5 Qxd8+', highlights: [H('d8', ATK)],
-      say: "...Nf5 Qxd8+! — Black tries to activate the knight, but we force the queen trade. Black recaptures with the king (Kxd8) — the king on d8 is permanently exposed AND we have the structural Berlin endgame edge. Hikaru lost this exact way.",
+      say: "...Nf5 Qxd8+! — Black tries to activate the knight, but we force the queen trade. Black recaptures with the king (Kxd8) — the king on d8 is permanently exposed AND we have the structural Berlin endgame edge. A top GM lost this exact way.",
       sayShort: 'Qxd8+ — Berlin endgame won.' }),
   ],
 };
@@ -83,19 +83,19 @@ const NC5_OPEN_RUY_PAWN: LessonScript = {
 
 // TRAP 4: 22g — Berlin Bc5 in d3 line + Bxc6 + Bg4 pin (Hikaru victim)
 const BC5_D3_HIKARU: LessonScript = {
-  openingId: 'pro-naroditsky-ruy-lopez', title: 'Weapon: Bc5 in d3 Berlin (Hikaru victim 2990)', minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
+  openingId: 'pro-naroditsky-ruy-lopez', title: 'Weapon: Bc5 in d3 Berlin (beat a 2990)', minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
   beats: [
     b({ id: 'ruy-bc5d3-setup', moves: 'e4 e5 Nf3 Nc6 Bb5 Nf6 d3', highlights: [H('d3', SOFT)],
-      say: "d3 Berlin (avoiding the main Berlin endgame). Black's options include the active ...Bc5. Hikaru played this and lost — to the Bxc6 + dxc6 + Bg4 pin sequence.",
+      say: "d3 Berlin (avoiding the main Berlin endgame). Black's options include the active ...Bc5. A top GM played this and lost — to the Bxc6 + dxc6 + Bg4 pin sequence.",
       sayShort: 'd3 — quiet Berlin.' }),
     b({ id: 'ruy-bc5d3-blunder', moves: 'e4 e5 Nf3 Nc6 Bb5 Nf6 d3 Bc5', highlights: [H('c5', ATK)],
-      say: "...Bc5 — active development. 22 opponents played this including Hikaru (2990), MichaelRoiz (2710), and Robert_Chessmood (2733).",
-      sayShort: '...Bc5 — Hikaru\'s move.' }),
+      say: "...Bc5 — active development. 22 opponents played this including a 2990-rated GM, MichaelRoiz (2710), and Robert_Chessmood (2733).",
+      sayShort: '...Bc5 — A top grandmaster\'s move.' }),
     b({ id: 'ruy-bc5d3-trade', moves: 'e4 e5 Nf3 Nc6 Bb5 Nf6 d3 Bc5 Bxc6 dxc6 Nbd2 Bg4', highlights: [H('g4', KEY)],
       say: "Bxc6 ...dxc6 Nbd2 ...Bg4! Black trades the bishop pair voluntarily by playing ...Bg4 pinning our knight. But the pin doesn't actually win material because of h3.",
       sayShort: '...Bg4 — pin attempt.' }),
     b({ id: 'ruy-bc5d3-cash', moves: 'e4 e5 Nf3 Nc6 Bb5 Nf6 d3 Bc5 Bxc6 dxc6 Nbd2 Bg4 h3', highlights: [H('h3', KEY)],
-      say: "h3 — White breaks the pin. Black must trade (Bxf3 Nxf3) and now White has the bishop pair, doubled c-pawns for Black, and a clear positional edge. Hikaru lost this 2990-rated game.",
+      say: "h3 — White breaks the pin. Black must trade (Bxf3 Nxf3) and now White has the bishop pair, doubled c-pawns for Black, and a clear positional edge. A 2990-rated GM lost this game.",
       sayShort: 'h3 — pin broken, edge won.' }),
   ],
 };
@@ -122,9 +122,9 @@ const D6_STEINITZ_BXC6: LessonScript = {
 interface TrapEntry { name: string; lesson: LessonScript; }
 const TRAPS: TrapEntry[] = [
   { name: 'Nf6 in Ba4 line walks into Bxc6 doubled-pawns (Wesley So victim)', lesson: NF6_BXC6_DOUBLED },
-  { name: 'Nd6 in Berlin Defense (Hikaru victim)', lesson: ND6_BERLIN_HIKARU },
+  { name: 'Nd6 in Berlin Defense (top-GM victim)', lesson: ND6_BERLIN_HIKARU },
   { name: 'Nc5 in Open Ruy lets us win the e5-pawn (Firouzja victim)', lesson: NC5_OPEN_RUY_PAWN },
-  { name: 'Bc5 in d3 Berlin (Hikaru victim 2990)', lesson: BC5_D3_HIKARU },
+  { name: 'Bc5 in d3 Berlin (beat a 2990)', lesson: BC5_D3_HIKARU },
   { name: 'd6 in Steinitz lets Bxc6+ + d4 dominate', lesson: D6_STEINITZ_BXC6 },
 ];
 

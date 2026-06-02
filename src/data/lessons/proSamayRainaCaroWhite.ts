@@ -11,12 +11,12 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['concept:pos-center', 'concept:pawn-isolated', 'https://www.chess.com/openings/Caro-Kann-Defense-Panov-Attack', 'https://api.chess.com/pub/player/samayraina/games/archives'];
 
 export const PRO_SAMAYRAINA_CARO_WHITE_LESSON: LessonScript = {
-  openingId: 'pro-samayraina-caro-white', title: "Samay vs the Caro — Panov (2.c4)", minutes: 7,
+  openingId: 'pro-samayraina-caro-white', title: "This repertoire vs the Caro — Panov (2.c4)", minutes: 7,
   orientation: 'white', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'c4', moves: 'e4 c6 c4 d5 exd5 cxd5 d4',
       arrows: [], highlights: [{ square: 'c4', color: KEY }, { square: 'd5', color: KEY }],
-      say: "Against the Caro, Samay's choice is c4 — the Accelerated Panov. We immediately challenge d5 and, after the trades, build a d4 centre. Instead of the slow Classical Caro, we get an open, dynamic game where White's development lead and central pressure do the talking.",
+      say: "Against the Caro, this repertoire's choice is c4 — the Accelerated Panov. We immediately challenge d5 and, after the trades, build a d4 centre. Instead of the slow Classical Caro, we get an open, dynamic game where White's development lead and central pressure do the talking.",
       sayShort: 'c4 — the Panov, hit d5.' }),
     b({ id: 'nc3', moves: 'e4 c6 c4 d5 exd5 cxd5 d4 Nf6 Nc3 Nc6 Bg5',
       arrows: [A('c3', 'd5')], highlights: [{ square: 'g5', color: KEY }, { square: 'd5', color: SOFT }],

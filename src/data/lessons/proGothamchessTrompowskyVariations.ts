@@ -35,7 +35,7 @@ const MAIN_E6: LessonScript = {
       arrows: [{ from: 'h4', to: 'd8', color: VIS }],
       highlights: [{ square: 'f6', color: KEY }, { square: 'd8', color: SOFT }],
       say:
-        "Levy's #1 most-played Trompowsky — 1,823 games. Against …e6 we develop Nd2 and, when Black puts the question with h6, keep the bishop alive on h4. Because e6 vacated the e7-square, the bishop on h4 now pins the f6-knight to the queen down the long diagonal. The knight is glued in place.",
+        "This repertoire's #1 most-played Trompowsky — 1,823 games. Against …e6 we develop Nd2 and, when Black puts the question with h6, keep the bishop alive on h4. Because e6 vacated the e7-square, the bishop on h4 now pins the f6-knight to the queen down the long diagonal. The knight is glued in place.",
       sayShort: 'Bh4 — pin f6 to the queen.',
     }),
     b({
@@ -74,7 +74,7 @@ const VAGANIAN: LessonScript = {
       arrows: [{ from: 'h2', to: 'h4', color: VIS }],
       highlights: [{ square: 'h4', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "Black's sharpest try — Ne4, jumping at our bishop. We don't retreat; we play the wild h4! It defends the g5-bishop and prepares to open the h-file. When Black hits the centre with c5, we slam the door with d5, grabbing space and keeping the position as messy as possible. This is a knife fight, and Levy lives for it.",
+        "Black's sharpest try — Ne4, jumping at our bishop. We don't retreat; we play the wild h4! It defends the g5-bishop and prepares to open the h-file. When Black hits the centre with c5, we slam the door with d5, grabbing space and keeping the position as messy as possible. This is a knife fight, and this repertoire lives for it.",
       sayShort: 'h4 + d5 — keep it sharp.',
     }),
     b({

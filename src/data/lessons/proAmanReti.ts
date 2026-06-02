@@ -20,14 +20,14 @@ const SRC = [
 
 export const PRO_AMAN_RETI_LESSON: LessonScript = {
   openingId: 'pro-aman-reti',
-  title: "Aman's Réti — Flexible Development, Then d4",
+  title: "This repertoire's Réti — Flexible Development, Then d4",
   minutes: 10,
   orientation: 'white',
   kind: 'variation',
   sources: SRC,
   beats: [
     b({ id: 'nf3', moves: 'Nf3', arrows: [A('g1', 'f3')], highlights: [H('e5'), H('d4'), H('f3')],
-      say: "Aman's most-played White move — Nf3. It develops a piece, controls the central e5- and d4-squares, and keeps every plan open. The Réti is flexibility itself: see what Black does, then choose the ideal structure.",
+      say: "This repertoire's most-played White move — Nf3. It develops a piece, controls the central e5- and d4-squares, and keeps every plan open. The Réti is flexibility itself: see what Black does, then choose the ideal structure.",
       sayShort: 'Nf3 — flexible first move.' }),
     b({ id: 'd5', moves: 'Nf3 d5 d4', highlights: [H('d4')],
       say: "When Black stakes a claim with …d5, White plays d4 and steers toward a sound, classical Queen's-Pawn structure. The Réti isn't a gimmick — it's a move-order that reaches the positions White wants on White's terms.",

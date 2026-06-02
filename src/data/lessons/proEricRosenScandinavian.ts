@@ -14,7 +14,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['concept:pos-development', 'concept:pos-bishop-pair', 'https://www.chess.com/openings/Scandinavian-Defense', 'https://api.chess.com/pub/player/imrosen/games/archives'];
 
 export const PRO_ERICROSEN_SCANDINAVIAN_LESSON: LessonScript = {
-  openingId: 'pro-ericrosen-scandinavian', title: "Rosen's Modern Scandinavian (…Nf6)", minutes: 6,
+  openingId: 'pro-ericrosen-scandinavian', title: "This repertoire's Modern Scandinavian (…Nf6)", minutes: 6,
   orientation: 'black', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'd5', moves: 'e4 d5 exd5 Nf6',
@@ -35,7 +35,7 @@ export const PRO_ERICROSEN_SCANDINAVIAN_LESSON: LessonScript = {
       sayShort: '…Nc6, O-O-O — pressure the d-file.' }),
     b({ id: 'plan', moves: 'e4 d5 exd5 Nf6 d4 Bg4 Be2 Bxe2 Qxe2 Qxd5 Nf3 Nc6 O-O O-O-O',
       arrows: [A('d8', 'd4')], highlights: [{ square: 'd4', color: KEY }, { square: 'e5', color: SOFT }],
-      say: "The plan: pile rooks and queen on the d-file against White's d4-pawn, prepare …e5 to break the centre open, and use the lead in development before White consolidates. Rosen plays the Scandinavian as a fighting, fully-sound counter-attacking defense.",
+      say: "The plan: pile rooks and queen on the d-file against White's d4-pawn, prepare …e5 to break the centre open, and use the lead in development before White consolidates. This repertoire plays the Scandinavian as a fighting, fully-sound counter-attacking defense.",
       sayShort: 'Plan: pressure d4, break with …e5.' }),
   ],
 };

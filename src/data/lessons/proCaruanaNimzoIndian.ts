@@ -16,13 +16,13 @@ const SRC = ['book:chess-fundamentals', 'concept:pawn-minority-attack', 'https:/
 
 export const PRO_CARUANA_NIMZO_INDIAN_LESSON: LessonScript = {
   openingId: 'pro-caruana-nimzo-indian',
-  title: "Caruana's Nimzo-Indian",
+  title: "This repertoire's Nimzo-Indian",
   minutes: 10,
   orientation: 'black',
   kind: 'variation',
   sources: SRC,
   beats: [
-    b({ id: 'bb4', moves: 'd4 Nf6 c4 e6 Nc3 Bb4', say: "The Nimzo-Indian — Caruana's principled answer to d4. The bishop pins the c3-knight, and behind it Black fights for the centre with pieces rather than pawns. One of the soundest defences in chess.", sayShort: '…Bb4 — pin the knight.', arrows: [A('f8', 'b4')], highlights: [H('b4')] }),
+    b({ id: 'bb4', moves: 'd4 Nf6 c4 e6 Nc3 Bb4', say: "The Nimzo-Indian — This repertoire's principled answer to d4. The bishop pins the c3-knight, and behind it Black fights for the centre with pieces rather than pawns. One of the soundest defences in chess.", sayShort: '…Bb4 — pin the knight.', arrows: [A('f8', 'b4')], highlights: [H('b4')] }),
     b({ id: 'qc2', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O', say: "White chooses the Classical Qc2, defending the knight and preparing to recapture on c3 with the queen — keeping the pawn structure intact for now. Black calmly castles and completes his kingside.", sayShort: '…O-O — castle, stay flexible.', highlights: [H('g8')] }),
     b({ id: 'bxc3', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d6', say: "After a3 questions the bishop, Black trades it for the knight; White recaptures with the queen. Black plays d6, building a small centre. The bishop pair is given up for clear strategic targets to come.", sayShort: '…Bxc3, …d6 — trade and build.', arrows: [A('b4', 'c3')], highlights: [H('c3')] }),
     b({ id: 'bg5', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d6 Bg5 h6 Bh4', say: "White pins with Bg5; Black puts the question with h6 and White keeps the pin with Bh4. The bishop is now committed to the h4-d8 diagonal, where Black can target it with a pawn advance.", sayShort: '…h6 — question the bishop.', highlights: [H('h6')] }),

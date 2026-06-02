@@ -35,7 +35,7 @@ const NC3_E5_TRADE: LessonScript = {
       say: "After the Open Sicilian central trades, Black plays an early ...e5 — challenging the centralized knight before completing development. The correct response from White is Nb3 (retreat with tempo) or even sacrifices. The wrong move is Nc3 — and 18 opponents played it.",
       sayShort: '...e5 — early central strike.' }),
     b({ id: 'naj-nc3-blunder', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 e5 Nc3', highlights: [H('c3', ATK)],
-      say: "Nc3?? — White develops the queen knight INSTEAD of moving the attacked d4-knight. The d4-knight is loose. Named 2700+ victim: Firouzja2003 (3139). The exd4 takedown wins material.",
+      say: "Nc3?? — White develops the queen knight INSTEAD of moving the attacked d4-knight. The d4-knight is loose. Named 2700+ victims: Firouzja2003 (3139). The exd4 takedown wins material.",
       sayShort: 'Nc3 — loose knight.' }),
     b({ id: 'naj-nc3-grab', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 e5 Nc3 exd4', highlights: [H('d4', ATK)],
       say: "...exd4! Black grabs the knight. White must recapture with the queen (Qxd4) — the only piece able to.",

@@ -33,7 +33,7 @@ const BOTVINNIK: LessonScript = {
       arrows: [{ from: 'e2', to: 'e4', color: VIS }],
       highlights: [{ square: 'c4', color: KEY }, { square: 'e4', color: KEY }, { square: 'd4', color: KEY }],
       say:
-        "Gotham's main English — 1,597 games at 62%. Against Black's King's-Indian setup we grab the WHOLE centre: c4, e4, and d4, the Botvinnik wall. Black fianchettoes the bishop to g7, eyeing the long diagonal. We have the space; he has the counterpunch.",
+        "This repertoire's main English — 1,597 games at 62%. Against Black's King's-Indian setup we grab the WHOLE centre: c4, e4, and d4, the Botvinnik wall. Black fianchettoes the bishop to g7, eyeing the long diagonal. We have the space; he has the counterpunch.",
       sayShort: 'c4-e4-d4 — the Botvinnik wall.',
     }),
     b({
@@ -149,7 +149,7 @@ const SYM_C5: LessonScript = {
       arrows: [{ from: 'f1', to: 'g2', color: VIS }],
       highlights: [{ square: 'g2', color: KEY }],
       say:
-        "Black mirrors with …c5 — the fully Symmetric English. Levy scores a fat 66% here, because symmetry plus an extra tempo just favours White. We fianchetto with g3 and Bg2, pointing the bishop down the long light diagonal toward Black's queenside.",
+        "Black mirrors with …c5 — the fully Symmetric English. This repertoire scores a fat 66% here, because symmetry plus an extra tempo just favours White. We fianchetto with g3 and Bg2, pointing the bishop down the long light diagonal toward Black's queenside.",
       sayShort: 'Bg2 — the long-diagonal fianchetto.',
     }),
     b({

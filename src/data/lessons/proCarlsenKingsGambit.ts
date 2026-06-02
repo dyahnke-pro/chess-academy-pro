@@ -16,15 +16,15 @@ const SRC = ['book:chess-fundamentals', 'https://en.wikipedia.org/wiki/King%27s_
 
 export const PRO_CARLSEN_KINGS_GAMBIT_LESSON: LessonScript = {
   openingId: 'pro-carlsen-kings-gambit',
-  title: "Carlsen's King's Gambit — the Kieseritzky",
+  title: "This repertoire's King's Gambit — the Kieseritzky",
   minutes: 10,
   orientation: 'white',
   kind: 'variation',
   sources: SRC,
   beats: [
-    b({ id: 'f4', moves: 'e4 e5 f4 exf4 Nf3', highlights: [H('f4'), H('f3')], say: "The King's Gambit — the most romantic opening in chess. White offers the f-pawn to rip open the f-file and seize a huge lead in development. Nf3 stops the …Qh4+ check and prepares to round up the f4-pawn later. Carlsen wheels this out to drag opponents into a street fight.", sayShort: 'f4 — the romantic gambit.' }),
+    b({ id: 'f4', moves: 'e4 e5 f4 exf4 Nf3', highlights: [H('f4'), H('f3')], say: "The King's Gambit — the most romantic opening in chess. White offers the f-pawn to rip open the f-file and seize a huge lead in development. Nf3 stops the …Qh4+ check and prepares to round up the f4-pawn later. This repertoire wheels this out to drag opponents into a street fight.", sayShort: 'f4 — the romantic gambit.' }),
     b({ id: 'g5', moves: 'e4 e5 f4 exf4 Nf3 g5 h4 g4 Ne5', arrows: [A('e5', 'g4')], highlights: [H('e5'), H('g5')], say: "Black clings to the extra pawn with …g5, and White strikes with h4 to open the h-file, sending the knight to e5 — the Kieseritzky. The knight sits on a magnificent central outpost, eyeing f7 and g4, while the h-file opens toward Black's king. White is down a pawn but coming hard.", sayShort: 'Ne5 — the Kieseritzky outpost.' }),
-    b({ id: 'd5', moves: 'e4 e5 f4 exf4 Nf3 g5 h4 g4 Ne5 Nf6 Bc4 d5 exd5 Bd6', arrows: [A('c4', 'f7')], highlights: [H('c4'), H('d6')], say: "Black develops …Nf6 and hits back in the centre with …d5; White takes and develops the bishop to c4, aiming at f7. After …Bd6 attacking the e5-knight, the position is a wild, double-edged battlefield where White's development and attacking chances fully compensate the pawn. Pure calculation — Carlsen's home turf.", sayShort: 'Bc4 — aim at f7, full attack.' }),
+    b({ id: 'd5', moves: 'e4 e5 f4 exf4 Nf3 g5 h4 g4 Ne5 Nf6 Bc4 d5 exd5 Bd6', arrows: [A('c4', 'f7')], highlights: [H('c4'), H('d6')], say: "Black develops …Nf6 and hits back in the centre with …d5; White takes and develops the bishop to c4, aiming at f7. After …Bd6 attacking the e5-knight, the position is a wild, double-edged battlefield where White's development and attacking chances fully compensate the pawn. Pure calculation — This repertoire's home turf.", sayShort: 'Bc4 — aim at f7, full attack.' }),
   ],
 };
 
@@ -40,7 +40,7 @@ const BISHOPS_GAMBIT: LessonScript = {
   openingId: 'pro-carlsen-kings-gambit', title: "Bishop's Gambit 3.Bc4", minutes: 5, orientation: 'white', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'bc4', moves: 'e4 e5 f4 exf4 Bc4', arrows: [A('c4', 'f7')], highlights: [H('c4')], say: "The Bishop's Gambit — instead of Nf3, White develops the bishop to c4 straight away, aiming at f7 and inviting the …Qh4+ check, which only helps White develop with tempo after g3. A sharp, attacking alternative that keeps the f-file dream alive.", sayShort: 'Bc4 — aim at f7 at once.' }),
-    b({ id: 'nf6', moves: 'e4 e5 f4 exf4 Bc4 Nf6 Nc3 c6 d4 d5 exd5 Bd6', highlights: [H('d4'), H('f4')], say: "Black develops …Nf6 and …c6 to blunt the bishop; White builds the big centre with Nc3 and d4. White has a massive pawn centre and a lead in development for the pawn — a classic gambit bargain that Carlsen is happy to calculate.", sayShort: 'Nc3, d4 — big centre for the pawn.' }),
+    b({ id: 'nf6', moves: 'e4 e5 f4 exf4 Bc4 Nf6 Nc3 c6 d4 d5 exd5 Bd6', highlights: [H('d4'), H('f4')], say: "Black develops …Nf6 and …c6 to blunt the bishop; White builds the big centre with Nc3 and d4. White has a massive pawn centre and a lead in development for the pawn — a classic gambit bargain that this repertoire is happy to calculate.", sayShort: 'Nc3, d4 — big centre for the pawn.' }),
   ],
 };
 

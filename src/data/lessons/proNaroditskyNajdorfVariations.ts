@@ -220,7 +220,7 @@ const BC4_SOZIN: LessonScript = {
     b({
       id: 'sozin-middlegame', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bc4 e6 Bb3 Be7 O-O O-O f4 Nc6',
       highlights: [{ square: 'f4', color: SOFT }, { square: 'c6', color: KEY }],
-      say: "f4 ...Nc6 — White starts the kingside expansion with f4, Black develops the knight to c6 hitting Nd4. The middlegame structural fight: White's f4-e4 kingside attack vs Black's queenside ...b5 + ...Bb7 setup. 67.3% score for Naroditsky across 124 games.",
+      say: "f4 ...Nc6 — White starts the kingside expansion with f4, Black develops the knight to c6 hitting Nd4. The middlegame structural fight: White's f4-e4 kingside attack vs Black's queenside ...b5 + ...Bb7 setup. 67.3% score for this repertoire across 124 games.",
       sayShort: '...Nc6 — central attack.',
     }),
   ],

@@ -11,7 +11,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['concept:pos-development', 'concept:pos-bishop-pair', 'https://www.chess.com/openings/Scandinavian-Defense', 'https://api.chess.com/pub/player/samayraina/games/archives'];
 
 export const PRO_SAMAYRAINA_SCANDI_LESSON: LessonScript = {
-  openingId: 'pro-samayraina-scandi', title: "Samay's Scandinavian — …Qd8", minutes: 6,
+  openingId: 'pro-samayraina-scandi', title: "This repertoire's Scandinavian — …Qd8", minutes: 6,
   orientation: 'black', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'qxd5', moves: 'e4 d5 exd5 Qxd5 Nc3 Qd8',

@@ -15,7 +15,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 
 export const PRO_GOTHAMCHESS_ENGLISH_LESSON: LessonScript = {
   openingId: 'pro-gothamchess-english',
-  title: "GothamChess's English — the Botvinnik Centre and Kingside Storm",
+  title: "This repertoire's English — the Botvinnik Centre and Kingside Storm",
   minutes: 11,
   orientation: 'white',
   kind: 'variation',
@@ -31,7 +31,7 @@ export const PRO_GOTHAMCHESS_ENGLISH_LESSON: LessonScript = {
       moves: 'c4 Nf6 Nc3 g6',
       highlights: [{ square: 'c4', color: SOFT }],
       say:
-        "The English — c4. A flank opening, but Levy plays it with a punch. Black heads for a King's-Indian set-up with g6, planning to fianchetto. Fine — we're going to grab the whole centre and play for a kingside attack.",
+        "The English — c4. A flank opening, but this repertoire plays it with a punch. Black heads for a King's-Indian set-up with g6, planning to fianchetto. Fine — we're going to grab the whole centre and play for a kingside attack.",
       sayShort: 'c4 — the flank opening.',
     }),
     b({
@@ -97,7 +97,7 @@ export const PRO_GOTHAMCHESS_ENGLISH_LESSON: LessonScript = {
       moves: 'c4 Nf6 Nc3 g6 e4 d6 d4 Bg7 Be2 O-O Be3 e5 d5 a5 g4 Na6 h4 Nc5 f3',
       highlights: [{ square: 'g5', color: KEY }, { square: 'h5', color: KEY }],
       say:
-        "Here's the middlegame in one picture. The centre is bolted shut, so it's a race of wings — and ours runs straight at the king. Push g5 and h5 to crack open the kingside, lift a rook to g1 or h1, and pour everything in. Black's queenside play is slower and aimed at our well-defended flank. White attacks the king; that's the faster race, and it's why this is Levy's English.",
+        "Here's the middlegame in one picture. The centre is bolted shut, so it's a race of wings — and ours runs straight at the king. Push g5 and h5 to crack open the kingside, lift a rook to g1 or h1, and pour everything in. Black's queenside play is slower and aimed at our well-defended flank. White attacks the king; that's the faster race, and it's why this is this repertoire's English.",
       sayShort: 'g5/h5 — crack the king open.',
     }),
   ],

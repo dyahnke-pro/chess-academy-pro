@@ -18,7 +18,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 
 export const PRO_GOTHAMCHESS_FANTASY_CARO_LESSON: LessonScript = {
   openingId: 'pro-gothamchess-fantasy-caro',
-  title: "GothamChess's Fantasy Caro — the f3 Gambit and the f7 Attack",
+  title: "This repertoire's Fantasy Caro — the f3 Gambit and the f7 Attack",
   minutes: 11,
   orientation: 'white',
   kind: 'variation',
@@ -34,7 +34,7 @@ export const PRO_GOTHAMCHESS_FANTASY_CARO_LESSON: LessonScript = {
       moves: 'e4 c6 d4 d5 f3',
       highlights: [{ square: 'f3', color: KEY }, { square: 'e4', color: SOFT }],
       say:
-        "The Fantasy Variation. Against the Caro-Kann, instead of the usual moves Levy plays the surprising f3 — propping up the e4-pawn so the centre can't be chipped away, and getting ready to recapture toward the middle if Black trades. It looks clumsy. It's actually a loaded gun.",
+        "The Fantasy Variation. Against the Caro-Kann, instead of the usual moves this repertoire plays the surprising f3 — propping up the e4-pawn so the centre can't be chipped away, and getting ready to recapture toward the middle if Black trades. It looks clumsy. It's actually a loaded gun.",
       sayShort: 'f3 — prop up the centre.',
     }),
     b({
@@ -51,7 +51,7 @@ export const PRO_GOTHAMCHESS_FANTASY_CARO_LESSON: LessonScript = {
       arrows: [{ from: 'e5', to: 'd4', color: VIS }],
       highlights: [{ square: 'e5', color: SOFT }, { square: 'd4', color: KEY }],
       say:
-        "Black strikes back with e5, hitting our d4-pawn and trying to break the centre open before we get organised. The position sharpens in an instant — and this is exactly where Levy wants the fight.",
+        "Black strikes back with e5, hitting our d4-pawn and trying to break the centre open before we get organised. The position sharpens in an instant — and this is exactly where this repertoire wants the fight.",
       sayShort: 'e5 — Black hits d4.',
     }),
     b({

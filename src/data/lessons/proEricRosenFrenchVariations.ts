@@ -42,7 +42,7 @@ const VS_TARRASCH: LessonScript = {
       sayShort: '…c5, …Nc6 — hammer d4.' }),
     b({ id: 'plan', moves: 'e4 e6 d4 d5 Nd2 Nf6 e5 Nfd7 Bd3 c5 c3 Nc6 Ne2',
       arrows: [A('d8', 'b6')], highlights: [{ square: 'b6', color: SOFT }, { square: 'f6', color: KEY }],
-      say: "White props the centre with Ne2; Black continues with …Qb6 hitting d4 and, at the right moment, …f6 to blast open the centre against White's slightly passive setup. Black gets active, comfortable play with a clear plan — and Rosen scores well here.",
+      say: "White props the centre with Ne2; Black continues with …Qb6 hitting d4 and, at the right moment, …f6 to blast open the centre against White's slightly passive setup. Black gets active, comfortable play with a clear plan — and this repertoire scores well here.",
       sayShort: 'Plan: …Qb6, then …f6 break.' }),
   ],
 };

@@ -70,8 +70,6 @@ export function ProPlayerCard({ player, openingCount, onClick }: ProPlayerCardPr
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             <span className="text-sm font-semibold text-theme-text truncate">{player.name}</span>
-            <span className={`text-xs font-mono font-semibold ${neon.ecoBadge}`}>{player.title}</span>
-            <span className="text-xs text-theme-text-muted">{player.rating}</span>
           </div>
 
           {player.style && (

@@ -10,12 +10,12 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['concept:pos-development', 'concept:pos-center', 'concept:pos-space', 'https://www.chess.com/openings/Ruy-Lopez', 'https://api.chess.com/pub/player/samayraina/games/archives'];
 
 export const PRO_SAMAYRAINA_RUY_LESSON: LessonScript = {
-  openingId: 'pro-samayraina-ruy', title: "Samay's Ruy Lopez — the Closed Main", minutes: 8,
+  openingId: 'pro-samayraina-ruy', title: "This repertoire's Ruy Lopez — the Closed Main", minutes: 8,
   orientation: 'white', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'bb5', moves: 'e4 e5 Nf3 Nc6 Bb5',
       arrows: [A('b5', 'c6')], highlights: [{ square: 'b5', color: KEY }, { square: 'c6', color: SOFT }],
-      say: "The Ruy Lopez — the deepest, most respected answer to e5. The bishop pins toward the c6-knight, the defender of e5, putting long-term pressure on Black's centre. This is positional chess at its finest, and it is Samay's main e5 weapon.",
+      say: "The Ruy Lopez — the deepest, most respected answer to e5. The bishop pins toward the c6-knight, the defender of e5, putting long-term pressure on Black's centre. This is positional chess at its finest, and it is this repertoire's main e5 weapon.",
       sayShort: 'Bb5 — pressure the e5-defender.' }),
     b({ id: 'morphy', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7',
       arrows: [A('a4', 'c2')], highlights: [{ square: 'a4', color: SOFT }, { square: 'e4', color: KEY }],

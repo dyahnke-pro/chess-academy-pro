@@ -35,7 +35,7 @@ const NF3: LessonScript = {
 const C6: LessonScript = {
   openingId: 'pro-hikaru-pirc-modern', title: "Modern — the ...c6 Setup", minutes: 7, orientation: 'black', kind: 'variation', sources: SRC,
   beats: [
-    b({ id: 'c6', moves: 'e4 g6 d4 Bg7 Nc3 c6', highlights: [H('c6')], say: "The flexible ...c6 prepares ...d5 to challenge White's centre directly, keeping all of Black's options open — exactly the fluid play Hikaru loves.", sayShort: '…c6 — flexible, prepare ...d5.' }),
+    b({ id: 'c6', moves: 'e4 g6 d4 Bg7 Nc3 c6', highlights: [H('c6')], say: "The flexible ...c6 prepares ...d5 to challenge White's centre directly, keeping all of Black's options open — exactly the fluid play this repertoire loves.", sayShort: '…c6 — flexible, prepare ...d5.' }),
     b({ id: 'dxe4', moves: 'e4 g6 d4 Bg7 Nc3 c6 Nf3 d5 h3 dxe4 Nxe4 Nf6', highlights: [H('e4')], say: "...d5 strikes and the centre trades; ...Nf6 challenges the e4-knight, forcing White to simplify into a structure Black handles comfortably.", sayShort: '…d5, …Nf6 — trade the centre.' }),
     b({ id: 'mid', moves: 'e4 g6 d4 Bg7 Nc3 c6 Nf3 d5 h3 dxe4 Nxe4 Nf6 Nxf6+ exf6 Bc4 O-O O-O Nd7 c3 b5 Bb3 Nb6 Re1 a5', arrows: [A('b7', 'b5')], highlights: [H('b5')], say: "After the knight trade and castling, Black expands with ...b5 and ...a5 and reroutes the knight to b6. A solid, comfortable middlegame with easy queenside play.", sayShort: '…b5, …a5 — comfortable game.' }),
   ],

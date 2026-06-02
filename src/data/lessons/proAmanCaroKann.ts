@@ -20,14 +20,14 @@ const SRC = [
 
 export const PRO_AMAN_CARO_KANN_LESSON: LessonScript = {
   openingId: 'pro-aman-caro-kann',
-  title: "Aman's Caro-Kann — the Bishop Out, the Wall Up",
+  title: "This repertoire's Caro-Kann — the Bishop Out, the Wall Up",
   minutes: 10,
   orientation: 'black',
   kind: 'variation',
   sources: SRC,
   beats: [
     b({ id: 'c6', moves: 'e4 c6', highlights: [H('d5'), H('c6')],
-      say: "The Caro-Kann — Aman's solid Black backup. …c6 prepares to challenge the centre with …d5, and unlike the French, it keeps the light-squared bishop free to develop. Rock-solid, low-risk, no weaknesses.",
+      say: "The Caro-Kann — This repertoire's solid Black backup. …c6 prepares to challenge the centre with …d5, and unlike the French, it keeps the light-squared bishop free to develop. Rock-solid, low-risk, no weaknesses.",
       sayShort: '…c6 — solid, prepare …d5.' }),
     b({ id: 'bf5', moves: 'e4 c6 d4 d5 e5 Bf5', arrows: [A('c8', 'f5')], highlights: [H('f5')],
       say: "White grabs space with e5, and here is the Caro's whole point: …Bf5! The light-squared bishop develops OUTSIDE the pawn chain to an active post — the very piece that stays trapped in the French Defense. This is why Caro players sleep well.",

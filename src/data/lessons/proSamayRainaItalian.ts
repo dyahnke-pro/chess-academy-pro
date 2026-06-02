@@ -9,7 +9,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['concept:pos-development', 'concept:pos-center', 'https://www.chess.com/openings/Italian-Game', 'https://api.chess.com/pub/player/samayraina/games/archives'];
 
 export const PRO_SAMAYRAINA_ITALIAN_LESSON: LessonScript = {
-  openingId: 'pro-samayraina-italian', title: "Samay's Italian — the Pianissimo", minutes: 7,
+  openingId: 'pro-samayraina-italian', title: "This repertoire's Italian — the Pianissimo", minutes: 7,
   orientation: 'white', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'bc4', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5',

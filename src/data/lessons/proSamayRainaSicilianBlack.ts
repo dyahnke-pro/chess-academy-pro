@@ -11,16 +11,16 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['concept:pos-space', 'concept:pos-development', 'https://www.chess.com/openings/Sicilian-Defense-Kalashnikov-Variation', 'https://api.chess.com/pub/player/samayraina/games/archives'];
 
 export const PRO_SAMAYRAINA_SICILIAN_BLACK_LESSON: LessonScript = {
-  openingId: 'pro-samayraina-sicilian-black', title: "Samay's Sicilian — the …e5 Kalashnikov", minutes: 8,
+  openingId: 'pro-samayraina-sicilian-black', title: "This repertoire's Sicilian — the …e5 Kalashnikov", minutes: 8,
   orientation: 'black', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'c5', moves: 'e4 c5',
       highlights: [{ square: 'c5', color: KEY }, { square: 'd4', color: SOFT }],
-      say: "The Sicilian — Samay's main weapon as Black and the most combative answer to e4. From the very first move Black plays for the full point, not just to equalise.",
+      say: "The Sicilian — This repertoire's main weapon as Black and the most combative answer to e4. From the very first move Black plays for the full point, not just to equalise.",
       sayShort: '…c5 — fight for the win.' }),
     b({ id: 'nc6-e5', moves: 'e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 e5',
       arrows: [], highlights: [{ square: 'e5', color: KEY }, { square: 'd4', color: SOFT }],
-      say: "Nc6 and then the thematic e5 — the heart of Samay's system. Rather than the slow Najdorf, he hits the d4-knight at once and grabs central space. The knight must retreat or trade, and Black already dictates the centre.",
+      say: "Nc6 and then the thematic e5 — the heart of this repertoire's system. Rather than the slow Najdorf, he hits the d4-knight at once and grabs central space. The knight must retreat or trade, and Black already dictates the centre.",
       sayShort: '…e5 — kick the d4-knight.' }),
     b({ id: 'bxc6', moves: 'e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 e5 Nxc6 bxc6',
       highlights: [{ square: 'c6', color: KEY }, { square: 'e5', color: SOFT }],
@@ -36,7 +36,7 @@ export const PRO_SAMAYRAINA_SICILIAN_BLACK_LESSON: LessonScript = {
       sayShort: '…Bb4 — pin the e4-defender.' }),
     b({ id: 'plan', moves: 'e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 e5 Nxc6 bxc6 Nc3 Nf6 Bg5 Bb4',
       arrows: [A('c8', 'a6')], highlights: [{ square: 'd5', color: SOFT }, { square: 'e4', color: KEY }],
-      say: "The plan is clear: keep piling on e4, break with d5 when the moment is right, and put the bishop pair and the open b- and c-files to work. This is the Sicilian Samay plays — initiative over comfort, the full point over a draw.",
+      say: "The plan is clear: keep piling on e4, break with d5 when the moment is right, and put the bishop pair and the open b- and c-files to work. This is the Sicilian this repertoire plays — initiative over comfort, the full point over a draw.",
       sayShort: 'Plan: pressure e4, break with …d5.' }),
   ],
 };

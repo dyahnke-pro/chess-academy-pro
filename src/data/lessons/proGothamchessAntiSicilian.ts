@@ -16,7 +16,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 
 export const PRO_GOTHAMCHESS_ANTI_SICILIAN_LESSON: LessonScript = {
   openingId: 'pro-gothamchess-anti-sicilian',
-  title: "GothamChess's Anti-Sicilian — the Rossolimo, No Theory Required",
+  title: "This repertoire's Anti-Sicilian — the Rossolimo, No Theory Required",
   minutes: 11,
   orientation: 'white',
   kind: 'variation',
@@ -33,7 +33,7 @@ export const PRO_GOTHAMCHESS_ANTI_SICILIAN_LESSON: LessonScript = {
       arrows: [{ from: 'b5', to: 'c6', color: VIS }],
       highlights: [{ square: 'b5', color: KEY }, { square: 'c6', color: SOFT }],
       say:
-        "Against the Sicilian, Levy refuses to memorise a hundred lines of the Open. Instead — Bb5, the Rossolimo. We train the bishop on the c6-knight, threatening to trade it off and wreck Black's pawns. This one move sidesteps the entire theory swamp and lands us in a position WE understand better than our opponent.",
+        "Against the Sicilian, this repertoire refuses to memorise a hundred lines of the Open. Instead — Bb5, the Rossolimo. We train the bishop on the c6-knight, threatening to trade it off and wreck Black's pawns. This one move sidesteps the entire theory swamp and lands us in a position WE understand better than our opponent.",
       sayShort: 'Bb5 — the Rossolimo.',
     }),
     b({
@@ -85,7 +85,7 @@ export const PRO_GOTHAMCHESS_ANTI_SICILIAN_LESSON: LessonScript = {
       arrows: [{ from: 'd4', to: 'd5', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }],
       say:
-        "The pieces come off on d4 and our queen recaptures, landing dead-centre. Step back and count the pluses: a safe king, a queen dominating the middle, the bishop on f1 about to re-emerge on a great diagonal, and a structurally healthier position. It's a small edge — but it's the kind of clean, riskless pull Levy grinds into a full point. No theory, just a better game.",
+        "The pieces come off on d4 and our queen recaptures, landing dead-centre. Step back and count the pluses: a safe king, a queen dominating the middle, the bishop on f1 about to re-emerge on a great diagonal, and a structurally healthier position. It's a small edge — but it's the kind of clean, riskless pull this repertoire grinds into a full point. No theory, just a better game.",
       sayShort: 'Qxd4 — a clean, lasting edge.',
     }),
   ],

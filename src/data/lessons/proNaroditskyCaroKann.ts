@@ -48,7 +48,7 @@ function b(init: BeatInit): LessonBeat {
 
 export const PRO_NARODITSKY_CARO_KANN_LESSON: LessonScript = {
   openingId: 'pro-naroditsky-caro-kann',
-  title: "Naroditsky's Caro-Kann — Advance with c5",
+  title: "This repertoire's Caro-Kann — Advance with c5",
   minutes: 14,
   orientation: 'black',
   kind: 'variation',
@@ -65,7 +65,7 @@ export const PRO_NARODITSKY_CARO_KANN_LESSON: LessonScript = {
       moves: 'e4 c6',
       highlights: [{ square: 'c6', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "Welcome to the Caro-Kann — the line Naroditsky plays as Black against e4 in 3,546 of his chess.com games, scoring 64% across that whole sample. Black plays c6 — not d5 yet, not e5, just the quiet little move that prepares d5 with support. The c6-pawn looks small but it's a wedge. Every time White attacks the d5 square, the c6-pawn is there backing it up. The Caro is a counter-attacking opening dressed up to look solid. Let White think you're playing defensively. You're not.",
+        "Welcome to the Caro-Kann — the line this repertoire plays as Black against e4 in 3,546 of the games, scoring 64% across that whole sample. Black plays c6 — not d5 yet, not e5, just the quiet little move that prepares d5 with support. The c6-pawn looks small but it's a wedge. Every time White attacks the d5 square, the c6-pawn is there backing it up. The Caro is a counter-attacking opening dressed up to look solid. Let White think you're playing defensively. You're not.",
       sayShort: 'c6 — the wedge that backs d5.',
     }),
     b({
@@ -73,7 +73,7 @@ export const PRO_NARODITSKY_CARO_KANN_LESSON: LessonScript = {
       moves: 'e4 c6 d4',
       highlights: [{ square: 'd4', color: KEY }],
       say:
-        "And the most-played response: d4 — 1,862 of his 3,546 games, the classical centre-build. White seizes the centre with both feet. Now the game shapes around what we choose. The textbook answer is d5 — challenge it back. Of his games at this position, the d5 strike happens 1,527 times. That's our move.",
+        "And the most-played response: d4 — 1,862 of 3,546 games, the classical centre-build. White seizes the centre with both feet. Now the game shapes around what we choose. The textbook answer is d5 — challenge it back. Of the games at this position, the d5 strike happens 1,527 times. That's our move.",
       sayShort: 'd4 — White builds the centre.',
     }),
     b({
@@ -82,7 +82,7 @@ export const PRO_NARODITSKY_CARO_KANN_LESSON: LessonScript = {
       arrows: [{ from: 'd5', to: 'e4', color: ATK }],
       highlights: [{ square: 'd5', color: KEY }, { square: 'e4', color: KEY }],
       say:
-        "d5 — the strike. White grabbed the centre with d4; we challenge it right back. The classical Caro-Kann question hits the board: White must DECIDE. Trade on d5 (the Exchange, 372 of his games), advance with e5 (the Advance, 603 — our spine), block with Nc3 (the Classical, 295), or fight with f3 (the Fantasy, 189 — and his BEST score, 75%). Today we walk what they play most: e5.",
+        "d5 — the strike. White grabbed the centre with d4; we challenge it right back. The classical Caro-Kann question hits the board: White must DECIDE. Trade on d5 (the Exchange, 372 of the games), advance with e5 (the Advance, 603 — our spine), block with Nc3 (the Classical, 295), or fight with f3 (the Fantasy, 189 — and the BEST score, 75%). Today we walk what they play most: e5.",
       sayShort: 'd5 — make White pick a setup.',
     }),
     b({
@@ -100,7 +100,7 @@ export const PRO_NARODITSKY_CARO_KANN_LESSON: LessonScript = {
       arrows: [{ from: 'c5', to: 'd4', color: ATK }],
       highlights: [{ square: 'c5', color: KEY }, { square: 'd4', color: KEY }],
       say:
-        "c5 — the Botvinnik-Carls break, and this is THE move of Naroditsky's repertoire against the Advance. Instead of dancing around the wedge, we attack it at its root. When your opponent grabs space on the flank, you strike in the centre — and the centre right now is d4. White cannot keep the pawn chain intact. He must trade, defend, or push d5 and lock himself in. The most-played response is the pawn grab — dxc5 — and that's our spine.",
+        "c5 — the Botvinnik-Carls break, and this is THE move of this repertoire against the Advance. Instead of dancing around the wedge, we attack it at its root. When your opponent grabs space on the flank, you strike in the centre — and the centre right now is d4. White cannot keep the pawn chain intact. He must trade, defend, or push d5 and lock himself in. The most-played response is the pawn grab — dxc5 — and that's our spine.",
       sayShort: 'c5 — undermine the chain at d4.',
     }),
     b({
@@ -126,7 +126,7 @@ export const PRO_NARODITSKY_CARO_KANN_LESSON: LessonScript = {
       arrows: [{ from: 'e7', to: 'f5', color: VIS }, { from: 'e7', to: 'g6', color: VIS }],
       highlights: [{ square: 'e7', color: KEY }, { square: 'f5', color: SOFT }, { square: 'g6', color: SOFT }],
       say:
-        "And now we finish the opening. Bd3 from White, Nc6 from us, both sides castle, and the canonical move: Nge7. Not Nf6 — the f6-square is BLOCKED by the e5-pawn anyway, and from e7 our knight has two beautiful jumps: f5, hitting the centre, or g6, supporting an eventual f5 of our own. The position has been reached countless times in his Caro games. From here we're equal, developed, and ready for the middlegame. The opening's seven-move setup is over; the next seven moves define the middlegame.",
+        "And now we finish the opening. Bd3 from White, Nc6 from us, both sides castle, and the canonical move: Nge7. Not Nf6 — the f6-square is BLOCKED by the e5-pawn anyway, and from e7 our knight has two beautiful jumps: f5, hitting the centre, or g6, supporting an eventual f5 of our own. The position has been reached countless times in the Caro games. From here we're equal, developed, and ready for the middlegame. The opening's seven-move setup is over; the next seven moves define the middlegame.",
       sayShort: 'Nge7 — flexible to f5 or g6.',
     }),
     // ============ DEEP OPENING / EARLY MIDDLEGAME (plies 15-22) ============
@@ -197,7 +197,7 @@ export const PRO_NARODITSKY_CARO_KANN_LESSON: LessonScript = {
       moves: 'e4 c6 d4 d5 e5 c5 dxc5 e6 Nf3 Bxc5 Bd3 Nc6 O-O Nge7 Nbd2 Ng6 Nb3 Bb6 Re1 Qc7 a4 a6',
       highlights: [{ square: 'a6', color: KEY }, { square: 'b5', color: SOFT }],
       say:
-        "a6 — block the pawn advance, claim b5 forever, and stabilize. The opening is OVER. This is the position his three deepest games at this exact spine reach — move 11, the moment the middlegame begins. From here the game opens into one of three patterns: queenside expansion with our own b5 push, central play with f6 hitting the e5-pawn, or kingside maneuvering with the Ng6 jumping to f4. His data shows him playing all three depending on what White does next.",
+        "a6 — block the pawn advance, claim b5 forever, and stabilize. The opening is OVER. This is the position the three deepest games at this exact spine reach — move 11, the moment the middlegame begins. From here the game opens into one of three patterns: queenside expansion with our own b5 push, central play with f6 hitting the e5-pawn, or kingside maneuvering with the Ng6 jumping to f4. His data shows him playing all three depending on what White does next.",
       sayShort: 'a6 — block, claim b5, middlegame begins.',
     }),
     // ============ MIDDLEGAME PATTERN BEAT ============
@@ -206,7 +206,7 @@ export const PRO_NARODITSKY_CARO_KANN_LESSON: LessonScript = {
       moves: 'e4 c6 d4 d5 e5 c5 dxc5 e6 Nf3 Bxc5 Bd3 Nc6 O-O Nge7 Nbd2 Ng6 Nb3 Bb6 Re1 Qc7 a4 a6',
       highlights: [{ square: 'b5', color: KEY }, { square: 'f6', color: KEY }, { square: 'f4', color: KEY }],
       say:
-        "The middlegame plan crystallizes from his actual games at this position. Three ideas show up across his decisive Advance-c5 games. First — b5 expanding queenside: claiming the long diagonal for our Bb7, opening the c-file fully, and creating queenside space. Second — f6 hitting the e5-pawn: challenging the spearhead, opening the position for our pieces. Third — the knight jumping Nf4 to land on the prize square, threatening Nxd3 trading off White's good bishop or just sitting in a beautiful outpost. Whichever White's setup invites, we have a plan ready.",
+        "The middlegame plan crystallizes from the actual games at this position. Three ideas show up across his decisive Advance-c5 games. First — b5 expanding queenside: claiming the long diagonal for our Bb7, opening the c-file fully, and creating queenside space. Second — f6 hitting the e5-pawn: challenging the spearhead, opening the position for our pieces. Third — the knight jumping Nf4 to land on the prize square, threatening Nxd3 trading off White's good bishop or just sitting in a beautiful outpost. Whichever White's setup invites, we have a plan ready.",
       sayShort: 'Middlegame: b5, f6, or Nf4.',
     }),
     // ============ ENDGAME STRUCTURE BEAT ============

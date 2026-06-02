@@ -14,7 +14,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 
 export const PRO_GOTHAMCHESS_LONDON_LESSON: LessonScript = {
   openingId: 'pro-gothamchess-london',
-  title: "GothamChess's London System — the Setup and the Ne5 Squeeze",
+  title: "This repertoire's London System — the Setup and the Ne5 Squeeze",
   minutes: 11,
   orientation: 'white',
   kind: 'variation',
@@ -29,7 +29,7 @@ export const PRO_GOTHAMCHESS_LONDON_LESSON: LessonScript = {
       id: 'open',
       moves: 'd4 d5 Nf3 Nf6',
       say:
-        "The London — Levy's bread-and-butter with d4. The beauty of it: we play almost the same setup whatever Black does. d4, Nf3, and the pieces come out on autopilot. Black mirrors with d5 and Nf6.",
+        "The London — This repertoire's bread-and-butter with d4. The beauty of it: we play almost the same setup whatever Black does. d4, Nf3, and the pieces come out on autopilot. Black mirrors with d5 and Nf6.",
       sayShort: 'd4 Nf3 — the London setup.',
     }),
     b({

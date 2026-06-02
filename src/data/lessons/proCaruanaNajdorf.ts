@@ -17,13 +17,13 @@ const SRC = ['book:chess-fundamentals', 'concept:pos-king-safety', 'https://en.w
 
 export const PRO_CARUANA_NAJDORF_LESSON: LessonScript = {
   openingId: 'pro-caruana-najdorf',
-  title: "Caruana's Najdorf",
+  title: "This repertoire's Najdorf",
   minutes: 10,
   orientation: 'black',
   kind: 'variation',
   sources: SRC,
   beats: [
-    b({ id: 'a6', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6', say: "The Najdorf — the most-analysed defence in chess and Caruana's fighting weapon against e4. The little move a6 is its soul: it controls b5, denies White the natural squares, and waits to see how White commits.", sayShort: '…a6 — the Najdorf move.', arrows: [A('a7', 'a6')], highlights: [H('a6')] }),
+    b({ id: 'a6', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6', say: "The Najdorf — the most-analysed defence in chess and this repertoire's fighting weapon against e4. The little move a6 is its soul: it controls b5, denies White the natural squares, and waits to see how White commits.", sayShort: '…a6 — the Najdorf move.', arrows: [A('a7', 'a6')], highlights: [H('a6')] }),
     b({ id: 'e5', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5', say: "Against the solid Be2, Black plays the principled e5, grabbing central space and kicking the d4-knight. This is the heart of the Najdorf — claiming the centre and accepting a slight hole on d5 in return for activity and counterplay.", sayShort: '…e5 — grab the centre.', arrows: [A('d6', 'e5')], highlights: [H('e5')] }),
     b({ id: 'be7', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O', say: "The knight retreats to b3, Black develops the bishop to e7 and both sides castle. A calm, classical Najdorf where Black has a sound, harmonious setup and a clear plan: pressure the centre and expand on the queenside.", sayShort: '…Be7, …O-O — sound and safe.', arrows: [A('f8', 'e7')], highlights: [H('e7')] }),
     b({ id: 'be6', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Be3 Be6', say: "White develops the bishop to e3 and Black answers with Be6, controlling the key d5-square and preparing to contest the centre. Both sides complete development around the e5/d5 tension.", sayShort: '…Be6 — fight for d5.', arrows: [A('c8', 'e6')], highlights: [H('e6')] }),

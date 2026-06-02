@@ -16,7 +16,7 @@ const SRC = ['book:chess-fundamentals', 'concept:pos-center', 'https://en.wikipe
 
 export const PRO_CARUANA_KID_LESSON: LessonScript = {
   openingId: 'pro-caruana-kid',
-  title: "Caruana's King's Indian Defense",
+  title: "This repertoire's King's Indian Defense",
   minutes: 10,
   orientation: 'black',
   kind: 'variation',

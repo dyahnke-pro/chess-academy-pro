@@ -41,7 +41,7 @@ const SOURCES_RUY = ['book:ruy-lopez', 'https://www.chess.com/openings/Ruy-Lopez
 // ============================================================
 export const PRO_NAR_ALAPIN_LESSON: LessonScript = {
   openingId: 'pro-naroditsky-alapin',
-  title: "Naroditsky's Alapin — c3 against the Sicilian",
+  title: "This repertoire's Alapin — c3 against the Sicilian",
   minutes: 14,
   orientation: 'white',
   kind: 'variation',
@@ -50,7 +50,7 @@ export const PRO_NAR_ALAPIN_LESSON: LessonScript = {
     b({
       id: 'open', moves: 'e4 c5 c3',
       highlights: [{ square: 'c3', color: KEY }, { square: 'd4', color: SOFT }],
-      say: "Naroditsky's anti-Sicilian. c3 isn't theory — it's a setup move. The whole point is move three: d4, with the pawn supported. We sidestep heavy Sicilian theory entirely and head for a position where practical chances to outplay matter more than memorisation. Solid, flexible, and surprisingly aggressive once the pieces find their squares.",
+      say: "This repertoire's anti-Sicilian. c3 isn't theory — it's a setup move. The whole point is move three: d4, with the pawn supported. We sidestep heavy Sicilian theory entirely and head for a position where practical chances to outplay matter more than memorisation. Solid, flexible, and surprisingly aggressive once the pieces find their squares.",
       sayShort: 'c3 — sets up the d4 push.',
     }),
     b({
@@ -77,7 +77,7 @@ export const PRO_NAR_ALAPIN_LESSON: LessonScript = {
       id: 'open-it-up', moves: 'e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O',
       arrows: [{ from: 'd1', to: 'd6', color: VIS }],
       highlights: [{ square: 'd6', color: KEY }, { square: 'g1', color: SOFT }],
-      say: "exd6 en passant! Then Qxd6 and we castle short. Black's queen is exposed in the centre, our king is safe, our bishop on b3 stares at f7, and we're ahead in development by a tempo. From here Naroditsky's plan is a4-a5-a6 cramping Black's queenside.",
+      say: "exd6 en passant! Then Qxd6 and we castle short. Black's queen is exposed in the centre, our king is safe, our bishop on b3 stares at f7, and we're ahead in development by a tempo. From here this repertoire's plan is a4-a5-a6 cramping Black's queenside.",
       sayShort: 'exd6, O-O — centre open, king safe.',
     }),
     b({
@@ -91,7 +91,7 @@ export const PRO_NAR_ALAPIN_LESSON: LessonScript = {
       id: 'crawl-a4', moves: 'e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6 Qxe6 a4',
       arrows: [{ from: 'a4', to: 'a5', color: VIS }],
       highlights: [{ square: 'a4', color: KEY }, { square: 'a5', color: SOFT }],
-      say: "Now THE Naroditsky signature: a4 starting the queenside crawl. This sequence — a4, then a5, then a6 — is the structural feature he plays for, the move-pattern that appears in roughly a quarter of his Alapin games at this position. There's no single tactical shot; it's logical piece development meeting positional smothering, and Black's pieces can't coordinate while we just methodically expand.",
+      say: "Now THE this repertoire signature: a4 starting the queenside crawl. This sequence — a4, then a5, then a6 — is the structural feature he plays for, the move-pattern that appears in roughly a quarter of the Alapin games at this position. There's no single tactical shot; it's logical piece development meeting positional smothering, and Black's pieces can't coordinate while we just methodically expand.",
       sayShort: 'a4 — queenside crawl begins.',
     }),
     b({
@@ -126,7 +126,7 @@ export const PRO_NAR_ALAPIN_LESSON: LessonScript = {
       id: 'queen-swing', moves: 'e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6 Qxe6 a4 Qd7 a5 Nd5 a6 b6 d4 e6 Ne5 Nxe5 dxe5 Be7 Qg4',
       arrows: [{ from: 'd1', to: 'g4', color: VIS }],
       highlights: [{ square: 'g4', color: KEY }, { square: 'g7', color: SOFT }],
-      say: "After the knight trade and Be7, this is where the opening hands off to the middlegame — and look at what we have. The queen swings to g4 staring down at g7, the bishop on e7 is stuck defending, the king is still in the centre, the queenside is choked from the a6-push. From here the dominant ending across his decisive games is rook + minor + pawn, where the queenside passer becomes the conversion. The c3 setup was building toward exactly this for twelve moves.",
+      say: "After the knight trade and Be7, this is where the opening hands off to the middlegame — and look at what we have. The queen swings to g4 staring down at g7, the bishop on e7 is stuck defending, the king is still in the centre, the queenside is choked from the a6-push. From here the dominant ending across the decisive games is rook + minor + pawn, where the queenside passer becomes the conversion. The c3 setup was building toward exactly this for twelve moves.",
       sayShort: 'Qg4 — every piece working.',
     }),
   ],
@@ -137,7 +137,7 @@ export const PRO_NAR_ALAPIN_LESSON: LessonScript = {
 // ============================================================
 export const PRO_NAR_NAJDORF_LESSON: LessonScript = {
   openingId: 'pro-naroditsky-najdorf',
-  title: "Naroditsky's Najdorf — the sharpest fight",
+  title: "This repertoire's Najdorf — the sharpest fight",
   minutes: 7,
   orientation: 'black',
   kind: 'variation',
@@ -185,7 +185,7 @@ export const PRO_NAR_NAJDORF_LESSON: LessonScript = {
 // ============================================================
 export const PRO_NAR_KID_LESSON: LessonScript = {
   openingId: 'pro-naroditsky-kid',
-  title: "Naroditsky's King's Indian — Mar del Plata fight",
+  title: "This repertoire's King's Indian — Mar del Plata fight",
   minutes: 7,
   orientation: 'black',
   kind: 'variation',
@@ -214,7 +214,7 @@ export const PRO_NAR_KID_LESSON: LessonScript = {
     b({
       id: 'mar-del-plata', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 Nc6 Be3',
       highlights: [{ square: 'd4', color: KEY }, { square: 'c6', color: SOFT }],
-      say: "exd4 / Nxd4 / Re8 — the modern Mar del Plata mainline. Our rook lifts to the open e-file, the knight on c6 hits the d4-knight, and the kingside expansion …Nh5 + …Nf4 is coming next. Naroditsky's classical KID treatment.",
+      say: "exd4 / Nxd4 / Re8 — the modern Mar del Plata mainline. Our rook lifts to the open e-file, the knight on c6 hits the d4-knight, and the kingside expansion …Nh5 + …Nf4 is coming next. This repertoire's classical KID treatment.",
       sayShort: 'Mar del Plata — Re8, attack queued.',
     }),
     b({
@@ -232,7 +232,7 @@ export const PRO_NAR_KID_LESSON: LessonScript = {
 // ============================================================
 export const PRO_NAR_ALEKHINE_LESSON: LessonScript = {
   openingId: 'pro-naroditsky-alekhine',
-  title: "Naroditsky's Alekhine — provoke the over-extension",
+  title: "This repertoire's Alekhine — provoke the over-extension",
   minutes: 6,
   orientation: 'black',
   kind: 'variation',
@@ -272,7 +272,7 @@ export const PRO_NAR_ALEKHINE_LESSON: LessonScript = {
 // ============================================================
 export const PRO_NAR_KIA_LESSON: LessonScript = {
   openingId: 'pro-naroditsky-kia',
-  title: "Naroditsky's King's Indian Attack — system, not theory",
+  title: "This repertoire's King's Indian Attack — system, not theory",
   minutes: 6,
   orientation: 'white',
   kind: 'variation',
@@ -281,7 +281,7 @@ export const PRO_NAR_KIA_LESSON: LessonScript = {
     b({
       id: 'system', moves: 'Nf3',
       highlights: [{ square: 'f3', color: KEY }],
-      say: "Nf3 — Naroditsky's most-played first move across his ENTIRE career. This is a SYSTEM, not theory. We're going to develop into a King's Indian Attack setup regardless of what Black does: g3, Bg2, O-O, d3, Nbd2, e4. Same plan every game.",
+      say: "Nf3 — This repertoire's most-played first move across his ENTIRE career. This is a SYSTEM, not theory. We're going to develop into a King's Indian Attack setup regardless of what Black does: g3, Bg2, O-O, d3, Nbd2, e4. Same plan every game.",
       sayShort: 'Nf3 — system, not theory.',
     }),
     b({
@@ -312,7 +312,7 @@ export const PRO_NAR_KIA_LESSON: LessonScript = {
 // ============================================================
 export const PRO_NAR_ROSSOLIMO_LESSON: LessonScript = {
   openingId: 'pro-naroditsky-rossolimo',
-  title: "Naroditsky's Rossolimo — sidestep the Sicilian theory",
+  title: "This repertoire's Rossolimo — sidestep the Sicilian theory",
   minutes: 5,
   orientation: 'white',
   kind: 'variation',
@@ -352,7 +352,7 @@ export const PRO_NAR_ROSSOLIMO_LESSON: LessonScript = {
 // ============================================================
 export const PRO_NAR_JOBAVA_LESSON: LessonScript = {
   openingId: 'pro-naroditsky-jobava-london',
-  title: "Naroditsky's Jobava London — aggressive d4 surprise",
+  title: "This repertoire's Jobava London — aggressive d4 surprise",
   minutes: 5,
   orientation: 'white',
   kind: 'variation',
@@ -361,7 +361,7 @@ export const PRO_NAR_JOBAVA_LESSON: LessonScript = {
     b({
       id: 'open', moves: 'd4 d5 Nc3',
       highlights: [{ square: 'c3', color: KEY }],
-      say: "The Jobava London. Nc3 instead of the boring Nf3 — we're saying we want a tactical fight, not a positional grind. Naroditsky popularized this for amateur play because it leads to sharp middlegames that punish under-prepared opponents.",
+      say: "The Jobava London. Nc3 instead of the boring Nf3 — we're saying we want a tactical fight, not a positional grind. This repertoire popularized this for amateur play because it leads to sharp middlegames that punish under-prepared opponents.",
       sayShort: 'Nc3 — tactical fight, not London grind.',
     }),
     b({
@@ -405,7 +405,7 @@ export const PRO_NAR_JOBAVA_LESSON: LessonScript = {
 // ============================================================
 export const PRO_NAR_RUY_LESSON: LessonScript = {
   openingId: 'pro-naroditsky-ruy-lopez',
-  title: "Naroditsky's Ruy Lopez — pressure without commitment",
+  title: "This repertoire's Ruy Lopez — pressure without commitment",
   minutes: 6,
   orientation: 'white',
   kind: 'variation',
@@ -415,7 +415,7 @@ export const PRO_NAR_RUY_LESSON: LessonScript = {
       id: 'open', moves: 'e4 e5 Nf3 Nc6 Bb5',
       arrows: [{ from: 'b5', to: 'c6', color: ATK }],
       highlights: [{ square: 'b5', color: KEY }, { square: 'c6', color: SOFT }],
-      say: "The Ruy Lopez. Bb5 pins Black's c6-knight against the e5-pawn — classical, deep, and the most theoretical opening in chess. Naroditsky's repertoire here is the modern mainline: pressure, develop, wait for Black to crack.",
+      say: "The Ruy Lopez. Bb5 pins Black's c6-knight against the e5-pawn — classical, deep, and the most theoretical opening in chess. This repertoire here is the modern mainline: pressure, develop, wait for Black to crack.",
       sayShort: 'Bb5 — pin the knight, classical.',
     }),
     b({

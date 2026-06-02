@@ -11,12 +11,12 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['concept:pos-development', 'concept:pos-center', 'https://www.chess.com/openings/Italian-Game-Giuoco-Pianissimo', 'https://api.chess.com/pub/player/samayraina/games/archives'];
 
 export const PRO_SAMAYRAINA_OPEN_E5_LESSON: LessonScript = {
-  openingId: 'pro-samayraina-open-e5', title: "Samay's …e5 — the Italian (Giuoco Pianissimo)", minutes: 8,
+  openingId: 'pro-samayraina-open-e5', title: "This repertoire's …e5 — the Italian (Giuoco Pianissimo)", minutes: 8,
   orientation: 'black', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'e5', moves: 'e4 e5 Nf3 Nc6',
       highlights: [{ square: 'e5', color: KEY }, { square: 'd4', color: SOFT }],
-      say: "Samay answers e4 with the classical e5, fighting for the centre head-on, and develops Nc6 to defend it. This is the most principled reply to the king's-pawn.",
+      say: "This repertoire answers e4 with the classical e5, fighting for the centre head-on, and develops Nc6 to defend it. This is the most principled reply to the king's-pawn.",
       sayShort: '…e5, …Nc6 — claim the centre.' }),
     b({ id: 'bc5', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5',
       arrows: [A('c5', 'f2')], highlights: [{ square: 'c5', color: KEY }, { square: 'f2', color: SOFT }],

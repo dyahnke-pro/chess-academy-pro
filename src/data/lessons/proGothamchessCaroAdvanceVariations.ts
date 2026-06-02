@@ -32,7 +32,7 @@ const MAIN_LINE: LessonScript = {
       arrows: [{ from: 'd4', to: 'e5', color: VIS }],
       highlights: [{ square: 'e5', color: KEY }, { square: 'f5', color: SOFT }],
       say:
-        "Against the Caro, Levy grabs space with e5 — the Advance. This is his bread-and-butter line: 423 games at a crushing 73%. Black develops the light-squared bishop outside the chain to f5, exactly as the Caro wants. So our whole plan is built around making that bishop regret it.",
+        "Against the Caro, this repertoire grabs space with e5 — the Advance. This is his bread-and-butter line: 423 games at a crushing 73%. Black develops the light-squared bishop outside the chain to f5, exactly as the Caro wants. So our whole plan is built around making that bishop regret it.",
       sayShort: 'e5 — the Advance squeeze.',
     }),
     b({
@@ -76,7 +76,7 @@ const MAIN_LINE: LessonScript = {
       arrows: [{ from: 'c2', to: 'c4', color: VIS }],
       highlights: [{ square: 'c4', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "And we open a second front: c4, striking at Black's d5-pawn. Here's the middlegame picture — we have more space, the better bishop, a target on h5, and now pressure on the queenside too. White plays on both wings while Black sits cramped and passive. This is the squeeze that wins 73% of Levy's Caros.",
+        "And we open a second front: c4, striking at Black's d5-pawn. Here's the middlegame picture — we have more space, the better bishop, a target on h5, and now pressure on the queenside too. White plays on both wings while Black sits cramped and passive. This is the squeeze that wins 73% of this repertoire's Caros.",
       sayShort: 'c4 — open the second front.',
     }),
   ],
@@ -122,7 +122,7 @@ const C5_LINE: LessonScript = {
       arrows: [{ from: 'd3', to: 'h7', color: VIS }],
       highlights: [{ square: 'd3', color: KEY }, { square: 'e5', color: SOFT }],
       say:
-        "Bd3 trains the bishop toward h7 and the kingside. Here's the middlegame: the e5-pawn is a thorn cramping Black, our pieces flow toward his king, and we castle next with a comfortable, space-based pull. Black freed his game with …c5 but handed us the long-term squeeze in return — exactly the trade Levy is happy to make.",
+        "Bd3 trains the bishop toward h7 and the kingside. Here's the middlegame: the e5-pawn is a thorn cramping Black, our pieces flow toward his king, and we castle next with a comfortable, space-based pull. Black freed his game with …c5 but handed us the long-term squeeze in return — exactly the trade this repertoire is happy to make.",
       sayShort: 'Bd3 — aim at the king, castle next.',
     }),
   ],

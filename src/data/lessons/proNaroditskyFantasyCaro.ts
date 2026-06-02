@@ -26,7 +26,7 @@ function b(init: BeatInit): LessonBeat {
 
 export const PRO_NAR_FANTASY_CARO_LESSON: LessonScript = {
   openingId: 'pro-naroditsky-fantasy-caro',
-  title: "Naroditsky's Fantasy — f3 against the Caro",
+  title: "This repertoire's Fantasy — f3 against the Caro",
   minutes: 6,
   orientation: 'white',
   kind: 'variation',

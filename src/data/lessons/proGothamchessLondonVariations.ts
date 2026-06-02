@@ -68,7 +68,7 @@ const STANDARD: LessonScript = {
       arrows: [{ from: 'd3', to: 'h7', color: VIS }],
       highlights: [{ square: 'h7', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "Here's the middlegame. We have the half-open h-file aimed at the king, the bishop on d3 trained on h7, central pressure on Black's hanging c5- and d5-pawns, and rooks swinging to the open files. The plan is simple and brutal: build on the kingside while Black's loose pawns tie his pieces down. This is why Levy's London is a winning machine, not a drawing one.",
+        "Here's the middlegame. We have the half-open h-file aimed at the king, the bishop on d3 trained on h7, central pressure on Black's hanging c5- and d5-pawns, and rooks swinging to the open files. The plan is simple and brutal: build on the kingside while Black's loose pawns tie his pieces down. This is why this repertoire's London is a winning machine, not a drawing one.",
       sayShort: 'h-file + Bd3 — attack the king.',
     }),
   ],
@@ -89,7 +89,7 @@ const VS_KID: LessonScript = {
       arrows: [{ from: 'd1', to: 'd2', color: VIS }],
       highlights: [{ square: 'c3', color: KEY }, { square: 'd2', color: SOFT }],
       say:
-        "Against a King's-Indian fianchetto, Levy DROPS the quiet London and goes for blood. Nc3 and Qd2 — not e3 and Be2. The queen on d2 lines up with the bishop, and the whole battery is pointed at one square: h6. We're hunting Black's most important piece.",
+        "Against a King's-Indian fianchetto, this repertoire DROPS the quiet London and goes for blood. Nc3 and Qd2 — not e3 and Be2. The queen on d2 lines up with the bishop, and the whole battery is pointed at one square: h6. We're hunting Black's most important piece.",
       sayShort: 'Qd2 — load the h6 battery.',
     }),
     b({
@@ -164,7 +164,7 @@ const JOBAVA: LessonScript = {
       arrows: [{ from: 'a4', to: 'c5', color: VIS }],
       highlights: [{ square: 'c5', color: KEY }, { square: 'd4', color: SOFT }],
       say:
-        "Black trades on d4 and castles; we recapture and reach the middlegame with central space and a knight bound for c5. The plan: plant the knight on the c5-outpost where it can't be kicked by a pawn, use the d4-pawn for space, and pressure Black's slightly loose queenside. It's a small, comfortable pull from a system that takes ten seconds to set up. That's Levy's value bet.",
+        "Black trades on d4 and castles; we recapture and reach the middlegame with central space and a knight bound for c5. The plan: plant the knight on the c5-outpost where it can't be kicked by a pawn, use the d4-pawn for space, and pressure Black's slightly loose queenside. It's a small, comfortable pull from a system that takes ten seconds to set up. That's this repertoire's value bet.",
       sayShort: 'Nc5 outpost + central space.',
     }),
   ],

@@ -15,12 +15,12 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['concept:pos-initiative', 'concept:tac-trap', 'concept:pos-development', 'https://www.chess.com/openings/Budapest-Gambit', 'https://api.chess.com/pub/player/imrosen/games/archives'];
 
 export const PRO_ERICROSEN_BUDAPEST_LESSON: LessonScript = {
-  openingId: 'pro-ericrosen-budapest', title: "Rosen's Budapest Gambit", minutes: 7,
+  openingId: 'pro-ericrosen-budapest', title: "This repertoire's Budapest Gambit", minutes: 7,
   orientation: 'black', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'e5', moves: 'd4 Nf6 c4 e5',
       arrows: [], highlights: [{ square: 'e5', color: KEY }, { square: 'd4', color: KEY }],
-      say: "The Budapest Gambit — e5! Against d4 and c4 we strike in the centre and offer the pawn. It is a Rosen kind of opening: a little dubious, hugely fun, and packed with traps that punish a White player who grabs material and relaxes.",
+      say: "The Budapest Gambit — e5! Against d4 and c4 we strike in the centre and offer the pawn. It is a this repertoire kind of opening: a little dubious, hugely fun, and packed with traps that punish a White player who grabs material and relaxes.",
       sayShort: '…e5 — the gambit strike.' }),
     b({ id: 'ng4', moves: 'd4 Nf6 c4 e5 dxe5 Ng4',
       arrows: [A('g4', 'e5'), A('g4', 'f2')], highlights: [{ square: 'g4', color: KEY }, { square: 'e5', color: KEY }],
@@ -40,7 +40,7 @@ export const PRO_ERICROSEN_BUDAPEST_LESSON: LessonScript = {
       sayShort: '…Nxe5 — pawn back, monster knight.' }),
     b({ id: 'plan', moves: 'd4 Nf6 c4 e5 dxe5 Ng4 Bf4 Bb4+ Nd2 Nc6 Ngf3 Qe7 a3 Ngxe5 Nxe5 Nxe5',
       arrows: [A('e5', 'd3'), A('e5', 'f3')], highlights: [{ square: 'd3', color: KEY }, { square: 'f2', color: SOFT }],
-      say: "The plan from here is pure activity: the e5-knight eyes the d3- and f3-holes, …O-O and …Re8 pile on the e-file, and the bishops rake White's kingside. Watch for the recurring tricks — …Nd3 forking, …Bxf2+ shots — that win games when White is careless. This is Rosen's playground.",
+      say: "The plan from here is pure activity: the e5-knight eyes the d3- and f3-holes, …O-O and …Re8 pile on the e-file, and the bishops rake White's kingside. Watch for the recurring tricks — …Nd3 forking, …Bxf2+ shots — that win games when White is careless. This is this repertoire's playground.",
       sayShort: 'Plan: …Nd3 tricks, …Re8 pressure.' }),
   ],
 };

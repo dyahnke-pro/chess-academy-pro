@@ -1305,7 +1305,7 @@
       "fen": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
       "wrongMove": "Bf5",
       "correctMove": "c5",
-      "explanation": "After e5 the textbook reflex everyone knows is Bf5 — get the bishop out before the chain locks. But we're playing Naroditsky's line, where c5 strikes the centre at d4 BEFORE developing the bishop. The principle: when your opponent grabs space on the flank, hit them in the centre. Bf5 just lets White play h4-h5 / g4 chasing the bishop around for the next ten moves; c5 forces White to clarify and our score with it is 64%.",
+      "explanation": "After e5 the textbook reflex everyone knows is Bf5 — get the bishop out before the chain locks. But we're playing this repertoire's line, where c5 strikes the centre at d4 BEFORE developing the bishop. The principle: when your opponent grabs space on the flank, hit them in the centre. Bf5 just lets White play h4-h5 / g4 chasing the bishop around for the next ten moves; c5 forces White to clarify and our score with it is 64%.",
       "shortNarration": "Wrong: …Bf5. Right: …c5 — Botvinnik-Carls.",
       "sources": [
         "book:caro-kann",
@@ -1327,7 +1327,7 @@
       "fen": "r1bqk1nr/pp3ppp/2n1p3/2bpP3/8/3B1N2/PPP2PPP/RNBQ1RK1 b kq - 3 7",
       "wrongMove": "Nf6",
       "correctMove": "Nge7",
-      "explanation": "Reflex says Nf6 — develop the knight to its 'normal' square. Look at the board: the e5-pawn already CONTROLS f6. The knight on f6 has no good squares to go to and is just blocking our own king's view of the kingside. Nge7 is the canonical Naroditsky reroute: from e7 the knight has two beautiful jumps — f5 hitting the centre, or g6 pressuring e5 and prepping a kingside attack. The 'normal' move is the wrong one here.",
+      "explanation": "Reflex says Nf6 — develop the knight to its 'normal' square. Look at the board: the e5-pawn already CONTROLS f6. The knight on f6 has no good squares to go to and is just blocking our own king's view of the kingside. Nge7 is the canonical this repertoire reroute: from e7 the knight has two beautiful jumps — f5 hitting the centre, or g6 pressuring e5 and prepping a kingside attack. The 'normal' move is the wrong one here.",
       "shortNarration": "Wrong: …Nf6 (e5 blocks). Right: …Nge7.",
       "sources": [
         "book:caro-kann",
@@ -1371,7 +1371,7 @@
       "fen": "rnb1kb1r/pp2pppp/5n2/2pq4/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
       "wrongMove": "Nf3",
       "correctMove": "Na3",
-      "explanation": "After …Nf6 in the d5-open line — the natural Nf3 is fine, but Naroditsky's signature is Na3! heading to b5 for the queen-fork outpost. Nf3 develops too modestly; Na3 wins concrete tempi on the c7 prize square. His 13% pick at this position scores 71.3% vs 66% for routine Nf3.",
+      "explanation": "After …Nf6 in the d5-open line — the natural Nf3 is fine, but this repertoire's signature is Na3! heading to b5 for the queen-fork outpost. Nf3 develops too modestly; Na3 wins concrete tempi on the c7 prize square. His 13% pick at this position scores 71.3% vs 66% for routine Nf3.",
       "shortNarration": "Na3 — heading for Nb5 outpost",
       "sources": [
         "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
@@ -2182,7 +2182,7 @@
       "fen": "r1bqkbnr/p4ppp/2p1p3/2pp4/4P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 6",
       "wrongMove": "exd5",
       "correctMove": "e5",
-      "explanation": "After Bxc6 and d3, when Black plays …d5, the ambitious e5! grabs a central space wedge and cramps Black, the Carlsen-style accelerated plan. The routine exd5 just opens the position for Black's bishop pair and relieves the cramped position. Ram e5 to keep Black passive behind the doubled pawns and build a kingside initiative.",
+      "explanation": "After Bxc6 and d3, when Black plays …d5, the ambitious e5! grabs a central space wedge and cramps Black, the grandmaster-style accelerated plan. The routine exd5 just opens the position for Black's bishop pair and relieves the cramped position. Ram e5 to keep Black passive behind the doubled pawns and build a kingside initiative.",
       "shortNarration": "e5 — the space wedge, keep Black cramped",
       "sources": [
         "book:chess-fundamentals",
@@ -2826,7 +2826,7 @@
       "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/3P4/PPP1BPPP/RNBQK2R b KQkq - 2 6",
       "wrongMove": "Ng4",
       "correctMove": "h5",
-      "explanation": "It is tempting to jump straight to g4 to hit f2 — but here White can simply chase the knight or trade it off, and the attack fizzles. Rosen plays h5 FIRST: it opens the h-file for the rook AND takes away the squares White would use to harass the knight on g4. Get the move order right — h5, then Ng4 with real force behind it.",
+      "explanation": "It is tempting to jump straight to g4 to hit f2 — but here White can simply chase the knight or trade it off, and the attack fizzles. This repertoire plays h5 FIRST: it opens the h-file for the rook AND takes away the squares White would use to harass the knight on g4. Get the move order right — h5, then Ng4 with real force behind it.",
       "shortNarration": "Play …h5 before …Ng4.",
       "sources": [
         "concept:pos-development",
@@ -3079,7 +3079,7 @@
       "fen": "rnbqkb1r/pppp1ppp/5n2/4P3/2P5/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
       "wrongMove": "Ne4",
       "correctMove": "Ng4",
-      "explanation": "After dxe5, …Ne4 is the Fajarowicz — tricky but objectively dubious, and easily neutralised. The sound main line, and the one Rosen plays, is …Ng4: the knight hits the e5-pawn, prepares the quick development with tempo, and keeps all the gambit's traps alive. Pick the move that fights for the pawn AND keeps the initiative.",
+      "explanation": "After dxe5, …Ne4 is the Fajarowicz — tricky but objectively dubious, and easily neutralised. The sound main line, and the one this repertoire plays, is …Ng4: the knight hits the e5-pawn, prepares the quick development with tempo, and keeps all the gambit's traps alive. Pick the move that fights for the pawn AND keeps the initiative.",
       "shortNarration": "…Ng4, not the dubious …Ne4.",
       "sources": [
         "concept:pos-initiative",
@@ -3144,7 +3144,7 @@
       "fen": "r1bq1rk1/2p1bppp/p1np1n2/1p2p3/4P3/1BP2N2/PP1P1PPP/RNBQR1K1 w - - 1 9",
       "wrongMove": "d4",
       "correctMove": "h3",
-      "explanation": "Rushing d4 in the Closed Ruy walks into the reply Bg4, pinning the f3-knight against the queen and piling pressure on the d4-point before White is ready. That is exactly why h3 is almost automatic here — Samay's prophylactic move takes the g4-square away first, and only then does he prepare d4 under his own terms. A quiet tempo now saves a headache later.",
+      "explanation": "Rushing d4 in the Closed Ruy walks into the reply Bg4, pinning the f3-knight against the queen and piling pressure on the d4-point before White is ready. That is exactly why h3 is almost automatic here — This repertoire's prophylactic move takes the g4-square away first, and only then does he prepare d4 under his own terms. A quiet tempo now saves a headache later.",
       "shortNarration": "h3 first — stop the Bg4 pin before you push d4.",
       "sources": [
         "https://api.chess.com/pub/player/samayraina/games/archives",
@@ -3170,7 +3170,7 @@
       "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2P2N2/PP1P1PPP/RNBQK2R w KQkq - 1 5",
       "wrongMove": "d4",
       "correctMove": "d3",
-      "explanation": "In the Giuoco Piano the natural-looking d4 hands Black easy equality with the fork trick: exd4, cxd4, Bb4 check, then Nxe4! and Black regains the pawn with a free game. Samay plays the Pianissimo d3 instead — the slow squeeze, keeping the centre intact and the bishop on c4 aimed at f7. At club level the quiet build-up scores better than the premature break.",
+      "explanation": "In the Giuoco Piano the natural-looking d4 hands Black easy equality with the fork trick: exd4, cxd4, Bb4 check, then Nxe4! and Black regains the pawn with a free game. This repertoire plays the Pianissimo d3 instead — the slow squeeze, keeping the centre intact and the bishop on c4 aimed at f7. At club level the quiet build-up scores better than the premature break.",
       "shortNarration": "Play d3, the Pianissimo — d4 lets the fork trick free Black.",
       "sources": [
         "https://api.chess.com/pub/player/samayraina/games/archives",
@@ -3814,7 +3814,7 @@
       "fen": "rnbqk1nr/ppp2ppp/3b4/3p4/2PP4/5N2/PP3PPP/RNBQKB1R b KQkq - 0 5",
       "wrongMove": "Ne7",
       "correctMove": "c6",
-      "explanation": "Ne7 blocks the bishop and invites cxd5, when White's pieces flood in and Black is nearly lost. c6 first shores up d5 and keeps the comfortable, solid Exchange French Carlsen is after.",
+      "explanation": "Ne7 blocks the bishop and invites cxd5, when White's pieces flood in and Black is nearly lost. c6 first shores up d5 and keeps the comfortable, solid Exchange French this repertoire is after.",
       "shortNarration": "c6 — shore up d5, stay solid",
       "sources": [
         "concept:pos-center",

@@ -15,7 +15,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['concept:pawn-minority-attack', 'concept:pos-development', 'https://www.chess.com/openings/Queens-Gambit-Declined', 'https://api.chess.com/pub/player/imrosen/games/archives'];
 
 export const PRO_ERICROSEN_QGD_LESSON: LessonScript = {
-  openingId: 'pro-ericrosen-qgd', title: "Rosen's QGD — the Carlsbad", minutes: 7,
+  openingId: 'pro-ericrosen-qgd', title: "This repertoire's QGD — the Carlsbad", minutes: 7,
   orientation: 'black', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'qgd', moves: 'd4 d5 c4 e6',
@@ -40,7 +40,7 @@ export const PRO_ERICROSEN_QGD_LESSON: LessonScript = {
       sayShort: '…Re8 — grab the e-file.' }),
     b({ id: 'plan', moves: 'd4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 c6 e3 Bd6 Bd3 h6 Bh4 O-O Nge2 Re8',
       arrows: [A('f6', 'e4')], highlights: [{ square: 'e4', color: KEY }, { square: 'f5', color: SOFT }],
-      say: "The Carlsbad blueprint for Black: meet White's minority attack on the queenside by counter-attacking on the kingside — …Ne4 jumping into the hole, …Bxh4 or …f5-f4 prying open lines at White's king. While White grinds slowly on the queenside, we play for the knockout. Rosen handles this structure against 3000-rated opposition.",
+      say: "The Carlsbad blueprint for Black: meet White's minority attack on the queenside by counter-attacking on the kingside — …Ne4 jumping into the hole, …Bxh4 or …f5-f4 prying open lines at White's king. While White grinds slowly on the queenside, we play for the knockout. This repertoire handles this structure against 3000-rated opposition.",
       sayShort: 'Plan: …Ne4, …f5 — kingside counter.' }),
   ],
 };

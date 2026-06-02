@@ -31,7 +31,7 @@ const SRC = [
 // ============================================================
 const BERLIN: LessonScript = {
   openingId: 'pro-naroditsky-ruy-lopez',
-  title: 'Berlin Defense — Carlsen endgame',
+  title: 'Berlin Defense — queenless endgame',
   minutes: 8,
   orientation: 'white',
   kind: 'variation',
@@ -40,7 +40,7 @@ const BERLIN: LessonScript = {
     b({
       id: 'berlin-open', moves: 'e4 e5 Nf3 Nc6 Bb5 Nf6',
       highlights: [{ square: 'f6', color: KEY }, { square: 'e4', color: SOFT }],
-      say: "…Nf6 — the Berlin Defense. Instead of …a6 chasing the bishop, Black develops directly and attacks the e4-pawn. The Berlin became famous when Kramnik used it to draw Kasparov in 2000; Carlsen plays it as Black against the world's best.",
+      say: "…Nf6 — the Berlin Defense. Instead of …a6 chasing the bishop, Black develops directly and attacks the e4-pawn. The Berlin became famous when Kramnik used it to draw Kasparov in 2000; it remains a top-level mainstay against the world's best.",
       sayShort: '…Nf6 — Berlin.',
     }),
     b({

@@ -26,7 +26,7 @@ const SRC = [
 
 export const PRO_ERICROSEN_LONDON_LESSON: LessonScript = {
   openingId: 'pro-ericrosen-london',
-  title: "Rosen's London System — the Bf4 setup",
+  title: "This repertoire's London System — the Bf4 setup",
   minutes: 8,
   orientation: 'white',
   kind: 'variation',
@@ -36,7 +36,7 @@ export const PRO_ERICROSEN_LONDON_LESSON: LessonScript = {
       id: 'bf4', moves: 'd4 Nf6 Bf4',
       arrows: [A('f4', 'b8')],
       highlights: [{ square: 'f4', color: KEY }, { square: 'd4', color: SOFT }],
-      say: "The London System. We play d4 and develop the dark-squared bishop OUT to f4 before locking it in with e3 — that one move is the whole point. The bishop eyes the b8-h2 diagonal and the c7/e5 squares, and we will build the same harmonious setup no matter what Black does. It is the opening Rosen reaches for more than any other.",
+      say: "The London System. We play d4 and develop the dark-squared bishop OUT to f4 before locking it in with e3 — that one move is the whole point. The bishop eyes the b8-h2 diagonal and the c7/e5 squares, and we will build the same harmonious setup no matter what Black does. It is the opening this repertoire reaches for more than any other.",
       sayShort: 'Bf4 — bishop out before e3.',
     }),
     b({
@@ -77,7 +77,7 @@ export const PRO_ERICROSEN_LONDON_LESSON: LessonScript = {
       id: 'plan', moves: 'd4 Nf6 Bf4 g6 Nc3 d5 e3 Bg7 Nf3 O-O Be2 c5 Ne5 Nc6 O-O',
       arrows: [A('e2', 'd3'), A('d1', 'f3')],
       highlights: [{ square: 'f7', color: KEY }, { square: 'h7', color: SOFT }],
-      say: "From here the plan writes itself: reroute the bishop to d3 to aim at h7, bring the queen toward the kingside, and use the e5-knight as the spearhead of an attack on Black's king. When Black is solid we just keep our edge; when Black weakens, we strike at f7 and h7. This is Rosen's bread and butter.",
+      say: "From here the plan writes itself: reroute the bishop to d3 to aim at h7, bring the queen toward the kingside, and use the e5-knight as the spearhead of an attack on Black's king. When Black is solid we just keep our edge; when Black weakens, we strike at f7 and h7. This is this repertoire's bread and butter.",
       sayShort: 'Plan: Bd3, queen up, attack h7.',
     }),
   ],

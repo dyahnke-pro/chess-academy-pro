@@ -16,7 +16,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 
 export const PRO_GOTHAMCHESS_TROMPOWSKY_LESSON: LessonScript = {
   openingId: 'pro-gothamchess-trompowsky',
-  title: "GothamChess's Trompowsky — vs …e6 and the f4 Storm",
+  title: "This repertoire's Trompowsky — vs …e6 and the f4 Storm",
   minutes: 11,
   orientation: 'white',
   kind: 'variation',
@@ -33,7 +33,7 @@ export const PRO_GOTHAMCHESS_TROMPOWSKY_LESSON: LessonScript = {
       arrows: [{ from: 'g5', to: 'f6', color: VIS }],
       highlights: [{ square: 'f6', color: KEY }],
       say:
-        "The Trompowsky — d4 Nf6 Bg5. Out comes the bishop on move two, straight at the f6-knight. This is Levy's anti-everything weapon: we sidestep all of Black's prepared Indian defences and make him solve fresh problems from move two.",
+        "The Trompowsky — d4 Nf6 Bg5. Out comes the bishop on move two, straight at the f6-knight. This is this repertoire's anti-everything weapon: we sidestep all of Black's prepared Indian defences and make him solve fresh problems from move two.",
       sayShort: 'Bg5 — straight at the knight.',
     }),
     b({

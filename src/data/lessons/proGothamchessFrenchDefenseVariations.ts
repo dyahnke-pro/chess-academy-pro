@@ -30,7 +30,7 @@ const RUBINSTEIN: LessonScript = {
       sayShort: 'e5 — the doubled pawn pays off.' }),
     b({ id: 'mg-bg4', moves: 'e4 e6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ gxf6 Nf3 Nc6 g3 e5 Bg2 Bg4 h3 Bxf3',
       arrows: [{ from: 'g4', to: 'f3', color: VIS }], highlights: [{ square: 'f3', color: KEY }, { square: 'e5', color: SOFT }],
-      say: "We develop …Bg4 and, when questioned, trade it on f3 — damaging White's kingside or grabbing the bishop pair, depending how he recaptures. Here's the middlegame: a powerful centre, both our bishops active, and the open g-file ready for a rook once we tuck the king away. We're a touch worse on the cold engine count, but this is rich, double-edged attacking chess — exactly the fight Levy wants from the French.",
+      say: "We develop …Bg4 and, when questioned, trade it on f3 — damaging White's kingside or grabbing the bishop pair, depending how he recaptures. Here's the middlegame: a powerful centre, both our bishops active, and the open g-file ready for a rook once we tuck the king away. We're a touch worse on the cold engine count, but this is rich, double-edged attacking chess — exactly the fight this repertoire wants from the French.",
       sayShort: '…Bxf3 — rooks to the g-file.' }),
   ],
 };

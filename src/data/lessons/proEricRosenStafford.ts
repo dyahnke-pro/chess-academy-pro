@@ -39,7 +39,7 @@ const SRC = [
 
 export const PRO_ERICROSEN_STAFFORD_LESSON: LessonScript = {
   openingId: 'pro-ericrosen-stafford',
-  title: "Rosen's Stafford Gambit — the f2 storm",
+  title: "This repertoire's Stafford Gambit — the f2 storm",
   minutes: 9,
   orientation: 'black',
   kind: 'variation',
@@ -74,7 +74,7 @@ export const PRO_ERICROSEN_STAFFORD_LESSON: LessonScript = {
       moves: 'e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5',
       arrows: [A('c5', 'f2')],
       highlights: [{ square: 'f2', color: KEY }, { square: 'c5', color: KEY }],
-      say: "White props up the centre with d3, and our bishop goes straight to c5 — pointing at f2. Memorise this square: f2 is the soft spot in almost every Stafford line. The whole attack is going to crash into it. Rosen has reached this exact position hundreds of times.",
+      say: "White props up the centre with d3, and our bishop goes straight to c5 — pointing at f2. Memorise this square: f2 is the soft spot in almost every Stafford line. The whole attack is going to crash into it. This repertoire has reached this exact position hundreds of times.",
       sayShort: '…Bc5 — aim at f2.',
     }),
     b({
@@ -82,7 +82,7 @@ export const PRO_ERICROSEN_STAFFORD_LESSON: LessonScript = {
       moves: 'e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5',
       arrows: [A('h8', 'h2')],
       highlights: [{ square: 'h5', color: KEY }, { square: 'h2', color: SOFT }],
-      say: "After White develops the bishop to e2, Rosen plays the move that defines his Stafford — h5. It looks reckless, but it is deliberate bait: it prepares Ng4 without allowing the bishop to chase the knight away, and it opens the h-file for the rook still sitting on h8. He plays it not because the engine loves it, but because it sets the trap.",
+      say: "After White develops the bishop to e2, this repertoire plays the move that defines his Stafford — h5. It looks reckless, but it is deliberate bait: it prepares Ng4 without allowing the bishop to chase the knight away, and it opens the h-file for the rook still sitting on h8. He plays it not because the engine loves it, but because it sets the trap.",
       sayShort: '…h5 — open the h-file, prep Ng4.',
     }),
     b({
@@ -98,7 +98,7 @@ export const PRO_ERICROSEN_STAFFORD_LESSON: LessonScript = {
       moves: 'e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5 c3 Ng4 d4 Qh4',
       arrows: [A('h4', 'f2'), A('h4', 'h2')],
       highlights: [{ square: 'h4', color: KEY }, { square: 'f2', color: KEY }],
-      say: "White grabs more centre with d4, and the queen swings to h4 — the third attacker. Queen, knight and bishop now converge on f2 and the h-file all at once. This is the Stafford battery: it is exactly the formation Rosen used to mate a grandmaster in the World Blitz Championship.",
+      say: "White grabs more centre with d4, and the queen swings to h4 — the third attacker. Queen, knight and bishop now converge on f2 and the h-file all at once. This is the Stafford battery: it is exactly the formation this repertoire used to mate a grandmaster in the World Blitz Championship.",
       sayShort: '…Qh4 — the mating battery loads.',
     }),
     b({
@@ -121,7 +121,7 @@ export const PRO_ERICROSEN_STAFFORD_LESSON: LessonScript = {
       id: 'honest',
       moves: 'e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5',
       highlights: [{ square: 'h3', color: KEY }, { square: 'd4', color: SOFT }, { square: 'f2', color: SOFT }],
-      say: "Be honest about the bargain. A calm White player who plays h3 to stop Ng4, finishes developing, castles, and builds a c3-and-d4 fortress can hold the extra pawn — the Stafford is objectively a gambit, not an equalizer. But over the board, against the clock, the pressure on f2 makes people crack. That is why Rosen scores so heavily with it.",
+      say: "Be honest about the bargain. A calm White player who plays h3 to stop Ng4, finishes developing, castles, and builds a c3-and-d4 fortress can hold the extra pawn — the Stafford is objectively a gambit, not an equalizer. But over the board, against the clock, the pressure on f2 makes people crack. That is why this repertoire scores so heavily with it.",
       sayShort: 'Honest: a calm h3 holds the pawn.',
     }),
   ],

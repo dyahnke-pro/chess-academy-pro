@@ -27,7 +27,7 @@ function b(init: BeatInit): LessonBeat {
 
 export const PRO_GOTHAMCHESS_CARO_ADVANCE_LESSON: LessonScript = {
   openingId: 'pro-gothamchess-caro-advance-white',
-  title: "GothamChess's Caro-Kann Advance — the h4 Main Line",
+  title: "This repertoire's Caro-Kann Advance — the h4 Main Line",
   minutes: 12,
   orientation: 'white',
   kind: 'variation',
@@ -43,7 +43,7 @@ export const PRO_GOTHAMCHESS_CARO_ADVANCE_LESSON: LessonScript = {
       moves: 'e4 c6',
       highlights: [{ square: 'c6', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "We're White against the Caro-Kann — and Levy's weapon here is the Advance, the most aggressive try. Black plays c6, the quiet little wedge that prepares d5 with support. He plays this whole structure across 423 of his games and wins 299 of them. Our job is to take the space and never give it back.",
+        "We're White against the Caro-Kann — and this repertoire's weapon here is the Advance, the most aggressive try. Black plays c6, the quiet little wedge that prepares d5 with support. He plays this whole structure across 423 of the games and wins 299 of them. Our job is to take the space and never give it back.",
       sayShort: 'c6 — the Caro wedge.',
     }),
     b({
@@ -75,8 +75,8 @@ export const PRO_GOTHAMCHESS_CARO_ADVANCE_LESSON: LessonScript = {
       moves: 'e4 c6 d4 d5 e5 Bf5 h4',
       highlights: [{ square: 'h4', color: KEY }, { square: 'h5', color: SOFT }],
       say:
-        "h4 — Levy's signature. We grab kingside space and threaten h5, which would slam the door on the f5-bishop's retreat squares. It's the move that gives the modern Advance its bite.",
-      sayShort: 'h4 — his signature space grab.',
+        "h4 — This repertoire's signature. We grab kingside space and threaten h5, which would slam the door on the f5-bishop's retreat squares. It's the move that gives the modern Advance its bite.",
+      sayShort: 'h4 — the signature space grab.',
     }),
     b({
       id: 'h5',

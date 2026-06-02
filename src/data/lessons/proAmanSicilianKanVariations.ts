@@ -104,7 +104,7 @@ export const PRO_AMAN_SICILIAN_KAN_VARIATION_LESSONS: Record<string, LessonScrip
         say: "…Bb7 lands on the long diagonal, staring straight at e4 through the centre. Both Black bishops and the c7-queen now eye White's centre; the bind looks impressive but it's under quiet, constant pressure.",
         sayShort: '…Bb7 — long diagonal on e4.' }),
       b({ id: 'middlegame', moves: 'e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 c4 Qc7 Nc3 Nf6 Be2 d6 O-O b6 Be3 Bb7 f3 Nbd7 Qd2', highlights: [H('b5'), H('d5')],
-        say: "White props the centre with f3 and lines up Qd2; Black completes with …Nbd7, the full hedgehog. The position is coiled and patient — Black waits for the right moment to uncoil with …b5 or …d5, breaking the bind on Black's terms. Equal, rich, and exactly the kind of slow grind Aman thrives in.",
+        say: "White props the centre with f3 and lines up Qd2; Black completes with …Nbd7, the full hedgehog. The position is coiled and patient — Black waits for the right moment to uncoil with …b5 or …d5, breaking the bind on Black's terms. Equal, rich, and exactly the kind of slow grind this repertoire thrives in.",
         sayShort: '…Nbd7 — full hedgehog, await the break.' }),
     ],
   },

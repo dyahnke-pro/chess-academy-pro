@@ -34,7 +34,7 @@ const GAMBIT: LessonScript = {
       arrows: [{ from: 'f2', to: 'f4', color: VIS }],
       highlights: [{ square: 'f4', color: KEY }],
       say:
-        "The Vienna Gambit at full tilt — 649 games in Levy's database. After Nc3 and Nf6, we hurl the f-pawn forward with f4, opening the f-file toward Black's king. Black's best is the central counter d5 rather than grabbing the pawn.",
+        "The Vienna Gambit at full tilt — 649 games in this repertoire's database. After Nc3 and Nf6, we hurl the f-pawn forward with f4, opening the f-file toward Black's king. Black's best is the central counter d5 rather than grabbing the pawn.",
       sayShort: 'f4 — the gambit thrust.',
     }),
     b({

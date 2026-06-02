@@ -15,16 +15,16 @@ const SRC = ['book:chess-fundamentals', 'https://en.wikipedia.org/wiki/Sicilian_
 
 export const PRO_CARLSEN_CLOSED_SICILIAN_LESSON: LessonScript = {
   openingId: 'pro-carlsen-closed-sicilian',
-  title: "Carlsen's Closed Sicilian — the Grand Prix f4 Attack",
+  title: "This repertoire's Closed Sicilian — the Grand Prix f4 Attack",
   minutes: 11,
   orientation: 'white',
   kind: 'variation',
   sources: SRC,
   beats: [
-    b({ id: 'nc3', moves: 'e4 c5 Nc3 Nc6 f4', highlights: [H('f4'), H('c5')], say: "Against the Sicilian, Carlsen sometimes skips the Open and plays the Grand Prix — Nc3 and f4. No memorising twenty moves of Najdorf theory: White grabs kingside space and sets up a direct attack with f4-f5 against Black's king. Simple, aggressive, and dangerous at every level.", sayShort: 'f4 — the Grand Prix attack.' }),
+    b({ id: 'nc3', moves: 'e4 c5 Nc3 Nc6 f4', highlights: [H('f4'), H('c5')], say: "Against the Sicilian, this repertoire sometimes skips the Open and plays the Grand Prix — Nc3 and f4. No memorising twenty moves of Najdorf theory: White grabs kingside space and sets up a direct attack with f4-f5 against Black's king. Simple, aggressive, and dangerous at every level.", sayShort: 'f4 — the Grand Prix attack.' }),
     b({ id: 'g6', moves: 'e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 a3', highlights: [H('g6'), H('a3')], say: "Black fianchettoes to challenge the centre, and White plays the useful a3 — preparing to expand and keeping the b4-square in reserve. White's plan is clear and thematic: castle, then roll the f-pawn forward to crack open the kingside.", sayShort: 'Nf3, a3 — build for f4-f5.' }),
     b({ id: 'bc4', moves: 'e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 a3 d6 Bc4 e6 O-O', arrows: [A('c4', 'f7')], highlights: [H('c4')], say: "The bishop goes to c4, eyeing f7 and the a2-g8 diagonal, and White castles. Everything points at the kingside. With the centre stable and the pieces aimed at Black's king, White is ready for the d3, Qe1-h4 and f5 attacking plan that defines the Grand Prix.", sayShort: 'Bc4, O-O — aim at f7.' }),
-    b({ id: 'd3', moves: 'e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 a3 d6 Bc4 e6 O-O Nge7 d3', highlights: [H('d3'), H('f4')], say: "d3 props the centre and frees the queen to swing to e1 and h4 for the attack. White's setup is complete and harmonious; the f4-f5 break will pry open lines toward Black's king. This is the kind of clear, attacking middlegame Carlsen converts with ease.", sayShort: 'd3 — finish, then f5 storms.' }),
+    b({ id: 'd3', moves: 'e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 a3 d6 Bc4 e6 O-O Nge7 d3', highlights: [H('d3'), H('f4')], say: "d3 props the centre and frees the queen to swing to e1 and h4 for the attack. White's setup is complete and harmonious; the f4-f5 break will pry open lines toward Black's king. This is the kind of clear, attacking middlegame this repertoire converts with ease.", sayShort: 'd3 — finish, then f5 storms.' }),
   ],
 };
 

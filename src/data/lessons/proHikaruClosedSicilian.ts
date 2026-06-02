@@ -16,15 +16,15 @@ const SRC = ['book:chess-fundamentals', 'https://www.chess.com/openings/Sicilian
 
 export const PRO_HIKARU_CLOSED_SICILIAN_LESSON: LessonScript = {
   openingId: 'pro-hikaru-closed-sicilian',
-  title: "Hikaru's Grand Prix Attack — f4-f5 and the Kingside Storm",
+  title: "This repertoire's Grand Prix Attack — f4-f5 and the Kingside Storm",
   minutes: 11,
   orientation: 'white',
   kind: 'variation',
   sources: SRC,
   beats: [
-    b({ id: 'nc3', moves: 'e4 c5 Nc3', highlights: [H('c3')], say: "The Grand Prix — Hikaru and Levy both call it legendary. Against the Sicilian, Nc3 comes first for a reason: it stops Black's freeing ...d5 before we throw the f-pawn forward. No deep Open-Sicilian theory, just a direct attack.", sayShort: 'Nc3 — stop ...d5 first.' }),
+    b({ id: 'nc3', moves: 'e4 c5 Nc3', highlights: [H('c3')], say: "The Grand Prix — widely regarded as legendary. Against the Sicilian, Nc3 comes first for a reason: it stops Black's freeing ...d5 before we throw the f-pawn forward. No deep Open-Sicilian theory, just a direct attack.", sayShort: 'Nc3 — stop ...d5 first.' }),
     b({ id: 'f4', moves: 'e4 c5 Nc3 Nc6 f4', arrows: [A('f2', 'f4')], highlights: [H('f4')], say: "f4 — the Grand Prix's signature. White grabs central space and opens the f-file for the coming kingside storm. Every piece will pour toward Black's king.", sayShort: 'f4 — the Grand Prix punch.' }),
-    b({ id: 'bc4', moves: 'e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bc4', arrows: [A('f1', 'c4')], highlights: [H('c4')], say: "Black fianchettoes and Hikaru develops the bishop to c4 — the original, attacking Grand Prix setup, aiming the bishop at f7 and supporting the f5-break. The plan is O-O, then f5 to rip the kingside open.", sayShort: 'Bc4 — eye f7, prep f5.' }),
+    b({ id: 'bc4', moves: 'e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bc4', arrows: [A('f1', 'c4')], highlights: [H('c4')], say: "Black fianchettoes and this repertoire develops the bishop to c4 — the original, attacking Grand Prix setup, aiming the bishop at f7 and supporting the f5-break. The plan is O-O, then f5 to rip the kingside open.", sayShort: 'Bc4 — eye f7, prep f5.' }),
     b({ id: 'f5', moves: 'e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bc4 e6 f5', arrows: [A('f4', 'f5')], highlights: [H('f5')], say: "After e6, the spearhead lunges: f5! The pawn strikes at e6 and g6, tearing at the squares around Black's fianchettoed king before he's even castled. This is the Grand Prix at full throttle.", sayShort: 'f5 — crack the kingside open.' }),
     b({ id: 'open', moves: 'e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bc4 e6 f5 Nge7 fxe6 dxe6', highlights: [H('e6')], say: "Black blocks with the knight and the pawns trade on e6 — but the lines are open now. Black's pawns are split, the e6-pawn is weak, and White's pieces have open files pointing at the king.", sayShort: 'fxe6 — open lines, weak e6.' }),
     b({ id: 'castle', moves: 'e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bc4 e6 f5 Nge7 fxe6 dxe6 O-O O-O d3', highlights: [H('d3')], say: "Both sides castle and White props the centre with d3. The position has settled, but White holds the initiative: the open f-file, the bishop on c4, and Black's weakened pawn structure all favour the attacker.", sayShort: 'O-O, d3 — keep the initiative.' }),

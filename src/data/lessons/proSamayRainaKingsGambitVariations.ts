@@ -16,7 +16,7 @@ const VS_DECLINED: LessonScript = {
   beats: [
     b({ id: 'nf3', moves: 'e4 e5 f4 Nc6 Nf3 d6 Bc4',
       arrows: [A('c4', 'f7')], highlights: [{ square: 'c4', color: KEY }, { square: 'f7', color: SOFT }],
-      say: "When Black declines with Nc6, Samay just builds the dream setup: Nf3, Bc4 on the a2-g8 diagonal, and the centre intact. Declining hands White a free, harmonious King's-Gambit position with no pawn given.",
+      say: "When Black declines with Nc6, this repertoire just builds the dream setup: Nf3, Bc4 on the a2-g8 diagonal, and the centre intact. Declining hands White a free, harmonious King's-Gambit position with no pawn given.",
       sayShort: 'Nf3, Bc4 — build, no pawn given.' }),
     b({ id: 'oo', moves: 'e4 e5 f4 Nc6 Nf3 d6 Bc4 Bg4 O-O Nf6 Nc3 Be7 d3',
       highlights: [{ square: 'f4', color: KEY }, { square: 'e4', color: SOFT }],
@@ -35,7 +35,7 @@ const VS_FALKBEER: LessonScript = {
   beats: [
     b({ id: 'exd5', moves: 'e4 e5 f4 d5 exd5 exf4',
       arrows: [], highlights: [{ square: 'd5', color: KEY }, { square: 'f4', color: SOFT }],
-      say: "The Falkbeer counter-strike d5; Samay takes exd5 and lets Black recapture on f4. The d5-pawn is a thorn that cramps Black, and White keeps a clean development edge.",
+      say: "The Falkbeer counter-strike d5; this repertoire takes exd5 and lets Black recapture on f4. The d5-pawn is a thorn that cramps Black, and White keeps a clean development edge.",
       sayShort: 'exd5 — keep the d5 thorn.' }),
     b({ id: 'd4', moves: 'e4 e5 f4 d5 exd5 exf4 Nf3 Nf6 d4 Nxd5 Bc4',
       arrows: [A('c4', 'd5')], highlights: [{ square: 'd4', color: KEY }, { square: 'd5', color: SOFT }],

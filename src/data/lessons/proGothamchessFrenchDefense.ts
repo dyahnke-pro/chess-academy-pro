@@ -16,7 +16,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 
 export const PRO_GOTHAMCHESS_FRENCH_DEFENSE_LESSON: LessonScript = {
   openingId: 'pro-gothamchess-french-defense',
-  title: "GothamChess's French — the Rubinstein …gxf6 Powerhouse",
+  title: "This repertoire's French — the Rubinstein …gxf6 Powerhouse",
   minutes: 11,
   orientation: 'black',
   kind: 'variation',
@@ -33,7 +33,7 @@ export const PRO_GOTHAMCHESS_FRENCH_DEFENSE_LESSON: LessonScript = {
       arrows: [{ from: 'd5', to: 'e4', color: VIS }],
       highlights: [{ square: 'e4', color: SOFT }],
       say:
-        "The French — e4 e6, then …d5. Against the main Nc3 we play the Rubinstein: dxe4, trading off the centre right away. Some say it's passive. Levy plays it as a coiled spring — we're about to take on a striking pawn structure that most opponents have no idea how to meet.",
+        "The French — e4 e6, then …d5. Against the main Nc3 we play the Rubinstein: dxe4, trading off the centre right away. Some say it's passive. This repertoire plays it as a coiled spring — we're about to take on a striking pawn structure that most opponents have no idea how to meet.",
       sayShort: 'dxe4 — the Rubinstein trade.',
     }),
     b({
@@ -68,7 +68,7 @@ export const PRO_GOTHAMCHESS_FRENCH_DEFENSE_LESSON: LessonScript = {
       arrows: [{ from: 'g4', to: 'f3', color: VIS }],
       highlights: [{ square: 'g4', color: KEY }, { square: 'f3', color: SOFT }],
       say:
-        "White completes the fianchetto; we develop with Bg4, pinning the f3-knight to the queen. Here's our middlegame: a powerful centre, both bishops aimed at White's position, and the open g-file ready for a rook to come crashing down once we tuck our king away on the queenside. We're a touch worse on the engine's cold count — but this is rich, double-edged, attacking chess, and the player who understands the structure outplays the one who memorised a line. That's exactly the fight Levy wants from the French.",
+        "White completes the fianchetto; we develop with Bg4, pinning the f3-knight to the queen. Here's our middlegame: a powerful centre, both bishops aimed at White's position, and the open g-file ready for a rook to come crashing down once we tuck our king away on the queenside. We're a touch worse on the engine's cold count — but this is rich, double-edged, attacking chess, and the player who understands the structure outplays the one who memorised a line. That's exactly the fight this repertoire wants from the French.",
       sayShort: 'Bg4 — pin f3, rooks to the g-file.',
     }),
   ],

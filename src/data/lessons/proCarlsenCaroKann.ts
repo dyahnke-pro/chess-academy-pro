@@ -15,7 +15,7 @@ const SRC = ['book:chess-fundamentals', 'https://en.wikipedia.org/wiki/Caro%E2%8
 
 export const PRO_CARLSEN_CARO_KANN_LESSON: LessonScript = {
   openingId: 'pro-carlsen-caro-kann',
-  title: "Carlsen's Caro-Kann — Advance with …Bf5",
+  title: "This repertoire's Caro-Kann — Advance with …Bf5",
   minutes: 11,
   orientation: 'black',
   kind: 'variation',
@@ -39,7 +39,7 @@ const EXCHANGE: LessonScript = {
   openingId: 'pro-carlsen-caro-kann', title: 'Exchange', minutes: 6, orientation: 'black', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'cxd5', moves: 'e4 c6 d4 d5 exd5 cxd5', highlights: [H('d5')], say: "The Exchange Variation — White trades on d5, giving Black a free game with the light-squared bishop already unobstructed. Black recaptures with the c-pawn and develops naturally; the symmetrical structure is comfortable and the so-called 'bad' bishop is anything but.", sayShort: 'cxd5 — free, symmetrical, comfy.' }),
-    b({ id: 'bf5', moves: 'e4 c6 d4 d5 exd5 cxd5 Bd3 Nc6 c3 Nf6 Bf4 Bg4', arrows: [A('g4', 'd1')], highlights: [H('g4')], say: "Black mirrors White's setup, develops …Nc6 and …Nf6, and pins with …Bg4 — getting the light bishop active again. The position is a balanced Exchange where understanding, not memory, decides. Carlsen is happy to grind these from full equality.", sayShort: 'Bg4 — active bishop, balanced.' }),
+    b({ id: 'bf5', moves: 'e4 c6 d4 d5 exd5 cxd5 Bd3 Nc6 c3 Nf6 Bf4 Bg4', arrows: [A('g4', 'd1')], highlights: [H('g4')], say: "Black mirrors White's setup, develops …Nc6 and …Nf6, and pins with …Bg4 — getting the light bishop active again. The position is a balanced Exchange where understanding, not memory, decides. This repertoire is happy to grind these from full equality.", sayShort: 'Bg4 — active bishop, balanced.' }),
   ],
 };
 

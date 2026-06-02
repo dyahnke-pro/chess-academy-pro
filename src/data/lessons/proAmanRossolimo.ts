@@ -20,7 +20,7 @@ const SRC = [
 
 export const PRO_AMAN_ROSSOLIMO_LESSON: LessonScript = {
   openingId: 'pro-aman-rossolimo',
-  title: "Aman's Rossolimo — Trade on c6, Take the Centre",
+  title: "This repertoire's Rossolimo — Trade on c6, Take the Centre",
   minutes: 9,
   orientation: 'white',
   kind: 'variation',

@@ -16,7 +16,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 
 export const PRO_GOTHAMCHESS_PIRC_DEFENSE_LESSON: LessonScript = {
   openingId: 'pro-gothamchess-pirc-defense',
-  title: "GothamChess's Pirc — Let Them Build It, Then Knock It Down",
+  title: "This repertoire's Pirc — Let Them Build It, Then Knock It Down",
   minutes: 11,
   orientation: 'black',
   kind: 'variation',

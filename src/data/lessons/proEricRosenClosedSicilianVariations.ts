@@ -43,7 +43,7 @@ const VS_G6: LessonScript = {
       sayShort: 'Qxd4, Bb5+ — develop with tempo.' }),
     b({ id: 'plan', moves: 'e4 c5 Nc3 g6 d4 cxd4 Qxd4 Nf6 Bb5 a6 Bd3 Bg7 Be3 O-O O-O-O',
       arrows: [A('d1', 'd8')], highlights: [{ square: 'd3', color: KEY }, { square: 'c1', color: SOFT }],
-      say: "The bishop drops to d3 eyeing the kingside, Be3 develops, and White castles long for an opposite-side attack: a strong centralised queen, a space edge, and the bishop pair aimed at Black's king. Rosen scores 73% from this line — the early …g6 is simply premature.",
+      say: "The bishop drops to d3 eyeing the kingside, Be3 develops, and White castles long for an opposite-side attack: a strong centralised queen, a space edge, and the bishop pair aimed at Black's king. This repertoire scores 73% from this line — the early …g6 is simply premature.",
       sayShort: 'Bd3, O-O-O — comfortable, attacking.' }),
   ],
 };

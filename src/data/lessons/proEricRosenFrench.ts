@@ -14,7 +14,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['concept:pawn-chain', 'concept:pos-development', 'https://www.chess.com/openings/French-Defense', 'https://api.chess.com/pub/player/imrosen/games/archives'];
 
 export const PRO_ERICROSEN_FRENCH_LESSON: LessonScript = {
-  openingId: 'pro-ericrosen-french', title: "Rosen's French — Classical", minutes: 6,
+  openingId: 'pro-ericrosen-french', title: "This repertoire's French — Classical", minutes: 6,
   orientation: 'black', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'e6', moves: 'e4 e6 d4 d5',
@@ -35,7 +35,7 @@ export const PRO_ERICROSEN_FRENCH_LESSON: LessonScript = {
       sayShort: '…c5 — hit the chain’s base.' }),
     b({ id: 'plan', moves: 'e4 e6 d4 d5 Nc3 Nf6 Bg5 Be7 e5 Nfd7 Bxe7 Qxe7 f4 O-O Nf3 c5',
       arrows: [A('b8', 'c6'), A('d7', 'b6')], highlights: [{ square: 'c5', color: KEY }, { square: 'f7', color: SOFT }],
-      say: "The plan: …Nc6 and …cxd4 to open the c-file, reroute the d7-knight to b6 or f8 to guard the king, and pressure d4 and c2. Black's counterplay on the queenside arrives just as White's kingside attack does — and Rosen is very comfortable defending the king while striking back. Counter-attack, not passive defense.",
+      say: "The plan: …Nc6 and …cxd4 to open the c-file, reroute the d7-knight to b6 or f8 to guard the king, and pressure d4 and c2. Black's counterplay on the queenside arrives just as White's kingside attack does — and this repertoire is very comfortable defending the king while striking back. Counter-attack, not passive defense.",
       sayShort: 'Plan: …Nc6, …cxd4, hit d4.' }),
   ],
 };

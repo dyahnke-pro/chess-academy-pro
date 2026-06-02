@@ -18,7 +18,7 @@ const SRC = ['concept:pos-center', 'concept:pos-development', 'concept:pos-space
 
 export const PRO_SAMAYRAINA_OPEN_SICILIAN_LESSON: LessonScript = {
   openingId: 'pro-samayraina-open-sicilian',
-  title: "Samay's Open Sicilian — the principled d4",
+  title: "This repertoire's Open Sicilian — the principled d4",
   minutes: 8,
   orientation: 'white',
   kind: 'variation',
@@ -28,7 +28,7 @@ export const PRO_SAMAYRAINA_OPEN_SICILIAN_LESSON: LessonScript = {
       id: 'nf3', moves: 'e4 c5 Nf3 d6 d4',
       arrows: [],
       highlights: [{ square: 'd4', color: KEY }, { square: 'c5', color: SOFT }],
-      say: "The Open Sicilian — the most principled, most ambitious answer to the Sicilian. We play Nf3 and then strike with d4, opening the centre. We refuse the quiet anti-Sicilians; we want the full theoretical main lines where White fights for a real edge. This is Samay's most-played opening by a mile.",
+      say: "The Open Sicilian — the most principled, most ambitious answer to the Sicilian. We play Nf3 and then strike with d4, opening the centre. We refuse the quiet anti-Sicilians; we want the full theoretical main lines where White fights for a real edge. This is this repertoire's most-played opening by a mile.",
       sayShort: 'd4 — open the Sicilian.',
     }),
     b({

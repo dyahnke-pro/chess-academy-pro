@@ -187,7 +187,7 @@ export function OpeningExplorerPage(): JSX.Element {
       <div className="grid grid-cols-4 gap-1 mb-4 p-1 bg-theme-surface rounded-xl" data-testid="tab-toggle">
         {([
           { id: 'masterclasses' as const, label: 'Masterclasses', icon: GraduationCap, testId: 'tab-masterclasses', activeClasses: 'bg-amber-500/25 text-amber-200', borderColor: 'border-amber-400/80 shadow-[0_0_6px_rgba(245,158,11,0.7),0_0_14px_rgba(245,158,11,0.45),0_0_24px_rgba(245,158,11,0.25)]' },
-          { id: 'pro' as const, label: 'Pro', icon: Users, testId: 'tab-pro', activeClasses: 'bg-emerald-500/25 text-emerald-200', borderColor: 'border-emerald-400/80 shadow-[0_0_6px_rgba(16,185,129,0.7),0_0_14px_rgba(16,185,129,0.45),0_0_24px_rgba(16,185,129,0.25)]' },
+          { id: 'pro' as const, label: 'Elite', icon: Users, testId: 'tab-pro', activeClasses: 'bg-emerald-500/25 text-emerald-200', borderColor: 'border-emerald-400/80 shadow-[0_0_6px_rgba(16,185,129,0.7),0_0_14px_rgba(16,185,129,0.45),0_0_24px_rgba(16,185,129,0.25)]' },
           { id: 'gambits' as const, label: 'Gambits', icon: Swords, testId: 'tab-gambits', activeClasses: 'bg-rose-500/25 text-rose-200', borderColor: 'border-rose-400/80 shadow-[0_0_6px_rgba(244,63,94,0.7),0_0_14px_rgba(244,63,94,0.45),0_0_24px_rgba(244,63,94,0.25)]' },
           { id: 'all' as const, label: 'All', icon: Library, testId: 'tab-all', activeClasses: 'bg-violet-500/25 text-violet-200', borderColor: 'border-violet-400/80 shadow-[0_0_6px_rgba(139,92,246,0.7),0_0_14px_rgba(139,92,246,0.45),0_0_24px_rgba(139,92,246,0.25)]' },
         ]).map(({ id, label, icon: Icon, testId, activeClasses, borderColor }) => (

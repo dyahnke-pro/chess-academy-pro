@@ -19,7 +19,7 @@ const SRC = [
 
 export const PRO_AMAN_OPEN_SICILIAN_LESSON: LessonScript = {
   openingId: 'pro-aman-open-sicilian',
-  title: "Aman's Open Sicilian — Take the Centre, Then Press",
+  title: "This repertoire's Open Sicilian — Take the Centre, Then Press",
   minutes: 10,
   orientation: 'white',
   kind: 'variation',

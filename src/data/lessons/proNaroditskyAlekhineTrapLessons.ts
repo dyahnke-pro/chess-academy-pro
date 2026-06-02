@@ -62,14 +62,14 @@ const BE3_BB4_VARIANT: LessonScript = {
 
 // TRAP 3: 17g — fxe5 in Anti-Vienna + Nxe4 (Hikaru victim!)
 const FXE5_NXE4_HIKARU: LessonScript = {
-  openingId: 'pro-naroditsky-alekhine', title: 'Weapon: fxe5 in Anti-Vienna f4 line (Hikaru victim)', minutes: 3, orientation: 'black', kind: 'trap', sources: SRC,
+  openingId: 'pro-naroditsky-alekhine', title: 'Weapon: fxe5 in Anti-Vienna f4 line (top-GM victim)', minutes: 3, orientation: 'black', kind: 'trap', sources: SRC,
   beats: [
     b({ id: 'alek-hik-setup', moves: 'e4 Nf6 Nc3 e5 f4 d5', highlights: [H('d5', KEY)],
       say: "Anti-Vienna with Nc3 e5 f4 — White plays the King's Gambit Declined-style attack. Black answers ...d5 challenging the centre. The wrong White move is the natural-looking fxe5.",
       sayShort: 'f4 ...d5.' }),
     b({ id: 'alek-hik-blunder', moves: 'e4 Nf6 Nc3 e5 f4 d5 fxe5', highlights: [H('e5', ATK)],
-      say: "fxe5?? — White takes the pawn but loses material to ...Nxe4. 17 opponents fell into this including Hikaru Nakamura (3316!) and Konavets (3067).",
-      sayShort: 'fxe5 — Hikaru\'s mistake.' }),
+      say: "fxe5?? — White takes the pawn but loses material to ...Nxe4. 17 opponents fell into this including a 3316-rated GM and Konavets (3067).",
+      sayShort: 'fxe5 — A top grandmaster\'s mistake.' }),
     b({ id: 'alek-hik-nxe4', moves: 'e4 Nf6 Nc3 e5 f4 d5 fxe5 Nxe4', highlights: [H('e4', ATK)],
       say: "...Nxe4! Black's knight grabs the e4-pawn and attacks the Nc3 too. White's tactics fall apart from here.",
       sayShort: '...Nxe4 — grab + fork.' }),
@@ -121,7 +121,7 @@ interface TrapEntry { name: string; lesson: LessonScript; }
 const TRAPS: TrapEntry[] = [
   { name: 'Nc3 in Four Pawns lets ...Bb4 win the bishop pair', lesson: NC3_FOUR_PAWNS_BB4 },
   { name: 'Be3 + ...Bb4 wins structure (move-order variant)', lesson: BE3_BB4_VARIANT },
-  { name: 'fxe5 in Anti-Vienna f4 line (Hikaru victim)', lesson: FXE5_NXE4_HIKARU },
+  { name: 'fxe5 in Anti-Vienna f4 line (top-GM victim)', lesson: FXE5_NXE4_HIKARU },
   { name: 'Bb5 in Anti-Vienna lets ...Nd4 fork', lesson: BB5_ND4_FORK },
   { name: 'Bc4 + Nd7 in Modern Alekhine', lesson: BC4_MODERN_TRADE },
 ];

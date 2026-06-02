@@ -345,7 +345,7 @@ const VS_B6_OWEN: LessonScript = {
     b({
       id: 'b6-castle', moves: 'Nf3 b6 g3 Bb7 Bg2 Nf6 O-O e6 d4',
       highlights: [{ square: 'd4', color: KEY }],
-      say: "O-O ...e6 d4! — we castle, Black plays solidly with ...e6, and now we GRAB the centre with d4. The d4 push is justified because Black has no central counter-strike available. White's space advantage converts in 75.8% of his games.",
+      say: "O-O ...e6 d4! — we castle, Black plays solidly with ...e6, and now we GRAB the centre with d4. The d4 push is justified because Black has no central counter-strike available. White's space advantage converts in 75.8% of the games.",
       sayShort: 'd4 — claim the centre.',
     }),
     b({

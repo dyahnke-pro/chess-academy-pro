@@ -38,7 +38,7 @@ const VS_NC3: LessonScript = {
       sayShort: '…Nc6 — hit the queen, develop.' }),
     b({ id: 'bb4', moves: 'd4 Nf6 c4 e5 Nc3 exd4 Qxd4 Nc6 Qd1 Bb4',
       arrows: [], highlights: [{ square: 'b4', color: KEY }, { square: 'c3', color: SOFT }],
-      say: "The queen retreats and we pin the c3-knight with …Bb4 — the same active, pressuring idea that runs through Rosen's whole repertoire. Black develops with threats while White is still sorting out the queen.",
+      say: "The queen retreats and we pin the c3-knight with …Bb4 — the same active, pressuring idea that runs through this repertoire's whole repertoire. Black develops with threats while White is still sorting out the queen.",
       sayShort: '…Bb4 — pin and pressure c3.' }),
     b({ id: 're8', moves: 'd4 Nf6 c4 e5 Nc3 exd4 Qxd4 Nc6 Qd1 Bb4 Nf3 O-O Bd2 Re8',
       arrows: [], highlights: [{ square: 'e8', color: KEY }, { square: 'e2', color: SOFT }],

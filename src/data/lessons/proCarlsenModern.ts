@@ -15,13 +15,13 @@ const SRC = ['book:chess-fundamentals', 'https://en.wikipedia.org/wiki/Modern_De
 
 export const PRO_CARLSEN_MODERN_LESSON: LessonScript = {
   openingId: 'pro-carlsen-modern',
-  title: "Carlsen's Modern — Fianchetto and Counterpunch",
+  title: "This repertoire's Modern — Fianchetto and Counterpunch",
   minutes: 11,
   orientation: 'black',
   kind: 'variation',
   sources: SRC,
   beats: [
-    b({ id: 'g6', moves: 'e4 g6 d4 Bg7 Nc3 d6', arrows: [A('g7', 'a1')], highlights: [H('g7'), H('d6')], say: "The Modern — Black fianchettoes the bishop to g7 and cedes the centre, planning to undermine it later. It's hypermodern and supremely flexible: no early commitments, the g7-bishop rakes the long diagonal, and Black keeps every counter-break in reserve. A favourite Carlsen surprise.", sayShort: 'Bg7 — fianchetto, cede the centre.' }),
+    b({ id: 'g6', moves: 'e4 g6 d4 Bg7 Nc3 d6', arrows: [A('g7', 'a1')], highlights: [H('g7'), H('d6')], say: "The Modern — Black fianchettoes the bishop to g7 and cedes the centre, planning to undermine it later. It's hypermodern and supremely flexible: no early commitments, the g7-bishop rakes the long diagonal, and Black keeps every counter-break in reserve. A favourite this repertoire surprise.", sayShort: 'Bg7 — fianchetto, cede the centre.' }),
     b({ id: 'a6', moves: 'e4 g6 d4 Bg7 Nc3 d6 Be3 a6', highlights: [H('a6')], say: "The modern treatment — …a6, preparing …b5 to expand on the queenside and challenge White's setup. Black avoids the old passive lines and plays actively, gaining space on the wing where White can't easily respond. Flexible and aggressive at once.", sayShort: 'a6 — prep the …b5 expansion.' }),
     b({ id: 'b5', moves: 'e4 g6 d4 Bg7 Nc3 d6 Be3 a6 f4 b5 Nf3 Nd7', arrows: [A('b5', 'b4')], highlights: [H('b5'), H('d7')], say: "Black grabs queenside space with …b5 and develops the knight to d7, supporting the …c5 and …e5 breaks. White builds a big centre with f4; Black's whole plan is to let it advance and then blow it up from the flanks. The g7-bishop waits patiently for the centre to open.", sayShort: 'b5, Nd7 — space and central breaks.' }),
     b({ id: 'bb7', moves: 'e4 g6 d4 Bg7 Nc3 d6 Be3 a6 f4 b5 Nf3 Nd7 Bd3 Bb7', arrows: [A('b7', 'e4')], highlights: [H('b7')], say: "…Bb7 puts the second bishop on the long diagonal, doubling the pressure on e4 and the centre. Black is fully mobilised with both bishops raking White's position, ready to strike with …c5 or …e5. The Modern has done its job: a rich, double-edged middlegame with all the counterplay.", sayShort: 'Bb7 — both bishops, hit the centre.' }),

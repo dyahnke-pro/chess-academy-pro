@@ -16,7 +16,7 @@ const SRC = ['book:chess-fundamentals', 'concept:pos-development', 'https://en.w
 
 export const PRO_CARUANA_CARO_KANN_LESSON: LessonScript = {
   openingId: 'pro-caruana-caro-kann',
-  title: "Caruana's Caro-Kann",
+  title: "This repertoire's Caro-Kann",
   minutes: 10,
   orientation: 'black',
   kind: 'variation',

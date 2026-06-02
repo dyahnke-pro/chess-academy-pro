@@ -20,14 +20,14 @@ const SRC = [
 
 export const PRO_AMAN_ANTI_CARO_LESSON: LessonScript = {
   openingId: 'pro-aman-anti-caro',
-  title: "Aman's Two Knights Caro — Fast, Easy, 83%",
+  title: "This repertoire's Two Knights Caro — Fast, Easy, 83%",
   minutes: 9,
   orientation: 'white',
   kind: 'variation',
   sources: SRC,
   beats: [
     b({ id: 'nc3', moves: 'e4 c6 Nc3', arrows: [A('b1', 'c3')], highlights: [H('c3')],
-      say: "Against the Caro-Kann, the Two Knights Attack starts with Nc3 — a quick, low-theory developing move that sidesteps the main-line theory entirely. This is Aman's best-scoring White opening, an eye-popping 83%.",
+      say: "Against the Caro-Kann, the Two Knights Attack starts with Nc3 — a quick, low-theory developing move that sidesteps the main-line theory entirely. This is this repertoire's best-scoring White opening, an eye-popping 83%.",
       sayShort: 'Nc3 — quick, low-theory.' }),
     b({ id: 'nf3', moves: 'e4 c6 Nc3 d5 Nf3', arrows: [A('g1', 'f3')], highlights: [H('f3')],
       say: "Black challenges the centre with …d5 and White develops the second knight with Nf3 — the Two Knights setup. Both knights are out fast, the pieces flow, and White keeps an easy, natural game with the e4-tension.",

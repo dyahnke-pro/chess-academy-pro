@@ -14,7 +14,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['concept:att-kingside-storm', 'concept:pos-development', 'https://www.chess.com/openings/Grand-Prix-Attack', 'https://api.chess.com/pub/player/imrosen/games/archives'];
 
 export const PRO_ERICROSEN_CLOSED_SICILIAN_LESSON: LessonScript = {
-  openingId: 'pro-ericrosen-closed-sicilian', title: "Rosen's Grand Prix Attack", minutes: 7,
+  openingId: 'pro-ericrosen-closed-sicilian', title: "This repertoire's Grand Prix Attack", minutes: 7,
   orientation: 'white', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'nc3', moves: 'e4 c5 Nc3 d6 f4',
@@ -35,7 +35,7 @@ export const PRO_ERICROSEN_CLOSED_SICILIAN_LESSON: LessonScript = {
       sayShort: 'd4, Be3 — open the centre.' }),
     b({ id: 'plan', moves: 'e4 c5 Nc3 d6 f4 Nc6 Nf3 g6 Bc4 Bg7 O-O e6 d4 Nxd4 Be3',
       arrows: [A('d1', 'e1')], highlights: [{ square: 'f5', color: KEY }, { square: 'h6', color: SOFT }],
-      say: "The attacking blueprint: push f5 to pry open the f-file and hit g6/e6, swing the queen and a rook to the kingside, and look for Bh6 to trade off Black's defensive fianchetto bishop. Against the Sicilian, Rosen turns a low-theory setup into a direct mating attack.",
+      say: "The attacking blueprint: push f5 to pry open the f-file and hit g6/e6, swing the queen and a rook to the kingside, and look for Bh6 to trade off Black's defensive fianchetto bishop. Against the Sicilian, this repertoire turns a low-theory setup into a direct mating attack.",
       sayShort: 'Plan: f5, Bh6, storm the king.' }),
   ],
 };

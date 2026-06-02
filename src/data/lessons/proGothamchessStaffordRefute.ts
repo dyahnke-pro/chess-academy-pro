@@ -18,7 +18,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 
 export const PRO_GOTHAMCHESS_STAFFORD_REFUTE_LESSON: LessonScript = {
   openingId: 'pro-gothamchess-stafford-refute',
-  title: "GothamChess's Stafford Refutation — Take the Pawn, Refuse the Trap",
+  title: "This repertoire's Stafford Refutation — Take the Pawn, Refuse the Trap",
   minutes: 11,
   orientation: 'white',
   kind: 'variation',
@@ -35,7 +35,7 @@ export const PRO_GOTHAMCHESS_STAFFORD_REFUTE_LESSON: LessonScript = {
       arrows: [{ from: 'c6', to: 'e5', color: VIS }],
       highlights: [{ square: 'e5', color: KEY }],
       say:
-        "The Stafford Gambit. After we grab the e5-pawn, Black plays Nc6 — offering a whole knight. It's a trap-laden gambit that has won thousands of online games, because the player who accepts it usually has no idea what's coming. Levy's message: there's nothing to fear if you know the refutation.",
+        "The Stafford Gambit. After we grab the e5-pawn, Black plays Nc6 — offering a whole knight. It's a trap-laden gambit that has won thousands of online games, because the player who accepts it usually has no idea what's coming. This repertoire's message: there's nothing to fear if you know the refutation.",
       sayShort: 'Nc6 — the knight offer.',
     }),
     b({
@@ -60,7 +60,7 @@ export const PRO_GOTHAMCHESS_STAFFORD_REFUTE_LESSON: LessonScript = {
       moves: 'e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2',
       highlights: [{ square: 'e2', color: SOFT }, { square: 'g4', color: SOFT }],
       say:
-        "Black develops the bishop to c5, aiming at f2. We answer with the humble Be2 — and notice WHERE: e2, not c4 or d3, so it covers the g4-square and leaves Black no juicy pin or sacrifice. Levy's refutation is a wall of unglamorous, perfect little moves.",
+        "Black develops the bishop to c5, aiming at f2. We answer with the humble Be2 — and notice WHERE: e2, not c4 or d3, so it covers the g4-square and leaves Black no juicy pin or sacrifice. This repertoire's refutation is a wall of unglamorous, perfect little moves.",
       sayShort: 'Be2 — cover g4, no targets.',
     }),
     b({

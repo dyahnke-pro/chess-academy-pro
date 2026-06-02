@@ -38,7 +38,7 @@ const VS_NF3: LessonScript = {
       sayShort: '…Nxd5 — pawn back, knight centred.' }),
     b({ id: 'bg4', moves: 'e4 d5 exd5 Nf6 Nf3 Nxd5 d4 Bg4',
       arrows: [A('g4', 'f3')], highlights: [{ square: 'g4', color: KEY }, { square: 'f3', color: SOFT }],
-      say: "…Bg4 pins the f3-knight and develops the problem bishop actively before …e6 shuts it in. This is the recurring Rosen Scandinavian theme — solve the light-bishop first, and the rest of the position plays itself.",
+      say: "…Bg4 pins the f3-knight and develops the problem bishop actively before …e6 shuts it in. This is the recurring this repertoire Scandinavian theme — solve the light-bishop first, and the rest of the position plays itself.",
       sayShort: '…Bg4 — pin Nf3, free the bishop.' }),
     b({ id: 'develop', moves: 'e4 d5 exd5 Nf6 Nf3 Nxd5 d4 Bg4 Be2 e6 O-O Be7',
       arrows: [], highlights: [{ square: 'e7', color: KEY }, { square: 'd5', color: SOFT }],

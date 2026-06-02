@@ -69,7 +69,7 @@ const NGE7_B3_VARIANT: LessonScript = {
   openingId: 'pro-naroditsky-rossolimo', title: 'Weapon: Nge7 in the early b3 Rossolimo', minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
   beats: [
     b({ id: 'ross-nb3-setup', moves: 'e4 c5 Nf3 Nc6 Bb5 e6 b3', highlights: [H('b3', KEY)],
-      say: "An immediate b3 instead of O-O — White prepares the fianchetto Bb2 + Bxc6 trade plan from move 4. This early commitment looks strange but it's part of Naroditsky's actual repertoire — and Black often walks into the same Nge7 trap.",
+      say: "An immediate b3 instead of O-O — White prepares the fianchetto Bb2 + Bxc6 trade plan from move 4. This early commitment looks strange but it's part of this repertoire's actual repertoire — and Black often walks into the same Nge7 trap.",
       sayShort: 'b3 — early fianchetto.' }),
     b({ id: 'ross-nb3-blunder', moves: 'e4 c5 Nf3 Nc6 Bb5 e6 b3 Nge7', highlights: [H('e7', ATK)],
       say: "...Nge7 — 25 opponents fell into this exact setup including ManuDavid2910 (2763) and Lordillidan (2879). Same theme as Trap 1: the knight development walks into the Bxc6 timing.",

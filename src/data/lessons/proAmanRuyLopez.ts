@@ -19,14 +19,14 @@ const SRC = [
 
 export const PRO_AMAN_RUY_LOPEZ_LESSON: LessonScript = {
   openingId: 'pro-aman-ruy-lopez',
-  title: "Aman's Ruy Lopez — Slow Squeeze, Big Centre",
+  title: "This repertoire's Ruy Lopez — Slow Squeeze, Big Centre",
   minutes: 10,
   orientation: 'white',
   kind: 'variation',
   sources: SRC,
   beats: [
     b({ id: 'bb5', moves: 'e4 e5 Nf3 Nc6 Bb5', arrows: [A('f1', 'b5')], highlights: [H('b5')],
-      say: "The Ruy Lopez — Aman's main answer to the open game. Bb5 pins pressure on the c6-knight, the defender of e5, asking Black a question about the centre from move three. The oldest and most respected of all the open-game weapons.",
+      say: "The Ruy Lopez — This repertoire's main answer to the open game. Bb5 pins pressure on the c6-knight, the defender of e5, asking Black a question about the centre from move three. The oldest and most respected of all the open-game weapons.",
       sayShort: 'Bb5 — pressure the e5-defender.' }),
     b({ id: 'a6', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O', highlights: [H('a4'), H('g1')],
       say: "Black plays the Morphy …a6; White retreats Ba4, keeping the bishop's pin-pressure alive, develops, and castles. White isn't rushing — the Ruy is a long-term squeeze, and step one is simply to get everything out safely.",

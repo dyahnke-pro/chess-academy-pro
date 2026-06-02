@@ -15,13 +15,13 @@ const SRC = ['book:chess-fundamentals', 'https://en.wikipedia.org/wiki/R%C3%A9ti
 
 export const PRO_CARLSEN_RETI_LESSON: LessonScript = {
   openingId: 'pro-carlsen-reti',
-  title: "Carlsen's Réti — the Flexible Fianchetto",
+  title: "This repertoire's Réti — the Flexible Fianchetto",
   minutes: 11,
   orientation: 'white',
   kind: 'variation',
   sources: SRC,
   beats: [
-    b({ id: 'nf3', moves: 'Nf3 d5 g3 Nf6 Bg2', arrows: [A('g2', 'b7')], highlights: [H('g2')], say: "The Nf3 move-order is the most flexible move in chess, and the fianchetto is its soul — g3 and Bg2. The bishop owns the long light diagonal toward b7 and a8, pressuring Black's queenside from afar. White commits to nothing and keeps every transposition in hand. This is Carlsen's universal, low-risk weapon.", sayShort: 'Bg2 — the long-diagonal weapon.' }),
+    b({ id: 'nf3', moves: 'Nf3 d5 g3 Nf6 Bg2', arrows: [A('g2', 'b7')], highlights: [H('g2')], say: "The Nf3 move-order is the most flexible move in chess, and the fianchetto is its soul — g3 and Bg2. The bishop owns the long light diagonal toward b7 and a8, pressuring Black's queenside from afar. White commits to nothing and keeps every transposition in hand. This is this repertoire's universal, low-risk weapon.", sayShort: 'Bg2 — the long-diagonal weapon.' }),
     b({ id: 'oo', moves: 'Nf3 d5 g3 Nf6 Bg2 e6 O-O Be7 d3', highlights: [H('d3')], say: "White castles and plays the restrained d3 — the King's-Indian-Attack setup. No early central clash; White will reroute the knight to d2, play e4 in one go, and expand on the kingside. Slow, harmonious, and built to outplay rather than out-prepare.", sayShort: 'd3 — the KIA, e4 to come.' }),
     b({ id: 'e4', moves: 'Nf3 d5 g3 Nf6 Bg2 e6 O-O Be7 d3 O-O Nbd2 c5 e4', arrows: [A('e4', 'd5')], highlights: [H('e4')], say: "Nbd2 and then the central thrust e4 — White finally challenges in the centre on his own terms. The fianchettoed bishop springs to life, and White gains kingside space for the classic KIA attack with e5, Nf1-g3 and a pawn storm. Black is solid, but White holds the initiative.", sayShort: 'e4 — strike, the bishop wakes.' }),
   ],
@@ -39,7 +39,7 @@ const SYMMETRIC_C5: LessonScript = {
   openingId: 'pro-carlsen-reti', title: 'vs …c5 Symmetric', minutes: 5, orientation: 'white', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'c5', moves: 'Nf3 c5 g3 Nc6 Bg2 g6 O-O Bg7', arrows: [A('g2', 'b7')], highlights: [H('g2')], say: "Against …c5, White fianchettoes into a Symmetric English / Réti. The Bg2 again rakes the long diagonal, and White's flexible setup lets him choose between d4 to open the centre or a slow manoeuvring game. No theory, just understanding.", sayShort: 'Bg2 — symmetric, but a tempo up.' }),
-    b({ id: 'd4', moves: 'Nf3 c5 g3 Nc6 Bg2 g6 O-O Bg7 c4 e6 Nc3 Nge7 d4', arrows: [A('d4', 'c5')], highlights: [H('d4')], say: "White expands with c4 and Nc3, then opens with d4 at the right moment. The position resembles a Maroczy or symmetrical English where White's extra tempo and central control give a small, lasting pull — Carlsen's bread and butter.", sayShort: 'c4, d4 — open with the edge.' }),
+    b({ id: 'd4', moves: 'Nf3 c5 g3 Nc6 Bg2 g6 O-O Bg7 c4 e6 Nc3 Nge7 d4', arrows: [A('d4', 'c5')], highlights: [H('d4')], say: "White expands with c4 and Nc3, then opens with d4 at the right moment. The position resembles a Maroczy or symmetrical English where White's extra tempo and central control give a small, lasting pull — This repertoire's bread and butter.", sayShort: 'c4, d4 — open with the edge.' }),
   ],
 };
 
@@ -47,7 +47,7 @@ const CATALAN_E6: LessonScript = {
   openingId: 'pro-carlsen-reti', title: 'vs …e6 (Catalan)', minutes: 5, orientation: 'white', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'e6', moves: 'Nf3 e6 g3 d5 Bg2 Nf6 O-O Be7 d3', highlights: [H('d3')], say: "Against …e6 and …d5, White can play the restrained d3 KIA or transpose to a Catalan with c4. The Bg2 bishop and the flexible centre give White a slow, pressing game. Black is solid, but White always has the easier plan.", sayShort: 'd3/c4 — KIA or Catalan.' }),
-    b({ id: 'nbd2', moves: 'Nf3 e6 g3 d5 Bg2 Nf6 O-O Be7 d3 O-O Nbd2 c5 e4', arrows: [A('e4', 'd5')], highlights: [H('e4')], say: "The signature KIA build — Nbd2 and e4, gaining kingside space and freeing the fianchettoed bishop. White heads for the e5 advance and a kingside attack with Nf1-g3, h4 and the pieces pouring in. A model attacking blueprint Carlsen executes flawlessly.", sayShort: 'e4 — the KIA kingside attack.' }),
+    b({ id: 'nbd2', moves: 'Nf3 e6 g3 d5 Bg2 Nf6 O-O Be7 d3 O-O Nbd2 c5 e4', arrows: [A('e4', 'd5')], highlights: [H('e4')], say: "The signature KIA build — Nbd2 and e4, gaining kingside space and freeing the fianchettoed bishop. White heads for the e5 advance and a kingside attack with Nf1-g3, h4 and the pieces pouring in. A model attacking blueprint this repertoire executes flawlessly.", sayShort: 'e4 — the KIA kingside attack.' }),
   ],
 };
 

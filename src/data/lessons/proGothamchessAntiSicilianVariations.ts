@@ -49,7 +49,7 @@ const E6: LessonScript = {
       arrows: [{ from: 'd4', to: 'd5', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }],
       say:
-        "The pieces come off on d4 and our queen recaptures, dominating the centre. Here's the middlegame: a safe king, a centralised queen, the bishop on f1 about to re-emerge on a great diagonal, and a healthier structure. It's a small, riskless pull — and against a Sicilian player who wanted chaos, a quiet, better game is exactly the win Levy hunts.",
+        "The pieces come off on d4 and our queen recaptures, dominating the centre. Here's the middlegame: a safe king, a centralised queen, the bishop on f1 about to re-emerge on a great diagonal, and a healthier structure. It's a small, riskless pull — and against a Sicilian player who wanted chaos, a quiet, better game is exactly the win this repertoire hunts.",
       sayShort: 'Qxd4 — a clean central pull.',
     }),
   ],
@@ -96,7 +96,7 @@ const G6: LessonScript = {
 // ── Accelerated Pawn Storm (Carlsen) — immediate Bxc6, d3/e5 + Bb2 ──
 const CARLSEN: LessonScript = {
   openingId: 'pro-gothamchess-anti-sicilian',
-  title: 'Rossolimo — Accelerated Storm (Carlsen-inspired)',
+  title: 'Rossolimo — Accelerated Storm (positional squeeze)',
   minutes: 10,
   orientation: 'white',
   kind: 'variation',
@@ -108,8 +108,8 @@ const CARLSEN: LessonScript = {
       arrows: [{ from: 'b5', to: 'c6', color: VIS }],
       highlights: [{ square: 'c6', color: KEY }],
       say:
-        "Magnus Carlsen popularised this — trade on c6 IMMEDIATELY, before Black is set up. After …bxc6 Black has the two bishops, but also a clump of doubled c-pawns and a half-open structure for us to play against. We're going for a Carlsen-style slow squeeze.",
-      sayShort: 'Bxc6 — the early Carlsen trade.',
+        "Top grandmasters popularised this — trade on c6 IMMEDIATELY, before Black is set up. After …bxc6 Black has the two bishops, but also a clump of doubled c-pawns and a half-open structure for us to play against. We're going for a slow positional squeeze.",
+      sayShort: 'Bxc6 — the early trade.',
     }),
     b({
       id: 'e5',
@@ -126,7 +126,7 @@ const CARLSEN: LessonScript = {
       arrows: [{ from: 'b2', to: 'g7', color: VIS }],
       highlights: [{ square: 'b2', color: KEY }, { square: 'c5', color: SOFT }],
       say:
-        "Black reroutes the knight to g6 to nibble at e5; we fianchetto with b3 and Bb2, aiming the bishop down the long dark diagonal. Here's the middlegame: the e5-space clamp, the Bb2 raking toward Black's kingside, and the doubled c-pawns as a permanent target. We castle and slowly improve. It's the Carlsen recipe — a tiny, riskless edge ground into a full point.",
+        "Black reroutes the knight to g6 to nibble at e5; we fianchetto with b3 and Bb2, aiming the bishop down the long dark diagonal. Here's the middlegame: the e5-space clamp, the Bb2 raking toward Black's kingside, and the doubled c-pawns as a permanent target. We castle and slowly improve. It's the positional recipe — a tiny, riskless edge ground into a full point.",
       sayShort: 'Bb2 — clamp, then squeeze.',
     }),
   ],
@@ -135,5 +135,5 @@ const CARLSEN: LessonScript = {
 export const PRO_GOTHAMCHESS_ANTI_SICILIAN_VARIATION_LESSONS: Record<string, LessonScript> = {
   'pro-gothamchess-anti-sicilian::Rossolimo 3.Bb5 e6': E6,
   'pro-gothamchess-anti-sicilian::Rossolimo 3.Bb5 g6': G6,
-  'pro-gothamchess-anti-sicilian::Accelerated Pawn Storm (Carlsen-inspired)': CARLSEN,
+  'pro-gothamchess-anti-sicilian::Accelerated Pawn Storm (positional squeeze)': CARLSEN,
 };

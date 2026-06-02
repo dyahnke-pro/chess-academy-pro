@@ -33,7 +33,7 @@ const MAIN: LessonScript = {
       arrows: [{ from: 'c4', to: 'f7', color: VIS }],
       highlights: [{ square: 'f7', color: KEY }, { square: 'd4', color: SOFT }],
       say:
-        "Levy's main attacking line, and it's a real fight. After the trade on e4 and Black's …e5 break, we develop Nf3 and let Black grab the d4-pawn — then slam the bishop to c4, straight at f7, the weakest square in Black's camp. A pawn for a lead in development and a target.",
+        "This repertoire's main attacking line, and it's a real fight. After the trade on e4 and Black's …e5 break, we develop Nf3 and let Black grab the d4-pawn — then slam the bishop to c4, straight at f7, the weakest square in Black's camp. A pawn for a lead in development and a target.",
       sayShort: 'Bc4 — the gambit, eye f7.',
     }),
     b({

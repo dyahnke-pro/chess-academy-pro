@@ -16,7 +16,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 
 export const PRO_GOTHAMCHESS_CARO_KANN_LESSON: LessonScript = {
   openingId: 'pro-gothamchess-caro-kann',
-  title: "GothamChess's Caro-Kann — the Classical, Solid as a Rock",
+  title: "This repertoire's Caro-Kann — the Classical, Solid as a Rock",
   minutes: 12,
   orientation: 'black',
   kind: 'variation',
@@ -33,7 +33,7 @@ export const PRO_GOTHAMCHESS_CARO_KANN_LESSON: LessonScript = {
       arrows: [{ from: 'd5', to: 'e4', color: VIS }],
       highlights: [{ square: 'c6', color: SOFT }, { square: 'd5', color: KEY }],
       say:
-        "The Caro-Kann — e4 c6, then …d5. Levy calls it the soundest answer to e4 there is. We challenge the centre immediately with d5, backed by the c6-pawn, so we get a French-like solidity without the French's big problem. You'll see that problem solved in a moment.",
+        "The Caro-Kann — e4 c6, then …d5. This repertoire calls it the soundest answer to e4 there is. We challenge the centre immediately with d5, backed by the c6-pawn, so we get a French-like solidity without the French's big problem. You'll see that problem solved in a moment.",
       sayShort: 'c6 and d5 — challenge the centre.',
     }),
     b({

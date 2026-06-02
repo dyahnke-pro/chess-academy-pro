@@ -16,7 +16,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 
 export const PRO_GOTHAMCHESS_CLOSED_SICILIAN_LESSON: LessonScript = {
   openingId: 'pro-gothamchess-closed-sicilian',
-  title: "GothamChess's Closed Sicilian — 2.Nc3 and a Theory-Light Pull",
+  title: "This repertoire's Closed Sicilian — 2.Nc3 and a Theory-Light Pull",
   minutes: 10,
   orientation: 'white',
   kind: 'variation',
@@ -33,7 +33,7 @@ export const PRO_GOTHAMCHESS_CLOSED_SICILIAN_LESSON: LessonScript = {
       arrows: [{ from: 'b5', to: 'c6', color: VIS }],
       highlights: [{ square: 'c3', color: SOFT }, { square: 'b5', color: KEY }],
       say:
-        "Another way Levy dodges Open Sicilian theory: Nc3, the Closed Sicilian move order. We develop the knight first, then bring the bishop to b5 to lean on the c6-knight. The message is the same as the Rossolimo — we steer the game into calm, understandable waters and make Black solve real problems with no memorised lines to lean on.",
+        "Another way this repertoire dodges Open Sicilian theory: Nc3, the Closed Sicilian move order. We develop the knight first, then bring the bishop to b5 to lean on the c6-knight. The message is the same as the Rossolimo — we steer the game into calm, understandable waters and make Black solve real problems with no memorised lines to lean on.",
       sayShort: 'Bb5 — pressure c6.',
     }),
     b({
@@ -69,7 +69,7 @@ export const PRO_GOTHAMCHESS_CLOSED_SICILIAN_LESSON: LessonScript = {
       arrows: [{ from: 'd4', to: 'g7', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }],
       say:
-        "We recapture on d4 with the queen, planting it in the centre with a glance down toward g7. Here's the honest middlegame assessment: it's a SMALL edge. We have more space and the better-placed pieces; Black has the bishop pair but no targets for it yet. We castle, develop the dark-squared bishop, and squeeze. No fireworks — just a comfortable, riskless pull, which against a Sicilian player who wanted chaos is exactly the win Levy is after.",
+        "We recapture on d4 with the queen, planting it in the centre with a glance down toward g7. Here's the honest middlegame assessment: it's a SMALL edge. We have more space and the better-placed pieces; Black has the bishop pair but no targets for it yet. We castle, develop the dark-squared bishop, and squeeze. No fireworks — just a comfortable, riskless pull, which against a Sicilian player who wanted chaos is exactly the win this repertoire is after.",
       sayShort: 'Qxd4 — a small, riskless pull.',
     }),
   ],

@@ -14,7 +14,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 
 export const PRO_GOTHAMCHESS_PONZIANI_LESSON: LessonScript = {
   openingId: 'pro-gothamchess-ponziani',
-  title: "GothamChess's Ponziani — the c3-d4 Centre and Qb3 Bind",
+  title: "This repertoire's Ponziani — the c3-d4 Centre and Qb3 Bind",
   minutes: 11,
   orientation: 'white',
   kind: 'variation',
@@ -30,7 +30,7 @@ export const PRO_GOTHAMCHESS_PONZIANI_LESSON: LessonScript = {
       moves: 'e4 e5 Nf3 Nc6 c3',
       highlights: [{ square: 'c3', color: KEY }, { square: 'd4', color: SOFT }],
       say:
-        "The Ponziani — e4 e5 Nf3 Nc6 c3. A 200-year-old surprise weapon. The little c3-move has one job: to support d4 next, so we can build the big centre most opponents never prepare against. Levy beats grandmasters with this precisely because nobody studies it.",
+        "The Ponziani — e4 e5 Nf3 Nc6 c3. A 200-year-old surprise weapon. The little c3-move has one job: to support d4 next, so we can build the big centre most opponents never prepare against. This repertoire beats grandmasters with this precisely because nobody studies it.",
       sayShort: 'c3 — preparing d4.',
     }),
     b({

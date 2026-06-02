@@ -66,13 +66,8 @@ export function ProPlayerPage(): JSX.Element {
           <span className="text-sm font-bold text-theme-accent">{player.imageInitials}</span>
         </div>
         <div className="flex-1">
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold text-theme-text">{player.name}</h1>
-            <span className="text-sm font-mono text-theme-accent">{player.title}</span>
-          </div>
+          <h1 className="text-xl font-bold text-theme-text">{player.name}</h1>
           <div className="flex items-center gap-2 text-sm text-theme-text-muted">
-            <span>FIDE {player.rating}</span>
-            <span className="w-1 h-1 rounded-full bg-theme-text-muted" />
             <span>{player.style}</span>
           </div>
         </div>

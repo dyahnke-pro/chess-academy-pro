@@ -203,7 +203,7 @@ const EXCHANGE_BD3_TRADE: LessonScript = {
       id: 'exch-development',
       moves: 'e4 c6 d4 d5 exd5 cxd5 Nf3 Nf6 h3 Bf5 Bd3',
       highlights: [H('d3', ATK), H('f5', KEY)],
-      say: "Nf3 ...Nf6 h3 ...Bf5 Bd3 — White develops the bishop to d3 hoping to trade off Black's active light-square bishop. This is the Bortnyk-Naroditsky main line — 20 games where Oleksandr_Bortnyk (3278) and Mykola-Bortnyk (3135) fell into trading the wrong way.",
+      say: "Nf3 ...Nf6 h3 ...Bf5 Bd3 — White develops the bishop to d3 hoping to trade off Black's active light-square bishop. This is the Bortnyk-this repertoire main line — 20 games where Oleksandr_Bortnyk (3278) and Mykola-Bortnyk (3135) fell into trading the wrong way.",
       sayShort: 'Bd3 — voluntary trade.',
     }),
     b({

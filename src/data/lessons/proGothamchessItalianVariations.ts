@@ -113,7 +113,7 @@ const SLOW: LessonScript = {
       arrows: [{ from: 'd3', to: 'd4', color: VIS }],
       highlights: [{ square: 'g3', color: KEY }, { square: 'd4', color: SOFT }],
       say:
-        "Here's the middlegame plan. Finish the knight's journey to g3, where it eyes the f5- and h5-squares; decide whether to trade the light bishops on e6 or keep yours; and prepare the central break d4 once your pieces are ideally placed. It's slow, it's strategic, and it's deeply principled — Levy grinds these out by simply out-maneuvering opponents who don't have a plan.",
+        "Here's the middlegame plan. Finish the knight's journey to g3, where it eyes the f5- and h5-squares; decide whether to trade the light bishops on e6 or keep yours; and prepare the central break d4 once your pieces are ideally placed. It's slow, it's strategic, and it's deeply principled — This repertoire grinds these out by simply out-maneuvering opponents who don't have a plan.",
       sayShort: 'Nf1-g3 then d4 — out-maneuver.',
     }),
   ],

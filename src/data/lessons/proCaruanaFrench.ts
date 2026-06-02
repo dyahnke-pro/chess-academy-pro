@@ -16,13 +16,13 @@ const SRC = ['book:chess-fundamentals', 'concept:pawn-minority-attack', 'https:/
 
 export const PRO_CARUANA_FRENCH_LESSON: LessonScript = {
   openingId: 'pro-caruana-french',
-  title: "Caruana's French Defense",
+  title: "This repertoire's French Defense",
   minutes: 10,
   orientation: 'black',
   kind: 'variation',
   sources: SRC,
   beats: [
-    b({ id: 'd5', moves: 'e4 e6 d4 d5', say: "The French Defense — a rock-solid choice Caruana reaches for against e4. With e6 and d5 Black challenges the centre at once, accepting a slightly cramped but extremely sturdy structure built for the counterattack.", sayShort: '…d5 — challenge the centre.', arrows: [A('d7', 'd5')], highlights: [H('d5')] }),
+    b({ id: 'd5', moves: 'e4 e6 d4 d5', say: "The French Defense — a rock-solid choice this repertoire reaches for against e4. With e6 and d5 Black challenges the centre at once, accepting a slightly cramped but extremely sturdy structure built for the counterattack.", sayShort: '…d5 — challenge the centre.', arrows: [A('d7', 'd5')], highlights: [H('d5')] }),
     b({ id: 'be7', moves: 'e4 e6 d4 d5 Nc3 Nf6 Bg5 Be7', say: "White develops Nc3 and pins with Bg5; Black answers Nf6 and the solid Be7 — the Classical French. Black calmly breaks the pin and prepares to meet White's central advance.", sayShort: '…Be7 — the Classical, break the pin.', arrows: [A('f8', 'e7')], highlights: [H('e7')] }),
     b({ id: 'nfd7', moves: 'e4 e6 d4 d5 Nc3 Nf6 Bg5 Be7 e5 Nfd7 Bxe7 Qxe7', say: "White pushes e5, gaining space and chasing the knight to d7; the bishops trade on e7 and Black recaptures with the queen. The Steinitz structure: White has the space, Black the solid blockade and a clear plan against the chain.", sayShort: '…Nfd7, …Qxe7 — solid blockade.', arrows: [A('f6', 'd7')], highlights: [H('d7')] }),
     b({ id: 'c5', moves: 'e4 e6 d4 d5 Nc3 Nf6 Bg5 Be7 e5 Nfd7 Bxe7 Qxe7 f4 a6 Nf3 c5', say: "White props the centre with f4 and Nf3; Black plays a6 and then the thematic break c5 — striking the base of White's d4-e5 pawn chain. This is the heart of the French: undermine the chain at its foot.", sayShort: '…c5 — strike the pawn chain.', arrows: [A('c7', 'c5')], highlights: [H('c5')] }),

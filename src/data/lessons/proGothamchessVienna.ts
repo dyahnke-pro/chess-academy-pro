@@ -14,7 +14,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 
 export const PRO_GOTHAMCHESS_VIENNA_LESSON: LessonScript = {
   openingId: 'pro-gothamchess-vienna',
-  title: "GothamChess's Vienna Gambit — Rb1 and the Opposite-Castle Attack",
+  title: "This repertoire's Vienna Gambit — Rb1 and the Opposite-Castle Attack",
   minutes: 12,
   orientation: 'white',
   kind: 'variation',
@@ -30,7 +30,7 @@ export const PRO_GOTHAMCHESS_VIENNA_LESSON: LessonScript = {
       moves: 'e4 e5 Nc3',
       highlights: [{ square: 'c3', color: SOFT }],
       say:
-        "The Vienna — e4 e5 Nc3. It looks like a quiet developing move, but it's the doorway to one of Levy's favourite gambits. We develop the knight and keep the f-pawn free to come crashing forward.",
+        "The Vienna — e4 e5 Nc3. It looks like a quiet developing move, but it's the doorway to one of this repertoire's favourite gambits. We develop the knight and keep the f-pawn free to come crashing forward.",
       sayShort: 'Nc3 — the Vienna doorway.',
     }),
     b({

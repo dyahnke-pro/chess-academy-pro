@@ -10,7 +10,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['concept:pos-development', 'concept:pos-open-file', 'https://www.chess.com/openings/French-Defense-Exchange-Variation', 'https://api.chess.com/pub/player/samayraina/games/archives'];
 
 export const PRO_SAMAYRAINA_FRENCH_WHITE_LESSON: LessonScript = {
-  openingId: 'pro-samayraina-french-white', title: "Samay vs the French — Exchange", minutes: 6,
+  openingId: 'pro-samayraina-french-white', title: "This repertoire vs the French — Exchange", minutes: 6,
   orientation: 'white', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'exd5', moves: 'e4 e6 d4 d5 exd5 exd5',

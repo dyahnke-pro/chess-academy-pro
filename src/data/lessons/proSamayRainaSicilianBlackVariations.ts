@@ -17,7 +17,7 @@ const VS_BC4: LessonScript = {
   beats: [
     b({ id: 'e6-d5', moves: 'e4 c5 Bc4 e6 Nf3 d5',
       arrows: [], highlights: [{ square: 'd5', color: KEY }, { square: 'c4', color: SOFT }],
-      say: "The early Bc4 is Samay's most-faced anti-Sicilian. He meets it the principled way: e6 then d5, striking the centre and hitting the c4-bishop in one stroke. Black seizes space and gains a tempo.",
+      say: "The early Bc4 is this repertoire's most-faced anti-Sicilian. He meets it the principled way: e6 then d5, striking the centre and hitting the c4-bishop in one stroke. Black seizes space and gains a tempo.",
       sayShort: '…e6, …d5 — hit the c4-bishop.' }),
     b({ id: 'nc6', moves: 'e4 c5 Bc4 e6 Nf3 d5 exd5 exd5 Bb5+ Nc6',
       highlights: [{ square: 'c6', color: KEY }, { square: 'd5', color: SOFT }],
@@ -36,7 +36,7 @@ const VS_ALAPIN: LessonScript = {
   beats: [
     b({ id: 'd5', moves: 'e4 c5 c3 d5',
       arrows: [], highlights: [{ square: 'd5', color: KEY }, { square: 'e4', color: SOFT }],
-      say: "Against the Alapin's c3, Samay plays the principled d5 — hitting e4 in the centre at once. This is far stronger than a passive knight move: Black equalises in the centre immediately and frees every piece.",
+      say: "Against the Alapin's c3, this repertoire plays the principled d5 — hitting e4 in the centre at once. This is far stronger than a passive knight move: Black equalises in the centre immediately and frees every piece.",
       sayShort: '…d5 — strike the centre.' }),
     b({ id: 'bg4', moves: 'e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 Bg4',
       arrows: [A('g4', 'f3')], highlights: [{ square: 'g4', color: KEY }, { square: 'f3', color: KEY }],
@@ -55,7 +55,7 @@ const VS_ROSSOLIMO: LessonScript = {
   beats: [
     b({ id: 'nd4', moves: 'e4 c5 Nf3 Nc6 Bb5 Nd4',
       arrows: [A('d4', 'b5')], highlights: [{ square: 'd4', color: KEY }, { square: 'b5', color: SOFT }],
-      say: "Against the Rossolimo Bb5, Samay's choice is the bold Nd4 — leaping into the centre and offering the trade. It hits the b5-bishop and seizes the d4-outpost; after White takes, Black recaptures toward the centre with easy, active development.",
+      say: "Against the Rossolimo Bb5, this repertoire's choice is the bold Nd4 — leaping into the centre and offering the trade. It hits the b5-bishop and seizes the d4-outpost; after White takes, Black recaptures toward the centre with easy, active development.",
       sayShort: '…Nd4 — central leap, hit b5.' }),
     b({ id: 'e5', moves: 'e4 c5 Nf3 Nc6 Bb5 Nd4 Nxd4 cxd4 O-O e5',
       highlights: [{ square: 'e5', color: KEY }, { square: 'd4', color: KEY }],
@@ -74,7 +74,7 @@ const VS_CLOSED: LessonScript = {
   beats: [
     b({ id: 'nc6-e6', moves: 'e4 c5 Nc3 Nc6 Nf3 e6 d4',
       highlights: [{ square: 'e6', color: KEY }, { square: 'd4', color: SOFT }],
-      say: "When White develops Nc3 and Nf3 and then opens with d4, the game heads toward an Open Sicilian. Samay meets it flexibly with Nc6 and e6 — a solid, resilient setup that keeps all the structures open.",
+      say: "When White develops Nc3 and Nf3 and then opens with d4, the game heads toward an Open Sicilian. This repertoire meets it flexibly with Nc6 and e6 — a solid, resilient setup that keeps all the structures open.",
       sayShort: '…Nc6, …e6 — flexible setup.' }),
     b({ id: 'bc5', moves: 'e4 c5 Nc3 Nc6 Nf3 e6 d4 cxd4 Nxd4 Bc5',
       arrows: [A('c5', 'd4')], highlights: [{ square: 'c5', color: KEY }, { square: 'd4', color: KEY }],
