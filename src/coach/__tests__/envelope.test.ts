@@ -122,6 +122,9 @@ describe('assembleEnvelope', () => {
     // pre-built games, walking the player's actual moves ply-by-ply.
     expect(identity).toMatch(/lookup_player_opening_moves/);
     expect(identity).toMatch(/BUILD IT ON THE FLY from the Lichess player database/i);
+    // Tool-failure must NOT trigger fabrication of the player's stats (G3).
+    expect(identity).toMatch(/TOOL FAILS \/ EXPLORER UNAVAILABLE/);
+    expect(identity).toMatch(/do not recite his stats from memory/i);
   });
 
   it('skips PHASE_NARRATION_ADDITION when suppressSurfaceMode=true on surface=phase-narration', () => {
