@@ -24,6 +24,7 @@ const SECRETS = [
   { env: 'ANTHROPIC_KEY', use: 'fallback LLM provider' },
   { env: 'AUDIT_STREAM_SECRET', use: 'x-audit-secret for GET /api/audit-stream (gate G2)' },
   { env: 'VERCEL_TOKEN', use: 'Vercel API/CLI auth — deploy + manage project settings (e.g. Ignored Build Step to disable preview builds)' },
+  { env: 'POSTHOG_API_KEY', use: 'PostHog personal API key (phx_, read scopes) — query product analytics via `node scripts/posthog-query.mjs`; DO NOT ask David for it, it lives in the env config' },
 ];
 
 const present = [];

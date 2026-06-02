@@ -1552,6 +1552,19 @@ for every command, and the code already reads them:
   AND the GitHub Action's G2 step (add it as a repo secret too:
   Settings → Secrets → Actions). Must match prod's Vercel env value
   and the app's `profile.preferences.auditStreamSecret`, or you get 401.
+- `POSTHOG_API_KEY` — **PostHog product-analytics read access (David
+  2026-06-02: "make sure claude code can always have access to posthog
+  data, don't ask every time").** A PostHog PERSONAL API key (`phx_…`,
+  read scopes: query:read / insight:read / project:read) set ONCE in the
+  env-var config. When present, query analytics with
+  `node scripts/posthog-query.mjs ["<HogQL>"]` (default = top events,
+  last 7 days) — DO NOT ask David for a key; it lives in the env config.
+  NB: this is the READ key. The app's WRITE key is the public `phc_…`
+  PostHog **project** key, which lives in Vercel as `VITE_POSTHOG_KEY`
+  (+ `VITE_POSTHOG_HOST=https://us.i.posthog.com`) and bakes into the
+  client bundle (`src/services/analytics.ts`, no-op when unset).
+  `VITE_POSTHOG_KEY` is safe to expose; `POSTHOG_API_KEY`/`phx_` is a
+  SECRET — never put it in a `VITE_*` var or commit it.
 
 `scripts/session-secrets.mjs` runs as a **SessionStart hook**
 (`.claude/settings.json`) and reports which of these are present (names
