@@ -22,6 +22,7 @@ import {
   __resetCoachMemoryStoreForTests,
   useCoachMemoryStore,
 } from '../../stores/coachMemoryStore';
+import { _resetLichessCircuitBreaker } from '../../services/lichessExplorerService';
 import type { Provider, ProviderResponse } from '../types';
 
 beforeEach(() => {
@@ -190,5 +191,54 @@ describe('coachService.ask', () => {
     );
     expect(call).toHaveBeenCalledTimes(3);
     expect(answer.text).toContain('turn 3');
+  });
+
+  it('ON-THE-FLY ORCHESTRATION: dispatches lookup_player_opening_moves through the spine and loops the result back', async () => {
+    _resetLichessCircuitBreaker();
+    // Canned Lichess /player body (the streamed first line is a single JSON object).
+    const playerBody = JSON.stringify({
+      white: 60, draws: 8, black: 20,
+      moves: [
+        { uci: 'e2e4', san: 'e4', averageOpponentRating: 2950, white: 40, draws: 5, black: 12 },
+        { uci: 'd2d4', san: 'd4', averageOpponentRating: 2900, white: 14, draws: 2, black: 5 },
+      ],
+      opening: { eco: 'B00', name: "King's Pawn Game" },
+    });
+    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue(
+      new Response(playerBody, { status: 200, headers: { 'Content-Type': 'application/json' } }),
+    );
+    // Turn 1: the brain calls the on-the-fly tool (player name "Carlsen").
+    // Turn 2: after the tool result loops back, it finalizes.
+    const responses: ProviderResponse[] = [
+      {
+        text: 'Let me pull how he plays this.',
+        toolCalls: [
+          {
+            id: 'tc-pl',
+            name: 'lookup_player_opening_moves',
+            args: { player: 'Carlsen', color: 'white', fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' },
+          },
+        ],
+      },
+      { text: 'He opens with e4 most often here.', toolCalls: [] },
+    ];
+    const call = vi.fn(() => Promise.resolve(responses.shift() ?? { text: '', toolCalls: [] }));
+    const provider: Provider = { name: 'deepseek', call };
+
+    const answer = await coachService.ask(
+      { surface: 'teach', ask: 'teach me how Carlsen plays this position', liveState: { surface: 'teach' } },
+      { providerOverride: provider, maxToolRoundTrips: 2 },
+    );
+
+    // The tool dispatched through the real spine.
+    expect(answer.toolCallIds).toContain('tc-pl');
+    // The round-trip loop fed the tool result back → provider called a second time → finalized.
+    expect(call).toHaveBeenCalledTimes(2);
+    expect(answer.text).toContain('e4');
+    // The tool actually executed (the spine invoked it) — its tool-called audit fired.
+    const toolAudit = auditCalls.find((c) => c.summary.includes('lookup_player_opening_moves'));
+    expect(toolAudit).toBeTruthy();
+
+    fetchSpy.mockRestore();
   });
 });
