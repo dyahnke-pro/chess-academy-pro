@@ -83,17 +83,22 @@ async function askOnce(page, prompt) {
   await page.locator('[data-testid="chat-send-btn"]').click();
   try {
     await page.waitForFunction((prev) => {
+      const ACK = /board'?s?\s+(?:is\s+)?set|you'?re\s+playing\s+(?:white|black)|position is set/i;
       const els = [...document.querySelectorAll('[data-testid="chat-message-assistant"]')];
-      return els.some((e) => { const t = (e.textContent || '').replace(/^[A-Za-z]\s*/, '').trim(); return t.length > 8 && !prev.includes(t); });
+      return els.some((e) => { const t = (e.textContent || '').replace(/^[A-Za-z]\s*/, '').trim(); return t.length > 8 && !prev.includes(t) && !ACK.test(t); });
     }, before, { timeout: BRAIN_TIMEOUT_MS });
   } catch { return '(timeout)'; }
   let prevLen = -1, stable = 0, resp = '';
   for (let i = 0; i < 30; i++) {
     await page.waitForTimeout(700);
     const after = await snap(page);
-    const fresh = after.filter((t) => !beforeSet.has(t));
-    // longest NEW bubble = the substantive answer (order-independent;
-    // /coach/play renders newest-first, /coach/chat newest-last).
+    // Exclude the set-board / move acknowledgment ("Board's set…",
+    // "you're playing White") so it can never be mistaken for the
+    // answer — deterministic signature, the real answers never contain it.
+    const ACK_SIG = /board'?s?\s+(?:is\s+)?set|you'?re\s+playing\s+(?:white|black)|position is set/i;
+    const fresh = after.filter((t) => !beforeSet.has(t) && !ACK_SIG.test(t));
+    // longest NEW non-ack bubble = the substantive answer (order-
+    // independent; /coach/play renders newest-first, /coach/chat last).
     const cur = fresh.length ? fresh.reduce((a, b) => (b.length > a.length ? b : a)) : '';
     if (cur.length === prevLen) { stable++; if (stable >= 2) { resp = cur; break; } } else stable = 0;
     prevLen = cur.length; resp = cur;
@@ -183,7 +188,7 @@ const PROBES = [
       if (STOCK_FALLBACK_RE.test(r)) return { prompt, response: r, ...fail('served the stock "can\'t verify / run it through the engine" fallback on a legitimate plan question (FIX C regression)') };
       return { prompt, response: r, ...pass('answered a plan question without the stock fallback') };
     } },
-  { id: 'king-square-post-castle', depth: 1, surface: 'play-setpos', fen: 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4', async run(page) {
+  { id: 'king-square-post-castle', depth: 1, surface: 'play-setpos', fen: 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 4 5', async run(page) {
       const prompt = 'Which exact square is my (White\'s) king on right now, and am I in check?';
       const r = await askLLM(page, prompt);
       if (r === '(timeout)') return { prompt, response: r, ...fail('timed out on king-square question') };
