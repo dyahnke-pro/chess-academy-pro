@@ -40,10 +40,85 @@ const USER_AGENT_FALLBACK_CHAIN = [
 ];
 
 const PROXY_TIMEOUT_MS = 8_000;
-/** The per-player explorer indexes a player's games on demand and is far
- *  slower (and more rate-limited) than the masters/lichess snapshots —
- *  8s routinely 502s a cold player. Give source=player more room. */
-const PLAYER_TIMEOUT_MS = 22_000;
+// The `player` explorer streams NDJSON: Lichess emits the position result
+// immediately, then RE-emits a refined result over and over as it indexes
+// the player's whole archive (the `queuePosition` field counts down). A
+// cold call streams for 40s+ — far past any sane edge budget — so reading
+// the full body (`upstream.text()`) times out (the old 8s×3-UA path → 502,
+// audit 2026-06-02) AND yields multiple concatenated JSON objects the
+// client can't parse. But the FIRST streamed object is a complete, valid,
+// usable result and arrives in ~0.16s even cold. So for `player` we read
+// exactly the first NDJSON line and abort the rest. One attempt only — the
+// explorer host is NOT UA-blocking (masters/lichess succeed with UA #1).
+const PLAYER_FIRST_LINE_TIMEOUT_MS = 12_000;
+
+async function handlePlayerSource(
+  upstreamUrl: string,
+  cors: Record<string, string>,
+): Promise<Response> {
+  const token = process.env.LICHESS_API_KEY ?? process.env.LICHESS_TOKEN ?? process.env.LICHESS;
+  const headers: Record<string, string> = {
+    Accept: 'application/x-ndjson',
+    'User-Agent': USER_AGENT_FALLBACK_CHAIN[0],
+  };
+  if (token) headers.Authorization = `Bearer ${token}`;
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), PLAYER_FIRST_LINE_TIMEOUT_MS);
+  try {
+    const upstream = await fetch(upstreamUrl, { headers, signal: controller.signal });
+    if (!upstream.ok || !upstream.body) {
+      const sample = await upstream.text().catch(() => '');
+      return new Response(
+        JSON.stringify({ error: 'player-upstream', status: upstream.status, sample: sample.slice(0, 200) }),
+        { status: upstream.status || 502, headers: { ...cors, 'Content-Type': 'application/json' } },
+      );
+    }
+    // Read only the first complete NDJSON line, then stop.
+    const reader = upstream.body.getReader();
+    const decoder = new TextDecoder();
+    let buf = '';
+    let line = '';
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (value) buf += decoder.decode(value, { stream: true });
+      const nl = buf.indexOf('\n');
+      if (nl >= 0) {
+        line = buf.slice(0, nl).trim();
+        break;
+      }
+      if (done) {
+        line = buf.trim();
+        break;
+      }
+    }
+    controller.abort(); // cancel the rest of the (long) indexing stream
+    const trimmed = line.trimStart();
+    if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+      return new Response(line, {
+        status: 200,
+        headers: {
+          ...cors,
+          'Content-Type': 'application/json',
+          'Cache-Control': 'public, max-age=60, s-maxage=60',
+          'X-Lichess-Proxy-Source': 'player-first-line',
+        },
+      });
+    }
+    return new Response(
+      JSON.stringify({ error: 'player-no-json', sample: line.slice(0, 200) }),
+      { status: 502, headers: { ...cors, 'Content-Type': 'application/json' } },
+    );
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    return new Response(
+      JSON.stringify({ error: 'player-fetch-failed', message }),
+      { status: 502, headers: { ...cors, 'Content-Type': 'application/json' } },
+    );
+  } finally {
+    clearTimeout(timer);
+  }
+}
 
 async function attemptUpstream(
   upstreamUrl: string,
@@ -119,30 +194,29 @@ export default async function handler(req: Request): Promise<Response> {
     upstreamParams.set(k, v);
   }
   const upstreamUrl = `${EXPLORER_BASE}/${source}?${upstreamParams.toString()}`;
-  const timeoutMs = source === 'player' ? PLAYER_TIMEOUT_MS : PROXY_TIMEOUT_MS;
+
+  // The `player` source streams NDJSON and indexes for 40s+ on a cold
+  // call — read just the first complete object and bail (see
+  // handlePlayerSource). masters/lichess return a single JSON body fast,
+  // so they keep the UA-fallback + full-read path below.
+  if (source === 'player') {
+    return await handlePlayerSource(upstreamUrl, cors);
+  }
 
   // Try each UA in the fallback chain. Stop on the first non-4xx
   // response (or the first 200, whichever comes first). Capture each
   // attempt's status + a body sample so the client (and the audit
   // log) can see which UA worked or what Lichess actually said.
-  //
-  // For source=player the per-attempt timeout is long (22s, on-demand
-  // indexing) so we can only afford ONE attempt before Vercel's ~25s
-  // edge budget — the player endpoint answers our standard server UA,
-  // it's not the iOS-UA CDN-block case the fallback chain exists for.
-  const uaChain = source === 'player'
-    ? USER_AGENT_FALLBACK_CHAIN.slice(0, 1)
-    : USER_AGENT_FALLBACK_CHAIN;
   const attempts: Array<{ ua: string; status: number; bodySample: string }> = [];
   let lastBody = '';
   let lastStatus = 0;
-  for (let i = 0; i < uaChain.length; i += 1) {
-    const ua = uaChain[i];
+  for (let i = 0; i < USER_AGENT_FALLBACK_CHAIN.length; i += 1) {
+    const ua = USER_AGENT_FALLBACK_CHAIN[i];
     try {
       const result = await attemptUpstream(
         upstreamUrl,
         ua,
-        AbortSignal.timeout(timeoutMs),
+        AbortSignal.timeout(PROXY_TIMEOUT_MS),
       );
       attempts.push({
         ua: ua.slice(0, 80),
