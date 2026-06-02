@@ -477,7 +477,21 @@ function getModel(
       const compatible =
         (provider === 'anthropic' && isAnthropicModel) ||
         (provider === 'deepseek' && isDeepSeekModel);
-      if (compatible) return userChoice;
+      // 3. LATENCY GUARD — the live chat brain (`chat_response`: in-game
+      //    ask + /coach/teach step-by-step move turns) is real-time; the
+      //    board waits on it. A reasoning/thinking model adds 5-15s per
+      //    turn across up to 4 tool round-trips (David 2026-06-02: "the
+      //    board is taking way too long to reset after my opponent's
+      //    move"). So even when the user's `analysis` pick is a reasoner,
+      //    chat_response uses the fast per-task default. The reasoner pick
+      //    still governs the genuinely deep tasks (post_game_analysis,
+      //    position_analysis_chat, opening_overview, reports). This also
+      //    restores the deliberate `chat_response → deepseek-chat` default
+      //    (see DEEPSEEK_MODEL_MAP: "biggest single cost win").
+      const latencySensitive = task === 'chat_response';
+      if (compatible && !(latencySensitive && isReasoningModel(userChoice))) {
+        return userChoice;
+      }
     }
   }
   return provider === 'anthropic'
