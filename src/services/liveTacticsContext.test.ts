@@ -99,6 +99,21 @@ describe('buildTacticsLiveContext — boardFacts', () => {
     expect(ctx.boardFacts?.mateInOne).toBeNull();
   });
 
+  it('lists a piece inventory so the brain never parses the raw FEN (the e4-pawn regression)', () => {
+    // 1.e4 e6 2.Nf3 d5 3.Bc4 — the position the 2026-06-02 audit caught
+    // the coach calling "the starting position, no e4 pawn".
+    const fen = 'rnbqkbnr/ppp2ppp/4p3/3p4/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4';
+    const ctx = buildTacticsLiveContext(fen, null, 'w', 1500);
+    const wp = ctx.boardFacts?.whitePieces ?? '';
+    expect(wp).toMatch(/Bishop c4/);
+    expect(wp).toMatch(/Knight f3/);
+    expect(wp).toMatch(/\be4\b/);     // the e4 pawn IS listed
+    expect(wp).not.toMatch(/\be2\b/); // and it is NOT still on e2
+    const bp = ctx.boardFacts?.blackPieces ?? '';
+    expect(bp).toMatch(/\bd5\b/);
+    expect(bp).toMatch(/\be6\b/);
+  });
+
   it('reports the king on g1 after White castles (the e8 regression)', () => {
     // 1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.O-O — White king on g1, rook f1.
     const fen = 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4';
