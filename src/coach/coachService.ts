@@ -83,6 +83,30 @@ function hasPlayerData(result: unknown): boolean {
          (Array.isArray(r.games) && r.games.length > 0);
 }
 
+/** Collect SAN tokens from a player-data tool result into `into`, so the
+ *  claim validator (master-play pipeline) accepts moves the coach grounds
+ *  in a player's REAL games — the same escape hatch the review surface
+ *  uses via `gameSans`. Without this, a lesson built from a chess.com
+ *  pro's games (Naroditsky/Hikaru — no Lichess master-play data for the
+ *  exact line) trips the master-play SAN gate and stocks out (#4). */
+function collectPlayerSans(toolName: string, result: unknown, into: Set<string>): void {
+  if (!result || typeof result !== 'object') return;
+  const r = result as { moves?: { san?: string }[]; games?: { pgn?: string }[] };
+  if (toolName === 'lookup_player_opening_moves' && Array.isArray(r.moves)) {
+    for (const m of r.moves) if (m.san) into.add(m.san);
+  }
+  if (toolName === 'lookup_player_games' && Array.isArray(r.games)) {
+    for (const g of r.games) {
+      if (typeof g.pgn === 'string') {
+        for (const tok of g.pgn.split(/\s+/)) {
+          const san = tok.replace(/^\d+\.+/, '').trim();
+          if (san) into.add(san);
+        }
+      }
+    }
+  }
+}
+
 /** The safe refusal that replaces a response which cited player percentages
  *  without any grounded player data (the explorer was down / returned
  *  empty). Mirrors claimValidator's stock-fallback. */
@@ -682,6 +706,10 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   // moves/games this turn? If the brain attempted one, got nothing, yet
   // still cites percentages, those are fabricated (see finalText guard).
   let playerDataGrounded = false;
+  // SANs from the player's REAL games (pre-loaded block + player-tool
+  // results), fed into the grounding `gameSans` so the claim validator
+  // accepts player-grounded moves instead of nuking the lesson (#4).
+  const playerSans = new Set<string>();
   // Cap multi-turn tool loops so a misbehaving brain can't loop forever.
   const maxRoundTrips = Math.max(1, options.maxToolRoundTrips ?? 1);
 
@@ -732,6 +760,17 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     // the pipeline based on the user's last message. Kid surfaces use
     // `getKidLlmResponse` directly (not coachService.ask), so this
     // path is coach-lane-only by construction.
+    // Fold the player's real-game SANs (pre-loaded block + accumulated
+    // player-tool results from prior trips) into gameSans so the claim
+    // validator treats them as grounded — the chess.com-pro lesson fix (#4).
+    for (const g of input.liveState.playerGames?.games ?? []) {
+      const pre = (g as { pgnPrefix?: string }).pgnPrefix;
+      if (pre) for (const t of pre.split(/\s+/)) if (t) playerSans.add(t.replace(/^\d+\.+/, ''));
+    }
+    const mergedGameSans =
+      playerSans.size > 0
+        ? [...(input.liveState.gameSans ?? []), ...playerSans]
+        : input.liveState.gameSans;
     const autoGrounding =
       options.grounding ??
       (input.liveState.fen
@@ -751,7 +790,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             // so the coach can discuss the student's OWN game without the
             // master-play gate nuking legal moves that aren't in the
             // Lichess explorer's top-N. Undefined off the review surface.
-            gameSans: input.liveState.gameSans,
+            gameSans: mergedGameSans,
             surface: coachSurfaceToRoute(input.liveState.surface),
           }
         : undefined);
@@ -864,6 +903,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
           hasPlayerData(result.result)
         ) {
           playerDataGrounded = true;
+          collectPlayerSans(call.name, result.result, playerSans);
         }
         // Audit-driven (#20, #21): include a high-signal preview of the
         // tool result so paste-back logs surface "stockfish said

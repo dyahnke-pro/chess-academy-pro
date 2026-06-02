@@ -240,6 +240,30 @@ describe('coachService.ask', () => {
     fetchSpy.mockRestore();
   });
 
+  it('#4: folds player-game SANs into grounding.gameSans so the master-play validator accepts them', async () => {
+    const call = vi.fn(() => Promise.resolve({ text: 'ok', toolCalls: [] }));
+    await coachService.ask(
+      {
+        surface: 'teach',
+        ask: 'teach me the Caro',
+        liveState: {
+          surface: 'teach',
+          fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+          // A pre-loaded player-games block (the breadth layer).
+          playerGames: {
+            playerId: 'naroditsky', openingId: 'caro-kann', openingName: 'Caro-Kann Defense', totalAvailable: 1,
+            games: [{ id: 'g1', player: 'Daniel Naroditsky', studentSide: 'black', opponent: 'X', opponentRating: 2700, result: '0-1', date: null, source: 'chess.com', variationLabel: 'Advance', plyCount: 6, pgnPrefix: 'e4 c6 d4 d5 e5 Bf5' }],
+          } as never,
+        },
+      },
+      { providerOverride: { name: 'deepseek', call }, maxToolRoundTrips: 1 },
+    );
+    const grounding = (call.mock.calls[0]?.[1] as { grounding?: { gameSans?: string[] } })?.grounding;
+    expect(grounding?.gameSans).toBeTruthy();
+    // The player's real-game moves are now grounded for the claim validator.
+    expect(grounding!.gameSans).toEqual(expect.arrayContaining(['Bf5', 'e5', 'c6']));
+  });
+
   it('G3 BACKSTOP: replaces a response that cites a player % when the player lookup returned no data', async () => {
     _resetLichessCircuitBreaker();
     // The player tool will FAIL (no data) — its execute returns ok:true with
