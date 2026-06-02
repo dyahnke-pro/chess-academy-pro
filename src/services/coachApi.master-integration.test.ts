@@ -194,6 +194,28 @@ describe('grounding — intent detection', () => {
     expect(counters.lichessCalls).toBeGreaterThan(0);
   });
 
+  it('engages on "what about Nf3?" (a move question)', async () => {
+    const { counters } = await ask('what about Nf3?', ['Nf3 is a fine developing move.']);
+    expect(counters.lichessCalls).toBeGreaterThan(0);
+  });
+
+  it('does NOT engage on "what about the Caro-Kann?" (general opening question, not a move)', async () => {
+    // 2026-06-02: this used to engage master-play on the CURRENT FEN, the
+    // coach named Caro moves, the validator gated them against the wrong
+    // position, and a teaching question got the stock fallback.
+    const counters = installFetchMock({ lichess: LICHESS_PAYLOAD, llmTexts: [
+      'The Caro-Kann starts 1.e4 c6 2.d4 d5 — solid, with a good light-squared bishop.',
+    ] });
+    const r = await getCoachChatResponse(
+      [{ role: 'user', content: 'what about the Caro-Kann?' }],
+      '', undefined, 'chat_response', 1024, undefined, undefined, undefined,
+      { currentFen: STARTING_FEN, surface: '/coach/teach' },
+    );
+    expect(r).toContain('Caro-Kann');
+    expect(r).not.toContain("can't verify");
+    expect(counters.lichessCalls).toBe(0); // grounding stayed dormant
+  });
+
   it('engages on forceEngage even without intent match', async () => {
     installFetchMock({ lichess: LICHESS_PAYLOAD, llmTexts: ['Sure.'] });
     const r = await getCoachChatResponse(
