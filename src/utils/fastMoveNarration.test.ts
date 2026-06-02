@@ -29,7 +29,7 @@ describe('buildFastMoveLine', () => {
     ).toBe('');
   });
 
-  it('names the mover\'s own hanging piece on a key move', () => {
+  it('warns of the mover\'s own hanging piece on a key move, naming the consequence', () => {
     const hanging: HangingPiece[] = [{ square: 'd4', piece: 'n', color: 'w' }];
     expect(
       buildFastMoveLine({
@@ -39,7 +39,36 @@ describe('buildFastMoveLine', () => {
         classification: 'blunder',
         hangingPieces: hanging,
       }),
-    ).toBe('The knight on d 4 is hanging.');
+    ).toBe('That leaves your knight on d 4 hanging — it can be taken.');
+  });
+
+  it('narrates a hanging pawn ONCE, then suppresses the repeat for that square', () => {
+    const hanging: HangingPiece[] = [{ square: 'd4', piece: 'p', color: 'w' }];
+    const announcedHangingSquares = new Set<string>();
+    // First time the d4 pawn is loose → speak it.
+    expect(
+      buildFastMoveLine({
+        san: 'd4', moverIsWhite: true, density: 'fast',
+        classification: 'blunder', hangingPieces: hanging, announcedHangingSquares,
+      }),
+    ).toBe('That leaves your pawn on d 4 hanging — it can be taken.');
+    // Same pawn still loose next ply → do NOT repeat; fall to the key flag.
+    expect(
+      buildFastMoveLine({
+        san: 'Ke2', moverIsWhite: true, density: 'fast',
+        classification: 'blunder', hangingPieces: hanging, announcedHangingSquares,
+      }),
+    ).toBe('That drops material.');
+  });
+
+  it('does not warn about a hanging piece on a move graded good under fast density', () => {
+    const hanging: HangingPiece[] = [{ square: 'd4', piece: 'n', color: 'w' }];
+    expect(
+      buildFastMoveLine({
+        san: 'Nd4', moverIsWhite: true, density: 'fast',
+        classification: 'good', hangingPieces: hanging,
+      }),
+    ).toBe('');
   });
 
   it('does not surface the opponent\'s hanging piece as the mover\'s blunder', () => {

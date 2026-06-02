@@ -40,6 +40,14 @@ export interface FastMoveLineInput {
   hangingPieces?: HangingPiece[];
   /** Narration density resolved from the user's setting. */
   density: FastNarrationDensity;
+  /** Per-game set of squares whose hanging-piece warning has ALREADY
+   *  been spoken. A given square is narrated only once — while the same
+   *  piece stays loose across several moves the warning must not repeat
+   *  (David 2026-06-02: "only narrate the hanging pawn once"). The caller
+   *  owns + resets this per game; when a fresh square is announced the
+   *  builder adds it. Omit it (tests, callers without a game) to disable
+   *  de-dup. */
+  announcedHangingSquares?: Set<string>;
 }
 
 const KEY_CLASSIFICATIONS = new Set(['blunder', 'mistake', 'inaccuracy']);
@@ -74,7 +82,7 @@ function spellSquare(sq: string): string {
  *      check") so every-move users still hear a beat.
  */
 export function buildFastMoveLine(input: FastMoveLineInput): string {
-  const { san, moverIsWhite, classification, tactics, hangingPieces, density } = input;
+  const { san, moverIsWhite, classification, tactics, hangingPieces, density, announcedHangingSquares } = input;
   if (density === 'none') return '';
 
   const realTactics = (tactics ?? []).filter((t) => t.type !== 'none' && t.description.trim());
@@ -88,16 +96,25 @@ export function buildFastMoveLine(input: FastMoveLineInput): string {
   }
 
   // 2. Hanging piece the move exposed. Surface the side-to-move's own
-  //    piece left hanging (the move just blundered it) — that is the
-  //    teachable consequence. Most valuable piece first.
+  //    piece left hanging — the teachable consequence of the move — but
+  //    speak a given square only ONCE per game. While the same piece
+  //    stays loose across several moves the old "The pawn on d4 is
+  //    hanging" line repeated every ply and tuned out fast (David
+  //    2026-06-02: "only narrate the hanging pawn once"). When we do
+  //    speak, name the CONSEQUENCE rather than just restating the board.
   const hanging = (hangingPieces ?? [])
     .slice()
     .sort((a, b) => pieceValue(b.piece) - pieceValue(a.piece));
   const moverColor: 'w' | 'b' = moverIsWhite ? 'w' : 'b';
   const ownHanging = hanging.find((h) => h.color === moverColor);
   if (ownHanging && (isKey || density !== 'fast')) {
-    const word = PIECE_WORD[ownHanging.piece.toLowerCase()] ?? 'piece';
-    return `The ${word} on ${spellSquare(ownHanging.square)} is hanging.`;
+    if (!announcedHangingSquares?.has(ownHanging.square)) {
+      announcedHangingSquares?.add(ownHanging.square);
+      const word = PIECE_WORD[ownHanging.piece.toLowerCase()] ?? 'piece';
+      return `That leaves your ${word} on ${spellSquare(ownHanging.square)} hanging — it can be taken.`;
+    }
+    // Already announced this square once — don't repeat the warning.
+    // Fall through to a key-moment flag or silence.
   }
 
   // 3. Key-moment classification with no detected motif.

@@ -560,6 +560,14 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   const previousFenRef = useRef<string | null>(null);
   const [isCoachThinking, setIsCoachThinking] = useState(false);
   const moveCountRef = useRef(0);
+  // Squares whose hanging-piece warning has already been spoken THIS
+  // game — keyed by gameId so it self-resets on restart/new game. A
+  // given loose piece is narrated once, never repeated every ply
+  // (David 2026-06-02: "only narrate the hanging pawn once").
+  const announcedHangingRef = useRef<{ gameId: string; squares: Set<string> }>({
+    gameId: '',
+    squares: new Set<string>(),
+  });
   // Track which openings we've already introduced this game so the
   // long teaching narration only fires ONCE per opening, not on
   // every move in book. Routine book moves stay silent until a key
@@ -3434,6 +3442,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // streamed sentences (which is what was dropping it to Web Speech).
     if (!USE_LLM_MOVE_COMMENTARY) {
       const narrationTactics = (tacticResult?.tactics ?? []).filter((t) => t.type !== 'none');
+      // Reset the once-per-game hanging ledger when the game changes.
+      if (announcedHangingRef.current.gameId !== gameState.gameId) {
+        announcedHangingRef.current = { gameId: gameState.gameId, squares: new Set<string>() };
+      }
       const fastLine = buildFastMoveLine({
         san: moveResult.san,
         moverIsWhite: playerColor === 'white',
@@ -3441,6 +3453,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         tactics: narrationTactics,
         hangingPieces: tacticResult?.hangingPieces ?? [],
         density: narrationDensity,
+        announcedHangingSquares: announcedHangingRef.current.squares,
       });
       if (fastLine) {
         commentary = fastLine;
