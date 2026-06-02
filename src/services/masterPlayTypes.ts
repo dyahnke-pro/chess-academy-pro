@@ -121,6 +121,11 @@ export interface MasterPlayContext {
    *  surface supplied `gameSans` (review); undefined elsewhere, where the
    *  strict master-play-only SAN gate stays in force. */
   groundedSans?: ReadonlyArray<string>;
+  /** Player display names grounded THIS turn by the player-games tools.
+   *  The entity claim-validator treats these as attributed, so a lesson
+   *  on "how <pro> plays X" can name the pro without stocking out. Same
+   *  idea as `groundedSans` for moves. (Prod bug 2026-06-02.) */
+  groundedPlayers?: ReadonlyArray<string>;
   /** True when this turn is grounded in an ACTUAL played game (the
    *  review surface supplied `gameSans`). Distinguishes the review case
    *  — where a SAN that's neither played nor legal IS a hallucination

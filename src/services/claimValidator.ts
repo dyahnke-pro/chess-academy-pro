@@ -249,6 +249,16 @@ const YEAR_RE = /\b(19[0-9]{2}|20[0-2][0-9])\b/g;
 
 function playerSeenInContext(canonical: string, context: MasterPlayContext): boolean {
   const surname = canonical.toLowerCase();
+  // Grounded THIS turn by the player-games tools (lookup_player_games /
+  // lookup_player_opening_moves): the pro the lesson is ABOUT. Teaching
+  // "how Carlsen plays the Catalan" must be able to name him — his real
+  // games ARE the grounding. (Prod bug 2026-06-02.)
+  if (context.groundedPlayers) {
+    for (const p of context.groundedPlayers) {
+      const pl = p.toLowerCase();
+      if (pl.includes(surname) || surname.includes(pl)) return true;
+    }
+  }
   // First: master-play `topGames` attribution (live Lichess or local DB).
   if (context.current.topGames && context.current.topGames.length > 0) {
     for (const g of context.current.topGames) {

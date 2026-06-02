@@ -43,6 +43,26 @@ function emptyContext(): MasterPlayContext {
   };
 }
 
+describe('validateClaims — groundedPlayers (on-the-fly pro lessons)', () => {
+  it('flags a player mention when nothing grounds it', () => {
+    const ctx = emptyContext();
+    const r = validateClaims('Carlsen plays the Catalan with a slow squeeze.', ctx);
+    expect(r.violations.some((v) => v.kind === 'entity' && v.claim === 'Carlsen')).toBe(true);
+  });
+
+  it('ACCEPTS the player named when groundedPlayers carries the pro (handle or display)', () => {
+    const ctx = { ...emptyContext(), groundedPlayers: ['magnuscarlsen'] };
+    const r = validateClaims('Carlsen plays the Catalan with a slow squeeze.', ctx);
+    expect(r.violations.some((v) => v.kind === 'entity' && v.claim === 'Carlsen')).toBe(false);
+  });
+
+  it('also accepts the display-name form', () => {
+    const ctx = { ...emptyContext(), groundedPlayers: ['Magnus Carlsen'] };
+    const r = validateClaims('In his games Carlsen heads for the Closed Catalan.', ctx);
+    expect(r.violations.some((v) => v.kind === 'entity' && v.claim === 'Carlsen')).toBe(false);
+  });
+});
+
 describe('validateClaims — no context (no-op)', () => {
   it('returns ok:true and no violations when context is undefined', () => {
     const r = validateClaims('Carlsen played Nf3 in 73% of his games at 2842 rating', undefined);

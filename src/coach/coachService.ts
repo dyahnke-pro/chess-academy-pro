@@ -107,6 +107,23 @@ function collectPlayerSans(toolName: string, result: unknown, into: Set<string>)
   }
 }
 
+/** Collect the player NAME grounded by a player-games tool — both the
+ *  `player` ARG the brain passed ("Carlsen" / "magnuscarlsen") and the
+ *  display name in the result ("Magnus Carlsen") — so the entity claim
+ *  validator accepts the pro the lesson is about. The arg matters because
+ *  the on-the-fly result carries the Lichess HANDLE ("DrNykterstein"),
+ *  not the canonical name the brain speaks. (Prod bug 2026-06-02.) */
+function collectPlayerNames(toolName: string, args: unknown, result: unknown, into: Set<string>): void {
+  if (toolName !== 'lookup_player_opening_moves' && toolName !== 'lookup_player_games') return;
+  const a = args as { player?: unknown };
+  if (typeof a?.player === 'string' && a.player.trim()) into.add(a.player.trim());
+  if (result && typeof result === 'object') {
+    const r = result as { player?: unknown; games?: { player?: unknown }[] };
+    if (typeof r.player === 'string' && r.player.trim()) into.add(r.player.trim());
+    if (Array.isArray(r.games)) for (const g of r.games) if (typeof g.player === 'string' && g.player.trim()) into.add(g.player.trim());
+  }
+}
+
 /** The safe refusal that replaces a response which cited player percentages
  *  without any grounded player data (the explorer was down / returned
  *  empty). Mirrors claimValidator's stock-fallback. */
@@ -710,6 +727,9 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   // results), fed into the grounding `gameSans` so the claim validator
   // accepts player-grounded moves instead of nuking the lesson (#4).
   const playerSans = new Set<string>();
+  // Player NAMES grounded this turn, fed into grounding.groundedPlayers so
+  // the entity validator accepts the pro the lesson is about (#entity fix).
+  const playerNames = new Set<string>();
   // Cap multi-turn tool loops so a misbehaving brain can't loop forever.
   const maxRoundTrips = Math.max(1, options.maxToolRoundTrips ?? 1);
 
@@ -769,11 +789,14 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     for (const g of input.liveState.playerGames?.games ?? []) {
       const pre = (g as { pgnPrefix?: string }).pgnPrefix;
       if (pre) for (const t of pre.split(/\s+/)) if (t) playerSans.add(t.replace(/^\d+\.+/, ''));
+      const nm = (g as { player?: string }).player;
+      if (nm) playerNames.add(nm);
     }
     const mergedGameSans =
       playerSans.size > 0
         ? [...(input.liveState.gameSans ?? []), ...playerSans]
         : input.liveState.gameSans;
+    const groundedPlayers = playerNames.size > 0 ? [...playerNames] : undefined;
     const autoGrounding =
       options.grounding ??
       (input.liveState.fen
@@ -794,6 +817,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             // master-play gate nuking legal moves that aren't in the
             // Lichess explorer's top-N. Undefined off the review surface.
             gameSans: mergedGameSans,
+            groundedPlayers,
             surface: coachSurfaceToRoute(input.liveState.surface),
           }
         : undefined);
@@ -908,6 +932,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
         ) {
           playerDataGrounded = true;
           collectPlayerSans(call.name, result.result, playerSans);
+          collectPlayerNames(call.name, call.args, result.result, playerNames);
         }
         // Audit-driven (#20, #21): include a high-signal preview of the
         // tool result so paste-back logs surface "stockfish said

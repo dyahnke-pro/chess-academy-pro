@@ -987,6 +987,14 @@ export interface MasterGroundingOptions {
    *  do masters play") keep the strict master-play-only SAN gate, where
    *  "no master data → flag every SAN" is the intended contract. */
   gameSans?: ReadonlyArray<string>;
+  /** Player display names grounded THIS turn by the player-games tools
+   *  (lookup_player_games / lookup_player_opening_moves). When teaching
+   *  "how <pro> plays X", the brain must name the player; the entity
+   *  claim-validator would otherwise flag it ("mentions Carlsen but no
+   *  topGames attribution") and stock-out the lesson. Listing the
+   *  grounded player here tells the validator that name is attributed.
+   *  Same escape hatch as `gameSans` for moves. (Prod bug 2026-06-02.) */
+  groundedPlayers?: ReadonlyArray<string>;
   /** Surface route for audit attribution. Goes into every emitted
    *  audit event (`master-play-lookup`, `claim-validator-trip`, etc). */
   surface: string;
@@ -1142,7 +1150,7 @@ async function buildMasterPlayContext(
     // review, `groundedSans` carries the game's own moves + legal moves
     // so the coach can discuss the student's actual game without every
     // SAN tripping the gate.
-    return { current, lookahead: [], groundedSans, groundedFromPlayedGame };
+    return { current, lookahead: [], groundedSans, groundedFromPlayedGame, groundedPlayers: grounding.groundedPlayers };
   }
   const lookahead = await buildLookahead(
     grounding.currentFen,
@@ -1150,7 +1158,7 @@ async function buildMasterPlayContext(
     grounding.surface,
     grounding.sessionId,
   );
-  return { current, lookahead, groundedSans, groundedFromPlayedGame };
+  return { current, lookahead, groundedSans, groundedFromPlayedGame, groundedPlayers: grounding.groundedPlayers };
 }
 
 /** Render the context as a system-prompt block the LLM can consume.
