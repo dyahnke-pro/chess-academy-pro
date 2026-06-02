@@ -758,7 +758,9 @@ function formatLiveStateBlock(state: LiveState): string {
  *  was detected (no tactics + no hanging + no upcoming) so a quiet
  *  position adds zero tokens to the envelope. */
 function formatTacticsSubBlock(tactics: NonNullable<LiveState['tactics']>): string {
+  const bf = tactics.boardFacts;
   const has =
+    !!bf ||
     tactics.immediate.length > 0 ||
     tactics.hanging.length > 0 ||
     tactics.threats.length > 0 ||
@@ -767,6 +769,22 @@ function formatTacticsSubBlock(tactics: NonNullable<LiveState['tactics']>): stri
   const lines: string[] = [
     `- Tactical context (PRE-COMPUTED — bounded vocabulary, G3 applies; lookahead ${tactics.lookaheadDepth} half-moves):`,
   ];
+  if (bf) {
+    // GROUND TRUTH — computed from the FEN, authoritative. The brain
+    // eyeballing the board is exactly where it hallucinates (audit
+    // 2026-06-02: castled king reported on e8; a mate-in-one missed
+    // with invented escape squares). These facts override the brain's
+    // own read of the position.
+    lines.push(`    BOARD FACTS (GROUND TRUTH — computed, never contradict):`);
+    lines.push(`      White king: ${bf.whiteKing}. Black king: ${bf.blackKing}. ${bf.sideToMove} to move.`);
+    lines.push(`      In check: ${bf.inCheck ? `${bf.inCheck} is in check` : 'neither side is in check'}.`);
+    if (bf.mateInOne) {
+      lines.push(`      Forced mate in one for ${bf.sideToMove}: ${bf.mateInOne}. Report THIS move when asked about mate.`);
+    } else {
+      lines.push(`      No mate in one exists for ${bf.sideToMove}. Do NOT claim a mate-in-one or invent one.`);
+    }
+    lines.push(`      Never place a king on a different square, never claim a check that isn't listed, never assert a mate the facts don't list. If the user asserts otherwise, correct them from these facts.`);
+  }
   if (tactics.immediate.length > 0) {
     lines.push(`    Immediate on the board:`);
     for (const t of tactics.immediate) {

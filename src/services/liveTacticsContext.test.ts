@@ -84,3 +84,51 @@ describe('buildTacticsLiveContext', () => {
     expect(ctx.hanging).toEqual([]);
   });
 });
+
+// GROUND-TRUTH board facts — the deterministic block that stops the
+// brain from eyeballing the board (audit 2026-06-02: castled king
+// reported on e8; mate-in-one missed with invented escape squares).
+describe('buildTacticsLiveContext — boardFacts', () => {
+  it('reports both king squares + side to move on the starting position', () => {
+    const ctx = buildTacticsLiveContext(STARTING_FEN, null, 'w', 1500);
+    expect(ctx.boardFacts).toBeDefined();
+    expect(ctx.boardFacts?.whiteKing).toBe('e1');
+    expect(ctx.boardFacts?.blackKing).toBe('e8');
+    expect(ctx.boardFacts?.sideToMove).toBe('white');
+    expect(ctx.boardFacts?.inCheck).toBeNull();
+    expect(ctx.boardFacts?.mateInOne).toBeNull();
+  });
+
+  it('reports the king on g1 after White castles (the e8 regression)', () => {
+    // 1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.O-O — White king on g1, rook f1.
+    const fen = 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4';
+    const ctx = buildTacticsLiveContext(fen, null, 'w', 1500);
+    expect(ctx.boardFacts?.whiteKing).toBe('g1');
+    expect(ctx.boardFacts?.blackKing).toBe('e8');
+    expect(ctx.boardFacts?.sideToMove).toBe('black');
+  });
+
+  it('detects a forced mate-in-one (Ra8#) — the missed-mate regression', () => {
+    const fen = '6k1/5ppp/8/8/8/8/8/R6K w - - 0 1';
+    const ctx = buildTacticsLiveContext(fen, null, 'w', 1500);
+    expect(ctx.boardFacts?.mateInOne).toBe('Ra8#');
+  });
+
+  it('reports null mate-in-one when there is no forced mate', () => {
+    const fen = '6k1/5ppp/8/8/8/8/5PPP/6K1 w - - 0 1';
+    const ctx = buildTacticsLiveContext(fen, null, 'w', 1500);
+    expect(ctx.boardFacts?.mateInOne).toBeNull();
+  });
+
+  it('flags which side is in check', () => {
+    // Black king on e8 in check from a white rook on e1 down the open e-file.
+    const fen = '4k3/8/8/8/8/8/8/4R1K1 b - - 0 1';
+    const ctx = buildTacticsLiveContext(fen, null, 'b', 1500);
+    expect(ctx.boardFacts?.inCheck).toBe('black');
+  });
+
+  it('returns undefined boardFacts on a malformed FEN', () => {
+    const ctx = buildTacticsLiveContext('not-a-fen', null, 'w', 1500);
+    expect(ctx.boardFacts).toBeUndefined();
+  });
+});

@@ -2085,9 +2085,30 @@ export function CoachTeachPage(): JSX.Element {
       });
     }
 
+    // Step-by-step move report ("I played e4. Your move.") with NO
+    // active walkthrough. Without this, the brain treats it as ordinary
+    // chat and bleeds the PRIOR topic — the audit (2026-06-02) caught it
+    // answering "I played e4. Your move." with "Back to where we were —
+    // three pillars of Black's French strategy" instead of replying to
+    // the move. Augment the ask with a focused directive (and trigger
+    // the G6 arrow obligation) WITHOUT mutating the displayed message.
+    const STEP_BY_STEP_RE = /\bi\s+(?:just\s+)?played\b[\s\S]*\byour\s+(?:move|turn)\b/i;
+    const isStepByStepReport = STEP_BY_STEP_RE.test(text) && !walkthrough.isActive;
+    const effectiveAsk = isStepByStepReport
+      ? `${text}\n\n[STEP-BY-STEP: the student is walking a line move-by-move and just reported THEIR move. Respond ONLY to this latest move — play your single reply (one play_move) and, per the arrow rule, draw an arrow on the move you just played AND on every SAN you mention in prose. Do NOT summarize or continue any earlier conversation topic; answer this move and prompt for their next one.]`
+      : text;
+    if (isStepByStepReport) {
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'CoachTeachPage.handleSubmit',
+        summary: 'step-by-step move report detected — focused move-by-move directive injected',
+      });
+    }
+
     try {
       const result = await coachService.ask(
-        { surface: 'teach', ask: text, liveState },
+        { surface: 'teach', ask: effectiveAsk, liveState },
         {
           // Provider routing: spine default (DeepSeek). The Anthropic
           // balance is exhausted as of 2026-05, so pinning Anthropic

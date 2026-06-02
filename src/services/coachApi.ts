@@ -1055,17 +1055,28 @@ async function buildLookahead(
  *  both. Returns undefined off the review surface (no `gameSans`) so the
  *  strict master-play-only SAN gate stays in force everywhere else. */
 function buildGroundedSans(grounding: MasterGroundingOptions): ReadonlyArray<string> | undefined {
-  if (!grounding.gameSans || grounding.gameSans.length === 0) return undefined;
-  const set = new Set<string>(grounding.gameSans);
+  const set = new Set<string>(grounding.gameSans ?? []);
+  // The LEGAL MOVES of the current position are grounded on EVERY
+  // surface, not just game review. A legal move the coach names while
+  // discussing a plan / the position is a real move, NOT a fabricated
+  // "masters play X" claim — so it must not trip the claim validator.
+  // Before this, on an off-book position the validator had no grounding
+  // source and flagged EVERY SAN, exhausted its retries, and served the
+  // stock "I can't verify which moves are sound" fallback — even for a
+  // plain "give me a plan" question (audit 2026-06-02, finding #1). The
+  // anti-fabrication guards that matter (percentages, game counts,
+  // ratings, player names, "most popular"/"main line" comparatives) all
+  // gate on `hasMasterData`, NOT this SAN set, so grounding legal moves
+  // does not weaken them.
   if (grounding.currentFen) {
     try {
       const chess = new Chess(grounding.currentFen);
       for (const m of chess.moves()) set.add(m);
     } catch {
-      // Bad FEN — fall back to the played-game SANs alone.
+      // Bad FEN — fall back to whatever gameSans provided (possibly none).
     }
   }
-  return Array.from(set);
+  return set.size > 0 ? Array.from(set) : undefined;
 }
 
 async function buildMasterPlayContext(

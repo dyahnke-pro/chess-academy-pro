@@ -265,11 +265,16 @@ describe('grounding — retry on validator trip', () => {
 });
 
 describe('grounding — no master data (source:none)', () => {
-  it('flags any SAN when context has no data', async () => {
+  // FIX C (audit 2026-06-02 finding #1): legal moves of the current FEN
+  // are grounded on every surface. A SAN that is ILLEGAL in the current
+  // position (or otherwise ungrounded) still trips; a LEGAL move passes
+  // even with no master data, so plan/positional answers no longer get
+  // nuked into the stock fallback.
+  it('still flags ILLEGAL / ungrounded SANs when context has no data', async () => {
     const counters = installFetchMock({ lichess: EMPTY_LICHESS_PAYLOAD, llmTexts: [
-      'Try Bb5 here.',
-      'How about Nf3?',
-      'You should play d4.', // recommendation verb → pawn-move detector fires
+      'The best move is Nh6.', // illegal on move 1 → not a legal move of the FEN
+      'Try Bf6 instead.',      // illegal
+      'Maybe Rf2 is good?',    // illegal
     ] });
     const r = await getCoachChatResponse(
       [{ role: 'user', content: 'what should I play here?' }],
@@ -284,6 +289,46 @@ describe('grounding — no master data (source:none)', () => {
     );
     expect(r).toContain("can't verify"); // stock fallback
     expect(counters.llmCalls).toBe(3);
+  });
+
+  it('grounds a LEGAL move even with no master data (FIX C — no false stock-out)', async () => {
+    const counters = installFetchMock({ lichess: EMPTY_LICHESS_PAYLOAD, llmTexts: [
+      'A solid developing plan is Nf3, then d4 to contest the center.', // both legal on move 1
+    ] });
+    const r = await getCoachChatResponse(
+      [{ role: 'user', content: 'what should I play here?' }],
+      '',
+      undefined,
+      'chat_response',
+      1024,
+      undefined,
+      undefined,
+      undefined,
+      { currentFen: STARTING_FEN, surface: '/coach/chat' },
+    );
+    expect(r).toContain('Nf3'); // passed through — not the stock fallback
+    expect(r).not.toContain("can't verify");
+    expect(counters.llmCalls).toBe(1); // no retry needed
+  });
+
+  it('still flags a fabricated percentage even when the SAN is legal (FIX C does not weaken numeric gating)', async () => {
+    const counters = installFetchMock({ lichess: EMPTY_LICHESS_PAYLOAD, llmTexts: [
+      'Nf3 scores 58% for White here.',  // Nf3 legal, but 58% is fabricated (no master data)
+      'Nf3 is a sound developing move.', // legal move, no fabricated stat → passes
+    ] });
+    const r = await getCoachChatResponse(
+      [{ role: 'user', content: 'what should I play here?' }],
+      '',
+      undefined,
+      'chat_response',
+      1024,
+      undefined,
+      undefined,
+      undefined,
+      { currentFen: STARTING_FEN, surface: '/coach/chat' },
+    );
+    expect(r).toContain('sound developing'); // the clean retry
+    expect(counters.llmCalls).toBe(2);        // first (58%) tripped, retry passed
   });
 
   it('passes a response that honestly says it cannot verify', async () => {

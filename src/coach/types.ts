@@ -385,6 +385,23 @@ export interface TacticsLiveContext {
    *  `getTacticLookahead`). The brain must not claim a tactic
    *  further out than this depth. */
   lookaheadDepth: number;
+  /** GROUND-TRUTH board facts computed deterministically from the FEN
+   *  (chess.js), injected so the brain NEVER has to eyeball the board —
+   *  the audit (2026-06-02) caught it putting a castled king on e8 and
+   *  missing a mate-in-1. The renderer marks these authoritative: the
+   *  brain must not contradict the king squares, must not invent a
+   *  check, and must report `mateInOne` when set / never claim a mate
+   *  when it's null. Present whenever a valid FEN was supplied. */
+  boardFacts?: {
+    sideToMove: 'white' | 'black';
+    whiteKing: string;
+    blackKing: string;
+    /** Which side (if any) is currently in check. */
+    inCheck: 'white' | 'black' | null;
+    /** SAN of a forced mate-in-one for the side to move, if one exists;
+     *  null when there is none. Computed by trying every legal move. */
+    mateInOne: string | null;
+  };
 }
 
 // ─── Envelope (what every LLM call contains) ─────────────────────────────────

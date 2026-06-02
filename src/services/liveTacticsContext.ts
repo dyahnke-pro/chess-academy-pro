@@ -91,7 +91,46 @@ export function buildTacticsLiveContext(
     threats,
     opportunities,
     lookaheadDepth,
+    boardFacts: computeBoardFacts(fen),
   };
+}
+
+/** Deterministic ground-truth facts from the FEN — king squares, side
+ *  to move, who's in check, and a forced mate-in-one if one exists.
+ *  Injected so the brain describes from authoritative data instead of
+ *  eyeballing the board (audit 2026-06-02: castled-king-on-e8 + a
+ *  missed mate-in-one with fabricated escape squares). Returns
+ *  `undefined` on an unparseable FEN so the renderer drops the block. */
+function computeBoardFacts(fen: string): TacticsLiveContext['boardFacts'] {
+  try {
+    const chess = new Chess(fen);
+    const board = chess.board();
+    let whiteKing = '';
+    let blackKing = '';
+    for (const row of board) {
+      for (const sq of row) {
+        if (sq && sq.type === 'k') {
+          if (sq.color === 'w') whiteKing = sq.square;
+          else blackKing = sq.square;
+        }
+      }
+    }
+    if (!whiteKing || !blackKing) return undefined;
+    const sideToMove = chess.turn() === 'w' ? 'white' : 'black';
+    const inCheck = chess.inCheck() ? sideToMove : null;
+    // Mate-in-one for the side to move: try every legal move; the first
+    // that delivers checkmate is the forced mate. chess.js validates
+    // legality, so this never reports an illegal "mate".
+    let mateInOne: string | null = null;
+    for (const m of chess.moves()) {
+      const probe = new Chess(fen);
+      probe.move(m);
+      if (probe.isCheckmate()) { mateInOne = m; break; }
+    }
+    return { sideToMove, whiteKing, blackKing, inCheck, mateInOne };
+  } catch {
+    return undefined;
+  }
 }
 
 /** Run `classifyPosition` against the current FEN as a null-move-style
