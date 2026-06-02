@@ -133,7 +133,26 @@ export const lookupPlayerOpeningMovesTool: Tool = {
         },
       };
     } catch (err) {
-      return { ok: false, error: err instanceof Error ? err.message : String(err) };
+      // A tool FAILURE (explorer unavailable / rate-limited / timeout) is
+      // NOT permission for the brain to recite the player's stats from
+      // memory (G3). A bare { ok:false, error } makes the brain improvise
+      // and fabricate percentages (~40% of runs in the 2026-06-02 live
+      // audit). Surface it instead as a NO-DATA result — the same shape
+      // the brain already handles gracefully for an empty result — with a
+      // hard anti-fabrication note, so it refuses cleanly.
+      const reason = err instanceof Error ? err.message : String(err);
+      return {
+        ok: true,
+        result: {
+          player: username,
+          color,
+          totalGames: 0,
+          openingName: null,
+          moves: [],
+          unavailable: true,
+          note: `Couldn't reach the Lichess player explorer for ${username} right now (it may be rate-limited or down: ${reason}). You have NO move data for this player this turn. Tell the student you can't pull their games right now and offer to retry — and do NOT state ANY of this player's move frequencies, percentages, win-rates, or "he plays X most often" figures, because you don't have them and reciting them from memory is a fabrication (G3). You may teach the opening itself from the master database, clearly labelled as general theory, NOT as "his".`,
+        },
+      };
     }
   },
 };

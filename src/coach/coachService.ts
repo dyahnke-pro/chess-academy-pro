@@ -73,6 +73,22 @@ export function stripLeadingArtifact(text: string): string {
   return text.replace(/^[A-Za-z](?=[A-Z][a-z])/, '');
 }
 
+/** Did a player-data tool result actually carry moves/games? Used by the
+ *  G3 fabrication backstop — a player lookup that returned nothing is not
+ *  grounding for any "he plays X 55%" claim. */
+function hasPlayerData(result: unknown): boolean {
+  if (!result || typeof result !== 'object') return false;
+  const r = result as { moves?: unknown[]; games?: unknown[] };
+  return (Array.isArray(r.moves) && r.moves.length > 0) ||
+         (Array.isArray(r.games) && r.games.length > 0);
+}
+
+/** The safe refusal that replaces a response which cited player percentages
+ *  without any grounded player data (the explorer was down / returned
+ *  empty). Mirrors claimValidator's stock-fallback. */
+const UNGROUNDED_PLAYER_STAT_REFUSAL =
+  "I can't pull that player's real games right now — the explorer's unavailable, so I don't have their actual move frequencies. I'm not going to guess percentages from memory. Want me to retry, or teach the opening from the master database instead?";
+
 function resolveProviderName(): ProviderName {
   // Vite-style env (browser builds).
   const viteEnv = (typeof import.meta !== 'undefined'
@@ -662,6 +678,10 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
 
   const dispatchedIds: string[] = [];
   const dispatchedToolNames: string[] = [];
+  // G3 fabrication backstop: did a player-data tool actually return
+  // moves/games this turn? If the brain attempted one, got nothing, yet
+  // still cites percentages, those are fabricated (see finalText guard).
+  let playerDataGrounded = false;
   // Cap multi-turn tool loops so a misbehaving brain can't loop forever.
   const maxRoundTrips = Math.max(1, options.maxToolRoundTrips ?? 1);
 
@@ -838,6 +858,13 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
           result: result.result,
           error: result.error,
         });
+        if (
+          result.ok &&
+          (call.name === 'lookup_player_opening_moves' || call.name === 'lookup_player_games') &&
+          hasPlayerData(result.result)
+        ) {
+          playerDataGrounded = true;
+        }
         // Audit-driven (#20, #21): include a high-signal preview of the
         // tool result so paste-back logs surface "stockfish said
         // bestMove=Nf3 eval=+0.4" instead of just "stockfish_eval ok".
@@ -1033,7 +1060,27 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
       }),
     });
   }
-  const finalText = deartifacted;
+  let finalText = deartifacted;
+
+  // G3 fabrication backstop (deterministic — prompt + tool-shape reduce
+  // this but an LLM can't be guaranteed on a negative constraint). If the
+  // brain ATTEMPTED a player-data lookup, got NO data back, yet still
+  // states a player percentage, that figure is fabricated from memory.
+  // Replace the whole answer with a safe refusal rather than ship invented
+  // pro stats. Mirrors claimValidator's stock-fallback.
+  const playerToolAttempted =
+    dispatchedToolNames.includes('lookup_player_opening_moves') ||
+    dispatchedToolNames.includes('lookup_player_games');
+  if (playerToolAttempted && !playerDataGrounded && /\d+\s*%/.test(finalText)) {
+    void logAppAudit({
+      kind: 'claim-validator-trip',
+      category: 'subsystem',
+      source: 'coachService.ungroundedPlayerStatGuard',
+      summary: `replaced ungrounded player-stat answer on ${input.surface} — player lookup returned no data but the response cited a percentage`,
+      details: JSON.stringify({ surface: input.surface, preview: finalText.slice(0, 200) }),
+    });
+    finalText = UNGROUNDED_PLAYER_STAT_REFUSAL;
+  }
 
   void logAppAudit({
     kind: 'coach-brain-answer-returned',

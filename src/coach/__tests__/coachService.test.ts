@@ -235,10 +235,55 @@ describe('coachService.ask', () => {
     // The round-trip loop fed the tool result back → provider called a second time → finalized.
     expect(call).toHaveBeenCalledTimes(2);
     expect(answer.text).toContain('e4');
-    // The tool actually executed (the spine invoked it) — its tool-called audit fired.
     const toolAudit = auditCalls.find((c) => c.summary.includes('lookup_player_opening_moves'));
     expect(toolAudit).toBeTruthy();
-
     fetchSpy.mockRestore();
+  });
+
+  it('G3 BACKSTOP: replaces a response that cites a player % when the player lookup returned no data', async () => {
+    _resetLichessCircuitBreaker();
+    // The player tool will FAIL (no data) — its execute returns ok:true with
+    // empty moves + unavailable note (the tool-shape fix), so the spine sees
+    // "attempted, no data grounded".
+    vi.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('Explorer API error: 502'));
+    const responses: ProviderResponse[] = [
+      {
+        text: 'pulling his games',
+        toolCalls: [
+          { id: 'tc-pl', name: 'lookup_player_opening_moves', args: { player: 'Carlsen', color: 'white', fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' } },
+        ],
+      },
+      // The brain fabricates anyway (the ~20% case the prompt can't stop):
+      { text: '[VOICE: Carlsen plays e4 about 55% of his games, d4 around 30%.] He is mainly a 1.e4 player.', toolCalls: [] },
+    ];
+    const call = vi.fn(() => Promise.resolve(responses.shift() ?? { text: '', toolCalls: [] }));
+    const answer = await coachService.ask(
+      { surface: 'teach', ask: "Carlsen's first-move stats from his real games?", liveState: { surface: 'teach' } },
+      { providerOverride: { name: 'deepseek', call }, maxToolRoundTrips: 2 },
+    );
+    // The fabricated "55%" / "30%" must NOT ship — replaced by the refusal.
+    expect(answer.text).not.toMatch(/\d+\s*%/);
+    expect(answer.text.toLowerCase()).toMatch(/can'?t pull|not going to guess|unavailable/);
+    const trip = auditCalls.find((c) => c.summary.includes('ungrounded player-stat') || c.summary.includes('replaced ungrounded'));
+    expect(trip).toBeTruthy();
+    vi.restoreAllMocks();
+  });
+
+  it('does NOT replace a player % when the lookup DID return data (grounded)', async () => {
+    _resetLichessCircuitBreaker();
+    const body = JSON.stringify({ white: 60, draws: 8, black: 20, moves: [{ uci: 'e2e4', san: 'e4', averageOpponentRating: 2950, white: 40, draws: 5, black: 12 }], opening: { eco: 'B00', name: "King's Pawn" } });
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(body, { status: 200, headers: { 'Content-Type': 'application/json' } }));
+    const responses: ProviderResponse[] = [
+      { text: 'pulling', toolCalls: [{ id: 'tc-pl', name: 'lookup_player_opening_moves', args: { player: 'Carlsen', color: 'white', fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' } }] },
+      { text: 'He plays e4 in 72% of these games.', toolCalls: [] },
+    ];
+    const call = vi.fn(() => Promise.resolve(responses.shift() ?? { text: '', toolCalls: [] }));
+    const answer = await coachService.ask(
+      { surface: 'teach', ask: 'his e4 rate?', liveState: { surface: 'teach' } },
+      { providerOverride: { name: 'deepseek', call }, maxToolRoundTrips: 2 },
+    );
+    // Grounded → the percentage is allowed through.
+    expect(answer.text).toMatch(/72\s*%/);
+    vi.restoreAllMocks();
   });
 });

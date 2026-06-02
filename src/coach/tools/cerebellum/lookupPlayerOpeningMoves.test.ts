@@ -105,6 +105,19 @@ describe('lookup_player_opening_moves tool', () => {
     expect(res.moves[0].playerScorePct).toBe(75);
   });
 
+  it('tool FAILURE => ok:true no-data result (not a bare error) so the brain refuses, not fabricates', async () => {
+    _resetLichessCircuitBreaker();
+    vi.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('Explorer API error: 502'));
+    const r = await lookupPlayerOpeningMovesTool.execute({ player: 'Carlsen', color: 'white', fen: START_FEN });
+    // Crucially ok:true (the empty-handling path), NOT ok:false (improvise).
+    expect(r.ok).toBe(true);
+    const res = r.result as { moves: unknown[]; totalGames: number; unavailable?: boolean; note?: string };
+    expect(res.moves).toHaveLength(0);
+    expect(res.totalGames).toBe(0);
+    expect(res.unavailable).toBe(true);
+    expect(res.note).toMatch(/do not state|fabrication|can't pull/i);
+  });
+
   it('empty moves => a note telling the brain not to fabricate', async () => {
     mockFetch({ white: 0, draws: 0, black: 0, moves: [], opening: null });
     const r = await lookupPlayerOpeningMovesTool.execute({ player: 'nobody-xyz', color: 'white', fen: START_FEN });
