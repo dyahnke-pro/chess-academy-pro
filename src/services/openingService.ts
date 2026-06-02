@@ -488,6 +488,22 @@ export async function toggleFavorite(id: string): Promise<boolean> {
   return newValue;
 }
 
+/**
+ * Promote an opening into the student's repertoire — the on-the-fly
+ * "Save & drill" flow (the coach just taught it; the student wants to
+ * keep it). Marks it `isRepertoire` (so it's drillable + tracked) and
+ * `isFavorite` (so it lands in the Training Plan rolodex). Idempotent.
+ * Flashcard seeding is the caller's job via `seedFlashcardsForRepertoire`
+ * (kept out of here to avoid a dataLoader import cycle). Returns the
+ * opening's name, or null when the id doesn't resolve.
+ */
+export async function saveOpeningToRepertoire(id: string): Promise<string | null> {
+  const opening = await db.openings.get(id);
+  if (!opening) return null;
+  await db.openings.update(id, { isRepertoire: true, isFavorite: true });
+  return opening.name;
+}
+
 /** Returns all favorited repertoire openings. */
 export async function getFavoriteOpenings(): Promise<OpeningRecord[]> {
   return db.openings.filter((o) => o.isFavorite).toArray();

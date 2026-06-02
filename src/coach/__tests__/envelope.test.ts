@@ -33,7 +33,7 @@ describe('assembleEnvelope', () => {
     expect(env.memory).toBeTruthy();
     expect(env.appMap.length).toBeGreaterThan(5);
     expect(env.liveState.surface).toBe('ping');
-    expect(env.toolbelt.length).toBe(25);
+    expect(env.toolbelt.length).toBe(26);
     expect(env.ask).toBe('hello');
   });
 
@@ -121,7 +121,9 @@ describe('assembleEnvelope', () => {
     // On-the-fly path: build from the Lichess player DB when we have no
     // pre-built games, walking the player's actual moves ply-by-ply.
     expect(identity).toMatch(/lookup_player_opening_moves/);
-    expect(identity).toMatch(/BUILD IT ON THE FLY from the Lichess player database/i);
+    // The visual walkthrough is the lesson; player tools only ground it (the
+    // "no lesson started" bug fix superseded the old "walk ply-by-ply" text).
+    expect(identity).toMatch(/START THE VISUAL LESSON FIRST/);
     // Tool-failure must NOT trigger fabrication of the player's stats (G3).
     expect(identity).toMatch(/TOOL FAILS \/ EXPLORER UNAVAILABLE/);
     expect(identity).toMatch(/do not recite his stats from memory/i);

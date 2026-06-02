@@ -76,6 +76,11 @@ describe('lookup_player_opening_moves tool', () => {
       ['Nihal', 'nihalsarin'],
       ['Andrew Tang', 'penguingm1'],
       ['Eric Rosen', 'EricRosen'],
+      // Spaceless / guessed handles the brain actually passes (prod bug):
+      ['magnuscarlsen', 'DrNykterstein'],
+      ['MagnusCarlsen', 'DrNykterstein'],
+      ['magnus_carlsen', 'DrNykterstein'],
+      ['alirezafirouzja', 'alireza2003'],
     ];
     for (const [name, handle] of cases) {
       mockFetch({ white: 1, draws: 0, black: 0, moves: [], opening: null });

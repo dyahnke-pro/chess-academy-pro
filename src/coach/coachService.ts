@@ -1162,6 +1162,27 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     finalText = UNGROUNDED_PLAYER_STAT_REFUSAL;
   }
 
+  // Non-silence safety net (production bug 2026-06-02: "no lesson started"
+  // — the brain dispatched tools across all round-trips and returned EMPTY
+  // text). If we have no final text AND no walkthrough was started (the
+  // walkthrough runtime narrates on its own, so empty is fine THERE), don't
+  // ship silence — give a short actionable nudge instead.
+  if (
+    !finalText.trim() &&
+    dispatchedToolNames.length > 0 &&
+    !dispatchedToolNames.includes('start_walkthrough_for_opening')
+  ) {
+    void logAppAudit({
+      kind: 'coach-brain-answer-returned',
+      category: 'subsystem',
+      source: 'coachService.emptyAnswerGuard',
+      summary: `empty answer after ${dispatchedToolNames.length} tool call(s) on ${input.surface} — served non-silent fallback (tools=${dispatchedToolNames.join(',')})`,
+      details: JSON.stringify({ surface: input.surface, dispatchedToolNames }),
+    });
+    finalText =
+      '[VOICE: Let me start that lesson.] Tell me the opening you want to learn — say "walk me through it" — and I\'ll animate it move by move on the board.';
+  }
+
   void logAppAudit({
     kind: 'coach-brain-answer-returned',
     category: 'subsystem',

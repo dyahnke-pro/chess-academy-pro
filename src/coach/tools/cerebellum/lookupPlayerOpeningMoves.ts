@@ -63,9 +63,35 @@ const PRO_LICHESS_USERNAMES: Record<string, string> = {
   penguingm1: 'penguingm1',
 };
 
+/** Alphanumerics only, lowercased — so "Magnus Carlsen", "magnuscarlsen",
+ *  and "magnus_carlsen" all collapse to the same key. */
+function norm(s: string): string {
+  return s.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+/** Normalized alias map (built once) for spaceless / punctuation-insensitive
+ *  matching: the brain often guesses "magnuscarlsen" rather than "Carlsen",
+ *  and that MUST still resolve (production bug 2026-06-02: it passed
+ *  "magnuscarlsen", missed the map, hit an empty Lichess account, then
+ *  improvised the wrong opening). */
+const NORM_ALIASES: Record<string, string> = Object.fromEntries(
+  Object.entries(PRO_LICHESS_USERNAMES).map(([k, v]) => [norm(k), v]),
+);
+
 function resolveUsername(player: string): string {
-  const key = player.trim().toLowerCase();
-  return PRO_LICHESS_USERNAMES[key] ?? player.trim();
+  const raw = player.trim();
+  const lower = raw.toLowerCase();
+  if (PRO_LICHESS_USERNAMES[lower]) return PRO_LICHESS_USERNAMES[lower];
+  const nk = norm(raw);
+  if (!nk) return raw;
+  if (NORM_ALIASES[nk]) return NORM_ALIASES[nk]; // "magnuscarlsen" -> DrNykterstein
+  // Substring match against the longer alias keys (≥5 chars, so a famous
+  // surname embedded in a guessed handle resolves): "magnuscarlsen"
+  // contains "carlsen", "alirezafirouzja" contains "firouzja", etc.
+  for (const [k, v] of Object.entries(NORM_ALIASES)) {
+    if (k.length >= 5 && (nk.includes(k) || k.includes(nk))) return v;
+  }
+  return raw;
 }
 
 export const lookupPlayerOpeningMovesTool: Tool = {

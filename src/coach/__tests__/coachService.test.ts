@@ -240,6 +240,34 @@ describe('coachService.ask', () => {
     fetchSpy.mockRestore();
   });
 
+  it('non-silence guard: empty text + tools called + no walkthrough => actionable fallback (not silence)', async () => {
+    const responses: ProviderResponse[] = [
+      { text: '', toolCalls: [{ id: 't1', name: 'lookup_player_opening_moves', args: { player: 'x', color: 'white', fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' } }] },
+      { text: '', toolCalls: [] }, // brain converges to nothing
+    ];
+    const call = vi.fn(() => Promise.resolve(responses.shift() ?? { text: '', toolCalls: [] }));
+    const answer = await coachService.ask(
+      { surface: 'teach', ask: 'how does magnus play the catalan', liveState: { surface: 'teach' } },
+      { providerOverride: { name: 'deepseek', call }, maxToolRoundTrips: 2 },
+    );
+    expect(answer.text.trim().length).toBeGreaterThan(0); // never silent
+    expect(answer.text.toLowerCase()).toMatch(/walk me through|lesson|learn/);
+  });
+
+  it('non-silence guard does NOT fire when a walkthrough was started (runtime narrates)', async () => {
+    const responses: ProviderResponse[] = [
+      { text: '', toolCalls: [{ id: 't1', name: 'start_walkthrough_for_opening', args: { opening: 'Catalan Opening' } }] },
+      { text: '', toolCalls: [] },
+    ];
+    const call = vi.fn(() => Promise.resolve(responses.shift() ?? { text: '', toolCalls: [] }));
+    const answer = await coachService.ask(
+      { surface: 'teach', ask: 'teach me the catalan', liveState: { surface: 'teach' } },
+      { providerOverride: { name: 'deepseek', call }, onStartWalkthroughForOpening: () => ({ ok: true }), maxToolRoundTrips: 2 },
+    );
+    // Empty is fine here — the walkthrough runtime owns the narration.
+    expect(answer.text).not.toMatch(/walk me through it/i);
+  });
+
   it('#4: folds player-game SANs into grounding.gameSans so the master-play validator accepts them', async () => {
     const call = vi.fn(() => Promise.resolve({ text: 'ok', toolCalls: [] }));
     await coachService.ask(
