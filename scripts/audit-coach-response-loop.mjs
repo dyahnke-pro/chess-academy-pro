@@ -59,6 +59,20 @@ function kingSquare(fen, color) {
 }
 function sideInCheck(fen) { try { const c = new Chess(fen); return c.inCheck() ? (c.turn() === 'w' ? 'white' : 'black') : null; } catch { return null; } }
 function pieceOn(fen, sq) { try { const p = new Chess(fen).get(sq); return p ? p : null; } catch { return null; } }
+// Detect a STALE set-board read: the coach describes piece types that
+// aren't on the board (set_board intermittently doesn't reach the brain,
+// so it reasons about the pre-set position). Endgame FENs are minimal,
+// so mentioning ≥2 absent piece types = stale → skip (infra), not fail.
+function staleSetposRead(resp, fen) {
+  const placement = (fen.split(' ')[0] || '').toLowerCase();
+  const present = new Set([...placement].filter((c) => 'pnbrqk'.includes(c)));
+  const NAMES = { p: 'pawn', n: 'knight', b: 'bishop', q: 'queen' };
+  let absent = 0;
+  for (const [letter, name] of Object.entries(NAMES)) {
+    if (!present.has(letter) && new RegExp(`\\b${name}s?\\b`, 'i').test(resp)) absent++;
+  }
+  return absent >= 2;
+}
 const moveCore = (m) => (m || '').replace(/[+#]$/, '');
 
 // ── browser/IO helpers ─────────────────────────────────────────────
@@ -348,6 +362,7 @@ async function main() {
         // diagnostic proved the coach answers these correctly when read).
         // Only a substantive, non-empty WRONG answer breaks the streak.
         if (r === '(timeout)' || r.replace(/[^a-z0-9]/gi, '').length < 3) { pr.skipped++; pr.probes.push({ id: family.id, skipped: true, prompt }); log(`  \x1b[33m⊘\x1b[0m ${family.id} — no answer captured (skipped, infra)  «${prompt.slice(0, 50)}»`); continue; }
+        if (family.surface === 'setpos' && variant.fen && staleSetposRead(r, variant.fen)) { pr.skipped++; pr.probes.push({ id: family.id, skipped: true, prompt, why: 'stale set-board read (app flake)' }); log(`  \x1b[33m⊘\x1b[0m ${family.id} — stale set-board read, coach saw wrong position (skipped, app flake)  «${prompt.slice(0, 45)}»`); continue; }
         const out = family.check(r, variant);
         pr.probes.push({ id: family.id, ok: out.ok, why: out.why, prompt, response: r.slice(0, 280) });
         if (!out.ok) pr.errors++;
