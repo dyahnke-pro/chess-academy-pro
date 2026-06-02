@@ -1,49 +1,55 @@
 /**
  * /api/ph/* — first-party reverse proxy for PostHog (David 2026-06-02).
  *
- * Why this exists: Safari's "Prevent Cross-Site Tracking" + ad-blockers block
- * direct requests to us.i.posthog.com, so a large share of real users (the
+ * Why: Safari "Prevent Cross-Site Tracking" + ad-blockers block direct
+ * requests to us.i.posthog.com, so a large share of real users (the
  * iOS/Safari launch audience) silently send zero analytics + crash data.
- * Routing ingestion through our OWN domain makes it same-origin → first-party
- * → never blocked. The client sets posthog `api_host` to this path.
+ * Same-origin /api/ph dodges that. The client sets posthog `api_host` here.
  *
- * Why a FUNCTION and not a vercel.json rewrite: Vercel's static rewrites to an
- * external URL proxy GET fine but return 405 for POST — and event capture is a
- * POST. An Edge function forwards every method and streams the body through
- * faithfully (posthog's capture bodies are compressed/form-encoded).
+ * Why a node function (not a vercel.json rewrite, not Edge): external static
+ * rewrites 405 every POST (event capture is a POST), and the Edge runtime
+ * wasn't registered in this Vite project (404). A plain @vercel/node function
+ * — same pattern as every other api/* here — forwards all methods. posthog-js
+ * sends capture bodies as `text/plain` (to avoid a CORS preflight), so
+ * @vercel/node hands us the raw string body to pass straight through.
  *
- * Routing: `/api/ph/static/*` → us-assets (the SDK's recorder/surveys assets),
- * everything else → us.i.posthog.com (capture, flags, batch, …).
+ * Routing: `/api/ph/static/*` → us-assets (SDK assets), else → us.i.posthog.com.
  */
-export const config = { runtime: 'edge' };
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 const EVENTS_HOST = 'https://us.i.posthog.com';
 const ASSETS_HOST = 'https://us-assets.i.posthog.com';
 
-export default async function handler(req: Request): Promise<Response> {
-  const url = new URL(req.url);
-  const phPath = url.pathname.replace(/^\/api\/ph\/?/, '');
-  const base = phPath.startsWith('static/') ? ASSETS_HOST : EVENTS_HOST;
-  const target = `${base}/${phPath}${url.search}`;
+const DROP_REQ_HEADERS = new Set(['host', 'connection', 'content-length', 'accept-encoding']);
+const DROP_RES_HEADERS = new Set(['content-encoding', 'content-length', 'transfer-encoding', 'connection']);
 
-  const headers = new Headers(req.headers);
-  headers.delete('host');
-  headers.delete('content-length');
+export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
+  try {
+    const u = new URL(req.url ?? '', 'http://localhost');
+    const phPath = u.pathname.replace(/^\/api\/ph\/?/, '');
+    const base = phPath.startsWith('static/') ? ASSETS_HOST : EVENTS_HOST;
+    const target = `${base}/${phPath}${u.search}`;
 
-  const hasBody = req.method !== 'GET' && req.method !== 'HEAD';
-  const init: RequestInit & { duplex?: 'half' } = {
-    method: req.method,
-    headers,
-    redirect: 'manual',
-  };
-  if (hasBody) {
-    init.body = req.body;
-    init.duplex = 'half';
+    const headers: Record<string, string> = {};
+    for (const [k, v] of Object.entries(req.headers)) {
+      if (typeof v === 'string' && !DROP_REQ_HEADERS.has(k.toLowerCase())) headers[k] = v;
+    }
+
+    const method = req.method ?? 'GET';
+    let body: string | undefined;
+    if (method !== 'GET' && method !== 'HEAD' && req.body != null) {
+      body = typeof req.body === 'string' ? req.body : JSON.stringify(req.body);
+    }
+
+    const upstream = await fetch(target, { method, headers, body });
+    const buf = Buffer.from(await upstream.arrayBuffer());
+
+    res.status(upstream.status);
+    upstream.headers.forEach((val, key) => {
+      if (!DROP_RES_HEADERS.has(key.toLowerCase())) res.setHeader(key, val);
+    });
+    res.send(buf);
+  } catch (e) {
+    res.status(502).json({ error: 'posthog proxy failed', detail: String(e) });
   }
-
-  const upstream = await fetch(target, init);
-  return new Response(upstream.body, {
-    status: upstream.status,
-    headers: new Headers(upstream.headers),
-  });
 }
