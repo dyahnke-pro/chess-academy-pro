@@ -1,19 +1,19 @@
 /**
- * /api/ph/* — first-party reverse proxy for PostHog (David 2026-06-02).
+ * /api/phproxy — first-party reverse proxy for PostHog (David 2026-06-02).
  *
  * Why: Safari "Prevent Cross-Site Tracking" + ad-blockers block direct
  * requests to us.i.posthog.com, so a large share of real users (the
  * iOS/Safari launch audience) silently send zero analytics + crash data.
- * Same-origin /api/ph dodges that. The client sets posthog `api_host` here.
+ * A same-origin proxy dodges that. The client sets posthog `api_host` to
+ * `/api/ph`, and vercel.json rewrites `/api/ph/:path*` → here with the path
+ * in `?p=`. (A nested catch-all `api/ph/[...path].ts` 404'd — Vercel doesn't
+ * register catch-all subdir functions in this Vite project; external static
+ * rewrites 405 every POST. A FLAT function + a query-param rewrite is the
+ * combination that actually routes AND accepts POST.)
  *
- * Why a node function (not a vercel.json rewrite, not Edge): external static
- * rewrites 405 every POST (event capture is a POST), and the Edge runtime
- * wasn't registered in this Vite project (404). A plain @vercel/node function
- * — same pattern as every other api/* here — forwards all methods. posthog-js
- * sends capture bodies as `text/plain` (to avoid a CORS preflight), so
- * @vercel/node hands us the raw string body to pass straight through.
- *
- * Routing: `/api/ph/static/*` → us-assets (SDK assets), else → us.i.posthog.com.
+ * Routing: `static/*` → us-assets (SDK assets), else → us.i.posthog.com.
+ * posthog-js posts capture as text/plain (to avoid a CORS preflight), so
+ * @vercel/node hands us the raw string body to forward unchanged.
  */
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
@@ -26,7 +26,8 @@ const DROP_RES_HEADERS = new Set(['content-encoding', 'content-length', 'transfe
 export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
   try {
     const u = new URL(req.url ?? '', 'http://localhost');
-    const phPath = u.pathname.replace(/^\/api\/ph\/?/, '');
+    const phPath = (u.searchParams.get('p') ?? '').replace(/^\/+/, '');
+    u.searchParams.delete('p');
     const base = phPath.startsWith('static/') ? ASSETS_HOST : EVENTS_HOST;
     const target = `${base}/${phPath}${u.search}`;
 
