@@ -3,6 +3,7 @@ import {
   auditKindToEvent,
   buildEventProps,
   captureEvent,
+  captureException,
   identifyUser,
   resetAnalytics,
   mirrorAuditEvent,
@@ -31,9 +32,26 @@ describe('analytics — no-op without a PostHog key', () => {
 
   it('every public function is total — never throws when disabled', () => {
     expect(() => captureEvent('checkout_started', { plan: 'annual' })).not.toThrow();
+    expect(() => captureException(new Error('boom'), { surface: 'coach' })).not.toThrow();
     expect(() => identifyUser('user-123', { email: 'x@y.z' })).not.toThrow();
     expect(() => resetAnalytics()).not.toThrow();
     expect(() => mirrorAuditEvent(entry())).not.toThrow();
+  });
+
+  it('crash kinds route through the exception bridge without throwing', () => {
+    for (const kind of ['uncaught-error', 'unhandled-rejection', 'error-boundary'] as const) {
+      expect(() =>
+        mirrorAuditEvent(entry({ kind, category: 'runtime', details: 'Error: x\n  at y' })),
+      ).not.toThrow();
+    }
+  });
+});
+
+describe('crash kinds are NOT in the product-event allowlist', () => {
+  it('error kinds are exceptions, not funnel events', () => {
+    expect(auditKindToEvent('uncaught-error')).toBeUndefined();
+    expect(auditKindToEvent('unhandled-rejection')).toBeUndefined();
+    expect(auditKindToEvent('error-boundary')).toBeUndefined();
   });
 });
 

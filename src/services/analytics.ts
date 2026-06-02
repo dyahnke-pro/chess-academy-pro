@@ -196,6 +196,45 @@ export function identifyUser(distinctId: string, props?: Record<string, unknown>
   }
 }
 
+/**
+ * Crash detection (PostHog Error Tracking).
+ * ----------------------------------------
+ * David 2026-06-02: "add the crash detection." Rather than stand up a
+ * second vendor (the Sentry env slots are empty), we forward the app's
+ * EXISTING crash audit-events into PostHog's Error Tracking — every crash
+ * path (window.onerror, unhandledrejection, React error boundary) already
+ * routes through `logAppAudit`, so the bridge in `mirrorAuditEvent` sends
+ * each as a `$exception`. PostHog groups them into issues automatically;
+ * pair with session replay (toggle on in the PostHog project) to watch the
+ * crash happen. No-op without a key, same as the rest of this module.
+ */
+const CRASH_KINDS: ReadonlySet<AuditKind> = new Set<AuditKind>([
+  'uncaught-error',
+  'unhandled-rejection',
+  'error-boundary',
+]);
+
+/** Send an exception to PostHog Error Tracking. Total — never throws. */
+export function captureException(error: unknown, props?: Record<string, unknown>): void {
+  try {
+    if (optedOut || !client) return;
+    client.captureException(error, props);
+  } catch {
+    /* swallow — crash reporting must never itself crash */
+  }
+}
+
+/** Reconstruct an Error from a crash audit entry so PostHog groups it by
+ *  a stable name + stack instead of a generic blob. */
+function crashFromAudit(entry: AuditEntry): Error {
+  const err = new Error(entry.summary || entry.kind);
+  err.name = entry.kind;
+  // The audit's `details` is the captured stack (+ React componentStack for
+  // boundary catches) — hand it to PostHog as the stack for grouping.
+  if (entry.details) err.stack = entry.details;
+  return err;
+}
+
 /** Reset identity on logout so the next user starts a fresh anonymous id. */
 export function resetAnalytics(): void {
   try {
@@ -229,6 +268,18 @@ export function setAnalyticsOptOut(next: boolean): void {
 export function mirrorAuditEvent(entry: AuditEntry): void {
   try {
     if (optedOut || !enabled) return;
+    // Crash detection: forward error-class kinds to PostHog Error Tracking
+    // as exceptions (not product events) so they group into issues.
+    if (CRASH_KINDS.has(entry.kind)) {
+      captureException(crashFromAudit(entry), {
+        audit_kind: entry.kind,
+        source: entry.source,
+        ...(entry.route ? { route: entry.route } : {}),
+        ...(entry.fen ? { fen: entry.fen } : {}),
+        ...(entry.buildId ? { build_id: entry.buildId } : {}),
+      });
+      return;
+    }
     const eventName = AUDIT_EVENT_MAP[entry.kind];
     if (!eventName) return;
     captureEvent(eventName, buildEventProps(entry));

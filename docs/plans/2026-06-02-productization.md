@@ -92,6 +92,18 @@ thresholds. Tracked as **Phase 4.5** below.
 - Init at app boot in `App.tsx`. Opt-out respected via `analyticsOptOut` preference.
 - Env vars added to `.env.example`. Tests: `analytics.test.ts`.
 
+### Phase 1.5 — Crash detection (PostHog Error Tracking) ✅ DONE (on main)
+- David 2026-06-02: "add the crash detection." The Sentry env slots
+  (`VITE_SENTRY_DSN`, `SENTRY_AUTH_TOKEN`) are EMPTY/unwired, so rather than
+  stand up a second vendor we forward the app's existing crash audit-events
+  (`uncaught-error`, `unhandled-rejection`, `error-boundary` — all already
+  route through `logAppAudit`) into PostHog Error Tracking as `$exception`s,
+  via the `mirrorAuditEvent` bridge in `analytics.ts` (`captureException`).
+  No-op without the PostHog key. Live the moment the key's set (it is).
+- Remaining (David's toggle): turn on **Session Replay** in the PostHog
+  project settings to watch a crash repro; optionally wire Sentry later if a
+  dedicated error-management tool is wanted (needs a real DSN).
+
 ### Phase 2 — Entitlement scaffold + hard Paywall ⏳ next
 - `src/stores/entitlementStore.ts` (Zustand) — `isPro`, `status`, `source`. Single source of truth.
 - `src/hooks/useEntitlement.ts`.
