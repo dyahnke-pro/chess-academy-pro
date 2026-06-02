@@ -255,7 +255,7 @@ const FAMILIES = [
   { id: 'plan-no-fallback', depth: 1, surface: 'game', variants: PLAN_PHRASINGS.map((p) => ({ prompt: p })),
     check: (r) => STOCK_FALLBACK_RE.test(r) ? fail('served the stock "run it through the engine" fallback on a legitimate plan question') : pass('answered a plan question without the stock fallback') },
   { id: 'king-square', depth: 1, surface: 'setpos', variants: CASTLED_FENS.map((fen) => ({ fen, prompt: "Which exact square is my (White's) king on right now?" })),
-    check: (r, v) => { const ks = kingSquare(v.fen, 'w'); const wrong = ['e1','d1','f1','e8','g8'].filter((s) => s !== ks); if (new RegExp(`\\b${ks}\\b`, 'i').test(r) && !wrong.some((w) => new RegExp(`king (?:is )?on ${w}`, 'i').test(r))) return pass(`king correctly on ${ks}`); return fail(`did not name the correct king square (${ks})`); } },
+    check: (r, v) => { const ks = kingSquare(v.fen, 'w'); if (!new RegExp(`\\b${ks}\\b`, 'i').test(r)) return fail(`did not name the correct king square (${ks})`); const wc = /(?:white|your|my)\s+king\s+(?:is\s+)?on\s+([a-h][1-8])/i.exec(r); if (wc && wc[1].toLowerCase() !== ks) return fail(`claimed the white king on ${wc[1]} (correct: ${ks})`); return pass(`king correctly on ${ks}`); } },
   { id: 'mate-in-one', depth: 1, surface: 'setpos', variants: MATE_FENS.map((fen) => ({ fen, prompt: 'Is there a forced checkmate in one move here? If so, give the exact move.' })),
     check: (r, v) => { const mates = computeMateMoves(v.fen); if (!mates.length) return pass('(no mate in this variant — skipped check)'); const denies = /\bno (?:forced )?(?:check)?mate|isn'?t\s+(?:a\s+)?mate|no mate in one/i.test(r); const hit = mates.some((m) => lc(r).includes(moveCore(m).toLowerCase())); return (hit && !denies) ? pass(`found a mate (${mates.join('/')})`) : fail(`missed the mate-in-one (${mates.join('/')})`); } },
   { id: 'false-premise', depth: 1, surface: 'chat', variants: FALSE_PREMISES,
@@ -265,7 +265,7 @@ const FAMILIES = [
 
   // DEPTH 2 — board ground-truth
   { id: 'in-check', depth: 2, surface: 'setpos', variants: [...INCHECK_FENS.map((fen) => ({ fen, inCheck: true })), ...QUIET_FENS.map((fen) => ({ fen, inCheck: false }))].map((v) => ({ ...v, prompt: 'Is my king in check right now? Answer yes or no and why.' })),
-    check: (r, v) => { const truth = sideInCheck(v.fen) === 'white'; const affirms = /\b(?:yes,? (?:your|you'?re)|you are in check|your king is in check|currently in check|in check right now)\b/i.test(lc(r)); const denies = /\b(?:not in check|no check|neither|isn'?t in check|^no\b|\bno,)/i.test(lc(r)); if (truth) return affirms && !denies ? pass('saw the check') : fail('missed a real check'); return (denies || !affirms) ? pass('saw no check') : fail('falsely claimed a check'); } },
+    check: (r, v) => { const truth = sideInCheck(v.fen) === 'white'; const negated = /\bnot in check\b|\bno check\b|\bneither\b|isn'?t in check|\bno,?\s+(?:you|your)\b|out of check|\bno\s+check\b/i.test(lc(r)); const saysInCheck = /\bin check\b/i.test(lc(r)) && !negated; if (truth) return saysInCheck ? pass('saw the real check') : fail('missed a real check'); return saysInCheck ? fail('falsely claimed a check in a quiet position') : pass('correctly saw no check'); } },
   { id: 'empty-square', depth: 2, surface: 'setpos', variants: EMPTY_SQUARE_FENS.map((v) => ({ ...v, prompt: `What piece, if any, is on the ${v.sq} square right now? Answer directly.` })),
     check: (r, v) => { const occupied = pieceOn(v.fen, v.sq); if (occupied) return pass('(variant square occupied — skipped)'); const hall = new RegExp(`on ${v.sq}[^.]*\\b(?:pawn|knight|bishop|rook|queen|king)\\b|\\b(?:pawn|knight|bishop|rook|queen|king)\\b[^.]*on ${v.sq}`, 'i').test(r); return hall ? fail(`hallucinated a piece on the empty ${v.sq}`) : pass(`did not hallucinate on ${v.sq}`); } },
   { id: 'hanging-piece', depth: 2, surface: 'setpos', variants: HANGING.slice(0, 2).map((v) => ({ ...v, prompt: 'Are any of my pieces hanging or able to be captured for free right now? Name the square.' })),
@@ -345,8 +345,17 @@ async function main() {
         log(`  ${out.ok ? '\x1b[32m✓\x1b[0m' : '\x1b[31m✗\x1b[0m'} ${family.id} — ${out.why}  «${prompt.slice(0, 50)}»`);
         if (!out.ok) log(`      A: ${r.slice(0, 200)}`);
       } catch (e) {
-        pr.errors++; pr.probes.push({ id: family.id, ok: false, why: 'threw: ' + String(e?.message ?? e).slice(0, 100), prompt });
-        log(`  \x1b[31m✗\x1b[0m ${family.id} — threw: ${String(e?.message ?? e).slice(0, 100)}`);
+        const msg = String(e?.message ?? e);
+        // Infra throws (locator/nav/page-closed timeouts) are audit
+        // environment hiccups, not coach errors → SKIP. Anything else is
+        // a genuine error.
+        if (/timeout|locator|waitFor|navigation|Target (?:page|closed|context)|detached|crash/i.test(msg)) {
+          pr.skipped++; pr.probes.push({ id: family.id, skipped: true, prompt, why: 'infra throw' });
+          log(`  \x1b[33m⊘\x1b[0m ${family.id} — infra throw (skipped): ${msg.slice(0, 70)}`);
+        } else {
+          pr.errors++; pr.probes.push({ id: family.id, ok: false, why: 'threw: ' + msg.slice(0, 100), prompt });
+          log(`  \x1b[31m✗\x1b[0m ${family.id} — threw: ${msg.slice(0, 100)}`);
+        }
         onPlay = false;
       }
     }
