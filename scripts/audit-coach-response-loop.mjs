@@ -104,20 +104,43 @@ async function gotoSurface(page, path, mount) {
   await page.waitForTimeout(4000);
   try { if (await page.locator('[data-testid="page-help-modal"]').count()) await page.keyboard.press('Escape'); } catch {}
 }
+/** Drain the coach's acknowledgment bubble for a set-board / move
+ *  intent so it has fully LANDED + STABILIZED before the next askLLM's
+ *  `before` snapshot. Without this the next question reads the stale
+ *  ack ("Board's set… your move") as if it were the answer (the pass-1
+ *  false failures). Bounded so a silent move never hangs the run. */
+async function drainAck(page, beforeCount, maxMs = 16000) {
+  const t0 = Date.now();
+  while (Date.now() - t0 < maxMs) {
+    const c = await page.locator('[data-testid="chat-message-assistant"]').count();
+    if (c > beforeCount) break;
+    await page.waitForTimeout(500);
+  }
+  let prev = -1, stable = 0;
+  while (Date.now() - t0 < maxMs) {
+    await page.waitForTimeout(600);
+    const a = await snap(page);
+    const cur = a[a.length - 1] || '';
+    if (cur.length === prev) { stable++; if (stable >= 2) break; } else stable = 0;
+    prev = cur.length;
+  }
+}
 async function setBoard(page, fen) {
+  const beforeCount = await page.locator('[data-testid="chat-message-assistant"]').count();
   const input = page.locator('[data-testid="chat-text-input"]');
   await input.click(); await input.fill(`set the board to ${fen}`);
   await page.locator('[data-testid="chat-send-btn"]').click();
-  await page.waitForTimeout(4500);
+  await drainAck(page, beforeCount);
   return scrapeFen(page);
 }
 async function playMove(page, san) {
   const before = await scrapeFen(page);
+  const beforeCount = await page.locator('[data-testid="chat-message-assistant"]').count();
   const input = page.locator('[data-testid="chat-text-input"]');
   await input.click(); await input.fill(`play ${san}`);
   await page.locator('[data-testid="chat-send-btn"]').click();
   for (let i = 0; i < 22; i++) { await page.waitForTimeout(800); const now = await scrapeFen(page); if (now && now !== before) break; }
-  await page.waitForTimeout(4000);
+  await drainAck(page, beforeCount);
   return scrapeFen(page);
 }
 async function clearIDB(page) {
