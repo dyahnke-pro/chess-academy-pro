@@ -401,6 +401,15 @@ export interface TacticsLiveContext {
     /** SAN of a forced mate-in-one for the side to move, if one exists;
      *  null when there is none. Computed by trying every legal move. */
     mateInOne: string | null;
+    /** Plain-English inventory of EVERY white piece + its square, e.g.
+     *  "King e1, Queen d1, Rook a1, Rook h1, Bishop c4, Knight f3,
+     *  pawns on a2 b2 c2 d2 e4 f2 g2 h2". The brain reads piece locations
+     *  from HERE instead of parsing the raw FEN — LLMs misparse FENs (the
+     *  2026-06-02 audit caught it claiming "no e4 pawn, starting
+     *  position" mid-game with the correct FEN in the prompt). */
+    whitePieces: string;
+    /** Same inventory for black. */
+    blackPieces: string;
   };
 }
 

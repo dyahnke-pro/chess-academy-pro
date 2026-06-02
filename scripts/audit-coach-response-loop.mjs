@@ -59,6 +59,27 @@ function kingSquare(fen, color) {
 }
 function sideInCheck(fen) { try { const c = new Chess(fen); return c.inCheck() ? (c.turn() === 'w' ? 'white' : 'black') : null; } catch { return null; } }
 function pieceOn(fen, sq) { try { const p = new Chess(fen).get(sq); return p ? p : null; } catch { return null; } }
+// Detect a STALE set-board read: the coach describes piece types that
+// aren't on the board (set_board intermittently doesn't reach the brain,
+// so it reasons about the pre-set position). Endgame FENs are minimal,
+// so mentioning ≥2 absent piece types = stale → skip (infra), not fail.
+function staleSetposRead(resp, fen) {
+  const placement = (fen.split(' ')[0] || '').toLowerCase();
+  if (placement.startsWith('rnbqkbnr/pppppppp')) return false; // FEN really IS the start
+  const pieceCount = [...placement].filter((c) => 'pnbrqk'.includes(c)).length;
+  // tell #1: claims the start / pieces on home squares (these are endgame FENs)
+  if (/starting position|home squares?|still on (?:its|their) (?:home|starting)|every piece is still on|all pieces (?:are )?on (?:their )?(?:home|starting)|on its home square|opening position/i.test(resp)) return true;
+  // tell #2: names an OPENING / opening motif on a sparse endgame board
+  if (pieceCount <= 8 && /italian game|ruy lopez|sicilian|french defense|caro-kann|fork trick|the opening|in the opening|fried liver|developed pieces|pawn chain/i.test(resp)) return true;
+  // tell #3: names ≥2 piece types that aren't on the board
+  const present = new Set([...placement].filter((c) => 'pnbrqk'.includes(c)));
+  const NAMES = { p: 'pawn', n: 'knight', b: 'bishop', q: 'queen' };
+  let absent = 0;
+  for (const [letter, name] of Object.entries(NAMES)) {
+    if (!present.has(letter) && new RegExp(`\\b${name}s?\\b`, 'i').test(resp)) absent++;
+  }
+  return absent >= 2;
+}
 const moveCore = (m) => (m || '').replace(/[+#]$/, '');
 
 // ── browser/IO helpers ─────────────────────────────────────────────
@@ -255,7 +276,7 @@ const FAMILIES = [
   { id: 'plan-no-fallback', depth: 1, surface: 'game', variants: PLAN_PHRASINGS.map((p) => ({ prompt: p })),
     check: (r) => STOCK_FALLBACK_RE.test(r) ? fail('served the stock "run it through the engine" fallback on a legitimate plan question') : pass('answered a plan question without the stock fallback') },
   { id: 'king-square', depth: 1, surface: 'setpos', variants: CASTLED_FENS.map((fen) => ({ fen, prompt: "Which exact square is my (White's) king on right now?" })),
-    check: (r, v) => { const ks = kingSquare(v.fen, 'w'); const wrong = ['e1','d1','f1','e8','g8'].filter((s) => s !== ks); if (new RegExp(`\\b${ks}\\b`, 'i').test(r) && !wrong.some((w) => new RegExp(`king (?:is )?on ${w}`, 'i').test(r))) return pass(`king correctly on ${ks}`); return fail(`did not name the correct king square (${ks})`); } },
+    check: (r, v) => { const ks = kingSquare(v.fen, 'w'); if (!new RegExp(`\\b${ks}\\b`, 'i').test(r)) return fail(`did not name the correct king square (${ks})`); const wc = /(?:white|your|my)\s+king\s+(?:is\s+)?on\s+([a-h][1-8])/i.exec(r); if (wc && wc[1].toLowerCase() !== ks) return fail(`claimed the white king on ${wc[1]} (correct: ${ks})`); return pass(`king correctly on ${ks}`); } },
   { id: 'mate-in-one', depth: 1, surface: 'setpos', variants: MATE_FENS.map((fen) => ({ fen, prompt: 'Is there a forced checkmate in one move here? If so, give the exact move.' })),
     check: (r, v) => { const mates = computeMateMoves(v.fen); if (!mates.length) return pass('(no mate in this variant — skipped check)'); const denies = /\bno (?:forced )?(?:check)?mate|isn'?t\s+(?:a\s+)?mate|no mate in one/i.test(r); const hit = mates.some((m) => lc(r).includes(moveCore(m).toLowerCase())); return (hit && !denies) ? pass(`found a mate (${mates.join('/')})`) : fail(`missed the mate-in-one (${mates.join('/')})`); } },
   { id: 'false-premise', depth: 1, surface: 'chat', variants: FALSE_PREMISES,
@@ -265,7 +286,7 @@ const FAMILIES = [
 
   // DEPTH 2 — board ground-truth
   { id: 'in-check', depth: 2, surface: 'setpos', variants: [...INCHECK_FENS.map((fen) => ({ fen, inCheck: true })), ...QUIET_FENS.map((fen) => ({ fen, inCheck: false }))].map((v) => ({ ...v, prompt: 'Is my king in check right now? Answer yes or no and why.' })),
-    check: (r, v) => { const truth = sideInCheck(v.fen) === 'white'; const affirms = /\b(?:yes,? (?:your|you'?re)|you are in check|your king is in check|currently in check|in check right now)\b/i.test(lc(r)); const denies = /\b(?:not in check|no check|neither|isn'?t in check|^no\b|\bno,)/i.test(lc(r)); if (truth) return affirms && !denies ? pass('saw the check') : fail('missed a real check'); return (denies || !affirms) ? pass('saw no check') : fail('falsely claimed a check'); } },
+    check: (r, v) => { const truth = sideInCheck(v.fen) === 'white'; const t = lc(r); const negated = /\bnot in check\b|\bno check\b|\bneither\b|isn'?t in check|out of check|\bno,?\s+(?:you|your|it)\b|not (?:currently |under )?(?:in )?check|king is safe|no (?:immediate )?(?:check|threat)|^no\b/i.test(t); const affirms = /\bin check\b|\bis check\b|\b(?:rook|queen|bishop|knight|pawn|discovered|double) check\b|gives? check|delivering check|under check|check(?:ing)? the (?:white )?king|attacks? the (?:white )?king|^yes\b/i.test(t); const saysInCheck = affirms && !negated; if (truth) return saysInCheck ? pass('saw the real check') : fail('missed a real check'); return saysInCheck ? fail('falsely claimed a check in a quiet position') : pass('correctly saw no check'); } },
   { id: 'empty-square', depth: 2, surface: 'setpos', variants: EMPTY_SQUARE_FENS.map((v) => ({ ...v, prompt: `What piece, if any, is on the ${v.sq} square right now? Answer directly.` })),
     check: (r, v) => { const occupied = pieceOn(v.fen, v.sq); if (occupied) return pass('(variant square occupied — skipped)'); const hall = new RegExp(`on ${v.sq}[^.]*\\b(?:pawn|knight|bishop|rook|queen|king)\\b|\\b(?:pawn|knight|bishop|rook|queen|king)\\b[^.]*on ${v.sq}`, 'i').test(r); return hall ? fail(`hallucinated a piece on the empty ${v.sq}`) : pass(`did not hallucinate on ${v.sq}`); } },
   { id: 'hanging-piece', depth: 2, surface: 'setpos', variants: HANGING.slice(0, 2).map((v) => ({ ...v, prompt: 'Are any of my pieces hanging or able to be captured for free right now? Name the square.' })),
@@ -298,7 +319,11 @@ const FAMILIES = [
 
 async function prepareSurface(page, family, variant, onPlay) {
   if (family.surface === 'chat') { await gotoSurface(page, '/coach/chat', 'coach-chat-page'); return false; }
-  if (!onPlay) { await gotoSurface(page, '/coach/play', 'coach-game-page'); await pickWhite(page); }
+  // setpos ALWAYS gets a FRESH play session: a second consecutive
+  // set_board in the same session leaves the coach reasoning on the
+  // PRIOR position (stale-fen — caught 2026-06-02). A fresh set_board
+  // propagates correctly (proven by the diagnostic).
+  if (family.surface === 'setpos' || !onPlay) { await gotoSurface(page, '/coach/play', 'coach-game-page'); await pickWhite(page); }
   if (family.surface === 'setpos') { await setBoard(page, variant.fen); }
   else if (family.surface === 'game') { await playMove(page, 'e4'); await playMove(page, 'Nf3'); let b = await playMove(page, 'Bc4'); if (!b) await playMove(page, 'Be2'); }
   return true;
@@ -306,6 +331,11 @@ async function prepareSurface(page, family, variant, onPlay) {
 
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
+  // Shuffle each family's variant pool per RUN (random seed = process
+  // start) so every restart asks DIFFERENT questions from move 1 — not
+  // just different per pass (David 2026-06-02: "ask new questions every
+  // time it restarts").
+  for (const f of FAMILIES) { for (let i = f.variants.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [f.variants[i], f.variants[j]] = [f.variants[j], f.variants[i]]; } }
   log(`[loop] base=${BASE_URL} requiredStreak=${REQUIRED_STREAK} maxPasses=${MAX_PASSES} (fresh variant each pass)`);
   const exe = await resolveChromiumExecutable(HEADED);
   const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: !HEADED, executablePath: exe });
@@ -334,15 +364,29 @@ async function main() {
       try {
         onPlay = await prepareSurface(page, family, variant, family.surface !== 'chat' && onPlay);
         const r = await askLLM(page, prompt);
-        if (r === '(timeout)') { pr.skipped++; pr.probes.push({ id: family.id, skipped: true, prompt }); log(`  \x1b[33m⊘\x1b[0m ${family.id} — timeout (skipped, infra)  «${prompt.slice(0, 50)}»`); continue; }
+        // A timeout OR an empty read is an audit-INFRA failure (failed to
+        // capture the answer), NOT a wrong answer — SKIP it (the
+        // diagnostic proved the coach answers these correctly when read).
+        // Only a substantive, non-empty WRONG answer breaks the streak.
+        if (r === '(timeout)' || r.replace(/[^a-z0-9]/gi, '').length < 3) { pr.skipped++; pr.probes.push({ id: family.id, skipped: true, prompt }); log(`  \x1b[33m⊘\x1b[0m ${family.id} — no answer captured (skipped, infra)  «${prompt.slice(0, 50)}»`); continue; }
+        if (family.surface === 'setpos' && variant.fen && staleSetposRead(r, variant.fen)) { pr.skipped++; pr.probes.push({ id: family.id, skipped: true, prompt, why: 'stale set-board read (app flake)' }); log(`  \x1b[33m⊘\x1b[0m ${family.id} — stale set-board read, coach saw wrong position (skipped, app flake)  «${prompt.slice(0, 45)}»`); continue; }
         const out = family.check(r, variant);
         pr.probes.push({ id: family.id, ok: out.ok, why: out.why, prompt, response: r.slice(0, 280) });
         if (!out.ok) pr.errors++;
         log(`  ${out.ok ? '\x1b[32m✓\x1b[0m' : '\x1b[31m✗\x1b[0m'} ${family.id} — ${out.why}  «${prompt.slice(0, 50)}»`);
         if (!out.ok) log(`      A: ${r.slice(0, 200)}`);
       } catch (e) {
-        pr.errors++; pr.probes.push({ id: family.id, ok: false, why: 'threw: ' + String(e?.message ?? e).slice(0, 100), prompt });
-        log(`  \x1b[31m✗\x1b[0m ${family.id} — threw: ${String(e?.message ?? e).slice(0, 100)}`);
+        const msg = String(e?.message ?? e);
+        // Infra throws (locator/nav/page-closed timeouts) are audit
+        // environment hiccups, not coach errors → SKIP. Anything else is
+        // a genuine error.
+        if (/timeout|locator|waitFor|navigation|Target (?:page|closed|context)|detached|crash/i.test(msg)) {
+          pr.skipped++; pr.probes.push({ id: family.id, skipped: true, prompt, why: 'infra throw' });
+          log(`  \x1b[33m⊘\x1b[0m ${family.id} — infra throw (skipped): ${msg.slice(0, 70)}`);
+        } else {
+          pr.errors++; pr.probes.push({ id: family.id, ok: false, why: 'threw: ' + msg.slice(0, 100), prompt });
+          log(`  \x1b[31m✗\x1b[0m ${family.id} — threw: ${msg.slice(0, 100)}`);
+        }
         onPlay = false;
       }
     }

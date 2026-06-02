@@ -93,7 +93,7 @@ describe('routeChatIntent', () => {
 
   it('"yes" after walkthrough-unavailable offer routes to play-against', async () => {
     const assistantOffer =
-      'I don\u2019t have a ready-made walkthrough for "King\u2019s Gambit" yet. Want to play it against me so you can learn it in-game?';
+      'I don\u2019t have a guided walkthrough for "King\u2019s Gambit", and I\u2019m not sure it\u2019s a standard opening I recognize. If it is a real line, want to play it against me so you can learn it in-game?';
     const routed = await routeChatIntent('yes', {
       lastAssistantMessage: assistantOffer,
     });

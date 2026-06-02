@@ -118,6 +118,7 @@ function computeBoardFacts(fen: string): TacticsLiveContext['boardFacts'] {
     if (!whiteKing || !blackKing) return undefined;
     const sideToMove = chess.turn() === 'w' ? 'white' : 'black';
     const inCheck = chess.inCheck() ? sideToMove : null;
+    const { whitePieces, blackPieces } = pieceInventory(board);
     // Mate-in-one for the side to move: try every legal move; the first
     // that delivers checkmate is the forced mate. chess.js validates
     // legality, so this never reports an illegal "mate".
@@ -127,10 +128,35 @@ function computeBoardFacts(fen: string): TacticsLiveContext['boardFacts'] {
       probe.move(m);
       if (probe.isCheckmate()) { mateInOne = m; break; }
     }
-    return { sideToMove, whiteKing, blackKing, inCheck, mateInOne };
+    return { sideToMove, whiteKing, blackKing, inCheck, mateInOne, whitePieces, blackPieces };
   } catch {
     return undefined;
   }
+}
+
+/** Plain-English inventory of every piece + its square, per color, so
+ *  the brain reads positions from words instead of parsing the raw FEN
+ *  (which LLMs do badly). Non-pawn pieces listed K-Q-R-B-N order; pawns
+ *  grouped. */
+function pieceInventory(board: ReturnType<Chess['board']>): { whitePieces: string; blackPieces: string } {
+  const NAMES: Record<string, string> = { p: 'pawn', n: 'Knight', b: 'Bishop', r: 'Rook', q: 'Queen', k: 'King' };
+  const ORDER: Record<string, number> = { King: 0, Queen: 1, Rook: 2, Bishop: 3, Knight: 4 };
+  const build = (color: 'w' | 'b'): string => {
+    const majors: string[] = [];
+    const pawns: string[] = [];
+    for (const row of board) {
+      for (const sq of row) {
+        if (!sq || sq.color !== color) continue;
+        if (sq.type === 'p') pawns.push(sq.square);
+        else majors.push(`${NAMES[sq.type]} ${sq.square}`);
+      }
+    }
+    majors.sort((a, b) => (ORDER[a.split(' ')[0]] ?? 9) - (ORDER[b.split(' ')[0]] ?? 9));
+    const parts = [...majors];
+    if (pawns.length) parts.push(`pawns on ${pawns.sort().join(' ')}`);
+    return parts.join(', ') || '(no pieces)';
+  };
+  return { whitePieces: build('w'), blackPieces: build('b') };
 }
 
 /** Run `classifyPosition` against the current FEN as a null-move-style

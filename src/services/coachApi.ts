@@ -988,7 +988,14 @@ const MOVE_QUESTION_PATTERNS: ReadonlyArray<RegExp> = [
   /\bis\s+[A-Za-z][\w-]*\s+(?:a\s+)?(?:good|bad|sound|playable|winning|losing)\b/i,
   /\b(?:should|can)\s+I\s+play\s+[A-Za-z][\w-]*\b/i,
   /\bwhat\s+happens?\s+(?:after|if\s+I\s+play)\b/i,
-  /\bwhat\s+(?:about|if)\s+[A-Za-z][\w-]*\??/i,
+  // "what about Nf3?" / "what if I play exd5?" — only a MOVE-shaped
+  // token engages position-grounding. Must NOT match general questions
+  // like "what about the Caro-Kann?" (audit 2026-06-02: that wrongly
+  // engaged master-play on the START position, the coach named Caro
+  // moves …c6/…d5, the validator gated them against the start's master
+  // moves, and a teaching question got the stock "run it through the
+  // engine" fallback).
+  /\bwhat\s+(?:about|if)\s+(?:i\s+(?:play|try)\s+)?(?:[NBRQK][a-h]?[1-8]?x?[a-h][1-8]|[a-h]x?[a-h]?[1-8]|O-O(?:-O)?)\b/i,
   /\bbest\s+continuation\b/i,
   /\bbook\s+move\b/i,
   /\bmain\s+line\b/i,

@@ -776,6 +776,10 @@ function formatTacticsSubBlock(tactics: NonNullable<LiveState['tactics']>): stri
     // with invented escape squares). These facts override the brain's
     // own read of the position.
     lines.push(`    BOARD FACTS (GROUND TRUTH — computed, never contradict):`);
+    lines.push(`      PIECES ON THE BOARD — read EVERY piece location from HERE; do NOT parse the raw FEN (you misread it):`);
+    lines.push(`        White: ${bf.whitePieces}.`);
+    lines.push(`        Black: ${bf.blackPieces}.`);
+    lines.push(`        Any square NOT listed above is EMPTY. Never say a piece is on a square it's not listed on, never say a pawn/piece is missing if it's listed, and never call this the "starting position" unless every piece above is on its home square.`);
     lines.push(`      White king: ${bf.whiteKing}. Black king: ${bf.blackKing}. ${bf.sideToMove} to move.`);
     lines.push(`      In check: ${bf.inCheck ? `${bf.inCheck} is in check` : 'neither side is in check'}.`);
     if (bf.mateInOne) {
