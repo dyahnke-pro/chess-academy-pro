@@ -310,6 +310,24 @@ export function normalizePieceShorthand(text: string): string {
  *  it does. Optional surrounding backticks/quotes are also stripped. */
 const FEN_PATTERN_RE = /[`'"]?\s*([rnbqkpRNBQKP1-8]+\/){7}[rnbqkpRNBQKP1-8]+\s+[wb]\s+[KQkq-]+\s+[a-h1-8-]+\s+\d+\s+\d+\s*[`'"]?/g;
 
+const RANK_ORDINALS = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth'] as const;
+
+/** Render a SAN disambiguation token as a leading, human-readable
+ *  qualifier (returns "" for no disambiguation, else a trailing-space
+ *  prefix that sits BEFORE the piece name):
+ *    "b"  → "b-file "        ("Nbd2" → "b-file knight to d2")
+ *    "1"  → "first-rank "    ("R1e2" → "first-rank rook to e2")
+ *    "h4" → "h4 "            (rare full-square disambig — read as-is)
+ *  The single-file form is hyphenated ("b-file") deliberately so the
+ *  case-insensitive sanitizer-leak detector never re-flags a lone "b"
+ *  followed by an action word. */
+function speakDisambiguation(disambig: string): string {
+  if (!disambig) return '';
+  if (/^[a-h]$/.test(disambig)) return `${disambig}-file `;
+  if (/^[1-8]$/.test(disambig)) return `${RANK_ORDINALS[Number(disambig) - 1]}-rank `;
+  return `${disambig} `;
+}
+
 /** Normalise LLM output so the spoken layer never has to read chess
  *  notation aloud. Pure function — safe to call on any string. Wraps
  *  normalizePieceShorthand with the TTS-only transforms (SAN expansion,
@@ -348,10 +366,16 @@ export function sanitizeForTTS(text: string): string {
   const pieceExpansions: Array<{ san: string; spoken: string }> = [];
   out = out.replace(SAN_MOVE_RE, (san: string, piece: string, disambig: string, capture: string, dest: string) => {
     const name = PIECE_LETTER_NAMES[piece] ?? piece;
-    // Speak the disambiguation char(s) so "Rad8" → "rook a to d8",
-    // "R1e2" → "rook 1 to e2" (space-joined so each is read on its own).
-    const dis = disambig ? `${disambig.split('').join(' ')} ` : '';
-    const spoken = capture === 'x' ? `${name} ${dis}takes ${dest}` : `${name} ${dis}to ${dest}`;
+    // Disambiguation reads as a LEADING natural-language qualifier, not a
+    // dangling letter after the piece name: "Nbd2" → "b-file knight to
+    // d2" (was the robotic "knight b to d2"). Besides reading like a human
+    // coach, the leading-hyphenated form ("b-file") dodges the
+    // case-insensitive LEAK_DETECTOR_RE false-positive — the old trailing
+    // "knight b to d2" had a lone "b to" that the leak auditor flagged as
+    // un-expanded piece-letter shorthand (prod sanitizer-leak noise).
+    const dis = speakDisambiguation(disambig);
+    const verb = capture === 'x' ? 'takes' : 'to';
+    const spoken = `${dis}${name} ${verb} ${dest}`;
     pieceExpansions.push({ san, spoken });
     return spoken;
   });

@@ -452,7 +452,21 @@ function getFallbackConfig(failedProvider: AiProvider): ProviderConfig | null {
   }
 }
 
-function getModel(
+/** Tasks that drive an INTERACTIVE, realtime loop and therefore must
+ *  NEVER run on a reasoning/thinking model — even when the user's
+ *  per-category Settings preference picks one. `chat_response` is the
+ *  live teach/in-game brain; `interactive_review` is per-move live
+ *  narration. Both block the board and both feed the Coach Brain
+ *  spine's 30s timeout race. See the LATENCY GUARD comment in
+ *  `getModel` for the full rationale. The genuinely deep, single-shot
+ *  analysis tasks (post_game_analysis, position_analysis_chat,
+ *  opening_overview, reports) are NOT here — they keep the reasoner. */
+const INTERACTIVE_TASKS: ReadonlySet<CoachTask> = new Set<CoachTask>([
+  'chat_response',
+  'interactive_review',
+]);
+
+export function getModel(
   task: CoachTask,
   provider: AiProvider,
   preferredModel?: ProviderConfig['preferredModel'],
@@ -478,18 +492,23 @@ function getModel(
         (provider === 'anthropic' && isAnthropicModel) ||
         (provider === 'deepseek' && isDeepSeekModel);
       // 3. LATENCY GUARD — the live chat brain (`chat_response`: in-game
-      //    ask + /coach/teach step-by-step move turns) is real-time; the
-      //    board waits on it. A reasoning/thinking model adds 5-15s per
-      //    turn across up to 4 tool round-trips (David 2026-06-02: "the
-      //    board is taking way too long to reset after my opponent's
-      //    move"). So even when the user's `analysis` pick is a reasoner,
-      //    chat_response uses the fast per-task default. The reasoner pick
-      //    still governs the genuinely deep tasks (post_game_analysis,
-      //    position_analysis_chat, opening_overview, reports). This also
-      //    restores the deliberate `chat_response → deepseek-chat` default
-      //    (see DEEPSEEK_MODEL_MAP: "biggest single cost win").
-      const latencySensitive = task === 'chat_response';
-      if (compatible && !(latencySensitive && isReasoningModel(userChoice))) {
+      //    ask + /coach/teach step-by-step move turns) and per-move live
+      //    narration (`interactive_review`) are real-time; the board waits
+      //    on them. A reasoning/thinking model adds 5-15s per turn across
+      //    up to 4 tool round-trips (David 2026-06-02: "the board is taking
+      //    way too long to reset after my opponent's move") AND blows past
+      //    the Coach Brain spine's 30s race → "coach-brain-deepseek-timeout".
+      //    Reasoner also burns the max_tokens budget on hidden
+      //    reasoning_content (truncated visible content — the documented
+      //    interactive_review failure) and 400s on a forced tool_choice
+      //    ("Thinking mode does not support this tool_choice"). So even when
+      //    the user's category pick is a reasoner, these tasks use the fast
+      //    per-task default. The reasoner pick still governs the genuinely
+      //    deep, single-shot tasks (post_game_analysis, position_analysis_chat,
+      //    opening_overview, reports). This also restores the deliberate
+      //    `chat_response → deepseek-chat` default (DEEPSEEK_MODEL_MAP:
+      //    "biggest single cost win").
+      if (compatible && !(INTERACTIVE_TASKS.has(task) && isReasoningModel(userChoice))) {
         return userChoice;
       }
     }
@@ -517,7 +536,7 @@ function isReasoningModel(model: string): boolean {
  *  `deepseek-reasoner` makes EVERY structured call (walkthrough
  *  narration, drill/findMove/punish labels) 400 and silently fall back
  *  to generic template prose. */
-function toolCapableModel(task: CoachTask, provider: AiProvider, model: string): string {
+export function toolCapableModel(task: CoachTask, provider: AiProvider, model: string): string {
   if (!isReasoningModel(model)) return model;
   const fallback = provider === 'anthropic' ? ANTHROPIC_MODEL_MAP[task] : DEEPSEEK_MODEL_MAP[task];
   if (isReasoningModel(fallback)) {
