@@ -11,12 +11,11 @@
  * walkthrough or pull additional examples. Filter by player +
  * opening (base id, pro id, or name) + variation. (David 2026-06-01.)
  */
-import proGameReferencesData from '../../../data/pro-game-references.json';
 import proRepertoireData from '../../../data/pro-repertoires.json';
+import { loadProGameReferenceData } from '../../../services/proGameReferenceData';
 import type { Tool } from '../../types';
 import type { ProGameReference } from '../../../types';
 
-const ALL_REFS = proGameReferencesData as unknown as ProGameReference[];
 const PLAYER_NAMES: Record<string, string> = Object.fromEntries(
   (proRepertoireData as { players: { id: string; name: string }[] }).players.map((p) => [p.id, p.name]),
 );
@@ -49,8 +48,8 @@ export const lookupPlayerGamesTool: Tool = {
     },
     required: [],
   },
-  // eslint-disable-next-line @typescript-eslint/require-await -- Tool.execute is typed Promise<...>; this implementation is synchronous.
   async execute(args) {
+    const ALL_REFS = await loadProGameReferenceData();
     const playerArg = typeof args.player === 'string' ? args.player.trim() : '';
     const openingIdArg = typeof args.openingId === 'string' ? norm(args.openingId) : '';
     const proOpeningIdArg = typeof args.proOpeningId === 'string' ? norm(args.proOpeningId) : '';

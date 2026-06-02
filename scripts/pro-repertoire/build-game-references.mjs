@@ -44,7 +44,10 @@ function argVal(flag, fallback) {
 const MAX_PER_VARIATION = Number(argVal('--max-per-variation', 5));
 
 const ROOT = process.cwd();
-const OUT_PATH = path.join(ROOT, 'src', 'data', 'pro-game-references.json');
+// Served from public/data (Vite copies public/ to the build root) and
+// fetched on demand by src/services/proGameReferenceData.ts — kept OUT of
+// the JS bundle so the growing reference set never inflates index.js.
+const OUT_PATH = path.join(ROOT, 'public', 'data', 'pro-game-references.json');
 const SOURCES = path.join(ROOT, 'data', 'sources');
 
 // chess.com username per app player id (the -chesscom / -trees / -deep
