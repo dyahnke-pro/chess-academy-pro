@@ -127,6 +127,12 @@ describe('assembleEnvelope', () => {
     // Tool-failure must NOT trigger fabrication of the player's stats (G3).
     expect(identity).toMatch(/TOOL FAILS \/ EXPLORER UNAVAILABLE/);
     expect(identity).toMatch(/do not recite his stats from memory/i);
+    // "board reset on me" fix (2026-06-02): launching a walkthrough must
+    // ANNOUNCE the board change first and must NOT pre-dump the moves with
+    // move-number prefixes (the walkthrough animates them).
+    expect(identity).toMatch(/Starting the \{opening name\} walkthrough/);
+    expect(identity).toMatch(/do NOT pre-narrate the moves/i);
+    expect(identity).toMatch(/NEVER write move-number prefixes in spoken prose/i);
   });
 
   it('skips PHASE_NARRATION_ADDITION when suppressSurfaceMode=true on surface=phase-narration', () => {

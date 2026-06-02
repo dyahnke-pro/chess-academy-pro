@@ -312,6 +312,14 @@ const FEN_PATTERN_RE = /[`'"]?\s*([rnbqkpRNBQKP1-8]+\/){7}[rnbqkpRNBQKP1-8]+\s+[
 
 const RANK_ORDINALS = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth'] as const;
 
+/** Move-number prefix in spoken prose: "1.", "12.", "1...", "3…" when
+ *  IMMEDIATELY followed by a SAN move token (piece letter, castle, or
+ *  file+rank/capture). Stripped before TTS so Polly never voices the
+ *  counter ("1.d4" → "one. d four"). The trailing lookahead is what
+ *  keeps it from eating ordinary numbers ("$1.50", "step 1." with a
+ *  space after). Black's "..." / "…" ellipsis is consumed too. */
+const MOVE_NUMBER_PREFIX_RE = /\b\d{1,3}(?:\.\.\.|…|\.)(?=[NBRQKO]|[a-h][1-8x])/g;
+
 /** Render a SAN disambiguation token as a leading, human-readable
  *  qualifier (returns "" for no disambiguation, else a trailing-space
  *  prefix that sits BEFORE the piece name):
@@ -352,6 +360,14 @@ export function sanitizeForTTS(text: string): string {
   // SAN regex below (a FEN's "K" / "Q" / "B" / "N" letters look like
   // piece-letter SAN to the SAN_MOVE_RE pattern).
   out = out.replace(FEN_PATTERN_RE, '[the position]');
+  // Move-number prefixes ("1.d4", "2.Nc3", "1...d5", "3…g3") BEFORE the
+  // SAN expansion: Polly reads "1." as "one" → "one. d four", robotic.
+  // The lookahead requires a real SAN token (piece/castle/file+rank)
+  // right after the number+dot(s), so a decimal/list-marker ("$1.50",
+  // "step 1.") never trips it. Strips the counter only, leaving the
+  // move ("1.d4" → "d4", "1...d5" → "d5") for the SAN pass below. Prod
+  // bug 2026-06-02: the chat brain spoke "Magnus plays 1.d4 and 2.c4".
+  out = out.replace(MOVE_NUMBER_PREFIX_RE, '');
   // Castling (before piece-letter substitutions mangle the O's).
   out = out.replace(CASTLE_QUEEN_RE, 'castle queenside');
   out = out.replace(CASTLE_KING_RE, 'castle kingside');

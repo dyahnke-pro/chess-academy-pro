@@ -78,6 +78,23 @@ describe('sanitizeForTTS', () => {
     it('pawn capture "exd5" → "e-pawn takes d5"', () => {
       expect(sanitizeForTTS('exd5 opens the center')).toBe('e-pawn takes d5 opens the center');
     });
+    it('strips move-number prefixes so Polly never reads "1." as "one"', () => {
+      // White counters: "1.d4 and 2.c4" → "d4 and c4" (plain pawn pushes
+      // pass through the SAN pass untouched).
+      expect(sanitizeForTTS('Magnus plays 1.d4 and 2.c4')).toBe('Magnus plays d4 and c4');
+    });
+    it('strips a move-number prefix in front of a piece move', () => {
+      expect(sanitizeForTTS('then 2.Nc3 develops')).toBe('then knight to c3 develops');
+    });
+    it('strips a black-move ellipsis counter "1...d5"', () => {
+      expect(sanitizeForTTS('reply 1...d5 equalises')).toBe('reply d5 equalises');
+    });
+    it('does NOT strip ordinary numbers with a trailing space', () => {
+      expect(sanitizeForTTS('step 1. develop your pieces')).toBe('step 1. develop your pieces');
+    });
+    it('does NOT strip a decimal like a price or eval', () => {
+      expect(sanitizeForTTS('about 1.50 better')).toBe('about 1.50 better');
+    });
     it('castling "O-O" → "castle kingside"', () => {
       expect(sanitizeForTTS('then O-O')).toBe('then castle kingside');
     });
