@@ -154,7 +154,18 @@ export function initAnalytics(opts?: { optedOut?: boolean }): void {
       client = posthog;
       enabled = true;
       if (optedOut) posthog.opt_out_capturing();
-      else flushQueue();
+      else {
+        flushQueue();
+        // Guaranteed per-load event — fires directly (not via the audit
+        // bridge, whose boot-time queue/flush ordering can drop the first
+        // event). Proves the ingest pipe works on every session and is the
+        // canonical "session started" analytic.
+        try {
+          posthog.capture('app_session_started');
+        } catch {
+          /* swallow */
+        }
+      }
     })
     .catch(() => {
       // Network/bundle failure to load posthog — stay a no-op.
