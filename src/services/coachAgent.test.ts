@@ -90,6 +90,33 @@ describe('parseCoachIntent — play-against', () => {
       expect(intent.kind).toBe('walkthrough');
       expect(intent.subject).toBe("King's Indian Defense");
     });
+
+    // Audit 2026-06-02: a teaching QUESTION that merely starts with "teach
+    // me" must NOT be swallowed whole as an opening name and deflected —
+    // it should fall through to QA so the LLM answers it.
+    describe('teaching questions fall through to QA, not walkthrough deflection', () => {
+      const QA_PHRASES: readonly string[] = [
+        "Teach me the London System against a King's Indian setup where Black fianchettoes with g6 and Bg7. How do I set up?",
+        'Teach me how to play the Italian against the Two Knights, what are my pawn breaks?',
+        'Show me how the Najdorf works against the English Attack and why Black plays b5',
+      ];
+      for (const phrase of QA_PHRASES) {
+        it(`routes a teaching question to qa: "${phrase.slice(0, 40)}…"`, () => {
+          const intent = parseCoachIntent(phrase);
+          expect(intent.kind).toBe('qa');
+        });
+      }
+    });
+
+    // …but a short, clause-free opening name still loads the walkthrough.
+    it('still routes a plain opening name to walkthrough', () => {
+      expect(parseCoachIntent('Teach me the Caro-Kann Advance Variation').kind).toBe(
+        'walkthrough',
+      );
+      expect(parseCoachIntent('Walk me through the Sicilian Najdorf').kind).toBe(
+        'walkthrough',
+      );
+    });
   });
 
   // Natural phrasings that previously fell through to `qa` and made the

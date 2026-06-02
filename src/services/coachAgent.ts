@@ -347,13 +347,47 @@ export function parseCoachIntent(query: string): CoachIntent {
     lower.match(/study\s+(?:the\s+)?(.+)/);
   if (walkthroughMatch) {
     const subject = cleanSubject(walkthroughMatch[1]);
-    if (subject) {
+    // A walkthrough subject is an opening NAME, not a sentence. If the
+    // captured phrase reads like a question or carries clausal qualifiers
+    // ("...against a King's Indian setup where Black fianchettoes... how do
+    // I set up?"), it's a teaching question, not a "load the X walkthrough"
+    // request — fall through to QA chat so the LLM actually answers it.
+    // Audit 2026-06-02: "Teach me the London System against a KID setup
+    // where..." was swallowed whole as an opening name and deflected with
+    // "I don't recognize this opening", while the same content phrased
+    // "Explain how to play the London..." taught it perfectly.
+    if (subject && !looksLikeSentence(subject)) {
       return { kind: 'walkthrough', subject: expandOpeningAlias(subject), raw };
     }
   }
 
   // Fallthrough: treat as a regular Q&A chat message.
   return { kind: 'qa', raw };
+}
+
+/**
+ * True when an extracted "subject" phrase is really a sentence / question
+ * rather than an opening NAME — a clausal qualifier ("against", "where",
+ * "how do I", "what's my plan"), an embedded question mark, or simply too
+ * many words for any real opening name. Used to keep the walkthrough router
+ * from swallowing whole teaching questions as unresolvable opening names.
+ *
+ * Real opening names stay short and clause-free: "Caro-Kann Advance
+ * Variation", "Sicilian Najdorf English Attack", "King's Indian Defense".
+ */
+function looksLikeSentence(subject: string): boolean {
+  const s = subject.toLowerCase();
+  if (/[?]/.test(subject)) return true;
+  if (
+    /\b(against|versus|vs\.?|where|when|how|what|why|whenever|because|should i|do i|i want|i play|my plan|pawn breaks?|set\s?up|fianchet|once the|after the|so that|in order to)\b/.test(
+      s,
+    )
+  )
+    return true;
+  // Opening names rarely exceed ~6 words ("Sicilian Defense Najdorf
+  // Variation English Attack" is already 6). Beyond that it's prose.
+  if (s.split(/\s+/).filter(Boolean).length > 7) return true;
+  return false;
 }
 
 /**
