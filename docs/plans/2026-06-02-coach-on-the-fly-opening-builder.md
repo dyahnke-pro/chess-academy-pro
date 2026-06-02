@@ -100,7 +100,28 @@ chat time, for ANY player, without us pre-authoring a repertoire.**
 
 ---
 
-## THE FEATURE TO BUILD — on-the-fly player-opening builder (in progress)
+## ✅ BUILT (commit on this branch) — on-the-fly player-opening builder
+
+Steps 1–4 below are DONE and unit-tested (typecheck + all gates green).
+Verified end-to-end at the data layer: the Lichess `/player` endpoint accepts
+a raw `fen` and returns the player's real move distribution (Carlsen vs the
+Sicilian → Nf3 282g / Nc3 159g / c3 39g / d4 21g). The only thing NOT verified
+here is the LIVE brain walking the spine — that needs a provider key
+(`DEEPSEEK_KEY`/`ANTHROPIC_KEY` not set) and is owed on a device / once a key
+is available. Paywall note (David 2026-06-02): gate AI-coach generation
+(quota/tier on lessons) — the Lichess data is free and Vercel egress is ~250KB
+per lesson; the cost lever is LLM tokens, kept low by DeepSeek-primary.
+
+Files: `api/lichess-explorer.ts` (+`player` source), `src/services/lichessExplorerService.ts`
+(`fetchLichessPlayerExplorer`), `src/coach/tools/cerebellum/lookupPlayerOpeningMoves.ts`
+(+`.test.ts`), `src/coach/tools/registry.ts` (25 tools now), `src/coach/envelope.ts`
+(doctrine points d/e), `src/coach/__tests__/envelope.test.ts`.
+
+Verified Lichess usernames in the alias map: Carlsen→DrNykterstein (5145g),
+Firouzja→alireza2003 (5416g). Hikaru/Naroditsky have no usable public explorer
+presence (chess.com players); the tool accepts any raw username for everyone else.
+
+### (original plan, for reference) on-the-fly player-opening builder
 
 Add a live "what does this player play here" capability so the brain can walk a
 pro's most-played moves ply-by-ply and teach the line on the fly. Reuses the

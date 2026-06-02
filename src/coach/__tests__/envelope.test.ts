@@ -33,7 +33,7 @@ describe('assembleEnvelope', () => {
     expect(env.memory).toBeTruthy();
     expect(env.appMap.length).toBeGreaterThan(5);
     expect(env.liveState.surface).toBe('ping');
-    expect(env.toolbelt.length).toBe(24);
+    expect(env.toolbelt.length).toBe(25);
     expect(env.ask).toBe('hello');
   });
 
@@ -114,10 +114,14 @@ describe('assembleEnvelope', () => {
     expect(identity).toMatch(/local_opening_book/);
     // Building a player's opening from their REAL games.
     expect(identity).toMatch(/spine IS what he actually plays/i);
-    expect(identity).toMatch(/No games for that player.+say so, don't fake it/i);
+    expect(identity).toMatch(/Still no games anywhere.+say so, don't fake it/i);
     // The legal guardrail — build it, but never advertise the likeness.
     expect(identity).toMatch(/DON'T BRAND IT — TEACH IT/);
     expect(identity).toMatch(/never as that player's official or endorsed product/i);
+    // On-the-fly path: build from the Lichess player DB when we have no
+    // pre-built games, walking the player's actual moves ply-by-ply.
+    expect(identity).toMatch(/lookup_player_opening_moves/);
+    expect(identity).toMatch(/BUILD IT ON THE FLY from the Lichess player database/i);
   });
 
   it('skips PHASE_NARRATION_ADDITION when suppressSurfaceMode=true on surface=phase-narration', () => {

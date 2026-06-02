@@ -12,13 +12,15 @@
  *   GET /api/lichess-explorer?source=masters&fen=<fen>&...
  *
  * Forwards every query parameter except `source` (which selects the
- * upstream path: `masters` | `lichess`). Returns the upstream JSON
- * verbatim so the client-side parser doesn't change.
+ * upstream path: `masters` | `lichess` | `player`). The `player` source
+ * (Lichess's per-player explorer — `?player=<user>&color=<w|b>&play=<uci>`)
+ * powers the coach's on-the-fly "what does THIS player play here" lookup.
+ * Returns the upstream JSON verbatim so the client-side parser doesn't change.
  */
 export const config = { runtime: 'edge' };
 
 const EXPLORER_BASE = 'https://explorer.lichess.ovh';
-const ALLOWED_SOURCES = new Set(['masters', 'lichess']);
+const ALLOWED_SOURCES = new Set(['masters', 'lichess', 'player']);
 
 /** Fallback chain of User-Agent strings. Production audit (build
  *  d9a5f28+) showed Lichess returning a generic nginx 401 page for
