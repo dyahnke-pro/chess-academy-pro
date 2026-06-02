@@ -69,10 +69,13 @@ describe('validateClaims — SAN check', () => {
     expect(sanViolation?.claim).toBe('Nh6');
   });
 
-  it('flags every SAN when context source is none', () => {
+  it('does NOT flag bare SANs off-book (no master data, no DB, no played game)', () => {
+    // Strengthened FIX C (2026-06-02): off-book play/chat, a SAN is
+    // forward-looking move discussion (a plan), NOT a fabricated master
+    // claim — so it must not trip the gate. Fabricated numbers/players
+    // are still gated (covered by the numeric/entity tests below).
     const r = validateClaims('You could play Bb5 here.', emptyContext());
-    expect(r.ok).toBe(false);
-    expect(r.violations.some((v) => v.kind === 'san' && v.claim === 'Bb5')).toBe(true);
+    expect(r.violations.some((v) => v.kind === 'san')).toBe(false);
   });
 
   it('does not flag pawn-square mentions like "the e4 square"', () => {
@@ -121,6 +124,7 @@ describe('validateClaims — game-review grounded SANs', () => {
       },
       lookahead: [],
       groundedSans,
+      groundedFromPlayedGame: true,
     };
   }
 

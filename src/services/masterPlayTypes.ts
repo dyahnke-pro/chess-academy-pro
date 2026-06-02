@@ -121,4 +121,12 @@ export interface MasterPlayContext {
    *  surface supplied `gameSans` (review); undefined elsewhere, where the
    *  strict master-play-only SAN gate stays in force. */
   groundedSans?: ReadonlyArray<string>;
+  /** True when this turn is grounded in an ACTUAL played game (the
+   *  review surface supplied `gameSans`). Distinguishes the review case
+   *  — where a SAN that's neither played nor legal IS a hallucination
+   *  worth flagging — from the off-book play/chat case, where bare SANs
+   *  are legitimate forward-looking move discussion (a plan names FUTURE
+   *  moves not yet legal) and must NOT be flagged into the stock
+   *  fallback. Set by `buildMasterPlayContext`. */
+  groundedFromPlayedGame?: boolean;
 }

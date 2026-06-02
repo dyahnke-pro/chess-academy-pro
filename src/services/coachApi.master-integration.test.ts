@@ -265,16 +265,16 @@ describe('grounding — retry on validator trip', () => {
 });
 
 describe('grounding — no master data (source:none)', () => {
-  // FIX C (audit 2026-06-02 finding #1): legal moves of the current FEN
-  // are grounded on every surface. A SAN that is ILLEGAL in the current
-  // position (or otherwise ungrounded) still trips; a LEGAL move passes
-  // even with no master data, so plan/positional answers no longer get
-  // nuked into the stock fallback.
-  it('still flags ILLEGAL / ungrounded SANs when context has no data', async () => {
+  // FIX C strengthened (audit 2026-06-02 finding #1): OFF-BOOK (no master
+  // data AND no DB entry) bare SANs are NOT flagged — a SAN is legitimate
+  // move discussion (a plan / candidate), not a fabricated "masters play
+  // X" claim. Flagging them nuked plan answers into the stock fallback
+  // (a multi-move plan names FUTURE moves that aren't in the current
+  // legal-move grounding set). The real fabrication vectors —
+  // percentages, player names, comparatives — stay gated (tests below).
+  it('does NOT stock-out on bare SANs when off-book (plan/move discussion serves)', async () => {
     const counters = installFetchMock({ lichess: EMPTY_LICHESS_PAYLOAD, llmTexts: [
-      'The best move is Nh6.', // illegal on move 1 → not a legal move of the FEN
-      'Try Bf6 instead.',      // illegal
-      'Maybe Rf2 is good?',    // illegal
+      'A reasonable plan is Nf3 and then d4, aiming to contest the center.',
     ] });
     const r = await getCoachChatResponse(
       [{ role: 'user', content: 'what should I play here?' }],
@@ -287,8 +287,9 @@ describe('grounding — no master data (source:none)', () => {
       undefined,
       { currentFen: STARTING_FEN, surface: '/coach/chat' },
     );
-    expect(r).toContain("can't verify"); // stock fallback
-    expect(counters.llmCalls).toBe(3);
+    expect(r).not.toContain("can't verify"); // served, no stock fallback
+    expect(r).toContain('Nf3');
+    expect(counters.llmCalls).toBe(1);
   });
 
   it('grounds a LEGAL move even with no master data (FIX C — no false stock-out)', async () => {

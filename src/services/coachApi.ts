@@ -1084,6 +1084,11 @@ async function buildMasterPlayContext(
 ): Promise<MasterPlayContext | undefined> {
   if (!grounding.currentFen) return undefined;
   const groundedSans = buildGroundedSans(grounding);
+  // Did this turn come from an ACTUAL played game (review)? If so the
+  // SAN gate stays strict (a non-played, non-legal SAN is a real
+  // hallucination). Off-book play/chat has only legal-move grounding,
+  // where forward-looking plan SANs must NOT be gated.
+  const groundedFromPlayedGame = !!(grounding.gameSans && grounding.gameSans.length > 0);
   const current = await lookupMasterPlay(grounding.currentFen, {
     triggeredBy: 'pre-injection',
     surface: grounding.surface,
@@ -1095,7 +1100,7 @@ async function buildMasterPlayContext(
     // review, `groundedSans` carries the game's own moves + legal moves
     // so the coach can discuss the student's actual game without every
     // SAN tripping the gate.
-    return { current, lookahead: [], groundedSans };
+    return { current, lookahead: [], groundedSans, groundedFromPlayedGame };
   }
   const lookahead = await buildLookahead(
     grounding.currentFen,
@@ -1103,7 +1108,7 @@ async function buildMasterPlayContext(
     grounding.surface,
     grounding.sessionId,
   );
-  return { current, lookahead, groundedSans };
+  return { current, lookahead, groundedSans, groundedFromPlayedGame };
 }
 
 /** Render the context as a system-prompt block the LLM can consume.

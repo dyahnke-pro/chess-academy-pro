@@ -323,22 +323,37 @@ export function validateClaims(
   const knownSans = collectKnownSans(context);
 
   // ── SAN check ────────────────────────────────────────────────────
+  // Only VERIFY SANs when there's a "known moves" set to verify against
+  // — live master-play data OR a named opening's DB lines. Off-book (no
+  // master data AND no DB entry), a bare SAN is legitimate move
+  // discussion (a plan, a candidate move), NOT a fabricated "masters
+  // play X" claim — flagging it nuked legitimate plan answers into the
+  // stock "I can't verify which moves are sound" fallback (audit
+  // 2026-06-02: a multi-move plan names FUTURE moves that aren't in the
+  // current legal-move grounding set, so they tripped the validator and
+  // the coach deflected "run it through the engine" on a plain "give me
+  // a plan" question). The real fabrication vectors — percentages, game
+  // counts, ratings, player names, "most popular"/"main line"
+  // comparatives — are gated below on `hasMasterData` regardless, so
+  // skipping bare-SAN checks off-book does NOT weaken G3.
   const sans = extractSans(response);
-  for (const san of sans) {
-    if (!hasData) {
-      violations.push({
-        kind: 'san',
-        claim: san,
-        reason: 'response cites a SAN but master-play context has no data (source:none) for this position',
-      });
-      continue;
-    }
-    if (!knownSans.has(san)) {
-      violations.push({
-        kind: 'san',
-        claim: san,
-        reason: `SAN "${san}" not present in master-play context for this position (known: ${Array.from(knownSans).slice(0, 6).join(', ')}…)`,
-      });
+  // Flag UNKNOWN SANs only when there's a basis to call one a
+  // hallucination: live master data, a named opening's DB lines, OR an
+  // actual played game (review). Off-book play/chat — where the only
+  // grounding is the auto-included legal-move set — is exempt: a bare
+  // SAN there is forward-looking move discussion (a plan names future
+  // moves), not fabrication. (Legal moves are in `knownSans` regardless,
+  // so they never trip even on the strict path.)
+  const canVerifySans = hasMasterData || hasDbData || !!context.groundedFromPlayedGame;
+  if (canVerifySans) {
+    for (const san of sans) {
+      if (!knownSans.has(san)) {
+        violations.push({
+          kind: 'san',
+          claim: san,
+          reason: `SAN "${san}" not present in master-play/DB context for this position (known: ${Array.from(knownSans).slice(0, 6).join(', ')}…)`,
+        });
+      }
     }
   }
 
