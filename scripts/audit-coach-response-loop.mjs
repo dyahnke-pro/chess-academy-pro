@@ -306,6 +306,11 @@ async function prepareSurface(page, family, variant, onPlay) {
 
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
+  // Shuffle each family's variant pool per RUN (random seed = process
+  // start) so every restart asks DIFFERENT questions from move 1 — not
+  // just different per pass (David 2026-06-02: "ask new questions every
+  // time it restarts").
+  for (const f of FAMILIES) { for (let i = f.variants.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [f.variants[i], f.variants[j]] = [f.variants[j], f.variants[i]]; } }
   log(`[loop] base=${BASE_URL} requiredStreak=${REQUIRED_STREAK} maxPasses=${MAX_PASSES} (fresh variant each pass)`);
   const exe = await resolveChromiumExecutable(HEADED);
   const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: !HEADED, executablePath: exe });
