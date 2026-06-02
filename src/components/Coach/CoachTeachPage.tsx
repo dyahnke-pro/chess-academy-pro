@@ -61,6 +61,7 @@ import { PlayerInfoBar } from './PlayerInfoBar';
 import { coachService } from '../../coach/coachService';
 import { logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAuditor';
 import { resolveCoachNarration } from '../../utils/coachNarration';
+import { recoverCoachMoveFromText } from '../../utils/recoverCoachMove';
 import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech, SENTENCE_END_RE } from '../../services/sanitizeCoachText';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
@@ -2324,6 +2325,48 @@ export function CoachTeachPage(): JSX.Element {
       // the final response so the student isn't left in silence.
       tryExtractVoiceMarker();
       tryExtractChoicesMarker();
+
+      // ── play_move SAFETY NET (David 2026-06-02: "coach didn't move a
+      //    piece!!"). On a step-by-step move turn the brain is told to
+      //    play its single reply via the play_move tool. A non-reasoner
+      //    model sometimes WRITES the move in prose ("I'll mirror with
+      //    d5") without ever calling the tool, so the board never updates
+      //    — an old, intermittent bug the deepseek-chat latency fix made
+      //    easier to hit. If NO play_move fired this turn, recover the
+      //    coach's intended move from the response: the FIRST legal SAN
+      //    for the side to move that the text actually names. handlePlayMove
+      //    re-validates and refuses to touch the student's pieces, so a
+      //    stray SAN can never move the wrong side — worst case we play a
+      //    sound move the coach itself named, which always beats a frozen
+      //    board.
+      if (isStepByStepReport && !result.dispatchedToolNames.includes('play_move')) {
+        const liveFen = liveFenRef.current;
+        const sideToMove = liveFen.split(' ')[1] === 'w' ? 'white' : 'black';
+        if (sideToMove !== playerColor) {
+          try {
+            const scan = `${spokenForTurn.join(' ')} ${result.text}`;
+            const chosen = recoverCoachMoveFromText(liveFen, scan);
+            if (chosen) {
+              const recovered = handlePlayMove(chosen);
+              void logAppAudit({
+                kind: 'coach-surface-migrated',
+                category: 'subsystem',
+                source: 'CoachTeachPage.playMoveSafetyNet',
+                summary: `no play_move dispatched on a step-by-step turn — recovered "${chosen}" from the narration (${recovered.ok ? 'played' : 'rejected: ' + (recovered.reason ?? 'unknown')})`,
+                fen: liveFen,
+              });
+            } else {
+              void logAppAudit({
+                kind: 'coach-surface-migrated',
+                category: 'subsystem',
+                source: 'CoachTeachPage.playMoveSafetyNet',
+                summary: 'no play_move dispatched and no legal SAN in the response to recover — board left unchanged',
+                fen: liveFen,
+              });
+            }
+          } catch { /* parse/validation failure — leave the board as-is */ }
+        }
+      }
 
       // Audit-instrumentation phase-3: verbosity response-length
       // distribution. Tracks the rolling p50/p90 per verbosity tier.
