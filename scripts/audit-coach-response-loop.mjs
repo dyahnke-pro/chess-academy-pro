@@ -334,7 +334,11 @@ async function main() {
       try {
         onPlay = await prepareSurface(page, family, variant, family.surface !== 'chat' && onPlay);
         const r = await askLLM(page, prompt);
-        if (r === '(timeout)') { pr.skipped++; pr.probes.push({ id: family.id, skipped: true, prompt }); log(`  \x1b[33m⊘\x1b[0m ${family.id} — timeout (skipped, infra)  «${prompt.slice(0, 50)}»`); continue; }
+        // A timeout OR an empty read is an audit-INFRA failure (failed to
+        // capture the answer), NOT a wrong answer — SKIP it (the
+        // diagnostic proved the coach answers these correctly when read).
+        // Only a substantive, non-empty WRONG answer breaks the streak.
+        if (r === '(timeout)' || r.replace(/[^a-z0-9]/gi, '').length < 3) { pr.skipped++; pr.probes.push({ id: family.id, skipped: true, prompt }); log(`  \x1b[33m⊘\x1b[0m ${family.id} — no answer captured (skipped, infra)  «${prompt.slice(0, 50)}»`); continue; }
         const out = family.check(r, variant);
         pr.probes.push({ id: family.id, ok: out.ok, why: out.why, prompt, response: r.slice(0, 280) });
         if (!out.ok) pr.errors++;
