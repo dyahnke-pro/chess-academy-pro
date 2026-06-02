@@ -57,6 +57,14 @@ export type AuditKind =
   | 'error-boundary'
   | 'navigation-error'
   | 'fen-desync'
+  // Runtime continuity detector (David 2026-06-02: "continuity errors are
+  // important to look out for"). Fired by `continuityGuard` when a played
+  // line (lesson / gem / plan / WLPP rung) hits a board jump (illegal move
+  // from the prior FEN — the class the players' silent `catch{break}` used
+  // to swallow), a misaligned narration/marker array, or a lead arrow that
+  // doesn't point at the move it accompanies. Forwarded to PostHog Error
+  // Tracking via the analytics defect bridge so it surfaces as an alert.
+  | 'continuity-error'
   // First-run / retroactive strength calibration (imports or skill picker)
   | 'strength-calibrated'
   // Voice instrumentation (WO-LEGACY-VOICE-01)

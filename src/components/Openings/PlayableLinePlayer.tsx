@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { LessonScaffold } from './LessonScaffold';
 import { voiceService } from '../../services/voiceService';
+import { reportPlayableLineContinuity } from '../../services/continuityGuard';
 import { sanToSpeech } from '../../utils/sanToSpeech';
 import { resolveCoachNarration } from '../../utils/coachNarration';
 import { useAppStore } from '../../stores/appStore';
@@ -118,6 +119,17 @@ export function PlayableLinePlayer({
   // Chess instance for memory phase move validation + position tracking
   const chessRef = useRef<Chess>(new Chess(line.fen));
   const [memoryFen, setMemoryFen] = useState(line.fen);
+
+  // Runtime continuity tripwire (David 2026-06-02: "continuity errors are
+  // important"). A read-only validation pass over the line on mount/change —
+  // catches a board jump (illegal move from the prior FEN, the class the
+  // memory-phase `catch { break; }` silently swallows), a narration array that
+  // slid off its move, or a lead arrow that doesn't match its move. Emits a
+  // `continuity-error` audit (→ PostHog Error Tracking via the defect bridge).
+  // Fire-and-forget; never affects playback.
+  useEffect(() => {
+    reportPlayableLineContinuity(line, { source: 'PlayableLinePlayer' });
+  }, [line]);
 
   // Silent Discussion-Practice faucet — Practice mode feeds the shared
   // misconception bucket when the student plays a genuine eval-worsening

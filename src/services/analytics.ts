@@ -214,6 +214,36 @@ const CRASH_KINDS: ReadonlySet<AuditKind> = new Set<AuditKind>([
   'error-boundary',
 ]);
 
+/**
+ * Defect-severity bridge (David 2026-06-02: "and build 2").
+ * ---------------------------------------------------------
+ * These aren't JS crashes — they're real CONTENT/RUNTIME DEFECTS the app
+ * already detects but that otherwise sit buried in the 200-kind forensic
+ * stream where you have to be looking. We promote them to PostHog Error
+ * Tracking issues (as exceptions tagged `severity: 'defect'`) so they ALERT.
+ * The forensic firehose stays in the audit-stream; only genuine defects get
+ * promoted. Add a kind here only when it represents a real defect a human
+ * should look at — not an informational/graceful-fallback signal.
+ */
+const DEFECT_KINDS: ReadonlySet<AuditKind> = new Set<AuditKind>([
+  // Runtime continuity (build 1)
+  'continuity-error',
+  // Narration board-truth violations (a claim that's false on the board)
+  'piece-on-square',
+  'hanging-piece',
+  'check-claim',
+  'mate-claim',
+  'illegal-san',
+  'sanitizer-leak',
+  // Live coach grounding failures
+  'coach-board-claim-blocked',
+  'claim-validator-trip',
+  'master-play-enforcement-fallback',
+  // Board desync + silence-where-narration-expected
+  'fen-desync',
+  'walkthrough-narration-empty',
+]);
+
 /** Send an exception to PostHog Error Tracking. Total — never throws. */
 export function captureException(error: unknown, props?: Record<string, unknown>): void {
   try {
@@ -268,11 +298,14 @@ export function setAnalyticsOptOut(next: boolean): void {
 export function mirrorAuditEvent(entry: AuditEntry): void {
   try {
     if (optedOut || !enabled) return;
-    // Crash detection: forward error-class kinds to PostHog Error Tracking
-    // as exceptions (not product events) so they group into issues.
-    if (CRASH_KINDS.has(entry.kind)) {
+    // Crash + defect detection: forward error-class and defect-class kinds to
+    // PostHog Error Tracking as exceptions (not product events) so they group
+    // into alertable issues. `severity` distinguishes a JS crash from a
+    // content/runtime defect in the PostHog issue list.
+    if (CRASH_KINDS.has(entry.kind) || DEFECT_KINDS.has(entry.kind)) {
       captureException(crashFromAudit(entry), {
         audit_kind: entry.kind,
+        severity: CRASH_KINDS.has(entry.kind) ? 'crash' : 'defect',
         source: entry.source,
         ...(entry.route ? { route: entry.route } : {}),
         ...(entry.fen ? { fen: entry.fen } : {}),
