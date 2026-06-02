@@ -160,8 +160,17 @@ export async function routeChatIntent(
     }
 
     case 'explain-position': {
+      // Only route to the explain-position session when there's an actual
+      // board FEN to explain. On a board-less surface (e.g. /coach/chat)
+      // there is no `currentFen`, so navigating would land the user on the
+      // session page showing the STARTING position — which is never what
+      // they asked about. Audit 2026-06-02: "evaluate this position
+      // <prose piece list>" misrouted to /coach/session/explain-position
+      // with the start board. Fall through to plain chat so the brain
+      // answers in-place (and can ask for a FEN / offer to set the board).
+      if (!options.currentFen) return null;
       const params = new URLSearchParams();
-      if (options.currentFen) params.set('fen', options.currentFen);
+      params.set('fen', options.currentFen);
       return {
         path: withQuery('/coach/session/explain-position', params),
         ackMessage: 'Let me analyse this position…',

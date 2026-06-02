@@ -281,6 +281,19 @@ export function parseCoachIntent(query: string): CoachIntent {
     lower.match(/\bready\s+(?:to\s+play|for\s+(?:a\s+)?(?:game|match))\b/);
   if (playMatch) {
     const rawSubject = playMatch[1] ? cleanSubject(playMatch[1]) : '';
+    // A play-against subject is an opening NAME, not a sentence. "I want
+    // to play 8...Ne4 because it forks the bishop and the knight, confirm
+    // that works" is a QUESTION that merely contains the word "play" — it
+    // must NOT be hijacked into a game session with a garbage subject.
+    // Audit 2026-06-02 caught exactly that: the whole sentence became the
+    // play-against `subject` and the app navigated to /coach/play?subject=
+    // 8+ne4+because+it+forks+… A clause-laden / question-shaped capture
+    // falls through to QA chat so the brain answers the move question.
+    // (A subject-less play phrase — "let's play", "start a game" — has an
+    // empty rawSubject and still routes; only sentence-shaped captures bail.)
+    if (rawSubject && looksLikeSentence(rawSubject)) {
+      return { kind: 'qa', raw };
+    }
     let side = extractSide(lower);
     const difficulty = extractDifficulty(lower) ?? 'auto';
     // Strip side/difficulty phrases from the subject so "play against me
@@ -379,7 +392,7 @@ function looksLikeSentence(subject: string): boolean {
   const s = subject.toLowerCase();
   if (/[?]/.test(subject)) return true;
   if (
-    /\b(against|versus|vs\.?|where|when|how|what|why|whenever|because|should i|do i|i want|i play|my plan|pawn breaks?|set\s?up|fianchet|once the|after the|so that|in order to)\b/.test(
+    /\b(against|versus|vs\.?|where|when|how|what|why|whenever|because|confirm|wins?\s+(?:a\s+)?(?:piece|pawn|material)|should i|do i|does (?:it|that)|is (?:it|that|this)|i want|i play|my plan|pawn breaks?|set\s?up|fianchet|once the|after the|so that|in order to)\b/.test(
       s,
     )
   )

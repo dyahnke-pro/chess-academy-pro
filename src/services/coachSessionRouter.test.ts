@@ -70,6 +70,14 @@ describe('routeChatIntent', () => {
     expect(params.get('fen')).toBe(fen);
   });
 
+  // Audit 2026-06-02: "evaluate this position <prose>" on a board-less
+  // surface (no currentFen) used to navigate to the explain-position
+  // session showing the STARTING board. It must now fall through to chat.
+  it('falls through to chat (null) for explain-position with no board FEN', async () => {
+    const routed = await routeChatIntent('evaluate this position for me');
+    expect(routed).toBeNull();
+  });
+
   it('navigates walkthrough only when opening matches', async () => {
     vi.mocked(matchOpeningForSubject).mockResolvedValueOnce(null);
     const missing = await routeChatIntent('walk me through the Flibbertigibbet');

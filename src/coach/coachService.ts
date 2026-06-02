@@ -57,6 +57,22 @@ import type {
  *  error the coachApi layer transparently retries on Anthropic via
  *  the existing fallback chain (`getFallbackConfig`). The
  *  constitution requires this be a one-line flip. */
+/**
+ * Strip the stray leading-character streaming artifact that prefixes
+ * tool-use turns on chat surfaces (production audit 2026-06-02: a constant
+ * leading "C" — "CWe're at the Najdorf…", "CLet me get the engine's read…").
+ * Removes a SOLITARY leading letter immediately followed (no space) by a
+ * capitalised word, the exact artifact shape. Safe against real coach text:
+ *   "Nf3 is best"  → "f" lowercase after N → no change
+ *   "White has…"   → "h" lowercase after W → no change
+ *   "OK, so…"      → "," after K (not a lowercase letter) → no change
+ *   "I think…"     → space after I → no change
+ *   "CWe're at…"   → "We" (cap+lower) after C → "We're at…"
+ */
+export function stripLeadingArtifact(text: string): string {
+  return text.replace(/^[A-Za-z](?=[A-Z][a-z])/, '');
+}
+
 function resolveProviderName(): ProviderName {
   // Vite-style env (browser builds).
   const viteEnv = (typeof import.meta !== 'undefined'
@@ -984,24 +1000,59 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     }
   }
 
+  // Strip the stray leading-character artifact that prefixes tool-use
+  // turns on chat surfaces. Production audit 2026-06-02 caught a constant
+  // leading "C" glued to the answer — "CWe're at the Najdorf…", "CLet me
+  // get the engine's read…" — on every turn that called a cerebellum tool
+  // (stockfish_eval / lichess_opening_lookup); in the worst case the whole
+  // reply collapsed to just "C". The root cause lives in the streaming /
+  // multi-trip tool-use accumulation (provider.callStreaming → the
+  // streamed delta boundary when a tool call interrupts the text block)
+  // and is only reproducible against the live keyed brain. This is a
+  // boundary guard + telemetry: it removes a SOLITARY leading letter that
+  // is immediately followed (no space) by a capitalised word — the exact
+  // artifact shape — and never touches legitimate openings ("Nf3…" → "f"
+  // is lowercase, "White…" → "h" is lowercase, "OK,…" → no lower after
+  // the cap, "I think" → space after the letter). The audit fires whenever
+  // it trips so prod telemetry can pin the streaming source for a real fix.
+  const rawText = lastResponse.text;
+  const deartifacted = stripLeadingArtifact(rawText);
+  if (deartifacted !== rawText) {
+    void logAppAudit({
+      kind: 'coach-brain-leading-artifact-stripped',
+      category: 'subsystem',
+      source: 'coachService.ask',
+      summary: `stripped leading "${rawText[0]}" from ${input.surface} answer (tools=${dispatchedIds.length})`,
+      details: JSON.stringify({
+        surface: input.surface,
+        provider: provider.name,
+        strippedChar: rawText[0],
+        toolCallsDispatched: dispatchedIds.length,
+        dispatchedToolNames,
+        preview: rawText.slice(0, 60),
+      }),
+    });
+  }
+  const finalText = deartifacted;
+
   void logAppAudit({
     kind: 'coach-brain-answer-returned',
     category: 'subsystem',
     source: 'coachService.ask',
-    summary: `surface=${input.surface} provider=${provider.name} task=${options.task ?? 'chat_response'} text=${lastResponse.text.length}c tools=${dispatchedIds.length}`,
+    summary: `surface=${input.surface} provider=${provider.name} task=${options.task ?? 'chat_response'} text=${finalText.length}c tools=${dispatchedIds.length}`,
     details: JSON.stringify({
       surface: input.surface,
       provider: provider.name,
       task: options.task ?? 'chat_response',
       maxTokens: options.maxTokens ?? null,
-      textLength: lastResponse.text.length,
+      textLength: finalText.length,
       toolCallsDispatched: dispatchedIds.length,
-      textPreview: lastResponse.text.slice(0, 120),
+      textPreview: finalText.slice(0, 120),
     }),
   });
 
   return {
-    text: lastResponse.text,
+    text: finalText,
     toolCallIds: dispatchedIds,
     dispatchedToolNames,
     provider: provider.name,

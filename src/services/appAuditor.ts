@@ -145,6 +145,7 @@ export type AuditKind =
   | 'coach-brain-tool-parse-result'
   | 'chat-panel-message-received'
   | 'coach-brain-answer-returned'
+  | 'coach-brain-leading-artifact-stripped'
   // (WO-FOUNDATION-02 trace harness deleted — was emitting ~9 audits
   // per spine call, doubling audit log size with no production
   // value once the cerebrum-dispatch question was answered. Removed
