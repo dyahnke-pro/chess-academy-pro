@@ -1,6 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import proRepertoire from './pro-repertoires.json';
+import {
+  getPlayers,
+  getPlayersWithRepertoire,
+  getOpeningCountsByPlayer,
+} from '../services/proRepertoireService';
 
 interface ProOpeningEntry {
   id: string;
@@ -93,6 +98,31 @@ describe('Pro Repertoire PGN Legality', () => {
     for (const opening of entries) {
       expect(opening.id).toMatch(/^pro-/);
     }
+  });
+});
+
+describe('Hide pros with incomplete (empty) repertoires', () => {
+  it('getPlayersWithRepertoire returns ONLY players that have at least one opening', () => {
+    const counts = getOpeningCountsByPlayer();
+    const shown = getPlayersWithRepertoire();
+    for (const player of shown) {
+      expect(counts[player.id] ?? 0).toBeGreaterThanOrEqual(1);
+    }
+  });
+
+  it('drops every names-only pro (zero openings) from the browse list', () => {
+    const counts = getOpeningCountsByPlayer();
+    const shownIds = new Set(getPlayersWithRepertoire().map((p) => p.id));
+    const namesOnly = getPlayers().filter((p) => (counts[p.id] ?? 0) === 0);
+    expect(namesOnly.length).toBeGreaterThan(0); // sanity: there ARE incomplete pros
+    for (const p of namesOnly) {
+      expect(shownIds.has(p.id)).toBe(false);
+    }
+  });
+
+  it('keeps the full roster intact (filter is non-destructive to the source)', () => {
+    expect(getPlayers()).toHaveLength(15);
+    expect(getPlayersWithRepertoire().length).toBeLessThan(getPlayers().length);
   });
 });
 
