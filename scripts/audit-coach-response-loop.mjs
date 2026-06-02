@@ -73,8 +73,8 @@ async function scrapeFen(page) {
 async function snap(page) {
   return page.$$eval('[data-testid="chat-message-assistant"]', (els) => els.map((e) => (e.textContent || '').replace(/^[A-Za-z]\s*/, '').trim()));
 }
-/** Order-independent: send prompt, wait for a NEW assistant bubble, stabilize, return text. */
-async function askLLM(page, prompt) {
+/** Order-independent single send: wait for a NEW assistant bubble, stabilize, return text. */
+async function askOnce(page, prompt) {
   const before = await snap(page);
   const beforeSet = new Set(before);
   const input = page.locator('[data-testid="chat-text-input"]');
@@ -97,6 +97,18 @@ async function askLLM(page, prompt) {
     prevLen = cur.length; resp = cur;
   }
   return clean(resp);
+}
+const TRANSIENT_RE = /taking too long|try again in a moment|please try again/i;
+/** Send a prompt; retry ONCE on a transient client-timeout ("Coach is
+ *  taking too long") — the WASM/grounding warm-up can lag the first
+ *  call in a fresh context. Correctness is still judged by the probe. */
+async function askLLM(page, prompt) {
+  let r = await askOnce(page, prompt);
+  if (r === '(timeout)' || TRANSIENT_RE.test(r)) {
+    await page.waitForTimeout(1500);
+    r = await askOnce(page, prompt);
+  }
+  return r;
 }
 async function gotoSurface(page, path, mount) {
   await page.goto(`${BASE_URL}${path}`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
@@ -164,8 +176,8 @@ const PROBES = [
       if (STOCK_FALLBACK_RE.test(r)) return { prompt, response: r, ...fail('served the stock "can\'t verify / run it through the engine" fallback on a legitimate plan question (FIX C regression)') };
       return { prompt, response: r, ...pass('answered a plan question without the stock fallback') };
     } },
-  { id: 'king-square-post-castle', depth: 1, surface: 'play-castled', async run(page) {
-      const prompt = 'Which exact square is my king on right now, and am I in check?';
+  { id: 'king-square-post-castle', depth: 1, surface: 'play-setpos', fen: 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4', async run(page) {
+      const prompt = 'Which exact square is my (White\'s) king on right now, and am I in check?';
       const r = await askLLM(page, prompt);
       if (r === '(timeout)') return { prompt, response: r, ...fail('timed out on king-square question') };
       if (/\be8\b/i.test(r)) return { prompt, response: r, ...fail('reported the king on e8 (the post-castle hallucination)') };
