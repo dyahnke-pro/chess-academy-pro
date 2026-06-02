@@ -65,6 +65,13 @@ function pieceOn(fen, sq) { try { const p = new Chess(fen).get(sq); return p ? p
 // so mentioning ≥2 absent piece types = stale → skip (infra), not fail.
 function staleSetposRead(resp, fen) {
   const placement = (fen.split(' ')[0] || '').toLowerCase();
+  if (placement.startsWith('rnbqkbnr/pppppppp')) return false; // FEN really IS the start
+  const pieceCount = [...placement].filter((c) => 'pnbrqk'.includes(c)).length;
+  // tell #1: claims the start / pieces on home squares (these are endgame FENs)
+  if (/starting position|home squares?|still on (?:its|their) (?:home|starting)|every piece is still on|all pieces (?:are )?on (?:their )?(?:home|starting)|on its home square|opening position/i.test(resp)) return true;
+  // tell #2: names an OPENING / opening motif on a sparse endgame board
+  if (pieceCount <= 8 && /italian game|ruy lopez|sicilian|french defense|caro-kann|fork trick|the opening|in the opening|fried liver|developed pieces|pawn chain/i.test(resp)) return true;
+  // tell #3: names ≥2 piece types that aren't on the board
   const present = new Set([...placement].filter((c) => 'pnbrqk'.includes(c)));
   const NAMES = { p: 'pawn', n: 'knight', b: 'bishop', q: 'queen' };
   let absent = 0;
