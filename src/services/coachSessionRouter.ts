@@ -223,10 +223,14 @@ export async function routeChatIntent(
           intent,
         };
       }
+      // Route STRAIGHT to the main Learn-with-Coach surface (in-place
+      // walkthrough). The legacy /coach/session/walkthrough page no longer
+      // exists; /coach/teach reads ?opening= and auto-kicks the walkthrough
+      // with its own DB-narration pipeline + chat + voice + picker chips.
       const params = new URLSearchParams();
-      params.set('subject', intent.subject);
+      params.set('opening', intent.subject);
       return {
-        path: withQuery('/coach/session/walkthrough', params),
+        path: withQuery('/coach/teach', params),
         ackMessage: `Loading the ${match.opening.name} walkthrough…`,
         intent,
       };
@@ -373,7 +377,7 @@ Reply with ONLY one word from the list above.`;
             : classified === 'puzzle'
               ? '/coach/session/puzzle'
               : classified === 'walkthrough'
-                ? `/coach/session/walkthrough?subject=${encodeURIComponent(text)}`
+                ? `/coach/teach?opening=${encodeURIComponent(text)}`
                 : `/coach/session/middlegame?subject=${encodeURIComponent(text)}`,
           ackMessage: 'Got it — setting up a session.',
           intent: { kind: classified === 'explain' ? 'explain-position' : classified === 'puzzle' ? 'puzzle' : classified === 'walkthrough' ? 'walkthrough' : 'continue-middlegame', raw: text },

@@ -95,8 +95,11 @@ describe('routeChatIntent', () => {
     });
     const found = await routeChatIntent('walk me through the Sicilian');
     expect(found).not.toBeNull();
-    expect(found!.path).toMatch(/^\/coach\/session\/walkthrough/);
-    expect(found!.path).toContain('subject=');
+    // Routes STRAIGHT to the main Learn-with-Coach surface — the legacy
+    // /coach/session/walkthrough page is gone.
+    expect(found!.path).toMatch(/^\/coach\/teach/);
+    expect(found!.path).not.toContain('/coach/session/walkthrough');
+    expect(found!.path).toContain('opening=');
   });
 
   it('"yes" after walkthrough-unavailable offer routes to play-against', async () => {
