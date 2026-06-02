@@ -18,6 +18,7 @@ export default tseslint.config(
       'e2e',
       'playwright.config.ts',
       'api',
+      'middleware.ts',
       'scripts',
       // Claude Code spawn_task worktrees live here; they duplicate the
       // src tree under a path that's outside tsconfig's include scope,

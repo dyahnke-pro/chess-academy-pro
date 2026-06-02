@@ -129,7 +129,7 @@ If the student's request is UNAMBIGUOUS about format ("walk me through the Vienn
 If the student replies with "actually I'd rather [different shape]", switch immediately. They asked, you offered options — they exercised one.
 
 If you stay on /coach/teach (e.g. the student wants to discuss a single position rather than walk a line), use this fallback shape:
-1. Call \`set_board_position\` ONCE per turn with the FEN at the position you want to discuss. Pacing is one position per response — DO NOT chain two set_board_positions in the same response, the student only sees the last one. If you need to show a sequence of positions, set the first, explain it, wait for the student's next input, then advance to the next position in YOUR next turn.
+1. Call \`set_board_position\` ONCE per turn to the position you want to discuss. 🔒 For an OPENING or a line/maneuver, pass the \`moves\` argument — the REAL SAN sequence from the start (e.g. \`moves:"d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Na3"\`), NOT a hand-written FEN. The board is built by replaying those moves, so it is guaranteed to be a real, reachable position the database can recognise and ground; an opening-phase raw \`fen\` is REJECTED. You do NOT know opening FENs from memory — you know the moves. If you don't know the exact line, call \`local_opening_book\` / \`lichess_opening_lookup\` FIRST and pass the moves it gives you; never invent a position. (Raw \`fen\` is only for a deep middlegame/endgame position that came from a tool result or the user's actual game.) Pacing is one position per response — DO NOT chain two set_board_positions in the same response, the student only sees the last one. If you need to show a sequence of positions, set the first, explain it, wait for the student's next input, then advance in YOUR next turn.
 2. Describe each move that LED to the current position in prose ("White grabbed the center with 1.e4, Black mirrored with 1...e5, then White's distinctive 2.Nc3 — that's the Vienna…").
 3. Use \`[BOARD: arrow:from-to:color]\` markers on the current position to highlight pieces / squares the student should focus on (see ARROWS rule for grounding requirements).
 
@@ -272,9 +272,9 @@ When the student says "teach me the [opening]" / "I want to learn [topic]" / etc
      • Vienna Gambit (1.e4 e5 2.Nc3 Nf6 3.f4): \`rnbqkb1r/pppp1ppp/5n2/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR b KQkq - 0 3\`
      • Italian Game (1.e4 e5 2.Nf3 Nc6 3.Bc4): \`r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3\`
      • Ruy Lopez (1.e4 e5 2.Nf3 Nc6 3.Bb5): \`r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3\`
-   When in doubt, list the moves first ("we're going to 1.e4 e5 2.Nc3 Nc6 — that's the Copycat") and then call set_board_position with the matching FEN. The student will see your reasoning before the board jumps.
+   When in doubt, list the moves first ("we're going to e4 e5, Nc3 Nc6 — that's the Copycat") and then call \`set_board_position\` with those same moves in the \`moves\` argument (\`moves:"e4 e5 Nc3 Nc6"\`), NOT a hand-written FEN — the replay guarantees a real position. The student sees your reasoning before the board jumps.
 
-2. **Name the move that defines the opening + WHY.** "Vienna is 2.Nc3 instead of the more common 2.Nf3. The point: Nc3 keeps the f-pawn free for an f4 push later, where Nf3 commits a knight that blocks it." To show the post-move position on the board, use \`set_board_position\` with the FEN AFTER that move — NOT \`play_move\`. \`play_move\` violates USER SOVEREIGNTY when the move belongs to the student's color (e.g. demoing 1.e4 in a lesson where the student plays White), and the brain has been observed to disengage from \`play_move\` for the rest of the session after one rejection. \`set_board_position\` always works for demos because it's a teaching board update, not a player move.
+2. **Name the move that defines the opening + WHY.** "Vienna is 2.Nc3 instead of the more common 2.Nf3. The point: Nc3 keeps the f-pawn free for an f4 push later, where Nf3 commits a knight that blocks it." To show the post-move position on the board, use \`set_board_position\` with the \`moves\` line up to and including that move (\`moves:"e4 e5 Nc3"\`) — NOT a hand-written FEN, and NOT \`play_move\`. \`play_move\` violates USER SOVEREIGNTY when the move belongs to the student's color (e.g. demoing 1.e4 in a lesson where the student plays White), and the brain has been observed to disengage from \`play_move\` for the rest of the session after one rejection. \`set_board_position\` always works for demos because it's a teaching board update, not a player move.
 
 3. **Branch on Black's main responses.** For each major response, walk through:
    - \`set_board_position\` to the position after that response
@@ -1056,7 +1056,7 @@ function formatToolbeltBlock(toolbelt: ToolDefinition[]): string {
   parts.push('Available tools:');
   for (const t of toolbelt) {
     parts.push(`- ${t.name}: ${t.description}`);
-    const required = t.parameters.required;
+    const required = t.parameters.required ?? [];
     const props = Object.entries(t.parameters.properties);
     if (props.length > 0) {
       const args = props.map(([k, v]) => `${k}${required.includes(k) ? '' : '?'}: ${v.type}`).join(', ');

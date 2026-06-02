@@ -133,6 +133,10 @@ describe('assembleEnvelope', () => {
     expect(identity).toMatch(/Starting the \{opening name\} walkthrough/);
     expect(identity).toMatch(/do NOT pre-narrate the moves/i);
     expect(identity).toMatch(/NEVER write move-number prefixes in spoken prose/i);
+    // "hallucinated board" fix (2026-06-02): an opening position is set via
+    // the real `moves` line (replayed), NEVER a hand-written FEN from memory.
+    expect(identity).toMatch(/pass the `moves` argument/);
+    expect(identity).toMatch(/an opening-phase raw `fen` is REJECTED/);
   });
 
   it('skips PHASE_NARRATION_ADDITION when suppressSurfaceMode=true on surface=phase-narration', () => {
