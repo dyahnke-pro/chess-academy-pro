@@ -925,6 +925,11 @@ export interface UserPreferences {
   // is the only writer.
   auditStreamUrl?: string | null;
   auditStreamSecret?: string | null;
+  // Productization Phase 1 — when true, PostHog product analytics is
+  // suppressed for this device (Settings → Privacy). Undefined/false =
+  // analytics on (only matters when VITE_POSTHOG_KEY is set; without a
+  // key analytics is a no-op regardless).
+  analyticsOptOut?: boolean | null;
   /**
    * Persistent "what the coach has learned about this student" notes.
    * Short natural-language observations emitted by the coach (via the

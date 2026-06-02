@@ -14,6 +14,7 @@ import { speechService } from './services/speechService';
 import { voiceService } from './services/voiceService';
 import { db } from './db/schema';
 import { installGlobalErrorHooks, installConsoleBackdoor, logAppAudit, loadAuditStreamConfig } from './services/appAuditor';
+import { initAnalytics } from './services/analytics';
 import { emitAppBootAudit } from './services/appBootAudit';
 import { AppLayout } from './components/ui/AppLayout';
 import { LoadingScreen } from './components/ui/LoadingScreen';
@@ -181,6 +182,12 @@ export function App(): JSX.Element {
         applyTheme(theme);
         setActiveTheme(theme);
         setActiveProfile(profile);
+
+        // Productization Phase 1 — start PostHog product analytics.
+        // No-op unless VITE_POSTHOG_KEY is set; honors the per-profile
+        // opt-out. Stays anonymous until auth lands (Phase 3) — never
+        // identify with the shared 'main' profile id.
+        initAnalytics({ optedOut: profile.preferences.analyticsOptOut === true });
 
         // Establish baseline strength so difficulty is adaptive from the
         // first session. Imported games are the source of truth; with no

@@ -26,6 +26,7 @@
  * never break the feature path that raised it.
  */
 import { db } from '../db/schema';
+import { mirrorAuditEvent } from './analytics';
 
 const APP_AUDIT_LOG_META_KEY = 'app-audit-log.v1';
 const APP_AUDIT_LOG_MAX_ENTRIES = 300;
@@ -895,6 +896,10 @@ export async function logAppAudit(
   // Opt-in remote stream — used for live-watch sessions where Claude
   // polls the backend for new entries. Off by default.
   void streamAuditEntry(filled);
+  // Productization Phase 1 — mirror curated high-signal kinds into
+  // PostHog. No-op unless VITE_POSTHOG_KEY is set and the user hasn't
+  // opted out; unmapped kinds return immediately. Never throws.
+  mirrorAuditEvent(filled);
 }
 
 // ─── Audit-stream config (Dexie-backed, was localStorage) ────────────

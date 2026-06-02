@@ -52,7 +52,7 @@ chess subreddit watches this and clicks the link. **Don't tell, show.**
 
 > **[0:54–0:60] CTA — landing page with pricing.**
 >
-> Caption: *"Free during beta. Lock in $2.99/month for life.
+> Caption: *"Free during beta. Lock in $7.99/month for life.
 > chessacademy.pro"*
 
 **Production tips:**
@@ -277,7 +277,7 @@ you can react to comments.
 > there. This is the coach that lives alongside.
 >
 > **Free during beta (4–6 weeks).** Anyone who signs up during beta
-> locks in $2.99/month for life. You can also unlock free forever by
+> locks in $7.99/month for life. You can also unlock free forever by
 > sharing a post about it — honor system, I check.
 >
 > Not on any socials myself, so your feedback here is the loudest
@@ -332,7 +332,7 @@ momentum matters more than absolute votes.
 > Imports your Chess.com/Lichess games. The coach analyzes every
 > move, narrates while you play, drills openings you actually face,
 > and surfaces patterns like "you lose 62% when queens trade early."
-> Free during beta — $2.99/mo locked for life.
+> Free during beta — $7.99/mo locked for life.
 
 **Gallery images** (in this order):
 
@@ -396,7 +396,7 @@ ask them; otherwise self-hunt.
 
 > Free during 6-week beta.
 >
-> Sign up during beta → $2.99/mo locked for life.
+> Sign up during beta → $7.99/mo locked for life.
 > Post about it publicly → free forever.
 >
 > [link]
