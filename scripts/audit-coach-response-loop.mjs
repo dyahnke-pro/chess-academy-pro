@@ -83,7 +83,7 @@ async function askOnce(page, prompt) {
   await page.locator('[data-testid="chat-send-btn"]').click();
   try {
     await page.waitForFunction((prev) => {
-      const ACK = /board'?s?\s+(?:is\s+)?set|you'?re\s+playing\s+(?:white|black)|position is set/i;
+      const ACK = /board'?s?\s+(?:is\s+)?set|you'?re\s+playing\s+(?:white|black)|position is set|taking too long|try again in a moment|please try again/i;
       const els = [...document.querySelectorAll('[data-testid="chat-message-assistant"]')];
       return els.some((e) => { const t = (e.textContent || '').replace(/^[A-Za-z]\s*/, '').trim(); return t.length > 8 && !prev.includes(t) && !ACK.test(t); });
     }, before, { timeout: BRAIN_TIMEOUT_MS });
@@ -95,7 +95,7 @@ async function askOnce(page, prompt) {
     // Exclude the set-board / move acknowledgment ("Board's set…",
     // "you're playing White") so it can never be mistaken for the
     // answer — deterministic signature, the real answers never contain it.
-    const ACK_SIG = /board'?s?\s+(?:is\s+)?set|you'?re\s+playing\s+(?:white|black)|position is set/i;
+    const ACK_SIG = /board'?s?\s+(?:is\s+)?set|you'?re\s+playing\s+(?:white|black)|position is set|taking too long|try again in a moment|please try again/i;
     const fresh = after.filter((t) => !beforeSet.has(t) && !ACK_SIG.test(t));
     // longest NEW non-ack bubble = the substantive answer (order-
     // independent; /coach/play renders newest-first, /coach/chat last).
@@ -150,11 +150,17 @@ async function drainAck(page, beforeTexts, budgetMs = 55000) {
   }
 }
 async function setBoard(page, fen) {
+  const target = fen.split(' ')[0];
   const beforeTexts = await snap(page);
   const input = page.locator('[data-testid="chat-text-input"]');
   await input.click(); await input.fill(`set the board to ${fen}`);
   await page.locator('[data-testid="chat-send-btn"]').click();
-  await drainAck(page, beforeTexts, 55000); // set-board ack is a guaranteed LLM reply (can be slow)
+  // Confirm the set via the BOARD (scrape), not the chat ack — the
+  // set-board ack frequently times out ("Coach is taking too long") even
+  // though the board IS set and the brain DOES see it (diagnosed
+  // 2026-06-02: it then answers Ra8# correctly). Poll the scraped board.
+  for (let i = 0; i < 45; i++) { await page.waitForTimeout(1000); if ((await scrapeFen(page)) === target) break; }
+  await drainAck(page, beforeTexts, 30000); // let any ack/timeout bubble land so it's in the next `before`
   return scrapeFen(page);
 }
 async function playMove(page, san) {
