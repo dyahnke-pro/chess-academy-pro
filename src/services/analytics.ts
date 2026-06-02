@@ -77,6 +77,13 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   'puzzle-skipped': 'puzzle_skipped',
   'repeat-mistake': 'repeat_mistake',
   'misconception-captured': 'misconception_captured',
+  // Activation funnel (build 3) — `games_imported` is the import milestone;
+  // paired with lesson_completed / coach_question_asked / strength_calibrated
+  // already above, PostHog can build the first-occurrence activation funnel.
+  'auto-import-completed': 'games_imported',
+  // In-app user bug report (build 1) — also flows here so reports land in
+  // PostHog alongside the audit-stream copy.
+  'user-report': 'user_report',
 };
 
 /** Map a forensic audit kind to its product-event name, or undefined
@@ -226,8 +233,10 @@ const CRASH_KINDS: ReadonlySet<AuditKind> = new Set<AuditKind>([
  * should look at — not an informational/graceful-fallback signal.
  */
 const DEFECT_KINDS: ReadonlySet<AuditKind> = new Set<AuditKind>([
-  // Runtime continuity (build 1)
+  // Runtime continuity + curated-fallback + empty-state detectors
   'continuity-error',
+  'curated-lesson-fallback',
+  'surface-empty-state',
   // Narration board-truth violations (a claim that's false on the board)
   'piece-on-square',
   'hanging-piece',

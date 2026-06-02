@@ -21,6 +21,7 @@ import { useStrictNarration } from '../../hooks/useStrictNarration';
 import { trimToSentences, isGenericAnnotationText } from '../../services/walkthroughNarration';
 import { generateWalkthroughNarrations } from '../../services/walkthroughLlmNarrator';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
+import { logAppAudit } from '../../services/appAuditor';
 import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation, AnalysisLine, LichessCloudEval } from '../../types';
 import { ArrowLeft, Play, Pause, Info } from 'lucide-react';
 
@@ -94,6 +95,23 @@ export function WalkthroughMode({
   // would break iOS Safari's user-gesture context for Web Speech API).
   const activeProfile = useAppStore((s) => s.activeProfile);
   const voiceEnabled = activeProfile?.preferences.voiceEnabled ?? true;
+
+  // Curated-lesson fallback detector (David 2026-06-02). Pro-rep openings MUST
+  // carry a hand-authored LessonScript (G9.3 Gate A) — if the legacy
+  // WalkthroughMode is rendering for a `pro-*` opening, a board-inaccurate
+  // auto-annotation fallback reached a real user (the GothamChess "pins the
+  // knight" bug class). Fire-and-forget defect → PostHog Error Tracking.
+  useEffect(() => {
+    if (opening.id.startsWith('pro-')) {
+      void logAppAudit({
+        kind: 'curated-lesson-fallback',
+        category: 'app',
+        source: 'WalkthroughMode',
+        summary: `Legacy walkthrough rendered for pro opening "${opening.id}" — expected a curated LessonScript (G9.3 Gate A)`,
+        context: opening.id,
+      });
+    }
+  }, [opening.id]);
 
   const isVariation = variationIndex !== undefined && variationIndex >= 0;
   const variation = customLine ?? (isVariation ? opening.variations?.[variationIndex] : undefined);

@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { LessonScaffold } from './LessonScaffold';
 import { voiceService } from '../../services/voiceService';
+import { logAppAudit } from '../../services/appAuditor';
 import { reportPlayableLineContinuity } from '../../services/continuityGuard';
 import { sanToSpeech } from '../../utils/sanToSpeech';
 import { resolveCoachNarration } from '../../utils/coachNarration';
@@ -129,6 +130,17 @@ export function PlayableLinePlayer({
   // Fire-and-forget; never affects playback.
   useEffect(() => {
     reportPlayableLineContinuity(line, { source: 'PlayableLinePlayer' });
+    // Empty-state detector: a played line that reaches the player with zero
+    // moves is a content/load defect (the rung shows nothing to play).
+    if (line.moves.length === 0) {
+      void logAppAudit({
+        kind: 'surface-empty-state',
+        category: 'app',
+        source: 'PlayableLinePlayer',
+        summary: `Playable line "${line.title}" reached the player with 0 moves`,
+        fen: line.fen,
+      });
+    }
   }, [line]);
 
   // Silent Discussion-Practice faucet — Practice mode feeds the shared

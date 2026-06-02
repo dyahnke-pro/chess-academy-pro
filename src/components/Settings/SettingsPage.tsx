@@ -20,6 +20,7 @@ import { Link } from 'react-router-dom';
 import { BoardGlowButton, BoardGlowSettings } from './BoardGlowSettings';
 import { NarrationAuditPanel } from './NarrationAuditPanel';
 import { AnalyticsAuditPanel } from './AnalyticsAuditPanel';
+import { BugReportPanel } from './BugReportPanel';
 import { ScrollHintBar } from '../Common/ScrollHintBar';
 import { APP_VERSION, BETA_MODE } from '../../utils/constants';
 import { hardRefresh } from '../../utils/hardRefresh';
@@ -1358,6 +1359,11 @@ function AboutTab(): JSX.Element {
               /api/audit-stream so Claude can watch in near-real time)
             - "Copy for Claude" — markdown export of the visible
               findings for pasting into a Claude Code session. */}
+      {/* In-app bug report — the human feedback channel (David 2026-06-02). */}
+      <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
+        <BugReportPanel />
+      </div>
+
       <div className="pt-4 border-t space-y-2" style={{ borderColor: 'var(--color-border)' }}>
         <div className="text-sm font-medium">Diagnostics &amp; audit log</div>
         <NarrationAuditPanel />

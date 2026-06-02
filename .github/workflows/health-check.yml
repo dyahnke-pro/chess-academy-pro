@@ -1,0 +1,26 @@
+name: prod-health-check
+
+# Synthetic uptime probe (David 2026-06-02). Pings prod + load-bearing API
+# endpoints every 30 min. On a critical failure the job fails, which emails
+# the repo owner — the zero-config "prod is down" alert.
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Probe prod
+        run: node scripts/health-check.mjs
+        env:
+          # Add AUDIT_STREAM_SECRET under Settings → Secrets → Actions so the
+          # audit-stream check runs; without it that check is skipped (non-fatal).
+          AUDIT_STREAM_SECRET: ${{ secrets.AUDIT_STREAM_SECRET }}

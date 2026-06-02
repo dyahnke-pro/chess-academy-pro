@@ -65,6 +65,19 @@ export type AuditKind =
   // doesn't point at the move it accompanies. Forwarded to PostHog Error
   // Tracking via the analytics defect bridge so it surfaces as an alert.
   | 'continuity-error'
+  // Curated-lesson fallback (David 2026-06-02). Fires when the legacy
+  // WalkthroughMode renders for an opening that should carry a hand-authored
+  // LessonScript (pro-* — G9.3 Gate A). The GothamChess "pins the knight"
+  // bug class — a board-inaccurate legacy fallback reaching a real user.
+  // Forwarded to PostHog Error Tracking as a defect.
+  | 'curated-lesson-fallback'
+  // A surface rendered an empty / failed-to-load state where content was
+  // expected (a played line with zero moves, a lesson that built no steps).
+  | 'surface-empty-state'
+  // In-app user bug report (David 2026-06-02). Emitted by BugReportPanel when
+  // a tester taps "Report a problem" — carries their note + recent defect
+  // context. Streams to the audit-stream AND PostHog (user_report event).
+  | 'user-report'
   // First-run / retroactive strength calibration (imports or skill picker)
   | 'strength-calibrated'
   // Voice instrumentation (WO-LEGACY-VOICE-01)
