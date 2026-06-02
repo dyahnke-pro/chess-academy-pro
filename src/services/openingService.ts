@@ -85,9 +85,11 @@ export async function searchOpenings(query: string): Promise<OpeningRecord[]> {
 
   const all = await db.openings.toArray();
 
-  // Normalized form (drop apostrophes/punctuation) so "Kings Indian"
-  // start-matches "King's Indian Defense".
-  const norm = (s: string): string => s.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  // Normalized form so "Kings Indian" start-matches "King's Indian
+  // Defense". Apostrophes are REMOVED (not spaced) — "King's" → "kings"
+  // (matching "Kings"), not "king s" — then other punctuation becomes a
+  // word separator.
+  const norm = (s: string): string => s.toLowerCase().replace(/['‘’]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
   const normQuery = norm(query);
 
   // Score every opening and keep matches
