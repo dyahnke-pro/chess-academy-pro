@@ -48,7 +48,7 @@ const OUT_DIR = `audit-reports/coach-response-loop-${stamp}`;
 const PMAP = { wP: 'P', wN: 'N', wB: 'B', wR: 'R', wQ: 'Q', wK: 'K', bP: 'p', bN: 'n', bB: 'b', bR: 'r', bQ: 'q', bK: 'k' };
 const STOCK_FALLBACK_RE = /can'?t verify which moves are sound|run (?:the position|it) through the engine|rather stay honest than guess/i;
 const log = (s) => console.log(s);
-const clean = (t) => (t || '').replace(/^[A-Za-z]\s*/, '').trim();
+const clean = (t) => (t || '').trim(); // snap() already removes the coach-badge prefix
 const lc = (s) => (s || '').toLowerCase();
 
 async function scrapeFen(page) {
@@ -71,7 +71,17 @@ async function scrapeFen(page) {
   return rows.join('/');
 }
 async function snap(page) {
-  return page.$$eval('[data-testid="chat-message-assistant"]', (els) => els.map((e) => (e.textContent || '').replace(/^[A-Za-z]\s*/, '').trim()));
+  // textContent of an assistant bubble = coach-badge avatar text + the
+  // message. Slice off the EXACT badge text (not a blind first-letter
+  // strip, which corrupted moves like "Ra8#" → "a8#" and failed the
+  // mate probe even though the coach was right).
+  return page.$$eval('[data-testid="chat-message-assistant"]', (els) => els.map((e) => {
+    const badge = e.querySelector('[data-testid="coach-badge"]');
+    const b = badge && badge.textContent ? badge.textContent : '';
+    let t = e.textContent || '';
+    if (b && t.startsWith(b)) t = t.slice(b.length);
+    return t.trim();
+  }));
 }
 /** Order-independent single send: wait for a NEW assistant bubble, stabilize, return text. */
 async function askOnce(page, prompt) {
@@ -85,7 +95,7 @@ async function askOnce(page, prompt) {
     await page.waitForFunction((prev) => {
       const ACK = /board'?s?\s+(?:is\s+)?set|you'?re\s+playing\s+(?:white|black)|position is set|taking too long|try again in a moment|please try again/i;
       const els = [...document.querySelectorAll('[data-testid="chat-message-assistant"]')];
-      return els.some((e) => { const t = (e.textContent || '').replace(/^[A-Za-z]\s*/, '').trim(); return t.length > 8 && !prev.includes(t) && !ACK.test(t); });
+      return els.some((e) => { const badge = e.querySelector('[data-testid="coach-badge"]'); const b = badge && badge.textContent ? badge.textContent : ''; let t = e.textContent || ''; if (b && t.startsWith(b)) t = t.slice(b.length); t = t.trim(); return t.length > 8 && !prev.includes(t) && !ACK.test(t); });
     }, before, { timeout: BRAIN_TIMEOUT_MS });
   } catch { return '(timeout)'; }
   let prevLen = -1, stable = 0, resp = '';
