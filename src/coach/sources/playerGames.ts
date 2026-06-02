@@ -19,11 +19,9 @@
  */
 import type { LivePlayerGamesContext } from '../types';
 import { detectOpening } from '../../services/openingDetectionService';
-import proGameReferencesData from '../../data/pro-game-references.json';
+import { getProGameReferenceDataSync } from '../../services/proGameReferenceData';
 import proRepertoireData from '../../data/pro-repertoires.json';
 import type { ProGameReference } from '../../types';
-
-const ALL_REFS = proGameReferencesData as unknown as ProGameReference[];
 
 /** App player id -> display name, from the pro roster. */
 const PLAYER_NAMES: Record<string, string> = Object.fromEntries(
@@ -65,6 +63,10 @@ export function loadPlayerGamesForLive(args: {
   /** When set (a pro opening surface), scope to this one pro opening. */
   proOpeningId?: string | null;
 }): LivePlayerGamesContext | null {
+  // Reads the in-memory cache primed by loadProGameReferenceData (awaited
+  // in coachService before this runs, and on boot by dataLoader). Empty
+  // until that resolves — the block is simply absent on a cold envelope.
+  const ALL_REFS = getProGameReferenceDataSync();
   // Fast path: a specific pro opening surface.
   if (args.proOpeningId) {
     const scoped = ALL_REFS.filter((g) => g.proOpeningId === args.proOpeningId && !studentLost(g));

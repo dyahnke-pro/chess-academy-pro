@@ -44,7 +44,10 @@ function argVal(flag, fallback) {
 const MAX_PER_VARIATION = Number(argVal('--max-per-variation', 5));
 
 const ROOT = process.cwd();
-const OUT_PATH = path.join(ROOT, 'src', 'data', 'pro-game-references.json');
+// Served from public/data (Vite copies public/ to the build root) and
+// fetched on demand by src/services/proGameReferenceData.ts — kept OUT of
+// the JS bundle so the growing reference set never inflates index.js.
+const OUT_PATH = path.join(ROOT, 'public', 'data', 'pro-game-references.json');
 const SOURCES = path.join(ROOT, 'data', 'sources');
 
 // chess.com username per app player id (the -chesscom / -trees / -deep
@@ -55,6 +58,7 @@ const USERNAME = {
   hikaru: 'hikaru',
   ericrosen: 'imrosen',
   samayraina: 'samayraina',
+  aman: 'chessbrah',
 };
 
 function slugify(s) {
@@ -113,9 +117,13 @@ let kept = 0;
 let dropped = 0;
 let idSeq = 0; // monotonic — guarantees globally-unique ids
 const perOpening = {};
+// chess.com game urls already added this run, so the deep source doesn't
+// re-add a game the trees source already shipped.
+const seenUrls = new Set();
 
 function pushGame(entry) {
   out.push(entry);
+  if (entry.url) seenUrls.add(entry.url);
   kept++;
   perOpening[entry.proOpeningId] = (perOpening[entry.proOpeningId] || 0) + 1;
 }
@@ -177,6 +185,59 @@ function ingestTrees(username) {
   }
 }
 
+// ─── Source 2: deep/<opening>-<variation>.json topModelGames (the breadth
+//     layer the header always promised but the code never wired). Full-PGN
+//     wins from the deep build, deduped against the trees source by url.
+//     Unlocks players who have -deep files but never had pick-model-games
+//     run (e.g. hikaru) and broadens every player's sample. ───────────────────
+function ingestDeep(username) {
+  const dir = path.join(SOURCES, `${username}-deep`);
+  if (!fs.existsSync(dir)) return;
+  for (const file of fs.readdirSync(dir).filter((f) => f.endsWith('.json'))) {
+    let j;
+    try { j = JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8')); } catch { continue; }
+    if (!Array.isArray(j.topModelGames) || j.topModelGames.length === 0) continue;
+    const resolved = resolvePro(j.openingId);
+    if (!resolved) {
+      console.warn(`  [skip] no pro opening for deep openingId="${j.openingId}" (${file})`);
+      continue;
+    }
+    const label = (j.variation && j.variation.label) || j.variationKey || 'Main line';
+    const variation = slugify(label);
+    const side = resolved.color;
+    let added = 0;
+    for (const g of j.topModelGames) {
+      if (added >= MAX_PER_VARIATION) break;
+      if (g.outcome === 'loss') continue;          // never cite the student losing
+      if (g.url && seenUrls.has(g.url)) continue;   // dedup vs the trees source
+      let clean;
+      try { clean = cleanPgn(g.pgn); } catch { dropped++; continue; }
+      if (studentLost(clean.result, side)) { dropped++; continue; }
+      const opponent = g.opponent || 'opponent';
+      pushGame({
+        id: `pgref-${APP_PLAYER}-${resolved.baseOpeningId}-${variation}-deep-${String(idSeq++).padStart(4, '0')}`,
+        playerId: APP_PLAYER,
+        openingId: resolved.baseOpeningId,
+        proOpeningId: resolved.proOpeningId,
+        variation,
+        variationLabel: label,
+        white: side === 'white' ? username : opponent,
+        black: side === 'black' ? username : opponent,
+        studentSide: side,
+        result: clean.result,
+        opponentRating: g.opponentRating ?? null,
+        date: g.date ?? null,
+        source: 'chess.com',
+        url: g.url ?? null,
+        eco: g.eco ?? null,
+        plyCount: clean.plyCount,
+        pgn: clean.pgn,
+      });
+      added++;
+    }
+  }
+}
+
 // ─── Source 3: otb/*.jsonl (real tournament games, rollout) ──────────────────
 function ingestOtb(username) {
   const dir = path.join(SOURCES, `${username}-otb`);
@@ -220,6 +281,7 @@ function ingestOtb(username) {
 const username = USERNAME[APP_PLAYER] || APP_PLAYER;
 console.log(`[refs] player=${APP_PLAYER} username=${username} maxPerVariation=${MAX_PER_VARIATION}`);
 ingestTrees(username);
+ingestDeep(username);
 ingestOtb(username);
 
 // ─── Merge into the existing committed JSON (scoped: replace only THIS

@@ -33,6 +33,7 @@ import { loadBookGroundingForLive } from './sources/bookGrounding';
 import { loadMiddlegamePlanForLive } from './sources/middlegamePlan';
 import { loadModelGamesForLive } from './sources/modelGames';
 import { loadPlayerGamesForLive } from './sources/playerGames';
+import { loadProGameReferenceData } from '../services/proGameReferenceData';
 import { deepseekProvider } from './providers/deepseek';
 import { anthropicProvider } from './providers/anthropic';
 import { COACH_TOOLS, getTool, getToolDefinitions } from './tools/registry';
@@ -495,6 +496,9 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   // ~2 hand-narrated model games alone. (David 2026-06-01.)
   if (!input.liveState.playerGames && (hasOpeningSignal || input.liveState.proOpeningId)) {
     try {
+      // Prime the reference cache (fetched from public/data, not bundled)
+      // so the synchronous loadPlayerGamesForLive read below sees it.
+      await loadProGameReferenceData();
       const games = loadPlayerGamesForLive({
         openingName: input.liveState.lichessSnapshot?.name,
         moveHistory: input.liveState.moveHistory ?? [],

@@ -1,10 +1,15 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 import { lookupPlayerGamesTool } from './lookupPlayerGames';
-import proGameReferencesData from '../../../data/pro-game-references.json';
+import proGameReferencesData from '../../../../public/data/pro-game-references.json';
+import { __setProGameReferenceCache } from '../../../services/proGameReferenceData';
 import type { ProGameReference } from '../../../types';
 
 const REFS = proGameReferencesData as unknown as ProGameReference[];
 const SAMPLE = REFS[0];
+
+// The tool awaits loadProGameReferenceData(); prime the cache with the
+// real shipped asset so it resolves without a fetch in vitest.
+beforeAll(() => __setProGameReferenceCache(REFS));
 
 describe('lookup_player_games tool', () => {
   it('is a read-only cerebellum tool', () => {

@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import proGameReferencesData from './pro-game-references.json';
+// Lives in public/data (served, not bundled) — import the real shipped
+// asset directly so this data-integrity gate validates exactly what ships.
+import proGameReferencesData from '../../public/data/pro-game-references.json';
 import proRepertoireData from './pro-repertoires.json';
 import type { ProGameReference } from '../types';
 

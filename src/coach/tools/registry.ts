@@ -26,6 +26,7 @@ import { lichessPuzzleFetchTool } from './cerebellum/lichessPuzzleFetch';
 import { lichessGameExportTool } from './cerebellum/lichessGameExport';
 import { localOpeningBookTool } from './cerebellum/localOpeningBook';
 import { lookupPlayerGamesTool } from './cerebellum/lookupPlayerGames';
+import { lookupPlayerOpeningMovesTool } from './cerebellum/lookupPlayerOpeningMoves';
 
 import { navigateToRouteTool } from './cerebrum/navigateToRoute';
 import { setIntendedOpeningTool } from './cerebrum/setIntendedOpening';
@@ -55,6 +56,7 @@ export const COACH_TOOLS: Tool[] = [
   lichessGameExportTool,
   localOpeningBookTool,
   lookupPlayerGamesTool,
+  lookupPlayerOpeningMovesTool,
   // Cerebrum
   navigateToRouteTool,
   setIntendedOpeningTool,

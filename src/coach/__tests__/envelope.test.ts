@@ -33,7 +33,7 @@ describe('assembleEnvelope', () => {
     expect(env.memory).toBeTruthy();
     expect(env.appMap.length).toBeGreaterThan(5);
     expect(env.liveState.surface).toBe('ping');
-    expect(env.toolbelt.length).toBe(24);
+    expect(env.toolbelt.length).toBe(25);
     expect(env.ask).toBe('hello');
   });
 
@@ -96,6 +96,32 @@ describe('assembleEnvelope', () => {
       input: { surface: 'teach', ask: 'q', liveState: { surface: 'teach' } },
     });
     expect(env.identity).not.toMatch(/TEACH MODE/);
+  });
+
+  it('teaches the brain to BUILD an opening plan from the data — prefer curated, ground every move, frame it UNBRANDED (coach-opening-teaching-plan)', () => {
+    const env = assembleEnvelope({
+      toolbelt: getToolDefinitions(),
+      input: { surface: 'teach', ask: 'teach me how Caruana plays the Caro-Kann', liveState: { surface: 'teach' } },
+    });
+    const identity = env.identity;
+    // Stage 1: curated first — only build it ourselves if we don't have it.
+    expect(identity).toMatch(/CURATED FIRST/);
+    expect(identity).toMatch(/start_walkthrough_for_opening/);
+    expect(identity).toMatch(/only build .+ when NO curated lesson exists/i);
+    // Stage 2: the data is the spine, the LLM only writes prose (G3).
+    expect(identity).toMatch(/DATA IS THE SPINE/);
+    expect(identity).toMatch(/lookup_player_games/);
+    expect(identity).toMatch(/local_opening_book/);
+    // Building a player's opening from their REAL games.
+    expect(identity).toMatch(/spine IS what he actually plays/i);
+    expect(identity).toMatch(/Still no games anywhere.+say so, don't fake it/i);
+    // The legal guardrail — build it, but never advertise the likeness.
+    expect(identity).toMatch(/DON'T BRAND IT — TEACH IT/);
+    expect(identity).toMatch(/never as that player's official or endorsed product/i);
+    // On-the-fly path: build from the Lichess player DB when we have no
+    // pre-built games, walking the player's actual moves ply-by-ply.
+    expect(identity).toMatch(/lookup_player_opening_moves/);
+    expect(identity).toMatch(/BUILD IT ON THE FLY from the Lichess player database/i);
   });
 
   it('skips PHASE_NARRATION_ADDITION when suppressSurfaceMode=true on surface=phase-narration', () => {

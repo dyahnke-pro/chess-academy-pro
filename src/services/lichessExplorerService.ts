@@ -6,6 +6,11 @@ import { logAppAudit } from './appAuditor';
  *  with their own timeout still get protection at the service edge. */
 const LICHESS_FETCH_TIMEOUT_MS = 8000;
 
+/** The per-player explorer indexes a cold player's games on demand and
+ *  can stream progress for a few seconds before the final aggregate —
+ *  give it more room than the snapshot endpoints. */
+const PLAYER_FETCH_TIMEOUT_MS = 15000;
+
 /** WO-REAL-FIXES — route every Lichess call through our own Edge
  *  proxies (`/api/lichess-explorer`, `/api/lichess-cloud-eval`)
  *  instead of the bare `explorer.lichess.ovh` host.
@@ -283,6 +288,83 @@ export async function fetchLichessExplorer(
   }
   recordExplorerSuccess();
   return response.json() as Promise<LichessExplorerResult>;
+}
+
+/**
+ * Fetch a SINGLE player's move distribution at a position from the
+ * Lichess per-player explorer (`source=player`). This is the on-the-fly
+ * engine for "how does <player> play this opening": it returns the moves
+ * that player actually plays here, with their white/draws/black counts,
+ * computed server-side across the player's whole Lichess history — so the
+ * coach can walk the most-played move ply-by-ply and build the spine live,
+ * with no pre-authored repertoire.
+ *
+ * `player` is a Lichess username; `color` is the side the player is on.
+ * Returns the same shape as the opening explorer (white/draws/black +
+ * moves[] + opening). On a COLD player Lichess streams progress as
+ * newline-delimited JSON before the final aggregate — we take the last
+ * complete line, which is the most complete result. Empty `moves` means
+ * "no games found" (the caller must NOT fabricate — G3).
+ */
+export async function fetchLichessPlayerExplorer(args: {
+  fen: string;
+  player: string;
+  color: 'white' | 'black';
+  /** Cap the number of candidate moves returned (default 10). */
+  maxMoves?: number;
+}): Promise<LichessExplorerResult> {
+  if (isLichessRateLimited()) {
+    throw new Error('lichess-rate-limited');
+  }
+  if (isCircuitOpen()) {
+    throw new Error('lichess-explorer-circuit-open');
+  }
+  const params = new URLSearchParams({
+    fen: args.fen,
+    source: 'player',
+    player: args.player,
+    color: args.color,
+    recentGames: '0',
+    moves: String(args.maxMoves ?? 10),
+  });
+  const url = withApiBase(`${EXPLORER_PROXY_PATH}?${params.toString()}`);
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      headers: { Accept: 'application/json' },
+      signal: AbortSignal.timeout(PLAYER_FETCH_TIMEOUT_MS),
+    });
+  } catch (err) {
+    recordExplorerFailure();
+    emitLichessFailure('lichessExplorerService.fetchLichessPlayerExplorer', url, err, null);
+    throw err;
+  }
+  if (!response.ok) {
+    recordExplorerFailure();
+    if (response.status === 429) {
+      recordLichessRateLimit(response, 'lichessExplorerService.fetchLichessPlayerExplorer');
+    }
+    let body: string | null = null;
+    try {
+      body = await response.text();
+    } catch {
+      body = null;
+    }
+    emitLichessFailure(
+      'lichessExplorerService.fetchLichessPlayerExplorer',
+      url,
+      new Error(`HTTP ${response.status}`),
+      response.status,
+      body,
+    );
+    throw new Error(`Explorer API error: ${response.status}`);
+  }
+  recordExplorerSuccess();
+  // The player endpoint may stream NDJSON (cold-index progress) — take the
+  // last complete JSON object, which is the most complete aggregate.
+  const text = await response.text();
+  const lastLine = text.trim().split('\n').filter(Boolean).pop() ?? '{}';
+  return JSON.parse(lastLine) as LichessExplorerResult;
 }
 
 /**

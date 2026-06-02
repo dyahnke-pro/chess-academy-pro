@@ -1,10 +1,15 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 import { loadPlayerGamesForLive } from './playerGames';
-import proGameReferencesData from '../../data/pro-game-references.json';
+import proGameReferencesData from '../../../public/data/pro-game-references.json';
+import { __setProGameReferenceCache } from '../../services/proGameReferenceData';
 import type { ProGameReference } from '../../types';
 
 const REFS = proGameReferencesData as unknown as ProGameReference[];
 const SAMPLE = REFS[0];
+
+// The source reads the lazy-loaded cache synchronously; prime it with the
+// real shipped asset (no fetch in vitest).
+beforeAll(() => __setProGameReferenceCache(REFS));
 
 describe('loadPlayerGamesForLive', () => {
   it('returns null when no opening can be resolved', () => {
