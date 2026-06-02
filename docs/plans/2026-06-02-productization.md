@@ -149,6 +149,15 @@ affect the running app).
   messages. (David)
 - 2026-06-02 — Cost caps (`llm-usage-cap-audit.md`) are a PAYWALL DEPENDENCY,
   not optional — flat price + unlimited AI + free trial = margin/abuse risk.
+- 2026-06-02 — **First-run flow: Login → auto-start 7-day trial → full app →
+  trial ends → paywall pops.** Trial starts automatically on signup (lowest
+  friction); the wall only appears at trial expiry. (David)
+- 2026-06-02 — **Beta cohort = RevenueCat promotional entitlements** (granted from
+  the RC dashboard; flows through the same `isPro` check, no app code). The
+  trial→paywall flow is the primary path for everyone else. (David)
+- 2026-06-02 — Vercel "Ignored Build Step" (build only `main`) is WORKING — the
+  PR #708 preview deploy was skipped/ignored, so branch+PR work does NOT burn the
+  Vercel build cap. Branch-based productization work is safe on that front.
 - 2026-06-02 — Stays on a branch + draft PR, NOT straight to `main`: half-built
   auth/paywall must not reach beta testers' production app. Overrides the usual
   push-to-main default for this multi-phase feature. Confirm cutover with David.

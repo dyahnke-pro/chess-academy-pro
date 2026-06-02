@@ -7,6 +7,9 @@ interface ImportMetaEnv {
   readonly VITE_POSTHOG_KEY?: string;
   /** PostHog ingestion host. Defaults to US cloud when unset. */
   readonly VITE_POSTHOG_HOST?: string;
+  /** Master switch for the hard paywall gate. `'true'` makes the gate
+   *  LIVE (locks non-Pro users out of the whole app). Dormant otherwise. */
+  readonly VITE_PAYWALL_ENABLED?: string;
 }
 
 declare const __ANTHROPIC_KEY__: string;
