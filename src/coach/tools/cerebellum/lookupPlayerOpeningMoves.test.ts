@@ -64,11 +64,31 @@ describe('lookup_player_opening_moves tool', () => {
     expect(res.moves[0].avgOpponentRating).toBe(3006);
   });
 
-  it('resolves a famous name to a verified Lichess username', async () => {
+  it('resolves famous names to their LIVE-VERIFIED active Lichess handles', async () => {
+    const cases: [string, string][] = [
+      ['Carlsen', 'DrNykterstein'],
+      ['magnus', 'DrNykterstein'],
+      ['Firouzja', 'alireza2003'],
+      ['Nepo', 'may6enexttime'],
+      ['Nepomniachtchi', 'may6enexttime'],
+      ['Artemiev', 'Vladimirovich9000'],
+      ['Anish Giri', 'AnishGiri'],
+      ['Nihal', 'nihalsarin'],
+      ['Andrew Tang', 'penguingm1'],
+      ['Eric Rosen', 'EricRosen'],
+    ];
+    for (const [name, handle] of cases) {
+      mockFetch({ white: 1, draws: 0, black: 0, moves: [], opening: null });
+      const r = await lookupPlayerOpeningMovesTool.execute({ player: name, color: 'white', fen: START_FEN });
+      expect(r.ok).toBe(true);
+      expect((r.result as { player: string }).player).toBe(handle);
+    }
+  });
+
+  it('passes through an unknown raw username unchanged', async () => {
     mockFetch({ white: 1, draws: 0, black: 0, moves: [], opening: null });
-    const r = await lookupPlayerOpeningMovesTool.execute({ player: 'Carlsen', color: 'white', fen: START_FEN });
-    expect(r.ok).toBe(true);
-    expect((r.result as { player: string }).player).toBe('DrNykterstein');
+    const r = await lookupPlayerOpeningMovesTool.execute({ player: 'SomeRandomUser123', color: 'white', fen: START_FEN });
+    expect((r.result as { player: string }).player).toBe('SomeRandomUser123');
   });
 
   it('black-side win% counts black wins as favourable', async () => {

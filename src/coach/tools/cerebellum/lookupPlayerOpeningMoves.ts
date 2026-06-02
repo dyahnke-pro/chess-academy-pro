@@ -29,7 +29,13 @@ import type { Tool } from '../../types';
  *  only well-established public mains, never an unconfirmed alt/smurf.
  *  Anything not here falls through to treating `player` as a raw
  *  Lichess username. */
+// Every mapping below was LIVE-VERIFIED (2026-06-02) to resolve to an
+// account with a rich explorer history on the Lichess /player endpoint —
+// the famous players' real-NAME handles mostly have ~0 games (they play
+// chess.com or under these active handles), so name->active-handle is what
+// makes "teach me how <pro> plays X" actually return data.
 const PRO_LICHESS_USERNAMES: Record<string, string> = {
+  // World #1 / elite OTB who are ALSO active on Lichess under known handles.
   carlsen: 'DrNykterstein',
   'magnus carlsen': 'DrNykterstein',
   magnus: 'DrNykterstein',
@@ -38,6 +44,23 @@ const PRO_LICHESS_USERNAMES: Record<string, string> = {
   'alireza firouzja': 'alireza2003',
   alireza: 'alireza2003',
   alireza2003: 'alireza2003',
+  nepomniachtchi: 'may6enexttime', // Ian Nepomniachtchi (4.5k games)
+  nepo: 'may6enexttime',
+  artemiev: 'Vladimirovich9000', // Vladislav Artemiev (5.5k)
+  'vladislav artemiev': 'Vladimirovich9000',
+  // Players whose REAL-NAME Lichess account is the active one.
+  'nihal sarin': 'nihalsarin',
+  nihal: 'nihalsarin',
+  giri: 'AnishGiri',
+  'anish giri': 'AnishGiri',
+  zhigalko: 'Zhigalko_Sergei',
+  'sergei zhigalko': 'Zhigalko_Sergei',
+  'eric rosen': 'EricRosen',
+  rosen: 'EricRosen',
+  // Streamers / content creators active on Lichess.
+  'andrew tang': 'penguingm1',
+  penguin: 'penguingm1',
+  penguingm1: 'penguingm1',
 };
 
 function resolveUsername(player: string): string {
