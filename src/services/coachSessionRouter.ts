@@ -204,8 +204,13 @@ export async function routeChatIntent(
         // "let's do it" automatically routes into /coach/session/play-against
         // via the affirmation-after-proposal path at the top of
         // routeChatIntent.
+        // Don't imply the name IS a real opening (audit 2026-06-02: a
+        // FAKE opening like "Fischer-Spassky Quantum Attack" got
+        // "...yet. Want to play it?", which reads as if it exists). Keep
+        // the "Want to play..." hook (ASSISTANT_GAME_PROPOSAL_RE routes
+        // the next "yes" into play-against) but qualify it.
         return {
-          ackMessage: `I don't have a ready-made walkthrough for "${intent.subject}" yet. Want to play it against me so you can learn it in-game?`,
+          ackMessage: `I don't have a guided walkthrough for "${intent.subject}", and I'm not sure it's a standard opening I recognize. If it is a real line, want to play it against me so you can learn it in-game?`,
           intent,
         };
       }

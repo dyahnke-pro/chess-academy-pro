@@ -85,6 +85,11 @@ export async function searchOpenings(query: string): Promise<OpeningRecord[]> {
 
   const all = await db.openings.toArray();
 
+  // Normalized form (drop apostrophes/punctuation) so "Kings Indian"
+  // start-matches "King's Indian Defense".
+  const norm = (s: string): string => s.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  const normQuery = norm(query);
+
   // Score every opening and keep matches
   const scored: Array<{ opening: OpeningRecord; score: number }> = [];
   for (const o of all) {
@@ -96,7 +101,14 @@ export async function searchOpenings(query: string): Promise<OpeningRecord[]> {
     // Fuzzy name match
     const s = fuzzyScore(query, o.name);
     if (s !== null) {
-      scored.push({ opening: o, score: s });
+      // Start-of-name bonus: a query matching the START of the opening's
+      // own name ("Kings Indian" → "King's Indian Defense") ranks ABOVE a
+      // mid-name match ("Benoni Defense: King's Indian System"). Without
+      // it, the alphabetical tiebreak floats Benoni/English "...King's
+      // Indian Formation" above the real King's Indian Defense (audit
+      // 2026-06-02).
+      const startsBonus = normQuery && norm(o.name).startsWith(normQuery) ? -100 : 0;
+      scored.push({ opening: o, score: s + startsBonus });
     }
   }
 
