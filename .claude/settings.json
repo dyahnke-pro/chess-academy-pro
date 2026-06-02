@@ -5,6 +5,10 @@
         "hooks": [
           {
             "type": "command",
+            "command": "node scripts/session-ensure-deps.mjs"
+          },
+          {
+            "type": "command",
             "command": "node scripts/session-secrets.mjs"
           }
         ]
