@@ -53,8 +53,23 @@ async function askOnce(page, prompt) {
 }
 async function gotoS(page, path, mount) { await page.goto(`${BASE_URL}${path}`, { waitUntil: 'domcontentloaded', timeout: 30_000 }); if (mount) await page.locator(`[data-testid="${mount}"]`).waitFor({ timeout: 20_000 }).catch(() => {}); await page.waitForTimeout(4000); try { if (await page.locator('[data-testid="page-help-modal"]').count()) await page.keyboard.press('Escape'); } catch {} }
 async function pickWhite(page) { try { const cs = page.locator('[data-testid="color-selector"]'); if (await cs.count()) { const w = page.getByRole('button', { name: /white/i }); if (await w.count()) await w.first().click().catch(() => {}); await page.waitForTimeout(2000); } } catch {} }
-async function setBoard(page, fen) { const target = fen.split(' ')[0]; const input = page.locator('[data-testid="chat-text-input"]'); await input.click(); await input.fill(`set the board to ${fen}`); await page.locator('[data-testid="chat-send-btn"]').click(); for (let i = 0; i < 40; i++) { await page.waitForTimeout(1000); if ((await scrapeFen(page)) === target) break; } await page.waitForTimeout(8000); return scrapeFen(page); }
-async function playMove(page, san) { const before = await scrapeFen(page); const input = page.locator('[data-testid="chat-text-input"]'); await input.click(); await input.fill(`play ${san}`); await page.locator('[data-testid="chat-send-btn"]').click(); for (let i = 0; i < 20; i++) { await page.waitForTimeout(800); const now = await scrapeFen(page); if (now && now !== before) break; } await page.waitForTimeout(5000); return scrapeFen(page); }
+// Drain the coach's set/move ACK (a position description / move
+// rejection / "your move") so it FULLY lands in the DOM before the next
+// ask() snapshots `before` — otherwise it pollutes the next answer and
+// shifts every play capture by one (the 2026-06-02 offset).
+async function drainAck(page, beforeTexts, budgetMs = 28000) {
+  const beforeSet = new Set(beforeTexts); const t0 = Date.now(); let prev = -1, stable = 0;
+  while (Date.now() - t0 < budgetMs) {
+    await page.waitForTimeout(700);
+    const a = await snap(page); const fresh = a.filter((t) => !beforeSet.has(t));
+    if (!fresh.length) continue;
+    const longest = fresh.reduce((m, t) => Math.max(m, t.length), 0);
+    if (longest > 15 && longest === prev) { stable++; if (stable >= 3) return; } else stable = 0;
+    prev = longest;
+  }
+}
+async function setBoard(page, fen) { const target = fen.split(' ')[0]; const beforeTexts = await snap(page); const input = page.locator('[data-testid="chat-text-input"]'); await input.click(); await input.fill(`set the board to ${fen}`); await page.locator('[data-testid="chat-send-btn"]').click(); for (let i = 0; i < 40; i++) { await page.waitForTimeout(1000); if ((await scrapeFen(page)) === target) break; } await drainAck(page, beforeTexts); return scrapeFen(page); }
+async function playMove(page, san) { const before = await scrapeFen(page); const beforeTexts = await snap(page); const input = page.locator('[data-testid="chat-text-input"]'); await input.click(); await input.fill(`play ${san}`); await page.locator('[data-testid="chat-send-btn"]').click(); for (let i = 0; i < 20; i++) { await page.waitForTimeout(800); const now = await scrapeFen(page); if (now && now !== before) break; } await drainAck(page, beforeTexts, 20000); return scrapeFen(page); }
 
 function rec(round, surface, category, prompt, answer, fen, truth) {
   transcript.push({ round, surface, category, prompt, answer, fen: fen || null, truth: truth || null });
