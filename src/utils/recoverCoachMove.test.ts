@@ -40,4 +40,25 @@ describe('recoverCoachMoveFromText', () => {
     const text = "I'll play Nf6 now; later d5 and c5 break the center.";
     expect(recoverCoachMoveFromText(AFTER_D4, text)).toBe('Nf6');
   });
+
+  it('uses the coach\'s INTENT-cued move, not a square it named about the opponent (the b5/castle bug)', () => {
+    // After 1.d4 d5 2.c4 e6 3.g3 Nf6 4.Bg2 Be7 5.Na3 — Black (coach) to move.
+    // The coach mentions White's knight "toward b5 or c2" then says it will
+    // CASTLE. The recovery must pick O-O (the stated move), never b5.
+    const fen = 'rnbqk2r/ppp1bppp/4pn2/3p4/2PP4/N5P1/PP2PPBP/R1BQK1NR b KQkq - 4 5';
+    const text =
+      'Na3 is unusual — the knight reroutes toward b5 or c2, keeping flexible. ' +
+      "I'll play 5...0-0, getting my king to safety and connecting my rooks.";
+    expect(recoverCoachMoveFromText(fen, text)).toBe('O-O');
+  });
+
+  it('normalises a castling move written with zeros and honours "My move:"', () => {
+    const fen = 'rnbqk2r/ppp1bppp/4pn2/3p4/2PP4/N5P1/PP2PPBP/R1BQK1NR b KQkq - 4 5';
+    expect(recoverCoachMoveFromText(fen, '**My move:** 0-0 — castle to safety.')).toBe('O-O');
+  });
+
+  it('falls back to the first legal SAN when the move precedes the cue', () => {
+    // "Nf6 … that's my move" — SAN before the cue; fallback still finds it.
+    expect(recoverCoachMoveFromText(AFTER_D4, "Nf6 develops the knight — that's my move.")).toBe('Nf6');
+  });
 });
