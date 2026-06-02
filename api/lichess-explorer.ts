@@ -40,6 +40,10 @@ const USER_AGENT_FALLBACK_CHAIN = [
 ];
 
 const PROXY_TIMEOUT_MS = 8_000;
+/** The per-player explorer indexes a player's games on demand and is far
+ *  slower (and more rate-limited) than the masters/lichess snapshots —
+ *  8s routinely 502s a cold player. Give source=player more room. */
+const PLAYER_TIMEOUT_MS = 22_000;
 
 async function attemptUpstream(
   upstreamUrl: string,
@@ -115,21 +119,30 @@ export default async function handler(req: Request): Promise<Response> {
     upstreamParams.set(k, v);
   }
   const upstreamUrl = `${EXPLORER_BASE}/${source}?${upstreamParams.toString()}`;
+  const timeoutMs = source === 'player' ? PLAYER_TIMEOUT_MS : PROXY_TIMEOUT_MS;
 
   // Try each UA in the fallback chain. Stop on the first non-4xx
   // response (or the first 200, whichever comes first). Capture each
   // attempt's status + a body sample so the client (and the audit
   // log) can see which UA worked or what Lichess actually said.
+  //
+  // For source=player the per-attempt timeout is long (22s, on-demand
+  // indexing) so we can only afford ONE attempt before Vercel's ~25s
+  // edge budget — the player endpoint answers our standard server UA,
+  // it's not the iOS-UA CDN-block case the fallback chain exists for.
+  const uaChain = source === 'player'
+    ? USER_AGENT_FALLBACK_CHAIN.slice(0, 1)
+    : USER_AGENT_FALLBACK_CHAIN;
   const attempts: Array<{ ua: string; status: number; bodySample: string }> = [];
   let lastBody = '';
   let lastStatus = 0;
-  for (let i = 0; i < USER_AGENT_FALLBACK_CHAIN.length; i += 1) {
-    const ua = USER_AGENT_FALLBACK_CHAIN[i];
+  for (let i = 0; i < uaChain.length; i += 1) {
+    const ua = uaChain[i];
     try {
       const result = await attemptUpstream(
         upstreamUrl,
         ua,
-        AbortSignal.timeout(PROXY_TIMEOUT_MS),
+        AbortSignal.timeout(timeoutMs),
       );
       attempts.push({
         ua: ua.slice(0, 80),

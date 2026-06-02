@@ -8,8 +8,10 @@ const LICHESS_FETCH_TIMEOUT_MS = 8000;
 
 /** The per-player explorer indexes a cold player's games on demand and
  *  can stream progress for a few seconds before the final aggregate —
- *  give it more room than the snapshot endpoints. */
-const PLAYER_FETCH_TIMEOUT_MS = 15000;
+ *  give it more room than the snapshot endpoints. Must sit ABOVE the
+ *  proxy's per-player upstream timeout (22s) so the client doesn't abort
+ *  while the edge function is still waiting on Lichess. */
+const PLAYER_FETCH_TIMEOUT_MS = 25000;
 
 /** WO-REAL-FIXES — route every Lichess call through our own Edge
  *  proxies (`/api/lichess-explorer`, `/api/lichess-cloud-eval`)
