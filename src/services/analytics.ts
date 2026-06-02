@@ -44,6 +44,9 @@ interface QueuedEvent {
   props?: Record<string, unknown>;
 }
 const preInitQueue: QueuedEvent[] = [];
+/** Exceptions captured before posthog-js loads (boot-time crashes are exactly
+ *  what we want to keep) — replayed on load. */
+const preInitExceptions: Array<{ error: unknown; props?: Record<string, unknown> }> = [];
 const PRE_INIT_QUEUE_LIMIT = 50;
 
 const DEFAULT_POSTHOG_HOST = 'https://us.i.posthog.com';
@@ -137,6 +140,9 @@ export function initAnalytics(opts?: { optedOut?: boolean }): void {
     .then(({ default: posthog }) => {
       posthog.init(key, {
         api_host: host,
+        // Reverse-proxy aware: the toolbar/links point at the real PostHog app
+        // even when events ingest through our first-party /ingest proxy.
+        ui_host: 'https://us.posthog.com',
         // SPA — we drive pageviews via the `route-changed` bridge.
         capture_pageview: false,
         // Explicit events only; no DOM autocapture noise.
@@ -161,6 +167,13 @@ function flushQueue(): void {
   for (const ev of preInitQueue.splice(0)) {
     try {
       client.capture(ev.name, ev.props);
+    } catch {
+      /* swallow */
+    }
+  }
+  for (const ex of preInitExceptions.splice(0)) {
+    try {
+      client.captureException(ex.error, ex.props);
     } catch {
       /* swallow */
     }
@@ -256,7 +269,14 @@ const DEFECT_KINDS: ReadonlySet<AuditKind> = new Set<AuditKind>([
 /** Send an exception to PostHog Error Tracking. Total — never throws. */
 export function captureException(error: unknown, props?: Record<string, unknown>): void {
   try {
-    if (optedOut || !client) return;
+    if (optedOut) return;
+    if (!client) {
+      // Queue boot-window crashes (posthog-js still loading) for replay.
+      if (initStarted && resolveKey() && preInitExceptions.length < PRE_INIT_QUEUE_LIMIT) {
+        preInitExceptions.push({ error, props });
+      }
+      return;
+    }
     client.captureException(error, props);
   } catch {
     /* swallow — crash reporting must never itself crash */
@@ -306,7 +326,12 @@ export function setAnalyticsOptOut(next: boolean): void {
  */
 export function mirrorAuditEvent(entry: AuditEntry): void {
   try {
-    if (optedOut || !enabled) return;
+    // NB: gate on opt-out ONLY, not on `enabled`. Early-boot events (app-boot
+    // → app_opened, the first route-changed) fire BEFORE posthog-js finishes
+    // its async load; `captureEvent`/`captureException` queue during that
+    // window and flush on load. Returning on `!enabled` here dropped the
+    // app_opened event entirely (the "someone opened the app" signal).
+    if (optedOut) return;
     // Crash + defect detection: forward error-class and defect-class kinds to
     // PostHog Error Tracking as exceptions (not product events) so they group
     // into alertable issues. `severity` distinguishes a JS crash from a
