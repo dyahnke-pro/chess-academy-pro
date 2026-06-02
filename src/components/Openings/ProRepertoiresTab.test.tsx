@@ -5,17 +5,19 @@ import { MotionConfig } from 'framer-motion';
 import { ProRepertoiresTab } from './ProRepertoiresTab';
 import type { ProPlayer } from '../../types';
 
-// Replace only getPlayers; ProPlayerCard pulls nothing else from the service.
+// Replace only getPlayersWithRepertoire (the tab's player source — names-only
+// pros are already filtered out by it). ProPlayerCard pulls nothing else from
+// the service; getOpeningCountsByPlayer stays real (reads the JSON).
 vi.mock('../../services/proRepertoireService', async () => {
   const actual = await vi.importActual<typeof import('../../services/proRepertoireService')>(
     '../../services/proRepertoireService',
   );
-  return { ...actual, getPlayers: vi.fn() };
+  return { ...actual, getPlayersWithRepertoire: vi.fn() };
 });
 
-import { getPlayers } from '../../services/proRepertoireService';
+import { getPlayersWithRepertoire } from '../../services/proRepertoireService';
 
-const mockGetPlayers = vi.mocked(getPlayers);
+const mockGetPlayers = vi.mocked(getPlayersWithRepertoire);
 
 const LEVY: ProPlayer = {
   id: 'gothamchess',

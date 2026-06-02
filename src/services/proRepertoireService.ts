@@ -45,6 +45,28 @@ export function getPlayers(): ProPlayer[] {
   return data.players;
 }
 
+/** Count of curated openings per player id, derived from the
+ *  pro-repertoires.json `openings` array. A names-only player (one
+ *  on the roster but with ZERO built openings) maps to 0 / absent. */
+export function getOpeningCountsByPlayer(): Record<string, number> {
+  const counts: Record<string, number> = {};
+  for (const op of data.openings) {
+    counts[op.playerId] = (counts[op.playerId] ?? 0) + 1;
+  }
+  return counts;
+}
+
+/** Players whose repertoire is COMPLETE enough to surface — i.e. they
+ *  carry at least one built opening. Names-only roster players (the
+ *  un-built pros kept as placeholders, ZERO openings) are hidden so
+ *  the user never taps into an empty pro page. David 2026-06-02:
+ *  "hide all pros with incomplete repertoires." A repertoire is
+ *  incomplete when the pro has no openings built yet. */
+export function getPlayersWithRepertoire(): ProPlayer[] {
+  const counts = getOpeningCountsByPlayer();
+  return data.players.filter((p) => (counts[p.id] ?? 0) > 0);
+}
+
 export function getPlayerById(playerId: string): ProPlayer | undefined {
   return data.players.find((p) => p.id === playerId);
 }
