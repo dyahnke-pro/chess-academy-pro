@@ -92,7 +92,9 @@ async function askOnce(page, prompt) {
     await page.waitForTimeout(700);
     const after = await snap(page);
     const fresh = after.filter((t) => !beforeSet.has(t));
-    const cur = fresh[fresh.length - 1] || after[after.length - 1] || '';
+    // longest NEW bubble = the substantive answer (order-independent;
+    // /coach/play renders newest-first, /coach/chat newest-last).
+    const cur = fresh.length ? fresh.reduce((a, b) => (b.length > a.length ? b : a)) : '';
     if (cur.length === prevLen) { stable++; if (stable >= 2) { resp = cur; break; } } else stable = 0;
     prevLen = cur.length; resp = cur;
   }
@@ -121,43 +123,43 @@ async function gotoSurface(page, path, mount) {
  *  `before` snapshot. Without this the next question reads the stale
  *  ack ("Board's set… your move") as if it were the answer (the pass-1
  *  false failures). Bounded so a silent move never hangs the run. */
-async function drainAck(page, beforeCount, growMs = 55000) {
+/** Drain the coach's set-board / move acknowledgment so it is FULLY in
+ *  the DOM before the next askLLM snapshots `before`. Order-INDEPENDENT:
+ *  stabilizes on the longest bubble whose text is NOT in `beforeTexts`
+ *  (the ack), regardless of whether the surface renders newest-first
+ *  (/coach/play reverses) or newest-last (/coach/chat). The earlier bug:
+ *  assuming newest == last picked the older of two new bubbles (the ack)
+ *  as the answer. */
+async function drainAck(page, beforeTexts, budgetMs = 55000) {
+  const beforeSet = new Set(beforeTexts);
   const t0 = Date.now();
-  let grew = false;
-  while (Date.now() - t0 < growMs) {
-    const c = await page.locator('[data-testid="chat-message-assistant"]').count();
-    if (c > beforeCount) { grew = true; break; }
-    await page.waitForTimeout(500);
-  }
-  if (!grew) return; // silent intent — nothing to drain
-  // The ack is an LLM-generated reply that streams in; stabilize its
-  // text so it is FULLY landed before the next askLLM snapshots `before`.
   let prev = -1, stable = 0;
-  const s0 = Date.now();
-  while (Date.now() - s0 < 14000) {
-    await page.waitForTimeout(600);
+  while (Date.now() - t0 < budgetMs) {
+    await page.waitForTimeout(700);
     const a = await snap(page);
-    const cur = a[a.length - 1] || '';
-    if (cur.length === prev) { stable++; if (stable >= 2) break; } else stable = 0;
-    prev = cur.length;
+    const fresh = a.filter((t) => !beforeSet.has(t));
+    if (!fresh.length) continue; // ack not appeared yet
+    const longest = fresh.reduce((m, t) => Math.max(m, t.length), 0);
+    if (longest > 15 && longest === prev) { stable++; if (stable >= 3) return; } else stable = 0;
+    prev = longest;
   }
 }
 async function setBoard(page, fen) {
-  const beforeCount = await page.locator('[data-testid="chat-message-assistant"]').count();
+  const beforeTexts = await snap(page);
   const input = page.locator('[data-testid="chat-text-input"]');
   await input.click(); await input.fill(`set the board to ${fen}`);
   await page.locator('[data-testid="chat-send-btn"]').click();
-  await drainAck(page, beforeCount, 55000); // set-board ack is a guaranteed LLM reply (can be slow)
+  await drainAck(page, beforeTexts, 55000); // set-board ack is a guaranteed LLM reply (can be slow)
   return scrapeFen(page);
 }
 async function playMove(page, san) {
   const before = await scrapeFen(page);
-  const beforeCount = await page.locator('[data-testid="chat-message-assistant"]').count();
+  const beforeTexts = await snap(page);
   const input = page.locator('[data-testid="chat-text-input"]');
   await input.click(); await input.fill(`play ${san}`);
   await page.locator('[data-testid="chat-send-btn"]').click();
   for (let i = 0; i < 22; i++) { await page.waitForTimeout(800); const now = await scrapeFen(page); if (now && now !== before) break; }
-  await drainAck(page, beforeCount, 22000); // coach reply narration may lag the move
+  await drainAck(page, beforeTexts, 24000); // coach reply narration may lag the move
   return scrapeFen(page);
 }
 async function clearIDB(page) {
