@@ -1860,17 +1860,18 @@ VOICE RULES (locked 2026-05-19):
 - Specific chess detail. Name squares, piece routes, named patterns. "the c3-knight reroutes via d2 to f1-g3" not "the knight goes to a good square".
 - Tactical verbs that match the action — threatens / pressures / kicks / blunts / outposts / hammers / undermines.
 - Cite by SAN inside prose. "After Bxc3 bxc3 Black has doubled c-pawns" not "the bishop trade gives doubled pawns".
+- NO move-number prefixes. Write "Nc3" or "the queen's knight to c3" — never "5.Nc3" or "5...Nc3". The voice reads "5." as "five" (robotic) and the count drifts across forks. Refer to moves by bare SAN or piece+square only.
 - BANNED: "powerful", "devastating", "the secret of", "key to success", "essential to remember", "we will see", "let me show you".
 
 For each move in the line, return:
 - text: ONE sentence (max ${pace === 'tour' ? 12 : 25} words) explaining the IDEA behind the move. First-person, second-person, conversational. Mention the SAN or its spoken form somewhere. ${pace === 'tour' ? 'TOUR MODE: keep narrations TIGHT — the student wants a quick playthrough, not a lecture.' : ''}Examples:
-  - "1.e4 grabs the center and frees the king's bishop and queen."
-  - "1...c5 — Black declines the symmetry and aims for asymmetric play on the queenside."
-  - "5.Nc3 develops the knight, defends e4, and prepares Bc4 or Qe2."
+  - "e4 grabs the center and frees the king's bishop and queen."
+  - "c5 — Black declines the symmetry and aims for asymmetric play on the queenside."
+  - "Nc3 develops the knight, defends e4, and prepares Bc4 or Qe2."
 - shortText: ONE sentence (max 18 words) — Brief mode variant of text. Strip the prose, keep the KEY chess idea (the threat / pattern / verdict). Mention the SAN. Same conventions as text but tighter. Examples:
-  - "1.e4 grabs the center and opens lines for the queen and bishop."
-  - "1...c5 — the Sicilian, asymmetric counterplay on the queenside."
-  - "5.Nc3 defends e4 and prepares Bc4."
+  - "e4 grabs the center and opens lines for the queen and bishop."
+  - "c5 — the Sicilian, asymmetric counterplay on the queenside."
+  - "Nc3 defends e4 and prepares Bc4."
 - arrows (OPTIONAL, 0-3 per move): the user wants arrows ONLY for two purposes:
   (a) THREATS — squares the moved piece NOW attacks / pressures / eyes (Bc4 → f7, Nf3 → e5, c5 → d4).
   (b) LOOK-AHEAD — the next critical square on the line we're walking (Re1 → e8 because the rook will land there in 2 moves; Nc3 → d5 because the knight is going to d5 next).
@@ -1942,7 +1943,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     narration = {
       intro: `${entry.canonicalName} — book moves from the Lichess opening database. Quick walkthrough of the canonical line.`,
       outro: `That's the canonical book line for the ${entry.canonicalName}. Drill the moves to lock them in, or ask for a deeper variation.`,
-      ideas: positions.map((p) => ({ text: synthesizeIdeaFromSan(p.san, p.movedBy, p.ply) })),
+      ideas: positions.map((p) => ({ text: synthesizeIdeaFromSan(p.san, p.movedBy) })),
     };
   }
 
@@ -1974,18 +1975,20 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     let extChildren: ChildWrap[] = [];
     for (let j = b.extensionMoves.length - 1; j >= 0; j -= 1) {
       const extSan = b.extensionMoves[j];
-      // Branch ply 0 is the branch's first move (b.san), so the
-      // extension's first move is ply 1 from the branch's perspective.
-      // From the spine's perspective the extension's j-th ply is at
-      // ply positions.length + 1 + j. Whose turn is determined by
-      // that absolute ply count's parity.
+      // The branch's first move (b.san) sits at spine ply
+      // positions.length (the next ply after the canonical line). The
+      // j-th extension move therefore sits at the 0-indexed spine ply
+      // positions.length + 1 + j, so its side follows the SAME parity
+      // rule the spine uses (positions[i].movedBy = i % 2 === 0 ?
+      // 'white' : 'black'). Getting this right keeps node.movedBy — and
+      // the "White/Black castles" wording — correct on extension nodes.
       const absolutePly = positions.length + 1 + j;
       const extMovedBy: 'white' | 'black' =
-        absolutePly % 2 === 0 ? 'black' : 'white';
+        absolutePly % 2 === 0 ? 'white' : 'black';
       const ideaEntry = extIdeas[j];
       const text =
         (typeof ideaEntry === 'object' && ideaEntry?.text?.trim()) ||
-        synthesizeIdeaFromSan(extSan, extMovedBy, absolutePly - 1);
+        synthesizeIdeaFromSan(extSan, extMovedBy);
       const shortText =
         typeof ideaEntry === 'object' && ideaEntry?.shortText?.trim()
           ? ideaEntry.shortText.trim()
@@ -2034,7 +2037,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       // Tolerate legacy string-shaped entries (older cached gens
       // pre-arrows extension might still produce them).
       (typeof ideaEntry === 'string' ? (ideaEntry as string).trim() : '') ||
-      synthesizeIdeaFromSan(p.san, p.movedBy, p.ply);
+      synthesizeIdeaFromSan(p.san, p.movedBy);
     const shortText =
       typeof ideaEntry === 'object' && ideaEntry?.shortText?.trim()
         ? ideaEntry.shortText.trim()
@@ -2140,7 +2143,7 @@ function buildFallbackTreeFromDb(
   for (let i = entry.moves.length - 1; i >= 0; i -= 1) {
     const san = entry.moves[i];
     const movedBy: 'white' | 'black' = i % 2 === 0 ? 'white' : 'black';
-    const idea = synthesizeIdeaFromSan(san, movedBy, i);
+    const idea = synthesizeIdeaFromSan(san, movedBy);
     const node: WalkthroughTreeNode = {
       san,
       movedBy,
@@ -2181,35 +2184,81 @@ function inferStudentSideFromName(name: string): 'white' | 'black' {
   return 'white';
 }
 
-/** Build a short idea sentence for a SAN at the given ply index.
- *  Keeps the spoken narration meaningful even without LLM gen.
+/** Build a short idea sentence for a SAN — the template fallback used
+ *  only when the LLM narration call is unavailable.
  *
- *  Per-piece templates that DESCRIBE WHAT THE MOVE DOES rather than
- *  just announcing the SAN. The student wants commentary on the
- *  move's purpose; an empty fallback that just reads the move number
- *  is worse — it tells them nothing. User: "I don't want fen calls
- *  I want descriptions of what the moves do." */
+ *  Names the ACTUAL destination square and reacts to captures / checks
+ *  so the spoken line is concrete, not a stuck-record "pawn move
+ *  shaping the center" on every push. The per-move pick is keyed off
+ *  the square so the same move is stable while different moves diverge.
+ *  Per-piece templates DESCRIBE WHAT THE MOVE DOES rather than just
+ *  announcing the SAN. User: "I don't want fen calls I want
+ *  descriptions of what the moves do." */
 function synthesizeIdeaFromSan(
   san: string,
   movedBy: 'white' | 'black',
-  plyIndex: number,
 ): string {
-  const moveNumber = Math.floor(plyIndex / 2) + 1;
-  const prefix = movedBy === 'white' ? `${moveNumber}.${san}` : `${moveNumber}…${san}`;
-  const piece = san[0];
+  // No move-number prefix — the voice reads "5." as "five" and the
+  // count drifts off across forks (David 2026-06-02). Lead with the
+  // bare SAN; the board shows the move number, the voice describes the
+  // idea.
+  const prefix = san;
+  const side = movedBy === 'white' ? 'White' : 'Black';
   if (san === 'O-O' || san === '0-0') {
-    return `${prefix} — ${movedBy === 'white' ? 'White' : 'Black'} castles kingside, tucking the king behind the wall and connecting the rooks.`;
+    return `${prefix} — ${side} castles kingside, tucking the king to safety and connecting the rooks.`;
   }
   if (san === 'O-O-O' || san === '0-0-0') {
-    return `${prefix} — ${movedBy === 'white' ? 'White' : 'Black'} castles queenside, an aggressive choice that activates the rook on the d-file.`;
+    return `${prefix} — ${side} castles queenside, bringing the rook to bear on the central d-file.`;
   }
-  if (piece === 'N') return `${prefix} — knight develops toward the center; standard opening principle.`;
-  if (piece === 'B') return `${prefix} — bishop activates and eyes the long diagonal; supports the central squares.`;
-  if (piece === 'R') return `${prefix} — rook lifts to a more active square, often preparing a file battle.`;
-  if (piece === 'Q') return `${prefix} — queen joins the action; mind the early development principles.`;
-  if (piece === 'K') return `${prefix} — king step; usually a sign castling has happened or the position is in a late-opening transition.`;
-  // Pawn move (lowercase first char).
-  return `${prefix} — pawn move shaping the center and clearing lines for the pieces behind.`;
+  const piece = /^[NBRQK]/.test(san) ? san[0] : 'P';
+  const destMatch = san.match(/([a-h][1-8])(?:=[NBRQ])?[+#]?$/);
+  const dest = destMatch ? destMatch[1] : '';
+  const isCapture = san.includes('x');
+  const isCheck = /[+#]/.test(san);
+  // Two phrasings per piece, chosen by the destination square so the
+  // fallback varies move-to-move instead of repeating one sentence.
+  const variant = dest ? (dest.charCodeAt(0) + Number(dest[1])) % 2 : 0;
+  const pick = (a: string, b: string): string => (variant === 0 ? a : b);
+  const on = dest ? ` on ${dest}` : '';
+  const to = dest ? ` to ${dest}` : '';
+  if (isCheck) {
+    return `${prefix} — checks the king${dest ? ` from ${dest}` : ''}, forcing a reply before anything else.`;
+  }
+  if (piece === 'N') {
+    return isCapture
+      ? `${prefix} — the knight takes${on}, trading off a defender.`
+      : `${prefix} — ${pick(`knight to ${dest}, developing toward the center and eyeing key squares.`, `knight jumps${to}, hitting central squares and adding pressure.`)}`;
+  }
+  if (piece === 'B') {
+    return isCapture
+      ? `${prefix} — the bishop captures${on}, giving up the pair for structure or tempo.`
+      : `${prefix} — ${pick(`bishop${to}, raking a long diagonal toward the center.`, `bishop develops${to}, pinning or pressuring along its diagonal.`)}`;
+  }
+  if (piece === 'R') {
+    return isCapture
+      ? `${prefix} — the rook grabs${on}, winning the exchange or a pawn.`
+      : `${prefix} — ${pick(`rook swings${to}, claiming an open or soon-to-open file.`, `rook lifts${to}, preparing to double or contest the file.`)}`;
+  }
+  if (piece === 'Q') {
+    return isCapture
+      ? `${prefix} — the queen takes${on}; watch she isn't chased with tempo.`
+      : `${prefix} — ${pick(`queen${to}, joining the attack while keeping flexibility.`, `queen steps${to}, coordinating the pieces and eyeing weak squares.`)}`;
+  }
+  if (piece === 'K') {
+    return `${prefix} — king${to}, walking to safety or activating in the late opening.`;
+  }
+  // Pawn move.
+  if (isCapture) {
+    return `${prefix} — the pawn captures${on}, opening lines and reshaping the center.`;
+  }
+  const central = dest && (dest[0] === 'd' || dest[0] === 'e');
+  if (central) {
+    return `${prefix} — stakes a claim in the center${on}, fighting for space and open lines.`;
+  }
+  return pick(
+    `${prefix} — gains space${on}, supporting the center and freeing the pieces behind.`,
+    `${prefix} — a pawn break${on}, challenging the structure and opening the position.`,
+  );
 }
 
 /** Strip a leading move-recitation sentence from an intro string.
@@ -2290,7 +2339,7 @@ export function buildTrapWalkthroughTreeFromPgn(opts: {
     const node: WalkthroughTreeNode = {
       san: p.san,
       movedBy: p.movedBy,
-      idea: synthesizeIdeaFromSan(p.san, p.movedBy, p.ply),
+      idea: synthesizeIdeaFromSan(p.san, p.movedBy),
       children: nextChildren,
     };
     nextChildren = [{ node }];

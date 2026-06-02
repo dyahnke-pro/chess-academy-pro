@@ -485,6 +485,33 @@ function getModel(
     : DEEPSEEK_MODEL_MAP[task];
 }
 
+/** "Reasoning"/"thinking" models (deepseek-reasoner, Claude extended-
+ *  thinking variants) run in a mode that REJECTS a forced `tool_choice`
+ *  — DeepSeek returns `400 Thinking mode does not support this
+ *  tool_choice`, and Anthropic extended-thinking only permits
+ *  `tool_choice: auto`. */
+function isReasoningModel(model: string): boolean {
+  return /reasoner|thinking/i.test(model);
+}
+
+/** Resolve a model that is guaranteed to accept a forced `tool_choice`
+ *  for structured tool-use calls. If the task/user-preference resolves
+ *  to a reasoning model, swap in the provider's default — and if that
+ *  default is itself a reasoner, pin the known tool-capable base model.
+ *
+ *  Without this, a user whose Settings → Provider analysis pick is
+ *  `deepseek-reasoner` makes EVERY structured call (walkthrough
+ *  narration, drill/findMove/punish labels) 400 and silently fall back
+ *  to generic template prose. */
+function toolCapableModel(task: CoachTask, provider: AiProvider, model: string): string {
+  if (!isReasoningModel(model)) return model;
+  const fallback = provider === 'anthropic' ? ANTHROPIC_MODEL_MAP[task] : DEEPSEEK_MODEL_MAP[task];
+  if (isReasoningModel(fallback)) {
+    return provider === 'anthropic' ? 'claude-sonnet-4-6' : 'deepseek-chat';
+  }
+  return fallback;
+}
+
 // ── DeepSeek (OpenAI-compatible) ──
 
 async function callDeepSeekStream(
@@ -854,7 +881,11 @@ export async function getCoachStructuredResponse(
     const anthropicConfig = await getForcedProviderConfig('anthropic');
     if (anthropicConfig) {
       try {
-        const model = getModel(task, anthropicConfig.provider, anthropicConfig.preferredModel);
+        const model = toolCapableModel(
+          task,
+          anthropicConfig.provider,
+          getModel(task, anthropicConfig.provider, anthropicConfig.preferredModel),
+        );
         return await callAnthropicWithTool(
           anthropicConfig.apiKey,
           model,
@@ -875,7 +906,11 @@ export async function getCoachStructuredResponse(
   }
   const deepseekConfig = await getForcedProviderConfig('deepseek');
   if (deepseekConfig) {
-    const model = getModel(task, deepseekConfig.provider, deepseekConfig.preferredModel);
+    const model = toolCapableModel(
+      task,
+      deepseekConfig.provider,
+      getModel(task, deepseekConfig.provider, deepseekConfig.preferredModel),
+    );
     try {
       return await callDeepseekWithTool(
         deepseekConfig.apiKey,
