@@ -9,42 +9,47 @@ Bundle ID: `com.chessacademy.pro` · App name: **Chess Academy Pro**
 
 ---
 
-## ⏸️ RESUME HERE (paused 2026-06-03 midday — waiting on Apple signing backend)
+## ⏸️ RESUME HERE (paused 2026-06-03 evening — new-account signing not yet enabled)
 
-**Status: account is ACTIVE; blocked only on Apple's signing-service
-provisioning for the brand-new team.** Everything on our side is correct.
+**Status: 100% set up; blocked only on Apple enabling cert/profile generation
+for the same-day-new account.** Enrolled + paid + account ACTIVE this morning
+(2026-06-03). Everything is correct; just waiting on Apple's per-account
+signing provisioning (routinely ~24h for a brand-new account).
 
-What's confirmed working:
-- ✅ Apple Developer Program **active** (welcome email received; Xcode Accounts
-  panel shows **DAVID M YAHNKE — Developer Team — Admin — green Certificates**)
-- ✅ Repo on the Mac at `/Users/davidyahnke/chess-academy-pro`, Node 26, app
-  builds, `ios/` generated (Capacitor 8 **SPM** — open `App.xcodeproj`)
-- ✅ Signing & Capabilities → **Automatically manage signing** ✓, Team =
-  **DAVID M YAHNKE** (the real Developer Team, NOT "Personal Team")
-- ✅ No pending license agreement (checked developer.apple.com — none)
+Confirmed correct (do NOT redo):
+- ✅ Apple Developer Program active — Xcode Accounts shows **DAVID M YAHNKE —
+  Developer Team — Admin — green Certificates, Identifiers & Profiles**
+- ✅ Repo on Mac `/Users/davidyahnke/chess-academy-pro`, Node 26, app builds,
+  `ios/` generated (Capacitor 8 **SPM** → open `App.xcodeproj`)
+- ✅ Signing: **Automatically manage signing** ✓, Team = real **DAVID M YAHNKE**
+  (not Personal), Bundle ID `com.chessacademy.pro`
+- ✅ iPhone 14 Pro Max connected + **Developer Mode ON** + paired
+- ✅ No pending license agreement; account token refreshed (removed + re-added)
+- ✅ NOT a network issue (at home, no VPN); **Apple System Status all GREEN**
+  (Certificates/Profiles, Account, TestFlight all available)
 
-The ONLY blocker (a wait, not a bug):
-- ❌ Signing shows **"Communication with Apple failed / your team has no
-  devices"** + **"No profiles for 'com.chessacademy.pro' were found."** This is
-  Apple's signing backend not yet provisioned for the team (enrolled same day).
-  `Try Again` does nothing — it clears on Apple's clock (hours).
+The ONLY blocker (Apple-side, time-based):
+- ❌ Signing: **"Communication with Apple failed / your team has 0 provisioned
+  devices / No profiles for com.chessacademy.pro."** Xcode can't register the
+  device or create a profile because Apple hasn't enabled signing for the
+  hours-old account yet. Account / agreement / network / Developer-Mode all
+  ruled out. This is the textbook "account too new to sign" state → clears on
+  Apple's clock, usually within ~24h.
 
-**Resume tonight (the fix):**
-1. Xcode → **Settings → Accounts** → select the Apple ID → **–** remove → **+**
-   re-add (sign in) — forces a fresh sync now that Apple's caught up.
-2. App target → **Signing & Capabilities** → confirm Team = **DAVID M YAHNKE**,
-   errors now cleared.
-3. Destination dropdown → **Any iOS Device (arm64)** → **Product → Archive**.
-4. Organizer opens → **Distribute App → App Store Connect → Upload**.
-5. App Store Connect → **TestFlight** → Internal Testing → add yourself →
-   install the TestFlight app on the iPhone → test.
-   - (Do **Step 3** below — create the App Store Connect app record — if not
-     already done.)
-- Optional accelerant that sometimes wakes Apple's side early: plug the iPhone
-  in, tap "Trust," let Xcode register it (Window → Devices and Simulators).
+**Resume TOMORROW (2026-06-04) morning:**
+1. Open Xcode → **Signing & Capabilities** → **Try Again**. The X's should now
+   clear (account aged ~a day; Apple can generate the profile).
+2. Destination → **Any iOS Device (arm64)** → **Product → Archive**.
+3. Organizer → **Distribute App → App Store Connect → Upload**.
+4. App Store Connect → **TestFlight** → Internal Testing → add self → install
+   TestFlight app on the iPhone → test. (Create the App Store Connect app
+   record first — Step 3 below — if not already done.)
 
-🔑 Capacitor 8 = Swift Package Manager: open `ios/App/App.xcodeproj` (no
-`.xcworkspace`, no CocoaPods).
+If it STILL fails after ~24h: bypass local Xcode signing entirely with the
+**Codemagic** cloud build (`codemagic.yaml` — it signs on its own Mac using an
+App Store Connect API key generated in the browser, which works fine).
+
+🔑 Capacitor 8 = Swift Package Manager: open `ios/App/App.xcodeproj`.
 
 ---
 
