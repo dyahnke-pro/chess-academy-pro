@@ -91,6 +91,27 @@ describe('validateBoardClaims — pin geometry', () => {
   });
 });
 
+describe('validateBoardClaims — negation / absence (audit 2026-06-03 pass 7)', () => {
+  // The gate must NOT strip a TRUE statement about a piece being ABSENT.
+  const F6_KNIGHT = 'rnbqkb1r/pppppppp/5n2/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 1 2';
+  it('keeps "there is no knight on f6" when f6 is empty (true absence)', () => {
+    expect(validateBoardClaims('There is no knight on f6 to defend the king.', BUG_FEN).ok).toBe(true);
+  });
+  it('keeps the contraction form "you don\'t have a knight on f6"', () => {
+    expect(validateBoardClaims("You don't have a knight on f6 yet.", BUG_FEN).ok).toBe(true);
+  });
+  it('keeps "without a bishop on f6" / "no longer a rook on f6"', () => {
+    expect(validateBoardClaims('Without a bishop on f6, the dark squares are weak.', BUG_FEN).ok).toBe(true);
+    expect(validateBoardClaims('There is no longer a rook on f6.', BUG_FEN).ok).toBe(true);
+  });
+  it('FLAGS a FALSE absence claim ("no knight on f6" when f6 holds a knight)', () => {
+    expect(validateBoardClaims('There is no knight on f6.', F6_KNIGHT).ok).toBe(false);
+  });
+  it('still flags a presence lie ("the knight on f6" on an empty f6)', () => {
+    expect(validateBoardClaims('The knight on f6 guards the centre.', BUG_FEN).ok).toBe(false);
+  });
+});
+
 describe('validateBoardClaims — piece on square', () => {
   it('flags a piece named on an empty square', () => {
     // f6 is empty in BUG_FEN.

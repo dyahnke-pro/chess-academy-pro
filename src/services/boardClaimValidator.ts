@@ -69,6 +69,24 @@ const TYPE_TO_PIECE_WORD: Record<PieceSymbol, string> = {
  *  is still checked separately (it gates on present pieces). */
 const FUTURE_MARKER_RE = /\b(after|if|once|then|would|will|could|should|when|next|prepares?|preparing|plan(?:s|ning)?|threatens?|going to|about to)\b/i;
 
+/** Negation / absence cues. A piece-on-square phrase governed by one of
+ *  these asserts the piece is NOT there ("there is no knight on f6",
+ *  "without a bishop on f6", "you don't have a rook on f6") — the OPPOSITE
+ *  of a presence claim. Stripping those true-absence sentences as if they
+ *  claimed presence is a false positive that censors legitimate coaching
+ *  (audit 2026-06-03 pass 7). For a negated claim the violation inverts:
+ *  it's false only when the piece IS actually on the square. */
+const NEGATION_RE = /\b(?:no|not|never|without|none|nor|no\s+longer|cannot|lacks?|lacking|missing|absent)\b|[a-z]+n['’]t\b/i;
+
+/** Is the piece-on-square phrase at `idx` inside `sentence` governed by a
+ *  negation cue? Scoped to the current clause (after the last comma / dash)
+ *  so a negation in an earlier clause doesn't bleed across. */
+function isNegatedAt(sentence: string, idx: number): boolean {
+  const bounds = [sentence.lastIndexOf(',', idx), sentence.lastIndexOf(';', idx), sentence.lastIndexOf('—', idx), sentence.lastIndexOf(' - ', idx)];
+  const clauseStart = Math.max(-1, ...bounds) + 1;
+  return NEGATION_RE.test(sentence.slice(clauseStart, idx + 1));
+}
+
 function isSquare(s: string): s is Square {
   return /^[a-h][1-8]$/.test(s);
 }
@@ -325,7 +343,7 @@ export function validateBoardClaims(text: string, fen: string): BoardClaimResult
   // ── (2) PIECE-ON-SQUARE (present-tense clauses only) ──────────────
   for (const sentence of splitSentences(text)) {
     if (FUTURE_MARKER_RE.test(sentence)) continue; // hypothetical board — skip
-    const claims: Array<{ type: PieceSymbol; color?: 'w' | 'b'; square: string; raw: string }> = [];
+    const claims: Array<{ type: PieceSymbol; color?: 'w' | 'b'; square: string; raw: string; negated: boolean }> = [];
     const fwd = /\b(white|black)?\s*(pawn|knight|bishop|rook|queen|king)\s+(?:on|at)\s+([a-h][1-8])\b/gi;
     const rev = /\b(?:the\s+)?([a-h][1-8])\s*[-–]\s*(pawn|knight|bishop|rook|queen|king)\b/gi;
     let pm: RegExpExecArray | null;
@@ -335,6 +353,7 @@ export function validateBoardClaims(text: string, fen: string): BoardClaimResult
         color: pm[1] ? COLOR_WORD[pm[1].toLowerCase()] : undefined,
         square: pm[3].toLowerCase(),
         raw: pm[0].trim(),
+        negated: isNegatedAt(sentence, pm.index),
       });
     }
     while ((pm = rev.exec(sentence)) !== null) {
@@ -342,11 +361,21 @@ export function validateBoardClaims(text: string, fen: string): BoardClaimResult
         type: PIECE_WORD_TO_TYPE[pm[2].toLowerCase()],
         square: pm[1].toLowerCase(),
         raw: pm[0].trim(),
+        negated: isNegatedAt(sentence, pm.index),
       });
     }
     for (const c of claims) {
       if (!isSquare(c.square)) continue;
       const p = chess.get(c.square);
+      // Negated/absence claim ("no knight on f6"): it asserts the piece is
+      // NOT there, so it's only FALSE when the piece IS actually present.
+      // (An empty square makes the absence claim TRUE — never strip it.)
+      if (c.negated) {
+        if (p && p.type === c.type && (!c.color || p.color === c.color)) {
+          violations.push({ kind: 'piece-on-square', claim: c.raw, reason: `claims no ${TYPE_TO_PIECE_WORD[c.type]} on ${c.square}, but one is there` });
+        }
+        continue;
+      }
       if (!p) {
         violations.push({ kind: 'piece-on-square', claim: c.raw, reason: `${c.square} is empty` });
       } else if (p.type !== c.type) {
