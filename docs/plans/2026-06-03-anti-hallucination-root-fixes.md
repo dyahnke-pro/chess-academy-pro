@@ -66,4 +66,28 @@ and would cry wolf.
 - [x] FIX 1 — getCoachChatResponse internal gate + coachAgentRunner migration
 - [x] FIX 2 — comparative widen + SAN-shape guard
 - [x] FIX 3 — entity set
-- [ ] tests + ship-check gates green
+- [x] tests + ship-check gates green
+
+## Escalating audit campaign (David: "audit all night, each test harder")
+
+Instruments used (honest constraints): (1) the **wired-gate driver** — real
+`getCoachChatResponse` path with the LLM mocked as an adversary, which tests
+THIS branch's code (prod runs the old code; no LLM key here for a live
+coach); (2) **prod audit-stream pulls** (`/api/audit-stream`, secret present)
+— HTTP 200 but empty all night = app not open; (3) a **chess.js game engine**
+to play a real game and probe the gate at every position. A live 3-instrument
+Playwright run is owed once this lands on `main` (Vercel has the LLM key).
+
+| Pass | Focus | Result |
+|---|---|---|
+| 1 | basic board lies + fabricated stats | 14/14 caught |
+| 2 | **hunt** board-fact evasions | found+fixed the **skewer geometry gap** ("A skewers B and C") |
+| 3 | **play a game** — 91 positions × board-generated claims | 182/182 false caught, 91/91 true kept, 0 FP |
+| 4 | disguised & buried (between truths, inside `[VOICE:]`/TTS, buried stat) | 7/7 caught |
+| 5 | eval contradiction + FEN-keying (groundCoachReply paths) | 7/7 (incl. same sentence stripped on empty-f6, kept on knight-f6) |
+| 6 | formatting evasion (caps/space/comma) + arrow synthesis (G6) | 8/8, no evasion gaps |
+
+**128 tests green across 8 files.** One real bug found & fixed (skewer).
+Documented deferrals (measured tradeoffs, not blind patches): verb-separated
+prose forms ("the knight occupies f6") and the maxim false-positive ("a knight
+on f5 cannot be repelled") — widening verb detection raises the maxim-FP rate.
