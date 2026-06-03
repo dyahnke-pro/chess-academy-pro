@@ -28,6 +28,32 @@ each streaming dispatcher.
 - **A. Streaming spoken gate** — `gateSpokenSentence(sentence, fen)` in
   coachAnswerGates; wire usePhaseNarration + CoachGamePage dispatcher;
   refactor usePositionNarration onto it. (#1, #2)
+## Status (2026-06-03 — shipped on main)
+- **A. Streaming spoken gate — DONE** (`4b77e2d`): `isSpokenSentenceGrounded`
+  in coachAnswerGates; wired into usePositionNarration, usePhaseNarration,
+  CoachGamePage move-commentary dispatcher. Closes the streaming-TTS hole.
+- **B. Non-streaming paths — DONE**: middlegamePlanner PV (`4b77e2d`),
+  walkthroughLlmNarrator per-move (`4b77e2d`), player-stat gate into
+  openingSectionNarrator + coachFeatureService (`c5c2899`).
+- **C. Stockfish EVAL gate — DONE** (`c5c2899`): eval claims checked against
+  the in-context `evalCp` (no new engine call); contradicted sentences
+  dropped. Tactic gate stays AUDIT (out-of-vocab tactic ≠ provable lie;
+  dropping risks false-positives on legit prose — revisit only with a
+  tighter vocabulary).
+- **D. Idea-source gate — NOT STARTED** (the frontier). Bind concrete
+  plan/strategic claims to a DB line or book passage; drop unsourced.
+  Needs claim-classification (factual-vs-general-principle) first; v1 narrow.
+- **Content program — ONGOING**, not a code task: widen pre-authored
+  masterclass coverage so high-traffic asks bypass the LLM = literal 0.
+
+## Next-session pickup
+Board-fact + eval + player-stat classes are gated on every surface/turn
+incl. the streaming voice path. Residual = idea/plan-judgment (D) and
+unverifiable claim types. Start D with claim-classification; keep the
+verified-or-silent policy (drop unsourced, never invent).
+
+## Original phase plan (for reference)
+- **A. Streaming spoken gate** — `gateSpokenSentence(sentence, fen)`.
 - **B. Non-streaming ungated paths** — groundCoachReply into
   middlegamePlanner (#3), walkthroughLlmNarrator (#5, per-move fen),
   player-stat gate into openingSectionNarrator (#4) + coachFeatureService (#6).
