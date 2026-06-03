@@ -764,6 +764,20 @@ export function repairFindMoveStage(
         `findMove[${i}]: kept first of ${correctIndices.length} correct candidates`,
       );
     }
+    // Board-claim gate the prose: the prompt against the question FEN,
+    // each candidate's label+explanation against the FEN AFTER its move
+    // (that's the position the explanation describes).
+    q.prompt = gradeNarrationText(q.prompt, fen, 'openingGenerator.findMove') ?? q.prompt;
+    for (const c of validCandidates) {
+      let afterFen = fen;
+      try {
+        const probe = new Chess(fen);
+        probe.move(stripSanAnnotations(c.san));
+        afterFen = probe.fen();
+      } catch { /* keep fen */ }
+      c.label = gradeNarrationText(c.label, afterFen, 'openingGenerator.findMove') ?? c.label;
+      c.explanation = gradeNarrationText(c.explanation, afterFen, 'openingGenerator.findMove') ?? c.explanation;
+    }
     q.candidates = validCandidates;
     kept.push(q);
   }
@@ -928,6 +942,21 @@ export function repairPunishStage(
     // punishment — drop any board-false sentence against those exact FENs.
     lesson.whyBad = gradeNarrationText(lesson.whyBad, postInaccuracyFen, 'openingGenerator.punish') ?? lesson.whyBad;
     lesson.whyPunish = gradeNarrationText(lesson.whyPunish, postPunishFen, 'openingGenerator.punish') ?? lesson.whyPunish;
+    // Each distractor explanation describes the position AFTER that
+    // distractor move; each followup idea the position after its move.
+    for (const d of lesson.distractors) {
+      let dFen = postInaccuracyFen;
+      try { const p = new Chess(postInaccuracyFen); p.move(stripSanAnnotations(d.san)); dFen = p.fen(); } catch { /* keep */ }
+      d.label = gradeNarrationText(d.label, dFen, 'openingGenerator.punish') ?? d.label;
+      d.explanation = gradeNarrationText(d.explanation, dFen, 'openingGenerator.punish') ?? d.explanation;
+    }
+    if (lesson.followup && lesson.followup.length > 0) {
+      const fp = new Chess(postPunishFen);
+      for (const step of lesson.followup) {
+        try { fp.move(stripSanAnnotations(step.san)); } catch { break; }
+        step.idea = gradeNarrationText(step.idea, fp.fen(), 'openingGenerator.punish') ?? step.idea;
+      }
+    }
     kept.push(lesson);
   }
   return { kept, report };
