@@ -10,7 +10,11 @@ const config: CapacitorConfig = {
   },
   ios: {
     contentInset: 'always',
-    scrollEnabled: false,
+    // Native WKWebView scrolling. Was `false`, which disabled scrolling
+    // entirely on device — content below the fold was unreachable (David's
+    // TestFlight report 2026-06-03). The app's pages rely on normal vertical
+    // scroll, so this must be on.
+    scrollEnabled: true,
     backgroundColor: '#0f0f0f',
     allowsLinkPreview: false,
   },
