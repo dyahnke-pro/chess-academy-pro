@@ -30,11 +30,37 @@
  */
 import { Chess } from 'chess.js';
 import { logAppAudit } from './appAuditor';
-import { groundCoachAnswerBoardClaims } from './boardClaimValidator';
+import { groundCoachAnswerBoardClaims, validateBoardClaims } from './boardClaimValidator';
 import { stripUngroundedPlayerStats } from './claimValidator';
 import { validateArrowClaims, synthesizeMissingArrows } from './arrowClaimValidator';
 import { validateTacticClaims } from './tacticClaimValidator';
 import type { TacticsLiveContext } from '../coach/types';
+
+/** Per-sentence spoken gate for STREAMING-TTS surfaces. Those hand each
+ *  sentence to Polly as it arrives — BEFORE any final-text gate can run —
+ *  so the gate must run here, on the single sentence about to be spoken.
+ *  Returns true if the sentence is safe to speak; false (with an audit) if
+ *  it makes a provably-false board-fact claim against `fen`. Cheap: one
+ *  `new Chess(fen)` + regexes on one sentence (~0.5–1ms). When `fen` is
+ *  absent there's no board to check against, so it passes (speak it). */
+export function isSpokenSentenceGrounded(sentence: string, fen: string | null | undefined, source: string): boolean {
+  if (!fen) return true;
+  try {
+    const { violations } = validateBoardClaims(sentence, fen);
+    if (violations.length > 0) {
+      void logAppAudit({
+        kind: 'claim-validator-trip',
+        category: 'subsystem',
+        source: `${source}.spokenSentenceGate`,
+        summary: `dropped a board-false sentence before speaking: "${sentence.slice(0, 60)}"`,
+        details: JSON.stringify({ source, sentence: sentence.slice(0, 200), reasons: violations.map((v) => v.reason) }),
+        fen,
+      });
+      return false;
+    }
+  } catch { /* never block speech on a validator fault */ }
+  return true;
+}
 
 export interface CoachAnswerGateOptions {
   /** The board FEN the prose describes (board + arrow gates need it). When

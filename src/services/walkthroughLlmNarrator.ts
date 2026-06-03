@@ -19,6 +19,8 @@
 import { Chess } from 'chess.js';
 import { getCoachChatResponse } from './coachApi';
 import { isGenericAnnotationText } from './walkthroughNarration';
+import { validateBoardClaims } from './boardClaimValidator';
+import { logAppAudit } from './appAuditor';
 import { db } from '../db/schema';
 
 /** Cache version — bump to invalidate all previously-cached narrations
@@ -142,11 +144,28 @@ export async function generateWalkthroughNarrations(
   );
 
   // Fold LLM output back into the full array, preserving curated
-  // entries where they exist.
-  const merged = perMove.map((_, i) => {
+  // entries where they exist. LLM-GENERATED entries pass the board-claim
+  // gate against the move's own FEN before they're cached/displayed — a
+  // provably-false board fact ("the knight on a3" when a3 is empty) is
+  // blanked (the walkthrough then shows the move without prose). Curated
+  // entries are already build-time-verified (narrationAccuracy), so they
+  // skip the gate.
+  const merged = perMove.map((ctx, i) => {
     const curated = (existing[i] ?? '').trim();
     if (curated && !isGenericAnnotationText(curated)) return curated;
-    return llmNarrations[i] ?? '';
+    const llm = llmNarrations[i] ?? '';
+    if (llm && validateBoardClaims(llm, ctx.fenAfter).violations.length > 0) {
+      void logAppAudit({
+        kind: 'claim-validator-trip',
+        category: 'subsystem',
+        source: 'walkthroughLlmNarrator.boardClaimGate',
+        summary: `blanked a board-false walkthrough narration on "${input.openingName}" move ${i + 1}: "${llm.slice(0, 60)}"`,
+        details: JSON.stringify({ move: ctx.san, fen: ctx.fenAfter, narration: llm.slice(0, 200) }),
+        fen: ctx.fenAfter,
+      });
+      return '';
+    }
+    return llm;
   });
 
   await writeCache(cacheKey, merged);

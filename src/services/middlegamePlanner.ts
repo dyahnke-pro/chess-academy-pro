@@ -21,6 +21,8 @@ import middlegamePlans from '../data/middlegame-plans.json';
 import { buildSession } from './walkthroughAdapter';
 import { stockfishEngine } from './stockfishEngine';
 import { getCoachChatResponse } from './coachApi';
+import { validateBoardClaims } from './boardClaimValidator';
+import { logAppAudit } from './appAuditor';
 import type { WalkthroughSession } from '../types/walkthrough';
 import type { OpeningMoveAnnotation } from '../types';
 
@@ -348,9 +350,33 @@ async function narratePvLine(
     );
     const parsed = extractJsonArray(raw);
     if (Array.isArray(parsed)) {
+      // Per-move FENs (replay the PV from the start) so each sentence is
+      // board-claim-gated against the position it describes — a
+      // provably-false board fact is blanked before it reaches the UI.
+      const fensAfter: (string | null)[] = [];
+      try {
+        const replay = new Chess(fen);
+        for (const san of sanMoves) {
+          try { replay.move(san); fensAfter.push(replay.fen()); }
+          catch { fensAfter.push(null); }
+        }
+      } catch { /* bad start fen — skip board gating */ }
       return sanMoves.map((_, i) => {
         const entry = parsed[i];
-        return typeof entry === 'string' && entry.trim() ? entry.trim() : '';
+        const text = typeof entry === 'string' && entry.trim() ? entry.trim() : '';
+        const moveFen = fensAfter[i];
+        if (text && moveFen && validateBoardClaims(text, moveFen).violations.length > 0) {
+          void logAppAudit({
+            kind: 'claim-validator-trip',
+            category: 'subsystem',
+            source: 'middlegamePlanner.boardClaimGate',
+            summary: `blanked a board-false PV narration at move ${i + 1}: "${text.slice(0, 60)}"`,
+            details: JSON.stringify({ moveFen, narration: text.slice(0, 200) }),
+            fen: moveFen,
+          });
+          return '';
+        }
+        return text;
       });
     }
   } catch (err: unknown) {

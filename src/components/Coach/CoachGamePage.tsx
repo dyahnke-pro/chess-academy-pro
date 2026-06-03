@@ -59,6 +59,7 @@ import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
 import { validateTacticClaims } from '../../services/tacticClaimValidator';
 import { getScenarioTemplate } from '../../services/coachTemplates';
 import { generateMoveCommentary } from '../../services/coachMoveCommentary';
+import { isSpokenSentenceGrounded } from '../../services/coachAnswerGates';
 import {
   loadCoachPlayState,
   saveCoachPlayState,
@@ -3375,7 +3376,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                 // from match.index would drop it silently.
                 const endIdx = match.index + match[1].length;
                 const sentence = buffer.slice(0, endIdx).trim();
-                if (sentence) {
+                // Per-sentence spoken gate: move commentary streams to Polly
+                // before the spine's final-text gate runs, so a board-false
+                // sentence must be dropped HERE against the post-move FEN.
+                if (sentence && isSpokenSentenceGrounded(sentence, probe.fen(), 'coachGamePage.moveCommentary')) {
                   streamedAnything = true;
                   speaker.add(sentence);
                 }

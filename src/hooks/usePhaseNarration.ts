@@ -6,6 +6,7 @@ import { logAppAudit } from '../services/appAuditor';
 import { db } from '../db/schema';
 import { getCachedStockfish, setCachedStockfish } from './stockfishFenCache';
 import { coachService } from '../coach/coachService';
+import { isSpokenSentenceGrounded } from '../services/coachAnswerGates';
 import type { CoachContext, PhaseNarrationVerbosity, StockfishAnalysis } from '../types';
 import type { PhaseTransitionEvent } from '../services/phaseTransitionDetector';
 
@@ -247,6 +248,10 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       const dispatchSentence = (sentence: string): void => {
         const trimmed = sentence.trim();
         if (!trimmed) return;
+        // Per-sentence spoken gate — this surface streams sentences to
+        // Polly as they arrive (before the spine's final-text gate), so a
+        // board-false sentence must be dropped HERE, before it's spoken.
+        if (!isSpokenSentenceGrounded(trimmed, event.fen, 'usePhaseNarration')) return;
         sentenceCount += 1;
         if (sentenceCount === 1) {
           const firstDispatchMs = Date.now() - detectedTs;
