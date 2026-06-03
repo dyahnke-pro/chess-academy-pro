@@ -57,6 +57,11 @@ TestFlight requires the **paid** Apple Developer Program ($99/yr).
 
 ## Step 4 — Build the web bundle with your keys
 
+> **Prerequisite: Node 22+** — Capacitor 8's CLI requires NodeJS >= 22.0.0.
+> Check with `node -v`; if it's older, install the **LTS** from
+> <https://nodejs.org> (or `brew upgrade node` / `nvm install 22`) before
+> running the steps below, or `cap add ios` will fatal out.
+
 On your Mac, in the repo:
 
 1. Create a `.env.local` (gitignored) with the **build-time** keys — mirror
