@@ -227,11 +227,26 @@ export function validateBoardClaims(text: string, fen: string): BoardClaimResult
     // available for pronoun resolution ("…queen on b6 pins IT to …").
     const preRaw = text.slice(Math.max(0, verbStart - 110), verbStart);
     const pre = preRaw.split(/[.;!?]/).pop() ?? preRaw;
-    // post = after verb up to a sentence end; split on " to " for target.
+    // post = after verb up to a sentence end; split for the target.
     const postRaw = text.slice(verbEnd, verbEnd + 90).split(/[.;!?]/)[0] ?? '';
+    // "A pins B to C" — the target sits after " to ". A SKEWER, though, is
+    // usually phrased "A skewers B and C" / "A skewers B, winning C" — same
+    // geometry as a pin (A, B and C on one line, B between A and C), just a
+    // different connective. So when there's no " to " target, fall back to
+    // splitting the post-verb clause on " and " / a comma to find the back
+    // piece. Without this, "the queen on b6 skewers the knight on f3 and the
+    // king on e1" (geometrically impossible) slipped the gate entirely.
+    let pinnedPhrase: string;
+    let targetPhrase: string;
     const toSplit = postRaw.split(/\bto\b/i);
-    const pinnedPhrase = toSplit[0] ?? '';
-    const targetPhrase = toSplit.slice(1).join(' to ');
+    if (toSplit.length > 1) {
+      pinnedPhrase = toSplit[0] ?? '';
+      targetPhrase = toSplit.slice(1).join(' to ');
+    } else {
+      const andSplit = postRaw.split(/\band\b|,/i);
+      pinnedPhrase = andSplit[0] ?? '';
+      targetPhrase = andSplit.slice(1).join(' ');
+    }
 
     const pinner = lastPieceRef(pre);
     if (!pinner) continue;

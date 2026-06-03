@@ -42,6 +42,27 @@ describe('validateBoardClaims — pin geometry', () => {
     expect(r.violations.some((v) => v.kind === 'pin-geometry')).toBe(true);
   });
 
+  it('flags an impossible SKEWER phrased with "and" (audit 2026-06-03 pass 2)', () => {
+    // Twin of the pin incident: "skewers B and C" (not "to C") used to slip
+    // because the target was only split on " to ". b6/f3/e1 aren't collinear.
+    const r = validateBoardClaims(
+      'The queen on b6 skewers the knight on f3 and the king on e1.',
+      BUG_FEN,
+    );
+    expect(r.ok).toBe(false);
+    expect(r.violations.some((v) => v.kind === 'pin-geometry')).toBe(true);
+  });
+
+  it('does NOT flag a real collinear skewer phrased with "and"', () => {
+    // Bb5 / Nc6 / Ke8 are on one diagonal — a legitimate skewer claim.
+    const ruy = 'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3';
+    const r = validateBoardClaims(
+      'The bishop on b5 skewers the knight on c6 and the king on e8.',
+      ruy,
+    );
+    expect(r.ok).toBe(true);
+  });
+
   it('does NOT flag a real, collinear pin (Ruy: Bb5 pins Nc6 to Ke8)', () => {
     // 1.e4 e5 2.Nf3 Nc6 3.Bb5 — b5/c6/e8 are on one diagonal.
     const ruy = 'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3';
