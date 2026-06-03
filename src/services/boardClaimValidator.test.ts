@@ -110,6 +110,19 @@ describe('validateBoardClaims — negation / absence (audit 2026-06-03 pass 7)',
   it('still flags a presence lie ("the knight on f6" on an empty f6)', () => {
     expect(validateBoardClaims('The knight on f6 guards the centre.', BUG_FEN).ok).toBe(false);
   });
+  it('a negation in one clause does NOT shield a presence lie in another (pass 9)', () => {
+    // The negation is clause-scoped (split on comma/semicolon), so "no rook
+    // on a1" must not protect the false "knight on f6" in the next clause.
+    expect(validateBoardClaims('There is no rook on a1, but the knight on f6 controls e4.', BUG_FEN).ok).toBe(false);
+    expect(validateBoardClaims('No bishop on c8; the knight on f6 is a monster.', BUG_FEN).ok).toBe(false);
+    expect(validateBoardClaims('Without a queen on d1, the knight on f6 dominates.', BUG_FEN).ok).toBe(false);
+  });
+  // KNOWN MINOR LIMITATION (documented, not fixed): a DEPARTURE phrasing whose
+  // cue sits AFTER the phrase ("the knight on f6 is gone") is still flagged —
+  // isNegatedAt only scans the clause BEFORE the phrase, because scanning
+  // after would mis-invert common true present claims ("the knight on f6 is
+  // not well placed"). The before-only scope is the safe choice; the cost is
+  // an occasional strip of a rare "X on sq is gone" sentence.
 });
 
 describe('validateBoardClaims — piece on square', () => {
