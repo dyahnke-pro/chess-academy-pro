@@ -42,6 +42,7 @@ import {
   type ForkBranch,
 } from './openingDetectionService';
 import { db, type CachedOpening } from '../db/schema';
+import { stripDisprovenSentences } from './boardClaimValidator';
 import { logAppAudit } from './appAuditor';
 import { buildOpeningNarrationContext } from './chessConceptService';
 import type {
@@ -980,6 +981,51 @@ export function repairNarrationArrows(tree: WalkthroughTree): number {
   return dropped;
 }
 
+/** Strip provably-false board-fact sentences from every node's SPOKEN
+ *  narration (idea / shortIdea / each narration segment text), validated
+ *  against the position AFTER that node's move — replayed deterministically
+ *  from the standard start. Closes the Learn-walkthrough hole: this
+ *  DB-narration generator writes the per-move prose with the LLM and it was
+ *  never board-checked at runtime, so a claim like "the knight on f6" with
+ *  no knight on f6 shipped straight to the student. ONLY provably-false
+ *  piece-on-square / pin-geometry claims are dropped; positional phrasing
+ *  ("shoring up d5") is the idea-frontier and is left untouched. Returns the
+ *  count of sentences dropped. */
+export function gradeNarrationBoardClaims(tree: WalkthroughTree): number {
+  const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+  let dropped = 0;
+  const gate = (text: string | undefined, fen: string): string | undefined => {
+    if (!text || !text.trim()) return text;
+    const res = stripDisprovenSentences(text, fen);
+    if (res.dropped.length === 0) return text;
+    dropped += res.dropped.length;
+    return res.clean; // may be '' if the whole line was a board lie — silent beats false
+  };
+  const walk = (node: WalkthroughTreeNode, fenBefore: string): void => {
+    let fenAfter = fenBefore;
+    if (node.san !== null) {
+      try {
+        const chess = new Chess(fenBefore);
+        chess.move(node.san);
+        fenAfter = chess.fen();
+      } catch {
+        return; // can't replay this branch — don't validate against a wrong FEN
+      }
+      node.idea = gate(node.idea, fenAfter) ?? node.idea;
+      if (node.shortIdea !== undefined) node.shortIdea = gate(node.shortIdea, fenAfter);
+      if (node.narration) {
+        for (const seg of node.narration) {
+          seg.text = gate(seg.text, fenAfter) ?? seg.text;
+          if (seg.shortText !== undefined) seg.shortText = gate(seg.shortText, fenAfter);
+        }
+      }
+    }
+    for (const child of node.children) walk(child.node, fenAfter);
+  };
+  walk(tree.root, START);
+  return dropped;
+}
+
 export function repairForkLabels(tree: WalkthroughTree): number {
   let filled = 0;
   function walk(node: WalkthroughTreeNode): void {
@@ -1487,6 +1533,19 @@ Fix the issues above and produce a SHORTER, valid tree.`
       category: 'subsystem',
       source: 'openingGenerator.generateOnce',
       summary: `stripped ${sansNormalized} SAN annotation marks for "${name}"`,
+    });
+  }
+  // Runtime board-claim gate on the per-move narration — this generator's
+  // prose is LLM-written and was never board-checked, so a piece-location
+  // lie ("the knight on f6" with f6 empty) shipped to the student in Learn.
+  // Drops only provably-false sentences, validated against each move's FEN.
+  const narrationDropped = gradeNarrationBoardClaims(tree);
+  if (narrationDropped > 0) {
+    void logAppAudit({
+      kind: 'claim-validator-trip',
+      category: 'subsystem',
+      source: 'openingGenerator.gradeNarrationBoardClaims',
+      summary: `dropped ${narrationDropped} board-false narration sentence(s) for "${name}"`,
     });
   }
   // Drop no-op arrows (from === to). Production audit (build 41154ec)
