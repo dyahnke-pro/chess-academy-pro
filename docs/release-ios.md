@@ -7,6 +7,37 @@ app is a separate channel, and every step is reversible.
 
 Bundle ID: `com.chessacademy.pro` · App name: **Chess Academy Pro**
 
+---
+
+## ⏸️ RESUME HERE (paused 2026-06-02 night — waiting on Apple)
+
+**Status: everything on our side is DONE; blocked only on Apple Developer
+Program activation.** David enrolled + paid via the iPhone Apple Developer
+app; the account shows **"Pending"** and he'll get a **"Welcome to the Apple
+Developer Program"** email when it activates (Apple says up to 48h, usually
+hours). Do NOT re-pay on developer.apple.com (double-charge risk) — the phone
+payment is processing.
+
+Already done (don't redo):
+- ✅ Repo cloned on the Mac at `/Users/davidyahnke/chess-academy-pro`
+- ✅ Node upgraded to 22+ (he's on v26 via Homebrew — Capacitor 8 needs ≥22)
+- ✅ `npm run build` + `npm run setup:ios` ran → `ios/` generated
+- ✅ Apple ID added to Xcode (Settings → Accounts)
+- ⏳ Xcode currently shows only **"(Personal Team)"** + red signing errors —
+  EXPECTED until the paid membership activates; ignore those errors for now
+
+**When the activation email arrives, resume at Step 6:**
+1. Xcode → **Settings → Accounts** → select the Apple ID → refresh (or
+   remove `–` and re-add `+`) so the new paid team loads.
+2. **Signing & Capabilities → Team** → pick the real **"DAVID M YAHNKE"**
+   (no "Personal Team") → the red errors clear.
+3. Do **Step 3** (create the App Store Connect app record) if not done.
+4. **Product → Archive → Distribute App → App Store Connect → Upload.**
+5. **TestFlight** → Internal Testing → add yourself → install on iPhone.
+
+🔑 **Capacitor 8 uses Swift Package Manager, NOT CocoaPods** — open
+`ios/App/App.xcodeproj` (there is no `.xcworkspace`, and no `pod install`).
+
 There are two slow, do-them-now items (steps 1 + 2) that run in the
 background while you read the rest. Kick both off first.
 
@@ -102,10 +133,11 @@ creates the `ios/` folder (gitignored — regenerated any time).
 ## Step 6 — Open in Xcode + set signing
 
 ```bash
-open ios/App/App.xcworkspace
+open ios/App/App.xcodeproj
 ```
-**Open the `.xcworkspace`, not the `.xcodeproj`** (CocoaPods needs the
-workspace).
+**Capacitor 8 uses Swift Package Manager, not CocoaPods** — open the
+`.xcodeproj` (there is no `.xcworkspace` and no `pod install` step; the
+`CapApp-SPM` folder is the SPM package).
 
 In Xcode:
 1. Left sidebar → click the blue **App** project → target **App** →
