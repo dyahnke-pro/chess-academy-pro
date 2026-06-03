@@ -5,6 +5,7 @@ import { useChessGame } from '../../hooks/useChessGame';
 import { useSettings } from '../../hooks/useSettings';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { getCoachChatResponse } from '../../services/coachApi';
+import { groundCoachAnswerBoardClaims } from '../../services/boardClaimValidator';
 import { speechService } from '../../services/speechService';
 import { sanitizeForTTS } from '../../services/voiceService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
@@ -292,10 +293,15 @@ export function MiddlegamePractice({
 
       if (!isMountedRef.current) return;
 
-      const assistantMsg: CoachMessage = { role: 'assistant', content: response };
+      // Runtime board-claim gate (this surface bypasses the coach spine,
+      // so it must run the gate itself): drop any provably-false board-fact
+      // sentence before it's shown or spoken.
+      const grounded = fen ? groundCoachAnswerBoardClaims(response, fen).text : response;
+
+      const assistantMsg: CoachMessage = { role: 'assistant', content: grounded };
       chatHistoryRef.current.push(assistantMsg);
 
-      setCoachText(response);
+      setCoachText(grounded);
 
       if (isNarrating) {
         // LLM response sometimes leads with a move citation
@@ -306,7 +312,7 @@ export function MiddlegamePractice({
         // "rook to f8 dot dot dot d8" at the start of every reply.
         // sanitizeForTTS still expands any inline SAN inside the
         // body to plain English.
-        void speechService.speak(sanitizeForTTS(stripLeadingMoveCitation(response)));
+        void speechService.speak(sanitizeForTTS(stripLeadingMoveCitation(grounded)));
       }
     } catch {
       if (isMountedRef.current) {

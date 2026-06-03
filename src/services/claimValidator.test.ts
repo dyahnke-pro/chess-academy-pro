@@ -1,6 +1,43 @@
 import { describe, it, expect } from 'vitest';
-import { validateClaims } from './claimValidator';
+import { validateClaims, stripUngroundedPlayerStats } from './claimValidator';
 import type { MasterPlayContext, MasterPlayResult } from './masterPlayTypes';
+
+describe('stripUngroundedPlayerStats — the teach-turn stat gate', () => {
+  it('drops a fabricated game-count sentence when no player data was grounded', () => {
+    const text = 'The Catalan is a great choice. Over 1,700 of his games reach this. The bishop eyes d5.';
+    const r = stripUngroundedPlayerStats(text, false);
+    expect(r.dropped).toHaveLength(1);
+    expect(r.text).not.toMatch(/1,700/);
+    expect(r.text).toMatch(/great choice/);
+    expect(r.text).toMatch(/bishop eyes d5/);
+  });
+
+  it('drops a fabricated percentage attributed to the player', () => {
+    const r = stripUngroundedPlayerStats('Magnus plays e4 55% of the time here. Develop naturally.', false);
+    expect(r.text).not.toMatch(/55%/);
+    expect(r.text).toMatch(/Develop naturally/);
+  });
+
+  it('KEEPS the player name when there is no stat (factual reference is fine)', () => {
+    const text = 'Magnus likes this fianchetto setup. The bishop is strong on g2.';
+    const r = stripUngroundedPlayerStats(text, false);
+    expect(r.dropped).toHaveLength(0);
+    expect(r.text).toBe(text.trim());
+  });
+
+  it('does NOTHING when player data WAS grounded this turn', () => {
+    const text = 'He scored 73% across 1,700 games here.';
+    const r = stripUngroundedPlayerStats(text, true);
+    expect(r.dropped).toHaveLength(0);
+    expect(r.text).toBe(text);
+  });
+
+  it('does not strip a non-player statistic sentence', () => {
+    const text = 'This position is roughly equal. Castle next.';
+    const r = stripUngroundedPlayerStats(text, false);
+    expect(r.dropped).toHaveLength(0);
+  });
+});
 
 function buildContext(): MasterPlayContext {
   const current: MasterPlayResult = {

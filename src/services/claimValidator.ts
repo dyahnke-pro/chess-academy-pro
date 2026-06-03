@@ -303,6 +303,61 @@ function topMoveFromContext(context: MasterPlayContext): string | undefined {
   return context.current.moves[0]?.san;
 }
 
+// ─── Ungrounded player-stat strip (spine gate, all turns) ────────────
+
+/** A player attribution cue — a possessive/subject reference to the
+ *  pro the lesson is about ("his games", "she plays", "Carlsen scores")
+ *  OR a canonical player name. Paired with a STAT token below to flag a
+ *  fabricated player-specific statistic. The player NAME itself is fine
+ *  (factual reference — David 2026-06-03); only an unsupported NUMBER /
+ *  superlative attributed to them is stripped. */
+const PLAYER_ATTRIBUTION_RE =
+  /\b(his|her|their|he|she|they)\b|\b(?:plays?|scores?|plays it|plays this|of his|of her)\b/i;
+/** Quantitative / comparative STAT tokens. Win-rate + "most-played"
+ *  phrasings on top of the shared %/game-count/rating patterns. */
+const STAT_TOKEN_RES: ReadonlyArray<RegExp> = [
+  PERCENT_RE,
+  GAME_COUNT_RE,
+  RATING_RE,
+  /\bwin[- ]rate\b/i,
+  /\bscores?\s+(?:over\s+)?\d/i,
+  /\bmost[- ](?:played|popular|common)\b/i,
+  /\b\d+\s+(?:of\s+(?:his|her|their)|times)\b/i,
+];
+
+/** Strip sentences that attribute an UNGROUNDED statistic to a player.
+ *  Fires only when NO player-data tool was grounded this turn
+ *  (`playerDataGrounded === false`) — when a lookup DID return data, the
+ *  numbers are real and the SANs/stats are the grounding. Targets the
+ *  exact teach-turn fabrication the master-play validator misses because
+ *  it never engages on "how does <pro> play X" intents ("Over 1,700 of
+ *  his games…", "<pro> plays e4 55%"). The player's NAME survives; only
+ *  the fabricated number/superlative sentence is dropped. Canonical
+ *  player names always count as attribution even without a pronoun. */
+export function stripUngroundedPlayerStats(
+  text: string,
+  playerDataGrounded: boolean,
+): { text: string; dropped: string[] } {
+  if (playerDataGrounded || !text.trim()) return { text, dropped: [] };
+  const nameRes = CANONICAL_PLAYERS.flatMap((p) => p.matchers);
+  // Split into sentences but PRESERVE directive markers ([VOICE:],
+  // [BOARD:], [[ACTION:]]) — never sever one. We test each sentence for
+  // (attribution OR a canonical name) AND a stat token.
+  const sentences = text.split(/(?<=[.!?])\s+/);
+  const kept: string[] = [];
+  const dropped: string[] = [];
+  for (const s of sentences) {
+    const trimmed = s.trim();
+    if (!trimmed) continue;
+    const hasMarker = /\[\[?[A-Z]/.test(trimmed); // protect any directive marker
+    const attributed = PLAYER_ATTRIBUTION_RE.test(trimmed) || nameRes.some((r) => { r.lastIndex = 0; return r.test(trimmed); });
+    const hasStat = STAT_TOKEN_RES.some((r) => { if ('lastIndex' in r) r.lastIndex = 0; return r.test(trimmed); });
+    if (!hasMarker && attributed && hasStat) dropped.push(trimmed);
+    else kept.push(trimmed);
+  }
+  return { text: kept.join(' ').trim(), dropped };
+}
+
 // ─── Validator ──────────────────────────────────────────────────────
 
 /**

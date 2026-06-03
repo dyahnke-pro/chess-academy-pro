@@ -26,7 +26,12 @@
  *
  * See `docs/COACH-BRAIN-00.md` for the architecture this implements.
  */
+import { Chess } from 'chess.js';
 import { logAppAudit } from '../services/appAuditor';
+import { groundCoachAnswerBoardClaims } from '../services/boardClaimValidator';
+import { validateArrowClaims, synthesizeMissingArrows } from '../services/arrowClaimValidator';
+import { validateTacticClaims } from '../services/tacticClaimValidator';
+import { stripUngroundedPlayerStats } from '../services/claimValidator';
 import { assembleEnvelope } from './envelope';
 import { loadAnnotationContextForLive } from './sources/annotationContext';
 import { loadBookGroundingForLive } from './sources/bookGrounding';
@@ -47,6 +52,7 @@ import type {
   Provider,
   ProviderName,
   ProviderResponse,
+  TacticsLiveContext,
   ToolExecutionContext,
 } from './types';
 
@@ -393,6 +399,105 @@ function previewToolResult(
   return null;
 }
 
+/** Runtime grounding gates applied to EVERY coach answer in the spine —
+ *  so every surface and every turn is validated, not just the few that
+ *  happened to wire a validator in by hand. Three gates, in order:
+ *
+ *   1. BOARD-CLAIM (enforcing) — drops a sentence that makes a provably-
+ *      false piece-on-square / pin claim against the board the prose
+ *      describes ("the knight on a3" when a3 is empty). The student never
+ *      hears or sees it. This is the gate the teach hallucination needed.
+ *   2. ARROW (enforcing) — synthesises the `[BOARD: arrow:…]` markers the
+ *      brain forgot for SANs it named, replaying them through chess.js at
+ *      the live FEN (G6 lead-the-eye, previously CoachTeachPage-only).
+ *   3. TACTIC (audit) — flags tactic vocabulary not grounded in the
+ *      bounded TacticsLiveContext we injected.
+ *
+ *  Each gate is best-effort and never throws into the answer path. */
+function runAnswerGates(
+  finalText: string,
+  fen: string | null,
+  tactics: TacticsLiveContext | null,
+  surface: string,
+  playerDataGrounded: boolean,
+): string {
+  let text = finalText;
+  if (!text.trim()) return text;
+
+  // (0) Ungrounded player-STAT gate — drop a sentence that attributes a
+  //     fabricated number/superlative to the pro ("Over 1,700 of his
+  //     games…", "<pro> plays e4 55%") when NO player-data tool grounded
+  //     this turn. This is the master-play claim validator's stat/entity
+  //     job for the teach turns it never engages on. The player's NAME is
+  //     kept (factual reference); only the unsupported number is dropped.
+  try {
+    const statGate = stripUngroundedPlayerStats(text, playerDataGrounded);
+    if (statGate.dropped.length > 0) {
+      text = statGate.text;
+      void logAppAudit({
+        kind: 'claim-validator-trip',
+        category: 'subsystem',
+        source: 'coachService.playerStatGate',
+        summary: `dropped ${statGate.dropped.length} ungrounded player-stat sentence(s) on ${surface}`,
+        details: JSON.stringify({ surface, dropped: statGate.dropped }),
+      });
+    }
+  } catch { /* never block */ }
+
+  // (1) Board-claim gate — strip provably-false board facts.
+  if (fen) {
+    try {
+      const grounded = groundCoachAnswerBoardClaims(text, fen);
+      if (grounded.violations.length > 0) {
+        text = grounded.text;
+        void logAppAudit({
+          kind: 'claim-validator-trip',
+          category: 'subsystem',
+          source: 'coachService.boardClaimGate',
+          summary: `dropped ${grounded.dropped.length} board-false sentence(s) on ${surface}: ${grounded.violations.map((v) => v.reason).slice(0, 3).join('; ')}`,
+          details: JSON.stringify({ surface, fen, violations: grounded.violations, dropped: grounded.dropped }),
+          fen,
+        });
+      }
+    } catch { /* never block the answer on a validator fault */ }
+  }
+
+  // (2) Arrow gate — synthesise the markers the brain omitted.
+  if (fen) {
+    try {
+      const arrowV = validateArrowClaims(text);
+      if (arrowV.violations.length > 0) {
+        const synth = synthesizeMissingArrows(text, fen, arrowV.violations, Chess, 'green');
+        text = synth.text;
+        void logAppAudit({
+          kind: 'claim-validator-trip',
+          category: 'subsystem',
+          source: 'coachService.arrowClaimGate',
+          summary: `arrows: synthesized ${synth.synthesized.length}/${arrowV.violations.length} on ${surface}`,
+          details: JSON.stringify({ surface, synthesized: synth.synthesized, failed: synth.failed }),
+          fen,
+        });
+      }
+    } catch { /* never block */ }
+  }
+
+  // (3) Tactic gate — audit out-of-vocab tactic claims.
+  try {
+    const tacticV = validateTacticClaims(text, tactics);
+    if (tacticV.violations.length > 0) {
+      void logAppAudit({
+        kind: 'claim-validator-trip',
+        category: 'subsystem',
+        source: 'coachService.tacticClaimGate',
+        summary: `out-of-vocab tactics on ${surface}: ${tacticV.violations.map((v) => v.type).join(', ')}`,
+        details: JSON.stringify({ surface, violations: tacticV.violations }),
+      });
+    }
+  } catch { /* never block */ }
+
+  return text;
+}
+
 async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Promise<CoachAnswer> {
   // WO-COACH-UNIFY-01 visibility: include task + maxTokens in the
   // ask-received audit so paste-back audit logs show which surface
@@ -730,6 +835,12 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   // Player NAMES grounded this turn, fed into grounding.groundedPlayers so
   // the entity validator accepts the pro the lesson is about (#entity fix).
   const playerNames = new Set<string>();
+  // The board FEN the FINAL prose describes — starts at the live FEN and
+  // advances to the result of any board-changing tool this turn
+  // (set_board_position / play_move / reset_board). The board-claim gate
+  // (below) validates the answer's piece-on-square / pin claims against
+  // THIS fen so "the knight on a3" can't be spoken when a3 is empty.
+  let boardFenForClaims = input.liveState.fen ?? null;
   // Cap multi-turn tool loops so a misbehaving brain can't loop forever.
   const maxRoundTrips = Math.max(1, options.maxToolRoundTrips ?? 1);
 
@@ -933,6 +1044,14 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
           playerDataGrounded = true;
           collectPlayerSans(call.name, result.result, playerSans);
           collectPlayerNames(call.name, call.args, result.result, playerNames);
+        }
+        // Track the board the FINAL prose will describe. Board-changing
+        // tools carry the resulting FEN in their result; capture it so the
+        // board-claim gate validates against the position actually shown.
+        if (result.ok) {
+          const rf = (result.result as { fen?: unknown } | undefined)?.fen;
+          if (typeof rf === 'string' && rf.trim()) boardFenForClaims = rf.trim();
+          else if (call.name === 'reset_board') boardFenForClaims = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
         }
         // Audit-driven (#20, #21): include a high-signal preview of the
         // tool result so paste-back logs surface "stockfish said
@@ -1206,6 +1325,44 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     });
     finalText =
       '[VOICE: Let me start that lesson.] Tell me the opening you want to learn — say "walk me through it" — and I\'ll animate it move by move on the board.';
+  }
+
+  // ── RUNTIME GROUNDING GATES (run on EVERY coach answer, EVERY surface) ──
+  // Previously these lived only on individual surfaces (board-claim on the
+  // hint hook, arrow/tactic on CoachTeachPage) — so masterclass-chat,
+  // middlegame-practice, live-coach, game-chat etc. shipped UNVALIDATED
+  // prose, and the teach hallucination ("the knight on a3" on an empty a3)
+  // sailed through. Centralising them in the spine wires every gate into
+  // every turn. The board the prose describes is `boardFenForClaims`
+  // (live FEN advanced by this turn's board-changing tools).
+  finalText = runAnswerGates(finalText, boardFenForClaims, input.liveState.tactics ?? null, input.surface, playerDataGrounded);
+
+  // Board-announce gate (was CoachTeachPage-only): when a board-changing
+  // tool fired, the spoken [VOICE:] block should announce it ("Setting the
+  // board to…" / "Starting the … walkthrough.") so the student is never
+  // surprised by the board moving under them. Audit on every surface now.
+  {
+    const boardTools = dispatchedToolNames.filter(
+      (n) => n === 'set_board_position' || n === 'start_walkthrough_for_opening',
+    );
+    if (boardTools.length > 0) {
+      const voiceMatch = /\[VOICE:\s*([^\]]*)\]/i.exec(finalText);
+      const firstSpoken = (voiceMatch ? voiceMatch[1] : finalText).trim().toLowerCase();
+      const announced =
+        firstSpoken.startsWith('setting the board') ||
+        firstSpoken.startsWith('starting the ') ||
+        firstSpoken.startsWith("let's set the board") ||
+        firstSpoken.startsWith("i'm setting the board");
+      if (firstSpoken && !announced) {
+        void logAppAudit({
+          kind: 'claim-validator-trip',
+          category: 'subsystem',
+          source: 'coachService.boardAnnounceGate',
+          summary: `board-changing tool(s) [${boardTools.join(', ')}] fired but voice did not announce it on ${input.surface}`,
+          details: JSON.stringify({ surface: input.surface, boardTools, firstSpoken: firstSpoken.slice(0, 120) }),
+        });
+      }
+    }
   }
 
   void logAppAudit({

@@ -353,6 +353,49 @@ export function validateBoardClaims(text: string, fen: string): BoardClaimResult
   return { ok: violations.length === 0, violations };
 }
 
+/** Marker-safe version of `stripDisprovenSentences` for a live COACH
+ *  answer, which interleaves prose with directive markers
+ *  (`[VOICE: …]`, `[BOARD: …]`, `[[ACTION: …]]`, `[CHOICES: …]`). It
+ *  must (a) strip a disproven sentence from the SPOKEN `[VOICE: …]`
+ *  block — that's what the student hears — and (b) strip it from the
+ *  visible prose, while NEVER breaking a marker (a marker carries SAN /
+ *  FEN / coordinates that look like board claims but aren't prose). The
+ *  whole point is that "the knight on a3" can never reach the student's
+ *  ears or screen when a3 is empty, without mangling the board/action
+ *  tags the surface depends on. Pure / read-only on the inputs.  */
+export function groundCoachAnswerBoardClaims(
+  text: string,
+  fen: string,
+): { text: string; dropped: string[]; violations: BoardClaimViolation[] } {
+  const all = validateBoardClaims(text, fen);
+  if (all.violations.length === 0) return { text, dropped: [], violations: [] };
+
+  const dropped: string[] = [];
+
+  // (1) Strip disproven sentences INSIDE the spoken [VOICE: …] block.
+  let out = text.replace(/\[VOICE:\s*([^\]]*)\]/gi, (_full, inner: string) => {
+    const res = stripDisprovenSentences(inner, fen);
+    for (const d of res.dropped) dropped.push(d.sentence);
+    const clean = res.clean.trim();
+    return clean ? `[VOICE: ${clean}]` : ''; // drop an emptied VOICE block
+  });
+
+  // (2) Strip from the visible prose, protecting EVERY remaining marker
+  //     (the cleaned VOICE block, [BOARD: …], [[ACTION: …]], [CHOICES: …])
+  //     as an opaque placeholder so a sentence split can't sever it.
+  const markers: string[] = [];
+  const S = '\u0001'; // private-use sentinel wrapping a marker index; never in prose
+  const protectedText = out.replace(/\[\[[^\]]*\]\]|\[[^\]]*\]/g, (m) => {
+    markers.push(m);
+    return `${S}${markers.length - 1}${S}`;
+  });
+  const res = stripDisprovenSentences(protectedText, fen);
+  for (const d of res.dropped) dropped.push(d.sentence);
+  out = res.clean.replace(new RegExp(`${S}(\\d+)${S}`, 'g'), (_m, i: string) => markers[Number(i)] ?? '');
+
+  return { text: out.trim(), dropped, violations: all.violations };
+}
+
 /** Split `text` into sentences and drop any whose board-claims are
  *  provably false. Returns the cleaned text plus the dropped sentences
  *  and their violations (for auditing). Used to keep a disproven
