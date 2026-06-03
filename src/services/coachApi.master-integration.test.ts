@@ -373,6 +373,71 @@ describe('grounding — no master data (source:none)', () => {
   });
 });
 
+describe('by-construction board-truth gate (FIX 1, 2026-06-03)', () => {
+  // The board-claim gate used to be opt-in per call-site (each surface had
+  // to wrap getCoachChatResponse with groundCoachReply). Now it runs INSIDE
+  // getCoachChatResponse whenever the caller hands a live FEN via
+  // grounding.currentFen — so a surface that passed a FEN but forgot to gate
+  // (e.g. VoiceChatMic) can no longer speak a board lie.
+
+  it('strips a board-false sentence on a non-move-question turn (the newly-gated path)', async () => {
+    // "explain this position" is NOT a move question → grounding stays
+    // dormant (lichess never called) → this exercises the has-FEN
+    // non-grounded path that previously streamed raw, ungated.
+    const counters = installFetchMock({ llmTexts: [
+      'The knight on e4 controls the center. Develop your pieces calmly.',
+    ] });
+    const r = await getCoachChatResponse(
+      [{ role: 'user', content: 'explain this position to me' }],
+      '', undefined, 'chat_response', 1024, undefined, undefined, undefined,
+      { currentFen: STARTING_FEN, surface: '/voice-chat' },
+    );
+    // e4 is empty at the start → the lie is dropped, the true sentence kept.
+    expect(r).not.toMatch(/knight on e4/i);
+    expect(r).toMatch(/Develop your pieces/i);
+    expect(counters.lichessCalls).toBe(0); // not a move question
+  });
+
+  it('strips a board-false sentence on a grounded (move-question) turn too', async () => {
+    // Master-play validation passes (no SAN/stat/entity claim), but the
+    // board claim is still false — finalizeReply must catch it after the
+    // master-play loop settles.
+    const { response } = await ask(
+      'what do masters play here?',
+      ['Masters develop naturally. The bishop on d5 dominates the long diagonal.'],
+    );
+    // d5 is empty at the start position → board lie dropped.
+    expect(response).not.toMatch(/bishop on d5/i);
+    expect(response).toMatch(/develop naturally/i);
+  });
+
+  it('leaves a board-TRUE sentence untouched', async () => {
+    const counters = installFetchMock({ llmTexts: [
+      'The knight on g1 is ready to develop. A calm setup serves here.',
+    ] });
+    const r = await getCoachChatResponse(
+      [{ role: 'user', content: 'explain this position to me' }],
+      '', undefined, 'chat_response', 1024, undefined, undefined, undefined,
+      { currentFen: STARTING_FEN, surface: '/voice-chat' },
+    );
+    // g1 holds a knight at the start → kept.
+    expect(r).toMatch(/knight on g1/i);
+    expect(counters.lichessCalls).toBe(0);
+  });
+
+  it('does NOT gate when no FEN is supplied (legacy passthrough preserved)', async () => {
+    const counters = installFetchMock({ llmTexts: [
+      'The knight on e4 controls the center.',
+    ] });
+    const r = await getCoachChatResponse(
+      [{ role: 'user', content: 'explain this position to me' }],
+      // no grounding → no board FEN → nothing to gate against
+    );
+    expect(r).toMatch(/knight on e4/i); // unchanged: no board to check
+    expect(counters.lichessCalls).toBe(0);
+  });
+});
+
 describe('kid contract — getKidLlmResponse never engages grounding', () => {
   it('does not engage master-play even when kid LLM is asked a move question', async () => {
     const counters = installFetchMock({ lichess: LICHESS_PAYLOAD, llmTexts: ['That\'s the white pawn.'] });

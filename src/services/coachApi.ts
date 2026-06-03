@@ -37,6 +37,7 @@ function emitLlmTokenUsage(
 }
 import { lookupMasterPlay } from './masterPlayLookup';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
+import { groundCoachReply } from './coachAnswerGates';
 import { logAppAudit } from './appAuditor';
 import { buildVerifiedPuzzleContext } from './verifiedLineLibrary';
 import type { MasterPlayContext, MasterPlayResult, OpeningDbEntry } from './masterPlayTypes';
@@ -1596,9 +1597,61 @@ export async function getCoachChatResponse(
     }
   };
 
-  // ── Non-grounded path: existing behavior, streaming-as-passed ──
+  // ── By-construction board-truth gate ─────────────────────────────
+  // Root fix (2026-06-03): board-fact gating used to be opt-in per
+  // call-site — each surface had to remember to wrap this function with
+  // `groundCoachReply`, so a surface that handed us a live FEN but forgot
+  // the wrap (e.g. VoiceChatMic) could speak a board lie ("the knight on
+  // f6 pins the queen" on a board with no f6 knight). Whenever the caller
+  // hands us the board FEN through the canonical `grounding.currentFen`
+  // channel, we now run the shared board-claim / arrow / player-stat gate
+  // HERE, so every such caller is gated by construction. Surfaces that
+  // also have an engine eval / tactics context still layer
+  // `groundCoachReply` themselves — it's idempotent, so this pass finding
+  // the lies first just means their second pass is a no-op.
+  //
+  // Board-truth needs the WHOLE reply before it can be shown (you can't
+  // un-stream a lie), so a has-FEN turn collects → gates → emits once
+  // rather than token-streaming. The move-question path already behaved
+  // this way; this extends it to has-FEN non-move-question turns. The cost
+  // (a short wait instead of a token stream) is the price of never
+  // speaking an ungrounded board claim.
+  const boardFenForGate = grounding?.currentFen ?? null;
+  const finalizeReply = (text: string): string => {
+    if (!boardFenForGate || !text.trim()) return text;
+    try {
+      return groundCoachReply(text, {
+        fen: boardFenForGate,
+        // The player-stat gate strips a pro stat ("his games 55%") only
+        // when NO player data grounded the turn. On a GROUNDED turn the
+        // master-play claim validator (Layer D) already verified every
+        // game-count/percentage/player against the context, so re-stripping
+        // here would wrongly kill a legitimately-grounded stat ("around
+        // 22000 master games"). So treat the turn as player-data-grounded
+        // whenever grounding engaged OR a pro was explicitly grounded; the
+        // strip then fires only on the genuinely-ungrounded has-FEN path.
+        playerDataGrounded: groundingEngaged || (grounding?.groundedPlayers?.length ?? 0) > 0,
+        source: grounding?.surface ?? 'getCoachChatResponse',
+      });
+    } catch {
+      return text; // never block a reply on a gate fault
+    }
+  };
+
+  // ── Non-grounded path ─────────────────────────────────────────────
   if (!groundingEngaged) {
-    return callOnce(buildSystemPromptFor(), true);
+    // No board FEN → nothing to board-gate; stream as before.
+    if (!boardFenForGate) {
+      return callOnce(buildSystemPromptFor(), true);
+    }
+    // Board FEN present but master-play grounding didn't engage (not a
+    // move question). Board-fact lies can still appear, so collect the
+    // full reply, gate it, THEN emit once — never stream an ungated board
+    // claim to the student.
+    const raw = await callOnce(buildSystemPromptFor(), false);
+    const gated = finalizeReply(raw);
+    if (onStream && gated) onStream(gated);
+    return gated;
   }
 
   // ── Grounded path: collect → validate → retry up to 2x → stock ──
@@ -1609,12 +1662,15 @@ export async function getCoachChatResponse(
   const { surface, sessionId } = grounding ?? { surface: 'unknown', sessionId: undefined };
   const originalQuery = messages[messages.length - 1]?.content ?? '';
 
-  // Attempt 1 (no addendum).
+  // Attempt 1 (no addendum). The master-play validator (Layer D) gates
+  // SAN/stat/entity/comparative claims; `finalizeReply` then gates the
+  // accepted text's board-facts/arrows/player-stats against the live FEN.
   let response = await callOnce(buildSystemPromptFor(), false);
   let validation = validateClaims(response, masterPlayContext);
   if (validation.ok) {
-    if (onStream && response) onStream(response);
-    return response;
+    const gated = finalizeReply(response);
+    if (onStream && gated) onStream(gated);
+    return gated;
   }
   emitClaimValidatorTrips(validation, 1, surface, sessionId);
 
@@ -1622,8 +1678,9 @@ export async function getCoachChatResponse(
   response = await callOnce(buildSystemPromptFor(buildRetryAddendum(1, validation)), false);
   validation = validateClaims(response, masterPlayContext);
   if (validation.ok) {
-    if (onStream && response) onStream(response);
-    return response;
+    const gated = finalizeReply(response);
+    if (onStream && gated) onStream(gated);
+    return gated;
   }
   emitClaimValidatorTrips(validation, 2, surface, sessionId);
 
@@ -1631,8 +1688,9 @@ export async function getCoachChatResponse(
   response = await callOnce(buildSystemPromptFor(buildRetryAddendum(2, validation)), false);
   validation = validateClaims(response, masterPlayContext);
   if (validation.ok) {
-    if (onStream && response) onStream(response);
-    return response;
+    const gated = finalizeReply(response);
+    if (onStream && gated) onStream(gated);
+    return gated;
   }
   // Retry budget exhausted. Serve the stock fallback so the user
   // doesn't see an ungrounded response slip through.
