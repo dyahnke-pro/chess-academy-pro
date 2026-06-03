@@ -20,7 +20,7 @@
  */
 import { useCallback, useRef } from 'react';
 import { getCoachChatResponse } from '../services/coachApi';
-import { groundCoachAnswerBoardClaims } from '../services/boardClaimValidator';
+import { groundCoachReply } from '../services/coachAnswerGates';
 import { voiceService } from '../services/voiceService';
 import { logAppAudit } from '../services/appAuditor';
 import {
@@ -256,12 +256,12 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
         return;
       }
 
-      // Runtime board-claim gate (this hook bypasses the coach spine):
-      // drop any provably-false board-fact sentence before it's spoken.
-      const text = (ctx.fenAfter
-        ? groundCoachAnswerBoardClaims(response, ctx.fenAfter).text
-        : response
-      ).trim();
+      // Runtime grounding gates (this hook bypasses the coach spine):
+      // drop board-false + ungrounded player-stat sentences before voicing.
+      const text = groundCoachReply(response, {
+        fen: ctx.fenAfter,
+        source: 'liveCoach',
+      }).trim();
       if (!text || text.startsWith('⚠️')) {
         inFlightRef.current = false;
         return;

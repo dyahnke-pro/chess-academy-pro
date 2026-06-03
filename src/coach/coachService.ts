@@ -26,12 +26,8 @@
  *
  * See `docs/COACH-BRAIN-00.md` for the architecture this implements.
  */
-import { Chess } from 'chess.js';
 import { logAppAudit } from '../services/appAuditor';
-import { groundCoachAnswerBoardClaims } from '../services/boardClaimValidator';
-import { validateArrowClaims, synthesizeMissingArrows } from '../services/arrowClaimValidator';
-import { validateTacticClaims } from '../services/tacticClaimValidator';
-import { stripUngroundedPlayerStats } from '../services/claimValidator';
+import { groundCoachReply } from '../services/coachAnswerGates';
 import { assembleEnvelope } from './envelope';
 import { loadAnnotationContextForLive } from './sources/annotationContext';
 import { loadBookGroundingForLive } from './sources/bookGrounding';
@@ -399,21 +395,11 @@ function previewToolResult(
   return null;
 }
 
-/** Runtime grounding gates applied to EVERY coach answer in the spine —
- *  so every surface and every turn is validated, not just the few that
- *  happened to wire a validator in by hand. Three gates, in order:
- *
- *   1. BOARD-CLAIM (enforcing) — drops a sentence that makes a provably-
- *      false piece-on-square / pin claim against the board the prose
- *      describes ("the knight on a3" when a3 is empty). The student never
- *      hears or sees it. This is the gate the teach hallucination needed.
- *   2. ARROW (enforcing) — synthesises the `[BOARD: arrow:…]` markers the
- *      brain forgot for SANs it named, replaying them through chess.js at
- *      the live FEN (G6 lead-the-eye, previously CoachTeachPage-only).
- *   3. TACTIC (audit) — flags tactic vocabulary not grounded in the
- *      bounded TacticsLiveContext we injected.
- *
- *  Each gate is best-effort and never throws into the answer path. */
+/** Runtime grounding gates applied to EVERY coach answer in the spine.
+ *  Thin wrapper over the shared `groundCoachReply` (services/
+ *  coachAnswerGates) — the SAME gate set every bypass surface uses, so
+ *  there is one implementation and no drift. See that module for the
+ *  per-gate contract. */
 function runAnswerGates(
   finalText: string,
   fen: string | null,
@@ -421,81 +407,12 @@ function runAnswerGates(
   surface: string,
   playerDataGrounded: boolean,
 ): string {
-  let text = finalText;
-  if (!text.trim()) return text;
-
-  // (0) Ungrounded player-STAT gate — drop a sentence that attributes a
-  //     fabricated number/superlative to the pro ("Over 1,700 of his
-  //     games…", "<pro> plays e4 55%") when NO player-data tool grounded
-  //     this turn. This is the master-play claim validator's stat/entity
-  //     job for the teach turns it never engages on. The player's NAME is
-  //     kept (factual reference); only the unsupported number is dropped.
-  try {
-    const statGate = stripUngroundedPlayerStats(text, playerDataGrounded);
-    if (statGate.dropped.length > 0) {
-      text = statGate.text;
-      void logAppAudit({
-        kind: 'claim-validator-trip',
-        category: 'subsystem',
-        source: 'coachService.playerStatGate',
-        summary: `dropped ${statGate.dropped.length} ungrounded player-stat sentence(s) on ${surface}`,
-        details: JSON.stringify({ surface, dropped: statGate.dropped }),
-      });
-    }
-  } catch { /* never block */ }
-
-  // (1) Board-claim gate — strip provably-false board facts.
-  if (fen) {
-    try {
-      const grounded = groundCoachAnswerBoardClaims(text, fen);
-      if (grounded.violations.length > 0) {
-        text = grounded.text;
-        void logAppAudit({
-          kind: 'claim-validator-trip',
-          category: 'subsystem',
-          source: 'coachService.boardClaimGate',
-          summary: `dropped ${grounded.dropped.length} board-false sentence(s) on ${surface}: ${grounded.violations.map((v) => v.reason).slice(0, 3).join('; ')}`,
-          details: JSON.stringify({ surface, fen, violations: grounded.violations, dropped: grounded.dropped }),
-          fen,
-        });
-      }
-    } catch { /* never block the answer on a validator fault */ }
-  }
-
-  // (2) Arrow gate — synthesise the markers the brain omitted.
-  if (fen) {
-    try {
-      const arrowV = validateArrowClaims(text);
-      if (arrowV.violations.length > 0) {
-        const synth = synthesizeMissingArrows(text, fen, arrowV.violations, Chess, 'green');
-        text = synth.text;
-        void logAppAudit({
-          kind: 'claim-validator-trip',
-          category: 'subsystem',
-          source: 'coachService.arrowClaimGate',
-          summary: `arrows: synthesized ${synth.synthesized.length}/${arrowV.violations.length} on ${surface}`,
-          details: JSON.stringify({ surface, synthesized: synth.synthesized, failed: synth.failed }),
-          fen,
-        });
-      }
-    } catch { /* never block */ }
-  }
-
-  // (3) Tactic gate — audit out-of-vocab tactic claims.
-  try {
-    const tacticV = validateTacticClaims(text, tactics);
-    if (tacticV.violations.length > 0) {
-      void logAppAudit({
-        kind: 'claim-validator-trip',
-        category: 'subsystem',
-        source: 'coachService.tacticClaimGate',
-        summary: `out-of-vocab tactics on ${surface}: ${tacticV.violations.map((v) => v.type).join(', ')}`,
-        details: JSON.stringify({ surface, violations: tacticV.violations }),
-      });
-    }
-  } catch { /* never block */ }
-
-  return text;
+  return groundCoachReply(finalText, {
+    fen,
+    tactics,
+    playerDataGrounded,
+    source: `coachService:${surface}`,
+  });
 }
 
 async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Promise<CoachAnswer> {

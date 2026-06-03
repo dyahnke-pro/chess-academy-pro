@@ -3,6 +3,7 @@ import { MessageCircle, X } from 'lucide-react';
 import { ChatMessage } from '../Coach/ChatMessage';
 import { ChatInput } from '../Coach/ChatInput';
 import { getCoachChatResponse } from '../../services/coachApi';
+import { groundCoachReply } from '../../services/coachAnswerGates';
 import { buildCourseScope } from '../../data/lessons';
 import type { ChatMessage as ChatMessageType } from '../../types';
 
@@ -54,8 +55,13 @@ export function MasterclassCoachChat({ openingId, variationName }: MasterclassCo
             'explore_reaction',
             512,
           );
-          historyRef.current.push({ role: 'assistant', content: reply });
-          setMessages((prev) => [...prev, { id: `a-${Date.now()}`, role: 'assistant', content: reply, timestamp: Date.now() }]);
+          // Runtime grounding gate (bypasses the coach spine). No live
+          // board here, so the player-stat gate is the load-bearing one:
+          // a masterclass "how does <pro> play this" answer can't ship an
+          // ungrounded pro statistic. The name is kept; the bad stat drops.
+          const grounded = groundCoachReply(reply, { source: 'masterclassChat' });
+          historyRef.current.push({ role: 'assistant', content: grounded });
+          setMessages((prev) => [...prev, { id: `a-${Date.now()}`, role: 'assistant', content: grounded, timestamp: Date.now() }]);
         } catch {
           setMessages((prev) => [...prev, { id: `err-${Date.now()}`, role: 'assistant', content: "I couldn't reach the coach just now — try again in a moment.", timestamp: Date.now() }]);
         } finally {

@@ -5,7 +5,7 @@ import { useChessGame } from '../../hooks/useChessGame';
 import { useSettings } from '../../hooks/useSettings';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { getCoachChatResponse } from '../../services/coachApi';
-import { groundCoachAnswerBoardClaims } from '../../services/boardClaimValidator';
+import { groundCoachReply } from '../../services/coachAnswerGates';
 import { speechService } from '../../services/speechService';
 import { sanitizeForTTS } from '../../services/voiceService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
@@ -293,10 +293,10 @@ export function MiddlegamePractice({
 
       if (!isMountedRef.current) return;
 
-      // Runtime board-claim gate (this surface bypasses the coach spine,
-      // so it must run the gate itself): drop any provably-false board-fact
-      // sentence before it's shown or spoken.
-      const grounded = fen ? groundCoachAnswerBoardClaims(response, fen).text : response;
+      // Runtime grounding gates (this surface bypasses the coach spine, so
+      // it runs the shared gate set itself): drop board-false + ungrounded
+      // player-stat sentences, synthesise missing arrows.
+      const grounded = groundCoachReply(response, { fen, source: 'middlegamePractice' });
 
       const assistantMsg: CoachMessage = { role: 'assistant', content: grounded };
       chatHistoryRef.current.push(assistantMsg);

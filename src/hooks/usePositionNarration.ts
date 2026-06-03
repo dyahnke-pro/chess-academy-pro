@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { getCoachChatResponse } from '../services/coachApi';
+import { validateBoardClaims } from '../services/boardClaimValidator';
 import { voiceService } from '../services/voiceService';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { buildChessContextMessage, POSITION_NARRATION_ADDITION } from '../services/coachPrompts';
@@ -214,6 +215,21 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       const dispatchSentence = (sentence: string): void => {
         const trimmed = sentence.trim();
         if (!trimmed) return;
+        // Per-sentence board-claim gate. This surface streams each
+        // sentence straight to TTS as it arrives (no final-text
+        // chokepoint), so the gate must run HERE — never speak a
+        // provably-false board fact ("the knight on a3" when a3 is empty).
+        if (validateBoardClaims(trimmed, args.fen).violations.length > 0) {
+          void logAppAudit({
+            kind: 'claim-validator-trip',
+            category: 'subsystem',
+            source: 'usePositionNarration.boardClaimGate',
+            summary: `dropped a board-false sentence before speaking: "${trimmed.slice(0, 60)}"`,
+            details: JSON.stringify({ sentence: trimmed.slice(0, 200) }),
+            fen: args.fen,
+          });
+          return;
+        }
         sentenceCount += 1;
         if (sentenceCount === 1) {
           const firstDispatchMs = Date.now() - tapTs;
