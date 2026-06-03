@@ -65,6 +65,33 @@ verified-or-silent policy (drop unsourced, never invent).
 - **Content program (not a code task)** — widen pre-authored masterclass
   coverage so high-traffic asks bypass the LLM at runtime = literal 0.
 
+## Follow-ups raised from the 2026-06-03 prod audit (build 1738f94)
+
+These are PRE-EXISTING (not caused by the gate work) — captured for the
+next pass:
+
+1. **Tactic-call ↔ hint disconnect + false positives.** The "You have a
+   tactic" announcer (`tacticAlertService.detectGameplayTactic`) fires when
+   the best move is ≥150cp better than the 2nd-best + a geometry match — so
+   a FORCED DEFENSIVE move (e.g. Rf1 stopping f2=Q in a lost position) trips
+   it as a "tactic." The hint (`useHintSystem`) is a SEPARATE LLM call that
+   reveals Stockfish's best move with generic prose and has no idea a tactic
+   was announced. Fix: (a) tighten the call to require an eval/material
+   SWING in the student's favour, not just best≫2nd; (b) thread the detected
+   tactic into the hint so it NAMES it ("this is the pin — Rf1…").
+2. **Play-surface narration "trips over itself."** Multiple narration
+   sources (tactic alert, phase transition, opponent-move) fire overlapping
+   non-forced `voiceService.speak` → `tts-concurrent-speak` collisions. Fix:
+   serialize all play-surface narration through ONE queue; drop the
+   over-triggered tactic alerts (see #1).
+3. **iOS Polly streaming decode failure → mid-sentence cut-off.** Finding 6:
+   `code=3 Media failed to decode` on iPhone iOS 18.7 → fallover to Web
+   Speech mid-utterance ("…King ac"). Harden the iOS ManagedMediaSource
+   streaming path (retry / buffered fallback) before bailing to Web Speech.
+4. **DONE (this pass):** walkthrough narration board-gate softened to drop
+   only the offending sentence, never blank the whole beat (was a possible
+   Learn "cut off" contributor).
+
 ## Decisions
 - Keep the redundant crude player-stat refusal (David: redundancy is fine).
 - Factual player NAME allowed; only ungrounded STAT dropped.

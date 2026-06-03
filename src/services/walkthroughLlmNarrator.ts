@@ -19,7 +19,7 @@
 import { Chess } from 'chess.js';
 import { getCoachChatResponse } from './coachApi';
 import { isGenericAnnotationText } from './walkthroughNarration';
-import { validateBoardClaims } from './boardClaimValidator';
+import { stripDisprovenSentences } from './boardClaimValidator';
 import { logAppAudit } from './appAuditor';
 import { db } from '../db/schema';
 
@@ -145,25 +145,27 @@ export async function generateWalkthroughNarrations(
 
   // Fold LLM output back into the full array, preserving curated
   // entries where they exist. LLM-GENERATED entries pass the board-claim
-  // gate against the move's own FEN before they're cached/displayed — a
-  // provably-false board fact ("the knight on a3" when a3 is empty) is
-  // blanked (the walkthrough then shows the move without prose). Curated
+  // gate against the move's own FEN — but only the OFFENDING sentence is
+  // dropped, never the whole beat (a single false-positive must not
+  // silence an entire move's narration → "narration cut off"). Curated
   // entries are already build-time-verified (narrationAccuracy), so they
   // skip the gate.
   const merged = perMove.map((ctx, i) => {
     const curated = (existing[i] ?? '').trim();
     if (curated && !isGenericAnnotationText(curated)) return curated;
     const llm = llmNarrations[i] ?? '';
-    if (llm && validateBoardClaims(llm, ctx.fenAfter).violations.length > 0) {
+    if (!llm) return llm;
+    const { clean, dropped } = stripDisprovenSentences(llm, ctx.fenAfter);
+    if (dropped.length > 0) {
       void logAppAudit({
         kind: 'claim-validator-trip',
         category: 'subsystem',
         source: 'walkthroughLlmNarrator.boardClaimGate',
-        summary: `blanked a board-false walkthrough narration on "${input.openingName}" move ${i + 1}: "${llm.slice(0, 60)}"`,
-        details: JSON.stringify({ move: ctx.san, fen: ctx.fenAfter, narration: llm.slice(0, 200) }),
+        summary: `dropped ${dropped.length} board-false sentence(s) on "${input.openingName}" move ${i + 1} (kept the rest)`,
+        details: JSON.stringify({ move: ctx.san, fen: ctx.fenAfter, dropped: dropped.map((d) => d.sentence) }),
         fen: ctx.fenAfter,
       });
-      return '';
+      return clean;
     }
     return llm;
   });
