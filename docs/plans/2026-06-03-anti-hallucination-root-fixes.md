@@ -92,8 +92,20 @@ Playwright run is owed once this lands on `main` (Vercel has the LLM key).
 | 10 | false forced-MATE claims | found+fixed: eval gate had **no mate detection** ("White has mate in 3") |
 | 11 | marker safety + generator gate (gradeNarrationText) | 8/8 — markers intact, generator path strips lies |
 | 12 | capstone — every lie type in one packed reply | all stripped, all truths kept |
+| 13 | edge-case boards (check/endgame/promotion/en-passant) | 11/11, robust + fails open on bad FEN |
+| 14 | false CHECK / CHECKMATE announcements | found+added: gate had **no check-state**; chess.js ground truth, low-FP |
+| 15 | false STALEMATE / insufficient-material | added; completes the board-STATE family (check/mate/stalemate/draw) |
 
-**~160 tests green across 11 files.** **Three real issues found & fixed:**
+**~195 tests green across 13 files.** **FIVE real issues found & addressed:**
+skewer geometry (bug), true-absence censoring (bug), false forced-mate
+(eval-gate gap), false check/checkmate (board-state gap), false stalemate/
+insufficient-material (board-state gap). The board-STATE family is now
+complete. Deliberately NOT gated (FP risk / not FEN-determinable): bare-draw
+assessments, threefold repetition, verb-separated prose forms, the maxim FP,
+departure-after-phrase. Kid path intentionally un-board-gated (no-master-play
+contract) — flagged for David, not force-changed.
+
+**Three real issues found & addressed in the first wave:**
 (a) impossible-skewer geometry slipped, (b) the gate **censored true
 absence** statements, (c) the eval gate missed **false forced-mate** claims.
 Documented deferrals (measured tradeoffs, not blind patches): verb-separated
