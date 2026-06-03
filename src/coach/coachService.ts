@@ -406,11 +406,15 @@ function runAnswerGates(
   tactics: TacticsLiveContext | null,
   surface: string,
   playerDataGrounded: boolean,
+  evalCp: number | undefined,
+  evalMateIn: number | undefined,
 ): string {
   return groundCoachReply(finalText, {
     fen,
     tactics,
     playerDataGrounded,
+    evalCp,
+    evalMateIn,
     source: `coachService:${surface}`,
   });
 }
@@ -1252,7 +1256,15 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   // sailed through. Centralising them in the spine wires every gate into
   // every turn. The board the prose describes is `boardFenForClaims`
   // (live FEN advanced by this turn's board-changing tools).
-  finalText = runAnswerGates(finalText, boardFenForClaims, input.liveState.tactics ?? null, input.surface, playerDataGrounded);
+  finalText = runAnswerGates(
+    finalText,
+    boardFenForClaims,
+    input.liveState.tactics ?? null,
+    input.surface,
+    playerDataGrounded,
+    input.liveState.evalCp,
+    input.liveState.evalMateIn,
+  );
 
   // Board-announce gate (was CoachTeachPage-only): when a board-changing
   // tool fired, the spoken [VOICE:] block should announce it ("Setting the

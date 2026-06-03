@@ -34,6 +34,7 @@ import { groundCoachAnswerBoardClaims, validateBoardClaims } from './boardClaimV
 import { stripUngroundedPlayerStats } from './claimValidator';
 import { validateArrowClaims, synthesizeMissingArrows } from './arrowClaimValidator';
 import { validateTacticClaims } from './tacticClaimValidator';
+import { stripDisprovenEvalSentences } from './evalClaimValidator';
 import type { TacticsLiveContext } from '../coach/types';
 
 /** Per-sentence spoken gate for STREAMING-TTS surfaces. Those hand each
@@ -73,6 +74,12 @@ export interface CoachAnswerGateOptions {
    *  player-stat gate fires (any pro stat is then ungrounded). Defaults to
    *  false (the safe default for a surface that runs no player tools). */
   playerDataGrounded?: boolean;
+  /** Ground-truth engine eval (White's-perspective centipawns) for the
+   *  position the prose describes. When present, the eval gate drops a
+   *  sentence whose who's-winning claim egregiously contradicts it. */
+  evalCp?: number;
+  /** Mate distance in plies (positive = White mates). Supersedes evalCp. */
+  evalMateIn?: number;
   /** Audit-source namespace, e.g. "coachService" or "masterclassChat". */
   source: string;
 }
@@ -83,7 +90,28 @@ export interface CoachAnswerGateOptions {
 export function groundCoachReply(text: string, opts: CoachAnswerGateOptions): string {
   let out = text;
   if (!out.trim()) return out;
-  const { fen, tactics = null, playerDataGrounded = false, source } = opts;
+  const { fen, tactics = null, playerDataGrounded = false, evalCp, evalMateIn, source } = opts;
+
+  // (eval) Who's-winning gate — drop a sentence whose assessment
+  // egregiously contradicts the ground-truth engine eval ("you're up a
+  // pawn" after losing the queen). Conservative thresholds (multi-pawn);
+  // a fuzzy judgment call is never touched. Runs only when an eval exists.
+  if (typeof evalCp === 'number' || typeof evalMateIn === 'number') {
+    try {
+      const evalGate = stripDisprovenEvalSentences(out, evalCp, evalMateIn);
+      if (evalGate.dropped.length > 0) {
+        out = evalGate.clean;
+        void logAppAudit({
+          kind: 'claim-validator-trip',
+          category: 'subsystem',
+          source: `${source}.evalClaimGate`,
+          summary: `dropped ${evalGate.dropped.length} eval-false sentence(s) (engine ${typeof evalMateIn === 'number' ? `mate ${evalMateIn}` : ((evalCp ?? 0) / 100).toFixed(1)})`,
+          details: JSON.stringify({ source, evalCp, evalMateIn, dropped: evalGate.dropped }),
+          fen: fen ?? undefined,
+        });
+      }
+    } catch { /* never block */ }
+  }
 
   // (0) Player-stat gate.
   try {

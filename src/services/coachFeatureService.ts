@@ -1,6 +1,7 @@
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { getCoachCommentary } from './coachApi';
+import { groundCoachReply } from './coachAnswerGates';
 import { buildChessContextMessage } from './coachPrompts';
 import { coachService } from '../coach/coachService';
 // REVIEW_MOVE_SEGMENT_ADDITION dropped in ship-3 — the per-ply segments
@@ -72,7 +73,7 @@ export async function getPostGameAnalysis(
   context: CoachContext,
   onStream?: (chunk: string) => void,
 ): Promise<string> {
-  return getCoachCommentary('post_game_analysis', context, onStream);
+  return gateReport('post_game_analysis', context, onStream);
 }
 
 // ─── Daily Lesson ───────────────────────────────────────────────────────────
@@ -81,7 +82,7 @@ export async function getDailyLesson(
   context: CoachContext,
   onStream?: (chunk: string) => void,
 ): Promise<string> {
-  return getCoachCommentary('daily_lesson', context, onStream);
+  return gateReport('daily_lesson', context, onStream);
 }
 
 // ─── Bad Habit Report ───────────────────────────────────────────────────────
@@ -90,7 +91,7 @@ export async function getBadHabitReport(
   context: CoachContext,
   onStream?: (chunk: string) => void,
 ): Promise<string> {
-  return getCoachCommentary('bad_habit_report', context, onStream);
+  return gateReport('bad_habit_report', context, onStream);
 }
 
 // ─── Weekly Report ──────────────────────────────────────────────────────────
@@ -99,7 +100,20 @@ export async function getWeeklyReport(
   context: CoachContext,
   onStream?: (chunk: string) => void,
 ): Promise<string> {
-  return getCoachCommentary('weekly_report', context, onStream);
+  return gateReport('weekly_report', context, onStream);
+}
+
+/** These report surfaces are non-board prose about the STUDENT's own
+ *  games, so the load-bearing gate is the ungrounded-player-stat strip
+ *  (a report can't ship an unsupported pro statistic). No FEN, so the
+ *  board/arrow gates self-skip. */
+async function gateReport(
+  task: 'post_game_analysis' | 'daily_lesson' | 'bad_habit_report' | 'weekly_report',
+  context: CoachContext,
+  onStream?: (chunk: string) => void,
+): Promise<string> {
+  const raw = await getCoachCommentary(task, context, onStream);
+  return groundCoachReply(raw, { source: `coachFeature:${task}` });
 }
 
 // ─── Bad Habit Detection from Coach Game ────────────────────────────────────

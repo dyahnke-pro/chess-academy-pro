@@ -14,6 +14,7 @@
  * failure we gracefully fall back to the joined bullet string.
  */
 import { getCoachChatResponse } from './coachApi';
+import { groundCoachReply } from './coachAnswerGates';
 import { db } from '../db/schema';
 
 /** Cache version — bump to invalidate all cached paragraphs when the
@@ -99,7 +100,10 @@ async function requestParagraph(
     'chat_response',
     500,
   );
-  return sanitize(raw);
+  // No live board here (section prose, not a position), so the gate's
+  // load-bearing check is the ungrounded-player-stat strip — a traps/
+  // pitfalls paragraph can't ship an unsupported "<pro> wins 70%" claim.
+  return groundCoachReply(sanitize(raw), { source: 'openingSectionNarrator' });
 }
 
 function sanitize(raw: string): string {
