@@ -445,6 +445,27 @@ export function validateBoardClaims(text: string, fen: string): BoardClaimResult
       if (!inChk) {
         violations.push({ kind: 'check-state', claim: sentence.trim().slice(0, 80), reason: 'claims a side is in check, but no king is in check' });
       }
+      continue;
+    }
+    // STALEMATE — precise present claim ("this is stalemate", "stalemate!").
+    if (/\b(?:this\s+is|that'?s|it'?s)\s+stalemate\b/i.test(sentence) || /(?:^|[\s—-])stalemate\s*[!.]/i.test(sentence)) {
+      let isStale = false;
+      try { isStale = chess.isStalemate(); } catch { isStale = true; }
+      if (!isStale) {
+        violations.push({ kind: 'check-state', claim: sentence.trim().slice(0, 80), reason: 'claims stalemate but the position is not stalemate' });
+      }
+      continue;
+    }
+    // INSUFFICIENT MATERIAL — a precise rule term (FEN-determinable). NOT a
+    // bare "this is a draw" (that's a fuzzy assessment, not a rule claim) and
+    // NOT threefold (a FEN-built position carries no repetition history, so
+    // the validator can't know it — flagging it would be a false positive).
+    if (/\binsufficient\s+material\b/i.test(sentence)) {
+      let insuf = false;
+      try { insuf = chess.isInsufficientMaterial(); } catch { insuf = true; }
+      if (!insuf) {
+        violations.push({ kind: 'check-state', claim: sentence.trim().slice(0, 80), reason: 'claims insufficient material, but there is enough material to mate' });
+      }
     }
   }
 
