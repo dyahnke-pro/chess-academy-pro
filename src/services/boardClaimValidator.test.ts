@@ -125,6 +125,33 @@ describe('validateBoardClaims — negation / absence (audit 2026-06-03 pass 7)',
   // an occasional strip of a rare "X on sq is gone" sentence.
 });
 
+describe('validateBoardClaims — check / checkmate state (audit pass 14)', () => {
+  const QUIET = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+  const FOOLS_MATE = 'rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3';
+  it('flags a false "in check" on a quiet board', () => {
+    expect(validateBoardClaims('You are in check right now.', QUIET).ok).toBe(false);
+    expect(validateBoardClaims('The king on e1 is in check.', QUIET).ok).toBe(false);
+  });
+  it('flags a false "checkmate!" announcement', () => {
+    expect(validateBoardClaims('Checkmate!', QUIET).ok).toBe(false);
+    expect(validateBoardClaims('This is checkmate.', QUIET).ok).toBe(false);
+  });
+  it('keeps a REAL check / checkmate', () => {
+    expect(validateBoardClaims('You are in check.', FOOLS_MATE).ok).toBe(true);
+    expect(validateBoardClaims('This is checkmate.', FOOLS_MATE).ok).toBe(true);
+  });
+  it('does NOT confuse a forced-mate claim with a checkmate announcement', () => {
+    // "checkmate in 3" / "forced mate" are forced-mate claims (eval gate),
+    // not a present-checkmate board state — must NOT be flagged here.
+    expect(validateBoardClaims('White has a forced mate. Finish strong.', QUIET).ok).toBe(true);
+    expect(validateBoardClaims('There is checkmate in 3 here.', QUIET).ok).toBe(true);
+  });
+  it('keeps hypothetical / negated check claims (no false positive)', () => {
+    expect(validateBoardClaims('If you castle, your king could be in check.', QUIET).ok).toBe(true);
+    expect(validateBoardClaims('Your king is not in check.', QUIET).ok).toBe(true);
+  });
+});
+
 describe('validateBoardClaims — piece on square', () => {
   it('flags a piece named on an empty square', () => {
     // f6 is empty in BUG_FEN.

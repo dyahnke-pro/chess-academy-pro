@@ -42,7 +42,7 @@
 import { Chess } from 'chess.js';
 import type { Square, PieceSymbol } from 'chess.js';
 
-export type BoardClaimKind = 'piece-on-square' | 'pin-geometry';
+export type BoardClaimKind = 'piece-on-square' | 'pin-geometry' | 'check-state';
 
 export interface BoardClaimViolation {
   kind: BoardClaimKind;
@@ -390,6 +390,60 @@ export function validateBoardClaims(text: string, fen: string): BoardClaimResult
           claim: c.raw,
           reason: `the piece on ${c.square} is ${p.color === 'w' ? 'white' : 'black'}, not ${c.color === 'w' ? 'white' : 'black'}`,
         });
+      }
+    }
+  }
+
+  // ── (3) CHECK / CHECKMATE STATE ───────────────────────────────────
+  // A coach falsely announcing "you're in check" / "this is checkmate" is a
+  // board-fact hallucination, and chess.js is exact ground truth — so this
+  // is a low-false-positive gate (unlike fuzzy prose). Only PRESENT,
+  // ASSERTIVE, NON-negated claims are checked; hypotheticals ("if you
+  // castle you'll be in check") are future-marker-gated. In a legal
+  // position only the side to move can be in check, so chess.inCheck() is
+  // THE check state for bare claims; a named-king claim is verified by
+  // whether that king's square is actually attacked.
+  for (const sentence of splitSentences(text)) {
+    if (FUTURE_MARKER_RE.test(sentence) || NEGATION_RE.test(sentence)) continue;
+    // CHECKMATE — present assertive ANNOUNCEMENT only ("this is checkmate",
+    // "checkmate!"). Requires the FULL word "checkmate" and is NOT a
+    // "checkmate in N" / "forced mate" forced-mate claim (those belong to
+    // the eval gate's MATE_RE; matching a bare "...forced mate." here wrongly
+    // stripped a legitimate forced-mate claim — pass 14 regression).
+    if (/\b(?:this\s+is|that'?s|it'?s|here'?s)\s+checkmate\b(?!\s+in\b)/i.test(sentence) || /(?:^|[\s—-])checkmate\s*[!.]/i.test(sentence)) {
+      let isMate = false;
+      try { isMate = chess.isCheckmate(); } catch { isMate = true; /* unknown → don't flag */ }
+      if (!isMate) {
+        violations.push({ kind: 'check-state', claim: sentence.trim().slice(0, 80), reason: 'claims checkmate but the position is not checkmate' });
+      }
+      continue;
+    }
+    // CHECK with a NAMED king square ("the king on e1 is in check", "checks
+    // the king on e1") — verify that king is actually attacked.
+    const named = /\b(?:the\s+)?king\s+on\s+([a-h][1-8])\s+is\s+(?:in\s+)?check\b/i.exec(sentence)
+      || /\bcheck(?:s|ing)?\s+the\s+king\s+on\s+([a-h][1-8])\b/i.exec(sentence);
+    if (named) {
+      const sq = named[1].toLowerCase();
+      if (isSquare(sq)) {
+        const p = chess.get(sq);
+        if (p && p.type === 'k') {
+          const enemy = p.color === 'w' ? 'b' : 'w';
+          let attacked = true;
+          try { attacked = chess.attackers(sq, enemy).length > 0; } catch { attacked = true; }
+          if (!attacked) {
+            violations.push({ kind: 'check-state', claim: sentence.trim().slice(0, 80), reason: `claims the king on ${sq} is in check, but it is not attacked` });
+          }
+        }
+      }
+      continue;
+    }
+    // BARE assertive check claim — side to move ("you are in check", "the
+    // king is in check", "this is check").
+    if (/\b(?:you\s+are|you'?re|the\s+king\s+is|this\s+is|that\s+is|it'?s)\s+(?:now\s+)?in\s+check\b/i.test(sentence)) {
+      let inChk = false;
+      try { inChk = chess.inCheck(); } catch { inChk = true; }
+      if (!inChk) {
+        violations.push({ kind: 'check-state', claim: sentence.trim().slice(0, 80), reason: 'claims a side is in check, but no king is in check' });
       }
     }
   }
