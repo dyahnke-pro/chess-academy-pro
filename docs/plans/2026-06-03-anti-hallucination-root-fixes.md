@@ -86,8 +86,19 @@ Playwright run is owed once this lands on `main` (Vercel has the LLM key).
 | 4 | disguised & buried (between truths, inside `[VOICE:]`/TTS, buried stat) | 7/7 caught |
 | 5 | eval contradiction + FEN-keying (groundCoachReply paths) | 7/7 (incl. same sentence stripped on empty-f6, kept on knight-f6) |
 | 6 | formatting evasion (caps/space/comma) + arrow synthesis (G6) | 8/8, no evasion gaps |
+| 7 | subtle FALSE-POSITIVE hunt: negation/absence | found+fixed: gate **censored TRUE absence** statements ("there is no knight on f6") |
+| 8 | multi-turn conversational game (25 turns, evolving board) | 25/25 position-specific lies caught, gated against each turn's fen |
+| 9 | stress pass-7 fix: negation clause-scoping | holds (negation in one clause can't shield a lie in another) |
+| 10 | false forced-MATE claims | found+fixed: eval gate had **no mate detection** ("White has mate in 3") |
+| 11 | marker safety + generator gate (gradeNarrationText) | 8/8 — markers intact, generator path strips lies |
+| 12 | capstone — every lie type in one packed reply | all stripped, all truths kept |
 
-**128 tests green across 8 files.** One real bug found & fixed (skewer).
+**~160 tests green across 11 files.** **Three real issues found & fixed:**
+(a) impossible-skewer geometry slipped, (b) the gate **censored true
+absence** statements, (c) the eval gate missed **false forced-mate** claims.
 Documented deferrals (measured tradeoffs, not blind patches): verb-separated
-prose forms ("the knight occupies f6") and the maxim false-positive ("a knight
-on f5 cannot be repelled") — widening verb detection raises the maxim-FP rate.
+prose forms ("the knight occupies f6"), the maxim false-positive ("a knight
+on f5 cannot be repelled"), and the departure-after-phrase case ("the knight
+on f6 is gone") — each widening raises a competing false-positive rate.
+The kid path is intentionally un-board-gated (no-master-play contract);
+flagged for David, not force-changed.
