@@ -92,6 +92,29 @@ next pass:
    only the offending sentence, never blank the whole beat (was a possible
    Learn "cut off" contributor).
 
+## Generator-gate unification (2026-06-03, David: "unify the rest of the app this way")
+ONE shared narration gate — `gradeNarrationText(text, fen, source, evalCp?)` in
+`coachAnswerGates.ts` — wraps the SAME boardClaimValidator/evalClaimValidator
+primitives the spine uses. Every content generator now calls it (no drift):
+- `openingGenerator` Learn walkthrough tree (idea/shortIdea/narration segs) ✓
+- `openingGenerator` punish prose (whyBad@postInaccuracyFen, whyPunish@postPunishFen) ✓
+- `walkthroughLlmNarrator` per-move ✓
+- `middlegamePlanner` PV per-move ✓
+- `openingSectionNarrator` + spine-bypass surfaces → `groundCoachReply` ✓
+- `coachMoveCommentary` → spine ✓
+- `kidPuzzleService` → STATIC templates, no LLM (no gate needed) ✓
+
+REMAINING ungated generator prose (deferred — needs careful per-item FEN
+mapping; wrong FEN = false-drops that break drills):
+- `openingGenerator` findMove candidate `explanation`s (FEN per question)
+- `openingGenerator` drill line annotations (FEN per move)
+- `openingGenerator` concept Q&A `explanation`s (Q&A — may lack a board FEN)
+Gate these with `gradeNarrationText` next, mapping each field to its FEN.
+
+Note: per-move-spine regeneration was considered and REJECTED (N LLM calls,
+worse coherence/cost, re-opens the parse problems the one-shot tree solved).
+Unify at the GATE, not the generation.
+
 ## Decisions
 - Keep the redundant crude player-stat refusal (David: redundancy is fine).
 - Factual player NAME allowed; only ungrounded STAT dropped.

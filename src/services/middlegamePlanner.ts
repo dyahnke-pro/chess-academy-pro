@@ -21,8 +21,7 @@ import middlegamePlans from '../data/middlegame-plans.json';
 import { buildSession } from './walkthroughAdapter';
 import { stockfishEngine } from './stockfishEngine';
 import { getCoachChatResponse } from './coachApi';
-import { validateBoardClaims } from './boardClaimValidator';
-import { logAppAudit } from './appAuditor';
+import { gradeNarrationText } from './coachAnswerGates';
 import type { WalkthroughSession } from '../types/walkthrough';
 import type { OpeningMoveAnnotation } from '../types';
 
@@ -364,19 +363,8 @@ async function narratePvLine(
       return sanMoves.map((_, i) => {
         const entry = parsed[i];
         const text = typeof entry === 'string' && entry.trim() ? entry.trim() : '';
-        const moveFen = fensAfter[i];
-        if (text && moveFen && validateBoardClaims(text, moveFen).violations.length > 0) {
-          void logAppAudit({
-            kind: 'claim-validator-trip',
-            category: 'subsystem',
-            source: 'middlegamePlanner.boardClaimGate',
-            summary: `blanked a board-false PV narration at move ${i + 1}: "${text.slice(0, 60)}"`,
-            details: JSON.stringify({ moveFen, narration: text.slice(0, 200) }),
-            fen: moveFen,
-          });
-          return '';
-        }
-        return text;
+        // Shared narration gate (same primitive as the spine + every generator).
+        return gradeNarrationText(text, fensAfter[i], 'middlegamePlanner') ?? text;
       });
     }
   } catch (err: unknown) {

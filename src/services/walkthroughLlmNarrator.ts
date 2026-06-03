@@ -19,8 +19,7 @@
 import { Chess } from 'chess.js';
 import { getCoachChatResponse } from './coachApi';
 import { isGenericAnnotationText } from './walkthroughNarration';
-import { stripDisprovenSentences } from './boardClaimValidator';
-import { logAppAudit } from './appAuditor';
+import { gradeNarrationText } from './coachAnswerGates';
 import { db } from '../db/schema';
 
 /** Cache version — bump to invalidate all previously-cached narrations
@@ -155,19 +154,8 @@ export async function generateWalkthroughNarrations(
     if (curated && !isGenericAnnotationText(curated)) return curated;
     const llm = llmNarrations[i] ?? '';
     if (!llm) return llm;
-    const { clean, dropped } = stripDisprovenSentences(llm, ctx.fenAfter);
-    if (dropped.length > 0) {
-      void logAppAudit({
-        kind: 'claim-validator-trip',
-        category: 'subsystem',
-        source: 'walkthroughLlmNarrator.boardClaimGate',
-        summary: `dropped ${dropped.length} board-false sentence(s) on "${input.openingName}" move ${i + 1} (kept the rest)`,
-        details: JSON.stringify({ move: ctx.san, fen: ctx.fenAfter, dropped: dropped.map((d) => d.sentence) }),
-        fen: ctx.fenAfter,
-      });
-      return clean;
-    }
-    return llm;
+    // Shared narration gate (same primitive as the spine + every generator).
+    return gradeNarrationText(llm, ctx.fenAfter, 'walkthroughLlmNarrator') ?? llm;
   });
 
   await writeCache(cacheKey, merged);

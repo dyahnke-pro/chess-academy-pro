@@ -30,7 +30,7 @@
  */
 import { Chess } from 'chess.js';
 import { logAppAudit } from './appAuditor';
-import { groundCoachAnswerBoardClaims, validateBoardClaims } from './boardClaimValidator';
+import { groundCoachAnswerBoardClaims, validateBoardClaims, stripDisprovenSentences } from './boardClaimValidator';
 import { stripUngroundedPlayerStats } from './claimValidator';
 import { validateArrowClaims, synthesizeMissingArrows } from './arrowClaimValidator';
 import { validateTacticClaims } from './tacticClaimValidator';
@@ -61,6 +61,51 @@ export function isSpokenSentenceGrounded(sentence: string, fen: string | null | 
     }
   } catch { /* never block speech on a validator fault */ }
   return true;
+}
+
+/** THE shared narration gate for CONTENT GENERATORS (openingGenerator,
+ *  walkthroughLlmNarrator, middlegamePlanner, …). A generator produces
+ *  per-move / per-position prose offline; this validates ONE such string
+ *  against the position it describes and drops only PROVABLY-false
+ *  board-fact (piece-on-square / pin) sentences — and, when an engine eval
+ *  for that position is known, eval-contradicting sentences too. Positional
+ *  phrasing is left untouched (the idea-frontier). Every generator calls
+ *  THIS, so there is one source of truth and no drift with the spine (which
+ *  uses the same boardClaimValidator/evalClaimValidator primitives).
+ *
+ *  Returns the cleaned text (may be '' if the whole line was a board lie —
+ *  silent beats false). `source` namespaces the audit. */
+export function gradeNarrationText(
+  text: string | undefined,
+  fen: string | null | undefined,
+  source: string,
+  evalCp?: number | null,
+): string | undefined {
+  if (!text || !text.trim() || !fen) return text;
+  try {
+    let out = text;
+    const board = stripDisprovenSentences(out, fen);
+    let droppedCount = board.dropped.length;
+    out = droppedCount > 0 ? board.clean : out;
+    if (typeof evalCp === 'number') {
+      const ev = stripDisprovenEvalSentences(out, evalCp);
+      droppedCount += ev.dropped.length;
+      out = ev.dropped.length > 0 ? ev.clean : out;
+    }
+    if (droppedCount > 0) {
+      void logAppAudit({
+        kind: 'claim-validator-trip',
+        category: 'subsystem',
+        source: `${source}.narrationGate`,
+        summary: `dropped ${droppedCount} board/eval-false narration sentence(s)`,
+        details: JSON.stringify({ source, fen, kept: out.slice(0, 120) }),
+        fen,
+      });
+    }
+    return out;
+  } catch {
+    return text; // never break generation on a validator fault
+  }
 }
 
 export interface CoachAnswerGateOptions {

@@ -42,7 +42,7 @@ import {
   type ForkBranch,
 } from './openingDetectionService';
 import { db, type CachedOpening } from '../db/schema';
-import { stripDisprovenSentences } from './boardClaimValidator';
+import { gradeNarrationText } from './coachAnswerGates';
 import { logAppAudit } from './appAuditor';
 import { buildOpeningNarrationContext } from './chessConceptService';
 import type {
@@ -923,6 +923,11 @@ export function repairPunishStage(
         report.notes.push(`punish[${i}]: truncated ${dropped} illegal followup move(s)`);
       }
     }
+    // Shared narration gate on the punish prose: whyBad describes the
+    // position AFTER the inaccuracy, whyPunish the position AFTER the
+    // punishment — drop any board-false sentence against those exact FENs.
+    lesson.whyBad = gradeNarrationText(lesson.whyBad, postInaccuracyFen, 'openingGenerator.punish') ?? lesson.whyBad;
+    lesson.whyPunish = gradeNarrationText(lesson.whyPunish, postPunishFen, 'openingGenerator.punish') ?? lesson.whyPunish;
     kept.push(lesson);
   }
   return { kept, report };
@@ -993,13 +998,13 @@ export function repairNarrationArrows(tree: WalkthroughTree): number {
  *  count of sentences dropped. */
 export function gradeNarrationBoardClaims(tree: WalkthroughTree): number {
   const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-  let dropped = 0;
+  let touched = 0;
+  // Uses the shared `gradeNarrationText` — the SAME board-claim primitive
+  // the spine and every other generator use (one source of truth).
   const gate = (text: string | undefined, fen: string): string | undefined => {
-    if (!text || !text.trim()) return text;
-    const res = stripDisprovenSentences(text, fen);
-    if (res.dropped.length === 0) return text;
-    dropped += res.dropped.length;
-    return res.clean; // may be '' if the whole line was a board lie — silent beats false
+    const out = gradeNarrationText(text, fen, 'openingGenerator');
+    if (out !== text) touched += 1;
+    return out;
   };
   const walk = (node: WalkthroughTreeNode, fenBefore: string): void => {
     let fenAfter = fenBefore;
@@ -1023,7 +1028,7 @@ export function gradeNarrationBoardClaims(tree: WalkthroughTree): number {
     for (const child of node.children) walk(child.node, fenAfter);
   };
   walk(tree.root, START);
-  return dropped;
+  return touched;
 }
 
 export function repairForkLabels(tree: WalkthroughTree): number {
