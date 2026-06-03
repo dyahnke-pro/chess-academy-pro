@@ -243,6 +243,26 @@ const CANONICAL_PLAYERS: ReadonlyArray<{ display: string; matchers: RegExp[] }> 
   { display: 'Wei Yi', matchers: [/\bwei\s+yi\b/i] },
   { display: 'Erigaisi', matchers: [/\berigaisi\b/i] },
   { display: 'Mamedyarov', matchers: [/\bmamedyarov\b/i] },
+  // Widened 2026-06-03 — strong GMs a coach cites that the validator
+  // couldn't even DETECT before (so an ungrounded attribution to them
+  // slipped through entirely). Strictly additive: an unknown name simply
+  // isn't checked, so adding a name only ever ADDS a grounding check.
+  // DELIBERATELY EXCLUDED: surnames that collide with opening eponyms
+  // (Réti, Bird, Evans, Caro, Najdorf) or common words (So → "so",
+  // Rapport → "rapport") — those would cry wolf on opening/word mentions,
+  // the documented reason a fully shape-based player detector is a NON-goal.
+  { display: 'Topalov', matchers: [/\btopalov\b/i] },
+  { display: 'Kramnik', matchers: [/\bkramnik\b/i] },
+  { display: 'Korchnoi', matchers: [/\bkorchnoi\b/i] },
+  { display: 'Smyslov', matchers: [/\bsmyslov\b/i] },
+  { display: 'Bronstein', matchers: [/\bbronstein\b/i] },
+  { display: 'Euwe', matchers: [/\beuwe\b/i] },
+  { display: 'Keres', matchers: [/\bkeres\b/i] },
+  { display: 'Gukesh', matchers: [/\bgukesh\b/i, /\bdommaraju\b/i] },
+  { display: 'Abdusattorov', matchers: [/\babdusattorov\b/i] },
+  { display: 'Dubov', matchers: [/\bdubov\b/i] },
+  { display: 'Grischuk', matchers: [/\bgrischuk\b/i] },
+  { display: 'Svidler', matchers: [/\bsvidler\b/i] },
 ];
 
 const YEAR_RE = /\b(19[0-9]{2}|20[0-2][0-9])\b/g;
@@ -290,14 +310,29 @@ function yearSeenInContext(year: number, context: MasterPlayContext): boolean {
 
 // ─── Comparative-claim extraction ───────────────────────────────────
 
-/** Pattern: "the most popular move is X" / "X is the most common".
- *  Captures the move/idea. The LLM tends to use a small set of comparative
- *  superlatives; v1 covers the most common ones. */
+/** Patterns that assert a SPECIFIC move is the theory-/data-preferred one
+ *  ("the most popular move is X", "the main line is X", "the sharpest
+ *  continuation is X", "Black's best try is X"). Each captures the move
+ *  token. A coach uses a wider vocabulary of these superlatives than just
+ *  "most popular" — widened 2026-06-03 so "main line"/"critical"/"sharpest"
+ *  claims are validated against the grounded top move too, not just
+ *  "popular"/"common"/"played". The capture is SAN-shape-guarded below so a
+ *  non-move description ("the main line is complex") is never validated. */
 const COMPARATIVE_PATTERNS: ReadonlyArray<RegExp> = [
   /\b(?:the\s+)?most\s+(?:popular|common|played)(?:\s+move)?\s+(?:is|here\s+is)\s+([A-Za-z0-9+#=-]+)/gi,
   /\b([A-Za-z0-9+#=-]+)\s+is\s+(?:the\s+)?most\s+(?:popular|common|played)/gi,
   /\bbest[- ]scoring\s+(?:move\s+)?(?:is|here\s+is)\s+([A-Za-z0-9+#=-]+)/gi,
+  /\b(?:the\s+)?main\s+(?:line|move|continuation)\s+(?:here\s+)?is\s+([A-Za-z0-9+#=-]+)/gi,
+  /\b(?:the\s+)?(?:critical|sharpest|principled|theoretical)\s+(?:move|line|continuation|try)\s+(?:here\s+)?is\s+([A-Za-z0-9+#=-]+)/gi,
+  /\b(?:best|main)\s+try\s+(?:here\s+)?is\s+([A-Za-z0-9+#=-]+)/gi,
 ];
+
+/** SAN-shape test for a comparative capture: validate the claim ONLY when
+ *  the captured token actually names a MOVE ("the main line is Nf3"), not a
+ *  description ("the main line is complex"). Mirrors the SAN_RE shapes
+ *  (piece move / pawn move / castling) anchored end-to-end. */
+const COMPARATIVE_SAN_SHAPE_RE =
+  /^(?:O-O-O|O-O|[KQRBN][a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|[a-h]x[a-h][1-8](?:=[QRBN])?[+#]?|[a-h][1-8](?:=[QRBN])?[+#]?)$/;
 
 function topMoveFromContext(context: MasterPlayContext): string | undefined {
   return context.current.moves[0]?.san;
@@ -572,22 +607,28 @@ export function validateClaims(
     let cm: RegExpExecArray | null;
     while ((cm = pat.exec(response))) {
       const claimed = cm[1];
+      // Normalize first, then SAN-shape-guard: a superlative that doesn't
+      // name a move ("the main line is complex", "the critical move is
+      // hard to find") asserts nothing about move popularity, so there's
+      // nothing to validate — skip it. This both widens coverage safely
+      // and removes a latent false positive in the original patterns.
+      const normalized = claimed.replace(/[.,;:!?"']/g, '').trim();
+      if (!COMPARATIVE_SAN_SHAPE_RE.test(normalized)) continue;
       if (!hasMasterData) {
         violations.push({
           kind: 'comparative',
           claim: cm[0],
-          reason: 'makes a comparative claim but master-play context has no data to back it',
+          reason: 'names a specific move as the top/main line but master-play context has no data to back it',
         });
         continue;
       }
       // Compare claimed move to the top one in context. Case-insensitive
       // and tolerant of "the X" prefixes.
-      const normalized = claimed.replace(/[.,;:!?"']/g, '').trim();
       if (topMove && normalized.toLowerCase() !== topMove.toLowerCase()) {
         violations.push({
           kind: 'comparative',
           claim: cm[0],
-          reason: `claims "${normalized}" is most popular but top master move in context is "${topMove}"`,
+          reason: `claims "${normalized}" is the top/main move but the top master move in context is "${topMove}"`,
         });
       }
     }

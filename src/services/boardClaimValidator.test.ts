@@ -42,6 +42,27 @@ describe('validateBoardClaims — pin geometry', () => {
     expect(r.violations.some((v) => v.kind === 'pin-geometry')).toBe(true);
   });
 
+  it('flags an impossible SKEWER phrased with "and" (audit 2026-06-03 pass 2)', () => {
+    // Twin of the pin incident: "skewers B and C" (not "to C") used to slip
+    // because the target was only split on " to ". b6/f3/e1 aren't collinear.
+    const r = validateBoardClaims(
+      'The queen on b6 skewers the knight on f3 and the king on e1.',
+      BUG_FEN,
+    );
+    expect(r.ok).toBe(false);
+    expect(r.violations.some((v) => v.kind === 'pin-geometry')).toBe(true);
+  });
+
+  it('does NOT flag a real collinear skewer phrased with "and"', () => {
+    // Bb5 / Nc6 / Ke8 are on one diagonal — a legitimate skewer claim.
+    const ruy = 'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3';
+    const r = validateBoardClaims(
+      'The bishop on b5 skewers the knight on c6 and the king on e8.',
+      ruy,
+    );
+    expect(r.ok).toBe(true);
+  });
+
   it('does NOT flag a real, collinear pin (Ruy: Bb5 pins Nc6 to Ke8)', () => {
     // 1.e4 e5 2.Nf3 Nc6 3.Bb5 — b5/c6/e8 are on one diagonal.
     const ruy = 'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3';
@@ -67,6 +88,67 @@ describe('validateBoardClaims — pin geometry', () => {
       BUG_FEN,
     );
     expect(r.ok).toBe(true);
+  });
+});
+
+describe('validateBoardClaims — negation / absence (audit 2026-06-03 pass 7)', () => {
+  // The gate must NOT strip a TRUE statement about a piece being ABSENT.
+  const F6_KNIGHT = 'rnbqkb1r/pppppppp/5n2/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 1 2';
+  it('keeps "there is no knight on f6" when f6 is empty (true absence)', () => {
+    expect(validateBoardClaims('There is no knight on f6 to defend the king.', BUG_FEN).ok).toBe(true);
+  });
+  it('keeps the contraction form "you don\'t have a knight on f6"', () => {
+    expect(validateBoardClaims("You don't have a knight on f6 yet.", BUG_FEN).ok).toBe(true);
+  });
+  it('keeps "without a bishop on f6" / "no longer a rook on f6"', () => {
+    expect(validateBoardClaims('Without a bishop on f6, the dark squares are weak.', BUG_FEN).ok).toBe(true);
+    expect(validateBoardClaims('There is no longer a rook on f6.', BUG_FEN).ok).toBe(true);
+  });
+  it('FLAGS a FALSE absence claim ("no knight on f6" when f6 holds a knight)', () => {
+    expect(validateBoardClaims('There is no knight on f6.', F6_KNIGHT).ok).toBe(false);
+  });
+  it('still flags a presence lie ("the knight on f6" on an empty f6)', () => {
+    expect(validateBoardClaims('The knight on f6 guards the centre.', BUG_FEN).ok).toBe(false);
+  });
+  it('a negation in one clause does NOT shield a presence lie in another (pass 9)', () => {
+    // The negation is clause-scoped (split on comma/semicolon), so "no rook
+    // on a1" must not protect the false "knight on f6" in the next clause.
+    expect(validateBoardClaims('There is no rook on a1, but the knight on f6 controls e4.', BUG_FEN).ok).toBe(false);
+    expect(validateBoardClaims('No bishop on c8; the knight on f6 is a monster.', BUG_FEN).ok).toBe(false);
+    expect(validateBoardClaims('Without a queen on d1, the knight on f6 dominates.', BUG_FEN).ok).toBe(false);
+  });
+  // KNOWN MINOR LIMITATION (documented, not fixed): a DEPARTURE phrasing whose
+  // cue sits AFTER the phrase ("the knight on f6 is gone") is still flagged —
+  // isNegatedAt only scans the clause BEFORE the phrase, because scanning
+  // after would mis-invert common true present claims ("the knight on f6 is
+  // not well placed"). The before-only scope is the safe choice; the cost is
+  // an occasional strip of a rare "X on sq is gone" sentence.
+});
+
+describe('validateBoardClaims — check / checkmate state (audit pass 14)', () => {
+  const QUIET = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+  const FOOLS_MATE = 'rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3';
+  it('flags a false "in check" on a quiet board', () => {
+    expect(validateBoardClaims('You are in check right now.', QUIET).ok).toBe(false);
+    expect(validateBoardClaims('The king on e1 is in check.', QUIET).ok).toBe(false);
+  });
+  it('flags a false "checkmate!" announcement', () => {
+    expect(validateBoardClaims('Checkmate!', QUIET).ok).toBe(false);
+    expect(validateBoardClaims('This is checkmate.', QUIET).ok).toBe(false);
+  });
+  it('keeps a REAL check / checkmate', () => {
+    expect(validateBoardClaims('You are in check.', FOOLS_MATE).ok).toBe(true);
+    expect(validateBoardClaims('This is checkmate.', FOOLS_MATE).ok).toBe(true);
+  });
+  it('does NOT confuse a forced-mate claim with a checkmate announcement', () => {
+    // "checkmate in 3" / "forced mate" are forced-mate claims (eval gate),
+    // not a present-checkmate board state — must NOT be flagged here.
+    expect(validateBoardClaims('White has a forced mate. Finish strong.', QUIET).ok).toBe(true);
+    expect(validateBoardClaims('There is checkmate in 3 here.', QUIET).ok).toBe(true);
+  });
+  it('keeps hypothetical / negated check claims (no false positive)', () => {
+    expect(validateBoardClaims('If you castle, your king could be in check.', QUIET).ok).toBe(true);
+    expect(validateBoardClaims('Your king is not in check.', QUIET).ok).toBe(true);
   });
 });
 

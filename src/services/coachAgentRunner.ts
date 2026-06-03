@@ -32,6 +32,7 @@ import { extractAndRememberNotes, buildCoachMemoryBlock } from './coachMemorySer
 import { buildStudentStateBlock } from './studentStateBlock';
 import { buildGroundingBlock } from './coachContextEnricher';
 import { recordAudit } from './narrationAuditor';
+import { groundCoachReply } from './coachAnswerGates';
 import { logAppAudit } from './appAuditor';
 import { detectSanitizerLeak } from './voiceService';
 import { useCoachSessionStore } from '../stores/coachSessionStore';
@@ -238,9 +239,24 @@ export async function runAgentTurn(
     content: m.content,
   }));
 
-  const raw = await getCoachChatResponse(trimmed, systemAddition, onChunk);
+  // Collect the full reply WITHOUT streaming so the board-truth gate can
+  // strip a provably-false board claim ("the knight on f6 pins the queen"
+  // on a board with no f6 knight) BEFORE it is shown OR spoken — streaming
+  // raw would let the lie reach the UI/TTS before any gate runs, which is
+  // exactly the failure the gate exists to stop. Then emit the gated text
+  // once. This makes coachAgentRunner consistent with its peer rich-
+  // grounding surfaces (MasterclassCoachChat / useLiveCoach /
+  // MiddlegamePractice), every one of which already gates via
+  // groundCoachReply. lastBoardFen is the board the prose describes;
+  // playerDataGrounded defaults false (this surface runs no player-data
+  // tools — buildGroundingBlock is explorer/engine/insight grounding).
+  const raw = await getCoachChatResponse(trimmed, systemAddition);
+  const gatedRaw = lastBoardFen
+    ? groundCoachReply(raw, { fen: lastBoardFen, source: '/coach (agent)' })
+    : raw;
+  if (onChunk && gatedRaw) onChunk(gatedRaw);
 
-  const { cleanText: afterActions, actions } = parseActions(raw);
+  const { cleanText: afterActions, actions } = parseActions(gatedRaw);
 
   if (actions.length > 0) {
     const ctx: ActionContext = { navigate, ...(game ? { game } : {}) };

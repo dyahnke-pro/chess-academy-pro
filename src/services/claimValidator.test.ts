@@ -284,6 +284,19 @@ describe('validateClaims — entity check', () => {
     const r = validateClaims('This opening dates back to before 1850 in classical chess.', buildContext());
     expect(r.violations.some((v) => v.kind === 'entity' && /1850/.test(v.claim))).toBe(false);
   });
+
+  // ── Widened player set (2026-06-03): names the validator couldn't even
+  //    DETECT before now get a grounding check. ──
+  it('flags a newly-covered player (Kramnik) when nothing grounds it', () => {
+    const r = validateClaims('Kramnik built a whole career on this Berlin structure.', emptyContext());
+    expect(r.violations.some((v) => v.kind === 'entity' && v.claim === 'Kramnik')).toBe(true);
+  });
+
+  it('accepts a newly-covered player when groundedPlayers carries them', () => {
+    const ctx = { ...emptyContext(), groundedPlayers: ['Topalov'] };
+    const r = validateClaims('Topalov went for the sharpest line every time.', ctx);
+    expect(r.violations.some((v) => v.kind === 'entity' && v.claim === 'Topalov')).toBe(false);
+  });
 });
 
 describe('validateClaims — comparative check', () => {
@@ -302,6 +315,38 @@ describe('validateClaims — comparative check', () => {
     const r = validateClaims('The most popular move is Bb5.', emptyContext());
     expect(r.ok).toBe(false);
     expect(r.violations.some((v) => v.kind === 'comparative')).toBe(true);
+  });
+
+  // ── Widened superlatives (2026-06-03) ──────────────────────────────
+  it('passes "the main line is Bb5" (top is Bb5)', () => {
+    const r = validateClaims('The main line here is Bb5.', buildContext());
+    expect(r.violations.filter((v) => v.kind === 'comparative')).toEqual([]);
+  });
+
+  it('flags "the main line is d4" (top is Bb5, not d4)', () => {
+    const r = validateClaims('The main line is d4.', buildContext());
+    expect(r.violations.some((v) => v.kind === 'comparative')).toBe(true);
+  });
+
+  it('flags "the sharpest continuation is d4" when the top move is Bb5', () => {
+    const r = validateClaims('The sharpest continuation here is d4.', buildContext());
+    expect(r.violations.some((v) => v.kind === 'comparative')).toBe(true);
+  });
+
+  it('flags "the critical move is Nh6" (a move not even in context)', () => {
+    const r = validateClaims('The critical move here is Nh6.', buildContext());
+    expect(r.violations.some((v) => v.kind === 'comparative')).toBe(true);
+  });
+
+  // ── SAN-shape guard: a non-move description is NOT a comparative claim ──
+  it('does NOT flag "the main line is complex" (no move named)', () => {
+    const r = validateClaims('The main line is complex and double-edged.', buildContext());
+    expect(r.violations.filter((v) => v.kind === 'comparative')).toEqual([]);
+  });
+
+  it('does NOT flag "the critical move is hard to find" off-data either', () => {
+    const r = validateClaims('The critical move is hard to find here.', emptyContext());
+    expect(r.violations.filter((v) => v.kind === 'comparative')).toEqual([]);
   });
 });
 

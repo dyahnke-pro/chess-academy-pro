@@ -42,7 +42,7 @@
 import { Chess } from 'chess.js';
 import type { Square, PieceSymbol } from 'chess.js';
 
-export type BoardClaimKind = 'piece-on-square' | 'pin-geometry';
+export type BoardClaimKind = 'piece-on-square' | 'pin-geometry' | 'check-state';
 
 export interface BoardClaimViolation {
   kind: BoardClaimKind;
@@ -68,6 +68,24 @@ const TYPE_TO_PIECE_WORD: Record<PieceSymbol, string> = {
  *  FEN can't adjudicate piece-on-square claims inside them. Pin GEOMETRY
  *  is still checked separately (it gates on present pieces). */
 const FUTURE_MARKER_RE = /\b(after|if|once|then|would|will|could|should|when|next|prepares?|preparing|plan(?:s|ning)?|threatens?|going to|about to)\b/i;
+
+/** Negation / absence cues. A piece-on-square phrase governed by one of
+ *  these asserts the piece is NOT there ("there is no knight on f6",
+ *  "without a bishop on f6", "you don't have a rook on f6") — the OPPOSITE
+ *  of a presence claim. Stripping those true-absence sentences as if they
+ *  claimed presence is a false positive that censors legitimate coaching
+ *  (audit 2026-06-03 pass 7). For a negated claim the violation inverts:
+ *  it's false only when the piece IS actually on the square. */
+const NEGATION_RE = /\b(?:no|not|never|without|none|nor|no\s+longer|cannot|lacks?|lacking|missing|absent)\b|[a-z]+n['’]t\b/i;
+
+/** Is the piece-on-square phrase at `idx` inside `sentence` governed by a
+ *  negation cue? Scoped to the current clause (after the last comma / dash)
+ *  so a negation in an earlier clause doesn't bleed across. */
+function isNegatedAt(sentence: string, idx: number): boolean {
+  const bounds = [sentence.lastIndexOf(',', idx), sentence.lastIndexOf(';', idx), sentence.lastIndexOf('—', idx), sentence.lastIndexOf(' - ', idx)];
+  const clauseStart = Math.max(-1, ...bounds) + 1;
+  return NEGATION_RE.test(sentence.slice(clauseStart, idx + 1));
+}
 
 function isSquare(s: string): s is Square {
   return /^[a-h][1-8]$/.test(s);
@@ -227,11 +245,26 @@ export function validateBoardClaims(text: string, fen: string): BoardClaimResult
     // available for pronoun resolution ("…queen on b6 pins IT to …").
     const preRaw = text.slice(Math.max(0, verbStart - 110), verbStart);
     const pre = preRaw.split(/[.;!?]/).pop() ?? preRaw;
-    // post = after verb up to a sentence end; split on " to " for target.
+    // post = after verb up to a sentence end; split for the target.
     const postRaw = text.slice(verbEnd, verbEnd + 90).split(/[.;!?]/)[0] ?? '';
+    // "A pins B to C" — the target sits after " to ". A SKEWER, though, is
+    // usually phrased "A skewers B and C" / "A skewers B, winning C" — same
+    // geometry as a pin (A, B and C on one line, B between A and C), just a
+    // different connective. So when there's no " to " target, fall back to
+    // splitting the post-verb clause on " and " / a comma to find the back
+    // piece. Without this, "the queen on b6 skewers the knight on f3 and the
+    // king on e1" (geometrically impossible) slipped the gate entirely.
+    let pinnedPhrase: string;
+    let targetPhrase: string;
     const toSplit = postRaw.split(/\bto\b/i);
-    const pinnedPhrase = toSplit[0] ?? '';
-    const targetPhrase = toSplit.slice(1).join(' to ');
+    if (toSplit.length > 1) {
+      pinnedPhrase = toSplit[0] ?? '';
+      targetPhrase = toSplit.slice(1).join(' to ');
+    } else {
+      const andSplit = postRaw.split(/\band\b|,/i);
+      pinnedPhrase = andSplit[0] ?? '';
+      targetPhrase = andSplit.slice(1).join(' ');
+    }
 
     const pinner = lastPieceRef(pre);
     if (!pinner) continue;
@@ -310,7 +343,7 @@ export function validateBoardClaims(text: string, fen: string): BoardClaimResult
   // ── (2) PIECE-ON-SQUARE (present-tense clauses only) ──────────────
   for (const sentence of splitSentences(text)) {
     if (FUTURE_MARKER_RE.test(sentence)) continue; // hypothetical board — skip
-    const claims: Array<{ type: PieceSymbol; color?: 'w' | 'b'; square: string; raw: string }> = [];
+    const claims: Array<{ type: PieceSymbol; color?: 'w' | 'b'; square: string; raw: string; negated: boolean }> = [];
     const fwd = /\b(white|black)?\s*(pawn|knight|bishop|rook|queen|king)\s+(?:on|at)\s+([a-h][1-8])\b/gi;
     const rev = /\b(?:the\s+)?([a-h][1-8])\s*[-–]\s*(pawn|knight|bishop|rook|queen|king)\b/gi;
     let pm: RegExpExecArray | null;
@@ -320,6 +353,7 @@ export function validateBoardClaims(text: string, fen: string): BoardClaimResult
         color: pm[1] ? COLOR_WORD[pm[1].toLowerCase()] : undefined,
         square: pm[3].toLowerCase(),
         raw: pm[0].trim(),
+        negated: isNegatedAt(sentence, pm.index),
       });
     }
     while ((pm = rev.exec(sentence)) !== null) {
@@ -327,11 +361,21 @@ export function validateBoardClaims(text: string, fen: string): BoardClaimResult
         type: PIECE_WORD_TO_TYPE[pm[2].toLowerCase()],
         square: pm[1].toLowerCase(),
         raw: pm[0].trim(),
+        negated: isNegatedAt(sentence, pm.index),
       });
     }
     for (const c of claims) {
       if (!isSquare(c.square)) continue;
       const p = chess.get(c.square);
+      // Negated/absence claim ("no knight on f6"): it asserts the piece is
+      // NOT there, so it's only FALSE when the piece IS actually present.
+      // (An empty square makes the absence claim TRUE — never strip it.)
+      if (c.negated) {
+        if (p && p.type === c.type && (!c.color || p.color === c.color)) {
+          violations.push({ kind: 'piece-on-square', claim: c.raw, reason: `claims no ${TYPE_TO_PIECE_WORD[c.type]} on ${c.square}, but one is there` });
+        }
+        continue;
+      }
       if (!p) {
         violations.push({ kind: 'piece-on-square', claim: c.raw, reason: `${c.square} is empty` });
       } else if (p.type !== c.type) {
@@ -346,6 +390,81 @@ export function validateBoardClaims(text: string, fen: string): BoardClaimResult
           claim: c.raw,
           reason: `the piece on ${c.square} is ${p.color === 'w' ? 'white' : 'black'}, not ${c.color === 'w' ? 'white' : 'black'}`,
         });
+      }
+    }
+  }
+
+  // ── (3) CHECK / CHECKMATE STATE ───────────────────────────────────
+  // A coach falsely announcing "you're in check" / "this is checkmate" is a
+  // board-fact hallucination, and chess.js is exact ground truth — so this
+  // is a low-false-positive gate (unlike fuzzy prose). Only PRESENT,
+  // ASSERTIVE, NON-negated claims are checked; hypotheticals ("if you
+  // castle you'll be in check") are future-marker-gated. In a legal
+  // position only the side to move can be in check, so chess.inCheck() is
+  // THE check state for bare claims; a named-king claim is verified by
+  // whether that king's square is actually attacked.
+  for (const sentence of splitSentences(text)) {
+    if (FUTURE_MARKER_RE.test(sentence) || NEGATION_RE.test(sentence)) continue;
+    // CHECKMATE — present assertive ANNOUNCEMENT only ("this is checkmate",
+    // "checkmate!"). Requires the FULL word "checkmate" and is NOT a
+    // "checkmate in N" / "forced mate" forced-mate claim (those belong to
+    // the eval gate's MATE_RE; matching a bare "...forced mate." here wrongly
+    // stripped a legitimate forced-mate claim — pass 14 regression).
+    if (/\b(?:this\s+is|that'?s|it'?s|here'?s)\s+checkmate\b(?!\s+in\b)/i.test(sentence) || /(?:^|[\s—-])checkmate\s*[!.]/i.test(sentence)) {
+      let isMate = false;
+      try { isMate = chess.isCheckmate(); } catch { isMate = true; /* unknown → don't flag */ }
+      if (!isMate) {
+        violations.push({ kind: 'check-state', claim: sentence.trim().slice(0, 80), reason: 'claims checkmate but the position is not checkmate' });
+      }
+      continue;
+    }
+    // CHECK with a NAMED king square ("the king on e1 is in check", "checks
+    // the king on e1") — verify that king is actually attacked.
+    const named = /\b(?:the\s+)?king\s+on\s+([a-h][1-8])\s+is\s+(?:in\s+)?check\b/i.exec(sentence)
+      || /\bcheck(?:s|ing)?\s+the\s+king\s+on\s+([a-h][1-8])\b/i.exec(sentence);
+    if (named) {
+      const sq = named[1].toLowerCase();
+      if (isSquare(sq)) {
+        const p = chess.get(sq);
+        if (p && p.type === 'k') {
+          const enemy = p.color === 'w' ? 'b' : 'w';
+          let attacked = true;
+          try { attacked = chess.attackers(sq, enemy).length > 0; } catch { attacked = true; }
+          if (!attacked) {
+            violations.push({ kind: 'check-state', claim: sentence.trim().slice(0, 80), reason: `claims the king on ${sq} is in check, but it is not attacked` });
+          }
+        }
+      }
+      continue;
+    }
+    // BARE assertive check claim — side to move ("you are in check", "the
+    // king is in check", "this is check").
+    if (/\b(?:you\s+are|you'?re|the\s+king\s+is|this\s+is|that\s+is|it'?s)\s+(?:now\s+)?in\s+check\b/i.test(sentence)) {
+      let inChk = false;
+      try { inChk = chess.inCheck(); } catch { inChk = true; }
+      if (!inChk) {
+        violations.push({ kind: 'check-state', claim: sentence.trim().slice(0, 80), reason: 'claims a side is in check, but no king is in check' });
+      }
+      continue;
+    }
+    // STALEMATE — precise present claim ("this is stalemate", "stalemate!").
+    if (/\b(?:this\s+is|that'?s|it'?s)\s+stalemate\b/i.test(sentence) || /(?:^|[\s—-])stalemate\s*[!.]/i.test(sentence)) {
+      let isStale = false;
+      try { isStale = chess.isStalemate(); } catch { isStale = true; }
+      if (!isStale) {
+        violations.push({ kind: 'check-state', claim: sentence.trim().slice(0, 80), reason: 'claims stalemate but the position is not stalemate' });
+      }
+      continue;
+    }
+    // INSUFFICIENT MATERIAL — a precise rule term (FEN-determinable). NOT a
+    // bare "this is a draw" (that's a fuzzy assessment, not a rule claim) and
+    // NOT threefold (a FEN-built position carries no repetition history, so
+    // the validator can't know it — flagging it would be a false positive).
+    if (/\binsufficient\s+material\b/i.test(sentence)) {
+      let insuf = false;
+      try { insuf = chess.isInsufficientMaterial(); } catch { insuf = true; }
+      if (!insuf) {
+        violations.push({ kind: 'check-state', claim: sentence.trim().slice(0, 80), reason: 'claims insufficient material, but there is enough material to mate' });
       }
     }
   }
