@@ -43,6 +43,13 @@ const EQUAL_RE = /\b(?:roughly\s+|approximately\s+|dead[\s-]+|completely\s+|abou
 const WINNING_RE = /\b(white|black)\s+is\s+(?:completely\s+|totally\s+|clearly\s+|just\s+)?(winning|crushing|lost|losing|busted)\b/i;
 const DECISIVE_RE = /\b(white|black)\s+has\s+a\s+(?:decisive|winning|crushing)\s+(?:advantage|edge)\b/i;
 const BETTER_RE = /\b(white|black)\s+is\s+(?:clearly\s+|much\s+|significantly\s+|considerably\s+)?better\b/i;
+/** Forced-mate claims: "White has a forced mate", "Black mates in 3",
+ *  "White delivers checkmate", "Black is getting mated". A mate is the
+ *  strongest who's-winning claim, so it reuses the contradiction logic
+ *  below — flagged only when the engine clearly has the OTHER side ahead
+ *  (conservative: a position the engine reads as even/favourable for the
+ *  claimant is left alone, since a shallow search can miss a deep mate). */
+const MATE_RE = /\b(white|black)\b[^.,;]{0,24}?\b(has\s+(?:a\s+)?(?:forced\s+)?mate|mates?\s+in\s+\d+|delivers?\s+(?:check)?mate|is\s+(?:getting\s+|about\s+to\s+be\s+)?mated|will\s+be\s+mated)\b/i;
 
 /** Split into rough sentence units (mirrors boardClaimValidator). */
 function splitSentences(text: string): string[] {
@@ -84,6 +91,7 @@ export function validateEvalClaims(
     let claimedWinnerIsWhite: boolean | null = null;
     const decM = DECISIVE_RE.exec(sentence);
     const winM = WINNING_RE.exec(sentence);
+    const mateM = MATE_RE.exec(sentence);
     if (decM) {
       claimedWinnerIsWhite = decM[1].toLowerCase() === 'white';
     } else if (winM) {
@@ -91,6 +99,13 @@ export function validateEvalClaims(
       const verb = winM[2].toLowerCase();
       // "winning/crushing" → that side; "losing/lost/busted" → the other.
       claimedWinnerIsWhite = (verb === 'winning' || verb === 'crushing') ? side === 'white' : side !== 'white';
+    } else if (mateM) {
+      const side = mateM[1].toLowerCase();
+      // "...is mated / getting mated / will be mated" → that side LOSES;
+      // every other phrase ("has mate", "mates in 3", "delivers mate") →
+      // that side WINS.
+      const beingMated = /mated\b/.test(mateM[2].toLowerCase()) && !/mates?\s+in/.test(mateM[2].toLowerCase());
+      claimedWinnerIsWhite = beingMated ? side !== 'white' : side === 'white';
     }
     if (claimedWinnerIsWhite !== null) {
       if (claimedWinnerIsWhite && whiteAhead <= -WINNING_CONTRADICTION_CP) {

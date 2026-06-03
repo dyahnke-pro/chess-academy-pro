@@ -69,6 +69,32 @@ describe('HALLUCINATION AUDIT pass 5 — eval contradiction', () => {
   });
 });
 
+describe('HALLUCINATION AUDIT pass 10 — false forced-mate claims', () => {
+  it('strips "White has a forced mate" when the engine has Black up 6', () => {
+    const r = groundCoachReply('White has a forced mate here. Keep calm and consolidate.', { fen: BUG_FEN, evalCp: -600, source: '/audit/mate' });
+    expect(r).not.toMatch(/forced mate/i);
+    expect(r).toMatch(/consolidate/i);
+  });
+  it('strips "Black mates in 3" when White is winning', () => {
+    const r = groundCoachReply('Black mates in 3. Push your passer.', { fen: BUG_FEN, evalCp: 650, source: '/audit/mate' });
+    expect(r).not.toMatch(/mates in 3/i);
+    expect(r).toMatch(/passer/i);
+  });
+  it('strips "White delivers checkmate" when the engine says Black is mating', () => {
+    const r = groundCoachReply('White delivers checkmate next. Bring the rook.', { fen: BUG_FEN, evalMateIn: -2, source: '/audit/mate' });
+    expect(r).not.toMatch(/checkmate/i);
+    expect(r).toMatch(/Bring the rook/i);
+  });
+  it('KEEPS a mate claim the engine agrees with', () => {
+    const r = groundCoachReply('White has a forced mate. Finish with the queen.', { fen: BUG_FEN, evalMateIn: 3, source: '/audit/mate' });
+    expect(r).toMatch(/forced mate/i);
+  });
+  it('does NOT strip a mate claim on a roughly-even board (a deep mate the search may miss)', () => {
+    const r = groundCoachReply('White may have a forced mate in 6 here.', { fen: BUG_FEN, evalCp: 40, source: '/audit/mate' });
+    expect(r).toMatch(/forced mate/i); // conservative — left alone
+  });
+});
+
 describe('HALLUCINATION AUDIT pass 5 — the gate keys on the CURRENT fen', () => {
   const CLAIM = 'The knight on f6 guards the centre. Play solidly.';
 
