@@ -1,0 +1,94 @@
+# Codemagic CI — iOS build + TestFlight upload for Chess Academy Pro.
+#
+# Cloud iOS builds (no Mac required). David enrolls in the Apple Developer
+# Program, connects an App Store Connect API key in the Codemagic UI, sets the
+# env vars below, and triggers this workflow — Codemagic compiles the Capacitor
+# app, signs it, and uploads it to TestFlight.
+#
+# Full walkthrough: docs/release-ios.md
+
+workflows:
+  ios-testflight:
+    name: iOS · TestFlight
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+
+    # Triggered manually from the Codemagic dashboard (no auto-build on push,
+    # so you control exactly when a TestFlight build goes out).
+    triggering:
+      events: []
+
+    integrations:
+      # Name of the App Store Connect API key you add in Codemagic:
+      # Teams → (your team) → Integrations → Apple Developer Portal.
+      app_store_connect: ChessAcademyAppStoreKey
+
+    environment:
+      ios_signing:
+        # Codemagic auto-manages the distribution cert + provisioning profile
+        # from your App Store Connect API key — no manual cert wrangling.
+        distribution_type: app_store
+        bundle_identifier: com.chessacademy.pro
+      node: 20
+      xcode: latest
+      cocoapods: default
+      groups:
+        # Create this variable group in Codemagic (Environment variables) and
+        # add the build-time client keys — MIRROR your Vercel Production values
+        # so the bundled native app behaves like the web app:
+        #   VITE_POSTHOG_KEY, VITE_POSTHOG_HOST, DEEPSEEK_KEY, ANTHROPIC_KEY,
+        #   AUDIT_STREAM_SECRET, AUDIT_STREAM_URL,
+        #   VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY (when auth lands),
+        #   VITE_REVENUECAT_IOS_KEY (when payments land)
+        - chess_academy_build
+      vars:
+        XCODE_WORKSPACE: "ios/App/App.xcworkspace"
+        XCODE_SCHEME: "App"
+        APP_STORE_APPLE_ID: $APP_STORE_APPLE_ID  # numeric App Store Connect app id
+
+    scripts:
+      - name: Install JS dependencies
+        script: npm ci
+
+      - name: Build the web bundle (Vite)
+        script: npm run build
+
+      - name: Generate + sync the native iOS project
+        script: |
+          # ios/ is gitignored (generated). Create it fresh, sync the web
+          # build in, and re-apply our AVAudioSession patch (Polly TTS + mic).
+          npx cap add ios || true
+          npx cap sync ios
+          cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
+          # App icons + splash (non-fatal: can be set in Xcode/Codemagic if it
+          # can't run here on a given image toolchain).
+          npm run assets:generate || echo "assets:generate skipped"
+
+      - name: Install CocoaPods
+        script: |
+          cd ios/App && pod install
+
+      - name: Apply automatic signing
+        script: |
+          xcode-project use-profiles
+
+      - name: Build the .ipa
+        script: |
+          xcode-project build-ipa \
+            --workspace "$XCODE_WORKSPACE" \
+            --scheme "$XCODE_SCHEME"
+
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+
+    publishing:
+      app_store_connect:
+        auth: integration
+        # Push the build to TestFlight automatically. It still has to finish
+        # Apple's processing (a few minutes) before it appears for testers.
+        submit_to_testflight: true
+        # Optional: auto-add to a TestFlight beta group you create in
+        # App Store Connect (uncomment + match the name):
+        # beta_groups:
+        #   - "Internal Testers"
