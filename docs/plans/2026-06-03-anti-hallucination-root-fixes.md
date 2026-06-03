@@ -114,3 +114,27 @@ on f5 cannot be repelled"), and the departure-after-phrase case ("the knight
 on f6 is gone") — each widening raises a competing false-positive rate.
 The kid path is intentionally un-board-gated (no-master-play contract);
 flagged for David, not force-changed.
+
+## Pass 16 (fuzzer) + Pass 17 (coverage sweep) — root-fix verification
+
+- **Pass 16 (fuzzer):** 4000 random piece-on-square claims + 800 random
+  "in check" claims across hundreds of random positions, every verdict
+  asserted against the chess.js oracle — **0 mismatches**, never throws on
+  garbage FENs. Correctness proven at SCALE, not just hand-picked cases.
+- **Pass 17 (coverage sweep):** classified EVERY `getCoachChatResponse`
+  caller. Each board-prose surface is gated — by-construction (currentFen),
+  `groundCoachReply`, `gradeNarrationText`, or `isSpokenSentenceGrounded`.
+  The "ungated" ones are all classifiers (no board prose), no-board surfaces
+  (smart search), pass-through provider wrappers (gated inside), comment-only
+  references, or the intentional kid carve-out. **No ungated board-prose
+  surface remains — the by-construction root fix achieved full coverage.**
+
+This is the definitive close of the original disease (opt-in per-call-site
+gating): the gate is both CORRECT (hand-picked + fuzzed) and WIRED EVERYWHERE
+(coverage sweep).
+
+## Owed: the live prod run
+A 3-instrument Playwright audit needs this code ON `main` + an LLM key (prod
+runs the old code; no key in this sandbox). Say "land it" → merge #710 to
+`main` + run the live audit. The audit-stream is wired + answering (HTTP 200),
+empty only because the app isn't open.
