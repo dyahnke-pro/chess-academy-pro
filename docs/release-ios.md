@@ -9,34 +9,46 @@ Bundle ID: `com.chessacademy.pro` · App name: **Chess Academy Pro**
 
 ---
 
-## ⏸️ RESUME HERE (paused 2026-06-02 night — waiting on Apple)
+## ⏸️ RESUME HERE (paused 2026-06-03 midday — waiting on Apple signing backend)
 
-**Status: everything on our side is DONE; blocked only on Apple Developer
-Program activation.** David enrolled + paid via the iPhone Apple Developer
-app; the account shows **"Pending"** and he'll get a **"Welcome to the Apple
-Developer Program"** email when it activates (Apple says up to 48h, usually
-hours). Do NOT re-pay on developer.apple.com (double-charge risk) — the phone
-payment is processing.
+**Status: account is ACTIVE; blocked only on Apple's signing-service
+provisioning for the brand-new team.** Everything on our side is correct.
 
-Already done (don't redo):
-- ✅ Repo cloned on the Mac at `/Users/davidyahnke/chess-academy-pro`
-- ✅ Node upgraded to 22+ (he's on v26 via Homebrew — Capacitor 8 needs ≥22)
-- ✅ `npm run build` + `npm run setup:ios` ran → `ios/` generated
-- ✅ Apple ID added to Xcode (Settings → Accounts)
-- ⏳ Xcode currently shows only **"(Personal Team)"** + red signing errors —
-  EXPECTED until the paid membership activates; ignore those errors for now
+What's confirmed working:
+- ✅ Apple Developer Program **active** (welcome email received; Xcode Accounts
+  panel shows **DAVID M YAHNKE — Developer Team — Admin — green Certificates**)
+- ✅ Repo on the Mac at `/Users/davidyahnke/chess-academy-pro`, Node 26, app
+  builds, `ios/` generated (Capacitor 8 **SPM** — open `App.xcodeproj`)
+- ✅ Signing & Capabilities → **Automatically manage signing** ✓, Team =
+  **DAVID M YAHNKE** (the real Developer Team, NOT "Personal Team")
+- ✅ No pending license agreement (checked developer.apple.com — none)
 
-**When the activation email arrives, resume at Step 6:**
-1. Xcode → **Settings → Accounts** → select the Apple ID → refresh (or
-   remove `–` and re-add `+`) so the new paid team loads.
-2. **Signing & Capabilities → Team** → pick the real **"DAVID M YAHNKE"**
-   (no "Personal Team") → the red errors clear.
-3. Do **Step 3** (create the App Store Connect app record) if not done.
-4. **Product → Archive → Distribute App → App Store Connect → Upload.**
-5. **TestFlight** → Internal Testing → add yourself → install on iPhone.
+The ONLY blocker (a wait, not a bug):
+- ❌ Signing shows **"Communication with Apple failed / your team has no
+  devices"** + **"No profiles for 'com.chessacademy.pro' were found."** This is
+  Apple's signing backend not yet provisioned for the team (enrolled same day).
+  `Try Again` does nothing — it clears on Apple's clock (hours).
 
-🔑 **Capacitor 8 uses Swift Package Manager, NOT CocoaPods** — open
-`ios/App/App.xcodeproj` (there is no `.xcworkspace`, and no `pod install`).
+**Resume tonight (the fix):**
+1. Xcode → **Settings → Accounts** → select the Apple ID → **–** remove → **+**
+   re-add (sign in) — forces a fresh sync now that Apple's caught up.
+2. App target → **Signing & Capabilities** → confirm Team = **DAVID M YAHNKE**,
+   errors now cleared.
+3. Destination dropdown → **Any iOS Device (arm64)** → **Product → Archive**.
+4. Organizer opens → **Distribute App → App Store Connect → Upload**.
+5. App Store Connect → **TestFlight** → Internal Testing → add yourself →
+   install the TestFlight app on the iPhone → test.
+   - (Do **Step 3** below — create the App Store Connect app record — if not
+     already done.)
+- Optional accelerant that sometimes wakes Apple's side early: plug the iPhone
+  in, tap "Trust," let Xcode register it (Window → Devices and Simulators).
+
+🔑 Capacitor 8 = Swift Package Manager: open `ios/App/App.xcodeproj` (no
+`.xcworkspace`, no CocoaPods).
+
+---
+
+## (Original full walkthrough below)
 
 There are two slow, do-them-now items (steps 1 + 2) that run in the
 background while you read the rest. Kick both off first.
