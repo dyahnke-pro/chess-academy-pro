@@ -2851,7 +2851,18 @@ export function CoachTeachPage(): JSX.Element {
     // NARRATE that exact move — play_move is disabled on the narration call,
     // so the LLM can't pick or play. Words always match the board.
     void (async () => {
+      // Natural think-time. Book/engine replies resolve near-instantly, so the
+      // opponent's move used to snap onto the board the moment the student let
+      // go — it "messes with the natural timing of chess" (David 2026-06-04).
+      // Pad the reply to a randomized 1-2s minimum, MEASURING the resolve time
+      // so a genuinely slow engine call doesn't stack an extra wait on top.
+      const thinkStart = Date.now();
       const reply = await resolveCoachReplyMove(move.fen);
+      const minThink = 1000 + Math.floor(Math.random() * 1000); // 1000–2000ms
+      const elapsed = Date.now() - thinkStart;
+      if (elapsed < minThink) {
+        await new Promise((resolve) => setTimeout(resolve, minThink - elapsed));
+      }
       if (reply) {
         const played = handlePlayMove(reply);
         if (played.ok) {
