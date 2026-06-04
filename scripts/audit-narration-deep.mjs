@@ -231,6 +231,7 @@ async function main() {
 
     // Deep game loop.
     let narratedTurns = 0;
+    let turnsWithReply = 0; // engine actually replied (some dev moves get blocked/skipped)
     let blackSig = await blackOcc(page);
     const turnTexts = [];
     for (const [from, to] of WHITE_DEV) {
@@ -254,6 +255,7 @@ async function main() {
         if (now !== blackSig && now.length > 0) { blackSig = now; replied = true; }
       }
       if (!replied) continue;
+      turnsWithReply++;
 
       // Wait for THIS turn's narration TTS.
       let spoke = false;
@@ -278,8 +280,13 @@ async function main() {
       errorFallbackSpoke === 0 && providerErrors === 0,
       `error-fallback-spoken=${errorFallbackSpoke} provider-errors=${providerErrors}${errorFallbackSpoke || providerErrors ? ' → INCONCLUSIVE: provider was down, re-run' : ''}`);
 
-    log('B1. deep game — coach narrated ≥6 engine replies', narratedTurns >= 6,
-      `narrated ${narratedTurns} turns`);
+    // The correctness invariant is "EVERY engine reply got narrated", not an
+    // absolute count — the resilient White-dev sequence yields 5-8 played turns
+    // depending on which moves the engine's replies happen to block. Require a
+    // meaningful depth (≥5 real replies) AND that every one of them narrated.
+    log('B1. deep game — EVERY engine reply narrated (≥5 turns deep)',
+      turnsWithReply >= 5 && narratedTurns === turnsWithReply,
+      `narrated ${narratedTurns}/${turnsWithReply} engine-reply turns`);
 
     // Grounding clean across the WHOLE deep game (the David-2026-06-04 fix).
     const cvTrips = await dumpAudit(page, ['claim-validator-trip']);
@@ -313,7 +320,11 @@ async function main() {
     // ════════════════════════════════════════════════════════════════════
     // SCENARIO D — OFF-CANONICAL CHAT INPUT still narrates (G7)
     // ════════════════════════════════════════════════════════════════════
-    for (const probe of ['Caro Cann', 'whats the Najdorff?']) {
+    // Question form (not a bare opening name — a bare name correctly routes to
+    // the opening picker, no voice). These probe the off-canonical-typo
+    // NARRATION path: a misspelled opening in a question must get a real spoken
+    // answer, not a stock-out.
+    for (const probe of ['whats the Caro Cann?', 'tell me about the Najdorff']) {
       const d = await newAuditedPage(ctx);
       try {
         await d.page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
