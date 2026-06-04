@@ -18,7 +18,12 @@
 export function autoDismissCalibration() {
   const css =
     '[data-testid="strength-calibration-bubble"]{pointer-events:none!important;opacity:0!important;}' +
-    '[data-testid="strength-calibration-bubble"] *{pointer-events:none!important;}';
+    '[data-testid="strength-calibration-bubble"] *{pointer-events:none!important;}' +
+    // The page-help modal auto-opens on many surfaces (/tactics, /coach, …) as
+    // a full-screen dialog and intercepts the first click on the surface behind
+    // it (e.g. the puzzle quick-settings toggle). Neutralize it the same way.
+    '[data-testid="page-help-modal"]{pointer-events:none!important;opacity:0!important;}' +
+    '[data-testid="page-help-modal"] *{pointer-events:none!important;}';
   const inject = () => {
     if (!document.head && !document.documentElement) { setTimeout(inject, 20); return; }
     if (document.getElementById('__audit_kill_calib')) return;
@@ -34,11 +39,17 @@ export function autoDismissCalibration() {
     const btn = document.querySelector('[data-testid="skill-band-intermediate"]');
     if (btn) btn.click();
   };
+  // best-effort: also CLOSE the page-help modal outright when it auto-opens.
+  const closePageHelp = () => {
+    const close = document.querySelector('[data-testid="page-help-close"]');
+    if (close) close.click();
+  };
+  const sweep = () => { inject(); clickBand(); closePageHelp(); };
   const start = () => {
     if (!document.body) { setTimeout(start, 50); return; }
-    new MutationObserver(() => { inject(); clickBand(); }).observe(document.body, { childList: true, subtree: true });
-    clickBand();
+    new MutationObserver(sweep).observe(document.body, { childList: true, subtree: true });
+    sweep();
   };
   start();
-  setInterval(() => { inject(); clickBand(); }, 500);
+  setInterval(sweep, 500);
 }

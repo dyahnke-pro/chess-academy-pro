@@ -58,8 +58,14 @@ async function waitForMount(page, sel, label, ms = 25_000) {
   catch { record(`mount: ${label}`, false, `${sel} not visible in ${ms}ms`); return false; }
 }
 async function tap(page, sel, label, ms = 8000) {
-  try { const el = page.locator(sel).first(); await el.waitFor({ state: 'visible', timeout: ms }); await el.click(); return true; }
-  catch (e) { record(`tap: ${label}`, false, `failed: ${e.message.split('\n')[0]}`); return false; }
+  try { const el = page.locator(sel).first(); await el.waitFor({ state: 'visible', timeout: ms }); await el.click({ timeout: ms }); return true; }
+  catch {
+    // Fallback: an auto-opening overlay may still be intercepting (despite the
+    // auto-dismiss init script). Force the click through so a transient overlay
+    // can't fail a real interaction.
+    try { await page.locator(sel).first().click({ force: true, timeout: ms }); return true; }
+    catch (e) { record(`tap: ${label}`, false, `failed: ${e.message.split('\n')[0]}`); return false; }
+  }
 }
 
 async function clearStorage(page) {

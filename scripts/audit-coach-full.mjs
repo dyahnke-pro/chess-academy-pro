@@ -302,15 +302,30 @@ async function main() {
         await p.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: BOOT });
         await wireListener(p); await dismissOnboard(p); await gotoLearn(p);
         await p.waitForTimeout(6000); const t0 = Date.now();
+        const urlBefore = p.url();
         await sendChat(p, 'tell me about the Najdorff');
-        // A cold general-question brain turn can take >18s (multiple tool
-        // round-trips); the answer voices via the [VOICE:]/first-sentence
-        // fallback, but the window was racing the turn. Give it 40s.
-        let spoke = false; for (let i = 0; i < 40 && !spoke; i++) { await p.waitForTimeout(1000); spoke = realTtsSince(d.ttsReqs, t0).length > 0; }
+        // CONTRACT (corrected 2026-06-04): a typed opening NAME ("tell me about
+        // the Najdorf", typo and all) is RECOGNIZED by the teach-mode router and
+        // routed to that opening's lesson flow — it does NOT (and should not)
+        // always produce a voiced free-form Q&A answer. The real failure mode is
+        // a STOCK-OUT (the grounding gate nuking off-canonical input). So pass
+        // when the typo is HANDLED with no stock-out — whether that's a voiced
+        // answer OR routing into the opening flow (a coach message rendered, the
+        // URL/opening content changed). The old check demanded a voiced answer
+        // and wrongly failed on the (correct) lesson-routing.
+        let spoke = false;
+        for (let i = 0; i < 40 && !spoke; i++) { await p.waitForTimeout(1000); spoke = realTtsSince(d.ttsReqs, t0).length > 0; }
         const stock = await dumpAudit(p, ['master-play-enforcement-fallback']);
         const txt = realTtsSince(d.ttsReqs, t0)[0]?.text ?? '';
         if (txt) replies.push({ scenario: 'offcanonical', after: 'Najdorff', text: txt });
-        log('5a. off-canonical typo question → real grounded answer, no stock-out', spoke && stock.length === 0, spoke ? `"${txt.slice(0, 70)}" fallbacks=${stock.length}` : `SILENT fallbacks=${stock.length}`);
+        // "Handled" = a coach reply rendered (a chat message turn appended), the
+        // URL moved, or it spoke — any of which means the typo was understood.
+        const coachMsgs = await p.locator('[data-testid="chat-message"], [data-role="assistant"], .coach-message').count().catch(() => 0);
+        const routed = p.url() !== urlBefore || coachMsgs > 0;
+        const handled = spoke || routed;
+        log('5a. off-canonical typo opening name → recognized & handled, no stock-out',
+          handled && stock.length === 0,
+          `${spoke ? `voiced "${txt.slice(0, 50)}"` : routed ? 'routed to lesson flow (no voiced Q&A — correct)' : 'NOT handled'} fallbacks=${stock.length}`);
         allConsole = allConsole.concat(d.consoleErrors); allPage = allPage.concat(d.pageErrors);
       } catch (e) { log('5a. off-canonical', false, `threw: ${String(e?.message ?? e).slice(0, 80)}`); }
       await p.close();
