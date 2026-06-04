@@ -35,6 +35,7 @@ import { stripUngroundedPlayerStats } from './claimValidator';
 import { validateArrowClaims, synthesizeMissingArrows } from './arrowClaimValidator';
 import { validateTacticClaims, stripUngroundedTacticSentences } from './tacticClaimValidator';
 import { stripDisprovenEvalSentences } from './evalClaimValidator';
+import { validateOpeningNameClaims } from './openingNameClaimValidator';
 import type { TacticsLiveContext } from '../coach/types';
 
 /** Per-sentence spoken gate for STREAMING-TTS surfaces. Those hand each
@@ -242,6 +243,27 @@ export function groundCoachReply(text: string, opts: CoachAnswerGateOptions): st
           details: JSON.stringify({ source, violations: tacticV.violations, enforced: false }),
         });
       }
+    }
+  } catch { /* never block */ }
+
+  // (4) Opening-NAME gate (AUDIT-ONLY). Flags an invented opening / variation
+  //     name that doesn't resolve in the canonical Lichess DB (the "Saduleto
+  //     line" class — a fabricated proper-noun no other gate catches). Audit-
+  //     only for now: a precise ENFORCING version needs the conversation's
+  //     opening context (real sub-variation names don't resolve standalone),
+  //     so we gather the real false-positive rate from PostHog before
+  //     stripping. NEVER mutates the answer. (David 2026-06-04.)
+  try {
+    const nameV = validateOpeningNameClaims(out);
+    if (nameV.violations.length > 0) {
+      void logAppAudit({
+        kind: 'claim-validator-trip',
+        category: 'subsystem',
+        source: `${source}.openingNameGate`,
+        summary: `unresolved opening name(s): ${nameV.violations.map((v) => v.name).join(', ')} · audit-only`,
+        details: JSON.stringify({ source, violations: nameV.violations, enforced: false }),
+        fen: fen ?? undefined,
+      });
     }
   } catch { /* never block */ }
 
