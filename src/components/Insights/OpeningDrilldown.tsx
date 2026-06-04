@@ -100,7 +100,10 @@ export function OpeningDrilldown({ opening, onBack }: OpeningDrilldownProps): JS
           }
         }
 
-        const moveCount = game.pgn.split(/\s+/).filter((t) => !/^\d+\.+$/.test(t)).length;
+        // SAN tokens are PLIES (half-moves); a chess "move" is white+black,
+        // so convert to full moves (was showing ~2x — David 2026-06-04).
+        const plies = game.pgn.split(/\s+/).filter((t) => t && !/^\d+\.+$/.test(t) && !/^(1-0|0-1|1\/2-1\/2|\*)$/.test(t)).length;
+        const moveCount = Math.ceil(plies / 2);
 
         return {
           game,

@@ -50,7 +50,11 @@ function parseTimeControlLabel(pgn: string): string | null {
 }
 
 function countMovesInPgn(pgn: string): number {
-  return pgn.split(/\s+/).filter((t) => t && !/^\d+\.+$/.test(t) && !/^(1-0|0-1|1\/2-1\/2|\*)$/.test(t)).length;
+  // Count SAN tokens = PLIES (half-moves), then convert to full moves. A
+  // chess "move" is white + black, so 317 plies = 159 moves — the card was
+  // showing the ply count mislabeled as moves (David 2026-06-04).
+  const plies = pgn.split(/\s+/).filter((t) => t && !/^\d+\.+$/.test(t) && !/^(1-0|0-1|1\/2-1\/2|\*)$/.test(t)).length;
+  return Math.ceil(plies / 2);
 }
 
 const RESULT_STYLES: Record<string, { label: string; color: string; bg: string }> = {
