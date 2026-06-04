@@ -2345,14 +2345,34 @@ export function CoachTeachPage(): JSX.Element {
         if (sideToMove !== playerColor) {
           try {
             const scan = `${spokenForTurn.join(' ')} ${result.text}`;
-            const chosen = recoverCoachMoveFromText(liveFen, scan);
+            let chosen = recoverCoachMoveFromText(liveFen, scan);
+            let recoverySource: 'narration' | 'db-explorer' = 'narration';
+            // When the response names NO legal SAN, the OLD safety net froze
+            // the board → "coach forgot its move." That happens when the
+            // master-play grounding gate served its stock "I can't verify
+            // which moves are sound" fallback (PostHog 2026-06-04:
+            // master-play-enforcement-fallback on /coach/teach) or the
+            // reasoner returned prose without a move. The board must NEVER
+            // freeze on a step-by-step turn, so fall back to the most-played
+            // book continuation from the explorer (DB = source of truth).
+            // GUARD: skip when the brain genuinely asked a question (a
+            // clarifying "which variation?" turn legitimately doesn't move) —
+            // the stock fallback isn't phrased as a question, a real ask is.
+            const looksLikeQuestion = /\?\s*$/.test(result.text.trim());
+            if (!chosen && !looksLikeQuestion) {
+              try {
+                const explorer = await fetchLichessExplorer(liveFen, 'lichess');
+                chosen = explorer.moves[0]?.san ?? null;
+                if (chosen) recoverySource = 'db-explorer';
+              } catch { /* network / rate-limit — leave chosen null */ }
+            }
             if (chosen) {
               const recovered = handlePlayMove(chosen);
               void logAppAudit({
                 kind: 'coach-surface-migrated',
                 category: 'subsystem',
                 source: 'CoachTeachPage.playMoveSafetyNet',
-                summary: `no play_move dispatched on a step-by-step turn — recovered "${chosen}" from the narration (${recovered.ok ? 'played' : 'rejected: ' + (recovered.reason ?? 'unknown')})`,
+                summary: `no play_move dispatched on a step-by-step turn — recovered "${chosen}" via ${recoverySource} (${recovered.ok ? 'played' : 'rejected: ' + (recovered.reason ?? 'unknown')})`,
                 fen: liveFen,
               });
             } else {
@@ -2360,7 +2380,7 @@ export function CoachTeachPage(): JSX.Element {
                 kind: 'coach-surface-migrated',
                 category: 'subsystem',
                 source: 'CoachTeachPage.playMoveSafetyNet',
-                summary: 'no play_move dispatched and no legal SAN in the response to recover — board left unchanged',
+                summary: `no play_move dispatched and no move recovered (narration + explorer both empty${looksLikeQuestion ? '; response was a question — board left for the student to answer' : ''}) — board unchanged`,
                 fen: liveFen,
               });
             }
