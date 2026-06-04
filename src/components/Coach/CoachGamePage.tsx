@@ -45,14 +45,12 @@ import { useCoachSessionStore } from '../../stores/coachSessionStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { narrateMove } from '../../services/coachAgentRunner';
 import { useSettings } from '../../hooks/useSettings';
-import { getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
+import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
 import { DEFAULT_TIME_CONTROL_ID, TIME_CONTROLS, getTimeControlById } from '../../services/chessClock';
 import { shouldPersistFinishedGame } from '../../utils/coachGamePersistence';
 import { useChessClock } from '../../hooks/useChessClock';
 import { coachService } from '../../coach/coachService';
 import { withTimeout } from '../../coach/withTimeout';
-import { emergencyPickMove } from '../../coach/coachTurnFallback';
-import type { LiveState } from '../../coach/types';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
 import { isCriticalThreat } from '../../services/tacticAlertService';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
@@ -2123,18 +2121,18 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           return;
         }
 
-        // ── WO-BRAIN-04 (post-tightening) — BRAIN OWNS MOVE SELECTION ──
-        // The deterministic hybrid (book + Stockfish, then optional
-        // brain override) is gone. The brain consults
-        // `local_opening_book` and / or `stockfish_eval` itself and
-        // emits `play_move`; `onPlayMove` validates the SAN against
-        // the live FEN and records the choice in `brainPickSan`. The
-        // pre-move Stockfish eval below is purely informational —
-        // eval bar, move classification, opponent-threat scan — and
-        // does NOT pick the move. If the brain fails to emit
-        // `play_move` (network error, parse miss, illegal SAN), the
-        // safety fallback is a random legal move so the game never
-        // freezes.
+        // ── ENGINE OWNS MOVE SELECTION (David 2026-06-04, REVERTS WO-BRAIN-04) ──
+        // The grounding truth of this app, from day one: LLMs cannot play
+        // chess, so the LLM NEVER picks or plays a move. WO-BRAIN-04
+        // (2026-04-25) wrongly "taught the brain to move" — it removed the
+        // deterministic hybrid and had the brain emit `play_move`. That is
+        // reverted here. The move is chosen by: opening book (in book) →
+        // rating-matched Stockfish (fast-path below) → `getAdaptiveMove`
+        // (masters/lichess/Stockfish) fallback. The mate/quality floor
+        // double-checks it. The pre-move Stockfish eval below is purely
+        // informational (eval bar, classification, threat scan). The LLM's
+        // ONLY job is per-move NARRATION, generated AFTER the move lands and
+        // grounded on the ACTUAL move (`generateMoveCommentary`).
         const preAnalysisPromise: Promise<StockfishAnalysis> = stockfishEngine
           .analyzePosition(game.fen, 10)
           .catch(() => ({
@@ -2159,53 +2157,19 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             setTimeout(() => resolve(null), 2_000),
           ),
         ]);
-        const engineHint = seededAnalysis && seededAnalysis.bestMove
-          ? ` Engine analysis at depth ${seededAnalysis.depth}: bestmove ${seededAnalysis.bestMove}, eval ${(seededAnalysis.evaluation / 100).toFixed(2)}. Use this as your primary signal — deviations are fine for variety at the student's rating, but never walk into a forced mate.`
-          : '';
-        const moveSelectorAsk = intendedOpeningName
-          ? `It is your turn (${aiColor}). The student is rated about ${targetStrength} and has committed to ${intendedOpeningName}. Consult local_opening_book first; if we are still in book, play that move via play_move. If we are out of book, use stockfish_eval and pick a move calibrated to the student's rating, then play it via play_move.${engineHint}`
-          : `It is your turn (${aiColor}). The student is rated about ${targetStrength}. Use stockfish_eval if you want depth, then pick a move calibrated to the student's rating and play it via play_move.${engineHint}`;
-        // Tactical context for the move-selector turn — when the coach
-        // is picking its own reply we still want it to be tactically
-        // aware so it can either (a) play into a tactic when it favors
-        // the coach's side, or (b) avoid walking into one the student
-        // would punish. The LLM still ultimately calls play_move via
-        // its toolbelt; the tactics block frames the decision.
-        const moveSelectorStudentColor = playerColor === 'white' ? 'w' : 'b';
-        const moveSelectorRating = activeProfile?.puzzleRating ?? 1200;
-        const moveSelectorTactics = buildTacticsLiveContext(
-          game.fen,
-          null, // No cached analysis at this site; immediate + hanging still fire.
-          moveSelectorStudentColor,
-          moveSelectorRating,
-        );
-        void logAppAudit({
-          kind: 'coach-surface-migrated',
-          category: 'subsystem',
-          source: 'CoachGamePage.moveSelector.buildLiveTactics',
-          summary: `tactics ctx: immediate=${moveSelectorTactics.immediate.length} hanging=${moveSelectorTactics.hanging.length} threats=${moveSelectorTactics.threats.length} opps=${moveSelectorTactics.opportunities.length} depth=${moveSelectorTactics.lookaheadDepth}`,
-          fen: game.fen,
-        });
-        const moveSelectorLiveState: LiveState = {
-          surface: 'move-selector',
-          fen: game.fen,
-          moveHistory: game.history,
-          currentRoute: '/coach/play',
-          userJustDid: 'pondering coach move',
-          tactics: moveSelectorTactics,
-        };
+        // GROUNDING TRUTH (David 2026-06-04, emphatic): the LLM NEVER picks
+        // or plays a move — LLMs can't play chess. The opponent reply comes
+        // from the DB/engine ONLY. `seededAnalysis` (above) feeds the
+        // mate/quality floor; the fast-path below (book -> Stockfish) picks
+        // the move; `getAdaptiveMove` is the robust fallback. Per-move
+        // narration runs AFTER the move lands (`generateMoveCommentary`,
+        // grounded on the actual move), so it always describes what the
+        // engine played, never an LLM "intended" move.
         void logAppAudit({
           kind: 'coach-surface-migrated',
           category: 'subsystem',
           source: 'CoachGamePage.makeCoachMove',
-          summary: `surface=move-selector viaSpine=true intent=${intendedOpeningName ?? 'none'}`,
-          details: JSON.stringify({
-            surface: 'move-selector',
-            viaSpine: true,
-            intendedOpening: intendedOpeningName,
-            plyCount: game.history.length,
-            targetStrength,
-          }),
+          summary: `engine move-selection (LLM removed from moves) intent=${intendedOpeningName ?? 'none'} ply=${game.history.length} strength=${targetStrength}`,
           fen: game.fen,
         });
         // ── WO-PLAN-B fast path: Stockfish + opening book directly ──
@@ -2270,129 +2234,30 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           }
         }
 
-        // WO-COACH-RESILIENCE — three-tier fallback chain so the
-        // coach never hangs mid-game. PR #344 shipped audit-kind
-        // names without implementation; this is the real layer.
-        // Primary 15 s → Level 1 stockfish-bypass 10 s → Level 2
-        // LLM-only 8 s → Level 3 deterministic legal move.
-        const askInput = {
-          surface: 'move-selector' as const,
-          ask: moveSelectorAsk,
-          liveState: moveSelectorLiveState,
-        };
-        // Spine fallback path — only runs when the fast path above
-        // didn't produce a legal move (rare: Stockfish hung, no book
-        // move available + Stockfish errored, etc.)
-        const onPlayMoveCallback = (san: string): { ok: boolean; reason?: string } => {
-          // Validate against the live FEN. The play_move tool already
-          // validated, but board state may have shifted between
-          // turns; double-check.
+        // Engine fallback when the fast-path produced nothing (Stockfish
+        // hung, no book move). getAdaptiveMove is the SAME proven engine path
+        // the WLPP Play rung uses: masters -> lichess -> rating-matched
+        // Stockfish -> random. The LLM is NOT consulted for moves.
+        if (!brainPickSan) {
           try {
-            const probe = new Chess(game.fen);
-            const result = probe.move(san);
-            if (!result) return { ok: false, reason: 'illegal at apply time' };
-            brainPickSan = san;
-            return { ok: true };
-          } catch (err) {
-            return {
-              ok: false,
-              reason: err instanceof Error ? err.message : String(err),
-            };
-          }
-        };
-        // WO-COACH-PERSONALITIES (PR B): thread the user's personality
-        // + dial settings into every coach-turn ask. Defaults preserve
-        // the original Danya prompt verbatim — no behavior change for
-        // profiles that haven't opted in.
-        const prefs = useAppStore.getState().activeProfile?.preferences;
-        const baseOptions = {
-          maxToolRoundTrips: 3,
-          onPlayMove: onPlayMoveCallback,
-          personality: prefs?.coachPersonality,
-          profanity: prefs?.coachProfanity,
-          mockery: prefs?.coachMockery,
-          flirt: prefs?.coachFlirt,
-          verbosity: prefs?.coachResponseLength,
-          // CLAUDE.md 2026-05-14: Anthropic is now the spine's default
-          // primary on every surface (including play mode), with
-          // DeepSeek as the auto-fallback at coachApi.ts:782. The
-          // previous `surfaceMode === 'teach' → providerOverride:
-          // anthropicProvider` block was both redundant under the new
-          // policy AND actively harmful — pinning the provider here
-          // defeats the auto-fallback when Anthropic 401s.
-        };
-
-        if (!brainPickSan) try {
-          // Primary: full toolbelt, 15 s budget.
-          const primary = await withTimeout(
-            coachService.ask(askInput, baseOptions),
-            15_000,
-            'coach-turn-ask',
-          );
-          if (!primary.ok) {
-            // Level 1 — Stockfish bypass.
-            void logAppAudit({
-              kind: 'coach-move-stockfish-bypassed',
-              category: 'subsystem',
-              source: 'CoachGamePage.coachTurn',
-              summary: 'primary ask timed out, retrying without stockfish_eval',
-              fen: game.fen,
-            });
-            const lvl1 = await withTimeout(
-              coachService.ask(askInput, {
-                ...baseOptions,
-                excludeTools: ['stockfish_eval'],
-              }),
-              10_000,
-              'coach-move-stockfish-bypassed',
+            const adaptive = await withTimeout(
+              getAdaptiveMove(game.fen, targetStrength),
+              8_000,
+              'coach-move-adaptive-fallback',
             );
-            if (!lvl1.ok && !brainPickSan) {
-              // Level 2 — pure-LLM, no data tools.
-              const llmOnlyAsk =
-                moveSelectorAsk +
-                "\n\nEngine and database are unavailable. Play a sensible move at this student's level using your own chess knowledge. Use the play_move tool.";
+            if (adaptive.ok && adaptive.value.move) {
+              brainPickSan = adaptive.value.move;
               void logAppAudit({
-                kind: 'coach-move-llm-fallback',
+                kind: 'coach-move-fastpath',
                 category: 'subsystem',
-                source: 'CoachGamePage.coachTurn',
-                summary: 'level 1 also timed out, retrying with LLM only (no data tools)',
+                source: 'CoachGamePage.coachTurn.adaptiveFallback',
+                summary: `getAdaptiveMove: ${adaptive.value.move} (source=${adaptive.value.source}, strength ${targetStrength})`,
                 fen: game.fen,
               });
-              const lvl2 = await withTimeout(
-                coachService.ask(
-                  { ...askInput, ask: llmOnlyAsk },
-                  {
-                    ...baseOptions,
-                    excludeTools: [
-                      'stockfish_eval',
-                      'lichess_opening_lookup',
-                      'lichess_master_games',
-                      'lichess_puzzle_fetch',
-                      'local_opening_book',
-                    ],
-                  },
-                ),
-                8_000,
-                'coach-move-llm-fallback',
-              );
-              if (!lvl2.ok && !brainPickSan) {
-                // Level 3 — deterministic emergency pick.
-                const emergencySan = emergencyPickMove(game.fen, game.history);
-                void logAppAudit({
-                  kind: 'coach-move-emergency-pick',
-                  category: 'subsystem',
-                  source: 'CoachGamePage.coachTurn',
-                  summary: `level 2 also timed out, deterministic pick=${emergencySan ?? 'null'}`,
-                  fen: game.fen,
-                });
-                if (emergencySan) {
-                  brainPickSan = emergencySan;
-                }
-              }
             }
+          } catch (err: unknown) {
+            console.warn('[CoachGame] getAdaptiveMove fallback failed:', err);
           }
-        } catch (err: unknown) {
-          console.warn('[CoachGame] move-selector spine call failed:', err);
         }
 
         if (isCancelled()) return;
