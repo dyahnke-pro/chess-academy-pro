@@ -37,13 +37,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
     configureAudioSession()
+    registerAudioObservers()
     return true
   }
 
-  /// Configure the shared audio session so Polly TTS and Web Speech mic
-  /// input work reliably with Bluetooth headsets and the silent-switch
-  /// engaged. Called once on launch; iOS keeps the category active for
-  /// the lifetime of the app unless another component reassigns it.
+  /// Configure the shared audio session so Polly TTS, the board sound
+  /// effects, and Web Speech mic input work reliably with Bluetooth
+  /// headsets and the silent-switch engaged.
+  ///
+  /// ROOT FIX (David 2026-06-04: all native audio — board clicks AND coach
+  /// voice — went silent mid-session while audio worked fine on the web/Vercel
+  /// build). The session was configured ONLY on launch and the lifecycle
+  /// hooks were empty, so the FIRST audio interruption (backgrounding, a
+  /// notification, a phone call, Siri, a Bluetooth route change) deactivated
+  /// the session and nothing ever re-activated it — every later sound (which
+  /// plays through the WKWebView's Web Audio, gated by this session) was
+  /// dropped until the app was force-quit and relaunched. We now re-activate
+  /// on foreground + on interruption-end + on route change, so it self-heals.
   private func configureAudioSession() {
     let session = AVAudioSession.sharedInstance()
     do {
@@ -63,10 +73,51 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
   }
 
+  /// Observe audio interruptions + output-route changes so the session is
+  /// re-activated after a call/Siri/notification or a Bluetooth (dis)connect.
+  private func registerAudioObservers() {
+    let nc = NotificationCenter.default
+    nc.addObserver(
+      self,
+      selector: #selector(handleInterruption(_:)),
+      name: AVAudioSession.interruptionNotification,
+      object: nil
+    )
+    nc.addObserver(
+      self,
+      selector: #selector(handleRouteChange(_:)),
+      name: AVAudioSession.routeChangeNotification,
+      object: nil
+    )
+  }
+
+  @objc private func handleInterruption(_ note: Notification) {
+    guard
+      let info = note.userInfo,
+      let raw = info[AVAudioSessionInterruptionTypeKey] as? UInt,
+      let type = AVAudioSession.InterruptionType(rawValue: raw)
+    else { return }
+    // On .ended, re-activate so audio resumes instead of staying dead.
+    if type == .ended {
+      configureAudioSession()
+    }
+  }
+
+  @objc private func handleRouteChange(_ note: Notification) {
+    // Bluetooth connect/disconnect, headphone plug/unplug — re-assert the
+    // category + active state so output keeps flowing to the new route.
+    configureAudioSession()
+  }
+
   func applicationWillResignActive(_ application: UIApplication) {}
   func applicationDidEnterBackground(_ application: UIApplication) {}
   func applicationWillEnterForeground(_ application: UIApplication) {}
-  func applicationDidBecomeActive(_ application: UIApplication) {}
+  /// Re-activate every time the app returns to the foreground — the most
+  /// reliable recovery point after iOS deactivated the session in the
+  /// background (the case that left David's audio dead until a relaunch).
+  func applicationDidBecomeActive(_ application: UIApplication) {
+    configureAudioSession()
+  }
   func applicationWillTerminate(_ application: UIApplication) {}
 
   func application(

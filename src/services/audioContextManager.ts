@@ -29,16 +29,30 @@ function _tryResume(ctx: AudioContext): void {
   }
 }
 
+let _listenersAttached = false;
+
 function _attachUnlockListeners(ctx: AudioContext): void {
-  const handler = (): void => {
-    _tryResume(ctx);
-    if (ctx.state === 'running') {
-      document.removeEventListener('touchstart', handler, true);
-      document.removeEventListener('mousedown', handler, true);
-    }
-  };
+  // Attach ONCE. Do NOT remove the listeners after the first resume — the
+  // context can be SUSPENDED AGAIN whenever the app is backgrounded / the
+  // iOS audio session is interrupted (a call, Siri, a notification, a
+  // Bluetooth route change). If we tear the listeners down after the first
+  // unlock, the next tap can't re-resume it and ALL Web Audio (board
+  // sounds + coach voice) stays dead until a full relaunch — exactly the
+  // native-app silence David hit (audio worked on web/Vercel, where the
+  // session isn't torn down the same way). The handler is a cheap state
+  // check when the context is already running, so leaving it attached is
+  // free. (David 2026-06-04.)
+  if (_listenersAttached) return;
+  _listenersAttached = true;
+  const handler = (): void => _tryResume(ctx);
   document.addEventListener('touchstart', handler, { passive: true, capture: true });
   document.addEventListener('mousedown', handler, { passive: true, capture: true });
+  // Foreground recovery: when the tab/app becomes visible again, the
+  // context may be suspended from the time in the background. Resume it
+  // proactively so the first sound after returning isn't dropped.
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') _tryResume(ctx);
+  });
 }
 
 /** Returns the shared AudioContext, creating it on first call. */
