@@ -60,8 +60,19 @@ const WHITE_DEV = [
   ['a2', 'a3'], ['h2', 'h3'],
 ];
 
+// The coach's LLM-provider error fallback + the master-play stock-out line.
+// These are SPOKEN via TTS but are NOT real narration — if we count them the
+// audit false-greens during a DeepSeek/Anthropic outage (exactly what fooled
+// the 2026-06-04 20:40 run: every deep-game "narration" was "I'm having
+// trouble connecting right now." while DeepSeek 503'd). A run that hits these
+// is INCONCLUSIVE for narration quality, not a pass.
+const ERROR_FALLBACK_RE =
+  /having trouble connecting|trouble connecting right now|can't verify which moves|i can't verify|something went wrong|try again in a moment|ask me your move or tell me what you want to learn/i;
+function isErrorFallback(s) {
+  return typeof s === 'string' && ERROR_FALLBACK_RE.test(s);
+}
 function isRealNarration(s) {
-  return typeof s === 'string' && s.replace(/[\s.]/g, '').length >= 3;
+  return typeof s === 'string' && s.replace(/[\s.]/g, '').length >= 3 && !isErrorFallback(s);
 }
 
 async function main() {
@@ -257,6 +268,16 @@ async function main() {
         narrationLog.push({ surface: 'learn-deep', studentMove: `${from}${to}`, text: txt });
       }
     }
+    // PROVIDER-HEALTH GATE: if the LLM provider was erroring, the "narration"
+    // we captured is the error-fallback line, not real teaching. Detect it so
+    // a provider outage reads as INCONCLUSIVE, never a false pass. (errorFallbackSpoke
+    // counts TTS lines that ARE the fallback; providerErrors from the audit log.)
+    const errorFallbackSpoke = a.ttsReqs.filter((r) => isErrorFallback(r.text)).length;
+    const providerErrors = (await dumpAudit(page, ['coach-llm-provider-error'])).length;
+    log('B0. LLM provider HEALTHY during run (no error-fallback narration)',
+      errorFallbackSpoke === 0 && providerErrors === 0,
+      `error-fallback-spoken=${errorFallbackSpoke} provider-errors=${providerErrors}${errorFallbackSpoke || providerErrors ? ' → INCONCLUSIVE: provider was down, re-run' : ''}`);
+
     log('B1. deep game — coach narrated ≥6 engine replies', narratedTurns >= 6,
       `narrated ${narratedTurns} turns`);
 
