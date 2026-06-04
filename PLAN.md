@@ -414,3 +414,20 @@ All gaps closed in one PR, data-grounded, gate-green:
 - **Per-variation model games:** +49 (one real high-rated win per variation,
   hand-authored overview). Now ~3/opening + 1/variation.
 All gates green. Next: ship-check → PR → loop audit on prod (3 instruments).
+
+## 2026-06-04 — Final pre-TestFlight content audit (single session)
+
+- [x] Extend short base-repertoire main lines: Schliemann 14→20p, Jänisch
+      Accepted variation 8→12p. Every added move = top Lichess-masters
+      continuation (explorer-verified). Albin stays 16p (no master line ≥5
+      games past terminus). repertoire.test 40→42. — committed
+- [x] Narrate the extended lines: schliemannDefence.ts main lesson +3 beats
+      (Qe2/Nf6, f4/Qxf4, Ne5+/c6) board-verified; Jänisch var already
+      narrated. narrationAccuracy + lessonIntegrity green. — committed
+- [ ] Personally review all 193 GEM_NARRATION entries: the Watch text on the
+      inaccuracy ply must explain WHY the move is bad; the punish ply must
+      explain the refutation (why it earns the gems tab). Tool:
+      scripts/dump-gem-narration.mts grounds each against board facts.
+- [ ] Fix any gem whose inaccuracy/punish narration is empty or doesn't explain.
+- [ ] Re-run punishGems.test + narration gates.
+- [ ] ship-check + deploy + TestFlight handoff.
