@@ -39,9 +39,12 @@ const STUDENT_MOVES = [
   ['f1', 'c4'],
   ['b1', 'c3'],
 ];
+// King-walk (Bongcloud) — reliably craters the eval regardless of the
+// opponent's reply, so the eval-based slip-check must trip. e1→e2 is legal
+// right after 1.e4 (e2 emptied); e2→f3 deepens the blunder.
 const BLUNDER_MOVES = [
-  ['f2', 'f3'],
-  ['g2', 'g4'],
+  ['e1', 'e2'],
+  ['e2', 'f3'],
 ];
 
 async function main() {
@@ -81,13 +84,17 @@ async function main() {
     } catch { return -1; }
   };
 
-  const fen = async () => {
+  // Dump the in-page forensic audit log (window.__AUDIT__.dump) and return
+  // entries whose kind matches `kinds`.
+  const dumpAudit = async (kinds) => {
     try {
-      return await page.evaluate(() => {
-        const sq = document.querySelectorAll('[data-square]');
-        return sq.length; // proxy: board mounted
+      const all = await page.evaluate(async () => {
+        const a = window.__AUDIT__;
+        if (!a || typeof a.dump !== 'function') return [];
+        try { return await a.dump(); } catch { return []; }
       });
-    } catch { return 0; }
+      return all.filter((e) => kinds.includes(e.kind));
+    } catch { return []; }
   };
 
   const tryMove = async (from, to) => {
@@ -211,13 +218,22 @@ async function main() {
     log('engine plays the coach reply (a black piece moved after e4)', blackMoved,
       blackMoved ? 'black occupancy changed → engine replied' : 'no black move detected');
 
-    // ── Make a blunder; verify the "why?" question pops up ─────────────
-    // Restart, then play the Fool's-Mate setup (f3, g4) — but wait for the
-    // student's turn between moves (the board is busy while the engine
-    // replies + the coach narrates). The engine reply is signalled by black
-    // occupancy changing; once it does, it's White's turn again.
-    await page.locator('[data-testid="teach-restart"]').first().click({ timeout: 4000 }).catch(() => {});
-    await page.waitForTimeout(2500);
+    // Move SOURCE — confirm the reply came from masters/lichess/Stockfish,
+    // NOT the last-resort random fallback (David 2026-06-04).
+    const srcEvents = await dumpAudit(['coach-opponent-move-source']);
+    const sources = srcEvents.map((e) => (e.summary || '').match(/source=(\S+)/)?.[1]).filter(Boolean);
+    const lastSrc = sources[sources.length - 1] ?? 'unknown';
+    // 'local' = the local masters DB; 'lichess'/'lichess-games' = live
+    // masters/games; 'stockfish-*' = rating-matched engine. Only 'random' is
+    // the bad last-resort fallback.
+    const goodSource = lastSrc !== 'random' && lastSrc !== 'unknown';
+    log('engine reply source is masters/Stockfish (not random)', goodSource,
+      sources.length ? `sources=[${sources.join(', ')}]` : 'no source event captured');
+
+    // ── Make a blunder; verify the slip-check RUNS + the "why?" pops up ──
+    // Do NOT restart (that resets to the start, where e2 is occupied and the
+    // king-walk is illegal). Continue from the e4 position: e2 is empty, so
+    // the Bongcloud king-walk (Ke2, Kf3) is legal and craters the eval.
     const waitForStudentTurn = async (prevBlackSig) => {
       for (let i = 0; i < 8; i++) {
         await page.waitForTimeout(2500);
@@ -229,8 +245,6 @@ async function main() {
     let promptSeen = false;
     let blackSig = await blackOcc();
     for (const [from, to] of BLUNDER_MOVES) {
-      // Make sure the board is accepting input (retry the move until the
-      // from-square empties), then wait for the engine's reply.
       let played = false;
       for (let k = 0; k < 6 && !played; k++) {
         await tryMove(from, to).catch(() => {});
@@ -239,8 +253,6 @@ async function main() {
         if (!played) await page.waitForTimeout(2000);
       }
       console.log(`  blunder ${from}${to}: played=${played}`);
-      // Check for the prompt right away (it fires on the student's move,
-      // before the engine's punishing reply).
       for (let p = 0; p < 6 && !promptSeen; p++) {
         await page.waitForTimeout(2000);
         promptSeen = (await page.locator('[data-testid="discussion-prompt"]').count().catch(() => 0)) > 0;
@@ -248,6 +260,13 @@ async function main() {
       if (promptSeen) break;
       blackSig = await waitForStudentTurn(blackSig);
     }
+    // The slip-check now RUNS (the fix: 'brain' priority, no longer dropped).
+    // faucet-slip-detected proves it fired even if the eval drop stayed below
+    // the rating-adaptive interjection bar (so no visible prompt).
+    const faucetEvents = await dumpAudit(['faucet-slip-detected']);
+    log('slip-check runs on the move (faucet fired — the prefetch-dropped fix)',
+      faucetEvents.length > 0 || promptSeen,
+      `faucet-slip-detected events=${faucetEvents.length}${promptSeen ? ' + prompt visible' : ''}`);
     log('"why did you play that?" question pops up on a blunder', promptSeen,
       promptSeen ? 'discussion-prompt visible' : 'no prompt (could not trigger a scored blunder in the scripted line; logic is unit-tested)');
 
