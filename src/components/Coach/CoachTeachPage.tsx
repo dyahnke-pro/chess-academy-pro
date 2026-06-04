@@ -1281,9 +1281,23 @@ export function CoachTeachPage(): JSX.Element {
         workingInput = workingInput.replace(/^face:\s*/i, '').trim();
       }
 
-      const m = (stageHint ? stageStrippedInput : workingInput).match(TEACH_PATTERN);
+      // A MOVE REPORT ("I played e4." — with or without "Your move.") or an
+      // engine-driven step turn is NEVER an opening-name query. Skip the
+      // opening-name router entirely so it can't fuzzy-match "e4" as an
+      // opening and surface a disambiguation picker INSTEAD of narrating the
+      // move (David 2026-06-04 root cause: the engine-driven message dropped
+      // "Your move.", so "I played e4." fell into the fuzzy router, popped a
+      // picker, the narration turn never ran, and the coach went silent).
+      const isMoveReport =
+        opts?.coachReplyPlayed !== undefined ||
+        /^\s*i\s+(?:just\s+)?played\b/i.test(workingInput);
+      const m = isMoveReport
+        ? null
+        : (stageHint ? stageStrippedInput : workingInput).match(TEACH_PATTERN);
       let requestedName: string | null = null;
-      if (m && m[2]) {
+      if (isMoveReport) {
+        requestedName = null;
+      } else if (m && m[2]) {
         requestedName = m[2].trim();
       } else if (stageHint && stageStrippedInput.length > 0 && stageStrippedInput.length <= 60) {
         // Stage keyword stripped → remaining text is the opening name.
@@ -2352,41 +2366,6 @@ export function CoachTeachPage(): JSX.Element {
       // the final response so the student isn't left in silence.
       tryExtractVoiceMarker();
       tryExtractChoicesMarker();
-
-      // ROOT FIX (David 2026-06-04: "I'm not hearing coach speech anymore").
-      // Voice was routed EXCLUSIVELY through the [VOICE:] marker, and the
-      // "speak the first sentence" fallback the comment above promised was
-      // never actually implemented — so whenever the brain omitted the marker
-      // the coach went totally silent (PostHog showed ZERO voice-speak-invoked
-      // while the coach was clearly narrating, with arrows firing). The
-      // engine-driven narration directive made the brain drop the marker,
-      // surfacing the latent bug. Implement the fallback for real: if nothing
-      // was spoken this turn and the walkthrough doesn't own the audio, speak
-      // the opening sentence(s) of the sanitized prose. The coach is never
-      // silent on a narration turn again.
-      if (
-        !voiceSpokenForTurn &&
-        !(walkthrough.isActive && walkthrough.phase !== 'paused')
-      ) {
-        const prose = displayBuffer.trim();
-        if (prose) {
-          // First 1-2 sentences (cap so we don't read a whole paragraph
-          // when the brain skipped the concise [VOICE:] summary).
-          const sentences = prose.split(/(?<=[.!?])\s+/).filter((s) => s.trim());
-          const spoken = sentences.slice(0, 2).join(' ').trim();
-          if (spoken) {
-            voiceSpokenForTurn = true;
-            void logAppAudit({
-              kind: 'coach-voice-marker-extracted',
-              category: 'subsystem',
-              source: 'CoachTeachPage.voiceFallback',
-              summary: `no [VOICE:] marker — spoke first sentence(s) (${spoken.length} chars)`,
-              details: JSON.stringify({ preview: spoken.slice(0, 80) }),
-            });
-            queueSpeak(spoken);
-          }
-        }
-      }
 
       // ── play_move SAFETY NET (David 2026-06-02: "coach didn't move a
       //    piece!!"). On a step-by-step move turn the brain is told to
