@@ -337,6 +337,12 @@ const BASELINE_VIOLATIONS = new Set<string>([
   'PLAN mp-italiangame-twoknights line[0] move 1 :: mp-italiangame-twoknights::0::0',
   'PLAN mp-kings-gambit-open-f-file line[0] move 5 :: mp-kings-gambit-open-f-file::0::4',
   'PLAN mp-viennagame-vs-nc6 line[0] move 7 :: mp-viennagame-vs-nc6::0::6',
+  // Checker false-positive, NOT a content bug: the text says the knight is
+  // "heading for g6 where it eyes f4 and h4" — from g6 a knight DOES attack f4
+  // and h4 (the claim is about the destination square, which is correct). The
+  // literal checker evaluates it at the e7 landing square and can't see the
+  // forward reference. Narration verified correct; baselined. (David 2026-06-04.)
+  'PLAN mp-prosamayopene5-d5break line[0] move 2 :: mp-prosamayopene5-d5break::0::1',
 ]);
 
 function filterNovel(violations: FactCheckResult[]): FactCheckResult[] {
