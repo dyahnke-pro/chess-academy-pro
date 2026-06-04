@@ -95,7 +95,7 @@ export function GameCard({
 
 function StatRow({ label, value, color }: { label: string; value: string; color?: string }): JSX.Element {
   return (
-    <div className="flex justify-between text-[11px] py-0.5">
+    <div className="flex items-baseline gap-1.5 text-[11px] py-0.5">
       <span style={{ color: 'var(--color-text-muted)' }}>{label}</span>
       <span className="font-semibold" style={{ color: color ?? 'var(--color-text-muted)' }}>{value}</span>
     </div>
