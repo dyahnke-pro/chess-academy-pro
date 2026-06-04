@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useState, useEffect } from 'react';
+import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { RotateCcw, SkipBack, RefreshCw } from 'lucide-react';
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
@@ -151,6 +151,25 @@ export function ControlledChessBoard({
     return () => clearTimeout(timer);
   }, [moveQualityFlash, settings.moveQualityFlash]);
 
+  // Single source of truth for "a move happened." react-chessboard fires
+  // BOTH onPieceDrop and onSquareClick for one physical drag-drop, so the
+  // two handlers below can each surface a move for the SAME interaction.
+  // A move is fundamentally a POSITION transition, so we emit onMove exactly
+  // once per resulting FEN — the duplicate event carries the same position
+  // and is a no-op. (Root fix for the teach-mode "I played X" x2 + piled-up
+  // arrows + double slip-faucet, David 2026-06-03 — replaces a downstream
+  // handleSubmit time-dedup bandaid.)
+  const lastEmittedFenRef = useRef<string | null>(null);
+  const emitMove = useCallback(
+    (result: MoveResult): void => {
+      if (result.fen === lastEmittedFenRef.current) return;
+      lastEmittedFenRef.current = result.fen;
+      onMove?.(result);
+      playMoveSound(result.san);
+    },
+    [onMove, playMoveSound],
+  );
+
   // Move handlers — delegate to parent-owned game object
   const handlePieceDrop = useCallback(
     ({ sourceSquare, targetSquare }: PieceDropHandlerArgs): boolean => {
@@ -160,14 +179,13 @@ export function ControlledChessBoard({
       }
       const result = game.onDrop(sourceSquare, targetSquare);
       if (result) {
-        onMove?.(result);
-        playMoveSound(result.san);
+        emitMove(result);
       } else {
         game.clearSelection();
       }
       return result !== null;
     },
-    [interactive, game, onMove, playMoveSound],
+    [interactive, game, emitMove],
   );
 
   const handleSquareClick = useCallback(
@@ -179,11 +197,10 @@ export function ControlledChessBoard({
       if (settings.moveMethod === 'drag') return;
       const result = game.onSquareClick(square);
       if (result) {
-        onMove?.(result);
-        playMoveSound(result.san);
+        emitMove(result);
       }
     },
-    [interactive, game, onMove, playMoveSound, settings.moveMethod],
+    [interactive, game, emitMove, settings.moveMethod],
   );
 
   const handlePieceDrag = useCallback(

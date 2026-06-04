@@ -375,15 +375,6 @@ export function CoachTeachPage(): JSX.Element {
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [streaming, setStreaming] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  // Same-tick double-fire guard. `busy` is React state, so two calls to
-  // handleSubmit in the same tick (board onMove + a re-render) both see
-  // `busy === false` and BOTH run — the move posts twice, the turn is
-  // processed twice, and the arrow-synthesizer appends arrows on each pass
-  // (the visible "I played e4." x2 + piled-up arrows, David 2026-06-03).
-  // A timestamp dedup blocks an IDENTICAL submission within a short window
-  // (the double-fire signature) and auto-recovers — no lock to get stuck on
-  // the many early-return paths below.
-  const lastSubmitRef = useRef<{ text: string; at: number }>({ text: '', at: 0 });
   // Brain-emitted answer chips. Set when the streaming response
   // contains a `[CHOICES: A | B | C]` marker (typically because
   // the brain is asking a disambiguation question — e.g.
@@ -916,18 +907,6 @@ export function CoachTeachPage(): JSX.Element {
     },
   ): Promise<void> => {
     if (!text.trim() || busy) return;
-    // Synchronous same-tick double-fire guard (see lastSubmitRef above).
-    // `busy` is async state and can't catch two calls in one tick; this
-    // does. Identical text within 1.5s = the double-submit, drop the dup.
-    const submittedText = text.trim();
-    const submittedAt = Date.now();
-    if (
-      lastSubmitRef.current.text === submittedText &&
-      submittedAt - lastSubmitRef.current.at < 1500
-    ) {
-      return;
-    }
-    lastSubmitRef.current = { text: submittedText, at: submittedAt };
     // Audit-instrumentation phase-1 (2026-05-19): mint a turn id and
     // make it the module-default for the duration of this handleSubmit.
     // Every logAppAudit call from any code reached during this turn

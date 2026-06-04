@@ -124,3 +124,65 @@ describe('useDiscussionPractice — prompt mode (the /coach/play faucet)', () =>
     expect(mockedCapture.mock.calls[0][0].classifyInput.userReason).toBeUndefined();
   });
 });
+
+// raiseSlipPrompt is the caller-driven entry the blunder interceptor uses:
+// CoachGamePage's classifyMove is the SINGLE move-quality checker, and on a
+// blunder/mistake it raises the same "why?" chat + capture through here —
+// without re-running the faucet's own analysis. (David 2026-06-04: one
+// checker, blunder + chat linked.)
+describe('useDiscussionPractice — raiseSlipPrompt (the blunder→chat link)', () => {
+  const RAISE_ARGS = {
+    fenBefore: FEN_BEFORE,
+    fenAfter: FEN_AFTER,
+    playedSan: 'Qe6',
+    bestSan: 'Qe4',
+    cpLoss: 500,
+    shouldCount: true,
+    gamePhase: 'middlegame' as const,
+    moveNumber: 1,
+    openingName: 'Ruy Lopez',
+  };
+
+  it('raises the why-prompt directly, no re-analysis', () => {
+    const { result } = renderHook(() => useDiscussionPractice(true));
+    act(() => { result.current.raiseSlipPrompt(RAISE_ARGS); });
+
+    expect(result.current.phase).toBe('asking');
+    expect(result.current.prompt?.playedSan).toBe('Qe6');
+    expect(result.current.prompt?.bestSan).toBe('Qe4');
+  });
+
+  it('dedupes against the faucet — one prompt per resulting FEN', async () => {
+    const { result } = renderHook(() => useDiscussionPractice(true));
+    act(() => { result.current.raiseSlipPrompt(RAISE_ARGS); });
+    expect(result.current.phase).toBe('asking');
+
+    // The faucet then resolves for the SAME move — it must NOT clobber.
+    await act(async () => { await result.current.evaluatePlayerMove(SLIP_ARGS); });
+    expect(result.current.prompt?.playedSan).toBe('Qe6');
+    // Still one prompt, still awaiting the answer (no passive capture).
+    expect(mockedCapture).not.toHaveBeenCalled();
+  });
+
+  it('captures silently when the in-game discussion toggle is off', () => {
+    useAppStore.setState({
+      activeProfile: buildUserProfile({ preferences: { coachInGameDiscussion: false } }),
+    });
+    const { result } = renderHook(() => useDiscussionPractice(true));
+    act(() => { result.current.raiseSlipPrompt(RAISE_ARGS); });
+
+    // No interruption, but the slip still feeds the bucket (passive).
+    expect(result.current.phase).toBe('idle');
+    expect(result.current.prompt).toBeNull();
+    expect(mockedCapture).toHaveBeenCalledOnce();
+    expect(mockedCapture.mock.calls[0][0].classifyInput.userReason).toBeUndefined();
+  });
+
+  it('does nothing when disabled', () => {
+    const { result } = renderHook(() => useDiscussionPractice(false));
+    act(() => { result.current.raiseSlipPrompt(RAISE_ARGS); });
+    expect(result.current.phase).toBe('idle');
+    expect(result.current.prompt).toBeNull();
+    expect(mockedCapture).not.toHaveBeenCalled();
+  });
+});

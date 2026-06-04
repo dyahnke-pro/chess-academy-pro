@@ -17,6 +17,7 @@ import {
   buildWhyPrompt,
   captureMisconception,
 } from '../services/discussionPractice';
+import type { SlipResult } from '../services/slipDetector';
 import { logAppAudit } from '../services/appAuditor';
 import { useSettings } from './useSettings';
 
@@ -51,12 +52,37 @@ export interface EvaluatePlayerMoveArgs {
   openingName?: string;
 }
 
+/** Args for `raiseSlipPrompt` — a slip a CALLER already detected (e.g. the
+ *  blunder interceptor in CoachGamePage), surfaced through the same "why
+ *  did you play that?" panel + capture pipeline WITHOUT re-running the
+ *  faucet's own analysis. The caller owns the eval; we own the UI + bucket. */
+export interface RaiseSlipPromptArgs {
+  fenBefore: string;
+  fenAfter: string;
+  playedSan: string;
+  bestSan?: string;
+  mastersTopSan?: string;
+  /** Centipawns lost — drives the spoken eval summary. */
+  cpLoss: number;
+  /** Whether this slip counts against the weakness bucket (learned line). */
+  shouldCount: boolean;
+  /** 'left-book' phrases the question differently; default 'eval-drop'. */
+  reason?: 'left-book' | 'eval-drop';
+  gamePhase: 'opening' | 'middlegame' | 'endgame';
+  moveNumber?: number;
+  openingId?: string;
+  openingName?: string;
+}
+
 export interface UseDiscussionPracticeResult {
   phase: DiscussionPhase;
   prompt: DiscussionPrompt | null;
   /** The coach's teaching line to speak/show after answer or skip. */
   teach: string | null;
   evaluatePlayerMove: (args: EvaluatePlayerMoveArgs) => Promise<void>;
+  /** Raise the "why?" prompt for a slip the caller already detected
+   *  (blunder interception), bypassing the faucet's own analysis. */
+  raiseSlipPrompt: (args: RaiseSlipPromptArgs) => void;
   submitReason: (reason: string) => Promise<void>;
   skip: () => Promise<void>;
   dismissTeach: () => void;
@@ -99,6 +125,11 @@ export function useDiscussionPractice(
   const [teach, setTeach] = useState<string | null>(null);
   const openingIdRef = useRef<string | undefined>(undefined);
   const openingNameRef = useRef<string | undefined>(undefined);
+  // One "why?" prompt per move. The faucet (evaluatePlayerMove) and a
+  // caller-driven raise (raiseSlipPrompt, used by the blunder interceptor)
+  // can both reach the same slip — whichever fires first wins; the other is
+  // a no-op for that position. Keyed on the resulting FEN.
+  const promptedFenAfterRef = useRef<string | null>(null);
 
   const evaluatePlayerMove = useCallback(async (args: EvaluatePlayerMoveArgs): Promise<void> => {
     if (!enabled) return;
@@ -124,6 +155,9 @@ export function useDiscussionPractice(
         learned: args.learned,
       });
       if (!slip.isSlip) return;
+      // Already prompted for this move (the blunder interceptor raised it
+      // first via raiseSlipPrompt) — don't double-fire.
+      if (promptedFenAfterRef.current === args.fenAfter) return;
 
       // Resolve the better move (SAN) and the masters' move for context.
       let bestSan: string | undefined;
@@ -168,6 +202,10 @@ export function useDiscussionPractice(
           openingName: args.openingName,
         }),
       });
+
+      // Claim this move so a caller-driven raise (raiseSlipPrompt) doesn't
+      // double-fire the same prompt.
+      promptedFenAfterRef.current = args.fenAfter;
 
       // Silent mode: feed the bucket directly, no panel, no voice — for
       // surfaces that already narrate (the /coach/teach brain) or are
@@ -218,6 +256,93 @@ export function useDiscussionPractice(
     }
   }, [enabled, effectiveSilent, surface]);
 
+  // Caller-driven raise: a slip the CALLER already detected (the blunder
+  // interceptor knows the move is a blunder and has the best move in hand).
+  // Surfaces the same "why?" panel + capture pipeline without re-running the
+  // faucet's analysis — so a blunder pop-up ALWAYS carries the coach's "why
+  // did you play that?" question instead of depending on the faucet's
+  // independent evaluator to coincidentally agree and win the analysis race
+  // (David 2026-06-04: blunder pop-up fired with no "why" question).
+  const raiseSlipPrompt = useCallback((args: RaiseSlipPromptArgs): void => {
+    if (!enabled) return;
+    // One prompt per move — if the faucet already claimed this position, or
+    // a prompt for it is already up, don't clobber it.
+    if (promptedFenAfterRef.current === args.fenAfter) return;
+    promptedFenAfterRef.current = args.fenAfter;
+    openingIdRef.current = args.openingId;
+    openingNameRef.current = args.openingName;
+
+    const slip: SlipResult = {
+      isSlip: true,
+      reason: args.reason ?? 'eval-drop',
+      severity: null,
+      cpLoss: args.cpLoss,
+      shouldCount: args.shouldCount,
+    };
+
+    void logAppAudit({
+      kind: 'faucet-slip-detected',
+      category: 'subsystem',
+      source: `useDiscussionPractice.raiseSlipPrompt${surface ? `:${surface}` : ''}`,
+      summary: `played=${args.playedSan} best=${args.bestSan ?? '?'} cpLoss=${args.cpLoss} count=${args.shouldCount} phase=${args.gamePhase} silent=${effectiveSilent} via=blunder`,
+      fen: args.fenBefore,
+      details: JSON.stringify({
+        surface,
+        silent: effectiveSilent,
+        playedSan: args.playedSan,
+        bestSan: args.bestSan,
+        mastersTopSan: args.mastersTopSan,
+        cpLoss: args.cpLoss,
+        shouldCount: args.shouldCount,
+        openingName: args.openingName,
+        via: 'blunder',
+      }),
+    });
+
+    // Silent (user turned "ask why" off, or a silent-by-contract surface):
+    // capture passively, no panel — exactly like the faucet.
+    if (effectiveSilent) {
+      void captureMisconception({
+        classifyInput: {
+          fen: args.fenBefore,
+          playedSan: args.playedSan,
+          bestSan: args.bestSan,
+          mastersTopSan: args.mastersTopSan,
+          evalSummary: cpToWords(args.cpLoss),
+          gamePhase: args.gamePhase,
+        },
+        source: 'discussion-practice',
+        shouldCount: args.shouldCount,
+        context: {
+          fen: args.fenBefore,
+          playedSan: args.playedSan,
+          bestSan: args.bestSan,
+          cpLoss: args.cpLoss,
+          gamePhase: args.gamePhase,
+          moveNumber: args.moveNumber,
+          openingId: args.openingId,
+          openingName: args.openingName,
+        },
+      }).catch(() => undefined);
+      return;
+    }
+
+    setPrompt({
+      question: buildWhyPrompt(slip),
+      fenBefore: args.fenBefore,
+      fenAfter: args.fenAfter,
+      playedSan: args.playedSan,
+      bestSan: args.bestSan,
+      mastersTopSan: args.mastersTopSan,
+      evalSummary: cpToWords(args.cpLoss),
+      cpLoss: args.cpLoss,
+      shouldCount: args.shouldCount,
+      gamePhase: args.gamePhase,
+      moveNumber: args.moveNumber,
+    });
+    setPhase('asking');
+  }, [enabled, effectiveSilent, surface]);
+
   const resolve = useCallback(async (reason: string | undefined): Promise<void> => {
     if (!prompt) return;
     setPhase('thinking');
@@ -261,7 +386,8 @@ export function useDiscussionPractice(
     setPrompt(null);
     setTeach(null);
     setPhase('idle');
+    promptedFenAfterRef.current = null;
   }, []);
 
-  return { phase, prompt, teach, evaluatePlayerMove, submitReason, skip, dismissTeach, reset };
+  return { phase, prompt, teach, evaluatePlayerMove, raiseSlipPrompt, submitReason, skip, dismissTeach, reset };
 }

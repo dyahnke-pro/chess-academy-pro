@@ -2889,29 +2889,17 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     const preFen = game.fen;
     previousFenRef.current = preFen;
 
-    // Discussion Practice faucet: best-effort slip check on the move just
-    // played. Mirrors OpeningPlayMode — feeds the shared weakness bucket so
-    // /coach/play participates in the money loop. Never blocks the game.
-    {
-      const openingName = intendedOpening?.name ?? detectOpening(game.history)?.name;
-      const ply = game.history.length;
-      const bookMoves = openingName ? getOpeningMoves(openingName) : null;
-      const inBook = !!bookMoves && ply < bookMoves.length;
-      const bookMoveSan = inBook ? bookMoves[ply] : undefined;
-      const phase = classifyPhase(moveResult.fen, ply + 1);
-      void discussion.evaluatePlayerMove({
-        fenBefore: preFen,
-        fenAfter: moveResult.fen,
-        playedSan: moveResult.san,
-        playerColor,
-        inBook,
-        bookMoveSan,
-        learned: !!openingName,
-        gamePhase: phase,
-        moveNumber: Math.ceil((ply + 1) / 2),
-        openingName,
-      });
-    }
+    // Discussion Practice (the coach "why did you play that?" chat) is driven
+    // off the SINGLE move-quality classification below (classifyMove), NOT a
+    // second, independently-analyzing slip checker. We used to call
+    // discussion.evaluatePlayerMove() here, which ran its OWN pair of
+    // Stockfish analyses and its OWN classifier (detectSlip) — a second
+    // move-quality checker racing the blunder interceptor's. The two
+    // disagreed, so a blunder overlay could fire with no "why?" chat (and
+    // vice-versa). Now there is one analysis (line ~2951), one classifier
+    // (classifyMove), feeding BOTH the on-board overlay AND the chat prompt
+    // via raiseWhyForSlip() below. (David 2026-06-04: one checker; blunder +
+    // chat linked.)
 
     // NOTE: We intentionally defer game.makeMove() until after analysis.
     // Calling it here would flip game.turn to the coach's color, and because
@@ -3009,6 +2997,31 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     if (isEngineBestMove || engineBestMoveSan === moveResult.san) {
       classification = 'good';
     }
+
+    // Single source of truth for "was this a slip worth discussing?": the
+    // classification above drives BOTH the on-board blunder overlay AND the
+    // coach chat's "why did you play that?" prompt + weakness capture. Call
+    // AFTER game.makeMove() so game.history reflects the played move. Dedupes
+    // against itself by resulting FEN inside the hook, so it's safe to call
+    // once per slip. (David 2026-06-04: one checker, blunder + chat linked.)
+    const raiseWhyForSlip = (): void => {
+      const ply = game.history.length;
+      const openingName = intendedOpening?.name ?? detectOpening(game.history)?.name;
+      const bookMoves = openingName ? getOpeningMoves(openingName) : null;
+      const inBook = !!bookMoves && ply - 1 < bookMoves.length;
+      discussion.raiseSlipPrompt({
+        fenBefore: preFen,
+        fenAfter: moveResult.fen,
+        playedSan: moveResult.san,
+        bestSan: engineBestMoveSan === '?' ? undefined : engineBestMoveSan,
+        cpLoss: evalLoss,
+        shouldCount: !!openingName,
+        reason: inBook ? 'left-book' : 'eval-drop',
+        gamePhase: classifyPhase(moveResult.fen, ply),
+        moveNumber: Math.ceil(ply / 2),
+        openingName,
+      });
+    };
 
     // Run deterministic tactic classifier on the move
     let tacticSuffix = '';
@@ -3679,6 +3692,12 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         currentHintLevel: 0,
       }));
 
+      // A blunder is, by definition, a slip worth discussing. Raise the
+      // coach's "why did you play that move?" chat from the SAME
+      // classification that drove this overlay — so the blunder pop-up and
+      // the chat are linked, one flow.
+      raiseWhyForSlip();
+
       // Per-move narration. A blunder is always a "key moment" so we
       // speak the explanation whenever the user hasn't fully muted
       // commentary (`coachCommentaryVerbosity !== 'off'`). Phase
@@ -3711,6 +3730,13 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
 
     // Non-blunder: sync the move and let the coach-move useEffect respond.
     game.makeMove(moveResult.from, moveResult.to, moveResult.promotion);
+
+    // Mistakes + inaccuracies don't pause the board, but they're still slips
+    // worth the coach's "why did you play that?" chat + a weakness-bucket
+    // entry — same single classification that drives the blunder overlay.
+    if (classification === 'mistake' || classification === 'inaccuracy') {
+      raiseWhyForSlip();
+    }
 
     // Per-move narration. ONLY speak when the LLM actually produced
     // personality-driven prose. The deterministic tactic suffix
