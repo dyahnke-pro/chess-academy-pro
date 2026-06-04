@@ -212,21 +212,44 @@ async function main() {
       blackMoved ? 'black occupancy changed → engine replied' : 'no black move detected');
 
     // ── Make a blunder; verify the "why?" question pops up ─────────────
+    // Restart, then play the Fool's-Mate setup (f3, g4) — but wait for the
+    // student's turn between moves (the board is busy while the engine
+    // replies + the coach narrates). The engine reply is signalled by black
+    // occupancy changing; once it does, it's White's turn again.
     await page.locator('[data-testid="teach-restart"]').first().click({ timeout: 4000 }).catch(() => {});
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(2500);
+    const waitForStudentTurn = async (prevBlackSig) => {
+      for (let i = 0; i < 8; i++) {
+        await page.waitForTimeout(2500);
+        const now = await blackOcc();
+        if (now !== prevBlackSig) return now; // engine moved ⇒ White to move
+      }
+      return prevBlackSig;
+    };
     let promptSeen = false;
+    let blackSig = await blackOcc();
     for (const [from, to] of BLUNDER_MOVES) {
-      await tryMove(from, to).catch((e) => console.log(`  [blunder ${from}${to}] ${e.message}`));
-      await page.waitForTimeout(MOVE_SETTLE_MS);
-      if (await page.locator('[data-testid="discussion-prompt"]').count().catch(() => 0)) { promptSeen = true; break; }
-    }
-    // Give it one more settle in case the faucet's analysis lagged.
-    if (!promptSeen) {
-      await page.waitForTimeout(6000);
-      promptSeen = (await page.locator('[data-testid="discussion-prompt"]').count().catch(() => 0)) > 0;
+      // Make sure the board is accepting input (retry the move until the
+      // from-square empties), then wait for the engine's reply.
+      let played = false;
+      for (let k = 0; k < 6 && !played; k++) {
+        await tryMove(from, to).catch(() => {});
+        await page.waitForTimeout(1200);
+        played = await isSquareEmpty(from);
+        if (!played) await page.waitForTimeout(2000);
+      }
+      console.log(`  blunder ${from}${to}: played=${played}`);
+      // Check for the prompt right away (it fires on the student's move,
+      // before the engine's punishing reply).
+      for (let p = 0; p < 6 && !promptSeen; p++) {
+        await page.waitForTimeout(2000);
+        promptSeen = (await page.locator('[data-testid="discussion-prompt"]').count().catch(() => 0)) > 0;
+      }
+      if (promptSeen) break;
+      blackSig = await waitForStudentTurn(blackSig);
     }
     log('"why did you play that?" question pops up on a blunder', promptSeen,
-      promptSeen ? 'discussion-prompt visible' : 'no prompt (engine may not have punished the line, or below rating bar)');
+      promptSeen ? 'discussion-prompt visible' : 'no prompt (could not trigger a scored blunder in the scripted line; logic is unit-tested)');
 
     log('no console errors', consoleErrors.length === 0, consoleErrors.slice(0, 2).join(' | '));
     log('no page errors', pageErrors.length === 0, pageErrors.slice(0, 2).join(' | '));
