@@ -2062,6 +2062,16 @@ export function CoachTeachPage(): JSX.Element {
       // response, then chess.js rejected it 5 trips in a row.
       whoseTurn: fenTurn,
       tactics: tacticsForAsk,
+      // Step-by-step move narration: the engine-driven reply (coachReplyPlayed
+      // defined) OR a typed "I played X. Your move." report, outside a
+      // walkthrough. Tells the grounding pipeline this turn is move discussion
+      // (coach narrates the played move + tactical ideas a ply ahead), so the
+      // bare-SAN gate is skipped — the deep Learn game stocked out ~half its
+      // turns otherwise (David 2026-06-04).
+      moveNarration:
+        !walkthrough.isActive &&
+        (opts?.coachReplyPlayed !== undefined ||
+          /\bi\s+(?:just\s+)?played\b[\s\S]*\byour\s+(?:move|turn)\b/i.test(text)),
       ...(evalForAsk ?? {}),
       ...(lichessForAsk ?? {}),
     };

@@ -850,6 +850,11 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             // Lichess explorer's top-N. Undefined off the review surface.
             gameSans: mergedGameSans,
             groundedPlayers,
+            // Step-by-step move-narration turns exempt the bare-SAN gate (the
+            // coach is narrating a played move + tactical ideas a ply ahead,
+            // not claiming "masters play X"). The G6 arrow validator + the
+            // stat/player/comparative guards still apply. (David 2026-06-04.)
+            moveNarration: input.liveState.moveNarration,
             surface: coachSurfaceToRoute(input.liveState.surface),
           }
         : undefined);

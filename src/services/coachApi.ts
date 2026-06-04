@@ -1028,6 +1028,16 @@ export interface MasterGroundingOptions {
    *  grounded player here tells the validator that name is attributed.
    *  Same escape hatch as `gameSans` for moves. (Prod bug 2026-06-02.) */
   groundedPlayers?: ReadonlyArray<string>;
+  /** Step-by-step MOVE NARRATION turn (the engine-driven Learn reply / a
+   *  "I played X. Your move." report). The coach is narrating a played move +
+   *  its ideas, naming tactical continuations a ply or two ahead — TEACHING,
+   *  not a "masters play X" claim. When set, the bare-SAN gate is skipped for
+   *  this turn (the G6 arrow validator still board-verifies every SAN, and the
+   *  percentage / count / player / comparative guards stay on `hasMasterData`).
+   *  See `LiveState.moveNarration`. (David's iPhone + deep audit, 2026-06-04:
+   *  deep Learn games stocked out ~half their turns on real recaptures the
+   *  explorer's top-N for the exact FEN didn't carry.) */
+  moveNarration?: boolean;
   /** Surface route for audit attribution. Goes into every emitted
    *  audit event (`master-play-lookup`, `claim-validator-trip`, etc). */
   surface: string;
@@ -1201,7 +1211,7 @@ async function buildMasterPlayContext(
     // review, `groundedSans` carries the game's own moves + legal moves
     // so the coach can discuss the student's actual game without every
     // SAN tripping the gate.
-    return { current, lookahead: [], groundedSans, groundedFromPlayedGame, groundedPlayers: grounding.groundedPlayers };
+    return { current, lookahead: [], groundedSans, groundedFromPlayedGame, moveNarration: grounding.moveNarration, groundedPlayers: grounding.groundedPlayers };
   }
   const lookahead = await buildLookahead(
     grounding.currentFen,
@@ -1209,7 +1219,7 @@ async function buildMasterPlayContext(
     grounding.surface,
     grounding.sessionId,
   );
-  return { current, lookahead, groundedSans, groundedFromPlayedGame, groundedPlayers: grounding.groundedPlayers };
+  return { current, lookahead, groundedSans, groundedFromPlayedGame, moveNarration: grounding.moveNarration, groundedPlayers: grounding.groundedPlayers };
 }
 
 /** Render the context as a system-prompt block the LLM can consume.

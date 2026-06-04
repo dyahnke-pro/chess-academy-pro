@@ -218,6 +218,22 @@ export interface LiveState {
    *  grounding stays in force for opening / "what do masters play"
    *  questions). */
   gameSans?: string[];
+  /** TRUE when this turn is step-by-step MOVE NARRATION — the coach is
+   *  narrating a move that was just played (the engine-driven Learn reply, or
+   *  a "I played X. Your move." report) and explaining the ideas around it,
+   *  NOT answering "what do masters play here?". In that context the coach
+   *  legitimately names tactical continuations a ply or two ahead ("…then
+   *  bxc3 doubles my pawns") that are neither currently legal nor in the move
+   *  history — and those are TEACHING, not a "masters play X" fabrication.
+   *  When set, the claim validator skips the bare-SAN gate for this turn
+   *  (every SAN still gets a board-verified arrow via the G6 arrow validator,
+   *  and the percentage / game-count / player-name / comparative guards stay
+   *  fully in force). Without this, a deep Learn game stocked out ~half its
+   *  turns: the coach named a real recapture/threat the explorer's top-N for
+   *  the exact FEN didn't carry, the SAN gate flagged it, retries exhausted,
+   *  and the student heard "I can't verify which moves are sound" instead of
+   *  the lesson (prod, David's iPhone + deep audit, 2026-06-04). */
+  moveNarration?: boolean;
 }
 
 /** Pre-formatted classical-book grounding block. The text is built

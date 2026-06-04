@@ -134,4 +134,13 @@ export interface MasterPlayContext {
    *  moves not yet legal) and must NOT be flagged into the stock
    *  fallback. Set by `buildMasterPlayContext`. */
   groundedFromPlayedGame?: boolean;
+  /** True when this turn is step-by-step MOVE NARRATION (the engine-driven
+   *  Learn reply / a "I played X. Your move." report) — the coach narrates a
+   *  played move + its ideas, naming tactical continuations a ply or two ahead
+   *  ("…then bxc3 doubles my pawns") that are TEACHING, not "masters play X"
+   *  claims. When set, the bare-SAN gate is skipped (the G6 arrow validator
+   *  still board-verifies every SAN; the percentage / count / player /
+   *  comparative guards stay in force). Set by `buildMasterPlayContext`.
+   *  (David's iPhone + deep audit, 2026-06-04.) */
+  moveNarration?: boolean;
 }

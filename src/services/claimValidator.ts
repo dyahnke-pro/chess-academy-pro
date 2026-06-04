@@ -409,7 +409,19 @@ export function validateClaims(
   // SAN there is forward-looking move discussion (a plan names future
   // moves), not fabrication. (Legal moves are in `knownSans` regardless,
   // so they never trip even on the strict path.)
-  const canVerifySans = hasMasterData || hasDbData || !!context.groundedFromPlayedGame;
+  // Step-by-step MOVE NARRATION (the engine-driven Learn reply / a "I played
+  // X. Your move." report) is move DISCUSSION, not a "what masters play here?"
+  // claim: the coach narrates the played move + names tactical continuations a
+  // ply or two ahead ("…then bxc3 doubles my pawns") that are legitimate
+  // teaching, neither currently legal nor in the move history. Those tripped
+  // the bare-SAN gate, exhausted retries, and stocked out ~half of a deep Learn
+  // game (David's iPhone + deep audit, 2026-06-04). Skip the bare-SAN gate for
+  // these turns — the G6 arrow validator still board-verifies every SAN, and
+  // the real fabrication vectors (percentages, game counts, ratings, player
+  // names, "most popular"/"main line" comparatives) stay gated on
+  // `hasMasterData` below regardless.
+  const canVerifySans =
+    !context.moveNarration && (hasMasterData || hasDbData || !!context.groundedFromPlayedGame);
   if (canVerifySans) {
     for (const san of sans) {
       if (!knownSans.has(san)) {

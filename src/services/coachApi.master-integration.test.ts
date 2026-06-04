@@ -273,6 +273,39 @@ describe('grounding — retry on validator trip', () => {
     expect(counters.llmCalls).toBe(3); // initial + 2 retries
   });
 
+  it('does NOT gate bare SANs on a MOVE-NARRATION turn (deep Learn teaching)', async () => {
+    // David's iPhone + deep audit, 2026-06-04: deep into a Learn game the coach
+    // narrates the played move and names a tactical continuation a ply or two
+    // ahead ("…then bxc3 doubles my pawns") that is neither legal-now nor in
+    // the history. With master/DB data present the bare-SAN gate flagged it,
+    // retries exhausted, and ~half the deep game stocked out. moveNarration
+    // exempts the bare-SAN gate for these turns (G6 arrow validator still
+    // board-verifies every SAN; stat/player/comparative guards stay on).
+    const counters = installFetchMock({ lichess: LICHESS_PAYLOAD, llmTexts: [
+      'Good — and if I recapture with bxc3, my pawns double but the b-file opens for your rook.',
+    ] });
+    const r = await getCoachChatResponse(
+      [{ role: 'user', content: 'I played Nc3. Your move.' }],
+      '', undefined, 'chat_response', 1024, undefined, undefined, undefined,
+      { currentFen: STARTING_FEN, moveNarration: true, surface: '/coach/teach', sessionId: 'test-session' },
+    );
+    expect(r).toContain('bxc3');
+    expect(r).not.toContain("can't verify"); // no stock-out
+    expect(counters.llmCalls).toBe(1);        // no retry — gate skipped
+  });
+
+  it('STILL gates a "what masters play" turn when moveNarration is OFF (guard intact)', async () => {
+    // The exemption must NOT leak into the "what do masters play here?" case —
+    // there an invented SAN IS a fabrication worth flagging. Same invented SAN,
+    // no moveNarration → trips + stocks out.
+    const { response, counters } = await ask(
+      'what should I play here?',
+      ['The best move is Nh6.', 'Try Bf6 instead.', 'Maybe Rf2 is good?'],
+    );
+    expect(response).toContain("can't verify");
+    expect(counters.llmCalls).toBe(3);
+  });
+
   it('does NOT trip when the coach names the move JUST PLAYED (engine-driven Learn step)', async () => {
     // David's iPhone, 2026-06-04: on the engine-driven /coach/teach step the
     // engine plays the reply (…c5) and the coach narrates it — "c5 is the
