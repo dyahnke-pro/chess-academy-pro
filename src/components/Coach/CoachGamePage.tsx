@@ -2246,12 +2246,22 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               'coach-move-adaptive-fallback',
             );
             if (adaptive.ok && adaptive.value.move) {
-              brainPickSan = adaptive.value.move;
+              // getAdaptiveMove returns UCI ("e7e5"); brainPickSan is fed to
+              // probe.move() which expects SAN. Convert so the fallback move
+              // actually plays (else it silently fell through to random).
+              let adaptiveSan: string | null = null;
+              try {
+                const c = new Chess(game.fen);
+                const uci = adaptive.value.move;
+                const m = c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.length > 4 ? uci[4] : undefined });
+                adaptiveSan = m?.san ?? null;
+              } catch { adaptiveSan = null; }
+              if (adaptiveSan) brainPickSan = adaptiveSan;
               void logAppAudit({
                 kind: 'coach-move-fastpath',
                 category: 'subsystem',
                 source: 'CoachGamePage.coachTurn.adaptiveFallback',
-                summary: `getAdaptiveMove: ${adaptive.value.move} (source=${adaptive.value.source}, strength ${targetStrength})`,
+                summary: `getAdaptiveMove: ${adaptive.value.move} → ${adaptiveSan ?? 'unconvertible'} (source=${adaptive.value.source}, strength ${targetStrength})`,
                 fen: game.fen,
               });
             }

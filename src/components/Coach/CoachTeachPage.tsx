@@ -2776,14 +2776,29 @@ export function CoachTeachPage(): JSX.Element {
         }
       } catch { /* fall through to engine */ }
     }
+    // getAdaptiveMove / getRandomLegalMove return UCI ("e7e5"); handlePlayMove
+    // matches by SAN, so convert before returning. (Audit 2026-06-04 caught
+    // the engine reply silently failing off-book because UCI never matched a
+    // SAN in handlePlayMove.)
+    const uciToSan = (uci: string): string | null => {
+      try {
+        const c = new Chess(fen);
+        const m = c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.length > 4 ? uci[4] : undefined });
+        return m?.san ?? null;
+      } catch { return null; }
+    };
     // 2) Out of book / deviation — rating-matched engine.
     try {
       const rating = activeProfile?.puzzleRating ?? 1200;
       const adaptive = await getAdaptiveMove(fen, rating);
-      if (adaptive.move) return adaptive.move;
+      if (adaptive.move) {
+        const san = uciToSan(adaptive.move);
+        if (san) return san;
+      }
     } catch { /* fall through */ }
     // 3) Never freeze.
-    return getRandomLegalMove(fen);
+    const random = getRandomLegalMove(fen);
+    return random ? uciToSan(random) : null;
   }, [walkthrough.tree?.openingName, activeProfile?.puzzleRating]);
 
   const handleStudentMove = useCallback((move: MoveResult): void => {
