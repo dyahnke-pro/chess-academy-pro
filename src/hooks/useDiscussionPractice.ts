@@ -142,11 +142,20 @@ export function useDiscussionPractice(
     openingIdRef.current = args.openingId;
     openingNameRef.current = args.openingName;
     try {
-      // Eval the position before (best move + eval) and after the move.
-      // 'prefetch' priority so we don't contend with the opponent engine.
+      // Eval the position before + after the move to detect a slip. Use
+      // 'brain' priority — NOT 'prefetch'. 'prefetch' analyses are DROPPED
+      // whenever a 'brain' eval is in flight, and on every surface the
+      // student's move kicks off a 'brain' eval immediately (the engine
+      // reply, the eval bar, the move classification). So a 'prefetch' slip-
+      // check was silently dropped and the "why did you play that?" pop-up
+      // NEVER fired (David 2026-06-04: "the pop up should fire even if the
+      // move is not punished" — it's eval-based, so it must). Depth 10 is
+      // plenty to catch a blunder and keeps the queue short. The two evals
+      // queue behind the engine reply, so the prompt appears a beat after
+      // the opponent moves — reliably, instead of never.
       const [before, after] = await Promise.all([
-        stockfishEngine.analyzePosition(args.fenBefore, 12, undefined, 'prefetch'),
-        stockfishEngine.analyzePosition(args.fenAfter, 12, undefined, 'prefetch'),
+        stockfishEngine.analyzePosition(args.fenBefore, 10, undefined, 'brain'),
+        stockfishEngine.analyzePosition(args.fenAfter, 10, undefined, 'brain'),
       ]);
       const sign = args.playerColor === 'white' ? 1 : -1;
       const evalBeforeCp = before.evaluation * sign;
