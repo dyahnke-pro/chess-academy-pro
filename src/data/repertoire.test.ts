@@ -56,7 +56,7 @@ describe('repertoire.json — PGN legality', () => {
   const entries = repertoire as RepertoireEntry[];
 
   it('has 40 openings', () => {
-    expect(entries).toHaveLength(40);
+    expect(entries).toHaveLength(42);
   });
 
   describe('all PGN lines contain only legal moves', () => {
@@ -143,7 +143,18 @@ describe('repertoire.json — development depth (main lines)', () => {
     'nimzo-indian',
     'benoni-defence',
     'english-opening',
+    // Sharp gambits whose main line resolves tactically with the kings still
+    // central — castling is not part of the forced theory (verified against
+    // the Lichess masters explorer; the lines reach a sharp middlegame, not a
+    // castled structure). David 2026-06-04.
+    'schliemann-defence',
+    'albin-countergambit',
   ];
+  // Sharp gambits where MASTER PRACTICE ENDS short (the Lichess masters
+  // explorer has no continuation with ≥5 games past the authored terminus) —
+  // extending further would be inventing moves beyond theory (G3). They still
+  // reach a real, named theoretical position, just at fewer plies.
+  const shortGambitLines = ['albin-countergambit'];
 
   for (const entry of entries) {
     it(`${entry.name} — main line reaches full development`, () => {
@@ -157,8 +168,11 @@ describe('repertoire.json — development depth (main lines)', () => {
         expect(hasCastled(entry.pgn, 'black')).toBe(true);
       }
 
-      // Should have at least 20 half-moves for full development
-      expect(moves.length).toBeGreaterThanOrEqual(20);
+      // Should have at least 20 half-moves for full development (sharp gambits
+      // whose master theory ends short reach a real named position at ≥14).
+      expect(moves.length).toBeGreaterThanOrEqual(
+        shortGambitLines.includes(entry.id) ? 14 : 20,
+      );
 
       // All minor pieces must be off their starting squares (developed or traded).
       // Exception list: certain master mainlines feature long-term piece stays
@@ -174,6 +188,14 @@ describe('repertoire.json — development depth (main lines)', () => {
         'nimzo-indian',
         'benoni-defence',
         'english-opening',
+        // QGD Orthodox: Black's c8 bishop is the textbook "bad bishop" that
+        // develops late (after ...dxc4 / a later ...b6 or ...e5) — the 28-ply
+        // Classical main line is fully developed except this known late piece.
+        'queens-gambit',
+        // Sharp gambits — pieces resolve through tactics, not standard
+        // development (kings central, sacrificed/advanced pawns drive play).
+        'schliemann-defence',
+        'albin-countergambit',
       ];
       if (!developmentExceptions.includes(entry.id)) {
         const undeveloped = getUndevelopedMinors(chess);
