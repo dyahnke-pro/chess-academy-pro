@@ -80,6 +80,7 @@ import { validateTacticClaims } from '../../services/tacticClaimValidator';
 import { validateArrowClaims, synthesizeMissingArrows } from '../../services/arrowClaimValidator';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
+import { getAdaptiveMove, getRandomLegalMove } from '../../services/coachGameEngine';
 import { withTimeout } from '../../coach/withTimeout';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -904,6 +905,12 @@ export function CoachTeachPage(): JSX.Element {
        *  FEN and replied "e4 hasn't landed yet" after the student
        *  played e4 (production audit, build cf2fe0b). */
       fenOverride?: string;
+      /** Engine-driven step-by-step turn (GROUNDING TRUTH): the engine/DB
+       *  ALREADY played the coach's reply (this SAN) in code; the brain must
+       *  only NARRATE it. Defined (a SAN, or '' when there was no legal
+       *  reply) means "this is the step-by-step path; play_move is disabled
+       *  so the LLM cannot pick or play a move." Undefined = legacy path. */
+      coachReplyPlayed?: string;
     },
   ): Promise<void> => {
     if (!text.trim() || busy) return;
@@ -2094,10 +2101,21 @@ export function CoachTeachPage(): JSX.Element {
     // the move. Augment the ask with a focused directive (and trigger
     // the G6 arrow obligation) WITHOUT mutating the displayed message.
     const STEP_BY_STEP_RE = /\bi\s+(?:just\s+)?played\b[\s\S]*\byour\s+(?:move|turn)\b/i;
-    const isStepByStepReport = STEP_BY_STEP_RE.test(text) && !walkthrough.isActive;
-    const effectiveAsk = isStepByStepReport
-      ? `${text}\n\n[STEP-BY-STEP: the student is walking a line move-by-move and just reported THEIR move. Respond ONLY to this latest move — play your single reply (one play_move) and, per the arrow rule, draw an arrow on the move you just played AND on every SAN you mention in prose. Do NOT summarize or continue any earlier conversation topic; answer this move and prompt for their next one.]`
-      : text;
+    // `coachReplyPlayed` defined = the ENGINE already played the coach's reply
+    // (the grounding-truth path); play_move is disabled below so the LLM
+    // cannot move — it only narrates. A non-empty value is the SAN to narrate.
+    const replyPlayed = opts?.coachReplyPlayed;
+    const engineDrivenStep = replyPlayed !== undefined;
+    const isStepByStepReport =
+      (STEP_BY_STEP_RE.test(text) || engineDrivenStep) && !walkthrough.isActive;
+    const effectiveAsk =
+      replyPlayed && replyPlayed.length > 0
+        ? `${text}\n\n[STEP-BY-STEP NARRATION — the engine already played the coach's reply ${replyPlayed}; it is ALREADY on the board. You do NOT and CANNOT play moves (play_move is disabled). NARRATE ${replyPlayed}: name the idea behind it, draw [BOARD: arrow:from-to:green] on that move AND on every SAN you mention in prose. Do NOT summarize or continue any earlier topic; narrate this reply and prompt the student's next move.]`
+        : engineDrivenStep
+          ? text // no legal coach reply (game over) — narrate the student's move only
+          : isStepByStepReport
+            ? `${text}\n\n[STEP-BY-STEP: the student is walking a line move-by-move and just reported THEIR move. Respond ONLY to this latest move — narrate the line's reply and, per the arrow rule, draw an arrow on every SAN you mention in prose. Do NOT call play_move (the engine plays moves, not you). Do NOT summarize or continue any earlier conversation topic; answer this move and prompt for their next one.]`
+            : text;
     if (isStepByStepReport) {
       void logAppAudit({
         kind: 'coach-surface-migrated',
@@ -2126,6 +2144,11 @@ export function CoachTeachPage(): JSX.Element {
           // per turn; with liveFenRef preventing redundant retries
           // the budget can come down without losing coverage.
           maxToolRoundTrips: 4,
+          // GROUNDING TRUTH: on the engine-driven step-by-step path the
+          // engine already played the coach's reply, so play_move is removed
+          // from the brain's toolbelt — the LLM physically cannot pick or
+          // play a move; it only narrates.
+          excludeTools: engineDrivenStep ? ['play_move'] : undefined,
           personality: activeProfile?.preferences.coachPersonality,
           profanity: activeProfile?.preferences.coachProfanity,
           mockery: activeProfile?.preferences.coachMockery,
@@ -2339,7 +2362,10 @@ export function CoachTeachPage(): JSX.Element {
       //    stray SAN can never move the wrong side — worst case we play a
       //    sound move the coach itself named, which always beats a frozen
       //    board.
-      if (isStepByStepReport && !result.dispatchedToolNames.includes('play_move')) {
+      // Skip on the engine-driven path — the engine ALREADY played the
+      // coach's reply in code, so there is nothing to recover (and firing
+      // would double-move).
+      if (!engineDrivenStep && isStepByStepReport && !result.dispatchedToolNames.includes('play_move')) {
         const liveFen = liveFenRef.current;
         const sideToMove = liveFen.split(' ')[1] === 'w' ? 'white' : 'black';
         if (sideToMove !== playerColor) {
@@ -2715,6 +2741,47 @@ export function CoachTeachPage(): JSX.Element {
   // callback (below). useChessGame already handles the click-to-move
   // + drag + legal-dot UI internally, so the parent just needs to
   // observe completed moves and tell the coach about them.
+  // GROUNDING TRUTH (David, from day one): LLMs cannot play chess, so the
+  // coach's reply is chosen by the DB/engine, NEVER the LLM. Book
+  // continuation while the student stays on the taught line; rating-matched
+  // getAdaptiveMove (the SAME engine the WLPP Play rung uses) once they
+  // deviate / leave book; random legal as the never-freeze floor.
+  const resolveCoachReplyMove = useCallback(async (fen: string): Promise<string | null> => {
+    // Half-moves already played, derived from the FEN (= index of the NEXT
+    // move in the book line). Robust against any gameRef render lag.
+    const parts = fen.split(' ');
+    const fullmove = Number.parseInt(parts[5] ?? '1', 10) || 1;
+    const ply = (fullmove - 1) * 2 + (parts[1] === 'b' ? 1 : 0);
+    // 1) Book continuation — the coach replies with the opening's next move
+    //    while the student is still on the named line. Source the opening the
+    //    USER chose: the loaded walkthrough line first, else the opening they
+    //    committed to (intendedOpening) — so the spine plays the opening the
+    //    user actually wants played, not a generic engine move (David
+    //    2026-06-04: "make sure the spine can still play the opening the user
+    //    wants played").
+    const openingName =
+      walkthrough.tree?.openingName ??
+      useCoachMemoryStore.getState().intendedOpening?.name ??
+      null;
+    if (openingName) {
+      try {
+        const bookMoves = getOpeningMoves(openingName);
+        if (bookMoves && ply < bookMoves.length) {
+          const probe = new Chess(fen);
+          if (probe.move(bookMoves[ply])) return bookMoves[ply];
+        }
+      } catch { /* fall through to engine */ }
+    }
+    // 2) Out of book / deviation — rating-matched engine.
+    try {
+      const rating = activeProfile?.puzzleRating ?? 1200;
+      const adaptive = await getAdaptiveMove(fen, rating);
+      if (adaptive.move) return adaptive.move;
+    } catch { /* fall through */ }
+    // 3) Never freeze.
+    return getRandomLegalMove(fen);
+  }, [walkthrough.tree?.openingName, activeProfile?.puzzleRating]);
+
   const handleStudentMove = useCallback((move: MoveResult): void => {
     if (busy) return;
     // Pre-move FEN (before we overwrite liveFenRef below) — the slip faucet
@@ -2723,9 +2790,7 @@ export function CoachTeachPage(): JSX.Element {
     // Update liveFenRef SYNCHRONOUSLY with the post-move FEN that the
     // MoveResult already carries. This is what every brain trip's
     // getLiveFen will read, so trip 1 sees the post-student-move
-    // position immediately — no waiting for React re-render. Also
-    // pass fenOverride for the kickoff envelope's input.liveState.fen
-    // (used by trip 1 before getLiveFen kicks in on trip 2+).
+    // position immediately — no waiting for React re-render.
     liveFenRef.current = move.fen;
     // Silent faucet: a genuine eval-worsening slip during guided play feeds
     // the bucket so it resurfaces as a drill. No panel/voice — the brain is
@@ -2742,8 +2807,29 @@ export function CoachTeachPage(): JSX.Element {
       moveNumber: move.moveNumber,
       openingName,
     });
-    void handleSubmit(`I played ${move.san}. Your move.`, { fenOverride: move.fen });
-  }, [busy, handleSubmit, discussion, walkthrough.tree?.openingName, playerColor]);
+    // The ENGINE plays the coach's reply (in code), then the LLM is asked to
+    // NARRATE that exact move — play_move is disabled on the narration call,
+    // so the LLM can't pick or play. Words always match the board.
+    void (async () => {
+      const reply = await resolveCoachReplyMove(move.fen);
+      if (reply) {
+        const played = handlePlayMove(reply);
+        if (played.ok) {
+          void handleSubmit(`I played ${move.san}.`, {
+            fenOverride: liveFenRef.current,
+            coachReplyPlayed: reply,
+          });
+          return;
+        }
+      }
+      // No legal coach reply (game over) — narrate the student's move only,
+      // still with play_move disabled (the LLM never moves).
+      void handleSubmit(`I played ${move.san}. Your move.`, {
+        fenOverride: move.fen,
+        coachReplyPlayed: '',
+      });
+    })();
+  }, [busy, handleSubmit, discussion, walkthrough.tree?.openingName, playerColor, resolveCoachReplyMove, handlePlayMove]);
 
   // ─── Guided-opening-play kickoff ─────────────────────────────────────────
   // On mount, pull the student's last 5 games + weakness profile so the
