@@ -100,11 +100,26 @@ async function main() {
   const isEmpty = async (page, sq) => { try { return await page.evaluate((s) => { const el = document.querySelector(`[data-square="${s}"]`); return !el || !(el.querySelector('[data-piece],img,[draggable="true"],[class*="piece"]') || el.getAttribute('data-piece')); }, sq); } catch { return false; } };
   const occupied = async (page, sq) => !(await isEmpty(page, sq));
   const blackOcc = async (page) => { try { return await page.evaluate(() => { const o = []; document.querySelectorAll('[data-square]').forEach((s) => { const n = s.getAttribute('data-square') || ''; if (!/[78]$/.test(n)) return; if (s.querySelector('[data-piece],img,[draggable="true"],[class*="piece"]') || s.getAttribute('data-piece')) o.push(n); }); return o.sort().join(','); }); } catch { return ''; } };
-  const dismissOnboard = async (page) => { await page.waitForTimeout(2500); const c = page.locator('[data-testid="strength-calibration-bubble"]'); if (await c.count().catch(() => 0)) { await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 5000 }).catch(() => {}); await c.waitFor({ state: 'detached', timeout: 15000 }).catch(() => {}); } };
+  const dismissOnboard = async (page) => {
+    // The strength-calibration bubble's applyStrength is async; one click can
+    // land before the Zustand profile is ready, so the bubble lingers and
+    // intercepts the hub-tile click. Retry the band-pick until it detaches.
+    await page.waitForTimeout(2500);
+    const c = page.locator('[data-testid="strength-calibration-bubble"]');
+    for (let i = 0; i < 5; i++) {
+      if (!(await c.count().catch(() => 0))) return; // gone
+      await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 5000, force: true }).catch(() => {});
+      const detached = await c.waitFor({ state: 'detached', timeout: 8000 }).then(() => true).catch(() => false);
+      if (detached) return;
+      await page.waitForTimeout(1000);
+    }
+  };
   const dismissHelp = async (page) => { const h = page.locator('[data-testid="page-help-close"]').first(); if (await h.count().catch(() => 0)) await h.click({ timeout: 3000 }).catch(() => {}); };
   const gotoLearn = async (page) => {
     await page.goto(`${BASE_URL}/coach/home`, { waitUntil: 'domcontentloaded', timeout: BOOT }).catch(() => {});
-    await page.waitForTimeout(1500); await dismissHelp(page);
+    await page.waitForTimeout(1500);
+    await dismissOnboard(page); // bubble can re-appear on the hub route — clear it before the tile click
+    await dismissHelp(page);
     const tile = page.locator('[data-testid="coach-action-teach"]').first();
     await tile.waitFor({ state: 'visible', timeout: 15000 }); await tile.click(); await page.waitForTimeout(2500); await dismissHelp(page);
     await page.waitForURL(/\/coach\/teach/, { timeout: 10000 }).catch(() => {});
@@ -331,7 +346,13 @@ async function main() {
       await p.close();
     }
 
-    const narrationRelevant = allConsole.filter((e) => !/Stockfish.*worker\.onerror|RuntimeError: unreachable|status of 503/i.test(e));
+    // Infra noise to ignore: the stockfish WASM worker quirk, and the LLM-
+    // PROVIDER-OUTAGE cascade (DeepSeek 503 → Anthropic fallback 400 "credit
+    // balance too low" / [CoachAPI] Fallback also failed). The latter only
+    // appears when the brain provider is degraded — the provider-health gate
+    // (1b) already flags that, so it shouldn't double-count as a narration bug.
+    const narrationRelevant = allConsole.filter((e) =>
+      !/Stockfish.*worker\.onerror|RuntimeError: unreachable|status of 503|status of 400|credit balance|\[CoachAPI\] Fallback|invalid_request_error/i.test(e));
     log('6. no narration-relevant console errors', narrationRelevant.length === 0, narrationRelevant.slice(0, 3).join(' | ') || `(benign noise ignored: ${allConsole.length - narrationRelevant.length})`);
     log('6b. no page errors anywhere', allPage.length === 0, allPage.slice(0, 3).join(' | '));
   } catch (e) {
