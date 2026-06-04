@@ -288,7 +288,10 @@ async function main() {
         await wireListener(p); await dismissOnboard(p); await gotoLearn(p);
         await p.waitForTimeout(6000); const t0 = Date.now();
         await sendChat(p, 'tell me about the Najdorff');
-        let spoke = false; for (let i = 0; i < 18 && !spoke; i++) { await p.waitForTimeout(1000); spoke = realTtsSince(d.ttsReqs, t0).length > 0; }
+        // A cold general-question brain turn can take >18s (multiple tool
+        // round-trips); the answer voices via the [VOICE:]/first-sentence
+        // fallback, but the window was racing the turn. Give it 40s.
+        let spoke = false; for (let i = 0; i < 40 && !spoke; i++) { await p.waitForTimeout(1000); spoke = realTtsSince(d.ttsReqs, t0).length > 0; }
         const stock = await dumpAudit(p, ['master-play-enforcement-fallback']);
         const txt = realTtsSince(d.ttsReqs, t0)[0]?.text ?? '';
         if (txt) replies.push({ scenario: 'offcanonical', after: 'Najdorff', text: txt });

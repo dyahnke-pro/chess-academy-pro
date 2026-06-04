@@ -41,6 +41,13 @@ const COLOR_MAP: Record<string, string> = {
 
 const HIGHLIGHT_FILL_OPACITY = 0.4;
 
+/** Real algebraic square (a1–h8). Guards the coordinate math below so a
+ *  malformed square can't render an SVG element with NaN coordinates
+ *  (the `MNaN,NaN` console-error class caught in the 2026-06-04 audit). */
+function isSquare(s: string): boolean {
+  return /^[a-h][1-8]$/.test(s);
+}
+
 /** Translate algebraic square notation to the SVG coordinate (center
  *  of the square in viewBox units). With viewBox="0 0 8 8" each square
  *  is a 1×1 unit; the center of "a1" from white's POV is (0.5, 7.5). */
@@ -102,7 +109,7 @@ export function NarrationArrowOverlay({
         ))}
       </defs>
       <AnimatePresence>
-        {highlights.map((h, i) => {
+        {highlights.filter((h) => isSquare(h.square)).map((h, i) => {
           const [x, y] = squareToTopLeft(h.square, orientation);
           const color = COLOR_MAP[h.color ?? 'yellow'] ?? COLOR_MAP.yellow;
           return (
@@ -120,7 +127,7 @@ export function NarrationArrowOverlay({
             />
           );
         })}
-        {arrows.map((a, i) => {
+        {arrows.filter((a) => isSquare(a.from) && isSquare(a.to)).map((a, i) => {
           const [fx, fy] = squareToCoord(a.from, orientation);
           const [tx, ty] = squareToCoord(a.to, orientation);
           const color = a.color ?? 'green';

@@ -227,6 +227,18 @@ export function ControlledChessBoard({
   // Board square neon glow from user settings
   const { baseGlow: baseGlowStr, mergeGlow } = useBoardGlow();
 
+  // Defensive square-validity filter for arrows. react-chessboard computes an
+  // arrow's SVG path from its start/end square coordinates; a malformed or
+  // empty square resolves to NaN and the lib emits `<path d="MNaN,NaN …">`
+  // (a console error caught in the 2026-06-04 coach audit). Drop any arrow
+  // whose endpoints aren't real algebraic squares before they reach the board.
+  const validArrows = useMemo(() => {
+    if (!arrows || arrows.length === 0) return arrows;
+    const isSq = (s: string): boolean => /^[a-h][1-8]$/.test(s);
+    const filtered = arrows.filter((a) => isSq(a.startSquare) && isSq(a.endSquare));
+    return filtered.length === arrows.length ? arrows : filtered;
+  }, [arrows]);
+
   const customSquareStyles = useMemo((): Record<string, React.CSSProperties> => {
     const styles: Record<string, React.CSSProperties> = {};
 
@@ -352,7 +364,7 @@ export function ControlledChessBoard({
               onPieceDrop: handlePieceDrop,
               onSquareClick: handleSquareClick,
               onPieceDrag: handlePieceDrag,
-              ...(arrows && arrows.length > 0 ? { arrows, clearArrowsOnPositionChange: true } : {}),
+              ...(validArrows && validArrows.length > 0 ? { arrows: validArrows, clearArrowsOnPositionChange: true } : {}),
               arrowOptions: BOARD_ARROW_OPTIONS,
             }}
           />
