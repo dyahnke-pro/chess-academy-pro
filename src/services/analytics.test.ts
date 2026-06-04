@@ -64,10 +64,19 @@ describe('auditKindToEvent — curated allowlist', () => {
     expect(auditKindToEvent('coach-brain-ask-received')).toBe('coach_question_asked');
   });
 
+  it('mirrors voice / narration kinds so voice bugs are diagnosable in PostHog', () => {
+    // David 2026-06-04 ("can we add voice events to hog?"). The summary
+    // carries the gate that fired (brief-cap N→0 / silenced / no-content),
+    // which is how a Brief-silence bug gets diagnosed without the app open.
+    expect(auditKindToEvent('voice-speak-invoked')).toBe('voice_spoken');
+    expect(auditKindToEvent('coach-narration-spoken')).toBe('coach_narration_spoken');
+    expect(auditKindToEvent('coach-move-narration-fired')).toBe('coach_narration_fired');
+    expect(auditKindToEvent('coach-move-narration-skipped')).toBe('coach_narration_skipped');
+  });
+
   it('returns undefined for forensic/high-volume kinds that should NOT mirror', () => {
-    // Per the doctrine: per-move + raw voice noise stays out of PostHog.
+    // Per the doctrine: per-move noise + crash forensics stay out of PostHog.
     expect(auditKindToEvent('move-attempt')).toBeUndefined();
-    expect(auditKindToEvent('voice-speak-invoked')).toBeUndefined();
     expect(auditKindToEvent('tts-failure')).toBeUndefined();
     expect(auditKindToEvent('uncaught-error')).toBeUndefined();
   });

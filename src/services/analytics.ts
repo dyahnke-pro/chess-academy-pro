@@ -54,11 +54,19 @@ const DEFAULT_POSTHOG_HOST = 'https://us.i.posthog.com';
 /**
  * Curated audit-kind → PostHog-event allowlist. ONLY these forensic
  * kinds are mirrored into PostHog; everything else stays in the audit
- * log. Deliberately excludes high-volume per-move kinds (`move-attempt`,
- * `voice-speak-invoked`, etc.) to protect the PostHog free-tier event
- * budget and keep the product funnel readable. Add a kind here when it
- * carries genuine product signal (a funnel step, an engagement
- * milestone, a cost driver) — not raw forensic noise.
+ * log. Excludes the highest-volume per-move kinds (`move-attempt`, etc.)
+ * to protect the PostHog free-tier event budget and keep the product
+ * funnel readable. Add a kind here when it carries genuine product signal
+ * (a funnel step, an engagement milestone, a cost driver) — not raw
+ * forensic noise.
+ *
+ * VOICE / NARRATION events ARE mirrored (David 2026-06-04: "can we add
+ * voice events to hog?"). They're the only way to diagnose a voice bug
+ * (e.g. the Brief-narration-silence report) without the app open for a
+ * live audit-stream pull — PostHog persists them. The `summary` carries
+ * the diagnostic (which gate fired: silent-gate / brief-cap N→0 chars /
+ * no-speakable-content / which source). For a single-user + beta-cohort
+ * app the volume is a non-issue against the 1M-event/month free tier.
  */
 const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   'app-boot': 'app_opened',
@@ -87,6 +95,16 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   // In-app user bug report (build 1) — also flows here so reports land in
   // PostHog alongside the audit-stream copy.
   'user-report': 'user_report',
+  // Voice / narration (David 2026-06-04). The `summary` carries the
+  // diagnostic — e.g. voice-speak-invoked from voiceService.speakInternal
+  // reads "brief-cap applied: 200→0 chars" / "silenced by Coach Narration =
+  // silent" / "dropped (no speakable content)" — which is exactly what
+  // pinpoints a Brief-silence bug. The skipped/fired pair tells us whether
+  // narration was even attempted upstream before speak.
+  'voice-speak-invoked': 'voice_spoken',
+  'coach-narration-spoken': 'coach_narration_spoken',
+  'coach-move-narration-fired': 'coach_narration_fired',
+  'coach-move-narration-skipped': 'coach_narration_skipped',
 };
 
 /** Map a forensic audit kind to its product-event name, or undefined
