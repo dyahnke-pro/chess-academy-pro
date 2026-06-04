@@ -2114,7 +2114,7 @@ export function CoachTeachPage(): JSX.Element {
       (STEP_BY_STEP_RE.test(text) || engineDrivenStep) && !walkthrough.isActive;
     const effectiveAsk =
       replyPlayed && replyPlayed.length > 0
-        ? `${text}\n\n[STEP-BY-STEP NARRATION — the engine already played the coach's reply ${replyPlayed}; it is ALREADY on the board. You do NOT and CANNOT play moves (play_move is disabled). NARRATE ${replyPlayed}: name the idea behind it, draw [BOARD: arrow:from-to:green] on that move AND on every SAN you mention in prose. Do NOT summarize or continue any earlier topic; narrate this reply and prompt the student's next move.]`
+        ? `${text}\n\n[STEP-BY-STEP NARRATION — the engine already played the coach's reply ${replyPlayed}; it is ALREADY on the board. You do NOT and CANNOT play moves (play_move is disabled). NARRATE ${replyPlayed}: name the idea behind it, draw [BOARD: arrow:from-to:green] on that move AND on every SAN you mention in prose. Put your SPOKEN narration in a [VOICE: ...] marker — one or two plain sentences naming the move and its idea — so the coach speaks it aloud (this is REQUIRED; without it the student hears nothing). Do NOT summarize or continue any earlier topic; narrate this reply and prompt the student's next move.]`
         : engineDrivenStep
           ? text // no legal coach reply (game over) — narrate the student's move only
           : isStepByStepReport
@@ -2352,6 +2352,41 @@ export function CoachTeachPage(): JSX.Element {
       // the final response so the student isn't left in silence.
       tryExtractVoiceMarker();
       tryExtractChoicesMarker();
+
+      // ROOT FIX (David 2026-06-04: "I'm not hearing coach speech anymore").
+      // Voice was routed EXCLUSIVELY through the [VOICE:] marker, and the
+      // "speak the first sentence" fallback the comment above promised was
+      // never actually implemented — so whenever the brain omitted the marker
+      // the coach went totally silent (PostHog showed ZERO voice-speak-invoked
+      // while the coach was clearly narrating, with arrows firing). The
+      // engine-driven narration directive made the brain drop the marker,
+      // surfacing the latent bug. Implement the fallback for real: if nothing
+      // was spoken this turn and the walkthrough doesn't own the audio, speak
+      // the opening sentence(s) of the sanitized prose. The coach is never
+      // silent on a narration turn again.
+      if (
+        !voiceSpokenForTurn &&
+        !(walkthrough.isActive && walkthrough.phase !== 'paused')
+      ) {
+        const prose = displayBuffer.trim();
+        if (prose) {
+          // First 1-2 sentences (cap so we don't read a whole paragraph
+          // when the brain skipped the concise [VOICE:] summary).
+          const sentences = prose.split(/(?<=[.!?])\s+/).filter((s) => s.trim());
+          const spoken = sentences.slice(0, 2).join(' ').trim();
+          if (spoken) {
+            voiceSpokenForTurn = true;
+            void logAppAudit({
+              kind: 'coach-voice-marker-extracted',
+              category: 'subsystem',
+              source: 'CoachTeachPage.voiceFallback',
+              summary: `no [VOICE:] marker — spoke first sentence(s) (${spoken.length} chars)`,
+              details: JSON.stringify({ preview: spoken.slice(0, 80) }),
+            });
+            queueSpeak(spoken);
+          }
+        }
+      }
 
       // ── play_move SAFETY NET (David 2026-06-02: "coach didn't move a
       //    piece!!"). On a step-by-step move turn the brain is told to
