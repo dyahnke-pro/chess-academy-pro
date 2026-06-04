@@ -33,7 +33,7 @@ import { logAppAudit } from './appAuditor';
 import { groundCoachAnswerBoardClaims, validateBoardClaims, stripDisprovenSentences } from './boardClaimValidator';
 import { stripUngroundedPlayerStats } from './claimValidator';
 import { validateArrowClaims, synthesizeMissingArrows } from './arrowClaimValidator';
-import { validateTacticClaims } from './tacticClaimValidator';
+import { validateTacticClaims, stripUngroundedTacticSentences } from './tacticClaimValidator';
 import { stripDisprovenEvalSentences } from './evalClaimValidator';
 import type { TacticsLiveContext } from '../coach/types';
 
@@ -210,17 +210,38 @@ export function groundCoachReply(text: string, opts: CoachAnswerGateOptions): st
     } catch { /* never block */ }
   }
 
-  // (3) Tactic gate (audit-only).
+  // (3) Tactic gate. ENFORCING when a bounded tactics context was sent this
+  //     turn — a named tactic absent from it is a provable out-of-vocabulary
+  //     hallucination, so drop the sentence (negation/avoidance phrasing is
+  //     kept; see stripUngroundedTacticSentences). AUDIT-ONLY when no context
+  //     block exists — we can't disprove a pure concept mention. (David
+  //     2026-06-04: PostHog showed the brain shipping an ungrounded "pin" to
+  //     the user on /openings/trompowsky-attack; audit-only wasn't enough.)
   try {
     const tacticV = validateTacticClaims(out, tactics);
     if (tacticV.violations.length > 0) {
-      void logAppAudit({
-        kind: 'claim-validator-trip',
-        category: 'subsystem',
-        source: `${source}.tacticClaimGate`,
-        summary: `out-of-vocab tactics: ${tacticV.violations.map((v) => v.type).join(', ')}`,
-        details: JSON.stringify({ source, violations: tacticV.violations }),
-      });
+      if (tactics) {
+        const strip = stripUngroundedTacticSentences(out, tactics);
+        const enforced = strip.dropped.length > 0;
+        if (enforced) out = strip.clean;
+        void logAppAudit({
+          kind: 'claim-validator-trip',
+          category: 'subsystem',
+          source: `${source}.tacticClaimGate`,
+          summary: `out-of-vocab tactics: ${tacticV.violations.map((v) => v.type).join(', ')} · ${enforced ? `dropped ${strip.dropped.length} sentence(s)` : 'kept (negation/no positive claim)'}`,
+          details: JSON.stringify({ source, violations: tacticV.violations, dropped: strip.dropped, enforced }),
+          fen: fen ?? undefined,
+        });
+      } else {
+        // No bounded context to disprove against — audit-only.
+        void logAppAudit({
+          kind: 'claim-validator-trip',
+          category: 'subsystem',
+          source: `${source}.tacticClaimGate`,
+          summary: `out-of-vocab tactics: ${tacticV.violations.map((v) => v.type).join(', ')} · audit-only (no tactics context)`,
+          details: JSON.stringify({ source, violations: tacticV.violations, enforced: false }),
+        });
+      }
     }
   } catch { /* never block */ }
 

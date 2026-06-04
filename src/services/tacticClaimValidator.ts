@@ -100,6 +100,83 @@ export interface ValidationResult {
  *  @param context  - The TacticsLiveContext that was attached to the
  *                    envelope, or null if no block was sent.
  */
+/** Negation / hypothetical cues that flip a tactic mention from a positive
+ *  board-claim ("there's a pin on e7") into legitimate teaching ("there's NO
+ *  pin here, so develop normally" / "this AVOIDS a fork"). A sentence with one
+ *  of these near a tactic word is NOT a fabricated assertion — keep it. */
+const TACTIC_NEGATION_GUARD =
+  /\b(no|not|n't|never|without|avoid(?:s|ing|ed)?|prevent(?:s|ing|ed)?|stop(?:s|ping|ped)?|isn't|aren't|wasn't|weren't|nothing|neither)\b/i;
+
+/** Split into sentence units, protecting tool markers ([BOARD:...],
+ *  [[ACTION:...]], [VOICE:...]) so a split never severs a tag. */
+function splitProtectingMarkers(text: string): { sentences: string[]; restore: (s: string) => string } {
+  const markers: string[] = [];
+  const S = '\u0001'; // private control sentinel; never appears in prose
+  const protectedText = text.replace(/\[\[[^\]]*\]\]|\[[^\]]*\]/g, (m) => {
+    markers.push(m);
+    return `${S}${markers.length - 1}${S}`;
+  });
+  const sentences = protectedText
+    .split(/(?<=[.!?])\s+|\n+/)
+    .map((sentence) => sentence.trim())
+    .filter(Boolean);
+  const restore = (sentence: string): string =>
+    sentence.replace(new RegExp(`${S}(\\d+)${S}`, 'g'), (_m, idx: string) => markers[Number(idx)] ?? '');
+  return { sentences, restore };
+}
+
+/** ENFORCING tactic gate: drop any sentence that NAMES a tactic absent from
+ *  the bounded `context` (a provable out-of-vocabulary hallucination — the
+ *  position WAS analyzed this turn and the engine didn't find it). Skips:
+ *   - the whole pass when NO context block was sent (can't disprove a
+ *     concept mention like "the idea of a pin" — that stays audit-only), and
+ *   - any sentence phrased as a negation / avoidance (kept as real teaching).
+ *  Strips inside the spoken [VOICE:...] block too, so a fabricated tactic is
+ *  never heard. Marker-safe. (David 2026-06-04: PostHog showed the brain
+ *  shipping an ungrounded "pin" to the user; audit-only wasn't enough.) */
+export function stripUngroundedTacticSentences(
+  text: string,
+  context: TacticsLiveContext | null,
+): { clean: string; dropped: string[] } {
+  if (!context) return { clean: text, dropped: [] };
+  const dropped: string[] = [];
+
+  // Built from a string (not a literal) to dodge the no-control-regex lint;
+  // \u0001 is the private sentinel splitProtectingMarkers wraps tags in.
+  const sentinel = String.fromCharCode(1);
+  const markerToken = new RegExp(`${sentinel}\\d+${sentinel}`, 'g');
+  const stripFrom = (segment: string): string => {
+    const { sentences, restore } = splitProtectingMarkers(segment);
+    const kept: string[] = [];
+    for (const protectedSentence of sentences) {
+      // Scan the PROSE only — markers (arrows/actions) never affect the
+      // tactic scan, and a fabricated tactic can't be hidden behind a tag.
+      const prose = protectedSentence.replace(markerToken, ' ').replace(/\s+/g, ' ').trim();
+      const { violations } = validateTacticClaims(prose, context);
+      const outOfVocab = violations.filter((v) => v.reason === 'not-in-vocabulary');
+      if (prose && outOfVocab.length > 0 && !TACTIC_NEGATION_GUARD.test(prose)) {
+        dropped.push(prose);
+        // Preserve any tool markers (arrow / action) that shared the dropped
+        // sentence — they belong to the move, not the fabricated claim.
+        const markerTokens = protectedSentence.match(markerToken);
+        if (markerTokens) kept.push(markerTokens.join(' '));
+      } else {
+        kept.push(protectedSentence);
+      }
+    }
+    return restore(kept.join(' ')).trim();
+  };
+
+  // (1) Strip inside the spoken [VOICE: ...] block first (so a lie is never
+  //     heard), dropping an emptied block. (2) Then the visible prose.
+  let out = text.replace(/\[VOICE:\s*([^\]]*)\]/gi, (_full, inner: string) => {
+    const clean = stripFrom(inner);
+    return clean ? `[VOICE: ${clean}]` : '';
+  });
+  out = stripFrom(out);
+  return { clean: out.trim(), dropped };
+}
+
 export function validateTacticClaims(
   response: string,
   context: TacticsLiveContext | null,

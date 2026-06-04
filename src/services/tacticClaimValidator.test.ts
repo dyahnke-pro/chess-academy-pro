@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { validateTacticClaims } from './tacticClaimValidator';
+import { validateTacticClaims, stripUngroundedTacticSentences } from './tacticClaimValidator';
 import type { TacticsLiveContext } from '../coach/types';
 
 const EMPTY_CTX: TacticsLiveContext = {
@@ -96,5 +96,59 @@ describe('validateTacticClaims', () => {
   it('flags back-rank claim when not in context', () => {
     const r = validateTacticClaims('Back rank is weak — be careful of mate on the back rank.', EMPTY_CTX);
     expect(r.violations.some((v) => v.type === 'back_rank')).toBe(true);
+  });
+});
+
+describe('stripUngroundedTacticSentences (the enforcing gate)', () => {
+  it('drops a sentence that asserts a tactic absent from the bounded context', () => {
+    const text = 'This develops the knight. There is a pin on the e-file.';
+    const { clean, dropped } = stripUngroundedTacticSentences(text, EMPTY_CTX);
+    expect(clean).toBe('This develops the knight.');
+    expect(dropped).toHaveLength(1);
+    expect(dropped[0]).toContain('pin');
+  });
+
+  it('keeps a tactic sentence when the tactic IS in the bounded context', () => {
+    const ctx = ctxWith([{ type: 'pin', description: 'pin on e7' }]);
+    const text = 'There is a pin on the e-file. Exploit it with Re1.';
+    const { clean, dropped } = stripUngroundedTacticSentences(text, ctx);
+    expect(dropped).toHaveLength(0);
+    expect(clean).toBe(text);
+  });
+
+  it('keeps a NEGATION sentence ("there is no pin here") even when out of vocab', () => {
+    const text = 'There is no pin here, so develop normally.';
+    const { clean, dropped } = stripUngroundedTacticSentences(text, EMPTY_CTX);
+    expect(dropped).toHaveLength(0);
+    expect(clean).toBe(text);
+  });
+
+  it('keeps an AVOIDANCE sentence ("this avoids a fork")', () => {
+    const text = 'Castle first. This avoids a fork on e2.';
+    const { clean, dropped } = stripUngroundedTacticSentences(text, EMPTY_CTX);
+    expect(dropped).toHaveLength(0);
+    expect(clean).toBe(text);
+  });
+
+  it('is a no-op when NO context block was sent (can\'t disprove a concept)', () => {
+    const text = 'The idea of a pin is to immobilize a defender.';
+    const { clean, dropped } = stripUngroundedTacticSentences(text, null);
+    expect(dropped).toHaveLength(0);
+    expect(clean).toBe(text);
+  });
+
+  it('strips a fabricated tactic from inside the spoken [VOICE:] block', () => {
+    const text = 'Develop calmly. [VOICE: Nf3 develops. Black has a deadly skewer on the long diagonal.]';
+    const { clean, dropped } = stripUngroundedTacticSentences(text, EMPTY_CTX);
+    expect(clean).toBe('Develop calmly. [VOICE: Nf3 develops.]');
+    expect(dropped.some((d) => d.includes('skewer'))).toBe(true);
+  });
+
+  it('never severs a [BOARD: arrow] / [[ACTION]] marker when dropping a neighbour', () => {
+    const text = 'Play Nf3. [BOARD: arrow:g1-f3:green] There is a fork on f7. [[ACTION:play_move {"san":"Nf3"}]]';
+    const { clean } = stripUngroundedTacticSentences(text, EMPTY_CTX);
+    expect(clean).toContain('[BOARD: arrow:g1-f3:green]');
+    expect(clean).toContain('[[ACTION:play_move {"san":"Nf3"}]]');
+    expect(clean).not.toMatch(/fork/);
   });
 });
