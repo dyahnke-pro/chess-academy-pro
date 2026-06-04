@@ -67,6 +67,35 @@ async function main() {
   page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text().slice(0, 300)); });
   page.on('pageerror', (e) => pageErrors.push(e.message.slice(0, 300)));
 
+  // ── VOICE INSTRUMENT (the missing 3rd instrument) ──────────────────────
+  // Every spoken line streams Polly audio from POST /api/tts. We capture the
+  // request body text so we can tell a REAL narration ("...develops the
+  // knight...") from the warmup "." probe, and timestamp each so we can
+  // measure the delta around a specific move (did the coach speak THIS reply,
+  // not just the kickoff?). David 2026-06-04: "not hearing narrations like I
+  // should" — the prior audit never checked voice at all.
+  const ttsReqs = []; // { t, text }
+  page.on('request', (r) => {
+    if (!/\/api\/tts/.test(r.url())) return;
+    // /api/tts is a GET — getTtsUrl() builds `/api/tts?text=…` and the primed
+    // <audio> element plays it by src. (A POST body path also exists for some
+    // callers.) Capture BOTH methods; pull the spoken text from the query
+    // param for GET, the body for POST.
+    let text = '';
+    try {
+      const u = new URL(r.url());
+      text = u.searchParams.get('text') ?? '';
+      if (!text && r.method() === 'POST') {
+        const body = r.postDataJSON();
+        text = (body?.text ?? body?.input ?? body?.ssml ?? '').toString();
+      }
+    } catch { text = (r.postData() || '').slice(0, 200); }
+    ttsReqs.push({ t: Date.now(), text: text.slice(0, 160) });
+  });
+  // A "real" narration = more than the warmup "." probe / a couple chars.
+  const isRealNarration = (s) => typeof s === 'string' && s.replace(/[\s.]/g, '').length >= 3;
+  const realTtsSince = (since) => ttsReqs.filter((r) => r.t >= since && isRealNarration(r.text));
+
   const results = [];
   const log = (name, ok, detail) => {
     results.push({ name, ok, detail });
@@ -167,6 +196,19 @@ async function main() {
     await page.locator('[data-square="e2"]').first().waitFor({ state: 'visible', timeout: 15000 });
     log('board is playable from the start', true);
 
+    // VOICE — the coach's KICKOFF narration ("welcome to my classroom…") must
+    // stream from /api/tts shortly after mount. If this is silent, the whole
+    // narration path is dead before any move. Give it up to 12s (brain trip +
+    // first Polly stream).
+    let kickoffSpoke = false;
+    for (let i = 0; i < 12 && !kickoffSpoke; i++) {
+      await page.waitForTimeout(1000);
+      kickoffSpoke = realTtsSince(0).length > 0;
+    }
+    const kickoffSample = realTtsSince(0)[0]?.text ?? '';
+    log('coach SPEAKS the kickoff narration (/api/tts streamed)', kickoffSpoke,
+      kickoffSpoke ? `first TTS: "${kickoffSample}"` : 'no real /api/tts request — narration path silent');
+
     // Snapshot which black squares (rank 7/8) are occupied BEFORE any move.
     const blackOcc = async () => {
       try {
@@ -205,6 +247,10 @@ async function main() {
     log('arrows go away on the student move (no piling)', boardLive && arrowsRightAfterE4 <= 1,
       `arrows right after e4 = ${arrowsRightAfterE4}`);
 
+    // Mark the moment just before the engine reply so we can measure whether
+    // the coach SPOKE this specific reply (delta), not just the kickoff.
+    const beforeReplyT = Date.now();
+
     // The ENGINE must play the coach's reply: after e4 + settle, a black
     // piece (rank 7/8) must have moved. This is the grounding-truth check —
     // the LLM is OUT of move selection; the engine replies.
@@ -217,6 +263,22 @@ async function main() {
     }
     log('engine plays the coach reply (a black piece moved after e4)', blackMoved,
       blackMoved ? 'black occupancy changed → engine replied' : 'no black move detected');
+
+    // VOICE — the coach must NARRATE the reply it just played. Give the brain
+    // trip + Polly stream up to 12s after the move landed. This is the check
+    // that catches "engine moved but the coach said nothing" — the exact
+    // symptom David reported (board advances, silence).
+    let replySpoke = false;
+    for (let i = 0; i < 12 && !replySpoke; i++) {
+      await page.waitForTimeout(1000);
+      replySpoke = realTtsSince(beforeReplyT).length > 0;
+    }
+    const replySample = realTtsSince(beforeReplyT)[0]?.text ?? '';
+    const narrationEvents = await dumpAudit(['coach-narration-spoken', 'voice-speak-invoked']);
+    log('coach NARRATES the engine reply (voice fired for THIS move)', replySpoke,
+      replySpoke
+        ? `TTS after reply: "${replySample}"`
+        : `SILENT after engine reply — voice-speak audit events=${narrationEvents.length}`);
 
     // Move SOURCE — confirm the reply came from masters/lichess/Stockfish,
     // NOT the last-resort random fallback (David 2026-06-04).
