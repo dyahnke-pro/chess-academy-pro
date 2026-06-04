@@ -13,6 +13,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
@@ -46,6 +47,7 @@ async function main() {
   });
   const page = await ctx.newPage();
 
+  await page.addInitScript(autoDismissCalibration);
   await page.addInitScript(() => {
     // @ts-ignore
     window.__audit_speak_calls = [];

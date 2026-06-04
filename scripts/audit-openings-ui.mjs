@@ -15,6 +15,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -44,6 +45,7 @@ async function main() {
     deviceScaleFactor: 2,
     userAgent: 'AuditOpeningsUIBot/1.0 (chromium)',
   });
+  await ctx.addInitScript(autoDismissCalibration);
   await ctx.addInitScript(({ url, secret }) => {
     try {
       window.localStorage.setItem('auditStreamUrl', url);

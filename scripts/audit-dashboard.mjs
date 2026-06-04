@@ -34,6 +34,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -72,6 +73,11 @@ async function main() {
     userAgent: 'AuditDashboardBot/1.0 (chromium)',
   });
 
+  // Neutralize the strength-calibration bubble + page-help modal on every
+  // navigation so they can't intercept clicks / hide the dashboard behind a
+  // full-screen overlay (the audit waited for the dashboard root BEFORE
+  // dismissing the bubble → everything read count=0). David 2026-06-04.
+  await ctx.addInitScript(autoDismissCalibration);
   await ctx.addInitScript(
     ({ url, secret }) => {
       try {

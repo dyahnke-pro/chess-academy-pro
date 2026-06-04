@@ -54,6 +54,7 @@ vi.mock('../../services/boardColorService', () => ({
 
 vi.mock('../../services/pieceSetService', () => ({
   buildPieceRenderer: () => null,
+  preloadPieceSet: () => {},
 }));
 
 describe('KnightSweepGame', () => {

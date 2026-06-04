@@ -33,8 +33,9 @@ describe('ChessLessonLayout', () => {
   it('reserves bottom-nav clearance by default (safe-area-aware padding)', () => {
     render(<ChessLessonLayout board={<div>B</div>} controls={<div>C</div>} />);
     const root = screen.getByTestId('chess-lesson-layout');
-    // The root applies the calc()-based padding class used for the mobile nav offset
-    expect(root.className).toMatch(/pb-\[calc\(4\.5rem\+env\(safe-area-inset-bottom/);
+    // The root applies the calc()-based padding class used for the mobile nav
+    // offset (6.5rem clearance + the iOS home-indicator safe-area inset).
+    expect(root.className).toMatch(/pb-\[calc\(6\.5rem\+env\(safe-area-inset-bottom/);
   });
 
   it('omits bottom-nav clearance when reserveBottomNav=false', () => {

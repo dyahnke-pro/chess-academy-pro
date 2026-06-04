@@ -20,6 +20,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -48,6 +49,7 @@ async function main() {
     userAgent: 'AuditBackFromReviewBot/1.0 (chromium)',
   });
 
+  await ctx.addInitScript(autoDismissCalibration);
   await ctx.addInitScript(
     ({ url, secret }) => {
       try {
