@@ -10,7 +10,7 @@ import { detectNarrationToggle, applyNarrationToggle } from '../../services/coac
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { extractMoveArrows } from '../../services/coachMoveExtractor';
 import { detectInGameChatIntent } from '../../services/inGameChatIntent';
-import { tryCaptureForgetIntent } from '../../services/openingIntentCapture';
+import { tryCaptureForgetIntent, tryCaptureOpeningIntent } from '../../services/openingIntentCapture';
 import { tryRouteIntent } from '../../services/coachIntentRouter';
 import { parseActions } from '../../services/coachActionDispatcher';
 import { coachService } from '../../coach/coachService';
@@ -471,7 +471,17 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       // `tryCaptureForgetIntent` regex stays for one more WO as a
       // belt-and-suspenders safety net. Removed in BRAIN-06 cleanup.
       const surface = isGameOver ? 'drawer-chat' : 'in-game-chat';
-      tryCaptureForgetIntent(text, surface);
+      // DETERMINISTIC requested-opening capture (David 2026-06-04 audit).
+      // WO-BRAIN-03 retired this in favour of the LLM's set_intended_opening
+      // tool — but a deep coach audit proved the LLM-only path is unreliable
+      // ("let's play the Italian Game" then 1.e4 got ...e6 French, not ...e5).
+      // Re-introduce the regex capture as a belt-and-suspenders: it only writes
+      // when the text names a RESOLVABLE opening, storing a canonical name the
+      // spine plays move-for-move — no LLM round-trip, no race with the next
+      // move. (forget-intent stays its own check below/above.)
+      if (!tryCaptureForgetIntent(text, surface)) {
+        tryCaptureOpeningIntent(text, surface, playerColor);
+      }
 
       // Narration toggle — deterministic intercept. Runs BEFORE the
       // in-game block below so "narrate while we play" reliably flips

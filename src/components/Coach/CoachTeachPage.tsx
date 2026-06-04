@@ -42,6 +42,7 @@ import {
 } from '../../services/openingDetectionService';
 import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
 import { parseCoachIntent } from '../../services/coachAgent';
+import { tryCaptureOpeningIntent, tryCaptureForgetIntent } from '../../services/openingIntentCapture';
 import { findPlansForOpening, sessionFromPlan } from '../../services/middlegamePlanner';
 import { MiddlegamePlanInline } from './MiddlegamePlanInline';
 import { OpeningPlayMode } from '../Openings/OpeningPlayMode';
@@ -1291,6 +1292,24 @@ export function CoachTeachPage(): JSX.Element {
       const isMoveReport =
         opts?.coachReplyPlayed !== undefined ||
         /^\s*i\s+(?:just\s+)?played\b/i.test(workingInput);
+
+      // DETERMINISTIC requested-opening capture (David 2026-06-04 audit: a deep
+      // coach audit caught the coach NOT playing the requested opening — typing
+      // "let's play the Italian Game" then 1.e4 got ...e6 (French), because the
+      // intended opening was only ever set by the LLM's set_intended_opening
+      // tool — non-deterministic and racing the student's next move. The
+      // `tryCaptureOpeningIntent` helper existed but was wired into NO surface
+      // (only tests). Capture it here, regex-first, BEFORE the brain round-trip
+      // and before the next resolveCoachReplyMove, so the spine plays exactly
+      // the opening the user asked for. The student plays White in Learn; the
+      // coach plays Black. Safe on any chat text — it only writes when the input
+      // actually names a resolvable opening (a move report / Q&A never matches).
+      if (!isMoveReport && !opts?.kickoff) {
+        if (!tryCaptureForgetIntent(workingInput, 'coach-teach')) {
+          tryCaptureOpeningIntent(workingInput, 'coach-teach', 'white');
+        }
+      }
+
       const m = isMoveReport
         ? null
         : (stageHint ? stageStrippedInput : workingInput).match(TEACH_PATTERN);
