@@ -1139,6 +1139,24 @@ async function buildLookahead(
  *  strict master-play-only SAN gate stays in force everywhere else. */
 function buildGroundedSans(grounding: MasterGroundingOptions): ReadonlyArray<string> | undefined {
   const set = new Set<string>(grounding.gameSans ?? []);
+  // The MOVES ALREADY PLAYED to reach the current position are grounded on
+  // EVERY surface. They're board-truth — chess.js validated each one as the
+  // live game advanced to `currentFen` — so naming the move just played
+  // ("c5 is the Sicilian", after the engine replied c5) is describing the
+  // board, NOT a fabricated "masters play X" claim. Before this, the engine-
+  // driven Learn step narrated the reply it had just played, but the
+  // validator only grounded the LEGAL moves of the post-move position — from
+  // which the just-played pawn move (c5/e6/…) is no longer legal — so EVERY
+  // engine reply (c5, e6, Qc7, …) tripped the SAN gate, exhausted 2 retries,
+  // and served the stock "I can't verify which moves are sound" fallback: the
+  // student heard the non-answer instead of the lesson (prod, David's iPhone,
+  // 2026-06-04 — claim-validator-trip kind=san retry=2 on /coach/teach). The
+  // move history is already threaded through `grounding.moveHistory`; ground
+  // it. Move-number prefixes ("1.e4") are stripped so the bare SAN matches.
+  for (const raw of grounding.moveHistory ?? []) {
+    const san = raw.replace(/^\d+\.+/, '').trim();
+    if (san) set.add(san);
+  }
   // The LEGAL MOVES of the current position are grounded on EVERY
   // surface, not just game review. A legal move the coach names while
   // discussing a plan / the position is a real move, NOT a fabricated

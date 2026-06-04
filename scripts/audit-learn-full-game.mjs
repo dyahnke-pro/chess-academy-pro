@@ -332,6 +332,21 @@ async function main() {
     log('"why did you play that?" question pops up on a blunder', promptSeen,
       promptSeen ? 'discussion-prompt visible' : 'no prompt (could not trigger a scored blunder in the scripted line; logic is unit-tested)');
 
+    // GROUNDING — the coach must NOT stock-out narrating the move it just
+    // played. David's iPhone (2026-06-04, PostHog): every engine reply (c5,
+    // e6, Qc7) tripped the SAN claim validator (kind=san, retry=2) because the
+    // played move isn't legal from the post-move position, exhausting retries
+    // → the stock "I can't verify which moves are sound" fallback. A SAN trip
+    // or an enforcement fallback during this walk is the bug back. (Arrow-kind
+    // trips are self-healing synthesis — those are allowed; only kind=san and
+    // the stock-out fallback are failures.)
+    const cvTrips = await dumpAudit(['claim-validator-trip']);
+    const sanTrips = cvTrips.filter((e) => /kind=san/.test(e.summary || ''));
+    const stockOuts = await dumpAudit(['master-play-enforcement-fallback']);
+    log('coach does NOT stock-out naming the move it just played (no kind=san trip)',
+      sanTrips.length === 0 && stockOuts.length === 0,
+      `san-trips=${sanTrips.length} enforcement-fallbacks=${stockOuts.length}${sanTrips[0] ? ` e.g. ${sanTrips[0].summary}` : ''}`);
+
     log('no console errors', consoleErrors.length === 0, consoleErrors.slice(0, 2).join(' | '));
     log('no page errors', pageErrors.length === 0, pageErrors.slice(0, 2).join(' | '));
 

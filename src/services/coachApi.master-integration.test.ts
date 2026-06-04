@@ -273,6 +273,28 @@ describe('grounding — retry on validator trip', () => {
     expect(counters.llmCalls).toBe(3); // initial + 2 retries
   });
 
+  it('does NOT trip when the coach names the move JUST PLAYED (engine-driven Learn step)', async () => {
+    // David's iPhone, 2026-06-04: on the engine-driven /coach/teach step the
+    // engine plays the reply (…c5) and the coach narrates it — "c5 is the
+    // Sicilian Defense …". The validator only grounded the LEGAL moves of the
+    // POST-move position, from which c5 is no longer legal, so every engine
+    // reply (c5/e6/Qc7) tripped kind=san, exhausted 2 retries, and served the
+    // stock fallback — the student heard the non-answer. The played move lives
+    // in moveHistory; grounding it must make naming it safe (no retry).
+    const POST_C5_FEN = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+    const counters = installFetchMock({ lichess: LICHESS_PAYLOAD, llmTexts: [
+      'c5 is the Sicilian Defense — Black fights for the center from the flank. Your move.',
+    ] });
+    const r = await getCoachChatResponse(
+      [{ role: 'user', content: 'I played e4.' }],
+      '', undefined, 'chat_response', 1024, undefined, undefined, undefined,
+      { currentFen: POST_C5_FEN, moveHistory: ['e4', 'c5'], surface: '/coach/teach', sessionId: 'test-session' },
+    );
+    expect(r).toContain('Sicilian');
+    expect(r).not.toContain("can't verify"); // no stock fallback
+    expect(counters.llmCalls).toBe(1);        // grounded first try, no retry
+  });
+
   it('flags invented player names on retry', async () => {
     const { response, counters } = await ask(
       'what do masters play here?',
