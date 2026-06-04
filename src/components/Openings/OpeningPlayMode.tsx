@@ -529,6 +529,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
       moveNumber: Math.ceil((currentMoveIdx + 1) / 2),
       openingId: opening.id,
       openingName: displayName,
+      studentRating: playerRating,
     });
 
     if (inOpeningPhase && currentMoveIdx < openingMoves.length) {

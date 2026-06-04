@@ -297,7 +297,7 @@ describe('OpeningPlayMode', () => {
     });
   });
 
-  it('hint button shows Get a Hint text at level 0', async () => {
+  it('hint button shows Hint text at level 0', async () => {
     renderPlay();
 
     act(() => {
@@ -308,7 +308,9 @@ describe('OpeningPlayMode', () => {
       expect(screen.getByTestId('hint-button')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('Get a Hint')).toBeInTheDocument();
+    // LEVEL_LABELS[0] is 'Hint' (was 'Get a Hint' before the label was
+    // shortened — the assertion had gone stale).
+    expect(screen.getByText('Hint')).toBeInTheDocument();
     expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '0');
   });
 });

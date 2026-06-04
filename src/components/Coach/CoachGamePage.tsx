@@ -2885,6 +2885,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         gamePhase: classifyPhase(moveResult.fen, ply),
         moveNumber: Math.ceil(ply / 2),
         openingName,
+        studentRating: activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? undefined,
       });
     };
 

@@ -58,6 +58,7 @@ import { ChatInput } from './ChatInput';
 import { DifficultyToggle } from './DifficultyToggle';
 import type { CoachDifficulty, MiddlegamePlan } from '../../types';
 import { PlayerInfoBar } from './PlayerInfoBar';
+import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { coachService } from '../../coach/coachService';
 import { logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAuditor';
 import { resolveCoachNarration } from '../../utils/coachNarration';
@@ -628,11 +629,14 @@ export function CoachTeachPage(): JSX.Element {
   const [playerColor, setPlayerColor] = useState<'white' | 'black'>('white');
   const [difficulty, setDifficulty] = useState<CoachDifficulty>('medium');
 
-  // Silent Discussion-Practice faucet — feeds the shared misconception
-  // bucket on a genuine slip during guided play-against-coach, WITHOUT a
-  // "why?" panel or extra voice (the brain already narrates every move).
-  // Passive capture, exactly like the auto-analysis faucet but live.
-  const discussion = useDiscussionPractice(true, { silent: true, surface: 'coach-teach' });
+  // Discussion-Practice faucet — on a genuine slip during guided play it
+  // raises the coach's "why did you play that?" question (David 2026-06-04:
+  // the question should pop up on a blunder/mistake in Learn too). No longer
+  // silent: with the engine playing the coach's reply, the brain narrates
+  // the COACH's move (not the student's slip), so the "why?" prompt fills
+  // the gap instead of conflicting. Honors the coachInGameDiscussion setting
+  // (falls back to silent capture when the user turned the interjection off).
+  const discussion = useDiscussionPractice(true, { surface: 'coach-teach' });
   const [coachTipsOn, setCoachTipsOn] = useState<boolean>(true);
   const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
 
@@ -2792,6 +2796,12 @@ export function CoachTeachPage(): JSX.Element {
     // getLiveFen will read, so trip 1 sees the post-student-move
     // position immediately — no waiting for React re-render.
     liveFenRef.current = move.fen;
+    // Clear the PREVIOUS coach turn's arrows/highlights the instant the
+    // student moves, so they "go away like they should" instead of lingering
+    // on the board through the engine-reply + narration latency (David
+    // 2026-06-04). The coach's narration repaints fresh arrows for its reply.
+    setArrows([]);
+    setHighlights([]);
     // Silent faucet: a genuine eval-worsening slip during guided play feeds
     // the bucket so it resurfaces as a drill. No panel/voice — the brain is
     // already narrating this move.
@@ -2806,6 +2816,7 @@ export function CoachTeachPage(): JSX.Element {
       gamePhase: classifyPhase(move.fen, (move.moveNumber ?? 1) * 2),
       moveNumber: move.moveNumber,
       openingName,
+      studentRating: activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? undefined,
     });
     // The ENGINE plays the coach's reply (in code), then the LLM is asked to
     // NARRATE that exact move — play_move is disabled on the narration call,
@@ -3285,6 +3296,19 @@ export function CoachTeachPage(): JSX.Element {
             isActive={!busy}
           />
         </div>
+
+        {/* Coach "why did you play that?" question on a real slip — the same
+            faucet Play uses, now surfaced in Learn (David 2026-06-04). The
+            slip threshold is rating-adaptive (beginners: blunders only;
+            2000+: inaccuracies too). */}
+        <DiscussionPracticePanel
+          phase={discussion.phase}
+          prompt={discussion.prompt}
+          teach={discussion.teach}
+          onSubmit={(reason) => void discussion.submitReason(reason)}
+          onSkip={() => void discussion.skip()}
+          onDismissTeach={discussion.dismissTeach}
+        />
 
         {/* Control buttons row — Takeback / Restart / Resign, same as
             Play. Resign on the teach surface ends the lesson and pops

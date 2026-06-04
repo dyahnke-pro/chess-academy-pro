@@ -10,6 +10,7 @@ import { speechService } from '../../services/speechService';
 import { sanitizeForTTS } from '../../services/voiceService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from './DiscussionPracticePanel';
+import { useAppStore } from '../../stores/appStore';
 import { ArrowLeft, MessageCircle, Volume2, VolumeX, Undo, Lightbulb } from 'lucide-react';
 import type {
   MiddlegamePlan,
@@ -343,6 +344,7 @@ export function MiddlegamePractice({
       moveNumber: moveCount + 1,
       openingId: plan.openingId,
       openingName: plan.title,
+      studentRating: useAppStore.getState().activeProfile?.currentRating ?? undefined,
     });
     void getCoachFeedback(moveResult.san, moveResult.fen);
   }, [getCoachFeedback, discussion, playerColor, moveCount, plan.openingId, plan.title]);

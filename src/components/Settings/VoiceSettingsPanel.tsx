@@ -185,6 +185,7 @@ export function VoiceSettingsPanel(): JSX.Element {
             type="button"
             role="switch"
             aria-checked={coachVoiceOn}
+            aria-label="Coach voice — read messages and commentary aloud"
             onClick={toggleCoachVoice}
             className="flex items-center gap-2 cursor-pointer rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1"
             data-testid="coach-voice-toggle"
@@ -232,6 +233,7 @@ export function VoiceSettingsPanel(): JSX.Element {
             type="button"
             role="switch"
             aria-checked={pollyEnabled}
+            aria-label="Cloud voice priority — use Amazon Polly before the system voice"
             onClick={() => void handlePollyToggle(!pollyEnabled)}
             className="flex items-center gap-2 cursor-pointer rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1"
             data-testid="polly-toggle"

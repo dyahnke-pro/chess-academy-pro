@@ -1005,7 +1005,7 @@ function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
       />
       <ToggleRow
         label="Ask Why On My Mistakes"
-        tooltip="When you slip during a live game, the coach pauses to ask what your idea was, then teaches. Turn off to play uninterrupted (your mistakes are still logged to Weaknesses silently)."
+        tooltip="When you slip during a live game (Play, Learn, or an opening's Play section), the coach pauses to ask what your idea was, then teaches. It gets pickier as you improve — blunders only for beginners, mistakes too past 1000, inaccuracies past 2000. Turn off to play uninterrupted (your mistakes are still logged to Weaknesses silently)."
         checked={profile.preferences.coachInGameDiscussion ?? true}
         onChange={(v) => void handleToggle('coachInGameDiscussion', v)}
         testId="coach-ingame-discussion-toggle"

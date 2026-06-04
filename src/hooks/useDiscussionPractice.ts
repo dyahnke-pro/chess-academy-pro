@@ -17,7 +17,7 @@ import {
   buildWhyPrompt,
   captureMisconception,
 } from '../services/discussionPractice';
-import type { SlipResult } from '../services/slipDetector';
+import { slipWarrantsInterjection, type SlipResult } from '../services/slipDetector';
 import { logAppAudit } from '../services/appAuditor';
 import { useSettings } from './useSettings';
 
@@ -50,6 +50,10 @@ export interface EvaluatePlayerMoveArgs {
   moveNumber?: number;
   openingId?: string;
   openingName?: string;
+  /** Student's rating — drives the rating-adaptive interjection bar (a
+   *  beginner is only asked about blunders; a 2000+ player about
+   *  inaccuracies too). Below the bar the slip is still captured silently. */
+  studentRating?: number;
 }
 
 /** Args for `raiseSlipPrompt` — a slip a CALLER already detected (e.g. the
@@ -72,6 +76,8 @@ export interface RaiseSlipPromptArgs {
   moveNumber?: number;
   openingId?: string;
   openingName?: string;
+  /** Student's rating for the rating-adaptive interjection bar. */
+  studentRating?: number;
 }
 
 export interface UseDiscussionPracticeResult {
@@ -207,11 +213,15 @@ export function useDiscussionPractice(
       // double-fire the same prompt.
       promptedFenAfterRef.current = args.fenAfter;
 
-      // Silent mode: feed the bucket directly, no panel, no voice — for
-      // surfaces that already narrate (the /coach/teach brain) or are
-      // silent-by-contract (WLPP Practice) OR the user turned the "ask why"
-      // interjection off. Passive capture, no userReason.
-      if (effectiveSilent) {
+      // Silent capture (feed the bucket, no panel/voice) when EITHER:
+      //   - silent-by-contract (the /coach/teach brain narrates / WLPP
+      //     Practice / the user turned the "ask why" interjection off), OR
+      //   - the slip is BELOW the rating-adaptive interjection bar (a
+      //     beginner's inaccuracy / a 1500's inaccuracy — captured, but not
+      //     worth interrupting; David 2026-06-04).
+      // Either way the slip still counts toward the weakness bucket.
+      const belowRatingBar = !slipWarrantsInterjection(slip.cpLoss, args.studentRating);
+      if (effectiveSilent || belowRatingBar) {
         await captureMisconception({
           classifyInput: {
             fen: args.fenBefore,
@@ -299,9 +309,10 @@ export function useDiscussionPractice(
       }),
     });
 
-    // Silent (user turned "ask why" off, or a silent-by-contract surface):
-    // capture passively, no panel — exactly like the faucet.
-    if (effectiveSilent) {
+    // Silent capture (no panel) when silent-by-contract OR the slip is below
+    // the rating-adaptive interjection bar — still feeds the bucket.
+    const belowRatingBar = !slipWarrantsInterjection(args.cpLoss, args.studentRating);
+    if (effectiveSilent || belowRatingBar) {
       void captureMisconception({
         classifyInput: {
           fen: args.fenBefore,
