@@ -59,6 +59,16 @@ function kingSquare(fen, color) {
 }
 function sideInCheck(fen) { try { const c = new Chess(fen); return c.inCheck() ? (c.turn() === 'w' ? 'white' : 'black') : null; } catch { return null; } }
 function pieceOn(fen, sq) { try { const p = new Chess(fen).get(sq); return p ? p : null; } catch { return null; } }
+// Net material from WHITE's perspective (pawns 1, N/B 3, R 5, Q 9; kings
+// excluded). Positive = white ahead. Used by the material-balance probe to
+// check the coach gets the DIRECTION of a material imbalance right (the
+// "claimed up a pawn after losing the queen" hallucination class).
+function materialDiff(fen) {
+  const val = { p: 1, n: 3, b: 3, r: 5, q: 9 };
+  let d = 0;
+  try { for (const row of new Chess(fen).board()) for (const sq of row) if (sq && sq.type !== 'k') d += (sq.color === 'w' ? 1 : -1) * (val[sq.type] || 0); } catch {}
+  return d;
+}
 // Detect a STALE set-board read: the coach describes piece types that
 // aren't on the board (set_board intermittently doesn't reach the brain,
 // so it reasons about the pre-set position). Endgame FENs are minimal,
@@ -128,10 +138,19 @@ async function askOnce(page, prompt) {
   }
   return clean(resp);
 }
-const TRANSIENT_RE = /taking too long|try again in a moment|please try again/i;
+// Transient brain/connection blips — NOT coach answers. "having trouble
+// connecting … back online soon" is the spine's graceful connection-error
+// fallback (fires on a hung/failed API call, e.g. a Vercel deploy swapping
+// the bundle mid-audit). Treating it as a wrong answer scored a false ✗ on
+// mate-in-one during a deploy collision (2026-06-05) — it's infra, so retry
+// it and, if it persists, return '(timeout)' so the loop SKIPS it.
+const TRANSIENT_RE = /taking too long|try again in a moment|please try again|trouble connecting|back online soon|couldn'?t reach the coach|reconnecting/i;
 async function askLLM(page, prompt) {
   let r = await askOnce(page, prompt);
   for (let a = 0; a < 2 && (r === '(timeout)' || TRANSIENT_RE.test(r)); a++) { await page.waitForTimeout(2000); r = await askOnce(page, prompt); }
+  // Still transient after retries → an infra blip, not a wrong answer. Hand
+  // back '(timeout)' so the main loop skips it (never breaks the streak).
+  if (r !== '(timeout)' && TRANSIENT_RE.test(r)) return '(timeout)';
   return r;
 }
 async function drainAck(page, beforeTexts, budgetMs = 55000) {
@@ -226,10 +245,17 @@ const QUIET_FENS = [ // no mate-in-one
   'r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w - - 0 1',
   '4k3/8/8/8/8/8/4P3/4K3 w - - 0 1',
 ];
-const CASTLED_FENS = [ // white castled (Kg1), white to move
-  'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 4 5',
-  'r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 7',
-  'rnbq1rk1/ppp2ppp/4pn2/3p4/2PP4/2N2N2/PP2PPPP/R1BQ1RK1 w - - 0 6',
+const CASTLED_FENS = [ // white king on a KNOWN square, white to move — the
+  // check reads the REAL square (kingSquare), so mixing castled (g1),
+  // queenside-castled (c1), uncastled (e1), and Kh1 hardens the stale-fen
+  // regression: the coach must read the ACTUAL board, not assume g1 — and
+  // the e1 case is the exact square the old stale-default bug returned.
+  'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 4 5',  // Kg1
+  'r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 7', // Kg1
+  'rnbq1rk1/ppp2ppp/4pn2/3p4/2PP4/2N2N2/PP2PPPP/R1BQ1RK1 w - - 0 6',       // Kg1
+  'r3kbnr/pppq1ppp/2np4/4p3/4P3/2NP4/PPPQ1PPP/2KR1BNR w kq - 0 6',         // Kc1 (queenside)
+  'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4',   // Ke1 (uncastled)
+  'r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQ1R1K w - - 0 7',  // Kh1
 ];
 const INCHECK_FENS = [ // white to move, IN check
   '6k1/8/8/8/8/8/8/r5K1 w - - 0 1',  // Ra1 checks Kg1 on rank 1
@@ -240,6 +266,18 @@ const EMPTY_SQUARE_FENS = [ // {fen, sq that is empty}
   { fen: 'r3k2r/8/8/8/8/8/8/R3K2R w - - 0 1', sq: 'd5' },
   { fen: '8/8/8/3k4/8/3K4/8/8 w - - 0 1', sq: 'e4' },
   { fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', sq: 'e5' },
+];
+const OCCUPIED_SQUARE_FENS = [ // {fen, sq, piece} — square is OCCUPIED; coach must name the right piece
+  { fen: 'rnbqkbnr/ppp1pppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 2', sq: 'd4', piece: 'pawn' },
+  { fen: 'rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3', sq: 'f3', piece: 'knight' },
+  { fen: 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3', sq: 'c6', piece: 'knight' },
+  { fen: 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 4 5', sq: 'c4', piece: 'bishop' },
+];
+const MATERIAL_FENS = [ // {fen} — clear material imbalance, white to move
+  '4k3/8/8/8/8/8/4P3/R3K3 w - - 0 1',      // white up a rook
+  '3qk3/8/8/8/8/8/4P3/4K3 w - - 0 1',      // white down a queen
+  '4k3/8/8/8/8/2N5/4PB2/4K3 w - - 0 1',    // white up bishop+knight
+  '4k3/4q3/8/8/8/8/4P3/R3K3 w - - 0 1',    // white has rook, black has queen → white down
 ];
 const HANGING = [ // {fen, sq} — a white piece clearly hanging (attacked, undefended)
   { fen: 'q6k/8/8/8/R7/8/8/6K1 w - - 0 1', sq: 'a4' },        // Ra4 attacked by Qa8
@@ -291,6 +329,11 @@ const PLAN_PHRASINGS = [
   'Outline a strategy for the next three moves in this position.',
   'What are my main ideas and plans from this position?',
   "What's the right plan for me here?",
+  "I'm not sure what to do — lay out my next three moves and the idea behind each.",
+  'How should I continue from here? Give me the next few moves and why.',
+  "What's my long-term plan in this position?",
+  'Map out a game plan for me over the next handful of moves.',
+  "Where do I go from here strategically — what am I aiming for?",
 ];
 
 const FAMILIES = [
@@ -313,6 +356,10 @@ const FAMILIES = [
     check: (r, v) => { const occupied = pieceOn(v.fen, v.sq); if (occupied) return pass('(variant square occupied — skipped)'); const hall = new RegExp(`on ${v.sq}[^.]*\\b(?:pawn|knight|bishop|rook|queen|king)\\b|\\b(?:pawn|knight|bishop|rook|queen|king)\\b[^.]*on ${v.sq}`, 'i').test(r); return hall ? fail(`hallucinated a piece on the empty ${v.sq}`) : pass(`did not hallucinate on ${v.sq}`); } },
   { id: 'hanging-piece', depth: 2, surface: 'setpos', variants: HANGING.slice(0, 2).map((v) => ({ ...v, prompt: 'Are any of my pieces hanging or able to be captured for free right now? Name the square.' })),
     check: (r, v) => new RegExp(`\\b${v.sq}\\b`, 'i').test(r) ? pass(`named the hanging piece on ${v.sq}`) : fail(`did not name the hanging piece on ${v.sq}`) },
+  { id: 'piece-on-square', depth: 2, surface: 'setpos', variants: OCCUPIED_SQUARE_FENS.map((v) => ({ ...v, prompt: `What piece is on the ${v.sq} square right now? Name the piece.` })),
+    check: (r, v) => { const p = pieceOn(v.fen, v.sq); if (!p) return pass('(variant square empty — skipped)'); const names = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' }; const name = names[p.type]; const namedRight = new RegExp(`\\b${name}s?\\b`, 'i').test(r); if (!namedRight) return fail(`did not name the ${name} on ${v.sq}`); const others = Object.values(names).filter((n) => n !== name && n !== 'king'); const wrong = others.find((n) => new RegExp(`\\bon ${v.sq}[^.]*\\b${n}s?\\b|\\b${n}s?\\b[^.]*\\bon ${v.sq}\\b`, 'i').test(r)); return wrong ? fail(`named a ${wrong} on ${v.sq} (it's a ${name})`) : pass(`correctly named the ${name} on ${v.sq}`); } },
+  { id: 'material-balance', depth: 2, surface: 'setpos', variants: MATERIAL_FENS.map((fen) => ({ fen, prompt: 'Counting material, am I (White) ahead or behind, and roughly by how much?' })),
+    check: (r, v) => { const d = materialDiff(v.fen); const t = lc(r); const up = /\b(?:up|ahead|winning|won|decisive|more material|material advantage|extra (?:a |the )?(?:pawn|piece|rook|knight|bishop|queen|exchange))\b|\badvantage\b/.test(t); const down = /\b(?:down|behind|losing|lost|less material|disadvantage)\b/.test(t); if (d >= 2) return (up && !down) ? pass(`correctly: white up (+${d})`) : fail(`white is up ${d} but coach didn't say ahead (said ${down ? 'behind' : 'neither'})`); if (d <= -2) return (down && !up) ? pass(`correctly: white down (${d})`) : fail(`white is down ${Math.abs(d)} but coach didn't say behind (said ${up ? 'ahead' : 'neither'})`); return pass('(roughly even — skipped)'); } },
 
   // DEPTH 3 — rules legality + anti-over-claim
   { id: 'illegal-move', depth: 3, surface: 'chat', variants: ILLEGAL,
