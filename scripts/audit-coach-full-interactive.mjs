@@ -46,7 +46,8 @@
  *   AUDIT_SMOKE_HEADED=1  open browser visibly
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -296,12 +297,17 @@ async function main() {
 
   const executablePath = await resolveChromiumExecutable(HEADED);
   if (executablePath) console.log(`[coach-full-interactive] chromium=${executablePath}`);
-  const browser = await chromium.launch({ headless: !HEADED, executablePath });
+  const browser = await chromium.launch({ headless: !HEADED, executablePath, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext({
+    ...sandboxContextOptions(), // AUDIT_SANDBOX=1 → ignoreHTTPSErrors for the resigned egress cert
     viewport: { width: 414, height: 896 },
     deviceScaleFactor: 2,
     userAgent: `AuditCoachFullInteractiveBot/${PASS} (chromium)`,
   });
+  // Neutralize the onboarding strength-calibration bubble + page-help modal
+  // on every navigation, or a fresh prod context fails every scenario
+  // "not-visible" (the 2026-06-05 teach-audit lesson).
+  await ctx.addInitScript(autoDismissCalibration);
 
   const auditPostBodies = [];
   ctx.on('request', (req) => {
