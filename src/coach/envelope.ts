@@ -903,6 +903,18 @@ function formatTacticsSubBlock(tactics: NonNullable<LiveState['tactics']>): stri
   } else {
     lines.push(`    HANGING PIECES (GROUND TRUTH): NONE — every attacked piece is defended. Do NOT call any piece "hanging", "free", "undefended", or "winnable for free". If a piece is attacked, describe it accurately — name what attacks it AND what defends it (e.g. "attacked by the queen but defended by your king, so taking it just loses the queen").`);
   }
+  // ATTACK / DEFENSE MAP — the EXACT squares attacking and defending each
+  // pressured piece. The coach must name these when explaining why a piece
+  // is or isn't hanging; it eyeballed the wrong attacker/defender otherwise
+  // (prod drive 2026-06-05: "the rook on a1 defends e2" when the KING did).
+  if (bf && bf.attackMap && bf.attackMap.length > 0) {
+    lines.push(`    ATTACK/DEFENSE MAP (GROUND TRUTH — when you explain what attacks or defends a piece, use EXACTLY these squares; never name a different attacker or defender):`);
+    for (const e of bf.attackMap) {
+      const atk = e.attackedBy.join(', ');
+      const def = e.defendedBy.length > 0 ? e.defendedBy.join(', ') : 'NONE → HANGING';
+      lines.push(`      ${e.color} ${e.piece} on ${e.square}: attacked by ${atk}; defended by ${def}.`);
+    }
+  }
   if (tactics.threats.length > 0) {
     lines.push(`    Opponent threats (warn the student, name the pattern):`);
     for (const t of tactics.threats) {

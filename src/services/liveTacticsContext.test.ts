@@ -131,6 +131,25 @@ describe('buildTacticsLiveContext — boardFacts', () => {
     expect(buildTacticsLiveContext(fen, null, 'w', 1500).boardFacts?.material).toMatch(/White is UP 6/);
   });
 
+  // Attack/defense map ground truth (prod drive 2026-06-05: the coach named
+  // the wrong attacker/defender when explaining why a piece was/wasn't safe).
+  it('maps the EXACT attacker + defender squares for a pressured piece', () => {
+    // White Pe2 attacked by Qe7, defended by Ke1 (NOT a rook).
+    const am = buildTacticsLiveContext('4k3/4q3/8/8/8/8/4P3/R3K3 w - - 0 1', null, 'w', 1500).boardFacts?.attackMap ?? [];
+    const e2 = am.find((e) => e.square === 'e2');
+    expect(e2).toBeDefined();
+    expect(e2!.attackedBy).toEqual(['e7']);
+    expect(e2!.defendedBy).toEqual(['e1']); // the KING, not a phantom rook
+  });
+  it('marks a genuinely hanging piece with empty defenders in the attack map', () => {
+    const am = buildTacticsLiveContext('4k3/8/1b4q1/R6B/8/8/8/4K3 w - - 0 1', null, 'w', 1500).boardFacts?.attackMap ?? [];
+    const a5 = am.find((e) => e.square === 'a5');
+    expect(a5!.attackedBy).toEqual(['b6']);  // the bishop, not the queen
+    expect(a5!.defendedBy).toEqual([]);      // hanging
+    const h5 = am.find((e) => e.square === 'h5');
+    expect(h5!.defendedBy).toEqual(['a5']);  // rook defends the bishop
+  });
+
   it('reports the king on g1 after White castles (the e8 regression)', () => {
     // 1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.O-O — White king on g1, rook f1.
     const fen = 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4';

@@ -120,6 +120,7 @@ function computeBoardFacts(fen: string): TacticsLiveContext['boardFacts'] {
     const inCheck = chess.inCheck() ? sideToMove : null;
     const { whitePieces, blackPieces } = pieceInventory(board);
     const material = describeMaterialBalance(board);
+    const attackMap = computeAttackMap(chess);
     // Mate-in-one for the side to move: try every legal move; the first
     // that delivers checkmate is the forced mate. chess.js validates
     // legality, so this never reports an illegal "mate".
@@ -129,10 +130,50 @@ function computeBoardFacts(fen: string): TacticsLiveContext['boardFacts'] {
       probe.move(m);
       if (probe.isCheckmate()) { mateInOne = m; break; }
     }
-    return { sideToMove, whiteKing, blackKing, inCheck, mateInOne, whitePieces, blackPieces, material };
+    return { sideToMove, whiteKing, blackKing, inCheck, mateInOne, whitePieces, blackPieces, material, attackMap };
   } catch {
     return undefined;
   }
+}
+
+/** Per-piece attack/defense map from chess.js `attackers()` (the same
+ *  occupancy-aware primitive the hanging detector now uses). For every
+ *  non-king piece the enemy attacks, record the exact squares attacking it
+ *  and defending it, so the coach explains the WHY with real pieces instead
+ *  of eyeballing the attacker/defender (prod drive 2026-06-05). Hanging-
+ *  first, then most-pressured (attackers minus defenders), capped to keep
+ *  the envelope tight. */
+function computeAttackMap(chess: Chess): NonNullable<TacticsLiveContext['boardFacts']>['attackMap'] {
+  const NAMES: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+  const out: NonNullable<TacticsLiveContext['boardFacts']>['attackMap'] = [];
+  try {
+    for (const row of chess.board()) {
+      for (const sq of row) {
+        if (!sq || sq.type === 'k') continue;
+        const enemy = sq.color === 'w' ? 'b' : 'w';
+        const attackedBy = chess.attackers(sq.square, enemy);
+        if (attackedBy.length === 0) continue;
+        const defendedBy = chess.attackers(sq.square, sq.color);
+        out.push({
+          square: sq.square,
+          piece: NAMES[sq.type] ?? sq.type,
+          color: sq.color === 'w' ? 'white' : 'black',
+          attackedBy: [...attackedBy],
+          defendedBy: [...defendedBy],
+        });
+      }
+    }
+  } catch { /* fall through to whatever we collected */ }
+  // Hanging pieces (no defenders) first; then by net pressure (attackers −
+  // defenders) descending. Cap at 8 so a busy middlegame doesn't bloat the
+  // prompt.
+  out.sort((a, b) => {
+    const ah = a.defendedBy.length === 0 ? 1 : 0;
+    const bh = b.defendedBy.length === 0 ? 1 : 0;
+    if (ah !== bh) return bh - ah;
+    return (b.attackedBy.length - b.defendedBy.length) - (a.attackedBy.length - a.defendedBy.length);
+  });
+  return out.slice(0, 8);
 }
 
 /** Deterministic material balance from the board (chess.js values, kings

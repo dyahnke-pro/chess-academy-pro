@@ -451,6 +451,22 @@ export interface TacticsLiveContext {
     whitePieces: string;
     /** Same inventory for black. */
     blackPieces: string;
+    /** Per-piece ATTACK / DEFENSE map (ground truth, chess.js attackers()):
+     *  every piece currently ATTACKED by the enemy, with the exact squares
+     *  that attack it and the exact squares that defend it. Lets the coach
+     *  explain WHY a piece is (or isn't) hanging with the RIGHT pieces
+     *  instead of eyeballing — prod drive 2026-06-05 caught the coach saying
+     *  "the rook on a1 defends e2" when the KING on e1 did, and "the queen
+     *  attacks a5" when the BISHOP on b6 did. A piece is hanging iff
+     *  `attackedBy` is non-empty AND `defendedBy` is empty. Hanging-first,
+     *  capped to the most-pressured pieces. */
+    attackMap: Array<{
+      square: string;
+      piece: string;
+      color: 'white' | 'black';
+      attackedBy: string[];
+      defendedBy: string[];
+    }>;
     /** Deterministic material balance (chess.js piece values, kings
      *  excluded), white-perspective, in plain English — e.g. "White is
      *  down 3 (rook+pawn = 6 vs queen = 9)" / "Material is even" / "White
