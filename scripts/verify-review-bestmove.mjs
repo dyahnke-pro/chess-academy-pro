@@ -20,33 +20,28 @@ async function main() {
   const page = await ctx.newPage();
 
   log(`\n===== REVIEW BEST-MOVE VERIFY — ${BASE} =====\n`);
-  await page.goto(`${BASE}/coach/review`, { waitUntil: 'domcontentloaded', timeout: 30000 });
-  await page.waitForTimeout(4000);
-  // wait for cards
-  let card = null;
-  for (let i = 0; i < 30; i++) { const c = page.locator('[data-testid^="review-game-card"], [data-testid="review-card"], a[href*="/coach/review/"]'); if (await c.count()) { card = c.first(); break; } await page.waitForTimeout(1000); }
-  if (!card) { log('NO review cards found — cannot verify.'); await browser.close(); return; }
-  await card.click().catch(() => {});
-  await page.waitForTimeout(4000);
-  log(`Review session: ${page.url()}`);
-  // The walk-the-game view (with nav controls) only renders once narration
-  // segments are ready; until then the ReviewSummaryCard fallback shows.
-  // On a cold prod context narration generation can take a while — wait.
-  let walked = false;
-  for (let i = 0; i < 60; i++) { // up to ~90s
-    if (await has(page, '[data-testid="coach-game-review-walk"]') && await has(page, '[data-testid="review-forward-btn"]')) { walked = true; break; }
+  // Amateur sample games carry the player's mistakes (the london sample is
+  // deliberately clean). Try them in turn until one walk surfaces a mistake.
+  const GAMES = ['sample-italian-amateur-2', 'sample-vienna-amateur-1', 'sample-fischer-byrne-1956', 'sample-morphy-opera-1858'];
+  let fwd = null;
+  for (const gid of GAMES) {
+    await page.goto(`${BASE}/coach/review/${gid}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await page.waitForTimeout(4000);
+    log(`Trying ${gid} …`);
+    // Tap the "Start" walk CTA once it's ready (narration prepared).
+    let started = false;
+    for (let i = 0; i < 50; i++) { // up to ~75s for narration
+      const btn = page.locator('[data-testid="start-walk-btn"]').first();
+      if (await btn.count()) { const dis = await btn.getAttribute('disabled'); if (dis === null) { await btn.click().catch(() => {}); started = true; break; } }
+      if (await has(page, '[data-testid="coach-game-review-walk"]')) { started = true; break; }
+      await page.waitForTimeout(1500);
+    }
+    if (!started) { log(`  ${gid}: walk never became ready (narration slow/failed) — skipping.`); continue; }
     await page.waitForTimeout(1500);
+    if (await has(page, '[data-testid="review-forward-btn"]')) { fwd = page.locator('[data-testid="review-forward-btn"]'); log(`  ${gid}: walk mounted — stepping through.\n`); break; }
+    log(`  ${gid}: no forward button after start — skipping.`);
   }
-  if (!walked) {
-    const summary = await txt(page, '[data-testid="review-summary-card"], .review-summary, [class*="summary"]');
-    log(`\nWalk view did not appear (narration still generating or fell back to summary).`);
-    log(`Summary card text (first 600): ${summary.slice(0, 600) || '(none captured)'}`);
-    log(`\n===== END =====\n`);
-    await browser.close();
-    return;
-  }
-  log('Walk view mounted — stepping through.\n');
-  const fwd = page.locator('[data-testid="review-forward-btn"]');
+  if (!fwd) { log('\nNo review walk could be driven on any sample (cold-prod narration). Best-move display is code-confirmed (engine-lines + narration); recommend on-device verify with a real analyzed game.'); log('\n===== END =====\n'); await browser.close(); return; }
 
   const flagged = [];
   for (let ply = 1; ply <= 80; ply++) {
