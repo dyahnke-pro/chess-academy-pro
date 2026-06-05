@@ -871,6 +871,12 @@ function defaultIntroText(params: {
  * framing, and doesn't load-bear the per-ply experience. If it fails,
  * a deterministic default intro covers the gap.
  */
+/** Max wait for the optional LLM intro prose before the review walk mounts
+ *  with the deterministic intro fallback. The per-ply segments (and the
+ *  best-move display) don't need the LLM, so this only bounds the opening
+ *  sentence — kept short so a cold-prod brain stall can't gate the walk. */
+const REVIEW_INTRO_TIMEOUT_MS = 8000;
+
 export async function generateReviewNarration(params: {
   moves: ReviewMoveInput[];
   playerColor: 'white' | 'black';
@@ -950,9 +956,19 @@ export async function generateReviewNarration(params: {
   // Brief mode: cap the intro at ~80 tokens so the spoken line stays
   // tight (~1 sentence). Full mode keeps the 200-token allowance.
   const introMaxTokens = coachNarration === 'brief' ? 80 : 200;
-  const introRaw = skipIntroLlm
-    ? ''
-    : await coachService.ask(
+  // 🔒 NEVER block the walk on the intro prose (David 2026-06-05). The
+  // per-ply segments below are DETERMINISTIC (no LLM) and carry the
+  // best-move / classification the walk renders — but this intro is a
+  // single LLM round-trip, and on a cold prod context it can hang well
+  // past a minute, so the whole narration (and therefore the walk view +
+  // every per-move best-move) never became ready (all 5 review samples
+  // stalled >75s in the 2026-06-05 prod drive). Race the intro against a
+  // short timeout: if it's fast you get the LLM prose; if not, fall back
+  // to the grounded defaultIntroText immediately so the walk mounts in
+  // seconds and the best-move display is reachable.
+  const introLlmPromise = skipIntroLlm
+    ? Promise.resolve('')
+    : coachService.ask(
       {
         surface: 'review',
         ask: introUserMessage,
@@ -974,6 +990,12 @@ export async function generateReviewNarration(params: {
         suppressToolbelt: true,
       },
     ).then((a) => unwrapSpineError(a.text)).catch(() => '');
+  const introRaw = skipIntroLlm
+    ? ''
+    : await Promise.race([
+      introLlmPromise,
+      new Promise<string>((resolve) => setTimeout(() => resolve(''), REVIEW_INTRO_TIMEOUT_MS)),
+    ]).catch(() => '');
 
   // Intro: use LLM response if non-empty and not the ⚠️ error placeholder;
   // else fall back to a grounded default.
