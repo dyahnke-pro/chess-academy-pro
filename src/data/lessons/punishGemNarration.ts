@@ -3837,12 +3837,12 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   },
   "pro-aman-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nge7_O-O_a6_Ba4_b5_Bb3:Na5": {
     sources: ["concept:tac-sacrifice","concept:tac-fork","https://www.chess.com/openings/Ruy-Lopez-Opening"],
-    watch: ["","","","","","","","","","","","Na5?! — chasing the bishop with a rim-knight leaves e5 fatally under-defended.","Nxe5! — the knight grabs e5; if Black takes on b3, Qh5 forks king and knight.","Nxb3 — Black grabs the bishop.","Qh5! — the double attack: mate on f7 and the loose b3-knight both hang.","Ng6 — Black must defend f7.","axb3 — White recovers the piece, a clean pawn up with the initiative.","","d4 — seizing the centre, White clearly winning.",""],
-    learn: ["","","","","","","","","","","","","Nxe5 — grab the pawn, set the fork","","Qh5 — double attack f7 and b3","","axb3 — recover, stay a pawn up","","d4 — seize the centre",""],
+    watch: ["","","","","","","","","","","","Na5?! — chasing the bishop with a rim-knight leaves e5 fatally under-defended.","Nxe5! — the knight grabs the e5-pawn; if Black takes the bishop with …Nxb3, White has the zwischenzug Qh5.","Nxb3 — Black grabs the bishop.","Qh5! — before recapturing, the queen and the e5-knight gang up on f7, forcing Black to defend.","Ng6 — Black must cover f7.","axb3 — only now does White scoop the b3-knight back, a clean pawn up.","","d4 — seizing the centre, White clearly winning.",""],
+    learn: ["","","","","","","","","","","","","Nxe5 — grab e5, then Qh5 hits f7","","Qh5 — gang up on f7 first","","axb3 — recover, stay a pawn up","","d4 — seize the centre",""],
   },
   "pro-aman-ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Ba4_Nf6_O-O_Nxe4_d4_b5_Bb3_d5_dxe5:Bc5": {
     sources: ["concept:tac-pin","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez-Opening-Open-Variation"],
-    watch: ["","","","","","","","","","","","","","","","Bc5?! — in the Open Ruy this lets White strike; the d5-pawn is overloaded.","Bxd5! — the bishop takes the key pawn, exploiting the pin on the e6/f7 squares.","Bxf2+ — Black tries a desperado.","Kh1 — the king steps aside, the check spent for nothing.","","Bxe4 — White wins the e4-knight, now up multiple pawns.","","Rxd1 — recapturing, White completely winning.",""],
+    watch: ["","","","","","","","","","","","","","","","Bc5?! — natural, but in the Open Ruy it lets White strike at the loose d5-pawn.","Bxd5! — the bishop snaps the key pawn and pins the c6-knight to the a8-rook while raking f7; Black’s loose pieces cost him material.","Bxf2+ — Black tries a desperado.","Kh1 — the king steps aside, the check spent for nothing.","","Bxe4 — White wins the e4-knight, now up multiple pawns.","","Rxd1 — recapturing, White completely winning.",""],
     learn: ["","","","","","","","","","","","","","","","","Bxd5 — take the overloaded pawn","","Kh1 — sidestep the check","","Bxe4 — win the knight","","",""],
   },
   "pro-aman-french-white:e4_e6_d4_d5_Nc3_Nf6_e5_Nfd7_f4_c5_Nf3_Nc6_Be3_Qb6_Na4:Qb4+": {
@@ -3882,7 +3882,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   },
   "pro-aman-anti-caro:e4_c6_Nc3_d5_Nf3_dxe4_Nxe4_Nf6_Qe2:Nbd7": {
     sources: ["concept:tac-mate","concept:tac-fork","https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"],
-    watch: ["","","","","","","","","Qe2 — the quiet queen move sets a famous trap: the e4-knight eyes d6 with the queen behind it.","Nbd7?? — the natural developing move walks into mate; it blocks the king’s escape and allows the fork.","Nd6# — smothered mate! The knight lands on d6 covering c8 and f7, and the boxed-in king has no flight square."],
+    watch: ["","","","","","","","","Qe2 — the quiet queen move sets a famous trap: the e4-knight eyes d6 with the queen behind it.","Nbd7?? — the natural developing move walks into mate; it plugs the d7-square, the king’s last escape.","Nd6# — smothered mate! The king is boxed in by its own pieces, and the e7-pawn that could capture the knight is pinned by the e2-queen."],
     learn: ["","","","","","","","","Qe2 — quiet move, hidden trap","","Nd6# — smothered mate"],
   },
   "pro-aman-anti-caro:e4_c6_Nc3_d5_Nf3_Bg4_h3_Bxf3_Qxf3_Nf6_e5:Ng8": {
@@ -4046,7 +4046,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     sources: ["concept:tac-fork","concept:pos-center","https://www.chess.com/openings/English-Opening"],
     watch: ["","","","","","","",
       "Bc5?! — a natural developing move that walks straight into the fork trick.",
-      "Nxe5 — the knight snaps the e5-pawn; if Black recaptures, d4 will skewer the c5-bishop and the e5-knight together.",
+      "Nxe5 — the knight snaps the e5-pawn; if Black recaptures, d4 forks the c5-bishop and the e5-knight at once.",
       "",
       "d4 — the fork! the pawn hits the c5-bishop and the e5-knight at once, and Black can't save both.",
       "",
