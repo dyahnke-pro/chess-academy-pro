@@ -6,6 +6,8 @@
 // Discussion Practice (live) and Game Review (past games).
 
 import { getCoachChatResponse } from './coachApi';
+import { stripDisprovenSentences } from './boardClaimValidator';
+import { logAppAudit } from './appAuditor';
 import {
   buildMisconceptionTagMenu,
   isMisconceptionTagId,
@@ -102,8 +104,28 @@ export async function classifyMisconception(
   }
 
   const tag = typeof parsed.tag === 'string' ? parsed.tag.trim() : '';
-  const coachNote = typeof parsed.coachNote === 'string' ? parsed.coachNote.trim() : '';
+  const rawNote = typeof parsed.coachNote === 'string' ? parsed.coachNote.trim() : '';
   if (!tag) return null;
+
+  // 🔒 GROUND THE SPOKEN NOTE (David 2026-06-05 — LLM-decision sweep). The
+  // tag is closed-set (validated below), but `coachNote` is free LLM prose
+  // that gets SPOKEN to teach the slip — and the prompt asks it to "name a
+  // square, a piece, or a principle." An ungrounded note can hallucinate
+  // ("your knight on f6 was hanging" with no knight on f6). chess.js is the
+  // truth: drop any sentence whose board-claim is provably false BEFORE it's
+  // ever spoken — same guard the main coach answer uses. A principle-only
+  // note (no concrete square/piece claim) passes untouched.
+  const { clean: coachNote, dropped } = stripDisprovenSentences(rawNote, input.fen);
+  if (dropped.length > 0) {
+    void logAppAudit({
+      kind: 'claim-validator-trip',
+      category: 'subsystem',
+      source: 'misconceptionClassifier.coachNote',
+      summary: `dropped ${dropped.length} disproven sentence(s) from coachNote (tag=${tag})`,
+      details: dropped.map((d) => d.sentence).join(' | ').slice(0, 300),
+      fen: input.fen,
+    });
+  }
 
   if (tag === 'none') {
     return { tag: 'none', coachNote };

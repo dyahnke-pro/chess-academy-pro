@@ -52,6 +52,29 @@ describe('classifyMisconception', () => {
     expect(r!.customLabel).toBe('premature resignation');
   });
 
+  // 🔒 Ground the spoken coachNote (LLM-decision sweep 2026-06-05): a
+  // sentence whose board-claim is provably false (chess.js as truth) is
+  // dropped before it can be spoken; a principle sentence survives. FEN is
+  // after 1.e4 e5 2.Nf3 Nc6 — there is NO knight on f6.
+  it('strips a hallucinated board-claim sentence from the coachNote, keeps the principle', async () => {
+    mocked.mockResolvedValueOnce(
+      '{"tag":"hung-material","coachNote":"The knight on f6 is hanging. Develop your pieces before launching an attack."}',
+    );
+    const r = await classifyMisconception({ fen: FEN, playedSan: 'Ng5' });
+    expect(r!.tag).toBe('hung-material');
+    expect(r!.coachNote).not.toMatch(/f6/i);
+    expect(r!.coachNote).toContain('Develop your pieces');
+  });
+
+  it('empties the coachNote when every sentence is a disproven board-claim (tag still stands)', async () => {
+    mocked.mockResolvedValueOnce(
+      '{"tag":"hung-material","coachNote":"Your queen on h5 is trapped by the bishop on g4."}',
+    );
+    const r = await classifyMisconception({ fen: FEN, playedSan: 'Ng5' });
+    expect(r!.tag).toBe('hung-material');
+    expect(r!.coachNote).toBe('');
+  });
+
   it('returns null on unparseable output', async () => {
     mocked.mockResolvedValueOnce('I think you played a questionable move there!');
     expect(await classifyMisconception({ fen: FEN, playedSan: 'a3' })).toBeNull();
