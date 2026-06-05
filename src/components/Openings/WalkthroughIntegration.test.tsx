@@ -232,32 +232,32 @@ describe('WalkthroughMode integration — real annotation data', () => {
 
     await waitFor(() => screen.getByTestId('walkthrough-overview'), { timeout: 3000 });
 
-    const seenTexts: string[] = [];
+    const counters: string[] = [];
 
-    for (let i = 0; i < 4; i++) {
-      // The Next button disables briefly while requestHint/narration
-      // kicks off its async call (HintButton-style isAnalyzing guard);
-      // clicking while disabled is a no-op. Wait for it to re-enable
-      // before each click so every click actually advances a move (real
-      // users wait for the prior beat too).
-      await waitFor(() =>
-        expect(screen.getByRole('button', { name: /next/i })).not.toBeDisabled(),
-      { timeout: 3000 });
+    // The move counter shows full moves (ceil(ply/2)), so it only advances
+    // every OTHER ply — stepping 6 plies takes it through Move 1 → 2 → 3.
+    // Step deterministically: wait for Next to re-enable (it disables briefly
+    // while the async narration kicks off) before each click, so every click
+    // actually advances a ply.
+    for (let i = 0; i < 6; i++) {
+      await waitFor(
+        () => expect(screen.getByRole('button', { name: /next/i })).not.toBeDisabled(),
+        { timeout: 4000 },
+      );
       act(() => { fireEvent.click(screen.getByRole('button', { name: /next/i })); });
-
-      await waitFor(() => {
-        const text = document.body.textContent;
-        expect(text.length).toBeGreaterThan(100);
-      }, { timeout: 3000 });
-
-      seenTexts.push((document.body.textContent).substring(0, 120));
+      await waitFor(
+        () => expect(screen.getByTestId('walkthrough-move-counter')).toBeInTheDocument(),
+        { timeout: 4000 },
+      );
+      counters.push(screen.getByTestId('walkthrough-move-counter').textContent ?? '');
     }
 
-    // Advancing through moves changes the displayed state per move (the
-    // move counter + annotation card update). Distinct snapshots prove
-    // the walkthrough is actually progressing, not stuck on one beat.
-    const uniqueTexts = new Set(seenTexts);
-    expect(uniqueTexts.size).toBeGreaterThanOrEqual(3);
+    // The counter progressed through ≥3 distinct move numbers — proof the
+    // walkthrough actually advances per move rather than being stuck on one
+    // beat (the original whole-body-prefix check was flaky: the sparse
+    // main-line annotation + the every-2-ply counter could yield <3 unique).
+    const uniqueCounters = new Set(counters);
+    expect(uniqueCounters.size).toBeGreaterThanOrEqual(3);
   });
 
   it('Jobava London (variationIndex=2): loads variation-2 annotations', async () => {

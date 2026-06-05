@@ -805,7 +805,10 @@ export function WalkthroughMode({
   const aboveBoard = (
     <div className="px-4 pt-2">
       <div className="flex items-center gap-2 mb-1">
-        <span className="text-[10px] text-theme-text-muted uppercase font-medium">
+        <span
+          className="text-[10px] text-theme-text-muted uppercase font-medium"
+          data-testid="walkthrough-move-counter"
+        >
           {/* currentMoveIndex counts plies (half-moves); convert to
               the chess move number so this matches the narration card
               (e.g. ply 21 → "Move 11"). David 2026-05-20. */}
