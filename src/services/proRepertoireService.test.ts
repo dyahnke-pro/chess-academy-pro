@@ -4,15 +4,18 @@ import { findTrapTilesForCanonicalLine, getTrapLineKind } from './proRepertoireS
 import { buildTrapWalkthroughTreeFromPgn } from './openingGenerator';
 
 describe('findTrapTilesForCanonicalLine', () => {
-  it('surfaces curated traps for the Alapin Open Variation line', () => {
-    // Naroditsky's Alapin carries the Nb5 queen-fork trap, classified
-    // 'trap', whose PGN starts with the Open Variation prefix
-    // `e4 c5 c3 d5`. The student should see it when typing into the
-    // line picker.
-    const traps = findTrapTilesForCanonicalLine('e4 c5 c3 d5');
+  it('surfaces curated forced traps for the Smith-Morra Siberian line', () => {
+    // Carlsen's anti-Sicilian set carries the Siberian Trap — a genuine
+    // forced queen-win classified 'trap' — whose PGN starts with the
+    // Smith-Morra prefix `e4 c5 d4 cxd4 c3`. The student should see it
+    // when typing into the line picker. (The Alapin's old Nb5 line was
+    // rebuilt into a positional 'Nb5 Outpost', classified 'mistake'; the
+    // Alapin's forced refutation now lives in the punish-gem system, not
+    // in trapLines — so no red TRAP surfaces for `e4 c5 c3 d5` anymore.)
+    const traps = findTrapTilesForCanonicalLine('e4 c5 d4 cxd4 c3');
     expect(traps.length).toBeGreaterThan(0);
     for (const t of traps) {
-      expect(t.pgn.startsWith('e4 c5 c3 d5')).toBe(true);
+      expect(t.pgn.startsWith('e4 c5 d4 cxd4 c3')).toBe(true);
       expect(t.trapName.length).toBeGreaterThan(0);
       expect(t.parentOpeningName.length).toBeGreaterThan(0);
       expect(t.explanation.length).toBeGreaterThan(0);
@@ -47,10 +50,10 @@ describe('findTrapTilesForCanonicalLine', () => {
 
   it('never surfaces more than the picker maximum of trap tiles', () => {
     // The picker caps at MAX_TRAP_TILES_PER_PICKER (4) so curated
-    // traps never squeeze out the variation tiles. The kept catalog
-    // currently has a single trap line (the Alapin Nb5 fork); the cap
-    // is still enforced structurally regardless of catalog size.
-    const traps = findTrapTilesForCanonicalLine('e4 c5 c3 d5');
+    // traps never squeeze out the variation tiles. The Smith-Morra
+    // Siberian line carries one live forced trap; the cap is still
+    // enforced structurally regardless of catalog size.
+    const traps = findTrapTilesForCanonicalLine('e4 c5 d4 cxd4 c3');
     expect(traps.length).toBeGreaterThan(0);
     expect(traps.length).toBeLessThanOrEqual(4);
   });
