@@ -9,7 +9,10 @@ const fs = require('fs');
 const path = require('path');
 
 const STOCKFISH_DIR = path.join(__dirname, 'public', 'stockfish');
-const STOCKFISH_SRC = path.join(__dirname, 'node_modules', 'stockfish');
+// The stockfish npm package ships its engine binaries under bin/ (per its
+// package.json `files: ["bin/"]`), so the auto-copy source is bin/ — matching
+// the "from node_modules/stockfish/bin/" the copy log already claims.
+const STOCKFISH_SRC = path.join(__dirname, 'node_modules', 'stockfish', 'bin');
 const REQUIRED_FILES = [
   { name: 'stockfish-18-lite.js', minSize: 10_000 },
   { name: 'stockfish-18-lite.wasm', minSize: 1_000_000 },
