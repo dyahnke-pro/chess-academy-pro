@@ -58,3 +58,7 @@ data/sources/carlsen-alts/
 
 # Real-ESRGAN model weights (downloaded on demand, not committed)
 scripts/*.pth
+
+# WIP modern-cast cutouts (derived from rpg-cast-src via scripts/process-cast.py)
+public/rpg/cast/
+scripts/*.onnx
