@@ -6320,12 +6320,12 @@
     "criticalMoments": [],
     "middlegameTheme": "Solid structure, the d5-outpost, patient counterplay.",
     "lessonSummary": "Trade on f3, hold the structure, dominate d5, and grind the advantage home.",
-    "variation": "Two Knights Variation",
     "sources": [
       "book:caro-kann",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-    ]
+    ],
+    "variation": "Two Knights Variation"
   },
   {
     "id": "mg-caro-kann-panov-botvinnik-attack",
@@ -6343,12 +6343,12 @@
     "criticalMoments": [],
     "middlegameTheme": "Blockade and pressure the isolated queen’s pawn.",
     "lessonSummary": "Blockade the IQP on d5, trade pieces, then win the weak pawn.",
-    "variation": "Panov-Botvinnik Attack",
     "sources": [
       "book:caro-kann",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-    ]
+    ],
+    "variation": "Panov-Botvinnik Attack"
   },
   {
     "id": "mg-caro-kann-tartakower-breyer-variation",
@@ -6366,12 +6366,12 @@
     "criticalMoments": [],
     "middlegameTheme": "Half-open e-file, central pawn mass, kingside storm.",
     "lessonSummary": "Embrace the …exf6 structure, take the e-file, and storm the king.",
-    "variation": "Tartakower/Breyer Variation",
     "sources": [
       "book:caro-kann",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-    ]
+    ],
+    "variation": "Tartakower/Breyer Variation"
   },
   {
     "id": "mg-french-defence-fort-knox-variation",
@@ -6389,12 +6389,12 @@
     "criticalMoments": [],
     "middlegameTheme": "Trade the light bishops, blockade d5, grind the queenside.",
     "lessonSummary": "Swap the bad bishop, plant a knight on d5, and outplay White slowly.",
-    "variation": "Fort Knox Variation",
     "sources": [
       "book:french-defence",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/French_Defence"
-    ]
+    ],
+    "variation": "Fort Knox Variation"
   },
   {
     "id": "mg-four-knights-game-rubinstein-variation-4-bb5-nd4",
@@ -6412,12 +6412,12 @@
     "criticalMoments": [],
     "middlegameTheme": "Keep pieces on, the e5-wedge, active fighting play.",
     "lessonSummary": "Avoid the trade with Ba4, grab e5, and play for the initiative.",
-    "variation": "Rubinstein Variation: 4.Bb5 Nd4",
     "sources": [
       "book:four-knights-game",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Four_Knights_Game"
-    ]
+    ],
+    "variation": "Rubinstein Variation: 4.Bb5 Nd4"
   },
   {
     "id": "mg-sicilian-najdorf-najdorf-classical-6-be2-with-e5",
@@ -6454,11 +6454,11 @@
     "event": "Berga op",
     "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Nf3 Bc5 e3 Nc6 Nc3 Ncxe5 Nxe5 Nxe5 Be2 O-O O-O Re8 b3 a5 Bb2 Ra6 Ne4 Ba7 c5 Rh6 g3 d5 Bd4 Qd7 Ng5 f6 f4 fxg5 fxe5 c6 Bd3 Qe7 Qf3 Bh3 Rf2 Bb8 e4 Be6 Raf1 Bc7 a3 dxe4 Bxe4 Kh8 Bc2 Bg8 Re2 Qd8 Qc3 Be6 Ref2 Kg8 b4 axb4 axb4 Qd5 Bb1 Qd7 Qe3 Qd8 Bc3 Bc4 Ba2 Bxa2 Rxa2 Rhe6 Rd2 Qe7 Rdf2 Bxe5 Bxe5 Rxe5 Qb3+ Qe6 Qxe6+ R5xe6 Rf7 R6e7 Rxe7 Rxe7 Rd1 h6 Rd4 h5 h3 Re3 Kf2 Rb3 Kg2 Kh7 Re4 Kg6 g4 h4 Re6+ Kf7 Re4 Kf6 Kh2 Rf3 Re8 Rf4 Kg2 Rxb4 Rd8 Ke5 Rd7 g6 Rg7 Rb2+ Kg1 Kf4 Rd7 Rb5 Kf2 Rxc5 Rxb7 Rc2+ Kg1 c5 Re7 c4 Kh1 c3",
     "overview": "Adler Variation. Anagnostopoulos shows the Budapest's point: the …a5 and …Ra6 rook-lift swings the rook toward the kingside, and Black's piece activity overwhelms White's slightly loose structure. The e5-pawn investment repaid with a full attack against a strong opponent.",
-    "variation": "Adler Variation (Nf3 Bc5)",
     "sources": [
       "https://lichess.org/EO5WwHrN",
       "https://en.wikipedia.org/wiki/Budapest_Gambit"
-    ]
+    ],
+    "variation": "Budapest Gambit: Alekhine Variation with Bc5"
   },
   {
     "id": "mg-budapest-adler-lendwai",
@@ -6473,11 +6473,11 @@
     "event": "Vienna op",
     "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Nf3 Bc5 e3 Nc6 Be2 O-O O-O Re8 b3 a5 Nc3 Ngxe5 Nxe5 Nxe5 Bb2 Ra6 Ne4 Ba7 c5 Rh6 Qd4 Qh4 f4 Qxh2+ Kf2 Rg6 Ng5 Qh4+ Kg1 d6 Qa4 Bd7 Qxa5 Bxc5 Bd4 Nc6 Qe1 Qxe1 Raxe1 Nxd4 exd4 Bxd4+ Kh2 Bc3 Rc1 Rxe2 Rxc3 Bc6",
     "overview": "Adler Variation. Lendwai mirrors the plan — …a5, …Ra6, the rook lift — and converts the Budapest's lead in piece activity into a kingside initiative against a 2500-rated White. A clean model of lasting gambit compensation.",
-    "variation": "Adler Variation (Nf3 Bc5)",
     "sources": [
       "https://lichess.org/aw2J1xza",
       "https://en.wikipedia.org/wiki/Budapest_Gambit"
-    ]
+    ],
+    "variation": "Budapest Gambit: Adler Variation"
   },
   {
     "id": "mg-albin-laskertrap-raetsky",
@@ -6492,11 +6492,11 @@
     "event": "Cappelle op 11th",
     "pgn": "d4 d5 c4 e5 dxe5 d4 e3 Bb4+ Bd2 dxe3 fxe3 Qh4+ g3 Qe4 Qf3 Bxd2+ Nxd2 Qxe5 O-O-O Nf6 Qf4 Qe7 Ngf3 O-O Bd3 Ng4 Ng5 h6 Nge4 Nc6 Rde1 Be6 Bb1 Rad8 h3 Nge5 g4 f5 Ng3 g5 Qf1 fxg4 Qg2 Nb4 Ref1 Ned3+ Bxd3 Nxd3+ Kb1 Qg7 Nde4 gxh3 Qc2 Nb4 Qb3 Nc6 Qc2 Bg4 a3 Kh8 Nf2 Bf3 Nxh3 Ne5 Rh2 Kg8 Nf2 Ng4 Nf5 Rxf5 Nxg4 Bxg4 Rxf5 Bxf5 Qxf5 Qh7 e4 Qxf5 exf5 Kg7 Re2 Rf8 Re5 h5 Kc2 Kf6 Ra5 h4",
     "overview": "The Lasker Trap in action: after the careless 4.e3?, …Bb4+ and the …dxe3 break tear into White's kingside, and Raetsky's attack crashes through. The textbook punishment of the Albin's most famous trap, executed by a 2510 GM.",
-    "variation": "Lasker Trap",
     "sources": [
       "https://lichess.org/hUJEP8OQ",
       "https://en.wikipedia.org/wiki/Albin_Countergambit"
-    ]
+    ],
+    "variation": "Lasker Trap"
   },
   {
     "id": "mg-albin-normal-tikkanen",
@@ -6511,7 +6511,6 @@
     "event": "SWE-chT 0809",
     "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 a3 Be6 e3 dxe3 Qxd8+ Rxd8 Bxe3 Nge7 Nc3 Nf5 Nb5 Nxe3 fxe3 Rd7 Rd1 g6 Nbd4 Bg7 Nxe6 fxe6 Rxd7 Kxd7 Bd3 Nxe5 Nxe5+ Bxe5 b3 g5 Rf1 Ke7 h3 h5 Bg6 Bf6 Ke2 b6 Rd1 Bb2 a4 a5 Be4 g4 Bc6 Be5 Rd7+ Kf6 Be4 Rf8 Rh7 Kg5 hxg4 hxg4 Re7 Kf6 Rd7 Bg3 Kd3 Ke5 Bc6 Be1 Bb7 Rf2 Rxc7 Rd2+ Kc3 Rd7+ Kc2 Rxc7 Ba6 Bb4 Bb5 Rf7",
     "overview": "Normal Variation, 4.Nf3 Nc6. Tikkanen shows Black's full compensation — the advanced d4-pawn cramps White, the queens come off, and Black's active pieces plus the better structure convert a clean technical win over a strong opponent.",
-    "variation": "Normal Development (Nf3 System)",
     "sources": [
       "https://lichess.org/q52pJwFH",
       "https://en.wikipedia.org/wiki/Albin_Countergambit"
@@ -6530,7 +6529,6 @@
     "event": "Saint Louis Blitz 2018",
     "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 Ng5 Nh6 Nxf7 Nxf7 Bxf7+ Kxf7 Qh5+ g6 Qxc5 d5 O-O dxe4 c3 Qd6 cxd4 Nxd4 Qxd6 cxd6 Nc3 Bg4 Nxe4 Nc2 f3 Nxa1 fxg4+ Ke6 Ng5+ Kd7 Rf7+ Kc6 Nxh7 Rae8 Bd2 Re2 Bc3 Rhe8 Nf8 g5 Nh7 Nc2 Rf2 d5 Nxg5 d4 Bd2 d3 Nf3 Rxf2 Kxf2 Re2+ Kg3 Kd5 g5 Ke6 h4 Kf5 h5 Re4 g6 Nd4 Nxd4+ Rxd4 Kf3 Rg4 g3 b5 Bf4 a5 Ke3 b4 Kxd3 a4 Kc4 a3 bxa3 bxa3 Kb3",
     "overview": "Grischuk unleashes the Scotch Gambit against a 2739 elite GM: the early d4-Bc4 punch hands White a lead in development and a broad centre, and Grischuk converts the lasting initiative into a full point — a model of the gambit at the very top level.",
-    "variation": "Main Line",
     "sources": [
       "https://lichess.org/jmCFOrHC"
     ]
@@ -6548,7 +6546,6 @@
     "event": "ch-USA 2015",
     "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bc5 Be3 O-O Nxc6 bxc6 Bxc5 Nxc5 Bxc6 Rb8 O-O Rxb2 Qxd5 Qxd5 Bxd5 Rxc2 Na3 Re2 Rac1 Nd3 Rxc7 Be6 Bb3 a5 Ra7 Bxb3 axb3 Rxe5 Nc4 Rb5 Rb1 Nc5 Nxa5 Re8 g3 g6 b4 Nd3 Nc6 Re2 Rd7 Nxf2 Nd4 Nh3+ Kh1 Nf2+ Kg2 Nd1+ Nxe2",
     "overview": "Nakamura shows the Scotch Gambit's bite: rapid piece play and central pressure leave Onischuk permanently on the back foot, and White's initiative never lets up. A crisp top-GM demonstration of the gambit's compensation paying off.",
-    "variation": "Main Line",
     "sources": [
       "https://lichess.org/Zny0pBLO"
     ]
@@ -6566,7 +6563,6 @@
     "event": "SpeedChess Final 2024",
     "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nc6 Bb5 Nxc3 dxc3 Be6 Ne2 Bc5 Be3 Bxe3 Qxe3 Qh4+ g3 Qe7 Nd4 Bd7 Bxc6 bxc6 O-O-O O-O Rhe1 Rfe8 Nb3 Bf5 Qc5 Qg5+ Kb1 Bg4 Rc1 Bd7 Nd4 Qg6 c4 dxc4 Qxc4 Rab8 b3 h6 Re3 Rb6 Rce1 Be6 Qc5 Bd5 Kb2 Qg5 c4 Bg2 Qa5 Rd8 Qc3 c5 Ne2 Bh3 Nf4 Be6 Rd3 Rxd3 Qxd3 Rb8 Qe3 Qe7 Nd3 Bxc4 Qxc5 Qxc5 Nxc5 Bd5 Na6 Rc8 Rc1 c6 Nb4 Re8 Re1 f6 Nd3 Kf7 Kc3 fxe5 Nxe5+ Kg8 Kd4 Rf8 Re2 Rf1 Rc2 Rd1+ Kc5 Be4 Re2 Rd5+ Kc4 Rxe5 Kd4 Rd5+ Kxe4 Kf7 Rc2 Rd6 Rc5 Rd2 Ra5 Rxh2 Rxa7+ Ke6 a4 Rb2 Rb7 g5 a5 Ra2 b4 h5 Rb6 Kd7 Kf5 h4 g4 h3 Kxg5 h2 Rb7+ Ke6 Rh7 c5 bxc5 Kd5 a6 Kxc5 a7 Kd4 Rxh2 Rxa7 Kg6 Ra6+ Kh5 Ra8 Re2 Kd3 Re6 Kd4 g5 Kd5 Re2 Rh8+ Kg6 Rg8+ Kh6 Rh8+ Kg7 Ra8 g6 Ra7+ Kh6 Ra8 g7 Ra6+ Kh7 Ra7 Kh8 Ra8+ g8=Q+ Rxg8+ Kxg8 Kd4 Kf7 Kd3 Re6 Kc4 Kf6 Kc3 Ke5 Kb2 Rd6 Kc3 Rd4 Kc2 Ke4 Kc3 Ke3 Kc2 Rc4+ Kb2 Kd3 Kb1 Kd2 Kb2 Rb4+ Ka3 Kc3 Ka2 Rb3 Ka1 Kc2",
     "overview": "Nakamura wields the Vienna Gambit against world-class Firouzja: the f4 thrust and central pawn lever open lines toward the black king, and White grinds the resulting pressure into a win. The Vienna Gambit, proven at the 2800 level.",
-    "variation": "Main Line",
     "sources": [
       "https://lichess.org/BfvmTiCI"
     ]
@@ -6584,7 +6580,6 @@
     "event": "Wch Blitz 5th",
     "pgn": "e4 e5 Nc3 Nf6 f4 d5 exd5 Nxd5 fxe5 Nxc3 bxc3 Qh4+ Ke2 Qe4+ Kf2 Qxe5 Nf3 Qh5 Rb1 a6 Qe2+ Be7 Ba3 Nc6 Qe3 Qf5 Bxe7 Nxe7 Bd3 Qe6 Qxe6 fxe6 Rhe1 h6 Bc4 Kf7 Re4 Rd8 Rbe1 Nd5 Nd4 b5 Bb3 c5 Nc6 Rd6 Ne5+ Kg8 c4 Nf6 R4e2 b4 Nd3 a5 Nxc5 Rc6 Na4 e5 h3 Be6 Rxe5 Rf8 Rxe6",
     "overview": "Ivanchuk handles the Vienna Gambit with his trademark energy, opening the f-file and central squares against Svidler and converting the attacking chances into a clean win — a model of the gambit's direct, king-hunting plans.",
-    "variation": "Main Line",
     "sources": [
       "https://lichess.org/JPlNgSFe"
     ]
@@ -6602,7 +6597,6 @@
     "event": "CCT Final Survival Loser",
     "pgn": "e4 c5 d4 cxd4 c3 Nf6 e5 Nd5 Qxd4 e6 Nf3 Nc6 Qe4 Qc7 Bc4 Nb6 Bd3 d5 Qe2 g6 O-O Bg7 Bf4 O-O Nbd2 f6 exf6 Qxf4 fxg7 Kxg7 Bb5 Nd8 Nb3 a6 Bd3 Nf7 Rae1 Re8 g3 Qf6 Ne5 Nxe5 Qxe5 Qxe5 Rxe5 Nd7 Re3 e5 Rfe1 b6 Bf1 Bb7 Bh3 Nc5 Rxe5 Rxe5 Rxe5 Kf6 f4",
     "overview": "Nakamura plays the Smith-Morra against MVL, a Sicilian expert: the c3 pawn sacrifice buys open c- and d-files and a lead in development, and White's relentless piece activity tells against one of the world's best. The gambit at the very top.",
-    "variation": "Accepted",
     "sources": [
       "https://lichess.org/bQDZlxgx"
     ]
@@ -6620,7 +6614,6 @@
     "event": "Nakamura-Nepomniashchy m",
     "pgn": "e4 c5 d4 cxd4 c3 d3 c4 g6 Nc3 d6 Nf3 Bg7 Be3 Nc6 Bxd3 Bg4 Be2 Bxf3 Bxf3 Nf6 Be2 Rc8 O-O a6 Rc1 O-O b3 Nd7 Nd5 e6 Nf4 Qe7 Rc2 Rfd8 Rd2 Nc5 f3 Bh6 Kh1 Qf8 Re1 e5 Nd5 Bxe3 Nxe3 Ne6 Bf1 Ncd4 Nd5 f5 exf5 gxf5 f4 Qg7 Rd3 Kh8 Rg3 Qf7 fxe5 f4 Rd3 dxe5 Rxe5 Nc6 Re1 Re8 Rd2 Ng5 Rxe8+ Rxe8 Rf2 Ne4 Rf3 Ne5 Qd4 Ng5 Rxf4 Qg7 Nf6 Nc6 Nxe8 Qxd4 Rf8#",
     "overview": "Nepomniachtchi demonstrates the Smith-Morra's pressure: the open files and active pieces from the pawn sac give White a lasting initiative that even Nakamura cannot fully neutralize. A model conversion of the gambit's dynamic compensation.",
-    "variation": "Accepted",
     "sources": [
       "https://lichess.org/suKYEsm8"
     ]
@@ -6638,7 +6631,6 @@
     "event": "Amber-blindfold 16th",
     "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Be3 Bg4 Qd3 Rae8 Nd2 Re6 a4 Qh5 axb5 axb5 Qf1 Bh3 Bd1 Qf5 Qe2 c5 Nf3 Bf4 Qd2 Nxe3 fxe3 Bh6 Qf2 Rfe8 Ne5 Qxf2+ Kxf2 f6 Bg4 Rxe5 Bxh3 Bxe3+ Kf3 cxd4 Rad1 dxc3 bxc3 Bb6 Rxe5 Rxe5 Rd5 Re3+ Kg2 Rxc3 Rxb5 Rc2+ Kh1 Bc7 Be6+ Kf8 Bb3 Rc3 Kg2 g6 Bd1 Ke7 Rb2 Rd3 Be2 Re3 Bf3 Ra3 Re2+ Be5 g4 Ke6 Be4 h5 gxh5 gxh5 Rf2 Bd4 Rf3 Ra2+ Kh3 Bg1 Bf5+ Ke5 Kh4 Rf2",
     "overview": "Kramnik unveils the Marshall Attack against Leko: the …d5 pawn sacrifice ignites a kingside initiative that flows straight from the opening into a winning endgame, where the activity and structural pluses decide. A world-champion model of the Marshall's compensation lasting all game.",
-    "variation": "Bf5 Modern",
     "sources": [
       "https://lichess.org/kASHcrid"
     ]
@@ -6675,7 +6667,6 @@
     "year": 2011,
     "event": "GRE-chT 39th",
     "pgn": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O Bd3 Na6 O-O c5 d5 Rb8 f5 Nb4 fxg6 fxg6 Be2 Ng4 a3 Na6 h3 Ne5 Nxe5 Bxe5 Bh6 Rf6 Bg5 Bd7 Bxf6 exf6 Bg4 Be8 Rb1 c4 Qf3 b5 Ne2 b4 Nf4 Qb6+ Kh1 Ba4 Be6+ Kg7 Qg4 bxa3 Nh5+ Kh8 Nxf6 a2 Qh4 Qc7 Ra1 Qe7 Rxa2 Nc5 Ra3 Bxc2 Rxa7 Qxa7 Bd7 Qxd7 Nxd7 Nxd7 Qe7 Ba4 Rf7 Kg8 g3 Rf8 Rxh7 Bf6",
-    "variation": "Austrian Attack",
     "overview": "Austrian Attack — Ivanchuk beats Mastrovasilis from the Black side: against White's f4 big centre, …c5 and …e5 break before the storm arrives.",
     "criticalMoments": [],
     "middlegameTheme": "…c5/…e5 against the f4 centre",
@@ -6696,7 +6687,6 @@
     "year": 2019,
     "event": "1st Prague Masters 2019",
     "pgn": "Nf3 g6 e4 Bg7 d4 d6 Be2 Nf6 Nc3 O-O O-O c6 a4 Qc7 h3 e5 dxe5 dxe5 Be3 Re8 Bc4 Be6 Qe2 Nbd7 Bxe6 Rxe6 Rfd1 Bf8 Qc4 Nb6 Qb3 Nc8 Rd3 Nd6 Ng5 Ree8 Bc5 Red8 Rad1 Nfe8 Nf3 b6 Be3 Nb7 Qc4 a6 Rxd8 Nxd8 Qd3 Ne6 Qd7 Bd6 Qxc7 Bxc7 Na2 a5 Rd3 f6 Rc3 Nd8 Nd2 Kf7 Nc1 Rb8 Nd3 Ke7 g4 Kd7 Nc4 Ne6 b4 Nd6 Ncxe5+ fxe5 Nxe5+ Kc8 Nxc6 Nxe4 Rb3 Ra8 Ne7+ Kb7 Nd5 Kc6 Nxc7 Kxc7 bxa5 bxa5 Rb5 Nc3 Bb6+ Kc6 Rxa5 Rxa5 Bxa5 Nxa4 Kg2 Kd5 Kg3 Nac5 f3 Nd4 h4 Nce6 Bd2 Ne2+ Kf2 N2f4 Kg3 Ke5 Bc3+ Kd6 Bb4+ Kd7 Bd2 Ne2+ Kf2 N2d4 c3 Nb3 Bh6 Kd6 Ke3 Nbc5 f4 Kd5 f5 gxf5 gxf5 Nd8 Bg7 Nf7 Bd4 Nb7 Kf4 Nbd6 Bg7 Kc4 Be5 Nb7 Bg7 Kd3 Be5 Nc5 Bd4 Na4 f6 Kc4 Ke4 Nb2 Be3 Nd3 Kf5 Kd5 c4+ Kd6 c5+ Kd5 c6 Nd6+ Kg5 Nf7+ Kf5 Nde5 c7 Nd6+ Kf4 Nef7 Ba7 Kc6 Bb8 Kd7 h5 Nc8 Ke4 Ke6 Kd4 Kxf6 Kd5 Ne5 Kc5 Ke6 Kd4 Ng4 Ke4 Nf6+ Kf4 h6",
-    "variation": "Classical System",
     "overview": "Classical System — Duda beats Rapport from the Black side: against the quiet Nf3/Be2 setup, Black equalises with …e5 and free piece play.",
     "criticalMoments": [],
     "middlegameTheme": "…e5 equalising break vs the quiet setup",
@@ -6717,7 +6707,6 @@
     "year": 2005,
     "event": "Zalakaros op 24th",
     "pgn": "e4 g6 d4 Bg7 Nc3 d6 Be3 Nf6 f3 O-O Qd2 c6 O-O-O b5 g4 b4 Nce2 Qa5 Kb1 Nbd7 h4 c5 h5 Nb6 hxg6 Nc4 gxf7+ Rxf7 Qc1 Be6 b3 Na3+ Ka1 Rc8",
-    "variation": "150 Attack",
     "overview": "150 Attack — Chernyshov beats Horvath from the Black side: against Be3/Qd2/Bh6, Black trades the dark bishops and counters on the queenside.",
     "criticalMoments": [],
     "middlegameTheme": "Trade dark bishops, counter on the wing",
@@ -6738,14 +6727,14 @@
     "year": 2015,
     "event": "World Blitz 2015",
     "pgn": "e4 d6 d4 Nf6 Nc3 g6 Bg5 Bg7 Qd2 O-O O-O-O c6 Bh6 Qa5 Bxg7 Kxg7 Kb1 Nbd7 h4 h5 f3 b5 Bd3 b4 Nce2 c5 g4 Qc7 dxc5 dxc5 b3 a5 Nf4 Rh8 g5 Nh7 Nd5 Qd6 Qc1 e6 Qb2+ Qe5 Ne3 a4 Nc4 Qxb2+ Kxb2 Ba6 f4 Ra7 Nf3 Rha8 bxa4 Bxc4 Bxc4 Nb6 Bb5 Nxa4+ Bxa4 Rxa4 Ra1 Nf8 Ne5 Ra3 Nd3 c4 Nxb4 c3+ Kc1 Nd7 Rh3 Nc5 Re3 R8a4 Nd3 Nxe4 Kd1 Nd6 Nc5 Rxf4 Ke2 Rxh4 Rd3 Rh2+ Kf3 Rh3+ Ke2 Rxd3 Kxd3 Ra5 Nb3 Rxg5 a4 Nc8 a5 h4 a6 Na7 Nd4 h3 Nf3 Rd5+ Ke3 g5 Rg1 f6 Rg3 Ra5 Rxh3 Rxa6 Nd4 e5 Nf5+ Kg6 Ne7+ Kf7 Nd5 Nb5 Rh7+ Kg6 Rb7 Nd4 Kd3 g4 Nxc3 Ra3 Kc4 g3 Rb1 g2 Ne4 Nf3",
-    "variation": "Byrne Variation",
     "overview": "Byrne Variation — Mamedyarov beats Rublevsky from the Black side: against the Bg5 setup, …h6 and …c5 win the central fight.",
     "criticalMoments": [],
     "middlegameTheme": "…h6/…c5 vs the Bg5 setup",
     "lessonSummary": "Against the Byrne Bg5, Black puts the question with …h6 and breaks with …c5 for active central play.",
     "sources": [
       "https://lichess.org/MfoNXuQ1"
-    ]
+    ],
+    "variation": "Byrne Variation"
   },
   {
     "id": "mg-pirc-czech",
@@ -6759,14 +6748,14 @@
     "year": 1996,
     "event": "EU-ch Rapid-30'",
     "pgn": "e4 d6 d4 Nf6 Nc3 c6 f4 Qa5 Bd3 e5 Nf3 Bg4 Be3 Nbd7 O-O Be7 Qd2 Bd8 Kh1 Bxf3 Rxf3 O-O a3 exd4 Bxd4 Bb6 Bf2 Bxf2 Qxf2 Qb6 Qh4 Qxb2 Raf1 Qxc3 e5 Qd4 c3 Qd5 exf6 Nxf6 Rg3 Kh8 Bc2 Rae8 Rg5 Qd2 Rxg7 Qxc2 Qxf6 Re6 Qg5 Qxc3 f5 Qxg7 Qxg7+ Kxg7 fxe6 fxe6 Rb1 b5 Kg1 e5 Rd1 d5 Rc1 Rf6 g4 h6 h4 a5 g5 hxg5 hxg5 Rd6 Kf2 Kg6",
-    "variation": "Czech Defence",
     "overview": "Czech setup — Adams beats Kotronias from the Black side: the …c6/…d6 wall holds firm, then …b5/…e5 expands.",
     "criticalMoments": [],
     "middlegameTheme": "Solid …c6/…d6 wall, then expand",
     "lessonSummary": "The Czech-style …c6/…d6 system: hold the centre solidly, then expand with …b5 and …e5.",
     "sources": [
       "https://lichess.org/MRMcGTMK"
-    ]
+    ],
+    "variation": "Czech Defence"
   },
   {
     "id": "mg-petrov-steinitz",
@@ -6780,14 +6769,14 @@
     "year": 1996,
     "event": "FIDE-Wch",
     "pgn": "e4 e5 Nf3 Nf6 d4 Nxe4 Bd3 d5 Nxe5 Nd7 Nxd7 Bxd7 O-O Bd6 Nc3 Qh4 g3 Nxc3 bxc3 Qg4 Re1+ Kd8 Be2 Qf5 Rb1 b6 c4 dxc4 Bxc4 Re8 Be3 Bc6 d5 Bd7 Bf1 h6 c4 Re7 Bd3 Qf6 Kg2 Ke8 Bc2 Qc3 Bb3 Kf8 Rc1 Qf6 Bc2 Rae8 Qd3 Bg4 Bd2 Re2 Rxe2 Rxe2 Rf1 Rxd2",
-    "variation": "Steinitz Variation",
     "overview": "Steinitz 3.d4 — Karpov beats Kamsky from the Black side: meeting the modern 3.d4 with precise symmetry and the better endgame technique.",
     "criticalMoments": [],
     "middlegameTheme": "Symmetry and clean technique",
     "lessonSummary": "Against 3.d4, Black equalises with accurate development and outplays in the resulting balanced positions.",
     "sources": [
       "https://lichess.org/TOdFOnAT"
-    ]
+    ],
+    "variation": "Steinitz Variation"
   },
   {
     "id": "mg-petrov-threeknights",
@@ -6801,7 +6790,6 @@
     "year": 2014,
     "event": "Zurich CC Blitz 2014",
     "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nxd4 Bb4 Nxc6 bxc6 Bd3 O-O O-O d5 exd5 cxd5 Bg5 c6 Na4 Bd6 c3 Re8 Bh4 Bg4 f3 Bh5 Qc2 Bg6 Rae1 Qc7 g4 Bxd3 Qxd3 Nd7 Qc2 Nf8 Rxe8 Rxe8 Re1 Rb8 Kg2 Ne6 Bg3 c5 b3 c4 Rd1 cxb3 axb3 d4 Bxd6 Qxd6 cxd4 Nf4+ Kh1 Qd5 Qe4 Qxb3 Re1 g5 Nc5 Qa2 Rg1 Nh3 Nd3 Nxg1 Qe5 Nxf3 Qxb8+ Kg7 Ne1 Qa1 Kg2 Nxe1+ Kf2 Nd3+ Ke3 Qc3",
-    "variation": "Three Knights Game",
     "overview": "Three Knights — Carlsen beats Nakamura from the Black side: sidestepping the symmetrical Petrov into a rich fight and grinding it down.",
     "criticalMoments": [],
     "middlegameTheme": "Rich middlegame, superior technique",
@@ -6842,7 +6830,6 @@
     "year": 2017,
     "event": "chess.com Speed 5m+2spm 2017",
     "pgn": "e4 d6 d4 Nf6 Nc3 e5 Nf3 exd4 Nxd4 Be7 Be2 O-O Bf4 Re8 Qd2 Bf8 f3 Nc6 O-O-O Nxd4 Qxd4 Be6 Kb1 Nd7 g4 a6 h4 b5 g5 b4 Nd5 a5 h5 c6 Ne3 Ne5 Nf5 c5 Qd2 c4 Nxd6 c3 Qd4 Bxd6 Qxd6 Qxd6 Rxd6 Bc4 Bd1 cxb2 Kxb2 Bb5 Rd5 Nc4+ Kc1 Na3 h6 Bc4 Rc5 Bxa2 hxg7 Rec8 Rxc8+ Rxc8 Be5 Bb3 f4 Bxc2 Bxc2 Rxc2+ Kd1 b3 Rh3 a4 f5 Nc4 g6 fxg6 fxg6 h5 Bf6 Rd2+ Ke1 b2 Bxb2 Rxb2 Rxh5 a3",
-    "variation": "Exchange Variation",
     "overview": "Exchange — Rapport beats Grischuk from the Black side: after the early central trade, Black's pieces find easy, active squares.",
     "criticalMoments": [],
     "middlegameTheme": "Free, active piece play after the trade",
@@ -6863,14 +6850,14 @@
     "year": 2018,
     "event": "World Blitz 2018",
     "pgn": "e4 e5 Nf3 d6 d4 exd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 Qd2 O-O O-O-O Re8 f3 Nc6 Kb1 Nxd4 Bxd4 Be6 Nd5 Bxd5 exd5 c5 dxc6 bxc6 g4 d5 h4 Rb8 b3 Qd6 h5 c5 Bb2 d4 hxg6 hxg6 Bc4 Nd5 Bxd5 Qxd5 Qh2 Qxf3 Qh7+ Kf8 Rdf1 Qd5 Bc1 d3 Bh6 dxc2+ Kc1 Bxh6+ Qxh6+ Ke7 Qf4 Kd7 Rh2 Kc6 Rxc2 Qe5 Qa4+ Kb6 Kb1 Re7 Rfc1 Qe4 Qa3 Rc7 Qb2 Rbc8 b4 c4 a4 c3 Qb3 Rc4 a5+ Kb7 Ka2 Rxb4 Qxf7+ Ka8 Rxc3 Ra4+ Kb2 Rb8+ Rb3 Rxb3+ Kxb3 Qb4+ Kc2 Qc5+ Kd3 Rd4+ Ke2 Re4+ Kf3 Qe3+ Kg2 Rxg4+ Kh2",
-    "variation": "Antoshin Variation",
     "overview": "Antoshin — Mamedov beats Saric from the Black side: the …Nxe4 Petrov-like simplification gives Black a comfortable, sound game.",
     "criticalMoments": [],
     "middlegameTheme": "…Nxe4 simplification to equality",
     "lessonSummary": "The Antoshin: trade in the centre with …dxe5/…Nxe4 for a clean, equal middlegame, then outplay.",
     "sources": [
       "https://lichess.org/ikhOL1uz"
-    ]
+    ],
+    "variation": "Exchange Variation"
   },
   {
     "id": "mg-qgd-main",
@@ -6904,7 +6891,6 @@
     "year": 1998,
     "event": "Sofia m 25'",
     "pgn": "Nf3 d5 d4 Nf6 c4 e6 Nc3 Be7 Bg5 O-O e3 h6 Bh4 b6 Be2 Bb7 Bxf6 Bxf6 cxd5 exd5 b4 c5 bxc5 bxc5 Rb1 Bc6 O-O Nd7 Bb5 Qc7 Qd3 Rfc8 h3 cxd4 Nxd4 Bb7 Rfc1 Nc5 Qd1 Qe7 Qg4 g6 Bf1 Bg7 Qd1 Rab8 Rc2 Ba8 Rbc1 Rd8 g3 Bxd4 exd4 Ne6 h4 Qf6 Ne2 Rb4 Rc8 Bb7 Rxd8+ Nxd8 Qd2 Ra4 Qxh6 Rxa2 Qe3 Ne6 Rb1 Bc6 Qh6 Qd8 Qe3 Qf6 Qb3 Rd2 Qe3 Nxd4 Nf4 Qe5 Qa3 Kg7 Rc1 Bb5 Rc8 Be8 Qc3 Bd7 Rd8 Rd1 Rxd7 Qe4 Rxd5 Rxf1+",
-    "variation": "Tartakower Variation",
     "overview": "Tartakower — Kasparov beats Topalov from the Black side: the …b6/…Bb7 fianchetto neutralises the centre and the hanging pawns become dynamic.",
     "criticalMoments": [],
     "middlegameTheme": "…b6/…Bb7 and dynamic hanging pawns",
@@ -6925,7 +6911,6 @@
     "year": 1997,
     "event": "Belgrade Investbank",
     "pgn": "d4 Nf6 c4 e6 Nf3 d5 Nc3 Be7 Bg5 O-O e3 h6 Bh4 b6 Qb3 Bb7 Bxf6 Bxf6 cxd5 exd5 Rd1 Re8 Bd3 c5 dxc5 Nd7 c6 Bxc6 O-O Nc5 Qc2 Rc8 Bh7+ Kh8 Bf5 Ne6 Nd4 Nxd4 exd4 Rc7 Qd3 g6 Bg4 h5 Bf3 Rce7 g3 h4 Qd2 Kg7 g4 Re6 h3 Bg5 Qc2 Qd6 Qb3 Bd8 Bg2 Qf4 Rc1 Bc7 Rfd1 Rf6 Qc2 Re3 Kf1 Rxc3",
-    "variation": "Lasker Defense",
     "overview": "Lasker — Kramnik beats Beliavsky from the Black side: the …Ne4 simplification trades into a comfortable, solid equality.",
     "criticalMoments": [],
     "middlegameTheme": "…Ne4 simplifying trade",
@@ -6946,7 +6931,6 @@
     "year": 2019,
     "event": "FIDE World Cup 2019",
     "pgn": "d4 Nf6 c4 e6 Nc3 d5 cxd5 exd5 Bg5 Be7 e3 O-O Bd3 c6 Nge2 Nbd7 Qc2 Re8 O-O Nf8 f3 g6 Bh4 Ne6 Kh1 b5 Rac1 Bb7 Nd1 Rc8 Qd2 a6 b4 Ne4 Bxe4 Bxh4 Bb1 a5 a3 axb4 axb4 Qe7 f4 Nf8 Ng1 Nd7 Nf3 Bf6 Ne5 Nb6 Nb2 Nc4 Nbxc4 bxc4 e4 Bg7 Rce1 Qc7 h4 Ba6 Rf2 Rb8 h5 Qd6 Qd1 dxe4 Bxe4 Rxb4 Nxf7 Kxf7 f5 Bf6 fxg6+ Kg7 gxh7 Qg3 Rf3 Qh4+ Rh3 Rxe4 Rf1 Rb3 Rxh4 Rxh4+ Kg1 Bxd4+ Rf2 Rb2",
-    "variation": "Exchange Variation",
     "overview": "Exchange QGD — Radjabov beats Mamedyarov from the Black side: meeting the minority attack with …Ne4 counterplay and kingside chances.",
     "criticalMoments": [],
     "middlegameTheme": "Counter the minority attack",
@@ -6987,7 +6971,6 @@
     "year": 2001,
     "event": "Botvinnik Memorial m 30'",
     "pgn": "d4 d5 c4 dxc4 Nf3 e6 e3 a6 Bxc4 c5 O-O Nf6 Bd3 b6 dxc5 Bxc5 a3 Bb7 Qe2 O-O Nbd2 Nbd7 b4 Be7 Bb2 a5 bxa5 Rxa5 Bb5 Qb8 a4 Rc8 Rfc1 Ra7 Rxc8+ Qxc8 Rc1 Qa8 Nd4 Nc5 Nc4 Nd5 e4 Nf4 Qg4 Ng6 Nxb6 Qd8 Nc4 Nxa4 Bxa4 Rxa4 Qd1 Rb4 Ba3 Rxc4 Rxc4 Bxa3 Qb3 Ba6 Ra4 Bc5 Rxa6 Qxd4 Ra8+ Nf8 Qc2 g6 g3 Kg7 Kg2 e5 Ra4 Qd6 Qc4 Ne6 Qd5 Qb8 Ra8 Qb2 Ra2 Qc3 Qd2 Qb3 Qd5 Qb8 Ra8 Qc7 Ra6 Bd4 Qc6 Qe7 Ra8 Qf6 Qc2 Ng5 Ra3 Qe6 h4 Qh3+ Kg1 Ne6 Rb3 Qg4 Qd3 Nc5 Qf3 Qxf3",
-    "variation": "Smyslov Variation 3...a6",
     "overview": "Smyslov 3…a6 — Kasparov beats Kramnik from the Black side: the flexible …a6/…b5 plan holds the pawn and expands on the queenside.",
     "criticalMoments": [],
     "middlegameTheme": "…a6/…b5 queenside expansion",
@@ -7008,14 +6991,14 @@
     "year": 2020,
     "event": "Lindores Abbey Final 8",
     "pgn": "d4 d5 c4 dxc4 Nf3 Nf6 e3 Bg4 Bxc4 e6 h3 Bh5 Nc3 Nbd7 O-O Be7 e4 O-O g4 Bg6 Qe2 c6 a4 Bb4 g5 Ne8 Nh4 Nb6 Bb3 Qxd4 a5 Nc8 Ra4 Qd6 f4 b5 Ra1 Ne7 Kg2 Qd7 Rd1 Qc8 Be3 Nd6 Nxg6 Nxg6 Na2 Bc5 Rac1 Nxe4 Kf3 e5 Bxc5 Nxc5 Rxc5 Qxh3+ Kf2 Qxb3 Nc3 Nxf4 Qxe5 Qxd1",
-    "variation": "Sadler Variation ...Bg4",
     "overview": "Sadler …Bg4 — Yu Yangyi beats Ding Liren from the Black side: develop the bishop outside the pawn chain before …e6, easing all problems.",
     "criticalMoments": [],
     "middlegameTheme": "…Bg4 before …e6",
     "lessonSummary": "The Sadler: solve the bad-bishop problem early with …Bg4, then …e6 and free development.",
     "sources": [
       "https://lichess.org/Ls3xqKhb"
-    ]
+    ],
+    "variation": "Sadler Variation ...Bg4"
   },
   {
     "id": "mg-slav-main",
@@ -7049,7 +7032,6 @@
     "year": 2009,
     "event": "Gjovik Aker CC Blitz",
     "pgn": "Nf3 Nf6 c4 c6 d4 d5 Nc3 dxc4 e4 b5 e5 Nd5 a4 e6 axb5 Nxc3 bxc3 cxb5 Ng5 Bb7 Qh5 g6 Qg4 Bd5 h4 h6 Ne4 Nd7 h5 g5 Be2 a5 O-O b4 Nd2 Nb6 f4 bxc3 Nf3 gxf4 Bxf4 Kd7 Ne1 Kc6 Nc2 Bb4 Rf2 Qe7 Qh3 Rag8 Bf1 Rg7 Ne3 Kb7 Ng4 Nd7 Bc1 Kc6 Ne3 Nb6 Nxd5 Nxd5 Bxc4 Rhg8 Bxd5+ exd5 Bxh6 Rg3 Qf5 Qe6 Qxe6+ fxe6 Bf4 R3g4 Be3 Kb5 h6 Kc4 Kf1 Kd3 Rf3 Kc4 Rh3 Rf8+ Kg1 Rfg8 Kh1 Kb3 Rf1 a4 Bd2 Rxd4 Bxc3 Bxc3 Rc1 Rc4 h7 Rh8 g4 a3 g5 Kb2 Rg1 Bxe5 Rg2+ Rc2",
-    "variation": "Geller Gambit",
     "overview": "Geller Gambit — Carlsen beats Nakamura from the Black side: accept the 5.e4 pawn, return it precisely, and emerge with the better structure.",
     "criticalMoments": [],
     "middlegameTheme": "Accept and return the gambit pawn",
@@ -7070,7 +7052,6 @@
     "year": 2008,
     "event": "Cap d'Agde CCAS Gp-A",
     "pgn": "d4 d5 c4 c6 Nc3 Nf6 e3 g6 Nf3 Bg7 Bd3 O-O O-O Bg4 h3 Bxf3 Qxf3 e6 Rd1 Nbd7 Bd2 Qe7 Rac1 Rfe8 Be1 Nb6 b3 Rad8 Bf1 e5 dxe5 Qxe5 cxd5 Nfxd5 Nxd5 Rxd5 Qe2 Red8 Qc2 Rxd1 Rxd1 Rxd1 Qxd1 Bf6 a4 Kg7 g4 Nd5 Bc4 Qe4 Bd3 Qe5 b4 Qb2 b5 Bc3 bxc6 bxc6 Be4 Bxe1 Qxe1 Nb4 Qd1 Qe5 Bg2 c5 Bf1 Nd5 Qf3 Nf6 Bc4 Qe4 Qe2 h5 g5 Nd7 Qb2+ Ne5 Bd3 Qd5 Be2 Kh7 a5 Nc6 Qf6 Nxa5 Bd3 Qd7 h4 Kg8 Bxg6 Qg4+ Kf1 Qd1+ Kg2 fxg6 Qxg6+ Kf8 Qf6+ Ke8 g6 Qd5+ f3 Nc6 g7 Ne7 e4 Qf7 Qe5 Qg6+ Kf2 Kf7 f4 c4 f5 Qf6 g8=Q+ Nxg8 Qd5+ Kg7 Qxc4 Qxh4+ Ke3 Qg3+ Kd4 Qd6+ Ke3 Nf6 Qb5 Qb6+ Qxb6 axb6 e5 b5 exf6+ Kxf6 Kd4",
-    "variation": "Schlechter Variation (...g6 Fianchetto)",
     "overview": "Schlechter — Bu Xiangzhi beats Ivanchuk from the Black side: the …g6 fianchetto turns the Slav into a solid, flexible Grünfeld-like setup.",
     "criticalMoments": [],
     "middlegameTheme": "…g6 fianchetto, flexible solidity",
@@ -7111,14 +7092,14 @@
     "year": 2013,
     "event": "Tata Steel-A 75th",
     "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Bd3 dxc4 Bxc4 b5 Bd3 Bd6 O-O O-O Qc2 Bb7 a3 Rc8 Ng5 c5 Nxh7 Ng4 f4 cxd4 exd4 Bc5 Be2 Nde5 Bxg4 Bxd4+ Kh1 Nxg4 Nxf8 f5 Ng6 Qf6 h3 Qxg6 Qe2 Qh5 Qd3 Be3",
-    "variation": "Meran Variation Deeper",
     "overview": "Meran — Anand beats Aronian from the Black side: the classic …dxc4/…b5/…c5 expansion gives Black the freer pieces and queenside space.",
     "criticalMoments": [],
     "middlegameTheme": "Meran …b5/…c5 expansion",
     "lessonSummary": "The Meran: expand with …b5 and break …c5, developing the bishops to active diagonals.",
     "sources": [
       "https://lichess.org/IHRez3l8"
-    ]
+    ],
+    "variation": "Meran Variation Deeper"
   },
   {
     "id": "mg-semislav-botvinnik",
@@ -7132,14 +7113,14 @@
     "year": 2002,
     "event": "Amber-rapid 11th",
     "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 Bg5 dxc4 e4 b5 e5 h6 Bh4 g5 Nxg5 hxg5 Bxg5 Nbd7 g3 Rg8 h4 Rxg5 hxg5 Nd5 g6 fxg6 Qg4 Qe7 Bg2 Kd8 Qxg6 Qb4 Qc2 Qa5 O-O N7b6 Ne4 Kc7 Nf6 Qb4 Qg6 Nxf6 exf6 Bd7 Rae1 Qxb2 Qf7 Re8 Bh3 Bd6 Bxe6 Qxd4 Rd1 Qc5 Bxd7 Rf8 Qg7 Nxd7 f7 Ne5",
-    "variation": "Botvinnik Variation Deep",
     "overview": "Botvinnik — Kramnik beats Shirov from the Black side: the wild …dxc4/…b5/…Bb7 gambit complex, navigated to a winning king-hunt.",
     "criticalMoments": [],
     "middlegameTheme": "Sharp gambit, the bishops blaze",
     "lessonSummary": "The Botvinnik: enter the forcing …b5/…Bb7 complex, accept the chaos, and let the two bishops decide.",
     "sources": [
       "https://lichess.org/l3Rt5KoP"
-    ]
+    ],
+    "variation": "Botvinnik Variation Deep"
   },
   {
     "id": "mg-semislav-moscow",
@@ -7153,14 +7134,14 @@
     "year": 2015,
     "event": "3rd Norway Chess 2015",
     "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 Bg5 h6 Bxf6 Qxf6 e3 Nd7 Rc1 g6 Be2 Bg7 cxd5 exd5 b4 a6 a4 O-O b5 axb5 axb5 Qd6 O-O Nb6 Qb3 Rb8 Nd1 Bf5 Nb2 Rfc8 Nd3 Bxd3 Qxd3 c5 dxc5 Rxc5 h4 Na4 h5 Rbc8 Rxc5 Nxc5 Qc2 gxh5 Nd4 Qg6 Nf5 Bf8 Rd1 Qe6 Rc1 Nb3 Qxc8 Nxc1 Qxc1 Qxf5 Qc7 Qb1+ Bf1 d4 exd4 Qd1 Qe5 Bg7 Qe8+ Bf8 Qd8 Kg7 Qd5 b6 Qe5+ Kg8 Qf6 Bg7 Qxb6 Bxd4 Qxh6 Qg4 Qd6 Qd1 Qd8+ Kh7 Qc7 Kg7 b6 Qg4 b7 Qh4 g3 Qf6 Qc2 Qe5 Qd3 Ba7 Qf3 Qf6 Qe2 Qc3 Kh2 Qd4 Qf3 Bb8 Kh3 Bc7 Be2 Bb8 Bd1 f5 Be2 f4 Qxh5 Qxf2 Qg5+ Kf7",
-    "variation": "Moscow Variation Bxf6",
     "overview": "Moscow Bxf6 — Topalov beats Carlsen from the Black side: take the doubled f-pawns for the bishop pair and the half-open g-file.",
     "criticalMoments": [],
     "middlegameTheme": "Bishop pair + half-open g-file",
     "lessonSummary": "The Moscow: recapture …gxf6, taking the bishop pair and the open g-file for active, unbalanced play.",
     "sources": [
       "https://lichess.org/IyXf8bOi"
-    ]
+    ],
+    "variation": "Moscow Variation Bxf6"
   },
   {
     "id": "mg-semislav-stoltz",
@@ -7174,7 +7155,6 @@
     "year": 2023,
     "event": "CCT Final Playoff 2023",
     "pgn": "d4 d5 c4 c6 e3 Nf6 Nc3 e6 Nf3 Nbd7 Qc2 Bd6 Bd2 O-O O-O-O a6 e4 e5 dxe5 Nxe5 cxd5 cxd5 Bg5 Be6 exd5 Bd7 Kb1 Rc8 Bd3 h6 Bh4 Nxf3 gxf3 Be5 Rhe1 Bxc3 bxc3 g5 Bg3 Qa5 c4 Nxd5 Bh7+ Kh8 Be5+ f6 Be4 Ba4 Qd2 Qb6+ Bb2 Nf4 Qd6 Qxd6 Rxd6 Kg7 Bxb7 Rxc4 Re7+ Kg8 Bxa6 Rc2 Bd3 Nxd3 Rxd3 Rb8 Rb3 Bxb3 axb3 Rxf2 Bxf6 Rxb3+",
-    "variation": "Stoltz Qc2 Variation",
     "overview": "Stoltz Qc2 — Firouzja beats Carlsen from the Black side: against the anti-Meran Qc2, Black frees the game with …dxc4 and …e5/…c5.",
     "criticalMoments": [],
     "middlegameTheme": "…dxc4 then …e5/…c5",
@@ -7215,14 +7195,14 @@
     "year": 1999,
     "event": "Internet Chess Club m2 g/5'",
     "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f4 O-O Nf3 c5 d5 e6 Be2 exd5 cxd5 Bg4 O-O Re8 h3 Bxf3 Bxf3 Nbd7 Re1 a6 a4 Rc8 Be3 Qa5 Bf2 c4 Re2 Qb4 Kh1 Nc5 Bxc5 Qxc5 e5 dxe5 fxe5 Nd7 Ne4 Qb4 e6 Ne5 exf7+ Nxf7 d6 Rcd8 Rd2 Ne5 Ng5 h6 Bd5+ Kh8 Nf7+ Nxf7 Bxf7 Rf8 Bxg6 Rf6 Be4 Rfxd6 Rxd6 Rxd6 Qg4 Rf6 Rd1 Qf8 Bf3 b5 axb5 axb5 Rd7 Rf7 Rd5 Re7 Qg3 Qe8 Rd1 Bxb2 Qh4 Bg7 Bc6 Qf8 Bxb5 c3 Bd3 Qf6 Qc4 Re8 Bc2 Qf2 Be4 Qf4 Bd3 Qg3 Qg4 Re1+ Rxe1 Qxe1+ Kh2 Be5+ g3 Qf2+ Kh1 Qe1+ Kh2 Qd2+ Be2 c2 Qc8+ Kg7 Qb7+ Kf6 Qc6+ Bd6 Qf3+ Ke5 Qh5+ Qg5 Qe8+ Kd4 Qa4+ Kc3 Qc4+ Kd2 Qd3+ Ke1 Qc3+ Qd2 Qxd2+ Kxd2 Kg2 c1=Q Kf3 Qc3+ Ke4 Qxg3 Kf5 Qxh3+ Kf6 Qe3 Kg6 Qe5 Kf7 Be7 Kg6 Qf6+ Kh7 Bf8",
-    "variation": "Four Pawns Attack",
     "overview": "Four Pawns — Kramnik beats Dlugy from the Black side: invite the huge centre, then detonate it with …e6/…c5/…exd6 counter-strikes.",
     "criticalMoments": [],
     "middlegameTheme": "Detonate the over-extended centre",
     "lessonSummary": "Vs the Four Pawns, Black hits the broad centre with …c5 and …e6, turning over-extension into weakness.",
     "sources": [
       "https://lichess.org/FUYTXAk0"
-    ]
+    ],
+    "variation": "Four Pawns Attack"
   },
   {
     "id": "mg-kid-fianchetto",
@@ -7236,14 +7216,14 @@
     "year": 2017,
     "event": "2nd IMSA Blitz 2017",
     "pgn": "d4 Nf6 c4 g6 Nf3 Bg7 g3 O-O Bg2 d6 O-O Nbd7 Nc3 e5 e4 exd4 Nxd4 Re8 h3 Nc5 Re1 Bd7 Rb1 a5 b3 h6 Kh2 Re5 f4 Rh5 f5 gxf5 exf5 Bxf5 Nxf5 Rxf5 Qc2 Qd7 Bf4 Rh5 Nd5 Ng4+ Kh1 Ne5 Bxe5 Rxe5 Rxe5 dxe5 Rd1 Qd8 Qf5 c6 Ne3 Qg5 Qf2 e4 h4 Qf6 Nf5 Nd3 Qf1 Rd8 Kh2 Qe5 Qe2 Qxf5 Bxe4 Re8",
-    "variation": "Fianchetto Variation",
     "overview": "Fianchetto KID — Grischuk beats Ding Liren from the Black side: against g3/Bg2, Black uses …c6/…d5 or …Nbd7/…e5 for full central counterplay.",
     "criticalMoments": [],
     "middlegameTheme": "…e5 / …d5 central counterplay",
     "lessonSummary": "Vs the solid Fianchetto, Black counters in the centre with …e5 (or …c6/…d5) for a balanced fight.",
     "sources": [
       "https://lichess.org/71yqPMUf"
-    ]
+    ],
+    "variation": "Fianchetto Variation"
   },
   {
     "id": "mg-grunfeld-russian",
@@ -7257,7 +7237,6 @@
     "year": 2000,
     "event": "Fujitsu Siemens Giants",
     "pgn": "d4 Nf6 Nf3 g6 c4 Bg7 Nc3 d5 Qb3 dxc4 Qxc4 O-O e4 a6 Qb3 c5 dxc5 Qa5 Qb6 Qxb6 cxb6 Nbd7 Be2 Nxb6 Be3 Nbd7 Nd4 Nc5 f3 e5 Nc6 bxc6 Bxc5 Rd8 Kf2 Be6 Rhd1 Nd7 Be3 Bf8 Rd2 f5 Rad1 Be7 g3 Kf7 b3 a5 Rc2 Nf6 Rxd8 Rxd8 exf5 gxf5 Na4 Bd5 Bb6 Ra8 Bc5 Nd7 Bxe7 Kxe7 Ke3 Kd6 Bd3 f4+ gxf4 exf4+ Kxf4 Rf8+ Kg5 Ne5 Bxh7 Nxf3+ Kh6 Rf4 Re2 Rh4+ Kg7 Nxh2 Nc3 Nf3 Ne4+ Kc7 Nf6 Nd4 Nxd5+ cxd5 Rd2 Kd6 Bd3 Ne6+ Kf6 Rf4+",
-    "variation": "Russian System (Qb3)",
     "overview": "Russian System — Kasparov beats Leko from the Black side: the …a6/…b5 Hungarian plan against Qb3, the long-diagonal bishop raking the centre.",
     "criticalMoments": [],
     "middlegameTheme": "…a6/…b5 vs Qb3, the long diagonal",
@@ -7298,7 +7277,6 @@
     "year": 2024,
     "event": "GRENKE Chess Classic 2024",
     "pgn": "d4 Nf6 c4 e6 Nc3 c5 d5 exd5 cxd5 d6 Nf3 g6 Bf4 Bg7 Qa4+ Bd7 Qb3 b5 Bxd6 Qb6 Be5 O-O e3 c4 Qd1 b4 Nb1 Bb5 a4 Ba6 Nbd2 Rc8 Rc1 c3 bxc3 Bxf1 Kxf1 Nbd7 Bxf6 Nxf6 cxb4 Qa6+ b5 Rxc1 Qxc1 Qxa4 g3 Qxb5+ Kg2 Qxd5 Qc4 a5 Ra1 Qxc4 Nxc4 a4 Nb6 Nd5 Rxa4 Nxb6 Rb4 Nd5 Rb7 h6 Rd7 Nc3 Rd2 Bf6 h4 Ra2 Rxa2 Nxa2 Ne1 Nb4 Nf3 Bc3 Ng1 Kg7 Kf3 Kf6 Ne2 Be5 Ng1 Ke6 Ne2 Kd5 Ng1 Nd3 Ke2 Nc1+ Kd2 Na2 Kd3 Nc3 Nf3 Ne4 Ke2 Bg7 Ne1 Kc4 Kf3 Nc3 Kg2 Nd5 Kf1 Bc3 Nf3 Kd3 Ng1 Nf6 Nh3 Be5 Ng1 Ne4 Kg2 f5 Nh3 g5 hxg5 hxg5 f4 g4 fxe5 gxh3+ Kxh3 Ng5+ Kh4 Nf3+ Kh5 Nxe5 Kg5 Ke4",
-    "variation": "Fianchetto Variation (g3/Bg2)",
     "overview": "Fianchetto Benoni — Carlsen beats Keymer from the Black side: against g3/Bg2, the …a6/…b5 break and …Re8/…Nbd7 piece play generate counterchances.",
     "criticalMoments": [],
     "middlegameTheme": "…a6/…b5 vs the fianchetto",
@@ -7319,7 +7297,6 @@
     "year": 2024,
     "event": "GRENKE Chess Classic 2024",
     "pgn": "d4 Nf6 c4 e6 Nc3 c5 d5 exd5 cxd5 d6 e4 g6 f4 Bg7 Bb5+ Nfd7 a4 Na6 Nf3 Nb4 O-O a6 Bxd7+ Bxd7 f5 O-O Bg5 f6 Bf4 gxf5 Qd2 Re8 Rae1 c4 exf5 Rxe1 Nxe1 Bxf5 Bxd6 Qxd6 Rxf5 Re8 g3 Qd7 Rf1 f5 d6 b5 axb5 axb5 Ne2 Re6 Rxf5 Rxe2 Qxe2 Qxf5 Qe8+ Bf8 d7 Nc6 d8=Q Nxd8 Qxd8 b4 Qd1 Bc5+ Kg2 Qf2+ Kh3 Qf1+ Kg4 h5+",
-    "variation": "Taimanov Variation (f4/Bb5+)",
     "overview": "Taimanov — Rapport beats Keymer from the Black side: meet the sharp f4/Bb5+ with precise development and counter-punch in the centre.",
     "criticalMoments": [],
     "middlegameTheme": "Counter the f4/Bb5+ punch",
@@ -7340,7 +7317,6 @@
     "year": 2002,
     "event": "Candidates sf2",
     "pgn": "d4 Nf6 c4 e6 Nc3 c5 d5 exd5 cxd5 d6 e4 g6 f4 Bg7 Bb5+ Nfd7 a4 O-O Nf3 Na6 O-O Nb4 h3 a6 Bc4 f5 Ng5 Nb6 Bb3 a5 Be3 fxe4 Kh1 Nd3 Qd2 Re8 Rab1 Bf5 g4 h6 gxf5 hxg5 fxg5 gxf5 Rxf5 Qd7 Rbf1 Re5 Rf7 Qxh3+ Qh2 Qxh2+ Kxh2 Rf8 Rxf8+ Bxf8 Rf6 c4 Bd1 Nd7 Rg6+ Kh7 Re6 N7c5 Rf6 Kg8 Bh5 Be7 Rh6 Kf8 Rh8+ Kg7 Re8 Bxg5 Rxe5 Bxe3 Re7+ Kf6 Rf7+ Kg5 Bd1 Bd4 Kg2 Nxb2 Nb5 Be5 Bc2 Nbd3 Kf1 Nb4 Bb1 Nxd5",
-    "variation": "Four Pawns Attack (...Ng4 Counter)",
     "overview": "Benoni Four Pawns — Topalov beats Bareev from the Black side: the …Ng4 counter and …Re8 pressure exploit the over-extended e5-thrust.",
     "criticalMoments": [],
     "middlegameTheme": "…Ng4 counter vs the big centre",
@@ -7381,14 +7357,14 @@
     "year": 2001,
     "event": "Champions Club m 5'",
     "pgn": "d4 Nf6 c4 e6 Nf3 b6 Nc3 Bb7 a3 d5 cxd5 Nxd5 e3 g6 Nxd5 exd5 Bb5+ c6 Bd3 Bg7 b4 O-O Bd2 Nd7 Rb1 Re8 O-O Nf6 Qc2 Ne4 Rfc1 Rc8 Be1 Nd6 a4 a6 Nd2 Rc7 Nb3 b5 Nc5 Bc8 Ra1 Rce7 Bc3 Nc4 Ra2 Qd6 axb5 axb5 Ra8 Nb6 Ra2 h5 Rca1 h4 Qd1 h3 g3 Nc4 Bf1 Bh6 Ra8 Bf5 Rxe8+ Rxe8 Bd2 Qf6 Bc1 Bg7 Ra6 Kh7 Qf3 Kg8 g4 Qg5 Bxh3 Bxd4 Kh1 Ne5 Qg3 Nxg4 Rxc6 Bxc5 Rxc5 Qh5 Bg2 Nf6 f3 Ne4 Qc7 Nxc5 bxc5 Bh3",
-    "variation": "Queen's Indian: Petrosian Variation (a3)",
     "overview": "Petrosian a3 — Kramnik beats Kasparov from the Black side: meet 4.a3 with the …d5 central strike and free, equal development.",
     "criticalMoments": [],
     "middlegameTheme": "…d5 central strike vs 4.a3",
     "lessonSummary": "Vs the Petrosian 4.a3, Black answers …d5, contests the centre directly, and equalises comfortably.",
     "sources": [
       "https://lichess.org/wBnKCnDK"
-    ]
+    ],
+    "variation": "Queen's Indian: Kasparov Variation (Nc3/a3)"
   },
   {
     "id": "mg-qid-nimzowitsch",
@@ -7402,14 +7378,14 @@
     "year": 2022,
     "event": "CGC KO 2022",
     "pgn": "d4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2 Bb4+ Bd2 Bxd2+ Qxd2 O-O O-O d6 Qc2 Be4 Qc1 Bb7 Qc2 Be4 Qc1 Qe7 Nc3 Bb7 Qc2 c5 Rfd1 Nc6 b3 Rfd8 Rd2 e5 d5 Nd4 Qb2 Bc8 Re1 a6 Nh4 e4 e3 Nf5 Nxf5 Bxf5 f4 exf3 Bxf3 Be4 Nxe4 Nxe4 Bxe4 Qxe4 Qc2 Re8 Qxe4 Rxe4 Kf2 b5 Kf3 f5 Rc2 Kf7 Rec1 Rae8 Re2 Rb8 Rec2 Kf6 b4 cxb4 c5 Re5 cxd6 Rxd5 Rc6 a5 d7+ Ke7 Rc8 Rb7 Rg8 Rbxd7 Rxg7+ Ke6 Rc6+ R5d6 Rxd7 Rxc6 Rb7 Rc5 e4 a4 exf5+ Kxf5 Ke3 b3 axb3 axb3 Rf7+ Ke5 Kd2 b2 Rf1 Rc1 Rxc1 bxc1=Q+ Kxc1 Ke4 Kc2 Kf3 Kc3 Kg2",
-    "variation": "Queen's Indian: Nimzowitsch Variation (...Bb4+)",
     "overview": "…Bb4+ — Mamedyarov beats Kovalev from the Black side: the check develops with tempo and fractures White's coordination before …Bb7.",
     "criticalMoments": [],
     "middlegameTheme": "…Bb4+ developing with tempo",
     "lessonSummary": "The …Bb4+ line: check to disrupt White's setup, then …Bb7 and …Ne4 for active light-square play.",
     "sources": [
       "https://lichess.org/wvf138PY"
-    ]
+    ],
+    "variation": "Queen's Indian: Nimzowitsch Variation (...Bb4+)"
   },
   {
     "id": "mg-oldindian-main",
@@ -7443,7 +7419,6 @@
     "year": 2014,
     "event": "21st TCh-RUS 2014",
     "pgn": "d4 Nf6 Nf3 d6 c4 Nbd7 Nc3 e5 e4 Be7 Be2 O-O O-O c6 Re1 Qe8 Bf1 Bd8 h3 Qe7 Be3 Ba5 Nd2 Rd8 Qc2 Nf8 d5 h6 a3 Bb6 b4 Bxe3 Rxe3 Bd7 a4 a5 Rb1 axb4 Rxb4 Bc8 Rb1 c5 g3 N8h7 Kh2 h5 Nf3 g6 Ree1 Kg7 Qd2 Ng8 Nh4 Nh6 Ng2 Bxh3 Nh4 Bc8 Kg1 Rf8 Rb6 Qd8 Rb3 Ra6 Reb1 Qe7 Bg2 f5 exf5 Nxf5 Nxf5+ gxf5 f4 e4 Bh3 Nf6 Ra3 Rg8 Nd1 Kf8 Kf1 Qg7 Qf2 Ke8 Rbb3 Kd8 a5 Ng4 Bxg4 hxg4 Qb2 Qd4 Ne3 Kc7 Rc3 Rh8 Kg2 Qg7 Qa1 Qh6 Kf2 Qf6 Kg2 Qd4 Qb2 Rh3 Rc2 b6 Rd2 Qxb2 Rxb2 Rxa5 Rxa5 bxa5 Ra2 Kb6 Rb2+ Ka6 Rb8 Rh8 Kf1 Ka7 Rb5 Rh1+ Ke2 Ra1 Kd2 Bd7 Rb3 Ra2+",
-    "variation": "Old Indian: Czech Variation",
     "overview": "Czech Old Indian — Jobava beats Jakovenko from the Black side: the …c6/…e5 closed centre and slow kingside regrouping.",
     "criticalMoments": [],
     "middlegameTheme": "…c6/…e5 closed centre",
@@ -7464,7 +7439,6 @@
     "year": 2003,
     "event": "Amber-rapid 12th",
     "pgn": "d4 Nf6 c4 d6 Nf3 Nbd7 Nc3 e5 e4 Be7 Be2 O-O O-O c6 Be3 Ng4 Bd2 Qe8 h3 Ngf6 Be3 Bd8 dxe5 dxe5 b4 Qe7 Qb3 Bc7 Rfd1 Rd8 c5 Nf8 Rxd8 Bxd8 Rd1 Bd7 Bc4 Bc7 b5 Be6 bxc6 bxc6 Bxe6 Nxe6 Qb7 Qe8 Ng5 Rb8 Qxa7 Ra8 Qb7 Rb8 Qa6 Nd4 Qc4 h6 Nf3 Nxf3+ gxf3 Nh7 Rb1 Ra8 Ne2 Nf8 Ng3 g6 Bxh6 Qe6 Qb3 Rxa2 Qb7 Bd8 Bxf8 Kxf8 Qb8 Rd2 h4 Qe7 Rc1 Qxh4 Qxe5 Bf6 Qb8+ Rd8 Qc7 Kg7 e5 Bg5 e6 Rf8 Re1 Bf4 Qxc6 Bxg3 fxg3 Qxg3+ Kf1 Rh8 Ke2 Rh2+ Kd1 Qf2",
-    "variation": "Old Indian: Be2 Development",
     "overview": "Be2 Old Indian — Morozevich beats Gelfand from the Black side: against the quiet Be2, …e5 and …Bg4 generate active piece play.",
     "criticalMoments": [],
     "middlegameTheme": "…e5/…Bg4 active development",
@@ -7491,7 +7465,8 @@
     "lessonSummary": "Vs 4.d3, Black manoeuvres Ruy-style with …Be7 and prepares the …d5 freeing break.",
     "sources": [
       "https://lichess.org/Gt25dwor"
-    ]
+    ],
+    "variation": "Two Knights: Quiet Italian d3 with ...Be7"
   },
   {
     "id": "mg-twoknights-d4",
@@ -7505,7 +7480,6 @@
     "year": 2019,
     "event": "IMSA World Masters Blitz",
     "pgn": "e4 e5 d4 exd4 Nf3 Nc6 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bd7 Bxc6 bxc6 O-O Bc5 f3 Ng5 Be3 O-O Nc3 f6 exf6 Qxf6 Qd2 Nf7 Nb3 Bd6 f4 Nh6 Bd4 Bxf4 Bxf6 Bxd2 Nxd2 Rxf6 Rxf6 gxf6 Na4 Re8 Nc5 Bf5 Nf3 Bxc2 Nd4 Bg6 a4 Nf5 Nxc6 Re2 Nxa7 Nh4 Nc6 Rxg2+ Kh1 Rxb2 a5 Nf3",
-    "variation": "Two Knights: Italian Two Knights d4",
     "overview": "4.d4 Italian — Bu Xiangzhi beats Jones from the Black side: meet the central thrust with …exd4 and active development for full equality.",
     "criticalMoments": [],
     "middlegameTheme": "…exd4 and active development",
@@ -7526,14 +7500,14 @@
     "year": 2023,
     "event": "10th Sinquefield Cup",
     "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 Bb5+ c6 dxc6 bxc6 Bd3 Nd5 h4 h6 Qh5 Qf6 Ne4 Qe6 b3 g6 Qe2 f5 Nec3 Bg7 Bb2 O-O Na3 e4 Bc4 Nxc4 Qxc4 Rb8 O-O-O Rb4 Qe2 a5 Rhe1 a4 g3 axb3 axb3 Qd6 f3 Qc5 Nab1 Re8 fxe4 fxe4 Ba3 Qa5 Bxb4 Nxb4 d4 e3 Kb2 h5 Na3 Bg4 Qc4+ Kh7 Qf7 Rf8 Qe7 Bxd1 Rxd1 Rf2 Ne4 Rxc2+ Kb1 Rf2 Ng5+ Kh8 Qe8+ Rf8 Qxg6 Qf5+ Qxf5 Rxf5 Re1 Bxd4 Nc2 Bc3 Nxe3 Rxg5",
-    "variation": "Two Knights: Fried Liver Defence 5...Na5",
     "overview": "…Na5 antidote — Caruana beats Firouzja from the Black side: the …Na5 hit on the c4-bishop defuses the Fried Liver and keeps a sound extra structure.",
     "criticalMoments": [],
     "middlegameTheme": "…Na5 defuses the Fried Liver",
     "lessonSummary": "Vs 4.Ng5, Black plays …Na5 to hit the bishop, returns the pawn, and emerges structurally sound.",
     "sources": [
       "https://lichess.org/NRb7EMLw"
-    ]
+    ],
+    "variation": "Two Knights: Fried Liver Defence 5...Na5"
   },
   {
     "id": "mg-twoknights-maxlange",
@@ -7547,7 +7521,6 @@
     "year": 2012,
     "event": "CRO-ch 12th",
     "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 O-O Nf6 d4 exd4 e5 d5 exf6 dxc4 fxg7 Rg8 Bg5 Qd5 Nc3 Qf5 Ne4 Rxg7 Nh4 Qxe4 Re1 Qxe1+ Qxe1+ Be6 Nf3 Rg6 Bh4 Kd7 Ne5+ Nxe5 Qxe5 Bb6 Rd1 Rag8 Bg3 Kc8 Kf1 Rg5 Qf4 h5 f3 Rf5 Qe4 Rd8 Be5 Rd5 Bf4 Rd8 h4 Ra5 Bg5 Rdd5 Qh7 Rxa2 Qh8+ Kd7 Qd8+ Kc6 Qe8+ Bd7 Qe2 Bc5 Bc1 Kb6 g4 hxg4 fxg4 Bb5 Qe4 c3+ Kg1 cxb2 Bxb2 d3+ Kh2 dxc2",
-    "variation": "Two Knights: Max Lange Attack",
     "overview": "Max Lange — Bosiocic beats Zelcic from the Black side: navigate the wild forced lines accurately and consolidate the extra material.",
     "criticalMoments": [],
     "middlegameTheme": "Defend precisely, keep the material",
@@ -7588,14 +7561,14 @@
     "year": 2002,
     "event": "ICC-ch blitz fin",
     "pgn": "e4 e5 Nf3 Nc6 Bb5 f5 d4 fxe4 Nxe5 Nxe5 dxe5 c6 Nc3 cxb5 Nxe4 d5 exd6 Nf6 Bg5 Qa5+ Nc3 b4 Bxf6 gxf6 Nd5 b3+ c3 Be6 Nc7+ Kd7 O-O Bxd6 Nxe6 Qe5 Re1 Qxh2+ Kf1 Qh1+ Ke2 Qxg2 Qxb3 Rae8 Kd3 Kc8 Qc4+ Kb8 Qd4 Qh3+ Re3 Qf5+ Qe4 Qxf2 Qd5 Bf4 Rae1 Rxe6 Rxe6 Qd2+ Ke4 Qxe1+ Kxf4 Qf2+ Ke4 Qg2+ Kd4 Qxb2 Kd3 Rc8",
-    "variation": "Schönemann Attack",
     "overview": "Schönemann 4.d4 — Garbarino beats Pavlovic from the Black side: meet the central try with …fxe4 and …exd4, keeping the initiative.",
     "criticalMoments": [],
     "middlegameTheme": "…fxe4/…exd4 keep the initiative",
     "lessonSummary": "Vs 4.d4, Black grabs e4 and opens lines, retaining the Schliemann's attacking chances.",
     "sources": [
       "https://lichess.org/BLpGC1zK"
-    ]
+    ],
+    "variation": "Schönemann Attack"
   },
   {
     "id": "mg-schliemann-accepted",
@@ -7609,14 +7582,14 @@
     "year": 2011,
     "event": "Biel MTO op 44th",
     "pgn": "e4 e5 Nf3 Nc6 Bb5 f5 exf5 e4 Qe2 Qe7 Bxc6 dxc6 Nd4 Nf6 Nc3 Qe5 Nb3 Bd6 g4 h5 g5 Nd5 Qxe4 Nb4",
-    "variation": "Jänisch Gambit Accepted",
     "overview": "Jänisch Accepted 4.exf5 — Purnama beats Megaranto from the Black side: regain the pawn with …e4 and …d5, opening lines for the bishops.",
     "criticalMoments": [],
     "middlegameTheme": "…e4/…d5 regains and opens",
     "lessonSummary": "Vs 4.exf5, Black plays …e4 and …d5 to regain the pawn and free the position for active play.",
     "sources": [
       "https://lichess.org/qyygop1W"
-    ]
+    ],
+    "variation": "Jänisch Gambit Accepted"
   },
   {
     "id": "mg-schliemann-dyckhoff",
@@ -7630,14 +7603,14 @@
     "year": 2018,
     "event": "10th London Classic 2018",
     "pgn": "e4 e5 Nf3 Nc6 Bb5 f5 d3 fxe4 dxe4 Nf6 O-O d6 Bc4 Bg4 h3 Bh5 Nc3 Nd4 g4 Nxf3+ Qxf3 Bg6 Be6 c6 Be3 Qe7 Bb3 Bf7 Rfd1 a6 Qg3 b5 f4 Bxb3 axb3 g6 b4 Qe6 Qf3 exf4 Bxf4 Nd7 e5 d5 Rd4 Bg7 Bg3 Bxe5 Rd3 Bxg3 Qxg3 O-O Re1 Qf6 Rd2 Rae8 Rxe8 Rxe8 Rf2 Qe5 Qxe5 Rxe5 Ne2 c5 bxc5 Nxc5 Nd4 Kg7 Kg2 Ne6 Nxe6+ Rxe6 Rd2 Rd6 Kf3 Kf6 c3 Ke5 Re2+ Kf6 Re8 d4 cxd4 Rxd4 Ra8 Rd6 Ke4 Kg5 Rh8 Rd7 Ra8 Rd6 Rh8 h6 b4 Rc6 Kd5 Rc4 Ra8 Rxb4 Rxa6 Rb3 h4+ Kxg4 Rxg6+ Kh5 Rb6 b4 Ke4 Rh3 Rb5+ Kg6 Rb6+ Kg7 Rb7+ Kf8 Kf5 Rxh4 Kf6 Ke8 Ke6 Re4+ Kf5 Rc4 Rb6 h5 Ke6 Kd8 Kd6 Kc8 Kd5 Kc7 Rh6 Rh4 Kc5 Kd7 Kd5 b3 Rh7+ Kc8 Kc6 Rc4+ Kd5 Rb4 Kc6 Rc4+ Kd5 b2 Kxc4 b1=Q Rxh5 Qc2+ Kd4 Qd1+",
-    "variation": "Dyckhoff Variation",
     "overview": "Dyckhoff 4.d3 — Aronian beats Caruana from the Black side: against the solid 4.d3, Black holds the centre and equalises with …Nf6/…Bc5.",
     "criticalMoments": [],
     "middlegameTheme": "Hold the centre vs 4.d3",
     "lessonSummary": "Vs the quiet Dyckhoff 4.d3, Black develops solidly and equalises in a balanced middlegame.",
     "sources": [
       "https://lichess.org/myqx8fCX"
-    ]
+    ],
+    "variation": "Dyckhoff Variation"
   },
   {
     "id": "mg-lichess-to1QN7uI",
@@ -11096,7 +11069,6 @@
   {
     "id": "mg-pro-carlsen-open-sicilian-var-rossolimo-vs-nc6",
     "openingId": "pro-carlsen-open-sicilian",
-    "variation": "Rossolimo vs ...Nc6",
     "white": "MagnusCarlsen",
     "black": "DenLaz",
     "whiteElo": 2882,
@@ -11112,7 +11084,6 @@
   {
     "id": "mg-pro-carlsen-open-sicilian-var-open-vs-e6",
     "openingId": "pro-carlsen-open-sicilian",
-    "variation": "Open vs ...e6",
     "white": "MagnusCarlsen",
     "black": "gurelediz",
     "whiteElo": 2882,
@@ -11128,7 +11099,6 @@
   {
     "id": "mg-pro-carlsen-open-sicilian-var-moscow-bb5",
     "openingId": "pro-carlsen-open-sicilian",
-    "variation": "Moscow Bb5+",
     "white": "MagnusCarlsen",
     "black": "HansOnTwitch",
     "whiteElo": 2882,
@@ -11144,7 +11114,6 @@
   {
     "id": "mg-pro-carlsen-open-sicilian-var-classical-bc4",
     "openingId": "pro-carlsen-open-sicilian",
-    "variation": "Classical Bc4",
     "white": "MagnusCarlsen",
     "black": "nihalsarin",
     "whiteElo": 2882,
@@ -11160,7 +11129,6 @@
   {
     "id": "mg-pro-carlsen-open-sicilian-var-hyperaccelerated-g6",
     "openingId": "pro-carlsen-open-sicilian",
-    "variation": "Hyperaccelerated ...g6",
     "white": "MagnusCarlsen",
     "black": "DanielNaroditsky",
     "whiteElo": 2882,
@@ -11176,7 +11144,6 @@
   {
     "id": "mg-pro-carlsen-ruy-lopez-var-italian-bc4",
     "openingId": "pro-carlsen-ruy-lopez",
-    "variation": "Italian Bc4",
     "white": "MagnusCarlsen",
     "black": "nihalsarin",
     "whiteElo": 2882,
@@ -11192,7 +11159,6 @@
   {
     "id": "mg-pro-carlsen-ruy-lopez-var-berlin-vs-nf6",
     "openingId": "pro-carlsen-ruy-lopez",
-    "variation": "Berlin vs ...Nf6",
     "white": "MagnusCarlsen",
     "black": "Hikaru",
     "whiteElo": 2882,
@@ -11208,7 +11174,6 @@
   {
     "id": "mg-pro-carlsen-ruy-lopez-var-vs-petrov-nf6",
     "openingId": "pro-carlsen-ruy-lopez",
-    "variation": "vs Petrov ...Nf6",
     "white": "MagnusCarlsen",
     "black": "amintabatabaei",
     "whiteElo": 2882,
@@ -11224,7 +11189,6 @@
   {
     "id": "mg-pro-carlsen-ruy-lopez-var-scotch-d4",
     "openingId": "pro-carlsen-ruy-lopez",
-    "variation": "Scotch d4",
     "white": "MagnusCarlsen",
     "black": "DanielNaroditsky",
     "whiteElo": 2882,
@@ -11240,7 +11204,6 @@
   {
     "id": "mg-pro-carlsen-ruy-lopez-var-four-knights-nc3",
     "openingId": "pro-carlsen-ruy-lopez",
-    "variation": "Four Knights Nc3",
     "white": "MagnusCarlsen",
     "black": "HansOnTwitch",
     "whiteElo": 2882,
@@ -11256,7 +11219,6 @@
   {
     "id": "mg-pro-carlsen-queens-pawn-var-nimzo-indian-nc3",
     "openingId": "pro-carlsen-queens-pawn",
-    "variation": "Nimzo-Indian Nc3",
     "white": "MagnusCarlsen",
     "black": "Philippians46",
     "whiteElo": 2882,
@@ -11272,7 +11234,6 @@
   {
     "id": "mg-pro-carlsen-queens-pawn-var-catalan-g3",
     "openingId": "pro-carlsen-queens-pawn",
-    "variation": "Catalan g3",
     "white": "MagnusCarlsen",
     "black": "DenLaz",
     "whiteElo": 2882,
@@ -11288,7 +11249,6 @@
   {
     "id": "mg-pro-carlsen-queens-pawn-var-bogo-indian-bb4",
     "openingId": "pro-carlsen-queens-pawn",
-    "variation": "Bogo-Indian Bb4+",
     "white": "MagnusCarlsen",
     "black": "vi_pranav",
     "whiteElo": 2882,
@@ -11304,7 +11264,6 @@
   {
     "id": "mg-pro-carlsen-sicilian-var-vs-rossolimo-bb5",
     "openingId": "pro-carlsen-sicilian",
-    "variation": "vs Rossolimo Bb5",
     "white": "Hikaru",
     "black": "MagnusCarlsen",
     "whiteElo": 3249,
@@ -11320,7 +11279,6 @@
   {
     "id": "mg-pro-carlsen-sicilian-var-taimanov-e6",
     "openingId": "pro-carlsen-sicilian",
-    "variation": "Taimanov ...e6",
     "white": "Hikaru",
     "black": "MagnusCarlsen",
     "whiteElo": 3268,
@@ -11336,7 +11294,6 @@
   {
     "id": "mg-pro-carlsen-sicilian-var-open-vs-nc6",
     "openingId": "pro-carlsen-sicilian",
-    "variation": "Open vs ...Nc6",
     "white": "Firouzja2003",
     "black": "MagnusCarlsen",
     "whiteElo": 3211,
@@ -11352,7 +11309,6 @@
   {
     "id": "mg-pro-carlsen-sicilian-var-vs-alapin-c3",
     "openingId": "pro-carlsen-sicilian",
-    "variation": "vs Alapin c3",
     "white": "Night-King96",
     "black": "DrNykterstein",
     "whiteElo": 3125,
@@ -11368,7 +11324,6 @@
   {
     "id": "mg-pro-carlsen-sicilian-var-vs-smith-morra-d4",
     "openingId": "pro-carlsen-sicilian",
-    "variation": "vs Smith-Morra / d4",
     "white": "nikotheo",
     "black": "DrNykterstein",
     "whiteElo": 3181,
@@ -11384,7 +11339,6 @@
   {
     "id": "mg-pro-carlsen-1e5-var-vs-italian-bc4",
     "openingId": "pro-carlsen-1e5",
-    "variation": "vs Italian Bc4",
     "white": "Firouzja2003",
     "black": "MagnusCarlsen",
     "whiteElo": 3287,
@@ -11400,7 +11354,6 @@
   {
     "id": "mg-pro-carlsen-1e5-var-berlin-nf6",
     "openingId": "pro-carlsen-1e5",
-    "variation": "Berlin ...Nf6",
     "white": "DanielNaroditsky",
     "black": "MagnusCarlsen",
     "whiteElo": 3077,
@@ -11416,7 +11369,6 @@
   {
     "id": "mg-pro-carlsen-1e5-var-vs-scotch-d4",
     "openingId": "pro-carlsen-1e5",
-    "variation": "vs Scotch d4",
     "white": "alireza2003",
     "black": "DrNykterstein",
     "whiteElo": 3093,
@@ -11432,7 +11384,6 @@
   {
     "id": "mg-pro-carlsen-1e5-var-vs-four-knights",
     "openingId": "pro-carlsen-1e5",
-    "variation": "vs Four Knights",
     "white": "Grischuk",
     "black": "MagnusCarlsen",
     "whiteElo": 2856,
@@ -11448,7 +11399,6 @@
   {
     "id": "mg-pro-carlsen-nimzo-var-nimzo-indian-bb4",
     "openingId": "pro-carlsen-nimzo",
-    "variation": "Nimzo-Indian Bb4",
     "white": "BogdanDeac",
     "black": "MagnusCarlsen",
     "whiteElo": 3164,
@@ -11464,7 +11414,6 @@
   {
     "id": "mg-pro-carlsen-nimzo-var-vs-catalan-g3",
     "openingId": "pro-carlsen-nimzo",
-    "variation": "vs Catalan g3",
     "white": "Ding Liren",
     "black": "Carlsen,M",
     "whiteElo": 2774,
@@ -11480,7 +11429,6 @@
   {
     "id": "mg-pro-carlsen-nimzo-var-bogo-indian-bb4",
     "openingId": "pro-carlsen-nimzo",
-    "variation": "Bogo-Indian Bb4+",
     "white": "Firouzja2003",
     "black": "MagnusCarlsen",
     "whiteElo": 3293,
@@ -11496,7 +11444,6 @@
   {
     "id": "mg-pro-carlsen-kid-var-fianchetto-g3",
     "openingId": "pro-carlsen-kid",
-    "variation": "Fianchetto g3",
     "white": "Parhamov",
     "black": "MagnusCarlsen",
     "whiteElo": 3259,
@@ -11512,7 +11459,6 @@
   {
     "id": "mg-pro-carlsen-kid-var-gr-nfeld-d5",
     "openingId": "pro-carlsen-kid",
-    "variation": "Grünfeld ...d5",
     "white": "C9C9C9C9C9",
     "black": "DrNykterstein",
     "whiteElo": 3168,
@@ -11528,7 +11474,6 @@
   {
     "id": "mg-pro-carlsen-french-var-vs-tarrasch-nd2",
     "openingId": "pro-carlsen-french",
-    "variation": "vs Tarrasch Nd2",
     "white": "Adar_07",
     "black": "MagnusCarlsen",
     "whiteElo": 2983,
@@ -11544,7 +11489,6 @@
   {
     "id": "mg-pro-carlsen-french-var-vs-advance-e5",
     "openingId": "pro-carlsen-french",
-    "variation": "vs Advance e5",
     "white": "DanielNaroditsky",
     "black": "MagnusCarlsen",
     "whiteElo": 3403,
@@ -11560,7 +11504,6 @@
   {
     "id": "mg-pro-carlsen-french-var-vs-exchange",
     "openingId": "pro-carlsen-french",
-    "variation": "vs Exchange",
     "white": "vi_pranav",
     "black": "MagnusCarlsen",
     "whiteElo": 3134,
@@ -11576,7 +11519,6 @@
   {
     "id": "mg-pro-carlsen-french-var-winawer-bb4",
     "openingId": "pro-carlsen-french",
-    "variation": "Winawer Bb4",
     "white": "Konavets",
     "black": "MagnusCarlsen",
     "whiteElo": 3143,
@@ -11592,7 +11534,6 @@
   {
     "id": "mg-pro-carlsen-scandinavian-var-3-qa5-main",
     "openingId": "pro-carlsen-scandinavian",
-    "variation": "3…Qa5 Main",
     "white": "Hikaru",
     "black": "MagnusCarlsen",
     "whiteElo": 3382,
@@ -11608,7 +11549,6 @@
   {
     "id": "mg-pro-carlsen-scandinavian-var-vs-2-nc3",
     "openingId": "pro-carlsen-scandinavian",
-    "variation": "vs 2.Nc3",
     "white": "Sina-Movahed",
     "black": "MagnusCarlsen",
     "whiteElo": 3170,
@@ -11624,7 +11564,6 @@
   {
     "id": "mg-pro-carlsen-scandinavian-var-3-qd8-solid",
     "openingId": "pro-carlsen-scandinavian",
-    "variation": "3…Qd8 Solid",
     "white": "NikoTheodorou",
     "black": "MagnusCarlsen",
     "whiteElo": 3086,
@@ -11640,7 +11579,6 @@
   {
     "id": "mg-pro-carlsen-caro-kann-var-vs-two-knights",
     "openingId": "pro-carlsen-caro-kann",
-    "variation": "vs Two Knights",
     "white": "Hikaru",
     "black": "MagnusCarlsen",
     "whiteElo": 3235,
@@ -11656,7 +11594,6 @@
   {
     "id": "mg-pro-carlsen-caro-kann-var-exchange",
     "openingId": "pro-carlsen-caro-kann",
-    "variation": "Exchange",
     "white": "NikoTheodorou",
     "black": "MagnusCarlsen",
     "whiteElo": 3120,
@@ -11672,7 +11609,6 @@
   {
     "id": "mg-pro-carlsen-caro-kann-var-vs-2-nf3-d3-kia",
     "openingId": "pro-carlsen-caro-kann",
-    "variation": "vs 2.Nf3 d3 (KIA)",
     "white": "nihalsarin",
     "black": "MagnusCarlsen",
     "whiteElo": 3225,
@@ -11688,7 +11624,6 @@
   {
     "id": "mg-pro-carlsen-modern-var-classical-nf3",
     "openingId": "pro-carlsen-modern",
-    "variation": "Classical Nf3",
     "white": "LacusSomniorum",
     "black": "MagnusCarlsen",
     "whiteElo": 3125,
@@ -11704,7 +11639,6 @@
   {
     "id": "mg-pro-carlsen-modern-var-vs-nc3-with-c6-d5",
     "openingId": "pro-carlsen-modern",
-    "variation": "vs Nc3 with …c6/…d5",
     "white": "alireza2003",
     "black": "DrNykterstein",
     "whiteElo": 3256,
@@ -11720,7 +11654,6 @@
   {
     "id": "mg-pro-carlsen-modern-var-vs-austrian-f4",
     "openingId": "pro-carlsen-modern",
-    "variation": "vs Austrian f4",
     "white": "mishanick",
     "black": "MagnusCarlsen",
     "whiteElo": 3034,
@@ -11736,7 +11669,6 @@
   {
     "id": "mg-pro-carlsen-closed-sicilian-var-vs-d6",
     "openingId": "pro-carlsen-closed-sicilian",
-    "variation": "vs …d6",
     "white": "MagnusCarlsen",
     "black": "DenLaz",
     "whiteElo": 2882,
@@ -11752,7 +11684,6 @@
   {
     "id": "mg-pro-carlsen-closed-sicilian-var-bb5-vs-nc6",
     "openingId": "pro-carlsen-closed-sicilian",
-    "variation": "Bb5 vs …Nc6",
     "white": "MagnusCarlsen",
     "black": "ALieRaiseAFireOozeUh",
     "whiteElo": 2882,
@@ -11768,7 +11699,6 @@
   {
     "id": "mg-pro-carlsen-reti-var-r-ti-into-c4-vs-nf6",
     "openingId": "pro-carlsen-reti",
-    "variation": "Réti into c4 vs …Nf6",
     "white": "MagnusCarlsen",
     "black": "Hikaru",
     "whiteElo": 2882,
@@ -11784,7 +11714,6 @@
   {
     "id": "mg-pro-carlsen-reti-var-vs-c5-symmetric",
     "openingId": "pro-carlsen-reti",
-    "variation": "vs …c5 Symmetric",
     "white": "DrNykterstein",
     "black": "jonasbjerre",
     "whiteElo": 2882,
@@ -11800,7 +11729,6 @@
   {
     "id": "mg-pro-carlsen-reti-var-vs-e6-catalan",
     "openingId": "pro-carlsen-reti",
-    "variation": "vs …e6 (Catalan)",
     "white": "MagnusCarlsen",
     "black": "NikaVolkov",
     "whiteElo": 2882,
@@ -11816,7 +11744,6 @@
   {
     "id": "mg-pro-carlsen-kings-gambit-var-falkbeer-2-d5",
     "openingId": "pro-carlsen-kings-gambit",
-    "variation": "Falkbeer 2…d5",
     "white": "MagnusCarlsen",
     "black": "Abund",
     "whiteElo": 2882,
@@ -11832,7 +11759,6 @@
   {
     "id": "mg-pro-carlsen-queens-pawn-var-vs-king-s-indian-g6",
     "openingId": "pro-carlsen-queens-pawn",
-    "variation": "vs King's Indian g6",
     "white": "MagnusCarlsen",
     "black": "Firouzja2003",
     "whiteElo": 2882,
@@ -11848,7 +11774,6 @@
   {
     "id": "mg-pro-carlsen-queens-pawn-var-queen-s-indian-b6",
     "openingId": "pro-carlsen-queens-pawn",
-    "variation": "Queen's Indian b6",
     "white": "DrNykterstein",
     "black": "Zhigalko_Sergei",
     "whiteElo": 2882,
@@ -11864,7 +11789,6 @@
   {
     "id": "mg-pro-carlsen-nimzo-var-queen-s-indian-b6",
     "openingId": "pro-carlsen-nimzo",
-    "variation": "Queen's Indian b6",
     "white": "sergoy",
     "black": "MagnusCarlsen",
     "whiteElo": 3014,
