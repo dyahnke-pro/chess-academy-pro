@@ -6,10 +6,12 @@
  *
  *   1. PRO_SUFFIX_TO_BASE: every value resolves to a real `*.json`.
  *   2. LEGACY_ID_TO_BASE:  every value resolves to a real `*.json`.
- *   3. Reachability:       every entry in repertoire.json and
- *      gambits.json has a resolvable annotation (via direct match,
- *      legacy-id map, or pro-suffix map). Pro-repertoires.json
- *      already audited under part 1's suffix set.
+ *   3. Reachability:       every entry in repertoire.json,
+ *      gambits.json, and pro-repertoires.json reaches a Watch source —
+ *      a resolvable annotation (direct match, legacy-id map, or
+ *      pro-suffix map) OR a curated LessonScript (the sanctioned source
+ *      for pro-rep / masterclass openings; annotations are banned there
+ *      per G9.3 Gate A).
  *   4. NAME_ALIASES:       every value in
  *      openingDetectionService.NAME_ALIASES is a real entry name
  *      in openings-lichess.json — typed shortcuts that no longer
@@ -34,6 +36,23 @@ const annotationKeys = new Set(
     .filter((f) => f.endsWith('.json'))
     .map((f) => f.replace(/\.json$/, '')),
 );
+
+// Pro-rep + masterclass openings render their Watch from a curated
+// LessonScript, NOT the legacy annotation files (G9.3 Gate A — the
+// auto-generated annotations are BANNED as the narration source for
+// these). So an opening that has a curated lesson is reachable in the
+// openings tab even with no annotation file. Collect every lesson's
+// declared openingId literal from src/data/lessons/*.ts. (Curated-lesson
+// coverage for pro-rep is itself gated by proRepLessonCoverage — G9.3
+// Gate A — so this is not a weaker check, just the right path.)
+const LESSONS_DIR = join(REPO, 'src/data/lessons');
+const curatedLessonIds = new Set();
+for (const f of readdirSync(LESSONS_DIR).filter((f) => f.endsWith('.ts'))) {
+  const text = readFileSync(join(LESSONS_DIR, f), 'utf8');
+  for (const m of text.matchAll(/openingId:\s*'([^']+)'/g)) {
+    curatedLessonIds.add(m[1]);
+  }
+}
 
 function parseSingleQuotedMap(source, varName) {
   const start = source.indexOf(varName);
@@ -89,6 +108,9 @@ for (const [legacy, base] of Object.entries(LEGACY_ID_TO_BASE)) {
 // Part 3 — reachability for repertoire + gambits via resolver chain
 function resolves(id) {
   if (annotationKeys.has(id)) return true;
+  // A curated LessonScript is the sanctioned Watch source for pro-rep /
+  // masterclass openings (annotations are banned for them) — reachable.
+  if (curatedLessonIds.has(id)) return true;
   const legacy = LEGACY_ID_TO_BASE[id];
   if (legacy && annotationKeys.has(legacy)) return true;
   const proMatch = /^pro-[a-z]+-(.+)$/.exec(id);
@@ -135,7 +157,7 @@ if (errors.length === 0) {
   const legacyCount = Object.keys(LEGACY_ID_TO_BASE).length;
   const aliasCount = Object.keys(NAME_ALIASES).length;
   console.log(
-    `Openings-tab integrity OK: ${proCount} pro suffixes + ${legacyCount} legacy IDs + ${aliasCount} name-aliases all resolve; every repertoire/gambit/pro entry reaches an annotation file.`,
+    `Openings-tab integrity OK: ${proCount} pro suffixes + ${legacyCount} legacy IDs + ${aliasCount} name-aliases all resolve; every repertoire/gambit/pro entry reaches an annotation file or a curated lesson.`,
   );
   process.exit(0);
 }
