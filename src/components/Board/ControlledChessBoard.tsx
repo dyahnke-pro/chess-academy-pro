@@ -231,12 +231,17 @@ export function ControlledChessBoard({
   // game.lastMove, so every landing sparks. Keyed off the from/to primitives so
   // it triggers once per move, not on every incidental re-render.
   const landingKeyRef = useRef(0);
-  const [landing, setLanding] = useState<{ square: string; key: number } | null>(null);
+  const [landing, setLanding] = useState<{ square: string; key: number; glowRgb: string } | null>(null);
   useEffect(() => {
     if (settings.landingEffect !== 'lightning' || prefersReducedMotion) return;
     if (!lastMove) return;
     landingKeyRef.current += 1;
-    setLanding({ square: lastMove.to, key: landingKeyRef.current });
+    // Color the bolt with the SAME glow that backlights the moved piece.
+    const moverColor = getPiece(lastMove.to)?.color;
+    const sideGlow = moverColor === 'b' ? settings.blackPieceGlowColor : settings.whitePieceGlowColor;
+    const fallback = settings.boardGlowColor && settings.boardGlowColor !== 'none' ? settings.boardGlowColor : '0, 255, 136';
+    const glowRgb = !sideGlow || sideGlow === 'none' ? fallback : sideGlow;
+    setLanding({ square: lastMove.to, key: landingKeyRef.current, glowRgb });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastMove?.from, lastMove?.to, settings.landingEffect, prefersReducedMotion]);
 
@@ -402,6 +407,7 @@ export function ControlledChessBoard({
             <LandingEffectOverlay
               key={landing.key}
               square={landing.square}
+              glowRgb={landing.glowRgb}
               boardOrientation={game.boardOrientation}
               onDone={() => setLanding(null)}
             />

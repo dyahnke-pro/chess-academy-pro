@@ -21,16 +21,16 @@ describe('buildPieceRenderer', () => {
     expect(Object.keys(pieces!)).toHaveLength(12);
   });
 
-  it('renders the gold set with a baked filter even without glow filters', () => {
-    // The "Gold (Champion)" set always renders custom (no lichessName +
-    // no filters would normally short-circuit to undefined).
+  it('renders the gold set with a baked gold tint over the stocked glyphs', () => {
+    // "Gold (Champion)" always renders custom (no lichessName + no filters
+    // would normally short-circuit to undefined).
     const pieces = buildPieceRenderer('gold');
     expect(pieces).toBeDefined();
     expect(Object.keys(pieces!)).toHaveLength(12);
     const { container } = render(<>{pieces!.wN({})}</>);
     const img = container.querySelector('img');
     expect(img).toBeTruthy();
-    // cburnett base glyph + a gold tint baked on (interim, until real renders).
+    // Stocked cburnett glyph + the baked gold tint.
     expect(img!.src).toContain('cburnett/wN.svg');
     expect(img!.style.filter).toContain('sepia');
   });

@@ -5,6 +5,9 @@ interface LandingEffectOverlayProps {
   /** Destination square the piece just landed on, e.g. "e4". */
   square: string;
   boardOrientation: 'white' | 'black';
+  /** RGB triple (e.g. "0, 255, 136") for the effect color — the SAME glow that
+   *  backlights the pieces, so the burst matches the board's look. */
+  glowRgb: string;
   /** Called when the burst animation finishes so the parent can unmount it. */
   onDone: () => void;
 }
@@ -22,53 +25,91 @@ function squareToPercent(
 }
 
 /**
- * Builds a jagged "lightning bolt" SVG path from the centre (50,50) of a
- * 100×100 viewBox outward along `angle`, zig-zagging perpendicular to it.
+ * A thin, branching "string of light" filament from near the piece outward —
+ * a delicate jagged line (with an optional fork) that flickers like the energy
+ * crackle in the icon. Coordinates are in a 0–100 viewBox centred on the
+ * square (50,50 = piece centre).
  */
-function boltPath(angle: number, length: number): string {
-  const segments = 4;
+function filamentPath(angle: number, innerR: number, length: number, fork: boolean): string {
   const rad = (angle * Math.PI) / 180;
   const perp = rad + Math.PI / 2;
-  const pts: Array<[number, number]> = [[50, 50]];
-  for (let i = 1; i <= segments; i++) {
-    const r = (length / segments) * i;
-    // Zig-zag amount tapers to 0 at the tip so bolts end on a clean point.
-    const sway = i === segments ? 0 : (i % 2 === 0 ? 1 : -1) * (7 - i);
-    const x = 50 + Math.cos(rad) * r + Math.cos(perp) * sway;
-    const y = 50 + Math.sin(rad) * r + Math.sin(perp) * sway;
-    pts.push([x, y]);
+  const segments = 4;
+  const pts: Array<[number, number]> = [];
+  for (let i = 0; i <= segments; i++) {
+    const r = innerR + (length / segments) * i;
+    const sway = i === 0 || i === segments ? 0 : (i % 2 === 0 ? 1 : -1) * (3 + Math.random() * 2);
+    pts.push([
+      50 + Math.cos(rad) * r + Math.cos(perp) * sway,
+      50 + Math.sin(rad) * r + Math.sin(perp) * sway,
+    ]);
   }
-  return 'M' + pts.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(' L');
+  let d = 'M' + pts.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(' L');
+  if (fork) {
+    // A small branch peeling off the second-to-last node.
+    const [bx, by] = pts[segments - 1];
+    const bAngle = angle + (Math.random() * 50 - 25);
+    const bRad = (bAngle * Math.PI) / 180;
+    const blen = length * 0.4;
+    d += ` M${bx.toFixed(1)},${by.toFixed(1)} L${(bx + Math.cos(bRad) * blen).toFixed(1)},${(by + Math.sin(bRad) * blen).toFixed(1)}`;
+  }
+  return d;
+}
+
+interface Spark {
+  x0: number; y0: number; x1: number; y1: number;
+  r0: number; delay: number; dur: number;
 }
 
 /**
- * A short green electric burst that fires on the square a piece just landed
- * on — radiating lightning bolts, a hot flash core, and an expanding shock
- * ring. Tuned to the app icon's emerald-energy look. ~600ms then unmounts via
- * `onDone`. The parent gates this on the Landing Effect setting + reduced
- * motion, so this component always animates when mounted.
+ * A short burst on the square a piece just landed on, styled after the app
+ * icon: a soft energy halo, a few thin branching light-strings, and little
+ * glowing sparks that drift away from the piece and fade — all tinted with the
+ * board's piece-glow color. ~900ms then unmounts via `onDone`. The parent
+ * gates this on the Landing Effect setting + reduced motion.
  */
 export function LandingEffectOverlay({
   square,
   boardOrientation,
+  glowRgb,
   onDone,
 }: LandingEffectOverlayProps): JSX.Element {
   const pos = squareToPercent(square, boardOrientation);
 
-  // Six bolts radiating at jittered angles — recomputed per mount (the parent
-  // remounts via a changing key each move) so no two landings look identical.
-  const bolts = useMemo(() => {
-    return Array.from({ length: 6 }, (_, i) => {
-      const angle = i * 60 + (Math.random() * 30 - 15);
-      const length = 34 + Math.random() * 14;
-      return boltPath(angle, length);
+  // Recomputed per mount (parent remounts via a changing key each move) so no
+  // two landings look identical.
+  const filaments = useMemo(
+    () =>
+      Array.from({ length: 5 }, (_, i) => {
+        const angle = (i * 360) / 5 + (Math.random() * 40 - 20);
+        return filamentPath(angle, 15 + Math.random() * 4, 22 + Math.random() * 12, Math.random() > 0.5);
+      }),
+    [],
+  );
+
+  const sparks = useMemo<Spark[]>(() => {
+    return Array.from({ length: 11 }, () => {
+      const angle = Math.random() * Math.PI * 2;
+      const startR = 14 + Math.random() * 8;
+      const endR = 48 + Math.random() * 55;
+      const driftUp = 6 + Math.random() * 12; // float upward as they drift out
+      return {
+        x0: 50 + Math.cos(angle) * startR,
+        y0: 50 + Math.sin(angle) * startR,
+        x1: 50 + Math.cos(angle) * endR,
+        y1: 50 + Math.sin(angle) * endR - driftUp,
+        r0: 1.4 + Math.random() * 1.6,
+        delay: Math.random() * 0.12,
+        dur: 0.6 + Math.random() * 0.35,
+      };
     });
   }, []);
 
   useEffect(() => {
-    const t = setTimeout(onDone, 620);
+    const t = setTimeout(onDone, 920);
     return () => clearTimeout(t);
   }, [onDone]);
+
+  const colored = (alpha: number): string => `rgba(${glowRgb}, ${alpha})`;
 
   return (
     <div
@@ -82,70 +123,49 @@ export function LandingEffectOverlay({
       }}
       data-testid="landing-effect-overlay"
     >
-      {/* Expanding shock ring */}
+      {/* Soft energy halo bloom behind the piece */}
       <motion.div
         className="absolute rounded-full"
         style={{
-          inset: '-10%',
-          border: '2px solid rgba(74, 222, 128, 0.85)',
-          boxShadow: '0 0 14px 2px rgba(74, 222, 128, 0.5)',
+          inset: '-15%',
+          background: `radial-gradient(circle, ${colored(0.4)} 0%, ${colored(0.12)} 45%, transparent 70%)`,
         }}
-        initial={{ scale: 0.3, opacity: 0.9 }}
-        animate={{ scale: 1.9, opacity: 0 }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}
+        initial={{ scale: 0.5, opacity: 0.9 }}
+        animate={{ scale: 1.4, opacity: 0 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
       />
 
-      {/* Hot flash core */}
-      <motion.div
-        className="absolute rounded-full"
-        style={{
-          inset: '28%',
-          background:
-            'radial-gradient(circle, rgba(220,255,235,0.95) 0%, rgba(74,222,128,0.7) 45%, rgba(74,222,128,0) 75%)',
-        }}
-        initial={{ scale: 0, opacity: 1 }}
-        animate={{ scale: 1.6, opacity: 0 }}
-        transition={{ duration: 0.32, ease: 'easeOut' }}
-      />
-
-      {/* Lightning bolts */}
-      <motion.svg
+      <svg
         viewBox="0 0 100 100"
-        className="absolute"
-        style={{
-          inset: '-40%',
-          width: '180%',
-          height: '180%',
-          overflow: 'visible',
-          filter: 'drop-shadow(0 0 4px rgba(74, 222, 128, 0.9))',
-        }}
-        initial={{ opacity: 0, scale: 0.6 }}
-        animate={{ opacity: [0, 1, 0.55, 1, 0], scale: [0.6, 1.12, 1.15] }}
-        transition={{ duration: 0.5, ease: 'easeOut', times: [0, 0.15, 0.4, 0.6, 1] }}
+        className="absolute inset-0 w-full h-full"
+        style={{ overflow: 'visible', filter: `drop-shadow(0 0 3px ${colored(0.85)})` }}
       >
-        {bolts.map((d, i) => (
-          <g key={i}>
-            {/* Soft green halo stroke */}
-            <path
-              d={d}
-              fill="none"
-              stroke="rgba(74, 222, 128, 0.55)"
-              strokeWidth={4}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            {/* Bright white-green core stroke */}
-            <path
-              d={d}
-              fill="none"
-              stroke="rgba(223, 255, 235, 0.95)"
-              strokeWidth={1.4}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </g>
+        {/* Thin branching light-strings */}
+        <motion.g
+          initial={{ opacity: 0, scale: 0.85 }}
+          animate={{ opacity: [0, 1, 0.4, 0.9, 0], scale: [0.85, 1.06, 1.12] }}
+          transition={{ duration: 0.5, ease: 'easeOut', times: [0, 0.15, 0.45, 0.65, 1] }}
+          style={{ transformOrigin: '50px 50px' }}
+        >
+          {filaments.map((d, i) => (
+            <g key={i}>
+              <path d={d} fill="none" stroke={colored(0.55)} strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" />
+              <path d={d} fill="none" stroke="rgba(255,255,255,0.92)" strokeWidth={0.6} strokeLinecap="round" strokeLinejoin="round" />
+            </g>
+          ))}
+        </motion.g>
+
+        {/* Little sparks drifting away from the piece */}
+        {sparks.map((s, i) => (
+          <motion.circle
+            key={i}
+            fill={colored(0.95)}
+            initial={{ cx: s.x0, cy: s.y0, r: s.r0, opacity: 0 }}
+            animate={{ cx: s.x1, cy: s.y1, r: 0.4, opacity: [0, 1, 1, 0] }}
+            transition={{ duration: s.dur, delay: s.delay, ease: 'easeOut', times: [0, 0.15, 0.7, 1] }}
+          />
         ))}
-      </motion.svg>
+      </svg>
     </div>
   );
 }
