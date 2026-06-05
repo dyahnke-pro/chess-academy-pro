@@ -232,11 +232,18 @@ describe('WalkthroughMode integration — real annotation data', () => {
 
     await waitFor(() => screen.getByTestId('walkthrough-overview'), { timeout: 3000 });
 
-    const nextBtn = screen.getByRole('button', { name: /next/i });
     const seenTexts: string[] = [];
 
     for (let i = 0; i < 4; i++) {
-      act(() => { fireEvent.click(nextBtn); });
+      // The Next button disables briefly while requestHint/narration
+      // kicks off its async call (HintButton-style isAnalyzing guard);
+      // clicking while disabled is a no-op. Wait for it to re-enable
+      // before each click so every click actually advances a move (real
+      // users wait for the prior beat too).
+      await waitFor(() =>
+        expect(screen.getByRole('button', { name: /next/i })).not.toBeDisabled(),
+      { timeout: 3000 });
+      act(() => { fireEvent.click(screen.getByRole('button', { name: /next/i })); });
 
       await waitFor(() => {
         const text = document.body.textContent;
@@ -246,7 +253,9 @@ describe('WalkthroughMode integration — real annotation data', () => {
       seenTexts.push((document.body.textContent).substring(0, 120));
     }
 
-    // Each move should produce distinct text (annotation advances)
+    // Advancing through moves changes the displayed state per move (the
+    // move counter + annotation card update). Distinct snapshots prove
+    // the walkthrough is actually progressing, not stuck on one beat.
     const uniqueTexts = new Set(seenTexts);
     expect(uniqueTexts.size).toBeGreaterThanOrEqual(3);
   });

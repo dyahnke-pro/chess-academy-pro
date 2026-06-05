@@ -152,7 +152,7 @@ describe('PersonalityPanel', () => {
     expect((screen.getByTestId('personality-voice-drill-sergeant')).value).toBe('matthew');
   });
 
-  it('voice override persists only when it differs from the per-personality default', async () => {
+  it('persists the FULL per-personality voice map (R8: lock pairings, no diff-only resets)', async () => {
     const profile = buildUserProfile();
     await db.profiles.put(profile);
     const setProfile = vi.fn();
@@ -162,9 +162,17 @@ describe('PersonalityPanel', () => {
     fireEvent.change(screen.getByTestId('personality-voice-edgy'), { target: { value: 'ruth' } });
     // Auto-save fires after the 250ms debounce.
     await waitFor(() => expect(setProfile).toHaveBeenCalled());
-    // Persisted map contains ONLY the edgy override; defaults aren't
-    // serialized so future default changes auto-apply.
+    // R8 (audit): the FULL voice map is serialized — not just the diff —
+    // so every personality's pairing is locked and switching personalities
+    // can't silently revert a value. The map = the per-personality
+    // defaults with the edgy entry flipped to 'ruth'.
     const stored = await db.profiles.get(profile.id);
-    expect(stored?.preferences.coachPersonalityVoices).toEqual({ edgy: 'ruth' });
+    expect(stored?.preferences.coachPersonalityVoices).toEqual({
+      default: 'ruth',
+      soft: 'joanna',
+      edgy: 'ruth',
+      flirtatious: 'ruth',
+      'drill-sergeant': 'matthew',
+    });
   });
 });

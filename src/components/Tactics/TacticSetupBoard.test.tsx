@@ -86,7 +86,7 @@ describe('TacticSetupBoard', () => {
 
     expect(screen.getByTestId('setup-hint-area')).toBeInTheDocument();
     expect(screen.getByTestId('hint-button')).toBeInTheDocument();
-    expect(screen.getByTestId('hint-button')).toHaveTextContent('Get a Hint');
+    expect(screen.getByTestId('hint-button')).toHaveTextContent('Hint');
   });
 
   it('hides hint button when showHints is disabled', () => {
@@ -98,7 +98,10 @@ describe('TacticSetupBoard', () => {
     expect(screen.queryByTestId('hint-button')).not.toBeInTheDocument();
   });
 
-  it('advances hint level when hint button is clicked', async () => {
+  it('jumps straight to the full answer (tier 3) on the first tap', async () => {
+    // One-tap hint design (David 2026-05-26: "All hint sources I want to
+    // just show the answer on first press") — no incremental 0→1→2
+    // ladder; the first click jumps to Tier 3.
     const puzzle = buildSetupPuzzle();
     render(<TacticSetupBoard puzzle={puzzle} onComplete={vi.fn()} />);
 
@@ -108,34 +111,26 @@ describe('TacticSetupBoard', () => {
     fireEvent.click(hintButton);
 
     await waitFor(() => {
-      expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '1');
+      expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '3');
     });
   });
 
-  it('shows nudge text at hint level 2', async () => {
+  it('shows nudge text after the one-tap full-answer hint', async () => {
     const puzzle = buildSetupPuzzle();
     render(<TacticSetupBoard puzzle={puzzle} onComplete={vi.fn()} />);
 
     const hintButton = screen.getByTestId('hint-button');
 
-    // Level 0 → 1 (arrows). requestHint kicks off an async brain call
-    // that flips isAnalyzing=true one microtask later; the button has
-    // `disabled={isAnalyzing}` so a back-to-back click would be a
-    // no-op. Wait for both the level bump AND isAnalyzing to settle.
+    // One tap → Tier 3; the async brain call then populates the nudge.
     fireEvent.click(hintButton);
     await waitFor(() => {
-      expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '1');
-      expect(screen.getByTestId('hint-button')).not.toBeDisabled();
+      expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '3');
     });
 
-    // Level 1 → 2 (nudge)
-    fireEvent.click(hintButton);
+    // Nudge text should appear once the brain call resolves.
     await waitFor(() => {
-      expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '2');
+      expect(screen.getByTestId('hint-nudge')).toBeInTheDocument();
     });
-
-    // Nudge text should appear
-    expect(screen.getByTestId('hint-nudge')).toBeInTheDocument();
   });
 
   it('speaks intro narration on mount', () => {
