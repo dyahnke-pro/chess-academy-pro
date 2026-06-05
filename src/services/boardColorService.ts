@@ -29,6 +29,15 @@ export const BOARD_COLORS: BoardColorScheme[] = [
     whitePieceFilter: 'drop-shadow(0 0 3px rgba(0, 255, 136, 0.6)) drop-shadow(0 0 1px rgba(0, 255, 136, 0.9))',
     blackPieceFilter: 'drop-shadow(0 0 3px rgba(168, 85, 247, 0.6)) drop-shadow(0 0 1px rgba(168, 85, 247, 0.9))',
   },
+  {
+    // Pairs with the "Gold (Champion)" piece set — dark obsidian squares and
+    // an emerald border glow, echoing the gold-knight app icon's backdrop.
+    id: 'champion',
+    name: 'Champion',
+    lightSquare: '#33403a',
+    darkSquare: '#1b231f',
+    borderGlow: '0 0 10px 1px rgba(74, 222, 128, 0.4), 0 0 26px 3px rgba(74, 222, 128, 0.16)',
+  },
 ];
 
 export const DEFAULT_BOARD_COLOR = 'neon';

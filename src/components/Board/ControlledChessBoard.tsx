@@ -15,6 +15,7 @@ import type { EngineSnapshot, LastMoveContext } from './VoiceChatMic';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import type { UseChessGameReturn, MoveResult } from '../../hooks/useChessGame';
 import { GhostPieceOverlay } from './GhostPieceOverlay';
+import { LandingEffectOverlay } from './LandingEffectOverlay';
 import type {
   PieceDropHandlerArgs,
   SquareHandlerArgs,
@@ -224,6 +225,21 @@ export function ControlledChessBoard({
   // Square highlight styles
   const { lastMove, checkSquare, selectedSquare, legalMoves, getPiece } = game;
 
+  // ─── Landing effect ──────────────────────────────────────────────────────
+  // Fire the emerald lightning burst on the square a piece just landed on —
+  // student moves AND auto-played opponent/walkthrough moves both flow through
+  // game.lastMove, so every landing sparks. Keyed off the from/to primitives so
+  // it triggers once per move, not on every incidental re-render.
+  const landingKeyRef = useRef(0);
+  const [landing, setLanding] = useState<{ square: string; key: number } | null>(null);
+  useEffect(() => {
+    if (settings.landingEffect !== 'lightning' || prefersReducedMotion) return;
+    if (!lastMove) return;
+    landingKeyRef.current += 1;
+    setLanding({ square: lastMove.to, key: landingKeyRef.current });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastMove?.from, lastMove?.to, settings.landingEffect, prefersReducedMotion]);
+
   // Board square neon glow from user settings
   const { baseGlow: baseGlowStr, mergeGlow } = useBoardGlow();
 
@@ -380,6 +396,14 @@ export function ControlledChessBoard({
               ghostMove={ghostMove}
               boardOrientation={game.boardOrientation}
               pieceSet={settings.pieceSet}
+            />
+          )}
+          {landing && (
+            <LandingEffectOverlay
+              key={landing.key}
+              square={landing.square}
+              boardOrientation={game.boardOrientation}
+              onDone={() => setLanding(null)}
             />
           )}
           {classificationOverlay && (

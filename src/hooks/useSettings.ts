@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { useAppStore } from '../stores/appStore';
 import { db } from '../db/schema';
-import type { UserPreferences, PieceAnimationSpeed, CoachVerbosity, MoveMethod } from '../types';
+import type { UserPreferences, PieceAnimationSpeed, LandingEffect, CoachVerbosity, MoveMethod } from '../types';
 
 export interface EffectiveSettings {
   theme: string;
@@ -16,6 +16,7 @@ export interface EffectiveSettings {
   showLegalMoves: boolean;
   showCoordinates: boolean;
   pieceAnimationSpeed: PieceAnimationSpeed;
+  landingEffect: LandingEffect;
   boardOrientation: boolean;
   moveQualityFlash: boolean;
   showHints: boolean;
@@ -55,6 +56,7 @@ const MASTER_OFF_OVERRIDES: Partial<EffectiveSettings> = {
   highlightLastMove: false,
   showLegalMoves: false,
   pieceAnimationSpeed: 'none',
+  landingEffect: 'off',
 };
 
 const DEFAULT_SETTINGS: EffectiveSettings = {
@@ -70,6 +72,7 @@ const DEFAULT_SETTINGS: EffectiveSettings = {
   showLegalMoves: true,
   showCoordinates: true,
   pieceAnimationSpeed: 'medium',
+  landingEffect: 'lightning',
   boardOrientation: true,
   moveQualityFlash: true,
   showHints: true,
@@ -113,6 +116,7 @@ export function useSettings(): UseSettingsReturn {
       showLegalMoves: raw.showLegalMoves,
       showCoordinates: raw.showCoordinates,
       pieceAnimationSpeed: raw.pieceAnimationSpeed,
+      landingEffect: raw.landingEffect ?? 'lightning',
       boardOrientation: raw.boardOrientation,
       moveQualityFlash: raw.moveQualityFlash,
       showHints: raw.showHints,

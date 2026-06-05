@@ -24,7 +24,7 @@ import { BugReportPanel } from './BugReportPanel';
 import { ScrollHintBar } from '../Common/ScrollHintBar';
 import { APP_VERSION, BETA_MODE } from '../../utils/constants';
 import { hardRefresh } from '../../utils/hardRefresh';
-import type { UserProfile, PieceAnimationSpeed, CoachNarration, MoveMethod } from '../../types';
+import type { UserProfile, PieceAnimationSpeed, LandingEffect, CoachNarration, MoveMethod } from '../../types';
 import { resolveCoachNarration } from '../../utils/coachNarration';
 
 type SettingsTab = 'profile' | 'board' | 'coach' | 'appearance' | 'analytics' | 'about';
@@ -266,6 +266,7 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
   const [showLegalMoves, setShowLegalMoves] = useState(prefs.showLegalMoves);
   const [showCoordinates, setShowCoordinates] = useState(prefs.showCoordinates);
   const [pieceAnimationSpeed, setPieceAnimationSpeed] = useState<PieceAnimationSpeed>(prefs.pieceAnimationSpeed);
+  const [landingEffect, setLandingEffect] = useState<LandingEffect>(prefs.landingEffect ?? 'lightning');
   // boardOrientation persisted but no UI — see Game Behavior section.
   // Read directly from prefs in the autosave effect.
   const boardOrientation = prefs.boardOrientation;
@@ -330,6 +331,7 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
         showLegalMoves,
         showCoordinates,
         pieceAnimationSpeed,
+        landingEffect,
         boardOrientation,
         boardColor,
         pieceSet,
@@ -354,6 +356,7 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     highlightLastMove, showLegalMoves, showCoordinates, pieceAnimationSpeed,
+    landingEffect,
     boardOrientation, boardColor, pieceSet, soundEnabled, showEvalBar,
     showEngineLines, moveQualityFlash, showHints, voiceEnabled, moveMethod,
     moveConfirmation, autoPromoteQueen, masterAllOff,
@@ -423,6 +426,18 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
         testId="animation-speed-select"
         disabled={affectedByMaster}
       />
+      <SelectRow
+        label="Landing Effect"
+        tooltip="Visual burst when a piece lands on a square"
+        value={landingEffect}
+        options={[
+          { value: 'lightning', label: 'Lightning — Emerald burst' },
+          { value: 'off', label: 'Off — None' },
+        ]}
+        onChange={(v) => setLandingEffect(v as LandingEffect)}
+        testId="landing-effect-select"
+        disabled={affectedByMaster}
+      />
       {/* "White on Bottom" toggle removed — board orientation is
           already correctly driven per-game by the active opening's
           studentSide (Black-defender openings flip the board, etc.).
@@ -444,6 +459,7 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
           { value: 'ice', label: 'Ice' },
           { value: 'coral', label: 'Coral' },
           { value: 'neon', label: 'Neon' },
+          { value: 'champion', label: 'Champion' },
         ]}
         onChange={setBoardColor}
         testId="board-color-select"
@@ -463,6 +479,7 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
           { value: 'pixel', label: 'Pixel' },
           { value: 'horsey', label: 'Horsey' },
           { value: 'letter', label: 'Letter' },
+          { value: 'gold', label: 'Gold (Champion)' },
         ]}
         onChange={setPieceSet}
         testId="piece-set-select"
