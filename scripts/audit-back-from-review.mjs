@@ -19,7 +19,7 @@
  * Default target = prod (chess-academy-pro.vercel.app).
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -42,8 +42,9 @@ async function main() {
 
   const executablePath = await resolveChromiumExecutable(HEADED);
   if (executablePath) console.log(`[back-from-review] chromium = ${executablePath}`);
-  const browser = await chromium.launch({ headless: !HEADED, executablePath });
+  const browser = await chromium.launch({ headless: !HEADED, executablePath, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext({
+    ...sandboxContextOptions(), // AUDIT_SANDBOX=1 → ignoreHTTPSErrors for the resigned egress cert
     viewport: { width: 414, height: 896 },
     deviceScaleFactor: 2,
     userAgent: 'AuditBackFromReviewBot/1.0 (chromium)',
