@@ -447,3 +447,25 @@ All gates green. Next: ship-check → PR → loop audit on prod (3 instruments).
           English Bc5/Nxe5 skewer→fork.
 - [x] All gates green: punishGems, narrationAccuracy, lessonIntegrity,
       wlppNarration, lessons/, repertoire.
+
+### 2026-06-05 — full green + WLPP Learn redesign
+- [x] All 14 test failures triaged + fixed (real bug vs stale-test, verified each):
+      - trap classification: 46 Naroditsky trapLines classified (all positional →
+        mistake/theme, none forced traps); Alapin mechanism test re-anchored on a
+        LIVE forced trap (Carlsen Siberian).
+      - model-games variation tags: regenerated from the deterministic classifier
+        (only variation fields changed, zero game-data touched).
+      - orphanLessons baseline emptied (every pro-rep variation now has a lesson).
+      - verify-annotation-resolution: curated lesson now counts as a reachable
+        Watch source (34 'unreachable' openings all have curated lessons; G9.3
+        Gate A bans annotations for them).
+      - audit-openings-narration: overflow now tests SAN legality, not DB-base
+        length (the ruy-lopez 30-move walkthrough is legal).
+      - 4 stale UI tests aligned with intentional changes (one-tap hint, R8
+        full-voice-map persistence) + 1 flaky walkthrough test made deterministic.
+- [x] FULL SUITE GREEN: 415 files / 20,379 passed / 0 failed. ship-check READY.
+- [x] WLPP LEARN redesign (David 2026-06-05): voice dictates the move only;
+      written narration shown below the board; opponent reply voice-promise-gated
+      (no choppy cut-off); square highlight kept. CLAUDE.md contract updated.
+- [ ] TestFlight upload (Mac-only — David's machine). Push to main pending
+      David's "we push at the end" signal.
