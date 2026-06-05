@@ -1038,6 +1038,17 @@ export interface MasterGroundingOptions {
    *  deep Learn games stocked out ~half their turns on real recaptures the
    *  explorer's top-N for the exact FEN didn't carry.) */
   moveNarration?: boolean;
+  /** PLAN / STRATEGY question turn ("give me a plan for the next three
+   *  moves", "what are my main ideas here?"). A plan answer names forward
+   *  moves 2-3 plies ahead that aren't legal in the current position nor in
+   *  the explorer's top-N, so the bare-SAN gate flagged them and stocked
+   *  out a legitimate plan question even WITH master data (the off-book
+   *  carve-out only covered no-master-data positions; an opening position
+   *  HAS master data — response-loop audit 2026-06-05). When set, the
+   *  bare-SAN gate is skipped for this turn; the stat / count / player /
+   *  comparative guards stay on `hasMasterData`, so G3's real fabrication
+   *  vectors remain gated. See `LiveState`/`MasterPlayContext.planQuestion`. */
+  planQuestion?: boolean;
   /** Surface route for audit attribution. Goes into every emitted
    *  audit event (`master-play-lookup`, `claim-validator-trip`, etc). */
   surface: string;
@@ -1211,7 +1222,7 @@ async function buildMasterPlayContext(
     // review, `groundedSans` carries the game's own moves + legal moves
     // so the coach can discuss the student's actual game without every
     // SAN tripping the gate.
-    return { current, lookahead: [], groundedSans, groundedFromPlayedGame, moveNarration: grounding.moveNarration, groundedPlayers: grounding.groundedPlayers };
+    return { current, lookahead: [], groundedSans, groundedFromPlayedGame, moveNarration: grounding.moveNarration, planQuestion: grounding.planQuestion, groundedPlayers: grounding.groundedPlayers };
   }
   const lookahead = await buildLookahead(
     grounding.currentFen,
@@ -1219,7 +1230,7 @@ async function buildMasterPlayContext(
     grounding.surface,
     grounding.sessionId,
   );
-  return { current, lookahead, groundedSans, groundedFromPlayedGame, moveNarration: grounding.moveNarration, groundedPlayers: grounding.groundedPlayers };
+  return { current, lookahead, groundedSans, groundedFromPlayedGame, moveNarration: grounding.moveNarration, planQuestion: grounding.planQuestion, groundedPlayers: grounding.groundedPlayers };
 }
 
 /** Render the context as a system-prompt block the LLM can consume.

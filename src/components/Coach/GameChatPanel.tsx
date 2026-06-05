@@ -556,6 +556,28 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           }
           return;
         }
+        if (inGame?.kind === 'set-board' && onSetBoardPosition) {
+          // Deterministic board-set — don't depend on the LLM emitting
+          // set_board_position (it skipped it intermittently, leaving the
+          // board at the start; response-loop audit 2026-06-05).
+          const res = await Promise.resolve(onSetBoardPosition(inGame.fen));
+          const ok = typeof res === 'boolean' ? res : res.ok;
+          const ack = ok
+            ? "Board's set. Your move."
+            : "I couldn't set that position — the FEN looked off.";
+          const ackMsg: ChatMessageType = {
+            id: `gmsg-${Date.now()}-ack`,
+            role: 'assistant',
+            content: ack,
+            timestamp: Date.now(),
+          };
+          setMessages([...updatedMessages, ackMsg]);
+          recordCoachAck(ack);
+          if (useAppStore.getState().coachVoiceOn) {
+            if (!speechAbortedRef.current) void voiceService.speak(ack);
+          }
+          return;
+        }
         if (inGame?.kind === 'play-opening' && onPlayOpening) {
           // Restart BEFORE queuing the opening — handleRestart clears
           // requestedOpeningMoves, so we have to wipe the board first

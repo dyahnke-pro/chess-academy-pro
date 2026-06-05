@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { detectInGameChatIntent } from './inGameChatIntent';
+import { detectInGameChatIntent, detectFenInText } from './inGameChatIntent';
 
 describe('detectInGameChatIntent', () => {
   describe('restart', () => {
@@ -121,6 +121,34 @@ describe('detectInGameChatIntent', () => {
       // Order matters: MUTE_RE runs before NARRATE_RE because "turn off
       // voice" contains "voice" which narrate would also catch.
       expect(detectInGameChatIntent('turn off the voice')).toEqual({ kind: 'mute' });
+    });
+  });
+
+  // Deterministic board-set — don't rely on the LLM emitting
+  // set_board_position (response-loop audit 2026-06-05 set_board tool-flake).
+  describe('set-board (FEN)', () => {
+    it('matches "set the board to <full FEN>"', () => {
+      const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 4 5';
+      expect(detectInGameChatIntent(`set the board to ${fen}`)).toEqual({ kind: 'set-board', fen });
+    });
+
+    it('matches a castled position FEN and reads the castled king', () => {
+      const fen = 'r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 7';
+      expect(detectInGameChatIntent(`load this: ${fen}`)).toEqual({ kind: 'set-board', fen });
+    });
+
+    it('normalizes a placement-only FEN with default fields', () => {
+      const out = detectFenInText('set up 6k1/5ppp/8/8/8/8/8/R6K');
+      expect(out).toBe('6k1/5ppp/8/8/8/8/8/R6K w - - 0 1');
+    });
+
+    it('rejects a king-less fragment (prose, not a position)', () => {
+      expect(detectFenInText('the 8/8 endgame technique')).toBeNull();
+    });
+
+    it('rejects an illegal placement chess.js cannot load', () => {
+      // 9 files on the first rank — not a legal FEN.
+      expect(detectFenInText('rnbqkbnrr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1')).toBeNull();
     });
   });
 

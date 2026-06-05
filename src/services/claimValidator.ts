@@ -420,8 +420,18 @@ export function validateClaims(
   // the real fabrication vectors (percentages, game counts, ratings, player
   // names, "most popular"/"main line" comparatives) stay gated on
   // `hasMasterData` below regardless.
+  // PLAN / STRATEGY turns also exempt the bare-SAN gate: a plan answer
+  // names FORWARD moves 2-3 plies ahead ("d3, castle, then reroute Nbd2-
+  // Nf1-Ng3") that aren't legal in the current position nor in the
+  // explorer's top-N for the exact FEN — legitimate move discussion, not a
+  // "masters play X" claim. The off-book carve-out (no master data) used to
+  // be the only escape, so an OPENING position (which HAS master data) still
+  // stocked out a plain "give me a plan" question (response-loop audit
+  // 2026-06-05). The stat / count / player / comparative guards below stay
+  // on `hasMasterData`, so G3's real fabrication vectors remain gated.
   const canVerifySans =
-    !context.moveNarration && (hasMasterData || hasDbData || !!context.groundedFromPlayedGame);
+    !context.moveNarration && !context.planQuestion &&
+    (hasMasterData || hasDbData || !!context.groundedFromPlayedGame);
   if (canVerifySans) {
     for (const san of sans) {
       if (!knownSans.has(san)) {

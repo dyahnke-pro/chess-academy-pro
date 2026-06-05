@@ -143,4 +143,18 @@ export interface MasterPlayContext {
    *  comparative guards stay in force). Set by `buildMasterPlayContext`.
    *  (David's iPhone + deep audit, 2026-06-04.) */
   moveNarration?: boolean;
+  /** True when the user's turn is a PLAN / STRATEGY question ("give me a
+   *  plan for the next three moves", "what are my main ideas here?"). A
+   *  plan answer names FORWARD moves 2-3 plies ahead that are neither
+   *  legal in the current position nor in the explorer's top-N for the
+   *  exact FEN, so the bare-SAN gate flagged them, exhausted retries, and
+   *  served the stock "run it through the engine" fallback on a perfectly
+   *  legitimate plan question — even WITH master data (the off-book carve-
+   *  out only covered positions with no master data; an opening position
+   *  has master data, so a multi-move plan still stocked out — response-
+   *  loop audit 2026-06-05). When set, the bare-SAN gate is skipped (the
+   *  percentage / count / player / comparative guards stay in force, so
+   *  the real fabrication vectors are still gated). Set by
+   *  `buildMasterPlayContext`. */
+  planQuestion?: boolean;
 }

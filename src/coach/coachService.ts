@@ -419,6 +419,17 @@ function runAnswerGates(
   });
 }
 
+/** A PLAN / STRATEGY question — the answer names forward moves several
+ *  plies ahead that the bare-SAN claim gate would otherwise flag as
+ *  ungrounded and stock out (response-loop audit 2026-06-05). Detecting it
+ *  here lets the grounding pipeline exempt the bare-SAN gate for the turn
+ *  while keeping the stat / count / player / comparative guards in force. */
+const PLAN_QUESTION_RE =
+  /\b(?:plans?|strateg(?:y|ies|ize)|next\s+(?:few|two|three|several|2|3|\d+)\s+moves?|main\s+ideas?|my\s+ideas?|long[-\s]?term|game\s*plan|how\s+(?:do\s+i|should\s+i)\s+(?:proceed|continue|play|approach)|what'?s?\s+(?:the|my)\s+(?:plan|idea|strategy|approach)|outline\s+(?:a|my|the)?\s*(?:plan|strategy))\b/i;
+function isPlanQuestion(ask: string | undefined): boolean {
+  return !!ask && PLAN_QUESTION_RE.test(ask);
+}
+
 async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Promise<CoachAnswer> {
   // WO-COACH-UNIFY-01 visibility: include task + maxTokens in the
   // ask-received audit so paste-back audit logs show which surface
@@ -855,6 +866,11 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             // not claiming "masters play X"). The G6 arrow validator + the
             // stat/player/comparative guards still apply. (David 2026-06-04.)
             moveNarration: input.liveState.moveNarration,
+            // PLAN / STRATEGY questions exempt the bare-SAN gate (a plan
+            // names forward moves several plies ahead, not "masters play
+            // X"). Detected from the user's ask. The stat / count / player /
+            // comparative guards still apply. (Response-loop audit 2026-06-05.)
+            planQuestion: isPlanQuestion(input.ask),
             surface: coachSurfaceToRoute(input.liveState.surface),
           }
         : undefined);

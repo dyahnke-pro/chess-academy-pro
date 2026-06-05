@@ -10,14 +10,51 @@
  * game we only care about two actions: restart in place, and load an
  * opening book line for the coach to play.
  */
+import { Chess } from 'chess.js';
 import { parseCoachIntent } from './coachAgent';
 import { getOpeningMoves } from './openingDetectionService';
 
 export type InGameChatIntent =
   | { kind: 'restart' }
   | { kind: 'play-opening'; openingName: string }
+  | { kind: 'set-board'; fen: string }
   | { kind: 'narrate' }
   | { kind: 'mute' };
+
+/** Match a FEN-shaped token: 8 ranks of piece-placement separated by
+ *  "/", optionally followed by the turn / castling / en-passant /
+ *  clock fields. "set the board to <FEN>" used to depend on the LLM
+ *  emitting the set_board_position tool — which it skipped intermittently,
+ *  leaving the board at the starting position (response-loop audit
+ *  2026-06-05, set_board tool-flake). Detecting + chess.js-validating the
+ *  FEN here makes board-setting deterministic, the same way restart /
+ *  play-opening short-circuit the LLM. */
+const FEN_RE =
+  /([pnbrqkPNBRQK1-8]+(?:\/[pnbrqkPNBRQK1-8]+){7})(?:\s+([wb])\s+(-|[KQkq]+)\s+(-|[a-h][36])(?:\s+(\d+)\s+(\d+))?)?/;
+
+/** Extract + validate a FEN from a chat message, returning the
+ *  normalized full FEN (placement-only inputs get the default side /
+ *  castling / clock fields) or null if no legal position is present. */
+export function detectFenInText(text: string): string | null {
+  const m = FEN_RE.exec(text);
+  if (!m) return null;
+  const placement = m[1];
+  // Reject a bare "8/8" style fragment that is really prose (needs all
+  // 8 ranks AND at least one king to be a plausible position).
+  if (!/k/i.test(placement)) return null;
+  const turn = m[2] ?? 'w';
+  const castling = m[3] ?? '-';
+  const ep = m[4] ?? '-';
+  const halfmove = m[5] ?? '0';
+  const fullmove = m[6] ?? '1';
+  const full = `${placement} ${turn} ${castling} ${ep} ${halfmove} ${fullmove}`;
+  try {
+    new Chess(full);
+    return full;
+  } catch {
+    return null;
+  }
+}
 
 /** Chess opening abbreviations people actually type. Expanded to a
  *  canonical name that `getOpeningMoves` can resolve against the
@@ -102,6 +139,15 @@ export function detectInGameChatIntent(text: string): InGameChatIntent | null {
 
   if (RESTART_RE.test(trimmed)) {
     return { kind: 'restart' };
+  }
+
+  // Deterministic board-set: a chat message carrying a legal FEN sets the
+  // board directly instead of relying on the LLM to emit set_board_position
+  // (which it skipped intermittently — board stayed at the start). Checked
+  // before the opening-play matchers because a FEN is unambiguous.
+  const fen = detectFenInText(trimmed);
+  if (fen) {
+    return { kind: 'set-board', fen };
   }
 
   // Opening-play requests — "play the KID against me", "let's play the

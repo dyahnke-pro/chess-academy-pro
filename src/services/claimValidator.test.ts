@@ -149,6 +149,35 @@ describe('validateClaims — SAN check', () => {
     expect(r.violations.some((v) => v.kind === 'san' && v.claim === 'f4')).toBe(true);
   });
 
+  // Regression (response-loop audit 2026-06-05): a PLAN / strategy question
+  // on an OPENING position (which HAS master data) named forward moves 2-3
+  // plies ahead that aren't in the current top-N nor legal yet, so the bare-
+  // SAN gate flagged them, exhausted retries, and served the stock "run it
+  // through the engine" fallback on a plain "give me a plan" question. With
+  // planQuestion set the bare-SAN gate is exempt; the stat / player /
+  // comparative guards stay in force.
+  it('does NOT flag forward-looking plan SANs when planQuestion is set (even WITH master data)', () => {
+    const ctx: MasterPlayContext = { ...buildContext(), planQuestion: true };
+    const r = validateClaims(
+      'A good plan: develop with d3 and O-O, then reroute the knight Nbd2-Nf1-Ng3 and expand with a4.',
+      ctx,
+    );
+    expect(r.violations.some((v) => v.kind === 'san')).toBe(false);
+    expect(r.ok).toBe(true);
+  });
+
+  it('STILL gates fabricated stats/players on a planQuestion turn (only the bare-SAN gate is exempt)', () => {
+    const ctx: MasterPlayContext = { ...buildContext(), planQuestion: true };
+    const r = validateClaims(
+      'The plan with Nbd2 scores 88% for White and is Kasparov\'s favourite.',
+      ctx,
+    );
+    // SAN exempt, but the bogus percentage + ungrounded player still trip.
+    expect(r.violations.some((v) => v.kind === 'san')).toBe(false);
+    expect(r.violations.some((v) => v.kind === 'numeric')).toBe(true);
+    expect(r.violations.some((v) => v.kind === 'entity' && v.claim === 'Kasparov')).toBe(true);
+  });
+
   it('accepts castling SAN if present in context', () => {
     const ctx = buildContext();
     const withCastling: MasterPlayContext = {
