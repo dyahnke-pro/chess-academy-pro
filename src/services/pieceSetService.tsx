@@ -1,5 +1,9 @@
 import type { PieceRenderObject } from 'react-chessboard';
 import { logAppAudit } from './appAuditor';
+import {
+  CHAMPION_USE_CUSTOM_IMAGES,
+  championBoardPieceUrl,
+} from './championPieceSet';
 
 export interface PieceSetConfig {
   id: string;
@@ -90,6 +94,14 @@ export function buildPieceRenderer(
 ): PieceRenderObject | undefined {
   const config = PIECE_SETS.find((ps) => ps.id === pieceSetId);
   const isGold = pieceSetId === 'gold';
+
+  // When the real rendered champion pieces are present, the gold set serves
+  // them directly (already gold — no CSS tint), falling back per-piece to the
+  // tinted cburnett glyph if an individual render is missing.
+  if (isGold && CHAMPION_USE_CUSTOM_IMAGES) {
+    return buildChampionImagePieces();
+  }
+
   const hasFilters = filters?.whitePieceFilter || filters?.blackPieceFilter;
 
   // No custom set and no filters → use react-chessboard defaults.
@@ -160,6 +172,52 @@ export function buildPieceRenderer(
     );
   }
 
+  return pieces;
+}
+
+/**
+ * Renders the "Gold (Champion)" set from the real rendered art committed to
+ * public/pieces/champion-board/ (already gold, so no CSS tint). If an
+ * individual piece render is missing, the `<img>` falls back to the
+ * gold-tinted cburnett glyph so a partial set never shows a broken image.
+ */
+function buildChampionImagePieces(): PieceRenderObject {
+  const pieces: PieceRenderObject = {};
+  for (const [key, file] of Object.entries(PIECE_MAP)) {
+    const customUrl = championBoardPieceUrl(key);
+    const isWhite = key.startsWith('w');
+    const fallbackFilter = isWhite ? GOLD_PIECE_FILTERS.white : GOLD_PIECE_FILTERS.black;
+    const fallbackUrl = `${LICHESS_CDN}/cburnett/${file}.svg`;
+
+    pieces[key] = ({ svgStyle } = {}) => (
+      <img
+        src={customUrl}
+        alt={key}
+        onError={(e) => {
+          const img = e.currentTarget as HTMLImageElement;
+          // First failure → swap to the tinted cburnett glyph (apply the gold
+          // treatment that the missing render would have carried).
+          if (!img.dataset.championFellBack) {
+            img.dataset.championFellBack = '1';
+            img.src = fallbackUrl;
+            img.style.filter = fallbackFilter;
+            return;
+          }
+          // cburnett fallback also failed → audit once per session.
+          if (loggedAssetFailures.has(customUrl)) return;
+          loggedAssetFailures.add(customUrl);
+          void logAppAudit({
+            kind: 'asset-load-error',
+            category: 'subsystem',
+            source: 'pieceSetService',
+            summary: `champion piece=${key} url=${customUrl} (fell back to cburnett, also failed)`,
+          });
+        }}
+        style={{ width: '100%', height: '100%', ...svgStyle }}
+        draggable={false}
+      />
+    );
+  }
   return pieces;
 }
 
