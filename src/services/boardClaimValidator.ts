@@ -308,8 +308,19 @@ export function validateBoardClaims(text: string, fen: string): BoardClaimResult
   }
 
   // ── (2) PIECE-ON-SQUARE (present-tense clauses only) ──────────────
-  for (const sentence of splitSentences(text)) {
-    if (FUTURE_MARKER_RE.test(sentence)) continue; // hypothetical board — skip
+  for (const fullSentence of splitSentences(text)) {
+    // Only adjudicate the PRESENT-TENSE HEAD of the sentence. Everything
+    // from the first future/hypothetical marker onward ("after Be2 …",
+    // "white threatens …", "you should …") describes a board that doesn't
+    // exist yet and can't be judged against the current FEN — but the head
+    // BEFORE that marker is a present-tense claim and MUST be checked.
+    // Skipping the WHOLE sentence on any marker was a leak: "the knight on
+    // f6 threatens your queen" (empty f6) rode through on the word
+    // "threatens" (David 2026-06-05 — "the gate must FULLY close every
+    // time there is a contradiction").
+    const fm = FUTURE_MARKER_RE.exec(fullSentence);
+    const sentence = fm ? fullSentence.slice(0, fm.index) : fullSentence;
+    if (!sentence.trim()) continue;
     const claims: Array<{ type: PieceSymbol; color?: 'w' | 'b'; square: string; raw: string }> = [];
     const fwd = /\b(white|black)?\s*(pawn|knight|bishop|rook|queen|king)\s+(?:on|at)\s+([a-h][1-8])\b/gi;
     const rev = /\b(?:the\s+)?([a-h][1-8])\s*[-–]\s*(pawn|knight|bishop|rook|queen|king)\b/gi;

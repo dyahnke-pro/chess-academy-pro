@@ -5,6 +5,7 @@
 // classification + a one-line spoken-safe teaching note. Shared by
 // Discussion Practice (live) and Game Review (past games).
 
+import { Chess } from 'chess.js';
 import { getCoachChatResponse } from './coachApi';
 import { stripDisprovenSentences } from './boardClaimValidator';
 import { logAppAudit } from './appAuditor';
@@ -107,22 +108,38 @@ export async function classifyMisconception(
   const rawNote = typeof parsed.coachNote === 'string' ? parsed.coachNote.trim() : '';
   if (!tag) return null;
 
-  // 🔒 GROUND THE SPOKEN NOTE (David 2026-06-05 — LLM-decision sweep). The
-  // tag is closed-set (validated below), but `coachNote` is free LLM prose
-  // that gets SPOKEN to teach the slip — and the prompt asks it to "name a
-  // square, a piece, or a principle." An ungrounded note can hallucinate
-  // ("your knight on f6 was hanging" with no knight on f6). chess.js is the
-  // truth: drop any sentence whose board-claim is provably false BEFORE it's
-  // ever spoken — same guard the main coach answer uses. A principle-only
-  // note (no concrete square/piece claim) passes untouched.
-  const { clean: coachNote, dropped } = stripDisprovenSentences(rawNote, input.fen);
-  if (dropped.length > 0) {
+  // 🔒 GROUND THE SPOKEN NOTE — FAIL-CLOSED (David 2026-06-05: "make damn
+  // sure that note is grounded and the gate FULLY CLOSES EVERY TIME there is
+  // a contradiction"). The tag is closed-set (validated below), but
+  // `coachNote` is free LLM prose that gets SPOKEN to teach the slip, and the
+  // prompt asks it to "name a square, a piece, or a principle." An ungrounded
+  // note can hallucinate ("the knight on f6 is hanging" with no knight on
+  // f6). chess.js is the truth: drop any sentence whose board-claim is
+  // provably false before it's ever spoken. FAIL-CLOSED: if the FEN can't be
+  // parsed (so the board can't be verified at all) we drop the ENTIRE note
+  // rather than speak an unverifiable claim — never pass through unchecked.
+  let coachNote = '';
+  try {
+    new Chess(input.fen); // throws on an unparseable FEN → fail closed below
+    const { clean, dropped } = stripDisprovenSentences(rawNote, input.fen);
+    coachNote = clean;
+    if (dropped.length > 0) {
+      void logAppAudit({
+        kind: 'claim-validator-trip',
+        category: 'subsystem',
+        source: 'misconceptionClassifier.coachNote',
+        summary: `dropped ${dropped.length} disproven sentence(s) from coachNote (tag=${tag})`,
+        details: dropped.map((d) => d.sentence).join(' | ').slice(0, 300),
+        fen: input.fen,
+      });
+    }
+  } catch {
+    coachNote = ''; // unverifiable board → speak nothing
     void logAppAudit({
       kind: 'claim-validator-trip',
       category: 'subsystem',
       source: 'misconceptionClassifier.coachNote',
-      summary: `dropped ${dropped.length} disproven sentence(s) from coachNote (tag=${tag})`,
-      details: dropped.map((d) => d.sentence).join(' | ').slice(0, 300),
+      summary: `dropped entire coachNote — FEN unparseable, cannot verify board claims (tag=${tag})`,
       fen: input.fen,
     });
   }

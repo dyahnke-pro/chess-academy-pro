@@ -870,6 +870,9 @@ function formatTacticsSubBlock(tactics: NonNullable<LiveState['tactics']>): stri
     lines.push(`        Black: ${bf.blackPieces}.`);
     lines.push(`        Any square NOT listed above is EMPTY. Never say a piece is on a square it's not listed on, never say a pawn/piece is missing if it's listed, and never call this the "starting position" unless every piece above is on its home square.`);
     lines.push(`      White king: ${bf.whiteKing}. Black king: ${bf.blackKing}. ${bf.sideToMove} to move.`);
+    if (bf.material) {
+      lines.push(`      MATERIAL (GROUND TRUTH — computed, never flip the sign): ${bf.material}`);
+    }
     lines.push(`      In check: ${bf.inCheck ? `${bf.inCheck} is in check` : 'neither side is in check'}.`);
     if (bf.mateInOne) {
       lines.push(`      Forced mate in one for ${bf.sideToMove}: ${bf.mateInOne}. Report THIS move when asked about mate.`);

@@ -119,6 +119,7 @@ function computeBoardFacts(fen: string): TacticsLiveContext['boardFacts'] {
     const sideToMove = chess.turn() === 'w' ? 'white' : 'black';
     const inCheck = chess.inCheck() ? sideToMove : null;
     const { whitePieces, blackPieces } = pieceInventory(board);
+    const material = describeMaterialBalance(board);
     // Mate-in-one for the side to move: try every legal move; the first
     // that delivers checkmate is the forced mate. chess.js validates
     // legality, so this never reports an illegal "mate".
@@ -128,10 +129,37 @@ function computeBoardFacts(fen: string): TacticsLiveContext['boardFacts'] {
       probe.move(m);
       if (probe.isCheckmate()) { mateInOne = m; break; }
     }
-    return { sideToMove, whiteKing, blackKing, inCheck, mateInOne, whitePieces, blackPieces };
+    return { sideToMove, whiteKing, blackKing, inCheck, mateInOne, whitePieces, blackPieces, material };
   } catch {
     return undefined;
   }
+}
+
+/** Deterministic material balance from the board (chess.js values, kings
+ *  excluded), white-perspective, in plain English. The coach intermittently
+ *  flips the SIGN when eyeballing a tricky imbalance (R+P=6 vs Q=9: it said
+ *  "White is ahead" while actually down 3 — response-loop audit 2026-06-05),
+ *  so we hand it the ground-truth direction. Pure material count — NOT a
+ *  positional eval. */
+function describeMaterialBalance(board: ReturnType<Chess['board']>): string {
+  const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
+  const tally = (color: 'w' | 'b'): number => {
+    let sum = 0;
+    for (const row of board) for (const sq of row) {
+      if (sq && sq.color === color && sq.type !== 'k') sum += VAL[sq.type] ?? 0;
+    }
+    return sum;
+  };
+  const w = tally('w');
+  const b = tally('b');
+  const diff = w - b;
+  if (diff === 0) return `Material is EVEN (White ${w} vs Black ${b} in piece points).`;
+  const side = diff > 0 ? 'White' : 'Black';
+  const mag = Math.abs(diff);
+  // State it from BOTH perspectives so an "am I (White) ahead or behind?"
+  // question can't be answered backwards.
+  const whiteDir = diff > 0 ? `White is UP ${mag}` : `White is DOWN ${mag}`;
+  return `${whiteDir} in material (White ${w} vs Black ${b} piece points; ${side} is ahead by ${mag}). Use THIS direction for any up/down/ahead/behind material claim.`;
 }
 
 /** Plain-English inventory of every piece + its square, per color, so

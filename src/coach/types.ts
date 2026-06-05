@@ -451,6 +451,15 @@ export interface TacticsLiveContext {
     whitePieces: string;
     /** Same inventory for black. */
     blackPieces: string;
+    /** Deterministic material balance (chess.js piece values, kings
+     *  excluded), white-perspective, in plain English — e.g. "White is
+     *  down 3 (rook+pawn = 6 vs queen = 9)" / "Material is even" / "White
+     *  is up 5 (extra rook)". Injected so the coach states up/down/ahead/
+     *  behind from ground truth instead of eyeballing — it intermittently
+     *  flips the SIGN on tricky imbalances (R+P vs Q: said "White is ahead"
+     *  while down 3 — response-loop audit 2026-06-05). NOT an eval (no
+     *  positional judgment); pure material count. */
+    material: string;
   };
 }
 

@@ -114,6 +114,23 @@ describe('buildTacticsLiveContext — boardFacts', () => {
     expect(bp).toMatch(/\be6\b/);
   });
 
+  // Material direction ground truth (response-loop audit 2026-06-05: the
+  // coach said "White is ahead" while down a rook+pawn for a queen).
+  it('reports material EVEN on the starting position', () => {
+    const ctx = buildTacticsLiveContext(STARTING_FEN, null, 'w', 1500);
+    expect(ctx.boardFacts?.material).toMatch(/even/i);
+  });
+  it('reports White DOWN 3 in the R+P vs Q ending (the sign-flip case)', () => {
+    const fen = '4k3/4q3/8/8/8/8/4P3/R3K3 w - - 0 1'; // White R+P(6) vs Black Q(9)
+    const m = buildTacticsLiveContext(fen, null, 'w', 1500).boardFacts?.material ?? '';
+    expect(m).toMatch(/White is DOWN 3/);
+    expect(m).not.toMatch(/White is UP/);
+  });
+  it('reports White UP 5 with an extra rook', () => {
+    const fen = '4k3/8/8/8/8/8/4P3/R3K3 w - - 0 1'; // White R+P(6) vs nothing
+    expect(buildTacticsLiveContext(fen, null, 'w', 1500).boardFacts?.material).toMatch(/White is UP 6/);
+  });
+
   it('reports the king on g1 after White castles (the e8 regression)', () => {
     // 1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.O-O — White king on g1, rook f1.
     const fen = 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4';
