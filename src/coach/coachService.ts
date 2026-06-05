@@ -426,7 +426,7 @@ function runAnswerGates(
  *  while keeping the stat / count / player / comparative guards in force. */
 const PLAN_QUESTION_RE =
   /\b(?:plans?|strateg(?:y|ies|ize)|next\s+(?:few|two|three|several|2|3|\d+)\s+moves?|main\s+ideas?|my\s+ideas?|long[-\s]?term|game\s*plan|how\s+(?:do\s+i|should\s+i)\s+(?:proceed|continue|play|approach)|what'?s?\s+(?:the|my)\s+(?:plan|idea|strategy|approach)|outline\s+(?:a|my|the)?\s*(?:plan|strategy))\b/i;
-function isPlanQuestion(ask: string | undefined): boolean {
+export function isPlanQuestion(ask: string | undefined): boolean {
   return !!ask && PLAN_QUESTION_RE.test(ask);
 }
 

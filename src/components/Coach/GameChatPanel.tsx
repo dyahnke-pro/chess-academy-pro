@@ -13,7 +13,8 @@ import { detectInGameChatIntent } from '../../services/inGameChatIntent';
 import { tryCaptureForgetIntent, tryCaptureOpeningIntent } from '../../services/openingIntentCapture';
 import { tryRouteIntent } from '../../services/coachIntentRouter';
 import { parseActions } from '../../services/coachActionDispatcher';
-import { coachService } from '../../coach/coachService';
+import { coachService, isPlanQuestion } from '../../coach/coachService';
+import { buildEnginePlan } from '../../services/enginePlanContext';
 import { withTimeout } from '../../coach/withTimeout';
 import type { LiveState } from '../../coach/types';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
@@ -686,6 +687,28 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             summary: `tactics ctx: immediate=${gameChatTactics.immediate.length} hanging=${gameChatTactics.hanging.length} threats=${gameChatTactics.threats.length} opps=${gameChatTactics.opportunities.length} depth=${gameChatTactics.lookaheadDepth}`,
             fen: liveFen || undefined,
           });
+          // ENGINE-ANCHORED PLAN (David 2026-06-05): when the student asks
+          // for a plan, the MOVE backbone is Stockfish's best line (real,
+          // legal, verified) rather than the LLM free-synthesizing moves.
+          // Only computed when it's the student's turn (so the PV's even
+          // plies are THEIR moves); pre-injecting is what makes it reliable
+          // vs. hoping the brain calls stockfish_eval. Best-effort — a null
+          // plan just falls back to master-play + DB grounding.
+          let enginePlan: LiveState['enginePlan'];
+          const studentToMove =
+            (liveFen.split(' ')[1] ?? 'w') === (playerColor === 'white' ? 'w' : 'b');
+          if (isPlanQuestion(text) && studentToMove) {
+            enginePlan = (await buildEnginePlan(liveFen, playerColor)) ?? undefined;
+            void logAppAudit({
+              kind: 'coach-surface-migrated',
+              category: 'subsystem',
+              source: 'GameChatPanel.handleSend.enginePlan',
+              summary: enginePlan
+                ? `engine plan pre-injected: ${enginePlan.pvSan.join(' ')} (depth ${enginePlan.depth})`
+                : 'plan question but engine plan unavailable (fell back to grounding)',
+              fen: liveFen,
+            });
+          }
           const liveState: LiveState = {
             surface: 'game-chat',
             fen: liveFen,
@@ -693,6 +716,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             userJustDid: text,
             currentRoute: '/coach/play',
             tactics: gameChatTactics,
+            enginePlan,
           };
           void logAppAudit({
             kind: 'coach-surface-migrated',

@@ -234,6 +234,31 @@ export interface LiveState {
    *  and the student heard "I can't verify which moves are sound" instead of
    *  the lesson (prod, David's iPhone + deep audit, 2026-06-04). */
   moveNarration?: boolean;
+  /** Engine-computed principal variation, pre-injected when the student
+   *  asks for a PLAN ("what's my plan?", "next three moves?"). David
+   *  2026-06-05: "use stockfish for the next three moves — more reliable."
+   *  The plan's MOVE backbone is the engine's best line (real, legal,
+   *  verified) instead of the LLM free-synthesizing moves. Because a PV is
+   *  best-play-by-BOTH-sides (a forcing line, not a plan), the brain is
+   *  instructed to anchor the student's NEXT move on `pvSan[0]`, teach the
+   *  IDEA, and frame later plies as contingent on the opponent's reply.
+   *  Pre-injecting (vs. relying on the brain to call `stockfish_eval`) is
+   *  what makes it reliable — the brain skipped the tool intermittently.
+   *  The play surface computes it for plan turns; quiet otherwise. */
+  enginePlan?: {
+    /** Principal variation in SAN from the current FEN, alternating
+     *  sides (~6 plies). `pvSan[0]` is the side-to-move's best move. */
+    pvSan: string[];
+    /** White-perspective centipawn eval of the line; null when forced mate. */
+    evalCp: number | null;
+    /** Mate distance in plies (signed, white positive); null when not forced. */
+    mateIn: number | null;
+    /** Search depth that produced the line. */
+    depth: number;
+    /** Side the student is playing — so the brain knows which PV plies
+     *  are the student's moves (the plan) vs the opponent's replies. */
+    studentSide: 'white' | 'black';
+  };
 }
 
 /** Pre-formatted classical-book grounding block. The text is built

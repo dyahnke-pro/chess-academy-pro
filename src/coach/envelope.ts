@@ -738,6 +738,9 @@ function formatLiveStateBlock(state: LiveState): string {
       `- Engine eval (PRE-COMPUTED, white-perspective): ${state.evalCp}cp — ${describeEval(state.evalCp)}. This is engine ground truth — do not contradict it with your own material counting. When making "winning"/"losing"/"up material"/"down material" claims, USE THIS NUMBER, not your eyeball count.`,
     );
   }
+  if (state.enginePlan && state.enginePlan.pvSan.length > 0) {
+    parts.push(formatEnginePlanSubBlock(state.enginePlan));
+  }
   if (state.lichessSnapshot) {
     const s = state.lichessSnapshot;
     const lines: string[] = ['- Lichess explorer (PRE-FETCHED for current FEN):'];
@@ -798,6 +801,42 @@ function formatLiveStateBlock(state: LiveState): string {
   }
   if (state.userJustDid) parts.push(`- User just did: ${state.userJustDid}`);
   return parts.join('\n');
+}
+
+/** Render the pre-computed engine plan line as a sub-block under
+ *  [Live state]. The MOVE backbone of a plan answer is Stockfish's best
+ *  line (real, legal, verified) — not the LLM's free-synthesized moves
+ *  (David 2026-06-05). A PV is best-play-by-BOTH-sides, so the closer
+ *  tells the brain to anchor the student's NEXT move on it, teach the
+ *  idea, and frame later plies as CONTINGENT on the opponent's reply —
+ *  a forcing line is not a plan. Computed only on the student's turn, so
+ *  even-indexed plies are the student's moves. */
+function formatEnginePlanSubBlock(plan: NonNullable<LiveState['enginePlan']>): string {
+  const pv = plan.pvSan;
+  const studentMoves: string[] = [];
+  const replies: string[] = [];
+  for (let i = 0; i < pv.length; i++) {
+    if (i % 2 === 0) studentMoves.push(pv[i]);
+    else replies.push(pv[i]);
+  }
+  const evalStr =
+    plan.mateIn !== null
+      ? `forced mate in ${Math.abs(plan.mateIn)} for ${plan.mateIn > 0 ? 'white' : 'black'}`
+      : plan.evalCp !== null
+        ? `${plan.evalCp >= 0 ? '+' : ''}${(plan.evalCp / 100).toFixed(1)} (white-perspective) — ${describeEval(plan.evalCp)}`
+        : 'unclear';
+  const lines: string[] = [
+    `- Engine plan line (PRE-COMPUTED — Stockfish depth ${plan.depth}, eval ${evalStr}, best play by BOTH sides):`,
+    `    The student plays ${plan.studentSide}. Their plan (engine's moves for their side): ${studentMoves.join(', ')}`,
+  ];
+  if (replies.length > 0) {
+    lines.push(`    Engine's expected replies: ${replies.join(', ')}`);
+  }
+  lines.push(`    Full line from here: ${pv.join(' ')}`);
+  lines.push(
+    `    ANCHOR the student's plan on THESE engine moves — name "${studentMoves[0]}" as their concrete next move and teach the IDEA behind it (what it develops / attacks / prepares). The replies are the engine's best defence, so the later moves are CONTINGENT — frame them as "if they answer ${replies[0] ?? '…'}, you continue ${studentMoves[1] ?? '…'}," not a guaranteed sequence. Do NOT recommend a concrete move OUTSIDE this engine line; if you offer an alternative idea, keep it to named strategic themes, not invented moves.`,
+  );
+  return lines.join('\n');
 }
 
 /** Render the pre-computed tactical context as a sub-block under
