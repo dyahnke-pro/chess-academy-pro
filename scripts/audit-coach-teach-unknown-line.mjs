@@ -43,6 +43,7 @@
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -86,6 +87,13 @@ async function main() {
     },
     { url: listener.url, secret: listener.secret },
   );
+  // Neutralize the strength-calibration bubble + page-help modal on EVERY
+  // navigation (CLAUDE.md G1 caveat #5). Without this, on a fresh prod
+  // context the full-screen onboarding bubble intercepts every click and the
+  // whole teach flow fails "not-visible" — the systemic false-failure this
+  // audit hit 2026-06-05 (every scenario, including paths the change never
+  // touched). Same helper the coach-response-loop audit uses.
+  await ctx.addInitScript(autoDismissCalibration);
 
   const page = await ctx.newPage();
 
