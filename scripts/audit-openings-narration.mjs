@@ -161,20 +161,32 @@ function auditAnnotation(filename, openingId, ann, plies) {
   const errors = [];
   const pushErr = (e) => errors.push({ file: filename, openingId, ...e });
 
-  // annotation-length-drift — split into OVERFLOW vs SHORTFALL.
-  // Per 2026-05-14 conversation: shortfall (fewer annotations than
-  // PGN plies) is allowed — the unannotated plies just don't get
-  // narration. Overflow (more annotations than plies) is a real bug
-  // because the surplus annotations describe positions that don't
-  // exist in the PGN.
-  if (ann.moveAnnotations.length > plies.length) {
+  // annotation-overflow — the moveAnnotations describe positions that
+  // cannot be legally reached. A hand-authored walkthrough may run
+  // legitimately DEEPER than the DB base-name line (e.g. the 30-move
+  // Ruy Lopez walkthrough vs the 5-ply 'Ruy Lopez' base), so
+  // length-vs-DB-base is NOT the test — legality of the annotation's OWN
+  // move sequence is. Shortfall (fewer annotations than PGN plies) is
+  // allowed (per 2026-05-14). Only flag the surplus that is genuinely
+  // illegal / unreachable.
+  let legalAnnPlies = 0;
+  {
+    const c = new Chess();
+    for (const m of ann.moveAnnotations) {
+      try {
+        if (!c.move(m.san ?? '')) break;
+      } catch {
+        break;
+      }
+      legalAnnPlies += 1;
+    }
+  }
+  if (legalAnnPlies < ann.moveAnnotations.length) {
     pushErr({
       class: 'annotation-overflow',
       claim: `${ann.moveAnnotations.length} moveAnnotations`,
-      pgnTruth: `${plies.length} plies — surplus ${ann.moveAnnotations.length - plies.length} describes nonexistent positions`,
+      pgnTruth: `${legalAnnPlies} legal plies — surplus ${ann.moveAnnotations.length - legalAnnPlies} describes illegal/unreachable positions`,
     });
-  } else if (ann.moveAnnotations.length < plies.length) {
-    // Shortfall — info only, not flagged as error.
   }
 
   for (let i = 0; i < ann.moveAnnotations.length; i += 1) {
