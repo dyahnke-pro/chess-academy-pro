@@ -102,87 +102,29 @@ function getAttackedSquares(chess: Chess, square: Square): Square[] {
 /**
  * Check if a square is defended by any piece of the given color.
  */
+// chess.js `attackers(square, color)` returns every `color` piece that
+// attacks/defends `square` by movement geometry — KING and pawns included,
+// occupancy-aware — regardless of what sits on the square. This is the
+// correct primitive for both attack and DEFENSE counting. The old hand-
+// rolled versions used `moves({square}).some(m => m.to === square)`, which
+// can never "move onto" a friendly-occupied square, so they MISSED every
+// non-pawn defender of an occupied piece — reporting king/rook/knight-
+// defended pieces as "hanging" (the e1-king-defends-e2 bug, personal prod
+// drive 2026-06-05). attackers() fixes it and is far simpler.
 function isDefended(chess: Chess, square: Square, byColor: Color): boolean {
   try {
-    const fenParts = chess.fen().split(' ');
-    fenParts[1] = byColor;
-    fenParts[3] = '-';
-    const testChess = new Chess(fenParts.join(' '));
-
-    // Check pawn defense via diagonal geometry
-    const targetFile = square.charCodeAt(0) - 97;
-    const targetRank = parseInt(square[1], 10) - 1;
-    const pawnRankOffset = byColor === 'w' ? -1 : 1;
-    const pawnSourceRank = targetRank + pawnRankOffset;
-    for (const df of [-1, 1]) {
-      const pawnSourceFile = targetFile + df;
-      const pawnSq = coordsToSquare(pawnSourceFile, pawnSourceRank);
-      if (pawnSq) {
-        const boardRow = 7 - pawnSourceRank;
-        const p = testChess.board()[boardRow][pawnSourceFile];
-        if (p && p.color === byColor && p.type === 'p') {
-          return true;
-        }
-      }
-    }
-
-    const board = testChess.board();
-    for (let r = 0; r < 8; r++) {
-      for (let c = 0; c < 8; c++) {
-        const p = board[r][c];
-        if (p && p.color === byColor && p.type !== 'p') {
-          const sq = coordsToSquare(c, 7 - r);
-          if (!sq) continue;
-          const moves = testChess.moves({ square: sq, verbose: true });
-          if (moves.some((m) => m.to === square)) return true;
-        }
-      }
-    }
+    return chess.attackers(square, byColor).length > 0;
   } catch {
-    // Fall back to false
+    return false;
   }
-  return false;
 }
 
 /**
- * Count attackers of a square by the given color.
+ * Count attackers of a square by the given color (king + pawns included).
  */
 function countAttackers(chess: Chess, square: Square, byColor: Color): number {
   try {
-    const fenParts = chess.fen().split(' ');
-    fenParts[1] = byColor;
-    fenParts[3] = '-';
-    const testChess = new Chess(fenParts.join(' '));
-    let count = 0;
-
-    // Check pawn attackers
-    const targetFile = square.charCodeAt(0) - 97;
-    const targetRank = parseInt(square[1], 10) - 1;
-    const pawnRankOffset = byColor === 'w' ? -1 : 1;
-    const pawnSourceRank = targetRank + pawnRankOffset;
-    for (const df of [-1, 1]) {
-      const pawnSourceFile = targetFile + df;
-      const pawnSq = coordsToSquare(pawnSourceFile, pawnSourceRank);
-      if (pawnSq) {
-        const boardRow = 7 - pawnSourceRank;
-        const p = testChess.board()[boardRow][pawnSourceFile];
-        if (p && p.color === byColor && p.type === 'p') count++;
-      }
-    }
-
-    const board = testChess.board();
-    for (let r = 0; r < 8; r++) {
-      for (let c = 0; c < 8; c++) {
-        const p = board[r][c];
-        if (p && p.color === byColor && p.type !== 'p') {
-          const sq = coordsToSquare(c, 7 - r);
-          if (!sq) continue;
-          const moves = testChess.moves({ square: sq, verbose: true });
-          if (moves.some((m) => m.to === square)) count++;
-        }
-      }
-    }
-    return count;
+    return chess.attackers(square, byColor).length;
   } catch {
     return 0;
   }

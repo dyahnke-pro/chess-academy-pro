@@ -50,11 +50,25 @@ describe('detectTactics — hanging pieces', () => {
   });
 
   it('detects multiple hanging pieces', () => {
-    // White rook on a5 and white bishop on h5, both undefended, attacked by black pieces
-    const fen = '4k3/8/1b4q1/R6B/8/8/8/4K3 b - - 0 1';
+    // White rook on a5 (attacked by Bb6) and white bishop on g3 (attacked by
+    // Qg6 down the g-file), both GENUINELY undefended and not defending each
+    // other. NOTE: the old FEN put the bishop on h5 — on the rook's 5th rank,
+    // so Ra5 actually DEFENDED it; the previous test asserted h5 "hanging"
+    // only because the old detector couldn't see a piece defending a friendly-
+    // occupied square (the king-defends-e2 class of bug, fixed 2026-06-05).
+    const fen = '4k3/8/1b4q1/R7/8/6B1/8/4K3 b - - 0 1';
     const result = detectTactics(fen);
     expect(hasHangingPieceAt(result, 'a5')).toBe(true);
-    expect(hasHangingPieceAt(result, 'h5')).toBe(true);
+    expect(hasHangingPieceAt(result, 'g3')).toBe(true);
+  });
+
+  it('does NOT flag a piece defended along a rank/file/diagonal by a friendly piece (king or slider)', () => {
+    // White Bh5 is attacked by Qg6 but DEFENDED by Ra5 along the 5th rank →
+    // not hanging. And White Pe2 is attacked by Qe7 but defended by Ke1 →
+    // not hanging. These are the exact false-positives the moves-based
+    // detector produced before switching to chess.js attackers().
+    expect(hasHangingPieceAt(detectTactics('4k3/8/1b4q1/R6B/8/8/8/4K3 b - - 0 1'), 'h5')).toBe(false);
+    expect(hasHangingPieceAt(detectTactics('4k3/4q3/8/8/8/8/4P3/R3K3 w - - 0 1'), 'e2')).toBe(false);
   });
 
   it('highlights side-to-move hanging pieces in danger color (red)', () => {

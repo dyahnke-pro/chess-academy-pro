@@ -887,11 +887,21 @@ function formatTacticsSubBlock(tactics: NonNullable<LiveState['tactics']>): stri
       lines.push(`      ${t.type.toUpperCase()} — ${t.description}`);
     }
   }
+  // HANGING PIECES are GROUND TRUTH (computed: a piece is hanging only when
+  // it is BOTH attacked by the enemy AND undefended). ALWAYS state them —
+  // including the "none" case — and BIND the coach's tactical-existence
+  // vocabulary to this set, exactly like the king / check / mate facts.
+  // Without the "none" line the coach eyeballed a "hanging" pawn that was
+  // actually defended (personal prod drive 2026-06-05: "your e2-pawn is
+  // hanging" while the king on e1 defended it). An attacked-but-DEFENDED
+  // piece is NOT hanging — describe it accurately, don't call it free.
   if (tactics.hanging.length > 0) {
     const list = tactics.hanging
       .map((h) => `${h.color === 'w' ? 'white' : 'black'} ${pieceFullName(h.piece)} on ${h.square}`)
       .join(', ');
-    lines.push(`    Hanging pieces: ${list}`);
+    lines.push(`    HANGING PIECES (GROUND TRUTH — attacked AND undefended; the ONLY pieces you may call "hanging" / "free" / "undefended" / "winnable for free"): ${list}.`);
+  } else {
+    lines.push(`    HANGING PIECES (GROUND TRUTH): NONE — every attacked piece is defended. Do NOT call any piece "hanging", "free", "undefended", or "winnable for free". If a piece is attacked, describe it accurately — name what attacks it AND what defends it (e.g. "attacked by the queen but defended by your king, so taking it just loses the queen").`);
   }
   if (tactics.threats.length > 0) {
     lines.push(`    Opponent threats (warn the student, name the pattern):`);
