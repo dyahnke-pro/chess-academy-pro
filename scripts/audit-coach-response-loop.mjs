@@ -363,13 +363,38 @@ async function main() {
       const prompt = variant.prompt;
       try {
         onPlay = await prepareSurface(page, family, variant, family.surface !== 'chat' && onPlay);
+        // PRECONDITION GUARD (David 2026-06-05): for a setpos probe, the
+        // board MUST actually be on the target FEN before we ask — else the
+        // coach is reading a DIFFERENT position than the check assumes and a
+        // "wrong" answer is the audit's own tool-flake, not a coach bug. The
+        // king-square e1 false-fail (set_board never fired → board stayed at
+        // the start → coach correctly read e1, audit wanted g1) was exactly
+        // this. Retry the set_board once; if the board still isn't on target,
+        // skip as a tool-flake (counted separately so a recurring failure to
+        // place the board stays VISIBLE in the report, not silently hidden).
+        if (family.surface === 'setpos' && variant.fen) {
+          const target = variant.fen.split(' ')[0];
+          let placement = await scrapeFen(page);
+          if (placement !== target) { await setBoard(page, variant.fen); placement = await scrapeFen(page); }
+          if (placement !== target) {
+            pr.skipped++; pr.toolFlakes = (pr.toolFlakes ?? 0) + 1;
+            pr.probes.push({ id: family.id, skipped: true, prompt, why: 'set_board never placed the target FEN (operator-tool flake)', got: placement, want: target });
+            log(`  \x1b[33m⊘\x1b[0m ${family.id} — set_board did not place the board (tool flake; got ${placement ? placement.slice(0, 24) : 'null'}…)  «${prompt.slice(0, 40)}»`);
+            continue;
+          }
+        }
         const r = await askLLM(page, prompt);
         // A timeout OR an empty read is an audit-INFRA failure (failed to
         // capture the answer), NOT a wrong answer — SKIP it (the
         // diagnostic proved the coach answers these correctly when read).
         // Only a substantive, non-empty WRONG answer breaks the streak.
         if (r === '(timeout)' || r.replace(/[^a-z0-9]/gi, '').length < 3) { pr.skipped++; pr.probes.push({ id: family.id, skipped: true, prompt }); log(`  \x1b[33m⊘\x1b[0m ${family.id} — no answer captured (skipped, infra)  «${prompt.slice(0, 50)}»`); continue; }
-        if (family.surface === 'setpos' && variant.fen && staleSetposRead(r, variant.fen)) { pr.skipped++; pr.probes.push({ id: family.id, skipped: true, prompt, why: 'stale set-board read (app flake)' }); log(`  \x1b[33m⊘\x1b[0m ${family.id} — stale set-board read, coach saw wrong position (skipped, app flake)  «${prompt.slice(0, 45)}»`); continue; }
+        // The board is CONFIRMED on the target FEN above, so a stale read
+        // here is now a REAL coach grounding bug, not a precondition miss.
+        // The live-fen-at-send-time wiring (2026-06-05) should make this
+        // impossible; if it recurs it's a regression — count it loudly
+        // (staleReads) rather than burying it in the generic skip bucket.
+        if (family.surface === 'setpos' && variant.fen && staleSetposRead(r, variant.fen)) { pr.errors++; pr.staleReads = (pr.staleReads ?? 0) + 1; pr.probes.push({ id: family.id, ok: false, why: 'STALE read — coach reasoned about the wrong position despite the board being on target (live-fen regression)', prompt, response: r.slice(0, 280) }); log(`  \x1b[31m✗\x1b[0m ${family.id} — STALE read on a confirmed board (live-fen regression!)  «${prompt.slice(0, 40)}»`); continue; }
         const out = family.check(r, variant);
         pr.probes.push({ id: family.id, ok: out.ok, why: out.why, prompt, response: r.slice(0, 280) });
         if (!out.ok) pr.errors++;
@@ -393,8 +418,9 @@ async function main() {
     pr.concerning = (await readConcerningSince(page, tsStart)).length;
     if (pr.concerning > 0) { pr.errors += pr.concerning; log(`  \x1b[33m⚠ ${pr.concerning} concerning page/error events\x1b[0m`); }
     report.passes.push(pr);
-    if (pr.errors === 0) { streak++; log(`  → clean pass (${pr.skipped} skipped/infra). streak ${streak}/${REQUIRED_STREAK}`); }
-    else { streak = 0; log(`  → ${pr.errors} error(s), ${pr.skipped} skipped. streak reset to 0`); }
+    const flakeNote = `${pr.skipped} skipped${pr.toolFlakes ? ` (${pr.toolFlakes} set_board tool-flake)` : ''}${pr.staleReads ? `, ${pr.staleReads} STALE` : ''}`;
+    if (pr.errors === 0) { streak++; log(`  → clean pass (${flakeNote}). streak ${streak}/${REQUIRED_STREAK}`); }
+    else { streak = 0; log(`  → ${pr.errors} error(s), ${flakeNote}. streak reset to 0`); }
     if (streak >= REQUIRED_STREAK) { report.met = true; log(`\n\x1b[1m\x1b[32m✅ CONTRACT MET — ${REQUIRED_STREAK} consecutive clean passes\x1b[0m`); break; }
   }
   report.finishedAt = new Date().toISOString();

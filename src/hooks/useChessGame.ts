@@ -30,6 +30,15 @@ export interface UseChessGameReturn {
   // Position state
   fen: string;
   position: string;            // alias for fen (WO-02 spec)
+  /**
+   * Live FEN read straight off the underlying chess.js instance.
+   * `fen`/`position` are React state SNAPSHOTS that lag the true board by
+   * a render — any consumer that needs the CURRENT position at call-time
+   * (e.g. building the coach's liveState the instant the student hits send,
+   * right after a set_board / move) MUST read this, not the snapshot, or it
+   * reasons about the prior position (the 2026-06-05 stale-fen coach bug).
+   */
+  getFen: () => string;
   turn: 'w' | 'b';
 
   // Check / game-over state
@@ -303,6 +312,8 @@ export function useChessGame(
     return piece || null;
   }, []);
 
+  const getFen = useCallback((): string => chessRef.current.fen(), []);
+
   const loadFen = useCallback((fenString: string): boolean => {
     try {
       const newChess = new Chess(fenString);
@@ -319,6 +330,7 @@ export function useChessGame(
   return useMemo(() => ({
     fen,
     position: fen,
+    getFen,
     turn,
     inCheck,
     isCheck: inCheck,
@@ -349,6 +361,6 @@ export function useChessGame(
     fen, turn, inCheck, checkSquare, isGameOver, isCheckmate, isStalemate,
     isDraw, lastMove, history, selectedSquare, legalMoves, boardOrientation,
     makeMove, onDrop, onSquareClick, flipBoard, setOrientation, undoMove, resetGame,
-    clearSelection, getLegalMoves, getPiece, loadFen,
+    clearSelection, getLegalMoves, getPiece, loadFen, getFen,
   ]);
 }

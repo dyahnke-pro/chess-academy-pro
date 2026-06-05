@@ -4882,6 +4882,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             <GameChatPanel
               ref={gameChatRef}
               fen={game.fen}
+              getLiveFen={game.getFen}
               pgn={game.history.join(' ')}
               moveNumber={moveCountRef.current}
               playerColor={playerColor}

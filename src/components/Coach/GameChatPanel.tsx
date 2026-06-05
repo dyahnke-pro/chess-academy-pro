@@ -39,6 +39,17 @@ import type { ChatMessage as ChatMessageType, BoardAnnotationCommand } from '../
 
 interface GameChatPanelProps {
   fen: string;
+  /**
+   * Live FEN getter off the underlying chess.js instance. `fen` (above) is
+   * a React snapshot that lags the true board by a render, so building the
+   * coach's liveState from it the instant the student hits send — right
+   * after a set_board / move — makes the brain reason about the PRIOR
+   * position (the 2026-06-05 stale-fen coach bug; the response-loop audit's
+   * king-square probe was the one that slipped past staleSetposRead). When
+   * provided, the send path reads this at call-time so the brain always
+   * gets the CURRENT board. Falls back to `fen` when absent.
+   */
+  getLiveFen?: () => string;
   pgn: string;
   moveNumber: number;
   playerColor: 'white' | 'black';
@@ -131,6 +142,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
   function GameChatPanel(
     {
       fen,
+      getLiveFen,
       playerColor,
       isGameOver,
       history,
@@ -624,15 +636,23 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         let streamMarkupBuf = '';
         let streamSafeBuf = '';
         try {
+          // SOURCE OF TRUTH: read the LIVE board off chess.js at send-time,
+          // never the `fen` React snapshot. The snapshot lags the true board
+          // by a render, so right after a set_board / move the brain would
+          // reason about the PRIOR position (the 2026-06-05 stale-fen coach
+          // bug — the response-loop king-square probe was the one that
+          // slipped past staleSetposRead). Fall back to the snapshot when no
+          // live getter is wired (e.g. drawer/standalone mounts).
+          const liveFen = getLiveFen?.() ?? fen;
           // Tactical context for the in-game chat — when the student
           // asks "what's the threat?" or "what should I play?" mid-
           // game, the brain gets the named patterns + PV scan so it
           // can answer by tactic name instead of citing eval alone.
-          const gameChatStudentColor = fen.split(' ')[1] === 'b' ? 'b' : 'w';
+          const gameChatStudentColor = liveFen.split(' ')[1] === 'b' ? 'b' : 'w';
           const gameChatStudentRating =
             useAppStore.getState().activeProfile?.puzzleRating ?? 1200;
           const gameChatTactics = buildTacticsLiveContext(
-            fen,
+            liveFen,
             null,
             gameChatStudentColor,
             gameChatStudentRating,
@@ -642,11 +662,11 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             category: 'subsystem',
             source: 'GameChatPanel.handleSend.buildLiveTactics',
             summary: `tactics ctx: immediate=${gameChatTactics.immediate.length} hanging=${gameChatTactics.hanging.length} threats=${gameChatTactics.threats.length} opps=${gameChatTactics.opportunities.length} depth=${gameChatTactics.lookaheadDepth}`,
-            fen: fen || undefined,
+            fen: liveFen || undefined,
           });
           const liveState: LiveState = {
             surface: 'game-chat',
-            fen,
+            fen: liveFen,
             moveHistory: history,
             userJustDid: text,
             currentRoute: '/coach/play',
@@ -661,9 +681,11 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               surface: 'game-chat',
               viaSpine: true,
               timestamp: Date.now(),
-              fenIfPresent: fen,
+              fenIfPresent: liveFen,
+              snapshotFen: fen,
+              stale: liveFen !== fen,
             }),
-            fen,
+            fen: liveFen,
           });
           // WO-COACH-RESILIENCE: wrap the in-game chat ask with the
           // shared withTimeout so a hung spine surfaces a graceful
@@ -1174,7 +1196,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         setStreamingContent('');
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps -- 'queueSpeak' is intentionally omitted to avoid recreating the callback every render; tracked for dedicated audit.
-    }, [activeProfile, isStreaming, fen, history, lastMoveBy, isGameOver, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, onPlayMove, onTakeBackMove, onSetBoardPosition, onResetBoard, onQuizUserForMove, onStartWalkthroughForOpening, setMessages, navigate, location, playerColor]);
+    }, [activeProfile, isStreaming, fen, getLiveFen, history, lastMoveBy, isGameOver, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, onPlayMove, onTakeBackMove, onSetBoardPosition, onResetBoard, onQuizUserForMove, onStartWalkthroughForOpening, setMessages, navigate, location, playerColor]);
 
     // Auto-send initial prompt (from post-game practice bridge or search bar)
     useEffect(() => {
