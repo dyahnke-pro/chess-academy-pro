@@ -712,6 +712,11 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           const liveState: LiveState = {
             surface: 'game-chat',
             fen: liveFen,
+            // Hand the coach whose turn it is + which side the STUDENT plays,
+            // so "whose move — mine or yours?" is answered from ground truth
+            // instead of guessed (response-loop whose-turn miss 2026-06-05).
+            whoseTurn: (liveFen.split(' ')[1] ?? 'w') === 'w' ? 'white' : 'black',
+            studentColor: playerColor,
             moveHistory: history,
             userJustDid: text,
             currentRoute: '/coach/play',

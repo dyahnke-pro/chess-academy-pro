@@ -719,7 +719,10 @@ function formatLiveStateBlock(state: LiveState): string {
     // emit play_move for the wrong side. Production audit (build
     // 30fe8c8) showed the brain repeatedly emitting `e5` for black
     // while reasoning as white; chess.js rejected every attempt.
-    parts.push(`- Whose turn: ${state.whoseTurn} TO MOVE — ANY play_move you emit must be a legal move for ${state.whoseTurn}.`);
+    const turnStudentBit = state.studentColor
+      ? ` The STUDENT plays ${state.studentColor}; you (the coach) play ${state.studentColor === 'white' ? 'black' : 'white'}. So right now it is ${state.whoseTurn === state.studentColor ? "the STUDENT's move (theirs — 'your move' to them)" : "YOUR move (the coach's, not the student's)"}. When asked "whose turn — mine or yours?", answer from THIS.`
+      : '';
+    parts.push(`- Whose turn: ${state.whoseTurn} TO MOVE.${turnStudentBit} ANY play_move you emit must be a legal move for ${state.whoseTurn}.`);
   }
   if (state.phase) parts.push(`- Phase: ${state.phase}`);
   // Surface engine eval as PRE-COMPUTED GROUND TRUTH on the current

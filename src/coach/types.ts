@@ -146,6 +146,13 @@ export interface LiveState {
    *  black-to-move position with the white-side mental model, and
    *  chess.js correctly rejected it 5 trips in a row. */
   whoseTurn?: 'white' | 'black';
+  /** Which side the STUDENT is playing on this surface (the coach plays the
+   *  other side in /coach/play). Without it the coach knows whose turn it is
+   *  from the FEN but has to GUESS which side is the student, and it guessed
+   *  wrong — "Black's turn to move — that's yours" when the student is White
+   *  (response-loop whose-turn probe 2026-06-05). Handed so the coach maps
+   *  whoseTurn → "your move" / "my move" correctly. */
+  studentColor?: 'white' | 'black';
   /** Pre-computed tactical context for the current FEN. Surfaces with
    *  Stockfish PV access (CoachTeachPage, CoachGamePage) build this via
    *  classifyPosition + scanUpcomingTactics so the brain can NAME
