@@ -28,11 +28,25 @@ async function main() {
   if (!card) { log('NO review cards found — cannot verify.'); await browser.close(); return; }
   await card.click().catch(() => {});
   await page.waitForTimeout(4000);
-  await page.locator('[data-testid="review-nav-controls"], [data-testid="review-forward-btn"]').first().waitFor({ timeout: 20000 }).catch(() => {});
-  log(`Review session: ${page.url()}\n`);
-
+  log(`Review session: ${page.url()}`);
+  // The walk-the-game view (with nav controls) only renders once narration
+  // segments are ready; until then the ReviewSummaryCard fallback shows.
+  // On a cold prod context narration generation can take a while — wait.
+  let walked = false;
+  for (let i = 0; i < 60; i++) { // up to ~90s
+    if (await has(page, '[data-testid="coach-game-review-walk"]') && await has(page, '[data-testid="review-forward-btn"]')) { walked = true; break; }
+    await page.waitForTimeout(1500);
+  }
+  if (!walked) {
+    const summary = await txt(page, '[data-testid="review-summary-card"], .review-summary, [class*="summary"]');
+    log(`\nWalk view did not appear (narration still generating or fell back to summary).`);
+    log(`Summary card text (first 600): ${summary.slice(0, 600) || '(none captured)'}`);
+    log(`\n===== END =====\n`);
+    await browser.close();
+    return;
+  }
+  log('Walk view mounted — stepping through.\n');
   const fwd = page.locator('[data-testid="review-forward-btn"]');
-  if (!(await fwd.count())) { log('No forward button — review session did not mount.'); await browser.close(); return; }
 
   const flagged = [];
   for (let ply = 1; ply <= 80; ply++) {
@@ -40,10 +54,13 @@ async function main() {
     await page.waitForTimeout(450);
     const badge = await txt(page, '[data-testid="review-classification-badge"]');
     const narr = await txt(page, '[data-testid="review-narration-banner"]');
-    const engineLines = await has(page, '[data-testid="review-engine-lines-section"]');
     // Record any ply flagged as a real mistake (badge mentions mistake/blunder/inaccuracy/miss)
     if (/mistake|blunder|inaccura|missed|\?\?|\?!/i.test(badge)) {
-      flagged.push({ ply, badge, narr, engineLines });
+      // Open the engine-lines panel to capture the deterministic best line.
+      let engineLine = '';
+      const toggle = page.locator('[data-testid="review-engine-lines-toggle"]').first();
+      if (await toggle.count()) { await toggle.click().catch(() => {}); await page.waitForTimeout(500); engineLine = await txt(page, '[data-testid="review-engine-lines-panel"]'); }
+      flagged.push({ ply, badge, narr, engineLine });
     }
     if (await fwd.getAttribute('disabled') !== null) break;
   }
@@ -53,10 +70,11 @@ async function main() {
   } else {
     log(`Flagged mistakes in this game: ${flagged.length}\n`);
     for (const f of flagged) {
-      const namesBest = /best (?:was|move|is)|should have|instead of|stronger|the move was|engine prefers|\b[KQRBN]?[a-h]?x?[a-h][1-8]\b.{0,20}(better|best)/i.test(f.narr);
+      const namesBest = /best (?:was|move|is)|should have|instead of|stronger|the move was|engine prefers/i.test(f.narr);
       log(`  ply ${f.ply} — badge: "${f.badge}"`);
       log(`     narration: "${f.narr || '(none)'}"`);
-      log(`     engine-lines shown: ${f.engineLines} | narration names a best move: ${namesBest}`);
+      log(`     narration names a best move: ${namesBest}`);
+      log(`     engine-lines panel: "${(f.engineLine || '(not shown)').slice(0, 120)}"`);
     }
   }
   log(`\n===== END =====\n`);
