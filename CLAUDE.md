@@ -2292,14 +2292,31 @@ playbook holds the rules you MUST follow, in particular:
     and the idea (the Naroditsky `pro-repertoires.json` `explanation` voice is
     the benchmark). Authored on `beat.say` for lessons; on the gem narration
     sidecar's `watch[]` for punish-gems.
-  - **Learn = a TRUNCATED reinforcement CUE** — the move plus a 3-5 word echo
-    of the Watch idea ("Nd5 — fork the queen, eye c7"), NOT a full sentence and
-    NOT bare dictation. Authored on `beat.sayShort` for lessons (carried by
-    `lessonToPlayableLine` → `PlayableMiddlegameLine.learnCues`); on the gem
-    sidecar's `learn[]`. The move-dictation fallback (`sanToSpeech`) is
-    sanctioned ONLY for non-masterclass / DB-only lines — for a MASTERCLASS
-    opening the authored short cue is REQUIRED, not optional (see the coverage
-    gates below).
+  - **Learn = the VOICE DICTATES THE MOVE ONLY; the written narration shows
+    BELOW THE BOARD (🔒 REFINED David 2026-06-05: "there is too much narration
+    in the learn tab of WLPP. i just want it saying the moves, theory was
+    already stated in watch. Also make sure that the written narration for the
+    move is listed below the board. Also make sure the narration is not choppy
+    or cut off by the opponents moves").** This SUPERSEDES the old "Learn speaks
+    the truncated cue" behavior. Concretely, in the Learn rung
+    (`PlayableLinePlayer` guided/`memory` phase — all WLPP Learn routes through
+    it via `lessonToPlayableLine`):
+    - The VOICE speaks ONLY `sanToSpeech(move)` ("Knight to d 5") — never the
+      prose annotation or the cue. The theory was taught in Watch.
+    - The move's WRITTEN narration (the full `say` annotation, falling back to
+      the `sayShort` cue) is displayed BELOW THE BOARD (`memory-move-narration`)
+      so the student reads the idea while hearing just the move.
+    - The opponent's auto-played reply is VOICE-PROMISE-GATED (plays only after
+      the move dictation resolves), never on a fixed timer that cuts the speech
+      off mid-word.
+    - The lead-the-eye square highlight stays (David: "i do like the square
+      highlighted").
+    The two-register DATA contract is UNCHANGED: every masterclass beat still
+    authors BOTH `say` (full) AND `sayShort` (≤8-word cue), both gated — the
+    cue now lives BELOW THE BOARD in writing instead of being spoken. The
+    move-dictation `sanToSpeech` is what Learn SPEAKS for every line (masterclass
+    or DB-only); the authored cue is still REQUIRED on masterclass lines for the
+    written display + the coverage gates below.
   - **🔒 NARRATION COVERAGE IS PART OF "DONE" — gated for every masterclass
     surface (David 2026-05-25, locked after the gem/plan-line gap audit).** It
     is not enough that the narration that EXISTS is good; every curated artifact

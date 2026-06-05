@@ -16,8 +16,6 @@ import { voiceService } from '../../services/voiceService';
 import { logAppAudit } from '../../services/appAuditor';
 import { reportPlayableLineContinuity } from '../../services/continuityGuard';
 import { sanToSpeech } from '../../utils/sanToSpeech';
-import { resolveCoachNarration } from '../../utils/coachNarration';
-import { useAppStore } from '../../stores/appStore';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { classifyPhase } from '../../services/gamePhaseService';
 import { usePieceSound } from '../../hooks/usePieceSound';
@@ -306,29 +304,28 @@ export function PlayableLinePlayer({
     if (phase !== 'memory' || memoryComplete) return;
     if (memoryMoveIndex >= line.moves.length) return;
     if (showWrongFlash || showCorrectFlash) return;
-    // Learn = the hand-written truncated CUE for this move when present
-    // (reinforces the Watch lesson as you play it — David 2026-05-24); else
-    // Practice is silent (no effect fires).
+    // Learn = the voice DICTATES the move and nothing else. The theory was
+    // already taught in Watch; the move's written narration is shown below
+    // the board instead (David 2026-06-05: "I just want it saying the moves,
+    // theory was already stated in watch"). Practice stays silent (no speak).
+    let speakPromise: Promise<void> = Promise.resolve();
     if (guided) {
       voiceService.stop();
-      // Learn narration follows the user's narration setting (David 2026-05-24):
-      // FULL → the beat's full explanation; LIMITED (brief) → the short cue;
-      // neither present → dictate the move. Silent is gated inside voiceService.
-      const verbosity = resolveCoachNarration(useAppStore.getState().activeProfile?.preferences);
-      const cue = line.learnCues?.[memoryMoveIndex]?.trim();
-      const full = line.annotations?.[memoryMoveIndex]?.trim();
-      const spoken = verbosity === 'full' && full
-        ? full
-        : cue
-          ? cue
-          : sanToSpeech(line.moves[memoryMoveIndex]);
-      void voiceService.speak(spoken).catch(() => { /* keep going */ });
+      speakPromise = voiceService
+        .speak(sanToSpeech(line.moves[memoryMoveIndex]))
+        .catch(() => { /* keep going */ });
     }
-    // Your move → wait for input. Opponent's move → auto-play it fast, so you
-    // only play your own side and the line rips along.
+    // Your move → wait for input.
     if (chessRef.current.turn() === studentChar) return;
+    // Opponent's move → auto-play it, but ONLY AFTER the move narration
+    // finishes, so the spoken move is never cut off mid-word by the reply
+    // (David 2026-06-05: "make sure the narration is not choppy or cut off
+    // by the opponents moves"). Voice-promise-gated, not a fixed timer
+    // racing the speech (CLAUDE.md: voice-promise resolution is the single
+    // source of truth for auto-advance). Practice (silent) keeps a quick beat.
     let cancelled = false;
-    const t = setTimeout(() => {
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const playOpponent = (): void => {
       if (cancelled) return;
       try {
         const mv = chessRef.current.move(line.moves[memoryMoveIndex]);
@@ -338,8 +335,16 @@ export function PlayableLinePlayer({
         setMemoryMoveIndex(next);
         if (next >= line.moves.length) finishLine();
       } catch { /* line desync — stop auto-advancing */ }
-    }, guided ? 650 : 300);
-    return () => { cancelled = true; clearTimeout(t); };
+    };
+    if (guided) {
+      void speakPromise.then(() => {
+        if (cancelled) return;
+        timer = setTimeout(playOpponent, 250);
+      });
+    } else {
+      timer = setTimeout(playOpponent, 300);
+    }
+    return () => { cancelled = true; if (timer) clearTimeout(timer); };
   }, [guided, phase, memoryMoveIndex, memoryComplete, line.moves, showWrongFlash, showCorrectFlash, studentChar, finishLine]);
 
   const togglePlayPause = useCallback((): void => {
@@ -833,12 +838,38 @@ export function PlayableLinePlayer({
             </motion.div>
           )}
           {!showWrongFlash && !showCorrectFlash && memoryMoveIndex < expectedMoves.length && (
-            <div className="rounded-2xl bg-theme-surface/90 border border-white/15 p-3">
-              <p className="text-sm text-theme-text-muted">
-                {mode === 'learn'
-                  ? `Listen, then play the highlighted move — ${memoryMoveIndex + 1} of ${expectedMoves.length}.`
-                  : `Play move ${memoryMoveIndex + 1} of ${expectedMoves.length} from memory.`}
-              </p>
+            <div
+              className="rounded-2xl bg-theme-surface/90 border border-white/15 p-3"
+              data-testid="memory-move-narration"
+            >
+              {(() => {
+                // Learn: show the move's WRITTEN narration below the board
+                // (David 2026-06-05) — the voice only dictates the move, but
+                // the theory is here in writing. Prefer the full per-move
+                // narration, fall back to the short cue, then the bare prompt.
+                const written =
+                  mode === 'learn'
+                    ? (line.annotations?.[memoryMoveIndex]?.trim() ||
+                       line.learnCues?.[memoryMoveIndex]?.trim() ||
+                       '')
+                    : '';
+                return written ? (
+                  <>
+                    <p className="text-xs font-semibold text-theme-text-muted uppercase tracking-wide mb-1">
+                      Move {memoryMoveIndex + 1} of {expectedMoves.length}
+                    </p>
+                    <p className="text-sm text-theme-text leading-relaxed" data-testid="memory-move-narration-text">
+                      {written}
+                    </p>
+                  </>
+                ) : (
+                  <p className="text-sm text-theme-text-muted">
+                    {mode === 'learn'
+                      ? `Play the highlighted move — ${memoryMoveIndex + 1} of ${expectedMoves.length}.`
+                      : `Play move ${memoryMoveIndex + 1} of ${expectedMoves.length} from memory.`}
+                  </p>
+                );
+              })()}
             </div>
           )}
         </>

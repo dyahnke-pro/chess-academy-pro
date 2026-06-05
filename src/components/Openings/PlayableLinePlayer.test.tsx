@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { MotionConfig } from 'framer-motion';
 import { PlayableLinePlayer } from './PlayableLinePlayer';
 import type { PlayableMiddlegameLine } from '../../types';
+import { sanToSpeech } from '../../utils/sanToSpeech';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────
 
@@ -275,5 +276,24 @@ describe('PlayableLinePlayer', () => {
     await userEvent.click(screen.getByTestId('line-retry'));
     await userEvent.click(screen.getByTestId('drop-d3-d4'));
     await waitFor(() => expect(onComplete).toHaveBeenCalledTimes(2), { timeout: 3000 });
+  });
+
+  it('Learn voice dictates the move ONLY; the written narration shows below the board', async () => {
+    vi.useRealTimers();
+    const { voiceService } = await import('../../services/voiceService');
+    // Mocks accumulate across tests (no global clear) — start clean so the
+    // "never spoke the prose" assertion only sees THIS render's calls.
+    vi.mocked(voiceService.speak).mockClear();
+    renderPlayer({ mode: 'learn' });
+    // David 2026-06-05: Learn speaks JUST the move (theory was taught in
+    // Watch). The voice gets the move dictation, never the prose annotation.
+    await waitFor(() =>
+      expect(voiceService.speak).toHaveBeenCalledWith(sanToSpeech('d4')),
+    );
+    expect(voiceService.speak).not.toHaveBeenCalledWith(TEST_LINE.annotations[0]);
+    // ...but the move's WRITTEN narration is listed below the board.
+    expect(screen.getByTestId('memory-move-narration-text')).toHaveTextContent(
+      'White strikes in the center with d4.',
+    );
   });
 });
