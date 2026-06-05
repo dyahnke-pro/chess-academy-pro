@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Chess, type Square } from 'chess.js';
 import { LpcCharacter, type CharacterLayer } from './LpcCharacter';
 import { pieceVisual, attackStyle } from './rpgRoster';
-import { playCaptureSound, playArrowSound, playMoveSound, playWarCry } from './rpgSfx';
+import { playCaptureSound, playArrowSound, playMoveSound, playWarCry, playQueenLaugh, playPawnTaunt } from './rpgSfx';
 import type { LpcAction, LpcDirection } from './lpcLayout';
 
 const S = 46; // square size (px) — 8×46 = 368, fits a phone
@@ -57,6 +57,9 @@ export function RpgChessBoard(): JSX.Element {
   const [animFrom, setAnimFrom] = useState<string | null>(null);
   const [dying, setDying] = useState<string | null>(null);
   const [dead, setDead] = useState(false);
+  // A pawn "kicking" a piece (advancing to attack an enemy non-pawn): the pawn
+  // pokes toward `victim` and that piece recoils — but stays on the board.
+  const [kickReact, setKickReact] = useState<{ pawn: string; victim: string; dx: number; dy: number } | null>(null);
   const [arrow, setArrow] = useState<{ x0: number; y0: number; x1: number; y1: number; fly: boolean } | null>(null);
   const runRef = useRef(0);
 
@@ -141,7 +144,10 @@ export function RpgChessBoard(): JSX.Element {
       await sleep(walkDur * 1000 + 80);
       if (!alive()) return;
       if (target) {
-        if (soundRef.current && moving.type === 'p') playWarCry(); // peasant charge
+        if (soundRef.current) {
+          if (moving.type === 'p') playWarCry(); // peasant charge
+          else if (moving.type === 'q') playQueenLaugh(); // the queen gloats
+        }
         setOverlay((o) => (o ? { ...o, action: 'thrust', loop: false, transition: { duration: 0 } } : o));
         await sleep(340);
         setDying(to);
@@ -160,6 +166,30 @@ export function RpgChessBoard(): JSX.Element {
     setDead(false);
     setArrow(null);
     bump();
+
+    // "Kicking" a piece (chess sense): a pawn that ADVANCED (no capture) now
+    // diagonally attacks an enemy non-pawn → poke it, it recoils + "get outta
+    // here", and it stays put (it's threatened, not taken).
+    if (moving.type === 'p' && !target) {
+      const fwd = moving.color === 'w' ? 1 : -1;
+      const toFile = to.charCodeAt(0) - 97;
+      const toRank = parseInt(to[1], 10);
+      for (const df of [-1, 1]) {
+        const ff = toFile + df;
+        const rr = toRank + fwd;
+        if (ff < 0 || ff > 7 || rr < 1 || rr > 8) continue;
+        const vicSq = `${'abcdefgh'[ff]}${rr}`;
+        const vic = g.get(vicSq as Square);
+        if (vic && vic.color !== moving.color && vic.type !== 'p' && vic.type !== 'k') {
+          const pP = sqXY(to);
+          const vP = sqXY(vicSq);
+          setKickReact({ pawn: to, victim: vicSq, dx: vP.x - pP.x, dy: vP.y - pP.y });
+          if (soundRef.current) playPawnTaunt();
+          window.setTimeout(() => setKickReact(null), 850);
+          break;
+        }
+      }
+    }
     setBusy(false);
   }, []);
 
@@ -193,6 +223,7 @@ export function RpgChessBoard(): JSX.Element {
     setAnimFrom(null);
     setDying(null);
     setDead(false);
+    setKickReact(null);
     setArrow(null);
     setBusy(false);
     bump();
@@ -263,6 +294,34 @@ export function RpgChessBoard(): JSX.Element {
             if (sq === animFrom) return null; // moving piece lives in the overlay
             const vis = pieceVisual(piece.type, piece.color);
             const isDying = sq === dying;
+            // Pawn poking a piece it just kicked (the pawn jabs toward it).
+            if (kickReact?.pawn === sq) {
+              return (
+                <motion.div
+                  key={sq}
+                  style={{ position: 'absolute', left: c * S - OFFX, top: PAD + r * S - OFFY, width: CHAR, height: CHAR, pointerEvents: 'none', zIndex: 5 }}
+                  animate={{ x: [0, kickReact.dx * 0.35, 0], y: [0, kickReact.dy * 0.35, 0] }}
+                  transition={{ duration: 0.5, times: [0, 0.4, 1], ease: 'easeOut' }}
+                >
+                  <LpcCharacter layers={vis.layers} glow={vis.glow} action="thrust" direction={kickReact.dx >= 0 ? 'right' : 'left'} playing loop={false} size={CHAR} />
+                  <PieceBadge glyph={vis.glyph} color={piece.color} />
+                </motion.div>
+              );
+            }
+            // The kicked piece startles + recoils, then settles (it stays put).
+            if (kickReact?.victim === sq) {
+              return (
+                <motion.div
+                  key={sq}
+                  style={{ position: 'absolute', left: c * S - OFFX, top: PAD + r * S - OFFY, width: CHAR, height: CHAR, pointerEvents: 'none', zIndex: 4 }}
+                  animate={{ x: [0, kickReact.dx * 0.2, 0], rotate: [0, kickReact.dx >= 0 ? 12 : -12, 0] }}
+                  transition={{ duration: 0.6, times: [0, 0.35, 1], ease: 'easeOut' }}
+                >
+                  <LpcCharacter layers={vis.layers} glow={vis.glow} action="walk" direction="down" playing={false} loop={false} size={CHAR} />
+                  <PieceBadge glyph={vis.glyph} color={piece.color} />
+                </motion.div>
+              );
+            }
             return (
               <div
                 key={sq}

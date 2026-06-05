@@ -267,6 +267,56 @@ export function playWarCry(): void {
   }
 }
 
+/** A regal four-syllable "ha ha ha ha" laugh — played when the queen captures. */
+export function playQueenLaugh(): void {
+  const c = audio();
+  if (!c) return;
+  try {
+    const t = c.currentTime;
+    [380, 350, 320, 290].forEach((p, i) => {
+      const t0 = t + i * 0.13;
+      const g = c.createGain();
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(0.12, t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.1);
+      g.connect(c.destination);
+      const o = c.createOscillator();
+      o.type = 'sawtooth';
+      o.frequency.setValueAtTime(p, t0);
+      o.frequency.exponentialRampToValueAtTime(p * 0.9, t0 + 0.1);
+      for (const fHz of [900, 1400]) {
+        const bp = c.createBiquadFilter();
+        bp.type = 'bandpass';
+        bp.Q.value = 8;
+        bp.frequency.value = fHz;
+        o.connect(bp).connect(g);
+      }
+      o.start(t0);
+      o.stop(t0 + 0.12);
+    });
+  } catch {
+    /* ignore */
+  }
+}
+
+const PAWN_TAUNTS = ['Get outta here!', 'Get out of here!', 'Off with ya!', 'And stay out!'];
+
+/** A pawn trash-talks the piece it just kicked off the board — real spoken
+ *  words via the Web Speech API (gruff, low pitch). No-ops where unavailable. */
+export function playPawnTaunt(): void {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+  try {
+    const u = new SpeechSynthesisUtterance(PAWN_TAUNTS[Math.floor(Math.random() * PAWN_TAUNTS.length)]);
+    u.pitch = 0.6;
+    u.rate = 1.08;
+    u.volume = 0.9;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(u);
+  } catch {
+    /* ignore */
+  }
+}
+
 /** Play the capture sound for a captured piece of the given type. Safe to call
  *  anywhere — no-ops if audio is unavailable (e.g. headless / autoplay-blocked). */
 export function playCaptureSound(type: string): void {
