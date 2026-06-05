@@ -1,4 +1,5 @@
 import { Chess } from 'chess.js';
+import { findHangingPieces } from './tacticClassifier';
 import { db } from '../db/schema';
 import { getCoachCommentary } from './coachApi';
 import { groundCoachReply } from './coachAnswerGates';
@@ -792,6 +793,79 @@ function buildDeterministicNarration(params: {
  * segments call that used to drive the walk (ship-3) — see the
  * generateReviewNarration commentary for the rationale.
  */
+const REVIEW_PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+const REVIEW_PIECE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 99 };
+
+/**
+ * GROUNDED, LLM-FREE explanation of WHY the best move beats the move played
+ * (David 2026-06-05: "these explanations need to be grounded"). Computed
+ * entirely from chess.js board truth — the SAME attackers()-based hanging
+ * detector the coach uses — so it can never hallucinate a tactic:
+ *
+ *   - what the BEST move concretely achieves (a winning capture of an
+ *     attacked-and-undefended enemy piece, or a check), and
+ *   - what the PLAYED move concretely cost (a friendly piece it left
+ *     attacked-and-undefended — i.e. hanging).
+ *
+ * Returns an appendable clause (no leading SAN — the template already names
+ * the move), or `null` when nothing is PROVABLY true on the board, in which
+ * case the narration just names the move (empty > generic > invented). It
+ * never reports the engine's deep reasoning it can't see; only board facts.
+ */
+export function explainBestMoveGrounded(
+  fenBefore: string,
+  playedSan: string | null,
+  bestMoveUci: string | null,
+  moverColor: 'white' | 'black',
+): string | null {
+  if (!bestMoveUci || bestMoveUci.length < 4) return null;
+  const mc: 'w' | 'b' = moverColor === 'white' ? 'w' : 'b';
+
+  // ── What the BEST move achieves ─────────────────────────────────────
+  let bestClause: string | null = null;
+  try {
+    const c = new Chess(fenBefore);
+    const to = bestMoveUci.slice(2, 4);
+    const captured = c.get(to as never); // enemy piece on the target, if any
+    const mv = c.move({ from: bestMoveUci.slice(0, 2), to, promotion: bestMoveUci.length > 4 ? bestMoveUci[4] : undefined });
+    if (mv) {
+      if (captured && captured.color !== mc) {
+        // Winning capture: either the captured square can't be recaptured
+        // by the enemy, or we won more than we'd give back.
+        const recapturable = c.attackers(to as never, captured.color).length > 0;
+        const movedVal = REVIEW_PIECE_VALUE[mv.piece] ?? 0;
+        const capVal = REVIEW_PIECE_VALUE[captured.type] ?? 0;
+        if (!recapturable || capVal > movedVal) {
+          bestClause = `it wins the ${REVIEW_PIECE_NAME[captured.type]} on ${to}`;
+        }
+      }
+      if (!bestClause && c.inCheck()) bestClause = 'it comes with check';
+    }
+  } catch { /* board fact unavailable — stay silent */ }
+
+  // ── What the PLAYED move cost ───────────────────────────────────────
+  let costClause: string | null = null;
+  if (playedSan) {
+    try {
+      const c = new Chess(fenBefore);
+      if (c.move(playedSan)) {
+        const hung = findHangingPieces(c).filter((h) => h.color === mc);
+        if (hung.length > 0) {
+          hung.sort((a, b) => (REVIEW_PIECE_VALUE[b.piece] ?? 0) - (REVIEW_PIECE_VALUE[a.piece] ?? 0));
+          const h = hung[0];
+          costClause = `your move left the ${REVIEW_PIECE_NAME[h.piece]} on ${h.square} hanging`;
+        }
+      }
+    } catch { /* board fact unavailable — stay silent */ }
+  }
+
+  if (bestClause && costClause) return `${cap(bestClause)}, while ${costClause}.`;
+  if (bestClause) return `${cap(bestClause)}.`;
+  if (costClause) return `${cap(costClause)}.`;
+  return null;
+}
+function cap(s: string): string { return s.charAt(0).toUpperCase() + s.slice(1); }
+
 export function buildReviewSegments(
   moves: ReviewMoveInput[],
 ): ReviewMoveSegment[] {
@@ -804,7 +878,7 @@ export function buildReviewSegments(
     const fullMove = Math.ceil(m.ply / 2);
     const moverColor: 'white' | 'black' = m.ply % 2 === 1 ? 'white' : 'black';
     const bestMoveSan = uciToSanAt(m.bestMove, fenPair.fenBefore);
-    const narration = buildDeterministicNarration({
+    let narration = buildDeterministicNarration({
       ply: m.ply,
       isStudentMove: !m.isCoachMove,
       classification: m.classification,
@@ -812,6 +886,13 @@ export function buildReviewSegments(
       preMoveEval: m.preMoveEval,
       evaluation: m.evaluation,
     });
+    // Append the GROUNDED "why the best move is best" clause — chess.js
+    // board truth only, never LLM-guessed (David 2026-06-05). Only on the
+    // student's flagged errors, and only when a board fact is provable.
+    if (narration && !m.isCoachMove && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy' || m.classification === 'miss')) {
+      const why = explainBestMoveGrounded(fenPair.fenBefore, m.san, m.bestMove, moverColor);
+      if (why) narration = `${narration} ${why}`;
+    }
     segments.push({
       ply: m.ply,
       moveNumber: fullMove,

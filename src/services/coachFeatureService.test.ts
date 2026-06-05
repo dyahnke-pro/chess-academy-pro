@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { db } from '../db/schema';
-import { detectBadHabits, detectBadHabitsFromGame, buildProfileContext, buildReviewSegments } from './coachFeatureService';
+import { detectBadHabits, detectBadHabitsFromGame, buildProfileContext, buildReviewSegments, explainBestMoveGrounded } from './coachFeatureService';
 import type { ReviewMoveInput } from './coachFeatureService';
 import { buildUserProfile, buildBadHabit } from '../test/factories';
 import type { UserProfile } from '../types';
@@ -12,6 +12,37 @@ vi.mock('./puzzleService', () => ({
 
 import { getThemeSkills } from './puzzleService';
 const getThemeSkillsMock = vi.mocked(getThemeSkills);
+
+describe('explainBestMoveGrounded — GROUNDED best-move explanation (no LLM, chess.js truth)', () => {
+  it('explains a winning capture the player missed', () => {
+    // White Rd1 can win the undefended black bishop on d4; the player instead
+    // shuffled the king (Kf1). best = Rxd4 (d1d4).
+    const r = explainBestMoveGrounded('4k3/8/8/8/3b4/8/8/3RK3 w - - 0 1', 'Kf1', 'd1d4', 'white');
+    expect(r).toBe('It wins the bishop on d4.');
+  });
+
+  it('explains that the played move left a piece hanging', () => {
+    // White Bf1; the player played Bb5 (f1-b5 diagonal) — attacked by the a6
+    // pawn, undefended. best = Ke2 (e1e2), a quiet move (no capture/check).
+    const r = explainBestMoveGrounded('4k3/8/p7/8/8/8/8/4KB2 w - - 0 1', 'Bb5', 'e1e2', 'white');
+    expect(r).toBe('Your move left the bishop on b5 hanging.');
+  });
+
+  it('returns null when nothing is provably true on the board (name-only fallback)', () => {
+    // Quiet position, best move is a normal developing move that neither
+    // captures nor checks, and the played move hangs nothing.
+    const r = explainBestMoveGrounded('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'a3', 'g1f3', 'white');
+    expect(r).toBeNull();
+  });
+
+  it('never claims a "win" on an even recapture (exchange, not a free piece)', () => {
+    // Rxd4 but the bishop is defended by the queen on d8 → recapturable, and
+    // rook(5) > bishop(3), so it is NOT a win. No merit clause, played move
+    // (Kf1) hangs nothing → null.
+    const r = explainBestMoveGrounded('3qk3/8/8/8/3b4/8/8/3RK3 w - - 0 1', 'Kf1', 'd1d4', 'white');
+    expect(r).toBeNull();
+  });
+});
 
 describe('coachFeatureService', () => {
   let profile: UserProfile;
