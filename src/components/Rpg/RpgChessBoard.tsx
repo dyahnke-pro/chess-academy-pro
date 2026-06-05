@@ -239,6 +239,9 @@ export function RpgChessBoard(): JSX.Element {
         className="relative rounded-lg overflow-hidden"
         style={{ width: 8 * S, height: 8 * S + PAD, boxShadow: '0 0 22px 2px rgba(74,222,128,0.14)', background: '#101713' }}
         data-testid="rpg-chess-board"
+        data-fen={game.fen()}
+        data-selected={selected ?? ''}
+        data-busy={busy ? '1' : '0'}
       >
         {/* Squares */}
         {Array.from({ length: 8 }, (_, r) =>

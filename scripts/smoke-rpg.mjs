@@ -68,31 +68,34 @@ try {
 
   const status1 = (await page.locator('[data-testid="rpg-status"]').textContent())?.trim();
 
-  // Capture path: ...d5 then exd5 (melee thrust + death + commit).
   const move = async (from, to, wait) => {
     await page.locator(`[data-square="${from}"]`).dispatchEvent('click');
     await page.waitForTimeout(250);
     const dots = await page.locator(`[data-square="${to}"] div`).count();
+    const sel = await board.getAttribute('data-selected');
     await page.locator(`[data-square="${to}"]`).dispatchEvent('click');
     await page.waitForTimeout(wait);
     const st = (await page.locator('[data-testid="rpg-status"]').textContent())?.trim();
-    console.log(`  move ${from}-${to}: legalDotOnTarget=${dots} -> ${st}`);
+    const fen = (await board.getAttribute('data-fen'))?.split(' ').slice(0, 2).join(' ');
+    console.log(`  move ${from}-${to}: selected=${sel} legalDot=${dots} -> ${st} | ${fen}`);
+    return st;
   };
-  await move('d7', 'd5', 1500);
-  await move('e4', 'd5', 2800); // white pawn captures (melee)
-  const status2 = (await page.locator('[data-testid="rpg-status"]').textContent())?.trim();
-  await move('b8', 'c6', 2200); // black knight leap
-  const status3 = (await page.locator('[data-testid="rpg-status"]').textContent())?.trim();
+  // A short game that exercises every combat style:
+  await move('e7', 'e5', 1500); // black pawn (melee walk)
+  await move('f1', 'c4', 1800); // white bishop develops
+  await move('b8', 'c6', 2200); // black knight LEAP
+  const statusArcher = await move('c4', 'f7', 3600); // white BISHOP ARCHER captures f7 (bow + arrow)
+  const statusFinal = await move('e8', 'f7', 2200); // black king captures the bishop (melee)
   await page.screenshot({ path: '/tmp/rpg-after.png' });
 
-  console.log(JSON.stringify({ status0, status1, status2, status3, mounted: true, bubblePresent, errors }, null, 2));
+  console.log(JSON.stringify({ status0, status1, statusArcher, statusFinal, mounted: true, bubblePresent, errors }, null, 2));
   const ok =
     status0?.includes('White') &&
     status1?.includes('Black') &&
-    status2?.includes('Black') && // after exd5 it's Black to move again
-    status3?.includes('White') && // after the knight leap it's White's move
+    statusArcher?.includes('Black') && // after the archer capture it's Black to move (in check)
+    statusFinal?.includes('White') && // after Kxf7 it's White's move
     errors.length === 0;
-  console.log(ok ? '\nSMOKE PASS ✅ (board mounts, e2-e4 committed, no errors)' : '\nSMOKE FAIL ❌');
+  console.log(ok ? '\nSMOKE PASS ✅ (mounts; leap + archer-capture + melee-capture all commit; no errors)' : '\nSMOKE FAIL ❌');
   process.exitCode = ok ? 0 : 1;
 } catch (e) {
   console.error('SMOKE ERROR', e);

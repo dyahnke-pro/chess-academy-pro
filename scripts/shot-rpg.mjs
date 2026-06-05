@@ -21,7 +21,7 @@ try {
   await waitFor(BASE);
   const exe = await resolveChromiumExecutable();
   browser = await chromium.launch({ executablePath: exe, headless: true, args: sandboxLaunchArgs() });
-  const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 520, height: 900 }, deviceScaleFactor: 2 });
+  const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 520, height: 900 }, deviceScaleFactor: 3 });
   const page = await ctx.newPage();
   // Hide onboarding/help overlays via CSS so they don't cover the board (survives re-render).
   await page.addInitScript(() => {
