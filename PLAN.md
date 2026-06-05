@@ -431,3 +431,19 @@ All gates green. Next: ship-check → PR → loop audit on prod (3 instruments).
 - [ ] Fix any gem whose inaccuracy/punish narration is empty or doesn't explain.
 - [ ] Re-run punishGems.test + narration gates.
 - [ ] ship-check + deploy + TestFlight handoff.
+
+### 2026-06-05 — gem narration review COMPLETE
+- [x] Personally reviewed all 296 GEM_NARRATION entries (board-grounded via
+      scripts/dump-gem-narration.mts). Fixes:
+      - 31 narrations corrected total:
+        - 25 generic-placeholder Samay gems rewritten with board-verified prose
+          (material claims only where material is actually won at the quiet end;
+          positional language otherwise — verified each).
+        - 6 mislabeled tactics corrected: Italian Bxf7+ (e5 not f7 guard);
+          KG Qb5+ royal-fork→fork; Scotch fxe3 false queen-fork→Nxe7+ wins knight;
+          Gotham/open-e5 Qe1+ skewer→fork; Alapin Bc4 discovered→direct + c7 guard;
+          Alapin Qb3 false e6-hit; Aman Na5/Nxe5 false Qh5-fork→f7 gang-up;
+          Aman Bc5/Bxd5 pin mechanism; Aman Nbd7/Nd6# fork→smothered-mate (Qe2 pin);
+          English Bc5/Nxe5 skewer→fork.
+- [x] All gates green: punishGems, narrationAccuracy, lessonIntegrity,
+      wlppNarration, lessons/, repertoire.
