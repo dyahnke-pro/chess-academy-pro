@@ -176,6 +176,28 @@ async function pickWhite(page) {
   try { const cs = page.locator('[data-testid="color-selector"]'); if (await cs.count()) { const w = page.getByRole('button', { name: /white/i }); if (await w.count()) await w.first().click().catch(() => {}); await page.waitForTimeout(2000); } } catch {}
 }
 async function clearIDB(page) { await page.evaluate(async () => { const dbs = await indexedDB.databases?.(); if (dbs) for (const d of dbs) if (d.name) indexedDB.deleteDatabase(d.name); }); }
+// Read the engine-plan pre-injection audit events the app logged since
+// `sinceTs` (source GameChatPanel.handleSend.enginePlan). Returns
+// { fired: bool, pv: string|null } — proof the engine-anchored plan
+// actually pre-injected the Stockfish PV on this plan turn (David
+// 2026-06-05 — "feel like it wasn't fully tested": this is the proof).
+async function readEnginePlanSince(page, sinceTs) {
+  return await page.evaluate(async (since) => {
+    try {
+      const req = indexedDB.open('ChessAcademyDB');
+      await new Promise((r) => { req.onsuccess = () => r(); req.onerror = () => r(); });
+      const db = req.result;
+      const tx = db.transaction('meta', 'readonly');
+      const rec = await new Promise((r) => { const g = tx.objectStore('meta').get('app-audit-log.v1'); g.onsuccess = () => r(g.result); g.onerror = () => r(null); });
+      db.close();
+      if (!rec) return { fired: false, pv: null };
+      const evs = JSON.parse(rec.value).filter((e) => e.timestamp > since && e.source === 'GameChatPanel.handleSend.enginePlan');
+      const hit = evs.find((e) => /engine plan pre-injected/i.test(e.summary || ''));
+      if (hit) { const m = /pre-injected:\s*(.+?)\s*\(depth/i.exec(hit.summary || ''); return { fired: true, pv: m ? m[1] : null }; }
+      return { fired: evs.length > 0 ? 'fallback' : false, pv: null };
+    } catch { return { fired: false, pv: null }; }
+  }, sinceTs);
+}
 async function readConcerningSince(page, sinceTs) {
   return await page.evaluate(async (since) => {
     try { const req = indexedDB.open('ChessAcademyDB'); await new Promise((r) => { req.onsuccess = () => r(); req.onerror = () => r(); }); const db = req.result; const tx = db.transaction('meta', 'readonly'); const rec = await new Promise((r) => { const g = tx.objectStore('meta').get('app-audit-log.v1'); g.onsuccess = () => r(g.result); g.onerror = () => r(null); }); db.close(); if (!rec) return []; const KINDS = ['uncaught-error', 'unhandled-rejection', 'error-boundary', 'bad-fen', 'navigation-error']; return JSON.parse(rec.value).filter((e) => e.timestamp > since && KINDS.includes(e.kind)).map((e) => ({ kind: e.kind })); } catch { return []; }
@@ -383,12 +405,25 @@ async function main() {
             continue;
           }
         }
+        // For PLAN turns on the play surface, timestamp the ask so we can
+        // confirm the engine-plan pre-injection event fired (feature proof,
+        // David 2026-06-05). Best-effort — a fallback (no PV) is NOT a fail
+        // (Stockfish may be slow/unavailable in a given env), but we COUNT
+        // real pre-injections so the report proves the wiring works on prod.
+        const planProbe = family.id === 'plan-no-fallback' && family.surface === 'game';
+        const planTs = planProbe ? Date.now() : 0;
         const r = await askLLM(page, prompt);
         // A timeout OR an empty read is an audit-INFRA failure (failed to
         // capture the answer), NOT a wrong answer — SKIP it (the
         // diagnostic proved the coach answers these correctly when read).
         // Only a substantive, non-empty WRONG answer breaks the streak.
         if (r === '(timeout)' || r.replace(/[^a-z0-9]/gi, '').length < 3) { pr.skipped++; pr.probes.push({ id: family.id, skipped: true, prompt }); log(`  \x1b[33m⊘\x1b[0m ${family.id} — no answer captured (skipped, infra)  «${prompt.slice(0, 50)}»`); continue; }
+        if (planProbe) {
+          const ep = await readEnginePlanSince(page, planTs);
+          if (ep.fired === true) { pr.enginePlanFired = (pr.enginePlanFired ?? 0) + 1; log(`    \x1b[36m⚙ engine plan pre-injected: ${ep.pv ?? '(pv?)'}\x1b[0m`); }
+          else if (ep.fired === 'fallback') { pr.enginePlanFallback = (pr.enginePlanFallback ?? 0) + 1; log(`    \x1b[33m⚙ plan turn fell back to grounding (no engine PV this time)\x1b[0m`); }
+          else { pr.enginePlanMissing = (pr.enginePlanMissing ?? 0) + 1; log(`    \x1b[33m⚙ no engine-plan audit event seen for this plan turn\x1b[0m`); }
+        }
         // The board is CONFIRMED on the target FEN above, so a stale read
         // here is now a REAL coach grounding bug, not a precondition miss.
         // The live-fen-at-send-time wiring (2026-06-05) should make this
