@@ -14,17 +14,19 @@
  *   Tier 2 — FAILURE MODES. Cold IndexedDB, no-gem tab self-hide, pick-
  *            before-load, out-of-order mode switching, the Caro named-trap
  *            Learn path, AND the voice contract decoded off /api/tts:
- *            Learn FIRES narration (cue or full explanation), Practice
- *            fires NOTHING.
+ *            Learn DICTATES THE MOVE ONLY (no prose/cue) + shows the written
+ *            narration below the board, Practice fires NOTHING.
  *   Tier 3 — ADVERSARIAL / stress. Wrong move in Learn (board rejects, no
  *            desync), rapid mode toggling (no leak), full Watch playout to
  *            completion, Practice silence under interaction. Zero pageerrors
  *            / unhandledrejection across the whole tier.
  *
  * The WLPP contract being proven (David): Watch = authored prose narration,
- * Learn = narration that follows the SETTING (FULL → full explanation,
- * LIMITED → ≤8-word cue; never silent — the old "move-dictation ONLY" rule is
- * superseded 2026-05-24), Practice = silent, Play = coach room.
+ * Learn = the voice DICTATES THE MOVE ONLY ("Knight to d 5" — never prose or
+ * the cue) while the move's WRITTEN narration shows below the board, and the
+ * opponent's reply is voice-promise-gated so the dictation is never cut off
+ * (David 2026-06-05, supersedes the 2026-05-24 "Learn follows the setting"
+ * rule), Practice = silent, Play = coach room.
  *
  * Run (sandbox): npm run dev, then
  *   AUDIT_SMOKE_URL=http://localhost:5173 node scripts/audit-punish-gems-loop.mjs
@@ -383,17 +385,24 @@ async function runPass(browser, level) {
       }
       await exitPlayer(page);
 
-      // ── LEARN — mounts + FIRES narration (register follows the narration
-      //    SETTING: FULL → full explanation, LIMITED → ≤8-word cue; never
-      //    silent). The old "move-dictation ONLY" rule is superseded
-      //    (David 2026-05-24) — Learn no longer has to be bare dictation. ──
+      // ── LEARN — mounts + DICTATES THE MOVE ONLY (David 2026-06-05: "i just
+      //    want it saying the moves, theory was already stated in watch"). The
+      //    voice speaks move-dictation form ("Knight to d 5"), NEVER prose or
+      //    the cue; the move's WRITTEN narration is listed below the board
+      //    instead. Supersedes the 2026-05-24 "Learn follows the setting" rule. ──
       if (await ensureWeapons(page, id) === 'locked') { skip(`${id} Learn: unlock write stalled (sandbox) — device/prod-only`); continue; }
       ev.tts.length = 0;
       await page.locator('[data-testid^="gem-learn-"]').first().click();
       await page.waitForTimeout(4000);
       if ((await squares(page)) < 64) fail(`${id} Learn: board absent`);
       const lt = narrationTexts(ev);
-      if (!lt.length) fail(`${id} Learn: no narration fired (should speak the cue or the full explanation)`);
+      if (!lt.length) fail(`${id} Learn: no narration fired (should dictate the move)`);
+      // The voice must DICTATE the move — never prose/theory (that lives in Watch).
+      const learnProse = lt.filter(isProse);
+      if (learnProse.length) fail(`${id} Learn: spoke PROSE/theory, not move-dictation ("${learnProse[0].slice(0, 50)}")`);
+      if (!lt.some(isMoveDictation)) fail(`${id} Learn: voice did not dictate a move (got "${lt[0]}")`);
+      // …and the move's WRITTEN narration is shown below the board.
+      if (!(await page.locator('[data-testid="memory-move-narration"]').count())) fail(`${id} Learn: written move-narration area missing below the board`);
       if (level >= 3) {
         for (const sq of ['a3', 'h6', 'c3', 'f6']) {
           const cl = page.locator(`[data-square="${sq}"]`).first();
