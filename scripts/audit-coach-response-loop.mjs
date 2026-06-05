@@ -69,27 +69,18 @@ function materialDiff(fen) {
   try { for (const row of new Chess(fen).board()) for (const sq of row) if (sq && sq.type !== 'k') d += (sq.color === 'w' ? 1 : -1) * (val[sq.type] || 0); } catch {}
   return d;
 }
-// Detect a STALE set-board read: the coach describes piece types that
-// aren't on the board (set_board intermittently doesn't reach the brain,
-// so it reasons about the pre-set position). Endgame FENs are minimal,
-// so mentioning ≥2 absent piece types = stale → skip (infra), not fail.
-function staleSetposRead(resp, fen) {
-  const placement = (fen.split(' ')[0] || '').toLowerCase();
-  if (placement.startsWith('rnbqkbnr/pppppppp')) return false; // FEN really IS the start
-  const pieceCount = [...placement].filter((c) => 'pnbrqk'.includes(c)).length;
-  // tell #1: claims the start / pieces on home squares (these are endgame FENs)
-  if (/starting position|home squares?|still on (?:its|their) (?:home|starting)|every piece is still on|all pieces (?:are )?on (?:their )?(?:home|starting)|on its home square|opening position/i.test(resp)) return true;
-  // tell #2: names an OPENING / opening motif on a sparse endgame board
-  if (pieceCount <= 8 && /italian game|ruy lopez|sicilian|french defense|caro-kann|fork trick|the opening|in the opening|fried liver|developed pieces|pawn chain/i.test(resp)) return true;
-  // tell #3: names ≥2 piece types that aren't on the board
-  const present = new Set([...placement].filter((c) => 'pnbrqk'.includes(c)));
-  const NAMES = { p: 'pawn', n: 'knight', b: 'bishop', q: 'queen' };
-  let absent = 0;
-  for (const [letter, name] of Object.entries(NAMES)) {
-    if (!present.has(letter) && new RegExp(`\\b${name}s?\\b`, 'i').test(resp)) absent++;
-  }
-  return absent >= 2;
-}
+// NOTE: the old `staleSetposRead` heuristic was REMOVED (2026-06-05). With
+// the precondition guard now CONFIRMING the board is on the target FEN
+// before any setpos probe asks (scrapeFen === target, retry-once-then-skip),
+// the family check itself is the authoritative judge of whether the coach
+// read the position correctly (king-square checks the king square, in-check
+// the check status, piece-on-square/empty-square the piece reads,
+// material-balance the material). The heuristic was a redundant fuzzy
+// overlay that FALSE-POSITIVED on positions which legitimately resemble the
+// start (e.g. the quiet "r3k2r/pppppppp/…/R3K2R" rook+pawn FEN, where the
+// coach correctly says "not in check, pieces on their starting ranks" and
+// the /home squares/ tell misfired). Real stale reads now surface as a
+// WRONG family answer, not a separate brittle gate.
 const moveCore = (m) => (m || '').replace(/[+#]$/, '');
 
 // ── browser/IO helpers ─────────────────────────────────────────────
@@ -268,7 +259,7 @@ const EMPTY_SQUARE_FENS = [ // {fen, sq that is empty}
   { fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', sq: 'e5' },
 ];
 const OCCUPIED_SQUARE_FENS = [ // {fen, sq, piece} — square is OCCUPIED; coach must name the right piece
-  { fen: 'rnbqkbnr/ppp1pppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 2', sq: 'd4', piece: 'pawn' },
+  { fen: 'rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq d6 0 2', sq: 'd4', piece: 'pawn' },
   { fen: 'rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3', sq: 'f3', piece: 'knight' },
   { fen: 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3', sq: 'c6', piece: 'knight' },
   { fen: 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 4 5', sq: 'c4', piece: 'bishop' },
@@ -359,7 +350,22 @@ const FAMILIES = [
   { id: 'piece-on-square', depth: 2, surface: 'setpos', variants: OCCUPIED_SQUARE_FENS.map((v) => ({ ...v, prompt: `What piece is on the ${v.sq} square right now? Name the piece.` })),
     check: (r, v) => { const p = pieceOn(v.fen, v.sq); if (!p) return pass('(variant square empty — skipped)'); const names = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' }; const name = names[p.type]; const namedRight = new RegExp(`\\b${name}s?\\b`, 'i').test(r); if (!namedRight) return fail(`did not name the ${name} on ${v.sq}`); const others = Object.values(names).filter((n) => n !== name && n !== 'king'); const wrong = others.find((n) => new RegExp(`\\bon ${v.sq}[^.]*\\b${n}s?\\b|\\b${n}s?\\b[^.]*\\bon ${v.sq}\\b`, 'i').test(r)); return wrong ? fail(`named a ${wrong} on ${v.sq} (it's a ${name})`) : pass(`correctly named the ${name} on ${v.sq}`); } },
   { id: 'material-balance', depth: 2, surface: 'setpos', variants: MATERIAL_FENS.map((fen) => ({ fen, prompt: 'Counting material, am I (White) ahead or behind, and roughly by how much?' })),
-    check: (r, v) => { const d = materialDiff(v.fen); const t = lc(r); const up = /\b(?:up|ahead|winning|won|decisive|more material|material advantage|extra (?:a |the )?(?:pawn|piece|rook|knight|bishop|queen|exchange))\b|\badvantage\b/.test(t); const down = /\b(?:down|behind|losing|lost|less material|disadvantage)\b/.test(t); if (d >= 2) return (up && !down) ? pass(`correctly: white up (+${d})`) : fail(`white is up ${d} but coach didn't say ahead (said ${down ? 'behind' : 'neither'})`); if (d <= -2) return (down && !up) ? pass(`correctly: white down (${d})`) : fail(`white is down ${Math.abs(d)} but coach didn't say behind (said ${up ? 'ahead' : 'neither'})`); return pass('(roughly even — skipped)'); } },
+    // Attribute the advantage to a COLOR — a bare "advantage"/"up" tripped a
+    // false fail when the coach correctly said "Black is up / advantage to
+    // Black" (2026-06-05). whiteAhead = white-up signals OR black-down
+    // signals; whiteBehind = white-down OR black-up. Direction only.
+    check: (r, v) => {
+      const d = materialDiff(v.fen); const t = lc(r);
+      const whiteUp = /\b(?:white|you)(?:'?re| are| is| have| has)?\s+(?:clearly\s+|way\s+|much\s+)?(?:up|ahead|winning|better|on top)\b|\b(?:white|you) (?:has|have|hold|holds) (?:a |the |an? )?(?:material |decisive )?advantage/.test(t);
+      const whiteDown = /\b(?:white|you)(?:'?re| are| is)?\s+(?:clearly\s+|way\s+|much\s+)?(?:down|behind|losing|worse|in trouble)\b/.test(t);
+      const blackUp = /\bblack(?:'?s| is| has| have)?\s+(?:clearly\s+|way\s+|much\s+)?(?:up|ahead|winning|better|on top)\b|\bblack (?:has|have|hold|holds) (?:a |the |an? )?(?:material |decisive )?advantage|advantage (?:to|for) black|up a (?:queen|rook|bishop|knight|piece|pawn) (?:for|to) black/.test(t);
+      const blackDown = /\bblack(?:'?s| is)?\s+(?:clearly\s+|way\s+|much\s+)?(?:down|behind|losing|worse)\b/.test(t);
+      const saysWhiteAhead = whiteUp || blackDown;
+      const saysWhiteBehind = whiteDown || blackUp;
+      if (d >= 2) return (saysWhiteAhead && !saysWhiteBehind) ? pass(`correctly: white up (+${d})`) : fail(`white is up ${d} but coach said ${saysWhiteBehind ? 'behind' : 'neither'}`);
+      if (d <= -2) return (saysWhiteBehind && !saysWhiteAhead) ? pass(`correctly: white down (${d})`) : fail(`white is down ${Math.abs(d)} but coach said ${saysWhiteAhead ? 'ahead' : 'neither'}`);
+      return pass('(roughly even — skipped)');
+    } },
 
   // DEPTH 3 — rules legality + anti-over-claim
   { id: 'illegal-move', depth: 3, surface: 'chat', variants: ILLEGAL,
@@ -471,12 +477,10 @@ async function main() {
           else if (ep.fired === 'fallback') { pr.enginePlanFallback = (pr.enginePlanFallback ?? 0) + 1; log(`    \x1b[33m⚙ plan turn fell back to grounding (no engine PV this time)\x1b[0m`); }
           else { pr.enginePlanMissing = (pr.enginePlanMissing ?? 0) + 1; log(`    \x1b[33m⚙ no engine-plan audit event seen for this plan turn\x1b[0m`); }
         }
-        // The board is CONFIRMED on the target FEN above, so a stale read
-        // here is now a REAL coach grounding bug, not a precondition miss.
-        // The live-fen-at-send-time wiring (2026-06-05) should make this
-        // impossible; if it recurs it's a regression — count it loudly
-        // (staleReads) rather than burying it in the generic skip bucket.
-        if (family.surface === 'setpos' && variant.fen && staleSetposRead(r, variant.fen)) { pr.errors++; pr.staleReads = (pr.staleReads ?? 0) + 1; pr.probes.push({ id: family.id, ok: false, why: 'STALE read — coach reasoned about the wrong position despite the board being on target (live-fen regression)', prompt, response: r.slice(0, 280) }); log(`  \x1b[31m✗\x1b[0m ${family.id} — STALE read on a confirmed board (live-fen regression!)  «${prompt.slice(0, 40)}»`); continue; }
+        // (Stale-read overlay removed — the board is CONFIRMED on target by
+        // the precondition guard above, so the family check below is the
+        // authoritative judge of the coach's board comprehension. A real
+        // stale read surfaces as a WRONG family answer.)
         const out = family.check(r, variant);
         pr.probes.push({ id: family.id, ok: out.ok, why: out.why, prompt, response: r.slice(0, 280) });
         if (!out.ok) pr.errors++;
@@ -500,7 +504,7 @@ async function main() {
     pr.concerning = (await readConcerningSince(page, tsStart)).length;
     if (pr.concerning > 0) { pr.errors += pr.concerning; log(`  \x1b[33m⚠ ${pr.concerning} concerning page/error events\x1b[0m`); }
     report.passes.push(pr);
-    const flakeNote = `${pr.skipped} skipped${pr.toolFlakes ? ` (${pr.toolFlakes} set_board tool-flake)` : ''}${pr.staleReads ? `, ${pr.staleReads} STALE` : ''}`;
+    const flakeNote = `${pr.skipped} skipped${pr.toolFlakes ? ` (${pr.toolFlakes} set_board tool-flake)` : ''}`;
     if (pr.errors === 0) { streak++; log(`  → clean pass (${flakeNote}). streak ${streak}/${REQUIRED_STREAK}`); }
     else { streak = 0; log(`  → ${pr.errors} error(s), ${flakeNote}. streak reset to 0`); }
     if (streak >= REQUIRED_STREAK) { report.met = true; log(`\n\x1b[1m\x1b[32m✅ CONTRACT MET — ${REQUIRED_STREAK} consecutive clean passes\x1b[0m`); break; }
