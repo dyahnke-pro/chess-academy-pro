@@ -1,54 +1,73 @@
 import type { CharacterLayer } from './LpcCharacter';
 
-// Maps a chess piece (type + color) to its RPG character look + combat style.
-// Costume layers are LPC sheets composited bottom-to-top. Today every piece
-// uses the base body tinted by team; richer per-type costumes (crown, robe,
-// bow + quiver, helmet, peasant tunic, horse) drop in by adding layers here —
-// the board logic keys off `attack`, not the art.
+// Maps a chess piece (type + color) to its themed RPG character — composited
+// from Universal LPC costume sheets (CC-BY-SA 3.0 / GPLv3, see
+// public/rpg/CREDITS.md). Layers paint bottom-to-top. Team is read by body
+// skin + a gold (White) / arcane-purple (Black) glow.
+//
+//   King   — golden helm, plate armor, scepter
+//   Queen  — gold tiara, flowing robe, long hair
+//   Rook   — metal helm, heavy plate, spear (the castle guard)
+//   Knight — chain coif + mail, blade (the rider) — leaps over pieces
+//   Bishop — hooded archer with bow + quiver — shoots, then advances
+//   Pawn   — leather cap, tunic, spear (the peasant levy)
 
 export type AttackStyle = 'melee' | 'leap' | 'ranged';
 
-const WHITE_BODY = '/rpg/body-light.png';
-const BLACK_BODY = '/rpg/body-dark.png';
+const ROOT = '/rpg';
+const KIT = '/rpg/kit';
 
-// Team tints — warm gold for White, arcane purple for Black (echoing the app
-// icon's gold + the board's neon glow).
-const WHITE_TINT = 'brightness(1.06) drop-shadow(0 0 3px rgba(255,196,64,0.9))';
-const BLACK_TINT = 'brightness(0.95) drop-shadow(0 0 3px rgba(168,85,247,0.95))';
-
-export interface PieceVisual {
-  layers: CharacterLayer[];
-  attack: AttackStyle;
-  /** Small base badge so the piece type is readable while the costume art is WIP. */
-  glyph: string;
-  label: string;
+function bodySheet(type: string, color: 'w' | 'b'): string {
+  if (type === 'q') return color === 'w' ? `${ROOT}/body-female-light.png` : `${KIT}/body-female-dark.png`;
+  return color === 'w' ? `${ROOT}/body-light.png` : `${ROOT}/body-dark.png`;
 }
 
+function costume(type: string, color: 'w' | 'b'): string[] {
+  const b = bodySheet(type, color);
+  switch (type) {
+    case 'k':
+      return [b, `${KIT}/legs-gold.png`, `${KIT}/torso-plate.png`, `${KIT}/helm-gold.png`, `${KIT}/wand.png`];
+    case 'q':
+      return [b, color === 'w' ? `${KIT}/robe-white.png` : `${KIT}/robe-purple.png`, `${KIT}/hair-long.png`, `${KIT}/tiara-gold.png`];
+    case 'r':
+      return [b, `${KIT}/legs-metal.png`, `${KIT}/torso-plate.png`, `${KIT}/helm-metal.png`, `${KIT}/spear.png`];
+    case 'n':
+      return [b, `${KIT}/legs-metal.png`, `${KIT}/torso-chain.png`, `${KIT}/hat-chain.png`, `${KIT}/dagger.png`];
+    case 'b':
+      return [`${KIT}/quiver.png`, b, `${KIT}/legs-teal.png`, `${KIT}/torso-leather.png`, `${KIT}/hood-cloth.png`, `${KIT}/arrow.png`, `${KIT}/bow.png`];
+    case 'p':
+      return [b, `${KIT}/legs-teal.png`, `${KIT}/shirt-brown.png`, `${KIT}/cap-leather.png`, `${KIT}/spear.png`];
+    default:
+      return [b];
+  }
+}
+
+const TEAM_GLOW: Record<'w' | 'b', string> = {
+  w: 'drop-shadow(0 1px 1px rgba(0,0,0,0.5)) drop-shadow(0 0 3px rgba(255,196,64,0.85))',
+  b: 'drop-shadow(0 1px 1px rgba(0,0,0,0.5)) drop-shadow(0 0 4px rgba(168,85,247,0.95))',
+};
+
 const ATTACK_BY_TYPE: Record<string, AttackStyle> = {
-  p: 'melee', // peasant — walks up and stabs
-  r: 'melee', // armored guard
-  q: 'melee',
-  k: 'melee',
+  p: 'melee', r: 'melee', q: 'melee', k: 'melee',
   n: 'leap', // rider — leaps over pieces
   b: 'ranged', // archer — shoots, then advances
 };
 
-const GLYPH: Record<string, string> = {
-  p: '♟', r: '♜', n: '♞', b: '♝', q: '♛', k: '♚',
-};
+const GLYPH: Record<string, string> = { p: '♟', r: '♜', n: '♞', b: '♝', q: '♛', k: '♚' };
 
-const LABEL: Record<string, string> = {
-  p: 'Peasant', r: 'Guard', n: 'Rider', b: 'Archer', q: 'Queen', k: 'King',
-};
+export interface PieceVisual {
+  layers: CharacterLayer[];
+  glow: string;
+  attack: AttackStyle;
+  glyph: string;
+}
 
 export function pieceVisual(type: string, color: 'w' | 'b'): PieceVisual {
-  const sheet = color === 'w' ? WHITE_BODY : BLACK_BODY;
-  const tint = color === 'w' ? WHITE_TINT : BLACK_TINT;
   return {
-    layers: [{ sheet, tint }],
+    layers: costume(type, color).map((sheet) => ({ sheet })),
+    glow: TEAM_GLOW[color],
     attack: ATTACK_BY_TYPE[type] ?? 'melee',
     glyph: GLYPH[type] ?? '♟',
-    label: LABEL[type] ?? 'Pawn',
   };
 }
 

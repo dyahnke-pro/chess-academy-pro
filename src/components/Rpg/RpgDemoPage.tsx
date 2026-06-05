@@ -22,10 +22,11 @@ export function RpgDemoPage(): JSX.Element {
       <RpgChessBoard />
 
       <div className="text-xs space-y-1 max-w-xs mx-auto" style={{ color: 'var(--color-text-muted)' }}>
+        <p><span className="font-semibold">King</span> crowned with a scepter · <span className="font-semibold">Queen</span> in robe + tiara · <span className="font-semibold">Rook</span> a plated guard · <span className="font-semibold">Knight</span> a mailed rider · <span className="font-semibold">Bishop</span> a hooded archer · <span className="font-semibold">Pawn</span> a spear peasant.</p>
         <p><span className="font-semibold">♞ Knight</span> — leaps over the pieces in its way and strikes on landing.</p>
-        <p><span className="font-semibold">♝ Bishop (archer)</span> — looses an arrow, the target falls, then advances to the square.</p>
-        <p><span className="font-semibold">♟♜♛♚ Others</span> — march onto the square and run the piece through.</p>
-        <p className="opacity-70">White = gold team, Black = arcane purple. Badges mark piece type while the costume art (crowns, robes, bows, horses, peasants) is built out.</p>
+        <p><span className="font-semibold">♝ Bishop</span> — looses an arrow, the target falls, then advances to the square.</p>
+        <p><span className="font-semibold">others</span> — march onto the square and run the piece through.</p>
+        <p className="opacity-70">Gold glow = White army, arcane purple = Black. (Knight-on-horseback is the next upgrade.)</p>
       </div>
 
       <p className="text-xs text-center leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>

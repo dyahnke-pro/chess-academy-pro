@@ -6,10 +6,11 @@ import { pieceVisual, attackStyle } from './rpgRoster';
 import { playCaptureSound } from './rpgSfx';
 import type { LpcAction, LpcDirection } from './lpcLayout';
 
-const S = 44; // square size (px) — 8×44 = 352, fits a phone
-const CHAR = Math.round(S * 1.5); // characters render a bit larger than the square
+const S = 46; // square size (px) — 8×46 = 368, fits a phone
+const CHAR = 64; // characters render at native LPC frame size (crisp), fit to square
 const OFFX = (CHAR - S) / 2;
 const OFFY = CHAR - S;
+const PAD = OFFY; // top head-room so back-rank helmets aren't clipped
 
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
 
@@ -30,6 +31,7 @@ function faceDir(from: string, to: string): LpcDirection {
 
 interface Overlay {
   layers: CharacterLayer[];
+  glow: string;
   baseX: number;
   baseY: number;
   action: LpcAction;
@@ -92,14 +94,14 @@ export function RpgChessBoard(): JSX.Element {
     const run = ++runRef.current;
     const alive = (): boolean => runRef.current === run;
 
-    const base = { layers: vis.layers, baseX: fromP.x - OFFX, baseY: fromP.y - OFFY };
+    const base = { layers: vis.layers, glow: vis.glow, baseX: fromP.x - OFFX, baseY: PAD + fromP.y - OFFY };
 
     if (style === 'ranged' && target) {
       // Archer: draw + loose an arrow, the target falls, THEN advance.
       setOverlay({ ...base, action: 'shoot', direction: dir, loop: false, anim: { x: 0, y: 0 }, transition: { duration: 0 } });
       await sleep(430);
       if (!alive()) return;
-      setArrow({ x0: fromP.x + S / 2, y0: fromP.y + S * 0.3, x1: toP.x + S / 2, y1: toP.y + S * 0.4, fly: false });
+      setArrow({ x0: fromP.x + S / 2, y0: PAD + fromP.y + S * 0.3, x1: toP.x + S / 2, y1: PAD + toP.y + S * 0.4, fly: false });
       await sleep(30);
       setArrow((a) => (a ? { ...a, fly: true } : a));
       await sleep(250);
@@ -199,7 +201,7 @@ export function RpgChessBoard(): JSX.Element {
 
       <div
         className="relative rounded-lg overflow-hidden"
-        style={{ width: 8 * S, height: 8 * S, boxShadow: '0 0 22px 2px rgba(74,222,128,0.14)' }}
+        style={{ width: 8 * S, height: 8 * S + PAD, boxShadow: '0 0 22px 2px rgba(74,222,128,0.14)', background: '#101713' }}
         data-testid="rpg-chess-board"
       >
         {/* Squares */}
@@ -217,14 +219,14 @@ export function RpgChessBoard(): JSX.Element {
                 style={{
                   position: 'absolute',
                   left: c * S,
-                  top: r * S,
+                  top: PAD + r * S,
                   width: S,
                   height: S,
                   background: isSel
-                    ? 'rgba(74,222,128,0.35)'
+                    ? 'rgba(74,222,128,0.45)'
                     : lightSq
-                      ? '#33403a'
-                      : '#1b231f',
+                      ? '#46584d'
+                      : '#26302a',
                   boxShadow: 'inset 0 0 0 1px rgba(74,222,128,0.10)',
                   cursor: busy ? 'default' : 'pointer',
                 }}
@@ -262,7 +264,7 @@ export function RpgChessBoard(): JSX.Element {
                 style={{
                   position: 'absolute',
                   left: c * S - OFFX,
-                  top: r * S - OFFY,
+                  top: PAD + r * S - OFFY,
                   width: CHAR,
                   height: CHAR,
                   pointerEvents: 'none',
@@ -273,6 +275,7 @@ export function RpgChessBoard(): JSX.Element {
               >
                 <LpcCharacter
                   layers={vis.layers}
+                  glow={vis.glow}
                   action={isDying ? 'hurt' : 'walk'}
                   direction="down"
                   playing={isDying}
@@ -304,6 +307,7 @@ export function RpgChessBoard(): JSX.Element {
           >
             <LpcCharacter
               layers={overlay.layers}
+              glow={overlay.glow}
               action={overlay.action}
               direction={overlay.direction}
               playing

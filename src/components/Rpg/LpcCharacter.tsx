@@ -25,6 +25,8 @@ interface LpcCharacterProps {
   loop?: boolean;
   playing?: boolean;
   size?: number;
+  /** Filter applied to the whole composited character (e.g. a team glow). */
+  glow?: string;
   onComplete?: () => void;
   className?: string;
   style?: CSSProperties;
@@ -44,6 +46,7 @@ export function LpcCharacter({
   loop = false,
   playing = true,
   size = 60,
+  glow,
   onComplete,
   className,
   style,
@@ -83,7 +86,7 @@ export function LpcCharacter({
   return (
     <div
       className={className}
-      style={{ position: 'relative', width: size, height: size, ...style }}
+      style={{ position: 'relative', width: size, height: size, filter: glow, ...style }}
       data-testid="lpc-character"
       data-action={action}
     >
@@ -97,7 +100,9 @@ export function LpcCharacter({
             backgroundRepeat: 'no-repeat',
             backgroundSize: bgSize,
             backgroundPosition: bgPos,
-            imageRendering: 'pixelated',
+            // Smooth scaling (not 'pixelated') so the characters read as
+            // illustrated figures, not blocky Lego pixels.
+            imageRendering: 'auto',
             filter: layer.tint,
           }}
         />
