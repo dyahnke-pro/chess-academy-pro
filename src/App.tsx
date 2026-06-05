@@ -24,6 +24,7 @@ import { StarAnimationLayer } from './components/StarAnimationLayer';
 
 // Page-level imports
 import { DashboardPage } from './components/Dashboard/DashboardPage';
+import { RpgDemoPage } from './components/Rpg/RpgDemoPage';
 import { OpeningExplorerPage } from './components/Openings/OpeningExplorerPage';
 import { OpeningDetailPage } from './components/Openings/OpeningDetailPage';
 import { SrsTrainerPage } from './components/Openings/SrsTrainerPage';
@@ -287,6 +288,8 @@ export function App(): JSX.Element {
         <Route path="/privacy" element={<PrivacyPolicyPage />} />
         <Route element={<AppLayout />}>
           <Route path="/" element={<ErrorBoundary><DashboardPage /></ErrorBoundary>} />
+          {/* RPG animated-pieces concept demo (isolated; not in main nav) */}
+          <Route path="/rpg-demo" element={<ErrorBoundary><RpgDemoPage /></ErrorBoundary>} />
           {/* Openings */}
           <Route path="/openings" element={<ErrorBoundary><OpeningExplorerPage /></ErrorBoundary>} />
           <Route path="/openings/srs" element={<ErrorBoundary><SrsTrainerPage /></ErrorBoundary>} />
