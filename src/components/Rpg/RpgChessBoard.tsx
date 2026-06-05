@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Chess, type Square } from 'chess.js';
 import { LpcCharacter, type CharacterLayer } from './LpcCharacter';
 import { pieceVisual, attackStyle } from './rpgRoster';
-import { playCaptureSound } from './rpgSfx';
+import { playCaptureSound, playArrowSound, playMoveSound, playWarCry } from './rpgSfx';
 import type { LpcAction, LpcDirection } from './lpcLayout';
 
 const S = 46; // square size (px) — 8×46 = 368, fits a phone
@@ -104,6 +104,7 @@ export function RpgChessBoard(): JSX.Element {
       setArrow({ x0: fromP.x + S / 2, y0: PAD + fromP.y + S * 0.3, x1: toP.x + S / 2, y1: PAD + toP.y + S * 0.4, fly: false });
       await sleep(30);
       setArrow((a) => (a ? { ...a, fly: true } : a));
+      if (soundRef.current) playArrowSound();
       await sleep(250);
       if (!alive()) return;
       setDying(to);
@@ -114,10 +115,12 @@ export function RpgChessBoard(): JSX.Element {
       setDead(true);
       await sleep(170);
       if (!alive()) return;
+      if (soundRef.current) playMoveSound(moving.type); // archer advances
       setOverlay((o) => (o ? { ...o, action: 'walk', loop: true, anim: { x: dx, y: dy }, transition: { x: { duration: walkDur, ease: 'linear' }, y: { duration: walkDur, ease: 'linear' } } } : o));
       await sleep(walkDur * 1000 + 80);
     } else if (style === 'leap') {
       // Rider: leap in an arc OVER whatever is in the way.
+      if (soundRef.current) playMoveSound(moving.type); // galloping hooves
       const arc = Math.min(130, 64 + dist * 16);
       setOverlay({ ...base, action: 'slash', direction: dir, loop: true, anim: { x: dx, y: [0, -arc, dy] }, transition: { x: { duration: 0.72, ease: 'easeOut' }, y: { duration: 0.72, ease: 'easeOut', times: [0, 0.5, 1] } } });
       await sleep(760);
@@ -133,10 +136,12 @@ export function RpgChessBoard(): JSX.Element {
       }
     } else {
       // Melee: march to the square, stab if occupied.
+      if (soundRef.current) playMoveSound(moving.type); // armor scrape / footsteps
       setOverlay({ ...base, action: 'walk', direction: dir, loop: true, anim: { x: dx, y: dy }, transition: { x: { duration: walkDur, ease: 'linear' }, y: { duration: walkDur, ease: 'linear' } } });
       await sleep(walkDur * 1000 + 80);
       if (!alive()) return;
       if (target) {
+        if (soundRef.current && moving.type === 'p') playWarCry(); // peasant charge
         setOverlay((o) => (o ? { ...o, action: 'thrust', loop: false, transition: { duration: 0 } } : o));
         await sleep(340);
         setDying(to);
