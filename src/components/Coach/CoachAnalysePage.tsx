@@ -47,7 +47,7 @@ export function CoachAnalysePage(): JSX.Element {
   // each sentence dispatches exactly once across all chunks (fixes
   // the 2026-05-16 voice-loop bug — same shape lived here too).
   const dispatcherRef = useRef<StreamingDispatcher>(
-    createStreamingDispatcher(SENTENCE_END_RE),
+    createStreamingDispatcher(SENTENCE_END_RE, undefined, () => game.fen),
   );
 
   const analysePosition = useCallback(async (fen: string) => {
@@ -56,7 +56,7 @@ export function CoachAnalysePage(): JSX.Element {
     // Cut any in-flight TTS before starting a new narration. Fresh
     // speaker so a prior stream's abandoned flag doesn't carry over.
     voiceService.stop();
-    dispatcherRef.current = createStreamingDispatcher(SENTENCE_END_RE);
+    dispatcherRef.current = createStreamingDispatcher(SENTENCE_END_RE, undefined, () => game.fen);
 
     try {
       // Run Stockfish analysis
@@ -180,7 +180,7 @@ export function CoachAnalysePage(): JSX.Element {
   const handleFollowUp = useCallback(async (question: string) => {
     setLoading(true);
     voiceService.stop();
-    dispatcherRef.current = createStreamingDispatcher(SENTENCE_END_RE);
+    dispatcherRef.current = createStreamingDispatcher(SENTENCE_END_RE, undefined, () => game.fen);
 
     const evalText = analysis
       ? (analysis.isMate

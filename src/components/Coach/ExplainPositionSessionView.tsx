@@ -59,7 +59,7 @@ export function ExplainPositionSessionView({
   // each sentence dispatches exactly once across all chunks (fixes
   // the 2026-05-16 voice-loop bug — same shape lived here too).
   const dispatcherRef = useRef<StreamingDispatcher>(
-    createStreamingDispatcher(SENTENCE_END_RE),
+    createStreamingDispatcher(SENTENCE_END_RE, undefined, () => targetFen),
   );
   const pushAccumulated = useCallback((accumulated: string) => {
     if (voiceMuted) return;
@@ -92,7 +92,7 @@ export function ExplainPositionSessionView({
 
         // Reset speech chain for this position's narration. Fresh
         // speaker so a prior stream's abandoned flag doesn't carry over.
-        dispatcherRef.current = createStreamingDispatcher(SENTENCE_END_RE);
+        dispatcherRef.current = createStreamingDispatcher(SENTENCE_END_RE, undefined, () => targetFen);
 
         const evalText = sf.isMate
           ? `Mate in ${sf.mateIn ?? '?'}`
@@ -193,7 +193,7 @@ export function ExplainPositionSessionView({
       if (!analysis) return;
       setLoading(true);
       voiceService.stop();
-      dispatcherRef.current = createStreamingDispatcher(SENTENCE_END_RE);
+      dispatcherRef.current = createStreamingDispatcher(SENTENCE_END_RE, undefined, () => targetFen);
 
       const evalText = analysis.isMate
         ? `Mate in ${analysis.mateIn ?? '?'}`

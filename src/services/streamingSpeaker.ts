@@ -22,6 +22,7 @@
  * it up by default.
  */
 import { voiceService } from './voiceService';
+import { stripDisprovenSentences } from './boardClaimValidator';
 
 export interface StreamingSpeaker {
   /** Add a completed sentence to the speech chain. Trims; empty
@@ -48,7 +49,15 @@ export interface StreamingSpeaker {
 /** Create a fresh streaming speaker for one LLM stream. Caller stores
  *  the instance in a ref and calls `add` for each completed sentence
  *  emitted by the streaming sentence dispatcher. */
-export function createStreamingSpeaker(): StreamingSpeaker {
+export function createStreamingSpeaker(
+  /** Optional live-board FEN getter. When provided, every streamed sentence
+   *  is GROUNDED against the current board before it's spoken — any claim
+   *  that isn't true on the board ("a pin was broken" with no pin) is
+   *  stripped (David 2026-06-06: the SPOKEN coach must be grounded
+   *  everywhere, not just the written coach). Omit it (or return null) on
+   *  surfaces with no live board — then it's a plain speak, zero change. */
+  getFen?: () => string | null,
+): StreamingSpeaker {
   let chain: Promise<void> = Promise.resolve();
   let sentenceCount = 0;
   let abandoned = false;
@@ -56,8 +65,19 @@ export function createStreamingSpeaker(): StreamingSpeaker {
 
   return {
     add(sentence: string): void {
-      const trimmed = sentence.trim();
+      let trimmed = sentence.trim();
       if (!trimmed) return;
+      // Ground the streamed sentence against the live board, if a FEN is
+      // available. A fully-disproven sentence is dropped (still counted).
+      if (getFen) {
+        const fen = getFen();
+        if (fen) {
+          try {
+            trimmed = stripDisprovenSentences(trimmed, fen).clean.trim();
+          } catch { /* unparseable FEN — speak the raw sentence */ }
+          if (!trimmed) { sentenceCount += 1; return; }
+        }
+      }
       if (abandoned) {
         // Still count attempts so callers can distinguish
         // "no sentences ever arrived" from "sentences arrived but
@@ -131,8 +151,14 @@ export interface StreamingDispatcher {
  *  starting fresh from index 0 each call. */
 export function createStreamingDispatcher(
   sentenceRegex: RegExp,
-  speaker: StreamingSpeaker = createStreamingSpeaker(),
+  speaker?: StreamingSpeaker,
+  /** Optional live-board FEN getter. When no custom `speaker` is supplied,
+   *  it's forwarded to the default speaker so every streamed sentence is
+   *  grounded against the live board before it's spoken (David 2026-06-06).
+   *  Omit on board-less surfaces — then it's a plain speak, zero change. */
+  getFen?: () => string | null,
 ): StreamingDispatcher {
+  const activeSpeaker = speaker ?? createStreamingSpeaker(getFen);
   let cursor = 0;
   return {
     push(accumulatedText: string): void {
@@ -143,13 +169,13 @@ export function createStreamingDispatcher(
       while ((match = sentenceRegex.exec(tail.slice(offset))) !== null) {
         const endIdx = match.index + match[1].length;
         const sentence = tail.slice(offset, offset + endIdx).trim();
-        if (sentence) speaker.add(sentence);
+        if (sentence) activeSpeaker.add(sentence);
         offset += endIdx;
       }
       cursor += offset;
     },
-    count: () => speaker.count(),
-    isAbandoned: () => speaker.isAbandoned(),
-    abandon: () => speaker.abandon(),
+    count: () => activeSpeaker.count(),
+    isAbandoned: () => activeSpeaker.isAbandoned(),
+    abandon: () => activeSpeaker.abandon(),
   };
 }

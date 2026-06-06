@@ -219,10 +219,12 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         .then(() => {
           if (speechAbortedRef.current) return;
           if (voiceService.currentStopGeneration !== myGen) return;
-          return voiceService.speak(trimmed);
+          // GROUND the spoken coach sentence against the live board (David
+          // 2026-06-06: the /coach/play voice must be grounded like the text).
+          return voiceService.speakGrounded(trimmed, getLiveFen?.() ?? null);
         })
         .catch(() => undefined);
-    }, []);
+    }, [getLiveFen]);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const messagesRef = useRef<ChatMessageType[]>(messages);
 
@@ -1070,7 +1072,9 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                   const sentence = speechBufferRef.current.slice(0, sentenceEnd.index + 1);
                   speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 2);
                   const speechReady = formatForSpeech(sentence);
-                  if (speechReady) if (!speechAbortedRef.current) void voiceService.speak(speechReady);
+                  // GROUND each streamed coach sentence against the live board
+                  // before speaking (David 2026-06-06: /coach/play voice grounded).
+                  if (speechReady) if (!speechAbortedRef.current) void voiceService.speakGrounded(speechReady, getLiveFen?.() ?? fen ?? null);
                 }
               }
             },

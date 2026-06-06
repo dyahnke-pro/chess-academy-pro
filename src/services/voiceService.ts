@@ -6,6 +6,7 @@ import { Capacitor } from '@capacitor/core';
 import { speechService } from './speechService';
 import { getSharedAudioContext } from './audioContextManager';
 import { stripCoachMarkup, formatForSpeech } from './sanitizeCoachText';
+import { stripDisprovenSentences } from './boardClaimValidator';
 import { db } from '../db/schema';
 import type { CoachPersonality } from '../coach/types';
 import { useAppStore } from '../stores/appStore';
@@ -885,6 +886,47 @@ class VoiceService {
   async speakReadAloud(text: string): Promise<void> {
     this.logSpeakInvoked('speakReadAloud', text);
     return this.speakInternal(sanitizeForTTS(text), true, { bypassVerbosity: true });
+  }
+
+  /**
+   * Speak LLM-generated commentary that makes claims about the CURRENT board,
+   * GROUNDED against `fen`. Any sentence that isn't true on the board (e.g.
+   * "a pin was broken" with no pin, "the knight on f6" when f6 is empty) is
+   * stripped before it's ever spoken. This is the single grounded-voice
+   * primitive every live-board coach surface routes through, so the grounding
+   * we built for the written coach also covers the SPOKEN coach everywhere —
+   * not one surface at a time (David 2026-06-06: "EVERYTHING needs to be
+   * grounded — is there ANY other voice that isn't?").
+   *
+   * Pass `fen = null` when there is no live board to check against (general
+   * chat with no position) — it then behaves like a normal speak with no
+   * stripping. Do NOT use this for AUTHORED / DB narration (lessons, model
+   * games, kid stories): that prose is grounded by construction + the
+   * narrationAccuracy gate, and board-stripping it against an unrelated FEN
+   * would delete legitimate teaching — those use `speak()` / `speakLecture()`.
+   */
+  async speakGrounded(text: string, fen: string | null, force = false): Promise<void> {
+    this.logSpeakInvoked('speakGrounded', text);
+    let grounded = text;
+    if (fen) {
+      try {
+        const res = stripDisprovenSentences(text, fen);
+        grounded = res.clean;
+        if (res.dropped.length > 0) {
+          const { logAppAudit } = await import('./appAuditor');
+          void logAppAudit({
+            kind: 'claim-validator-trip',
+            category: 'subsystem',
+            source: 'voiceService.speakGrounded',
+            summary: `stripped ${res.dropped.length} ungrounded sentence(s) before speaking`,
+            fen,
+            details: JSON.stringify({ dropped: res.dropped.map((d) => d.sentence).slice(0, 5) }),
+          });
+        }
+      } catch { /* unparseable FEN — speak the raw text rather than go silent */ }
+    }
+    if (!grounded.trim()) return;
+    return this.speakInternal(sanitizeForTTS(grounded), force);
   }
 
   private async speakInternal(
