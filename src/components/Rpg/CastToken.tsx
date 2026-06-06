@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react';
 import { castImage } from './rpgCast';
+import { spriteFrames, type SpriteAction, type Facing } from './rpgCastFrames';
 
 interface CastTokenProps {
   type: string;
@@ -10,15 +12,47 @@ interface CastTokenProps {
   glow: string;
   /** Mirror horizontally to face the travel direction. */
   flip?: boolean;
+  /** Animation action (pieces with a frame set play frames; others stay static). */
+  action?: SpriteAction;
+  /** Which way the figure faces (front/back) — picks the matching frame row. */
+  facing?: Facing;
+  /** Frames-per-second for an attack sequence. */
+  fps?: number;
 }
 
 /**
- * Renders a modern full-body character token (a background-stripped render) with
- * a soft ground shadow, bottom-anchored so the figure "stands" on its square.
- * The figure may overflow the footprint width (e.g. the mounted knight) — it's
- * centred and allowed to extend. Motion is applied by the parent via transforms.
+ * Renders a full-body character token with a soft ground shadow, bottom-anchored
+ * so the figure stands on its square. Pieces that have a generated frame set
+ * (see rpgCastFrames) animate through their frames (e.g. the king's staff
+ * swing); the rest show their single static render and rely on the board's
+ * procedural motion.
  */
-export function CastToken({ type, color, w, h, glow, flip }: CastTokenProps): JSX.Element {
+export function CastToken({ type, color, w, h, glow, flip, action = 'idle', facing = 'front', fps = 14 }: CastTokenProps): JSX.Element {
+  const frames = spriteFrames(type, color, facing, action);
+  const [fi, setFi] = useState(0);
+
+  useEffect(() => {
+    const list = spriteFrames(type, color, facing, action);
+    if (!list || list.length < 2) {
+      setFi(0);
+      return;
+    }
+    let i = 0;
+    setFi(0);
+    const id = window.setInterval(() => {
+      i += 1;
+      if (i >= list.length) {
+        window.clearInterval(id);
+        setFi(list.length - 1); // hold the follow-through
+        return;
+      }
+      setFi(i);
+    }, 1000 / fps);
+    return () => window.clearInterval(id);
+  }, [type, color, facing, action, fps]);
+
+  const src = frames ? frames[Math.min(fi, frames.length - 1)] : castImage(type, color);
+
   return (
     <div style={{ position: 'relative', width: w, height: h, pointerEvents: 'none' }}>
       {/* Ground shadow */}
@@ -36,7 +70,7 @@ export function CastToken({ type, color, w, h, glow, flip }: CastTokenProps): JS
         }}
       />
       <img
-        src={castImage(type, color)}
+        src={src}
         alt=""
         draggable={false}
         style={{

@@ -18,7 +18,7 @@ export function roleOf(type: string): string {
 
 /** Image path for a piece's token. White = light (heroic), Black = dark (recolored). */
 export function castImage(type: string, color: 'w' | 'b'): string {
-  return `/rpg/cast/${ROLE[type] ?? 'pawn'}-${color === 'w' ? 'light' : 'dark'}.png`;
+  return `/rpg/cast/${roleOf(type)}-${color === 'w' ? 'light' : 'dark'}.png`;
 }
 
 /** Small type glyph (king/rook can look alike at board size). */

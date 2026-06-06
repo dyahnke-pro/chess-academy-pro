@@ -2,7 +2,8 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Chess, type Square } from 'chess.js';
 import { CastToken } from './CastToken';
-import { CAST_GLYPH, CAST_TEAM_GLOW } from './rpgCast';
+import { CAST_GLYPH, CAST_TEAM_GLOW, roleOf } from './rpgCast';
+import { hasFrames, type SpriteAction, type Facing } from './rpgCastFrames';
 import { attackStyle } from './rpgRoster';
 import { playCaptureSound, playArrowSound, playMoveSound, playWarCry, playQueenLaugh, playPawnTaunt, playChargeSound, playVictory, playDefeat } from './rpgSfx';
 
@@ -35,6 +36,8 @@ interface Overlay {
   type: string;
   color: 'w' | 'b';
   flip: boolean;
+  facing: Facing;
+  action: SpriteAction;
   baseX: number;
   baseY: number;
   anim: { x: number | number[]; y: number | number[]; scale?: number | number[]; rotate?: number | number[] };
@@ -103,7 +106,9 @@ export function RpgChessBoard(): JSX.Element {
     const run = ++runRef.current;
     const alive = (): boolean => runRef.current === run;
 
-    const base = { type: moving.type, color: moving.color, flip: dir === 'left', baseX: fromP.x, baseY: PAD + fromP.y + S - pieceH(moving.type) };
+    const facing: Facing = dir === 'up' ? 'back' : 'front';
+    const base = { type: moving.type, color: moving.color, flip: dir === 'left', facing, action: 'walk' as SpriteAction, baseX: fromP.x, baseY: PAD + fromP.y + S - pieceH(moving.type) };
+    const framed = hasFrames(roleOf(moving.type));
 
     if (style === 'ranged' && target) {
       // Archer: draw the bow (lean back), loose an arrow, the target falls, THEN advance.
@@ -154,7 +159,8 @@ export function RpgChessBoard(): JSX.Element {
       if (!alive()) { setFireTrail(null); return; }
       if (target) {
         if (soundRef.current) playCaptureSound(target.type);
-        setOverlay((o) => (o ? { ...o, anim: { x: dx, y: dy, scale: [1, 1.22, 1.05] }, transition: { duration: 0.16 } } : o));
+        // Framed rook plays its shield-thrust sequence into the head-butt.
+        setOverlay((o) => (o ? { ...o, action: framed ? 'attack' : o.action, anim: { x: dx, y: dy, scale: [1, 1.22, 1.05] }, transition: { duration: 0.16 } } : o));
         setHeadbutt({ square: to, dx: (dx >= 0 ? 1 : -1) * S * 1.3, dy: -S * 0.5, rot: dx >= 0 ? 45 : -45 });
         setDying(to);
         await sleep(540);
@@ -174,8 +180,13 @@ export function RpgChessBoard(): JSX.Element {
           if (moving.type === 'p') playWarCry();
           else if (moving.type === 'q') playQueenLaugh();
         }
-        const swing = dir === 'left' ? -24 : 24; // swing the weapon toward the target
-        setOverlay((o) => (o ? { ...o, anim: { x: dx, y: dy, scale: [1, 1.15, 1], rotate: [0, swing, 0] }, transition: { duration: 0.34 } } : o));
+        if (framed) {
+          // Pieces with a frame set play their real swing sequence.
+          setOverlay((o) => (o ? { ...o, action: 'attack', anim: { x: dx, y: dy, scale: [1, 1.06, 1] }, transition: { duration: 0.36 } } : o));
+        } else {
+          const swing = dir === 'left' ? -24 : 24; // puppet swing toward the target
+          setOverlay((o) => (o ? { ...o, anim: { x: dx, y: dy, scale: [1, 1.15, 1], rotate: [0, swing, 0] }, transition: { duration: 0.34 } } : o));
+        }
         await sleep(340);
         setDying(to);
         if (soundRef.current) playCaptureSound(target.type);
@@ -348,7 +359,7 @@ export function RpgChessBoard(): JSX.Element {
                 : { repeat: Infinity, duration: 0.5, delay: (c % 4) * 0.05 };
               return (
                 <motion.div key={sq} style={{ ...common, zIndex: 10 + r }} animate={anim} transition={trans}>
-                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} />
+                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} action="idle" facing="front" />
                   <PieceBadge glyph={CAST_GLYPH[piece.type]} color={piece.color} />
                 </motion.div>
               );
@@ -358,7 +369,7 @@ export function RpgChessBoard(): JSX.Element {
             if (kickReact?.pawn === sq) {
               return (
                 <motion.div key={sq} style={{ ...common, zIndex: 30 }} animate={{ x: [0, kickReact.dx * 0.35, 0], y: [0, kickReact.dy * 0.35, 0] }} transition={{ duration: 0.5, times: [0, 0.4, 1], ease: 'easeOut' }}>
-                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} flip={kickReact.dx < 0} />
+                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} action="idle" facing="front" flip={kickReact.dx < 0} />
                   <PieceBadge glyph={CAST_GLYPH[piece.type]} color={piece.color} />
                 </motion.div>
               );
@@ -367,7 +378,7 @@ export function RpgChessBoard(): JSX.Element {
             if (kickReact?.victim === sq) {
               return (
                 <motion.div key={sq} style={{ ...common, zIndex: 20 + r }} animate={{ x: [0, kickReact.dx * 0.2, 0], rotate: [0, kickReact.dx >= 0 ? 10 : -10, 0] }} transition={{ duration: 0.6, times: [0, 0.35, 1], ease: 'easeOut' }}>
-                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} />
+                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} action="idle" facing="front" />
                   <PieceBadge glyph={CAST_GLYPH[piece.type]} color={piece.color} />
                 </motion.div>
               );
@@ -379,7 +390,7 @@ export function RpgChessBoard(): JSX.Element {
                   animate={{ x: [0, headbutt.dx, headbutt.dx * 1.7], y: [0, headbutt.dy, headbutt.dy + S * 1.6], rotate: [0, headbutt.rot, headbutt.rot * 2.2], opacity: [1, 1, 0] }}
                   transition={{ duration: 0.62, times: [0, 0.28, 1], ease: 'easeOut' }}
                 >
-                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} />
+                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} action="idle" facing="front" />
                   <PieceBadge glyph={CAST_GLYPH[piece.type]} color={piece.color} />
                 </motion.div>
               );
@@ -389,7 +400,7 @@ export function RpgChessBoard(): JSX.Element {
                 key={sq}
                 style={{ ...common, opacity: isDying && dead ? 0 : 1, transition: 'opacity 0.4s ease-out', zIndex: isDying ? 15 : 10 + r }}
               >
-                <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} />
+                <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} action="idle" facing="front" />
                 <PieceBadge glyph={CAST_GLYPH[piece.type]} color={piece.color} />
               </div>
             );
@@ -416,7 +427,7 @@ export function RpgChessBoard(): JSX.Element {
             animate={overlay.anim}
             transition={overlay.transition}
           >
-            <CastToken type={overlay.type} color={overlay.color} w={TOKEN_W} h={pieceH(overlay.type)} glow={CAST_TEAM_GLOW[overlay.color]} flip={overlay.flip} />
+            <CastToken type={overlay.type} color={overlay.color} w={TOKEN_W} h={pieceH(overlay.type)} glow={CAST_TEAM_GLOW[overlay.color]} flip={overlay.flip} action={overlay.action} facing={overlay.facing} />
           </motion.div>
         )}
       </div>
