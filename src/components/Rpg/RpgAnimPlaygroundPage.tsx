@@ -2,6 +2,7 @@ import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF, useAnimations, ContactShadows, SoftShadows } from '@react-three/drei';
 import * as THREE from 'three';
+import { clone as cloneSkeleton } from 'three/examples/jsm/utils/SkeletonUtils.js';
 
 // Playground for the auto-rigged rogue: David's reconstructed pawn, bound here
 // (no Mixamo) to a 14-action skeleton. Tap a button to fire an action; it sways
@@ -18,7 +19,7 @@ function Rogue({ action, onDone }: { action: string; onDone: () => void }): JSX.
   const group = useRef<THREE.Group>(null);
   const { scene, animations } = useGLTF(URL);
   const obj = useMemo(() => {
-    const c = scene.clone(true);
+    const c = cloneSkeleton(scene);
     c.traverse((o) => {
       const m = o as THREE.Mesh;
       if (m.isMesh) {

@@ -11,7 +11,11 @@ import { Chess } from 'chess.js';
 // kill-cam. Clean rigged skeletons, no Mixamo, all on our end.
 
 const CHAR: Record<string, string> = { p: 'rogue', n: 'Knight', b: 'Mage', r: 'Barbarian', q: 'Mage', k: 'Knight' };
-const URL = (c: string): string => `/rpg/models/kaykit/${c}.glb`;
+// David's reconstructed pieces, skinned onto the KayKit rig (same skeleton +
+// 76 clips), drop in by character name. Pawns are the finished hooded rogue;
+// the rest fall back to the CC0 KayKit base until each is rebuilt from his art.
+const SKINNED: Record<string, string> = { rogue: '/rpg/models/skinned-rogue.glb' };
+const URL = (c: string): string => SKINNED[c] ?? `/rpg/models/kaykit/${c}.glb`;
 [...new Set(Object.values(CHAR))].forEach((c) => useGLTF.preload(URL(c)));
 
 const ATTACK: Record<string, string> = {
