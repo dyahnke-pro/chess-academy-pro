@@ -25,6 +25,7 @@ import { StarAnimationLayer } from './components/StarAnimationLayer';
 // Page-level imports
 import { DashboardPage } from './components/Dashboard/DashboardPage';
 import { RpgDemoPage } from './components/Rpg/RpgDemoPage';
+import { RpgDemo3DPage } from './components/Rpg/RpgDemo3DPage';
 import { OpeningExplorerPage } from './components/Openings/OpeningExplorerPage';
 import { OpeningDetailPage } from './components/Openings/OpeningDetailPage';
 import { SrsTrainerPage } from './components/Openings/SrsTrainerPage';
@@ -290,6 +291,8 @@ export function App(): JSX.Element {
           <Route path="/" element={<ErrorBoundary><DashboardPage /></ErrorBoundary>} />
           {/* RPG animated-pieces concept demo (isolated; not in main nav) */}
           <Route path="/rpg-demo" element={<ErrorBoundary><RpgDemoPage /></ErrorBoundary>} />
+          {/* 3D engine demo (React Three Fiber) — rigged skeletal animation POC */}
+          <Route path="/rpg-3d" element={<ErrorBoundary><RpgDemo3DPage /></ErrorBoundary>} />
           {/* Openings */}
           <Route path="/openings" element={<ErrorBoundary><OpeningExplorerPage /></ErrorBoundary>} />
           <Route path="/openings/srs" element={<ErrorBoundary><SrsTrainerPage /></ErrorBoundary>} />
@@ -438,7 +441,7 @@ export function App(): JSX.Element {
     {/* First-run strength bubble — the first coach-mark to pop, blocking
         until answered, so a beginner's difficulty is set before anything
         else. Imports bypass it (calibrated silently at boot). */}
-    {needsCalibration && activeProfile && !window.location.pathname.startsWith('/rpg-demo') && (
+    {needsCalibration && activeProfile && !window.location.pathname.startsWith('/rpg') && (
       <StrengthCalibrationBubble onDone={() => setNeedsCalibration(false)} />
     )}
     </>
