@@ -1,5 +1,6 @@
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
+import type { Table } from 'dexie';
 import { createDefaultSrsFields } from './srsEngine';
 import ecoData from '../data/openings-lichess.json';
 import repertoireData from '../data/repertoire.json';
@@ -129,12 +130,55 @@ async function markDatabaseSeeded(): Promise<void> {
   await db.meta.put({ key: SEED_KEY, value: 'true' });
 }
 
+/**
+ * Yield to the event loop between heavy seed batches so the main thread can
+ * paint and run queued interactive work — a tap handler, a navigation, or a
+ * small profile write — instead of being monopolized by the cold-boot backfill.
+ */
+function yieldToEventLoop(): Promise<void> {
+  return new Promise((resolve) => { setTimeout(resolve, 0); });
+}
+
+/**
+ * Build + write a large record set in BATCHES, yielding to the event loop
+ * between each. The cold-boot seed otherwise builds every record at once
+ * (loadEcoData replays 3,300+ PGNs through chess.js — pure main-thread CPU)
+ * and writes them in ONE bulkPut, locking the main thread + the IndexedDB
+ * write queue for ~16s. That was the dashboard freeze (David 2026-06-06):
+ * the queued interactive writes (e.g. the strength-calibration profile write)
+ * were starved behind the giant write, and the UI couldn't paint. Chunking
+ * keeps every turn short so the app stays responsive while the backfill runs.
+ *
+ * Idempotent: each batch is a bulkPut upsert. Returns the full built array so
+ * callers that prune orphans can compute the valid-id set without re-mapping.
+ */
+async function buildAndBulkPutChunked<S, R>(
+  table: Table<R>,
+  source: readonly S[],
+  build: (item: S) => R,
+  batchSize = 200,
+): Promise<R[]> {
+  const built: R[] = [];
+  for (let i = 0; i < source.length; i += batchSize) {
+    const end = Math.min(i + batchSize, source.length);
+    const batch: R[] = [];
+    for (let j = i; j < end; j++) batch.push(build(source[j]));
+    await table.bulkPut(batch);
+    built.push(...batch);
+    if (end < source.length) await yieldToEventLoop();
+  }
+  return built;
+}
+
 // ─── ECO Loader ───────────────────────────────────────────────────────────────
 
 export async function loadEcoData(): Promise<void> {
   const defaults = createDefaultSrsFields();
 
-  const records: OpeningRecord[] = (ecoData as EcoEntry[]).map((entry) => {
+  // Chunked + yielding: 3,300+ chess.js PGN replays + the bulkPut are the
+  // single biggest main-thread block on a cold boot. Batch them so the UI
+  // stays responsive and interactive writes aren't starved (the freeze fix).
+  await buildAndBulkPutChunked(db.openings, ecoData as EcoEntry[], (entry): OpeningRecord => {
     const { fen, uci } = computePosition(entry.pgn);
     const id = slugify(`${entry.eco}-${entry.name}`);
 
@@ -165,9 +209,6 @@ export async function loadEcoData(): Promise<void> {
       ...defaults,
     };
   });
-
-  // bulkPut is idempotent — safe to re-run
-  await db.openings.bulkPut(records);
 }
 
 // ─── Repertoire Loader ────────────────────────────────────────────────────────
@@ -223,7 +264,7 @@ export async function loadProRepertoireData(): Promise<void> {
   const defaults = createDefaultSrsFields();
   const entries = (proRepertoireData as { openings: ProRepertoireEntry[] }).openings;
 
-  const records: OpeningRecord[] = entries.map((entry) => {
+  await buildAndBulkPutChunked(db.openings, entries, (entry): OpeningRecord => {
     const { fen, uci } = computePosition(entry.pgn);
 
     return {
@@ -254,8 +295,6 @@ export async function loadProRepertoireData(): Promise<void> {
       ...defaults,
     };
   });
-
-  await db.openings.bulkPut(records);
 }
 
 /**
@@ -442,50 +481,47 @@ export async function reconcileBaseRepertoire(): Promise<void> {
 export async function loadGambitData(): Promise<void> {
   const defaults = createDefaultSrsFields();
 
-  const records: OpeningRecord[] = (gambitData as RepertoireEntry[]).map(
-    (entry) => {
-      const { fen, uci } = computePosition(entry.pgn);
+  await buildAndBulkPutChunked(db.openings, gambitData as RepertoireEntry[], (entry): OpeningRecord => {
+    const { fen, uci } = computePosition(entry.pgn);
 
-      return {
-        id: entry.id,
-        eco: entry.eco,
-        name: entry.name,
-        pgn: entry.pgn,
-        uci,
-        fen,
-        color: entry.color,
-        style: entry.style,
-        isRepertoire: false,
-        isGambit: true,
-        overview: entry.overview,
-        keyIdeas: entry.keyIdeas,
-        traps: entry.traps,
-        warnings: entry.warnings,
-        variations: entry.variations,
-        trapLines: entry.trapLines ?? null,
-        warningLines: entry.warningLines ?? null,
-        drillAccuracy: 0,
-        drillAttempts: 0,
-        lastStudied: null,
-        woodpeckerReps: 0,
-        woodpeckerSpeed: null,
-        woodpeckerLastDate: null,
-        isFavorite: false,
-        ...defaults,
-      };
-    },
-  );
-
-  await db.openings.bulkPut(records);
+    return {
+      id: entry.id,
+      eco: entry.eco,
+      name: entry.name,
+      pgn: entry.pgn,
+      uci,
+      fen,
+      color: entry.color,
+      style: entry.style,
+      isRepertoire: false,
+      isGambit: true,
+      overview: entry.overview,
+      keyIdeas: entry.keyIdeas,
+      traps: entry.traps,
+      warnings: entry.warnings,
+      variations: entry.variations,
+      trapLines: entry.trapLines ?? null,
+      warningLines: entry.warningLines ?? null,
+      drillAccuracy: 0,
+      drillAttempts: 0,
+      lastStudied: null,
+      woodpeckerReps: 0,
+      woodpeckerSpeed: null,
+      woodpeckerLastDate: null,
+      isFavorite: false,
+      ...defaults,
+    };
+  });
 }
 
 // ─── Model Games Loader ──────────────────────────────────────────────────────
 
 export async function loadModelGamesData(): Promise<void> {
-  const records = (modelGamesData as ModelGame[]).map((entry) => ({
-    ...entry,
-  }));
-  await db.modelGames.bulkPut(records);
+  // Chunked + yielding — runs on EVERY boot for already-seeded users, so it
+  // must never starve interactive writes (the freeze fix).
+  const records = await buildAndBulkPutChunked(
+    db.modelGames, modelGamesData as ModelGame[], (entry) => ({ ...entry }),
+  );
   // PRUNE orphans (G8). bulkPut only upserts, so a game DELETED from the
   // JSON (e.g. a draw/loss replaced per the wins-only model-game rule)
   // would otherwise linger in Dexie and keep surfacing in ModelGamesSection
@@ -515,7 +551,8 @@ export async function loadProGameReferences(): Promise<void> {
   // Fetched from public/data (not bundled) — also primes the in-memory
   // cache the coach envelope source reads synchronously.
   const records = await loadProGameReferenceData();
-  await db.proGameReferences.bulkPut(records);
+  // Chunked + yielding — every-boot write, must not starve interactive work.
+  await buildAndBulkPutChunked(db.proGameReferences, records, (r) => r);
   const validIds = new Set(records.map((r) => r.id));
   const all = await db.proGameReferences.toArray();
   const stale = all.filter((g) => !validIds.has(g.id)).map((g) => g.id);
@@ -527,10 +564,12 @@ export async function loadProGameReferences(): Promise<void> {
 // ─── Middlegame Plans Loader ─────────────────────────────────────────────────
 
 export async function loadMiddlegamePlansData(): Promise<void> {
-  const records = ([...(middlegamePlansData as MiddlegamePlan[]), ...(gambitPlansData as MiddlegamePlan[])]).map((entry) => ({
-    ...entry,
-  }));
-  await db.middlegamePlans.bulkPut(records);
+  // Chunked + yielding — every-boot write, must not starve interactive work.
+  const records = await buildAndBulkPutChunked(
+    db.middlegamePlans,
+    [...(middlegamePlansData as MiddlegamePlan[]), ...(gambitPlansData as MiddlegamePlan[])],
+    (entry) => ({ ...entry }),
+  );
   // PRUNE stale plans. bulkPut only upserts, so a plan DELETED from the
   // JSON (e.g. the Pirc Bayonet/Kholmov plans) would otherwise linger in
   // Dexie forever on already-seeded devices and keep rendering. Middlegame
