@@ -58,6 +58,8 @@ function Scene(): JSX.Element {
   const [, force] = useState(0);
   const animRef = useRef<Anim | null>(null);
   const movingGroup = useRef<THREE.Group>(null);
+  const dyingRef = useRef<{ square: string; type: string; color: 'w' | 'b'; t: number } | null>(null);
+  const dyingGroup = useRef<THREE.Group>(null);
   const { camera } = useThree();
   const camPos = useRef(new THREE.Vector3(0, 7.5, 9.5));
   const camLook = useRef(new THREE.Vector3(0, 0.6, 0));
@@ -98,14 +100,20 @@ function Scene(): JSX.Element {
         }
         force((n) => n + 1);
         await sleep(((animRef.current?.dur ?? 0.8) * 1000) + 120);
-        // commit the move
+        // the struck victim topples out as the move commits
+        if (capture) {
+          const v = g.get(capture);
+          if (v) dyingRef.current = { square: capture, type: v.type, color: v.color, t: 0 };
+        }
         g.move(san);
         animRef.current = null;
+        force((n) => n + 1);
+        if (capture) { await sleep(620); dyingRef.current = null; }
         // pull camera back to the overview
         camPos.current.set(0, 7.5, 9.5);
         camLook.current.set(0, 0.6, 0);
         force((n) => n + 1);
-        await sleep(700);
+        await sleep(620);
       }
     }
     void loop();
@@ -122,11 +130,23 @@ function Scene(): JSX.Element {
       const e = a.t * a.t * (3 - 2 * a.t); // smoothstep
       const x = fx + (tx - fx) * e;
       const z = fz + (tz - fz) * e;
-      const hop = a.type === 'n' ? 1.1 : 0.35;
-      const y = Math.sin(Math.PI * a.t) * hop;
-      movingGroup.current.position.set(x, y, z);
-      const dir = Math.atan2(tx - fx, tz - fz);
-      movingGroup.current.rotation.y = dir;
+      const distSq = Math.max(Math.abs(tx - fx), Math.abs(tz - fz));
+      const knight = a.type === 'n';
+      const steps = Math.max(2, Math.round(distSq * 1.2));
+      // knight leaps; everyone else gets a procedural WALK — stepped bob + waddle
+      const hop = knight ? Math.sin(Math.PI * a.t) * 1.05 : Math.abs(Math.sin(a.t * Math.PI * steps)) * 0.07;
+      movingGroup.current.position.set(x, hop, z);
+      movingGroup.current.rotation.y = Math.atan2(tx - fx, tz - fz);
+      movingGroup.current.rotation.z = knight ? 0 : Math.sin(a.t * Math.PI * steps) * 0.05;
+    }
+    // captured piece topples + sinks out
+    const d = dyingRef.current;
+    if (d && dyingGroup.current) {
+      d.t = Math.min(1, d.t + dt / 0.55);
+      dyingGroup.current.position.y = -d.t * 0.5;
+      dyingGroup.current.rotation.x = d.t * 1.4 * (d.color === 'w' ? 1 : -1);
+      const s = Math.max(0.001, 1 - d.t * 0.5);
+      dyingGroup.current.scale.setScalar(s);
     }
     const k = 1 - Math.pow(0.0009, dt);
     camera.position.lerp(camPos.current, k);
@@ -164,6 +184,13 @@ function Scene(): JSX.Element {
       {a && (
         <group ref={movingGroup}>
           <Piece type={a.type} color={a.color} />
+        </group>
+      )}
+
+      {/* the struck victim toppling out */}
+      {dyingRef.current && (
+        <group ref={dyingGroup} position={[sqWorld(dyingRef.current.square)[0], 0, sqWorld(dyingRef.current.square)[1]]}>
+          <Piece type={dyingRef.current.type} color={dyingRef.current.color} />
         </group>
       )}
 
