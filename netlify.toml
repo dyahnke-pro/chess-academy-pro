@@ -9,6 +9,15 @@
   status = 200
   force = true
 
+# RPG-demo preview branch: open the game directly from the root, so the bare
+# preview URL (no /rpg-demo path) still lands on the demo instead of the
+# dashboard. Preview-branch only — not on main.
+[[redirects]]
+  from = "/"
+  to = "/rpg-demo"
+  status = 302
+  force = true
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
