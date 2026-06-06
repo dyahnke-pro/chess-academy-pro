@@ -1310,6 +1310,10 @@ class VoiceService {
         category: 'subsystem',
         source: 'voiceService.speakPolly',
         summary: `voice=${voice} personality=${personality} text="${text.slice(0, 40)}"`,
+        // FULL spoken line — stored in PostHog as `narration_text` so we can
+        // review exactly what Ruth said (David 2026-06-06). The summary above
+        // is just a preview; this is the real text.
+        narrationText: text,
         details: JSON.stringify({
           voice,
           personality,

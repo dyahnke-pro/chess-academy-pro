@@ -122,6 +122,11 @@ export function buildEventProps(entry: AuditEntry): Record<string, unknown> {
   if (entry.context) props.context = entry.context.slice(0, 200);
   if (entry.summary) props.summary = entry.summary.slice(0, 200);
   if (entry.buildId) props.build_id = entry.buildId;
+  // Full spoken-narration text (David 2026-06-06). The summary truncates to
+  // 40 chars; this carries the complete line so PostHog stores the real
+  // narration for accuracy review. Bounded generously — a single spoken
+  // sentence never approaches this.
+  if (entry.narrationText) props.narration_text = entry.narrationText.slice(0, 2000);
   return props;
 }
 

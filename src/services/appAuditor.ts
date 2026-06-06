@@ -742,6 +742,12 @@ export interface AuditEntry {
    *  scattered across 7 app launches" — important context when
    *  reading historical exports. */
   sessionId?: string;
+  /** Full spoken-narration text (David 2026-06-06: "the full narration
+   *  to be uploaded and stored in PostHog"). The `summary` only carries a
+   *  40-char preview; this holds the complete spoken line so PostHog has
+   *  the real text for narration-accuracy review. Forwarded by
+   *  `analytics.buildEventProps` as `narration_text`. */
+  narrationText?: string;
 }
 
 /** Build identifier injected at vite-build time. Falls back to

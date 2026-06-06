@@ -105,4 +105,18 @@ describe('buildEventProps — lean, safe payloads', () => {
     expect((props.summary as string).length).toBe(200);
     expect((props.context as string).length).toBe(200);
   });
+
+  it('forwards the FULL narration text (not the 40-char summary preview) to PostHog', () => {
+    // David 2026-06-06: the full spoken line must reach PostHog for narration-
+    // accuracy review. summary stays a short preview; narration_text is the
+    // complete line (bounded at 2000, well above any single sentence).
+    const full = 'The knight on f6 defends e4 and eyes the d5 outpost while the bishop pins nothing here.';
+    const props = buildEventProps(entry({ kind: 'coach-narration-spoken', narrationText: full }));
+    expect(props.narration_text).toBe(full);
+  });
+
+  it('bounds narration_text at 2000 chars', () => {
+    const props = buildEventProps(entry({ kind: 'coach-narration-spoken', narrationText: 'x'.repeat(5000) }));
+    expect((props.narration_text as string).length).toBe(2000);
+  });
 });

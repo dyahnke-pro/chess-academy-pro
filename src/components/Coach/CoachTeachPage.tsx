@@ -65,6 +65,7 @@ import { logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAud
 import { resolveCoachNarration } from '../../utils/coachNarration';
 import { recoverCoachMoveFromText } from '../../utils/recoverCoachMove';
 import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech, SENTENCE_END_RE } from '../../services/sanitizeCoachText';
+import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
 import { useAppStore } from '../../stores/appStore';
@@ -1949,7 +1950,32 @@ export function CoachTeachPage(): JSX.Element {
      *  prompt rule on state-changing turns. */
     const spokenForTurn: string[] = [];
     const queueSpeak = (raw: string): void => {
-      const sentence = formatForSpeech(raw);
+      // GROUND every spoken line against the live board before it leaves the
+      // device. The chat prose is grounded post-hoc, but the [VOICE:] marker
+      // is spoken mid-stream and would otherwise bypass that gate — letting
+      // the voice say things that aren't true on the board ("a pin was
+      // broken" with no pin). Strip any disproven sentence so the voice can
+      // ONLY speak board-true claims (David 2026-06-06: "EVERYTHING NEEDS TO
+      // BE GROUNDED — we grounded the entire coach"). Fall back to the raw
+      // text only if the FEN won't parse, so the coach never goes silent.
+      let grounded = raw;
+      try {
+        const res = stripDisprovenSentences(raw, fen);
+        grounded = res.clean;
+        if (res.dropped.length > 0) {
+          void logAppAudit({
+            kind: 'claim-validator-trip',
+            category: 'subsystem',
+            source: 'CoachTeachPage.queueSpeak.boardGrounding',
+            summary: `voice grounding stripped ${res.dropped.length} ungrounded sentence(s)`,
+            details: JSON.stringify({
+              fen,
+              dropped: res.dropped.map((d) => d.sentence).slice(0, 5),
+            }),
+          });
+        }
+      } catch { /* unparseable FEN — speak raw rather than go silent */ }
+      const sentence = formatForSpeech(grounded);
       if (!sentence) return;
       if (sentence === lastQueuedSentence) return;
       lastQueuedSentence = sentence;
