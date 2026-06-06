@@ -292,7 +292,7 @@ export function App(): JSX.Element {
           {/* RPG-demo preview branch: the root IS the multi-frame (your-art)
               combat board. Client redirect because the service worker on
               installed PWAs swallows the Netlify 302. Dashboard lives at /home. */}
-          <Route path="/" element={<Navigate to="/rpg-demo" replace />} />
+          <Route path="/" element={<Navigate to="/rpg-3d" replace />} />
           <Route path="/home" element={<ErrorBoundary><DashboardPage /></ErrorBoundary>} />
           {/* RPG animated-pieces concept demo (isolated; not in main nav) */}
           <Route path="/rpg-demo" element={<ErrorBoundary><RpgDemoPage /></ErrorBoundary>} />
