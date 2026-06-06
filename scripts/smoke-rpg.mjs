@@ -26,11 +26,15 @@ try {
   await waitFor(BASE);
   const exe = await resolveChromiumExecutable();
   browser = await chromium.launch({ executablePath: exe, headless: true, args: sandboxLaunchArgs() });
-  const ctx = await browser.newContext(sandboxContextOptions());
+  const ctx = await browser.newContext({ ...sandboxContextOptions(), serviceWorkers: 'block' });
   const page = await ctx.newPage();
   const errors = [];
-  page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
-  page.on('console', (m) => { if (m.type() === 'error') errors.push(`console.error: ${m.text()}`); });
+  page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}\n${(e.stack || '').split('\n').slice(0, 4).join('\n')}`));
+  page.on('console', (m) => {
+    if ((m.type() === 'error' || m.type() === 'warning') && !m.text().includes('Service Worker registration blocked')) {
+      errors.push(`console.${m.type()}: ${m.text()}`);
+    }
+  });
 
   await page.goto(`${BASE}/rpg-demo`, { waitUntil: 'networkidle' });
 

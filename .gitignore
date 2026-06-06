@@ -59,6 +59,6 @@ data/sources/carlsen-alts/
 # Real-ESRGAN model weights (downloaded on demand, not committed)
 scripts/*.pth
 
-# WIP modern-cast cutouts (derived from rpg-cast-src via scripts/process-cast.py)
-public/rpg/cast/
+# Modern-cast tokens (derived from rpg-cast-src/ragnarok-sheet.png via
+# scripts/slice-cast.py) — COMMITTED so the deployed build ships them.
 scripts/*.onnx

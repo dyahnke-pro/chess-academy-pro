@@ -1,26 +1,28 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Chess, type Square } from 'chess.js';
-import { LpcCharacter, type CharacterLayer } from './LpcCharacter';
-import { pieceVisual, attackStyle } from './rpgRoster';
+import { CastToken } from './CastToken';
+import { CAST_GLYPH, CAST_TEAM_GLOW } from './rpgCast';
+import { attackStyle } from './rpgRoster';
 import { playCaptureSound, playArrowSound, playMoveSound, playWarCry, playQueenLaugh, playPawnTaunt } from './rpgSfx';
-import type { LpcAction, LpcDirection } from './lpcLayout';
 
 const S = 46; // square size (px) — 8×46 = 368, fits a phone
-const CHAR = 64; // characters render at native LPC frame size (crisp), fit to square
-const OFFX = (CHAR - S) / 2;
-const OFFY = CHAR - S;
-const PAD = OFFY; // top head-room so back-rank helmets aren't clipped
+const TOKEN_W = S; // footprint width = one square
+const TOKEN_H = Math.round(S * 1.35); // full-body tokens stand a bit taller than the square
+const KNIGHT_H = Math.round(S * 1.85); // the mounted knight stands ~½ a head over the pawns
+const PAD = KNIGHT_H - S; // top head-room for the tallest piece (the rider)
+const pieceH = (type: string): number => (type === 'n' ? KNIGHT_H : TOKEN_H);
 
+type Dir = 'left' | 'right' | 'up' | 'down';
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
 
 interface SqXY { x: number; y: number }
 function sqXY(square: string): SqXY {
   const file = square.charCodeAt(0) - 97; // a..h → 0..7
   const rank = parseInt(square[1], 10); // 1..8
-  return { x: file * S, y: (8 - rank) * S };
+  return { x: file * S, y: (8 - rank) * S }; // token top-left (bottom aligns to square)
 }
-function faceDir(from: string, to: string): LpcDirection {
+function faceDir(from: string, to: string): Dir {
   const a = sqXY(from);
   const b = sqXY(to);
   const dx = b.x - a.x;
@@ -30,14 +32,12 @@ function faceDir(from: string, to: string): LpcDirection {
 }
 
 interface Overlay {
-  layers: CharacterLayer[];
-  glow: string;
+  type: string;
+  color: 'w' | 'b';
+  flip: boolean;
   baseX: number;
   baseY: number;
-  action: LpcAction;
-  direction: LpcDirection;
-  loop: boolean;
-  anim: { x: number | number[]; y: number | number[] };
+  anim: { x: number | number[]; y: number | number[]; scale?: number | number[] };
   transition: object;
 }
 
@@ -81,7 +81,6 @@ export function RpgChessBoard(): JSX.Element {
     if (!moving) return;
     const target = g.get(to as Square);
     const style = attackStyle(moving.type);
-    const vis = pieceVisual(moving.type, moving.color);
     const fromP = sqXY(from);
     const toP = sqXY(to);
     const dx = toP.x - fromP.x;
@@ -97,14 +96,14 @@ export function RpgChessBoard(): JSX.Element {
     const run = ++runRef.current;
     const alive = (): boolean => runRef.current === run;
 
-    const base = { layers: vis.layers, glow: vis.glow, baseX: fromP.x - OFFX, baseY: PAD + fromP.y - OFFY };
+    const base = { type: moving.type, color: moving.color, flip: dir === 'left', baseX: fromP.x, baseY: PAD + fromP.y + S - pieceH(moving.type) };
 
     if (style === 'ranged' && target) {
       // Archer: draw + loose an arrow, the target falls, THEN advance.
-      setOverlay({ ...base, action: 'shoot', direction: dir, loop: false, anim: { x: 0, y: 0 }, transition: { duration: 0 } });
+      setOverlay({ ...base, anim: { x: 0, y: 0 }, transition: { duration: 0 } });
       await sleep(430);
       if (!alive()) return;
-      setArrow({ x0: fromP.x + S / 2, y0: PAD + fromP.y + S * 0.3, x1: toP.x + S / 2, y1: PAD + toP.y + S * 0.4, fly: false });
+      setArrow({ x0: fromP.x + S / 2, y0: PAD + fromP.y + S - TOKEN_H * 0.65, x1: toP.x + S / 2, y1: PAD + toP.y + S - TOKEN_H * 0.65, fly: false });
       await sleep(30);
       setArrow((a) => (a ? { ...a, fly: true } : a));
       if (soundRef.current) playArrowSound();
@@ -119,17 +118,17 @@ export function RpgChessBoard(): JSX.Element {
       await sleep(170);
       if (!alive()) return;
       if (soundRef.current) playMoveSound(moving.type); // archer advances
-      setOverlay((o) => (o ? { ...o, action: 'walk', loop: true, anim: { x: dx, y: dy }, transition: { x: { duration: walkDur, ease: 'linear' }, y: { duration: walkDur, ease: 'linear' } } } : o));
+      setOverlay((o) => (o ? { ...o, anim: { x: dx, y: dy }, transition: { x: { duration: walkDur, ease: 'linear' }, y: { duration: walkDur, ease: 'linear' } } } : o));
       await sleep(walkDur * 1000 + 80);
     } else if (style === 'leap') {
-      // Rider: leap in an arc OVER whatever is in the way.
-      if (soundRef.current) playMoveSound(moving.type); // galloping hooves
-      const arc = Math.min(130, 64 + dist * 16);
-      setOverlay({ ...base, action: 'slash', direction: dir, loop: true, anim: { x: dx, y: [0, -arc, dy] }, transition: { x: { duration: 0.72, ease: 'easeOut' }, y: { duration: 0.72, ease: 'easeOut', times: [0, 0.5, 1] } } });
+      // Rider: gallop + leap in an arc OVER whatever is in the way.
+      if (soundRef.current) playMoveSound(moving.type);
+      const arc = Math.min(140, 70 + dist * 18);
+      setOverlay({ ...base, anim: { x: dx, y: [0, -arc, dy] }, transition: { x: { duration: 0.72, ease: 'easeOut' }, y: { duration: 0.72, ease: 'easeOut', times: [0, 0.5, 1] } } });
       await sleep(760);
       if (!alive()) return;
       if (target) {
-        setOverlay((o) => (o ? { ...o, action: 'thrust', loop: false, anim: { x: dx, y: dy }, transition: { duration: 0 } } : o));
+        setOverlay((o) => (o ? { ...o, anim: { x: dx, y: dy, scale: [1, 1.14, 1] }, transition: { duration: 0.34 } } : o));
         await sleep(340);
         setDying(to);
         if (soundRef.current) playCaptureSound(target.type);
@@ -138,17 +137,17 @@ export function RpgChessBoard(): JSX.Element {
         await sleep(170);
       }
     } else {
-      // Melee: march to the square, stab if occupied.
-      if (soundRef.current) playMoveSound(moving.type); // armor scrape / footsteps
-      setOverlay({ ...base, action: 'walk', direction: dir, loop: true, anim: { x: dx, y: dy }, transition: { x: { duration: walkDur, ease: 'linear' }, y: { duration: walkDur, ease: 'linear' } } });
+      // Melee: march to the square, strike if occupied.
+      if (soundRef.current) playMoveSound(moving.type);
+      setOverlay({ ...base, anim: { x: dx, y: dy }, transition: { x: { duration: walkDur, ease: 'linear' }, y: { duration: walkDur, ease: 'linear' } } });
       await sleep(walkDur * 1000 + 80);
       if (!alive()) return;
       if (target) {
         if (soundRef.current) {
-          if (moving.type === 'p') playWarCry(); // peasant charge
-          else if (moving.type === 'q') playQueenLaugh(); // the queen gloats
+          if (moving.type === 'p') playWarCry();
+          else if (moving.type === 'q') playQueenLaugh();
         }
-        setOverlay((o) => (o ? { ...o, action: 'thrust', loop: false, transition: { duration: 0 } } : o));
+        setOverlay((o) => (o ? { ...o, anim: { x: dx, y: dy, scale: [1, 1.15, 1] }, transition: { duration: 0.34 } } : o));
         await sleep(340);
         setDying(to);
         if (soundRef.current) playCaptureSound(target.type);
@@ -229,6 +228,9 @@ export function RpgChessBoard(): JSX.Element {
     bump();
   }, []);
 
+  const tokenLeft = (c: number): number => c * S;
+  const tokenTop = (r: number, h: number): number => PAD + r * S + S - h; // bottom-aligned to its square
+
   return (
     <div className="flex flex-col items-center gap-3">
       <div className="text-sm font-semibold" style={{ color: 'var(--color-text)' }} data-testid="rpg-status">
@@ -237,7 +239,7 @@ export function RpgChessBoard(): JSX.Element {
 
       <div
         className="relative rounded-lg overflow-hidden"
-        style={{ width: 8 * S, height: 8 * S + PAD, boxShadow: '0 0 22px 2px rgba(74,222,128,0.14)', background: '#101713' }}
+        style={{ width: 8 * S, height: 8 * S + PAD, boxShadow: '0 0 22px 2px rgba(74,222,128,0.14)', background: '#0c1410' }}
         data-testid="rpg-chess-board"
         data-fen={game.fen()}
         data-selected={selected ?? ''}
@@ -261,11 +263,7 @@ export function RpgChessBoard(): JSX.Element {
                   top: PAD + r * S,
                   width: S,
                   height: S,
-                  background: isSel
-                    ? 'rgba(74,222,128,0.45)'
-                    : lightSq
-                      ? '#46584d'
-                      : '#26302a',
+                  background: isSel ? 'rgba(74,222,128,0.45)' : lightSq ? '#46584d' : '#26302a',
                   boxShadow: 'inset 0 0 0 1px rgba(74,222,128,0.10)',
                   cursor: busy ? 'default' : 'pointer',
                 }}
@@ -280,7 +278,8 @@ export function RpgChessBoard(): JSX.Element {
                       height: S * 0.28,
                       transform: 'translate(-50%,-50%)',
                       borderRadius: '50%',
-                      background: 'rgba(74,222,128,0.5)',
+                      background: 'rgba(74,222,128,0.6)',
+                      boxShadow: '0 0 6px 1px rgba(74,222,128,0.5)',
                     }}
                   />
                 )}
@@ -295,61 +294,36 @@ export function RpgChessBoard(): JSX.Element {
             if (!piece) return null;
             const sq = piece.square;
             if (sq === animFrom) return null; // moving piece lives in the overlay
-            const vis = pieceVisual(piece.type, piece.color);
+            const glow = CAST_TEAM_GLOW[piece.color];
             const isDying = sq === dying;
-            // Pawn poking a piece it just kicked (the pawn jabs toward it).
+            const h = pieceH(piece.type);
+            const common = { position: 'absolute' as const, left: tokenLeft(c), top: tokenTop(r, h), width: TOKEN_W, height: h, pointerEvents: 'none' as const };
+
+            // Pawn poking a piece it just kicked.
             if (kickReact?.pawn === sq) {
               return (
-                <motion.div
-                  key={sq}
-                  style={{ position: 'absolute', left: c * S - OFFX, top: PAD + r * S - OFFY, width: CHAR, height: CHAR, pointerEvents: 'none', zIndex: 5 }}
-                  animate={{ x: [0, kickReact.dx * 0.35, 0], y: [0, kickReact.dy * 0.35, 0] }}
-                  transition={{ duration: 0.5, times: [0, 0.4, 1], ease: 'easeOut' }}
-                >
-                  <LpcCharacter layers={vis.layers} glow={vis.glow} action="thrust" direction={kickReact.dx >= 0 ? 'right' : 'left'} playing loop={false} size={CHAR} />
-                  <PieceBadge glyph={vis.glyph} color={piece.color} />
+                <motion.div key={sq} style={{ ...common, zIndex: 30 }} animate={{ x: [0, kickReact.dx * 0.35, 0], y: [0, kickReact.dy * 0.35, 0] }} transition={{ duration: 0.5, times: [0, 0.4, 1], ease: 'easeOut' }}>
+                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} flip={kickReact.dx < 0} />
+                  <PieceBadge glyph={CAST_GLYPH[piece.type]} color={piece.color} />
                 </motion.div>
               );
             }
-            // The kicked piece startles + recoils, then settles (it stays put).
+            // The kicked piece startles + recoils, then settles (stays put).
             if (kickReact?.victim === sq) {
               return (
-                <motion.div
-                  key={sq}
-                  style={{ position: 'absolute', left: c * S - OFFX, top: PAD + r * S - OFFY, width: CHAR, height: CHAR, pointerEvents: 'none', zIndex: 4 }}
-                  animate={{ x: [0, kickReact.dx * 0.2, 0], rotate: [0, kickReact.dx >= 0 ? 12 : -12, 0] }}
-                  transition={{ duration: 0.6, times: [0, 0.35, 1], ease: 'easeOut' }}
-                >
-                  <LpcCharacter layers={vis.layers} glow={vis.glow} action="walk" direction="down" playing={false} loop={false} size={CHAR} />
-                  <PieceBadge glyph={vis.glyph} color={piece.color} />
+                <motion.div key={sq} style={{ ...common, zIndex: 20 + r }} animate={{ x: [0, kickReact.dx * 0.2, 0], rotate: [0, kickReact.dx >= 0 ? 10 : -10, 0] }} transition={{ duration: 0.6, times: [0, 0.35, 1], ease: 'easeOut' }}>
+                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} />
+                  <PieceBadge glyph={CAST_GLYPH[piece.type]} color={piece.color} />
                 </motion.div>
               );
             }
             return (
               <div
                 key={sq}
-                style={{
-                  position: 'absolute',
-                  left: c * S - OFFX,
-                  top: PAD + r * S - OFFY,
-                  width: CHAR,
-                  height: CHAR,
-                  pointerEvents: 'none',
-                  opacity: isDying && dead ? 0 : 1,
-                  transition: 'opacity 0.4s ease-out',
-                  zIndex: isDying ? 3 : 2,
-                }}
+                style={{ ...common, opacity: isDying && dead ? 0 : 1, transition: 'opacity 0.4s ease-out', zIndex: isDying ? 15 : 10 + r }}
               >
-                <LpcCharacter
-                  layers={vis.layers}
-                  glow={vis.glow}
-                  action={isDying ? 'hurt' : 'walk'}
-                  direction="down"
-                  playing={isDying}
-                  loop={false}
-                  size={CHAR}
-                />
-                <PieceBadge glyph={vis.glyph} color={piece.color} />
+                <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} />
+                <PieceBadge glyph={CAST_GLYPH[piece.type]} color={piece.color} />
               </div>
             );
           }),
@@ -361,26 +335,18 @@ export function RpgChessBoard(): JSX.Element {
             initial={{ left: arrow.x0, top: arrow.y0, opacity: 0 }}
             animate={{ left: arrow.fly ? arrow.x1 : arrow.x0, top: arrow.fly ? arrow.y1 : arrow.y0, opacity: 1 }}
             transition={{ duration: 0.25, ease: 'linear' }}
-            style={{ position: 'absolute', width: 10, height: 3, borderRadius: 2, background: '#fde047', boxShadow: '0 0 5px 1px rgba(250,204,21,0.9)', zIndex: 6 }}
+            style={{ position: 'absolute', width: 12, height: 3, borderRadius: 2, background: '#fde047', boxShadow: '0 0 6px 1px rgba(250,204,21,0.9)', zIndex: 40 }}
           />
         )}
 
-        {/* Moving overlay character */}
+        {/* Moving overlay token */}
         {overlay && (
           <motion.div
-            style={{ position: 'absolute', left: overlay.baseX, top: overlay.baseY, width: CHAR, height: CHAR, zIndex: 5 }}
+            style={{ position: 'absolute', left: overlay.baseX, top: overlay.baseY, width: TOKEN_W, height: pieceH(overlay.type), zIndex: 35 }}
             animate={overlay.anim}
             transition={overlay.transition}
           >
-            <LpcCharacter
-              layers={overlay.layers}
-              glow={overlay.glow}
-              action={overlay.action}
-              direction={overlay.direction}
-              playing
-              loop={overlay.loop}
-              size={CHAR}
-            />
+            <CastToken type={overlay.type} color={overlay.color} w={TOKEN_W} h={pieceH(overlay.type)} glow={CAST_TEAM_GLOW[overlay.color]} flip={overlay.flip} />
           </motion.div>
         )}
       </div>
@@ -414,13 +380,13 @@ function PieceBadge({ glyph, color }: { glyph: string; color: 'w' | 'b' }): JSX.
       style={{
         position: 'absolute',
         left: '50%',
-        bottom: 0,
+        bottom: -2,
         transform: 'translateX(-50%)',
-        fontSize: 11,
-        lineHeight: '12px',
+        fontSize: 10,
+        lineHeight: '11px',
         padding: '0 3px',
         borderRadius: 4,
-        background: 'rgba(0,0,0,0.55)',
+        background: 'rgba(0,0,0,0.6)',
         color: color === 'w' ? '#ffd479' : '#c4b5fd',
         textShadow: '0 1px 1px rgba(0,0,0,0.8)',
       }}
