@@ -14,7 +14,7 @@
 # dashboard. Preview-branch only — not on main.
 [[redirects]]
   from = "/"
-  to = "/rpg-3d"
+  to = "/rpg-demo"
   status = 302
   force = true
 
