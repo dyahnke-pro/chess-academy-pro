@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useAppStore } from '../../stores/appStore';
-import { SKILL_BANDS, applyStrength, type SkillBand } from '../../services/strengthCalibrationService';
+import { SKILL_BANDS, applyStrength, clampRating, type SkillBand } from '../../services/strengthCalibrationService';
 import { logAppAudit } from '../../services/appAuditor';
 
 /**
@@ -18,30 +18,45 @@ export function StrengthCalibrationBubble({ onDone }: { onDone: () => void }): J
   const [saving, setSaving] = useState<SkillBand['id'] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handlePick = async (band: SkillBand): Promise<void> => {
+  const handlePick = (band: SkillBand): void => {
     if (!activeProfile || saving) return;
     setSaving(band.id);
     setError(null);
-    try {
-      const updated = await applyStrength(activeProfile, band.rating);
-      setActiveProfile(updated);
-      void logAppAudit({
-        kind: 'strength-calibrated',
-        category: 'app',
-        source: 'StrengthCalibrationBubble',
-        summary: `skill picker: ${band.id} → ${band.rating}`,
-      });
-      onDone();
-    } catch (e) {
-      setError('Could not save — tap to retry.');
-      setSaving(null);
+
+    // OPTIMISTIC dismiss — never block the UI on the Dexie write. On a cold
+    // boot the deferred seed (loadEcoData + pro-rep + model games + …) hammers
+    // IndexedDB, and a small profile write gets STARVED behind it — measured at
+    // ~16s on prod, longer on slower devices. Awaiting it here left the modal
+    // overlay up with "Saving…" for that whole time, intercepting every tap, so
+    // the app looked frozen (David 2026-06-06: "freezes on the dashboard").
+    // Rehydrate the store + close the bubble IMMEDIATELY from the clamped
+    // values, then persist in the background — the write completing late is
+    // fine (next boot reads `strengthCalibrated: true`); the user is never
+    // blocked. If the background write fails, calibration simply re-asks next
+    // boot rather than trapping the user behind a permanent overlay.
+    const clamped = clampRating(band.rating);
+    setActiveProfile({
+      ...activeProfile,
+      currentRating: clamped,
+      puzzleRating: clamped,
+      strengthCalibrated: true,
+    });
+    void logAppAudit({
+      kind: 'strength-calibrated',
+      category: 'app',
+      source: 'StrengthCalibrationBubble',
+      summary: `skill picker: ${band.id} → ${band.rating}`,
+    });
+    onDone();
+
+    void applyStrength(activeProfile, band.rating).catch((e: unknown) => {
       void logAppAudit({
         kind: 'uncaught-error',
         category: 'app',
         source: 'StrengthCalibrationBubble',
-        summary: e instanceof Error ? e.message : 'applyStrength failed',
+        summary: e instanceof Error ? e.message : 'applyStrength background write failed',
       });
-    }
+    });
   };
 
   return createPortal(
@@ -67,7 +82,7 @@ export function StrengthCalibrationBubble({ onDone }: { onDone: () => void }): J
             <button
               key={band.id}
               type="button"
-              onClick={() => void handlePick(band)}
+              onClick={() => { handlePick(band); }}
               disabled={saving !== null}
               className="w-full px-4 py-3 rounded-xl border-2 border-theme-border text-left hover:border-amber-500/50 transition-colors disabled:opacity-50"
               data-testid={`skill-band-${band.id}`}

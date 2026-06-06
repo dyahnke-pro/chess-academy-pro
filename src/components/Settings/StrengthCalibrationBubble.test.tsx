@@ -22,7 +22,7 @@ describe('StrengthCalibrationBubble', () => {
     expect(screen.getByTestId('skill-band-advanced')).toBeInTheDocument();
   });
 
-  it('picking a band seeds BOTH ratings and calls onDone', async () => {
+  it('picking a band seeds BOTH ratings (background write) and calls onDone', async () => {
     const profile = buildUserProfile({
       id: 'main',
       currentRating: 800,
@@ -38,11 +38,37 @@ describe('StrengthCalibrationBubble', () => {
 
     await waitFor(() => expect(onDone).toHaveBeenCalled());
 
-    const persisted = await db.profiles.get('main');
-    expect(persisted?.currentRating).toBe(600);
-    expect(persisted?.puzzleRating).toBe(600);
-    expect(persisted?.strengthCalibrated).toBe(true);
+    // Persistence is a background write now — it lands shortly after dismiss.
+    await waitFor(async () => {
+      const persisted = await db.profiles.get('main');
+      expect(persisted?.currentRating).toBe(600);
+      expect(persisted?.puzzleRating).toBe(600);
+      expect(persisted?.strengthCalibrated).toBe(true);
+    });
+  });
 
-    expect(useAppStore.getState().activeProfile?.puzzleRating).toBe(600);
+  it('dismisses OPTIMISTICALLY — store updates + onDone fire without awaiting the Dexie write', async () => {
+    // The freeze fix (David 2026-06-06): the bubble must NOT block on the
+    // profile write, which the cold deferred seed can starve for 15s+. The
+    // store reflects the pick and onDone fires synchronously on click, before
+    // any awaited persistence.
+    const profile = buildUserProfile({
+      id: 'main',
+      currentRating: 800,
+      puzzleRating: 800,
+      strengthCalibrated: false,
+    });
+    await db.profiles.put(profile);
+    useAppStore.getState().setActiveProfile(profile);
+    const onDone = vi.fn();
+
+    render(<StrengthCalibrationBubble onDone={onDone} />);
+    fireEvent.click(screen.getByTestId('skill-band-intermediate'));
+
+    // Synchronous, same tick as the click — no await between.
+    expect(onDone).toHaveBeenCalledTimes(1);
+    expect(useAppStore.getState().activeProfile?.currentRating).toBe(1300);
+    expect(useAppStore.getState().activeProfile?.puzzleRating).toBe(1300);
+    expect(useAppStore.getState().activeProfile?.strengthCalibrated).toBe(true);
   });
 });
