@@ -197,6 +197,30 @@ export function playMoveSound(type: string): void {
 }
 
 /** A bowstring release + arrow whoosh — played when the archer looses. */
+/** Triumphant rising fanfare for the winning army. */
+export function playVictory(): void {
+  const c = audio();
+  if (!c) return;
+  try {
+    const t = c.currentTime;
+    [523, 659, 784, 1047].forEach((f, i) => tone(c, t + i * 0.13, 'triangle', f, f, 0.2, 0.18));
+  } catch {
+    /* ignore */
+  }
+}
+
+/** A sad descending sting for the defeated army. */
+export function playDefeat(): void {
+  const c = audio();
+  if (!c) return;
+  try {
+    const t = c.currentTime;
+    [392, 330, 262, 196].forEach((f, i) => tone(c, t + i * 0.18, 'sawtooth', f, f * 0.94, 0.32, 0.15));
+  } catch {
+    /* ignore */
+  }
+}
+
 /** The rook's charge — a low rumble + a sustained fire crackle. */
 export function playChargeSound(): void {
   const c = audio();

@@ -4,7 +4,7 @@ import { Chess, type Square } from 'chess.js';
 import { CastToken } from './CastToken';
 import { CAST_GLYPH, CAST_TEAM_GLOW } from './rpgCast';
 import { attackStyle } from './rpgRoster';
-import { playCaptureSound, playArrowSound, playMoveSound, playWarCry, playQueenLaugh, playPawnTaunt, playChargeSound } from './rpgSfx';
+import { playCaptureSound, playArrowSound, playMoveSound, playWarCry, playQueenLaugh, playPawnTaunt, playChargeSound, playVictory, playDefeat } from './rpgSfx';
 
 const S = 46; // square size (px) — 8×46 = 368, fits a phone
 const TOKEN_W = S; // footprint width = one square
@@ -65,6 +65,9 @@ export function RpgChessBoard(): JSX.Element {
   const [fireTrail, setFireTrail] = useState<{ x0: number; x1: number; key: number } | null>(null);
   const [headbutt, setHeadbutt] = useState<{ square: string; dx: number; dy: number; rot: number } | null>(null);
   const fireKeyRef = useRef(0);
+  // At game end the winning army celebrates; the losers throw a fit (or all
+  // slump on a draw, winner = null).
+  const [gameOver, setGameOver] = useState<{ winner: 'w' | 'b' | null } | null>(null);
   const runRef = useRef(0);
 
   const game = gameRef.current;
@@ -213,6 +216,13 @@ export function RpgChessBoard(): JSX.Element {
         }
       }
     }
+
+    // Game over → winners celebrate, losers throw a fit.
+    if (g.isGameOver()) {
+      const winner = g.isCheckmate() ? moving.color : null; // draw / stalemate → null
+      setGameOver({ winner });
+      if (soundRef.current) (winner ? playVictory : playDefeat)();
+    }
     setBusy(false);
   }, []);
 
@@ -250,6 +260,7 @@ export function RpgChessBoard(): JSX.Element {
     setArrow(null);
     setFireTrail(null);
     setHeadbutt(null);
+    setGameOver(null);
     setBusy(false);
     bump();
   }, []);
@@ -324,6 +335,23 @@ export function RpgChessBoard(): JSX.Element {
             const isDying = sq === dying;
             const h = pieceH(piece.type);
             const common = { position: 'absolute' as const, left: tokenLeft(c), top: tokenTop(r, h), width: TOKEN_W, height: h, pointerEvents: 'none' as const };
+
+            // Game over: winners jump for joy, losers throw a fit.
+            if (gameOver) {
+              const isWinner = gameOver.winner === piece.color;
+              const anim = isWinner
+                ? { y: [0, -12, 0] }
+                : { rotate: [0, -8, 8, -8, 8, 0], x: [0, -3, 3, -3, 3, 0] };
+              const trans = isWinner
+                ? { repeat: Infinity, duration: 0.7, delay: (c % 4) * 0.1, ease: 'easeOut' as const }
+                : { repeat: Infinity, duration: 0.5, delay: (c % 4) * 0.05 };
+              return (
+                <motion.div key={sq} style={{ ...common, zIndex: 10 + r }} animate={anim} transition={trans}>
+                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} />
+                  <PieceBadge glyph={CAST_GLYPH[piece.type]} color={piece.color} />
+                </motion.div>
+              );
+            }
 
             // Pawn poking a piece it just kicked.
             if (kickReact?.pawn === sq) {
