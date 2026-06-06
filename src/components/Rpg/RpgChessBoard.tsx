@@ -37,7 +37,7 @@ interface Overlay {
   flip: boolean;
   baseX: number;
   baseY: number;
-  anim: { x: number | number[]; y: number | number[]; scale?: number | number[] };
+  anim: { x: number | number[]; y: number | number[]; scale?: number | number[]; rotate?: number | number[] };
   transition: object;
 }
 
@@ -106,8 +106,8 @@ export function RpgChessBoard(): JSX.Element {
     const base = { type: moving.type, color: moving.color, flip: dir === 'left', baseX: fromP.x, baseY: PAD + fromP.y + S - pieceH(moving.type) };
 
     if (style === 'ranged' && target) {
-      // Archer: draw + loose an arrow, the target falls, THEN advance.
-      setOverlay({ ...base, anim: { x: 0, y: 0 }, transition: { duration: 0 } });
+      // Archer: draw the bow (lean back), loose an arrow, the target falls, THEN advance.
+      setOverlay({ ...base, anim: { x: 0, y: 0, scale: [1, 0.97, 1.01], rotate: [0, dir === 'left' ? 7 : -7, 0] }, transition: { duration: 0.42, times: [0, 0.7, 1] } });
       await sleep(430);
       if (!alive()) return;
       setArrow({ x0: fromP.x + S / 2, y0: PAD + fromP.y + S - TOKEN_H * 0.65, x1: toP.x + S / 2, y1: PAD + toP.y + S - TOKEN_H * 0.65, fly: false });
@@ -164,9 +164,9 @@ export function RpgChessBoard(): JSX.Element {
       }
       window.setTimeout(() => setFireTrail(null), 250);
     } else {
-      // Melee: march to the square, strike if occupied.
+      // Melee: march to the square (with a stride sway), strike if occupied.
       if (soundRef.current) playMoveSound(moving.type);
-      setOverlay({ ...base, anim: { x: dx, y: dy }, transition: { x: { duration: walkDur, ease: 'linear' }, y: { duration: walkDur, ease: 'linear' } } });
+      setOverlay({ ...base, anim: { x: dx, y: dy, rotate: [0, -3, 3, -3, 3, 0] }, transition: { x: { duration: walkDur, ease: 'linear' }, y: { duration: walkDur, ease: 'linear' }, rotate: { duration: walkDur, ease: 'linear' } } });
       await sleep(walkDur * 1000 + 80);
       if (!alive()) return;
       if (target) {
@@ -174,7 +174,8 @@ export function RpgChessBoard(): JSX.Element {
           if (moving.type === 'p') playWarCry();
           else if (moving.type === 'q') playQueenLaugh();
         }
-        setOverlay((o) => (o ? { ...o, anim: { x: dx, y: dy, scale: [1, 1.15, 1] }, transition: { duration: 0.34 } } : o));
+        const swing = dir === 'left' ? -24 : 24; // swing the weapon toward the target
+        setOverlay((o) => (o ? { ...o, anim: { x: dx, y: dy, scale: [1, 1.15, 1], rotate: [0, swing, 0] }, transition: { duration: 0.34 } } : o));
         await sleep(340);
         setDying(to);
         if (soundRef.current) playCaptureSound(target.type);
