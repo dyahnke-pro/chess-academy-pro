@@ -7,7 +7,7 @@ import * as THREE from 'three';
 // (no Mixamo) to a 14-action skeleton. Tap a button to fire an action; it sways
 // gently at rest. Proves real skeletal articulation on his own piece, in-app.
 
-const URL = '/rpg/models/kaykit/rogue.glb';
+const URL = '/rpg/models/skinned-rogue.glb';
 useGLTF.preload(URL);
 
 const LOOP = new Set(['Idle', 'Walking_C', 'Running_A']);
