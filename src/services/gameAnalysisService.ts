@@ -536,6 +536,35 @@ export async function analyzeAllGames(
   let completed = 0;
   const analyzedGameIds: string[] = [];
 
+  // Per-game insight generation — runs INLINE as each game finishes analysis,
+  // NOT batched at the very end. On a library with many games the end-of-run
+  // batch rarely completes uninterrupted (iOS suspends the webview, the user
+  // navigates away or locks the phone → `_abortAnalysis`), and the old batch
+  // loop was gated behind `if (_abortAnalysis) break`, so it generated ZERO
+  // puzzles even though dozens of games were already annotated — the empty
+  // My Mistakes / Weaknesses bug despite a full game library (David 2026-06-06:
+  // "many games imported… no errors to drill"). Generating per-game means every
+  // analyzed game contributes its mistakes immediately and survives any
+  // interruption. The username is needed so the mistake generator can tell
+  // which side the student played in imported games (else 0 puzzles).
+  const profile = useAppStore.getState().activeProfile;
+  const chessComUsername = profile?.preferences.chessComUsername;
+  const lichessUsername = profile?.preferences.lichessUsername;
+  const generateInsightsForGame = async (
+    gameId: string,
+    source: GameRecord['source'],
+    annotations: MoveAnnotation[],
+  ): Promise<void> => {
+    const username = source === 'chesscom' ? chessComUsername
+      : source === 'lichess' ? lichessUsername
+        : undefined; // coach games infer the side from "Stockfish Bot"
+    try { await generateMistakePuzzlesFromGame(gameId, username); } catch { /* continue */ }
+    try { await classifyTacticsFromGame(gameId); } catch { /* continue */ }
+    if (profile && annotations.length > 0) {
+      try { await detectBadHabitsFromGame(annotations, profile); } catch { /* continue */ }
+    }
+  };
+
   try {
     if (workers.length > 0) {
       // Parallel: each worker grabs the next game from the queue
@@ -558,6 +587,9 @@ export async function analyzeAllGames(
             await db.games.update(game.id, { annotations, fullyAnalyzed: true });
             analyzedGameIds.push(game.id);
             analyzed++;
+            // Generate this game's mistakes NOW — don't wait for the whole
+            // batch to finish (it often never does on a big library).
+            await generateInsightsForGame(game.id, game.source, annotations);
           }
           completed++;
         }
@@ -581,6 +613,7 @@ export async function analyzeAllGames(
           await db.games.update(game.id, { annotations, fullyAnalyzed: true });
           analyzedGameIds.push(game.id);
           analyzed++;
+          await generateInsightsForGame(game.id, game.source, annotations);
         }
       }
     }
@@ -596,52 +629,10 @@ export async function analyzeAllGames(
     phase: 'computing_weaknesses',
   });
 
-  // Generate mistake puzzles and detect bad habits from newly-analyzed games
-  const profile = useAppStore.getState().activeProfile;
-  // The mistake generator needs a username to figure out which side
-  // the student played for imported games (chess.com / lichess).
-  // Without it, determinePlayerColor returns null and ZERO puzzles get
-  // generated — the reason the My Mistakes tab has always been empty
-  // for imported games. Resolve it per-game based on the game source.
-  const chessComUsername = profile?.preferences.chessComUsername;
-  const lichessUsername = profile?.preferences.lichessUsername;
-  const resolveUsername = async (gameId: string): Promise<string | undefined> => {
-    const g = await db.games.get(gameId);
-    if (!g) return undefined;
-    if (g.source === 'chesscom') return chessComUsername;
-    if (g.source === 'lichess') return lichessUsername;
-    return undefined; // coach games infer player side from "Stockfish Bot"
-  };
-  for (const gameId of analyzedGameIds) {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- mutated by visibilitychange handler
-    if (_abortAnalysis) break;
-    try {
-      const username = await resolveUsername(gameId);
-      await generateMistakePuzzlesFromGame(gameId, username);
-    } catch {
-      // Continue with remaining games
-    }
-
-    // Classify missed tactics by motif type
-    try {
-      await classifyTacticsFromGame(gameId);
-    } catch {
-      // Continue with remaining games
-    }
-
-    // Detect bad habits from each analyzed game's annotations
-    if (profile) {
-      try {
-        const game = await db.games.get(gameId);
-        if (game?.annotations && game.annotations.length > 0) {
-          await detectBadHabitsFromGame(game.annotations, profile);
-        }
-      } catch {
-        // Continue with remaining games
-      }
-    }
-  }
-
+  // Mistake puzzles / tactic classification / bad-habit detection already ran
+  // INLINE per game as each finished analysis (see generateInsightsForGame
+  // above) — so even a run interrupted partway through has produced puzzles for
+  // every game it did analyze. Just refresh the aggregate weakness profile.
   await recomputeWeaknessFromGames();
 
   onProgress?.({

@@ -24,10 +24,12 @@ vi.mock('./mistakePuzzleService', () => ({
 
 import { stockfishEngine } from './stockfishEngine';
 import { computeWeaknessProfile } from './weaknessAnalyzer';
+import { generateMistakePuzzlesFromGame } from './mistakePuzzleService';
 
 const mockAnalyzePosition = vi.mocked(stockfishEngine).analyzePosition;
 const mockInitialize = vi.mocked(stockfishEngine).initialize;
 const mockComputeWeaknessProfile = vi.mocked(computeWeaknessProfile);
+const mockGenMistakes = vi.mocked(generateMistakePuzzlesFromGame);
 
 function mockAnalysis(evaluation: number, bestMove: string): StockfishAnalysis {
   return { evaluation, bestMove, isMate: false, mateIn: null, depth: 12, topLines: [], nodesPerSecond: 100000 };
@@ -122,6 +124,25 @@ describe('gameAnalysisService', () => {
       const updated = await db.games.get('analyze-me');
       expect(updated?.annotations).not.toBeNull();
       expect(updated?.annotations?.length).toBe(4);
+    });
+
+    it('generates mistake puzzles INLINE per analyzed game, not batched at the end', async () => {
+      // The fix (David 2026-06-06): mistakes must be generated as each game
+      // finishes, so an interrupted run still produces puzzles for the games it
+      // did analyze. Two games → generateMistakePuzzlesFromGame fires for each.
+      for (const id of ['game-a', 'game-b']) {
+        await db.games.add(buildGameRecord({
+          id, pgn: '1. e4 e5 2. Nf3 Nc6 1/2-1/2', annotations: null, isMasterGame: false,
+        }));
+      }
+      mockAnalyzePosition.mockResolvedValue(mockAnalysis(25, 'e2e4'));
+
+      await analyzeAllGames();
+
+      const calledIds = mockGenMistakes.mock.calls.map((c) => c[0]);
+      expect(calledIds).toContain('game-a');
+      expect(calledIds).toContain('game-b');
+      expect(mockGenMistakes).toHaveBeenCalledTimes(2);
     });
 
     it('reports progress during analysis', async () => {
