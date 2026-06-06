@@ -21,11 +21,20 @@ describe('explainBestMoveGrounded — GROUNDED best-move explanation (no LLM, ch
     expect(r).toBe('It wins the bishop on d4.');
   });
 
-  it('explains that the played move left a piece hanging', () => {
+  it('plays out the punishment when the played move hangs a piece', () => {
     // White Bf1; the player played Bb5 (f1-b5 diagonal) — attacked by the a6
     // pawn, undefended. best = Ke2 (e1e2), a quiet move (no capture/check).
+    // GROUNDED punishment: Black's cheapest attacker (the a6 pawn) takes it.
     const r = explainBestMoveGrounded('4k3/8/p7/8/8/8/8/4KB2 w - - 0 1', 'Bb5', 'e1e2', 'white');
-    expect(r).toBe('Your move left the bishop on b5 hanging.');
+    expect(r).toBe('Your move let Black play axb5, winning the bishop.');
+  });
+
+  it('reports check when the punishing capture lands with check', () => {
+    // Black to move plays Qe5 (d6-e5), hanging the queen on the open e-file.
+    // White's Rxe5+ takes it for free AND checks the black king on e8.
+    // best = Kf8 (e8f8), a quiet king move (no capture/check) → no merit clause.
+    const r = explainBestMoveGrounded('4k3/8/3q4/8/8/8/8/4R1K1 b - - 0 1', 'Qe5', 'e8f8', 'black');
+    expect(r).toBe('Your move let White play Rxe5+, winning the queen with check.');
   });
 
   it('returns null when nothing is provably true on the board (name-only fallback)', () => {

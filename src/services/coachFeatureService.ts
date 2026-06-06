@@ -849,11 +849,36 @@ export function explainBestMoveGrounded(
     try {
       const c = new Chess(fenBefore);
       if (c.move(playedSan)) {
+        // `c` now holds the position AFTER the played move — opponent to
+        // move. Any of the student's pieces that are attacked-and-undefended
+        // here is hanging.
         const hung = findHangingPieces(c).filter((h) => h.color === mc);
         if (hung.length > 0) {
           hung.sort((a, b) => (REVIEW_PIECE_VALUE[b.piece] ?? 0) - (REVIEW_PIECE_VALUE[a.piece] ?? 0));
           const h = hung[0];
-          costClause = `your move left the ${REVIEW_PIECE_NAME[h.piece]} on ${h.square} hanging`;
+          // Play out the punishment the GROUNDED way (David 2026-06-05's
+          // standard: "let White play Bxh7+, winning the pawn ..."): the
+          // hanging piece is attacked AND undefended, so the opponent's
+          // cheapest attacker simply takes it for free, and chess.js tells
+          // us whether that capture lands with check. Pure board truth — no
+          // engine PV, no invented line. Falls back to the plain "left it
+          // hanging" phrasing if (defensively) no legal capture is found.
+          const captures = c.moves({ verbose: true })
+            .filter((mm) => mm.to === h.square && mm.captured);
+          if (captures.length > 0) {
+            captures.sort((a, b) => (REVIEW_PIECE_VALUE[a.piece] ?? 0) - (REVIEW_PIECE_VALUE[b.piece] ?? 0));
+            const punish = captures[0];
+            const punisher = mc === 'w' ? 'Black' : 'White';
+            let givesCheck = false;
+            try {
+              const after = new Chess(c.fen());
+              after.move(punish.san);
+              givesCheck = after.inCheck();
+            } catch { /* keep givesCheck false */ }
+            costClause = `your move let ${punisher} play ${punish.san}, winning the ${REVIEW_PIECE_NAME[h.piece]}${givesCheck ? ' with check' : ''}`;
+          } else {
+            costClause = `your move left the ${REVIEW_PIECE_NAME[h.piece]} on ${h.square} hanging`;
+          }
         }
       }
     } catch { /* board fact unavailable — stay silent */ }
