@@ -39,7 +39,10 @@ export function spriteFrames(type: string, color: 'w' | 'b', face: Facing, actio
   const role = roleOf(type);
   if (SPIN.has(role)) {
     if (action === 'attack') return [0, 1, 2, 3].map((i) => spinUrl(role, color, i));
-    return [castImage(type, color)]; // idle / walk → static stance
+    // Idle: a clean hooded rogue (just a black hood — no face). Front stance when
+    // facing the viewer (opponent army), the back when facing away (your army).
+    if (face === 'front') return [`/rpg/cast/${role}-front-${color === 'w' ? 'light' : 'dark'}.png`];
+    return [castImage(type, color)];
   }
   if (!FRAMED.has(role)) return null;
   if (action === 'attack') return [0, 1, 2, 3].map((i) => frameUrl(role, color, face, i));

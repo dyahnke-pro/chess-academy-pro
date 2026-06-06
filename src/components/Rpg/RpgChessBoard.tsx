@@ -9,10 +9,12 @@ import { playCaptureSound, playArrowSound, playMoveSound, playWarCry, playQueenL
 
 const S = 46; // square size (px) — 8×46 = 368, fits a phone
 const TOKEN_W = S; // footprint width = one square
-const TOKEN_H = Math.round(S * 1.35); // full-body tokens stand a bit taller than the square
-const KNIGHT_H = Math.round(S * 1.85); // the mounted knight stands ~½ a head over the pawns
-const PAD = KNIGHT_H - S; // top head-room for the tallest piece (the rider)
-const pieceH = (type: string): number => (type === 'n' ? KNIGHT_H : TOKEN_H);
+// True-to-size hierarchy, built around the knight (1.85 = the perfect size).
+// Queen tallest, king just shorter; rook/knight/bishop share the knight's beefy
+// tier; the pawn is shortest.
+const HEIGHTS: Record<string, number> = { q: 2.1, k: 1.98, n: 1.85, r: 1.85, b: 1.85, p: 1.35 };
+const pieceH = (type: string): number => Math.round(S * (HEIGHTS[type] ?? 1.4));
+const PAD = Math.round(S * 2.1) - S; // head-room for the tallest piece (the queen)
 
 type Dir = 'left' | 'right' | 'up' | 'down';
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
@@ -119,6 +121,8 @@ export function RpgChessBoard(): JSX.Element {
   // slump on a draw, winner = null).
   const [gameOver, setGameOver] = useState<{ winner: 'w' | 'b' | null } | null>(null);
   const runRef = useRef(0);
+  // Each piece type's FIRST kill is always a cinematic close-up; later kills are random.
+  const killedTypesRef = useRef<Set<string>>(new Set());
 
   const game = gameRef.current;
   const board = game.board();
@@ -145,9 +149,11 @@ export function RpgChessBoard(): JSX.Element {
     const dir = faceDir(from, to);
     const dist = Math.max(Math.abs(dx), Math.abs(dy)) / S;
     const walkDur = Math.max(0.4, dist * 0.16);
-    // Random cinematic kill-shot: punch in on a fraction of captures. Skip the
-    // rook charge — its victim flies OFF the board, which reads better wide.
-    const closeUp = !!target && style !== 'charge' && Math.random() < 0.5;
+    // Cinematic kill-shot: ALWAYS on a piece type's FIRST kill (one signature
+    // shot per piece), and randomly on later captures.
+    const firstKill = !!target && !killedTypesRef.current.has(moving.type);
+    const closeUp = !!target && (firstKill || Math.random() < 0.5);
+    if (target) killedTypesRef.current.add(moving.type);
     const killOx = toP.x + S / 2;
     const killOy = PAD + toP.y + S * 0.45;
     const punchIn = (): void => { if (closeUp) { camOriginRef.current = `${killOx}px ${killOy}px`; setZoomed(true); } };
@@ -168,7 +174,7 @@ export function RpgChessBoard(): JSX.Element {
       setOverlay({ ...base, anim: { x: 0, y: 0, scale: [1, 0.97, 1.01], rotate: [0, dir === 'left' ? 7 : -7, 0] }, transition: { duration: 0.42, times: [0, 0.7, 1] } });
       await sleep(430);
       if (!alive()) return;
-      setArrow({ x0: fromP.x + S / 2, y0: PAD + fromP.y + S - TOKEN_H * 0.65, x1: toP.x + S / 2, y1: PAD + toP.y + S - TOKEN_H * 0.65, fly: false });
+      setArrow({ x0: fromP.x + S / 2, y0: PAD + fromP.y + S - pieceH('b') * 0.65, x1: toP.x + S / 2, y1: PAD + toP.y + S - pieceH('b') * 0.65, fly: false });
       await sleep(30);
       setArrow((a) => (a ? { ...a, fly: true } : a));
       if (soundRef.current) playArrowSound();
@@ -226,6 +232,7 @@ export function RpgChessBoard(): JSX.Element {
       if (!alive()) { setFireTrail(null); return; }
       if (target) {
         if (soundRef.current) playCaptureSound(target.type);
+        punchIn(); // close-up on the shield-bash impact
         // Shield-bash from the square just before the victim — the rook plays its
         // shield-thrust frames and the victim is launched off the board.
         setOverlay((o) => (o ? { ...o, action: framed ? 'attack' : o.action, anim: { x: adx, y: ady, scale: [1, 1.18, 1.05], rotate: [lean, lean * 1.4, 0] }, transition: { duration: 0.2 } } : o));
@@ -235,7 +242,9 @@ export function RpgChessBoard(): JSX.Element {
         const fy = uy !== 0 ? uy * S * 6 - S * 1.5 : -S * 2.4;
         setHeadbutt({ square: to, fx, fy, rot: (ux >= 0 ? 1 : -1) * 760 });
         setDying(to);
-        await sleep(720); // let the victim sail off the edge
+        await sleep(240); // hold the impact (zoomed on a kill-shot)
+        if (closeUp) setZoomed(false); // pull wide to watch the victim sail off
+        await sleep(480); // the rest of the flight off the edge
         if (!alive()) { setFireTrail(null); setHeadbutt(null); return; }
         // Rook steps onto the cleared square.
         setOverlay((o) => (o ? { ...o, action: framed ? 'idle' : o.action, anim: { x: dx, y: dy, rotate: 0 }, transition: { duration: 0.18, ease: 'easeOut' } } : o));
@@ -372,6 +381,7 @@ export function RpgChessBoard(): JSX.Element {
     setBlade(null);
     setDucking([]);
     setZoomed(false);
+    killedTypesRef.current = new Set();
     setGameOver(null);
     setBusy(false);
     bump();
@@ -461,7 +471,7 @@ export function RpgChessBoard(): JSX.Element {
                 : { repeat: Infinity, duration: 0.5, delay: (c % 4) * 0.05 };
               return (
                 <motion.div key={sq} style={{ ...common, zIndex: 10 + r }} animate={anim} transition={trans}>
-                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} action="idle" facing="front" />
+                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} action="idle" facing={piece.color === 'w' ? 'back' : 'front'} />
                   <PieceBadge glyph={CAST_GLYPH[piece.type]} color={piece.color} />
                 </motion.div>
               );
@@ -471,7 +481,7 @@ export function RpgChessBoard(): JSX.Element {
             if (kickReact?.pawn === sq) {
               return (
                 <motion.div key={sq} style={{ ...common, zIndex: 30 }} animate={{ x: [0, kickReact.dx * 0.35, 0], y: [0, kickReact.dy * 0.35, 0] }} transition={{ duration: 0.5, times: [0, 0.4, 1], ease: 'easeOut' }}>
-                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} action="idle" facing="front" flip={kickReact.dx < 0} />
+                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} action="idle" facing={piece.color === 'w' ? 'back' : 'front'} flip={kickReact.dx < 0} />
                   <PieceBadge glyph={CAST_GLYPH[piece.type]} color={piece.color} />
                 </motion.div>
               );
@@ -480,7 +490,7 @@ export function RpgChessBoard(): JSX.Element {
             if (kickReact?.victim === sq) {
               return (
                 <motion.div key={sq} style={{ ...common, zIndex: 20 + r }} animate={{ x: [0, kickReact.dx * 0.2, 0], rotate: [0, kickReact.dx >= 0 ? 10 : -10, 0] }} transition={{ duration: 0.6, times: [0, 0.35, 1], ease: 'easeOut' }}>
-                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} action="idle" facing="front" />
+                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} action="idle" facing={piece.color === 'w' ? 'back' : 'front'} />
                   <PieceBadge glyph={CAST_GLYPH[piece.type]} color={piece.color} />
                 </motion.div>
               );
@@ -492,7 +502,7 @@ export function RpgChessBoard(): JSX.Element {
                   animate={{ x: [0, headbutt.fx * 0.5, headbutt.fx], y: [0, -S * 1.5, headbutt.fy], rotate: [0, headbutt.rot * 0.4, headbutt.rot], opacity: [1, 1, 0] }}
                   transition={{ duration: 0.8, ease: 'easeOut' }}
                 >
-                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} action="idle" facing="front" />
+                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} action="idle" facing={piece.color === 'w' ? 'back' : 'front'} />
                   <PieceBadge glyph={CAST_GLYPH[piece.type]} color={piece.color} />
                 </motion.div>
               );
@@ -504,7 +514,7 @@ export function RpgChessBoard(): JSX.Element {
                   animate={{ scaleY: [1, 0.82, 0.18], y: [0, S * 0.1, S * 0.5], rotate: [0, 6, 16], opacity: [1, 1, 0] }}
                   transition={{ duration: 0.36, ease: 'easeIn' }}
                 >
-                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} action="idle" facing="front" />
+                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} action="idle" facing={piece.color === 'w' ? 'back' : 'front'} />
                   <PieceBadge glyph={CAST_GLYPH[piece.type]} color={piece.color} />
                 </motion.div>
               );
@@ -516,7 +526,7 @@ export function RpgChessBoard(): JSX.Element {
                   animate={{ scaleY: [1, 0.66, 0.66, 1], y: [0, S * 0.14, S * 0.14, 0] }}
                   transition={{ duration: 0.66, times: [0, 0.3, 0.6, 1], ease: 'easeInOut' }}
                 >
-                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} action="idle" facing="front" />
+                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} action="idle" facing={piece.color === 'w' ? 'back' : 'front'} />
                   <PieceBadge glyph={CAST_GLYPH[piece.type]} color={piece.color} />
                 </motion.div>
               );
@@ -526,7 +536,7 @@ export function RpgChessBoard(): JSX.Element {
                 key={sq}
                 style={{ ...common, opacity: isDying && dead ? 0 : 1, transition: 'opacity 0.4s ease-out', zIndex: isDying ? 15 : 10 + r }}
               >
-                <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} action="idle" facing="front" />
+                <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} action="idle" facing={piece.color === 'w' ? 'back' : 'front'} />
                 <PieceBadge glyph={CAST_GLYPH[piece.type]} color={piece.color} />
               </div>
             );
