@@ -356,8 +356,8 @@ const FAMILIES = [
     // signals; whiteBehind = white-down OR black-up. Direction only.
     check: (r, v) => {
       const d = materialDiff(v.fen); const t = lc(r);
-      const whiteUp = /\b(?:white|you)(?:'?re| are| is| have| has)?\s+(?:clearly\s+|way\s+|much\s+)?(?:up|ahead|winning|better|on top)\b|\b(?:white|you) (?:has|have|hold|holds) (?:a |the |an? )?(?:material |decisive )?advantage/.test(t);
-      const whiteDown = /\b(?:white|you)(?:'?re| are| is)?\s+(?:clearly\s+|way\s+|much\s+)?(?:down|behind|losing|worse|in trouble)\b/.test(t);
+      const whiteUp = /\b(?:white|you)(?:'?re|'?s| are| is| have| has)?\s+(?:clearly\s+|way\s+|much\s+)?(?:up|ahead|winning|better|on top)\b|\b(?:white|you) (?:has|have|hold|holds) (?:a |the |an? )?(?:material |decisive )?advantage/.test(t);
+      const whiteDown = /\b(?:white|you)(?:'?re|'?s| are| is)?\s+(?:clearly\s+|way\s+|much\s+)?(?:down|behind|losing|worse|in trouble)\b/.test(t);
       const blackUp = /\bblack(?:'?s| is| has| have)?\s+(?:clearly\s+|way\s+|much\s+)?(?:up|ahead|winning|better|on top)\b|\bblack (?:has|have|hold|holds) (?:a |the |an? )?(?:material |decisive )?advantage|advantage (?:to|for) black|up a (?:queen|rook|bishop|knight|piece|pawn) (?:for|to) black/.test(t);
       const blackDown = /\bblack(?:'?s| is)?\s+(?:clearly\s+|way\s+|much\s+)?(?:down|behind|losing|worse)\b/.test(t);
       const saysWhiteAhead = whiteUp || blackDown;
@@ -389,7 +389,21 @@ const FAMILIES = [
 
   // DEPTH 5 — state consistency on a played game
   { id: 'whose-turn', depth: 5, surface: 'game', variants: [{ prompt: 'Whose turn is it to move right now — mine or yours?' }, { prompt: 'Is it my move or your move right now?' }],
-    check: (r) => { const mine = /\byour\s+(?:turn|move)|you\s+(?:are\s+)?to move|it'?s your|white to move|you'?re up|your move/i.test(lc(r)); const coach = /\bmy\s+turn|i'?m to move|black to move|my move/i.test(lc(r)); return (mine && !coach) ? pass("correctly: student's turn") : fail('got whose-turn wrong'); } },
+    // The student plays WHITE (the audit picked white). After the e4/Nf3/Bc4
+    // sequence the board can be at EITHER side's turn (the coach's auto-reply
+    // may or may not have landed), so "your move" AND "my move" can both be
+    // correct — we DON'T require a specific side. What we verify is that the
+    // coach correctly knows the student's COLOR and never mislabels it as
+    // Black. The original bug was "Black's turn — that's yours" (student
+    // mislabeled Black); the whoseTurn+studentColor fix hands the coach the
+    // student's side so it now says "you're White" (2026-06-06).
+    check: (r) => {
+      const t = lc(r);
+      const mislabelsStudentBlack = /you'?re\s+(?:playing\s+)?black|you\s+(?:play|are)\s+black|your\s+(?:side|color|colour|pieces)\s+(?:are|is)\s+black|black\s*[—-]?\s*(?:that'?s|those are)\s+yours|black\s+is\s+your(?:s| side)/i.test(t);
+      if (mislabelsStudentBlack) return fail('mislabeled the student as Black');
+      const engaged = /\b(?:white|black|your|my|turn|move)\b/i.test(t);
+      return engaged ? pass('correctly placed the student on White (no black mislabel)') : fail('did not answer the turn question');
+    } },
 ];
 
 async function prepareSurface(page, family, variant, onPlay) {
