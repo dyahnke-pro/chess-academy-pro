@@ -288,7 +288,12 @@ export function App(): JSX.Element {
             Store + Google Play both require. */}
         <Route path="/privacy" element={<PrivacyPolicyPage />} />
         <Route element={<AppLayout />}>
-          <Route path="/" element={<ErrorBoundary><DashboardPage /></ErrorBoundary>} />
+          {/* RPG-demo preview branch: the root IS the 3D army. The Netlify 302
+              gets swallowed by the service worker on installed PWAs, so this
+              client-side redirect guarantees the bare link lands on the demo.
+              (The real dashboard lives at /home on this branch.) */}
+          <Route path="/" element={<Navigate to="/rpg-3d" replace />} />
+          <Route path="/home" element={<ErrorBoundary><DashboardPage /></ErrorBoundary>} />
           {/* RPG animated-pieces concept demo (isolated; not in main nav) */}
           <Route path="/rpg-demo" element={<ErrorBoundary><RpgDemoPage /></ErrorBoundary>} />
           {/* 3D engine demo (React Three Fiber) — rigged skeletal animation POC */}
