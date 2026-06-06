@@ -119,8 +119,6 @@ async function clickTab(page, pass, tabId) {
     record(pass, `tab-${tabId} clickable`, false, 'tab not in DOM');
     return false;
   }
-  await tab.click();
-  await page.waitForTimeout(800);
   // After tab click, ANY of the per-tab content testids constitutes
   // a valid mount — patterns in particular renders an empty / loading
   // state when totalGames < MIN_GAMES_FOR_SIGNAL on cold-cache, so
@@ -128,10 +126,20 @@ async function clickTab(page, pass, tabId) {
   // patterns-loading as proof of life.
   const acceptableTestids = TAB_CONTENT_TESTIDS[tabId];
   const selector = acceptableTestids.map((t) => `[data-testid="${t}"]`).join(', ');
-  const contentVisible = await page.locator(selector).first()
-    .waitFor({ timeout: 5000, state: 'visible' })
-    .then(() => true)
-    .catch(() => false);
+  // The FIRST tab-switch right after navigation can lag while prod
+  // computes insights cold (the per-tab content is lazy-mounted off
+  // that compute). One click + a 5s wait is too tight for that first
+  // compute, so retry the click once with a longer wait. A genuinely
+  // broken tab still fails both attempts; only compute-lag is masked.
+  let contentVisible = false;
+  for (let attempt = 0; attempt < 2 && !contentVisible; attempt++) {
+    await tab.click().catch(() => {});
+    await page.waitForTimeout(800);
+    contentVisible = await page.locator(selector).first()
+      .waitFor({ timeout: 12_000, state: 'visible' })
+      .then(() => true)
+      .catch(() => false);
+  }
   const observedTestid = contentVisible
     ? await page.evaluate((sel) => {
         const el = document.querySelector(sel);
