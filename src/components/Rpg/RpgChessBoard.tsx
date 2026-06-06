@@ -106,6 +106,10 @@ export function RpgChessBoard(): JSX.Element {
   const bladeKeyRef = useRef(0);
   // Pieces the knight is currently leaping OVER — they duck under the horse.
   const [ducking, setDucking] = useState<string[]>([]);
+  // Random cinematic close-up: the board punches in on the kill square, then out.
+  // The origin lives in a ref so zooming back out stays anchored on the kill (no snap).
+  const [zoomed, setZoomed] = useState(false);
+  const camOriginRef = useRef('50% 50%');
   // Rook charge: ground fire licking up under the feet along the charge path,
   // and the victim getting shield-bashed clean off the board.
   const [fireTrail, setFireTrail] = useState<{ path: SqXY[]; key: number } | null>(null);
@@ -141,6 +145,12 @@ export function RpgChessBoard(): JSX.Element {
     const dir = faceDir(from, to);
     const dist = Math.max(Math.abs(dx), Math.abs(dy)) / S;
     const walkDur = Math.max(0.4, dist * 0.16);
+    // Random cinematic kill-shot: punch in on a fraction of captures. Skip the
+    // rook charge — its victim flies OFF the board, which reads better wide.
+    const closeUp = !!target && style !== 'charge' && Math.random() < 0.5;
+    const killOx = toP.x + S / 2;
+    const killOy = PAD + toP.y + S * 0.45;
+    const punchIn = (): void => { if (closeUp) { camOriginRef.current = `${killOx}px ${killOy}px`; setZoomed(true); } };
 
     setBusy(true);
     setSelected(null);
@@ -164,6 +174,7 @@ export function RpgChessBoard(): JSX.Element {
       if (soundRef.current) playArrowSound();
       await sleep(250);
       if (!alive()) return;
+      punchIn(); // close-up as the arrow lands
       setDying(to);
       if (soundRef.current) playCaptureSound(target.type);
       setArrow(null);
@@ -188,6 +199,7 @@ export function RpgChessBoard(): JSX.Element {
       setDucking([]);
       if (!alive()) return;
       if (target) {
+        punchIn(); // close-up as the axe comes down
         setOverlay((o) => (o ? { ...o, action: framed ? 'attack' : o.action, anim: { x: dx, y: dy, scale: [1, 1.12, 1] }, transition: { duration: 0.36 } } : o));
         await sleep(360);
         setDying(to);
@@ -241,6 +253,7 @@ export function RpgChessBoard(): JSX.Element {
         if (moving.type === 'p' && Math.random() < 0.5) {
           // Assassin's Creed hidden-blade kill: dart in low, the blade flicks out,
           // one thrust, and the victim crumples in place — instant.
+          punchIn(); // close-up on the hidden-blade strike
           setOverlay((o) => (o ? { ...o, action: 'idle', anim: { x: dx, y: dy, scale: [1, 1.12, 1], rotate: [0, dir === 'left' ? -7 : 7, 0] }, transition: { duration: 0.2 } } : o));
           setBlade({ x: toP.x + S / 2, y: PAD + toP.y + S * 0.42, key: ++bladeKeyRef.current });
           await sleep(150);
@@ -263,6 +276,7 @@ export function RpgChessBoard(): JSX.Element {
             const swing = dir === 'left' ? -24 : 24; // puppet swing toward the target
             setOverlay((o) => (o ? { ...o, anim: { x: dx, y: dy, scale: [1, 1.15, 1], rotate: [0, swing, 0] }, transition: { duration: 0.34 } } : o));
           }
+          punchIn(); // close-up on the strike
           await sleep(moving.type === 'p' ? 420 : 340);
           setDying(to);
           if (soundRef.current) playCaptureSound(target.type);
@@ -283,6 +297,7 @@ export function RpgChessBoard(): JSX.Element {
     setHeadbutt(null);
     setCrumple(null);
     setDucking([]);
+    setZoomed(false); // zoom back out
     window.setTimeout(() => setBlade(null), 240);
     bump();
 
@@ -356,6 +371,7 @@ export function RpgChessBoard(): JSX.Element {
     setCrumple(null);
     setBlade(null);
     setDucking([]);
+    setZoomed(false);
     setGameOver(null);
     setBusy(false);
     bump();
@@ -370,9 +386,11 @@ export function RpgChessBoard(): JSX.Element {
         {status}
       </div>
 
-      <div
+      <motion.div
         className="relative rounded-lg overflow-hidden"
-        style={{ width: 8 * S, height: 8 * S + PAD, boxShadow: '0 0 22px 2px rgba(74,222,128,0.14)', background: '#0c1410' }}
+        style={{ width: 8 * S, height: 8 * S + PAD, boxShadow: '0 0 22px 2px rgba(74,222,128,0.14)', background: '#0c1410', transformOrigin: camOriginRef.current }}
+        animate={{ scale: zoomed ? 1.85 : 1 }}
+        transition={{ duration: 0.34, ease: zoomed ? 'easeOut' : 'easeInOut' }}
         data-testid="rpg-chess-board"
         data-fen={game.fen()}
         data-selected={selected ?? ''}
@@ -549,7 +567,7 @@ export function RpgChessBoard(): JSX.Element {
             <CastToken type={overlay.type} color={overlay.color} w={TOKEN_W} h={pieceH(overlay.type)} glow={CAST_TEAM_GLOW[overlay.color]} flip={overlay.flip} action={overlay.action} facing={overlay.facing} />
           </motion.div>
         )}
-      </div>
+      </motion.div>
 
       <div className="flex gap-3">
         <button

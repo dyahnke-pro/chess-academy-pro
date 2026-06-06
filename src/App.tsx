@@ -438,7 +438,7 @@ export function App(): JSX.Element {
     {/* First-run strength bubble — the first coach-mark to pop, blocking
         until answered, so a beginner's difficulty is set before anything
         else. Imports bypass it (calibrated silently at boot). */}
-    {needsCalibration && activeProfile && (
+    {needsCalibration && activeProfile && !window.location.pathname.startsWith('/rpg-demo') && (
       <StrengthCalibrationBubble onDone={() => setNeedsCalibration(false)} />
     )}
     </>
