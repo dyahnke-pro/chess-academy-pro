@@ -5,6 +5,7 @@ import {
   getRepertoireOpenings,
   getOpeningsByEcoLetter,
   searchOpenings,
+  toggleFavorite,
 } from '../../services/openingService';
 import { seedDatabase, whenFullySeeded } from '../../services/dataLoader';
 import { db } from '../../db/schema';
@@ -17,6 +18,13 @@ import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { BookOpen, Library, ChevronDown, ChevronRight, Users, Swords, Sparkles, GraduationCap } from 'lucide-react';
 
 type TabMode = 'masterclasses' | 'pro' | 'gambits' | 'all';
+
+/** Favorited openings pinned to the top of a list (David 2026-06-06:
+ *  "favorite openings are not saved at the top"). Stable: preserves the
+ *  original relative order within the favorited and non-favorited groups. */
+function favoritesFirst(list: OpeningRecord[]): OpeningRecord[] {
+  return [...list].sort((a, b) => Number(b.isFavorite) - Number(a.isFavorite));
+}
 
 const ECO_LETTERS = ['A', 'B', 'C', 'D', 'E'] as const;
 
@@ -119,6 +127,21 @@ export function OpeningExplorerPage(): JSX.Element {
     setSearchResultIds(new Set(results.map((r) => r.id)));
   }, []);
 
+  // Favorite from the LIST (not just the detail page). David 2026-06-06: the
+  // explorer cards had no heart — you had to open an opening to favorite it.
+  // Flip in Dexie + mirror into both the flat `allOpenings` list and the
+  // per-letter `ecoGroups` so the heart + the favorites-first sort update live.
+  const handleToggleFavorite = useCallback(async (id: string): Promise<void> => {
+    const newVal = await toggleFavorite(id);
+    const patch = (o: OpeningRecord): OpeningRecord => (o.id === id ? { ...o, isFavorite: newVal } : o);
+    setAllOpenings((prev) => prev.map(patch));
+    setEcoGroups((prev) => {
+      const next: Record<string, OpeningRecord[]> = {};
+      for (const [letter, list] of Object.entries(prev)) next[letter] = list.map(patch);
+      return next;
+    });
+  }, []);
+
   const toggleLetter = useCallback((letter: string): void => {
     setExpandedLetters((prev) => {
       const next = new Set(prev);
@@ -134,7 +157,7 @@ export function OpeningExplorerPage(): JSX.Element {
   // All openings search results
   const displayAllSearch = useMemo((): OpeningRecord[] | null => {
     if (tab !== 'all' || !searchResultIds) return null;
-    return allOpenings.filter((o) => searchResultIds.has(o.id));
+    return favoritesFirst(allOpenings.filter((o) => searchResultIds.has(o.id)));
   }, [tab, searchResultIds, allOpenings]);
 
   if (loading) {
@@ -245,6 +268,7 @@ export function OpeningExplorerPage(): JSX.Element {
                     key={opening.id}
                     opening={opening}
                     onClick={() => void navigate(`/openings/${opening.id}`)}
+                    onToggleFavorite={() => void handleToggleFavorite(opening.id)}
                   />
                 ))}
               </div>
@@ -285,11 +309,12 @@ export function OpeningExplorerPage(): JSX.Element {
                 </button>
                 {isExpanded && (
                   <div className="mt-1.5 space-y-1.5 pl-2">
-                    {group.map((opening) => (
+                    {favoritesFirst(group).map((opening) => (
                       <OpeningCard
                         key={opening.id}
                         opening={opening}
                         onClick={() => void navigate(`/openings/${opening.id}`)}
+                        onToggleFavorite={() => void handleToggleFavorite(opening.id)}
                       />
                     ))}
                   </div>

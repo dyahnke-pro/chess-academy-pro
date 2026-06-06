@@ -2,6 +2,7 @@
 // Fallback chain: Amazon Polly → Web Speech API
 // Only this file may call TTS APIs.
 
+import { Capacitor } from '@capacitor/core';
 import { speechService } from './speechService';
 import { getSharedAudioContext } from './audioContextManager';
 import { stripCoachMarkup, formatForSpeech } from './sanitizeCoachText';
@@ -149,7 +150,28 @@ export function resolvePollySecondaryVoice(
 
 /** Absolute URL for Polly TTS — needed when running inside Capacitor WKWebView */
 const VERCEL_ORIGIN = 'https://chess-academy-pro.vercel.app';
-const isCapacitor = typeof window !== 'undefined' && window.location.protocol === 'capacitor:';
+
+/**
+ * True when running inside the native (Capacitor) app, where the web assets
+ * are served from a `capacitor://…` origin and `/api/tts` must be called
+ * ABSOLUTELY against VERCEL_ORIGIN (a relative URL hits the local bundle,
+ * which has no API → silent narration).
+ *
+ * Use Capacitor's official `isNativePlatform()` as the primary signal — it's
+ * scheme-independent. The old check sniffed `window.location.protocol ===
+ * 'capacitor:'`, which silently broke when the WKWebView served under a
+ * different scheme/hostname (e.g. after the `server.hostname` change): native
+ * was misdetected as web, the TTS URL went relative, and narration died on
+ * device while the web kept working (David 2026-06-06). The protocol sniff is
+ * kept as a defensive fallback. (David's app: no narration after the rebuild.)
+ */
+function detectNativeApp(): boolean {
+  try {
+    if (Capacitor.isNativePlatform()) return true;
+  } catch { /* @capacitor/core unavailable — fall through */ }
+  return typeof window !== 'undefined' && window.location.protocol === 'capacitor:';
+}
+const isCapacitor = detectNativeApp();
 
 export function getTtsUrl(text: string, voice: string, useSsml = true, style?: string): string {
   const base = isCapacitor ? VERCEL_ORIGIN : '';

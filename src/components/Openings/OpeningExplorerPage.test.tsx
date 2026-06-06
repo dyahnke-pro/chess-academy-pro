@@ -8,6 +8,7 @@ import { OpeningExplorerPage } from './OpeningExplorerPage';
 const mockGetRepertoireOpenings = vi.fn();
 const mockSearchOpenings = vi.fn();
 const mockGetOpeningsByEcoLetter = vi.fn();
+const mockToggleFavorite = vi.fn();
 
 const whiteOpening = {
   id: 'vienna-game',
@@ -87,6 +88,7 @@ vi.mock('../../services/openingService', () => ({
   getOpeningsByEcoLetter: (...args: unknown[]): unknown => mockGetOpeningsByEcoLetter(...args),
   getMasteryPercent: (o: typeof whiteOpening) => Math.round(o.drillAccuracy * 100),
   needsReview: (o: typeof whiteOpening) => o.drillAttempts > 0 && o.drillAccuracy < 0.7,
+  toggleFavorite: (...args: unknown[]): unknown => mockToggleFavorite(...args),
 }));
 
 vi.mock('../../services/dataLoader', () => ({
@@ -123,6 +125,7 @@ describe('OpeningExplorerPage', () => {
       if (letter === 'A') return Promise.resolve([ecoOpening]);
       return Promise.resolve([]);
     });
+    mockToggleFavorite.mockResolvedValue(true);
   });
 
   it('renders the page title', async () => {
@@ -223,6 +226,23 @@ describe('OpeningExplorerPage', () => {
     await waitFor(() => {
       expect(screen.getByText('Amar Opening')).toBeInTheDocument();
     });
+  });
+
+  it('shows a favorite heart on list cards and toggles it (David 2026-06-06)', async () => {
+    const user = userEvent.setup();
+    render(<OpeningExplorerPage />);
+
+    await waitFor(() => expect(screen.getByTestId('tab-all')).toBeInTheDocument());
+    await user.click(screen.getByTestId('tab-all'));
+    await waitFor(() => expect(screen.getByTestId('eco-toggle-A')).toBeInTheDocument());
+    await user.click(screen.getByTestId('eco-toggle-A'));
+
+    // The heart must be on the LIST card now — no need to open the detail page.
+    const heart = await screen.findByTestId('favorite-toggle-a00-amar-opening');
+    expect(heart).toBeInTheDocument();
+
+    await user.click(heart);
+    expect(mockToggleFavorite).toHaveBeenCalledWith('a00-amar-opening');
   });
 
   it('search query calls searchOpenings after debounce', async () => {
