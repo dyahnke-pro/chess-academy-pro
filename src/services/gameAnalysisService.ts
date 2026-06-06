@@ -1,3 +1,4 @@
+import { Capacitor } from '@capacitor/core';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { stockfishEngine } from './stockfishEngine';
@@ -24,7 +25,29 @@ const BEST_MOVE_DEPTH = 18;
 const BLUNDER_CP = 300;
 const MISTAKE_CP = 100;
 const INACCURACY_CP = 50;
-const WORKER_POOL_SIZE = 6;
+/**
+ * How many Stockfish engines to run in parallel for batch analysis.
+ *
+ * Each worker is a full WASM engine. On a desktop browser (8+ cores) running
+ * 6 is smooth — which is why the web app never glitches. On a PHONE (Capacitor
+ * WKWebView, 4-6 thermally-limited cores, less RAM) 6 concurrent engines
+ * saturate the CPU and starve the main thread, so the whole app goes
+ * glitchy / slow / frozen while analysis runs — and analysis runs right after
+ * importing a big game library (David 2026-06-06: "the APP is frozen", web is
+ * fine). Cap hard on native so the UI always keeps a couple of cores free.
+ */
+function resolveWorkerPoolSize(): number {
+  const cores = (typeof navigator !== 'undefined' && navigator.hardwareConcurrency) || 4;
+  let isNative = false;
+  try { isNative = Capacitor.isNativePlatform(); } catch { /* web */ }
+  if (isNative) {
+    // Phone: never more than 2, always leave cores for the UI + voice.
+    return Math.max(1, Math.min(2, cores - 2));
+  }
+  // Desktop web: keep it quick but don't hog every core.
+  return Math.max(2, Math.min(6, cores - 1));
+}
+const WORKER_POOL_SIZE = resolveWorkerPoolSize();
 const INIT_TIMEOUT_MS = 45_000;
 
 // Abort signal for background suspension
