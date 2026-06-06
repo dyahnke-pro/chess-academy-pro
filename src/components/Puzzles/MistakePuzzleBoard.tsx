@@ -536,7 +536,9 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     }).then((response) => {
       setWhyLoading(false);
       setSubtitle(response);
-      void voiceService.speak(response);
+      // GROUND the spoken explanation against the puzzle position — the
+      // voice must not claim something untrue on the board (David 2026-06-06).
+      void voiceService.speakGrounded(response, puzzle.fen);
     }).catch(() => {
       setWhyLoading(false);
       // Fallback to tactic-specific coaching
@@ -581,7 +583,8 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
         ].filter(Boolean).join('\n'),
       });
       setChatReply(reply);
-      void voiceService.speak(reply);
+      // GROUND the spoken chat answer against the live board (David 2026-06-06).
+      void voiceService.speakGrounded(reply, fen);
       setChatInput('');
     } catch {
       setChatReply('Coach is unavailable right now — try again in a moment.');
