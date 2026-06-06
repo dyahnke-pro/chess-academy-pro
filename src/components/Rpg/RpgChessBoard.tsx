@@ -4,7 +4,7 @@ import { Chess, type Square } from 'chess.js';
 import { CastToken } from './CastToken';
 import { CAST_GLYPH, CAST_TEAM_GLOW } from './rpgCast';
 import { attackStyle } from './rpgRoster';
-import { playCaptureSound, playArrowSound, playMoveSound, playWarCry, playQueenLaugh, playPawnTaunt } from './rpgSfx';
+import { playCaptureSound, playArrowSound, playMoveSound, playWarCry, playQueenLaugh, playPawnTaunt, playChargeSound } from './rpgSfx';
 
 const S = 46; // square size (px) — 8×46 = 368, fits a phone
 const TOKEN_W = S; // footprint width = one square
@@ -61,6 +61,10 @@ export function RpgChessBoard(): JSX.Element {
   // pokes toward `victim` and that piece recoils — but stays on the board.
   const [kickReact, setKickReact] = useState<{ pawn: string; victim: string; dx: number; dy: number } | null>(null);
   const [arrow, setArrow] = useState<{ x0: number; y0: number; x1: number; y1: number; fly: boolean } | null>(null);
+  // Rook charge: a fire trail rising from the board base + a head-butt knockback.
+  const [fireTrail, setFireTrail] = useState<{ x0: number; x1: number; key: number } | null>(null);
+  const [headbutt, setHeadbutt] = useState<{ square: string; dx: number; dy: number; rot: number } | null>(null);
+  const fireKeyRef = useRef(0);
   const runRef = useRef(0);
 
   const game = gameRef.current;
@@ -136,6 +140,26 @@ export function RpgChessBoard(): JSX.Element {
         setDead(true);
         await sleep(170);
       }
+    } else if (style === 'charge') {
+      // Armored guard: a fast charge trailing fire from the board's base, then
+      // a head-butt that knocks the victim clean off.
+      if (soundRef.current) { playMoveSound(moving.type); playChargeSound(); }
+      setFireTrail({ x0: Math.min(fromP.x, toP.x), x1: Math.max(fromP.x, toP.x) + S, key: ++fireKeyRef.current });
+      const chargeDur = Math.max(0.2, dist * 0.075); // markedly faster than the other pieces
+      setOverlay({ ...base, anim: { x: dx, y: dy }, transition: { x: { duration: chargeDur, ease: 'easeIn' }, y: { duration: chargeDur, ease: 'easeIn' } } });
+      await sleep(chargeDur * 1000 + 60);
+      if (!alive()) { setFireTrail(null); return; }
+      if (target) {
+        if (soundRef.current) playCaptureSound(target.type);
+        setOverlay((o) => (o ? { ...o, anim: { x: dx, y: dy, scale: [1, 1.22, 1.05] }, transition: { duration: 0.16 } } : o));
+        setHeadbutt({ square: to, dx: (dx >= 0 ? 1 : -1) * S * 1.3, dy: -S * 0.5, rot: dx >= 0 ? 45 : -45 });
+        setDying(to);
+        await sleep(540);
+        setDead(true);
+        await sleep(120);
+        setHeadbutt(null);
+      }
+      window.setTimeout(() => setFireTrail(null), 250);
     } else {
       // Melee: march to the square, strike if occupied.
       if (soundRef.current) playMoveSound(moving.type);
@@ -224,6 +248,8 @@ export function RpgChessBoard(): JSX.Element {
     setDead(false);
     setKickReact(null);
     setArrow(null);
+    setFireTrail(null);
+    setHeadbutt(null);
     setBusy(false);
     bump();
   }, []);
@@ -317,6 +343,18 @@ export function RpgChessBoard(): JSX.Element {
                 </motion.div>
               );
             }
+            // Head-butted by a charging rook: the victim flies off the board.
+            if (headbutt?.square === sq) {
+              return (
+                <motion.div key={sq} style={{ ...common, zIndex: 18 }}
+                  animate={{ x: [0, headbutt.dx, headbutt.dx * 1.7], y: [0, headbutt.dy, headbutt.dy + S * 1.6], rotate: [0, headbutt.rot, headbutt.rot * 2.2], opacity: [1, 1, 0] }}
+                  transition={{ duration: 0.62, times: [0, 0.28, 1], ease: 'easeOut' }}
+                >
+                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} />
+                  <PieceBadge glyph={CAST_GLYPH[piece.type]} color={piece.color} />
+                </motion.div>
+              );
+            }
             return (
               <div
                 key={sq}
@@ -328,6 +366,9 @@ export function RpgChessBoard(): JSX.Element {
             );
           }),
         )}
+
+        {/* Rook's fire trail (rises from the board base along the charge path) */}
+        {fireTrail && <FireTrail key={fireTrail.key} x0={fireTrail.x0} x1={fireTrail.x1} boardH={8 * S + PAD} />}
 
         {/* Arrow projectile */}
         {arrow && (
@@ -370,6 +411,38 @@ export function RpgChessBoard(): JSX.Element {
           {soundOn ? '🔊 Sound' : '🔇 Muted'}
         </button>
       </div>
+    </div>
+  );
+}
+
+function FireTrail({ x0, x1, boardH }: { x0: number; x1: number; boardH: number }): JSX.Element {
+  const width = Math.max(1, x1 - x0);
+  const count = Math.max(3, Math.round(width / 22));
+  return (
+    <div style={{ position: 'absolute', left: x0, bottom: 0, width, height: boardH * 0.6, pointerEvents: 'none', zIndex: 33 }}>
+      {Array.from({ length: count }, (_, i) => {
+        const fx = (i / (count - 1 || 1)) * width;
+        const fh = boardH * (0.34 + Math.random() * 0.22);
+        return (
+          <motion.div
+            key={i}
+            style={{
+              position: 'absolute',
+              left: fx - 15,
+              bottom: 0,
+              width: 30,
+              height: fh,
+              background:
+                'radial-gradient(ellipse at 50% 100%, rgba(255,235,140,0.95) 0%, rgba(255,140,20,0.85) 35%, rgba(220,40,10,0.5) 65%, transparent 80%)',
+              filter: 'blur(1px)',
+              borderRadius: '50% 50% 45% 45% / 60% 60% 40% 40%',
+            }}
+            initial={{ opacity: 0, scaleY: 0.5 }}
+            animate={{ opacity: [0, 0.95, 0.7, 0], scaleY: [0.5, 1.1, 0.9, 0.3], scaleX: [1, 0.85, 1.05, 0.9] }}
+            transition={{ duration: 0.8, delay: Math.random() * 0.15, times: [0, 0.2, 0.6, 1], ease: 'easeOut' }}
+          />
+        );
+      })}
     </div>
   );
 }

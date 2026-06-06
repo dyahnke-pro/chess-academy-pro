@@ -12,7 +12,7 @@ import type { CharacterLayer } from './LpcCharacter';
 //   Bishop — hooded archer with bow + quiver — shoots, then advances
 //   Pawn   — leather cap, tunic, spear (the peasant levy)
 
-export type AttackStyle = 'melee' | 'leap' | 'ranged';
+export type AttackStyle = 'melee' | 'leap' | 'ranged' | 'charge';
 
 const ROOT = '/rpg';
 const KIT = '/rpg/kit';
@@ -48,7 +48,8 @@ const TEAM_GLOW: Record<'w' | 'b', string> = {
 };
 
 const ATTACK_BY_TYPE: Record<string, AttackStyle> = {
-  p: 'melee', r: 'melee', q: 'melee', k: 'melee',
+  p: 'melee', q: 'melee', k: 'melee',
+  r: 'charge', // armored guard — fast charge + head-butt, fire trail
   n: 'leap', // rider — leaps over pieces
   b: 'ranged', // archer — shoots, then advances
 };

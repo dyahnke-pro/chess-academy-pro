@@ -197,6 +197,36 @@ export function playMoveSound(type: string): void {
 }
 
 /** A bowstring release + arrow whoosh — played when the archer looses. */
+/** The rook's charge — a low rumble + a sustained fire crackle. */
+export function playChargeSound(): void {
+  const c = audio();
+  if (!c) return;
+  try {
+    const t = c.currentTime;
+    tone(c, t, 'sawtooth', 90, 48, 0.5, 0.16); // charge rumble
+    // fire crackle: sustained band-passed noise
+    const dur = 0.6;
+    const n = c.createBufferSource();
+    const buf = c.createBuffer(1, Math.max(1, Math.ceil(c.sampleRate * dur)), c.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    n.buffer = buf;
+    const bp = c.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.frequency.value = 1100;
+    bp.Q.value = 0.6;
+    const g = c.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.12, t + 0.05);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    n.connect(bp).connect(g).connect(c.destination);
+    n.start(t);
+    n.stop(t + dur);
+  } catch {
+    /* ignore */
+  }
+}
+
 export function playArrowSound(): void {
   const c = audio();
   if (!c) return;
