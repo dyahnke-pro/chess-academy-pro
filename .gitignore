@@ -62,3 +62,6 @@ scripts/*.pth
 # Modern-cast tokens (derived from rpg-cast-src/ragnarok-sheet.png via
 # scripts/slice-cast.py) — COMMITTED so the deployed build ships them.
 scripts/*.onnx
+
+# Python bytecode cache
+__pycache__/
