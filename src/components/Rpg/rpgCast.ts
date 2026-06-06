@@ -11,6 +11,11 @@ const ROLE: Record<string, string> = {
   p: 'pawn', // hooded Rogue
 };
 
+/** Piece letter → role name (king/queen/rook/knight/bishop/pawn). */
+export function roleOf(type: string): string {
+  return ROLE[type] ?? 'pawn';
+}
+
 /** Image path for a piece's token. White = light (heroic), Black = dark (recolored). */
 export function castImage(type: string, color: 'w' | 'b'): string {
   return `/rpg/cast/${ROLE[type] ?? 'pawn'}-${color === 'w' ? 'light' : 'dark'}.png`;
