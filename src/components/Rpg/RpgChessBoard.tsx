@@ -31,6 +31,42 @@ function faceDir(from: string, to: string): Dir {
   if (Math.abs(dx) >= Math.abs(dy)) return dx > 0 ? 'right' : 'left';
   return dy > 0 ? 'down' : 'up';
 }
+/** Inclusive straight-line squares from `from` to `to` (rank, file, or diagonal). */
+function squaresBetween(from: string, to: string): string[] {
+  const f0 = from.charCodeAt(0) - 97;
+  const r0 = parseInt(from[1], 10);
+  const f1 = to.charCodeAt(0) - 97;
+  const r1 = parseInt(to[1], 10);
+  const df = Math.sign(f1 - f0);
+  const dr = Math.sign(r1 - r0);
+  const steps = Math.max(Math.abs(f1 - f0), Math.abs(r1 - r0));
+  const out: string[] = [];
+  for (let i = 0; i <= steps; i++) out.push(`${'abcdefgh'[f0 + df * i]}${r0 + dr * i}`);
+  return out;
+}
+/** Bottom-center (the foot line) of a square, in board px — where fire licks up. */
+function footCenter(square: string): SqXY {
+  const p = sqXY(square);
+  return { x: p.x + S / 2, y: PAD + p.y + S };
+}
+/** Squares whose centre lies under the knight's leap arc (between, not at, the
+ *  endpoints) — those pieces duck as the horse sails over them. */
+function squaresUnderLeap(occupied: string[], from: string, to: string): string[] {
+  const a = sqXY(from);
+  const b = sqXY(to);
+  const vx = b.x - a.x;
+  const vy = b.y - a.y;
+  const len2 = vx * vx + vy * vy || 1;
+  return occupied.filter((sq) => {
+    if (sq === from || sq === to) return false;
+    const q = sqXY(sq);
+    const t = ((q.x - a.x) * vx + (q.y - a.y) * vy) / len2;
+    if (t < 0.18 || t > 0.82) return false;
+    const px = a.x + t * vx;
+    const py = a.y + t * vy;
+    return Math.hypot(q.x - px, q.y - py) < S * 0.62;
+  });
+}
 
 interface Overlay {
   type: string;
@@ -64,9 +100,16 @@ export function RpgChessBoard(): JSX.Element {
   // pokes toward `victim` and that piece recoils — but stays on the board.
   const [kickReact, setKickReact] = useState<{ pawn: string; victim: string; dx: number; dy: number } | null>(null);
   const [arrow, setArrow] = useState<{ x0: number; y0: number; x1: number; y1: number; fly: boolean } | null>(null);
-  // Rook charge: a fire trail rising from the board base + a head-butt knockback.
-  const [fireTrail, setFireTrail] = useState<{ x0: number; x1: number; key: number } | null>(null);
-  const [headbutt, setHeadbutt] = useState<{ square: string; dx: number; dy: number; rot: number } | null>(null);
+  // Pawn (assassin) hidden-blade kill: a blade glint + the victim crumpling in place.
+  const [crumple, setCrumple] = useState<string | null>(null);
+  const [blade, setBlade] = useState<{ x: number; y: number; key: number } | null>(null);
+  const bladeKeyRef = useRef(0);
+  // Pieces the knight is currently leaping OVER — they duck under the horse.
+  const [ducking, setDucking] = useState<string[]>([]);
+  // Rook charge: ground fire licking up under the feet along the charge path,
+  // and the victim getting shield-bashed clean off the board.
+  const [fireTrail, setFireTrail] = useState<{ path: SqXY[]; key: number } | null>(null);
+  const [headbutt, setHeadbutt] = useState<{ square: string; fx: number; fy: number; rot: number } | null>(null);
   const fireKeyRef = useRef(0);
   // At game end the winning army celebrates; the losers throw a fit (or all
   // slump on a draw, winner = null).
@@ -133,15 +176,20 @@ export function RpgChessBoard(): JSX.Element {
       setOverlay((o) => (o ? { ...o, anim: { x: dx, y: dy }, transition: { x: { duration: walkDur, ease: 'linear' }, y: { duration: walkDur, ease: 'linear' } } } : o));
       await sleep(walkDur * 1000 + 80);
     } else if (style === 'leap') {
-      // Rider: gallop + leap in an arc OVER whatever is in the way.
+      // Rider: gallop + a controlled hop arcing OVER whatever's in the way and
+      // landing ON the square — the arc is clamped so it never sails off the top
+      // of the board — then the axe comes down.
       if (soundRef.current) playMoveSound(moving.type);
-      const arc = Math.min(140, 70 + dist * 18);
-      setOverlay({ ...base, anim: { x: dx, y: [0, -arc, dy] }, transition: { x: { duration: 0.72, ease: 'easeOut' }, y: { duration: 0.72, ease: 'easeOut', times: [0, 0.5, 1] } } });
-      await sleep(760);
+      const occupied = g.board().flat().filter((p): p is NonNullable<typeof p> => !!p).map((p) => p.square);
+      setDucking(squaresUnderLeap(occupied, from, to)); // pieces under the arc duck
+      const arc = Math.min(52, 24 + dist * 6, base.baseY + 16); // gentle; stays on-screen
+      setOverlay({ ...base, anim: { x: dx, y: [0, -arc, dy] }, transition: { x: { duration: 0.66, ease: 'easeInOut' }, y: { duration: 0.66, ease: 'easeInOut', times: [0, 0.5, 1] } } });
+      await sleep(700);
+      setDucking([]);
       if (!alive()) return;
       if (target) {
-        setOverlay((o) => (o ? { ...o, anim: { x: dx, y: dy, scale: [1, 1.14, 1] }, transition: { duration: 0.34 } } : o));
-        await sleep(340);
+        setOverlay((o) => (o ? { ...o, action: framed ? 'attack' : o.action, anim: { x: dx, y: dy, scale: [1, 1.12, 1] }, transition: { duration: 0.36 } } : o));
+        await sleep(360);
         setDying(to);
         if (soundRef.current) playCaptureSound(target.type);
         await sleep(500);
@@ -149,26 +197,40 @@ export function RpgChessBoard(): JSX.Element {
         await sleep(170);
       }
     } else if (style === 'charge') {
-      // Armored guard: a fast charge trailing fire from the board's base, then
-      // a head-butt that knocks the victim clean off.
+      // Armored guard: a fast charge — leaning forward, fire licking up under the
+      // feet — that STOPS one square short and shield-bashes the victim clean off
+      // the board.
       if (soundRef.current) { playMoveSound(moving.type); playChargeSound(); }
-      setFireTrail({ x0: Math.min(fromP.x, toP.x), x1: Math.max(fromP.x, toP.x) + S, key: ++fireKeyRef.current });
-      const chargeDur = Math.max(0.2, dist * 0.075); // markedly faster than the other pieces
-      setOverlay({ ...base, anim: { x: dx, y: dy }, transition: { x: { duration: chargeDur, ease: 'easeIn' }, y: { duration: chargeDur, ease: 'easeIn' } } });
-      await sleep(chargeDur * 1000 + 60);
+      const lineSquares = squaresBetween(from, to);
+      const approachSq = lineSquares.length >= 2 ? lineSquares[lineSquares.length - 2] : from;
+      const aP = sqXY(approachSq);
+      const adx = aP.x - fromP.x;
+      const ady = aP.y - fromP.y;
+      const lean = dir === 'left' ? -10 : dir === 'right' ? 10 : 0; // lean into the charge
+      setFireTrail({ path: lineSquares.slice(0, -1).map(footCenter), key: ++fireKeyRef.current });
+      const chargeDur = Math.max(0.18, dist * 0.07); // markedly faster than the other pieces
+      setOverlay({ ...base, anim: { x: adx, y: ady, rotate: [0, lean, lean] }, transition: { x: { duration: chargeDur, ease: 'easeIn' }, y: { duration: chargeDur, ease: 'easeIn' }, rotate: { duration: chargeDur } } });
+      await sleep(chargeDur * 1000 + 50);
       if (!alive()) { setFireTrail(null); return; }
       if (target) {
         if (soundRef.current) playCaptureSound(target.type);
-        // Framed rook plays its shield-thrust sequence into the head-butt.
-        setOverlay((o) => (o ? { ...o, action: framed ? 'attack' : o.action, anim: { x: dx, y: dy, scale: [1, 1.22, 1.05] }, transition: { duration: 0.16 } } : o));
-        setHeadbutt({ square: to, dx: (dx >= 0 ? 1 : -1) * S * 1.3, dy: -S * 0.5, rot: dx >= 0 ? 45 : -45 });
+        // Shield-bash from the square just before the victim — the rook plays its
+        // shield-thrust frames and the victim is launched off the board.
+        setOverlay((o) => (o ? { ...o, action: framed ? 'attack' : o.action, anim: { x: adx, y: ady, scale: [1, 1.18, 1.05], rotate: [lean, lean * 1.4, 0] }, transition: { duration: 0.2 } } : o));
+        const ux = Math.sign(dx);
+        const uy = Math.sign(dy);
+        const fx = ux !== 0 ? ux * S * 6 : (Math.random() < 0.5 ? -1 : 1) * S * 0.7;
+        const fy = uy !== 0 ? uy * S * 6 - S * 1.5 : -S * 2.4;
+        setHeadbutt({ square: to, fx, fy, rot: (ux >= 0 ? 1 : -1) * 760 });
         setDying(to);
-        await sleep(540);
+        await sleep(720); // let the victim sail off the edge
+        if (!alive()) { setFireTrail(null); setHeadbutt(null); return; }
+        // Rook steps onto the cleared square.
+        setOverlay((o) => (o ? { ...o, action: framed ? 'idle' : o.action, anim: { x: dx, y: dy, rotate: 0 }, transition: { duration: 0.18, ease: 'easeOut' } } : o));
+        await sleep(200);
         setDead(true);
-        await sleep(120);
-        setHeadbutt(null);
       }
-      window.setTimeout(() => setFireTrail(null), 250);
+      window.setTimeout(() => setFireTrail(null), 300);
     } else {
       // Melee: march to the square (with a stride sway), strike if occupied.
       if (soundRef.current) playMoveSound(moving.type);
@@ -176,23 +238,38 @@ export function RpgChessBoard(): JSX.Element {
       await sleep(walkDur * 1000 + 80);
       if (!alive()) return;
       if (target) {
-        if (soundRef.current) {
-          if (moving.type === 'p') playWarCry();
-          else if (moving.type === 'q') playQueenLaugh();
-        }
-        if (framed) {
-          // Pieces with a frame set play their real swing sequence.
-          setOverlay((o) => (o ? { ...o, action: 'attack', anim: { x: dx, y: dy, scale: [1, 1.06, 1] }, transition: { duration: 0.36 } } : o));
+        if (moving.type === 'p' && Math.random() < 0.5) {
+          // Assassin's Creed hidden-blade kill: dart in low, the blade flicks out,
+          // one thrust, and the victim crumples in place — instant.
+          setOverlay((o) => (o ? { ...o, action: 'idle', anim: { x: dx, y: dy, scale: [1, 1.12, 1], rotate: [0, dir === 'left' ? -7 : 7, 0] }, transition: { duration: 0.2 } } : o));
+          setBlade({ x: toP.x + S / 2, y: PAD + toP.y + S * 0.42, key: ++bladeKeyRef.current });
+          await sleep(150);
+          if (!alive()) return;
+          if (soundRef.current) playCaptureSound(target.type);
+          setCrumple(to);
+          await sleep(360);
         } else {
-          const swing = dir === 'left' ? -24 : 24; // puppet swing toward the target
-          setOverlay((o) => (o ? { ...o, anim: { x: dx, y: dy, scale: [1, 1.15, 1], rotate: [0, swing, 0] }, transition: { duration: 0.34 } } : o));
+          if (soundRef.current) {
+            if (moving.type === 'p') playWarCry();
+            else if (moving.type === 'q') playQueenLaugh();
+          }
+          if (moving.type === 'p') {
+            // Rogue dagger-spin: the spin frames whirl through the strike.
+            setOverlay((o) => (o ? { ...o, action: 'attack', anim: { x: dx, y: dy, scale: [1, 1.1, 1] }, transition: { duration: 0.42 } } : o));
+          } else if (framed) {
+            // Pieces with a frame set play their real swing sequence.
+            setOverlay((o) => (o ? { ...o, action: 'attack', anim: { x: dx, y: dy, scale: [1, 1.06, 1] }, transition: { duration: 0.36 } } : o));
+          } else {
+            const swing = dir === 'left' ? -24 : 24; // puppet swing toward the target
+            setOverlay((o) => (o ? { ...o, anim: { x: dx, y: dy, scale: [1, 1.15, 1], rotate: [0, swing, 0] }, transition: { duration: 0.34 } } : o));
+          }
+          await sleep(moving.type === 'p' ? 420 : 340);
+          setDying(to);
+          if (soundRef.current) playCaptureSound(target.type);
+          await sleep(500);
+          setDead(true);
+          await sleep(170);
         }
-        await sleep(340);
-        setDying(to);
-        if (soundRef.current) playCaptureSound(target.type);
-        await sleep(500);
-        setDead(true);
-        await sleep(170);
       }
     }
     if (!alive()) return;
@@ -203,6 +280,10 @@ export function RpgChessBoard(): JSX.Element {
     setDying(null);
     setDead(false);
     setArrow(null);
+    setHeadbutt(null);
+    setCrumple(null);
+    setDucking([]);
+    window.setTimeout(() => setBlade(null), 240);
     bump();
 
     // "Kicking" a piece (chess sense): a pawn that ADVANCED (no capture) now
@@ -272,6 +353,9 @@ export function RpgChessBoard(): JSX.Element {
     setArrow(null);
     setFireTrail(null);
     setHeadbutt(null);
+    setCrumple(null);
+    setBlade(null);
+    setDucking([]);
     setGameOver(null);
     setBusy(false);
     bump();
@@ -383,12 +467,36 @@ export function RpgChessBoard(): JSX.Element {
                 </motion.div>
               );
             }
-            // Head-butted by a charging rook: the victim flies off the board.
+            // Shield-bashed by a charging rook: the victim tumbles clean off the board.
             if (headbutt?.square === sq) {
               return (
-                <motion.div key={sq} style={{ ...common, zIndex: 18 }}
-                  animate={{ x: [0, headbutt.dx, headbutt.dx * 1.7], y: [0, headbutt.dy, headbutt.dy + S * 1.6], rotate: [0, headbutt.rot, headbutt.rot * 2.2], opacity: [1, 1, 0] }}
-                  transition={{ duration: 0.62, times: [0, 0.28, 1], ease: 'easeOut' }}
+                <motion.div key={sq} style={{ ...common, zIndex: 50 }}
+                  animate={{ x: [0, headbutt.fx * 0.5, headbutt.fx], y: [0, -S * 1.5, headbutt.fy], rotate: [0, headbutt.rot * 0.4, headbutt.rot], opacity: [1, 1, 0] }}
+                  transition={{ duration: 0.8, ease: 'easeOut' }}
+                >
+                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} action="idle" facing="front" />
+                  <PieceBadge glyph={CAST_GLYPH[piece.type]} color={piece.color} />
+                </motion.div>
+              );
+            }
+            // Assassinated (hidden blade): the victim crumples to the ground.
+            if (crumple === sq) {
+              return (
+                <motion.div key={sq} style={{ ...common, zIndex: 17, transformOrigin: '50% 100%' }}
+                  animate={{ scaleY: [1, 0.82, 0.18], y: [0, S * 0.1, S * 0.5], rotate: [0, 6, 16], opacity: [1, 1, 0] }}
+                  transition={{ duration: 0.36, ease: 'easeIn' }}
+                >
+                  <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} action="idle" facing="front" />
+                  <PieceBadge glyph={CAST_GLYPH[piece.type]} color={piece.color} />
+                </motion.div>
+              );
+            }
+            // Ducking under the leaping knight: crouch low, then pop back up.
+            if (ducking.includes(sq)) {
+              return (
+                <motion.div key={sq} style={{ ...common, zIndex: 10 + r, transformOrigin: '50% 100%' }}
+                  animate={{ scaleY: [1, 0.66, 0.66, 1], y: [0, S * 0.14, S * 0.14, 0] }}
+                  transition={{ duration: 0.66, times: [0, 0.3, 0.6, 1], ease: 'easeInOut' }}
                 >
                   <CastToken type={piece.type} color={piece.color} w={TOKEN_W} h={h} glow={glow} action="idle" facing="front" />
                   <PieceBadge glyph={CAST_GLYPH[piece.type]} color={piece.color} />
@@ -407,8 +515,19 @@ export function RpgChessBoard(): JSX.Element {
           }),
         )}
 
-        {/* Rook's fire trail (rises from the board base along the charge path) */}
-        {fireTrail && <FireTrail key={fireTrail.key} x0={fireTrail.x0} x1={fireTrail.x1} boardH={8 * S + PAD} />}
+        {/* Rook's fire trail (licks up under the feet along the charge path) */}
+        {fireTrail && <FireTrail key={fireTrail.key} path={fireTrail.path} />}
+
+        {/* Assassin's hidden-blade glint */}
+        {blade && (
+          <motion.div
+            key={blade.key}
+            initial={{ opacity: 0, scaleX: 0.4, rotate: -32 }}
+            animate={{ opacity: [0, 1, 0], scaleX: [0.4, 1.3, 1.1], rotate: [-32, 14, 20] }}
+            transition={{ duration: 0.24, ease: 'easeOut' }}
+            style={{ position: 'absolute', left: blade.x - 16, top: blade.y, width: 32, height: 4, borderRadius: 2, background: 'linear-gradient(90deg, transparent, #fff 45%, #cfe8ff 60%, transparent)', boxShadow: '0 0 9px 2px rgba(220,240,255,0.95)', zIndex: 44, pointerEvents: 'none' }}
+          />
+        )}
 
         {/* Arrow projectile */}
         {arrow && (
@@ -423,7 +542,7 @@ export function RpgChessBoard(): JSX.Element {
         {/* Moving overlay token */}
         {overlay && (
           <motion.div
-            style={{ position: 'absolute', left: overlay.baseX, top: overlay.baseY, width: TOKEN_W, height: pieceH(overlay.type), zIndex: 35 }}
+            style={{ position: 'absolute', left: overlay.baseX, top: overlay.baseY, width: TOKEN_W, height: pieceH(overlay.type), zIndex: 35, transformOrigin: '50% 100%' }}
             animate={overlay.anim}
             transition={overlay.transition}
           >
@@ -455,35 +574,50 @@ export function RpgChessBoard(): JSX.Element {
   );
 }
 
-function FireTrail({ x0, x1, boardH }: { x0: number; x1: number; boardH: number }): JSX.Element {
-  const width = Math.max(1, x1 - x0);
-  const count = Math.max(3, Math.round(width / 22));
+/** Fire kicked up under the rook's feet: short, hot flame tongues hugging the
+ *  ground at each square along the charge path, igniting in sequence. */
+function FireTrail({ path }: { path: SqXY[] }): JSX.Element {
+  const flame =
+    'radial-gradient(ellipse at 50% 100%, rgba(255,250,210,0.98) 0%, rgba(255,186,46,0.95) 28%, rgba(244,96,18,0.78) 52%, rgba(168,30,10,0.4) 74%, transparent 86%)';
   return (
-    <div style={{ position: 'absolute', left: x0, bottom: 0, width, height: boardH * 0.6, pointerEvents: 'none', zIndex: 33 }}>
-      {Array.from({ length: count }, (_, i) => {
-        const fx = (i / (count - 1 || 1)) * width;
-        const fh = boardH * (0.34 + Math.random() * 0.22);
-        return (
-          <motion.div
-            key={i}
-            style={{
-              position: 'absolute',
-              left: fx - 15,
-              bottom: 0,
-              width: 30,
-              height: fh,
-              background:
-                'radial-gradient(ellipse at 50% 100%, rgba(255,235,140,0.95) 0%, rgba(255,140,20,0.85) 35%, rgba(220,40,10,0.5) 65%, transparent 80%)',
-              filter: 'blur(1px)',
-              borderRadius: '50% 50% 45% 45% / 60% 60% 40% 40%',
-            }}
-            initial={{ opacity: 0, scaleY: 0.5 }}
-            animate={{ opacity: [0, 0.95, 0.7, 0], scaleY: [0.5, 1.1, 0.9, 0.3], scaleX: [1, 0.85, 1.05, 0.9] }}
-            transition={{ duration: 0.8, delay: Math.random() * 0.15, times: [0, 0.2, 0.6, 1], ease: 'easeOut' }}
-          />
-        );
-      })}
-    </div>
+    <>
+      {path.map((p, i) =>
+        [0, 1, 2].map((j) => {
+          const jx = (j - 1) * S * 0.24;
+          return (
+            <motion.div
+              key={`${i}-${j}`}
+              style={{
+                position: 'absolute',
+                left: p.x + jx - S * 0.22,
+                top: p.y - S * 0.6,
+                width: S * 0.44,
+                height: S * 0.6,
+                pointerEvents: 'none',
+                zIndex: 34,
+                background: flame,
+                filter: 'blur(0.6px)',
+                borderRadius: '50% 50% 42% 42% / 66% 66% 34% 34%',
+                transformOrigin: '50% 100%',
+              }}
+              initial={{ opacity: 0, scaleY: 0.35 }}
+              animate={{ opacity: [0, 1, 0.8, 0], scaleY: [0.35, 1.15, 0.8, 0.25], scaleX: [1, 0.78, 1.12, 0.85] }}
+              transition={{ duration: 0.62, delay: i * 0.05 + j * 0.02 + Math.random() * 0.05, times: [0, 0.25, 0.6, 1], ease: 'easeOut' }}
+            />
+          );
+        }),
+      )}
+      {/* a few rising embers */}
+      {path.map((p, i) => (
+        <motion.div
+          key={`e${i}`}
+          style={{ position: 'absolute', left: p.x - 1, top: p.y - 4, width: 3, height: 3, borderRadius: '50%', background: 'rgba(255,200,90,0.95)', boxShadow: '0 0 4px 1px rgba(255,150,40,0.8)', pointerEvents: 'none', zIndex: 35 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0, 1, 0], y: [0, -S * 0.7], x: [0, (Math.random() - 0.5) * S * 0.4] }}
+          transition={{ duration: 0.7, delay: i * 0.05 + Math.random() * 0.1, ease: 'easeOut' }}
+        />
+      ))}
+    </>
   );
 }
 

@@ -80,7 +80,7 @@ export function CastToken({ type, color, w, h, glow, flip, action = 'idle', faci
           transform: `translateX(-50%) ${flip ? 'scaleX(-1)' : ''}`,
           height: h * 0.97,
           width: 'auto',
-          maxWidth: w * 1.7,
+          maxWidth: w * 2.4,
           filter: glow,
           userSelect: 'none',
         }}
