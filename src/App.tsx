@@ -27,6 +27,7 @@ import { DashboardPage } from './components/Dashboard/DashboardPage';
 import { RpgDemoPage } from './components/Rpg/RpgDemoPage';
 import { RpgDemo3DPage } from './components/Rpg/RpgDemo3DPage';
 import { RpgAnimPlaygroundPage } from './components/Rpg/RpgAnimPlaygroundPage';
+import { RpgGalleryPage } from './components/Rpg/RpgGalleryPage';
 import { OpeningExplorerPage } from './components/Openings/OpeningExplorerPage';
 import { OpeningDetailPage } from './components/Openings/OpeningDetailPage';
 import { SrsTrainerPage } from './components/Openings/SrsTrainerPage';
@@ -299,6 +300,7 @@ export function App(): JSX.Element {
           {/* 3D engine demo (React Three Fiber) — rigged skeletal animation POC */}
           <Route path="/rpg-3d" element={<ErrorBoundary><RpgDemo3DPage /></ErrorBoundary>} />
           <Route path="/rpg-anim" element={<ErrorBoundary><RpgAnimPlaygroundPage /></ErrorBoundary>} />
+          <Route path="/rpg-gallery" element={<ErrorBoundary><RpgGalleryPage /></ErrorBoundary>} />
           {/* Openings */}
           <Route path="/openings" element={<ErrorBoundary><OpeningExplorerPage /></ErrorBoundary>} />
           <Route path="/openings/srs" element={<ErrorBoundary><SrsTrainerPage /></ErrorBoundary>} />
