@@ -19,8 +19,9 @@ const SKINNED: Record<string, string> = {
   q: '/rpg/models/skinned-queen.glb',
   k: '/rpg/models/skinned-king.glb',
   b: '/rpg/models/skinned-bishop.glb',
+  n: '/rpg/models/skinned-knight.glb', // his mounted knight (horse+rider, glides — no humanoid rig)
 };
-const KAYKIT: Record<string, string> = { n: 'Knight', r: 'Barbarian' };
+const KAYKIT: Record<string, string> = { r: 'Barbarian' };
 const MODEL_URL = (type: string): string => SKINNED[type] ?? `/rpg/models/kaykit/${KAYKIT[type] ?? 'rogue'}.glb`;
 ['p', 'n', 'b', 'r', 'q', 'k'].forEach((t) => useGLTF.preload(MODEL_URL(t)));
 
