@@ -105,6 +105,10 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   'coach-narration-spoken': 'coach_narration_spoken',
   'coach-move-narration-fired': 'coach_narration_fired',
   'coach-move-narration-skipped': 'coach_narration_skipped',
+  // Mirror the actual TTS playback failure (iOS <audio> autoplay rejection,
+  // decode error, /api/tts non-200) to PostHog. It was NOT mirrored, so
+  // "no voice" reports were invisible in analytics (David 2026-06-06).
+  'tts-failure': 'tts_failure',
 };
 
 /** Map a forensic audit kind to its product-event name, or undefined

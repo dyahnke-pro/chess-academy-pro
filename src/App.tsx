@@ -225,6 +225,14 @@ export function App(): JSX.Element {
         // Warm up the voice pipeline early so the first narration has no cold-start delay
         void voiceService.warmup();
 
+        // Wire the iOS audio-element unlock. iOS blocks programmatic
+        // audio.play() until the element has played once inside a real user
+        // gesture, so timer-driven narration (Watch lessons) is silent until
+        // then. This attaches first-gesture listeners that "bless" the
+        // streaming <audio> element. It existed but was NEVER called — that's
+        // why the coach voice was silent on the iPhone (David 2026-06-06).
+        voiceService.installStreamingAudioUnlock();
+
         const skippedMeta = await db.meta.get('onboarding_skipped');
         if (skippedMeta?.value !== 'true') {
           // Auto-skip onboarding — API keys can be added from Settings

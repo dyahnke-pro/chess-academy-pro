@@ -72,12 +72,14 @@ describe('auditKindToEvent — curated allowlist', () => {
     expect(auditKindToEvent('coach-narration-spoken')).toBe('coach_narration_spoken');
     expect(auditKindToEvent('coach-move-narration-fired')).toBe('coach_narration_fired');
     expect(auditKindToEvent('coach-move-narration-skipped')).toBe('coach_narration_skipped');
+    // The actual playback failure (iOS autoplay rejection / decode / non-200)
+    // must reach PostHog so "no voice" reports are diagnosable (David 2026-06-06).
+    expect(auditKindToEvent('tts-failure')).toBe('tts_failure');
   });
 
   it('returns undefined for forensic/high-volume kinds that should NOT mirror', () => {
     // Per the doctrine: per-move noise + crash forensics stay out of PostHog.
     expect(auditKindToEvent('move-attempt')).toBeUndefined();
-    expect(auditKindToEvent('tts-failure')).toBeUndefined();
     expect(auditKindToEvent('uncaught-error')).toBeUndefined();
   });
 });
