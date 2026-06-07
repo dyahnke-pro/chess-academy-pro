@@ -69,6 +69,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     defer { isConfiguringAudio = false }
 
     let session = AVAudioSession.sharedInstance()
+    // PREFERRED: .playAndRecord so Web Speech mic input works alongside Polly
+    // TTS. BUT .playAndRecord activation FAILS ("Session activation failed")
+    // when microphone permission isn't granted — and that failure kills ALL
+    // audio, including TTS playback (David 2026-06-06: no voice rendering on
+    // device once the retry loop was removed; the loop had been masking this
+    // by occasionally slipping a successful activation through).
     do {
       try session.setCategory(
         .playAndRecord,
@@ -77,12 +83,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       )
       try session.setActive(true, options: [])
     } catch {
-      // Non-fatal: log to console and proceed. The app still boots;
-      // voice features may degrade to Web Speech or silence under the
-      // conditions the patch was designed to avoid. No user-facing
-      // UI here — CoachGamePage surfaces Polly failures via its own
-      // error path.
-      print("[AppDelegate] AVAudioSession setup failed: \(error.localizedDescription)")
+      print("[AppDelegate] AVAudioSession .playAndRecord failed (\(error.localizedDescription)); falling back to .playback")
+      // FALLBACK: playback-only ALWAYS activates (no mic permission needed),
+      // so the coach voice is never silent. Mic-dependent features (Web
+      // Speech) re-request the session when the user actually invokes them.
+      do {
+        try session.setCategory(.playback, mode: .default, options: [.mixWithOthers])
+        try session.setActive(true, options: [])
+      } catch {
+        print("[AppDelegate] AVAudioSession .playback fallback also failed: \(error.localizedDescription)")
+      }
     }
   }
 
