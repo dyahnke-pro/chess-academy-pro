@@ -32,7 +32,14 @@ const ATTACK: Record<string, string> = {
 };
 const HEIGHT: Record<string, number> = { p: 1.1, n: 1.3, b: 1.25, r: 1.35, q: 1.5, k: 1.45 };
 const TEAM: Record<'w' | 'b', THREE.Color> = { w: new THREE.Color('#f0d9a0'), b: new THREE.Color('#b69cff') };
-const LOOP = new Set(['Idle', 'Walking_C', 'Running_A']);
+const LOOP = new Set(['Idle', 'Walking_C', 'Running_A', 'Gallop', 'Walk']);
+// The mounted knight rides the Quaternius horse rig (CC0) whose clips are named
+// differently than the humanoid KayKit clips — remap so the board's requests
+// drive the horse's gallop/idle/death.
+const HORSE_CLIP: Record<string, string> = {
+  Idle: 'Idle', Walking_C: 'Gallop', Jump_Full_Long: 'Gallop', Death_A: 'Death',
+  '1H_Melee_Attack_Slice_Diagonal': 'Attack_Kick',
+};
 
 /** One articulated fighter: own skeleton clone + mixer, plays the given clip. */
 function Fighter({ type, color, clip }: { type: string; color: 'w' | 'b'; clip: string }): JSX.Element {
@@ -57,14 +64,15 @@ function Fighter({ type, color, clip }: { type: string; color: 'w' | 'b'; clip: 
   const { actions, mixer } = useAnimations(animations, group);
 
   useEffect(() => {
-    const a = actions[clip] ?? actions['Idle'];
+    const want = type === 'n' ? (HORSE_CLIP[clip] ?? 'Idle') : clip;
+    const a = actions[want] ?? actions['Idle'];
     if (!a) return;
     a.reset();
-    a.setLoop(LOOP.has(clip) ? THREE.LoopRepeat : THREE.LoopOnce, Infinity);
-    a.clampWhenFinished = !LOOP.has(clip);
+    a.setLoop(LOOP.has(want) ? THREE.LoopRepeat : THREE.LoopOnce, Infinity);
+    a.clampWhenFinished = !LOOP.has(want);
     a.fadeIn(0.2).play();
     return () => { a.fadeOut(0.2); };
-  }, [clip, actions, mixer]);
+  }, [clip, type, actions, mixer]);
 
   const h = HEIGHT[type] ?? 1.2;
   return <group ref={group} scale={[h / 1.78, h / 1.78, h / 1.78]} rotation={[0, color === 'w' ? 0 : Math.PI, 0]}><primitive object={obj} /></group>;
