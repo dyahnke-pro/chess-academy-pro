@@ -32,6 +32,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   var window: UIWindow?
 
+  /// Re-entrancy guard. `setCategory` / `setActive` post an
+  /// `AVAudioSession.routeChangeNotification`; without this the route-change
+  /// observer can call back into `configureAudioSession()` and recurse —
+  /// the infinite reconfigure loop that spammed "Session activation failed"
+  /// hundreds of times and froze the app at launch (David 2026-06-06).
+  private var isConfiguringAudio = false
+
   func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
@@ -55,6 +62,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   /// dropped until the app was force-quit and relaunched. We now re-activate
   /// on foreground + on interruption-end + on route change, so it self-heals.
   private func configureAudioSession() {
+    // Guard against re-entry from the route-change notification that our own
+    // setCategory/setActive calls post (see isConfiguringAudio).
+    if isConfiguringAudio { return }
+    isConfiguringAudio = true
+    defer { isConfiguringAudio = false }
+
     let session = AVAudioSession.sharedInstance()
     do {
       try session.setCategory(
@@ -104,9 +117,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
   @objc private func handleRouteChange(_ note: Notification) {
-    // Bluetooth connect/disconnect, headphone plug/unplug — re-assert the
-    // category + active state so output keeps flowing to the new route.
-    configureAudioSession()
+    // ONLY re-assert on a genuine device (dis)connect (Bluetooth, headphones).
+    // Our own setCategory/setActive post route changes with reason
+    // .categoryChange / .override / .routeConfigurationChange — re-configuring
+    // on those re-triggers this notification → infinite loop → "Session
+    // activation failed" spam + a frozen main thread (David 2026-06-06). The
+    // re-entrancy guard can't catch it because the notification is delivered
+    // asynchronously, so we must filter by reason here.
+    guard
+      let info = note.userInfo,
+      let raw = info[AVAudioSessionRouteChangeReasonKey] as? UInt,
+      let reason = AVAudioSession.RouteChangeReason(rawValue: raw)
+    else { return }
+    switch reason {
+    case .newDeviceAvailable, .oldDeviceUnavailable:
+      configureAudioSession()
+    default:
+      break
+    }
   }
 
   func applicationWillResignActive(_ application: UIApplication) {}
