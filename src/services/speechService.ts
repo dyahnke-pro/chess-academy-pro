@@ -17,6 +17,27 @@ export interface SystemVoice {
   isNatural: boolean;
 }
 
+/**
+ * Strip ALL markup so the OS speech synth gets clean plain text. iOS 26's
+ * WKWebView speech path tries to parse the utterance as SSML and FAILS on any
+ * stray tag/entity ("Could not parse SSML: No single root node found"), which
+ * silences the voice on device (David 2026-06-07). The good voice (Polly) uses
+ * SSML via /api/tts; this Web-Speech fallback must NEVER see markup — just the
+ * words. Removes XML/SSML tags + decodes the common HTML entities.
+ */
+function toPlainSpokenText(text: string): string {
+  return text
+    .replace(/<[^>]*>/g, ' ')      // strip every SSML/XML tag (<speak>, <prosody>, …)
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#3?9;|&apos;/gi, "'")
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 class SpeechService {
   private synthesis: SpeechSynthesis | null;
   private preferredVoice: SpeechSynthesisVoice | null = null;
@@ -167,7 +188,7 @@ class SpeechService {
     }
 
     return new Promise<void>((resolve) => {
-      const utterance = new SpeechSynthesisUtterance(text);
+      const utterance = new SpeechSynthesisUtterance(toPlainSpokenText(text));
       utterance.rate = options.rate ?? this.rate;
       utterance.pitch = options.pitch ?? 0.78;
       utterance.volume = options.volume ?? 1.0;
@@ -196,7 +217,7 @@ class SpeechService {
   queue(text: string, options: SpeechOptions = {}): void {
     if (!this.synthesis || !this.enabled) return;
 
-    const utterance = new SpeechSynthesisUtterance(text);
+    const utterance = new SpeechSynthesisUtterance(toPlainSpokenText(text));
     utterance.rate = options.rate ?? this.rate;
     utterance.pitch = options.pitch ?? 0.78;
     utterance.volume = options.volume ?? 1.0;
