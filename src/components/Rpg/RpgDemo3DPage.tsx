@@ -10,13 +10,18 @@ import { Chess } from 'chess.js';
 // a real melee/spell attack and the victim plays a death — with a cinematic
 // kill-cam. Clean rigged skeletons, no Mixamo, all on our end.
 
-const CHAR: Record<string, string> = { p: 'rogue', n: 'Knight', b: 'Mage', r: 'Barbarian', q: 'Mage', k: 'Knight' };
-// David's reconstructed pieces, skinned onto the KayKit rig (same skeleton +
-// 76 clips), drop in by character name. Pawns are the finished hooded rogue;
-// the rest fall back to the CC0 KayKit base until each is rebuilt from his art.
-const SKINNED: Record<string, string> = { rogue: '/rpg/models/skinned-rogue.glb' };
-const URL = (c: string): string => SKINNED[c] ?? `/rpg/models/kaykit/${c}.glb`;
-[...new Set(Object.values(CHAR))].forEach((c) => useGLTF.preload(URL(c)));
+// Per chess role: David's reconstructed + rigged piece where built, otherwise
+// the CC0 KayKit base. Both share the same 76-clip skeleton, so they're
+// drop-in. Pawn = hooded rogue, queen + king = his robed royalty (with staffs);
+// knight/bishop/rook fall back to KayKit until rebuilt from his art.
+const SKINNED: Record<string, string> = {
+  p: '/rpg/models/skinned-rogue.glb',
+  q: '/rpg/models/skinned-queen.glb',
+  k: '/rpg/models/skinned-king.glb',
+};
+const KAYKIT: Record<string, string> = { n: 'Knight', b: 'Mage', r: 'Barbarian' };
+const MODEL_URL = (type: string): string => SKINNED[type] ?? `/rpg/models/kaykit/${KAYKIT[type] ?? 'rogue'}.glb`;
+['p', 'n', 'b', 'r', 'q', 'k'].forEach((t) => useGLTF.preload(MODEL_URL(t)));
 
 const ATTACK: Record<string, string> = {
   p: '1H_Melee_Attack_Slice_Diagonal', n: '1H_Melee_Attack_Slice_Diagonal', r: '2H_Melee_Attack_Chop',
@@ -29,7 +34,7 @@ const LOOP = new Set(['Idle', 'Walking_C', 'Running_A']);
 /** One articulated fighter: own skeleton clone + mixer, plays the given clip. */
 function Fighter({ type, color, clip }: { type: string; color: 'w' | 'b'; clip: string }): JSX.Element {
   const group = useRef<THREE.Group>(null);
-  const { scene, animations } = useGLTF(URL(CHAR[type]));
+  const { scene, animations } = useGLTF(MODEL_URL(type));
   const obj = useMemo(() => {
     const c = cloneSkeleton(scene);
     const tint = TEAM[color];
