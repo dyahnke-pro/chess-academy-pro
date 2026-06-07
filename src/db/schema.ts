@@ -698,6 +698,41 @@ class ChessAcademyDB extends Dexie {
     }).upgrade(async () => {
       // Brand-new store; no migration.
     });
+
+    // v30 — switch the default coach voice from Ruth (generative, the
+    // priciest Polly tier) to Joanna (neural, ~half the per-character
+    // cost) at David's request (2026-06-07). One-time flip of the OLD
+    // default value only, so any deliberate later voice choice is kept.
+    this.version(30).stores({
+      puzzles: 'id, rating, *themes, srsDueDate, userRating',
+      openings: 'id, eco, name, color, isRepertoire, isFavorite',
+      games: 'id, source, eco, date, isMasterGame, openingId',
+      flashcards: 'id, openingId, type, srsDueDate',
+      profiles: 'id',
+      sessions: 'id, date, profileId',
+      meta: 'key',
+      mistakePuzzles: 'id, sourceGameId, classification, srsDueDate, status, sourceMode, gamePhase',
+      modelGames: 'id, openingId',
+      proGameReferences: 'id, playerId, openingId, proOpeningId, variation',
+      middlegamePlans: 'id, openingId',
+      generatedContent: 'id, openingId, type, generatedAt',
+      openingWeakSpots: 'id, openingId, failCount, lastFailedAt',
+      classifiedTactics: 'id, sourceGameId, tacticType, playerColor, createdAt',
+      setupPuzzles: 'id, tacticType, difficulty, srsDueDate, status, sourceGameId',
+      openingNarrations: 'id, openingName, variation, moveSan, fen, approved',
+      cachedOpenings: 'normalizedName, eco, generatedAt',
+      endgameProgress: 'id, lessonId, lastPlayedAt',
+      srsOpeningCards: 'id, openingId, nextReviewAt, [openingId+nextReviewAt]',
+      findSquareAttempts: 'id, timestamp, target, correct, color',
+      misconceptionTags: 'id, tag, source, status, createdAt, openingId, sourceGameId',
+    }).upgrade(async (tx) => {
+      await tx.table('profiles').toCollection().modify((profile: UserProfile) => {
+        const prefs = profile.preferences as unknown as Record<string, unknown>;
+        if (prefs.pollyVoice === 'ruth') {
+          prefs.pollyVoice = 'joanna';
+        }
+      });
+    });
   }
 }
 

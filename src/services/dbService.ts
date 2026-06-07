@@ -59,7 +59,7 @@ export async function getOrCreateMainProfile(): Promise<UserProfile> {
       elevenlabsKeyIv: null,
       elevenlabsVoiceId: null,
       pollyEnabled: true,
-      pollyVoice: 'ruth',
+      pollyVoice: 'joanna',
       voiceSpeed: 1.0,
       kokoroEnabled: true,
       kokoroVoiceId: 'af_bella',

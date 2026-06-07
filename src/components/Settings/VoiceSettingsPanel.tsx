@@ -52,7 +52,7 @@ export function VoiceSettingsPanel(): JSX.Element {
 
   // Amazon Polly TTS state
   const [pollyEnabled, setPollyEnabled] = useState(() => activeProfile?.preferences.pollyEnabled ?? true);
-  const [pollyVoice, setPollyVoice] = useState(() => activeProfile?.preferences.pollyVoice ?? 'ruth');
+  const [pollyVoice, setPollyVoice] = useState(() => activeProfile?.preferences.pollyVoice ?? 'joanna');
   const [pollyPreviewPlaying, setPollyPreviewPlaying] = useState(false);
 
   // System voice state

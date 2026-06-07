@@ -97,7 +97,7 @@ export function canStreamProgressivePlaybackFor(
 // can deliver any personality — Ruth doing drill-sergeant, Stephen
 // doing flirtatious, etc.
 export const PERSONALITY_VOICE_DEFAULTS: Record<CoachPersonality, string> = {
-  default: 'ruth',         // generative — sultry, low female (current pre-personality default)
+  default: 'joanna',       // neural — warm female; cheaper than generative Ruth (David 2026-06-07)
   soft: 'joanna',          // neural — warm, encouraging female
   edgy: 'stephen',         // neural — dry, sharper male
   flirtatious: 'ruth',     // generative — sultry, low female
@@ -765,7 +765,7 @@ class VoiceService {
     this.cachedPrefs = {
       voiceEnabled: prefs.voiceEnabled ?? true,
       pollyEnabled: prefs.pollyEnabled ?? false,
-      pollyVoice: prefs.pollyVoice || 'ruth',
+      pollyVoice: prefs.pollyVoice || 'joanna',
       coachPersonality: prefs.coachPersonality,
       coachPersonalityVoices: prefs.coachPersonalityVoices,
       coachPersonalitySecondaryVoices: prefs.coachPersonalitySecondaryVoices,
