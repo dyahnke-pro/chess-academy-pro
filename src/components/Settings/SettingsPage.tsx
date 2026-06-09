@@ -14,6 +14,7 @@ import { AnalyzeGamesButton } from '../Games/AnalyzeGamesButton';
 import { VoiceSettingsPanel } from './VoiceSettingsPanel';
 import { PieceSoundPanel } from './PieceSoundPanel';
 import { FeedbackForm } from '../Feedback/FeedbackForm';
+import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { encryptApiKey } from '../../services/cryptoService';
 import { Link } from 'react-router-dom';
 
@@ -1278,6 +1279,13 @@ function AboutTab(): JSX.Element {
       </div>
       <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
         Built with React, TypeScript, Vite, Tailwind CSS, chess.js, Stockfish WASM, Dexie.js, Zustand, and Claude API.
+      </div>
+      {/* Non-endorsement disclaimer — the app-wide home for the
+          right-of-publicity / Lanham §43(a) notice (David 2026-06-09).
+          Mirrors the per-surface notice shown on pro-player pages. */}
+      <div className="pt-4 border-t space-y-1.5" style={{ borderColor: 'var(--color-border)' }}>
+        <div className="text-sm font-medium">Pro players &amp; attribution</div>
+        <ProAttributionNotice />
       </div>
       <div className="pt-4 border-t space-y-3" style={{ borderColor: 'var(--color-border)' }}>
         {/* Feedback button — primary post-launch signal. Placed at top

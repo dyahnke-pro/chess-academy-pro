@@ -142,6 +142,25 @@ disclosure checklist. **I cannot (no SDKs/signing/devices here):** run
 > • Works offline — your training data stays on your device
 >
 > No account required. Free to start.
+>
+> Pro players featured in the app are not affiliated with, and do not endorse,
+> Chess Academy Pro. Lessons are derived from publicly available games and the
+> established, general understanding of these openings.
+
+**App Review notes (App Store Connect → "Notes for Reviewer"; Play → "App access / notes"):**
+> No account or login is required — open the app and all features are available
+> immediately (no demo credentials needed). Voice chat uses the microphone for
+> speech-to-text only; audio is not stored or shared.
+>
+> Some opening lessons and repertoires reference named chess professionals
+> (e.g. Magnus Carlsen, Hikaru Nakamura, Daniel Naroditsky, Levy Rozman). These
+> names are used **nominatively and factually** — to identify whose publicly
+> available games a lesson's move data is drawn from. The app does **not** claim
+> any affiliation with, sponsorship by, or endorsement from these players, and a
+> non-endorsement disclaimer is shown in-app on every player-attributed surface
+> and under Settings → About. No player likeness, photo, logo, or copyrighted
+> instructional content is used — only factual move data from public games plus
+> the app's own original narration.
 
 **Data declarations (App Store privacy label + Play Data safety):**
 - **Data collected/linked to you:** none required (no account for core use).
