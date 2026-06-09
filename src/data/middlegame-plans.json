@@ -57512,7 +57512,7 @@
     "openingId": "pro-gothamchess-qgd",
     "criticalPositionFen": "r2q1rk1/pbpnbpp1/1p2pn1p/3p4/2PP3B/2NBPN2/PP3PPP/R2Q1RK1 w - - 4 10",
     "title": "QGD Tartakower: …b6, …Bb7 and the …c5 Break",
-    "overview": "The Tartakower is the QGD's freest line. Black fianchettoes with …b6 and …Bb7 to fight for the long diagonal, then the moment White releases the central tension Black strikes with …c5. Trading down leaves Black with the freeing break played, the bishop pair, and a healthy share of the centre — exactly the active game the Tartakower promises.",
+    "overview": "The Tartakower is the QGD's freest line. Black fianchettoes with …b6 and …Bb7 to fight for the long diagonal, then the moment White releases the central tension Black strikes with …c5. Trading down leaves Black with the freeing break played, an active bishop on the long diagonal, and a healthy share of the centre — exactly the active game the Tartakower promises.",
     "pawnBreaks": [
       "…c5 — the freeing break"
     ],
@@ -57523,10 +57523,10 @@
     "strategicThemes": [
       "Fianchetto with …b6 and …Bb7",
       "Free the game with …c5",
-      "Win the bishop pair and central share"
+      "Equalise with a fair share of the centre"
     ],
     "endgameTransitions": [
-      "The bishop pair and sound centre carry into a comfortable ending"
+      "The active bishop and sound centre carry into a comfortable ending"
     ],
     "playableLines": [
       {
@@ -57549,7 +57549,7 @@
           "Nxd5 White swaps knights.",
           "…Bxd5 the fianchettoed bishop recaptures on its diagonal, eyeing g2.",
           "Rc1 White contests the c-file ahead of …c5.",
-          "…c5 the freeing break; Black equalises with the bishop and a fair share of the centre."
+          "…c5 the freeing break; Black equalises with the active bishop and a fair share of the centre."
         ],
         "learnCues": [
           "cxd5 — release the tension",
@@ -57622,7 +57622,7 @@
           ]
         ],
         "sources": [
-          "concept:pos-bishop-pair",
+          "concept:pos-open-file",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
         ],
@@ -74482,7 +74482,7 @@
     "id": "mp-proamancaro-twoknights",
     "openingId": "pro-aman-caro-kann",
     "title": "Caro Two Knights Exchange: …Nd7-b6 and the …f5 Break",
-    "overview": "After recapturing …exf6, Aman embraces the doubled f-pawns as a battering ram. The rook swings to the open e-file with check, the knight reroutes …Nd7-b6 toward c4, and then …f5 rolls forward — the doubled pawn becomes a lever that pries open lines toward White's king while the two bishops fan out.",
+    "overview": "After recapturing …exf6, Aman embraces the doubled f-pawns as a battering ram. The rook swings to the open e-file with check, the knight reroutes …Nd7-b6 toward c4, and then …f5 rolls forward — the doubled pawn becomes a lever that pries open lines toward White's king while the rooks seize the central files.",
     "pawnBreaks": [
       "…f5 — the freeing break with the doubled f-pawns"
     ],
@@ -74493,10 +74493,10 @@
     "strategicThemes": [
       "Turn the doubled f-pawns into a …f5 lever",
       "Reroute …Nd7-b6",
-      "Open lines for the two bishops"
+      "Open lines toward White's king"
     ],
     "endgameTransitions": [
-      "The bishop pair tells if the position simplifies"
+      "The active rooks and …f5 lever carry into the ending"
     ],
     "playableLines": [
       {
@@ -74603,7 +74603,7 @@
         ],
         "sources": [
           "concept:pawn-doubled",
-          "concept:pos-bishop-pair",
+          "concept:pos-open-file",
           "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
         ],
         "title": "…Nd7-b6 and the …f5 Break",
