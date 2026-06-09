@@ -641,6 +641,13 @@ export interface GameRecord {
   whiteElo: number | null;
   blackElo: number | null;
   source: GameSource;
+  /** How the game ended, straight from the platform: lichess `status`
+   *  ("mate" / "resign" / "outoftime" / "aborted" / …) or the chess.com
+   *  loser/draw result string ("checkmated" / "resigned" / "timeout" /
+   *  "abandoned" / "agreed" / …). Lets the weakness engine later
+   *  distinguish an honest result from a disconnect/abort. Optional —
+   *  absent on older records + non-import sources. */
+  termination?: string;
   annotations: MoveAnnotation[] | null;
   coachAnalysis: string | null;
   isMasterGame: boolean;

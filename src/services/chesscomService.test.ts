@@ -97,6 +97,25 @@ describe('chesscomService', () => {
       expect(games.every((g) => g.source === 'chesscom')).toBe(true);
     });
 
+    it('records the platform termination reason (loser/draw result string)', async () => {
+      const archive = 'https://api.chess.com/pub/player/testuser/games/2024/04';
+      mockArchivesFlow([archive], {
+        [archive]: [
+          // White wins by abandonment — termination = the loser's reason.
+          makeChessComGame({
+            url: 'https://www.chess.com/game/live/abandon1',
+            white: { username: 'Alice', rating: 1500, result: 'win' },
+            black: { username: 'Bob', rating: 1400, result: 'abandoned' },
+          }),
+        ],
+      });
+
+      await importChessComGames('testuser');
+      const game = (await db.games.toArray()).find((g) => g.id === 'chesscom-abandon1');
+      expect(game?.result).toBe('1-0');
+      expect(game?.termination).toBe('abandoned');
+    });
+
     it('imports from a single archive with multiple games', async () => {
       const archive = 'https://api.chess.com/pub/player/testuser/games/2024/03';
       mockArchivesFlow([archive], {

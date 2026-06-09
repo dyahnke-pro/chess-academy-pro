@@ -47,6 +47,15 @@ function parseChessComGame(game: ChessComGame): GameRecord {
     game.black.result === 'win' ? '0-1' :
     '1/2-1/2';
 
+  // The platform's reason the game ended: the loser's result string for
+  // decisive games ("checkmated" / "resigned" / "timeout" / "abandoned"),
+  // else the shared draw reason ("agreed" / "repetition" / "stalemate" /
+  // "insufficient" / …). Lets the weakness engine later tell an honest
+  // result from an abandonment.
+  const termination = game.white.result !== 'win' && game.black.result !== 'win'
+    ? game.white.result
+    : game.white.result === 'win' ? game.black.result : game.white.result;
+
   const ecoMatch = game.pgn.match(/\[ECO\s+"([^"]+)"\]/);
   const clockRemainingMs = extractClockMs(game.pgn);
 
@@ -62,6 +71,7 @@ function parseChessComGame(game: ChessComGame): GameRecord {
     whiteElo: game.white.rating,
     blackElo: game.black.rating,
     source: 'chesscom',
+    ...(termination ? { termination } : {}),
     annotations: null,
     coachAnalysis: null,
     isMasterGame: false,

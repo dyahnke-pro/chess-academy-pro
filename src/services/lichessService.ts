@@ -13,10 +13,18 @@ interface LichessGame {
     black: { user?: { name: string }; rating?: number };
   };
   winner?: string;
+  /** Lichess game status: "mate" / "resign" / "stalemate" / "timeout" /
+   *  "outoftime" / "draw" / "aborted" / "noStart" / … */
+  status?: string;
   opening?: { eco: string; name: string };
   createdAt: number;
   pgn?: string;
 }
+
+/** Statuses with no real chess content — the game never got going. We
+ *  store these with result '*' so the weakness aggregate (which filters
+ *  `result !== '*'`) ignores them instead of counting a bogus draw. */
+const NO_CONTENT_STATUSES = new Set(['aborted', 'noStart']);
 
 interface LichessUserResponse {
   username: string;
@@ -85,7 +93,12 @@ export async function importLichessGames(
   for (const line of lines) {
     const game = JSON.parse(line) as LichessGame;
 
-    const result = game.winner === 'white' ? '1-0' :
+    // Aborted / never-started games carry no winner; the old code mapped
+    // them to '1/2-1/2', so empty games polluted the weakness stats as
+    // fake draws. Map them to '*' instead so they're filtered out, and
+    // only call it a real draw when the game genuinely had no winner.
+    const result = game.status && NO_CONTENT_STATUSES.has(game.status) ? '*' :
+      game.winner === 'white' ? '1-0' :
       game.winner === 'black' ? '0-1' :
       game.winner ? '1-0' : '1/2-1/2';
 
@@ -103,6 +116,7 @@ export async function importLichessGames(
       whiteElo: game.players.white.rating ?? null,
       blackElo: game.players.black.rating ?? null,
       source: 'lichess',
+      ...(game.status ? { termination: game.status } : {}),
       annotations: null,
       coachAnalysis: null,
       isMasterGame: false,

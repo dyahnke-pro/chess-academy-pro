@@ -82,6 +82,33 @@ describe('lichessService', () => {
       expect(count2).toBe(0);
     });
 
+    it('maps aborted games to result "*" (excluded from weakness stats) and stores termination', async () => {
+      const ndjson = [
+        makeLichessGame({ id: 'aborted1', status: 'aborted', winner: undefined, pgn: '' }),
+        makeLichessGame({ id: 'mate1', status: 'mate', winner: 'white' }),
+        makeLichessGame({ id: 'draw1', status: 'draw', winner: undefined }),
+      ].map((g) => JSON.stringify(g)).join('\n');
+      vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+        ok: true,
+        text: () => Promise.resolve(ndjson),
+      } as Response);
+
+      await importLichessGames('termuser');
+      const games = await db.games.toArray();
+      const aborted = games.find((g) => g.id === 'lichess-aborted1');
+      const mate = games.find((g) => g.id === 'lichess-mate1');
+      const draw = games.find((g) => g.id === 'lichess-draw1');
+
+      // Aborted: '*' (not a fake '1/2-1/2') so the weakness aggregate skips it.
+      expect(aborted?.result).toBe('*');
+      expect(aborted?.termination).toBe('aborted');
+      // Real decisive + real draw keep their results, with termination recorded.
+      expect(mate?.result).toBe('1-0');
+      expect(mate?.termination).toBe('mate');
+      expect(draw?.result).toBe('1/2-1/2');
+      expect(draw?.termination).toBe('draw');
+    });
+
     it('throws on API error', async () => {
       vi.spyOn(globalThis, 'fetch').mockResolvedValue({
         ok: false,
