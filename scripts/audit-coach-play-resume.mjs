@@ -57,8 +57,11 @@ async function main() {
   const browser = await chromium.launch({ headless: !HEADED, executablePath, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext({
     ...sandboxContextOptions(),
-    viewport: { width: 414, height: 896 },
-    deviceScaleFactor: 2,
+    // Desktop viewport so the MoveListPanel renders (it's gated to
+    // !isMobile) — gives a visible move-list oracle. The persistence /
+    // resume logic itself is viewport-independent.
+    viewport: { width: 1280, height: 900 },
+    deviceScaleFactor: 1,
     userAgent: 'AuditCoachPlayBot/1.0 (resume)',
   });
   const page = await ctx.newPage();
@@ -126,13 +129,25 @@ async function main() {
       !!snapAfter && JSON.stringify(snapAfter.sans) === JSON.stringify(snapBefore?.sans),
       snapAfter ? `sans=${JSON.stringify(snapAfter.sans)}` : 'no snapshot');
 
+    // ── Deterministic proof the BOARD resumed: play one more move and
+    //    confirm the history APPENDS to the resumed line (prefix preserved,
+    //    length grows) instead of resetting to a fresh game (length 1).
+    const resumedLen = Array.isArray(snapAfter?.sans) ? snapAfter.sans.length : 0;
+    // White is to move after an even-ply history; a knight develop is legal
+    // from the standard opening shapes this audit produces.
+    await move('g1', 'f3').catch(() => undefined);
+    const snapAppended = await readSnapshot(page);
+    const appended = Array.isArray(snapAppended?.sans)
+      && snapAppended.sans.length > resumedLen
+      && JSON.stringify(snapAppended.sans.slice(0, resumedLen)) === JSON.stringify(snapAfter?.sans);
+    ok('next move APPENDS to the resumed game (not a fresh restart)', appended,
+      snapAppended ? `len ${resumedLen} → ${snapAppended.sans.length}` : 'no snapshot');
+
     // ── Resign clears the snapshot (new game only on completion/resign) ─
-    const resign = page.locator('[data-testid="resign-button"], button:has-text("Resign")').first();
+    const resign = page.locator('[data-testid="resign-btn"]').first();
     if (await resign.count()) {
       await resign.click({ timeout: 4000 }).catch(() => undefined);
-      // confirm dialog if present
-      const confirm = page.locator('button:has-text("Resign"), button:has-text("Confirm"), [data-testid="confirm-resign"]').last();
-      await confirm.click({ timeout: 2000 }).catch(() => undefined);
+      await page.locator('[data-testid="resign-yes"]').first().click({ timeout: 3000 }).catch(() => undefined);
       await page.waitForTimeout(2500);
       const snapResigned = await readSnapshot(page);
       ok('snapshot CLEARED on resign', snapResigned === null, snapResigned ? 'still present' : 'cleared');
