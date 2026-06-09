@@ -132,8 +132,55 @@ const PICKER_ACTIONS = [
     description: 'Live game vs the coach starting from this opening.',
     buildInput: (opening: string) => `play it for real ${opening}`,
   },
+  {
+    // "How a pro plays" — routes a free-text question to the coach brain,
+    // which calls the grounded player tools (lookup_player_opening_moves +
+    // lookup_player_games). The phrasing the opening-chip onClick builds
+    // for this mode ("How does <player> play the <opening>?") is
+    // load-bearing: the leading "How does" dodges TEACH_PATTERN and the
+    // trailing "?" trips the bare-name router's `!includes('?')` guard, so
+    // the input falls through to coachService.ask with the full tool
+    // registry instead of being fuzzy-matched as an opening. Do NOT drop
+    // the "?" or prefix it with "show me/teach me" — that silently breaks
+    // the grounding route. buildInput is unused here (the onClick branches
+    // because this mode needs a player AND an opening).
+    id: 'player',
+    label: 'How a pro plays',
+    description: "See a named player's REAL moves in this opening, pulled from their games.",
+    buildInput: (opening: string) => opening,
+  },
 ] as const;
 type PickerActionId = (typeof PICKER_ACTIONS)[number]['id'];
+
+/** The pros with a bundled real-game corpus (`pro-game-references.json`),
+ *  shown as quick chips for the "How a pro plays" picker mode. Any other
+ *  Lichess username works too via the free-text field — the live
+ *  lookup_player_opening_moves tool reads the player's Lichess history. The
+ *  id list mirrors the 8 bundled corpus ids; the display name is what the
+ *  coach query is phrased with (it resolves through the tool's name->Lichess
+ *  alias map). */
+const BUNDLED_PROS: ReadonlyArray<{ id: string; name: string }> = [
+  { id: 'carlsen', name: 'Magnus Carlsen' },
+  { id: 'hikaru', name: 'Hikaru Nakamura' },
+  { id: 'caruana', name: 'Fabiano Caruana' },
+  { id: 'naroditsky', name: 'Daniel Naroditsky' },
+  { id: 'gothamchess', name: 'Levy Rozman' },
+  { id: 'ericrosen', name: 'Eric Rosen' },
+  { id: 'aman', name: 'Aman Hambleton' },
+  { id: 'samayraina', name: 'Samay Raina' },
+];
+
+/** Build the brain-routed query for the "How a pro plays" picker mode.
+ *  Load-bearing shape: the leading "How does" keeps it clear of
+ *  TEACH_PATTERN (which requires a teach/show/walk verb), and the trailing
+ *  "?" trips the bare-name router's `!includes('?')` guard — together they
+ *  guarantee the input falls through to `coachService.ask` with the grounded
+ *  player tools instead of being fuzzy-matched as an opening name. Keep BOTH
+ *  the "How does" prefix and the "?" or the grounding route silently breaks.
+ *  Exported so the routing contract is unit-tested (CoachTeachPage.playerQuery.test). */
+export function buildPlayerStyleQuery(player: string, opening: string): string {
+  return `How does ${player} play the ${opening}?`;
+}
 
 /** Fallback openings shown when the student has no favorites yet —
  *  a curated mix of the most-asked-about ones across both colors. */
@@ -393,6 +440,11 @@ export function CoachTeachPage(): JSX.Element {
   // and submits via the normal handleSubmit path so the picker is
   // purely additive UI.
   const [pickerAction, setPickerAction] = useState<PickerActionId>('teach');
+  // "How a pro plays" mode: which player the opening chip phrases the
+  // query for. `pickerPlayerCustom` (any Lichess username) overrides the
+  // chip selection when non-empty.
+  const [pickerPlayer, setPickerPlayer] = useState<string>('Magnus Carlsen');
+  const [pickerPlayerCustom, setPickerPlayerCustom] = useState<string>('');
   const [favoriteOpenings, setFavoriteOpenings] = useState<OpeningRecord[]>([]);
   useEffect(() => {
     let cancelled = false;
@@ -3804,6 +3856,61 @@ export function CoachTeachPage(): JSX.Element {
                 >
                   {activeAction.description}
                 </div>
+                {/* Player selector — only for the "How a pro plays" mode.
+                    Chips for the 8 bundled-corpus pros + a free-text field
+                    for any Lichess username (the live per-player tool reads
+                    their Lichess history). */}
+                {pickerAction === 'player' && (
+                  <div className="space-y-2">
+                    <div
+                      className="text-[11px] font-medium uppercase tracking-wide px-1"
+                      style={{ color: 'var(--color-text-muted)' }}
+                    >
+                      Pick a player
+                    </div>
+                    <div
+                      className="flex flex-wrap gap-1.5"
+                      data-testid="teach-picker-players"
+                      role="radiogroup"
+                      aria-label="Pick a player"
+                    >
+                      {BUNDLED_PROS.map((p) => {
+                        const selected = !pickerPlayerCustom.trim() && p.name === pickerPlayer;
+                        return (
+                          <button
+                            key={p.id}
+                            type="button"
+                            role="radio"
+                            aria-checked={selected}
+                            onClick={() => {
+                              setPickerPlayer(p.name);
+                              setPickerPlayerCustom('');
+                            }}
+                            className="px-2.5 py-1.5 rounded-full border text-xs font-semibold transition-colors"
+                            style={{
+                              borderColor: selected ? 'var(--color-accent, #06b6d4)' : 'var(--color-border)',
+                              backgroundColor: selected ? 'var(--color-accent, #06b6d4)' : 'transparent',
+                              color: selected ? 'var(--color-bg)' : 'var(--color-text)',
+                            }}
+                            data-testid={`teach-picker-player-${p.id}`}
+                          >
+                            {p.name}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <input
+                      type="text"
+                      value={pickerPlayerCustom}
+                      onChange={(e) => setPickerPlayerCustom(e.target.value)}
+                      placeholder="Or any Lichess username…"
+                      className="w-full px-2.5 py-1.5 rounded-md border text-xs bg-transparent"
+                      style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                      data-testid="teach-picker-player-custom"
+                      aria-label="Lichess username"
+                    />
+                  </div>
+                )}
                 {/* Opening chips — favorites if any, fallback popular otherwise. */}
                 <div
                   className="text-[11px] font-medium uppercase tracking-wide px-1"
@@ -3819,7 +3926,17 @@ export function CoachTeachPage(): JSX.Element {
                     <button
                       key={name}
                       type="button"
-                      onClick={() => void handleSubmit(activeAction.buildInput(name))}
+                      onClick={() => {
+                        // "How a pro plays" builds the load-bearing
+                        // brain-routed phrasing (see PICKER_ACTIONS 'player'
+                        // comment); every other mode uses its buildInput.
+                        if (pickerAction === 'player') {
+                          const who = pickerPlayerCustom.trim() || pickerPlayer;
+                          void handleSubmit(buildPlayerStyleQuery(who, name));
+                        } else {
+                          void handleSubmit(activeAction.buildInput(name));
+                        }
+                      }}
                       className="px-2.5 py-1.5 rounded-md border text-xs hover:opacity-80 transition-opacity"
                       style={{
                         borderColor: 'var(--color-border)',
