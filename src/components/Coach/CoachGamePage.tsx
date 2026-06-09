@@ -3240,7 +3240,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             const activeVoice = resolvePollyVoice(
               activePrefs?.coachPersonality,
               activePrefs?.coachPersonalityVoices,
-              activePrefs?.pollyVoice ?? 'joanna',
+              activePrefs?.pollyVoice ?? 'ruth',
             );
             return POLLY_VOICES.find((v) => v.id === activeVoice)?.engine;
           })(),

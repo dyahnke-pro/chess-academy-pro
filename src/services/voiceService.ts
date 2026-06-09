@@ -97,7 +97,7 @@ export function canStreamProgressivePlaybackFor(
 // can deliver any personality — Ruth doing drill-sergeant, Stephen
 // doing flirtatious, etc.
 export const PERSONALITY_VOICE_DEFAULTS: Record<CoachPersonality, string> = {
-  default: 'joanna',       // neural — warm female; cheaper than generative Ruth (David 2026-06-07)
+  default: 'ruth',         // generative — sultry low female (David's pick 2026-06-07: Joanna reverted)
   soft: 'joanna',          // neural — warm, encouraging female
   edgy: 'stephen',         // neural — dry, sharper male
   flirtatious: 'ruth',     // generative — sultry, low female
@@ -765,7 +765,7 @@ class VoiceService {
     this.cachedPrefs = {
       voiceEnabled: prefs.voiceEnabled ?? true,
       pollyEnabled: prefs.pollyEnabled ?? false,
-      pollyVoice: prefs.pollyVoice || 'joanna',
+      pollyVoice: prefs.pollyVoice || 'ruth',
       coachPersonality: prefs.coachPersonality,
       coachPersonalityVoices: prefs.coachPersonalityVoices,
       coachPersonalitySecondaryVoices: prefs.coachPersonalitySecondaryVoices,
@@ -1152,11 +1152,20 @@ class VoiceService {
       // sultry under flirtatious, clipped under drill-sergeant, etc.
       // Generative voices (Ruth/Matthew/Danielle/Gregory) ignore
       // prosody — pass the style through anyway for consistency.
-      const success = await this.speakPolly(
-        text,
-        voiceForSpeak,
-        this.kidVoiceLock ? 'default' : (prefs.coachPersonality ?? 'default'),
-      );
+      // Pass the personality as the Neural-prosody style ONLY for a
+      // NON-default personality. 'default' (and the kid lock) apply no
+      // prosody, but passing 'default' as a style appended "|default" to
+      // the cache key and "&style=default" to the /api/tts URL — which
+      // MISSED every prefetched entry (prefetchAudio keys WITHOUT a style)
+      // and re-fetched each beat, adding lag. Normalising default →
+      // undefined makes the live lookup hit the prefetched cache for an
+      // instant blob playback (David 2026-06-09: reduce narration lag).
+      const personalityStyle = this.kidVoiceLock
+        ? undefined
+        : prefs.coachPersonality && prefs.coachPersonality !== 'default'
+          ? prefs.coachPersonality
+          : undefined;
+      const success = await this.speakPolly(text, voiceForSpeak, personalityStyle);
       if (success) {
         this.lastTier = 'polly';
         this.lastSpeakDiagnostic.tier = 'polly';
@@ -1759,15 +1768,23 @@ class VoiceService {
 
       const url = getTtsUrl(text, voice, true, style);
 
-      // Older iOS (no MediaSource / ManagedMediaSource streaming): play
-      // straight from the /api/tts URL via the primed <audio> element.
-      // Native progressive streaming — playback starts as bytes arrive,
-      // so no added lag — and it sidesteps BOTH the dead Web Audio output
-      // and the AbortSignal.timeout footgun (there's no fetch here at
-      // all). This is the path the Settings voice-test button proves
-      // works on the affected devices. Repeats are served from the
-      // browser HTTP cache (the endpoint sets max-age=86400).
-      if (!this.canStreamProgressivePlayback() && this.isIosPlatform()) {
+      // iOS plays straight from the /api/tts URL via the primed <audio>
+      // element. Native progressive streaming — playback starts as bytes
+      // arrive, so no added lag — and it sidesteps the dead Web Audio
+      // output, the AbortSignal.timeout footgun, AND the fragile
+      // ManagedMediaSource streaming path (there's no fetch here at all).
+      // This is the path the Settings voice-test button proves works.
+      //
+      // NATIVE iOS (Capacitor WKWebView) ALWAYS takes this path — never
+      // the MediaSource streaming path below. On iOS 26 the WKWebView's
+      // ManagedMediaSource append/sourceBuffer throws, which falls into
+      // speakPolly's catch → coolDownPolly and silences narration entirely
+      // while the Settings Preview (plain <audio>) still plays. Routing
+      // native iOS through playViaElement off the direct URL fixes it
+      // (David 2026-06-09: narration dead on iOS 26.5, Preview worked).
+      // Web iOS Safari keeps the streaming path when ManagedMediaSource
+      // is available; only the old-iOS / native cases use the element.
+      if (this.isIosPlatform() && (isCapacitor || !this.canStreamProgressivePlayback())) {
         this.lastSpeakDiagnostic.pollyOk = true;
         const ok = await this.playViaElement(url, false);
         if (ok) this.lastSpeakDiagnostic.pollyStatus = 200;

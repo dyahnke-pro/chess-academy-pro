@@ -699,10 +699,11 @@ class ChessAcademyDB extends Dexie {
       // Brand-new store; no migration.
     });
 
-    // v30 — switch the default coach voice from Ruth (generative, the
-    // priciest Polly tier) to Joanna (neural, ~half the per-character
-    // cost) at David's request (2026-06-07). One-time flip of the OLD
-    // default value only, so any deliberate later voice choice is kept.
+    // v30 — version bump retained for schema continuity. (It briefly
+    // flipped the default coach voice Ruth→Joanna on 2026-06-07; reverted
+    // same session — David preferred Ruth and the flip is now a no-op so
+    // fresh installs keep the Ruth default. Existing devices that already
+    // ran the flip just change the voice in Settings.)
     this.version(30).stores({
       puzzles: 'id, rating, *themes, srsDueDate, userRating',
       openings: 'id, eco, name, color, isRepertoire, isFavorite',
@@ -725,13 +726,8 @@ class ChessAcademyDB extends Dexie {
       srsOpeningCards: 'id, openingId, nextReviewAt, [openingId+nextReviewAt]',
       findSquareAttempts: 'id, timestamp, target, correct, color',
       misconceptionTags: 'id, tag, source, status, createdAt, openingId, sourceGameId',
-    }).upgrade(async (tx) => {
-      await tx.table('profiles').toCollection().modify((profile: UserProfile) => {
-        const prefs = profile.preferences as unknown as Record<string, unknown>;
-        if (prefs.pollyVoice === 'ruth') {
-          prefs.pollyVoice = 'joanna';
-        }
-      });
+    }).upgrade(async () => {
+      // No-op: the Ruth→Joanna voice flip was reverted (David preferred Ruth).
     });
   }
 }
