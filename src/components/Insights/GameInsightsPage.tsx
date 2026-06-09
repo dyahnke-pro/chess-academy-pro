@@ -192,8 +192,12 @@ export function GameInsightsPage(): JSX.Element {
       animate={{ opacity: 1 }}
       data-testid="game-insights-page"
     >
-      {/* Fixed header */}
-      <div className="px-5 pt-5 pb-0 shrink-0">
+      {/* Fixed header — top padding clears the iOS status bar / Dynamic
+          Island (AppLayout's <main> adds no safe-area-top, so the page
+          owns it). max() keeps the desktop ≥20px while expanding to the
+          notch inset on device — fixes the title cramming under the
+          status bar David reported on the Weaknesses tab. */}
+      <div className="px-5 pt-[max(1.25rem,calc(env(safe-area-inset-top,0px)+0.5rem))] pb-0 shrink-0">
         {/* Title row */}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">

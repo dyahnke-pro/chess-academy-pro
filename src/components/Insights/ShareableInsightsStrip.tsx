@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ShareableInsightCard } from './ShareableInsightCard';
 import {
@@ -11,6 +12,17 @@ import {
  *  as a deliberate swipe. 40px is comfortable for mobile thumbs
  *  without competing with the vertical scroll handler. */
 const SWIPE_THRESHOLD_PX = 40;
+
+/** Direction-aware slide variants for the card carousel. `direction`
+ *  is +1 (went to the next card) or -1 (went to the previous): the
+ *  incoming card enters from the side we're heading toward and the
+ *  outgoing card exits the opposite side — the native iOS page-slide
+ *  feel. Percent offsets keep it responsive to the card width. */
+const SLIDE_VARIANTS = {
+  enter: (direction: number) => ({ x: direction >= 0 ? '100%' : '-100%', opacity: 0 }),
+  center: { x: '0%', opacity: 1 },
+  exit: (direction: number) => ({ x: direction >= 0 ? '-100%' : '100%', opacity: 0 }),
+};
 
 /**
  * ShareableInsightsStrip — the carousel of "did you know" cards at
@@ -37,6 +49,23 @@ export function ShareableInsightsStrip(): JSX.Element | null {
   // loaded-state render called 5).
   const swipeStartXRef = useRef<number | null>(null);
   const swipeStartYRef = useRef<number | null>(null);
+  // Slide direction for the iPhone-style card transition: +1 = the
+  // next card slides in from the right, -1 = the previous card slides
+  // in from the left. Drives the AnimatePresence enter/exit offsets so
+  // the whole card image glides across rather than hard-cutting.
+  const [direction, setDirection] = useState(0);
+
+  // Centralised index movers so the slide direction is always set in
+  // lockstep with the index — tapping arrows AND swiping route through
+  // these, keeping the animation honest about which way we moved.
+  function goNext(): void {
+    setDirection(1);
+    setIndex((i) => Math.min((insights?.length ?? 1) - 1, i + 1));
+  }
+  function goPrev(): void {
+    setDirection(-1);
+    setIndex((i) => Math.max(0, i - 1));
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -81,8 +110,8 @@ export function ShareableInsightsStrip(): JSX.Element | null {
     // Vertical-dominant — don't consume; user is probably scrolling.
     if (Math.abs(dy) > Math.abs(dx)) return;
     if (Math.abs(dx) < SWIPE_THRESHOLD_PX) return;
-    if (dx < 0 && hasNext) setIndex((i) => Math.min(insightCount - 1, i + 1));
-    else if (dx > 0 && hasPrev) setIndex((i) => Math.max(0, i - 1));
+    if (dx < 0 && hasNext) goNext();
+    else if (dx > 0 && hasPrev) goPrev();
   }
 
   return (
@@ -99,7 +128,7 @@ export function ShareableInsightsStrip(): JSX.Element | null {
         {insights.length > 1 && (
           <div className="flex items-center gap-1">
             <button
-              onClick={() => setIndex((i) => Math.max(0, i - 1))}
+              onClick={goPrev}
               disabled={!hasPrev}
               aria-label="Previous insight"
               className="p-1 rounded hover:opacity-80 disabled:opacity-30"
@@ -112,7 +141,7 @@ export function ShareableInsightsStrip(): JSX.Element | null {
               {index + 1} / {insights.length}
             </span>
             <button
-              onClick={() => setIndex((i) => Math.min(insights.length - 1, i + 1))}
+              onClick={goNext}
               disabled={!hasNext}
               aria-label="Next insight"
               className="p-1 rounded hover:opacity-80 disabled:opacity-30"
@@ -142,7 +171,29 @@ export function ShareableInsightsStrip(): JSX.Element | null {
         style={{ touchAction: 'pan-y', cursor: insights.length > 1 ? 'grab' : 'default' }}
         data-testid="shareable-insight-swipe-region"
       >
-        <ShareableInsightCard insight={current} />
+        {/* iPhone-style slide: the outgoing card glides off one edge
+            while the incoming card glides in from the other. `custom`
+            feeds the direction into the variants so next/prev move the
+            opposite ways. `overflow-hidden` clips the off-screen card;
+            `mode="popLayout"` keeps the section height stable mid-slide. */}
+        <div className="relative overflow-hidden">
+          <AnimatePresence initial={false} custom={direction} mode="popLayout">
+            <motion.div
+              key={index}
+              custom={direction}
+              variants={SLIDE_VARIANTS}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                x: { type: 'spring', stiffness: 320, damping: 34 },
+                opacity: { duration: 0.18 },
+              }}
+            >
+              <ShareableInsightCard insight={current} />
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
     </section>
   );
