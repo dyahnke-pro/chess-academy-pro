@@ -32499,35 +32499,35 @@
   {
     "id": "mp-siciliandragon-classical",
     "openingId": "sicilian-dragon",
-    "title": "Classical: Comfortable Equality",
+    "title": "Classical Dragon: The …d5 Central Break",
     "criticalPositionFen": "rnbqkb1r/pp2pp1p/3p1np1/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
-    "overview": "Against the quiet Be2 Classical, Black has no storm to fear. The plan is simple good chess: the knight reroutes to the c4 outpost via a5, trades off White's strong bishop, and Black equalises with every piece on a fine square.",
+    "overview": "In the quiet Classical (Be2) Dragon there is no Yugoslav-Attack storm to fear, so Black plays for the centre. The plan is patient: mass …Be6, …Qc8, …Rd8 behind the d-file, then strike with the freeing …d5 break that liberates the whole position. Reaching …d5 is the Classical Dragon's whole point.",
     "pawnBreaks": [
       {
-        "move": "…b5-b4 — the queenside expansion",
-        "explanation": "Black gains space and prepares …b4 to hit the c3-knight, attacking on the wing the Dragon bishop rakes.",
-        "fen": "rnbqkb1r/pp2pp1p/3p1np1/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6"
+        "move": "…d5 — the freeing central break",
+        "explanation": "After …Be6/…Qc8/…Rd8 mass behind it, …d5 strikes the centre and frees Black’s game; even e5 in reply meets …Ne4 with active play.",
+        "fen": "r1qr2k1/pp2ppbp/2npbnp1/8/4PP2/1NN5/PPP1B1PP/R2Q1RBK b - - 4 12"
       }
     ],
     "pieceManeuvers": [
       {
-        "piece": "Bishop",
-        "route": "…Bf8-g7 — the Dragon bishop",
-        "explanation": "The fianchettoed bishop dominates the long diagonal toward White’s queenside."
+        "piece": "Queen",
+        "route": "…Qd8-c8 — clear d8 for the rook",
+        "explanation": "The queen steps off the d-file so the rook can back the coming …d5."
       },
       {
-        "piece": "Pawn",
-        "route": "…a6 and …b5 — the queenside lever",
-        "explanation": "Black expands to open lines on the wing where his bishop points."
+        "piece": "Rook",
+        "route": "…Rf8-d8 — load the d-file behind the break",
+        "explanation": "The rook swings to d8, lining up directly behind the …d5 break."
       }
     ],
     "strategicThemes": [
-      "No king hunt — Black simply plays solid chess.",
-      "The c4 outpost trades White's best minor piece.",
-      "The long-diagonal bishop is a lasting asset."
+      "No kingside storm to fear in the quiet Classical",
+      "Mass …Be6/…Qc8/…Rd8 behind the centre",
+      "Free the game with the …d5 break"
     ],
     "endgameTransitions": [
-      "A sound structure and the strong bishop give Black a pleasant endgame."
+      "With the centre freed, Black’s active pieces hold the balance into the endgame"
     ],
     "playableLines": [
       {
@@ -32540,17 +32540,48 @@
           "Be3",
           "Nc6",
           "Nb3",
-          "a6"
+          "Be6",
+          "f4",
+          "Qc8",
+          "Kh1",
+          "Rd8",
+          "Bg1",
+          "d5",
+          "e5"
         ],
         "annotations": [
-          "Be2 — White chooses the Classical Dragon, a calmer setup than the sharp Yugoslav Attack with its opposite-side castling race.",
-          "…Bg7! The Dragon bishop takes its post on the long diagonal, raking toward White's queenside — the soul of the whole opening.",
-          "White castles kingside, signalling a positional game.",
-          "…O-O — Black castles too; with both kings safe this becomes a manoeuvring battle, not a slugfest.",
-          "White develops the bishop to e3.",
-          "…Nc6 develops and eyes the d4- and b4-squares.",
-          "White repositions the knight to b3 to free the d-file and discourage …d5.",
-          "…a6! Black begins the queenside expansion, preparing …b5-b4 to attack on the wing where the Dragon bishop already points. Black has a comfortable, dynamic game with the easier plan — Carlsen outplayed Svidler from here."
+          "Be2 — the quiet Classical: White develops modestly, with no Yugoslav-Attack pawn storm coming. Black can play for the centre in peace.",
+          "…Bg7 — the Dragon bishop takes its long diagonal, raking toward White’s queenside.",
+          "O-O — White castles short, the signal there’s no assault on Black’s king here.",
+          "…O-O — Black castles to safety and turns attention to the centre.",
+          "Be3 develops the bishop and eyes the queenside dark squares.",
+          "…Nc6 develops with pressure on the d4-knight.",
+          "Nb3 sidesteps the pressure and eyes the a5- and c5-squares.",
+          "…Be6 develops the light bishop and begins massing Black’s forces behind the centre.",
+          "f4 grabs kingside space — but with no open lines it’s just space, not an attack.",
+          "…Qc8 steps the queen off the d-file, clearing d8 for the rook — quietly preparing the break.",
+          "Kh1 tucks the king into the corner, a useful prophylactic move.",
+          "…Rd8 loads the d-file directly behind the coming …d5.",
+          "Bg1 repositions the bishop; with no concrete plan, White just waits.",
+          "…d5! The freeing central break — the whole Classical Dragon plan was building to this. Black strikes the centre and equalizes cleanly.",
+          "e5 pushes past and hits the f6-knight, but …Ne4 leaps into a fine post — the …d5 break has solved the Dragon’s central problem."
+        ],
+        "learnCues": [
+          "Be2 — the quiet Classical, no storm",
+          "…Bg7 — the Dragon bishop",
+          "O-O — White castles short",
+          "…O-O — safe king, play the centre",
+          "Be3 — develop, eye the dark squares",
+          "…Nc6 — pressure d4",
+          "Nb3 — sidestep, eye a5/c5",
+          "…Be6 — mass behind the centre",
+          "f4 — space, not an attack",
+          "…Qc8 — clear d8 for the rook",
+          "Kh1 — tuck the king away",
+          "…Rd8 — load the d-file",
+          "Bg1 — White just waits",
+          "…d5 — the freeing break!",
+          "e5 — …Ne4, Black is free"
         ],
         "arrows": [
           [],
@@ -32560,9 +32591,15 @@
           [],
           [],
           [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
           []
         ],
-        "title": "The Classical Dragon (Svidler–Carlsen)",
         "highlights": [
           [
             {
@@ -32608,27 +32645,60 @@
           ],
           [
             {
-              "square": "a6",
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "intro": "Black fianchettoes and expands on the queenside.",
         "sources": [
+          "concept:pos-center",
           "concept:pos-development",
-          "concept:pos-space",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
         ],
-        "learnCues": [
-          "Be2 — the Classical Dragon",
-          "…Bg7 — the Dragon bishop",
-          "O-O — White castles short",
-          "…O-O — Black castles",
-          "Be3 — White develops",
-          "…Nc6 — develop, eye b4",
-          "Nb3 — White repositions",
-          "…a6 — start the queenside expansion"
-        ]
+        "title": "The Classical Dragon …d5 Break",
+        "intro": "Black masses …Be6/…Qc8/…Rd8, then frees the game with …d5."
       }
     ]
   },
