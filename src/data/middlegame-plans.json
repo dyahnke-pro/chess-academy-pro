@@ -30922,35 +30922,35 @@
   {
     "id": "mp-scotchgame-mieses",
     "openingId": "scotch-game",
-    "title": "Mieses: Space, the c4 Clamp, and the Bishop Pair Fight",
+    "title": "Scotch Mieses: Space and the c4 Clamp",
     "criticalPositionFen": "r1b1kb1r/p1ppqppp/2p2n2/4P3/8/8/PPP2PPP/RNBQKB1R w KQkq - 1 7",
-    "overview": "The Mieses middlegame: White rides the e5-spearhead and the c4-clamp to bind Black's wrecked queenside pawns, while Black counts on the bishop pair and the …Ba6 pin for activity. A genuinely double-edged modern struggle (Kasparov's choice).",
+    "overview": "White keeps the e5-pawn — the cramping wedge that defines the Mieses — clamps with c4 to grab queenside space and kick the d5-knight, props it with b3, and expands with f4. Black blockades on d5 and hits back with …d6, but White's space gives a durable, comfortable pull.",
     "pawnBreaks": [
       {
-        "move": "c4 — gain queenside space",
-        "explanation": "White kicks the d5-knight and expands, turning the e5-wedge into a lasting space bind.",
-        "fen": "r1b1kb1r/p1ppqppp/2p2n2/4P3/8/8/PPP2PPP/RNBQKB1R w KQkq - 1 7"
+        "move": "c4 — the clamp + queenside space",
+        "explanation": "c4 seizes space and kicks the d5-knight — the heart of the Mieses bind.",
+        "fen": "r1b1kb1r/p1ppqppp/2p5/3nP3/8/8/PPP1QPPP/RNB1KB1R w KQkq - 3 8"
+      },
+      {
+        "move": "f4 — buttress the wedge",
+        "explanation": "f4 props the e5-pawn and expands on the kingside.",
+        "fen": "r3kb1r/p1ppqp1p/b1p3p1/3nP3/2P5/1P6/P3QPPP/RNB1KB1R w KQkq - 0 10"
       }
     ],
     "pieceManeuvers": [
       {
         "piece": "Queen",
-        "route": "Qd1-e2 — support e5 with tempo",
-        "explanation": "The queen props up the advanced pawn and helps White develop while keeping the bind."
-      },
-      {
-        "piece": "Knight",
-        "route": "Nb1-d2 — toward the centre",
-        "explanation": "The knight reroutes to support the centre and the kingside."
+        "route": "Qd1-e2-f2 — behind the wedge",
+        "explanation": "The queen supports e5 from e2, then steps to f2 off the …Ba6 pin to hold the centre."
       }
     ],
     "strategicThemes": [
-      "The e5-pawn cramps Black; the doubled c-pawns are a long-term target.",
-      "c4 + b3 build a queenside clamp.",
-      "Ba3 hits the e7-queen and the dark squares."
+      "Keep the cramping e5-wedge",
+      "Clamp with c4, expand with f4",
+      "Squeeze the blockaded position"
     ],
     "endgameTransitions": [
-      "If Black's activity fades, the structural edge tells in the endgame."
+      "The space advantage carries into a pleasant endgame"
     ],
     "playableLines": [
       {
@@ -30959,21 +30959,43 @@
           "Qe2",
           "Nd5",
           "c4",
-          "Nb6",
-          "Nd2",
-          "Qe6",
+          "Ba6",
           "b3",
-          "a5"
+          "g6",
+          "f4",
+          "d6",
+          "Qf2",
+          "Nf6",
+          "Be2",
+          "dxe5"
         ],
         "annotations": [
-          "Qe2 supports the advanced e5-pawn and prepares to develop with tempo — the Mieses Scotch grants White a space-gaining e5-wedge.",
-          "Black retreats the knight to d5, the natural blockading square.",
-          "c4! White kicks the knight and grabs queenside space, the Mieses' thematic expansion.",
-          "Black's knight steps back to b6.",
-          "White develops the knight toward the kingside and centre.",
-          "…Qe6 eyes the e5-pawn and the light squares.",
-          "b3 secures the c4-pawn and opens the long diagonal for the bishop — White's space advantage is becoming a bind.",
-          "…a5 grabs queenside counterplay, but White holds the e5-wedge, the space, and the more pleasant game — Kasparov ground Karpov down from exactly this Mieses bind."
+          "Qe2 backs up the e5-pawn — the cramping wedge that defines this whole structure — and readies the king's bishop.",
+          "…Nd5 plants the knight on the central blockade square, the post right in front of White's pawns.",
+          "c4! The clamp. White seizes queenside space and kicks the d5-knight — the heart of the Mieses bind.",
+          "…Ba6 pins the c4-pawn to the queen on e2, prodding the clamp before the bishop retreats.",
+          "b3 calmly props c4; White refuses to loosen the bind.",
+          "…g6 prepares …Bg7, training the bishop on the e5-pawn down the long diagonal.",
+          "f4! White buttresses the e5-wedge and expands — the kingside space the plan was built on.",
+          "…d6 finally chips at the e5-pawn, Black's bid for freedom.",
+          "Qf2 steps off the a6-bishop's pin and holds the centre together.",
+          "…Nf6 redeploys the knight now that c4 and b3 have fixed the queenside.",
+          "Be2 completes development and blunts the a6-bishop; White's space gives a durable, comfortable pull.",
+          "…dxe5 strikes the wedge — but fxe5 keeps the pawn and the bind, and White stays on top."
+        ],
+        "learnCues": [
+          "Qe2 — back up the e5-wedge",
+          "…Nd5 — blockade the centre",
+          "c4 — the clamp!",
+          "…Ba6 — pin the c4-pawn",
+          "b3 — prop the clamp",
+          "…g6 — fianchetto vs e5",
+          "f4 — buttress and expand",
+          "…d6 — strike the wedge",
+          "Qf2 — step off the pin",
+          "…Nf6 — redeploy the knight",
+          "Be2 — develop, blunt the bishop",
+          "…dxe5 — fxe5 keeps the bind"
         ],
         "arrows": [
           [],
@@ -30983,18 +31005,17 @@
           [],
           [],
           [],
+          [],
+          [],
+          [],
+          [],
           []
         ],
-        "title": "The Mieses Bind (Kasparov–Karpov)",
         "highlights": [
           [
             {
               "square": "e2",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
@@ -31011,19 +31032,7 @@
           ],
           [
             {
-              "square": "b6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e6",
+              "square": "a6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -31035,27 +31044,54 @@
           ],
           [
             {
-              "square": "a5",
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "intro": "White expands with c4 and presses the e5-wedge bind.",
         "sources": [
           "concept:pos-center",
-          "concept:pos-space",
+          "concept:pos-development",
           "https://en.wikipedia.org/wiki/Scotch_Game"
         ],
-        "learnCues": [
-          "Qe2 — support e5, develop",
-          "…Nd5 — blockade",
-          "c4 — kick the knight, grab space",
-          "…Nb6 — retreat",
-          "Nd2 — develop toward the centre",
-          "…Qe6 — eye e5",
-          "b3 — secure c4, open the diagonal",
-          "…a5 — Black seeks counterplay"
-        ]
+        "title": "The Mieses Space Bind",
+        "intro": "White clamps with c4, expands with f4, and squeezes."
       }
     ]
   },
@@ -31395,35 +31431,30 @@
   {
     "id": "mp-sicilianalapin-d5",
     "openingId": "sicilian-alapin",
-    "title": "Alapin 2...d5: Blockade the Isolated Pawn",
+    "title": "Alapin 2…d5: The d5 Outpost and Easy Equality",
     "criticalPositionFen": "rnb1kbnr/pp2pppp/8/2pq4/8/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 4",
-    "overview": "After 2...d5 Black plays against White's isolated queen's pawn: develop with tempo, pin the f3-knight, blockade d5, and pile on the lone d-pawn.",
+    "overview": "Against the Alapin, 2…d5 is the cleanest equalizer. Black develops, trades on d4 at the right moment, and plants a knight on d5 — a dominant central outpost no white pawn can challenge. After the minors come off, Black stands comfortably with a sound structure and no targets.",
     "pawnBreaks": [
       {
-        "move": "…Nc6 and …Rd8 — pressure d4",
-        "explanation": "Black piles pieces onto the isolated d4-pawn, the structural target.",
-        "fen": "rnb1kbnr/pp2pppp/8/2pq4/8/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 4"
+        "move": "…cxd4 — liquidate the centre",
+        "explanation": "…cxd4 opens the centre exactly when the trades favour Black, clearing the way for the d5-knight.",
+        "fen": "r1b1kb1r/pp3ppp/2n1pn2/2pq4/3P4/N1P1BN2/PP3PPP/R2QKB1R b KQkq - 3 7"
       }
     ],
     "pieceManeuvers": [
       {
         "piece": "Knight",
-        "route": "…Nf6 then …Nbd7/…Nc6 — blockade and pressure",
-        "explanation": "The knights blockade d5 and besiege the isolated d4-pawn."
-      },
-      {
-        "piece": "Bishop",
-        "route": "…Be7 — develop solidly",
-        "explanation": "The bishop completes development before the siege begins."
+        "route": "…Nf6-d5 — the central outpost",
+        "explanation": "After the trades the knight settles on d5, the dominant blockading post that gives Black easy, equal play."
       }
     ],
     "strategicThemes": [
-      "Blockade the d5-square.",
-      "Pin and pile on the isolated d-pawn.",
-      "Trade into a better endgame."
+      "Trade down to a clean structure",
+      "Plant the knight on the d5 outpost",
+      "Equalize with no weaknesses"
     ],
     "endgameTransitions": [
-      "The isolated pawn is a long-term target."
+      "The sound structure and active knight hold easily into an endgame"
     ],
     "playableLines": [
       {
@@ -31433,20 +31464,48 @@
           "Nf6",
           "Nf3",
           "e6",
-          "Bd3",
-          "Be7",
-          "O-O",
-          "O-O"
+          "Na3",
+          "Nc6",
+          "Be3",
+          "cxd4",
+          "Nb5",
+          "Qd8",
+          "Nbxd4",
+          "Nd5",
+          "Nxc6",
+          "bxc6"
         ],
         "annotations": [
-          "d4 — White accepts an isolated queen's pawn for piece activity, the Alapin's main try.",
-          "…Nf6 develops, eyeing the d5- and e4-squares.",
-          "White develops the knight to f3, supporting the IQP.",
-          "…e6 builds a solid structure and prepares to blockade d5.",
-          "White develops the bishop to its active d3 square.",
-          "…Be7 develops, readying castling.",
-          "White castles.",
-          "…O-O — Black castles into a comfortable position: solid structure, easy development, and White's isolated d4-pawn as a long-term target. Sutovsky outplayed Pavasovic by pressuring it."
+          "d4 stakes the centre; White hopes the c3-pawn lends a small space pull.",
+          "…Nf6 develops and eyes the central light squares — d5 above all.",
+          "Nf3 brings the knight toward the centre.",
+          "…e6 opens the f8-bishop and braces to meet d4 calmly.",
+          "Na3 heads for b5, angling at Black's queenside.",
+          "…Nc6 develops and adds a second attacker to d4.",
+          "Be3 props the d4-pawn.",
+          "…cxd4 liquidates the centre at the right moment — the trades only help Black.",
+          "Nb5 jumps in with the Nc7-fork threat, forcing Black to be accurate.",
+          "…Qd8 steps back and covers c7, defusing the fork.",
+          "Nbxd4 regains the pawn; the dust settles with level material.",
+          "…Nd5! The knight reaches its dream square — a central outpost hitting the e3-bishop, the heart of Black's easy equality.",
+          "Nxc6 trades a pair of knights.",
+          "…bxc6 recaptures, and Black is fully equal: the d5-knight dominates and there are no weaknesses to target."
+        ],
+        "learnCues": [
+          "d4 — White takes the centre",
+          "…Nf6 — eye the d5 square",
+          "Nf3 — develop",
+          "…e6 — open the bishop",
+          "Na3 — knight heads to b5",
+          "…Nc6 — pressure d4",
+          "Be3 — prop d4",
+          "…cxd4 — liquidate the centre",
+          "Nb5 — the Nc7 fork threat",
+          "…Qd8 — defuse the fork",
+          "Nbxd4 — regain the pawn",
+          "…Nd5 — the dream outpost!",
+          "Nxc6 — trade knights",
+          "…bxc6 — equal, d5-knight rules"
         ],
         "arrows": [
           [],
@@ -31456,9 +31515,14 @@
           [],
           [],
           [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
           []
         ],
-        "title": "Against the Alapin (Pavasovic–Sutovsky)",
         "highlights": [
           [
             {
@@ -31486,49 +31550,72 @@
           ],
           [
             {
-              "square": "d3",
+              "square": "a3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e7",
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g1",
+              "square": "e3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
-            {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "intro": "Black strikes with ...d5 and targets the IQP.",
         "sources": [
           "concept:pos-center",
-          "concept:pawn-isolated",
+          "concept:pos-development",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation"
         ],
-        "learnCues": [
-          "d4 — White accepts the IQP",
-          "…Nf6 — develop, eye d5",
-          "Nf3 — support the IQP",
-          "…e6 — solid, prepare to blockade",
-          "Bd3 — White develops",
-          "…Be7 — develop, ready to castle",
-          "O-O — White castles",
-          "…O-O — castle, target the IQP"
-        ]
+        "title": "The …Nd5 Outpost",
+        "intro": "Black trades down and dominates the d5 outpost with easy equality."
       }
     ]
   },
