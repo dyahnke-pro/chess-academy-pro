@@ -8120,34 +8120,34 @@
     "id": "mp-frenchdefence-advance",
     "openingId": "french-defence",
     "criticalPositionFen": "r2qkbnr/pp1b1ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 3 6",
-    "title": "Advance: The Queenside Clamp",
-    "overview": "Black has locked the queenside with …c4 and parked a knight on the great f5-square. With the centre fixed, the plan plays itself: keep the clamp, route the king to safety away from White's kingside pawns, and lean on the b3-outpost. Black is never worse here — the space and the structure are permanent.",
+    "title": "French Advance: The Queenside Clamp",
+    "overview": "Against the Advance, Black trades on d4 and then plants a knight on f5 — the dream square that bites at White's d4-pawn, the base of the e5/d4 chain. Behind it Black piles on the half-open c-file with …Rc8 and presses d4 with …Qb6. The plan is slow, structural pressure on the pawn chain's base.",
     "pawnBreaks": [
       {
-        "move": "…cxd4 then …f6 — pressure the chain",
-        "explanation": "Black trades on d4 to fix the target, then can chip at e5 with …f6 to dissolve White’s cramping wedge.",
-        "fen": "r2qkbnr/pp1b1ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 3 6"
+        "move": "…cxd4 — open the c-file, hit the chain base",
+        "explanation": "Trading on d4 opens the c-file for Black’s rooks and fixes d4 as the target at the base of White’s chain.",
+        "fen": "r2qkb1r/pp1bnppp/2n1p3/2ppP3/3P4/N1P2N2/PP2BPPP/R1BQK2R b KQkq - 6 7"
       }
     ],
     "pieceManeuvers": [
       {
         "piece": "Knight",
-        "route": "…Nge7-f5 — the d4 outpost",
-        "explanation": "The knight reroutes to f5, the strong square attacking White’s weak d4-pawn."
+        "route": "…Ng8-e7-f5 — the dream square",
+        "explanation": "The knight reroutes to f5, where it bites at d4 and can never be kicked by a white pawn."
       },
       {
         "piece": "Rook",
-        "route": "…Rc8 — seize the open c-file",
-        "explanation": "Black claims the file opened by …cxd4, the highway against White’s queenside."
+        "route": "…Ra8-c8 — the half-open c-file",
+        "explanation": "The rook claims the file opened by …cxd4, the highway against White’s queenside."
       }
     ],
     "strategicThemes": [
-      "The fixed chain dictates the wings",
-      "Permanent queenside space",
-      "The unkickable f5-knight"
+      "Attack the d4/e5 chain at its base",
+      "The …Nf5 outpost",
+      "Pile on the half-open c-file"
     ],
     "endgameTransitions": [
-      "The queenside space edge carries into any ending"
+      "The pressure on d4 often wins the pawn or a better ending"
     ],
     "playableLines": [
       {
@@ -8155,22 +8155,41 @@
         "moves": [
           "Be2",
           "Nge7",
-          "O-O",
+          "Na3",
           "cxd4",
           "cxd4",
           "Nf5",
-          "Nc3",
-          "Rc8"
+          "Nc2",
+          "Qb6",
+          "O-O",
+          "Rc8",
+          "Kh1"
         ],
         "annotations": [
-          "White develops the bishop, supporting the d4-base of the Advance pawn chain.",
-          "…Nge7 heads for f5 — the dream square in the Advance French, attacking d4 from the side.",
-          "White castles.",
-          "…cxd4 opens the c-file, trading to fix White's centre as a target.",
-          "White recaptures, the d4-pawn now isolated and weak.",
-          "…Nf5! The knight reaches its outpost, piling onto the weak d4-pawn — Black's whole strategy in one move.",
-          "White develops the knight.",
-          "…Rc8 seizes the open c-file. Black has the classic Advance French bind: the d4-pawn is a fixed target, the f5-knight dominates, and the c-file belongs to Black — exactly how Carlsen ground down Giri."
+          "Be2 develops modestly, bracing the d4-pawn.",
+          "…Nge7 starts the knight on its route to the great f5-square.",
+          "Na3 heads for c2 to add a defender to d4.",
+          "…cxd4 trades, opening the c-file and fixing d4 as the chain's base.",
+          "cxd4 recaptures; d4 is now the lasting target.",
+          "…Nf5! The knight lands on its dream square — biting at d4, unkickable by any white pawn.",
+          "Nc2 reinforces d4 against the mounting pressure.",
+          "…Qb6 leans on d4 (and b2), the queen joining the siege.",
+          "O-O White finally castles to safety.",
+          "…Rc8 claims the half-open c-file — the rook joins the queenside pressure.",
+          "Kh1 tucks the king away; Black's structural clamp on d4 is set for the long game."
+        ],
+        "learnCues": [
+          "Be2 — brace d4",
+          "…Nge7 — route to f5",
+          "Na3 — knight toward c2",
+          "…cxd4 — open the c-file",
+          "cxd4 — d4 is the target",
+          "…Nf5 — the dream square!",
+          "Nc2 — reinforce d4",
+          "…Qb6 — lean on d4",
+          "O-O — castle",
+          "…Rc8 — claim the c-file",
+          "Kh1 — the clamp is set"
         ],
         "arrows": [
           [],
@@ -8180,9 +8199,11 @@
           [],
           [],
           [],
+          [],
+          [],
+          [],
           []
         ],
-        "title": "The Advance Bind (Giri–Carlsen)",
         "highlights": [
           [
             {
@@ -8198,30 +8219,167 @@
           ],
           [
             {
-              "square": "g1",
+              "square": "a3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "f5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pawn-chain",
+          "concept:pos-outpost",
+          "https://en.wikipedia.org/wiki/French_Defence"
+        ],
+        "title": "The Advance Queenside Clamp",
+        "intro": "Black plants a knight on f5 and clamps the d4/e5 chain."
+      }
+    ]
+  },
+  {
+    "id": "mp-frenchdefence-burn",
+    "openingId": "french-defence",
+    "criticalPositionFen": "rnbqk2r/ppp1bp1p/4pp2/8/3PN3/8/PPP2PPP/R2QKBNR w KQkq - 0 7",
+    "title": "French Burn: Queenside Space and the Long Diagonal",
+    "overview": "In the Burn, Black gives up the centre for free, easy development. The plan is queenside expansion — …a6 and …b5 grab space — and the light-squared bishop swings to b7, raking the long diagonal toward White's king. A comfortable, active setup with no weaknesses.",
+    "pawnBreaks": [
+      {
+        "move": "…a6 and …b5 — queenside expansion",
+        "explanation": "…b5 grabs space and clears b7 for the bishop’s long diagonal.",
+        "fen": "rnbqk2r/1pp1bp1p/p3p3/5p2/3P4/2N2NP1/PPP2P1P/R2QKB1R b KQkq - 0 9"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "…Bc8-b7 — the long diagonal",
+        "explanation": "The light bishop reaches b7, training on White’s kingside down the long light-squared diagonal."
+      }
+    ],
+    "strategicThemes": [
+      "Queenside expansion with …a6/…b5",
+      "The light bishop on the long diagonal",
+      "Free, weakness-free development"
+    ],
+    "endgameTransitions": [
+      "The sound structure and active bishop hold the balance into an endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqk2r/ppp1bp1p/4pp2/8/3PN3/8/PPP2PPP/R2QKBNR w KQkq - 0 7",
+        "moves": [
+          "Nf3",
+          "f5",
+          "Nc3",
+          "a6",
+          "g3",
+          "b5",
+          "Bg2",
+          "Bb7",
+          "O-O",
+          "O-O",
+          "Ne5",
+          "Bxg2"
+        ],
+        "annotations": [
+          "Nf3 develops toward the centre.",
+          "…f5 hits the e4-knight, gaining time and grabbing kingside space.",
+          "Nc3 sidesteps and develops.",
+          "…a6 prepares the queenside expansion.",
+          "g3 prepares to fianchetto and contest the light squares.",
+          "…b5 grabs queenside space and opens b7 for the bishop.",
+          "Bg2 contests the long diagonal.",
+          "…Bb7 the light bishop reaches the long diagonal, eyeing White's king.",
+          "O-O White castles.",
+          "…O-O Black castles into a comfortable, active position.",
+          "Ne5 centralises the knight on the strong square.",
+          "…Bxg2 trades the light bishops; Black stands easy, with space and no weaknesses."
+        ],
+        "learnCues": [
+          "Nf3 — develop",
+          "…f5 — hit the e4-knight",
+          "Nc3 — develop",
+          "…a6 — prepare …b5",
+          "g3 — prepare Bg2",
+          "…b5 — queenside space",
+          "Bg2 — contest the diagonal",
+          "…Bb7 — the long diagonal",
+          "O-O — castle",
+          "…O-O — comfortable",
+          "Ne5 — centralise",
+          "…Bxg2 — easy equality"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
@@ -8232,171 +8390,66 @@
           ],
           [
             {
-              "square": "c8",
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "intro": "Black targets d4 with the …Nf5 outpost and the c-file.",
         "sources": [
-          "book:french-defence",
-          "concept:pos-center",
+          "concept:pos-space",
+          "concept:pawn-fianchetto",
           "https://en.wikipedia.org/wiki/French_Defence"
         ],
-        "learnCues": [
-          "Be2 — White supports d4",
-          "…Nge7 — head for f5",
-          "O-O — White castles",
-          "…cxd4 — open the c-file",
-          "cxd4 — White's pawn is now weak",
-          "…Nf5 — the dream outpost on d4",
-          "Nc3 — White develops",
-          "…Rc8 — seize the c-file"
-        ]
-      }
-    ]
-  },
-  {
-    "id": "mp-frenchdefence-burn",
-    "openingId": "french-defence",
-    "criticalPositionFen": "rnbqk2r/ppp1bp1p/4pp2/8/3PN3/8/PPP2PPP/R2QKBNR w KQkq - 0 7",
-    "title": "Burn: The Bishop Pair Unleashed",
-    "overview": "Black has the two bishops and a flawless structure; White has castled queenside and will storm the kingside. The plan: complete the fianchetto on b7, redeploy the knight, and break with …c5 to rip open lines for the bishop pair against White's king on b1. The bishops do the talking.",
-    "pawnBreaks": [
-      {
-        "move": "…c5 — challenge the centre",
-        "explanation": "Once developed, …c5 strikes at d4 and frees Black’s game in the Burn structure.",
-        "fen": "rnbqk2r/ppp1bp1p/4pp2/8/3PN3/8/PPP2PPP/R2QKBNR w KQkq - 0 7"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "…Nc6-b4 — harass the queen and the king",
-        "explanation": "The knight develops then jumps to b4, hitting the queen and the squares near White’s king."
-      },
-      {
-        "piece": "Queen",
-        "route": "…Qd5 — centralize and offer the trade",
-        "explanation": "Black centralizes the queen to defuse White’s attack and reach a comfortable ending."
-      }
-    ],
-    "strategicThemes": [
-      "The bishop pair",
-      "Opposite-side attacks",
-      "No weaknesses, only targets"
-    ],
-    "endgameTransitions": [
-      "The two bishops shine in an open ending"
-    ],
-    "playableLines": [
-      {
-        "fen": "rnbqk2r/ppp1bp1p/4pp2/8/3PN3/8/PPP2PPP/R2QKBNR w KQkq - 0 7",
-        "moves": [
-          "Qd3",
-          "Nc6",
-          "O-O-O",
-          "Nb4",
-          "Qb3",
-          "Qd5",
-          "Qxd5",
-          "Nxd5"
-        ],
-        "annotations": [
-          "White develops the queen, eyeing kingside and centre after the Burn's …dxe4 trade.",
-          "…Nc6 develops and immediately leans on the d4-pawn — the Burn gives Black a solid structure with easy piece play.",
-          "White castles long, committing to opposite wings.",
-          "…Nb4! The knight jumps to b4, attacking the d3-queen and eyeing the c2- and d3-squares near White's king.",
-          "White sidesteps to b3.",
-          "…Qd5 centralizes, offering a queen trade that defuses White's attacking intentions.",
-          "White trades queens.",
-          "…Nxd5 recaptures, the knight landing on the dominant d5-outpost. With queens off and a sound, symmetrical structure, Black is comfortable and has the easier endgame — Anand outplayed Gashimov from here."
-        ],
-        "arrows": [
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          []
-        ],
-        "title": "The Burn Simplification (Gashimov–Anand)",
-        "highlights": [
-          [
-            {
-              "square": "d3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "c1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "b4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d3",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "b3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
-        ],
-        "intro": "Black develops actively and trades into a comfortable game.",
-        "sources": [
-          "book:french-defence",
-          "concept:pos-center",
-          "https://en.wikipedia.org/wiki/French_Defence"
-        ],
-        "learnCues": [
-          "Qd3 — White develops the queen",
-          "…Nc6 — develop, pressure d4",
-          "O-O-O — White castles long",
-          "…Nb4 — leap in, hit the queen",
-          "Qb3 — White sidesteps",
-          "…Qd5 — centralize, offer the trade",
-          "Qxd5 — White trades queens",
-          "…Nxd5 — recapture on the outpost"
-        ]
+        "title": "Burn: Queenside Space",
+        "intro": "Black expands with …a6/…b5 and rakes the long diagonal from b7."
       }
     ]
   },
@@ -8404,34 +8457,29 @@
     "id": "mp-frenchdefence-classical",
     "openingId": "french-defence",
     "criticalPositionFen": "rnb1k2r/pppnqppp/4p3/3pP3/3P4/2N5/PPP2PPP/R2QKBNR w KQkq - 0 7",
-    "title": "Classical: The Opposite-Wing Race",
-    "overview": "Kings on opposite wings means a pure attacking race. White's king sits on c1, so Black throws the queenside pawns and pieces at it: open the centre with …cxd4, swing the knight to b6 and c4, and roll …b5–b4. Speed beats material here — Black does not defend, Black attacks first.",
+    "title": "French Classical: The Opposite-Wing Race",
+    "overview": "White builds the f4/e5 wedge and castles long to storm the kingside; Black answers on the other wing. The plan is …c5 and …b5, blasting open the queenside where White's king will sit. Whoever's pawns arrive first wins — and Black's attack on the castled king is the faster one.",
     "pawnBreaks": [
       {
-        "move": "…c5 then …c4 — the queenside storm",
-        "explanation": "The …c5 break hits d4, then …c4 clamps and rolls the …b5-b4 pawn storm at White’s castled king.",
-        "fen": "rnb1k2r/pppnqppp/4p3/3pP3/3P4/2N5/PPP2PPP/R2QKBNR w KQkq - 0 7"
+        "move": "…c5 and …b5 — the queenside storm",
+        "explanation": "…c5 cracks the centre and …b5-b4 tears open the files toward White’s queenside-castled king.",
+        "fen": "rnb1k2r/1ppnqppp/p3p3/3pP3/3P1P2/2N2N2/PPP3PP/R2QKB1R b KQkq - 1 8"
       }
     ],
     "pieceManeuvers": [
       {
-        "piece": "Knight",
-        "route": "…Nc6 — pressure d4",
-        "explanation": "The knight targets the base of White’s pawn chain."
-      },
-      {
-        "piece": "Pawn",
-        "route": "…a6 and …c4 — the queenside lever",
-        "explanation": "Black prepares and launches the …b5-b4 storm toward the white king."
+        "piece": "Queen",
+        "route": "…Qe7xc5 — grab the pawn, eye the queenside",
+        "explanation": "The queen recaptures on c5, active and pointed at White’s coming castled position."
       }
     ],
     "strategicThemes": [
-      "Opposite-side attacks",
-      "Speed over material",
-      "The half-open c-file at the c1-king"
+      "Storm the queenside with …c5/…b5/…b4",
+      "Race White’s kingside pawns",
+      "Open files at the long-castled king"
     ],
     "endgameTransitions": [
-      "Rare — the attacks decide before an ending"
+      "If the attack is parried, the queenside majority tells later"
     ],
     "playableLines": [
       {
@@ -8441,20 +8489,36 @@
           "a6",
           "Nf3",
           "c5",
-          "Qd2",
+          "dxc5",
           "Nc6",
+          "Qd2",
+          "Qxc5",
           "O-O-O",
-          "c4"
+          "b5"
         ],
         "annotations": [
-          "White bolsters the e5-wedge with f4, the Steinitz Classical's broad pawn front.",
-          "…a6 prepares the queenside expansion, the standard plan against White's space — Black attacks where White's king will go.",
-          "White develops the knight.",
-          "…c5! The thematic French break, striking at the d4-base of White's chain and opening the c-file for the attack.",
-          "White prepares to castle long with Qd2.",
-          "…Nc6 piles onto d4, the focus of Black's pressure.",
-          "White castles queenside, defining the battle: opposite-side castling, a race of pawn storms.",
-          "…c4! Black clamps the queenside and gains the c5-square, fixing White's pawns and rolling the …b5-b4 storm toward White's king — Morozevich's signature aggression against Shirov."
+          "f4 buttresses the e5-wedge and signals a kingside pawn storm.",
+          "…a6 prepares …b5 — Black starts on the opposite wing.",
+          "Nf3 develops, supporting the centre.",
+          "…c5 strikes the centre and opens lines toward White's queenside.",
+          "dxc5 opens the position — exactly the files Black wants.",
+          "…Nc6 develops with tempo, pressing toward d4 and b4.",
+          "Qd2 connects and prepares to castle long.",
+          "…Qxc5 regains the pawn, the queen eyeing White's queenside.",
+          "O-O-O White commits the king to the queenside — straight into Black's pawns.",
+          "…b5 the storm begins; …b4 next will tear open the king. Black's attack is the faster one."
+        ],
+        "learnCues": [
+          "f4 — the kingside wedge",
+          "…a6 — prepare …b5",
+          "Nf3 — support the centre",
+          "…c5 — crack the centre",
+          "dxc5 — open lines",
+          "…Nc6 — develop with tempo",
+          "Qd2 — prepare O-O-O",
+          "…Qxc5 — eye the queenside",
+          "O-O-O — into the storm",
+          "…b5 — the storm begins!"
         ],
         "arrows": [
           [],
@@ -8464,9 +8528,10 @@
           [],
           [],
           [],
+          [],
+          [],
           []
         ],
-        "title": "The Classical Queenside Storm (Shirov–Morozevich)",
         "highlights": [
           [
             {
@@ -8490,10 +8555,18 @@
             {
               "square": "c5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
@@ -8504,12 +8577,8 @@
           ],
           [
             {
-              "square": "c6",
+              "square": "c5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
@@ -8520,27 +8589,18 @@
           ],
           [
             {
-              "square": "c4",
+              "square": "b5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "intro": "Black breaks with …c5 and storms the queenside.",
         "sources": [
-          "book:french-defence",
-          "concept:pos-center",
+          "concept:att-queenside-attack",
+          "concept:pawn-chain",
           "https://en.wikipedia.org/wiki/French_Defence"
         ],
-        "learnCues": [
-          "f4 — White props up e5",
-          "…a6 — ready the queenside storm",
-          "Nf3 — White develops",
-          "…c5 — the French break vs d4",
-          "Qd2 — White readies O-O-O",
-          "…Nc6 — pile on d4",
-          "O-O-O — opposite castling",
-          "…c4 — clamp, roll …b5-b4"
-        ]
+        "title": "Classical: the Wing Race",
+        "intro": "Black storms the queenside with …c5/…b5 at White’s long-castled king."
       }
     ]
   },
@@ -8548,34 +8608,28 @@
     "id": "mp-frenchdefence-exchange",
     "openingId": "french-defence",
     "criticalPositionFen": "rnbqkb1r/ppp2ppp/5n2/3p4/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5",
-    "title": "Exchange: Seize the Only Open File",
-    "overview": "The symmetrical Exchange offers one trump: the open e-file. Black's whole plan is to grab it first with …Re8, trade off the heavy pieces down it, and nurse a tiny initiative. There are no weaknesses — so respect the balance, take the small edge, and never overpress.",
-    "pawnBreaks": [
-      {
-        "move": "…c5 — break the symmetry",
-        "explanation": "Black strikes back in the centre to seize the initiative rather than drift into a dead-equal Exchange.",
-        "fen": "rnbqkb1r/ppp2ppp/5n2/3p4/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5"
-      }
-    ],
+    "title": "French Exchange: Seize the Open e-File",
+    "overview": "The symmetrical Exchange gives one trump worth fighting for: the only open file, the e-file. Black mirrors White's development and then races to grab it first — …Rfe8 plants the rook on the file before White's, the small but real edge in a level position.",
+    "pawnBreaks": [],
     "pieceManeuvers": [
       {
-        "piece": "Bishop",
-        "route": "…Bf8-d6 — the active diagonal",
-        "explanation": "Black mirrors White’s active bishop, eyeing the kingside."
+        "piece": "Rook",
+        "route": "…Rf8-e8 — the open e-file",
+        "explanation": "Black claims the lone open file before White, the one structural plus in the symmetrical Exchange."
       },
       {
-        "piece": "Queen",
-        "route": "…Qe7 — offer the trade, prepare to castle",
-        "explanation": "Black neutralizes White’s check and reaches comfortable activity."
+        "piece": "Bishop",
+        "route": "…Bc8-g4 — pin the knight",
+        "explanation": "The bishop develops actively, pinning the f3-knight before the symmetrical setup is complete."
       }
     ],
     "strategicThemes": [
-      "The open e-file is the only imbalance",
-      "Symmetry — patience over force",
-      "First to the file holds the edge"
+      "Grab the open e-file first",
+      "Mirror, then out-coordinate",
+      "Patient pressure in a level position"
     ],
     "endgameTransitions": [
-      "Often drawish, but the e-file can yield a small endgame pull"
+      "Owning the open file is the edge that carries into the endgame"
     ],
     "playableLines": [
       {
@@ -8583,22 +8637,50 @@
         "moves": [
           "Bd3",
           "Bd6",
-          "Qe2+",
-          "Be6",
-          "c4",
-          "dxc4",
-          "Bxc4",
-          "Qe7"
+          "O-O",
+          "O-O",
+          "Bg5",
+          "Bg4",
+          "Nbd2",
+          "Nbd7",
+          "c3",
+          "c6",
+          "Qc2",
+          "Qc7",
+          "Rfe1",
+          "Rfe8"
         ],
         "annotations": [
-          "White develops the bishop actively, hoping the symmetrical Exchange gives an easy edge.",
-          "…Bd6 mirrors, claiming the same active diagonal — in the Exchange French, whoever plays more energetically gets the chances, and Black refuses to be passive.",
-          "White checks to disrupt.",
-          "…Be6 calmly blocks, completing development and reinforcing the d5-pawn.",
-          "White breaks the symmetry with c4.",
-          "…dxc4 accepts, opening the position for Black's well-placed pieces.",
-          "White recaptures.",
-          "…Qe7 offers the queen trade and clears the back rank for castling, reaching comfortable, active equality. The Exchange is no draw — Grischuk outplayed Carlsen from this balanced, double-edged footing."
+          "Bd3 takes the natural diagonal in the symmetrical structure.",
+          "…Bd6 mirrors — Black matches White's setup.",
+          "O-O White castles.",
+          "…O-O Black castles.",
+          "Bg5 develops the bishop with a pin idea.",
+          "…Bg4 mirrors, pinning White's f3-knight in turn.",
+          "Nbd2 develops toward the centre.",
+          "…Nbd7 mirrors again.",
+          "c3 supports d4 and the structure.",
+          "…c6 supports d5 symmetrically.",
+          "Qc2 lines up on the b1-h7 diagonal.",
+          "…Qc7 mirrors.",
+          "Rfe1 contests the open e-file.",
+          "…Rfe8! Black claims the e-file too — and being a tempo behind, must hold it accurately. Owning the only open file is the whole game here."
+        ],
+        "learnCues": [
+          "Bd3 — the natural diagonal",
+          "…Bd6 — mirror",
+          "O-O — castle",
+          "…O-O — castle",
+          "Bg5 — pin idea",
+          "…Bg4 — pin in turn",
+          "Nbd2 — develop",
+          "…Nbd7 — mirror",
+          "c3 — support d4",
+          "…c6 — support d5",
+          "Qc2 — the diagonal",
+          "…Qc7 — mirror",
+          "Rfe1 — contest the e-file",
+          "…Rfe8 — claim the e-file!"
         ],
         "arrows": [
           [],
@@ -8608,9 +8690,14 @@
           [],
           [],
           [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
           []
         ],
-        "title": "Active Equality (Carlsen–Grischuk)",
         "highlights": [
           [
             {
@@ -8626,57 +8713,84 @@
           ],
           [
             {
-              "square": "e2",
+              "square": "g1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e6",
+              "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c4",
+              "square": "g5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c4",
+              "square": "g4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c4",
+              "square": "d2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e7",
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "intro": "Black answers the Exchange with energetic, active play.",
         "sources": [
-          "book:french-defence",
+          "concept:pos-open-file",
           "concept:pos-development",
           "https://en.wikipedia.org/wiki/French_Defence"
         ],
-        "learnCues": [
-          "Bd3 — White develops actively",
-          "…Bd6 — mirror, claim the diagonal",
-          "Qe2+ — White checks",
-          "…Be6 — block, support d5",
-          "c4 — White breaks symmetry",
-          "…dxc4 — accept, open lines",
-          "Bxc4 — White recaptures",
-          "…Qe7 — offer the trade, ready O-O"
-        ]
+        "title": "Exchange: the e-File",
+        "intro": "Black races to seize the only open file with …Rfe8."
       }
     ]
   },
@@ -8684,34 +8798,23 @@
     "id": "mp-frenchdefence-fortknox",
     "openingId": "french-defence",
     "criticalPositionFen": "rn1qkbnr/pppb1ppp/4p3/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5",
-    "title": "Fort Knox: The Impregnable Setup",
-    "overview": "The bad bishop is gone — traded on f3 — and Black is left with a symmetrical, weakness-free fortress. There is nothing for White to attack. The plan is patient: complete development, castle, contest the e-file, and prepare a freeing …c5 or …e5 break at leisure. Offer White nothing.",
-    "pawnBreaks": [
-      {
-        "move": "…c5 — free the position",
-        "explanation": "After trading the bishops, …c5 challenges d4 and opens lines for Black’s sound pieces.",
-        "fen": "rn1qkbnr/pppb1ppp/4p3/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5"
-      }
-    ],
+    "title": "French Fort Knox: The Impregnable Setup",
+    "overview": "The Fort Knox solves the French's eternal problem — the bad light-squared bishop — by developing it OUTSIDE the chain to d7-c6, where it trades itself off. What's left is a rock-solid, weakness-free structure with no targets. Black develops calmly and waits; there is simply nothing for White to attack.",
+    "pawnBreaks": [],
     "pieceManeuvers": [
       {
         "piece": "Bishop",
-        "route": "…Bd7-c6 — solve the bad bishop",
-        "explanation": "The light-squared bishop reaches the long diagonal to trade off White’s best piece — the Fort Knox’s whole idea."
-      },
-      {
-        "piece": "Knight",
-        "route": "…Ngf6 — challenge e4",
-        "explanation": "Black develops and offers to trade White’s active knight."
+        "route": "…Bc8-d7-c6 — trade the bad bishop",
+        "explanation": "The French problem bishop comes out to c6 and trades on e4/f3, leaving Black with no weak piece and no weak squares."
       }
     ],
     "strategicThemes": [
-      "A fortress with no weaknesses",
-      "Patient development",
-      "Trade into safe equality"
+      "Trade off the bad light-squared bishop",
+      "A weakness-free, impregnable structure",
+      "Calm development, no targets"
     ],
     "endgameTransitions": [
-      "Comfortable, balanced endings — Black is rock-solid"
+      "With no weaknesses, Black equalizes cleanly into any endgame"
     ],
     "playableLines": [
       {
@@ -8723,18 +8826,37 @@
           "Nd7",
           "O-O",
           "Ngf6",
-          "Nc3",
-          "Be7"
+          "Ng3",
+          "Be7",
+          "Re1",
+          "O-O",
+          "c3"
         ],
         "annotations": [
-          "White develops the knight, having the freer game against the solid Fort Knox.",
-          "…Bc6! The Fort Knox's signature: the light-squared bishop — usually France's problem piece — reaches the great a8-h1 diagonal, where it trades off White's best attacker.",
-          "White develops the bishop.",
-          "…Nd7 develops toward f6 and supports the solid structure.",
-          "White castles.",
-          "…Ngf6 challenges the e4-knight and completes the kingside, offering to trade White's active pieces.",
-          "White develops the knight.",
-          "…Be7 readies castling. Black has the Fort Knox blueprint: trade off the light-squared bishops, keep a rock-solid structure with no weaknesses, and steer toward an endgame where the position's soundness tells — exactly the grind Duda used to beat Gukesh."
+          "Nf3 develops; White keeps a small space edge.",
+          "…Bc6 the point of the Fort Knox — the bad bishop comes out to challenge e4/f3.",
+          "Bd3 retreats the knight's support and eyes the kingside.",
+          "…Nd7 develops, preparing …Ngf6.",
+          "O-O White castles.",
+          "…Ngf6 completes the kingside development.",
+          "Ng3 repositions the knight off the centre.",
+          "…Be7 modestly develops; Black's setup is solid as a rock.",
+          "Re1 centralises the rook.",
+          "…O-O Black castles into a weakness-free position.",
+          "c3 supports d4 — but there is nothing here for White to attack. The Fort Knox has done its job."
+        ],
+        "learnCues": [
+          "Nf3 — develop",
+          "…Bc6 — the Fort Knox point",
+          "Bd3 — eye the kingside",
+          "…Nd7 — prepare …Ngf6",
+          "O-O — castle",
+          "…Ngf6 — finish developing",
+          "Ng3 — reposition",
+          "…Be7 — solid",
+          "Re1 — centralise",
+          "…O-O — weakness-free",
+          "c3 — nothing to attack"
         ],
         "arrows": [
           [],
@@ -8744,9 +8866,11 @@
           [],
           [],
           [],
+          [],
+          [],
+          [],
           []
         ],
-        "title": "The Fort Knox Solidity (Gukesh–Duda)",
         "highlights": [
           [
             {
@@ -8786,7 +8910,7 @@
           ],
           [
             {
-              "square": "c3",
+              "square": "g3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -8795,24 +8919,33 @@
               "square": "e7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ]
         ],
-        "intro": "Black trades the bad bishop and builds the solid wall.",
         "sources": [
-          "book:french-defence",
+          "concept:pos-prophylaxis",
           "concept:pos-development",
           "https://en.wikipedia.org/wiki/French_Defence"
         ],
-        "learnCues": [
-          "Nf3 — White develops",
-          "…Bc6 — the bishop to the long diagonal",
-          "Bd3 — White develops",
-          "…Nd7 — develop toward f6",
-          "O-O — White castles",
-          "…Ngf6 — challenge e4",
-          "Nc3 — White develops",
-          "…Be7 — ready to castle"
-        ]
+        "title": "Fort Knox: Impregnable",
+        "intro": "Black trades the bad bishop via …Bc6 for a weakness-free fortress."
       }
     ]
   },
@@ -9276,34 +9409,29 @@
     "id": "mp-frenchdefence-tarrasch",
     "openingId": "french-defence",
     "criticalPositionFen": "rnbqkb1r/pp1n1ppp/4p3/2ppP3/3P1P2/8/PPPN2PP/R1BQKBNR w KQkq - 0 6",
-    "title": "Tarrasch: Siege of the Isolated Pawn",
-    "overview": "The exchanges have left White with an isolated d4-pawn — the strategic heart of the Tarrasch. Black's plan is textbook: blockade the d5-square, line up against d4, and aim the …Bd6/…Qc7 battery at h2. The isolated pawn is a long-term target Black can press for the whole game.",
+    "title": "French Tarrasch: Attack the Chain Base",
+    "overview": "Against the e5-advance Tarrasch, Black goes after the base of White's d4/e5 pawn chain. …Nc6 and …Qb6 pile on d4, …cxd4 trades to fix it as the target, and …Bb4+ disrupts White's coordination with check. The principle is pure: attack a pawn chain where it's rooted — at d4.",
     "pawnBreaks": [
       {
-        "move": "…b5-b4 — undermine the c3-base",
-        "explanation": "The queenside pawn storm attacks White’s pawn chain where it is anchored, the closed-Tarrasch plan.",
-        "fen": "rnbqkb1r/pp1n1ppp/4p3/2ppP3/3P1P2/8/PPPN2PP/R1BQKBNR w KQkq - 0 6"
+        "move": "…cxd4 — hit the chain base",
+        "explanation": "Trading on d4 fixes White’s chain base as a fixed target for Black’s pieces — the d4-pawn can no longer advance away.",
+        "fen": "r1b1kb1r/pp1n1ppp/1qn1p3/2ppP3/3P1P2/2P2NP1/PP5P/R1BQKBNR b KQkq - 0 8"
       }
     ],
     "pieceManeuvers": [
       {
-        "piece": "Rook",
-        "route": "…Rb8 — support the …b5-b4 storm",
-        "explanation": "The rook backs the queenside expansion before it rolls."
-      },
-      {
-        "piece": "Knight",
-        "route": "…Nc6 — pressure d4",
-        "explanation": "The knight targets the base of White’s pawn chain."
+        "piece": "Bishop",
+        "route": "…Bf8-b4 — the disrupting pin/check",
+        "explanation": "…Bb4+ checks and ties White’s pieces down, gaining time against the chain."
       }
     ],
     "strategicThemes": [
-      "Play against the isolated d4-pawn",
-      "Blockade the d5-square",
-      "The h2 battery"
+      "Attack the d4/e5 chain at its base (d4)",
+      "Pile pieces on d4 with …Nc6/…Qb6",
+      "Disrupt with …Bb4+"
     ],
     "endgameTransitions": [
-      "Trade pieces — the weak d4-pawn falls in the ending"
+      "Pressure on the fixed d4-pawn often nets it or a better ending"
     ],
     "playableLines": [
       {
@@ -9312,21 +9440,31 @@
           "c3",
           "Nc6",
           "Ndf3",
-          "Rb8",
-          "Bd3",
-          "b5",
-          "Ne2",
-          "g6"
+          "Qb6",
+          "g3",
+          "cxd4",
+          "cxd4",
+          "Bb4+"
         ],
         "annotations": [
-          "White buttresses the centre with c3, the closed Tarrasch's broad pawn front.",
-          "…Nc6 develops and pressures d4, the base of White's chain.",
-          "White reroutes the knight to f3.",
-          "…Rb8! The rook swings behind the b-pawn for the queenside expansion — Black builds the …b5-b4 lever that attacks White's chain at its c3-anchor.",
-          "White develops the bishop.",
-          "…b5! The queenside lever rolls forward, gaining space and preparing …b4 to undermine c3.",
-          "White repositions the knight toward g3.",
-          "…g6 opens the way for the fianchetto and contests the kingside, completing a flexible setup. Black has the standard closed-Tarrasch picture: pressure on d4, the …b5-b4 storm rolling, and the c3-base of White's chain under fire — Ponomariov outplayed Shirov from this footing."
+          "c3 props the d4-pawn — the base of White's chain.",
+          "…Nc6 develops and adds the first attacker to d4.",
+          "Ndf3 reroutes the knight to defend d4.",
+          "…Qb6 piles a second heavy piece on d4 (and eyes b2).",
+          "g3 prepares Bg2 and shores up the kingside.",
+          "…cxd4 trades to FIX d4 as a fixed, attackable target.",
+          "cxd4 recaptures; the pawn is now rooted and can't run.",
+          "…Bb4+! The check disrupts White's coordination and gains time — Black's siege of the chain base is in full swing."
+        ],
+        "learnCues": [
+          "c3 — prop the chain base",
+          "…Nc6 — first attacker on d4",
+          "Ndf3 — defend d4",
+          "…Qb6 — pile on d4",
+          "g3 — prepare Bg2",
+          "…cxd4 — fix the target",
+          "cxd4 — d4 is rooted",
+          "…Bb4 — disrupt with check!"
         ],
         "arrows": [
           [],
@@ -9338,7 +9476,6 @@
           [],
           []
         ],
-        "title": "The Closed Tarrasch Expansion (Shirov–Ponomariov)",
         "highlights": [
           [
             {
@@ -9350,10 +9487,6 @@
             {
               "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
@@ -9364,51 +9497,42 @@
           ],
           [
             {
-              "square": "b8",
+              "square": "b6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d3",
+              "square": "g3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b5",
+              "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e2",
+              "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g6",
+              "square": "b4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "intro": "Black expands on the queenside to undermine the pawn chain.",
         "sources": [
-          "book:french-defence",
-          "concept:pos-center",
+          "concept:pawn-chain",
+          "concept:pos-development",
           "https://en.wikipedia.org/wiki/French_Defence"
         ],
-        "learnCues": [
-          "c3 — White props the centre",
-          "…Nc6 — pressure d4",
-          "Ndf3 — White reroutes",
-          "…Rb8 — ready …b5-b4",
-          "Bd3 — White develops",
-          "…b5 — the queenside lever",
-          "Ne2 — White repositions",
-          "…g6 — prepare the fianchetto"
-        ]
+        "title": "Tarrasch: the Chain Base",
+        "intro": "Black piles on d4 — the base of the chain — with …Nc6/…Qb6/…cxd4/…Bb4+."
       }
     ]
   },
