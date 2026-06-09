@@ -14091,34 +14091,29 @@
     "id": "mp-nimzoindian-saemisch",
     "openingId": "nimzo-indian",
     "criticalPositionFen": "rnbqk2r/pp1p1ppp/4pn2/2p5/2PP4/P1P5/4PPPP/R1BQKBNR w KQkq - 0 6",
-    "title": "Nimzo Sämisch: Blockade the Big Centre",
-    "overview": "White has the bishop pair and a big centre but doubled c-pawns. Black's plan is the blockade: pieces on the light squares in front of White's pawns — …Ne8-d6, …Ba6 pressuring c4 — trade off White's attackers, and prove the doubled c-pawns a liability before the centre rolls.",
+    "title": "Nimzo Sämisch: Pressure the Doubled c-Pawns",
+    "overview": "The Sämisch hands White a broad c3/d4/e4 pawn centre and the bishop pair, paid for with doubled c-pawns. But — as Lasker taught — doubled pawns aren't a weakness in themselves; only when they can't be defended. So Black doesn't sit and hope: …b6 and …Ba6 train fire on the c4-pawn to MAKE the doubled pair a real target, while …Ne8 reroutes to blockade the centre and prepare …f5.",
     "pawnBreaks": [
       {
         "move": "…b6 and …Ba6 — hit the doubled c-pawns",
-        "explanation": "Trading the light-squared bishops exposes White’s backward c4-pawn, the target the whole Sämisch defence aims at.",
-        "fen": "rnbqk2r/pp1p1ppp/4pn2/2p5/2PP4/P1P5/4PPPP/R1BQKBNR w KQkq - 0 6"
+        "explanation": "…b6 clears a6 so the light bishop can pressure c4, turning White’s doubled pawns from a non-issue into a genuine liability.",
+        "fen": "r1bq1rk1/pp1p1ppp/2n1pn2/2p5/2PP4/P1PBP3/4NPPP/R1BQK2R b KQ - 4 8"
       }
     ],
     "pieceManeuvers": [
       {
         "piece": "Knight",
-        "route": "…Nf6-e8-d6 — blockade and attack c4",
-        "explanation": "The knight reroutes to d6 to blockade White’s centre and pile onto the weak c4-pawn."
-      },
-      {
-        "piece": "Knight",
-        "route": "…Nc6 — pressure d4",
-        "explanation": "The other knight targets the base of White’s centre."
+        "route": "…Nf6-e8 — reroute to blockade and …f5",
+        "explanation": "The knight steps back to e8, heading for d6/g7 to blockade the centre and clear the f-pawn for the …f5 lever against e4."
       }
     ],
     "strategicThemes": [
-      "Blockade the doubled c-pawns",
-      "Light-square control vs the bishop pair",
-      "Contain the big centre"
+      "Make the doubled c-pawns a real target with …Ba6",
+      "Blockade White’s broad centre",
+      "Prepare the …f5 lever against e4"
     ],
     "endgameTransitions": [
-      "The doubled c-pawns decide a simplified ending"
+      "If the centre is neutralized, the doubled pawns tell in the endgame"
     ],
     "playableLines": [
       {
@@ -14131,17 +14126,33 @@
           "Ne2",
           "b6",
           "e4",
-          "Ne8"
+          "Ne8",
+          "O-O",
+          "Ba6"
         ],
         "annotations": [
-          "White builds the big centre, the Sämisch's compensation for the doubled c-pawns Black inflicted with …Bxc3.",
-          "…Nc6 develops and targets the d4-pawn — Black plays against White's weakened queenside structure.",
-          "White develops the bishop aggressively.",
-          "…O-O tucks the king away, ready for the long manoeuvring battle.",
-          "White prepares e4 with the knight.",
-          "…b6 prepares …Ba6, trading off White's good bishop and hitting the backward c4-pawn — the heart of the anti-Sämisch plan.",
-          "White grabs the full centre with e4.",
-          "…Ne8! The knight reroutes toward d6, where it blockades the centre and piles onto the weak c4-pawn. Black's blueprint is clear: blockade White's centre, fix the doubled c-pawns, and let the structural damage decide — Nakamura ground Carlsen down exactly so."
+          "e3 opens the bishop and shores up the big c4/d4/e-pawn centre the Sämisch is built on.",
+          "…Nc6 develops and leans on d4, the front of White’s pawn mass.",
+          "Bd3 takes the b1-h7 diagonal — and quietly defends the c4-pawn — part of White’s bishop-pair trumps.",
+          "…O-O Black castles to safety before starting work on the centre.",
+          "Ne2 heads for g3, supporting the e3-e4 push that completes the broad centre.",
+          "…b6 opens the road for the light bishop to a6 — the first step in turning the doubled c-pawns into a target.",
+          "e4! White’s full centre stands — c4, d4, e4 — backed by the bishop pair. It’s a winner only while it stays mobile.",
+          "…Ne8 reroutes the knight toward d6/g7 to blockade the centre and free the f-pawn for …f5.",
+          "O-O White tucks the king away, development done, banking on space and the two bishops.",
+          "…Ba6! The point. Doubled pawns aren’t weak in themselves — only when they can’t be defended — so Black trains the bishop on c4 to MAKE the doubled pair a genuine liability and clamp the centre."
+        ],
+        "learnCues": [
+          "e3 — open the bishop, shore the centre",
+          "…Nc6 — lean on d4",
+          "Bd3 — diagonal + defend c4",
+          "…O-O — castle to safety",
+          "Ne2 — heading to g3 for e4",
+          "…b6 — open the road for …Ba6",
+          "e4 — the full big centre",
+          "…Ne8 — reroute, prepare …f5",
+          "O-O — bank on space and bishops",
+          "…Ba6 — fix c4 as the target!"
         ],
         "arrows": [
           [],
@@ -14151,9 +14162,10 @@
           [],
           [],
           [],
+          [],
+          [],
           []
         ],
-        "title": "Blockading the Sämisch (Carlsen–Nakamura)",
         "highlights": [
           [
             {
@@ -14165,10 +14177,6 @@
             {
               "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
@@ -14193,10 +14201,6 @@
             {
               "square": "b6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c4",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
@@ -14210,24 +14214,27 @@
               "square": "e8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ]
         ],
-        "intro": "Black blockades the centre and targets the doubled c-pawns.",
         "sources": [
           "concept:pawn-doubled",
-          "concept:pos-center",
+          "concept:pos-development",
           "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
         ],
-        "learnCues": [
-          "e3 — White builds the centre",
-          "…Nc6 — target d4",
-          "Bd3 — White develops",
-          "…O-O — king safe for the grind",
-          "Ne2 — White readies e4",
-          "…b6 — prepare …Ba6, hit c4",
-          "e4 — White takes the centre",
-          "…Ne8 — reroute to d6, blockade"
-        ]
+        "title": "Sämisch: Target the Doubled Pawns",
+        "intro": "Black plays …b6/…Ba6 to make White’s doubled c-pawns a real weakness."
       }
     ]
   },
