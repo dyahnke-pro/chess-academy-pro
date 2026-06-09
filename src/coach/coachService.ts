@@ -430,6 +430,24 @@ export function isPlanQuestion(ask: string | undefined): boolean {
   return !!ask && PLAN_QUESTION_RE.test(ask);
 }
 
+/** A BEST-MOVE / SOUNDNESS question — "what's the best move here?", "is
+ *  this sound?", "does White only have one good move?". Answering it
+ *  HONESTLY means naming the engine's best move AND the short line that
+ *  shows why (the opponent's reply + the follow-up). Those forward SANs
+ *  aren't legal in the current position, so the bare-SAN claim gate flagged
+ *  them, exhausted the retry budget, and served the cold "I can't verify…
+ *  run it through the engine" fallback — on a position the coach was
+ *  literally holding a Stockfish eval for (David 2026-06-09, "No bueno").
+ *  Detecting it here exempts JUST the bare-SAN gate for the turn (the same
+ *  carve-out plan/move-narration questions already get); every fabrication
+ *  guard — percentages, game counts, ratings, player attributions, "most
+ *  popular" comparatives — stays fully in force, so G3 is not weakened. */
+const BEST_MOVE_QUESTION_RE =
+  /\bbest\s+move\b|\bbest\s+continuation\b|\bstrongest\s+move\b|\bonly\s+(?:\w+\s+){0,3}(?:good\s+)?moves?\b|\bone\s+(?:good\s+)?move\b|\bwhat\s+should\s+(?:i|white|black|we)\s+play\b|\bwhat'?s?\s+(?:the\s+|white'?s?\s+|black'?s?\s+)?best\b|\b(?:right|correct|winning)\s+move\b|\bis\s+(?:this|that|it|[A-Za-z0-9+#=-]{1,6})\s+(?:the\s+)?(?:best|sound|good|winning|correct|playable)\b/i;
+export function isBestMoveQuestion(ask: string | undefined): boolean {
+  return !!ask && BEST_MOVE_QUESTION_RE.test(ask);
+}
+
 async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Promise<CoachAnswer> {
   // WO-COACH-UNIFY-01 visibility: include task + maxTokens in the
   // ask-received audit so paste-back audit logs show which surface
@@ -871,6 +889,13 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             // X"). Detected from the user's ask. The stat / count / player /
             // comparative guards still apply. (Response-loop audit 2026-06-05.)
             planQuestion: isPlanQuestion(input.ask),
+            // BEST-MOVE / SOUNDNESS questions exempt the bare-SAN gate too:
+            // the honest answer names the engine's best move + the short
+            // line that proves it (forward moves not legal now). The
+            // stat/count/player/comparative guards still apply. (David
+            // 2026-06-09 "No bueno": the coach refused a plain "best move
+            // here?" because the explanation's forward SANs tripped the gate.)
+            bestMoveQuestion: isBestMoveQuestion(input.ask),
             surface: coachSurfaceToRoute(input.liveState.surface),
           }
         : undefined);

@@ -429,8 +429,19 @@ export function validateClaims(
   // stocked out a plain "give me a plan" question (response-loop audit
   // 2026-06-05). The stat / count / player / comparative guards below stay
   // on `hasMasterData`, so G3's real fabrication vectors remain gated.
+  // BEST-MOVE / SOUNDNESS questions ("what's the best move?", "is this
+  // sound?", "only one good move?") are exempt for the same reason as
+  // plan/move-narration turns: the honest answer names the engine's best
+  // move PLUS the short proving line (the opponent's reply + the follow-up),
+  // and those forward SANs aren't legal in the current position, so the
+  // bare-SAN gate flagged them and served the cold "run it through the
+  // engine" fallback — on a position the coach was holding a Stockfish eval
+  // for (David 2026-06-09 "No bueno"). The percentage / count / rating /
+  // player / comparative guards below stay gated on `hasMasterData`, so the
+  // real fabrication vectors remain blocked; the G6 arrow validator still
+  // board-verifies every SAN.
   const canVerifySans =
-    !context.moveNarration && !context.planQuestion &&
+    !context.moveNarration && !context.planQuestion && !context.bestMoveQuestion &&
     (hasMasterData || hasDbData || !!context.groundedFromPlayedGame);
   if (canVerifySans) {
     for (const san of sans) {

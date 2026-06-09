@@ -157,4 +157,15 @@ export interface MasterPlayContext {
    *  the real fabrication vectors are still gated). Set by
    *  `buildMasterPlayContext`. */
   planQuestion?: boolean;
+  /** True when the user's turn is a BEST-MOVE / SOUNDNESS question
+   *  ("what's the best move?", "is this sound?", "only one good move?").
+   *  The honest answer names the engine's best move AND the short line
+   *  that proves it — forward moves not legal in the current position —
+   *  which tripped the bare-SAN gate and served the cold "run it through
+   *  the engine" fallback (David 2026-06-09). When set, the bare-SAN gate
+   *  is skipped for the turn; the percentage / count / rating / player /
+   *  comparative guards stay fully in force. Detected via
+   *  `isBestMoveQuestion` in coachService and threaded to
+   *  `MasterPlayContext.bestMoveQuestion`. */
+  bestMoveQuestion?: boolean;
 }
