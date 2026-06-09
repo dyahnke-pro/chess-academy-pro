@@ -218,6 +218,31 @@ play for X" framing — never an equality claim.** No prose authored; the build
 reads the actual `concept:`/`book:` passage text before writing, in original
 words.
 
+### Phase 2 addendum — narration-honesty scan (2026-06-09, DONE)
+
+Grepped `say`/`sayShort` across all flagged-opening lesson files for
+equality/soundness language ("equal", "comfortable", "fully sound", "never
+worse", "risk-free", "dead level"…). **Nuanced result — NOT a blanket lie:**
+
+- **Mostly honest / on the SOUND sibling lines** (no action): Pirc Classical is
+  tagged in-code `engine -0.42`; the KID Fianchetto beat already says *"be honest
+  about the verdict — Black is a shade worse… a shade passive"* (the correct
+  register); the Budapest **Adler** main line and the King's Gambit **Modern/
+  Fischer** lines that genuinely recoup to ~level legitimately say "roughly
+  balanced / comfortable". Alekhine **Exchange** ("full equality") is the calm
+  ~equal line, not the flagged Four Pawns.
+- **VERIFY-PER-LINE during the build** (the equality claim must be checked
+  against THAT line's eval, not the sibling's): the genuinely-dim flagged lines —
+  **Pirc Austrian** (−1.86), **Benoni Taimanov** (−0.7+), **Budapest Fajarowicz**
+  (−1.1), and the King's Gambit **Allgaier/Muzio** sacs (−2.6/−3.6) — must NOT
+  carry "equal/comfortable/never worse" on their own beats. The scan didn't catch
+  an obvious violation on those specific beats, but the cross-check (claim ↔ that
+  beat's terminus eval) is a build-time task folded into the per-line authoring.
+- **Net:** no emergency overclaim found; the honesty risk is real but contained,
+  and the per-line claim↔eval check is part of Phase-2 authoring for the dim/sac
+  lines. The `narration-honesty assertion` (Phase 3 gate) automates this going
+  forward.
+
 ---
 
 ## Phase 3 — The gate fix (prevent recurrence; build after the content repair)
