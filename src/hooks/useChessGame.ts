@@ -77,6 +77,9 @@ export interface UseChessGameReturn {
   getPiece: (square: string) => { type: string; color: string } | null;
   reset: (fen?: string) => void;  // backward-compat alias for resetGame
   loadFen: (fen: string) => boolean;
+  /** Replay a SAN list into a fresh game, lighting the last move.
+   *  Used to RESUME a saved coach game without ghost squares. */
+  loadHistory: (sans: string[]) => boolean;
 }
 
 function findKingInCheck(chess: Chess): string | null {
@@ -327,6 +330,33 @@ export function useChessGame(
     }
   }, [clearSelection]);
 
+  /**
+   * Replay a SAN move list into a fresh game. Unlike `loadFen`, this
+   * rebuilds the full chess.js history AND lights the last move's
+   * squares — which is what makes a RESUMED game look like a real game
+   * in progress instead of a position dropped onto the board with no
+   * highlight (the "ghost squares" that got WO-RESUME-01's FEN-only
+   * restore disabled). Returns false (and leaves the game untouched)
+   * if any SAN is illegal, so a corrupt snapshot can't wedge the board.
+   */
+  const loadHistory = useCallback((sans: string[]): boolean => {
+    const replay = new Chess();
+    try {
+      // chess.js throws on an illegal SAN — the catch turns that into a
+      // clean false so a corrupt snapshot can't wedge the board.
+      for (const san of sans) replay.move(san);
+    } catch {
+      return false;
+    }
+    chessRef.current = replay;
+    setFen(replay.fen());
+    const verbose = replay.history({ verbose: true });
+    const last = verbose[verbose.length - 1];
+    setLastMove(last ? { from: last.from, to: last.to } : null);
+    clearSelection();
+    return true;
+  }, [clearSelection]);
+
   return useMemo(() => ({
     fen,
     position: fen,
@@ -356,11 +386,12 @@ export function useChessGame(
     getPiece,
     reset,
     loadFen,
+    loadHistory,
   // eslint-disable-next-line react-hooks/exhaustive-deps -- reset excluded as it always creates new closure; reset === resetGame
   }), [
     fen, turn, inCheck, checkSquare, isGameOver, isCheckmate, isStalemate,
     isDraw, lastMove, history, selectedSquare, legalMoves, boardOrientation,
     makeMove, onDrop, onSquareClick, flipBoard, setOrientation, undoMove, resetGame,
-    clearSelection, getLegalMoves, getPiece, loadFen, getFen,
+    clearSelection, getLegalMoves, getPiece, loadFen, loadHistory, getFen,
   ]);
 }

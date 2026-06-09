@@ -644,4 +644,43 @@ describe('useChessGame', () => {
       expect(result.current.history).toHaveLength(1);
     });
   });
+
+  // WO-RESUME-01: replaying a SAN list to resume a saved coach game.
+  describe('loadHistory (resume)', () => {
+    it('replays a SAN list, rebuilding position + history + last-move highlight', () => {
+      const { result } = renderHook(() => useChessGame());
+      let ok = false;
+      act(() => {
+        ok = result.current.loadHistory(['e4', 'e5', 'Nf3', 'Nc6']);
+      });
+      expect(ok).toBe(true);
+      // Real history rebuilt (not a bare FEN drop) — the fix for ghost squares.
+      expect(result.current.history).toEqual(['e4', 'e5', 'Nf3', 'Nc6']);
+      expect(result.current.turn).toBe('w');
+      // The board lights the FINAL move's squares so a resumed game looks live.
+      expect(result.current.lastMove).toEqual({ from: 'b8', to: 'c6' });
+      expect(result.current.fen).toContain('r1bqkbnr/pppp1ppp');
+    });
+
+    it('rejects an illegal SAN list and leaves the game untouched', () => {
+      const { result } = renderHook(() => useChessGame());
+      let ok = true;
+      act(() => {
+        ok = result.current.loadHistory(['e4', 'e5', 'Qz9']);
+      });
+      expect(ok).toBe(false);
+      expect(result.current.history).toHaveLength(0);
+    });
+
+    it('resumes an empty history to the starting position cleanly', () => {
+      const { result } = renderHook(() => useChessGame());
+      let ok = false;
+      act(() => {
+        ok = result.current.loadHistory([]);
+      });
+      expect(ok).toBe(true);
+      expect(result.current.history).toHaveLength(0);
+      expect(result.current.lastMove).toBeNull();
+    });
+  });
 });

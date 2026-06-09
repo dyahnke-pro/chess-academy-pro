@@ -46,7 +46,7 @@ import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { narrateMove } from '../../services/coachAgentRunner';
 import { useSettings } from '../../hooks/useSettings';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
-import { DEFAULT_TIME_CONTROL_ID, TIME_CONTROLS, getTimeControlById } from '../../services/chessClock';
+import { DEFAULT_TIME_CONTROL_ID, TIME_CONTROLS, getTimeControlById, type ClockState } from '../../services/chessClock';
 import { shouldPersistFinishedGame } from '../../utils/coachGamePersistence';
 import { useChessClock } from '../../hooks/useChessClock';
 import { coachService } from '../../coach/coachService';
@@ -559,6 +559,11 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   const previousFenRef = useRef<string | null>(null);
   const [isCoachThinking, setIsCoachThinking] = useState(false);
   const moveCountRef = useRef(0);
+  // WO-RESUME-01: a resumed timed game stashes its saved clock here; the
+  // clock hook is declared further down, so a dedicated effect below it
+  // consumes this ref to restore the remaining time after the gameId /
+  // time-control resets have settled. Null for unlimited / fresh games.
+  const pendingResumeClockRef = useRef<ClockState | null>(null);
   // Squares whose hanging-piece warning has already been spoken THIS
   // game — keyed by gameId so it self-resets on restart/new game. A
   // given loose piece is narrated once, never repeated every ply
@@ -770,23 +775,33 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       searchParams.has('opening') ||
       searchParams.has('side');
     if (hasExplicitStart) return;
-    // Disabled by WO-CLEANUP-01 — resume produces ghost squares; see WO-RESUME-01 for rebuild.
-    const RESUME_ENABLED = false;
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (!RESUME_ENABLED) return;
+    // WO-RESUME-01: rebuilt restore. Replays the saved SAN history (not a
+    // bare FEN) so chess.js has real history and the board lights the last
+    // move — the fix for the "ghost squares" that got the old FEN-only
+    // resume disabled. Re-entering the Play tab now picks the game back up
+    // exactly where it was left; a fresh game only starts on completion /
+    // resign (which clear the snapshot) or an explicit restart.
     void loadCoachPlayState().then((saved) => {
       if (!saved) return;
       // Only restore when we haven't made any moves yet (mount state).
       if (moveCountRef.current > 0) return;
-      setDifficulty(saved.difficulty);
-      setPlayerColor(saved.playerColor);
-      setTimeControlId(getTimeControlById(saved.timeControlId).id);
-      const ok = game.loadFen(saved.fen);
+      const ok = game.loadHistory(saved.sans);
       if (!ok) {
-        // Saved FEN is corrupt — drop it and start fresh.
+        // Saved history is corrupt — drop it and start fresh.
         void clearCoachPlayState();
         return;
       }
+      setDifficulty(saved.difficulty);
+      setPlayerColor(saved.playerColor);
+      setTimeControlId(getTimeControlById(saved.timeControlId).id);
+      // Restore the move list + hints/takebacks/keyMoments so the UI and
+      // the post-game analysis resume intact. gameId carries over so the
+      // clock-reset effect keys off the SAME game.
+      setGameState(saved.gameState);
+      moveCountRef.current = saved.sans.length;
+      // Stash the clock for the dedicated restore effect below the clock
+      // hook (it must run after the gameId / time-control resets settle).
+      pendingResumeClockRef.current = saved.clock ?? null;
       if (saved.subject) {
         handleOpeningRequest(saved.subject);
       }
@@ -794,38 +809,8 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Persist the active game on every board change so the next visit
-  // resumes where we left off. Skipped while a review is loaded
-  // (review mode has its own state path), while the game is done
-  // (clearCoachPlayState runs in the game-over path instead), and
-  // while no real moves have been played yet (writing a starting
-  // position as a resumable snapshot buys us nothing and just wastes
-  // a DB write on every mount).
-  useEffect(() => {
-    if (reviewMoves) return;
-    if (gameState.status !== 'playing') return;
-    if (game.isGameOver) return;
-    if (gameState.moves.length === 0) return;
-    void saveCoachPlayState({
-      fen: game.fen,
-      playerColor,
-      difficulty,
-      timeControlId,
-      subject: subjectParam ?? null,
-      halfMoveCount: moveCountRef.current,
-      updatedAt: Date.now(),
-    });
-  }, [
-    game.fen,
-    game.isGameOver,
-    reviewMoves,
-    gameState.status,
-    gameState.moves.length,
-    playerColor,
-    difficulty,
-    timeControlId,
-    subjectParam,
-  ]);
+  // (Active-game persistence lives below the clock hook so the snapshot
+  //  can include the live remaining time — see WO-RESUME-01.)
 
   // Honor `?narrate=1` from the agent's start_play action. Flips
   // both the session-store narrationMode and the appStore voice
@@ -1962,7 +1947,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // the player isn't flagged for time spent off the main game board.
   const clockRunning =
     gameState.status === 'playing' && !game.isGameOver && !temporaryFen && !practicePosition && !isExploreMode;
-  const { clock: clockState, enabled: clockEnabled, recordMove: recordClockMove, reset: resetClock } = useChessClock({
+  const { clock: clockState, enabled: clockEnabled, recordMove: recordClockMove, reset: resetClock, restore: restoreClock } = useChessClock({
     timeControl,
     turn: game.turn,
     running: clockRunning,
@@ -1980,6 +1965,56 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     prevMovesLenRef.current = 0;
     clockHistoryRef.current = [];
   }, [gameState.gameId, resetClock]);
+
+  // WO-RESUME-01: restore a resumed game's remaining clock. Declared
+  // AFTER the reset-on-gameId effect above so it wins: the resume sets a
+  // new gameId → that effect resets the clock to full → this one then
+  // stamps the saved remaining time back. Guarded by the ref so it fires
+  // exactly once per resume, never during normal play.
+  useEffect(() => {
+    const pending = pendingResumeClockRef.current;
+    if (!pending) return;
+    pendingResumeClockRef.current = null;
+    restoreClock(pending);
+  }, [gameState.gameId, timeControlId, restoreClock]);
+
+  // Persist the active game on every board change so re-entering the Play
+  // tab resumes exactly where we left off (position + move list + clock).
+  // Skipped while a review is loaded (its own state path), once the game
+  // is done (the game-over path clears the snapshot instead), and before
+  // any real move (an empty snapshot buys nothing). Reads the live clock
+  // via ref. WO-RESUME-01.
+  useEffect(() => {
+    if (reviewMoves) return;
+    if (gameState.status !== 'playing') return;
+    if (game.isGameOver) return;
+    if (gameState.moves.length === 0) return;
+    void saveCoachPlayState({
+      fen: game.fen,
+      sans: game.history,
+      lastMove: game.lastMove,
+      gameState,
+      clock: clockEnabled ? clockStateRef.current : null,
+      playerColor,
+      difficulty,
+      timeControlId,
+      subject: subjectParam ?? null,
+      halfMoveCount: moveCountRef.current,
+      updatedAt: Date.now(),
+    });
+  }, [
+    game.fen,
+    game.history,
+    game.lastMove,
+    game.isGameOver,
+    reviewMoves,
+    gameState,
+    clockEnabled,
+    playerColor,
+    difficulty,
+    timeControlId,
+    subjectParam,
+  ]);
 
   // Apply the increment + snapshot remaining time for the side that just moved.
   // Driven off moves.length so neither commit site has to be touched. Reads the

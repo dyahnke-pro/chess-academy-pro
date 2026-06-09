@@ -21,6 +21,9 @@ interface UseChessClockResult {
   enabled: boolean;
   recordMove: (moved: Color) => void;
   reset: () => void;
+  /** Restore the clock to a saved remaining-time snapshot (resuming a
+   *  timed game). No-op for unlimited time controls. */
+  restore: (state: ClockState) => void;
 }
 
 const TICK_MS = 100;
@@ -51,6 +54,13 @@ export function useChessClock({ timeControl, turn, running, onFlag }: UseChessCl
     setClock((prev) => applyIncrement(prev, moved, timeControl));
   }, [enabled, timeControl]);
 
+  const restore = useCallback((state: ClockState): void => {
+    if (!enabled) return;
+    flaggedRef.current = false;
+    lastTsRef.current = null; // fresh elapsed window; tick resumes from here
+    setClock({ whiteMs: state.whiteMs, blackMs: state.blackMs });
+  }, [enabled]);
+
   useEffect(() => {
     if (!enabled || !running || flaggedRef.current) {
       lastTsRef.current = null;
@@ -77,5 +87,5 @@ export function useChessClock({ timeControl, turn, running, onFlag }: UseChessCl
     };
   }, [enabled, running, turn]);
 
-  return { clock, enabled, recordMove, reset };
+  return { clock, enabled, recordMove, reset, restore };
 }

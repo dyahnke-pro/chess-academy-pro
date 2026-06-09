@@ -17,9 +17,15 @@
  * truth; everything else is session configuration.
  */
 import { db } from '../db/schema';
-import type { ChatMessage } from '../types';
+import type { ChatMessage, CoachGameState } from '../types';
+import type { ClockState } from './chessClock';
 
-const META_KEY = 'coachPlayActive.v1';
+// v2 (WO-RESUME-01): snapshot now carries the full SAN history + the
+// CoachGameState + clock so resume rebuilds a CONSISTENT game (real
+// chess.js history, correct last-move highlight, intact move list) —
+// the v1 FEN-only snapshot produced "ghost squares" and was never
+// restored. Bumping the key cleanly ignores any stale v1 record.
+const META_KEY = 'coachPlayActive.v2';
 /** Separate key for the per-game chat transcript so corruption here
  *  can't break the main resume flow. Paired with META_KEY by caller
  *  (GameChatPanel wiring in CoachGamePage). */
@@ -33,8 +39,19 @@ const CHAT_MAX_MESSAGES = 200;
 const MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 
 export interface CoachPlayActiveState {
-  /** FEN after the most recent move. The board resumes here. */
+  /** FEN after the most recent move. Kept for validation / a last-ditch
+   *  fallback; the SAN history below is the primary restore source. */
   fen: string;
+  /** Full SAN move list. Replayed on resume so chess.js rebuilds real
+   *  history and the board lights the last move (no ghost squares). */
+  sans: string[];
+  /** Last move's squares — restores the board highlight immediately. */
+  lastMove: { from: string; to: string } | null;
+  /** The CoachGameState snapshot (move list + hints + takebacks +
+   *  keyMoments + result) so the move-list UI + analysis resume intact. */
+  gameState: CoachGameState;
+  /** Remaining clock for a timed game. Null/omitted = unlimited. */
+  clock: ClockState | null;
   /** Which colour the student is playing. */
   playerColor: 'white' | 'black';
   /** Difficulty level for the engine. CoachGamePage only accepts
@@ -74,7 +91,9 @@ export async function loadCoachPlayState(): Promise<CoachPlayActiveState | null>
     const record = await db.meta.get(META_KEY);
     if (!record) return null;
     const value = record.value as unknown as CoachPlayActiveState | undefined;
-    if (!value || !value.fen) return null;
+    // Require the SAN history (the primary restore source). A snapshot
+    // without it can't rebuild a consistent game, so treat as nothing.
+    if (!value || !value.fen || !Array.isArray(value.sans) || value.sans.length === 0) return null;
     if (Date.now() - value.updatedAt > MAX_AGE_MS) {
       // Stale — clear so we don't keep reading it forever.
       await clearCoachPlayState();
