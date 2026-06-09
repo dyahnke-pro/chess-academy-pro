@@ -5,6 +5,9 @@
 interface ImportMetaEnv {
   /** PostHog Cloud project API key (`phc_…`). Unset → analytics no-ops. */
   readonly VITE_POSTHOG_KEY?: string;
+  /** Alias for the PostHog project key under its configured name. Read as
+   *  a fallback so analytics works whichever name the build env uses. */
+  readonly VITE_PUBLIC_POSTHOG_KEY?: string;
   /** PostHog ingestion host. Defaults to US cloud when unset. */
   readonly VITE_POSTHOG_HOST?: string;
   /** Master switch for the hard paywall gate. `'true'` makes the gate

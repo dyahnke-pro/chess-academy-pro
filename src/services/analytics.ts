@@ -137,7 +137,14 @@ export function buildEventProps(entry: AuditEntry): Record<string, unknown> {
 /** Read the PostHog key from the build-time env. Returns undefined when
  *  unset (the no-op case). */
 function resolveKey(): string | undefined {
-  const key = import.meta.env.VITE_POSTHOG_KEY;
+  // Accept either env-var name. The key was originally `VITE_POSTHOG_KEY`
+  // but the configured var is named `VITE_PUBLIC_POSTHOG_KEY` — reading
+  // only the old name left analytics (and the audit→PostHog mirror) a
+  // silent no-op on every build that had the new name, so device voice/
+  // narration bugs were undiagnosable (David 2026-06-09). Prefer the old
+  // name when present so existing prod config keeps working.
+  const key =
+    import.meta.env.VITE_POSTHOG_KEY || import.meta.env.VITE_PUBLIC_POSTHOG_KEY;
   return key && key.length > 0 ? key : undefined;
 }
 
