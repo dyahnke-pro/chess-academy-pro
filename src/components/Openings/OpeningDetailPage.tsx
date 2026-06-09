@@ -1549,11 +1549,11 @@ export function OpeningDetailPage(): JSX.Element {
               </>
             )}
           </div>
-          {isProContext && <ProAttributionNotice className="mt-1.5" />}
         </div>
         <PageHelp
           helpId="opening-detail"
           title="How to use a Masterclass"
+          footer={isProContext ? <ProAttributionNotice /> : undefined}
           steps={[
             { label: 'Watch', body: 'Sit back — the line plays itself while the coach explains every idea. This is where you GET the opening.' },
             { label: 'Learn', body: 'Now you play the moves. The voice cues each one; you make it on the board. Locks the line into your hands.' },

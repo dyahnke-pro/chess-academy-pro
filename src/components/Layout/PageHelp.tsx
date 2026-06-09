@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { Info, X } from 'lucide-react';
 import { db } from '../../db/schema';
@@ -32,13 +32,16 @@ interface PageHelpProps {
    * the auto-open runs, making this the SECOND bubble in sequence.
    */
   suppressAutoOpen?: boolean;
+  /** Optional content rendered below the steps — e.g. a legal/attribution
+   *  notice on the pro-masterclass surfaces. */
+  footer?: ReactNode;
 }
 
 function metaKey(helpId: string): string {
   return `pagehelp-seen-${helpId}`;
 }
 
-export function PageHelp({ title, steps, className = '', helpId, suppressAutoOpen = false }: PageHelpProps): JSX.Element {
+export function PageHelp({ title, steps, className = '', helpId, suppressAutoOpen = false, footer }: PageHelpProps): JSX.Element {
   const [open, setOpen] = useState(false);
 
   // First-visit auto-open: check Dexie once on mount; if unseen, open + mark
@@ -112,6 +115,11 @@ export function PageHelp({ title, steps, className = '', helpId, suppressAutoOpe
                 </li>
               ))}
             </ol>
+            {footer && (
+              <div className="mt-4 pt-3 border-t border-theme-border" data-testid="page-help-footer">
+                {footer}
+              </div>
+            )}
           </div>
         </div>,
         document.body,
