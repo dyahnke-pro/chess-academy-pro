@@ -19,18 +19,26 @@
 
 import { existsSync, readFileSync } from 'node:fs';
 
+// Each secret has a canonical name + accepted ALIASES. The Vercel project env
+// (and env configs synced from it) name the same keys with VITE_ prefixes
+// (VITE_DEEPSEEK_API_KEY) or bespoke labels (Read_key_PostHog); without the
+// alias list this reporter wrongly cried "NOT set" for keys that were present
+// under another name (the 2026-06-09 false alarm). Presence = ANY alias set.
 const SECRETS = [
-  { env: 'DEEPSEEK_KEY', use: 'primary coach/brain LLM (client → api.deepseek.com); bakes into the build' },
-  { env: 'ANTHROPIC_KEY', use: 'fallback LLM provider' },
-  { env: 'AUDIT_STREAM_SECRET', use: 'x-audit-secret for GET /api/audit-stream (gate G2)' },
-  { env: 'VERCEL_TOKEN', use: 'Vercel API/CLI auth — deploy + manage project settings (e.g. Ignored Build Step to disable preview builds)' },
-  { env: 'POSTHOG_API_KEY', use: 'PostHog personal API key (phx_, read scopes) — query product analytics via `node scripts/posthog-query.mjs`; DO NOT ask David for it, it lives in the env config' },
+  { env: 'DEEPSEEK_KEY', aliases: ['VITE_DEEPSEEK_API_KEY', 'DEEPSEEK_API_KEY'], use: 'primary coach/brain LLM (client → api.deepseek.com); bakes into the build' },
+  { env: 'ANTHROPIC_KEY', aliases: ['VITE_ANTHROPIC_API_KEY', 'ANTHROPIC_API_KEY'], use: 'fallback LLM provider' },
+  { env: 'AUDIT_STREAM_SECRET', aliases: [], use: 'x-audit-secret for GET /api/audit-stream (gate G2)' },
+  { env: 'VERCEL_TOKEN', aliases: [], use: 'Vercel API/CLI auth — deploy + manage project settings (e.g. Ignored Build Step to disable preview builds)' },
+  { env: 'POSTHOG_API_KEY', aliases: ['Read_key_PostHog', 'PostHog_Read_API_KEY', 'POSTHOG_READ_API_KEY'], use: 'PostHog personal API key (read scopes) — query product analytics via `node scripts/posthog-query.mjs`; DO NOT ask David for it, it lives in the env config' },
 ];
+
+const isSet = (name) => Boolean(process.env[name] && process.env[name].trim());
 
 const present = [];
 const missing = [];
 for (const s of SECRETS) {
-  if (process.env[s.env] && process.env[s.env].trim()) present.push(s);
+  const found = [s.env, ...(s.aliases ?? [])].find(isSet);
+  if (found) present.push({ ...s, foundAs: found });
   else missing.push(s);
 }
 
@@ -38,7 +46,7 @@ const localEnv = ['.env.local', '.env'].filter((f) => existsSync(f));
 
 const lines = ['── session secrets ──'];
 if (present.length) {
-  lines.push(`available in env (use freely, do not ask): ${present.map((s) => s.env).join(', ')}`);
+  lines.push(`available in env (use freely, do not ask): ${present.map((s) => s.foundAs === s.env ? s.env : `${s.env} (as ${s.foundAs})`).join(', ')}`);
 }
 if (missing.length) {
   lines.push(`NOT set: ${missing.map((s) => s.env).join(', ')}`);
