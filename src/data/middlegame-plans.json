@@ -1840,33 +1840,27 @@
     "openingId": "benko-gambit",
     "criticalPositionFen": "rn1qkb1r/3ppppp/b4n2/2pP4/8/8/PP2PPPP/RNBQKBNR w KQkq - 0 6",
     "title": "Benko: The Queenside Squeeze",
-    "overview": "The full Benko grip is assembled: the g7-bishop on the long diagonal, knights heading for the queenside, and the rooks ready to double on the open a- and b-files. The plan is automatic and relentless: …Qa5, …Rfb8, …Ra8, and pile every piece onto a2 and b2 until White cracks. You gave a pawn; you got a grip for the whole game.",
-    "pawnBreaks": [
-      {
-        "move": "…e6 — challenge the d5-pawn",
-        "explanation": "When ready, …e6 strikes at the d5-pawn to open more lines for Black’s active pieces.",
-        "fen": "rn1qkb1r/3ppppp/b4n2/2pP4/8/8/PP2PPPP/RNBQKBNR w KQkq - 0 6"
-      }
-    ],
+    "overview": "For the pawn, the Benko buys a lasting positional bind. The fianchettoed g7-bishop rakes the long diagonal into White's queenside, and Black stacks rooks on the half-open a- and b-files behind …Qa5. There's no rush: the pressure on White's queenside IS the compensation, and it only grows.",
+    "pawnBreaks": [],
     "pieceManeuvers": [
       {
-        "piece": "Bishop",
-        "route": "…Bf8-g7 — the long diagonal",
-        "explanation": "The fianchettoed bishop rakes toward White’s queenside, the Benko’s key piece."
+        "piece": "Rook",
+        "route": "…Rf8-b8 + …Ra8 — the half-open a/b-files",
+        "explanation": "Both rooks pile up behind the queenside pawns, on the files the gambit opened."
       },
       {
-        "piece": "Bishop",
-        "route": "…Ba6xf1 — wreck White’s castling",
-        "explanation": "Trading the light bishops leaves White’s king stuck in the centre."
+        "piece": "Queen",
+        "route": "…Qd8-a5 — queenside pressure",
+        "explanation": "The queen swings to a5, eyeing the c3-knight and a3 to anchor the squeeze."
       }
     ],
     "strategicThemes": [
-      "Open a-/b-file pressure",
-      "The g7-bishop",
-      "Permanent queenside bind"
+      "The g7-bishop on the long diagonal",
+      "Rooks on the half-open a/b-files",
+      "Permanent queenside pressure for the pawn"
     ],
     "endgameTransitions": [
-      "The Benko pressure famously persists into the endgame, where the pawn matters least"
+      "The bind often wins the pawn back with interest as pieces come off"
     ],
     "playableLines": [
       {
@@ -1875,21 +1869,49 @@
           "Nc3",
           "d6",
           "Nf3",
+          "g6",
+          "g3",
+          "Bg7",
+          "Bg2",
           "Nbd7",
-          "e4",
-          "Bxf1",
-          "Kxf1",
-          "g6"
+          "O-O",
+          "O-O",
+          "Rb1",
+          "Qa5",
+          "b3",
+          "Rfb8"
         ],
         "annotations": [
-          "Nc3 develops, the main-line Benko-Accepted setup with the big d5-pawn.",
-          "…d6 supports the structure and opens the f8-bishop's path to the long diagonal.",
-          "White develops the knight to f3.",
-          "…Nbd7 develops, heading toward the queenside and the e5/c5 squares.",
-          "White claims the centre with e4.",
-          "…Bxf1! Black trades the light-squared bishops — without it White cannot castle kingside normally, so the king is awkwardly placed.",
-          "White recaptures with the king, losing castling rights — a key Benko theme.",
-          "…g6 prepares the fianchetto. Black has the textbook Benko compensation: the half-open a- and b-files, the g7-bishop coming to the long diagonal, and a White king stuck in the centre — Vasiukov outplayed Portisch from this dream setup."
+          "Nc3 develops; White tries to consolidate the extra pawn behind a calm setup.",
+          "…d6 stakes the centre and frees the f8-bishop for its diagonal.",
+          "Nf3 develops toward the centre.",
+          "…g6 prepares the fianchetto — the Benko bishop heads for the long diagonal.",
+          "g3 answers with a fianchetto of its own, contesting that diagonal.",
+          "…Bg7 the Benko bishop is home, raking the long diagonal into White's queenside.",
+          "Bg2 completes White's kingside development.",
+          "…Nbd7 develops, the knight eyeing c5/b6/e5 toward the queenside.",
+          "O-O White castles to safety.",
+          "…O-O Black castles; now the real work — the queenside files — begins.",
+          "Rb1 props b2, bracing for the pressure to come.",
+          "…Qa5 swings the queen to the queenside, eyeing the c3-knight and a3 — the squeeze takes shape.",
+          "b3 shores up the queenside but leaves a long-term target.",
+          "…Rfb8 doubles toward the b-file. With both rooks, the queen, and the g7-bishop trained on White's queenside, Black's pressure is permanent — the Benko's full compensation for the pawn."
+        ],
+        "learnCues": [
+          "Nc3 — consolidate the pawn",
+          "…d6 — stake the centre",
+          "Nf3 — develop",
+          "…g6 — prepare the fianchetto",
+          "g3 — contest the diagonal",
+          "…Bg7 — the Benko bishop",
+          "Bg2 — finish the kingside",
+          "…Nbd7 — knight toward the queenside",
+          "O-O — castle",
+          "…O-O — now the files",
+          "Rb1 — brace b2",
+          "…Qa5 — the squeeze begins",
+          "b3 — a long-term target",
+          "…Rfb8 — permanent pressure"
         ],
         "arrows": [
           [],
@@ -1899,9 +1921,14 @@
           [],
           [],
           [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
           []
         ],
-        "title": "The Benko Compensation (Portisch–Vasiukov)",
         "highlights": [
           [
             {
@@ -1923,51 +1950,78 @@
           ],
           [
             {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
               "square": "d7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e4",
+              "square": "g1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f1",
+              "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f1",
+              "square": "b1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g6",
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "intro": "Black sets up the queenside pressure for the gambit pawn.",
         "sources": [
-          "concept:pos-initiative",
-          "concept:pos-development",
+          "concept:att-queenside-attack",
+          "concept:pawn-fianchetto",
           "https://en.wikipedia.org/wiki/Benko_Gambit"
         ],
-        "learnCues": [
-          "Nc3 — the Benko-Accepted setup",
-          "…d6 — support, open the bishop",
-          "Nf3 — White develops",
-          "…Nbd7 — develop toward c5/e5",
-          "e4 — White claims the centre",
-          "…Bxf1 — trade, wreck castling",
-          "Kxf1 — White loses castling",
-          "…g6 — prepare the fianchetto"
-        ]
+        "title": "The Benko Queenside Bind",
+        "intro": "Black piles rooks and queen on the a/b-files behind the g7-bishop."
       }
     ]
   },
@@ -2342,58 +2396,66 @@
   {
     "id": "mp-birdsopening-main",
     "openingId": "birds-opening",
-    "title": "Bird's: the Qh4 Kingside Attack",
+    "title": "Bird's: the e5 Knight Outpost",
     "criticalPositionFen": "rnbqk1nr/ppp1ppbp/6p1/3p4/5P2/5NP1/PPPPP2P/RNBQKB1R w KQkq - 1 4",
-    "overview": "The signature Bird's attacking plan: lift the queen Qe1-h4, plant a knight on the e5 outpost, and pour pieces toward Black's kingside behind the f-pawn.",
-    "pawnBreaks": [
-      {
-        "move": "e2-e4 — the central break",
-        "explanation": "After the pieces are placed, e4 opens the long diagonal for the fianchettoed bishop and seizes the centre.",
-        "fen": "rnbqk1nr/ppp1ppbp/6p1/3p4/5P2/5NP1/PPPPP2P/RNBQKB1R w KQkq - 1 4"
-      }
-    ],
+    "overview": "Bird's 1.f4 stakes a claim on e5. The plan is to plant a knight there — an outpost the f4-pawn guards and no black pawn can ever kick — and to build kingside play behind it. The fianchettoed g2-bishop and the d3/c3 backbone give a clean, durable setup around the e5 knight.",
+    "pawnBreaks": [],
     "pieceManeuvers": [
       {
         "piece": "Knight",
-        "route": "Nf3-e5 — the central outpost",
-        "explanation": "The knight dominates e5, supported by the f4-pawn — the Bird’s key attacking piece."
-      },
-      {
-        "piece": "Bishop",
-        "route": "Bf1-g2 — the long diagonal",
-        "explanation": "The fianchettoed bishop rakes across the centre and the queenside."
+        "route": "Nf3-e5 — the outpost",
+        "explanation": "The knight settles on e5, a permanent outpost the f4-pawn defends and no black pawn can challenge."
       }
     ],
     "strategicThemes": [
-      "Lift the queen via e1 to h4.",
-      "Occupy the e5 outpost with a knight.",
-      "Pry open the f-file and attack the king."
+      "Plant the knight on the e5 outpost",
+      "The f4 + d3 backbone",
+      "Kingside play behind the outpost"
     ],
     "endgameTransitions": [
-      "If the attack is parried, White still keeps the e5 grip into the middlegame."
+      "The space and outpost carry a small pull into the endgame"
     ],
     "playableLines": [
       {
         "fen": "rnbqk1nr/ppp1ppbp/6p1/3p4/5P2/5NP1/PPPPP2P/RNBQKB1R w KQkq - 1 4",
         "moves": [
           "Bg2",
-          "c6",
+          "Nf6",
           "O-O",
-          "Bg4",
-          "Ne5",
-          "h5",
-          "h3",
-          "Be6"
+          "O-O",
+          "d3",
+          "c5",
+          "c3",
+          "Nc6",
+          "Na3",
+          "Rb8",
+          "Ne5"
         ],
         "annotations": [
-          "Bg2 completes White's double-fianchetto Leningrad Bird's, the bishop raking the long diagonal across the centre.",
-          "…c6 supports the d5-pawn and prepares Black's own development.",
-          "White castles, the king snug behind the fianchetto.",
-          "…Bg4 develops the bishop, pinning the f3-knight.",
-          "Ne5! The knight leaps to the powerful e5-outpost — the heart of the Bird's, dominating the centre and supported by the f4-pawn.",
-          "Black tries to challenge with …h5, gaining kingside space.",
-          "h3 questions the g4-bishop, securing the e5-knight's support.",
-          "…Be6 retreats the bishop. White has the ideal Leningrad Bird's: the e5-knight outpost, the long-diagonal bishop, and the f4-e5 kingside space — a harmonious attacking setup, just as Aronian wielded against Topalov."
+          "Bg2 fianchettoes; the bishop eyes the long diagonal and the centre.",
+          "…Nf6 develops, contesting e4 and the centre.",
+          "O-O White castles.",
+          "…O-O Black castles.",
+          "d3 backs up the f4-pawn and the future e5 outpost — the structural backbone.",
+          "…c5 grabs queenside space and eyes d4.",
+          "c3 props d4 and keeps Black's …d4 break in check.",
+          "…Nc6 develops, pressing toward d4 and e5.",
+          "Na3 heads for c2/c4, supporting the centre.",
+          "…Rb8 readies a queenside expansion with …b5.",
+          "Ne5! The outpost. The knight lands on e5, guarded by the f4-pawn and unkickable by any black pawn — the heart of the Bird's setup and the springboard for kingside play."
+        ],
+        "learnCues": [
+          "Bg2 — fianchetto",
+          "…Nf6 — contest the centre",
+          "O-O — castle",
+          "…O-O — castle",
+          "d3 — the backbone",
+          "…c5 — queenside space",
+          "c3 — prop d4",
+          "…Nc6 — press d4/e5",
+          "Na3 — knight toward c4",
+          "…Rb8 — ready …b5",
+          "Ne5 — the outpost!"
         ],
         "arrows": [
           [],
@@ -2403,9 +2465,11 @@
           [],
           [],
           [],
+          [],
+          [],
+          [],
           []
         ],
-        "title": "The Leningrad Bird (Aronian–Topalov)",
         "highlights": [
           [
             {
@@ -2415,7 +2479,7 @@
           ],
           [
             {
-              "square": "c6",
+              "square": "f6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -2427,7 +2491,43 @@
           ],
           [
             {
-              "square": "g4",
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -2436,42 +2536,15 @@
               "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
-          ],
-          [
-            {
-              "square": "h5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "h3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
           ]
         ],
-        "intro": "White builds the e5-outpost and the long-diagonal bishop.",
         "sources": [
-          "concept:pos-center",
-          "concept:pos-space",
+          "concept:pos-outpost",
+          "concept:pos-development",
           "https://en.wikipedia.org/wiki/Bird%27s_Opening"
         ],
-        "learnCues": [
-          "Bg2 — the Leningrad fianchetto",
-          "…c6 — support d5",
-          "O-O — White castles",
-          "…Bg4 — pin the knight",
-          "Ne5 — the central outpost",
-          "…h5 — Black grabs space",
-          "h3 — secure the outpost",
-          "…Be6 — Black retreats"
-        ]
+        "title": "The e5 Outpost",
+        "intro": "White builds around a knight outpost on e5, guarded by the f4-pawn."
       }
     ]
   },
@@ -4924,57 +4997,80 @@
     "id": "mp-dutchdefence-classical",
     "openingId": "dutch-defence",
     "criticalPositionFen": "rnbqkb1r/pppp2pp/4pn2/5p2/3P4/6P1/PPP1PPBP/RNBQK1NR w KQkq - 0 4",
-    "title": "Dutch Classical: Flexible Outpost Play",
-    "overview": "The flexible Classical with …Be7: Black keeps the choice between a Stonewall structure and a central break, plants a knight on e4, and recaptures …fxe4 for a cramping pawn and the half-open f-file. Sound, adaptable, and quietly aggressive.",
+    "title": "Dutch Classical: The Stonewall and the e4 Square",
+    "overview": "Black builds the Stonewall — pawns on f5, e6, d5 and c6 — clamping the e4-square so no white pawn can ever take it, then plants pieces there. The structure's one flaw, the boxed-in c8-bishop, is solved by …b6 and …Bb7, swinging it onto the long diagonal. The result is a solid, hard-to-crack setup with a permanent grip on the central light squares.",
     "pawnBreaks": [
       {
-        "move": "…e5 — the central break",
-        "explanation": "Supported by …d6, the …e5 break opens lines for Black’s kingside attack.",
-        "fen": "rnbqkb1r/pppp2pp/4pn2/5p2/3P4/6P1/PPP1PPBP/RNBQK1NR w KQkq - 0 4"
+        "move": "…d5 — the Stonewall clamp",
+        "explanation": "…d5 completes the f5-e6-d5 wall, locking the e4-square out of White’s reach for good.",
+        "fen": "rnbqkb1r/pppp2pp/4pn2/5p2/2PP4/6P1/PP2PPBP/RNBQK1NR b KQkq - 0 4"
       }
     ],
     "pieceManeuvers": [
       {
-        "piece": "Queen",
-        "route": "…Qe8-h5 — the kingside lift",
-        "explanation": "The queen swings to the kingside, the Classical Dutch’s attacking idea."
-      },
-      {
         "piece": "Bishop",
-        "route": "…Be7 — flexible development",
-        "explanation": "The Classical setup keeps the structure flexible for …e5."
+        "route": "…Bc8-b7 via …b6 — free the bad bishop",
+        "explanation": "…b6 opens the road so the Stonewall’s problem bishop reaches the long diagonal at b7."
       }
     ],
     "strategicThemes": [
-      "The e4 outpost and …fxe4 cramp",
-      "Flexibility",
-      "The half-open f-file"
+      "Clamp e4 with the Stonewall",
+      "Free the c8-bishop via …b6/…Bb7",
+      "A durable grip on the central light squares"
     ],
     "endgameTransitions": [
-      "Comfortable, balanced endings"
+      "The light-square bind and solid wall hold comfortably toward an endgame"
     ],
     "playableLines": [
       {
         "fen": "rnbqkb1r/pppp2pp/4pn2/5p2/3P4/6P1/PPP1PPBP/RNBQK1NR w KQkq - 0 4",
         "moves": [
-          "Nf3",
-          "Be7",
-          "O-O",
-          "O-O",
           "c4",
-          "d6",
-          "Nc3",
-          "Qe8"
+          "d5",
+          "Nf3",
+          "c6",
+          "O-O",
+          "Bd6",
+          "b3",
+          "Qe7",
+          "Bb2",
+          "O-O",
+          "Qc1",
+          "b6",
+          "Ba3",
+          "Bb7"
         ],
         "annotations": [
-          "Nf3 develops, the main-line setup against the Classical Dutch.",
-          "…Be7 develops the bishop, the Classical (as opposed to Stonewall) approach keeping the structure flexible.",
-          "White castles.",
-          "…O-O — Black castles, ready to begin kingside operations.",
-          "White expands with c4, claiming queenside space.",
-          "…d6 supports a future …e5 break and keeps the centre flexible.",
-          "White develops the knight to c3.",
-          "…Qe8! The signature Classical Dutch move: the queen lifts toward h5, swinging the attack to the kingside where Black's …f5 structure points. Amin outplayed Esipenko with this thematic plan."
+          "c4 strikes at Black's coming …d5, the standard challenge to the Stonewall.",
+          "…d5! The Stonewall takes shape: f5, e6 and now d5 lock down the e4-square for good.",
+          "Nf3 develops and eyes e5.",
+          "…c6 buttresses d5 — the Stonewall's queenside anchor.",
+          "O-O White castles.",
+          "…Bd6 aims the dark-squared bishop at White's kingside, the Stonewall's attacking piece.",
+          "b3 prepares to fianchetto and challenge that dark-squared bishop.",
+          "…Qe7 connects the rooks and supports later kingside play.",
+          "Bb2 contests the long diagonal.",
+          "…O-O Black castles.",
+          "Qc1 lines up Ba3 to trade off Black's good dark-squared bishop.",
+          "…b6 opens the road for the problem bishop — the Stonewall's one bad piece gets a future.",
+          "Ba3 offers the trade of dark-squared bishops, easing White's cramp.",
+          "…Bb7! The c8-bishop, the Stonewall's eternal headache, finally reaches the long diagonal. With e4 clamped and every piece working, Black's structure is rock-solid."
+        ],
+        "learnCues": [
+          "c4 — challenge …d5",
+          "…d5 — the Stonewall clamp!",
+          "Nf3 — develop, eye e5",
+          "…c6 — anchor d5",
+          "O-O — castle",
+          "…Bd6 — the attacking bishop",
+          "b3 — prepare Bb2/Ba3",
+          "…Qe7 — connect, support …e5",
+          "Bb2 — contest the diagonal",
+          "…O-O — castle",
+          "Qc1 — line up Ba3",
+          "…b6 — free the bad bishop",
+          "Ba3 — offer the trade",
+          "…Bb7 — the bad bishop is free!"
         ],
         "arrows": [
           [],
@@ -4984,10 +5080,27 @@
           [],
           [],
           [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
           []
         ],
-        "title": "The Classical Dutch (Esipenko–Amin)",
         "highlights": [
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
           [
             {
               "square": "f3",
@@ -4996,7 +5109,7 @@
           ],
           [
             {
-              "square": "e7",
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -5008,51 +5121,66 @@
           ],
           [
             {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
               "square": "d6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c3",
+              "square": "b3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e8",
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "intro": "Black sets up solidly and lifts the queen to attack.",
         "sources": [
-          "concept:pos-initiative",
-          "concept:pos-development",
+          "concept:pos-outpost",
+          "concept:pos-space",
           "https://en.wikipedia.org/wiki/Dutch_Defence"
         ],
-        "learnCues": [
-          "Nf3 — White develops",
-          "…Be7 — the Classical setup",
-          "O-O — White castles",
-          "…O-O — castle, ready to attack",
-          "c4 — White expands",
-          "…d6 — flexible, prepare …e5",
-          "Nc3 — White develops",
-          "…Qe8 — the queen lift toward h5"
-        ]
+        "title": "The Stonewall Grip on e4",
+        "intro": "Black clamps e4 with the Stonewall and frees the c8-bishop via …b6/…Bb7."
       }
     ]
   },
