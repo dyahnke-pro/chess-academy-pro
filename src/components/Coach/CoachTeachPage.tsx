@@ -19,6 +19,7 @@ import { NarrationArrowOverlay } from './NarrationArrowOverlay';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
 import { useTeachWalkthrough } from '../../hooks/useTeachWalkthrough';
+import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
 import type {
   WalkthroughTree,
@@ -3909,6 +3910,7 @@ export function CoachTeachPage(): JSX.Element {
                       data-testid="teach-picker-player-custom"
                       aria-label="Lichess username"
                     />
+                    <ProAttributionNotice className="px-1" />
                   </div>
                 )}
                 {/* Opening chips — favorites if any, fallback popular otherwise. */}

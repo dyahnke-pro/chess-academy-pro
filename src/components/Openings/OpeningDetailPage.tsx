@@ -19,6 +19,7 @@ import { MiddlegamePractice } from './MiddlegamePractice';
 import { PlayableLinePlayer } from './PlayableLinePlayer';
 import { CheckpointQuiz } from './CheckpointQuiz';
 import { ClassicWisdomSection } from './ClassicWisdomSection';
+import { ProAttributionNotice } from './ProAttributionNotice';
 import { BookReader } from './BookReader';
 import { ListenableProse } from './ListenableProse';
 import { VariationTabs, buildVariationTabs } from './VariationTabs';
@@ -1548,6 +1549,7 @@ export function OpeningDetailPage(): JSX.Element {
               </>
             )}
           </div>
+          {isProContext && <ProAttributionNotice className="mt-1.5" />}
         </div>
         <PageHelp
           helpId="opening-detail"

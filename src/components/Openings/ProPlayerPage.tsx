@@ -5,6 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import { getPlayerById, getPlayerOpenings } from '../../services/proRepertoireService';
 import { toggleFavorite } from '../../services/openingService';
 import { OpeningCard } from './OpeningCard';
+import { ProAttributionNotice } from './ProAttributionNotice';
 import type { OpeningRecord, ProPlayer } from '../../types';
 
 export function ProPlayerPage(): JSX.Element {
@@ -74,7 +75,8 @@ export function ProPlayerPage(): JSX.Element {
       </div>
 
       {/* Description */}
-      <p className="text-sm text-theme-text-muted mb-6">{player.description}</p>
+      <p className="text-sm text-theme-text-muted mb-2">{player.description}</p>
+      <ProAttributionNotice playerName={player.name} className="mb-6" />
 
       {/* White Openings */}
       {whites.length > 0 && (

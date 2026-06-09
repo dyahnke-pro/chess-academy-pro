@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { getPlayers } from '../../services/proRepertoireService';
 import { ProPlayerCard } from './ProPlayerCard';
+import { ProAttributionNotice } from './ProAttributionNotice';
 import proRepertoireData from '../../data/pro-repertoires.json';
 
 interface ProOpeningEntry {
@@ -23,6 +24,7 @@ export function ProRepertoiresTab(): JSX.Element {
 
   return (
     <div className="space-y-2" data-testid="pro-repertoires-tab">
+      <ProAttributionNotice className="px-1 pb-1" />
       {/* Standard: every player behind a player card, no featured/front-and-center. */}
       {players.map((player, i) => (
         <motion.div
