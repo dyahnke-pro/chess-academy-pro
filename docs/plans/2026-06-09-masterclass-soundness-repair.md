@@ -56,21 +56,36 @@ position. The bottom four are a faulty tail on a dim opening (the swap recovers
 Curve shows best ≈ taught at almost every ply — no single blunder. The opening
 itself drifts the student to a bad position.
 
-- **Pirc, Austrian Attack** — steady slide −0.55 → −1.64; engine-best at the end
-  still −1.27. Passive `…Na6-c7 + …b6` plan; Stockfish even prefers `…e5` over
-  the Pirc's own `…g6`. No clean single fix — needs a more active spine or
-  honest framing.
-- **Pirc, Czech** — `…c6 + …Qa5` sideline sits ~−1.0 from move 9. Dim by
-  variation choice.
+- **Pirc, Austrian Attack** — the ONE genuinely dim Pirc line. At depth 24 the
+  taught line is **−1.63** (passive `…O-O/…Na6-c7/…b6/…Rb8` crawl lets White
+  swing `Qe1-Qh4`). **Fix = swap the passive plan for the active `…c5` strike —
+  already proven sound in this opening's own siblings:** the "Austrian with …e5
+  …c5" tab evals **+0.29** and GothamChess's `…c5 Bb5+ Nc6 e5 Nd7` evals −0.05.
+  Same opening, better plan — NOT a drop.
+- **Pirc, Czech — RECLASSIFIED (2026-06-09 depth-24 re-eval): FINE.** The earlier
+  "⛔ −1.37" was an INTERMEDIATE ply, not the terminus. The full taught line at
+  depth 24 is **−0.79** — same slightly-passive band as the other sound Pirc
+  tabs. **No replace, no drop.** (The depth-18 sweep over-pessimised it by ~23cp,
+  consistent with the gem-depth finding that deeper search is kinder to quiet
+  lines.)
+
+**Full Pirc soundness map (depth 24, student=Black):** Byrne +0.29, Austrian-w-c5
++0.29, Fianchetto −0.47, Lion −0.48, Main/Classical −0.51, 150 −0.67, Czech
+−0.79, **Austrian Attack −1.63 (lone fix)**. 7 of 9 lines −0.5..+0.3; the Pirc is
+a healthy fighting repertoire. Pro-rep: Hikaru "vs Austrian f4" also dim (−1.06,
+optional same `…c5` fix); GothamChess Pirc all fine (−0.05..−0.58).
 - **Benoni, Taimanov (f4/Bb5+)** — the Modern Benoni into the Taimanov is the
   critical anti-Benoni; Black is −1.0 to −1.4 the whole way with best play. Bad
   matchup to teach as a Black main line.
 
-> **DECISION NEEDED (David):** for Bucket B, do we (a) rebuild the spine onto the
-> soundest available line of the same opening and keep it (with honest "this is
-> a tough, slightly-worse defense" framing), or (b) replace the variation
-> entirely with a sounder sibling? Phase-1 research below gives the soundest data
-> line for each so the decision is informed.
+> **DECISION STATUS (updated 2026-06-09 after the depth-24 Pirc map):**
+> - **Pirc Austrian** — the data ANSWERS it: rebuild the tab onto the in-opening
+>   `…c5` plan (proven +0.29 in the sibling tab). No David decision needed.
+> - **Pirc Czech** — RECLASSIFIED FINE (−0.79 at depth 24). No action.
+> - **Benoni Taimanov** — the one genuine keep-vs-replace JUDGMENT left: it's a
+>   tough matchup (~−0.7 to −1.0) with no in-opening rescue as clean as the Pirc's.
+>   Keep-with-honest-framing or steer the Benoni move-order away from the Taimanov?
+>   **This is the remaining Bucket-B call for David.**
 
 ### Bucket C — GAMBIT / SIDELINE SHOWCASES (NOT defects — leave the moves)
 
@@ -106,7 +121,7 @@ Compare the corrected terminus eval to the broken lesson's eval in Phase 0.
 | **KID Fianchetto** | `d4 Nf6 c4 g6 g3 Bg7 Bg2 O-O Nc3 d6 Nf3 Nc6 O-O a6 h3 Rb8 e4 b5 e5 dxe5 dxe5 Qxd1 Rxd1 Nd7 e6 fxe6 cxb5 axb5 Bf4 Nde5` (move 15) | **−0.21** | −1.40 |
 | **Old Indian (Be2 & Czech)** | `d4 Nf6 c4 d6 Nc3 e5 Nf3 Nbd7 e4 Be7 Be2 O-O O-O c6 Re1 a6 Bf1 b5 a3 Bb7 Bg5` (move 11) | **−0.58** | −1.11 / −1.26 |
 | **Pirc Austrian** | `e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O Bd3 Na6 O-O c5 d5 Bg4 Bc4 Nc7 h3 Bxf3 Qxf3 a6 a4 b6 Qd3 Qc8` (move 13) | **−0.74** | −1.64 |
-| **Pirc Czech** | `e4 d6 d4 Nf6 Nc3 c6 f4 Qa5 Bd3 e5 Nf3 Bg4 Be3 Nbd7 O-O Be7 h3 Bxf3 Qxf3 O-O Ne2` (move 11) | **−1.37 ⚠** | −1.02 |
+| **Pirc Czech** | `e4 d6 d4 Nf6 Nc3 c6 f4 Qa5 Bd3 e5 Nf3 Bg4 Be3 Nbd7 O-O Be7 h3 Bxf3 Qxf3 O-O Ne2 c5 dxe5 dxe5` (move 12) | **−0.79 @d24 ✓** | (fine) |
 | **Benoni Taimanov** | `d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 f4 Bg7 Bb5+ Nfd7 a4 O-O Nf3 Na6 O-O Nb4 Re1 a6 Bf1 Re8 h3 f5 Bd2` (move 15) | **−0.74** | −1.39 |
 | **Sicilian Dragon** | `e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 O-O Qd2 Nc6 O-O-O d5 exd5 Nxd5 Nxc6 bxc6 Bd4 e5 Bc5 Be6 Ne4 Re8 h4 h6 g4 Qc7 g5 h5 Bc4 Red8 Qf2 Nf4 Bxe6 Nxe6` (move 20) | **−0.53** | −1.16 |
 
@@ -129,7 +144,7 @@ Compare the corrected terminus eval to the broken lesson's eval in Phase 0.
   Pirc Austrian −0.74. All a real improvement; all reach a middlegame. So for
   7 of 8, the repair = **rebuild the spine on the data line + re-anchor the
   plan** — no invention needed.
-- **Pirc Czech is the exception ⚠.** Even the most-played line reaches −1.37 —
+- **Pirc Czech is FINE (−0.79 @d24)** — the earlier −1.37 was an intermediate ply.
   the variation is genuinely dim at the root. This is a **replace, don't
   rebuild** candidate (swap the Czech `…c6+…Qa5` for a sounder Pirc/Modern
   treatment, OR drop the variation). Needs David's Bucket-B call. (Note: the
@@ -157,7 +172,7 @@ invented").
 | **Alekhine Four Pawns** ◑thin | `Kh1 Kh8 b3 Bh7 Bd3` (6–153) | Quiet regroup: kings tucked, White builds the `Bd3` battery on b1-h7; Black holds the **bishop pair** (post-`…Bxf6`) and contests the f-file (`…Rad8`→f-file). Theme = bishop pair + f-file/central counterplay. Thin → structure-grounded. |
 | **KID Fianchetto** ⚠off-book | (none — off masters book at the anchor) | The corrected line went **queens-off at move 15** (`…dxe5 …Qxd1`). So this is an **early-endgame plan, not a kingside storm**: centralized `…Nde5` knights, the e5/e6 pawn tension, knights-vs-bishop-pair balance. MUST ground on minor-piece-ending concepts (Capablanca/Lasker), not invent moves. |
 | **Pirc Austrian** ⚠off-book | (none — off masters book at move 13) | Closed center (White's `d5`): Black's `Nc7 + …b5/…a6/…Rb8` queenside expansion + the `Bg7` diagonal, aiming at `…e6`/`…f5` breaks. Dim (−0.74). Theme = queenside play vs White's space. Off-book → structure-grounded; **Bucket-B decision applies.** |
-| **Pirc Czech** ⛔ | (not walked — variation flagged for replace) | Even the opening line is −1.37; do not author a plan until the replace/rebuild decision is made. |
+| **Pirc Czech** ✓ | fine at −0.79 (depth 24) | Standard slightly-passive plan; treat like the other sound Pirc tabs. No special action. |
 
 ### Phase 1 conclusion
 
@@ -166,8 +181,9 @@ invented").
   Benoni) even have rich forced/thematic continuations to follow; the rest reach
   a sound position whose plan grounds on structure + concepts where the data
   thins.
-- **Pirc Czech (⛔) needs David's call** before any work: replace the dim
-  `…c6+…Qa5` variation or drop it.
+- **Pirc Austrian** is the lone dim Pirc line; fix = in-opening `…c5` plan
+  (data-proven +0.29). **Pirc Czech reclassified FINE.** Remaining Bucket-B
+  call = **Benoni Taimanov** (keep-with-honest-framing vs steer move-order).
 - **KID Fianchetto's plan is an early endgame**, not a kingside attack — the
   re-anchored plan + its narration must reflect that.
 
@@ -208,7 +224,7 @@ original (no phrase lifted from any source, incl. marketing copy).
 | **Pirc Austrian** ⚠ | `concept:pawn-chain`, `concept:pos-space` (read), `concept:pos-weak-squares`; chess.com/lichess/wikipedia Pirc Austrian | Queenside expansion (`…b5/…a6/…Rb8/…Nc7`) vs White's big space, `Bg7` on the long diagonal, aiming at `…e6`/`…f5`. **Dim (−0.74) — narration MUST be honest it's a tough, slightly-worse defense, never claim equality** (the Antoshin failure). Pending Bucket-B decision. |
 | **Benoni Taimanov** | `concept:pawn-chain`, `concept:pos-open-file`, `concept:att-kingside-storm`, `concept:pos-initiative`; chess.com/lichess/chessable Modern Benoni | The Taimanov (`f4/Bb5+`) is the critical anti-Benoni; Black must play actively for the **`…f5` break** (the rich data continuation: `…fxe4`, open the f-file, activate the bishops). Honest: Black is worse (~−0.7) and playing for activity/counterplay, not equality. |
 | **Dragon (d5 main)** | `concept:pos-open-file`, `concept:pos-initiative`, `concept:tac-sacrifice`; chess.com/lichess Yugoslav Attack, chessbase | `…d5` is THE equalizer in the Yugoslav — it liquidates White's attack and leaves Black with sound, active piece play (`…Qb6` hitting b2/f2, queenside/open-file pressure). Replaces the dubious Chinese `…Rb8/…b5` (−1.16) with the principled central break (−0.53). |
-| **Pirc Czech** ⛔ | — | No narration research until the replace/rebuild decision (the variation is −1.37 at the root). |
+| **Pirc Czech** ✓ | `concept:pawn-chain`, `concept:pos-development`; chess.com/lichess Pirc | Fine (−0.79). Standard slightly-passive Pirc register; same grounding as the other tabs. No special action. |
 
 ### Phase 2 conclusion
 Every active line has ≥1 resolvable grounding source identified (Old Indian even
@@ -271,7 +287,7 @@ every honest gambit and flaps on depth-noisy sharp lines). Instead:
 
 1. Finish Phase 1 tables (this doc) — corrected spines + plan anchors, all
    engine-verified, all sourced.
-2. David reviews + answers the Bucket B decision.
+2. David answers the ONE remaining Bucket-B call: Benoni Taimanov (keep+honest-frame vs re-steer move-order). (Pirc Austrian fix is data-decided; Pirc Czech is fine.)
 3. Phase 2 narration research → appended here.
 4. ONLY THEN build, in Gate B→C→D order, one opening at a time, re-running the
    soundness sweep + board-truth gates after each.
