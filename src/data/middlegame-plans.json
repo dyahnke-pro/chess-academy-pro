@@ -35615,34 +35615,34 @@
     "id": "mp-slavdefence-main",
     "openingId": "slav-defence",
     "criticalPositionFen": "rnbqkb1r/pp2pppp/2p2n2/8/2pP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5",
-    "title": "Slav: Trade on c3, then Win the e4-Pawn",
-    "overview": "A concrete tactical plan: Black trades the dark bishop on c3 to fracture White’s queenside pawns, and the same move loosens White’s centre — the e4-pawn falls to …Bxe4, because Qxe4 runs into …Nxe4, the f6-knight winning the queen. Black emerges a clean pawn up.",
+    "title": "Slav: The …e5 Central Break",
+    "overview": "Black brings the light-squared bishop out to f5, lets White post the knight on e5 and win the c4-pawn back, then frees the whole position with the …e5 central break — the mainstream way the Slav equalizes. The point isn't a one-move trick; it's that …e5 liberates every black piece at once.",
     "pawnBreaks": [
       {
-        "move": "…c5 — the freeing break",
-        "explanation": "After developing, …c5 challenges d4 and completes Black’s equalization in the Slav.",
-        "fen": "rnbqkb1r/pp2pppp/2p2n2/8/2pP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5"
+        "move": "…e5 — the freeing central break",
+        "explanation": "Once developed, …e5 strikes White's centre; after dxe5 …Nxe5 Black's pieces spring to life with full equality.",
+        "fen": "r3kb1r/ppqnpppp/2p2n2/5b2/P1NP4/2N3P1/1P2PP1P/R1BQKB1R b KQkq - 0 8"
       }
     ],
     "pieceManeuvers": [
       {
         "piece": "Bishop",
         "route": "…Bc8-f5 — the good bishop out early",
-        "explanation": "The Slav’s signature: the light-squared bishop develops actively before …e6 shuts it in."
+        "explanation": "The Slav's signature: the light-squared bishop develops ACTIVE, outside the pawn chain, before …e6 could ever lock it in."
       },
       {
-        "piece": "Bishop",
-        "route": "…Bf8-b4 — pin with tempo",
-        "explanation": "The dark-squared bishop pins the knight and pressures the centre."
+        "piece": "Knight",
+        "route": "…Nb8-d7xe5 — challenge, then seize the centre",
+        "explanation": "The queen-knight goes to d7 to hit White’s e5-knight and, after the …e5 break, recaptures on the dominant e5-square."
       }
     ],
     "strategicThemes": [
-      "Damage the queenside structure",
-      "Win the loose e4-pawn",
-      "The …Nxe4 tactic on the queen"
+      "Develop the light bishop OUTSIDE the pawn chain",
+      "Challenge White’s e5 outpost knight",
+      "Free the position with the …e5 break"
     ],
     "endgameTransitions": [
-      "The extra pawn tells in simplification"
+      "With the centre resolved, Black’s freed pieces comfortably hold the balance toward the endgame"
     ],
     "playableLines": [
       {
@@ -35650,22 +35650,41 @@
         "moves": [
           "a4",
           "Bf5",
-          "e3",
-          "e6",
-          "Bxc4",
-          "Bb4",
-          "O-O",
-          "O-O"
+          "Ne5",
+          "Nbd7",
+          "Nxc4",
+          "Qc7",
+          "g3",
+          "e5",
+          "dxe5",
+          "Nxe5",
+          "Bf4"
         ],
         "annotations": [
-          "a4 stops Black's …b5 and prepares to regain the c4-pawn, the main-line Slav approach.",
-          "…Bf5! The defining Slav move: the light-squared bishop develops actively OUTSIDE the pawn chain before …e6 locks it in — exactly the freedom the French and QGD bishops never get.",
-          "White prepares to recapture on c4 with e3.",
-          "…e6 supports the centre and opens the f8-bishop's path, the bishop already solved on f5.",
-          "White regains the pawn with Bxc4.",
-          "…Bb4 pins the c3-knight, developing with tempo and pressuring the centre.",
-          "White castles.",
-          "…O-O — Black castles into a comfortable, well-developed position: the good bishop active on f5, a solid structure, and easy equality. This is the Slav's promise, and Caruana outplayed So from here."
+          "a4 clamps b5 so Black can’t cling to the extra c4-pawn — the main-line answer to 4…dxc4.",
+          "…Bf5! The Slav’s whole point: the light-squared bishop comes out ACTIVE, outside the pawn chain, before …e6 could ever bury it.",
+          "Ne5 plants the knight on the central outpost, eyeing c4 to win the pawn back.",
+          "…Nbd7 challenges the e5-knight at once — Black refuses to let it settle.",
+          "Nxc4 regains the pawn. Material is level; now it’s a fight for the centre.",
+          "…Qc7 lines up on the e5-square and clears d8 — quietly preparing the freeing break.",
+          "g3 readies Bf4 and Bg2, shoring up White’s kingside.",
+          "…e5! The freeing break the whole plan was built on — Black hits the centre and every piece breathes.",
+          "dxe5 opens the centre; the position simplifies toward equality.",
+          "…Nxe5 recaptures on the strong central e5-square — Black is comfortably equal.",
+          "Bf4 develops with a poke at the e5-knight, Black’s queen sitting behind it on c7. Black is fine — the …e5 break achieved its goal."
+        ],
+        "learnCues": [
+          "a4 — clamp …b5",
+          "…Bf5 — the good bishop out",
+          "Ne5 — knight to the outpost",
+          "…Nbd7 — challenge the e5-knight",
+          "Nxc4 — White regains the pawn",
+          "…Qc7 — ready the …e5 break",
+          "g3 — shore up the kingside",
+          "…e5 — the freeing break!",
+          "dxe5 — the centre opens",
+          "…Nxe5 — recapture, equal",
+          "Bf4 — pokes the knight, Black is fine"
         ],
         "arrows": [
           [],
@@ -35675,9 +35694,11 @@
           [],
           [],
           [],
+          [],
+          [],
+          [],
           []
         ],
-        "title": "The Main-Line Slav (So–Caruana)",
         "highlights": [
           [
             {
@@ -35693,13 +35714,13 @@
           ],
           [
             {
-              "square": "e3",
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e6",
+              "square": "d7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -35711,39 +35732,48 @@
           ],
           [
             {
-              "square": "b4",
+              "square": "c7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g1",
+              "square": "g3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g8",
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "intro": "Black develops the bishop to f5 and equalizes comfortably.",
         "sources": [
-          "concept:pos-development",
           "concept:pos-center",
+          "concept:pos-development",
           "https://en.wikipedia.org/wiki/Slav_Defense"
         ],
-        "learnCues": [
-          "a4 — stop …b5, regain c4",
-          "…Bf5 — the good bishop out early",
-          "e3 — prepare Bxc4",
-          "…e6 — support the centre",
-          "Bxc4 — White regains the pawn",
-          "…Bb4 — pin, develop with tempo",
-          "O-O — White castles",
-          "…O-O — castle, comfortable equality"
-        ]
+        "title": "The Main-Line Slav …e5 Break",
+        "intro": "Black develops, challenges the e5-knight, and frees the game with …e5."
       }
     ]
   },
