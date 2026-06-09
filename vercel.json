@@ -2,6 +2,8 @@
   "rewrites": [
     { "source": "/voice-packs/:file", "destination": "/api/voice-packs/:file" },
     { "source": "/api/ph/:path*", "destination": "/api/phproxy?p=:path*" },
+    { "source": "/api/llm/deepseek/:path*", "destination": "/api/llm-proxy?provider=deepseek&path=:path*" },
+    { "source": "/api/llm/anthropic/:path*", "destination": "/api/llm-proxy?provider=anthropic&path=:path*" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ],
   "headers": [

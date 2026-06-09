@@ -23,13 +23,18 @@ function resolveBuildId(): string {
 }
 
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), ['VITE_', 'ANTHROPIC_', 'DEEPSEEK_', 'AUDIT_']);
+  // SECURITY (2026-06-09): provider API keys must NOT be exposed to the
+  // client. Do NOT add 'ANTHROPIC_'/'DEEPSEEK_' to loadEnv or envPrefix and
+  // do NOT `define` __ANTHROPIC_KEY__/__DEEPSEEK_KEY__ — that inlined the
+  // keys into the public bundle and a scraped key got siphoned. Provider
+  // calls now go through the server-side proxy api/llm-proxy.ts, which reads
+  // the keys from process.env at runtime. The keys live ONLY in Vercel's
+  // server env, never the bundle.
+  const env = loadEnv(mode, process.cwd(), ['VITE_', 'AUDIT_']);
   const buildId = resolveBuildId();
   return {
-  envPrefix: ['VITE_', 'ANTHROPIC_', 'DEEPSEEK_'],
+  envPrefix: ['VITE_'],
   define: {
-    __ANTHROPIC_KEY__: JSON.stringify(env.ANTHROPIC_KEY || process.env.ANTHROPIC_KEY || ''),
-    __DEEPSEEK_KEY__: JSON.stringify(env.DEEPSEEK_KEY || process.env.DEEPSEEK_KEY || ''),
     __BUILD_ID__: JSON.stringify(buildId),
     // Baked-in audit-stream defaults so EVERY device (beta testers
     // included) streams audit events without per-device opt-in. The

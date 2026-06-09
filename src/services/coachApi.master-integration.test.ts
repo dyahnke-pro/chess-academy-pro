@@ -85,13 +85,15 @@ function installFetchMock(plan: FetchPlan): { llmCalls: number; lichessCalls: nu
       lichessIdx += 1;
       return new Response(JSON.stringify(body), { status: 200, headers: { 'Content-Type': 'application/json' } });
     }
-    if (url.includes('api.anthropic.com/v1/messages')) {
+    // Provider calls now route through the first-party proxy
+    // (/api/llm/{anthropic,deepseek}); the key is injected server-side.
+    if (url.includes('/api/llm/anthropic')) {
       counters.llmCalls += 1;
       const text = plan.llmTexts[Math.min(llmIdx, plan.llmTexts.length - 1)] ?? '';
       llmIdx += 1;
       return new Response(JSON.stringify(buildAnthropicResponse(text)), { status: 200, headers: { 'Content-Type': 'application/json' } });
     }
-    if (url.includes('api.deepseek.com')) {
+    if (url.includes('/api/llm/deepseek')) {
       counters.llmCalls += 1;
       // OpenAI-shaped response
       const text = plan.llmTexts[Math.min(llmIdx, plan.llmTexts.length - 1)] ?? '';

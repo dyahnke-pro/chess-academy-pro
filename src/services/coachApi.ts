@@ -228,17 +228,35 @@ const TASK_CATEGORY: Record<CoachTask, 'commentary' | 'analysis' | 'reports'> = 
   deep_analysis:             'reports',
 };
 
-// Embedded keys (split + reversed) — assembled at runtime as fallback
-const _P = ['AAg3tjc6-QloxqPVoiya_sIlFe1BjOsVJGQz', 'vBBV66KIx6FbPmIuCxO1TLStej-Kt44jL5DD', 'UB9cvx5Mx30pFR0x3xVYmg8-30ipa-tna-ks'];
-const _Q = ['ef9cdc72a407', 'f919f60457b8', 'd75abe29-ks'];
-function _r(c: string[]): string { return c.join('').split('').reverse().join(''); }
+// LLM keys NEVER ship to the client (incident 2026-06-09: the baked key was
+// scraped from the bundle and siphoned). Provider calls go through the
+// first-party proxy `/api/llm/{deepseek,anthropic}` (api/llm-proxy.ts), which
+// injects the real key SERVER-SIDE from process.env. The client only needs a
+// non-empty sentinel so the SDKs construct and the provider-reachability /
+// fallback logic in getProviderConfig still treats both providers as
+// available (the server decides real availability — a missing key there
+// returns 503 and the existing fallback chain switches providers).
+const PROXY_SENTINEL_KEY = 'proxy';
+
+/** Absolute origin for our `/api` proxy. Under Capacitor (WKWebView, origin
+ *  `capacitor://…`) we must hit the deployed prod host; on web + dev we use
+ *  the page origin (vite dev proxies `/api/*` to prod). Mirrors
+ *  `voiceService.getTtsUrl`. */
+const VERCEL_ORIGIN = 'https://chess-academy-pro.vercel.app';
+function apiOrigin(): string {
+  if (typeof window === 'undefined') return VERCEL_ORIGIN;
+  if (window.location.protocol === 'capacitor:') return VERCEL_ORIGIN;
+  return window.location.origin;
+}
+const DEEPSEEK_PROXY_BASE = `${apiOrigin()}/api/llm/deepseek`;
+const ANTHROPIC_PROXY_BASE = `${apiOrigin()}/api/llm/anthropic`;
 
 function getAnthropicKey(): string | undefined {
-  return (import.meta.env.VITE_ANTHROPIC_API_KEY || import.meta.env.ANTHROPIC_KEY || __ANTHROPIC_KEY__) as string || _r(_P) || undefined;
+  return PROXY_SENTINEL_KEY;
 }
 
 function getDeepseekKey(): string | undefined {
-  return (import.meta.env.VITE_DEEPSEEK_API_KEY || import.meta.env.DEEPSEEK_KEY || __DEEPSEEK_KEY__) as string || _r(_Q) || undefined;
+  return PROXY_SENTINEL_KEY;
 }
 
 async function getProviderConfig(): Promise<ProviderConfig | null> {
@@ -556,7 +574,7 @@ async function callDeepSeekStream(
 ): Promise<string> {
   const client = new OpenAI({
     apiKey,
-    baseURL: 'https://api.deepseek.com',
+    baseURL: DEEPSEEK_PROXY_BASE,
     dangerouslyAllowBrowser: true,
   });
 
@@ -614,7 +632,7 @@ async function callDeepSeek(
 ): Promise<string> {
   const client = new OpenAI({
     apiKey,
-    baseURL: 'https://api.deepseek.com',
+    baseURL: DEEPSEEK_PROXY_BASE,
     dangerouslyAllowBrowser: true,
   });
 
@@ -660,6 +678,7 @@ async function callAnthropicStream(
 ): Promise<string> {
   const client = new Anthropic({
     apiKey,
+    baseURL: ANTHROPIC_PROXY_BASE,
     dangerouslyAllowBrowser: true,
   });
 
@@ -699,6 +718,7 @@ async function callAnthropic(
 ): Promise<string> {
   const client = new Anthropic({
     apiKey,
+    baseURL: ANTHROPIC_PROXY_BASE,
     dangerouslyAllowBrowser: true,
   });
 
@@ -744,6 +764,7 @@ export async function callAnthropicWithTool(
 ): Promise<unknown> {
   const client = new Anthropic({
     apiKey,
+    baseURL: ANTHROPIC_PROXY_BASE,
     dangerouslyAllowBrowser: true,
   });
   const response = await client.messages.create({
@@ -855,7 +876,7 @@ export async function callDeepseekWithTool(
 ): Promise<unknown> {
   const client = new OpenAI({
     apiKey,
-    baseURL: 'https://api.deepseek.com',
+    baseURL: DEEPSEEK_PROXY_BASE,
     dangerouslyAllowBrowser: true,
   });
   const response = await client.chat.completions.create({
