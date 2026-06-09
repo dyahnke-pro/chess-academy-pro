@@ -38,8 +38,8 @@ const GEM_OUT = process.env.GEM_OUT || 'src/data/punish-gems.json';
 // so a practical-win-rate filter HIDES the real crushes (f7 sacs, bad gambit
 // grabs). Instead: take the common opponent moves, and keep the ones the engine
 // refutes — the punish is the ENGINE'S best move, so sacs surface.
-const FREQ_FLOOR = 0.02;     // opponent move ≥2% common (natural blunders are rarer)
-const MIN_GAMES = 100;       // …with a real sample
+const FREQ_FLOOR = Number(process.env.FREQ_FLOOR ?? 0.02); // opponent move ≥2% common (env-overridable for coverage probes)
+const MIN_GAMES = Number(process.env.MIN_GAMES ?? 100);    // …with a real sample (env-overridable)
 const CANDIDATES = 5;        // engine-test the top-N common opponent moves per node
 const JUMP_CP = 50;          // the move must hand the student ≥+0.5 vs best play
 // Engine bar: a weapon must give REAL benefit. ≥+1.0 = 'confirmed' crush (wins
