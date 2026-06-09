@@ -290,3 +290,62 @@ at the grounded middlegame terminus above and authors a thematic playable line
 that EXECUTES the declared pawnBreaks/pieceManeuvers from there — then re-runs
 middlegamePlanThemes / narrationAccuracy / lessonIntegrity. [PRO] entries pull
 the continuation from the player's game corpus, not the masters explorer.
+
+## Pro-corpus check (2026-06-09 follow-up — David: "did you check the pro game corpus?")
+
+The 6 [PRO] offenders were re-checked against the player's own games
+(`public/data/pro-game-references.json`, 2,209 refs) instead of the masters
+explorer — matching each plan's `criticalPositionFen` inside the player's
+real games and reading the most-common continuation. Result:
+
+| Pro plan | Corpus | Grounded continuation (player's own games) |
+|---|---|---|
+| `mp-progothamchess-pirc-150-b5` | ✅ 4/10 reach anchor | `…Nbd7 …Nb6 …b4` (also `…Nbd7 g4 Nb6 g5 Nfd7 h4`) — the **…c6+…b5+…b4 queenside counterattack** the plan advertises. Masters couldn't show this; his corpus does. |
+| `mp-pronarocaro-fantasy-central-break` | ✅ 6/60 reach anchor | `dxe4 fxe4 e5 Nf3 Be6 Bd3` (3×) — his central-break line. |
+| `mp-pronaroFantasyCaro-bishop-pair-attack` | ✅ 5/30 reach anchor | `e5 Nf3 Bg4 Bc4 Nd7 c3` (2×). |
+| `mp-pronarocaro-advance-bf5-piece-storm` | ⚠️ 1/60 reach anchor | `Nc6 dxc5 Nge7 c3 Ng6 b4` — grounded but THIN (single game); verify against a deeper corpus pull before authoring. |
+| `mp-proamancaro-twoknights` | ❌ 0/48 reach anchor | **NOT GROUNDABLE as anchored.** The anchor FEN never occurs in Aman's games → the plan was anchored off his real lines (grounding violation) OR the corpus needs a fresh/deeper pull. Investigate the anchor before re-building. |
+| `mp-progothamchess-qgd-tartakower-b6` | ❌ 0/2 reach anchor | **Corpus too sparse** (only 2 candidate games). Needs `build-game-references` / `fetch-chesscom` deeper pull, then re-check. |
+
+**Net:** 4 of 6 pro plans now have a corpus-grounded continuation. The 2 that
+don't (`proamancaro-twoknights`, `gotham-qgd-tartakower-b6`) are a SEPARATE
+finding — their anchors don't appear in the player's actual games, so before
+re-building them the build session must first confirm the anchor is on a real
+player line (re-pull the corpus if needed). Do NOT author a continuation for
+those two from masters/memory — that would reintroduce the very grounding
+violation this sweep exists to catch.
+
+## Online research for the 2 corpus-missing pro plans (David: "check online — Google / YouTube")
+
+Searched the open web for real games + the players' own teaching of these two
+lines. Findings (grounded sources, no fabrication):
+
+### `mp-proamancaro-twoknights` — Aman, Caro-Kann Two Knights, …Bg4 pin
+- **ROOT CAUSE of the corpus miss:** Aman's Caro speedrun games are on his
+  **chess.com speedrun account `VBKN`** (the "official speedrun account of GM
+  Aman Hambleton"), NOT the `chessbrah` / `TheEndgameMagician` accounts the
+  corpus pulled. → **Build-session fix:** `node scripts/pro-repertoire/fetch-chesscom.mjs vbkn`,
+  re-extract, re-check the anchor against his real games.
+- **Grounded line (lichess study "The Caro-Kann — Two Knights Attack", gAudob5z):**
+  - Exchange (matches the plan's structure): `1.e4 c6 2.Nc3 d5 3.Nf3 dxe4 4.Nxe4 Nf6 5.Nxf6+ exf6 6.d4 Bd6 7.Be2 O-O 8.O-O Re8 9.c4`
+  - …Bg4 pin (Minderno): `3…Bg4 4.h3 Bxf3 5.Qxf3 e6 6.d3 Nd7 7.Qg3 g6 8.Be2 Bg7 9.O-O Ne7 10.f4 O-O`
+  - These confirm the plan's …Bd6 / …O-O / …Re8 / …Bg4 ideas are real book lines —
+    a grounded anchor for the rebuild even before the VBKN pull lands.
+
+### `mp-progothamchess-qgd-tartakower-b6` — Gotham, QGD Tartakower …b6/…Bb7
+- **Grounded line (chess.com / 365chess D59 Tartakower):**
+  `1.d4 d5 2.c4 e6 3.Nc3 Nf6 4.Bg5 Be7 5.e3 O-O 6.Nf3 h6 7.Bh4 b6 8.cxd5 Nxd5 9.Bxe7 Qxe7`
+  — the standard …b6 + …Bb7 fianchetto the plan advertises.
+- **Build-session fix:** the local corpus had only 2 gothamchess QGD games →
+  re-pull `gothamchess` (deeper / `--years`) and re-check; or anchor on the
+  standard Tartakower theory above. Levy's games are also in the 365chess
+  player DB (`365chess.com/players/Levy_Rozman`) if a specific game is wanted.
+
+### Caveat (per playbook STEP 6)
+The players TEACH these exact lines on YouTube (Aman's Caro speedruns; Levy's
+QGD 10-min video), but **YouTube transcripts are sandbox-blocked** (datacenter-IP
+bot-check). To pull their verbatim spoken teaching for the narration voice,
+run `yt-dlp --write-auto-sub --skip-download` on David's machine and drop the
+`.vtt` into `data/sources/<player>-voice/transcripts/`. The MOVE-spine above is
+already grounded from the game/theory sources; only the voice corpus needs the
+on-machine transcript pull.
