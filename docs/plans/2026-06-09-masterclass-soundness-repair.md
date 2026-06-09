@@ -142,18 +142,105 @@ Compare the corrected terminus eval to the broken lesson's eval in Phase 0.
 
 ### 1B — Middlegame plans grounded from the data (Gate C themes)
 
-_(continuation walk — most-played plan moves from each anchor — appended next)_
+Continuation walk (`scripts/_diag-plan-walk.mjs`): from each anchor, the
+most-played master move for ~12 plies (game counts in parens). Where the data
+goes thin/off-book, the plan must be derived from STRUCTURE + the concept corpus
+(G3: never invent a continuation the games don't show — "empty > generic >
+invented").
+
+| Line | Data continuation from anchor (most-played) | Plan reading |
+|---|---|---|
+| **Botvinnik** ✅rich | `Bxd5 Rxd5 Rxc4 Rxg5 Qd4 Kb8 Rxc6 Rxg3+ fxg3 Qxc6 Rd1 Qc7` (187–208 games each) | Not a "plan" — **forced main-line theory**. Mass liquidation to a Q+R middlegame ≈ balanced (Black's extra pawns vs White's activity). The lesson should FOLLOW this forced line; the "plan" beat = the liquidation + resulting structure. |
+| **Benoni Taimanov** ✅rich | `fxe4 Nxe4 Nf6 Nxf6+ Bxf6 Qb3 Rxe1 Rxe1 Bf5 g4 Bd7 Bc3` (23–34) | The thematic **`…f5` break** (already on the board at the anchor) → `…fxe4` opens the f-file, trade a pair of knights, activate the bishops (`…Bf5/…Bd7`) and the `Bg7/…Bf6` long diagonal. Theme = `…f5` central break + f-file/long-diagonal pressure. |
+| **Dragon (d5 main)** ◑thins | `Bd6 Qb6 c3` (42→29→15) | After the `…d5` liquidation: Black's `…Qb6` hits b2/f2, piece activity + queenside/open-file counterplay (classic Dragon, calmer structure). Theme = active pieces + queenside pressure. Thins → ground rest on structure. |
+| **Old Indian** ◑thin | `h6 Bh4 Re8 Rc1` (10–21) | Complete development (`…Re8`), question the Bg5 (`…h6`), then the central `…exd4`/`…d5` break or play on the `…b5` queenside already started. Theme = central break + queenside space. Thin → structure-grounded. |
+| **Alekhine Four Pawns** ◑thin | `Kh1 Kh8 b3 Bh7 Bd3` (6–153) | Quiet regroup: kings tucked, White builds the `Bd3` battery on b1-h7; Black holds the **bishop pair** (post-`…Bxf6`) and contests the f-file (`…Rad8`→f-file). Theme = bishop pair + f-file/central counterplay. Thin → structure-grounded. |
+| **KID Fianchetto** ⚠off-book | (none — off masters book at the anchor) | The corrected line went **queens-off at move 15** (`…dxe5 …Qxd1`). So this is an **early-endgame plan, not a kingside storm**: centralized `…Nde5` knights, the e5/e6 pawn tension, knights-vs-bishop-pair balance. MUST ground on minor-piece-ending concepts (Capablanca/Lasker), not invent moves. |
+| **Pirc Austrian** ⚠off-book | (none — off masters book at move 13) | Closed center (White's `d5`): Black's `Nc7 + …b5/…a6/…Rb8` queenside expansion + the `Bg7` diagonal, aiming at `…e6`/`…f5` breaks. Dim (−0.74). Theme = queenside play vs White's space. Off-book → structure-grounded; **Bucket-B decision applies.** |
+| **Pirc Czech** ⛔ | (not walked — variation flagged for replace) | Even the opening line is −1.37; do not author a plan until the replace/rebuild decision is made. |
+
+### Phase 1 conclusion
+
+- **7 of 8 are "rebuild the spine on the data line + re-anchor the plan"** — all
+  engine-verified sound, all reach a middlegame, no invention. Two (Botvinnik,
+  Benoni) even have rich forced/thematic continuations to follow; the rest reach
+  a sound position whose plan grounds on structure + concepts where the data
+  thins.
+- **Pirc Czech (⛔) needs David's call** before any work: replace the dim
+  `…c6+…Qa5` variation or drop it.
+- **KID Fianchetto's plan is an early endgame**, not a kingside attack — the
+  re-anchored plan + its narration must reflect that.
+
+**Move skeletons are now LOCKED and verified (Gate B done; Gate C anchors +
+themes identified). Narration (Phase 2) comes next — nothing is authored yet.**
 
 ---
 
-## Phase 2 — Narration research (PENDING — after Phase 1 review)
+## Phase 2 — Narration research (DONE — grounding identified, prose NOT authored)
 
-For each corrected line: gather the teaching IDEAS from grounded sources (book
-corpus `chess-concepts.json` / `opening-book-pages.json` for classical openings;
-reputable references for modern ones), record `sources[]` per beat, in original
-prose (no lifted phrasing). Saved here before any narration is authored.
+The narration is built LAST (Gate D), over the locked skeleton. This section
+records, per line, **what grounds the ideas** so the build authors ORIGINAL
+prose from real sources — never from memory, never lifted (the 2026-06-09
+plagiarism lesson: even ungated pro-rep prose must be *translated*, not copied).
+
+**Corpus reality check (from `chess-concepts.json` + `opening-book-pages.json`):**
+- Book pages exist for **`old-indian-defence`** (+ caro-kann, french, ruy,
+  vienna, king's-gambit, qgd, etc.) — the corpus is pre-1930s **classical only**.
+- The other six targets (Alekhine, Semi-Slav Botvinnik, KID, Pirc, Benoni,
+  Dragon) are **modern → NO opening-specific book page**. They ground on (a)
+  universal `concept:<id>` passages, (b) the DB move-lines (G3), (c) reputable
+  URLs on the `narrationSources` allowlist (chess.com, lichess.org,
+  chessable.com, wikipedia.org, 365chess.com, chessbase.com, chess24.com…).
+- `concept:` ids verified to carry real passages and matched to each theme below
+  (ids with 0 passages, e.g. `pos-bishop-pair`, `att-queenside-attack`, are NOT
+  cited — use the populated equivalent, e.g. `end-two-bishops`).
+
+**Build rule for every beat (record in `sources[]`):** ≥1 resolvable source —
+`concept:<id>` and/or `book:<id>` and/or an allowlist URL — and the prose is
+original (no phrase lifted from any source, incl. marketing copy).
+
+| Line | Grounding sources | Teaching IDEAS to translate (not copy) |
+|---|---|---|
+| **Alekhine Four Pawns** | `concept:end-two-bishops`, `concept:pos-open-file`, `concept:pos-center`, `concept:pos-tempo`; chess.com/lichess/wikipedia Alekhine pages | Black *invites* White's huge c4-d4-e4-f4 center, then undermines it; the `…f6` break — timed AFTER development, not early (that was the −1.07 bug) — cracks the e5 wedge; Black emerges with the **bishop pair** + f-file play, slightly worse but active (−0.8). |
+| **Semi-Slav Botvinnik** | `concept:tac-sacrifice`, `concept:pos-initiative`, `concept:pawn-passed`, `concept:pos-open-file`; chessable/chessbase/chess.com Botvinnik | The most-analyzed forcing line in chess: Black takes c4 then the b-pawns, White sacs a piece for the e5/f6 wedge + initiative; the **main line liquidates** (the rich data continuation) to a balanced Q+R position — Black's extra pawns offset White's activity. Beat = follow the forced theory + name the resulting balance. |
+| **KID Fianchetto** | `concept:end-bishop-vs-knight`, `concept:end-two-bishops`, `concept:pos-centralization`, `concept:end-rook-7th`; chess.com/lichess KID Fianchetto | **Early-endgame plan, NOT a kingside storm** (corrected line trades queens move 15). The Fianchetto is White's most solid anti-KID; Black sidesteps the bad version via `…a6/…b5/…dxe5/…Qxd1` into a near-equal ending — teach the **holding technique** with centralized `…Nde5` knights vs the bishop pair. |
+| **Old Indian** (Be2 & Czech) | **`book:old-indian-defence`** (real pages!), `concept:pawn-chain`, `concept:pos-center`, `concept:pos-development` | A sound, slightly passive KID-cousin: Black accepts less space for a solid structure, finishes developing, then breaks with `…exd4`/`…d5` or expands queenside (`…b5/…a6`, already on the board). Honest register: a touch worse (~−0.5), comfortable to play. **Avoid the `…c5` that tanked to −1.2.** |
+| **Pirc Austrian** ⚠ | `concept:pawn-chain`, `concept:pos-space` (read), `concept:pos-weak-squares`; chess.com/lichess/wikipedia Pirc Austrian | Queenside expansion (`…b5/…a6/…Rb8/…Nc7`) vs White's big space, `Bg7` on the long diagonal, aiming at `…e6`/`…f5`. **Dim (−0.74) — narration MUST be honest it's a tough, slightly-worse defense, never claim equality** (the Antoshin failure). Pending Bucket-B decision. |
+| **Benoni Taimanov** | `concept:pawn-chain`, `concept:pos-open-file`, `concept:att-kingside-storm`, `concept:pos-initiative`; chess.com/lichess/chessable Modern Benoni | The Taimanov (`f4/Bb5+`) is the critical anti-Benoni; Black must play actively for the **`…f5` break** (the rich data continuation: `…fxe4`, open the f-file, activate the bishops). Honest: Black is worse (~−0.7) and playing for activity/counterplay, not equality. |
+| **Dragon (d5 main)** | `concept:pos-open-file`, `concept:pos-initiative`, `concept:tac-sacrifice`; chess.com/lichess Yugoslav Attack, chessbase | `…d5` is THE equalizer in the Yugoslav — it liquidates White's attack and leaves Black with sound, active piece play (`…Qb6` hitting b2/f2, queenside/open-file pressure). Replaces the dubious Chinese `…Rb8/…b5` (−1.16) with the principled central break (−0.53). |
+| **Pirc Czech** ⛔ | — | No narration research until the replace/rebuild decision (the variation is −1.37 at the root). |
+
+### Phase 2 conclusion
+Every active line has ≥1 resolvable grounding source identified (Old Indian even
+has real book pages). For the two honest-but-dim lines (Pirc Austrian, Benoni)
+the narration register is constrained: **truthful "you're slightly worse,
+play for X" framing — never an equality claim.** No prose authored; the build
+reads the actual `concept:`/`book:` passage text before writing, in original
+words.
 
 ---
+
+## Phase 3 — The gate fix (prevent recurrence; build after the content repair)
+
+`soundness-sweep.mjs` is currently an orphaned manual script — that's why these
+15 shipped. Do NOT add a blunt "terminus < −1.0 fails" gate (it false-fails
+every honest gambit and flaps on depth-noisy sharp lines). Instead:
+
+1. **Per-ply "throw-from-healthy" detector (hard-fail).** At each student ply,
+   if engine-best ≥ −0.5 (healthy) AND the taught move drops ≥ 80cp into
+   worse-than −1.0 → fail. Catches Alekhine `…f6` / Botvinnik `…Qa5` (throws
+   from a healthy position) while never firing on a gambit (its drop is from an
+   already-committed-negative position). No allowlist needed for sacrifices.
+2. **Shrinking soundness-showcase baseline** (like `KNOWN_SHORTFALLS`): explicit
+   reviewed allowlist for legitimately-negative lines (gambits + chosen-dim
+   defenses). Anything < −1.0 that isn't a throw and isn't allowlisted → fail.
+   List only shrinks.
+3. **Narration-honesty assertion** on every allowlisted negative line: forbid
+   equality-claiming language ("equal", "comfortable", "fine for Black",
+   "fully sound"). This is the gate that would have caught the Antoshin.
+4. **Wire it into `ship-check`**, depth-bounded, **engine-skip-clean** when
+   Stockfish is absent (exactly how `mastersCoverage.test.ts` degrades in the
+   sandbox) so CI/local enforce it without false-blocking the web sandbox.
 
 ## Sequencing / next-session pickup
 
