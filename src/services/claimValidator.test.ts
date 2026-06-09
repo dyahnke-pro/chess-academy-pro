@@ -108,6 +108,46 @@ describe('validateClaims — no context (no-op)', () => {
   });
 });
 
+// WO: coach-engine-grounding (David 2026-06-09 "No bueno"). A best-move /
+// soundness question — "what's the best move here?", "only one good move?" —
+// must be answerable: the honest answer names the best move AND the short
+// line that proves it (forward SANs not legal now). Those tripped the bare-
+// SAN gate and served the cold "run it through the engine" fallback on a
+// position the coach was holding a Stockfish eval for. The `bestMoveQuestion`
+// flag exempts JUST the bare-SAN gate; every fabrication guard stays in force.
+describe('validateClaims — bestMoveQuestion exemption (engine grounding)', () => {
+  // The reproduced scenario: an off-book opening position (matched the
+  // opening DB so grounding engages) with NO live master data.
+  const OFFBOOK: MasterPlayContext = {
+    current: { fen: 'rnbqkbnr/pp2pppp/8/2pp4/5P2/5N2/PPPPP1PP/RNBQKB1R w KQkq -', totalGames: 0, moves: [], source: 'none' },
+    lookahead: [],
+    dbEntries: [{ id: 'bird', name: "Bird's Opening", sans: ['f4', 'd5', 'Nf3'] }] as unknown as MasterPlayContext['dbEntries'],
+    groundedSans: ['e3', 'd4', 'g3', 'b3', 'Nc3', 'e4'], // legal moves of the position
+  };
+  const ANSWER = 'The best move is e3, opening the bishop. After …Nc6, then Bb5 pins the knight and White is comfortable.';
+
+  it('WITHOUT the flag, the forward SANs (Nc6, Bb5) still trip the SAN gate (gate intact)', () => {
+    const r = validateClaims(ANSWER, OFFBOOK);
+    expect(r.ok).toBe(false);
+    expect(r.violations.some((v) => v.kind === 'san' && (v.claim === 'Nc6' || v.claim === 'Bb5'))).toBe(true);
+  });
+
+  it('WITH bestMoveQuestion, the best-move answer passes (coach can explain the line)', () => {
+    const r = validateClaims(ANSWER, { ...OFFBOOK, bestMoveQuestion: true });
+    expect(r.ok).toBe(true);
+  });
+
+  it('STILL blocks a fabricated statistic even on a best-move turn (G3 intact)', () => {
+    const r = validateClaims('The best move is e3, played in 64% of games here.', { ...OFFBOOK, bestMoveQuestion: true });
+    expect(r.violations.some((v) => v.kind === 'numeric')).toBe(true);
+  });
+
+  it('STILL blocks a fabricated player attribution on a best-move turn', () => {
+    const r = validateClaims('Carlsen scores 70% from here, so e3 is best.', { ...OFFBOOK, bestMoveQuestion: true });
+    expect(r.violations.some((v) => v.kind === 'numeric' || v.kind === 'entity')).toBe(true);
+  });
+});
+
 describe('validateClaims — SAN check', () => {
   it('passes a SAN that appears in current.moves', () => {
     const r = validateClaims('Here you should play Bb5, the main line.', buildContext());

@@ -1049,6 +1049,13 @@ export interface MasterGroundingOptions {
    *  comparative guards stay on `hasMasterData`, so G3's real fabrication
    *  vectors remain gated. See `LiveState`/`MasterPlayContext.planQuestion`. */
   planQuestion?: boolean;
+  /** True when this turn is a BEST-MOVE / SOUNDNESS question ("what's the
+   *  best move?", "is this sound?", "only one good move?"). Same carve-out
+   *  as `planQuestion`: the answer names the engine's best move + the short
+   *  proving line (forward SANs), so the bare-SAN gate is skipped for the
+   *  turn while every fabrication guard stays in force. Detected via
+   *  `isBestMoveQuestion` in coachService (David 2026-06-09 "No bueno"). */
+  bestMoveQuestion?: boolean;
   /** Surface route for audit attribution. Goes into every emitted
    *  audit event (`master-play-lookup`, `claim-validator-trip`, etc). */
   surface: string;
@@ -1222,7 +1229,7 @@ async function buildMasterPlayContext(
     // review, `groundedSans` carries the game's own moves + legal moves
     // so the coach can discuss the student's actual game without every
     // SAN tripping the gate.
-    return { current, lookahead: [], groundedSans, groundedFromPlayedGame, moveNarration: grounding.moveNarration, planQuestion: grounding.planQuestion, groundedPlayers: grounding.groundedPlayers };
+    return { current, lookahead: [], groundedSans, groundedFromPlayedGame, moveNarration: grounding.moveNarration, planQuestion: grounding.planQuestion, bestMoveQuestion: grounding.bestMoveQuestion, groundedPlayers: grounding.groundedPlayers };
   }
   const lookahead = await buildLookahead(
     grounding.currentFen,
@@ -1230,7 +1237,7 @@ async function buildMasterPlayContext(
     grounding.surface,
     grounding.sessionId,
   );
-  return { current, lookahead, groundedSans, groundedFromPlayedGame, moveNarration: grounding.moveNarration, planQuestion: grounding.planQuestion, groundedPlayers: grounding.groundedPlayers };
+  return { current, lookahead, groundedSans, groundedFromPlayedGame, moveNarration: grounding.moveNarration, planQuestion: grounding.planQuestion, bestMoveQuestion: grounding.bestMoveQuestion, groundedPlayers: grounding.groundedPlayers };
 }
 
 /** Render the context as a system-prompt block the LLM can consume.
