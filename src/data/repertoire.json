@@ -1976,7 +1976,7 @@
       },
       {
         "name": "Botvinnik Variation Deep",
-        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 Bg5 dxc4 e4 b5 e5 h6 Bh4 g5 Nxg5 hxg5 Bxg5 Nbd7 exf6 Bb7 g3 c5 d5 Qb6 Bg2 O-O-O O-O b4 Na4 Qa5",
+        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 Bg5 dxc4 e4 b5 e5 h6 Bh4 g5 Nxg5 hxg5 Bxg5 Nbd7 exf6 Bb7 g3 c5 d5 Qb6 Bg2 O-O-O O-O b4 Na4 Qa6",
         "explanation": "The deep Botvinnik is among the most heavily analyzed positions in chess history. Black grabs two pawns and a piece for the exchange, creating a wildly unbalanced position. After ...Bb7 and ...c5, Black's queenside majority and bishop pair provide long-term compensation. The critical sequence d5 Qb6 Bg2 O-O-O O-O sees both sides castling, after which the real battle begins. White's passed f6 pawn looks dangerous but Black's queenside pawns and active pieces create counter-threats that demand precise calculation."
       },
       {
@@ -2647,7 +2647,7 @@
       },
       {
         "name": "Old Indian: Be2 Development",
-        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 Qc2 Re8 Rd1 Bf8 d5 c5 a3",
+        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O c6 Qc2 Re8 Rd1 Bf8 d5 c5",
         "explanation": "White's Be2 development is the most classical approach to the Old Indian. Black responds with a patient setup, fianchettoing the dark bishop via f8-g7 after the center closes. The queen on c2 supports e4 and prepares queenside expansion while the rook goes to d1 for central pressure. Black must time the f5 break carefully while keeping the queenside stable. This line leads to a deep strategic battle where understanding plans matters more than memorization."
       }
     ],
