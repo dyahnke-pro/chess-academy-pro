@@ -30,7 +30,7 @@ const TARGETS = [
   ['sicilian-alapin', 'stranded on a5'],
   ['alekhine-defence', 'Chase Variation'],
   ['qga', 'hangs the knight'],
-  ['vienna-game', 'won the knight on c3'],
+  ['vienna-game', 'blocks the check but forgets'],
   ['trompowsky-attack', 'drops a pawn and the initiative'],
 ];
 
