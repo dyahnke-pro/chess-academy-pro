@@ -22,8 +22,9 @@
  * voice and supplies a sample node so the LLM mimics the pattern.
  * Style drift is the main risk; that's why we anchor on a sample.
  */
-import { Chess, type Move, type Square } from 'chess.js';
+import { Chess, type Move } from 'chess.js';
 import puzzleData from '../data/puzzles.json';
+import { computeLeadEyeArrows, type LineMove } from './arrowEngine';
 import { getCoachChatResponse, getCoachStructuredResponse } from './coachApi';
 import {
   validateMoveLegality,
@@ -1040,97 +1041,6 @@ export interface GenerateOpeningOptions {
  *  Attack, Bg5 Main Line, Opocensky etc), code surfaces them as
  *  fork branches at the end of the spine and asks the LLM for a
  *  one-sentence teaser idea per branch. */
-// ───────────────────────────────────────────────────────────────────
-// CODE-COMPUTED lead-the-eye arrows (G0 — the LLM no longer DECIDES
-// board geometry). The former NARRATION_SCHEMA let the LLM emit
-// `arrows:[{from,to}]`, with only a syntax filter downstream — so the
-// model was free to point an arrow at an empty square. The two arrow
-// categories the prompt asked for are both deterministic, so we
-// compute them from the line itself and hand the prose-only narration
-// to the LLM:
-//   (a) THREAT      — the most valuable square the moved piece now
-//                     attacks (a capture, a check, or a sensitive
-//                     f7/f2/h7/h2 square), read straight off chess.js.
-//   (b) LOOK-AHEAD  — where this SAME piece moves NEXT on the line
-//                     (its next hop), read straight off the move list.
-// Never the move's own from→to (the board animates that).
-type LineMove = { from: string; to: string; color: 'w' | 'b'; fen: string };
-type FromTo = { from: string; to: string };
-
-const SENSITIVE_SQUARES = new Set(['f7', 'f2', 'h7', 'h2', 'g7', 'g2']);
-const ARROW_PIECE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
-
-/** Flip the side-to-move in a FEN (and clear en-passant) so we can
- *  generate the moves of the side that JUST moved — that reveals what
- *  the piece on its destination square now attacks. Returns null when
- *  the flip would be illegal (e.g. the move was a check, leaving the
- *  opponent's king in check with the mover to move) — in that case the
- *  threat is self-evident (the SAN shows the +) and we skip the arrow. */
-function withSideToMove(fen: string, color: 'w' | 'b'): string | null {
-  const parts = fen.split(' ');
-  if (parts.length < 4) return null;
-  parts[1] = color;
-  parts[3] = '-';
-  return parts.join(' ');
-}
-
-/** THREAT arrow: the single most valuable square the piece now on
- *  `toSquare` attacks. Null when it threatens nothing concrete. */
-function computeThreatArrow(postFen: string, movedColor: 'w' | 'b', toSquare: string): FromTo | null {
-  const flipped = withSideToMove(postFen, movedColor);
-  if (!flipped) return null;
-  const probe = new Chess();
-  try {
-    probe.load(flipped);
-  } catch {
-    return null; // illegal flipped position (the move was a check) → skip
-  }
-  let best: { to: string; score: number } | null = null;
-  let moves: Move[];
-  try {
-    moves = probe.moves({ square: toSquare as Square, verbose: true });
-  } catch {
-    return null;
-  }
-  for (const m of moves) {
-    let score = 0;
-    if (m.isCapture()) score += 10 + (m.captured ? ARROW_PIECE_VALUE[m.captured] ?? 0 : 0);
-    if (m.san.includes('+') || m.san.includes('#')) score += 6;
-    if (SENSITIVE_SQUARES.has(m.to)) score += 2;
-    if (score > 0 && (!best || score > best.score)) best = { to: m.to, score };
-  }
-  return best ? { from: toSquare, to: best.to } : null;
-}
-
-/** LOOK-AHEAD arrow: where the piece now on seq[i].to moves NEXT on
- *  the line (the first later same-colour move departing that square). */
-function computeLookAheadArrow(seq: LineMove[], i: number): FromTo | null {
-  const square = seq[i].to;
-  const color = seq[i].color;
-  for (let j = i + 1; j < seq.length; j += 1) {
-    if (seq[j].color !== color) continue;
-    if (seq[j].from === square) {
-      return seq[j].to === square ? null : { from: square, to: seq[j].to };
-    }
-  }
-  return null;
-}
-
-/** Per-ply lead-the-eye arrows for a played line — threat + look-ahead,
- *  computed from board geometry alone. Max 2 per ply, deduped. */
-function computeLeadEyeArrows(seq: LineMove[]): FromTo[][] {
-  return seq.map((mv, i) => {
-    const arrows: FromTo[] = [];
-    const threat = computeThreatArrow(mv.fen, mv.color, mv.to);
-    if (threat) arrows.push(threat);
-    const ahead = computeLookAheadArrow(seq, i);
-    if (ahead && !arrows.some((a) => a.from === ahead.from && a.to === ahead.to)) {
-      arrows.push(ahead);
-    }
-    return arrows;
-  });
-}
-
 const NARRATION_SCHEMA: Record<string, unknown> = {
   type: 'object',
   required: ['intro', 'outro', 'ideas'],
