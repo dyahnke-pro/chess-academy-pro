@@ -691,6 +691,9 @@ export interface FlashcardRecord {
 // ─── Settings Enums (WO-5) ───────────────────────────────────────────────────
 
 export type PieceAnimationSpeed = 'none' | 'fast' | 'medium' | 'slow';
+
+/** Visual burst played on the square a piece lands on. */
+export type LandingEffect = 'lightning' | 'off';
 export type CoachVerbosity = 'none' | 'fast' | 'medium' | 'slow' | 'unlimited';
 
 /** How much the coach says at live phase transitions (opening→middlegame
@@ -800,6 +803,10 @@ export interface UserPreferences {
   showLegalMoves: boolean;
   showCoordinates: boolean;
   pieceAnimationSpeed: PieceAnimationSpeed;
+  /** Visual burst played on the square a piece lands on. 'lightning' = the
+   *  emerald electric burst that matches the app icon; 'off' = none.
+   *  Optional for migration — undefined resolves to 'lightning'. */
+  landingEffect?: LandingEffect;
   // Piece Sound Customization (WO-COACH-PIECE-SOUND-CUSTOM). Layered ON
   // TOP of the existing style-set / event-type defaults so move /
   // capture / castle / check stay distinguishable. Each value is

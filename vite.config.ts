@@ -63,7 +63,10 @@ export default defineConfig(({ mode }) => {
         // inlined into one ~10 MB `index` chunk (WO-PERF-BUNDLE-01).
         maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-        globIgnores: ['stockfish/**'],
+        // Don't precache the heavy /rpg-demo character art — it would bloat the
+        // install-time precache (delaying SW activation → a mid-session
+        // autoUpdate reload). It loads on demand on that isolated route instead.
+        globIgnores: ['stockfish/**', 'rpg/**'],
         navigateFallbackDenylist: [/^\/api\//, /^\/voice-packs\//],
         runtimeCaching: [
           {

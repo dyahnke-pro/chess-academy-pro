@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useState, useEffect, memo } from 'react';
+import { useMemo, useCallback, useState, useEffect, useRef, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Chessboard } from 'react-chessboard';
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
@@ -17,6 +17,7 @@ import type { EngineSnapshot, LastMoveContext } from './VoiceChatMic';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import type { MoveResult } from '../../hooks/useChessGame';
 import { GhostPieceOverlay } from './GhostPieceOverlay';
+import { LandingEffectOverlay } from './LandingEffectOverlay';
 import type {
   PieceDropHandlerArgs,
   SquareHandlerArgs,
@@ -220,6 +221,25 @@ export function ChessBoard({
 
   const { lastMove, checkSquare, selectedSquare, legalMoves, getPiece } = game;
 
+  // ─── Landing effect ──────────────────────────────────────────────────────
+  // Emerald lightning burst on the square a piece just landed on (student and
+  // auto-played moves both flow through game.lastMove). Keyed off from/to so it
+  // fires once per move.
+  const landingKeyRef = useRef(0);
+  const [landing, setLanding] = useState<{ square: string; key: number; glowRgb: string } | null>(null);
+  useEffect(() => {
+    if (settings.landingEffect !== 'lightning' || prefersReducedMotion) return;
+    if (!lastMove) return;
+    landingKeyRef.current += 1;
+    // Color the bolt with the SAME glow that backlights the moved piece.
+    const moverColor = getPiece(lastMove.to)?.color;
+    const sideGlow = moverColor === 'b' ? settings.blackPieceGlowColor : settings.whitePieceGlowColor;
+    const fallback = settings.boardGlowColor && settings.boardGlowColor !== 'none' ? settings.boardGlowColor : '0, 255, 136';
+    const glowRgb = !sideGlow || sideGlow === 'none' ? fallback : sideGlow;
+    setLanding({ square: lastMove.to, key: landingKeyRef.current, glowRgb });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastMove?.from, lastMove?.to, settings.landingEffect, prefersReducedMotion]);
+
   // Board square neon glow from user settings
   const { baseGlow: baseGlowStr, mergeGlow } = useBoardGlow();
 
@@ -375,6 +395,16 @@ export function ChessBoard({
               ghostMove={ghostMove}
               boardOrientation={game.boardOrientation}
               pieceSet={settings.pieceSet}
+            />
+          )}
+          {/* Landing lightning burst */}
+          {landing && (
+            <LandingEffectOverlay
+              key={landing.key}
+              square={landing.square}
+              glowRgb={landing.glowRgb}
+              boardOrientation={game.boardOrientation}
+              onDone={() => setLanding(null)}
             />
           )}
           {/* Classification icon overlay (Chess.com-style badge) */}

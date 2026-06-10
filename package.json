@@ -50,6 +50,8 @@
     "@capacitor/app": "^8.1.0",
     "@capacitor/core": "8.1.0",
     "@dnd-kit/sortable": "^10.0.0",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.6.1",
     "@upstash/redis": "^1.37.0",
     "@vercel/blob": "^2.4.0",
     "chess.js": "1.4.0",
@@ -66,6 +68,7 @@
     "react-router-dom": "7.13.1",
     "recharts": "3.7.0",
     "stockfish": "^18.0.5",
+    "three": "^0.171.0",
     "zustand": "5.0.11"
   },
   "devDependencies": {

@@ -19,7 +19,25 @@ export const PIECE_SETS: PieceSetConfig[] = [
   { id: 'pixel', name: 'Pixel', lichessName: 'pixel' },
   { id: 'horsey', name: 'Horsey', lichessName: 'horsey' },
   { id: 'letter', name: 'Letter', lichessName: 'letter' },
+  // "Gold (Champion)" — matches the gold-knight app icon using the pieces we
+  // already ship: renders the clean cburnett glyphs with a baked CSS treatment
+  // (see GOLD_PIECE_FILTERS) so white reads as polished gold and black gains an
+  // emerald-energy rim. Special-cased in buildPieceRenderer so the gold
+  // treatment wins over the user's neon glow filter (otherwise a green
+  // drop-shadow would mask the gold tint).
+  { id: 'gold', name: 'Gold (Champion)', lichessName: 'cburnett' },
 ];
+
+/** Baked CSS `filter` treatment for the "gold" piece set, applied per side
+ *  regardless of the user's neon-glow setting. White → warm polished gold;
+ *  black → kept dark with a soft green rim so the two sides stay readable
+ *  and both nod to the gold-and-green app icon. */
+const GOLD_PIECE_FILTERS = {
+  white:
+    'sepia(1) saturate(2.6) hue-rotate(2deg) brightness(1.06) contrast(1.05) drop-shadow(0 0 3px rgba(255, 196, 64, 0.65))',
+  black:
+    'brightness(0.82) sepia(0.35) hue-rotate(70deg) saturate(1.4) drop-shadow(0 0 3px rgba(74, 222, 128, 0.7))',
+};
 
 const PIECE_MAP: Record<string, string> = {
   wP: 'wP', wN: 'wN', wB: 'wB', wR: 'wR', wQ: 'wQ', wK: 'wK',
@@ -71,10 +89,12 @@ export function buildPieceRenderer(
   filters?: PieceFilterOptions,
 ): PieceRenderObject | undefined {
   const config = PIECE_SETS.find((ps) => ps.id === pieceSetId);
+  const isGold = pieceSetId === 'gold';
   const hasFilters = filters?.whitePieceFilter || filters?.blackPieceFilter;
 
-  // No custom set and no filters → use react-chessboard defaults
-  if (!config?.lichessName && !hasFilters) return undefined;
+  // No custom set and no filters → use react-chessboard defaults.
+  // ('gold' always renders custom — its gold treatment is baked, not optional.)
+  if (!config?.lichessName && !hasFilters && !isGold) return undefined;
 
   // Use the configured set, or fall back to cburnett when we need filters on the default set
   const setName = config?.lichessName ?? 'cburnett';
@@ -83,7 +103,11 @@ export function buildPieceRenderer(
   for (const [key, file] of Object.entries(PIECE_MAP)) {
     const url = `${LICHESS_CDN}/${setName}/${file}.svg`;
     const isWhite = key.startsWith('w');
-    const pieceFilter = isWhite ? filters?.whitePieceFilter : filters?.blackPieceFilter;
+    // The gold set's baked treatment overrides the user's neon-glow filter so
+    // the gold tint isn't masked by a green drop-shadow.
+    const pieceFilter = isGold
+      ? (isWhite ? GOLD_PIECE_FILTERS.white : GOLD_PIECE_FILTERS.black)
+      : (isWhite ? filters?.whitePieceFilter : filters?.blackPieceFilter);
 
     pieces[key] = ({ svgStyle } = {}) => (
       <img
