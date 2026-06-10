@@ -3700,6 +3700,11 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
 
   // Handle board move routing — explore mode, practice mode, or normal gameplay
   const handleBoardMoveRouted = useCallback((moveResult: MoveResult) => {
+    // Cut any in-flight narration the instant the student plays — the board is
+    // now interactive during narration (mirror of Learn), so the voice must
+    // get out of the way when they move instead of droning over the new
+    // position (David 2026-06-10).
+    voiceService.stop();
     // WO-STOCKFISH-SWAP-AND-PERF (part 4): speculative prefetch.
     // Kick off a depth-12 Stockfish eval against the post-move FEN
     // before the brain runs. The full depth-18 eval the brain will
@@ -4616,7 +4621,14 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               key={`${gameState.gameId}-${playerColor}-${practicePosition?.fen ?? ''}-${practiceAttempts}-${exploreFen ?? ''}`}
               initialFen={displayFen}
               orientation={playerColor}
-              interactive={(gameState.status === 'playing' && !isCoachThinking && !temporaryFen && viewedMoveIndex === null && !positionNarration.isNarrating && !phaseNarration.isNarrating) || !!practicePosition || isExploreMode}
+              // Mirror Learn (CoachTeachPage): the board is locked ONLY while
+              // the coach is computing its move (isCoachThinking) — NOT while it
+              // narrates afterward. The student can play the instant the
+              // opponent's move lands; the narration runs unblocked and is cut
+              // by the move handler if they move (David 2026-06-10: "play a
+              // move as soon as the opponent's turn is over" + "these two
+              // surfaces need to mirror each other").
+              interactive={(gameState.status === 'playing' && !isCoachThinking && !temporaryFen && viewedMoveIndex === null) || !!practicePosition || isExploreMode}
               onMove={handleBoardMoveRouted}
               showEvalBar={showEvalBarEffective || isExploreMode}
               evaluation={isExploreMode && exploreEval !== null ? exploreEval : latestEval}
