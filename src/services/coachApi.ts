@@ -1380,13 +1380,13 @@ function renderMasterPlayContextBlock(ctx: MasterPlayContext): string {
   return lines.join('\n');
 }
 
-/** Stock fallback served when retries are exhausted. Generic enough
- *  to feel like a coach being honest about uncertainty rather than
- *  hitting a programmatic dead end. */
+/** Stock fallback served when the in-code strip emptied the response (every
+ *  sentence carried an ungrounded claim). Honest about uncertainty without
+ *  punting the student to "the engine" — invites a question the grounded
+ *  assemblers (best move / plan / tactics / master play) can actually answer. */
 const STOCK_GROUNDING_FALLBACK =
-  "I can't verify which moves are sound here from master practice right now. " +
-  "If you want a concrete recommendation, run the position through the engine — " +
-  "I'd rather stay honest than guess.";
+  "I can't verify that precisely from grounded data right now. " +
+  "Ask me for the best move, the plan, or what's hanging, and I'll ground the answer for you.";
 
 function emitClaimValidatorTrips(
   validation: ClaimValidationResult,
@@ -1468,9 +1468,10 @@ function stripUngroundedSentences(text: string, validation: ClaimValidationResul
  * move to pick. That's why it needs no validator: nothing ungrounded can come
  * out because nothing ungrounded went in.
  *
- * If you find yourself wanting to add a validator, a gate, or a "use exactly
- * these squares" instruction around a coach call — STOP. The LLM is still
- * deciding. Compute the answer in code and route it through HERE instead.
+ * If you find yourself wanting to add a validator, a gate, or an anti-
+ * hallucination instruction (the "say only these squares" kind) around a coach
+ * call — STOP. The LLM is still deciding. Compute the answer in code and route
+ * it through HERE instead.
  *
  * Returns null if no provider is configured (caller decides the fallback);
  * never throws.

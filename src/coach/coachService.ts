@@ -435,9 +435,9 @@ export function isPlanQuestion(ask: string | undefined): boolean {
  *  HONESTLY means naming the engine's best move AND the short line that
  *  shows why (the opponent's reply + the follow-up). Those forward SANs
  *  aren't legal in the current position, so the bare-SAN claim gate flagged
- *  them, exhausted the retry budget, and served the cold "I can't verify…
- *  run it through the engine" fallback — on a position the coach was
- *  literally holding a Stockfish eval for (David 2026-06-09, "No bueno").
+ *  them, exhausted the retry budget, and served the cold can't-verify
+ *  fallback — on a position the coach was literally holding a Stockfish eval
+ *  for (David 2026-06-09, "No bueno").
  *  Detecting it here exempts JUST the bare-SAN gate for the turn (the same
  *  carve-out plan/move-narration questions already get); every fabrication
  *  guard — percentages, game counts, ratings, player attributions, "most

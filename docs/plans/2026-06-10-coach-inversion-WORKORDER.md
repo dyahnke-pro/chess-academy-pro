@@ -78,25 +78,40 @@ Gate baseline driven **9 → 4**.
   - Phase 4 "how do masters play this?" — pure `assembleMasterPlayAnswer` voices
     the master-play lookup's real top moves + frequencies; `isMasterPlayQuestion`
     detector + `masterPlayQuestion` flag + interception.
+  - **Phase 3 plans** — pure `assemblePlanAnswer` voices the engine PV (replayed
+    + chess.js-verified) as the plan: the student's moves + the expected reply +
+    eval, arrow on the first move. Threaded via `enginePlan` in
+    `MasterGroundingOptions` + the `planQuestion` interception. (NOT a thin
+    raw-PV voicer — it validates the line replays legally and stops at the last
+    legal ply, never voicing a bad line.)
+- **Gate driven 9 → 1.** Beyond STEP C's removals: reworded the stock fallback
+  to stop punting "run the position through the engine", and reworded the two
+  false-positive doc/comments so the gate measures REAL band-aids. The remaining
+  **1** is the single silent `validateClaims` backstop on the general chat
+  path (kept deliberately per STEP C). It is the HONEST FLOOR until that general
+  path is fully inverted — **do NOT delete the backstop to hit 0** (that removes
+  the safety net, not the disease).
 
-### 🔭 STILL LEFT for the next session (the harder tail — do each at full depth)
-- **STEP D Phase 3 — plans/strategy.** `isPlanQuestion` exists; fact source is
-  `middlegame-plans.json` (criticalPositionFen match, read via `middlegamePlanner`
-  — that file is ANOTHER session's lane, READ only) + the engine PV
-  (`enginePlan.pvSan`, already threaded). Don't ship a thin raw-PV voicer — voice
-  the real plan data.
-- **STEP D Phase 4 (cont) — pro-game refs** for "how does <pro> play X".
-- **STEP D Phase 5 — endgame** (`/api/lichess-tablebase`) + **concepts**
-  (`chess-concepts.json` book corpus).
-- **STEP D — the report CoachTasks** (`weakness/bad_habit/weekly/daily/session`)
-  → voice the computed profile; and the per-move CoachTasks
-  (`move_commentary`/`whatif_commentary`/`position_analysis_chat`/`hint`/…).
+### 🔭 STILL LEFT (the harder tail — do each at FULL depth, then gate → 0)
+- **Phase 4 (cont) — pro-game refs** for "how does \<pro\> play X" (the
+  `playerGames` envelope is already injected; assemble + voice it).
+- **Phase 5 — endgame** (`/api/lichess-tablebase`) + **concepts**
+  (`chess-concepts.json`; `detectConceptsInText`/`getConcept` exist — needs an
+  `isConceptQuestion` detector that doesn't collide with `isTacticsQuestion`,
+  since "what's a fork?" trips both).
+- **The report CoachTasks** (`weakness/bad_habit/weekly/daily/session`) and the
+  per-move CoachTasks (`move_commentary`/`whatif_commentary`/
+  `position_analysis_chat`/`hint`/`puzzle_feedback`/`model_game_annotation`/
+  `smart_search`). ⚠️ These route through `getCoachCommentary` (a DIFFERENT
+  entry point than `getCoachChatResponse`), so inverting them is a separate
+  seam — compute the report/commentary in code, voice via a `voiceFacts`-class
+  call. This is the biggest remaining chunk.
+- **General chat-fallback inversion → removes the backstop → gate 0.** Once
+  every chat turn is assembled (position facts: eval + tactics + master play +
+  book concepts → voiceFacts), the lone `validateClaims` backstop has nothing
+  to guard and can go. THAT is the gate-0 finish line.
 - **STEP E — leak audit** (LAST, David "later todo"): tag every coach LLM call
   grounded vs ungrounded; emit `coach-ungrounded-llm-call`.
-- **Gate floor note:** baseline is 4 = 1 intended validator backstop + 1 stock-
-  fallback line ("run the position through the engine", removed when the general
-  chat path is fully inverted) + 2 false-positives (the law quoted in the
-  voiceFacts doc-comment + `coachService:439` comment). Lower it as you invert.
 
 ## 🔧 WHAT'S LEFT (original plan, in order)
 

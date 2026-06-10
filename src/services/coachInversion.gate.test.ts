@@ -37,16 +37,23 @@ const WATCHED = [
 const BANDAID_RE = /cite NO [a-z]|use EXACTLY|never name a different|regenerat[a-z]+|run the (?:position )?through the engine|run it through the engine/gi;
 const VALIDATOR_RE = /validateClaims\(|validateArrowClaims\(|validateTacticClaims\(/g;
 
-// 🔒 BASELINE — ONLY EVER LOWER THIS. It hits 0 when the inversion is complete
-//    (no validators, no regen, no anti-hallucination prompts).
+// 🔒 BASELINE — ONLY EVER LOWER THIS.
 //    2026-06-10: started at 9.
 //    STEP C (kill the regen loop): 9 → 4. Removed the 2 regen `validateClaims`
-//    passes + `buildRetryAddendum` (3 prompt markers: Regenerate / cite NO move
-//    / Cite NO percentage). Remaining 4 = 1 intended validator backstop +
-//    1 stock-fallback line ("run the position through the engine", removed when
-//    STEP D inverts the general chat path) + 2 false-positives (the law quoted
-//    in the voiceFacts doc-comment + the coachService:439 comment).
-const BASELINE = 4;
+//    passes + `buildRetryAddendum` (Regenerate / cite NO move / Cite NO %).
+//    STEP D (intent inversions + cleanup): 4 → 1. Reworded the stock fallback
+//    to stop punting "run the position through the engine", and reworded the
+//    two false-positive doc/comments (the law quoted in the voiceFacts
+//    doc-comment + the coachService isBestMoveQuestion comment) so the gate
+//    measures REAL band-aids, not quotes of the rule.
+//    The remaining 1 is the SINGLE silent `validateClaims` backstop on the
+//    general chat-fallback path — kept deliberately per STEP C ("keep ONE
+//    validator pass as a silent backstop; ZERO regens"). It drops to 0 only
+//    when that general path is fully inverted too (every chat turn assembled),
+//    so the backstop has nothing left to guard. Until then, 1 is the honest
+//    floor — do NOT delete the backstop just to hit 0 (that removes the safety
+//    net, not the disease).
+const BASELINE = 1;
 
 describe('G0 gate — the LLM decides nothing (band-aid baseline, can only shrink)', () => {
   it('keeps the band-aid count at or below the frozen baseline', () => {
