@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer } from './groundedAnswer';
 import type { TacticsLiveContext } from '../coach/types';
 import type { MasterPlayResult } from './masterPlayTypes';
 
@@ -126,5 +126,28 @@ describe('assembleMasterPlayAnswer — Phase 4 (voice the real master frequencie
   it('returns null when there is no master data (source none / empty moves)', () => {
     expect(assembleMasterPlayAnswer(masterResult({ source: 'none', moves: [], totalGames: 0 }))).toBeNull();
     expect(assembleMasterPlayAnswer(masterResult({ moves: [] }))).toBeNull();
+  });
+});
+
+// Phase 3: a plan answer's MOVE backbone is the engine PV (real, chess.js-
+// verified), never the LLM free-synthesizing moves.
+describe('assemblePlanAnswer — Phase 3 (voice the engine PV as the plan)', () => {
+  const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+  it('voices the student moves + expected reply with an arrow on the first move', () => {
+    const a = assemblePlanAnswer({ fen: START, pvSan: ['e4', 'e5', 'Nf3', 'Nc6'], evalCp: 30, mateIn: null, studentSide: 'white' });
+    expect(a!.facts).toContain('Your plan: e4, then Nf3.');
+    expect(a!.facts).toContain('most likely reply is e5');
+    expect(a!.bestMoveFromTo).toEqual({ from: 'e2', to: 'e4' });
+    expect(a!.sources).toContain('engine:stockfish');
+  });
+  it('stops at the last legal ply when the PV diverges from legality (never voices a bad line)', () => {
+    // Second move "Qh5xz" is illegal SAN → replay stops after e4; one student move.
+    const a = assemblePlanAnswer({ fen: START, pvSan: ['e4', 'totally-illegal'], evalCp: 20, mateIn: null, studentSide: 'white' });
+    expect(a!.facts).toContain('Your plan starts with e4.');
+    expect(a!.bestMoveFromTo).toEqual({ from: 'e2', to: 'e4' });
+  });
+  it('returns null on an empty PV or unparseable FEN', () => {
+    expect(assemblePlanAnswer({ fen: START, pvSan: [], evalCp: 0, mateIn: null, studentSide: 'white' })).toBeNull();
+    expect(assemblePlanAnswer({ fen: 'not-a-fen', pvSan: ['e4'], evalCp: 0, mateIn: null, studentSide: 'white' })).toBeNull();
   });
 });

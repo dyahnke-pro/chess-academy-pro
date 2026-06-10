@@ -946,6 +946,8 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             // are white-perspective (the interception converts to side-to-move).
             engineEvalCp: input.liveState.enginePlan?.evalCp ?? input.liveState.evalCp,
             engineMateIn: input.liveState.enginePlan?.mateIn ?? input.liveState.evalMateIn,
+            // STEP D Phase 3 — the engine PV backs a PLAN answer (assemblePlanAnswer).
+            enginePlan: input.liveState.enginePlan,
             tactics: input.liveState.tactics,
             // STEP B — tactics/danger (Phase 2) + student-progress (Phase 6).
             // Both assemblers exist; these flags tell the interception to

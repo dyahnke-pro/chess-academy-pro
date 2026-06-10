@@ -36,7 +36,7 @@ function emitLlmTokenUsage(
   });
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer } from './groundedAnswer';
 import { detectBadHabits } from './badHabitDetector';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
@@ -1096,6 +1096,11 @@ export interface MasterGroundingOptions {
   engineEvalCp?: number;
   /** Mate distance in plies (signed, white-positive) for `currentFen`. */
   engineMateIn?: number;
+  /** STEP D Phase 3 — the engine's principal variation for a PLAN question.
+   *  The plan's MOVE backbone is Stockfish's best line (real, legal, verified),
+   *  voiced by assemblePlanAnswer instead of the LLM free-synthesizing a plan.
+   *  Built only when the student is to move (PV[0] is the student's move). */
+  enginePlan?: { pvSan: ReadonlyArray<string>; evalCp: number | null; mateIn: number | null; studentSide: 'white' | 'black' };
   /** Pre-computed tactical context for `currentFen` (forks/hanging/threats/
    *  mate-in-one) — the fact source for STEP B's tactics/danger answers. */
   tactics?: TacticsLiveContext;
@@ -1652,6 +1657,29 @@ export async function getCoachChatResponse(
                   ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
                   : voiced;
               }
+            }
+          }
+        }
+
+        // ── PLAN / STRATEGY (Phase 3) — voice the engine's principal variation ──
+        // The plan's MOVE backbone is Stockfish's PV (real, legal, chess.js-
+        // verified), NOT the LLM free-synthesizing moves. assemblePlanAnswer
+        // replays the PV and packages the student's moves + the expected reply;
+        // voiceFacts says them. Falls through when there's no engine plan.
+        if (grounding.planQuestion && grounding.enginePlan && grounding.currentFen) {
+          const answer = assemblePlanAnswer({
+            fen: grounding.currentFen,
+            pvSan: grounding.enginePlan.pvSan,
+            evalCp: grounding.enginePlan.evalCp,
+            mateIn: grounding.enginePlan.mateIn,
+            studentSide: grounding.enginePlan.studentSide,
+          });
+          if (answer) {
+            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config });
+            if (voiced) {
+              return answer.bestMoveFromTo
+                ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
+                : voiced;
             }
           }
         }

@@ -181,6 +181,74 @@ export function explainBestMoveGrounded(
 }
 
 /**
+ * assemblePlanAnswer — Phase 3 of the grounding inversion: plan / strategy
+ * questions ("what's my plan?", "next three moves?"). The fact source is the
+ * ENGINE's principal variation (`enginePlan.pvSan`, computed by Stockfish) —
+ * real, legal, verified moves, NOT the LLM free-synthesizing a plan. This
+ * replays the PV on the board (chess.js is the truth), extracts the student's
+ * moves (the plan) + the opponent's expected replies, and packages them for
+ * the voiceFacts chokepoint. The plan is built only when the student is to
+ * move, so PV[0] is the student's move (even plies = student). Returns null
+ * when the PV is empty or doesn't replay legally (never voices a bad line).
+ */
+export function assemblePlanAnswer(opts: {
+  fen: string;
+  pvSan: ReadonlyArray<string>;
+  /** White-perspective centipawn eval of the line; null when forced mate. */
+  evalCp: number | null;
+  /** Mate distance in plies (signed, white-positive); null when not forced. */
+  mateIn: number | null;
+  studentSide: 'white' | 'black';
+}): GroundedAnswer | null {
+  if (!opts.pvSan || opts.pvSan.length === 0) return null;
+  let chess: Chess;
+  try {
+    chess = new Chess(opts.fen);
+  } catch {
+    return null;
+  }
+  const moves: Array<{ san: string; from: string; to: string; isStudent: boolean }> = [];
+  for (let i = 0; i < opts.pvSan.length; i += 1) {
+    let mv;
+    try {
+      mv = chess.move(opts.pvSan[i]);
+    } catch {
+      break; // PV diverged from legality — stop at the last legal ply.
+    }
+    if (!mv) break;
+    moves.push({ san: mv.san, from: mv.from, to: mv.to, isStudent: i % 2 === 0 });
+  }
+  if (moves.length === 0) return null;
+
+  const studentMoves = moves.filter((m) => m.isStudent).map((m) => m.san);
+  const firstReply = moves.find((m) => !m.isStudent)?.san ?? null;
+
+  const parts: string[] = [];
+  if (studentMoves.length === 1) {
+    parts.push(`Your plan starts with ${studentMoves[0]}.`);
+  } else {
+    parts.push(`Your plan: ${studentMoves[0]}`);
+    const rest = studentMoves.slice(1);
+    parts[parts.length - 1] += `, then ${rest.join(', then ')}.`;
+  }
+  if (firstReply) parts.push(`The opponent's most likely reply is ${firstReply}.`);
+
+  // PV eval is white-perspective; convert to the student's POV for the phrase.
+  const studentEvalCp = opts.evalCp == null ? null : (opts.studentSide === 'white' ? opts.evalCp : -opts.evalCp);
+  const studentMateIn = opts.mateIn == null ? null : (opts.studentSide === 'white' ? opts.mateIn : -opts.mateIn);
+  const evalText = evalPhrase(studentEvalCp, studentMateIn, opts.studentSide);
+  if (evalText) parts.push(`${evalText.charAt(0).toUpperCase()}${evalText.slice(1)}.`);
+
+  const first = moves[0];
+  return {
+    facts: parts.join(' '),
+    bestMoveSan: first.san,
+    bestMoveFromTo: { from: first.from, to: first.to },
+    sources: ['engine:stockfish', 'board:chess.js'],
+  };
+}
+
+/**
  * assembleTacticsAnswer — Phase 2 of the grounding inversion: tactics / danger
  * questions ("is anything hanging?", "what's the threat?", "is there a fork?").
  * The `liveTacticsContext` engine has ALREADY computed everything — the fork
