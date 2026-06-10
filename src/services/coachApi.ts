@@ -36,7 +36,7 @@ function emitLlmTokenUsage(
   });
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment } from './groundedAnswer';
 import { lookupTablebase } from './lichessTablebaseService';
 import { detectBadHabits } from './badHabitDetector';
 import { detectConceptsInText, getConcept } from './chessConceptService';
@@ -1148,6 +1148,11 @@ export interface MasterGroundingOptions {
    *  lookup (≤7 pieces) and voices the verdict (assembleEndgameAnswer); falls
    *  through to the engine-eval path when the position isn't in the tablebase. */
   endgameQuestion?: boolean;
+  /** Phase 1 cont — true when this turn asks to ASSESS the position ("who's
+   *  winning?", "how do I stand?", "what's the eval?"). Voiced from the engine
+   *  eval + top live tactic (assemblePositionAssessment) — grounds the biggest
+   *  slice of the free-reasoning chat fallback. */
+  positionAssessmentQuestion?: boolean;
   /** Which side the STUDENT plays — so the tactics answer warns about THEIR
    *  hanging pieces. Falls back to side-to-move when absent. */
   studentColor?: 'white' | 'black';
@@ -1648,7 +1653,8 @@ export async function getCoachChatResponse(
       grounding.progressQuestion === true ||
       grounding.conceptQuestion === true ||
       grounding.playerGamesQuestion === true ||
-      grounding.endgameQuestion === true;
+      grounding.endgameQuestion === true ||
+      grounding.positionAssessmentQuestion === true;
     if (intentFired) {
       try {
         // Helper: the latest user message, for voiceFacts context.
@@ -1830,6 +1836,26 @@ export async function getCoachChatResponse(
               }
             }
           } catch { /* tablebase unreachable — fall through to engine eval */ }
+        }
+
+        // ── POSITION ASSESSMENT (Phase 1 cont) — "who's winning / how do I
+        // stand?" → the engine eval + the top live-tactics fact, voiced from the
+        // student's POV. Grounds the biggest slice of the free-reasoning chat
+        // fallback. Falls through when there's no eval AND no tactic to report.
+        if (grounding.positionAssessmentQuestion) {
+          const sc: 'white' | 'black' =
+            grounding.studentColor ??
+            ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
+          const answer = assemblePositionAssessment({
+            evalCp: grounding.engineEvalCp,
+            mateIn: grounding.engineMateIn,
+            tactics: grounding.tactics,
+            studentColor: sc,
+          });
+          if (answer) {
+            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'position-assessment' });
+            if (voiced) return voiced;
+          }
         }
         // DB-grounding extension: attach canonical openings-lichess.json
         // entries that match the current move history OR were referenced

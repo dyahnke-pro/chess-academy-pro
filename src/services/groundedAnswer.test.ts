@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -231,5 +231,39 @@ describe('assembleEndgameAnswer — Phase 5 (voice the tablebase verdict)', () =
   it('returns null on an uncertain category (no guessing)', () => {
     expect(assembleEndgameAnswer({ result: tb({ category: 'maybe-win', whiteRelativeResult: null }), studentColor: 'white' })).toBeNull();
     expect(assembleEndgameAnswer({ result: tb({ category: 'unknown', whiteRelativeResult: null }), studentColor: 'white' })).toBeNull();
+  });
+});
+
+// Phase 1 cont: "who's winning / how do I stand?" — voices the engine eval (+ a
+// top tactic) from the STUDENT's perspective. White-perspective eval in.
+describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)', () => {
+  it('voices the eval from the student POV (White)', () => {
+    const a = assemblePositionAssessment({ evalCp: 120, mateIn: null, studentColor: 'white' });
+    expect(a!.facts).toMatch(/You're clearly better — about 1\.2 pawns\./);
+    expect(a!.sources).toEqual(['engine:stockfish']);
+  });
+  it('flips perspective for Black (white-positive eval = Black worse)', () => {
+    const a = assemblePositionAssessment({ evalCp: 120, mateIn: null, studentColor: 'black' });
+    expect(a!.facts).toMatch(/You're clearly worse — about 1\.2 pawns\./);
+  });
+  it('calls a balanced position balanced', () => {
+    expect(assemblePositionAssessment({ evalCp: 10, mateIn: null, studentColor: 'white' })!.facts).toBe('The position is roughly balanced.');
+  });
+  it('voices a forced mate for / against the student', () => {
+    expect(assemblePositionAssessment({ evalCp: null, mateIn: 3, studentColor: 'white' })!.facts).toContain('You have a forced mate in 3.');
+    expect(assemblePositionAssessment({ evalCp: null, mateIn: 3, studentColor: 'black' })!.facts).toContain('forced mate against you in 3');
+  });
+  it('appends the top live-tactics fact (a hanging student piece) alongside the eval', () => {
+    const a = assemblePositionAssessment({
+      evalCp: -250, mateIn: null, studentColor: 'white',
+      tactics: tactics({ hanging: [{ square: 'd5', piece: 'n', color: 'w' }] }),
+    });
+    expect(a!.facts).toContain("You're losing — about 2.5 pawns down."); // -250 white-POV, student is White
+    expect(a!.facts).toContain('Your knight on d5 is hanging.');
+    expect(a!.sources).toContain('board:chess.js');
+  });
+  it('returns null when there is nothing computed to say (no eval, no tactic)', () => {
+    expect(assemblePositionAssessment({ evalCp: null, mateIn: null, studentColor: 'white' })).toBeNull();
+    expect(assemblePositionAssessment({ evalCp: null, mateIn: null, studentColor: 'white', tactics: tactics() })).toBeNull();
   });
 });

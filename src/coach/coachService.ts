@@ -460,6 +460,19 @@ export function isTacticsQuestion(ask: string | undefined): boolean {
   return !!ask && TACTICS_QUESTION_RE.test(ask);
 }
 
+/** A POSITION-ASSESSMENT question — "who's winning?", "how do I stand here?",
+ *  "what's the eval?", "is this good/bad for me?", "what's going on in this
+ *  position?". Phase 1 (the "who's winning / eval" row): answered from Stockfish
+ *  eval + the top live-tactics fact via `assemblePositionAssessment` → voiceFacts.
+ *  Deliberately position-scoped phrasings ONLY — it must NOT swallow "how am I
+ *  improving" (that's `isProgressQuestion`, about the student over time) or
+ *  "what should I play" (`isBestMoveQuestion`). */
+const POSITION_ASSESSMENT_RE =
+  /\bwho(?:'?s| is)\s+(?:winning|better|worse|ahead)\b|\bwhat'?s?\s+(?:the\s+)?eval(?:uation)?\b|\b(?:am\s+i|are\s+we)\s+(?:better|worse|winning|losing|ahead|behind)\b|\bis\s+(?:this|the|my)\s+(?:position\s+)?(?:good|bad|better|worse|winning|losing|equal|balanced|fine|ok(?:ay)?)\b|\bhow\s+(?:do\s+i|am\s+i)\s+(?:stand|standing)\b|\bwhere\s+do\s+i\s+stand\b|\bhow'?s?\s+(?:my|the)\s+position\b|\bassess\b|\bevaluate\s+(?:this|the\s+position)\b|\bwhat'?s?\s+going\s+on\s+(?:here|in\s+this)\b/i;
+export function isPositionAssessmentQuestion(ask: string | undefined): boolean {
+  return !!ask && POSITION_ASSESSMENT_RE.test(ask);
+}
+
 /** A "HOW DO MASTERS PLAY THIS?" / "most popular move?" question — Phase 4.
  *  The master-play lookup has the real top moves + frequencies; the grounding
  *  inversion voices them via `assembleMasterPlayAnswer` so the LLM never
@@ -1013,6 +1026,10 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             // STEP D Phase 5 — "can I win this endgame?" → the syzygy tablebase
             // (assembleEndgameAnswer); the interception does the ≤7-piece lookup.
             endgameQuestion: isEndgameQuestion(input.ask),
+            // Phase 1 cont — "who's winning / how do I stand?" → eval + top
+            // tactic (assemblePositionAssessment); grounds the biggest slice of
+            // the free-reasoning chat fallback.
+            positionAssessmentQuestion: isPositionAssessmentQuestion(input.ask),
             studentColor: input.liveState.studentColor,
             surface: coachSurfaceToRoute(input.liveState.surface),
           }

@@ -56,6 +56,60 @@ function evalPhrase(evalCp: number | null | undefined, mateIn: number | null | u
 }
 
 /**
+ * assemblePositionAssessment — "who's winning?", "how do I stand here?",
+ * "what's the eval?", "is this good for me?". The fact source is Stockfish's
+ * eval (already threaded from the surface) PLUS the one most-relevant fact from
+ * `liveTacticsContext` — voiced from the STUDENT's perspective. This grounds
+ * the single biggest slice of the free-reasoning chat fallback (a bare
+ * "who's better / assess this" readout the LLM used to free-narrate). Returns
+ * null when there's nothing computed to say (no eval AND no tactic) so the
+ * caller falls through. Takes WHITE-perspective eval (LiveState convention)
+ * and converts to the student's POV internally.
+ */
+export function assemblePositionAssessment(opts: {
+  evalCp: number | null | undefined;
+  mateIn: number | null | undefined;
+  tactics?: TacticsLiveContext | null;
+  studentColor: 'white' | 'black';
+}): GroundedAnswer | null {
+  const { tactics, studentColor } = opts;
+  const sc: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  const parts: string[] = [];
+
+  // WHITE-perspective eval → student POV (flip sign for Black).
+  const studentEvalCp = typeof opts.evalCp === 'number' ? (studentColor === 'white' ? opts.evalCp : -opts.evalCp) : null;
+  const studentMateIn = typeof opts.mateIn === 'number' ? (studentColor === 'white' ? opts.mateIn : -opts.mateIn) : null;
+
+  if (typeof studentMateIn === 'number' && studentMateIn !== 0) {
+    parts.push(studentMateIn > 0 ? `You have a forced mate in ${Math.abs(studentMateIn)}.` : `There is a forced mate against you in ${Math.abs(studentMateIn)}.`);
+  } else if (typeof studentEvalCp === 'number') {
+    const mag = Math.abs(studentEvalCp) / 100;
+    const side = studentEvalCp >= 0 ? 'better' : 'worse';
+    if (mag < 0.3) parts.push('The position is roughly balanced.');
+    else if (mag < 1.0) parts.push(`You're slightly ${side} — about ${mag.toFixed(1)} of a pawn.`);
+    else if (mag < 2.5) parts.push(`You're clearly ${side} — about ${mag.toFixed(1)} pawns.`);
+    else parts.push(studentEvalCp >= 0 ? `You're winning — about ${mag.toFixed(1)} pawns up.` : `You're losing — about ${mag.toFixed(1)} pawns down.`);
+  }
+
+  // Add the single most relevant computed fact so the assessment names a WHY.
+  if (tactics) {
+    if (tactics.boardFacts?.mateInOne) {
+      parts.push(`There is checkmate in one on the board: ${tactics.boardFacts.mateInOne}.`);
+    } else if (tactics.immediate[0]?.description) {
+      parts.push(`${tactics.immediate[0].description}.`);
+    } else {
+      const myHang = tactics.hanging.find((h) => h.color === sc);
+      if (myHang) parts.push(`Your ${REVIEW_PIECE_NAME[myHang.piece] ?? myHang.piece} on ${myHang.square} is hanging.`);
+      else if (tactics.threats[0]?.description) parts.push(`Watch out — ${tactics.threats[0].description}.`);
+    }
+  }
+
+  if (parts.length === 0) return null;
+  const sources = tactics ? ['engine:stockfish', 'board:chess.js'] : ['engine:stockfish'];
+  return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources };
+}
+
+/**
  * Assemble the grounded facts for a move / best-move / eval question.
  * Returns null when there's no engine move to ground on (caller falls back
  * to the existing path — this never fabricates).

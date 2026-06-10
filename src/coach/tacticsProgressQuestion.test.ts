@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { isTacticsQuestion, isProgressQuestion, isMasterPlayQuestion, isConceptQuestion, isPlayerGamesQuestion, isEndgameQuestion } from './coachService';
+import { isTacticsQuestion, isProgressQuestion, isMasterPlayQuestion, isConceptQuestion, isPlayerGamesQuestion, isEndgameQuestion, isPositionAssessmentQuestion } from './coachService';
 
 // Grounding inversion STEP B (2026-06-10). These detectors route a chat turn to
 // a CODE fact-computer (assembleTacticsAnswer / assembleProgressAnswer) so the
@@ -181,6 +181,38 @@ describe('isEndgameQuestion', () => {
       '',
     ]) {
       expect(isEndgameQuestion(q), String(q)).toBe(false);
+    }
+  });
+});
+
+describe('isPositionAssessmentQuestion', () => {
+  it('matches position-assessment phrasings', () => {
+    for (const q of [
+      "who's winning?",
+      'who is better here',
+      "what's the eval?",
+      'am I better or worse',
+      'is this position good for me',
+      'where do I stand',
+      "how's my position",
+      'assess this position',
+      'evaluate the position',
+      "what's going on here",
+    ]) {
+      expect(isPositionAssessmentQuestion(q), q).toBe(true);
+    }
+  });
+
+  it('does NOT swallow progress, best-move, or tactics questions', () => {
+    for (const q of [
+      'am I improving?',        // progress (student over time)
+      'what should I play?',     // best-move
+      'is anything hanging?',    // tactics
+      'tell me about the Caro',  // opening chat
+      undefined,
+      '',
+    ]) {
+      expect(isPositionAssessmentQuestion(q), String(q)).toBe(false);
     }
   });
 });
