@@ -110,6 +110,28 @@ export const MISCONCEPTION_TAGS = [
     coachCue: 'Sacrificed material or threw pieces at the king when the attack is unsound — the engine shows the defender consolidating and emerging better.',
     drill: { kind: 'tactic', puzzleThemes: ['sacrifice', 'attackingF2F7', 'kingsideAttack'] },
   },
+  {
+    // NEW (2026-06-10, thinking-error buckets). Detector: the played move begins
+    // a forcing line (capture/check sequence) and the eval flips against the
+    // student INSIDE that line — the idea was sound, the calculation wrong.
+    id: 'miscalculated',
+    label: 'Miscalculated a line',
+    bucket: 'tactical',
+    blurb: "You had the right idea, but the concrete line didn't work the way you saw it.",
+    coachCue: 'The move starts a forcing sequence (captures/checks) and the evaluation flips against you partway through that line — the intent was sound but the calculation went wrong.',
+    drill: { kind: 'tactic', puzzleThemes: ['fork', 'pin', 'sacrifice'] },
+  },
+  {
+    // NEW (2026-06-10). Detector: eval was clearly winning with a forcing /
+    // attacking best move available, but the played move was quiet, retreating,
+    // or a trade that handed the advantage back.
+    id: 'underestimated-my-attack',
+    label: "Didn't press your attack",
+    bucket: 'tactical',
+    blurb: 'You had a strong attack or a winning edge and let it slip by playing safe instead of pressing.',
+    coachCue: 'The position was clearly in your favour with a forcing/attacking continuation available, but you played something quiet, retreating, or a trade that gave the advantage back.',
+    drill: { kind: 'tactic', puzzleThemes: ['attackingF2F7', 'kingsideAttack', 'mate'] },
+  },
 
   // ── POSITIONAL ───────────────────────────────────────────────────
   {
@@ -142,6 +164,28 @@ export const MISCONCEPTION_TAGS = [
     bucket: 'positional',
     blurb: "You traded a good piece for a worse one, or relieved the opponent's cramped position.",
     coachCue: "Exchanged a strong, active piece for a passive one (or traded into the opponent's preferred structure / freed their game) when keeping the tension or avoiding the trade was clearly better.",
+    drill: { kind: 'principle' },
+  },
+  {
+    // NEW (2026-06-10). Detector: the opponent's threat was objectively harmless
+    // (engine shows it leads nowhere), but the student reacted with a passive or
+    // material-losing defensive move that worsened their own position.
+    id: 'overestimated-opponents-attack',
+    label: 'Over-defended a threat',
+    bucket: 'positional',
+    blurb: "You spent moves or material defending an attack that wasn't really dangerous.",
+    coachCue: "The opponent's threat was objectively harmless (the engine shows it leads nowhere), but you reacted with a passive or material-conceding defensive move that worsened your position.",
+    drill: { kind: 'principle' },
+  },
+  {
+    // NEW (2026-06-10). Detector (heuristic → pop-up): activity / pawn breaks
+    // aimed at the side of the board the structure does NOT favour, when the
+    // correct play was on the other wing.
+    id: 'wrong-side',
+    label: 'Played on the wrong side',
+    bucket: 'positional',
+    blurb: 'You had a plan, but it pointed at the wrong part of the board — against the structure instead of with it.',
+    coachCue: 'Activity and pawn breaks were aimed at the wing the pawn structure does NOT favour (attacking where you have no space or a pawn minority) when the right play was on the other side.',
     drill: { kind: 'principle' },
   },
 
