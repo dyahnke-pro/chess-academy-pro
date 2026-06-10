@@ -182,3 +182,25 @@ Speed fix: shallow scan (depth 14) to spot the +1.2 blunder, deep confirm
   trap is NOT in the drillable trap-gem set (the only Italian gem is a different
   `…d4 Nxd4 Bxf7+` line). So the detector found a real gap on the most famous
   trap in chess — earns its keep.
+
+## "What to watch out for" (Warning ⚠️) lesson spec — LOCKED (David 2026-06-10)
+
+The mirror of the Trap 💎 lesson. Order:
+1. **WALKTHROUGH THE TRAP (the disaster).** Coach plays BOTH sides: you make the
+   natural/greedy move, the opponent springs it, you get punished — **played to
+   the conclusion** (mate or decisively lost). The student **only watches** —
+   never plays the losing move. Reason (CAP standard): don't train the hands on
+   the wrong move.
+2. **RESET to the decision point + the side-by-side choice.** Show BOTH candidate
+   moves at the fork: the tempting trap move in **RED** ("you just saw where this
+   goes") vs the refutation in **GREEN**. Crystallize the decision so the student
+   recognizes the temptation in their OWN game and resists it.
+3. **REFUTATION** — the correct move/line shown.
+4. **LPP** — Learn → Practice → Play the refutation (no Watch rung; the
+   walkthrough was the watch). The hands only ever touch the refutation.
+
+Detector fills BOTH sides from the SAME walk, run in two orientations:
+- **trapper = student** → **Traps 💎** (`trapLines[]`): you bait, they err, you punish.
+- **trapper = opponent** → **Warnings ⚠️** (`warningLines[]`): they bait, you could
+  err, they punish → teach the refutation via the spec above.
+The orientation assert still holds (the error is always the victim's move).

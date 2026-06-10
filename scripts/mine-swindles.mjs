@@ -57,7 +57,7 @@ async function checkNode(sanPath, exDisc, exVal, trapper){
   }
   return null;
 }
-async function walkCfg(name, seed, trapper, WP, NC, GLOBAL){
+async function walkCfg(name, seed, trapper, WP, NC, GLOBAL, mode='trap'){
   const found=[]; let nodes=0;
   async function rec(path, depth){
     if(depth>=WP || nodes>=NC) return;
@@ -69,7 +69,7 @@ async function walkCfg(name, seed, trapper, WP, NC, GLOBAL){
       if(!GLOBAL.has(k)){ GLOBAL.add(k); nodes++;
         try{ const exV=await expl(path,VALIDATE); await sleep(20);
           const sN=await checkNode(path,exD,exV,trapper);
-          if(sN){ sN.opening=name; found.push(sN); log(`  ✦ ${name} @ ${path.join(' ')} | bait ${sN.baitMove} → error ${sN.error}(${sN.errorGames}g) +${sN.studentAfter}cp | punish ${sN.punish.split(' ').slice(0,2).join(' ')} | refutation ${sN.refutation}`); }
+          if(sN){ sN.opening=name; sN.mode=mode; found.push(sN); log(`  ${mode==='warning'?'⚠ WARN':'✦ TRAP'} ${name} @ ${path.join(' ')} | ${mode==='warning'?`you-err ${sN.error}(${sN.errorGames}g) → disaster ${sN.punish.split(' ').slice(0,2).join(' ')} | play instead ${sN.refutation}`:`bait ${sN.baitMove} → error ${sN.error}(${sN.errorGames}g) → punish ${sN.punish.split(' ').slice(0,2).join(' ')} | refutation ${sN.refutation}`} [+${sN.studentAfter}cp]`); }
         }catch(e){}
       }
       for(const m of exD.moves.slice(0,KB)) await rec([...path,m.san],depth+1);
@@ -118,10 +118,13 @@ function loadAll(){
   const ld=p=>{const d=JSON.parse(_rd(p,'utf8'));return d.openings??d;};
   const ops=[...ld('src/data/repertoire.json'),...ld('src/data/gambits.json'),...ld('src/data/pro-repertoires.json')];
   const roots=[];
-  for(const o of ops){ const col=(o.color||'white')[0]; const pgn=(o.pgn||'').trim().split(/\s+/).filter(Boolean);
-    if(pgn.length>=3) roots.push({name:o.id,seed:pgn.slice(0,4),col,kind:'main'});
+  for(const o of ops){ const sc=(o.color||'white')[0]; const oc=sc==='w'?'b':'w'; const pgn=(o.pgn||'').trim().split(/\s+/).filter(Boolean);
+    if(pgn.length>=3){ roots.push({name:o.id,seed:pgn.slice(0,4),col:sc,kind:'main',mode:'trap'});
+                        roots.push({name:o.id,seed:pgn.slice(0,4),col:oc,kind:'main',mode:'warning'}); }
     for(const v of (o.variations||[])){ const vp=(v.pgn||'').trim().split(/\s+/).filter(Boolean);
-      if(vp.length>=4) roots.push({name:`${o.id}::${(v.name||'var').slice(0,28)}`,seed:vp,col,kind:'var'}); } }
+      if(vp.length>=4){ const nm=`${o.id}::${(v.name||'var').slice(0,28)}`;
+        roots.push({name:nm,seed:vp,col:sc,kind:'var',mode:'trap'});
+        roots.push({name:nm,seed:vp,col:oc,kind:'var',mode:'warning'}); } } }
   return roots;
 }
 const OUT='/tmp/swindle-all.json';
@@ -135,7 +138,7 @@ if(SET==='all'){
     // shallower caps for variation roots (just probe past the tabiya); cheap dedup
     process.env.__='';
     const capWP = r.kind==='var' ? 4 : 9;  const capN = r.kind==='var' ? 6 : 22;
-    try{ const f=await walkCfg(r.name,r.seed,r.col,capWP,capN,GLOBAL); all.push(...f); }catch(e){ log(`[${r.name} err] `+String(e).slice(0,70)); }
+    try{ const f=await walkCfg(r.name,r.seed,r.col,capWP,capN,GLOBAL,r.mode); all.push(...f); }catch(e){ log(`[${r.name} err] `+String(e).slice(0,70)); }
     if(++done%10===0){ persist(); log(`  …${done}/${roots.length} roots, ${all.length} traps so far`); }
   }
   persist();
