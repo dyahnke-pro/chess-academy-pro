@@ -29,8 +29,9 @@ function sanPV(fen,pv,n=6){const c=new Chess(fen);const o=[];for(const u of pv.s
 const NATURAL=san=>/^O-O/.test(san)||/x/.test(san)||/^[NB][a-h]?[1-8]?[a-h][1-8]/.test(san)||/^[a-h][45]$/.test(san)||/^d|^e/.test(san); // dev/castle/capture/central
 const RANDOMISH=san=>/^[a-h][3-6]$/.test(san)&&/^[ah]/.test(san); // a/h pawn pushes = edge noise candidates
 
-async function checkNode(sanPath, exDisc, exVal, trapper){
+async function checkNode(sanPath, exDisc, exVal, trapper, mode='trap'){
   const c=new Chess(); for(const m of sanPath)c.move(m); const fen=c.fen();
+  if(c.turn()===trapper) return null; // ORIENTATION SAFETY: the error is always the VICTIM's move, never the trapper's
   // shallow scan first
   const shallow=await multipv(fen,14,4,6000); if(shallow.length<2)return null;
   const best=shallow[0]; const smap=new Map(shallow.map(m=>[m.san,m]));
@@ -51,7 +52,8 @@ async function checkNode(sanPath, exDisc, exVal, trapper){
     return { sanPath:[...sanPath],
              baitMove: sanPath[sanPath.length-1],   // YOUR lure (the trapper's last move)
              error:hm.san, errorPctAll:hm.pct, errorGames:hm.games, errorPct1000:valPct, // THEIR common wrong reply
-             studentAfter:-db.cp, refutation:dbest.san,                                   // their only correct move
+             studentAfter: (mode==='warning'? db.cp : -db.cp), // trap: student(trapper) advantage(+); warning: student(victim) eval(−)
+             victimEval: db.cp, refutation:dbest.san,                  // the correct move (refutation)
              punish:pun[0]?sanPV(c2.fen(),pun[0].pv,6):'',
              crossBand, natural:NATURAL(hm.san) };
   }
@@ -68,8 +70,8 @@ async function walkCfg(name, seed, trapper, WP, NC, GLOBAL, mode='trap'){
       const k=c.fen().split(' ').slice(0,2).join(' ');
       if(!GLOBAL.has(k)){ GLOBAL.add(k); nodes++;
         try{ const exV=await expl(path,VALIDATE); await sleep(20);
-          const sN=await checkNode(path,exD,exV,trapper);
-          if(sN){ sN.opening=name; sN.mode=mode; found.push(sN); log(`  ${mode==='warning'?'⚠ WARN':'✦ TRAP'} ${name} @ ${path.join(' ')} | ${mode==='warning'?`you-err ${sN.error}(${sN.errorGames}g) → disaster ${sN.punish.split(' ').slice(0,2).join(' ')} | play instead ${sN.refutation}`:`bait ${sN.baitMove} → error ${sN.error}(${sN.errorGames}g) → punish ${sN.punish.split(' ').slice(0,2).join(' ')} | refutation ${sN.refutation}`} [+${sN.studentAfter}cp]`); }
+          const sN=await checkNode(path,exD,exV,trapper,mode);
+          if(sN){ sN.opening=name; sN.mode=mode; found.push(sN); log(`  ${mode==='warning'?'⚠ WARN':'✦ TRAP'} ${name} @ ${path.join(' ')} | ${mode==='warning'?`you-err ${sN.error}(${sN.errorGames}g) → disaster ${sN.punish.split(' ').slice(0,2).join(' ')} | play instead ${sN.refutation}`:`bait ${sN.baitMove} → error ${sN.error}(${sN.errorGames}g) → punish ${sN.punish.split(' ').slice(0,2).join(' ')} | refutation ${sN.refutation}`} [${sN.studentAfter>=0?'+':''}${sN.studentAfter}cp]`); }
         }catch(e){}
       }
       for(const m of exD.moves.slice(0,KB)) await rec([...path,m.san],depth+1);
@@ -90,7 +92,7 @@ async function walk(name, seed, trapper){
       const k=c.fen().split(' ').slice(0,2).join(' ');
       if(!seen.has(k)){ seen.add(k); nodes++;
         try{ const exV=await expl(path,VALIDATE); await sleep(25);
-          const s=await checkNode(path, exD, exV, trapper);
+          const s=await checkNode(path, exD, exV, trapper, 'trap');
           if(s){found.push(s); log(`  ✦ TRAP @ ${path.join(' ')}\n      bait ${s.baitMove} → error ${s.error} (all:${(s.errorPctAll*100).toFixed(0)}% ${s.errorGames}g | 1000+:${(s.errorPct1000*100).toFixed(0)}%) → +${s.studentAfter}cp | punish ${s.punish} | refutation ${s.refutation} ${s.crossBand?'[cross-band✓]':'[0-only]'} ${s.natural?'':'[unnatural!]'}`);}
         }catch(e){ log(`  [node err] ${String(e).slice(0,60)}`); }
       }
