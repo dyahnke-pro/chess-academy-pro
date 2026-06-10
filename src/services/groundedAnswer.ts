@@ -15,6 +15,7 @@
 import { Chess } from 'chess.js';
 import { findHangingPieces } from './tacticClassifier';
 import type { TacticsLiveContext } from '../coach/types';
+import type { BadHabit } from '../types';
 
 // Pure board-fact constants — universal chess values, leaf-local so this module
 // imports nothing that could loop back. coachFeatureService imports these FROM
@@ -221,4 +222,31 @@ export function assembleTacticsAnswer(
     bestMoveFromTo: null,
     sources: ['engine:stockfish', 'board:chess.js'],
   };
+}
+
+/**
+ * assembleProgressAnswer — Phase 6: "am I improving?" / "what should I work
+ * on?". The answer is the student's OWN computed history — `detectBadHabits`
+ * already analyzed their games and produced human-readable habit descriptions
+ * with occurrence counts. This selects the top unresolved ones and packages
+ * them for the voiceFacts chokepoint. The LLM voices the student's real data;
+ * it never invents a weakness. Returns null when there's no habit data yet
+ * (caller takes the one fallback — e.g. "play a few games and I'll spot
+ * patterns").
+ */
+export function assembleProgressAnswer(badHabits: ReadonlyArray<BadHabit>): GroundedAnswer | null {
+  const open = badHabits
+    .filter((h) => !h.isResolved && h.description)
+    .sort((a, b) => b.occurrences - a.occurrences)
+    .slice(0, 3);
+  if (open.length === 0) return null;
+
+  const phrase = (h: BadHabit): string =>
+    `${h.description} (${h.occurrences} time${h.occurrences === 1 ? '' : 's'})`;
+  const facts =
+    open.length === 1
+      ? `The pattern to work on: ${phrase(open[0])}.`
+      : `The patterns to work on, most frequent first: ${open.map(phrase).join('; ')}.`;
+
+  return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }

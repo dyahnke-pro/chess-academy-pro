@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer } from './groundedAnswer';
 import type { TacticsLiveContext } from '../coach/types';
 
 // Phase 1: the facts for a move/eval question are assembled IN CODE — the
@@ -78,5 +78,21 @@ describe('assembleTacticsAnswer — Phase 2 (voice the engine-computed tactics)'
   });
   it('returns null when there is no concrete tactic (caller falls back)', () => {
     expect(assembleTacticsAnswer(tactics(), 'white')).toBeNull();
+  });
+});
+
+import type { BadHabit } from '../types';
+function habit(over: Partial<BadHabit> = {}): BadHabit {
+  return { id: 'h', description: 'you hang pieces in the opening', occurrences: 3, lastSeen: '2026-06-10', isResolved: false, ...over };
+}
+describe('assembleProgressAnswer — Phase 6 (voice the student\'s real history)', () => {
+  it('voices the top unresolved habits, most frequent first', () => {
+    const a = assembleProgressAnswer([habit({ description: 'you trade your good bishop', occurrences: 2 }), habit({ description: 'you hang pieces in the opening', occurrences: 5 })]);
+    expect(a!.facts).toMatch(/hang pieces in the opening \(5 times\).*good bishop \(2 times\)/);
+    expect(a!.sources).toContain('data:your-games');
+  });
+  it('ignores resolved habits and returns null when none remain', () => {
+    expect(assembleProgressAnswer([habit({ isResolved: true })])).toBeNull();
+    expect(assembleProgressAnswer([])).toBeNull();
   });
 });
