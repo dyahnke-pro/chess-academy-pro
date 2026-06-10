@@ -428,6 +428,18 @@ export function CoachTeachPage(): JSX.Element {
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [streaming, setStreaming] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  // The board is locked ONLY while the opponent is computing its reply (the
+  // engine call + the natural 1-2s think pad) — NOT while the coach narrates
+  // afterward. David 2026-06-10: "I want to be able to move as soon as the
+  // opponent's turn is over" without waiting 3+s for narration to finish. The
+  // ref is the synchronous guard inside handlers; the state drives the board's
+  // `interactive` prop. Keep them in lock-step via setOpponentThinking.
+  const [opponentThinking, setOpponentThinkingState] = useState(false);
+  const opponentThinkingRef = useRef(false);
+  const setOpponentThinking = useCallback((v: boolean): void => {
+    opponentThinkingRef.current = v;
+    setOpponentThinkingState(v);
+  }, []);
   // Brain-emitted answer chips. Set when the streaming response
   // contains a `[CHOICES: A | B | C]` marker (typically because
   // the brain is asking a disambiguation question — e.g.
@@ -2931,7 +2943,13 @@ export function CoachTeachPage(): JSX.Element {
   }, [walkthrough.tree?.openingName, activeProfile?.puzzleRating]);
 
   const handleStudentMove = useCallback((move: MoveResult): void => {
-    if (busy) return;
+    // Block a new move ONLY while the opponent is still computing its reply —
+    // never while the coach is merely narrating the last move (that was the
+    // 3+s lag David hit 2026-06-10). If the student moves while a prior
+    // narration is still speaking, cut it immediately so the voice doesn't
+    // drone over the new position.
+    if (opponentThinkingRef.current) return;
+    voiceService.stop();
     // Pre-move FEN (before we overwrite liveFenRef below) — the slip faucet
     // needs the position the student moved FROM.
     const fenBefore = liveFenRef.current;
@@ -2965,37 +2983,48 @@ export function CoachTeachPage(): JSX.Element {
     // The ENGINE plays the coach's reply (in code), then the LLM is asked to
     // NARRATE that exact move — play_move is disabled on the narration call,
     // so the LLM can't pick or play. Words always match the board.
+    setOpponentThinking(true);
     void (async () => {
-      // Natural think-time. Book/engine replies resolve near-instantly, so the
-      // opponent's move used to snap onto the board the moment the student let
-      // go — it "messes with the natural timing of chess" (David 2026-06-04).
-      // Pad the reply to a randomized 1-2s minimum, MEASURING the resolve time
-      // so a genuinely slow engine call doesn't stack an extra wait on top.
-      const thinkStart = Date.now();
-      const reply = await resolveCoachReplyMove(move.fen);
-      const minThink = 1000 + Math.floor(Math.random() * 1000); // 1000–2000ms
-      const elapsed = Date.now() - thinkStart;
-      if (elapsed < minThink) {
-        await new Promise((resolve) => setTimeout(resolve, minThink - elapsed));
-      }
-      if (reply) {
-        const played = handlePlayMove(reply);
-        if (played.ok) {
-          void handleSubmit(`I played ${move.san}.`, {
-            fenOverride: liveFenRef.current,
-            coachReplyPlayed: reply,
-          });
-          return;
+      try {
+        // Natural think-time. Book/engine replies resolve near-instantly, so the
+        // opponent's move used to snap onto the board the moment the student let
+        // go — it "messes with the natural timing of chess" (David 2026-06-04).
+        // Pad the reply to a randomized 1-2s minimum, MEASURING the resolve time
+        // so a genuinely slow engine call doesn't stack an extra wait on top.
+        const thinkStart = Date.now();
+        const reply = await resolveCoachReplyMove(move.fen);
+        const minThink = 1000 + Math.floor(Math.random() * 1000); // 1000–2000ms
+        const elapsed = Date.now() - thinkStart;
+        if (elapsed < minThink) {
+          await new Promise((resolve) => setTimeout(resolve, minThink - elapsed));
         }
+        if (reply) {
+          const played = handlePlayMove(reply);
+          if (played.ok) {
+            // Opponent's move is on the board — UNLOCK immediately so the
+            // student can play again right away; the narration below runs
+            // unblocked and is cut by voiceService.stop() if they do move.
+            setOpponentThinking(false);
+            void handleSubmit(`I played ${move.san}.`, {
+              fenOverride: liveFenRef.current,
+              coachReplyPlayed: reply,
+            });
+            return;
+          }
+        }
+        // No legal coach reply (game over) — narrate the student's move only,
+        // still with play_move disabled (the LLM never moves).
+        setOpponentThinking(false);
+        void handleSubmit(`I played ${move.san}. Your move.`, {
+          fenOverride: move.fen,
+          coachReplyPlayed: '',
+        });
+      } finally {
+        // Safety net: never leave the board stuck locked if anything threw.
+        setOpponentThinking(false);
       }
-      // No legal coach reply (game over) — narrate the student's move only,
-      // still with play_move disabled (the LLM never moves).
-      void handleSubmit(`I played ${move.san}. Your move.`, {
-        fenOverride: move.fen,
-        coachReplyPlayed: '',
-      });
     })();
-  }, [busy, handleSubmit, discussion, walkthrough.tree?.openingName, playerColor, resolveCoachReplyMove, handlePlayMove]);
+  }, [handleSubmit, discussion, walkthrough.tree?.openingName, playerColor, resolveCoachReplyMove, handlePlayMove, setOpponentThinking, activeProfile?.puzzleRating, activeProfile?.currentRating]);
 
   // ─── Guided-opening-play kickoff ─────────────────────────────────────────
   // On mount, pull the student's last 5 games + weakness profile so the
@@ -3423,7 +3452,7 @@ export function CoachTeachPage(): JSX.Element {
             ) : (
               <ConsistentChessboard
                 game={game}
-                interactive={!busy}
+                interactive={!opponentThinking && !generationStatus && !kickoffStatus}
                 showFlipButton={false}
                 showUndoButton={false}
                 showResetButton={false}
