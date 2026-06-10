@@ -20,7 +20,7 @@
  */
 import { useCallback, useRef } from 'react';
 import { getCoachChatResponse } from '../services/coachApi';
-import { groundCoachReply } from '../services/coachAnswerGates';
+import { groundCoachReply, applyCandidateArrows } from '../services/coachAnswerGates';
 import { voiceService } from '../services/voiceService';
 import { logAppAudit } from '../services/appAuditor';
 import {
@@ -257,11 +257,13 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
       }
 
       // Runtime grounding gates (this hook bypasses the coach spine):
-      // drop board-false + ungrounded player-stat sentences before voicing.
-      const text = groundCoachReply(response, {
-        fen: ctx.fenAfter,
-        source: 'liveCoach',
-      }).trim();
+      // drop board-false + ungrounded player-stat sentences before voicing;
+      // arrows are the async engine-colored pass.
+      const text = (await applyCandidateArrows(
+        groundCoachReply(response, { fen: ctx.fenAfter, source: 'liveCoach' }),
+        ctx.fenAfter,
+        'liveCoach',
+      )).trim();
       if (!text || text.startsWith('⚠️')) {
         inFlightRef.current = false;
         return;

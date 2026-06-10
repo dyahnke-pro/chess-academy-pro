@@ -211,7 +211,10 @@ export async function injectCandidateArrows(
   fen: string,
   analyze: MultipvAnalyzer,
 ): Promise<{ text: string; injected: { san: string; color: ArrowColor }[] }> {
-  const base = stripBoardMarkers(text).replace(/\s+/g, ' ').trim();
+  // Strip any pre-existing markers (we re-derive every arrow) but
+  // preserve newlines — only collapse the double-spaces a stripped
+  // inline marker leaves behind.
+  const base = stripBoardMarkers(text).replace(/ {2,}/g, ' ').trim();
   const sans = Array.from(new Set(extractMentionedSans(text)));
   if (sans.length === 0) return { text: base, injected: [] };
 

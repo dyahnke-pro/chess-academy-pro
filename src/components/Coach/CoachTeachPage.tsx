@@ -81,7 +81,7 @@ import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from 
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
 import { validateTacticClaims } from '../../services/tacticClaimValidator';
-import { validateArrowClaims, synthesizeMissingArrows } from '../../services/arrowClaimValidator';
+import { applyCandidateArrows } from '../../services/coachAnswerGates';
 import { groundArrows } from '../../utils/arrowGrounding';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
@@ -2781,46 +2781,20 @@ export function CoachTeachPage(): JSX.Element {
         // markers. The synthesized markers are re-parsed below so the
         // board renders the arrows the LLM forgot — closes the G6
         // loop without an extra LLM round-trip.
-        const arrowValidation = validateArrowClaims(finalText);
-        if (arrowValidation.violations.length > 0) {
-          const synthesis = synthesizeMissingArrows(
-            finalText,
-            fen,
-            arrowValidation.violations,
-            Chess,
-            'green',
-          );
-          void logAppAudit({
-            kind: 'claim-validator-trip',
-            category: 'subsystem',
-            source: 'CoachTeachPage.arrowClaimValidator',
-            summary:
-              `coach mentioned SAN without arrow: ${arrowValidation.violations.map((v) => v.san).join(', ')} ` +
-              `· synthesized ${synthesis.synthesized.length}/${arrowValidation.violations.length}`,
-            details: JSON.stringify({
-              violations: arrowValidation.violations,
-              mentionedSans: arrowValidation.mentionedSans,
-              arrowMarkerCount: arrowValidation.arrowMarkers.length,
-              synthesized: synthesis.synthesized,
-              failedToSynthesize: synthesis.failed,
-            }),
-            fen,
-          });
-          // Parse the synthesized arrows out of the augmented text and
-          // merge them onto the board. The original arrows (from any
-          // LLM-emitted markers) were already set above; append the
-          // new ones without clobbering. Display text (`finalText`)
-          // stays as the LLM wrote it — the brackets get stripped by
-          // sanitizeCoachText on the way into the chat bubble.
-          if (synthesis.synthesized.length > 0) {
-            const synthBoard = parseBoardTags(synthesis.text);
-            const synthArrows: BoardArrow[] = [];
-            for (const cmd of synthBoard.commands) {
-              if (cmd.type === 'arrow' && cmd.arrows) synthArrows.push(...cmd.arrows);
-            }
-            if (synthArrows.length > 0) {
-              setArrows((prev) => [...prev, ...synthArrows]);
-            }
+        // Arrow standard (G0): the LLM no longer emits arrow markers.
+        // Code resolves every mentioned move's geometry and colors it by
+        // Stockfish rank (the ONE arrow path, shared via arrowEngine).
+        // Display text (`finalText`) stays as the LLM wrote it; we only
+        // extract the code-derived markers onto the board.
+        const arrowed = await applyCandidateArrows(finalText, fen, 'CoachTeachPage');
+        if (arrowed !== finalText) {
+          const arrowBoard = parseBoardTags(arrowed);
+          const codeArrows: BoardArrow[] = [];
+          for (const cmd of arrowBoard.commands) {
+            if (cmd.type === 'arrow' && cmd.arrows) codeArrows.push(...cmd.arrows);
+          }
+          if (codeArrows.length > 0) {
+            setArrows((prev) => [...prev, ...codeArrows]);
           }
         }
         setMessages((prev) => [...prev, {
