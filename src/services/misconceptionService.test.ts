@@ -16,6 +16,19 @@ beforeEach(async () => {
   await db.misconceptionTags.clear();
 });
 
+describe('getMisconceptionProfile — ranks by error count, most first', () => {
+  it('puts the most-frequent mistake on top (David: "most number of errors working on down")', async () => {
+    // 2× hung-material, 3× wrong-side → wrong-side ranks first by count.
+    for (let i = 0; i < 2; i++) await logMisconception({ tag: 'hung-material', source: 'discussion-practice', fen: FEN });
+    for (let i = 0; i < 3; i++) await logMisconception({ tag: 'wrong-side', source: 'discussion-practice', fen: FEN });
+    const profile = await getMisconceptionProfile();
+    expect(profile[0].tag).toBe('wrong-side');
+    expect(profile[0].total).toBe(3);
+    expect(profile[1].tag).toBe('hung-material');
+    expect(profile[1].total).toBe(2);
+  });
+});
+
 describe('reassignMisconception (Step 5 — correctable auto-tags)', () => {
   it('re-tags a captured slip to a different closed-set bucket', async () => {
     const rec = await logMisconception({ tag: 'miscalculated', source: 'discussion-practice', fen: FEN, playedSan: 'Ng5', bestSan: 'O-O' });

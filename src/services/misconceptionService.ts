@@ -189,7 +189,13 @@ export async function getMisconceptionProfile(): Promise<MisconceptionAggregate[
     });
   }
 
+  // Rank by ERROR COUNT, most errors first (David 2026-06-10: "most number of
+  // errors working on down. top 5 mistakes"). Code alone decides the order —
+  // your most-frequent mistake leads. Ties break by what's most DUE (SRS), then
+  // most recent. The training-plan feed takes the top of this list (capped at
+  // 5); the tab shows the same frequency order.
   rows.sort((a, b) => {
+    if (b.total !== a.total) return b.total - a.total;
     if (b.openCount !== a.openCount) return b.openCount - a.openCount;
     return b.lastSeenAt - a.lastSeenAt;
   });
