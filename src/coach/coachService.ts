@@ -460,6 +460,17 @@ export function isTacticsQuestion(ask: string | undefined): boolean {
   return !!ask && TACTICS_QUESTION_RE.test(ask);
 }
 
+/** A "HOW DO MASTERS PLAY THIS?" / "most popular move?" question — Phase 4.
+ *  The master-play lookup has the real top moves + frequencies; the grounding
+ *  inversion voices them via `assembleMasterPlayAnswer` so the LLM never
+ *  fabricates a frequency. Distinct from `isBestMoveQuestion` (the ENGINE's
+ *  best move) — this is about master PRACTICE / popularity. */
+const MASTER_PLAY_QUESTION_RE =
+  /\bwhat\s+do\s+(?:the\s+)?(?:masters?|grandmasters?|gms?|pros?|top\s+players?|they)\s+(?:play|do|prefer|choose|continue|go\s+for)\b|\bhow\s+do\s+(?:the\s+)?(?:masters?|grandmasters?|gms?|pros?)\s+(?:play|continue|handle|treat|approach)\b|\bmost\s+(?:popular|common|played|frequent)\s+(?:move|continuation|line|choice)\b|\bwhat'?s?\s+(?:the\s+)?(?:main|book|theoretical)\s+(?:line|move|continuation)\b|\bwhat\s+do\s+the\s+(?:books?|database|stats?)\s+say\b/i;
+export function isMasterPlayQuestion(ask: string | undefined): boolean {
+  return !!ask && MASTER_PLAY_QUESTION_RE.test(ask);
+}
+
 /** A STUDENT-PROGRESS question — "am I improving?", "what should I work on?",
  *  "what are my weaknesses?", "how am I doing?", "my bad habits". The answer is
  *  the student's OWN computed history (their persisted bad-habit profile), so
@@ -943,6 +954,9 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             // tactics answer warn about the STUDENT's hanging pieces.
             tacticsQuestion: isTacticsQuestion(input.ask),
             progressQuestion,
+            // STEP D Phase 4 — "how do masters play this?" voices the master-play
+            // lookup's real top moves + frequencies (assembleMasterPlayAnswer).
+            masterPlayQuestion: isMasterPlayQuestion(input.ask),
             studentColor: input.liveState.studentColor,
             surface: coachSurfaceToRoute(input.liveState.surface),
           }

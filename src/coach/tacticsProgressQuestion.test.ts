@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { isTacticsQuestion, isProgressQuestion } from './coachService';
+import { isTacticsQuestion, isProgressQuestion, isMasterPlayQuestion } from './coachService';
 
 // Grounding inversion STEP B (2026-06-10). These detectors route a chat turn to
 // a CODE fact-computer (assembleTacticsAnswer / assembleProgressAnswer) so the
@@ -68,6 +68,36 @@ describe('isProgressQuestion', () => {
       '',
     ]) {
       expect(isProgressQuestion(q), String(q)).toBe(false);
+    }
+  });
+});
+
+describe('isMasterPlayQuestion', () => {
+  it('matches master-practice / popularity phrasings', () => {
+    for (const q of [
+      'how do masters play this?',
+      'what do grandmasters play here?',
+      'what do the pros prefer?',
+      "what's the most popular move?",
+      'most common continuation here',
+      "what's the main line?",
+      'what do the books say?',
+      'how do GMs continue?',
+    ]) {
+      expect(isMasterPlayQuestion(q), q).toBe(true);
+    }
+  });
+
+  it('does NOT match ordinary chat / non-master questions', () => {
+    for (const q of [
+      "what's the best move?",   // engine best-move, not master practice
+      'is anything hanging?',
+      'am I improving?',
+      'tell me about the Italian Game',
+      undefined,
+      '',
+    ]) {
+      expect(isMasterPlayQuestion(q), String(q)).toBe(false);
     }
   });
 });

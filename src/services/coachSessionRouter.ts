@@ -34,7 +34,6 @@ import {
 } from './middlegamePlanner';
 import { TACTICAL_THEMES } from './puzzleService';
 import { findLastMatchingGame } from './gameContextService';
-import { getCoachChatResponse } from './coachApi';
 import { getWeakestOpenings } from './openingService';
 
 export interface RoutedChatIntent {
@@ -291,107 +290,23 @@ export async function routeChatIntent(
     }
 
     default:
-      // Regex returned 'qa' — before falling through to generic chat,
-      // try a cheap LLM classification. This is the safety net for
-      // every phrasing the regex list doesn't cover ("can you start a
-      // match?", "I'm ready for chess", "teach me something", etc.).
-      // Capped at 60 tokens + 2s timeout so the latency hit is
-      // negligible compared to the streaming chat response.
-      return classifyWithLlmFallback(text, options);
+      // Regex returned 'qa'. parseCoachIntent (deterministic) is now the
+      // ONLY router path — the LLM intent-classify fallback was DELETED
+      // (grounding inversion STEP D: the LLM decides nothing, not even
+      // routing; deleting it also saved a 60-token classify call on every
+      // qa turn). A phrasing the regex doesn't catch is handled as normal
+      // chat; when a real miss surfaces, extend parseCoachIntent's
+      // deterministic patterns — never re-add an LLM guess.
+      return null;
   }
 }
 
-/**
- * LLM fallback classifier — runs ONLY when the regex router returned
- * 'qa'. Asks a cheap, low-latency LLM call (60 tokens max, 2s timeout)
- * to classify the user message into one of the routable intents. If
- * the LLM agrees the message is a play/review/walkthrough/puzzle
- * request, re-dispatch through the normal router logic.
- *
- * This is the safety net that stops the regex whack-a-mole: instead
- * of adding a new regex for every user phrasing, the LLM catches the
- * long tail.
- *
- * Returns null when:
- * - the LLM call fails (timeout, no API key, network error)
- * - the LLM confirms 'qa' (genuinely a question, not a command)
- * - the LLM response can't be parsed
- *
- * Cost: ~$0.0001 per call (Haiku/DeepSeek); latency: ~500ms-1.5s.
- */
-async function classifyWithLlmFallback(
-  text: string,
-  options: RouteChatIntentOptions,
-): Promise<RoutedChatIntent | null> {
-  const LLM_CLASSIFY_PROMPT = `You are a chess-app intent classifier. Given the user's message, output ONE word from this list:
-play — user wants to play a game against a coach/engine
-review — user wants to review a specific past game
-walkthrough — user wants to learn/study an opening
-middlegame — user wants middlegame plans or analysis
-puzzle — user wants a tactics puzzle
-explain — user wants the current board position explained
-qa — none of the above, just a question or chat
-
-User message: "${text.replace(/"/g, '\\"')}"
-
-Reply with ONLY one word from the list above.`;
-
-  try {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 2000);
-    const response = await getCoachChatResponse(
-      [{ role: 'user', content: LLM_CLASSIFY_PROMPT }],
-      '',
-      undefined,
-      'intent_classify',
-      60,
-    );
-    clearTimeout(timer);
-
-    const classified = response.trim().toLowerCase().split(/\s+/)[0];
-
-    switch (classified) {
-      case 'play':
-        return {
-          path: '/coach/session/play-against',
-          ackMessage: 'Starting a game with the coach.',
-          intent: { kind: 'play-against', difficulty: 'auto', raw: text },
-        };
-      case 'review':
-        // Delegate to findLastMatchingGame for the actual lookup.
-        return await routeChatIntent(
-          `review my last game`,
-          options,
-        );
-      case 'walkthrough':
-      case 'middlegame':
-      case 'puzzle':
-      case 'explain':
-        // For these, the regex missed but the LLM caught it. Rather
-        // than duplicating all the resolution logic, just return a
-        // play-against fallback with the original text as focus.
-        // The coach on the play page reads the focus and adapts.
-        return {
-          path: classified === 'explain'
-            ? '/coach/session/explain-position'
-            : classified === 'puzzle'
-              ? '/coach/session/puzzle'
-              : classified === 'walkthrough'
-                ? `/coach/teach?opening=${encodeURIComponent(text)}`
-                : `/coach/session/middlegame?subject=${encodeURIComponent(text)}`,
-          ackMessage: 'Got it — setting up a session.',
-          intent: { kind: classified === 'explain' ? 'explain-position' : classified === 'puzzle' ? 'puzzle' : classified === 'walkthrough' ? 'walkthrough' : 'continue-middlegame', raw: text },
-        };
-      case 'qa':
-      default:
-        return null;
-    }
-  } catch {
-    // LLM unavailable — fall through to generic chat. No worse than
-    // today; the regex is still the primary path.
-    return null;
-  }
-}
+// The LLM intent-classify fallback (`classifyWithLlmFallback`) was DELETED in
+// the grounding inversion (STEP D, 2026-06-10). The LLM decides nothing —
+// including routing. `parseCoachIntent`'s deterministic regexes are the only
+// path; a phrasing they don't catch is handled as normal chat. This also
+// removed a 60-token `intent_classify` LLM call on every qa turn. To catch a
+// new routable phrasing, extend `parseCoachIntent` — never re-add an LLM guess.
 
 function withQuery(path: string, params: URLSearchParams): string {
   const qs = params.toString();

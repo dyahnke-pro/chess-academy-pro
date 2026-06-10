@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer } from './groundedAnswer';
 import type { TacticsLiveContext } from '../coach/types';
+import type { MasterPlayResult } from './masterPlayTypes';
 
 // Phase 1: the facts for a move/eval question are assembled IN CODE — the
 // best move (chess.js SAN from the engine UCI), the grounded "why", and the
@@ -94,5 +95,36 @@ describe('assembleProgressAnswer — Phase 6 (voice the student\'s real history)
   it('ignores resolved habits and returns null when none remain', () => {
     expect(assembleProgressAnswer([habit({ isResolved: true })])).toBeNull();
     expect(assembleProgressAnswer([])).toBeNull();
+  });
+});
+
+// Phase 4: "how do masters play this?" voices the master-play lookup's REAL
+// top moves + frequencies — the LLM never fabricates a popularity figure.
+function masterResult(over: Partial<MasterPlayResult> = {}): MasterPlayResult {
+  return {
+    fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -',
+    totalGames: 3000,
+    source: 'lichess-live',
+    moves: [
+      { san: 'e4', uci: 'e2e4', games: 1500, white: 750, draws: 450, black: 300, whitePct: 0.5, drawPct: 0.3, blackPct: 0.2 },
+      { san: 'd4', uci: 'd2d4', games: 1000, white: 480, draws: 320, black: 200, whitePct: 0.48, drawPct: 0.32, blackPct: 0.2 },
+      { san: 'Nf3', uci: 'g1f3', games: 400, white: 180, draws: 140, black: 80, whitePct: 0.45, drawPct: 0.35, blackPct: 0.2 },
+    ],
+    ...over,
+  };
+}
+describe('assembleMasterPlayAnswer — Phase 4 (voice the real master frequencies)', () => {
+  it('voices the top move with its real game count + W/D/B split and an arrow', () => {
+    const a = assembleMasterPlayAnswer(masterResult());
+    expect(a!.facts).toContain('e4');
+    expect(a!.facts).toContain('1,500 games');
+    expect(a!.facts).toMatch(/White wins 50%, draws 30%, Black wins 20%/);
+    expect(a!.facts).toContain('d4 (1,000 games)');
+    expect(a!.bestMoveFromTo).toEqual({ from: 'e2', to: 'e4' });
+    expect(a!.sources).toContain('master-games:lichess');
+  });
+  it('returns null when there is no master data (source none / empty moves)', () => {
+    expect(assembleMasterPlayAnswer(masterResult({ source: 'none', moves: [], totalGames: 0 }))).toBeNull();
+    expect(assembleMasterPlayAnswer(masterResult({ moves: [] }))).toBeNull();
   });
 });

@@ -36,7 +36,7 @@ function emitLlmTokenUsage(
   });
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer } from './groundedAnswer';
 import { detectBadHabits } from './badHabitDetector';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
@@ -1108,6 +1108,11 @@ export interface MasterGroundingOptions {
    *  bad-habit profile (assembleProgressAnswer), voiced via voiceFacts. Needs
    *  no board, so the pipeline engages even with no `currentFen`. */
   progressQuestion?: boolean;
+  /** STEP D Phase 4 — true when this turn asks how MASTERS play the position
+   *  ("how do masters play this?", "most popular move?"). Voices the master-play
+   *  lookup's real top moves + frequencies (assembleMasterPlayAnswer) so the LLM
+   *  never fabricates a frequency. */
+  masterPlayQuestion?: boolean;
   /** Which side the STUDENT plays — so the tactics answer warns about THEIR
    *  hanging pieces. Falls back to side-to-move when absent. */
   studentColor?: 'white' | 'black';
@@ -1664,6 +1669,23 @@ export async function getCoachChatResponse(
           if (answer) {
             const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config });
             if (voiced) return voiced;
+          }
+        }
+
+        // ── MASTER PLAY (Phase 4) — voice the real top moves + frequencies ──
+        // The master-play lookup already computed the top moves with their game
+        // counts + W/D/B splits; assembleMasterPlayAnswer packages them and
+        // voiceFacts says them. The LLM never invents "masters play X 55%".
+        // Falls through when there's no master data (legacy path handles it).
+        if (grounding.masterPlayQuestion && masterPlayContext && masterPlayContext.current.moves.length > 0) {
+          const answer = assembleMasterPlayAnswer(masterPlayContext.current);
+          if (answer) {
+            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config });
+            if (voiced) {
+              return answer.bestMoveFromTo
+                ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
+                : voiced;
+            }
           }
         }
         // DB-grounding extension: attach canonical openings-lichess.json

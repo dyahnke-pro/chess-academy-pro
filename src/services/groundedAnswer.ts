@@ -16,6 +16,7 @@ import { Chess } from 'chess.js';
 import { findHangingPieces } from './tacticClassifier';
 import type { TacticsLiveContext } from '../coach/types';
 import type { BadHabit } from '../types';
+import type { MasterPlayResult } from './masterPlayTypes';
 
 // Pure board-fact constants — universal chess values, leaf-local so this module
 // imports nothing that could loop back. coachFeatureService imports these FROM
@@ -221,6 +222,45 @@ export function assembleTacticsAnswer(
     bestMoveSan: null,
     bestMoveFromTo: null,
     sources: ['engine:stockfish', 'board:chess.js'],
+  };
+}
+
+/**
+ * assembleMasterPlayAnswer — Phase 4 of the grounding inversion: "how do
+ * masters play this?" / "what's the most popular move?". The master-play
+ * lookup (`masterPlayLookup`, the Lichess explorer / local DB) has ALREADY
+ * computed the top moves with their game counts + White/draw/Black splits.
+ * This SELECTS the top few and packages them for the voiceFacts chokepoint —
+ * the LLM voices the real frequencies, it never invents "masters play X 55%".
+ * Returns null when there's no master data (caller falls through).
+ */
+export function assembleMasterPlayAnswer(current: MasterPlayResult): GroundedAnswer | null {
+  if (current.source === 'none' || current.moves.length === 0) return null;
+  const fmt = (n: number): string => n.toLocaleString('en-US');
+  const top = current.moves.slice(0, 3);
+  const lead = top[0];
+  const leadWhite = Math.round(lead.whitePct * 100);
+  const leadDraw = Math.round(lead.drawPct * 100);
+  const leadBlack = Math.round(lead.blackPct * 100);
+  const parts: string[] = [
+    `The most popular master move here is ${lead.san}, played in ${fmt(lead.games)} game${lead.games === 1 ? '' : 's'} ` +
+      `(White wins ${leadWhite}%, draws ${leadDraw}%, Black wins ${leadBlack}%).`,
+  ];
+  const others = top.slice(1);
+  if (others.length > 0) {
+    parts.push(`Masters also play ${others.map((m) => `${m.san} (${fmt(m.games)} games)`).join(' and ')}.`);
+  }
+
+  let fromTo: { from: string; to: string } | null = null;
+  if (lead.uci && lead.uci.length >= 4) {
+    fromTo = { from: lead.uci.slice(0, 2), to: lead.uci.slice(2, 4) };
+  }
+
+  return {
+    facts: parts.join(' '),
+    bestMoveSan: lead.san,
+    bestMoveFromTo: fromTo,
+    sources: ['master-games:lichess'],
   };
 }
 
