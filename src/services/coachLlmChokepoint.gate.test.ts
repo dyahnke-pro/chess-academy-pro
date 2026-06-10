@@ -77,7 +77,11 @@ describe('LLM chokepoint gate — every model wire funnels through coachApi.ts',
     const instantiations =
       (src.match(/\bnew\s+OpenAI\s*\(/g)?.length ?? 0) +
       (src.match(/\bnew\s+Anthropic\s*\(/g)?.length ?? 0);
-    const emits = src.match(/emitCoachLlmCallAudit\s*\(/g)?.length ?? 0;
+    // Count CALL sites only — exclude the `function emitCoachLlmCallAudit(`
+    // declaration so removing a primitive's emit (while keeping the def) still
+    // trips the gate.
+    const emits = (src.match(/emitCoachLlmCallAudit\s*\(/g)?.length ?? 0) -
+      (src.match(/function\s+emitCoachLlmCallAudit\s*\(/g)?.length ?? 0);
     // The 6 primitives each instantiate once and each emit once. If someone
     // adds a 7th primitive (a new instantiation) without an emit, this trips.
     expect(
