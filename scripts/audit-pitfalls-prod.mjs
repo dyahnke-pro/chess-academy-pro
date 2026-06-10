@@ -27,6 +27,9 @@ const TARGETS = [
   ['petrov-defence', 'discovered check'],
   ['philidor-defence', 'keep e5 defended'],
   ['queens-gambit', 'Elephant Trap'],
+  ['sicilian-alapin', 'stranded on a5'],
+  ['alekhine-defence', 'Chase Variation'],
+  ['qga', 'hangs the knight'],
 ];
 
 const exe = await resolveChromiumExecutable();
