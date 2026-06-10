@@ -45,6 +45,55 @@ wire.
 | am I improving / what to work on | weakness profile + bad-habit data + game stats (Dexie) |
 | encouragement / restating | persona config + computed position state |
 
+## 🔒 EVERY LLM-TOUCHING PATH IN THE APP — wire ALL (David: "do not miss a single thing")
+The `CoachTask` enum (`coachApi.ts`) is the canonical inventory — all 26, plus
+the non-task paths, come under the inversion. None exempt.
+
+| CoachTask | Fact source (compute in code; LLM voices) | Status (AS-IS) |
+|---|---|---|
+| `chat_response` | the full `qa` taxonomy above (Phases 1-6) | ⛔ swamp — biggest |
+| `move_commentary` / `coachMoveCommentary` | move + eval + `explainBestMoveGrounded` | ⛔ |
+| `whatif_commentary` | chess.js legality + Stockfish eval(X) + line | ⛔ |
+| `position_analysis_chat` | Stockfish eval + `liveTacticsContext` | ⛔ |
+| `hint` | next move from DB line / engine | ⛔ |
+| `puzzle_feedback` | the puzzle's solution (puzzles DB) + move correctness | ⛔ |
+| `explore_reaction` | Stockfish eval of explored position | ⛔ |
+| `sideline_explanation` | the sideline's moves (openings DB) | ⛔ |
+| `game_commentary` | per-move eval + classification | ⛔ |
+| `game_opening_line` | the opening line (openings DB) | ⛔ |
+| `game_narrative_summary` | computed game arc (evals + key moments) | ⛔ |
+| `game_post_review` | evals + classifications + `explainBestMoveGrounded` | ✅ mostly |
+| `interactive_review` | the review walk (computed evals/lines) | 🟡 |
+| `post_game_analysis` | computed mistakes/evals | 🟡 |
+| `deep_analysis` | Stockfish deep eval/PV | ⛔ |
+| `opening_overview` | the opening's data (openings DB / repertoire) | ⛔ |
+| `model_game_annotation` | the model game's moves + computed annotations | ⛔ |
+| `middlegame_plan_generation` | `middlegame-plans.json` | 🟡 |
+| `smart_search` | search index results (DB) | ⛔ |
+| `intent_classify` | **make deterministic** — `parseCoachIntent` regex-first | ⛔ |
+| `bad_habit_report` | bad-habit data from games (Dexie) | ⛔ |
+| `weakness_report` | **weakness profile from games** (David's favourite) | ⛔ |
+| `weekly_report` | weekly stats from games | ⛔ |
+| `daily_lesson` | weakness-driven curated lesson | ⛔ |
+| `session_plan_generation` | weakness-driven training plan | ⛔ |
+| `kid_puzzle_gen` | DB-selected puzzle; kid prose only | ✅ |
+
+**Non-CoachTask paths:** `generateOpeningFromDbNarration` (✅ gold standard),
+`openingSectionNarrator`, `smartSearchService`, `misconceptionClassifier`
+(→ deterministic), `socraticNudgeService`, kid `*.ts` (✅ gated). Bar: every
+⛔/🟡 → ✅.
+
+## 🔒 NON-NEGOTIABLE: EVERY question type, end to end (David, emphatic)
+Not "ground best-move." EVERY row, end to end — none left in the `qa` swamp.
+Not done until NO path reaches the LLM as free reasoning. Student-progress
+("am I improving / what to work on") is a must.
+
+## 🔮 FUTURE PHASE (LATER — David: "later todo") — the LEAK AUDIT
+Instrument every coach LLM call as **grounded** vs **ungrounded**, emit
+`coach-ungrounded-llm-call` (intent + raw question). Audit-stream / PostHog
+then shows EVERY leak in prod → a closeable list. Build ≈Phase 6→7. Locked
+here so it isn't lost.
+
 ## Architecture
 1. **Sub-classifier**: extend the intent layer so a `qa` turn is further
    classified into the rows above (deterministic regex-first, like the
