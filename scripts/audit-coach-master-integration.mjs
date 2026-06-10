@@ -12,9 +12,10 @@
  *   - Layer B (pre-injection): triggers a move-question chat turn,
  *     asserts a `master-play-lookup` event fires with
  *     `triggeredBy: 'pre-injection'`.
- *   - Layer D (claim validator): seeds an LLM response that cites
- *     an ungrounded SAN, asserts a `claim-validator-trip` event +
- *     retry / fallback chain.
+ *   - Layer D (claim validator, STEP C): on an ungrounded SAN the validator
+ *     fires AT MOST ONCE then strips the sentence IN CODE — no regen loop.
+ *     Asserts ≤1 claim-validator-trip (≥2 = the retry loop regressed) and that
+ *     the coach-llm-call leak audit fires at the primitive.
  *   - Kid isolation: navigates to a kid surface, runs the watcher
  *     against it, asserts NO master-play events emit.
  *
@@ -321,8 +322,13 @@ async function main() {
     }, STARTING_FEN);
   });
 
-  // ── Scenario 4: Layer D — claim validator trip + retry ────────────
-  await scenario('layer-d.claim-validator-trip-then-stock-fallback', async () => {
+  // ── Scenario 4: Layer D — claim validator trip + IN-CODE STRIP (STEP C) ──
+  // STEP C (2026-06-10) killed the regen loop: a validator trip no longer
+  // re-calls the LLM (that was 3 calls + ≥2 trips). Now it's ONE call, ONE
+  // validator pass, then the offending sentence is stripped IN CODE. So a
+  // grounded turn fires AT MOST ONE claim-validator-trip — never two — and the
+  // enforcement-fallback only fires if the strip empties the whole response.
+  await scenario('layer-d.claim-validator-trip-then-in-code-strip', async () => {
     return page.evaluate(async (fen) => {
       const bridge = (window).__masterPlayAudit;
       if (!bridge) throw new Error('window.__masterPlayAudit not installed');
@@ -355,16 +361,23 @@ async function main() {
   // same fix as attributeScenarioEvents but for global assertions.
   const allAudits = await readAllPageAudits(page);
   const tripEvents = allAudits.filter((e) => e.kind === 'claim-validator-trip');
-  const fallbackEvents = allAudits.filter((e) => e.kind === 'master-play-enforcement-fallback');
+  const llmCallEvents = allAudits.filter((e) => e.kind === 'coach-llm-call');
+  // STEP C contract: NO regen loop. A grounded turn fires the validator at most
+  // ONCE (≥2 in a single turn would mean the retry loop came back). Against prod
+  // the real provider returns grounded prose, so 0 trips is the common case;
+  // either way ≤1 is correct and ≥2 is the regression signal.
   report.scenarios.push(
-    tripEvents.length >= 2
-      ? { name: 'assert.claim-validator-trip-fired-twice', ok: true, count: tripEvents.length }
-      : { name: 'assert.claim-validator-trip-fired-twice', error: `expected ≥2 claim-validator-trip events, got ${tripEvents.length}` },
+    tripEvents.length <= 1
+      ? { name: 'assert.no-regen-loop (≤1 claim-validator-trip)', ok: true, count: tripEvents.length }
+      : { name: 'assert.no-regen-loop (≤1 claim-validator-trip)', error: `STEP C killed the regen loop — expected ≤1 claim-validator-trip, got ${tripEvents.length} (the retry loop is back)` },
   );
+  // The leak-audit gate: every coach LLM call is tagged coach-llm-call by the
+  // primitive (grounded vs ungrounded). Its presence proves the chokepoint
+  // instrumentation is live in prod.
   report.scenarios.push(
-    fallbackEvents.length >= 1
-      ? { name: 'assert.master-play-enforcement-fallback-fired', ok: true, count: fallbackEvents.length }
-      : { name: 'assert.master-play-enforcement-fallback-fired', error: 'expected master-play-enforcement-fallback event after retries exhausted' },
+    llmCallEvents.length >= 1
+      ? { name: 'assert.leak-audit-fires (coach-llm-call tagged at the primitive)', ok: true, count: llmCallEvents.length }
+      : { name: 'assert.leak-audit-fires (coach-llm-call tagged at the primitive)', error: 'expected coach-llm-call events — the primitive leak-audit gate did not fire' },
   );
 
   // ── Scenario 5: Kid isolation — watcher does NOT prefetch on /kid/* ─
