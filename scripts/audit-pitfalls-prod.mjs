@@ -77,7 +77,8 @@ const RENDER = [
 ];
 
 // ── PHASE B interactive WATCH targets ───────────────────────────────────────
-// [openingId, wrongMove (matches the card's strikethrough SAN), authored title]
+// [openingId, wrongMove (matches the card's strikethrough SAN), authored title,
+//  optional annotation snippet to confirm by stepping the demo forward]
 const WATCH = [
   ['italian-game', 'Bxf7+', 'Why the Bxf7+ sac just loses a piece'],
   ['catalan-opening', 'Qxc4', 'Why Qxc4 loses the queen'],
@@ -89,6 +90,10 @@ const WATCH = [
   ['pro-aman-anti-caro', 'Qxf7+', 'Why Qxf7+ throws the queen away'],
   ['pro-carlsen-kings-gambit', 'fxe5', 'Why fxe5 invites the queen check'],
   ['pro-caruana-ruy-lopez', 'Bxb5', 'Why Bxb5 drops the bishop'],
+  // board-true material-claim fixes (2026-06-10) — confirm the corrected
+  // annotation text renders live when the demo steps to it.
+  ['pro-gothamchess-scandinavian', 'Nxd5', 'Why ...Nxd5 drops a piece', 'a knight for two pawns'],
+  ['smith-morra-gambit', 'Bxb5', 'Why Bxb5 loses a piece', 'down a bishop for two pawns'],
 ];
 
 const exe = await resolveChromiumExecutable();
@@ -166,13 +171,13 @@ for (const [id, snippet] of RENDER) {
 
 // ── PHASE B ──────────────────────────────────────────────────────────────────
 const watchResults = [];
-for (const [id, wrongMove, title] of WATCH) {
+for (const [id, wrongMove, title, annSnippet] of WATCH) {
   if (ONLY.length && !ONLY.includes(id)) continue;
   const page = await freshPage();
   const errs = [];
   page.on('console', (m) => { if (m.type() === 'error') errs.push(m.text().slice(0, 120)); });
   page.on('pageerror', (e) => errs.push('PAGEERROR ' + String(e).slice(0, 120)));
-  const r = { id, wrongMove, demo: false, titleSeen: false, errs: 0, note: '' };
+  const r = { id, wrongMove, demo: false, titleSeen: false, annSeen: !annSnippet, errs: 0, note: '' };
   try {
     await loadOpening(page, id);
     // find the card index whose strikethrough SAN == wrongMove
@@ -192,23 +197,33 @@ for (const [id, wrongMove, title] of WATCH) {
       await watchBtn.click({ timeout: 4000 });
       await page.waitForSelector('[data-testid="line-player-demo"]', { timeout: 15000 });
       r.demo = true;
-      const txt = await page.locator('body').innerText();
+      let txt = await page.locator('body').innerText();
       r.titleSeen = txt.includes(title);
       if (!r.titleSeen) r.note = `title "${title}" not shown`;
+      // step the demo forward to surface the corrected annotation text
+      if (annSnippet) {
+        for (let step = 0; step < 8 && !r.annSeen; step++) {
+          txt = await page.locator('body').innerText();
+          if (txt.includes(annSnippet)) { r.annSeen = true; break; }
+          await page.locator('[data-testid="lesson-next"]').click({ timeout: 3000 }).catch(() => {});
+          await page.waitForTimeout(500);
+        }
+        if (!r.annSeen) r.note += ` | annotation "${annSnippet}" not shown`;
+      }
     }
     r.errs = errs.length;
   } catch (e) {
     r.note = 'EXC ' + String(e).slice(0, 90);
   }
   watchResults.push(r);
-  const ok = r.demo && r.titleSeen && r.errs === 0;
-  console.log(`B ${ok ? '✓' : '✗'} ${id.padEnd(28)} ${wrongMove.padEnd(7)} demo=${r.demo} title=${r.titleSeen} errs=${r.errs} ${r.note}`);
+  const ok = r.demo && r.titleSeen && r.annSeen && r.errs === 0;
+  console.log(`B ${ok ? '✓' : '✗'} ${id.padEnd(28)} ${wrongMove.padEnd(7)} demo=${r.demo} title=${r.titleSeen} ann=${r.annSeen} errs=${r.errs} ${r.note}`);
   await page.close();
 }
 
 if (browser) await browser.close().catch(() => {});
 const aPass = renderResults.filter((r) => r.mounted && r.section && r.snippet && r.errs === 0).length;
-const bPass = watchResults.filter((r) => r.demo && r.titleSeen && r.errs === 0).length;
+const bPass = watchResults.filter((r) => r.demo && r.titleSeen && r.annSeen && r.errs === 0).length;
 console.log(`\n=== PITFALLS POST-DEPLOY AUDIT ===`);
 console.log(`  PHASE A (render):        ${aPass}/${renderResults.length} green`);
 console.log(`  PHASE B (watch interact): ${bPass}/${watchResults.length} green`);
