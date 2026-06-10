@@ -33,7 +33,9 @@ describe('assembleEnvelope', () => {
     expect(env.memory).toBeTruthy();
     expect(env.appMap.length).toBeGreaterThan(5);
     expect(env.liveState.surface).toBe('ping');
-    expect(env.toolbelt.length).toBe(26);
+    // 23 tools after the 2026-06-10 dead-tool cut (removed `speak`,
+    // `request_hint_tier` BRAIN-05 stubs + punted `lichess_puzzle_fetch`).
+    expect(env.toolbelt.length).toBe(23);
     expect(env.ask).toBe('hello');
   });
 
