@@ -2583,6 +2583,18 @@
         "concept:pos-development",
         "https://en.wikipedia.org/wiki/Two_Knights_Defense"
       ]
+    },
+    {
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p1N1/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 5 4",
+      "wrongMove": "Nxe4",
+      "correctMove": "d5",
+      "explanation": "Snatching the pawn with 4...Nxe4?? forgets that f7 is already under fire from both the c4-bishop and the g5-knight. 5.Bxf7+! forces 5...Ke7 — the king cannot recapture because the g5-knight guards f7 — and with the king stranded in the centre White wins the knight back by force and keeps a crushing attack. The only move is 4...d5, striking the centre and hitting the c4-bishop before any sacrifice can land.",
+      "shortNarration": "d5 — break the centre, hit the bishop",
+      "sources": [
+        "concept:pos-king-safety",
+        "concept:pos-center",
+        "https://en.wikipedia.org/wiki/Two_Knights_Defense"
+      ]
     }
   ],
   "philidor-defence": [
