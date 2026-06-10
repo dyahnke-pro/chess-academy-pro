@@ -471,6 +471,20 @@ export function isMasterPlayQuestion(ask: string | undefined): boolean {
   return !!ask && MASTER_PLAY_QUESTION_RE.test(ask);
 }
 
+/** A PRO-GAME question — "how does Naroditsky play this?", "show me his games
+ *  here", "what does the pro do in this line?". Phase 4: the answer is the
+ *  player's REAL game corpus (pro-game-references → LivePlayerGamesContext),
+ *  voiced via `assemblePlayerGamesAnswer`. The interception gates on that
+ *  context being PRESENT (only loaded on pro-opening / opening-signal turns),
+ *  so this detector can be broad on the "how does X play / show me X's games"
+ *  shape without name-matching every pro. Distinct from `isMasterPlayQuestion`
+ *  (aggregate master practice) — this is ONE player's actual games. */
+const PLAYER_GAMES_QUESTION_RE =
+  /\bhow\s+does\s+(?:he|she|they|\w+)\s+(?:play|handle|treat|approach|continue)\b|\b(?:show|see)\s+(?:me\s+)?(?:his|her|their|\w+'?s)\s+games?\b|\bwhat\s+does\s+(?:he|she|they|the\s+pro|\w+)\s+(?:do|play|prefer)\s+(?:here|in\s+this|in\s+the)\b|\b\w+'s\s+games?\b|\bhis\s+(?:real\s+)?games?\b/i;
+export function isPlayerGamesQuestion(ask: string | undefined): boolean {
+  return !!ask && PLAYER_GAMES_QUESTION_RE.test(ask);
+}
+
 /** A CONCEPT / DEFINITION question — "what's a fork?", "explain zwischenzug",
  *  "what does zugzwang mean?". Phase 5: the answer is the injected BOOK corpus
  *  (chess-concepts.json), voiced via `assembleConceptAnswer` → voiceFacts —
@@ -979,6 +993,11 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             // STEP D Phase 5 — "what's a fork?" voices the book corpus
             // (assembleConceptAnswer); the interception confirms a real concept.
             conceptQuestion: isConceptQuestion(input.ask),
+            // STEP D Phase 4 (cont) — "how does <pro> play this?" voices the
+            // player's REAL games (assemblePlayerGamesAnswer); gated on the
+            // playerGames context being present.
+            playerGamesQuestion: isPlayerGamesQuestion(input.ask),
+            playerGames: input.liveState.playerGames ?? undefined,
             studentColor: input.liveState.studentColor,
             surface: coachSurfaceToRoute(input.liveState.surface),
           }

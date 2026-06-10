@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer } from './groundedAnswer';
-import type { TacticsLiveContext } from '../coach/types';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer } from './groundedAnswer';
+import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { MasterPlayResult } from './masterPlayTypes';
 import type { ConceptEntry } from './chessConceptService';
 
@@ -178,5 +178,33 @@ describe('assembleConceptAnswer — Phase 5 (voice the book corpus, not memory)'
   });
   it('returns null when the concept carries neither a passage nor a fallback', () => {
     expect(assembleConceptAnswer(concept())).toBeNull();
+  });
+});
+
+// Phase 4 (cont): "how does <pro> play X" voices the player's REAL games.
+function pgGame(over: Partial<LivePlayerGamesContext['games'][number]> = {}): LivePlayerGamesContext['games'][number] {
+  return { id: 'g', player: 'Naroditsky', studentSide: 'white', opponent: 'Opp', opponentRating: 2400, result: '1-0', date: null, source: 'chess.com', variationLabel: 'Advance', pgnPrefix: 'e4 c6', plyCount: 4, ...over };
+}
+function pgCtx(games: LivePlayerGamesContext['games'], over: Partial<LivePlayerGamesContext> = {}): LivePlayerGamesContext {
+  return { playerId: 'naroditsky', openingId: 'caro-kann', openingName: 'Caro-Kann', totalAvailable: 1700, games, ...over };
+}
+describe('assemblePlayerGamesAnswer — Phase 4 cont (voice the pro\'s real games)', () => {
+  it('voices the real count + the highest-rated-opponent WIN', () => {
+    const a = assemblePlayerGamesAnswer(pgCtx([
+      pgGame({ opponent: 'Weak', opponentRating: 2100, result: '1-0' }),
+      pgGame({ opponent: 'Strong', opponentRating: 3100, result: '1-0', variationLabel: 'Two Knights' }),
+      pgGame({ opponent: 'Lost', opponentRating: 3200, result: '0-1' }), // higher rating but a LOSS
+    ]));
+    expect(a!.facts).toContain('Naroditsky has 1700 reference games in the Caro-Kann.');
+    expect(a!.facts).toContain('beat Strong (3100)');     // the win over the strongest, not the 3200 loss
+    expect(a!.facts).toContain('Two Knights');
+    expect(a!.sources).toEqual(['player-games:naroditsky']);
+  });
+  it('falls back to the strongest game (not a win) when the pro never won in the set', () => {
+    const a = assemblePlayerGamesAnswer(pgCtx([pgGame({ opponent: 'Beat me', opponentRating: 2800, result: '0-1' })]));
+    expect(a!.facts).toContain('notable game was against Beat me (2800)');
+  });
+  it('returns null when there are no reference games', () => {
+    expect(assemblePlayerGamesAnswer(pgCtx([]))).toBeNull();
   });
 });

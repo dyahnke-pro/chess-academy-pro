@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { isTacticsQuestion, isProgressQuestion, isMasterPlayQuestion, isConceptQuestion } from './coachService';
+import { isTacticsQuestion, isProgressQuestion, isMasterPlayQuestion, isConceptQuestion, isPlayerGamesQuestion } from './coachService';
 
 // Grounding inversion STEP B (2026-06-10). These detectors route a chat turn to
 // a CODE fact-computer (assembleTacticsAnswer / assembleProgressAnswer) so the
@@ -128,6 +128,33 @@ describe('isConceptQuestion', () => {
       '',
     ]) {
       expect(isConceptQuestion(q), String(q)).toBe(false);
+    }
+  });
+});
+
+describe('isPlayerGamesQuestion', () => {
+  it('matches pro-game phrasings', () => {
+    for (const q of [
+      'how does Naroditsky play this?',
+      'how does he handle the Caro?',
+      "show me his games here",
+      "show me Naroditsky's games",
+      'what does the pro do here',
+      "what are Hikaru's games in this line",
+    ]) {
+      expect(isPlayerGamesQuestion(q), q).toBe(true);
+    }
+  });
+
+  it('does NOT match aggregate master-play or generic questions', () => {
+    for (const q of [
+      'how do masters play this?', // aggregate → isMasterPlayQuestion, not pro-games
+      "what's the best move?",
+      'is anything hanging?',
+      undefined,
+      '',
+    ]) {
+      expect(isPlayerGamesQuestion(q), String(q)).toBe(false);
     }
   });
 });

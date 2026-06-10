@@ -36,7 +36,7 @@ function emitLlmTokenUsage(
   });
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer } from './groundedAnswer';
 import { detectBadHabits } from './badHabitDetector';
 import { detectConceptsInText, getConcept } from './chessConceptService';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
@@ -47,7 +47,7 @@ import { buildOpeningDbEntries } from './openingDbGrounding';
 import { buildNarrationGroundingBlock } from './narrationGrounding';
 import { buildLessonReferenceBlock } from '../data/lessons';
 import type { CoachTask, CoachContext, CoachVerbosity, AiProvider } from '../types';
-import type { TacticsLiveContext } from '../coach/types';
+import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 
 // WO-COACH-MASTER-INTEGRATION audit bridge — installs window.__masterPlayAudit
 // when the audit-stream is configured, letting the Playwright audit drive
@@ -1125,6 +1125,15 @@ export interface MasterGroundingOptions {
    *  training memory. Needs no board. The interception confirms a real concept
    *  via `detectConceptsInText` and falls through otherwise. */
   conceptQuestion?: boolean;
+  /** STEP D Phase 4 (cont) — true when this turn asks how a specific PRO plays
+   *  ("how does Naroditsky play this?"). Voiced from `playerGames` (the player's
+   *  real game corpus) via assemblePlayerGamesAnswer; gated on `playerGames`
+   *  being present. */
+  playerGamesQuestion?: boolean;
+  /** The player's real-game reference corpus for the current opening (loaded by
+   *  coachService from pro-game-references). The fact source for a pro-game
+   *  answer — the LLM never invents a "<pro> plays X" game. */
+  playerGames?: LivePlayerGamesContext;
   /** Which side the STUDENT plays — so the tactics answer warns about THEIR
    *  hanging pieces. Falls back to side-to-move when absent. */
   studentColor?: 'white' | 'black';
@@ -1621,7 +1630,8 @@ export async function getCoachChatResponse(
       detectMoveQuestionIntent(messages) ||
       grounding.tacticsQuestion === true ||
       grounding.progressQuestion === true ||
-      grounding.conceptQuestion === true;
+      grounding.conceptQuestion === true ||
+      grounding.playerGamesQuestion === true;
     if (intentFired) {
       try {
         // Helper: the latest user message, for voiceFacts context.
@@ -1767,6 +1777,20 @@ export async function getCoachChatResponse(
                 ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
                 : voiced;
             }
+          }
+        }
+
+        // ── PRO GAMES (Phase 4 cont) — voice the player's REAL games ────────
+        // "how does <pro> play this?" → the player's actual reference corpus
+        // (pro-game-references), already loaded into grounding.playerGames.
+        // assemblePlayerGamesAnswer voices the real count + a standout game; the
+        // LLM never invents a "<pro> plays X" game. Falls through when there are
+        // no reference games for this opening.
+        if (grounding.playerGamesQuestion && grounding.playerGames) {
+          const answer = assemblePlayerGamesAnswer(grounding.playerGames);
+          if (answer) {
+            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'player-games' });
+            if (voiced) return voiced;
           }
         }
         // DB-grounding extension: attach canonical openings-lichess.json

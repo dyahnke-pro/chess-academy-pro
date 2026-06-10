@@ -14,7 +14,7 @@
  */
 import { Chess } from 'chess.js';
 import { findHangingPieces } from './tacticClassifier';
-import type { TacticsLiveContext } from '../coach/types';
+import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { BadHabit } from '../types';
 import type { MasterPlayResult } from './masterPlayTypes';
 import type { ConceptEntry } from './chessConceptService';
@@ -330,6 +330,53 @@ export function assembleMasterPlayAnswer(current: MasterPlayResult): GroundedAns
     bestMoveSan: lead.san,
     bestMoveFromTo: fromTo,
     sources: ['master-games:lichess'],
+  };
+}
+
+/** Did the pro (playing `studentSide`) WIN this game? Lenient on the result
+ *  string shape ("1-0" / "0-1" / "win" / "1/2-1/2"). */
+function proWonGame(result: string, studentSide: 'white' | 'black'): boolean {
+  const r = result.trim().toLowerCase();
+  if (r.includes('1/2') || r === 'draw' || r === '=') return false;
+  if (studentSide === 'white') return r.startsWith('1-0') || r === 'win' || r === '1';
+  return r.startsWith('0-1') || r === 'win' || r === '0';
+}
+
+/**
+ * assemblePlayerGamesAnswer — Phase 4 (pro-game references): "how does <pro>
+ * play this?" / "show me <pro>'s games here". The fact source is the player's
+ * REAL game corpus (`pro-game-references.json` → `LivePlayerGamesContext`,
+ * already loaded into liveState by coachService), NOT the LLM. This voices the
+ * real count + a standout game (highest-rated-opponent win, else the
+ * highest-rated game) — opponent, rating, result, the named variation — all
+ * board-true from the reference. Returns null when there are no games (caller
+ * falls through). The LLM never invents a "<pro> plays X" game.
+ */
+export function assemblePlayerGamesAnswer(ctx: LivePlayerGamesContext): GroundedAnswer | null {
+  if (!ctx.games || ctx.games.length === 0) return null;
+  const player = ctx.games[0].player;
+  // Prefer a win over the strongest opponent; else just the strongest opponent.
+  const ranked = [...ctx.games].sort((a, b) => (b.opponentRating ?? 0) - (a.opponentRating ?? 0));
+  const standout = ranked.find((g) => proWonGame(g.result, g.studentSide)) ?? ranked[0];
+
+  const total = ctx.totalAvailable || ctx.games.length;
+  const parts: string[] = [
+    `${player} has ${total} reference game${total === 1 ? '' : 's'} in the ${ctx.openingName}.`,
+  ];
+  const won = proWonGame(standout.result, standout.studentSide);
+  const oppRating = standout.opponentRating ? ` (${standout.opponentRating})` : '';
+  const variation = standout.variationLabel ? ` in the ${standout.variationLabel}` : '';
+  if (won) {
+    parts.push(`In a standout, ${player} beat ${standout.opponent}${oppRating}${variation}.`);
+  } else {
+    parts.push(`One notable game was against ${standout.opponent}${oppRating}${variation}.`);
+  }
+
+  return {
+    facts: parts.join(' '),
+    bestMoveSan: null,
+    bestMoveFromTo: null,
+    sources: [`player-games:${ctx.playerId ?? 'pro'}`],
   };
 }
 
