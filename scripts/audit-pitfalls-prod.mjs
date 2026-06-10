@@ -94,6 +94,9 @@ const WATCH = [
   // annotation text renders live when the demo steps to it.
   ['pro-gothamchess-scandinavian', 'Nxd5', 'Why ...Nxd5 drops a piece', 'a knight for two pawns'],
   ['smith-morra-gambit', 'Bxb5', 'Why Bxb5 loses a piece', 'down a bishop for two pawns'],
+  // old-error fixes (2026-06-10): board-true wording + Elephant Trap played out.
+  ['two-knights-defence', 'Nxe4', 'Why 4...Nxe4 gets your king hunted', 'g5-knight'],
+  ['queens-gambit', 'Nxd5', 'Why 6.Nxd5 is the Elephant Trap', 'Black is a clean piece up'],
 ];
 
 const exe = await resolveChromiumExecutable();
@@ -200,13 +203,18 @@ for (const [id, wrongMove, title, annSnippet] of WATCH) {
       let txt = await page.locator('body').innerText();
       r.titleSeen = txt.includes(title);
       if (!r.titleSeen) r.note = `title "${title}" not shown`;
-      // step the demo forward to surface the corrected annotation text
+      // step the demo forward to surface the corrected annotation text.
+      // Pause auto-play first so it can't race to the completion screen on a
+      // long line, then step deterministically through every ply.
       if (annSnippet) {
-        for (let step = 0; step < 8 && !r.annSeen; step++) {
+        await page.locator('[data-testid="demo-play-pause"]').click({ timeout: 3000 }).catch(() => {});
+        await page.waitForTimeout(300);
+        const maxSteps = 14;
+        for (let step = 0; step <= maxSteps && !r.annSeen; step++) {
           txt = await page.locator('body').innerText();
           if (txt.includes(annSnippet)) { r.annSeen = true; break; }
           await page.locator('[data-testid="lesson-next"]').click({ timeout: 3000 }).catch(() => {});
-          await page.waitForTimeout(500);
+          await page.waitForTimeout(450);
         }
         if (!r.annSeen) r.note += ` | annotation "${annSnippet}" not shown`;
       }
