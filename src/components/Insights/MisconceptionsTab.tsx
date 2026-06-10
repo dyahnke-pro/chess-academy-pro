@@ -11,13 +11,14 @@
  *
  * Read-only. Empty state teaches: play/review a game and the map fills in.
  */
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Brain, Target, ArrowRight, Clock } from 'lucide-react';
+import { Brain, Target, ArrowRight, Clock, ChevronDown, ChevronUp } from 'lucide-react';
 import {
   getMisconceptionProfile,
   type MisconceptionAggregate,
 } from '../../services/misconceptionService';
+import { MisconceptionCard } from './MisconceptionCard';
 
 const BUCKET_STYLE: Record<string, { label: string; color: string; bg: string }> = {
   opening: { label: 'Opening', color: 'text-sky-300', bg: 'bg-sky-500/15' },
@@ -41,6 +42,13 @@ export function MisconceptionsTab(): JSX.Element {
   const navigate = useNavigate();
   const [rows, setRows] = useState<MisconceptionAggregate[]>([]);
   const [loading, setLoading] = useState(true);
+  const [expandedKey, setExpandedKey] = useState<string | null>(null);
+
+  const reload = useCallback(() => {
+    void getMisconceptionProfile()
+      .then((p) => { setRows(p); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -96,9 +104,12 @@ export function MisconceptionsTab(): JSX.Element {
         const style = BUCKET_STYLE[row.bucket] ?? BUCKET_STYLE.uncategorized;
         const due = row.openCount > 0;
         const example = row.examples[0];
+        const rowKey = `${row.tag}:${row.label}`;
+        const expanded = expandedKey === rowKey;
+        const correctable = row.examples.filter((e) => e.fen);
         return (
           <div
-            key={`${row.tag}:${row.label}`}
+            key={rowKey}
             className={`rounded-xl border p-3 ${due ? 'border-theme-border bg-theme-surface' : 'border-theme-border/50 bg-theme-surface/50'}`}
             data-testid={`misconception-row-${row.tag}`}
           >
@@ -128,15 +139,33 @@ export function MisconceptionsTab(): JSX.Element {
                     “{example.coachNote}”
                   </p>
                 )}
-                {example?.openingName && (
+                {!expanded && example?.openingName && (
                   <p className="text-[10px] text-theme-text-muted/70 mt-1">
                     e.g. {example.openingName}
                     {example.playedSan ? ` — you played ${example.playedSan}` : ''}
                     {example.bestSan ? `, best was ${example.bestSan}` : ''}
                   </p>
                 )}
+                {correctable.length > 0 && (
+                  <button
+                    onClick={() => setExpandedKey(expanded ? null : rowKey)}
+                    className="mt-1.5 flex items-center gap-1 text-[11px] font-medium text-theme-accent hover:opacity-80"
+                    data-testid={`misconception-expand-${row.tag}`}
+                  >
+                    {expanded
+                      ? <>Hide <ChevronUp size={12} /></>
+                      : <>Review {correctable.length} {correctable.length === 1 ? 'mistake' : 'mistakes'} · fix a wrong tag <ChevronDown size={12} /></>}
+                  </button>
+                )}
               </div>
             </div>
+            {expanded && (
+              <div className="mt-2 flex flex-col gap-2" data-testid={`misconception-cards-${row.tag}`}>
+                {correctable.map((rec) => (
+                  <MisconceptionCard key={rec.id} record={rec} onRetagged={reload} />
+                ))}
+              </div>
+            )}
           </div>
         );
       })}
