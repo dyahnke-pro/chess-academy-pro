@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer } from './groundedAnswer';
+import type { TacticsLiveContext } from '../coach/types';
 
 // Phase 1: the facts for a move/eval question are assembled IN CODE — the
 // best move (chess.js SAN from the engine UCI), the grounded "why", and the
@@ -50,5 +51,32 @@ describe('assembleMoveEvalAnswer', () => {
 
   it('returns null on an unparseable FEN (never blanks/fabricates)', () => {
     expect(assembleMoveEvalAnswer({ fen: 'garbage', bestMoveUci: 'g1f3' })).toBeNull();
+  });
+});
+
+function tactics(over: Partial<TacticsLiveContext> = {}): TacticsLiveContext {
+  return { immediate: [], hanging: [], threats: [], opportunities: [], lookaheadDepth: 4, ...over } as TacticsLiveContext;
+}
+
+describe('assembleTacticsAnswer — Phase 2 (voice the engine-computed tactics)', () => {
+  it('voices a forced mate-in-one first', () => {
+    const a = assembleTacticsAnswer(tactics({ boardFacts: { sideToMove: 'white', mateInOne: 'Qh7#' } as TacticsLiveContext['boardFacts'] }), 'white');
+    expect(a!.facts).toContain('checkmate in one: Qh7#');
+  });
+  it("voices the engine's fork description verbatim (no LLM)", () => {
+    const a = assembleTacticsAnswer(tactics({ immediate: [{ type: 'fork', description: 'Knight on d5 forks queen on c7 and rook on f6', squares: ['d5', 'c7', 'f6'] }] }), 'white');
+    expect(a!.facts).toContain('Knight on d5 forks queen on c7');
+  });
+  it("warns about the STUDENT's hanging piece, not the opponent's", () => {
+    const a = assembleTacticsAnswer(tactics({ hanging: [{ square: 'b4', piece: 'b', color: 'w' }, { square: 'e5', piece: 'p', color: 'b' }] }), 'white');
+    expect(a!.facts).toContain('Your bishop on b4 is hanging');
+    expect(a!.facts).not.toContain('e5');
+  });
+  it('falls to the top threat when nothing immediate', () => {
+    const a = assembleTacticsAnswer(tactics({ threats: [{ type: 'fork', description: 'Black threatens Nxe4', depthAhead: 2, line: [] }] }), 'white');
+    expect(a!.facts).toContain('Watch out');
+  });
+  it('returns null when there is no concrete tactic (caller falls back)', () => {
+    expect(assembleTacticsAnswer(tactics(), 'white')).toBeNull();
   });
 });

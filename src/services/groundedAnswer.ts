@@ -14,6 +14,7 @@
  */
 import { Chess } from 'chess.js';
 import { findHangingPieces } from './tacticClassifier';
+import type { TacticsLiveContext } from '../coach/types';
 
 // Pure board-fact constants — universal chess values, leaf-local so this module
 // imports nothing that could loop back. coachFeatureService imports these FROM
@@ -175,4 +176,49 @@ export function explainBestMoveGrounded(
   if (bestClause) return `${cap(bestClause)}.`;
   if (costClause) return `${cap(costClause)}.`;
   return null;
+}
+
+/**
+ * assembleTacticsAnswer — Phase 2 of the grounding inversion: tactics / danger
+ * questions ("is anything hanging?", "what's the threat?", "is there a fork?").
+ * The `liveTacticsContext` engine has ALREADY computed everything — the fork
+ * descriptions, the hanging pieces, the mate-in-one — deterministically from
+ * the FEN. So this just SELECTS the relevant facts and packages them for the
+ * voiceFacts chokepoint. The LLM decides nothing; it voices these descriptions.
+ * Returns null when there's no concrete tactic (caller takes the one fallback).
+ */
+export function assembleTacticsAnswer(
+  tactics: TacticsLiveContext,
+  studentColor: 'white' | 'black',
+): GroundedAnswer | null {
+  const sc: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  const parts: string[] = [];
+
+  // Most urgent: a forced mate-in-one for the side to move.
+  if (tactics.boardFacts?.mateInOne) {
+    parts.push(`There is checkmate in one: ${tactics.boardFacts.mateInOne}.`);
+  }
+  // Immediate tactics on the board now — voice the engine's own descriptions.
+  for (const t of tactics.immediate.slice(0, 2)) {
+    if (t.description) parts.push(`${t.description}.`);
+  }
+  // The STUDENT's pieces left hanging — warn concretely.
+  for (const h of tactics.hanging.filter((p) => p.color === sc).slice(0, 2)) {
+    parts.push(`Your ${REVIEW_PIECE_NAME[h.piece] ?? h.piece} on ${h.square} is hanging.`);
+  }
+  // Nothing concrete yet → surface the top threat, then the top opportunity.
+  if (parts.length === 0 && tactics.threats[0]?.description) {
+    parts.push(`Watch out — ${tactics.threats[0].description}.`);
+  }
+  if (parts.length === 0 && tactics.opportunities[0]?.description) {
+    parts.push(`You have a shot: ${tactics.opportunities[0].description}.`);
+  }
+
+  if (parts.length === 0) return null;
+  return {
+    facts: parts.join(' '),
+    bestMoveSan: null,
+    bestMoveFromTo: null,
+    sources: ['engine:stockfish', 'board:chess.js'],
+  };
 }
