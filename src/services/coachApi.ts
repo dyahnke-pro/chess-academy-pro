@@ -36,6 +36,7 @@ function emitLlmTokenUsage(
   });
 }
 import { lookupMasterPlay } from './masterPlayLookup';
+import { assembleMoveEvalAnswer } from './groundedAnswer';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
 import { buildVerifiedPuzzleContext } from './verifiedLineLibrary';
@@ -1559,7 +1560,6 @@ export async function getCoachChatResponse(
         if (grounding.bestMoveQuestion && masterPlayContext.current.moves.length > 0) {
           const top = masterPlayContext.current.moves[0];
           if (top.uci) {
-            const { assembleMoveEvalAnswer } = await import('./groundedAnswer');
             const answer = assembleMoveEvalAnswer({ fen: masterPlayContext.current.fen, bestMoveUci: top.uci });
             if (answer) {
               let lastUser: string | undefined;

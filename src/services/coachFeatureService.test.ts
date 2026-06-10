@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { db } from '../db/schema';
-import { detectBadHabits, detectBadHabitsFromGame, buildProfileContext, buildReviewSegments, explainBestMoveGrounded } from './coachFeatureService';
+import { detectBadHabits, detectBadHabitsFromGame, buildProfileContext, buildReviewSegments } from './coachFeatureService';
+import { explainBestMoveGrounded } from './groundedAnswer';
 import type { ReviewMoveInput } from './coachFeatureService';
 import { buildUserProfile, buildBadHabit } from '../test/factories';
 import type { UserProfile } from '../types';

@@ -13,7 +13,14 @@
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
 import { Chess } from 'chess.js';
-import { explainBestMoveGrounded } from './coachFeatureService';
+import { findHangingPieces } from './tacticClassifier';
+
+// Pure board-fact constants — universal chess values, leaf-local so this module
+// imports nothing that could loop back. coachFeatureService imports these FROM
+// here (one direction), instead of the reverse that created the cycle.
+export const REVIEW_PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+export const REVIEW_PIECE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 99 };
+function cap(s: string): string { return s.charAt(0).toUpperCase() + s.slice(1); }
 
 export interface GroundedAnswer {
   /** The plain-language facts the LLM must voice — and ONLY these. */
@@ -101,4 +108,71 @@ export function assembleMoveEvalAnswer(opts: {
     bestMoveFromTo: fromTo,
     sources,
   };
+}
+
+/**
+ * explainBestMoveGrounded — the GROUNDED, LLM-FREE "why" (moved here from
+ * coachFeatureService 2026-06-10 to break the import cycle: pure board-fact
+ * computers belong in the leaf, not in a service tangled with coachApi). It
+ * reports ONLY what chess.js can prove about the board — what the best move
+ * concretely wins, whether it gives check, what the played move left hanging —
+ * never the engine's deep reasoning it can't see.
+ */
+export function explainBestMoveGrounded(
+  fenBefore: string,
+  playedSan: string | null,
+  bestMoveUci: string | null,
+  moverColor: 'white' | 'black',
+): string | null {
+  if (!bestMoveUci || bestMoveUci.length < 4) return null;
+  const mc: 'w' | 'b' = moverColor === 'white' ? 'w' : 'b';
+
+  let bestClause: string | null = null;
+  try {
+    const c = new Chess(fenBefore);
+    const to = bestMoveUci.slice(2, 4);
+    const captured = c.get(to as never);
+    const mv = c.move({ from: bestMoveUci.slice(0, 2), to, promotion: bestMoveUci.length > 4 ? bestMoveUci[4] : undefined });
+    if (mv) {
+      if (captured && captured.color !== mc) {
+        const recapturable = c.attackers(to as never, captured.color).length > 0;
+        const movedVal = REVIEW_PIECE_VALUE[mv.piece] ?? 0;
+        const capVal = REVIEW_PIECE_VALUE[captured.type] ?? 0;
+        if (!recapturable || capVal > movedVal) {
+          bestClause = `it wins the ${REVIEW_PIECE_NAME[captured.type]} on ${to}`;
+        }
+      }
+      if (!bestClause && c.inCheck()) bestClause = 'it comes with check';
+    }
+  } catch { /* board fact unavailable — stay silent */ }
+
+  let costClause: string | null = null;
+  if (playedSan) {
+    try {
+      const c = new Chess(fenBefore);
+      if (c.move(playedSan)) {
+        const hung = findHangingPieces(c).filter((h) => h.color === mc);
+        if (hung.length > 0) {
+          hung.sort((a, b) => (REVIEW_PIECE_VALUE[b.piece] ?? 0) - (REVIEW_PIECE_VALUE[a.piece] ?? 0));
+          const h = hung[0];
+          const captures = c.moves({ verbose: true }).filter((mm) => mm.to === h.square && mm.captured);
+          if (captures.length > 0) {
+            captures.sort((a, b) => (REVIEW_PIECE_VALUE[a.piece] ?? 0) - (REVIEW_PIECE_VALUE[b.piece] ?? 0));
+            const punish = captures[0];
+            const punisher = mc === 'w' ? 'Black' : 'White';
+            let givesCheck = false;
+            try { const after = new Chess(c.fen()); after.move(punish.san); givesCheck = after.inCheck(); } catch { /* keep false */ }
+            costClause = `your move let ${punisher} play ${punish.san}, winning the ${REVIEW_PIECE_NAME[h.piece]}${givesCheck ? ' with check' : ''}`;
+          } else {
+            costClause = `your move left the ${REVIEW_PIECE_NAME[h.piece]} on ${h.square} hanging`;
+          }
+        }
+      }
+    } catch { /* board fact unavailable — stay silent */ }
+  }
+
+  if (bestClause && costClause) return `${cap(bestClause)}, while ${costClause}.`;
+  if (bestClause) return `${cap(bestClause)}.`;
+  if (costClause) return `${cap(costClause)}.`;
+  return null;
 }
