@@ -2,11 +2,16 @@
 /**
  * Punish-gems + WLPP interactive loop audit — POST-DEPLOY CONTRACT (G7).
  *
- * David's contract (2026-05-23): "Three CONSECUTIVE passes, each digging
- * deeper and challenging the code harder, with ZERO errors = pass. Not just
- * 3 passes." This runs three escalating tiers in one sweep; the contract is
- * MET only when ALL THREE come back with 0 errors. Any error fails the sweep
- * — you fix and re-run until you get a clean 3/3.
+ * David's contract (2026-05-23, bumped 2026-06-10): CONSECUTIVE passes, each
+ * digging deeper and challenging the code harder, with ZERO errors = pass.
+ * The streak requirement was raised from 3 → 8 (REQUIRED_PASSES); the contract
+ * is MET only when 8 passes in a row come back with 0 errors. Any error resets
+ * the streak — you fix and re-run until you get a clean 8/8.
+ *
+ * Also asserts the 2026-06-10 ARROW-INVERSION contract every pass: no raw
+ * "[BOARD: arrow:" marker may surface in visible text (arrows are now computed
+ * in code via arrowEngine — gen-path lead-the-eye + chat-path Stockfish-colored
+ * — never emitted by the LLM; the arrowClaimValidator band-aid was deleted).
  *
  *   Tier 1 — BREADTH / happy path. Every gem-bearing opening: card renders,
  *            every gem carries the 4 WLPP buttons, Watch mounts the played-
@@ -39,6 +44,10 @@ import { seedUnlockedOpenings } from './audit-lib/idb-unlock.mjs';
 import { mkdir, writeFile, readFile } from 'node:fs/promises';
 
 const URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
+// CONTRACT: consecutive error-free passes required (David 2026-06-10: 3 → 8).
+// Override with AUDIT_PASSES for a quicker smoke during development.
+const REQUIRED_PASSES = Math.max(1, Number(process.env.AUDIT_PASSES) || 8);
+const REQUIRED_LEVELS = Array.from({ length: REQUIRED_PASSES }, (_, i) => i + 1);
 // Instrument 3 (G1): the narration listener sidecar. When AUDIT_LISTENER_URL
 // is set, every page points its auditStreamUrl localStorage at the local
 // listener so the app POSTs its voice/speak/narration events there — proving
@@ -482,6 +491,20 @@ async function runPass(browser, level) {
         }
       }
     }
+
+    // ── ARROW-INVERSION CONTRACT (2026-06-10): the LLM no longer emits
+    //    [BOARD: arrow:...] markers anywhere — walkthrough arrows are computed
+    //    by code (arrowEngine.computeLeadEyeArrows) and chat arrows are
+    //    code-injected + Stockfish-colored. A raw "[BOARD: arrow:" literal
+    //    surfacing in visible text means a marker leaked into display (the bug
+    //    the inversion + arrowClaimValidator deletion was meant to end). After
+    //    exercising the whole surface this pass, assert NONE leaked. ──
+    try {
+      const leaked = await page.evaluate(() =>
+        (document.body.innerText || '').includes('[BOARD: arrow:'),
+      );
+      if (leaked) fail('arrow-inversion: raw "[BOARD: arrow:" marker leaked into visible text (should be code-handled, never displayed)');
+    } catch { /* page may be mid-nav — non-fatal */ }
   } catch (e) { fail(`threw — ${String(e).slice(0, 160)}`); }
   errs.push(...ev.pageerrors.map((p) => `P${level} pageerror: ${p}`), ...ev.consoleErrors.map((c) => `P${level} console: ${c}`));
   await ctx.close();
@@ -604,7 +627,10 @@ async function continuityPreflight() {
   const report = { url: URL, ts: new Date().toISOString(), passes: [] };
   let clean = 0;
   let playSkipped = false; // any pass that SKIPPED the actual gem play (write-stall)
-  for (const level of [1, 2, 3]) {
+  // CONTRACT bumped 3 → 8 consecutive clean passes (David 2026-06-10). Each
+  // pass touches every function; passes ≥3 run at full depth (cold-cache,
+  // play-to-completion, pick-before-load, out-of-order). MET only on 8 in a row.
+  for (const level of REQUIRED_LEVELS) {
     process.stdout.write(`\n[loop] Pass ${level} (every function${level > 1 ? `, depth ${level}` : ''}) …\n`);
     const { errs, skips } = await runPass(browser, level);
     report.passes.push({ level, errors: errs, skips });
@@ -625,15 +651,15 @@ async function continuityPreflight() {
   }
   await mkdir('audit-reports', { recursive: true }).catch(() => {});
   await writeFile(`audit-reports/punish-gems-loop-${ONLY || 'all'}-${report.ts.replace(/[:.]/g, '-')}.json`, JSON.stringify(report, null, 2));
-  const threeClean = clean === 3;
+  const allClean = clean === REQUIRED_PASSES;
   // FULL-PLAY contract (David 2026-06-01): a skip is NOT a pass. If the gem play
   // was never actually exercised (sandbox write-stall locked the weapons), the
   // contract is NOT met — it is DEFERRED to a real device / prod where the
   // unlock write lands. Continuity preflight already passed (hard floor); the
   // full interactive play-through still owes a device/prod run.
-  const met = threeClean && !playSkipped;
-  if (met) console.log(`\n[loop] CONTRACT MET — continuity clean + 3 consecutive error-free passes with the gems actually PLAYED (clean streak: ${clean}/3)`);
-  else if (threeClean && playSkipped) console.log(`\n[loop] CONTRACT DEFERRED — continuity clean + 0 errors, but the gem PLAY-THROUGH was skipped (sandbox unlock write-stall). Full-play is owed on a real device / prod; a skip is not a pass.`);
-  else console.log(`\n[loop] CONTRACT NOT MET — need continuity clean + 3 consecutive error-free passes with gems played (clean streak: ${clean}/3${playSkipped ? ', play skipped' : ''})`);
+  const met = allClean && !playSkipped;
+  if (met) console.log(`\n[loop] CONTRACT MET — continuity clean + ${REQUIRED_PASSES} consecutive error-free passes with the gems actually PLAYED (clean streak: ${clean}/${REQUIRED_PASSES})`);
+  else if (allClean && playSkipped) console.log(`\n[loop] CONTRACT DEFERRED — continuity clean + 0 errors, but the gem PLAY-THROUGH was skipped (sandbox unlock write-stall). Full-play is owed on a real device / prod; a skip is not a pass.`);
+  else console.log(`\n[loop] CONTRACT NOT MET — need continuity clean + ${REQUIRED_PASSES} consecutive error-free passes with gems played (clean streak: ${clean}/${REQUIRED_PASSES}${playSkipped ? ', play skipped' : ''})`);
   process.exit(met ? 0 : 1);
 })();
