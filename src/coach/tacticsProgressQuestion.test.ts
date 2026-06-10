@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { isTacticsQuestion, isProgressQuestion, isMasterPlayQuestion, isConceptQuestion, isPlayerGamesQuestion } from './coachService';
+import { isTacticsQuestion, isProgressQuestion, isMasterPlayQuestion, isConceptQuestion, isPlayerGamesQuestion, isEndgameQuestion } from './coachService';
 
 // Grounding inversion STEP B (2026-06-10). These detectors route a chat turn to
 // a CODE fact-computer (assembleTacticsAnswer / assembleProgressAnswer) so the
@@ -155,6 +155,32 @@ describe('isPlayerGamesQuestion', () => {
       '',
     ]) {
       expect(isPlayerGamesQuestion(q), String(q)).toBe(false);
+    }
+  });
+});
+
+describe('isEndgameQuestion', () => {
+  it('matches endgame-verdict phrasings', () => {
+    for (const q of [
+      'can I win this endgame?',
+      'is this a draw?',
+      'can I hold this?',
+      'how do I win this',
+      'is this theoretically winning',
+      'what does the tablebase say',
+    ]) {
+      expect(isEndgameQuestion(q), q).toBe(true);
+    }
+  });
+
+  it('does NOT match plain non-endgame questions', () => {
+    for (const q of [
+      'tell me about the Italian Game',
+      'what should I name my repertoire',
+      undefined,
+      '',
+    ]) {
+      expect(isEndgameQuestion(q), String(q)).toBe(false);
     }
   });
 });

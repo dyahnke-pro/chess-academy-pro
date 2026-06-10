@@ -471,6 +471,18 @@ export function isMasterPlayQuestion(ask: string | undefined): boolean {
   return !!ask && MASTER_PLAY_QUESTION_RE.test(ask);
 }
 
+/** An ENDGAME question — "can I win this?", "is this a draw?", "how do I hold
+ *  this ending?". Phase 5: the answer is the SYZYGY TABLEBASE (literal truth for
+ *  ≤7-piece endings), voiced via `assembleEndgameAnswer`. The interception gates
+ *  on `lookupTablebase` returning a hit (≤7 pieces), so this detector can be
+ *  broad on the endgame-verdict shape; a non-endgame position falls through to
+ *  the engine-eval path. */
+const ENDGAME_QUESTION_RE =
+  /\bendgame\b|\bcan\s+i\s+(?:win|hold|draw|save|defend)\b|\bhow\s+do\s+i\s+(?:win|hold|draw|convert|defend)\b|\bis\s+this\s+(?:a\s+)?(?:theoretical(?:ly)?\s+)?(?:win|won|winning|draw|drawn|lost|losing)\b|\b(?:theoretical|tablebase)\b/i;
+export function isEndgameQuestion(ask: string | undefined): boolean {
+  return !!ask && ENDGAME_QUESTION_RE.test(ask);
+}
+
 /** A PRO-GAME question — "how does Naroditsky play this?", "show me his games
  *  here", "what does the pro do in this line?". Phase 4: the answer is the
  *  player's REAL game corpus (pro-game-references → LivePlayerGamesContext),
@@ -998,6 +1010,9 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             // playerGames context being present.
             playerGamesQuestion: isPlayerGamesQuestion(input.ask),
             playerGames: input.liveState.playerGames ?? undefined,
+            // STEP D Phase 5 — "can I win this endgame?" → the syzygy tablebase
+            // (assembleEndgameAnswer); the interception does the ≤7-piece lookup.
+            endgameQuestion: isEndgameQuestion(input.ask),
             studentColor: input.liveState.studentColor,
             surface: coachSurfaceToRoute(input.liveState.surface),
           }

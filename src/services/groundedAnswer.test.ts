@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
+import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
 import type { ConceptEntry } from './chessConceptService';
 
@@ -206,5 +207,29 @@ describe('assemblePlayerGamesAnswer — Phase 4 cont (voice the pro\'s real game
   });
   it('returns null when there are no reference games', () => {
     expect(assemblePlayerGamesAnswer(pgCtx([]))).toBeNull();
+  });
+});
+
+// Phase 5 endgame: the verdict is the SYZYGY TABLEBASE — literal truth.
+function tb(over: Partial<TablebaseLookupResult> = {}): TablebaseLookupResult {
+  return { category: 'draw', whiteRelativeResult: 'draw', dtm: null, dtz: null, checkmate: false, stalemate: false, insufficientMaterial: false, ...over };
+}
+describe('assembleEndgameAnswer — Phase 5 (voice the tablebase verdict)', () => {
+  it('voices a WIN for the student with the mate distance', () => {
+    const a = assembleEndgameAnswer({ result: tb({ category: 'win', whiteRelativeResult: 'white-wins', dtm: 17 }), studentColor: 'white' });
+    expect(a!.facts).toBe('By the tablebase, this endgame is a win for you with best play — mate in 17.');
+    expect(a!.sources).toEqual(['tablebase:syzygy']);
+  });
+  it('voices a LOSS when the win is the opponent\'s', () => {
+    const a = assembleEndgameAnswer({ result: tb({ category: 'win', whiteRelativeResult: 'white-wins', dtm: 12 }), studentColor: 'black' });
+    expect(a!.facts).toContain('lost for you with best play — mate in 12');
+  });
+  it('voices a theoretical draw (incl. cursed-win = fifty-move-rule draw)', () => {
+    expect(assembleEndgameAnswer({ result: tb({ category: 'draw', whiteRelativeResult: 'draw' }), studentColor: 'white' })!.facts).toContain('theoretical draw');
+    expect(assembleEndgameAnswer({ result: tb({ category: 'cursed-win', whiteRelativeResult: null }), studentColor: 'white' })!.facts).toContain('fifty-move rule');
+  });
+  it('returns null on an uncertain category (no guessing)', () => {
+    expect(assembleEndgameAnswer({ result: tb({ category: 'maybe-win', whiteRelativeResult: null }), studentColor: 'white' })).toBeNull();
+    expect(assembleEndgameAnswer({ result: tb({ category: 'unknown', whiteRelativeResult: null }), studentColor: 'white' })).toBeNull();
   });
 });

@@ -18,6 +18,7 @@ import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types'
 import type { BadHabit } from '../types';
 import type { MasterPlayResult } from './masterPlayTypes';
 import type { ConceptEntry } from './chessConceptService';
+import type { TablebaseLookupResult } from './lichessTablebaseService';
 
 // Pure board-fact constants — universal chess values, leaf-local so this module
 // imports nothing that could loop back. coachFeatureService imports these FROM
@@ -378,6 +379,44 @@ export function assemblePlayerGamesAnswer(ctx: LivePlayerGamesContext): Grounded
     bestMoveFromTo: null,
     sources: [`player-games:${ctx.playerId ?? 'pro'}`],
   };
+}
+
+/**
+ * assembleEndgameAnswer — Phase 5 (endgame): "can I win this?" / "is this a
+ * draw?" / "how do I hold this ending?". The fact source is the SYZYGY
+ * TABLEBASE (`lookupTablebase` via the `/api/lichess-tablebase` proxy) — literal
+ * mathematical truth for ≤7-piece endings, the strongest grounding there is.
+ * The caller does the (async) lookup; this packages the verdict from the
+ * STUDENT's perspective for the voiceFacts chokepoint. Returns null on an
+ * uncertain category (`maybe-*` / `unknown`) so the coach never voices a guess.
+ */
+export function assembleEndgameAnswer(opts: {
+  result: TablebaseLookupResult;
+  studentColor: 'white' | 'black';
+}): GroundedAnswer | null {
+  const { result, studentColor } = opts;
+  if (result.checkmate) {
+    return { facts: 'This position is already checkmate.', bestMoveSan: null, bestMoveFromTo: null, sources: ['tablebase:syzygy'] };
+  }
+  if (result.stalemate || result.insufficientMaterial || result.whiteRelativeResult === 'draw' ||
+      result.category === 'cursed-win' || result.category === 'blessed-loss') {
+    const why =
+      result.stalemate ? ' (stalemate)' :
+      result.insufficientMaterial ? ' (insufficient material)' :
+      (result.category === 'cursed-win' || result.category === 'blessed-loss') ? ' under the fifty-move rule' : '';
+    return { facts: `By the tablebase, this endgame is a theoretical draw${why} with best play.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['tablebase:syzygy'] };
+  }
+  if (result.whiteRelativeResult === 'white-wins' || result.whiteRelativeResult === 'black-wins') {
+    const studentWins =
+      (result.whiteRelativeResult === 'white-wins' && studentColor === 'white') ||
+      (result.whiteRelativeResult === 'black-wins' && studentColor === 'black');
+    const mate = typeof result.dtm === 'number' ? ` — mate in ${Math.abs(result.dtm)}` : '';
+    const facts = studentWins
+      ? `By the tablebase, this endgame is a win for you with best play${mate}.`
+      : `By the tablebase, this endgame is lost for you with best play${mate} — your goal is to make it as hard as possible.`;
+    return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['tablebase:syzygy'] };
+  }
+  return null; // maybe-win / maybe-loss / unknown → don't voice a guess.
 }
 
 /**

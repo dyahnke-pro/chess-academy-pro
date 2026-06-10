@@ -36,7 +36,8 @@ function emitLlmTokenUsage(
   });
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer } from './groundedAnswer';
+import { lookupTablebase } from './lichessTablebaseService';
 import { detectBadHabits } from './badHabitDetector';
 import { detectConceptsInText, getConcept } from './chessConceptService';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
@@ -1134,6 +1135,11 @@ export interface MasterGroundingOptions {
    *  coachService from pro-game-references). The fact source for a pro-game
    *  answer — the LLM never invents a "<pro> plays X" game. */
   playerGames?: LivePlayerGamesContext;
+  /** STEP D Phase 5 — true when this turn is an ENDGAME-verdict question ("can I
+   *  win this?", "is this a draw?"). The interception does a syzygy tablebase
+   *  lookup (≤7 pieces) and voices the verdict (assembleEndgameAnswer); falls
+   *  through to the engine-eval path when the position isn't in the tablebase. */
+  endgameQuestion?: boolean;
   /** Which side the STUDENT plays — so the tactics answer warns about THEIR
    *  hanging pieces. Falls back to side-to-move when absent. */
   studentColor?: 'white' | 'black';
@@ -1631,7 +1637,8 @@ export async function getCoachChatResponse(
       grounding.tacticsQuestion === true ||
       grounding.progressQuestion === true ||
       grounding.conceptQuestion === true ||
-      grounding.playerGamesQuestion === true;
+      grounding.playerGamesQuestion === true ||
+      grounding.endgameQuestion === true;
     if (intentFired) {
       try {
         // Helper: the latest user message, for voiceFacts context.
@@ -1792,6 +1799,27 @@ export async function getCoachChatResponse(
             const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'player-games' });
             if (voiced) return voiced;
           }
+        }
+
+        // ── ENDGAME (Phase 5) — voice the SYZYGY TABLEBASE verdict ──────────
+        // For an endgame-verdict question, the syzygy tablebase is literal truth
+        // (≤7 pieces). lookupTablebase returns null off-tablebase (>7 pieces /
+        // proxy miss) → fall through to the engine-eval path. The verdict is
+        // voiced from the STUDENT's perspective; the LLM decides nothing.
+        if (grounding.endgameQuestion && grounding.currentFen) {
+          try {
+            const tb = await lookupTablebase(grounding.currentFen);
+            if (tb) {
+              const sc: 'white' | 'black' =
+                grounding.studentColor ??
+                (grounding.currentFen.split(' ')[1] === 'b' ? 'black' : 'white');
+              const answer = assembleEndgameAnswer({ result: tb, studentColor: sc });
+              if (answer) {
+                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame' });
+                if (voiced) return voiced;
+              }
+            }
+          } catch { /* tablebase unreachable — fall through to engine eval */ }
         }
         // DB-grounding extension: attach canonical openings-lichess.json
         // entries that match the current move history OR were referenced
