@@ -162,6 +162,11 @@ console.log('');
 // orientation). If any of these fail, the build can't ship. If a non-gate
 // test fails, that's a separate problem the gate harness shouldn't gate.
 const GATE_TESTS = [
+  // 🔒 G0 — the LLM decides nothing. Freezes the band-aid count in the coach
+  // LLM path; adding a validator/regen/"don't hallucinate" prompt instead of
+  // routing through voiceFacts makes ship-check go RED and blocks the push.
+  // The teeth behind the rule that was written 8x and ignored for 3 months.
+  'src/services/coachInversion.gate.test.ts',
   'src/data/lessons/lessonIntegrity.test.ts',
   'src/data/lessons/narrationAccuracy.test.ts',
   'src/data/lessons/narrationGrounding.test.ts',

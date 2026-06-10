@@ -167,3 +167,79 @@ Read the plan doc → read `groundedAnswer.ts` (see the proven pattern) → read
 best-move interception in `coachApi.ts` (your template) → do STEP A (thread the
 engine snapshot). That single step unlocks off-book best-move + every tactics/
 eval intent. Go.
+
+---
+
+## 🔒 THE G0 GATE IS LIVE (mechanical enforcement — built 2026-06-10)
+`src/services/coachInversion.gate.test.ts` FREEZES the band-aid count (validator
+calls + regen + "cite NO / use EXACTLY / run it through the engine" prompts) in
+`coachApi.ts` + `coachService.ts` at **BASELINE = 9**. It's wired into
+`scripts/ship-check.mjs` GATE_TESTS, so adding a new band-aid makes the push go
+RED. **As you remove a validator (because the answer is now computed), LOWER the
+baseline to the new count. NEVER raise it. 0 = inversion complete.** That's the
+teeth behind G0 — a written rule got ignored 8×; this one can't be.
+
+---
+
+## 🗂️ FULL SESSION CONTEXT — everything else in flight (don't lose this)
+
+### Security incident (mostly fixed; ONE thing still owed)
+- **LLM keys were leaked** in the public bundle AND git history. Fixed: provider
+  calls now go through the server-side proxy `api/llm-proxy.ts`
+  (`/api/llm/{deepseek,anthropic}`, Origin-allowlisted, edge, streams); keys
+  removed from the bundle (verified zero `sk-`); the `VITE_*_API_KEY` Vercel env
+  vars (which auto-bake into the client) were DELETED; `DEEPSEEK_KEY` +
+  `ANTHROPIC_KEY` set server-side in Vercel.
+- **DeepSeek key** `sk-92e…c9fe` was REVOKED (it was siphoned onto
+  `deepseek-v4-pro`, 779 requests). New DeepSeek key is set server-side + works.
+- **⚠️ STILL OWED:** the **Anthropic key `sk-ant-api03-8…3gAA` is the LEAKED one**
+  (still in git history) and got drained (~$20, almost certainly siphoned —
+  PostHog showed only 1 legit device). David must **ROTATE it** once testers are
+  off the old build, then update `ANTHROPIC_KEY` in Vercel, and **set a hard
+  spend cap** on the Anthropic account. Until then it's the bridge keeping the
+  installed app alive.
+
+### Phone / TestFlight (David owes a build)
+- David's installed iPhone app is build **`ccad2845`** (2026-06-09) — the OLD
+  pre-proxy bundle with **baked keys that are now dead**. Coach there limps on
+  the Anthropic baked-key fallback (dies when that credit runs out). The fix is
+  a NEW TestFlight build: `git pull` → **`unset VITE_DEEPSEEK_API_KEY
+  VITE_ANTHROPIC_API_KEY`** (or the build re-bakes a key) → `npm run build`
+  (verify `grep -rEo 'sk-ant-api[0-9]{2}|sk-[a-f0-9]{30}' dist/assets/*.js` is
+  empty) → `npx cap sync ios` → `cp ios-patches/App/AppDelegate.swift
+  ios/App/App/AppDelegate.swift` → open `ios/App/App.xcworkspace` → Archive →
+  TestFlight. New bundle uses the proxy, no baked keys.
+
+### Other coach fixes already landed on main this session
+- Best-move/soundness answers (PR #712, merged). · Arrow grounding
+  (`src/utils/arrowGrounding.ts` — `groundArrows`). · Board unlocks the instant
+  the opponent moves, on BOTH Learn (`CoachTeachPage`, `opponentThinking` flag)
+  and Play (`CoachGamePage:4619`, dropped the `isNarrating` lock + `voiceService.stop()`
+  on move). These are the move-timing fixes; they ship in the new TestFlight too.
+
+### Access / infra a fresh session has (don't re-ask)
+- **PostHog** (product analytics, the app's audit system): the read key is in the
+  env as **`Read_key_PostHog`** (`phx_…`). `scripts/posthog-query.mjs` now
+  auto-resolves it (any `phx_` env var). Query: `node scripts/posthog-query.mjs
+  "<HogQL>"`. Project 390808.
+- **Vercel**: `VERCEL_TOKEN` is in the env (manage env vars / deploys via the
+  API). teamId `team_EG9m215w9cQHWilBOPnOtIFS`, project `chess-academy-pro`.
+- **Audit-stream**: `AUDIT_STREAM_SECRET` in the env. `GET
+  https://chess-academy-pro.vercel.app/api/audit-stream?since=<ms>` with header
+  `x-audit-secret`.
+- **This environment has full internet + prod + Vercel access** (per CLAUDE.md
+  standing note). The Chromium IndexedDB write-stall is the only sandbox quirk.
+
+### Parallel sessions / file isolation
+- Another session is building **trap/pitfall DATA** (`pro-repertoires.json`,
+  `common-mistakes.json`, `punish-gems.json`, `lessons/*.ts`,
+  `model-games.json`, `middlegame-plans.json`). **DO NOT TOUCH those files.** The
+  inversion's lane is the 4 coach SERVICE files. Disjoint → no conflict.
+
+### The cost stakes (the WHY behind the urgency)
+The inversion is the ROOT fix for BOTH hallucination AND token cost. Every
+decision moved to code = an LLM call avoided or shrunk: validator regens gone
+(3–6 calls/turn → 1), prompts collapse (voice a tiny facts block, not the whole
+board + "don't hallucinate"), and some surfaces go to ZERO LLM (the review path
+already does — `buildDeterministicNarration` calls the model not once). That is
+what stops the Anthropic-drain scare from being possible. Ship it.
