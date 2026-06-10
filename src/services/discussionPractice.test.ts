@@ -75,6 +75,57 @@ describe('captureMisconception', () => {
     expect(mockedLog).not.toHaveBeenCalled();
   });
 
+  it('SILENT + unsure: logs the MOST-LIKELY bucket (top candidate), never "other"', async () => {
+    // Code is below the auto-tag bar (needsPicker) but has a top guess. The
+    // pivot (David 2026-06-10) places the slip in that most-likely bucket
+    // silently — no mid-game question, correctable later.
+    mockedClassify.mockResolvedValueOnce({
+      tag: 'miscalculated',
+      coachNote: 'The line you saw runs out.',
+      source: 'code',
+      needsPicker: true,
+      candidates: [
+        { tag: 'miscalculated', confidence: 0.7, evidence: 'eval flipped inside a forcing line' },
+        { tag: 'overvalued-attack', confidence: 0.5, evidence: 'sac without follow-up' },
+      ],
+    } as never);
+    mockedLog.mockResolvedValueOnce({ id: 'y' } as never);
+
+    const r = await captureMisconception({
+      classifyInput: { fen: FEN, playedSan: 'Ng5' },
+      source: 'discussion-practice',
+      shouldCount: true,
+      context: { fen: FEN, playedSan: 'Ng5' },
+    });
+
+    expect(r.logged).toBe(true);
+    expect(mockedLog).toHaveBeenCalledOnce();
+    expect(mockedLog.mock.calls[0][0].tag).toBe('miscalculated'); // the top candidate, NOT 'other'
+  });
+
+  it('INTERACTIVE + unsure: returns needsPicker with candidates, logs nothing yet', async () => {
+    mockedClassify.mockResolvedValueOnce({
+      tag: 'wrong-side',
+      coachNote: 'Play points the wrong way.',
+      source: 'code',
+      needsPicker: true,
+      candidates: [{ tag: 'wrong-side', confidence: 0.6, evidence: 'break opposite the structure' }],
+    } as never);
+
+    const r = await captureMisconception({
+      classifyInput: { fen: FEN, playedSan: 'a4' },
+      source: 'discussion-practice',
+      shouldCount: true,
+      interactive: true,
+      context: { fen: FEN, playedSan: 'a4' },
+    });
+
+    expect(r.needsPicker).toBe(true);
+    expect(r.candidates).toHaveLength(1);
+    expect(r.logged).toBe(false);
+    expect(mockedLog).not.toHaveBeenCalled();
+  });
+
   it('returns empty coachNote and does not log when classification fails', async () => {
     mockedClassify.mockResolvedValueOnce(null);
     const r = await captureMisconception({

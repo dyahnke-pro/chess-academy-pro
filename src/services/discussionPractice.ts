@@ -101,42 +101,24 @@ export async function captureMisconception(
 
   const coachNote = classification.coachNote;
 
-  // CODE is unsure.
+  // 'none' = the move was actually fine; nothing to log (no top candidate).
+  if (classification.tag === 'none') {
+    return { classification, coachNote, logged: false, needsPicker: false, candidates: classification.candidates };
+  }
+
+  // CODE is unsure (confidence < the auto-tag bar, or a tie).
   if (classification.needsPicker) {
-    // A user is at the board → pop the picker (ranked candidates) and log their
-    // pick via `logPickedMisconception`. Don't log yet.
+    // INTERACTIVE correction surface present (the Thinking-Errors tab / review-
+    // at-ply picker) → hand back the ranked candidates so the user can confirm
+    // or reassign; don't log yet (the picker logs via logPickedMisconception).
     if (args.interactive) {
       return { classification, coachNote, logged: false, needsPicker: true, candidates: classification.candidates };
     }
-    // SILENT capture — no one to ask. Don't lose the slip and don't assert a
-    // low-confidence specific bucket: log it as 'other' (unclassified, with the
-    // best guess as a hint), correctable from the Thinking Errors tab.
-    if (!args.shouldCount) {
-      return { classification, coachNote, logged: false, needsPicker: false, candidates: classification.candidates };
-    }
-    const guess = classification.tag !== 'none' ? getMisconceptionTag(classification.tag)?.label : undefined;
-    const otherRecord = await logMisconception({
-      tag: 'other',
-      customLabel: guess ? `unclassified (likely: ${guess})` : 'unclassified',
-      source: args.source,
-      fen: args.context.fen,
-      playedSan: args.context.playedSan,
-      bestSan: args.context.bestSan,
-      cpLoss: args.context.cpLoss,
-      gamePhase: args.context.gamePhase,
-      moveNumber: args.context.moveNumber,
-      openingId: args.context.openingId,
-      openingName: args.context.openingName,
-      userReason: args.classifyInput.userReason,
-      coachNote,
-      sourceGameId: args.context.sourceGameId,
-    });
-    return { classification, coachNote, logged: otherRecord !== null, record: otherRecord ?? undefined, needsPicker: false, candidates: classification.candidates };
-  }
-
-  // 'none' = the move was actually fine; teach nothing to log.
-  if (classification.tag === 'none') {
-    return { classification, coachNote, logged: false, needsPicker: false, candidates: classification.candidates };
+    // SILENT-CLASSIFY PIVOT (David 2026-06-10): no mid-game question. Place the
+    // error in the MOST-LIKELY bucket — code's top candidate — even when below
+    // the auto-tag bar. It's the best guess, it's correctable later from the
+    // Thinking-Errors tab / review, and the aggregate is robust to the noise.
+    // Falls through to the normal log path below with classification.tag.
   }
 
   // The count-against rule: only learned lines / principles become

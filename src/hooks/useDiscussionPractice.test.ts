@@ -85,20 +85,19 @@ describe('useDiscussionPractice — silent mode (the /coach/teach + Practice fau
   });
 });
 
-describe('useDiscussionPractice — prompt mode (the /coach/play faucet)', () => {
-  it('raises the why-prompt and does NOT auto-capture until answered', async () => {
+describe('useDiscussionPractice — always silent (no mid-game question, David 2026-06-10 pivot)', () => {
+  it('captures the slip silently to the most-likely bucket, NEVER raising a prompt', async () => {
+    // Even on a normally-prompting (non-silent) surface, the pivot means the
+    // mid-game "why?" question is gone: the slip is auto-bucketed silently and
+    // corrected later in the Thinking-Errors tab / review.
     const { result } = renderHook(() => useDiscussionPractice(true));
     await act(async () => { await result.current.evaluatePlayerMove(SLIP_ARGS); });
 
-    expect(result.current.phase).toBe('asking');
-    expect(result.current.prompt?.playedSan).toBe('Qe6');
-    // Prompt mode waits for the student's answer — no silent bucket write.
-    expect(mockedCapture).not.toHaveBeenCalled();
-
-    // Answering routes through captureMisconception with the reason.
-    await act(async () => { await result.current.submitReason('I wanted to attack'); });
+    expect(result.current.phase).toBe('idle');
+    expect(result.current.prompt).toBeNull();
+    // Captured silently, no userReason (passive — no one was asked).
     expect(mockedCapture).toHaveBeenCalledOnce();
-    expect(mockedCapture.mock.calls[0][0].classifyInput.userReason).toBe('I wanted to attack');
+    expect(mockedCapture.mock.calls[0][0].classifyInput.userReason).toBeUndefined();
   });
 
   it('stays silent when disabled', async () => {
@@ -143,25 +142,27 @@ describe('useDiscussionPractice — raiseSlipPrompt (the blunder→chat link)', 
     openingName: 'Ruy Lopez',
   };
 
-  it('raises the why-prompt directly, no re-analysis', () => {
+  it('captures the slip silently, no re-analysis, no prompt', () => {
     const { result } = renderHook(() => useDiscussionPractice(true));
     act(() => { result.current.raiseSlipPrompt(RAISE_ARGS); });
 
-    expect(result.current.phase).toBe('asking');
-    expect(result.current.prompt?.playedSan).toBe('Qe6');
-    expect(result.current.prompt?.bestSan).toBe('Qe4');
+    // Pivot: no prompt — the caller-detected blunder is bucketed silently.
+    expect(result.current.phase).toBe('idle');
+    expect(result.current.prompt).toBeNull();
+    expect(mockedCapture).toHaveBeenCalledOnce();
+    // The caller's best move rides into the capture context.
+    expect(mockedCapture.mock.calls[0][0].context.bestSan).toBe('Qe4');
   });
 
-  it('dedupes against the faucet — one prompt per resulting FEN', async () => {
+  it('dedupes against the faucet — one capture per resulting FEN', async () => {
     const { result } = renderHook(() => useDiscussionPractice(true));
     act(() => { result.current.raiseSlipPrompt(RAISE_ARGS); });
-    expect(result.current.phase).toBe('asking');
+    expect(mockedCapture).toHaveBeenCalledOnce();
 
-    // The faucet then resolves for the SAME move — it must NOT clobber.
+    // The faucet then evaluates the SAME move — promptedFenAfterRef guards it,
+    // so there's no double-capture for one position.
     await act(async () => { await result.current.evaluatePlayerMove(SLIP_ARGS); });
-    expect(result.current.prompt?.playedSan).toBe('Qe6');
-    // Still one prompt, still awaiting the answer (no passive capture).
-    expect(mockedCapture).not.toHaveBeenCalled();
+    expect(mockedCapture).toHaveBeenCalledOnce();
   });
 
   it('captures silently when the in-game discussion toggle is off', () => {

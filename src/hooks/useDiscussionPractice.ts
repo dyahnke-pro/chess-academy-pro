@@ -14,14 +14,12 @@ import { lookupMasterPlay } from '../services/masterPlayLookup';
 import { describeTopMasterMove } from '../services/explorerTranslate';
 import {
   evaluateMove,
-  buildWhyPrompt,
   captureMisconception,
   logPickedMisconception,
   type CaptureMisconceptionArgs,
 } from '../services/discussionPractice';
 import type { MisconceptionCandidate } from '../services/misconceptionDiagnosis';
 import { getMisconceptionTag } from '../data/misconceptionTags';
-import { slipWarrantsInterjection, type SlipResult } from '../services/slipDetector';
 import { logAppAudit } from '../services/appAuditor';
 import { useSettings } from './useSettings';
 
@@ -235,54 +233,33 @@ export function useDiscussionPractice(
       // double-fire the same prompt.
       promptedFenAfterRef.current = args.fenAfter;
 
-      // Silent capture (feed the bucket, no panel/voice) when EITHER:
-      //   - silent-by-contract (the /coach/teach brain narrates / WLPP
-      //     Practice / the user turned the "ask why" interjection off), OR
-      //   - the slip is BELOW the rating-adaptive interjection bar (a
-      //     beginner's inaccuracy / a 1500's inaccuracy — captured, but not
-      //     worth interrupting; David 2026-06-04).
-      // Either way the slip still counts toward the weakness bucket.
-      const belowRatingBar = !slipWarrantsInterjection(slip.cpLoss, args.studentRating);
-      if (effectiveSilent || belowRatingBar) {
-        await captureMisconception({
-          classifyInput: {
-            fen: args.fenBefore,
-            playedSan: args.playedSan,
-            bestSan,
-            mastersTopSan,
-            evalSummary: cpToWords(slip.cpLoss),
-            gamePhase: args.gamePhase,
-          },
-          source: 'discussion-practice',
-          shouldCount: slip.shouldCount,
-          context: {
-            fen: args.fenBefore,
-            playedSan: args.playedSan,
-            bestSan,
-            cpLoss: slip.cpLoss,
-            gamePhase: args.gamePhase,
-            moveNumber: args.moveNumber,
-            openingId: args.openingId,
-            openingName: args.openingName,
-          },
-        });
-        return;
-      }
-
-      setPrompt({
-        question: buildWhyPrompt(slip),
-        fenBefore: args.fenBefore,
-        fenAfter: args.fenAfter,
-        playedSan: args.playedSan,
-        bestSan,
-        mastersTopSan,
-        evalSummary: cpToWords(slip.cpLoss),
-        cpLoss: slip.cpLoss,
+      // SILENT-CLASSIFY PIVOT (David 2026-06-10): no mid-game "why?" question
+      // anywhere. Always place the slip in its most-likely bucket silently
+      // (captureMisconception logs code's top candidate); the user confirms or
+      // reassigns later in the Thinking-Errors tab or by reviewing the game.
+      // Cutting the interrupt means every slip is captured with zero friction.
+      await captureMisconception({
+        classifyInput: {
+          fen: args.fenBefore,
+          playedSan: args.playedSan,
+          bestSan,
+          mastersTopSan,
+          evalSummary: cpToWords(slip.cpLoss),
+          gamePhase: args.gamePhase,
+        },
+        source: 'discussion-practice',
         shouldCount: slip.shouldCount,
-        gamePhase: args.gamePhase,
-        moveNumber: args.moveNumber,
+        context: {
+          fen: args.fenBefore,
+          playedSan: args.playedSan,
+          bestSan,
+          cpLoss: slip.cpLoss,
+          gamePhase: args.gamePhase,
+          moveNumber: args.moveNumber,
+          openingId: args.openingId,
+          openingName: args.openingName,
+        },
       });
-      setPhase('asking');
     } catch {
       // Any failure → no prompt this move. Never block the game.
     }
@@ -304,14 +281,6 @@ export function useDiscussionPractice(
     openingIdRef.current = args.openingId;
     openingNameRef.current = args.openingName;
 
-    const slip: SlipResult = {
-      isSlip: true,
-      reason: args.reason ?? 'eval-drop',
-      severity: null,
-      cpLoss: args.cpLoss,
-      shouldCount: args.shouldCount,
-    };
-
     void logAppAudit({
       kind: 'faucet-slip-detected',
       category: 'subsystem',
@@ -331,49 +300,31 @@ export function useDiscussionPractice(
       }),
     });
 
-    // Silent capture (no panel) when silent-by-contract OR the slip is below
-    // the rating-adaptive interjection bar — still feeds the bucket.
-    const belowRatingBar = !slipWarrantsInterjection(args.cpLoss, args.studentRating);
-    if (effectiveSilent || belowRatingBar) {
-      void captureMisconception({
-        classifyInput: {
-          fen: args.fenBefore,
-          playedSan: args.playedSan,
-          bestSan: args.bestSan,
-          mastersTopSan: args.mastersTopSan,
-          evalSummary: cpToWords(args.cpLoss),
-          gamePhase: args.gamePhase,
-        },
-        source: 'discussion-practice',
-        shouldCount: args.shouldCount,
-        context: {
-          fen: args.fenBefore,
-          playedSan: args.playedSan,
-          bestSan: args.bestSan,
-          cpLoss: args.cpLoss,
-          gamePhase: args.gamePhase,
-          moveNumber: args.moveNumber,
-          openingId: args.openingId,
-          openingName: args.openingName,
-        },
-      }).catch(() => undefined);
-      return;
-    }
-
-    setPrompt({
-      question: buildWhyPrompt(slip),
-      fenBefore: args.fenBefore,
-      fenAfter: args.fenAfter,
-      playedSan: args.playedSan,
-      bestSan: args.bestSan,
-      mastersTopSan: args.mastersTopSan,
-      evalSummary: cpToWords(args.cpLoss),
-      cpLoss: args.cpLoss,
+    // SILENT-CLASSIFY PIVOT (David 2026-06-10): no mid-game panel. Always
+    // capture the slip into its most-likely bucket silently; correction
+    // happens later in the Thinking-Errors tab / review.
+    void captureMisconception({
+      classifyInput: {
+        fen: args.fenBefore,
+        playedSan: args.playedSan,
+        bestSan: args.bestSan,
+        mastersTopSan: args.mastersTopSan,
+        evalSummary: cpToWords(args.cpLoss),
+        gamePhase: args.gamePhase,
+      },
+      source: 'discussion-practice',
       shouldCount: args.shouldCount,
-      gamePhase: args.gamePhase,
-      moveNumber: args.moveNumber,
-    });
-    setPhase('asking');
+      context: {
+        fen: args.fenBefore,
+        playedSan: args.playedSan,
+        bestSan: args.bestSan,
+        cpLoss: args.cpLoss,
+        gamePhase: args.gamePhase,
+        moveNumber: args.moveNumber,
+        openingId: args.openingId,
+        openingName: args.openingName,
+      },
+    }).catch(() => undefined);
   }, [enabled, effectiveSilent, surface]);
 
   const resolve = useCallback(async (reason: string | undefined): Promise<void> => {
