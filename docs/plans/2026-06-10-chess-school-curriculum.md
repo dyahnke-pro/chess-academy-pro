@@ -201,6 +201,59 @@ not one book's idiosyncrasy.
 
 ---
 
+## 🔄 UPDATE (David 2026-06-10, later) — agreed refinements (SUPERSEDE the ordering above)
+
+1. **NO single "teaching engine" book.** Znosko is demoted from "the engine" to
+   *one source* (it best articulates the Force/Space/Time evaluation language for
+   Parts II–III). **Our chapter sequence is the spine**; all seven books are equal
+   grounding sources. (David questioned the Znosko-centric framing — correct.)
+2. **TACTICS COME FIRST.** Tactics move from an appended "toolkit" to **Part I —
+   Tactical Vision**, the foundation. Reason: strategy is unplayable without
+   tactical safety, the classics teach tactics first (Capablanca "Simple Mates",
+   Lasker "Elementary Combinations"), AND `puzzles.json` (~80k themed/rated) is our
+   RICHEST data source — tactics are the best-resourced topic, not the thinnest.
+3. **The book = *Winning Chess*, 8 parts / 30 chapters** (each deepened with key
+   ideas in the session; author into the content):
+   - **I Tactical Vision** — 1 Seeing the Board · 2 The Fork · 3 Pins & Skewers ·
+     4 Discovered & Double Attacks · 5 The Mating Patterns *(+ review: your mistakes)*
+   - **II The Elements** — 6 Force · 7 Space · 8 Time · 9 Threats
+   - **III Reading a Position** — 10 Valuation · 11 Making a Plan · 12 Converting/Holding
+   - **IV Pawn Structure** — 13 IQP · 14 Doubled & Backward · 15 Chains & Breaks · 16 Passed Pawns & Majorities
+   - **V Weaknesses & Targets** — 17 Weak Squares & Holes · 18 Fixing a Weakness · 19 Open Files & the 7th · 20 Two Weaknesses
+   - **VI Piece Play** — 21 Good/Bad Bishop & the Pair · 22 Knight Outposts & Manoeuvres · 23 Rooks · 24 Bishop vs Knight
+   - **VII The Attack** — 25 Attacking the King · 26 The Greek Gift · 27 Defence & the Counterblow
+   - **VIII Endgame Technique** — 28 Opposition (K+P) · 29 Rook Endings · 30 Converting the Won Game
+4. **Per-chapter format = written text WITH illustrations** (David: "it would be
+   cool to have written text with illustrations"): **(a)** the idea (original prose,
+   grounded, never verbatim) · **(b)** illustrated board diagrams (real FENs from
+   `puzzles.json`/openings DB, board-verified) · **(c)** a worked master example ·
+   **(d)** "From your games" personalized slot · **(e)** checkpoint quiz (gates the
+   next chapter). The Academy ships an actual readable TEXTBOOK alongside the
+   interactive lessons.
+5. **Illustrations are a CURATED MIX (David):** canonical teaching diagrams are the
+   backbone; the student's OWN positions are pulled in **only where they cleanly
+   illustrate the chapter** (quality-gated by classification confidence — "empty >
+   generic > forced"). A perfect personal example *replaces* the stock diagram; a
+   muddy one is skipped.
+6. **Personalized illustrations are CREDITED + zero-LLM (David):** the caption shows
+   it's the student's own game — **opponent · rating · date · your colour · result ·
+   move number** — assembled from `games[sourceGameId]` + the `mistakePuzzle`. The
+   write-up (your move, the engine's best, why it's best, why yours fell short) is
+   assembled IN CODE from the engine line + classification already stored, wrapped in
+   the chapter's authored teaching. **No provider call** (consistent with decision 7,
+   the zero-LLM Academy). Callbacks thread mistakes across chapters ("the same weak
+   square from Ch. 17"). Data path: `MistakePuzzle{fen,bestMoveSan,classification,
+   moveNumber,sourceGameId}` → `GameRecord{white,black,result,date,event,*Elo}`.
+7. **Sample built** (proof of concept): Ch. 2 — The Fork, real FENs, every fork
+   verified legal + on-target with chess.js, SVG diagrams + credited "from your
+   games" slot. The SVG glyph renderer is a PROTOTYPE (piece-centering imperfect);
+   **production renders boards via `ConsistentChessboard`** (proper sprites), so
+   that's a non-issue at ship.
+8. **Next:** draft a STRATEGIC sample chapter (Ch. 17 — Weak Squares & Holes) to
+   prove the positional voice + diagrams, mirroring the tactical sample.
+
+---
+
 ## Phased build plan
 
 - [ ] **P0 — Book ingestion → coach references.** Extend the fetch path to
