@@ -1523,17 +1523,46 @@
           "The king takes back on d8 and Black has lost the right to castle forever. Down zero material, but the hypermodern Pirc just lost its quiet middlegame future. Game basically over before move five."
         ],
         "arrows": [
-          [],
-          [],
           [
+            {
+              "from": "e7",
+              "to": "e5",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "d4",
+              "to": "e5",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "d6",
+              "to": "e5",
+              "color": "rgba(239,68,68,0.85)"
+            },
             {
               "from": "d1",
               "to": "d8",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
-          [],
-          []
+          [
+            {
+              "from": "d1",
+              "to": "d8",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "e8",
+              "to": "d8",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ]
         ],
         "highlights": [
           [
@@ -1628,10 +1657,34 @@
           "Qxf3 — White recaptures with the queen, now centralised and eyeing both b7 and f7. White has the bishop pair, a flexible centre, and Black has no real compensation for the structural concession."
         ],
         "arrows": [
-          [],
-          [],
-          [],
-          []
+          [
+            {
+              "from": "c8",
+              "to": "g4",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "h2",
+              "to": "h3",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "g4",
+              "to": "f3",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "d1",
+              "to": "f3",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ]
         ],
         "highlights": [
           [
@@ -1724,10 +1777,34 @@
           "Nd2 — White reroutes calmly to better squares (f1, g3, then maybe f5) knowing Black has no plan. Closed centre, all of Black's pieces with no scope — this is the slow, suffocating defeat the Pirc is supposed to AVOID."
         ],
         "arrows": [
-          [],
-          [],
-          [],
-          []
+          [
+            {
+              "from": "c7",
+              "to": "c5",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "d4",
+              "to": "d5",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "b8",
+              "to": "a6",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "f3",
+              "to": "d2",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ]
         ],
         "highlights": [
           [
@@ -2072,7 +2149,7 @@
           "Nxd8"
         ],
         "annotations": [
-          "Having grabbed the e4-pawn, you retreat the knight to f6 — and the open e-file is fatal.",
+          "Having just won the e-pawn, you retreat the knight to f6 — and the open e-file is fatal.",
           "Nc6+! A discovered check: the e2-queen rakes straight down the open e-file at your king, and the knight on c6 attacks your queen at the same time.",
           "...Be7 blocks the check — the only way to stay on the board — but it does nothing for the queen.",
           "Nxd8 takes her. You are a full queen down. The one move was 4...Qe7, pinning the knight to win it back."
@@ -2172,13 +2249,21 @@
           "Nxd5",
           "Nxd5",
           "Bxd8",
-          "Bb4+"
+          "Bb4+",
+          "Qd2",
+          "Bxd2+",
+          "Kxd2",
+          "Kxd8"
         ],
         "annotations": [
           "You grab the d5-pawn — the Elephant Trap. The knight looks like it wins material; it loses a piece.",
           "...Nxd5! Black takes the knight, and the bishop on g5 is hanging the d8-queen behind it.",
           "Bxd8 wins the queen — but it is an illusion. Watch.",
-          "...Bb4+! Check. The bishop comes off with check, and after you block and trade queens you end up a clean piece down. Just play 6.e3 and develop."
+          "…Bb4+! Check — and this is the whole point. The bishop comes off with check before you can rescue the bishop sitting on d8.",
+          "Qd2 blocks the check — forced; nothing else covers it.",
+          "…Bxd2+! The bishop snaps off your queen, with check.",
+          "Kxd2 — you must recapture the bishop.",
+          "…Kxd8 collects the loose bishop on d8. Count the wood: Black is a clean piece up, and the 'won' queen was a mirage. Just develop with e3 instead."
         ],
         "arrows": [
           [
@@ -2208,6 +2293,34 @@
               "to": "b4",
               "color": "rgba(239,68,68,0.85)"
             }
+          ],
+          [
+            {
+              "from": "d1",
+              "to": "d2",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "b4",
+              "to": "d2",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "e1",
+              "to": "d2",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "e8",
+              "to": "d8",
+              "color": "rgba(239,68,68,0.85)"
+            }
           ]
         ],
         "highlights": [
@@ -2234,13 +2347,41 @@
               "square": "b4",
               "color": "rgba(255,214,0,0.88)"
             }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255,214,0,0.88)"
+            }
           ]
         ],
         "learnCues": [
           "Nxd5?? — the Elephant Trap",
           "...Nxd5 — take the knight",
           "Bxd8 — grabs the queen",
-          "...Bb4+ — and you're a piece down"
+          "…Bb4+ — check, the real point",
+          "Qd2 — forced block",
+          "…Bxd2+ — takes the queen",
+          "Kxd2 — forced recapture",
+          "…Kxd8 — Black a clean piece up"
         ]
       }
     }
@@ -5071,7 +5212,7 @@
           "Bxf7+! The bishop crashes in with check. You cannot take back — the g5-knight covers f7 — so the king has to walk.",
           "...Ke7, the only legal square. Your king is stranded in the centre with the rook and bishop entombed behind it.",
           "d4 tears the centre open around the naked king. White's whole army is about to pour through.",
-          "...h6 shoos the g5-bishop, but it is a wasted move — your king still has nowhere to hide.",
+          "...h6 shoos the g5-knight, but it is a wasted move — your king still has nowhere to hide.",
           "Nxe4 calmly scoops the piece back. Material is level, but your king is hunted and the position is lost. Play 4...d5 instead."
         ],
         "arrows": [
