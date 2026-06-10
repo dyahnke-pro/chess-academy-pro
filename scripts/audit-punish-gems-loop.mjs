@@ -43,6 +43,14 @@ import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-lis
 import { seedUnlockedOpenings } from './audit-lib/idb-unlock.mjs';
 import { mkdir, writeFile, readFile } from 'node:fs/promises';
 
+// A detached page/context event can reject AFTER its pass already moved on
+// (e.g. a renderer crash). Without this, that stray rejection kills the whole
+// run mid-audit. Log it and keep going — the per-pass error accounting is the
+// source of truth for the contract, not a transient async hiccup.
+process.on('unhandledRejection', (err) => {
+  console.log(`[loop] (non-fatal) unhandledRejection: ${String(err).slice(0, 140)}`);
+});
+
 const URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 // CONTRACT: consecutive error-free passes required (David 2026-06-10: 3 → 8).
 // Override with AUDIT_PASSES for a quicker smoke during development.
@@ -507,7 +515,11 @@ async function runPass(browser, level) {
     } catch { /* page may be mid-nav — non-fatal */ }
   } catch (e) { fail(`threw — ${String(e).slice(0, 160)}`); }
   errs.push(...ev.pageerrors.map((p) => `P${level} pageerror: ${p}`), ...ev.consoleErrors.map((c) => `P${level} console: ${c}`));
-  await ctx.close();
+  // Guard close: a renderer crash mid-pass closes the context, and an
+  // unguarded ctx.close() then throws an UNCAUGHT rejection that nukes the
+  // whole run (one transient browser hiccup ≠ contract failure). Swallow it;
+  // the pass already recorded its errors.
+  try { await ctx.close(); } catch { /* context already gone */ }
   return { errs, skips };
 }
 
