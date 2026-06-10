@@ -12,6 +12,42 @@ app, built for him. No multi-tenancy, no other accounts.
 These are HARD requirements — not "best effort." Skipping them is a
 ship-blocking failure no matter how trivial the change looks.
 
+### G0. THE LLM DECIDES NOTHING — it voices facts computed in code (David 2026-06-10, LOCKED, supreme law).
+
+This rule was written EIGHT different times scoped to specific
+surfaces (walkthroughs, stage-gen, kids) and got ignored for THREE
+MONTHS on the coach chat because none said "**every** LLM call,
+including chat." It does now, with no loophole:
+
+**The LLM generates ZERO chess content. Moves, evals, lines, AND the
+*reason* a move is strong are ALL computed in code (Stockfish,
+chess.js, the DB, the tactics engine, `explainBestMoveGrounded`,
+`liveTacticsContext`) and handed to the LLM. Its ONLY job, on EVERY
+path, is to phrase those facts.**
+
+**THE TEST (apply before you write a line):** if you are adding a
+validator, a gate, a regen/retry, a claim-stripper, or a prompt that
+says "use exactly these squares / don't hallucinate / cite only the
+context" — **STOP.** Every one of those exists only because the LLM is
+still *deciding*. That's the disease, not the cure. Compute the answer
+in code and route it through the one chokepoint, `voiceFacts`
+(`coachApi.ts`). True inversion has nothing to validate because the
+LLM was never given a choice.
+
+This applies to ALL 26 `CoachTask`s + every non-task LLM call — chat,
+commentary, hints, reports, search, intent-classify, narration,
+everything. The migration is in flight on branch
+`coach-grounding-inversion`.
+
+**Before touching any coach LLM surface, READ:**
+`docs/plans/2026-06-10-coach-chat-grounding-inversion.md` (the plan +
+the full 26-task inventory) and
+`docs/plans/2026-06-10-coach-inversion-WORKORDER.md` (the execution
+guide with every stumbling block pre-cleared). The pure fact-computers
+live in the LEAF `src/services/groundedAnswer.ts`; the chokepoint is
+`voiceFacts`; the wiring template is the best-move interception in
+`getCoachChatResponse`. Don't reinvent — extend the pattern.
+
 ### G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).
 
 After every push that lands on `main`, run the post-deploy audit
