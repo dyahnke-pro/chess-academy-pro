@@ -1,11 +1,26 @@
 // useDiscussionPractice — the live faucet's React shell over the tested
 // orchestration in services/discussionPractice.ts. Mounts on a play
 // surface; after each player move it (best-effort, never blocking the
-// game) evaluates the move, and on a real slip raises a "why did you
-// play that?" prompt. The student answers (voice/text) or skips; either
-// way the coach teaches, and a counted slip is logged to the weakness
-// bucket. All engine/lookup work is wrapped so a failure just means "no
-// prompt this move" — the game never stalls.
+// game) evaluates the move and SILENTLY captures a real slip into its
+// most-likely thinking-error bucket. All engine/lookup work is wrapped so
+// a failure just means "no capture this move" — the game never stalls.
+//
+// 🟡 DORMANT-BUT-PRESERVED (silent-classify pivot, David 2026-06-10):
+//   The mid-game "why did you play that?" PROMPT + ranked-candidate PICKER
+//   (`prompt`/`teach`/`pickerCandidates` state, the `asking`/`picking`/
+//   `teaching` phases, `resolve`/`submitReason`/`skip`/`pickBucket`/
+//   `dismissTeach`, and the `DiscussionPracticePanel` it drives) are KEPT
+//   but FULLY DORMANT — preserved in case we re-activate the interactive
+//   ask later. Dormancy is structural, not incidental: NOTHING sets phase
+//   to 'asking' anymore (evaluatePlayerMove + raiseSlipPrompt always
+//   capture silently), so phase is permanently 'idle', the panel always
+//   renders null, its buttons never mount, and submitReason/skip/pickBucket
+//   are never reachable. The `phase === 'idle'` invariant is locked by
+//   useDiscussionPractice.test.ts. ⤳ TO RE-ACTIVATE: in evaluatePlayerMove
+//   (and raiseSlipPrompt), when you want to ask, `setPrompt({...})` +
+//   `setPhase('asking')` instead of the silent captureMisconception call —
+//   the rest of the flow (resolve → picker → logPickedMisconception) is
+//   intact and waiting.
 
 import { useCallback, useRef, useState } from 'react';
 import { Chess } from 'chess.js';

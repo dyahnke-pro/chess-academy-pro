@@ -2,6 +2,13 @@
 // Voice-first (the parent surface speaks the question + coachNote via its
 // own say()), with a text fallback and a skip. Kept dumb: all logic lives
 // in useDiscussionPractice / services. Mounts inside a play surface.
+//
+// 🟡 DORMANT-BUT-PRESERVED (silent-classify pivot, David 2026-06-10): this
+// panel is still mounted by the play surfaces but NEVER renders — its parent
+// hook's `phase` is permanently 'idle' (nothing sets 'asking' anymore), and
+// every branch below returns null unless phase is asking/picking/teaching.
+// Preserved intact for a possible future re-activation of the interactive
+// ask; see the DORMANT note in useDiscussionPractice.ts for how to wake it.
 
 import { useState, useCallback, type ReactNode } from 'react';
 import { Send, X } from 'lucide-react';
