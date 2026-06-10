@@ -603,6 +603,30 @@
         "concept:pos-development",
         "https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation"
       ]
+    },
+    {
+      "fen": "r1bqkbnr/pp2pppp/2n5/3P4/3P4/8/PP3PPP/RNBQKBNR b KQkq - 0 5",
+      "wrongMove": "Qa5+",
+      "correctMove": "Qxd5",
+      "explanation": "After 9.exd5 the pawn attacks the c6-knight and must be answered. The flashy 9...Qa5+?? ignores that: 10.Nc3 blocks the check and develops, the knight is driven back to b8, and Black is left cramped, undeveloped, with the queen stranded on a5 — close to lost. Simply recapture with 9...Qxd5, when Black is comfortable.",
+      "shortNarration": "Qxd5 — recapture, don't check for nothing",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-initiative",
+        "https://www.chess.com/openings/Sicilian-Defense-Alapin-Variation"
+      ]
+    },
+    {
+      "fen": "rnbqkb1r/pp1ppppp/5n2/2p1P3/8/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
+      "wrongMove": "Ne4",
+      "correctMove": "Nd5",
+      "explanation": "When 3.e5 kicks the knight, it belongs on d5, not e4. The greedy 3...Ne4?? puts it on a square it cannot hold: 4.d3! attacks it and there is no safe retreat — 4...Nxf2 5.Kxf2 just hands White a piece for a pawn. Hop to 3...Nd5, the secure central square, and Black is fine.",
+      "shortNarration": "Nd5 — the safe square, not e4",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-weak-squares",
+        "https://www.chess.com/openings/Sicilian-Defense-Alapin-Variation"
+      ]
     }
   ],
   "pirc-defence": [
@@ -1072,6 +1096,18 @@
         "concept:pos-development",
         "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted"
       ]
+    },
+    {
+      "fen": "rnbqkbnr/p1p1pppp/8/1p6/2pP4/4PQ2/PP3PPP/RNB1KBNR b KQkq - 1 4",
+      "wrongMove": "Nc6",
+      "correctMove": "c6",
+      "explanation": "Trying to hold the gambit pawn with ...b5 lets White strike: Qf3 rakes the long diagonal at the a8-rook. Blocking with 7...Nc6?? hangs the knight — pushing ...b5 vacated b7, so c6 is undefended and 8.Qxc6+ wins a piece. Block with the pawn instead: 7...c6 is guarded by the b5-pawn, and Black keeps the extra pawn comfortably.",
+      "shortNarration": "c6 — block with the pawn, not the knight",
+      "sources": [
+        "concept:tac-double-attack",
+        "concept:pos-development",
+        "https://www.chess.com/openings/Queens-Gambit-Accepted"
+      ]
     }
   ],
   "sicilian-sveshnikov": [
@@ -1332,6 +1368,18 @@
       "sources": [
         "concept:pos-center",
         "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
+      ]
+    },
+    {
+      "fen": "rnbqkb1r/pppppppp/1n6/2P1P3/8/8/PP1P1PPP/RNBQKBNR b KQkq - 0 4",
+      "wrongMove": "d6",
+      "correctMove": "Nd5",
+      "explanation": "In the Chase Variation 4.c5 attacks the b6-knight, and it must move. The careless 4...d6?? ignores the attack: 5.cxb6! wins the piece outright (5...axb6 leaves Black down a knight for a pawn). Retreat to the strong central square with 4...Nd5, and Black has the usual sound Alekhine counterplay against White's broad centre.",
+      "shortNarration": "Nd5 — save the knight, don't lose it",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-center",
         "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
       ]
     }
