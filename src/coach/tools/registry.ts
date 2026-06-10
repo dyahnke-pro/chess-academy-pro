@@ -1,20 +1,26 @@
 /**
- * Tool registry — exports the full 24-tool toolbelt the spine
- * dispatches. Eight cerebellum (read-only deterministic), the rest
- * cerebrum (decisions / side effects). See COACH-BRAIN-00 §"The
- * Cerebellum" and §"The Cerebrum Toolbelt".
+ * Tool registry — exports the toolbelt the spine dispatches.
+ * Cerebellum (read-only deterministic fact-fetch) + cerebrum
+ * (decisions / side effects). See COACH-BRAIN-00 §"The Cerebellum"
+ * and §"The Cerebrum Toolbelt".
+ *
+ * Three dead tools were removed (2026-06-10): `speak` and
+ * `request_hint_tier` were never-implemented BRAIN-05 stubs (returned
+ * `{ stub: true }` with no effect — narration goes through
+ * `voiceService`, hints through the hint system), and
+ * `lichess_puzzle_fetch` was punted (no theme API; the local
+ * `puzzles.json` already serves themed puzzles). Cutting them also
+ * drops three tool schemas from every agentic-turn prompt.
  *
  * Spine wires these as (post WO-COACH-LICHESS-OPENINGS):
  *   FULLY IMPLEMENTED — stockfish_eval, stockfish_classify_move,
  *     lichess_opening_lookup, lichess_master_games,
  *     lichess_game_export, local_opening_book, lookup_player_games,
- *     navigate_to_route,
+ *     lookup_player_opening_moves, navigate_to_route,
  *     play_move, take_back_move, set_board_position, reset_board,
  *     set_intended_opening, clear_memory, record_hint_request,
  *     record_blunder, quiz_user_for_move,
  *     start_walkthrough_for_opening
- *   PUNTED w/ flag    — lichess_puzzle_fetch (no theme API)
- *   STUBBED until WO  — speak (BRAIN-05), request_hint_tier (BRAIN-05)
  */
 import type { Tool, ToolDefinition } from '../types';
 
@@ -22,7 +28,6 @@ import { stockfishEvalTool } from './cerebellum/stockfishEval';
 import { stockfishClassifyMoveTool } from './cerebellum/stockfishClassifyMove';
 import { lichessOpeningLookupTool } from './cerebellum/lichessOpeningLookup';
 import { lichessMasterGamesTool } from './cerebellum/lichessMasterGames';
-import { lichessPuzzleFetchTool } from './cerebellum/lichessPuzzleFetch';
 import { lichessGameExportTool } from './cerebellum/lichessGameExport';
 import { localOpeningBookTool } from './cerebellum/localOpeningBook';
 import { lookupPlayerGamesTool } from './cerebellum/lookupPlayerGames';
@@ -39,8 +44,6 @@ import { setBoardPositionTool } from './cerebrum/setBoardPosition';
 import { savePositionTool } from './cerebrum/savePosition';
 import { restoreSavedPositionTool } from './cerebrum/restoreSavedPosition';
 import { resetBoardTool } from './cerebrum/resetBoard';
-import { speakTool } from './cerebrum/speak';
-import { requestHintTierTool } from './cerebrum/requestHintTier';
 import { recordHintRequestTool } from './cerebrum/recordHintRequest';
 import { recordBlunderTool } from './cerebrum/recordBlunder';
 import { quizUserForMoveTool } from './cerebrum/quizUserForMove';
@@ -53,7 +56,6 @@ export const COACH_TOOLS: Tool[] = [
   stockfishClassifyMoveTool,
   lichessOpeningLookupTool,
   lichessMasterGamesTool,
-  lichessPuzzleFetchTool,
   lichessGameExportTool,
   localOpeningBookTool,
   lookupPlayerGamesTool,
@@ -70,8 +72,6 @@ export const COACH_TOOLS: Tool[] = [
   savePositionTool,
   restoreSavedPositionTool,
   resetBoardTool,
-  speakTool,
-  requestHintTierTool,
   recordHintRequestTool,
   recordBlunderTool,
   quizUserForMoveTool,
