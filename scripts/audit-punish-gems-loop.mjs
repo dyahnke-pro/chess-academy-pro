@@ -141,7 +141,7 @@ async function makeCtx(browser) {
     }, { url: listenerUrl, secret: LOCAL_LISTENER_SECRET });
   }
   const ev = { pageerrors: [], consoleErrors: [], tts: [] };
-  page.on('pageerror', (e) => ev.pageerrors.push(String(e).slice(0, 200)));
+  page.on('pageerror', (e) => ev.pageerrors.push((e && e.stack ? e.stack : String(e)).slice(0, 800)));
   page.on('console', (m) => { if (m.type() === 'error' && !isNoise(m.text())) ev.consoleErrors.push(m.text().slice(0, 200)); });
   page.on('request', (r) => { const u = r.url(); if (/\/api\/tts/.test(u)) ev.tts.push({ t: Date.now(), text: ttsTextOf(u) }); });
   return { ctx, page, ev };
@@ -201,6 +201,18 @@ async function openDetail(page, id) {
 }
 const cardVisible = (p) => p.locator('[data-testid="punish-gems-card"]').isVisible().catch(() => false);
 const squares = (p) => p.locator('[data-square]').count();
+// Readiness poll for a mounted board (>=64 squares). Against live prod the
+// lesson/board mount can lag any fixed waitForTimeout, which raced the
+// "board absent / did not mount" asserts intermittently. Poll up to `timeout`;
+// a board that genuinely never mounts still fails (the poll exhausts → false).
+const waitBoard = async (p, timeout = 12000) => {
+  const end = Date.now() + timeout;
+  while (Date.now() < end) {
+    if ((await squares(p)) >= 64) return true;
+    await p.waitForTimeout(400);
+  }
+  return false;
+};
 // Weapons (gems) are LOCKED behind the WLPP ladder until Play (David's unlock
 // ladder, 2026-05-24). Unlock via the expert-pass two-tap before any gem check.
 // Returns 'card' once the gems card is visible. In the Claude Code sandbox the
@@ -335,7 +347,7 @@ async function runPass(browser, level) {
           // student so its dictation can't fingerprint the line).
           await page.locator('[data-testid="walkthrough-btn"]').click().catch(() => {});
           await page.waitForTimeout(2500);
-          if ((await squares(page)) < 64) fail(`${id} [${tabLabel}] Watch: lesson did not mount`);
+          if (!(await waitBoard(page))) fail(`${id} [${tabLabel}] Watch: lesson did not mount`);
           const title = (await page.locator('[data-testid="lesson-title"]').first().innerText().catch(() => '')).trim();
           if (!title) fail(`${id} [${tabLabel}] Watch: lesson has no title`);
           tabTitles.push({ tabLabel, title });
@@ -348,7 +360,7 @@ async function runPass(browser, level) {
           await page.waitForTimeout(1500); // let tab-selection register before driving WLPP
           await page.locator('[data-testid="learn-btn"]').click().catch(() => {});
           await page.waitForTimeout(2000);
-          if ((await squares(page)) < 64) fail(`${id} [${tabLabel}] Learn: did not mount`);
+          if (!(await waitBoard(page))) fail(`${id} [${tabLabel}] Learn: did not mount`);
           await exitPlayer(page);
           await openDetail(page, id);
         }
@@ -382,10 +394,18 @@ async function runPass(browser, level) {
       if (await ensureWeapons(page, id) === 'locked') { skip(`${id} Watch: unlock write stalled (sandbox) — device/prod-only`); continue; }
       ev.tts.length = 0;
       await page.locator('[data-testid^="gem-watch-"]').first().click();
-      await page.waitForTimeout(level >= 2 ? 3500 : 2500);
+      // Poll for the Watch prose narration rather than a flat wait: against live
+      // prod the lesson mount + /api/tts round-trip can exceed a fixed 3.5s,
+      // which raced "no prose narration fired" intermittently. Wait UNTIL prose
+      // fires (up to ~15s); a genuinely silent Watch still fails when it times out.
+      let watchProse = false;
+      for (let i = 0; i < 30; i++) {
+        if (narrationTexts(ev).some(isProse)) { watchProse = true; break; }
+        await page.waitForTimeout(500);
+      }
       if (await cardVisible(page)) fail(`${id} Watch: detail card did not unmount`);
-      if ((await squares(page)) < 64) fail(`${id} Watch: board absent`);
-      if (!narrationTexts(ev).some(isProse)) fail(`${id} Watch: no prose narration fired`);
+      if (!(await waitBoard(page))) fail(`${id} Watch: board absent`);
+      if (!watchProse) fail(`${id} Watch: no prose narration fired`);
       if (level >= 3) {
         // Play the crush out to completion — no desync / throw mid-playout.
         let last = '', stalls = 0;
@@ -398,7 +418,7 @@ async function runPass(browser, level) {
           last = tag;
           if (m && m[1] === m[2]) break;
         }
-        if ((await squares(page)) < 64) fail(`${id} Watch playout: board lost`);
+        if (!(await waitBoard(page))) fail(`${id} Watch playout: board lost`);
       }
       await exitPlayer(page);
 
@@ -410,22 +430,35 @@ async function runPass(browser, level) {
       if (await ensureWeapons(page, id) === 'locked') { skip(`${id} Learn: unlock write stalled (sandbox) — device/prod-only`); continue; }
       ev.tts.length = 0;
       await page.locator('[data-testid^="gem-learn-"]').first().click();
-      await page.waitForTimeout(4000);
-      if ((await squares(page)) < 64) fail(`${id} Learn: board absent`);
+      // Readiness waits, NOT a fixed timeout (cold-cache deeper passes mount the
+      // Learn rung slower than any flat wait). Wait for the board, then for the
+      // written-narration area to APPEAR — and TRUST that appearance: the
+      // `memory-move-narration` div only renders while `!flash && moveIndex <
+      // len` (PlayableLinePlayer.tsx:840), so it BLINKS OUT during the
+      // between-move flash and after completion. A late re-count therefore races
+      // a blink-out (this was the intermittent "narration missing" at P5/6/7).
+      // So we assert it APPEARED (waitFor resolved) rather than re-count later.
+      // A genuine never-render still fails — the waitFor times out → narrShown=false.
+      await page.locator('[data-square]').first().waitFor({ state: 'attached', timeout: 12000 }).catch(() => {});
+      const narrShown = await page.locator('[data-testid="memory-move-narration"]').first()
+        .waitFor({ state: 'attached', timeout: 8000 }).then(() => true).catch(() => false);
+      await page.waitForTimeout(1500); // settle for the voice events to flush into ev.tts
+      if (!(await waitBoard(page))) fail(`${id} Learn: board absent`);
       const lt = narrationTexts(ev);
       if (!lt.length) fail(`${id} Learn: no narration fired (should dictate the move)`);
       // The voice must DICTATE the move — never prose/theory (that lives in Watch).
       const learnProse = lt.filter(isProse);
       if (learnProse.length) fail(`${id} Learn: spoke PROSE/theory, not move-dictation ("${learnProse[0].slice(0, 50)}")`);
       if (!lt.some(isMoveDictation)) fail(`${id} Learn: voice did not dictate a move (got "${lt[0]}")`);
-      // …and the move's WRITTEN narration is shown below the board.
-      if (!(await page.locator('[data-testid="memory-move-narration"]').count())) fail(`${id} Learn: written move-narration area missing below the board`);
+      // …and the move's WRITTEN narration appeared below the board (see above:
+      // trust the appearance, since the area blinks out between moves).
+      if (!narrShown) fail(`${id} Learn: written move-narration area never appeared below the board`);
       if (level >= 3) {
         for (const sq of ['a3', 'h6', 'c3', 'f6']) {
           const cl = page.locator(`[data-square="${sq}"]`).first();
           if (await cl.isVisible().catch(() => false)) { await cl.click().catch(() => {}); await page.waitForTimeout(150); }
         }
-        if ((await squares(page)) < 64) fail(`${id} Learn: board vanished on stray click`);
+        if (!(await waitBoard(page))) fail(`${id} Learn: board vanished on stray click`);
       }
       await exitPlayer(page);
 
@@ -434,7 +467,7 @@ async function runPass(browser, level) {
       ev.tts.length = 0;
       await page.locator('[data-testid^="gem-practice-"]').first().click();
       await page.waitForTimeout(level >= 2 ? 4000 : 2500);
-      if ((await squares(page)) < 64) fail(`${id} Practice: board absent`);
+      if (!(await waitBoard(page))) fail(`${id} Practice: board absent`);
       if (level >= 3) {
         for (const sq of ['e4', 'e5', 'd4', 'd5']) {
           const cl = page.locator(`[data-square="${sq}"]`).first();
@@ -460,7 +493,7 @@ async function runPass(browser, level) {
       if (await tl.count()) {
         await tl.scrollIntoViewIfNeeded().catch(() => {});
         await tl.click().catch(() => {}); await page.waitForTimeout(2500);
-        if ((await squares(page)) < 64) fail('named-trap Learn: board absent');
+        if (!(await waitBoard(page))) fail('named-trap Learn: board absent');
         await exitPlayer(page);
       } else { fail('named-trap Learn button not found'); }
     }
