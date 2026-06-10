@@ -77,7 +77,20 @@ async function walk(name, seed, trapper){
   log(`  → ${found.length} trap(s) / ${nodes} nodes checked.`);
   return found;
 }
+// Tactical openings where trapper-aggression swindles concentrate (trapper=White).
+const TACTICAL=[
+ ["Bishop's Opening",['e4','e5','Bc4'],'w'], ['Italian Game',['e4','e5','Nf3','Nc6','Bc4'],'w'],
+ ['Two Knights/Fried Liver',['e4','e5','Nf3','Nc6','Bc4','Nf6'],'w'], ['Evans Gambit',['e4','e5','Nf3','Nc6','Bc4','Bc5','b4'],'w'],
+ ['Scotch',['e4','e5','Nf3','Nc6','d4'],'w'], ['Ponziani',['e4','e5','Nf3','Nc6','c3'],'w'],
+ ['Vienna',['e4','e5','Nc3'],'w'], ["King's Gambit",['e4','e5','f4'],'w'],
+ ['Danish/Center',['e4','e5','d4'],'w'], ['Alapin Sicilian',['e4','c5','c3'],'w'],
+ ['Smith-Morra',['e4','c5','d4'],'w'], ['Rossolimo',['e4','c5','Nf3','Nc6','Bb5'],'w'],
+ ['Grand Prix',['e4','c5','Nc3'],'w'], ['Blackmar-Diemer',['d4','d5','e4'],'w'],
+ ['Scandinavian Trap',['e4','d5','exd5'],'w'], ['Stafford-prone Petrov',['e4','e5','Nf3','Nf6'],'w'],
+];
+const SET=process.env.SET||'demo';
+const targets = SET==='tactical' ? TACTICAL : [["Bishop's Opening",['e4','e5','Bc4'],'w'],['Alapin Sicilian',['e4','c5','c3'],'w']];
 const all=[];
-try{ all.push(...await walk("Bishop's Opening", ['e4','e5','Bc4'], 'w')); }catch(e){ log('[Bishop err] '+e); }
-try{ all.push(...await walk("Alapin Sicilian", ['e4','c5','c3'], 'w')); }catch(e){ log('[Alapin err] '+e); }
-log(`\n==================== TOTAL: ${all.length} traps ====================`);
+for(const [name,seed,col] of targets){ try{ all.push(...await walk(name,seed,col)); }catch(e){ log(`[${name} err] `+String(e).slice(0,80)); } }
+log(`\n==================== TOTAL: ${all.length} traps across ${targets.length} openings ====================`);
+for(const s of all) log(`  ${s.sanPath.join(' ')} | bait ${s.bait} (${s.baitGames}g) +${s.studentAfter}cp | punish ${s.punish.split(' ').slice(0,2).join(' ')} | better ${s.refutation}`);

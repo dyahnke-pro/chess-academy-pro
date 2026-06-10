@@ -110,9 +110,50 @@ but a *tempting* move loses. Complementary, not redundant:
 - **Surface**: standalone trainer section, or a `swindle`-tier rung inside the
   existing opening WLPP?
 
+## CORRECTION (David 2026-06-10) — what's actually new, honestly
+
+The first prototype over-engineered it. Two corrections, both David's:
+
+1. **NO escape-difficulty filter.** Dropping a trap because humans *can* refute it
+   is wrong — "if 10% of opponents don't refute, that's 10% more games won," and
+   the punish line exists to teach how to punish the error. The refutation is
+   **recorded and taught alongside**, never used to filter.
+2. **The detection is NOT new** — it's the same punish-gem condition (a common
+   opponent move that Stockfish punishes). The genuinely-new piece is the
+   **WALK**: branch on the *trapper's* aggressive/sac/gambit tries (`Ng5`, the
+   `Bxf7`/`Nxf7` sacs, `b4`, early `Qd5`), the lines the sound-spine gem-walk
+   never visits — that's why the old miner misses this whole class.
+
+So: punish-miner condition + trapper-aggression walk + all-ratings + refutation-
+taught-not-filtered. Not a clever new detector.
+
+### Rating model (David 2026-06-10)
+- **Floor = the `1000` bucket**, not `0`. The `0` bucket is *everyone under 1000*
+  — it lumps in 400-level random moves (noise, not principled mistakes).
+- BUT add `0` back for **discovery** with a **cross-band noise filter**: a trap
+  ships only if the bait *also* appears in the `1000+` bands. A real natural
+  mistake plays across all levels; a random 400-move lives only in the `0`
+  bucket → dropped. Belt-and-suspenders with a move-naturalness check.
+- `DISCOVER='0,1000,…,2000'` (surfaces low-end falls), `VALIDATE='1000,…,2000'`
+  (coherent-play floor). Per-bait games floor (`MIN_BAIT=20`) kills thin noise.
+
+## VALIDATED (v5, 2026-06-10)
+Ran over Bishop's + Alapin: **7 real traps, all cross-band ✓, zero `0-only`
+noise leaked.** Each carries bait + fall-rate + punishment + refutation:
+- Bishop's `…Bg5 …Bxf6 gxf6?` +1.2 (**1,144 games**) → `Qh5`; `…Bxf2+?` +3.5 → `Kxf2 Qxf6+`; +2 more.
+- Alapin `…d5 exd5 Qa5+?` +3.1 (**5,615 games**) → `Nc3 Nb4 Bb5+`; +2 more.
+- The cross-band filter validated itself: `Qa5+` was mis-tagged `[unnatural]` by
+  the naturalness regex but **kept by the cross-band rule** (5,615 games at
+  1000+) — the empirical filter caught what the heuristic missed.
+
+Speed fix: shallow scan (depth 14) to spot the +1.2 blunder, deep confirm
+(depth 20) on hits — the depth-22-everywhere version was just slow, not broken.
+
 ## Status
 - [x] Design (this doc)
-- [ ] Prototype `mine-swindles.mjs` + ground-truth test (Alapin + Bishop's)
-- [ ] Knob-tune on proof cases
-- [ ] Full scan + hand-verify
-- [ ] Gate + data + surface
+- [x] Prototype + ground-truth (Bishop's + Alapin) — 7 traps validated
+- [x] Corrected per David (no escape gate; trapper-aggression walk; 1000-floor +
+      cross-band 0-filter; refutation taught not filtered)
+- [~] Production scan over the 16 tactical openings (`SET=tactical`) — RUNNING
+- [ ] Hand-verify the production candidates
+- [ ] Gate + data (`swindles.json` or `tier:'swindle'`) + surface (trap trainer)
