@@ -99,6 +99,18 @@
         "concept:pos-center",
         "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
       ]
+    },
+    {
+      "fen": "r1bqkbnr/pp1npppp/2p5/8/3PN3/8/PPP1QPPP/R1B1KBNR b KQkq - 2 5",
+      "wrongMove": "Ngf6",
+      "correctMove": "Ndf6",
+      "explanation": "Developing the wrong knight with 5...Ngf6?? walks into the famous Caro-Kann smothered mate: 6.Nd6#. The e7-pawn would simply capture the knight, but it is pinned to the king by the e2-queen, so it cannot — and the king has no escape. Recapture toward the centre with 5...Ndf6 instead (5...e6 also works), and Black is comfortable.",
+      "shortNarration": "Ndf6 — the other knight, dodge Nd6 mate",
+      "sources": [
+        "book:caro-kann",
+        "concept:pos-king-safety",
+        "https://www.chess.com/openings/Caro-Kann-Defense"
+      ]
     }
   ],
   "ruy-lopez": [
@@ -986,6 +998,18 @@
       "shortNarration": "…Qe7 — keep the king safe.",
       "sources": [
         "book:petrov-defence",
+        "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
+      ]
+    },
+    {
+      "fen": "rnbqkb1r/pppp1ppp/8/4N3/4n3/8/PPPPQPPP/RNB1KB1R b KQkq - 1 4",
+      "wrongMove": "Nf6",
+      "correctMove": "Qe7",
+      "explanation": "Having grabbed the pawn with 3...Nxe4, the careless retreat 4...Nf6?? loses the queen to 5.Nc6+ — a discovered check from the e2-queen down the open e-file that also attacks the d8-queen. Every block drops her (5...Qe7 6.Nxe7, 5...Be7 or 5...Ne4 6.Nxd8). The one move is 4...Qe7, pinning the e5-knight to the queen so Black wins it back and stays level.",
+      "shortNarration": "Qe7 — pin the knight, regain the piece",
+      "sources": [
+        "book:petrov-defence",
+        "concept:tac-double-attack",
         "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
       ]
     }
