@@ -41,8 +41,30 @@ The 20 sub-2% new finds are mostly `confirmed` crushes (engine ≥ +1.0): Italia
 many +1.2..+3.5. Real engine-verified punishments at 0.5–1.8% frequency that the
 2% floor excluded.
 
-**Extrapolation:** ~20 sound hidden traps from 5 openings → **~150–250** across
-the full masterclass + pro-rep set (rough, needs the full scan to confirm).
+**Extrapolation (SUPERSEDED — see full-set result below):** ~20 from 5 openings
+naively → ~150–250. That over-shot: the 5 sampled openings (Italian/Vienna/
+French) are unusually trap-rich.
+
+### Full-set result (masterclass + 7 gambits + 81 pro-rep, 2026-06-10)
+Ran the 0.5% floor across the whole universe (default ~28-opening set + an
+explicit scoped run of all gambits + the 60 remaining pro-rep ids; combined +
+deduped, diffed vs `punish-gems.json` ∪ `gambit-punish-gems.json`):
+
+| metric | value |
+|---|---|
+| baseline gems (both stores) | 341 |
+| probe gems (deduped, all sources) | 345 across 80 openings |
+| **TRUE new finds** | **217** |
+| **└ genuinely sub-2% (the floor unlock)** | **124** (95 confirmed, 29 positional) |
+| └ by category | **pro-rep 94**, masterclass 19, gambit 11 |
+
+**124 sound hidden sub-2% traps, 95 of them confirmed crushes — concentrated in
+pro-rep (94).** This is exactly what the 2026-06-01 "spicy low-frequency traps"
+rule anticipated: a tactical player's real lines hide refutable blunders below
+the 2% cutoff. Gambits add little (11) — already sharp, well-mined. Top: Scotch/
+Vienna/Italian (masterclass); Ruy/French/Caro/Najdorf across Carlsen/Aman/
+Caruana/Gotham (pro-rep). Scratch candidate lists: `/tmp/cov-gems-full.json` +
+`/tmp/cov-gems-gambit-prorep.json` (this container only).
 
 ## How to pull the lever (the RIGHT way — not a naive re-mine)
 1. **Additive only.** The fresh 0.5% run failed to reproduce 33 current gems
