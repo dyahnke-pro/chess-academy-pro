@@ -1,160 +1,174 @@
-// Misconception classifier — turns a slip (position + played vs best +
-// the student's stated reason) into ONE closed-set misconception tag via
-// the LLM. The LLM picks from the fixed menu (or 'none' / 'other' +
-// label); it never invents a tag and never emits chess moves — only a
-// classification + a one-line spoken-safe teaching note. Shared by
-// Discussion Practice (live) and Game Review (past games).
+// Misconception classifier — CODE-FIRST (thinking-error buckets, 2026-06-10).
+//
+// The board decides the bucket, not the LLM. `diagnoseMisconception` computes
+// ranked candidates + confidence from move-type × eval × cause:
+//   - top ≥ AUTO_TAG_CONFIDENCE and clear → AUTO-TAG silently (no LLM call).
+//   - else, if the student gave a free-text reason → a BOUNDED LLM matches that
+//     reason to the CODE-COMPUTED candidate set (it may only return a tag in the
+//     set — never an invented diagnosis; the gate enforces it).
+//   - else → return `needsPicker` + the ranked candidates so the surface pops
+//     the picker (most-probable first). `random` is never produced here.
+//
+// This inverts the last LLM decision in the misconception path: the model no
+// longer PICKS the chess error; it only maps the student's words onto code's
+// computed options and (elsewhere) voices the board-grounded note. Shared by
+// Discussion Practice (live), Game Review, and import-time auto-analysis.
 
-import { Chess } from 'chess.js';
 import { getCoachChatResponse } from './coachApi';
-import { stripDisprovenSentences } from './boardClaimValidator';
 import { logAppAudit } from './appAuditor';
+import { getMisconceptionTag, isMisconceptionTagId } from '../data/misconceptionTags';
 import {
-  buildMisconceptionTagMenu,
-  isMisconceptionTagId,
-} from '../data/misconceptionTags';
+  diagnoseMisconception,
+  AUTO_TAG_CONFIDENCE,
+  type MisconceptionCandidate,
+} from './misconceptionDiagnosis';
+import type { TacticsLiveContext } from '../coach/types';
 
 export interface ClassifyMisconceptionInput {
+  /** Position BEFORE the played move (student to move). */
   fen: string;
   playedSan: string;
-  /** Engine best and/or the masters' move, for context. */
+  /** Engine best and/or the masters' move, for the diagnosis + display. */
   bestSan?: string;
+  bestUci?: string;
   mastersTopSan?: string;
-  /** Plain-English eval summary, e.g. "drops about a pawn and a half".
-   *  NEVER a raw centipawn number in spoken text. */
+  /** Plain-English eval summary (display only — diagnosis uses the numbers). */
   evalSummary?: string;
+  /** STUDENT-perspective evals (centipawns). When both are known the detector
+   *  uses the difference; otherwise it falls back to `cpLossStudent`. */
+  evalBeforeStudent?: number | null;
+  evalAfterStudent?: number | null;
+  /** Centipawns lost vs best, student POV (the capture path supplies this). */
+  cpLossStudent?: number | null;
+  /** Which side the STUDENT played (the side to move at `fen`). Derived from the
+   *  FEN turn when omitted. */
+  studentColor?: 'white' | 'black';
+  /** Pre-computed tactics at `fen` (threats/opportunities/hanging). */
+  tactics?: TacticsLiveContext | null;
   gamePhase?: 'opening' | 'middlegame' | 'endgame';
-  /** What the student said when asked "why did you play that?" — voice
-   *  or text. Absent when skipped or auto-analysed. */
+  /** What the student said when asked "why did you play that?" — voice or text. */
   userReason?: string;
 }
 
 export interface MisconceptionClassification {
-  /** Closed-set tag id, or 'none' when the move is actually fine. */
+  /** Closed-set tag id, the code-chosen best guess, or 'none' when no mistake. */
   tag: string;
-  /** Free-text error label — present only when tag === 'other'. */
   customLabel?: string;
-  /** One-line spoken-safe teaching note (no SAN read as letters, no
-   *  digits, no interface references). */
+  /** One-line board-grounded teaching note (the bucket's plain-English blurb —
+   *  generic, no board-claim, so it can't hallucinate). */
   coachNote: string;
+  /** How the tag was resolved: 'code' (auto / best guess), 'reason' (bounded LLM
+   *  matched the student's words to a candidate), or 'none'. */
+  source: 'code' | 'reason' | 'none';
+  /** True when the surface should POP THE PICKER (confidence < bar or a tie).
+   *  The caller shows `candidates` ranked, most-probable first. */
+  needsPicker: boolean;
+  /** The ranked candidate set (most-probable first) for the picker. */
+  candidates: MisconceptionCandidate[];
 }
 
-const SYSTEM_PROMPT = [
-  'You are a chess coach classifying ONE move into a fixed misconception',
-  'taxonomy so it can be drilled later. You will be given the position, the',
-  'move the student played, the better move, an eval summary, and (sometimes)',
-  'the student\'s own reason for the move.',
-  '',
-  buildMisconceptionTagMenu(),
-  '',
-  'Respond with ONLY a JSON object, no prose, no code fence:',
-  '{"tag": "<id|none|other>", "customLabel": "<short label, only if tag is other>",',
-  ' "coachNote": "<one short sentence teaching the lesson>"}',
-  '',
-  'Rules for coachNote: speak plainly about the position (name a square, a',
-  'piece, or a principle). No move letters read aloud, no percentages, no',
-  'first person, no references to buttons or the app. If the student gave a',
-  'reason, address THAT reasoning. Keep it to one sentence.',
-].join('\n');
-
-/** Strip a leading/trailing ```json fence if the model added one. */
-function stripFence(s: string): string {
-  return s.replace(/^\s*```(?:json)?\s*/i, '').replace(/\s*```\s*$/i, '').trim();
-}
-
-/** Classify a slip into the closed-set taxonomy. Returns null when the
- *  LLM output can't be parsed or carries an off-vocabulary tag (the
- *  hallucination guard) — callers then skip logging rather than store
- *  junk. A `{ tag: 'none' }` result means "the move was actually fine". */
-export async function classifyMisconception(
-  input: ClassifyMisconceptionInput,
-): Promise<MisconceptionClassification | null> {
-  const facts = [
-    `Position (FEN): ${input.fen}`,
-    `Phase: ${input.gamePhase ?? 'unknown'}`,
-    `Move played: ${input.playedSan}`,
-    input.bestSan ? `Better move: ${input.bestSan}` : '',
-    input.mastersTopSan ? `Masters usually play: ${input.mastersTopSan}` : '',
-    input.evalSummary ? `Engine: ${input.evalSummary}` : '',
-    input.userReason ? `Student's reason: "${input.userReason}"` : 'Student gave no reason.',
-    '',
-    'Classify this move. Return the JSON object only.',
-  ].filter(Boolean).join('\n');
-
+/** A BOUNDED language-match: given the student's reason + the CODE-computed
+ *  candidate set, the LLM returns the ONE candidate that best matches the
+ *  student's wording — or 'none'. The gate (caller-side too) is that the result
+ *  must be a member of `candidates`; the LLM cannot invent a diagnosis. It does
+ *  language work, never chess. Returns null on any miss. */
+async function matchReasonToCandidates(
+  reason: string,
+  candidates: MisconceptionCandidate[],
+): Promise<string | null> {
+  if (candidates.length === 0) return null;
+  const menu = candidates
+    .map((c) => `${c.tag}: ${getMisconceptionTag(c.tag)?.blurb ?? c.tag}`)
+    .join('\n');
+  const system =
+    'You map a chess student\'s stated reason for a move onto ONE option from a ' +
+    'fixed list. Reply with ONLY the option id (left of the colon), or the word ' +
+    'none. Do not explain. Do not invent an id that is not in the list.';
+  const user = `Options:\n${menu}\n\nStudent said: "${reason}"\n\nWhich option id best matches their reasoning?`;
   let raw: string;
   try {
     raw = await getCoachChatResponse(
-      [{ role: 'user', content: facts }],
-      SYSTEM_PROMPT,
+      [{ role: 'user', content: user }],
+      system,
       undefined,
       'bad_habit_report',
-      350,
+      20,
       undefined,
       undefined,
-      true, // skipPersonality — keep the JSON clean
+      true, // skipPersonality — clean id only
     );
   } catch {
     return null;
   }
+  const picked = (raw.match(/[a-z][a-z-]+/i)?.[0] ?? '').toLowerCase();
+  // GATE: the returned tag MUST be one the code computed. No LLM-invented tag.
+  if (candidates.some((c) => c.tag === picked)) return picked;
+  return null;
+}
 
-  let parsed: { tag?: unknown; customLabel?: unknown; coachNote?: unknown };
+/** Code-grounded teaching note for a tag — the bucket's plain-English blurb. */
+function noteFor(tag: string): string {
+  return getMisconceptionTag(tag)?.blurb ?? '';
+}
+
+/**
+ * Classify a slip CODE-FIRST. Never throws. Returns `needsPicker: true` (with
+ * the ranked candidates) when the surface should ask rather than auto-tag.
+ */
+export async function classifyMisconception(
+  input: ClassifyMisconceptionInput,
+): Promise<MisconceptionClassification | null> {
+  const studentColor =
+    input.studentColor ?? (input.fen.split(' ')[1] === 'b' ? 'black' : 'white');
+
+  let diag;
   try {
-    parsed = JSON.parse(stripFence(raw)) as { tag?: unknown; customLabel?: unknown; coachNote?: unknown };
+    diag = diagnoseMisconception({
+      fenBefore: input.fen,
+      playedSan: input.playedSan,
+      bestSan: input.bestSan,
+      bestUci: input.bestUci,
+      evalBeforeStudent: input.evalBeforeStudent,
+      evalAfterStudent: input.evalAfterStudent,
+      cpLossStudent: input.cpLossStudent,
+      studentColor,
+      tactics: input.tactics,
+    });
   } catch {
     return null;
   }
 
-  const tag = typeof parsed.tag === 'string' ? parsed.tag.trim() : '';
-  const rawNote = typeof parsed.coachNote === 'string' ? parsed.coachNote.trim() : '';
-  if (!tag) return null;
+  const candidates = diag.candidates;
 
-  // 🔒 GROUND THE SPOKEN NOTE — FAIL-CLOSED (David 2026-06-05: "make damn
-  // sure that note is grounded and the gate FULLY CLOSES EVERY TIME there is
-  // a contradiction"). The tag is closed-set (validated below), but
-  // `coachNote` is free LLM prose that gets SPOKEN to teach the slip, and the
-  // prompt asks it to "name a square, a piece, or a principle." An ungrounded
-  // note can hallucinate ("the knight on f6 is hanging" with no knight on
-  // f6). chess.js is the truth: drop any sentence whose board-claim is
-  // provably false before it's ever spoken. FAIL-CLOSED: if the FEN can't be
-  // parsed (so the board can't be verified at all) we drop the ENTIRE note
-  // rather than speak an unverifiable claim — never pass through unchecked.
-  let coachNote = '';
-  try {
-    new Chess(input.fen); // throws on an unparseable FEN → fail closed below
-    const { clean, dropped } = stripDisprovenSentences(rawNote, input.fen);
-    coachNote = clean;
-    if (dropped.length > 0) {
-      void logAppAudit({
-        kind: 'claim-validator-trip',
-        category: 'subsystem',
-        source: 'misconceptionClassifier.coachNote',
-        summary: `dropped ${dropped.length} disproven sentence(s) from coachNote (tag=${tag})`,
-        details: dropped.map((d) => d.sentence).join(' | ').slice(0, 300),
-        fen: input.fen,
-      });
-    }
-  } catch {
-    coachNote = ''; // unverifiable board → speak nothing
+  // ── AUTO-TAG: code is confident + clear. No LLM. ──
+  if (diag.top && !diag.needsPicker && diag.top.confidence >= AUTO_TAG_CONFIDENCE) {
     void logAppAudit({
-      kind: 'claim-validator-trip',
+      kind: 'claim-validator-trip', // reuse the subsystem audit channel
       category: 'subsystem',
-      source: 'misconceptionClassifier.coachNote',
-      summary: `dropped entire coachNote — FEN unparseable, cannot verify board claims (tag=${tag})`,
+      source: 'misconceptionClassifier.autoTag',
+      summary: `auto-tag ${diag.top.tag} (conf=${diag.top.confidence.toFixed(2)}) — ${diag.top.evidence}`,
       fen: input.fen,
     });
+    return { tag: diag.top.tag, coachNote: noteFor(diag.top.tag), source: 'code', needsPicker: false, candidates };
   }
 
-  if (tag === 'none') {
-    return { tag: 'none', coachNote };
+  // ── BOUNDED LLM MATCH: the student gave a reason — map it to the candidates. ──
+  if (input.userReason && input.userReason.trim() && candidates.length > 0) {
+    const matched = await matchReasonToCandidates(input.userReason, candidates);
+    if (matched && isMisconceptionTagId(matched)) {
+      return { tag: matched, coachNote: noteFor(matched), source: 'reason', needsPicker: false, candidates };
+    }
   }
-  if (!isMisconceptionTagId(tag)) return null;
 
-  const customLabel = typeof parsed.customLabel === 'string' ? parsed.customLabel.trim() : '';
-  if (tag === 'other' && !customLabel) return null;
-
+  // ── Otherwise: defer to the detector's verdict. `needsPicker` is true for a
+  // real-but-unsure slip (the surface shows the ranked candidates, best guess
+  // pre-suggested, + the judgment floor + Random) and FALSE for a sound move
+  // (tag 'none' — don't bug the user). ──
   return {
-    tag,
-    customLabel: tag === 'other' ? customLabel : undefined,
-    coachNote,
+    tag: diag.top?.tag ?? 'none',
+    coachNote: diag.top ? noteFor(diag.top.tag) : '',
+    source: 'code',
+    needsPicker: diag.needsPicker,
+    candidates,
   };
 }

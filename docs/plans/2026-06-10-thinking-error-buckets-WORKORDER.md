@@ -86,8 +86,14 @@ sharp. Grid:
    for the picker, and when a student reason is present, a bounded LLM matches it
    to the set (gate: returned tag ∈ candidate set). `coachNote` stays
    board-grounded (existing `stripDisprovenSentences`).
-4. **Picker UI** — 5/5/4 grid below the written response, importance copy, the
-   "random/not sure" cell; only shown when confidence < 90.
+4. **Picker UI — RANKED-CANDIDATE pop-up, off the detector's probabilities** (no
+   hardcoded grid). When confidence < 90 (or a tie), the pop-up renders the
+   detector's `candidates` ranked by confidence (most-probable on top → usually a
+   1-tap confirm of the top guess). When code fired nothing, fall back to the
+   judgment list (wrong-side · over-defended · piece-passive · no-plan). ALWAYS
+   present: "Random / not sure" (user-only honest escape) + a "something else"
+   expander to the full set so a wrong guess is correctable. The picker is data-
+   driven by the model's ranking for THAT position — not a static cell layout.
 5. **Auto-tag UX** — auto-tags surface in the Thinking Errors tab with a 1-tap
    re-tag (correctable).
 6. **Imported-game batch** — run the detector over flagged moves on import;

@@ -43,6 +43,10 @@ export interface MisconceptionDiagnosisInput {
   evalBeforeStudent?: number | null;
   /** Eval AFTER the played move, STUDENT-perspective centipawns. */
   evalAfterStudent?: number | null;
+  /** Centipawns lost vs the best move, student POV (+ = a mistake). Used as the
+   *  eval-drop signal when the absolute before/after evals aren't both known
+   *  (the capture path supplies cpLoss). */
+  cpLossStudent?: number | null;
   studentColor: 'white' | 'black';
   /** Pre-computed tactics at `fenBefore` (threats/hanging/opportunities). */
   tactics?: TacticsLiveContext | null;
@@ -157,10 +161,13 @@ export function diagnoseMisconception(input: MisconceptionDiagnosisInput): Misco
   const shape = shapeOf(input.fenBefore, input.playedSan);
 
   // The eval drop (student POV, centipawns). Positive = the move lost ground.
+  // Prefer the before/after difference; fall back to the supplied cpLoss.
   const drop =
     typeof input.evalBeforeStudent === 'number' && typeof input.evalAfterStudent === 'number'
       ? input.evalBeforeStudent - input.evalAfterStudent
-      : null;
+      : typeof input.cpLossStudent === 'number'
+        ? input.cpLossStudent
+        : null;
   const wasWinning = typeof input.evalBeforeStudent === 'number' && input.evalBeforeStudent >= 150;
   const nowWorse = typeof input.evalAfterStudent === 'number' && input.evalAfterStudent < -50;
 
@@ -223,12 +230,18 @@ export function diagnoseMisconception(input: MisconceptionDiagnosisInput): Misco
     }
 
     // ── MISPLACED PIECE (heuristic → pop-up) — quiet piece move, low scope. ──
+    // Scope must be measured with the STUDENT to move; the after-position has
+    // the OPPONENT to move (so moves({square}) would always be 0). Flip the turn
+    // on a probe FEN — legal here because the move gave no check.
     if (!shape.isPawnMove && !shape.isCapture && !shape.isCheck && drop !== null && drop >= 60) {
       try {
-        const after = new Chess(shape.afterFen);
-        const scope = after.moves({ square: shape.to as Square, verbose: true }).length;
+        const parts = shape.afterFen.split(' ');
+        parts[1] = sc;       // student to move
+        parts[3] = '-';      // clear en-passant to keep the flipped FEN legal
+        const probe = new Chess(parts.join(' '));
+        const scope = probe.moves({ square: shape.to as Square, verbose: true }).length;
         if (scope <= 3) push('misplaced-piece', HEURISTIC_CAP, `${shape.san} put the piece on a low-scope square (${scope} moves)`);
-      } catch { /* ignore */ }
+      } catch { /* turn-flip illegal → skip the heuristic */ }
     }
   }
 
@@ -268,10 +281,15 @@ export function diagnoseMisconception(input: MisconceptionDiagnosisInput): Misco
   const candidates = [...byTag.values()].sort((a, b) => b.confidence - a.confidence);
   const top = candidates[0] ?? null;
 
-  // Pop the picker when: nothing fired, the top is below the auto bar, or the
-  // top two are genuinely tied (within 0.1) — can't attribute confidently.
+  // Pop the picker when code can't auto-tag a REAL mistake:
+  //  - a top fired but it's below the bar OR the top two are tied (can't
+  //    attribute) → ask;
+  //  - nothing fired BUT there was a real eval drop (an unclassified slip) →
+  //    ask (the surface shows the judgment-list floor);
+  //  - nothing fired AND no real drop → it's a fine move → do NOT ask.
   const tied = candidates.length >= 2 && candidates[0].confidence - candidates[1].confidence < 0.1;
-  const needsPicker = !top || top.confidence < AUTO_TAG_CONFIDENCE || tied;
+  const hadMistake = drop !== null && drop >= 60;
+  const needsPicker = top ? top.confidence < AUTO_TAG_CONFIDENCE || tied : hadMistake;
 
   return { candidates, top, needsPicker };
 }

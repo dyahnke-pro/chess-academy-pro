@@ -14,6 +14,8 @@ import {
   type ClassifyMisconceptionInput,
   type MisconceptionClassification,
 } from './misconceptionClassifier';
+import type { MisconceptionCandidate } from './misconceptionDiagnosis';
+import { getMisconceptionTag } from '../data/misconceptionTags';
 import { logMisconception } from './misconceptionService';
 import { addMistakePuzzleFromCapture } from './mistakePuzzleService';
 import type { MisconceptionSource, MisconceptionTagRecord } from '../types';
@@ -61,6 +63,13 @@ export interface CaptureMisconceptionResult {
   /** True when a tag was actually written to the bucket. */
   logged: boolean;
   record?: MisconceptionTagRecord;
+  /** True when CODE couldn't auto-tag confidently — the surface should POP THE
+   *  PICKER with `candidates` (most-probable first) and log the user's pick via
+   *  `logPickedMisconception`. Nothing is logged yet in this case. */
+  needsPicker: boolean;
+  /** Ranked candidates for the picker (best guess first). Empty = code found no
+   *  specific bucket; the surface shows the judgment-list floor + Random. */
+  candidates: MisconceptionCandidate[];
 }
 
 /** Classify a slip and, when it's a real misconception on a line that
@@ -71,22 +80,36 @@ export interface CaptureMisconceptionResult {
 export async function captureMisconception(
   args: CaptureMisconceptionArgs,
 ): Promise<CaptureMisconceptionResult> {
-  const classification = await classifyMisconception(args.classifyInput);
+  // Thread the eval drop (the detector's key signal) from the capture context
+  // so the code-first diagnosis works without the caller restructuring its
+  // classifyInput. The caller's explicit cpLossStudent wins when present.
+  const classifyInput: ClassifyMisconceptionInput = {
+    ...args.classifyInput,
+    cpLossStudent: args.classifyInput.cpLossStudent ?? args.context.cpLoss ?? null,
+    bestSan: args.classifyInput.bestSan ?? args.context.bestSan,
+  };
+  const classification = await classifyMisconception(classifyInput);
   if (!classification) {
-    return { classification: null, coachNote: '', logged: false };
+    return { classification: null, coachNote: '', logged: false, needsPicker: false, candidates: [] };
   }
 
   const coachNote = classification.coachNote;
 
+  // CODE is unsure → the surface pops the picker (ranked candidates, best guess
+  // first) and logs the user's pick via `logPickedMisconception`. Don't log yet.
+  if (classification.needsPicker) {
+    return { classification, coachNote, logged: false, needsPicker: true, candidates: classification.candidates };
+  }
+
   // 'none' = the move was actually fine; teach nothing to log.
   if (classification.tag === 'none') {
-    return { classification, coachNote, logged: false };
+    return { classification, coachNote, logged: false, needsPicker: false, candidates: classification.candidates };
   }
 
   // The count-against rule: only learned lines / principles become
   // weaknesses. On an unlearned line we still return the teach.
   if (!args.shouldCount) {
-    return { classification, coachNote, logged: false };
+    return { classification, coachNote, logged: false, needsPicker: false, candidates: classification.candidates };
   }
 
   const record = await logMisconception({
@@ -128,5 +151,55 @@ export async function captureMisconception(
     coachNote,
     logged: record !== null,
     record: record ?? undefined,
+    needsPicker: false,
+    candidates: classification.candidates,
   };
+}
+
+/** Log the bucket the USER picked from the pop-up (the <90%-confidence path).
+ *  `tag` is a closed-set id or 'random' (the honest escape → stored as the
+ *  'other' catch-all with a 'random' label). The grounded coachNote is the
+ *  bucket's blurb. Returns the logged record (or null when the line shouldn't
+ *  count / 'random' is chosen and we only want the tally). */
+export async function logPickedMisconception(args: {
+  tag: string;
+  source: MisconceptionSource;
+  shouldCount: boolean;
+  context: CaptureMisconceptionArgs['context'];
+  userReason?: string;
+}): Promise<MisconceptionTagRecord | null> {
+  if (!args.shouldCount) return null;
+  const isRandom = args.tag === 'random' || args.tag === 'none';
+  const tag = isRandom ? 'other' : args.tag;
+  const record = await logMisconception({
+    tag,
+    customLabel: isRandom ? 'random / not sure' : undefined,
+    source: args.source,
+    fen: args.context.fen,
+    playedSan: args.context.playedSan,
+    bestSan: args.context.bestSan,
+    cpLoss: args.context.cpLoss,
+    gamePhase: args.context.gamePhase,
+    moveNumber: args.context.moveNumber,
+    openingId: args.context.openingId,
+    openingName: args.context.openingName,
+    userReason: args.userReason,
+    coachNote: getMisconceptionTag(tag)?.blurb ?? '',
+    sourceGameId: args.context.sourceGameId,
+  });
+  // A user-picked concrete (non-random) tag with a best move also becomes a
+  // drillable mistake puzzle — same as the auto path.
+  if (record && !isRandom && args.context.bestSan) {
+    void addMistakePuzzleFromCapture({
+      fen: args.context.fen,
+      playedSan: args.context.playedSan ?? '',
+      bestSan: args.context.bestSan,
+      cpLoss: args.context.cpLoss,
+      gamePhase: args.context.gamePhase,
+      moveNumber: args.context.moveNumber,
+      openingName: args.context.openingName,
+      sourceGameId: args.context.sourceGameId,
+    }).catch(() => undefined);
+  }
+  return record;
 }

@@ -1,96 +1,78 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { classifyMisconception } from './misconceptionClassifier';
 import { getCoachChatResponse } from './coachApi';
+import { getMisconceptionTag } from '../data/misconceptionTags';
 
-vi.mock('./coachApi', () => ({
-  getCoachChatResponse: vi.fn(),
-}));
+// CODE-FIRST contract (thinking-error buckets, 2026-06-10): the DETECTOR picks
+// the tag, not the LLM. The LLM is only called to MATCH a student's free-text
+// reason to the code-computed candidate set (bounded — it can't invent a tag).
+vi.mock('./coachApi', () => ({ getCoachChatResponse: vi.fn() }));
+const mockedLlm = vi.mocked(getCoachChatResponse);
 
-const mocked = vi.mocked(getCoachChatResponse);
-const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3';
+// White e4 played, Black pawn on g6: White blunders Qh5 → the g6 pawn wins it.
+const HUNG_FEN = 'rnbqkbnr/pppppp1p/6p1/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+// 1.e4 e5 2.Nf3 Nc6 — White grabs Nxe5?? (defended) → hangs + bad trade (tie).
+const TIE_FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3';
 
-beforeEach(() => {
-  mocked.mockReset();
-});
+beforeEach(() => mockedLlm.mockReset());
 
-describe('classifyMisconception', () => {
-  it('parses a clean closed-set classification', async () => {
-    mocked.mockResolvedValueOnce(
-      '{"tag":"overvalued-attack","coachNote":"The sacrifice on f7 has no follow-up; the defender consolidates."}',
-    );
-    const r = await classifyMisconception({ fen: FEN, playedSan: 'Bxf7+', bestSan: 'O-O' });
-    expect(r).not.toBeNull();
-    expect(r!.tag).toBe('overvalued-attack');
-    expect(r!.coachNote).toContain('f7');
-  });
-
-  it('tolerates a ```json fence around the object', async () => {
-    mocked.mockResolvedValueOnce('```json\n{"tag":"hung-material","coachNote":"The knight on e5 is undefended."}\n```');
-    const r = await classifyMisconception({ fen: FEN, playedSan: 'Ng4' });
+describe('classifyMisconception — code-first', () => {
+  it('AUTO-TAGS a clear board blunder with NO LLM call', async () => {
+    const r = await classifyMisconception({ fen: HUNG_FEN, playedSan: 'Qh5', cpLossStudent: 820 });
     expect(r!.tag).toBe('hung-material');
+    expect(r!.needsPicker).toBe(false);
+    expect(r!.source).toBe('code');
+    expect(mockedLlm).not.toHaveBeenCalled(); // code decided — no model call
   });
 
-  it('passes through tag "none" when the move is fine', async () => {
-    mocked.mockResolvedValueOnce('{"tag":"none","coachNote":"A reasonable developing move."}');
-    const r = await classifyMisconception({ fen: FEN, playedSan: 'Bb5' });
-    expect(r!.tag).toBe('none');
+  it("coachNote is the bucket's grounded blurb (generic, no board-claim)", async () => {
+    const r = await classifyMisconception({ fen: HUNG_FEN, playedSan: 'Qh5', cpLossStudent: 820 });
+    expect(r!.coachNote).toBe(getMisconceptionTag('hung-material')!.blurb);
   });
 
-  it('rejects an off-vocabulary tag (hallucination guard)', async () => {
-    mocked.mockResolvedValueOnce('{"tag":"blundered-the-vibe","coachNote":"x"}');
-    const r = await classifyMisconception({ fen: FEN, playedSan: 'a3' });
-    expect(r).toBeNull();
+  it('pops the PICKER (no LLM) when causes tie and there is no student reason', async () => {
+    const r = await classifyMisconception({ fen: TIE_FEN, playedSan: 'Nxe5', cpLossStudent: 260 });
+    expect(r!.needsPicker).toBe(true);
+    expect(r!.candidates.length).toBeGreaterThanOrEqual(2);
+    expect(mockedLlm).not.toHaveBeenCalled();
   });
 
-  it("requires a customLabel when tag is 'other'", async () => {
-    mocked.mockResolvedValueOnce('{"tag":"other","coachNote":"odd move"}');
-    expect(await classifyMisconception({ fen: FEN, playedSan: 'a3' })).toBeNull();
-
-    mocked.mockResolvedValueOnce('{"tag":"other","customLabel":"premature resignation","coachNote":"There was still a defense."}');
-    const r = await classifyMisconception({ fen: FEN, playedSan: 'a3' });
-    expect(r!.tag).toBe('other');
-    expect(r!.customLabel).toBe('premature resignation');
+  it('a BOUNDED LLM maps the student reason to a candidate (in-set only)', async () => {
+    mockedLlm.mockResolvedValueOnce('bad-trade'); // an id that IS in the candidate set
+    const r = await classifyMisconception({
+      fen: TIE_FEN, playedSan: 'Nxe5', cpLossStudent: 260,
+      userReason: 'I thought I was just winning a free pawn',
+    });
+    expect(r!.tag).toBe('bad-trade');
+    expect(r!.source).toBe('reason');
+    expect(r!.needsPicker).toBe(false);
+    expect(mockedLlm).toHaveBeenCalledTimes(1);
   });
 
-  // 🔒 Ground the spoken coachNote (LLM-decision sweep 2026-06-05): a
-  // sentence whose board-claim is provably false (chess.js as truth) is
-  // dropped before it can be spoken; a principle sentence survives. FEN is
-  // after 1.e4 e5 2.Nf3 Nc6 — there is NO knight on f6.
-  it('strips a hallucinated board-claim sentence from the coachNote, keeps the principle', async () => {
-    mocked.mockResolvedValueOnce(
-      '{"tag":"hung-material","coachNote":"The knight on f6 is hanging. Develop your pieces before launching an attack."}',
-    );
-    const r = await classifyMisconception({ fen: FEN, playedSan: 'Ng5' });
-    expect(r!.tag).toBe('hung-material');
-    expect(r!.coachNote).not.toMatch(/f6/i);
-    expect(r!.coachNote).toContain('Develop your pieces');
+  it('REJECTS an LLM reply that is not in the candidate set → falls to the picker', async () => {
+    mockedLlm.mockResolvedValueOnce('left-book-early'); // NOT a candidate for this slip
+    const r = await classifyMisconception({
+      fen: TIE_FEN, playedSan: 'Nxe5', cpLossStudent: 260, userReason: 'whatever',
+    });
+    expect(r!.needsPicker).toBe(true); // gate rejected the off-set tag
+    expect(r!.tag).not.toBe('left-book-early');
   });
 
-  it('empties the coachNote when every sentence is a disproven board-claim (tag still stands)', async () => {
-    mocked.mockResolvedValueOnce(
-      '{"tag":"hung-material","coachNote":"Your queen on h5 is trapped by the bishop on g4."}',
-    );
-    const r = await classifyMisconception({ fen: FEN, playedSan: 'Ng5' });
-    expect(r!.tag).toBe('hung-material');
-    expect(r!.coachNote).toBe('');
-  });
-
-  it('returns null on unparseable output', async () => {
-    mocked.mockResolvedValueOnce('I think you played a questionable move there!');
-    expect(await classifyMisconception({ fen: FEN, playedSan: 'a3' })).toBeNull();
-  });
-
-  it('returns null when the LLM call throws', async () => {
-    mocked.mockRejectedValueOnce(new Error('network'));
-    expect(await classifyMisconception({ fen: FEN, playedSan: 'a3' })).toBeNull();
-  });
-
-  it('forwards the student reason and skips personality', async () => {
-    mocked.mockResolvedValueOnce('{"tag":"missed-opponents-threat","coachNote":"Black threatened the e4 pawn."}');
-    await classifyMisconception({ fen: FEN, playedSan: 'a3', userReason: 'I wanted luft for my king' });
-    const [messages, , , task, , , , skipPersonality] = mocked.mock.calls[0];
-    expect(messages[0].content).toContain('I wanted luft for my king');
+  it('the bounded match skips personality + uses the cheap task', async () => {
+    mockedLlm.mockResolvedValueOnce('bad-trade');
+    await classifyMisconception({ fen: TIE_FEN, playedSan: 'Nxe5', cpLossStudent: 260, userReason: 'free pawn' });
+    const [, , , task, , , , skipPersonality] = mockedLlm.mock.calls[0];
     expect(task).toBe('bad_habit_report');
     expect(skipPersonality).toBe(true);
+  });
+
+  it('a sound move (no real drop) needs no picker and no LLM', async () => {
+    const r = await classifyMisconception({
+      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      playedSan: 'e4', cpLossStudent: 5,
+    });
+    expect(r!.needsPicker).toBe(false);
+    expect(r!.tag).toBe('none');
+    expect(mockedLlm).not.toHaveBeenCalled();
   });
 });
