@@ -16,12 +16,17 @@ import {
   evaluateMove,
   buildWhyPrompt,
   captureMisconception,
+  logPickedMisconception,
+  type CaptureMisconceptionArgs,
 } from '../services/discussionPractice';
+import type { MisconceptionCandidate } from '../services/misconceptionDiagnosis';
+import { getMisconceptionTag } from '../data/misconceptionTags';
 import { slipWarrantsInterjection, type SlipResult } from '../services/slipDetector';
 import { logAppAudit } from '../services/appAuditor';
 import { useSettings } from './useSettings';
 
-export type DiscussionPhase = 'idle' | 'asking' | 'thinking' | 'teaching';
+// 'picking' = code was unsure; the user chooses from the ranked candidates.
+export type DiscussionPhase = 'idle' | 'asking' | 'thinking' | 'picking' | 'teaching';
 
 export interface DiscussionPrompt {
   question: string;
@@ -85,12 +90,17 @@ export interface UseDiscussionPracticeResult {
   prompt: DiscussionPrompt | null;
   /** The coach's teaching line to speak/show after answer or skip. */
   teach: string | null;
+  /** When phase === 'picking': the ranked candidate buckets (best guess first)
+   *  the user chooses from. Empty = show the judgment-list floor + Random. */
+  pickerCandidates: MisconceptionCandidate[];
   evaluatePlayerMove: (args: EvaluatePlayerMoveArgs) => Promise<void>;
   /** Raise the "why?" prompt for a slip the caller already detected
    *  (blunder interception), bypassing the faucet's own analysis. */
   raiseSlipPrompt: (args: RaiseSlipPromptArgs) => void;
   submitReason: (reason: string) => Promise<void>;
   skip: () => Promise<void>;
+  /** Log the bucket the user picked from the pop-up ('random' = honest escape). */
+  pickBucket: (tag: string) => Promise<void>;
   dismissTeach: () => void;
   reset: () => void;
 }
@@ -129,6 +139,9 @@ export function useDiscussionPractice(
   const [phase, setPhase] = useState<DiscussionPhase>('idle');
   const [prompt, setPrompt] = useState<DiscussionPrompt | null>(null);
   const [teach, setTeach] = useState<string | null>(null);
+  const [pickerCandidates, setPickerCandidates] = useState<MisconceptionCandidate[]>([]);
+  // Context held while the picker is up so the user's pick can be logged.
+  const pickContextRef = useRef<{ context: CaptureMisconceptionArgs['context']; reason?: string; shouldCount: boolean } | null>(null);
   const openingIdRef = useRef<string | undefined>(undefined);
   const openingNameRef = useRef<string | undefined>(undefined);
   // One "why?" prompt per move. The faucet (evaluatePlayerMove) and a
@@ -366,6 +379,17 @@ export function useDiscussionPractice(
   const resolve = useCallback(async (reason: string | undefined): Promise<void> => {
     if (!prompt) return;
     setPhase('thinking');
+    const context = {
+      fen: prompt.fenBefore,
+      playedSan: prompt.playedSan,
+      bestSan: prompt.bestSan,
+      cpLoss: prompt.cpLoss,
+      gamePhase: prompt.gamePhase,
+      moveNumber: prompt.moveNumber,
+      openingId: openingIdRef.current,
+      openingName: openingNameRef.current,
+    };
+    // interactive: a user is at the board — if code is unsure, get the picker.
     const result = await captureMisconception({
       classifyInput: {
         fen: prompt.fenBefore,
@@ -378,24 +402,43 @@ export function useDiscussionPractice(
       },
       source: 'discussion-practice',
       shouldCount: prompt.shouldCount,
-      context: {
-        fen: prompt.fenBefore,
-        playedSan: prompt.playedSan,
-        bestSan: prompt.bestSan,
-        cpLoss: prompt.cpLoss,
-        gamePhase: prompt.gamePhase,
-        moveNumber: prompt.moveNumber,
-        openingId: openingIdRef.current,
-        openingName: openingNameRef.current,
-      },
+      interactive: true,
+      context,
     });
     setPrompt(null);
+    if (result.needsPicker) {
+      // Code couldn't auto-tag (and the reason didn't resolve it) → show the
+      // ranked-candidate picker; the user's pick is logged by pickBucket.
+      pickContextRef.current = { context, reason, shouldCount: prompt.shouldCount };
+      setPickerCandidates(result.candidates);
+      setPhase('picking');
+      return;
+    }
     setTeach(result.coachNote || null);
     setPhase(result.coachNote ? 'teaching' : 'idle');
   }, [prompt]);
 
   const submitReason = useCallback((reason: string) => resolve(reason), [resolve]);
   const skip = useCallback(() => resolve(undefined), [resolve]);
+
+  /** Log the bucket the user picked from the ranked-candidate pop-up. */
+  const pickBucket = useCallback(async (tag: string): Promise<void> => {
+    const pick = pickContextRef.current;
+    if (!pick) return;
+    setPhase('thinking');
+    await logPickedMisconception({
+      tag,
+      source: 'discussion-practice',
+      shouldCount: pick.shouldCount,
+      context: pick.context,
+      userReason: pick.reason,
+    }).catch(() => undefined);
+    pickContextRef.current = null;
+    setPickerCandidates([]);
+    const note = tag === 'random' ? null : getMisconceptionTag(tag)?.blurb ?? null;
+    setTeach(note);
+    setPhase(note ? 'teaching' : 'idle');
+  }, []);
 
   const dismissTeach = useCallback(() => {
     setTeach(null);
@@ -405,9 +448,11 @@ export function useDiscussionPractice(
   const reset = useCallback(() => {
     setPrompt(null);
     setTeach(null);
+    setPickerCandidates([]);
+    pickContextRef.current = null;
     setPhase('idle');
     promptedFenAfterRef.current = null;
   }, []);
 
-  return { phase, prompt, teach, evaluatePlayerMove, raiseSlipPrompt, submitReason, skip, dismissTeach, reset };
+  return { phase, prompt, teach, pickerCandidates, evaluatePlayerMove, raiseSlipPrompt, submitReason, skip, pickBucket, dismissTeach, reset };
 }

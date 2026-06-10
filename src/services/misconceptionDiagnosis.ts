@@ -101,16 +101,17 @@ function shapeOf(fenBefore: string, playedSan: string): MoveShape | null {
     return null;
   }
   if (!mv) return null;
-  const isCapture = mv.flags.includes('c') || mv.flags.includes('e');
+  // chess.js 1.x: use the Move predicates, not the deprecated `flags` string.
+  const isCapture = mv.isCapture(); // covers en-passant too
   const isCheck = chess.inCheck(); // position after the move = opponent in check
-  const isCastle = mv.flags.includes('k') || mv.flags.includes('q');
+  const isCastle = mv.isKingsideCastle() || mv.isQueensideCastle();
   const isPawnMove = mv.piece === 'p';
-  // Trade test: after the move, can the opponent recapture on `to` with a piece
-  // worth ≤ the capturer? (a clean recapture = an exchange, not a free win).
+  // Trade test: after the move, can the opponent recapture on `to`? (a clean
+  // recapture = an exchange, not a free win).
   let isTrade = false;
   if (isCapture) {
     const oppColor = mv.color === 'w' ? 'b' : 'w';
-    const recapturers = chess.attackers(mv.to as Square, oppColor);
+    const recapturers = chess.attackers(mv.to, oppColor);
     isTrade = recapturers.length > 0;
   }
   return {
@@ -145,7 +146,7 @@ function bestIsForcing(fenBefore: string, bestSan?: string | null, bestUci?: str
       mv = chess.move({ from: bestUci.slice(0, 2) as Square, to: bestUci.slice(2, 4) as Square, promotion: bestUci.length > 4 ? bestUci[4] : undefined });
     }
     if (!mv) return false;
-    return mv.flags.includes('c') || mv.flags.includes('e') || chess.inCheck();
+    return mv.isCapture() || chess.inCheck();
   } catch {
     return false;
   }
@@ -196,7 +197,7 @@ export function diagnoseMisconception(input: MisconceptionDiagnosisInput): Misco
     }
 
     // ── OVERVALUED MY ATTACK — gave material and ended up worse. ──
-    if (shape.isCapture === false && drop !== null && drop >= 150 && nowWorse) {
+    if (!shape.isCapture && drop !== null && drop >= 150 && nowWorse) {
       // A non-capturing committing move that dropped a lot and left us worse —
       // the attack/sac that wasn't there. (Sac detection refined by material.)
       const movedVal = REVIEW_PIECE_VALUE[shape.piece] ?? 0;

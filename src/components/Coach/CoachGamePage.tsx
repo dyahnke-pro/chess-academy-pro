@@ -4761,8 +4761,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           phase={discussion.phase}
           prompt={discussion.prompt}
           teach={discussion.teach}
+          pickerCandidates={discussion.pickerCandidates}
           onSubmit={(reason) => void discussion.submitReason(reason)}
           onSkip={() => void discussion.skip()}
+          onPick={(tag) => void discussion.pickBucket(tag)}
           onDismissTeach={discussion.dismissTeach}
         />
 
