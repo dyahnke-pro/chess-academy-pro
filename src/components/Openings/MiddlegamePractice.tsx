@@ -5,7 +5,7 @@ import { useChessGame } from '../../hooks/useChessGame';
 import { useSettings } from '../../hooks/useSettings';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { getCoachChatResponse } from '../../services/coachApi';
-import { groundCoachReply } from '../../services/coachAnswerGates';
+import { groundCoachReply, applyCandidateArrows } from '../../services/coachAnswerGates';
 import { speechService } from '../../services/speechService';
 import { sanitizeForTTS } from '../../services/voiceService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
@@ -296,8 +296,12 @@ export function MiddlegamePractice({
 
       // Runtime grounding gates (this surface bypasses the coach spine, so
       // it runs the shared gate set itself): drop board-false + ungrounded
-      // player-stat sentences, synthesise missing arrows.
-      const grounded = groundCoachReply(response, { fen, source: 'middlegamePractice' });
+      // player-stat sentences. Arrows are the async engine-colored pass.
+      const grounded = await applyCandidateArrows(
+        groundCoachReply(response, { fen, source: 'middlegamePractice' }),
+        fen,
+        'middlegamePractice',
+      );
 
       const assistantMsg: CoachMessage = { role: 'assistant', content: grounded };
       chatHistoryRef.current.push(assistantMsg);

@@ -27,7 +27,7 @@
  * See `docs/COACH-BRAIN-00.md` for the architecture this implements.
  */
 import { logAppAudit } from '../services/appAuditor';
-import { groundCoachReply } from '../services/coachAnswerGates';
+import { groundCoachReply, applyCandidateArrows } from '../services/coachAnswerGates';
 import { assembleEnvelope } from './envelope';
 import { loadAnnotationContextForLive } from './sources/annotationContext';
 import { loadBookGroundingForLive } from './sources/bookGrounding';
@@ -1446,6 +1446,10 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     input.liveState.evalCp,
     input.liveState.evalMateIn,
   );
+  // Arrow standard (async, engine-colored) — the ONE arrow path. Every
+  // move the coach mentioned gets a code-resolved, Stockfish-rank-
+  // colored arrow; the LLM no longer emits [BOARD: arrow:] markers.
+  finalText = await applyCandidateArrows(finalText, boardFenForClaims, `coachService:${input.surface}`);
 
   // Board-announce gate (was CoachTeachPage-only): when a board-changing
   // tool fired, the spoken [VOICE:] block should announce it ("Setting the

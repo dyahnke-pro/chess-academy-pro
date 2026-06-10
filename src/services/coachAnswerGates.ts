@@ -28,11 +28,11 @@
  * `source` namespaces the audit events to the caller (spine vs a specific
  * surface) so the audit log shows where a gate tripped.
  */
-import { Chess } from 'chess.js';
 import { logAppAudit } from './appAuditor';
 import { groundCoachAnswerBoardClaims, validateBoardClaims, stripDisprovenSentences } from './boardClaimValidator';
 import { stripUngroundedPlayerStats } from './claimValidator';
-import { validateArrowClaims, synthesizeMissingArrows } from './arrowClaimValidator';
+import { injectCandidateArrows, type RankedCandidate } from './arrowEngine';
+import { stockfishEngine } from './stockfishEngine';
 import { validateTacticClaims, stripUngroundedTacticSentences } from './tacticClaimValidator';
 import { stripDisprovenEvalSentences } from './evalClaimValidator';
 import { validateOpeningNameClaims } from './openingNameClaimValidator';
@@ -192,24 +192,12 @@ export function groundCoachReply(text: string, opts: CoachAnswerGateOptions): st
     } catch { /* never block */ }
   }
 
-  // (2) Arrow gate.
-  if (fen) {
-    try {
-      const arrowV = validateArrowClaims(out);
-      if (arrowV.violations.length > 0) {
-        const synth = synthesizeMissingArrows(out, fen, arrowV.violations, Chess, 'green');
-        out = synth.text;
-        void logAppAudit({
-          kind: 'claim-validator-trip',
-          category: 'subsystem',
-          source: `${source}.arrowClaimGate`,
-          summary: `arrows: synthesized ${synth.synthesized.length}/${arrowV.violations.length}`,
-          details: JSON.stringify({ source, synthesized: synth.synthesized, failed: synth.failed }),
-          fen,
-        });
-      }
-    } catch { /* never block */ }
-  }
+  // (2) Arrow injection moved OUT of this sync gate — arrows are now
+  //     computed (geometry + Stockfish-rank color) by the shared
+  //     arrowEngine via the ASYNC `applyCandidateArrows`, which
+  //     fen-bearing surfaces call after this gate. groundCoachReply
+  //     stays sync; the engine-colored arrow pass needs await. See
+  //     docs/plans/2026-06-10-unified-arrow-engine.md.
 
   // (3) Tactic gate. ENFORCING when a bounded tactics context was sent this
   //     turn — a named tactic absent from it is a provable out-of-vocabulary
@@ -268,4 +256,44 @@ export function groundCoachReply(text: string, opts: CoachAnswerGateOptions): st
   } catch { /* never block */ }
 
   return out;
+}
+
+/** Stockfish multipv adapter for the arrow engine: rank the top moves
+ *  at `fen` so candidate arrows get engine-rank colors (no LLM, no
+ *  per-move eval — one analysis ranks every mention). depth 12 is the
+ *  fast-check depth; MultiPV 5 covers green/blue/yellow + a margin. */
+async function rankCandidatesAtFen(fen: string): Promise<RankedCandidate[]> {
+  const analysis = await stockfishEngine.analyzePosition(fen, 12, { MultiPV: 5 });
+  return analysis.topLines
+    .map((line) => {
+      const uci = line.moves[0] ?? '';
+      return { from: uci.slice(0, 2), to: uci.slice(2, 4), rank: line.rank };
+    })
+    .filter((r) => r.from.length === 2 && r.to.length === 2);
+}
+
+/** ASYNC arrow pass — the single arrow standard for chat surfaces.
+ *  Strips any markers, finds every move the coach mentioned, resolves
+ *  geometry in code, colors by Stockfish rank, and appends
+ *  `[BOARD: arrow:from-to:color]` markers. The LLM never picks an
+ *  arrow. Fen-bearing surfaces call this after `groundCoachReply`.
+ *  Never throws — on any fault returns the text unchanged. */
+export async function applyCandidateArrows(text: string, fen: string | null | undefined, source: string): Promise<string> {
+  if (!text.trim() || !fen) return text;
+  try {
+    const { text: out, injected } = await injectCandidateArrows(text, fen, rankCandidatesAtFen);
+    if (injected.length > 0) {
+      void logAppAudit({
+        kind: 'coach-narration-spoken',
+        category: 'subsystem',
+        source: `${source}.arrowEngine`,
+        summary: `injected ${injected.length} code-arrow(s): ${injected.map((i) => `${i.san}:${i.color}`).join(', ')}`,
+        details: JSON.stringify({ source, injected }),
+        fen,
+      });
+    }
+    return out;
+  } catch {
+    return text; // never block the reply on an arrow fault
+  }
 }
