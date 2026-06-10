@@ -74,6 +74,9 @@ const RENDER = [
   ['pro-carlsen-kid', 'Indian, never gr'],
   ['pro-aman-anti-caro', 'flashy Qxf7+ is a blunder'],
   ['pro-carlsen-kings-gambit', 'Against the Falkbeer Counter-Gambit'],
+  // depth-24 resweep adds (2026-06-10)
+  ['dutch-defence', 'Staunton Gambit'],
+  ['albin-countergambit', 'The d4-pawn IS the Albin'],
 ];
 
 // ── PHASE B interactive WATCH targets ───────────────────────────────────────
@@ -97,6 +100,9 @@ const WATCH = [
   // old-error fixes (2026-06-10): board-true wording + Elephant Trap played out.
   ['two-knights-defence', 'Nxe4', 'Why 4...Nxe4 gets your king hunted', 'g5-knight'],
   ['queens-gambit', 'Nxd5', 'Why 6.Nxd5 is the Elephant Trap', 'Black is a clean piece up'],
+  // depth-24 resweep adds (2026-06-10)
+  ['dutch-defence', 'Nf6', 'Why ...Nf6 hands White the centre', 'crawls all the way home'],
+  ['albin-countergambit', 'Bf5', 'Why ...Bf5 throws away the Albin', 'two clean pawns down'],
 ];
 
 const exe = await resolveChromiumExecutable();
@@ -136,7 +142,9 @@ async function dismissOverlays(page) {
 async function loadOpening(page, id) {
   await page.goto(`${BASE}/openings/${id}`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await dismissOverlays(page);
-  await page.waitForSelector('[data-testid="common-mistakes-section"], [data-testid="common-mistakes-empty"]', { timeout: 120000 });
+  // pro-rep openings carry a heavier deferred seed (~50s+); give them longer.
+  const seedTimeout = id.startsWith('pro-') ? 180000 : 120000;
+  await page.waitForSelector('[data-testid="common-mistakes-section"], [data-testid="common-mistakes-empty"]', { timeout: seedTimeout });
   await dismissOverlays(page);
 }
 
