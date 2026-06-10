@@ -48,6 +48,13 @@ vi.mock('../../services/boardColorService', () => ({
   getBoardColor: () => ({ light: '#f0d9b5', dark: '#b58863' }),
 }));
 
+vi.mock('../../services/voiceService', () => ({
+  voiceService: {
+    speak: vi.fn().mockResolvedValue(undefined),
+    stop: vi.fn(),
+  },
+}));
+
 describe('QueensGauntlet', () => {
   const onBack = vi.fn();
   const onComplete = vi.fn();

@@ -87,6 +87,10 @@ export function PieceMazePage({ piece }: Props): JSX.Element {
     }
   }, [level, piece, voiceOn, navigate]);
 
+  // Stop any in-flight narration when leaving the page (siblings do
+  // this; without it the welcome line can bleed past navigation).
+  useEffect(() => () => { voiceService.stop(); }, []);
+
   const handleSquareClick = useCallback(({ square }: SquareHandlerArgs): void => {
     if (phase !== 'playing' || !level) return;
     if (!legalSet.has(square)) return;

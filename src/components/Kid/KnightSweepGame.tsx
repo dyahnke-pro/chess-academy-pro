@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { KidChessboard } from '../Chessboard/KidChessboard';
 import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { ArrowLeft, Volume2, VolumeX } from 'lucide-react';
 import { voiceService } from '../../services/voiceService';
@@ -362,7 +362,7 @@ export function KnightSweepGame(): JSX.Element {
 
       {/* Board */}
       <BoardVoiceOverlay fen={position} className="w-full md:max-w-[420px] mx-auto">
-        <ConsistentChessboard
+        <KidChessboard
           fen={position}
           boardOrientation="white"
           squareStyles={squareStyles}

@@ -1,8 +1,9 @@
-import { useState, useCallback, useMemo } from 'react';
-import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { useState, useCallback, useMemo, useEffect } from 'react';
+import { KidChessboard } from '../Chessboard/KidChessboard';
 import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, RotateCcw } from 'lucide-react';
+import { voiceService } from '../../services/voiceService';
 import {
   QUEEN_GAUNTLET_LEVELS,
   initGauntletState,
@@ -15,12 +16,24 @@ import type { QueenGauntletState } from '../../services/queenGameEngine';
 interface QueensGauntletProps {
   onBack: () => void;
   onComplete: (level: number, won: boolean) => void;
+  /** Honors the hub's voice toggle. Defaults to on. */
+  voiceOn?: boolean;
 }
 
-export function QueensGauntlet({ onBack, onComplete }: QueensGauntletProps): JSX.Element {
+export function QueensGauntlet({ onBack, onComplete, voiceOn = true }: QueensGauntletProps): JSX.Element {
   const [levelIndex, setLevelIndex] = useState(0);
   const level = QUEEN_GAUNTLET_LEVELS[levelIndex];
   const [state, setState] = useState<QueenGauntletState>(() => initGauntletState(level));
+
+  // Spoken intro per level — fills the "what do I do" gap (this game
+  // shipped silent). Move feedback stays milestone-only (#5): the win /
+  // loss line is voiced by the hub on completion.
+  useEffect(() => {
+    if (!voiceOn) return;
+    void voiceService.speak(
+      `Queen's Gauntlet, level ${level.id}. Slide your queen to the glowing square, and stay off the red squares the enemies attack.`,
+    );
+  }, [levelIndex, level.id, voiceOn]);
 
   const position = useMemo(() => gauntletPosition(state), [state]);
 
@@ -142,7 +155,7 @@ export function QueensGauntlet({ onBack, onComplete }: QueensGauntletProps): JSX
 
       {/* Board */}
       <BoardVoiceOverlay fen={position} className="w-full md:max-w-[420px]">
-        <ConsistentChessboard
+        <KidChessboard
           fen={position}
           boardOrientation="white"
           squareStyles={customSquareStyles}

@@ -99,7 +99,7 @@ export function QueenGamesHub(): JSX.Element {
   if (view === 'queen-vs-army') {
     return (
       <MotionConfig transition={{ duration: 0.15 }}>
-        <QueenVsArmy onBack={handleBack} onComplete={handleArmyComplete} />
+        <QueenVsArmy onBack={handleBack} onComplete={handleArmyComplete} voiceOn={voiceOn} />
       </MotionConfig>
     );
   }
@@ -107,7 +107,7 @@ export function QueenGamesHub(): JSX.Element {
   if (view === 'queens-gauntlet') {
     return (
       <MotionConfig transition={{ duration: 0.15 }}>
-        <QueensGauntlet onBack={handleBack} onComplete={handleGauntletComplete} />
+        <QueensGauntlet onBack={handleBack} onComplete={handleGauntletComplete} voiceOn={voiceOn} />
       </MotionConfig>
     );
   }
