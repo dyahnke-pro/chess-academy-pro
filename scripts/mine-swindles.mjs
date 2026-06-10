@@ -48,11 +48,35 @@ async function checkNode(sanPath, exDisc, exVal){
     if((-db.cp)<PUNISH || (dbest.cp-db.cp)<GAP) continue;        // washed out deep → skip
     const c2=new Chess(fen); c2.move(hm.san); const pun=await multipv(c2.fen(),18,1,7000);
     const valPct=exVal?.moves?.find(m=>m.san===hm.san)?.pct ?? 0;
-    return { sanPath:[...sanPath], bait:hm.san, baitPctAll:hm.pct, baitGames:hm.games, baitPct1000:valPct,
-             studentAfter:-db.cp, refutation:dbest.san, punish:pun[0]?sanPV(c2.fen(),pun[0].pv,6):'',
+    return { sanPath:[...sanPath],
+             baitMove: sanPath[sanPath.length-1],   // YOUR lure (the trapper's last move)
+             error:hm.san, errorPctAll:hm.pct, errorGames:hm.games, errorPct1000:valPct, // THEIR common wrong reply
+             studentAfter:-db.cp, refutation:dbest.san,                                   // their only correct move
+             punish:pun[0]?sanPV(c2.fen(),pun[0].pv,6):'',
              crossBand, natural:NATURAL(hm.san) };
   }
   return null;
+}
+async function walkCfg(name, seed, trapper, WP, NC, GLOBAL){
+  const found=[]; let nodes=0;
+  async function rec(path, depth){
+    if(depth>=WP || nodes>=NC) return;
+    const c=new Chess(); for(const m of path)c.move(m);
+    const exD=await expl(path,DISCOVER); await sleep(25);
+    if(!exD||exD.tot<MIN_GAMES||!exD.moves.length) return;
+    if(c.turn()!==trapper){
+      const k=c.fen().split(' ').slice(0,2).join(' ');
+      if(!GLOBAL.has(k)){ GLOBAL.add(k); nodes++;
+        try{ const exV=await expl(path,VALIDATE); await sleep(20);
+          const sN=await checkNode(path,exD,exV);
+          if(sN){ sN.opening=name; found.push(sN); log(`  ✦ ${name} @ ${path.join(' ')} | bait ${sN.baitMove} → error ${sN.error}(${sN.errorGames}g) +${sN.studentAfter}cp | punish ${sN.punish.split(' ').slice(0,2).join(' ')} | refutation ${sN.refutation}`); }
+        }catch(e){}
+      }
+      for(const m of exD.moves.slice(0,KB)) await rec([...path,m.san],depth+1);
+    } else { for(const m of exD.moves.slice(0,KW)) await rec([...path,m.san],depth+1); }
+  }
+  await rec(seed, seed.length);
+  return found;
 }
 async function walk(name, seed, trapper){
   log(`\n########## ${name} (trapper=${trapper}) ##########`);
@@ -67,7 +91,7 @@ async function walk(name, seed, trapper){
       if(!seen.has(k)){ seen.add(k); nodes++;
         try{ const exV=await expl(path,VALIDATE); await sleep(25);
           const s=await checkNode(path, exD, exV);
-          if(s){found.push(s); log(`  ✦ TRAP @ ${path.join(' ')}\n      bait ${s.bait} (all:${(s.baitPctAll*100).toFixed(0)}% ${s.baitGames}g | 1000+:${(s.baitPct1000*100).toFixed(0)}%) → student +${s.studentAfter}cp | punish ${s.punish} | better ${s.refutation} ${s.crossBand?'[cross-band✓]':'[0-only]'} ${s.natural?'':'[unnatural!]'}`);}
+          if(s){found.push(s); log(`  ✦ TRAP @ ${path.join(' ')}\n      bait ${s.baitMove} → error ${s.error} (all:${(s.errorPctAll*100).toFixed(0)}% ${s.errorGames}g | 1000+:${(s.errorPct1000*100).toFixed(0)}%) → +${s.studentAfter}cp | punish ${s.punish} | refutation ${s.refutation} ${s.crossBand?'[cross-band✓]':'[0-only]'} ${s.natural?'':'[unnatural!]'}`);}
         }catch(e){ log(`  [node err] ${String(e).slice(0,60)}`); }
       }
       for(const m of exD.moves.slice(0,KB)) await rec([...path,m.san],depth+1);
@@ -89,8 +113,36 @@ const TACTICAL=[
  ['Scandinavian Trap',['e4','d5','exd5'],'w'], ['Stafford-prone Petrov',['e4','e5','Nf3','Nf6'],'w'],
 ];
 const SET=process.env.SET||'demo';
-const targets = SET==='tactical' ? TACTICAL : [["Bishop's Opening",['e4','e5','Bc4'],'w'],['Alapin Sicilian',['e4','c5','c3'],'w']];
+import {readFileSync as _rd, writeFileSync as _wr} from 'fs';
+function loadAll(){
+  const ld=p=>{const d=JSON.parse(_rd(p,'utf8'));return d.openings??d;};
+  const ops=[...ld('src/data/repertoire.json'),...ld('src/data/gambits.json'),...ld('src/data/pro-repertoires.json')];
+  const roots=[];
+  for(const o of ops){ const col=(o.color||'white')[0]; const pgn=(o.pgn||'').trim().split(/\s+/).filter(Boolean);
+    if(pgn.length>=3) roots.push({name:o.id,seed:pgn.slice(0,4),col,kind:'main'});
+    for(const v of (o.variations||[])){ const vp=(v.pgn||'').trim().split(/\s+/).filter(Boolean);
+      if(vp.length>=4) roots.push({name:`${o.id}::${(v.name||'var').slice(0,28)}`,seed:vp,col,kind:'var'}); } }
+  return roots;
+}
+const OUT='/tmp/swindle-all.json';
 const all=[];
-for(const [name,seed,col] of targets){ try{ all.push(...await walk(name,seed,col)); }catch(e){ log(`[${name} err] `+String(e).slice(0,80)); } }
-log(`\n==================== TOTAL: ${all.length} traps across ${targets.length} openings ====================`);
-for(const s of all) log(`  ${s.sanPath.join(' ')} | bait ${s.bait} (${s.baitGames}g) +${s.studentAfter}cp | punish ${s.punish.split(' ').slice(0,2).join(' ')} | better ${s.refutation}`);
+const persist=()=>{ try{ _wr(OUT, JSON.stringify(all,null,1)); }catch{} };
+if(SET==='all'){
+  const roots=loadAll(); log(`loaded ${roots.length} walk roots (mains+variations) from 130 openings`);
+  const GLOBAL=new Set();   // global FEN dedup across all roots
+  let done=0;
+  for(const r of roots){
+    // shallower caps for variation roots (just probe past the tabiya); cheap dedup
+    process.env.__='';
+    const capWP = r.kind==='var' ? 4 : 9;  const capN = r.kind==='var' ? 6 : 22;
+    try{ const f=await walkCfg(r.name,r.seed,r.col,capWP,capN,GLOBAL); all.push(...f); }catch(e){ log(`[${r.name} err] `+String(e).slice(0,70)); }
+    if(++done%10===0){ persist(); log(`  …${done}/${roots.length} roots, ${all.length} traps so far`); }
+  }
+  persist();
+  log(`\n==================== TOTAL: ${all.length} traps across ${roots.length} roots ====================`);
+} else {
+  const targets = SET==='tactical' ? TACTICAL : [["Bishop's Opening",['e4','e5','Bc4'],'w'],['Alapin Sicilian',['e4','c5','c3'],'w']];
+  for(const [name,seed,col] of targets){ try{ all.push(...await walk(name,seed,col)); }catch(e){ log(`[${name} err] `+String(e).slice(0,80)); } }
+  log(`\n==================== TOTAL: ${all.length} traps across ${targets.length} openings ====================`);
+  for(const s of all) log(`  ${s.sanPath.join(' ')} | bait ${s.baitMove} → error ${s.error} (${s.errorGames}g) +${s.studentAfter}cp | punish ${s.punish.split(' ').slice(0,2).join(' ')} | refutation ${s.refutation}`);
+}
