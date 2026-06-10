@@ -19,6 +19,12 @@ import {
   type MisconceptionAggregate,
 } from '../../services/misconceptionService';
 import { MisconceptionCard } from './MisconceptionCard';
+import { BucketCorrectionDrill } from './BucketCorrectionDrill';
+
+// The two PRINCIPLE buckets get a bespoke multiple-choice correction drill
+// (pick-the-wing / find-the-move). The tactical buckets drill via real
+// mistakePuzzles in the Training Plan, so they don't need an inline drill here.
+const PRINCIPLE_DRILL_TAGS = new Set(['wrong-side', 'overestimated-opponents-attack']);
 
 const BUCKET_STYLE: Record<string, { label: string; color: string; bg: string }> = {
   opening: { label: 'Opening', color: 'text-sky-300', bg: 'bg-sky-500/15' },
@@ -43,6 +49,7 @@ export function MisconceptionsTab(): JSX.Element {
   const [rows, setRows] = useState<MisconceptionAggregate[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedKey, setExpandedKey] = useState<string | null>(null);
+  const [drillingKey, setDrillingKey] = useState<string | null>(null);
 
   const reload = useCallback(() => {
     void getMisconceptionProfile()
@@ -106,7 +113,9 @@ export function MisconceptionsTab(): JSX.Element {
         const example = row.examples[0];
         const rowKey = `${row.tag}:${row.label}`;
         const expanded = expandedKey === rowKey;
+        const drilling = drillingKey === rowKey;
         const correctable = row.examples.filter((e) => e.fen);
+        const canDrill = PRINCIPLE_DRILL_TAGS.has(row.tag) && correctable.some((e) => e.bestSan);
         return (
           <div
             key={rowKey}
@@ -146,17 +155,28 @@ export function MisconceptionsTab(): JSX.Element {
                     {example.bestSan ? `, best was ${example.bestSan}` : ''}
                   </p>
                 )}
-                {correctable.length > 0 && (
-                  <button
-                    onClick={() => setExpandedKey(expanded ? null : rowKey)}
-                    className="mt-1.5 flex items-center gap-1 text-[11px] font-medium text-theme-accent hover:opacity-80"
-                    data-testid={`misconception-expand-${row.tag}`}
-                  >
-                    {expanded
-                      ? <>Hide <ChevronUp size={12} /></>
-                      : <>Review {correctable.length} {correctable.length === 1 ? 'mistake' : 'mistakes'} · fix a wrong tag <ChevronDown size={12} /></>}
-                  </button>
-                )}
+                <div className="mt-1.5 flex items-center gap-3 flex-wrap">
+                  {correctable.length > 0 && (
+                    <button
+                      onClick={() => { setExpandedKey(expanded ? null : rowKey); setDrillingKey(null); }}
+                      className="flex items-center gap-1 text-[11px] font-medium text-theme-accent hover:opacity-80"
+                      data-testid={`misconception-expand-${row.tag}`}
+                    >
+                      {expanded
+                        ? <>Hide <ChevronUp size={12} /></>
+                        : <>Review {correctable.length} {correctable.length === 1 ? 'mistake' : 'mistakes'} · fix a wrong tag <ChevronDown size={12} /></>}
+                    </button>
+                  )}
+                  {canDrill && (
+                    <button
+                      onClick={() => { setDrillingKey(drilling ? null : rowKey); setExpandedKey(null); }}
+                      className="flex items-center gap-1 text-[11px] font-medium text-emerald-400 hover:opacity-80"
+                      data-testid={`misconception-drill-${row.tag}`}
+                    >
+                      {drilling ? <>Stop drilling <ChevronUp size={12} /></> : <>Drill this <Target size={12} /></>}
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
             {expanded && (
@@ -164,6 +184,15 @@ export function MisconceptionsTab(): JSX.Element {
                 {correctable.map((rec) => (
                   <MisconceptionCard key={rec.id} record={rec} onRetagged={reload} />
                 ))}
+              </div>
+            )}
+            {drilling && (
+              <div className="mt-2" data-testid={`misconception-drill-panel-${row.tag}`}>
+                <BucketCorrectionDrill
+                  tag={row.tag}
+                  positions={correctable}
+                  onDone={() => { setDrillingKey(null); reload(); }}
+                />
               </div>
             )}
           </div>
