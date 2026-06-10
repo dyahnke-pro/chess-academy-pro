@@ -539,6 +539,18 @@
         "concept:pos-development",
         "https://en.wikipedia.org/wiki/Vienna_Game"
       ]
+    },
+    {
+      "fen": "rnbqk2r/pppp1ppp/5n2/4p3/4P3/2bP1N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
+      "wrongMove": "Bd2",
+      "correctMove": "bxc3",
+      "explanation": "After 4...Bxc3+ White must recapture. The reflexive 5.Bd2?? blocks the check but forgets that the bishop on c3 is hanging — 5...Bxd2+ 6.Qxd2 leaves Black a clean piece up (he has taken the knight on c3 and the bishop on d2 for only his bishop). Recapture with 5.bxc3, regaining the material with a sound, broad centre.",
+      "shortNarration": "bxc3 — recapture, don't just block",
+      "sources": [
+        "book:vienna-game",
+        "concept:pos-development",
+        "https://www.chess.com/openings/Vienna-Game"
+      ]
     }
   ],
   "four-knights-game": [
@@ -1195,6 +1207,18 @@
       "shortNarration": "Bf4 — active square, not passive Bh4",
       "sources": [
         "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Trompowsky_Attack"
+      ]
+    },
+    {
+      "fen": "rnb1kb1r/pp1ppppp/8/q1p5/3PnB2/5P2/PPP1P1PP/RN1QKBNR w KQkq - 1 5",
+      "wrongMove": "Bd2",
+      "correctMove": "c3",
+      "explanation": "Black's 4...c5 and 4...Qa5+ set a trap: the natural 5.Bd2?? drops a pawn and the initiative — 5...Nxd2! 6.Qxd2 Qxd2+ 7.Nxd2 cxd4 and Black is a clean pawn up with the freer game. Block the check with 5.c3 instead, which holds d4 and keeps the balance.",
+      "shortNarration": "c3 — block the check, hold the centre",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-center",
         "https://en.wikipedia.org/wiki/Trompowsky_Attack"
       ]
     }
