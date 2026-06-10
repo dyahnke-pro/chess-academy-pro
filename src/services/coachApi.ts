@@ -1454,16 +1454,16 @@ export async function voiceFacts(
     `FACTS (say these, add nothing):\n${facts}` +
     (opts.studentMessage ? `\n\nThe student asked: "${opts.studentMessage}"` : '');
 
-  // Phrasing only → the cheap model. Tight token budget; there is no reasoning.
+  // Phrasing only → always the cheap model. Tight token budget; no reasoning.
+  // (Deliberately NOT cfg.preferredModel — voicing facts never needs the
+  // pricier model, and that field is a string|object union anyway.)
   try {
     if (cfg.provider === 'anthropic') {
-      const model = cfg.preferredModel ?? ANTHROPIC_MODEL_MAP.move_commentary;
-      return await callAnthropic(cfg.apiKey, model, system, [{ role: 'user', content: user }], 240, 'grounded_voice');
+      return await callAnthropic(cfg.apiKey, ANTHROPIC_MODEL_MAP.move_commentary, system, [{ role: 'user', content: user }], 240, 'grounded_voice');
     }
-    const model = cfg.preferredModel ?? DEEPSEEK_MODEL_MAP.move_commentary;
     return await callDeepSeek(
       cfg.apiKey,
-      model,
+      DEEPSEEK_MODEL_MAP.move_commentary,
       [{ role: 'system', content: system }, { role: 'user', content: user }],
       240,
       'grounded_voice',
@@ -1557,7 +1557,7 @@ export async function getCoachChatResponse(
         // docs/plans/2026-06-10-coach-chat-grounding-inversion.md. If you're
         // about to add a validator here — STOP: compute it and route it through
         // voiceFacts instead.
-        if (grounding.bestMoveQuestion && masterPlayContext.current.moves.length > 0) {
+        if (grounding.bestMoveQuestion && masterPlayContext && masterPlayContext.current.moves.length > 0) {
           const top = masterPlayContext.current.moves[0];
           if (top.uci) {
             const answer = assembleMoveEvalAnswer({ fen: masterPlayContext.current.fen, bestMoveUci: top.uci });
