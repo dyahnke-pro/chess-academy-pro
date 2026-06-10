@@ -66,32 +66,61 @@ export function validatePuzzleFen(fen: string, solution: string): boolean {
   }
 }
 
-function uciFirstMoveToSan(fen: string, uciMoves: string): string | null {
-  const first = uciMoves.split(/\s+/)[0];
-  if (!first || first.length < 4) return null;
+function applyUci(
+  chess: Chess,
+  uci: string,
+): ReturnType<Chess['move']> | null {
+  if (!uci || uci.length < 4) return null;
   try {
-    const chess = new Chess(fen);
-    const move = chess.move({
-      from: first.slice(0, 2),
-      to: first.slice(2, 4),
-      promotion: first.length === 5 ? first[4] : undefined,
+    return chess.move({
+      from: uci.slice(0, 2),
+      to: uci.slice(2, 4),
+      promotion: uci.length === 5 ? uci[4] : undefined,
     });
-    return move?.san ?? null;
   } catch {
     return null;
   }
+}
+
+/**
+ * Resolve the KID-facing position + the one move the kid must find.
+ *
+ * Lichess convention (this repo's puzzles.json): `record.fen` is the
+ * position BEFORE the opponent's blunder, `moves[0]` is the opponent's
+ * setup move (auto-played to reach the tactic), and `moves[1]` is the
+ * SOLVER's move — the tactic. So the kid must be SHOWN the position
+ * after the opponent's setup move (kid-to-move) and solve with the SAN
+ * of `moves[1]`. Single-move puzzles (training pool) are solver-to-move
+ * already — the kid solves `moves[0]` from the given FEN.
+ *
+ * (Before 2026-06-10 this kept `record.fen` and used `moves[0]`, which
+ * showed the OPPONENT-to-move position and treated the opponent's setup
+ * move as the kid's "solution" — the kid was playing the wrong side.)
+ */
+function resolveKidPosition(
+  record: PuzzleRecord,
+): { fen: string; san: string } | null {
+  const moves = record.moves.trim().split(/\s+/).filter(Boolean);
+  if (moves.length === 0) return null;
+  const hasOpponentSetup = moves.length >= 2;
+  const chess = new Chess(record.fen);
+  if (hasOpponentSetup && !applyUci(chess, moves[0])) return null;
+  const startFen = chess.fen();
+  const solverMove = applyUci(chess, hasOpponentSetup ? moves[1] : moves[0]);
+  if (!solverMove) return null;
+  return { fen: startFen, san: solverMove.san };
 }
 
 function puzzleRecordToJourneyPuzzle(
   record: PuzzleRecord,
   piece: ChessPiece,
 ): JourneyPuzzle | null {
-  const san = uciFirstMoveToSan(record.fen, record.moves);
-  if (!san) return null;
+  const resolved = resolveKidPosition(record);
+  if (!resolved) return null;
   return {
     id: `db-${record.id}`,
-    fen: record.fen,
-    solution: [san],
+    fen: resolved.fen,
+    solution: [resolved.san],
     hint: PIECE_HINT[piece],
     successMessage: PIECE_SUCCESS[piece],
   };

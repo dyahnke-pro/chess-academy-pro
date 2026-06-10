@@ -4,8 +4,8 @@ import { ArrowLeft, Volume2, VolumeX } from 'lucide-react';
 import { voiceService } from '../../services/voiceService';
 import { getKidPuzzles, seedPuzzles, recordAttempt } from '../../services/puzzleService';
 import { DifficultyToggle } from '../Coach/DifficultyToggle';
-import { PuzzleBoard } from '../Puzzles/PuzzleBoard';
-import type { PuzzleOutcome } from '../Puzzles/PuzzleBoard';
+import { KidPuzzleBoard } from './KidPuzzleBoard';
+import type { KidPuzzleOutcome } from './KidPuzzleBoard';
 import { useAppStore } from '../../stores/appStore';
 import type { CoachDifficulty, PuzzleRecord } from '../../types';
 
@@ -111,7 +111,7 @@ export function KidPuzzlePage(): JSX.Element {
     }
   }, [currentIndex, puzzles.length, phase, difficulty, fetchMorePuzzles]);
 
-  const handlePuzzleComplete = useCallback(({ correct }: PuzzleOutcome): void => {
+  const handlePuzzleComplete = useCallback(({ correct }: KidPuzzleOutcome): void => {
     if (correct) setSolvedCount((c) => c + 1);
     setTotalAttempted((t) => t + 1);
     setResultOverlay(correct ? 'correct' : 'incorrect');
@@ -284,7 +284,7 @@ export function KidPuzzlePage(): JSX.Element {
             </div>
           </div>
 
-          <PuzzleBoard
+          <KidPuzzleBoard
             puzzle={currentPuzzle}
             onComplete={handlePuzzleComplete}
           />

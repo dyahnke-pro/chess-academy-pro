@@ -11,8 +11,8 @@ import {
   getKidRating,
   bumpKidRating,
 } from '../../services/kidRatingService';
-import { PuzzleBoard } from '../Puzzles/PuzzleBoard';
-import type { PuzzleOutcome } from '../Puzzles/PuzzleBoard';
+import { KidPuzzleBoard } from './KidPuzzleBoard';
+import type { KidPuzzleOutcome } from './KidPuzzleBoard';
 import { useAppStore } from '../../stores/appStore';
 import type { ChessPiece, PuzzleRecord } from '../../types';
 
@@ -110,7 +110,7 @@ export function KidPiecePuzzlesPage({ piece }: Props): JSX.Element {
     };
   }, []);
 
-  const handleOutcome = useCallback(({ correct }: PuzzleOutcome): void => {
+  const handleOutcome = useCallback(({ correct }: KidPuzzleOutcome): void => {
     setAttempted((n) => n + 1);
     if (correct) setSolved((n) => n + 1);
     setOverlay(correct ? 'correct' : 'incorrect');
@@ -231,7 +231,7 @@ export function KidPiecePuzzlesPage({ piece }: Props): JSX.Element {
 
       {phase === 'playing' && current && (
         <div className="flex flex-col gap-3 relative">
-          <PuzzleBoard puzzle={current} onComplete={handleOutcome} />
+          <KidPuzzleBoard puzzle={current} onComplete={handleOutcome} />
           {overlay && (
             <div
               className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
