@@ -236,6 +236,39 @@ export async function recordTagDrillResult(tag: string, success: boolean): Promi
   });
 }
 
+/** Re-tag a single captured misconception (Step 5 — correctable auto-tags).
+ *  The silent-classify pivot places every slip in its most-likely bucket with
+ *  no mid-game question; this is the user's correction path from the
+ *  Thinking-Errors tab / review. `newTag` is a closed-set id, or 'random'/'none'
+ *  (the honest escape → stored as the 'other' catch-all labelled "random / not
+ *  sure"). Returns the updated record, or null when the id/tag is invalid. */
+export async function reassignMisconception(
+  recordId: string,
+  newTag: string,
+): Promise<MisconceptionTagRecord | null> {
+  const isRandom = newTag === 'random' || newTag === 'none';
+  const tag = isRandom ? 'other' : newTag;
+  if (!isMisconceptionTagId(tag)) return null;
+  const rec = await db.misconceptionTags.get(recordId);
+  if (!rec) return null;
+  if (rec.tag === tag && !isRandom) return rec; // no-op re-tag to the same bucket
+
+  const customLabel = tag === 'other'
+    ? (isRandom ? 'random / not sure' : (rec.customLabel ?? 'corrected'))
+    : undefined;
+  const coachNote = isRandom ? rec.coachNote : (getMisconceptionTag(tag)?.blurb ?? rec.coachNote);
+  await db.misconceptionTags.update(recordId, { tag, customLabel, coachNote });
+  void logAppAudit({
+    kind: 'misconception-captured',
+    category: 'subsystem',
+    source: 'misconceptionService.reassignMisconception',
+    summary: `reassign ${rec.tag}→${tag}${isRandom ? ' (random/not sure)' : ''}`,
+    fen: rec.fen,
+    details: JSON.stringify({ recordId, from: rec.tag, to: tag, source: rec.source }),
+  });
+  return { ...rec, tag, customLabel, coachNote };
+}
+
 export interface TagDrillPlan {
   tag: string;
   label: string;

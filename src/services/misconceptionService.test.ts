@@ -6,6 +6,7 @@ import {
   getAllMisconceptions,
   recordTagDrillResult,
   mapTagToDrills,
+  reassignMisconception,
   isMisconceptionDue,
 } from './misconceptionService';
 
@@ -13,6 +14,30 @@ const FEN = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
 
 beforeEach(async () => {
   await db.misconceptionTags.clear();
+});
+
+describe('reassignMisconception (Step 5 — correctable auto-tags)', () => {
+  it('re-tags a captured slip to a different closed-set bucket', async () => {
+    const rec = await logMisconception({ tag: 'miscalculated', source: 'discussion-practice', fen: FEN, playedSan: 'Ng5', bestSan: 'O-O' });
+    const updated = await reassignMisconception(rec!.id, 'overvalued-attack');
+    expect(updated?.tag).toBe('overvalued-attack');
+    const stored = await getAllMisconceptions();
+    expect(stored).toHaveLength(1);
+    expect(stored[0].tag).toBe('overvalued-attack');
+  });
+
+  it("maps the honest 'random' escape onto the 'other' catch-all", async () => {
+    const rec = await logMisconception({ tag: 'wrong-side', source: 'discussion-practice', fen: FEN });
+    const updated = await reassignMisconception(rec!.id, 'random');
+    expect(updated?.tag).toBe('other');
+    expect(updated?.customLabel).toBe('random / not sure');
+  });
+
+  it('rejects an invalid tag and a missing record', async () => {
+    const rec = await logMisconception({ tag: 'hung-material', source: 'discussion-practice', fen: FEN });
+    expect(await reassignMisconception(rec!.id, 'totally-made-up')).toBeNull();
+    expect(await reassignMisconception('no-such-id', 'wrong-side')).toBeNull();
+  });
 });
 
 describe('logMisconception', () => {
