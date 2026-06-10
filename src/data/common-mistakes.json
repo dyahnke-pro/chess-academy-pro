@@ -113,6 +113,32 @@
         "concept:pos-center",
         "https://en.wikipedia.org/wiki/Ruy_Lopez"
       ]
+    },
+    {
+      "fen": "r1bqkbnr/2p2ppp/p2p4/1p6/3pP3/1B6/PPP2PPP/RNBQK2R w KQkq - 0 8",
+      "wrongMove": "Qxd4",
+      "correctMove": "c3",
+      "explanation": "Recapturing with 8.Qxd4?? walks into the Noah's Ark Trap: 8...c5! hits the queen, and after it retreats 9...c4 snares the b3-bishop — a4 is met by ...bxa4 while a2 and c2 are blocked by White's own pawns, so the bishop has no escape and Black wins the piece. Instead 8.c3! regains the pawn safely and keeps the game level.",
+      "shortNarration": "c3 — regain the pawn, dodge Noah's Ark",
+      "sources": [
+        "book:ruy-lopez",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Noah%27s_Ark_Trap"
+      ]
+    }
+  ],
+  "birds-opening": [
+    {
+      "fen": "rnbqk1nr/ppp2ppp/3b4/8/8/8/PPPPP1PP/RNBQKBNR w KQkq - 0 4",
+      "wrongMove": "Nc3",
+      "correctMove": "Nf3",
+      "explanation": "In From's Gambit a casual developing move like 4.Nc3?? is mated on the spot: 4...Qh4+ 5.g3 Bxg3+! 6.hxg3 Qxg3# — the queen mates on g3 straight down the f2-square that the f4-push abandoned. Only 4.Nf3 covers h4 and stops ...Qh4+; then White keeps the extra pawn with a sound game.",
+      "shortNarration": "Nf3 — stop Qh4+, hold the pawn",
+      "sources": [
+        "concept:tac-sacrifice",
+        "concept:pos-king-safety",
+        "https://en.wikipedia.org/wiki/From%27s_Gambit"
+      ]
     }
   ],
   "qgd": [
