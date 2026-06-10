@@ -203,6 +203,27 @@ not one book's idiosyncrasy.
 
 ## 🔄 UPDATE (David 2026-06-10, later) — agreed refinements (SUPERSEDE the ordering above)
 
+**🔒 0. PRIORITY — the BOOK is a REFERENCE, not the main focus (David 2026-06-10).**
+Verbatim: *"i do not want this to be the main focus of the course but a tool the
+user can reference. the main teaching will be lectures and interactive play. hand
+written narrations."* So:
+- **MAIN teaching = interactive, hand-narrated lectures + play** — the proven
+  masterclass `LessonScript`/beats engine pointed at *concepts* (not openings):
+  hand-written narration in **two registers** (full Watch + ≤8-word Learn cue),
+  lead-the-eye arrows + highlights, **WLPP** interactive play (Watch → Learn →
+  Practice → Play), board-verified (`narrationAccuracy`) + sourced, **voiced via
+  TTS with no LLM call** (decision 7). The hand-written narration is the real
+  authoring work and inherits the locked narration standard (G5/G9/G9.4).
+- **The BOOK (the 30 chapters below) is a companion REFERENCE** the user can
+  open to *read* a chapter + its diagrams — it plugs into the existing
+  `BookReader` surface. It is NOT the centerpiece; the lectures are. The book and
+  the lecture share the same authored prose + the same "from your games"
+  personalized illustrations (narrated in the lecture, illustrated in the book).
+- Build order follows: **lectures + interactive play FIRST**, book as the
+  derived companion.
+
+
+
 1. **NO single "teaching engine" book.** Znosko is demoted from "the engine" to
    *one source* (it best articulates the Force/Space/Time evaluation language for
    Parts II–III). **Our chapter sequence is the spine**; all seven books are equal
