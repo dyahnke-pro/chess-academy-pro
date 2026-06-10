@@ -90,3 +90,44 @@ Caruana/Gotham (pro-rep). Scratch candidate lists: `/tmp/cov-gems-full.json` +
   candidate count (running).
 - Then David decides whether to greenlight the per-opening curated low-floor
   sweep (hand-verify + author narration for the new finds).
+
+## Hand-curated candidate #1 — Alapin queen-sac swindle (the proof case)
+
+From a ChesswithAkeem ChessReps video ("A Secret Weapon to Beat the Sicilian",
+2026-06-10) — a hand-made practical swindle in the Alapin. Engine-verified
+below; NOT shipped (recorded as the first hand-curated trap candidate). It is
+EXACTLY the class the bot-miner structurally cannot find — proof that
+hand-curation and the coverage scan are complementary.
+
+**Line (all chess.js-legal, student = White):**
+```
+1.e4 c5 2.c3 d5 3.exd5 Qxd5 4.d4 cxd4 5.cxd4 Nc6 6.Nf3 Bg4 7.Nc3 Qa5 8.d5 Ne5
+   (8.d5 hits the c6-knight; …Ne5 looks safe because the Bg4 pins Nf3 to the Qd1)
+9.Nxe5!  Bxd1  10.Bb5+!
+   • TRAP (Black blocks/trades the queen): 10…Qxb5 11.Nxb5 …Rc8 12.Kxd1
+        → White +4.7 (up two minor pieces). "Game over in style."
+   • REFUTATION (best): 10…Kd8! 11.Nxf7+ Kc8 12.Kxd1 → only +0.9 (Black escapes).
+```
+
+**Why the engine-first miner can't find it (the lesson):**
+- It is NOT a forced win — the sac is objectively only +0.9 vs best defense
+  (`10…Kd8`); the engine's actual #1 at move 9 is the quiet `Qb3` (+2.3).
+- It needs Black to err TWICE (the `…Ne5` walk-in AND the `…Qxb5` block instead
+  of `…Kd8`). The miner scans SINGLE inaccuracies with a forced winning
+  refutation graded at the quiet end — a multi-move practical swindle that's
+  only +0.9 against best play never clears its bar. So it's invisible to the
+  scan but a devastating club-level weapon.
+- This is the `practical`-tier class the gem doctrine deliberately drops from
+  auto-mining — and precisely why the 2026-06-01 "find traps by hand, no more
+  bots" rule exists. The 124 coverage finds are engine-sound hidden traps; this
+  is the *other* category (practical swindles) that only hand-curation surfaces.
+
+**App coverage:** NOT present. The 3 existing Alapin gems are a different line
+(`…Qxd5 4.d4 Nf6 5.Nf3 e6 6.Na3 Nc6 7.Be3` → Nb5). This whole `Nc3 / Bg4-pin /
+Nxe5` family is absent from the Alapin lessons + gems.
+
+**If shipped (future, with David's greenlight):** author as a `trap`-class weapon
+with HONEST narration — "wins two pieces IF Black blocks with the queen; the
+only-move `…Kd8` escapes to ~−0.9, so it's a practical swindle, not a forced
+win." Both registers, sources cite the ChessReps video + the engine line. The
+`narration-honesty` gate (Phase 3) would enforce the "not a forced win" framing.
