@@ -33,7 +33,7 @@ describe('buildWhyPrompt', () => {
 
 describe('captureMisconception', () => {
   it('logs a real misconception on a counted line', async () => {
-    mockedClassify.mockResolvedValueOnce({ tag: 'overvalued-attack', coachNote: 'The attack has no follow-up.' });
+    mockedClassify.mockReturnValueOnce({ tag: 'overvalued-attack', coachNote: 'The attack has no follow-up.' });
     mockedLog.mockResolvedValueOnce({ id: 'x' } as never);
 
     const r = await captureMisconception({
@@ -51,7 +51,7 @@ describe('captureMisconception', () => {
   });
 
   it('teaches but does NOT log on an unlearned line (count-against gate)', async () => {
-    mockedClassify.mockResolvedValueOnce({ tag: 'hung-material', coachNote: 'The knight is undefended.' });
+    mockedClassify.mockReturnValueOnce({ tag: 'hung-material', coachNote: 'The knight is undefended.' });
     const r = await captureMisconception({
       classifyInput: { fen: FEN, playedSan: 'Ng4' },
       source: 'discussion-practice',
@@ -64,7 +64,7 @@ describe('captureMisconception', () => {
   });
 
   it("does not log when the move was actually fine (tag 'none')", async () => {
-    mockedClassify.mockResolvedValueOnce({ tag: 'none', coachNote: 'A solid developing move.' });
+    mockedClassify.mockReturnValueOnce({ tag: 'none', coachNote: 'A solid developing move.' });
     const r = await captureMisconception({
       classifyInput: { fen: FEN, playedSan: 'Bb5' },
       source: 'discussion-practice',
@@ -79,7 +79,7 @@ describe('captureMisconception', () => {
     // Code is below the auto-tag bar (needsPicker) but has a top guess. The
     // pivot (David 2026-06-10) places the slip in that most-likely bucket
     // silently — no mid-game question, correctable later.
-    mockedClassify.mockResolvedValueOnce({
+    mockedClassify.mockReturnValueOnce({
       tag: 'miscalculated',
       coachNote: 'The line you saw runs out.',
       source: 'code',
@@ -104,7 +104,7 @@ describe('captureMisconception', () => {
   });
 
   it('INTERACTIVE + unsure: returns needsPicker with candidates, logs nothing yet', async () => {
-    mockedClassify.mockResolvedValueOnce({
+    mockedClassify.mockReturnValueOnce({
       tag: 'wrong-side',
       coachNote: 'Play points the wrong way.',
       source: 'code',
@@ -127,7 +127,7 @@ describe('captureMisconception', () => {
   });
 
   it('returns empty coachNote and does not log when classification fails', async () => {
-    mockedClassify.mockResolvedValueOnce(null);
+    mockedClassify.mockReturnValueOnce(null);
     const r = await captureMisconception({
       classifyInput: { fen: FEN, playedSan: 'a3' },
       source: 'discussion-practice',

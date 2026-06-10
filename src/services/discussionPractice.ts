@@ -94,7 +94,7 @@ export async function captureMisconception(
     cpLossStudent: args.classifyInput.cpLossStudent ?? args.context.cpLoss ?? null,
     bestSan: args.classifyInput.bestSan ?? args.context.bestSan,
   };
-  const classification = await classifyMisconception(classifyInput);
+  const classification = classifyMisconception(classifyInput);
   if (!classification) {
     return { classification: null, coachNote: '', logged: false, needsPicker: false, candidates: [] };
   }
