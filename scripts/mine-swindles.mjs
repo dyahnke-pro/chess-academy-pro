@@ -1,72 +1,83 @@
 #!/usr/bin/env node
-// Swindle/trap detector v4 — CORRECTED per David 2026-06-10.
-// The detection is the SAME as the punish-gem miner (common opponent move that
-// Stockfish punishes). The NEW part is the WALK: branch on the TRAPPER's
-// aggressive/sac/gambit tries (not just the sound spine), where these traps
-// live. NO escape-difficulty filter — a trap is valuable even if some opponents
-// refute it (that 10% who don't = wins). The refutation is RECORDED to TEACH
-// alongside, never to filter. All ratings (RATINGS overridable), low freq floor.
+// Swindle/trap detector v5 — FAST + cross-band noise filter.
+// Detection = punish-gem condition (common opponent move that Stockfish
+// punishes), run over a walk that branches on the TRAPPER's aggressive tries.
+// NO escape filter (refutation is RECORDED to teach, never to drop a trap).
+// SPEED: shallow scan (depth 14) to spot the +1.2 blunder, deep confirm (20) on
+// hits. NOISE FILTER (David 2026-06-10): include the 0 bucket for DISCOVERY but
+// require the bait to ALSO appear at 1000+ (cross-band) — a real natural mistake
+// shows across levels; a random 400-move lives only in the 0 bucket → dropped.
 import { Chess } from 'chess.js';
 import { spawn } from 'child_process';
 const SF = process.env.STOCKFISH_PATH || '/usr/games/stockfish';
 const PROXY = 'https://chess-academy-pro.vercel.app/api/lichess-explorer';
-const RATINGS = process.env.RATINGS || '1200,1400,1600,1800,2000'; // all-ratings by default
-const WALK_PLIES = Number(process.env.WALK_PLIES ?? 12);
-const KW = Number(process.env.KW ?? 5);     // trapper branch width (catch aggressive tries)
-const KB = Number(process.env.KB ?? 2);     // opponent continuation width
+const DISCOVER = process.env.DISCOVER || '0,1000,1200,1400,1600,1800,2000'; // includes the low end
+const VALIDATE = process.env.VALIDATE || '1000,1200,1400,1600,1800,2000';   // coherent-play floor
+const WALK_PLIES = Number(process.env.WALK_PLIES ?? 10);
+const KW = Number(process.env.KW ?? 4), KB = Number(process.env.KB ?? 2);
 const MIN_GAMES = Number(process.env.MIN_GAMES ?? 30);
-const PUNISH = Number(process.env.PUNISH ?? 120);  // student ≥ +1.2 after the bait
-const GAP = Number(process.env.GAP ?? 120);        // bait is ≥120cp worse than opponent's best
+const PUNISH = Number(process.env.PUNISH ?? 120), GAP = Number(process.env.GAP ?? 120);
+const MIN_BAIT = Number(process.env.MIN_BAIT ?? 20); // bait must be played in >= this many games
+const NODE_CAP = Number(process.env.NODE_CAP ?? 60);
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-process.on('unhandledRejection',e=>console.error('[warn] unhandledRejection',String(e).slice(0,120)));
+process.on('unhandledRejection',e=>console.error('[warn]',String(e).slice(0,100)));
+const log=s=>{process.stdout.write(s+'\n');};
 
-function multipv(fen, depth, n=6, ms=12000){return new Promise((res)=>{const sf=spawn(SF);const map=new Map();sf.stdout.on('data',(d)=>{for(const ln of d.toString().split('\n')){const mp=ln.match(/ multipv (\d+) /),sc=ln.match(/score (cp|mate) (-?\d+)/),pv=ln.match(/ pv (.+)/);if(mp&&sc&&pv){const cp=sc[1]==='mate'?(parseInt(sc[2])>0?1e5:-1e5):parseInt(sc[2]);map.set(parseInt(mp[1]),{cp,pv:pv[1].trim()});}}if(/bestmove/.test(d.toString())){sf.kill();fin();}});let done=false;const fin=()=>{if(done)return;done=true;const out=[...map.entries()].sort((a,b)=>a[0]-b[0]).map(([,v])=>{const c=new Chess(fen);const u=v.pv.split(' ')[0];let san=u;try{san=c.move({from:u.slice(0,2),to:u.slice(2,4),promotion:u[4]}).san;}catch{}return{uci:u,san,cp:v.cp,pv:v.pv};});res(out);};sf.stdin.write(`setoption name MultiPV value ${n}\nposition fen ${fen}\ngo depth ${depth}\n`);setTimeout(fin,ms);});}
-async function expl(sanPath){try{const c=new Chess();const uci=sanPath.map(m=>{const x=c.move(m);return x.from+x.to+(x.promotion??'');});const r=await fetch(`${PROXY}?source=lichess&ratings=${RATINGS}&speeds=blitz,rapid,classical&play=${uci.join(',')}`);if(!r.ok)return null;const j=await r.json();const tot=(j.white||0)+(j.draws||0)+(j.black||0);return{tot,moves:(j.moves||[]).map(m=>({san:m.san,games:(m.white||0)+(m.draws||0)+(m.black||0),pct:tot?((m.white||0)+(m.draws||0)+(m.black||0))/tot:0}))};}catch{return null;}}
+function multipv(fen, depth, n=4, ms=8000){return new Promise((res)=>{let sf;try{sf=spawn(SF);}catch{return res([]);}const map=new Map();const done=()=>{try{sf.kill();}catch{}};sf.on('error',()=>res([]));sf.stdout.on('data',(d)=>{for(const ln of d.toString().split('\n')){const mp=ln.match(/ multipv (\d+) /),sc=ln.match(/score (cp|mate) (-?\d+)/),pv=ln.match(/ pv (.+)/);if(mp&&sc&&pv){const cp=sc[1]==='mate'?(parseInt(sc[2])>0?1e5:-1e5):parseInt(sc[2]);map.set(parseInt(mp[1]),{cp,pv:pv[1].trim()});}}if(/bestmove/.test(d.toString())){done();fin();}});let f=false;const fin=()=>{if(f)return;f=true;const out=[...map.entries()].sort((a,b)=>a[0]-b[0]).map(([,v])=>{const c=new Chess(fen);const u=v.pv.split(' ')[0];let san=u;try{san=c.move({from:u.slice(0,2),to:u.slice(2,4),promotion:u[4]}).san;}catch{}return{san,cp:v.cp,pv:v.pv};});res(out);};sf.stdin.write(`setoption name MultiPV value ${n}\nposition fen ${fen}\ngo depth ${depth}\n`);setTimeout(()=>{done();fin();},ms);});}
+async function expl(sanPath,ratings){try{const c=new Chess();const uci=sanPath.map(m=>{const x=c.move(m);return x.from+x.to+(x.promotion??'');});const r=await fetch(`${PROXY}?source=lichess&ratings=${ratings}&speeds=blitz,rapid,classical&play=${uci.join(',')}`);if(!r.ok)return null;const j=await r.json();const tot=(j.white||0)+(j.draws||0)+(j.black||0);return{tot,moves:(j.moves||[]).map(m=>({san:m.san,games:(m.white||0)+(m.draws||0)+(m.black||0),pct:tot?((m.white||0)+(m.draws||0)+(m.black||0))/tot:0}))};}catch{return null;}}
 function sanPV(fen,pv,n=6){const c=new Chess(fen);const o=[];for(const u of pv.split(' ').slice(0,n)){try{o.push(c.move({from:u.slice(0,2),to:u.slice(2,4),promotion:u[4]}).san);}catch{break;}}return o.join(' ');}
+const NATURAL=san=>/^O-O/.test(san)||/x/.test(san)||/^[NB][a-h]?[1-8]?[a-h][1-8]/.test(san)||/^[a-h][45]$/.test(san)||/^d|^e/.test(san); // dev/castle/capture/central
+const RANDOMISH=san=>/^[a-h][3-6]$/.test(san)&&/^[ah]/.test(san); // a/h pawn pushes = edge noise candidates
 
-async function checkNode(sanPath, trapper, ex){
+async function checkNode(sanPath, exDisc, exVal){
   const c=new Chess(); for(const m of sanPath)c.move(m); const fen=c.fen();
-  const deep=await multipv(fen,22,6); if(deep.length<2)return null;
-  const best=deep[0]; const dmap=new Map(deep.map(m=>[m.san,m]));
-  // check the opponent's COMMON human moves (not just #1) for a punishable blunder
-  for(const hm of ex.moves.slice(0,3)){
-    const d=dmap.get(hm.san); if(!d) continue;             // bait outside top-6 deep
-    if(hm.san===best.san) continue;                         // their best move, no trap
-    const studentAfter = -d.cp;                             // student's eval after the bait
-    if(studentAfter>=PUNISH && (best.cp - d.cp)>=GAP){
-      // the punishment = student's best reply after the bait
-      const c2=new Chess(fen); c2.move(hm.san);
-      const pun=await multipv(c2.fen(),20,1);
-      return { sanPath:[...sanPath], bait:hm.san, baitPct:hm.pct, baitGames:hm.games,
-               studentAfter, refutation:best.san, refutationCp:best.cp,
-               punish: pun[0]?sanPV(c2.fen(),pun[0].pv,6):'', punishCp: pun[0]?-pun[0].cp:null };
-    }
+  // shallow scan first
+  const shallow=await multipv(fen,14,4,6000); if(shallow.length<2)return null;
+  const best=shallow[0]; const smap=new Map(shallow.map(m=>[m.san,m]));
+  const valSet=new Set((exVal?.moves||[]).map(m=>m.san)); // moves coherent players also make
+  for(const hm of (exDisc.moves||[]).slice(0,3)){
+    const d=smap.get(hm.san); if(!d||hm.san===best.san) continue;
+    if((hm.games||0)<MIN_BAIT) continue; // too thin to be a real trap
+    if((-d.cp)<PUNISH || (best.cp-d.cp)<GAP) continue;          // not a real blunder
+    // NOISE FILTER: bait must be natural AND survive into 1000+ play (cross-band)
+    const crossBand = valSet.has(hm.san);
+    if(!NATURAL(hm.san) && !crossBand) continue;                 // random-ish + 0-only → noise
+    // CONFIRM deep
+    const deep=await multipv(fen,20,4,9000); const dm=new Map(deep.map(m=>[m.san,m]));
+    const db=dm.get(hm.san), dbest=deep[0]; if(!db) continue;
+    if((-db.cp)<PUNISH || (dbest.cp-db.cp)<GAP) continue;        // washed out deep → skip
+    const c2=new Chess(fen); c2.move(hm.san); const pun=await multipv(c2.fen(),18,1,7000);
+    const valPct=exVal?.moves?.find(m=>m.san===hm.san)?.pct ?? 0;
+    return { sanPath:[...sanPath], bait:hm.san, baitPctAll:hm.pct, baitGames:hm.games, baitPct1000:valPct,
+             studentAfter:-db.cp, refutation:dbest.san, punish:pun[0]?sanPV(c2.fen(),pun[0].pv,6):'',
+             crossBand, natural:NATURAL(hm.san) };
   }
   return null;
 }
-
 async function walk(name, seed, trapper){
-  console.log(`\n########## ${name} (trapper=${trapper}) ##########`);
+  log(`\n########## ${name} (trapper=${trapper}) ##########`);
   const found=[]; const seen=new Set(); let nodes=0;
   async function rec(path, depth){
-    if(depth>=WALK_PLIES) return;
+    if(depth>=WALK_PLIES || nodes>=NODE_CAP) return;
     const c=new Chess(); for(const m of path)c.move(m);
-    const ex=await expl(path); await sleep(35);
-    if(!ex||ex.tot<MIN_GAMES||!ex.moves.length) return;
-    if(c.turn()!==trapper){ // opponent to move → check + continue down their replies
+    const exD=await expl(path,DISCOVER); await sleep(30);
+    if(!exD||exD.tot<MIN_GAMES||!exD.moves.length) return;
+    if(c.turn()!==trapper){
       const k=c.fen().split(' ').slice(0,2).join(' ');
       if(!seen.has(k)){ seen.add(k); nodes++;
-        const s=await checkNode(path, trapper, ex);
-        if(s){found.push(s); console.log(`  ✦ TRAP @ ${path.join(' ')}\n      bait ${s.bait} (${(s.baitPct*100).toFixed(0)}%, ${s.baitGames}g) → student +${s.studentAfter}cp | punish: ${s.punish} (+${s.punishCp}) | better was ${s.refutation}`);}
+        try{ const exV=await expl(path,VALIDATE); await sleep(25);
+          const s=await checkNode(path, exD, exV);
+          if(s){found.push(s); log(`  ✦ TRAP @ ${path.join(' ')}\n      bait ${s.bait} (all:${(s.baitPctAll*100).toFixed(0)}% ${s.baitGames}g | 1000+:${(s.baitPct1000*100).toFixed(0)}%) → student +${s.studentAfter}cp | punish ${s.punish} | better ${s.refutation} ${s.crossBand?'[cross-band✓]':'[0-only]'} ${s.natural?'':'[unnatural!]'}`);}
+        }catch(e){ log(`  [node err] ${String(e).slice(0,60)}`); }
       }
-      for(const m of ex.moves.slice(0,KB)) await rec([...path,m.san],depth+1);
-    } else { for(const m of ex.moves.slice(0,KW)) await rec([...path,m.san],depth+1); }
+      for(const m of exD.moves.slice(0,KB)) await rec([...path,m.san],depth+1);
+    } else { for(const m of exD.moves.slice(0,KW)) await rec([...path,m.san],depth+1); }
   }
   await rec(seed, seed.length);
-  console.log(`  → ${found.length} trap node(s) / ${nodes} opponent nodes checked.`);
+  log(`  → ${found.length} trap(s) / ${nodes} nodes checked.`);
   return found;
 }
 const all=[];
-try{ all.push(...await walk("Bishop's Opening", ['e4','e5','Bc4'], 'w')); }catch(e){ console.error('[Bishop walk error]', String(e).slice(0,160)); }
-try{ all.push(...await walk("Alapin Sicilian", ['e4','c5','c3'], 'w')); }catch(e){ console.error('[Alapin walk error]', String(e).slice(0,160)); }
-console.log(`\n==================== TOTAL: ${all.length} trap nodes ====================`);
+try{ all.push(...await walk("Bishop's Opening", ['e4','e5','Bc4'], 'w')); }catch(e){ log('[Bishop err] '+e); }
+try{ all.push(...await walk("Alapin Sicilian", ['e4','c5','c3'], 'w')); }catch(e){ log('[Alapin err] '+e); }
+log(`\n==================== TOTAL: ${all.length} traps ====================`);
