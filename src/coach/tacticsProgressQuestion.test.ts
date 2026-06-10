@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { isTacticsQuestion, isProgressQuestion, isMasterPlayQuestion } from './coachService';
+import { isTacticsQuestion, isProgressQuestion, isMasterPlayQuestion, isConceptQuestion } from './coachService';
 
 // Grounding inversion STEP B (2026-06-10). These detectors route a chat turn to
 // a CODE fact-computer (assembleTacticsAnswer / assembleProgressAnswer) so the
@@ -98,6 +98,36 @@ describe('isMasterPlayQuestion', () => {
       '',
     ]) {
       expect(isMasterPlayQuestion(q), String(q)).toBe(false);
+    }
+  });
+});
+
+describe('isConceptQuestion', () => {
+  it('matches definitional phrasings', () => {
+    for (const q of [
+      "what's a fork?",
+      'what is a zwischenzug',
+      'explain zugzwang',
+      'define the Lucena position',
+      'what does en passant mean',
+      'tell me about the bishop pair',
+      'how does a skewer work',
+    ]) {
+      expect(isConceptQuestion(q), q).toBe(true);
+    }
+  });
+
+  it('does NOT match position-specific questions (no collision with tactics/best-move)', () => {
+    for (const q of [
+      'is there a fork here?',
+      'is anything hanging?',
+      "what's the best move?",
+      'what should I play here',
+      'am I in danger right now',
+      undefined,
+      '',
+    ]) {
+      expect(isConceptQuestion(q), String(q)).toBe(false);
     }
   });
 });

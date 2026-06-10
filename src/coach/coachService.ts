@@ -471,6 +471,21 @@ export function isMasterPlayQuestion(ask: string | undefined): boolean {
   return !!ask && MASTER_PLAY_QUESTION_RE.test(ask);
 }
 
+/** A CONCEPT / DEFINITION question — "what's a fork?", "explain zwischenzug",
+ *  "what does zugzwang mean?". Phase 5: the answer is the injected BOOK corpus
+ *  (chess-concepts.json), voiced via `assembleConceptAnswer` → voiceFacts —
+ *  never the LLM's training memory. This matches only the DEFINITIONAL shape
+ *  and excludes position-specific cues ("is there a fork HERE", "am I in
+ *  danger") so it doesn't collide with `isTacticsQuestion`; the interception
+ *  then confirms a real concept token via `detectConceptsInText`. */
+const CONCEPT_QUESTION_RE =
+  /\b(?:what(?:'?s| is| are| does)\s+(?:a|an|the\s+)?[a-z]+|what\s+do\s+you\s+mean\s+by|explain|define|tell\s+me\s+about|how\s+does\s+(?:a|an|the)\b)\b/i;
+const CONCEPT_POSITIONAL_CUE_RE =
+  /\b(?:here|this\s+position|on\s+the\s+board|right\s+now|in\s+this|my\s+(?:position|move)|best\s+move|should\s+i\s+play)\b/i;
+export function isConceptQuestion(ask: string | undefined): boolean {
+  return !!ask && CONCEPT_QUESTION_RE.test(ask) && !CONCEPT_POSITIONAL_CUE_RE.test(ask);
+}
+
 /** A STUDENT-PROGRESS question — "am I improving?", "what should I work on?",
  *  "what are my weaknesses?", "how am I doing?", "my bad habits". The answer is
  *  the student's OWN computed history (their persisted bad-habit profile), so
@@ -892,13 +907,15 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
         ? [...(input.liveState.gameSans ?? []), ...playerSans]
         : input.liveState.gameSans;
     const groundedPlayers = playerNames.size > 0 ? [...playerNames] : undefined;
-    // A progress question ("am I improving?") is answered from the student's
-    // OWN history (Phase 6) and needs NO board — so engage grounding even with
-    // no FEN. Every other grounded intent requires a live position.
+    // Progress ("am I improving?") and concept ("what's a fork?") questions are
+    // answered from the student's history / the book corpus — NO board needed —
+    // so engage grounding even with no FEN. Other grounded intents need a live
+    // position.
     const progressQuestion = isProgressQuestion(input.ask);
+    const conceptQuestionEngage = isConceptQuestion(input.ask);
     const autoGrounding =
       options.grounding ??
-      (input.liveState.fen || progressQuestion
+      (input.liveState.fen || progressQuestion || conceptQuestionEngage
         ? {
             currentFen: input.liveState.fen,
             // DB-grounding: thread the move history through so the
@@ -959,6 +976,9 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             // STEP D Phase 4 — "how do masters play this?" voices the master-play
             // lookup's real top moves + frequencies (assembleMasterPlayAnswer).
             masterPlayQuestion: isMasterPlayQuestion(input.ask),
+            // STEP D Phase 5 — "what's a fork?" voices the book corpus
+            // (assembleConceptAnswer); the interception confirms a real concept.
+            conceptQuestion: isConceptQuestion(input.ask),
             studentColor: input.liveState.studentColor,
             surface: coachSurfaceToRoute(input.liveState.surface),
           }

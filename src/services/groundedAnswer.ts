@@ -17,6 +17,7 @@ import { findHangingPieces } from './tacticClassifier';
 import type { TacticsLiveContext } from '../coach/types';
 import type { BadHabit } from '../types';
 import type { MasterPlayResult } from './masterPlayTypes';
+import type { ConceptEntry } from './chessConceptService';
 
 // Pure board-fact constants — universal chess values, leaf-local so this module
 // imports nothing that could loop back. coachFeatureService imports these FROM
@@ -329,6 +330,38 @@ export function assembleMasterPlayAnswer(current: MasterPlayResult): GroundedAns
     bestMoveSan: lead.san,
     bestMoveFromTo: fromTo,
     sources: ['master-games:lichess'],
+  };
+}
+
+/**
+ * assembleConceptAnswer — Phase 5 (concepts): "what's a fork?", "explain
+ * zwischenzug", "what does zugzwang mean?". The fact source is the injected
+ * book corpus (`chess-concepts.json` — Capablanca / Lasker / Staunton / …),
+ * NEVER the LLM's training memory. The caller detects the concept + looks it
+ * up (chessConceptService); this packages the real book passage (or the
+ * curated fallback definition) for the voiceFacts chokepoint, with the source
+ * recorded. Returns null when the concept carries neither a passage nor a
+ * fallback (caller falls through). Takes the first 2 sentences of the passage
+ * so the voiced answer stays concise + grounded in the actual text.
+ */
+export function assembleConceptAnswer(concept: ConceptEntry): GroundedAnswer | null {
+  const passage = concept.passages?.[0];
+  let definition: string | null = null;
+  let source: string | null = null;
+  if (passage?.text?.trim()) {
+    definition = passage.text.trim().split(/(?<=[.!?])\s+/).slice(0, 2).join(' ').trim();
+    source = `book:${passage.bookSlug}`;
+  } else if (concept.fallbackDefinition?.trim()) {
+    definition = concept.fallbackDefinition.trim();
+    source = `concept:${concept.id}`;
+  }
+  if (!definition || !source) return null;
+
+  return {
+    facts: `${cap(concept.name)}: ${definition}`,
+    bestMoveSan: null,
+    bestMoveFromTo: null,
+    sources: [source],
   };
 }
 

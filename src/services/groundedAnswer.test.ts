@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer } from './groundedAnswer';
 import type { TacticsLiveContext } from '../coach/types';
 import type { MasterPlayResult } from './masterPlayTypes';
+import type { ConceptEntry } from './chessConceptService';
 
 // Phase 1: the facts for a move/eval question are assembled IN CODE — the
 // best move (chess.js SAN from the engine UCI), the grounded "why", and the
@@ -149,5 +150,33 @@ describe('assemblePlanAnswer — Phase 3 (voice the engine PV as the plan)', () 
   it('returns null on an empty PV or unparseable FEN', () => {
     expect(assemblePlanAnswer({ fen: START, pvSan: [], evalCp: 0, mateIn: null, studentSide: 'white' })).toBeNull();
     expect(assemblePlanAnswer({ fen: 'not-a-fen', pvSan: ['e4'], evalCp: 0, mateIn: null, studentSide: 'white' })).toBeNull();
+  });
+});
+
+// Phase 5: concept definitions come from the BOOK corpus, never LLM memory.
+function concept(over: Partial<ConceptEntry> = {}): ConceptEntry {
+  return { id: 'fork', name: 'fork', type: 'tactic', phrases: ['fork'], passages: [], ...over };
+}
+describe('assembleConceptAnswer — Phase 5 (voice the book corpus, not memory)', () => {
+  it('voices the first sentences of the book passage + a book source', () => {
+    const a = assembleConceptAnswer(concept({
+      passages: [{
+        bookSlug: 'capablanca-chess-fundamentals', bookTitle: 'Chess Fundamentals', author: 'Capablanca',
+        gutenbergId: 33870, chapter: null, section: null, wordCount: 20,
+        text: 'A fork is a double attack by one piece. It strikes two targets at once. The defender can save only one.',
+      }],
+    }));
+    expect(a!.facts).toMatch(/^Fork: A fork is a double attack/);
+    expect(a!.facts).toContain('strikes two targets'); // second sentence kept
+    expect(a!.facts).not.toContain('save only one'); // third sentence dropped (cap at 2)
+    expect(a!.sources).toEqual(['book:capablanca-chess-fundamentals']);
+  });
+  it('falls back to the curated definition + concept source when no passage', () => {
+    const a = assembleConceptAnswer(concept({ id: 'zwischenzug', name: 'zwischenzug', fallbackDefinition: 'An in-between move inserted before the expected recapture.' }));
+    expect(a!.facts).toBe('Zwischenzug: An in-between move inserted before the expected recapture.');
+    expect(a!.sources).toEqual(['concept:zwischenzug']);
+  });
+  it('returns null when the concept carries neither a passage nor a fallback', () => {
+    expect(assembleConceptAnswer(concept())).toBeNull();
   });
 });

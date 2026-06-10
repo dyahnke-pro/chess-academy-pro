@@ -36,8 +36,9 @@ function emitLlmTokenUsage(
   });
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer } from './groundedAnswer';
 import { detectBadHabits } from './badHabitDetector';
+import { detectConceptsInText, getConcept } from './chessConceptService';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
 import { buildVerifiedPuzzleContext } from './verifiedLineLibrary';
@@ -1118,6 +1119,12 @@ export interface MasterGroundingOptions {
    *  lookup's real top moves + frequencies (assembleMasterPlayAnswer) so the LLM
    *  never fabricates a frequency. */
   masterPlayQuestion?: boolean;
+  /** STEP D Phase 5 — true when this turn is a CONCEPT / DEFINITION question
+   *  ("what's a fork?", "explain zwischenzug"). The answer is the injected book
+   *  corpus (assembleConceptAnswer), voiced via voiceFacts — never the LLM's
+   *  training memory. Needs no board. The interception confirms a real concept
+   *  via `detectConceptsInText` and falls through otherwise. */
+  conceptQuestion?: boolean;
   /** Which side the STUDENT plays — so the tactics answer warns about THEIR
    *  hanging pieces. Falls back to side-to-move when absent. */
   studentColor?: 'white' | 'black';
@@ -1613,7 +1620,8 @@ export async function getCoachChatResponse(
       grounding.forceEngage === true ||
       detectMoveQuestionIntent(messages) ||
       grounding.tacticsQuestion === true ||
-      grounding.progressQuestion === true;
+      grounding.progressQuestion === true ||
+      grounding.conceptQuestion === true;
     if (intentFired) {
       try {
         // Helper: the latest user message, for voiceFacts context.
@@ -1639,6 +1647,24 @@ export async function getCoachChatResponse(
               if (voiced) return voiced;
             }
           } catch { /* fall through to legacy path */ }
+        }
+
+        // ── CONCEPT / DEFINITION (Phase 5) — voice the BOOK corpus ─────────
+        // "what's a fork?" / "explain zwischenzug". The definition comes from
+        // chess-concepts.json (Capablanca / Lasker / …), NEVER training memory.
+        // Confirm a real concept token here (the detector only checked the
+        // question SHAPE); fall through when none matches.
+        if (grounding.conceptQuestion) {
+          const userText = lastUserMessage() ?? '';
+          const conceptIds = detectConceptsInText(userText);
+          if (conceptIds.length > 0) {
+            const concept = getConcept(conceptIds[0]);
+            const answer = concept ? assembleConceptAnswer(concept) : null;
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept' });
+              if (voiced) return voiced;
+            }
+          }
         }
 
         masterPlayContext = await buildMasterPlayContext(grounding);
