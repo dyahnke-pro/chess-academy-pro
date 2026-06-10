@@ -157,3 +157,28 @@ Speed fix: shallow scan (depth 14) to spot the +1.2 blunder, deep confirm
 - [~] Production scan over the 16 tactical openings (`SET=tactical`) — RUNNING
 - [ ] Hand-verify the production candidates
 - [ ] Gate + data (`swindles.json` or `tier:'swindle'`) + surface (trap trainer)
+
+
+## REFINEMENTS (David 2026-06-10, second pass)
+
+- **NAME = "Traps" with a gem icon** (David's original title) — NOT "Swindles" /
+  "Secret Weapons". The surface is just **Traps** 💎.
+- **Same bucket as the existing gems** (David: "too many similar buckets — is it
+  a trap or not?"). A trap is structurally identical to a punish-gem; merge into
+  the existing store, add one `refutation` field. The detector is a new *finder*,
+  not a new content type.
+- **The BAIT is YOUR move, the ERROR is THEIRS** (David's structural fix). Correct
+  model: **bait** (your luring move — the last move of the line) → **error** (the
+  opponent's common wrong reply = the gem's `inaccuracy` field) → **punish** (you
+  win) → **refutation** (their only save). My first labels had bait/error swapped.
+- **ORIENTATION is hard-asserted** — `checkNode` returns null if it's the
+  student's move to play, so the detector can NEVER find a trap *for the opponent*
+  (where the student is the one who errs). Only opponent-to-move nodes are checked.
+- **PUNISH RUNS TO THE END** (David: "don't stop 2-3 moves before checkmate").
+  `playToConclusion` walks engine-best for both sides until **mate** (`#`) or a
+  **quiet, decisively-won** position. `punishToMate` flags forced mates.
+- **Fried Liver finding:** the app has the Two Knights/Fried Liver as a *lesson*
+  (`twoKnightsDefence.ts`, `italianGameTrapLessons.ts`) but the `Ng5→Nxe4→Bxf7+`
+  trap is NOT in the drillable trap-gem set (the only Italian gem is a different
+  `…d4 Nxd4 Bxf7+` line). So the detector found a real gap on the most famous
+  trap in chess — earns its keep.

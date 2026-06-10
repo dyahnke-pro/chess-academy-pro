@@ -29,7 +29,7 @@ function sanPV(fen,pv,n=6){const c=new Chess(fen);const o=[];for(const u of pv.s
 const NATURAL=san=>/^O-O/.test(san)||/x/.test(san)||/^[NB][a-h]?[1-8]?[a-h][1-8]/.test(san)||/^[a-h][45]$/.test(san)||/^d|^e/.test(san); // dev/castle/capture/central
 const RANDOMISH=san=>/^[a-h][3-6]$/.test(san)&&/^[ah]/.test(san); // a/h pawn pushes = edge noise candidates
 
-async function checkNode(sanPath, exDisc, exVal){
+async function checkNode(sanPath, exDisc, exVal, trapper){
   const c=new Chess(); for(const m of sanPath)c.move(m); const fen=c.fen();
   // shallow scan first
   const shallow=await multipv(fen,14,4,6000); if(shallow.length<2)return null;
@@ -68,7 +68,7 @@ async function walkCfg(name, seed, trapper, WP, NC, GLOBAL){
       const k=c.fen().split(' ').slice(0,2).join(' ');
       if(!GLOBAL.has(k)){ GLOBAL.add(k); nodes++;
         try{ const exV=await expl(path,VALIDATE); await sleep(20);
-          const sN=await checkNode(path,exD,exV);
+          const sN=await checkNode(path,exD,exV,trapper);
           if(sN){ sN.opening=name; found.push(sN); log(`  ✦ ${name} @ ${path.join(' ')} | bait ${sN.baitMove} → error ${sN.error}(${sN.errorGames}g) +${sN.studentAfter}cp | punish ${sN.punish.split(' ').slice(0,2).join(' ')} | refutation ${sN.refutation}`); }
         }catch(e){}
       }
@@ -90,7 +90,7 @@ async function walk(name, seed, trapper){
       const k=c.fen().split(' ').slice(0,2).join(' ');
       if(!seen.has(k)){ seen.add(k); nodes++;
         try{ const exV=await expl(path,VALIDATE); await sleep(25);
-          const s=await checkNode(path, exD, exV);
+          const s=await checkNode(path, exD, exV, trapper);
           if(s){found.push(s); log(`  ✦ TRAP @ ${path.join(' ')}\n      bait ${s.baitMove} → error ${s.error} (all:${(s.errorPctAll*100).toFixed(0)}% ${s.errorGames}g | 1000+:${(s.errorPct1000*100).toFixed(0)}%) → +${s.studentAfter}cp | punish ${s.punish} | refutation ${s.refutation} ${s.crossBand?'[cross-band✓]':'[0-only]'} ${s.natural?'':'[unnatural!]'}`);}
         }catch(e){ log(`  [node err] ${String(e).slice(0,60)}`); }
       }
