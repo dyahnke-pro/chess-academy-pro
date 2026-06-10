@@ -1738,6 +1738,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             pgn={pgn}
             openingName={openingName}
             gameId={props.gameId}
+            playerRating={playerRating}
           />
         </div>
       </div>

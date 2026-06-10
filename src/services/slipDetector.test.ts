@@ -1,5 +1,15 @@
 import { describe, it, expect } from 'vitest';
-import { detectSlip, SLIP_CP } from './slipDetector';
+import { detectSlip, SLIP_CP, mistakeThresholdForRating } from './slipDetector';
+
+describe('mistakeThresholdForRating (rating-adaptive bucket gate)', () => {
+  it('holds 1500+ players to ≥0.5 pawn, everyone else to ≥1.0', () => {
+    expect(mistakeThresholdForRating(2100)).toBe(SLIP_CP.inaccuracy); // 50 — advanced
+    expect(mistakeThresholdForRating(1500)).toBe(SLIP_CP.inaccuracy); // 50 — boundary is inclusive
+    expect(mistakeThresholdForRating(1499)).toBe(SLIP_CP.mistake);    // 100 — below the line
+    expect(mistakeThresholdForRating(800)).toBe(SLIP_CP.mistake);     // 100 — beginner
+    expect(mistakeThresholdForRating(undefined)).toBe(SLIP_CP.mistake); // unknown → 1.0
+  });
+});
 
 describe('detectSlip', () => {
   it('following the book move is never a slip', () => {

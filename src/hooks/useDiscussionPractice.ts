@@ -20,6 +20,7 @@ import {
 } from '../services/discussionPractice';
 import type { MisconceptionCandidate } from '../services/misconceptionDiagnosis';
 import { getMisconceptionTag } from '../data/misconceptionTags';
+import { mistakeThresholdForRating } from '../services/slipDetector';
 import { logAppAudit } from '../services/appAuditor';
 import { useSettings } from './useSettings';
 
@@ -181,6 +182,10 @@ export function useDiscussionPractice(
         learned: args.learned,
       });
       if (!slip.isSlip) return;
+      // Rating-adaptive BUCKET gate (David 2026-06-10): only a real mistake
+      // becomes a bucket — ≥1.0 pawn for most players, ≥0.5 for 1500+. Keeps a
+      // game to a handful of mistakes, not 30 sub-optimal moves.
+      if (slip.cpLoss < mistakeThresholdForRating(args.studentRating)) return;
       // Already prompted for this move (the blunder interceptor raised it
       // first via raiseSlipPrompt) — don't double-fire.
       if (promptedFenAfterRef.current === args.fenAfter) return;
@@ -274,6 +279,9 @@ export function useDiscussionPractice(
   // (David 2026-06-04: blunder pop-up fired with no "why" question).
   const raiseSlipPrompt = useCallback((args: RaiseSlipPromptArgs): void => {
     if (!enabled) return;
+    // Rating-adaptive bucket gate (≥1.0 pawn, or ≥0.5 for 1500+). Gate BEFORE
+    // claiming the FEN so a sub-threshold slip doesn't block the faucet.
+    if (args.cpLoss < mistakeThresholdForRating(args.studentRating)) return;
     // One prompt per move — if the faucet already claimed this position, or
     // a prompt for it is already up, don't clobber it.
     if (promptedFenAfterRef.current === args.fenAfter) return;

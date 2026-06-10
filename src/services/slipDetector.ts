@@ -55,21 +55,17 @@ function severityFor(cpLoss: number): SlipSeverity | null {
   return null;
 }
 
-/** Rating-adaptive interjection bar (David 2026-06-04): the coach's
- *  "why did you play that?" question gets PICKIER as the player improves —
- *  don't nag a beginner about every inaccuracy, but a 2000+ player wants the
- *  sharper feedback.
- *    - beginner     (< 1000):    blunders only
- *    - intermediate (1000–2000): mistakes + blunders
- *    - advanced     (> 2000):    inaccuracies + mistakes + blunders
- *  The slip is still CAPTURED to the weakness bucket below the bar — this
- *  governs only whether to INTERRUPT with the spoken question. Defaults the
- *  rating to 1200 (intermediate) when unknown. */
-export function slipWarrantsInterjection(cpLoss: number, rating: number | undefined | null): boolean {
-  const r = rating ?? 1200;
-  if (r > 2000) return cpLoss >= SLIP_CP.inaccuracy;
-  if (r >= 1000) return cpLoss >= SLIP_CP.mistake;
-  return cpLoss >= SLIP_CP.blunder;
+/** Rating-adaptive BUCKET-CAPTURE threshold, in centipawns (David 2026-06-10).
+ *  A move only becomes a thinking-error bucket when its eval drop clears this
+ *  bar — so "didn't find the engine's #1" with a small loss never counts, and a
+ *  game yields a handful of real mistakes, not 30. Two bands:
+ *    - advanced (≥1500): 0.5 pawn (50cp) — held to the finer standard.
+ *    - everyone else:     1.0 pawn (100cp = the mistake floor) — only real
+ *      mistakes count; small inaccuracies are noise at this level.
+ *  (Supersedes the old interjection bar — the silent-classify pivot removed the
+ *  mid-game prompt, so this now governs CAPTURE, not whether to interrupt.) */
+export function mistakeThresholdForRating(rating: number | undefined | null): number {
+  return (rating ?? 0) >= 1500 ? SLIP_CP.inaccuracy : SLIP_CP.mistake;
 }
 
 /** Decide whether a played move is a slip worth teaching. Pure logic —

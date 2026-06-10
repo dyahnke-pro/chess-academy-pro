@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { BookOpen, Target, Check, Loader2 } from 'lucide-react';
 import { scanTheoryDeviation, type TheoryDeviation } from '../../services/theoryDeviationScan';
 import { autoAnalyzeBlunders, type BlunderForAnalysis } from '../../services/autoAnalyzeGame';
+import { mistakeThresholdForRating } from '../../services/slipDetector';
 import { classifyPhase } from '../../services/gamePhaseService';
 import { hasMisconceptionsForGame } from '../../services/misconceptionService';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
@@ -25,22 +26,32 @@ interface GameReviewWeaknessCaptureProps {
   pgn?: string;
   openingName?: string | null;
   gameId?: string;
+  /** Student's rating — drives the rating-adaptive bucket threshold (≥1.0
+   *  pawn for most players, ≥0.5 for 1500+). */
+  playerRating?: number;
 }
 
 /** Build the player's blundered/mistaken moves into BlunderForAnalysis,
  *  using the prior move's resulting FEN as the position-before. */
-function buildBlunders(moves: CoachGameMove[], playerColor: 'white' | 'black'): BlunderForAnalysis[] {
+function buildBlunders(moves: CoachGameMove[], playerColor: 'white' | 'black', rating?: number): BlunderForAnalysis[] {
   const sign = playerColor === 'white' ? 1 : -1;
+  const threshold = mistakeThresholdForRating(rating);
   const out: BlunderForAnalysis[] = [];
   for (let i = 0; i < moves.length; i++) {
     const move = moves[i];
     const side = i % 2 === 0 ? 'white' : 'black';
     if (side !== playerColor) continue;
-    if (move.classification !== 'blunder' && move.classification !== 'mistake') continue;
     const cpLoss =
       move.preMoveEval !== null && move.evaluation !== null
         ? (move.preMoveEval - move.evaluation) * sign
         : undefined;
+    // Rating-adaptive bucket gate: a known eval drop must clear the threshold
+    // (≥1.0 pawn, or ≥0.5 for 1500+). When the eval is missing, fall back to
+    // the scan's blunder/mistake flag so nothing flagged is silently dropped.
+    const passes = cpLoss !== undefined
+      ? cpLoss >= threshold
+      : (move.classification === 'blunder' || move.classification === 'mistake');
+    if (!passes) continue;
     const fenBefore = i > 0 ? moves[i - 1].fen : START_FEN;
     out.push({
       fen: fenBefore,
@@ -61,6 +72,7 @@ export function GameReviewWeaknessCapture({
   pgn,
   openingName,
   gameId,
+  playerRating,
 }: GameReviewWeaknessCaptureProps): JSX.Element | null {
   const navigate = useNavigate();
   const openingId = openingName ? resolveOpeningIdFromName(openingName) : null;
@@ -95,7 +107,7 @@ export function GameReviewWeaknessCapture({
     return () => { cancelled = true; };
   }, [gameId]);
 
-  const blunders = buildBlunders(moves, playerColor);
+  const blunders = buildBlunders(moves, playerColor, playerRating);
 
   const capture = useCallback(async (): Promise<void> => {
     if (captureState !== 'idle') return;
