@@ -93,6 +93,41 @@ sharp. Grid:
 6. **Imported-game batch** — run the detector over flagged moves on import;
    auto-tag ≥90, queue the rest.
 
+## ═══ SECOND HALF — FEED THE DATA BACK / TEACH THE CORRECTION ═══
+(David 2026-06-10: "then we need to build the second half. Feeding data back to
+the user.") The diagnosis (first half) is worthless if the correction isn't
+COMMUNICATED. This is the answer to the question that started the thread — *how
+are the teachings and corrections communicated?* It rests on the grounding
+foundation shipped this session: **the corrections ARE grounded narration.**
+
+7. **Thinking-Errors dashboard** — the tab lists buckets ranked by frequency
+   (recency-weighted), each with its plain-English blurb, the latest
+   board-grounded `coachNote`, the count, and a "work on this" action. The user
+   SEES their actual thinking errors, most frequent first.
+8. **Per-bucket CORRECTION drill — close the loop the right way per bucket**
+   (today the non-tactical tags dead-end at a `principle` stub; fix that):
+   - Tactical (hung / missed-tactic / missed-threat / **miscalculated**) →
+     RE-SOLVE the real position: find the move you missed / the refutation /
+     re-calculate the line to the end.
+   - **Didn't-press** → from the winning position, find the forcing continuation
+     you bailed on.
+   - **Over-defended** → shown the "threat", find the move that ignores it +
+     why it was harmless (engine proves it).
+   - **Wrong-side** → shown the structure, choose the correct wing / break
+     (orientation drill).
+   - Positional (bad-trade / pawn-weakness / king-safety / misplaced) → a
+     principle card + a decision drill ("would you make this trade?").
+   Each correction is SPOKEN/WRITTEN through the grounded narration path
+   (board-verified `coachNote` + the drill's teaching) — never invented prose.
+9. **Training-Plan integration + progress feedback** — `trainingPlanSelector`
+   prioritizes the most frequent/recent thinking errors and serves the step-8
+   corrections as the daily reps; add drill mappings for the 4 new tags. The
+   bucket's SRS spaces out as the user drills it (never graduates — David's rule)
+   so the user watches the error get RARER. That visible decline is the feedback.
+
+The two halves together: **first half tags WHAT went wrong (code), second half
+teaches HOW to fix it (grounded narration) and drills it until it fades.**
+
 ## Gates
 - Pure detector tests (each bucket's trigger + confidence band).
 - The bounded-LLM gate: the tag returned by the language-match step MUST be a
