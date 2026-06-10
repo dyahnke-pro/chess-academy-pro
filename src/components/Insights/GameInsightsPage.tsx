@@ -301,8 +301,15 @@ export function GameInsightsPage(): JSX.Element {
           </div>
         )}
 
-        {/* Tabs */}
-        <div className="flex gap-2 py-2">
+        {/* Tabs — horizontally scrollable so no tab clips off the right
+            edge (5 tabs + the wide "Thinking Errors" label overflowed a
+            fixed-width flex-1 row and cut "Tactics" off). Buttons size to
+            their label and the row scrolls left/right. */}
+        <div
+          className="flex gap-2 py-2 overflow-x-auto"
+          style={{ scrollbarWidth: 'none' }}
+          data-testid="insights-tab-row"
+        >
           {TABS.map((t) => {
             const isActive = tab === t.id;
             return (
@@ -320,7 +327,7 @@ export function GameInsightsPage(): JSX.Element {
                   }
                   setTab(t.id);
                 }}
-                className="flex-1 text-center py-2.5 px-2 text-sm font-semibold rounded-lg transition-all"
+                className="shrink-0 whitespace-nowrap text-center py-2.5 px-3.5 text-sm font-semibold rounded-lg transition-all"
                 style={{
                   color: isActive ? 'var(--color-accent)' : 'var(--color-text-muted)',
                   border: isActive ? '1px solid var(--color-accent)' : '1px solid var(--color-border)',
