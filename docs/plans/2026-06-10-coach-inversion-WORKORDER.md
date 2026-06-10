@@ -113,19 +113,27 @@ The DECISION/Q&A paths are inverted. What remains splits in two:
    shallow-work sin). The right next step for these is to TIGHTEN the
    fact-injection + lean on the auditor, NOT to template them. The leak audit
    tags them `grounded=false` so their volume is visible.
-2. **Genuine remaining DECISION holes:**
+2. **Genuine remaining DECISION holes** (each needs new plumbing — do at full
+   depth WITH review, not blind):
+   - **Phase 5 concepts — DONE** (`assembleConceptAnswer`, `isConceptQuestion`,
+     book-corpus grounded).
    - **Phase 4 pro-game refs** ("how does \<pro\> play X") — `playerGames`
-     envelope already injected; assemble + voice.
-   - **Phase 5 endgame** (`/api/lichess-tablebase`) + **concepts**
-     (`detectConceptsInText`/`getConcept` exist; needs an `isConceptQuestion`
-     detector that doesn't collide with `isTacticsQuestion`).
-   - **whatif** ("what if I play X?") — needs an engine eval of the hypothetical
-     in the chat path (Stockfish-in-chat), then voice it.
+     envelope is injected (`LivePlayerGamesContext` in liveState); thread it onto
+     `MasterGroundingOptions` + assemble (count + the highest-rated-opponent win
+     + variation). The detector is the fuzzy part (arbitrary pro names) — gate on
+     the playerGames context being present rather than name-matching.
+   - **Phase 5 endgame** — `/api/lichess-tablebase` is the TRUTH for ≤7-piece
+     endings (win/draw/loss + DTZ + best move). Needs an async tablebase fetch in
+     the chat path (like `buildMasterPlayContext`'s fetch) gated on an endgame FEN
+     + an `isEndgameQuestion` detector. Network-dependent — verify proxy reach.
+   - **whatif** ("what if I play X?") — needs a Stockfish eval of the hypothetical
+     position IN the chat path, then voice the resulting eval+line.
    - **General chat-fallback** → assemble position facts (eval+tactics+master+
      book) and voice; only genuinely-non-chess chat stays free prose. Once that
      lands, the lone `validateClaims` backstop has nothing to guard → delete it
      → **gate 0**. Do NOT delete the backstop before then (it's the safety net,
-     not the disease).
+     not the disease). This is also a PRODUCT call (terser grounded answers vs
+     the current richer free prose) — confirm with David.
 
 ## 🔧 WHAT'S LEFT (original plan, in order)
 
