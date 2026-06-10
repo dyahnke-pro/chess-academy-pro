@@ -1478,7 +1478,7 @@ function stripUngroundedSentences(text: string, validation: ClaimValidationResul
  */
 export async function voiceFacts(
   facts: string,
-  opts: { studentMessage?: string; providerConfig?: ProviderConfig | null } = {},
+  opts: { studentMessage?: string; providerConfig?: ProviderConfig | null; intent?: string } = {},
 ): Promise<string | null> {
   const cfg = opts.providerConfig ?? (await getProviderConfig());
   if (!cfg) return null;
@@ -1498,19 +1498,45 @@ export async function voiceFacts(
   // (Deliberately NOT cfg.preferredModel — voicing facts never needs the
   // pricier model, and that field is a string|object union anyway.)
   try {
-    if (cfg.provider === 'anthropic') {
-      return await callAnthropic(cfg.apiKey, ANTHROPIC_MODEL_MAP.move_commentary, system, [{ role: 'user', content: user }], 240, 'grounded_voice');
-    }
-    return await callDeepSeek(
-      cfg.apiKey,
-      DEEPSEEK_MODEL_MAP.move_commentary,
-      [{ role: 'system', content: system }, { role: 'user', content: user }],
-      240,
-      'grounded_voice',
-    );
+    const out = cfg.provider === 'anthropic'
+      ? await callAnthropic(cfg.apiKey, ANTHROPIC_MODEL_MAP.move_commentary, system, [{ role: 'user', content: user }], 240, 'grounded_voice')
+      : await callDeepSeek(
+          cfg.apiKey,
+          DEEPSEEK_MODEL_MAP.move_commentary,
+          [{ role: 'system', content: system }, { role: 'user', content: user }],
+          240,
+          'grounded_voice',
+        );
+    // STEP E leak audit — a GROUNDED call: the facts were computed in code and
+    // this only phrased them. (The matching ungrounded emissions are at the
+    // free-reasoning chat fallback + getCoachCommentary.)
+    emitCoachLlmCallAudit({ grounded: true, intent: opts.intent ?? 'voiceFacts', question: opts.studentMessage });
+    return out;
   } catch {
     return null; // never throws — caller falls through
   }
+}
+
+/** STEP E — the grounding-inversion leak audit. Emits `coach-llm-call` on
+ *  every coach-facing LLM call with a `grounded` flag, so audit-stream /
+ *  PostHog show exactly how many turns voiced computed facts (grounded=true,
+ *  via an assembler→voiceFacts) vs let the LLM reason/narrate freely
+ *  (grounded=false: the general chat fallback + the grounded-by-injection
+ *  narration tasks). Turns "does the LLM still decide anywhere?" into a
+ *  measured, closeable list. Fire-and-forget; never throws. */
+function emitCoachLlmCallAudit(opts: { grounded: boolean; intent: string; surface?: string; question?: string }): void {
+  void logAppAudit({
+    kind: 'coach-llm-call',
+    category: 'subsystem',
+    source: 'coachApi',
+    summary: `grounded=${opts.grounded} intent=${opts.intent} surface=${opts.surface ?? 'unknown'}`,
+    details: JSON.stringify({
+      grounded: opts.grounded,
+      intent: opts.intent,
+      surface: opts.surface ?? null,
+      question: opts.question ? opts.question.slice(0, 200) : null,
+    }),
+  });
 }
 
 export async function getCoachChatResponse(
@@ -1609,7 +1635,7 @@ export async function getCoachChatResponse(
             const profile = await db.profiles.get('main');
             const answer = profile ? assembleProgressAnswer(await detectBadHabits(profile)) : null;
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config });
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress' });
               if (voiced) return voiced;
             }
           } catch { /* fall through to legacy path */ }
@@ -1652,7 +1678,7 @@ export async function getCoachChatResponse(
                 : null;
             const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config });
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move' });
               if (voiced) {
                 return answer.bestMoveFromTo
                   ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
@@ -1676,7 +1702,7 @@ export async function getCoachChatResponse(
             studentSide: grounding.enginePlan.studentSide,
           });
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config });
+            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'plan' });
             if (voiced) {
               return answer.bestMoveFromTo
                 ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
@@ -1696,7 +1722,7 @@ export async function getCoachChatResponse(
             ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
           const answer = assembleTacticsAnswer(grounding.tactics, sc);
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config });
+            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics' });
             if (voiced) return voiced;
           }
         }
@@ -1709,7 +1735,7 @@ export async function getCoachChatResponse(
         if (grounding.masterPlayQuestion && masterPlayContext && masterPlayContext.current.moves.length > 0) {
           const answer = assembleMasterPlayAnswer(masterPlayContext.current);
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config });
+            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'master-play' });
             if (voiced) {
               return answer.bestMoveFromTo
                 ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
@@ -1891,6 +1917,9 @@ export async function getCoachChatResponse(
 
   // ── Non-grounded path: existing behavior, streaming-as-passed ──
   if (!groundingEngaged) {
+    // STEP E leak audit — UNGROUNDED: no assembler matched, the LLM reasons
+    // freely (open chat / a position question the inversion doesn't yet cover).
+    emitCoachLlmCallAudit({ grounded: false, intent: 'chat-open', surface: grounding?.surface, question: messages[messages.length - 1]?.content });
     return callOnce(buildSystemPromptFor(), true);
   }
 
@@ -1907,6 +1936,11 @@ export async function getCoachChatResponse(
   const { surface, sessionId } = grounding ?? { surface: 'unknown', sessionId: undefined };
   const originalQuery = messages[messages.length - 1]?.content ?? '';
 
+  // STEP E leak audit — UNGROUNDED: grounding context was injected but no
+  // assembler produced the answer, so the LLM still reasons freely (then the
+  // single validator backstop + in-code strip guard the output). This is the
+  // remaining hole the general-path inversion will close (→ gate 0).
+  emitCoachLlmCallAudit({ grounded: false, intent: 'chat-grounded-fallback', surface, question: originalQuery });
   const response = await callOnce(buildSystemPromptFor(), false);
   const validation = validateClaims(response, masterPlayContext);
   if (validation.ok) {
@@ -2038,6 +2072,14 @@ export async function getCoachCommentary(
     grounding.block || undefined,
   );
   const userMessage = buildChessContextMessage(context);
+
+  // STEP E leak audit — UNGROUNDED: the commentary/report tasks (move
+  // commentary, puzzle feedback, post-game review, reports, model-game
+  // annotation, …) are grounded-by-INJECTION (facts + "never invent" rules +
+  // narrationAuditor) but still let the LLM phrase freely — they don't route
+  // through an assembler→voiceFacts. Tagging them surfaces the per-task volume
+  // so the closeable list is complete. `task` IS the intent here.
+  emitCoachLlmCallAudit({ grounded: false, intent: `commentary:${task}`, question: context.additionalContext ?? context.lastMoveSan ?? undefined });
 
   try {
     return await callCommentaryWithConfig(config, task, userMessage, systemPrompt, onStream);

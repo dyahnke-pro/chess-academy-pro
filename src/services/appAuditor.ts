@@ -584,6 +584,18 @@ export type AuditKind =
   //   coach served the stock "I can't verify which moves are sound"
   //   response. Last-line G3 protection.
   | 'master-play-enforcement-fallback'
+  // `coach-llm-call`: the grounding-inversion leak audit (STEP E). Fires on
+  //   EVERY coach-facing LLM call with `grounded` in the summary/details:
+  //   grounded=true  → the answer was COMPUTED in code and routed through the
+  //                    `voiceFacts` chokepoint (the LLM only phrased facts).
+  //   grounded=false → the LLM still reasoned/narrated freely (the general
+  //                    chat fallback, or a grounded-by-injection narration
+  //                    path like move commentary / reports). Details carry the
+  //                    detected `intent`, the `surface`, and the raw question,
+  //                    so audit-stream / PostHog show every remaining ungrounded
+  //                    call as a closeable list. This is how "no LLM decisions
+  //                    anywhere?" becomes a measured answer instead of a claim.
+  | 'coach-llm-call'
   // Book grounding (chess-concepts.json — 7 Gutenberg classics).
   //   Fires whenever the coach OR the opening narrator injects a
   //   passage from Capablanca / Lasker / Staunton / Young / Edge /
