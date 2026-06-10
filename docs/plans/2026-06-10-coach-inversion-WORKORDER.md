@@ -92,26 +92,40 @@ Gate baseline driven **9 → 4**.
   path is fully inverted — **do NOT delete the backstop to hit 0** (that removes
   the safety net, not the disease).
 
-### 🔭 STILL LEFT (the harder tail — do each at FULL depth, then gate → 0)
-- **Phase 4 (cont) — pro-game refs** for "how does \<pro\> play X" (the
-  `playerGames` envelope is already injected; assemble + voice it).
-- **Phase 5 — endgame** (`/api/lichess-tablebase`) + **concepts**
-  (`chess-concepts.json`; `detectConceptsInText`/`getConcept` exist — needs an
-  `isConceptQuestion` detector that doesn't collide with `isTacticsQuestion`,
-  since "what's a fork?" trips both).
-- **The report CoachTasks** (`weakness/bad_habit/weekly/daily/session`) and the
-  per-move CoachTasks (`move_commentary`/`whatif_commentary`/
-  `position_analysis_chat`/`hint`/`puzzle_feedback`/`model_game_annotation`/
-  `smart_search`). ⚠️ These route through `getCoachCommentary` (a DIFFERENT
-  entry point than `getCoachChatResponse`), so inverting them is a separate
-  seam — compute the report/commentary in code, voice via a `voiceFacts`-class
-  call. This is the biggest remaining chunk.
-- **General chat-fallback inversion → removes the backstop → gate 0.** Once
-  every chat turn is assembled (position facts: eval + tactics + master play +
-  book concepts → voiceFacts), the lone `validateClaims` backstop has nothing
-  to guard and can go. THAT is the gate-0 finish line.
-- **STEP E — leak audit** (LAST, David "later todo"): tag every coach LLM call
-  grounded vs ungrounded; emit `coach-ungrounded-llm-call`.
+- **STEP E — leak audit — DONE.** `coach-llm-call` fires on EVERY coach LLM
+  call with a `grounded` flag (true = assembler→voiceFacts; false = the general
+  chat fallback + the grounded-by-injection narration tasks). audit-stream /
+  PostHog now show the grounded:ungrounded ratio + every remaining ungrounded
+  call type by `intent`. **This is the measured answer to "does the LLM still
+  decide anywhere?" — pull the audit and read the `grounded=false` rows.**
+
+### 🔭 STILL LEFT (the harder tail — each at FULL depth; finish line = gate 0)
+The DECISION/Q&A paths are inverted. What remains splits in two:
+
+1. **Grounded-by-injection NARRATION (do NOT shallow-template these).**
+   `move_commentary`, `puzzle_feedback`, `game_post_review`, the reports
+   (`weakness/bad_habit/weekly/daily/session`), `model_game_annotation`,
+   `opening_overview`, `sideline_explanation`. They route through
+   `getCoachCommentary`, already inject the facts + "never invent" rules +
+   the narrationAuditor, and produce rich TEACHING prose. G0 permits the LLM
+   to *phrase* computed facts — that's what these do. Forcing them through a
+   templated facts-voicer REGRESSES the teaching quality (the cardinal
+   shallow-work sin). The right next step for these is to TIGHTEN the
+   fact-injection + lean on the auditor, NOT to template them. The leak audit
+   tags them `grounded=false` so their volume is visible.
+2. **Genuine remaining DECISION holes:**
+   - **Phase 4 pro-game refs** ("how does \<pro\> play X") — `playerGames`
+     envelope already injected; assemble + voice.
+   - **Phase 5 endgame** (`/api/lichess-tablebase`) + **concepts**
+     (`detectConceptsInText`/`getConcept` exist; needs an `isConceptQuestion`
+     detector that doesn't collide with `isTacticsQuestion`).
+   - **whatif** ("what if I play X?") — needs an engine eval of the hypothetical
+     in the chat path (Stockfish-in-chat), then voice it.
+   - **General chat-fallback** → assemble position facts (eval+tactics+master+
+     book) and voice; only genuinely-non-chess chat stays free prose. Once that
+     lands, the lone `validateClaims` backstop has nothing to guard → delete it
+     → **gate 0**. Do NOT delete the backstop before then (it's the safety net,
+     not the disease).
 
 ## 🔧 WHAT'S LEFT (original plan, in order)
 
