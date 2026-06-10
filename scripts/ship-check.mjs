@@ -167,6 +167,11 @@ const GATE_TESTS = [
   // routing through voiceFacts makes ship-check go RED and blocks the push.
   // The teeth behind the rule that was written 8x and ignored for 3 months.
   'src/services/coachInversion.gate.test.ts',
+  // 🔒 LLM CHOKEPOINT — every model wire funnels through coachApi.ts and every
+  // network primitive is leak-audited. Touching a provider SDK / the /api/llm
+  // proxy anywhere else, or adding an untagged primitive, makes ship-check RED.
+  // Turns "what else are we missing?" into an enforced, closed question.
+  'src/services/coachLlmChokepoint.gate.test.ts',
   'src/data/lessons/lessonIntegrity.test.ts',
   'src/data/lessons/narrationAccuracy.test.ts',
   'src/data/lessons/narrationGrounding.test.ts',

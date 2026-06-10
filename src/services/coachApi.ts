@@ -576,7 +576,9 @@ async function callDeepSeekStream(
   messages: OpenAI.Chat.ChatCompletionMessageParam[],
   maxTokens: number,
   onStream: (chunk: string) => void,
+  task: string = 'chat_response',
 ): Promise<string> {
+  emitCoachLlmCallAudit({ grounded: task === 'grounded_voice', intent: task });
   const client = new OpenAI({
     apiKey,
     baseURL: DEEPSEEK_PROXY_BASE,
@@ -635,6 +637,7 @@ async function callDeepSeek(
   maxTokens: number,
   task: string,
 ): Promise<string> {
+  emitCoachLlmCallAudit({ grounded: task === 'grounded_voice', intent: task });
   const client = new OpenAI({
     apiKey,
     baseURL: DEEPSEEK_PROXY_BASE,
@@ -680,7 +683,9 @@ async function callAnthropicStream(
   messages: { role: 'user' | 'assistant'; content: string }[],
   maxTokens: number,
   onStream: (chunk: string) => void,
+  task: string = 'chat_response',
 ): Promise<string> {
+  emitCoachLlmCallAudit({ grounded: task === 'grounded_voice', intent: task });
   const client = new Anthropic({
     apiKey,
     baseURL: ANTHROPIC_PROXY_BASE,
@@ -721,6 +726,7 @@ async function callAnthropic(
   maxTokens: number,
   task: string,
 ): Promise<string> {
+  emitCoachLlmCallAudit({ grounded: task === 'grounded_voice', intent: task });
   const client = new Anthropic({
     apiKey,
     baseURL: ANTHROPIC_PROXY_BASE,
@@ -767,6 +773,7 @@ export async function callAnthropicWithTool(
   toolDescription: string,
   inputSchema: Record<string, unknown>,
 ): Promise<unknown> {
+  emitCoachLlmCallAudit({ grounded: false, intent: task });
   const client = new Anthropic({
     apiKey,
     baseURL: ANTHROPIC_PROXY_BASE,
@@ -833,18 +840,18 @@ async function callChatWithConfig(
   }).catch(() => undefined);
   if (config.provider === 'anthropic') {
     if (onStream) {
-      return await callAnthropicStream(config.apiKey, model, systemPrompt, messages, maxTokens, onStream);
+      return await callAnthropicStream(config.apiKey, model, systemPrompt, messages, maxTokens, onStream, task);
     }
-    return await callAnthropic(config.apiKey, model, systemPrompt, messages, maxTokens, 'chat_response');
+    return await callAnthropic(config.apiKey, model, systemPrompt, messages, maxTokens, task);
   } else {
     const allMessages: OpenAI.Chat.ChatCompletionMessageParam[] = [
       { role: 'system', content: systemPrompt },
       ...messages,
     ];
     if (onStream) {
-      return await callDeepSeekStream(config.apiKey, model, allMessages, maxTokens, onStream);
+      return await callDeepSeekStream(config.apiKey, model, allMessages, maxTokens, onStream, task);
     }
-    return await callDeepSeek(config.apiKey, model, allMessages, maxTokens, 'chat_response');
+    return await callDeepSeek(config.apiKey, model, allMessages, maxTokens, task);
   }
 }
 
@@ -879,6 +886,7 @@ export async function callDeepseekWithTool(
   toolDescription: string,
   inputSchema: Record<string, unknown>,
 ): Promise<unknown> {
+  emitCoachLlmCallAudit({ grounded: false, intent: task });
   const client = new OpenAI({
     apiKey,
     baseURL: DEEPSEEK_PROXY_BASE,
@@ -1529,23 +1537,25 @@ export async function voiceFacts(
           240,
           'grounded_voice',
         );
-    // STEP E leak audit — a GROUNDED call: the facts were computed in code and
-    // this only phrased them. (The matching ungrounded emissions are at the
-    // free-reasoning chat fallback + getCoachCommentary.)
-    emitCoachLlmCallAudit({ grounded: true, intent: opts.intent ?? 'voiceFacts', question: opts.studentMessage });
+    // Leak audit fires at the primitive (callAnthropic/callDeepSeek) with
+    // task='grounded_voice' → tagged grounded=true there. No emit needed here.
     return out;
   } catch {
     return null; // never throws — caller falls through
   }
 }
 
-/** STEP E — the grounding-inversion leak audit. Emits `coach-llm-call` on
- *  every coach-facing LLM call with a `grounded` flag, so audit-stream /
- *  PostHog show exactly how many turns voiced computed facts (grounded=true,
- *  via an assembler→voiceFacts) vs let the LLM reason/narrate freely
- *  (grounded=false: the general chat fallback + the grounded-by-injection
- *  narration tasks). Turns "does the LLM still decide anywhere?" into a
- *  measured, closeable list. Fire-and-forget; never throws. */
+/** STEP E — the grounding-inversion leak audit. Called from EACH of the 6
+ *  network primitives (`callDeepSeek`, `callDeepSeekStream`, `callAnthropic`,
+ *  `callAnthropicStream`, `callAnthropicWithTool`, `callDeepseekWithTool`) — the
+ *  one chokepoint every model call must pass through (the SDK is imported only
+ *  in this file; the `coachLlmChokepoint.gate.test.ts` enforces it). Emitting at
+ *  the primitive means EVERY call is tagged by construction — no entry point can
+ *  bypass it, present or future. `grounded=true` exactly when the task is
+ *  `grounded_voice` (i.e. it came via an assembler → `voiceFacts`); every other
+ *  call is the LLM reasoning/narrating freely. Turns "does the LLM still decide
+ *  anywhere?" into a measured, closeable list (read the grounded=false rows off
+ *  the audit stream). Fire-and-forget; never throws. */
 function emitCoachLlmCallAudit(opts: { grounded: boolean; intent: string; surface?: string; question?: string }): void {
   void logAppAudit({
     kind: 'coach-llm-call',
@@ -1994,10 +2004,8 @@ export async function getCoachChatResponse(
   };
 
   // ── Non-grounded path: existing behavior, streaming-as-passed ──
+  // (Leak audit fires at the primitive — this call lands as grounded=false.)
   if (!groundingEngaged) {
-    // STEP E leak audit — UNGROUNDED: no assembler matched, the LLM reasons
-    // freely (open chat / a position question the inversion doesn't yet cover).
-    emitCoachLlmCallAudit({ grounded: false, intent: 'chat-open', surface: grounding?.surface, question: messages[messages.length - 1]?.content });
     return callOnce(buildSystemPromptFor(), true);
   }
 
@@ -2014,11 +2022,10 @@ export async function getCoachChatResponse(
   const { surface, sessionId } = grounding ?? { surface: 'unknown', sessionId: undefined };
   const originalQuery = messages[messages.length - 1]?.content ?? '';
 
-  // STEP E leak audit — UNGROUNDED: grounding context was injected but no
-  // assembler produced the answer, so the LLM still reasons freely (then the
-  // single validator backstop + in-code strip guard the output). This is the
-  // remaining hole the general-path inversion will close (→ gate 0).
-  emitCoachLlmCallAudit({ grounded: false, intent: 'chat-grounded-fallback', surface, question: originalQuery });
+  // Grounding context was injected but no assembler produced the answer, so the
+  // LLM still reasons freely (the validator backstop + in-code strip guard it).
+  // This call lands as grounded=false at the primitive — the remaining hole the
+  // general-path inversion will close (→ gate 0).
   const response = await callOnce(buildSystemPromptFor(), false);
   const validation = validateClaims(response, masterPlayContext);
   if (validation.ok) {
@@ -2097,7 +2104,7 @@ async function callCommentaryWithConfig(
       { role: 'user', content: userMessage },
     ];
     if (onStream) {
-      return await callAnthropicStream(config.apiKey, model, systemPrompt, messages, 512, onStream);
+      return await callAnthropicStream(config.apiKey, model, systemPrompt, messages, 512, onStream, task);
     }
     return await callAnthropic(config.apiKey, model, systemPrompt, messages, 1024, task);
   } else {
@@ -2106,7 +2113,7 @@ async function callCommentaryWithConfig(
       { role: 'user', content: userMessage },
     ];
     if (onStream) {
-      return await callDeepSeekStream(config.apiKey, model, messages, 512, onStream);
+      return await callDeepSeekStream(config.apiKey, model, messages, 512, onStream, task);
     }
     return await callDeepSeek(config.apiKey, model, messages, 1024, task);
   }
@@ -2151,14 +2158,10 @@ export async function getCoachCommentary(
   );
   const userMessage = buildChessContextMessage(context);
 
-  // STEP E leak audit — UNGROUNDED: the commentary/report tasks (move
-  // commentary, puzzle feedback, post-game review, reports, model-game
-  // annotation, …) are grounded-by-INJECTION (facts + "never invent" rules +
-  // narrationAuditor) but still let the LLM phrase freely — they don't route
-  // through an assembler→voiceFacts. Tagging them surfaces the per-task volume
-  // so the closeable list is complete. `task` IS the intent here.
-  emitCoachLlmCallAudit({ grounded: false, intent: `commentary:${task}`, question: context.additionalContext ?? context.lastMoveSan ?? undefined });
-
+  // The commentary/report tasks (move commentary, puzzle feedback, post-game
+  // review, reports, model-game annotation, …) are grounded-by-INJECTION but
+  // still let the LLM phrase freely — they don't route through voiceFacts. The
+  // leak audit tags them grounded=false at the primitive with intent=<task>.
   try {
     return await callCommentaryWithConfig(config, task, userMessage, systemPrompt, onStream);
   } catch (error) {
