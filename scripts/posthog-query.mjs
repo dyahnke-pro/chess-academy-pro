@@ -27,7 +27,29 @@
 //     WHERE timestamp > now() - INTERVAL 1 DAY
 
 const HOST = (process.env.POSTHOG_HOST || 'https://us.posthog.com').replace(/\/+$/, '');
-const KEY = process.env.POSTHOG_API_KEY;
+// Resolve the personal read key robustly. It's SUPPOSED to be POSTHOG_API_KEY,
+// but it's been set under other names in the env config (e.g. Read_key_PostHog).
+// So: prefer the canonical name, then any common alias, then ANY env var whose
+// value looks like a PostHog personal key (`phx_…`). This makes the script work
+// no matter what the var was named — never burn a session on a name mismatch
+// again (2026-06-10).
+function resolvePostHogKey() {
+  const direct = process.env.POSTHOG_API_KEY
+    || process.env.POSTHOG_PERSONAL_API_KEY
+    || process.env.Read_key_PostHog
+    || process.env.POSTHOG_READ_API_KEY;
+  if (direct) return direct;
+  // Last resort: scan every env var for a `phx_` value (the personal-key
+  // prefix). The public project key is `phc_`, so this won't grab that.
+  for (const [k, v] of Object.entries(process.env)) {
+    if (typeof v === 'string' && /^phx_[A-Za-z0-9]/.test(v)) {
+      console.error(`# (using PostHog key from env var "${k}")`);
+      return v;
+    }
+  }
+  return undefined;
+}
+const KEY = resolvePostHogKey();
 
 function die(msg) {
   console.error(msg);
