@@ -122,18 +122,26 @@ The DECISION/Q&A paths are inverted. What remains splits in two:
      `MasterGroundingOptions` + assemble (count + the highest-rated-opponent win
      + variation). The detector is the fuzzy part (arbitrary pro names) — gate on
      the playerGames context being present rather than name-matching.
-   - **Phase 5 endgame** — `/api/lichess-tablebase` is the TRUTH for ≤7-piece
-     endings (win/draw/loss + DTZ + best move). Needs an async tablebase fetch in
-     the chat path (like `buildMasterPlayContext`'s fetch) gated on an endgame FEN
-     + an `isEndgameQuestion` detector. Network-dependent — verify proxy reach.
-   - **whatif** ("what if I play X?") — needs a Stockfish eval of the hypothetical
-     position IN the chat path, then voice the resulting eval+line.
-   - **General chat-fallback** → assemble position facts (eval+tactics+master+
-     book) and voice; only genuinely-non-chess chat stays free prose. Once that
-     lands, the lone `validateClaims` backstop has nothing to guard → delete it
-     → **gate 0**. Do NOT delete the backstop before then (it's the safety net,
-     not the disease). This is also a PRODUCT call (terser grounded answers vs
-     the current richer free prose) — confirm with David.
+   - **Phase 4 pro-game refs — DONE** (`assemblePlayerGamesAnswer`,
+     `isPlayerGamesQuestion`; gated on the playerGames corpus being present).
+   - **Phase 5 endgame — DONE** (`assembleEndgameAnswer`, `isEndgameQuestion`;
+     async `lookupTablebase` via the proxy, gated ≤7 pieces, voices the verdict
+     from the student's POV; falls through off-tablebase).
+
+   **Only two genuine decision holes remain — both need a call, not a blind build:**
+   - **whatif** ("what if I play X?") — needs a Stockfish eval of the HYPOTHETICAL
+     position INSIDE the chat path (coachApi → stockfishEngine worker, ~1-5s +
+     timeout handling). In-book whatifs are already partly covered by the
+     master-play lookahead. This is the heaviest remaining plumbing + a latency
+     concern — do it deliberately, not overnight-blind.
+   - **General chat-fallback → gate 0** is a **PRODUCT CALL for David.** Today,
+     when no specific assembler matches a position question, the LLM still
+     reasons (validator backstop + strip). Fully inverting it = assemble position
+     facts (eval+tactics+master+book) and voice ONLY those → the backstop can be
+     deleted → gate 0. BUT that makes open/nuanced answers terser + grounded-only
+     instead of the current richer free prose. That tradeoff is David's to make;
+     don't unilaterally regress the coach's open-chat richness to chase a 0.
+     (Until then the lone backstop validator stays — gate floor = 1.)
 
 ## 🔧 WHAT'S LEFT (original plan, in order)
 
