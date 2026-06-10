@@ -1417,6 +1417,61 @@ function buildRetryAddendum(retryNumber: 1 | 2, lastValidation: ClaimValidationR
   ].join('\n');
 }
 
+/**
+ * voiceFacts — THE CHOKEPOINT for the grounding inversion
+ * (docs/plans/2026-06-10-coach-chat-grounding-inversion.md).
+ *
+ * The contract: the LLM DECIDES NOTHING. Every chess fact — the move, the
+ * eval, the reason it's strong — is computed in code and passed in as `facts`.
+ * This makes ONE small call whose ONLY job is to phrase those facts as a coach.
+ * There is no question for the model to reason about, no board to read, no
+ * move to pick. That's why it needs no validator: nothing ungrounded can come
+ * out because nothing ungrounded went in.
+ *
+ * If you find yourself wanting to add a validator, a gate, or a "use exactly
+ * these squares" instruction around a coach call — STOP. The LLM is still
+ * deciding. Compute the answer in code and route it through HERE instead.
+ *
+ * Returns null if no provider is configured (caller decides the fallback);
+ * never throws.
+ */
+export async function voiceFacts(
+  facts: string,
+  opts: { studentMessage?: string; providerConfig?: ProviderConfig | null } = {},
+): Promise<string | null> {
+  const cfg = opts.providerConfig ?? (await getProviderConfig());
+  if (!cfg) return null;
+
+  const system =
+    'You are a warm, concise chess coach speaking to a student. You will be given ' +
+    'FACTS that are already true and verified. Your ONLY job is to say those facts ' +
+    'to the student naturally, as a coach would. Add NOTHING: do not introduce any ' +
+    'move, square, piece, number, name, opening, or claim that is not in the facts. ' +
+    'Do not analyze further, do not hedge, do not recommend running an engine. Just ' +
+    'voice the facts in one or two friendly sentences.';
+  const user =
+    `FACTS (say these, add nothing):\n${facts}` +
+    (opts.studentMessage ? `\n\nThe student asked: "${opts.studentMessage}"` : '');
+
+  // Phrasing only → the cheap model. Tight token budget; there is no reasoning.
+  try {
+    if (cfg.provider === 'anthropic') {
+      const model = cfg.preferredModel ?? ANTHROPIC_MODEL_MAP.move_commentary;
+      return await callAnthropic(cfg.apiKey, model, system, [{ role: 'user', content: user }], 240, 'grounded_voice');
+    }
+    const model = cfg.preferredModel ?? DEEPSEEK_MODEL_MAP.move_commentary;
+    return await callDeepSeek(
+      cfg.apiKey,
+      model,
+      [{ role: 'system', content: system }, { role: 'user', content: user }],
+      240,
+      'grounded_voice',
+    );
+  } catch {
+    return null; // never throws — caller falls through
+  }
+}
+
 export async function getCoachChatResponse(
   messages: { role: 'user' | 'assistant'; content: string }[],
   systemPromptAddition: string,
@@ -1491,6 +1546,35 @@ export async function getCoachChatResponse(
     if (intentFired) {
       try {
         masterPlayContext = await buildMasterPlayContext(grounding);
+        // ── GROUNDING INVERSION (Phase 1) — the voiceFacts chokepoint ──────
+        // For a "what's the best move?" question with real master data, the
+        // answer is COMPUTED in code (the grounded top master move + chess.js's
+        // "why") and VOICED through `voiceFacts`. The LLM decides nothing — so
+        // there is no claim to validate and no regen to pay for. Falls through
+        // to the legacy reasoning path on ANY miss, so it can never break the
+        // turn. This is the pattern every intent migrates to; see
+        // docs/plans/2026-06-10-coach-chat-grounding-inversion.md. If you're
+        // about to add a validator here — STOP: compute it and route it through
+        // voiceFacts instead.
+        if (grounding.bestMoveQuestion && masterPlayContext.current.moves.length > 0) {
+          const top = masterPlayContext.current.moves[0];
+          if (top.uci) {
+            const { assembleMoveEvalAnswer } = await import('./groundedAnswer');
+            const answer = assembleMoveEvalAnswer({ fen: masterPlayContext.current.fen, bestMoveUci: top.uci });
+            if (answer) {
+              let lastUser: string | undefined;
+              for (let i = messages.length - 1; i >= 0; i -= 1) {
+                if (messages[i].role === 'user') { lastUser = messages[i].content; break; }
+              }
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUser, providerConfig: config });
+              if (voiced) {
+                return answer.bestMoveFromTo
+                  ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
+                  : voiced;
+              }
+            }
+          }
+        }
         // DB-grounding extension: attach canonical openings-lichess.json
         // entries that match the current move history OR were referenced
         // by name in the user's latest message. The claim validator
