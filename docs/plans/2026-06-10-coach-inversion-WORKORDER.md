@@ -45,7 +45,60 @@ correctness AND cost in one move.
 
 ---
 
-## 🔧 WHAT'S LEFT (in order)
+## ✅ SESSION 2 LANDED (2026-06-10, branch `claude/friendly-bohr-1hsl0g`)
+
+STEP A, B, C + two STEP D items are DONE, committed, ship-check GREEN
+(typecheck 0, lint 0 errors, content gates green, 322 coach tests pass).
+Gate baseline driven **9 → 4**.
+
+- **STEP A** — engine snapshot threaded. `MasterGroundingOptions` carries
+  `engineBestMoveUci` / `engineEvalCp` / `engineMateIn` / `tactics`;
+  `LiveState.engineBestMoveUci` added + populated in `CoachTeachPage` from the
+  eval-bar analysis; `coachService.ask` threads them. The best-move interception
+  now PREFERS the engine move over the master top move → **off-book positions
+  ground** (the gap the master-only block couldn't cover). Eval is sign-flipped
+  white-POV → side-to-move in the interception.
+- **STEP B** — Phase 2 tactics + Phase 6 progress wired live. Detectors
+  `isTacticsQuestion` / `isProgressQuestion`; interceptions call
+  `assembleTacticsAnswer` / `assembleProgressAnswer` → `voiceFacts`. Progress
+  engages even with no FEN.
+- **detectBadHabits extracted to the leaf** `src/services/badHabitDetector.ts`
+  (cycle-free; `coachFeatureService` re-exports). Progress now computes the
+  FRESH habit profile in `coachApi` — no coachApi↔coachFeatureService cycle, no
+  stale `profile.badHabits` shortcut.
+- **STEP C** — regen loop KILLED. The grounded path is now ONE LLM call + ONE
+  silent `validateClaims` backstop + in-code `stripUngroundedSentences` (drops
+  whole sentences carrying a flagged claim; markers protected; case-insensitive).
+  ZERO regens. A turn is AT MOST 1 LLM call. `buildRetryAddendum` deleted.
+  master-integration tests updated to the strip contract (living-audit rule).
+- **STEP D (partial):**
+  - `intent_classify` LLM fallback DELETED (`classifyWithLlmFallback` in
+    `coachSessionRouter`). `parseCoachIntent` is the ONLY routing path — the LLM
+    no longer decides routing, and a 60-token call/qa-turn is gone.
+  - Phase 4 "how do masters play this?" — pure `assembleMasterPlayAnswer` voices
+    the master-play lookup's real top moves + frequencies; `isMasterPlayQuestion`
+    detector + `masterPlayQuestion` flag + interception.
+
+### 🔭 STILL LEFT for the next session (the harder tail — do each at full depth)
+- **STEP D Phase 3 — plans/strategy.** `isPlanQuestion` exists; fact source is
+  `middlegame-plans.json` (criticalPositionFen match, read via `middlegamePlanner`
+  — that file is ANOTHER session's lane, READ only) + the engine PV
+  (`enginePlan.pvSan`, already threaded). Don't ship a thin raw-PV voicer — voice
+  the real plan data.
+- **STEP D Phase 4 (cont) — pro-game refs** for "how does <pro> play X".
+- **STEP D Phase 5 — endgame** (`/api/lichess-tablebase`) + **concepts**
+  (`chess-concepts.json` book corpus).
+- **STEP D — the report CoachTasks** (`weakness/bad_habit/weekly/daily/session`)
+  → voice the computed profile; and the per-move CoachTasks
+  (`move_commentary`/`whatif_commentary`/`position_analysis_chat`/`hint`/…).
+- **STEP E — leak audit** (LAST, David "later todo"): tag every coach LLM call
+  grounded vs ungrounded; emit `coach-ungrounded-llm-call`.
+- **Gate floor note:** baseline is 4 = 1 intended validator backstop + 1 stock-
+  fallback line ("run the position through the engine", removed when the general
+  chat path is fully inverted) + 2 false-positives (the law quoted in the
+  voiceFacts doc-comment + `coachService:439` comment). Lower it as you invert.
+
+## 🔧 WHAT'S LEFT (original plan, in order)
 
 ### STEP A — Thread the engine snapshot to the chat layer (the load-bearing piece)
 `assembleMoveEvalAnswer`/`assembleTacticsAnswer` need Stockfish's best move +
