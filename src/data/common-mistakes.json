@@ -1025,6 +1025,18 @@
         "concept:pos-development",
         "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
       ]
+    },
+    {
+      "fen": "r1bqkb1r/pppn1ppp/5n2/3p2B1/3P4/2N5/PP2PPPP/R2QKBNR w KQkq - 0 6",
+      "wrongMove": "Nxd5",
+      "correctMove": "e3",
+      "explanation": "Snatching the pawn with 6.Nxd5?? is the Elephant Trap: 6...Nxd5! 7.Bxd8 (winning the queen) Bb4+! 8.Qd2 Bxd2+ 9.Kxd2 Kxd8 and Black comes out a clean piece up — the g5-bishop is lost and the queen sacrifice was an illusion. Just develop with 6.e3, keeping the comfortable Queen's Gambit pull.",
+      "shortNarration": "e3 — develop, dodge the Elephant Trap",
+      "sources": [
+        "book:queens-gambit",
+        "concept:pos-development",
+        "https://www.chess.com/openings/Queens-Gambit-Declined"
+      ]
     }
   ],
   "qga": [
