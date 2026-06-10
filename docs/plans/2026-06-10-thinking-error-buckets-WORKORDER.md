@@ -6,15 +6,43 @@ feature the buckets conversation produced; the narration grounding it rests on
 is done.
 
 ## The goal
-Every in-game mistake gets a **thinking-error bucket**. The board computes it:
-- **≥90% confidence (per-detector) → AUTO-TAG silently.** No pop-up, no LLM call.
-- **<90% → POP-UP** with the 14-cell picker; the user taps the real bucket.
+Every in-game mistake gets a **thinking-error bucket**. The board computes it.
+
+### 🔒 DESIGN PIVOT (David 2026-06-10, locked AFTER the original draft below) — NO MID-GAME POP-UP. SILENT-CLASSIFY EVERYWHERE; CORRECT IN THE TAB / REVIEW.
+David: *"cut out the coach asking questions about mistakes. just have the
+code place the error in the most likely bucket."* + *"both — option to place
+in bucket from the card if they remember; if they don't, click review the game
+then make the decision."* The refinement that supersedes the "<90% → pop-up"
+rule below:
+- **ALWAYS silent-classify to the top candidate.** No mid-game question, no
+  pop-up, ever. Live in-game behaves like imported-game review (which never had
+  anyone to ask). The reason code can't compute (the *why*) is captured LATER,
+  optionally, not by interrupting play.
+- **Correction lives in TWO places, same `setMistakeBucket(id, tag)` write:**
+  1. **Card pill** in the Thinking-Errors tab — tap → ranked-candidate picker
+     (top guess pre-selected) → 1-tap confirm/reassign. For "I remember."
+  2. **Review at the ply** — tap the card body → deep-link
+     `/coach/review/:gameId?ply=N` → board lands PAUSED at the mistake → user
+     hits play, watches the playout (their move → eval swing → better line, the
+     existing engine playout) → the SAME ranked picker appears inline at that
+     ply → decide after re-living it. For "I don't remember."
+- **Recognition over recall:** the tab groups mistakes BY BUCKET; the user scans
+  a cluster of board thumbnails and validates the *pattern* ("yeah, all wrong-
+  side") rather than recalling one move. Forgotten cards just keep code's
+  auto-tag (correction is optional; the aggregate is robust to per-instance
+  noise). Low-confidence auto-tags get a subtle "confirm?" affordance so
+  attention goes where code was unsure.
+- Threshold tuning still applies: silent auto-tag stands; real override data
+  from the tab lets us refine detectors instead of guessing.
+
+### Original draft (SUPERSEDED on the pop-up point by the pivot above)
+- ~~**≥90% → auto-tag; <90% → mid-game POP-UP.**~~ Replaced: always silent,
+  correct in tab/review. The confidence number still drives the "confirm?"
+  nudge + detector tuning, just never a live interrupt.
 - **Imported games:** batch the detector over every flagged move on arrival →
-  auto-tag the confident ones → the Thinking Errors tab + Training Plan are
-  populated **before the user opens them**. Only the ambiguous moments queue.
-- **Auto-tags are VISIBLE + 1-tap re-taggable** in the Thinking Errors tab, so a
-  wrong silent tag is never permanent — which lets us tune the threshold DOWN
-  later with real override data instead of guessing 80% blind.
+  silent-classify all → the Thinking Errors tab + Training Plan are populated
+  **before the user opens them**.
+- **Auto-tags are VISIBLE + 1-tap re-taggable** in the Thinking Errors tab.
 
 This INVERTS the last LLM decision in the misconception path: today
 `classifyMisconception` lets the LLM *pick the tag*. After this, **code picks the
