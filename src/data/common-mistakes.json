@@ -110,7 +110,53 @@
         "book:caro-kann",
         "concept:pos-king-safety",
         "https://www.chess.com/openings/Caro-Kann-Defense"
-      ]
+      ],
+      "punishmentLine": {
+        "fen": "r1bqkbnr/pp1npppp/2p5/8/3PN3/8/PPP1QPPP/R1B1KBNR b KQkq - 2 5",
+        "title": "Why 5...Ngf6 is the smothered mate",
+        "moves": [
+          "Ngf6",
+          "Nd6#"
+        ],
+        "annotations": [
+          "You develop the wrong knight — and it is mate in one. The e7-pawn is pinned to your king by the queen on e2, so it cannot do the one job it needs to.",
+          "Nd6#! The knight forks nothing — it simply mates. The pinned e7-pawn cannot capture, and the king has no flight square. Recapture with 5...Ndf6 instead."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "e4",
+              "to": "d6",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Ngf6?? — e7 is pinned",
+          "Nd6# — smothered mate"
+        ]
+      }
     }
   ],
   "ruy-lopez": [
@@ -136,7 +182,85 @@
         "book:ruy-lopez",
         "concept:pos-development",
         "https://en.wikipedia.org/wiki/Noah%27s_Ark_Trap"
-      ]
+      ],
+      "punishmentLine": {
+        "fen": "r1bqkbnr/2p2ppp/p2p4/1p6/3pP3/1B6/PPP2PPP/RNBQK2R w KQkq - 0 8",
+        "title": "Why 8.Qxd4 walks into Noah's Ark",
+        "moves": [
+          "Qxd4",
+          "c5",
+          "Qc3",
+          "c4"
+        ],
+        "annotations": [
+          "You grab the pawn with Qxd4 — straight into the Noah's Ark Trap. The queen looks dominant in the centre; she is about to be chased into a swindle.",
+          "...c5! The pawn jabs the queen and gains a tempo while quietly preparing the real threat.",
+          "Qc3 retreats, and now the jaws close: the b3-bishop has only the a4-square left to flee to.",
+          "...c4! The bishop is snared — a4 is met by ...bxa4, and a2 and c2 are blocked by your own pawns. The piece is lost. Play 8.c3 to recover the pawn safely."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "d1",
+              "to": "d4",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "c7",
+              "to": "c5",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "d4",
+              "to": "c3",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "c5",
+              "to": "c4",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Qxd4?? — into Noah's Ark",
+          "...c5 — jab the queen",
+          "Qc3 — nowhere good",
+          "...c4 — bishop trapped"
+        ]
+      }
     }
   ],
   "birds-opening": [
@@ -150,7 +274,53 @@
         "concept:tac-sacrifice",
         "concept:pos-king-safety",
         "https://en.wikipedia.org/wiki/From%27s_Gambit"
-      ]
+      ],
+      "punishmentLine": {
+        "fen": "rnbqk1nr/ppp2ppp/3b4/8/8/8/PPPPP1PP/RNBQKBNR w KQkq - 0 4",
+        "title": "Why 4.Nc3 is mate in From's Gambit",
+        "moves": [
+          "Nc3",
+          "Qh4+"
+        ],
+        "annotations": [
+          "You develop casually with Nc3 — and in From's Gambit that loses on the spot. With the f-pawn gone, the e1-h4 diagonal and the f2-square are fatally open.",
+          "...Qh4+! and it is forced mate: g3 Bxg3+ hxg3 Qxg3# — the queen mates down the abandoned f2-square. Only 4.Nf3 covers h4. Always play it here."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "d8",
+              "to": "h4",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nc3?? — the diagonal is open",
+          "...Qh4+ — forced mate"
+        ]
+      }
     }
   ],
   "qgd": [
@@ -550,7 +720,85 @@
         "book:vienna-game",
         "concept:pos-development",
         "https://www.chess.com/openings/Vienna-Game"
-      ]
+      ],
+      "punishmentLine": {
+        "fen": "rnbqk2r/pppp1ppp/5n2/4p3/4P3/2bP1N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
+        "title": "Why 5.Bd2 drops a piece",
+        "moves": [
+          "Bd2",
+          "Bxd2+",
+          "Qxd2",
+          "d6"
+        ],
+        "annotations": [
+          "Black has just taken your knight with ...Bxc3+ and you must recapture. Bd2 blocks the check but forgets the bishop sitting on c3.",
+          "...Bxd2+ takes your other bishop in turn.",
+          "Qxd2 recaptures — but count the wood: Black has won your knight and a bishop for only his bishop.",
+          "...d6 develops, a clean piece up. Always recapture with 5.bxc3."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "c1",
+              "to": "d2",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "c3",
+              "to": "d2",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "d1",
+              "to": "d2",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "d7",
+              "to": "d6",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Bd2?? — forgot to recapture",
+          "...Bxd2+ — takes the bishop",
+          "Qxd2 — you're a piece down",
+          "...d6 — Black consolidates"
+        ]
+      }
     }
   ],
   "four-knights-game": [
@@ -626,7 +874,85 @@
         "concept:pos-development",
         "concept:pos-initiative",
         "https://www.chess.com/openings/Sicilian-Defense-Alapin-Variation"
-      ]
+      ],
+      "punishmentLine": {
+        "fen": "r1bqkbnr/pp2pppp/2n5/3P4/3P4/8/PP3PPP/RNBQKBNR b KQkq - 0 5",
+        "title": "Why 9...Qa5+ is a wasted check",
+        "moves": [
+          "Qa5+",
+          "Nc3",
+          "Nb4",
+          "Bb5+"
+        ],
+        "annotations": [
+          "The d5-pawn is attacking your c6-knight and you ignore it for a pointless check.",
+          "Nc3 blocks and develops with tempo — now your offside queen and the looming d-pawn leave you tangled and cramped.",
+          "...Nb4 lunges, but it is going nowhere fast.",
+          "Bb5+! Another tempo, the bind tightens, and you are close to lost. Recapture with 9...Qxd5 and stay comfortable."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "d8",
+              "to": "a5",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "c6",
+              "to": "b4",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "f1",
+              "to": "b5",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Qa5+?? — pointless check",
+          "Nc3 — develops with tempo",
+          "...Nb4 — going nowhere",
+          "Bb5+ — the bind tightens"
+        ]
+      }
     },
     {
       "fen": "rnbqkb1r/pp1ppppp/5n2/2p1P3/8/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
@@ -638,7 +964,85 @@
         "concept:pos-development",
         "concept:pos-weak-squares",
         "https://www.chess.com/openings/Sicilian-Defense-Alapin-Variation"
-      ]
+      ],
+      "punishmentLine": {
+        "fen": "rnbqkb1r/pp1ppppp/5n2/2p1P3/8/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
+        "title": "Why 3...Ne4 loses a piece",
+        "moves": [
+          "Ne4",
+          "d3",
+          "Nxf2",
+          "Kxf2"
+        ],
+        "annotations": [
+          "When e5 kicks your knight, it belongs on d5 — not e4, where it cannot be held.",
+          "d3! The pawn attacks the knight and it has no safe retreat.",
+          "...Nxf2 is a desperate try, throwing the knight at f2 for a single pawn.",
+          "Kxf2 simply takes it. You are a clean piece down for a pawn. Hop to 3...Nd5 instead."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "d2",
+              "to": "d3",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "e4",
+              "to": "f2",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "e1",
+              "to": "f2",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Ne4?? — can't hold the square",
+          "d3 — kicked, no retreat",
+          "...Nxf2 — desperation",
+          "Kxf2 — piece gone"
+        ]
+      }
     }
   ],
   "pirc-defence": [
@@ -1047,7 +1451,85 @@
         "book:petrov-defence",
         "concept:tac-double-attack",
         "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
-      ]
+      ],
+      "punishmentLine": {
+        "fen": "rnbqkb1r/pppp1ppp/8/4N3/4n3/8/PPPPQPPP/RNB1KB1R b KQkq - 1 4",
+        "title": "Why 4...Nf6 drops the queen",
+        "moves": [
+          "Nf6",
+          "Nc6+",
+          "Be7",
+          "Nxd8"
+        ],
+        "annotations": [
+          "Having grabbed the e4-pawn, you retreat the knight to f6 — and the open e-file is fatal.",
+          "Nc6+! A discovered check: the e2-queen rakes straight down the open e-file at your king, and the knight on c6 attacks your queen at the same time.",
+          "...Be7 blocks the check — the only way to stay on the board — but it does nothing for the queen.",
+          "Nxd8 takes her. You are a full queen down. The one move was 4...Qe7, pinning the knight to win it back."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e4",
+              "to": "f6",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "e5",
+              "to": "c6",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "f8",
+              "to": "e7",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "c6",
+              "to": "d8",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nf6?? — open e-file",
+          "Nc6+ — discovered, hits the queen",
+          "...Be7 — block, queen still falls",
+          "Nxd8 — queen gone"
+        ]
+      }
     }
   ],
   "queens-gambit": [
@@ -1072,7 +1554,85 @@
         "book:queens-gambit",
         "concept:pos-development",
         "https://www.chess.com/openings/Queens-Gambit-Declined"
-      ]
+      ],
+      "punishmentLine": {
+        "fen": "r1bqkb1r/pppn1ppp/5n2/3p2B1/3P4/2N5/PP2PPPP/R2QKBNR w KQkq - 0 6",
+        "title": "Why 6.Nxd5 is the Elephant Trap",
+        "moves": [
+          "Nxd5",
+          "Nxd5",
+          "Bxd8",
+          "Bb4+"
+        ],
+        "annotations": [
+          "You grab the d5-pawn — the Elephant Trap. The knight looks like it wins material; it loses a piece.",
+          "...Nxd5! Black takes the knight, and the bishop on g5 is hanging the d8-queen behind it.",
+          "Bxd8 wins the queen — but it is an illusion. Watch.",
+          "...Bb4+! Check. The bishop comes off with check, and after you block and trade queens you end up a clean piece down. Just play 6.e3 and develop."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "f6",
+              "to": "d5",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "g5",
+              "to": "d8",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "f8",
+              "to": "b4",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nxd5?? — the Elephant Trap",
+          "...Nxd5 — take the knight",
+          "Bxd8 — grabs the queen",
+          "...Bb4+ — and you're a piece down"
+        ]
+      }
     }
   ],
   "qga": [
@@ -1119,7 +1679,85 @@
         "concept:tac-double-attack",
         "concept:pos-development",
         "https://www.chess.com/openings/Queens-Gambit-Accepted"
-      ]
+      ],
+      "punishmentLine": {
+        "fen": "rnbqkbnr/p1p1pppp/8/1p6/2pP4/4PQ2/PP3PPP/RNB1KBNR b KQkq - 1 4",
+        "title": "Why 7...Nc6 hangs a piece",
+        "moves": [
+          "Nc6",
+          "Qxc6+",
+          "Bd7",
+          "Qf3"
+        ],
+        "annotations": [
+          "White's queen rakes the long diagonal at your a8-rook, and you block with the knight — but pushing ...b5 left b7 empty, so c6 is undefended.",
+          "Qxc6+! The queen snaps off the knight with check. There is no recapture.",
+          "...Bd7 blocks the check, a move too late.",
+          "Qf3 retreats with the extra piece. You are simply a knight down. Block with the pawn — 7...c6 — guarded by b5."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "b8",
+              "to": "c6",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "f3",
+              "to": "c6",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "c8",
+              "to": "d7",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "c6",
+              "to": "f3",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nc6?? — c6 is undefended",
+          "Qxc6+ — snaps the knight",
+          "...Bd7 — too late",
+          "Qf3 — a piece up"
+        ]
+      }
     }
   ],
   "sicilian-sveshnikov": [
@@ -1220,7 +1858,117 @@
         "concept:pos-development",
         "concept:pos-center",
         "https://en.wikipedia.org/wiki/Trompowsky_Attack"
-      ]
+      ],
+      "punishmentLine": {
+        "fen": "rnb1kb1r/pp1ppppp/8/q1p5/3PnB2/5P2/PPP1P1PP/RN1QKBNR w KQkq - 1 5",
+        "title": "Why 5.Bd2 loses a pawn and the initiative",
+        "moves": [
+          "Bd2",
+          "Nxd2",
+          "Qxd2",
+          "Qxd2+",
+          "Nxd2",
+          "cxd4"
+        ],
+        "annotations": [
+          "Black's ...c5 and ...Qa5+ set the trap, and the natural Bd2 springs it.",
+          "...Nxd2! The knight crashes in.",
+          "Qxd2 recaptures, but now the queens come off on your terms — for Black.",
+          "...Qxd2+ forces the trade.",
+          "Nxd2 recaptures, and the d4-pawn is hanging.",
+          "...cxd4 collects it. You are a pawn down with the worse game. Block with 5.c3 instead."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "f4",
+              "to": "d2",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "e4",
+              "to": "d2",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "d1",
+              "to": "d2",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "a5",
+              "to": "d2",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "b1",
+              "to": "d2",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Bd2?? — springs the trap",
+          "...Nxd2 — knight crashes in",
+          "Qxd2 — recapture",
+          "...Qxd2+ — trade queens",
+          "Nxd2 — d4 hangs",
+          "...cxd4 — pawn lost"
+        ]
+      }
     }
   ],
   "benoni-defence": [
@@ -1405,7 +2153,85 @@
         "concept:pos-development",
         "concept:pos-center",
         "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
-      ]
+      ],
+      "punishmentLine": {
+        "fen": "rnbqkb1r/pppppppp/1n6/2P1P3/8/8/PP1P1PPP/RNBQKBNR b KQkq - 0 4",
+        "title": "Why 4...d6 hangs the knight",
+        "moves": [
+          "d6",
+          "cxb6",
+          "axb6",
+          "Nf3"
+        ],
+        "annotations": [
+          "In the Chase, c5 is attacking your b6-knight — and ...d6 simply ignores it.",
+          "cxb6! The pawn takes the knight clean off the board.",
+          "...axb6 recaptures, but you have given a knight for a pawn.",
+          "Nf3 develops, a piece up and winning. Retreat with 4...Nd5 to save the knight."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "d7",
+              "to": "d6",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "c5",
+              "to": "b6",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "a7",
+              "to": "b6",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "d6?? — ignores the attack",
+          "cxb6 — knight taken",
+          "...axb6 — a piece for a pawn",
+          "Nf3 — White is winning"
+        ]
+      }
     }
   ],
   "dutch-defence": [
@@ -2728,7 +3554,117 @@
         "concept:pos-king-safety",
         "concept:pos-center",
         "https://en.wikipedia.org/wiki/Two_Knights_Defense"
-      ]
+      ],
+      "punishmentLine": {
+        "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p1N1/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 5 4",
+        "title": "Why 4...Nxe4 gets your king hunted",
+        "moves": [
+          "Nxe4",
+          "Bxf7+",
+          "Ke7",
+          "d4",
+          "h6",
+          "Nxe4"
+        ],
+        "annotations": [
+          "You snatch the e4-pawn — but f7 is screaming. That knight guarded nothing on e4, and now your king sits behind an open door.",
+          "Bxf7+! The bishop crashes in with check. You cannot take back — the g5-knight covers f7 — so the king has to walk.",
+          "...Ke7, the only legal square. Your king is stranded in the centre with the rook and bishop entombed behind it.",
+          "d4 tears the centre open around the naked king. White's whole army is about to pour through.",
+          "...h6 shoos the g5-bishop, but it is a wasted move — your king still has nowhere to hide.",
+          "Nxe4 calmly scoops the piece back. Material is level, but your king is hunted and the position is lost. Play 4...d5 instead."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "c4",
+              "to": "f7",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "e8",
+              "to": "e7",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "h7",
+              "to": "h6",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "g5",
+              "to": "e4",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nxe4?? — greedy, f7 falls",
+          "Bxf7+ — king yanked out",
+          "...Ke7 — forced into the open",
+          "d4 — rip the centre open",
+          "...h6 — too slow",
+          "Nxe4 — piece back, you're busted"
+        ]
+      }
     }
   ],
   "philidor-defence": [
@@ -2754,7 +3690,117 @@
         "book:philidor-defence",
         "concept:tac-sacrifice",
         "https://www.chess.com/openings/Philidor-Defense"
-      ]
+      ],
+      "punishmentLine": {
+        "fen": "rn1qkbnr/ppp2ppp/3p4/4p3/2B1P1b1/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 3 4",
+        "title": "Why 4...g6 runs into Legal's trick",
+        "moves": [
+          "g6",
+          "Nxe5",
+          "dxe5",
+          "Qxg4",
+          "Nc6",
+          "d3"
+        ],
+        "annotations": [
+          "You leave e5 undefended — and your pinned bishop becomes a liability.",
+          "Nxe5! The knight grabs the pawn and offers the queen. If you snatch it, 5...Bxd1?? 6.Bxf7+ Ke7 7.Nd5# is Legal's Mate.",
+          "So you must decline with ...dxe5, recapturing the knight and keeping your king alive.",
+          "Qxg4 collects the loose bishop. You have survived the mate, but you are a clean pawn down for nothing.",
+          "...Nc6 develops, far too late — White is simply up a pawn with the better game.",
+          "d3 calmly consolidates the extra pawn. Guard e5 with 4...Nc6 in the first place."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "g7",
+              "to": "g6",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "d6",
+              "to": "e5",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "d1",
+              "to": "g4",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "b8",
+              "to": "c6",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ],
+          [
+            {
+              "from": "d2",
+              "to": "d3",
+              "color": "rgba(239,68,68,0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "g6?? — e5 hangs",
+          "Nxe5! — and Bxd1 is mate",
+          "...dxe5 — decline the queen",
+          "Qxg4 — bishop falls, pawn down",
+          "...Nc6 — too late",
+          "d3 — White keeps the pawn"
+        ]
+      }
     }
   ],
   "albin-countergambit": [
