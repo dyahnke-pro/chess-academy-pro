@@ -59,3 +59,25 @@ mate/material → theory cross-check → board-true narration + resolvable sourc
 `commonMistakeNarration` + `narrationAccuracy` gates → `ship-check` (READY TO
 PUSH) → push to `main` (rebased onto concurrent pushes) → prod bundle hash
 advanced → `audit-pitfalls-prod.mjs` 7/7 green.
+
+## UPDATE — extended batch (autonomous continuation)
+
+Added 6 more verified pitfalls (13 total this session, all live on prod):
+- **sicilian-alapin** `…Qa5+??` (−3.0, 5,615 games) + `…Ne4??` (−2.9)
+- **alekhine-defence** `…d6??` in the Chase (−3.1, `c5` forks the knight)
+- **qga** `…Nc6??` (−3.2, `Qxc6+` fork — `…b5` vacated b7)
+- **vienna-game** `Bd2??` (−5.1 — fails to recapture on c3, drops a piece)
+- **trompowsky-attack** `Bd2??` (−2.1 — `…Nxd2` wins a pawn + initiative)
+
+Each verified the same way (chess.js + Stockfish d22 + correct-move-from-engine
++ dup check + board-true narration + resolvable sources + gates + ship-check).
+Rejected: French `…Qxd4` (node already lost), Alekhine `dxe5` (correct move
+only −0.75), Schliemann `…d5` (not a real pitfall).
+
+**Live prod coverage: 48/49 masterclass+gambit openings, 111 pitfalls total.**
+Only `schliemann-defence` remains empty (no clean common pitfall — verified).
+
+Post-deploy audit: `scripts/audit-pitfalls-prod.mjs` (now 12 openings, with an
+`AUDIT_ONLY` scope filter). NB: node block-buffers stdout to a file — the audit
+prints nothing until it EXITS (~8 min for 12 openings, ~18s each); do not mistake
+that for a hang.
