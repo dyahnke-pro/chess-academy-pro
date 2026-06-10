@@ -22,7 +22,7 @@
  * voice and supplies a sample node so the LLM mimics the pattern.
  * Style drift is the main risk; that's why we anchor on a sample.
  */
-import { Chess } from 'chess.js';
+import { Chess, type Move, type Square } from 'chess.js';
 import puzzleData from '../data/puzzles.json';
 import { getCoachChatResponse, getCoachStructuredResponse } from './coachApi';
 import {
@@ -1040,6 +1040,97 @@ export interface GenerateOpeningOptions {
  *  Attack, Bg5 Main Line, Opocensky etc), code surfaces them as
  *  fork branches at the end of the spine and asks the LLM for a
  *  one-sentence teaser idea per branch. */
+// ───────────────────────────────────────────────────────────────────
+// CODE-COMPUTED lead-the-eye arrows (G0 — the LLM no longer DECIDES
+// board geometry). The former NARRATION_SCHEMA let the LLM emit
+// `arrows:[{from,to}]`, with only a syntax filter downstream — so the
+// model was free to point an arrow at an empty square. The two arrow
+// categories the prompt asked for are both deterministic, so we
+// compute them from the line itself and hand the prose-only narration
+// to the LLM:
+//   (a) THREAT      — the most valuable square the moved piece now
+//                     attacks (a capture, a check, or a sensitive
+//                     f7/f2/h7/h2 square), read straight off chess.js.
+//   (b) LOOK-AHEAD  — where this SAME piece moves NEXT on the line
+//                     (its next hop), read straight off the move list.
+// Never the move's own from→to (the board animates that).
+type LineMove = { from: string; to: string; color: 'w' | 'b'; fen: string };
+type FromTo = { from: string; to: string };
+
+const SENSITIVE_SQUARES = new Set(['f7', 'f2', 'h7', 'h2', 'g7', 'g2']);
+const ARROW_PIECE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+
+/** Flip the side-to-move in a FEN (and clear en-passant) so we can
+ *  generate the moves of the side that JUST moved — that reveals what
+ *  the piece on its destination square now attacks. Returns null when
+ *  the flip would be illegal (e.g. the move was a check, leaving the
+ *  opponent's king in check with the mover to move) — in that case the
+ *  threat is self-evident (the SAN shows the +) and we skip the arrow. */
+function withSideToMove(fen: string, color: 'w' | 'b'): string | null {
+  const parts = fen.split(' ');
+  if (parts.length < 4) return null;
+  parts[1] = color;
+  parts[3] = '-';
+  return parts.join(' ');
+}
+
+/** THREAT arrow: the single most valuable square the piece now on
+ *  `toSquare` attacks. Null when it threatens nothing concrete. */
+function computeThreatArrow(postFen: string, movedColor: 'w' | 'b', toSquare: string): FromTo | null {
+  const flipped = withSideToMove(postFen, movedColor);
+  if (!flipped) return null;
+  const probe = new Chess();
+  try {
+    probe.load(flipped);
+  } catch {
+    return null; // illegal flipped position (the move was a check) → skip
+  }
+  let best: { to: string; score: number } | null = null;
+  let moves: Move[];
+  try {
+    moves = probe.moves({ square: toSquare as Square, verbose: true });
+  } catch {
+    return null;
+  }
+  for (const m of moves) {
+    let score = 0;
+    if (m.isCapture()) score += 10 + (m.captured ? ARROW_PIECE_VALUE[m.captured] ?? 0 : 0);
+    if (m.san.includes('+') || m.san.includes('#')) score += 6;
+    if (SENSITIVE_SQUARES.has(m.to)) score += 2;
+    if (score > 0 && (!best || score > best.score)) best = { to: m.to, score };
+  }
+  return best ? { from: toSquare, to: best.to } : null;
+}
+
+/** LOOK-AHEAD arrow: where the piece now on seq[i].to moves NEXT on
+ *  the line (the first later same-colour move departing that square). */
+function computeLookAheadArrow(seq: LineMove[], i: number): FromTo | null {
+  const square = seq[i].to;
+  const color = seq[i].color;
+  for (let j = i + 1; j < seq.length; j += 1) {
+    if (seq[j].color !== color) continue;
+    if (seq[j].from === square) {
+      return seq[j].to === square ? null : { from: square, to: seq[j].to };
+    }
+  }
+  return null;
+}
+
+/** Per-ply lead-the-eye arrows for a played line — threat + look-ahead,
+ *  computed from board geometry alone. Max 2 per ply, deduped. */
+function computeLeadEyeArrows(seq: LineMove[]): FromTo[][] {
+  return seq.map((mv, i) => {
+    const arrows: FromTo[] = [];
+    const threat = computeThreatArrow(mv.fen, mv.color, mv.to);
+    if (threat) arrows.push(threat);
+    const ahead = computeLookAheadArrow(seq, i);
+    if (ahead && !arrows.some((a) => a.from === ahead.from && a.to === ahead.to)) {
+      arrows.push(ahead);
+    }
+    return arrows;
+  });
+}
+
 const NARRATION_SCHEMA: Record<string, unknown> = {
   type: 'object',
   required: ['intro', 'outro', 'ideas'],
@@ -1055,17 +1146,8 @@ const NARRATION_SCHEMA: Record<string, unknown> = {
         properties: {
           text: { type: 'string' },
           shortText: { type: 'string' },
-          arrows: {
-            type: 'array',
-            items: {
-              type: 'object',
-              required: ['from', 'to'],
-              properties: {
-                from: { type: 'string' },
-                to: { type: 'string' },
-              },
-            },
-          },
+          // No `arrows` field — lead-the-eye arrows are computed in
+          // code (computeLeadEyeArrows), never decided by the LLM.
         },
       },
     },
@@ -1087,17 +1169,7 @@ const NARRATION_SCHEMA: Record<string, unknown> = {
           properties: {
             text: { type: 'string' },
             shortText: { type: 'string' },
-            arrows: {
-              type: 'array',
-              items: {
-                type: 'object',
-                required: ['from', 'to'],
-                properties: {
-                  from: { type: 'string' },
-                  to: { type: 'string' },
-                },
-              },
-            },
+            // No `arrows` — computed in code (computeLeadEyeArrows).
           },
         },
       },
@@ -1108,7 +1180,6 @@ const NARRATION_SCHEMA: Record<string, unknown> = {
 interface NarrationIdea {
   text: string;
   shortText?: string;
-  arrows?: { from: string; to: string }[];
 }
 
 interface NarrationOutput {
@@ -1171,12 +1242,13 @@ async function generateOpeningFromDbNarration(
     : entry.moves;
 
   // 1. Replay the PGN, collect each move's SAN + post-move FEN.
-  type Position = { san: string; fen: string; ply: number; movedBy: 'white' | 'black' };
+  type Position = { san: string; fen: string; ply: number; movedBy: 'white' | 'black'; from: string; to: string };
   const positions: Position[] = [];
   const c = new Chess();
   for (let i = 0; i < spineMoves.length; i += 1) {
+    let mv: Move;
     try {
-      c.move(stripSanAnnotations(spineMoves[i]));
+      mv = c.move(stripSanAnnotations(spineMoves[i]));
     } catch {
       return null; // DB entry corrupt — extremely rare, abort
     }
@@ -1185,8 +1257,20 @@ async function generateOpeningFromDbNarration(
       fen: c.fen(),
       ply: i,
       movedBy: i % 2 === 0 ? 'white' : 'black',
+      from: mv.from,
+      to: mv.to,
     });
   }
+  // CODE-COMPUTED lead-the-eye arrows for the spine (G0 — no LLM
+  // chooses board geometry). One FromTo[] per spine ply, by index.
+  const spineArrows = computeLeadEyeArrows(
+    positions.map((p) => ({
+      from: p.from,
+      to: p.to,
+      color: p.movedBy === 'white' ? 'w' : 'b',
+      fen: p.fen,
+    })),
+  );
 
   // 1b. Find sibling extensions to inject as deep-dive fork branches
   //     at the end of the spine. For Najdorf this surfaces English
@@ -1260,11 +1344,7 @@ For each move in the line, return:
   - "e4 grabs the center and opens lines for the queen and bishop."
   - "c5 — the Sicilian, asymmetric counterplay on the queenside."
   - "Nc3 defends e4 and prepares Bc4."
-- arrows (OPTIONAL, 0-3 per move): the user wants arrows ONLY for two purposes:
-  (a) THREATS — squares the moved piece NOW attacks / pressures / eyes (Bc4 → f7, Nf3 → e5, c5 → d4).
-  (b) LOOK-AHEAD — the next critical square on the line we're walking (Re1 → e8 because the rook will land there in 2 moves; Nc3 → d5 because the knight is going to d5 next).
-  Do NOT draw the move's own from→to (the board animates that — drawing it again is noise). Do NOT draw retrospective arrows. Skip arrows entirely when neither category fits (O-O, generic developing moves).
-- Use squares in algebraic notation only (e.g. "e4", "f7"). Empty arrows array is fine; do NOT invent arrows just to fill the field.
+Do NOT emit arrows or square-coordinates as data — the board's lead-the-eye arrows are drawn by code. Just write the prose; if a square matters, NAME it in the sentence ("the bishop eyes f7") and the arrow will already be there.
 
 The student is playing as ${studentSide}. Frame ideas from that perspective when relevant.
 
@@ -1275,11 +1355,7 @@ Also produce:
 ${branches.length > 0 ? `- branchIdeas: ONE sentence (max 20 words) for EACH branch the student might dive into next. Mention the named line and its strategic flavor (sharp / positional / pawn-storm / quiet etc).
 - shortBranchIdeas: ONE sentence (max 15 words) per branch — Brief mode variants of branchIdeas, same order.
 - branchExtensionIdeas: a 2D array. For EACH branch (in the same order as branches[]), emit an array of EXACTLY ONE idea object per extension move provided. Each idea object MUST include both text AND shortText (Brief mode variant). If a branch has 6 extension moves you MUST emit 6 idea objects in its inner array — no fewer. This is the most-undersized field in past gens and the student ends up reading template prose instead of your prose; do not skimp.
-  - text rules: same as the spine ideas (max ${pace === 'tour' ? 12 : 25} words, mention the SAN, do NOT forecast future moves).
-  - arrow rules (CRITICAL): arrows on the EXTENSION moves should ONLY show:
-      (a) THREATS — squares the moved piece NOW attacks/pressures (Bc4 → f7), or
-      (b) LOOK-AHEAD — the next critical square on the line you're walking (Re1 → e8 if the rook is going to lift, Nc3 → d5 if the knight is heading to d5 next).
-    Do NOT draw the move's own from→to (the board animates that). Skip arrows when nothing useful to show.
+  - text rules: same as the spine ideas (max ${pace === 'tour' ? 12 : 25} words, mention the SAN, do NOT forecast future moves). No arrows/coordinates as data — the board's arrows are drawn by code; just write prose.
   Example: for "English Attack" with extension "Ng4 Bg5 Qa5+", emit 3 idea objects narrating those three plies.` : ''}
 
 ${(() => {
@@ -1302,7 +1378,7 @@ Moves with post-move FENs:
 ${moveLabels}
 ${branches.length > 0 ? `\nBranches available at the end of the spine (the student picks one to dive deeper):\n${branchLabels}\n\nFor each branch, write ONE short sentence describing what kind of line it is.` : ''}
 
-Emit a JSON object with intro (string), shortIntro (string), outro (string), ideas (array of ${positions.length} objects { text, shortText, arrows? }, one per spine move in order)${branches.length > 0 ? `, branchIdeas (array of ${branches.length} strings), shortBranchIdeas (array of ${branches.length} strings), and branchExtensionIdeas (2D array of { text, shortText, arrows? } objects)` : ''}.`;
+Emit a JSON object with intro (string), shortIntro (string), outro (string), ideas (array of ${positions.length} objects { text, shortText }, one per spine move in order)${branches.length > 0 ? `, branchIdeas (array of ${branches.length} strings), shortBranchIdeas (array of ${branches.length} strings), and branchExtensionIdeas (2D array of { text, shortText } objects)` : ''}.`;
 
   let narration: NarrationOutput;
   try {
@@ -1342,8 +1418,24 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   //    fires the deep-dive flow that resolves the canonical name and
   //    starts a fresh focused walkthrough.
   type ChildWrap = { node: WalkthroughTreeNode; label?: string; forkSubtitle?: string };
-  const SQUARE_RE = /^[a-h][1-8]$/;
+  // Branches sit at the spine terminus; replay each branch line from
+  // there so its lead-the-eye arrows are code-computed too.
+  const terminusFen = positions[positions.length - 1].fen;
   const branchChildren: ChildWrap[] = branches.map((b, idx) => {
+    // CODE-COMPUTED arrows for [b.san, ...extensionMoves], replayed
+    // from the spine terminus. branchArrows[0] = b.san's arrow;
+    // branchArrows[1 + j] = extensionMoves[j]'s arrow.
+    const branchSeq: LineMove[] = [];
+    const bc = new Chess(terminusFen);
+    for (const san of [b.san, ...b.extensionMoves]) {
+      try {
+        const m = bc.move(stripSanAnnotations(san));
+        branchSeq.push({ from: m.from, to: m.to, color: m.color, fen: bc.fen() });
+      } catch {
+        break; // shouldn't happen (DB-validated), but never throw mid-build
+      }
+    }
+    const branchArrows = computeLeadEyeArrows(branchSeq);
     // The branch's first move belongs to the side whose turn it is
     // after the canonical's last ply. Position[i].ply = i, so after
     // the last spine move the next ply is positions.length (odd =
@@ -1381,13 +1473,8 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
         typeof ideaEntry === 'object' && ideaEntry?.shortText?.trim()
           ? ideaEntry.shortText.trim()
           : undefined;
-      const rawArrows =
-        typeof ideaEntry === 'object' && Array.isArray(ideaEntry?.arrows)
-          ? ideaEntry.arrows
-          : [];
-      const arrows = rawArrows.filter(
-        (a) => SQUARE_RE.test(a.from) && SQUARE_RE.test(a.to) && a.from !== a.to,
-      );
+      // Code-computed: branchArrows[0] is b.san, so extension j is 1+j.
+      const arrows = branchArrows[j + 1] ?? [];
       const node: WalkthroughTreeNode = {
         san: extSan,
         movedBy: extMovedBy,
@@ -1410,6 +1497,12 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       children: extChildren,
     };
     if (shortTeaser) branchNode.shortIdea = shortTeaser;
+    const branchEntryArrows = branchArrows[0] ?? [];
+    if (branchEntryArrows.length > 0) {
+      const segment: NarrationSegmentType = { text: teaser, arrows: branchEntryArrows };
+      if (shortTeaser) segment.shortText = shortTeaser;
+      branchNode.narration = [segment];
+    }
     return {
       label: b.label,
       forkSubtitle: teaser,
@@ -1430,16 +1523,8 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       typeof ideaEntry === 'object' && ideaEntry?.shortText?.trim()
         ? ideaEntry.shortText.trim()
         : undefined;
-    const rawArrows =
-      typeof ideaEntry === 'object' && Array.isArray(ideaEntry?.arrows)
-        ? ideaEntry.arrows
-        : [];
-    // Drop arrows with non-algebraic squares or from===to no-ops.
-    // The downstream repairNarrationArrows pass would clean these
-    // up too, but doing it here keeps the tree tight at build time.
-    const arrows = rawArrows.filter(
-      (a) => SQUARE_RE.test(a.from) && SQUARE_RE.test(a.to) && a.from !== a.to,
-    );
+    // Code-computed lead-the-eye arrows for this ply (G0 — not the LLM).
+    const arrows = spineArrows[i] ?? [];
     const node: WalkthroughTreeNode = {
       san: p.san,
       movedBy: p.movedBy,
