@@ -112,6 +112,14 @@ export interface LiveState {
   /** Mate distance in plies (positive = white mates, negative = black
    *  mates). When set, supersedes evalCp for "who's winning" reads. */
   evalMateIn?: number;
+  /** Stockfish PV[0] in UCI (e.g. `g1f3`) for the live FEN. Surfaces that
+   *  already run a debounced engine analysis (CoachTeachPage's eval bar)
+   *  thread it here so the grounding-inversion chat layer can ground a
+   *  best-move answer in CODE — the engine's true best move — and voice it
+   *  through `voiceFacts`, instead of handing the LLM the board. Optional;
+   *  the grounding pipeline falls back to the master-play top move when
+   *  absent. See docs/plans/2026-06-10-coach-chat-grounding-inversion.md. */
+  engineBestMoveUci?: string;
   /** Pre-fetched Lichess explorer snapshot for the current FEN. The
    *  surface (CoachTeachPage) fires `fetchLichessExplorer` on every
    *  FEN change and threads the compact result here so the brain can

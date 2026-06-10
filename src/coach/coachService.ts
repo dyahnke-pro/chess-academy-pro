@@ -448,6 +448,29 @@ export function isBestMoveQuestion(ask: string | undefined): boolean {
   return !!ask && BEST_MOVE_QUESTION_RE.test(ask);
 }
 
+/** A TACTICS / DANGER question — "is anything hanging?", "what's the threat?",
+ *  "is there a fork / pin / mate here?", "am I in danger?", "is my queen safe?".
+ *  The answer is `liveTacticsContext`'s ALREADY-computed descriptions (forks,
+ *  hanging pieces, mate-in-one, top threat/opportunity) — so the grounding
+ *  inversion (Phase 2) routes it through `assembleTacticsAnswer` → voiceFacts
+ *  and the LLM voices the engine's facts, deciding nothing. */
+const TACTICS_QUESTION_RE =
+  /\b(?:hang(?:ing|s)?|en\s*prise|(?:any\s+)?threats?|(?:a\s+)?fork|pinn?(?:ed|ing)?|skewer|discover(?:ed|y)|in\s+danger|under\s+attack|(?:is\s+(?:it|there|my|the)\b[\s\S]{0,40}\b(?:safe|hanging|attacked|defended))|am\s+i\s+safe|safe\s+(?:here|now)|can\s+(?:i|it|he|she|they|white|black)\s+be\s+(?:punished|taken|captured)|(?:is\s+there\s+(?:a\s+)?)?mate(?:\s+(?:here|in\s+\w+|threat))?|tactics?|combination|can\s+i\s+(?:win|grab|take)\s+(?:material|a\s+piece|the))\b/i;
+export function isTacticsQuestion(ask: string | undefined): boolean {
+  return !!ask && TACTICS_QUESTION_RE.test(ask);
+}
+
+/** A STUDENT-PROGRESS question — "am I improving?", "what should I work on?",
+ *  "what are my weaknesses?", "how am I doing?", "my bad habits". The answer is
+ *  the student's OWN computed history (their persisted bad-habit profile), so
+ *  the grounding inversion (Phase 6) routes it through `assembleProgressAnswer`
+ *  → voiceFacts. The LLM voices the student's real data; it invents no weakness. */
+const PROGRESS_QUESTION_RE =
+  /\b(?:am\s+i\s+(?:improving|getting\s+better|progressing|any\s+good)|how\s+am\s+i\s+(?:doing|progressing|playing)|what\s+(?:should|do)\s+i\s+(?:work\s+on|improve|practi[sc]e|focus\s+on)|what\s+(?:are|to)\s+(?:my\s+)?(?:work\s+on|improve)|my\s+(?:weakness(?:es)?|weak\s+(?:spots?|points?|areas?)|bad\s+habits?|progress|improvement|strengths?)|where\s+(?:am\s+i|do\s+i)\s+(?:weak|struggl|lose|losing|need)|what'?s?\s+holding\s+me\s+back|biggest\s+(?:weakness|mistake|problem))\b/i;
+export function isProgressQuestion(ask: string | undefined): boolean {
+  return !!ask && PROGRESS_QUESTION_RE.test(ask);
+}
+
 async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Promise<CoachAnswer> {
   // WO-COACH-UNIFY-01 visibility: include task + maxTokens in the
   // ask-received audit so paste-back audit logs show which surface
@@ -858,9 +881,13 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
         ? [...(input.liveState.gameSans ?? []), ...playerSans]
         : input.liveState.gameSans;
     const groundedPlayers = playerNames.size > 0 ? [...playerNames] : undefined;
+    // A progress question ("am I improving?") is answered from the student's
+    // OWN history (Phase 6) and needs NO board — so engage grounding even with
+    // no FEN. Every other grounded intent requires a live position.
+    const progressQuestion = isProgressQuestion(input.ask);
     const autoGrounding =
       options.grounding ??
-      (input.liveState.fen
+      (input.liveState.fen || progressQuestion
         ? {
             currentFen: input.liveState.fen,
             // DB-grounding: thread the move history through so the
@@ -896,6 +923,27 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             // 2026-06-09 "No bueno": the coach refused a plain "best move
             // here?" because the explanation's forward SANs tripped the gate.)
             bestMoveQuestion: isBestMoveQuestion(input.ask),
+            // GROUNDING INVERSION (STEP A) — thread the live engine snapshot +
+            // tactics so the chat layer can COMPUTE a best-move / eval / tactics
+            // answer and voice it through `voiceFacts`, instead of handing the
+            // LLM the board. All optional; the interception falls through to the
+            // master-play top move / legacy path when absent. The engine move is
+            // what lets OFF-BOOK positions (no master data) ground.
+            engineBestMoveUci: input.liveState.engineBestMoveUci,
+            // enginePlan carries a white-perspective eval for plan turns; the
+            // eval-bar snapshot carries one for every turn. Either is fine — both
+            // are white-perspective (the interception converts to side-to-move).
+            engineEvalCp: input.liveState.enginePlan?.evalCp ?? input.liveState.evalCp,
+            engineMateIn: input.liveState.enginePlan?.mateIn ?? input.liveState.evalMateIn,
+            tactics: input.liveState.tactics,
+            // STEP B — tactics/danger (Phase 2) + student-progress (Phase 6).
+            // Both assemblers exist; these flags tell the interception to
+            // COMPUTE the answer (engine tactics / the student's bad-habit
+            // profile) and voice it via voiceFacts. Studentcolor lets the
+            // tactics answer warn about the STUDENT's hanging pieces.
+            tacticsQuestion: isTacticsQuestion(input.ask),
+            progressQuestion,
+            studentColor: input.liveState.studentColor,
             surface: coachSurfaceToRoute(input.liveState.surface),
           }
         : undefined);

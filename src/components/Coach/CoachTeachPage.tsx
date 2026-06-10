@@ -2173,6 +2173,11 @@ export function CoachTeachPage(): JSX.Element {
       // response, then chess.js rejected it 5 trips in a row.
       whoseTurn: fenTurn,
       tactics: tacticsForAsk,
+      // GROUNDING INVERSION (STEP A): thread Stockfish's best move (UCI) so the
+      // chat layer can COMPUTE a best-move answer and voice it via voiceFacts —
+      // grounding even OFF-BOOK positions the master-play DB can't cover. Only
+      // when the cached analysis is for THIS exact FEN (same gate as the eval).
+      engineBestMoveUci: cachedAnalysis?.bestMove || undefined,
       // Step-by-step move narration: the engine-driven reply (coachReplyPlayed
       // defined) OR a typed "I played X. Your move." report, outside a
       // walkthrough. Tells the grounding pipeline this turn is move discussion

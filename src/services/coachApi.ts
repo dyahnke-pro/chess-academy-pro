@@ -36,7 +36,7 @@ function emitLlmTokenUsage(
   });
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer } from './groundedAnswer';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
 import { buildVerifiedPuzzleContext } from './verifiedLineLibrary';
@@ -45,6 +45,7 @@ import { buildOpeningDbEntries } from './openingDbGrounding';
 import { buildNarrationGroundingBlock } from './narrationGrounding';
 import { buildLessonReferenceBlock } from '../data/lessons';
 import type { CoachTask, CoachContext, CoachVerbosity, AiProvider } from '../types';
+import type { TacticsLiveContext } from '../coach/types';
 
 // WO-COACH-MASTER-INTEGRATION audit bridge — installs window.__masterPlayAudit
 // when the audit-stream is configured, letting the Playwright audit drive
@@ -1078,6 +1079,37 @@ export interface MasterGroundingOptions {
    *  turn while every fabrication guard stays in force. Detected via
    *  `isBestMoveQuestion` in coachService (David 2026-06-09 "No bueno"). */
   bestMoveQuestion?: boolean;
+  /** GROUNDING INVERSION (STEP A) — the live engine snapshot, threaded from
+   *  the surface (`CoachTeachPage`/play) so the chat layer can ground a
+   *  best-move / eval / tactics answer in CODE and voice it through
+   *  `voiceFacts` — instead of handing the LLM the board and hoping. All
+   *  optional + additive: when absent, the interception falls through to the
+   *  master-play top move (in-book) or the legacy reasoning path. Threading
+   *  the engine move is what lets OFF-BOOK positions (no master data) ground.
+   *  See docs/plans/2026-06-10-coach-chat-grounding-inversion.md. */
+  /** Stockfish PV[0] in UCI (e.g. `g1f3`) for `currentFen`. The TRUE best
+   *  move — preferred over the master-play top move when present. */
+  engineBestMoveUci?: string;
+  /** WHITE-perspective centipawn eval of `currentFen` (LiveState convention).
+   *  The interception flips the sign to side-to-move POV for the assembler. */
+  engineEvalCp?: number;
+  /** Mate distance in plies (signed, white-positive) for `currentFen`. */
+  engineMateIn?: number;
+  /** Pre-computed tactical context for `currentFen` (forks/hanging/threats/
+   *  mate-in-one) — the fact source for STEP B's tactics/danger answers. */
+  tactics?: TacticsLiveContext;
+  /** STEP B — true when this turn is a TACTICS / DANGER question ("anything
+   *  hanging?", "what's the threat?", "fork here?"). The answer is COMPUTED
+   *  from `tactics` (assembleTacticsAnswer) and voiced via voiceFacts. */
+  tacticsQuestion?: boolean;
+  /** STEP B — true when this turn is a STUDENT-PROGRESS question ("am I
+   *  improving?", "what should I work on?"). The answer is the student's OWN
+   *  bad-habit profile (assembleProgressAnswer), voiced via voiceFacts. Needs
+   *  no board, so the pipeline engages even with no `currentFen`. */
+  progressQuestion?: boolean;
+  /** Which side the STUDENT plays — so the tactics answer warns about THEIR
+   *  hanging pieces. Falls back to side-to-move when absent. */
+  studentColor?: 'white' | 'black';
   /** Surface route for audit attribution. Goes into every emitted
    *  audit event (`master-play-lookup`, `claim-validator-trip`, etc). */
   surface: string;
@@ -1543,9 +1575,38 @@ export async function getCoachChatResponse(
   let masterPlayContext: MasterPlayContext | undefined;
   let groundingEngaged = false;
   if (grounding) {
-    const intentFired = grounding.forceEngage === true || detectMoveQuestionIntent(messages);
+    const intentFired =
+      grounding.forceEngage === true ||
+      detectMoveQuestionIntent(messages) ||
+      grounding.tacticsQuestion === true ||
+      grounding.progressQuestion === true;
     if (intentFired) {
       try {
+        // Helper: the latest user message, for voiceFacts context.
+        const lastUserMessage = (): string | undefined => {
+          for (let i = messages.length - 1; i >= 0; i -= 1) {
+            if (messages[i].role === 'user') return messages[i].content;
+          }
+          return undefined;
+        };
+
+        // ── PROGRESS (Phase 6) — the student's OWN computed history ────────
+        // No board needed. The persisted bad-habit profile IS the computed
+        // student data (refreshed by updateBadHabits); reading it from db
+        // here keeps coachApi cycle-free (coachFeatureService imports coachApi,
+        // so we must NOT import detectBadHabits back into it). voiceFacts the
+        // facts; fall through to the legacy path when there's no habit data.
+        if (grounding.progressQuestion) {
+          try {
+            const profile = await db.profiles.get('main');
+            const answer = assembleProgressAnswer(profile?.badHabits ?? []);
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config });
+              if (voiced) return voiced;
+            }
+          } catch { /* fall through to legacy path */ }
+        }
+
         masterPlayContext = await buildMasterPlayContext(grounding);
         // ── GROUNDING INVERSION (Phase 1) — the voiceFacts chokepoint ──────
         // For a "what's the best move?" question with real master data, the
@@ -1557,22 +1618,55 @@ export async function getCoachChatResponse(
         // docs/plans/2026-06-10-coach-chat-grounding-inversion.md. If you're
         // about to add a validator here — STOP: compute it and route it through
         // voiceFacts instead.
-        if (grounding.bestMoveQuestion && masterPlayContext && masterPlayContext.current.moves.length > 0) {
-          const top = masterPlayContext.current.moves[0];
-          if (top.uci) {
-            const answer = assembleMoveEvalAnswer({ fen: masterPlayContext.current.fen, bestMoveUci: top.uci });
+        if (grounding.bestMoveQuestion) {
+          // Prefer Stockfish's TRUE best move (threaded from the surface engine
+          // snapshot, STEP A); fall back to the top master move when the engine
+          // snapshot isn't present. Threading the engine move is what lets
+          // OFF-BOOK positions (no master data) ground too — the gap the
+          // master-only block couldn't cover.
+          let bestUci: string | null = grounding.engineBestMoveUci ?? null;
+          let bestFen: string | null = bestUci ? (grounding.currentFen ?? null) : null;
+          if (!bestUci && masterPlayContext && masterPlayContext.current.moves.length > 0) {
+            bestUci = masterPlayContext.current.moves[0].uci ?? null;
+            bestFen = masterPlayContext.current.fen;
+          }
+          if (bestUci && bestFen) {
+            // LiveState evals are WHITE-perspective; assembleMoveEvalAnswer
+            // wants side-to-move POV. Flip the sign when Black is to move.
+            const blackToMove = bestFen.split(' ')[1] === 'b';
+            const stmEvalCp =
+              typeof grounding.engineEvalCp === 'number'
+                ? (blackToMove ? -grounding.engineEvalCp : grounding.engineEvalCp)
+                : null;
+            const stmMateIn =
+              typeof grounding.engineMateIn === 'number'
+                ? (blackToMove ? -grounding.engineMateIn : grounding.engineMateIn)
+                : null;
+            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn });
             if (answer) {
-              let lastUser: string | undefined;
-              for (let i = messages.length - 1; i >= 0; i -= 1) {
-                if (messages[i].role === 'user') { lastUser = messages[i].content; break; }
-              }
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUser, providerConfig: config });
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config });
               if (voiced) {
                 return answer.bestMoveFromTo
                   ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
                   : voiced;
               }
             }
+          }
+        }
+
+        // ── TACTICS / DANGER (Phase 2) — voice the engine's computed tactics ──
+        // `liveTacticsContext` already computed every fork/hanging/mate-in-one
+        // deterministically; assembleTacticsAnswer SELECTS the relevant facts
+        // and voiceFacts says them. The LLM decides nothing. Falls through when
+        // there's no concrete tactic (the legacy path then handles the turn).
+        if (grounding.tacticsQuestion && grounding.tactics) {
+          const sc: 'white' | 'black' =
+            grounding.studentColor ??
+            ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
+          const answer = assembleTacticsAnswer(grounding.tactics, sc);
+          if (answer) {
+            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config });
+            if (voiced) return voiced;
           }
         }
         // DB-grounding extension: attach canonical openings-lichess.json
