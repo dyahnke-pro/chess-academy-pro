@@ -81,3 +81,46 @@ Post-deploy audit: `scripts/audit-pitfalls-prod.mjs` (now 12 openings, with an
 `AUDIT_ONLY` scope filter). NB: node block-buffers stdout to a file — the audit
 prints nothing until it EXITS (~8 min for 12 openings, ~18s each); do not mistake
 that for a hang.
+
+## UPDATE — disaster-walkthrough punishmentLines (batch 1+2+3, all live on main)
+
+David's "I set them up, you knock them down" standard applied to the pitfalls:
+every pitfall whose wrong move leads to a CONCRETE forced disaster now carries a
+hand-authored `punishmentLine` — a sharp/cautionary second-person walkthrough
+that plays the blunder out and shows the punishment. WATCH plays the disaster;
+Learn/Practice still drill the antidote (correctMove). Positional/"dim" pitfalls
+get NO fabricated disaster (empty > generic > invented) — they keep the standard
+RED-wrong/GREEN-correct arrow + their existing explanation.
+
+Pipeline (reproducible): `_gen-punishment-lines.mjs` (engine-verified disaster
+candidates + per-move board facts) → `_verify-disasters.mjs` (confirms a REAL
+student disaster: wrong ≤ −150cp, correct ≥ −90cp, swing ≥ 150cp, oriented) →
+hand-author NARR {title, ann[], cue[]} board-true → `_assemble-punishment.mjs`
+(merges narration + scaffold into the punishmentLine, RED move-arrow + green
+vision + yellow key squares, validates array alignment) → gates → ship-check →
+push main → prod bundle advanced → `audit-pitfalls-prod.mjs`.
+
+- **Batch 1 (16):** masterclass/gambit disasters (shipped 556e3ec).
+- **Batch 2 (17):** masterclass/gambit confirmed disasters — italian, KID,
+  english, catalan, four-knights, evans (x2), sveshnikov, benko, budapest,
+  scotch-gambit (x3), vienna-gambit, smith-morra, marshall (x2).
+- **Batch 3 (26):** pro-rep confirmed disasters across every player — naroditsky
+  (x3), gothamchess (x4), hikaru (x3), samayraina (x2), caruana (x2), carlsen
+  (x6), aman (x3), incl. the famous Caro `…Ngf6?? Nd6#` mate and the Qxf7+ /
+  Bxf7+ unsound sacs.
+
+**Total: 59 punishmentLines live** (43 confirmed disasters this session + 16
+batch-1 + 3 pre-existing pirc). Every one: moves[0]==wrongMove, all moves
+chess.js-legal from the FEN, oriented to the student color, Stockfish-confirmed,
+arrays aligned, cues ≤8 words. Gates green: commonMistakeNarration (203),
+commonMistakeLine (8). ship-check READY TO PUSH.
+
+Audit `scripts/audit-pitfalls-prod.mjs` EXTENDED (G7 living-audit):
+- PHASE A (render): 38 openings — section renders + board-true on-card snippet +
+  0 console errors.
+- PHASE B (interactive WATCH): 10 disaster openings — expands the matching
+  pitfall card, clicks WATCH, asserts the disaster walkthrough (`line-player-demo`)
+  mounts showing the authored title. Proves the walkthrough PLAYS, not just that
+  data exists.
+- Browser recycles every 8 pages (sandbox headless_shell OOM-crashes ~20 pages
+  in one long-lived context).
