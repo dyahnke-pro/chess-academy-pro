@@ -373,8 +373,14 @@ DONE + shipped to main (all gate-green):
 - Tools built: build-opening-spine, diagnose-lesson-tails, soundness-sweep,
   extract-endgame-structures.
 NEEDS DAVID / DEEPER WORK (flagged, NOT risked autonomously):
-- 5 genuinely-hard/sharp variations (pirc 150, two-knights Max Lange, semi-slav
-  Botvinnik, old-indian, benoni Taimanov) — see SOUNDNESS SWEEP RESULTS above.
+- 4 genuinely-hard/sharp variations (pirc 150, two-knights Max Lange, semi-slav
+  Botvinnik, old-indian) — see SOUNDNESS SWEEP RESULTS above. [benoni Taimanov
+  RESOLVED 2026-06-10: KEEP — re-eval at depth 26 = -0.96 (the -1.98 was a
+  shallow-depth artifact); branchpoint already -0.83 before the lesson moves,
+  best play holds -0.86 to -0.96, student plays engine-best (...Nfd7 + the
+  ...Na6-c7-a6-b5 consensus counterplay). No sound equalising line exists (the
+  Taimanov is THE critical anti-Benoni); narration already honest ('slightly
+  worse... not an equaliser'). Tab explanation aligned to match.]
 - Endgame authoring across the ~6 structural openings (data prepped above).
 - London/Scotch/Vienna/Caro mains etc. = sound showcases, correctly LEFT.
 
@@ -384,7 +390,7 @@ NEEDS DAVID / DEEPER WORK (flagged, NOT risked autonomously):
 - NARRATIONS: re-authored on every rebuild; all pass narrationAccuracy/Grounding.
 - SOUNDNESS: comprehensively swept. 6 secretly-losing lessons FIXED; 5 hard/sharp
   flagged (Pirc 150, Two Knights Max Lange, Semi-Slav Botvinnik, Old-Indian,
-  Benoni — need deeper theory / David's call). Sharp gambit showcases left.
+  Benoni RESOLVED 2026-06-10: KEEP, -0.96 at depth 26, honest narration). Sharp gambit showcases left.
 - OPENING SPINES: genuine defects rebuilt (Italian, Philidor x2, Alekhine);
   sound showcases (London, Scotch, Vienna, Caro, Scandi mains) correctly LEFT.
 - ENDGAMES: the one genuinely-missing layer (only Ruy has them). DATA PREPPED

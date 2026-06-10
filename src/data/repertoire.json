@@ -2362,7 +2362,7 @@
       {
         "name": "Taimanov Variation (f4/Bb5+)",
         "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 f4 Bg7 Bb5+ Nfd7 a4 O-O Nf3 Na6 O-O Nc7 Bd3 a6",
-        "explanation": "The Taimanov Attack with f4 and Bb5+ is one of the most aggressive anti-Benoni weapons. White builds a massive pawn center and the check on b5 disrupts Black's development pattern. Black responds with the critical ...Na6-c7 maneuver followed by the thematic ...a6 and ...b5 break. After the b-file opens, the exchange of light-squared bishops with ...Ba6 gives Black tremendous counterplay along the a6-f1 diagonal and the open b-file. The key is timing the ...b5 break precisely before White consolidates with e5."
+        "explanation": "The Taimanov Attack with f4 and Bb5+ is one of the most aggressive anti-Benoni weapons. White builds a massive pawn center and the check on b5 disrupts Black’s development pattern. Black responds with the critical …Na6-c7 maneuver followed by the thematic …a6 and …b5 break. After the b-file opens, the exchange of light-squared bishops with …Ba6 gives Black real counterplay along the a6-f1 diagonal and the open b-file. Be honest about where this stands: the Taimanov is the toughest anti-Benoni, White’s space gives a lasting pull, and Black is a shade worse — but it is a dynamic, double-edged fight, not a losing one, with the …b5 break as Black’s trump. Timing …b5 precisely before White consolidates with e5 is the key."
       },
       {
         "name": "Four Pawns Attack (...Ng4 Counter)",

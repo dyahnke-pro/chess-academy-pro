@@ -4849,7 +4849,7 @@
         "annotations": [
           "You recapture on d5 with the knight — but the c4-pawn is covering that square.",
           "cxd5! The pawn takes your knight. You cannot win it back cleanly.",
-          "...Qxd5 grabs the pawn, but you are already down a piece for it.",
+          "…Qxd5 wins a second pawn back — but a knight for two pawns, with your queen about to be hounded, is a losing bargain.",
           "Nc3 hits the queen with tempo. You are lost. Play ...e6 to challenge d5 safely."
         ],
         "arrows": [
@@ -5800,9 +5800,9 @@
         ],
         "annotations": [
           "You snatch on b5 with the bishop — but the a-pawn is covering that square.",
-          "...axb5 takes the bishop. You are down a piece.",
+          "…axb5 takes the bishop — you gave it for a single pawn.",
           "Nxb5 tries to muddy things with threats to c7.",
-          "...Ng6 calmly defends and Black keeps the extra piece. Retreat the bishop to b3 instead."
+          "…Ng6 calmly defends, and you are left down a bishop for two pawns in a clearly worse position. Retreat the bishop to b3 instead."
         ],
         "arrows": [
           [
@@ -5864,7 +5864,7 @@
           "Bxb5?? — a-pawn covers it",
           "...axb5 — bishop gone",
           "Nxb5 — bluffing",
-          "...Ng6 — Black holds up a piece"
+          "…Ng6 — down a bishop for two pawns"
         ]
       }
     }
