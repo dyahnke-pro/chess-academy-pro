@@ -37,6 +37,7 @@ function emitLlmTokenUsage(
 }
 import { lookupMasterPlay } from './masterPlayLookup';
 import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer } from './groundedAnswer';
+import { detectBadHabits } from './badHabitDetector';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
 import { buildVerifiedPuzzleContext } from './verifiedLineLibrary';
@@ -1422,32 +1423,28 @@ function emitEnforcementFallback(
   });
 }
 
-/** Build a strengthened addendum to attach on retry. The first retry's
- *  strengthening points to the most recent violation; the second retry
- *  doubles down and forbids the LLM from making chess claims at all
- *  if it can't ground them. */
-function buildRetryAddendum(retryNumber: 1 | 2, lastValidation: ClaimValidationResult): string {
-  const violationSummary = lastValidation.violations
-    .slice(0, 5)
-    .map((v) => `[${v.kind}] ${v.claim}: ${v.reason}`)
-    .join('\n  ');
-  if (retryNumber === 1) {
-    return [
-      '═══ GROUNDING VIOLATION ON PRIOR ATTEMPT ═══',
-      'Your previous response was rejected. The following claims were not grounded in the master-play context:',
-      `  ${violationSummary}`,
-      'Regenerate WITHOUT those claims. Either use only data from the master-play context above, or omit',
-      'the chess specifics entirely and answer with strategic prose.',
-    ].join('\n');
+/** STEP C — the in-code replacement for the regen loop. When the single
+ *  validator backstop trips, we do NOT re-call the LLM (that was the disease:
+ *  re-calling the model = the LLM still deciding, at 3–6 calls/turn). Instead we drop
+ *  the whole SENTENCES carrying a flagged claim and keep the rest — grammatical,
+ *  no clipped fragments, ZERO extra LLM calls. Directive markers ([BOARD:],
+ *  [VOICE:], [[ACTION:]]) are never severed. Modeled on
+ *  `stripUngroundedPlayerStats` (claimValidator.ts). Returns '' only when every
+ *  sentence carried a claim (caller then serves the honest stock line). */
+function stripUngroundedSentences(text: string, validation: ClaimValidationResult): string {
+  const claims = validation.violations.map((v) => v.claim).filter(Boolean).map((c) => c.toLowerCase());
+  if (claims.length === 0 || !text.trim()) return text.trim();
+  const sentences = text.split(/(?<=[.!?])\s+/);
+  const kept: string[] = [];
+  for (const s of sentences) {
+    const trimmed = s.trim();
+    if (!trimmed) continue;
+    const hasMarker = /\[\[?[A-Z]/.test(trimmed); // protect directive markers
+    const lower = trimmed.toLowerCase();
+    const carriesClaim = !hasMarker && claims.some((c) => lower.includes(c));
+    if (!carriesClaim) kept.push(trimmed);
   }
-  return [
-    '═══ FINAL ATTEMPT — STRICTEST GROUNDING ═══',
-    'Two grounding violations so far:',
-    `  ${violationSummary}`,
-    'On this attempt: cite NO move SAN unless it appears verbatim in the master-play context above.',
-    'Cite NO percentage, game count, rating, player name, or year unless it derives directly from the context.',
-    'If you cannot answer under those constraints, say so plainly and recommend the user run the engine.',
-  ].join('\n');
+  return kept.join(' ').trim();
 }
 
 /**
@@ -1591,15 +1588,15 @@ export async function getCoachChatResponse(
         };
 
         // ── PROGRESS (Phase 6) — the student's OWN computed history ────────
-        // No board needed. The persisted bad-habit profile IS the computed
-        // student data (refreshed by updateBadHabits); reading it from db
-        // here keeps coachApi cycle-free (coachFeatureService imports coachApi,
-        // so we must NOT import detectBadHabits back into it). voiceFacts the
-        // facts; fall through to the legacy path when there's no habit data.
+        // No board needed. `detectBadHabits` recomputes the FRESH habit profile
+        // from current theme-skill data (it lives in the leaf `badHabitDetector`
+        // so this call is cycle-free — coachFeatureService imports coachApi, so
+        // the detector can't live there). voiceFacts the facts; fall through to
+        // the legacy path when there's no habit data.
         if (grounding.progressQuestion) {
           try {
             const profile = await db.profiles.get('main');
-            const answer = assembleProgressAnswer(profile?.badHabits ?? []);
+            const answer = profile ? assembleProgressAnswer(await detectBadHabits(profile)) : null;
             if (answer) {
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config });
               if (voiced) return voiced;
@@ -1846,41 +1843,35 @@ export async function getCoachChatResponse(
     return callOnce(buildSystemPromptFor(), true);
   }
 
-  // ── Grounded path: collect → validate → retry up to 2x → stock ──
-  // Streaming is disabled on grounded turns so the validator can
-  // reject without the user seeing a half-bad response. `grounding`
-  // is guaranteed non-null at this point — `groundingEngaged` is only
-  // true if we built a context, which requires grounding.
+  // ── Grounded path: ONE call → ONE validator backstop → in-code strip ──
+  // STEP C of the grounding inversion (David's "1 call max" rule). The old
+  // path re-called the LLM up to 2× on a validator trip — 3–6 calls/turn and
+  // the disease itself (re-calling the model means the LLM is still DECIDING). That's
+  // gone. Now: a single LLM call, a single silent validator pass, and if a
+  // claim slips through we DROP the offending sentences IN CODE (grammatical,
+  // no clipped fragments, zero extra LLM calls). A turn is AT MOST 1 LLM call.
+  // Streaming stays off on grounded turns so the strip can run before the user
+  // sees a half-grounded response. `grounding` is non-null here (groundingEngaged
+  // implies we built a context, which requires grounding).
   const { surface, sessionId } = grounding ?? { surface: 'unknown', sessionId: undefined };
   const originalQuery = messages[messages.length - 1]?.content ?? '';
 
-  // Attempt 1 (no addendum).
-  let response = await callOnce(buildSystemPromptFor(), false);
-  let validation = validateClaims(response, masterPlayContext);
+  const response = await callOnce(buildSystemPromptFor(), false);
+  const validation = validateClaims(response, masterPlayContext);
   if (validation.ok) {
     if (onStream && response) onStream(response);
     return response;
   }
+  // Ungrounded claim(s) slipped in. Do NOT re-call the model — strip the
+  // sentences carrying them and serve what's left.
   emitClaimValidatorTrips(validation, 1, surface, sessionId);
-
-  // Attempt 2 (mild strengthening).
-  response = await callOnce(buildSystemPromptFor(buildRetryAddendum(1, validation)), false);
-  validation = validateClaims(response, masterPlayContext);
-  if (validation.ok) {
-    if (onStream && response) onStream(response);
-    return response;
+  const stripped = stripUngroundedSentences(response, validation);
+  if (stripped) {
+    if (onStream) onStream(stripped);
+    return stripped;
   }
-  emitClaimValidatorTrips(validation, 2, surface, sessionId);
-
-  // Attempt 3 (strictest).
-  response = await callOnce(buildSystemPromptFor(buildRetryAddendum(2, validation)), false);
-  validation = validateClaims(response, masterPlayContext);
-  if (validation.ok) {
-    if (onStream && response) onStream(response);
-    return response;
-  }
-  // Retry budget exhausted. Serve the stock fallback so the user
-  // doesn't see an ungrounded response slip through.
+  // The strip emptied the response (the whole thing was ungrounded). Serve the
+  // honest stock line — still zero extra LLM calls.
   emitEnforcementFallback(originalQuery, validation, surface, sessionId);
   if (onStream) onStream(STOCK_GROUNDING_FALLBACK);
   return STOCK_GROUNDING_FALLBACK;

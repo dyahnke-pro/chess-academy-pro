@@ -1,5 +1,6 @@
 import { Chess } from 'chess.js';
 import { explainBestMoveGrounded } from './groundedAnswer';
+import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { getCoachCommentary } from './coachApi';
 import { groundCoachReply } from './coachAnswerGates';
@@ -12,7 +13,6 @@ import {
   GAME_POST_REVIEW_ADDITION,
   REVIEW_INTRO_ADDITION,
 } from './coachPrompts';
-import { getThemeSkills } from './puzzleService';
 import { logAppAudit } from './appAuditor';
 import { sanitizeCoachStream, sanitizeCoachText, unwrapSpineError } from './sanitizeCoachText';
 import { resolveCoachNarration } from '../utils/coachNarration';
@@ -20,47 +20,12 @@ import type { BadHabit, CoachContext, UserProfile, CoachNarration } from '../typ
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
 
-export async function detectBadHabits(profile: UserProfile): Promise<BadHabit[]> {
-  const themeSkills = await getThemeSkills();
-  const habits: BadHabit[] = [...profile.badHabits];
-  const today = new Date().toISOString().split('T')[0];
-
-  // Check for weak themes (accuracy < 40% with 5+ attempts)
-  for (const skill of themeSkills) {
-    if (skill.accuracy < 0.4 && skill.attempts >= 5) {
-      const existingIdx = habits.findIndex((h) => h.id === `weak-${skill.theme}`);
-      if (existingIdx >= 0) {
-        habits[existingIdx] = {
-          ...habits[existingIdx],
-          occurrences: habits[existingIdx].occurrences + 1,
-          lastSeen: today,
-          isResolved: skill.accuracy >= 0.6,
-        };
-      } else {
-        habits.push({
-          id: `weak-${skill.theme}`,
-          description: `Struggling with ${skill.theme} puzzles (${Math.round(skill.accuracy * 100)}% accuracy)`,
-          occurrences: 1,
-          lastSeen: today,
-          isResolved: false,
-        });
-      }
-    }
-  }
-
-  // Mark habits as resolved if accuracy improved
-  for (const habit of habits) {
-    if (habit.id.startsWith('weak-')) {
-      const theme = habit.id.replace('weak-', '');
-      const skill = themeSkills.find((s) => s.theme === theme);
-      if (skill && skill.accuracy >= 0.6) {
-        habit.isResolved = true;
-      }
-    }
-  }
-
-  return habits;
-}
+// `detectBadHabits` now lives in the leaf `badHabitDetector` so the coach-chat
+// grounding interception in `coachApi` can compute the FRESH habit profile
+// without the coachApi↔coachFeatureService import cycle (WO stumbling-block #1).
+// Re-exported here so existing consumers (StatsPage, CoachGamePage,
+// gameAnalysisService) keep importing it from this module unchanged.
+export { detectBadHabits };
 
 export async function updateBadHabits(profile: UserProfile): Promise<BadHabit[]> {
   const habits = await detectBadHabits(profile);

@@ -249,30 +249,35 @@ describe('grounding — pre-injection + clean validation', () => {
   });
 });
 
-describe('grounding — retry on validator trip', () => {
-  it('retries when first response invents a SAN, succeeds on attempt 2', async () => {
+// STEP C (grounding inversion, 2026-06-10): the regen loop is GONE. A validator
+// trip no longer re-calls the LLM (that was 3–6 calls/turn and the disease).
+// Now: ONE call, ONE silent validator pass, then the offending SENTENCES are
+// stripped IN CODE. A turn is AT MOST 1 LLM call. These tests assert the new
+// contract — single call, ungrounded sentence dropped, grounded sentence kept.
+describe('grounding — in-code sentence strip on validator trip (no regen)', () => {
+  it('strips the invented-SAN sentence in code and keeps the grounded one — ONE call', async () => {
     const { response, counters } = await ask(
       'what should I play here?',
       [
-        'I recommend Nh6 here — masters favor this knight maneuver.', // INVENTED — Nh6 not in context
-        'Actually, masters favor e4 or d4 in this position.',         // Clean retry
+        // Sentence 1 invents Nh6 (not in context); sentence 2 is grounded (e4/d4 are master moves).
+        'I recommend Nh6 here. Masters favor e4 or d4 in this position.',
       ],
     );
-    expect(response).toContain('e4');
-    expect(counters.llmCalls).toBe(2);
+    expect(response).not.toContain('Nh6'); // ungrounded sentence stripped
+    expect(response).toContain('e4');       // grounded sentence survives
+    expect(counters.llmCalls).toBe(1);      // NO regen — one call
   });
 
-  it('retries twice when validator keeps tripping, then stocks out', async () => {
+  it('stocks out when EVERY sentence is ungrounded — still ONE call', async () => {
     const { response, counters } = await ask(
       'what should I play here?',
       [
-        'The best move is Nh6.',  // Invented SAN
-        'Try Bf6 instead.',         // Still invented
-        'Maybe Rf2 is good?',       // Still invented
+        // All three SANs are invented; the strip empties the response → stock line.
+        'The best move is Nh6. Try Bf6 instead. Maybe Rf2 is good.',
       ],
     );
-    expect(response).toContain("can't verify"); // stock fallback
-    expect(counters.llmCalls).toBe(3); // initial + 2 retries
+    expect(response).toContain("can't verify"); // stock fallback (strip emptied it)
+    expect(counters.llmCalls).toBe(1);           // NO retries — one call
   });
 
   it('does NOT gate bare SANs on a MOVE-NARRATION turn (deep Learn teaching)', async () => {
@@ -299,13 +304,13 @@ describe('grounding — retry on validator trip', () => {
   it('STILL gates a "what masters play" turn when moveNarration is OFF (guard intact)', async () => {
     // The exemption must NOT leak into the "what do masters play here?" case —
     // there an invented SAN IS a fabrication worth flagging. Same invented SAN,
-    // no moveNarration → trips + stocks out.
+    // no moveNarration → the SAN gate trips and the sentence is stripped in code.
     const { response, counters } = await ask(
       'what should I play here?',
-      ['The best move is Nh6.', 'Try Bf6 instead.', 'Maybe Rf2 is good?'],
+      ['The best move is Nh6.'],
     );
-    expect(response).toContain("can't verify");
-    expect(counters.llmCalls).toBe(3);
+    expect(response).not.toContain('Nh6'); // flagged + stripped (guard intact)
+    expect(counters.llmCalls).toBe(1);     // one call — no regen
   });
 
   it('does NOT trip when the coach names the move JUST PLAYED (engine-driven Learn step)', async () => {
@@ -330,16 +335,18 @@ describe('grounding — retry on validator trip', () => {
     expect(counters.llmCalls).toBe(1);        // grounded first try, no retry
   });
 
-  it('flags invented player names on retry', async () => {
+  it('strips an invented-player sentence in code, keeps the grounded one — ONE call', async () => {
     const { response, counters } = await ask(
       'what do masters play here?',
       [
-        'Carlsen plays this often.',  // Carlsen not in our topGames (Kasparov is)
-        'Kasparov plays e4 here.',    // Kasparov IS in topGames, plus e4 is in moves
+        // Sentence 1 names Carlsen (NOT in topGames → flagged); sentence 2 names
+        // Kasparov (IN topGames) playing e4 (in moves) → grounded, survives.
+        'Carlsen plays this often. Kasparov plays e4 here.',
       ],
     );
-    expect(counters.llmCalls).toBe(2);
-    expect(response).toContain('Kasparov');
+    expect(counters.llmCalls).toBe(1);        // one call — no regen
+    expect(response).not.toContain('Carlsen'); // ungrounded player sentence stripped
+    expect(response).toContain('Kasparov');    // grounded sentence survives
   });
 });
 
@@ -391,10 +398,11 @@ describe('grounding — no master data (source:none)', () => {
     expect(counters.llmCalls).toBe(1); // no retry needed
   });
 
-  it('still flags a fabricated percentage even when the SAN is legal (FIX C does not weaken numeric gating)', async () => {
+  it('still flags a fabricated percentage even when the SAN is legal (numeric gating intact, stripped in code)', async () => {
     const counters = installFetchMock({ lichess: EMPTY_LICHESS_PAYLOAD, llmTexts: [
-      'Nf3 scores 58% for White here.',  // Nf3 legal, but 58% is fabricated (no master data)
-      'Nf3 is a sound developing move.', // legal move, no fabricated stat → passes
+      // Sentence 1 cites a fabricated 58% (no master data) → flagged + stripped;
+      // sentence 2 is a legal move with no fabricated stat → survives.
+      'Nf3 scores 58% for White here. Nf3 is a sound developing move.',
     ] });
     const r = await getCoachChatResponse(
       [{ role: 'user', content: 'what should I play here?' }],
@@ -407,8 +415,9 @@ describe('grounding — no master data (source:none)', () => {
       undefined,
       { currentFen: STARTING_FEN, surface: '/coach/chat' },
     );
-    expect(r).toContain('sound developing'); // the clean retry
-    expect(counters.llmCalls).toBe(2);        // first (58%) tripped, retry passed
+    expect(r).toContain('sound developing'); // grounded sentence survives
+    expect(r).not.toContain('58%');           // fabricated percentage stripped
+    expect(counters.llmCalls).toBe(1);        // one call — no regen
   });
 
   it('passes a response that honestly says it cannot verify', async () => {

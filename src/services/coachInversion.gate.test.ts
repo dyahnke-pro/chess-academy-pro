@@ -37,9 +37,16 @@ const WATCHED = [
 const BANDAID_RE = /cite NO [a-z]|use EXACTLY|never name a different|regenerat[a-z]+|run the (?:position )?through the engine|run it through the engine/gi;
 const VALIDATOR_RE = /validateClaims\(|validateArrowClaims\(|validateTacticClaims\(/g;
 
-// 🔒 BASELINE — 2026-06-10. ONLY EVER LOWER THIS. It hits 0 when the inversion
-//    is complete (no validators, no regen, no anti-hallucination prompts).
-const BASELINE = 9;
+// 🔒 BASELINE — ONLY EVER LOWER THIS. It hits 0 when the inversion is complete
+//    (no validators, no regen, no anti-hallucination prompts).
+//    2026-06-10: started at 9.
+//    STEP C (kill the regen loop): 9 → 4. Removed the 2 regen `validateClaims`
+//    passes + `buildRetryAddendum` (3 prompt markers: Regenerate / cite NO move
+//    / Cite NO percentage). Remaining 4 = 1 intended validator backstop +
+//    1 stock-fallback line ("run the position through the engine", removed when
+//    STEP D inverts the general chat path) + 2 false-positives (the law quoted
+//    in the voiceFacts doc-comment + the coachService:439 comment).
+const BASELINE = 4;
 
 describe('G0 gate — the LLM decides nothing (band-aid baseline, can only shrink)', () => {
   it('keeps the band-aid count at or below the frozen baseline', () => {

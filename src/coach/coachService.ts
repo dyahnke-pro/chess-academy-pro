@@ -466,7 +466,7 @@ export function isTacticsQuestion(ask: string | undefined): boolean {
  *  the grounding inversion (Phase 6) routes it through `assembleProgressAnswer`
  *  → voiceFacts. The LLM voices the student's real data; it invents no weakness. */
 const PROGRESS_QUESTION_RE =
-  /\b(?:am\s+i\s+(?:improving|getting\s+better|progressing|any\s+good)|how\s+am\s+i\s+(?:doing|progressing|playing)|what\s+(?:should|do)\s+i\s+(?:work\s+on|improve|practi[sc]e|focus\s+on)|what\s+(?:are|to)\s+(?:my\s+)?(?:work\s+on|improve)|my\s+(?:weakness(?:es)?|weak\s+(?:spots?|points?|areas?)|bad\s+habits?|progress|improvement|strengths?)|where\s+(?:am\s+i|do\s+i)\s+(?:weak|struggl|lose|losing|need)|what'?s?\s+holding\s+me\s+back|biggest\s+(?:weakness|mistake|problem))\b/i;
+  /\b(?:am\s+i\s+(?:improving|getting\s+better|progressing|any\s+good)|how\s+am\s+i\s+(?:doing|progressing|playing)|what\s+(?:should|do)\s+i\s+(?:(?:need|want|have)\s+to\s+)?(?:work\s+on|improve|practi[sc]e|focus\s+on|get\s+better\s+at)|(?:need|want)\s+to\s+(?:work\s+on|improve|practi[sc]e|get\s+better)|what\s+(?:are|to)\s+(?:my\s+)?(?:work\s+on|improve)|my\s+(?:weakness(?:es)?|weak\s+(?:spots?|points?|areas?)|bad\s+habits?|progress|improvement|strengths?)|where\s+(?:am\s+i|do\s+i)\s+(?:weak|struggl|lose|losing|need)|what'?s?\s+holding\s+me\s+back|biggest\s+(?:weakness|mistake|problem))\b/i;
 export function isProgressQuestion(ask: string | undefined): boolean {
   return !!ask && PROGRESS_QUESTION_RE.test(ask);
 }
