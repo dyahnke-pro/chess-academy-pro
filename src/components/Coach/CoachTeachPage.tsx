@@ -82,6 +82,7 @@ import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
 import { validateTacticClaims } from '../../services/tacticClaimValidator';
 import { validateArrowClaims, synthesizeMissingArrows } from '../../services/arrowClaimValidator';
+import { groundArrows } from '../../utils/arrowGrounding';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { getAdaptiveMove, getRandomLegalMove } from '../../services/coachGameEngine';
@@ -2706,7 +2707,13 @@ export function CoachTeachPage(): JSX.Element {
       // the explicit form). Caller has the option to leave them by
       // emitting the same arrow markers in the follow-up turn.
       void cleared;
-      setArrows(nextArrows);
+      // Ground the brain's arrows against the board before rendering: drop any
+      // arrow that starts on an empty square or cuts a line the piece can't
+      // actually see (and cap the count) so the board never shows ungrounded
+      // arrows scattered across it (David's audit 2026-06-10). The synthesized
+      // arrows appended below are chess.js-derived, so they're grounded by
+      // construction.
+      setArrows(groundArrows(nextArrows, fen));
       setHighlights(nextHighlights);
 
       // Sanitize the FINAL response too — both for transcript display

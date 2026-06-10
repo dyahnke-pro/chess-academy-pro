@@ -1431,7 +1431,11 @@ class VoiceService {
     }
     audio.preload = 'auto';
     audio.src = src;
-    audio.playbackRate = this.speed;
+    // Narration is generative Ruth (prosody-immune), which reads slow at
+    // playbackRate 1.0 — nudge the spoken pace up so replies don't drag
+    // (David 2026-06-10). Scales on top of the user's voiceSpeed pref and
+    // stays under the 2.0 ceiling.
+    audio.playbackRate = Math.min(2.0, this.speed * 1.15);
     this.currentAudioElement = audio;
     this.playing = true;
 
@@ -1538,7 +1542,11 @@ class VoiceService {
     const audio = this.streamAudioEl ?? new Audio();
     this.streamAudioEl = audio;
     try { audio.pause(); audio.removeAttribute('src'); audio.load(); } catch { /* fresh element */ }
-    audio.playbackRate = this.speed;
+    // Narration is generative Ruth (prosody-immune), which reads slow at
+    // playbackRate 1.0 — nudge the spoken pace up so replies don't drag
+    // (David 2026-06-10). Scales on top of the user's voiceSpeed pref and
+    // stays under the 2.0 ceiling.
+    audio.playbackRate = Math.min(2.0, this.speed * 1.15);
     audio.preload = 'auto';
     // Track the audio element IMMEDIATELY so a concurrent stop() can
     // find and pause it. Previously this happened at line 1115 after
