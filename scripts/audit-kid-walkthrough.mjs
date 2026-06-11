@@ -54,6 +54,16 @@ const ROUTES = [
   { url: '/kid/fairy-tale', label: 'Fairy Tale map', mount: 'h1,h2' },
   { url: '/kid/fairy-tale/1', label: 'Fairy Tale ch.1', mount: 'h1,h2', game: true },
   { url: '/kid/play-games', label: 'Play Games hub', mount: 'h1,h2' },
+  // ── New surfaces (2026-06-11) ──────────────────────────────────────
+  { url: '/kid/queen-games/vs-army', label: 'Queen vs Army', mount: 'h1,h2', game: true },
+  { url: '/kid/queen-games/gauntlet', label: "Queen's Gauntlet", mount: 'h1,h2', game: true },
+  { url: '/kid/knight-games/army', label: 'Two Knights vs Army', mount: 'h1,h2', game: true },
+  { url: '/kid/bishop-games/army', label: 'Two Bishops vs Army', mount: 'h1,h2', game: true },
+  { url: '/kid/level-select/knight/race', label: 'Level select (knight race)', mount: '[data-testid="level-select-knight-race"],h2' },
+  { url: '/kid/level-select/rook/maze', label: 'Level select (rook maze)', mount: '[data-testid="level-select-rook-maze"],h2' },
+  { url: '/kid/knight-games/race/1', label: 'Knight Race L1', mount: 'h2', game: true },
+  { url: '/kid/queen-games/race/1', label: 'Queen Race L1', mount: 'h2', game: true },
+  { url: '/kid/bishop-games/race/3', label: 'Bishop Race L3', mount: 'h2', game: true },
 ];
 
 const results = [];
