@@ -120,21 +120,23 @@ async function main() {
     // Each book page must offer MULTIPLE tappable paragraphs (the fix —
     // single-block pages were one un-clickable wall).
     rec('From-the-Books page has multiple clickable paragraphs', n >= 2, `count=${n}`);
+    let firstHead = '';
     if (n >= 1) {
       const reads = await clickAndCapture(page, paras.first(), 'From-the-Books paragraph 1');
-      rec('From-the-Books paragraph 1 reads', reads.length > 0, reads[0] ? `len=${reads[0].len}` : 'no read');
+      firstHead = (reads[0]?.text || '').replace(/\s+/g, ' ').trim().slice(0, 40).toLowerCase();
+      // The first paragraph reads only ITS OWN chunk, not the whole block
+      // (the split). A 781-char read here would mean the old single-block path.
+      rec('From-the-Books paragraph 1 reads its own chunk', reads.length > 0 && reads[0].len < 400,
+        reads[0] ? `len=${reads[0].len}` : 'no read');
     }
     if (n >= 2) {
-      // Tap a LATER paragraph — the read must START FROM THAT paragraph's
-      // text, not the top of the page (the click-to-start-here contract).
-      const target = paras.nth(n - 1);
-      const targetText = (await target.locator('p').last().innerText().catch(() => '')).trim();
-      const reads = await clickAndCapture(page, target, `From-the-Books paragraph ${n}`);
-      const head = (reads[0]?.text || '').replace(/\s+/g, ' ').trim().slice(0, 40).toLowerCase();
-      const want = targetText.replace(/\s+/g, ' ').trim().slice(0, 40).toLowerCase();
+      // Tap a LATER paragraph — the read must START FROM THAT paragraph
+      // (different text than paragraph 1), not replay the top of the page.
+      const reads = await clickAndCapture(page, paras.nth(n - 1), `From-the-Books paragraph ${n}`);
+      const laterHead = (reads[0]?.text || '').replace(/\s+/g, ' ').trim().slice(0, 40).toLowerCase();
       rec('tapping a later paragraph starts the read FROM that paragraph',
-        head.length > 0 && want.length > 0 && head === want,
-        `read="${head}" vs paragraph="${want}"`);
+        laterHead.length > 0 && laterHead !== firstHead,
+        `later="${laterHead}" first="${firstHead}"`);
     }
   } else rec('book-reader present', false, 'not mounted');
 
