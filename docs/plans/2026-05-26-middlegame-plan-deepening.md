@@ -109,6 +109,22 @@ Order by impact; classical openings first (book-groundable), modern after.
    grounded in the plan's themes + book corpus; add/keep `sources[]`.
 5. Re-run leadeye; run gates.
 
+## 🆕 TODO (David 2026-06-10) — add the new middlegame BOOK grounding to plan narration
+The plans were built **Gutenberg-only** and never had **Znosko-Borovsky's *The
+Middle Game in Chess* (1922)** — the one book entirely about the middlegame —
+nor Emanuel Lasker's *Common Sense in Chess* (1896) or Mason's *Principles of
+Chess* (1894). They're US-public-domain on Archive.org (`middlegameinches00znos`,
+`commonsenseinche00laskrich`, `principlesofches00masoiala`) and being ingested
+into the coach reference corpus (see
+`docs/plans/2026-06-10-chess-school-curriculum.md` P0). AFTER ingestion:
+- [ ] Revisit every `middlegame-plans.json` plan's narration + `sources[]` and
+  weave in the Znosko framework — **PART II Superior / Inferior / Equal
+  Positions** (the plan-selection grammar) and **PART III Manoeuvres · Attack ·
+  Defence · Counter-Battle**.
+- [ ] Add `book:znosko-middle-game` (+ common-sense / mason ids) to the cited
+  sources where the idea genuinely came from those passages — not a rubber
+  stamp. Re-run the source/theme gates.
+
 ## Next-session pickup
 Resume at Phase 2, next unchecked opening. The thinness ranking query lives in
 the session transcript; re-derive with the masters-DB + manifest scan if needed.
