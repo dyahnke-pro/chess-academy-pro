@@ -4,6 +4,38 @@ import { voiceService } from '../../services/voiceService';
 import { PHILOSOPHY_OF_A_GENERAL } from '../../data/academy/philosophyOfAGeneral';
 import { PageHelp } from '../Layout/PageHelp';
 
+/** Polly / `/api/tts` rejects any request over 3000 chars. Stay well
+ *  under it (chapters were silently failing at 3.4k–4.3k). */
+const MAX_TTS_CHARS = 2400;
+
+/** Split chapter prose into Polly-sized chunks on sentence boundaries so
+ *  every TTS request clears the 3000-char cap. A chunk accumulates whole
+ *  sentences until the next would overflow; a lone sentence longer than
+ *  the cap (rare) is hard-split. Order is preserved so the chapter reads
+ *  end-to-end. */
+export function chunkForTts(text: string): string[] {
+  if (text.length <= MAX_TTS_CHARS) return [text];
+  const sentences = text.match(/[^.!?]+[.!?]+[\s]*|[^.!?]+$/g) ?? [text];
+  const chunks: string[] = [];
+  let cur = '';
+  for (const s of sentences) {
+    if (s.length > MAX_TTS_CHARS) {
+      if (cur.trim()) { chunks.push(cur.trim()); cur = ''; }
+      for (let j = 0; j < s.length; j += MAX_TTS_CHARS) {
+        chunks.push(s.slice(j, j + MAX_TTS_CHARS).trim());
+      }
+      continue;
+    }
+    if (cur && cur.length + s.length > MAX_TTS_CHARS) {
+      chunks.push(cur.trim());
+      cur = '';
+    }
+    cur += s;
+  }
+  if (cur.trim()) chunks.push(cur.trim());
+  return chunks;
+}
+
 /**
  * The Academy — the school surface. v1 hosts "The Philosophy of A General",
  * the board-free doctrine, as an audiobook: tap play and it reads the whole
@@ -29,28 +61,35 @@ export function AcademyPage(): JSX.Element {
         return;
       }
       setIndex(i);
-      // Prefetch the WHOLE chapter into the audio cache, then play it from that
-      // complete buffer. Buffered playback fixes two bugs at once: (1) it plays
-      // the entire chapter — the live stream's 'ended' could fire early and cut a
-      // chapter off half-way; (2) it needs no mid-chapter network synth, so there
-      // is no silent gap for a Bluetooth link to idle through and clip the first
-      // word of the next sentence. Prefetch the NEXT chapter in the background so
-      // the chapter-to-chapter transition stays gapless and warm too. (If the
-      // prefetch fails, speakReadAloud just streams it live as a fallback.)
-      const text = textOf(i);
+      // Split the chapter into Polly-sized chunks. /api/tts REJECTS any
+      // request over MAX_TEXT_LENGTH (3000 chars), and the rewritten
+      // chapters run 1.9k–4.3k chars — so a whole-chapter request silently
+      // returned nothing and the book "wouldn't play" (David 2026-06-11).
+      // Chunking on sentence boundaries keeps every request safely under
+      // the cap. We still PREFETCH the whole chapter's chunks before
+      // playing so buffered playback stays gapless (no mid-chapter network
+      // synth for a Bluetooth link to clip), and prefetch the next
+      // chapter in the background too. (Prefetch failure is non-fatal —
+      // speakReadAloud streams each chunk live as a fallback.)
+      const chunks = chunkForTts(textOf(i));
       try {
-        await voiceService.prefetchAudio([text]);
+        await voiceService.prefetchAudio(chunks);
       } catch {
         /* prefetch failed — falls back to live streaming below */
       }
       if (token !== tokenRef.current) return;
       if (i + 1 < book.chapters.length) {
-        void voiceService.prefetchAudio([textOf(i + 1)]);
+        void voiceService.prefetchAudio(chunkForTts(textOf(i + 1)));
       }
-      try {
-        await voiceService.speakReadAloud(text);
-      } catch {
-        /* interrupted — stop/skip handles state */
+      // Play each chunk in order; speakReadAloud resolves when the chunk's
+      // audio finishes, so the chapter reads end-to-end with no gaps.
+      for (const chunk of chunks) {
+        if (token !== tokenRef.current) return;
+        try {
+          await voiceService.speakReadAloud(chunk);
+        } catch {
+          /* interrupted — stop/skip handles state */
+        }
       }
       if (token !== tokenRef.current) return;
       await run(i + 1);
