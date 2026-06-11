@@ -190,20 +190,25 @@ export function applyBriefVoiceCap(
     return { text: trimmed, truncated: false, originalLength };
   }
 
-  // Join with a single space — each kept sentence still carries its
-  // own terminator from the slice above, so the result reads as
-  // separate sentences instead of a run-on.
-  let chosen = sentencesForCap.slice(0, BRIEF_VOICE_SENTENCE_CAP).join(' ').trim();
-
-  // Word-count cap. When the kept sentences still exceed the word
-  // budget, truncate to the cap and close cleanly with a period.
-  const words = chosen.split(/\s+/);
-  if (words.length > BRIEF_VOICE_WORD_CAP) {
-    chosen = words.slice(0, BRIEF_VOICE_WORD_CAP).join(' ');
-    // Strip trailing comma / dangling preposition; close with a period.
-    chosen = chosen.replace(/[,;:\s]+$/, '').replace(/\b(and|but|or|because|so|that|the|a|of|to|in)$/, '').trim();
-    if (!/[.!?]$/.test(chosen)) chosen += '.';
+  // Keep WHOLE sentences up to the sentence cap AND the word budget — never
+  // truncate mid-sentence. The old code joined the first N sentences then
+  // word-sliced at exactly BRIEF_VOICE_WORD_CAP words, producing fragments
+  // like "...what to do with." / "...it can't easily." (caught in the prod
+  // narration logs, 2026-06-11). Now we add sentences until the next one would
+  // blow the word budget, but always keep at least the FIRST sentence whole —
+  // a slightly-long complete sentence reads far better than a clipped fragment.
+  let chosen = '';
+  let wordCount = 0;
+  let sentenceCount = 0;
+  for (const sentence of sentencesForCap) {
+    if (sentenceCount >= BRIEF_VOICE_SENTENCE_CAP) break;
+    const w = sentence.split(/\s+/).filter(Boolean).length;
+    if (chosen && wordCount + w > BRIEF_VOICE_WORD_CAP) break;
+    chosen = chosen ? `${chosen} ${sentence}` : sentence;
+    wordCount += w;
+    sentenceCount += 1;
   }
+  chosen = (chosen || sentencesForCap[0] || trimmed).trim();
 
   return {
     text: chosen,

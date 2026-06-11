@@ -216,15 +216,18 @@ describe('applyBriefVoiceCap', () => {
     expect(r.text).toContain('Second');
   });
 
-  it('caps to 30 words on brief even if sentences fit', () => {
-    // 35 words, single sentence so the sentence cap doesn't trigger
-    // — only the word cap should fire.
+  it('keeps a single over-budget sentence WHOLE rather than cutting it mid-sentence', () => {
+    // 35 words, one sentence. The old code word-sliced at 30 and produced a
+    // mid-sentence fragment ("...often weak in many" + dangling cleanup) —
+    // the exact "...what to do with." / "...it can't easily." bug caught in
+    // the prod narration logs. The cap now applies at SENTENCE boundaries, so
+    // a single complete sentence is spoken whole, never clipped mid-thought.
     const text =
       'The Vienna Gambit starts with f4 a sharp pawn sacrifice to rip open the f-file for your rook giving you fast development and an attack on the f7 square which is often weak in many openings indeed.';
     const r = applyBriefVoiceCap(text, 'brief');
-    expect(r.truncated).toBe(true);
-    const wordCount = r.text.split(/\s+/).length;
-    expect(wordCount).toBeLessThanOrEqual(30);
+    expect(r.text).toBe(text); // whole sentence kept, not fragmented
+    expect(r.truncated).toBe(false);
+    expect(r.text.trim()).toMatch(/[.!?]$/); // ends on a real terminator
   });
 
   it("matches David's audit example — 497-char response gets clipped to ≤30 words on brief", () => {
