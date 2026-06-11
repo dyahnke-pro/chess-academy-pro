@@ -80,6 +80,23 @@ describe('getMisconceptionProfile', () => {
     const wrongRook = others.find((r) => r.label === 'wrong rook');
     expect(wrongRook?.total).toBe(2);
   });
+
+  it("files an 'other' fallback under its PHASE bucket, not Uncategorized", async () => {
+    await logMisconception({ tag: 'other', source: 'auto-analysis', fen: FEN, customLabel: 'Endgame slip', gamePhase: 'endgame' });
+    await logMisconception({ tag: 'other', source: 'auto-analysis', fen: FEN, customLabel: 'Opening slip', gamePhase: 'opening' });
+    await logMisconception({ tag: 'other', source: 'auto-analysis', fen: FEN, customLabel: 'Middlegame slip', gamePhase: 'middlegame' });
+
+    const profile = await getMisconceptionProfile();
+    expect(profile.find((r) => r.label === 'Endgame slip')?.bucket).toBe('endgame');
+    expect(profile.find((r) => r.label === 'Opening slip')?.bucket).toBe('opening');
+    expect(profile.find((r) => r.label === 'Middlegame slip')?.bucket).toBe('positional');
+  });
+
+  it("leaves a phase-less 'other' row Uncategorized", async () => {
+    await logMisconception({ tag: 'other', source: 'game-review', fen: FEN, customLabel: 'wrong rook' });
+    const profile = await getMisconceptionProfile();
+    expect(profile.find((r) => r.label === 'wrong rook')?.bucket).toBe('uncategorized');
+  });
 });
 
 describe('recordTagDrillResult — SRS spacing, never graduate out', () => {

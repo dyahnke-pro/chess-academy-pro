@@ -157,6 +157,20 @@ export interface MisconceptionAggregate {
   examples: MisconceptionTagRecord[];
 }
 
+/** Map a game phase to the weakness bucket an unclassifiable slip in that
+ *  phase belongs to — so the honest `other` fallback files under Opening /
+ *  Positional / Endgame instead of the generic Uncategorized (David
+ *  2026-06-11). Middlegame maps to `positional` (there is no middlegame
+ *  bucket). Returns null when the phase is unknown (legacy records). */
+function phaseToBucket(
+  phase: 'opening' | 'middlegame' | 'endgame' | undefined,
+): string | null {
+  if (phase === 'opening') return 'opening';
+  if (phase === 'endgame') return 'endgame';
+  if (phase === 'middlegame') return 'positional';
+  return null;
+}
+
 /** Aggregate the bucket into one row per tag, ranked by DUE count (the
  *  Training Plan's headline order). Well-spaced tags sink to the bottom
  *  today but resurface when due — they never graduate out. `other` rows
@@ -192,7 +206,14 @@ export async function getMisconceptionProfile(
       label: head.tag === 'other'
         ? (head.customLabel ?? 'Uncategorized')
         : (def?.label ?? head.tag),
-      bucket: def?.bucket ?? 'uncategorized',
+      // A motif we COULD pin gets its taxonomy bucket. The honest `other`
+      // fallback (a real slip we couldn't pin) is filed under its PHASE's
+      // bucket — an endgame slip shows the Endgame chip, not Uncategorized
+      // (David 2026-06-11). The record already carries gamePhase, so this is
+      // a display derivation, not an invented classification.
+      bucket: head.tag === 'other'
+        ? (phaseToBucket(head.gamePhase) ?? (def?.bucket ?? 'uncategorized'))
+        : (def?.bucket ?? 'uncategorized'),
       total: records.length,
       openCount,
       lastSeenAt: head.createdAt,
