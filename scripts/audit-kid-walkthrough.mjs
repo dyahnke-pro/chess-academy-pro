@@ -69,15 +69,24 @@ const ROUTES = [
 const results = [];
 
 async function dismissOverlays(page) {
-  for (const sel of [
-    '[data-testid="skill-band-intermediate"]',
-    '[data-testid="page-help-modal"] button',
-  ]) {
+  // The strength-calibration onboarding bubble (fixed inset-0 z-110)
+  // appears ASYNC on first run — poll a few times so we catch it after
+  // it mounts, else it silently intercepts every click (G1 #5).
+  for (let i = 0; i < 5; i++) {
     try {
-      const el = page.locator(sel).first();
-      if (await el.isVisible({ timeout: 800 })) await el.click({ timeout: 800 });
-    } catch { /* not present */ }
+      const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
+      if ((await bubble.count()) && (await bubble.isVisible().catch(() => false))) {
+        await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 }).catch(() => {});
+        await bubble.waitFor({ state: 'detached', timeout: 15000 }).catch(() => {});
+        break;
+      }
+    } catch { /* not present yet */ }
+    await page.waitForTimeout(1000);
   }
+  try {
+    const help = page.locator('[data-testid="page-help-modal"] button').first();
+    if (await help.isVisible({ timeout: 800 })) await help.click({ timeout: 800 });
+  } catch { /* not present */ }
 }
 
 async function run() {
