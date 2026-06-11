@@ -4,6 +4,7 @@ import { db } from '../db/schema';
 import { stockfishEngine } from './stockfishEngine';
 import { computeWeaknessProfile } from './weaknessAnalyzer';
 import { generateMistakePuzzlesFromGame } from './mistakePuzzleService';
+import { autoAnalyzeGameMisconceptions } from './autoAnalyzeGame';
 import { detectBadHabitsFromGame } from './coachFeatureService';
 import { classifyTacticsFromGame } from './tacticClassifierService';
 import { useAppStore } from '../stores/appStore';
@@ -618,6 +619,9 @@ export async function analyzeAllGames(
       : source === 'lichess' ? lichessUsername
         : undefined; // coach games infer the side from "Stockfish Bot"
     try { await generateMistakePuzzlesFromGame(gameId, username); } catch { /* continue */ }
+    // Thinking-Errors bucket — the bulk faucet (was interactive-only, so a
+    // freshly analyzed library never filled the tab). Deterministic + free now.
+    try { await autoAnalyzeGameMisconceptions(gameId, username); } catch { /* continue */ }
     try { await classifyTacticsFromGame(gameId); } catch { /* continue */ }
     if (profile && annotations.length > 0) {
       try { await detectBadHabitsFromGame(annotations, profile); } catch { /* continue */ }

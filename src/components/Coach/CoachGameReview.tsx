@@ -38,6 +38,7 @@ import { validateTacticClaims } from '../../services/tacticClaimValidator';
 import { resolveCoachNarration } from '../../utils/coachNarration';
 import { logAppAudit } from '../../services/appAuditor';
 import { generateMistakePuzzlesFromGame } from '../../services/mistakePuzzleService';
+import { autoAnalyzeGameMisconceptions } from '../../services/autoAnalyzeGame';
 import { db } from '../../db/schema';
 import { CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
@@ -167,6 +168,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           : game.source === 'lichess' ? prefs?.lichessUsername
           : undefined;
         const made = await generateMistakePuzzlesFromGame(gid, username, playerRating ?? 1200);
+        // Also fill the Thinking-Errors bucket from this game's annotations
+        // (deterministic, idempotent per game) — the tactical-only puzzle gate
+        // drops positional slips, but those ARE thinking errors.
+        if (!cancelled) {
+          try { await autoAnalyzeGameMisconceptions(gid, username); } catch { /* best-effort */ }
+        }
         if (!cancelled && made > 0) {
           void logAppAudit({
             kind: 'review-walk-started',

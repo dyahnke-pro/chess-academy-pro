@@ -5,8 +5,24 @@ Insights, the Coach, and Game Review. Captured here so we fix them methodically
 instead of one-screenshot-at-a-time (which at 3am is how a new bug gets shipped).
 
 ## ✅ Fixed + shipped to main tonight
-- **Insights: Thinking Errors STILL empty — the classifier was the disease, not
-  the discard.** `c3f43c4` made `captureMisconception` always LOG a *successful*
+- **Insights: Thinking Errors empty — the REAL disease was a missing BULK
+  faucet.** Even with the classifier fixed (below), the tab stayed empty after
+  analyzing a library: the ONLY writers to `misconceptionTags` were interactive
+  (the per-ply "why?" review walk, live coach games, the manual "add to
+  weaknesses" button). Import + Analyze filled `mistakePuzzles` (→ Mistakes /
+  Weaknesses) but NEVER `misconceptionTags`. Fix: a bulk faucet
+  `autoAnalyzeGameMisconceptions(gameId)` derives misconceptions from each
+  game's full annotations (tactical AND positional — the tactical-only
+  mistakePuzzle gate drops positional slips, but those ARE thinking errors) and
+  is now wired into the bulk per-game chokepoint (`gameAnalysisService`'s
+  `generateInsightsForGame`) AND the single-game review mount
+  (`CoachGameReview`). `learned: false` → display-only (shows in Thinking Errors,
+  doesn't double-count vs the same games' `mistakePuzzles`, doesn't pollute My
+  Mistakes past the tactical gate). Idempotent per game via
+  `hasMisconceptionsForGame`. Now: Import → Analyze → Thinking Errors fills, just
+  like Mistakes does. (Possible because classification is now deterministic +
+  free — running it over every blunder of a large library costs nothing.)
+- **Insights: Thinking Errors classifier was an LLM — made it deterministic.** `c3f43c4` made `captureMisconception` always LOG a *successful*
   classification, but `classifyMisconception` itself was an LLM call
   (`getCoachChatResponse` + strict-JSON parse) that returned `null` on any
   garbled/failed brain reply — so on a degraded brain the slip was dropped

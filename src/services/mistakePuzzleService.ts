@@ -126,7 +126,7 @@ function sourceFromGameSource(source: string): MistakePuzzleSourceMode | null {
   return null;
 }
 
-function uciToSan(fen: string, uci: string): string {
+export function uciToSan(fen: string, uci: string): string {
   try {
     const chess = new Chess(fen);
     const from = uci.slice(0, 2);
@@ -211,7 +211,7 @@ async function extendPvLine(fen: string, pvMoves: string[], min = MIN_PV_MOVES, 
   return extended;
 }
 
-function replayPgnToFens(pgn: string): string[] {
+export function replayPgnToFens(pgn: string): string[] {
   const chess = new Chess();
   const fens: string[] = [chess.fen()];
   try {
@@ -228,7 +228,7 @@ function replayPgnToFens(pgn: string): string[] {
   return fens;
 }
 
-function determinePlayerColor(
+export function determinePlayerColor(
   game: GameRecord,
   username?: string,
 ): 'white' | 'black' | null {
