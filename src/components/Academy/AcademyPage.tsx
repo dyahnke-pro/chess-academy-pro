@@ -20,6 +20,8 @@ export function AcademyPage(): JSX.Element {
   const tokenRef = useRef(0);
 
   const speakFrom = (start: number, token: number): void => {
+    const textOf = (idx: number): string =>
+      `${book.chapters[idx].title}. ${book.chapters[idx].paragraphs.join(' ')}`;
     const run = async (i: number): Promise<void> => {
       if (token !== tokenRef.current) return;
       if (i >= book.chapters.length) {
@@ -27,24 +29,28 @@ export function AcademyPage(): JSX.Element {
         return;
       }
       setIndex(i);
-      const ch = book.chapters[i];
-      // Speak ONE SENTENCE per call. voiceService streams a single Polly
-      // utterance per call, and a long multi-paragraph chunk can end early
-      // (the MediaSource 'ended' fires before all chunks arrive, or it hits a
-      // length limit) — which made a chapter stop halfway and jump to the next.
-      // Sentence-sized calls are the app's canonical narration unit and resolve
-      // reliably, so we chain sentences within a chapter, then advance.
-      const sentences = `${ch.title}. ${ch.paragraphs.join(' ')}`
-        .split(/(?<=[.!?])\s+/)
-        .map((s) => s.trim())
-        .filter(Boolean);
-      for (const sentence of sentences) {
-        if (token !== tokenRef.current) return;
-        try {
-          await voiceService.speakReadAloud(sentence);
-        } catch {
-          /* interrupted — stop/skip handles state */
-        }
+      // Prefetch the WHOLE chapter into the audio cache, then play it from that
+      // complete buffer. Buffered playback fixes two bugs at once: (1) it plays
+      // the entire chapter — the live stream's 'ended' could fire early and cut a
+      // chapter off half-way; (2) it needs no mid-chapter network synth, so there
+      // is no silent gap for a Bluetooth link to idle through and clip the first
+      // word of the next sentence. Prefetch the NEXT chapter in the background so
+      // the chapter-to-chapter transition stays gapless and warm too. (If the
+      // prefetch fails, speakReadAloud just streams it live as a fallback.)
+      const text = textOf(i);
+      try {
+        await voiceService.prefetchAudio([text]);
+      } catch {
+        /* prefetch failed — falls back to live streaming below */
+      }
+      if (token !== tokenRef.current) return;
+      if (i + 1 < book.chapters.length) {
+        void voiceService.prefetchAudio([textOf(i + 1)]);
+      }
+      try {
+        await voiceService.speakReadAloud(text);
+      } catch {
+        /* interrupted — stop/skip handles state */
       }
       if (token !== tokenRef.current) return;
       await run(i + 1);
