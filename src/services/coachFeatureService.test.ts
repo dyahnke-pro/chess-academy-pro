@@ -342,6 +342,31 @@ describe('coachFeatureService', () => {
       expect(seg.narration).not.toMatch(/^You /);
     });
 
+    it('never names the played move as the better move (best == played)', () => {
+      // David 2026-06-11: the deep best-move search can return the very move
+      // that was played while the shallow pass flagged a slip — so the review
+      // said "your opponent slipped — <the move they played> was stronger".
+      // The played SAN must never be presented as the better alternative.
+      const segments = buildReviewSegments([
+        move({ ply: 1, san: 'e4', classification: 'book' }),
+        // Opponent inaccuracy whose stored bestMove (f7f6) IS the move played.
+        move({
+          ply: 2,
+          san: 'f6',
+          classification: 'inaccuracy',
+          isCoachMove: true,
+          bestMove: 'f7f6',
+          preMoveEval: 20,
+          evaluation: 80,
+        }),
+      ]);
+      const seg = segments[1];
+      // best == played is suppressed: no SAN to present, so bestMoveSan is null
+      // and the incoherent "f6 was stronger" never appears.
+      expect(seg.bestMoveSan).toBeNull();
+      expect(seg.narration ?? '').not.toMatch(/stronger|f6/);
+    });
+
     it('falls back to a generic line when bestMove is missing', () => {
       const segments = buildReviewSegments([
         move({ ply: 1, san: 'e4', classification: 'book' }),

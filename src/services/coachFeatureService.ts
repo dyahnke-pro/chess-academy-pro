@@ -772,7 +772,14 @@ export function buildReviewSegments(
     const fenPair = fenChain[i];
     const fullMove = Math.ceil(m.ply / 2);
     const moverColor: 'white' | 'black' = m.ply % 2 === 1 ? 'white' : 'black';
-    const bestMoveSan = uciToSanAt(m.bestMove, fenPair.fenBefore);
+    const rawBestSan = uciToSanAt(m.bestMove, fenPair.fenBefore);
+    // Defense-in-depth for games analysed BEFORE the source fix: never name the
+    // move that was actually played as the "better" move. If the stored best
+    // move resolves to the played SAN, treat it as absent so the narration uses
+    // its no-alternative phrasing (or stays silent) instead of the incoherent
+    // "<played move> was stronger" (David 2026-06-11).
+    const stripGlyphs = (s: string): string => s.replace(/[+#!?]+$/, '');
+    const bestMoveSan = rawBestSan && stripGlyphs(rawBestSan) !== stripGlyphs(m.san) ? rawBestSan : null;
     let narration = buildDeterministicNarration({
       ply: m.ply,
       isStudentMove: !m.isCoachMove,
@@ -783,8 +790,9 @@ export function buildReviewSegments(
     });
     // Append the GROUNDED "why the best move is best" clause — chess.js
     // board truth only, never LLM-guessed (David 2026-06-05). Only on the
-    // student's flagged errors, and only when a board fact is provable.
-    if (narration && !m.isCoachMove && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy' || m.classification === 'miss')) {
+    // student's flagged errors, only when there's a genuine distinct best
+    // move, and only when a board fact is provable.
+    if (narration && bestMoveSan && !m.isCoachMove && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy' || m.classification === 'miss')) {
       const why = explainBestMoveGrounded(fenPair.fenBefore, m.san, m.bestMove, moverColor);
       if (why) narration = `${narration} ${why}`;
     }
