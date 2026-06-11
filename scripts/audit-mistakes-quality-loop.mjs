@@ -930,12 +930,13 @@ async function main() {
     insightsPage + insightsLoading > 0,
     `page=${insightsPage}, loading=${insightsLoading}`);
 
-  // J. /tactics/weakness drill page
-  log('\n▶ J. /tactics/weakness drill page mounts');
-  await page.goto(`${BASE_URL}/tactics/weakness`, { waitUntil: 'domcontentloaded' });
-  await waitForMount(page, '[data-testid="back-btn"], [data-testid="loading"]', '/tactics/weakness');
+  // J. /tactics/weakness-themes drill page (the legacy /tactics/weakness
+  // drill was removed 2026-06-11 — superseded by the themes picker).
+  log('\n▶ J. /tactics/weakness-themes drill page mounts');
+  await page.goto(`${BASE_URL}/tactics/weakness-themes`, { waitUntil: 'domcontentloaded' });
+  await waitForMount(page, '[data-testid="back-btn"], [data-testid="loading"]', '/tactics/weakness-themes');
   await page.waitForTimeout(3000);
-  record('/tactics/weakness page mounted (back-btn or loading visible)',
+  record('/tactics/weakness-themes page mounted (back-btn or loading visible)',
     true, page.url());
 
   // S. NEW (2026-05-19): audit-stream event summary. Observability

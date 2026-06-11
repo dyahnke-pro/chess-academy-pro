@@ -47,7 +47,6 @@ const SUB_ROUTES = [
   { url: '/tactics/mistakes', mount: '[data-testid="my-mistakes-page"], [data-testid="loading"], [data-testid="solving-mode"]', label: 'my mistakes' },
   { url: '/tactics/adaptive', mount: '[data-testid="adaptive-puzzle-page"]', label: 'adaptive puzzle' },
   { url: '/tactics/classic', mount: '[data-testid="puzzle-trainer"], [data-testid="back-to-modes"]', label: 'classic trainer' },
-  { url: '/tactics/weakness', mount: '[data-testid="back-btn"], [data-testid="loading"]', label: 'weakness puzzles' },
   { url: '/tactics/opening-traps', mount: '[data-testid="opening-blunders-page"]', label: 'opening traps' },
 ];
 

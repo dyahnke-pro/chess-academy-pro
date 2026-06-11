@@ -32,7 +32,6 @@ import { PuzzleTrainerPage } from './components/Puzzles/PuzzleTrainerPage';
 import { AdaptivePuzzlePage } from './components/Puzzles/AdaptivePuzzlePage';
 import { MyMistakesPage } from './components/Puzzles/MyMistakesPage';
 import { LichessDashboardPage } from './components/Puzzles/LichessDashboardPage';
-import { WeaknessPuzzlePage } from './components/Puzzles/WeaknessPuzzlePage';
 import { WeaknessTagDrillPage } from './components/Puzzles/WeaknessTagDrillPage';
 import { WeaknessThemesPage } from './components/Puzzles/WeaknessThemesPage';
 // PuzzlesHubPage removed — Puzzles tab merged into Tactics
@@ -339,7 +338,6 @@ export function App(): JSX.Element {
           <Route path="/tactics/find-square" element={<ErrorBoundary><FindSquarePage /></ErrorBoundary>} />
           <Route path="/tactics/adaptive" element={<ErrorBoundary><AdaptivePuzzlePage /></ErrorBoundary>} />
           <Route path="/tactics/classic" element={<ErrorBoundary><PuzzleTrainerPage /></ErrorBoundary>} />
-          <Route path="/tactics/weakness" element={<ErrorBoundary><WeaknessPuzzlePage /></ErrorBoundary>} />
           <Route path="/tactics/weakness-drill" element={<ErrorBoundary><WeaknessTagDrillPage /></ErrorBoundary>} />
           <Route path="/tactics/weakness-themes" element={<ErrorBoundary><WeaknessThemesPage /></ErrorBoundary>} />
           <Route path="/tactics/lichess" element={<ErrorBoundary><LichessDashboardPage /></ErrorBoundary>} />
@@ -348,12 +346,12 @@ export function App(): JSX.Element {
           <Route path="/puzzles/classic" element={<Navigate to="/tactics/classic" replace />} />
           <Route path="/puzzles/adaptive" element={<Navigate to="/tactics/adaptive" replace />} />
           <Route path="/puzzles/mistakes" element={<Navigate to="/tactics/mistakes" replace />} />
-          <Route path="/puzzles/weakness" element={<Navigate to="/tactics/weakness" replace />} />
+          <Route path="/puzzles/weakness" element={<Navigate to="/tactics/weakness-themes" replace />} />
           <Route path="/puzzles/lichess-dashboard" element={<Navigate to="/tactics/lichess" replace />} />
           <Route path="/weaknesses" element={<ErrorBoundary><GameInsightsPage /></ErrorBoundary>} />
           <Route path="/weaknesses/games" element={<ErrorBoundary><GamesDrilldownPage /></ErrorBoundary>} />
           <Route path="/coach/report" element={<Navigate to="/weaknesses" replace />} />
-          <Route path="/weaknesses/puzzles" element={<Navigate to="/tactics/weakness" replace />} />
+          <Route path="/weaknesses/puzzles" element={<Navigate to="/tactics/weakness-themes" replace />} />
           <Route path="/weaknesses/adaptive" element={<Navigate to="/tactics/adaptive" replace />} />
           <Route path="/weaknesses/classic" element={<Navigate to="/tactics/classic" replace />} />
           <Route path="/weaknesses/mistakes" element={<Navigate to="/tactics/mistakes" replace />} />

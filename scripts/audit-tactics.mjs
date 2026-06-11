@@ -924,25 +924,10 @@ async function main() {
     ],
   );
 
-  // ═══════════════════════════════════════════════════════════════════
-  // /tactics/weakness — WeaknessPuzzlePage
-  // ═══════════════════════════════════════════════════════════════════
-  await scenario(
-    '27-weakness-puzzle',
-    async () => {
-      await page.goto(`${BASE_URL}/tactics/weakness`, { waitUntil: 'domcontentloaded' });
-      await waitUntil(async () =>
-        (await visible('puzzle-nav')) || (await visible('session-summary')) ||
-        (await visible('loading')), 12_000);
-    },
-    SETTLE_PUZZLE,
-    [
-      { label: 'route /tactics/weakness', fn: () => page.url().endsWith('/tactics/weakness') },
-      { label: 'back-btn present', fn: () => visible('back-btn') },
-      { label: 'puzzle-nav OR summary OR loading',
-        fn: async () => (await visible('puzzle-nav')) || (await visible('session-summary')) || (await visible('loading')) },
-    ],
-  );
+  // /tactics/weakness (WeaknessPuzzlePage) was removed 2026-06-11 — the dead,
+  // unreachable legacy weakness drill superseded by /tactics/weakness-themes.
+  // Its scenario lived here; the redirect-coverage block below now asserts the
+  // legacy paths land on weakness-themes.
 
   // ═══════════════════════════════════════════════════════════════════
   // /tactics/mistakes — MyMistakesPage
@@ -1060,9 +1045,9 @@ async function main() {
     ['/puzzles/classic', '/tactics/classic'],
     ['/puzzles/adaptive', '/tactics/adaptive'],
     ['/puzzles/mistakes', '/tactics/mistakes'],
-    ['/puzzles/weakness', '/tactics/weakness'],
+    ['/puzzles/weakness', '/tactics/weakness-themes'],
     ['/puzzles/lichess-dashboard', '/tactics/lichess'],
-    ['/weaknesses/puzzles', '/tactics/weakness'],
+    ['/weaknesses/puzzles', '/tactics/weakness-themes'],
     ['/weaknesses/adaptive', '/tactics/adaptive'],
     ['/weaknesses/classic', '/tactics/classic'],
     ['/weaknesses/mistakes', '/tactics/mistakes'],

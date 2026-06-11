@@ -149,12 +149,6 @@ export const APP_ROUTES_MANIFEST: RouteManifestEntry[] = [
     featuresAvailable: ['mistake-puzzles'],
   },
   {
-    path: '/tactics/weakness',
-    title: 'Weakness Puzzles',
-    description: 'Puzzles drilling specific weakness themes.',
-    featuresAvailable: ['weakness-puzzles'],
-  },
-  {
     path: '/tactics/weakness-themes',
     title: 'Weakness Themes',
     description: 'Browse available weakness themes.',

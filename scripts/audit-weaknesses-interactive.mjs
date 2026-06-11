@@ -315,11 +315,9 @@ async function pass3(page, tracker) {
   const wtAlive = !!(await page.locator('body').count());
   record(3, '/tactics/weakness-themes mounts without crash', wtAlive, page.url());
 
-  // /tactics/weakness loop.
-  await page.goto(`${BASE_URL}/tactics/weakness`, { waitUntil: 'domcontentloaded' });
-  await page.waitForTimeout(2500);
-  const wkAlive = !!(await page.locator('body').count());
-  record(3, '/tactics/weakness mounts without crash', wkAlive, page.url());
+  // (The legacy /tactics/weakness drill loop was removed 2026-06-11 — the
+  // route + WeaknessPuzzlePage were dead/unreachable, superseded by the
+  // weakness-themes picker checked above.)
 
   // Return to /weaknesses one more time to verify reload path.
   await gotoWeaknesses(page);
