@@ -3,6 +3,7 @@ import { db } from '../db/schema';
 import { getThemeSkills } from './puzzleService';
 import { getRepertoireOpenings } from './openingService';
 import { detectTactics } from './tacticsDetector';
+import { classifyPhase } from './gamePhaseService';
 import { getMisconceptionProfile, type MisconceptionAggregate } from './misconceptionService';
 import type { MisconceptionBucket } from '../data/misconceptionTags';
 import type {
@@ -1081,11 +1082,12 @@ interface GameMistake {
   tacticTypes: string[];
 }
 
-function classifyPhase(moveIndex: number, totalMoves: number): 'opening' | 'middlegame' | 'endgame' {
-  if (moveIndex < 15) return 'opening';
-  if (moveIndex >= totalMoves - 20) return 'endgame';
-  return 'middlegame';
-}
+// Phase classification uses the canonical MATERIAL-based classifyPhase from
+// gamePhaseService (imported above), the same one the rest of the app uses.
+// The old local version here classified by raw ply count ("endgame = last 20
+// half-moves"), which mislabeled real endgame mistakes as middlegame — so the
+// Insights "Errors by phase" Endgame bucket read 0 even with heavy late-game
+// collapses. Removed; do not reintroduce a second divergent classifier.
 
 /**
  * Extracts classified mistakes from a single GameRecord.
@@ -1128,12 +1130,15 @@ export function analyzeGameMistakes(game: GameRecord): GameMistake[] {
       }
     }
 
-    const phase = classifyPhase(i, totalMoves);
-
-    // Build a synthetic FEN for tactic detection from the annotation
-    // We need a position FEN — try to reconstruct from the annotation data
-    // If no FEN is available directly, use the move number as a stand-in
+    // Reconstruct the position FEN once — material-based phase classification
+    // and tactic detection both use it. (If the PGN can't be replayed we fall
+    // back to a ply guess that never falsely reports 'endgame'.)
     const positionFen = buildFenFromAnnotationIndex(game, i);
+    const phase: 'opening' | 'middlegame' | 'endgame' = positionFen
+      ? classifyPhase(positionFen, i + 1)
+      : i < 20
+        ? 'opening'
+        : 'middlegame';
     const tacticsResult = positionFen ? detectTactics(positionFen) : null;
     const tacticTypes = tacticsResult
       ? tacticsResult.tactics.map((t) => t.type)
