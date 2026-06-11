@@ -1,5 +1,7 @@
-# The Art of Chess Generalship
-### The audiobook — chess through the eyes of a general commanding an army
+# The Philosophy of A General
+### Advanced Board Concepts for Chess Mastery
+
+*Chess through the eyes of a general commanding an army — the Academy's board-free doctrine (read & listen).*
 
 > **The Academy's "Listen" track — board-free, philosophical, made to be heard.**
 > No square names, no diagrams, no "look here." Voiced via TTS (streaming Polly +
