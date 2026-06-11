@@ -1755,7 +1755,7 @@
       "Support d5 with ...e6, then develop pieces to natural squares",
       "The ...dxc4 break at the right moment frees Black's position",
       "After ...Nd5, Black gets active piece play and challenges the Bg5",
-      "The minority attack with ...b5-b4 on the queenside is a key strategic plan"
+      "Meet White's minority attack (b4-b5 against c6) by counter-striking in the centre with ...c5 or ...e5"
     ],
     "traps": [
       "Elephant Trap: After Bg5 Nbd7, if White plays cxd5 Nxd5 Bxe7 Qxe7, Black can spring ...Nxc3! winning the queen if White recaptures bxc3 because of ...Qa3+.",
@@ -1910,7 +1910,7 @@
       {
         "name": "Exchange Variation",
         "pgn": "d4 d5 c4 c6 cxd5 cxd5 Bf4 Nc6 e3 Nf6 Bd3 Bg4 Nf3 e6 Nbd2",
-        "explanation": "White exchanges early for a quiet, strategic game. Black develops naturally and the minority attack with ...b5-b4 is often the key plan. Don't underestimate these positions — they're deceptively complex."
+        "explanation": "White exchanges early for a quiet, strategic game. The symmetric structure is deceptively complex: White presses with the minority attack (b4-b5 against c6), and Black equalizes with accurate development and well-timed piece trades."
       },
       {
         "name": "Chebanenko Variation (4...a6)",
