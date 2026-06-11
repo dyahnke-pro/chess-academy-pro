@@ -91,13 +91,32 @@ export function useReviewBlunderCapture(
   const [prompt, setPrompt] = useState<ReviewCapturePrompt | null>(null);
   const [teach, setTeach] = useState<string | null>(null);
   const askedPlies = useRef<Set<number>>(new Set());
+  // The ply the open prompt / teaching note belongs to. A prompt is pinned to
+  // its OWN blunder ply; if the walk has since moved elsewhere the user
+  // navigated away without answering, and the prompt must be dropped so it
+  // doesn't haunt every later position (and the opponent's moves) with a stale
+  // "You played <that move>…?" — the bug David caught 2026-06-11.
+  const boundPlyRef = useRef<number | null>(null);
 
   const onPlyLanded = useCallback((ply: number): void => {
-    if (phase !== 'idle') return; // don't interrupt an active prompt
+    if (phase !== 'idle') {
+      // 'thinking' is an async classification in flight — never interrupt it.
+      if (phase === 'thinking') return;
+      // An 'asking'/'teaching' prompt still sitting on its own ply stays put
+      // (this effect re-fires on every render with the same ply).
+      if (boundPlyRef.current === ply) return;
+      // Otherwise the walk has moved off the prompt's ply — drop it and fall
+      // through to evaluate the ply we actually landed on.
+      setPrompt(null);
+      setTeach(null);
+      setPhase('idle');
+      boundPlyRef.current = null;
+    }
     if (askedPlies.current.has(ply)) return;
     const p = blunderAtPly(moves, ply, playerColor);
     if (!p) return;
     askedPlies.current.add(ply);
+    boundPlyRef.current = ply;
     setPrompt(p);
     setPhase('asking');
   }, [phase, moves, playerColor]);

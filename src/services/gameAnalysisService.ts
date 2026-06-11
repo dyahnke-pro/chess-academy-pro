@@ -59,6 +59,38 @@ let _abortAnalysis = false;
 // subsystems share the same value. Local alias kept for readability.
 import { MATE_EVAL_THRESHOLD, MATE_EVAL_VALUE } from './engineConstants';
 
+/**
+ * True when the engine's deep best-move (UCI) for `fenBefore` is the very move
+ * that was actually played there. This happens because the slip is classified
+ * from the SHALLOW eval pass (ANALYSIS_DEPTH) but the best move is found by a
+ * DEEPER search (BEST_MOVE_DEPTH) — at the deeper depth the engine sometimes
+ * confirms the played move WAS best, leaving us with a "mistake" whose best
+ * move equals the move played. That bestMove is meaningless to every consumer
+ * (the review narration would say "<played move> was stronger" and the mistake
+ * puzzle's solution would be the move you played), so we drop it. David caught
+ * this 2026-06-11 ("the opponent slipped but the better move it named was the
+ * move the opponent played").
+ */
+function bestMoveEqualsPlayed(
+  fenBefore: string,
+  playedSan: string,
+  bestUci: string | null,
+): boolean {
+  if (!bestUci || bestUci.length < 4) return false;
+  try {
+    const probe = new Chess(fenBefore);
+    const m = probe.move({
+      from: bestUci.slice(0, 2),
+      to: bestUci.slice(2, 4),
+      promotion: bestUci.length > 4 ? bestUci[4] : undefined,
+    });
+    const strip = (s: string): string => s.replace(/[+#!?]+$/, '');
+    return strip(m.san) === strip(playedSan);
+  } catch {
+    return false;
+  }
+}
+
 function classifyCpLoss(
   cpLoss: number,
   evalBefore?: number | null,
@@ -288,7 +320,9 @@ async function analyzeGameOnWorker(
     if (_abortAnalysis) return null;
     try {
       const result = await worker.analyzePosition(fens[moveIdx], BEST_MOVE_DEPTH);
-      annotations[moveIdx].bestMove = result.bestMove;
+      annotations[moveIdx].bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], result.bestMove)
+        ? null
+        : result.bestMove;
       // Overwrite the shallow bestMoveEval with the deeper-depth value
       // for this position. Same engine, deeper search — keeps the swing
       // math (detectMisses / detectMissedTactics) on the most reliable
@@ -351,7 +385,9 @@ async function analyzeGamePositions(game: GameRecord): Promise<MoveAnnotation[] 
       if (cpLoss >= INACCURACY_CP && classification !== 'brilliant' && classification !== 'great' && classification !== 'good') {
         try {
           const bestAnalysis: StockfishAnalysis = await stockfishEngine.analyzePosition(fens[moveIdx], BEST_MOVE_DEPTH);
-          bestMove = bestAnalysis.bestMove;
+          bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], bestAnalysis.bestMove)
+            ? null
+            : bestAnalysis.bestMove;
           refinedBestMoveEval = bestAnalysis.evaluation;
         } catch {
           // Leave bestMove null + keep the shallow bestMoveEval below
