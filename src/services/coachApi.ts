@@ -36,7 +36,7 @@ function emitLlmTokenUsage(
   });
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded } from './groundedAnswer';
 import { lookupTablebase } from './lichessTablebaseService';
 import { detectBadHabits } from './badHabitDetector';
 import { detectConceptsInText, getConcept } from './chessConceptService';
@@ -1548,6 +1548,44 @@ export async function voiceFacts(
   } catch {
     return null; // never throws — caller falls through
   }
+}
+
+/**
+ * explainPuzzleMoveGrounded — the puzzle/tactics section's "Explain why" /
+ * "Ask coach" answer, grounded the SAME way as Play-with-Coach's best-move
+ * interception (G0). The reason the best move is strong — what it REALLY wins,
+ * and crucially whether the capture is recapturable (computed in code via
+ * chess.js `attackers()`, never guessed by the LLM) — comes from
+ * `explainBestMoveGrounded`, then is phrased through the `voiceFacts`
+ * chokepoint. The LLM decides no chess, so it CANNOT invent "forks its own
+ * knight" or "the king can't recapture" (the 2026-06-11 weakness-drill
+ * hallucination). `studentMessage` carries the student's own question for the
+ * "Ask coach" path; the chokepoint still only voices the computed facts toward
+ * it. Always returns a grounded sentence (never the LLM free-narrating the
+ * board); when no tactical reason is computable it states the move plainly.
+ */
+export async function explainPuzzleMoveGrounded(opts: {
+  fen: string;
+  bestMoveUci: string | null;
+  bestMoveSan: string;
+  playedSan: string | null;
+  studentMessage?: string;
+}): Promise<string> {
+  // The mover (whose best move + played move these are) is whoever is to move
+  // in the FEN — derive it from the FEN, never trust a possibly-mismatched
+  // stored color, or the enemy/hanging checks invert.
+  const moverColor: 'white' | 'black' = opts.fen.split(' ')[1] === 'b' ? 'black' : 'white';
+  const facts = explainBestMoveGrounded(opts.fen, opts.playedSan, opts.bestMoveUci, moverColor);
+  if (facts) {
+    const voiced = await voiceFacts(facts, {
+      studentMessage: opts.studentMessage ?? `Why is ${opts.bestMoveSan} the best move here?`,
+      intent: 'best-move',
+    });
+    return voiced ?? facts; // provider down → the computed facts are already true
+  }
+  // No code-computable tactical reason (a quiet / positional best move). Stay
+  // grounded — state the move; never let the LLM invent a rationale.
+  return `The strongest move here is ${opts.bestMoveSan}.`;
 }
 
 /** STEP E — the grounding-inversion leak audit. Called from EACH of the 6

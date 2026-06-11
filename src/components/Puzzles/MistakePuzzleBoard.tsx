@@ -5,7 +5,7 @@ import { usePieceSound } from '../../hooks/usePieceSound';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useSettings } from '../../hooks/useSettings';
 import { voiceService } from '../../services/voiceService';
-import { getCoachCommentary } from '../../services/coachApi';
+import { explainPuzzleMoveGrounded } from '../../services/coachApi';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { getPieceNameOnSquare } from '../../utils/puzzleHints';
@@ -14,7 +14,6 @@ import { ShowMeButton } from '../Coach/ShowMeButton';
 import { useStruggleDetection } from '../../hooks/useStruggleDetection';
 import { detectTacticType } from '../../services/missedTacticService';
 import { getCoachingMessage, recordTacticOutcome, tacticTypeLabel } from '../../services/tacticAlertService';
-import { stockfishEngine } from '../../services/stockfishEngine';
 import type { CoachingTier } from '../../services/tacticAlertService';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MistakePuzzle, MistakeClassification } from '../../types';
@@ -497,47 +496,23 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       return;
     }
 
-    // state === 'correct' — give a thorough coach explanation of why the move was best
+    // state === 'correct' — explain why the move was best, GROUNDED (G0): the
+    // rationale (what it really wins, whether the capture is recapturable) is
+    // computed in code and only PHRASED by the LLM via the voiceFacts
+    // chokepoint. The LLM decides no chess, so it can't invent a false fork or
+    // a wrong recapture (the 2026-06-11 weakness-drill hallucination).
     setWhyLoading(true);
     setSubtitle('Analyzing why this was the best move...');
 
     const rating = activeProfile?.currentRating ?? 1200;
-    // Fetch Stockfish analysis so the LLM has concrete eval data to work with
-    void stockfishEngine.analyzePosition(puzzle.fen, 16).then((analysis) => {
-      return getCoachCommentary('puzzle_feedback', {
-        fen: puzzle.fen,
-        lastMoveSan: puzzle.bestMoveSan,
-        moveNumber: puzzle.moveNumber,
-        pgn: '',
-        openingName: puzzle.openingName,
-        stockfishAnalysis: analysis,
-        playerMove: puzzle.playerMoveSan,
-        moveClassification: null,
-        playerProfile: {
-          rating,
-          weaknesses: [],
-        },
-        additionalContext: [
-          `The student just solved a tactic puzzle from one of their own games.`,
-          `Position before: FEN ${puzzle.fen}`,
-          `Their original (wrong) move was: ${puzzle.playerMoveSan} (${puzzle.classification}, lost ${puzzle.cpLoss} centipawns)`,
-          `The best move was: ${puzzle.bestMoveSan}`,
-          `Solution line (UCI): ${puzzle.moves}`,
-          `Game phase: ${puzzle.gamePhase}`,
-          puzzle.opponentName ? `Opponent: ${puzzle.opponentName}` : '',
-          puzzle.openingName ? `Opening: ${puzzle.openingName}` : '',
-          ``,
-          `Give a thorough explanation (3-5 sentences) of WHY ${puzzle.bestMoveSan} is the best move.`,
-          `Explain what it accomplishes tactically/strategically, why their original move ${puzzle.playerMoveSan} was worse,`,
-          `and what principle or pattern they should remember for next time.`,
-          `Be specific about the position — reference pieces, squares, and threats.`,
-        ].filter(Boolean).join('\n'),
-      });
+    void explainPuzzleMoveGrounded({
+      fen: puzzle.fen,
+      bestMoveUci: puzzle.bestMove,
+      bestMoveSan: puzzle.bestMoveSan,
+      playedSan: puzzle.playerMoveSan,
     }).then((response) => {
       setWhyLoading(false);
       setSubtitle(response);
-      // GROUND the spoken explanation against the puzzle position — the
-      // voice must not claim something untrue on the board (David 2026-06-06).
       void voiceService.speakGrounded(response, puzzle.fen);
     }).catch(() => {
       setWhyLoading(false);
@@ -558,40 +533,26 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     setChatLoading(true);
     setChatReply('');
     voiceService.stop();
-    const rating = activeProfile?.currentRating ?? 1200;
     try {
-      const analysis = await stockfishEngine.analyzePosition(puzzle.fen, 14);
-      const reply = await getCoachCommentary('puzzle_feedback', {
+      // GROUNDED (G0): the student's question is answered by phrasing the
+      // code-computed facts about the best move through the voiceFacts
+      // chokepoint — never the LLM free-narrating the board.
+      const reply = await explainPuzzleMoveGrounded({
         fen: puzzle.fen,
-        lastMoveSan: puzzle.bestMoveSan,
-        moveNumber: puzzle.moveNumber,
-        pgn: '',
-        openingName: puzzle.openingName,
-        stockfishAnalysis: analysis,
-        playerMove: puzzle.playerMoveSan,
-        moveClassification: null,
-        playerProfile: { rating, weaknesses: [] },
-        additionalContext: [
-          `The student is reviewing a mistake puzzle from one of their own games.`,
-          `Position: FEN ${puzzle.fen}`,
-          `They originally played ${puzzle.playerMoveSan}; the best move was ${puzzle.bestMoveSan}.`,
-          puzzle.tacticType ? `Tactic type: ${puzzle.tacticType}` : '',
-          ``,
-          `The student is asking: "${question}"`,
-          ``,
-          `Answer their question directly. Be specific about pieces, squares, and lines. Keep it tight — 2-4 sentences.`,
-        ].filter(Boolean).join('\n'),
+        bestMoveUci: puzzle.bestMove,
+        bestMoveSan: puzzle.bestMoveSan,
+        playedSan: puzzle.playerMoveSan,
+        studentMessage: question,
       });
       setChatReply(reply);
-      // GROUND the spoken chat answer against the live board (David 2026-06-06).
-      void voiceService.speakGrounded(reply, fen);
+      void voiceService.speakGrounded(reply, puzzle.fen);
       setChatInput('');
     } catch {
       setChatReply('Coach is unavailable right now — try again in a moment.');
     } finally {
       setChatLoading(false);
     }
-  }, [chatInput, chatLoading, puzzle, activeProfile?.currentRating]);
+  }, [chatInput, chatLoading, puzzle]);
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing') return;
