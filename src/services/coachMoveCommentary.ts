@@ -17,8 +17,9 @@
  * This service lives outside React so it can be reused by any play or
  * review view.
  */
-import type { Chess } from 'chess.js';
-import { consumeLastLlmMetadata } from './coachApi';
+import { Chess } from 'chess.js';
+import { consumeLastLlmMetadata, voiceFacts } from './coachApi';
+import { explainBestMoveGrounded } from './groundedAnswer';
 import { coachService } from '../coach/coachService';
 import { unwrapSpineError } from './sanitizeCoachText';
 import { buildCoachMemoryBlock, extractAndRememberNotes } from './coachMemoryService';
@@ -43,6 +44,13 @@ export interface MoveCommentaryInput {
   evalAfter: number | null;
   /** First SAN move of Stockfish's best continuation from the position AFTER the move, if known. */
   bestReplySan?: string;
+  /** Stockfish's best move (UCI) at the position BEFORE this move — i.e. what
+   *  the mover should ideally have played. Threading it lets the GROUNDED move
+   *  commentary path (G0 / inversion plan: move_commentary = move + eval +
+   *  explainBestMoveGrounded) compute the move's real tactical effect in code
+   *  and only PHRASE it via voiceFacts, instead of the LLM reading the board
+   *  and inventing a fork/capture/recapture. */
+  bestMoveUci?: string;
   /** Optional subject (e.g. "Sicilian Najdorf") to bias the prose. */
   subject?: string;
   /** Narration density from UserPreferences.coachVerbosity. Maps to
@@ -350,6 +358,45 @@ async function getLlmCommentary(
     briefMode = false, voiceEngine, onStream,
   } = input;
   const last = history[history.length - 1];
+
+  // ── GROUNDED move commentary (G0 / inversion plan: move_commentary =
+  //    "move + eval + explainBestMoveGrounded"). When the student just moved
+  //    and we know the engine's best move at the prior position, the move's
+  //    real tactical effect — what the best move wins, and whether the played
+  //    move hung material (recapturability computed in code via chess.js
+  //    `attackers()`) — is computed by `explainBestMoveGrounded` and only
+  //    PHRASED through the `voiceFacts` chokepoint. The LLM never reads the
+  //    board to DECIDE what the move did, so it cannot invent a fork on its
+  //    own knight or a king that "can't recapture". Post-game review and
+  //    opening teaching keep their existing injected-fact paths below.
+  if (!reviewTone && input.bestMoveUci && last && mover === studentColor) {
+    // Reconstruct the position BEFORE the played move (clone via PGN + undo —
+    // robust to games that started from a custom FEN).
+    let fenBefore: string | null = null;
+    try {
+      const cloneBefore = new Chess();
+      cloneBefore.loadPgn(gameAfter.pgn());
+      cloneBefore.undo();
+      fenBefore = cloneBefore.fen();
+    } catch {
+      fenBefore = null;
+    }
+    if (fenBefore) {
+      const moverColor: 'white' | 'black' = mover === 'w' ? 'white' : 'black';
+      const facts = explainBestMoveGrounded(fenBefore, last.san, input.bestMoveUci, moverColor);
+      if (facts) {
+        const voiced = await voiceFacts(facts, { intent: 'move-commentary' });
+        const out = voiced ?? facts;
+        if (onStream && out) onStream(out);
+        return out;
+      }
+      // No code-computable tactical fact = a quiet move. Stay silent rather
+      // than let the LLM free-narrate the board — unless this is opening
+      // teaching (subject / injected notes), which keeps its grounded path.
+      if (groundedNotes.length === 0 && !subject) return '';
+    }
+  }
+
   const verdict = classifyEvalSwing(evalBefore, evalAfter, mover);
 
   const pawnPerspective = (cp: number | null): string =>

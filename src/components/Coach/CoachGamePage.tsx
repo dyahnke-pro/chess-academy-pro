@@ -3248,6 +3248,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           evalBefore: preMoveEval,
           evalAfter: analysis?.evaluation ?? null,
           bestReplySan: engineBestMoveSan !== '?' ? engineBestMoveSan : undefined,
+          // Engine best move (UCI) at the PRE-move position → lets the grounded
+          // move-commentary path compute the move's real tactical effect in
+          // code and voice it via voiceFacts (G0), instead of the LLM inventing.
+          bestMoveUci: engineBestMoveUci ?? undefined,
           chatHistory: sessionMessages,
           // Threading the resolved subject (URL > committed intent >
           // auto-detected) activates the OPENING TEACHING MODE branch
