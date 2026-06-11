@@ -7,40 +7,36 @@
 > No square names, no diagrams, no "look here." Voiced via TTS (streaming Polly +
 > the iOS background-audio session) as a podcast you can absorb on the drive to
 > work. It teaches the established understanding of chess — its *generalship* —
-> translated into the voice of a commander. The concrete board lessons (forks,
-> positions) live in the visual Watch/Read modes; this is the doctrine. **Every
-> episode cites its sources** (the canon it draws on), and closes with CliffsNotes.
+> in the voice of a commander. The concrete board lessons (forks, positions) live
+> in the visual Watch/Read modes; this is the doctrine. **Every episode cites its
+> sources** and closes with CliffsNotes.
 >
-> Canon combined into one philosophy: Young (the campaign), Nimzowitsch
-> (restraint/prophylaxis), Réti (dominating ground), Em. Lasker (the struggle),
-> Znosko (Force/Space/Time) — and, for the Advanced Doctrine, the great captains of
-> war themselves: Clausewitz and Boyd.
+> Canon: Young (the campaign), Nimzowitsch (restraint/prophylaxis), Réti
+> (dominating ground), Em. Lasker (the struggle), Znosko (Force/Space/Time) — and,
+> for the Advanced Doctrine, the great captains of war, Clausewitz and Boyd.
 
 ---
 
 ## Prologue — The Two Armies
 
-Two armies face each other across the board, equal in every man. Neither general
-begins with a single soldier more than the other. Remember that, because it is the
-first and last truth of this art: the victory you are about to learn to win will
-not be *given* to you by greater numbers — there are none. It will be *taken*, by
-the better commander.
+Two armies line up across the board, and they start dead even. Same pieces, same pawns,
+not one soldier between you. Hold onto that, because it is the first thing this book will
+teach you: nobody hands you the win. There is no extra material on the way. The win gets
+taken, by whichever of you is the better commander.
 
-You are that commander. The pieces are your soldiers, and they do nothing you do not
-order; they have no courage you do not lend them and no plan but the one you give.
-Every blunder on the board is a failure of generalship, and every fine move is a
-decision well made. The board is a battlefield, and you sit at the head of an army.
+And that is you. The pieces do nothing you don't tell them to do. They carry no plan but
+yours and no nerve but the one you lend them. Every blunder on the board is a general's
+mistake; every good move is a decision you got right. So stop thinking of this as a game.
+It is a battlefield, and you give the orders.
 
-The whole of this campaign rests on five pillars, and if you carry nothing else away,
-carry these. **See the whole field before you commit a soldier.** **Weigh every
-position by three measures only — your force, your space, your time.** **Restrain
-your enemy before you strike him.** **Dominate the ground rather than merely stand on
-it.** And above all, **impose your will** — for chess is a contest of two minds, and
-the stronger will, as often as not, defeats the stronger position.
+The whole of it rests on five ideas. Learn nothing else, learn these. See the whole board
+before you touch a piece. Weigh every position by three things only: your force, your
+space, your time. Tie your opponent's hands before you swing at him. Own the ground, don't
+just stand on it. And above all, impose your will, because chess is two minds fighting, and
+the stronger will beats the stronger position more often than you would believe.
 
-Hold these five, and no position will ever frighten you again. You will not sit
-before the board as a player hoping for a good move. You will survey it as a general,
-and you will command.
+Get those five into your bones and no position frightens you again. You stop hoping a good
+move turns up. You read the board like a general, and you give the order.
 
 **Sources.** Young, *Chess Generalship* (chess as a military campaign); Znosko-Borovsky,
 *The Middle Game in Chess* (Force, Space, Time); Nimzowitsch, *My System* (restraint &
@@ -48,28 +44,25 @@ prophylaxis); Réti, *Modern Ideas in Chess* (dominating ground); Emanuel Lasker
 *Common Sense in Chess* / *Lasker's Manual* (chess as struggle).
 
 ### CliffsNotes
-- You command an army equal to the enemy's — victory is **taken** by the better general, never given by numbers.
-- The five pillars: **see the whole field · weigh force/space/time · restrain before you strike · dominate the ground · impose your will.**
+- You command an army equal to the enemy's — the win is **taken** by the better general, never handed to you.
+- The five pillars: **see the whole board · weigh force/space/time · restrain before you strike · own the ground · impose your will.**
 - Every move is a command decision; every blunder, a failure of generalship.
 
 ---
 
 ## Lesson 1 — Marshalling the Army
 
-No general sends his army into battle one soldier at a time. Before a single blow is
-struck, every piece must be brought out of the camp and given its post — and more than
-that, the troops must be **in position and well coordinated**, each supporting the
-others, so the army fights as one body and not as a scattered crowd. An attack launched
-by two pieces while the rest sleep in the rear is no attack at all; it is a gift to the
-enemy.
+No general throws his army into battle one soldier at a time. Before the first shot, every
+piece comes out of camp and takes its post. And not just out — *coordinated*, each one
+backing up the others, so the army fights as a single body instead of a loose mob. Two
+pieces attacking while the rest sleep in the back rank? That isn't an attack. That's a gift.
 
-So the opening of every game is not yet the battle — it is the *mobilization*. Bring
-every soldier toward the centre, where it commands the most ground. Do not march the
-same piece twice while others have not yet moved. Do not send your queen, your heaviest
-gun, to the front before the lighter forces have secured the field — she will only be
-chased back, and you will have spent the very time you meant to gain. And get your king
-behind its walls before you dream of conquest. Only when your whole army stands deployed
-and working together have you earned the right to fight.
+So the opening is not the battle yet. It is the mobilization. Bring every piece toward the
+centre, where it covers the most ground. Don't march the same piece twice while others
+haven't moved at all. Don't shove your queen out early — she is your heaviest gun, and the
+enemy will develop with tempo just by chasing her, handing you back the time you spent. Get
+your king behind its walls. Only when the whole army stands up and works together have you
+earned the right to fight.
 
 **Sources.** Capablanca, *Chess Fundamentals* (Ch. I, general strategy of the opening —
 the rules of development); Emanuel Lasker, *Common Sense in Chess* (the laws of rapid
@@ -77,438 +70,406 @@ development); Znosko-Borovsky, *The Middle Game in Chess* (the coordinated army)
 
 ### CliffsNotes
 - Mobilize before you fight: develop **every** piece, working together, before any attack.
-- Don't move one piece twice in the opening, don't send the queen out early, and castle early.
-- An attack by part of the army is a gift — fight as one body, not a scattered crowd.
+- Don't move one piece twice in the opening, don't bring the queen out early, and castle early.
+- An attack by part of the army is a gift — fight as one body, not a scattered mob.
 
 ---
 
 ## Lesson 2 — Seizing the Initiative
 
-There is a thing more precious than a pawn, more precious sometimes than a piece, and
-it owns no square on the board: the **initiative** — the right to dictate the battle.
-The general who holds it makes the threats, and his enemy must answer them; and a man
-who is forever answering can never attack. That is the whole secret. **Seize the
-initiative, and never give it back.**
+There is something on the board worth more than a pawn, sometimes more than a piece, and it
+sits on no square at all. The initiative — the right to dictate the fight. Whoever holds it
+makes the threats, and the other side has to answer. And a man stuck answering can never
+attack. That is the whole secret. Take the initiative and never give it back.
 
-Keep your enemy reacting — to this threat, then the next, then the next — and he will
-never find the free move he needs to turn and strike at *you*. Every move you make
-should ask him a question he is forced to answer. But the instant you relax, the instant
-you play a quiet move where a forcing one stood ready, you hand the initiative across
-the board — and **the moment you surrender it, you lay yourself open to the
-counterattack.** This is why even a sound gambit is no recklessness: you give up a little
-force to buy the initiative, because the enemy who is always defending is already half
-beaten. Press, and keep pressing.
+Keep him reacting. This threat, then the next, then the next, and he never finds the free
+move he needs to turn around and come at you. Every move you make should ask a question he
+is forced to answer. The moment you relax — the moment you play something quiet when a
+forcing move was sitting right there — you hand the initiative across the table. And the
+second you give it up, you are the one open to the counterattack. This is why a sound gambit
+is not reckless. You spend a little material to buy the initiative, because a man who is
+always defending is already half beaten. Press. Keep pressing.
 
 **Sources.** Capablanca, *Chess Fundamentals* (Ch. IV, "The Initiative"); Emanuel Lasker,
 *Common Sense in Chess* (attack and the right to move); Znosko-Borovsky, *The Middle Game
 in Chess* (advantage in Time).
 
 ### CliffsNotes
-- The initiative is the right to dictate the battle — **seize it and never give it back.**
-- A man forever answering your threats can never turn and attack you.
-- Surrender it — play quiet where forcing stood ready — and you invite the counterattack.
-- Even a sound gambit is this trade: a little force bought for the initiative.
+- The initiative is the right to dictate the fight — **take it and never give it back.**
+- A man stuck answering your threats can never turn and attack you.
+- Give it up — play quiet when a forcing move was there — and you invite the counterattack.
+- A sound gambit is just this trade: a little material for the initiative.
 
 ---
 
 ## Lesson 3 — Reading the Field, and the Diversion
 
-The poor commander looks at one corner of the board and charges; he loses, and never
-quite knows why. The great commander first surveys the *whole* field — where the armies
-are massed and where the ground lies bare, which lines stand open and which are walled,
-and above all **where the enemy is weakest and least expecting a blow.** That thin,
-unwatched point is where you will strike.
+The weak player stares at one corner of the board, sees a chance, and charges. He loses, and
+he is never quite sure why. The good one looks at the *whole* field first. Where are the
+armies massed, where is the ground bare, which lines are open and which are walled shut? And
+the big question: where is the enemy thinnest, and where is he not looking? That quiet,
+unwatched spot is where you go.
 
-And here is the deeper art of the general: *you need not attack where you mean to win.*
-Open a **diversion** on the far side of the board — a threat loud enough that your enemy
-must send his forces to meet it — and while his army marches away to defend the wrong
-wing, you fall upon the place you intended all along. Draw his strength to one side;
-deliver the blow on the other. No army can defend two fronts at once, and the commander
-who makes his enemy guess wrong has won the battle before it is fought.
+Now the deeper trick. You do not have to attack where you mean to win. Start a diversion on
+the far wing — a threat loud enough that he has to send pieces to deal with it. While his army
+marches off to defend the wrong side, you fall on the spot you wanted all along. Pull his
+strength one way; land the blow the other. No army holds two fronts at once, and a general who
+makes the enemy guess wrong has won before a shot is fired.
 
 **Sources.** Young, *Chess Generalship* (Grand Reconnaissance; the decisive point);
 Capablanca, *Chess Fundamentals* (Ch. V, "The Sudden Attack from a Different Side" — the
-principle of two weaknesses); Nimzowitsch, *My System* (provoking weakness; play on two
-wings).
+principle of two weaknesses); Nimzowitsch, *My System* (provoking weakness; play on two wings).
 
 ### CliffsNotes
-- Survey the **whole** field first; strike where the enemy is weakest and least expecting.
-- You needn't attack where you mean to win — open a **diversion** to pull his forces away.
-- No army defends two fronts at once; make him guess wrong and the battle is won early.
+- Read the **whole** board first; go at the enemy where he is thinnest and not looking.
+- You needn't attack where you mean to win — run a **diversion** to pull his pieces away.
+- No army holds two fronts at once; make him guess wrong and the fight is over early.
 
 ---
 
 ## Lesson 4 — The Commander's Calculus
 
-Before a general commits to attack or to defend, he must answer one question, and
-answer it honestly: am I the stronger army here, or the weaker? Almost every great
-blunder of the board begins with a wrong answer — the commander who believes himself
-winning when he is losing overreaches and is destroyed; the one who believes himself
-losing when he is winning plays timidly and lets the victory slip away. So take the
-measure of a position coldly, by the three elements you already carry. **Force** — who
-has more men, and whose are the more active. **Space** — who commands more ground,
-whose army moves freely and whose is cramped. **Time** — who holds the initiative, who
-dictates and who merely answers. Weigh them together and a verdict appears — not a
-number, but a story: "I am a soldier up, but my king stands bare," "he has the freer
-position, yet I hold the safer one." And that verdict decides your whole posture: when
-you judge yourself the stronger, you press and attack; when you judge yourself the
-weaker, you defend, simplify, and seek counterplay; when the scales hang level, you do
-not force matters — you maneuver, and manufacture the small imbalance you can later
-exploit. The general who reads the balance truly never plays the wrong kind of game.
+Before you decide to attack or to defend, answer one question honestly: in this position, am I
+the stronger army or the weaker one? Almost every disaster on the board starts with the wrong
+answer. Think you're winning when you're losing, and you overreach and get destroyed. Think
+you're losing when you're winning, and you play scared and let it slip.
 
-**Sources.** Znosko-Borovsky, *The Middle Game in Chess* (Valuation of Position;
-superior, inferior, and equal positions); Capablanca, *Chess Fundamentals* (judging a
-position before choosing a plan); Emanuel Lasker, *Common Sense in Chess* (the balance
-of the game).
+So take the measure of the position cold, using the three things you already carry. Force: who
+has more, and whose pieces are actually doing work. Space: who has the room, and whose army is
+tripping over itself. Time: who is making the threats and who is just answering. Add them up.
+You are not after a number, you are after the story — "I'm a pawn up but my king is bare," "he
+has the freer game, but mine is the safer one." That story sets your whole posture. Stronger,
+you press and attack. Weaker, you defend, simplify, and dig for counterplay. Dead level, you
+don't force anything — you maneuver, and you build the small edge you can cash in later. Read
+the balance right and you never play the wrong kind of game.
+
+**Sources.** Znosko-Borovsky, *The Middle Game in Chess* (Valuation of Position; superior,
+inferior, and equal positions); Capablanca, *Chess Fundamentals* (judging a position before
+choosing a plan); Emanuel Lasker, *Common Sense in Chess* (the balance of the game).
 
 ### CliffsNotes
-- Before any plan, answer honestly: am I the **stronger** army here, or the weaker?
-- Weigh the three elements — Force, Space, Time — into a verdict (a *story*, not a number).
-- Stronger → press and attack; weaker → defend, simplify, seek counterplay; level → maneuver and unbalance.
-- Most great blunders begin with a wrong reading of the balance.
+- Before any plan, answer it straight: am I the **stronger** army here, or the weaker?
+- Weigh the three — Force, Space, Time — into a verdict. You want the *story*, not a number.
+- Stronger → press and attack. Weaker → defend, simplify, find counterplay. Level → maneuver and unbalance.
+- Most disasters start with a wrong read of the balance.
 
 ---
 
 ## Lesson 5 — Locking Down the Position
 
-Before you raise your sword, bar the doors. A wise commander, on the eve of his assault,
-makes certain his enemy cannot strike back — for an attack succeeds only when the ground
-behind it is secure. So before you launch your forces on one wing, you **lock the rest of
-the board down.**
+Before you draw your sword, bolt the doors behind you. A smart commander, on the night before
+the assault, makes sure the enemy can't hit him back. An attack only works if the ground at
+your back is safe. So before you send the army at one wing, you shut the rest of the board down.
 
-Slide a single pawn forward to jam the position shut on the side you are *not* attacking,
-and the enemy's pawns are frozen, his lines sealed, his counterplay strangled before it is
-born. Now he cannot open a single road into your camp; he cannot raise the diversion that
-would pull your army back; he can only stand and watch as you mass for the blow. This is
-**control** — you fix the board in the shape that suits you, deny the enemy every break
-and every plan, and only *then*, with his hands tied and his doors barred, do you attack.
-Restrain first; strike second. The assault that cannot be answered is the assault that
-wins.
+One pawn forward can do it — slide it up and jam the position closed on the side you are *not*
+attacking. Now his pawns are frozen, his lines are sealed, and his counterplay is dead before
+it is born. He can't pry open a road into your camp. He can't start the diversion that would
+drag your army back. He can only stand there and watch you stack up for the blow. That is
+control. You set the board in the shape that suits you, you take away his every break and every
+plan, and only *then*, with his hands tied and the doors bolted, do you go in. Restrain first.
+Strike second. The attack he can't answer is the attack that wins.
 
-**Sources.** Nimzowitsch, *My System* (restraint, prophylaxis, the blockade — fix the
-enemy before you strike); Capablanca, *Chess Fundamentals* (a closed/fixed centre permits
-the wing attack); Znosko-Borovsky, *The Middle Game in Chess* (control of the position).
+**Sources.** Nimzowitsch, *My System* (restraint, prophylaxis, the blockade — fix the enemy
+before you strike); Capablanca, *Chess Fundamentals* (a closed/fixed centre lets the wing attack
+work); Znosko-Borovsky, *The Middle Game in Chess* (control of the position).
 
 ### CliffsNotes
-- Before you attack, **bar the doors** — lock down the side you are *not* attacking.
-- A pawn that jams the position kills his counterplay and his diversion before they're born.
-- Restrain first, strike second; the unanswerable assault is the winning one.
+- Before you attack, **bolt the doors** — lock down the side you are *not* attacking.
+- One pawn that jams the position kills his counterplay and his diversion before they start.
+- Restrain first, strike second. The attack he can't answer is the one that wins.
 
 ---
 
 ## Lesson 6 — Holding the Ground
 
-An army marches on its supply lines, and on the chessboard those lines are the pawns.
-They are the slowest, humblest soldiers, and they decide everything — for they alone
-cannot retreat, and the shape they make is the shape of the whole campaign. A chain of
-pawns is a fortress wall: attack it at its *base*, where it stands on the earth, never
-at its crowned summit. A lone soldier with no comrade to shield him is a weakness the
-enemy will besiege for the rest of the game. And the squares your pawns can never again
-guard become *holes* — open gates through which an enemy knight will ride and plant
-itself where nothing can drive it out. Read the pawns, and the terrain itself tells you
-where to march and where to dig in.
+An army runs on its supply lines, and on this board those lines are your pawns. They are the
+slowest, humblest soldiers you have, and they decide everything, because they are the only ones
+that can't turn around and march back. The shape they make is the shape of the whole war. A
+chain of pawns is a wall — and you break a wall at the bottom, at its base, never at the top. A
+lone pawn with no friend beside it is a target the enemy will gnaw on for the rest of the game.
+And any square your pawns can no longer guard turns into a hole — an open gate for an enemy
+knight to ride through and plant itself where nothing can kick it out. Read the pawns, and the
+ground itself tells you where to march and where to dig in.
 
-**Sources.** Capablanca, *Chess Fundamentals* (Ch. VI, salient points about pawns; the
-"hole"); Nimzowitsch, *My System* (pawn chains, the isolani, holes & outposts); Edward
-Lasker, *Chess Strategy* (the pawn skeleton).
+**Sources.** Capablanca, *Chess Fundamentals* (Ch. VI, salient points about pawns; the "hole");
+Nimzowitsch, *My System* (pawn chains, the isolani, holes & outposts); Edward Lasker, *Chess
+Strategy* (the pawn skeleton).
 
 ### CliffsNotes
-- Pawns are your **supply lines and terrain**; their shape is the campaign's shape.
-- Attack a pawn chain at its **base**; a lone pawn is a target for the rest of the game.
-- Squares your pawns can never guard become **holes** — gates for an enemy knight.
+- Pawns are your **supply lines and your terrain** — their shape is the shape of the war.
+- Break a pawn chain at its **base**; a lone pawn is a target for the whole game.
+- Squares your pawns can't guard become **holes** — open gates for an enemy knight.
 
 ---
 
 ## Lesson 7 — The Decisive Point
 
-Victory is won at a single point — the place where the enemy's line is thinnest. The
-general's task is to find that point, or to *make* one, and then to bring overwhelming
-force against it. But a stout enemy can defend one weak point with his whole strength.
-So the master creates a *second*, far from the first, and shifts his pressure between
-them. No defender stands in two places at once; stretch his line between two fires and
-somewhere it must tear. One weakness can be held. Two cannot. This is how a small edge
-becomes a won war — and why the diversion is no mere trick but a law of command: the
-enemy dragged to one fire cannot smother the other.
+A battle is won at one spot: the place where the enemy line is thinnest. Your job is to find
+that spot, or make one, and then bring more force against it than he can possibly defend. But a
+tough enemy can hold a single weak point with everything he has. So you make a second one, far
+from the first, and you swing your pressure back and forth between them. No defender stands in
+two places at once. Stretch his line between two fires and somewhere it tears. One weakness he
+can hold. Two, he can't. That is how a small edge turns into a won game — and it is why the
+diversion is not a cheap trick but a law: a man dragged to one fire can't put out the other.
 
-**Sources.** Capablanca, *Chess Fundamentals* (Ch. V, the attack from a different side —
-the principle of two weaknesses); Nimzowitsch, *My System* (provoking & fixing weakness,
-play on two wings); Znosko-Borovsky, *The Middle Game in Chess* (objects of attack).
+**Sources.** Capablanca, *Chess Fundamentals* (Ch. V, the attack from a different side — the
+principle of two weaknesses); Nimzowitsch, *My System* (provoking & fixing weakness, play on two
+wings); Znosko-Borovsky, *The Middle Game in Chess* (objects of attack).
 
 ### CliffsNotes
 - Win at the single **thinnest point** — find it or make it, then mass force there.
-- One weakness can be defended; create a **second**, far off, and shift between them.
-- Stretch his line between two fires until it tears — two weaknesses cannot both be held.
+- One weakness he can hold; make a **second**, far off, and swing between them.
+- Stretch his line between two fires until it tears.
 
 ---
 
 ## Lesson 8 — Commanding the Forces
 
-Each soldier has a nature, and the general who uses each according to its nature commands
-a far stronger army than his men alone would suggest. The knight is cavalry — it leaps
-the walls and strikes where nothing expects it, but it is slow, and must be marched
-patiently to the strong square from which it will dominate. The bishops are long-range
-gunners, deadly down an open line, useless behind their own walls — so open the board for
-them, or trade off the one your own pawns have imprisoned. The rooks are siege engines
-that come to life on open roads and crash through on the enemy's last rank. And the queen
-— the heaviest artillery on the field — does **not** lead the charge: she is too precious,
-too easily driven off by a common foot-soldier, losing you a tempo with every retreat. She
-supports from *behind* the lighter pieces and comes forward only to deliver the final blow
-once they have broken the line. Lead with your queen, and you will spend your strongest
-piece chasing shadows.
+Every piece has a nature, and a general who plays each one to its nature commands a far stronger
+army than his material says he should. The knight is cavalry. It jumps the walls and lands where
+nobody expected it — but it is slow, so you have to march it patiently to the strong square where
+it will rule. The bishops are long-range guns: deadly down an open line, useless stuck behind
+their own pawns, so open the board for them or trade off the one your pawns have locked in. The
+rooks are siege engines that come alive on open files and smash through on the back rank. And the
+queen does not lead the charge. She is too valuable, and any foot-soldier can chase her off and
+cost you a tempo every time she runs. She works from behind the lighter pieces, and she comes
+forward to finish the job once they have cracked the line open. Lead with your queen and you'll
+spend your best piece chasing shadows.
 
 **Sources.** Capablanca, *Chess Fundamentals* (relative value of knight & bishop; piece
-coordination); Nimzowitsch, *My System* (the outpost, manoeuvring, open files); Alekhine,
-*My Best Games 1908-1923* (the heavy pieces in the attack — the queen's supporting role).
+coordination); Nimzowitsch, *My System* (the outpost, manoeuvring, open files); Alekhine, *My Best
+Games 1908-1923* (the heavy pieces in the attack — the queen's supporting role).
 
 ### CliffsNotes
-- Use each piece by its **nature**: knight = cavalry (march it to a strong square), bishop = gunner (needs open lines), rook = siege engine (open files & the 7th).
-- The **queen leads from behind** — too precious to be chased; she delivers the final blow once the lighter pieces break the line.
-- Lead with the queen and you waste your strongest piece chasing shadows.
+- Play each piece to its **nature**: knight = cavalry (march it to a strong square), bishop = gun (needs open lines), rook = siege engine (open files & the 7th).
+- The **queen works from behind** — too valuable to be chased; she comes forward to finish.
+- Lead with the queen and you waste your best piece chasing shadows.
 
 ---
 
 ## Lesson 9 — The Doctrine of the Exchange
 
-Every time pieces are traded the character of the battle changes, and a general who
-trades carelessly throws away won positions and prolongs lost ones. An exchange is a
-decision, never a reflex, and it is governed by a few plain laws. **First: exchange your
-worst soldier for his best.** The whole purpose of a trade is to leave you a finer army
-than before — so give your bad bishop for his good knight, your passive rook for his
-active one, and never the reverse. **Second: trade by the verdict of the balance.** When
-you are the stronger — a man up — trade pieces freely, for every exchange carries you
-nearer the simple won ending where one extra soldier decides; when you are cramped, trade
-also, for each piece swapped gives your crowded ranks room to breathe. But when you are
-*attacking*, do the opposite — never trade the very pieces carrying your assault, for each
-one exchanged halves the storm. **Third: trade toward the ending you want.** A swap that
-leaves you the healthier pawns, or the better minor piece for the coming endgame, is a
-good trade even when the material is dead level. Judge every exchange by one question, and
-one only: when the smoke clears, is *my* position the better — or his?
+Every time pieces come off, the whole character of the fight changes — and a general who trades
+carelessly throws away won games and drags out lost ones. An exchange is a decision, never a
+reflex. A few plain rules govern it. First: trade your worst piece for his best. The point of
+swapping is to be left with a better army than you started with, so give your bad bishop for his
+good knight, your dead rook for his active one, and never the other way around. Second: trade by
+the verdict of the balance. When you're winning — a piece up — swap freely, because every trade
+walks you toward the simple endgame where one extra man decides everything. When you're cramped,
+swap too, because each piece off gives your crowded army room to breathe. But when you are
+*attacking*, do the opposite: never trade the pieces carrying the attack, because every one you
+let off cuts your storm in half. Third: trade toward the ending you want. A swap that leaves you
+the better pawns, or the better minor piece for the endgame, is a good trade even when the
+material is dead level. Judge every exchange by one question, and only one: when the smoke clears,
+is *my* position better, or his?
 
-**Sources.** Capablanca, *Chess Fundamentals* (simplification when ahead; the relative
-value of the pieces); Nimzowitsch, *My System* (the good and bad bishop; exchanging into a
-favourable structure); Znosko-Borovsky, *The Middle Game in Chess* (the transformation of
-advantages).
+**Sources.** Capablanca, *Chess Fundamentals* (simplification when ahead; the relative value of
+the pieces); Nimzowitsch, *My System* (the good and bad bishop; exchanging into a favourable
+structure); Znosko-Borovsky, *The Middle Game in Chess* (the transformation of advantages).
 
 ### CliffsNotes
-- A trade changes the whole battle — it is a decision, never a reflex.
-- **Exchange your worst piece for his best** (bad bishop for good knight); never the reverse.
-- Stronger or cramped → trade pieces; **attacking → never trade your attackers**.
-- Judge every exchange by one question: when the smoke clears, is *my* position better?
+- A trade changes the whole fight — it's a decision, never a reflex.
+- **Swap your worst piece for his best** (bad bishop for good knight); never the reverse.
+- Winning or cramped → trade pieces. **Attacking → never trade your attackers.**
+- Judge every swap by one question: when the smoke clears, is *my* position better?
 
 ---
 
 ## Lesson 10 — The Assault
 
-When the position is ripe — when you hold more force in the sector, when the lines to the
-enemy king stand open, when your reconnaissance and your restraint have done their work —
-*then*, and only then, you attack. And when you attack, **commit everything.** The
-commonest failed assault is the one launched by two or three pieces while the rest of the
-army idles in the rear. Count your attackers against his defenders: bring more strength to
-bear on the king than can shield it, and the line breaks. Open the roads, march up every
-reserve, and strike. A half-hearted attack is worse than none, for it spends your position
-and hands back the very initiative you fought so hard to win.
+When the position is ripe — when you have more force in the sector, the lines to his king are
+open, and your reading and your restraint have done their work — *then* you attack. Not before.
+And when you go, go with everything. The most common failed assault in chess is the one launched
+by two or three pieces while the rest of the army stands around in the back. Count your attackers
+against his defenders. Bring more force to the king than he can put in front of it, and the line
+breaks. Open the roads, march up every reserve, and hit. A half-hearted attack is worse than no
+attack at all: it spends your position and hands back the initiative you fought so hard to win.
 
-**Sources.** Capablanca, *Chess Fundamentals* (Ch. III, planning a win in the middlegame);
-Emanuel Lasker, *Common Sense in Chess* (the attack on the king); Alekhine, *My Best Games
-1908-1923* (the conduct of the attack).
+**Sources.** Capablanca, *Chess Fundamentals* (Ch. III, planning a win in the middlegame); Emanuel
+Lasker, *Common Sense in Chess* (the attack on the king); Alekhine, *My Best Games 1908-1923* (the
+conduct of the attack).
 
 ### CliffsNotes
-- Attack only when **ripe**: more force in the sector, open lines, the groundwork done.
-- **Commit everything** — count attackers vs defenders; bring every reserve up.
-- A half-hearted attack is worse than none — it spends your position and returns the initiative.
+- Attack only when it's **ripe**: more force in the sector, lines open, the groundwork done.
+- Go with **everything** — count attackers against defenders and bring every reserve.
+- A half-hearted attack is worse than none: it spends your position and returns the initiative.
 
 ---
 
 ## Lesson 11 — The Defence and the Counterstroke
 
-Not every battle is yours to dictate; sometimes the storm falls on you. The poor general
-panics, and the panic loses what calm would have held. Defend as actively as you would
-attack. Trade away the enemy's attacking pieces — every one you exchange halves the storm.
-Give back material, even, to reach safe ground; a returned pawn is cheap when it buys your
-king's life. And remember: the strongest defence is not defence at all, but the
-**counterstroke** — a blow against a weakness on the far side of the board, so the attacker
-must break off and rush home to save himself. Most assaults are bluffs that crumble the
-instant they meet a commander who does not flinch. Find the one saving resource, and the
-enemy who overcommitted will find his army stranded.
+Not every game is yours to run. Sometimes the storm comes at you. The weak player panics, and the
+panic loses what calm would have held. Defend the way you would attack — actively. Trade off his
+attacking pieces; every one you swap cuts the storm in half. Give material back if you have to. A
+returned pawn is cheap when it buys your king's life. And the strongest defence is not defence at
+all. It is the counterstroke: a blow at a weakness on the far side of the board that forces the
+attacker to break off and run home. Most attacks at the board are bluffs, and they fall apart the
+moment they meet a man who doesn't flinch. Find the one resource that holds, and the enemy who
+overcommitted finds his army stranded.
 
-**Sources.** Nimzowitsch, *My System* (active defence, the counter-blow); Capablanca,
-*Chess Fundamentals* (returning material; defence); Emanuel Lasker, *Common Sense in Chess*
-(the fighting defence).
+**Sources.** Nimzowitsch, *My System* (active defence, the counter-blow); Capablanca, *Chess
+Fundamentals* (returning material; defence); Emanuel Lasker, *Common Sense in Chess* (the fighting
+defence).
 
 ### CliffsNotes
-- Defend **actively**: trade off the attackers (each one halves the storm); return material for safety.
-- The strongest defence is the **counterstroke** — hit a weakness elsewhere so he must rush home.
+- Defend **actively**: trade off his attackers (each one halves the storm), give material back for safety.
+- The strongest defence is the **counterstroke** — hit a weakness elsewhere so he has to run home.
 - Don't flinch — most attacks are bluffs that fold under calm calculation.
 
 ---
 
 ## Lesson 12 — The Will to Win
 
-Here is the truth the diagrams never show: chess is a fight between two minds, and the
-stronger will often defeats the stronger position. Your enemy is not the wooden pieces; he
-is the man across the board, with his fears, his impatience, his fatigue. The great
-champions won not by calculation alone but by *struggle* — by the refusal to be beaten, by
-setting their opponent the hardest problem on every single move, by holding the tension
-until the other will broke first. Resolve is a weapon. Patience is a weapon. Make your
-enemy solve, and solve, and solve again — for it is far harder to defend a long siege than
-to press one, and sooner or later he will fail.
+Here is something the diagrams never show you. Chess is a fight between two minds, and the stronger
+will beats the stronger position more often than it has any right to. Your enemy is not the wooden
+pieces. He is the man across the table, with his nerves, his impatience, his tired eyes. The great
+champions did not win by calculation alone. They won by *struggle* — by refusing to be beaten, by
+handing the other man the hardest problem on every single move, by holding the tension until the
+other will cracked first. Resolve is a weapon. Patience is a weapon. Make him solve, and solve, and
+solve again, because it is far harder to defend a long siege than to press one — and sooner or later,
+he breaks.
 
-**Sources.** Emanuel Lasker, *Lasker's Manual of Chess* / *Common Sense in Chess* (chess as
-struggle; the psychology of the fight); Réti, *Modern Ideas in Chess* (the contest of wills
-and ideas).
+**Sources.** Emanuel Lasker, *Lasker's Manual of Chess* / *Common Sense in Chess* (chess as struggle;
+the psychology of the fight); Réti, *Modern Ideas in Chess* (the contest of wills and ideas).
 
 ### CliffsNotes
 - Chess is a fight between two **minds** — the stronger will often beats the stronger position.
-- Set the hardest problem every move; hold the tension until *his* will breaks first.
-- Resolve and patience are weapons — it is harder to defend a siege than to press one.
+- Hand him the hardest problem on every move; hold the tension until *his* will cracks first.
+- Resolve and patience are weapons. It's harder to defend a siege than to press one.
 
 ---
 
 ## Lesson 13 — Forcing the Surrender
 
-When the armies have thinned and the great clashes are past, the campaign enters its final
-phase — and everything changes. The king, who spent the battle hidden in his fortress, now
-throws off his caution and becomes a fighting general, marching to the front to lead the
-last advance. A single extra soldier, meaningless in the chaos of the middlegame, now
-marches to the far rank to be crowned and decides the war. Technique here is not brilliance;
-it is the patient, merciless removal of the enemy's last hope — trading down, advancing the
-king, escorting the passed soldier home. The general who learned to *win* small advantages
-now learns the harder art: to **convert** them, and to accept the surrender.
+When the armies thin out and the big clashes are behind you, the game enters its last phase, and
+everything changes. The king, who spent the whole battle hiding behind his walls, throws off the
+caution and becomes a fighting general, marching to the front to lead the final push. A single extra
+pawn that meant nothing in the middlegame chaos now walks to the far rank, becomes a queen, and ends
+the war. Technique here is not brilliance. It is the patient, ruthless work of taking away the enemy's
+last hope: trade down, bring the king up, walk the passed pawn home. The general who learned to *win*
+small edges now learns the harder craft — how to *cash* them, and take the surrender.
 
-**Sources.** Capablanca, *Chess Fundamentals* (Ch. II & V, endgame principles; the
-opposition; rook endings); Emanuel Lasker, *Common Sense in Chess* (the endgame; the
-principle of the position); Edward Lasker, *Chess & Checkers* (fundamental endings).
+**Sources.** Capablanca, *Chess Fundamentals* (Ch. II & V, endgame principles; the opposition; rook
+endings); Emanuel Lasker, *Common Sense in Chess* (the endgame; the principle of the position); Edward
+Lasker, *Chess & Checkers* (fundamental endings).
 
 ### CliffsNotes
-- In the endgame the king becomes a **fighting general** — march it to the front.
-- A single extra pawn now decides the war — escort it home.
+- In the endgame the king turns into a **fighting general** — bring it up to the front.
+- A single extra pawn now ends the war — walk it home.
 - Technique is the patient **removal of the enemy's last hope**, not brilliance.
 
 ---
 
 # The Advanced Doctrine — Three Laws from the Great Captains of War
 
-*The thirteen lessons above are the timeless wisdom of the chess masters. These three are
-drawn from the theorists of real war — Clausewitz and Boyd — and translated, for the first
-time, into doctrine for the board. They are the advanced concepts: harder to see, decisive
-when you do.*
+*The thirteen lessons above are the timeless wisdom of the chess masters. These three are drawn from
+the theorists of real war — Clausewitz and Boyd — and put into doctrine for the board for the first
+time. They are the hard ones to see, and the decisive ones once you do.*
 
 ## Lesson 14 — The Culminating Point of the Attack
 
-Every offensive carries within it the seed of its own exhaustion. Clausewitz called it the
-**culminating point of the attack** — the moment when an advancing army's strength peaks,
-and beyond which every further step actually *weakens* it: the supply lines stretch thin,
-the men tire, the surprise is spent, and the defender, falling back onto his reserves,
-grows stronger by the hour. The hardest art of the great general is to *feel* that point
-arriving, and at the very crest of his attack to stop, consolidate, and bank his gains —
-before he overreaches into ruin.
+Every attack carries the seed of its own collapse. Clausewitz had a name for it: the culminating
+point of the attack. It is the moment an advancing army hits its peak, and past that point every
+further step actually makes it *weaker*. The supply lines stretch thin, the men tire, the surprise
+runs out, and the defender, falling back onto his reserves, gets stronger by the hour. The hardest
+skill a general has is feeling that moment arrive, and at the very top of his attack choosing to stop,
+dig in, and bank what he won — before he overreaches into ruin.
 
-On the board it is the same law, and it costs club players more games than any single
-blunder. You build an attack, you win a pawn or pry open a file, and the momentum is
-intoxicating — so you fling in one more piece, push one more pawn, *certain* the
-breakthrough is a move away. But the position had peaked. The defender consolidates, your
-overextended forces hang, and the initiative you bled for floods back the other way — now
-*you* defend the wreck of your own assault. The doctrine: learn to recognise when your
-attack has **culminated**. The signs are real — your forcing moves run dry, the enemy king
-finds a haven, every continuation now needs a sacrifice that doesn't quite work. At that
-moment, *convert*: trade into the won endgame, pocket the weak pawn, settle for the better
-structure. The attack that does not know when it has peaked becomes the attack that is
+It is the same law on the board, and it costs club players more games than any single blunder. You
+build an attack, you win a pawn or rip open a file, and the momentum is intoxicating, so you throw in
+one more piece, push one more pawn, dead sure the breakthrough is a move away. But the position had
+peaked. He consolidates, your overstretched pieces start to hang, and the initiative you bled for comes
+flooding back the other way. Now *you* are defending the wreck of your own attack. So learn the warning
+signs. Your forcing moves dry up. His king finds a hole to breathe in. Every next blow needs a sacrifice
+that doesn't quite work. When you see them, cash out: trade into the won endgame, pocket the weak pawn,
+settle for the better structure. The attack that doesn't know when it has peaked is the attack that gets
 counterattacked.
 
-**Sources.** Carl von Clausewitz, *On War* (the culminating point of the attack); Capablanca,
-*Chess Fundamentals* (Ch. IV, relinquishing the initiative; converting an advantage); Emanuel
-Lasker, *Common Sense in Chess* (the natural limit of an attack). *Novel synthesis — an Academy
-original concept.*
+**Sources.** Carl von Clausewitz, *On War* (the culminating point of the attack); Capablanca, *Chess
+Fundamentals* (Ch. IV, relinquishing the initiative; converting an advantage); Emanuel Lasker, *Common
+Sense in Chess* (the natural limit of an attack). *Novel synthesis — an Academy original concept.*
 
 ### CliffsNotes
-- Every attack has a **culminating point** — a peak beyond which pressing on weakens you.
-- The signs: forcing moves run dry, the king escapes, the next blow needs a sac that fails.
-- At the crest, **convert** — bank a pawn, a structure, a won endgame; do not overreach.
-- The attack that won't stop becomes the one counterattacked — you hand back the initiative.
+- Every attack has a **culminating point** — a peak past which pressing on only weakens you.
+- The warning signs: forcing moves dry up, his king escapes, the next blow needs a sac that fails.
+- At the peak, **cash out** — bank a pawn, a structure, a won endgame. Don't overreach.
+- The attack that won't stop is the one that gets counterattacked — you hand the initiative back.
 
 ---
 
 ## Lesson 15 — The Enemy's Centre of Gravity
 
-Clausewitz taught his generals not to fritter their strength against the enemy's whole
-line, but to find his **centre of gravity** — "the hub of all power and movement, on which
-everything depends," the one thing that holds his entire position together. Strike *that*,
-with everything you have, and the rest collapses of its own weight. It is the opposite of
-scattering blows; it is concentration against the single load-bearing point.
+Clausewitz told his generals to stop hammering at the enemy's whole line and find his centre of
+gravity instead — "the hub of all power and movement, on which everything depends." The one thing
+holding his whole position together. Hit *that* with everything, and the rest comes down under its own
+weight. It is the opposite of spreading your blows around. It is concentration on the single load-bearing
+point.
 
-Every chess position has such a hub, and learning to see it is what separates a plan from a
-wish. Sometimes it is a single piece — the knight that anchors his whole kingside, the
-fianchettoed bishop that alone guards the dark squares around his king, the over-worked rook
-defending two things at once. Sometimes it is a pawn — the one brace that holds his chain,
-the lone guard of a colour complex. Find the piece on which his position *depends*, and aim
-your whole army at removing or neutralising it; when it falls, the weaknesses it was hiding
-all come due at once. This is **mass** in its truest sense — not "attack the king" in the
-abstract, but identify the keystone and concentrate against it, while spending only the
-minimum force to hold everywhere else, the soldier's law of **economy of force**. Topple the
-keystone, and the whole arch comes down.
+Every position on the board has one, and learning to spot it is what turns a wish into a plan. Sometimes
+it is a piece — the knight anchoring his whole kingside, the fianchettoed bishop that alone guards the
+dark squares by his king, the rook doing two defensive jobs at once. Sometimes it is a pawn — the one
+brace holding his chain, or the lone guard of a colour. Find the piece his position *depends* on, and
+aim the whole army at taking it off or shutting it down. When it falls, every weakness it was covering
+comes due at the same moment. This is mass in its truest sense — not "attack the king" in the abstract,
+but find the keystone and pile everything onto it, while you hold the rest of the board with the bare
+minimum, the soldier's old rule of economy of force. Knock out the keystone and the arch comes down.
 
-**Sources.** Carl von Clausewitz, *On War* (the centre of gravity); the principles of war
-(Mass; Economy of Force); Nimzowitsch, *My System* (the key point; over-protection); Capablanca,
-*Chess Fundamentals* (concentration against a single weakness). *Novel synthesis — an Academy
-original concept.*
+**Sources.** Carl von Clausewitz, *On War* (the centre of gravity); the principles of war (Mass; Economy
+of Force); Nimzowitsch, *My System* (the key point; over-protection); Capablanca, *Chess Fundamentals*
+(concentration against a single weakness). *Novel synthesis — an Academy original concept.*
 
 ### CliffsNotes
-- Every position has a **centre of gravity** — the one piece or pawn the whole enemy position rests on.
-- Don't scatter blows; **mass** your force against that single keystone.
-- Often it's an over-worked defender, an anchoring knight, or the brace of a pawn chain.
-- Hold everywhere else with **minimum force** (economy of force) so you can concentrate.
+- Every position has a **centre of gravity** — the one piece or pawn the whole enemy rests on.
+- Don't spread your blows; **mass** everything against that single keystone.
+- Usually it's an over-worked defender, an anchoring knight, or the brace of a pawn chain.
+- Hold the rest of the board with **minimum force** (economy of force) so you can concentrate.
 
 ---
 
 ## Lesson 16 — Inside His Decision Loop
 
-The American strategist John Boyd taught that victory does not always go to the *stronger*
-force, but to the one that thinks and acts faster than its enemy can react. Every commander,
-he said, runs a loop: he **observes** the situation, **orients** himself to make sense of it,
-**decides**, and **acts** — and the way to defeat him is to "get inside his loop," to change
-the situation faster than he can re-orient, so that every decision he reaches is already
-answering a battle that no longer exists. Speed alone is not the point; *disruption* is —
-keep transforming the problem until his understanding is always one step stale.
+The American strategist John Boyd taught that the win does not always go to the stronger force. It goes
+to the one that thinks and moves faster than the other can react. Every commander, he said, runs a loop:
+he *observes* what's in front of him, *orients* himself to make sense of it, *decides*, and *acts*. Beat
+him by getting inside that loop — change the situation faster than he can re-orient, so every decision he
+lands on is already answering a battle that no longer exists. Speed by itself isn't the point. Disruption
+is. Keep changing the problem until his picture of it is always a step out of date.
 
-This is the deepest meaning of the initiative, and it reaches past merely making threats. A
-*threat* your enemy can meet and move on; but a move that **changes the very nature of the
-position** — a pawn break that reshapes the whole structure, an exchange that transforms what
-kind of game it is, a sudden switch of the attack to the wing he just reinforced — forces him
-to throw away his plan and understand the board afresh. Do it again before he has finished,
-and he is forever re-orienting, never executing. The diversion of an earlier lesson is one
-face of this; the deeper law is to keep **changing the question** faster than he can answer
-the last one. The general who is always one transformation ahead is not merely active — he is
-fighting a battle his opponent has not yet realised has begun.
+This is the deepest meaning of the initiative, and it goes past simply making threats. A threat he can meet
+and move on from. But a move that changes the *whole nature* of the position — a pawn break that reshapes
+the structure, a trade that turns it into a different kind of game, a sudden switch of the attack to the
+wing he just reinforced — forces him to throw out his plan and read the board from scratch. Do it again
+before he's finished, and he is always re-orienting and never executing. The diversion you learned earlier
+is one version of this. The deeper law is to keep changing the question faster than he can answer the last
+one. The general who is always one transformation ahead isn't just active. He is fighting a battle his
+opponent doesn't yet know has started.
 
-**Sources.** John Boyd, the OODA loop & maneuver warfare (U.S. Marine Corps *Warfighting*,
-FMFM-1); Réti, *Modern Ideas in Chess* (transforming the character of the position); Emanuel
-Lasker, *Lasker's Manual* (imposing your will on the opponent's mind). *Novel synthesis — an
-Academy original concept.*
+**Sources.** John Boyd, the OODA loop & maneuver warfare (U.S. Marine Corps *Warfighting*, FMFM-1); Réti,
+*Modern Ideas in Chess* (transforming the character of the position); Emanuel Lasker, *Lasker's Manual*
+(imposing your will on the opponent's mind). *Novel synthesis — an Academy original concept.*
 
 ### CliffsNotes
-- Boyd's law: you beat the enemy who reacts slower by getting **inside his decision loop**.
-- The initiative is more than threats — **change the nature of the position** so his plan goes stale.
-- A pawn break, a transforming exchange, a sudden shift of front forces him to re-orient from scratch.
-- Keep **changing the question** faster than he can answer the last — stay one transformation ahead.
+- Boyd's law: beat the slower-reacting enemy by getting **inside his decision loop**.
+- The initiative is more than threats — **change the whole nature of the position** so his plan goes stale.
+- A pawn break, a transforming trade, a sudden switch of front forces him to read the board from scratch.
+- Keep changing the question faster than he answers the last — stay one transformation ahead.
 
 ---
 
 ## Epilogue — The Commander's Eye
 
-You began seeing pieces. You end seeing a battlefield. Where once stood knights and pawns,
-now there are forces and terrain, weak points and lines of attack, a campaign unfolding
-move by move. This is what it means to play through the eyes of a general: not to
-memorize, but to *understand* — to look at any position, however strange, and know what it
-asks of you. Marshal your army. Seize the initiative. Read the field and find his weakness.
-Lock down his counterplay. Mass at the decisive point — at the very hub his position rests
-on — strike before he can re-orient, and know when to stop. Impose your will. The board will
-never frighten you again, for you no longer sit before it as a player. You command.
+You started out seeing pieces. You end up seeing a battlefield. Where there used to be knights and pawns,
+now there is force and ground, weak points and lines of attack, a campaign unfolding a move at a time. That
+is what it means to play through the eyes of a general. You don't memorize. You *understand* — you look at
+any position, however strange, and you know what it is asking of you. Marshal the army. Take the initiative.
+Read the field and find his weak spot. Lock his counterplay down. Mass at the decisive point, at the hub his
+whole position hangs on, hit him before he can re-orient, and know when to stop. Impose your will. The board
+won't frighten you again, because you don't sit down to it as a player anymore. You command.
 
-**Sources.** The whole canon — Young, Nimzowitsch, Réti, Emanuel & Edward Lasker,
-Znosko-Borovsky, Capablanca — and the captains of war, Clausewitz and Boyd, woven into one
-doctrine of command.
+**Sources.** The whole canon — Young, Nimzowitsch, Réti, Emanuel & Edward Lasker, Znosko-Borovsky,
+Capablanca — and the captains of war, Clausewitz and Boyd.
 
 ### CliffsNotes
-- You now see **forces and terrain**, not pieces — you understand a position, you don't memorize it.
-- The whole doctrine in one breath: **marshal · seize the initiative · read & find the weakness · lock down · mass at the centre of gravity · strike inside his loop · know the culminating point · impose your will.**
-- You no longer play the board. You command it.
+- You now see **force and ground**, not pieces — you understand a position instead of memorizing it.
+- The whole doctrine in a breath: **marshal · take the initiative · read & find the weak spot · lock it down · mass at the centre of gravity · strike inside his loop · know when to stop · impose your will.**
+- You don't play the board anymore. You command it.
