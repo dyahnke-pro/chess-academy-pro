@@ -942,11 +942,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // Drill All / Show / Try It buttons that consumed it.
 
       // "Show me" playout — when the student taps the button at an
-      // inaccuracy / mistake / blunder ply, Stockfish auto-plays the
-      // punishment line from `seg.fenAfter` so the student SEES why
-      // their move was wrong. Silent (no narration), standard board
-      // animation cadence (200ms slide + 600ms pause ≈ 800ms/ply),
-      // and capped at 4 plies or game-over (whichever comes first).
+      // inaccuracy / mistake / blunder ply, play the BEST move they should
+      // have played (from `seg.fenBefore`), then let Stockfish continue the
+      // good line so they SEE the right plan — NOT the punishment of the move
+      // they actually played. Silent (no narration), standard board animation
+      // cadence (200ms slide + 600ms pause ≈ 800ms/ply), capped at 4 plies or
+      // game-over (whichever comes first).
       //
       // Why silent in v1: the chat/voice surface around it is already
       // narrating the position; the playout is a visual demonstration,
@@ -972,13 +973,34 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             bestMoveUci: seg.bestMoveUci ?? null,
           }),
         });
-        let currentFen = seg.fenAfter;
-        // Surface the starting position immediately so the Resume
-        // button shows and the badge stays oriented to "exploration".
-        setWalkExplorationFen(currentFen);
-        setWalkExplorationSan(null);
+        // Start from the position BEFORE the move and play the BEST move first —
+        // the move the student SHOULD have played — then let Stockfish continue
+        // the good line. (Previously this started from `seg.fenAfter` and played
+        // the punishment of the move they DID play.)
+        let currentFen = seg.fenBefore;
         let pliesPlayed = 0;
         const MAX_PLIES = 4;
+        // Surface the pre-move position first so the best move animates from it.
+        setWalkExplorationFen(currentFen);
+        setWalkExplorationSan(null);
+        const bestUci = seg.bestMoveUci;
+        if (bestUci && bestUci.length >= 4) {
+          await new Promise((r) => setTimeout(r, 350));
+          const bestProbe = new Chess(currentFen);
+          const bestApplied = bestProbe.move({
+            from: bestUci.slice(0, 2),
+            to: bestUci.slice(2, 4),
+            promotion: bestUci.length > 4 ? bestUci.slice(4, 5) : undefined,
+          });
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- chess.js returns null for an illegal move at runtime
+          if (bestApplied && walkMountedRef.current && walkShowMeActiveRef.current) {
+            currentFen = bestProbe.fen();
+            setWalkExplorationFen(currentFen);
+            playMoveSound(bestApplied.san);
+            pliesPlayed++;
+            await new Promise((r) => setTimeout(r, 600));
+          }
+        }
         try {
           while (pliesPlayed < MAX_PLIES && walkMountedRef.current) {
             const probe = new Chess(currentFen);
