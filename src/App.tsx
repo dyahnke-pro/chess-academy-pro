@@ -80,7 +80,7 @@ import { PieceSweepPage } from './components/Kid/PieceSweepPage';
 import { KnightGamesPage } from './components/Kid/KnightGamesPage';
 import { LeapFrogGame } from './components/Kid/LeapFrogGame';
 import { KnightSweepGame } from './components/Kid/KnightSweepGame';
-import { QueenGamesHub } from './components/Kid/QueenGamesHub';
+import { QueenGamesHub, QueenVsArmyRoute, QueensGauntletRoute } from './components/Kid/QueenGamesHub';
 import { KidPuzzlePage } from './components/Kid/KidPuzzlePage';
 import { GuidedGameHubPage } from './components/Kid/GuidedGameHubPage';
 import { GuidedGamePage } from './components/Kid/GuidedGamePage';
@@ -380,6 +380,8 @@ export function App(): JSX.Element {
           <Route path="/kid" element={<ErrorBoundary><KidModePage /></ErrorBoundary>} />
           <Route path="/kid/journey" element={<ErrorBoundary><JourneyMapPage /></ErrorBoundary>} />
           <Route path="/kid/queen-games" element={<ErrorBoundary><QueenGamesHub /></ErrorBoundary>} />
+          <Route path="/kid/queen-games/vs-army" element={<ErrorBoundary><QueenVsArmyRoute /></ErrorBoundary>} />
+          <Route path="/kid/queen-games/gauntlet" element={<ErrorBoundary><QueensGauntletRoute /></ErrorBoundary>} />
           <Route path="/kid/journey/:chapterId" element={<ErrorBoundary><JourneyChapterPage /></ErrorBoundary>} />
           <Route path="/kid/fairy-tale" element={<ErrorBoundary><FairyTaleMapPage /></ErrorBoundary>} />
           <Route path="/kid/fairy-tale/:chapterId" element={<ErrorBoundary><FairyTaleChapterPage /></ErrorBoundary>} />

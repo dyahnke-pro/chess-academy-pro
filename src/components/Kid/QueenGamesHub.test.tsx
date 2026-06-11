@@ -1,45 +1,39 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '../../test/utils';
 import { QueenGamesHub } from './QueenGamesHub';
-import { getGameProgress, isChapterUnlocked } from '../../services/journeyService';
+import { getGameProgress } from '../../services/journeyService';
+
+const mockNavigate = vi.fn();
+vi.mock('react-router-dom', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('react-router-dom')>()),
+  useNavigate: () => mockNavigate,
+}));
 
 vi.mock('../../services/journeyService', () => ({
   getGameProgress: vi.fn(),
   isChapterUnlocked: vi.fn(),
 }));
-
 vi.mock('../../services/voiceService', () => ({
-  voiceService: {
-    speak: vi.fn().mockResolvedValue(undefined),
-    stop: vi.fn(),
-  },
+  voiceService: { speak: vi.fn().mockResolvedValue(undefined), stop: vi.fn() },
 }));
-
-// Mock the game subcomponents
-vi.mock('./QueenVsArmy', () => ({
-  QueenVsArmy: ({ onBack }: { onBack: () => void }) => (
-    <div data-testid="queen-vs-army-game">
-      <button onClick={onBack} data-testid="army-back">Back</button>
-    </div>
-  ),
-}));
-
-vi.mock('./QueensGauntlet', () => ({
-  QueensGauntlet: ({ onBack }: { onBack: () => void }) => (
-    <div data-testid="queens-gauntlet-game">
-      <button onClick={onBack} data-testid="gauntlet-back">Back</button>
-    </div>
-  ),
-}));
+// The hub imports these for its route wrappers but never renders them
+// inline — keep them light so the hub test doesn't mount real boards.
+vi.mock('./QueenVsArmy', () => ({ QueenVsArmy: () => <div /> }));
+vi.mock('./QueensGauntlet', () => ({ QueensGauntlet: () => <div /> }));
 
 const mockGetGameProgress = vi.mocked(getGameProgress);
-const mockIsChapterUnlocked = vi.mocked(isChapterUnlocked);
+
+function unlock(): void {
+  mockGetGameProgress.mockResolvedValue({
+    chapters: {},
+    currentChapterId: 'queen',
+    startedAt: '2024-01-01',
+    completedAt: null,
+  });
+}
 
 describe('QueenGamesHub', () => {
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+  beforeEach(() => { vi.clearAllMocks(); });
 
   it('shows loading state initially', () => {
     mockGetGameProgress.mockReturnValue(new Promise(() => {})); // never resolves
@@ -47,110 +41,34 @@ describe('QueenGamesHub', () => {
     expect(screen.getByTestId('queen-games-loading')).toBeInTheDocument();
   });
 
-  it('shows game cards when progress is loaded', async () => {
-    mockGetGameProgress.mockResolvedValue({
-      chapters: { pawn: { chapterId: 'pawn', completed: true, lessonsCompleted: 3, puzzlesCompleted: 3, puzzlesCorrect: 3, bestScore: 3, completedAt: '2024-01-01' } },
-      currentChapterId: 'rook',
-      startedAt: '2024-01-01',
-      completedAt: null,
-    });
-
+  it('shows the game cards when unlocked', async () => {
+    unlock();
     render(<QueenGamesHub />);
-    await waitFor(() => {
-      expect(screen.getByTestId('queen-army-card')).toBeInTheDocument();
-    });
-    expect(screen.getByTestId('queen-gauntlet-card')).toBeInTheDocument();
-  });
-
-  it('shows game cards when unlocked', async () => {
-    mockGetGameProgress.mockResolvedValue({
-      chapters: {
-        knight: { chapterId: 'knight', completed: true, lessonsCompleted: 3, puzzlesCompleted: 3, puzzlesCorrect: 3, bestScore: 3, completedAt: '2024-01-01' },
-      },
-      currentChapterId: 'queen',
-      startedAt: '2024-01-01',
-      completedAt: null,
-    });
-    mockIsChapterUnlocked.mockReturnValue(true);
-
-    render(<QueenGamesHub />);
-    await waitFor(() => {
-      expect(screen.getByTestId('queen-army-card')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByTestId('queen-army-card')).toBeInTheDocument());
     expect(screen.getByTestId('queen-gauntlet-card')).toBeInTheDocument();
     expect(screen.getByText('Queen vs. Army')).toBeInTheDocument();
     expect(screen.getByText(/Queen's Gauntlet/)).toBeInTheDocument();
   });
 
-  it('navigates to Queen vs Army game', async () => {
-    mockGetGameProgress.mockResolvedValue({
-      chapters: {},
-      currentChapterId: 'queen',
-      startedAt: '2024-01-01',
-      completedAt: null,
-    });
-    mockIsChapterUnlocked.mockReturnValue(true);
-
+  it('routes (not setView) to Queen vs Army', async () => {
+    unlock();
     render(<QueenGamesHub />);
-    await waitFor(() => {
-      expect(screen.getByTestId('queen-army-card')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByTestId('queen-army-card')).toBeInTheDocument());
     fireEvent.click(screen.getByTestId('queen-army-card'));
-    expect(screen.getByTestId('queen-vs-army-game')).toBeInTheDocument();
+    expect(mockNavigate).toHaveBeenCalledWith('/kid/queen-games/vs-army');
   });
 
-  it('navigates to Queens Gauntlet game', async () => {
-    mockGetGameProgress.mockResolvedValue({
-      chapters: {},
-      currentChapterId: 'queen',
-      startedAt: '2024-01-01',
-      completedAt: null,
-    });
-    mockIsChapterUnlocked.mockReturnValue(true);
-
+  it('routes (not setView) to Queen\'s Gauntlet', async () => {
+    unlock();
     render(<QueenGamesHub />);
-    await waitFor(() => {
-      expect(screen.getByTestId('queen-gauntlet-card')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByTestId('queen-gauntlet-card')).toBeInTheDocument());
     fireEvent.click(screen.getByTestId('queen-gauntlet-card'));
-    expect(screen.getByTestId('queens-gauntlet-game')).toBeInTheDocument();
+    expect(mockNavigate).toHaveBeenCalledWith('/kid/queen-games/gauntlet');
   });
 
-  it('returns to menu from a game', async () => {
-    mockGetGameProgress.mockResolvedValue({
-      chapters: {},
-      currentChapterId: 'queen',
-      startedAt: '2024-01-01',
-      completedAt: null,
-    });
-    mockIsChapterUnlocked.mockReturnValue(true);
-
+  it('shows the locked state when progression is not met', async () => {
+    mockGetGameProgress.mockResolvedValue(null);
     render(<QueenGamesHub />);
-    await waitFor(() => {
-      expect(screen.getByTestId('queen-army-card')).toBeInTheDocument();
-    });
-    fireEvent.click(screen.getByTestId('queen-army-card'));
-    expect(screen.getByTestId('queen-vs-army-game')).toBeInTheDocument();
-
-    fireEvent.click(screen.getByTestId('army-back'));
-    expect(screen.getByTestId('queen-games-hub')).toBeInTheDocument();
-  });
-
-  it('shows completion progress', async () => {
-    mockGetGameProgress.mockResolvedValue({
-      chapters: {},
-      currentChapterId: 'queen',
-      startedAt: '2024-01-01',
-      completedAt: null,
-    });
-    mockIsChapterUnlocked.mockReturnValue(true);
-
-    render(<QueenGamesHub />);
-    await waitFor(() => {
-      expect(screen.getByTestId('queen-army-card')).toBeInTheDocument();
-    });
-    // Both cards show "0/3 levels completed" — text split by React rendering
-    const cards = screen.getAllByText(/levels completed/);
-    expect(cards).toHaveLength(2);
+    await waitFor(() => expect(screen.getByTestId('queen-games-locked')).toBeInTheDocument());
   });
 });

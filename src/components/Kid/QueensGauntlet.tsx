@@ -1,114 +1,108 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
-import { KidChessboard } from '../Chessboard/KidChessboard';
-import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
+import { useState, useCallback, useMemo, useEffect, type CSSProperties } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, RotateCcw } from 'lucide-react';
+import { ArrowLeft, RotateCcw, Volume2, VolumeX } from 'lucide-react';
+import type { SquareHandlerArgs } from 'react-chessboard';
+import { KidChessboard } from '../Chessboard/KidChessboard';
 import { voiceService } from '../../services/voiceService';
 import {
-  QUEEN_GAUNTLET_LEVELS,
   initGauntletState,
-  processGauntletMove,
+  heroCaptureTargets,
+  applyGauntletCapture,
+  enemyGuardedSquares,
   gauntletPosition,
-  gauntletHighlights,
-} from '../../services/queenGameEngine';
-import type { QueenGauntletState } from '../../services/queenGameEngine';
+  type GauntletState,
+} from '../../services/gauntletEngine';
+import { QUEEN_GAUNTLET_LEVELS } from '../../data/gauntletLevels';
 
 interface QueensGauntletProps {
   onBack: () => void;
-  onComplete: (level: number, won: boolean) => void;
+  /** Optional — fires (level, won) on each finished level. */
+  onComplete?: (level: number, won: boolean) => void;
   /** Honors the hub's voice toggle. Defaults to on. */
   voiceOn?: boolean;
 }
 
-export function QueensGauntlet({ onBack, onComplete, voiceOn = true }: QueensGauntletProps): JSX.Element {
-  const [levelIndex, setLevelIndex] = useState(0);
-  const level = QUEEN_GAUNTLET_LEVELS[levelIndex];
-  const [state, setState] = useState<QueenGauntletState>(() => initGauntletState(level));
+const LEVELS = QUEEN_GAUNTLET_LEVELS;
 
-  // Spoken intro per level — fills the "what do I do" gap (this game
-  // shipped silent). Move feedback stays milestone-only (#5): the win /
-  // loss line is voiced by the hub on completion.
-  useEffect(() => {
+export function QueensGauntlet({ onBack, onComplete, voiceOn: voiceOnProp = true }: QueensGauntletProps): JSX.Element {
+  const [levelIndex, setLevelIndex] = useState(0);
+  const level = LEVELS[levelIndex];
+  const [state, setState] = useState<GauntletState>(() => initGauntletState(level));
+  const [voiceOn, setVoiceOn] = useState(voiceOnProp);
+
+  const kidSpeak = useCallback((text: string): void => {
     if (!voiceOn) return;
-    void voiceService.speak(
-      `Queen's Gauntlet, level ${level.id}. Slide your queen to the glowing square, and stay off the red squares the enemies attack.`,
+    void voiceService.speak(text);
+  }, [voiceOn]);
+
+  // Per-level spoken intro — what to do (the game used to be silent).
+  useEffect(() => {
+    kidSpeak(
+      `Queen's Gauntlet, level ${level.id}. Capture every enemy, but never land on a square another enemy still guards. Take the safe one first!`,
     );
-  }, [levelIndex, level.id, voiceOn]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [levelIndex]);
+
+  useEffect(() => () => { voiceService.stop(); }, []);
 
   const position = useMemo(() => gauntletPosition(state), [state]);
-
-  const { attackedSquares, safeSquares } = useMemo(
-    () => gauntletHighlights(state, level),
-    [state, level],
+  const captureTargets = useMemo(() => heroCaptureTargets(state), [state]);
+  const guarded = useMemo(
+    () => (level.showGuarded ? enemyGuardedSquares(state.enemies, state.hero.square) : new Set<string>()),
+    [state, level.showGuarded],
   );
 
-  const customSquareStyles = useMemo(() => {
-    const styles: Record<string, React.CSSProperties> = {};
-
-    for (const sq of attackedSquares) {
+  const squareStyles = useMemo(() => {
+    const styles: Record<string, CSSProperties> = {};
+    // Red = squares a remaining enemy still guards (danger — training levels).
+    for (const sq of guarded) {
+      styles[sq] = { background: 'rgba(239, 68, 68, 0.32)' };
+    }
+    // Green ring = an enemy you can safely or riskily capture this turn.
+    for (const sq of captureTargets) {
       styles[sq] = {
-        background: 'rgba(239, 68, 68, 0.35)',
-        borderRadius: '0',
+        ...styles[sq],
+        background: 'radial-gradient(circle, rgba(34, 197, 94, 0.55) 30%, rgba(34,197,94,0.15) 32%)',
       };
     }
-
-    for (const sq of safeSquares) {
-      styles[sq] = {
-        background: 'rgba(34, 197, 94, 0.3)',
-        borderRadius: '0',
-      };
-    }
-
-    // Target square always glows
-    if (state.status === 'playing') {
-      styles[state.target] = {
-        ...styles[state.target],
-        background: 'radial-gradient(circle, rgba(250, 204, 21, 0.7) 40%, rgba(250, 204, 21, 0.2) 70%)',
-        boxShadow: 'inset 0 0 12px rgba(250, 204, 21, 0.6)',
-      };
-    }
-
     return styles;
-  }, [attackedSquares, safeSquares, state.target, state.status]);
+  }, [guarded, captureTargets]);
 
-  const handleDrop = useCallback(
-    ({ sourceSquare, targetSquare, piece }: { sourceSquare: string; targetSquare: string | null; piece: { pieceType: string } }): boolean => {
-      if (piece.pieceType !== 'wQ') return false;
-      if (state.status !== 'playing') return false;
-      if (!targetSquare || sourceSquare === targetSquare) return false;
+  const handleSquareClick = useCallback(({ square }: SquareHandlerArgs): void => {
+    if (state.status !== 'playing') return;
+    if (!captureTargets.includes(square)) return;
+    const next = applyGauntletCapture(state, square);
+    setState(next);
+    if (next.status === 'won') {
+      kidSpeak('The whole army is cleared! The queen carved a path right through them.');
+      onComplete?.(level.id, true);
+    } else if (next.status === 'lost') {
+      kidSpeak('The queen was captured! That piece was still guarded. Try taking a safe one first.');
+      onComplete?.(level.id, false);
+    }
+  }, [state, captureTargets, kidSpeak, onComplete, level.id]);
 
-      const newState = processGauntletMove(state, targetSquare);
-      if (newState === state) return false;
-
-      setState(newState);
-
-      if (newState.status === 'won' || newState.status === 'lost') {
-        onComplete(level.id, newState.status === 'won');
-      }
-
-      return true;
-    },
-    [state, level, onComplete],
-  );
-
-  const handleReset = useCallback((): void => {
+  const handleRetry = useCallback((): void => {
     setState(initGauntletState(level));
-  }, [level]);
+    kidSpeak('New plan! Find the piece nobody is guarding.');
+  }, [level, kidSpeak]);
 
   const handleNextLevel = useCallback((): void => {
     const next = levelIndex + 1;
-    if (next < QUEEN_GAUNTLET_LEVELS.length) {
+    if (next < LEVELS.length) {
       setLevelIndex(next);
-      const nextLevel = QUEEN_GAUNTLET_LEVELS[next];
-      setState(initGauntletState(nextLevel));
+      setState(initGauntletState(LEVELS[next]));
     } else {
       onBack();
     }
   }, [levelIndex, onBack]);
 
-  const handleRetry = useCallback((): void => {
-    setState(initGauntletState(level));
-  }, [level]);
+  const handleVoiceToggle = useCallback((): void => {
+    if (voiceOn) voiceService.stop();
+    setVoiceOn((v) => !v);
+  }, [voiceOn]);
+
+  const remaining = state.enemies.length;
 
   return (
     <div
@@ -123,48 +117,61 @@ export function QueensGauntlet({ onBack, onComplete, voiceOn = true }: QueensGau
           className="p-2 rounded-lg hover:opacity-80"
           style={{ background: 'var(--color-surface)' }}
           data-testid="gauntlet-back"
+          aria-label="Back"
         >
           <ArrowLeft size={18} />
         </button>
         <h2 className="text-lg font-bold">Queen&apos;s Gauntlet — Level {level.id}</h2>
-        <button
-          onClick={handleReset}
-          className="p-2 rounded-lg hover:opacity-80"
-          style={{ background: 'var(--color-surface)' }}
-          data-testid="gauntlet-reset"
-          aria-label="Reset level"
-        >
-          <RotateCcw size={18} />
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleRetry}
+            className="p-2 rounded-lg hover:opacity-80"
+            style={{ background: 'var(--color-surface)' }}
+            data-testid="gauntlet-reset"
+            aria-label="Reset level"
+          >
+            <RotateCcw size={18} />
+          </button>
+          <button
+            onClick={handleVoiceToggle}
+            className="p-2 rounded-lg border transition-colors"
+            style={{
+              background: voiceOn ? 'var(--color-accent)' : 'var(--color-surface)',
+              borderColor: 'var(--color-border)',
+              color: voiceOn ? 'var(--color-bg)' : 'var(--color-text-muted)',
+            }}
+            aria-label={voiceOn ? 'Mute voice' : 'Unmute voice'}
+            data-testid="gauntlet-voice"
+          >
+            {voiceOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
+          </button>
+        </div>
       </div>
 
       {/* Instructions */}
-      <div
-        className="text-center text-sm px-4 max-w-md"
-        style={{ color: 'var(--color-text-muted)' }}
-      >
+      <div className="text-center text-sm px-4 max-w-md" style={{ color: 'var(--color-text-muted)' }}>
         {state.status === 'playing' && (
           <>
-            Navigate your queen to the glowing square!
+            Tap an enemy to capture it — but don&apos;t land where another enemy is still guarding!
             <span className="block text-xs mt-1">
-              Avoid attacked squares. Moves: {state.moveCount}
+              Enemies left: {remaining} · Moves: {state.moveCount}
             </span>
           </>
         )}
       </div>
 
       {/* Board */}
-      <BoardVoiceOverlay fen={position} className="w-full md:max-w-[420px]">
+      <div className="w-full md:max-w-[420px]">
         <KidChessboard
           fen={position}
           boardOrientation="white"
-          squareStyles={customSquareStyles}
           interactive={state.status === 'playing'}
-          onPieceDrop={handleDrop}
+          onSquareClick={handleSquareClick}
+          squareStyles={squareStyles}
         />
-      </BoardVoiceOverlay>
+      </div>
 
-      {/* Win/Loss overlay */}
+      {/* Win / Loss overlay */}
       <AnimatePresence>
         {state.status !== 'playing' && (
           <motion.div
@@ -176,47 +183,32 @@ export function QueensGauntlet({ onBack, onComplete, voiceOn = true }: QueensGau
             className="flex flex-col items-center gap-3 text-center"
             data-testid="gauntlet-result"
           >
-            <span className="text-4xl">
-              {state.status === 'won' ? '🎉' : '💥'}
-            </span>
+            <span className="text-4xl">{state.status === 'won' ? '🎉' : '😢'}</span>
             <p className="text-xl font-bold">
-              {state.status === 'won'
-                ? 'You made it through!'
-                : 'Your queen was captured!'}
+              {state.status === 'won' ? 'Army cleared!' : 'The queen was captured!'}
             </p>
-            <p
-              className="text-sm"
-              style={{ color: 'var(--color-text-muted)' }}
-            >
+            <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
               {state.status === 'won'
-                ? `Navigated safely in ${state.moveCount} moves`
-                : 'That square was attacked! Try a different path.'}
+                ? `Cleared in ${state.moveCount} moves.`
+                : 'That piece was still guarded — take a safe one first.'}
             </p>
             <div className="flex gap-3 mt-2">
               <button
                 onClick={handleRetry}
                 className="px-6 py-2 rounded-xl font-bold"
-                style={{
-                  background: 'var(--color-surface)',
-                  border: '1px solid var(--color-border)',
-                }}
+                style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
                 data-testid="gauntlet-retry"
               >
-                Retry
+                {state.status === 'won' ? 'Replay' : 'Try Again'}
               </button>
               {state.status === 'won' && (
                 <button
                   onClick={handleNextLevel}
                   className="px-6 py-2 rounded-xl font-bold"
-                  style={{
-                    background: 'var(--color-accent)',
-                    color: 'var(--color-bg)',
-                  }}
+                  style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
                   data-testid="gauntlet-next"
                 >
-                  {levelIndex + 1 < QUEEN_GAUNTLET_LEVELS.length
-                    ? 'Next Level'
-                    : 'Done'}
+                  {levelIndex + 1 < LEVELS.length ? 'Next Level' : 'Done'}
                 </button>
               )}
             </div>
