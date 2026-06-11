@@ -57,6 +57,7 @@ export function QueenGamesHub(): JSX.Element {
     { testid: 'queen-puzzles-card', emoji: '🧩', title: 'Queen Puzzles', subtitle: 'Find the queen move that wins.', to: '/kid/queen-games/puzzles' },
     { testid: 'queen-maze-card', emoji: '🧭', title: 'Queen Path', subtitle: 'Guide the queen to the target square.', to: '/kid/queen-games/maze/1' },
     { testid: 'queen-hunt-card', emoji: '⚔️', title: 'Queen Hunt', subtitle: 'Capture every target.', to: '/kid/queen-games/sweep/1' },
+    { testid: 'queen-race-card', emoji: '⏱️', title: 'Queen Race', subtitle: 'Capture every target against the clock!', to: '/kid/queen-games/race/1' },
   ];
 
   return (

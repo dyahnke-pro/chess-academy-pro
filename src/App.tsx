@@ -77,6 +77,7 @@ import { BishopGamesPage, BishopVsPawnsRoute, ColorWarsRoute } from './component
 import { KidPiecePuzzlesPage } from './components/Kid/KidPiecePuzzlesPage';
 import { PieceMazePage } from './components/Kid/PieceMazePage';
 import { PieceSweepPage } from './components/Kid/PieceSweepPage';
+import { PieceRaceGame } from './components/Kid/PieceRaceGame';
 import { KnightGamesPage } from './components/Kid/KnightGamesPage';
 import { LeapFrogGame } from './components/Kid/LeapFrogGame';
 import { KnightSweepGame } from './components/Kid/KnightSweepGame';
@@ -436,6 +437,12 @@ export function App(): JSX.Element {
           <Route path="/kid/bishop-games/sweep/:level" element={<ErrorBoundary><PieceSweepPage piece="bishop" /></ErrorBoundary>} />
           <Route path="/kid/queen-games/sweep/:level"  element={<ErrorBoundary><PieceSweepPage piece="queen" /></ErrorBoundary>} />
           <Route path="/kid/king-games/sweep/:level"   element={<ErrorBoundary><PieceSweepPage piece="king" /></ErrorBoundary>} />
+          {/* Time-trial races — capture every target against the clock. */}
+          <Route path="/kid/knight-games/race/:level" element={<ErrorBoundary><PieceRaceGame piece="knight" /></ErrorBoundary>} />
+          <Route path="/kid/bishop-games/race/:level" element={<ErrorBoundary><PieceRaceGame piece="bishop" /></ErrorBoundary>} />
+          <Route path="/kid/rook-games/race/:level"   element={<ErrorBoundary><PieceRaceGame piece="rook" /></ErrorBoundary>} />
+          <Route path="/kid/queen-games/race/:level"  element={<ErrorBoundary><PieceRaceGame piece="queen" /></ErrorBoundary>} />
+          <Route path="/kid/king-games/race/:level"   element={<ErrorBoundary><PieceRaceGame piece="king" /></ErrorBoundary>} />
           <Route path="/kid/:piece" element={<ErrorBoundary><KidPiecePage /></ErrorBoundary>} />
         </Route>
       </Routes>
