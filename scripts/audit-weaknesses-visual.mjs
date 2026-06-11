@@ -283,7 +283,7 @@ async function main() {
   const tabText = async () => (await page.locator('[data-testid="game-insights-page"]').innerText().catch(() => '')).replace(/\s+/g, ' ');
 
   // ── Walk every tab ────────────────────────────────────────────────
-  const tabs = ['overview', 'openings', 'mistakes', 'tactics', 'patterns'];
+  const tabs = ['overview', 'misconceptions', 'openings', 'mistakes', 'tactics', 'patterns'];
   for (const t of tabs) {
     console.log(`\n[tab] ${t}`);
     await page.locator(`[data-testid="tab-${t}"]`).click({ timeout: 6000 }).catch(() => undefined);
@@ -361,6 +361,24 @@ async function main() {
   const scopedCards = await page.locator('[data-testid="puzzle-card"]').count().catch(() => 0);
   const badge = await page.locator('[data-testid="opening-scope-badge"]').innerText().catch(() => '');
   check('scoped mistakes list shows ONLY these games\' mistakes (3, not 5)', scopedCards === 3, `${scopedCards} cards, badge="${badge.trim()}"`);
+
+  // ── GamesDrilldownPage ("games behind this stat") — the non-tab
+  //    drill-through window in this section. Reach it with an opening
+  //    filter for D02 and verify it renders games with sane move counts. ─
+  console.log(`\n[games-drilldown] /weaknesses/games (opening=D02)`);
+  const fParam = Buffer.from(
+    encodeURIComponent(JSON.stringify([{ source: 'opening', eco: 'D02', label: "Queen's Pawn Game" }])),
+  ).toString('base64');
+  await page.goto(`${BASE_URL}/weaknesses/games?f=${fParam}`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
+  await page.locator('[data-testid="games-drilldown-page"]').waitFor({ timeout: 12_000 }).catch(() => undefined);
+  await dismissOnboarding(page);
+  await page.waitForTimeout(2500);
+  await shot('games-drilldown');
+  const gdText = (await page.locator('[data-testid="games-drilldown-page"]').innerText().catch(() => '')).replace(/\s+/g, ' ');
+  const gdMoves = [...gdText.matchAll(/(\d+)\s*moves/gi)].map((m) => Number(m[1]));
+  const gdMax = gdMoves.length ? Math.max(...gdMoves) : 0;
+  check('games-drilldown renders (no NaN/undefined)', gdText.length > 0 && !/\bNaN\b|undefined/.test(gdText), gdText.slice(0, 70));
+  check('games-drilldown move counts are full-moves (≤ 20 or none shown)', gdMax <= 20, `max=${gdMax} of [${gdMoves.join(',')}]`);
 
   report.numbers = { gamesStat, listCount, errPerGame, moveNums };
   report.pageErrors = pageErrors;
