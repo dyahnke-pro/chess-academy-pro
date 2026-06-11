@@ -59,6 +59,9 @@ interface MistakesPageLocationState {
   initialClassification?: MistakeClassification;
   initialStatus?: MistakePuzzleStatus;
   initialOpeningName?: string;
+  /** Scope the list to one game's mistakes (the post-game "missed
+   *  opportunities" button passes this so it drills THIS game). */
+  sourceGameId?: string;
 }
 
 export function MyMistakesPage(): JSX.Element {
@@ -82,6 +85,8 @@ export function MyMistakesPage(): JSX.Element {
   const [sourceFilter, setSourceFilter] = useState<SourceFilter>('all');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>(navState.initialStatus ?? 'all');
   const [openingFilter, setOpeningFilter] = useState<string | null>(initialOpeningFromUrlOrState);
+  // Scope to one game (post-game "missed opportunities" deep-link). Clearable.
+  const [gameFilter, setGameFilter] = useState<string | null>(navState.sourceGameId ?? null);
   /** Smart-search query — matches against opponent name OR tactic
    *  type label, case-insensitive substring. Empty = no filter.
    *  David's directive 2026-05-19: "a search bar so i can search
@@ -138,6 +143,7 @@ export function MyMistakesPage(): JSX.Element {
     if (sourceFilter !== 'all' && p.sourceMode !== sourceFilter) return false;
     if (statusFilter !== 'all' && p.status !== statusFilter) return false;
     if (openingFilter !== null && p.openingName !== openingFilter) return false;
+    if (gameFilter !== null && p.sourceGameId !== gameFilter) return false;
     // Smart-search: OR-match across opponent name + tactic label +
     // opening. Empty query = no filter.
     if (searchQ) {
@@ -423,6 +429,17 @@ export function MyMistakesPage(): JSX.Element {
             data-testid="opening-filter-badge"
           >
             {openingFilter} &times;
+          </button>
+        )}
+
+        {gameFilter !== null && (
+          <button
+            onClick={() => setGameFilter(null)}
+            className="text-xs px-2 py-1 rounded font-medium flex items-center gap-1"
+            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+            data-testid="game-filter-badge"
+          >
+            This game &times;
           </button>
         )}
       </div>

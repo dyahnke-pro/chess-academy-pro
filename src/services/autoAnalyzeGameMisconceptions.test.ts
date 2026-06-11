@@ -22,7 +22,8 @@ function blunderAnnotations(): MoveAnnotation[] {
 beforeEach(async () => {
   await db.misconceptionTags.clear();
   await db.games.clear();
-  await db.meta.delete('misconceptions_backfill_v1');
+  await db.mistakePuzzles.clear();
+  await db.meta.delete('misconceptions_backfill_v2');
 });
 
 describe('autoAnalyzeGameMisconceptions', () => {
@@ -43,6 +44,12 @@ describe('autoAnalyzeGameMisconceptions', () => {
     const rows = await db.misconceptionTags.where('sourceGameId').equals('g-hang-queen').toArray();
     expect(rows.length).toBeGreaterThan(0);
     expect(rows.some((r) => r.tag === 'hung-material')).toBe(true);
+
+    // It ALSO persists a drillable mistakePuzzle for the blunder, so the
+    // mistake lands in the My Mistakes / My Weaknesses pool (David 2026-06-11).
+    const puzzles = await db.mistakePuzzles.where('sourceGameId').equals('g-hang-queen').toArray();
+    expect(puzzles.length).toBeGreaterThan(0);
+    expect(puzzles.some((p) => p.playerMoveSan === 'Qxe5+' && p.bestMoveSan === 'Nf3')).toBe(true);
     // Display-only: shows in Thinking Errors but doesn't inflate the weakness profile.
     expect(rows.every((r) => r.counted === false)).toBe(true);
     expect(rows.every((r) => r.source === 'auto-analysis')).toBe(true);

@@ -15,8 +15,10 @@ import {
   replayPgnToFens,
   determinePlayerColor,
   uciToSan,
+  buildMistakePuzzleFromCapture,
 } from './mistakePuzzleService';
 import { classifyPhase } from './gamePhaseService';
+import type { MistakePuzzle } from '../types';
 
 export interface BlunderForAnalysis {
   /** Position BEFORE the move (FEN). */
@@ -102,18 +104,21 @@ export async function autoAnalyzeBlunders(
  *  game can tag its blunders/mistakes here too — covering POSITIONAL slips the
  *  tactical-only mistakePuzzle gate deliberately drops.
  *
- *  `learned: false` (display-only): these surface in Thinking Errors but do
- *  NOT feed the formal weakness profile (the same games' `mistakePuzzles`
- *  already represent them — counting both would double-count) and do NOT
- *  spawn `mistakePuzzles` (that would bypass the tactical quality gate). Idempotent
- *  per game via `hasMisconceptionsForGame`. */
+ *  `learned: false` (display-only): the misconception TALLY doesn't feed the
+ *  formal weakness profile (the same games' `mistakePuzzles` already represent
+ *  them — counting both would double-count). But it DOES now persist a drillable
+ *  `mistakePuzzle` for every blunder/mistake — including the POSITIONAL ones the
+ *  tactical gate in `generateMistakePuzzlesFromGame` drops — so every thinking
+ *  error lands in the same weakness-puzzle pool My Mistakes / My Weaknesses
+ *  drill (David 2026-06-11: "all of these need to go into the my weaknesses
+ *  puzzles"). The puzzle persistence is idempotent by position (so it runs every
+ *  time and back-fills already-tagged games); only the misconception LOGGING is
+ *  once-per-game via `hasMisconceptionsForGame`. */
 export async function autoAnalyzeGameMisconceptions(
   gameId: string,
   username?: string,
 ): Promise<AutoAnalyzeResult> {
   const empty: AutoAnalyzeResult = { classified: 0, logged: 0 };
-  // Already tagged (bulk, review-walk, or live) — never double-log a game.
-  if (await hasMisconceptionsForGame(gameId)) return empty;
 
   const game = await db.games.get(gameId);
   if (!game) return empty;
@@ -143,11 +148,49 @@ export async function autoAnalyzeGameMisconceptions(
   }
   if (blunders.length === 0) return empty;
 
+  // Persist a drillable mistakePuzzle for each blunder — incl. the positional
+  // ones the tactical gate drops — deduped by position against this game's
+  // existing puzzles (the tactical ones the analyze pipeline already made). One
+  // indexed query + one bulkAdd; idempotent, so it runs every call and catches
+  // up already-tagged games.
+  await persistMistakePuzzlesForBlunders(gameId, blunders);
+
+  // Log the misconception TALLY once per game (bulk / review-walk / live).
+  if (await hasMisconceptionsForGame(gameId)) return empty;
   return autoAnalyzeBlunders(blunders, {
     openingId: game.openingId ?? undefined,
     sourceGameId: gameId,
     learned: false,
   });
+}
+
+/** Persist drillable mistakePuzzles for a game's blunders, deduped by position
+ *  against the game's existing puzzles. Idempotent — re-running adds nothing new
+ *  (position keys already seen). Skips blunders with no recorded best move. */
+async function persistMistakePuzzlesForBlunders(
+  gameId: string,
+  blunders: BlunderForAnalysis[],
+): Promise<void> {
+  const existing = await db.mistakePuzzles.where('sourceGameId').equals(gameId).toArray();
+  const seen = new Set(existing.map((p) => `${p.fen}|${p.playerMoveSan}`));
+  const fresh: MistakePuzzle[] = [];
+  for (const b of blunders) {
+    if (!b.bestSan) continue;
+    const key = `${b.fen}|${b.playedSan}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const puzzle = buildMistakePuzzleFromCapture({
+      fen: b.fen,
+      playedSan: b.playedSan,
+      bestSan: b.bestSan,
+      cpLoss: b.cpLoss,
+      gamePhase: b.gamePhase,
+      moveNumber: b.moveNumber,
+      sourceGameId: gameId,
+    });
+    if (puzzle) fresh.push(puzzle);
+  }
+  if (fresh.length > 0) await db.mistakePuzzles.bulkAdd(fresh);
 }
 
 /** One-time backfill: sweep the ALREADY-analyzed game library and fill the
@@ -164,7 +207,9 @@ export async function autoAnalyzeGameMisconceptions(
 export async function backfillMisconceptionsFromAnalyzedGames(
   opts?: { force?: boolean },
 ): Promise<AutoAnalyzeResult> {
-  const flagKey = 'misconceptions_backfill_v1';
+  // v2: re-sweep so already-tagged games also persist their POSITIONAL mistake
+  // puzzles (the v1 sweep only logged the tally).
+  const flagKey = 'misconceptions_backfill_v2';
   if (!opts?.force) {
     const done = await db.meta.get(flagKey);
     if (done?.value === 'true') return { classified: 0, logged: 0 };

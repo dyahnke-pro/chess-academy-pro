@@ -1811,16 +1811,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           onPlayAgain={onPlayAgain}
           onBackToCoach={onBackToCoach}
           // Wire the "N missed opportunities → Practice" button to the
-          // My Mistakes drill surface — it was dead (the prop was never
-          // passed, so onClick was undefined; David 2026-06-11).
+          // My Mistakes drill surface, SCOPED to this game so it drills the
+          // mistakes you just made — same board, same format (David 2026-06-11).
           onNavigateToMistakes={() => {
             void logAppAudit({
               kind: 'review-walk-started',
               category: 'subsystem',
               source: 'CoachGameReview.onNavigateToMistakes',
-              summary: `missed-opportunities → /tactics/mistakes (${missCount} missed)`,
+              summary: `missed-opportunities → /tactics/mistakes (this game, ${missCount} missed)`,
             });
-            void navigate('/tactics/mistakes');
+            void navigate('/tactics/mistakes', props.gameId ? { state: { sourceGameId: props.gameId } } : undefined);
           }}
         />
         <div className="w-full max-w-md px-4 pb-4">
