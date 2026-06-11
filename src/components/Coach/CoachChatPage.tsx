@@ -11,6 +11,7 @@ import { coachService } from '../../coach/coachService';
 import type { LiveState } from '../../coach/types';
 import { logAppAudit } from '../../services/appAuditor';
 import { voiceService } from '../../services/voiceService';
+import { stripCoachMarkup } from '../../services/sanitizeCoachText';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import type { ChatMessage as ChatMessageType } from '../../types';
@@ -19,7 +20,12 @@ import type { ChatMessage as ChatMessageType } from '../../types';
  *  tags from display text. Tags are parsed and dispatched by the spine;
  *  the user shouldn't see them in the chat bubble. WO-COACH-RESILIENCE
  *  part C added the single-bracket form (Audit Finding 32). */
-const TAG_STRIP_RE = /\[BOARD:[^\]]*\]|\[\[ACTION:[^\]]*\]\]|\[ACTION:[^\]]*\]/gi;
+/** Strip the brain's directive markup for display. Routes through the
+ *  shared, brace-aware `stripCoachMarkup` so a JSON-bearing tag whose
+ *  args carry a `]` (`[ACTION:lookup_player_games {"moves":["e4"]}]`)
+ *  is fully removed instead of half-stripped — the old local regex used
+ *  `[^\]]*` and leaked the tail (David 2026-06-11 Catalan bug). */
+const stripTags = (text: string): string => stripCoachMarkup(text);
 
 const STARTER_CHIPS = [
   'Play the Italian against me',
@@ -38,13 +44,10 @@ const READ_THIS_RE =
 /** Strip markdown/tags so Polly/Web Speech doesn't read "asterisk asterisk
  *  bold asterisk asterisk". Intentionally not a full Markdown parser. */
 function stripMarkdownForTts(text: string): string {
-  return text
-    .replace(/\[BOARD:[^\]]*\]/gi, '')
-    // WO-COACH-RESILIENCE part C: strip BOTH bracket variants. The
-    // double-bracket form was leaking through to Polly (Audit
-    // Finding 32: '[[ACTION:play_move {"san":"e4"}]] Done.').
-    .replace(/\[\[ACTION:[^\]]*\]\]/gi, '')
-    .replace(/\[ACTION:[^\]]*\]/gi, '')
+  // Directive markup first, via the shared brace-aware stripper — covers
+  // [BOARD:…], [ACTION:…], [[ACTION:…]] including JSON args that carry a
+  // `]` (the old inline `[^\]]*` regexes leaked such tails to Polly).
+  return stripCoachMarkup(text)
     .replace(/\*\*(.+?)\*\*/g, '$1')
     .replace(/\*(.+?)\*/g, '$1')
     .replace(/_{1,2}(.+?)_{1,2}/g, '$1')
@@ -304,7 +307,7 @@ export function CoachChatPage(): JSX.Element {
             streamed += chunk;
             // Display side: strip [BOARD:] / [[ACTION:]] tags so the
             // user sees only narrative text in the bubble.
-            const displayText = streamed.replace(TAG_STRIP_RE, '').trim();
+            const displayText = stripTags(streamed).trim();
             setStreamingContent(displayText);
 
             if (shouldSpeak) {
@@ -322,7 +325,7 @@ export function CoachChatPage(): JSX.Element {
                 speechBufferRef.current = speechBufferRef.current.slice(sentenceEnd.index + 1).trimStart();
                 // Strip tags from spoken text too — never read action
                 // tags out loud.
-                const spoken = sentence.replace(TAG_STRIP_RE, '').trim();
+                const spoken = stripTags(sentence).trim();
                 if (spoken) speakOrQueue(spoken);
               }
             }
@@ -332,7 +335,7 @@ export function CoachChatPage(): JSX.Element {
       // Flush any trailing text (no sentence terminator) via the same
       // gating so a tail-only reply still fires.
       if (shouldSpeak) {
-        const tail = speechBufferRef.current.replace(TAG_STRIP_RE, '').trim();
+        const tail = stripTags(speechBufferRef.current).trim();
         if (tail) speakOrQueue(tail);
       }
       speechBufferRef.current = '';
@@ -340,7 +343,7 @@ export function CoachChatPage(): JSX.Element {
       // Strip tags from the final text and append the assistant
       // message into both stores (session + memory). Inherit modality
       // so the renderer can hide the text bubble for voice asks.
-      const cleanText = answer.text.replace(TAG_STRIP_RE, '').trim();
+      const cleanText = stripTags(answer.text).trim();
       const assistantMsg: ChatMessageType = {
         id: `msg-${Date.now()}-resp`,
         role: 'assistant',

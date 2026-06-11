@@ -5,6 +5,45 @@ Insights, the Coach, and Game Review. Captured here so we fix them methodically
 instead of one-screenshot-at-a-time (which at 3am is how a new bug gets shipped).
 
 ## ✅ Fixed + shipped to main tonight
+- **Coach: chat text now matches the spoken narration.** The coach split its
+  output — the `[VOICE:]` marker was spoken while the chat bubble showed the
+  long teaching essay (so the student heard a summary, read an essay; felt like
+  a 2nd LLM call wrote the text — it never was). Both Teach + Game-Review
+  surfaces now DISPLAY the exact `[VOICE:]` content the voice speaks (fallback:
+  the spoken first sentence). Long prose still drives board arrows only.
+  (commit 16e2df6)
+- **Coach: raw `[ACTION:...]` tag leak fixed (#1).** `sanitizeCoachText`'s
+  single-bracket strip used `[^\]]*`, which stopped at a `]` INSIDE the JSON
+  args (a moves array) and leaked the tail. Added a brace-aware `JSON_MARKUP_RE`
+  + held the in-flight tag back during streaming; routed CoachChatPage's local
+  strippers through the shared `stripCoachMarkup`. Regression tests added.
+- **Coach: "Show me a Magnus Catalan" → "no game" fixed (#2).** REAL root
+  cause (David: "magnus has played the catalan!! we have several"): the games
+  ARE in `pro-game-references.json` — Carlsen has **7 Catalan wins** — but the
+  build buckets every game by the player's REPERTOIRE TREE, so they're tagged
+  `openingId: "queens-pawn"` with the actual opening in
+  `variationLabel: "Catalan g3"`. A lookup by `openingId/Name="catalan"` only
+  checked `openingId`, so it missed them. Fix: both the `lookup_player_games`
+  tool AND the auto-injected `playerGames` envelope source now match the
+  opening stem against `variationLabel`/`variation` too (excluding `"vs …"`
+  labels = the player FACING it, not wielding it). Plus a model-games fallback
+  for openings with truly zero references. Regression tests added. (The
+  cleaner long-term fix is to relabel `openingId` honestly in
+  `build-game-references.mjs` — logged as follow-up.)
+- **Game Review: dead "N missed opportunities → Practice" button fixed (#6).**
+  `ReviewSummaryCard`'s `onNavigateToMistakes` prop was never passed by
+  `CoachGameReview`, so the onClick was `undefined`. Wired it to
+  `/tactics/mistakes` (My Mistakes drill surface).
+- **Game Review: mistakes now auto-enroll into puzzles on review (#5).** The
+  bulk `analyzeGames` pipeline generates mistake puzzles inline per game, but a
+  single-game REVIEW never did — so a game opened from the picker dropped its
+  mistakes and David had to tap "add my mistakes to puzzles" by hand. Added a
+  background, idempotent `generateMistakePuzzlesFromGame` call on review mount
+  (per-game meta guard; self-analyzes with Stockfish when annotations missing).
+- **Game Review: misleading "nothing new to drill" copy reworded (#7)** →
+  "No new mistakes — already in your weaknesses".
+
+## ✅ Fixed earlier tonight
 - **Insights: "Endgame errors always 0".** `weaknessAnalyzer` had a *duplicate*
   ply-based `classifyPhase(moveIndex,totalMoves)` ("endgame = last 20 half-moves")
   diverging from the canonical MATERIAL-based `classifyPhase(fen,moveNumber)` the
@@ -14,43 +53,21 @@ instead of one-screenshot-at-a-time (which at 3am is how a new bug gets shipped)
   Mate scores (huge sentinel evals) leaked into the cpLoss delta. Clamped cpLoss
   magnitude at 1000cp for stats. (commit 22f3245)
 
-## 🔴 Open — diagnosed, need proper fixes (NOT 3am hacks)
-
-### Coach
-1. **Raw `[ACTION:lookup_player_opening_moves {...}]` + stray `\` leaked into the
-   chat bubble** (Learn-with-Coach Catalan walkthrough). The action directive
-   should be parsed/executed and hidden, never rendered. → coach response
-   post-processing isn't stripping un-executed action tags. *Coach-pipeline fix;
-   the brain is mid grounding-inversion migration — touch carefully.*
-2. **"Show me a Magnus Catalan" → coach says no game.** Root cause:
-   `src/data/pro-game-references.json` **does not exist** — the breadth-layer game
-   references (STEP 11.5) were never built/committed, so `lookup_player_games`
-   reads nothing and returns zero. Meanwhile `model-games.json` has only **1**
-   Magnus Catalan game (`mg-carlsen-catalan-slav`). Fix: build + commit
-   `pro-game-references.json` for the pros (esp. Carlsen) AND/OR have the coach
-   fall back to the model game when the reference lookup is empty.
+## 🔴 Open — remaining
 
 ### Insights / Weaknesses
-3. **Tactic Recognition table all 0%** (fork/pin/skewer/… both Puzzle & In-game).
-   Source = `classifiedTactics` store (`PatternsTab` → `data.tacticRecognition`).
-   Likely not yet populated (analysis was still running 17/167) — VERIFY after a
-   full analysis completes before treating as a code bug.
+3. **Tactic Recognition table all 0%** — VERIFIED WIRED CORRECTLY, not a code
+   bug. `tacticTransferGap()` derives the puzzle column from `mistakePuzzles`
+   first-try accuracy (0% until the student SOLVES some) and the in-game column
+   from brilliant/great-tagged finds via `scanFoundTacticsByType()` (0% when
+   there are no such finds — a very high bar). So "all 0%" reflects real data:
+   missed tactics captured, none solved-as-puzzle yet, few/no brilliant finds.
+   Re-check after a full analysis + a puzzle-solving session. *Possible future
+   UX: the "In-game recognition" denominator (brilliant/great only) is harsh and
+   reads as "you recognize 0%" — consider a softer recognition signal. Design
+   change, not a bug — leave for David's call.*
 4. **"Errors by phase" donut shows a tiny count** (e.g., 13) for 881 games — it's
    the curated/deduped mistake set, not raw error totals. Confirm that's intended
-   vs. confusing copy.
+   vs. confusing copy. *(Copy/clarity — not yet touched.)*
 
-### Game Review
-5. **Mistakes not auto-added to puzzles** — David had to click "add your mistakes
-   to puzzles" manually at the bottom of the review. The `autoAnalyzeGame`
-   pipeline should enroll mistakes into `mistakePuzzles` automatically. → verify
-   why the auto path didn't fire on this review.
-6. **Dead "2 missed opportunities → Practice" button.** No action on click; should
-   route to the missed-opportunity puzzles. → broken onClick / missing route.
-7. **"Reviewed — nothing new to drill" copy is misleading** — reads as "you have no
-   puzzles to play" when puzzles do exist. Reword.
-
-## Sequencing (suggested)
-1. Game-review UX (5,6,7) — concrete, low-risk, high daily value.
-2. `pro-game-references.json` build (#2) — a content/data build (STEP 11.5).
-3. Coach action-tag strip (#1) — careful, mid-migration.
-4. Verify #3 (tactic recognition) after a full analysis pass; fix if still 0%.
+All other items (#1, #2, #5, #6, #7) fixed — see the shipped list above.

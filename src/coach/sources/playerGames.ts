@@ -57,6 +57,30 @@ function openingIdCandidates(openingId: string): Set<string> {
   return set;
 }
 
+/** Collapse an opening id/name to a comparison stem (drop trailing
+ *  -opening/-defense/-game/etc.) so "catalan", "catalan-opening" and
+ *  "Catalan Opening" all reduce to "catalan". */
+function openingStem(s: string): string {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+    .replace(/-(opening|defense|defence|game|system|variation|attack)$/g, '');
+}
+
+/** A reference game matches the asked opening if its repertoire-tree
+ *  openingId matches OR its variationLabel/variation names the opening
+ *  (the build stashes the ACTUAL opening in the label — Carlsen's
+ *  Catalan wins are openingId "queens-pawn", label "Catalan g3"). A
+ *  "vs <Opening>" label means the player FACED it, so it's excluded
+ *  from a "his <Opening>" ask (David 2026-06-11). */
+function gameMatchesOpening(g: ProGameReference, candidates: Set<string>, stem: string): boolean {
+  if (candidates.has(g.openingId)) return true;
+  if (openingStem(g.openingId) === stem) return true;
+  if (/^vs\b/i.test(g.variationLabel.trim())) return false;
+  const labelNorm = g.variationLabel.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  if (stem && labelNorm.includes(stem)) return true;
+  const varNorm = (g.variation ?? '').toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  return !!stem && varNorm.includes(stem);
+}
+
 export function loadPlayerGamesForLive(args: {
   openingName?: string | null;
   moveHistory: string[];
@@ -85,8 +109,9 @@ export function loadPlayerGamesForLive(args: {
   const openingId = openingNameToId(openingName);
   if (!openingId) return null;
   const candidates = openingIdCandidates(openingId);
+  const stem = openingStem(openingId);
 
-  const matches = ALL_REFS.filter((g) => candidates.has(g.openingId) && !studentLost(g));
+  const matches = ALL_REFS.filter((g) => gameMatchesOpening(g, candidates, stem) && !studentLost(g));
   if (matches.length === 0) return null;
 
   return shape(matches, openingId, openingName, null);

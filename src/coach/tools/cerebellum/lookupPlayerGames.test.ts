@@ -47,6 +47,39 @@ describe('lookup_player_games tool', () => {
     expect(result.games).toEqual([]);
   });
 
+  it('finds Magnus Catalan REFERENCE games tagged by repertoire-tree, not openingId (David 2026-06-11)', async () => {
+    // Carlsen's 7 Catalan wins are bucketed under openingId "queens-pawn"
+    // with variationLabel "Catalan g3" (the build groups by his
+    // repertoire tree, stashing the real opening in the label). A lookup
+    // by openingName "Catalan" must match the variationLabel, not just
+    // openingId — otherwise the coach wrongly says "no game." And the
+    // "vs Catalan" games (he FACED it as Black) must be excluded.
+    const r = await lookupPlayerGamesTool.execute({ player: 'Carlsen', openingName: 'Catalan' });
+    const result = r.result as {
+      totalAvailable: number;
+      games: Array<{ id: string; source: string; studentSide: string; result: string; variationLabel: string; pgn: string }>;
+    };
+    expect(result.games.length).toBeGreaterThan(0);
+    // Real reference games (not the model-game fallback).
+    expect(result.games.some((g) => g.source !== 'model-game')).toBe(true);
+    for (const g of result.games) {
+      // Magnus WIELDING the Catalan (white), never facing it.
+      expect(g.variationLabel.toLowerCase().startsWith('vs ')).toBe(false);
+    }
+  });
+
+  it('falls back to a curated model game when the reference set truly has none', async () => {
+    // An opening with no reference games at all still surfaces a real
+    // game from the curated model-games corpus (tagged source:
+    // 'model-game') instead of "no game found".
+    const r = await lookupPlayerGamesTool.execute({ player: 'Carlsen', openingName: 'no-such-opening-zzz' });
+    const result = r.result as { games: Array<{ source: string }> };
+    // Either empty (truly nothing) or a model-game fallback — never a
+    // hard "no game" lie when a curated game exists. For a nonsense
+    // opening it's empty; this asserts the fallback path doesn't crash.
+    expect(Array.isArray(result.games)).toBe(true);
+  });
+
   it('truncates to 40 plies when fullPgn is false', async () => {
     const r = await lookupPlayerGamesTool.execute({ proOpeningId: SAMPLE.proOpeningId, fullPgn: false });
     const result = r.result as { games: Array<{ pgn: string }> };

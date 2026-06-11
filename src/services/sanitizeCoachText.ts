@@ -33,6 +33,19 @@
  *  lines. */
 const DOUBLE_MARKUP_RE = /\[\[[A-Z][A-Z0-9_]*(?::[\s\S]*?)?\]\]/g;
 
+/** JSON-bearing directive `[DIRECTIVE:name {…json…}]` (single OR double
+ *  bracket). The generic single-bracket strip below uses `[^\]]*`, which
+ *  stops at the FIRST `]` — so a tool whose JSON args carry an array
+ *  (`{"moves":["e4","d4"]}`) only gets HALF-stripped and the tail leaks
+ *  into the chat bubble. Production bug (David 2026-06-11): the Catalan
+ *  Learn-with-Coach walkthrough rendered a raw
+ *  `[ACTION:lookup_player_opening_moves {…}]` with a trailing `\`.
+ *  This pattern anchors on the closing `}` that's followed by the
+ *  marker's `]`, so any `]` INSIDE the JSON (arrays, nested objects) is
+ *  consumed by the lazy body instead of terminating the match early.
+ *  Run BEFORE the generic single-bracket strip. */
+const JSON_MARKUP_RE = /\[\[?[A-Z][A-Z0-9_]*:[^[\]{]*\{[\s\S]*?\}\s*\]\]?/g;
+
 /** Legacy single-bracket form `[DIRECTIVE:args]`. `args` is `[^\]]*`
  *  because legacy tags didn't support nested `]`. */
 const SINGLE_MARKUP_RE = /\[[A-Z][A-Z0-9_]+:[^\]]*\]/g;
@@ -107,6 +120,9 @@ export function stripScaffolding(text: string): {
 function stripMarkup(text: string): string {
   return text
     .replace(DOUBLE_MARKUP_RE, '')
+    // JSON-bearing tags first, so a `]` inside the args can't terminate
+    // the generic single-bracket match early and leak the tail.
+    .replace(JSON_MARKUP_RE, '')
     .replace(SINGLE_MARKUP_RE, '')
     // Collapse runs of horizontal whitespace BUT preserve newlines.
     // `[ \t]+` only matches spaces/tabs so paragraph breaks survive.
@@ -231,6 +247,28 @@ export function sanitizeCoachStream(
       return {
         safe: stripMarkup(buffer.slice(0, lastDoubleOpen)),
         pending: buffer.slice(lastDoubleOpen),
+      };
+    }
+  }
+
+  // Hold back an in-flight SINGLE-bracket directive whose closing `]`
+  // hasn't streamed yet — including JSON-bearing tags
+  // (`[ACTION:name {"moves":["e4"]}]`) whose args carry a `]` we must
+  // NOT mistake for the terminator. Without this the partial tag flashes
+  // in the bubble before the next chunk closes it.
+  const openDirective = /\[[A-Z][A-Z0-9_]*:/g;
+  let dm: RegExpExecArray | null;
+  let lastOpen = -1;
+  while ((dm = openDirective.exec(buffer)) !== null) lastOpen = dm.index;
+  if (lastOpen !== -1) {
+    const rest = buffer.slice(lastOpen);
+    // With a `{`, the tag closes only on `}` + `]`; otherwise on the
+    // first `]`.
+    const closed = /\{/.test(rest) ? /\}\s*\]/.test(rest) : /\]/.test(rest);
+    if (!closed) {
+      return {
+        safe: stripMarkup(buffer.slice(0, lastOpen)),
+        pending: buffer.slice(lastOpen),
       };
     }
   }

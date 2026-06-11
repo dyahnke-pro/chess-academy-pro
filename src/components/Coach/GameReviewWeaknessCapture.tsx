@@ -148,7 +148,7 @@ export function GameReviewWeaknessCapture({
           {captureState === 'idle' && <Target size={15} className="text-theme-accent" />}
           {captureState === 'idle' && `Add this game's mistakes to your weaknesses (${blunders.length})`}
           {captureState === 'running' && 'Reviewing your mistakes…'}
-          {captureState === 'done' && (loggedCount > 0 ? `Added ${loggedCount} to your weaknesses` : 'Reviewed — nothing new to drill')}
+          {captureState === 'done' && (loggedCount > 0 ? `Added ${loggedCount} to your weaknesses` : 'No new mistakes — already in your weaknesses')}
           {captureState === 'already' && 'Already in your weaknesses'}
         </button>
       )}

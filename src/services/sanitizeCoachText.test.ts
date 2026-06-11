@@ -92,6 +92,20 @@ describe('sanitizeCoachText', () => {
       );
     });
 
+    it('strips a single-bracket [ACTION:...] whose JSON args contain a `]` (Catalan leak, David 2026-06-11)', () => {
+      // The bug: `[^\]]*` stopped at the `]` inside the moves array, so
+      // the tag was only HALF-stripped and `]` + trailing prose leaked.
+      const input =
+        'One sec [ACTION:lookup_player_opening_moves {"player":"Carlsen","moves":["d4","Nf6","c4","e6"]}] — pulling his Catalan.';
+      expect(sanitizeCoachText(input)).toBe('One sec — pulling his Catalan.');
+    });
+
+    it('strips a single-bracket JSON tag with escaped quotes + no leak', () => {
+      const input =
+        'Checking [ACTION:lookup {"q":"a \\"sharp\\" line","tags":["open","tactical"]}] now.';
+      expect(sanitizeCoachText(input)).toBe('Checking now.');
+    });
+
     it('does NOT touch chess-notation single brackets', () => {
       // Legitimate chess prose uses brackets in patterns like
       // "[1.e4 e5 2.Nf3]" or "[White to move]". The legacy regex

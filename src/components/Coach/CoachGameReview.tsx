@@ -37,6 +37,8 @@ import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
 import { validateTacticClaims } from '../../services/tacticClaimValidator';
 import { resolveCoachNarration } from '../../utils/coachNarration';
 import { logAppAudit } from '../../services/appAuditor';
+import { generateMistakePuzzlesFromGame } from '../../services/mistakePuzzleService';
+import { db } from '../../db/schema';
 import { CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
 import type { CoachGameMove, KeyMoment, ReviewState, GameAccuracy, MoveClassificationCounts, PhaseAccuracy, MissedTactic } from '../../types';
@@ -141,6 +143,42 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       walkMountedRef.current = false;
     };
   }, []);
+
+  // Auto-enroll THIS game's mistakes into the My Mistakes drill set on
+  // review — the student should never have to tap "add my mistakes to
+  // puzzles" by hand (David 2026-06-11). The bulk analyze pipeline does
+  // this inline per game, but a single-game review never did, so a game
+  // opened straight from the picker dropped its mistakes on the floor.
+  // generateMistakePuzzlesFromGame is idempotent (per-game meta guard)
+  // and self-analyzes with Stockfish when annotations are missing, so
+  // re-reviewing is a cheap no-op. Best-effort + background; the review
+  // UI never waits on it, and the manual capture button stays as a
+  // fallback.
+  useEffect(() => {
+    const gid = props.gameId;
+    if (!gid) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const game = await db.games.get(gid);
+        if (cancelled || !game) return;
+        const prefs = useAppStore.getState().activeProfile?.preferences;
+        const username = game.source === 'chesscom' ? prefs?.chessComUsername
+          : game.source === 'lichess' ? prefs?.lichessUsername
+          : undefined;
+        const made = await generateMistakePuzzlesFromGame(gid, username, playerRating ?? 1200);
+        if (!cancelled && made > 0) {
+          void logAppAudit({
+            kind: 'review-walk-started',
+            category: 'subsystem',
+            source: 'CoachGameReview.autoEnrollMistakes',
+            summary: `auto-enrolled ${made} mistake puzzle(s) from reviewed game ${gid}`,
+          });
+        }
+      } catch { /* best-effort — manual capture button remains */ }
+    })();
+    return () => { cancelled = true; };
+  }, [props.gameId, playerRating]);
 
   // Walk-mode exploration: when the student is on a ply that has a
   // better-move arrow (inaccuracy/mistake/blunder), they can grab the
@@ -1765,6 +1803,18 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           walkReady={walkReady}
           onPlayAgain={onPlayAgain}
           onBackToCoach={onBackToCoach}
+          // Wire the "N missed opportunities → Practice" button to the
+          // My Mistakes drill surface — it was dead (the prop was never
+          // passed, so onClick was undefined; David 2026-06-11).
+          onNavigateToMistakes={() => {
+            void logAppAudit({
+              kind: 'review-walk-started',
+              category: 'subsystem',
+              source: 'CoachGameReview.onNavigateToMistakes',
+              summary: `missed-opportunities → /tactics/mistakes (${missCount} missed)`,
+            });
+            void navigate('/tactics/mistakes');
+          }}
         />
         <div className="w-full max-w-md px-4 pb-4">
           <GameReviewWeaknessCapture
