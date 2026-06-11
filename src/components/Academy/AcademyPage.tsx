@@ -28,11 +28,23 @@ export function AcademyPage(): JSX.Element {
       }
       setIndex(i);
       const ch = book.chapters[i];
-      const text = `${ch.title}. ${ch.paragraphs.join(' ')}`;
-      try {
-        await voiceService.speakReadAloud(text);
-      } catch {
-        /* interrupted — stop/skip handles state */
+      // Speak ONE SENTENCE per call. voiceService streams a single Polly
+      // utterance per call, and a long multi-paragraph chunk can end early
+      // (the MediaSource 'ended' fires before all chunks arrive, or it hits a
+      // length limit) — which made a chapter stop halfway and jump to the next.
+      // Sentence-sized calls are the app's canonical narration unit and resolve
+      // reliably, so we chain sentences within a chapter, then advance.
+      const sentences = `${ch.title}. ${ch.paragraphs.join(' ')}`
+        .split(/(?<=[.!?])\s+/)
+        .map((s) => s.trim())
+        .filter(Boolean);
+      for (const sentence of sentences) {
+        if (token !== tokenRef.current) return;
+        try {
+          await voiceService.speakReadAloud(sentence);
+        } catch {
+          /* interrupted — stop/skip handles state */
+        }
       }
       if (token !== tokenRef.current) return;
       await run(i + 1);
