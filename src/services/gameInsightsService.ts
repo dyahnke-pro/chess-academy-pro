@@ -230,7 +230,11 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
       const moves = reconstructMovesFromGame(game, playerColor);
       if (moves.length === 0) continue;
 
-      totalMoves += moves.length;
+      // reconstructMovesFromGame returns PLIES (both colors). "Moves per
+      // game" is a FULL-move stat (white+black), so convert — it was
+      // reporting ~2x (e.g. 24 instead of 12) on the Overview tab (David
+      // 2026-06-11, same class as the drilldown/card move-count fix).
+      totalMoves += Math.ceil(moves.length / 2);
 
       // Classification counts
       const counts = getClassificationCounts(moves, playerColor);

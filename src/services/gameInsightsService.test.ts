@@ -29,6 +29,10 @@ vi.mock('./accuracyService', () => ({
 
 vi.mock('./gamePhaseService', () => ({
   getPhaseBreakdown: (...args: unknown[]): unknown => mockGetPhaseBreakdown(...args as []),
+  // Stub the rest of the module surface so importers don't hit an
+  // undefined export (the factory replaces the WHOLE module).
+  classifyPhase: (): string => 'middlegame',
+  countMaterial: (): number => 0,
 }));
 
 vi.mock('./missedTacticService', () => ({
