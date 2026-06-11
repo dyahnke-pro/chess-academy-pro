@@ -46,6 +46,10 @@ import { parseCoachIntent } from '../../services/coachAgent';
 import { tryCaptureOpeningIntent, tryCaptureForgetIntent } from '../../services/openingIntentCapture';
 import { findPlansForOpening, sessionFromPlan } from '../../services/middlegamePlanner';
 import { MiddlegamePlanInline } from './MiddlegamePlanInline';
+import { parsePlayerGameRequest } from '../../services/playerGameRequest';
+import { lookupPlayerGamesTool } from '../../coach/tools/cerebellum/lookupPlayerGames';
+import { buildSession } from '../../services/walkthroughAdapter';
+import { fetchChesscomPlayerGames } from '../../services/chesscomGamesService';
 import { OpeningPlayMode } from '../Openings/OpeningPlayMode';
 import type { WalkthroughSession } from '../../types/walkthrough';
 import { classifyPhase } from '../../services/gamePhaseService';
@@ -226,6 +230,37 @@ interface DeepDiveOption {
   extensionSans: string[];
 }
 
+/** One real game returned by the `lookup_player_games` function — the
+ *  fields CoachTeachPage's player-game handler reads off the result. */
+interface FoundPlayerGame {
+  id: string;
+  player: string;
+  studentSide: 'white' | 'black';
+  opponent: string;
+  opponentRating: number | null;
+  result: string;
+  date: string | null;
+  source: string;
+  variationLabel: string;
+  plyCount: number;
+  pgn: string;
+}
+
+/** "1-0" / "0-1" / "1/2-1/2" → a word from the named player's side.
+ *  The lookup already filters out the player's losses, so this is win
+ *  or draw in practice. */
+function gameResultWord(result: string, side: 'white' | 'black'): string {
+  if (result === '1/2-1/2') return 'a draw';
+  const studentWon =
+    (side === 'white' && result === '1-0') || (side === 'black' && result === '0-1');
+  return studentWon ? 'a win' : 'a loss';
+}
+
+/** Title-case a free-text span ("catalan opening" → "Catalan Opening"). */
+function titleCase(s: string): string {
+  return s.replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 /** Walk every fork in the tree and emit one DeepDiveOption per
  *  child. Limited to the FIRST fork's children for surface clarity —
  *  a tree with three forks would emit 9 options otherwise, which
@@ -383,6 +418,11 @@ export function CoachTeachPage(): JSX.Element {
     plans: MiddlegamePlan[];
     side: 'white' | 'black';
   } | null>(null);
+  // In-page model-game viewer (David 2026-06-11): when the student asks
+  // "show me a game that magnus played the catalan" we resolve their REAL
+  // game in code (no LLM tool round-trip) and walk it HERE, on this board.
+  // Reuses the generic voice-gated session player (MiddlegamePlanInline).
+  const [modelGameSession, setModelGameSession] = useState<WalkthroughSession | null>(null);
   const startMiddlegamePlan = useCallback((plan: MiddlegamePlan, orientation: 'white' | 'black'): void => {
     const session = sessionFromPlan(plan, { orientation });
     if (!session) return;
@@ -1173,6 +1213,194 @@ export function CoachTeachPage(): JSX.Element {
           }]);
         }
         return;
+      }
+
+      // ─── Player-game request (BYPASS opening-name resolution) ───
+      // "show me a game that magnus played the catalan" / "how does
+      // carlsen play the catalan" must surface the PLAYER'S REAL game —
+      // NOT get fuzzy-matched as an opening NAME and bounced back with a
+      // "Did you mean Catalan Opening?" picker (David 2026-06-11: the ask
+      // never reached the lookup, even though we ship 5 Carlsen Catalan
+      // wins on disk). This is the inverted/no-tools pattern: code parses
+      // the ask and calls `lookup_player_games` as a PLAIN FUNCTION, then
+      // walks the game in-page. The LLM is never in this loop — no tool-use
+      // round-trip, no toolbelt tokens, nothing to "decide" (G0). Runs
+      // BEFORE the fuzzy matcher so the hijack can't happen.
+      {
+        const pgReq = parsePlayerGameRequest(text);
+        if (pgReq) {
+          const fuzzy = fuzzyMatchOpening(pgReq.openingQuery);
+          const openingName =
+            fuzzy.candidates[0]?.canonicalName ?? titleCase(pgReq.openingQuery);
+          const openingIsReal = fuzzy.candidates.length > 0;
+
+          // FAST PATH — DETERMINISTIC on-disk lookup. The tool's execute()
+          // is just an async function over bundled data (+ model-game
+          // fallback). No LLM, no tool-use round-trip, no tokens.
+          let diskGames: FoundPlayerGame[] = [];
+          try {
+            const res = await lookupPlayerGamesTool.execute({
+              player: pgReq.player,
+              openingName,
+              limit: 6,
+              fullPgn: true,
+            });
+            const payload = res.ok
+              ? (res.result as { games?: FoundPlayerGame[] } | undefined)
+              : undefined;
+            if (payload && Array.isArray(payload.games)) diskGames = payload.games;
+          } catch {
+            diskGames = [];
+          }
+
+          // Only short-circuit when we can ACT: a game on disk, or the
+          // opening is a real opening (so online lookup / an honest "no
+          // game" is correct). Otherwise fall through to normal routing —
+          // a rare misparse must not get eaten here.
+          if (diskGames.length > 0 || openingIsReal) {
+            const pgTurnId = `t-${Date.now()}-player-game`;
+            setMessages((prev) => [...prev, {
+              id: `${pgTurnId}-u`,
+              role: 'user',
+              content: text,
+              timestamp: Date.now(),
+            }]);
+            useCoachMemoryStore.getState().appendConversationMessage({
+              surface: 'chat-teach',
+              role: 'user',
+              text,
+              fen: opts?.fenOverride ?? gameRef.current.fen,
+              trigger: null,
+            });
+
+            // Normalize on-disk + online games into one mountable shape so
+            // both sources walk the board identically.
+            interface MountableGame {
+              player: string;
+              studentSide: 'white' | 'black';
+              opponent: string;
+              opponentRating: number | null;
+              result: string;
+              date: string | null;
+              pgn: string;
+            }
+            let mountable: MountableGame[] = diskGames.map((g) => ({
+              player: g.player,
+              studentSide: g.studentSide,
+              opponent: g.opponent,
+              opponentRating: g.opponentRating,
+              result: g.result,
+              date: g.date,
+              pgn: g.pgn,
+            }));
+            let source: 'disk' | 'chesscom' = 'disk';
+
+            // ONLINE "deeper" layer — nothing on disk, so pull from the
+            // player's LIVE chess.com history (David 2026-06-11). Wins the
+            // player wielded in this opening; bounded + degrades to [].
+            if (mountable.length === 0) {
+              const searchingId = `${pgTurnId}-searching`;
+              setMessages((prev) => [...prev, {
+                id: searchingId,
+                role: 'assistant',
+                content: `Nothing on disk — checking ${titleCase(pgReq.player)}'s chess.com games…`,
+                timestamp: Date.now(),
+              }]);
+              try {
+                const online = await fetchChesscomPlayerGames({
+                  player: pgReq.player,
+                  opening: pgReq.openingQuery,
+                  limit: 3,
+                });
+                mountable = online.map((g) => ({
+                  player: titleCase(pgReq.player),
+                  studentSide: g.studentSide,
+                  opponent: g.opponent,
+                  opponentRating: g.opponentRating,
+                  result: g.result,
+                  date: g.date,
+                  pgn: g.pgn,
+                }));
+                if (mountable.length > 0) source = 'chesscom';
+              } catch {
+                mountable = [];
+              }
+            }
+
+            if (mountable.length > 0) {
+              const top = mountable[0];
+              const sideWord = top.studentSide === 'white' ? 'with White' : 'with Black';
+              const oppRating = top.opponentRating ? ` (${top.opponentRating})` : '';
+              const when = top.date ? ` in ${top.date}` : '';
+              const srcNote = source === 'chesscom' ? ' — pulled live from his chess.com games' : '';
+              const more =
+                mountable.length > 1
+                  ? ` I found ${mountable.length} — ask again for another.`
+                  : '';
+              const prose =
+                `Here's ${top.player} ${sideWord} in the ${openingName} — ` +
+                `${gameResultWord(top.result, top.studentSide)} over ${top.opponent}${oppRating}${when}${srcNote}. ` +
+                `Walking it on the board now — tap Play or step through with the arrows.${more}`;
+
+              // Build a silent walkthrough of the REAL game and mount it.
+              const session = buildSession({
+                pgn: top.pgn,
+                title: `${top.player} vs ${top.opponent}`,
+                subtitle: `${openingName} · ${top.result}${when}`,
+                orientation: top.studentSide,
+                kind: 'opening',
+                source: `player-game-${source}`,
+              });
+              setModelGameSession(session);
+
+              setMessages((prev) => [...prev, {
+                id: `${pgTurnId}-c`,
+                role: 'assistant',
+                content: prose,
+                timestamp: Date.now(),
+              }]);
+              useCoachMemoryStore.getState().appendConversationMessage({
+                surface: 'chat-teach',
+                role: 'coach',
+                text: prose,
+                fen: opts?.fenOverride ?? gameRef.current.fen,
+                trigger: null,
+              });
+              void logAppAudit({
+                kind: 'coach-surface-migrated',
+                category: 'subsystem',
+                source: 'CoachTeachPage.handleSubmit.playerGame',
+                summary:
+                  `player-game "${text.slice(0, 50)}" → ${top.player} / ${openingName} ` +
+                  `(${source}, ${mountable.length} found) — mounted ${session.steps.length}-ply game`,
+              });
+            } else {
+              const prose =
+                `I couldn't find one of ${titleCase(pgReq.player)}'s ${openingName} games on disk or in their chess.com history. ` +
+                `Want me to walk the ${openingName} itself? Just say "teach me the ${openingName}".`;
+              setMessages((prev) => [...prev, {
+                id: `${pgTurnId}-c`,
+                role: 'assistant',
+                content: prose,
+                timestamp: Date.now(),
+              }]);
+              useCoachMemoryStore.getState().appendConversationMessage({
+                surface: 'chat-teach',
+                role: 'coach',
+                text: prose,
+                fen: opts?.fenOverride ?? gameRef.current.fen,
+                trigger: null,
+              });
+              void logAppAudit({
+                kind: 'coach-surface-migrated',
+                category: 'subsystem',
+                source: 'CoachTeachPage.handleSubmit.playerGame',
+                summary: `player-game "${text.slice(0, 50)}" → no game for ${pgReq.player} in ${openingName} (disk+online)`,
+              });
+            }
+            return;
+          }
+        }
       }
 
       // ─── Middlegame-plan intent (BYPASS opening-name resolution) ───
@@ -3162,6 +3390,16 @@ export function CoachTeachPage(): JSX.Element {
           session={middlegameSession}
           onExit={() => setMiddlegameSession(null)}
           onPlayOut={handlePlayOutPlan}
+        />
+      )}
+      {/* In-page model game (David 2026-06-11): "show me a game that
+          magnus played the catalan" walks the player's REAL game here.
+          Same generic voice-gated session player; no onPlayOut (a model
+          game isn't a plan to "play out"). "Lesson" returns. */}
+      {modelGameSession && (
+        <MiddlegamePlanInline
+          session={modelGameSession}
+          onExit={() => setModelGameSession(null)}
         />
       )}
       {/* In-page play-out (David 2026-05-29): after a plan, the student
