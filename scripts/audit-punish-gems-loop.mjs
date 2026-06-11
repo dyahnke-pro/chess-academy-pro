@@ -51,7 +51,40 @@ process.on('unhandledRejection', (err) => {
   console.log(`[loop] (non-fatal) unhandledRejection: ${String(err).slice(0, 140)}`);
 });
 
-const URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
+// 🔒 PIN A STABLE BUNDLE (David 2026-06-11). The rolling prod alias
+// (chess-academy-pro.vercel.app) is a MOVING TARGET during active parallel
+// deploys: a mid-run redeploy changes chunk hashes, so the 15-min-old page
+// 404s a lazy chunk → index.html (MIME text/html) or hits a mismatched
+// function (t.startsWith) at the late passes — breaking an otherwise-clean
+// 8/8 for reasons that are NOT the app. When targeting the rolling alias,
+// resolve the LATEST READY Production deployment's IMMUTABLE url and audit
+// THAT instead, so the bundle can't shift under the run. Falls back to the
+// alias when VERCEL_TOKEN is absent, AUDIT_NO_PIN is set, or resolution fails.
+async function resolvePinnedUrl(url) {
+  const ROLLING = /^https?:\/\/chess-academy-pro\.vercel\.app\/?$/;
+  const token = process.env.VERCEL_TOKEN;
+  if (process.env.AUDIT_NO_PIN || !ROLLING.test(url) || !token) return url;
+  try {
+    const res = await fetch(
+      'https://api.vercel.com/v6/deployments?app=chess-academy-pro&target=production&state=READY&limit=1',
+      { headers: { Authorization: `Bearer ${token}` } },
+    );
+    const data = await res.json();
+    const host = data?.deployments?.[0]?.url;
+    if (host) {
+      const pinned = `https://${host}`;
+      console.log(`[loop] PINNED to immutable deployment ${pinned}`);
+      console.log('[loop]   (rolling alias chess-academy-pro.vercel.app is a moving target during parallel deploys — pinning a fixed bundle so a mid-run redeploy can\'t break late passes; set AUDIT_NO_PIN=1 to opt out)');
+      return pinned;
+    }
+    console.log('[loop] pin: no READY production deployment returned — using rolling alias');
+  } catch (e) {
+    console.log(`[loop] pin resolve failed (${String(e).slice(0, 80)}) — using rolling alias`);
+  }
+  return url;
+}
+
+const URL = await resolvePinnedUrl(process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173');
 // CONTRACT: consecutive error-free passes required (David 2026-06-10: 3 → 8).
 // Override with AUDIT_PASSES for a quicker smoke during development.
 const REQUIRED_PASSES = Math.max(1, Number(process.env.AUDIT_PASSES) || 8);
