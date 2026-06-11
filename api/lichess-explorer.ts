@@ -100,7 +100,7 @@ async function handlePlayerSource(
         headers: {
           ...cors,
           'Content-Type': 'application/json',
-          'Cache-Control': 'public, max-age=60, s-maxage=60',
+          'Cache-Control': 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800',
           'X-Lichess-Proxy-Source': 'player-first-line',
         },
       });
@@ -232,7 +232,7 @@ export default async function handler(req: Request): Promise<Response> {
           headers: {
             ...cors,
             'Content-Type': 'application/json',
-            'Cache-Control': 'public, max-age=60, s-maxage=60',
+            'Cache-Control': 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800',
             // Diagnostic: which UA in the chain succeeded. Helps the
             // client confirm we found a working format.
             'X-Lichess-Proxy-Ua-Index': String(i),
