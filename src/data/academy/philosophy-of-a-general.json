@@ -68,8 +68,23 @@
       "sources": "Young, Chess Generalship (Grand Reconnaissance; the decisive point); Capablanca, Chess Fundamentals (Ch. V, \"The Sudden Attack from a Different Side\" — the principle of two weaknesses); Nimzowitsch, My System (provoking weakness; play on two wings)."
     },
     {
-      "id": "locking-down-the-position",
+      "id": "the-commander-s-calculus",
       "label": "Lesson 4",
+      "title": "The Commander's Calculus",
+      "paragraphs": [
+        "Before a general commits to attack or to defend, he must answer one question, and answer it honestly: am I the stronger army here, or the weaker? Almost every great blunder of the board begins with a wrong answer — the commander who believes himself winning when he is losing overreaches and is destroyed; the one who believes himself losing when he is winning plays timidly and lets the victory slip away. So take the measure of a position coldly, by the three elements you already carry. Force — who has more men, and whose are the more active. Space — who commands more ground, whose army moves freely and whose is cramped. Time — who holds the initiative, who dictates and who merely answers. Weigh them together and a verdict appears — not a number, but a story: \"I am a soldier up, but my king stands bare,\" \"he has the freer position, yet I hold the safer one.\" And that verdict decides your whole posture: when you judge yourself the stronger, you press and attack; when you judge yourself the weaker, you defend, simplify, and seek counterplay; when the scales hang level, you do not force matters — you maneuver, and manufacture the small imbalance you can later exploit. The general who reads the balance truly never plays the wrong kind of game."
+      ],
+      "cliffsNotes": [
+        "Before any plan, answer honestly: am I the stronger army here, or the weaker?",
+        "Weigh the three elements — Force, Space, Time — into a verdict (a *story*, not a number).",
+        "Stronger → press and attack; weaker → defend, simplify, seek counterplay; level → maneuver and unbalance.",
+        "Most great blunders begin with a wrong reading of the balance."
+      ],
+      "sources": "Znosko-Borovsky, The Middle Game in Chess (Valuation of Position; superior, inferior, and equal positions); Capablanca, Chess Fundamentals (judging a position before choosing a plan); Emanuel Lasker, Common Sense in Chess (the balance of the game)."
+    },
+    {
+      "id": "locking-down-the-position",
+      "label": "Lesson 5",
       "title": "Locking Down the Position",
       "paragraphs": [
         "Before you raise your sword, bar the doors. A wise commander, on the eve of his assault, makes certain his enemy cannot strike back — for an attack succeeds only when the ground behind it is secure. So before you launch your forces on one wing, you lock the rest of the board down.",
@@ -84,7 +99,7 @@
     },
     {
       "id": "holding-the-ground",
-      "label": "Lesson 5",
+      "label": "Lesson 6",
       "title": "Holding the Ground",
       "paragraphs": [
         "An army marches on its supply lines, and on the chessboard those lines are the pawns. They are the slowest, humblest soldiers, and they decide everything — for they alone cannot retreat, and the shape they make is the shape of the whole campaign. A chain of pawns is a fortress wall: attack it at its base, where it stands on the earth, never at its crowned summit. A lone soldier with no comrade to shield him is a weakness the enemy will besiege for the rest of the game. And the squares your pawns can never again guard become holes — open gates through which an enemy knight will ride and plant itself where nothing can drive it out. Read the pawns, and the terrain itself tells you where to march and where to dig in."
@@ -98,7 +113,7 @@
     },
     {
       "id": "the-decisive-point",
-      "label": "Lesson 6",
+      "label": "Lesson 7",
       "title": "The Decisive Point",
       "paragraphs": [
         "Victory is won at a single point — the place where the enemy's line is thinnest. The general's task is to find that point, or to make one, and then to bring overwhelming force against it. But a stout enemy can defend one weak point with his whole strength. So the master creates a second, far from the first, and shifts his pressure between them. No defender stands in two places at once; stretch his line between two fires and somewhere it must tear. One weakness can be held. Two cannot. This is how a small edge becomes a won war — and why the diversion is no mere trick but a law of command: the enemy dragged to one fire cannot smother the other."
@@ -112,7 +127,7 @@
     },
     {
       "id": "commanding-the-forces",
-      "label": "Lesson 7",
+      "label": "Lesson 8",
       "title": "Commanding the Forces",
       "paragraphs": [
         "Each soldier has a nature, and the general who uses each according to its nature commands a far stronger army than his men alone would suggest. The knight is cavalry — it leaps the walls and strikes where nothing expects it, but it is slow, and must be marched patiently to the strong square from which it will dominate. The bishops are long-range gunners, deadly down an open line, useless behind their own walls — so open the board for them, or trade off the one your own pawns have imprisoned. The rooks are siege engines that come to life on open roads and crash through on the enemy's last rank. And the queen — the heaviest artillery on the field — does not lead the charge: she is too precious, too easily driven off by a common foot-soldier, losing you a tempo with every retreat. She supports from behind the lighter pieces and comes forward only to deliver the final blow once they have broken the line. Lead with your queen, and you will spend your strongest piece chasing shadows."
@@ -125,8 +140,23 @@
       "sources": "Capablanca, Chess Fundamentals (relative value of knight & bishop; piece coordination); Nimzowitsch, My System (the outpost, manoeuvring, open files); Alekhine, My Best Games 1908-1923 (the heavy pieces in the attack — the queen's supporting role)."
     },
     {
+      "id": "the-doctrine-of-the-exchange",
+      "label": "Lesson 9",
+      "title": "The Doctrine of the Exchange",
+      "paragraphs": [
+        "Every time pieces are traded the character of the battle changes, and a general who trades carelessly throws away won positions and prolongs lost ones. An exchange is a decision, never a reflex, and it is governed by a few plain laws. First: exchange your worst soldier for his best. The whole purpose of a trade is to leave you a finer army than before — so give your bad bishop for his good knight, your passive rook for his active one, and never the reverse. Second: trade by the verdict of the balance. When you are the stronger — a man up — trade pieces freely, for every exchange carries you nearer the simple won ending where one extra soldier decides; when you are cramped, trade also, for each piece swapped gives your crowded ranks room to breathe. But when you are attacking, do the opposite — never trade the very pieces carrying your assault, for each one exchanged halves the storm. Third: trade toward the ending you want. A swap that leaves you the healthier pawns, or the better minor piece for the coming endgame, is a good trade even when the material is dead level. Judge every exchange by one question, and one only: when the smoke clears, is my position the better — or his?"
+      ],
+      "cliffsNotes": [
+        "A trade changes the whole battle — it is a decision, never a reflex.",
+        "Exchange your worst piece for his best (bad bishop for good knight); never the reverse.",
+        "Stronger or cramped → trade pieces; attacking → never trade your attackers.",
+        "Judge every exchange by one question: when the smoke clears, is *my* position better?"
+      ],
+      "sources": "Capablanca, Chess Fundamentals (simplification when ahead; the relative value of the pieces); Nimzowitsch, My System (the good and bad bishop; exchanging into a favourable structure); Znosko-Borovsky, The Middle Game in Chess (the transformation of advantages)."
+    },
+    {
       "id": "the-assault",
-      "label": "Lesson 8",
+      "label": "Lesson 10",
       "title": "The Assault",
       "paragraphs": [
         "When the position is ripe — when you hold more force in the sector, when the lines to the enemy king stand open, when your reconnaissance and your restraint have done their work — then, and only then, you attack. And when you attack, commit everything. The commonest failed assault is the one launched by two or three pieces while the rest of the army idles in the rear. Count your attackers against his defenders: bring more strength to bear on the king than can shield it, and the line breaks. Open the roads, march up every reserve, and strike. A half-hearted attack is worse than none, for it spends your position and hands back the very initiative you fought so hard to win."
@@ -140,7 +170,7 @@
     },
     {
       "id": "the-defence-and-the-counterstroke",
-      "label": "Lesson 9",
+      "label": "Lesson 11",
       "title": "The Defence and the Counterstroke",
       "paragraphs": [
         "Not every battle is yours to dictate; sometimes the storm falls on you. The poor general panics, and the panic loses what calm would have held. Defend as actively as you would attack. Trade away the enemy's attacking pieces — every one you exchange halves the storm. Give back material, even, to reach safe ground; a returned pawn is cheap when it buys your king's life. And remember: the strongest defence is not defence at all, but the counterstroke — a blow against a weakness on the far side of the board, so the attacker must break off and rush home to save himself. Most assaults are bluffs that crumble the instant they meet a commander who does not flinch. Find the one saving resource, and the enemy who overcommitted will find his army stranded."
@@ -154,7 +184,7 @@
     },
     {
       "id": "the-will-to-win",
-      "label": "Lesson 10",
+      "label": "Lesson 12",
       "title": "The Will to Win",
       "paragraphs": [
         "Here is the truth the diagrams never show: chess is a fight between two minds, and the stronger will often defeats the stronger position. Your enemy is not the wooden pieces; he is the man across the board, with his fears, his impatience, his fatigue. The great champions won not by calculation alone but by struggle — by the refusal to be beaten, by setting their opponent the hardest problem on every single move, by holding the tension until the other will broke first. Resolve is a weapon. Patience is a weapon. Make your enemy solve, and solve, and solve again — for it is far harder to defend a long siege than to press one, and sooner or later he will fail."
@@ -168,7 +198,7 @@
     },
     {
       "id": "forcing-the-surrender",
-      "label": "Lesson 11",
+      "label": "Lesson 13",
       "title": "Forcing the Surrender",
       "paragraphs": [
         "When the armies have thinned and the great clashes are past, the campaign enters its final phase — and everything changes. The king, who spent the battle hidden in his fortress, now throws off his caution and becomes a fighting general, marching to the front to lead the last advance. A single extra soldier, meaningless in the chaos of the middlegame, now marches to the far rank to be crowned and decides the war. Technique here is not brilliance; it is the patient, merciless removal of the enemy's last hope — trading down, advancing the king, escorting the passed soldier home. The general who learned to win small advantages now learns the harder art: to convert them, and to accept the surrender."
@@ -182,7 +212,7 @@
     },
     {
       "id": "the-culminating-point-of-the-attack",
-      "label": "Lesson 12",
+      "label": "Lesson 14",
       "title": "The Culminating Point of the Attack",
       "paragraphs": [
         "Every offensive carries within it the seed of its own exhaustion. Clausewitz called it the culminating point of the attack — the moment when an advancing army's strength peaks, and beyond which every further step actually weakens it: the supply lines stretch thin, the men tire, the surprise is spent, and the defender, falling back onto his reserves, grows stronger by the hour. The hardest art of the great general is to feel that point arriving, and at the very crest of his attack to stop, consolidate, and bank his gains — before he overreaches into ruin.",
@@ -198,7 +228,7 @@
     },
     {
       "id": "the-enemy-s-centre-of-gravity",
-      "label": "Lesson 13",
+      "label": "Lesson 15",
       "title": "The Enemy's Centre of Gravity",
       "paragraphs": [
         "Clausewitz taught his generals not to fritter their strength against the enemy's whole line, but to find his centre of gravity — \"the hub of all power and movement, on which everything depends,\" the one thing that holds his entire position together. Strike that, with everything you have, and the rest collapses of its own weight. It is the opposite of scattering blows; it is concentration against the single load-bearing point.",
@@ -214,7 +244,7 @@
     },
     {
       "id": "inside-his-decision-loop",
-      "label": "Lesson 14",
+      "label": "Lesson 16",
       "title": "Inside His Decision Loop",
       "paragraphs": [
         "The American strategist John Boyd taught that victory does not always go to the stronger force, but to the one that thinks and acts faster than its enemy can react. Every commander, he said, runs a loop: he observes the situation, orients himself to make sense of it, decides, and acts — and the way to defeat him is to \"get inside his loop,\" to change the situation faster than he can re-orient, so that every decision he reaches is already answering a battle that no longer exists. Speed alone is not the point; disruption is — keep transforming the problem until his understanding is always one step stale.",

@@ -138,7 +138,38 @@ wings).
 
 ---
 
-## Lesson 4 — Locking Down the Position
+## Lesson 4 — The Commander's Calculus
+
+Before a general commits to attack or to defend, he must answer one question, and
+answer it honestly: am I the stronger army here, or the weaker? Almost every great
+blunder of the board begins with a wrong answer — the commander who believes himself
+winning when he is losing overreaches and is destroyed; the one who believes himself
+losing when he is winning plays timidly and lets the victory slip away. So take the
+measure of a position coldly, by the three elements you already carry. **Force** — who
+has more men, and whose are the more active. **Space** — who commands more ground,
+whose army moves freely and whose is cramped. **Time** — who holds the initiative, who
+dictates and who merely answers. Weigh them together and a verdict appears — not a
+number, but a story: "I am a soldier up, but my king stands bare," "he has the freer
+position, yet I hold the safer one." And that verdict decides your whole posture: when
+you judge yourself the stronger, you press and attack; when you judge yourself the
+weaker, you defend, simplify, and seek counterplay; when the scales hang level, you do
+not force matters — you maneuver, and manufacture the small imbalance you can later
+exploit. The general who reads the balance truly never plays the wrong kind of game.
+
+**Sources.** Znosko-Borovsky, *The Middle Game in Chess* (Valuation of Position;
+superior, inferior, and equal positions); Capablanca, *Chess Fundamentals* (judging a
+position before choosing a plan); Emanuel Lasker, *Common Sense in Chess* (the balance
+of the game).
+
+### CliffsNotes
+- Before any plan, answer honestly: am I the **stronger** army here, or the weaker?
+- Weigh the three elements — Force, Space, Time — into a verdict (a *story*, not a number).
+- Stronger → press and attack; weaker → defend, simplify, seek counterplay; level → maneuver and unbalance.
+- Most great blunders begin with a wrong reading of the balance.
+
+---
+
+## Lesson 5 — Locking Down the Position
 
 Before you raise your sword, bar the doors. A wise commander, on the eve of his assault,
 makes certain his enemy cannot strike back — for an attack succeeds only when the ground
@@ -165,7 +196,7 @@ the wing attack); Znosko-Borovsky, *The Middle Game in Chess* (control of the po
 
 ---
 
-## Lesson 5 — Holding the Ground
+## Lesson 6 — Holding the Ground
 
 An army marches on its supply lines, and on the chessboard those lines are the pawns.
 They are the slowest, humblest soldiers, and they decide everything — for they alone
@@ -188,7 +219,7 @@ Lasker, *Chess Strategy* (the pawn skeleton).
 
 ---
 
-## Lesson 6 — The Decisive Point
+## Lesson 7 — The Decisive Point
 
 Victory is won at a single point — the place where the enemy's line is thinnest. The
 general's task is to find that point, or to *make* one, and then to bring overwhelming
@@ -210,7 +241,7 @@ play on two wings); Znosko-Borovsky, *The Middle Game in Chess* (objects of atta
 
 ---
 
-## Lesson 7 — Commanding the Forces
+## Lesson 8 — Commanding the Forces
 
 Each soldier has a nature, and the general who uses each according to its nature commands
 a far stronger army than his men alone would suggest. The knight is cavalry — it leaps
@@ -236,7 +267,37 @@ coordination); Nimzowitsch, *My System* (the outpost, manoeuvring, open files); 
 
 ---
 
-## Lesson 8 — The Assault
+## Lesson 9 — The Doctrine of the Exchange
+
+Every time pieces are traded the character of the battle changes, and a general who
+trades carelessly throws away won positions and prolongs lost ones. An exchange is a
+decision, never a reflex, and it is governed by a few plain laws. **First: exchange your
+worst soldier for his best.** The whole purpose of a trade is to leave you a finer army
+than before — so give your bad bishop for his good knight, your passive rook for his
+active one, and never the reverse. **Second: trade by the verdict of the balance.** When
+you are the stronger — a man up — trade pieces freely, for every exchange carries you
+nearer the simple won ending where one extra soldier decides; when you are cramped, trade
+also, for each piece swapped gives your crowded ranks room to breathe. But when you are
+*attacking*, do the opposite — never trade the very pieces carrying your assault, for each
+one exchanged halves the storm. **Third: trade toward the ending you want.** A swap that
+leaves you the healthier pawns, or the better minor piece for the coming endgame, is a
+good trade even when the material is dead level. Judge every exchange by one question, and
+one only: when the smoke clears, is *my* position the better — or his?
+
+**Sources.** Capablanca, *Chess Fundamentals* (simplification when ahead; the relative
+value of the pieces); Nimzowitsch, *My System* (the good and bad bishop; exchanging into a
+favourable structure); Znosko-Borovsky, *The Middle Game in Chess* (the transformation of
+advantages).
+
+### CliffsNotes
+- A trade changes the whole battle — it is a decision, never a reflex.
+- **Exchange your worst piece for his best** (bad bishop for good knight); never the reverse.
+- Stronger or cramped → trade pieces; **attacking → never trade your attackers**.
+- Judge every exchange by one question: when the smoke clears, is *my* position better?
+
+---
+
+## Lesson 10 — The Assault
 
 When the position is ripe — when you hold more force in the sector, when the lines to the
 enemy king stand open, when your reconnaissance and your restraint have done their work —
@@ -258,7 +319,7 @@ Emanuel Lasker, *Common Sense in Chess* (the attack on the king); Alekhine, *My 
 
 ---
 
-## Lesson 9 — The Defence and the Counterstroke
+## Lesson 11 — The Defence and the Counterstroke
 
 Not every battle is yours to dictate; sometimes the storm falls on you. The poor general
 panics, and the panic loses what calm would have held. Defend as actively as you would
@@ -281,7 +342,7 @@ enemy who overcommitted will find his army stranded.
 
 ---
 
-## Lesson 10 — The Will to Win
+## Lesson 12 — The Will to Win
 
 Here is the truth the diagrams never show: chess is a fight between two minds, and the
 stronger will often defeats the stronger position. Your enemy is not the wooden pieces; he
@@ -303,7 +364,7 @@ and ideas).
 
 ---
 
-## Lesson 11 — Forcing the Surrender
+## Lesson 13 — Forcing the Surrender
 
 When the armies have thinned and the great clashes are past, the campaign enters its final
 phase — and everything changes. The king, who spent the battle hidden in his fortress, now
@@ -327,12 +388,12 @@ principle of the position); Edward Lasker, *Chess & Checkers* (fundamental endin
 
 # The Advanced Doctrine — Three Laws from the Great Captains of War
 
-*The eleven lessons above are the timeless wisdom of the chess masters. These three are
+*The thirteen lessons above are the timeless wisdom of the chess masters. These three are
 drawn from the theorists of real war — Clausewitz and Boyd — and translated, for the first
 time, into doctrine for the board. They are the advanced concepts: harder to see, decisive
 when you do.*
 
-## Lesson 12 — The Culminating Point of the Attack
+## Lesson 14 — The Culminating Point of the Attack
 
 Every offensive carries within it the seed of its own exhaustion. Clausewitz called it the
 **culminating point of the attack** — the moment when an advancing army's strength peaks,
@@ -367,7 +428,7 @@ original concept.*
 
 ---
 
-## Lesson 13 — The Enemy's Centre of Gravity
+## Lesson 15 — The Enemy's Centre of Gravity
 
 Clausewitz taught his generals not to fritter their strength against the enemy's whole
 line, but to find his **centre of gravity** — "the hub of all power and movement, on which
@@ -399,7 +460,7 @@ original concept.*
 
 ---
 
-## Lesson 14 — Inside His Decision Loop
+## Lesson 16 — Inside His Decision Loop
 
 The American strategist John Boyd taught that victory does not always go to the *stronger*
 force, but to the one that thinks and acts faster than its enemy can react. Every commander,
