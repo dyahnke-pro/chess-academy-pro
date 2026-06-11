@@ -52,20 +52,48 @@ function shortTitle(title: string): string {
   return title.split(':')[0].trim();
 }
 
+/**
+ * Split a passage block into readable, individually-clickable paragraphs.
+ * The source book text is usually ONE long block with no blank lines, which
+ * left the reader with a single un-clickable wall per page — so "tap a
+ * paragraph to start reading from there" had nothing to tap between. Split
+ * on blank lines first; then break any long block into ~2-sentence
+ * paragraphs so the student can tap a later paragraph and have the read
+ * start there (David 2026-06-11). Short blocks pass through untouched.
+ */
+function splitIntoReadableBlocks(text: string): string[] {
+  const blocks = text.split('\n\n').map((b) => b.trim()).filter(Boolean);
+  const out: string[] = [];
+  for (const block of blocks) {
+    if (block.length <= 280) {
+      out.push(block);
+      continue;
+    }
+    // Split on real sentence boundaries only — punctuation followed by a
+    // space and a capital. This deliberately does NOT break on chess move
+    // notation like "...b4" / "...d5" (no space after the dots, move starts
+    // lower/uppercase with no preceding boundary), which a naive [.!?] split
+    // shredded into fragments.
+    const sentences = block.split(/(?<=[.!?])\s+(?=[A-Z])/).map((s) => s.trim()).filter(Boolean);
+    for (let i = 0; i < sentences.length; i += 2) {
+      const chunk = sentences.slice(i, i + 2).join(' ').trim();
+      if (chunk) out.push(chunk);
+    }
+  }
+  return out;
+}
+
 function buildParagraphs(
   chapterId: string,
   passageIdx: number,
   title: string | undefined,
   text: string,
 ): ReaderParagraph[] {
-  return text
-    .split('\n\n')
-    .filter(Boolean)
-    .map((para, j) => ({
-      id: `${chapterId}-p${passageIdx}-${j}`,
-      text: para,
-      spoken: j === 0 && title ? `${title}. ${para}` : para,
-    }));
+  return splitIntoReadableBlocks(text).map((para, j) => ({
+    id: `${chapterId}-p${passageIdx}-${j}`,
+    text: para,
+    spoken: j === 0 && title ? `${title}. ${para}` : para,
+  }));
 }
 
 function pageToPassage(chapterId: string, idx: number, p: BookPage): ReaderPassage {

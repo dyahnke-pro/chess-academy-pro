@@ -115,13 +115,27 @@ async function main() {
   // ── Instrument 1: drive the reads ───────────────────────────────────
   const book = page.locator('[data-testid="book-reader"]');
   if (await book.count()) {
-    const para = book.locator('[data-testid^="book-paragraph-"]').first();
-    if (await para.count()) {
-      const reads = await clickAndCapture(page, para, 'From-the-Books paragraph');
-      const full = reads.find((r) => r.len > 60);
-      rec('From-the-Books paragraph reads (full passage)', !!full,
-        full ? `len=${full.len} "${full.text.slice(0, 50)}…"` : `reads=${reads.length}`);
-    } else rec('From-the-Books paragraph present', false, 'no book-paragraph testid');
+    const paras = book.locator('[data-testid^="book-paragraph-"]');
+    const n = await paras.count();
+    // Each book page must offer MULTIPLE tappable paragraphs (the fix —
+    // single-block pages were one un-clickable wall).
+    rec('From-the-Books page has multiple clickable paragraphs', n >= 2, `count=${n}`);
+    if (n >= 1) {
+      const reads = await clickAndCapture(page, paras.first(), 'From-the-Books paragraph 1');
+      rec('From-the-Books paragraph 1 reads', reads.length > 0, reads[0] ? `len=${reads[0].len}` : 'no read');
+    }
+    if (n >= 2) {
+      // Tap a LATER paragraph — the read must START FROM THAT paragraph's
+      // text, not the top of the page (the click-to-start-here contract).
+      const target = paras.nth(n - 1);
+      const targetText = (await target.locator('p').last().innerText().catch(() => '')).trim();
+      const reads = await clickAndCapture(page, target, `From-the-Books paragraph ${n}`);
+      const head = (reads[0]?.text || '').replace(/\s+/g, ' ').trim().slice(0, 40).toLowerCase();
+      const want = targetText.replace(/\s+/g, ' ').trim().slice(0, 40).toLowerCase();
+      rec('tapping a later paragraph starts the read FROM that paragraph',
+        head.length > 0 && want.length > 0 && head === want,
+        `read="${head}" vs paragraph="${want}"`);
+    }
   } else rec('book-reader present', false, 'not mounted');
 
   const ovItem = page.locator('[data-testid^="listenable-overview-item-"]').first();
