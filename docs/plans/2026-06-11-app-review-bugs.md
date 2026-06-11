@@ -5,6 +5,22 @@ Insights, the Coach, and Game Review. Captured here so we fix them methodically
 instead of one-screenshot-at-a-time (which at 3am is how a new bug gets shipped).
 
 ## ✅ Fixed + shipped to main tonight
+- **Insights: Thinking Errors STILL empty — the classifier was the disease, not
+  the discard.** `c3f43c4` made `captureMisconception` always LOG a *successful*
+  classification, but `classifyMisconception` itself was an LLM call
+  (`getCoachChatResponse` + strict-JSON parse) that returned `null` on any
+  garbled/failed brain reply — so on a degraded brain the slip was dropped
+  *before* logging and the tab never filled (the 2026-06-01 audit's Finding 2,
+  never resolved). Fix: the classifier is now **fully deterministic** — no LLM.
+  It computes the closed-set tag in code from chess.js board inspection + the
+  engine facts the caller already has (best move, captured piece, phase):
+  hung-material (own piece left en prise), missed-tactic (forcing best move
+  lands a fork/pin/skewer/mate the quiet move passed up), greedy-pawn-grab,
+  king-stuck-center, weakened-king-safety, neglected-development; an honest
+  phase-bucketed `other` when no motif is provable (empty > generic > invented).
+  The spoken coachNote is built from verified squares (true by construction).
+  A real slip now ALWAYS yields a tag, so the pipeline never depends on a model
+  returning parseable JSON. Tests rewritten deterministic (no mocks).
 - **Coach: chat text now matches the spoken narration.** The coach split its
   output — the `[VOICE:]` marker was spoken while the chat bubble showed the
   long teaching essay (so the student heard a summary, read an essay; felt like
