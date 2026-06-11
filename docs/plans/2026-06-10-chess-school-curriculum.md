@@ -275,6 +275,81 @@ written narrations."* So:
 
 ---
 
+## 🔄 UPDATE 2 (David 2026-06-11) — full structure + tri-modal + book survey
+
+**A. Structure expanded to ~40 chapters via a gap audit (David: "I want all of it").**
+The 30-ch draft (manuscript `docs/academy/winning-chess.md`) is the STARTING point;
+these are the must-adds, to be inserted + renumbered in one pass when the skeleton
+is locked:
+- **Part I (Tactics):** + Removing the Defender (deflection/decoy/overload) · + In-Between Moves (zwischenzug) · + Calculation & Candidate Moves.
+- **Part III is rebuilt into the strategic SPINE — 7 chapters:** Reading the Board (the full scan + the imbalances) · Valuation · **Which Side to Attack On** (NEW flagship — the centre decides if a wing attack is allowed; pawns point; space; majority; the king) · **The Art of the Trade** (NEW — good vs bad trades; trade worst-for-best) · Making a Plan · **Prophylaxis** (NEW — read + stop the opponent's plan) · Converting & Holding.
+- **Part IV:** + Pawn Centres & the Central Break · (fold Hanging Pawns).
+- **Part V:** + The Minority Attack.
+- **Part VI:** + Opposite-Coloured Bishops · (The Queen advanced note below).
+- **Part VII:** + The King in the Centre · + Opposite-Side Castling & Pawn Storms.
+- **Part VIII:** + Pawn Endgame Technique (zugzwang, rule of the square, breakthrough) · + Minor-Piece/Opposite-Bishop Endings · (Basic Mates as a front appendix).
+
+**B. Every chapter is TIERED Foundations → Intermediate → Advanced (David: serve
+beginner→advanced, "keep the advanced user's attention").** Content must EXIST at
+all tiers; then two routers place the user:
+- **Test-out (entry router):** the checkpoint mechanic run at the TOP of a chapter —
+  ace it and Foundations collapses, drop into Advanced + hard Practice. Onboarding
+  strength-calibration sets the initial global tier.
+- **Per-TOPIC adaptive difficulty (drill router):** `getPuzzleForThemeAtRating`
+  drives Practice up/down by performance on THAT theme (not blunt global Elo).
+
+**C. Practice = a VARIED, adaptive, mistake-mixed DRILL SET, not a single replay**
+(David). Pull many positions by theme + rating band from `puzzles.json` + the
+student's own `mistakePuzzles` (SRS-due). This is the Academy-concept Practice
+engine; the masterclass-OPENING Practice (same line) stays as-is.
+
+**D. TRI-MODAL — same authored source, three doorways:**
+- **Read** — text + diagrams (`BookReader`).
+- **Watch** — the interactive WLPP lecture; **Watch = the lecture** (board-dependent).
+- **Listen** — a board-free **PHILOSOPHICAL audio track** (David: "concepts you can
+  listen to while driving… not what a fork is, but philosophical teachings"). A
+  distinct **board-free register** (no square names to visualize, no "look here"),
+  TTS-voiced (streaming Polly + the iOS AVAudioSession background-audio patch),
+  served as a playlist/podcast. Tactics stay VISUAL; the strategic/philosophical
+  chapters feed the audio. Canon for the audio register: **Young** (chess as a
+  military campaign), **Nimzowitsch** (restraint/prophylaxis/blockade), **Réti**
+  (hypermodern), **Em. Lasker** (the struggle), **Znosko** (Force/Space/Time).
+
+**E. BOOK CORPUS — final survey (US public-domain, 2026 = pub ≤1930 + per-title check):**
+- **Have (clean Gutenberg):** Capablanca *Fundamentals* '21 · E. Lasker *Strategy* '15 + *Chess & Checkers* '18 · Young *Generalship* '10 · Staunton · Edge *Morphy* · Bird.
+- **Verified PD adds (Archive.org OCR — ingest in P0):** Znosko *Middle Game* 1922 · Em. Lasker *Common Sense* 1896 · Mason *Principles* 1894 (+*Art of Chess* '13) · **Nimzowitsch *My System* 1929 (the ADVANCED-tier bible)** · **Réti *Modern Ideas* 1923** · **Alekhine *My Best Games 1908-1923* 1927** (annotated games) · **Capablanca *My Chess Career* 1920** (annotated games).
+- **HOLD (NOT US-PD yet):** Lasker's *Manual of Chess* (English 1932 → 2028) · Réti *Masters of the Chessboard* (English 1932 → 2028) · Nimzowitsch *Chess Praxis* (English 1936) · Tarrasch *The Game of Chess* (1931).
+- **Honest thin spot:** there is **no great PD English ENDGAME treatise** pre-1930
+  (Berger is German; Fine 1941 not PD). Endgame grounding = Capablanca + Znosko +
+  E. Lasker C&C + `puzzles.json` (endgame-tagged).
+- The scout (`scripts/list-archive-chess.mjs` → `archive-chess-pd-list.json`, 119
+  texts) is a conservative FLOOR — its `NOT_IN_COPYRIGHT` filter MISSES US-PD 1920s
+  books Archive hasn't tagged (My System, Alekhine, etc.), so the 1920s advanced
+  tier must be verified per-title (done above).
+- All books are the IDEAS/voice layer (G3); positions come from the DB. *My System*
+  grounds the advanced tier across Parts III–VI (prophylaxis, blockade, the 7th,
+  pawn chains, restraint).
+
+**F. The Queen (Part VI) advanced-tier principle (David):** the queen *leads from
+behind* — too valuable to spearhead (any minor kicks her, losing tempo); the minors
+and pawns crack the position open, then the queen comes in to finish.
+
+**G. The MIDDLEGAME is the app's largest section (David, thinking out loud).** ~30
+of ~40 chapters live in the middlegame. It is taught on TWO layers that should
+cross-link: the Academy = the **universal** concept layer; the per-opening
+`middlegame-plans` = the **applied** layer (the same principle in a real structure).
+Concept ⇄ application ⇄ the student's own games. The middlegame likely wants to be a
+NAVIGATION HUB, not a buried section.
+
+**H. Pending build (when the skeleton is locked):** (1) restructure the manuscript —
+insert the new chapters, renumber, encode the F/I/A tier blocks per chapter, mark
+each chapter's board-free audio/Listen text; (2) P0 ingestion now includes My
+System / Réti / Alekhine / Capablanca alongside Znosko / Common Sense / Mason →
+coach references (all coaches, all tabs — David); (3) derive the WLPP lectures +
+the audio playlist surface; (4) wire the from-your-games slots.
+
+---
+
 ## Phased build plan
 
 - [ ] **P0 — Book ingestion → coach references.** Extend the fetch path to
