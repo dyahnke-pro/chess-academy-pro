@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import { getGamesByOpening } from '../../services/gameInsightsService';
 import { reconstructMovesFromGame } from '../../services/gameReconstructionService';
+import { countFullMovesInPgn } from '../../utils/pgnMoveCount';
 import { calculateAccuracy, getClassificationCounts } from '../../services/accuracyService';
 import { logAppAudit } from '../../services/appAuditor';
 import { useAppStore } from '../../stores/appStore';
@@ -79,7 +80,17 @@ export function OpeningDrilldown({ opening, onBack }: OpeningDrilldownProps): JS
       return;
     }
     void getGamesByOpening(opening.eco).then((rawGames) => {
-      const processed: GameCardData[] = rawGames.map((game) => {
+      // Show EXACTLY the games the aggregate counted. The aggregate
+      // (opening.*) is built PER COLOR and color-choice filtered, so its
+      // count (e.g. 9 as White) is a SUBSET of getGamesByOpening(eco),
+      // which returns BOTH colors for the eco (was 23). Without this the
+      // donut/Games/Win-Rate said 9 while the list showed 23 and Err/Game
+      // divided 23-games-of-errors by 9 → ~2.5x inflated (David
+      // 2026-06-11). gameIds is always populated by the aggregator; fall
+      // back to all games only if it's somehow empty.
+      const idSet = new Set(opening.gameIds);
+      const scoped = idSet.size > 0 ? rawGames.filter((g) => idSet.has(g.id)) : rawGames;
+      const processed: GameCardData[] = scoped.map((game) => {
         const playerColor = getPlayerColor(game, {
           profileName: activeProfile?.name,
           chessComUsername: activeProfile?.preferences.chessComUsername,
@@ -100,10 +111,9 @@ export function OpeningDrilldown({ opening, onBack }: OpeningDrilldownProps): JS
           }
         }
 
-        // SAN tokens are PLIES (half-moves); a chess "move" is white+black,
-        // so convert to full moves (was showing ~2x — David 2026-06-04).
-        const plies = game.pgn.split(/\s+/).filter((t) => t && !/^\d+\.+$/.test(t) && !/^(1-0|0-1|1\/2-1\/2|\*)$/.test(t)).length;
-        const moveCount = Math.ceil(plies / 2);
+        // Full moves (white+black), robust to {clk}/{eval} comments that
+        // the old naive split counted as plies (David 2026-06-11).
+        const moveCount = countFullMovesInPgn(game.pgn);
 
         return {
           game,
@@ -132,8 +142,12 @@ export function OpeningDrilldown({ opening, onBack }: OpeningDrilldownProps): JS
     { name: 'Draws', value: opening.draws, color: 'var(--color-text-muted)' },
   ];
 
-  const errorsPerGame = opening.games > 0
-    ? ((games.reduce((s, g) => s + g.blunders + g.mistakes + g.inaccuracies, 0)) / opening.games).toFixed(1)
+  // Divide by the SAME set we display + counted (games.length), not the
+  // aggregate's opening.games — they're now equal after the gameIds scope
+  // above, but keying off the shown list keeps Err/Game internally
+  // consistent no matter what (David 2026-06-11: was 23-games-of-errors / 9).
+  const errorsPerGame = games.length > 0
+    ? ((games.reduce((s, g) => s + g.blunders + g.mistakes + g.inaccuracies, 0)) / games.length).toFixed(1)
     : '0';
 
   return (

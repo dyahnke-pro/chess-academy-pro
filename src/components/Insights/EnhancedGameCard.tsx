@@ -13,6 +13,7 @@
  */
 import { useNavigate } from 'react-router-dom';
 import type { GameRecord } from '../../types';
+import { countFullMovesInPgn } from '../../utils/pgnMoveCount';
 
 const AI_NAMES = ['AI Coach', 'Stockfish Bot'];
 
@@ -49,13 +50,10 @@ function parseTimeControlLabel(pgn: string): string | null {
   return 'Classical';
 }
 
-function countMovesInPgn(pgn: string): number {
-  // Count SAN tokens = PLIES (half-moves), then convert to full moves. A
-  // chess "move" is white + black, so 317 plies = 159 moves — the card was
-  // showing the ply count mislabeled as moves (David 2026-06-04).
-  const plies = pgn.split(/\s+/).filter((t) => t && !/^\d+\.+$/.test(t) && !/^(1-0|0-1|1\/2-1\/2|\*)$/.test(t)).length;
-  return Math.ceil(plies / 2);
-}
+// Full moves (white+black), robust to {clk}/{eval} comments — shared with
+// OpeningDrilldown. The old inline split counted comment tokens as plies
+// (David 2026-06-11); see utils/pgnMoveCount.
+const countMovesInPgn = countFullMovesInPgn;
 
 const RESULT_STYLES: Record<string, { label: string; color: string; bg: string }> = {
   win:  { label: 'WIN',  color: 'var(--color-success)', bg: 'color-mix(in srgb, var(--color-success) 10%, transparent)' },
