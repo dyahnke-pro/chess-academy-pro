@@ -182,6 +182,16 @@ export function initAnalytics(opts?: { optedOut?: boolean }): void {
         // Explicit events only; no DOM autocapture noise.
         autocapture: false,
         capture_performance: false,
+        // 🚨 DISABLE feature-flag polling. The app uses ZERO PostHog
+        // feature flags, but posthog-js polls the `/flags/` endpoint on
+        // init/identify by default — and because PostHog is reverse-
+        // proxied through `/api/ph/*`, every one of those calls is a
+        // billed Vercel EDGE request. Runtime-log analysis (2026-06-11)
+        // found `/api/ph/flags/` was ~92% of ALL edge requests (the
+        // single biggest driver of the 5.9M that paused the account).
+        // Disabling it kills that traffic with no behavior loss — event
+        // capture uses a separate endpoint and is unaffected.
+        advanced_disable_flags: true,
         // Respect Do-Not-Track at the library level too.
         respect_dnt: true,
       });
