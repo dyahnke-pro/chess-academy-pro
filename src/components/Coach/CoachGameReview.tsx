@@ -590,6 +590,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // via Polly so the surface matches the /coach/teach voice cue.
     let voiceRawBuffer = '';
     let voiceSpokenForTurn = false;
+    // The EXACT text we spoke — the chat bubble shows THIS, not the long
+    // teaching prose, so the student reads what the voice says (text ==
+    // narration, David 2026-06-11).
+    let spokenDisplayText = '';
     const VOICE_MARKER_RE = /\[VOICE:\s*([\s\S]*?)\]/g;
     const tryExtractVoiceMarker = (): void => {
       if (voiceSpokenForTurn) return;
@@ -599,6 +603,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       const inner = match[1].trim();
       if (!inner) return;
       voiceSpokenForTurn = true;
+      spokenDisplayText = inner;
       void logAppAudit({
         kind: 'coach-voice-marker-extracted',
         category: 'subsystem',
@@ -630,8 +635,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             // clean prose instead of leaking the directive.
             voiceRawBuffer += chunk;
             tryExtractVoiceMarker();
-            const visible = chunk.replace(VOICE_MARKER_RE, '');
-            setAskResponse((prev: string | null) => (prev ?? '') + visible);
+            // Once the `[VOICE:]` marker (which leads the response) is in
+            // hand, show exactly what we speak — never the divergent long
+            // prose that streams after it. Until then, stream the live
+            // prose so the bubble isn't blank.
+            if (spokenDisplayText.trim()) {
+              setAskResponse(spokenDisplayText);
+            } else {
+              const visible = chunk.replace(VOICE_MARKER_RE, '');
+              setAskResponse((prev: string | null) => (prev ?? '') + visible);
+            }
           },
           onNavigate: (path: string) => {
             void navigate(path);

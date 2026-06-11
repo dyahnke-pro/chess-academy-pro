@@ -1966,12 +1966,22 @@ export function CoachTeachPage(): JSX.Element {
     // brain emits ONE `[VOICE: ...]` marker per response containing a
     // complete summary of the important info: what just happened on
     // the board, positional/structural assessment, future plans. The
-    // voice speaks that summary in full while the chat shows the
-    // deeper teaching detail. We extract the first closed marker we
-    // see and ignore further VOICE markers in the same turn —
-    // rambling-by-multiple-markers is not the goal.
+    // voice speaks that summary AND the chat shows that same summary —
+    // text == narration (David 2026-06-11). The long teaching prose that
+    // streams after the marker is used only for board annotations
+    // (arrows / tactic grounding), never shown as a divergent transcript.
+    // We extract the first closed marker we see and ignore further VOICE
+    // markers in the same turn — rambling-by-multiple-markers is not the goal.
     let voiceRawBuffer = '';
     let voiceSpokenForTurn = false;
+    // The EXACT text we spoke this turn (raw `[VOICE:]` inner, or the
+    // fallback first sentence). The chat bubble shows THIS, not the long
+    // teaching prose — David 2026-06-11: "i want the text to match the
+    // narration." The voice and the transcript are one source now; the
+    // old "voice speaks a summary, chat shows the deeper essay" split is
+    // what made the student hear one thing and read another (and made it
+    // feel like a second LLM call wrote the chat text — it never was).
+    let spokenDisplayText = '';
     let choicesExtractedForTurn = false;
     /** `[VOICE: summary]` — captures inner content lazily so the
      *  marker closes on the first `]` rather than greedily consuming
@@ -2065,6 +2075,8 @@ export function CoachTeachPage(): JSX.Element {
       const inner = match[1].trim();
       if (!inner) return;
       voiceSpokenForTurn = true;
+      // The transcript shows exactly what the voice speaks (text == narration).
+      spokenDisplayText = inner;
       // SUPPRESS brain [VOICE:] when the walkthrough is the priority
       // audio. Production audit (build e6c3c7b, finding 45) showed
       // the brain's "I kicked off the Vienna walkthrough anyway"
@@ -2470,9 +2482,19 @@ export function CoachTeachPage(): JSX.Element {
             // First real prose chunk → tear down the kickoff progress
             // banner (the lesson is now visibly arriving).
             if (kickoffStatus) setKickoffStatus(null);
-            // Render in chat — sanitized only.
+            // Render in chat — sanitized only. The bubble shows exactly
+            // what the voice speaks: once the `[VOICE:]` marker has been
+            // extracted (it leads the response), stream THAT, so the
+            // transcript never balloons into the long teaching prose and
+            // then snaps shorter (text == narration, David 2026-06-11).
+            // Until the marker closes we show the live prose so the
+            // student isn't staring at a blank bubble.
             displayBuffer += safe;
-            setStreaming(displayBuffer);
+            setStreaming(
+              spokenDisplayText.trim()
+                ? sanitizeCoachText(spokenDisplayText)
+                : displayBuffer,
+            );
             sentenceBuffer += safe;
             // Drain sentence terminators only to keep the buffer
             // bounded. We do NOT queueSpeak per sentence — voice is
@@ -2679,6 +2701,8 @@ export function CoachTeachPage(): JSX.Element {
           : finalText.trim();
         if (firstSentence) {
           voiceSpokenForTurn = true;
+          // Transcript mirrors the spoken fallback too (text == narration).
+          spokenDisplayText = firstSentence;
           // Same suppression as the [VOICE:] path: walkthrough audio
           // always wins. The fallback first-sentence speech also gets
           // suppressed when the walkthrough is running.
@@ -2738,6 +2762,14 @@ export function CoachTeachPage(): JSX.Element {
       // the next turn re-feeds prior assistant text into the prompt;
       // unsanitized text would teach the LLM that markup is normal.
       const finalText = sanitizeCoachText(result.text);
+      // What the student READS is exactly what the voice SPOKE (text ==
+      // narration, David 2026-06-11). `spokenDisplayText` is the raw
+      // `[VOICE:]` inner (or the fallback first sentence) — the one thing
+      // we actually said. Fall back to the full prose only when nothing
+      // was spoken at all (empty response), so the bubble is never blank.
+      const displayText = spokenDisplayText.trim()
+        ? sanitizeCoachText(spokenDisplayText)
+        : finalText;
       if (finalText) {
         // G3 enforcement (Phase 2.5 of WO-COACH-TACTICAL-AWARENESS):
         // scan the response for tactic vocabulary against the bounded
@@ -2800,13 +2832,13 @@ export function CoachTeachPage(): JSX.Element {
         setMessages((prev) => [...prev, {
           id: `${turnId}-c`,
           role: 'assistant',
-          content: finalText,
+          content: displayText,
           timestamp: Date.now(),
         }]);
         useCoachMemoryStore.getState().appendConversationMessage({
           surface: 'chat-teach',
           role: 'coach',
-          text: finalText,
+          text: displayText,
           fen: gameRef.current.fen,
           trigger: null,
         });

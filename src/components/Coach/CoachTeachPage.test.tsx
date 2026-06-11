@@ -102,12 +102,14 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
     expect(mockSpeakQueuedForced).not.toHaveBeenCalled();
   });
 
-  it('speaks the [VOICE: ...] marker contents and nothing else', async () => {
+  it('speaks the [VOICE: ...] marker contents AND shows that same text in chat (text == narration)', async () => {
     // Brain emits a VOICE summary up-front + long teaching text below.
     // Voice channel speaks the marker contents only — never the long
-    // chat-only prose. This is the contract the user asked for: a
-    // spoken summary covering positional info, structure, plans;
-    // depth lives in the chat bubble.
+    // chat-only prose. And the chat bubble shows that SAME summary, so
+    // the student reads exactly what the voice says (David 2026-06-11:
+    // "i want the text to match the narration"). The long prose that
+    // streams after the marker drives only the board arrows, never a
+    // divergent transcript.
     const voiceSummary = "e4 frees the bishop and queen. I'll mirror with e5 — symmetric center, both sides develop knights and castle short.";
     const longChat = "Vienna Game proper kicks in once white plays Nc3 — knight to c3 supports a future d4 push and eyes the d5/f5 squares. Black's main responses are Nf6 mirroring development or Nc6 with a more positional setup. Master games show ~55% white scoring at club level, dropping to balance at master strength.";
     const fullText = `[VOICE: ${voiceSummary}] ${longChat}`;
@@ -135,6 +137,11 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
     expect(allSpoken).not.toContain('Master games show');
     expect(allSpoken).not.toContain('club level');
     expect(mockSpeakQueuedForced).not.toHaveBeenCalled();
+
+    // text == narration: the chat bubble shows the SAME summary the voice
+    // spoke, and does NOT show the long teaching prose.
+    expect(await screen.findByText(/symmetric center/)).toBeInTheDocument();
+    expect(screen.queryByText(/Master games show/)).not.toBeInTheDocument();
   });
 
   it('falls back to first sentence when the brain omits the [VOICE:] marker', async () => {
