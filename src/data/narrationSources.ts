@@ -25,6 +25,7 @@ const REPUTABLE_DOMAINS = [
   'wikipedia.org', 'chess.com', 'chessable.com', 'lichess.org', '365chess.com',
   'chessgames.com', 'britannica.com', 'chesstempo.com', 'chessbase.com',
   'chess24.com', 'thechessworld.com', 'gameknot.com', 'chesspathways.com',
+  'gutenberg.org',
 ];
 
 export function isResolvableSource(ref: string): boolean {

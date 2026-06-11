@@ -228,6 +228,53 @@ life" feel end-to-end on real digitized positions, then go wide theme-by-theme
 - [ ] Audit script for the new surface (clone an existing coach audit) +
       added to the matrix + `docs/AUDIT_INDEX.md`.
 
+## BUILD PROGRESS (2026-06-11)
+
+**Pipeline proven + first lesson shipped to data (not yet UI-wired):**
+- `src/data/middlegameBookLessons.ts` — typed data module + the content template.
+  First lesson `capablanca-cf-ex13-castled-king` is FULLY DIGITIZED + VALIDATED:
+  Capablanca, *Chess Fundamentals*, Fig13 → FEN
+  `2q2rk1/1b3ppp/pp6/2p5/2P1N3/PP1Q4/1B3PPP/6K1 w` → the book's forced line
+  `Nf6+ gxf6 Qg3+ Kh8 Bxf6#` replays legal and mates (chess.js). Authored as the
+  4-beat unit (principle → position → technique → rule), two registers, lead-the-
+  eye arrows/highlights, sources.
+- `src/data/middlegameBookLessons.test.ts` — the Path-B fidelity GATE: every
+  lesson's FEN is legal, the technique replays move-for-move to the claimed
+  outcome, arrows originate on real pieces, both registers present, sources
+  resolvable. 7/7 green. (Add to ship-check's curated list when wiring lands.)
+- `narrationSources.ts` — added `gutenberg.org` to the reputable-domain allowlist
+  (the canonical public-domain source for every book lesson). Purely additive.
+
+### Figure → theme sourcing map (verified, ready to transcribe)
+Image pipelines CONFIRMED: Capablanca *Chess Fundamentals* (gutenberg 33870,
+`FigN.jpg`) and E. Lasker *Chess Strategy* (5614, `diagNN.jpg`). E. Lasker *Chess
+and Checkers* (4913) image edition 503'd — retry.
+
+| First-wave theme | Book | Candidate diagrams (verbatim moves already extracted where noted) |
+|---|---|---|
+| Attack on the castled king (✅ Fig13 done) | Capablanca CF | Fig11, Fig12 (R-R8 back-rank mate — moves extracted), Fig13 ✅, Fig14, Fig15, Fig16 (Greek-gift family — moves extracted) |
+| Weak squares / the hole | E. Lasker, Chess Strategy | diag11, diag25 |
+| The isolated pawn (IQP) | E. Lasker, Chess Strategy | diag70 (Post–Leonhardt 1907), diag104 |
+| The pawn chain | E. Lasker, Chess Strategy | diag29, diag97/98 |
+| The backward pawn / open file (alt positional) | E. Lasker, Chess Strategy | diag20, diag86 (backward); diag21, diag127/128 (open file) |
+
+**Transcription discipline (locked, cardinal-sin guard):** never ship a FEN you
+can't fully verify. Capablanca's combination diagrams self-validate (replay the
+forced mate). Lasker's master-game diagrams are busier (15+ pieces) — transcribe
+carefully, then cross-check by replaying the book's continuation; if any move is
+illegal, the read is wrong → re-read, never guess. Fig11/12 were NOT shipped this
+push because their quiet-pawn placements aren't pinned by the (short) mate line.
+
+### Still TODO (the build, in order)
+1. Transcribe + validate the remaining first-wave positions (table above).
+2. Author each as a `MiddlegameBookLesson` (4 beats, two registers, arrows).
+3. Build `CoachMiddlegamePage` (data-driven shell): theme-tab picker + "By
+   Opening" tab + lesson view via the existing WLPP player. Loading/empty/error.
+4. Route `/coach/middlegame` + home tile on `CoachHomePage`.
+5. Audit script (clone a coach audit) + matrix + AUDIT_INDEX.
+6. Wire the gate test into ship-check's curated list.
+7. THEN port the whole shell to the Endgame sibling (data swap).
+
 ## Next-session pickup
 
 Design is locked except the first-wave-vs-full-themes scope (above). When
