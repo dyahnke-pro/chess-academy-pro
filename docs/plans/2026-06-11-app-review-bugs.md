@@ -22,6 +22,13 @@ instead of one-screenshot-at-a-time (which at 3am is how a new bug gets shipped)
   `hasMisconceptionsForGame`. Now: Import → Analyze → Thinking Errors fills, just
   like Mistakes does. (Possible because classification is now deterministic +
   free — running it over every blunder of a large library costs nothing.)
+  **Backfill for the existing library:** the per-game faucet only fires DURING
+  analysis, so games analyzed BEFORE it existed (David's ~881) wouldn't populate
+  — and re-analysis skips them. Added `backfillMisconceptionsFromAnalyzedGames()`
+  (one-time, meta-flagged, yields to the UI thread) wired into the Thinking-
+  Errors tab mount: it sweeps the already-analyzed games, fills the bucket, and
+  refreshes the rows in place. The existing library self-heals on first open of
+  the tab — no re-analyze needed.
 - **Insights: Thinking Errors classifier was an LLM — made it deterministic.** `c3f43c4` made `captureMisconception` always LOG a *successful*
   classification, but `classifyMisconception` itself was an LLM call
   (`getCoachChatResponse` + strict-JSON parse) that returned `null` on any

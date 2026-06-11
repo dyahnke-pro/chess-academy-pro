@@ -18,6 +18,7 @@ import {
   getMisconceptionProfile,
   type MisconceptionAggregate,
 } from '../../services/misconceptionService';
+import { backfillMisconceptionsFromAnalyzedGames } from '../../services/autoAnalyzeGame';
 
 const BUCKET_STYLE: Record<string, { label: string; color: string; bg: string }> = {
   opening: { label: 'Opening', color: 'text-sky-300', bg: 'bg-sky-500/15' },
@@ -47,6 +48,17 @@ export function MisconceptionsTab(): JSX.Element {
     void getMisconceptionProfile()
       .then((p) => { if (!cancelled) { setRows(p); setLoading(false); } })
       .catch(() => { if (!cancelled) setLoading(false); });
+    // One-time backfill of the already-analyzed library (the per-game faucet
+    // only fires DURING analysis, so games analyzed before it existed never
+    // populated this tab). Runs in the background; when it writes new tags,
+    // refresh the profile so the rows appear without a manual reload.
+    void backfillMisconceptionsFromAnalyzedGames()
+      .then((r) => {
+        if (!cancelled && r.logged > 0) {
+          void getMisconceptionProfile().then((p) => { if (!cancelled) setRows(p); });
+        }
+      })
+      .catch(() => { /* best-effort */ });
     return () => { cancelled = true; };
   }, []);
 

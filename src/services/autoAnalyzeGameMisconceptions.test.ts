@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { db } from '../db/schema';
-import { autoAnalyzeGameMisconceptions } from './autoAnalyzeGame';
+import { autoAnalyzeGameMisconceptions, backfillMisconceptionsFromAnalyzedGames } from './autoAnalyzeGame';
 import { buildGameRecord } from '../test/factories';
 import type { MoveAnnotation } from '../types';
 
@@ -22,6 +22,7 @@ function blunderAnnotations(): MoveAnnotation[] {
 beforeEach(async () => {
   await db.misconceptionTags.clear();
   await db.games.clear();
+  await db.meta.delete('misconceptions_backfill_v1');
 });
 
 describe('autoAnalyzeGameMisconceptions', () => {
@@ -66,6 +67,30 @@ describe('autoAnalyzeGameMisconceptions', () => {
     expect(after1).toBeGreaterThan(0);
     expect(second).toEqual({ classified: 0, logged: 0 });
     expect(after2).toBe(after1);
+  });
+
+  it('backfills the already-analyzed library once, then short-circuits via the meta flag', async () => {
+    for (const id of ['bf-1', 'bf-2']) {
+      await db.games.put(buildGameRecord({
+        id,
+        source: 'coach',
+        white: 'David',
+        black: 'Stockfish Bot',
+        pgn: PGN,
+        annotations: blunderAnnotations(),
+      }));
+    }
+    // A game with no annotations is skipped (not yet analyzed).
+    await db.games.put(buildGameRecord({ id: 'bf-bare', source: 'coach', white: 'David', black: 'Stockfish Bot', pgn: PGN, annotations: null }));
+
+    const first = await backfillMisconceptionsFromAnalyzedGames();
+    expect(first.logged).toBeGreaterThan(0);
+    const tagged = await db.misconceptionTags.toArray();
+    expect(new Set(tagged.map((r) => r.sourceGameId))).toEqual(new Set(['bf-1', 'bf-2']));
+
+    // Second call short-circuits on the meta flag — no new work.
+    const second = await backfillMisconceptionsFromAnalyzedGames();
+    expect(second).toEqual({ classified: 0, logged: 0 });
   });
 
   it('no-ops on a game with no annotations', async () => {

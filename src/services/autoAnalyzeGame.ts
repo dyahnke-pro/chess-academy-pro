@@ -8,6 +8,8 @@
 
 import { captureMisconception } from './discussionPractice';
 import { db } from '../db/schema';
+import { useAppStore } from '../stores/appStore';
+import { logAppAudit } from './appAuditor';
 import { hasMisconceptionsForGame } from './misconceptionService';
 import {
   replayPgnToFens,
@@ -146,4 +148,59 @@ export async function autoAnalyzeGameMisconceptions(
     sourceGameId: gameId,
     learned: false,
   });
+}
+
+/** One-time backfill: sweep the ALREADY-analyzed game library and fill the
+ *  Thinking-Errors bucket from each game's annotations. The per-game bulk
+ *  faucet only fires DURING analysis, so a library analyzed before the faucet
+ *  existed never populated the tab — and re-analysis skips already-analyzed
+ *  games. This catches those up (David 2026-06-11: "pulls from imported games
+ *  that are analyzed?" — yes, but the existing library needed a backfill).
+ *
+ *  Cheap: reads stored annotations + the deterministic classifier (no LLM, no
+ *  Stockfish). Idempotent per game (`hasMisconceptionsForGame`) AND gated by a
+ *  meta flag so it runs once, not every boot. Yields to the event loop
+ *  periodically so a big library doesn't jank the UI. Fire-and-forget. */
+export async function backfillMisconceptionsFromAnalyzedGames(
+  opts?: { force?: boolean },
+): Promise<AutoAnalyzeResult> {
+  const flagKey = 'misconceptions_backfill_v1';
+  if (!opts?.force) {
+    const done = await db.meta.get(flagKey);
+    if (done?.value === 'true') return { classified: 0, logged: 0 };
+  }
+
+  const prefs = useAppStore.getState().activeProfile?.preferences;
+  const chessComUsername = prefs?.chessComUsername;
+  const lichessUsername = prefs?.lichessUsername;
+
+  let classified = 0;
+  let logged = 0;
+  const games = await db.games.toArray();
+  let processed = 0;
+  for (const game of games) {
+    if (!game.annotations || game.annotations.length === 0) continue;
+    const username =
+      game.source === 'chesscom' ? chessComUsername
+      : game.source === 'lichess' ? lichessUsername
+      : undefined;
+    try {
+      const r = await autoAnalyzeGameMisconceptions(game.id, username);
+      classified += r.classified;
+      logged += r.logged;
+    } catch {
+      /* continue — best-effort backfill */
+    }
+    // Yield every 20 games so the chess.js work doesn't block the UI thread.
+    if (++processed % 20 === 0) await new Promise((res) => setTimeout(res, 0));
+  }
+
+  await db.meta.put({ key: flagKey, value: 'true' });
+  void logAppAudit({
+    kind: 'misconception-captured',
+    category: 'subsystem',
+    source: 'autoAnalyzeGame.backfillMisconceptionsFromAnalyzedGames',
+    summary: `backfill swept ${games.length} games — classified=${classified} logged=${logged}`,
+  });
+  return { classified, logged };
 }
