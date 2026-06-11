@@ -174,6 +174,7 @@ import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import { detectBadHabitsFromGame } from '../../services/coachFeatureService';
 import { generateMistakePuzzlesFromGame } from '../../services/mistakePuzzleService';
+import { autoAnalyzeGameMisconceptions } from '../../services/autoAnalyzeGame';
 import { computeWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { reconstructMovesFromGame } from '../../services/gameReconstructionService';
 import { voiceService, resolvePollyVoice, POLLY_VOICES } from '../../services/voiceService';
@@ -1932,6 +1933,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       void generateMistakePuzzlesFromGame(gameRecord.id).then(() => {
         void computeWeaknessProfile(activeProfile);
       });
+      // Thinking-Errors capture from this game's annotations — the live "why
+      // did you play that?" faucet is retired, so capture happens here on
+      // game-end (deterministic, idempotent per game).
+      void autoAnalyzeGameMisconceptions(gameRecord.id);
     });
   }, [gameState.status, gameState.moves, gameState.hintsUsed, gameState.gameId, playerColor, difficulty, game.history, activeProfile, playerRating, targetStrength, detectedOpening, timeControl, convDrill, initialGameFen]);
 

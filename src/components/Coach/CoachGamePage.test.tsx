@@ -125,6 +125,9 @@ vi.mock('../../services/gamePhaseService', () => ({
     { phase: 'middlegame', accuracy: 80, moveCount: 10, mistakes: 1 },
     { phase: 'endgame', accuracy: 85, moveCount: 5, mistakes: 0 },
   ]),
+  // Used by autoAnalyzeGameMisconceptions (pulled into the graph via the
+  // game-end capture). Material-based phase classifier.
+  classifyPhase: vi.fn().mockReturnValue('middlegame'),
 }));
 
 vi.mock('../../services/missedTacticService', () => ({
