@@ -911,6 +911,27 @@ export interface CapturePuzzleInput {
 export async function addMistakePuzzleFromCapture(
   input: CapturePuzzleInput,
 ): Promise<MistakePuzzle | null> {
+  const puzzle = buildMistakePuzzleFromCapture(input);
+  if (!puzzle) return null;
+
+  // Dedup against any existing puzzle for the same position+move.
+  const key = capturePosKey(input.fen, input.playedSan);
+  const existing = await db.mistakePuzzles.toArray();
+  if (existing.some((p) => capturePosKey(p.fen, p.playerMoveSan) === key)) return null;
+
+  await db.mistakePuzzles.add(puzzle);
+  return puzzle;
+}
+
+/** Pure builder: turn a captured slip (fen + playedSan + bestSan) into a fully-
+ *  formed MistakePuzzle WITHOUT touching Dexie — so it can seed an in-memory
+ *  drill queue (the per-misconception "drill this exact moment" surface) using
+ *  the SAME puzzle shape + board the analyze pipeline produces. Returns null on
+ *  any illegal/ambiguous SAN (never build a bad puzzle — CLAUDE.md "when unsure,
+ *  skip"). `addMistakePuzzleFromCapture` wraps this with dedup + persistence. */
+export function buildMistakePuzzleFromCapture(
+  input: CapturePuzzleInput,
+): MistakePuzzle | null {
   const { fen, playedSan, bestSan } = input;
   if (!fen || !playedSan || !bestSan) return null;
 
@@ -927,13 +948,8 @@ export async function addMistakePuzzleFromCapture(
     const bm = c2.move(bestSan);
     bestMove = `${bm.from}${bm.to}${bm.promotion ?? ''}`;
   } catch {
-    return null; // illegal/ambiguous SAN for this fen — don't write junk
+    return null; // illegal/ambiguous SAN for this fen — don't build junk
   }
-
-  // Dedup against any existing puzzle for the same position+move.
-  const key = capturePosKey(fen, playedSan);
-  const existing = await db.mistakePuzzles.toArray();
-  if (existing.some((p) => capturePosKey(p.fen, p.playerMoveSan) === key)) return null;
 
   const cpLoss = input.cpLoss && input.cpLoss > 0 ? Math.round(input.cpLoss) : 150;
   const classification = classifyCpLoss(cpLoss);
@@ -951,7 +967,7 @@ export async function addMistakePuzzleFromCapture(
     openingName: input.openingName ?? null,
   });
 
-  const puzzle: MistakePuzzle = {
+  return {
     id: generateId(),
     fen,
     playerMove,
@@ -983,8 +999,49 @@ export async function addMistakePuzzleFromCapture(
     successes: 0,
     tacticType,
   };
-  await db.mistakePuzzles.add(puzzle);
-  return puzzle;
+}
+
+/** Build the drill queue for a Thinking-Errors row: every stored position for
+ *  that misconception tag, turned into a MistakePuzzle (same shape + board as
+ *  My Mistakes / My Weaknesses). Due instances first (then the rest, so the row
+ *  is always drillable), deduped by position, newest first. `customLabel` scopes
+ *  the `other` catch-all to one phase bucket (Opening / Middlegame / Endgame
+ *  slip). Positions with no recorded best move are skipped (can't build a
+ *  solvable puzzle). Pure read + build — nothing is persisted. */
+export async function getMisconceptionDrillPuzzles(
+  tag: string,
+  customLabel?: string,
+): Promise<MistakePuzzle[]> {
+  const now = Date.now();
+  let records = await db.misconceptionTags.where('tag').equals(tag).toArray();
+  if (tag === 'other' && customLabel) {
+    records = records.filter((r) => (r.customLabel ?? '') === customLabel);
+  }
+  const isDue = (r: { dueAt?: number }): boolean => r.dueAt == null || r.dueAt <= now;
+  const due = records.filter(isDue);
+  const ordered = (due.length > 0 ? due : records).sort((a, b) => b.createdAt - a.createdAt);
+
+  const puzzles: MistakePuzzle[] = [];
+  const seen = new Set<string>();
+  for (const r of ordered) {
+    if (!r.bestSan || !r.playedSan) continue;
+    const puzzle = buildMistakePuzzleFromCapture({
+      fen: r.fen,
+      playedSan: r.playedSan,
+      bestSan: r.bestSan,
+      cpLoss: r.cpLoss,
+      gamePhase: r.gamePhase,
+      moveNumber: r.moveNumber,
+      openingName: r.openingName,
+      sourceGameId: r.sourceGameId,
+    });
+    if (!puzzle) continue;
+    const key = `${puzzle.fen}|${puzzle.playerMoveSan}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    puzzles.push(puzzle);
+  }
+  return puzzles;
 }
 
 export async function getAllMistakePuzzles(): Promise<MistakePuzzle[]> {

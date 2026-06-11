@@ -109,9 +109,17 @@ export function MisconceptionsTab(): JSX.Element {
         const due = row.openCount > 0;
         const example = row.examples[0];
         return (
-          <div
+          <button
+            type="button"
             key={`${row.tag}:${row.label}`}
-            className={`rounded-xl border p-3 ${due ? 'border-theme-border bg-theme-surface' : 'border-theme-border/50 bg-theme-surface/50'}`}
+            onClick={() => void navigate('/tactics/weakness-drill', {
+              state: {
+                misconceptionTag: row.tag,
+                customLabel: row.tag === 'other' ? row.label : undefined,
+                label: row.label,
+              },
+            })}
+            className={`w-full text-left rounded-xl border p-3 transition-colors hover:border-theme-accent/60 ${due ? 'border-theme-border bg-theme-surface' : 'border-theme-border/50 bg-theme-surface/50'}`}
             data-testid={`misconception-row-${row.tag}`}
           >
             <div className="flex items-start gap-3">
@@ -149,7 +157,7 @@ export function MisconceptionsTab(): JSX.Element {
                 )}
               </div>
             </div>
-          </div>
+          </button>
         );
       })}
     </div>

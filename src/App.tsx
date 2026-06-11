@@ -33,6 +33,7 @@ import { AdaptivePuzzlePage } from './components/Puzzles/AdaptivePuzzlePage';
 import { MyMistakesPage } from './components/Puzzles/MyMistakesPage';
 import { LichessDashboardPage } from './components/Puzzles/LichessDashboardPage';
 import { WeaknessPuzzlePage } from './components/Puzzles/WeaknessPuzzlePage';
+import { WeaknessTagDrillPage } from './components/Puzzles/WeaknessTagDrillPage';
 import { WeaknessThemesPage } from './components/Puzzles/WeaknessThemesPage';
 // PuzzlesHubPage removed — Puzzles tab merged into Tactics
 import { CoachGamePage } from './components/Coach/CoachGamePage';
@@ -339,6 +340,7 @@ export function App(): JSX.Element {
           <Route path="/tactics/adaptive" element={<ErrorBoundary><AdaptivePuzzlePage /></ErrorBoundary>} />
           <Route path="/tactics/classic" element={<ErrorBoundary><PuzzleTrainerPage /></ErrorBoundary>} />
           <Route path="/tactics/weakness" element={<ErrorBoundary><WeaknessPuzzlePage /></ErrorBoundary>} />
+          <Route path="/tactics/weakness-drill" element={<ErrorBoundary><WeaknessTagDrillPage /></ErrorBoundary>} />
           <Route path="/tactics/weakness-themes" element={<ErrorBoundary><WeaknessThemesPage /></ErrorBoundary>} />
           <Route path="/tactics/lichess" element={<ErrorBoundary><LichessDashboardPage /></ErrorBoundary>} />
           {/* Backward-compat redirects */}
