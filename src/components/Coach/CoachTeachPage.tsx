@@ -1284,8 +1284,17 @@ export function CoachTeachPage(): JSX.Element {
               date: string | null;
               pgn: string;
             }
+            // The on-disk lookup returns the REPERTOIRE title as `player`
+            // for pro-rep games (e.g. "The Universal Grandmaster
+            // Repertoire") — that reads wrong as a person ("Here's The
+            // Universal Grandmaster Repertoire in the Catalan"). Prefer the
+            // person's name the student typed when the tool name looks like
+            // a repertoire title; keep it when it's a real name (the
+            // model-game fallback returns "Magnus Carlsen").
+            const displayPlayer = (toolName: string): string =>
+              /repertoire|^the\s/i.test(toolName) ? titleCase(pgReq.player) : toolName;
             let mountable: MountableGame[] = diskGames.map((g) => ({
-              player: g.player,
+              player: displayPlayer(g.player),
               studentSide: g.studentSide,
               opponent: g.opponent,
               opponentRating: g.opponentRating,
