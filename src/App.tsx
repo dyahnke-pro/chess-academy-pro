@@ -78,10 +78,13 @@ import { BishopGamesPage, BishopVsPawnsRoute, ColorWarsRoute } from './component
 import { KidPiecePuzzlesPage } from './components/Kid/KidPiecePuzzlesPage';
 import { PieceMazePage } from './components/Kid/PieceMazePage';
 import { PieceSweepPage } from './components/Kid/PieceSweepPage';
+import { PieceRaceGame } from './components/Kid/PieceRaceGame';
+import { KnightArmyRoute, BishopArmyRoute } from './components/Kid/PairArmyGame';
+import { PieceLevelSelect } from './components/Kid/PieceLevelSelect';
 import { KnightGamesPage } from './components/Kid/KnightGamesPage';
 import { LeapFrogGame } from './components/Kid/LeapFrogGame';
 import { KnightSweepGame } from './components/Kid/KnightSweepGame';
-import { QueenGamesHub } from './components/Kid/QueenGamesHub';
+import { QueenGamesHub, QueenVsArmyRoute, QueensGauntletRoute } from './components/Kid/QueenGamesHub';
 import { KidPuzzlePage } from './components/Kid/KidPuzzlePage';
 import { GuidedGameHubPage } from './components/Kid/GuidedGameHubPage';
 import { GuidedGamePage } from './components/Kid/GuidedGamePage';
@@ -382,6 +385,8 @@ export function App(): JSX.Element {
           <Route path="/kid" element={<ErrorBoundary><KidModePage /></ErrorBoundary>} />
           <Route path="/kid/journey" element={<ErrorBoundary><JourneyMapPage /></ErrorBoundary>} />
           <Route path="/kid/queen-games" element={<ErrorBoundary><QueenGamesHub /></ErrorBoundary>} />
+          <Route path="/kid/queen-games/vs-army" element={<ErrorBoundary><QueenVsArmyRoute /></ErrorBoundary>} />
+          <Route path="/kid/queen-games/gauntlet" element={<ErrorBoundary><QueensGauntletRoute /></ErrorBoundary>} />
           <Route path="/kid/journey/:chapterId" element={<ErrorBoundary><JourneyChapterPage /></ErrorBoundary>} />
           <Route path="/kid/fairy-tale" element={<ErrorBoundary><FairyTaleMapPage /></ErrorBoundary>} />
           <Route path="/kid/fairy-tale/:chapterId" element={<ErrorBoundary><FairyTaleChapterPage /></ErrorBoundary>} />
@@ -436,6 +441,17 @@ export function App(): JSX.Element {
           <Route path="/kid/bishop-games/sweep/:level" element={<ErrorBoundary><PieceSweepPage piece="bishop" /></ErrorBoundary>} />
           <Route path="/kid/queen-games/sweep/:level"  element={<ErrorBoundary><PieceSweepPage piece="queen" /></ErrorBoundary>} />
           <Route path="/kid/king-games/sweep/:level"   element={<ErrorBoundary><PieceSweepPage piece="king" /></ErrorBoundary>} />
+          {/* Time-trial races — capture every target against the clock. */}
+          <Route path="/kid/knight-games/race/:level" element={<ErrorBoundary><PieceRaceGame piece="knight" /></ErrorBoundary>} />
+          <Route path="/kid/bishop-games/race/:level" element={<ErrorBoundary><PieceRaceGame piece="bishop" /></ErrorBoundary>} />
+          <Route path="/kid/rook-games/race/:level"   element={<ErrorBoundary><PieceRaceGame piece="rook" /></ErrorBoundary>} />
+          <Route path="/kid/queen-games/race/:level"  element={<ErrorBoundary><PieceRaceGame piece="queen" /></ErrorBoundary>} />
+          <Route path="/kid/king-games/race/:level"   element={<ErrorBoundary><PieceRaceGame piece="king" /></ErrorBoundary>} />
+          {/* Pairs vs. Army — two heroes hunt the marching pawn army. */}
+          <Route path="/kid/knight-games/army" element={<ErrorBoundary><KnightArmyRoute /></ErrorBoundary>} />
+          <Route path="/kid/bishop-games/army" element={<ErrorBoundary><BishopArmyRoute /></ErrorBoundary>} />
+          {/* Level picker for the generic per-piece games (maze/sweep/race). */}
+          <Route path="/kid/level-select/:piece/:game" element={<ErrorBoundary><PieceLevelSelect /></ErrorBoundary>} />
           <Route path="/kid/:piece" element={<ErrorBoundary><KidPiecePage /></ErrorBoundary>} />
         </Route>
       </Routes>

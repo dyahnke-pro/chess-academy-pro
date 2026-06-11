@@ -471,7 +471,7 @@ export const FAIRY_TALE_CHAPTERS: JourneyChapter[] = [
       },
       {
         id: 'queen-puzzle-2',
-        fen: '4k3/8/2r3b1/8/8/8/6Q1/4K3 w - - 0 1',
+        fen: '4k3/8/2r5/8/8/8/6Q1/4K3 w - - 0 1',
         solution: ['Qxc6+'],
         hint: 'Can the queen capture a piece along the diagonal?',
         successMessage:
@@ -479,7 +479,7 @@ export const FAIRY_TALE_CHAPTERS: JourneyChapter[] = [
       },
       {
         id: 'queen-puzzle-3',
-        fen: '7k/5K2/5Q2/8/8/8/8/8 w - - 0 1',
+        fen: '7k/8/5K2/8/8/8/8/6Q1 w - - 0 1',
         solution: ['Qg7#'],
         hint: 'The queen can deliver checkmate with support from the king!',
         successMessage:
@@ -564,8 +564,8 @@ export const FAIRY_TALE_CHAPTERS: JourneyChapter[] = [
     puzzles: [
       {
         id: 'king-puzzle-1',
-        fen: '4k3/8/8/8/8/8/5r2/4K3 w - - 0 1',
-        solution: ['Kxf2'],
+        fen: '4k3/8/8/8/8/8/4r3/4K3 w - - 0 1',
+        solution: ['Kxe2'],
         hint: 'The king is being attacked! Can it capture the attacker?',
         successMessage:
           'The Wise King captures the rook himself! Sometimes the best defense is a bold counterattack.',
@@ -680,6 +680,7 @@ export const FAIRY_TALE_CHAPTERS: JourneyChapter[] = [
         id: 'tactics-puzzle-3',
         fen: '3qk3/8/8/3B4/8/8/8/3RK3 w - - 0 1',
         solution: ['Bc6+', 'Ke7'],
+        altSolutions: ['Bf7+'],
         hint: 'Move the bishop to give check — what happens to the piece behind it?',
         successMessage:
           'Discovered attack! The wizard\'s lightning gives check, and the Stone Guardian\'s power is unleashed against the queen! Brilliant!',

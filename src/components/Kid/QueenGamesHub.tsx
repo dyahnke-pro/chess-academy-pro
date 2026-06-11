@@ -1,88 +1,43 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Volume2, VolumeX } from 'lucide-react';
-import { motion, MotionConfig } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { voiceService } from '../../services/voiceService';
 import { getGameProgress } from '../../services/journeyService';
 import { QueenVsArmy } from './QueenVsArmy';
 import { QueensGauntlet } from './QueensGauntlet';
 import type { JourneyProgress } from '../../types';
 
-type HubView = 'menu' | 'queen-vs-army' | 'queens-gauntlet';
-
-interface LevelCompletion {
-  queenArmy: boolean[];
-  gauntlet: boolean[];
-}
+// Pure routing hub — every game has its own route (no setView). The two
+// gauntlet-style games and the puzzle/maze/sweep tiles all navigate.
 
 export function QueenGamesHub(): JSX.Element {
   const navigate = useNavigate();
-  const [view, setView] = useState<HubView>('menu');
   const [voiceOn, setVoiceOn] = useState(true);
   const [unlocked, setUnlocked] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [completion, setCompletion] = useState<LevelCompletion>({
-    queenArmy: [false, false, false],
-    gauntlet: [false, false, false],
-  });
 
   useEffect(() => {
     void getGameProgress('pawns-journey').then((progress: JourneyProgress | null) => {
-      if (progress) {
-        setUnlocked(true); // DEV: unlocked for testing
-      }
+      if (progress) setUnlocked(true); // DEV: unlocked for testing
       setLoading(false);
     });
   }, []);
 
   useEffect(() => {
-    if (!loading && voiceOn && view === 'menu') {
-      if (unlocked) {
-        void voiceService.speak('Welcome to the Queen Games! Choose your challenge.');
-      } else {
-        void voiceService.speak('Complete the Knight chapter first to unlock the Queen Games!');
-      }
+    if (!loading && voiceOn) {
+      void voiceService.speak(
+        unlocked
+          ? 'Welcome to the Queen Games! Choose your challenge.'
+          : 'Complete the Knight chapter first to unlock the Queen Games!',
+      );
     }
-  }, [loading, unlocked, voiceOn, view]);
-
-  const handleBack = useCallback((): void => {
-    if (view !== 'menu') {
-      setView('menu');
-    } else {
-      void navigate('/kid');
-    }
-  }, [view, navigate]);
+  }, [loading, unlocked, voiceOn]);
 
   const handleVoiceToggle = useCallback((): void => {
     voiceService.stop();
     setVoiceOn((v) => !v);
   }, []);
-
-  const handleArmyComplete = useCallback((level: number, won: boolean): void => {
-    if (won) {
-      setCompletion((prev) => {
-        const updated = [...prev.queenArmy];
-        updated[level - 1] = true;
-        return { ...prev, queenArmy: updated };
-      });
-      if (voiceOn) {
-        void voiceService.speak('Amazing! You defeated the pawn army!');
-      }
-    }
-  }, [voiceOn]);
-
-  const handleGauntletComplete = useCallback((level: number, won: boolean): void => {
-    if (won) {
-      setCompletion((prev) => {
-        const updated = [...prev.gauntlet];
-        updated[level - 1] = true;
-        return { ...prev, gauntlet: updated };
-      });
-      if (voiceOn) {
-        void voiceService.speak('Brilliant! You navigated the gauntlet safely!');
-      }
-    }
-  }, [voiceOn]);
 
   if (loading) {
     return (
@@ -96,39 +51,29 @@ export function QueenGamesHub(): JSX.Element {
     );
   }
 
-  if (view === 'queen-vs-army') {
-    return (
-      <MotionConfig transition={{ duration: 0.15 }}>
-        <QueenVsArmy onBack={handleBack} onComplete={handleArmyComplete} />
-      </MotionConfig>
-    );
-  }
-
-  if (view === 'queens-gauntlet') {
-    return (
-      <MotionConfig transition={{ duration: 0.15 }}>
-        <QueensGauntlet onBack={handleBack} onComplete={handleGauntletComplete} />
-      </MotionConfig>
-    );
-  }
-
-  const armyCompleted = completion.queenArmy.filter(Boolean).length;
-  const gauntletCompleted = completion.gauntlet.filter(Boolean).length;
+  const cards: Array<{ testid: string; emoji: string; title: string; subtitle: string; to: string }> = [
+    { testid: 'queen-army-card', emoji: '⚔️', title: 'Queen vs. Army', subtitle: 'Capture all enemy pawns before they promote!', to: '/kid/queen-games/vs-army' },
+    { testid: 'queen-gauntlet-card', emoji: '🛡️', title: "Queen's Gauntlet", subtitle: 'Carve through a guarded army — capture them all in the safe order!', to: '/kid/queen-games/gauntlet' },
+    { testid: 'queen-puzzles-card', emoji: '🧩', title: 'Queen Puzzles', subtitle: 'Find the queen move that wins.', to: '/kid/queen-games/puzzles' },
+    { testid: 'queen-maze-card', emoji: '🧭', title: 'Queen Path', subtitle: 'Guide the queen to the target square.', to: '/kid/level-select/queen/maze' },
+    { testid: 'queen-hunt-card', emoji: '⚔️', title: 'Queen Hunt', subtitle: 'Capture every target.', to: '/kid/level-select/queen/sweep' },
+    { testid: 'queen-race-card', emoji: '⏱️', title: 'Queen Race', subtitle: 'Capture every target against the clock!', to: '/kid/level-select/queen/race' },
+  ];
 
   return (
     <div
-      className="flex flex-col gap-6 p-6 flex-1 overflow-y-auto pb-6"
+      className="flex flex-col gap-4 p-6 flex-1 overflow-y-auto pb-6"
       style={{ color: 'var(--color-text)' }}
       data-testid="queen-games-hub"
     >
-      {/* Top bar */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button
-            onClick={handleBack}
+            onClick={() => void navigate('/kid')}
             className="p-2 rounded-lg hover:opacity-80"
             style={{ background: 'var(--color-surface)' }}
             data-testid="queen-hub-back"
+            aria-label="Back"
           >
             <ArrowLeft size={18} />
           </button>
@@ -152,10 +97,7 @@ export function QueenGamesHub(): JSX.Element {
       {!unlocked && (
         <div
           className="rounded-xl p-5 border-2 text-center"
-          style={{
-            background: 'var(--color-surface)',
-            borderColor: 'var(--color-border)',
-          }}
+          style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
           data-testid="queen-games-locked"
         >
           <span className="text-4xl block mb-2">🔒</span>
@@ -168,121 +110,43 @@ export function QueenGamesHub(): JSX.Element {
 
       {unlocked && (
         <div className="flex flex-col gap-4">
-          {/* Queen vs Army card */}
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => setView('queen-vs-army')}
-            className="rounded-xl p-5 border-2 flex items-center gap-4 text-left transition-colors"
-            style={{
-              background: 'var(--color-surface)',
-              borderColor: 'var(--color-accent)',
-              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
-            }}
-            data-testid="queen-army-card"
-          >
-            <span className="text-4xl flex-shrink-0">⚔️</span>
-            <div className="flex-1">
-              <div className="font-bold text-lg">Queen vs. Army</div>
-              <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
-                Capture all enemy pawns before they promote!
+          {cards.map((c) => (
+            <motion.button
+              key={c.testid}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => void navigate(c.to)}
+              className="rounded-xl p-5 border-2 flex items-center gap-4 text-left transition-colors"
+              style={{
+                background: 'var(--color-surface)',
+                borderColor: 'var(--color-accent)',
+                boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+              }}
+              data-testid={c.testid}
+            >
+              <span className="text-4xl flex-shrink-0">{c.emoji}</span>
+              <div className="flex-1">
+                <div className="font-bold text-lg">{c.title}</div>
+                <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                  {c.subtitle}
+                </div>
               </div>
-              <div className="text-xs mt-1" style={{ color: 'var(--color-accent)' }}>
-                {armyCompleted}/3 levels completed
-              </div>
-            </div>
-          </motion.button>
-
-          {/* Queen's Gauntlet card */}
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => setView('queens-gauntlet')}
-            className="rounded-xl p-5 border-2 flex items-center gap-4 text-left transition-colors"
-            style={{
-              background: 'var(--color-surface)',
-              borderColor: 'var(--color-accent)',
-              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
-            }}
-            data-testid="queen-gauntlet-card"
-          >
-            <span className="text-4xl flex-shrink-0">🛡️</span>
-            <div className="flex-1">
-              <div className="font-bold text-lg">Queen&apos;s Gauntlet</div>
-              <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
-                Navigate through enemy lines to reach the target!
-              </div>
-              <div className="text-xs mt-1" style={{ color: 'var(--color-accent)' }}>
-                {gauntletCompleted}/3 levels completed
-              </div>
-            </div>
-          </motion.button>
-
-          {/* Per-piece adaptive puzzles — Phase 8. */}
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => void navigate('/kid/queen-games/puzzles')}
-            className="rounded-xl p-5 border-2 flex items-center gap-4 text-left transition-colors"
-            style={{
-              background: 'var(--color-surface)',
-              borderColor: 'var(--color-accent)',
-              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
-            }}
-            data-testid="queen-puzzles-card"
-          >
-            <span className="text-2xl">🧩</span>
-            <div className="flex-1">
-              <div className="font-bold text-lg">Queen Puzzles</div>
-              <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
-                Find the queen move that wins.
-              </div>
-            </div>
-          </motion.button>
-
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => void navigate('/kid/queen-games/maze/1')}
-            className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
-            style={{
-              background: 'var(--color-surface)',
-              borderColor: 'var(--color-accent)',
-              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
-            }}
-            data-testid="queen-maze-card"
-          >
-            <span className="text-2xl">🧭</span>
-            <div className="flex-1">
-              <div className="font-bold text-lg">Queen Path</div>
-              <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
-                Guide the queen to the target square.
-              </div>
-            </div>
-          </motion.button>
-
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => void navigate('/kid/queen-games/sweep/1')}
-            className="rounded-xl p-5 border-2 flex items-center gap-4 text-left transition-colors"
-            style={{
-              background: 'var(--color-surface)',
-              borderColor: 'var(--color-accent)',
-              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
-            }}
-            data-testid="queen-hunt-card"
-          >
-            <span className="text-2xl">⚔️</span>
-            <div className="flex-1">
-              <div className="font-bold text-lg">Queen Hunt</div>
-              <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
-                Capture every target.
-              </div>
-            </div>
-          </motion.button>
+            </motion.button>
+          ))}
         </div>
       )}
     </div>
   );
+}
+
+// Route wrappers — keep each game's `onBack` contract while wiring
+// navigation, so the games are deep-linkable (#9: everything routes).
+export function QueenVsArmyRoute(): JSX.Element {
+  const navigate = useNavigate();
+  return <QueenVsArmy onBack={() => void navigate('/kid/queen-games')} onComplete={() => {}} />;
+}
+
+export function QueensGauntletRoute(): JSX.Element {
+  const navigate = useNavigate();
+  return <QueensGauntlet onBack={() => void navigate('/kid/queen-games')} />;
 }

@@ -117,6 +117,30 @@ describe('kidPuzzleService', () => {
       expect(puzzles[0].hint).toContain('pawn');
     });
 
+    it('orients multi-move Lichess puzzles to the kid-to-move tactic position', async () => {
+      // Lichess convention: moves[0] is the opponent's setup move,
+      // moves[1] is the SOLVER's tactic. The kid must be shown the
+      // position AFTER moves[0] (kid to move) and solve with moves[1] —
+      // NOT the opponent-to-move FEN with the opponent's move as the
+      // "solution" (the pre-2026-06-10 bug).
+      mockGetKidPiecePuzzles.mockResolvedValue([
+        // Opponent (white) plays h2h3; solver (black) wins with Ra1+.
+        dbPuzzle({ id: 'multi', fen: '6k1/8/8/8/8/8/r5PP/6K1 w - - 0 1', moves: 'h2h3 a2a1' }),
+        // Single-move training puzzle — solver already to move.
+        dbPuzzle({ id: 'single', fen: '4k3/8/8/8/8/8/4P3/4K3 w - - 0 1', moves: 'e2e4' }),
+      ]);
+      const puzzles = await generateKidPuzzles(MOCK_PAWN_CHAPTER, buildUserProfile());
+
+      expect(puzzles).toHaveLength(2);
+      // Multi-move: FEN advanced past the opponent setup → kid (black) to move.
+      expect(puzzles[0].id).toBe('db-multi');
+      expect(puzzles[0].fen.split(' ')[1]).toBe('b');
+      expect(puzzles[0].solution).toEqual(['Ra1+']);
+      // Single-move: unchanged — solver (white) to move, solves moves[0].
+      expect(puzzles[1].fen.split(' ')[1]).toBe('w');
+      expect(puzzles[1].solution).toEqual(['e4']);
+    });
+
     it('falls back to chapter.puzzles for non-piece chapters (tactics, first-game)', async () => {
       const profile = buildUserProfile();
       const puzzles = await generateKidPuzzles(MOCK_TACTICS_CHAPTER, profile);

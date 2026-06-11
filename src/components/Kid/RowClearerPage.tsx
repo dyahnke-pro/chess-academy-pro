@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { KidChessboard } from '../Chessboard/KidChessboard';
 import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Volume2, VolumeX, RotateCcw } from 'lucide-react';
@@ -310,7 +310,7 @@ export function RowClearerPage(): JSX.Element {
 
         {/* Board */}
         <BoardVoiceOverlay fen={fen} className="w-full md:max-w-[420px] mx-auto">
-          <ConsistentChessboard
+          <KidChessboard
             fen={fen}
             boardOrientation="white"
             squareStyles={squareStyles}

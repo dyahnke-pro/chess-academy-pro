@@ -135,7 +135,45 @@ export function BishopGamesPage(): JSX.Element {
         </button>
 
         <button
-          onClick={() => void navigate('/kid/bishop-games/maze/1')}
+          onClick={() => void navigate('/kid/bishop-games/army')}
+          className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
+          style={{
+            background: 'var(--color-surface)',
+            borderColor: 'var(--color-accent)',
+            boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+          }}
+          data-testid="bishop-army-card"
+        >
+          <span className="text-2xl">⛪</span>
+          <div className="flex-1">
+            <div className="font-bold text-lg">Two Bishops vs. Army</div>
+            <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+              Both colors covered — catch every pawn before it queens!
+            </div>
+          </div>
+        </button>
+
+        <button
+          onClick={() => void navigate('/kid/level-select/bishop/race')}
+          className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
+          style={{
+            background: 'var(--color-surface)',
+            borderColor: 'var(--color-accent)',
+            boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+          }}
+          data-testid="bishop-race-card"
+        >
+          <span className="text-2xl">⏱️</span>
+          <div className="flex-1">
+            <div className="font-bold text-lg">Bishop Race</div>
+            <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+              Capture every target against the clock!
+            </div>
+          </div>
+        </button>
+
+        <button
+          onClick={() => void navigate('/kid/level-select/bishop/maze')}
           className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
           style={{
             background: 'var(--color-surface)',
@@ -154,7 +192,7 @@ export function BishopGamesPage(): JSX.Element {
         </button>
 
         <button
-          onClick={() => void navigate('/kid/bishop-games/sweep/1')}
+          onClick={() => void navigate('/kid/level-select/bishop/sweep')}
           className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
           style={{
             background: 'var(--color-surface)',

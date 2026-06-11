@@ -130,7 +130,7 @@ export function MiniGameHubPage(): JSX.Element {
       </button>
 
           <button
-            onClick={() => void navigate('/kid/pawn-games/maze/1')}
+            onClick={() => void navigate('/kid/level-select/pawn/maze')}
             className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
             style={{
               background: 'var(--color-surface)',
@@ -149,7 +149,7 @@ export function MiniGameHubPage(): JSX.Element {
           </button>
 
           <button
-            onClick={() => void navigate('/kid/pawn-games/sweep/1')}
+            onClick={() => void navigate('/kid/level-select/pawn/sweep')}
             className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
             style={{
               background: 'var(--color-surface)',

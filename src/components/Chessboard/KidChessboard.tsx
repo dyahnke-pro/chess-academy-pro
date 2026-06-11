@@ -24,7 +24,7 @@
 // src/components/Kid/.
 
 import type { CSSProperties } from 'react';
-import type { SquareHandlerArgs } from 'react-chessboard';
+import type { SquareHandlerArgs, PieceDropHandlerArgs } from 'react-chessboard';
 import { ChessBoard, type ChessBoardProps } from '../Board/ChessBoard';
 import {
   ControlledChessBoard,
@@ -55,6 +55,10 @@ interface StaticKidProps {
    *  (piece-maze gameplay routes square clicks through here rather
    *  than chess.js move validation). */
   onSquareClick?: (args: SquareHandlerArgs) => void;
+  /** Drag-to-move handler for static-board games that validate the
+   *  move themselves (QueenVsArmy / QueensGauntlet). Returns true to
+   *  accept the drop. */
+  onPieceDrop?: (args: PieceDropHandlerArgs) => boolean;
   /** Custom per-square styling — e.g. legal-move dots, target tint. */
   squareStyles?: Record<string, CSSProperties>;
 }
@@ -106,6 +110,7 @@ export function KidChessboard(props: KidChessboardProps): JSX.Element {
       interactive={props.interactive ?? false}
       className={props.className}
       onSquareClick={props.onSquareClick}
+      onPieceDrop={props.onPieceDrop}
       squareStyles={props.squareStyles}
     />
   );

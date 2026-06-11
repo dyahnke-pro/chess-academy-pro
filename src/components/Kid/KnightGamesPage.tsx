@@ -194,7 +194,45 @@ export function KnightGamesPage(): JSX.Element {
           </button>
 
         <button
-          onClick={() => void navigate('/kid/knight-games/maze/1')}
+          onClick={() => void navigate('/kid/knight-games/army')}
+          className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
+          style={{
+            background: 'var(--color-surface)',
+            borderColor: 'var(--color-accent)',
+            boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+          }}
+          data-testid="knight-army-card"
+        >
+          <span className="text-2xl">🐴</span>
+          <div className="flex-1">
+            <div className="font-bold text-lg">Two Knights vs. Army</div>
+            <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+              Two knights hunt the pawns before they reach the top!
+            </div>
+          </div>
+        </button>
+
+        <button
+          onClick={() => void navigate('/kid/level-select/knight/race')}
+          className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
+          style={{
+            background: 'var(--color-surface)',
+            borderColor: 'var(--color-accent)',
+            boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+          }}
+          data-testid="knight-race-card"
+        >
+          <span className="text-2xl">⏱️</span>
+          <div className="flex-1">
+            <div className="font-bold text-lg">Knight Race</div>
+            <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+              Capture every target against the clock!
+            </div>
+          </div>
+        </button>
+
+        <button
+          onClick={() => void navigate('/kid/level-select/knight/maze')}
           className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
           style={{
             background: 'var(--color-surface)',
@@ -213,7 +251,7 @@ export function KnightGamesPage(): JSX.Element {
         </button>
 
         <button
-          onClick={() => void navigate('/kid/knight-games/sweep/1')}
+          onClick={() => void navigate('/kid/level-select/knight/sweep')}
           className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
           style={{
             background: 'var(--color-surface)',

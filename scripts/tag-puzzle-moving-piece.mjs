@@ -2,20 +2,31 @@
 // scripts/tag-puzzle-moving-piece.mjs
 // ----------------------------------------------------------------------
 // One-shot tagger for src/data/puzzles.json. Adds a `movingPiece` field
-// to every puzzle record (K/Q/R/B/N/P) by applying the puzzle's first
-// UCI move via chess.js and reading the piece letter off the resulting
-// move object.
+// to every puzzle record (K/Q/R/B/N/P) — the piece the SOLVER moves.
+//
+// Lichess convention (this repo's puzzles.json): `puzzle.fen` is the
+// position BEFORE the opponent's blunder, `moves[0]` is the opponent's
+// setup move (auto-played), and `moves[1]` is the SOLVER's move — the
+// tactic the puzzle is actually about. So movingPiece is read off
+// moves[1], applied to the position AFTER moves[0]. Single-move puzzles
+// (training pool, source:'training') are solver-to-move already, so
+// their solver move is moves[0].
+//
+// (Before 2026-06-10 this tagged moves[0] = the opponent's piece, which
+// made the kid per-piece filter select on the wrong side — "Rook
+// Puzzles" returned puzzles where the OPPONENT first moved a rook. Fixed
+// to tag the solver's piece; re-run with --retag to recompute.)
 //
 // Required by the kid section's per-piece puzzle filter — Lichess's
 // `moves` field is UCI (e.g. "f3g4"), not SAN, so we can't derive the
 // piece by looking at the first character of the move string.
 //
-// Idempotent: re-running on a file that already has movingPiece skips
-// untouched entries. Logs any entry where the UCI move can't be
-// applied (would indicate a bad FEN/move pair in source data).
+// Idempotent by default: re-running skips entries that already carry a
+// movingPiece. Pass --retag (or --force) to RECOMPUTE every entry — use
+// this after changing the tagging logic. Logs any entry where a UCI
+// move can't be applied (would indicate a bad FEN/move pair).
 //
-// Run with:  node scripts/tag-puzzle-moving-piece.mjs
-// (Or via npm script — see package.json once added.)
+// Run with:  node scripts/tag-puzzle-moving-piece.mjs [--retag]
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
@@ -34,27 +45,39 @@ const PIECE_MAP = {
   k: 'K',
 };
 
+const FORCE = process.argv.includes('--retag') || process.argv.includes('--force');
+
+/** Apply a UCI string to a chess.js instance. Returns the move or null. */
+function applyUci(chess, uci) {
+  if (!uci || uci.length < 4) return null;
+  return chess.move({
+    from: uci.slice(0, 2),
+    to: uci.slice(2, 4),
+    promotion: uci.length === 5 ? uci[4] : undefined,
+  });
+}
+
 function tagPuzzle(puzzle) {
-  if (typeof puzzle.movingPiece === 'string') {
+  if (typeof puzzle.movingPiece === 'string' && !FORCE) {
     return { tagged: false, error: null };
   }
-  const moves = String(puzzle.moves ?? '').trim();
-  if (!moves) {
+  const moves = String(puzzle.moves ?? '').trim().split(/\s+/).filter(Boolean);
+  if (moves.length === 0) {
     return { tagged: false, error: 'no moves' };
   }
-  const firstUci = moves.split(/\s+/)[0];
-  if (!firstUci || firstUci.length < 4) {
-    return { tagged: false, error: `bad uci: ${firstUci}` };
-  }
+  // Multi-move (Lichess) → moves[0] is the opponent's setup, moves[1]
+  // is the solver's move. Single-move (training) → moves[0] is the
+  // solver's move.
+  const hasSetup = moves.length >= 2;
   try {
     const chess = new Chess(puzzle.fen);
-    const move = chess.move({
-      from: firstUci.slice(0, 2),
-      to: firstUci.slice(2, 4),
-      promotion: firstUci.length === 5 ? firstUci[4] : undefined,
-    });
+    if (hasSetup && !applyUci(chess, moves[0])) {
+      return { tagged: false, error: `setup move rejected: ${moves[0]}` };
+    }
+    const solverUci = hasSetup ? moves[1] : moves[0];
+    const move = applyUci(chess, solverUci);
     if (!move) {
-      return { tagged: false, error: 'chess.js rejected move' };
+      return { tagged: false, error: `solver move rejected: ${solverUci}` };
     }
     const piece = PIECE_MAP[move.piece];
     if (!piece) {

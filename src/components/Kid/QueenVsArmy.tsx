@@ -1,8 +1,9 @@
-import { useState, useCallback, useMemo } from 'react';
-import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { useState, useCallback, useMemo, useEffect } from 'react';
+import { KidChessboard } from '../Chessboard/KidChessboard';
 import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, RotateCcw } from 'lucide-react';
+import { voiceService } from '../../services/voiceService';
 import {
   QUEEN_ARMY_LEVELS,
   initQueenArmyState,
@@ -15,12 +16,24 @@ import type { QueenArmyState } from '../../services/queenGameEngine';
 interface QueenVsArmyProps {
   onBack: () => void;
   onComplete: (level: number, won: boolean) => void;
+  /** Honors the hub's voice toggle. Defaults to on. */
+  voiceOn?: boolean;
 }
 
-export function QueenVsArmy({ onBack, onComplete }: QueenVsArmyProps): JSX.Element {
+export function QueenVsArmy({ onBack, onComplete, voiceOn = true }: QueenVsArmyProps): JSX.Element {
   const [levelIndex, setLevelIndex] = useState(0);
   const level = QUEEN_ARMY_LEVELS[levelIndex];
   const [state, setState] = useState<QueenArmyState>(() => initQueenArmyState(level));
+
+  // Spoken intro per level — fills the "what do I do" gap (this game
+  // shipped silent). Move feedback stays milestone-only (#5): the win /
+  // loss line is voiced by the hub on completion.
+  useEffect(() => {
+    if (!voiceOn) return;
+    void voiceService.speak(
+      `Queen versus Army, level ${level.id}. Move your queen to capture every pawn before one reaches the top.`,
+    );
+  }, [levelIndex, level.id, voiceOn]);
 
   const position = useMemo(() => queenArmyPosition(state), [state]);
   const highlights = useMemo(
@@ -135,7 +148,7 @@ export function QueenVsArmy({ onBack, onComplete }: QueenVsArmyProps): JSX.Eleme
 
       {/* Board */}
       <BoardVoiceOverlay fen={position} className="w-full md:max-w-[420px]">
-        <ConsistentChessboard
+        <KidChessboard
           fen={position}
           boardOrientation="white"
           squareStyles={customSquareStyles}
