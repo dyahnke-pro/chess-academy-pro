@@ -49,9 +49,15 @@ const FIXED_BUTTONS: { key: string; label: string; icon: React.ComponentType<{ s
   { key: 'random-mix', label: 'Random Mix', icon: Shuffle, route: '/tactics/drill', color: 'text-emerald-400', bgColor: 'bg-emerald-500/10', rgb: '52, 211, 153', colSpan: true, py: 'py-6', iconSize: 32, textSize: 'text-base', state: { filterThemes: ['fork', 'pin', 'skewer', 'discoveredAttack', 'backRankMate', 'sacrifice', 'deflection'] } },
 ];
 
-const BOTTOM_BUTTONS: { key: string; label: string; icon: React.ComponentType<{ size?: number; className?: string }>; route: string; color: string; bgColor: string; rgb: string }[] = [
-  { key: 'my-weaknesses', label: 'My Weaknesses', icon: Crosshair, route: '/tactics/weakness-themes', color: 'text-rose-400', bgColor: 'bg-rose-500/10', rgb: '244, 63, 94' },
+// Priority "from your games" buttons — pinned to the TOP of the grid so the
+// drilling that targets David's own mistakes/weaknesses is the first thing he
+// reaches, ahead of the generic themed sets (David 2026-06-11).
+const TOP_BUTTONS: { key: string; label: string; icon: React.ComponentType<{ size?: number; className?: string }>; route: string; color: string; bgColor: string; rgb: string }[] = [
   { key: 'my mistakes', label: 'My Mistakes', icon: AlertTriangle, route: '/tactics/mistakes', color: 'text-red-400', bgColor: 'bg-red-500/10', rgb: '239, 68, 68' },
+  { key: 'my-weaknesses', label: 'My Weaknesses', icon: Crosshair, route: '/tactics/weakness-themes', color: 'text-rose-400', bgColor: 'bg-rose-500/10', rgb: '244, 63, 94' },
+];
+
+const BOTTOM_BUTTONS: { key: string; label: string; icon: React.ComponentType<{ size?: number; className?: string }>; route: string; color: string; bgColor: string; rgb: string }[] = [
   { key: 'find-the-square', label: 'Find the Square', icon: MapPin, route: '/tactics/find-square', color: 'text-cyan-400', bgColor: 'bg-cyan-500/10', rgb: '34, 211, 238' },
 ];
 
@@ -159,6 +165,27 @@ export function TacticsPage(): JSX.Element {
 
       {/* Grid */}
       <div className="grid grid-cols-2 gap-3 flex-1 content-start max-w-lg mx-auto w-full">
+        {/* Priority row — My Mistakes / My Weaknesses, pinned to the top */}
+        {TOP_BUTTONS.map((btn) => {
+          const Icon = btn.icon;
+          const shadow = scaledShadow(btn.rgb, gB);
+          const shadowHover = scaledShadow(btn.rgb, Math.min(200, gB * 1.4));
+          return (
+            <button
+              key={btn.key}
+              onClick={() => handleNavigate(btn.route, btn.label)}
+              className={`py-8 ${btn.bgColor} rounded-2xl flex flex-col items-center justify-center gap-3 transition-all duration-200`}
+              style={{ ...neonBorderStyle(btn.rgb, gS), boxShadow: shadow }}
+              onMouseEnter={(e) => { applyHoverBorder(e.currentTarget, btn.rgb, gS); e.currentTarget.style.boxShadow = shadowHover; }}
+              onMouseLeave={(e) => { applyRestBorder(e.currentTarget, btn.rgb, gS); e.currentTarget.style.boxShadow = shadow; }}
+              data-testid={`section-${btn.key}`}
+            >
+              <Icon size={36} className={btn.color} />
+              <span className={`text-base font-bold ${btn.color} text-center px-2 leading-tight`}>{btn.label}</span>
+            </button>
+          );
+        })}
+
         {/* Fixed buttons (Profile, Daily, Setup, Random Mix) */}
         {FIXED_BUTTONS.map((btn) => {
           const Icon = btn.icon;
