@@ -79,6 +79,7 @@ import { PieceMazePage } from './components/Kid/PieceMazePage';
 import { PieceSweepPage } from './components/Kid/PieceSweepPage';
 import { PieceRaceGame } from './components/Kid/PieceRaceGame';
 import { KnightArmyRoute, BishopArmyRoute } from './components/Kid/PairArmyGame';
+import { PieceLevelSelect } from './components/Kid/PieceLevelSelect';
 import { KnightGamesPage } from './components/Kid/KnightGamesPage';
 import { LeapFrogGame } from './components/Kid/LeapFrogGame';
 import { KnightSweepGame } from './components/Kid/KnightSweepGame';
@@ -447,6 +448,8 @@ export function App(): JSX.Element {
           {/* Pairs vs. Army — two heroes hunt the marching pawn army. */}
           <Route path="/kid/knight-games/army" element={<ErrorBoundary><KnightArmyRoute /></ErrorBoundary>} />
           <Route path="/kid/bishop-games/army" element={<ErrorBoundary><BishopArmyRoute /></ErrorBoundary>} />
+          {/* Level picker for the generic per-piece games (maze/sweep/race). */}
+          <Route path="/kid/level-select/:piece/:game" element={<ErrorBoundary><PieceLevelSelect /></ErrorBoundary>} />
           <Route path="/kid/:piece" element={<ErrorBoundary><KidPiecePage /></ErrorBoundary>} />
         </Route>
       </Routes>

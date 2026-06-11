@@ -287,6 +287,24 @@ export const PIECE_MAZE_LEVELS: PieceMazeLevel[] = [
     piece: 'bishop', id: 10, name: 'Bishop Path 10',
     pieceStart: 'f8', target: 'a7', obstacles: ["b3","b6","d2","d8","f1","h5"], par: 3,
   },
+  // ── Expansion tier (more obstacles, BFS-validated par) ─────────────
+  { piece: 'king', id: 11, name: 'Tight Squeeze', pieceStart: 'h7', target: 'e7', obstacles: ['b2', 'a8', 'h5'], par: 3 },
+  { piece: 'king', id: 12, name: 'The Gauntlet', pieceStart: 'c7', target: 'g6', obstacles: ['b3', 'a8', 'g7', 'g3'], par: 4 },
+  { piece: 'king', id: 13, name: 'Labyrinth', pieceStart: 'b6', target: 'g4', obstacles: ['e7', 'd2', 'f2', 'd5', 'e8'], par: 5 },
+  { piece: 'queen', id: 11, name: 'Tight Squeeze', pieceStart: 'b2', target: 'e2', obstacles: ['d4', 'c4', 'c2'], par: 3 },
+  { piece: 'queen', id: 12, name: 'The Gauntlet', pieceStart: 'e8', target: 'f1', obstacles: ['b7', 'e2', 'c7', 'f6'], par: 3 },
+  { piece: 'queen', id: 13, name: 'Labyrinth', pieceStart: 'h8', target: 'd8', obstacles: ['a8', 'f6', 'c1', 'f8', 'a6'], par: 3 },
+  { piece: 'rook', id: 11, name: 'Tight Squeeze', pieceStart: 'h8', target: 'f2', obstacles: ['g3', 'f7', 'h5'], par: 3 },
+  { piece: 'rook', id: 12, name: 'The Gauntlet', pieceStart: 'h1', target: 'f8', obstacles: ['f6', 'c5', 'h4', 'f3'], par: 3 },
+  { piece: 'rook', id: 13, name: 'Labyrinth', pieceStart: 'h1', target: 'a7', obstacles: ['f1', 'a1', 'd6', 'd4', 'b7'], par: 3 },
+  { piece: 'bishop', id: 11, name: 'Tight Squeeze', pieceStart: 'd2', target: 'h8', obstacles: ['c2', 'b2', 'f6'], par: 3 },
+  { piece: 'bishop', id: 12, name: 'The Gauntlet', pieceStart: 'b8', target: 'c3', obstacles: ['f8', 'e7', 'c1', 'c7'], par: 3 },
+  { piece: 'bishop', id: 13, name: 'Labyrinth', pieceStart: 'c1', target: 'd4', obstacles: ['f2', 'd6', 'e3', 'b3', 'b2'], par: 3 },
+  { piece: 'knight', id: 11, name: 'Tight Squeeze', pieceStart: 'a1', target: 'h6', obstacles: ['c8', 'c1', 'b8'], par: 4 },
+  { piece: 'knight', id: 12, name: 'The Gauntlet', pieceStart: 'b6', target: 'b1', obstacles: ['f2', 'e1', 'c1', 'a8'], par: 3 },
+  { piece: 'knight', id: 13, name: 'Labyrinth', pieceStart: 'a7', target: 'a2', obstacles: ['c7', 'g8', 'd8', 'f3', 'e7'], par: 3 },
+  { piece: 'pawn', id: 11, name: 'Tight Squeeze', pieceStart: 'e3', target: 'e7', obstacles: ['g8', 'g7', 'h7'], par: 4 },
+  { piece: 'pawn', id: 12, name: 'Labyrinth', pieceStart: 'g1', target: 'g7', obstacles: ['d5', 'c2', 'e6', 'd7', 'h5'], par: 5 },
 ];
 
 export function getMazeLevelsForPiece(

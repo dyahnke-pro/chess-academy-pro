@@ -154,7 +154,7 @@ export function BishopGamesPage(): JSX.Element {
         </button>
 
         <button
-          onClick={() => void navigate('/kid/bishop-games/race/1')}
+          onClick={() => void navigate('/kid/level-select/bishop/race')}
           className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
           style={{
             background: 'var(--color-surface)',
@@ -173,7 +173,7 @@ export function BishopGamesPage(): JSX.Element {
         </button>
 
         <button
-          onClick={() => void navigate('/kid/bishop-games/maze/1')}
+          onClick={() => void navigate('/kid/level-select/bishop/maze')}
           className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
           style={{
             background: 'var(--color-surface)',
@@ -192,7 +192,7 @@ export function BishopGamesPage(): JSX.Element {
         </button>
 
         <button
-          onClick={() => void navigate('/kid/bishop-games/sweep/1')}
+          onClick={() => void navigate('/kid/level-select/bishop/sweep')}
           className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
           style={{
             background: 'var(--color-surface)',

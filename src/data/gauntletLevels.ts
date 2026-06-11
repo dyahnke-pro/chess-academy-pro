@@ -59,4 +59,29 @@ export const QUEEN_GAUNTLET_LEVELS: GauntletLevel[] = [
     ],
     showGuarded: false,
   },
+  // ── Expert tier (6-7 enemies, no guard hints) ──────────────────────
+  {
+    id: 5, name: 'Iron Wall',
+    hero: { type: 'queen', square: 'e1' },
+    enemies: [ { type: 'rook', square: 'e2' }, { type: 'rook', square: 'h1' }, { type: 'knight', square: 'h4' }, { type: 'knight', square: 'a8' }, { type: 'knight', square: 'a2' }, { type: 'knight', square: 'g4' } ],
+    showGuarded: false,
+  },
+  {
+    id: 6, name: 'No Mercy',
+    hero: { type: 'queen', square: 'a1' },
+    enemies: [ { type: 'bishop', square: 'h7' }, { type: 'bishop', square: 'a7' }, { type: 'knight', square: 'h8' }, { type: 'knight', square: 'g3' }, { type: 'knight', square: 'g1' }, { type: 'knight', square: 'c7' } ],
+    showGuarded: false,
+  },
+  {
+    id: 7, name: 'The Siege',
+    hero: { type: 'queen', square: 'e5' },
+    enemies: [ { type: 'rook', square: 'c7' }, { type: 'rook', square: 'a8' }, { type: 'bishop', square: 'h7' }, { type: 'bishop', square: 'b7' }, { type: 'knight', square: 'd6' }, { type: 'bishop', square: 'g7' }, { type: 'knight', square: 'a1' } ],
+    showGuarded: false,
+  },
+  {
+    id: 8, name: 'Last Stand',
+    hero: { type: 'queen', square: 'd5' },
+    enemies: [ { type: 'rook', square: 'h1' }, { type: 'knight', square: 'e1' }, { type: 'knight', square: 'a6' }, { type: 'knight', square: 'g1' }, { type: 'knight', square: 'a1' }, { type: 'bishop', square: 'f7' }, { type: 'bishop', square: 'b7' } ],
+    showGuarded: false,
+  },
 ];

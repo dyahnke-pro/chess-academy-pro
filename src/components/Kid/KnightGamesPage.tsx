@@ -213,7 +213,7 @@ export function KnightGamesPage(): JSX.Element {
         </button>
 
         <button
-          onClick={() => void navigate('/kid/knight-games/race/1')}
+          onClick={() => void navigate('/kid/level-select/knight/race')}
           className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
           style={{
             background: 'var(--color-surface)',
@@ -232,7 +232,7 @@ export function KnightGamesPage(): JSX.Element {
         </button>
 
         <button
-          onClick={() => void navigate('/kid/knight-games/maze/1')}
+          onClick={() => void navigate('/kid/level-select/knight/maze')}
           className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
           style={{
             background: 'var(--color-surface)',
@@ -251,7 +251,7 @@ export function KnightGamesPage(): JSX.Element {
         </button>
 
         <button
-          onClick={() => void navigate('/kid/knight-games/sweep/1')}
+          onClick={() => void navigate('/kid/level-select/knight/sweep')}
           className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
           style={{
             background: 'var(--color-surface)',

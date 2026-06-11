@@ -281,7 +281,7 @@ export function RookGamesPage(): JSX.Element {
           </button>
 
           <button
-            onClick={() => void navigate('/kid/rook-games/race/1')}
+            onClick={() => void navigate('/kid/level-select/rook/race')}
             className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
             style={{
               background: 'var(--color-surface)',
@@ -300,7 +300,7 @@ export function RookGamesPage(): JSX.Element {
           </button>
 
           <button
-            onClick={() => void navigate('/kid/rook-games/maze/1')}
+            onClick={() => void navigate('/kid/level-select/rook/maze')}
             className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
             style={{
               background: 'var(--color-surface)',
@@ -319,7 +319,7 @@ export function RookGamesPage(): JSX.Element {
           </button>
 
           <button
-            onClick={() => void navigate('/kid/rook-games/sweep/1')}
+            onClick={() => void navigate('/kid/level-select/rook/sweep')}
             className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
             style={{
               background: 'var(--color-surface)',

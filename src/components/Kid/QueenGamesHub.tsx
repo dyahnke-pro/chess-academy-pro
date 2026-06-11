@@ -55,9 +55,9 @@ export function QueenGamesHub(): JSX.Element {
     { testid: 'queen-army-card', emoji: '⚔️', title: 'Queen vs. Army', subtitle: 'Capture all enemy pawns before they promote!', to: '/kid/queen-games/vs-army' },
     { testid: 'queen-gauntlet-card', emoji: '🛡️', title: "Queen's Gauntlet", subtitle: 'Carve through a guarded army — capture them all in the safe order!', to: '/kid/queen-games/gauntlet' },
     { testid: 'queen-puzzles-card', emoji: '🧩', title: 'Queen Puzzles', subtitle: 'Find the queen move that wins.', to: '/kid/queen-games/puzzles' },
-    { testid: 'queen-maze-card', emoji: '🧭', title: 'Queen Path', subtitle: 'Guide the queen to the target square.', to: '/kid/queen-games/maze/1' },
-    { testid: 'queen-hunt-card', emoji: '⚔️', title: 'Queen Hunt', subtitle: 'Capture every target.', to: '/kid/queen-games/sweep/1' },
-    { testid: 'queen-race-card', emoji: '⏱️', title: 'Queen Race', subtitle: 'Capture every target against the clock!', to: '/kid/queen-games/race/1' },
+    { testid: 'queen-maze-card', emoji: '🧭', title: 'Queen Path', subtitle: 'Guide the queen to the target square.', to: '/kid/level-select/queen/maze' },
+    { testid: 'queen-hunt-card', emoji: '⚔️', title: 'Queen Hunt', subtitle: 'Capture every target.', to: '/kid/level-select/queen/sweep' },
+    { testid: 'queen-race-card', emoji: '⏱️', title: 'Queen Race', subtitle: 'Capture every target against the clock!', to: '/kid/level-select/queen/race' },
   ];
 
   return (

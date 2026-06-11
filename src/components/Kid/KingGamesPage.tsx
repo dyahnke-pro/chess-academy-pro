@@ -129,7 +129,7 @@ export function KingGamesPage(): JSX.Element {
         </button>
 
         <button
-          onClick={() => void navigate('/kid/king-games/race/1')}
+          onClick={() => void navigate('/kid/level-select/king/race')}
           className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
           style={{
             background: 'var(--color-surface)',
@@ -148,7 +148,7 @@ export function KingGamesPage(): JSX.Element {
         </button>
 
         <button
-          onClick={() => void navigate('/kid/king-games/maze/1')}
+          onClick={() => void navigate('/kid/level-select/king/maze')}
           className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
           style={{
             background: 'var(--color-surface)',
@@ -167,7 +167,7 @@ export function KingGamesPage(): JSX.Element {
         </button>
 
         <button
-          onClick={() => void navigate('/kid/king-games/sweep/1')}
+          onClick={() => void navigate('/kid/level-select/king/sweep')}
           className="rounded-xl p-5 border-2 flex items-center gap-4 hover:opacity-80 transition-opacity w-full text-left"
           style={{
             background: 'var(--color-surface)',
