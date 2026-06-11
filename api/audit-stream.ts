@@ -1,8 +1,8 @@
 /**
  * /api/audit-stream — real-time audit event sink.
  *
- * POST: client sends an audit entry. Stored in Vercel KV as a
- *       timestamp-keyed list entry with 24h TTL.
+ * POST: client sends an audit entry. Appended to an Upstash Redis list
+ *       with a 24h TTL.
  * GET:  query param `since=<ms>` returns all entries with
  *       timestamp > since. Used by Claude to poll for new events
  *       when the user asks for a live-watch session.
@@ -20,19 +20,18 @@
  * Storage (first configured tier wins):
  *   1. Upstash Redis — when `UPSTASH_REDIS_REST_URL` +
  *      `UPSTASH_REDIS_REST_TOKEN` (or the `KV_REST_API_*` vars) are set.
- *   2. Vercel Blob — when `BLOB_READ_WRITE_TOKEN` is set. Each event is
- *      one immutable object at `audit/<timestamp>-<rand>.json`; reads
- *      `list()` the prefix, filter by the timestamp embedded in the
- *      pathname, and fetch the matches. Durable across cold starts and
- *      shared across all serverless workers — which the in-memory tier
- *      is NOT (that was the bug: a tester's POST and Claude's GET hit
- *      different workers, so reads came back empty). Old objects (>24h)
- *      are pruned opportunistically on read.
- *   3. In-memory Map — last-resort fallback (local dev / nothing
+ *      One `rpush` per write, one `lrange` per read — durable across
+ *      cold starts, shared across all serverless workers, and CHEAP.
+ *   2. In-memory Map — last-resort fallback (local dev / nothing
  *      configured). Per-instance, not durable, not shared.
+ *
+ * ⚠️ A Vercel BLOB tier used to sit between these two — it wrote one
+ * object PER EVENT and `list()`d every object on each read, so a single
+ * pull cost thousands of billed "blob operations" (79K against a 2K
+ * Hobby cap → the account got paused, David 2026-06-11). It was REMOVED.
+ * Redis is the durable tier; do NOT reintroduce per-event object storage.
  */
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { put, list, del } from '@vercel/blob';
 
 interface AuditStreamEntry {
   timestamp: number;
@@ -108,81 +107,6 @@ async function writeRedis(entry: AuditStreamEntry): Promise<boolean> {
   }
 }
 
-// ── Vercel Blob tier ──────────────────────────────────────────────
-const BLOB_PREFIX = 'audit/';
-const BLOB_TTL_MS = 86_400_000; // 24h, matches the Redis tier
-
-function getBlobToken(): string | null {
-  return process.env.BLOB_READ_WRITE_TOKEN ?? null;
-}
-
-/** Parse the event timestamp out of a blob pathname like
- *  `audit/1779916298005-AbC123.json`. Returns NaN on an unexpected
- *  shape so the caller can skip it. */
-function timestampFromPathname(pathname: string): number {
-  const file = pathname.split('/').pop() ?? '';
-  const lead = file.split('-')[0];
-  return Number.parseInt(lead, 10);
-}
-
-async function writeBlob(entry: AuditStreamEntry): Promise<boolean> {
-  const token = getBlobToken();
-  if (!token) return false;
-  try {
-    await put(`${BLOB_PREFIX}${entry.timestamp}.json`, JSON.stringify(entry), {
-      access: 'public',
-      token,
-      contentType: 'application/json',
-      // Unguessable URL per object; the timestamp prefix is preserved
-      // for range-filtering on read.
-      addRandomSuffix: true,
-    });
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-async function readBlob(since: number): Promise<AuditStreamEntry[] | null> {
-  const token = getBlobToken();
-  if (!token) return null;
-  try {
-    // Page through every audit object (list caps at 1000/page).
-    const all: { pathname: string; url: string; ts: number }[] = [];
-    let cursor: string | undefined;
-    for (let page = 0; page < 10; page++) {
-      const { blobs, hasMore, cursor: next } = await list({ prefix: BLOB_PREFIX, token, cursor, limit: 1000 });
-      for (const b of blobs) {
-        all.push({ pathname: b.pathname, url: b.url, ts: timestampFromPathname(b.pathname) });
-      }
-      if (!hasMore) break;
-      cursor = next;
-    }
-    const now = Date.now();
-    // Opportunistic prune of expired objects (fire-and-forget).
-    const expired = all.filter((b) => Number.isFinite(b.ts) && now - b.ts > BLOB_TTL_MS);
-    if (expired.length > 0) {
-      void del(expired.map((b) => b.url), { token }).catch(() => undefined);
-    }
-    // Fetch only the objects newer than `since`.
-    const fresh = all.filter((b) => Number.isFinite(b.ts) && b.ts > since);
-    const entries = await Promise.all(
-      fresh.map(async (b) => {
-        try {
-          const r = await fetch(b.url);
-          if (!r.ok) return null;
-          return (await r.json()) as AuditStreamEntry;
-        } catch {
-          return null;
-        }
-      }),
-    );
-    return entries.filter((e): e is AuditStreamEntry => e !== null && typeof e.timestamp === 'number');
-  } catch {
-    return null;
-  }
-}
-
 export default async function handler(
   req: VercelRequest,
   res: VercelResponse,
@@ -216,11 +140,9 @@ export default async function handler(
       context: body.context,
       route: body.route,
     };
-    let storage: 'redis' | 'blob' | 'memory';
+    let storage: 'redis' | 'memory';
     if (await writeRedis(entry)) {
       storage = 'redis';
-    } else if (await writeBlob(entry)) {
-      storage = 'blob';
     } else {
       inMemoryBuffer.push(entry);
       trimInMemory();
@@ -234,12 +156,11 @@ export default async function handler(
     const sinceRaw = req.query.since;
     const since = typeof sinceRaw === 'string' ? parseInt(sinceRaw, 10) : 0;
     const redisEntries = await readRedis(since);
-    const blobEntries = redisEntries === null ? await readBlob(since) : null;
     const entries =
-      redisEntries ?? blobEntries ?? inMemoryBuffer.filter((e) => e.timestamp > since);
+      redisEntries ?? inMemoryBuffer.filter((e) => e.timestamp > since);
     // Newest last so the caller can use the last timestamp as the next `since`.
     entries.sort((a, b) => a.timestamp - b.timestamp);
-    const storage = redisEntries ? 'redis' : blobEntries ? 'blob' : 'memory';
+    const storage = redisEntries ? 'redis' : 'memory';
     res.status(200).json({
       entries,
       count: entries.length,
