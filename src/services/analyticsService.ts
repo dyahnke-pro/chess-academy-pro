@@ -28,6 +28,7 @@ import { Chess } from 'chess.js';
 import { getAppAuditLog, type AuditEntry, type AuditKind } from './appAuditor';
 import { db } from '../db/schema';
 import { getOverviewInsights, getOpeningInsights } from './gameInsightsService';
+import { getOpeningNameByEco } from './openingDetectionService';
 import { detectTacticType } from './missedTacticService';
 import type {
   GamePhase,
@@ -1362,16 +1363,15 @@ export async function openingProficiencyMatrix(topN = 10): Promise<OpeningProfic
   type Bin = { name: string; eco: string | null; w: number; wWins: number; b: number; bWins: number };
   const bins = new Map<string, Bin>();
 
-  // Pull opening names from the openings table to enrich raw ECOs.
-  const openings = await db.openings.toArray();
-  const ecoToName = new Map<string, string>();
-  for (const o of openings) {
-    if (o.eco && !ecoToName.has(o.eco)) ecoToName.set(o.eco, o.name);
-  }
-
+  // Resolve eco → name with the SAME canonical resolver the rest of the
+  // Insights surface uses (gameInsightsService). The old code pulled the
+  // FIRST db.openings row per eco, which picked an arbitrary sub-line
+  // (e.g. D02 → "London System: Poisoned Pawn Variation") that disagreed
+  // with the "Queen's Pawn Game" shown everywhere else in the tab — same
+  // opening, two names (David 2026-06-11).
   for (const { game, color } of playerGames) {
     const key = game.eco ?? 'unknown';
-    const name = (game.eco && ecoToName.get(game.eco)) ?? game.eco ?? 'Unknown';
+    const name = getOpeningNameByEco(game.eco) ?? game.eco ?? 'Unknown';
     let bin = bins.get(key);
     if (!bin) {
       bin = { name, eco: game.eco, w: 0, wWins: 0, b: 0, bWins: 0 };

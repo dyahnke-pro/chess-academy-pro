@@ -242,8 +242,22 @@ async function main() {
     await shot(`tab-${t}`);
     const txt = await tabText();
     check(`${t} tab renders without "NaN"/"undefined"`, !/\bNaN\b|undefined/.test(txt), txt.slice(0, 80));
+    if (t === 'overview') {
+      // Seed games are 14 / 10 / 9 full moves → avg ~12. The bug reported
+      // PLIES (~24). Assert the FULL-move stat (David 2026-06-11).
+      const mpg = (txt.match(/Moves per game\s*(\d+)/i) || [])[1];
+      check('overview: Moves per game is full-moves not plies (≤ 16)', mpg !== undefined && Number(mpg) <= 16, `Moves per game = ${mpg ?? '?'}`);
+    }
     if (t === 'patterns') {
       check('patterns finished loading (not stuck on "Reading your habits")', !/Reading your habits/i.test(txt), txt.slice(0, 60));
+    }
+    if (t === 'openings') {
+      // The D02 seed must show ONE consistent name everywhere — the
+      // proficiency matrix used to call it "London System: Poisoned Pawn
+      // Variation" while the rest said "Queen's Pawn Game" (David 2026-06-11).
+      check('openings: D02 named consistently ("Queen\'s Pawn Game", no "London System")',
+        /Queen.?s Pawn Game/i.test(txt) && !/London System/i.test(txt),
+        /London System/i.test(txt) ? 'still shows "London System"' : 'consistent');
     }
   }
 
