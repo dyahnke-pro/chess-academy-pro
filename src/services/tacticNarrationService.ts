@@ -156,23 +156,23 @@ export function drillIncorrect(tacticType: TacticType): string {
 
 export function setupIntro(tacticType: TacticType, difficulty: number): string {
   const tacticLabel = tacticTypeLabel(tacticType).toLowerCase();
-  const moveText = difficulty === 1 ? 'one quiet move' : `${difficulty} quiet moves`;
-  return `Find ${moveText} that make the ${tacticLabel} inevitable.`;
+  const depth = difficulty >= 3 ? ' — calculate it all the way out' : '';
+  return `The quiet move comes first. Set up the ${tacticLabel}, then play it to the end${depth}.`;
 }
 
-export function setupCorrectPrep(remaining: number): string {
-  if (remaining <= 0) return 'Setup complete! Watch the tactic unfold.';
-  if (remaining === 1) return 'Good. One more prep move to go.';
-  return `Correct. ${remaining} prep moves remaining.`;
+/** Spoken once the quiet setup move lands — now the tactic is on. */
+export function setupPrepPlanted(tacticType: TacticType): string {
+  const tacticLabel = tacticTypeLabel(tacticType).toLowerCase();
+  return `The setup's in. Now calculate the ${tacticLabel}.`;
 }
 
 export function setupRevealComplete(tacticType: TacticType): string {
   const tacticLabel = tacticTypeLabel(tacticType).toLowerCase();
-  return `You engineered the ${tacticLabel}. That's deep calculation.`;
+  return `You calculated the ${tacticLabel} to the finish.`;
 }
 
 export function setupIncorrect(): string {
-  return "That doesn't set up the tactic. Think about what the position needs.";
+  return "That doesn't lead to the tactic. Look for the quiet move that sets it up.";
 }
 
 // ─── Layer 4: Create Narration ────────────────────────────────────────────

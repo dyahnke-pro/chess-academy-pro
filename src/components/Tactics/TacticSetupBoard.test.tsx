@@ -49,7 +49,7 @@ vi.mock('../../services/voiceService', () => ({
 
 vi.mock('../../services/tacticNarrationService', () => ({
   setupIntro: (): string => 'Find the setup move.',
-  setupCorrectPrep: (remaining: number): string => `${remaining} more to go.`,
+  setupPrepPlanted: (): string => 'Now calculate the tactic.',
   setupRevealComplete: (): string => 'Tactic revealed!',
   setupIncorrect: (): string => 'Not quite right.',
 }));
@@ -77,7 +77,7 @@ describe('TacticSetupBoard', () => {
     render(<TacticSetupBoard puzzle={puzzle} onComplete={vi.fn()} />);
 
     expect(screen.getByTestId('setup-board')).toBeInTheDocument();
-    expect(screen.getByText('Find the preparatory move')).toBeInTheDocument();
+    expect(screen.getByText('Find the quiet setup move')).toBeInTheDocument();
   });
 
   it('shows hint button when showHints is enabled', () => {
@@ -144,6 +144,6 @@ describe('TacticSetupBoard', () => {
     const puzzle = buildSetupPuzzle({ difficulty: 1 });
     render(<TacticSetupBoard puzzle={puzzle} onComplete={vi.fn()} />);
 
-    expect(screen.getByText(/Your turn — find the prep move/)).toBeInTheDocument();
+    expect(screen.getByText(/find the quiet move that sets up the/)).toBeInTheDocument();
   });
 });

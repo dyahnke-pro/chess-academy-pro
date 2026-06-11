@@ -10,12 +10,12 @@ import { useAppStore } from '../../stores/appStore';
 import type { MoveResult } from '../../hooks/useChessGame';
 import { tacticTypeLabel } from '../../services/tacticalProfileService';
 import { voiceService } from '../../services/voiceService';
-import { setupIntro, setupCorrectPrep, setupRevealComplete, setupIncorrect } from '../../services/tacticNarrationService';
+import { setupIntro, setupPrepPlanted, setupRevealComplete, setupIncorrect } from '../../services/tacticNarrationService';
 import { recordTacticOutcome } from '../../services/tacticAlertService';
 import type { CoachingTier } from '../../services/tacticAlertService';
 import type { SetupPuzzle } from '../../types';
 
-type BoardState = 'thinking' | 'correct' | 'incorrect' | 'reveal';
+type BoardState = 'thinking' | 'incorrect' | 'solved';
 
 interface TacticSetupBoardProps {
   puzzle: SetupPuzzle;
@@ -30,24 +30,32 @@ function parseUciMove(uci: string): { from: string; to: string; promotion?: stri
   };
 }
 
+/**
+ * The student plays the WHOLE solver line — the quiet setup move FIRST, then
+ * calculates and plays the tactic to the end (David 2026-06-11: "essentially
+ * calculation training mixed with tactics spotting"). Opponent replies
+ * auto-play. No passive "watch the reveal" phase.
+ *
+ * `solutionMoves` is the full alternating line from `setupFen`: the student
+ * plays even indices, the opponent auto-plays odd indices. Lichess lines
+ * always end on the solver's decisive move, so the student plays the last move.
+ */
 export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps): JSX.Element {
   const chessRef = useRef(new Chess(puzzle.setupFen));
   const [fen, setFen] = useState(puzzle.setupFen);
   const [boardState, setBoardState] = useState<BoardState>('thinking');
   const [moveIndex, setMoveIndex] = useState(0);
-  const [message, setMessage] = useState('Find the preparatory move');
-  const [revealStep, setRevealStep] = useState(0);
+  const [message, setMessage] = useState('Find the quiet setup move');
   const [boardKey, setBoardKey] = useState(0);
   const hasCompleted = useRef(false);
 
   const [wrongAttemptCount, setWrongAttemptCount] = useState(0);
   const wrongAttemptsRef = useRef(0);
 
-  const solutionMoves = puzzle.solutionMoves.split(' ').filter(Boolean);
-  const tacticMoves = puzzle.tacticMoves.split(' ').filter(Boolean);
-  const isPlayerTurn = moveIndex % 2 === 0; // Player moves on even indices
+  const line = useMemo(() => puzzle.solutionMoves.split(' ').filter(Boolean), [puzzle.solutionMoves]);
+  const totalSolverMoves = Math.ceil(line.length / 2);
+  const isPlayerTurn = moveIndex % 2 === 0; // student plays even indices
 
-  // Determine board orientation
   const orientation = puzzle.playerColor === 'black' ? 'black' : 'white';
 
   const { settings } = useSettings();
@@ -68,10 +76,10 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
     onCoach: handleStruggleCoach,
   });
 
-  // Derive the expected move for the hint system
+  // Derive the expected move for the hint system (always the student's next move).
   const knownMove = useMemo((): { from: string; to: string; san: string } | null => {
     if (boardState !== 'thinking' || !isPlayerTurn) return null;
-    const uci = solutionMoves[moveIndex];
+    const uci = line[moveIndex];
     if (!uci) return null;
     const from = uci.slice(0, 2);
     const to = uci.slice(2, 4);
@@ -83,7 +91,7 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
     } catch {
       return { from, to, san: '' };
     }
-  }, [boardState, isPlayerTurn, moveIndex, solutionMoves, fen]);
+  }, [boardState, isPlayerTurn, moveIndex, line, fen]);
 
   const { hintState, requestHint, resetHints } = useHintSystem({
     fen,
@@ -103,12 +111,12 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
     return () => { voiceService.stop(); };
   }, [resetHints, resetStruggle]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Auto-play opponent responses
+  // Auto-play opponent responses (odd indices in the line)
   useEffect(() => {
-    if (boardState !== 'thinking' || isPlayerTurn || moveIndex >= solutionMoves.length) return;
+    if (boardState !== 'thinking' || isPlayerTurn || moveIndex >= line.length) return;
 
     const timer = setTimeout(() => {
-      const move = solutionMoves[moveIndex];
+      const move = line[moveIndex];
       if (!move) return;
       const parsed = parseUciMove(move);
       try {
@@ -116,92 +124,60 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
         setFen(chessRef.current.fen());
         setBoardKey((k) => k + 1);
         setMoveIndex((i) => i + 1);
-
-        if (moveIndex + 1 >= solutionMoves.length) {
-          // All prep moves done — show the tactic reveal
-          setBoardState('reveal');
-          setMessage(`Setup complete! Now watch the ${tacticTypeLabel(puzzle.tacticType).toLowerCase()}...`);
-        }
       } catch {
-        // Invalid move in solution — skip
         setMoveIndex((i) => i + 1);
       }
-    }, 800);
+    }, 700);
 
     return () => clearTimeout(timer);
-  }, [boardState, isPlayerTurn, moveIndex, solutionMoves, puzzle.tacticType]);
+  }, [boardState, isPlayerTurn, moveIndex, line]);
 
-  // Reveal the tactic finish move by move
-  useEffect(() => {
-    if (boardState !== 'reveal' || revealStep >= tacticMoves.length) {
-      if (boardState === 'reveal' && revealStep >= tacticMoves.length && !hasCompleted.current) {
-        hasCompleted.current = true;
-        const timer = setTimeout(() => {
-          setBoardState('correct');
-          const completeMsg = setupRevealComplete(puzzle.tacticType);
-          setMessage(completeMsg);
-          void voiceService.speak(completeMsg);
-          recordTacticOutcome({
-            tacticType: puzzle.tacticType,
-            found: true,
-            wasCoached: wrongAttemptsRef.current > 0,
-            context: 'setup',
-          });
-          setTimeout(() => onComplete(true), 2000);
-        }, 800);
-        return () => clearTimeout(timer);
-      }
-      return undefined;
-    }
-
-    const timer = setTimeout(() => {
-      const move = tacticMoves[revealStep];
-      if (!move) return;
-      const parsed = parseUciMove(move);
-      try {
-        chessRef.current.move({ from: parsed.from, to: parsed.to, promotion: parsed.promotion });
-        setFen(chessRef.current.fen());
-        setBoardKey((k) => k + 1);
-        setRevealStep((s) => s + 1);
-      } catch {
-        setRevealStep((s) => s + 1);
-      }
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [boardState, revealStep, tacticMoves, puzzle.tacticType, onComplete]);
+  const finishSolved = useCallback((): void => {
+    if (hasCompleted.current) return;
+    hasCompleted.current = true;
+    setBoardState('solved');
+    const msg = setupRevealComplete(puzzle.tacticType);
+    setMessage(msg);
+    void voiceService.speak(msg);
+    recordTacticOutcome({
+      tacticType: puzzle.tacticType,
+      found: true,
+      wasCoached: wrongAttemptsRef.current > 0,
+      context: 'setup',
+    });
+    setTimeout(() => onComplete(true), 1400);
+  }, [puzzle.tacticType, onComplete]);
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (boardState !== 'thinking' || !isPlayerTurn) return;
 
-    const expectedMove = solutionMoves[moveIndex];
+    const expectedMove = line[moveIndex];
     if (!expectedMove) return;
-
     const expected = parseUciMove(expectedMove);
 
-    // Check if the move matches the expected solution
     if (move.from === expected.from && move.to === expected.to) {
-      // Apply to our chess instance to stay in sync
       try {
         chessRef.current.move({ from: move.from, to: move.to, promotion: move.promotion });
       } catch {
-        // Already applied or promotion mismatch — sync from expected
         chessRef.current.move({ from: expected.from, to: expected.to, promotion: expected.promotion });
       }
       resetHints();
       setFen(chessRef.current.fen());
-      setMoveIndex((i) => i + 1);
+      const wasFirstMove = moveIndex === 0;
+      const nextIndex = moveIndex + 1;
+      setMoveIndex(nextIndex);
 
-      if (moveIndex + 1 >= solutionMoves.length) {
-        setBoardState('reveal');
-        const revealMsg = `Setup complete! Now watch the ${tacticTypeLabel(puzzle.tacticType).toLowerCase()}...`;
-        setMessage(revealMsg);
-        void voiceService.speak(revealMsg);
-      } else {
-        const remaining = Math.ceil((solutionMoves.length - moveIndex - 1) / 2);
-        const prepMsg = setupCorrectPrep(remaining);
+      if (nextIndex >= line.length) {
+        finishSolved();
+      } else if (wasFirstMove) {
+        // The quiet setup just landed — the tactic is now on.
+        const prepMsg = setupPrepPlanted(puzzle.tacticType);
         setMessage(prepMsg);
         void voiceService.speak(prepMsg);
+      } else {
+        // Mid-tactic student move — stay quiet (the board is the lesson here),
+        // just update the on-screen prompt.
+        setMessage('Keep calculating…');
       }
       return;
     }
@@ -216,25 +192,23 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
     setMessage(wrongMsg);
     void voiceService.speak(wrongMsg);
 
-    // Remount board at the correct position (ChessBoard applied the wrong
-    // move internally, so we force-reset it via key change)
+    // ChessBoard applied the wrong move internally — force-reset it to the
+    // true position via a key change.
     setFen(chessRef.current.fen());
     setBoardKey((k) => k + 1);
 
-    // Brief feedback then back to thinking — allow retry
     setTimeout(() => {
       setBoardState('thinking');
     }, 1500);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- tracked for dedicated audit; intentional dep list.
-  }, [boardState, isPlayerTurn, moveIndex, solutionMoves, puzzle.tacticType, onComplete, resetHints]);
+  }, [boardState, isPlayerTurn, moveIndex, line, puzzle.tacticType, finishSolved, resetHints]);
 
-  const statusColor = boardState === 'correct'
+  const statusColor = boardState === 'solved'
     ? 'var(--color-success)'
     : boardState === 'incorrect'
       ? 'var(--color-error)'
-      : boardState === 'reveal'
-        ? 'var(--color-accent)'
-        : 'var(--color-text-muted)';
+      : 'var(--color-text-muted)';
+
+  const tacticLabel = tacticTypeLabel(puzzle.tacticType);
 
   return (
     <div className="flex flex-col gap-3">
@@ -283,14 +257,17 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
 
       {/* Move indicator */}
       <div className="text-center text-xs" style={{ color: 'var(--color-text-muted)' }}>
-        {boardState === 'thinking' && isPlayerTurn && (
-          <span>Your turn — find the prep move ({moveIndex / 2 + 1} of {Math.ceil(solutionMoves.length / 2)})</span>
+        {boardState === 'thinking' && isPlayerTurn && moveIndex === 0 && (
+          <span>Your turn — find the quiet move that sets up the {tacticLabel.toLowerCase()}</span>
+        )}
+        {boardState === 'thinking' && isPlayerTurn && moveIndex > 0 && (
+          <span>Calculate the {tacticLabel.toLowerCase()} — move {Math.floor(moveIndex / 2) + 1} of {totalSolverMoves}</span>
         )}
         {boardState === 'thinking' && !isPlayerTurn && (
           <span>Opponent responding...</span>
         )}
-        {boardState === 'reveal' && (
-          <span>The tactic unfolds...</span>
+        {boardState === 'solved' && (
+          <span>Solved — {tacticLabel.toLowerCase()} calculated to the end</span>
         )}
       </div>
     </div>

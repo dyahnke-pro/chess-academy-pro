@@ -2,87 +2,113 @@ import { PageHelp } from '../Layout/PageHelp';
 import { useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Wrench, ChevronRight, ChevronLeft } from 'lucide-react';
-import { buildSetupPuzzleQueue, gradeSetupPuzzle } from '../../services/tacticSetupService';
+import { ArrowLeft, Wrench, ChevronRight, TrendingUp } from 'lucide-react';
+import {
+  createSetupSession,
+  pickSetupPuzzle,
+  recordSetupResult,
+  type SetupAdaptiveSession,
+  type SetupTrainerItem,
+} from '../../services/setupTrainerService';
+import { seedPuzzles } from '../../services/puzzleService';
 import { tacticTypeLabel, tacticTypeIcon } from '../../services/tacticalProfileService';
+import { useAppStore } from '../../stores/appStore';
+import { db } from '../../db/schema';
 import { TacticSetupBoard } from './TacticSetupBoard';
 import { logAppAudit } from '../../services/appAuditor';
-import type { SetupPuzzle, SetupPuzzleDifficulty } from '../../types';
+import type { SetupPuzzleDifficulty } from '../../types';
 
 type Phase = 'select' | 'loading' | 'solving' | 'summary';
 
+const SESSION_LENGTH = 10;
+
 const DIFFICULTIES: Array<{ value: SetupPuzzleDifficulty; label: string; description: string }> = [
-  { value: 1, label: 'Beginner', description: '1 prep move before the tactic' },
-  { value: 2, label: 'Intermediate', description: '2 prep moves — deeper planning' },
-  { value: 3, label: 'Advanced', description: '3 prep moves — the first looks quiet' },
+  { value: 1, label: 'Beginner', description: 'Quiet move, then a 1-move tactic — shallow calculation' },
+  { value: 2, label: 'Intermediate', description: 'The tactic lands two moves out — deeper to see' },
+  { value: 3, label: 'Advanced', description: 'The tactic is far out — calculate the whole line' },
 ];
 
 export function TacticSetupPage(): JSX.Element {
   const navigate = useNavigate();
+  const activeProfile = useAppStore((s) => s.activeProfile);
+  const setActiveProfile = useAppStore((s) => s.setActiveProfile);
+
   const [phase, setPhase] = useState<Phase>('select');
-  const [difficulty, setDifficulty] = useState<SetupPuzzleDifficulty>(1);
-  const [queue, setQueue] = useState<SetupPuzzle[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [solved, setSolved] = useState(0);
-  const [failed, setFailed] = useState(0);
-  const completedRef = useRef<Set<number>>(new Set());
+  const [item, setItem] = useState<SetupTrainerItem | null>(null);
+  const [displayRating, setDisplayRating] = useState<number>(activeProfile?.puzzleRating ?? 1200);
+  const sessionRef = useRef<SetupAdaptiveSession | null>(null);
+  const completedRef = useRef(false);
 
   const handleSelectDifficulty = useCallback(async (d: SetupPuzzleDifficulty): Promise<void> => {
-    setDifficulty(d);
     setPhase('loading');
     void logAppAudit({
       kind: 'tactics-surface-event',
       category: 'subsystem',
       source: 'TacticSetupPage.difficulty-selected',
-      summary: `setup-trainer started at difficulty=${d}`,
+      summary: `setup-trainer started at level=${d}`,
     });
-    const puzzles = await buildSetupPuzzleQueue(10, d);
-    if (puzzles.length === 0) {
-      setQueue([]);
+
+    // The corpus must be in Dexie before we can band-select.
+    await seedPuzzles();
+
+    const baseRating = activeProfile?.puzzleRating ?? 1200;
+    const session = createSetupSession(d, baseRating);
+    sessionRef.current = session;
+    setDisplayRating(session.targetRating);
+
+    const first = await pickSetupPuzzle(session);
+    if (!first) {
+      setItem(null);
       setPhase('summary');
       return;
     }
-    setQueue(puzzles);
-    setCurrentIndex(0);
-    setSolved(0);
-    setFailed(0);
-    completedRef.current = new Set();
+    completedRef.current = false;
+    setItem(first);
     setPhase('solving');
-  }, []);
+  }, [activeProfile?.puzzleRating]);
 
   const handleComplete = useCallback(async (correct: boolean): Promise<void> => {
-    const puzzle = queue.at(currentIndex);
-    if (!puzzle) return;
+    const session = sessionRef.current;
+    const current = item;
+    if (!session || !current) return;
+    if (completedRef.current) return; // guard double-fire
+    completedRef.current = true;
 
-    // Only count the first completion of each puzzle
-    if (completedRef.current.has(currentIndex)) return;
-    completedRef.current.add(currentIndex);
+    const playerRating = activeProfile?.puzzleRating ?? 1200;
+    const { session: nextSession, newPlayerRating } = recordSetupResult(
+      session,
+      current.puzzle.id,
+      current.rating,
+      correct,
+      playerRating,
+    );
+    sessionRef.current = nextSession;
+    setDisplayRating(nextSession.targetRating);
 
-    if (correct) setSolved((s) => s + 1);
-    else setFailed((f) => f + 1);
+    // Persist the adapted puzzle rating (consistent with AdaptivePuzzlePage).
+    if (activeProfile) {
+      const updated = { ...activeProfile, puzzleRating: newPlayerRating };
+      setActiveProfile(updated);
+      void db.profiles.update(activeProfile.id, { puzzleRating: newPlayerRating });
+    }
 
-    const grade = correct ? 'good' : 'again';
-    await gradeSetupPuzzle(puzzle.id, grade, correct);
-    // No auto-advance — user navigates with arrows
-  }, [queue, currentIndex]);
-
-  const goNext = useCallback((): void => {
-    const nextIndex = currentIndex + 1;
-    if (nextIndex >= queue.length) {
+    if (nextSession.attempted >= SESSION_LENGTH) {
       setPhase('summary');
-    } else {
-      setCurrentIndex(nextIndex);
+      return;
     }
-  }, [currentIndex, queue.length]);
 
-  const goPrev = useCallback((): void => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
+    const next = await pickSetupPuzzle(nextSession);
+    if (!next) {
+      setPhase('summary');
+      return;
     }
-  }, [currentIndex]);
+    completedRef.current = false;
+    setItem(next);
+  }, [item, activeProfile, setActiveProfile]);
 
-  const currentPuzzle = queue.at(currentIndex);
-  const total = solved + failed;
+  const session = sessionRef.current;
+  const solved = session?.solved ?? 0;
+  const attempted = session?.attempted ?? 0;
 
   return (
     <div className="max-w-2xl mx-auto w-full p-4 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 flex flex-col gap-4 min-h-[80vh]">
@@ -98,10 +124,10 @@ export function TacticSetupPage(): JSX.Element {
             helpId="tactics-setup"
             title="How the Setup Trainer works"
             steps={[
-              { label: 'What this trains', body: 'Not "find the fork" — "engineer the fork." You find the quiet preparatory move that makes a tactic inevitable a move or two later.' },
-              { label: 'Pick a difficulty', body: 'Beginner is 1 prep move; harder levels add more prep moves before the tactic, and the first move looks quieter.' },
-              { label: 'Solve the set', body: 'Work through the puzzles; missed ones come back on a schedule so the setup patterns stick.' },
-              { label: 'Where it fits', body: 'A deeper tactical skill than spot-the-motif drilling — it sharpens the move-before-the-move that wins games.' },
+              { label: 'What this trains', body: 'Calculation mixed with tactics spotting. Each position has a quiet preparatory move — no capture, no check — that sets up a tactic. You find it, then calculate and play the tactic all the way to the end.' },
+              { label: 'Pick a depth', body: 'Beginner: the tactic lands one move after the setup. Advanced: it is several moves out, so you calculate the whole line before you commit.' },
+              { label: 'It adapts', body: 'Puzzles are pulled near your tactic rating and get harder as you solve, easier as you miss — so the calculation stays at the edge of what you can see.' },
+              { label: 'Where it fits', body: 'A deeper skill than spot-the-motif drilling: the move-before-the-move, calculated to the finish, is what wins real games.' },
             ]}
           />
         </div>
@@ -111,8 +137,8 @@ export function TacticSetupPage(): JSX.Element {
       {phase === 'select' && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col gap-4">
           <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
-            Find the quiet preparatory moves that make the tactic inevitable.
-            Not &ldquo;find the fork&rdquo; — &ldquo;engineer the fork.&rdquo;
+            Find the quiet move that sets up the tactic, then calculate it to the end.
+            Not &ldquo;spot the fork&rdquo; — &ldquo;engineer the fork, then play it out.&rdquo;
           </p>
           <div className="flex flex-col gap-3">
             {DIFFICULTIES.map((d) => (
@@ -146,15 +172,15 @@ export function TacticSetupPage(): JSX.Element {
       {/* Loading */}
       {phase === 'loading' && (
         <div className="flex items-center justify-center flex-1" data-testid="loading">
-          <p style={{ color: 'var(--color-text-muted)' }}>Generating setup puzzles...</p>
+          <p style={{ color: 'var(--color-text-muted)' }}>Finding setup positions...</p>
         </div>
       )}
 
       {/* Solving */}
-      {phase === 'solving' && currentPuzzle && (
+      {phase === 'solving' && item && (
         <AnimatePresence mode="wait">
           <motion.div
-            key={currentPuzzle.id}
+            key={item.puzzle.id}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
@@ -164,56 +190,35 @@ export function TacticSetupPage(): JSX.Element {
             {/* Progress */}
             <div className="flex items-center gap-3">
               <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'var(--color-border)' }}>
-                <div className="h-full rounded-full transition-all" style={{ background: 'var(--color-accent)', width: `${Math.round((currentIndex / queue.length) * 100)}%` }} />
+                <div className="h-full rounded-full transition-all" style={{ background: 'var(--color-accent)', width: `${Math.round((attempted / SESSION_LENGTH) * 100)}%` }} />
               </div>
-              <span className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>{currentIndex + 1}/{queue.length}</span>
+              <span className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>{Math.min(attempted + 1, SESSION_LENGTH)}/{SESSION_LENGTH}</span>
             </div>
 
-            {/* Badge */}
-            <div className="flex items-center gap-2">
-              <span className="text-sm">{tacticTypeIcon(currentPuzzle.tacticType)}</span>
+            {/* Badge row */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-sm">{tacticTypeIcon(item.puzzle.tacticType)}</span>
               <span className="text-xs px-2 py-1 rounded-full font-medium" style={{ background: 'color-mix(in srgb, var(--color-success) 15%, transparent)', color: 'var(--color-success)' }}>
-                Setup: {tacticTypeLabel(currentPuzzle.tacticType)}
+                Setup: {tacticTypeLabel(item.puzzle.tacticType)}
               </span>
-              <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                {difficulty === 1 ? '1 prep move' : `${difficulty} prep moves`}
+              <span className="text-xs flex items-center gap-1" style={{ color: 'var(--color-text-muted)' }}>
+                <TrendingUp size={12} /> ~{displayRating}
               </span>
             </div>
 
             {/* Board */}
             <TacticSetupBoard
-              puzzle={currentPuzzle}
+              puzzle={item.puzzle}
               onComplete={(correct) => void handleComplete(correct)}
             />
-
-            {/* Navigation arrows */}
-            <div className="flex items-center justify-center gap-6 py-1" data-testid="puzzle-nav">
-              <button
-                onClick={goPrev}
-                disabled={currentIndex === 0}
-                className="p-2 rounded-lg border transition-opacity disabled:opacity-30"
-                style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-                data-testid="nav-prev"
-              >
-                <ChevronLeft size={20} />
-              </button>
-              <span className="text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>
-                {currentIndex + 1} / {queue.length}
-              </span>
-              <button
-                onClick={goNext}
-                className="p-2 rounded-lg border transition-opacity"
-                style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-                data-testid="nav-next"
-              >
-                <ChevronRight size={20} />
-              </button>
-            </div>
 
             {/* Stats */}
             <div className="flex justify-center gap-6 text-sm" style={{ color: 'var(--color-text-muted)' }}>
               <span style={{ color: 'var(--color-success)' }}>{solved} solved</span>
-              <span style={{ color: 'var(--color-error)' }}>{failed} missed</span>
+              <span style={{ color: 'var(--color-error)' }}>{attempted - solved} missed</span>
+              <button onClick={() => setPhase('summary')} className="underline opacity-70 hover:opacity-100" data-testid="end-session">
+                End session
+              </button>
             </div>
           </motion.div>
         </AnimatePresence>
@@ -230,28 +235,19 @@ export function TacticSetupPage(): JSX.Element {
           <Wrench size={40} style={{ color: 'var(--color-success)' }} />
           <div className="text-center">
             <h2 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>Setup Training Complete</h2>
-            {total > 0 ? (
+            {attempted > 0 ? (
               <p className="text-lg mt-2" style={{ color: 'var(--color-text-muted)' }}>
-                {solved}/{total} setups found ({Math.round((solved / total) * 100)}%)
+                {solved}/{attempted} setups calculated ({Math.round((solved / attempted) * 100)}%)
               </p>
             ) : (
-              <>
               <p className="text-sm mt-2" style={{ color: 'var(--color-text-muted)' }}>
-                Import games to review your in-game mistakes and unlock setup training.
+                No setup positions found at that depth right now. Try another level.
               </p>
-              <button
-                onClick={() => void navigate('/games/import')}
-                className="mt-4 px-5 py-2.5 rounded-xl font-semibold text-sm"
-                style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
-              >
-                Import Games
-              </button>
-              </>
             )}
           </div>
           <div className="flex gap-3">
             <button
-              onClick={() => setPhase('select')}
+              onClick={() => { sessionRef.current = null; setItem(null); setPhase('select'); }}
               className="px-6 py-3 rounded-xl font-semibold text-sm"
               style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
               data-testid="play-again"
