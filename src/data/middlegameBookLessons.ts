@@ -1,5 +1,4 @@
 // Book-grounded middlegame lessons for the Coach › Middlegame tab.
-//
 // DOCTRINE (see docs/plans/2026-06-11-coach-middlegame-book-tab.md):
 // every lesson here is Path B — the master's OWN diagrammed position,
 // digitized from the public-domain Gutenberg edition, with every move
@@ -16,11 +15,11 @@ export interface BookSource {
   readonly bookSlug: string;
   readonly bookTitle: string;
   readonly author: string;
-  /** Project Gutenberg ebook id — the public-domain source. */
-  readonly gutenbergId: number;
-  /** The diagram image this position was digitized from. */
-  readonly figure: string;
-  /** Where in the book it lives (for the player + provenance). */
+  /** Project Gutenberg ebook id, when the book lives there (clean Fig scans). */
+  readonly gutenbergId?: number;
+  /** The diagram image this position was digitized from (Gutenberg books). */
+  readonly figure?: string;
+  /** Where in the book it lives (for the player + provenance). Required. */
   readonly locationLabel: string;
 }
 
@@ -68,6 +67,13 @@ export interface MiddlegameBookTheme {
 
 export const MIDDLEGAME_BOOK_THEMES: ReadonlyArray<MiddlegameBookTheme> = [
   {
+    id: 'pawn-chain',
+    title: 'The Pawn Chain',
+    blurb:
+      'Nimzowitsch’s law: a fixed pawn chain is struck at its base — the soft ' +
+      'rearmost link — with a pawn-lever and massed pieces, never at the head.',
+  },
+  {
     id: 'attack-castled-king',
     title: 'The Attack on the Castled King',
     blurb:
@@ -77,6 +83,102 @@ export const MIDDLEGAME_BOOK_THEMES: ReadonlyArray<MiddlegameBookTheme> = [
 ];
 
 export const MIDDLEGAME_BOOK_LESSONS: ReadonlyArray<MiddlegameBookLesson> = [
+  {
+    // My System is public-domain as a 1925/1929 work, but the modern algebraic
+    // editions are copyrighted. We lift NO prose: the position and moves are
+    // facts (chess.js-validated, the canonical French Advance), and the teaching
+    // text is authored here as an elegant translation of Nimzowitsch's
+    // established idea — attributed to the book, not quoted from any edition.
+    id: 'nimzowitsch-ms-pawn-chain-base',
+    themeId: 'pawn-chain',
+    title: 'Attack the Chain at its Base',
+    openingId: 'french-defense',
+    source: {
+      bookSlug: 'nimzowitsch-my-system',
+      bookTitle: 'My System',
+      author: 'Aron Nimzowitsch',
+      locationLabel: 'Chapter 9 — The Pawn Chain',
+    },
+    principle: {
+      say:
+        'Nimzowitsch’s law of the pawn chain: a chain is a fixed formation, and ' +
+        'you do not batter its head, which the whole chain defends — you strike ' +
+        'its base, the rearmost link, where its support runs out. Here White’s ' +
+        'pawns on e5 and d4 are the chain; d4 is the base. Bring a pawn-lever to ' +
+        'the base and mass your pieces on it.',
+      sayShort: 'Strike the chain at its base.',
+    },
+    // Canonical French Advance, chain e5–d4 set, Black to move. Validated.
+    fen: 'rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3',
+    studentSide: 'black',
+    technique: [
+      {
+        san: 'c5',
+        say:
+          'The lever. The c-pawn strikes d4, the base of White’s chain — the one ' +
+          'link the chain cannot defend with another pawn.',
+        sayShort: 'The lever strikes the base.',
+        arrows: [{ from: 'c7', to: 'c5', color: 'green' }],
+        highlights: [{ square: 'd4', color: 'yellow' }],
+      },
+      {
+        san: 'c3',
+        say: 'White props the base with a pawn — the only way to hold d4.',
+        sayShort: 'White props the base.',
+      },
+      {
+        san: 'Nc6',
+        say: 'A second attacker joins the base. The knight bears down on d4.',
+        sayShort: 'Pile a piece on the base.',
+        arrows: [{ from: 'b8', to: 'c6', color: 'green' }],
+        highlights: [{ square: 'd4', color: 'yellow' }],
+      },
+      {
+        san: 'Nf3',
+        say: 'White defends d4 a second time.',
+        sayShort: 'White defends the base again.',
+      },
+      {
+        san: 'Qb6',
+        say:
+          'The queen comes to b6 — a third attacker on d4, and the b2-pawn in her ' +
+          'sights as well. Every Black piece now points at the base.',
+        sayShort: 'Queen joins — three on the base.',
+        arrows: [{ from: 'd8', to: 'b6', color: 'green' }],
+        highlights: [
+          { square: 'd4', color: 'yellow' },
+          { square: 'b2', color: 'blue' },
+        ],
+      },
+      {
+        san: 'Be2',
+        say: 'White finishes developing, the base still under siege.',
+        sayShort: 'White develops; the base holds, just.',
+      },
+      {
+        san: 'cxd4',
+        say:
+          'The lever does its work: Black captures at the base. The chain’s foot ' +
+          'is torn away and the lines against White’s centre swing open.',
+        sayShort: 'Capture the base — the chain cracks.',
+        arrows: [{ from: 'c5', to: 'd4', color: 'green' }],
+        highlights: [{ square: 'd4', color: 'yellow' }],
+      },
+      {
+        san: 'cxd4',
+        say:
+          'White must recapture, and the proud chain is now a single isolated ' +
+          'pawn on d4 — exactly the weakness the base-attack was built to create.',
+        sayShort: 'The chain is now one weak pawn.',
+        highlights: [{ square: 'd4', color: 'yellow' }],
+      },
+    ],
+    rule:
+      'A pawn chain is attacked at its base, not its head: bring a pawn-lever to ' +
+      'the rearmost link and mass your pieces there until it falls.',
+    outcome: 'equal',
+    sources: ['concept:pawn-chain', 'https://en.wikipedia.org/wiki/My_System'],
+  },
   {
     id: 'capablanca-cf-ex13-castled-king',
     themeId: 'attack-castled-king',

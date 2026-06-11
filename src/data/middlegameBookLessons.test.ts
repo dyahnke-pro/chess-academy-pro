@@ -66,7 +66,7 @@ describe('middlegame book lessons — data integrity', () => {
       it('carries the book attribution and resolvable sources', () => {
         expect(lesson.source.bookTitle.length).toBeGreaterThan(0);
         expect(lesson.source.author.length).toBeGreaterThan(0);
-        expect(lesson.source.gutenbergId).toBeGreaterThan(0);
+        expect(lesson.source.locationLabel.length).toBeGreaterThan(0);
         expect(lesson.sources.length).toBeGreaterThan(0);
         expect(lesson.sources.every(isResolvableSource)).toBe(true);
       });

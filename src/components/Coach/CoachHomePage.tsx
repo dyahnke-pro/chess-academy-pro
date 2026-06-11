@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Swords, BarChart3, Calendar, Search, GraduationCap, History, Info, X, Crown } from 'lucide-react';
+import { Swords, BarChart3, Calendar, Search, GraduationCap, History, Info, X, Crown, Library } from 'lucide-react';
 import { useState } from 'react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
@@ -172,6 +172,20 @@ export function CoachHomePage(): JSX.Element {
           gB={gB}
           gS={gS}
           testId="coach-action-endgame"
+        />
+        <SecondaryTile
+          icon={<Library size={28} className="text-amber-400" />}
+          label="The Coaches Library"
+          info={
+            "The masters' own books, brought to life. Tap a book and it opens like a book — the author's real public-domain words, read aloud (tap any paragraph to start there), turnable pages — and wherever the original printed a drawn diagram, a LIVE, playable board sits in its place.\n\nCapablanca's Chess Fundamentals is alive now (the middlegame combinations). Chess Strategy, My System and more are on the shelf, coming to life."
+          }
+          rgb="251, 191, 36"
+          bgClass="bg-amber-500/10"
+          textColorClass="text-amber-400"
+          onClick={goTo('library', '/coach/library')}
+          gB={gB}
+          gS={gS}
+          testId="coach-action-library"
         />
         <SecondaryTile
           icon={<Search size={28} className="text-sky-400" />}
