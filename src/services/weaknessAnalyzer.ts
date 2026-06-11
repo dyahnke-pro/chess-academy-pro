@@ -976,7 +976,7 @@ export async function computeWeaknessProfile(
     db.flashcards.toArray(),
     db.mistakePuzzles.toArray(),
     db.openingWeakSpots.toArray(),
-    getMisconceptionProfile(),
+    getMisconceptionProfile({ countedOnly: true }),
   ]);
 
   // Run each analyzer

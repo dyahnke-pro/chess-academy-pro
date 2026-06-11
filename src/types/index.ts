@@ -1337,6 +1337,12 @@ export interface MisconceptionTagRecord {
    *  = due now. Lengthens with each success, snaps back on a miss. */
   dueAt?: number;
   lastDrilledAt?: number;
+  /** True = this slip COUNTS toward the formal weakness profile (the
+   *  learned/count-against gate). False = display-only: it still shows in
+   *  Thinking Errors / the misconception bucket, but the weakness analysis
+   *  ignores it (an un-learned / first-exposure line). Absent on legacy rows =
+   *  treated as counted. */
+  counted?: boolean;
 }
 
 

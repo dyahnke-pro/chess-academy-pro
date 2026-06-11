@@ -364,7 +364,7 @@ function mergeByKey(rows: UnifiedWeakness[]): UnifiedWeakness[] {
  *  Ranked by open/due count, then severity, then recency. */
 export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
   const [misAgg, allMis, mistakes, weakSpots, tactics, games, heatmap, addressedConv] = await Promise.all([
-    getMisconceptionProfile(),
+    getMisconceptionProfile({ countedOnly: true }),
     db.misconceptionTags.toArray(),
     db.mistakePuzzles.toArray(),
     db.openingWeakSpots.toArray(),

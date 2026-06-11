@@ -83,12 +83,12 @@ export async function captureMisconception(
     return { classification, coachNote, logged: false };
   }
 
-  // The count-against rule: only learned lines / principles become
-  // weaknesses. On an unlearned line we still return the teach.
-  if (!args.shouldCount) {
-    return { classification, coachNote, logged: false };
-  }
-
+  // Always LOG the slip so it shows in Thinking Errors. The `counted` flag
+  // carries the learned/count-against gate: an un-learned line is display-only
+  // and doesn't inflate the formal weakness profile. (The classifier already
+  // ran above — the old early-return threw its result away on un-learned lines,
+  // which is why Thinking Errors sat empty after bulk import. We're not removing
+  // the LLM call; we're keeping the result we already paid for.)
   const record = await logMisconception({
     tag: classification.tag,
     customLabel: classification.customLabel,
@@ -104,13 +104,14 @@ export async function captureMisconception(
     userReason: args.classifyInput.userReason,
     coachNote,
     sourceGameId: args.context.sourceGameId,
+    counted: args.shouldCount,
   });
 
   // Option B (David 2026-05-25): a logged tactical/concrete slip with a
   // known best move ALSO becomes a drillable mistakePuzzle, so coach-caught
   // mistakes surface in My Mistakes + Tactics, not just as a tally. Deduped
   // by position inside the helper; fire-and-forget so capture never blocks.
-  if (record && args.context.bestSan) {
+  if (record && args.shouldCount && args.context.bestSan) {
     void addMistakePuzzleFromCapture({
       fen: args.context.fen,
       playedSan: args.context.playedSan ?? '',

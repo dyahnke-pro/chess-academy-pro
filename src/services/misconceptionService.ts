@@ -71,6 +71,10 @@ export interface LogMisconceptionInput {
   userReason?: string;
   coachNote?: string;
   sourceGameId?: string;
+  /** Whether this counts toward the formal weakness profile. Default true.
+   *  Pass false to log a display-only slip (un-learned line) that shows in
+   *  Thinking Errors but doesn't inflate the weakness analysis. */
+  counted?: boolean;
 }
 
 /** Persist one tagged misconception. Rejects a tag outside the closed
@@ -103,6 +107,7 @@ export async function logMisconception(
     status: 'open',
     masteryHits: 0,
     dueAt: Date.now(), // due immediately on first capture
+    counted: input.counted ?? true,
   };
   await db.misconceptionTags.add(record);
   void logAppAudit({
@@ -157,9 +162,15 @@ export interface MisconceptionAggregate {
  *  today but resurface when due — they never graduate out. `other` rows
  *  are grouped by their free-text label so distinct uncategorised errors
  *  stay distinct for later promotion. */
-export async function getMisconceptionProfile(): Promise<MisconceptionAggregate[]> {
+export async function getMisconceptionProfile(
+  opts?: { countedOnly?: boolean },
+): Promise<MisconceptionAggregate[]> {
   const now = Date.now();
-  const all = await db.misconceptionTags.toArray();
+  const raw = await db.misconceptionTags.toArray();
+  // The Thinking-Errors display reads everything; the weakness analysis passes
+  // countedOnly so display-only (un-learned) slips don't inflate the formal
+  // weakness profile. Legacy rows have no `counted` field → treated as counted.
+  const all = opts?.countedOnly ? raw.filter((r) => r.counted !== false) : raw;
   const groups = new Map<string, MisconceptionTagRecord[]>();
   for (const rec of all) {
     // Keep distinct free-text labels separate within the 'other' tag.

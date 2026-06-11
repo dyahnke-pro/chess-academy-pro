@@ -50,7 +50,7 @@ describe('captureMisconception', () => {
     expect(mockedLog.mock.calls[0][0].userReason).toBe('I wanted to attack the king');
   });
 
-  it('teaches but does NOT log on an unlearned line (count-against gate)', async () => {
+  it('logs an unlearned-line slip for DISPLAY, but marked counted=false', async () => {
     mockedClassify.mockResolvedValueOnce({ tag: 'hung-material', coachNote: 'The knight is undefended.' });
     const r = await captureMisconception({
       classifyInput: { fen: FEN, playedSan: 'Ng4' },
@@ -59,8 +59,11 @@ describe('captureMisconception', () => {
       context: { fen: FEN, playedSan: 'Ng4' },
     });
     expect(r.coachNote).toContain('undefended');
-    expect(r.logged).toBe(false);
-    expect(mockedLog).not.toHaveBeenCalled();
+    // Now it LOGS so it shows in Thinking Errors — but counted=false, so the
+    // weakness analysis ignores it (the learned/count-against gate moved onto
+    // the flag instead of dropping the already-classified slip on the floor).
+    expect(mockedLog).toHaveBeenCalledOnce();
+    expect(mockedLog.mock.calls[0][0].counted).toBe(false);
   });
 
   it("does not log when the move was actually fine (tag 'none')", async () => {
