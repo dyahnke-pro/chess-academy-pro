@@ -1130,6 +1130,12 @@ export function analyzeGameMistakes(game: GameRecord): GameMistake[] {
       }
     }
 
+    // Clamp magnitude. Mate scores are stored as huge sentinel evals, so a swing
+    // from "+mate" to "-mate" reads as tens of thousands of centipawns and wrecks
+    // every average (Avg CP loss showing thousands of cp, a costliest mistake at
+    // -30569cp). A decisive blunder is a decisive blunder — cap it for the stats.
+    cpLoss = Math.min(cpLoss, 1000);
+
     // Reconstruct the position FEN once — material-based phase classification
     // and tactic detection both use it. (If the PGN can't be replayed we fall
     // back to a ply guess that never falsely reports 'endgame'.)
