@@ -121,6 +121,52 @@ function buildSeedGames() {
   return games;
 }
 
+// Minimal-valid MistakePuzzle records tied to specific seed games so the
+// Mistakes tab populates AND the drilldown's "drill these mistakes" scope
+// can be verified. 3 belong to White D02 games (in the drilldown's 9), 2
+// to other openings.
+function buildSeedPuzzles() {
+  const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
+  const mk = (id, sourceGameId, openingName, cls) => ({
+    id,
+    fen,
+    playerMove: 'f1c4',
+    playerMoveSan: 'Bc4',
+    bestMove: 'f3e5',
+    bestMoveSan: 'Nxe5',
+    moves: 'f3e5 c6e5',
+    cpLoss: cls === 'blunder' ? 320 : cls === 'mistake' ? 160 : 80,
+    classification: cls,
+    gamePhase: 'opening',
+    moveNumber: 6,
+    sourceGameId,
+    sourceMode: 'chesscom',
+    playerColor: 'white',
+    promptText: 'Find the better move.',
+    narration: { intro: '', moveNarrations: [], outro: '', conceptHint: '' },
+    createdAt: '2026-03-10T00:00:00.000Z',
+    opponentName: 'opp',
+    gameDate: '2026-03-10',
+    openingName,
+    evalBefore: 40,
+    srsInterval: 0,
+    srsEaseFactor: 2.5,
+    srsRepetitions: 0,
+    srsDueDate: '2026-03-11',
+    srsLastReview: null,
+    status: 'unsolved',
+    attempts: 0,
+    successes: 0,
+  });
+  return [
+    mk('mp_d1', 'd02w_0', "Queen's Pawn Game", 'blunder'),
+    mk('mp_d2', 'd02w_1', "Queen's Pawn Game", 'mistake'),
+    mk('mp_d3', 'd02w_2', "Queen's Pawn Game", 'inaccuracy'),
+    mk('mp_c1', 'c50_0', 'Italian Game', 'mistake'),
+    mk('mp_c2', 'c00_0', 'French Defense', 'blunder'),
+  ];
+}
+
 async function dismissOnboarding(page) {
   const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
   if (await bubble.count().catch(() => 0)) {
@@ -206,6 +252,16 @@ async function main() {
       tx.oncomplete = () => res();
       tx.onerror = () => rej(new Error('games write failed'));
     });
+    // 2b) bulk-put the mistake puzzles (Mistakes tab + drilldown scope).
+    if (payload.puzzles && payload.puzzles.length) {
+      await new Promise((res, rej) => {
+        const tx = db.transaction('mistakePuzzles', 'readwrite');
+        const store = tx.objectStore('mistakePuzzles');
+        for (const p of payload.puzzles) store.put(p);
+        tx.oncomplete = () => res();
+        tx.onerror = () => rej(new Error('puzzles write failed'));
+      });
+    }
     const count = await new Promise((res) => {
       const tx = db.transaction('games', 'readonly');
       const c = tx.objectStore('games').count();
@@ -213,7 +269,7 @@ async function main() {
     });
     db.close();
     return { wrote: games.length, total: count };
-  }, { games: buildSeedGames(), user: USER });
+  }, { games: buildSeedGames(), user: USER, puzzles: buildSeedPuzzles() });
   console.log(`[seed] wrote ${seedResult.wrote}, games store now ${seedResult.total}`);
 
   // Reload so the insights services re-read Dexie with our seed.
@@ -251,6 +307,11 @@ async function main() {
     if (t === 'patterns') {
       check('patterns finished loading (not stuck on "Reading your habits")', !/Reading your habits/i.test(txt), txt.slice(0, 60));
     }
+    if (t === 'mistakes') {
+      // 5 puzzles seeded → the Errors breakdown must be non-zero now.
+      const errCount = (txt.match(/(\d+)\s*ERRORS/i) || [])[1];
+      check('mistakes tab shows seeded errors (not stuck at 0)', errCount !== undefined && Number(errCount) > 0, `${errCount ?? '?'} errors`);
+    }
     if (t === 'openings') {
       // The D02 seed must show ONE consistent name everywhere — the
       // proficiency matrix used to call it "London System: Poisoned Pawn
@@ -287,6 +348,19 @@ async function main() {
   const moveNums = [...dd.matchAll(/Moves\s+(\d+)/g)].map((m) => Number(m[1]));
   const maxMoves = moveNums.length ? Math.max(...moveNums) : 0;
   check('drilldown: move counts are full-moves not plies (≤ 20)', moveNums.length > 0 && maxMoves <= 20, `max=${maxMoves} of [${moveNums.join(',')}]`);
+
+  // ── Scoped mistakes: CTA shows the count from THESE games (3 of 5), and
+  //    clicking it opens the mistakes list scoped to those games (David). ─
+  const ctaText = await page.locator('[data-testid="drill-opening-mistakes-btn"]').innerText().catch(() => '');
+  const ctaCount = (ctaText.match(/Drill\s+(\d+)\s+mistake/i) || [])[1];
+  check('drilldown: "drill these mistakes" CTA shows the scoped count (3)', ctaCount === '3', `CTA="${ctaText.trim()}"`);
+  await page.locator('[data-testid="drill-opening-mistakes-btn"]').click({ timeout: 5000 }).catch(() => undefined);
+  await page.locator('[data-testid="opening-scope-badge"]').waitFor({ timeout: 8000 }).catch(() => undefined);
+  await page.waitForTimeout(1500);
+  await shot('mistakes-scoped-to-opening');
+  const scopedCards = await page.locator('[data-testid="puzzle-card"]').count().catch(() => 0);
+  const badge = await page.locator('[data-testid="opening-scope-badge"]').innerText().catch(() => '');
+  check('scoped mistakes list shows ONLY these games\' mistakes (3, not 5)', scopedCards === 3, `${scopedCards} cards, badge="${badge.trim()}"`);
 
   report.numbers = { gamesStat, listCount, errPerGame, moveNums };
   report.pageErrors = pageErrors;

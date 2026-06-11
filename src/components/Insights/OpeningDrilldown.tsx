@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, BookOpen } from 'lucide-react';
+import { ArrowLeft, BookOpen, AlertTriangle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import { getGamesByOpening } from '../../services/gameInsightsService';
 import { reconstructMovesFromGame } from '../../services/gameReconstructionService';
 import { countFullMovesInPgn } from '../../utils/pgnMoveCount';
+import { getAllMistakePuzzles } from '../../services/mistakePuzzleService';
 import { calculateAccuracy, getClassificationCounts } from '../../services/accuracyService';
 import { logAppAudit } from '../../services/appAuditor';
 import { useAppStore } from '../../stores/appStore';
@@ -73,6 +74,10 @@ export function OpeningDrilldown({ opening, onBack }: OpeningDrilldownProps): JS
   const activeProfile = useAppStore((s) => s.activeProfile);
   const [games, setGames] = useState<GameCardData[]>([]);
   const [loading, setLoading] = useState(true);
+  // Count of saved mistake-puzzles drawn from EXACTLY the games shown here,
+  // so "see these mistakes" stays consistent with the opening's game count
+  // (David 2026-06-11: "we click to see our mistakes in this app").
+  const [mistakeCount, setMistakeCount] = useState(0);
 
   useEffect(() => {
     if (!opening.eco) {
@@ -136,6 +141,23 @@ export function OpeningDrilldown({ opening, onBack }: OpeningDrilldownProps): JS
      
   }, [opening.eco, activeProfile?.name, activeProfile?.preferences.chessComUsername, activeProfile?.preferences.lichessUsername]);
 
+  // Tally the mistake-puzzles that belong to the SHOWN games only.
+  useEffect(() => {
+    if (games.length === 0) {
+      setMistakeCount(0);
+      return;
+    }
+    const idSet = new Set(games.map((g) => g.game.id));
+    let cancelled = false;
+    void getAllMistakePuzzles().then((all) => {
+      if (cancelled) return;
+      setMistakeCount(all.filter((p) => idSet.has(p.sourceGameId)).length);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [games]);
+
   const wldData = [
     { name: 'Wins', value: opening.wins, color: 'var(--color-success)' },
     { name: 'Losses', value: opening.losses, color: 'var(--color-error)' },
@@ -183,6 +205,24 @@ export function OpeningDrilldown({ opening, onBack }: OpeningDrilldownProps): JS
         >
           <BookOpen size={16} />
           Study this opening
+        </button>
+      )}
+
+      {/* See the mistakes from THESE games only — scoped so the count
+          matches the opening's games (David 2026-06-11). */}
+      {mistakeCount > 0 && (
+        <button
+          onClick={() =>
+            void navigate('/tactics/mistakes', {
+              state: { gameIds: games.map((g) => g.game.id), scopeLabel: opening.name },
+            })
+          }
+          className="w-full mb-3 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold border-2 transition-colors"
+          style={{ borderColor: 'var(--color-error)', color: 'var(--color-error)' }}
+          data-testid="drill-opening-mistakes-btn"
+        >
+          <AlertTriangle size={16} />
+          Drill {mistakeCount} mistake{mistakeCount === 1 ? '' : 's'} from these games
         </button>
       )}
 

@@ -62,6 +62,12 @@ interface MistakesPageLocationState {
   /** Scope the list to one game's mistakes (the post-game "missed
    *  opportunities" button passes this so it drills THIS game). */
   sourceGameId?: string;
+  /** Scope the list to a SET of games — the opening drilldown passes the
+   *  exact games it shows so "see mistakes" stays consistent with the
+   *  opening's game count (David 2026-06-11). */
+  gameIds?: string[];
+  /** Display label for the scope chip (e.g. the opening name). */
+  scopeLabel?: string;
 }
 
 export function MyMistakesPage(): JSX.Element {
@@ -87,6 +93,11 @@ export function MyMistakesPage(): JSX.Element {
   const [openingFilter, setOpeningFilter] = useState<string | null>(initialOpeningFromUrlOrState);
   // Scope to one game (post-game "missed opportunities" deep-link). Clearable.
   const [gameFilter, setGameFilter] = useState<string | null>(navState.sourceGameId ?? null);
+  // Scope to a SET of games (opening-drilldown "see these mistakes"). Clearable.
+  const [gameIdsFilter, setGameIdsFilter] = useState<string[] | null>(
+    navState.gameIds && navState.gameIds.length > 0 ? navState.gameIds : null,
+  );
+  const gameIdSet = gameIdsFilter ? new Set(gameIdsFilter) : null;
   /** Smart-search query — matches against opponent name OR tactic
    *  type label, case-insensitive substring. Empty = no filter.
    *  David's directive 2026-05-19: "a search bar so i can search
@@ -144,6 +155,7 @@ export function MyMistakesPage(): JSX.Element {
     if (statusFilter !== 'all' && p.status !== statusFilter) return false;
     if (openingFilter !== null && p.openingName !== openingFilter) return false;
     if (gameFilter !== null && p.sourceGameId !== gameFilter) return false;
+    if (gameIdSet !== null && !gameIdSet.has(p.sourceGameId)) return false;
     // Smart-search: OR-match across opponent name + tactic label +
     // opening. Empty query = no filter.
     if (searchQ) {
@@ -440,6 +452,17 @@ export function MyMistakesPage(): JSX.Element {
             data-testid="game-filter-badge"
           >
             This game &times;
+          </button>
+        )}
+
+        {gameIdSet !== null && (
+          <button
+            onClick={() => setGameIdsFilter(null)}
+            className="text-xs px-2 py-1 rounded font-medium flex items-center gap-1"
+            style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+            data-testid="opening-scope-badge"
+          >
+            {navState.scopeLabel ? `${navState.scopeLabel} games` : 'These games'} &times;
           </button>
         )}
       </div>
