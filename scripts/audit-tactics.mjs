@@ -544,20 +544,23 @@ async function main() {
     '12-setup-beginner-queue',
     async () => {
       await page.locator('[data-testid="difficulty-1"]').click();
-      // Either queue loads (puzzle-nav appears) OR summary shows (empty queue with import CTA)
+      // New adaptive corpus flow: 'loading' ("Finding setup positions...")
+      // → 'solving' (setup-board) or, if no L1 puzzle is found, 'summary'.
+      // The first visit seeds the 15k-puzzle corpus into Dexie, so allow
+      // generous time for the seed + band-selection before the board mounts.
       await waitUntil(
-        async () => (await visible('puzzle-nav')) || (await visible('session-summary')),
-        12_000,
+        async () => (await visible('setup-board')) || (await visible('session-summary')),
+        30_000,
       );
     },
     1500,
     [
-      { label: 'puzzle-nav OR session-summary', fn: async () =>
-        (await visible('puzzle-nav')) || (await visible('session-summary')) },
-      { label: 'IF empty: Import Games CTA',
-        fn: async () => (await visible('puzzle-nav')) || (await hasText('Import Games')) },
-      { label: 'IF queue loaded: setup board visible',
-        fn: async () => (await visible('session-summary')) || (await visible('setup-board')) },
+      { label: 'setup-board OR session-summary', fn: async () =>
+        (await visible('setup-board')) || (await visible('session-summary')) },
+      { label: 'IF solving: end-session control present',
+        fn: async () => (await visible('session-summary')) || (await visible('end-session')) },
+      { label: 'IF solving: quiet-setup framing rendered',
+        fn: async () => (await visible('session-summary')) || (await hasText('quiet')) },
     ],
   );
 
