@@ -1671,6 +1671,12 @@ export interface JourneyPuzzle {
   id: string;
   fen: string;
   solution: string[];
+  /** Other first moves that ALSO satisfy the puzzle's goal — accepted
+   *  as correct alongside solution[0]. Used for puzzles where several
+   *  moves legitimately achieve the lesson (e.g. a discovered check
+   *  that works from two bishop squares), so the kid isn't marked
+   *  wrong for a genuinely correct answer. */
+  altSolutions?: string[];
   hint: string;
   successMessage: string;
 }

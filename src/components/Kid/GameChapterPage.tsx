@@ -223,8 +223,12 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
 
     const currentPuzzle = activePuzzles[puzzleIndex];
 
-    // Check exact SAN match first (works for hardcoded puzzles)
-    const isExactMatch = move.san === currentPuzzle.solution[0];
+    // Check exact SAN match first (works for hardcoded puzzles).
+    // altSolutions covers puzzles where several first moves legitimately
+    // achieve the goal, so a correct answer is never marked wrong.
+    const isExactMatch =
+      move.san === currentPuzzle.solution[0] ||
+      (currentPuzzle.altSolutions?.includes(move.san) ?? false);
 
     if (isExactMatch) {
       setPuzzleFeedback('correct');
