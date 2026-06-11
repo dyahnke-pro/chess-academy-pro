@@ -39,7 +39,7 @@ flush();
 
 for (const c of chapters) {
   c.paragraphs = c.paragraphs
-    .filter(p => !/^\*?The eleven lessons above/.test(p))
+    .filter(p => !/lessons above are the/i.test(p))
     .map(p => p.replace(/\*\*/g, '').replace(/\*/g, '').trim())
     .filter(Boolean);
 }
