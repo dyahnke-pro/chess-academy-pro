@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-19T19:03:38.264Z",
+  "generatedAt": "2026-06-11T18:14:26.347Z",
   "sources": [
     {
       "slug": "capablanca-chess-fundamentals",
@@ -63,18 +63,8 @@
           "gutenbergId": 33870,
           "chapter": "V",
           "section": "A DIFFICULT ENDING: TWO ROOKS AND PAWNS",
-          "text": "{137} White threatens P - R 5, which would finally force Black to take, and then White would double his Rooks against the isolated Pawn and win it, or tie up Black's Rooks completely. The text move, however, only helps White; therefore Black had nothing better than to hold tight and wait. R - K 4 would not help much, as White would simply answer R - B 8, R - K 1; R (Kt 5) x R, and whichever Rook Black took, White would have an easy game. (The student should carefully study these variations.)",
-          "wordCount": 96
-        },
-        {
-          "bookSlug": "edward-lasker-chess-strategy",
-          "bookTitle": "Chess Strategy",
-          "author": "Lasker, Edward",
-          "gutenbergId": 5614,
-          "chapter": "VI",
-          "section": "ILLUSTRATIVE GAMES FROM MASTER TOURNAMENTS",
-          "text": "P-Kt3 seems preferable, as the text move releases the hold on White’s Q4. The isolated pawn resulting after 13. PxP is not to be feared, as the B at Kt2 would have greater efficiency (QR- Kt1), and White would not be so firmly established in the centre.",
-          "wordCount": 47
+          "text": "An isolated pawn is a soldier with no neighbours to cover him — and the enemy knows it. No friendly pawn can ever defend him, so pieces must be tied down to the duty, and a piece chained to a guard post is a piece absent from the battle. Blockade him first: plant a knight on the square directly in front, where no pawn can ever evict it. Then bring up the heavy pieces and besiege him from every side. But respect his teeth — while he stands, he grants his owner open lines and active pieces for the attack. Trade those attackers off, and what was a spearhead becomes a cripple you collect in the endgame.",
+          "wordCount": 117
         }
       ]
     },
@@ -94,28 +84,8 @@
           "gutenbergId": 5614,
           "chapter": "V",
           "section": "THE END-GAME",
-          "text": "It is frequently and erroneously thought that DOUBLED pawns as such are a weakness. Doubled pawns are weak when ISOLATED, for they cannot support each other. But if doubled pawns can be supported by a pawn on the next file they need not by any means be at a disadvantage against three united single pawns on the opposite side. For instance, in Diagram 64, if Black had a pawn at QKt3 instead of R2, White would have no winning chances. He could not attack the pawns, nor would any kind of manœuvres force a passed pawn through. In the diagram, however, White wins through",
+          "text": "Do not flinch at doubled pawns out of habit — that is an amateur's fear. Pawns doubled on a file are weak only when isolated, for then they cannot shield one another. Give them a neighbour on the adjacent file and they hold their ground against three healthy pawns opposite. Weigh the compensation, too: the very capture that doubled them often handed you an open file for the rooks and the bishop pair for the campaign. Judge a structure by what it enables, not by how it looks. The general who refuses a doubled pawn on principle surrenders weapons he never troubled to understand.",
           "wordCount": 104
-        },
-        {
-          "bookSlug": "edward-lasker-chess-and-checkers",
-          "bookTitle": "Chess and Checkers : the Way to Mastership",
-          "author": "Lasker, Edward",
-          "gutenbergId": 4913,
-          "chapter": null,
-          "section": "THE MIDDLE GAME",
-          "text": "The foregoing variations show conclusively that the position of Diagram 47 is lost for Black. The attack which White obtains after creating a weakness on f6 by the removal of the Pawn g7 cannot be effectively countered. The question arises, whether Black was at fault when disregarding White's threat to place his Knight on d5 and developing his Queen's Bishop or whether he had a chance to improve on one of the two following moves which led to the position of Diagram 47. Indeed, it lies near to try the same attack which White threatens to initiate by Q-d2 one move earlier by playing Q-d7 instead of B-c5. The fact, however, that this Bishop is not cooperating with the pieces on the King's wing makes a big difference and the most Black can obtain is apparently a draw. The continuation could be: (1) Ktxf6+, Pxf6; (2) Bxf6, P-h6; (3) P-c3, Ktxf3+, (4) Pxf3, B-h5; (5) K-h1, K-h7; (6) R-g1, R-g8; (7) R-g3. If Black's Bishop were on c5 instead of b4, White could not play R-g3 on account of Bxf2. He would have to make the preparatory move Q-e2 and he would be lost after R- g6, just in the same manner which was demonstrated in one of the above variations with attack and defense reversed. As it is Black cannot enter on h3 with his Queen without exchanging Rooks and so he is unable to take advantage of the weakness on f3. After (7) ..., R-g6, (8) B-h4, B-a5 or c5, (9) P-d4 and Q-d3 the game probably ends in a draw as it is unlikely that White can realize an advantage from the doubled Pawn which he is ahead.",
-          "wordCount": 281
-        },
-        {
-          "bookSlug": "staunton-blue-book-of-chess",
-          "bookTitle": "The blue book of chess : $b teaching the rudiments of the game, and giving an analysis of all the recognized openings",
-          "author": "Staunton, Howard",
-          "gutenbergId": 16377,
-          "chapter": null,
-          "section": "THE BLUE BOOKS OF PRACTICAL INFORMATION",
-          "text": "1. {Notes by Jas. Mason.} e4 e5 2. Nf3 Nf6 3. Nc3 Nc6 4. Bb5 Bb4 5. O-O O-O 6. d3 d6 7. Bg5 {In this familiar 'double Lopez' predicament, Bxc6 is highly recommended, if a dull but durable kind of game is desired.} Bxc3 8. bxc3 Ne7 {... Something like a leap in the dark. If the doubled Pawn can be 'dissolved' betimes, or the open file well used in attack, a safe landing may be confidently expected.} 9. Bxf6 gxf6 10. Qd2 Ng6 11. Kh1 {More or less necessary, sooner or later. Black does not attempt to dissolve, just here; for then Qh6, threatening Ng5, might be uncomfortable.} Kh8 12. d4 Rg8 13. Bd3 Qe7 14. Rab1 {Routine--indirectly including the questionable 16. d5?. At once Ng1, to be speedily followed by g3 and f4, would have given the matter another and perhaps very different complexion.} b6 15. Ng1 Be6 $1 16. d5 $2 Bd7 17. g3 Rg7 18. Rbe1 Rag8 {... The difference is in favor of the young American representative, who presses it fully.} 19. f3 {Manifestly weakening. The Russian champion feels himself on the defensive, and at a loss how to continue. Thus the text move may be as good as any other.} h5 $1 20. Re2 Nf8 21. f4 exf4 22. Qxf4 Nh7 23. Nf3 Bg4 24. Nd4 {Nh4 would be much stronger, the importance of halting the advancing Rook Pawn duly considered. Going from bad to worse, the downright blunder two moves later caps the climax--and more need not be said.} h4 $1 25. Re3 Qe5 26. gxh4 $2 Bf3+ 0-1",
-          "wordCount": 267
         }
       ]
     },
@@ -136,28 +106,8 @@
           "gutenbergId": 33870,
           "chapter": "II",
           "section": "OBTAINING A PASSED PAWN",
-          "text": "When three or more Pawns are opposed to each other in some such position as the one in Example 24, there is always a chance for one side or the other of obtaining a passed Pawn.",
-          "wordCount": 36
-        },
-        {
-          "bookSlug": "edward-lasker-chess-strategy",
-          "bookTitle": "Chess Strategy",
-          "author": "Lasker, Edward",
-          "gutenbergId": 5614,
-          "chapter": "V",
-          "section": "THE END-GAME",
-          "text": "We will now turn our attention to positions in which the pawns opposed on each wing are of equal number and no passed pawn can be forced through. Everything depends on the relative position of the Kings. The deciding factor in valuing the King’s position is whether pawn moves are possible, or whether they are already entirely or nearly exhausted, so that only manœuvres by the King are possible. The following illustrations make the position clear. We shall see that the importance of getting the opposition is paramount. Diagram 60 shows a simple instance in which there are no",
+          "text": "A passed pawn is a runner with the road to promotion clear before him — no enemy pawn left to bar or capture him on his march. Wherever pawn-majorities face off, the side that can manufacture such a runner holds a trump for the endgame. Push him, and the enemy king must drop everything to give chase; while it chases, you strike elsewhere. Nurse him toward the eighth rank, where he threatens to become a queen, and that single threat will bend the whole position to your will. The masters put it plainly: a passed pawn must be pushed.",
           "wordCount": 99
-        },
-        {
-          "bookSlug": "edward-lasker-chess-and-checkers",
-          "bookTitle": "Chess and Checkers : the Way to Mastership",
-          "author": "Lasker, Edward",
-          "gutenbergId": 4913,
-          "chapter": null,
-          "section": "RELATIVE VALUE OF THE MEN",
-          "text": "Black is a piece down but his two connected passed Pawns constitute a dangerous threat. White, therefore, does best to sacrifice a Knight for the two Pawns, as he then remains with two Pawns against one. Black must finally give up his Bishop for White's a-Pawn who threatens to queen, and then White wins by capturing Black's g-Pawn and queening his own. Play might proceed as follows: (1) Ktxc2, Pxc2; (2) Ktxc2, B-d5; (3) Kt-b4, B-a8; (4) P-a6, K-g6; (5) P-a7, K-f6; (6) Kt-a6, K-e7; (7) Kt-c7, B-h1; (8) P-a8 (Queen), Bxa8; (9) Ktxa8, K-f6; (10) Kt-c7, K-g6; (11) Kt-d5, K-h6; (12) K-f5, K-h7; (13) K-g5, K-h8; (14) K-g6, K-g8; (15) Kt-e7+, K-h8; (16) Kt-f5, K-g8; (17) Ktxg7, K-h8; (18) K-f7, K-h7; (19) P-g5, K-h8; (20) Kt-f5, White could not play P-g6, as Black would have been stalemate. (20) ..., K-h7; (21) P-g6+, K- h8; (22) P-g7+, K-h7; (23) P-g8 (Queen) mate.",
-          "wordCount": 152
         }
       ]
     },
@@ -177,18 +127,8 @@
           "gutenbergId": 4913,
           "chapter": null,
           "section": "THE MIDDLE GAME",
-          "text": "Diagram 61 shows a position which occurred in one of the match games played between Emanuel Lasker and S. Tarrasch for the World's Championship in 1908, and which furnishes a good illustration of the difficulties arising from a backward Pawn. The game proceeded as follows: (1) Ktxd6, Pxd6; (2) Ra1-d1, Q-f6; (3) P-c4, Rf8-e8; (4) Q-g4 (threatening Q-d7) B-c6; (5) R-e2; R- e4; (6) Q-g3, Q-e6 (threatening R-g4); (7) P-h3, R-d8. Black cannot protect the Pawn d6 as many times as White can attack him. It looks as if he could have taken the Pawn c4 with his Queen, but he was probably afraid of the weakness White would have provoked with B-h6, (8) Re2-d2, Re4-e5; (9) B-h6 ! Black cannot take the Bishop on account of Qxe5. (9) ..., Q-g6; (10) B-f4 and wins, as the Pawn d6 as well as the Pawn c5 are doomed.",
-          "wordCount": 147
-        },
-        {
-          "bookSlug": "edward-lasker-chess-strategy",
-          "bookTitle": "Chess Strategy",
-          "author": "Lasker, Edward",
-          "gutenbergId": 5614,
-          "chapter": "VI",
-          "section": "GENERAL REMARKS",
-          "text": "The last two diagrams exemplify this. If in Diagram 91 Black makes the mistake of playing P-QB4 as suggested, the backward QP becomes a welcome objective for White’s attack. White can keep that pawn back by playing P-Q B4 as soon as it threatens to advance, after which he would develop quietly, double his Rooks, and bring the Q and QB to bear in a concentrated attack on Q6. A position not unlike that in Diagram 92 will result ultimately, in which Black defends the pawn as many times as it is attacked, but in which White can bring up his KP to the attack, as the QP cannot move away, whilst Black has no further defensive move at his disposal. Play against a backward pawn nearly always develops on these lines, and is even easier when there is no defending B of the same colour as the pawn. (See p. 40, and Game No. 26.)",
-          "wordCount": 156
+          "text": "A backward pawn is the laggard of the line — fallen behind his fellows, unable to advance without being lost, while the square in front of him, which no pawn of his can ever guard, becomes a fortress for the enemy. Fix him in place, occupy the hole before him with a knight, and pile the rooks on the half-open file. He can be defended only so many times before the attackers outnumber the guards. The lesson cuts both ways: never let your own pawns be left behind, and when the enemy leaves one, make his weakness the axis of your whole plan.",
+          "wordCount": 103
         }
       ]
     },
@@ -220,8 +160,8 @@
           "gutenbergId": 4913,
           "chapter": null,
           "section": "KING'S PAWN OPENINGS",
-          "text": "Black, in the meantime, will of course, also aim at the development of his Rooks. In the position of the Diagram it is even less troublesome for him than for White to prepare the opening of the d-file, as there is no objection to his playing immediately Kt-e7 with P-c6 and P-d5. The only reason which might deter Black from playing Kt-e7 is the fear that White might answer Bxf6 forcing Black to retake with the Pawn g7 and thereby tearing a hole in the protecting chain of Pawns around the King. However, as will be explained in the discussion of the middle game, this maneuver need not be feared.",
-          "wordCount": 110
+          "text": "Pawns linked along a diagonal form a chain — each soldier braced by the one behind, the whole line a wall slanting across the board. Do not batter the wall at its head, where it is strongest; strike at its base, the rearmost pawn, for he is the foundation and the rest cannot stand without him. Win the base and the chain crumbles. Guard your own base with equal care, and beware the trade that tears a hole in the pawns sheltering your king — a chain broken before your own fortress is an invitation the enemy will not decline.",
+          "wordCount": 100
         }
       ]
     },
@@ -279,28 +219,8 @@
           "gutenbergId": 33870,
           "chapter": "II",
           "section": "THE OPPOSITION",
-          "text": "If the student will now take the trouble to go back to the examples of King and Pawns which I have given in this book,[3] he will realise that in all of them the matter of the opposition is of paramount importance; as, in fact, it is in nearly all endings of King and Pawns, except in such cases where the Pawn-position in itself ensures the win.",
-          "wordCount": 67
-        },
-        {
-          "bookSlug": "edward-lasker-chess-strategy",
-          "bookTitle": "Chess Strategy",
-          "author": "Lasker, Edward",
-          "gutenbergId": 5614,
-          "chapter": "V",
-          "section": "THE END-GAME",
-          "text": "We will now turn our attention to positions in which the pawns opposed on each wing are of equal number and no passed pawn can be forced through. Everything depends on the relative position of the Kings. The deciding factor in valuing the King’s position is whether pawn moves are possible, or whether they are already entirely or nearly exhausted, so that only manœuvres by the King are possible. The following illustrations make the position clear. We shall see that the importance of getting the opposition is paramount. Diagram 60 shows a simple instance in which there are no",
-          "wordCount": 99
-        },
-        {
-          "bookSlug": "edward-lasker-chess-and-checkers",
-          "bookTitle": "Chess and Checkers : the Way to Mastership",
-          "author": "Lasker, Edward",
-          "gutenbergId": 4913,
-          "chapter": null,
-          "section": "RELATIVE VALUE OF THE MEN",
-          "text": "White can win the game only by playing (5) K-e5. The technical term for this move is \"going into OPPOSITION.\" The Kings oppose each other in one line on squares of the same color and the one who has to move out of opposition--in this case Black's King--is compelled to allow the advance of the opposing King to the next line. If Black plays K-d7, White answers (6) K-f6, and if Black plays K-f7, (6) K-d6 would follow. Then, after Black's K-e8, White repeats the maneuver by taking the opposition with (7) K- e6, and again Black must back out with either K-d8 or K-f8, so that White can advance to either f7 or d7. This clears the way for the Pawn who now advances unimpeded to the queening square.",
-          "wordCount": 130
+          "text": "In king-and-pawn endings the kings duel without their armies, and the opposition is the whole art of that duel. Stand your king squarely facing the enemy's, one square between them, and it is he who must give way — for the side forced to move first must yield ground. Seize the opposition and you seize the squares; seize the squares and the pawn promotes. This single idea governs nearly every pawn ending there is. Master it before all else, for the player who does not understand the opposition will draw won games and lose drawn ones, and never know why.",
+          "wordCount": 100
         }
       ]
     },
@@ -356,8 +276,8 @@
           "gutenbergId": 4902,
           "chapter": null,
           "section": "PROGRESS OF CHESS",
-          "text": "Chess as now played with the Queen of present powers, imported into the game dates back about four centuries, to near the time when the works of the Spanish writers, Vicenz and Lucena, appeared in 1495, and shortly before that of Damiano the Portuguese in 1512. In 1561 Ruy Lopez, the Spanish priest of Cafra, a name familiar to the present generation, from one of the openings most approved in modern practice being named after him, wrote the best work of a scientific character which had appeared in Europe to that time, and he was considered in Spain the very best player in the world, until the memorable contests between him and Leonardo da Cutri, and Paolo Boi of Syracuse left the question of supremacy doubtful. These famous struggles are reverted to not without interest in our days, when the not very profitable task of attempting to institute comparisons between past and present great players is indulged in, for in the absence of a single published complete and annotated game until the 19th century, there is little advantage in conjecturing whether Al Suli was equal to Philidor, Razi or Greco to A. McDonnell of Belfast, Ali Shatranji to La Bourdonnais, Paoli Boi to Anderssen, Ruy Lopez to Staunton, or Leonardo to Morphy, though these conjectural comparisons in varied forms are not uncommon in modern chess talk.",
-          "wordCount": 226
+          "text": "The Lucena is the cornerstone of rook endings — the position every master knows by heart, where you hold an extra pawn a step from queening and need only force it home against the enemy rook's checks. The technique, four centuries old and named for the Spaniard who first recorded it, is called building the bridge: march your king out from in front of the pawn, then interpose your own rook to block the checks, and the pawn walks in to promote. Learn this one position cold. It converts a winning endgame that would otherwise slip through your fingers to a draw.",
+          "wordCount": 102
         }
       ]
     },
@@ -403,18 +323,8 @@
           "gutenbergId": 4913,
           "chapter": null,
           "section": "HOW THE DIFFERENT MEN COOPERATE",
-          "text": "Following is an example which is taken from a master game. As far as the material is concerned the players are about even, as the Queen is worth as much as the two Rooks while Knight and Bishop are an approximate equivalent of the Black Rook and the Pawn which Black is ahead. The Pawn a4 is rather dangerous for White, as he needs only three more moves to reach the first rank where he can be promoted into any piece. On the other hand the Rooks doubled in the seventh rank give White so strong an attack on the Black King that he forces the mate before Black succeeds in realizing the advantage of his advanced passed Pawn.",
-          "wordCount": 119
-        },
-        {
-          "bookSlug": "edward-lasker-chess-strategy",
-          "bookTitle": "Chess Strategy",
-          "author": "Lasker, Edward",
-          "gutenbergId": 5614,
-          "chapter": "VI",
-          "section": "ILLUSTRATIVE GAMES FROM MASTER TOURNAMENTS",
-          "text": "This drives the Rook to a better square, but already now there is no satisfactory move. It would perhaps have been best to parry the threat of BxKt and R-B7 by playing Q-Q3, although the pawn would have to recapture after 19. BxKt, because of 20. R-B5 and KR-B1. The chance of bearing on the QP through the open file, which was probably Black’s intention all along, would then be lost. After the text move, however, White takes possession of the seventh rank, and Black’s game collapses quickly.",
-          "wordCount": 88
+          "text": "A rook on the seventh rank is a raider behind enemy lines. From there it rakes the pawns still sitting on their home squares and pins the enemy king to the back rank, helpless to come to their rescue. Double a second rook beside it — pigs on the seventh, the masters call them — and the attack often outruns even an enemy passed pawn racing to queen. In the endgame the seventh rank is worth a pawn and sometimes the whole game. Seize it, hold it, and let your rooks devour what the enemy cannot defend.",
+          "wordCount": 97
         }
       ]
     },
@@ -434,28 +344,8 @@
           "gutenbergId": 5614,
           "chapter": "III",
           "section": "GENERAL PRINCIPLES OF CHESS STRATEGY",
-          "text": "Except in certain positions, which are brought about by some particular array of the pieces, the intrinsic value of a Rook is greater than that of a Bishop, because it can command all the squares on the board, whilst a Bishop is tied to its own colour; Knight and Bishop are considered equivalent, because the Knight’s advantage in being able to act on all the squares of either colour is balanced by the fact that the Bishop can sweep long diagonals. Two Bishops are, generally speaking, of greater value than two Knights, because together they also act on all the squares, and their command of long diagonals is a clear advantage. The whole of this valuation, however, comes to nought when the pieces are hindered in their mobility by the peculiarity of any particular position.",
-          "wordCount": 135
-        },
-        {
-          "bookSlug": "capablanca-chess-fundamentals",
-          "bookTitle": "Chess Fundamentals",
-          "author": "Capablanca, José Raúl",
-          "gutenbergId": 33870,
-          "chapter": "VI",
-          "section": "PART II",
-          "text": "The object of this move is to bring about speedily a middle-game without Queens, in which White {182} has four Pawns to three on the King's side, while Black's superiority of Pawns on the other side is somewhat balanced by the fact that one of Black's Pawns is doubled. On the other hand, Black has the advantage of remaining with two Bishops while White has only one.",
-          "wordCount": 67
-        },
-        {
-          "bookSlug": "edward-lasker-chess-and-checkers",
-          "bookTitle": "Chess and Checkers : the Way to Mastership",
-          "author": "Lasker, Edward",
-          "gutenbergId": 4913,
-          "chapter": null,
-          "section": "RELATIVE VALUE OF THE MEN",
-          "text": "From the foregoing examples it is possible to form a vague idea of the strength of the different pieces. The Queen is apparently the strongest piece. On account of her superior mobility she can confine the hostile King with a few moves and force him into a mating net. Of the other pieces the Rook is no doubt the strongest for he is sufficient to force a mate in conjunction with his own King, while Bishop or Knight cannot do so. Two Bishops apparently are stronger than two Knights, while it is not possible yet to say anything about the relative value of one Bishop and one Knight.",
-          "wordCount": 108
+          "text": "Two bishops on an open board are a pair of long-range guns covering both colours of square between them — a battery no lone knight or single bishop can match. They sweep the diagonals, drive the enemy king where you wish, and shepherd a passed pawn home. The bishop pair is a small, lasting advantage: it does not win on its own, but it grinds. Open the position to give the bishops air, deny the enemy knight a secure outpost, and convert with patience. Two bishops reward the patient general as few advantages do.",
+          "wordCount": 94
         }
       ]
     },
@@ -478,18 +368,8 @@
           "gutenbergId": 4913,
           "chapter": null,
           "section": "FUNDAMENTAL ENDINGS",
-          "text": "In the fight of King, Bishop and Knight against the King the mate can be enforced only in a corner controlled by the Bishop, if the lone King always makes the best move. Diagram 12 may serve as an example of this ending. White has a black Bishop and so he will have to drive Black's King to either h8 or a1 as it is not possible to mate him in the white corner a8, unless he makes a blunder.",
-          "wordCount": 80
-        },
-        {
-          "bookSlug": "edward-lasker-chess-strategy",
-          "bookTitle": "Chess Strategy",
-          "author": "Lasker, Edward",
-          "gutenbergId": 5614,
-          "chapter": "II",
-          "section": "HINTS FOR BEGINNERS--ELEMENTARY COMBINATIONS",
-          "text": "[2] It is difficult to compare the relative value of the different pieces, as so much depends on the peculiarities of each position, but, generally speaking, minor pieces, Bishop and Knight, are reckoned as equal; the Rook as equal to a minor piece and one or two pawns (to have a Rook against a minor piece, is to be the “exchange” ahead). The Queen is equal to two Rooks or three minor pieces.",
-          "wordCount": 73
+          "text": "Bishop and knight are equals on paper, but the ground decides which one rules. In an open position with pawns on both wings, the bishop is king — it strikes at a distance and shifts flanks in a single move, while the knight plods square by square and arrives a tempo late. Lock the position, fix the pawns on one colour, and the verdict flips: the knight reaches squares the bishop never can, and a bishop hemmed by its own pawns becomes a tall pawn. Read the pawns first — they tell you which piece is the master and which the servant.",
+          "wordCount": 102
         }
       ]
     },
@@ -618,8 +498,8 @@
           "gutenbergId": 5614,
           "chapter": "VI",
           "section": "ILLUSTRATIVE GAMES FROM MASTER TOURNAMENTS",
-          "text": "The position is not unlike that in Diagram 90, and the same remarks apply to it. Here B-K3 is inadvisable, because P-Q4, threatening to fork two pieces, forces the exchange of Black’s centre pawn. After 7. ... B-Kt5; 8. Kt-Q5, Kt-Q5; 9. B-B4, B-B4, on the other hand, we get the position discussed on p. 115, in which White obtains the advantage by Q-Q2. Instead of 9. ... B- B4, Black should play Q-Q2 with a similar threat. But he has not the cooperation of his King’s Bishop for the attack, and White just manages to escape with a draw, e.g. 9. ... Q-Q2; 10. KtxKtch, PxKt; 11. BxP, P-KR3(BxKt; 12. PxB, Q-R6 fails on account of K-R1 and R-KKt1); 12. P-B3, KtxKtch; 13. PxKt, B-KR4; 14. K-R1, K-R2 (Diagram 129); 15. R-KKt1.",
-          "wordCount": 133
+          "text": "A fork is one man threatening two — a single piece attacking two enemies at once, so that whichever you save, the other falls. The knight is the born forker, leaping over defenders to strike king and queen together, but pawns, bishops, rooks, even the queen herself can spear two targets in a turn. Hunt for them wherever enemy pieces share a knight's reach or a single line, and guard against them by keeping your valuables off the same fatal square. The fork wins material outright, and material, in the end, wins games.",
+          "wordCount": 93
         }
       ]
     },
@@ -640,28 +520,8 @@
           "gutenbergId": 5614,
           "chapter": "VI",
           "section": "ILLUSTRATIVE GAMES FROM MASTER TOURNAMENTS",
-          "text": "In a game between Riga and Berlin PxP was tried for the first time, a bold venture which anticipates White’s desire to open the King’s file. After 7. R-K1 Black can defend the Kt by P-Q4, but after 8. KtxP White threatens again to win the Kt by P-KB3, besides attacking the QKt a second time. However, Black has a surprising answer in readiness. He initiates a violent counter attack which keeps White busy until Black, by castling, escapes the dangers of the double pin. (Compare Game No. 17.)",
-          "wordCount": 89
-        },
-        {
-          "bookSlug": "edward-lasker-chess-and-checkers",
-          "bookTitle": "Chess and Checkers : the Way to Mastership",
-          "author": "Lasker, Edward",
-          "gutenbergId": 4913,
-          "chapter": null,
-          "section": "HOW THE DIFFERENT MEN COOPERATE",
-          "text": "Instead of playing (1) P-d4 and taking advantage of the fact that the Pawn e5 is pinned, White can direct his attack against the other Black man which is pinned, namely the Knight f6. He can play (1) Kt-d5 and thereby attack the Queen and at the same time the Knight f6 for the second time. It will not be evident to the beginner that White can derive any advantage from this double attack, as Black can answer either Q-d6 or Q-d8 keeping his Knight twice protected. Indeed, White does not gain anything on f6, the square itself upon which the pin is effected, but he uses the pin to force an opening into the chain of Pawns which protects Black's King by exchanging on f6, compelling Black to retake with the Pawn g7. The advantage resulting from this break in Black's Pawn position will be explained later on when discussing the strategy of the middle-game.",
-          "wordCount": 156
-        },
-        {
-          "bookSlug": "capablanca-chess-fundamentals",
-          "bookTitle": "Chess Fundamentals",
-          "author": "Capablanca, José Raúl",
-          "gutenbergId": 33870,
-          "chapter": "VI",
-          "section": "PART II",
-          "text": "In order to pin the Knight and be ready to come back to either K 2 or B 1. Also to prevent Q R - Kt 1. In reality nearly all these precautions are unnecessary, since White's attack amounts to nothing. Probably Black should have left aside all these considerations, and played Q - R 5 now, in order to follow it up with P - B 4, as he did later, but under less favourable circumstances.",
-          "wordCount": 77
+          "text": "A pin nails an enemy piece in place: it dares not move, for behind it stands something it must not expose — its king, in an absolute pin, or a greater piece in a relative one. A pinned piece is half a piece; it can neither defend nor attack while it stands frozen. So pile fresh attackers onto it — a pawn thrust, a second piece — and win it where it stands. And when the enemy pins you, break free before the second wave arrives: interpose, drive off the pinning piece, or unpin by counterattack. A pin endured too long is a piece already lost.",
+          "wordCount": 106
         }
       ]
     },
@@ -693,28 +553,8 @@
           "gutenbergId": 4913,
           "chapter": null,
           "section": "HOW THE DIFFERENT MEN COOPERATE",
-          "text": "Sometimes two pieces are involved in the double attack, the line of one of the pieces being discovered by the other. Thus, in the position of Diagram 22, which could be brought about by the moves (1) P-e4, P-d5; (2) Pxd5, Qxd5; (3) Kt-c3, Q-a5; (4) P-d4, Kt-f6; (5) B-c4, P-e6; (6) B-d2, white threatens to play (7) Kt-d5, uncovering the Bishop d2 on Black's Queen and at the same time attacking the Pawn c7, which Black cannot keep protected.",
-          "wordCount": 80
-        },
-        {
-          "bookSlug": "edward-lasker-chess-strategy",
-          "bookTitle": "Chess Strategy",
-          "author": "Lasker, Edward",
-          "gutenbergId": 5614,
-          "chapter": "VI",
-          "section": "ILLUSTRATIVE GAMES FROM MASTER TOURNAMENTS",
-          "text": "This manœuvre is unwise; White counters with 13. P-QR4, a move which was necessary in any case, in order to develop the QKt via R3, this being the Knight’s only chance of getting into play, because, as long as the QP is attacked three times the lines of B and Q must not be interrupted. That is a weakness in White’s game, and it was necessary for Black to prevent his Kt being driven off by P-KKt4. P-KR4 was the correct move. Then White also had to play P-KR4 to prevent P-KKt4-5, in which case Black could have played l3. ... P-KKt3, and have brought his Rooks into concerted action. P-KKt3 would have been necessary before castling, because White’s B-Q3 would have attacked the KKt. The latter could not then capture the Queen’s Pawn on account of a discovered check, e.g. l2. ... Castles; 13 B-Q3, KtxP?; 14 KtxKt, KtxKt; 15 BxKt, QxB?; 16 B-R7ch, and QxQ.",
-          "wordCount": 157
-        },
-        {
-          "bookSlug": "staunton-blue-book-of-chess",
-          "bookTitle": "The blue book of chess : $b teaching the rudiments of the game, and giving an analysis of all the recognized openings",
-          "author": "Staunton, Howard",
-          "gutenbergId": 16377,
-          "chapter": null,
-          "section": "LASKER, STEINITZ, SCHLECHTER, PILLSBURY, AND OTHER RECENT PLAYERS",
-          "text": "In this situation the white King is threatened with what is called \"a discovered check,\" that is, his opponent, by removing the Bishop, would _discover_ check from the Queen, a proceeding in the present instance, which would speedily involve the loss of the game to White. Not being at the moment in check, however, and having moved neither King nor Rook, and there being no _intervening_ Piece between the King and his own Rook, White is enabled to castle, giving check to the adverse King at the same time, and win the game easily, for Black has no square to which he can move his King without going into check, and is consequently obliged to interpose his Q. at K. B's second, or K. B's third square, in either case being checkmated in two more moves, as you will soon be able to see.",
-          "wordCount": 144
+          "text": "A discovered attack is an ambush sprung by stepping aside. One piece moves out of the way and unmasks another behind it, so two threats arrive at once — the piece that moved makes its own, and the unveiled piece makes a second. When the moving piece gives check as it uncovers the attack, the enemy must answer the check and is powerless to save the other target. It is among the most violent weapons on the board: line up a rook or bishop behind a piece of your own that has a strong move to make, and the discovery wins what no single threat ever could.",
+          "wordCount": 107
         }
       ]
     },
@@ -734,28 +574,8 @@
           "gutenbergId": 4913,
           "chapter": null,
           "section": "HOW THE DIFFERENT MEN COOPERATE",
-          "text": "Sometimes two pieces are involved in the double attack, the line of one of the pieces being discovered by the other. Thus, in the position of Diagram 22, which could be brought about by the moves (1) P-e4, P-d5; (2) Pxd5, Qxd5; (3) Kt-c3, Q-a5; (4) P-d4, Kt-f6; (5) B-c4, P-e6; (6) B-d2, white threatens to play (7) Kt-d5, uncovering the Bishop d2 on Black's Queen and at the same time attacking the Pawn c7, which Black cannot keep protected.",
-          "wordCount": 80
-        },
-        {
-          "bookSlug": "edward-lasker-chess-strategy",
-          "bookTitle": "Chess Strategy",
-          "author": "Lasker, Edward",
-          "gutenbergId": 5614,
-          "chapter": "VI",
-          "section": "ILLUSTRATIVE GAMES FROM MASTER TOURNAMENTS",
-          "text": "Supporting, as it does, the KP, this is not a lost move, although White has not played P-Q4. It prepares Black’s P-Q4 (after Kt- B3), the KP being fully protected against White’s double attack by PxP.",
-          "wordCount": 36
-        },
-        {
-          "bookSlug": "capablanca-chess-fundamentals",
-          "bookTitle": "Chess Fundamentals",
-          "author": "Capablanca, José Raúl",
-          "gutenbergId": 33870,
-          "chapter": "IV",
-          "section": "O - O",
-          "text": "(Making a double attack on the Rook--which still cannot be taken--and preparing to defend the K R P.) If either the Rook or Bishop are taken White would be mated in a few moves.",
-          "wordCount": 34
+          "text": "The double attack is the engine of nearly every combination: make two threats in a single move and the enemy, who can answer only one, must concede the other. A fork is a double attack by one piece; a discovery, a double attack by two. But the idea runs broader than either — a quiet move that threatens mate on one wing and hangs a rook on the other wins as surely as any sacrifice. Train the eye to ask, on every move, what second thing this can also do. The player who threatens two things at once is the player who wins material at will.",
+          "wordCount": 106
         }
       ]
     },
@@ -788,18 +608,8 @@
           "gutenbergId": 5614,
           "chapter": "IV",
           "section": "THE OPENING",
-          "text": "In most cases two centre squares become inaccessible at once, through the opponent placing one of his pawns in the centre; therefore it would seem a good plan to lure that pawn away, and this is rendered feasible by playing P-K4 or P-QB4 when the opponent has a pawn on his Q4, and P-Q4 or P-KB4 when he has a pawn on K4. In the following we will consider such manœuvres as could apply either to White or Black, from the point of view of White, to whom the initiative is, as pointed out above, a sort of birth-right. Naturally, should White lose a move, as, for instance, 1. P-K4, P-K4; 2. Kt-KB3, Kt-QB3; 3. P-QR3? the position is reversed, and Black is bound to obtain the initiative which is White’s birthright.",
-          "wordCount": 132
-        },
-        {
-          "bookSlug": "edge-paul-morphy-exploits",
-          "bookTitle": "The Exploits and Triumphs, in Europe, of Paul Morphy, the Chess Champion",
-          "author": "Edge, Frederick Milnes",
-          "gutenbergId": 34180,
-          "chapter": null,
-          "section": "THE WESTMINSTER CLUB,",
-          "text": "It was noticed in our columns last week that this event, the Chess-players' Derby day, was fixed to commence on the 22d of June. The arrangements of the local committee are, of course, not yet complete, but it is whispered that they have succeeded in insuring the presence of the American chess phenomenon, Paul Morphy, an attraction, of itself, sufficient to secure the largest attendance which has been known for years.",
-          "wordCount": 71
+          "text": "A decoy lures an enemy piece — or the king itself — onto a square where it can be punished. Offer a sacrifice it feels bound to accept, and the captured square becomes the scene of the execution: a fork, a check, a mating net that existed only once the victim stepped onto the fatal square. The decoy's cousin is the deflection — dragging a defender away from the post it must hold. Both rest on one truth: a piece is only as strong as where it stands, and the tactician chooses where the enemy stands for him.",
+          "wordCount": 98
         }
       ]
     },
@@ -857,28 +667,8 @@
           "gutenbergId": 4913,
           "chapter": null,
           "section": "RELATIVE VALUE OF THE MEN",
-          "text": "Black is a piece down but his two connected passed Pawns constitute a dangerous threat. White, therefore, does best to sacrifice a Knight for the two Pawns, as he then remains with two Pawns against one. Black must finally give up his Bishop for White's a-Pawn who threatens to queen, and then White wins by capturing Black's g-Pawn and queening his own. Play might proceed as follows: (1) Ktxc2, Pxc2; (2) Ktxc2, B-d5; (3) Kt-b4, B-a8; (4) P-a6, K-g6; (5) P-a7, K-f6; (6) Kt-a6, K-e7; (7) Kt-c7, B-h1; (8) P-a8 (Queen), Bxa8; (9) Ktxa8, K-f6; (10) Kt-c7, K-g6; (11) Kt-d5, K-h6; (12) K-f5, K-h7; (13) K-g5, K-h8; (14) K-g6, K-g8; (15) Kt-e7+, K-h8; (16) Kt-f5, K-g8; (17) Ktxg7, K-h8; (18) K-f7, K-h7; (19) P-g5, K-h8; (20) Kt-f5, White could not play P-g6, as Black would have been stalemate. (20) ..., K-h7; (21) P-g6+, K- h8; (22) P-g7+, K-h7; (23) P-g8 (Queen) mate.",
-          "wordCount": 152
-        },
-        {
-          "bookSlug": "edward-lasker-chess-strategy",
-          "bookTitle": "Chess Strategy",
-          "author": "Lasker, Edward",
-          "gutenbergId": 5614,
-          "chapter": "II",
-          "section": "HINTS FOR BEGINNERS--ELEMENTARY COMBINATIONS",
-          "text": "But in such cases the sacrificing of material has its compensation in some particular advantage of position. As principles of position are difficult for beginners to grasp, I propose to defer their consideration for the present and to devote my attention first to such combinations as involve questions of material. Let us master a simple device that makes most combinations easy both for attack and defence. It amounts merely to a matter of elementary arithmetic, and if the beginner neglects it, he will soon be at a material disadvantage.",
-          "wordCount": 89
-        },
-        {
-          "bookSlug": "staunton-blue-book-of-chess",
-          "bookTitle": "The blue book of chess : $b teaching the rudiments of the game, and giving an analysis of all the recognized openings",
-          "author": "Staunton, Howard",
-          "gutenbergId": 16377,
-          "chapter": null,
-          "section": "LASKER, STEINITZ, SCHLECHTER, PILLSBURY, AND OTHER RECENT PLAYERS",
-          "text": "Be cautious of playing your Queen in front of your King and in subjecting yourself to a _discovered check_. It is better when check is given to your King to interpose a man that attacks the checking Piece than with one that does not. Beware of giving useless checks to your adversary's King, but when, by checking, you can oblige him to move, and thus deprive him of the right to castle, it is generally good play to do so. It is sometimes useful to give a series of checks, and even sacrifice a Piece, to force the King into the middle of the board, where he may be subjected to the attacks of your other men.",
-          "wordCount": 117
+          "text": "A sacrifice is an investment, not a gift. You surrender material to buy something the scoreboard cannot show — an exposed king, a decisive attack, a runner that queens, a fortress that cannot be broken. The sound sacrifice is calculated to its end, not hoped for; the general who throws away a knight on faith is merely throwing away a knight. Reckon the return before you commit: what lines open, what squares fall, what the enemy cannot prevent. When the gain is real and forced, give the material without a second thought. When it is only a feeling, hold your fire.",
+          "wordCount": 101
         }
       ]
     },
@@ -913,18 +703,8 @@
           "gutenbergId": 33870,
           "chapter": "I",
           "section": "CONTROL OF THE CENTRE",
-          "text": "The four squares, K 4 and Q 4 on each side respectively, are the centre squares, and control of these squares is called control of the centre. _The control of the centre is of great importance._ No violent attack can succeed without controlling at least two of these {29} squares, and possibly three. Many a manoeuvre in the opening has for its sole object the control of the centre, which invariably ensures the initiative. It is well always to bear this in mind, since it will often be the reason of a series of moves which could not otherwise be properly understood. As this book progresses I shall dwell more fully on these different points. At present I shall devote some time to openings taken at random and explain the moves according to general principles. The student will in that way train his mind in the proper direction, and will thus have less trouble in finding a way out when confronted with a new and difficult situation.",
-          "wordCount": 167
-        },
-        {
-          "bookSlug": "edward-lasker-chess-and-checkers",
-          "bookTitle": "Chess and Checkers : the Way to Mastership",
-          "author": "Lasker, Edward",
-          "gutenbergId": 4913,
-          "chapter": null,
-          "section": "IV ILLUSTRATIVE GAMES",
-          "text": "The move B-c5 which Black might consider instead of Kt-f6 is not to be recommended as White would reply P-c3 and then force the exchange of Black's center-Pawn by P-d4. The complete control of the center which White would gain in the further course of the game would soon give him an overwhelming attack. For instance: (4) ..., B-c5; (5) P-c3, Kt-f6; (6) o-o, o-o;",
-          "wordCount": 65
+          "text": "The four central squares are the high ground of the chessboard, and he who commands them commands the battle. From the centre a piece radiates its power across the whole field; pressed to the edge it withers — a knight on the rim, the old maxim runs, is dim. No serious attack succeeds without first holding the centre, for the side that owns it can swing forces from wing to wing faster than the enemy can answer. Half the manoeuvres of the opening exist for this single end. Win the centre first; the attack comes after.",
+          "wordCount": 96
         }
       ]
     },
@@ -960,18 +740,8 @@
           "gutenbergId": 5614,
           "chapter": "IV",
           "section": "II",
-          "text": "Except the French defence and the Caro-Kann, there is no game in which an irregular reply to White’s 1. P-K4 necessitates any special considerations either in development of pieces or pawn formation. In all such cases it is sufficient to maintain the pawn centre and to occupy such squares with the pieces, whence they cannot be driven away with the loss of a move. Just one example: If Black plays 1. ... P-QB4 (Sicilian defence), White will not play his King’s Bishop to B4, because Black can reply P- K3, and gain a move by P-Q4.",
-          "wordCount": 96
-        },
-        {
-          "bookSlug": "edward-lasker-chess-and-checkers",
-          "bookTitle": "Chess and Checkers : the Way to Mastership",
-          "author": "Lasker, Edward",
-          "gutenbergId": 4913,
-          "chapter": null,
-          "section": "QUEEN'S PAWN OPENINGS",
-          "text": "Black has now the choice between either advancing his c-Pawn right away or first developing the pieces of his Queen's wing. In the latter case he cannot place the Queen's Knight on c6 as this would block the way of the c-Pawn. He must develop him to d7. This appears to be a bad move as it blocks the way of the Queen's Bishop, but this Bishop will have to be developed in a different diagonal anyway as the Pawn e6 cannot advance opening the diagonal c8-h3.",
-          "wordCount": 87
+          "text": "Develop with speed and purpose: bring every piece into the fight before the first shot is fired, and waste not a tempo doing it. Move each man once, to a square where the enemy cannot harass him into moving twice; never march the same piece about the board while the others sleep at home. Knights and bishops out, king castled to safety, rooks joined on the open lines — that is an army ready for war. The player who develops fastest strikes first, and in the opening the first blow is often the last. A lead in development is a debt the enemy pays in blood.",
+          "wordCount": 106
         }
       ]
     },
@@ -993,28 +763,8 @@
           "gutenbergId": 4913,
           "chapter": null,
           "section": "KING'S PAWN OPENINGS",
-          "text": "This attacks White's Pawn and White has to decide whether to protect, advance or exchange him. The advance P-e5 and the protection P-f3 are out of question because these moves are Pawn moves which do not contribute to the development and are, therefore, to be classed as mere loss of time. The protection (2) P-d3 is not sufficient either as Black, after exchanging on e4, would hamper White's development by exchanging Queens so that White would lose the right of castling. The protection (2) Kt-c3 cannot be recommended as Black could deprive White of his center- Pawn and obtain one for himself by Pxe4, (3) Ktxe4; P-e5. For all these reasons White cannot do better than exchanges on d5.",
-          "wordCount": 119
-        },
-        {
-          "bookSlug": "staunton-blue-book-of-chess",
-          "bookTitle": "The blue book of chess : $b teaching the rudiments of the game, and giving an analysis of all the recognized openings",
-          "author": "Staunton, Howard",
-          "gutenbergId": 16377,
-          "chapter": null,
-          "section": "THE KING'S KNIGHT'S OPENING",
-          "text": "In reply, you may now play P. to K. R's 4th, having a capital game. If, instead of 11. P. to R's 3d, he play 11. Q. Kt. to Q's 5th, you move 12. Q. to her 3d, then B. to Q's 2d, and finally castle on the Q's side. If, however, in lieu of that move, he play 11. B. to Q. R's 4th, you can move 12. B. to Q's 2d, and presently castle on the Q's side; and lastly, if he play 11. K. to R's sq., then you take your Queen to K. R's 5th, and he cannot save the game.",
-          "wordCount": 105
-        },
-        {
-          "bookSlug": "edward-lasker-chess-strategy",
-          "bookTitle": "Chess Strategy",
-          "author": "Lasker, Edward",
-          "gutenbergId": 5614,
-          "chapter": "VI",
-          "section": "ILLUSTRATIVE GAMES FROM MASTER TOURNAMENTS",
-          "text": "White intends to castle on the Queen’s side, and to follow this up with a storm by the King’s side pawns. Although Rubinstein has on many occasions been successful with this form of attack, it is open to criticism. For, where Kings have castled on different wings, the attack on the King which has castled on the Q side should be more successful.",
-          "wordCount": 63
+          "text": "Before you dream of attack, house your king. Castle early, keep the pawns before him unmoved and whole, and do not fling them forward chasing shadows — every such advance is a crack in the wall and a tempo stolen from development. A king caught in the centre while the lines tear open is a king already half-mated. Once yours is safe behind its rampart, turn the same gaze on his: where his shelter is broken, there you aim. Half of strategy is keeping your own king sound while you make a ruin of the enemy's.",
+          "wordCount": 96
         }
       ]
     },
@@ -1035,28 +785,8 @@
           "gutenbergId": 33870,
           "chapter": "V",
           "section": "THE SUDDEN ATTACK FROM A DIFFERENT SIDE",
-          "text": "White's only advantage in the above position is that he possesses the open file and has the move, which will secure him the initiative. There is also the slight advantage of having his Pawns on the Queen's side united, while Black has an isolated Q R P. The {114} proper course, as in the previous ending, is to bring the Rooks forward, so that at least one of them may be able to shift from one side of the board to the other, and thus keep Black's Rooks from moving freely. What this means in general theory has been stated already; it really means: _keep harassing the enemy; force him to use his big pieces to defend Pawns. If he has a weak point, try to make it weaker, or create another weakness somewhere else and his position will collapse sooner or later. If he has a weakness, and he can get rid of it, make sure that you create another weakness somewhere else_.",
-          "wordCount": 164
-        },
-        {
-          "bookSlug": "edward-lasker-chess-strategy",
-          "bookTitle": "Chess Strategy",
-          "author": "Lasker, Edward",
-          "gutenbergId": 5614,
-          "chapter": "IV",
-          "section": "THE OPENING",
-          "text": "In most cases two centre squares become inaccessible at once, through the opponent placing one of his pawns in the centre; therefore it would seem a good plan to lure that pawn away, and this is rendered feasible by playing P-K4 or P-QB4 when the opponent has a pawn on his Q4, and P-Q4 or P-KB4 when he has a pawn on K4. In the following we will consider such manœuvres as could apply either to White or Black, from the point of view of White, to whom the initiative is, as pointed out above, a sort of birth-right. Naturally, should White lose a move, as, for instance, 1. P-K4, P-K4; 2. Kt-KB3, Kt-QB3; 3. P-QR3? the position is reversed, and Black is bound to obtain the initiative which is White’s birthright.",
-          "wordCount": 132
-        },
-        {
-          "bookSlug": "young-chess-generalship",
-          "bookTitle": "Chess Generalship, Vol. I. Grand Reconnaissance",
-          "author": "Young, Franklin K.‏ (Franklin Knowles)",
-          "gutenbergId": 55278,
-          "chapter": null,
-          "section": "LEAST FAVORABLE ADVERSE CONDITION",
-          "text": "That _relative advantage in Time_ expressed by restrictions of the adversary’s choice of movements at his turn to play, is materially manifested upon the Chess-board by Feints operated by Kindred Chess-pieces against adverse vital points; and such advantage of the Initiative dictates the next move of the opposing army.",
-          "wordCount": 49
+          "text": "The initiative is the right to dictate — to make the threats while the enemy only parries. Hold it, and his every move is forced, spent answering you instead of building a plan of his own. Harass him without pause: press on a weakness, seize the open file, push where he is thin, and never grant him the free move that lets him organise. The initiative is fragile — one idle move and it passes to him — so press while you hold it. The attacker who lets his opponent breathe has already begun to lose.",
+          "wordCount": 96
         }
       ]
     },
@@ -1078,8 +808,8 @@
           "gutenbergId": 33870,
           "chapter": "VI",
           "section": "PART II",
-          "text": "An original idea, I believe, played for the first time in a similar position in a game against Mr. Walter Penn Shipley, of Philadelphia. My idea is that as there is no Black Bishop and because Black's pieces have been developed with a view to an attack on the King's side, it will be impossible for Black to take advantage of the apparently unprotected position of White's King. Two possibilities must be considered. Firstly: If Black Castles on the Queen's side, as in this game, it is evident that there is no danger of an attack. Secondly: If Black Castles on the King's side, White begins the attack first, taking advantage of the awkward position of Black's Queen. In addition to the attacking probabilities of the text move, White in one move brings his King into safety and brings one of his Rooks into play. Thus he gains several moves, \"tempi\" as they are called, which will serve him to develop whatever plan he may wish to evolve.",
-          "wordCount": 168
+          "text": "A tempo is a single move's worth of time, and in chess time is a currency you spend with every turn. To gain a tempo is to develop a piece while forcing the enemy to react; to lose one is to shuffle a piece twice, or push a pawn that aids no plan, while the opponent builds. Whole openings are won and lost by a single tempo — one extra move of development that lets the attack arrive before the defence is ready. Count your tempi as a quartermaster counts rations. The player who is always one move ahead is the player who is never too late.",
+          "wordCount": 107
         }
       ]
     },
@@ -1100,28 +830,8 @@
           "gutenbergId": 4913,
           "chapter": null,
           "section": "QUEEN'S PAWN OPENINGS",
-          "text": "The same two leading principles apply to Queen's Pawn openings which were discussed in connection with the King's Pawn openings; but there is one great difference between the two kinds of openings which is not obvious to the beginner. This is the fact that in Queen's Pawn openings, in most cases, neither player has a chance to open a file in the center of the board through the exchange of one of the center-Pawns, and that, therefore, an additional Pawn move is necessary in the opening stage to provide for an open file in which the Rooks later on may have an opportunity of entering the battle.",
-          "wordCount": 107
-        },
-        {
-          "bookSlug": "edward-lasker-chess-strategy",
-          "bookTitle": "Chess Strategy",
-          "author": "Lasker, Edward",
-          "gutenbergId": 5614,
-          "chapter": "IV",
-          "section": "THE OPENING",
-          "text": "5. Castles; he does not trouble to protect his KP as its capture would allow his Rook an open file on which to act against the opposing King (compare Games Nos. 14 and 17) 5. ... B-K2. Now Black can capture the KP without much risk, as the Bishop is on the King’s file. 6. R-K1, White covers his pawn, and thereby threatens to win a pawn by BxKt. Therefore Black must not delay playing 6. ... P-QKt4.",
-          "wordCount": 78
-        },
-        {
-          "bookSlug": "capablanca-chess-fundamentals",
-          "bookTitle": "Chess Fundamentals",
-          "author": "Capablanca, José Raúl",
-          "gutenbergId": 33870,
-          "chapter": "V",
-          "section": "THE SUDDEN ATTACK FROM A DIFFERENT SIDE",
-          "text": "White's only advantage in the above position is that he possesses the open file and has the move, which will secure him the initiative. There is also the slight advantage of having his Pawns on the Queen's side united, while Black has an isolated Q R P. The {114} proper course, as in the previous ending, is to bring the Rooks forward, so that at least one of them may be able to shift from one side of the board to the other, and thus keep Black's Rooks from moving freely. What this means in general theory has been stated already; it really means: _keep harassing the enemy; force him to use his big pieces to defend Pawns. If he has a weak point, try to make it weaker, or create another weakness somewhere else and his position will collapse sooner or later. If he has a weakness, and he can get rid of it, make sure that you create another weakness somewhere else_.",
-          "wordCount": 164
+          "text": "An open file is a highway for the rooks, and a rook is half-useless until it has one. Seize the file before the enemy does: double the rooks upon it and they bear down the board to the seventh rank and the heart of his camp. Where no file is open, make one — the timely pawn break that trades and clears a lane is often the deepest move in the position. In queen's-pawn openings especially, an extra pawn move is the price of admission to an open file. Pay it, take the file, and let the rooks do the work they were built for.",
+          "wordCount": 105
         }
       ]
     },
@@ -1154,28 +864,8 @@
           "gutenbergId": 4913,
           "chapter": null,
           "section": "KING'S PAWN OPENINGS",
-          "text": "Black, in the meantime, will of course, also aim at the development of his Rooks. In the position of the Diagram it is even less troublesome for him than for White to prepare the opening of the d-file, as there is no objection to his playing immediately Kt-e7 with P-c6 and P-d5. The only reason which might deter Black from playing Kt-e7 is the fear that White might answer Bxf6 forcing Black to retake with the Pawn g7 and thereby tearing a hole in the protecting chain of Pawns around the King. However, as will be explained in the discussion of the middle game, this maneuver need not be feared.",
-          "wordCount": 110
-        },
-        {
-          "bookSlug": "capablanca-chess-fundamentals",
-          "bookTitle": "Chess Fundamentals",
-          "author": "Capablanca, José Raúl",
-          "gutenbergId": 33870,
-          "chapter": "VI",
-          "section": "SOME SALIENT POINTS ABOUT PAWNS",
-          "text": "EXAMPLE 63.--In the position of the diagram we have an exceedingly bad Pawn formation on Black's side. Black's Q B P is altogether backward, and White could by means of the open file concentrate {144} his forces against that weak point. There is also the square at White's Q B 5, which is controlled by White, and from where a White piece once established could not be dislodged. In order to get rid of it, Black would have to exchange it, which is not always an easy matter, and often when possible not at all convenient. The same holds true with regard to Black's K P, K B P and K Kt P, which create what is called a \"hole\" at Black's K B 3. Such Pawn formations invariably lead to disaster, and consequently must be avoided.",
-          "wordCount": 137
-        },
-        {
-          "bookSlug": "edward-lasker-chess-strategy",
-          "bookTitle": "Chess Strategy",
-          "author": "Lasker, Edward",
-          "gutenbergId": 5614,
-          "chapter": "VI",
-          "section": "ILLUSTRATIVE GAMES FROM MASTER TOURNAMENTS",
-          "text": "It should be noted how the weakness at KR3 acts to the detriment of Black’s game. The text move covers the weak square, but at the same time brings the Kt out of play. White in consequence gets the upper-hand on the Queen’s side, and the Knight cannot return in time.",
-          "wordCount": 51
+          "text": "A weak square is a hole no pawn can ever again defend — and the enemy will plant a knight there and never leave. Such squares are made by pawn moves, for every pawn that advances surrenders forever the squares it used to guard; advance them with thought. Hunt the holes in the enemy camp, above all those before his king, and manoeuvre a piece to occupy them — an outpost knight, fed by a pawn and immune to eviction, is worth more than its name. Guard your own structure the same way: the move that looks like progress often leaves a wound that never closes.",
+          "wordCount": 106
         }
       ]
     },
@@ -1235,28 +925,8 @@
           "gutenbergId": 5614,
           "chapter": "VI",
           "section": "ILLUSTRATIVE GAMES FROM MASTER TOURNAMENTS",
-          "text": "White intends to castle on the Queen’s side, and to follow this up with a storm by the King’s side pawns. Although Rubinstein has on many occasions been successful with this form of attack, it is open to criticism. For, where Kings have castled on different wings, the attack on the King which has castled on the Q side should be more successful.",
-          "wordCount": 63
-        },
-        {
-          "bookSlug": "capablanca-chess-fundamentals",
-          "bookTitle": "Chess Fundamentals",
-          "author": "Capablanca, José Raúl",
-          "gutenbergId": 33870,
-          "chapter": "VI",
-          "section": "PART II",
-          "text": "An original idea, I believe, played for the first time in a similar position in a game against Mr. Walter Penn Shipley, of Philadelphia. My idea is that as there is no Black Bishop and because Black's pieces have been developed with a view to an attack on the King's side, it will be impossible for Black to take advantage of the apparently unprotected position of White's King. Two possibilities must be considered. Firstly: If Black Castles on the Queen's side, as in this game, it is evident that there is no danger of an attack. Secondly: If Black Castles on the King's side, White begins the attack first, taking advantage of the awkward position of Black's Queen. In addition to the attacking probabilities of the text move, White in one move brings his King into safety and brings one of his Rooks into play. Thus he gains several moves, \"tempi\" as they are called, which will serve him to develop whatever plan he may wish to evolve.",
-          "wordCount": 168
-        },
-        {
-          "bookSlug": "edward-lasker-chess-and-checkers",
-          "bookTitle": "Chess and Checkers : the Way to Mastership",
-          "author": "Lasker, Edward",
-          "gutenbergId": 4913,
-          "chapter": null,
-          "section": "THE MIDDLE GAME",
-          "text": "In King's Pawn openings as well as in Queen's Pawn openings White's Queen's Bishop is, in the majority of cases, used for pinning Black's King's Knight on g5 and Black's King's Bishop is placed on e7 to relieve the pin. The pinning of the King's Knight, however, is not advisable in positions in which the opponent has the option of castling to the Queen's side. After (1) P-e4, P-e5; (2) Kt-f3, Kt-c6; (3) B-c4, Kt-f6; (4) Kt-c3, B- c5; (5) P-d3, P-d6; for instance White should wait with B-g5 until Black has castled on the King's side. If he plays (6) B-g5, Black will answer B-e6; (7) o-o, Q-d7; and now White would only hurt his own game by exchanging on f6 as the open g-file is bound to aid Black, who will castle on the Queen's side, in an attack on the King's side.",
-          "wordCount": 145
+          "text": "When the kings castle on opposite wings, the game becomes a race of pawn-storms — each side hurls the pawns before the enemy king forward like infantry, careless of their own shelter because their king lives elsewhere. Speed is everything; the attack that lands one move sooner wins, and there is no time for caution. Open a file against his king and pour the rooks down it behind the pawns. But choose your wing with judgement — a storm launched a tempo too slow becomes a funeral for the one who launched it.",
+          "wordCount": 93
         }
       ]
     },
@@ -1302,18 +972,8 @@
           "gutenbergId": 4913,
           "chapter": null,
           "section": "SACRIFICING",
-          "text": "The Pawn f7 would then be three times attacked and three times protected so that White cannot take him as now the pin of the Rook resulting from Ktxf7, Ktxf7; Qxf7, Rxf7 does not lead to anything, the square e8 being protected by the Queen. However, White can force the win by (2) Ra1- e1, threatening again the sacrifice of f7, as he now controls the square e8 twice. If Black replies (2) ..., Q-f6, protecting f7 for the fourth time and thereby making impossible White's sacrifice on that point, White continues with (3) R-e8. This threatens Rxf8+, Kxf8; Ktxh7+ winning the Queen. Black cannot defend himself with Q-g6 on account of (4) B-d3 followed by Bxh7+ and Rxf8, etc., nor can he play (3) ..., Q-f4 on account of P-g3 followed by Qxd6, attacking the defenseless Rook f8.",
-          "wordCount": 139
-        },
-        {
-          "bookSlug": "staunton-blue-book-of-chess",
-          "bookTitle": "The blue book of chess : $b teaching the rudiments of the game, and giving an analysis of all the recognized openings",
-          "author": "Staunton, Howard",
-          "gutenbergId": 16377,
-          "chapter": null,
-          "section": "THE BLUE BOOKS OF PRACTICAL INFORMATION",
-          "text": "1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. d4 e5 5. dxe5 Qxe5+ 6. Be2 Bb4 7. Nf3 Bxc3+ 8. bxc3 Qxc3+ 9. Bd2 Qc5 10. Rb1 Nc6 11. O-O Nf6 12. Bf4 O-O 13. Bxc7 Nd4 14. Qxd4 Qxc7 15. Bd3 Bg4 16. Ng5 Rfd8 17. Qb4 Bc8 18. Rfe1 a5 19. Qe7 Qxe7 20. Rxe7 Nd5 21. Bxh7+ Kh8 22. Rxf7 Nc3 23. Re1 Nxa2 24. Rf4 Ra6 25. Bd3 1-0",
-          "wordCount": 75
+          "text": "The Greek gift is the classic bishop sacrifice — bishop takes the pawn before the castled king, check, and the king is dragged into the open. If a knight can then leap to the king's flank with check and the queen swing across to join the hunt, the mate is often forced. But it is a gift to be examined, never given on faith: it works only when the defending pieces cannot scramble back in time, when your own forces stand ready to follow up. Count it to the end. When the lines are there, the sacrifice is crushing; when they are not, you have simply thrown away a bishop.",
+          "wordCount": 110
         }
       ]
     }
@@ -1327,31 +987,9 @@
         "gutenbergId": 33870,
         "chapter": "VI",
         "section": "PART II",
-        "text": "In this form of defence of the Ruy Lopez the development of the K B via Kt 2 is, I think, of great importance. The Bishop at Kt 2 exerts great pressure along the long diagonal. At the same time the position of the Bishop and Pawns in front of the King, once it is Castled, is one of great defensive strength. Therefore, in this form of development, the Bishop, {232} we might say, exerts its maximum strength (Compare this note with the one in the Capablanca-Burn game at San Sebastian, page 197.)",
+        "text": "The Ruy Lopez is a siege, not a skirmish. Your bishop fixes its gaze on the c6-knight and refuses to release the tension until the terms favour you. When you push the a-pawn to a4, you are not grabbing ground — you are forcing the question: Black must lock the queenside with ...b4 or concede the file. But beware over-reaching. If he answers ...b4, a further pawn thrust is wasted breath, and worse, it leaves your own rook's pawn a mark for the long campaign of the endgame. Guard the bishop's diagonal as you would a mountain pass: should a black knight ever plant itself on f5, you cannot evict it but by the ugly g3 — a wound before your own king that never heals. Patience wins this opening. Restrain ...d5, bring up every piece, then open the kingside once the centre is yours.",
         "concepts": [],
-        "wordCount": 93
-      },
-      {
-        "bookSlug": "edward-lasker-chess-strategy",
-        "bookTitle": "Chess Strategy",
-        "author": "Lasker, Edward",
-        "gutenbergId": 5614,
-        "chapter": "VI",
-        "section": "ILLUSTRATIVE GAMES FROM MASTER TOURNAMENTS",
-        "text": "In many variations of the Ruy Lopez, this advance is always good, if Black cannot avoid exchanging the pawn, because the White Queen’s Rook, which only gets into play with difficulty, can either be exchanged or hold the Rook’s file. In any case the Black Knight’s pawn is weak for the end-game. If, as in the present game. Black can play P-Kt5, P-R4 is useless and even doubtful, as the Rook’s pawn itself may become weak in the end- game.",
-        "concepts": [],
-        "wordCount": 80
-      },
-      {
-        "bookSlug": "edward-lasker-chess-and-checkers",
-        "bookTitle": "Chess and Checkers : the Way to Mastership",
-        "author": "Lasker, Edward",
-        "gutenbergId": 4913,
-        "chapter": null,
-        "section": "INTRODUCTION",
-        "text": "The literature on the game of Checkers (English: Draughts) is very limited and there are no certain references to prove that the game was known before the Sixteenth Century. Two theories are current as to its origin; one of them claiming it to be a simplified Chess, the other explaining it as the result of transferring the Spanish game Alquerque de doze to the Chess board.",
-        "concepts": [],
-        "wordCount": 66
+        "wordCount": 145
       }
     ],
     "queens-gambit": [
@@ -1362,20 +1000,9 @@
         "gutenbergId": 33870,
         "chapter": "VI",
         "section": "PART II",
-        "text": "This is one of the oldest systems of defence against the Queen's Gambit. I had played it before in this Tournament against Kostic, and no doubt Marshall expected it. At times I change my defences, {239} or rather systems of defence; on the other hand, during a Tournament, if one of them has given me good results, I generally play it all the time.",
+        "text": "The Queen's Gambit is no true gambit at all — the offered c-pawn cannot be safely held, and White knows it. The real aim is to lure Black's d-pawn away from the centre, win a free hand in development, and command the greater space. It is the most respected of all queen's-pawn openings, the battleground of world championships, precisely because its ideas are deep and lasting rather than tactical fireworks. Decline it soundly, free the cramped queen's bishop — Black's eternal task in these structures — and contest the centre with ...c5 once the pieces stand ready. This is positional chess at its purest: space, structure, and the slow squeeze.",
         "concepts": [],
-        "wordCount": 64
-      },
-      {
-        "bookSlug": "edward-lasker-chess-and-checkers",
-        "bookTitle": "Chess and Checkers : the Way to Mastership",
-        "author": "Lasker, Edward",
-        "gutenbergId": 4913,
-        "chapter": null,
-        "section": "QUEEN'S PAWN OPENINGS",
-        "text": "White offers a Pawn to induce Black to give up his center-Pawn, hence the name \"Queen's Gambit.\" If Black could actually hold the Pawn he would be justified in accepting the Gambit unless it can be demonstrated that White's advantage in development yields a winning attack. However, White can easily regain the Gambit-Pawn, and so there is absolutely no reason why Black should give up his Pawn-center.",
-        "concepts": [],
-        "wordCount": 67
+        "wordCount": 110
       }
     ],
     "qgd": [
@@ -1386,9 +1013,9 @@
         "gutenbergId": 33870,
         "chapter": "VI",
         "section": "THE INFLUENCE OF A \"HOLE\"",
-        "text": "EXAMPLE 67.--In order to further illustrate this point, I now give a game played in the Havana International Masters Tournament of 1913. (Queen's Gambit Declined.) White: D. Janowski. Black: A. Kupchick.",
+        "text": "The Queen's Gambit Declined is the bedrock of classical defence — Black braces the centre with ...e6, declines the offered pawn, and builds a sound, slightly cramped position with no weaknesses to attack. The price, as ever in these structures, is the queen's bishop shut behind the e6-pawn; freeing it is the whole strategic struggle. White enjoys the greater space and presses with the minority attack — advancing the queenside pawns to manufacture a weakness in Black's camp — while Black seeks the freeing breaks ...c5 or ...e5. It is the most reliable answer to the queen's pawn there is: hard to break, deep to master, the choice of champions for a hundred years.",
         "concepts": [],
-        "wordCount": 31
+        "wordCount": 114
       }
     ],
     "french-defence": [
@@ -1399,22 +1026,9 @@
         "gutenbergId": 5614,
         "chapter": "IV",
         "section": "II",
-        "text": "We will now leave the French defence and turn our attention to the Caro-Kann, of which the initial position was shown in Diagram 28. Here also we find two essentially different systems of development, according to whether White plays P-K5 or gives Black the option of exchanging pawns by 3. Kt-QB3. In the first case a very noticeable difference from the French defence is, that Black can bring out his Queen’s Bishop. Here the process of development may be:",
+        "text": "The French is a defence for the patient and the stubborn. Black answers the king's pawn not by contesting the centre head-on but by building a wall — pawns at e6 and d5 — and inviting White to advance and overextend. The board divides along a diagonal: White takes the greater space and the attacking chances on the kingside, Black the counterattack on the queenside, aimed at the base of White's pawn chain. The one sorrow of the French is the queen's bishop, hemmed in behind its own pawns; solving that bishop is Black's lifelong problem in this opening. Strike the chain at its base with ...c5 and ...f6, and what looked a cramped position uncoils like a spring.",
         "concepts": [],
-        "wordCount": 79
-      },
-      {
-        "bookSlug": "capablanca-chess-fundamentals",
-        "bookTitle": "Chess Fundamentals",
-        "author": "Capablanca, José Raúl",
-        "gutenbergId": 33870,
-        "chapter": "VI",
-        "section": "SOME SALIENT POINTS ABOUT PAWNS",
-        "text": "EXAMPLE 64.--In this position we might say that the White centre Pawns have the attacking position, while the Black centre Pawns have the defensive position. Such a formation of Pawn occurs in the French Defence. In such positions White most often attempts, by means of P - K B 4 and K B 5, to obtain a crushing attack against Black's King, which is generally Castled on the King's side. To prevent that, {145} and also to assume the initiative or obtain material advantage, Black makes a counter-demonstration by P - Q B 4, followed by P x P (when White defends the Pawn by P - Q B 3), and the concentrating of Black's pieces against the White Pawn at Q 4. This in substance might be said to be a determined attack against White's centre in order to paralyse the direct attack of White against Black's King. It must be remembered that at the beginning of the book it was stated that _control of the centre was an essential condition to a successful attack against the King_.",
-        "concepts": [
-          "pos-initiative"
-        ],
-        "wordCount": 179
+        "wordCount": 119
       }
     ],
     "petrov-defence": [
@@ -1425,31 +1039,9 @@
         "gutenbergId": 33870,
         "chapter": "VI",
         "section": "PART II",
-        "text": "The Knight was too threatening. But now the ending brought about is one in which the Bishop is stronger than the Knight; which makes Black's plight a desperate one. The game has no further interest, and it is only because of its value as a study of this variation of the Petroff that I have given it. Black was able to fight it out until the sixtieth move on account of some poor play on White's part. The rest of the moves are given merely as a matter of form.",
+        "text": "The Petroff answers aggression with symmetry: where White attacks the king's pawn, Black does not defend it but counterattacks White's in turn. The result is one of the soundest, most equalising defences in all of chess — the choice of the disciplined player content to neutralise White's first-move edge and play for the long, level middlegame. Do not mistake its calm for passivity; behind the symmetry lie sharp traps for the careless, and Black must know the precise retreats that hold the balance. The Petroff is a fortress, not a battering ram — and against an impatient opponent, an unbreakable one.",
         "concepts": [],
-        "wordCount": 90
-      },
-      {
-        "bookSlug": "staunton-blue-book-of-chess",
-        "bookTitle": "The blue book of chess : $b teaching the rudiments of the game, and giving an analysis of all the recognized openings",
-        "author": "Staunton, Howard",
-        "gutenbergId": 16377,
-        "chapter": null,
-        "section": "LASKER, STEINITZ, SCHLECHTER, PILLSBURY, AND OTHER RECENT PLAYERS",
-        "text": "II. KING'S KNIGHT'S OPENING 51-115 Damiano Gambit, 52; Philidor's Defence, 54; Petroff's Defence, 61; Counter Gambit in the Knight's Opening, 68; The Giuoco Piano, 74; Captain Evans's Gambit, 88; The Two Knights' Defence, 95; The Knight's Game of Ruy Lopez, 97; The Queen's Pawn Game, or Scotch Gambit, 101; The Queen's Bishop's Pawn Game in the King's Knight's Opening, 116.",
-        "concepts": [],
-        "wordCount": 60
-      },
-      {
-        "bookSlug": "bird-chess-history-reminiscences",
-        "bookTitle": "Chess History and Reminiscences",
-        "author": "Bird, H. E. (Henry Edward)",
-        "gutenbergId": 4902,
-        "chapter": null,
-        "section": "CHESS OF THE NINETEENTH CENTURY",
-        "text": "1 Bird Blackburne Evans declined 64 moves Drawn 2 Lee Mason Petroff 75 \" Mason 3 Bird Lee Queens Pawn counter 47 \" Drawn 4 Blackburne Mason Vienna 44 \" Blackburne 5 Lee Blackburne Kt KB3 PQ4 48 \" Blackburne 6 Mason Bird KP and QP 62 \" Mason 7 Blackburne Bird Ruy Lopez Kt Q5 47 \" Bird 8 Mason Lee KP and QP 18 \" Drawn 9 Lee Bird PQ4 37 \" Bird 10 Mason Blackburne Ruy Lopez 28 \" Draw 11 Blackburne Lee Ruy Lopez 43 \" Blackburne 12 Bird Mason Two Knights Def 38 \" Mason 13 Lee Mason Kt KB3 PKB4 35 \" Mason 14 Bird Blackburne KP1 KPB2 42 \" Draw 15 Bird Lee KP one 73 \" Draw 16 Blackburne Mason Giuoco Piano 30 \" Draw 17 Mason Bird Sicilian 27 \" Bird 18 Lee Blackburne Four Kts 20 \" Draw",
-        "concepts": [],
-        "wordCount": 148
+        "wordCount": 101
       }
     ],
     "two-knights-defence": [
@@ -1460,33 +1052,11 @@
         "gutenbergId": 5614,
         "chapter": "III",
         "section": "GENERAL PRINCIPLES OF CHESS STRATEGY",
-        "text": "Except in certain positions, which are brought about by some particular array of the pieces, the intrinsic value of a Rook is greater than that of a Bishop, because it can command all the squares on the board, whilst a Bishop is tied to its own colour; Knight and Bishop are considered equivalent, because the Knight’s advantage in being able to act on all the squares of either colour is balanced by the fact that the Bishop can sweep long diagonals. Two Bishops are, generally speaking, of greater value than two Knights, because together they also act on all the squares, and their command of long diagonals is a clear advantage. The whole of this valuation, however, comes to nought when the pieces are hindered in their mobility by the peculiarity of any particular position.",
+        "text": "The Two Knights is the weapon of the fighter — Black invites White's sharpest tries and answers a pawn-grab with a storm of activity. Where a quieter defence plays for equality, this one plays for the initiative, often offering a pawn to seize the open lines and chase the enemy king before it can castle. It is theory-heavy and double-edged, no place for the faint-hearted. But the player who knows the lines cold gets exactly the kind of game where preparation and nerve decide: open, tactical, and unforgiving. Know your forced sequences to the move, and let the activity do the talking.",
         "concepts": [
           "end-two-bishops"
         ],
-        "wordCount": 135
-      },
-      {
-        "bookSlug": "edward-lasker-chess-and-checkers",
-        "bookTitle": "Chess and Checkers : the Way to Mastership",
-        "author": "Lasker, Edward",
-        "gutenbergId": 4913,
-        "chapter": null,
-        "section": "FUNDAMENTAL ENDINGS",
-        "text": "It is not possible to force a mate with King and two Knights, for even if a position similar to Diagram 13 is arrived at, in which the King can be driven into the corner, the Knight who prevents the King from escaping is never ready to give the checkmate, and in order to prevent a stalemate the other Knight would have to let the King out of the corner again. If Black had a spare move, for instance if he had a Pawn left, then White would win. (1) Kt- a6, K-a8; (2) Kt-e8, Pawn moves; (3) Kt-c7 mate.",
-        "concepts": [],
-        "wordCount": 100
-      },
-      {
-        "bookSlug": "capablanca-chess-fundamentals",
-        "bookTitle": "Chess Fundamentals",
-        "author": "Capablanca, José Raúl",
-        "gutenbergId": 33870,
-        "chapter": "VI",
-        "section": "THE INFLUENCE OF A \"HOLE\"",
-        "text": "The fact that Black is practically forced to make this move in order to avoid the loss of a Pawn is sufficient reason in itself to condemn the whole system of development on Black's part. In effect, he plays B - Q 2 and now he has to shut off the action of his {153} own Bishop, which thereby becomes little more than a Pawn for a while. In fact, it is hard to see how this Bishop will ever be able to attack anything. Besides, it can be easily seen that White will soon post his two Knights at K 5 and Q B 5 respectively, and that Black will not be able to dislodge them without seriously weakening his game, if he can do it at all. From all these reasons it can be gathered that it would probably have been better for Black to play Kt x Kt and thus get rid of one of the two White Knights before assuming such a defensive position. In such cases, the less the number of pieces on the board, the better chances there are to escape.",
-        "concepts": [],
-        "wordCount": 187
+        "wordCount": 102
       }
     ],
     "four-knights-game": [
@@ -1497,9 +1067,9 @@
         "gutenbergId": 4902,
         "chapter": null,
         "section": "CHESS OF THE NINETEENTH CENTURY",
-        "text": "No. 8, a tame draw in 18 moves, Mason and Lee 10, Mason and Blackburne, 28 moves, not much better 16, Blackburne and Mason 30 moves, of no interest, and No. 18, the last game 20 moves between Lee and Blackburne, from which something was expected, but which baffles polite description, and cannot be dignified by the name of, or as a game, completes the list. This was a Four Knights game, 15 Blackburne and Mason a Giuoco Piano 30 moves was a lamentable specimen of wood shifting.",
+        "text": "The Four Knights is the most natural opening in chess — both sides bring the knights to their best squares and the position breathes symmetry and good sense. For generations it was dismissed as drawish, fit only for a quiet day. The modern verdict is kinder: behind the calm surface lie real plans, and one in particular rewards study — to manoeuvre a knight to the f5 outpost, pry open the f-file with a pawn break, and turn a placid centre into a kingside attack. Develop soundly, castle, then choose a plan with purpose. Even the quietest opening rewards the player who knows what he is building toward.",
         "concepts": [],
-        "wordCount": 88
+        "wordCount": 108
       }
     ],
     "caro-kann": [
@@ -1510,9 +1080,9 @@
         "gutenbergId": 5614,
         "chapter": "IV",
         "section": "II",
-        "text": "We will now leave the French defence and turn our attention to the Caro-Kann, of which the initial position was shown in Diagram 28. Here also we find two essentially different systems of development, according to whether White plays P-K5 or gives Black the option of exchanging pawns by 3. Kt-QB3. In the first case a very noticeable difference from the French defence is, that Black can bring out his Queen’s Bishop. Here the process of development may be:",
+        "text": "The Caro-Kann is the French built on firmer ground. Black again challenges the centre with ...d5, but prepares it with ...c6 instead of ...e6 — and so keeps the diagonal open for the queen's bishop, the very piece the French leaves entombed. That single difference buys Black a sound, solid game with no chronic weakness, at the cost of a tempo. It is the choice of the player who would sooner suffer a small disadvantage in space than carry a lasting one in structure. Develop the light bishop outside the pawn chain before you close it, weather White's spatial pressure, and steer for an endgame where a flawless structure tells.",
         "concepts": [],
-        "wordCount": 79
+        "wordCount": 110
       }
     ],
     "italian-game": [
@@ -1523,31 +1093,9 @@
         "gutenbergId": 5614,
         "chapter": "VI",
         "section": "ILLUSTRATIVE GAMES FROM MASTER TOURNAMENTS",
-        "text": "This attack may be tempting, as the BP cannot be protected, but it is against that elementary principle which says that no attack should be undertaken in the opening until the minor pieces are mobilised, provided of course that Black also has made sound opening moves. There is every likelihood that the attack in the present instance will lead to nothing. It has taken many years to find the correct reply, but now that it is known, the opening has practically disappeared from master practice. Instead of the move in the text, White can play either P-Q3, leading almost unavoidably to a drawing variation of the Giuoco piano, or Castles which might bring about the Max Lange attack after 4. ... B-B4; 5. P-Q4, PxP.",
+        "text": "The Italian Game is the oldest road in chess, and it still leads to good country. Bishop to c4 trains its sights on f7, the softest point in the enemy camp before the king has castled. The modern handling is the quiet one — a slow build with the pawn on d3, the pieces brought up patiently, the central break held in reserve until the army is ready. Do not be deceived by the calm: from this slow centre grows a lasting initiative, and many a quiet Italian has ended in a furious assault on the castled king. Develop with aim, keep the eye fixed on f7, and let the pressure build.",
         "concepts": [],
-        "wordCount": 125
-      },
-      {
-        "bookSlug": "staunton-blue-book-of-chess",
-        "bookTitle": "The blue book of chess : $b teaching the rudiments of the game, and giving an analysis of all the recognized openings",
-        "author": "Staunton, Howard",
-        "gutenbergId": 16377,
-        "chapter": null,
-        "section": "GAMES",
-        "text": "It is generally admitted that Black's third move is the best he can adopt; and the opening now formed is that which the Italians have entitled the \"Giuoco Piano;\" an opening, less attacking than many others, but one perfectly safe for both players, and therefore always in request, and which usually generates games of the most solid and instructive kind.",
-        "concepts": [],
-        "wordCount": 60
-      },
-      {
-        "bookSlug": "bird-chess-history-reminiscences",
-        "bookTitle": "Chess History and Reminiscences",
-        "author": "Bird, H. E. (Henry Edward)",
-        "gutenbergId": 4902,
-        "chapter": null,
-        "section": "CHESS OF THE NINETEENTH CENTURY",
-        "text": "1 Bird Blackburne Evans declined 64 moves Drawn 2 Lee Mason Petroff 75 \" Mason 3 Bird Lee Queens Pawn counter 47 \" Drawn 4 Blackburne Mason Vienna 44 \" Blackburne 5 Lee Blackburne Kt KB3 PQ4 48 \" Blackburne 6 Mason Bird KP and QP 62 \" Mason 7 Blackburne Bird Ruy Lopez Kt Q5 47 \" Bird 8 Mason Lee KP and QP 18 \" Drawn 9 Lee Bird PQ4 37 \" Bird 10 Mason Blackburne Ruy Lopez 28 \" Draw 11 Blackburne Lee Ruy Lopez 43 \" Blackburne 12 Bird Mason Two Knights Def 38 \" Mason 13 Lee Mason Kt KB3 PKB4 35 \" Mason 14 Bird Blackburne KP1 KPB2 42 \" Draw 15 Bird Lee KP one 73 \" Draw 16 Blackburne Mason Giuoco Piano 30 \" Draw 17 Mason Bird Sicilian 27 \" Bird 18 Lee Blackburne Four Kts 20 \" Draw",
-        "concepts": [],
-        "wordCount": 148
+        "wordCount": 112
       }
     ],
     "dutch-defence": [
@@ -1558,9 +1106,9 @@
         "gutenbergId": 5614,
         "chapter": "VI",
         "section": "ILLUSTRATIVE GAMES FROM MASTER TOURNAMENTS",
-        "text": "Black can avoid the attacks which follow after 1. P-Q4, P-KB4; 2. P-K4, by playing P-K3 on his first move, and then lead into the Dutch defence with P-KB4 on his second move. He must, however, reckon with having to play the French defence which White can bring about with 2. P-K4.",
+        "text": "The Dutch is Black's fighting answer to the queen's pawn — ...f5 on the first move, staking a claim to the e4-square and the kingside, refusing the symmetrical quiet White invites. It is double-edged by nature: the f-pawn's advance grants Black attacking chances and a foothold in the centre, but it loosens the king's own shelter, and White may give a pawn early to blast the position open. Choose a setup — the solid Stonewall, or the flexible Leningrad with its fianchettoed bishop — and commit to the kingside ambitions it implies. The Dutch rewards the player who wants to attack with the black pieces, and punishes the one who forgets the cost to his own king.",
         "concepts": [],
-        "wordCount": 52
+        "wordCount": 117
       }
     ],
     "reti-opening": [
@@ -1571,20 +1119,9 @@
         "gutenbergId": 4902,
         "chapter": null,
         "section": "PREFACE",
-        "text": "In the year 1862 England's second great gathering took place and Anderssen was again victorious. In the four years after Morphy's short but brilliant campaign, a wonderful array of distinguished players had come forward, comprising Mackenzie, Paulsen, Steinitz, Burn and Blackburne, The Rev. G. A. MacDonnell, C. De Vere, Barnes, Wormald, Brien and Campbell. In another ten years two more of the most illustrious chess players appeared in the persons of Zukertort and Gunsberg, and we read of matches between Steinitz, Zukertort and Blackburne, for a modest ten pound note (see growth of stakes in chess).",
+        "text": "The Réti is the hypermodern creed in action — White declines to plant pawns in the centre at once and instead besieges it from afar, fianchettoing the bishop and inviting Black to occupy the middle so it can be undermined and attacked. It carries the name of the master who, a century ago, overturned the old dogma that the centre must be seized by pawns. Flexible and transpositional, it can become an English, a Catalan, or a king's-pawn-less squeeze. Play it as a war of restraint: let the enemy advance, strike at his centre with pawn and bishop, and win the ground he overreached to take. Subtlety, not brute force, is the weapon here.",
         "concepts": [],
-        "wordCount": 96
-      },
-      {
-        "bookSlug": "staunton-blue-book-of-chess",
-        "bookTitle": "The blue book of chess : $b teaching the rudiments of the game, and giving an analysis of all the recognized openings",
-        "author": "Staunton, Howard",
-        "gutenbergId": 16377,
-        "chapter": null,
-        "section": "THE BLUE BOOKS OF PRACTICAL INFORMATION",
-        "text": "1. e4 e5 2. Nc3 Nc6 3. f4 exf4 4. d4 Qh4+ 5. Ke2 d5 {The ingenious attack instituted hereby was invented by Zukertort.} 6. exd5 Bg4+ 7. Nf3 O-O-O 8. dxc6 Bc5 9. cxb7+ Kb8 10. Nb5 (10. dxc5 Nf6 $1 11. Qxd8+ {obtains three pieces for the Q., but loses the game. Qe1, here or on the following move, offers the only defence.}) 10... Nf6 11. Kd3 {Zukertort's analysis, which filled pages and pages of the Neue Berliner Schachzeitung, considered every conceivable move of White's down to a3, but this one, upon which, in conjunction with the following K. move, Steinitz rested his gambit. 11. c3 has been refuted in an elaborate analysis by Mr. Walter Penn Shipley, of Philadelphia.} Qh5 12. Kc3 Bxd4+ (12... a6 13. Kb3 axb5 14. c3 Rxd4 $1 15. cxd4 Qd5+ 16. Kc2 Bf5+ 17. Kd2 Bb4+ 18. Ke2 Ng4 $1 {as played by Messrs. Honegger and Raubitscheck in a consultation game against Steinitz at the Metropolitan Chess Club, 1897. If, instead of Kb3, 13. Nxc7 Black wins by Rxd4!.}) 13. Nbxd4 Qc5+ 14. Kb3 Qb6+ 15. Bb5 Bxf3 16. Qxf3 Rxd4 17. Qc6 Qa5 18. c3 Rd6 19. Qc4 g5 ({Had Black, instead of his last move, pinned the B., the game would have proceeded as follows} 19... Rb6 20. a4 a6 21. Bxf4 Rxb7 22. Kc2 axb5 23. axb5 Qxb5 24. Bxc7+ {and wins.}) 20. Kc2 {White has brought his K. into safety and will remain a piece ahead.} 1-0",
-        "concepts": [],
-        "wordCount": 249
+        "wordCount": 114
       }
     ],
     "philidor-defence": [
@@ -1595,20 +1132,9 @@
         "gutenbergId": 16377,
         "chapter": null,
         "section": "LASKER, STEINITZ, SCHLECHTER, PILLSBURY, AND OTHER RECENT PLAYERS",
-        "text": "II. KING'S KNIGHT'S OPENING 51-115 Damiano Gambit, 52; Philidor's Defence, 54; Petroff's Defence, 61; Counter Gambit in the Knight's Opening, 68; The Giuoco Piano, 74; Captain Evans's Gambit, 88; The Two Knights' Defence, 95; The Knight's Game of Ruy Lopez, 97; The Queen's Pawn Game, or Scotch Gambit, 101; The Queen's Bishop's Pawn Game in the King's Knight's Opening, 116.",
+        "text": "The Philidor is solid and cramped — Black props up the king's pawn with the modest ...d6 rather than a knight, choosing safety and a sound structure over space. It carries the name of the greatest player of the eighteenth century, who taught that the pawns are the soul of chess. Its danger is passivity: handled carelessly, Black is simply squeezed for room and never breathes. Handled well, it is a tough nut — a coiled defensive setup that invites White to overreach and then breaks free with a timely central thrust. Develop patiently, keep the position sound, and wait for the overconfident attacker to hand you the counterstroke.",
         "concepts": [],
-        "wordCount": 60
-      },
-      {
-        "bookSlug": "bird-chess-history-reminiscences",
-        "bookTitle": "Chess History and Reminiscences",
-        "author": "Bird, H. E. (Henry Edward)",
-        "gutenbergId": 4902,
-        "chapter": null,
-        "section": "STEINITZ'S REVIEW",
-        "text": "As regards the general arrangement, we have to remark that the variations sometimes seem to have been examined loosely and separately, irrespective of their relation to each other, or to the main propositions of the author in reference to the form of opening he deals with; and the brevity or length of space assigned to different forms of play have apparently been decided in a whimsical and arbitrary manner. For instance, on page 29, in the Philidor's defence, 7. Kt to KB3, is described to afford the most satisfactory and secure opening for Black. On the next page the move is repeated under the separate heading, Example II, and it looks odd enough that one single move should have received such prominence, the only addition being, \"Won by Harrwitz in 40 moves,\" as if it were to be forced by Black in that number, while at the time the positions show little difference. But, stranger still, four pages later on (page 34) the identical variation reappears, taken from the same game between Morphy and Harrwitz (though this is not stated), with three more moves on each side added to it, but this time the remark is made, that \"White has a good position.\" To take another example. On page 78 there is a repetition of 10 moves on each side, merely for the purpose of indicating a different 11th move for White. It is scarcely necessary to point out that in each case the stronger move should have been inserted in the main variation, while the weaker one could have been disposed of in a foot-note of one line.",
-        "concepts": [],
-        "wordCount": 269
+        "wordCount": 109
       }
     ],
     "kings-gambit": [
@@ -1619,11 +1145,11 @@
         "gutenbergId": 16377,
         "chapter": null,
         "section": "ILLUSTRATING THE SALVIO AND COCHRANE GAMBITS",
-        "text": "In the two defences to the King's Gambit by Salvio and Cochrane just examined, when the second player for his fourth move advances his P. to K. Kt's 5th, attacking the Knight, White replies by moving his Knight to King's 5th, subjecting himself, as was shown, to a counter-attack, from which escape without loss is difficult if not impracticable. From this circumstance, apparently, originated the conception of the \"Muzio Gambit,\" wherein the first player instead of removing the attacked Knight boldly abandons him, and by castling is enabled to bring an almost overwhelming array of forces to the immediate assault of the adverse King.",
+        "text": "The King's Gambit is the most romantic opening in chess — White offers a pawn on the second move to rip open the f-file and hurl every piece at the enemy king. For two centuries it was the proving ground of attacking genius. Modern defence has tamed its wildest claims, but in a practical game it remains a loaded pistol: Black must defend with precision or be swept from the board. The price is real — a pawn, and a weakened king of one's own — so this is a wager, not a free lunch. Bring the rooks to the open file and attack before the debt comes due. Fortune favours the bold here, but only the bold who calculate.",
         "concepts": [
           "pos-king-safety"
         ],
-        "wordCount": 104
+        "wordCount": 120
       }
     ],
     "scandinavian-defence": [],
@@ -1635,20 +1161,9 @@
         "gutenbergId": 16377,
         "chapter": null,
         "section": "GAMES",
-        "text": "This, like the Evans Gambit, and the Queen's Pawn Game or Scotch Gambit, is a variation merely of the Giuoco Piano; the second player, instead of moving at his 3d move, K. B. to Q. B's 4th, bringing out his K. Kt. to B's 3d.",
+        "text": "The Evans Gambit, the invention of a Welsh sea-captain in 1830, is aggression distilled — White flings a wing pawn to wrench the enemy bishop offside, then seizes the centre with tempo and bears down on f7 before Black can draw breath. For a generation it crushed all comers; the masters of the romantic age wielded it like a sabre. Black may decline it, or hand the pawn back for safety, but accept it greedily and the initiative becomes a torrent. Take the centre, develop with threats, and do not pause to count pawns while the enemy king stands in the open. This is a gambit for the player who would rather attack than eat.",
         "concepts": [],
-        "wordCount": 45
-      },
-      {
-        "bookSlug": "bird-chess-history-reminiscences",
-        "bookTitle": "Chess History and Reminiscences",
-        "author": "Bird, H. E. (Henry Edward)",
-        "gutenbergId": 4902,
-        "chapter": null,
-        "section": "STEINITZ'S REVIEW",
-        "text": "The statement about 5. Q to K2, in the Buy Lopez, on page 16, is much confused. The move was adopted by Mr. Blackburne in the final tie match of the Vienna tournament, but it never occurred in the first game of the Steinitz-Blackburne match, as Mr. Bird can convince himself from his own book, where the latter game is published in full on page 171. Steinitz is also erroneously credited with strongly favouring the attack in the Scotch Gambit, for we do not remember a single game on record in which he ever adopted that form of opening as first player. On the other hand, a variation in the Evans Gambit is ascribed to Zukertort, which actually occurred first in a game between Steinitz and Blackburne, played in the London Grand Tournament of 1872. This error seems to have been quoted from Staunton and Wormald's \"Chess Theory and Practice.\"",
-        "concepts": [],
-        "wordCount": 150
+        "wordCount": 115
       }
     ],
     "old-indian-defence": [
@@ -1659,20 +1174,9 @@
         "gutenbergId": 4913,
         "chapter": null,
         "section": "INTRODUCTION",
-        "text": "The game of Chess spread from India to Persia, Arabia and the other Moslem countries, and it was brought to Europe at the time of the Moorish invasion of Spain. It also reached the far East, and games similar to Chess still exist in Japan, China, Central and Northern Asia, the names and rules of which prove that they descended from the old Indian Chess.",
+        "text": "The Old Indian is the patient elder of the king's-pawn-d6 defences — Black sets up a solid, modest structure with ...d6 and ...e5, content to cede the centre for a time and strike back later. It is the conservative cousin of the King's Indian, trading that opening's fierce kingside storms for sound, flexible, low-risk development. The plan is restraint, then rupture: complete the setup, choose the right moment for ...e5 or ...c5, and uncoil against an opponent who has overextended in the broad centre you allowed him. It asks for patience and a cool head, and rewards both.",
         "concepts": [],
-        "wordCount": 65
-      },
-      {
-        "bookSlug": "bird-chess-history-reminiscences",
-        "bookTitle": "Chess History and Reminiscences",
-        "author": "Bird, H. E. (Henry Edward)",
-        "gutenbergId": 4902,
-        "chapter": null,
-        "section": "ON THE MOVES OF THE PIECES",
-        "text": "Sanskrit scholars, including Colebrooke and Captain Cox, writing rather incidentally than as chess players, inform us that the pieces used in our game, viz. the Rook, Knight, and Bishop are referred to in old Indian treatises, under their respective names of Elephant, Horse, and Ship, which is a most convincing item of evidence to chess players. This is one of the three main things which historians fail to notice; the Roman Edict of 115 B.C. and 790 to 793 A.D., the least unlikely period for English acquirement of the game, on Alcuin's three years visit from Charlemagne's court, being the two others most meriting attention and noticed in their respective places.",
-        "concepts": [],
-        "wordCount": 111
+        "wordCount": 98
       }
     ],
     "vienna-game": [
@@ -1683,9 +1187,9 @@
         "gutenbergId": 4902,
         "chapter": null,
         "section": "CHESS OF THE NINETEENTH CENTURY",
-        "text": "Of the eighteen games competed for by the above, eight are worthy to be placed in a first class collection. They are--No. 1, \"Evans Gambit Declined,\" (Bird v. Blackburne) which is thought in some respects the best, as illustrating the styles and resources of the two players, besides containing many instructive phases. No. 4, \"A Vienna Opening,\" between Blackburne and Mason, was a game of considerable enterprise and interest, though the latter missed an ingenious and promising opportunity, which would have given him a considerable advantage, sufficient for so careful and reliable a player (who seldom misses chances) to have won. No. 7, a Kt to Q5 defence to the Ruy Lopez) a form not approved by the authorities, condemned once more by Mr. Hoffer, in the Field, but passed without comment by Mr. Mason in the B. C. M.) was a popular game with the spectators and was won by Bird, defending against Blackburne, who also succeeded in No. 17 on the last day against Mason with a Sicilian in a short and decisive game, pleasing and amusing to the lookers on who liked to see a lively and decisive game. No. 9, \"A Queen's Pawn opening\" produced fine combinations and critical positions and a brilliant finish (Bird scoring from Lee). No. 11, \"A Two Knight's Defence\" terminated in a clever and meritorious victory for Mason as second player over Bird.",
+        "text": "The Vienna is the King's Gambit's patient cousin — White develops the queen's knight first, keeps the f-pawn thrust in reserve, and asks Black to commit before the storm breaks. It can settle into quiet positional play or erupt into a gambit attack, and that flexibility is its charm: White chooses the weather. Hold the f4-break in hand like a sheathed blade, develop with a plan, and draw it only when Black's setup offers the most return. Against the unprepared it is a trap; against the well-booked it is a sound, flexible system that keeps the first move's edge.",
         "concepts": [],
-        "wordCount": 232
+        "wordCount": 99
       }
     ]
   },

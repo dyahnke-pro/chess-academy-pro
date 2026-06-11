@@ -19,9 +19,10 @@ interface ClassicWisdomSectionProps {
  * Two-tier content:
  *
  *   1. Book passages (preferred) — when `chess-concepts.json` carries
- *      ≥1 tagged passage for this opening from the 7 Gutenberg
- *      classics. Up to 2 passages rendered with citation + Gutenberg
- *      link. Covers 16/40 of our taxonomy.
+ *      ≥1 passage for this opening: a modern retelling of the classic
+ *      masters' ideas (drawn from the 7 Gutenberg works), rendered with
+ *      a "drawn from" credit + Gutenberg link. Covers 16/40 of our
+ *      taxonomy.
  *
  *   2. Modern definition (fallback) — when no book passage matched,
  *      render the static OpeningDefinition (description + character
@@ -65,25 +66,25 @@ export function ClassicWisdomSection({ openingName, renderNarrationButton, onAct
         <div className="space-y-3" data-testid="classic-wisdom-passages">
           {passages.map((p, idx) => {
             const author = p.author.split(';')[0].split(',')[0].trim();
-            const cite = p.section ? `${author} — ${p.section}` : author;
+            const title = p.bookTitle.split(':')[0].trim();
             return (
               <blockquote
                 key={`${p.bookSlug}-${idx}`}
                 className="border-l-2 border-amber-400/40 pl-3"
                 data-testid="classic-wisdom-passage"
               >
-                <p className="text-sm text-theme-text-muted leading-relaxed italic">
-                  &ldquo;{p.text}&rdquo;
+                <p className="text-sm text-theme-text-muted leading-relaxed">
+                  {p.text}
                 </p>
-                <footer className="text-xs text-theme-text-muted/70 mt-1.5">
-                  — {cite}{' '}
+                <footer className="text-xs text-theme-text-muted/60 mt-1.5 italic">
+                  Drawn from {author},{' '}
                   <a
                     href={`https://www.gutenberg.org/ebooks/${p.gutenbergId}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-amber-400/80 hover:text-amber-300 underline"
+                    className="text-amber-400/80 hover:text-amber-300 underline not-italic"
                   >
-                    ({p.bookTitle})
+                    {title}
                   </a>
                 </footer>
               </blockquote>

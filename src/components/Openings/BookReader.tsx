@@ -18,7 +18,14 @@ interface ReaderParagraph {
 interface ReaderPassage {
   title?: string;
   paragraphs: ReaderParagraph[];
-  citation: string;
+  author: string;
+  bookTitle: string;
+  gutenbergId: number;
+}
+
+interface SourceWork {
+  author: string;
+  bookTitle: string;
   gutenbergId: number;
 }
 
@@ -30,15 +37,19 @@ interface Chapter {
 }
 
 const CHAPTER_INTRO: Record<Chapter['id'], string> = {
-  opening: 'What the classic masters wrote about this opening — in their own words.',
-  middlegame: 'The plans, structures, and tactics it leads to, taught by the greats.',
-  endgame: 'The endgames you steer toward, and how the masters handled them.',
+  opening: 'The wisdom of the old masters on this opening — retold for the player at the board.',
+  middlegame: 'The plans, structures, and tactics it leads to, in the voice of a seasoned general.',
+  endgame: 'The endgames you steer toward, and the doctrine for converting them.',
 };
 
-function citationFor(p: { author: string; bookTitle: string; chapter: string | null; section: string | null }): string {
-  const author = p.author.split(';')[0].split(',')[0].trim();
-  const where = p.chapter ? `Ch. ${p.chapter}` : p.section ?? '';
-  return where ? `${author} — ${p.bookTitle}, ${where}` : `${author} — ${p.bookTitle}`;
+/** Short author surname for the in-text "drawn from" credit. */
+function authorName(author: string): string {
+  return author.split(';')[0].split(',')[0].trim();
+}
+
+/** Trim a long catalogue title to its leading clause (before the colon). */
+function shortTitle(title: string): string {
+  return title.split(':')[0].trim();
 }
 
 function buildParagraphs(
@@ -60,7 +71,8 @@ function buildParagraphs(
 function pageToPassage(chapterId: string, idx: number, p: BookPage): ReaderPassage {
   return {
     paragraphs: buildParagraphs(chapterId, idx, undefined, p.text),
-    citation: citationFor(p),
+    author: p.author,
+    bookTitle: p.bookTitle,
     gutenbergId: p.gutenbergId,
   };
 }
@@ -69,9 +81,27 @@ function conceptToPassage(chapterId: string, idx: number, name: string, p: BookP
   return {
     title: name,
     paragraphs: buildParagraphs(chapterId, idx, name, p.text),
-    citation: citationFor(p),
+    author: p.author,
+    bookTitle: p.bookTitle,
     gutenbergId: p.gutenbergId,
   };
+}
+
+/** Unique source works across every chapter, for the closing Sources list. */
+function collectSources(chapters: Chapter[]): SourceWork[] {
+  const byId = new Map<number, SourceWork>();
+  for (const ch of chapters) {
+    for (const p of ch.passages) {
+      if (!byId.has(p.gutenbergId)) {
+        byId.set(p.gutenbergId, {
+          author: authorName(p.author),
+          bookTitle: shortTitle(p.bookTitle),
+          gutenbergId: p.gutenbergId,
+        });
+      }
+    }
+  }
+  return [...byId.values()].sort((a, b) => a.author.localeCompare(b.author));
 }
 
 interface BookReaderProps {
@@ -104,6 +134,8 @@ export function BookReader({ openingName, overview, keyIdeas }: BookReaderProps)
     }
     return out;
   }, [openingName, overview, keyIdeas]);
+
+  const sources = useMemo<SourceWork[]>(() => collectSources(chapters), [chapters]);
 
   const [activeIdx, setActiveIdx] = useState(0);
   const activeChapter = chapters[activeIdx] as Chapter | undefined;
@@ -252,16 +284,8 @@ export function BookReader({ openingName, overview, keyIdeas }: BookReaderProps)
             </div>
           );
         })}
-        <footer className="text-xs text-theme-text-muted/70 mt-2">
-          — {passage.citation}{' '}
-          <a
-            href={`https://www.gutenberg.org/ebooks/${passage.gutenbergId}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-amber-400/80 hover:text-amber-300 underline"
-          >
-            (Project Gutenberg)
-          </a>
+        <footer className="text-xs text-theme-text-muted/60 mt-2 italic">
+          Drawn from {authorName(passage.author)}, {shortTitle(passage.bookTitle)}
         </footer>
       </div>
 
@@ -291,6 +315,31 @@ export function BookReader({ openingName, overview, keyIdeas }: BookReaderProps)
           >
             <ChevronRight size={20} />
           </button>
+        </div>
+      )}
+
+      {/* Sources — the public-domain works these retellings draw on. */}
+      {sources.length > 0 && (
+        <div className="mt-4 pt-3 border-t border-theme-border/60" data-testid="book-reader-sources">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-theme-text-muted/70 mb-1.5">Sources</p>
+          <ul className="space-y-1">
+            {sources.map((s) => (
+              <li key={s.gutenbergId} className="text-[11px] text-theme-text-muted/70 leading-snug">
+                {s.author}, <span className="italic">{s.bookTitle}</span>{' '}
+                <a
+                  href={`https://www.gutenberg.org/ebooks/${s.gutenbergId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-amber-400/70 hover:text-amber-300 underline"
+                >
+                  (Project Gutenberg)
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p className="text-[10px] text-theme-text-muted/50 mt-2 leading-snug">
+            Public-domain classics, retold in a single teaching voice. Ideas adapted; wording original.
+          </p>
         </div>
       )}
     </div>
