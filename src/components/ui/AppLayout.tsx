@@ -11,6 +11,7 @@ import {
   MessageCircle,
   AlertTriangle,
   Target,
+  Swords,
 } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { ThemeToggle } from './ThemeToggle';
@@ -36,6 +37,7 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/coach/home', label: 'Coach', icon: GraduationCap, glowColor: 'rgba(251, 113, 133, 0.6)', iconColor: 'rgb(251, 113, 133)', activeText: 'text-rose-400', activeBg: 'bg-rose-500/10' },
   { to: '/tactics', label: 'Tactics', icon: Target, glowColor: 'rgba(52, 211, 153, 0.6)', iconColor: 'rgb(52, 211, 153)', activeText: 'text-emerald-400', activeBg: 'bg-emerald-500/10' },
   { to: '/weaknesses', label: 'Weaknesses', icon: AlertTriangle, glowColor: 'rgba(139, 92, 246, 0.6)', iconColor: 'rgb(139, 92, 246)', activeText: 'text-violet-400', activeBg: 'bg-violet-500/10' },
+  { to: '/academy', label: 'Academy', icon: Swords, glowColor: 'rgba(99, 102, 241, 0.6)', iconColor: 'rgb(99, 102, 241)', activeText: 'text-indigo-400', activeBg: 'bg-indigo-500/10' },
   { to: '/kid', label: 'Kids Mode', icon: Baby, glowColor: 'rgba(251, 146, 60, 0.6)', iconColor: 'rgb(251, 146, 60)', activeText: 'text-orange-400', activeBg: 'bg-orange-500/10' },
   { to: '/settings', label: 'Settings', icon: Settings, glowColor: 'rgba(148, 163, 184, 0.5)', iconColor: 'rgb(148, 163, 184)', activeText: 'text-slate-400', activeBg: 'bg-slate-500/10' },
 ];
