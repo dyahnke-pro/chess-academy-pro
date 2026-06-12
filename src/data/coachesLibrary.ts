@@ -197,8 +197,40 @@ const SHELF: ReadonlyArray<LibraryBook> = [
       sourceUrl: 'https://www.gutenberg.org/ebooks/5614',
     },
     shelfNote: 'The middlegame and positional play — weak squares, the chain, the file.',
-    comingToLife: true,
-    pages: [],
+    pages: [
+      {
+        id: 'cs-mobility',
+        heading: 'Chapter III — General Principles of Chess Strategy · Mobility',
+        text:
+          'For quick development is of the utmost importance, and he who succeeds ' +
+          'first in placing all his pieces, from their initial awkward positions, ' +
+          'to such places as give them command of the greatest possible number of ' +
+          'squares, has the better chance of concentrating a superior force on some ' +
+          'important point. It follows that White, having the first move, is, so to ' +
+          'speak, always morally justified in attacking, whilst Black should assume ' +
+          'the defensive.',
+      },
+      {
+        id: 'cs-pawn-permanence',
+        heading: 'Mobility — the pawns',
+        text:
+          'Pawn formation is of a more permanent character than that of the pieces, ' +
+          'in consequence of the latter’s greater mobility. When we have made a rash ' +
+          'move with a piece, to which our attacking disposition may have tempted ' +
+          'us, we may still have a chance of retrieving the position by timely ' +
+          'retreat. Once a pawn has moved it cannot turn back.',
+      },
+      {
+        id: 'cs-pawn-skeleton',
+        heading: 'The Pawn Skeleton',
+        text:
+          'As a consequence of the pawns having so little mobility, this “pawn ' +
+          'skeleton” often preserves its shape right into the end-game. Applying ' +
+          'the general strategical principles to the formation of the pawn skeleton, ' +
+          'the learner acquires the understanding of the leading idea underlying ' +
+          'each opening without having to burden his memory.',
+      },
+    ],
   },
   {
     id: 'edward-lasker-chess-and-checkers',
@@ -211,8 +243,39 @@ const SHELF: ReadonlyArray<LibraryBook> = [
       sourceUrl: 'https://www.gutenberg.org/ebooks/4913',
     },
     shelfNote: 'The way to mastership — how the pieces cooperate.',
-    comingToLife: true,
-    pages: [],
+    pages: [
+      {
+        id: 'cc-cooperate',
+        heading: 'How the Different Men Cooperate',
+        text:
+          'There are two kinds of elementary attack. One when a single man attacks ' +
+          'two or more hostile men at the same time; the other when more men are ' +
+          'brought up to attack an opposing man than can be mustered for defense. ' +
+          'The advantage of attacking two men at once is evident in that probably ' +
+          'only one of them can be saved. The advantage of bringing up more men for ' +
+          'attack than can be gathered for defense is not less obvious, but will be ' +
+          'found more difficult to carry out. Using both methods of attack in ' +
+          'conjunction is the secret of the successful cooperation of the men.',
+      },
+      {
+        id: 'cc-the-pin',
+        heading: 'The Pin (Diagram 31)',
+        text:
+          'In the opening and in the middle game the main threat of a Rook is the ' +
+          '“pinning” of a hostile piece. Supposing Black, to save his Knight f6 ' +
+          'which White has just attacked by P-e5, plays Kt-g4 and after P-h3 takes ' +
+          'the Pawn e5 with the Knight g4, then White wins a piece by Ktxe5, Ktxe5; ' +
+          'R-e1. This move “pins” Black’s Knight to his place, as the King would be ' +
+          'exposed to White’s Rook if the Knight moved. P-d6 or Q-e7 is not a ' +
+          'sufficient defense, for White continues with P-f4.',
+        board: {
+          fen: 'r1bqk2r/pppp1ppp/2n2n2/2b1P3/2Bp4/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 1',
+          moves: ['Ng4', 'h3', 'Ngxe5', 'Nxe5', 'Nxe5', 'Re1', 'd6', 'f4'],
+          orientation: 'white',
+          caption: 'Black to move — the knight walks into a pin',
+        },
+      },
+    ],
   },
 ];
 
