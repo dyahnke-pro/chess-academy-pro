@@ -2466,7 +2466,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           move = getRandomLegalMove(game.fen);
         }
         if (!move) {
-          console.error('[CoachGame] No legal moves available');
+          // Expected when the position is terminal (mate/stalemate) or in a
+          // transitional state during a rapid restart/takeback/resign — the
+          // coach simply skips its move. Recoverable, not an error.
+          console.warn('[CoachGame] No legal moves available (game over or transitional) — skipping coach move');
           return;
         }
 
@@ -2482,7 +2485,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         }
 
         if (!result) {
-          console.error('[CoachGame] No valid move could be made');
+          // Both the brain move and the random fallback failed to apply —
+          // happens when game.fen flipped under us during a rapid restart/
+          // takeback/resign interrupt. Recoverable: skip this coach move.
+          console.warn('[CoachGame] No valid move could be made on the current position — skipping (transitional state)');
           return;
         }
 
@@ -2713,7 +2719,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         }
       } catch (error) {
         if (isCancelled()) return;
-        console.error('[CoachGame] Coach move failed, attempting random fallback:', error);
+        // Recoverable: the game never freezes — we fall back to a random legal
+        // move. Fires during rapid restart/takeback/resign races, so it's a
+        // warn, not an error (which would trip the audit error gate).
+        console.warn('[CoachGame] Coach move threw, attempting random fallback:', error);
 
         // Last resort: random legal move so the game never freezes
         const randomMove = getRandomLegalMove(game.fen);
@@ -2725,7 +2734,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             return;
           }
         }
-        console.error('[CoachGame] All move attempts failed');
+        console.warn('[CoachGame] All move attempts failed — skipping coach move (transitional/terminal state)');
       } finally {
         // Only clear thinking state if this operation wasn't cancelled.
         // If cancelled, the cleanup function already handled it.
