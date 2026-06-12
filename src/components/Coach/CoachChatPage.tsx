@@ -27,6 +27,13 @@ import type { ChatMessage as ChatMessageType } from '../../types';
  *  `[^\]]*` and leaked the tail (David 2026-06-11 Catalan bug). */
 const stripTags = (text: string): string => stripCoachMarkup(text);
 
+// Monotonic chat-message ids — chatMsgId('u') alone collides when two
+// same-suffix messages are minted in the same millisecond (rapid double-submit),
+// giving two <ChatMessage> siblings the same React key. The counter makes every
+// id unique regardless of timing (same fix as CoachTeachPage.freshTurnId).
+let __chatMsgSeq = 0;
+const chatMsgId = (suffix: string): string => `msg-${Date.now()}-${(++__chatMsgSeq).toString(36)}-${suffix}`;
+
 const STARTER_CHIPS = [
   'Play the Italian against me',
   'Play Black against me',
@@ -143,7 +150,7 @@ export function CoachChatPage(): JSX.Element {
     const narrationToggle = detectNarrationToggle(text);
     if (narrationToggle) {
       appendMessage({
-        id: `msg-${Date.now()}-u`,
+        id: chatMsgId('u'),
         role: 'user',
         content: text,
         modality,
@@ -152,7 +159,7 @@ export function CoachChatPage(): JSX.Element {
       recordTurn('user', text);
       const ack = applyNarrationToggle(narrationToggle.enable);
       appendMessage({
-        id: `msg-${Date.now()}-narr`,
+        id: chatMsgId('narr'),
         role: 'assistant',
         content: ack,
         modality,
@@ -174,7 +181,7 @@ export function CoachChatPage(): JSX.Element {
       const lastAssistant = [...chatMessages].reverse().find((m) => m.role === 'assistant');
       if (lastAssistant) {
         appendMessage({
-          id: `msg-${Date.now()}-u`,
+          id: chatMsgId('u'),
           role: 'user',
           content: text,
           modality,
@@ -206,7 +213,7 @@ export function CoachChatPage(): JSX.Element {
       const routed = await routeChatIntent(text, { lastAssistantMessage });
       if (routed) {
         appendMessage({
-          id: `msg-${Date.now()}-u`,
+          id: chatMsgId('u'),
           role: 'user',
           content: text,
           modality,
@@ -214,7 +221,7 @@ export function CoachChatPage(): JSX.Element {
         });
         recordTurn('user', text);
         appendMessage({
-          id: `msg-${Date.now()}-ack`,
+          id: chatMsgId('ack'),
           role: 'assistant',
           content: routed.ackMessage,
           modality,
@@ -247,7 +254,7 @@ export function CoachChatPage(): JSX.Element {
     // chat rendering) and memory store's conversationHistory (so the
     // brain envelope on the next ask reflects the back-and-forth).
     const userMsg: ChatMessageType = {
-      id: `msg-${Date.now()}-u`,
+      id: chatMsgId('u'),
       role: 'user',
       content: text,
       modality,
@@ -345,7 +352,7 @@ export function CoachChatPage(): JSX.Element {
       // so the renderer can hide the text bubble for voice asks.
       const cleanText = stripTags(answer.text).trim();
       const assistantMsg: ChatMessageType = {
-        id: `msg-${Date.now()}-resp`,
+        id: chatMsgId('resp'),
         role: 'assistant',
         content: cleanText,
         modality,
