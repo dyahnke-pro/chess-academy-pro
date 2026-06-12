@@ -107,3 +107,5 @@ Status legend: ✅ shipped · 🟡 partial · 🚧 in flight (another session) �
 
 - `scripts/audit-samay-deep-prod.mjs` — deep Samay pro-rep audit: every opening × variation tab × WLPP, narration listener + `/api/tts` voice decode, against live prod. Watch + per-tab narration verified in-sandbox; Learn/Practice/Play require a real device (G1.4 ladder-write stall).
 scripts/audit-pitfalls-prod.mjs — post-deploy audit for opening pitfalls (common-mistakes). Run: AUDIT_SANDBOX=1 AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app node scripts/audit-pitfalls-prod.mjs
+
+- `scripts/audit-coaches-library.mjs` — The Coaches Library (`/coach/library`): shelf renders all books, search finds + jumps cross-book, each book opens + reads, live boards render + animate, no page errors.

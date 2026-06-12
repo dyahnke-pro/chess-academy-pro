@@ -26,7 +26,7 @@ page.on('pageerror', (e) => pageErrors.push(e.message));
 const nuke = async () => {
   try {
     const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
-    if (await bubble.isVisible({ timeout: 6000 })) {
+    if (await bubble.isVisible({ timeout: 1500 })) {
       await page.locator('[data-testid="skill-band-intermediate"]').click();
       await bubble.waitFor({ state: 'detached', timeout: 15000 });
     }
@@ -47,6 +47,7 @@ try {
   await page.waitForTimeout(700);
   const hits = await page.locator('[data-testid="library-search-results"] button').count();
   record('search returns cross-book passages', hits > 0, `${hits} hits for "the pin"`);
+  await nuke();
   await page.locator('[data-testid="library-search-results"] button').first().click();
   await page.waitForSelector('[data-testid="library-book-reader"]', { timeout: 8000 });
   record('search result opens the reader', true);
@@ -57,6 +58,7 @@ try {
   const ids = await page.locator('[data-testid^="library-book-"]').evaluateAll((els) =>
     els.map((e) => e.getAttribute('data-testid').replace('library-book-', '')));
   for (const id of ids) {
+    await nuke();
     await page.locator(`[data-testid="library-book-${id}"]`).click();
     const ok = await page.waitForSelector('[data-testid="library-book-reader"]', { timeout: 8000 }).then(() => true).catch(() => false);
     const text = ok ? (await page.locator('[data-testid="library-page"]').innerText().catch(() => '')) : '';
@@ -69,20 +71,30 @@ try {
   }
 
   // animated board on Chess and Checkers
+  await nuke();
   await page.locator('[data-testid="library-book-edward-lasker-chess-and-checkers"]').click();
   await page.waitForSelector('[data-testid="library-book-reader"]', { timeout: 8000 });
   let foundBoard = false;
-  for (let i = 0; i < 30; i++) {
-    if (await page.locator('[data-testid="library-living-board"]').count()) { foundBoard = true; break; }
+  let foundAnimated = false;
+  for (let i = 0; i < 60; i++) {
+    if (await page.locator('[data-testid="library-living-board"]').count()) {
+      foundBoard = true;
+      // an animated board has an enabled "Play move" (a study position does not)
+      if (await page.locator('[data-testid="living-board-next"]').isEnabled().catch(() => false)) {
+        foundAnimated = true;
+        break;
+      }
+    }
+    if (!(await page.locator('[data-testid="library-pager"] button').last().isEnabled().catch(() => false))) break;
     await page.locator('[data-testid="library-pager"] button').last().click();
-    await page.waitForTimeout(150);
+    await page.waitForTimeout(120);
   }
   record('Chess and Checkers shows a live board', foundBoard);
-  if (foundBoard) {
-    const playable = await page.locator('[data-testid="living-board-next"]').isEnabled().catch(() => false);
-    if (playable) { await page.locator('[data-testid="living-board-next"]').click(); await page.waitForTimeout(400); }
-    record('live board animates a move', playable);
+  if (foundAnimated) {
+    await page.locator('[data-testid="living-board-next"]').click();
+    await page.waitForTimeout(400);
   }
+  record('a live board animates a move', foundAnimated);
 
   record('no uncaught page errors', pageErrors.length === 0, pageErrors.slice(0, 3).join(' | '));
 } catch (e) {
