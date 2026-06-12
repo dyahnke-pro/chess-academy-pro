@@ -4037,6 +4037,7 @@ export function CoachTeachPage(): JSX.Element {
                 return (
                   <button
                     key={opt.fullName}
+                    data-testid="line-picker-tile"
                     onClick={() => {
                       // Audit-instrumentation phase-1: every line-
                       // picker tile tap as chip-tap-resolved with the
