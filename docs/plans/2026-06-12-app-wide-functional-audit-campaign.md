@@ -33,7 +33,7 @@ Clone the references: `scripts/audit-coach-teach-functional.mjs` +
 
 | # | Surface | Routes | Status | Findings / fixes |
 |---|---|---|---|---|
-| 1 | **Coach · Learn (Teach)** | `/coach/teach` | ✅ DONE | board-arrow dup-key flood (fixed+swept); chat-msg id collision (fixed); control-words stop/switch/resume (fixed, PR #720); fork auto-advance (added). Grid 28/31 (3 = audit-timing). |
+| 1 | **Coach · Learn (Teach)** | `/coach/teach` | ✅ DONE | **Bugs found+fixed:** board-arrow dup-key flood (deduped + swept to OpeningChallenge); chat-msg id collision under rapid use (freshTurnId); control-words stop/switch/resume (PR #720); skip-onto-fork stalled (auto-advance added). **Feature:** Watch auto-advances through forks down the main line (David: "pages need to advance automatically"). **Coverage grid 29/32**, 0 console/page errors. **Breaking-point loop:** fork-race chaos (pick/pause/stop vs the 4s timer) = CLEAN (0 pageerror / 0 same-key); dup-key flood zone clean. ⚠ Loop FOLLOW-UP: the out-of-order/spam chaos produces load-artifact `silent-hang`s — needs PACING so the loop can reach 3 clean passes (a harness tune, not a coach bug). |
 | 2 | Coach · Play | `/coach/play` | ☐ pending | |
 | 3 | Coach · Chat | `/coach/chat` | ☐ pending | |
 | 4 | Coach · Review | `/coach/review`, `/coach/review/:gameId`, `/coach/report` | ☐ pending | |

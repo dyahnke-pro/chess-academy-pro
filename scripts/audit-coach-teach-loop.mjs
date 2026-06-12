@@ -356,10 +356,14 @@ async function main() {
     } catch (e) { recordBreak('chaos-pickbeforeload', e); }
 
     // 3) Out-of-order: stop with nothing running, resume with nothing paused,
-    //    fork-pick with no fork, quiz before any opening.
+    //    fork-pick with no fork, quiz before any opening. PACE between inputs —
+    //    a real human types these seconds apart; firing them back-to-back just
+    //    saturates the shared LLM proxy and manufactures false `silent-hang`s
+    //    (an un-paced loop can never legitimately go green — CLAUDE.md protocol).
     await freshReload();
     for (const t of ['stop', 'resume', 'next', 'go back', 'quiz me', 'show me the trap']) {
       await ask(t, { settle: 600 });
+      await page.waitForTimeout(2500); // human pacing between brain-bound asks
     }
 
     // 4) Mid-walkthrough hijack: start Vienna, then mid-narration switch
@@ -407,10 +411,13 @@ async function main() {
       await waitInputEnabled(40000);
     } catch (e) { recordBreak('chaos-fork-race', e); }
 
-    // 6) Empty / whitespace / single-char spam.
+    // 6) Empty / whitespace / single-char spam. Paced — the single chars that
+    //    route to the brain ("a", "ok", "hi") otherwise pile onto a saturated
+    //    proxy and false-hang.
     await freshReload();
     for (const t of [' ', '.', 'a', '?', 'ok', 'yes', 'no', 'hi', 'help']) {
       await ask(t, { settle: 400 });
+      await page.waitForTimeout(2000); // human pacing
     }
   }
 
@@ -434,6 +441,11 @@ async function main() {
       if (i % 4 === 0) { if (pass >= 3 && i % 8 === 0) await coldReload(); else await freshReload(); }
       process.stdout.write(`  [P${pass} ${i}/${slate.length}] ${item.fn}: "${item.text.slice(0, 48)}"\n`);
       await ask(item.text);
+      // Human pacing between asks — keeps the adversarial loop from saturating
+      // the shared LLM proxy with itself and manufacturing false `silent-hang`s.
+      // The CHAOS is still in the messy inputs + state collisions, not in an
+      // inhuman request rate (real single-user use is paced).
+      await page.waitForTimeout(1800);
     }
 
     // State chaos on every pass from 2 up (and pass 1 too — break early).
