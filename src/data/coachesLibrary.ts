@@ -17,6 +17,7 @@
 
 import { PHILOSOPHY_OF_A_GENERAL } from './academy/philosophyOfAGeneral';
 import mySystemData from './library/my-system.json';
+import chessAndCheckersData from './library/chess-and-checkers.json';
 
 export interface BookCitation {
   /** Publisher, place, year of the edition we reproduce (or "our work"). */
@@ -214,52 +215,22 @@ const SHELF: ReadonlyArray<LibraryBook> = [
       },
     ],
   },
-  {
-    id: 'edward-lasker-chess-and-checkers',
-    bookTitle: 'Chess and Checkers',
-    author: 'Edward Lasker',
-    citation: {
-      edition: 'E. P. Dutton and Company, New York, 1918',
-      rights: 'Published 1918. In the public domain.',
-      sourceLabel: 'Project Gutenberg (ebook #4913)',
-      sourceUrl: 'https://www.gutenberg.org/ebooks/4913',
-    },
-    shelfNote: 'The way to mastership — how the pieces cooperate.',
-    pages: [
-      {
-        id: 'cc-cooperate',
-        heading: 'How the Different Men Cooperate',
-        text:
-          'There are two kinds of elementary attack. One when a single man attacks ' +
-          'two or more hostile men at the same time; the other when more men are ' +
-          'brought up to attack an opposing man than can be mustered for defense. ' +
-          'The advantage of attacking two men at once is evident in that probably ' +
-          'only one of them can be saved. The advantage of bringing up more men for ' +
-          'attack than can be gathered for defense is not less obvious, but will be ' +
-          'found more difficult to carry out. Using both methods of attack in ' +
-          'conjunction is the secret of the successful cooperation of the men.',
-      },
-      {
-        id: 'cc-the-pin',
-        heading: 'The Pin (Diagram 31)',
-        text:
-          'In the opening and in the middle game the main threat of a Rook is the ' +
-          '“pinning” of a hostile piece. Supposing Black, to save his Knight f6 ' +
-          'which White has just attacked by P-e5, plays Kt-g4 and after P-h3 takes ' +
-          'the Pawn e5 with the Knight g4, then White wins a piece by Ktxe5, Ktxe5; ' +
-          'R-e1. This move “pins” Black’s Knight to his place, as the King would be ' +
-          'exposed to White’s Rook if the Knight moved. P-d6 or Q-e7 is not a ' +
-          'sufficient defense, for White continues with P-f4.',
-        board: {
-          fen: 'r1bqk2r/pppp1ppp/2n2n2/2b1P3/2Bp4/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 1',
-          moves: ['Ng4', 'h3', 'Ngxe5', 'Nxe5', 'Nxe5', 'Re1', 'd6', 'f4'],
-          orientation: 'white',
-          caption: 'Black to move — the knight walks into a pin',
-        },
-      },
-    ],
-  },
 ];
+
+// ── Edward Lasker, Chess and Checkers — the ENTIRE book, auto-animated ────────
+// Ingested by scripts/build-library-chessandcheckers.mjs: every chapter read
+// aloud, and EVERY printed diagram auto-extracted from the book's own ASCII
+// boards into a LIVE board, with the adjacent algebraic line chess.js-validated
+// (most animate; pure study positions stay as the position). Born-digital
+// Gutenberg text, so the prose is clean.
+const EDWARD_LASKER_CHESS_AND_CHECKERS: LibraryBook = {
+  id: chessAndCheckersData.id,
+  bookTitle: chessAndCheckersData.bookTitle,
+  author: chessAndCheckersData.author,
+  citation: chessAndCheckersData.citation as BookCitation,
+  shelfNote: 'The way to mastership — how the pieces cooperate.',
+  pages: chessAndCheckersData.pages as LibraryPage[],
+};
 
 // ── Our book — the house book, leading the shelf ─────────────────────────────
 // "The Philosophy of A General" is our OWN authored doctrine (not a master's
@@ -289,6 +260,7 @@ export const COACHES_LIBRARY: ReadonlyArray<LibraryBook> = [
   HOUSE_BOOK,
   CAPABLANCA_CHESS_FUNDAMENTALS,
   NIMZOWITSCH_MY_SYSTEM,
+  EDWARD_LASKER_CHESS_AND_CHECKERS,
   ...SHELF,
 ];
 
