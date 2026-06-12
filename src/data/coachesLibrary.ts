@@ -110,7 +110,7 @@ const CF_COMBINATION_PAGES: ReadonlyArray<LibraryPage> = [
 
 const CAPABLANCA_CHESS_FUNDAMENTALS: LibraryBook = (() => {
   const ingested = chessFundamentalsData.pages as LibraryPage[];
-  const at = Math.max(0, ingested.findIndex((p) => /RELATIVE VALUE/i.test(p.heading)));
+  const at = Math.max(0, ingested.findIndex((p) => /RELATIVE VALUE/i.test(p.heading ?? '')));
   const pages =
     at > 0
       ? [...ingested.slice(0, at), ...CF_COMBINATION_PAGES, ...ingested.slice(at)]
