@@ -255,3 +255,49 @@ export const COACHES_LIBRARY: ReadonlyArray<LibraryBook> = [
 export function getLibraryBook(id: string): LibraryBook | undefined {
   return COACHES_LIBRARY.find((b) => b.id === id);
 }
+
+export interface LibrarySearchHit {
+  readonly bookId: string;
+  readonly bookTitle: string;
+  readonly author: string;
+  readonly pageIndex: number;
+  readonly heading?: string;
+  /** A short excerpt around the match, with the query region marked by «…». */
+  readonly snippet: string;
+  /** True when the match was in the page heading (ranked first). */
+  readonly inHeading: boolean;
+}
+
+/** Full-text search across every book's pages — type a topic, jump to the page. */
+export function searchLibrary(query: string, limit = 50): LibrarySearchHit[] {
+  const q = query.trim().toLowerCase();
+  if (q.length < 2) return [];
+  const hits: LibrarySearchHit[] = [];
+  for (const book of COACHES_LIBRARY) {
+    book.pages.forEach((pg, pageIndex) => {
+      const headLc = (pg.heading ?? '').toLowerCase();
+      const textLc = pg.text.toLowerCase();
+      const inHeading = headLc.includes(q);
+      const at = textLc.indexOf(q);
+      if (!inHeading && at < 0) return;
+      const src = pg.text.replace(/\s+/g, ' ');
+      const pos = src.toLowerCase().indexOf(q);
+      let snippet: string;
+      if (pos >= 0) {
+        const start = Math.max(0, pos - 50);
+        snippet =
+          (start > 0 ? '…' : '') +
+          src.slice(start, pos) + '«' + src.slice(pos, pos + q.length) + '»' +
+          src.slice(pos + q.length, pos + q.length + 90).trimEnd() + '…';
+      } else {
+        snippet = src.slice(0, 130).trim() + '…';
+      }
+      hits.push({
+        bookId: book.id, bookTitle: book.bookTitle, author: book.author,
+        pageIndex, heading: pg.heading, snippet, inHeading,
+      });
+    });
+  }
+  // Heading matches first, then book order.
+  return hits.sort((a, b) => Number(b.inHeading) - Number(a.inHeading)).slice(0, limit);
+}

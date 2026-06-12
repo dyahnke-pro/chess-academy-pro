@@ -15,12 +15,12 @@ import { useNavigate } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import {
   ArrowLeft, BookOpen, Play, Pause, ChevronLeft, ChevronRight,
-  SkipBack, SkipForward, RotateCcw, Library,
+  SkipBack, SkipForward, RotateCcw, Library, Search, X,
 } from 'lucide-react';
 import { ConsistentChessboard, type BoardArrow } from '../Chessboard/ConsistentChessboard';
 import { useProseReader, type ProseUnit } from '../../hooks/useProseReader';
 import {
-  COACHES_LIBRARY, getLibraryBook,
+  COACHES_LIBRARY, getLibraryBook, searchLibrary,
   type LibraryBook, type LibraryPage, type LivingBoard,
 } from '../../data/coachesLibrary';
 
@@ -119,8 +119,8 @@ function LivingBoardView({ board }: { board: LivingBoard }): JSX.Element {
 }
 
 // ── The book reader (mirrors the opening tab's "From the Book") ──────────────
-function LibraryBookReader({ book, onBack }: { book: LibraryBook; onBack: () => void }): JSX.Element {
-  const [page, setPage] = useState(0);
+function LibraryBookReader({ book, onBack, initialPage = 0 }: { book: LibraryBook; onBack: () => void; initialPage?: number }): JSX.Element {
+  const [page, setPage] = useState(initialPage);
   const pageCount = book.pages.length;
   const safePage = Math.min(page, Math.max(0, pageCount - 1));
   const current = book.pages[safePage];
@@ -261,11 +261,13 @@ function LibraryBookReader({ book, onBack }: { book: LibraryBook; onBack: () => 
 // ── The shelf ────────────────────────────────────────────────────────────────
 export function CoachesLibraryPage(): JSX.Element {
   const navigate = useNavigate();
-  const [openId, setOpenId] = useState<string | null>(null);
-  const openBook = openId ? getLibraryBook(openId) : undefined;
+  const [open, setOpen] = useState<{ id: string; page: number } | null>(null);
+  const [query, setQuery] = useState('');
+  const openBook = open ? getLibraryBook(open.id) : undefined;
+  const results = useMemo(() => searchLibrary(query), [query]);
 
   if (openBook && openBook.pages.length > 0) {
-    return <LibraryBookReader book={openBook} onBack={() => setOpenId(null)} />;
+    return <LibraryBookReader book={openBook} initialPage={open?.page ?? 0} onBack={() => setOpen(null)} />;
   }
 
   return (
@@ -291,6 +293,55 @@ export function CoachesLibraryPage(): JSX.Element {
         <div className="w-[44px]" />
       </div>
 
+      {/* Search every book for a topic, jump straight to the page. */}
+      <div className="max-w-lg mx-auto w-full relative">
+        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-theme-text-muted" />
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search the books — “isolated pawn”, “the pin”…"
+          className="w-full pl-9 pr-9 py-2.5 rounded-xl bg-theme-surface border border-theme-border text-sm text-theme-text placeholder:text-theme-text-muted/60 focus:outline-none focus:border-amber-400/50"
+          data-testid="library-search-input"
+        />
+        {query && (
+          <button
+            type="button"
+            onClick={() => setQuery('')}
+            className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-theme-text-muted hover:text-theme-text"
+            aria-label="Clear search"
+          >
+            <X size={16} />
+          </button>
+        )}
+      </div>
+
+      {query.trim().length >= 2 ? (
+        <div className="max-w-lg mx-auto w-full flex flex-col gap-2" data-testid="library-search-results">
+          <p className="text-xs text-theme-text-muted">
+            {results.length} {results.length === 1 ? 'passage' : 'passages'} across the books
+          </p>
+          {results.map((hit) => (
+            <button
+              key={`${hit.bookId}-${hit.pageIndex}`}
+              type="button"
+              onClick={() => { setOpen({ id: hit.bookId, page: hit.pageIndex }); setQuery(''); }}
+              className="text-left rounded-xl border border-theme-border bg-theme-surface/60 hover:bg-amber-500/10 hover:border-amber-400/30 p-3 transition-colors"
+              data-testid={`library-search-hit-${hit.bookId}-${hit.pageIndex}`}
+            >
+              <div className="flex items-baseline justify-between gap-2">
+                <span className="text-xs font-bold text-amber-300">{hit.bookTitle}</span>
+                <span className="text-[10px] text-theme-text-muted shrink-0">p. {hit.pageIndex + 1}</span>
+              </div>
+              {hit.heading && <div className="text-[11px] text-theme-text-muted/80 truncate">{hit.heading}</div>}
+              <div className="text-[12px] text-theme-text leading-snug mt-0.5">{hit.snippet}</div>
+            </button>
+          ))}
+          {results.length === 0 && (
+            <p className="text-sm text-theme-text-muted text-center py-6">No passages found. Try another word.</p>
+          )}
+        </div>
+      ) : (
       <div className="grid grid-cols-2 gap-3 max-w-lg mx-auto w-full">
         {COACHES_LIBRARY.map((book) => {
           const alive = book.pages.length > 0 && !book.comingToLife;
@@ -298,7 +349,7 @@ export function CoachesLibraryPage(): JSX.Element {
             <button
               key={book.id}
               type="button"
-              onClick={() => alive && setOpenId(book.id)}
+              onClick={() => alive && setOpen({ id: book.id, page: 0 })}
               disabled={!alive}
               className={`text-left border-2 rounded-2xl p-4 flex flex-col gap-2 transition-colors ${
                 alive
@@ -323,6 +374,7 @@ export function CoachesLibraryPage(): JSX.Element {
           );
         })}
       </div>
+      )}
     </div>
   );
 }
