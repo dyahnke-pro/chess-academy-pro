@@ -442,7 +442,7 @@ export function MiddlegamePractice({
             Practice: {plan.title}
           </h3>
           <p className="text-xs text-theme-text-muted">
-            {moveCount} moves played
+            {Math.ceil(moveCount / 2)} moves played
             {isEngineMoving ? ' — Engine thinking...' : ''}
           </p>
         </div>
