@@ -14,6 +14,16 @@ describe('PositionNarrationBanner', () => {
     expect(screen.getByText('We are out of book.')).toBeInTheDocument();
   });
 
+  it('pins the banner so it stays visible while the page scrolls', () => {
+    // Regression: the banner lived in the scroll container's normal flow,
+    // so scrolling down to the move list pushed it off the top of the
+    // viewport mid-narration. It must stick to the top of the scroll area.
+    render(<PositionNarrationBanner text="Coach reading the position." active={true} />);
+    const banner = screen.getByTestId('position-narration-banner');
+    expect(banner.className).toContain('sticky');
+    expect(banner.className).toContain('top-0');
+  });
+
   it('keeps the banner visible briefly after active flips false, then hides', async () => {
     const { rerender } = render(
       <PositionNarrationBanner text="Coach speaking." active={true} />,

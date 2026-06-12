@@ -10,7 +10,9 @@ let stopCount = 0;
 
 vi.mock('../services/voiceService', () => ({
   voiceService: {
-    speakForced: vi.fn((text: string) => {
+    // "Read this position" is an explicit read-aloud tap → speakReadAloud
+    // (bypasses the verbosity gate) rather than speakForced.
+    speakReadAloud: vi.fn((text: string) => {
       return new Promise<void>((resolve) => {
         speakRecords.push({ text, resolve });
       });
@@ -147,7 +149,7 @@ describe('usePositionNarration', () => {
     );
   });
 
-  it('speaks the full response via voiceService.speakForced when the stream completes', async () => {
+  it('speaks the full response via voiceService.speakReadAloud when the stream completes', async () => {
     const { result } = renderHook(() => usePositionNarration(defaultArgs()));
 
     act(() => {

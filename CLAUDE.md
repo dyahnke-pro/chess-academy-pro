@@ -277,7 +277,22 @@ opening detail page (Classic Wisdom, section narration via
 tapped — they are EXEMPT from verbosity entirely (silent AND brief). This
 is the SECOND sanctioned exemption alongside `speakLecture`; route opening-
 page read-text through `speakReadAloud` (sets `bypassVerbosity`), never
-through `speakForced`. Do NOT extend this exemption to any in-game surface.
+through `speakForced`. Do NOT extend this exemption to AUTOMATIC in-game
+narration (per-move commentary, phase-transition narration) — those honor
+the gate.
+
+**THIRD sanctioned exemption (David 2026-06-12): the explicit "Read this
+position" button on the coach play screen** (`usePositionNarration` →
+`voiceService.speakReadAloud`). It is the SAME class as the opening-page
+read-aloud — an on-demand affordance the user just TAPPED to hear THIS
+position — so it bypasses verbosity (silent AND brief). The "don't extend
+to in-game surfaces" rule above scopes to AUTOMATIC narration, not to an
+explicit user-tapped read button; routing it through `speakForced` made it
+a dead control on Silent/Brief (the subtitle streamed but no voice fired —
+David's buddy's report). The line stays bright: AUTOMATIC in-game voice
+(commentary, phase narration, move feedback) → `speakForced`/gated; an
+EXPLICIT "read this to me" TAP → `speakReadAloud`/bypass. Do NOT route
+automatic narration through `speakReadAloud` to dodge the gate.
 
 - **silent** = no in-game voice fires anywhere. `voiceService.speakInternal`
   short-circuits at the silent gate (unless `bypassVerbosity`, the

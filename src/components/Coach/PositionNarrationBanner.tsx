@@ -34,7 +34,7 @@ export function PositionNarrationBanner({ text, active }: PositionNarrationBanne
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -4 }}
           transition={{ duration: 0.2 }}
-          className="mx-2 mb-1 rounded-xl backdrop-blur-md border border-emerald-500/30 px-3 py-2 shrink-0"
+          className="sticky top-0 z-20 mx-2 mb-1 rounded-xl backdrop-blur-md border border-emerald-500/30 px-3 py-2 shrink-0"
           style={{
             background: 'color-mix(in srgb, var(--color-bg) 85%, rgba(16, 185, 129, 0.3))',
           }}

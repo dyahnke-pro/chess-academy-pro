@@ -89,9 +89,17 @@ function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise
  * Drives the "Read this position" button on the coach play screen.
  *
  * Calls the coach LLM with POSITION_NARRATION_ADDITION, streams tokens
- * into `currentText` for a live subtitle banner, then hands the full
- * response to voiceService.speakForced() for TTS. Cancellation uses a
- * token counter so an in-flight run is superseded instead of racing.
+ * into `currentText` for a live subtitle banner, then hands each sentence
+ * to voiceService.speakReadAloud() for TTS. Cancellation uses a token
+ * counter so an in-flight run is superseded instead of racing.
+ *
+ * speakReadAloud (NOT speakForced) because "Read this position" is an
+ * EXPLICIT, user-tapped read-aloud affordance — the user just asked to
+ * hear THIS position, so it bypasses the Coach Narration verbosity gate
+ * (silent AND brief), exactly like the opening-page Classic Wisdom /
+ * section read-aloud buttons. Without this, a student on Silent/Brief
+ * taps the button and gets a dead control: the subtitle streams but no
+ * voice ever fires (CLAUDE.md G5 read-aloud carve-out).
  *
  * Every async step is bounded by a timeout. If any step hangs, the
  * timeout fires, the catch block runs, the finally resets state — so
@@ -236,7 +244,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
           });
         }
         speechChain = speechChain
-          .then(() => voiceService.speakForced(trimmed))
+          .then(() => voiceService.speakReadAloud(trimmed))
           .catch(() => undefined);
       };
       // `+` (not `*`) so a bare terminator like "..." can't match a
