@@ -58,3 +58,6 @@ data/sources/carlsen-alts/
 
 # Raw public-domain book OCR caches (re-fetched by build-library-*.mjs)
 data/sources/*.txt
+
+# All raw public-domain book sources (re-fetched by build-library-*.mjs)
+data/sources/
