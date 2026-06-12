@@ -25,10 +25,11 @@ describe('Coaches Library — integrity + citations', () => {
 
       it('every living board is legal and replays its line', () => {
         for (const page of book.pages) {
-          if (!page.board) continue;
-          expect(() => new Chess(page.board!.fen)).not.toThrow();
-          const game = new Chess(page.board!.fen);
-          for (const san of page.board!.moves) {
+          const board = page.board;
+          if (!board) continue;
+          expect(() => new Chess(board.fen)).not.toThrow();
+          const game = new Chess(board.fen);
+          for (const san of board.moves) {
             const applied = game.move(san);
             expect(applied, `illegal ${san} in ${book.id}/${page.id}`).toBeTruthy();
           }
