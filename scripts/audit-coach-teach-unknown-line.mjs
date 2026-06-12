@@ -606,8 +606,14 @@ async function main() {
         (e.summary ?? '').includes('surface-routed (static): "Vienna"'),
         45_000,
       );
+      // Wait for the walkthrough panel to RENDER (commit) before deciding
+      // whether we're in the chooser — the surface-routed audit fires
+      // inside start() before React commits, so checking the chooser off
+      // the bare audit races the render.
+      await page.locator('[data-testid="walkthrough-choose-mode"], [data-testid="walkthrough-narrating-panel"]').first().waitFor({ state: 'visible', timeout: 20_000 }).catch(() => undefined);
       // If we landed in the chooser (Vienna previously completed), start
-      // a fresh narrating walkthrough so the path is populated.
+      // a fresh narrating walkthrough so the path is populated (resume
+      // needs a non-empty path).
       const chooser = page.locator('[data-testid="walkthrough-choose-walkthrough"]');
       if (await chooser.count() > 0 && await chooser.first().isVisible().catch(() => false)) {
         await chooser.first().click();
