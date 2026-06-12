@@ -14,7 +14,7 @@ import { useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import {
-  ArrowLeft, BookOpen, Play, Pause, Volume2, ChevronLeft, ChevronRight,
+  ArrowLeft, BookOpen, Play, Pause, ChevronLeft, ChevronRight,
   SkipBack, SkipForward, RotateCcw, Library,
 } from 'lucide-react';
 import { ConsistentChessboard, type BoardArrow } from '../Chessboard/ConsistentChessboard';
@@ -24,13 +24,29 @@ import {
   type LibraryBook, type LibraryPage, type LivingBoard,
 } from '../../data/coachesLibrary';
 
-/** Split a page's verbatim text into displayable/readable paragraphs. */
-function paragraphsOf(page: LibraryPage): { id: string; text: string }[] {
+interface Sentence { id: string; text: string }
+interface Paragraph { id: string; sentences: Sentence[] }
+
+/** Split prose into sentences for click-to-read-from-here. Splits on .!?
+ *  followed by whitespace + a capital/quote, so chess notation ("viz.:",
+ *  "1...R-K1", "2 QxP ch") and abbreviations don't trigger false breaks. */
+function splitSentences(text: string): string[] {
+  return text
+    .split(/(?<=[.!?])\s+(?=[A-Z“"‘'])/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+/** Split a page into paragraphs of individually-clickable sentences. */
+function paragraphsOf(page: LibraryPage): Paragraph[] {
   return page.text
     .split('\n\n')
     .map((t) => t.trim())
     .filter(Boolean)
-    .map((text, i) => ({ id: `${page.id}-p${i}`, text }));
+    .map((para, pi) => ({
+      id: `${page.id}-p${pi}`,
+      sentences: splitSentences(para).map((text, si) => ({ id: `${page.id}-p${pi}-s${si}`, text })),
+    }));
 }
 
 // ── The live board that replaces a drawn diagram ────────────────────────────
@@ -110,7 +126,11 @@ function LibraryBookReader({ book, onBack }: { book: LibraryBook; onBack: () => 
   const current = book.pages[safePage];
   const paras = useMemo(() => (current ? paragraphsOf(current) : []), [current]);
 
-  const units = useMemo<ProseUnit[]>(() => paras.map((p) => ({ id: p.id, text: p.text })), [paras]);
+  // Sentence-level units: clicking any sentence starts the audiobook there.
+  const units = useMemo<ProseUnit[]>(
+    () => paras.flatMap((p) => p.sentences.map((s) => ({ id: s.id, text: s.text }))),
+    [paras],
+  );
   const reader = useProseReader(units);
 
   const touchX = useRef<number | null>(null);
@@ -168,31 +188,25 @@ function LibraryBookReader({ book, onBack }: { book: LibraryBook; onBack: () => 
             touchX.current = null;
           }}
         >
-          {paras.map((para) => {
-            const reading = reader.currentId === para.id;
-            return (
-              <div
-                key={para.id}
-                className={`group flex items-start gap-2 rounded -ml-1 pl-1 pr-1 py-0.5 mb-2 cursor-pointer transition-colors ${
-                  reading ? 'bg-amber-400/10' : 'hover:bg-amber-400/5'
-                }`}
-                onClick={() => reader.playFrom(para.id)}
-                data-testid={`library-paragraph-${para.id}`}
-              >
-                <button
-                  type="button"
-                  onClick={(e) => { e.stopPropagation(); reader.playOne(para.id); }}
-                  className={`shrink-0 mt-0.5 p-1 rounded text-amber-400/70 hover:text-amber-300 transition-opacity ${
-                    reading ? 'opacity-100 text-amber-300' : 'opacity-0 group-hover:opacity-100'
-                  }`}
-                  aria-label="Relisten to this paragraph"
-                >
-                  <Volume2 size={13} />
-                </button>
-                <p className="text-[15px] text-theme-text leading-relaxed font-serif">{para.text}</p>
-              </div>
-            );
-          })}
+          {paras.map((para) => (
+            <p key={para.id} className="text-[15px] text-theme-text leading-relaxed font-serif mb-3">
+              {para.sentences.map((sen) => {
+                const reading = reader.currentId === sen.id;
+                return (
+                  <span
+                    key={sen.id}
+                    onClick={() => reader.playFrom(sen.id)}
+                    className={`cursor-pointer rounded px-0.5 transition-colors ${
+                      reading ? 'bg-amber-400/25 text-theme-text' : 'hover:bg-amber-400/10'
+                    }`}
+                    data-testid={`library-sentence-${sen.id}`}
+                  >
+                    {sen.text}{' '}
+                  </span>
+                );
+              })}
+            </p>
+          ))}
 
           {/* Where the book drew a diagram, the live board. */}
           {current?.board && <LivingBoardView board={current.board} />}
