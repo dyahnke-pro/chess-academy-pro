@@ -2981,77 +2981,138 @@ interactive, weaknesses, training-loop) are surface-specific loops — use them
 when the change is on THAT surface, but the unqualified word "audit" defaults
 to the punish-gems loop above.
 
-### 🚨 THE ADVERSARIAL LOOP-TEST PROTOCOL — BREAK IT, THEN FIX THE BREAK (David 2026-06-12, LOCKED).
+### 🚨 THE ADVERSARIAL FUNCTIONAL AUDIT — BREAK IT, THEN FIX THE BREAK (David 2026-06-12, LOCKED. This is HOW you audit any interactive surface — supersedes "click the happy path and call it green").
 
 David, verbatim: *"the purpose of this audit is to find the edge cases. to
 simulate human use. to push it until it breaks! and then fix the break. if it
 doesn't break, you didn't do it right, or it's perfectly coded. but that has
-not been my experience of your performance."* And: *"BREAK IT!"*
+not been my experience of your performance."* — *"i want a functional audit
+where you click and use the app like a real person, not inject commands
+artificially."* — *"its a loop that covers EVERY SINGLE PROGRAMED FUNCTION."*
+— *"BREAK IT!"*
 
-This is the standing doctrine for ANY loop audit of an interactive surface
-(coach chat/teach, kid surfaces, search, any typed-input UI). It is NOT a
-happy-path checklist — a green pass-1 means the inputs were too soft. The job:
+**WHY THIS EXISTS — the worked example that defines the bar (2026-06-12).** The
+coach-teach surface looked perfect: typecheck green, unit tests green, a
+14-scenario Playwright audit 100% green, and a slow human-paced functional
+play-through came up CLEAN. It was NOT clean. Driven hard — messy human input,
+fast, every function, escalating — the surface flooded
+`"Encountered two children with the same key"` and **silently dropped board
+arrows**. Root cause (captured key = `chessboard-arrow-c2-c3`): the coach
+merged code-derived arrows onto prior arrows without deduping, so any answer
+re-mentioning an already-arrowed move put two arrows on the same square-pair
+(react-chessboard keys arrows by `startSquare-endSquare`) → duplicate React key
+→ dropped arrow. It floods under fast use, is invisible in slow play — exactly
+the class a happy-path audit can NEVER catch. The fix was a one-line dedupe; the
+POINT is that only an adversarial, break-it audit found it. **A green happy-path
+pass is not an audit. Pushing until it breaks is the audit.**
 
-1. **COVER EVERY SINGLE PROGRAMMED FUNCTION.** Enumerate every branch/intent
-   the surface's submit handler + runtime implement (for `/coach/teach`:
-   `/clearcache`, player-game lookup, walkthrough control new/stop/resume,
-   middlegame-plan intent, move-report step-by-step, opening/forget intent
-   capture, TEACH verb routing, every STAGE keyword drill/quiz/findMove/punish/
-   play-real, FACE mode, fuzzy autoAccept/ambiguous-picker/no-match, bare-name,
-   Tier 1 static / 1.5 line-picker / 2 cache / 2.5 shared / 3 DB-gen, pre-flight
-   reject → brain Q&A, returning-visitor chooser, every Q&A class positional/
-   best-move/principle, arrow validator, auto-pause, and the walkthrough runtime
-   start/skip/fork/pause/resume/leaf/stage-menu/quiz/drill/punish/merge/
-   continue/board-move→coach-reply). The audit must PROVE it touched each one
-   each pass — list the function inventory in the script.
+This is the standing doctrine for ANY interactive surface (coach chat/teach,
+kid surfaces, search, openings, any typed-input or click-driven UI). Run BOTH
+instruments below — the functional click-through to prove the wiring, the
+adversarial loop to break it.
 
-2. **SIMULATE REAL, MESSY HUMAN USE — push until it BREAKS.** Throw the input a
-   real impatient human throws: typos (`Najdorff`), British spellings
-   (`Philidor Defence`), abbreviations (`KID`), partial names (`Caro`),
-   diacritics (`Réti`), gibberish-adjacent, emoji, very long rambles, raw move
-   lists, punctuation-only, whitespace-padded, SQL-ish, multi-intent ("teach me
-   the najdorf AND quiz me AND show a trap"), contradictions ("the French but
-   no the Sicilian"), and STATE CHAOS: rapid double/triple submit (mash send
-   before the turn settles), pick-before-load (fire a stage + question before a
-   cold gen finishes), out-of-order (stop with nothing running, resume with
-   nothing paused, quiz before any opening), mid-walkthrough hijack (switch
-   openings mid-narration), cold-cache first use, single-char spam.
+#### 1. FUNCTIONAL — use the app like a real person (NO synthetic command injection).
 
-3. **ESCALATE EVERY PASS, SHUFFLE EVERY PASS.** Pass N raises the chaos tier
-   ceiling and reshuffles order so the same break doesn't hide. Cold-nuke the
-   whole IndexedDB on the harder passes (first-use path).
+Drive the REAL UI affordances, the way a human taps them — do NOT `fill()` the
+chat box with command strings like `"drill Vienna"` / `"stop"`. A human CLICKS
+the Drill tile and the End button. Concretely: tap the picker action chips
+(Teach/Drill/Quiz/Trap/Play), tap an opening tile, tap a line-picker variation,
+WATCH the lesson actually play, tap Skip / pick fork options, reach the leaf,
+tap Continue-learning / Play-this-line, tap a stage tile, answer a quiz by
+CLICKING a choice, play a move by CLICKING board squares (`[data-square="e2"]`
+→ `[data-square="e4"]`), tap Resume / End. Typing a real *question* in the chat
+box is legitimate (that's what the box is for) — injecting a *command* as text
+is not. Record the console/pageerror delta PER STEP + a screenshot, so you see
+exactly which click introduces a bug. Instrument: `scripts/audit-coach-teach-functional.mjs`.
 
-4. **A BREAK IS THE DELIVERABLE — capture it WITH the exact input.** Break
-   classes the harness flags, each tagged to the in-flight input: `pageerror`,
-   app-level `console-error` (Uncaught/TypeError/React-minified/"cannot read
-   prop"/max-update-depth), `silent-hang` (no transcript growth + no panel + no
-   routing audit within the timeout), `error-fallback` reply ("Hit a snag…"),
-   `stuck-input` (textarea disabled long after the turn), `send-failed`. When
-   the loop finds a break: **DIAGNOSE the root cause, FIX THE CODE, re-run.**
-   Fixing the audit to dodge the break is cheating — fix the COACH unless the
-   break is a genuine audit-harness artifact (and prove it is).
+#### 2. ADVERSARIAL LOOP — cover EVERY programmed function, escalate, break it.
 
-5. **THE CONTRACT:** MET only on **3 CONSECUTIVE break-free passes**, each pass
-   harder than the last and touching every function; ANY break resets the
-   streak to 0. If it never breaks across the escalation, say so plainly — but
-   the default expectation (David's) is that messy human use WILL surface
-   something; if you got pass-1 clean, your inputs were too soft — make them
-   nastier.
+- **COVER EVERY SINGLE PROGRAMMED FUNCTION.** Enumerate every branch the
+  surface's submit handler + runtime implement and PROVE the loop touched each
+  one (list the inventory in the script). For `/coach/teach`: `/clearcache`,
+  player-game lookup, walkthrough control new/stop/resume, middlegame-plan
+  intent, move-report step-by-step, opening/forget intent capture, TEACH verb
+  routing, every STAGE keyword (drill/quiz/findMove/punish/play-real), FACE
+  mode, fuzzy autoAccept/ambiguous-picker/no-match, bare-name, Tier 1 static /
+  1.5 line-picker / 2 cache / 2.5 shared / 3 DB-gen, pre-flight reject → brain
+  Q&A, returning-visitor chooser, every Q&A class (positional/best-move/
+  principle/traps/meta), arrow validator, auto-pause, and the walkthrough
+  runtime (start/skip/fork/pause/resume/leaf/stage-menu/quiz/drill/punish/merge/
+  continue/board-move→coach-reply).
+- **THROW REAL, MESSY HUMAN INPUT.** Typos (`Najdorff`), British spellings
+  (`Philidor Defence`), abbreviations (`KID`), partial names (`Caro`),
+  diacritics (`Réti`), gibberish, emoji, very long rambles, raw move lists,
+  punctuation-only, whitespace-padded, SQL-ish, multi-intent ("teach the najdorf
+  AND quiz me AND show a trap"), contradictions ("the French but no the
+  Sicilian"), and STATE CHAOS: rapid double/triple submit (mash send before the
+  turn settles), pick-before-load (fire a stage + question before a cold gen
+  finishes), out-of-order (stop with nothing running, resume with nothing
+  paused, quiz before any opening), mid-walkthrough hijack (switch openings
+  mid-narration), cold-cache first use, single-char spam.
+- **ESCALATE + SHUFFLE EVERY PASS.** Pass N raises the chaos tier ceiling and
+  reshuffles order so a break can't hide; cold-nuke the whole IndexedDB on the
+  harder passes (first-use path). Instrument: `scripts/audit-coach-teach-loop.mjs`.
 
-The instrument: **`scripts/audit-coach-teach-loop.mjs`** (the coach-teach
-adversarial loop; clone it per surface). Run from the sandbox against the local
-dev server while iterating on fixes, then against `main`/prod for the deploy-
-verifying run.
+#### 3. CAPTURE EVERY BREAK WITH THE EXACT INPUT — AND, for React warnings, the KEY VALUE + COMPONENT STACK.
+
+Tag every break to the in-flight input. Break classes: `pageerror`; app-level
+`console-error` — and this MUST include **React correctness warnings**
+(`same key` / `Each child in a list` / `unique "key"` / `Maximum update depth`
+/ `Cannot update a component`), NOT just `Uncaught`/`TypeError`. The 2026-06-12
+bug was a React *warning*, not a throw — a filter that only catches `Uncaught`
+MISSES it. `silent-hang` (no transcript growth + no panel + no routing audit in
+the window); `error-fallback` reply ("Hit a snag…"); `stuck-input` (textarea
+disabled long after the turn); `send-failed`.
+
+When a `same key` warning fires, **capture `console.args()[1]` (the duplicate
+key value) and the last arg (the component stack)** — that is what pinned the
+bug to `chessboard-arrow-c2-c3` in minutes instead of guessing for an hour. The
+warning text alone (`%s`) is useless; the key VALUE names the exact list.
+
+#### 4. REAL BREAK vs ARTIFACT — discriminate before you "fix" anything.
+
+Not every red is a coach bug. Before changing code, classify:
+- **Real bug** → fix the CODE. Then **SWEEP**: grep for the same pattern
+  everywhere and fix every instance (the arrow dedupe bug also lived in
+  `OpeningChallenge`'s hint+annotation merge — fixed both). Then **CONFIRM** by
+  re-running the exact break condition (re-ran the loop; the flood zone — the
+  same inputs that flooded — came back clean).
+- **Load artifact (NOT a bug)** — firing 20+ questions in ~2 min saturates the
+  LLM provider, so some brain-bound inputs exceed the timeout and look like
+  `silent-hang`. PROVE it's load, not a bug, by repro in ISOLATION (one input,
+  fresh page): if it answers in ~2-3s alone, it's saturation, not a hang. Real
+  single-user use never fires that fast. The loop must PACE itself (a gap
+  between brain-heavy inputs) so it doesn't manufacture false hangs — an
+  un-paced loop can never legitimately go green.
+- **Harness artifact (NOT a bug)** — empty/whitespace input is a CORRECT no-op
+  (don't flag it as a hang); a continuously-animating board fails Playwright's
+  "stable" actionability check, so `click()` times out — a human can tap anyway,
+  so `force: true` the click (if the input were truly covered it'd then surface
+  as a real `silent-hang`); the chat input is `disabled` while a turn is busy,
+  so WAIT for it to re-enable (up to the cold-gen budget, ~90s) BEFORE the next
+  action, or you get false `send-failed`. Fixing the HARNESS for these is right;
+  fixing the harness to dodge a REAL break is cheating.
+
+#### 5. THE FIX CYCLE + CONTRACT.
+
+run → it breaks → capture the exact input + key/stack → reproduce in isolation
+to find root cause → FIX THE CODE (+ sweep) → re-run the break condition to
+CONFIRM → repeat. The loop is MET only on **3 CONSECUTIVE break-free passes**
+(real breaks; load/harness artifacts don't count once proven, but you must
+prove and ideally pace them out), each pass harder and touching every function;
+ANY real break resets the streak. **"It didn't break" is only acceptable after
+you genuinely tried to break it and escalated** — if pass-1 was clean, your
+inputs were too soft; make them nastier.
 
 ```bash
-AUDIT_SANDBOX=1 AUDIT_SMOKE_URL=http://localhost:5173 \
-  AUDIT_MAX_PASSES=4 node scripts/audit-coach-teach-loop.mjs
+# functional click-through (proves wiring, finds which click breaks it)
+AUDIT_SANDBOX=1 AUDIT_SMOKE_URL=http://localhost:5173 node scripts/audit-coach-teach-functional.mjs
+# adversarial loop (breaks it) — iterate on the local dev server, then run vs main/prod
+AUDIT_SANDBOX=1 AUDIT_SMOKE_URL=http://localhost:5173 AUDIT_MAX_PASSES=4 node scripts/audit-coach-teach-loop.mjs
 ```
 
-The cycle is: run → it breaks → fix the code → re-run → repeat until 3
-consecutive clean passes at full chaos. "It didn't break" is only acceptable
-after you've genuinely tried to break it and escalated; otherwise you didn't
-do it right.
+Clone both per surface. The two scripts ARE the reference implementation of
+this protocol — read them before writing a new surface's audit.
 
 ### 🚨 AUDITS ARE LIVING — UPDATE THE AUDIT BEFORE YOU RUN IT (David 2026-05-24, LOCKED)
 
