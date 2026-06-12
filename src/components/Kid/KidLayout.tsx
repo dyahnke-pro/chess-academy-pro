@@ -36,7 +36,7 @@ export function KidLayout(): JSX.Element {
 
   return (
     <div
-      className="flex flex-col min-h-dvh text-[18px] md:text-[20px] leading-relaxed"
+      className="flex flex-col min-h-dvh text-xl md:text-2xl leading-relaxed tracking-wide"
       style={{ background: 'var(--color-bg)' }}
       data-testid="kid-layout"
     >

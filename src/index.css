@@ -227,6 +227,19 @@ body {
 }
 
 /* ─── Kid Mode overrides ──────────────────────────────────────────────────── */
+/* Big, chunky block lettering that's easy for young readers. Baloo 2 is a
+   heavy rounded-block face (loaded in index.html). The fallback chain stays on
+   real sans faces — NOT `cursive`, which on iOS resolves to the Snell Roundhand
+   script font and made kid text unreadable. The medium weight gives the solid
+   "block" feel. */
 [data-theme="kid-mode"] body {
-  font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+  font-family: 'Baloo 2', 'Comic Sans MS', system-ui, -apple-system, sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+/* Scale the whole kid UI up from the 16px root. Tailwind sizes/spacing are
+   rem-based, so this enlarges every letter (and keeps spacing proportional)
+   only while kid mode is active; it reverts when the theme is restored. */
+html[data-theme="kid-mode"] {
+  font-size: 18px;
 }
