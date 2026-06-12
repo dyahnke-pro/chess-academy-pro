@@ -53,7 +53,7 @@ per-surface DEEP functional grids + adversarial loops below add the depth.
 | 10 | Puzzles | `/puzzles` + 5 sub-routes | ☐ pending | |
 | 11 | Weaknesses | `/weaknesses` + 6 sub-routes | 🔶 empty-state healthy; tabs need data | `audit-weaknesses-functional.mjs` built. Empty/onboarding state renders CLEAN (0 console/page errors). The insights TABS (overview/patterns/openings/tactics/mistakes/misconceptions) only mount with ANALYZED GAME data — needs `audit-reports/.fixtures/david-games.json` (absent in sandbox) or a real device with games. Re-run with the fixture present to deep-audit the tabs. No bugs in reachable state. |
 | 12 | Games | `/games`, `/games/import` | ☐ pending | |
-| 13 | Kid | `/kid/*` (6 piece hubs + journey + games) | ☐ pending | kid non-negotiables apply (CLAUDE.md §🧒) |
+| 13 | Kid | `/kid/*` (6 piece hubs + journey + games) | 🔶 healthy 9/12 | `audit-kid-functional.mjs` — **9/12, 0 console/page errors** (no crash = P0 clear). All 6 piece hubs (pawn/rook/knight/bishop/queen/king) load, journey map + chapter load. ❌ audit-selector nuances: puzzle-board probe clicked a non-game button (needs a game-tile selector); kid-back-to-main testid is on sub-pages not the hub. No bugs. TODO: tighten the game-tile + chrome selectors. |
 | 14 | Settings | `/settings`, `/settings/onboarding` | ☐ pending | |
 | 15 | Dashboard | `/` + SmartSearchBar | ☐ pending | |
 | 16 | Academy | `/academy` | ☐ pending | |
