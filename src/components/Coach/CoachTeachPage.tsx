@@ -47,6 +47,10 @@ import { tryCaptureOpeningIntent, tryCaptureForgetIntent } from '../../services/
 import { findPlansForOpening, sessionFromPlan } from '../../services/middlegamePlanner';
 import { MiddlegamePlanInline } from './MiddlegamePlanInline';
 import { parsePlayerGameRequest } from '../../services/playerGameRequest';
+import {
+  classifyWalkthroughControl,
+  isWalkthroughControlPhrase,
+} from '../../services/walkthroughControlIntent';
 import { lookupPlayerGamesTool } from '../../coach/tools/cerebellum/lookupPlayerGames';
 import { buildSession } from '../../services/walkthroughAdapter';
 import { fetchChesscomPlayerGames } from '../../services/chesscomGamesService';
@@ -86,13 +90,34 @@ import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
 import { validateTacticClaims } from '../../services/tacticClaimValidator';
 import { applyCandidateArrows } from '../../services/coachAnswerGates';
-import { groundArrows } from '../../utils/arrowGrounding';
+import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { getAdaptiveMove, getRandomLegalMove } from '../../services/coachGameEngine';
 import { withTimeout } from '../../coach/withTimeout';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+// Monotonic suffix for chat-message id bases. `Date.now()` alone collides
+// when two ids are minted in the SAME millisecond — which happens under
+// rapid interaction (two turns back-to-back, a turn that appends user +
+// coach quickly, StrictMode's double-invoke). Colliding ids made two
+// `<ChatMessage>` siblings share a React key → "Encountered two children
+// with the same key" + duplicated/omitted messages. Surfaced by the
+// adversarial loop audit (2026-06-12). `freshTurnId` appends an ever-
+// increasing counter so every minted base is unique regardless of timing.
+let __coachMsgSeq = 0;
+function freshTurnId(topic?: string): string {
+  __coachMsgSeq += 1;
+  return `t-${Date.now()}-${__coachMsgSeq.toString(36)}${topic ? `-${topic}` : ''}`;
+}
+
+// Arrows passed to the board must be unique by square-pair (react-chessboard
+// keys on it). Shared dedupe lives in arrowGrounding. Surfaced by the
+// adversarial loop audit (2026-06-12, key="chessboard-arrow-c2-c3"):
+// un-grounded code-derived arrows appended to prior arrows duplicated a
+// square-pair and flooded "Encountered two children with the same key".
+const uniqueArrows = dedupeArrowsBySquarePair;
 
 const SUGGESTIONS = [
   'Walk me through the Vienna opening',
@@ -1141,6 +1166,100 @@ export function CoachTeachPage(): JSX.Element {
     // streams. tryExtractChoicesMarker re-sets them if the new
     // response is itself another disambiguation.
     setCoachChoices(null);
+
+    // ─── Walkthrough control intent (deterministic — BYPASS the brain) ───
+    // A walkthrough on the board (paused OR mid-narration) turns control
+    // phrases into COMMANDS, not opening searches. Before this, typing a
+    // control word like "start" / "go" / "new lesson" on a PAUSED
+    // walkthrough fell into the bare-name fuzzy router: it fuzzy-matched
+    // "start" as an opening NAME and surfaced a nonsense "I don't have an
+    // exact match for 'start'. Did you mean one of these?" picker with
+    // random openings, while the paused walkthrough just sat there — the
+    // coach never stopped what it was doing, never started a new lesson,
+    // never resumed (David 2026-06-12, screenshot). Pure regex over the
+    // student's text; the LLM is never in this loop (G0). Runs BEFORE the
+    // auto-pause below so walkthrough.phase still reflects reality.
+    if (
+      !opts?.kickoff &&
+      opts?.coachReplyPlayed === undefined &&
+      walkthrough.isActive
+    ) {
+      const control = classifyWalkthroughControl(trimmedText);
+      if (control === 'new' || control === 'stop') {
+        const priorOpening = walkthrough.tree?.openingName ?? null;
+        const ctlTurnId = freshTurnId('walkthrough-control');
+        setMessages((prev) => [...prev, {
+          id: `${ctlTurnId}-u`,
+          role: 'user',
+          content: text,
+          timestamp: Date.now(),
+        }]);
+        useCoachMemoryStore.getState().appendConversationMessage({
+          surface: 'chat-teach',
+          role: 'user',
+          text,
+          fen: opts?.fenOverride ?? gameRef.current.fen,
+          trigger: null,
+        });
+        // Tear the walkthrough down and clear the board / overlays so the
+        // next ask starts from a clean slate.
+        voiceService.stop();
+        walkthrough.stop();
+        handleResetBoard();
+        setArrows([]);
+        setLinePicker(null);
+        setCoachChoices(null);
+        const ack = control === 'new'
+          ? `Done with ${priorOpening ?? 'that line'}. What would you like to learn next? Name an opening and we'll dive in.`
+          : `Ended the ${priorOpening ?? 'walkthrough'}. Ask me anything, or name an opening to start a new lesson.`;
+        setMessages((prev) => [...prev, {
+          id: `${ctlTurnId}-c`,
+          role: 'assistant',
+          content: ack,
+          timestamp: Date.now(),
+        }]);
+        useCoachMemoryStore.getState().appendConversationMessage({
+          surface: 'chat-teach',
+          role: 'coach',
+          text: ack,
+          fen: gameRef.current.fen,
+          trigger: null,
+        });
+        void voiceService.speakForced(ack).catch(() => undefined);
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'CoachTeachPage.handleSubmit.walkthroughControl',
+          summary: `walkthrough control "${control}" — tore down ${priorOpening ?? '(none)'} via "${trimmedText.slice(0, 40)}"`,
+        });
+        return;
+      }
+      if (control === 'resume' && walkthrough.phase === 'paused') {
+        const ctlTurnId = freshTurnId('walkthrough-control');
+        setMessages((prev) => [...prev, {
+          id: `${ctlTurnId}-u`,
+          role: 'user',
+          content: text,
+          timestamp: Date.now(),
+        }]);
+        useCoachMemoryStore.getState().appendConversationMessage({
+          surface: 'chat-teach',
+          role: 'user',
+          text,
+          fen: opts?.fenOverride ?? gameRef.current.fen,
+          trigger: null,
+        });
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'CoachTeachPage.handleSubmit.walkthroughControl',
+          summary: `walkthrough control "resume" — continued ${walkthrough.tree?.openingName ?? '(none)'}`,
+        });
+        walkthrough.resume();
+        return;
+      }
+    }
+
     // If a walkthrough is mid-narration when the student types a
     // question, pause it so voice doesn't talk over the coach's
     // reply. The student can hit Resume on the walkthrough panel
@@ -1258,7 +1377,7 @@ export function CoachTeachPage(): JSX.Element {
           // game" is correct). Otherwise fall through to normal routing —
           // a rare misparse must not get eaten here.
           if (diskGames.length > 0 || openingIsReal) {
-            const pgTurnId = `t-${Date.now()}-player-game`;
+            const pgTurnId = freshTurnId('player-game');
             setMessages((prev) => [...prev, {
               id: `${pgTurnId}-u`,
               role: 'user',
@@ -1441,7 +1560,7 @@ export function CoachTeachPage(): JSX.Element {
           // opening we don't cover (no fuzzy-matched wrong opening).
           const probe = namedSubject ?? trimmedText;
           const subject = namedSubject;
-          const mgTurnId = `t-${Date.now()}-middlegame-intent`;
+          const mgTurnId = freshTurnId('middlegame-intent');
           setMessages((prev) => [...prev, {
             id: `${mgTurnId}-u`,
             role: 'user',
@@ -1625,7 +1744,17 @@ export function CoachTeachPage(): JSX.Element {
       } else if (stageHint && stageStrippedInput.length > 0 && stageStrippedInput.length <= 60) {
         // Stage keyword stripped → remaining text is the opening name.
         requestedName = stageStrippedInput;
-      } else if (workingInput.length <= 60 && !workingInput.includes('?')) {
+      } else if (
+        workingInput.length <= 60 &&
+        !workingInput.includes('?') &&
+        // A walkthrough control word ("start", "go", "stop", "new
+        // lesson", …) is NEVER an opening name — keep it out of the
+        // fuzzy matcher so it can't surface a bogus "did you mean
+        // <opening>?" picker. With an active walkthrough these are
+        // already handled by the control-intent block up top; this
+        // guard covers the idle case (David 2026-06-12).
+        !isWalkthroughControlPhrase(workingInput)
+      ) {
         // Bare-name routing: "The Vienna", "Pirc defense", "Italian".
         // Production audit (build 7e4f52b) caught "Pirc defense"
         // falling through to the brain instead of the LLM generator
@@ -1707,7 +1836,7 @@ export function CoachTeachPage(): JSX.Element {
                 : null,
             }),
           });
-          const ambiguousTurnId = `t-${Date.now()}-fuzzy-picker`;
+          const ambiguousTurnId = freshTurnId('fuzzy-picker');
           setMessages((prev) => [...prev, {
             id: `${ambiguousTurnId}-u`,
             role: 'user',
@@ -1767,7 +1896,7 @@ export function CoachTeachPage(): JSX.Element {
         // generation (last resort). Each later tier is slower but
         // covers more openings.
         const staticTree = resolveWalkthroughTree(requestedName);
-        const surfaceTurnId = `t-${Date.now()}-walkthrough-surface`;
+        const surfaceTurnId = freshTurnId('walkthrough-surface');
         // Always show the user's ask in the transcript.
         setMessages((prev) => [...prev, {
           id: `${surfaceTurnId}-u`,
@@ -2152,7 +2281,7 @@ export function CoachTeachPage(): JSX.Element {
     }
 
     setBusy(true);
-    const turnId = `t-${Date.now()}`;
+    const turnId = freshTurnId();
     // Kickoff sends a system-style ask to seed the lesson — don't
     // render it as a "student said" turn in the transcript. Only the
     // coach's reply (the spoken greeting) shows up.
@@ -2622,7 +2751,7 @@ export function CoachTeachPage(): JSX.Element {
             // brain tool emitted start_walkthrough for an opening
             // outside the static registry and uncached.
             const ackBuilding = `Putting together ${lessonLabel(opening)} — this takes about a minute. The first time only; after this it'll be instant.`;
-            const brainTurnId = `brain-walk-${Date.now()}`;
+            const brainTurnId = freshTurnId('brain-walk');
             setMessages((prev) => [...prev, {
               id: `${brainTurnId}-c`,
               role: 'assistant',
@@ -2991,7 +3120,7 @@ export function CoachTeachPage(): JSX.Element {
       // arrows scattered across it (David's audit 2026-06-10). The synthesized
       // arrows appended below are chess.js-derived, so they're grounded by
       // construction.
-      setArrows(groundArrows(nextArrows, fen));
+      setArrows(uniqueArrows(groundArrows(nextArrows, fen)));
       setHighlights(nextHighlights);
 
       // Sanitize the FINAL response too — both for transcript display
@@ -3063,7 +3192,7 @@ export function CoachTeachPage(): JSX.Element {
             if (cmd.type === 'arrow' && cmd.arrows) codeArrows.push(...cmd.arrows);
           }
           if (codeArrows.length > 0) {
-            setArrows((prev) => [...prev, ...codeArrows]);
+            setArrows((prev) => uniqueArrows([...prev, ...codeArrows]));
           }
         }
         setMessages((prev) => [...prev, {
@@ -3354,7 +3483,7 @@ export function CoachTeachPage(): JSX.Element {
         ? `Ready to start the ${rolodexOpening.trim()} walkthrough?`
         : 'Welcome to my classroom — what would you like to learn today?';
       setKickoffStatus(null);
-      const turnId = `t-${Date.now()}-welcome`;
+      const turnId = freshTurnId('welcome');
       setMessages((prev) => [...prev, {
         id: `${turnId}-c`,
         role: 'assistant',
