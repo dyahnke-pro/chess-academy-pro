@@ -35,7 +35,10 @@ const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const OUT_DIR = `audit-reports/coach-teach-loop-${stamp}`;
 
 const BOOT_TIMEOUT_MS = 30_000;
-const ANSWER_TIMEOUT_MS = 30_000;
+// The coach brain races a 30s/provider timeout then falls back to the OTHER
+// provider (another ~30s) — so a legit answer under load can take ~60s. Only
+// flag a TRUE hang past that.
+const ANSWER_TIMEOUT_MS = 60_000;
 const ERROR_FALLBACKS = ['hit a snag', 'say it again', 'something went wrong', "couldn't"];
 
 // ── The adversarial input bank, by the programmed function it targets ──
@@ -140,8 +143,10 @@ async function main() {
   page.on('console', (msg) => {
     if (msg.type() !== 'error') return;
     const t = msg.text();
-    // App-level crashes only — ignore network 4xx/5xx noise + favicon.
-    if (/Uncaught|TypeError|ReferenceError|is not a function|undefined is not|cannot read prop|Maximum update depth|Minified React error/i.test(t)) {
+    // App-level crashes AND React correctness warnings (duplicate keys,
+    // missing keys, bad setState) — these are real rendering bugs that
+    // duplicate/drop content. Ignore pure network 4xx/5xx + favicon noise.
+    if (/Uncaught|TypeError|ReferenceError|is not a function|undefined is not|cannot read prop|Maximum update depth|Minified React error|same key|Each child in a list|unique "key"|Cannot update a component/i.test(t)) {
       recordBreak('console-error', t);
     }
   });
@@ -271,7 +276,9 @@ async function main() {
       const grew = (await transcriptText()).length > beforeLen + 2;
       const panel = await anyWalkthroughPanel();
       const routed = intercepted.slice(evBefore).some((e) =>
-        e.kind === 'coach-surface-migrated' || e.kind === 'route-changed' || e.kind === 'coach-brain-ask-received');
+        e.kind === 'coach-surface-migrated' || e.kind === 'route-changed' ||
+        e.kind === 'coach-brain-ask-received' || e.kind === 'coach-brain-provider-called' ||
+        e.kind === 'coach-llm-call' || e.kind === 'opening-cache-miss' || e.kind === 'opening-cache-hit');
       const navAway = !page.url().includes('/coach/teach');
       if (grew || panel || routed || navAway) { responded = true; break; }
       await page.waitForTimeout(500);
@@ -281,6 +288,10 @@ async function main() {
     const after = await transcriptText();
     const lower = after.toLowerCase();
     const fellBack = ERROR_FALLBACKS.some((p) => lower.includes(p) && !before.toLowerCase().includes(p));
+    // Empty / whitespace input is CORRECTLY a no-op (handleSubmit bails on
+    // !text.trim()) — not a hang. Only console/pageerror (captured globally)
+    // would be a real break for these.
+    if (text.trim().length === 0) { return { broke: false }; }
     // Navigation away (play-real / player-game walk) — return to teach for next ask.
     if (!page.url().includes('/coach/teach')) {
       await page.goBack({ timeout: 8000 }).catch(() => undefined);
