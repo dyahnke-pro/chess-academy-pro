@@ -241,6 +241,21 @@ async function main() {
             .catch(() => '');
           actual = String(t).slice(0, 100);
           ok = String(t).toLowerCase().includes(String(a.value).toLowerCase());
+        } else if (a.kind === 'transcript-not-contains') {
+          const t = await page
+            .locator('[data-testid="teach-transcript"]')
+            .innerText({ timeout: 2000 })
+            .catch(() => '');
+          const has = String(t).toLowerCase().includes(String(a.value).toLowerCase());
+          actual = has ? `FOUND "${a.value}" (regression)` : `absent (good)`;
+          ok = !has;
+        } else if (a.kind === 'not-visible') {
+          const count = await page.locator(a.selector).count();
+          const visible = count > 0
+            ? await page.locator(a.selector).first().isVisible().catch(() => false)
+            : false;
+          actual = visible ? 'visible (unexpected)' : `not-visible (count=${count})`;
+          ok = !visible;
         }
       } catch (e) {
         actual = `error: ${e.message?.slice(0, 80)}`;
@@ -483,6 +498,146 @@ async function main() {
         selector: '[data-testid="coach-teach-page"]',
         label: 'page still mounted (no crash)',
       },
+    ],
+  });
+
+  // ── S9: Walkthrough CONTROL intent (David 2026-06-12) ───────────
+  // Regression guard for the paused-walkthrough bug: control words
+  // ("start" / "stop" / "new lesson") used to fall into the bare-name
+  // fuzzy router and surface "I don't have an exact match for 'start'.
+  // Did you mean one of these?" with random openings, while the paused
+  // walkthrough just sat there. They must now be handled as COMMANDS.
+  // Vienna is the target (static registry → no LLM key needed).
+
+  // S9a — "new lesson" while a walkthrough is on the board → tear down
+  //        + invite a new ask. NO fuzzy "exact match" picker.
+  await clearSessionAndReload();
+  await recordScenario('S9a_control_new_lesson', {
+    run: async () => {
+      await page.locator('[data-testid="chat-text-input"]').click();
+      await page.locator('[data-testid="chat-text-input"]').fill('Vienna');
+      await page.locator('[data-testid="chat-send-btn"]').click();
+      await waitForEvent(intercepted, (e) =>
+        e.kind === 'coach-surface-migrated' &&
+        (e.summary ?? '').includes('surface-routed (static): "Vienna"'),
+        45_000,
+      );
+      // Wait for a walkthrough panel to actually RENDER — proves React
+      // committed the re-render so walkthrough.isActive is true in the
+      // next handleSubmit closure (the surface-routed AUDIT fires inside
+      // start() *before* commit, so typing the control word off the bare
+      // audit races the commit).
+      await page.locator('[data-testid="walkthrough-choose-mode"], [data-testid="walkthrough-narrating-panel"], [data-testid="walkthrough-paused-panel"], [data-testid="walkthrough-leaf-panel"]').first().waitFor({ state: 'visible', timeout: 20_000 }).catch(() => undefined);
+      // Walkthrough is now on the board. Ask for a different lesson.
+      await page.locator('[data-testid="chat-text-input"]').click();
+      await page.locator('[data-testid="chat-text-input"]').fill('teach me something else');
+      await page.locator('[data-testid="chat-send-btn"]').click();
+      await waitForEvent(intercepted, (e) =>
+        e.kind === 'coach-surface-migrated' &&
+        /walkthrough control "new"/.test(e.summary ?? ''),
+        15_000,
+      );
+      await page.waitForTimeout(800);
+    },
+    assertions: [
+      { kind: 'audit-summary-contains', value: 'walkthrough control "new"', label: 'new-lesson control audit fires' },
+      { kind: 'transcript-contains', value: 'what would you like to learn', label: 'coach invites a new opening' },
+      { kind: 'transcript-not-contains', value: 'exact match for', label: 'NO bogus fuzzy "did you mean" picker (regression)' },
+      { kind: 'not-visible', selector: '[data-testid="walkthrough-paused-panel"]', label: 'walkthrough torn down (paused panel gone)' },
+      { kind: 'not-visible', selector: '[data-testid="walkthrough-narrating-panel"]', label: 'walkthrough torn down (narrating panel gone)' },
+    ],
+  });
+
+  // S9b — "stop the walkthrough" → end it cleanly.
+  await clearSessionAndReload();
+  await recordScenario('S9b_control_stop', {
+    run: async () => {
+      await page.locator('[data-testid="chat-text-input"]').click();
+      await page.locator('[data-testid="chat-text-input"]').fill('Vienna');
+      await page.locator('[data-testid="chat-send-btn"]').click();
+      await waitForEvent(intercepted, (e) =>
+        e.kind === 'coach-surface-migrated' &&
+        (e.summary ?? '').includes('surface-routed (static): "Vienna"'),
+        45_000,
+      );
+      // Wait for the walkthrough panel to render (commit) before the
+      // control word — see S9a note on the audit-vs-commit race.
+      await page.locator('[data-testid="walkthrough-choose-mode"], [data-testid="walkthrough-narrating-panel"], [data-testid="walkthrough-paused-panel"], [data-testid="walkthrough-leaf-panel"]').first().waitFor({ state: 'visible', timeout: 20_000 }).catch(() => undefined);
+      await page.locator('[data-testid="chat-text-input"]').click();
+      await page.locator('[data-testid="chat-text-input"]').fill('stop the walkthrough');
+      await page.locator('[data-testid="chat-send-btn"]').click();
+      await waitForEvent(intercepted, (e) =>
+        e.kind === 'coach-surface-migrated' &&
+        /walkthrough control "stop"/.test(e.summary ?? ''),
+        15_000,
+      );
+      await page.waitForTimeout(800);
+    },
+    assertions: [
+      { kind: 'audit-summary-contains', value: 'walkthrough control "stop"', label: 'stop control audit fires' },
+      { kind: 'transcript-contains', value: 'ended', label: 'coach acks the walkthrough ended' },
+      { kind: 'transcript-not-contains', value: 'exact match for', label: 'NO bogus fuzzy picker (regression)' },
+      { kind: 'not-visible', selector: '[data-testid="walkthrough-paused-panel"]', label: 'paused panel gone' },
+      { kind: 'not-visible', selector: '[data-testid="walkthrough-narrating-panel"]', label: 'narrating panel gone' },
+    ],
+  });
+
+  // S9c — THE SCREENSHOT BUG: pause a NARRATING walkthrough, type
+  //        "start" → it RESUMES (no "exact match for 'start'" picker).
+  //        Drive a real narrating state first: Vienna is completed by
+  //        earlier scenarios so it lands in the chooser — click
+  //        "walk through again" to get a populated, narrating walkthrough
+  //        (the screenshot's "Walkthrough paused — <Opening>" state).
+  await clearSessionAndReload();
+  const waitInputEnabled = async () => {
+    await page.waitForFunction(() => {
+      const el = document.querySelector('[data-testid="chat-text-input"]');
+      if (!(el instanceof HTMLTextAreaElement) && !(el instanceof HTMLInputElement)) return false;
+      return !el.disabled;
+    }, { timeout: 30_000 }).catch(() => undefined);
+  };
+  await recordScenario('S9c_control_resume_paused', {
+    run: async () => {
+      await page.locator('[data-testid="chat-text-input"]').click();
+      await page.locator('[data-testid="chat-text-input"]').fill('Vienna');
+      await page.locator('[data-testid="chat-send-btn"]').click();
+      await waitForEvent(intercepted, (e) =>
+        e.kind === 'coach-surface-migrated' &&
+        (e.summary ?? '').includes('surface-routed (static): "Vienna"'),
+        45_000,
+      );
+      // If we landed in the chooser (Vienna previously completed), start
+      // a fresh narrating walkthrough so the path is populated.
+      const chooser = page.locator('[data-testid="walkthrough-choose-walkthrough"]');
+      if (await chooser.count() > 0 && await chooser.first().isVisible().catch(() => false)) {
+        await chooser.first().click();
+      }
+      await page.locator('[data-testid="walkthrough-narrating-panel"]').waitFor({ state: 'visible', timeout: 20_000 }).catch(() => undefined);
+      // Ask a question → auto-pauses the walkthrough (pause fires before
+      // any brain round-trip).
+      await page.locator('[data-testid="chat-text-input"]').click();
+      await page.locator('[data-testid="chat-text-input"]').fill('what is the key idea here?');
+      await page.locator('[data-testid="chat-send-btn"]').click();
+      await page.locator('[data-testid="walkthrough-paused-panel"]').waitFor({ state: 'visible', timeout: 15_000 }).catch(() => undefined);
+      // Wait for the question turn to FINISH (busy clears) so the next
+      // submit isn't dropped and phase has settled to 'paused'.
+      await waitInputEnabled();
+      // Now type the bare control word that used to break.
+      await page.locator('[data-testid="chat-text-input"]').click();
+      await page.locator('[data-testid="chat-text-input"]').fill('start');
+      await page.locator('[data-testid="chat-send-btn"]').click();
+      await waitForEvent(intercepted, (e) =>
+        e.kind === 'coach-surface-migrated' &&
+        /walkthrough control "resume"/.test(e.summary ?? ''),
+        15_000,
+      );
+      await page.waitForTimeout(800);
+    },
+    assertions: [
+      { kind: 'audit-summary-contains', value: 'walkthrough control "resume"', label: '"start" resumes the paused walkthrough' },
+      { kind: 'transcript-not-contains', value: 'exact match for', label: 'NO "I don\'t have an exact match for start" picker (the exact bug)' },
+      { kind: 'transcript-not-contains', value: 'did you mean one of these', label: 'NO random-opening did-you-mean chips' },
+      { kind: 'not-visible', selector: '[data-testid="walkthrough-paused-panel"]', label: 'paused panel cleared (walkthrough resumed)' },
     ],
   });
 
