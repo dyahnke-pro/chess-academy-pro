@@ -29,6 +29,14 @@ See CLAUDE.md §"THE ADVERSARIAL FUNCTIONAL AUDIT". For EVERY surface:
 Clone the references: `scripts/audit-coach-teach-functional.mjs` +
 `scripts/audit-coach-teach-loop.mjs`.
 
+## ✅ APP-WIDE STABILITY SWEEP — DONE (2026-06-12)
+`scripts/audit-app-sweep.mjs` loads ALL 55 routes (seed-warmed so content
+actually renders), captures console/pageerror/React-warnings/error-boundary +
+a light interaction. **Result: 55/55 clean** — every route mounts + renders
+real content with ZERO crashes, console errors, React key warnings, or error
+boundaries (incl. the 404 catch-all). This is the breadth baseline; the
+per-surface DEEP functional grids + adversarial loops below add the depth.
+
 ## Surface inventory + status
 
 | # | Surface | Routes | Status | Findings / fixes |
