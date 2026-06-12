@@ -10,7 +10,7 @@
  * (read via the shared `useProseReader` audiobook engine); boards are chess.js-
  * validated facts. The voice only READS; it never writes.
  */
-import { useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import {
@@ -24,20 +24,28 @@ import {
   type LibraryBook, type LibraryPage, type LivingBoard,
 } from '../../data/coachesLibrary';
 
-interface Sentence { id: string; text: string }
-interface Paragraph { id: string; sentences: Sentence[] }
+interface Paragraph { id: string; text: string; chunks: { id: string; text: string }[] }
 
-/** Split prose into sentences for click-to-read-from-here. Splits on .!?
- *  followed by whitespace + a capital/quote, so chess notation ("viz.:",
- *  "1...R-K1", "2 QxP ch") and abbreviations don't trigger false breaks. */
-function splitSentences(text: string): string[] {
-  return text
-    .split(/(?<=[.!?])\s+(?=[A-Z“"‘'])/)
-    .map((s) => s.trim())
-    .filter(Boolean);
+// Polly / /api/tts rejects very long requests — split only when a paragraph
+// exceeds this, on sentence boundaries, so a normal paragraph is ONE TTS call
+// (no inter-sentence pauses).
+const MAX_TTS = 2200;
+function chunkParagraph(text: string): string[] {
+  if (text.length <= MAX_TTS) return [text];
+  const sentences = text.match(/[^.!?]+[.!?]+\s*|[^.!?]+$/g) ?? [text];
+  const chunks: string[] = [];
+  let cur = '';
+  for (const s of sentences) {
+    if (cur && (cur + s).length > MAX_TTS) { chunks.push(cur.trim()); cur = ''; }
+    cur += s;
+  }
+  if (cur.trim()) chunks.push(cur.trim());
+  return chunks;
 }
 
-/** Split a page into paragraphs of individually-clickable sentences. */
+/** Split a page into paragraphs. The PARAGRAPH is the read/click unit — it's
+ *  spoken in one go (chunked only if it's over the TTS limit) so there are no
+ *  pauses between sentences. */
 function paragraphsOf(page: LibraryPage): Paragraph[] {
   return page.text
     .split('\n\n')
@@ -45,7 +53,8 @@ function paragraphsOf(page: LibraryPage): Paragraph[] {
     .filter(Boolean)
     .map((para, pi) => ({
       id: `${page.id}-p${pi}`,
-      sentences: splitSentences(para).map((text, si) => ({ id: `${page.id}-p${pi}-s${si}`, text })),
+      text: para,
+      chunks: chunkParagraph(para).map((text, ci) => ({ id: `${page.id}-p${pi}-c${ci}`, text })),
     }));
 }
 
@@ -205,19 +214,36 @@ function LibraryBookReader({ book, onBack, initialPage = 0 }: { book: LibraryBoo
   const current = book.pages[safePage];
   const paras = useMemo(() => (current ? paragraphsOf(current) : []), [current]);
 
-  // Sentence-level units: clicking any sentence starts the audiobook there.
+  // Paragraph-level units — each paragraph is one TTS call (chunked only if it
+  // exceeds the limit), so there are no pauses between sentences.
   const units = useMemo<ProseUnit[]>(
-    () => paras.flatMap((p) => p.sentences.map((s) => ({ id: s.id, text: s.text }))),
+    () => paras.flatMap((p) => p.chunks.map((c) => ({ id: c.id, text: c.text }))),
     [paras],
   );
-  const reader = useProseReader(units);
+  // Auto-advance: when a page finishes reading, turn to the next page and keep
+  // going. `resumeRef` carries the intent across the page change.
+  const resumeRef = useRef(false);
+  const onPageComplete = useCallback(() => {
+    if (safePage < pageCount - 1) { resumeRef.current = true; setPage(safePage + 1); }
+  }, [safePage, pageCount]);
+  const reader = useProseReader(units, onPageComplete);
+  // After the next page's units render, resume reading from its first paragraph.
+  useEffect(() => {
+    if (resumeRef.current && units.length > 0) {
+      resumeRef.current = false;
+      reader.playFrom(units[0].id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [units]);
 
   const touchX = useRef<number | null>(null);
   const goPage = (next: number): void => {
+    resumeRef.current = false;
     reader.stop();
     setPage(Math.max(0, Math.min(pageCount - 1, next)));
   };
   const openChapter = (p: number): void => {
+    resumeRef.current = false;
     reader.stop();
     setPage(p);
     setShowContents(false);
@@ -336,25 +362,21 @@ function LibraryBookReader({ book, onBack, initialPage = 0 }: { book: LibraryBoo
             touchX.current = null;
           }}
         >
-          {paras.map((para) => (
-            <p key={para.id} className="text-[15px] text-theme-text leading-relaxed font-serif mb-3">
-              {para.sentences.map((sen) => {
-                const reading = reader.currentId === sen.id;
-                return (
-                  <span
-                    key={sen.id}
-                    onClick={() => reader.playFrom(sen.id)}
-                    className={`cursor-pointer rounded px-0.5 transition-colors ${
-                      reading ? 'bg-amber-400/25 text-theme-text' : 'hover:bg-amber-400/10'
-                    }`}
-                    data-testid={`library-sentence-${sen.id}`}
-                  >
-                    {sen.text}{' '}
-                  </span>
-                );
-              })}
-            </p>
-          ))}
+          {paras.map((para) => {
+            const reading = para.chunks.some((c) => c.id === reader.currentId);
+            return (
+              <p
+                key={para.id}
+                onClick={() => reader.playFrom(para.chunks[0].id)}
+                className={`text-[15px] leading-relaxed font-serif mb-3 cursor-pointer rounded px-1 -mx-1 transition-colors ${
+                  reading ? 'bg-amber-400/20 text-theme-text' : 'text-theme-text hover:bg-amber-400/10'
+                }`}
+                data-testid={`library-paragraph-${para.id}`}
+              >
+                {para.text}
+              </p>
+            );
+          })}
 
           {/* Where the book drew a diagram, the live board. */}
           {current?.board && <LivingBoardView board={current.board} />}

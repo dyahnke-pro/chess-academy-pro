@@ -30,12 +30,16 @@ export interface ProseReader {
  * promise resolution drives advancement (no racing timers). A token
  * supersedes any in-flight chain on pause / restart / unmount.
  */
-export function useProseReader(units: ProseUnit[]): ProseReader {
+export function useProseReader(units: ProseUnit[], onComplete?: () => void): ProseReader {
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const tokenRef = useRef(0);
   const unitsRef = useRef(units);
   unitsRef.current = units;
+  // Fires when a sequential read reaches the natural end of the units (NOT on
+  // stop/pause/restart) — used to auto-advance to the next page.
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
 
   const stop = useCallback((): void => {
     tokenRef.current++;
@@ -80,6 +84,7 @@ export function useProseReader(units: ProseUnit[]): ProseReader {
       if (tokenRef.current === token) {
         setIsPlaying(false);
         setCurrentId(null);
+        onCompleteRef.current?.();
       }
     },
     [speakUnit],
