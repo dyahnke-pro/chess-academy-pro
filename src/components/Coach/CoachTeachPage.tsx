@@ -90,7 +90,7 @@ import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
 import { validateTacticClaims } from '../../services/tacticClaimValidator';
 import { applyCandidateArrows } from '../../services/coachAnswerGates';
-import { groundArrows } from '../../utils/arrowGrounding';
+import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { getAdaptiveMove, getRandomLegalMove } from '../../services/coachGameEngine';
@@ -111,6 +111,13 @@ function freshTurnId(topic?: string): string {
   __coachMsgSeq += 1;
   return `t-${Date.now()}-${__coachMsgSeq.toString(36)}${topic ? `-${topic}` : ''}`;
 }
+
+// Arrows passed to the board must be unique by square-pair (react-chessboard
+// keys on it). Shared dedupe lives in arrowGrounding. Surfaced by the
+// adversarial loop audit (2026-06-12, key="chessboard-arrow-c2-c3"):
+// un-grounded code-derived arrows appended to prior arrows duplicated a
+// square-pair and flooded "Encountered two children with the same key".
+const uniqueArrows = dedupeArrowsBySquarePair;
 
 const SUGGESTIONS = [
   'Walk me through the Vienna opening',
@@ -3113,7 +3120,7 @@ export function CoachTeachPage(): JSX.Element {
       // arrows scattered across it (David's audit 2026-06-10). The synthesized
       // arrows appended below are chess.js-derived, so they're grounded by
       // construction.
-      setArrows(groundArrows(nextArrows, fen));
+      setArrows(uniqueArrows(groundArrows(nextArrows, fen)));
       setHighlights(nextHighlights);
 
       // Sanitize the FINAL response too — both for transcript display
@@ -3185,7 +3192,7 @@ export function CoachTeachPage(): JSX.Element {
             if (cmd.type === 'arrow' && cmd.arrows) codeArrows.push(...cmd.arrows);
           }
           if (codeArrows.length > 0) {
-            setArrows((prev) => [...prev, ...codeArrows]);
+            setArrows((prev) => uniqueArrows([...prev, ...codeArrows]));
           }
         }
         setMessages((prev) => [...prev, {
