@@ -69,6 +69,7 @@ import { fetchLichessExplorer, fetchCloudEval } from '../../services/lichessExpl
 import { addAddressedConversion } from '../../services/conversionProgress';
 import { detectTrapInPosition, formatTrapForPrompt, type MoveEvaluation } from '../../services/openingTrapDetector';
 import { buildFastMoveLine } from '../../utils/fastMoveNarration';
+import { dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
 
 /** Max wall-clock for any Lichess lookup during opening teaching.
  *  Matches coachContextEnricher's FETCH_TIMEOUT_MS so the whole
@@ -4656,7 +4657,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               showFlipButton={false}
               showVoiceMic={false}
               highlightSquares={coachLastMove}
-              arrows={[...hintState.arrows, ...annotationArrows, ...voiceArrows].length > 0 ? [...hintState.arrows, ...annotationArrows, ...voiceArrows] : undefined}
+              arrows={(() => { const a = dedupeArrowsBySquarePair([...hintState.arrows, ...annotationArrows, ...voiceArrows]); return a.length > 0 ? a : undefined; })()}
               annotationHighlights={annotationHighlights.length > 0 ? annotationHighlights : undefined}
               ghostMove={hintState.ghostMove}
               pgnForChat={game.history.join(' ')}
