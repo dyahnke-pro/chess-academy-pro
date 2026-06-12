@@ -247,6 +247,12 @@ async function main() {
       '[data-testid="walkthrough-narrating-panel"], [data-testid="walkthrough-paused-panel"], [data-testid="walkthrough-leaf-panel"], [data-testid="walkthrough-choose-mode"], [data-testid="walkthrough-stage-menu"], [data-testid="walkthrough-quiz-panel"], [data-testid="walkthrough-drill-picker"], [data-testid="walkthrough-drill-active"], [data-testid="walkthrough-punish-picker"], [data-testid="walkthrough-fork-panel"], [data-testid="line-picker"]',
     ).first().isVisible().catch(() => false);
   }
+  async function anyPhase() {
+    for (const id of ['walkthrough-fork-panel', 'walkthrough-narrating-panel', 'walkthrough-leaf-panel', 'walkthrough-paused-panel', 'walkthrough-choose-mode', 'walkthrough-stage-menu']) {
+      if (await page.locator(`[data-testid="${id}"]`).first().isVisible().catch(() => false)) return id;
+    }
+    return 'none';
+  }
 
   // Send one input and judge whether the coach RESPONDED at all. A break is:
   //  - silent hang (no transcript growth, no panel, no routing audit in time)
@@ -368,7 +374,40 @@ async function main() {
       await ask('stop');
     } catch (e) { recordBreak('chaos-hijack', e); }
 
-    // 5) Empty / whitespace / single-char spam.
+    // 5) FORK AUTO-ADVANCE RACE — push the new auto-advance timer to its edge.
+    //    Reach a fork, then race the 4s auto-advance: hammer pickFork / pause /
+    //    stop / a question RIGHT as the timer is about to fire, so the timer
+    //    callback and the manual transition collide (classic double-advance /
+    //    stale-state bug surface). pageerror / same-key / silent-hang here = a
+    //    real break in the auto-advance wiring.
+    await freshReload();
+    inFlightInput = 'FORK AUTO-ADVANCE RACE';
+    try {
+      await ask('teach me the Vienna');
+      if (await page.locator('[data-testid="walkthrough-choose-mode"]').first().isVisible().catch(() => false)) {
+        await page.locator('[data-testid="walkthrough-choose-walkthrough"]').click({ force: true }).catch(() => undefined);
+      }
+      // skip-click through narration to reach a fork fast
+      const dl = Date.now() + 45000;
+      while (Date.now() < dl) {
+        const p = await anyPhase();
+        if (p === 'walkthrough-fork-panel') break;
+        if (p === 'walkthrough-leaf-panel' || p === 'none') break;
+        if (p === 'walkthrough-narrating-panel') await page.locator('[data-testid="walkthrough-skip"]').first().click({ force: true, timeout: 2000 }).catch(() => undefined);
+        await page.waitForTimeout(400);
+      }
+      // At/near the fork: collide with the 4s auto-advance timer.
+      await page.waitForTimeout(3600); // sit just inside the auto-advance window
+      await page.locator('[data-testid="walkthrough-fork-option-0"]').first().click({ force: true, timeout: 1500 }).catch(() => undefined);
+      await page.locator('[data-testid="walkthrough-pause"]').first().click({ force: true, timeout: 1500 }).catch(() => undefined);
+      await ask('stop', { settle: 400 });
+      await ask('teach me the Vienna');
+      await page.waitForTimeout(3900);
+      await ask('actually the Italian'); // hijack right at the next auto-advance
+      await waitInputEnabled(40000);
+    } catch (e) { recordBreak('chaos-fork-race', e); }
+
+    // 6) Empty / whitespace / single-char spam.
     await freshReload();
     for (const t of [' ', '.', 'a', '?', 'ok', 'yes', 'no', 'hi', 'help']) {
       await ask(t, { settle: 400 });

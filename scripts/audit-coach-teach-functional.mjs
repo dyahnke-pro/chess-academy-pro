@@ -186,6 +186,34 @@ async function main() {
   await gotoTeach(); await ask('play it for real the Vienna');
   record('stage-play→/coach/play', await until(async () => page.url().includes('/coach/play'), 25000), page.url().includes('/coach/play') ? 'navigated' : 'no nav');
 
+  // ── B2. Watch AUTO-ADVANCES through a fork with NO click (David 2026-06-12) ──
+  // The lesson must keep flowing on its own: reach a fork, then WITHOUT tapping
+  // anything, assert it leaves that fork (advances down the main line). The
+  // fork-panel text is captured so a deeper fork still counts as "advanced".
+  await gotoTeach(); await ask('teach me the Vienna');
+  if (await visible('[data-testid="walkthrough-choose-mode"]')) { await clickReq('[data-testid="walkthrough-choose-walkthrough"]'); }
+  // Skip-click through the NARRATION only (a user may skip) to reach the first
+  // fork fast — then STOP clicking at the fork and prove it advances on its own.
+  let gotFork = false;
+  const fDeadline = Date.now() + 70000;
+  while (Date.now() < fDeadline) {
+    const p = await phase();
+    if (p === 'walkthrough-fork-panel') { gotFork = true; break; }
+    if (p === 'walkthrough-leaf-panel') break;
+    if (p === 'walkthrough-narrating-panel') await clickReq('[data-testid="walkthrough-skip"]');
+    await page.waitForTimeout(500);
+  }
+  let autoAdvanced = false;
+  if (gotFork) {
+    const forkText1 = await page.locator('[data-testid="walkthrough-fork-panel"]').innerText().catch(() => '');
+    // do NOT click — wait past FORK_AUTO_ADVANCE_MS (4s) + a beat
+    await page.waitForTimeout(7000);
+    const p2 = await phase();
+    const forkText2 = p2 === 'walkthrough-fork-panel' ? await page.locator('[data-testid="walkthrough-fork-panel"]').innerText().catch(() => '') : '';
+    autoAdvanced = p2 !== 'walkthrough-fork-panel' || (!!forkText2 && forkText2 !== forkText1);
+  }
+  record('fork-auto-advance (no click)', gotFork && autoAdvanced, gotFork ? (autoAdvanced ? 'advanced past fork on its own' : 'STALLED at fork — no auto-advance') : 'never reached a fork');
+
   // ── C. Routing / control / Q&A (fresh navs) ──
   await gotoTeach();
   record('bare-name-routing', await (async () => { await ask('Caro'); return until(async () => (await phase()) !== 'teach-picker' || /caro/i.test(await transcript()), 30000); })(), 'Caro routed');
@@ -218,10 +246,10 @@ async function main() {
   await ask('teach me something else');
   record('control-new-lesson', await until(async () => /what would you like to learn|done with/i.test(await transcript()), 15000), 'tore down + invited');
   await gotoTeach(); await ask('teach me the Vienna');
-  // wait for the walkthrough to actually be ON the board (active) before
-  // firing the control word — else "stop" routes as a normal ask (S9b proves
-  // the control path works when a walkthrough is active).
-  await until(async () => ['walkthrough-narrating-panel', 'walkthrough-choose-mode', 'walkthrough-fork-panel', 'walkthrough-leaf-panel'].includes(await phase()), 35000);
+  // drive PAST the chooser to a real narrating walkthrough, then fire stop
+  // (S9b proves the control path works when a walkthrough is genuinely active).
+  if (await visible('[data-testid="walkthrough-choose-mode"]')) { await clickReq('[data-testid="walkthrough-choose-walkthrough"]'); }
+  await until(async () => ['walkthrough-narrating-panel', 'walkthrough-fork-panel', 'walkthrough-leaf-panel'].includes(await phase()), 40000);
   await waitInput();
   await ask('stop the walkthrough');
   record('control-stop', await until(async () => /ended/i.test(await transcript()), 15000), 'ended');
