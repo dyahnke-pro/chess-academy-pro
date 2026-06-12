@@ -1,18 +1,34 @@
 // The Coaches Library — our books, brought to life.
 //
 // SUPREME LAW (G0): the LLM authors NO words here. Every page's text is the
-// book's OWN verbatim public-domain prose, read aloud by the voice engine.
-// Every board is FACTS — the position + moves are chess.js-validated, and
-// where the original book printed a drawn diagram we render a LIVE, playable
-// board in its place. Nothing on this surface is invented.
+// book's OWN public-domain prose, reproduced faithfully (OCR de-garbled to the
+// printed text, never paraphrased), and read aloud by the voice engine. Every
+// board is FACTS — the position + moves are chess.js-validated, and where the
+// original printed a drawn diagram we render a LIVE, playable board in its
+// place. Nothing on this surface is invented.
 //
-// A book "comes to life" when we have BOTH its public-domain TEXT and the
-// digitized positions for its diagrams. Books we have on the shelf but whose
-// clean public-domain text / positions aren't ingested yet are listed with
-// `comingToLife: true` (honest: on the shelf, not yet alive).
+// GOING TO MARKET — CITATIONS (David 2026-06-12): every book carries a full
+// `citation` (edition, translator, publisher, year, public-domain basis, and
+// the digitization source). We use ONLY editions that are public domain in the
+// United States. Note the My System trap: the modern "21st Century Edition"
+// (algebraic, 1991) is COPYRIGHTED and must never be used; we use the 1930
+// Harcourt Brace edition (Philip Hereford's English version), public domain in
+// the US since 1 Jan 2026.
+
+export interface BookCitation {
+  /** Publisher, place, year of the edition we reproduce. */
+  readonly edition: string;
+  /** Translator / "English version by", when applicable. */
+  readonly translator?: string;
+  /** Plain-language public-domain basis statement. */
+  readonly publicDomain: string;
+  /** Where the digitized text/scan comes from. */
+  readonly sourceLabel: string;
+  readonly sourceUrl: string;
+}
 
 export interface LivingBoard {
-  /** chess.js-validated starting position (read off the book's diagram). */
+  /** chess.js-validated starting position (the book's diagram). */
   readonly fen: string;
   /** The book's line from that position, SAN, validated move-for-move. */
   readonly moves: ReadonlyArray<string>;
@@ -36,8 +52,7 @@ export interface LibraryBook {
   readonly id: string;
   readonly bookTitle: string;
   readonly author: string;
-  /** Project Gutenberg id when the public-domain text lives there. */
-  readonly gutenbergId?: number;
+  readonly citation: BookCitation;
   /** The book's own catalogue subtitle / one-line factual descriptor. */
   readonly shelfNote: string;
   /** True = on the shelf, not yet brought to life (text/positions pending). */
@@ -45,17 +60,17 @@ export interface LibraryBook {
   readonly pages: ReadonlyArray<LibraryPage>;
 }
 
-// ── Capablanca, Chess Fundamentals — the first fully-alive book ──────────────
-// Public-domain text from Project Gutenberg 33870. The three combinations of
-// "Some Winning Positions in the Middle-game" (Examples 11–13); Example 13's
-// drawn diagram (Fig13) becomes a live board. FEN + line chess.js-validated to
-// mate (see middlegameBookLessons.test.ts).
-
+// ── Capablanca, Chess Fundamentals (1921, public domain) ─────────────────────
 const CAPABLANCA_CHESS_FUNDAMENTALS: LibraryBook = {
   id: 'capablanca-chess-fundamentals',
   bookTitle: 'Chess Fundamentals',
   author: 'José Raúl Capablanca',
-  gutenbergId: 33870,
+  citation: {
+    edition: 'Harcourt, Brace and Company, New York, 1921',
+    publicDomain: 'Published 1921. In the public domain in the United States.',
+    sourceLabel: 'Project Gutenberg (ebook #33870)',
+    sourceUrl: 'https://www.gutenberg.org/ebooks/33870',
+  },
   shelfNote: 'The 1921 classic — first principles of endings, middlegame and openings.',
   pages: [
     {
@@ -107,23 +122,70 @@ const CAPABLANCA_CHESS_FUNDAMENTALS: LibraryBook = {
   ],
 };
 
-// ── The rest of the shelf ────────────────────────────────────────────────────
-// On the shelf; brought to life as their text + positions are digitized.
+// ── Nimzowitsch, My System (1930 Hereford edition, public domain) ────────────
+// Text reproduced from the public-domain Harcourt Brace 1930 edition (Internet
+// Archive). The pawn-chain Nimzowitsch defines is the French Advance; the live
+// board is that chain and Black's strike at its base — chess.js-validated.
+const NIMZOWITSCH_MY_SYSTEM: LibraryBook = {
+  id: 'nimzowitsch-my-system',
+  bookTitle: 'My System',
+  author: 'Aron Nimzowitsch',
+  citation: {
+    edition: 'Harcourt, Brace and Company, New York, 1930',
+    translator: 'Philip Hereford',
+    publicDomain: 'Published 1930. In the public domain in the United States (since 1 January 2026).',
+    sourceLabel: 'Internet Archive',
+    sourceUrl: 'https://archive.org/details/mysystemchesstre0000aron',
+  },
+  shelfNote: 'The middlegame bible — the pawn chain, the outpost, prophylaxis.',
+  pages: [
+    {
+      id: 'ms-chain-def',
+      heading: 'Chapter XI — The Pawn-Chain · §1. The base of the chain',
+      text:
+        'After 1. P-K4, P-K3; 2. P-Q4, P-Q4; 3. P-K5, a Black and White ' +
+        'pawn-chain has been formed. The Pawns at Q4, K5, and at K3, Q4 are the ' +
+        'several links in the chain. The Pawn at Q4 is to be regarded as the base ' +
+        'or foot of the White chain, while the Pawn at K3 plays a like rôle in ' +
+        'Black’s. Accordingly we call the bottommost link of the chain, on which ' +
+        'all the other links depend, the base.',
+      board: {
+        // After 1.e4 e6 2.d4 d5 3.e5 — the chain e5–d4 (base d4) vs e6–d5.
+        fen: 'rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3',
+        moves: ['c5', 'c3', 'Nc6', 'Nf3', 'Qb6', 'Be2', 'cxd4', 'cxd4'],
+        orientation: 'white',
+        caption: 'The chain is set — Black strikes the base (d4)',
+      },
+    },
+    {
+      id: 'ms-chain-attack-base',
+      heading: '§2. The attack against the base',
+      text:
+        'To recapitulate: P-K5, that is to say the formation of a pawn-chain, ' +
+        'always creates two theatres of war, of which the enemy wing, cramped by ' +
+        'the advance, forms one, and the base of the enemy pawn-chain the other. ' +
+        'And further, P-K5 is inspired by the desire to attack.\n\nThe attack on ' +
+        'Black’s PQ4 which was present before the advance of our KP has been ' +
+        'transferred to Black’s PK3, which has been reduced to immobility by our ' +
+        'PK5, so as to be exposed to a flank attack by P-KB4-B5.',
+    },
+  ],
+};
+
+// ── The rest of the shelf — coming to life as text + positions are digitized ─
 const SHELF: ReadonlyArray<LibraryBook> = [
   {
     id: 'edward-lasker-chess-strategy',
     bookTitle: 'Chess Strategy',
     author: 'Edward Lasker',
-    gutenbergId: 5614,
+    citation: {
+      edition: 'E. P. Dutton and Company, New York, 1915',
+      translator: 'J. du Mont (English edition)',
+      publicDomain: 'Published 1915. In the public domain.',
+      sourceLabel: 'Project Gutenberg (ebook #5614)',
+      sourceUrl: 'https://www.gutenberg.org/ebooks/5614',
+    },
     shelfNote: 'The middlegame and positional play — weak squares, the chain, the file.',
-    comingToLife: true,
-    pages: [],
-  },
-  {
-    id: 'nimzowitsch-my-system',
-    bookTitle: 'My System',
-    author: 'Aron Nimzowitsch',
-    shelfNote: 'The middlegame bible — the pawn chain, the outpost, prophylaxis. (1929 text pending.)',
     comingToLife: true,
     pages: [],
   },
@@ -131,7 +193,12 @@ const SHELF: ReadonlyArray<LibraryBook> = [
     id: 'edward-lasker-chess-and-checkers',
     bookTitle: 'Chess and Checkers',
     author: 'Edward Lasker',
-    gutenbergId: 4913,
+    citation: {
+      edition: 'E. P. Dutton and Company, New York, 1918',
+      publicDomain: 'Published 1918. In the public domain.',
+      sourceLabel: 'Project Gutenberg (ebook #4913)',
+      sourceUrl: 'https://www.gutenberg.org/ebooks/4913',
+    },
     shelfNote: 'The way to mastership — how the pieces cooperate.',
     comingToLife: true,
     pages: [],
@@ -140,6 +207,7 @@ const SHELF: ReadonlyArray<LibraryBook> = [
 
 export const COACHES_LIBRARY: ReadonlyArray<LibraryBook> = [
   CAPABLANCA_CHESS_FUNDAMENTALS,
+  NIMZOWITSCH_MY_SYSTEM,
   ...SHELF,
 ];
 

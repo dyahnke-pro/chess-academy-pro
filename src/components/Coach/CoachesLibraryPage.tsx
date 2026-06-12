@@ -197,21 +197,20 @@ function LibraryBookReader({ book, onBack }: { book: LibraryBook; onBack: () => 
           {/* Where the book drew a diagram, the live board. */}
           {current?.board && <LivingBoardView board={current.board} />}
 
-          <footer className="text-xs text-theme-text-muted/60 mt-2 italic">
-            Drawn from {book.author}, {book.bookTitle}
-            {book.gutenbergId ? (
-              <>
-                {' '}
-                <a
-                  href={`https://www.gutenberg.org/ebooks/${book.gutenbergId}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-amber-400/70 hover:text-amber-300 underline not-italic"
-                >
-                  (Project Gutenberg)
-                </a>
-              </>
-            ) : null}
+          {/* Full citation — public-domain provenance (market-ready). */}
+          <footer className="text-[11px] text-theme-text-muted/70 mt-3 pt-2 border-t border-theme-border/50 leading-snug not-italic">
+            <span className="italic">{book.bookTitle}</span> by {book.author}.
+            {book.citation.translator ? ` English version by ${book.citation.translator}.` : ''}{' '}
+            {book.citation.edition}.{' '}
+            <span className="text-theme-text-muted/60">{book.citation.publicDomain}</span>{' '}
+            <a
+              href={book.citation.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-amber-400/80 hover:text-amber-300 underline"
+            >
+              Source: {book.citation.sourceLabel}
+            </a>
           </footer>
         </div>
 
@@ -298,8 +297,11 @@ export function CoachesLibraryPage(): JSX.Element {
               <div className="font-bold text-sm leading-tight">{book.bookTitle}</div>
               <div className="text-[11px] text-theme-text-muted">{book.author}</div>
               <div className="text-[11px] text-theme-text-muted/70 leading-snug">{book.shelfNote}</div>
+              <span className="mt-auto text-[9px] font-semibold uppercase tracking-wide text-emerald-400/50">
+                Public domain
+              </span>
               {!alive && (
-                <span className="mt-auto text-[10px] font-semibold uppercase tracking-wide text-amber-300/60">
+                <span className="text-[10px] font-semibold uppercase tracking-wide text-amber-300/60">
                   Coming to life
                 </span>
               )}
