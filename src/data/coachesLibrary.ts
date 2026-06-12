@@ -16,6 +16,7 @@
 // the US since 1 Jan 2026.
 
 import { PHILOSOPHY_OF_A_GENERAL } from './academy/philosophyOfAGeneral';
+import mySystemData from './library/my-system.json';
 
 export interface BookCitation {
   /** Publisher, place, year of the edition we reproduce (or "our work"). */
@@ -134,53 +135,34 @@ const CAPABLANCA_CHESS_FUNDAMENTALS: LibraryBook = {
 };
 
 // ── Nimzowitsch, My System (1930 Hereford edition, public domain) ────────────
-// Text reproduced from the public-domain Harcourt Brace 1930 edition (Internet
-// Archive). The pawn-chain Nimzowitsch defines is the French Advance; the live
-// board is that chain and Black's strike at its base — chess.js-validated.
-const NIMZOWITSCH_MY_SYSTEM: LibraryBook = {
-  id: 'nimzowitsch-my-system',
-  bookTitle: 'My System',
-  author: 'Aron Nimzowitsch',
-  citation: {
-    edition: 'Harcourt, Brace and Company, New York, 1930',
-    translator: 'Philip Hereford',
-    rights: 'Published 1930. In the public domain in the United States (since 1 January 2026).',
-    sourceLabel: 'Internet Archive',
-    sourceUrl: 'https://archive.org/details/mysystemchesstre0000aron',
+// The ENTIRE book, ingested from the public-domain Harcourt Brace 1930 edition
+// (Internet Archive) by scripts/build-library-mysystem.mjs → my-system.json:
+// every chapter, paginated by section, read aloud. The dense move-analysis OCR
+// is filtered out of the spoken prose (it belongs on the boards). Validated
+// live boards are merged onto their diagram pages by a text marker.
+const MY_SYSTEM_BOARDS: ReadonlyArray<{ match: string; board: LivingBoard }> = [
+  {
+    match: 'Black and White pawn-chain has been formed',
+    board: {
+      // After 1.e4 e6 2.d4 d5 3.e5 — the chain e5–d4 (base d4) vs e6–d5.
+      fen: 'rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3',
+      moves: ['c5', 'c3', 'Nc6', 'Nf3', 'Qb6', 'Be2', 'cxd4', 'cxd4'],
+      orientation: 'white',
+      caption: 'The chain is set — Black strikes the base (d4)',
+    },
   },
+];
+
+const NIMZOWITSCH_MY_SYSTEM: LibraryBook = {
+  id: mySystemData.id,
+  bookTitle: mySystemData.bookTitle,
+  author: mySystemData.author,
+  citation: mySystemData.citation as BookCitation,
   shelfNote: 'The middlegame bible — the pawn chain, the outpost, prophylaxis.',
-  pages: [
-    {
-      id: 'ms-chain-def',
-      heading: 'Chapter XI — The Pawn-Chain · §1. The base of the chain',
-      text:
-        'After 1. P-K4, P-K3; 2. P-Q4, P-Q4; 3. P-K5, a Black and White ' +
-        'pawn-chain has been formed. The Pawns at Q4, K5, and at K3, Q4 are the ' +
-        'several links in the chain. The Pawn at Q4 is to be regarded as the base ' +
-        'or foot of the White chain, while the Pawn at K3 plays a like rôle in ' +
-        'Black’s. Accordingly we call the bottommost link of the chain, on which ' +
-        'all the other links depend, the base.',
-      board: {
-        // After 1.e4 e6 2.d4 d5 3.e5 — the chain e5–d4 (base d4) vs e6–d5.
-        fen: 'rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3',
-        moves: ['c5', 'c3', 'Nc6', 'Nf3', 'Qb6', 'Be2', 'cxd4', 'cxd4'],
-        orientation: 'white',
-        caption: 'The chain is set — Black strikes the base (d4)',
-      },
-    },
-    {
-      id: 'ms-chain-attack-base',
-      heading: '§2. The attack against the base',
-      text:
-        'To recapitulate: P-K5, that is to say the formation of a pawn-chain, ' +
-        'always creates two theatres of war, of which the enemy wing, cramped by ' +
-        'the advance, forms one, and the base of the enemy pawn-chain the other. ' +
-        'And further, P-K5 is inspired by the desire to attack.\n\nThe attack on ' +
-        'Black’s PQ4 which was present before the advance of our KP has been ' +
-        'transferred to Black’s PK3, which has been reduced to immobility by our ' +
-        'PK5, so as to be exposed to a flank attack by P-KB4-B5.',
-    },
-  ],
+  pages: (mySystemData.pages as LibraryPage[]).map((pg) => {
+    const hit = MY_SYSTEM_BOARDS.find((b) => pg.text.includes(b.match));
+    return hit ? { ...pg, board: hit.board } : pg;
+  }),
 };
 
 // ── The rest of the shelf — coming to life as text + positions are digitized ─
