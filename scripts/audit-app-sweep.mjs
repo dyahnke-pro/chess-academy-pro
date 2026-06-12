@@ -58,30 +58,36 @@ const GRID = [];
 
 async function main() {
   console.log(`[sweep] ${BASE}  ${ROUTES.length} routes\n`);
+  // One-time seed warmup: the openings/coach/tactics pages render real content
+  // only after the deferred Dexie seed (~30-60s). Trigger it once + wait so the
+  // sweep measures real content, not a spinner.
+  curRoute = '__warmup__';
+  await page.goto(`${BASE}/openings`, { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => undefined);
+  await page.waitForFunction(() => (document.body?.innerText?.trim().length ?? 0) > 120, { timeout: 60000 }).catch(() => undefined);
+  await page.waitForTimeout(2000);
   for (const route of ROUTES) {
     curRoute = route;
     let mounted = false, errorBoundary = false, note = '';
     try {
-      const resp = await page.goto(`${BASE}${route}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
-      await page.waitForTimeout(2500); // settle: effects, first render, async data
-      // mounted = some app chrome is present (body has real content, not blank)
+      await page.goto(`${BASE}${route}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+      // wait for REAL content to render (not just a spinner) — up to 12s
+      await page.waitForFunction(() => (document.body?.innerText?.trim().length ?? 0) > 60, { timeout: 12000 }).catch(() => undefined);
+      await page.waitForTimeout(1200);
       const bodyLen = await page.locator('body').innerText({ timeout: 3000 }).then((t) => t.trim().length).catch(() => 0);
       mounted = bodyLen > 0;
-      // error boundary text (ErrorBoundary fallback)
       const txt = await page.locator('body').innerText({ timeout: 2000 }).catch(() => '');
       errorBoundary = /something went wrong|unexpected error|reload the (app|page)|error boundary/i.test(txt);
-      // light interaction: tap the first visible button (not destructive on a fresh nav)
+      const thin = bodyLen <= 40; // suspiciously empty after the content-wait
       const btn = page.locator('button:visible, [role="button"]:visible').first();
       if (await btn.isVisible().catch(() => false)) { await btn.click({ force: true, timeout: 2500 }).catch(() => undefined); await page.waitForTimeout(800); }
-      note = `body=${bodyLen}ch`;
+      note = `body=${bodyLen}ch${thin ? ' ⚠THIN' : ''}`;
     } catch (e) {
       note = `NAV ERROR: ${String(e?.message ?? e).slice(0, 80)}`;
     }
     const routeErrs = [...new Set(errsByRoute[curRoute] ?? [])];
-    const is404 = route === '/this-route-does-not-exist';
     const ok = mounted && !errorBoundary && routeErrs.length === 0 && !note.startsWith('NAV ERROR');
     GRID.push({ route, ok, mounted, errorBoundary, errors: routeErrs, note });
-    const flag = ok ? '✅' : (errorBoundary ? '🛑 ERROR-BOUNDARY' : routeErrs.length ? `💥 ${routeErrs.length} err` : (note.startsWith('NAV') ? '💥 NAV' : '⚠'));
+    const flag = ok ? (note.includes('THIN') ? '⚠ THIN' : '✅') : (errorBoundary ? '🛑 ERROR-BOUNDARY' : routeErrs.length ? `💥 ${routeErrs.length} err` : (note.startsWith('NAV') ? '💥 NAV' : '⚠'));
     console.log(`  ${flag.padEnd(18)} ${route.padEnd(28)} ${note}`);
     for (const e of routeErrs.slice(0, 2)) console.log(`        ⤷ ${e.slice(0, 150)}`);
   }
