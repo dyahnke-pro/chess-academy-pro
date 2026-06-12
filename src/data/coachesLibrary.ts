@@ -15,13 +15,16 @@
 // Harcourt Brace edition (Philip Hereford's English version), public domain in
 // the US since 1 Jan 2026.
 
+import { PHILOSOPHY_OF_A_GENERAL } from './academy/philosophyOfAGeneral';
+
 export interface BookCitation {
-  /** Publisher, place, year of the edition we reproduce. */
+  /** Publisher, place, year of the edition we reproduce (or "our work"). */
   readonly edition: string;
   /** Translator / "English version by", when applicable. */
   readonly translator?: string;
-  /** Plain-language public-domain basis statement. */
-  readonly publicDomain: string;
+  /** Plain-language rights basis — "In the public domain…" for the classics,
+   *  or our own copyright line for the house book. */
+  readonly rights: string;
   /** Where the digitized text/scan comes from. */
   readonly sourceLabel: string;
   readonly sourceUrl: string;
@@ -55,6 +58,8 @@ export interface LibraryBook {
   readonly citation: BookCitation;
   /** The book's own catalogue subtitle / one-line factual descriptor. */
   readonly shelfNote: string;
+  /** True = our own book (the house book), leads the shelf. */
+  readonly house?: boolean;
   /** True = on the shelf, not yet brought to life (text/positions pending). */
   readonly comingToLife?: boolean;
   readonly pages: ReadonlyArray<LibraryPage>;
@@ -67,7 +72,7 @@ const CAPABLANCA_CHESS_FUNDAMENTALS: LibraryBook = {
   author: 'José Raúl Capablanca',
   citation: {
     edition: 'Harcourt, Brace and Company, New York, 1921',
-    publicDomain: 'Published 1921. In the public domain in the United States.',
+    rights: 'Published 1921. In the public domain in the United States.',
     sourceLabel: 'Project Gutenberg (ebook #33870)',
     sourceUrl: 'https://www.gutenberg.org/ebooks/33870',
   },
@@ -139,7 +144,7 @@ const NIMZOWITSCH_MY_SYSTEM: LibraryBook = {
   citation: {
     edition: 'Harcourt, Brace and Company, New York, 1930',
     translator: 'Philip Hereford',
-    publicDomain: 'Published 1930. In the public domain in the United States (since 1 January 2026).',
+    rights: 'Published 1930. In the public domain in the United States (since 1 January 2026).',
     sourceLabel: 'Internet Archive',
     sourceUrl: 'https://archive.org/details/mysystemchesstre0000aron',
   },
@@ -187,7 +192,7 @@ const SHELF: ReadonlyArray<LibraryBook> = [
     citation: {
       edition: 'E. P. Dutton and Company, New York, 1915',
       translator: 'J. du Mont (English edition)',
-      publicDomain: 'Published 1915. In the public domain.',
+      rights: 'Published 1915. In the public domain.',
       sourceLabel: 'Project Gutenberg (ebook #5614)',
       sourceUrl: 'https://www.gutenberg.org/ebooks/5614',
     },
@@ -201,7 +206,7 @@ const SHELF: ReadonlyArray<LibraryBook> = [
     author: 'Edward Lasker',
     citation: {
       edition: 'E. P. Dutton and Company, New York, 1918',
-      publicDomain: 'Published 1918. In the public domain.',
+      rights: 'Published 1918. In the public domain.',
       sourceLabel: 'Project Gutenberg (ebook #4913)',
       sourceUrl: 'https://www.gutenberg.org/ebooks/4913',
     },
@@ -211,7 +216,32 @@ const SHELF: ReadonlyArray<LibraryBook> = [
   },
 ];
 
+// ── Our book — the house book, leading the shelf ─────────────────────────────
+// "The Philosophy of A General" is our OWN authored doctrine (not a master's
+// text), so unlike the public-domain classics we may write its words — and we
+// own them. Adapted from the Academy manuscript: each chapter is a page, read
+// the same audiobook way (board-free doctrine; live boards can be added later).
+const HOUSE_BOOK: LibraryBook = {
+  id: 'philosophy-of-a-general',
+  bookTitle: PHILOSOPHY_OF_A_GENERAL.title,
+  author: 'Chess Academy Pro',
+  citation: {
+    edition: 'Chess Academy Pro — original work',
+    rights: '© Chess Academy Pro. Our own book, written for this app.',
+    sourceLabel: 'Chess Academy Pro',
+    sourceUrl: 'https://chess-academy-pro.vercel.app',
+  },
+  shelfNote: PHILOSOPHY_OF_A_GENERAL.subtitle,
+  house: true,
+  pages: PHILOSOPHY_OF_A_GENERAL.chapters.map((ch) => ({
+    id: `pog-${ch.id}`,
+    heading: `${ch.label} · ${ch.title}`,
+    text: ch.paragraphs.join('\n\n'),
+  })),
+};
+
 export const COACHES_LIBRARY: ReadonlyArray<LibraryBook> = [
+  HOUSE_BOOK,
   CAPABLANCA_CHESS_FUNDAMENTALS,
   NIMZOWITSCH_MY_SYSTEM,
   ...SHELF,

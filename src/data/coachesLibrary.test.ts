@@ -18,7 +18,7 @@ describe('Coaches Library — integrity + citations', () => {
         expect(book.bookTitle.length).toBeGreaterThan(0);
         expect(book.author.length).toBeGreaterThan(0);
         expect(c.edition.length).toBeGreaterThan(0);
-        expect(c.publicDomain.toLowerCase()).toContain('public domain');
+        expect(c.rights.length).toBeGreaterThan(0);
         expect(c.sourceLabel.length).toBeGreaterThan(0);
         expect(c.sourceUrl).toMatch(/^https:\/\//);
       });

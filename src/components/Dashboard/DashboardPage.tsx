@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../stores/appStore';
 import { updateStreak } from '../../services/sessionGenerator';
 import { seedDatabase } from '../../services/dataLoader';
-import { BookOpen, GraduationCap, Target, AlertTriangle, Upload, ChevronRight, CheckCircle2, Swords } from 'lucide-react';
+import { BookOpen, GraduationCap, Target, AlertTriangle, Upload, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
 import { useSettings } from '../../hooks/useSettings';
@@ -212,27 +212,8 @@ export function DashboardPage(): JSX.Element {
       {/* Live loop status — today's reps, routes into the Training Plan hub */}
       <TodayStatus />
 
-      {/* The Academy — featured (the school: lessons + the listenable doctrine book) */}
-      <div className="max-w-lg mx-auto w-full">
-        <button
-          onClick={() => void navigate('/academy')}
-          className="w-full flex items-center gap-4 px-5 py-5 rounded-2xl bg-indigo-500/10 hover:opacity-80 transition-all duration-200"
-          style={{
-            borderTop: `1px solid rgba(99, 102, 241, ${Math.min(1, 0.1 * gS)})`,
-            borderRight: `1px solid rgba(99, 102, 241, ${Math.min(1, 0.1 * gS)})`,
-            borderLeft: `2px solid rgba(99, 102, 241, ${Math.min(1, 0.6 * gS)})`,
-            borderBottom: `2px solid rgba(99, 102, 241, ${Math.min(1, 0.6 * gS)})`,
-            boxShadow: scaledShadow('99, 102, 241', gB),
-          }}
-          data-testid="section-the-academy"
-        >
-          <Swords size={36} className="text-indigo-400 shrink-0" />
-          <div className="text-left min-w-0">
-            <span className="text-base font-bold block" style={{ color: 'var(--color-text)' }}>The Academy</span>
-            <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>The Philosophy of A General — listen &amp; learn</span>
-          </div>
-        </button>
-      </div>
+      {/* "The Philosophy of A General" (our book) now lives in The Coaches
+          Library (Coach › The Coaches Library), so its dashboard tile is gone. */}
 
       {/* Section grid — uniform cards, order matches sidebar */}
       <div className="grid grid-cols-2 gap-3 flex-1 content-center max-w-lg mx-auto w-full">

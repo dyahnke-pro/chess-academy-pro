@@ -216,7 +216,7 @@ function LibraryBookReader({ book, onBack }: { book: LibraryBook; onBack: () => 
             <span className="italic">{book.bookTitle}</span> by {book.author}.
             {book.citation.translator ? ` English version by ${book.citation.translator}.` : ''}{' '}
             {book.citation.edition}.{' '}
-            <span className="text-theme-text-muted/60">{book.citation.publicDomain}</span>{' '}
+            <span className="text-theme-text-muted/60">{book.citation.rights}</span>{' '}
             <a
               href={book.citation.sourceUrl}
               target="_blank"
@@ -311,8 +311,8 @@ export function CoachesLibraryPage(): JSX.Element {
               <div className="font-bold text-sm leading-tight">{book.bookTitle}</div>
               <div className="text-[11px] text-theme-text-muted">{book.author}</div>
               <div className="text-[11px] text-theme-text-muted/70 leading-snug">{book.shelfNote}</div>
-              <span className="mt-auto text-[9px] font-semibold uppercase tracking-wide text-emerald-400/50">
-                Public domain
+              <span className={`mt-auto text-[9px] font-semibold uppercase tracking-wide ${book.house ? 'text-amber-300/70' : 'text-emerald-400/50'}`}>
+                {book.house ? 'Our book' : 'Public domain'}
               </span>
               {!alive && (
                 <span className="text-[10px] font-semibold uppercase tracking-wide text-amber-300/60">
