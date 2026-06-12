@@ -18,6 +18,7 @@
 import { PHILOSOPHY_OF_A_GENERAL } from './academy/philosophyOfAGeneral';
 import mySystemData from './library/my-system.json';
 import chessAndCheckersData from './library/chess-and-checkers.json';
+import chessFundamentalsData from './library/chess-fundamentals.json';
 
 export interface BookCitation {
   /** Publisher, place, year of the edition we reproduce (or "our work"). */
@@ -68,72 +69,60 @@ export interface LibraryBook {
 }
 
 // ── Capablanca, Chess Fundamentals (1921, public domain) ─────────────────────
-const CAPABLANCA_CHESS_FUNDAMENTALS: LibraryBook = {
-  id: 'capablanca-chess-fundamentals',
-  bookTitle: 'Chess Fundamentals',
-  author: 'José Raúl Capablanca',
-  citation: {
-    edition: 'Harcourt, Brace and Company, New York, 1921',
-    rights: 'Published 1921. In the public domain in the United States.',
-    sourceLabel: 'Project Gutenberg (ebook #33870)',
-    sourceUrl: 'https://www.gutenberg.org/ebooks/33870',
+// The ENTIRE book ingested by scripts/build-library-capablanca.mjs (full clean
+// Gutenberg prose; dense move-analysis filtered out of the audio). Capablanca's
+// diagrams are IMAGES, so they can't be auto-extracted; the hand-validated
+// combination boards (Examples 11 & 13) are spliced into the middle-game spot.
+const CF_COMBINATION_PAGES: ReadonlyArray<LibraryPage> = [
+  {
+    id: 'cf-mg-ex11',
+    heading: 'Some Winning Positions in the Middle-game — Example 11',
+    text:
+      'It is Black’s move, and thinking that White merely threatens to play ' +
+      'Q-R6 and to mate at KKt7, Black plays 1...R-K1, threatening mate by way ' +
+      'of R-K8. White now uncovers his real and most effective threat, viz.: ' +
+      '1...R-K1; 2 QxP ch, KxQ; 3 R-R3 ch, K-Kt1; 4 R-R8 mate.',
+    board: {
+      fen: '5rk1/1b3p1p/ppq3p1/3p4/8/1P1P1R1Q/PBP3PP/6K1 b - - 0 1',
+      moves: ['Re8', 'Qxh7+', 'Kxh7', 'Rh3+', 'Kg8', 'Rh8#'],
+      orientation: 'white',
+      caption: 'Black to move — White’s hidden mate',
+    },
   },
-  shelfNote: 'The 1921 classic — first principles of endings, middlegame and openings.',
-  pages: [
-    {
-      id: 'cf-mg-ex11',
-      heading: 'Some Winning Positions in the Middle-game — Example 11',
-      text:
-        'It is Black’s move, and thinking that White merely threatens to play ' +
-        'Q-R6 and to mate at KKt7, Black plays 1...R-K1, threatening mate by way ' +
-        'of R-K8. White now uncovers his real and most effective threat, viz.: ' +
-        '1...R-K1; 2 QxP ch, KxQ; 3 R-R3 ch, K-Kt1; 4 R-R8 mate.',
-      board: {
-        fen: '5rk1/1b3p1p/ppq3p1/3p4/8/1P1P1R1Q/PBP3PP/6K1 b - - 0 1',
-        moves: ['Re8', 'Qxh7+', 'Kxh7', 'Rh3+', 'Kg8', 'Rh8#'],
-        orientation: 'white',
-        caption: 'Black to move — White’s hidden mate',
-      },
+  {
+    id: 'cf-mg-ex13',
+    heading: 'Example 13',
+    text:
+      'This is another very interesting type of combination. Black has a Rook ' +
+      'for a Knight and should therefore win, unless White is able to obtain ' +
+      'some compensation immediately. White, in fact, mates in a few moves ' +
+      'thus: 1 Kt-B6 ch, PxKt (forced, otherwise QxP mates); 2 Q-Kt3 ch, K-R1; ' +
+      '3 BxP mate.',
+    board: {
+      fen: '2q2rk1/1b3ppp/pp6/2p5/2P1N3/PP1Q4/1B3PPP/6K1 w - - 0 1',
+      moves: ['Nf6+', 'gxf6', 'Qg3+', 'Kh8', 'Bxf6#'],
+      orientation: 'white',
+      caption: 'White to play and mate',
     },
-    {
-      id: 'cf-mg-ex12',
-      heading: 'Example 12',
-      text:
-        'This same type of combination may come as the result of a somewhat more ' +
-        'complicated position. White is a piece behind, and unless he can win it ' +
-        'back quickly he will lose; he therefore plays: 1 KtxKt, B-Kt4. He cannot ' +
-        'take the Kt because White threatens mate by QxP ch followed by R-R3 ch. ' +
-        '2 Kt-K7 ch, QxKt; 3 RxQ, BxR; 4 Q-Q7 and White wins one of the two ' +
-        'Bishops, remains with a Queen and a Bishop against a Rook and Bishop, and ' +
-        'should therefore win easily.\n\nThese two examples show the danger of ' +
-        'advancing the KKtP one square, after having Castled on that side.',
-    },
-    {
-      id: 'cf-mg-ex13',
-      heading: 'Example 13',
-      text:
-        'This is another very interesting type of combination. Black has a Rook ' +
-        'for a Knight and should therefore win, unless White is able to obtain ' +
-        'some compensation immediately. White, in fact, mates in a few moves ' +
-        'thus: 1 Kt-B6 ch, PxKt (forced, otherwise QxP mates); 2 Q-Kt3 ch, K-R1; ' +
-        '3 BxP mate.',
-      board: {
-        fen: '2q2rk1/1b3ppp/pp6/2p5/2P1N3/PP1Q4/1B3PPP/6K1 w - - 0 1',
-        moves: ['Nf6+', 'gxf6', 'Qg3+', 'Kh8', 'Bxf6#'],
-        orientation: 'white',
-        caption: 'White to play and mate',
-      },
-    },
-    {
-      id: 'cf-mg-coordination',
-      heading: 'The Principle Behind Them',
-      text:
-        'It will be seen that all the combinations shown have for a foundation ' +
-        'the proper co-ordination of the pieces, which have all been brought to ' +
-        'bear against a weak point.',
-    },
-  ],
-};
+  },
+];
+
+const CAPABLANCA_CHESS_FUNDAMENTALS: LibraryBook = (() => {
+  const ingested = chessFundamentalsData.pages as LibraryPage[];
+  const at = Math.max(0, ingested.findIndex((p) => /RELATIVE VALUE/i.test(p.heading)));
+  const pages =
+    at > 0
+      ? [...ingested.slice(0, at), ...CF_COMBINATION_PAGES, ...ingested.slice(at)]
+      : [...ingested, ...CF_COMBINATION_PAGES];
+  return {
+    id: chessFundamentalsData.id,
+    bookTitle: chessFundamentalsData.bookTitle,
+    author: chessFundamentalsData.author,
+    citation: chessFundamentalsData.citation as BookCitation,
+    shelfNote: 'The 1921 classic — first principles of endings, middlegame and openings.',
+    pages,
+  };
+})();
 
 // ── Nimzowitsch, My System (1930 Hereford edition, public domain) ────────────
 // The ENTIRE book, ingested from the public-domain Harcourt Brace 1930 edition
