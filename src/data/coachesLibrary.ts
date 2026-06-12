@@ -19,6 +19,7 @@ import { PHILOSOPHY_OF_A_GENERAL } from './academy/philosophyOfAGeneral';
 import mySystemData from './library/my-system.json';
 import chessAndCheckersData from './library/chess-and-checkers.json';
 import chessFundamentalsData from './library/chess-fundamentals.json';
+import chessStrategyData from './library/chess-strategy.json';
 
 export interface BookCitation {
   /** Publisher, place, year of the edition we reproduce (or "our work"). */
@@ -155,56 +156,54 @@ const NIMZOWITSCH_MY_SYSTEM: LibraryBook = {
   }),
 };
 
-// ── The rest of the shelf — coming to life as text + positions are digitized ─
-const SHELF: ReadonlyArray<LibraryBook> = [
+// ── Edward Lasker, Chess Strategy — the ENTIRE book ingested ─────────────────
+// Full Gutenberg prose (scripts/build-library-chessstrategy.mjs). Heavily
+// game-based, so the read-aloud is the conceptual chapter prose (the game
+// analysis is filtered out — it belongs on boards, not yet extracted from its
+// image diagrams). Three hand-polished highlight pages lead the book.
+const CS_CURATED: ReadonlyArray<LibraryPage> = [
   {
-    id: 'edward-lasker-chess-strategy',
-    bookTitle: 'Chess Strategy',
-    author: 'Edward Lasker',
-    citation: {
-      edition: 'E. P. Dutton and Company, New York, 1915',
-      translator: 'J. du Mont (English edition)',
-      rights: 'Published 1915. In the public domain.',
-      sourceLabel: 'Project Gutenberg (ebook #5614)',
-      sourceUrl: 'https://www.gutenberg.org/ebooks/5614',
-    },
-    shelfNote: 'The middlegame and positional play — weak squares, the chain, the file.',
-    pages: [
-      {
-        id: 'cs-mobility',
-        heading: 'Chapter III — General Principles of Chess Strategy · Mobility',
-        text:
-          'For quick development is of the utmost importance, and he who succeeds ' +
-          'first in placing all his pieces, from their initial awkward positions, ' +
-          'to such places as give them command of the greatest possible number of ' +
-          'squares, has the better chance of concentrating a superior force on some ' +
-          'important point. It follows that White, having the first move, is, so to ' +
-          'speak, always morally justified in attacking, whilst Black should assume ' +
-          'the defensive.',
-      },
-      {
-        id: 'cs-pawn-permanence',
-        heading: 'Mobility — the pawns',
-        text:
-          'Pawn formation is of a more permanent character than that of the pieces, ' +
-          'in consequence of the latter’s greater mobility. When we have made a rash ' +
-          'move with a piece, to which our attacking disposition may have tempted ' +
-          'us, we may still have a chance of retrieving the position by timely ' +
-          'retreat. Once a pawn has moved it cannot turn back.',
-      },
-      {
-        id: 'cs-pawn-skeleton',
-        heading: 'The Pawn Skeleton',
-        text:
-          'As a consequence of the pawns having so little mobility, this “pawn ' +
-          'skeleton” often preserves its shape right into the end-game. Applying ' +
-          'the general strategical principles to the formation of the pawn skeleton, ' +
-          'the learner acquires the understanding of the leading idea underlying ' +
-          'each opening without having to burden his memory.',
-      },
-    ],
+    id: 'cs-mobility',
+    heading: 'Chapter III — General Principles of Chess Strategy · Mobility',
+    text:
+      'For quick development is of the utmost importance, and he who succeeds ' +
+      'first in placing all his pieces, from their initial awkward positions, ' +
+      'to such places as give them command of the greatest possible number of ' +
+      'squares, has the better chance of concentrating a superior force on some ' +
+      'important point. It follows that White, having the first move, is, so to ' +
+      'speak, always morally justified in attacking, whilst Black should assume ' +
+      'the defensive.',
+  },
+  {
+    id: 'cs-pawn-permanence',
+    heading: 'Mobility — the pawns',
+    text:
+      'Pawn formation is of a more permanent character than that of the pieces, ' +
+      'in consequence of the latter’s greater mobility. When we have made a rash ' +
+      'move with a piece, to which our attacking disposition may have tempted ' +
+      'us, we may still have a chance of retrieving the position by timely ' +
+      'retreat. Once a pawn has moved it cannot turn back.',
+  },
+  {
+    id: 'cs-pawn-skeleton',
+    heading: 'The Pawn Skeleton',
+    text:
+      'As a consequence of the pawns having so little mobility, this “pawn ' +
+      'skeleton” often preserves its shape right into the end-game. Applying ' +
+      'the general strategical principles to the formation of the pawn skeleton, ' +
+      'the learner acquires the understanding of the leading idea underlying ' +
+      'each opening without having to burden his memory.',
   },
 ];
+
+const EDWARD_LASKER_CHESS_STRATEGY: LibraryBook = {
+  id: chessStrategyData.id,
+  bookTitle: chessStrategyData.bookTitle,
+  author: chessStrategyData.author,
+  citation: chessStrategyData.citation as BookCitation,
+  shelfNote: 'The middlegame and positional play — weak squares, the chain, the file.',
+  pages: [...CS_CURATED, ...(chessStrategyData.pages as LibraryPage[])],
+};
 
 // ── Edward Lasker, Chess and Checkers — the ENTIRE book, auto-animated ────────
 // Ingested by scripts/build-library-chessandcheckers.mjs: every chapter read
@@ -250,7 +249,7 @@ export const COACHES_LIBRARY: ReadonlyArray<LibraryBook> = [
   CAPABLANCA_CHESS_FUNDAMENTALS,
   NIMZOWITSCH_MY_SYSTEM,
   EDWARD_LASKER_CHESS_AND_CHECKERS,
-  ...SHELF,
+  EDWARD_LASKER_CHESS_STRATEGY,
 ];
 
 export function getLibraryBook(id: string): LibraryBook | undefined {
