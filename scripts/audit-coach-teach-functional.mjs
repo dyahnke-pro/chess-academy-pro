@@ -200,7 +200,8 @@ async function main() {
     const p = await phase();
     if (p === 'walkthrough-fork-panel') { gotFork = true; break; }
     if (p === 'walkthrough-leaf-panel') break;
-    if (p === 'walkthrough-narrating-panel') await clickReq('[data-testid="walkthrough-skip"]');
+    if (p === 'walkthrough-choose-mode') await clickReq('[data-testid="walkthrough-choose-walkthrough"]');
+    else if (p === 'walkthrough-narrating-panel') await clickReq('[data-testid="walkthrough-skip"]');
     await page.waitForTimeout(500);
   }
   let autoAdvanced = false;

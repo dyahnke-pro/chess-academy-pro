@@ -1255,7 +1255,15 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     } else if (node.children.length === 1) {
       narrateAndAdvance([...pathNodes, node.children[0].node]);
     } else {
+      // Skipping ONTO a fork: same as the passive-narration case — show the
+      // picker but keep flowing down the main line so the lesson doesn't stall
+      // (pages advance automatically). pickFork / pause / another skip clears
+      // this timer.
       setPhase('fork');
+      advanceTimerRef.current = setTimeout(() => {
+        advanceTimerRef.current = null;
+        narrateAndAdvance([...pathNodes, node.children[0].node]);
+      }, FORK_AUTO_ADVANCE_MS);
     }
   }, [phase, pathNodes, narrateAndAdvance]);
 
