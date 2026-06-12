@@ -47,6 +47,10 @@ import { tryCaptureOpeningIntent, tryCaptureForgetIntent } from '../../services/
 import { findPlansForOpening, sessionFromPlan } from '../../services/middlegamePlanner';
 import { MiddlegamePlanInline } from './MiddlegamePlanInline';
 import { parsePlayerGameRequest } from '../../services/playerGameRequest';
+import {
+  classifyWalkthroughControl,
+  isWalkthroughControlPhrase,
+} from '../../services/walkthroughControlIntent';
 import { lookupPlayerGamesTool } from '../../coach/tools/cerebellum/lookupPlayerGames';
 import { buildSession } from '../../services/walkthroughAdapter';
 import { fetchChesscomPlayerGames } from '../../services/chesscomGamesService';
@@ -1141,6 +1145,100 @@ export function CoachTeachPage(): JSX.Element {
     // streams. tryExtractChoicesMarker re-sets them if the new
     // response is itself another disambiguation.
     setCoachChoices(null);
+
+    // ─── Walkthrough control intent (deterministic — BYPASS the brain) ───
+    // A walkthrough on the board (paused OR mid-narration) turns control
+    // phrases into COMMANDS, not opening searches. Before this, typing a
+    // control word like "start" / "go" / "new lesson" on a PAUSED
+    // walkthrough fell into the bare-name fuzzy router: it fuzzy-matched
+    // "start" as an opening NAME and surfaced a nonsense "I don't have an
+    // exact match for 'start'. Did you mean one of these?" picker with
+    // random openings, while the paused walkthrough just sat there — the
+    // coach never stopped what it was doing, never started a new lesson,
+    // never resumed (David 2026-06-12, screenshot). Pure regex over the
+    // student's text; the LLM is never in this loop (G0). Runs BEFORE the
+    // auto-pause below so walkthrough.phase still reflects reality.
+    if (
+      !opts?.kickoff &&
+      opts?.coachReplyPlayed === undefined &&
+      walkthrough.isActive
+    ) {
+      const control = classifyWalkthroughControl(trimmedText);
+      if (control === 'new' || control === 'stop') {
+        const priorOpening = walkthrough.tree?.openingName ?? null;
+        const ctlTurnId = `t-${Date.now()}-walkthrough-control`;
+        setMessages((prev) => [...prev, {
+          id: `${ctlTurnId}-u`,
+          role: 'user',
+          content: text,
+          timestamp: Date.now(),
+        }]);
+        useCoachMemoryStore.getState().appendConversationMessage({
+          surface: 'chat-teach',
+          role: 'user',
+          text,
+          fen: opts?.fenOverride ?? gameRef.current.fen,
+          trigger: null,
+        });
+        // Tear the walkthrough down and clear the board / overlays so the
+        // next ask starts from a clean slate.
+        voiceService.stop();
+        walkthrough.stop();
+        handleResetBoard();
+        setArrows([]);
+        setLinePicker(null);
+        setCoachChoices(null);
+        const ack = control === 'new'
+          ? `Done with ${priorOpening ?? 'that line'}. What would you like to learn next? Name an opening and we'll dive in.`
+          : `Ended the ${priorOpening ?? 'walkthrough'}. Ask me anything, or name an opening to start a new lesson.`;
+        setMessages((prev) => [...prev, {
+          id: `${ctlTurnId}-c`,
+          role: 'assistant',
+          content: ack,
+          timestamp: Date.now(),
+        }]);
+        useCoachMemoryStore.getState().appendConversationMessage({
+          surface: 'chat-teach',
+          role: 'coach',
+          text: ack,
+          fen: gameRef.current.fen,
+          trigger: null,
+        });
+        void voiceService.speakForced(ack).catch(() => undefined);
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'CoachTeachPage.handleSubmit.walkthroughControl',
+          summary: `walkthrough control "${control}" — tore down ${priorOpening ?? '(none)'} via "${trimmedText.slice(0, 40)}"`,
+        });
+        return;
+      }
+      if (control === 'resume' && walkthrough.phase === 'paused') {
+        const ctlTurnId = `t-${Date.now()}-walkthrough-control`;
+        setMessages((prev) => [...prev, {
+          id: `${ctlTurnId}-u`,
+          role: 'user',
+          content: text,
+          timestamp: Date.now(),
+        }]);
+        useCoachMemoryStore.getState().appendConversationMessage({
+          surface: 'chat-teach',
+          role: 'user',
+          text,
+          fen: opts?.fenOverride ?? gameRef.current.fen,
+          trigger: null,
+        });
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'CoachTeachPage.handleSubmit.walkthroughControl',
+          summary: `walkthrough control "resume" — continued ${walkthrough.tree?.openingName ?? '(none)'}`,
+        });
+        walkthrough.resume();
+        return;
+      }
+    }
+
     // If a walkthrough is mid-narration when the student types a
     // question, pause it so voice doesn't talk over the coach's
     // reply. The student can hit Resume on the walkthrough panel
@@ -1625,7 +1723,17 @@ export function CoachTeachPage(): JSX.Element {
       } else if (stageHint && stageStrippedInput.length > 0 && stageStrippedInput.length <= 60) {
         // Stage keyword stripped → remaining text is the opening name.
         requestedName = stageStrippedInput;
-      } else if (workingInput.length <= 60 && !workingInput.includes('?')) {
+      } else if (
+        workingInput.length <= 60 &&
+        !workingInput.includes('?') &&
+        // A walkthrough control word ("start", "go", "stop", "new
+        // lesson", …) is NEVER an opening name — keep it out of the
+        // fuzzy matcher so it can't surface a bogus "did you mean
+        // <opening>?" picker. With an active walkthrough these are
+        // already handled by the control-intent block up top; this
+        // guard covers the idle case (David 2026-06-12).
+        !isWalkthroughControlPhrase(workingInput)
+      ) {
         // Bare-name routing: "The Vienna", "Pirc defense", "Italian".
         // Production audit (build 7e4f52b) caught "Pirc defense"
         // falling through to the brain instead of the LLM generator
