@@ -81,6 +81,12 @@ const CAPABLANCA_CHESS_FUNDAMENTALS: LibraryBook = {
         'Q-R6 and to mate at KKt7, Black plays 1...R-K1, threatening mate by way ' +
         'of R-K8. White now uncovers his real and most effective threat, viz.: ' +
         '1...R-K1; 2 QxP ch, KxQ; 3 R-R3 ch, K-Kt1; 4 R-R8 mate.',
+      board: {
+        fen: '5rk1/1b3p1p/ppq3p1/3p4/8/1P1P1R1Q/PBP3PP/6K1 b - - 0 1',
+        moves: ['Re8', 'Qxh7+', 'Kxh7', 'Rh3+', 'Kg8', 'Rh8#'],
+        orientation: 'white',
+        caption: 'Black to move — White’s hidden mate',
+      },
     },
     {
       id: 'cf-mg-ex12',
