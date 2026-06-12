@@ -54,25 +54,33 @@ try {
   await page.locator('[aria-label="Back to the library"]').click();
   await page.waitForSelector('[data-testid="coaches-library-page"]', { timeout: 8000 });
 
-  // each book: open, has text, turn a page
+  // each book: opens to the APPENDIX (chapter picker) → tap a chapter → reads
   const ids = await page.locator('[data-testid^="library-book-"]').evaluateAll((els) =>
     els.map((e) => e.getAttribute('data-testid').replace('library-book-', '')));
   for (const id of ids) {
     await nuke();
     await page.locator(`[data-testid="library-book-${id}"]`).click();
-    const ok = await page.waitForSelector('[data-testid="library-book-reader"]', { timeout: 8000 }).then(() => true).catch(() => false);
-    const text = ok ? (await page.locator('[data-testid="library-page"]').innerText().catch(() => '')) : '';
-    record(`open ${id}`, ok && text.length > 40, `${text.length} chars on page 1`);
-    // turn a page if multi-page
-    const hasPager = await page.locator('[data-testid="library-pager"]').count();
-    if (hasPager) { await page.locator('[data-testid="library-pager"] button').last().click(); await page.waitForTimeout(300); }
+    const onContents = await page.waitForSelector('[data-testid="library-contents"]', { timeout: 8000 }).then(() => true).catch(() => false);
+    const chapters = onContents ? await page.locator('[data-testid="library-chapter-list"] button').count() : 0;
+    record(`${id} opens to the appendix with chapters`, onContents && chapters > 0, `${chapters} chapters`);
+    if (onContents && chapters > 0) {
+      await page.locator('[data-testid="library-chapter-list"] button').first().click();
+      const ok = await page.waitForSelector('[data-testid="library-book-reader"]', { timeout: 8000 }).then(() => true).catch(() => false);
+      const text = ok ? (await page.locator('[data-testid="library-page"]').innerText().catch(() => '')) : '';
+      record(`read ${id}`, ok && text.length > 40, `${text.length} chars`);
+      // Contents button returns to the appendix
+      await page.locator('[data-testid="library-contents-btn"]').click().catch(() => {});
+      await page.waitForTimeout(300);
+    }
     await page.locator('[aria-label="Back to the library"]').click();
     await page.waitForSelector('[data-testid="coaches-library-page"]', { timeout: 8000 });
   }
 
-  // animated board on Chess and Checkers
+  // animated board on Chess and Checkers (enter via the appendix)
   await nuke();
   await page.locator('[data-testid="library-book-edward-lasker-chess-and-checkers"]').click();
+  await page.waitForSelector('[data-testid="library-contents"]', { timeout: 8000 });
+  await page.locator('[data-testid="library-chapter-list"] button').first().click();
   await page.waitForSelector('[data-testid="library-book-reader"]', { timeout: 8000 });
   let foundBoard = false;
   let foundAnimated = false;
