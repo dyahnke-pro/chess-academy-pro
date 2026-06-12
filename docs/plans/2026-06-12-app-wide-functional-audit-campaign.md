@@ -49,7 +49,7 @@ per-surface DEEP functional grids + adversarial loops below add the depth.
 | 6 | Coach · Endgame / Session | `/coach/endgame`, `/coach/session/:kind`, `/coach/train` | ☐ pending | |
 | 7 | **Openings detail (WLPP/traps/gems/books)** | `/openings/:id`, `/openings/pro/:playerId/:id` | 🔶 partial (`audit-punish-gems-loop.mjs` exists) | bring under functional-grid + adversarial standard |
 | 8 | Openings hub + SRS | `/openings`, `/openings/srs`, `/openings/pro/:playerId` | ☐ pending | |
-| 9 | Tactics | `/tactics` + 12 sub-routes | ☐ pending | |
+| 9 | Tactics | `/tactics` + 12 sub-routes | ✅ DONE | `audit-tactics-functional.mjs` — **13/13 reached, 0 console/page errors**. Hub + all 8 modes load (adaptive/classic/find-square/setup/mistakes/weakness-themes/profile/opening-traps), drill playable via hub Random-Mix tile, find-square playable, hub-tile nav works. No bugs. |
 | 10 | Puzzles | `/puzzles` + 5 sub-routes | ☐ pending | |
 | 11 | Weaknesses | `/weaknesses` + 6 sub-routes | ☐ pending | |
 | 12 | Games | `/games`, `/games/import` | ☐ pending | |

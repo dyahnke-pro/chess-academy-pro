@@ -44,7 +44,9 @@ async function main() {
 
   // ── each mode loads + (where applicable) a board renders ──
   const modes = [
-    { r: '/tactics/drill', testid: 'drill-view', label: 'drill (random-mix)', board: true },
+    // (drill is reached via the hub "Random Mix" tile below — direct
+    //  /tactics/drill lacks the filterThemes router state, so it shows the
+    //  theme-selector, not a board; the hub-tile probe covers it.)
     { r: '/tactics/adaptive', testid: 'adaptive-puzzle-page', label: 'adaptive', board: true },
     { r: '/tactics/classic', testid: null, label: 'classic (daily)', board: true },
     { r: '/tactics/find-square', testid: 'find-square-page', label: 'find-the-square', board: false },
@@ -66,9 +68,13 @@ async function main() {
     record(`mode:${m.label}`, loaded, loaded ? 'loaded' : 'did not load');
   }
 
-  // ── drill: attempt a move on the board (interactable) ──
-  await goto('/tactics/drill');
-  await until(() => visible('[data-testid="chess-board"], [data-testid="board-wrapper"]'), 20000);
+  // ── drill: reach it via the hub "Random Mix" tile (it passes the
+  //    filterThemes router state a direct /tactics/drill nav lacks), then
+  //    attempt a move on the board ──
+  await goto('/tactics');
+  await until(() => visible('[data-testid="tactics-page"]'), 15000);
+  await page.getByText('Random Mix', { exact: false }).first().click({ force: true }).catch(() => undefined);
+  await until(() => visible('[data-testid="chess-board"], [data-testid="board-wrapper"]'), 25000);
   let interacted = false;
   for (const [from, to] of [['e2', 'e4'], ['d2', 'd4'], ['g1', 'f3']]) {
     const f = page.locator(`[data-square="${from}"]`).first(), t = page.locator(`[data-square="${to}"]`).first();
@@ -93,12 +99,12 @@ async function main() {
   }
   record('find-square-playable', fsLoaded && fsPlayed, fsLoaded ? (fsPlayed ? 'tapped a square' : 'loaded, no board') : 'did not load');
 
-  // ── hub tile navigation (click a real tile → routes) ──
+  // ── hub tile navigation (click a NAMED mode tile → routes) ──
   await goto('/tactics');
   await until(() => visible('[data-testid="tactics-page"]'), 15000);
   const before = page.url();
-  const tappedTile = await clickIf('[data-testid="tactics-page"] button');
-  const navigated = tappedTile && await until(async () => page.url() !== before, 8000);
+  await page.getByText('Daily Training', { exact: false }).first().click({ force: true }).catch(() => undefined);
+  const navigated = await until(async () => page.url() !== before && /\/tactics\//.test(page.url()), 8000);
   record('hub-tile-navigates', navigated, navigated ? `→ ${page.url().split('/').slice(-1)[0]}` : 'no nav');
 
   const reached = GRID.filter((g) => g.ok).length;
