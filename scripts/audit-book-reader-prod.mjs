@@ -146,11 +146,26 @@ async function main() {
     rec('Overview paragraph reads', reads.length > 0, reads[0] ? `len=${reads[0].len}` : 'no read');
   }
 
-  const cw = page.locator('[data-testid="classic-wisdom-header"]');
-  if (await cw.count()) {
-    const reads = await clickAndCapture(page, cw, 'Classic Wisdom header');
-    rec('Classic Wisdom header reads', reads.length > 0, reads[0] ? `len=${reads[0].len}` : 'no read');
-  }
+  // Classic Wisdom now supports per-paragraph tap-to-start too.
+  const cwSection = page.locator('[data-testid="classic-wisdom-section"]');
+  if (await cwSection.count()) {
+    const cwParas = cwSection.locator('[data-testid^="wisdom-paragraph-"]');
+    const cwN = await cwParas.count();
+    rec('Classic Wisdom has multiple tappable paragraphs', cwN >= 2, `count=${cwN}`);
+    let cwFirstHead = '';
+    if (cwN >= 1) {
+      const r1 = await clickAndCapture(page, cwParas.first(), 'Classic Wisdom paragraph 1');
+      cwFirstHead = (r1[0]?.text || '').replace(/\s+/g, ' ').trim().slice(0, 40).toLowerCase();
+      rec('Classic Wisdom paragraph 1 reads its own chunk', r1.length > 0 && r1[0].len < 400,
+        r1[0] ? `len=${r1[0].len}` : 'no read');
+    }
+    if (cwN >= 2) {
+      const r2 = await clickAndCapture(page, cwParas.nth(cwN - 1), `Classic Wisdom paragraph ${cwN}`);
+      const cwLater = (r2[0]?.text || '').replace(/\s+/g, ' ').trim().slice(0, 40).toLowerCase();
+      rec('Classic Wisdom later-paragraph tap starts the read FROM that paragraph',
+        cwLater.length > 0 && cwLater !== cwFirstHead, `later="${cwLater}" first="${cwFirstHead}"`);
+    }
+  } else rec('classic-wisdom-section present', false);
 
   await page.waitForTimeout(1500); // let trailing audit POSTs land
 
