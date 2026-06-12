@@ -58,6 +58,14 @@ function paragraphsOf(page: LibraryPage): Paragraph[] {
     }));
 }
 
+// A paragraph that explicitly points AT the printed diagram. When the reader
+// hits one of these (or the final paragraph of a board-page), we focus the
+// living board instead of scrolling the words to the top — so the student's
+// eye lands on the position while those words are read. Kept conservative so
+// it doesn't steal focus on every chess-prose paragraph.
+const DIAGRAM_REF =
+  /\b(?:the following|adjoining|annexed|appended|subjoined|preceding|above|below)\s+(?:diagram|position)|see (?:the )?diagram|in the diagram|position (?:shown|below|above)|(?:white|black) to (?:play|move)\b/i;
+
 interface Chapter { title: string; page: number }
 
 // Real titles where the source heading is bare (e.g. Chess Strategy prints only
@@ -236,6 +244,32 @@ function LibraryBookReader({ book, onBack, initialPage = 0 }: { book: LibraryBoo
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [units]);
 
+  // ── Follow-along scroll ──────────────────────────────────────────────────
+  // As each paragraph is read, scroll it to the top of the reader so the
+  // student never has to chase the text down their phone. On a page that has a
+  // printed diagram, when the reading reaches the paragraph that describes it
+  // (the last one, or any that explicitly points at the diagram), focus the
+  // living board instead so the position is in view while its words are read.
+  const paraRefs = useRef<Map<string, HTMLParagraphElement>>(new Map());
+  const boardRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (!reader.currentId) return;
+    const active = paras.find((p) => p.chunks.some((c) => c.id === reader.currentId));
+    if (!active) return;
+    const isLastPara = paras.length > 0 && active.id === paras[paras.length - 1].id;
+    const focusBoard = Boolean(current?.board) && (isLastPara || DIAGRAM_REF.test(active.text));
+    const target = focusBoard ? boardRef.current : paraRefs.current.get(active.id);
+    if (!target) return;
+    const reduce =
+      typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    target.scrollIntoView({
+      behavior: reduce ? 'auto' : 'smooth',
+      block: focusBoard ? 'center' : 'start',
+    });
+  }, [reader.currentId, paras, current]);
+
   const touchX = useRef<number | null>(null);
   const goPage = (next: number): void => {
     resumeRef.current = false;
@@ -367,8 +401,12 @@ function LibraryBookReader({ book, onBack, initialPage = 0 }: { book: LibraryBoo
             return (
               <p
                 key={para.id}
+                ref={(el) => {
+                  if (el) paraRefs.current.set(para.id, el);
+                  else paraRefs.current.delete(para.id);
+                }}
                 onClick={() => reader.playFrom(para.chunks[0].id)}
-                className={`text-[15px] leading-relaxed font-serif mb-3 cursor-pointer rounded px-1 -mx-1 transition-colors ${
+                className={`scroll-mt-3 text-[15px] leading-relaxed font-serif mb-3 cursor-pointer rounded px-1 -mx-1 transition-colors ${
                   reading ? 'bg-amber-400/20 text-theme-text' : 'text-theme-text hover:bg-amber-400/10'
                 }`}
                 data-testid={`library-paragraph-${para.id}`}
@@ -379,7 +417,11 @@ function LibraryBookReader({ book, onBack, initialPage = 0 }: { book: LibraryBoo
           })}
 
           {/* Where the book drew a diagram, the live board. */}
-          {current?.board && <LivingBoardView board={current.board} />}
+          {current?.board && (
+            <div ref={boardRef}>
+              <LivingBoardView board={current.board} />
+            </div>
+          )}
 
           {/* Full citation — public-domain provenance (market-ready). */}
           <footer className="text-[11px] text-theme-text-muted/70 mt-3 pt-2 border-t border-theme-border/50 leading-snug not-italic">
