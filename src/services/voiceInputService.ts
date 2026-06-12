@@ -197,6 +197,55 @@ class VoiceInputService {
     );
   }
 
+  /** Fire-and-forget audit so mic failures are visible in the live audit
+   *  stream. The mic stack previously emitted NOTHING — a dead mic on an
+   *  unfamiliar device (Dictation disabled, server-recognition unreachable,
+   *  standalone PWA) left no trace, so the only "fix" was guessing. Every
+   *  start / error / give-up now lands in the stream. Auditing must never
+   *  throw into the mic flow. */
+  private audit(
+    kind: 'mic-start-requested' | 'mic-started' | 'mic-start-failed' | 'mic-error' | 'mic-gave-up',
+    summary: string,
+    details?: Record<string, unknown>,
+  ): void {
+    void import('./appAuditor')
+      .then(({ logAppAudit }) => {
+        void logAppAudit({
+          kind,
+          category: 'subsystem',
+          source: 'voiceInputService',
+          summary,
+          details: details ? JSON.stringify(details) : undefined,
+        });
+      })
+      .catch(() => { /* auditing must never break the mic */ });
+  }
+
+  /** Snapshot of what the platform claims to support — exactly the data
+   *  needed to diagnose a dead mic on an unfamiliar device without the
+   *  user in the room. */
+  private capabilitySnapshot(): Record<string, unknown> {
+    const hasWin = typeof window !== 'undefined';
+    const nav = typeof navigator !== 'undefined' ? navigator : undefined;
+    const ua = nav?.userAgent ?? '';
+    // Cast through a loose shape: the DOM lib types these as always-present,
+    // but on the exact unusual platforms we're diagnosing they can be
+    // undefined, so we probe defensively.
+    const loose = nav as unknown as { standalone?: boolean; mediaDevices?: { getUserMedia?: unknown }; onLine?: boolean } | undefined;
+    const navStandalone = loose?.standalone === true;
+    const displayStandalone = hasWin && window.matchMedia('(display-mode: standalone)').matches;
+    return {
+      hasSpeechRecognition: hasWin && 'SpeechRecognition' in window,
+      hasWebkitSpeechRecognition: hasWin && 'webkitSpeechRecognition' in window,
+      hasGetUserMedia: !!loose?.mediaDevices?.getUserMedia,
+      isSecureContext: hasWin ? window.isSecureContext : undefined,
+      standalone: navStandalone || displayStandalone,
+      isIos: /iPhone|iPad|iPod/.test(ua),
+      online: loose?.onLine,
+      userAgent: ua,
+    };
+  }
+
   /**
    * Pre-warm the mic permission + hardware by opening a brief
    * getUserMedia stream, then closing it. Solves the "press mic
@@ -234,11 +283,23 @@ class VoiceInputService {
   }
 
   startListening(options: StartListeningOptions = {}): boolean {
-    if (!this.isSupported()) return false;
+    // Capability snapshot on EVERY start attempt — this is the diagnostic
+    // payload that turns a "dead mic on a weird iPhone" report into a
+    // concrete cause in the audit stream.
+    const caps = this.capabilitySnapshot();
+    this.audit('mic-start-requested', `mic tap — supported=${this.isSupported()}`, caps);
+
+    if (!this.isSupported()) {
+      this.audit('mic-start-failed', 'Web Speech recognition unsupported on this platform', caps);
+      return false;
+    }
     if (this.listening) return true;
 
     const SpeechRecognitionClass = this.getSpeechRecognitionClass();
-    if (SpeechRecognitionClass == null) return false;
+    if (SpeechRecognitionClass == null) {
+      this.audit('mic-start-failed', 'SpeechRecognition constructor missing despite isSupported', caps);
+      return false;
+    }
 
     this.interimHandler = options.onInterim ?? null;
     this.endHandler = options.onEnd ?? null;
@@ -306,7 +367,7 @@ class VoiceInputService {
     return klass ?? null;
   }
 
-  private createAndStart(SpeechRecognitionClass: SpeechRecognitionConstructor): boolean {
+  private createAndStart(SpeechRecognitionClass: SpeechRecognitionConstructor, isRestart = false): boolean {
     this.recognition = new SpeechRecognitionClass();
     // Continuous = true keeps the session alive across pauses on
     // browsers that honor it (desktop Chrome). iOS Safari still
@@ -391,6 +452,14 @@ class VoiceInputService {
       this.restartAttempts += 1;
       if (this.restartAttempts > MAX_RESTART_ATTEMPTS) {
         this.listening = false;
+        // The classic "mic looks like it's trying but never returns a
+        // transcript" symptom: recognition keeps ending with no result and
+        // we restart until the cap, then give up. Now visible in the stream.
+        this.audit(
+          'mic-gave-up',
+          `auto-restart thrashed past ${MAX_RESTART_ATTEMPTS} attempts without a transcript`,
+          this.capabilitySnapshot(),
+        );
         this.errorHandler?.('thrashing');
         this.endHandler?.();
         return;
@@ -398,34 +467,53 @@ class VoiceInputService {
       const klass = this.getSpeechRecognitionClass();
       if (!klass) {
         this.listening = false;
+        this.audit('mic-start-failed', 'SpeechRecognition constructor vanished mid-session', this.capabilitySnapshot());
         this.errorHandler?.('unavailable');
         this.endHandler?.();
         return;
       }
       // Fresh instance avoids "InvalidStateError: already started"
       // when we restart immediately after a stop.
-      this.createAndStart(klass);
+      this.createAndStart(klass, true);
     };
 
     this.recognition.onerror = (event: { error: string }) => {
-      // Permission denial is terminal — no point retrying, the user
-      // has to re-grant via the browser. Other errors (no-speech,
-      // audio-capture, network) are transient; let `onend` handle
-      // the restart decision.
-      if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+      const err = event.error;
+      // The RAW error string is the single most useful diagnostic for a dead
+      // mic on an unfamiliar device — capture it ALWAYS, before any branching.
+      this.audit('mic-error', `recognition error: ${err}`, { error: err, ...this.capabilitySnapshot() });
+      // Permission denial is terminal — no point retrying, the user has to
+      // re-grant. `service-not-allowed` on iOS specifically means Dictation /
+      // Siri is disabled (Settings → General → Keyboard → Enable Dictation).
+      if (err === 'not-allowed' || err === 'service-not-allowed') {
         this.userStopped = true;
         this.errorHandler?.('permission-denied');
-      } else if (event.error === 'audio-capture') {
-        // Mic hardware missing / in use by another app. Still let
-        // onend restart logic run, but surface the failure up top.
+      } else if (err === 'audio-capture') {
+        // Mic hardware missing / in use by another app.
+        this.errorHandler?.('unavailable');
+      } else if (err === 'network' || err === 'language-not-supported') {
+        // network = the platform's server-based recognition is unreachable
+        // (iOS uses Apple's servers for some locales — the "trying to collect
+        // an audio sample" stall). language-not-supported = no recognizer for
+        // the locale. Both leave the mic dead, so surface them instead of
+        // silently thrash-restarting until the cap.
+        this.userStopped = true;
         this.errorHandler?.('unavailable');
       }
+      // 'no-speech' / 'aborted' are benign — let `onend` handle the restart.
     };
 
     try {
       this.recognition.start();
+      // Audit the FIRST start only — transparent restarts (continuous mode
+      // between utterances) would otherwise spam the stream.
+      if (!isRestart) this.audit('mic-started', 'recognition.start() succeeded');
       return true;
-    } catch {
+    } catch (err) {
+      // Previously swallowed silently — this catch is exactly where a "weird
+      // iPhone" mic dies with zero trace. Capture the throw + capabilities.
+      const detail = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
+      this.audit('mic-start-failed', `recognition.start() threw: ${detail}`, this.capabilitySnapshot());
       return false;
     }
   }

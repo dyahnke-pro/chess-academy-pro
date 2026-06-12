@@ -717,7 +717,23 @@ export type AuditKind =
   | 'faucet-slip-detected'
   | 'misconception-captured'
   | 'misconception-drill-result'
-  | 'todays-reps-built';
+  | 'todays-reps-built'
+  // Voice INPUT / mic instrumentation (David 2026-06-12 — the "weird iPhone"
+  // mic blind spot). The mic stack (voiceInputService) previously emitted
+  // NOTHING, so a dead mic on an unusual device left no trace in the audit
+  // stream and could only be guessed at. These make every tap / start /
+  // error / give-up visible: `mic-start-requested` carries the platform
+  // capability snapshot (UA, standalone, has-SpeechRecognition, getUserMedia),
+  // `mic-started` / `mic-start-failed` cover the start() outcome, `mic-error`
+  // carries the RAW Web Speech error string (`not-allowed`, `service-not-allowed`
+  // = iOS Dictation/Siri disabled, `network` = server-recognition unreachable,
+  // `audio-capture`, `no-speech`, `language-not-supported`), and `mic-gave-up`
+  // fires when auto-restart thrashes past the cap.
+  | 'mic-start-requested'
+  | 'mic-started'
+  | 'mic-start-failed'
+  | 'mic-error'
+  | 'mic-gave-up';
 
 export interface AuditEntry {
   timestamp: number;

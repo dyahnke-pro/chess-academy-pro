@@ -749,17 +749,26 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
         setInterimTranscript('');
         setMicError(
           reason === 'permission-denied'
-            ? 'Mic access denied. Enable microphone permission to talk to the coach.'
+            ? 'Mic blocked. On iPhone: Settings → General → Keyboard → Enable Dictation, and allow Safari mic access.'
             : reason === 'unavailable'
-              ? 'Mic unavailable. Check that no other app is using it.'
+              ? 'Mic unavailable — voice recognition couldn’t reach the speech service. Check your connection, or use the native app.'
               : 'Mic reconnect failed. Tap again to retry.'
         );
-        setTimeout(() => setMicError(null), 4000);
+        setTimeout(() => setMicError(null), 6000);
       },
     });
     // Same sync-ref pattern as the off-branch above.
     listeningRef.current = started;
     setListening(started);
+    // Supported (we passed the isSupported gate above) but start() still
+    // failed — on iOS this is the silent dead-button case (Dictation off,
+    // the recognizer threw). Give the user an actionable message instead
+    // of a button that just doesn't turn on. The voiceInputService audit
+    // captures the underlying cause for diagnosis.
+    if (!started) {
+      setMicError('Couldn’t start the mic. On iPhone: Settings → General → Keyboard → Enable Dictation, then reload. The native app is more reliable for voice.');
+      setTimeout(() => setMicError(null), 6000);
+    }
   }, [isStreaming]);
 
   return (
