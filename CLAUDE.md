@@ -3025,6 +3025,29 @@ box is legitimate (that's what the box is for) — injecting a *command* as text
 is not. Record the console/pageerror delta PER STEP + a screenshot, so you see
 exactly which click introduces a bug. Instrument: `scripts/audit-coach-teach-functional.mjs`.
 
+**🚨 A SILENT NO-OP IS A FAILED TEST, NOT A PASS — PROVE every function was
+actually REACHED (the 2026-06-12 false-coverage failure).** The functional run
+tapped the first opening tile, which happened to be the broad "Sicilian" →
+that opens the line-PICKER, not a lesson. The script didn't click a variation,
+so it sat stuck on the picker — and every later step (Continue-learning, Quiz
+tile, answer-a-choice, Drill tile, play-a-move, Resume/End) used a
+"click-if-visible" helper that found NO target and **silently did nothing,
+logging `ok`**. The run reported 13/14 steps "ok" while 8 functions were NEVER
+exercised. That is a LIE dressed as coverage. The locked rules:
+- **Every step MUST ASSERT it reached the expected post-state** (the panel /
+  phase / URL it was supposed to produce). A step whose target element is
+  absent, or that leaves the phase unchanged when it should have advanced,
+  **FAILS loudly** — it does not log `ok`. A "click-if-present" that no-ops is
+  a bug in the audit.
+- **Handle the branch a real user hits.** A broad family tile opens a variation
+  picker — the user taps a line; the audit MUST too, or it never reaches the
+  lesson. Don't let one unhandled fork silently swallow the rest of the run.
+- **The audit MUST emit a per-function COVERAGE GRID** — each programmed
+  function → reached? (which step/assertion) → pass/fail. "I tested it" is only
+  true for functions the grid PROVES were reached and exercised. Untested
+  functions are reported as ❌ NOT TESTED, never silently omitted. Do not claim
+  "tested every function" without the grid backing every row.
+
 #### 2. ADVERSARIAL LOOP — cover EVERY programmed function, escalate, break it.
 
 - **COVER EVERY SINGLE PROGRAMMED FUNCTION.** Enumerate every branch the
