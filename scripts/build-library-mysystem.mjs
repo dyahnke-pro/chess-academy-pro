@@ -138,6 +138,9 @@ function isProse(s) {
   if (/[A-Za-z]*\d[A-Za-z0-9]*\d/.test(s)) return false; // multi-digit garble
   if (/[—-][KQRBN]\d/.test(s)) return false; // -K4 residue
   if (/\bK[A-Z]\b|\bP\d|\bKt\b.*\bKt\b.*\bKt\b/.test(s)) return false;
+  if (/\.{3,}/.test(s)) return false; // move-number leaders "I....."
+  if (/\b[KQRBN]{2,}[A-Za-z0-9]*[a-su-z]\b/.test(s)) return false; // garble PQKtz/BKKtz (not legit KKt)
+  if (/[—–]\s*[KQRBN][a-z]?\d?/.test(s)) return false; // garbled em-dash move
   return true;
 }
 // Strip move notation + OCR garble tokens (they belong on the boards). Keeps
@@ -151,6 +154,8 @@ function stripNotation(t) {
     .replace(/\b(P|Kt|B|R|Q|K)x[A-Za-z0-9]{1,4}\b/g, ' ')
     .replace(/\bP-[KQRBN][A-Za-z0-9]{0,3}\b/g, ' ')
     .replace(/\bKt-[A-Za-z0-9]{1,3}\b/g, ' ')
+    .replace(/\b\w{0,3}\.{3,}\S*/g, ' ') // move-number leaders + the garbled move after
+    .replace(/\b[KQRBN]{2,}[A-Za-z0-9]*[a-su-z]\b/g, ' ') // garble PQKtz/BKKtz only
     .replace(/\(\s*[),;]?\s*\)/g, ' ')
     .replace(/\s{2,}/g, ' ')
     .replace(/\s+([.,;:])/g, '$1');

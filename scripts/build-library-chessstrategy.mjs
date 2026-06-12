@@ -38,7 +38,12 @@ function isNoise(t) {
   return letters / t.length < 0.45;
 }
 function fix(s) {
-  return s.replace(/Fig\d+\.jpg/g, ' ').replace(/\s+/g, ' ').replace(/\s+([.,;:])/g, '$1').trim();
+  return s
+    .replace(/Fig\d+\.jpg/g, " ")
+    .replace(/\b\d{1,2}\.{2,}\s*/g, " ") // move-number leaders
+    .replace(/\s+/g, " ")
+    .replace(/\s+([.,;:])/g, "$1")
+    .trim();
 }
 // Drop move-analysis / garble sentences from the spoken prose (they belong on
 // the boards): reject sentences carrying descriptive-notation residue.

@@ -91,9 +91,11 @@ function extractMoves(fen, text) {
 const raw = await ensureSource();
 const lines = raw.split('\n');
 
-// front-matter / license boundaries
-let start = lines.findIndex((l) => /START OF (THE|THIS) PROJECT GUTENBERG/i.test(l));
-start = start < 0 ? 0 : start + 1;
+// Skip the Gutenberg producer boilerplate + duplicate front matter — start at
+// the book's PREFACE (real authored content).
+let start = lines.findIndex((l) => /^\s*PREFACE\s*$/.test(l));
+if (start < 0) start = lines.findIndex((l) => /START OF (THE|THIS) PROJECT GUTENBERG/i.test(l)) + 1;
+start = start < 0 ? 0 : start;
 const end = (() => {
   const i = lines.findIndex((l, idx) => idx > start && /END OF (THE|THIS) PROJECT GUTENBERG/i.test(l));
   return i < 0 ? lines.length : i;
@@ -111,7 +113,23 @@ let pageParas = [];
 let pendingBoard = null;
 let pi = 0;
 
-function flushPara() { if (para.length) { pageParas.push(clean(para.join(' '))); para = []; } }
+// A paragraph that's mostly game-score notation — "(16)... P-e4 (17) Pxe4" —
+// reads as noise aloud; the moves live on the boards. Drop it from the prose.
+function isMostlyMoves(text) {
+  const toks = text.split(/\s+/).filter(Boolean);
+  if (toks.length < 4) return false;
+  const moveish = toks.filter((t) =>
+    /^\(?\d+\)?\.*$/.test(t) || /^[KQRBNP]?-?[a-h][1-8x]/.test(t) ||
+    /^[KQRBNP]x[a-h]/.test(t) || /^o-o/i.test(t)).length;
+  return moveish / toks.length > 0.3;
+}
+function flushPara() {
+  if (para.length) {
+    const text = clean(para.join(' '));
+    if (text && !isMostlyMoves(text)) pageParas.push(text);
+    para = [];
+  }
+}
 function flushPage() {
   flushPara();
   const text = pageParas.filter(Boolean).join('\n\n');
@@ -125,6 +143,11 @@ function flushPage() {
 for (let i = start; i < end; i++) {
   const line = lines[i];
   const t = line.trim();
+
+  // This is the Chess Academy Library — stop at the Checkers half of the book
+  // (its game scores are number-lists that read as noise aloud, and it's not
+  // chess). The chess content is complete by here.
+  if (/^PART\s+II\b/i.test(t)) break;
 
   // ASCII board?
   if (/^\+-{10,}\+$/.test(t)) {
