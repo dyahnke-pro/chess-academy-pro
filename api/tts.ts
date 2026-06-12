@@ -144,15 +144,32 @@ function isRateLimited(req: Request): boolean {
   return entry.count > RATE_LIMIT_MAX_REQUESTS;
 }
 
-/** Escape the five XML-significant characters so plain text is safe
- *  inside an SSML document. */
 function escapeForSsml(text: string): string {
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;');
+  // Strip codepoints illegal in XML 1.0 BEFORE escaping. A single control
+  // char or lone surrogate anywhere in the passage makes Polly reject the
+  // whole request with InvalidSsmlException (=> 500 => client falls over to
+  // iOS Web Speech, silent in a standalone PWA). The five-char escape alone
+  // is NOT enough; client-side sanitizers / pasted content can introduce
+  // these silent killers. Filter by codepoint, then escape the XML-five.
+  let out = "";
+  for (const ch of text) {
+    const c = ch.codePointAt(0)!;
+    // Allow tab/newline/CR; drop the rest below U+0020.
+    if (c < 0x20 && c !== 0x09 && c !== 0x0a && c !== 0x0d) continue;
+    // Drop the non-characters U+FFFE / U+FFFF.
+    if (c === 0xfffe || c === 0xffff) continue;
+    // Lone surrogates (U+D800-U+DFFF) never reach here: the for..of iterator
+    // yields whole code points, so unpaired surrogates surface as U+FFFD
+    // (replacement char), which is valid XML. Belt-and-suspenders: drop them.
+    if (c >= 0xd800 && c <= 0xdfff) continue;
+    out += ch;
+  }
+  return out
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
 }
 
 /**
@@ -243,28 +260,49 @@ async function synthesize(text: string, voice: string, req: Request, useSsml: bo
       credentials: { accessKeyId, secretAccessKey },
     });
 
-    const synthText = useSsml ? buildSsmlForEngine(text, voiceConfig.engine, style) : text;
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic import loses type info
-    const command = new SynthesizeSpeechCommand({
-      Text: synthText,
-      TextType: useSsml ? 'ssml' : 'text',
-      OutputFormat: 'mp3',
-      VoiceId: voiceConfig.voiceId,
-      Engine: voiceConfig.engine,
-    } as any);
+    // Build the command for a given mode. `asSsml=false` is the safe
+    // fallback path — plain text can never raise InvalidSsmlException.
+    const buildCommand = (asSsml: boolean) =>
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic import loses type info
+      new SynthesizeSpeechCommand({
+        Text: asSsml ? buildSsmlForEngine(text, voiceConfig.engine, style) : text,
+        TextType: asSsml ? 'ssml' : 'text',
+        OutputFormat: 'mp3',
+        VoiceId: voiceConfig.voiceId,
+        Engine: voiceConfig.engine,
+      } as any);
 
     // Keep server timeout ≥ client timeout (voiceService uses 10s) so
     // the server never aborts a request the client is still willing
     // to wait for.
-    const abortController = new AbortController();
-    const timeout = setTimeout(() => abortController.abort(), 10000);
+    const send = async (command: InstanceType<typeof SynthesizeSpeechCommand>) => {
+      const abortController = new AbortController();
+      const timeout = setTimeout(() => abortController.abort(), 10000);
+      try {
+        return await polly.send(command, { abortSignal: abortController.signal });
+      } finally {
+        clearTimeout(timeout);
+      }
+    };
 
     let result;
     try {
-      result = await polly.send(command, { abortSignal: abortController.signal });
-    } finally {
-      clearTimeout(timeout);
+      result = await send(buildCommand(useSsml));
+    } catch (err: unknown) {
+      // SSML safety net (the silent-narration bug, David 2026-06-12): a
+      // friend on an iOS standalone PWA heard NO narration because the
+      // read-aloud passage's SSML tripped InvalidSsmlException → 500 →
+      // the client fell over to iOS Web Speech (silent in standalone).
+      // Plain text never raises this, so on an SSML parse error retry once
+      // as plain text. Polly is the canonical voice (G4); an SSML quirk must
+      // never demote a user to silent Web Speech. Audit captures the recovery.
+      const errName = err instanceof Error ? err.name : '';
+      if (useSsml && errName === 'InvalidSsmlException') {
+        console.warn('[TTS] InvalidSsmlException — retrying as plain text');
+        result = await send(buildCommand(false));
+      } else {
+        throw err;
+      }
     }
 
     if (!result.AudioStream) {
