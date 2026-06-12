@@ -2981,6 +2981,78 @@ interactive, weaknesses, training-loop) are surface-specific loops — use them
 when the change is on THAT surface, but the unqualified word "audit" defaults
 to the punish-gems loop above.
 
+### 🚨 THE ADVERSARIAL LOOP-TEST PROTOCOL — BREAK IT, THEN FIX THE BREAK (David 2026-06-12, LOCKED).
+
+David, verbatim: *"the purpose of this audit is to find the edge cases. to
+simulate human use. to push it until it breaks! and then fix the break. if it
+doesn't break, you didn't do it right, or it's perfectly coded. but that has
+not been my experience of your performance."* And: *"BREAK IT!"*
+
+This is the standing doctrine for ANY loop audit of an interactive surface
+(coach chat/teach, kid surfaces, search, any typed-input UI). It is NOT a
+happy-path checklist — a green pass-1 means the inputs were too soft. The job:
+
+1. **COVER EVERY SINGLE PROGRAMMED FUNCTION.** Enumerate every branch/intent
+   the surface's submit handler + runtime implement (for `/coach/teach`:
+   `/clearcache`, player-game lookup, walkthrough control new/stop/resume,
+   middlegame-plan intent, move-report step-by-step, opening/forget intent
+   capture, TEACH verb routing, every STAGE keyword drill/quiz/findMove/punish/
+   play-real, FACE mode, fuzzy autoAccept/ambiguous-picker/no-match, bare-name,
+   Tier 1 static / 1.5 line-picker / 2 cache / 2.5 shared / 3 DB-gen, pre-flight
+   reject → brain Q&A, returning-visitor chooser, every Q&A class positional/
+   best-move/principle, arrow validator, auto-pause, and the walkthrough runtime
+   start/skip/fork/pause/resume/leaf/stage-menu/quiz/drill/punish/merge/
+   continue/board-move→coach-reply). The audit must PROVE it touched each one
+   each pass — list the function inventory in the script.
+
+2. **SIMULATE REAL, MESSY HUMAN USE — push until it BREAKS.** Throw the input a
+   real impatient human throws: typos (`Najdorff`), British spellings
+   (`Philidor Defence`), abbreviations (`KID`), partial names (`Caro`),
+   diacritics (`Réti`), gibberish-adjacent, emoji, very long rambles, raw move
+   lists, punctuation-only, whitespace-padded, SQL-ish, multi-intent ("teach me
+   the najdorf AND quiz me AND show a trap"), contradictions ("the French but
+   no the Sicilian"), and STATE CHAOS: rapid double/triple submit (mash send
+   before the turn settles), pick-before-load (fire a stage + question before a
+   cold gen finishes), out-of-order (stop with nothing running, resume with
+   nothing paused, quiz before any opening), mid-walkthrough hijack (switch
+   openings mid-narration), cold-cache first use, single-char spam.
+
+3. **ESCALATE EVERY PASS, SHUFFLE EVERY PASS.** Pass N raises the chaos tier
+   ceiling and reshuffles order so the same break doesn't hide. Cold-nuke the
+   whole IndexedDB on the harder passes (first-use path).
+
+4. **A BREAK IS THE DELIVERABLE — capture it WITH the exact input.** Break
+   classes the harness flags, each tagged to the in-flight input: `pageerror`,
+   app-level `console-error` (Uncaught/TypeError/React-minified/"cannot read
+   prop"/max-update-depth), `silent-hang` (no transcript growth + no panel + no
+   routing audit within the timeout), `error-fallback` reply ("Hit a snag…"),
+   `stuck-input` (textarea disabled long after the turn), `send-failed`. When
+   the loop finds a break: **DIAGNOSE the root cause, FIX THE CODE, re-run.**
+   Fixing the audit to dodge the break is cheating — fix the COACH unless the
+   break is a genuine audit-harness artifact (and prove it is).
+
+5. **THE CONTRACT:** MET only on **3 CONSECUTIVE break-free passes**, each pass
+   harder than the last and touching every function; ANY break resets the
+   streak to 0. If it never breaks across the escalation, say so plainly — but
+   the default expectation (David's) is that messy human use WILL surface
+   something; if you got pass-1 clean, your inputs were too soft — make them
+   nastier.
+
+The instrument: **`scripts/audit-coach-teach-loop.mjs`** (the coach-teach
+adversarial loop; clone it per surface). Run from the sandbox against the local
+dev server while iterating on fixes, then against `main`/prod for the deploy-
+verifying run.
+
+```bash
+AUDIT_SANDBOX=1 AUDIT_SMOKE_URL=http://localhost:5173 \
+  AUDIT_MAX_PASSES=4 node scripts/audit-coach-teach-loop.mjs
+```
+
+The cycle is: run → it breaks → fix the code → re-run → repeat until 3
+consecutive clean passes at full chaos. "It didn't break" is only acceptable
+after you've genuinely tried to break it and escalated; otherwise you didn't
+do it right.
+
 ### 🚨 AUDITS ARE LIVING — UPDATE THE AUDIT BEFORE YOU RUN IT (David 2026-05-24, LOCKED)
 
 **After EVERY build/change, it is YOUR job to update the relevant audit
