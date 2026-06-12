@@ -94,6 +94,40 @@ try {
   await sq('e2'); await sq('e4'); // move after resign
   note('resign then move (post-game interaction)', errSnapshot() > before, `+${errSnapshot() - before} errors`);
 
+  // ── DEEPER WAVE (§0: push harder) ─────────────────────────────────────────
+  // fresh game, then concurrent chaos: move + button spam + toggles at once
+  await page.locator(sel('restart-btn')).first().click({ timeout: 1500, force: true }).catch(() => {});
+  before = errSnapshot();
+  await Promise.allSettled([
+    sq('e2'), sq('e4'),
+    spam('coach-tips-toggle', 8), spam('hint-button', 8), spam('read-position-btn', 8),
+    spam('difficulty-easy', 5), spam('difficulty-hard', 5),
+  ]);
+  await page.waitForTimeout(1500);
+  note('concurrent chaos (move + 6 controls at once)', errSnapshot() > before, `+${errSnapshot() - before} errors`);
+
+  // rapid analysis toggles (eval bar / engine lines) if present
+  before = errSnapshot();
+  for (let i = 0; i < 8; i++) {
+    await page.getByRole('button', { name: /eval|engine|lines/i }).first().click({ timeout: 400, force: true }).catch(() => {});
+  }
+  note('rapid analysis-toggle spam', errSnapshot() > before, `+${errSnapshot() - before} errors`);
+
+  // reload mid-game → must recover (persisted game)
+  before = errSnapshot();
+  await page.reload({ waitUntil: 'networkidle' }).catch(() => {});
+  await nuke();
+  await page.waitForTimeout(1200);
+  const recovered = await mounted();
+  note('reload mid-game recovers', !recovered, recovered ? 'recovered' : 'BLANK after reload');
+  note('reload produced no errors', errSnapshot() > before, `+${errSnapshot() - before} errors`);
+
+  // play many fast moves toward a terminal state (coach move under pressure)
+  before = errSnapshot();
+  const burst = [['g1', 'f3'], ['f1', 'c4'], ['e1', 'g1'], ['d2', 'd4'], ['b1', 'c3'], ['c1', 'g5'], ['d1', 'd2']];
+  for (const [f, t] of burst) { await sq(f); await sq(t); await page.waitForTimeout(250); }
+  note('rapid move burst (7 moves, minimal wait)', errSnapshot() > before, `+${errSnapshot() - before} errors`);
+
   await nuke();
   const stillThere = await mounted();
   note('FINAL: surface alive after the assault', !stillThere, stillThere ? 'mounted' : 'BLANK/CRASHED');
