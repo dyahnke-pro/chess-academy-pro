@@ -4,6 +4,7 @@ import { reconstructMovesFromGame } from './gameReconstructionService';
 import { calculateAccuracy, getClassificationCounts } from './accuracyService';
 import { getPhaseBreakdown } from './gamePhaseService';
 import { uciMoveToSan } from '../utils/uciToSan';
+import { countFullMovesInPgn } from '../utils/pgnMoveCount';
 import { detectMissedTactics } from './missedTacticService';
 import { getMistakePuzzleStats } from './mistakePuzzleService';
 import { gameNeedsAnalysis } from './gameAnalysisService';
@@ -203,6 +204,14 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
       if (isWin(game, playerColor)) blackWins++;
     }
 
+    // Move count is computable from the PGN for EVERY game (it doesn't
+    // need Stockfish analysis), so accumulate it here — NOT inside the
+    // analysis gate below. Otherwise avgMovesPerGame summed only analyzed
+    // games' moves but divided by ALL games → diluted (~½ on a corpus
+    // that's only partly analyzed). Same denominator-mismatch class as the
+    // drilldown err/game bug (David 2026-06-12).
+    totalMoves += countFullMovesInPgn(game.pgn);
+
     // Opponent ELO
     const oppElo = getOpponentElo(game, playerColor);
     if (oppElo) {
@@ -229,12 +238,6 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
     if (!gameNeedsAnalysis(game)) {
       const moves = reconstructMovesFromGame(game, playerColor);
       if (moves.length === 0) continue;
-
-      // reconstructMovesFromGame returns PLIES (both colors). "Moves per
-      // game" is a FULL-move stat (white+black), so convert — it was
-      // reporting ~2x (e.g. 24 instead of 12) on the Overview tab (David
-      // 2026-06-11, same class as the drilldown/card move-count fix).
-      totalMoves += Math.ceil(moves.length / 2);
 
       // Classification counts
       const counts = getClassificationCounts(moves, playerColor);
