@@ -58,7 +58,14 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
 
   const kidSpeak = useCallback((text: string): void => {
     if (!voiceOn) return;
-    void voiceService.speak(text);
+    // Kid story narration is long-form AUTHORED prose — speak it in FULL.
+    // `speak()` routes through the brief-voice cap (G5), which clips the story
+    // to ≤30 words when the adult verbosity is "brief" → the narration gets
+    // cut off mid-story (David 2026-06-12). `speakLecture` is the sanctioned
+    // bypass for long-form authored narration (voiceService doc explicitly
+    // lists "kid stories"): it skips the brief cap but still honors the silent
+    // gate, and the kid `voiceOn` toggle above is the real on/off control.
+    void voiceService.speakLecture(text);
   }, [voiceOn]);
 
   // Find the chapter
