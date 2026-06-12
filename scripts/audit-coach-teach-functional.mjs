@@ -30,11 +30,19 @@ await ctx.addInitScript(autoDismissCalibration);
 const page = await ctx.newPage();
 
 const errs = [];
-page.on('console', (m) => {
+const keyDetails = [];
+page.on('console', async (m) => {
   if (m.type() !== 'error') return;
   const t = m.text();
   if (/same key|each child|unique "key"|Uncaught|TypeError|ReferenceError|cannot read prop|Minified React|Maximum update depth|Cannot update a component/i.test(t)) {
     errs.push(t.slice(0, 200));
+    if (/same key|each child/i.test(t) && keyDetails.length < 4) {
+      try {
+        const args = await Promise.all(m.args().map((a) => a.jsonValue().catch(() => '<obj>')));
+        // args[1] = the duplicate key value; last arg = component stack
+        keyDetails.push({ key: String(args[1] ?? '?'), stack: String(args[args.length - 1] ?? '').slice(0, 400) });
+      } catch { /* */ }
+    }
   }
 });
 page.on('pageerror', (e) => errs.push('PAGEERROR: ' + e.message.slice(0, 200)));
@@ -121,6 +129,19 @@ async function main() {
     return `tapped "${label.replace(/\s+/g, ' ').slice(0, 30)}"`;
   });
 
+  // A broad family (e.g. Sicilian) opens the variation picker — a real
+  // user taps a specific line to dive in. Click the first variation tile.
+  await step('if a variation picker appears, tap a line', async () => {
+    if (await visible('[data-testid="line-picker"]')) {
+      // option buttons carry no testid; skip the mode/dismiss buttons
+      const optBtns = page.locator('[data-testid="line-picker"] button:not([data-testid])');
+      const n = await optBtns.count();
+      if (n > 0) { await optBtns.first().click({ force: true }).catch(() => undefined); await waitInput(); return `tapped variation (of ${n})`; }
+      return 'picker shown but no option button';
+    }
+    return 'no variation picker (went straight to lesson)';
+  });
+
   await step('watch the lesson play (tap Skip / pick forks)', async () => {
     const reached = await watchLessonToEnd();
     return `reached ${reached}`;
@@ -190,6 +211,10 @@ async function main() {
   console.log(`  steps: ${steps.length}  total console/page errors: ${totalErrs}`);
   if (firstBad) console.log(`  FIRST error introduced at step: "${firstBad.name}" → ${firstBad.errors[0]}`);
   else console.log(`  no console/page errors across the whole functional play-through ✅`);
+  if (keyDetails.length) {
+    console.log(`\n  ---- DUPLICATE-KEY DETAILS (key + component stack) ----`);
+    for (const k of keyDetails) console.log(`  key="${k.key}"\n    stack: ${k.stack.replace(/\s+/g, ' ')}`);
+  }
   await writeFile(join(OUT, 'report.json'), JSON.stringify({ base: BASE, steps }, null, 2), 'utf-8');
   console.log(`  report: ${join(OUT, 'report.json')}`);
   await browser.close();

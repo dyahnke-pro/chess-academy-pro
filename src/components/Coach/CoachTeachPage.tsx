@@ -98,6 +98,20 @@ import { withTimeout } from '../../coach/withTimeout';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
+// Monotonic suffix for chat-message id bases. `Date.now()` alone collides
+// when two ids are minted in the SAME millisecond — which happens under
+// rapid interaction (two turns back-to-back, a turn that appends user +
+// coach quickly, StrictMode's double-invoke). Colliding ids made two
+// `<ChatMessage>` siblings share a React key → "Encountered two children
+// with the same key" + duplicated/omitted messages. Surfaced by the
+// adversarial loop audit (2026-06-12). `freshTurnId` appends an ever-
+// increasing counter so every minted base is unique regardless of timing.
+let __coachMsgSeq = 0;
+function freshTurnId(topic?: string): string {
+  __coachMsgSeq += 1;
+  return `t-${Date.now()}-${__coachMsgSeq.toString(36)}${topic ? `-${topic}` : ''}`;
+}
+
 const SUGGESTIONS = [
   'Walk me through the Vienna opening',
   'Teach me about pins and skewers',
@@ -1166,7 +1180,7 @@ export function CoachTeachPage(): JSX.Element {
       const control = classifyWalkthroughControl(trimmedText);
       if (control === 'new' || control === 'stop') {
         const priorOpening = walkthrough.tree?.openingName ?? null;
-        const ctlTurnId = `t-${Date.now()}-walkthrough-control`;
+        const ctlTurnId = freshTurnId('walkthrough-control');
         setMessages((prev) => [...prev, {
           id: `${ctlTurnId}-u`,
           role: 'user',
@@ -1214,7 +1228,7 @@ export function CoachTeachPage(): JSX.Element {
         return;
       }
       if (control === 'resume' && walkthrough.phase === 'paused') {
-        const ctlTurnId = `t-${Date.now()}-walkthrough-control`;
+        const ctlTurnId = freshTurnId('walkthrough-control');
         setMessages((prev) => [...prev, {
           id: `${ctlTurnId}-u`,
           role: 'user',
@@ -1356,7 +1370,7 @@ export function CoachTeachPage(): JSX.Element {
           // game" is correct). Otherwise fall through to normal routing —
           // a rare misparse must not get eaten here.
           if (diskGames.length > 0 || openingIsReal) {
-            const pgTurnId = `t-${Date.now()}-player-game`;
+            const pgTurnId = freshTurnId('player-game');
             setMessages((prev) => [...prev, {
               id: `${pgTurnId}-u`,
               role: 'user',
@@ -1539,7 +1553,7 @@ export function CoachTeachPage(): JSX.Element {
           // opening we don't cover (no fuzzy-matched wrong opening).
           const probe = namedSubject ?? trimmedText;
           const subject = namedSubject;
-          const mgTurnId = `t-${Date.now()}-middlegame-intent`;
+          const mgTurnId = freshTurnId('middlegame-intent');
           setMessages((prev) => [...prev, {
             id: `${mgTurnId}-u`,
             role: 'user',
@@ -1815,7 +1829,7 @@ export function CoachTeachPage(): JSX.Element {
                 : null,
             }),
           });
-          const ambiguousTurnId = `t-${Date.now()}-fuzzy-picker`;
+          const ambiguousTurnId = freshTurnId('fuzzy-picker');
           setMessages((prev) => [...prev, {
             id: `${ambiguousTurnId}-u`,
             role: 'user',
@@ -1875,7 +1889,7 @@ export function CoachTeachPage(): JSX.Element {
         // generation (last resort). Each later tier is slower but
         // covers more openings.
         const staticTree = resolveWalkthroughTree(requestedName);
-        const surfaceTurnId = `t-${Date.now()}-walkthrough-surface`;
+        const surfaceTurnId = freshTurnId('walkthrough-surface');
         // Always show the user's ask in the transcript.
         setMessages((prev) => [...prev, {
           id: `${surfaceTurnId}-u`,
@@ -2260,7 +2274,7 @@ export function CoachTeachPage(): JSX.Element {
     }
 
     setBusy(true);
-    const turnId = `t-${Date.now()}`;
+    const turnId = freshTurnId();
     // Kickoff sends a system-style ask to seed the lesson — don't
     // render it as a "student said" turn in the transcript. Only the
     // coach's reply (the spoken greeting) shows up.
@@ -2730,7 +2744,7 @@ export function CoachTeachPage(): JSX.Element {
             // brain tool emitted start_walkthrough for an opening
             // outside the static registry and uncached.
             const ackBuilding = `Putting together ${lessonLabel(opening)} — this takes about a minute. The first time only; after this it'll be instant.`;
-            const brainTurnId = `brain-walk-${Date.now()}`;
+            const brainTurnId = freshTurnId('brain-walk');
             setMessages((prev) => [...prev, {
               id: `${brainTurnId}-c`,
               role: 'assistant',
@@ -3462,7 +3476,7 @@ export function CoachTeachPage(): JSX.Element {
         ? `Ready to start the ${rolodexOpening.trim()} walkthrough?`
         : 'Welcome to my classroom — what would you like to learn today?';
       setKickoffStatus(null);
-      const turnId = `t-${Date.now()}-welcome`;
+      const turnId = freshTurnId('welcome');
       setMessages((prev) => [...prev, {
         id: `${turnId}-c`,
         role: 'assistant',
