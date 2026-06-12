@@ -54,7 +54,7 @@ per-surface DEEP functional grids + adversarial loops below add the depth.
 | 11 | Weaknesses | `/weaknesses` + 6 sub-routes | 🔶 empty-state healthy; tabs need data | `audit-weaknesses-functional.mjs` built. Empty/onboarding state renders CLEAN (0 console/page errors). The insights TABS (overview/patterns/openings/tactics/mistakes/misconceptions) only mount with ANALYZED GAME data — needs `audit-reports/.fixtures/david-games.json` (absent in sandbox) or a real device with games. Re-run with the fixture present to deep-audit the tabs. No bugs in reachable state. |
 | 12 | Games | `/games`, `/games/import` | ☐ pending | |
 | 13 | Kid | `/kid/*` (6 piece hubs + journey + games) | 🔶 healthy 9/12 | `audit-kid-functional.mjs` — **9/12, 0 console/page errors** (no crash = P0 clear). All 6 piece hubs (pawn/rook/knight/bishop/queen/king) load, journey map + chapter load. ❌ audit-selector nuances: puzzle-board probe clicked a non-game button (needs a game-tile selector); kid-back-to-main testid is on sub-pages not the hub. No bugs. TODO: tighten the game-tile + chrome selectors. |
-| 14 | Settings | `/settings`, `/settings/onboarding` | ☐ pending | |
+| 14 | Settings | `/settings`, `/settings/onboarding` | 🔶 renders clean | `audit-settings-functional.mjs` — mounts + renders real content, 0 console/page errors. Tab testids (about/analytics/appearance/board/coach) live in a sub-view, not the top-level scroll page — selector TODO to deep-drive the tabs + toggles. No bugs. |
 | 15 | Dashboard | `/` + SmartSearchBar | ☐ pending | |
 | 16 | Academy | `/academy` | ☐ pending | |
 
@@ -74,3 +74,23 @@ endgame/session → academy.
   the functional grid, then move to surface 7 (openings/:id) or 2 (coach/play).
 - Each surface: read its component(s) end-to-end → enumerate functions → clone
   the two reference scripts → run → break → fix → 3 clean passes → mark ✅ here.
+
+## CAMPAIGN STATUS SNAPSHOT (2026-06-12, end of session)
+- **Breadth (stability): DONE** — app-sweep 55/55 routes mount + render real
+  content with ZERO crashes / console errors / React warnings / error
+  boundaries. The entire app is stable.
+- **Depth (per-function functional grids):**
+  - `/coach/teach` ✅ — 4 real bugs FOUND + FIXED (arrow dup-key flood,
+    msg-id collision, control-words, skip-fork) + auto-advance feature;
+    breaking-point loop clean.
+  - `/tactics` ✅ — 13/13, 0 errors.
+  - `/kid` — 9/12, 0 errors (hubs+journey healthy; puzzle-tile selector TODO).
+  - `/coach/review` — 11/19, 0 errors (contextual buttons need blunder/walk-end).
+  - `/weaknesses` — empty-state clean; tabs need the david-games fixture.
+  - `/settings` — renders clean; tab testids in a sub-view (selector TODO).
+- **NO new bugs found beyond the teach fixes** — every surface is stable.
+- **Remaining for deep grids (stability already ✅ via sweep):** openings/:id
+  (punish-gems loop exists), openings hub, coach play(parallel)/chat/plan/
+  analyse/home/endgame, puzzles, games, dashboard, academy. Each needs
+  surface-specific selectors (the generic grid finds stability, not the
+  per-function depth) — pick up via this tracker.
