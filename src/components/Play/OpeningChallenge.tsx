@@ -18,6 +18,7 @@ import {
   getWelcomeMessage,
 } from '../../services/gamesService';
 import type { OpeningRecord, BoardArrow, BoardAnnotationCommand } from '../../types';
+import { dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { GameChatPanelHandle } from '../Coach/GameChatPanel';
 
@@ -274,7 +275,11 @@ export function OpeningChallenge({
     ? Math.round((currentMoveIndex / expectedMoves.length) * 100)
     : 0;
 
-  const allArrows = [...hintState.arrows, ...annotationArrows];
+  // Dedupe by square-pair: hint arrows + accumulated chat-annotation arrows
+  // can land on the same pair, which makes react-chessboard render duplicate
+  // React keys (and drop an arrow). Same class the coach-teach loop audit
+  // caught (2026-06-12).
+  const allArrows = dedupeArrowsBySquarePair([...hintState.arrows, ...annotationArrows]);
 
   // Build PGN up to current position for chat context
   const pgnUpToCurrent = expectedMoves

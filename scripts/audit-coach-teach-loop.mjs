@@ -140,7 +140,8 @@ async function main() {
     console.log(`  💥 BREAK [${kind}] on "${inFlightInput.slice(0, 60)}" → ${b.detail.slice(0, 160)}`);
   };
   page.on('pageerror', (err) => recordBreak('pageerror', err.message));
-  page.on('console', (msg) => {
+  const keyDetails = [];
+  page.on('console', async (msg) => {
     if (msg.type() !== 'error') return;
     const t = msg.text();
     // App-level crashes AND React correctness warnings (duplicate keys,
@@ -148,6 +149,14 @@ async function main() {
     // duplicate/drop content. Ignore pure network 4xx/5xx + favicon noise.
     if (/Uncaught|TypeError|ReferenceError|is not a function|undefined is not|cannot read prop|Maximum update depth|Minified React error|same key|Each child in a list|unique "key"|Cannot update a component/i.test(t)) {
       recordBreak('console-error', t);
+      if (/same key|each child/i.test(t) && keyDetails.length < 3) {
+        try {
+          const args = await Promise.all(msg.args().map((a) => a.jsonValue().catch(() => '<obj>')));
+          const detail = { key: String(args[1] ?? '?'), stack: String(args[args.length - 1] ?? '').replace(/\s+/g, ' ').slice(0, 500) };
+          keyDetails.push(detail);
+          console.log(`  🔑 DUP-KEY value="${detail.key}"  stack: ${detail.stack}`);
+        } catch { /* */ }
+      }
     }
   });
   page.on('requestfailed', () => { /* network failures are not app breaks */ });
