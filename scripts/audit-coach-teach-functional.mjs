@@ -245,7 +245,9 @@ async function main() {
   await gotoTeach(); await ask('Sicilian');
   const lp = await until(async () => (await phase()) === 'line-picker', 25000);
   record('line-picker-surfaces', lp, lp ? 'broad family → picker' : 'no picker');
-  // tap a real variation tile (now testid'd: line-picker-tile)
+  // tap a real variation tile (now testid'd: line-picker-tile) — wait for it
+  // to render (the tiles mount a beat after the picker header).
+  if (lp) await page.locator('[data-testid="line-picker-tile"]').first().waitFor({ state: 'visible', timeout: 10000 }).catch(() => undefined);
   const variationClicked = lp && await clickReq('[data-testid="line-picker-tile"]');
   record('line-picker-variation-click', variationClicked && await until(async () => (await phase()) !== 'line-picker', 45000), variationClicked ? 'tapped a variation → lesson' : 'no variation tile');
   // FACE mode toggle (click) — re-open picker, toggle Face, tap a variation
