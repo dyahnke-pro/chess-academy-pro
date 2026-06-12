@@ -160,49 +160,14 @@ const NIMZOWITSCH_MY_SYSTEM: LibraryBook = {
 // Full Gutenberg prose (scripts/build-library-chessstrategy.mjs). Heavily
 // game-based, so the read-aloud is the conceptual chapter prose (the game
 // analysis is filtered out — it belongs on boards, not yet extracted from its
-// image diagrams). Three hand-polished highlight pages lead the book.
-const CS_CURATED: ReadonlyArray<LibraryPage> = [
-  {
-    id: 'cs-mobility',
-    heading: 'Chapter III — General Principles of Chess Strategy · Mobility',
-    text:
-      'For quick development is of the utmost importance, and he who succeeds ' +
-      'first in placing all his pieces, from their initial awkward positions, ' +
-      'to such places as give them command of the greatest possible number of ' +
-      'squares, has the better chance of concentrating a superior force on some ' +
-      'important point. It follows that White, having the first move, is, so to ' +
-      'speak, always morally justified in attacking, whilst Black should assume ' +
-      'the defensive.',
-  },
-  {
-    id: 'cs-pawn-permanence',
-    heading: 'Mobility — the pawns',
-    text:
-      'Pawn formation is of a more permanent character than that of the pieces, ' +
-      'in consequence of the latter’s greater mobility. When we have made a rash ' +
-      'move with a piece, to which our attacking disposition may have tempted ' +
-      'us, we may still have a chance of retrieving the position by timely ' +
-      'retreat. Once a pawn has moved it cannot turn back.',
-  },
-  {
-    id: 'cs-pawn-skeleton',
-    heading: 'The Pawn Skeleton',
-    text:
-      'As a consequence of the pawns having so little mobility, this “pawn ' +
-      'skeleton” often preserves its shape right into the end-game. Applying ' +
-      'the general strategical principles to the formation of the pawn skeleton, ' +
-      'the learner acquires the understanding of the leading idea underlying ' +
-      'each opening without having to burden his memory.',
-  },
-];
-
+// image diagrams).
 const EDWARD_LASKER_CHESS_STRATEGY: LibraryBook = {
   id: chessStrategyData.id,
   bookTitle: chessStrategyData.bookTitle,
   author: chessStrategyData.author,
   citation: chessStrategyData.citation as BookCitation,
   shelfNote: 'The middlegame and positional play — weak squares, the chain, the file.',
-  pages: [...CS_CURATED, ...(chessStrategyData.pages as LibraryPage[])],
+  pages: chessStrategyData.pages as LibraryPage[],
 };
 
 // ── Edward Lasker, Chess and Checkers — the ENTIRE book, auto-animated ────────

@@ -106,7 +106,7 @@ for (const p of paras) {
 if (cur.paras.length) pages.push({ id: `cs-${pi++}`, heading: cur.heading, text: cur.paras.join('\n\n') });
 
 const book = {
-  id: 'capablanca-chess-strategy',
+  id: 'edward-lasker-chess-strategy',
   bookTitle: 'Chess Strategy',
   author: 'Edward Lasker',
   citation: {

@@ -125,25 +125,23 @@ export function CoachHomePage(): JSX.Element {
           testId="coach-action-play"
         />
 
-        {/* Training Plan — third primary tile, spans 2 cols at
-            half-height so its HEIGHT matches the aspect-square
-            Learn/Play tiles above. The daily headline: rolodex
-            of favorited openings with 8 training rows each
-            (Theory, Puzzles, GM Games, Traps, Blunders,
-            Walkthrough, Practice from move 1, Practice
-            middlegame). */}
+        {/* The Coaches Library — the featured wide tile: five complete
+            public-domain master books, read aloud with live boards to
+            train from. */}
         <PrimaryTile
-          icon={<Calendar size={40} className="text-amber-400" />}
-          label="Training Plan"
-          subtitle="Your favorited openings, side-by-side — pick a card, drill its rows."
-          info="Your repertoire as a rolodex. Each favorited opening becomes a card with 8 training rows:\n\n• Theory & Lines — full DB walk\n• Puzzles — tactics tagged to the opening (family-fallback if exact set is thin)\n• GM Games — ECO-filtered\n• Traps & Pitfalls — opening-specific tactical patterns\n• Your blunders — mistakes you've made in this opening\n• Coached walkthrough — animated, voice-narrated\n• Practice from move 1 — engine plays the full opening with you\n• Practice middlegame — skip the opening, drop into the critical position\n\nTap any row to deep-link straight into that drill, scoped to the opening. Drag to reorder, tap a peeking card to flip forward. Star animations from /openings push new favorites into the deck live."
-          rgb="245, 158, 11"
-          bgClass="bg-amber-500/10"
-          textColorClass="text-amber-400"
-          onClick={goTo('plan', '/coach/plan')}
+          icon={<Library size={40} className="text-rose-400" />}
+          label="The Coaches Library"
+          subtitle="Pro chess books to train from — the masters' own words, read aloud, with live boards."
+          info={
+            "The masters' own books, brought to life. Tap a book and it opens like a book — the author's real public-domain words, read aloud (tap any sentence to start there), turnable pages — and wherever the original printed a drawn diagram, a LIVE, playable board sits in its place.\n\nFive complete books: Capablanca's Chess Fundamentals, Nimzowitsch's My System, Edward Lasker's Chess Strategy and Chess and Checkers, plus our own. Search across all of them to jump straight to any topic."
+          }
+          rgb="244, 63, 94"
+          bgClass="bg-rose-500/10"
+          textColorClass="text-rose-400"
+          onClick={goTo('library', '/coach/library')}
           gB={gB}
           gS={gS}
-          testId="coach-action-plan"
+          testId="coach-action-library"
           wide
         />
 
@@ -174,18 +172,16 @@ export function CoachHomePage(): JSX.Element {
           testId="coach-action-endgame"
         />
         <SecondaryTile
-          icon={<Library size={28} className="text-amber-400" />}
-          label="The Coaches Library"
-          info={
-            "The masters' own books, brought to life. Tap a book and it opens like a book — the author's real public-domain words, read aloud (tap any paragraph to start there), turnable pages — and wherever the original printed a drawn diagram, a LIVE, playable board sits in its place.\n\nCapablanca's Chess Fundamentals is alive now (the middlegame combinations). Chess Strategy, My System and more are on the shelf, coming to life."
-          }
-          rgb="251, 191, 36"
+          icon={<Calendar size={28} className="text-amber-400" />}
+          label="Training Plan"
+          info="Your repertoire as a rolodex. Each favorited opening becomes a card with 8 training rows:\n\n• Theory & Lines — full DB walk\n• Puzzles — tactics tagged to the opening (family-fallback if exact set is thin)\n• GM Games — ECO-filtered\n• Traps & Pitfalls — opening-specific tactical patterns\n• Your blunders — mistakes you've made in this opening\n• Coached walkthrough — animated, voice-narrated\n• Practice from move 1 — engine plays the full opening with you\n• Practice middlegame — skip the opening, drop into the critical position\n\nTap any row to deep-link straight into that drill, scoped to the opening. Drag to reorder, tap a peeking card to flip forward. Star animations from /openings push new favorites into the deck live."
+          rgb="245, 158, 11"
           bgClass="bg-amber-500/10"
           textColorClass="text-amber-400"
-          onClick={goTo('library', '/coach/library')}
+          onClick={goTo('plan', '/coach/plan')}
           gB={gB}
           gS={gS}
-          testId="coach-action-library"
+          testId="coach-action-plan"
         />
         <SecondaryTile
           icon={<Search size={28} className="text-sky-400" />}

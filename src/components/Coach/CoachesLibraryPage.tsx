@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import {
   ArrowLeft, BookOpen, Play, Pause, ChevronLeft, ChevronRight,
-  SkipBack, SkipForward, RotateCcw, Library, Search, X,
+  SkipBack, SkipForward, RotateCcw, Library, Search, X, List, ChevronRight as Chevron,
 } from 'lucide-react';
 import { ConsistentChessboard, type BoardArrow } from '../Chessboard/ConsistentChessboard';
 import { useProseReader, type ProseUnit } from '../../hooks/useProseReader';
@@ -47,6 +47,81 @@ function paragraphsOf(page: LibraryPage): Paragraph[] {
       id: `${page.id}-p${pi}`,
       sentences: splitSentences(para).map((text, si) => ({ id: `${page.id}-p${pi}-s${si}`, text })),
     }));
+}
+
+interface Chapter { title: string; page: number }
+
+// Real titles where the source heading is bare (e.g. Chess Strategy prints only
+// "CHAPTER II"); keyed by book id → the bare chapter heading → its real title.
+const CHAPTER_TITLE_OVERRIDES: Record<string, Record<string, string>> = {
+  'edward-lasker-chess-strategy': {
+    'Chess Strategy': 'Introductory — The Rules of the Game',
+    'CHAPTER II': 'Hints for Beginners — Elementary Combinations',
+    'CHAPTER III': 'General Principles of Chess Strategy',
+    'CHAPTER IV': 'The Opening',
+    'CHAPTER V': 'The End-Game',
+    'CHAPTER VI': 'The Middle Game',
+    'PART II': 'Illustrative Games from Master Tournaments',
+  },
+  'capablanca-chess-fundamentals': {
+    'CHAPTER II': 'Further Principles in End-Game Play',
+    'CHAPTER III': 'Planning a Win in Middle-Game Play',
+    'CHAPTER IV': 'General Theory',
+    'CHAPTER V': 'End-Game Strategy',
+    '32. SOME POSSIBLE DEVELOPMENTS FROM': 'Some Possible Developments from a Ruy Lopez',
+    'PART II': 'Illustrative Games',
+  },
+};
+
+const GENERIC_HEADING = /^(Chapter\s+[IVXLC]+|My System|Untitled|Chess Fundamentals|Chess Strategy|PART\s+[IVXLC]+|CHAPTER\s+[IVXLC]+)$/i;
+const SMALL_WORDS = new Set(['of', 'the', 'a', 'an', 'to', 'and', 'with', 'in', 'on', 'for', 'from', 'as', 'at', 'by', 'or']);
+function titleCaseIfShouting(s: string): string {
+  // Convert ALL-CAPS headings to Title Case; leave already-mixed-case alone.
+  const letters = s.replace(/[^A-Za-z]/g, '');
+  if (letters.length <= 2 || letters !== letters.toUpperCase()) return s;
+  const words = s.toLowerCase().split(/(\s+)/);
+  let wordIdx = 0;
+  return words
+    .map((w) => {
+      if (/^\s+$/.test(w) || !w) return w;
+      const cap = wordIdx > 0 && SMALL_WORDS.has(w) ? w : w.replace(/^([a-z])/, (m) => m.toUpperCase());
+      wordIdx++;
+      return cap;
+    })
+    .join('');
+}
+function clip(s: string, n = 64): string {
+  const t = s.trim();
+  return t.length > n ? `${t.slice(0, n - 1).trim()}…` : t;
+}
+/** The most descriptive title available for the chapter starting at page i. */
+function chapterTitle(book: LibraryBook, p: LibraryPage): string {
+  const h = p.heading ?? '';
+  const chap = h.split(' · ')[0].trim();
+  const ov = CHAPTER_TITLE_OVERRIDES[book.id]?.[chap];
+  if (ov) return ov;
+  const sect = h.includes(' · ') ? h.split(' · ').slice(1).join(' · ') : '';
+  const sd = sect.replace(/^Section\s+\S+\s*[—-]?\s*/i, '').trim();
+  // Short label-style chapter ("Lesson 1", "Prologue") → keep its title too.
+  if (sd && chap.length <= 14 && /^(Lesson|Prologue|Epilogue|Game)/i.test(chap)) {
+    return clip(`${chap} · ${sd}`, 70);
+  }
+  if (chap && !GENERIC_HEADING.test(chap)) return titleCaseIfShouting(chap.replace(/^\d+\.\s*/, ''));
+  // generic/garbled chapter label → use the descriptive section, else the text
+  if (sd) return titleCaseIfShouting(clip(sd));
+  const firstLine = p.text.replace(/\s+/g, ' ').trim();
+  return titleCaseIfShouting(clip(firstLine, 60)) || 'Untitled';
+}
+
+/** The book's chapters with the page each starts on — drives the contents picker. */
+function chaptersOf(book: LibraryBook): Chapter[] {
+  const out: Chapter[] = [];
+  let lastGroup: string | null = null;
+  book.pages.forEach((p, i) => {
+    const group = (p.heading ?? 'Untitled').split(' · ')[0].trim() || 'Untitled';
+    if (group !== lastGroup) { out.push({ title: chapterTitle(book, p), page: i }); lastGroup = group; }
+  });
+  return out;
 }
 
 // ── The live board that replaces a drawn diagram ────────────────────────────
@@ -121,6 +196,10 @@ function LivingBoardView({ board }: { board: LivingBoard }): JSX.Element {
 // ── The book reader (mirrors the opening tab's "From the Book") ──────────────
 function LibraryBookReader({ book, onBack, initialPage = 0 }: { book: LibraryBook; onBack: () => void; initialPage?: number }): JSX.Element {
   const [page, setPage] = useState(initialPage);
+  const chapters = useMemo(() => chaptersOf(book), [book]);
+  // Page one of every book is the appendix — a chapter picker. Opening from a
+  // search result (initialPage > 0) jumps straight to that page instead.
+  const [showContents, setShowContents] = useState(initialPage === 0);
   const pageCount = book.pages.length;
   const safePage = Math.min(page, Math.max(0, pageCount - 1));
   const current = book.pages[safePage];
@@ -138,6 +217,64 @@ function LibraryBookReader({ book, onBack, initialPage = 0 }: { book: LibraryBoo
     reader.stop();
     setPage(Math.max(0, Math.min(pageCount - 1, next)));
   };
+  const openChapter = (p: number): void => {
+    reader.stop();
+    setPage(p);
+    setShowContents(false);
+  };
+
+  // ── The appendix: a chapter picker (page one of every book) ───────────────
+  if (showContents) {
+    return (
+      <div
+        className="flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6"
+        style={{ color: 'var(--color-text)' }}
+        data-testid="library-contents"
+      >
+        <div className="flex items-center justify-between">
+          <button
+            onClick={onBack}
+            className="p-2 rounded-lg hover:bg-theme-surface min-w-[44px] min-h-[44px] flex items-center justify-center"
+            aria-label="Back to the library"
+          >
+            <ArrowLeft size={20} className="text-theme-text" />
+          </button>
+          <div className="flex-1 flex flex-col items-center">
+            <h1 className="text-lg font-bold text-center leading-tight">{book.bookTitle}</h1>
+            <p className="text-xs text-theme-text-muted">{book.author}</p>
+          </div>
+          <div className="w-[44px]" />
+        </div>
+
+        <div className="max-w-lg mx-auto w-full">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-rose-300/80 mb-1">Contents</p>
+          <p className="text-[11px] text-theme-text-muted/70 mb-3">{chapters.length} chapters · tap one to start reading.</p>
+          <div className="flex flex-col gap-2" data-testid="library-chapter-list">
+            {chapters.map((ch) => (
+              <button
+                key={`${ch.page}-${ch.title}`}
+                type="button"
+                onClick={() => openChapter(ch.page)}
+                className="group flex items-center gap-3 text-left rounded-xl border border-theme-border bg-theme-surface/60 hover:bg-rose-500/10 hover:border-rose-400/40 px-3 py-3 transition-colors"
+                data-testid={`library-chapter-${ch.page}`}
+              >
+                <span className="text-[11px] tabular-nums text-theme-text-muted/60 w-6 shrink-0">{ch.page + 1}</span>
+                <span className="flex-1 text-sm text-theme-text leading-snug">{ch.title}</span>
+                <Chevron size={16} className="text-theme-text-muted/50 group-hover:text-rose-300 shrink-0" />
+              </button>
+            ))}
+          </div>
+
+          <footer className="text-[11px] text-theme-text-muted/70 mt-4 pt-2 border-t border-theme-border/50 leading-snug">
+            <span className="italic">{book.bookTitle}</span> by {book.author}.
+            {book.citation.translator ? ` English version by ${book.citation.translator}.` : ''}{' '}
+            {book.citation.edition}.{' '}
+            <span className="text-theme-text-muted/60">{book.citation.rights}</span>
+          </footer>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -146,13 +283,24 @@ function LibraryBookReader({ book, onBack, initialPage = 0 }: { book: LibraryBoo
       data-testid="library-book-reader"
     >
       <div className="flex items-center justify-between">
-        <button
-          onClick={onBack}
-          className="p-2 rounded-lg hover:bg-theme-surface min-w-[44px] min-h-[44px] flex items-center justify-center"
-          aria-label="Back to the library"
-        >
-          <ArrowLeft size={20} className="text-theme-text" />
-        </button>
+        <div className="flex items-center">
+          <button
+            onClick={onBack}
+            className="p-2 rounded-lg hover:bg-theme-surface min-w-[44px] min-h-[44px] flex items-center justify-center"
+            aria-label="Back to the library"
+          >
+            <ArrowLeft size={20} className="text-theme-text" />
+          </button>
+          <button
+            type="button"
+            onClick={() => { reader.stop(); setShowContents(true); }}
+            className="p-2 rounded-lg hover:bg-rose-500/15 min-w-[44px] min-h-[44px] flex items-center justify-center text-rose-300"
+            aria-label="Contents"
+            data-testid="library-contents-btn"
+          >
+            <List size={20} />
+          </button>
+        </div>
         <div className="flex-1 flex flex-col items-center">
           <h1 className="text-lg font-bold text-center leading-tight">{book.bookTitle}</h1>
           <p className="text-xs text-theme-text-muted">{book.author}</p>
