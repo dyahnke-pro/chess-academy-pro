@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
 import { HintButton } from '../Coach/HintButton';
+import { countFullMovesInPgn } from '../../utils/pgnMoveCount';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { getRepertoireOpenings, recordDrillAttempt } from '../../services/openingService';
 import type { OpeningRecord, HintLevel, BoardArrow } from '../../types';
@@ -300,7 +301,7 @@ export function BlindfolTrainer({ onExit }: BlindfolTrainerProps): JSX.Element {
                     <div>
                       <p className="text-sm font-medium text-theme-text">{o.name}</p>
                       <p className="text-xs text-theme-text-muted">
-                        {o.eco} · {o.color === 'white' ? 'White' : 'Black'} · {o.pgn.trim().split(/\s+/).length} moves
+                        {o.eco} · {o.color === 'white' ? 'White' : 'Black'} · {countFullMovesInPgn(o.pgn)} moves
                       </p>
                     </div>
                     <EyeOff size={14} className="text-theme-text-muted" />

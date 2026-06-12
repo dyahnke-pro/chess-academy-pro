@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { BookOpen, Play, Pause, Volume2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useProseReader, type ProseUnit } from '../../hooks/useProseReader';
+import { splitIntoReadableBlocks } from '../../utils/proseParagraphs';
 import {
   getOpeningBookPages,
   getConceptBookGroups,
@@ -58,14 +59,11 @@ function buildParagraphs(
   title: string | undefined,
   text: string,
 ): ReaderParagraph[] {
-  return text
-    .split('\n\n')
-    .filter(Boolean)
-    .map((para, j) => ({
-      id: `${chapterId}-p${passageIdx}-${j}`,
-      text: para,
-      spoken: j === 0 && title ? `${title}. ${para}` : para,
-    }));
+  return splitIntoReadableBlocks(text).map((para, j) => ({
+    id: `${chapterId}-p${passageIdx}-${j}`,
+    text: para,
+    spoken: j === 0 && title ? `${title}. ${para}` : para,
+  }));
 }
 
 function pageToPassage(chapterId: string, idx: number, p: BookPage): ReaderPassage {

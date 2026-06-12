@@ -345,6 +345,28 @@ describe('MyMistakesPage', () => {
     expect(screen.getByTestId('opening-filter-badge')).toHaveTextContent('Sicilian Defense');
   });
 
+  it('scopes to a set of games via gameIds state (opening drilldown)', async () => {
+    setMockData([
+      buildMistakePuzzle({ id: 'p1', sourceGameId: 'g1', moveNumber: 5 }),
+      buildMistakePuzzle({ id: 'p2', sourceGameId: 'g2', moveNumber: 8 }),
+      buildMistakePuzzle({ id: 'p3', sourceGameId: 'g-other', moveNumber: 12 }),
+    ]);
+
+    rtlRender(
+      <MemoryRouter initialEntries={[{ pathname: '/tactics/mistakes', state: { gameIds: ['g1', 'g2'], scopeLabel: "Queen's Pawn Game" } }]}>
+        <MotionConfig transition={{ duration: 0 }}>
+          <MyMistakesPage />
+        </MotionConfig>
+      </MemoryRouter>,
+    );
+
+    // Only the two games in the set surface — not g-other.
+    await waitFor(() => {
+      expect(screen.getAllByTestId('puzzle-card')).toHaveLength(2);
+    });
+    expect(screen.getByTestId('opening-scope-badge')).toHaveTextContent("Queen's Pawn Game games");
+  });
+
   it('clears opening filter when badge is clicked', async () => {
     setMockData([
       buildMistakePuzzle({ id: 'p1', openingName: 'Sicilian Defense', moveNumber: 5 }),

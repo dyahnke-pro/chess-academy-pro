@@ -238,7 +238,7 @@ export function TacticsPage(): JSX.Element {
           );
         })}
 
-        {/* Bottom full-width buttons (Weaknesses, Mistakes) */}
+        {/* Square tiles that sit inline with the theme cards (Find the Square) */}
         {BOTTOM_BUTTONS.map((btn) => {
           const Icon = btn.icon;
           const shadow = scaledShadow(btn.rgb, gB);
@@ -247,14 +247,14 @@ export function TacticsPage(): JSX.Element {
             <button
               key={btn.key}
               onClick={() => handleNavigate(btn.route, btn.label)}
-              className={`col-span-2 py-6 ${btn.bgColor} rounded-2xl flex flex-col items-center justify-center gap-3 transition-all duration-200`}
+              className={`${btn.bgColor} rounded-2xl flex flex-col items-center justify-center gap-2 transition-all duration-200 aspect-square`}
               style={{ ...neonBorderStyle(btn.rgb, gS), boxShadow: shadow }}
               onMouseEnter={(e) => { applyHoverBorder(e.currentTarget, btn.rgb, gS); e.currentTarget.style.boxShadow = shadowHover; }}
               onMouseLeave={(e) => { applyRestBorder(e.currentTarget, btn.rgb, gS); e.currentTarget.style.boxShadow = shadow; }}
               data-testid={`section-${btn.key}`}
             >
-              <Icon size={32} className={btn.color} />
-              <span className={`text-base font-bold ${btn.color}`}>{btn.label}</span>
+              <Icon size={28} className={btn.color} />
+              <span className={`text-sm font-bold ${btn.color} text-center px-2 leading-tight`}>{btn.label}</span>
             </button>
           );
         })}

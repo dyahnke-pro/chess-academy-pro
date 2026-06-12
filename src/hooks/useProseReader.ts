@@ -53,7 +53,13 @@ export function useProseReader(units: ProseUnit[]): ProseReader {
   );
 
   const speakUnit = useCallback(async (text: string): Promise<void> => {
-    await voiceService.speakForced(sanitizeForTTS(scrubDescriptiveNotationForSpeech(text)));
+    // Read-aloud affordance (BookReader, ListenableProse "Listen" buttons) —
+    // EXEMPT from the brief/silent verbosity cap exactly like the opening
+    // page's Classic-Wisdom "from the book" section (G5). speakForced still
+    // honored the brief cap, so on "brief" every paragraph was clipped to
+    // ≤2 sentences / ≤30 words — the book read truncated. speakReadAloud
+    // sets bypassVerbosity so the full passage is read.
+    await voiceService.speakReadAloud(sanitizeForTTS(scrubDescriptiveNotationForSpeech(text)));
   }, []);
 
   const playSequence = useCallback(
