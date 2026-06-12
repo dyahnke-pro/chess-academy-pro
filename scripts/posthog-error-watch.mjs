@@ -53,6 +53,15 @@ async function setOutput(key, value) {
   }
 }
 
+// Multiline GITHUB_OUTPUT (heredoc form) — used for the human-readable
+// digest the auto-fix workflow interpolates into Claude's prompt.
+async function setMultilineOutput(key, value) {
+  if (process.env.GITHUB_OUTPUT) {
+    const delim = `__EOF_${key}_${Date.now()}__`;
+    await appendFile(process.env.GITHUB_OUTPUT, `${key}<<${delim}\n${value}\n${delim}\n`);
+  }
+}
+
 async function emitEmpty(reason) {
   if (reason) console.log(`[posthog-watch] ${reason}`);
   await setOutput('count', '0');
@@ -150,6 +159,13 @@ async function main() {
   await setOutput('count', String(errors.length));
   await setOutput('maxTs', String(maxTs));
   await setOutput('hasErrors', errors.length > 0 ? 'true' : 'false');
+
+  // A compact plain-text digest for the auto-fix prompt (newest first).
+  const digest = [...errors]
+    .reverse()
+    .map((e) => `- ${e.type || '(no type)'}: ${e.value || '(no message)'} — ${e.occurrences}x / ${e.users} user(s), last ${new Date(e.lastTs).toISOString()}`)
+    .join('\n');
+  await setMultilineOutput('digest', digest || '(none)');
 }
 
 // PostHog returns array properties (`$exception_types`/`$exception_values`)
