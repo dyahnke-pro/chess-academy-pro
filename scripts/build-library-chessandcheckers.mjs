@@ -167,9 +167,14 @@ for (let i = start; i < end; i++) {
     if (fen) {
       const after = ctx + ' ' + lines.slice(j, j + 18).join(' ');
       const moves = extractMoves(fen, after);
-      // close the current page WITH this board as its illustration
-      pendingBoard = { fen, moves, orientation: 'white', caption: moves.length ? 'Play through the line' : 'The position' };
+      // The book prints the ASCII board, THEN its "DIAGRAM N" label, THEN the
+      // prose that analyses that position. So a board illustrates the discussion
+      // that FOLLOWS it, not the prose before it. Close the preceding prose with
+      // whatever board was already pending, then hold THIS board for the next
+      // page. (Attaching to the preceding prose shifted every board one diagram
+      // ahead of the text that discussed it — the "wrong position" bug.)
       flushPage();
+      pendingBoard = { fen, moves, orientation: 'white', caption: moves.length ? 'Play through the line' : 'The position' };
     }
     i = j; // skip past the board + file-letter line
     continue;
