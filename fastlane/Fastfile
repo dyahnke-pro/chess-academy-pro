@@ -72,8 +72,14 @@ platform :ios do
     upload_to_testflight(
       api_key: api_key,
       app_identifier: APP_ID,
-      skip_waiting_for_build_processing: true,
-      distribute_external: false,
+      # External distribution → submit to the "Beta Test" group for Apple's
+      # Beta App Review. Internal testers still get every build automatically,
+      # with no review. distribute_external requires waiting for processing.
+      distribute_external: true,
+      groups: ['Beta Test'],
+      notify_external_testers: true,
+      changelog: 'Fixes the AI coach — it now connects and answers in the app.',
+      skip_waiting_for_build_processing: false,
     )
   end
 end

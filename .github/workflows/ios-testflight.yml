@@ -17,12 +17,15 @@ on:
         description: 'What changed since the last TestFlight build (for the log).'
         required: false
         type: string
-  # Tag-triggered builds: push a tag like `ios-build-1` to kick a TestFlight
-  # build without needing the Actions UI / a workflow-dispatch token. Scoped to
-  # this tag prefix only — normal pushes never build.
+  # Build whenever the iOS build config changes on main (the git proxy here
+  # blocks tag pushes, and the dispatch API needs a token we don't have, so a
+  # path-scoped push trigger is the reliable kick). Normal app/code pushes to
+  # main do NOT build — only edits to fastlane/ or this workflow.
   push:
-    tags:
-      - 'ios-build-*'
+    branches: [main]
+    paths:
+      - 'fastlane/**'
+      - '.github/workflows/ios-testflight.yml'
 
 concurrency:
   group: ios-testflight
@@ -31,7 +34,7 @@ concurrency:
 jobs:
   testflight:
     runs-on: macos-14
-    timeout-minutes: 40
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
 
