@@ -1,0 +1,75 @@
+name: iOS → TestFlight
+
+# Build the Capacitor app on a macOS runner and upload to TestFlight — so a
+# new TestFlight build is one workflow trigger, no local Xcode archive.
+#
+# Trigger: manual (workflow_dispatch). NOT on every push — TestFlight builds
+# are deliberate, and external testers need Apple Beta App Review anyway.
+#
+# Requires the secrets documented in docs/ios-testflight-ci.md. Without them
+# the `fastlane beta` step fails fast at the first missing ENV.fetch — nothing
+# else in the repo is affected.
+
+on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'What changed since the last TestFlight build (for the log).'
+        required: false
+        type: string
+
+concurrency:
+  group: ios-testflight
+  cancel-in-progress: false
+
+jobs:
+  testflight:
+    runs-on: macos-14
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_16.app
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+
+      - name: Install JS deps
+        run: npm ci --no-audit --no-fund
+
+      - name: Build web bundle
+        run: npm run build
+
+      - name: Generate app icons / splash
+        run: npm run assets:generate
+
+      - name: Add + sync iOS project (regenerates the gitignored ios/)
+        run: |
+          npx cap add ios
+          npx cap sync ios
+
+      - name: Apply AVAudioSession AppDelegate patch
+        run: cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
+
+      - name: Fastlane → TestFlight
+        run: bundle exec fastlane ios beta
+        env:
+          # The ONLY three secrets needed — your App Store Connect API key.
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+
+      - name: Upload .ipa artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-ipa
+          path: build/*.ipa
+          if-no-files-found: ignore

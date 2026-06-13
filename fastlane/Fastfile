@@ -1,0 +1,79 @@
+# Fastlane — ship the Capacitor app to TestFlight from CI.
+#
+# The web bundle + native project are already built/synced by the workflow
+# (.github/workflows/ios-testflight.yml) BEFORE this runs, so by the time the
+# `beta` lane fires, ios/App/App.xcworkspace exists with Pods installed and the
+# AVAudioSession AppDelegate patch applied.
+#
+# Signing + auth are driven ENTIRELY by the App Store Connect API key (Admin
+# role) — no Mac, no Fastlane match repo, no stored .p12. On CI we:
+#   * create/download a distribution certificate with the API key (`cert`),
+#   * create/download an App Store provisioning profile (`get_provisioning_profile`),
+#   * build with that identity, and upload to TestFlight with the same key.
+# Three secrets total: APP_STORE_CONNECT_API_KEY_{ID,ISSUER_ID} + _KEY (the .p8).
+#
+# See docs/ios-testflight-ci.md for the one-time setup.
+
+default_platform(:ios)
+
+WORKSPACE = 'ios/App/App.xcworkspace'
+SCHEME = 'App'
+APP_ID = 'com.chessacademy.pro'
+
+platform :ios do
+  desc 'Build and upload a new build to TestFlight'
+  lane :beta do
+    # Ephemeral keychain so the created signing cert never persists on the runner.
+    setup_ci
+
+    api_key = app_store_connect_api_key(
+      key_id: ENV.fetch('APP_STORE_CONNECT_API_KEY_ID'),
+      issuer_id: ENV.fetch('APP_STORE_CONNECT_API_ISSUER_ID'),
+      key_content: ENV.fetch('APP_STORE_CONNECT_API_KEY'), # the raw .p8 contents
+      in_house: false,
+    )
+
+    # Distribution certificate — create one if the account has none, else reuse.
+    # The private key is generated into the keychain that `setup_ci` configured.
+    cert(api_key: api_key)
+
+    # App Store provisioning profile for this bundle id (created if missing).
+    profile_path = get_provisioning_profile(
+      api_key: api_key,
+      app_identifier: APP_ID,
+      adhoc: false,
+      readonly: false,
+    )
+    profile_name = lane_context[SharedValues::SIGH_NAME]
+
+    # Auto-increment the build number off TestFlight's latest.
+    latest = latest_testflight_build_number(
+      api_key: api_key,
+      app_identifier: APP_ID,
+      initial_build_number: 0,
+    )
+    increment_build_number(
+      xcodeproj: 'ios/App/App.xcodeproj',
+      build_number: (latest + 1).to_s,
+    )
+
+    build_app(
+      workspace: WORKSPACE,
+      scheme: SCHEME,
+      export_method: 'app-store',
+      export_options: {
+        provisioningProfiles: { APP_ID => profile_name },
+        signingStyle: 'manual',
+      },
+      output_directory: 'build',
+      clean: true,
+    )
+
+    upload_to_testflight(
+      api_key: api_key,
+      app_identifier: APP_ID,
+      skip_waiting_for_build_processing: true,
+      distribute_external: false,
+    )
+  end
+end

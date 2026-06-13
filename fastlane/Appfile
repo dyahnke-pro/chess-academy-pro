@@ -1,0 +1,5 @@
+app_identifier('com.chessacademy.pro')
+
+# Team identifiers are resolved from the App Store Connect API key at runtime,
+# so no Apple ID / team id needs to live here. If you ever switch off the API
+# key, add: apple_id("you@example.com"), itc_team_id("..."), team_id("...").
