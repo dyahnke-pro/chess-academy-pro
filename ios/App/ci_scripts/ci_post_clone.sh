@@ -41,13 +41,33 @@ npx cap sync ios
 # Reapply the AVAudioSession AppDelegate patch (cap regenerates ios/).
 cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 
-# Xcode Cloud archives with automatic Swift Package resolution DISABLED and
-# requires a resolved file at
-# App.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved.
-# The project is generated fresh here so none exists yet — resolve the SPM
-# graph now (CapApp-SPM pulls capacitor-swift-pm from GitHub) so the archive
-# step finds the resolved file instead of failing.
-xcodebuild -resolvePackageDependencies -project ios/App/App.xcodeproj -scheme App
+# --- Swift Package resolution -------------------------------------------------
+# Xcode Cloud archives with "only use versions from Package.resolved" forced ON
+# globally (IDEPackageOnlyUseVersionsFromResolvedFile), so the Archive step
+# REFUSES to resolve fresh and demands a resolved file at
+#   App.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+# Because the project is generated here, none is committed — so we must produce
+# it now. (This global setting is why an explicit
+# `xcodebuild -resolvePackageDependencies` alone failed with exit 74 — see
+# swift-package-manager#6914.)
+RESOLVED="ios/App/App.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
+
+# Flip the global default OFF for this build user so xcodebuild can resolve,
+# then resolve — this writes Package.resolved with the originHash xcodebuild
+# expects for the .xcodeproj dependency graph.
+defaults write com.apple.dt.Xcode IDEPackageOnlyUseVersionsFromResolvedFile -bool NO || true
+xcodebuild -resolvePackageDependencies -project ios/App/App.xcodeproj -scheme App || true
+
+# Fallback: if the above didn't produce the file (e.g. the default is enforced
+# another way), resolve with the SwiftPM CLI — it ignores the com.apple.dt.Xcode
+# default entirely — and place the result where the Archive step looks.
+if [ ! -f "$RESOLVED" ]; then
+  ( cd ios/App/CapApp-SPM && xcrun swift package resolve )
+  mkdir -p "$(dirname "$RESOLVED")"
+  cp ios/App/CapApp-SPM/Package.resolved "$RESOLVED"
+fi
+
+test -f "$RESOLVED" || { echo "ci_post_clone: FAILED to produce Package.resolved"; exit 1; }
 
 echo "ci_post_clone: generated ios/App/App.xcodeproj + resolved SPM dependencies"
 }
