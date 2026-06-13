@@ -6,12 +6,8 @@ name: iOS → TestFlight
 # Trigger: manual (workflow_dispatch) or a push that changes fastlane/ or this
 # workflow. Requires the secrets in docs/ios-testflight-ci.md.
 #
-# Key formats: the APP_STORE_CONNECT_API_KEY secret holds the ORIGINAL Apple
-# .p8 (PKCS#8) base64. altool's TestFlight upload uses it verbatim (it needs
-# Apple's exact bytes). fastlane spaceship can't parse PKCS#8 (its EC.new →
-# "invalid curve name"), so the build step derives a SEC1 form from it.
-#
-# (re-trigger: original-.p8 secret)
+# Key formats: APP_STORE_CONNECT_API_KEY = ORIGINAL Apple .p8 (PKCS#8) base64.
+# altool uses it verbatim; spaceship needs SEC1, derived in the build step.
 
 on:
   workflow_dispatch:
@@ -32,8 +28,6 @@ concurrency:
 
 jobs:
   testflight:
-    # macos-15 ships Xcode 16 as default (Apple requires the iOS 18 / Xcode 16
-    # SDK for App Store + TestFlight uploads). No explicit xcode-select needed.
     runs-on: macos-15
     timeout-minutes: 60
     steps:
@@ -65,17 +59,29 @@ jobs:
       - name: Apply AVAudioSession AppDelegate patch
         run: cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 
+      - name: Prepare ASC keys (PKCS#8 for altool, SEC1 for spaceship)
+        env:
+          ASC_KEY_P8_B64: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+        run: |
+          set -x
+          printf '%s' "$ASC_KEY_P8_B64" | base64 -d > "$RUNNER_TEMP/asc.p8"
+          echo "p8 head: $(head -1 "$RUNNER_TEMP/asc.p8"); bytes: $(wc -c < "$RUNNER_TEMP/asc.p8")"
+          # SEC1 for fastlane spaceship.
+          openssl ec -in "$RUNNER_TEMP/asc.p8" -out "$RUNNER_TEMP/asc_sec1.pem"
+          echo "sec1 head: $(head -1 "$RUNNER_TEMP/asc_sec1.pem")"
+          # Place the ORIGINAL .p8 (verbatim) where altool searches.
+          for d in "$HOME/.appstoreconnect/private_keys" "$HOME/private_keys" "$HOME/.private_keys" "./private_keys"; do
+            mkdir -p "$d"; cp "$RUNNER_TEMP/asc.p8" "$d/AuthKey_${KEY_ID}.p8"
+          done
+
       - name: Fastlane → build signed IPA
         env:
           APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
-          # Secret = original PKCS#8 .p8 (base64). spaceship needs SEC1 → derive
-          # it (openssl ec reads PKCS#8 or SEC1 and emits SEC1).
-          ASC_KEY_P8_B64: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
           CERT_P12_B64: ${{ secrets.BUILD_CERT_P12_B64 }}
           CERT_P12_PASSWORD: 'capro-ci-2026'
         run: |
-          printf '%s' "$ASC_KEY_P8_B64" | base64 -d | openssl ec -outform pem > "$RUNNER_TEMP/asc_sec1.pem" 2>/dev/null
           export APP_STORE_CONNECT_API_KEY_B64="$(base64 -w0 "$RUNNER_TEMP/asc_sec1.pem")"
           printf '%s' "$CERT_P12_B64" | base64 -d > "$RUNNER_TEMP/dist.p12"
           export CERT_P12_PATH="$RUNNER_TEMP/dist.p12"
@@ -85,15 +91,7 @@ jobs:
         env:
           KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
-          # The secret is Apple's original PKCS#8 .p8 — give altool those exact
-          # bytes (a re-serialized PKCS#8 makes altool's JWT loader fall back to
-          # no-auth → -26000). Placed in every dir altool searches.
-          ASC_KEY_P8_B64: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
         run: |
-          for d in "$HOME/.appstoreconnect/private_keys" "$HOME/private_keys" "$HOME/.private_keys" "./private_keys"; do
-            mkdir -p "$d"
-            printf '%s' "$ASC_KEY_P8_B64" | base64 -d > "$d/AuthKey_${KEY_ID}.p8"
-          done
           echo "Uploading build/App.ipa to TestFlight via altool…"
           xcrun altool --upload-app --type ios --file build/App.ipa --apiKey "$KEY_ID" --apiIssuer "$ISSUER_ID"
 
