@@ -10,6 +10,8 @@ name: iOS → TestFlight
 # .p8 (PKCS#8) base64. altool's TestFlight upload uses it verbatim (it needs
 # Apple's exact bytes). fastlane spaceship can't parse PKCS#8 (its EC.new →
 # "invalid curve name"), so the build step derives a SEC1 form from it.
+#
+# (re-trigger: original-.p8 secret)
 
 on:
   workflow_dispatch:
