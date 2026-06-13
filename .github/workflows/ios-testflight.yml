@@ -46,9 +46,6 @@ jobs:
 
       - uses: ruby/setup-ruby@v1
         with:
-          # Ruby 3.2, NOT 3.3 — fastlane's spaceship hits "invalid curve name
-          # (OpenSSL::PKey::ECError)" parsing the App Store Connect .p8 key on
-          # Ruby 3.3 + OpenSSL 3. 3.2 parses the EC key cleanly.
           ruby-version: '3.2'
           bundler-cache: true
 
@@ -70,12 +67,18 @@ jobs:
         run: cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 
       - name: Fastlane → TestFlight
-        run: bundle exec fastlane ios beta
         env:
           # The ONLY three secrets needed — your App Store Connect API key.
           APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
-          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          # RAW_P8 = the .p8 PEM as stored in the secret. We base64-encode it
+          # in-process (never logged) so fastlane gets clean bytes — a raw
+          # multi-line PEM from a GitHub secret corrupts and triggers the
+          # spaceship "invalid curve name" error (#29478).
+          RAW_P8: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+        run: |
+          export APP_STORE_CONNECT_API_KEY="$(printf '%s' "$RAW_P8" | base64 | tr -d '\n')"
+          bundle exec fastlane ios beta
 
       - name: Upload .ipa artifact
         if: always()
