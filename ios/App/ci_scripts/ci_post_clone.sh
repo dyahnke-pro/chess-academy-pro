@@ -41,6 +41,15 @@ npx cap sync ios
 # Reapply the AVAudioSession AppDelegate patch (cap regenerates ios/).
 cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 
+# Declare export compliance (standard HTTPS/TLS only = exempt encryption) so
+# TestFlight never shows "Missing Compliance" and the build is installable for
+# internal testers immediately, with no per-build encryption question. Guarded
+# so a plist hiccup never aborts the archive.
+PLIST="ios/App/App/Info.plist"
+/usr/libexec/PlistBuddy -c "Add :ITSAppUsesNonExemptEncryption bool false" "$PLIST" 2>/dev/null \
+  || /usr/libexec/PlistBuddy -c "Set :ITSAppUsesNonExemptEncryption false" "$PLIST" 2>/dev/null \
+  || true
+
 # --- Swift Package resolution -------------------------------------------------
 # Xcode Cloud archives with "only use versions from Package.resolved" forced ON
 # globally (IDEPackageOnlyUseVersionsFromResolvedFile), so the Archive step
