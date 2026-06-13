@@ -5,12 +5,14 @@
 # `beta` lane fires, ios/App/App.xcworkspace exists with Pods installed and the
 # AVAudioSession AppDelegate patch applied.
 #
-# Signing + auth are driven ENTIRELY by the App Store Connect API key (Admin
-# role) — no Mac, no Fastlane match repo, no stored .p12. On CI we:
-#   * create/download a distribution certificate with the API key (`cert`),
-#   * create/download an App Store provisioning profile (`get_provisioning_profile`),
-#   * build with that identity, and upload to TestFlight with the same key.
-# Three secrets total: APP_STORE_CONNECT_API_KEY_{ID,ISSUER_ID} + _KEY (the .p8).
+# Signing + auth:
+#   * App Store Connect API key (.p8, base64) authenticates spaceship.
+#   * A PERSISTENT distribution cert + private key, generated once and stored
+#     as the BUILD_CERT_P12_B64 secret (base64 .p12), is imported into the CI
+#     keychain — fastlane's `cert` can't be used on ephemeral CI because the
+#     private key it generates is lost when the job ends (orphaning a cert each
+#     run, hitting Apple's 2-cert cap).
+#   * The App Store provisioning profile is created/downloaded via the API key.
 #
 # See docs/ios-testflight-ci.md for the one-time setup.
 
@@ -23,27 +25,29 @@ APP_ID = 'com.chessacademy.pro'
 platform :ios do
   desc 'Build and upload a new build to TestFlight'
   lane :beta do
-    # Ephemeral keychain so the created signing cert never persists on the runner.
+    # Ephemeral keychain so the imported signing cert never persists on the runner.
     setup_ci
 
-    # key_content is the BASE64 of the SEC1-converted key (the workflow's
-    # "Convert ASC key" step turns Apple's PKCS#8 .p8 into SEC1 and base64s it).
-    # SEC1 avoids the OpenSSL-3 "invalid curve name (OpenSSL::PKey::ECError)"
-    # that spaceship hits parsing a PKCS#8 EC key.
     api_key = app_store_connect_api_key(
       key_id: ENV.fetch('APP_STORE_CONNECT_API_KEY_ID'),
       issuer_id: ENV.fetch('APP_STORE_CONNECT_API_ISSUER_ID'),
+      # base64 of the SEC1-converted .p8 (pre-validated against the ASC API).
       key_content: ENV.fetch('APP_STORE_CONNECT_API_KEY_B64'),
       is_key_content_base64: true,
       in_house: false,
     )
 
-    # Distribution certificate — create one if the account has none, else reuse.
-    # The private key is generated into the keychain that `setup_ci` configured.
-    cert(api_key: api_key)
+    # Import the persistent distribution cert + private key (.p12 decoded to a
+    # file by the workflow) into the keychain setup_ci created.
+    import_certificate(
+      certificate_path: ENV.fetch('CERT_P12_PATH'),
+      certificate_password: ENV.fetch('CERT_P12_PASSWORD'),
+      keychain_name: ENV.fetch('MATCH_KEYCHAIN_NAME', 'fastlane_tmp_keychain'),
+      keychain_password: ENV.fetch('MATCH_KEYCHAIN_PASSWORD', ''),
+    )
 
     # App Store provisioning profile for this bundle id (created if missing).
-    profile_path = get_provisioning_profile(
+    get_provisioning_profile(
       api_key: api_key,
       app_identifier: APP_ID,
       adhoc: false,
