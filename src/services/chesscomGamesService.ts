@@ -11,6 +11,21 @@
  * or the coach honestly says it found nothing.
  */
 import { Chess } from 'chess.js';
+import { Capacitor } from '@capacitor/core';
+
+/** Under Capacitor (native WKWebView) relative `/api/*` calls hit the dead app
+ *  host, so prefix the deployed prod origin. Web/dev stay relative (same-origin
+ *  proxy). Scheme-independent native detection — mirrors voiceService /
+ *  lichessExplorer / coachApi (the `protocol === 'capacitor:'` sniff breaks
+ *  under the `server.hostname` https origin). */
+const VERCEL_ORIGIN = 'https://chess-academy-pro.vercel.app';
+function apiUrl(path: string): string {
+  try {
+    if (Capacitor.isNativePlatform()) return `${VERCEL_ORIGIN}${path}`;
+  } catch { /* @capacitor/core unavailable — fall through */ }
+  if (typeof window !== 'undefined' && window.location.protocol === 'capacitor:') return `${VERCEL_ORIGIN}${path}`;
+  return path;
+}
 
 export interface ChesscomGame {
   /** Bare space-delimited SAN move list (headers + clocks stripped), ready
@@ -121,7 +136,7 @@ export async function fetchChesscomPlayerGames(args: FetchChesscomArgs): Promise
   if (args.color) params.set('color', args.color);
 
   try {
-    const resp = await fetch(`/api/chesscom-games?${params.toString()}`, { signal: args.signal });
+    const resp = await fetch(apiUrl(`/api/chesscom-games?${params.toString()}`), { signal: args.signal });
     if (!resp.ok) return [];
     const data = (await resp.json()) as { games?: unknown } | null;
     if (!data || !Array.isArray(data.games)) return [];

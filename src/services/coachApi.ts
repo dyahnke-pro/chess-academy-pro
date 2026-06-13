@@ -1,6 +1,7 @@
 // All LLM API calls must go through this file only — per CLAUDE.md
 import OpenAI from 'openai';
 import Anthropic from '@anthropic-ai/sdk';
+import { Capacitor } from '@capacitor/core';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { SYSTEM_PROMPT, buildChessContextMessage, getVerbosityInstruction } from './coachPrompts';
@@ -243,13 +244,24 @@ const TASK_CATEGORY: Record<CoachTask, 'commentary' | 'analysis' | 'reports'> = 
 // returns 503 and the existing fallback chain switches providers).
 const PROXY_SENTINEL_KEY = 'proxy';
 
-/** Absolute origin for our `/api` proxy. Under Capacitor (WKWebView, origin
- *  `capacitor://…`) we must hit the deployed prod host; on web + dev we use
- *  the page origin (vite dev proxies `/api/*` to prod). Mirrors
- *  `voiceService.getTtsUrl`. */
+/** Absolute origin for our `/api` proxy. Under Capacitor (native WKWebView) we
+ *  must hit the deployed prod host; on web + dev we use the page origin (vite
+ *  dev proxies `/api/*` to prod).
+ *
+ *  Native detection uses Capacitor's official `isNativePlatform()` — it is
+ *  scheme-independent. The old `protocol === 'capacitor:'` sniff silently broke
+ *  once `server.hostname` made the WKWebView serve under `https://…`, so the
+ *  coach was misdetected as web and its /api/llm calls went to the (dead) app
+ *  host instead of VERCEL_ORIGIN — coach died on device while web kept working.
+ *  Same fix voiceService.detectNativeApp / lichessExplorerService got
+ *  2026-06-06; coachApi was missed in that sweep (David 2026-06-13). The
+ *  protocol sniff stays as a defensive fallback. */
 const VERCEL_ORIGIN = 'https://chess-academy-pro.vercel.app';
 function apiOrigin(): string {
   if (typeof window === 'undefined') return VERCEL_ORIGIN;
+  try {
+    if (Capacitor.isNativePlatform()) return VERCEL_ORIGIN;
+  } catch { /* @capacitor/core unavailable — fall through */ }
   if (window.location.protocol === 'capacitor:') return VERCEL_ORIGIN;
   return window.location.origin;
 }
