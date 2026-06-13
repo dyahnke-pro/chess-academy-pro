@@ -1,0 +1,132 @@
+name: PostHog error watch (cron)
+
+# Always-on watcher for live app crashes captured by PostHog Error Tracking.
+# Polls PostHog every ~15 min for new `$exception` events (the app mirrors
+# every crash path — window.onerror, unhandledrejection, React error
+# boundary, continuity-error — into PostHog as `$exception`). When a beta
+# tester hits a NEW error, the watcher comments on a dedicated tracking
+# issue with the error + occurrence/user counts — the notification a Claude
+# session picks up to triage and fix.
+#
+# State (the "last alerted" cursor, epoch-ms) lives in the issue body as a
+# `<!--cursor:MS-->` marker, so we never re-alert the same errors and need
+# no external store — identical to the audit-watch (voice-failure) cron.
+#
+# Setup (one-time): add a PostHog PERSONAL API key (`phx_…`, scopes
+# query:read + project:read) as a repo secret `POSTHOG_API_KEY`
+# (Settings → Secrets and variables → Actions). Without it, the watcher
+# logs "skipping" and exits cleanly (non-fatal).
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: posthog-error-watch
+  cancel-in-progress: false
+
+permissions:
+  contents: write       # autofix job pushes a branch
+  pull-requests: write  # autofix job opens a draft PR
+  issues: write         # watcher comments on the tracking issue
+
+env:
+  WATCH_ISSUE_TITLE: '🐛 PostHog error watch'
+  FALLBACK_LOOKBACK_MS: '86400000' # 24h on first run (no cursor yet)
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      hasErrors: ${{ steps.watch.outputs.hasErrors }}
+      digest: ${{ steps.watch.outputs.digest }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Find/create tracking issue + read cursor
+        id: cursor
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = process.env.WATCH_ISSUE_TITLE;
+            const fallback = Number(process.env.FALLBACK_LOOKBACK_MS);
+            const { owner, repo } = context.repo;
+            const issues = await github.rest.issues.listForRepo({
+              owner, repo, state: 'open', per_page: 100,
+            });
+            let issue = issues.data.find((i) => i.title === title && !i.pull_request);
+            if (!issue) {
+              const created = await github.rest.issues.create({
+                owner, repo, title,
+                body: `Automated watcher for live app crashes (PostHog Error Tracking).\n\nThe \`posthog-error-watch\` cron comments below whenever a beta tester hits a NEW \`$exception\`. Each comment is a fix-me signal — a Claude session can triage from the error + counts and open a PR.\n\n<!--cursor:0-->`,
+              });
+              issue = created.data;
+            }
+            const m = (issue.body || '').match(/<!--cursor:(\d+)-->/);
+            const cursor = m ? Number(m[1]) : 0;
+            const since = cursor > 0 ? cursor : (Date.now() - fallback);
+            core.setOutput('issueNumber', String(issue.number));
+            core.setOutput('since', String(since));
+            core.setOutput('body', issue.body || '');
+
+      - name: Query PostHog for new exceptions
+        id: watch
+        env:
+          POSTHOG_API_KEY: ${{ secrets.POSTHOG_API_KEY }}
+          POSTHOG_PROJECT_ID: ${{ secrets.POSTHOG_PROJECT_ID }}
+          SINCE_MS: ${{ steps.cursor.outputs.since }}
+          OUT_FILE: /tmp/posthog-errors.json
+        run: node scripts/posthog-error-watch.mjs
+
+      - name: Alert on new errors + advance cursor
+        if: steps.watch.outputs.hasErrors == 'true'
+        uses: actions/github-script@v7
+        env:
+          ISSUE_NUMBER: ${{ steps.cursor.outputs.issueNumber }}
+          MAX_TS: ${{ steps.watch.outputs.maxTs }}
+          PREV_BODY: ${{ steps.cursor.outputs.body }}
+        with:
+          script: |
+            const fs = require('fs');
+            const { owner, repo } = context.repo;
+            const issueNumber = Number(process.env.ISSUE_NUMBER);
+            const maxTs = Number(process.env.MAX_TS);
+            const data = JSON.parse(fs.readFileSync('/tmp/posthog-errors.json', 'utf8'));
+            const lines = data.errors.map((e) => {
+              const when = new Date(e.lastTs).toISOString();
+              const head = `${e.type || '(no type)'}: ${e.value || '(no message)'}`;
+              return `- \`${when}\` **${head}** — ${e.occurrences}× / ${e.users} user(s)`;
+            });
+            const body = [
+              `### 🐛 ${data.errors.length} error issue(s) seen in PostHog`,
+              '',
+              ...lines,
+              '',
+              `<sub>window since ${new Date(data.since).toISOString()} · run ${context.runId}</sub>`,
+            ].join('\n');
+            await github.rest.issues.createComment({ owner, repo, issue_number: issueNumber, body });
+            const prev = process.env.PREV_BODY || '';
+            const next = prev.match(/<!--cursor:\d+-->/)
+              ? prev.replace(/<!--cursor:\d+-->/, `<!--cursor:${maxTs}-->`)
+              : `${prev}\n<!--cursor:${maxTs}-->`;
+            await github.rest.issues.update({ owner, repo, issue_number: issueNumber, body: next });
+
+  # Auto-spawn a Claude session to triage + fix the new errors and open a
+  # DRAFT PR. Runs once per cycle that has new errors (the cursor dedups, so
+  # each distinct error triggers a fix at most once). secrets: inherit passes
+  # the Anthropic credential through to the called workflow.
+  autofix:
+    needs: watch
+    if: needs.watch.outputs.hasErrors == 'true'
+    uses: ./.github/workflows/claude-autofix.yml
+    with:
+      error_digest: ${{ needs.watch.outputs.digest }}
+    secrets: inherit

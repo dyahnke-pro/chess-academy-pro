@@ -1,0 +1,89 @@
+name: Claude auto-fix (from error digest)
+
+# Spawns an autonomous Claude Code session to triage a batch of live errors
+# and open a DRAFT PR with a fix. Reusable two ways:
+#   - workflow_call  — invoked by posthog-error-watch when NEW crashes appear
+#                      (the digest is passed in).
+#   - workflow_dispatch — fire manually with a pasted error digest.
+#
+# Claude opens a DRAFT PR only; it never pushes to main. David reviews + merges.
+#
+# Setup (one-time): add an Anthropic credential as a repo secret — either
+#   ANTHROPIC_API_KEY (an `sk-ant-…` key), OR run `/install-github-app` in
+#   Claude Code which provisions CLAUDE_CODE_OAUTH_TOKEN automatically.
+# Without a credential the action step fails fast (nothing else is affected).
+
+on:
+  workflow_call:
+    inputs:
+      error_digest:
+        description: 'Newline-separated list of live errors to triage + fix.'
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      error_digest:
+        description: 'Error summary (one per line) to triage + fix.'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: claude-autofix
+  cancel-in-progress: false
+
+jobs:
+  autofix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install deps
+        run: npm ci --no-audit --no-fund
+
+      - name: Claude triage + fix
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            Beta testers hit these live errors in production (from PostHog Error Tracking):
+
+            ${{ inputs.error_digest }}
+
+            You are working in the chess-academy-pro repo. Read CLAUDE.md first — its
+            gates and voice rules apply. Your job:
+
+            1. TRIAGE: pick the single highest-impact GENUINE CODE BUG in the list
+               (prefer high occurrence-count crashes: uncaught-error /
+               unhandled-rejection / continuity-error / sanitizer-leak / IndexedDB
+               transaction errors). SKIP items that are architectural grounding
+               signals rather than fixable crashes (claim-validator-trip,
+               master-play-enforcement-fallback) — note them but don't try to
+               "fix" them with a code patch.
+            2. ROOT CAUSE: find the disease, not just the symptom. Grep for every
+               other instance of the same pattern (CLAUDE.md "sweep, don't spot-fix").
+            3. FIX: minimal, surgical changes. No unrelated refactors.
+            4. VERIFY: run `npm run ship-check` — typecheck + lint + content gates
+               must pass.
+            5. Open a DRAFT pull request against main titled `fix: <bug>`, with a
+               body that names the error, the root cause, the fix, and what you
+               could NOT verify from CI (e.g. the live 3-instrument prod audit,
+               which David runs after merge per G1). Do NOT push to main.
+
+            If none of the items is a genuinely fixable code bug, open NO PR — instead
+            comment your triage conclusion on the `🐛 PostHog error watch` tracking issue.
+          claude_args: |
+            --max-turns 30
+            --allowedTools Edit,Write,Read,Grep,Glob,Bash
