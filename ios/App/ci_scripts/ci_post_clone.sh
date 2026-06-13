@@ -38,18 +38,26 @@ npm run build
 npx cap add ios
 npx cap sync ios
 
+# Regenerate the REAL app icon + splash from the committed sources in assets/.
+# `cap add` scaffolds the DEFAULT Capacitor icon, so without this every build
+# ships the placeholder icon (David's report 2026-06-13). The project's own
+# asset pipeline builds the icon set into ios/App/App/Assets.xcassets.
+npm run assets:generate
+
 # Reapply the AVAudioSession AppDelegate patch (cap regenerates ios/).
 cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 
-# Stamp the real marketing version. `cap add` scaffolds a fresh project at
-# MARKETING_VERSION = 1.0, which would REGRESS below the shipped 2.x line — a
-# 1.0 build is LOWER than 2.4, so TestFlight never offers it as an update.
-# Bump this one value when you cut a new release. (Xcode Cloud sets the build
-# number / CFBundleVersion itself, so we leave CURRENT_PROJECT_VERSION alone.)
-IOS_MARKETING_VERSION="2.4"
+# Auto-bump the marketing version every build (David 2026-06-13). `cap add`
+# scaffolds at 1.0, which would REGRESS below the shipped 2.x line. Xcode Cloud
+# stamps a monotonically increasing build number (CI_BUILD_NUMBER) and uses it
+# for CFBundleVersion, so we derive the marketing minor from it:
+# minor = CI_BUILD_NUMBER - 39  ->  build 43 = 2.4, 44 = 2.5, 45 = 2.6 ...
+# a +0.1 bump every build, monotonic and stateless. Falls back to 2.4 when run
+# outside Xcode Cloud (CI_BUILD_NUMBER unset).
+IOS_MARKETING_VERSION="2.$(( ${CI_BUILD_NUMBER:-43} - 39 ))"
 sed -i '' -e "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = ${IOS_MARKETING_VERSION};/g" \
   ios/App/App.xcodeproj/project.pbxproj
-echo "ci_post_clone: MARKETING_VERSION set to ${IOS_MARKETING_VERSION}"
+echo "ci_post_clone: MARKETING_VERSION set to ${IOS_MARKETING_VERSION} (build ${CI_BUILD_NUMBER:-?})"
 
 # Declare export compliance (standard HTTPS/TLS only = exempt encryption) so
 # TestFlight never shows "Missing Compliance" and the build is installable for
