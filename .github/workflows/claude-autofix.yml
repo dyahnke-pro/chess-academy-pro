@@ -31,6 +31,9 @@ permissions:
   contents: write
   pull-requests: write
   issues: write
+  id-token: write   # required for claude-code-action to mint its OIDC token
+                    # (without it every autofix run died: "Could not fetch an
+                    # OIDC token ... add id-token: write")
 
 concurrency:
   group: claude-autofix

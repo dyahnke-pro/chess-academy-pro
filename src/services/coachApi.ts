@@ -43,6 +43,7 @@ import { detectBadHabits } from './badHabitDetector';
 import { detectConceptsInText, getConcept } from './chessConceptService';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
+import { captureException } from './analytics';
 import { buildVerifiedPuzzleContext } from './verifiedLineLibrary';
 import type { MasterPlayContext, MasterPlayResult, OpeningDbEntry } from './masterPlayTypes';
 import { buildOpeningDbEntries } from './openingDbGrounding';
@@ -170,6 +171,24 @@ const ANTHROPIC_MODEL_MAP: Record<CoachTask, string> = {
   weekly_report:           'claude-opus-4-6',
   deep_analysis:           'claude-opus-4-6',
 };
+
+/** Report a hard coach failure to PostHog as a `$exception` so it surfaces in
+ *  error tracking instead of being swallowed into OFFLINE_FALLBACKS. The audit
+ *  stream gets `emitProviderFailureAudit` separately; this is the PostHog path
+ *  the error-watch cron reads. We skip when the device is genuinely OFFLINE
+ *  (expected, not a bug) and report only when we believe we're online but the
+ *  coach still couldn't reach the brain — the real-bug signal (e.g. the
+ *  2026-06-13 native host-detection break that sent /api calls to a dead host
+ *  and failed SILENTLY: voice worked, coach didn't, nothing in PostHog). */
+function reportCoachOffline(task: CoachTask, stage: string, error: unknown): void {
+  try {
+    if (typeof navigator !== 'undefined' && !navigator.onLine) return;
+    captureException(
+      error instanceof Error ? error : new Error(`coach offline (${stage}): ${String(error)}`),
+      { surface: 'coach', task, stage, online: typeof navigator !== 'undefined' ? navigator.onLine : null },
+    );
+  } catch { /* never let reporting throw into the coach path */ }
+}
 
 // Offline fallback templates
 const OFFLINE_FALLBACKS: Record<string, string> = {
@@ -2072,9 +2091,11 @@ export async function getCoachChatResponse(
           console.error('[CoachAPI] Fallback also failed:', fallbackError);
           emitProviderFailureAudit('fallback', fallback.provider, task, fallbackError);
           markProviderDead(fallback.provider);
+          reportCoachOffline(task, 'chat-both-providers-failed', fallbackError);
           return OFFLINE_FALLBACKS.default;
         }
       }
+      reportCoachOffline(task, 'chat-no-fallback', error);
       return OFFLINE_FALLBACKS.default;
     }
   };
@@ -2252,9 +2273,11 @@ export async function getCoachCommentary(
         console.error('[CoachAPI] Fallback also failed:', fallbackError);
         emitProviderFailureAudit('fallback', fallback.provider, task, fallbackError);
         markProviderDead(fallback.provider);
+        reportCoachOffline(task, 'commentary-both-providers-failed', fallbackError);
         return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
       }
     }
+    reportCoachOffline(task, 'commentary-no-fallback', error);
     return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
   }
 }
