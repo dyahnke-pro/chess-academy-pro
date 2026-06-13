@@ -17,6 +17,12 @@ on:
         description: 'What changed since the last TestFlight build (for the log).'
         required: false
         type: string
+  # Tag-triggered builds: push a tag like `ios-build-1` to kick a TestFlight
+  # build without needing the Actions UI / a workflow-dispatch token. Scoped to
+  # this tag prefix only — normal pushes never build.
+  push:
+    tags:
+      - 'ios-build-*'
 
 concurrency:
   group: ios-testflight
