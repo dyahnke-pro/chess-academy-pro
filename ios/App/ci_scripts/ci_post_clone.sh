@@ -41,6 +41,16 @@ npx cap sync ios
 # Reapply the AVAudioSession AppDelegate patch (cap regenerates ios/).
 cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 
+# Stamp the real marketing version. `cap add` scaffolds a fresh project at
+# MARKETING_VERSION = 1.0, which would REGRESS below the shipped 2.x line — a
+# 1.0 build is LOWER than 2.4, so TestFlight never offers it as an update.
+# Bump this one value when you cut a new release. (Xcode Cloud sets the build
+# number / CFBundleVersion itself, so we leave CURRENT_PROJECT_VERSION alone.)
+IOS_MARKETING_VERSION="2.4"
+sed -i '' -e "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = ${IOS_MARKETING_VERSION};/g" \
+  ios/App/App.xcodeproj/project.pbxproj
+echo "ci_post_clone: MARKETING_VERSION set to ${IOS_MARKETING_VERSION}"
+
 # Declare export compliance (standard HTTPS/TLS only = exempt encryption) so
 # TestFlight never shows "Missing Compliance" and the build is installable for
 # internal testers immediately, with no per-build encryption question. Guarded
