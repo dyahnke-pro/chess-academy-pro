@@ -23,6 +23,7 @@ default_platform(:ios)
 PROJECT = 'ios/App/App.xcodeproj'
 SCHEME = 'App'
 APP_ID = 'com.chessacademy.pro'
+TEAM_ID = '7KATVL9274'
 
 platform :ios do
   desc 'Build and upload a new build to TestFlight'
@@ -72,6 +73,9 @@ platform :ios do
       project: PROJECT,
       scheme: SCHEME,
       export_method: 'app-store',
+      # The Capacitor project ships with no DEVELOPMENT_TEAM, so the manual-
+      # signing archive needs the team + cert + profile passed explicitly.
+      xcargs: %Q(DEVELOPMENT_TEAM=#{TEAM_ID} CODE_SIGN_STYLE=Manual PROVISIONING_PROFILE_SPECIFIER="#{profile_name}" CODE_SIGN_IDENTITY="Apple Distribution"),
       export_options: {
         provisioningProfiles: { APP_ID => profile_name },
         signingStyle: 'manual',
