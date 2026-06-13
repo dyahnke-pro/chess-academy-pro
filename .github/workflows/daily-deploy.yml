@@ -54,9 +54,26 @@ jobs:
         with:
           node-version: 20
 
+      # Only do anything if main actually advanced since the last build — no
+      # changes => no build, no deploy, no TestFlight submission, no tester
+      # email. (Prevents a pointless daily build/email when nothing changed.)
+      - name: Detect changes since last build
+        id: changed
+        if: steps.gate.outputs.run == 'true'
+        env:
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+        run: |
+          if [ -z "$APP_STORE_CONNECT_API_KEY" ]; then
+            echo "ship=true" >> "$GITHUB_OUTPUT"   # can't check without creds — ship
+            exit 0
+          fi
+          HEAD_SHA="$(git rev-parse HEAD)" node scripts/ci/main-changed.mjs
+
       # --- Web: Vercel production deploy --------------------------------------
       - name: Deploy web to Vercel production
-        if: steps.gate.outputs.run == 'true'
+        if: steps.gate.outputs.run == 'true' && steps.changed.outputs.ship == 'true'
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
@@ -74,10 +91,11 @@ jobs:
       # --- iOS: build once (per-push auto-builds are off) then distribute -----
       # Per-push Xcode Cloud builds are disabled (the workflow's branch trigger
       # points at a dead branch), so this job is the ONLY thing that produces an
-      # iOS build — one per day. trigger-ios-build fires the build of main and
-      # waits until it's VALID; distribute then sends THAT build out.
+      # iOS build — one per day, and only when main changed. trigger-ios-build
+      # fires the build of main and waits until it's VALID; distribute then
+      # sends THAT build out.
       - name: Build iOS (Xcode Cloud) and wait for VALID
-        if: steps.gate.outputs.run == 'true'
+        if: steps.gate.outputs.run == 'true' && steps.changed.outputs.ship == 'true'
         env:
           APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
           APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
@@ -91,7 +109,7 @@ jobs:
           node scripts/ci/trigger-ios-build.mjs
 
       - name: Distribute iOS build to TestFlight external + internal
-        if: steps.gate.outputs.run == 'true' && env.SKIP_IOS != '1'
+        if: steps.gate.outputs.run == 'true' && steps.changed.outputs.ship == 'true' && env.SKIP_IOS != '1'
         env:
           APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
           APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
