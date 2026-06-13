@@ -66,29 +66,14 @@ jobs:
       - name: Apply AVAudioSession AppDelegate patch
         run: cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 
-      - name: Convert ASC key (PKCS#8 → SEC1) + validate
-        env:
-          RAW_P8: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
-        run: |
-          printf '%s' "$RAW_P8" > /tmp/asc_pkcs8.p8
-          echo "key bytes: $(wc -c < /tmp/asc_pkcs8.p8)"
-          # Apple ships the App Store Connect key as unencrypted PKCS#8
-          # (BEGIN PRIVATE KEY). fastlane's spaceship calls
-          # OpenSSL::PKey::EC.new(content), which on OpenSSL 3 fails to parse a
-          # PKCS#8 EC key and falls back to treating it as a curve name →
-          # "invalid curve name (OpenSSL::PKey::ECError)". Converting to the
-          # traditional SEC1 form (BEGIN EC PRIVATE KEY) parses cleanly. This
-          # also hard-fails here with a clear error if the key is corrupt.
-          openssl ec -in /tmp/asc_pkcs8.p8 -out /tmp/asc_sec1.pem
-          echo "converted to SEC1 OK"
-          echo "APP_STORE_CONNECT_API_KEY_B64=$(base64 < /tmp/asc_sec1.pem | tr -d '\n')" >> "$GITHUB_ENV"
-
       - name: Fastlane → TestFlight
         env:
           APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
-          # APP_STORE_CONNECT_API_KEY_B64 comes from the convert step (GITHUB_ENV)
-          # — base64 of the SEC1-format key.
+          # The secret holds the base64 of the SEC1 EC key (pre-validated against
+          # the App Store Connect API). fastlane base64-decodes it via
+          # is_key_content_base64: true — no in-workflow key conversion needed.
+          APP_STORE_CONNECT_API_KEY_B64: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
         run: bundle exec fastlane ios beta
 
       - name: Upload .ipa artifact
