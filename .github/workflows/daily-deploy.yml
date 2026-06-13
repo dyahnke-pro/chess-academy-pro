@@ -32,10 +32,19 @@ jobs:
     steps:
       - name: Gate to 21:00 America/Chicago (skip the off-DST scheduled run)
         id: gate
+        env:
+          # One-night pause (David 2026-06-13: "I don't want a build tonight").
+          # Scheduled runs before this UTC instant are skipped; it auto-clears
+          # after — tonight's 21:00 CT run (2026-06-14 ~02:00 UTC) is paused,
+          # tomorrow's resumes normally. Safe to delete this env once past.
+          RESUME_AFTER_UTC: '2026-06-14T12:00:00Z'
         run: |
           hour=$(TZ=America/Chicago date +%H)
           echo "Chicago hour: $hour (event: ${{ github.event_name }})"
-          if [ "${{ github.event_name }}" = "schedule" ] && [ "$hour" != "21" ]; then
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "$(date -u +%s)" -lt "$(date -u -d "$RESUME_AFTER_UTC" +%s)" ]; then
+            echo "Paused until $RESUME_AFTER_UTC — skipping tonight's run."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event_name }}" = "schedule" ] && [ "$hour" != "21" ]; then
             echo "Off-hour scheduled trigger — skipping."
             echo "run=false" >> "$GITHUB_OUTPUT"
           else
