@@ -1,0 +1,87 @@
+name: Daily deploy + TestFlight external (21:00 America/Chicago)
+
+# David's cadence (2026-06-13): hold releases during the day, ship once nightly
+# at 21:00 Chicago. This single scheduled job:
+#   1. Deploys the web app to Vercel production (git auto-deploy is disabled at
+#      the Vercel side — project Ignored Build Step = `exit 0` — so this job is
+#      the ONLY thing that promotes main to production: one deploy per day).
+#   2. Sends the latest VALID iOS build to the external "Beta Test" group
+#      (+ internal), and submits it for Beta App Review.
+#
+# GitHub cron is UTC and DST-blind, so we fire at both 02:00 and 03:00 UTC and
+# gate on the actual Chicago wall-clock hour: exactly one of the two runs sees
+# hour 21 (02:00 UTC in CDT/summer, 03:00 UTC in CST/winter), so we ship once
+# per day at 21:00 Chicago year-round.
+
+on:
+  schedule:
+    - cron: '0 2 * * *'   # 21:00 CDT (summer, UTC-5)
+    - cron: '0 3 * * *'   # 21:00 CST (winter, UTC-6)
+  workflow_dispatch: {}    # manual on-demand run (bypasses the hour gate)
+
+concurrency:
+  group: daily-deploy
+  cancel-in-progress: false
+
+jobs:
+  ship:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: team_EG9m215w9cQHWilBOPnOtIFS
+      VERCEL_PROJECT_ID: prj_qYJMwF1apaxdp6sIZzcvZMz9BcZN
+    steps:
+      - name: Gate to 21:00 America/Chicago (skip the off-DST scheduled run)
+        id: gate
+        run: |
+          hour=$(TZ=America/Chicago date +%H)
+          echo "Chicago hour: $hour (event: ${{ github.event_name }})"
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "$hour" != "21" ]; then
+            echo "Off-hour scheduled trigger — skipping."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout main
+        if: steps.gate.outputs.run == 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Node
+        if: steps.gate.outputs.run == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # --- Web: Vercel production deploy --------------------------------------
+      - name: Deploy web to Vercel production
+        if: steps.gate.outputs.run == 'true'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::VERCEL_TOKEN secret is not set — add it under Settings → Secrets → Actions."
+            exit 1
+          fi
+          npm install -g vercel@latest
+          vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+          vercel build --prod --token="$VERCEL_TOKEN"
+          url=$(vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN")
+          echo "Production deploy: $url"
+          echo "## Web deploy 🚀 $url" >> "$GITHUB_STEP_SUMMARY"
+
+      # --- iOS: send latest TestFlight build to external testers --------------
+      - name: Distribute iOS build to TestFlight external + internal
+        if: steps.gate.outputs.run == 'true'
+        env:
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+        run: |
+          if [ -z "$APP_STORE_CONNECT_API_KEY" ]; then
+            echo "::warning::APP_STORE_CONNECT_API_* secrets not set — skipping iOS distribution."
+            exit 0
+          fi
+          node scripts/ci/distribute-testflight.mjs
+          echo "## iOS sent to external (Beta App Review) + internal 📲" >> "$GITHUB_STEP_SUMMARY"
