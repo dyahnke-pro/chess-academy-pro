@@ -41,5 +41,13 @@ npx cap sync ios
 # Reapply the AVAudioSession AppDelegate patch (cap regenerates ios/).
 cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 
-echo "ci_post_clone: generated ios/App/App.xcodeproj"
+# Xcode Cloud archives with automatic Swift Package resolution DISABLED and
+# requires a resolved file at
+# App.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved.
+# The project is generated fresh here so none exists yet — resolve the SPM
+# graph now (CapApp-SPM pulls capacitor-swift-pm from GitHub) so the archive
+# step finds the resolved file instead of failing.
+xcodebuild -resolvePackageDependencies -project ios/App/App.xcodeproj -scheme App
+
+echo "ci_post_clone: generated ios/App/App.xcodeproj + resolved SPM dependencies"
 }
