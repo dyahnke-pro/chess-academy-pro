@@ -70,12 +70,18 @@ jobs:
         env:
           APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
-          # base64 of the SEC1 EC key (pre-validated against the ASC API).
-          APP_STORE_CONNECT_API_KEY_B64: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          # Secret holds base64 of the SEC1 key. We convert it BACK to PKCS#8
+          # (the original .p8 form) here: spaceship reads PKCS#8 fine (the key
+          # is clean), and altool's TestFlight upload REQUIRES PKCS#8 — it
+          # rejects SEC1 with "AuthKey file does not contain a valid key".
+          ASC_KEY_SEC1_B64: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
           # base64 of the persistent distribution .p12 (cert + private key).
           CERT_P12_B64: ${{ secrets.BUILD_CERT_P12_B64 }}
           CERT_P12_PASSWORD: 'capro-ci-2026'
         run: |
+          printf '%s' "$ASC_KEY_SEC1_B64" | base64 -d > "$RUNNER_TEMP/asc_sec1.pem"
+          openssl pkey -in "$RUNNER_TEMP/asc_sec1.pem" -out "$RUNNER_TEMP/asc_pkcs8.pem"
+          export APP_STORE_CONNECT_API_KEY_B64="$(base64 -w0 "$RUNNER_TEMP/asc_pkcs8.pem")"
           printf '%s' "$CERT_P12_B64" | base64 -d > "$RUNNER_TEMP/dist.p12"
           export CERT_P12_PATH="$RUNNER_TEMP/dist.p12"
           bundle exec fastlane ios beta
