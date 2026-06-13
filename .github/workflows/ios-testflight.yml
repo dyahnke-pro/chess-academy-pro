@@ -3,12 +3,13 @@ name: iOS → TestFlight
 # Build the Capacitor app on a macOS runner and upload to TestFlight — so a
 # new TestFlight build is one workflow trigger, no local Xcode archive.
 #
-# Trigger: manual (workflow_dispatch). NOT on every push — TestFlight builds
-# are deliberate, and external testers need Apple Beta App Review anyway.
+# Trigger: manual (workflow_dispatch) or a push that changes fastlane/ or this
+# workflow. Requires the secrets in docs/ios-testflight-ci.md.
 #
-# Requires the secrets documented in docs/ios-testflight-ci.md. Without them
-# the `fastlane beta` step fails fast at the first missing ENV.fetch — nothing
-# else in the repo is affected.
+# Key-format note: fastlane spaceship parses SEC1 EC keys (its EC.new chokes on
+# PKCS#8); Apple's altool uploader requires PKCS#8. So the BUILD uses the SEC1
+# secret, and the UPLOAD step converts it to PKCS#8 for altool — one format per
+# tool, no conflict.
 
 on:
   workflow_dispatch:
@@ -17,10 +18,6 @@ on:
         description: 'What changed since the last TestFlight build (for the log).'
         required: false
         type: string
-  # Build whenever the iOS build config changes on main (the git proxy here
-  # blocks tag pushes, and the dispatch API needs a token we don't have, so a
-  # path-scoped push trigger is the reliable kick). Normal app/code pushes to
-  # main do NOT build — only edits to fastlane/ or this workflow.
   push:
     branches: [main]
     paths:
@@ -66,37 +63,32 @@ jobs:
       - name: Apply AVAudioSession AppDelegate patch
         run: cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 
-      - name: Patch spaceship to read PKCS#8 EC keys
-        # fastlane spaceship parses the ASC key with OpenSSL::PKey::EC.new,
-        # which on OpenSSL 3 can't read a PKCS#8 EC key (→ "invalid curve
-        # name"). OpenSSL::PKey.read handles BOTH PKCS#8 and SEC1, so this
-        # one-line swap lets us use the original PKCS#8 .p8 — which altool's
-        # TestFlight upload also requires. One key format for the whole lane.
-        run: |
-          TOKEN_RB=$(find vendor/bundle -path '*spaceship*/connect_api/token.rb' | head -1)
-          if [ -z "$TOKEN_RB" ]; then echo "::error::spaceship token.rb not found"; exit 1; fi
-          sed -i.bak 's/OpenSSL::PKey::EC\.new/OpenSSL::PKey.read/g' "$TOKEN_RB"
-          echo "patched $TOKEN_RB:"; grep -n 'OpenSSL::PKey' "$TOKEN_RB"
-
-      - name: Fastlane → TestFlight
+      - name: Fastlane → build signed IPA
         env:
           APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
-          # Secret holds base64 of the SEC1 key. We convert it BACK to PKCS#8
-          # (the original .p8 form): the patched spaceship reads PKCS#8, and
-          # altool's TestFlight upload REQUIRES PKCS#8 (it rejects SEC1 with
-          # "AuthKey file does not contain a valid key"). One format for both.
-          ASC_KEY_SEC1_B64: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          # SEC1 key (the secret) directly — spaceship parses SEC1 cleanly.
+          APP_STORE_CONNECT_API_KEY_B64: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
           # base64 of the persistent distribution .p12 (cert + private key).
           CERT_P12_B64: ${{ secrets.BUILD_CERT_P12_B64 }}
           CERT_P12_PASSWORD: 'capro-ci-2026'
         run: |
-          printf '%s' "$ASC_KEY_SEC1_B64" | base64 -d > "$RUNNER_TEMP/asc_sec1.pem"
-          openssl pkey -in "$RUNNER_TEMP/asc_sec1.pem" -out "$RUNNER_TEMP/asc_pkcs8.pem"
-          export APP_STORE_CONNECT_API_KEY_B64="$(base64 -w0 "$RUNNER_TEMP/asc_pkcs8.pem")"
           printf '%s' "$CERT_P12_B64" | base64 -d > "$RUNNER_TEMP/dist.p12"
           export CERT_P12_PATH="$RUNNER_TEMP/dist.p12"
           bundle exec fastlane ios beta
+
+      - name: Upload to TestFlight (altool, PKCS#8 key)
+        env:
+          KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          # Secret holds SEC1; altool needs PKCS#8 — convert and place it where
+          # altool looks (~/.appstoreconnect/private_keys/AuthKey_<KEYID>.p8).
+          ASC_KEY_SEC1_B64: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+        run: |
+          mkdir -p ~/.appstoreconnect/private_keys
+          printf '%s' "$ASC_KEY_SEC1_B64" | base64 -d | openssl pkey > ~/.appstoreconnect/private_keys/AuthKey_${KEY_ID}.p8
+          echo "Uploading build/App.ipa to TestFlight via altool…"
+          xcrun altool --upload-app --type ios --file build/App.ipa --apiKey "$KEY_ID" --apiIssuer "$ISSUER_ID"
 
       - name: Upload .ipa artifact
         if: always()
