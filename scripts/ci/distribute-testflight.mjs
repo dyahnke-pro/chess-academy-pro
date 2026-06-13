@@ -73,6 +73,20 @@ const main = async () => {
   }
   console.log('whatsNew: set');
 
+  // GUARD: never submit for Beta App Review without a non-empty "What to Test".
+  // An empty whatsNew silently blocks the review submission (the build sits in
+  // the external group but never enters review — exactly what happened to
+  // build 46, which David had to submit by hand). Re-read it and confirm before
+  // submitting; bail loudly if it didn't stick.
+  const verify = await api('GET', `/v1/builds/${buildId}/betaBuildLocalizations?fields[betaBuildLocalizations]=locale,whatsNew`);
+  const verifyEn = (verify.j.data || []).find((l) => l.attributes.locale === 'en-US');
+  const whatsNewValue = (verifyEn?.attributes?.whatsNew || '').trim();
+  if (!whatsNewValue) {
+    console.error('::error::"What to Test" is empty after set — refusing to submit for review (it would silently never enter review). Aborting external submission.');
+    process.exit(1);
+  }
+  console.log(`whatsNew verified (${whatsNewValue.length} chars)`);
+
   // External group + Beta App Review.
   const ext = await api('POST', `/v1/betaGroups/${EXTERNAL_GROUP}/relationships/builds`, { data: [{ type: 'builds', id: buildId }] });
   console.log(`external assign: ${ext.status === 204 ? 'OK' : ext.status} ${ext.status >= 400 ? JSON.stringify(ext.j).slice(0, 200) : ''}`);
