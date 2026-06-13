@@ -26,14 +26,14 @@ platform :ios do
     # Ephemeral keychain so the created signing cert never persists on the runner.
     setup_ci
 
-    # key_content is the BASE64 of the .p8 (the workflow encodes it before
-    # calling fastlane). Base64 sidesteps the multi-line-secret mangling that
-    # makes spaceship throw "invalid curve name (OpenSSL::PKey::ECError)" when
-    # a raw PEM is passed via a GitHub secret (fastlane issue #29478).
+    # key_content is the BASE64 of the SEC1-converted key (the workflow's
+    # "Convert ASC key" step turns Apple's PKCS#8 .p8 into SEC1 and base64s it).
+    # SEC1 avoids the OpenSSL-3 "invalid curve name (OpenSSL::PKey::ECError)"
+    # that spaceship hits parsing a PKCS#8 EC key.
     api_key = app_store_connect_api_key(
       key_id: ENV.fetch('APP_STORE_CONNECT_API_KEY_ID'),
       issuer_id: ENV.fetch('APP_STORE_CONNECT_API_ISSUER_ID'),
-      key_content: ENV.fetch('APP_STORE_CONNECT_API_KEY'),
+      key_content: ENV.fetch('APP_STORE_CONNECT_API_KEY_B64'),
       is_key_content_base64: true,
       in_house: false,
     )
