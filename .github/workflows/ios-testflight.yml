@@ -46,7 +46,10 @@ jobs:
 
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3'
+          # Ruby 3.2, NOT 3.3 — fastlane's spaceship hits "invalid curve name
+          # (OpenSSL::PKey::ECError)" parsing the App Store Connect .p8 key on
+          # Ruby 3.3 + OpenSSL 3. 3.2 parses the EC key cleanly.
+          ruby-version: '3.2'
           bundler-cache: true
 
       - name: Install JS deps
