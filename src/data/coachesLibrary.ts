@@ -62,7 +62,8 @@ export interface LibraryBook {
   readonly citation: BookCitation;
   /** The book's own catalogue subtitle / one-line factual descriptor. */
   readonly shelfNote: string;
-  /** True = our own book (the house book), leads the shelf. */
+  /** True = our own book (the house book); sits at the foot of the shelf,
+   *  under the public-domain classics. */
   readonly house?: boolean;
   /** True = on the shelf, not yet brought to life (text/positions pending). */
   readonly comingToLife?: boolean;
@@ -185,7 +186,7 @@ const EDWARD_LASKER_CHESS_AND_CHECKERS: LibraryBook = {
   pages: chessAndCheckersData.pages as LibraryPage[],
 };
 
-// ── Our book — the house book, leading the shelf ─────────────────────────────
+// ── Our book — the house book, at the foot of the shelf (under the classics) ──
 // "The Philosophy of A General" is our OWN authored doctrine (not a master's
 // text), so unlike the public-domain classics we may write its words — and we
 // own them. Adapted from the Academy manuscript: each chapter is a page, read
@@ -210,11 +211,11 @@ const HOUSE_BOOK: LibraryBook = {
 };
 
 export const COACHES_LIBRARY: ReadonlyArray<LibraryBook> = [
-  HOUSE_BOOK,
   CAPABLANCA_CHESS_FUNDAMENTALS,
   NIMZOWITSCH_MY_SYSTEM,
   EDWARD_LASKER_CHESS_AND_CHECKERS,
   EDWARD_LASKER_CHESS_STRATEGY,
+  HOUSE_BOOK,
 ];
 
 export function getLibraryBook(id: string): LibraryBook | undefined {
