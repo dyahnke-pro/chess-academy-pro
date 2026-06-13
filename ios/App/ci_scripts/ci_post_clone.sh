@@ -47,14 +47,14 @@ npm run assets:generate
 # Reapply the AVAudioSession AppDelegate patch (cap regenerates ios/).
 cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 
-# Auto-bump the marketing version every build (David 2026-06-13). `cap add`
-# scaffolds at 1.0, which would REGRESS below the shipped 2.x line. Xcode Cloud
-# stamps a monotonically increasing build number (CI_BUILD_NUMBER) and uses it
-# for CFBundleVersion, so we derive the marketing minor from it:
-# minor = CI_BUILD_NUMBER - 39  ->  build 43 = 2.4, 44 = 2.5, 45 = 2.6 ...
-# a +0.1 bump every build, monotonic and stateless. Falls back to 2.4 when run
-# outside Xcode Cloud (CI_BUILD_NUMBER unset).
-IOS_MARKETING_VERSION="2.$(( ${CI_BUILD_NUMBER:-43} - 39 ))"
+# Pin the marketing version; Xcode Cloud bumps the build number (CI_BUILD_NUMBER
+# -> CFBundleVersion) every build on its own. Keeping ONE marketing version
+# means each new build is the SAME version with a higher build number, so once
+# this version clears Beta App Review the external testers get every subsequent
+# build with NO re-review (David 2026-06-13). Bump this when you cut a real
+# release; `cap add` scaffolds 1.0, which we must overwrite so it never regresses
+# below the shipped 2.x line.
+IOS_MARKETING_VERSION="2.8"
 sed -i '' -e "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = ${IOS_MARKETING_VERSION};/g" \
   ios/App/App.xcodeproj/project.pbxproj
 echo "ci_post_clone: MARKETING_VERSION set to ${IOS_MARKETING_VERSION} (build ${CI_BUILD_NUMBER:-?})"

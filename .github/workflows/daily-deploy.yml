@@ -71,8 +71,12 @@ jobs:
           echo "Production deploy: $url"
           echo "## Web deploy 🚀 $url" >> "$GITHUB_STEP_SUMMARY"
 
-      # --- iOS: send latest TestFlight build to external testers --------------
-      - name: Distribute iOS build to TestFlight external + internal
+      # --- iOS: build once (per-push auto-builds are off) then distribute -----
+      # Per-push Xcode Cloud builds are disabled (the workflow's branch trigger
+      # points at a dead branch), so this job is the ONLY thing that produces an
+      # iOS build — one per day. trigger-ios-build fires the build of main and
+      # waits until it's VALID; distribute then sends THAT build out.
+      - name: Build iOS (Xcode Cloud) and wait for VALID
         if: steps.gate.outputs.run == 'true'
         env:
           APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
@@ -80,8 +84,18 @@ jobs:
           APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
         run: |
           if [ -z "$APP_STORE_CONNECT_API_KEY" ]; then
-            echo "::warning::APP_STORE_CONNECT_API_* secrets not set — skipping iOS distribution."
+            echo "::warning::APP_STORE_CONNECT_API_* secrets not set — skipping iOS build + distribution."
+            echo "SKIP_IOS=1" >> "$GITHUB_ENV"
             exit 0
           fi
+          node scripts/ci/trigger-ios-build.mjs
+
+      - name: Distribute iOS build to TestFlight external + internal
+        if: steps.gate.outputs.run == 'true' && env.SKIP_IOS != '1'
+        env:
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+        run: |
           node scripts/ci/distribute-testflight.mjs
-          echo "## iOS sent to external (Beta App Review) + internal 📲" >> "$GITHUB_STEP_SUMMARY"
+          echo "## iOS built + sent to external (Beta App Review) + internal 📲" >> "$GITHUB_STEP_SUMMARY"
