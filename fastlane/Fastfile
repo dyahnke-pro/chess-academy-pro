@@ -2,8 +2,8 @@
 #
 # The web bundle + native project are already built/synced by the workflow
 # (.github/workflows/ios-testflight.yml) BEFORE this runs, so by the time the
-# `beta` lane fires, ios/App/App.xcworkspace exists with Pods installed and the
-# AVAudioSession AppDelegate patch applied.
+# `beta` lane fires, ios/App/App.xcodeproj exists and the AVAudioSession
+# AppDelegate patch is applied.
 #
 # Signing + auth:
 #   * App Store Connect API key (.p8, base64) authenticates spaceship.
@@ -18,7 +18,9 @@
 
 default_platform(:ios)
 
-WORKSPACE = 'ios/App/App.xcworkspace'
+# Capacitor 8 uses Swift Package Manager (no CocoaPods), so there is NO
+# .xcworkspace — build the project directly.
+PROJECT = 'ios/App/App.xcodeproj'
 SCHEME = 'App'
 APP_ID = 'com.chessacademy.pro'
 
@@ -67,7 +69,7 @@ platform :ios do
     )
 
     build_app(
-      workspace: WORKSPACE,
+      project: PROJECT,
       scheme: SCHEME,
       export_method: 'app-store',
       export_options: {
