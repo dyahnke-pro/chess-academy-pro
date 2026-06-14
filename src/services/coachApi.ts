@@ -1739,7 +1739,7 @@ export async function getCoachChatResponse(
         // from current theme-skill data (it lives in the leaf `badHabitDetector`
         // so this call is cycle-free — coachFeatureService imports coachApi, so
         // the detector can't live there). voiceFacts the facts; fall through to
-        // the legacy path when there's no habit data.
+        // the legacy path when there's NO bad-habit data.
         if (grounding.progressQuestion) {
           try {
             const profile = await db.profiles.get('main');
@@ -1748,6 +1748,14 @@ export async function getCoachChatResponse(
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress' });
               if (voiced) return voiced;
             }
+            // No bad-habit data yet — voice a computed "not enough data" fallback
+            // instead of falling through to the legacy LLM path (which talks about
+            // the board and produces a non-answer — G0).  This is the documented
+            // contract from assembleProgressAnswer's docstring: "caller takes the
+            // one fallback — e.g. 'play a few games and I'll spot patterns'".
+            const noDataFact = "You haven't played enough games or puzzles yet for me to identify patterns in your play. Play a few more and I'll analyze your weaknesses.";
+            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress' });
+            if (voicedNoData) return voicedNoData;
           } catch { /* fall through to legacy path */ }
         }
 
