@@ -8,6 +8,7 @@ export default tseslint.config(
   {
     ignores: [
       'dist',
+      '.vercel',
       'ios',
       'android',
       'node_modules',
