@@ -452,6 +452,12 @@ const PLAN_QUESTION_RE = anyOf([
   String.raw`\bwhat(?:'?s| is| am)?\s+i\s+(?:trying|aiming|looking)\s+to\s+(?:do|achieve)\b`,
   String.raw`\boutline\s+(?:a|my|the)?\s*(?:plan|strategy)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:goal|objective|aim)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+(?:my|the)\s+(?:setup|structure|formation|pawn\s+structure)\b`,
+  String.raw`\bwhere\s+(?:do|should)\s+(?:my\s+)?(?:pieces?|knights?|bishops?|rooks?|queen|king)\s+(?:go|belong|head)\b`,
+  String.raw`\bhow\s+do\s+i\s+(?:make\s+progress|build\s+up|improve\s+my\s+position|attack|defend|press|convert\s+my\s+edge)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?(?:right|correct|best)\s+(?:plan|setup|approach|way\s+to\s+play)\b`,
+  String.raw`\bwhat\s+am\s+i\s+(?:supposed|meant)\s+to\s+do\b`,
+  String.raw`\blong[-\s]?(?:range|haul)\b`,
 ]);
 export function isPlanQuestion(ask: string | undefined): boolean {
   return !!ask && PLAN_QUESTION_RE.test(ask);
@@ -481,7 +487,13 @@ const BEST_MOVE_QUESTION_RE = anyOf([
   String.raw`\bhow\s+should\s+(?:i|we)\s+(?:continue|respond|recapture)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+the\s+move\b`,
   String.raw`\bis\s+(?:this|that|it|[A-Za-z0-9+#=-]{1,6})\s+(?:the\s+)?(?:best|sound|good|winning|correct|playable|right|strong|a\s+(?:good|sound|strong)\s+move)\b`,
-  String.raw`\bshould\s+i\s+(?:play|go\s+for|take|capture|push)\b`,
+  String.raw`\bshould\s+i\s+(?:play|go\s+for|take|capture|push|trade|castle)\b`,
+  String.raw`\bcandidate\s+moves?\b`,
+  String.raw`\bwhat\s+(?:do|should)\s+i\s+do\s+(?:here|now|in\s+this)\b`,
+  String.raw`\bis\s+there\s+(?:a\s+)?better\s+(?:move|option|continuation)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+the\s+(?:engine|computer)('?s)?\s+(?:move|pick|choice|line)\b`,
+  String.raw`\btop\s+(?:choice|pick|move)\b`,
+  String.raw`\bwhat\s+now\b`,
 ]);
 export function isBestMoveQuestion(ask: string | undefined): boolean {
   return !!ask && BEST_MOVE_QUESTION_RE.test(ask);
@@ -515,6 +527,14 @@ const TACTICS_QUESTION_RE = anyOf([
   String.raw`\b(?:any\s+)?(?:shot|sac(?:rifice)?|trick|tactic)\s+(?:here|available|on|in\s+this)?\b`,
   String.raw`\bcan\s+i\s+(?:win|grab|take|snag|pick\s+up)\s+(?:material|a\s+piece|a\s+pawn|the)\b`,
   String.raw`\bwin\s+(?:material|a\s+piece|a\s+pawn)\b`,
+  String.raw`\bundefended\b`,
+  String.raw`\boverload(?:ed|ing)?\b`,
+  String.raw`\bback[-\s]?rank\b`,
+  String.raw`\bcan\s+i\s+sac(?:rifice)?\b`,
+  String.raw`\bis\s+(?:my\s+|the\s+|his\s+|her\s+)?\w+\s+(?:defended|protected|loose|hanging|trapped|en\s*prise)\b`,
+  String.raw`\bweak\s+(?:king|back\s*rank|squares?)\b`,
+  String.raw`\bdeflect(?:ion|ing)?\b`,
+  String.raw`\bremoving\s+the\s+defender\b`,
 ]);
 export function isTacticsQuestion(ask: string | undefined): boolean {
   return !!ask && TACTICS_QUESTION_RE.test(ask);
@@ -542,6 +562,12 @@ const POSITION_ASSESSMENT_RE = anyOf([
   String.raw`\bwhat(?:'?s| is)?\s+going\s+on\s+(?:here|in\s+this)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+the\s+(?:situation|status)\b`,
   String.raw`\bwho\s+stands\s+better\b`,
+  String.raw`\bhow\s+(?:bad|good)\s+is\s+(?:it|this)\b`,
+  String.raw`\bam\s+i\s+(?:up|down)\s+(?:material|a\s+pawn|a\s+piece|the\s+exchange)\b`,
+  String.raw`\bwho\s+(?:has|holds)\s+(?:the\s+)?(?:edge|advantage|initiative|better\s+position)\b`,
+  String.raw`\bis\s+(?:it|this)\s+(?:lost|won|winning|losing|equal|level|holdable)\b`,
+  String.raw`\bhow\s+much\s+(?:better|worse|ahead|behind)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+the\s+(?:engine\s+)?(?:eval|number|advantage)\b`,
 ]);
 export function isPositionAssessmentQuestion(ask: string | undefined): boolean {
   return !!ask && POSITION_ASSESSMENT_RE.test(ask);
@@ -562,6 +588,11 @@ const MASTER_PLAY_QUESTION_RE = anyOf([
   String.raw`\bmain\s*line\b`,
   String.raw`\bbook\s+move\b`,
   String.raw`\bwhat(?:'?s| is)?\s+(?:usually|typically|normally|commonly)\s+played\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+(?:played|standard|normal)\s+(?:here|in\s+this)\b`,
+  String.raw`\bhow\s+is\s+(?:this|it)\s+(?:usually|normally|typically)\s+(?:played|met|handled|answered)\b`,
+  String.raw`\bwhat\s+do\s+the\s+(?:best|elite|top)\s+players?\b`,
+  String.raw`\bbest\s+by\s+test\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?(?:engine|database)\s+(?:top|favou?rite)\b`,
 ]);
 export function isMasterPlayQuestion(ask: string | undefined): boolean {
   return !!ask && MASTER_PLAY_QUESTION_RE.test(ask);
@@ -581,6 +612,12 @@ const ENDGAME_QUESTION_RE = anyOf([
   String.raw`\bis\s+(?:this|it)\s+(?:winning|won|drawn|drawish|lost)(?:\s+for\s+me)?\b`,
   String.raw`\b(?:theoretical(?:ly)?|tablebase)\b`,
   String.raw`\bcan\s+(?:this|it)\s+be\s+(?:won|held|drawn|saved)\b`,
+  String.raw`\bis\s+(?:this|it)\s+winnable\b`,
+  String.raw`\bcan\s+i\s+save\s+(?:this|it|the\s+game)\b`,
+  String.raw`\b(?:rook|pawn|king|queen|bishop|knight|minor[-\s]?piece)\s+(?:and\s+\w+\s+)?end(?:game|ing)\b`,
+  String.raw`\bopposite[-\s]?colou?red?\s+bishops?\b`,
+  String.raw`\bhow\s+do\s+i\s+(?:convert|finish|win)\s+(?:from\s+here|this\s+(?:ending|endgame))\b`,
+  String.raw`\bking\s+and\s+pawn\b`,
 ]);
 export function isEndgameQuestion(ask: string | undefined): boolean {
   return !!ask && ENDGAME_QUESTION_RE.test(ask);
@@ -602,6 +639,10 @@ const PLAYER_GAMES_QUESTION_RE = anyOf([
   String.raw`\bhas\s+(?:he|she|they|\w+)\s+(?:ever\s+)?played\s+(?:this|here)\b`,
   String.raw`\b\w+'s\s+(?:real\s+)?games?\b`,
   String.raw`\b(?:his|her|their)\s+(?:real\s+|actual\s+|own\s+)?games?\b`,
+  String.raw`\bdid\s+(?:he|she|they|\w+)\s+(?:play|face|win\s+with)\b`,
+  String.raw`\b(?:his|her|their)\s+(?:repertoire|lines?|games\s+here)\b`,
+  String.raw`\bpull\s+(?:up\s+)?(?:his|her|their|\w+'?s)\b`,
+  String.raw`\bhow\s+did\s+(?:he|she|they|\w+)\s+(?:win|handle|beat)\b`,
 ]);
 export function isPlayerGamesQuestion(ask: string | undefined): boolean {
   return !!ask && PLAYER_GAMES_QUESTION_RE.test(ask);
@@ -625,6 +666,9 @@ const CONCEPT_QUESTION_RE = anyOf([
   String.raw`\bdescribe\b`,
   String.raw`\bwhat\s+does\s+\w+\s+mean\b`,
   String.raw`\bhow\s+does\s+(?:a|an|the)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?(?:idea|point|purpose|concept)\s+(?:behind|of)\b`,
+  String.raw`\bwhy\s+(?:is|are)\s+(?:a\s+|an\s+|the\s+)?(?:[a-z]+\s+){1,3}(?:good|important|strong|useful|bad|weak|better|worse)\b`,
+  String.raw`\bwhat\s+(?:are\s+)?(?:the\s+)?principles?\b`,
 ]);
 const CONCEPT_POSITIONAL_CUE_RE =
   /\b(?:here|this\s+position|on\s+the\s+board|right\s+now|in\s+this|my\s+(?:position|move)|best\s+move|should\s+i\s+play)\b/i;

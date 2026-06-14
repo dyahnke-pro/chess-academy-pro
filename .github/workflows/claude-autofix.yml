@@ -89,7 +89,10 @@ jobs:
                transaction errors). SKIP items that are architectural grounding
                signals rather than fixable crashes (claim-validator-trip,
                master-play-enforcement-fallback) — note them but don't try to
-               "fix" them with a code patch.
+               "fix" them with a code patch. ALSO SKIP `ProviderTokensEmpty`
+               (a provider ran out of tokens/credits) — that's an ops alert for
+               David to top up the account, NOT a code bug; never open a PR for
+               it, just note it.
                A `coach non-answer` item is DIFFERENT and IS fixable: the coach
                connected but didn't address the question (reason 're-ask' /
                'fallback-or-greeting'). The usual root cause is an intent

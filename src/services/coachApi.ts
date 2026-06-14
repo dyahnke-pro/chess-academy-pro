@@ -444,6 +444,35 @@ function markProviderDead(provider: AiProvider): void {
   providerDeadUntil[provider] = Date.now() + PROVIDER_COOLDOWN_MS;
 }
 
+/** Signatures of an "out of tokens / credits" provider error across both
+ *  providers (DeepSeek "Insufficient Balance"/402, Anthropic "credit balance
+ *  too low", OpenAI-style "insufficient_quota"). David 2026-06-14: "notify me
+ *  when tokens are empty" — this is a real ops signal he WANTS to see, distinct
+ *  from a transient blip. */
+const TOKENS_EMPTY_RE =
+  /insufficient\s*balance|credit\s*balance\b[\s\S]{0,15}\btoo\s*low|insufficient[_\s]*quota|exceeded\s+your\s+current\s+quota|out\s+of\s+(?:credits?|tokens?)|payment\s+required|\b402\b/i;
+
+function isTokensEmptyError(error: unknown): boolean {
+  const msg = error instanceof Error ? error.message : String(error);
+  return TOKENS_EMPTY_RE.test(msg);
+}
+
+/** Notify David when a provider runs out of tokens/credits. Emits a DISTINCT
+ *  PostHog $exception (separate type) so the error-watch cron surfaces it on the
+ *  tracking issue — the "your tokens are empty" alert he asked for. The autofix
+ *  prompt is told to SKIP these (ops issue, not a code bug) so it never burns a
+ *  Claude session trying to "fix" an empty wallet. */
+function reportTokensEmpty(provider: AiProvider, error: unknown): void {
+  try {
+    const detail = error instanceof Error ? error.message : String(error);
+    captureException(new Error(`ProviderTokensEmpty: ${provider} is out of tokens/credits — top it up. (${detail.slice(0, 160)})`), {
+      surface: 'coach',
+      provider,
+      kind: 'tokens-empty',
+    });
+  } catch { /* never let reporting throw into the coach path */ }
+}
+
 /** Emit a structured audit event for a provider call failure so the
  *  audit-stream captures WHY a fallback fired. Without this, the only
  *  signal on the wire is a silent jump from one `coach-llm-model-selected`
@@ -460,6 +489,9 @@ function emitProviderFailureAudit(
 ): void {
   const errMsg = error instanceof Error ? error.message : String(error);
   const errName = error instanceof Error ? error.name : 'Unknown';
+  // Out-of-tokens is a distinct ops signal David asked to be notified about —
+  // route it to PostHog as its own exception type (the error-watch surfaces it).
+  if (isTokensEmptyError(error)) reportTokensEmpty(provider, error);
   void import('./appAuditor').then(({ logAppAudit }) => {
     void logAppAudit({
       kind: 'coach-llm-provider-error',

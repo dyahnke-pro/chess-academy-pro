@@ -170,6 +170,39 @@ describe('isPlanQuestion', () => {
   ])('matches: %s', (q) => expect(isPlanQuestion(q)).toBe(true));
 });
 
+// David 2026-06-14: strengthen ALL routers' vocabulary, not just weakness.
+describe('strengthened vocabulary across every router', () => {
+  const cases: Array<[string, (ask: string | undefined) => boolean, string]> = [
+    ['plan', isPlanQuestion, 'where do my pieces belong'],
+    ['plan', isPlanQuestion, 'what is the right setup'],
+    ['plan', isPlanQuestion, 'what am I supposed to do'],
+    ['best-move', isBestMoveQuestion, 'what do I do here'],
+    ['best-move', isBestMoveQuestion, 'are there candidate moves'],
+    ['best-move', isBestMoveQuestion, "what's the engine's pick"],
+    ['best-move', isBestMoveQuestion, 'is there a better move'],
+    ['tactics', isTacticsQuestion, 'is my bishop undefended'],
+    ['tactics', isTacticsQuestion, 'can I sacrifice'],
+    ['tactics', isTacticsQuestion, 'is there a back-rank weakness'],
+    ['position', isPositionAssessmentQuestion, 'how bad is it'],
+    ['position', isPositionAssessmentQuestion, 'am I up material'],
+    ['position', isPositionAssessmentQuestion, 'who has the edge'],
+    ['position', isPositionAssessmentQuestion, 'is it lost'],
+    ['master-play', isMasterPlayQuestion, 'what is standard here'],
+    ['master-play', isMasterPlayQuestion, 'how is this usually played'],
+    ['master-play', isMasterPlayQuestion, 'what do the top players do'],
+    ['endgame', isEndgameQuestion, 'is this winnable'],
+    ['endgame', isEndgameQuestion, 'can I save this'],
+    ['endgame', isEndgameQuestion, 'how do I convert from here'],
+    ['player-games', isPlayerGamesQuestion, 'did he play this'],
+    ['player-games', isPlayerGamesQuestion, 'how did Carlsen win'],
+    ['player-games', isPlayerGamesQuestion, 'pull up his games'],
+    ['concept', isConceptQuestion, 'what is the idea behind the fianchetto'],
+    ['concept', isConceptQuestion, 'why is the bishop pair good'],
+    ['concept', isConceptQuestion, 'what are the principles'],
+  ];
+  it.each(cases)('%s router matches: %s', (_label, fn, q) => expect(fn(q)).toBe(true));
+});
+
 describe('cross-router disambiguation (must NOT collide)', () => {
   it('progress questions are not mistaken for position assessment', () => {
     // "am I improving" is about the student over time, NOT "am I winning".
