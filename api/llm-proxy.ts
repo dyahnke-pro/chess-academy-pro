@@ -57,14 +57,24 @@ function originAllowed(origin: string | null): boolean {
   return !origin || isAllowedOrigin(origin);
 }
 
-function corsHeaders(origin: string | null): Record<string, string> {
+function corsHeaders(origin: string | null, requestedHeaders?: string | null): Record<string, string> {
+  // Reflect whatever headers the CORS preflight asks for. The OpenAI SDK
+  // (DeepSeek) sends `authorization` + an `x-stainless-*` family, and the
+  // Anthropic SDK sends `x-api-key` — a static allow-list keeps missing them,
+  // so the native cross-origin POST was blocked at preflight (coach dead on
+  // iOS, fine on same-origin web where there's no preflight). David 2026-06-14.
+  const allowHeaders =
+    requestedHeaders && requestedHeaders.trim()
+      ? requestedHeaders
+      : 'Authorization, Content-Type, x-api-key, anthropic-version, anthropic-beta';
   const h: Record<string, string> = {
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, anthropic-version, anthropic-beta',
+    'Access-Control-Allow-Headers': allowHeaders,
+    'Access-Control-Max-Age': '86400',
   };
   if (origin && isAllowedOrigin(origin)) {
     h['Access-Control-Allow-Origin'] = origin;
-    h['Vary'] = 'Origin';
+    h['Vary'] = 'Origin, Access-Control-Request-Headers';
   }
   return h;
 }
@@ -97,7 +107,7 @@ const DROP_RES_HEADERS = new Set(['content-encoding', 'content-length', 'transfe
 
 export default async function handler(req: Request): Promise<Response> {
   const origin = req.headers.get('Origin');
-  const cors = corsHeaders(origin);
+  const cors = corsHeaders(origin, req.headers.get('Access-Control-Request-Headers'));
 
   if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
   if (!originAllowed(origin)) return new Response('forbidden origin', { status: 403, headers: cors });
