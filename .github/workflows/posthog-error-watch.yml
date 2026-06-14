@@ -30,6 +30,13 @@ permissions:
   contents: write       # autofix job pushes a branch
   pull-requests: write  # autofix job opens a draft PR
   issues: write         # watcher comments on the tracking issue
+  id-token: write       # the reusable claude-autofix workflow mints an OIDC
+                        # token; for a reusable call the CALLER must ALSO grant
+                        # id-token, or the whole run fails at startup
+                        # ("requesting id-token: write, only allowed none").
+                        # c27fa9d added it to the callee only — that flipped the
+                        # run from `failure` to `startup_failure` (David
+                        # 2026-06-14: every error-watch cron was dead).
 
 env:
   WATCH_ISSUE_TITLE: '🐛 PostHog error watch'
