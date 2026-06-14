@@ -424,8 +424,35 @@ function runAnswerGates(
  *  ungrounded and stock out (response-loop audit 2026-06-05). Detecting it
  *  here lets the grounding pipeline exempt the bare-SAN gate for the turn
  *  while keeping the stat / count / player / comparative guards in force. */
-const PLAN_QUESTION_RE =
-  /\b(?:plans?|strateg(?:y|ies|ize)|next\s+(?:few|two|three|several|2|3|\d+)\s+moves?|main\s+ideas?|my\s+ideas?|long[-\s]?term|game\s*plan|how\s+(?:do\s+i|should\s+i)\s+(?:proceed|continue|play|approach)|what'?s?\s+(?:the|my)\s+(?:plan|idea|strategy|approach)|outline\s+(?:a|my|the)?\s*(?:plan|strategy))\b/i;
+// ─────────────────────────────────────────────────────────────────────────
+// THE QUESTION-INTENT THESAURUS (David 2026-06-14: "throw the thesaurus at
+// this problem for ALL questions"). Each grounded-answer router below is built
+// from an explicit LIST of phrasings instead of one dense regex, so a student
+// gets routed to the right computed-fact answer no matter HOW they word it —
+// "what are my weaknesses?" and "what's the weakest aspect of my game?" must
+// land in the same place. To widen a router, add a phrasing to its array.
+// Disambiguations between routers (e.g. position-assessment must NOT swallow
+// progress/best-move) are preserved and covered by coachService.questionIntents.test.ts.
+//
+// `anyOf` joins alternatives into one case-insensitive regex; `\b` word
+// boundaries are baked into each fragment as needed.
+const anyOf = (alts: string[]): RegExp => new RegExp(alts.join('|'), 'i');
+
+const PLAN_QUESTION_RE = anyOf([
+  String.raw`\bplans?\b`,
+  String.raw`\bstrateg(?:y|ies|ize|ic)\b`,
+  String.raw`\bnext\s+(?:few|couple|two|three|several|2|3|\d+)\s+moves?\b`,
+  String.raw`\bmain\s+ideas?\b`,
+  String.raw`\bmy\s+ideas?\b`,
+  String.raw`\bidea\s+here\b`,
+  String.raw`\blong[-\s]?term\b`,
+  String.raw`\bgame\s*plan\b`,
+  String.raw`\bhow\s+(?:do\s+i|should\s+i|to)\s+(?:proceed|continue|play|approach|handle|develop|set\s+up)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+(?:the|my)\s+(?:plan|idea|strategy|approach|goal|aim)\b`,
+  String.raw`\bwhat(?:'?s| is| am)?\s+i\s+(?:trying|aiming|looking)\s+to\s+(?:do|achieve)\b`,
+  String.raw`\boutline\s+(?:a|my|the)?\s*(?:plan|strategy)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:goal|objective|aim)\b`,
+]);
 export function isPlanQuestion(ask: string | undefined): boolean {
   return !!ask && PLAN_QUESTION_RE.test(ask);
 }
@@ -442,8 +469,20 @@ export function isPlanQuestion(ask: string | undefined): boolean {
  *  carve-out plan/move-narration questions already get); every fabrication
  *  guard — percentages, game counts, ratings, player attributions, "most
  *  popular" comparatives — stays fully in force, so G3 is not weakened. */
-const BEST_MOVE_QUESTION_RE =
-  /\bbest\s+move\b|\bbest\s+continuation\b|\bstrongest\s+move\b|\bonly\s+(?:\w+\s+){0,3}(?:good\s+)?moves?\b|\bone\s+(?:good\s+)?move\b|\bwhat\s+should\s+(?:i|white|black|we)\s+play\b|\bwhat'?s?\s+(?:the\s+|white'?s?\s+|black'?s?\s+)?best\b|\b(?:right|correct|winning)\s+move\b|\bis\s+(?:this|that|it|[A-Za-z0-9+#=-]{1,6})\s+(?:the\s+)?(?:best|sound|good|winning|correct|playable)\b/i;
+const BEST_MOVE_QUESTION_RE = anyOf([
+  String.raw`\b(?:best|strongest|top|optimal|ideal|right|correct|winning|killer|critical)\s+(?:move|continuation|option|choice|try|play|reply|response|idea)\b`,
+  String.raw`\bbest\b[\s\S]{0,12}\bto\s+play\b`,
+  String.raw`\bonly\s+(?:\w+\s+){0,3}(?:good\s+)?moves?\b`,
+  String.raw`\bone\s+(?:good\s+)?move\b`,
+  String.raw`\bwhat\s+should\s+(?:i|white|black|we)\s+play\b`,
+  String.raw`\bwhat\s+(?:do|would|can|must|should)\s+(?:i|we|you)\s+play(?:\s+here)?\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+|white'?s?\s+|black'?s?\s+|my\s+)?best(?:\s+(?:move|here|option|play))?\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+the\s+(?:right|correct|winning|strongest)\s+(?:move|continuation)\b`,
+  String.raw`\bhow\s+should\s+(?:i|we)\s+(?:continue|respond|recapture)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+the\s+move\b`,
+  String.raw`\bis\s+(?:this|that|it|[A-Za-z0-9+#=-]{1,6})\s+(?:the\s+)?(?:best|sound|good|winning|correct|playable|right|strong|a\s+(?:good|sound|strong)\s+move)\b`,
+  String.raw`\bshould\s+i\s+(?:play|go\s+for|take|capture|push)\b`,
+]);
 export function isBestMoveQuestion(ask: string | undefined): boolean {
   return !!ask && BEST_MOVE_QUESTION_RE.test(ask);
 }
@@ -454,8 +493,29 @@ export function isBestMoveQuestion(ask: string | undefined): boolean {
  *  hanging pieces, mate-in-one, top threat/opportunity) — so the grounding
  *  inversion (Phase 2) routes it through `assembleTacticsAnswer` → voiceFacts
  *  and the LLM voices the engine's facts, deciding nothing. */
-const TACTICS_QUESTION_RE =
-  /\b(?:hang(?:ing|s)?|en\s*prise|(?:any\s+)?threats?|(?:a\s+)?fork|pinn?(?:ed|ing)?|skewer|discover(?:ed|y)|in\s+danger|under\s+attack|(?:is\s+(?:it|there|my|the)\b[\s\S]{0,40}\b(?:safe|hanging|attacked|defended))|am\s+i\s+safe|safe\s+(?:here|now)|can\s+(?:i|it|he|she|they|white|black)\s+be\s+(?:punished|taken|captured)|(?:is\s+there\s+(?:a\s+)?)?mate(?:\s+(?:here|in\s+\w+|threat))?|tactics?|combination|can\s+i\s+(?:win|grab|take)\s+(?:material|a\s+piece|the))\b/i;
+const TACTICS_QUESTION_RE = anyOf([
+  String.raw`\bhang(?:ing|s)?\b`,
+  String.raw`\ben\s*prise\b`,
+  String.raw`\bloose\s+piece`,
+  String.raw`\b(?:any\s+)?threats?\b`,
+  String.raw`\b(?:a\s+)?forks?\b`,
+  String.raw`\bpinn?(?:ed|ing)?\b`,
+  String.raw`\bskewers?\b`,
+  String.raw`\bdiscover(?:ed|y|ies)\b`,
+  String.raw`\bdouble\s+attack\b`,
+  String.raw`\bin\s+danger\b`,
+  String.raw`\bunder\s+attack\b`,
+  String.raw`\b(?:is\s+(?:it|there|my|the)\b[\s\S]{0,40}\b(?:safe|hanging|attacked|defended|loose|trapped))`,
+  String.raw`\bam\s+i\s+safe\b`,
+  String.raw`\bsafe\s+(?:here|now)\b`,
+  String.raw`\bcan\s+(?:i|it|he|she|they|white|black)\s+be\s+(?:punished|taken|captured|trapped|exploited)\b`,
+  String.raw`\b(?:is\s+there\s+(?:a\s+)?)?mate(?:\s+(?:here|in\s+\w+|threat))?\b`,
+  String.raw`\btactics?\b`,
+  String.raw`\bcombination\b`,
+  String.raw`\b(?:any\s+)?(?:shot|sac(?:rifice)?|trick|tactic)\s+(?:here|available|on|in\s+this)?\b`,
+  String.raw`\bcan\s+i\s+(?:win|grab|take|snag|pick\s+up)\s+(?:material|a\s+piece|a\s+pawn|the)\b`,
+  String.raw`\bwin\s+(?:material|a\s+piece|a\s+pawn)\b`,
+]);
 export function isTacticsQuestion(ask: string | undefined): boolean {
   return !!ask && TACTICS_QUESTION_RE.test(ask);
 }
@@ -467,8 +527,22 @@ export function isTacticsQuestion(ask: string | undefined): boolean {
  *  Deliberately position-scoped phrasings ONLY — it must NOT swallow "how am I
  *  improving" (that's `isProgressQuestion`, about the student over time) or
  *  "what should I play" (`isBestMoveQuestion`). */
-const POSITION_ASSESSMENT_RE =
-  /\bwho(?:'?s| is)\s+(?:winning|better|worse|ahead)\b|\bwhat'?s?\s+(?:the\s+)?eval(?:uation)?\b|\b(?:am\s+i|are\s+we)\s+(?:better|worse|winning|losing|ahead|behind)\b|\bis\s+(?:this|the|my)\s+(?:position\s+)?(?:good|bad|better|worse|winning|losing|equal|balanced|fine|ok(?:ay)?)\b|\bhow\s+(?:do\s+i|am\s+i)\s+(?:stand|standing)\b|\bwhere\s+do\s+i\s+stand\b|\bhow'?s?\s+(?:my|the)\s+position\b|\bassess\b|\bevaluate\s+(?:this|the\s+position)\b|\bwhat'?s?\s+going\s+on\s+(?:here|in\s+this)\b/i;
+const POSITION_ASSESSMENT_RE = anyOf([
+  String.raw`\bwho(?:'?s| is| has)\s+(?:winning|better|worse|ahead|on\s+top|the\s+(?:advantage|edge|initiative|upper\s+hand))\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?eval(?:uation)?\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?(?:score|assessment|verdict)\b`,
+  String.raw`\b(?:am\s+i|are\s+we)\s+(?:better|worse|winning|losing|ahead|behind|equal|fine|ok(?:ay)?|in\s+trouble|in\s+good\s+shape)\b`,
+  String.raw`\bis\s+(?:this|that|it|the|my)\s+(?:position\s+)?(?:good|bad|better|worse|winning|won|losing|lost|equal|level|balanced|fine|ok(?:ay)?|drawish|close|unclear|dangerous)\b`,
+  String.raw`\bhow\s+(?:do\s+i|am\s+i)\s+(?:stand|standing|doing\s+here)\b`,
+  String.raw`\bwhere\s+do\s+i\s+stand\b`,
+  String.raw`\bhow(?:'?s| is)?\s+(?:my|the)\s+position\b`,
+  String.raw`\bhow\s+(?:good|bad)\s+is\s+(?:my|this|the)\s+position\b`,
+  String.raw`\bassess(?:\s+(?:this|the\s+position))?\b`,
+  String.raw`\bevaluate\s+(?:this|the\s+position)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+going\s+on\s+(?:here|in\s+this)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+the\s+(?:situation|status)\b`,
+  String.raw`\bwho\s+stands\s+better\b`,
+]);
 export function isPositionAssessmentQuestion(ask: string | undefined): boolean {
   return !!ask && POSITION_ASSESSMENT_RE.test(ask);
 }
@@ -478,8 +552,17 @@ export function isPositionAssessmentQuestion(ask: string | undefined): boolean {
  *  inversion voices them via `assembleMasterPlayAnswer` so the LLM never
  *  fabricates a frequency. Distinct from `isBestMoveQuestion` (the ENGINE's
  *  best move) — this is about master PRACTICE / popularity. */
-const MASTER_PLAY_QUESTION_RE =
-  /\bwhat\s+do\s+(?:the\s+)?(?:masters?|grandmasters?|gms?|pros?|top\s+players?|they)\s+(?:play|do|prefer|choose|continue|go\s+for)\b|\bhow\s+do\s+(?:the\s+)?(?:masters?|grandmasters?|gms?|pros?)\s+(?:play|continue|handle|treat|approach)\b|\bmost\s+(?:popular|common|played|frequent)\s+(?:move|continuation|line|choice)\b|\bwhat'?s?\s+(?:the\s+)?(?:main|book|theoretical)\s+(?:line|move|continuation)\b|\bwhat\s+do\s+the\s+(?:books?|database|stats?)\s+say\b/i;
+const MASTER_PLAY_QUESTION_RE = anyOf([
+  String.raw`\bwhat\s+do\s+(?:the\s+)?(?:masters?|grandmasters?|gms?|pros?|professionals?|top\s+players?|strong\s+players?|titled\s+players?|they)\s+(?:play|do|prefer|choose|continue|go\s+for|opt\s+for|favou?r)\b`,
+  String.raw`\bhow\s+do\s+(?:the\s+)?(?:masters?|grandmasters?|gms?|pros?|top\s+players?)\s+(?:play|continue|handle|treat|approach|meet)\b`,
+  String.raw`\bmost\s+(?:popular|common|played|frequent|usual|tested)\s+(?:move|continuation|line|choice|reply|response)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?(?:main|book|theoretical|critical|principal|standard|usual|normal)\s+(?:line|move|continuation|reply)\b`,
+  String.raw`\bwhat\s+do(?:es)?\s+(?:the\s+)?(?:books?|database|theory|stats?|data|engine\s+stats?)\s+say\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?theory(?:\s+here|\s+say)?\b`,
+  String.raw`\bmain\s*line\b`,
+  String.raw`\bbook\s+move\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+(?:usually|typically|normally|commonly)\s+played\b`,
+]);
 export function isMasterPlayQuestion(ask: string | undefined): boolean {
   return !!ask && MASTER_PLAY_QUESTION_RE.test(ask);
 }
@@ -490,8 +573,15 @@ export function isMasterPlayQuestion(ask: string | undefined): boolean {
  *  on `lookupTablebase` returning a hit (≤7 pieces), so this detector can be
  *  broad on the endgame-verdict shape; a non-endgame position falls through to
  *  the engine-eval path. */
-const ENDGAME_QUESTION_RE =
-  /\bendgame\b|\bcan\s+i\s+(?:win|hold|draw|save|defend)\b|\bhow\s+do\s+i\s+(?:win|hold|draw|convert|defend)\b|\bis\s+this\s+(?:a\s+)?(?:theoretical(?:ly)?\s+)?(?:win|won|winning|draw|drawn|lost|losing)\b|\b(?:theoretical|tablebase)\b/i;
+const ENDGAME_QUESTION_RE = anyOf([
+  String.raw`\bend(?:game|ing)s?\b`,
+  String.raw`\bcan\s+i\s+(?:win|hold|draw|save|defend|convert|promote|queen)\b`,
+  String.raw`\bhow\s+(?:do\s+i|to)\s+(?:win|hold|draw|convert|defend|promote|queen)\s+(?:this|it|the)?\b`,
+  String.raw`\bis\s+this\s+(?:a\s+)?(?:theoretical(?:ly)?\s+)?(?:win|won|winning|draw|drawn|lost|losing|holdable|defensible)\b`,
+  String.raw`\bis\s+(?:this|it)\s+(?:winning|won|drawn|drawish|lost)(?:\s+for\s+me)?\b`,
+  String.raw`\b(?:theoretical(?:ly)?|tablebase)\b`,
+  String.raw`\bcan\s+(?:this|it)\s+be\s+(?:won|held|drawn|saved)\b`,
+]);
 export function isEndgameQuestion(ask: string | undefined): boolean {
   return !!ask && ENDGAME_QUESTION_RE.test(ask);
 }
@@ -504,8 +594,15 @@ export function isEndgameQuestion(ask: string | undefined): boolean {
  *  so this detector can be broad on the "how does X play / show me X's games"
  *  shape without name-matching every pro. Distinct from `isMasterPlayQuestion`
  *  (aggregate master practice) — this is ONE player's actual games. */
-const PLAYER_GAMES_QUESTION_RE =
-  /\bhow\s+does\s+(?:he|she|they|\w+)\s+(?:play|handle|treat|approach|continue)\b|\b(?:show|see)\s+(?:me\s+)?(?:his|her|their|\w+'?s)\s+games?\b|\bwhat\s+does\s+(?:he|she|they|the\s+pro|\w+)\s+(?:do|play|prefer)\s+(?:here|in\s+this|in\s+the)\b|\b\w+'s\s+games?\b|\bhis\s+(?:real\s+)?games?\b/i;
+const PLAYER_GAMES_QUESTION_RE = anyOf([
+  String.raw`\bhow\s+does\s+(?:he|she|they|\w+)\s+(?:play|handle|treat|approach|continue|meet)\b`,
+  String.raw`\b(?:show|see|find|pull\s+up|got)\s+(?:me\s+)?(?:his|her|their|\w+'?s)\s+games?\b`,
+  String.raw`\bwhat\s+does\s+(?:he|she|they|the\s+pro|\w+)\s+(?:do|play|prefer|choose)\s+(?:here|in\s+this|in\s+the)\b`,
+  String.raw`\bwhat\s+(?:did|has)\s+(?:he|she|they|\w+)\s+(?:play(?:ed)?|do(?:ne)?)\b`,
+  String.raw`\bhas\s+(?:he|she|they|\w+)\s+(?:ever\s+)?played\s+(?:this|here)\b`,
+  String.raw`\b\w+'s\s+(?:real\s+)?games?\b`,
+  String.raw`\b(?:his|her|their)\s+(?:real\s+|actual\s+|own\s+)?games?\b`,
+]);
 export function isPlayerGamesQuestion(ask: string | undefined): boolean {
   return !!ask && PLAYER_GAMES_QUESTION_RE.test(ask);
 }
@@ -517,8 +614,18 @@ export function isPlayerGamesQuestion(ask: string | undefined): boolean {
  *  and excludes position-specific cues ("is there a fork HERE", "am I in
  *  danger") so it doesn't collide with `isTacticsQuestion`; the interception
  *  then confirms a real concept token via `detectConceptsInText`. */
-const CONCEPT_QUESTION_RE =
-  /\b(?:what(?:'?s| is| are| does)\s+(?:a|an|the\s+)?[a-z]+|what\s+do\s+you\s+mean\s+by|explain|define|tell\s+me\s+about|how\s+does\s+(?:a|an|the)\b)\b/i;
+const CONCEPT_QUESTION_RE = anyOf([
+  String.raw`\bwhat(?:'?s| is| are| does)\s+(?:a|an|the\s+)?[a-z]+`,
+  String.raw`\bwhat\s+do\s+you\s+mean\s+by\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?(?:meaning|definition)\s+of\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+the\s+difference\s+between\b`,
+  String.raw`\bexplain\b`,
+  String.raw`\bdefine\b`,
+  String.raw`\b(?:tell|teach)\s+me\s+about\b`,
+  String.raw`\bdescribe\b`,
+  String.raw`\bwhat\s+does\s+\w+\s+mean\b`,
+  String.raw`\bhow\s+does\s+(?:a|an|the)\b`,
+]);
 const CONCEPT_POSITIONAL_CUE_RE =
   /\b(?:here|this\s+position|on\s+the\s+board|right\s+now|in\s+this|my\s+(?:position|move)|best\s+move|should\s+i\s+play)\b/i;
 export function isConceptQuestion(ask: string | undefined): boolean {
@@ -530,8 +637,29 @@ export function isConceptQuestion(ask: string | undefined): boolean {
  *  the student's OWN computed history (their persisted bad-habit profile), so
  *  the grounding inversion (Phase 6) routes it through `assembleProgressAnswer`
  *  → voiceFacts. The LLM voices the student's real data; it invents no weakness. */
-const PROGRESS_QUESTION_RE =
-  /\b(?:am\s+i\s+(?:improving|getting\s+better|progressing|any\s+good)|how\s+am\s+i\s+(?:doing|progressing|playing)|what\s+(?:should|do)\s+i\s+(?:(?:need|want|have)\s+to\s+)?(?:work\s+on|improve|practi[sc]e|focus\s+on|get\s+better\s+at)|(?:need|want)\s+to\s+(?:work\s+on|improve|practi[sc]e|get\s+better)|what\s+(?:are|to)\s+(?:my\s+)?(?:work\s+on|improve)|my\s+(?:weakness(?:es)?|weak\s+(?:spots?|points?|areas?)|bad\s+habits?|progress|improvement|strengths?)|where\s+(?:am\s+i|do\s+i)\s+(?:weak|struggl|lose|losing|need)|what'?s?\s+holding\s+me\s+back|biggest\s+(?:weakness|mistake|problem))\b/i;
+// Reusable fragments for the progress/weakness router (the most-worded ask).
+const IMPROVE_VERBS = String.raw`(?:work\s+on|improve(?:\s+on)?|practi[sc]e|focus\s+on|get\s+better(?:\s+at)?|fix|address|sharpen|study|brush\s+up\s+on|shore\s+up)`;
+const WEAKNESS_NOUNS = String.raw`(?:weakness(?:es)?|weak\s+(?:spots?|points?|areas?|aspects?|parts?|sides?)|weakest\s+(?:spot|point|area|aspect|part|skill|move|link|element|side)|flaws?|shortcomings?|blind\s+spots?|achilles\s+heel|leaks?|holes?|gaps?|sticking\s+points?|bad\s+habits?|recurring\s+(?:mistakes?|errors?)|common\s+(?:mistakes?|errors?))`;
+const PROGRESS_QUESTION_RE = anyOf([
+  String.raw`\bam\s+i\s+(?:improving|getting\s+(?:better|worse)|progressing|developing|growing|any\s+good|good\s+enough|getting\s+anywhere)\b`,
+  String.raw`\bhow\s+am\s+i\s+(?:doing|progressing|playing|improving|developing|getting\s+on)\b`,
+  String.raw`\bhow(?:'?s| is| has)\s+my\s+(?:game|play|chess|progress|improvement)\b`,
+  String.raw`\bwhat\s+(?:should|do|can|must|ought)\s+i\s+(?:(?:need|want|have|like|try)\s+to\s+)?` + IMPROVE_VERBS + String.raw`\b`,
+  String.raw`\b(?:need|want|have|trying|gotta|got\s+to)\s+to?\s*` + IMPROVE_VERBS + String.raw`\b`,
+  String.raw`\bwhat\s+(?:are|is|to)\s+(?:my\s+)?(?:work\s+on|improve)\b`,
+  String.raw`\b(?:my|the)\s+(?:biggest\s+|main\s+|worst\s+|greatest\s+|number\s+one\s+)?` + WEAKNESS_NOUNS + String.raw`\b`,
+  String.raw`\b` + WEAKNESS_NOUNS + String.raw`\s+(?:in|of)\s+my\s+(?:game|play|chess)\b`,
+  String.raw`\bweakest\s+(?:aspect|part|area|point|spot|skill|element|side|link|piece)\s+of\s+my\s+(?:game|play|chess)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?weakest\s+(?:aspect|part|area|point|spot|side)\b`,
+  String.raw`\b(?:my|the)\s+(?:progress|improvement|strengths?|strong\s+(?:points?|suits?|areas?))\b`,
+  String.raw`\bwhere\s+(?:am\s+i|do\s+i)\s+(?:keep\s+)?(?:weak|struggl(?:e|ing)|los(?:e|ing)|need\s+work|go(?:ing)?\s+wrong|mess(?:ing)?\s+up|blunder(?:ing)?|fall(?:ing)?\s+short|drop(?:ping)?\s+points?)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+holding\s+me\s+back\b`,
+  String.raw`\bwhat\s+(?:trips|throws|holds)\s+me\s+(?:up|back)\b`,
+  String.raw`\bwhat\s+(?:am\s+i|do\s+i)\s+(?:bad|worst|good|best|strong|weak)\s+at\b`,
+  String.raw`\bwhat\s+do\s+i\s+(?:do|get|keep\s+(?:doing|getting))\s+wrong\b`,
+  String.raw`\bbiggest\s+(?:weakness|mistake|problem|issue|flaw|leak)\b`,
+  String.raw`\bwhat\s+(?:keeps?\s+)?(?:costing|losing)\s+me\s+(?:games|points|rating)\b`,
+]);
 export function isProgressQuestion(ask: string | undefined): boolean {
   return !!ask && PROGRESS_QUESTION_RE.test(ask);
 }
