@@ -143,6 +143,47 @@ async function main() {
   }));
   errors.sort((a, b) => a.lastTs - b.lastTs);
 
+  // Also pull coach NON-ANSWERS (David 2026-06-14): the coach connected but
+  // didn't address the question (canned fallback / re-ask / empty). These are
+  // emitted by the app as `coach_non_answer` (src/services/coachNonAnswer.ts);
+  // surface them alongside crashes so the autofix pipeline triages them too.
+  const naQuery = `
+    SELECT
+      toUnixTimestamp(max(timestamp)) * 1000 AS lastTs,
+      count() AS occurrences,
+      count(DISTINCT person_id) AS users,
+      any(properties.reason) AS reason,
+      any(properties.question) AS question,
+      any(properties.surface) AS surface
+    FROM events
+    WHERE event = 'coach_non_answer' AND timestamp > toDateTime('${sinceIso}')
+    GROUP BY properties.reason, properties.question
+    ORDER BY lastTs DESC
+    LIMIT 25`;
+  try {
+    const naData = await api(key, `/api/projects/${projectId}/query/`, {
+      method: 'POST',
+      body: JSON.stringify({ query: { kind: 'HogQLQuery', query: naQuery } }),
+    });
+    for (const r of Array.isArray(naData.results) ? naData.results : []) {
+      const reason = cleanStr(r[3]) || 'non-answer';
+      const question = cleanStr(r[4]);
+      const surface = cleanStr(r[5]);
+      errors.push({
+        lastTs: Number(r[0]) || SINCE_MS,
+        occurrences: Number(r[1]) || 0,
+        users: Number(r[2]) || 0,
+        type: 'coach non-answer',
+        value: `${reason}${surface ? ` [${surface}]` : ''}: "${question}"`,
+        groupKey: `coach_non_answer:${reason}:${question}`,
+      });
+    }
+  } catch (err) {
+    // Non-fatal — a non-answer query hiccup must not break crash watching.
+    console.log(`[posthog-watch] coach_non_answer query skipped: ${err.message}`);
+  }
+  errors.sort((a, b) => a.lastTs - b.lastTs);
+
   const maxTs = errors.length ? errors[errors.length - 1].lastTs : SINCE_MS;
   console.log(
     `[posthog-watch] project=${projectId} window-since=${new Date(SINCE_MS).toISOString()} ` +

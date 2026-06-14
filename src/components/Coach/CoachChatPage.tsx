@@ -10,6 +10,7 @@ import { detectNarrationToggle, applyNarrationToggle } from '../../services/coac
 import { coachService } from '../../coach/coachService';
 import type { LiveState } from '../../coach/types';
 import { logAppAudit } from '../../services/appAuditor';
+import { reportCoachNonAnswer } from '../../services/coachNonAnswer';
 import { voiceService } from '../../services/voiceService';
 import { stripCoachMarkup } from '../../services/sanitizeCoachText';
 import { ChatMessage } from './ChatMessage';
@@ -360,6 +361,21 @@ export function CoachChatPage(): JSX.Element {
       };
       appendMessage(assistantMsg);
       recordTurn('coach', cleanText);
+
+      // Non-answer watch (David 2026-06-14): if the coach connected but didn't
+      // address the question (canned fallback, re-ask of a recent question, or
+      // empty reply), emit `coach_non_answer` → the error-watch cron + autofix
+      // pipeline triage it. `chatMessages` is the pre-turn history, so its user
+      // messages are exactly the PRIOR questions (current one excluded).
+      reportCoachNonAnswer({
+        surface: 'coach-chat',
+        question: text,
+        answer: cleanText,
+        priorUserQuestions: chatMessages
+          .filter((m) => m.role === 'user')
+          .map((m) => m.content)
+          .slice(-6),
+      });
     } catch (err) {
       console.warn('[CoachChatPage] coachService.ask failed:', err);
       // Surface the failure to the student instead of leaving a stuck

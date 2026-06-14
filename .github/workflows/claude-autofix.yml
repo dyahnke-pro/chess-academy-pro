@@ -8,10 +8,12 @@ name: Claude auto-fix (from error digest)
 #
 # Claude opens a DRAFT PR only; it never pushes to main. David reviews + merges.
 #
-# Setup (one-time): add an Anthropic credential as a repo secret — either
-#   ANTHROPIC_API_KEY (an `sk-ant-…` key), OR run `/install-github-app` in
-#   Claude Code which provisions CLAUDE_CODE_OAUTH_TOKEN automatically.
-# Without a credential the action step fails fast (nothing else is affected).
+# Brain (one-time setup): DeepSeek-first. Add DEEPSEEK_KEY as a repo secret
+#   (Settings → Secrets → Actions; same value as Vercel's DEEPSEEK_KEY) and the
+#   session runs on DeepSeek's Anthropic-compatible endpoint — the funded
+#   primary. Optional fallback for when DEEPSEEK_KEY is absent: ANTHROPIC_API_KEY
+#   (an `sk-ant-…` key) OR CLAUDE_CODE_OAUTH_TOKEN (via `/install-github-app`).
+# Without ANY of these the session errors at $0 cost and no fix is produced.
 
 on:
   workflow_call:
@@ -57,9 +59,28 @@ jobs:
 
       - name: Claude triage + fix
         uses: anthropics/claude-code-action@v1
+        env:
+          # DeepSeek-first (David 2026-06-14): DeepSeek is the FUNDED primary
+          # brain; the Anthropic account was out of credits, so the autofix
+          # session errored at $0 cost and never produced a fix. DeepSeek ships
+          # an Anthropic-compatible endpoint, so Claude Code runs against it via
+          # ANTHROPIC_BASE_URL + ANTHROPIC_AUTH_TOKEN + ANTHROPIC_MODEL. When
+          # DEEPSEEK_KEY is present we point there; when it's absent these are
+          # empty and the action falls back to the Anthropic API key / OAuth
+          # token in `with:` below.
+          # NOTE: DEEPSEEK_KEY must exist as a REPO secret (Settings → Secrets →
+          # Actions) — same value as Vercel's DEEPSEEK_KEY. Without it this
+          # falls back to the (dry) Anthropic key.
+          ANTHROPIC_BASE_URL: ${{ secrets.DEEPSEEK_KEY != '' && 'https://api.deepseek.com/anthropic' || '' }}
+          ANTHROPIC_AUTH_TOKEN: ${{ secrets.DEEPSEEK_KEY }}
+          ANTHROPIC_MODEL: ${{ secrets.DEEPSEEK_KEY != '' && 'deepseek-chat' || '' }}
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # When DeepSeek is the provider we still pass its key here so the
+          # action's credential precheck passes; the real auth to the custom
+          # endpoint is ANTHROPIC_AUTH_TOKEN above. Falls back to the Anthropic
+          # key / OAuth token when DEEPSEEK_KEY is absent.
+          anthropic_api_key: ${{ secrets.DEEPSEEK_KEY != '' && secrets.DEEPSEEK_KEY || secrets.ANTHROPIC_API_KEY }}
+          claude_code_oauth_token: ${{ secrets.DEEPSEEK_KEY == '' && secrets.CLAUDE_CODE_OAUTH_TOKEN || '' }}
           prompt: |
             Beta testers hit these live errors in production (from PostHog Error Tracking):
 
@@ -75,6 +96,13 @@ jobs:
                signals rather than fixable crashes (claim-validator-trip,
                master-play-enforcement-fallback) — note them but don't try to
                "fix" them with a code patch.
+               A `coach non-answer` item is DIFFERENT and IS fixable: the coach
+               connected but didn't address the question (reason 're-ask' /
+               'fallback-or-greeting'). The usual root cause is an intent
+               classifier in src/coach/coachService.ts not recognizing the
+               phrasing — broaden the matching router the same way
+               src/coach/questionIntents.test.ts does (the "thesaurus" pattern),
+               and add the failing phrasing to that test.
             2. ROOT CAUSE: find the disease, not just the symptom. Grep for every
                other instance of the same pattern (CLAUDE.md "sweep, don't spot-fix").
             3. FIX: minimal, surgical changes. No unrelated refactors.

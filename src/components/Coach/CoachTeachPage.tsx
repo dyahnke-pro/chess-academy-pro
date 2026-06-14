@@ -43,6 +43,7 @@ import {
 } from '../../services/openingDetectionService';
 import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
 import { parseCoachIntent } from '../../services/coachAgent';
+import { reportCoachReask } from '../../services/coachNonAnswer';
 import { tryCaptureOpeningIntent, tryCaptureForgetIntent } from '../../services/openingIntentCapture';
 import { findPlansForOpening, sessionFromPlan } from '../../services/middlegamePlanner';
 import { MiddlegamePlanInline } from './MiddlegamePlanInline';
@@ -1087,6 +1088,10 @@ export function CoachTeachPage(): JSX.Element {
               sharedTokens: shared,
             }),
           });
+          // Also surface the re-ask to PostHog as a coach non-answer so the
+          // error-watch cron + autofix pipeline triage it — the prior answer
+          // didn't satisfy (David 2026-06-14: he re-asked "weakest aspect").
+          reportCoachReask({ surface: 'coach-teach', priorQuestion: prev.text, reask: trimmedText });
         }
       }
       // Track current input for the NEXT retry check. Cap at 3 entries.
