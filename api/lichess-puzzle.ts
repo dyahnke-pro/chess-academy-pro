@@ -31,6 +31,7 @@ function getCorsHeaders(req: Request): Record<string, string> {
   };
   if (
     origin === 'capacitor://app.chessacademy.pro' ||
+    origin === 'https://app.chessacademy.pro' ||
     origin === 'https://chess-academy-pro.vercel.app' ||
     /^https:\/\/chess-academy-pro-[a-z0-9-]+-dyahnke-pros-projects\.vercel\.app$/.test(origin) ||
     origin === ''

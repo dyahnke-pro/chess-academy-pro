@@ -48,13 +48,23 @@ jobs:
       - name: Build web bundle
         run: npm run build
 
-      - name: Generate app icons / splash
-        run: npm run assets:generate
-
       - name: Add + sync iOS project (regenerates the gitignored ios/)
         run: |
           npx cap add ios
           npx cap sync ios
+
+      # MUST run AFTER `cap add ios` — capacitor-assets writes into the iOS
+      # project's asset catalog, and if the project doesn't exist yet it
+      # silently skips iOS ("iOS platform not found") and the default Capacitor
+      # placeholder icon ships. (This step used to run before `cap add`, which
+      # is exactly how the placeholder icon reached TestFlight — David
+      # 2026-06-14.) The verify step fails the build if the brand icon didn't
+      # actually land.
+      - name: Generate app icons / splash
+        run: npm run assets:generate
+
+      - name: Verify the brand app icon was applied
+        run: node scripts/verify-app-icon.mjs
 
       - name: Apply AVAudioSession AppDelegate patch
         run: cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift

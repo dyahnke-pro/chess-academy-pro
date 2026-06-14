@@ -44,6 +44,12 @@ npx cap sync ios
 # asset pipeline builds the icon set into ios/App/App/Assets.xcassets.
 npm run assets:generate
 
+# Guard: FAIL the build if the brand icon wasn't actually applied. capacitor-
+# assets can silently no-op for iOS (e.g. if it can't find the appiconset) and
+# leave the white Capacitor placeholder — exactly what shipped in 2.8 (David
+# 2026-06-14). This turns a wrong-icon ship into a red build.
+node scripts/verify-app-icon.mjs
+
 # Reapply the AVAudioSession AppDelegate patch (cap regenerates ios/).
 cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 

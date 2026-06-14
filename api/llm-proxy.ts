@@ -25,7 +25,14 @@
 export const config = { runtime: 'edge' };
 
 const ALLOWED_ORIGINS = [
+  // Native iOS WKWebView serves the app over BOTH schemes depending on the
+  // Capacitor `server.hostname` config: the legacy `capacitor://` and, once
+  // `server.hostname` is set, `https://app.chessacademy.pro`. The latter was
+  // missing, so the coach's /api/llm POSTs from device 403'd at the origin gate
+  // even after the client correctly routed them here (David 2026-06-14: coach
+  // dead on iOS, fine on web). Allow both.
   'capacitor://app.chessacademy.pro',
+  'https://app.chessacademy.pro',
   'https://chess-academy-pro.vercel.app',
 ];
 const LOCAL_DEV_ORIGINS = [

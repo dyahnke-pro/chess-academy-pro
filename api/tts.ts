@@ -1,7 +1,11 @@
 export const config = { runtime: 'edge' };
 
 const ALLOWED_ORIGINS = [
+  // Native iOS WKWebView serves over `https://app.chessacademy.pro` once
+  // `server.hostname` is set (in addition to the legacy `capacitor://`). The
+  // https origin was missing, so on-device voice 403'd at the gate. Allow both.
   'capacitor://app.chessacademy.pro',
+  'https://app.chessacademy.pro',
   'https://chess-academy-pro.vercel.app',
 ];
 
