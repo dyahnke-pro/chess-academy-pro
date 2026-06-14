@@ -68,3 +68,10 @@ data/sources/*.txt
 
 # All raw public-domain book sources (re-fetched by build-library-*.mjs)
 data/sources/
+
+# Ruby / fastlane — CI installs gems via bundler-cache; the vendored bundle is a
+# local cache (98 MB) and Gemfile.lock is generated per-Ruby (this container's
+# 3.3.0 differs from CI's 3.2), so neither belongs in git. Gemfile stays tracked.
+vendor/
+Gemfile.lock
+.bundle/
