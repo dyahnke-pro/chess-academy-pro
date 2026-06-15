@@ -3,6 +3,7 @@ import { Swords, Play, Pause, SkipForward, SkipBack, Headphones } from 'lucide-r
 import { voiceService } from '../../services/voiceService';
 import { PHILOSOPHY_OF_A_GENERAL } from '../../data/academy/philosophyOfAGeneral';
 import { PageHelp } from '../Layout/PageHelp';
+import { AcademyCourses } from './AcademyCourses';
 
 /** Polly / `/api/tts` rejects any request over 3000 chars. Stay well
  *  under it (chapters were silently failing at 3.4k–4.3k). */
@@ -145,6 +146,7 @@ export function AcademyPage(): JSX.Element {
             helpId="academy"
             title="The Academy"
             steps={[
+              { label: 'Courses', body: 'Enrolled GM-style opening courses — a numbered chapter syllabus with progress and a finish line. Tap a course to pick up where you left off.' },
               { label: 'Listen', body: 'Tap play to hear the whole book read aloud — made for the commute. It keeps playing chapter to chapter, so you can pocket the phone and just listen.' },
               { label: 'Read', body: 'Tap any chapter to open its full text, CliffsNotes, and sources, and read along.' },
               { label: 'The doctrine', body: 'Learn to think like a general: see the whole field, seize the initiative, mass at the decisive point, and impose your will.' },
@@ -152,6 +154,9 @@ export function AcademyPage(): JSX.Element {
           />
         </div>
       </div>
+
+      {/* Courses — the enrolled GM-style opening masterclasses */}
+      <AcademyCourses />
 
       {/* Book / audiobook hero */}
       <div

@@ -36,6 +36,40 @@ line.
 
 ---
 
+## THE VOCABULARY — variations vs sublines (David, 2026-06-15, the key articulation)
+
+The free/paid line is a DEPTH line, and David named it precisely:
+
+- **Variation** = a top-level named branch (the Advance, the Exchange, the
+  Classical). Breadth. **Already offered free in the Openings tab** (main line +
+  variations).
+- **Subline** = the deeper branches INSIDE a variation — the answers to every
+  opponent deviation within it (under the Advance: 3…c5 vs 3…Bf5; under Bf5:
+  4.Nf3 vs 4.h4 …). Depth. The "never out of book" layer.
+
+**Openings tab (FREE) teaches VARIATIONS. A COURSE (PAID) teaches BOTH —
+variations + sublines.** Buy the course, you get it all (no further gating
+inside a course). The DEPTH (the sublines) is the product; the variations are
+already free, so what's paid for is the complete gap-free tree + the syllabus +
+prescriptive coaching wrapped around it.
+
+**Structural consequence: the syllabus is a TWO-LEVEL tree** (Chapter =
+variation → Sublines), exactly the Chessable nested contents tree. The course
+is the ONLY surface where sublines appear.
+
+### 🚨 Data-source decision this forces (G3)
+Sublines = real DB lines, NEVER invented (G3 + "if it's not in the Lichess DB it
+doesn't exist"). Source options for each variation's sublines:
+- **DB-derived (recommended):** the sub-branches under the variation in
+  `openings-lichess.json`, via the existing sibling/continuation machinery
+  (`findSiblingExtensionBranches`, `findContinuationsAtPly` in
+  `openingDetectionService.ts`). Same engine the walkthrough forks already use.
+- **Authored (deep):** hand-built per the masterclass/pro-rep deep-build
+  doctrine (§G9.1) — more work, masterclass-grade.
+- Current data: `OpeningVariation` has NO nested `sublines[]`; the model needs a
+  subline layer (DB-derived first; author the masterclass set over time).
+**OPEN for David: DB-derived sublines for v1, author later? (recommended).**
+
 ## The insight (David, 2026-06-15)
 
 A GM course is NOT a neutral catalog of variations. It's **prescriptive and
