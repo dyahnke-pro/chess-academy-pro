@@ -382,6 +382,36 @@ user on it without even being asked." A proactive, weakness-targeting coach. Thi
 is the course-sparring idea (P9) generalized to the whole Learn-with-Coach surface,
 driven by `openingWeakSpots` + SRS. Remind David when course-sparring lands.
 
+## 🔒 ANTI-OPENING COURSES — either side, flip the student color (David 2026-06-15)
+
+A course can be oriented from EITHER color — the position-based engine handles both
+by just setting which side is the "student":
+- **"Play the X"** = student plays X (Black's Caro repertoire); coach throws the
+  opponent's tries.
+- **"Beat X / Meet X"** = student is the other side, course RECOMMENDS a weapon vs
+  X and drills every reply. (Existing "face mode" already flips studentSide.)
+Two packagings: standalone "Meet the Caro" courses, OR chapters inside a broader
+"1.e4 White repertoire" course ("vs the Caro", "vs the French", …). The ONLY extra
+curation is PICKING the recommended weapon — the same prescriptive "we recommend X
+because Y" decision the course concept already rests on. Engine unchanged; flip the
+color, follow the (now-attacker) student's chosen system, branch on the defender.
+Accuracy note: a recommended anti-Caro weapon should be the Advance or Two Knights
+(principled), not the Fantasy (offbeat surprise). Anti-French recommend = the
+Advance (3.e5) — fixed structure, clear plans, dodges the Winawer.
+
+**The clean generalization (David 2026-06-15): a COURSE = rooted at ANY position +
+a student color + a recommended system.** The root is just a FEN/short prefix, so
+one structure subsumes everything:
+- Rooted at the START, student White → a full "1.e4 (or 1.d4) White repertoire."
+- Rooted after **1.d4, student Black** → "vs the Queen's Pawn as Black, we
+  recommend [the Nimzo/QGD complex, or the KID]" — a defensive repertoire BY THE
+  OPPONENT'S FIRST MOVE.
+- Rooted after 1.e4, student Black → the e4-defense repertoire (Caro/French/…).
+- Rooted at a named opening → the single-opening course.
+All the same FEN-walk: set the root + color, follow the student's recommended
+system at student-to-move plies, branch on the opponent at opponent-to-move plies.
+"Anti-opening" and "defensive repertoire by first move" are just different roots.
+
 ## 🔒🔒 CORE PRINCIPLE — IT IS ALL POSITION-BASED / FEN-KEYED (David 2026-06-15, emphatic)
 
 The entire engine is keyed on POSITION (FEN), never move-names or PGN strings.
