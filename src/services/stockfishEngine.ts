@@ -48,15 +48,12 @@ interface QueueEntry {
 const INIT_TIMEOUT_MS = 45_000;
 const STOCKFISH_MT_URL = '/stockfish/stockfish-18-lite.js';
 const STOCKFISH_ST_URL = '/stockfish/stockfish-18-lite-single.js';
-/** WO-STOCKFISH-SWAP — lila-stockfish-web bridge worker. ES module
- *  worker that imports `sf16-7` (Lichess's known-iOS-compatible
- *  Stockfish 16 build) and adapts the `engine.uci()` /
- *  `engine.listen` API to the classic postMessage worker contract
- *  the rest of this engine speaks. Used on iOS Safari where
- *  `stockfish-18-lite` crashes with `RuntimeError: call_indirect to
- *  a signature that does not match` (audit cycle 6 Findings 10, 20,
- *  29, 47, 55, 79, 97, 109, 117, 120). */
-const LILA_BRIDGE_URL = '/stockfish/lila-bridge.worker.js';
+// NOTE (David 2026-06-15): the lila/sf16-7 module-worker path was REMOVED from
+// routing — it needs SharedArrayBuffer (7+ SAB/pthread refs) which iOS
+// Capacitor lacks, so it hung 45s on init. iOS now uses the SAB-free
+// single build (STOCKFISH_ST_URL). The lila-bridge.worker.js + sf16-7 assets
+// remain on disk (orphaned) pending a decision on a true single-threaded
+// engine if the single build's iOS-26 `call_indirect` issue resurfaces.
 const MAX_CRASH_RETRIES = 3;
 /** How long to wait after spawning the multi-threaded worker before
  *  declaring it broken. The bundle hangs / throws inside pthread
@@ -108,14 +105,21 @@ export function resolveWorkerUrl(): ResolvedWorker {
   if (typeof window === 'undefined') {
     return { url: STOCKFISH_ST_URL, variant: 'single', reason: 'no-window', workerType: 'classic' };
   }
-  // WO-STOCKFISH-SWAP — iOS Safari is the only host where
-  // stockfish-18-lite is known to crash; route it to lila first.
+  // ENGINE ROOT FIX (David 2026-06-15): iOS Capacitor is NOT cross-origin
+  // isolated, so SharedArrayBuffer is unavailable. EVERY threaded build —
+  // stockfish-18-lite (multi) AND lila's sf16-7/fsf14/sf171-79 (all 7+ SAB/
+  // pthread refs) — HANGS spawning pthread workers it can never start (the
+  // observed 45s init timeout). The SAB-free `stockfish-18-lite-single` is
+  // the only build that fits. (It previously crashed with `call_indirect` on
+  // iOS Safari 26, but the wasm+glue were rebuilt as a matched pair, which is
+  // the usual cause of that mismatch — so retry it here; if it still throws,
+  // handleWorkerCrash now reports the reason instead of failing dark.)
   if (isIosSafari()) {
     return {
-      url: LILA_BRIDGE_URL,
-      variant: 'lila',
-      reason: 'iOS Safari detected — using lila-stockfish-web sf16-7 (stockfish-18-lite crashes on this host)',
-      workerType: 'module',
+      url: STOCKFISH_ST_URL,
+      variant: 'single',
+      reason: 'iOS — single-threaded build (threaded builds need SharedArrayBuffer, unavailable on iOS Capacitor → init hang)',
+      workerType: 'classic',
     };
   }
   const isolated =
@@ -192,6 +196,10 @@ function writePersistedMultiFallback(): void {
 }
 
 class StockfishEngine {
+  // Last init stage the (lila) bridge reported via a `__sfstage__` marker —
+  // folded into the init-timeout message to name where the iOS hang occurs
+  // (David 2026-06-15).
+  private _lastInitStage: string | null = null;
   private worker: Worker | null = null;
   private isReady = false;
   private pending: PendingAnalysis | null = null;
@@ -289,7 +297,11 @@ class StockfishEngine {
 
     this.initPromise = new Promise((resolve, reject) => {
       const overallTimeoutId = setTimeout(() => {
-        const msg = 'Stockfish initialization timed out after 45s';
+        // Fold in the last init stage the worker reported (David 2026-06-15):
+        // the iOS lila init HANGS, and the last `__sfstage__` marker names
+        // exactly where (import / instantiate / runtime) so we can fix the
+        // real hang point instead of guessing.
+        const msg = `Stockfish initialization timed out after 45s (last stage: ${this._lastInitStage ?? 'none — worker never signaled'})`;
         console.error('[Stockfish]', msg);
         this.setStatus('error', msg);
         reject(new Error(msg));
@@ -305,27 +317,15 @@ class StockfishEngine {
 
       const tryStart = (forceSingle: boolean): void => {
         let resolved: ResolvedWorker;
-        // WO-STOCKFISH-SWAP audit (2026-05-15): iOS Safari MUST short-
-        // circuit BEFORE the forceSingle / sticky-fallback branches.
-        // Both fallback paths route to STOCKFISH_ST_URL (the lite-
-        // single bundle), which crashes 5+ times/sec on iOS Safari
-        // with `RuntimeError: call_indirect to a signature that does
-        // not match`. Live audit at build 7eca7c3 captured 120 such
-        // errors in 15 min on /coach/endgame because the persisted
-        // `_runtimeFallbackAttempted` flag bypassed the iOS check.
-        // iOS Safari → lila is the only safe path; force-single on
-        // iOS would just crash the single bundle the same way.
+        // ENGINE ROOT FIX (David 2026-06-15): iOS routes to the SAB-free
+        // single build (threaded builds — multi AND lila — hang on iOS
+        // Capacitor for lack of SharedArrayBuffer). This used to force lila
+        // to dodge a `call_indirect` crash in the single bundle, but lila
+        // HANGS (no SAB) which is worse; the single wasm was rebuilt as a
+        // matched pair so the crash should be gone. force-single / sticky
+        // already target the single bundle, so iOS just falls through.
         if (isIosSafari()) {
-          resolved = {
-            url: LILA_BRIDGE_URL,
-            variant: 'lila',
-            reason: forceSingle
-              ? 'iOS Safari — lila (forceSingle ignored: lite crashes on this host)'
-              : this._runtimeFallbackAttempted
-                ? 'iOS Safari — lila (sticky-fallback ignored: lite crashes on this host)'
-                : 'iOS Safari detected — using lila-stockfish-web sf16-7 (stockfish-18-lite crashes on this host)',
-            workerType: 'module',
-          };
+          resolved = resolveWorkerUrl();
         } else if (forceSingle) {
           resolved = {
             url: STOCKFISH_ST_URL,
@@ -406,6 +406,12 @@ class StockfishEngine {
 
           this.worker.onmessage = (event: MessageEvent<string>) => {
             const line = event.data;
+            // Bridge init stage marker (David 2026-06-15) — records where the
+            // iOS init hang occurs; NOT a UCI line, so consume it here.
+            if (typeof line === 'string' && line.startsWith('__sfstage__ ')) {
+              this._lastInitStage = line.slice('__sfstage__ '.length);
+              return;
+            }
             // The lila/sf16-7 bridge (iOS path) reports failures as
             // `error: ...` UCI lines (bridge-init / bridge-uci failed).
             // handleMessage only parses info/bestmove and silently drops

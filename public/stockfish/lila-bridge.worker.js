@@ -40,19 +40,33 @@
 let engine = null;
 let pendingCommands = [];
 
+// Stage markers (David 2026-06-15): the iOS init HANGS (45s timeout, not an
+// error), so we can't see WHERE. Post a marker before/after each init step;
+// the host records the last one and folds it into the timeout message, so the
+// next session names the exact hang point (import vs wasm-instantiate vs
+// emscripten-runtime). Prefix is chosen to NOT match the host's info/bestmove/
+// error parsing.
+const stage = (s) => {
+  try { self.postMessage(`__sfstage__ ${s}`); } catch { /* ignore */ }
+};
+
 (async () => {
   try {
+    stage('import-start');
     const mod = await import('/stockfish/sf16-7.js');
+    stage('import-done');
     const StockfishWeb = mod.default;
     if (typeof StockfishWeb !== 'function') {
       throw new Error(`sf16-7 default export is ${typeof StockfishWeb}, expected function`);
     }
+    stage('instantiate-start');
     engine = await StockfishWeb({
       // Pass through onError as a top-level option since the module
       // doesn't fully wire it via the .onError= setter until after
       // construction. Same for listen — set both via post-construct
       // assignment below to be safe.
     });
+    stage('instantiate-done');
     engine.listen = (line) => {
       // Forward every UCI line back to the main thread. Existing
       // stockfishEngine.ts.handleMessage() parses these.
@@ -74,6 +88,7 @@ let pendingCommands = [];
       }
     }
     pendingCommands = [];
+    stage('ready');
   } catch (err) {
     // Surface the FULL reason (name + message + stack head) so the host's
     // surfaceWorkerError logs WHY sf16-7 failed to load/init on the device —
