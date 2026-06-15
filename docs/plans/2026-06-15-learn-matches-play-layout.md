@@ -54,7 +54,7 @@ identical."
 
 ## Steps / status
 - [ ] PLAN committed
-- [ ] Captured-pieces tray (PlayerInfoBar) added to Learn
+- [x] Captured-pieces tray wired into both PlayerInfoBars (real captures from displayed fen)
 - [ ] Board column centered/capped to match Play
 - [ ] Header restructured to Play's two-row shell
 - [ ] Lesson controls folded into an accessible "Lesson" menu

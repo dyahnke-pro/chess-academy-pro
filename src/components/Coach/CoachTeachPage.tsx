@@ -69,6 +69,7 @@ import { ChatInput } from './ChatInput';
 import { DifficultyToggle } from './DifficultyToggle';
 import type { CoachDifficulty, MiddlegamePlan } from '../../types';
 import { PlayerInfoBar } from './PlayerInfoBar';
+import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { coachService } from '../../coach/coachService';
 import { logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAuditor';
@@ -3489,6 +3490,19 @@ export function CoachTeachPage(): JSX.Element {
   // ChatInput chat primitives. Only the coaching actions differ:
   // there's no engine-driven move clock here — every coach message
   // comes from the LLM via the teach-mode prompt.
+
+  // Captured-pieces tray (David 2026-06-15: "make Learn identical to Play —
+  // it also shows which pieces have been captured"). Computed from the board's
+  // CURRENTLY DISPLAYED fen (walkthrough drill > trap > path fen when a lesson
+  // is animating; otherwise the live game). Mirrors Play's exact left/right
+  // assignment so the trays read identically.
+  const teachBoardFen = walkthrough.isActive
+    ? (walkthrough.drillFen || walkthrough.trapFen || walkthrough.fen || game.fen)
+    : game.fen;
+  const teachCaptured = getCapturedPieces(teachBoardFen);
+  const teachMaterialAdv = getMaterialAdvantage(teachBoardFen);
+  const isTeachPlayerWhite = playerColor === 'white';
+
   return (
     <div
       className="relative flex flex-col md:flex-row h-full overflow-hidden pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-0"
@@ -3719,7 +3733,8 @@ export function CoachTeachPage(): JSX.Element {
           <PlayerInfoBar
             name="Coach"
             isBot
-            capturedPieces={[]}
+            capturedPieces={isTeachPlayerWhite ? teachCaptured.black : teachCaptured.white}
+            materialAdvantage={isTeachPlayerWhite ? Math.max(0, -teachMaterialAdv) : Math.max(0, teachMaterialAdv)}
             isActive={busy}
           />
         </div>
@@ -3838,7 +3853,8 @@ export function CoachTeachPage(): JSX.Element {
           <PlayerInfoBar
             name={activeProfile?.name ?? 'You'}
             rating={activeProfile?.currentRating ?? undefined}
-            capturedPieces={[]}
+            capturedPieces={isTeachPlayerWhite ? teachCaptured.white : teachCaptured.black}
+            materialAdvantage={isTeachPlayerWhite ? Math.max(0, teachMaterialAdv) : Math.max(0, -teachMaterialAdv)}
             isActive={!busy}
           />
         </div>
