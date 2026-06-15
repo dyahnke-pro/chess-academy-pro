@@ -1785,10 +1785,16 @@ audio.playbackRate = this.speed;
       // Web iOS Safari keeps the streaming path when ManagedMediaSource
       // is available; only the old-iOS / native cases use the element.
       if (this.isIosPlatform() && (isCapacitor || !this.canStreamProgressivePlayback())) {
+        // iOS <audio src> CANNOT decode the chunked /api/tts stream (no
+        // Content-Length → MEDIA_ERR_DECODE code=3 on iOS 26 — David
+        // 2026-06-15: tts_failure [tts-url] "Media failed to decode"). Buffer
+        // the full MP3 first and play a COMPLETE object-URL — the cached-
+        // buffer branch above already does exactly this and works. Costs one
+        // fetch of latency vs. silence. (Earlier code assumed native
+        // progressive streaming off the direct URL works on iOS; the device
+        // data proves it doesn't.)
         this.lastSpeakDiagnostic.pollyOk = true;
-        const ok = await this.playViaElement(url, false);
-        if (ok) this.lastSpeakDiagnostic.pollyStatus = 200;
-        return ok;
+        return await this.playViaElementBuffered(url, key);
       }
 
       // Cache miss → fetch from /api/tts.
@@ -1892,6 +1898,32 @@ audio.playbackRate = this.speed;
     }
   }
 
+  /** iOS element playback off a COMPLETE, buffered MP3 (David 2026-06-15).
+   *  iOS `<audio src>` cannot decode the chunked, Content-Length-less
+   *  `/api/tts` stream — it throws MEDIA_ERR_DECODE (code=3) on iOS 26. So
+   *  fetch the full body, cache it (subsequent identical utterances hit the
+   *  cached-buffer fast path), and play a complete object-URL via the primed
+   *  element. One fetch of latency vs. silence. NOT the banned server-buffered
+   *  path (G4): the server still STREAMS the body; this buffers client-side. */
+  private async playViaElementBuffered(url: string, cacheKey: string): Promise<boolean> {
+    this.abortController = new AbortController();
+    const combined = AbortSignal.any
+      ? AbortSignal.any([this.abortController.signal, createTimeoutSignal(10_000)])
+      : this.abortController.signal;
+    const res = await fetch(url, { signal: combined });
+    this.lastSpeakDiagnostic.pollyStatus = res.status;
+    this.lastSpeakDiagnostic.pollyOk = res.ok;
+    if (!res.ok) {
+      this.lastSpeakDiagnostic.error = `iOS buffered /api/tts ${res.status}`;
+      return false;
+    }
+    const buf = await res.arrayBuffer();
+    this.abortController = null;
+    this.setAudioCacheEntry(cacheKey, buf);
+    const blobUrl = URL.createObjectURL(new Blob([buf], { type: 'audio/mpeg' }));
+    return this.playViaElement(blobUrl, true);
+  }
+
   /** Buffered-Polly fallback (David 2026-05-31). Runs when the
    *  progressive-streaming path was available but failed to START on a
    *  streaming-capable device (e.g. a transient MediaSource sourceOpen
@@ -1910,9 +1942,9 @@ audio.playbackRate = this.speed;
   private async playBufferedPollyFallback(url: string, cacheKey: string): Promise<boolean> {
     try {
       if (this.isIosPlatform()) {
-        const ok = await this.playViaElement(url, false);
-        if (ok) this.lastSpeakDiagnostic.pollyStatus = 200;
-        return ok;
+        // Buffer the complete MP3 — iOS can't decode the chunked /api/tts
+        // stream via <audio src> (code=3). See playViaElementBuffered.
+        return await this.playViaElementBuffered(url, cacheKey);
       }
       const res = await fetch(url, { signal: createTimeoutSignal(10_000) });
       this.lastSpeakDiagnostic.pollyStatus = res.status;
