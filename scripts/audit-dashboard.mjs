@@ -21,6 +21,8 @@
  *     - SmartSearchBar mounts + responds to typing
  *     - 4 section tiles render: Openings / Coach / Tactics / Weaknesses
  *     - Clicking each section navigates to its route
+ *     - Table of Contents bar expands; main tabs + nested subcategories
+ *       collapse/expand independently
  *   SmartSearchBar
  *     - Typing produces some kind of dropdown content
  *     - Mic button present (or unsupported-stub)
@@ -238,6 +240,38 @@ async function main() {
     }
   };
   await dismissOnboarding();
+
+  // ── Table of Contents (collapsible app map under the section grid) ─
+  // One thin yellow bar that expands into every main tab's capabilities;
+  // each main tab AND its nested subcategories collapse independently.
+  await record('table-of-contents', async () => {
+    const toggle = page.locator('[data-testid="toc-toggle"]');
+    await toggle.waitFor({ timeout: 8000 });
+    await toggle.scrollIntoViewIfNeeded().catch(() => undefined);
+    await toggle.click();                       // expand the panel
+    await page.waitForTimeout(300);
+    const coach = page.locator('[data-testid="toc-section-coach"]');
+    await coach.scrollIntoViewIfNeeded().catch(() => undefined);
+    await coach.click();                        // expand the Coach tab
+    await page.waitForTimeout(200);
+    const tactics = page.locator('[data-testid="toc-section-tactics"]');
+    await tactics.scrollIntoViewIfNeeded().catch(() => undefined);
+    await tactics.click();                      // expand the Tactics tab
+    await page.waitForTimeout(200);
+    const themed = page.locator('[data-testid="toc-item-themed-sets"]');
+    await themed.scrollIntoViewIfNeeded().catch(() => undefined);
+    await themed.click();                       // expand a nested subcategory
+    await page.waitForTimeout(200);
+  }, SHORT_SETTLE_MS, [
+    { kind: 'visible', selector: '[data-testid="toc-toggle"]', label: 'TOC bar present' },
+    { kind: 'visible', selector: '[data-testid="toc-panel"]', label: 'TOC panel expands on tap' },
+    { kind: 'count-eq', selector: '[data-testid^="toc-section-"]', value: 7, label: '7 main tabs listed' },
+    { kind: 'visible', selector: '[data-testid="toc-item-learn-with-coach"]', label: 'Coach tab reveals its capabilities' },
+    { kind: 'visible', selector: '[data-testid="toc-item-forks"]', label: 'nested subcategory (Themed Sets) expands' },
+  ]);
+
+  // Collapse the TOC again so its expanded panel doesn't shift later probes.
+  await page.locator('[data-testid="toc-toggle"]').click().catch(() => undefined);
 
   // ── SmartSearchBar typing → dropdown surfaces ───────────────────
   await record('search-typing-surfaces-dropdown', async () => {
