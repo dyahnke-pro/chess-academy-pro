@@ -230,8 +230,62 @@ already exists for that line.
 - **P8 — ADAPTIVE subline trainer (David 2026-06-15).** One view that teaches /
   drills the DIFFERENT sublines of a single variation, adaptively — see the
   "Adaptive trainer" section below. The premium "train the variation" experience.
-- **P9 (album 2) — Curriculum ACROSS courses** ("Beginner → Intermediate →
+- **P9 — COURSE-SPARRING in /coach/play (David 2026-06-15).** When a PAID user
+  (owns the course) plays the coach, the coach's OPENING BOOK = the student's
+  course sub-tree: it plays the OPPONENT side of their repertoire and throws the
+  real variations/sublines at them (weighted by weak-spots/SRS — the training
+  loop), follows the course tree move-for-move through the opening, then hands
+  off to adaptive Stockfish at the middlegame terminus. Misses feed the loop
+  back. Free users → generic Stockfish opening (today's behavior). See section
+  below.
+- **P10 (album 2) — Curriculum ACROSS courses** ("Beginner → Intermediate →
   Advanced" path).
+
+## Traps folded INTO the walkthrough tree (David 2026-06-15) — unifies sublines + punish-gems
+
+A punish trap IS a subline where the opponent's deviation is a BLUNDER instead of
+a reasonable try. Both are "opponent played X → your prepared answer." So fold the
+punish trap lines into the course/walkthrough tree: the tree then covers EVERY
+opponent option, sound and unsound = the literal "never out of book" promise, and
+teaches the trap IN CONTEXT (at the move where it's available), not in a
+disconnected section.
+
+- **One tree, branches TAGGED:** sound-subline ("reasonable move → your plan") vs
+  blunder-punish ("mistake → the refutation"). The contrast sharpens the "why".
+- **Respect the trap taxonomy (CLAUDE.md):** only `trap` kind (forced tactical
+  refutation) gets the bright "they blundered — punish!" framing; `mistake` /
+  `theme` stay softer. Classify each folded branch correctly. Punish moves are
+  already engine-verified (punish-gem tiering) → the why is grounded.
+- **Gating:** inside a PAID course there's no internal gate (buying unlocks all),
+  so traps just live in the tree. Keep a "weapons" highlight-reel index too (drill
+  traps directly), but the PRIMARY home becomes the tree.
+- **Synergy:** the coach (course-sparring) can walk into a trap and the student
+  springs it live — the most motivating rep there is.
+
+## Course-sparring — coach plays the course material (David 2026-06-15)
+
+"If a student plays with coach I want coach throwing back the opening sequences."
+The board-adaptive trainer, promoted from the opening page up to the full
+`/coach/play` room.
+
+- **Mechanism:** the coach's opening moves come from the subline engine
+  (`buildSublines`, DB-grounded, never invented). It plays the OPPONENT side of
+  one of the student's OWNED courses, picking which variation/subline to throw
+  by the learner-adaptive signal (`openingWeakSpots` + SRS-due), follows the
+  course tree move-for-move (generalize `OpeningPlayMode` from one line → the
+  tree), then hands off to adaptive Stockfish (`coachPlaySession.resolveConfig`)
+  at the middlegame terminus. Game misses write back to weak-spots/SRS.
+- **Orientation (confirm w/ David):** coach plays the OPPONENT side so the
+  student drills THEIR repertoire (student plays Caro as Black → coach throws
+  White's tries). Possible flipped demo/refute mode is a later option.
+- **Gating:** paid (owns course) → course-sparring; free → generic Stockfish.
+  The coach itself becomes a paywall surface.
+- **Reuses + respects locked contracts:** this is a NEW gated mode inside coach
+  play (course-sparring), driven by the subline engine — it does NOT change the
+  existing locked-line WLPP Play (in-page `OpeningPlayMode`) or the generic
+  free-play behavior. It actually closes the "generic /coach/play wanders off
+  the taught line" gap by bringing locked-tree play into the coach room for
+  course owners.
 
 ## Adaptive trainer (David 2026-06-15) — "one view, different sublines for the same variation"
 
