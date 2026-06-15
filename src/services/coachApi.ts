@@ -19,12 +19,22 @@ function emitLlmTokenUsage(
   promptTokens: number,
   completionTokens: number,
   finishReason: string | null = null,
+  // Prefix-cache split (David 2026-06-15: "take advantage of the cheaper
+  // hits"). DeepSeek bills cache HITS at ~1/10th of misses; surfacing the
+  // split shows the TRUE cost — a high cacheHit ratio means the 27k static
+  // prompt is mostly cheap, a low ratio means the cache keeps going stale.
+  cacheHitTokens: number | null = null,
+  cacheMissTokens: number | null = null,
 ): void {
+  const cacheSuffix =
+    cacheHitTokens !== null || cacheMissTokens !== null
+      ? ` cacheHit=${cacheHitTokens ?? 0} cacheMiss=${cacheMissTokens ?? 0}`
+      : '';
   void logAppAudit({
     kind: 'llm-token-usage',
     category: 'subsystem',
     source: `coachApi.${provider}`,
-    summary: `task=${task} model=${model} provider=${provider} in=${promptTokens} out=${completionTokens}`,
+    summary: `task=${task} model=${model} provider=${provider} in=${promptTokens} out=${completionTokens}${cacheSuffix}`,
     details: JSON.stringify({
       task,
       model,
@@ -32,9 +42,20 @@ function emitLlmTokenUsage(
       promptTokens,
       completionTokens,
       totalTokens: promptTokens + completionTokens,
+      cacheHitTokens,
+      cacheMissTokens,
       finishReason,
     }),
   });
+}
+/** Pull DeepSeek's prefix-cache split off the usage object. These fields are
+ *  DeepSeek-specific (not in the OpenAI SDK type), so narrow via cast. */
+function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number | null } {
+  const u = usage as { prompt_cache_hit_tokens?: unknown; prompt_cache_miss_tokens?: unknown } | undefined;
+  return {
+    hit: typeof u?.prompt_cache_hit_tokens === 'number' ? u.prompt_cache_hit_tokens : null,
+    miss: typeof u?.prompt_cache_miss_tokens === 'number' ? u.prompt_cache_miss_tokens : null,
+  };
 }
 import { lookupMasterPlay } from './masterPlayLookup';
 import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded } from './groundedAnswer';
@@ -714,8 +735,9 @@ async function callDeepSeek(
   });
 
   if (response.usage) {
+    const { hit, miss } = deepseekCacheSplit(response.usage);
     void recordApiUsage(task, model, response.usage.prompt_tokens, response.usage.completion_tokens);
-    emitLlmTokenUsage(task, model, 'deepseek', response.usage.prompt_tokens, response.usage.completion_tokens, response.choices[0]?.finish_reason ?? null);
+    emitLlmTokenUsage(task, model, 'deepseek', response.usage.prompt_tokens, response.usage.completion_tokens, response.choices[0]?.finish_reason ?? null, hit, miss);
   }
   const choice = response.choices[0];
   // DeepSeek-reasoner emits `reasoning_content` separately from
@@ -972,8 +994,9 @@ export async function callDeepseekWithTool(
     tool_choice: { type: 'function', function: { name: toolName } },
   });
   if (response.usage) {
+    const { hit, miss } = deepseekCacheSplit(response.usage);
     void recordApiUsage(task, model, response.usage.prompt_tokens, response.usage.completion_tokens);
-    emitLlmTokenUsage(task, model, 'deepseek', response.usage.prompt_tokens, response.usage.completion_tokens, response.choices[0]?.finish_reason ?? null);
+    emitLlmTokenUsage(task, model, 'deepseek', response.usage.prompt_tokens, response.usage.completion_tokens, response.choices[0]?.finish_reason ?? null, hit, miss);
   }
   const choice = response.choices[0];
   const toolCall = choice?.message?.tool_calls?.[0];
