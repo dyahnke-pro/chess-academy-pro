@@ -1,1 +1,8 @@
 audit-reports/
+
+# Ruby/fastlane tooling for the iOS CI — NOT part of the web bundle. Without
+# these, `vercel build` auto-detects the root Gemfile and tries `bundle install`
+# on the Node-only runner → `spawn bundle ENOENT`, failing the nightly deploy.
+Gemfile
+Gemfile.lock
+fastlane/
