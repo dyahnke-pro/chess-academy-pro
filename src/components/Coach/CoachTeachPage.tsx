@@ -88,6 +88,7 @@ import type { LiveState } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
+import { explainBestMoveGrounded } from '../../services/groundedAnswer';
 import { validateTacticClaims } from '../../services/tacticClaimValidator';
 import { applyCandidateArrows } from '../../services/coachAnswerGates';
 import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
@@ -3402,9 +3403,30 @@ export function CoachTeachPage(): JSX.Element {
               if (m) {
                 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
                 const mover = NAME[m.piece] ?? 'piece';
-                replyFact = m.captured
-                  ? `GROUNDED FACT: this move CAPTURED the ${NAME[m.captured] ?? 'piece'} on ${m.to} (the ${mover} came from ${m.from}). Narrate THIS exact capture — do NOT name a different captured piece.`
-                  : `GROUNDED FACT: this was a NON-capturing ${mover} move from ${m.from} to ${m.to}. Do NOT say it captured anything.`;
+                const facts: string[] = [];
+                // 1. What it did — the victim is gone from the after-FEN, so this
+                //    is the ONLY source of the captured piece.
+                facts.push(m.captured
+                  ? `CAPTURED the ${NAME[m.captured] ?? 'piece'} on ${m.to} (${mover} from ${m.from}).`
+                  : `quiet ${mover} move ${m.from}->${m.to}, no capture.`);
+                // 2. Check / mate / stalemate — straight from chess.js.
+                if (probe.isCheckmate()) facts.push('This is CHECKMATE — the game is over.');
+                else if (probe.isCheck()) facts.push('It gives CHECK.');
+                else if (probe.isStalemate()) facts.push('This is STALEMATE — a draw.');
+                // 3. Why it's strong — material/check judgment (no-LLM grounded "why").
+                const coachColor: 'white' | 'black' = playerColor === 'white' ? 'black' : 'white';
+                const why = explainBestMoveGrounded(move.fen, null, `${m.from}${m.to}${m.promotion ?? ''}`, coachColor);
+                if (why) facts.push(`Why it's strong: ${why}.`);
+                // 4. REAL tactics + loose pieces in the resulting position (student
+                //    to move) — the true fork/pin/threat, so the coach narrates the
+                //    ACTUAL tactic instead of inventing one (the validators were
+                //    stripping invented "fork/discovery" all session).
+                const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
+                const studentCC: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
+                const tctx = buildTacticsLiveContext(probe.fen(), null, studentCC, rating);
+                if (tctx.immediate.length > 0) facts.push(`Real tactics on the board now: ${tctx.immediate.map((t) => t.description).join('; ')}.`);
+                if (tctx.hanging.length > 0) facts.push(`Undefended/attacked: ${tctx.hanging.map((h) => `${NAME[h.piece] ?? h.piece} on ${h.square}`).join(', ')}.`);
+                replyFact = `GROUNDED FACTS (voice ONLY these — never invent a capture, check, tactic, or threat not listed here): ${facts.join(' ')}`;
               }
             } catch {
               /* probe is best-effort; absence just means no extra fact */
