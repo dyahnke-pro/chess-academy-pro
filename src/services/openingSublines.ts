@@ -6,7 +6,18 @@ import {
 // @ts-expect-error — plain-JS shared metric, no type decls (run by node + vite).
 // Single source of the "reaches the middlegame" rule; reused so the course
 // trims sublines with the SAME definition the variationMiddlegameDepth gate uses.
-import { reachesMiddlegame } from '../data/variationMiddlegameDepth.shared.mjs';
+import { reachesMiddlegame as reachesMiddlegameImpl } from '../data/variationMiddlegameDepth.shared.mjs';
+
+/** Typed view of the untyped shared metric (keeps eslint's no-unsafe-call happy
+ *  while still sourcing the rule from the single shared .mjs). */
+const reachesMiddlegame = reachesMiddlegameImpl as (pgn: string) => {
+  pass: boolean;
+  plies: number;
+  wCastle: boolean;
+  bCastle: boolean;
+  wDev: number;
+  bDev: number;
+};
 
 // Subline derivation (2026-06-15). A VARIATION is a top-level named branch
 // (e.g. the Caro-Kann "Advance"); a SUBLINE is a deeper branch inside it that
@@ -65,7 +76,7 @@ export function pgnToSans(pgn: string): string[] {
  *  tail) so we still ship the whole grounded line rather than nothing. */
 function middlegameTerminus(moves: string[], minPly: number): { ply: number; reached: boolean } {
   for (let k = Math.max(minPly, 1); k <= moves.length; k++) {
-    if ((reachesMiddlegame(moves.slice(0, k).join(' ')) as { pass: boolean }).pass) {
+    if (reachesMiddlegame(moves.slice(0, k).join(' ')).pass) {
       return { ply: k, reached: true };
     }
   }
