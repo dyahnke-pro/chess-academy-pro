@@ -1,4 +1,5 @@
 {
+  "installCommand": "npm install",
   "rewrites": [
     { "source": "/voice-packs/:file", "destination": "/api/voice-packs/:file" },
     { "source": "/api/ph/:path*", "destination": "/api/phproxy?p=:path*" },
