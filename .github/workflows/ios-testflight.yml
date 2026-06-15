@@ -28,7 +28,10 @@ concurrency:
 
 jobs:
   testflight:
-    runs-on: macos-15
+    # macos-26 ships Xcode 26 (iOS 26 SDK). Apple rejects uploads built with
+    # the iOS 18.5 SDK (Xcode 16, the macos-15 default) — "all apps must be
+    # built with the iOS 26 SDK or later." macos-15 can no longer ship to ASC.
+    runs-on: macos-26
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
