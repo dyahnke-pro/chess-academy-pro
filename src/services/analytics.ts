@@ -122,9 +122,9 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   // events (queryable, not $exception) so we can see failure RATE without
   // spamming the autofix loop; promote to a defect later if a pattern shows.
   'llm-error': 'llm_error',
-  // Provider failover (DeepSeek↔Anthropic). Seeing this fire tells us a
+  // Provider failover/retry (DeepSeek↔Anthropic). Seeing this fire tells us a
   // provider is degraded before users feel it as slow/empty coach replies.
-  'provider-fallback': 'provider_fallback',
+  'coach-brain-provider-retry': 'coach_provider_retry',
   // Eval-bar caller miss — the bar requested an analysis that timed out/empty
   // and never updated. Event (not defect) so we see the RATE; a spike means
   // the engine's alive but too slow, or a UI-wiring regression.
@@ -366,9 +366,8 @@ const DEFECT_KINDS: ReadonlySet<AuditKind> = new Set<AuditKind>([
   'coach-opponent-stockfish-error',
   'coach-opponent-masters-error',
   'opening-play-opponent-error',
-  // Coach brain can't answer at all (provider error / empty token pool).
+  // Coach brain can't answer at all (provider error).
   'coach-llm-provider-error',
-  'tokens-empty',
 ]);
 
 /** Send an exception to PostHog Error Tracking. Total — never throws. */
