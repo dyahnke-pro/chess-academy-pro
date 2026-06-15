@@ -156,6 +156,14 @@ const SINGLE_THREAD_RETRY_DELAY_MS = 500;
  *  bundle emits 60+ ErrorEvents in ~100ms; we want one summary log,
  *  not 60 IndexedDB writes blocking the main thread. */
 const WORKER_ERROR_DEDUP_WINDOW_MS = 500;
+/** Watchdog: if an analysis sends `go` but no `bestmove` arrives within
+ *  this window, emit a `stockfish-analysis-stalled` audit. This is the
+ *  signal that screens a dead eval bar (esp. the iOS lila/sf16-7 bridge
+ *  failing silently) to the audit stream / PostHog — David 2026-06-15.
+ *  Generous so a slow deep search on single-thread/lila never false-fires;
+ *  a truly stuck engine never returns at all. Audit-only — does not alter
+ *  the resolve/reject flow (callers own their own timeouts). */
+const ANALYSIS_STALL_MS = 12_000;
 /** localStorage key for the persisted "multi-thread is broken on
  *  this host" flag. Per audit cycle ccd0057: multi-thread crashes
  *  reliably on David's machine. Without persistence, every new
@@ -397,7 +405,16 @@ class StockfishEngine {
             : new Worker(resolved.url);
 
           this.worker.onmessage = (event: MessageEvent<string>) => {
-            this.handleMessage(event.data);
+            const line = event.data;
+            // The lila/sf16-7 bridge (iOS path) reports failures as
+            // `error: ...` UCI lines (bridge-init / bridge-uci failed).
+            // handleMessage only parses info/bestmove and silently drops
+            // these — which is why a dead eval bar gives NO signal. Surface
+            // them to the audit stream and unblock any hung analysis.
+            if (typeof line === 'string' && /^error:/i.test(line)) {
+              this.surfaceWorkerError(line);
+            }
+            this.handleMessage(line);
           };
 
           this.worker.onerror = (error) => {
@@ -732,6 +749,22 @@ class StockfishEngine {
           this.send(`position fen ${fen}`);
           this.send(`go depth ${depth}`);
           this._analysisStarted = true;
+          // Stall watchdog: if THIS analysis is still pending after the
+          // window (no bestmove came back), screen the dead engine to the
+          // audit stream. Self-guarding — if pending resolved or was
+          // replaced, the identity check fails and this no-ops, so no
+          // cleanup is needed and the resolve/reject flow is untouched.
+          const watched = this.pending;
+          setTimeout(() => {
+            if (this.pending === watched && this._analysisStarted) {
+              void logAppAudit({
+                kind: 'stockfish-analysis-stalled',
+                category: 'subsystem',
+                source: 'stockfishEngine._dispatchAnalysis',
+                summary: `no bestmove in ${ANALYSIS_STALL_MS}ms — variant=${this.workerVariant ?? '?'} depth=${depth} fen=${fen.slice(0, 40)}`,
+              });
+            }
+          }, ANALYSIS_STALL_MS);
         }
       };
       this.worker?.addEventListener('message', readyHandler);
@@ -861,6 +894,24 @@ class StockfishEngine {
 
   private send(command: string): void {
     this.worker?.postMessage(command);
+  }
+
+  /** Surface an `error:`-prefixed UCI line from the worker (the lila
+   *  bridge's failure channel) to the audit stream, and fail any in-flight
+   *  analysis so the eval bar doesn't hang stuck at 0.0. This is the
+   *  diagnostic that screens a dead engine to David (2026-06-15). */
+  private surfaceWorkerError(line: string): void {
+    void logAppAudit({
+      kind: 'stockfish-error',
+      category: 'subsystem',
+      source: 'stockfishEngine.worker',
+      summary: `engine error (variant=${this.workerVariant ?? '?'}): ${line.slice(0, 200)}`,
+    });
+    if (this.pending) {
+      const p = this.pending;
+      this.pending = null;
+      p.reject(new Error(line.slice(0, 200)));
+    }
   }
 
   private handleMessage(data: string): void {

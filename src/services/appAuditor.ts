@@ -239,6 +239,12 @@ export type AuditKind =
   // re-spawned the single-threaded bundle. Capped at one attempt
   // per session. (WO-STOCKFISH-RUNTIME-FALLBACK).
   | 'stockfish-variant-fallback'
+  // Stockfish analysis stalled — the `go` command was sent but no
+  // bestmove came back within the watchdog window. The dominant
+  // symptom of a dead eval bar on iOS, where the lila/sf16-7 bridge
+  // can fail silently. Surfaces WHY the bar is stuck at 0.0
+  // (David 2026-06-15).
+  | 'stockfish-analysis-stalled'
   // Coach-turn resilience — three-tier fallback chain that ensures
   // the coach never hangs mid-game when Stockfish stalls or any
   // other tool dispatch hangs. (WO-COACH-RESILIENCE).
