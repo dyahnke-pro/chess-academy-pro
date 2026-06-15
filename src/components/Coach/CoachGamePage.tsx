@@ -58,6 +58,7 @@ import { validateTacticClaims } from '../../services/tacticClaimValidator';
 import { getScenarioTemplate } from '../../services/coachTemplates';
 import { generateMoveCommentary } from '../../services/coachMoveCommentary';
 import { isSpokenSentenceGrounded } from '../../services/coachAnswerGates';
+import { validateBoardClaims } from '../../services/boardClaimValidator';
 import {
   loadCoachPlayState,
   saveCoachPlayState,
@@ -2875,6 +2876,18 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       setLatestIsMate(analysis.isMate);
       setLatestMateIn(analysis.mateIn);
       setLatestTopLines(analysis.topLines);
+    } else {
+      // Analysis came back empty / timed out — the eval bar won't update.
+      // Surface it so a frozen bar isn't silent (David 2026-06-15 gap audit).
+      // Distinct from an engine crash: the engine may be alive but slower than
+      // the 5s bar budget, or a UI-wiring regression dropped the result.
+      void logAppAudit({
+        kind: 'eval-bar-analysis-failed',
+        category: 'subsystem',
+        source: 'CoachGamePage.playerMove',
+        summary: 'eval-bar analysis empty/timed-out after player move; bar not updated',
+        fen: moveResult.fen,
+      });
     }
 
     // Check if the player played the engine's best move
@@ -3339,6 +3352,29 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           openingIntroSpokenRef.current = true;
         }
         commentary = llm ? llm + tacticSuffix : tacticSuffix.trim();
+        // Audit-only board-claim check on the DISPLAYED commentary. The
+        // spoken sentences are board-grounded above (isSpokenSentenceGrounded),
+        // but the displayed `commentary` text is NOT — so a board-false
+        // sentence the LLM wrote still shows in the chat bubble (David
+        // 2026-06-15: "the bishop you just captured is attacking you"). This
+        // path had ZERO board-claim validation; surface it as a defect so the
+        // prose hallucination is finally visible (the fix is the G0 inversion).
+        if (llm.trim()) {
+          const boardCheck = validateBoardClaims(llm, probe.fen());
+          if (boardCheck.violations.length > 0) {
+            void logAppAudit({
+              kind: 'coach-board-claim-blocked',
+              category: 'subsystem',
+              source: 'CoachGamePage.moveCommentary.boardClaimValidator',
+              summary: `board-false claim in displayed commentary: ${boardCheck.violations.map((v) => v.kind).join(', ')}`,
+              details: JSON.stringify({
+                violations: boardCheck.violations.map((v) => ({ kind: v.kind, claim: v.claim.slice(0, 60), reason: v.reason.slice(0, 80) })),
+                surface: 'game-commentary-display',
+              }),
+              fen: probe.fen(),
+            });
+          }
+        }
         // Only the LLM portion is speech-worthy. tacticSuffix is a
         // deterministic readout meant for the move list display, NOT
         // for TTS.

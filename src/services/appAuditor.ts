@@ -245,6 +245,11 @@ export type AuditKind =
   // can fail silently. Surfaces WHY the bar is stuck at 0.0
   // (David 2026-06-15).
   | 'stockfish-analysis-stalled'
+  // Eval-bar caller-level miss: the bar requested an analysis but it timed
+  // out / came back empty, so the bar never updated — distinct from an engine
+  // crash (the engine may be fine but too slow for the 5s bar budget). Catches
+  // the "engine works but eval bar frozen" class (David 2026-06-15 gap audit).
+  | 'eval-bar-analysis-failed'
   // Coach-turn resilience — three-tier fallback chain that ensures
   // the coach never hangs mid-game when Stockfish stalls or any
   // other tool dispatch hangs. (WO-COACH-RESILIENCE).

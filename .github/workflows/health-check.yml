@@ -24,3 +24,12 @@ jobs:
           # Add AUDIT_STREAM_SECRET under Settings → Secrets → Actions so the
           # audit-stream check runs; without it that check is skipped (non-fatal).
           AUDIT_STREAM_SECRET: ${{ secrets.AUDIT_STREAM_SECRET }}
+      # Deploy-freeze alarm (David 2026-06-15): catch prod silently stuck
+      # behind main — the failure that went unnoticed for ~2 days. Runs even
+      # if the probe above failed; fails the job (→ owner email) only on a real
+      # freeze, skips quietly without VERCEL_TOKEN.
+      - name: Deploy-freeze check (prod stale vs main)
+        if: always()
+        run: node scripts/deploy-freeze-check.mjs
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}

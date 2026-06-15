@@ -125,6 +125,23 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   // Provider failover (DeepSeek↔Anthropic). Seeing this fire tells us a
   // provider is degraded before users feel it as slow/empty coach replies.
   'provider-fallback': 'provider_fallback',
+  // Eval-bar caller miss — the bar requested an analysis that timed out/empty
+  // and never updated. Event (not defect) so we see the RATE; a spike means
+  // the engine's alive but too slow, or a UI-wiring regression.
+  'eval-bar-analysis-failed': 'eval_bar_analysis_failed',
+  // Degradation / infra-failure visibility (David 2026-06-15 re-audit). Events
+  // (not $exception) so we see RATES without spamming autofix — promote any to
+  // DEFECT_KINDS if a pattern shows it's user-facing breakage.
+  'audit-stream-post-failed': 'audit_stream_post_failed', // telemetry itself failing — meta-blindspot
+  'tool-call-error': 'coach_tool_call_error',
+  'coach-tool-callback-rejected': 'coach_tool_callback_rejected',
+  'opening-play-eval-error': 'opening_play_eval_error',
+  'dexie-error': 'dexie_error',
+  'network-error': 'network_error',
+  'lichess-error': 'lichess_error',
+  'asset-load-error': 'asset_load_error',
+  'auto-import-failed': 'auto_import_failed',
+  'polly-fallback': 'polly_fallback',
 };
 
 /** Map a forensic audit kind to its product-event name, or undefined
@@ -342,6 +359,16 @@ const DEFECT_KINDS: ReadonlySet<AuditKind> = new Set<AuditKind>([
   // and self-routes to a fix build instead of failing dark.
   'stockfish-error',
   'stockfish-analysis-stalled',
+  // Opponent-move computation failures — when the coach can't compute ITS
+  // reply, the board locks in "opponent thinking" and the user can't move
+  // (David 2026-06-15: "it froze, can't move any piece"). These were detected
+  // in code but never surfaced; they're the freeze's signal.
+  'coach-opponent-stockfish-error',
+  'coach-opponent-masters-error',
+  'opening-play-opponent-error',
+  // Coach brain can't answer at all (provider error / empty token pool).
+  'coach-llm-provider-error',
+  'tokens-empty',
 ]);
 
 /** Send an exception to PostHog Error Tracking. Total — never throws. */
