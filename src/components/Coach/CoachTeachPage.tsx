@@ -1048,6 +1048,14 @@ export function CoachTeachPage(): JSX.Element {
        *  reply) means "this is the step-by-step path; play_move is disabled
        *  so the LLM cannot pick or play a move." Undefined = legacy path. */
       coachReplyPlayed?: string;
+      /** GROUNDING COMPLETENESS (David 2026-06-15): the captured-piece +
+       *  squares fact for the coach's reply, computed in code (chess.js).
+       *  The SAN alone (e.g. "Qxg5") tells the LLM a capture happened but NOT
+       *  what was taken — and the after-FEN can't tell it either (the victim
+       *  is gone). Without this the LLM fabricates the victim ("queen takes
+       *  queen"). Handed in so the LLM narrates the REAL capture, never an
+       *  invented one. */
+      coachReplyFact?: string;
     },
   ): Promise<void> => {
     if (!text.trim() || busy) return;
@@ -2636,11 +2644,11 @@ export function CoachTeachPage(): JSX.Element {
       (STEP_BY_STEP_RE.test(text) || engineDrivenStep) && !walkthrough.isActive;
     const effectiveAsk =
       replyPlayed && replyPlayed.length > 0
-        ? `${text}\n\n[STEP-BY-STEP NARRATION — the engine already played the coach's reply ${replyPlayed}; it is ALREADY on the board. You do NOT and CANNOT play moves (play_move is disabled). NARRATE ${replyPlayed}: name the idea behind it, draw [BOARD: arrow:from-to:green] on that move AND on every SAN you mention in prose. Put your SPOKEN narration in a [VOICE: ...] marker — one or two plain sentences naming the move and its idea — so the coach speaks it aloud (this is REQUIRED; without it the student hears nothing). Do NOT summarize or continue any earlier topic; narrate this reply and prompt the student's next move.]`
+        ? `${text}\n\n[STEP-BY-STEP NARRATION — the engine already played the coach's reply ${replyPlayed}; it is ALREADY on the board. ${opts?.coachReplyFact ?? ''} You do NOT and CANNOT play moves (play_move is disabled). NARRATE ${replyPlayed} using ONLY the grounded fact above for what it captured — never invent a captured piece. Name the idea behind the move, draw [BOARD: arrow:from-to:green] on that move AND on every SAN you mention in prose. Put your SPOKEN narration in a [VOICE: ...] marker — one or two plain sentences naming the move and its idea — so the coach speaks it aloud (this is REQUIRED; without it the student hears nothing). Do NOT summarize or continue any earlier topic; narrate this reply and prompt the student's next move.]`
         : engineDrivenStep
           ? text // no legal coach reply (game over) — narrate the student's move only
           : isStepByStepReport
-            ? `${text}\n\n[STEP-BY-STEP: the student is walking a line move-by-move and just reported THEIR move. Respond ONLY to this latest move — narrate the line's reply and, per the arrow rule, draw an arrow on every SAN you mention in prose. Do NOT call play_move (the engine plays moves, not you). Do NOT summarize or continue any earlier conversation topic; answer this move and prompt for their next one.]`
+            ? `${text}\n\n[STEP-BY-STEP: the student reported THEIR move. The coach's reply has NOT been computed by the engine — you do NOT know it. You MUST NOT name, narrate, or invent ANY coach reply move: no "queen takes queen", no fabricated capture, no guessed continuation. Inventing a move that wasn't played is a hallucination and is forbidden. Acknowledge ONLY the student's reported move and its idea, draw an arrow on every SAN you ACTUALLY mention, then prompt for their next move. If you have nothing grounded to say about THEIR move, be brief or stay silent — never fill the gap with an invented reply.]`
             : text;
     if (isStepByStepReport) {
       void logAppAudit({
@@ -3382,6 +3390,25 @@ export function CoachTeachPage(): JSX.Element {
         if (reply) {
           const played = handlePlayMove(reply);
           if (played.ok) {
+            // GROUNDING COMPLETENESS (David 2026-06-15): compute what the
+            // reply ACTUALLY did — captured piece + squares — from the BEFORE
+            // position, so the LLM narrates the real move instead of inventing
+            // the victim ("queen takes queen"). The SAN + after-FEN alone don't
+            // carry the captured piece.
+            let replyFact = '';
+            try {
+              const probe = new Chess(move.fen);
+              const m = probe.move(reply);
+              if (m) {
+                const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+                const mover = NAME[m.piece] ?? 'piece';
+                replyFact = m.captured
+                  ? `GROUNDED FACT: this move CAPTURED the ${NAME[m.captured] ?? 'piece'} on ${m.to} (the ${mover} came from ${m.from}). Narrate THIS exact capture — do NOT name a different captured piece.`
+                  : `GROUNDED FACT: this was a NON-capturing ${mover} move from ${m.from} to ${m.to}. Do NOT say it captured anything.`;
+              }
+            } catch {
+              /* probe is best-effort; absence just means no extra fact */
+            }
             // Opponent's move is on the board — UNLOCK immediately so the
             // student can play again right away; the narration below runs
             // unblocked and is cut by voiceService.stop() if they do move.
@@ -3389,6 +3416,7 @@ export function CoachTeachPage(): JSX.Element {
             void handleSubmit(`I played ${move.san}.`, {
               fenOverride: liveFenRef.current,
               coachReplyPlayed: reply,
+              coachReplyFact: replyFact,
             });
             return;
           }
