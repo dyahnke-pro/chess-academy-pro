@@ -20,9 +20,13 @@ import { writeFileSync, mkdirSync } from 'node:fs';
 
 const PROXY = 'https://chess-academy-pro.vercel.app/api/lichess-explorer';
 const SF_BIN = 'node_modules/stockfish/bin/stockfish-18-lite-single.js';
-const DEPTH_SCAN = Number(process.argv[2] ?? 24);
-const DEPTH_VERIFY = Number(process.argv[3] ?? 30);
-const MULTIPV = 8;
+// Bounded per-position think time (ms). Single-threaded WASM crashes if pushed
+// to a fixed deep `go depth` with MultiPV over many positions (heap fills), so
+// we cap by TIME and auto-restart the engine on any empty result.
+const MOVETIME_SCAN = Number(process.argv[2] ?? 3500);
+const MOVETIME_VERIFY = Number(process.argv[3] ?? 6000);
+const DEPTH_VERIFY = 30; // reported label only; verify is time-bounded below
+const MULTIPV = 6;
 const RARE_PCT = 0.05;     // played in < 5% of games at this node = rare
 const RARE_GAMES_MIN = 8;  // but seen enough to be a real, legal, tested move
 const NEAR_BEST_CP = 30;   // within 0.30 of the engine's #1 = "engine endorses"
@@ -87,42 +91,55 @@ const SEEDS = [
   ['d4 f5 g3', 'Dutch vs g3, Black'],
 ];
 
-// ── Stockfish persistent engine with MultiPV ────────────────────────────────
+// ── Stockfish engine with MultiPV + auto-restart on crash ───────────────────
+// The single-threaded WASM build wedges if a fixed deep `go depth` with MultiPV
+// is run over many positions (heap fills). We cap by TIME, clear the hash each
+// position (ucinewgame), bound Hash small, and respawn on any empty result so
+// one crash can't cascade into a wall of "no engine pv" skips.
 function startEngine() {
-  const sf = spawn('node', [SF_BIN]);
-  let buf = '';
-  let pvs = new Map(); // multipv index -> { cp, mate, firstUci }
-  let resolver = null;
-  sf.stdout.on('data', (d) => {
-    buf += d.toString();
-    const lines = buf.split('\n'); buf = lines.pop() ?? '';
-    for (const l of lines) {
-      const mpv = l.match(/multipv (\d+)/);
-      if (mpv && l.includes(' pv ')) {
-        const idx = parseInt(mpv[1], 10);
-        const cp = l.match(/score cp (-?\d+)/);
-        const mate = l.match(/score mate (-?\d+)/);
-        const pv = l.match(/ pv (\S+)/);
-        pvs.set(idx, {
-          cp: cp ? parseInt(cp[1], 10) : null,
-          mate: mate ? parseInt(mate[1], 10) : null,
-          firstUci: pv ? pv[1] : null,
-        });
+  let sf, buf, pvs, resolver, multipv = MULTIPV;
+  function spawnProc() {
+    sf = spawn('node', [SF_BIN]);
+    buf = ''; pvs = new Map(); resolver = null;
+    sf.stdout.on('data', (d) => {
+      buf += d.toString();
+      const lines = buf.split('\n'); buf = lines.pop() ?? '';
+      for (const l of lines) {
+        const mpv = l.match(/multipv (\d+)/);
+        if (mpv && l.includes(' pv ')) {
+          const idx = parseInt(mpv[1], 10);
+          const cp = l.match(/score cp (-?\d+)/);
+          const mate = l.match(/score mate (-?\d+)/);
+          const pv = l.match(/ pv (\S+)/);
+          pvs.set(idx, { cp: cp ? parseInt(cp[1], 10) : null, mate: mate ? parseInt(mate[1], 10) : null, firstUci: pv ? pv[1] : null });
+        }
+        if (l.startsWith('bestmove') && resolver) {
+          const r = resolver; resolver = null; r([...pvs.entries()].sort((a, b) => a[0] - b[0]).map(([, v]) => v));
+        }
       }
-      if (l.startsWith('bestmove') && resolver) {
-        const r = resolver; resolver = null; r([...pvs.entries()].sort((a, b) => a[0] - b[0]).map(([, v]) => v));
-      }
-    }
-  });
-  sf.stdin.write('uci\nisready\n');
+    });
+    sf.on('exit', () => { if (resolver) { const r = resolver; resolver = null; r([]); } });
+    sf.stdin.write(`uci\nsetoption name Hash value 64\nsetoption name MultiPV value ${multipv}\nisready\n`);
+  }
+  spawnProc();
+  function runOnce(fen, movetime) {
+    return new Promise((res) => {
+      pvs = new Map(); resolver = res;
+      try { sf.stdin.write(`ucinewgame\nposition fen ${fen}\ngo movetime ${movetime}\n`); }
+      catch { resolver = null; res([]); return; }
+      setTimeout(() => { if (resolver === res) { resolver = null; res([...pvs.entries()].sort((a, b) => a[0] - b[0]).map(([, v]) => v)); } }, movetime + 8000);
+    });
+  }
   return {
-    setMultiPV(n) { sf.stdin.write(`setoption name MultiPV value ${n}\n`); },
-    analyse(fen, depth) {
-      return new Promise((res) => {
-        pvs = new Map(); resolver = res;
-        sf.stdin.write(`position fen ${fen}\ngo depth ${depth}\n`);
-        setTimeout(() => { if (resolver === res) { resolver = null; res([...pvs.entries()].sort((a, b) => a[0] - b[0]).map(([, v]) => v)); } }, 60000);
-      });
+    setMultiPV(n) { multipv = n; try { sf.stdin.write(`setoption name MultiPV value ${n}\n`); } catch { /* */ } },
+    async analyse(fen, movetime) {
+      let out = await runOnce(fen, movetime);
+      if (!out.length) { // crashed/empty → respawn and retry once
+        try { sf.kill(); } catch { /* */ }
+        spawnProc(); await sleep(400);
+        out = await runOnce(fen, movetime);
+      }
+      return out;
     },
     quit() { try { sf.stdin.write('quit\n'); sf.kill(); } catch { /* */ } },
   };
@@ -165,7 +182,7 @@ async function main() {
     for (const m of book.moves) freq.set(m.san, { games: gamesOf(m), pct: gamesOf(m) / total });
 
     // Engine top-N from the side-to-move perspective.
-    const pvs = (await eng.analyse(fen, DEPTH_SCAN)).filter((p) => p.firstUci);
+    const pvs = (await eng.analyse(fen, MOVETIME_SCAN)).filter((p) => p.firstUci);
     if (!pvs.length) { console.log(`[skip] no engine pv @ ${label}`); continue; }
     const bestScore = scoreNum(pvs[0]);
 
@@ -201,10 +218,10 @@ async function main() {
   }
 
   // ── Re-verify every finalist deep so the list is genuinely engine-sound.
-  console.log(`\n[verify] re-evaluating ${candidates.length} candidates at depth ${DEPTH_VERIFY}...`);
+  console.log(`\n[verify] re-verifying ${candidates.length} candidates at movetime ${MOVETIME_VERIFY}ms...`);
   eng.setMultiPV(1);
   for (const cand of candidates) {
-    const pv = (await eng.analyse(cand.fenAfter, DEPTH_VERIFY))[0];
+    const pv = (await eng.analyse(cand.fenAfter, MOVETIME_VERIFY))[0];
     if (!pv) { cand.verifyCp = cand.scanCp; cand.verifyEval = cand.scanEval; continue; }
     // fenAfter is the OPPONENT to move → flip to the armed side's perspective.
     const oppScore = scoreNum(pv);
@@ -229,7 +246,7 @@ async function main() {
   mkdirSync(outDir, { recursive: true });
   const report = {
     generatedAt: new Date().toISOString(),
-    params: { DEPTH_SCAN, DEPTH_VERIFY, MULTIPV, RARE_PCT, NEAR_BEST_CP, SOUND_FLOOR },
+    params: { MOVETIME_SCAN, MOVETIME_VERIFY, MULTIPV, RARE_PCT, NEAR_BEST_CP, SOUND_FLOOR },
     totalCandidates: candidates.length, soundCount: sound.length,
     white, black, results: sound,
   };
