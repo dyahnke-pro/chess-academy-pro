@@ -117,6 +117,14 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   // itself surfaces separately as stockfish-error ($exception).
   'stockfish-variant-resolved': 'stockfish_variant',
   'stockfish-variant-fallback': 'stockfish_variant_fallback',
+  // Coach LLM health (David 2026-06-15 gap audit). When the brain call
+  // fails/times out the coach can't answer — currently invisible. Mirror as
+  // events (queryable, not $exception) so we can see failure RATE without
+  // spamming the autofix loop; promote to a defect later if a pattern shows.
+  'llm-error': 'llm_error',
+  // Provider failover (DeepSeek↔Anthropic). Seeing this fire tells us a
+  // provider is degraded before users feel it as slow/empty coach replies.
+  'provider-fallback': 'provider_fallback',
 };
 
 /** Map a forensic audit kind to its product-event name, or undefined
