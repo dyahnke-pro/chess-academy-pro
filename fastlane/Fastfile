@@ -63,16 +63,18 @@ platform :ios do
     )
     profile_name = lane_context[SharedValues::SIGH_NAME]
 
-    # Auto-increment the build number off TestFlight's latest.
-    latest = latest_testflight_build_number(
-      api_key: api_key,
-      app_identifier: APP_ID,
-      initial_build_number: 0,
-    )
+    # Build number must strictly increase on every upload. Deriving it from
+    # latest_testflight_build_number races against builds still "processing"
+    # on Apple's side — a just-uploaded build isn't counted yet, so the next
+    # run reuses the same number and altool 409s ("bundle version must be
+    # higher"). A Unix timestamp is monotonic, always larger than any prior
+    # build, and independent of Apple's processing state.
+    build_no = Time.now.to_i.to_s
     increment_build_number(
       xcodeproj: 'ios/App/App.xcodeproj',
-      build_number: (latest + 1).to_s,
+      build_number: build_no,
     )
+    UI.message("Build number set to #{build_no}")
 
     build_app(
       project: PROJECT,
