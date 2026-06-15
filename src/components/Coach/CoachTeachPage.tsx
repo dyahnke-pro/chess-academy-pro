@@ -81,10 +81,8 @@ import { voiceService } from '../../services/voiceService';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { useSettings } from '../../hooks/useSettings';
-import { db } from '../../db/schema';
 import { getFavoriteOpenings } from '../../services/openingService';
 import type { OpeningRecord } from '../../types';
-import { analyzeRecentGames, gameNeedsAnalysis } from '../../services/gameAnalysisService';
 import type { LiveState } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
@@ -3428,43 +3426,15 @@ export function CoachTeachPage(): JSX.Element {
     if (kickoffFiredRef.current) return;
     if (!activeProfile) return;
     kickoffFiredRef.current = true;
-    void (async () => {
-      setKickoffStatus({ label: 'Pulling your last 5 games…', step: 1, total: 4 });
-      const recent = await db.games
-        .reverse()
-        .limit(5)
-        .toArray()
-        .catch(() => []);
-
-      // Analyze any of the 5 most-recent games that aren't already
-      // Stockfish-analyzed. Sequential on the singleton engine so the
-      // coach's stockfish_eval calls during the lesson don't compete
-      // with a 6-worker batch chewing through hundreds of older games.
-      // Lesson kicks off the moment these 5 are done — the rest of
-      // the unanalyzed backlog stays untouched here and is processed
-      // when the user navigates to Game Insights.
-      const needsAnalysis = recent.filter(gameNeedsAnalysis).length;
-      if (needsAnalysis > 0) {
-        await analyzeRecentGames(5, ({ current, total, label }) => {
-          // Encode per-game progress into the step bar so the user
-          // sees "Analyzing game X of Y" with the bar moving forward.
-          setKickoffStatus({
-            label,
-            step: Math.min(2 + current, 3 + total),
-            total: 3 + total,
-          });
-        });
-      }
-
-      // Game pulling + analysis above is kept as a cache-warmer: it
-      // populates the stockfish cache with the student's recent games
-      // so the brain's first eval call during the lesson lands in
-      // ms instead of seconds. The OLD code also built a summaryLines
-      // block to seed the kickoff prompt with "you played the Vienna
-      // 5x" stats; that prompt is gone now (canned greeting below) so
-      // the summaryLines computation is gone too. Recent-game context
-      // still reaches the brain organically through coach memory on
-      // the first real round-trip.
+    (() => {
+      // 5-game Stockfish kickoff analysis REMOVED (David 2026-06-15):
+      // entering Learn with Coach must NOT block on analyzing the
+      // student's recent games — it stalled the lesson behind a
+      // "Pulling your last 5 games… / Analyzing game X of Y" bar.
+      // Recent-game context still reaches the brain organically through
+      // coach memory on the first round-trip; the unanalyzed backlog is
+      // processed when the user visits Game Insights. The lesson now
+      // starts instantly with the canned welcome line below.
 
       // Hard-coded welcome line. Skipping the LLM here means:
       //   (a) the student always hears the SAME greeting (canon),
