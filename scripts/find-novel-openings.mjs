@@ -30,7 +30,9 @@ const MULTIPV = 6;
 const RARE_PCT = 0.05;     // played in < 5% of games at this node = rare
 const RARE_GAMES_MIN = 8;  // but seen enough to be a real, legal, tested move
 const NEAR_BEST_CP = 30;   // within 0.30 of the engine's #1 = "engine endorses"
-const SOUND_FLOOR = -25;   // side-to-move eval must be >= -0.25 (roughly equal+)
+const SOUND_FLOOR = -25;   // White weapon floor effectively 0 (see floorFor)
+const BLACK_FLOOR = -45;   // a rare Black surprise conceding <=0.45 is still sound/playable
+const floorFor = (side) => (side === 'w' ? 0 : BLACK_FLOOR);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // ── Seed branch positions: real tabiyas across many openings, both colors.
@@ -89,6 +91,21 @@ const SEEDS = [
   ['Nf3', 'Black vs 1.Nf3'],
   ['d4 Nf6 c4 g6 Nc3 Bg7 e4 d6', "KID classical, Black"],
   ['d4 f5 g3', 'Dutch vs g3, Black'],
+  // extra Black-to-move branch points where surprises live (relaxed floor)
+  ['e4 d5 exd5', 'Scandinavian recapture, Black'],
+  ['e4 e6 d4 d5 Nd2', 'French Tarrasch, Black'],
+  ['e4 c6 d4 d5 Nd2', 'Caro vs 3.Nd2, Black'],
+  ['e4 d6 d4 Nf6 Nc3', 'Pirc, Black 3rd'],
+  ['e4 g6 d4 Bg7 Nc3', 'Modern, Black 3rd'],
+  ['e4 c5 Nf3 e6 d4 cxd4 Nxd4', 'Sicilian Kan/Taimanov branch, Black'],
+  ['e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2', 'Najdorf vs 6.Be2, Black'],
+  ['d4 Nf6 c4 e6 Nc3 Bb4 e3', 'Nimzo Rubinstein, Black'],
+  ['d4 d5 c4 dxc4 Nf3 Nf6 e3', 'QGA, Black 4th'],
+  ['d4 d5 c4 c6 Nf3 Nf6 Nc3 e6', 'Semi-Slav branch, Black'],
+  ['c4 e5 Nc3 Nf6 Nf3', 'English reversed Sicilian, Black 3rd'],
+  ['c4 Nf6 Nc3 e6 Nf3', 'English vs ...e6, Black'],
+  ['d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Be3', 'Grünfeld Exchange, Black'],
+  ['Nf3 d5 g3 Nf6 Bg2', 'Réti/KIA, Black 3rd'],
 ];
 
 // ── Stockfish engine with MultiPV + auto-restart on crash ───────────────────
@@ -195,9 +212,9 @@ async function main() {
       const drop = bestScore - sc;
       const soundCp = pv.mate != null ? (pv.mate > 0 ? 9999 : -9999) : pv.cp;
       // Color-aware soundness floor: a WHITE weapon must KEEP the edge (>= 0);
-      // a BLACK weapon need only reach near-equality (>= SOUND_FLOOR) — full
-      // equalisation is the prize for the second player.
-      const floor = sideToMove === 'w' ? 0 : SOUND_FLOOR;
+      // a BLACK surprise need only stay sound/playable (>= BLACK_FLOOR) — the
+      // second player accepts a small minus for a rare weapon.
+      const floor = floorFor(sideToMove);
       // Candidate gates: near the engine's best, sound for the side, RARE in practice.
       const isNearBest = drop <= NEAR_BEST_CP;
       const isSound = soundCp >= floor;
@@ -234,7 +251,7 @@ async function main() {
 
   // Keep only the ones that survive deep verification as sound for the armed side
   // (color-aware floor: White must keep the edge, Black need only equalise).
-  const sound = candidates.filter((c) => c.verifyCp >= (c.sideToMove === 'w' ? 0 : SOUND_FLOOR));
+  const sound = candidates.filter((c) => c.verifyCp >= floorFor(c.sideToMove));
   for (const c of sound) c.rarityTier = c.freqPct < 1 ? 'rare' : 'offbeat';
   // Rank each color by its own engine eval (strongest first), then by rarity.
   const byCp = (a, b) => b.verifyCp - a.verifyCp || a.freqPct - b.freqPct;
