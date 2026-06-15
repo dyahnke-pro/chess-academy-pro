@@ -2078,6 +2078,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     setIsCoachThinking(true);
     const abortController = new AbortController();
     const isCancelled = (): boolean => abortController.signal.aborted;
+    // Exactly-once guard: the freeze watchdog (below) and the normal move
+    // path must never both play a coach move. First caller wins; the other
+    // no-ops. (Single-threaded JS + this flag = no double-move.)
+    let coachMovePlayed = false;
 
     const applyCoachMove = (
       result: MoveResult,
@@ -2085,6 +2089,8 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       preMoveEval: number | null = null,
       bestMove: string | null = null,
     ): void => {
+      if (coachMovePlayed) return;
+      coachMovePlayed = true;
       moveCountRef.current += 1;
 
       const coachMove: CoachGameMove = {
@@ -2752,9 +2758,36 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // without the lag.
     const timer = setTimeout(() => void makeCoachMove(), 250);
 
+    // Anti-freeze watchdog (David 2026-06-15: "it froze, can't move any
+    // piece"). makeCoachMove's catch + finally only run if it THROWS or
+    // returns — but if an engine call HANGS (the iOS lila/sf16-7 worker
+    // crashed and a request never resolves), it stalls forever, the coach
+    // never moves, the turn never flips back, and the board stays locked so
+    // the player can't move EITHER. Guarantee recovery: if no coach move has
+    // landed in the window, abort the stalled attempt and force a random legal
+    // move so the turn flips and the board unlocks. A normal move re-runs the
+    // effect → cleanup clears this timer, so it only fires on a true stall.
+    const FREEZE_WATCHDOG_MS = 16_000;
+    const watchdog = setTimeout(() => {
+      if (isCancelled() || coachMovePlayed) return;
+      abortController.abort(); // stop the stalled in-flight attempt from double-moving
+      const randomMove = getRandomLegalMove(game.fen);
+      const result = randomMove ? tryMakeMove(randomMove) : null;
+      if (result) applyCoachMove(result, 0);
+      setIsCoachThinking(false);
+      void logAppAudit({
+        kind: 'coach-opponent-stockfish-error',
+        category: 'subsystem',
+        source: 'CoachGamePage.coachTurn.freezeWatchdog',
+        summary: `coach move stalled >${FREEZE_WATCHDOG_MS}ms (engine likely dead) — forced ${result ? `random ${result.san}` : 'no-op'} to unfreeze board`,
+        fen: game.fen,
+      });
+    }, FREEZE_WATCHDOG_MS);
+
     return () => {
       abortController.abort();
       clearTimeout(timer);
+      clearTimeout(watchdog);
       setIsCoachThinking(false);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally depend on specific game properties, not the whole object
