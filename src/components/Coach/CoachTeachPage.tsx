@@ -12,7 +12,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
-import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, X, Check, MessageCircle, Zap } from 'lucide-react';
+import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw } from 'lucide-react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
 import { NarrationArrowOverlay } from './NarrationArrowOverlay';
@@ -3933,35 +3933,43 @@ export function CoachTeachPage(): JSX.Element {
             onDeepDive={(query) => void handleSubmit(query)}
           />
         ) : (
-          <div className="flex items-center justify-center gap-2 px-3 pb-3">
+          // Control buttons styled to MATCH Play's row exactly (David
+          // 2026-06-15: "make these buttons match play") — outlined border-2 +
+          // colored glow: Takeback amber, Restart cyan, End Lesson red (Play's
+          // Resign). Same buttons + functions as before, so navigation is
+          // unchanged; only the look matches Play.
+          <div className="flex items-center justify-center gap-2 px-4 py-2">
             <button
               onClick={() => game.undoMove()}
               disabled={busy || game.history.length === 0}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors disabled:opacity-40"
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-amber-500/30 text-sm font-medium text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 disabled:opacity-30 transition-all duration-200"
+              style={{ boxShadow: '0 0 10px rgba(245, 158, 11, 0.25), 0 0 3px rgba(245, 158, 11, 0.15)' }}
               aria-label="Take back last move"
               data-testid="teach-takeback"
             >
-              <SkipBack size={14} />
+              <Undo2 size={16} />
               <span>Takeback</span>
             </button>
             <button
               onClick={() => { void handleResetBoard(); }}
               disabled={busy}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors disabled:opacity-40"
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-cyan-500/30 text-sm font-medium text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200"
+              style={{ boxShadow: '0 0 10px rgba(6, 182, 212, 0.25), 0 0 3px rgba(6, 182, 212, 0.15)' }}
               aria-label="Restart"
               data-testid="teach-restart"
             >
-              <RefreshCw size={14} />
+              <RotateCcw size={16} />
               <span>Restart</span>
             </button>
             <button
               onClick={() => void navigate('/coach/home')}
               disabled={busy}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors disabled:opacity-40"
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-red-500/30 text-sm font-medium text-red-400/80 hover:text-red-300 hover:bg-red-500/10 disabled:opacity-30 transition-all duration-200"
+              style={{ boxShadow: '0 0 10px rgba(239, 68, 68, 0.2), 0 0 3px rgba(239, 68, 68, 0.1)' }}
               aria-label="End lesson"
               data-testid="teach-resign"
             >
-              <Flag size={14} />
+              <Flag size={15} />
               <span>End Lesson</span>
             </button>
           </div>
