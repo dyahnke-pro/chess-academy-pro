@@ -55,7 +55,7 @@ export function AcademyCourses(): JSX.Element {
           >
             <AcademyCourseCard
               opening={opening}
-              onOpen={() => void navigate(`/openings/${opening.id}`)}
+              onOpen={() => void navigate(`/academy/course/${opening.id}`)}
             />
           </motion.div>
         ))
