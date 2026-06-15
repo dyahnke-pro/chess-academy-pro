@@ -3491,6 +3491,56 @@ export function CoachTeachPage(): JSX.Element {
   // there's no engine-driven move clock here — every coach message
   // comes from the LLM via the teach-mode prompt.
 
+  // Game-over → game review (David 2026-06-15: "make learn trigger a game
+  // review"). When a REAL played game in Learn ends (checkmate / stalemate /
+  // etc.) — and NOT during a walkthrough lesson — save a minimal record and
+  // route to /coach/review/<id>, which analyzes it post-hoc via Stockfish
+  // (now that the engine works on iOS). Fixes the stuck-at-checkmate gap: the
+  // board never declared mate and never advanced to review. Ref-guarded so it
+  // fires exactly once per finished game.
+  const teachGameOverHandledRef = useRef(false);
+  useEffect(() => {
+    if (!game.isGameOver) { teachGameOverHandledRef.current = false; return; }
+    if (walkthrough.isActive || teachGameOverHandledRef.current || game.history.length < 4) return;
+    teachGameOverHandledRef.current = true;
+    const studentLoss = game.isCheckmate &&
+      ((game.turn === 'w' && playerColor === 'white') ||
+       (game.turn === 'b' && playerColor === 'black'));
+    const won = game.isCheckmate && !studentLoss;
+    const playerName = activeProfile?.name ?? 'Player';
+    const rating = activeProfile?.currentRating ?? activeProfile?.puzzleRating ?? 1200;
+    const gameId = `teach-${Date.now()}`;
+    const pgn = game.history.join(' ');
+    const openingId = walkthrough.tree?.openingName ?? null;
+    void (async () => {
+      try {
+        const { db } = await import('../../db/schema');
+        await db.games.add({
+          id: gameId,
+          pgn,
+          white: playerColor === 'white' ? playerName : 'Coach',
+          black: playerColor === 'black' ? playerName : 'Coach',
+          result: playerColor === 'white'
+            ? (won ? '1-0' : game.isCheckmate ? '0-1' : '1/2-1/2')
+            : (won ? '0-1' : game.isCheckmate ? '1-0' : '1/2-1/2'),
+          date: new Date().toISOString().split('T')[0],
+          event: 'Learn with Coach',
+          eco: null,
+          whiteElo: playerColor === 'white' ? rating : null,
+          blackElo: playerColor === 'black' ? rating : null,
+          source: 'coach',
+          annotations: null,
+          coachAnalysis: null,
+          isMasterGame: false,
+          openingId,
+        });
+      } catch {
+        /* save is best-effort; still route to review */
+      }
+      void navigate(`/coach/review/${gameId}`);
+    })();
+  }, [game.isGameOver, game.isCheckmate, game.turn, walkthrough.isActive, playerColor, game.history, activeProfile, navigate, walkthrough.tree?.openingName]);
+
   // Captured-pieces tray (David 2026-06-15: "make Learn identical to Play —
   // it also shows which pieces have been captured"). Computed from the board's
   // CURRENTLY DISPLAYED fen (walkthrough drill > trap > path fen when a lesson
