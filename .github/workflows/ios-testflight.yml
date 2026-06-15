@@ -99,7 +99,11 @@ jobs:
           CERT_P12_B64: ${{ secrets.BUILD_CERT_P12_B64 }}
           CERT_P12_PASSWORD: 'capro-ci-2026'
         run: |
-          export APP_STORE_CONNECT_API_KEY_B64="$(base64 -w0 "$RUNNER_TEMP/asc_sec1.pem")"
+          # macOS `base64` is BSD, not GNU — it has no `-w` flag, so the old
+          # `base64 -w0` errored and left this var EMPTY, which fastlane read as
+          # an empty key → "invalid curve name". `openssl base64 -A` is portable
+          # and emits a single unwrapped line on both Linux and macOS.
+          export APP_STORE_CONNECT_API_KEY_B64="$(openssl base64 -A -in "$RUNNER_TEMP/asc_sec1.pem")"
           printf '%s' "$CERT_P12_B64" | base64 -d > "$RUNNER_TEMP/dist.p12"
           export CERT_P12_PATH="$RUNNER_TEMP/dist.p12"
           bundle exec fastlane ios beta
