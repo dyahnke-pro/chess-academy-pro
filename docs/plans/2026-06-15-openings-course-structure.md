@@ -103,18 +103,37 @@ prescriptive coaching wrapped around it.
 variation → Sublines), exactly the Chessable nested contents tree. The course
 is the ONLY surface where sublines appear.
 
-### 🚨 Data-source decision this forces (G3)
-Sublines = real DB lines, NEVER invented (G3 + "if it's not in the Lichess DB it
-doesn't exist"). Source options for each variation's sublines:
-- **DB-derived (recommended):** the sub-branches under the variation in
-  `openings-lichess.json`, via the existing sibling/continuation machinery
-  (`findSiblingExtensionBranches`, `findContinuationsAtPly` in
-  `openingDetectionService.ts`). Same engine the walkthrough forks already use.
-- **Authored (deep):** hand-built per the masterclass/pro-rep deep-build
-  doctrine (§G9.1) — more work, masterclass-grade.
-- Current data: `OpeningVariation` has NO nested `sublines[]`; the model needs a
-  subline layer (DB-derived first; author the masterclass set over time).
-**OPEN for David: DB-derived sublines for v1, author later? (recommended).**
+### 🔒 Data-source decision — RESOLVED: FREQUENCY-DERIVED, precomputed (2026-06-15)
+Sublines = real DB lines, NEVER invented (G3). Two approaches were tried:
+- **Named-DB sub-variations** (`findSiblingExtensionBranches`) — REJECTED as the
+  primary source: coverage is uneven/thin (probe: Najdorf=6 sublines, but Caro
+  Advance=**1**) because it only surfaces *named* sub-variations, not every real
+  opponent deviation. Can't deliver "answer every opponent move."
+- **Frequency-derived from the masters DB** — ADOPTED. At each opponent-to-move
+  node ALONG the variation spine (after the variation's *establishment ply* — the
+  ply its ECO name first specializes, so we don't capture the system-level fork
+  that IS another chapter), branch on every opponent move played in ≥ max(4, 2%)
+  master games, walk each along the most-played continuation to the middlegame.
+  Probe result: Caro Advance → 10 ranked sublines (h4/Tal 20%, O-O/Short 18%,
+  Nc3/Van der Wiel 10% …). Forcing variations correctly get 0 (empty > invented).
+- **Precomputed, NOT runtime:** the masters DB is a 37MB runtime *fetch* (not
+  bundled), so a build script (`scripts/build-course-sublines.mjs`) emits a compact
+  `src/data/course-sublines.json` (per opening → variation index → ranked
+  sublines). Runtime `buildCourse` reads the small file; the 37MB DB never ships
+  to the client.
+- Each subline carries: `triggerMove`, `atPly`, `games`, **`pct`** (share at the
+  node), `name` (ECO canonical), `moves` (to the middlegame), `reachesMiddlegame`.
+- Authored masterclass-grade narration layers on top later (the combined-pipeline
+  Stage 2); the frequency data is the Stage-1 why-fact + the authoring brief.
+
+### 🔒 RANKING + FREQUENCY NARRATION (David 2026-06-15)
+- **Tree is ranked most→least common** (sublines sorted by master games desc).
+- **Narration states the %/count SELECTIVELY — only when it adds value**, never on
+  every move (robotic). Good moments: the dominant try ("White's main move here,
+  ~73%"), a rare-but-dangerous deviation ("you'll see this maybe 1 game in 20, but
+  it bites"), a surprising even split. The `pct`/`games` ride in the Stage-1
+  why-facts; the author/voice decides when to speak them (honors the G5 + voice
+  rules: concrete, varied, silence is fine).
 
 ## The insight (David, 2026-06-15)
 
