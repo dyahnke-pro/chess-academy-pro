@@ -6,6 +6,7 @@ import { seedDatabase } from '../../services/dataLoader';
 import { BookOpen, GraduationCap, Target, AlertTriangle, Upload, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
+import { TableOfContents } from './TableOfContents';
 import { useSettings } from '../../hooks/useSettings';
 import { scaledShadow } from '../../utils/neonColors';
 import { getUnifiedWeaknessProfile } from '../../services/weaknessSpine';
@@ -257,6 +258,10 @@ export function DashboardPage(): JSX.Element {
           );
         })}
       </div>
+
+      {/* App table of contents — thin yellow bar under the section cards,
+          expands into every tab's capabilities (David 2026-06-15). */}
+      <TableOfContents />
     </div>
   );
 }
