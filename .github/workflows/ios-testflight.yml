@@ -50,6 +50,13 @@ jobs:
 
       - name: Add + sync iOS project (regenerates the gitignored ios/)
         run: |
+          # ios/App/ci_scripts/ is committed (Xcode Cloud needs it), so ios/
+          # EXISTS at checkout and `npx cap add ios` aborts with "ios platform
+          # already exists" — which has failed every TestFlight build since the
+          # ci_scripts commit (2026-06-13). This GitHub-Actions path signs via
+          # fastlane and does NOT use ci_post_clone, so regenerate ios/ clean:
+          # the rm only touches the runner's checkout, never the committed file.
+          rm -rf ios
           npx cap add ios
           npx cap sync ios
 
