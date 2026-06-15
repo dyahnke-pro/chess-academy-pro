@@ -1492,7 +1492,7 @@ audio.playbackRate = this.speed;
         kind: 'tts-failure',
         category: 'subsystem',
         source: 'voiceService.playViaElement',
-        summary: `iOS element playback failed: ${detail.slice(0, 80)}`,
+        summary: `iOS element playback failed [${isObjectUrl ? 'object-url' : 'tts-url'}]: ${detail.slice(0, 80)}`,
         details: JSON.stringify({
           detail,
           srcKind: isObjectUrl ? 'object-url' : 'tts-url',
