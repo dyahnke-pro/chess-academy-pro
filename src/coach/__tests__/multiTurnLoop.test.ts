@@ -108,7 +108,12 @@ describe('coachService multi-turn loop', () => {
       { providerOverride: provider, maxToolRoundTrips: 3 },
     );
     expect(provider.receivedEnvelopes).toHaveLength(3);
-    expect(answer.text).toBe('Done.');
+    // stockfish_eval failed (no engine wired in this test), so the fail-loudly
+    // guard prepends a "Stockfish isn't responding" banner to the final text
+    // (David 2026-06-15). The loop still ran all 3 trips and the final
+    // acknowledgment is preserved.
+    expect(answer.text).toContain('Done.');
+    expect(answer.text).toContain("Stockfish isn't responding");
   });
 
   it('stops looping early when a turn returns no tool calls', async () => {

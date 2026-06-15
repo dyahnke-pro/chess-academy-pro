@@ -132,6 +132,23 @@ function collectPlayerNames(toolName: string, args: unknown, result: unknown, in
 const UNGROUNDED_PLAYER_STAT_REFUSAL =
   "I can't pull that player's real games right now — the explorer's unavailable, so I don't have their actual move frequencies. I'm not going to guess percentages from memory. Want me to retry, or teach the opening from the master database instead?";
 
+/** FAIL-LOUDLY (David 2026-06-15: "I want the llm to fail loudly if something
+ *  is down… say what is not working — 'Stockfish not responding'"). When a
+ *  DATA tool the coach relies on fails this turn, we surface WHAT is down to
+ *  the student deterministically instead of letting the LLM paper over it with
+ *  an invented evaluation (the dead-engine "exd6 is the engine's #1"
+ *  fabrication). Maps each data tool → a plain-language "what's down" clause. */
+const DATA_TOOL_DOWN_MESSAGES: Record<string, string> = {
+  stockfish_eval: "Stockfish isn't responding, so I can't give you an engine evaluation or a verified best move right now",
+  stockfish_classify_move: "Stockfish isn't responding, so I can't grade that move's accuracy right now",
+  lookup_master_play: "the master-games database is unreachable, so I can't tell you what masters actually play here",
+  lichess_master_games: "the master-games database is unreachable right now",
+  lichess_opening_lookup: "the opening database is unreachable right now",
+  local_opening_book: "the opening book is unavailable right now",
+  lookup_player_games: "I couldn't reach that player's real games right now",
+  lookup_player_opening_moves: "I couldn't reach that player's opening stats right now",
+};
+
 function resolveProviderName(): ProviderName {
   // Vite-style env (browser builds).
   const viteEnv = (typeof import.meta !== 'undefined'
@@ -1038,6 +1055,10 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   // moves/games this turn? If the brain attempted one, got nothing, yet
   // still cites percentages, those are fabricated (see finalText guard).
   let playerDataGrounded = false;
+  // Fail-loudly: data tools that FAILED this turn (name → error). Surfaced to
+  // the student after the final text so a down data source is never hidden
+  // behind an invented answer (David 2026-06-15).
+  const failedDataTools = new Map<string, string>();
   // SANs from the player's REAL games (pre-loaded block + player-tool
   // results), fed into the grounding `gameSans` so the claim validator
   // accepts player-grounded moves instead of nuking the lesson (#4).
@@ -1310,6 +1331,9 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
           result: result.result,
           error: result.error,
         });
+        if (!result.ok && Object.prototype.hasOwnProperty.call(DATA_TOOL_DOWN_MESSAGES, call.name)) {
+          failedDataTools.set(call.name, result.error ?? 'unavailable');
+        }
         if (
           result.ok &&
           (call.name === 'lookup_player_opening_moves' || call.name === 'lookup_player_games') &&
@@ -1398,6 +1422,9 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
           ok: false,
           error: err instanceof Error ? err.message : String(err),
         });
+        if (Object.prototype.hasOwnProperty.call(DATA_TOOL_DOWN_MESSAGES, call.name)) {
+          failedDataTools.set(call.name, err instanceof Error ? err.message : String(err));
+        }
       }
     };
 
@@ -1622,6 +1649,28 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   // move the coach mentioned gets a code-resolved, Stockfish-rank-
   // colored arrow; the LLM no longer emits [BOARD: arrow:] markers.
   finalText = await applyCandidateArrows(finalText, boardFenForClaims, `coachService:${input.surface}`);
+
+  // ── FAIL LOUDLY: a data source the coach relies on went down this turn ──
+  // David 2026-06-15: "I want the llm to fail loudly if something is down…
+  // say what is not working — 'Stockfish not responding'." When a DATA tool
+  // failed (engine crashed, explorer/master DB unreachable), tell the student
+  // WHAT is down — deterministically, up front — instead of letting an
+  // invented answer stand (the dead-engine "exd6 is the engine's #1"
+  // fabrication). The per-tool tool-call-error audit already fired; this
+  // surfaces it to the USER. Runs after grounding so it can't be stripped.
+  if (failedDataTools.size > 0) {
+    const clauses = [
+      ...new Set([...failedDataTools.keys()].map((n) => DATA_TOOL_DOWN_MESSAGES[n])),
+    ];
+    finalText = `⚠️ Heads up — ${clauses.join('; ')}. I won't make that up — here's my general read instead:\n\n${finalText}`.trim();
+    void logAppAudit({
+      kind: 'claim-validator-trip',
+      category: 'subsystem',
+      source: 'coachService.dataUnavailableGuard',
+      summary: `surfaced data-source-down to student on ${input.surface}: ${[...failedDataTools.keys()].join(', ')}`,
+      details: JSON.stringify({ surface: input.surface, failed: Object.fromEntries(failedDataTools) }),
+    });
+  }
 
   // Board-announce gate (was CoachTeachPage-only): when a board-changing
   // tool fired, the spoken [VOICE:] block should announce it ("Setting the
