@@ -597,6 +597,20 @@ class StockfishEngine {
     console.error(
       `[Stockfish] Worker crashed (attempt ${this._crashRetries}/${MAX_CRASH_RETRIES}): ${reason}`,
     );
+    // Surface engine crash / init-failure to the audit stream + PostHog.
+    // Without this, an engine that dies before it ever starts an analysis
+    // (e.g. the iOS lila/sf16-7 module worker failing to load in the
+    // Capacitor WebView) produces ZERO signal — a dead eval bar with no
+    // explanation (David 2026-06-15). This is the failure mode that
+    // surfaceWorkerError + the stall watchdog can't see because no `go`
+    // is ever sent. stockfish-error is a DEFECT kind → $exception → the
+    // error-watch autofix loop.
+    void logAppAudit({
+      kind: 'stockfish-error',
+      category: 'subsystem',
+      source: 'stockfishEngine.handleWorkerCrash',
+      summary: `worker crash/init-fail (variant=${this.workerVariant ?? '?'}, attempt ${this._crashRetries}/${MAX_CRASH_RETRIES}): ${reason.slice(0, 160)}`,
+    });
     if (this.pending) {
       this.pending.reject(new Error(`worker crashed: ${reason}`));
       this.pending = null;

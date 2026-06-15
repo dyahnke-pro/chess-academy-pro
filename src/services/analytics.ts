@@ -109,6 +109,14 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   // decode error, /api/tts non-200) to PostHog. It was NOT mirrored, so
   // "no voice" reports were invisible in analytics (David 2026-06-06).
   'tts-failure': 'tts_failure',
+  // Stockfish engine selection (David 2026-06-15: dead eval bar on iOS).
+  // Mirrors WHICH variant the device resolved (multi / single / lila) and
+  // any runtime fallback — so we can see that init actually ran and which
+  // engine path a device took. A dead eval bar with NO variant event means
+  // init never even started; lila here confirms the iOS path. The crash
+  // itself surfaces separately as stockfish-error ($exception).
+  'stockfish-variant-resolved': 'stockfish_variant',
+  'stockfish-variant-fallback': 'stockfish_variant_fallback',
 };
 
 /** Map a forensic audit kind to its product-event name, or undefined
