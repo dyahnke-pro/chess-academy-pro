@@ -46,14 +46,29 @@ list of moves — they're paying for **the reasoning behind each pick**. So:
   the bad-bishop before …e6 ever traps it." No bare moves, ever.
 - **Make it a HARD GATE:** a course move with no why does not ship (a
   `courseMoveWhy` test, same class as `wlppNarration` / `narrationAccuracy`).
-- **The why is GROUNDED, never invented (G0/G3).** Sourced from: DB frequency
-  ("the main weapon, N% of masters"), engine confirmation (Stockfish holds the
-  edge), and the book/concept corpus (the idea) — voiced, not made up. The
-  `explainBestMoveGrounded` / `groundedAnswer.ts` pattern is the template.
-- ✅ **Why-source = BOTH (David 2026-06-15):** grounded/computed why on EVERY
-  move from day one (DB-derived floor — nothing ships without a why) + authored
-  weapon-grade why layered on the flagship masterclass set over time. Same
-  floor/ceiling split as the subline sources. No-move-without-a-why is the gate.
+- **The why is GROUNDED, never invented (G0/G3) — a two-stage pipeline:**
+  Stage 1 the CODE computes the why-facts (DB frequency / main-weapon %, Stockfish
+  eval delta, concept-corpus idea, legality); Stage 2 a human hand-authors the
+  narration FROM those facts. The engine supplies the why; the author supplies
+  the elegance — neither invents. `explainBestMoveGrounded` / `groundedAnswer.ts`
+  is the Stage-1 template. (Full detail in the Decisions log below.)
+- ✅ **Why-source = ONE COMBINED PIPELINE, two stages (David 2026-06-15):**
+  the engine COMPUTES the why, the human WRITES the narration from it — pure G0,
+  nothing invented at either step.
+  - **Stage 1 — code computes the grounded why-FACTS for every recommended move:**
+    DB frequency / main-weapon status ("the main move, N% of masters"), Stockfish
+    eval delta (holds the edge / refutes the deviation), concept-corpus idea tag,
+    legality. A structured why-fact object per move. Exists day one for EVERY
+    move (so nothing is ever empty), and IS the displayed why until authored.
+  - **Stage 2 — human hand-authors the narration FROM those computed facts:**
+    weapon-grade, two-register, personal voice — translating the facts into
+    elegant prose ("the general understanding is the raw material; the elegance
+    is my job"), NEVER inventing. The Stage-1 fact object doubles as the
+    AUTHORING BRIEF (the author sees "main move 72%, engine +0.4, idea: undermine
+    the base of the chain" and writes from it). Flagships first.
+  - **Displayed why** = authored narration when present, else the Stage-1 grounded
+    fact sentence. Both grounded; authoring is the elegance pass over the SAME
+    facts. No-move-without-a-why is the gate.
 
 This SUPERSEDES the "DB-derived sublines are lighter on prose" framing: the moves
 may be DB-derived, but the WHY is mandatory on every one.
