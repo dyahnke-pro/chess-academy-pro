@@ -26,13 +26,27 @@
 
 // Import the lila module. This is a module-worker; the URL is
 // resolved relative to this script's location.
-import StockfishWeb from '/stockfish/sf16-7.js';
+//
+// ROOT-CAUSE FIX (David 2026-06-15): this import was STATIC and top-level.
+// On iOS the engine crashed via the host's worker.onerror with an EMPTY
+// reason — because a static top-level `import` that fails (module load /
+// sf16-7 eval / wasm fetch) dies BEFORE the try/catch below runs, so the
+// failure surfaced as an uncaught worker error with no message instead of a
+// reportable `error: bridge-init failed: <reason>`. Moving it to a DYNAMIC
+// import INSIDE the try/catch means an import failure is caught and posted
+// with its real reason + stack — which both makes the failure graceful and
+// finally tells us WHY sf16-7 won't load on the device.
 
 let engine = null;
 let pendingCommands = [];
 
 (async () => {
   try {
+    const mod = await import('/stockfish/sf16-7.js');
+    const StockfishWeb = mod.default;
+    if (typeof StockfishWeb !== 'function') {
+      throw new Error(`sf16-7 default export is ${typeof StockfishWeb}, expected function`);
+    }
     engine = await StockfishWeb({
       // Pass through onError as a top-level option since the module
       // doesn't fully wire it via the .onError= setter until after
@@ -61,7 +75,15 @@ let pendingCommands = [];
     }
     pendingCommands = [];
   } catch (err) {
-    self.postMessage(`error: bridge-init failed: ${err && err.message ? err.message : String(err)}`);
+    // Surface the FULL reason (name + message + stack head) so the host's
+    // surfaceWorkerError logs WHY sf16-7 failed to load/init on the device —
+    // "Failed to fetch dynamically imported module", a wasm error, a parse
+    // error, etc. This is the signal that was empty before the dynamic-import
+    // change (David 2026-06-15 root-cause hunt).
+    const name = err && err.name ? err.name : 'Error';
+    const detail = err && err.message ? err.message : String(err);
+    const stack = err && err.stack ? ` | ${String(err.stack).slice(0, 240)}` : '';
+    self.postMessage(`error: bridge-init failed: ${name}: ${detail}${stack}`);
   }
 })();
 

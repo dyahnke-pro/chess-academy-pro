@@ -418,9 +418,16 @@ class StockfishEngine {
           };
 
           this.worker.onerror = (error) => {
+            // Capture the failing file:line:col (David 2026-06-15 root-cause
+            // hunt) — for a worker SCRIPT load/parse failure `error.message`
+            // is empty, but `filename`/`lineno` name the resource that died,
+            // which is what was missing when the iOS lila crash logged blank.
+            const ee = error as Partial<ErrorEvent>;
+            const loc = ee.filename
+              ? ` @ ${ee.filename}:${ee.lineno ?? '?'}:${ee.colno ?? '?'}`
+              : '';
             const msg =
-              error.message ||
-              'Uncaught RuntimeError or worker load failure';
+              (error.message || 'Uncaught RuntimeError or worker load failure') + loc;
             // Phase 8 Bug A — suppress the bubble to window.onerror.
             // A crashing multi-thread bundle emits 60+ ErrorEvents
             // in ~100ms; if any of those reach the global error

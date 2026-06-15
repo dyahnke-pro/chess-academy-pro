@@ -445,6 +445,11 @@ export function mirrorAuditEvent(entry: AuditEntry): void {
         audit_kind: entry.kind,
         severity: CRASH_KINDS.has(entry.kind) ? 'crash' : 'defect',
         source: entry.source,
+        // Explicit `summary` prop — the Error.message carries it too, but
+        // PostHog doesn't expose that as a queryable field, so the stockfish
+        // crash reason came back blank (David 2026-06-15). This makes the
+        // reason queryable as properties.summary.
+        summary: entry.summary,
         ...(entry.route ? { route: entry.route } : {}),
         ...(entry.fen ? { fen: entry.fen } : {}),
         ...(entry.buildId ? { build_id: entry.buildId } : {}),
