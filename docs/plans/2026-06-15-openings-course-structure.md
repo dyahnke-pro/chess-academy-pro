@@ -382,6 +382,33 @@ user on it without even being asked." A proactive, weakness-targeting coach. Thi
 is the course-sparring idea (P9) generalized to the whole Learn-with-Coach surface,
 driven by `openingWeakSpots` + SRS. Remind David when course-sparring lands.
 
+## 🔒🔒 CORE PRINCIPLE — IT IS ALL POSITION-BASED / FEN-KEYED (David 2026-06-15, emphatic)
+
+The entire engine is keyed on POSITION (FEN), never move-names or PGN strings.
+This is THE architecture, and it unifies everything:
+
+- **One primitive: `masterPlayLookup(fen)`** (FEN-keyed, returns moves played at
+  the position WITH game counts). At each node:
+  - STUDENT-to-move → follow the top move by games = the recommended reply; the
+    "played in N% of games" IS why-fact #1, for free.
+  - OPPONENT-to-move → every move above a threshold = a subline branch.
+  - Stockfish eval per move = why-fact #2.
+- **The subline-tree walk and `computeWhyFacts` COLLAPSE into ONE FEN walk** — not
+  two systems. One traversal yields the tree AND the grounded why together.
+- **Transpositions solve themselves** — different move orders reaching the same
+  FEN share a node automatically (huge for repertoires; a name/PGN tree can't).
+- **"End where theory ends" is free** — when `masterPlayLookup` returns few/no
+  games at a FEN, you've left book = a natural terminus (complements
+  `reachesMiddlegame`).
+- The Lichess opening DB (`openings-lichess.json`) still supplies NAMES/labels for
+  nodes (via `detectOpening`/`findOpeningByPgnPrefix`) and the G3 "is this a real
+  line" check, but DISCOVERY + frequency + branching are FEN-driven via master-play.
+
+**Engine restated:** walk by FEN — master-play data gives the branches + the
+frequency-why, Stockfish gives the eval-why, follow the main move for the student,
+branch on the opponent's, stop at the middlegame / end of theory. `buildSublines`
+v1 (name-based) is replaced by this FEN walk (async; merges in the why-facts).
+
 ## 🚨 EMPIRICAL FINDING — subline discovery must be POSITION-based, not name-based (2026-06-15 probe)
 
 Probe of `buildSublines` v1 (named-branch primitive `findSiblingExtensionBranches`):
