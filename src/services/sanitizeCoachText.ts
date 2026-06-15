@@ -31,7 +31,7 @@
  *  markers in one string strip independently. `[\s\S]` matches
  *  newlines too — the LLM sometimes wraps long tool-args across
  *  lines. */
-const DOUBLE_MARKUP_RE = /\[\[[A-Z][A-Z0-9_]*(?::[\s\S]*?)?\]\]/g;
+const DOUBLE_MARKUP_RE = /\\?\[\[[A-Z][A-Z0-9_]*(?::[\s\S]*?)?\]\]/g;
 
 /** JSON-bearing directive `[DIRECTIVE:name {…json…}]` (single OR double
  *  bracket). The generic single-bracket strip below uses `[^\]]*`, which
@@ -44,11 +44,11 @@ const DOUBLE_MARKUP_RE = /\[\[[A-Z][A-Z0-9_]*(?::[\s\S]*?)?\]\]/g;
  *  marker's `]`, so any `]` INSIDE the JSON (arrays, nested objects) is
  *  consumed by the lazy body instead of terminating the match early.
  *  Run BEFORE the generic single-bracket strip. */
-const JSON_MARKUP_RE = /\[\[?[A-Z][A-Z0-9_]*:[^[\]{]*\{[\s\S]*?\}\s*\]\]?/g;
+const JSON_MARKUP_RE = /\\?\[\[?[A-Z][A-Z0-9_]*:[^[\]{]*\{[\s\S]*?\}\s*\]\]?/g;
 
 /** Legacy single-bracket form `[DIRECTIVE:args]`. `args` is `[^\]]*`
  *  because legacy tags didn't support nested `]`. */
-const SINGLE_MARKUP_RE = /\[[A-Z][A-Z0-9_]+:[^\]]*\]/g;
+const SINGLE_MARKUP_RE = /\\?\[[A-Z][A-Z0-9_]+:[^\]]*\]/g;
 
 /** Conversational scaffolding the LLM tacks onto the front of
  *  responses despite explicit prompt bans. Audit 2026-05-19 (Bug I):

@@ -1,9 +1,19 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import type { ChatMessage as ChatMessageType } from '../../types';
+import { stripCoachMarkup } from '../../services/sanitizeCoachText';
 
-/** Render basic markdown-style formatting: **bold** and *italic* */
-function renderFormattedText(text: string): React.ReactNode[] {
+/** Render basic markdown-style formatting: **bold** and *italic*.
+ *  Defense-in-depth: strip any coach directive markup
+ *  (`[BOARD: arrow:e2-e4]`, `[[ACTION:...]]`, escaped `\[BOARD:...]`)
+ *  that slipped past a surface's own sanitize before it reaches the
+ *  bubble. The move-narration path on /coach/play did NOT strip, so a
+ *  raw `\[BOARD: arrow:f3-f3:green]` leaked into the chat (David
+ *  2026-06-15). This is the single render-level chokepoint every coach
+ *  surface shares, so stripping here closes the leak everywhere at
+ *  once. Idempotent — already-clean text is unchanged. */
+function renderFormattedText(rawText: string): React.ReactNode[] {
+  const text = stripCoachMarkup(rawText);
   const parts: React.ReactNode[] = [];
   // Match **bold** first, then *italic*
   const regex = /\*\*(.+?)\*\*|\*(.+?)\*/g;

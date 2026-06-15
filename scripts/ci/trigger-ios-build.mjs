@@ -34,8 +34,30 @@ async function api(method, path, body) {
 }
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// Point the Xcode Cloud workflow's branch start condition at `pattern`.
+// We keep auto-build OFF in steady state (a non-existent branch pattern) so a
+// push to main NEVER auto-triggers a build — David wants ONE batched push, not
+// a build per commit (2026-06-15). To create a deliberate build we briefly
+// associate `main`, create the build, then disassociate again. A running
+// ciBuildRun is NOT cancelled by changing the start condition, so the build
+// completes after we flip the pattern back.
+const IDLE_BRANCH_PATTERN = '__manual-batch-only__';
+async function setWorkflowBranch(pattern) {
+  const r = await api('PATCH', `/v1/ciWorkflows/${WORKFLOW}`, {
+    data: { type: 'ciWorkflows', id: WORKFLOW, attributes: {
+      branchStartCondition: { source: { isAllMatch: false, patterns: [{ pattern, isPrefix: false }] }, autoCancel: true },
+    } },
+  });
+  if (r.status >= 400) console.error(`::warning::could not set workflow branch to ${pattern}:`, JSON.stringify(r.j).slice(0, 200));
+  return r.status < 400;
+}
+
 const main = async () => {
+  // Associate main so the manual build can be created, then disassociate
+  // immediately after so no future push auto-builds.
+  await setWorkflowBranch('main');
   const trig = await api('POST', '/v1/ciBuildRuns', { data: { type: 'ciBuildRuns', relationships: { workflow: { data: { type: 'ciWorkflows', id: WORKFLOW } } } } });
+  await setWorkflowBranch(IDLE_BRANCH_PATTERN);
   if (trig.status >= 400) { console.error('::error::trigger failed', JSON.stringify(trig.j).slice(0, 300)); process.exit(1); }
   const runId = trig.j.data?.id;
   const number = trig.j.data?.attributes?.number;

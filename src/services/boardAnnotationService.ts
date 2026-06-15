@@ -8,7 +8,10 @@ const COLOR_MAP: Record<string, string> = {
   orange: 'rgba(249, 115, 22, 0.8)',
 };
 
-const BOARD_TAG_REGEX = /\[BOARD:\s*(arrow|highlight|position|practice|clear)(?::([^\]]*))?\]/gi;
+// `\\?` consumes a leading backslash so a markdown-escaped `\[BOARD:…]`
+// (the LLM sometimes escapes the bracket) is matched and removed whole,
+// instead of leaving an orphan `\` in the bubble (David 2026-06-15).
+const BOARD_TAG_REGEX = /\\?\[BOARD:\s*(arrow|highlight|position|practice|clear)(?::([^\]]*))?\]/gi;
 const VALID_SQUARE = /^[a-h][1-8]$/;
 
 function resolveColor(name: string): string {
@@ -38,7 +41,14 @@ function parseArrowData(data: string): BoardArrow[] {
     const color = parts[1] ? resolveColor(parts[1]) : COLOR_MAP.green;
     const [from, to] = squares.split('-');
 
-    if (from && to && isValidSquare(from) && isValidSquare(to)) {
+    // Drop degenerate from==to arrows (e.g. `arrow:f3-f3`) — react-chessboard
+    // can't draw a square to itself and arrowGrounding rejects them anyway;
+    // catching it here keeps a hallucinated self-arrow out of the command set
+    // entirely (David 2026-06-15).
+    if (
+      from && to && isValidSquare(from) && isValidSquare(to) &&
+      from.trim() !== to.trim()
+    ) {
       arrows.push({ startSquare: from.trim(), endSquare: to.trim(), color });
     }
   }

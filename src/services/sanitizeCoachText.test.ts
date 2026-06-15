@@ -361,3 +361,22 @@ describe('stripScaffolding (Bug I)', () => {
     expect(stripScaffolding('   ').text).toBe('');
   });
 });
+
+describe('sanitizeCoachText — escaped board markers (David 2026-06-15)', () => {
+  it('strips a markdown-escaped board marker whole, no orphan backslash', () => {
+    // The exact leak from the /coach/play screenshot.
+    const out = sanitizeCoachText('Knight takes f3. Your move. Nxf3+ \\[BOARD: arrow:f3-f3:green]');
+    expect(out).not.toContain('BOARD');
+    expect(out).not.toContain('[');
+    expect(out).not.toContain('\\');
+    expect(out).toContain('Nxf3+');
+  });
+
+  it('still strips an un-escaped board marker', () => {
+    expect(sanitizeCoachText('text [BOARD: highlight:e4:yellow] more')).toBe('text more');
+  });
+
+  it('strips an escaped double-bracket action tag', () => {
+    expect(sanitizeCoachText('done \\[[ACTION:play_move {"san":"e4"}]]')).toBe('done');
+  });
+});

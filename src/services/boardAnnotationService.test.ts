@@ -177,4 +177,21 @@ describe('boardAnnotationService', () => {
       }
     });
   });
+
+  describe('hallucination hardening (David 2026-06-15)', () => {
+    it('removes a markdown-escaped board marker, leaving no orphan backslash', () => {
+      const result = parseBoardTags('Nxf3+ \\[BOARD: arrow:e5-f3:green]');
+      expect(result.cleanText).toBe('Nxf3+');
+      expect(result.cleanText).not.toContain('\\');
+      expect(result.commands[0].arrows![0]).toMatchObject({ startSquare: 'e5', endSquare: 'f3' });
+    });
+
+    it('drops a degenerate from==to arrow (arrow:f3-f3)', () => {
+      const result = parseBoardTags('text [BOARD: arrow:f3-f3:green] end');
+      expect(result.cleanText).not.toContain('BOARD');
+      // No arrow command emitted for the self-arrow.
+      const arrowCmds = result.commands.filter((c) => c.type === 'arrow');
+      expect(arrowCmds).toHaveLength(0);
+    });
+  });
 });
