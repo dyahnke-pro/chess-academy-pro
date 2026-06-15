@@ -241,6 +241,28 @@ already exists for that line.
 - **P10 (album 2) — Curriculum ACROSS courses** ("Beginner → Intermediate →
   Advanced" path).
 
+## 🔒 SUBLINE DEPTH — to the middlegame, not a move count (David 2026-06-15, confirmed)
+
+A subline runs until the student is back in KNOWN TERRITORY — depth is variable by
+line, set by the line's nature (sharp forced lines go deeper; quiet lines end
+once the plan is clear). This is the app's existing law (G9.3 Gate B), so courses
+inherit it. A subline ends at the FIRST of three honest stopping points:
+
+1. **Transposes into the variation's main middlegame** → end at the transposition;
+   inherit the main line's plan (no duplicate). Most quiet sublines.
+2. **Reaches its own distinct middlegame** → end there; attach a short plan note.
+   Terminus = `reachesMiddlegame(pgn)` (`src/data/variationMiddlegameDepth.shared.mjs`
+   — ≥14 plies OR someone castled OR both sides developed ≥2 minors). REUSE this
+   exact helper (single source the gate already uses); do NOT reinvent.
+3. **Forces a clear resolution** (the opponent's deviation is a blunder we punish)
+   → end at the refutation / clear advantage. This is the trap payoff.
+
+Then at every terminus, hand off to the middlegame plan (G9.3 Gate C continuity),
+and add an endgame layer only where the wider-corpus DATA shows a recurring ending
+(G9.1 step 5; section self-hides otherwise). `findSiblingExtensionBranches` runs to
+the DB line's END, so `buildSublines` TRIMS to the terminus via stopping points
+1-3 (v1: stopping point 2 via `reachesMiddlegame`; 1 + 3 are refinements).
+
 ## Traps folded INTO the walkthrough tree (David 2026-06-15) — unifies sublines + punish-gems
 
 A punish trap IS a subline where the opponent's deviation is a BLUNDER instead of
@@ -327,6 +349,56 @@ TO the app's existing training loop, closing the learning loop with no gaps
   today), and the course feeds the training loop (today's course misses become
   tomorrow's reps). Same SRS/weakness substrate the rest of the app already
   runs on — no parallel progress system.
+
+## 🔒 BUILD PRIORITY — LOCKED (David 2026-06-15, "LOCK THIS IN")
+
+Build it, but **lead with the VALUE, not the wrapper.** The value = a complete,
+adaptive, never-out-of-book training layer the free app doesn't have. The wrapper
+(syllabus/progress/finish-line) is the **delivery vehicle**, built alongside — NOT
+the product. Two contingencies the whole thing rests on:
+1. **The why on EVERY move is actually good** — engine-grounded (Stage 1), then
+   hand-authored on flagships (Stage 2). A thin/auto-only why = it collapses into
+   "more tiles." This is non-negotiable.
+2. **The adaptive trainer is the HEADLINE**, not an afterthought.
+
+**Build order (value-first):**
+1. `buildSublines` — DB-derived deviation tree per variation, trimmed to the
+   middlegame terminus (real subline DEPTH). ← FOUNDATION, in progress.
+2. `computeWhyFacts` — Stage-1 grounded why per move (frequency + engine + concept).
+3. **Adaptive trainer** (board-adaptive, learner-weighted, training-loop wired).
+4. Course-sparring in /coach/play.
+5. Traps folded into the tree.
+6. Wrapper (syllabus / progress / finish line) — the delivery vehicle.
+7. Hand-authored why on flagships (ongoing content pass).
+
+## 💡 PARKED IDEA — proactive weakness-driven Learn-with-Coach (David 2026-06-15, "REMIND ME LATER")
+
+David's tangent, to surface later (NOT this build, but don't lose it): when a user
+plays **Learn-with-Coach**, the coach should play **openings the user has STUDIED**
+— never generic. And with NO direction from the user, the coach **auto-picks what's
+already identified as the user's WEAK area and trains them on it, unprompted** —
+"if given no directions, picks what is already identified as weak and trains the
+user on it without even being asked." A proactive, weakness-targeting coach. This
+is the course-sparring idea (P9) generalized to the whole Learn-with-Coach surface,
+driven by `openingWeakSpots` + SRS. Remind David when course-sparring lands.
+
+## 🚨 EMPIRICAL FINDING — subline discovery must be POSITION-based, not name-based (2026-06-15 probe)
+
+Probe of `buildSublines` v1 (named-branch primitive `findSiblingExtensionBranches`):
+- Caro Advance → **1** subline (Van der Wiel Attack only).
+- Italian Game → **0** sublines.
+Cause: `findSiblingExtensionBranches` only matches DB sub-variations *comma-named*
+under the EXACT canonical name, but the DB mostly uses COLONS ("Italian Game: Two
+Knights Defense", not "Italian Game, …"). Too thin for the locked "real depth".
+
+**Fix (next build step):** subline discovery = POSITION-based DB-tree walk —
+`findContinuationsAtPly(prefix)` finds EVERY DB continuation at a position
+regardless of naming. Walk the sub-tree under the variation: at STUDENT-to-move
+plies follow the recommended (main) reply; at OPPONENT-to-move plies BRANCH into
+each DB continuation (= a subline trigger); extend each along the DB to the
+middlegame terminus. Needs the student color (ply parity) → `buildSublines` takes
+the opening's color. v1 (`pgnToSans` + named-branch) is committed as the floor;
+the position-based walk replaces the discovery step.
 
 ## Decisions log (David, 2026-06-15)
 - ✅ **Scope = FULL** — dedicated syllabus/contents screen in The Academy (the
