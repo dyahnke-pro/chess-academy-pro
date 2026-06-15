@@ -45,6 +45,19 @@ async function api(method, path, body) {
   let j; try { j = JSON.parse(t); } catch { j = t; }
   return { status: r.status, j };
 }
+// Apple's relationship endpoints intermittently return 500 UNEXPECTED_ERROR
+// (build 52, 2026-06-15: the internal assign 500'd, so the build nearly never
+// reached the internal tester — David's "I want builds right away"). Retry
+// transient 5xx with backoff so a build reliably reaches testers.
+async function apiRetry(method, path, body, tries = 4) {
+  let last;
+  for (let i = 1; i <= tries; i++) {
+    last = await api(method, path, body);
+    if (last.status < 500) return last;
+    await new Promise((r) => setTimeout(r, 1500 * i));
+  }
+  return last;
+}
 
 const main = async () => {
   let buildId = process.env.TF_BUILD_ID;
@@ -59,8 +72,9 @@ const main = async () => {
   const comp = await api('PATCH', `/v1/builds/${buildId}`, { data: { type: 'builds', id: buildId, attributes: { usesNonExemptEncryption: false } } });
   console.log(`compliance: ${comp.status === 200 ? 'set' : comp.status}`);
 
-  // Internal group — instant, no review.
-  const intl = await api('POST', `/v1/betaGroups/${INTERNAL_GROUP}/relationships/builds`, { data: [{ type: 'builds', id: buildId }] });
+  // Internal group — instant, no review. Retry on transient 5xx so the build
+  // reliably reaches the internal tester (David) right away.
+  const intl = await apiRetry('POST', `/v1/betaGroups/${INTERNAL_GROUP}/relationships/builds`, { data: [{ type: 'builds', id: buildId }] });
   console.log(`internal assign: ${intl.status === 204 ? 'OK' : intl.status} ${intl.status >= 400 ? JSON.stringify(intl.j).slice(0, 160) : ''}`);
 
   // "What to Test" on the build's en-US localization (create or update).
@@ -88,7 +102,7 @@ const main = async () => {
   console.log(`whatsNew verified (${whatsNewValue.length} chars)`);
 
   // External group + Beta App Review.
-  const ext = await api('POST', `/v1/betaGroups/${EXTERNAL_GROUP}/relationships/builds`, { data: [{ type: 'builds', id: buildId }] });
+  const ext = await apiRetry('POST', `/v1/betaGroups/${EXTERNAL_GROUP}/relationships/builds`, { data: [{ type: 'builds', id: buildId }] });
   console.log(`external assign: ${ext.status === 204 ? 'OK' : ext.status} ${ext.status >= 400 ? JSON.stringify(ext.j).slice(0, 200) : ''}`);
 
   const sub = await api('POST', `/v1/betaAppReviewSubmissions`, { data: { type: 'betaAppReviewSubmissions', relationships: { build: { data: { type: 'builds', id: buildId } } } } });
