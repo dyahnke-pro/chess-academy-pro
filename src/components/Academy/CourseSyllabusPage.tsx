@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, CheckCircle2, Lock, Trophy, GraduationCap, PlayCircle } from 'lucide-react';
 import { getOpeningById } from '../../services/openingService';
 import { buildCourse } from '../../services/openingCourse';
+import { sublineWhyFact } from '../../services/courseWhyFacts';
 import { MAIN_LINE_INDEX, type Rung } from '../../utils/wlppLadder';
 import type { OpeningRecord } from '../../types';
 import type { CourseChapter } from '../../services/openingCourse';
@@ -190,6 +191,14 @@ function ChapterRow({ chapter, onOpen }: { chapter: CourseChapter; onOpen: () =>
       {sublines.length > 0 && (
         <div className="px-4 pb-3 pt-2 flex flex-col gap-1 border-t border-indigo-500/10" data-testid={`course-sublines-${chapter.n}`}>
           <p className="text-[10px] uppercase tracking-wide text-theme-text-muted/70">They might play</p>
+          {(() => {
+            // Selective frequency caption — only when the top deviation is a
+            // dominant or rare try (the rule: speak the % only when it adds value).
+            const why = sublineWhyFact(sublines[0]);
+            return why.text ? (
+              <p className="text-[11px] italic text-indigo-300/80" data-testid={`course-subline-why-${chapter.n}`}>{why.text}</p>
+            ) : null;
+          })()}
           {sublines.slice(0, 6).map((s) => (
             <div key={`${s.triggerMove}-${s.atPly}`} className="flex items-center gap-2 text-[11px] pl-1">
               <span className="font-mono font-semibold text-indigo-300 shrink-0">{s.triggerMove}</span>
