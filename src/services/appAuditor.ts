@@ -1047,8 +1047,10 @@ export async function loadAuditStreamConfig(): Promise<AuditStreamConfig | null>
     streamConfigHydrated = true;
     cachedStreamConfig = url && secret ? { url, secret } : null;
     // Fresh config → give streaming another chance (the secret may have
-    // changed since a prior 401 disabled it).
+    // changed since a prior 401 disabled it; the network may have recovered).
     streamAuthDisabled = false;
+    streamNetworkDisabled = false;
+    streamNetworkFailureStreak = 0;
     flushPreHydrationQueue();
     return cachedStreamConfig;
   } catch {
@@ -1139,6 +1141,16 @@ let streamPostFailureLastReport = 0;
 const STREAM_FAILURE_REPORT_THRESHOLD = 5;
 const STREAM_FAILURE_REPORT_INTERVAL_MS = 60_000;
 
+// Circuit-breaker for persistent NETWORK failures (status=null — endpoint
+// unreachable from this origin / CORS-blocked). Unlike a 401 these can be
+// transient, so reset on ANY success and latch off only after a run of
+// consecutive failures — long enough to ride a blip, short enough to kill the
+// per-audit retry storm within a turn (David 2026-06-15: 61 failed POSTs/
+// session dragging the UI). Reset when the config is re-set.
+let streamNetworkFailureStreak = 0;
+let streamNetworkDisabled = false;
+const STREAM_NETWORK_FAILURE_LIMIT = 20;
+
 /** Latch set when the server rejects our secret (401/403). A wrong
  *  secret is deterministic — retrying on every audit can't fix it, it
  *  just floods the network and the failure rollup (a production export
@@ -1156,7 +1168,7 @@ async function streamAuditEntry(entry: AuditEntry): Promise<void> {
   if (entry.kind === 'audit-stream-post-failed') return;
   // Auth was permanently rejected this session — don't keep hammering
   // the endpoint with a secret the server won't accept.
-  if (streamAuthDisabled) return;
+  if (streamAuthDisabled || streamNetworkDisabled) return;
   const cfg = cachedStreamConfig;
   if (!cfg) {
     // Boot window: hydration hasn't completed yet. Queue for replay
@@ -1209,9 +1221,18 @@ async function streamAuditEntry(entry: AuditEntry): Promise<void> {
       } else {
         maybeEmitStreamFailureRollup(response.status, null);
       }
+    } else {
+      // Success → the endpoint is reachable; reset the network breaker.
+      streamNetworkFailureStreak = 0;
     }
   } catch (err) {
     streamPostFailureCount += 1;
+    streamNetworkFailureStreak += 1;
+    // Latch streaming off after a sustained run of network failures so a
+    // persistently-unreachable endpoint can't retry-storm on every audit.
+    if (streamNetworkFailureStreak >= STREAM_NETWORK_FAILURE_LIMIT) {
+      streamNetworkDisabled = true;
+    }
     maybeEmitStreamFailureRollup(null, err);
   }
 }

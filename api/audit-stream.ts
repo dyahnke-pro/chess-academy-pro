@@ -111,6 +111,22 @@ export default async function handler(
   req: VercelRequest,
   res: VercelResponse,
 ): Promise<void> {
+  // CORS — the iOS Capacitor app posts from `capacitor://localhost` (cross-
+  // origin), and the custom `x-audit-secret` header forces a preflight. With
+  // no CORS headers the browser blocked EVERY POST → status=null network
+  // failure → the client retry-stormed (61×/session, David 2026-06-15
+  // slowness). Auth is the secret, not the origin, and no cookies/credentials
+  // are used, so `*` is safe. Must run BEFORE the secret check — preflight
+  // OPTIONS requests don't carry the custom header.
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'content-type, x-audit-secret');
+  res.setHeader('Access-Control-Max-Age', '86400');
+  if (req.method === 'OPTIONS') {
+    res.status(204).end();
+    return;
+  }
+
   const secret = req.headers['x-audit-secret'];
   const expected = process.env.AUDIT_STREAM_SECRET;
 
