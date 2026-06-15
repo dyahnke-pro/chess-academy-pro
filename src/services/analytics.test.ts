@@ -55,6 +55,18 @@ describe('crash kinds are NOT in the product-event allowlist', () => {
   });
 });
 
+describe('stockfish defects route to Error Tracking (David 2026-06-15)', () => {
+  it('engine error + stall route through the exception bridge (→ error report → autofix build)', () => {
+    for (const kind of ['stockfish-error', 'stockfish-analysis-stalled'] as const) {
+      expect(() =>
+        mirrorAuditEvent(entry({ kind, category: 'subsystem', summary: 'engine dead' })),
+      ).not.toThrow();
+      // Defects are $exceptions, never funnel events.
+      expect(auditKindToEvent(kind)).toBeUndefined();
+    }
+  });
+});
+
 describe('auditKindToEvent — curated allowlist', () => {
   it('maps high-signal product kinds to event names', () => {
     expect(auditKindToEvent('app-boot')).toBe('app_opened');

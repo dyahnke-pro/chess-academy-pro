@@ -319,6 +319,13 @@ const DEFECT_KINDS: ReadonlySet<AuditKind> = new Set<AuditKind>([
   // Board desync + silence-where-narration-expected
   'fen-desync',
   'walkthrough-narration-empty',
+  // Engine failures that kill the eval bar / analysis (David 2026-06-15:
+  // "we need errors like this to trigger error reports to trigger builds").
+  // Promote to PostHog Error Tracking → the posthog-error-watch cron detects
+  // the new $exception → triggers claude-autofix. A dead engine now reports
+  // and self-routes to a fix build instead of failing dark.
+  'stockfish-error',
+  'stockfish-analysis-stalled',
 ]);
 
 /** Send an exception to PostHog Error Tracking. Total — never throws. */
