@@ -412,6 +412,41 @@ All the same FEN-walk: set the root + color, follow the student's recommended
 system at student-to-move plies, branch on the opponent at opponent-to-move plies.
 "Anti-opening" and "defensive repertoire by first move" are just different roots.
 
+## 🔒 COURSE / WEAPON NATURE TAG — principled vs SURPRISE (David 2026-06-15)
+
+David: "surprise and off beat is how you catch an opponent out of prep." Correct —
+offbeat ≠ inferior. Catching someone out of book is a real, separate practical edge
+(they burn clock, they're on their own, an unfamiliar position beats a half-pawn).
+Tag the NATURE of a course/weapon:
+- **Principled / main-line** — objectively best, bulletproof.
+- **Surprise / out-of-prep** — offbeat, practically nasty, drags them off book
+  (Fantasy Caro, Smith-Morra, sideline gambits). Honest sub-label: "practically
+  excellent, objectively a hair worse."
+The COURSE is what makes a surprise weapon work — you know 15 moves of prepared
+venom, they guess on move 5. "Surprise Weapons" is its own sellable shelf. Earlier
+note's "don't recommend the Fantasy" was wrong-framed: it's not a MAIN-LINE pick,
+but it's a legitimate SURPRISE pick — tag it, don't dismiss it. (The engine eval +
+frequency still ground the "objectively a hair worse" honestly.)
+
+### 🔒 "DEVASTATING ANTI-OPENINGS NO ONE SEES" — a flagship, and it's COMPUTABLE (David 2026-06-15)
+
+David: "we want devastating anti openings that no one ever sees." This is a
+flagship shelf — and it's the punish-gem doctrine lifted to OPENING CHOICE, so it's
+GROUNDED, never invented (G3):
+- **"No one sees it" = low frequency** — `masterPlayLookup` game counts quantify
+  rarity. Pick lines few play.
+- **"Devastating" = engine-verified** — the OPPONENT'S most-common (autopilot)
+  reply has a negative eval delta into OUR prepared punish (Stockfish). The gold:
+  rare line × opponent's modal reply is an inaccuracy × we have the refutation.
+- **Falls out of the FEN-walk for FREE** — frequency + per-move eval are already
+  computed; flag a line "surprise weapon" when freq low AND opponent-top-reply
+  eval-delta negative-for-them. No new machinery.
+- **Honesty rail:** "devastating" is conditional on them being out of prep and
+  playing the natural move (= the premise). Against someone who KNOWS it, it's
+  offbeat-equal. The course makes YOU the one who knows it cold. Tag honestly with
+  rarity + the trap + the eval-when-they-play-natural — devastating AND true.
+- The surprise-weapon finder = the punish-gem miner pointed at opening choice.
+
 ## 🔒🔒 CORE PRINCIPLE — IT IS ALL POSITION-BASED / FEN-KEYED (David 2026-06-15, emphatic)
 
 The entire engine is keyed on POSITION (FEN), never move-names or PGN strings.
