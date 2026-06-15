@@ -395,9 +395,13 @@ Two packagings: standalone "Meet the Caro" courses, OR chapters inside a broader
 curation is PICKING the recommended weapon — the same prescriptive "we recommend X
 because Y" decision the course concept already rests on. Engine unchanged; flip the
 color, follow the (now-attacker) student's chosen system, branch on the defender.
-Accuracy note: a recommended anti-Caro weapon should be the Advance or Two Knights
-(principled), not the Fantasy (offbeat surprise). Anti-French recommend = the
-Advance (3.e5) — fixed structure, clear plans, dodges the Winawer.
+🔒 **DECISION (David 2026-06-15): the FANTASY (3.f3) IS our recommended anti-Caro
+weapon.** "If the Fantasy is good enough for Naroditsky to stand behind and teach,
+it's good enough for us." GM-backed → not dubious; aggressive, out-of-prep, and the
+poster child for the surprise-weapon thesis. Teach it at FULL depth (Naroditsky's
+content as the voice corpus; lines DB- + engine-grounded). This SUPERSEDES the
+earlier "anti-Caro = Advance/Two Knights, not Fantasy" note — that was too
+conservative. Anti-French recommend = the Advance (3.e5).
 
 **The clean generalization (David 2026-06-15): a COURSE = rooted at ANY position +
 a student color + a recommended system.** The root is just a FEN/short prefix, so
