@@ -9,6 +9,7 @@ import { routeChatIntent } from '../../services/coachSessionRouter';
 import { detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { extractMoveArrows } from '../../services/coachMoveExtractor';
+import { groundArrows } from '../../utils/arrowGrounding';
 import { detectInGameChatIntent } from '../../services/inGameChatIntent';
 import { tryCaptureForgetIntent, tryCaptureOpeningIntent } from '../../services/openingIntentCapture';
 import { tryRouteIntent } from '../../services/coachIntentRouter';
@@ -882,6 +883,18 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           // matching callback. WO-FOUNDATION-02 (continued).
           const { cleanText: textWithoutBoardTags, commands: annotations } =
             parseBoardTags(answer.text);
+          // Geometry-ground every LLM-authored arrow against the live board:
+          // drop any the from-piece can't actually make — a knight arrow that
+          // isn't an L-move, an arrow from an empty square, a slider through a
+          // blocker. The brain emits [BOARD: arrow:...] markers freely and gets
+          // the geometry wrong (David 2026-06-15: a bogus knight arrow on the
+          // play board). CoachTeachPage already grounds at its arrow site; this
+          // in-game chat path did not, so the bad arrows reached the board.
+          for (const cmd of annotations) {
+            if (cmd.type === 'arrow' && cmd.arrows) {
+              cmd.arrows = groundArrows(cmd.arrows, fen);
+            }
+          }
           const { actions: streamedActions } = parseActions(answer.text);
           for (const action of streamedActions) {
             void logAppAudit({
