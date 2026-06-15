@@ -2919,6 +2919,33 @@ straight to main.
 **iOS / TestFlight builds** are produced locally via Capacitor when
 needed.
 
+**🚨 BUILD TO INTERNAL TESTFLIGHT IS THE DEFAULT — David should NEVER have
+to ask for it (David 2026-06-15: "that is now the obvious default for future
+sessions right? do i have to keep saying it?" — answer: NO, you don't).**
+When a change lands on `main` and David needs to test it on his iPhone (any
+runtime/UI/coach/engine/voice change — i.e. almost everything), the session
+ALSO triggers the iOS TestFlight build WITHOUT being asked:
+
+1. Land the change on `main` (web deploy, per the policy above).
+2. Trigger the iOS build: the `daily-deploy.yml` workflow
+   (`mcp__github__actions_run_trigger` → `workflow_dispatch` on `main`). It
+   builds via Xcode Cloud, waits for VALID, and **auto-distributes to BOTH
+   the internal group ("Chess Academy Pro" — David, instant, no review) AND
+   the external "Beta Test" group (after Apple Beta App Review)** via
+   `scripts/ci/distribute-testflight.mjs`.
+3. The internal assign is instant — David installs from TestFlight in
+   minutes, no review wait. If the internal assign returns a transient Apple
+   5xx, the script now retries (apiRetry); if it ever still fails, re-run the
+   assign via the ASC API directly.
+4. Watch the build to VALID + distribute, confirm the build number, and tell
+   David it's installable. THEN run the post-deploy audit / pull the audit
+   stream for the surfaces touched.
+
+Batching still applies (don't fire a build per commit — build once the body
+of work David wants to test is complete), but the build-to-internal step
+itself is NOT optional and NOT something to ask about. It's the on-device
+delivery half of "shipped."
+
 **Don't ask for permission to push.** Just do it. Asking adds
 round-trips David doesn't want.
 
