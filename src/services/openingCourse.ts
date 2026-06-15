@@ -9,6 +9,30 @@ import {
   type Rung,
 } from '../utils/wlppLadder';
 import { buildVariationTabs } from './variationTabs';
+import sublinesData from '../data/course-sublines.json';
+
+/** A frequency-derived subline of a chapter — an opponent deviation, ranked by
+ *  how often it's played, walked to the middlegame. Precomputed offline by
+ *  `scripts/build-course-sublines.mjs` from the masters DB (G3 — never invented). */
+export interface CourseSubline {
+  /** The opponent move that triggers this subline (SAN). */
+  triggerMove: string;
+  /** Canonical ECO name of the resulting line. */
+  name: string;
+  /** Share of master games at this node (e.g. 20 = 20%). Ranked desc. */
+  pct: number;
+  /** Master game count behind this deviation. */
+  games: number;
+  /** The subline's moves (SAN) to the middlegame terminus. */
+  moves: string[];
+  /** Ply along the variation spine where this deviation branches. */
+  atPly: number;
+  /** Whether the trimmed line reaches a middlegame. */
+  reachesMiddlegame: boolean;
+}
+
+type SublinesByOpening = Record<string, Record<string, CourseSubline[]>>;
+const SUBLINES = sublinesData as SublinesByOpening;
 
 // The COURSE view of an opening (2026-06-15). Reframes an opening as a
 // GM-style course: a numbered list of CHAPTERS (the main-line trunk + the
@@ -46,6 +70,10 @@ export interface CourseChapter {
   /** 0..100 over this chapter's four rungs. */
   percent: number;
   status: ChapterStatus;
+  /** Frequency-ranked opponent deviations inside this chapter (the second level
+   *  of the tree — the depth that makes it a course). Empty for the main-line
+   *  chapter and for forcing variations with no real deviation. */
+  sublines: CourseSubline[];
 }
 
 export interface CourseNextStep {
@@ -93,6 +121,7 @@ function buildChapter(
   label: string,
   isMainLine: boolean,
   summary: string,
+  sublines: CourseSubline[],
 ): CourseChapter {
   const rungs: CourseChapterRung[] = RUNGS.map((rung) => ({
     rung,
@@ -115,6 +144,7 @@ function buildChapter(
     totalRungs,
     percent: pct(completedRungs, totalRungs),
     status,
+    sublines,
   };
 }
 
@@ -128,9 +158,11 @@ export function buildCourse(opening: OpeningRecord): OpeningCourse {
   const tabs = buildVariationTabs(opening.id, opening.variations);
   const variations = opening.variations ?? [];
 
+  const openingSubs = SUBLINES[opening.id] ?? {};
   const chapters: CourseChapter[] = [];
 
-  // Chapter 1 — the trunk (main line). Summary from the opening overview.
+  // Chapter 1 — the trunk (main line). Summary from the opening overview. The
+  // main line carries no precomputed sublines (v1 derives them per variation).
   chapters.push(
     buildChapter(
       opening,
@@ -139,15 +171,18 @@ export function buildCourse(opening: OpeningRecord): OpeningCourse {
       'Main Line',
       true,
       firstSentence(opening.overview),
+      [],
     ),
   );
 
-  // Chapters 2..N — the curated variation tabs, in their pedagogical order.
+  // Chapters 2..N — the curated variation tabs, in their pedagogical order, each
+  // with its frequency-ranked sublines (the opponent's deviations within it).
   for (const tab of tabs) {
     const v = variations[tab.index];
     const summary = firstSentence(v?.overview ?? v?.explanation);
+    const sublines = openingSubs[String(tab.index)] ?? [];
     chapters.push(
-      buildChapter(opening, tab.index, chapters.length + 1, tab.label, false, summary),
+      buildChapter(opening, tab.index, chapters.length + 1, tab.label, false, summary, sublines),
     );
   }
 

@@ -133,46 +133,75 @@ export function CourseSyllabusPage(): JSX.Element {
 
 const RUNG_SHORT: Record<Rung, string> = { watch: 'Watch', learn: 'Learn', practice: 'Practice', play: 'Play' };
 
+/** The specific tail of an ECO name ("Caro-Kann Defense: Advance Variation,
+ *  Tal Variation" → "Advance Variation, Tal Variation"). */
+function subName(name: string): string {
+  return name.includes(':') ? name.split(':').slice(1).join(':').trim() : name;
+}
+
 function ChapterRow({ chapter, onOpen }: { chapter: CourseChapter; onOpen: () => void }): JSX.Element {
   const done = chapter.status === 'complete';
+  const sublines = chapter.sublines;
   return (
-    <button
-      type="button"
-      onClick={onOpen}
-      className="w-full text-left rounded-2xl bg-theme-surface border-2 border-indigo-500/20 hover:border-indigo-400/50 transition-colors p-4 flex flex-col gap-2.5"
+    <div
+      className="rounded-2xl bg-theme-surface border-2 border-indigo-500/20 overflow-hidden"
       data-testid={`course-chapter-${chapter.n}`}
     >
-      <div className="flex items-center gap-3">
-        <span className={`shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${done ? 'bg-emerald-500/20 text-emerald-300' : 'bg-indigo-500/20 text-indigo-200'}`}>
-          {done ? <CheckCircle2 size={16} /> : chapter.n}
-        </span>
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-bold truncate">{chapter.label}</p>
-          {chapter.summary && <p className="text-[11px] truncate" style={{ color: 'var(--color-text-muted)' }}>{chapter.summary}</p>}
-        </div>
-        <span className="text-[11px] font-semibold text-indigo-300 shrink-0">{chapter.percent}%</span>
-        <ChevronRight size={16} className="text-indigo-400/60 shrink-0" />
-      </div>
-
-      {/* WLPP rung row */}
-      <div className="flex items-center gap-1.5 pl-10">
-        {chapter.rungs.map((r) => (
-          <span
-            key={r.rung}
-            className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${
-              r.complete
-                ? 'bg-indigo-500/25 text-indigo-200'
-                : r.unlocked
-                  ? 'bg-white/5 text-theme-text-muted'
-                  : 'bg-white/5 text-theme-text-muted/40'
-            }`}
-            title={r.complete ? `${RUNG_SHORT[r.rung]} — done` : r.unlocked ? `${RUNG_SHORT[r.rung]} — unlocked` : `${RUNG_SHORT[r.rung]} — locked`}
-          >
-            {!r.complete && !r.unlocked ? <Lock size={9} className="inline mb-0.5 mr-0.5" /> : null}
-            {RUNG_SHORT[r.rung]}
+      <button
+        type="button"
+        onClick={onOpen}
+        className="w-full text-left p-4 flex flex-col gap-2.5 hover:bg-indigo-500/5 transition-colors"
+      >
+        <div className="flex items-center gap-3">
+          <span className={`shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${done ? 'bg-emerald-500/20 text-emerald-300' : 'bg-indigo-500/20 text-indigo-200'}`}>
+            {done ? <CheckCircle2 size={16} /> : chapter.n}
           </span>
-        ))}
-      </div>
-    </button>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-bold truncate">{chapter.label}</p>
+            {chapter.summary && <p className="text-[11px] truncate" style={{ color: 'var(--color-text-muted)' }}>{chapter.summary}</p>}
+          </div>
+          <span className="text-[11px] font-semibold text-indigo-300 shrink-0">{chapter.percent}%</span>
+          <ChevronRight size={16} className="text-indigo-400/60 shrink-0" />
+        </div>
+
+        {/* WLPP rung row */}
+        <div className="flex items-center gap-1.5 pl-10">
+          {chapter.rungs.map((r) => (
+            <span
+              key={r.rung}
+              className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${
+                r.complete
+                  ? 'bg-indigo-500/25 text-indigo-200'
+                  : r.unlocked
+                    ? 'bg-white/5 text-theme-text-muted'
+                    : 'bg-white/5 text-theme-text-muted/40'
+              }`}
+              title={r.complete ? `${RUNG_SHORT[r.rung]} — done` : r.unlocked ? `${RUNG_SHORT[r.rung]} — unlocked` : `${RUNG_SHORT[r.rung]} — locked`}
+            >
+              {!r.complete && !r.unlocked ? <Lock size={9} className="inline mb-0.5 mr-0.5" /> : null}
+              {RUNG_SHORT[r.rung]}
+            </span>
+          ))}
+        </div>
+      </button>
+
+      {/* Sublines — the opponent's deviations within this chapter, ranked by how
+          often they're played (the second level of the tree). */}
+      {sublines.length > 0 && (
+        <div className="px-4 pb-3 pt-2 flex flex-col gap-1 border-t border-indigo-500/10" data-testid={`course-sublines-${chapter.n}`}>
+          <p className="text-[10px] uppercase tracking-wide text-theme-text-muted/70">They might play</p>
+          {sublines.slice(0, 6).map((s) => (
+            <div key={`${s.triggerMove}-${s.atPly}`} className="flex items-center gap-2 text-[11px] pl-1">
+              <span className="font-mono font-semibold text-indigo-300 shrink-0">{s.triggerMove}</span>
+              <span className="truncate flex-1" style={{ color: 'var(--color-text-muted)' }}>{subName(s.name)}</span>
+              <span className="text-theme-text-muted/60 shrink-0">{s.pct}%</span>
+            </div>
+          ))}
+          {sublines.length > 6 && (
+            <p className="text-[10px] text-theme-text-muted/60 pl-1">+{sublines.length - 6} more</p>
+          )}
+        </div>
+      )}
+    </div>
   );
 }

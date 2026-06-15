@@ -104,6 +104,32 @@ describe('buildCourse', () => {
     expect(c.nextStep).toBeNull();
   });
 
+  it('attaches frequency-ranked sublines from the data file to variation chapters', () => {
+    // caro-kann is in course-sublines.json; variation chapters pick up their
+    // sublines by index. The main-line chapter carries none (v1).
+    const c = buildCourse(
+      buildOpeningRecord({
+        id: 'caro-kann',
+        name: 'Caro-Kann Defence',
+        color: 'black',
+        variations: [{ name: 'Classical', pgn: 'e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5', explanation: 'x' }],
+      }),
+    );
+    expect(c.chapters[0].sublines).toEqual([]); // main line — none
+    const variationChapter = c.chapters[1];
+    expect(variationChapter.sublines.length).toBeGreaterThan(0);
+    // ranked most → least common
+    const games = variationChapter.sublines.map((s) => s.games);
+    expect(games).toEqual([...games].sort((a, b) => b - a));
+    // every subline carries a frequency %
+    for (const s of variationChapter.sublines) expect(typeof s.pct).toBe('number');
+  });
+
+  it('leaves sublines empty for an opening not in the data file', () => {
+    const c = course();
+    for (const ch of c.chapters) expect(ch.sublines).toEqual([]);
+  });
+
   it('marks Watch unlocked and later rungs locked until the prior is done', () => {
     const c = course();
     const rungs = c.chapters[0].rungs;

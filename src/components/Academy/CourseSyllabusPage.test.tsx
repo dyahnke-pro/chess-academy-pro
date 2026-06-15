@@ -59,6 +59,14 @@ describe('CourseSyllabusPage', () => {
     expect(screen.getByTestId('course-progress-label')).toHaveTextContent('100%');
   });
 
+  it('renders a chapter\'s sublines ("They might play") when the data has them', async () => {
+    mockGet.mockResolvedValue(opening({ id: 'caro-kann' }));
+    renderAt('caro-kann');
+    // chapter 2 = first variation (index 0), which carries sublines for caro-kann
+    const subs = await screen.findByTestId('course-sublines-2');
+    expect(subs).toHaveTextContent('They might play');
+  });
+
   it('shows a not-found state for a missing course', async () => {
     mockGet.mockResolvedValue(undefined);
     renderAt('nope');
