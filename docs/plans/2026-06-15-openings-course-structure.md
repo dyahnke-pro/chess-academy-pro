@@ -36,6 +36,28 @@ line.
 
 ---
 
+## 🔒 ABSOLUTE RULE — EVERY recommended move has a WHY (David 2026-06-15)
+
+A course is a **personal hand-picked weapon**. The student isn't paying for a
+list of moves — they're paying for **the reasoning behind each pick**. So:
+
+- **EVERY recommended move (variation AND subline, every ply we recommend)
+  carries an exact "why we play this" explanation.** "Bf5 — because it solves
+  the bad-bishop before …e6 ever traps it." No bare moves, ever.
+- **Make it a HARD GATE:** a course move with no why does not ship (a
+  `courseMoveWhy` test, same class as `wlppNarration` / `narrationAccuracy`).
+- **The why is GROUNDED, never invented (G0/G3).** Sourced from: DB frequency
+  ("the main weapon, N% of masters"), engine confirmation (Stockfish holds the
+  edge), and the book/concept corpus (the idea) — voiced, not made up. The
+  `explainBestMoveGrounded` / `groundedAnswer.ts` pattern is the template.
+- ✅ **Why-source = BOTH (David 2026-06-15):** grounded/computed why on EVERY
+  move from day one (DB-derived floor — nothing ships without a why) + authored
+  weapon-grade why layered on the flagship masterclass set over time. Same
+  floor/ceiling split as the subline sources. No-move-without-a-why is the gate.
+
+This SUPERSEDES the "DB-derived sublines are lighter on prose" framing: the moves
+may be DB-derived, but the WHY is mandatory on every one.
+
 ## THE VOCABULARY — variations vs sublines (David, 2026-06-15, the key articulation)
 
 The free/paid line is a DEPTH line, and David named it precisely:
@@ -52,6 +74,15 @@ variations + sublines.** Buy the course, you get it all (no further gating
 inside a course). The DEPTH (the sublines) is the product; the variations are
 already free, so what's paid for is the complete gap-free tree + the syllabus +
 prescriptive coaching wrapped around it.
+
+**🔒 PAYWALL RULES (David 2026-06-15, firm):**
+- **The Openings tab gives EVERY variation, free.** ALL variations, not a
+  curated subset — main line + all variations, no gate.
+- **NEVER paywall an individual variation.** Variations are never the paid unit.
+- **The ONLY paid thing is the COURSE** (per opening) = the sublines (depth) +
+  the course wrapper (syllabus / prescriptive coaching / adaptive trainer).
+- **Buying a course unlocks the whole course** — no per-variation, per-subline,
+  or per-chapter gating inside it.
 
 **Structural consequence: the syllabus is a TWO-LEVEL tree** (Chapter =
 variation → Sublines), exactly the Chessable nested contents tree. The course
@@ -181,16 +212,82 @@ already exists for that line.
   for not-yet-purchased classes. Build the seam; defer the actual purchase flow
   / price model until after the experience is built (David's call).
 - **P7 (later) — Warm narration carve-out.** Deferred; separate decision.
-- **P8 (album 2) — Curriculum ACROSS courses** ("Beginner → Intermediate →
+- **P8 — ADAPTIVE subline trainer (David 2026-06-15).** One view that teaches /
+  drills the DIFFERENT sublines of a single variation, adaptively — see the
+  "Adaptive trainer" section below. The premium "train the variation" experience.
+- **P9 (album 2) — Curriculum ACROSS courses** ("Beginner → Intermediate →
   Advanced" path).
 
-## Open decisions for David
-- **Scope of v1:** Light (course header + numbered tabs on the existing page) vs
-  Full (dedicated syllabus/contents screen as the opening's entry). Leaning
-  Full — the contents page is *the* GM-course feeling. P1–P3 are shared either
-  way, so P1 starts now regardless.
-- **Which openings first:** the masterclass set (richest data) as the pilot,
-  then pro-reps, then DB-only.
+## Adaptive trainer (David 2026-06-15) — "one view, different sublines for the same variation"
+
+Two senses of "adaptive", both buildable on existing machinery, not exclusive:
+
+1. **Board-adaptive (branching live tree)** — one view; the engine plays the
+   realistic opponent deviations within the variation, and the course routes
+   into + teaches the matching subline as it comes up ("they played h4 — here's
+   how we meet it"). The "never out of book" experience made interactive. Reuses
+   `OpeningPlayMode` (locked-to-line → adaptive Stockfish) but locked to the
+   VARIATION's sub-tree instead of a single line; the subline set is the
+   DB-derived branches.
+2. **Learner-adaptive (SRS / weakness)** — the view cycles the variation's
+   sublines, surfacing the ones the student is weakest on / due for review first
+   (the "due today" pulse, scoped to a variation). Reuses `openingWeakSpots` +
+   the flashcard/SRS layer.
+
+**Rec:** build board-adaptive first (it's the novel, course-defining feel),
+weight subline selection by the learner-adaptive signal. Pairs naturally with
+DB-derived sublines (structural lines drill well even before deep narration).
+
+### 🔒 LEARNER-ADAPTIVE MUST TIE INTO THE TRAINING LOOP (David 2026-06-15)
+
+The learner-adaptive trainer is NOT a standalone drill — it READS FROM and WRITES
+TO the app's existing training loop, closing the learning loop with no gaps
+(per the "everything wired" audit doctrine). Concretely:
+
+- **READS (which subline to drill next):** the same signals the Training Plan
+  uses — `openingWeakSpots` (the student's weak lines), SRS-due cards, and the
+  new/unlearned-line set. Reuse `buildTodaysReps()`'s sources
+  (`TrainingPlanRolodexPage`) so the course surfaces the subline the student is
+  weakest on / is due to review FIRST.
+- **WRITES (results feed the loop back):** a drilled subline enrolls into SRS
+  (the existing `markRungComplete` → SRS auto-enroll path), updates
+  `openingWeakSpots` on misses, and so the course's sublines appear in
+  "Today's Reps" — the course becomes part of the daily training agenda, not a
+  separate place.
+- **Net:** the training loop feeds the course (drill my weak Caro sublines
+  today), and the course feeds the training loop (today's course misses become
+  tomorrow's reps). Same SRS/weakness substrate the rest of the app already
+  runs on — no parallel progress system.
+
+## Decisions log (David, 2026-06-15)
+- ✅ **Scope = FULL** — dedicated syllabus/contents screen in The Academy (the
+  course front door), not a light skin on the openings page.
+- ✅ **Home = The Academy tab** (second section alongside the audiobook).
+- ✅ **Monetization = pay-per-class**, model settled AFTER it's built; build the
+  per-course gating SEAM only.
+- ✅ **Paywall line:** every variation FREE (all of them, never gated); the
+  COURSE is the only paid unit = sublines + wrapper; buying unlocks the whole
+  course.
+- ✅ **Sublines = BOTH approaches, not either/or (David 2026-06-15).**
+  - **DB-derived** builds the COMPLETE TREE FAST — every variation's sub-branches
+    from the Lichess DB via the existing sibling/continuation machinery, fully
+    grounded (G3). This is the FLOOR: the whole shelf reaches "complete, gap-free
+    tree" quickly, every move carrying a grounded WHY (the absolute rule).
+  - **Authored (deep-build grade)** is the CEILING — hand-built to masterclass
+    standard (two-register narration, lead-the-eye arrows, sources, the
+    prescriptive weapon-grade "why"), opening-by-opening, flagships first. The
+    long content campaign per §G9.1.
+  - DB-derived is NOT the endpoint — it's the fast floor that the authoring
+    deepens over time. Both ship; the tree is complete now, the quality climbs.
+- ✅ **Adaptive trainer = board-adaptive first, weighted by the learner-adaptive
+  (weak-spot / SRS) signal.**
+- ✅ **Pilot openings = the masterclass set** (richest data), then pro-reps, then
+  DB-only.
+
+## Remaining for David (later)
+- Exact pay-per-class price model + purchase flow (after build).
+- Does the Openings tab stay the free library long-term (recommended) or get
+  absorbed into The Academy.
 
 ## Next-session pickup
 Start at P1: `src/services/openingCourse.ts` + `openingCourse.test.ts`, pure
