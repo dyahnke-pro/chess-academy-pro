@@ -168,9 +168,10 @@ few genuine defects (fail BOTH levels). Status:
   inherently passive opening; eval −1.03, within floor; data-only re-sync, no lesson).
   ⚠️ CAVEAT: the Old Indian is passive by nature — no variation here is clearly +eval;
   this is "least-bad, clear practical improvement (31%→48%)," not a +eval triumph.
-- ⬜ **Philidor Modern d3 Hybrid** (eval −2.06 floor-breach, but 58% M / 49% club) —
-  needs a deep look: likely a deep-line over-extension artifact (trim) vs the line
-  itself; masters 58% suggests the early line is fine.
+- ✅ **Philidor Modern d3 Hybrid** — confirmed deep over-extension: sound through
+  move 10 (…Bxc4 dxc4, −0.44) then …Nd4?? craters it to −1.82. Re-anchored to the
+  sound …Nb4-a6 reroute targeting White's doubled c-pawns: −0.48, 58% M / 49% club
+  (data-only re-sync). The win% 'keep' was masking a fixable tail blunder.
 - KEEPS confirmed by club ≥45%: Caro main/Classical/Advance/Panov/Fantasy/Exchange/
   Tartakower; Old Indian Czech/Janowski/Ukrainian/Main-d5/Seirawan/Be2; Philidor
   main/Hanham/Nimzowitsch/Exchange/Counter-Gambit; Scandinavian main/Qa5/Icelandic/

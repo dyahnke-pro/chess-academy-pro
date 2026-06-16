@@ -1376,8 +1376,8 @@
       },
       {
         "name": "Modern d3 Hybrid",
-        "pgn": "e4 e5 Nf3 d6 d3 Nf6 g3 Be7 Bg2 O-O O-O Nc6 Nbd2 Be6 Re1 Qd7 a4 a5 Nc4 Bxc4 dxc4 Nd4 Nxd4 exd4 f4 c5 e5 dxe5 fxe5",
-        "explanation": "The Modern d3 hybrid creates a King's Indian Attack-like structure where White plays d3, g3, Bg2 instead of the traditional d4. Black develops naturally with ...Nf6, ...Be7, ...O-O, and ...Nc6, maintaining a solid position. The piece on e6 is well-placed supporting the center and can go to c4 after Nc4. After the center opens with e5 and f4, Black's centralized pieces and the passed d4 pawn create lasting counterplay against White's kingside ambitions."
+        "pgn": "e4 e5 Nf3 d6 d3 Nf6 g3 Be7 Bg2 O-O O-O Nc6 Nbd2 Be6 Re1 Qd7 a4 a5 Nc4 Bxc4 dxc4 Nb4 b3 Na6",
+        "explanation": "A solid, low-theory King's-Indian-Attack-style Philidor. Black develops naturally and, after the trade on c4 saddles White with doubled c-pawns, reroutes the knight via b4-a6-c5 to target them. Comfortable and sound."
       }
     ],
     "trapLines": [],
