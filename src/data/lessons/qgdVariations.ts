@@ -14,6 +14,15 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['book:qgd', 'concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'];
 
 export const QGD_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'qgd::Orthodox Defense Main Line': {
+    openingId: 'qgd', title: 'QGD — The Orthodox Main Line', minutes: 11, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'oqd1', moves: 'd4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 Nbd7', say: "The Orthodox Queen's Gambit Declined — the most solid defence in chess. Black builds a bombproof wall: …e6, …Be7, …O-O and …Nbd7, conceding a little space in return for a position with no weaknesses whatsoever. The whole art is to free it without cracking it.", sayShort: '…Nbd7 — the rock-solid Orthodox wall.', highlights: [H('e6')] }),
+      b({ id: 'oqd2', moves: 'd4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 Nbd7 Rc1 c6 Bd3 dxc4 Bxc4 Nd5', say: "Here is Capablanca's famous freeing manoeuvre. After …dxc4 prises open the bishop, …Nd5! offers a string of trades — the knight hits the g5-bishop and the c3-knight at once. Trading pieces is exactly how Black relieves the cramp of the QGD; less wood on the board means more room to breathe.", sayShort: "…Nd5 — Capablanca's freeing trade.", arrows: [A('d5', 'c3')], highlights: [H('d5')] }),
+      b({ id: 'oqd3', moves: 'd4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 Nbd7 Rc1 c6 Bd3 dxc4 Bxc4 Nd5 Bxe7 Qxe7 O-O Nxc3 Rxc3', say: "The trades roll off: Bxe7 …Qxe7 swaps the dark-squared bishops, and …Nxc3 Rxc3 removes a pair of knights. Each exchange loosens White's grip a notch and hands Black more elbow room. The position is simplifying straight toward equality.", sayShort: '…Nxc3 — trade down, loosen the grip.', highlights: [H('c3')] }),
+      b({ id: 'oqd4', moves: 'd4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 Nbd7 Rc1 c6 Bd3 dxc4 Bxc4 Nd5 Bxe7 Qxe7 O-O Nxc3 Rxc3 e5 dxe5 Nxe5 Nxe5 Qxe5', say: "…e5! — the freeing break that crowns the whole plan. The pawn strikes the centre, and after the exchanges the queen lands on e5, central and active. The cramp is gone, the structure is symmetrical and sound, and Black is fully equal. This is Capablanca's recipe, still the backbone of the QGD a century on: defend like a fortress, then free with …e5.", sayShort: '…e5 — the freeing break, fully equal.', highlights: [H('e5')] }),
+    ],
+  },
   'qgd::Tartakower Variation': {
     openingId: 'qgd', title: 'QGD — The Tartakower (…b6 Hanging Pawns)', minutes: 11, orientation: 'black', sources: SRC,
     beats: [
