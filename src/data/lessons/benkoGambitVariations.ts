@@ -10,6 +10,39 @@ interface BeatInit { id: string; moves: string; say: string; sayShort?: string; 
 function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return { ...rest, moves: moves.trim().split(/\s+/) }; }
 
 export const BENKO_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'benko-gambit::Fully Accepted: Main Line': {
+    openingId: 'benko-gambit', title: 'Benko Gambit — Fully Accepted Main Line', minutes: 11, orientation: 'black',
+    sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
+    beats: [
+      b({ id: 'fa1', moves: 'd4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6', say: "The Benko Gambit. Black throws in …b5 and, after the trades, gives up the pawn for good with …Bxa6. There is no immediate threat and no cheap trick — Black is simply buying the two half-open files on the queenside and a beautiful diagonal for the dark-squared bishop. It is the soundest, most positional gambit in chess: long-term pressure for a single pawn.", sayShort: '…Bxa6 — sac the pawn for queenside files.', highlights: [H('a6', SOFT)] }),
+      b({ id: 'fa2', moves: 'd4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1', say: "Black trades the light-squared bishops with …Bxf1, and White must recapture with the king — Kxf1, forfeiting the right to castle. That is a quiet triumph for the gambiteer: White's king is stuck in the centre and will spend several moves shuffling to safety while Black develops with gain of time.", sayShort: "…Bxf1 — strip White's castling rights.", highlights: [H('f1', SOFT)] }),
+      b({ id: 'fa3', moves: 'd4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 g3 Bg7 Kg2 O-O Nf3 Nbd7', say: "Black assembles the dream Benko set-up: …g6 and …Bg7 putting the bishop on the long diagonal, …O-O for safety, …Nbd7 heading for the queenside. White's king crawls to g2. Every black piece has a natural, purposeful home — and they all point at White's queenside.", sayShort: '…Bg7, …Nbd7 — the Benko machine assembles.', highlights: [H('g7')] }),
+      b({ id: 'fa4', moves: 'd4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 g3 Bg7 Kg2 O-O Nf3 Nbd7 Re1 Qa5 Qc2 Rfb8 Bd2 Ng4 h3 Nge5', say: "Here is the full Benko engine running: …Qa5 and …Rfb8 double the rooks on the open a- and b-files, and …Ng4-e5 plants a knight on the magnificent central outpost. Both rooks, the queen and the bishop all bear down on White's queenside. This is why the Benko is feared: the pawn is long gone, but Black's pressure is permanent and easy to play, while White must defend passively for fifty moves. The practical score is excellent — Black wins here far more often than the pawn count suggests.", sayShort: '…Qa5, …Rfb8, …Ne5 — permanent pressure.', highlights: [H('a5'), H('b8'), H('e5')] }),
+    ],
+  },
+
+  'benko-gambit::Fianchetto Variation': {
+    openingId: 'benko-gambit', title: 'Benko Gambit — the Fianchetto Variation', minutes: 10, orientation: 'black',
+    sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
+    beats: [
+      b({ id: 'bf1', moves: 'd4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 g6', say: "The Benko Gambit with an early …g6 — Black signals the fianchetto at once. White will set up calmly, but the gambit's logic is unchanged: surrender the b-pawn to open the a- and b-files and prepare the long-diagonal fianchetto. Pressure, not material, is the currency.", sayShort: '…g6 — fianchetto-first Benko.', highlights: [H('g6', SOFT)] }),
+      b({ id: 'bf2', moves: 'd4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 g6 Nc3 Bxa6 e4 Bxf1 Kxf1', say: "Black recaptures …Bxa6 and immediately trades it off with …Bxf1, forcing Kxf1. The same Benko dividend: White's king loses castling and is stranded in the centre, buying Black time to mass on the queenside.", sayShort: '…Bxf1 — King to f1, no castling.', highlights: [H('f1', SOFT)] }),
+      b({ id: 'bf3', moves: 'd4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 g6 Nc3 Bxa6 e4 Bxf1 Kxf1 d6 g3 Bg7 Kg2 O-O Nf3 Nbd7', say: "Black completes development — …d6, …Bg7 on the diagonal, …O-O, …Nbd7 — while White's king tucks onto g2 behind its fianchetto. Black's structure is harmonious and the plan needs no calculation: occupy the open files and squeeze.", sayShort: '…Bg7, …O-O — harmonious Benko setup.', highlights: [H('g7')] }),
+      b({ id: 'bf4', moves: 'd4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 g6 Nc3 Bxa6 e4 Bxf1 Kxf1 d6 g3 Bg7 Kg2 O-O Nf3 Nbd7 Re1 Qa5 Qc2 Rfb8', say: "…Qa5 and …Rfb8 complete the Benko picture — the queen and both rooks swing onto the a- and b-files, pressing White's queenside pawns and the c3-knight. There is the tabiya: full, lasting compensation for the pawn, an easy plan for Black and a long passive defence for White. The Benko wins games precisely because that pressure never goes away.", sayShort: '…Qa5, …Rfb8 — files seized, lasting pressure.', highlights: [H('a5'), H('b8')] }),
+    ],
+  },
+
+  'benko-gambit::King Walk Variation': {
+    openingId: 'benko-gambit', title: 'Benko Gambit — the King Walk', minutes: 10, orientation: 'black',
+    sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
+    beats: [
+      b({ id: 'kw1', moves: 'd4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1', say: "The King Walk line — the main accepted Benko, named for White's wandering monarch. Black sacrifices the pawn, recaptures …Bxa6, and trades it for the f1-bishop, forcing Kxf1. White's king has no castle to run to; it must walk to safety on foot.", sayShort: '…Bxf1 Kxf1 — the king must walk.', highlights: [H('f1', SOFT)] }),
+      b({ id: 'kw2', moves: 'd4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2', say: "Black develops …g6, …Bg7 and …O-O while White's king completes its trek to g2. The fianchettoed bishop rakes the long diagonal, and Black is fully mobilised — the gambit pawn already forgotten, the pressure just beginning.", sayShort: '…Bg7, …O-O — Black fully mobilised.', highlights: [H('g7')] }),
+      b({ id: 'kw3', moves: 'd4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 a4 Qa5', say: "…Nbd7 develops the last piece; White grabs queenside space with a4, but …Qa5 pins it down — the queen eyes the a4-pawn, the c3-knight and the queenside dark squares. Black's pieces are already swarming the wing where White is weakest.", sayShort: '…Qa5 — pin down a4 and the queenside.', highlights: [H('a5'), H('a4', SOFT)] }),
+      b({ id: 'kw4', moves: 'd4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 a4 Qa5 Re1 Rfb8', say: "…Rfb8 brings the rook to the half-open b-file, completing the queenside battery. There is the King Walk tabiya: the queen on a5, rooks on a8 and b8, the bishop on g7 — every piece pressing White's queenside, with White's king and rooks tied to passive defence. Classic, permanent Benko compensation, and a practical scoring machine for Black.", sayShort: '…Rfb8 — the queenside battery is complete.', highlights: [H('b8'), H('a5')] }),
+    ],
+  },
+
   'benko-gambit::Benko Declined: Nf3 System': {
     openingId: 'benko-gambit', title: 'Benko — The Declined (Nf3 System)', minutes: 10, orientation: 'black',
     sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
