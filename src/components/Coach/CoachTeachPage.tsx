@@ -12,12 +12,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
-import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2 } from 'lucide-react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
 import { NarrationArrowOverlay } from './NarrationArrowOverlay';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
+import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { useTeachWalkthrough } from '../../hooks/useTeachWalkthrough';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
@@ -69,6 +70,7 @@ import { ChatInput } from './ChatInput';
 import { DifficultyToggle } from './DifficultyToggle';
 import type { CoachDifficulty, MiddlegamePlan } from '../../types';
 import { PlayerInfoBar } from './PlayerInfoBar';
+import { PositionNarrationBanner } from './PositionNarrationBanner';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { coachService } from '../../coach/coachService';
@@ -3332,7 +3334,27 @@ export function CoachTeachPage(): JSX.Element {
     return random ? uciToSan(random) : null;
   }, [walkthrough.tree?.openingName, activeProfile?.puzzleRating]);
 
+  // "Read this position" — the SAME on-demand affordance Play carries
+  // (David 2026-06-15: "You didn't like the read this position button?").
+  // Reads the LIVE free-play position (not the walkthrough animation) so a
+  // student stuck on a played-out move can hear the position explained.
+  // Routes through usePositionNarration → voiceService.speakReadAloud
+  // (bypassVerbosity, G5 third sanctioned exemption — an explicit tapped
+  // read button). Declared before handleStudentMove so the move handler can
+  // dismiss the banner on a board move (David: "make a move on the board to
+  // close it out").
+  const positionNarration = usePositionNarration({
+    fen: game.fen,
+    pgn: game.history.join(' '),
+    moveNumber: Math.floor(game.history.length / 2) + 1,
+    playerColor,
+    openingName: walkthrough.tree?.openingName ?? null,
+  });
+
   const handleStudentMove = useCallback((move: MoveResult): void => {
+    // A board move DISMISSES the "Read this position" banner (clears its
+    // text) — same as Play. The student answered the position by playing.
+    positionNarration.cancel();
     // Block a new move ONLY while the opponent is still computing its reply —
     // never while the coach is merely narrating the last move (that was the
     // 3+s lag David hit 2026-06-10). If the student moves while a prior
@@ -3455,7 +3477,7 @@ export function CoachTeachPage(): JSX.Element {
         setOpponentThinking(false);
       }
     })();
-  }, [handleSubmit, discussion, walkthrough.tree?.openingName, playerColor, resolveCoachReplyMove, handlePlayMove, setOpponentThinking, activeProfile?.puzzleRating, activeProfile?.currentRating]);
+  }, [handleSubmit, discussion, walkthrough.tree?.openingName, playerColor, resolveCoachReplyMove, handlePlayMove, setOpponentThinking, activeProfile?.puzzleRating, activeProfile?.currentRating, positionNarration]);
 
   // ─── Guided-opening-play kickoff ─────────────────────────────────────────
   // On mount, pull the student's last 5 games + weakness profile so the
@@ -3602,6 +3624,10 @@ export function CoachTeachPage(): JSX.Element {
   const teachCaptured = getCapturedPieces(teachBoardFen);
   const teachMaterialAdv = getMaterialAdvantage(teachBoardFen);
   const isTeachPlayerWhite = playerColor === 'white';
+
+  const handleReadPosition = useCallback(() => {
+    void positionNarration.narrate();
+  }, [positionNarration]);
 
   return (
     <div
@@ -3839,6 +3865,16 @@ export function CoachTeachPage(): JSX.Element {
           />
         </div>
 
+        {/* "Read this position" subtitle — same banner Play uses. Persists
+            until the student taps X or makes a board move (onDismiss → the
+            dismissible mode). Only meaningful in free play; the walkthrough
+            has its own narration overlay. */}
+        <PositionNarrationBanner
+          text={positionNarration.currentText}
+          active={positionNarration.isNarrating}
+          onDismiss={() => positionNarration.cancel()}
+        />
+
         {/* Board — same `<ControlledChessBoard>` Play uses, so click-
             to-move, legal-move dots, drag-and-drop, last-move highlight
             all work identically. No eval bar, no flip/undo/reset chrome
@@ -3987,8 +4023,28 @@ export function CoachTeachPage(): JSX.Element {
           // 2026-06-15: "make these buttons match play") — outlined border-2 +
           // colored glow: Takeback amber, Restart cyan, End Lesson red (Play's
           // Resign). Same buttons + functions as before, so navigation is
-          // unchanged; only the look matches Play.
-          <div className="flex items-center justify-center gap-2 px-4 py-2">
+          // unchanged; only the look matches Play. Plus the "Read this
+          // position" row above (emerald, Volume2), identical to Play's.
+          <div className="flex flex-col gap-2 px-4 py-2">
+          <div className="flex justify-center">
+            <button
+              onClick={handleReadPosition}
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-emerald-500/30 text-sm font-medium text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 transition-all duration-200"
+              style={{ boxShadow: '0 0 10px rgba(16, 185, 129, 0.25), 0 0 3px rgba(16, 185, 129, 0.15)' }}
+              onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 18px rgba(16, 185, 129, 0.45), 0 0 6px rgba(16, 185, 129, 0.25)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 10px rgba(16, 185, 129, 0.25), 0 0 3px rgba(16, 185, 129, 0.15)'; }}
+              data-testid="teach-read-position-btn"
+              aria-label={positionNarration.isNarrating ? 'Restart position narration' : 'Read this position aloud'}
+            >
+              {positionNarration.isNarrating ? (
+                <Loader2 size={16} className="animate-spin" />
+              ) : (
+                <Volume2 size={16} />
+              )}
+              <span>{positionNarration.isNarrating ? 'Reading…' : 'Read this position'}</span>
+            </button>
+          </div>
+          <div className="flex items-center justify-center gap-2">
             <button
               onClick={() => game.undoMove()}
               disabled={busy || game.history.length === 0}
@@ -4022,6 +4078,7 @@ export function CoachTeachPage(): JSX.Element {
               <Flag size={15} />
               <span>End Lesson</span>
             </button>
+          </div>
           </div>
         )}
       </div>
