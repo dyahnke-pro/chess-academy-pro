@@ -210,3 +210,26 @@ ahead of the narration work — it would break the board↔voice contract.
 Pro-Naroditsky gem/trap lines evaluating ≤0 for the student (e.g. "Nxf6+
 premature trade" −6.28). These read like mis-classified warnings or wrong-side
 gems — review classification (weapon vs warning) before shipping as weapons.
+
+## D-SCREEN (2026-06-16) — broad win% screen over the WHOLE repertoire
+`screen-all.mjs` (eval@18 < −0.6 candidates, skipping done + documented gambit/
+aggressive keeps) over every remaining repertoire opening found only **2** genuine
+defects — both French:
+- ✅ **French: Classical Variation** — was the slow …f6 opposite-side race (−0.7,
+  32% M / 35% club), narrated as a "full-blooded attack" Black statistically loses.
+  Re-anchored to the …a6/…c5/…b5 queenside avalanche vs White's O-O-O king:
+  −0.34, **45% club (27,869 g)**. Lesson rebuilt by hand (cla3–cla6), data + sublines
+  synced. Gates green.
+- ⚠️ **French: Fort Knox** (−0.69, 40% M / 43% club, 2,023 g) — BORDERLINE, flagged
+  for David. It's a respected solid-but-passive system; 43% club is near its honest
+  ceiling, and every deeper re-anchor I tried scored WORSE (−1.01 / 42%). Per
+  "don't trim to fake-better," left as-is rather than degraded. David's call:
+  keep the respected-passive line, or cut it.
+
+### CAMPAIGN STATUS: program is clean
+13 opening lines fixed this session (7 win%-defects + 2 Section-A + Antoshin +
+Old Indian Tartakower + Philidor Modern-d3 + French Classical). The broad screen
+confirms the remaining negative-eval lines are the documented gambit/aggressive
+KEEPS (win%-validated at club level). Only open items: Fort Knox (borderline, David's
+call) + the pre-existing `mp-*` middlegame-plan soundness CI failures (separate
+artifact, mostly gambit sacs — not opening lines).

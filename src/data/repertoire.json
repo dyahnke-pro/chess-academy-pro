@@ -930,8 +930,8 @@
       },
       {
         "name": "Classical Variation",
-        "pgn": "e4 e6 d4 d5 Nc3 Nf6 Bg5 Be7 e5 Nfd7 Bxe7 Qxe7 f4 O-O Nf3 c5 Qd2 Nc6 O-O-O f6 exf6 Qxf6",
-        "explanation": "The Classical is a heavyweight positional battle where both sides have clear plans. White builds a strong pawn center with f4 supporting e5, while Black systematically undermines it with ...c5 and the well-timed ...f6 break. After Bxe7 Qxe7, Black avoids doubled pawns and keeps the queen active. The ...f6 break opens the f-file for Black's rook and challenges White's entire center; queens recapture on f6 keeps Black's pieces actively placed.",
+        "pgn": "e4 e6 d4 d5 Nc3 Nf6 Bg5 Be7 e5 Nfd7 Bxe7 Qxe7 f4 a6 Nf3 c5 Qd2 Nc6 dxc5 Qxc5 O-O-O b5",
+        "explanation": "The Classical with 4.Bg5 Be7: Black trades off White's good bishop, then — instead of the slow ...f6 break — plays the patient ...a6/...c5/...b5, launching a queenside pawn avalanche at White's O-O-O king. Black's storm is the faster one, and it scores markedly better.",
         "shortExplanation": "Classical: Bxe7 Qxe7 avoids doubled pawns; ...c5/...f6 breaks dismantle e5/d4 center; opposite-side castling middlegame."
       },
       {
