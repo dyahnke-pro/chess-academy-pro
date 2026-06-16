@@ -25,13 +25,13 @@ for (const L of rep.losing) {
   if (GAMBITRE.test(L.id) || GAMBITRE.test(L.label)) continue;
   const c = new Chess(); let culprit = null;
   for (let i = 0; i < s.length; i++) {
-    if (isStudent(i, color)) {
+    if (isStudent(i, color) && i <= 14) { // re-anchorable culprits live in the opening phase
       const fenBefore = c.fen();
-      const b = await best(fenBefore, 16); // best for student (side to move)
+      const b = await best(fenBefore, 12); // best for student (side to move)
       const bestStudentCp = b.cp; // side-to-move = student
       // student's actual move eval
       const probe = new Chess(fenBefore); probe.move(s[i]);
-      const after = await best(probe.fen(), 16); // opponent to move; negate for student
+      const after = await best(probe.fen(), 12); // opponent to move; negate for student
       const studentCp = -after.cp;
       const gain = (bestStudentCp - studentCp) / 100;
       if (gain > 0.7 && bestStudentCp / 100 > -0.8) { // a clearly better move existed that keeps it playable
