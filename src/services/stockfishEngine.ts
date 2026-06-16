@@ -1016,7 +1016,42 @@ class StockfishEngine {
       this.messageHandlers.forEach((h) => h(analysis));
     }
   }
+
+  /** App-resume recovery (David 2026-06-16: freeze after backgrounding the iOS
+   *  app, then re-entering). iOS suspends/kills the Web Worker when the app is
+   *  backgrounded — but the resolved `initPromise` makes `initialize()` think
+   *  we're still ready, so the next analyze (which the coach AWAITS for its
+   *  grounded answers) hangs FOREVER on a dead worker → frozen UI. On resume,
+   *  hard-reset: reject any pending analysis so no caller hangs, drop the dead
+   *  worker, and clear the init state so the next analyze spawns a FRESH
+   *  worker. Idempotent + safe to call on every foreground. */
+  handleAppResume(): void {
+    if (this.pending) {
+      try { this.pending.reject(new Error('engine reset on app resume')); } catch { /* ignore */ }
+      this.pending = null;
+    }
+    try { this.worker?.terminate(); } catch { /* already gone */ }
+    this.worker = null;
+    this.isReady = false;
+    this.initPromise = null;
+    this._permanentlyUnavailable = false;
+    this._crashRetries = 0;
+    this._initFailedAt = null;
+  }
 }
 
 // Singleton
 export const stockfishEngine = new StockfishEngine();
+
+// App-resume recovery — when the app returns to the foreground, the iOS
+// WebView's Web Worker may have been killed while backgrounded; the stale
+// resolved initPromise would otherwise hang the next analysis (and the coach
+// that awaits it) → frozen. visibilitychange fires on foreground in the
+// Capacitor WKWebView, so reset the engine then; the next analyze respawns.
+if (typeof document !== 'undefined') {
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      stockfishEngine.handleAppResume();
+    }
+  });
+}
