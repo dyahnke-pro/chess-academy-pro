@@ -48,4 +48,3 @@ console.log(`ILLEGAL: ${illegal.length}`); for (const x of illegal.slice(0, 25))
 console.log(`LOSING play-lines (student < -1.0, non-gambit): ${losing.length}`); for (const x of losing.slice(0, 50)) console.log(`  X ${x.id} [${x.kind}] ${x.label} ${x.eval} | ${x.line}`);
 console.log(`TOOTHLESS traps (student < 0): ${toothless.length}`); for (const x of toothless.slice(0, 30)) console.log(`  ~ ${x.id} ${x.label} ${x.eval} | ${x.line}`);
 console.log(`\nDONE. report: ${dir}/report.json`);
-EOF
