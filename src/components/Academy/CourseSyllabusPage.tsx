@@ -4,6 +4,8 @@ import { ChevronLeft, ChevronRight, CheckCircle2, Lock, Trophy, GraduationCap, P
 import { getOpeningById } from '../../services/openingService';
 import { buildCourse } from '../../services/openingCourse';
 import { sublineWhyFact } from '../../services/courseWhyFacts';
+import { useCourseAccess } from '../../hooks/useCourseAccess';
+import { isChapterUnlockedByAccess } from '../../services/courseEntitlement';
 import { MAIN_LINE_INDEX, type Rung } from '../../utils/wlppLadder';
 import type { OpeningRecord } from '../../types';
 import type { CourseChapter } from '../../services/openingCourse';
@@ -21,6 +23,7 @@ export function CourseSyllabusPage(): JSX.Element {
   const navigate = useNavigate();
   const [opening, setOpening] = useState<OpeningRecord | null>(null);
   const [loading, setLoading] = useState(true);
+  const access = useCourseAccess(id ?? '');
 
   useEffect(() => {
     let alive = true;
@@ -122,10 +125,23 @@ export function CourseSyllabusPage(): JSX.Element {
         </div>
       )}
 
+      {/* Pay-per-class preview banner (dormant until the gate is flipped) */}
+      {access.previewOnly && (
+        <div className="max-w-lg mx-auto w-full rounded-2xl bg-amber-500/10 border-2 border-amber-500/30 p-4 flex items-center gap-3" data-testid="course-preview-banner">
+          <Lock size={18} className="text-amber-400 shrink-0" />
+          <p className="text-sm text-amber-200">Chapter 1 is a free preview. Unlock the full course for every chapter, subline, and weapon.</p>
+        </div>
+      )}
+
       {/* Syllabus — numbered chapters */}
       <div className="max-w-lg mx-auto w-full flex flex-col gap-2" data-testid="course-chapters">
         {course.chapters.map((ch) => (
-          <ChapterRow key={ch.lineIndex} chapter={ch} onOpen={() => openChapter(ch.lineIndex)} />
+          <ChapterRow
+            key={ch.lineIndex}
+            chapter={ch}
+            locked={!isChapterUnlockedByAccess(ch.n, access)}
+            onOpen={() => openChapter(ch.lineIndex)}
+          />
         ))}
       </div>
     </>,
@@ -140,22 +156,24 @@ function subName(name: string): string {
   return name.includes(':') ? name.split(':').slice(1).join(':').trim() : name;
 }
 
-function ChapterRow({ chapter, onOpen }: { chapter: CourseChapter; onOpen: () => void }): JSX.Element {
+function ChapterRow({ chapter, onOpen, locked }: { chapter: CourseChapter; onOpen: () => void; locked: boolean }): JSX.Element {
   const done = chapter.status === 'complete';
   const sublines = chapter.sublines;
   return (
     <div
-      className="rounded-2xl bg-theme-surface border-2 border-indigo-500/20 overflow-hidden"
+      className={`rounded-2xl bg-theme-surface border-2 border-indigo-500/20 overflow-hidden ${locked ? 'opacity-60' : ''}`}
       data-testid={`course-chapter-${chapter.n}`}
     >
       <button
         type="button"
-        onClick={onOpen}
+        onClick={locked ? undefined : onOpen}
+        aria-disabled={locked}
         className="w-full text-left p-4 flex flex-col gap-2.5 hover:bg-indigo-500/5 transition-colors"
+        data-testid={locked ? `course-chapter-locked-${chapter.n}` : undefined}
       >
         <div className="flex items-center gap-3">
-          <span className={`shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${done ? 'bg-emerald-500/20 text-emerald-300' : 'bg-indigo-500/20 text-indigo-200'}`}>
-            {done ? <CheckCircle2 size={16} /> : chapter.n}
+          <span className={`shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${locked ? 'bg-amber-500/15 text-amber-300' : done ? 'bg-emerald-500/20 text-emerald-300' : 'bg-indigo-500/20 text-indigo-200'}`}>
+            {locked ? <Lock size={14} /> : done ? <CheckCircle2 size={16} /> : chapter.n}
           </span>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-bold truncate">{chapter.label}</p>
@@ -187,8 +205,9 @@ function ChapterRow({ chapter, onOpen }: { chapter: CourseChapter; onOpen: () =>
       </button>
 
       {/* Sublines — the opponent's deviations within this chapter, ranked by how
-          often they're played (the second level of the tree). */}
-      {sublines.length > 0 && (
+          often they're played (the second level of the tree). Hidden when the
+          chapter is locked (paid content). */}
+      {!locked && sublines.length > 0 && (
         <div className="px-4 pb-3 pt-2 flex flex-col gap-1 border-t border-indigo-500/10" data-testid={`course-sublines-${chapter.n}`}>
           <p className="text-[10px] uppercase tracking-wide text-theme-text-muted/70">They might play</p>
           {(() => {
