@@ -41,9 +41,31 @@ masters-most-played mainline (all clear the gate: club ≥45%, eval ≥ −0.8):
 - **KID main** (−1.53) → `d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O Nc6 d5 Ne7` — −0.76, 43%/47%.
 - **KID vs Sämisch** (−1.43) → `d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 c5 Nge2 Nc6 d5` — −0.42, 46%/54%.
 - **Philidor Nimzowitsch** (−1.26) → `e4 e5 Nf3 d6 d4 Nf6 Nc3 Nbd7 Bc4 Be7 O-O O-O Re1` — −0.48, 44%/48%.
-- **Bird's main** (−1.8) → `f4 d5 Nf3 g6 g3 Bg7` (Leningrad) — −0.18, 46%/50%.
+- **Bird's main** (−1.8) → ✅ DONE: re-anchored to the modern **Leningrad** with the
+  aggressive e4 break: `f4 d5 Nf3 g6 g3 Bg7 Bg2 Nf6 O-O O-O d3 c5 Nc3 Nc6 e4 dxe4
+  dxe4 Qxd1 Rxd1 e5` — engine **+0.29 for White**, masters **64%** / club **59%**
+  (vs the old e3 Classical's −1.8 / 38% masters). Lesson rebuilt by hand
+  (`birdsOpening.ts`, 6 beats, describable purpose per move: clamp e5 → prep e4 →
+  develop → e4 break for the e4+f4 duo + open d-file → White keeps the pull after
+  the queen trade). Move order chosen to anchor 12 plies in the lichess DB
+  (Leningrad Formation). No sound *aggressive* main line exists vs best defence
+  (Black trades queens), so this is the honest "go solid" case — narrated as
+  aggressive-in-intent, positional-pull in execution. Gates green.
 Each edits a hand-authored lesson → apply = swap line + re-author narration (one
 unit). Target lines LOCKED here for the narration pass. Tool: `find-best-line.mjs`.
+
+### Progress (2026-06-16): 6 of 7 fixed
+✅ Philidor Lion (cut), ✅ KID main (re-synced), ✅ Petrov Classical (re-synced),
+✅ Two Knights Max Lange (re-synced), ✅ Carlsen Sämisch (rebuilt → ...c5/...Ne5),
+✅ **Bird's main (rebuilt → Leningrad +e4 break)**. Remaining: ⬜ Alekhine main
+(over-extends to 36% club; trim/re-anchor to the ~12-ply sound point + re-narrate),
+⬜ Philidor Nimzowitsch-Rellstab.
+
+⚠️ PRE-EXISTING (not this campaign, flag to David): `narrationFactCheck` reports 3
+stale "fork" claims from a parallel session — `semi-slav::Botvinnik Variation Deep`
+(bo4, queen-a6 "fork"), `mp-scotchgame-steinitz` (knight-b5 "fork"), `mp-sicilian
+alapin-d5` (knight-b5 + queen-d8 "fork"). Confirmed failing on HEAD without my
+changes; not in the ship-check blocking gate set.
 
 ### Genuine defects after the win% gate (~7 — bad at BOTH levels / eval-floor):
 Philidor Lion (−6.25, lost), Alekhine main (29%/34%), Petrov Classical (40%/38% —

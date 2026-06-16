@@ -2854,7 +2854,7 @@
     "id": "birds-opening",
     "eco": "A02",
     "name": "Bird's Opening",
-    "pgn": "f4 d5 Nf3 Nf6 e3 g6 Be2 Bg7 O-O O-O d3 c5 Qe1 Nc6 Nc3 d4 Nd1 dxe3 Nxe3 Nd5 Nc4 b5 Na3 a6 Kh1 Qc7 Ng5 Nd4 Bd1 Bb7 c3 Nf5 Nc2 Rad8 Ne4 Nb6 Ne3 Rxd3 Nxf5 gxf5 Ng3 e6 Nh5 Qe7 Nxg7 Kxg7 Bc2 Rd7 Be3",
+    "pgn": "f4 d5 Nf3 g6 g3 Bg7 Bg2 Nf6 O-O O-O d3 c5 Nc3 Nc6 e4 dxe4 dxe4 Qxd1 Rxd1 e5",
     "color": "white",
     "style": "Aggressive, Unorthodox",
     "overview": "Bird's Opening is named after Henry Edward Bird, the eccentric English master who played 1.f4 throughout his career in the late 1800s. Bird wrote extensively about chess openings and championed unorthodox systems; the opening fell into obscurity for most of the 20th century before being revived by Danish GM Bent Larsen in the 1970s. Modern players like Henrik Danielsen have made the Bird their signature weapon. 1.f4 immediately signals aggressive intentions — grab kingside space and prepare a Dutch-like setup where you're a tempo up (since Black hasn't yet committed to a specific defence). Most opponents have zero specific preparation against this, giving you a practical advantage from move one.",
