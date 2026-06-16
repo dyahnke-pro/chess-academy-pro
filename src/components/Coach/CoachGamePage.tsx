@@ -53,8 +53,8 @@ import { coachService } from '../../coach/coachService';
 import { withTimeout } from '../../coach/withTimeout';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
 import { isCriticalThreat } from '../../services/tacticAlertService';
-import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
-import { validateTacticClaims } from '../../services/tacticClaimValidator';
+import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
+import { validateTacticClaims, stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { getScenarioTemplate } from '../../services/coachTemplates';
 import { generateMoveCommentary } from '../../services/coachMoveCommentary';
 import { isSpokenSentenceGrounded } from '../../services/coachAnswerGates';
@@ -135,6 +135,7 @@ import type {
   ChatMessage,
 } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
+import type { TacticsLiveContext } from '../../coach/types';
 import { isMateEval } from '../../services/engineConstants';
 
 function classifyMove(
@@ -3233,6 +3234,21 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         // If yes, the post-LLM speak path below skips (the streamed
         // sentences ARE the narration; speaking again would double up).
         let streamedAnything = false;
+        // FED tactics for the post-move position so the auto-narration is
+        // tactic-grounded (David 2026-06-16). generateMoveCommentary is a
+        // legacy brain that isn't centrally fed, and its voice streams
+        // sentence-by-sentence BEFORE any final-text gate — so a hallucinated
+        // "knight fork" would otherwise be SPOKEN. moveTactics gates the
+        // spoken sentences (the gate below) and the displayed prose. Fed so
+        // it carries real PV tactics, not just FEN-only; degrades cleanly.
+        let moveTactics: TacticsLiveContext | null = null;
+        try {
+          moveTactics = await buildFedTacticsContext(
+            probe.fen(),
+            playerColor === 'white' ? 'w' : 'b',
+            useAppStore.getState().activeProfile?.puzzleRating ?? 1200,
+          );
+        } catch { moveTactics = null; }
         const llm = await generateMoveCommentary({
           gameAfter: probe,
           mover,
@@ -3303,7 +3319,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                 // Per-sentence spoken gate: move commentary streams to Polly
                 // before the spine's final-text gate runs, so a board-false
                 // sentence must be dropped HERE against the post-move FEN.
-                if (sentence && isSpokenSentenceGrounded(sentence, probe.fen(), 'coachGamePage.moveCommentary')) {
+                if (sentence && isSpokenSentenceGrounded(sentence, probe.fen(), 'coachGamePage.moveCommentary', moveTactics)) {
                   streamedAnything = true;
                   speaker.add(sentence);
                 }
@@ -3319,7 +3335,18 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         if (llm && resolvedSubject && isFirstSeeingOpening) {
           openingIntroSpokenRef.current = true;
         }
-        commentary = llm ? llm + tacticSuffix : tacticSuffix.trim();
+        // Tactic-ground the DISPLAYED LLM prose (the code-grounded
+        // tacticSuffix is already real, so strip only the `llm` portion):
+        // drop any sentence claiming a tactic absent from the fed context so
+        // the false claim isn't read either (David 2026-06-16).
+        let llmGrounded = llm;
+        if (moveTactics && llmGrounded.trim()) {
+          try {
+            const t = stripUngroundedTacticSentences(llmGrounded, moveTactics);
+            if (t.dropped.length > 0) llmGrounded = t.clean;
+          } catch { /* keep the prose as-is on a validator fault */ }
+        }
+        commentary = llmGrounded ? llmGrounded + tacticSuffix : tacticSuffix.trim();
         // Audit-only board-claim check on the DISPLAYED commentary. The
         // spoken sentences are board-grounded above (isSpokenSentenceGrounded),
         // but the displayed `commentary` text is NOT — so a board-false

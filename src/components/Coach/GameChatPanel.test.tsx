@@ -104,10 +104,14 @@ describe('GameChatPanel', () => {
 
   // ─── Board Annotation Tests ─────────────────────────────────────────────────
 
-  it('clears annotations then applies new ones when response contains arrow tags', async () => {
+  // Arrows are CODE-DERIVED from the SAN the coach NAMES (the G0 arrow
+  // inversion): the LLM no longer emits [BOARD: arrow] markers — the spine
+  // strips any it writes and re-derives geometry from the named move. So a
+  // response naming "e5" (legal for Black here) produces an e7-e5 arrow.
+  it('derives an arrow from a SAN named in the response', async () => {
     const onBoardAnnotation = vi.fn();
     mockGetCoachChatResponse.mockResolvedValue(
-      'Great question! [BOARD: arrow:e2-e4:green] This pawn move is strong.',
+      'Good question — e5 strikes back in the center.',
     );
 
     render(<GameChatPanel {...defaultProps} onBoardAnnotation={onBoardAnnotation} />);
@@ -130,16 +134,21 @@ describe('GameChatPanel', () => {
     expect(clearCall).toHaveLength(1);
     expect(clearCall[0].type).toBe('clear');
 
-    // Second call has the arrow annotation
+    // Second call has the code-derived arrow for the named move e5 (e7-e5).
     const annotationCall = onBoardAnnotation.mock.calls[1][0] as BoardAnnotationCommand[];
     expect(annotationCall).toHaveLength(1);
     expect(annotationCall[0].type).toBe('arrow');
     expect(annotationCall[0].arrows).toHaveLength(1);
-    expect(annotationCall[0].arrows![0].startSquare).toBe('e2');
-    expect(annotationCall[0].arrows![0].endSquare).toBe('e4');
+    expect(annotationCall[0].arrows![0].startSquare).toBe('e7');
+    expect(annotationCall[0].arrows![0].endSquare).toBe('e5');
   });
 
-  it('clears annotations then applies highlights from response', async () => {
+  // Under the G0 inversion the LLM no longer draws the board: a literal
+  // [BOARD: highlight] marker it writes is STRIPPED from the display and is
+  // NOT rendered as an annotation (only code-derived arrows from named moves
+  // surface here). The marker must not leak as text, and no highlight
+  // annotation should fire.
+  it('strips an LLM highlight marker and does not render it', async () => {
     const onBoardAnnotation = vi.fn();
     mockGetCoachChatResponse.mockResolvedValue(
       'These central squares are key [BOARD: highlight:e4:yellow,d5:yellow].',
@@ -156,14 +165,16 @@ describe('GameChatPanel', () => {
     });
 
     await waitFor(() => {
-      expect(onBoardAnnotation).toHaveBeenCalledTimes(2);
+      expect(screen.queryByText(/central squares are key/)).toBeInTheDocument();
     });
-
-    // Second call has the highlight annotations
-    const annotationCall = onBoardAnnotation.mock.calls[1][0] as BoardAnnotationCommand[];
-    expect(annotationCall).toHaveLength(1);
-    expect(annotationCall[0].type).toBe('highlight');
-    expect(annotationCall[0].highlights).toHaveLength(2);
+    // The marker is stripped from the visible text.
+    expect(screen.queryByText(/\[BOARD:/)).not.toBeInTheDocument();
+    // No highlight annotation is produced (no clear→highlight pair) — at most
+    // the initial clear fires.
+    const highlightCalls = onBoardAnnotation.mock.calls.filter(
+      (c) => (c[0] as BoardAnnotationCommand[]).some((cmd) => cmd.type === 'highlight'),
+    );
+    expect(highlightCalls).toHaveLength(0);
   });
 
   it('only sends clear when response has no board tags', async () => {
@@ -213,10 +224,12 @@ describe('GameChatPanel', () => {
     expect(screen.queryByText(/\[BOARD:/)).not.toBeInTheDocument();
   });
 
-  it('stores annotations in message metadata', async () => {
+  it('stores the code-derived arrow annotation in message metadata', async () => {
     const onBoardAnnotation = vi.fn();
+    // Names Nf6 (legal for Black here) → code derives a g8-f6 arrow. The LLM's
+    // own [BOARD:] markers are stripped; only the derived arrow is rendered.
     mockGetCoachChatResponse.mockResolvedValue(
-      'Check [BOARD: arrow:d1-h5:red] this line! [BOARD: highlight:e4:green]',
+      'Check this line — Nf6 develops and hits the e4 pawn.',
     );
 
     render(<GameChatPanel {...defaultProps} onBoardAnnotation={onBoardAnnotation} />);
@@ -230,15 +243,15 @@ describe('GameChatPanel', () => {
     });
 
     await waitFor(() => {
-      // 1 clear + 1 annotation call
+      // 1 clear + 1 code-derived arrow call
       expect(onBoardAnnotation).toHaveBeenCalledTimes(2);
     });
 
-    // Second call (after the clear) has the annotation commands
     const cmds = onBoardAnnotation.mock.calls[1][0] as BoardAnnotationCommand[];
-    expect(cmds).toHaveLength(2);
+    expect(cmds).toHaveLength(1);
     expect(cmds[0].type).toBe('arrow');
-    expect(cmds[1].type).toBe('highlight');
+    expect(cmds[0].arrows![0].startSquare).toBe('g8');
+    expect(cmds[0].arrows![0].endSquare).toBe('f6');
   });
 
   it('exposes injectAssistantMessage via ref', async () => {

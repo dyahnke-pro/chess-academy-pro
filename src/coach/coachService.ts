@@ -30,7 +30,6 @@ import { Chess } from 'chess.js';
 import { logAppAudit } from '../services/appAuditor';
 import { scanPositionForTrap } from '../services/positionTrapScan';
 import { groundCoachReply, applyCandidateArrows } from '../services/coachAnswerGates';
-import { buildFedTacticsContext } from '../services/liveTacticsContext';
 import { assembleEnvelope } from './envelope';
 import { loadAnnotationContextForLive } from './sources/annotationContext';
 import { loadBookGroundingForLive } from './sources/bookGrounding';
@@ -749,43 +748,18 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     }),
   });
 
-  // ── FEED THE TACTICS PACKAGE (ROOT fix for hallucinated tactics, David
-  //    2026-06-16: false "knight fork") ──
-  // Every surface builds its tactics block from a best-effort eval-bar cache
-  // that's `null` on a miss (and the eval bar times out on iOS), so the block
-  // arrives THIN. A thin/absent context is the disease, two ways: (a) the LLM
-  // is handed no real tactics, so it INVENTS one to sound useful; (b) the
-  // runtime tactic gate below only ENFORCES when a context is present —
-  // audit-only otherwise — so an invented tactic sails through. Re-feed here,
-  // at the ONE chokepoint every surface routes through, so BOTH the prompt
-  // (assembleEnvelope) and the enforcing gate (runAnswerGates) work off the
-  // position's REAL tactics. Hang-protected + budgeted (the engine recovers a
-  // stuck worker now); a genuinely dead engine degrades to the FEN-only
-  // context, still grounded — empty > invented. Skipped when the surface
-  // already supplied a rich (PV-fed) context.
-  if (input.liveState.fen) {
-    const t = input.liveState.tactics;
-    const thin = !t || (t.threats.length === 0 && t.opportunities.length === 0);
-    if (thin) {
-      try {
-        const color: 'w' | 'b' =
-          input.liveState.studentColor === 'black' ? 'b'
-          : input.liveState.studentColor === 'white' ? 'w'
-          : (input.liveState.fen.split(' ')[1] === 'b' ? 'b' : 'w');
-        // Rating only sizes the PV lookahead depth; a mid default scans deep
-        // enough to FIND the real tactics (the gate never invents, so deeper
-        // is safe). No cached analysis in the spine, so the helper fetches a
-        // fresh hang-protected one itself.
-        input.liveState.tactics = await buildFedTacticsContext(
-          input.liveState.fen,
-          color,
-          1400,
-        );
-      } catch {
-        /* keep whatever context we had — never block the turn */
-      }
-    }
-  }
+  // NOTE on hallucinated tactics (David 2026-06-16, false "knight fork"):
+  // the fix is NOT a blocking engine read here. `runAnswerGates` below
+  // ALREADY enforces the tactic gate against whatever bounded context the
+  // surface passed — and a THIN context still ENFORCES (it strips any
+  // out-of-vocabulary tactic the LLM invented), so a fabricated fork can't
+  // reach the returned text. Surfaces that also want the LLM HANDED richer
+  // tactics pre-feed their own context via buildFedTacticsContext WITHOUT
+  // blocking the brain call (coach-teach for its lesson + voice; the play
+  // surfaces for their streamed-voice gate). Doing the engine read in the
+  // spine added latency to EVERY turn and could block on a cold engine
+  // (the eval-bar's own analysis already warms the cache where it matters)
+  // — so it's intentionally NOT done here.
 
   // WO-FOUNDATION-02 trace harness — fires at the start of every
   // ask, mirroring coach-brain-ask-received but carrying the

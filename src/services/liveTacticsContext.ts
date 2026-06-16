@@ -102,7 +102,15 @@ export function buildTacticsLiveContext(
  *  hanging the coach turn. */
 async function defaultFedAnalyze(fen: string): Promise<StockfishAnalysis | null> {
   try {
-    return await stockfishEngine.analyzeWithBudget(fen, 12, 1500);
+    // Hard-race the engine read against a 2.5s ceiling so a COLD engine
+    // (whose init can take up to 45s, which analyzeWithBudget awaits) can
+    // never block the coach turn. On a warm engine the eval-bar already
+    // analysed this FEN, so this resolves from the engine cache instantly;
+    // a slow/cold/dead engine returns null fast → FEN-only context.
+    return await Promise.race([
+      stockfishEngine.analyzeWithBudget(fen, 12, 1500),
+      new Promise<null>((resolve) => setTimeout(() => resolve(null), 2500)),
+    ]);
   } catch {
     return null;
   }
