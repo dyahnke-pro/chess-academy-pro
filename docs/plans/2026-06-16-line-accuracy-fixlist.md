@@ -15,6 +15,19 @@ catastrophically lost (eval floor ≈ ≥ −2.0) on an **adequate sample (≥ ~
   "48%" on only 20 games at −6.25 — a lost line; the floor/sample catches it.
 - **Aggression earns its place by WINNING at the buyer's level, not by eval.**
 
+### ✅ THE 7 FIXES — all fixable, exact re-anchor lines (grounded masters-mainline + win%-verified, 2026-06-16)
+Each flagged line was a sub-optimal DEVIATION from main theory; re-anchor to the
+masters-most-played mainline (all clear the gate: club ≥45%, eval ≥ −0.8):
+- **Philidor Lion** (−6.25) → `e4 e5 Nf3 d6 d4 exd4 Nxd4 Nf6 Nc3 Be7 Be2 O-O O-O Re8` — −0.30, 52%/52%.
+- **Alekhine main** (−1.99) → `e4 Nf6 e5 Nd5 d4 d6 Nf3 Bg4 Be2 e6 O-O Be7` — −0.72, 38%/50%.
+- **Petrov Classical** (−1.82) → `e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 Nc6 O-O Be7 c4 Nb4` — −0.28, 43%/50%.
+- **KID main** (−1.53) → `d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O Nc6 d5 Ne7` — −0.76, 43%/47%.
+- **KID vs Sämisch** (−1.43) → `d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 c5 Nge2 Nc6 d5` — −0.42, 46%/54%.
+- **Philidor Nimzowitsch** (−1.26) → `e4 e5 Nf3 d6 d4 Nf6 Nc3 Nbd7 Bc4 Be7 O-O O-O Re1` — −0.48, 44%/48%.
+- **Bird's main** (−1.8) → `f4 d5 Nf3 g6 g3 Bg7` (Leningrad) — −0.18, 46%/50%.
+Each edits a hand-authored lesson → apply = swap line + re-author narration (one
+unit). Target lines LOCKED here for the narration pass. Tool: `find-best-line.mjs`.
+
 ### Genuine defects after the win% gate (~7 — bad at BOTH levels / eval-floor):
 Philidor Lion (−6.25, lost), Alekhine main (29%/34%), Petrov Classical (40%/38% —
 Petrov is solid, so the line is wrong), KID main (42%/38%), Carlsen Sämisch f3
