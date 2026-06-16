@@ -41,6 +41,24 @@ export const BUDAPEST_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
     ],
   },
 
+  'budapest-gambit::Budapest Gambit: Alekhine Variation': {
+    openingId: 'budapest-gambit', title: 'Budapest — the Alekhine (4.e4)', minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'al1', moves: 'd4 Nf6 c4 e5 dxe5 Ng4 e4', say: "The Alekhine — White's most ambitious reply: instead of just defending the pawn, e4 grabs a huge centre. Why is the Budapest still fine here? Because that broad pawn front becomes a target. Black gets the e5-pawn back and the kind of open, piece-active game where a well-prepared gambiteer thrives against an over-extended opponent.", sayShort: 'e4 — White grabs a big centre to attack.', highlights: [H('e4')] }),
+      b({ id: 'al2', moves: 'd4 Nf6 c4 e5 dxe5 Ng4 e4 Nxe5 f4 Nec6 Nc3 Bc5', say: "…Nxe5 recoups the pawn at once, and after f4 the knight steps back to c6, inviting White to keep pushing pawns. Black develops the bishop actively to …Bc5, eyeing f2 and the a7-g1 diagonal. White has space, but every pawn move is a square Black's pieces will exploit.", sayShort: '…Bc5 — active bishop vs the pawn front.', highlights: [H('c5')] }),
+      b({ id: 'al3', moves: 'd4 Nf6 c4 e5 dxe5 Ng4 e4 Nxe5 f4 Nec6 Nc3 Bc5 Na4 Bb4+ Bd2 Qe7 Bd3 Qd6 Ke2 Bxd2', say: "The play turns sharp: Na4 hits the bishop, …Bb4+ checks, and Black piles onto the holes White's pawns left behind — …Qe7-d6 hitting f4 and e4, and …Bxd2 forcing the king to an awkward e2. There is the Alekhine tabiya: a genuinely double-edged fight where White's big centre is matched by Black's active pieces and White's loose king. A sharp surprise weapon — sound by the gambit's standard and dangerous for an unprepared White.", sayShort: "…Bxd2 — sharp, White's king is loose.", highlights: [H('d6'), H('e4', SOFT)] }),
+    ],
+  },
+
+  'budapest-gambit::Budapest Gambit: 3...Ne4 Trappy Line': {
+    openingId: 'budapest-gambit', title: 'Budapest — the …Ne4 Trappy Line', minutes: 9, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'tr1', moves: 'd4 Nf6 c4 e5 dxe5 Ne4', say: "The Fajarowicz cousin — instead of …Ng4, Black plants …Ne4, the knight leaping deep into White's position. It is the trappiest line in the Budapest: Black eyes …Bb4+ and …Qh4 tricks, and many natural White moves walk straight into tactics. A pure out-of-prep surprise weapon.", sayShort: '…Ne4 — the trappy central leap.', highlights: [H('e4')] }),
+      b({ id: 'tr2', moves: 'd4 Nf6 c4 e5 dxe5 Ne4 Nd2 Nc5 Ngf3 Nc6 g3 Qe7', say: "White plays the solid Nd2 to challenge the knight, and Black reroutes …Nc5, keeping the piece active and eyeing the e4- and d3-squares. …Nc6 and …Qe7 pile toward the e5-pawn, which Black will round up while developing with threats.", sayShort: '…Nc5, …Qe7 — active, target e5.', highlights: [H('c5')] }),
+      b({ id: 'tr3', moves: 'd4 Nf6 c4 e5 dxe5 Ne4 Nd2 Nc5 Ngf3 Nc6 g3 Qe7 Bg2 g6 O-O Bg7 Nb3 Ne6 Be3 O-O', say: "Black fianchettoes with …g6 and …Bg7, develops …Ne6 to regain e5, and castles. There is the trappy-line tabiya: Black is harmoniously developed with active knights and the long-diagonal bishop for the pawn. Objectively a touch worse — this is a gambit — but full of practical venom, and at club level it scores like a real fighting weapon.", sayShort: '…O-O — active pieces, practical venom.', highlights: [H('g7'), H('e6', SOFT)] }),
+    ],
+  },
+
   'budapest-gambit::Budapest Gambit: Adler Variation': {
     openingId: 'budapest-gambit', title: 'Budapest — The Adler (3.Nf3)', minutes: 8, orientation: 'black', kind: 'roadmap', sources: SRC,
     beats: [

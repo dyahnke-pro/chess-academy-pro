@@ -2553,7 +2553,7 @@
       },
       {
         "name": "Budapest Gambit: Alekhine Variation",
-        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 e4 Nxe5 f4 Nec6",
+        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 e4 Nxe5 f4 Nec6 Nc3 Bc5 Na4 Bb4+ Bd2 Qe7 Bd3 Qd6 Ke2 Bxd2",
         "explanation": "The Alekhine Variation with 4.e4 is White's most ambitious try, building a big pawn center immediately. However, Black gets excellent counterplay by targeting the overextended central pawns with piece pressure. The knight retreats to c6 and later reroutes to active squares like a5 and c4 pressuring b2 and d2. Black's strategy revolves around provoking weaknesses in White's f4-e4 pawn duo which creates holes on d4 and e3."
       },
       {
@@ -2563,7 +2563,7 @@
       },
       {
         "name": "Budapest Gambit: 3...Ne4 Trappy Line",
-        "pgn": "d4 Nf6 c4 e5 dxe5 Ne4 Nd2 Nc5 Ngf3 Nc6 g3 Qe7 Bg2 g6 O-O Bg7",
+        "pgn": "d4 Nf6 c4 e5 dxe5 Ne4 Nd2 Nc5 Ngf3 Nc6 g3 Qe7 Bg2 g6 O-O Bg7 Nb3 Ne6 Be3 O-O",
         "explanation": "The rare 3...Ne4 line is a trappy alternative to the main 3...Ng4 that aims to exploit White's unfamiliarity with the resulting positions. The piece on e4 forces White to react immediately, and after Nd2 Nc5 the knight reroutes to pressure e5 from a different angle. Black delays castling to keep options flexible and develops the bishop to g7 for long-diagonal pressure. While objectively equal, this line has enormous practical value because most White players have never faced it and must navigate unfamiliar territory where tactical tricks lurk around every corner."
       }
     ],
