@@ -19,14 +19,19 @@ const INPUTS = [
 async function run(browser, text) {
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 }, userAgent: 'AuditIsoBot/1.0' });
   const page = await ctx.newPage();
-  let firstSign = null;
-  const t0 = Date.now();
-  page.on('console', () => {});
-  // any brain/route sign of life
-  page.on('request', (r) => {
-    if (firstSign) return;
+  let askFiredMs = null;   // brain REQUEST went out
+  let llmDoneMs = null;    // brain RESPONSE returned (the authoritative "answered")
+  let ttsMs = null;        // voice fired (answer produced)
+  let armed = false;       // only count signals AFTER we send the input
+  let ts = 0;
+  const isLLM = (u) => /\/api\/llm|deepseek|anthropic/.test(u);
+  const isTTS = (u) => /\/api\/tts\b/.test(u);
+  page.on('request', (r) => { if (armed && askFiredMs === null && isLLM(r.url())) askFiredMs = Date.now() - ts; });
+  page.on('response', (r) => {
+    if (!armed) return;
     const u = r.url();
-    if (/\/api\/(llm|tts)|deepseek|anthropic|lichess-explorer/.test(u)) firstSign = { what: 'network', ms: Date.now() - t0, u: u.slice(0, 60) };
+    if (llmDoneMs === null && isLLM(u)) llmDoneMs = Date.now() - ts;
+    if (ttsMs === null && isTTS(u)) ttsMs = Date.now() - ts;
   });
   try {
     await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: 60000 });
@@ -38,26 +43,34 @@ async function run(browser, text) {
     const help = page.locator('[data-testid="page-help-modal"]'); if (await help.count()) { await page.keyboard.press('Escape'); await page.waitForTimeout(500); }
     const input = page.locator('[data-testid="chat-text-input"]');
     await input.waitFor({ timeout: 15000 });
+    // Baseline: a NARRATING walkthrough panel that's already up (none expected
+    // on a fresh teach — the ever-present empty-state teach-picker is NOT a
+    // response and is intentionally excluded).
+    const narratingVisible = async () => page.locator('[data-testid="walkthrough-narrating-panel"], [data-testid="walkthrough-fork-panel"], [data-testid="walkthrough-leaf-panel"], [data-testid="line-picker"]').first().isVisible().catch(() => false);
+    const baseNarrating = await narratingVisible();
     const beforeLen = (await page.locator('body').innerText().catch(() => '')).length;
-    const ts = Date.now();
+
+    ts = Date.now();
+    armed = true;
     await input.fill(text, { timeout: 8000 });
     await page.locator('[data-testid="chat-send-btn"]').click({ timeout: 8000, force: true });
-    // wait up to 90s for ANY response form: a walkthrough panel, a line
-    // picker, a returning-visitor chooser, or chat-text growth. (The first
-    // detector only checked text growth and wrongly flagged the walkthrough-
-    // panel responses as hangs.)
+
+    // Authoritative "responded" = the brain RESPONSE returned, OR the voice
+    // fired, OR a NARRATING lesson panel/line-picker newly appeared, OR the
+    // chat transcript grew. NOT the pre-existing empty-state picker.
     let respMs = null;
     let respKind = null;
     const dl = Date.now() + 90000;
     while (Date.now() < dl) {
-      const panel = await page.locator('[data-testid^="walkthrough-"], [data-testid="line-picker"], [data-testid="teach-picker"], [data-testid="teach-generation-progress"]').first().isVisible().catch(() => false);
-      if (panel) { respMs = Date.now() - ts; respKind = 'panel'; break; }
+      if (llmDoneMs !== null) { respMs = llmDoneMs; respKind = 'llm-response'; break; }
+      if (ttsMs !== null) { respMs = ttsMs; respKind = 'tts'; break; }
+      if (!baseNarrating && (await narratingVisible())) { respMs = Date.now() - ts; respKind = 'lesson-panel'; break; }
       const len = (await page.locator('body').innerText().catch(() => '')).length;
-      if (len > beforeLen + 40) { respMs = Date.now() - ts; respKind = 'text'; break; }
-      await page.waitForTimeout(500);
+      if (len > beforeLen + 60) { respMs = Date.now() - ts; respKind = 'text'; break; }
+      await page.waitForTimeout(400);
     }
-    console.log(`  "${text.slice(0, 50)}"  → firstNetwork=${firstSign ? firstSign.ms + 'ms' : 'NONE'}  responded=${respMs !== null ? `${respMs}ms (${respKind})` : 'NO (90s)'}`);
-    return { text, firstSign, respMs };
+    console.log(`  "${text.slice(0, 48)}"  → askFired=${askFiredMs ?? 'NONE'}ms  responded=${respMs !== null ? `${respMs}ms (${respKind})` : 'NO (90s)'}`);
+    return { text, askFiredMs, respMs, respKind };
   } finally {
     await ctx.close().catch(() => {});
   }
