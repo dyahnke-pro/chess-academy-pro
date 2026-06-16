@@ -1414,7 +1414,7 @@
     "variations": [
       {
         "name": "Classical Variation",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 Nc6 O-O Be7 c4 Nb4 Be2 O-O Nc3 Bf5 a3 Nxc3 bxc3 Nc6 Re1 Re8 Bf4 Rc8 Bd3 Bxd3 Qxd3 Na5",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 Nc6 O-O Be7 c4 Nb4 Be2 O-O",
         "explanation": "The Classical Variation is the theoretical main line where both sides develop naturally after the pawn exchange. Black achieves a symmetric pawn structure with ...d5 and develops the bishop to e7 and f5 for a rock-solid position. The ...Nb4 jump creates pressure on c2 and d3, and after a3, the knight retreats to c6 to maintain central control. The resulting positions are extremely solid for Black, with equality achievable through precise play and the long-term plan of ...Na5-c4 exploiting weak queenside squares."
       },
       {
@@ -2006,7 +2006,7 @@
     "id": "kings-indian-defence",
     "eco": "E60",
     "name": "King's Indian Defence",
-    "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O Nc6 d5 Ne7 Ne1 Nd7 Be3 f5 f3 f4 Bf2 g5 Nd3 Nf6 c5 Ng6 Rc1 Rf7 Kh1 Bf8 Rg1 h5 g3 fxg3 Rxg3 Rg7 Qd2 Nh7 b4 Bd7 Be3 Nf4 Bxf4 exf4 Rgg1 Qf6 c6 bxc6 dxc6 Be6 b5 Kh8 Bd1 g4 Nxf4 gxf3 Rf1 Rf7 Ncd5 Bxd5 Nxd5 Qh4 Bxf3 Bg7",
+    "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O Nc6 d5 Ne7 Ne1 Nd7 Be3 f5 f3 f4 Bf2 g5 Nd3 Nf6 c5 Ng6",
     "color": "black",
     "style": "Dynamic, Attacking",
     "overview": "The King's Indian Defence is the ultimate fighting weapon for Black with 100 years of championship pedigree. Pioneered by the hypermoderns Réti and Nimzowitsch in the 1920s, perfected as a winning weapon by David Bronstein and Mikhail Tal in the 1950s for spectacular attacking play, immortalized by Bobby Fischer (1972 World Championship match included KID wins) and Garry Kasparov (his weapon against Karpov for a decade). The Mar del Plata variation is named for the 1953 Mar del Plata tournament in Argentina where Pal Benko introduced the modern attacking treatment. You let White build a big centre with d4, c4, and e4 — then blow it apart with …e5 and …f5. Black launches a kingside attack while White pushes on the queenside; the faster attack wins.",
