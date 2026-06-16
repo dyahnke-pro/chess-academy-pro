@@ -4,6 +4,8 @@ import { fuzzyScore } from '../utils/fuzzySearch';
 import { MAIN_LINE_INDEX } from '../utils/wlppLadder';
 import { enrollOpeningLine } from './srsOpeningService';
 import openingManifests from '../data/opening-manifests.json';
+import antiOpeningsData from '../data/anti-openings.json';
+import gambitData from '../data/gambits.json';
 
 // ─── Opening name helpers ────────────────────────────────────────────────────
 
@@ -469,6 +471,30 @@ export function getMasterclassOpeningIds(): string[] {
  *  the ones we have. */
 export async function getMasterclassOpenings(): Promise<OpeningRecord[]> {
   const ids = getMasterclassOpeningIds();
+  const out: OpeningRecord[] = [];
+  for (const id of ids) {
+    const o = await db.openings.get(id);
+    if (o) out.push(o);
+  }
+  return out;
+}
+
+/** The White anti-opening courses (Counter-Weapons) as full records, in the
+ *  generated order. Seeded by `loadAntiOpenings`; missing entries skipped. */
+export async function getAntiOpenings(): Promise<OpeningRecord[]> {
+  const ids = (antiOpeningsData as Array<{ id: string }>).map((o) => o.id);
+  const out: OpeningRecord[] = [];
+  for (const id of ids) {
+    const o = await db.openings.get(id);
+    if (o) out.push(o);
+  }
+  return out;
+}
+
+/** The gambit courses (gambits.json) as full records. Seeded by
+ *  `loadGambitData`; missing entries skipped. */
+export async function getGambitCourseOpenings(): Promise<OpeningRecord[]> {
+  const ids = (gambitData as Array<{ id: string }>).map((o) => o.id);
   const out: OpeningRecord[] = [];
   for (const id of ids) {
     const o = await db.openings.get(id);

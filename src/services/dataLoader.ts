@@ -6,6 +6,7 @@ import ecoData from '../data/openings-lichess.json';
 import repertoireData from '../data/repertoire.json';
 import proRepertoireData from '../data/pro-repertoires.json';
 import gambitData from '../data/gambits.json';
+import antiOpeningsData from '../data/anti-openings.json';
 import modelGamesData from '../data/model-games.json';
 import { loadProGameReferenceData } from './proGameReferenceData';
 import middlegamePlansData from '../data/middlegame-plans.json';
@@ -514,6 +515,45 @@ export async function loadGambitData(): Promise<void> {
   });
 }
 
+// ─── Anti-Opening Loader ─────────────────────────────────────────────────────
+// White anti-opening courses (Counter-Weapons): grounded weapon repertoires vs
+// the Black defenses amateurs struggle to face. DB-derived (G3), course-shaped.
+// bulkPut upsert — idempotent, runs on fresh + already-seeded boots.
+export async function loadAntiOpenings(): Promise<void> {
+  const defaults = createDefaultSrsFields();
+  const records = (antiOpeningsData as RepertoireEntry[]).map((entry): OpeningRecord => {
+    const { fen, uci } = computePosition(entry.pgn);
+    return {
+      id: entry.id,
+      eco: entry.eco,
+      name: entry.name,
+      pgn: entry.pgn,
+      uci,
+      fen,
+      color: entry.color,
+      style: entry.style,
+      isRepertoire: true,
+      isGambit: false,
+      overview: entry.overview ?? null,
+      keyIdeas: entry.keyIdeas ?? null,
+      traps: entry.traps ?? null,
+      warnings: entry.warnings ?? null,
+      variations: entry.variations,
+      trapLines: null,
+      warningLines: null,
+      drillAccuracy: 0,
+      drillAttempts: 0,
+      lastStudied: null,
+      woodpeckerReps: 0,
+      woodpeckerSpeed: null,
+      woodpeckerLastDate: null,
+      isFavorite: false,
+      ...defaults,
+    };
+  });
+  await db.openings.bulkPut(records);
+}
+
 // ─── Model Games Loader ──────────────────────────────────────────────────────
 
 export async function loadModelGamesData(): Promise<void> {
@@ -711,6 +751,7 @@ function startDeferredSeed(): Promise<void> {
     await loadEcoData();
     await loadProRepertoireData();
     await loadGambitData();
+    await loadAntiOpenings();
     await loadModelGamesData();
     await loadProGameReferences();
     await loadMiddlegamePlansData();
@@ -747,6 +788,10 @@ async function runSeedOnce(): Promise<void> {
   // Same for the BASE repertoire (repertoire.json) — content edits like
   // per-variation overview/keyIdeas otherwise never reach existing users.
   await reconcileBaseRepertoire();
+
+  // Anti-opening courses (Counter-Weapons) — bulkPut upsert reaches
+  // already-seeded users on every boot without touching their progress.
+  await loadAntiOpenings();
 
   // Middlegame plans are seeded ONCE in the first-install deferred
   // backfill, so already-seeded users never picked up plan JSON

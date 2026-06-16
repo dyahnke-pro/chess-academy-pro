@@ -15,6 +15,10 @@ const manifests = JSON.parse(readFileSync(root + 'src/data/opening-manifests.jso
 const eco = JSON.parse(readFileSync(root + 'src/data/openings-lichess.json', 'utf8'));
 const ecoEntries = (Array.isArray(eco) ? eco : eco.openings || Object.values(eco)).filter(e => e && e.pgn && e.name);
 const reps = Array.isArray(rep) ? rep : rep.openings || Object.values(rep);
+let antiOpenings = [];
+try { antiOpenings = JSON.parse(readFileSync(root + 'src/data/anti-openings.json', 'utf8')); } catch { /* not built yet */ }
+let gambits = [];
+try { const g = JSON.parse(readFileSync(root + 'src/data/gambits.json', 'utf8')); gambits = Array.isArray(g) ? g : g.openings || g.gambits || []; } catch { /* none */ }
 const masterclassIds = Object.keys(manifests).filter(k => !k.startsWith('_'));
 const only = process.env.OPENINGS ? new Set(process.env.OPENINGS.split(',')) : null;
 
@@ -76,14 +80,17 @@ function buildSublines(variationPgn, studentColor) {
 }
 
 const out = {}; let totalSubs = 0;
-for (const id of masterclassIds) {
-  if (only && !only.has(id)) continue;
-  const o = reps.find(x => x && x.id === id);
-  if (!o || !o.variations) continue;
+const targets = [
+  ...masterclassIds.map(id => reps.find(x => x && x.id === id)).filter(o => o && o.variations),
+  ...antiOpenings.filter(o => o && o.variations && o.variations.length),
+  ...gambits.filter(o => o && o.variations && o.variations.length),
+];
+for (const o of targets) {
+  if (only && !only.has(o.id)) continue;
   const perVar = {};
   o.variations.forEach((v, idx) => { const subs = buildSublines(v.pgn, o.color); if (subs.length) { perVar[idx] = subs; totalSubs += subs.length; } });
-  if (Object.keys(perVar).length) out[id] = perVar;
-  console.log(`${id.padEnd(22)} ${o.color.padEnd(5)} vars=${o.variations.length} sublines/var=[${o.variations.map((v,i)=>(perVar[i]?.length||0)).join(',')}]`);
+  if (Object.keys(perVar).length) out[o.id] = perVar;
+  console.log(`${o.id.padEnd(24)} ${o.color.padEnd(5)} vars=${o.variations.length} sublines/var=[${o.variations.map((v,i)=>(perVar[i]?.length||0)).join(',')}]`);
 }
 if (!only) { writeFileSync(root + 'src/data/course-sublines.json', JSON.stringify(out)); console.log(`\nwrote src/data/course-sublines.json — ${Object.keys(out).length} openings, ${totalSubs} sublines`); }
 else {
