@@ -28,6 +28,17 @@ function b(init: BeatInit): LessonBeat {
 }
 
 export const SCOTCH_GAME_VARIATION_LESSONS: Record<string, LessonScript> = {
+  "scotch-game::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)": {
+    openingId: 'scotch-game', title: 'Scotch — the Schmidt (IQP Play)', minutes: 10, orientation: 'white',
+    sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scotch_Game'],
+    beats: [
+      b({ id: 'sc1', moves: 'e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nc3 Bb4', say: "The Schmidt — Black meets the Scotch Four Knights with the pin …Bb4, pressuring the e4-pawn through the c3-knight. White's reply is principled and ambitious: trade on c6 to damage Black's structure, then play against the weakness that results.", sayShort: '…Bb4 — the pin; White plays for structure.', highlights: [H('b4', SOFT), H('e4', SOFT)] }),
+      b({ id: 'sc2', moves: 'e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nc3 Bb4 Nxc6 bxc6 Bd3 d5 exd5 cxd5', say: "Nxc6 bxc6 doubles Black's pawns, and after Bd3 d5 exd5 cxd5 Black is left with an isolated queen's pawn on d5. That IQP is the whole game: it gives Black active pieces and open lines, but it is a permanent target that White will blockade and besiege.", sayShort: 'cxd5 — Black gets the isolated d5-pawn.', highlights: [H('d5')] }),
+      b({ id: 'sc3', moves: 'e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nc3 Bb4 Nxc6 bxc6 Bd3 d5 exd5 cxd5 O-O O-O Bg5 c6 Qf3', say: "White castles and trains the pieces on the d5-pawn and the kingside: Bg5 pins the f6-knight, Qf3 eyes both d5 and the long light diagonal. The standard IQP recipe — pile up on the isolated pawn, provoke weaknesses, and keep Black tied to its defence.", sayShort: 'Bg5, Qf3 — besiege the isolated pawn.', highlights: [H('d5')] }),
+      b({ id: 'sc4', moves: 'e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nc3 Bb4 Nxc6 bxc6 Bd3 d5 exd5 cxd5 O-O O-O Bg5 c6 Qf3 Be7 Rae1 Be6', say: "Black defends accurately — …c6 props d5, …Be7 unpins, …Be6 guards the pawn — and White completes mobilisation with Rae1. There is the Schmidt IQP tabiya: White enjoys the easier game and a nagging pull against the isolated d5-pawn, while Black holds with active piece play. A model isolated-pawn middlegame, pleasant and risk-free for White.", sayShort: '…Be6 holds d5; White presses the IQP.', highlights: [H('e6'), H('d5')] }),
+    ],
+  },
+
   "scotch-game::Scotch: Mieses Variation 4...Nf6 (e5 Push)": {
   openingId: "scotch-game",
   sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scotch_Game'],
