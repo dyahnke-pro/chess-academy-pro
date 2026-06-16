@@ -16,6 +16,26 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defence'];
 
 export const QUEENS_INDIAN_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'queens-indian::Queen\'s Indian: Classical Variation (...Be7)': {
+    openingId: 'queens-indian', title: "Queen's Indian — the Classical …Be7", minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'qc1', moves: 'd4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2 Be7', say: "The Queen's Indian — Black's soundest answer to 1.d4 Nf3, recommended because it is almost impossible to crack. Black fianchettoes …b6 and …Bb7, contesting the long light diagonal and the e4-square that White's g2-bishop wants. With …Be7 Black keeps it flexible and solid; the whole defence is built on controlling e4.", sayShort: '…Bb7, …Be7 — contest the e4-square.', highlights: [H('b7')] }),
+      b({ id: 'qc2', moves: 'd4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2 Be7 O-O O-O Nc3 Ne4', say: "Both castle, White develops Nc3 — and Black uncorks the thematic …Ne4! The knight jumps to the very square the whole opening fights over, blocking the g2-bishop's diagonal and forcing trades. This is why the line is so reliable: Black grabs the key central square and simplifies White's attacking pieces off the board.", sayShort: '…Ne4 — seize the key central square.', arrows: [A('e4', 'c3')], highlights: [H('e4')] }),
+      b({ id: 'qc3', moves: 'd4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2 Be7 O-O O-O Nc3 Ne4 Qc2 Nxc3 Qxc3 f5', say: "After …Nxc3 Qxc3, Black plays the ambitious …f5 — clamping e4 permanently and grabbing kingside space. This is the modern, fighting Queen's Indian: not just equality, but a real grip on the light squares and active play, the Bb7 and the f5-pawn jointly ruling e4.", sayShort: '…f5 — clamp e4, fight for the initiative.', highlights: [H('f5')] }),
+      b({ id: 'qc4', moves: 'd4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2 Be7 O-O O-O Nc3 Ne4 Qc2 Nxc3 Qxc3 f5 d5 Bf6', say: "White grabs space with d5; Black redeploys …Bf6, the bishop swinging to the long dark diagonal to pressure d4 and the queenside. There is the Classical Queen's Indian tabiya: Black is rock-solid, owns e4, has kingside space and active bishops, and scores well above fifty percent at club level. A sound, fighting equaliser — exactly why it is a mainstay of elite repertoires.", sayShort: '…Bf6 — active bishops, comfortable for Black.', highlights: [H('f6'), H('d5', SOFT)] }),
+    ],
+  },
+
+  'queens-indian::Queen\'s Indian: Kasparov Variation (Nc3/a3)': {
+    openingId: 'queens-indian', title: "Queen's Indian — the Kasparov/Petrosian Centre", minutes: 11, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'qk1', moves: 'd4 Nf6 c4 e6 Nf3 b6 Nc3 Bb7 a3', say: "White's most ambitious anti-Queen's-Indian: Nc3 and a3, the Kasparov–Petrosian set-up. The a3 stops …Bb4 and prepares to build a big e4-centre. Why recommend Black's reply here? Because the recipe against a broad centre is well known and reliable: let White build it, then chip it down.", sayShort: 'a3 — White readies a big centre.', highlights: [H('e4', SOFT)] }),
+      b({ id: 'qk2', moves: 'd4 Nf6 c4 e6 Nf3 b6 Nc3 Bb7 a3 d5 cxd5 Nxd5 Qc2 Be7 e4 Nxc3 bxc3', say: "Black strikes with …d5 immediately; after the trades on c3, White recaptures with the b-pawn and erects the classical centre — pawns on c3, d4 and e4. It looks imposing, but those doubled c-pawns and the broad front are exactly the targets Black's pieces will swarm.", sayShort: '…d5 — invite the centre, then target it.', highlights: [H('e4'), H('c3', SOFT)] }),
+      b({ id: 'qk3', moves: 'd4 Nf6 c4 e6 Nf3 b6 Nc3 Bb7 a3 d5 cxd5 Nxd5 Qc2 Be7 e4 Nxc3 bxc3 O-O Bd3 c5', say: "Black castles and plays the key lever …c5, hammering at the base of White's centre on d4. The whole plan crystallises: trade off White's proud pawns, leave the c3-pawn weak, and let the Bb7 rake the long diagonal once e4 is challenged. Black plays against the centre, not in fear of it.", sayShort: '…c5 — hit the base of the centre.', highlights: [H('c5'), H('d4', SOFT)] }),
+      b({ id: 'qk4', moves: 'd4 Nf6 c4 e6 Nf3 b6 Nc3 Bb7 a3 d5 cxd5 Nxd5 Qc2 Be7 e4 Nxc3 bxc3 O-O Bd3 c5 O-O Qc7 Qe2 Nd7 Bb2 Nf6 Rad1', say: "Both sides complete development around the central tension — …Qc7, …Nd7-f6 pressing e4, against White's Bb2 and rooks. There is the tabiya, and the engine actually likes Black a touch: the broad white centre is more weakness than strength, with the c3-pawn chronically loose and the long diagonal Black's. A genuinely comfortable, fighting equaliser against White's most ambitious try.", sayShort: '…Nf6 — pressure e4; Black is comfortable.', highlights: [H('f6'), H('e4', SOFT)] }),
+    ],
+  },
+
   'queens-indian::Queen\'s Indian: Petrosian Variation (a3)': {
     openingId: 'queens-indian', title: "Queen's Indian — The Petrosian (a3 Systems)", minutes: 10, orientation: 'black', sources: SRC,
     beats: [
