@@ -2622,8 +2622,8 @@
       },
       {
         "name": "Old Indian: Tartakower Variation",
-        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O Re8 Re1 Bf8 Bf1 g6",
-        "explanation": "Black fianchettoes the dark-squared bishop via f8 and g7, creating a King's Indian-like structure with a solid base. The Nf4 maneuver is a key tactical idea that disrupts White's kingside coordination after the thematic f5 break. After gxf5, Black gets an open g-file and attacking chances against White's king. This flexible approach lets Black generate kingside counterplay while maintaining the structural integrity of the Old Indian."
+        "pgn": "d4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O exd4 Nxd4 Re8 f3 Bf8",
+        "explanation": "Black resolves the centre with ...exd4 and sets up the resilient ...Re8/...Bf8 small-centre — the most practical Old Indian treatment, scoring markedly better at club level than the slow ...g6 plan."
       },
       {
         "name": "Old Indian: Ukrainian Variation",

@@ -163,7 +163,11 @@ few genuine defects (fail BOTH levels). Status:
   a worse line dressed up as sharp. Re-anchored to the TRUE textbook Antoshin
   (…Nf6 …Be7 small-centre + …d5 break): −0.15, 52% M / 55% club. Lesson rebuilt by
   hand (5 beats, describable purpose per move), data pgn + sublines synced. Gates green.
-- ⬜ **Old Indian: Tartakower** (−0.84, 41% M / 31% club, 137 g) — genuine defect, next.
+- ✅ **Old Indian: Tartakower** — was the slow …g6 plan (31% club). Re-anchored to
+  the resilient …exd4 small-centre (…Re8/…Bf8): **48% club** (best practical for this
+  inherently passive opening; eval −1.03, within floor; data-only re-sync, no lesson).
+  ⚠️ CAVEAT: the Old Indian is passive by nature — no variation here is clearly +eval;
+  this is "least-bad, clear practical improvement (31%→48%)," not a +eval triumph.
 - ⬜ **Philidor Modern d3 Hybrid** (eval −2.06 floor-breach, but 58% M / 49% club) —
   needs a deep look: likely a deep-line over-extension artifact (trim) vs the line
   itself; masters 58% suggests the early line is fine.
