@@ -50,6 +50,17 @@ const JSON_MARKUP_RE = /\\?\[\[?[A-Z][A-Z0-9_]*:[^[\]{]*\{[\s\S]*?\}\s*\]\]?/g;
  *  because legacy tags didn't support nested `]`. */
 const SINGLE_MARKUP_RE = /\\?\[[A-Z][A-Z0-9_]+:[^\]]*\]/g;
 
+/** Board markup the LLM sometimes emits as PROSE despite the "code draws
+ *  the board" rule (G0) — a "Board arrows:" / "Board highlights:" header
+ *  followed by a bullet list of `from-to` (color, …) descriptions. It is
+ *  NOT a `[BOARD: …]` marker, so the marker strips above miss it, and it
+ *  leaked RAW to the student ("Board arrows: - c6-c6 (green, highlighting
+ *  the hanging pawn)", David 2026-06-16). The board is code-derived; this
+ *  prose has zero value to the reader. Strip the header + its trailing
+ *  bullet block. Anchored on the "board" prefix to avoid touching legit
+ *  prose that happens to contain "arrows". */
+const BOARD_PROSE_RE = /(?:^|\n)[ \t]*board\s+(?:arrows?|highlights?|markers?)\s*:[^\n]*(?:\n[ \t]*[-*•][^\n]*)*/gi;
+
 /** Conversational scaffolding the LLM tacks onto the front of
  *  responses despite explicit prompt bans. Audit 2026-05-19 (Bug I):
  *  every brief-mode response opened with "Great question" or "Let me
@@ -124,6 +135,9 @@ function stripMarkup(text: string): string {
     // the generic single-bracket match early and leak the tail.
     .replace(JSON_MARKUP_RE, '')
     .replace(SINGLE_MARKUP_RE, '')
+    // Prose "Board arrows:/highlights:" lists the LLM emits despite the
+    // code-draws-the-board rule — strip before whitespace-collapse.
+    .replace(BOARD_PROSE_RE, '')
     // Collapse runs of horizontal whitespace BUT preserve newlines.
     // `[ \t]+` only matches spaces/tabs so paragraph breaks survive.
     .replace(/[ \t]{2,}/g, ' ');

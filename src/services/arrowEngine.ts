@@ -124,6 +124,12 @@ const SAN_TOKEN_RE = /\b(?:[KQRBN][a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|[a-h
 const NON_MOVE_PHRASE_PRECEDERS = new Set([
   'the', 'a', 'on', 'at', 'square', 'pawn', 'piece', 'file',
   'rank', 'diagonal', 'point', 'about', 'around', 'near',
+  // Square-NOUN preceders: a coordinate after one of these names a square
+  // the coach is pointing at ("the backward c6 pawn", "the d5 outpost"),
+  // not a move — so it's a highlight, never an arrow. Kept in sync with
+  // SQUARE_REF_PRECEDERS so the two extractors never fight over a coord.
+  'outpost', 'target', 'weak', 'weakness', 'backward', 'isolated',
+  'passed', 'break', 'hole', 'controls', 'covers', 'eyes', 'hits',
 ]);
 
 /** Strip `[BOARD: ...]` directives so the SAN scan doesn't match the
@@ -229,8 +235,7 @@ export async function injectCandidateArrows(
     return hit ? hit.rank : null;
   };
 
-  const markers: string[] = [];
-  const injected: { san: string; color: ArrowColor }[] = [];
+  const resolved: { san: string; from: string; to: string; rank: number | null }[] = [];
   const seen = new Set<string>();
   for (const san of sans) {
     const arrow = resolveSanToArrow(san, [fen]);
@@ -238,10 +243,81 @@ export async function injectCandidateArrows(
     const key = `${arrow.from}-${arrow.to}`;
     if (seen.has(key)) continue;
     seen.add(key);
-    const color = colorForRank(rankOf(arrow));
-    markers.push(`[BOARD: arrow:${arrow.from}-${arrow.to}:${color}]`);
+    resolved.push({ san, from: arrow.from, to: arrow.to, rank: rankOf(arrow) });
+  }
+  // Cap + prioritize: a teaching answer that names many moves must NOT
+  // flood the board with arrows ("arrows all over the place", David
+  // 2026-06-16). Keep the few that matter — engine-ranked candidates
+  // first (the real best moves), then the rest — hard-capped. The
+  // masterclass standard: one well-anchored arrow beats a paragraph.
+  resolved.sort((a, b) => (a.rank ?? 99) - (b.rank ?? 99));
+  const capped = resolved.slice(0, MAX_CANDIDATE_ARROWS);
+  const markers: string[] = [];
+  const injected: { san: string; color: ArrowColor }[] = [];
+  for (const { san, from, to, rank } of capped) {
+    const color = colorForRank(rank);
+    markers.push(`[BOARD: arrow:${from}-${to}:${color}]`);
     injected.push({ san, color });
   }
   if (markers.length === 0) return { text: base, injected: [] };
   return { text: `${base} ${markers.join(' ')}`, injected };
+}
+
+/** Hard cap on arrows rendered for one coach answer. More than a few and
+ *  the board stops leading the eye and starts hiding it. */
+export const MAX_CANDIDATE_ARROWS = 3;
+/** Hard cap on highlights rendered for one coach answer (same reasoning). */
+export const MAX_CANDIDATE_HIGHLIGHTS = 3;
+
+/** Words that mark a following coordinate as a SQUARE the coach is
+ *  pointing at (an outpost, a target, a pawn) rather than part of a move.
+ *  The mirror of the arrow extractor: a coordinate after one of these is a
+ *  HIGHLIGHT, never an arrow. */
+const SQUARE_REF_PRECEDERS = new Set([
+  'the', 'a', 'on', 'at', 'to', 'square', 'outpost', 'pawn', 'piece',
+  'target', 'weak', 'weakness', 'backward', 'isolated', 'passed', 'break',
+  'file', 'rank', 'diagonal', 'hole', 'controls', 'covers', 'eyes', 'hits',
+]);
+const SQUARE_TOKEN_RE = /\b([a-h][1-8])\b/g;
+
+/** Every board SQUARE the coach explicitly pointed at in prose ("the d5
+ *  outpost", "the backward c6-pawn") — markers stripped first, and any
+ *  coordinate that belongs to a named MOVE (those become arrows) excluded.
+ *  This is the highlight twin of `extractMentionedSans` (G0: highlights are
+ *  code-derived from the squares the LLM names, never LLM-drawn markup). */
+export function extractMentionedSquares(text: string): string[] {
+  const cleaned = stripBoardMarkers(text);
+  const moveSquares = new Set<string>();
+  for (const san of extractMentionedSans(text)) {
+    let mm: RegExpExecArray | null;
+    const re = /([a-h][1-8])/g;
+    while ((mm = re.exec(san)) !== null) moveSquares.add(mm[1]);
+  }
+  const out: string[] = [];
+  let match: RegExpExecArray | null;
+  SQUARE_TOKEN_RE.lastIndex = 0;
+  while ((match = SQUARE_TOKEN_RE.exec(cleaned)) !== null) {
+    const sq = match[1];
+    if (moveSquares.has(sq)) continue;
+    const before = cleaned.slice(Math.max(0, match.index - 20), match.index);
+    const precedingWord = (before.trim().split(/\s+/).pop() ?? '')
+      .toLowerCase()
+      .replace(/[^a-z]/g, '');
+    if (!SQUARE_REF_PRECEDERS.has(precedingWord)) continue;
+    if (!out.includes(sq)) out.push(sq);
+  }
+  return out;
+}
+
+/** Code-derived HIGHLIGHT markers for the squares the coach named in prose.
+ *  Capped + deduped. Yellow (the "key square you're calling out" cue) —
+ *  the one grounded default, since color-intent (target vs outpost) isn't
+ *  recoverable without the LLM deciding, and the LLM no longer decides. */
+export function injectCandidateHighlights(text: string): { markers: string[]; squares: string[] } {
+  const squares = extractMentionedSquares(text).slice(0, MAX_CANDIDATE_HIGHLIGHTS);
+  if (squares.length === 0) return { markers: [], squares: [] };
+  return {
+    markers: [`[BOARD: highlight:${squares.map((s) => `${s}:yellow`).join(',')}]`],
+    squares,
+  };
 }

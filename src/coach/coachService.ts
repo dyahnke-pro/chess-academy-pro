@@ -1540,7 +1540,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
           `play_move SHORT-CIRCUITED — this trip has already had ${playMoveRejectionsThisTrip} play_move rejections. ` +
           `STOP attempting to walk through a sequence via play_move. play_move is for ONE move on YOUR color's turn during practical play, not a way to enact hypothetical lines. ` +
           `If the student asked for a guided opening lesson ("teach me [opening]" / "show me the trap"), call start_walkthrough_for_opening with the opening name — that routes them to a surface where each move animates sequentially. ` +
-          `If you just want to show one position to discuss, call set_board_position ONCE with the FEN and explain in prose + [BOARD: arrow] markers.`;
+          `If you just want to show one position to discuss, call set_board_position ONCE with the FEN and explain in prose — name the key moves in SAN and the app draws the arrows (do NOT emit [BOARD: arrow] markers yourself).`;
         toolResults.push({ name: call.name, ok: false, error });
         void logAppAudit({
           kind: 'tool-call-error',

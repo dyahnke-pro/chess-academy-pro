@@ -31,7 +31,7 @@
 import { logAppAudit } from './appAuditor';
 import { groundCoachAnswerBoardClaims, validateBoardClaims, stripDisprovenSentences } from './boardClaimValidator';
 import { stripUngroundedPlayerStats } from './claimValidator';
-import { injectCandidateArrows, type RankedCandidate } from './arrowEngine';
+import { injectCandidateArrows, injectCandidateHighlights, type RankedCandidate } from './arrowEngine';
 import { stockfishEngine } from './stockfishEngine';
 import { validateTacticClaims, stripUngroundedTacticSentences } from './tacticClaimValidator';
 import { stripDisprovenEvalSentences } from './evalClaimValidator';
@@ -295,5 +295,29 @@ export async function applyCandidateArrows(text: string, fen: string | null | un
     return out;
   } catch {
     return text; // never block the reply on an arrow fault
+  }
+}
+
+/** Code-derived HIGHLIGHT markers for a coach answer — the highlight twin
+ *  of `applyCandidateArrows` (G0: highlights are derived from the squares
+ *  the coach NAMED in prose, never drawn by the LLM). Returns just the
+ *  marker strings to append; the caller parses them onto the board. Never
+ *  throws. Synchronous — no engine needed (highlights are geometry-free). */
+export function candidateHighlightMarkers(text: string, source: string): string[] {
+  if (!text.trim()) return [];
+  try {
+    const { markers, squares } = injectCandidateHighlights(text);
+    if (squares.length > 0) {
+      void logAppAudit({
+        kind: 'coach-narration-spoken',
+        category: 'subsystem',
+        source: `${source}.highlightEngine`,
+        summary: `injected ${squares.length} code-highlight(s): ${squares.join(', ')}`,
+        details: JSON.stringify({ source, squares }),
+      });
+    }
+    return markers;
+  } catch {
+    return [];
   }
 }

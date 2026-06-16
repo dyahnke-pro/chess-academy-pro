@@ -92,7 +92,7 @@ import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
 import { explainBestMoveGrounded } from '../../services/groundedAnswer';
 import { validateTacticClaims } from '../../services/tacticClaimValidator';
-import { applyCandidateArrows } from '../../services/coachAnswerGates';
+import { applyCandidateArrows, candidateHighlightMarkers } from '../../services/coachAnswerGates';
 import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
@@ -3116,32 +3116,18 @@ export function CoachTeachPage(): JSX.Element {
         }
       }
 
-      // Parse [BOARD: arrow:e2-e4:green] / highlight: / clear markers
-      // out of the LLM's response and render them on the board. Each
-      // new coach turn clears prior annotations and applies fresh
-      // ones, so the board never accumulates stale arrows.
-      const board = parseBoardTags(result.text);
-      const nextArrows: BoardArrow[] = [];
-      const nextHighlights: BoardHighlight[] = [];
-      let cleared = false;
-      for (const cmd of board.commands) {
-        if (cmd.type === 'clear') cleared = true;
-        if (cmd.type === 'arrow' && cmd.arrows) nextArrows.push(...cmd.arrows);
-        if (cmd.type === 'highlight' && cmd.highlights) nextHighlights.push(...cmd.highlights);
-      }
-      // Always replace prior arrows/highlights with this turn's set —
-      // a turn with no annotations clears the board (cleared=true is
-      // the explicit form). Caller has the option to leave them by
-      // emitting the same arrow markers in the follow-up turn.
-      void cleared;
-      // Ground the brain's arrows against the board before rendering: drop any
-      // arrow that starts on an empty square or cuts a line the piece can't
-      // actually see (and cap the count) so the board never shows ungrounded
-      // arrows scattered across it (David's audit 2026-06-10). The synthesized
-      // arrows appended below are chess.js-derived, so they're grounded by
-      // construction.
-      setArrows(uniqueArrows(groundArrows(nextArrows, fen)));
-      setHighlights(nextHighlights);
+      // Board annotations are CODE-DERIVED ONLY (G0): the LLM no longer
+      // draws arrows or highlights. It just NAMES moves (→ arrows) and
+      // squares (→ highlights) in prose; code resolves the geometry +
+      // Stockfish-rank color below. Any `[BOARD: ...]` markup (or a prose
+      // "Board arrows:" list) the LLM emitted anyway is stripped from the
+      // display and IGNORED as a board source — that markup is exactly what
+      // leaked to the student ("Board arrows: c6-c6 highlighting the hanging
+      // pawn", David 2026-06-16) and produced ungrounded arrows. Clear this
+      // turn's annotations up front; the code-derived set is applied after
+      // the final text is known (see the candidate-annotation pass below).
+      setArrows([]);
+      setHighlights([]);
 
       // Sanitize the FINAL response too — both for transcript display
       // and for the conversation memory record. Memory rehydration on
@@ -3199,22 +3185,28 @@ export function CoachTeachPage(): JSX.Element {
         // markers. The synthesized markers are re-parsed below so the
         // board renders the arrows the LLM forgot — closes the G6
         // loop without an extra LLM round-trip.
-        // Arrow standard (G0): the LLM no longer emits arrow markers.
-        // Code resolves every mentioned move's geometry and colors it by
-        // Stockfish rank (the ONE arrow path, shared via arrowEngine).
-        // Display text (`finalText`) stays as the LLM wrote it; we only
-        // extract the code-derived markers onto the board.
+        // Annotation standard (G0): the LLM no longer emits arrow OR
+        // highlight markers. Code resolves every NAMED move's geometry
+        // (colored by Stockfish rank, capped so the board never floods)
+        // and every NAMED square's highlight — the ONE shared path via
+        // arrowEngine. This is the SOLE board source; the LLM's own markup
+        // was already cleared above and is ignored. Display text
+        // (`finalText`) stays as the LLM wrote it; we only extract the
+        // code-derived markers onto the board.
         const arrowed = await applyCandidateArrows(finalText, fen, 'CoachTeachPage');
-        if (arrowed !== finalText) {
-          const arrowBoard = parseBoardTags(arrowed);
-          const codeArrows: BoardArrow[] = [];
-          for (const cmd of arrowBoard.commands) {
-            if (cmd.type === 'arrow' && cmd.arrows) codeArrows.push(...cmd.arrows);
-          }
-          if (codeArrows.length > 0) {
-            setArrows((prev) => uniqueArrows([...prev, ...codeArrows]));
-          }
+        const highlightMarkers = candidateHighlightMarkers(finalText, 'CoachTeachPage');
+        const annotated = highlightMarkers.length > 0
+          ? `${arrowed} ${highlightMarkers.join(' ')}`
+          : arrowed;
+        const annoBoard = parseBoardTags(annotated);
+        const codeArrows: BoardArrow[] = [];
+        const codeHighlights: BoardHighlight[] = [];
+        for (const cmd of annoBoard.commands) {
+          if (cmd.type === 'arrow' && cmd.arrows) codeArrows.push(...cmd.arrows);
+          if (cmd.type === 'highlight' && cmd.highlights) codeHighlights.push(...cmd.highlights);
         }
+        setArrows(uniqueArrows(groundArrows(codeArrows, fen)));
+        setHighlights(codeHighlights);
         setMessages((prev) => [...prev, {
           id: `${turnId}-c`,
           role: 'assistant',
