@@ -10,11 +10,15 @@ import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
-const INPUTS = [
-  'teach me the Vienna',                                   // control (known good)
-  'what is the single best move and why is it winning?',   // loop silent-hang
-  'Réti Opening',                                          // loop silent-hang
-];
+const INPUTS = (process.env.AUDIT_ISO_INPUTS
+  ? process.env.AUDIT_ISO_INPUTS.split('||')
+  : [
+      'teach me the Vienna',                                   // control (known good)
+      'what is the single best move and why is it winning?',   // loop silent-hang
+      'Réti Opening',                                          // loop silent-hang
+    ]);
+import { mkdir } from 'node:fs/promises';
+const SHOT_DIR = 'audit-reports/iso-shots';
 
 async function run(browser, text) {
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 }, userAgent: 'AuditIsoBot/1.0' });
@@ -42,7 +46,12 @@ async function run(browser, text) {
     await page.waitForTimeout(2000);
     const help = page.locator('[data-testid="page-help-modal"]'); if (await help.count()) { await page.keyboard.press('Escape'); await page.waitForTimeout(500); }
     const input = page.locator('[data-testid="chat-text-input"]');
-    await input.waitFor({ timeout: 15000 });
+    const inputThere = await input.count();
+    await mkdir(SHOT_DIR, { recursive: true }).catch(() => {});
+    const slug = text.slice(0, 16).replace(/[^a-z0-9]/gi, '_');
+    await page.screenshot({ path: `${SHOT_DIR}/${slug}-before.png` }).catch(() => {});
+    console.log(`    [${slug}] chat-input present=${inputThere} url=${page.url()}`);
+    await input.waitFor({ timeout: 15000 }).catch(() => {});
     // Baseline: a NARRATING walkthrough panel that's already up (none expected
     // on a fresh teach — the ever-present empty-state teach-picker is NOT a
     // response and is intentionally excluded).
@@ -69,7 +78,9 @@ async function run(browser, text) {
       if (len > beforeLen + 60) { respMs = Date.now() - ts; respKind = 'text'; break; }
       await page.waitForTimeout(400);
     }
-    console.log(`  "${text.slice(0, 48)}"  → askFired=${askFiredMs ?? 'NONE'}ms  responded=${respMs !== null ? `${respMs}ms (${respKind})` : 'NO (90s)'}`);
+    await page.screenshot({ path: `${SHOT_DIR}/${slug}-after.png` }).catch(() => {});
+    const inputDisabled = await input.isDisabled().catch(() => 'unknown');
+    console.log(`  "${text.slice(0, 48)}"  → askFired=${askFiredMs ?? 'NONE'}ms  responded=${respMs !== null ? `${respMs}ms (${respKind})` : 'NO (90s)'}  inputDisabledAtEnd=${inputDisabled}`);
     return { text, askFiredMs, respMs, respKind };
   } finally {
     await ctx.close().catch(() => {});
