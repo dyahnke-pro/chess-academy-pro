@@ -2741,7 +2741,7 @@
     "variations": [
       {
         "name": "Reti: KIA Setup g3 Bg2 d3 e4",
-        "pgn": "Nf3 d5 g3 Nf6 Bg2 c6 O-O Bg4 d3 Nbd7 Nbd2 e5 e4 dxe4 dxe4 Bc5 h3 Bh5 Qe1 O-O",
+        "pgn": "Nf3 d5 g3 c6 Bg2 Bg4 O-O Nd7 d3 Ngf6 Nbd2 e5 e4 dxe4 dxe4 Bc5 h3 Bh5 Qe1 O-O",
         "explanation": "White transposes from the Reti into a King's Indian Attack formation with g3, Bg2, d3, and the key e4 break. After e4 opens the long diagonal, the g2 bishop becomes a monster targeting the queenside. The Qe1 maneuver allows redeployment to g3 or h4 for kingside pressure. This flexible setup works against virtually any Black defensive scheme and gives White a straightforward attacking plan."
       },
       {
