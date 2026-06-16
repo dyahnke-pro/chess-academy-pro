@@ -1370,11 +1370,6 @@
         "explanation": "The Antoshin Variation arises after dxe5 Nxe4, where Black temporarily wins a pawn but must handle the resulting complications accurately. The key idea is that after ...d5, Black establishes a strong central presence and the knight captures on d2 disrupting White's coordination. The ensuing endgame-type middlegame is comfortable for Black with the active piece on d5 and the bishops controlling key diagonals. Black should aim for simplification to exploit the extra central space."
       },
       {
-        "name": "Lion Variation",
-        "pgn": "e4 e5 Nf3 d6 d4 Nf6 Nc3 Nbd7 Bc4 Be7 O-O O-O a4 c6 Re1 b6 Ba2 Bb7 Bg5 h6 Bh4 Qc7 d5 c5 Nd2 Nh7 Bxe7",
-        "explanation": "The Lion setup adds ...b6 and ...Bb7 to the Hanham formation, giving the light-squared bishop scope along the a8-h1 diagonal. This fianchetto approach is very flexible and creates additional pressure on e4 and d5. The bishop on b7 supports the eventual ...d5 break and controls key central squares. After White plays d5, Black shifts to kingside counterplay with ...Nh7 and ...Ng5, targeting the weakened f3 and h3 squares while maintaining queenside solidity."
-      },
-      {
         "name": "Philidor Counter-Gambit",
         "pgn": "e4 e5 Nf3 d6 d4 f5 Nc3 fxe4 Nxe4 d5 Neg5 exd4 Nxd4 Bc5 Be3 Bxd4 Bxd4 Nf6 Be2 O-O O-O Nc6",
         "explanation": "The Philidor Counter-Gambit with ...f5 is a sharp and ambitious choice that immediately contests the center. After exf4 Nxe4, the position opens dramatically and tactical skill becomes paramount. Black must play precisely after Neg5, but the ...Bc5 development hits d4 and f2 with tempo. The pawn sacrifice leads to active piece play where Black's lead in development and open f-file provide full compensation. This is an excellent weapon for players who enjoy tactical complications."
