@@ -39,6 +39,10 @@ const BOOT_TIMEOUT_MS = 30_000;
 // provider (another ~30s) — so a legit answer under load can take ~60s. Only
 // flag a TRUE hang past that.
 const ANSWER_TIMEOUT_MS = 60_000;
+// Gap between brain-bound asks. Default 4.5s — a real single user does NOT
+// fire move-by-move questions faster than this, and tighter pacing on the
+// 45-input harder pass saturated the shared brain proxy into false hangs.
+const ASK_GAP_MS = Number(process.env.AUDIT_ASK_GAP_MS ?? 4500);
 const ERROR_FALLBACKS = ['hit a snag', 'say it again', 'something went wrong', "couldn't"];
 
 // ── The adversarial input bank, by the programmed function it targets ──
@@ -501,8 +505,12 @@ async function main() {
       // Human pacing between asks — keeps the adversarial loop from saturating
       // the shared LLM proxy with itself and manufacturing false `silent-hang`s.
       // The CHAOS is still in the messy inputs + state collisions, not in an
-      // inhuman request rate (real single-user use is paced).
-      await page.waitForTimeout(1800);
+      // inhuman request rate (real single-user use is paced). Bumped + made
+      // configurable after the harder (45-input) pass over-saturated the
+      // shared brain proxy at 1.8s and manufactured false silent-hangs on the
+      // heavy brain bait (David 2026-06-16) — a real human takes seconds
+      // between move-by-move questions.
+      await page.waitForTimeout(ASK_GAP_MS);
     }
 
     // State chaos on every pass from 2 up (and pass 1 too — break early).

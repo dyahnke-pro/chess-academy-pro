@@ -42,15 +42,21 @@ async function run(browser, text) {
     const ts = Date.now();
     await input.fill(text, { timeout: 8000 });
     await page.locator('[data-testid="chat-send-btn"]').click({ timeout: 8000, force: true });
-    // wait up to 90s for a response (transcript growth)
+    // wait up to 90s for ANY response form: a walkthrough panel, a line
+    // picker, a returning-visitor chooser, or chat-text growth. (The first
+    // detector only checked text growth and wrongly flagged the walkthrough-
+    // panel responses as hangs.)
     let respMs = null;
+    let respKind = null;
     const dl = Date.now() + 90000;
     while (Date.now() < dl) {
+      const panel = await page.locator('[data-testid^="walkthrough-"], [data-testid="line-picker"], [data-testid="teach-picker"], [data-testid="teach-generation-progress"]').first().isVisible().catch(() => false);
+      if (panel) { respMs = Date.now() - ts; respKind = 'panel'; break; }
       const len = (await page.locator('body').innerText().catch(() => '')).length;
-      if (len > beforeLen + 20) { respMs = Date.now() - ts; break; }
+      if (len > beforeLen + 40) { respMs = Date.now() - ts; respKind = 'text'; break; }
       await page.waitForTimeout(500);
     }
-    console.log(`  "${text.slice(0, 50)}"  → firstNetwork=${firstSign ? firstSign.ms + 'ms' : 'NONE'}  responded=${respMs !== null ? respMs + 'ms' : 'NO (90s)'}`);
+    console.log(`  "${text.slice(0, 50)}"  → firstNetwork=${firstSign ? firstSign.ms + 'ms' : 'NONE'}  responded=${respMs !== null ? `${respMs}ms (${respKind})` : 'NO (90s)'}`);
     return { text, firstSign, respMs };
   } finally {
     await ctx.close().catch(() => {});
