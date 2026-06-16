@@ -1,6 +1,28 @@
 # Line-accuracy fix-list (2026-06-16) — the sold-repertoire soundness campaign
 
-## 🔒 THE STANDARD (David 2026-06-16, consolidated — supersedes the −1.0 triage below)
+## 🔒🔒 FINAL "WELL-TAUGHT LINE" GATE (David 2026-06-16 — practical results, supersedes equal-or-better)
+Eval alone is too blunt. A line is **well-taught if the student scores ≥ ~45% at
+masters OR at the student's club level (~1400-2000)** — AND it isn't
+catastrophically lost (eval floor ≈ ≥ −2.0) on an **adequate sample (≥ ~30 games)**.
+- **Win% (results) is the verdict; eval is a sanity floor.** A line that wins at
+  the buyer's level is good even at a negative engine eval. (Tooling:
+  `check-line-winrate.mjs`, `SOURCE=masters|lichess`.)
+- **This validates the surprise-weapon thesis with data:** Stafford −2.58 scores
+  **46% at club level on 26k games** → a real weapon, kept (labeled surprise).
+  Caro Advance, Four Pawns, KID Fianchetto, Carlsen Modern, etc. all rescued by
+  club results — they're good practical recommendations.
+- **Eval-floor + min-sample guard against false rescues:** Philidor Lion shows
+  "48%" on only 20 games at −6.25 — a lost line; the floor/sample catches it.
+- **Aggression earns its place by WINNING at the buyer's level, not by eval.**
+
+### Genuine defects after the win% gate (~7 — bad at BOTH levels / eval-floor):
+Philidor Lion (−6.25, lost), Alekhine main (29%/34%), Petrov Classical (40%/38% —
+Petrov is solid, so the line is wrong), KID main (42%/38%), Carlsen Sämisch f3
+(33%/38%), Philidor Nimzowitsch-Rellstab (35%/39%), Bird's main (45%/39%,
+borderline). These are the real re-anchor/cut targets (down from 25). Each still
+edits a hand-authored lesson → fix WITH the narration pass, gated by this rule.
+
+## THE STANDARD (David 2026-06-16, consolidated — superseded by the win% gate above for "good line")
 **Every taught line must end EQUAL OR BETTER for the student.** Concretely (chess
 reality: White moves first, so sound Black defenses are a hair negative at best
 play — that IS equality): the student ends **balanced (≈ −0.3/−0.4 or better),
