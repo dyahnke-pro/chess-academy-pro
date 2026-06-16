@@ -222,6 +222,22 @@ already exists for that line.
 
 ---
 
+## BUILD STATUS (2026-06-16)
+- ✅ P1 engine · ✅ P2 cards · ✅ P3 syllabus (two-level tree) · ✅ subline engine
+  (frequency-derived, 2,659 sublines / 58 courses) · ✅ Stage-1 frequency why +
+  selective narration · ✅ **Anti-X courses** (9, data-driven from amateur-struggle
+  ranking, all engine-sound for White +0.26..+1.14) · ✅ **Gambit courses** (7) ·
+  ✅ **pay-per-class gating seam** (dormant).
+- ⏳ Eval why-NARRATION: soundness eval DONE (all anti-openings sound; script
+  `_soundness` pattern). Per-subline eval text is a follow-on (frequency why
+  already ships the spoken fact; full per-subline Stockfish batch ≈ 25-30 min).
+- ⏳ **Adaptive tree-trainer / course-sparring** — the ONE remaining feature.
+  It's a cross-surface integration into the coach-play room + training loop
+  (LOCKED contracts in CLAUDE.md), so build it as a SELF-CONTAINED course-trainer
+  surface (reuse the board + subline tree + weak-spot signal) rather than modify
+  `/coach/play`. Warrants the 3-instrument audit — do it carefully, not rushed.
+- ⛔ Narration (Stage-2 authored voice) — David: do it LAST, after the build.
+
 ## Phased build (each phase shippable)
 
 - **P1 — Course progress engine (no UI). ✅ DONE.** `src/services/openingCourse.ts`
