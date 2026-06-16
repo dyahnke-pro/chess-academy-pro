@@ -32,6 +32,7 @@ import { loadRoutesManifest } from './sources/routesManifest';
 import { prepareLiveState } from './sources/liveState';
 import type { CoachPersonality, IntensityLevel } from './types';
 import { PHASE_NARRATION_ADDITION, WALKTHROUGH_PROMISE_CONTRACT } from '../services/coachPrompts';
+import { formatTrapForPrompt } from '../services/openingTrapDetector';
 
 /** Appended to the identity prompt when the surface is 'teach'. The
  *  /coach/teach surface defaults to GUIDED OPENING PLAY: the student
@@ -81,6 +82,8 @@ PLACE THE HIGHLIGHT MARKER RIGHT WHERE YOU SAY THE SQUARE. Put \`[BOARD: highlig
 When you want to demonstrate a sequence of moves ("the Vienna Gambit goes 1.e4 e5 2.Nc3 Nc6 3.f4 d5", or "the Greek Gift sac runs Bxh7+ Kxh7 Ng5+ Kg8 Qh5"), do NOT call \`play_move\` for each ply in the line. \`play_move\` is for ONE move on YOUR color's turn during practical play. It is not a way to walk a hypothetical line ply-by-ply.
 
 THE PREFERRED PATH — the FIRST tool call you make — for "teach me [opening name]" / "walk me through [line]" / "show me the traps in [opening]" / "let's do the [opening] trap" is \`start_walkthrough_for_opening\`. That tool routes the student to the dedicated walkthrough surface where moves animate sequentially with timed narration — the student SEES each move land. It's the right experience for a guided opening lesson and it MUST be your first instinct when the student names an opening they want to learn. Production audit (build 42fb9a0) caught the brain emitting NINE sequential play_move calls on a "let's do the Vienna trap" ask — every single one rejected (sovereignty + illegal-move chain) — instead of the one start_walkthrough_for_opening call that would have just worked. The code now short-circuits play_move after 2 rejections in one trip with a hard error directing you to start_walkthrough_for_opening; this is the prompt-side warning so you don't trip the backstop.
+
+🚨 BUT — a question about a TRAP IN THE CURRENT POSITION is NOT an opening-lesson request. "Is there a trap in this position?" / "any traps here?" / "can I trap them here?" / "what's the trap here?" / "am I about to fall into a trap?" asks you to assess the POSITION ON THE BOARD RIGHT NOW — answer it IN CHAT, do NOT call start_walkthrough_for_opening (that spins up a minute-long opening lesson the student didn't ask for). The [Live state] block carries a PRE-COMPUTED "Position trap scan" when a trap exists here: if it's present, name the popular-but-losing move + its refutation and the game count, exactly as given (G0 — voice it, never invent one). If there is NO trap-scan block, say plainly there's no trap you can see in this position (optionally point at the live tactical context) — do NOT manufacture one and do NOT start a walkthrough. The walkthrough path is ONLY for "show me the traps IN [a named opening]" / "teach me the [opening] trap" — a NAMED opening the student wants to LEARN, not the live board.
 
 ═══ TEACHING-MODE MENU — TELL THEM THE OPTIONS, ONCE ═══
 
@@ -747,6 +750,14 @@ function formatLiveStateBlock(state: LiveState): string {
   }
   if (state.tactics) {
     parts.push(formatTacticsSubBlock(state.tactics));
+  }
+  if (state.trapSignal) {
+    // PRE-COMPUTED trap-mining result (G3 + G0): a popular-but-losing move in
+    // THIS position with its refutation, decided by the engine in code. Voice
+    // it; never invent a trap that isn't here.
+    parts.push(
+      `- Position trap scan (PRE-COMPUTED — voice ONLY this; do NOT invent a trap):\n  ${formatTrapForPrompt(state.trapSignal)}`,
+    );
   }
   if (state.annotationContext) {
     const block = formatAnnotationContextSubBlock(state.annotationContext);

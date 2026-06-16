@@ -91,6 +91,8 @@ import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from 
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
 import { explainBestMoveGrounded } from '../../services/groundedAnswer';
+import { scanPositionForTrap } from '../../services/positionTrapScan';
+import type { TrapSignal } from '../../services/openingTrapDetector';
 import { validateTacticClaims } from '../../services/tacticClaimValidator';
 import { applyCandidateArrows } from '../../services/coachAnswerGates';
 import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
@@ -2554,6 +2556,62 @@ export function CoachTeachPage(): JSX.Element {
       studentColor,
       studentRating,
     );
+    // Position TRAP SCAN (David 2026-06-16) — the SAME engine-first trap
+    // miner /coach/play uses (`scanPositionForTrap` → `detectTrapInPosition`):
+    // a POPULAR move here the engine says is LOSING, plus its refutation.
+    // Only runs on a trap/tactics-shaped question so a normal ask doesn't pay
+    // the per-candidate cloud-eval cost. The result rides in the GROUNDED
+    // handoff (liveState.trapSignal); the LLM voices it, never invents it (G0).
+    // Off-book / no explorer coverage → null → correctly silent (G3). This is
+    // what makes "is there a trap in this position?" answer from the live
+    // board instead of spinning up an opening lesson.
+    let trapSignalForAsk: TrapSignal | undefined;
+    const asksAboutTrap =
+      /\b(trap|traps|tactic|tactics|blunder|fall(?:ing)?\s+into|caught|punish|refut|trick|tricks)\b/i.test(
+        text,
+      );
+    if (asksAboutTrap) {
+      let engineBestSan: string | undefined;
+      const bestUci = cachedAnalysis?.bestMove;
+      if (bestUci && bestUci.length >= 4) {
+        try {
+          const c = new Chess(fen);
+          const mv = c.move({
+            from: bestUci.slice(0, 2),
+            to: bestUci.slice(2, 4),
+            promotion: bestUci.slice(4, 5) || undefined,
+          });
+          engineBestSan = mv?.san;
+        } catch {
+          /* leave undefined — refutation hint is optional */
+        }
+      }
+      let legalSan: string[] | undefined;
+      try {
+        legalSan = new Chess(fen).moves();
+      } catch {
+        /* leave undefined — detector skips legality filtering */
+      }
+      try {
+        trapSignalForAsk =
+          (await scanPositionForTrap({
+            fen,
+            mover: fenTurn === 'white' ? 'w' : 'b',
+            engineBestSan,
+            legalSan,
+          })) ?? undefined;
+      } catch {
+        /* explorer/network failure → no trap claim, never a fabricated one */
+      }
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'CoachTeachPage.positionTrapScan',
+        summary: trapSignalForAsk
+          ? `trap found: ${trapSignalForAsk.trapMove} (${trapSignalForAsk.gamesPlayed}g ${trapSignalForAsk.evalCpForMover}cp ${trapSignalForAsk.severity})`
+          : `no trap at current fen (scan ran, none qualified)`,
+      });
+    }
     const liveState: LiveState = {
       surface: 'teach',
       currentRoute: '/coach/teach',
@@ -2566,6 +2624,7 @@ export function CoachTeachPage(): JSX.Element {
       // response, then chess.js rejected it 5 trips in a row.
       whoseTurn: fenTurn,
       tactics: tacticsForAsk,
+      trapSignal: trapSignalForAsk,
       // GROUNDING INVERSION (STEP A): thread Stockfish's best move (UCI) so the
       // chat layer can COMPUTE a best-move answer and voice it via voiceFacts —
       // grounding even OFF-BOOK positions the master-play DB can't cover. Only

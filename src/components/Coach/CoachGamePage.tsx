@@ -66,9 +66,10 @@ import {
   loadCoachPlayChat,
   saveCoachPlayChat,
 } from '../../services/coachPlayPersistence';
-import { fetchLichessExplorer, fetchCloudEval } from '../../services/lichessExplorerService';
+import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { addAddressedConversion } from '../../services/conversionProgress';
-import { detectTrapInPosition, formatTrapForPrompt, type MoveEvaluation } from '../../services/openingTrapDetector';
+import { formatTrapForPrompt } from '../../services/openingTrapDetector';
+import { scanPositionForTrap } from '../../services/positionTrapScan';
 import { buildFastMoveLine } from '../../utils/fastMoveNarration';
 import { dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
 
@@ -104,60 +105,6 @@ function withFetchTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
     promise,
     new Promise<T>((_, reject) => setTimeout(() => reject(new Error('timeout')), ms)),
   ]);
-}
-
-/**
- * Evaluate a set of candidate SAN moves on the position reached AFTER
- * each move. Uses Lichess cloud-eval (no auth, free, cached) per
- * candidate in parallel. Candidates whose FEN has no cloud eval
- * (404) are skipped — better to miss a trap than to mis-flag one.
- *
- * Eval is normalised to the MOVER's POV: positive = the candidate
- * player got better, negative = they lost ground. This matches what
- * `detectTrapInPosition` expects (it looks for popular moves where
- * evalCp &lt;= -200 for the mover).
- */
-/** Max Lichess cloud-eval requests in flight at once. Previously
- *  Promise.all fired 5+ candidates in parallel on every trap check,
- *  which could 429 on the public endpoint or just pile up on slow
- *  networks. 2-at-a-time is enough to keep latency reasonable
- *  without burst. */
-const LICHESS_CLOUD_EVAL_CONCURRENCY = 2;
-
-async function evaluateExplorerCandidates(
-  fen: string,
-  sanList: string[],
-  mover: 'w' | 'b',
-): Promise<MoveEvaluation[]> {
-  const ChessCtor = (await import('chess.js')).Chess;
-
-  const evalOne = async (san: string): Promise<MoveEvaluation | null> => {
-    try {
-      const board = new ChessCtor(fen);
-      const moved = board.move(san);
-      if (!moved) return null;
-      const resultingFen = board.fen();
-      const eval_ = await withFetchTimeout(fetchCloudEval(resultingFen, 1), LICHESS_FETCH_TIMEOUT_MS);
-      if (!eval_ || !eval_.pvs || eval_.pvs.length === 0) return null;
-      // cloud-eval cp is from WHITE's POV. Flip for black movers so
-      // the detector gets a "this was good/bad for the MOVER" number.
-      const cpWhitePov = eval_.pvs[0].cp ?? 0;
-      const evalCp = mover === 'w' ? cpWhitePov : -cpWhitePov;
-      return { san, evalCp };
-    } catch {
-      return null;
-    }
-  };
-
-  // Chunked Promise.all — process LICHESS_CLOUD_EVAL_CONCURRENCY at a
-  // time to cap outbound request bursts against the free Lichess API.
-  const results: (MoveEvaluation | null)[] = [];
-  for (let i = 0; i < sanList.length; i += LICHESS_CLOUD_EVAL_CONCURRENCY) {
-    const chunk = sanList.slice(i, i + LICHESS_CLOUD_EVAL_CONCURRENCY);
-    const chunkResults = await Promise.all(chunk.map(evalOne));
-    results.push(...chunkResults);
-  }
-  return results.filter((r): r is MoveEvaluation => r !== null);
 }
 import { resolveVerbosity, shouldCallLlmForMove } from '../../services/coachCommentaryPolicy';
 import { resolvePhaseNarrationVerbosity, resolveLlmNarrationDensity } from '../../utils/coachNarration';
@@ -3237,33 +3184,21 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                 `[Lichess Opening Explorer at current position${openingLabel}]\n${topMoves}`,
               );
 
-              // Trap detection — cloud-eval each top explorer move on
-              // its RESULTING position to get a correct per-candidate
-              // eval. The prior implementation paired explorer moves
-              // (ranked by popularity) with Stockfish top-lines
-              // (ranked by strength) by array index. Those arrays
-              // don't align, so the detector was reading the wrong
-              // eval for the wrong move. Now each candidate is
-              // evaluated on its own resulting FEN; missing cloud
-              // evals (404) are skipped, never misattributed.
-              const evaluations = await evaluateExplorerCandidates(
-                probe.fen(),
-                explorer.moves.slice(0, 5).map((m) => m.san),
+              // Trap detection — the SHARED `scanPositionForTrap` (the same
+              // tool /coach/teach uses): cloud-eval each top explorer move on
+              // its RESULTING position and flag a popular-but-losing one. Pass
+              // the already-fetched `explorer` so we don't double-fetch.
+              const trap = await scanPositionForTrap({
+                fen: probe.fen(),
                 mover,
-              );
-              if (evaluations.length > 0) {
-                const trap = detectTrapInPosition({
-                  explorer,
-                  evaluations,
-                  engineBestSan: engineBestMoveSan !== '?' ? engineBestMoveSan : undefined,
-                  // Gate against the CURRENT legal-move set so an
-                  // explorer/FEN mismatch can't surface a trap for a
-                  // move that isn't playable right now.
-                  legalSan: probe.moves(),
-                });
-                if (trap) {
-                  groundedNotes.push(formatTrapForPrompt(trap));
-                }
+                explorer,
+                engineBestSan: engineBestMoveSan !== '?' ? engineBestMoveSan : undefined,
+                // Gate against the CURRENT legal-move set so an explorer/FEN
+                // mismatch can't surface a trap for an unplayable move.
+                legalSan: probe.moves(),
+              });
+              if (trap) {
+                groundedNotes.push(formatTrapForPrompt(trap));
               }
             }
           } catch (err: unknown) {
