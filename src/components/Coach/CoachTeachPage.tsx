@@ -12,7 +12,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
-import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, X, Check, MessageCircle, Zap } from 'lucide-react';
+import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw } from 'lucide-react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
 import { NarrationArrowOverlay } from './NarrationArrowOverlay';
@@ -88,6 +88,7 @@ import type { LiveState } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
+import { explainBestMoveGrounded } from '../../services/groundedAnswer';
 import { validateTacticClaims } from '../../services/tacticClaimValidator';
 import { applyCandidateArrows } from '../../services/coachAnswerGates';
 import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
@@ -1048,6 +1049,14 @@ export function CoachTeachPage(): JSX.Element {
        *  reply) means "this is the step-by-step path; play_move is disabled
        *  so the LLM cannot pick or play a move." Undefined = legacy path. */
       coachReplyPlayed?: string;
+      /** GROUNDING COMPLETENESS (David 2026-06-15): the captured-piece +
+       *  squares fact for the coach's reply, computed in code (chess.js).
+       *  The SAN alone (e.g. "Qxg5") tells the LLM a capture happened but NOT
+       *  what was taken — and the after-FEN can't tell it either (the victim
+       *  is gone). Without this the LLM fabricates the victim ("queen takes
+       *  queen"). Handed in so the LLM narrates the REAL capture, never an
+       *  invented one. */
+      coachReplyFact?: string;
     },
   ): Promise<void> => {
     if (!text.trim() || busy) return;
@@ -2636,11 +2645,11 @@ export function CoachTeachPage(): JSX.Element {
       (STEP_BY_STEP_RE.test(text) || engineDrivenStep) && !walkthrough.isActive;
     const effectiveAsk =
       replyPlayed && replyPlayed.length > 0
-        ? `${text}\n\n[STEP-BY-STEP NARRATION — the engine already played the coach's reply ${replyPlayed}; it is ALREADY on the board. You do NOT and CANNOT play moves (play_move is disabled). NARRATE ${replyPlayed}: name the idea behind it, draw [BOARD: arrow:from-to:green] on that move AND on every SAN you mention in prose. Put your SPOKEN narration in a [VOICE: ...] marker — one or two plain sentences naming the move and its idea — so the coach speaks it aloud (this is REQUIRED; without it the student hears nothing). Do NOT summarize or continue any earlier topic; narrate this reply and prompt the student's next move.]`
+        ? `${text}\n\n[STEP-BY-STEP NARRATION — the engine already played the coach's reply ${replyPlayed}; it is ALREADY on the board. ${opts?.coachReplyFact ?? ''} You do NOT and CANNOT play moves (play_move is disabled). NARRATE ${replyPlayed} using ONLY the grounded fact above for what it captured — never invent a captured piece. Name the idea behind the move, draw [BOARD: arrow:from-to:green] on that move AND on every SAN you mention in prose. Put your SPOKEN narration in a [VOICE: ...] marker — one or two plain sentences naming the move and its idea — so the coach speaks it aloud (this is REQUIRED; without it the student hears nothing). Do NOT summarize or continue any earlier topic; narrate this reply and prompt the student's next move.]`
         : engineDrivenStep
           ? text // no legal coach reply (game over) — narrate the student's move only
           : isStepByStepReport
-            ? `${text}\n\n[STEP-BY-STEP: the student is walking a line move-by-move and just reported THEIR move. Respond ONLY to this latest move — narrate the line's reply and, per the arrow rule, draw an arrow on every SAN you mention in prose. Do NOT call play_move (the engine plays moves, not you). Do NOT summarize or continue any earlier conversation topic; answer this move and prompt for their next one.]`
+            ? `${text}\n\n[STEP-BY-STEP: the student reported THEIR move. The coach's reply has NOT been computed by the engine — you do NOT know it. You MUST NOT name, narrate, or invent ANY coach reply move: no "queen takes queen", no fabricated capture, no guessed continuation. Inventing a move that wasn't played is a hallucination and is forbidden. Acknowledge ONLY the student's reported move and its idea, draw an arrow on every SAN you ACTUALLY mention, then prompt for their next move. If you have nothing grounded to say about THEIR move, be brief or stay silent — never fill the gap with an invented reply.]`
             : text;
     if (isStepByStepReport) {
       void logAppAudit({
@@ -3382,6 +3391,46 @@ export function CoachTeachPage(): JSX.Element {
         if (reply) {
           const played = handlePlayMove(reply);
           if (played.ok) {
+            // GROUNDING COMPLETENESS (David 2026-06-15): compute what the
+            // reply ACTUALLY did — captured piece + squares — from the BEFORE
+            // position, so the LLM narrates the real move instead of inventing
+            // the victim ("queen takes queen"). The SAN + after-FEN alone don't
+            // carry the captured piece.
+            let replyFact = '';
+            try {
+              const probe = new Chess(move.fen);
+              const m = probe.move(reply);
+              if (m) {
+                const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+                const mover = NAME[m.piece] ?? 'piece';
+                const facts: string[] = [];
+                // 1. What it did — the victim is gone from the after-FEN, so this
+                //    is the ONLY source of the captured piece.
+                facts.push(m.captured
+                  ? `CAPTURED the ${NAME[m.captured] ?? 'piece'} on ${m.to} (${mover} from ${m.from}).`
+                  : `quiet ${mover} move ${m.from}->${m.to}, no capture.`);
+                // 2. Check / mate / stalemate — straight from chess.js.
+                if (probe.isCheckmate()) facts.push('This is CHECKMATE — the game is over.');
+                else if (probe.isCheck()) facts.push('It gives CHECK.');
+                else if (probe.isStalemate()) facts.push('This is STALEMATE — a draw.');
+                // 3. Why it's strong — material/check judgment (no-LLM grounded "why").
+                const coachColor: 'white' | 'black' = playerColor === 'white' ? 'black' : 'white';
+                const why = explainBestMoveGrounded(move.fen, null, `${m.from}${m.to}${m.promotion ?? ''}`, coachColor);
+                if (why) facts.push(`Why it's strong: ${why}.`);
+                // 4. REAL tactics + loose pieces in the resulting position (student
+                //    to move) — the true fork/pin/threat, so the coach narrates the
+                //    ACTUAL tactic instead of inventing one (the validators were
+                //    stripping invented "fork/discovery" all session).
+                const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
+                const studentCC: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
+                const tctx = buildTacticsLiveContext(probe.fen(), null, studentCC, rating);
+                if (tctx.immediate.length > 0) facts.push(`Real tactics on the board now: ${tctx.immediate.map((t) => t.description).join('; ')}.`);
+                if (tctx.hanging.length > 0) facts.push(`Undefended/attacked: ${tctx.hanging.map((h) => `${NAME[h.piece] ?? h.piece} on ${h.square}`).join(', ')}.`);
+                replyFact = `GROUNDED FACTS (voice ONLY these — never invent a capture, check, tactic, or threat not listed here): ${facts.join(' ')}`;
+              }
+            } catch {
+              /* probe is best-effort; absence just means no extra fact */
+            }
             // Opponent's move is on the board — UNLOCK immediately so the
             // student can play again right away; the narration below runs
             // unblocked and is cut by voiceService.stop() if they do move.
@@ -3389,6 +3438,7 @@ export function CoachTeachPage(): JSX.Element {
             void handleSubmit(`I played ${move.san}.`, {
               fenOverride: liveFenRef.current,
               coachReplyPlayed: reply,
+              coachReplyFact: replyFact,
             });
             return;
           }
@@ -3933,35 +3983,43 @@ export function CoachTeachPage(): JSX.Element {
             onDeepDive={(query) => void handleSubmit(query)}
           />
         ) : (
-          <div className="flex items-center justify-center gap-2 px-3 pb-3">
+          // Control buttons styled to MATCH Play's row exactly (David
+          // 2026-06-15: "make these buttons match play") — outlined border-2 +
+          // colored glow: Takeback amber, Restart cyan, End Lesson red (Play's
+          // Resign). Same buttons + functions as before, so navigation is
+          // unchanged; only the look matches Play.
+          <div className="flex items-center justify-center gap-2 px-4 py-2">
             <button
               onClick={() => game.undoMove()}
               disabled={busy || game.history.length === 0}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors disabled:opacity-40"
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-amber-500/30 text-sm font-medium text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 disabled:opacity-30 transition-all duration-200"
+              style={{ boxShadow: '0 0 10px rgba(245, 158, 11, 0.25), 0 0 3px rgba(245, 158, 11, 0.15)' }}
               aria-label="Take back last move"
               data-testid="teach-takeback"
             >
-              <SkipBack size={14} />
+              <Undo2 size={16} />
               <span>Takeback</span>
             </button>
             <button
               onClick={() => { void handleResetBoard(); }}
               disabled={busy}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors disabled:opacity-40"
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-cyan-500/30 text-sm font-medium text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200"
+              style={{ boxShadow: '0 0 10px rgba(6, 182, 212, 0.25), 0 0 3px rgba(6, 182, 212, 0.15)' }}
               aria-label="Restart"
               data-testid="teach-restart"
             >
-              <RefreshCw size={14} />
+              <RotateCcw size={16} />
               <span>Restart</span>
             </button>
             <button
               onClick={() => void navigate('/coach/home')}
               disabled={busy}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-text text-sm transition-colors disabled:opacity-40"
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-red-500/30 text-sm font-medium text-red-400/80 hover:text-red-300 hover:bg-red-500/10 disabled:opacity-30 transition-all duration-200"
+              style={{ boxShadow: '0 0 10px rgba(239, 68, 68, 0.2), 0 0 3px rgba(239, 68, 68, 0.1)' }}
               aria-label="End lesson"
               data-testid="teach-resign"
             >
-              <Flag size={14} />
+              <Flag size={15} />
               <span>End Lesson</span>
             </button>
           </div>

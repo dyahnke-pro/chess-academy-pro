@@ -3793,6 +3793,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // get out of the way when they move instead of droning over the new
     // position (David 2026-06-10).
     voiceService.stop();
+    // A board move also DISMISSES the "Read this position" banner (clears its
+    // text → the persistent banner hides). David 2026-06-15: "make a move on
+    // the board to close it out."
+    positionNarration.cancel();
     // WO-STOCKFISH-SWAP-AND-PERF (part 4): speculative prefetch.
     // Kick off a depth-12 Stockfish eval against the post-move FEN
     // before the brain runs. The full depth-18 eval the brain will
@@ -4700,6 +4704,15 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             ? positionNarration.currentText
             : phaseNarration.currentText}
           active={positionNarration.isNarrating || phaseNarration.isNarrating}
+          // "Read this position" (user-tapped) PERSISTS until dismissed via the
+          // X or a board move (David 2026-06-15). Phase narration (auto) keeps
+          // its transient auto-linger — so onDismiss only when the banner is
+          // showing the position narration.
+          onDismiss={
+            positionNarration.isNarrating || positionNarration.currentText
+              ? () => positionNarration.cancel()
+              : undefined
+          }
         />
 
         {/* Board — flex-shrink-0 so it never shrinks regardless of content above/below */}
