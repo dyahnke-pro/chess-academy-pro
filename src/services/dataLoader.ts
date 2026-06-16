@@ -521,7 +521,10 @@ export async function loadGambitData(): Promise<void> {
 // bulkPut upsert — idempotent, runs on fresh + already-seeded boots.
 export async function loadAntiOpenings(): Promise<void> {
   const defaults = createDefaultSrsFields();
-  const records = (antiOpeningsData as RepertoireEntry[]).map((entry): OpeningRecord => {
+  // anti-openings.json carries nulls (overview/keyIdeas/etc.) by design; the map
+  // below coerces every field, so cast through unknown to satisfy the stricter
+  // RepertoireEntry shape.
+  const records = (antiOpeningsData as unknown as RepertoireEntry[]).map((entry): OpeningRecord => {
     const { fen, uci } = computePosition(entry.pgn);
     return {
       id: entry.id,
