@@ -159,7 +159,9 @@ async function main() {
     breaks.push(b);
     console.log(`  💥 BREAK [${kind}] on "${inFlightInput.slice(0, 60)}" → ${b.detail.slice(0, 160)}`);
   };
-  page.on('pageerror', (err) => recordBreak('pageerror', err.message));
+  // Capture name + stack — the bare message is often empty ("ErrorEvent"/
+  // null) for worker/resource errors, which hides the root cause.
+  page.on('pageerror', (err) => recordBreak('pageerror', `[${err?.name ?? '?'}] ${err?.message || '(empty)'} :: ${String(err?.stack ?? '').replace(/\s+/g, ' ').slice(0, 300)}`));
   const keyDetails = [];
   page.on('console', async (msg) => {
     if (msg.type() !== 'error') return;
