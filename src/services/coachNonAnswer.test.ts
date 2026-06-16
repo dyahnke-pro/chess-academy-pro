@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 
 vi.mock('./analytics', () => ({ captureEvent: vi.fn() }));
 
-import { detectCoachNonAnswer, reportCoachNonAnswer } from './coachNonAnswer';
+import { detectCoachNonAnswer, reportCoachNonAnswer, isMoveReport } from './coachNonAnswer';
 import { captureEvent } from './analytics';
 
 describe('detectCoachNonAnswer', () => {
@@ -73,6 +73,31 @@ describe('detectCoachNonAnswer', () => {
       priorUserQuestions: ['what are my weaknesses?'],
     });
     expect(r.isNonAnswer).toBe(false);
+  });
+
+  // David 2026-06-16: consecutive step-by-step MOVE REPORTS share "I played"
+  // and were falsely flagged as re-asks, spamming coach_non_answer.
+  it('does NOT flag consecutive move reports as a re-ask', () => {
+    const r = detectCoachNonAnswer({
+      surface: 'coach-teach',
+      question: 'I played dxc6.',
+      answer: 'Recapturing opens the b-file for your rook.',
+      priorUserQuestions: ['I played e4.', 'I played Nf3.'],
+    });
+    expect(r.isNonAnswer).toBe(false);
+  });
+});
+
+describe('isMoveReport', () => {
+  it('recognizes the step-by-step move-report templates', () => {
+    for (const s of ['I played e4.', 'I play Nf6', 'I just played dxc6', 'my move is Bb5', 'Nc6, your move']) {
+      expect(isMoveReport(s)).toBe(true);
+    }
+  });
+  it('does NOT treat a real question as a move report', () => {
+    for (const s of ['what is the best move here?', 'why is the knight strong?', 'is this a fork?']) {
+      expect(isMoveReport(s)).toBe(false);
+    }
   });
 });
 

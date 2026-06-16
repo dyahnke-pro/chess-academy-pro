@@ -38,9 +38,25 @@ function tokenOverlap(a: string, b: string): number {
   return inter / Math.min(wa.size, wb.size);
 }
 
+/** A step-by-step MOVE REPORT ("I played e4.", "I play Nf6", "my move is
+ *  dxc6", "Nc6, your move") is a walkthrough move, NOT a question — so it is
+ *  never a non-answer or a re-ask. Consecutive move reports share the words
+ *  "I played" and so scored ~1.0 token-overlap, falsely tripping the re-ask
+ *  heuristic (David 2026-06-16: "I played e4." then "I played dxc6." flagged
+ *  as re-asks, polluting the error stream + the autofix loop). */
+export function isMoveReport(s: string): boolean {
+  const t = (s ?? '').trim();
+  if (!t) return false;
+  return /\bi\s*(?:'?ll|just|then)?\s*(?:played|play|moved?|went|push(?:ed)?|castled?)\b/i.test(t)
+    || /\b(?:your|its your|it'?s your)\s+move\b/i.test(t)
+    || /\bmy\s+move\s+is\b/i.test(t);
+}
+
 /** Does the text read like a real question the coach should answer? Filters out
- *  greetings / one-word inputs so we don't flag those as non-answers. */
+ *  greetings / one-word inputs / move reports so we don't flag those as
+ *  non-answers. */
 function looksLikeQuestion(q: string): boolean {
+  if (isMoveReport(q)) return false;
   if (/\?/.test(q)) return true;
   if (/^(what|why|how|where|when|which|who|is|are|can|could|should|do|does|did|tell|explain|show|find)\b/i.test(q.trim())) {
     return true;

@@ -44,7 +44,7 @@ import {
 } from '../../services/openingDetectionService';
 import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
 import { parseCoachIntent } from '../../services/coachAgent';
-import { reportCoachReask } from '../../services/coachNonAnswer';
+import { reportCoachReask, isMoveReport } from '../../services/coachNonAnswer';
 import { tryCaptureOpeningIntent, tryCaptureForgetIntent } from '../../services/openingIntentCapture';
 import { findPlansForOpening, sessionFromPlan } from '../../services/middlegamePlanner';
 import { MiddlegamePlanInline } from './MiddlegamePlanInline';
@@ -91,7 +91,7 @@ import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from 
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
 import { explainBestMoveGrounded } from '../../services/groundedAnswer';
-import { validateTacticClaims } from '../../services/tacticClaimValidator';
+import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { applyCandidateArrows, candidateHighlightMarkers } from '../../services/coachAnswerGates';
 import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
 import type { StockfishAnalysis } from '../../types';
@@ -1078,7 +1078,10 @@ export function CoachTeachPage(): JSX.Element {
     const trimmedText = text.trim();
     {
       const prev = recentUserInputsRef.current[recentUserInputsRef.current.length - 1];
-      if (prev && Date.now() - prev.at < 5 * 60_000) {
+      // A step-by-step move report ("I played e4." → "I played dxc6.") is NOT
+      // a re-ask — consecutive reports share "I played" and falsely tripped the
+      // token-overlap heuristic, spamming coach_non_answer (David 2026-06-16).
+      if (prev && !isMoveReport(trimmedText) && !isMoveReport(prev.text) && Date.now() - prev.at < 5 * 60_000) {
         const norm = (s: string) =>
           s.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
         const prevTokens = new Set(norm(prev.text).split(' ').filter((t) => t.length >= 4));
@@ -2432,6 +2435,26 @@ export function CoachTeachPage(): JSX.Element {
           });
         }
       } catch { /* unparseable FEN — speak raw rather than go silent */ }
+      // ALSO strip any sentence claiming a TACTIC that isn't in the bounded
+      // live context. The board gate above only catches false piece-on-square
+      // claims, so a hallucinated "knight fork" with no false piece claim used
+      // to be SPOKEN here — before the (audit-only) final-text check ever ran
+      // (David 2026-06-16: false knight-fork claim on /coach/teach). This is
+      // the only gate between the brain and the voice, so it must ENFORCE, not
+      // just audit. Guarded so it never silences a turn on a fault.
+      try {
+        const tac = stripUngroundedTacticSentences(grounded, tacticsForAsk);
+        if (tac.dropped.length > 0) {
+          grounded = tac.clean;
+          void logAppAudit({
+            kind: 'claim-validator-trip',
+            category: 'subsystem',
+            source: 'CoachTeachPage.queueSpeak.tacticGrounding',
+            summary: `voice grounding stripped ${tac.dropped.length} ungrounded tactic sentence(s)`,
+            details: JSON.stringify({ fen, dropped: tac.dropped.slice(0, 5) }),
+          });
+        }
+      } catch { /* context not ready / parse fault — speak board-grounded text */ }
       const sentence = formatForSpeech(grounded);
       if (!sentence) return;
       if (sentence === lastQueuedSentence) return;
@@ -2539,10 +2562,30 @@ export function CoachTeachPage(): JSX.Element {
     // master-play / opening-name grounding pattern. Only attaches
     // when we have a fresh analysis for this exact FEN; stale evals
     // would mislead the scan.
-    const cachedAnalysis =
+    let cachedAnalysis =
       latestEvalRef.current && latestEvalRef.current.fen === fen
         ? latestEvalRef.current.analysis
         : null;
+    // FEED THE TACTICS PACKAGE — the ROOT fix for hallucinated tactics (David
+    // 2026-06-16: false "knight fork"). The package's fork/pin/skewer scan
+    // needs `analysis.topLines`; the eval-bar cache above is best-effort and
+    // goes EMPTY exactly when the engine times out on a move (the
+    // `eval-bar-analysis-failed` we see on iOS). A null analysis STARVES the
+    // scan → the LLM gets an empty tactics block → it invents a tactic to fill
+    // the void. So on a cache MISS, AWAIT a real, hang-protected, budgeted
+    // analysis and feed the package its actual tactics. If the engine is
+    // genuinely down it rejects fast (budget grace) and we fall back to the
+    // FEN-only context — the enforcing tactic gate then keeps the coach from
+    // inventing either way (empty > invented). This is the wiring gap, not a
+    // mis-wire: the block IS injected (envelope formatTacticsSubBlock); it was
+    // just being fed a cache that's null on a miss.
+    if (!cachedAnalysis) {
+      try {
+        cachedAnalysis = await stockfishEngine.analyzeWithBudget(fen, 12, 1500);
+      } catch {
+        cachedAnalysis = null; // engine down — FEN-only context + enforcing gate
+      }
+    }
     const studentColor = fenTurn === 'white' ? 'w' : 'b';
     // Rating proxy = puzzleRating (1200 fresh, drifts up/down with
     // adaptive puzzles). Drives lookahead depth via
@@ -3133,43 +3176,45 @@ export function CoachTeachPage(): JSX.Element {
       // and for the conversation memory record. Memory rehydration on
       // the next turn re-feeds prior assistant text into the prompt;
       // unsanitized text would teach the LLM that markup is normal.
-      const finalText = sanitizeCoachText(result.text);
+      let finalText = sanitizeCoachText(result.text);
+      // ENFORCING tactic gate (David 2026-06-16: false knight-fork claim on
+      // /coach/teach). This used to be AUDIT-ONLY — it logged the out-of-vocab
+      // tactic and shipped the false claim to the student anyway. Now it STRIPS
+      // any sentence claiming a tactic absent from the bounded live context,
+      // from the SHOWN bubble + the memory record (the spoken path is gated in
+      // queueSpeak). Negation/avoidance phrasing is kept; a real tactic that's
+      // in the context is never touched. Mirrors the shared groundCoachReply
+      // gate so there is one tactic-grounding standard.
+      try {
+        const ft = stripUngroundedTacticSentences(finalText, tacticsForAsk);
+        if (ft.dropped.length > 0) {
+          finalText = ft.clean;
+          void logAppAudit({
+            kind: 'claim-validator-trip',
+            category: 'subsystem',
+            source: 'CoachTeachPage.tacticClaimGate',
+            summary: `STRIPPED ${ft.dropped.length} ungrounded tactic sentence(s) from the reply`,
+            details: JSON.stringify({ fen, dropped: ft.dropped.slice(0, 5) }),
+            fen,
+          });
+        }
+      } catch { /* never block the reply on a validator fault */ }
       // What the student READS is exactly what the voice SPOKE (text ==
       // narration, David 2026-06-11). `spokenDisplayText` is the raw
       // `[VOICE:]` inner (or the fallback first sentence) — the one thing
       // we actually said. Fall back to the full prose only when nothing
       // was spoken at all (empty response), so the bubble is never blank.
-      const displayText = spokenDisplayText.trim()
+      let displayText = spokenDisplayText.trim()
         ? sanitizeCoachText(spokenDisplayText)
         : finalText;
+      // The shown [VOICE:] inner bypasses the finalText strip above — clean it
+      // too so the false tactic claim isn't READ even if it was caught before
+      // being SPOKEN.
+      try {
+        const dt = stripUngroundedTacticSentences(displayText, tacticsForAsk);
+        if (dt.dropped.length > 0) displayText = dt.clean.trim() || finalText;
+      } catch { /* never block the reply */ }
       if (finalText) {
-        // G3 enforcement (Phase 2.5 of WO-COACH-TACTICAL-AWARENESS):
-        // scan the response for tactic vocabulary against the bounded
-        // context we sent in the envelope. Audit-only for now — log
-        // violations so we can observe how often the brain invents
-        // tactics in prod. Future iteration: trigger a regen with a
-        // strengthened addendum (mirrors the master-play claim
-        // validator's regen pattern).
-        const validation = validateTacticClaims(finalText, tacticsForAsk);
-        if (validation.violations.length > 0) {
-          void logAppAudit({
-            kind: 'claim-validator-trip',
-            category: 'subsystem',
-            source: 'CoachTeachPage.tacticClaimValidator',
-            summary: `out-of-vocab tactics: ${validation.violations.map((v) => v.type).join(', ')}`,
-            details: JSON.stringify({
-              violations: validation.violations,
-              tacticContext: {
-                immediateTypes: tacticsForAsk.immediate.map((t) => t.type),
-                threatTypes: tacticsForAsk.threats.map((t) => t.type),
-                opportunityTypes: tacticsForAsk.opportunities.map((t) => t.type),
-                hangingCount: tacticsForAsk.hanging.length,
-                lookaheadDepth: tacticsForAsk.lookaheadDepth,
-              },
-            }),
-            fen,
-          });
-        }
         // Arrow-claim validator (Phase D of streaming-TTS standardization,
         // 2026-05-18). Scans the response for SAN-shaped move
         // mentions that don't have a matching [BOARD: arrow:from-to:color]
