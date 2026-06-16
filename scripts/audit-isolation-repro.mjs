@@ -28,6 +28,12 @@ async function run(browser, text) {
   let ttsMs = null;        // voice fired (answer produced)
   let armed = false;       // only count signals AFTER we send the input
   let ts = 0;
+  const pageErrors = [];
+  page.on('pageerror', (err) => {
+    pageErrors.push({ name: err?.name, message: err?.message || '(empty)', stack: (err?.stack || '').slice(0, 600) });
+  });
+  const consoleErrors = [];
+  page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text().slice(0, 300)); });
   const isLLM = (u) => /\/api\/llm|deepseek|anthropic/.test(u);
   const isTTS = (u) => /\/api\/tts\b/.test(u);
   page.on('request', (r) => { if (armed && askFiredMs === null && isLLM(r.url())) askFiredMs = Date.now() - ts; });
@@ -84,10 +90,18 @@ async function run(browser, text) {
       if (len > beforeLen + 60) { respMs = Date.now() - ts; respKind = 'text'; break; }
       await page.waitForTimeout(400);
     }
+    // Give errors time to fire, then try interacting with a line-picker
+    // variation (the loop's pageerror flood was on "Sicilian" → picker).
+    await page.waitForTimeout(2500);
+    const variation = page.locator('[data-testid^="line-picker-option"], [data-testid="line-picker"] button').first();
+    if (await variation.count()) { await variation.click({ force: true, timeout: 3000 }).catch(() => {}); await page.waitForTimeout(3000); }
     await page.screenshot({ path: `${SHOT_DIR}/${slug}-after.png` }).catch(() => {});
     const inputDisabled = await input.isDisabled().catch(() => 'unknown');
     console.log(`  "${text.slice(0, 48)}"  → askFired=${askFiredMs ?? 'NONE'}ms  responded=${respMs !== null ? `${respMs}ms (${respKind})` : 'NO (90s)'}  inputDisabledAtEnd=${inputDisabled}`);
-    return { text, askFiredMs, respMs, respKind };
+    console.log(`     pageErrors=${pageErrors.length}  consoleErrors=${consoleErrors.length}`);
+    for (const e of pageErrors.slice(0, 4)) console.log(`     PAGEERROR [${e.name}] ${e.message}\n        ${e.stack.split('\n').slice(0, 4).join('\n        ')}`);
+    for (const e of consoleErrors.slice(0, 4)) console.log(`     CONSOLE-ERR ${e}`);
+    return { text, askFiredMs, respMs, respKind, pageErrors: pageErrors.length, consoleErrors: consoleErrors.length };
   } finally {
     await ctx.close().catch(() => {});
   }
