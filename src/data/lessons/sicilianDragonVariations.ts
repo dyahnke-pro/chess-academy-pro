@@ -27,6 +27,28 @@ function b(init: BeatInit): LessonBeat {
 }
 
 export const SICILIAN_DRAGON_VARIATION_LESSONS: Record<string, LessonScript> = {
+  "sicilian-dragon::Yugoslav Attack Main Line": {
+    openingId: 'sicilian-dragon', title: "Sicilian Dragon — The Yugoslav Attack", minutes: 12, orientation: 'black',
+    sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation'],
+    beats: [
+      b({ id: 'yug1', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 O-O Qd2 Nc6', say: "The Yugoslav Attack — White's most dangerous weapon against the Dragon. The set-up is unmistakable: Be3, f3, Qd2 and queenside castling, then h4-h5 and a pawn storm to mate the fianchettoed king. Black builds the Dragon, the bishop settled on g7, and gets ready to race straight back at White's king.", sayShort: '…Nc6 — meet the Yugoslav head-on.', highlights: [H('g7')] }),
+      b({ id: 'yug2', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 O-O Qd2 Nc6 Bc4 Bd7 O-O-O Rc8', say: "Bc4 eyes f7, but Black develops …Bd7 and swings the rook to the half-open c-file with …Rc8. With the kings on opposite wings it is a flat-out race, and the c-file aimed at White's king on c1 is the engine of the whole Dragon counterattack.", sayShort: '…Rc8 — load the c-file at the king.', highlights: [H('c8'), H('c1', SOFT)] }),
+      b({ id: 'yug3', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 O-O Qd2 Nc6 Bc4 Bd7 O-O-O Rc8 Bb3 Ne5 h4 h5', say: "White retreats the bishop to b3 and starts the storm with h4; Black reroutes …Ne5 toward the c4-outpost and slams the brakes on the attack with …h5! — freezing White's h-pawn before it can prise open the h-file. Defence and attack in a single move.", sayShort: '…Ne5, …h5 — outpost and freeze the storm.', arrows: [A('e5', 'c4', VIS)], highlights: [H('e5'), H('h5')] }),
+      b({ id: 'yug4', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 O-O Qd2 Nc6 Bc4 Bd7 O-O-O Rc8 Bb3 Ne5 h4 h5 Kb1 Nc4 Bxc4 Rxc4', say: "…Nc4 jumps into the outpost; after Bxc4 …Rxc4 the rook lands on c4 — active, ready to double on the c-file or crash through on c3 against the white king. Every black piece is now pointed at the queenside, exactly where White lives.", sayShort: '…Rxc4 — the rook seizes the c-file.', highlights: [H('c4')] }),
+      b({ id: 'yug5', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 O-O Qd2 Nc6 Bc4 Bd7 O-O-O Rc8 Bb3 Ne5 h4 h5 Kb1 Nc4 Bxc4 Rxc4 g4 hxg4 h5 Nxh5', say: "Now both storms erupt: White breaks with g4 to rip open the kingside, Black takes and meets h5 with …Nxh5, keeping the lines half-shut while the c-file pressure rolls on. This is the Dragon in full fury — a razor-sharp race where, the record shows, Black's attack is every bit as fast: Black scores well over fifty percent here at master level.", sayShort: '…Nxh5 — the race erupts, Black is fast.', highlights: [H('h5')] }),
+    ],
+  },
+
+  "sicilian-dragon::Dragadorf Hybrid": {
+    openingId: 'sicilian-dragon', title: "Sicilian Dragon — The Dragadorf", minutes: 10, orientation: 'black',
+    sources: ['concept:att-queenside-attack', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation'],
+    beats: [
+      b({ id: 'ddf1', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 g6 f3 Bg7', say: "The Dragadorf — a cunning hybrid that fuses the Najdorf's …a6 with the Dragon's …g6 and …Bg7. Black gets the fianchettoed bishop on the long diagonal AND the …a6/…b5 queenside expansion of the Najdorf. Against White's Yugoslav set-up, that is a potent double-barrelled attacking scheme.", sayShort: '…Bg7 — the Najdorf-Dragon hybrid.', highlights: [H('g7'), H('a6', SOFT)] }),
+      b({ id: 'ddf2', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 g6 f3 Bg7 Qd2 O-O O-O-O b5', say: "Both castle on opposite wings, and Black wastes no time — …b5! The queenside pawn storm is already rolling at White's king, with …b4 and …a5 to follow. Because Black delayed …Nc6, there is no knight in the way: the pawns pour straight down the board.", sayShort: '…b5 — the queenside storm rolls early.', highlights: [H('b5')] }),
+      b({ id: 'ddf3', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 g6 f3 Bg7 Qd2 O-O O-O-O b5 Nd5 Nxd5 exd5 Bb7', say: "White tries Nd5 to trade and blunt the attack, but after …Nxd5 exd5 Black plays …Bb7 — and now the long diagonal is Black's, the bishop bearing on d5 and pointing toward White's king, the queenside pawns ready to advance. There is the Dragadorf tabiya: a sharp, double-edged race where Black's …b4-a5 storm and the two bishops give real, dangerous attacking chances. Aggressive by design, and it scores well at club level.", sayShort: '…Bb7 — long diagonal and the pawn storm.', highlights: [H('b7'), H('d5')] }),
+    ],
+  },
+
   "sicilian-dragon::Yugoslav Attack: Soltis Variation": {
   openingId: "sicilian-dragon",
   sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation'],

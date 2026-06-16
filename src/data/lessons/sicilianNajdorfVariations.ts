@@ -27,6 +27,20 @@ function b(init: BeatInit): LessonBeat {
 }
 
 export const SICILIAN_NAJDORF_VARIATION_LESSONS: Record<string, LessonScript> = {
+  "sicilian-najdorf::Najdorf: English Attack (6.Be3 Main Line)": {
+  openingId: "sicilian-najdorf",
+  sources: ['concept:att-queenside-attack', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
+  title: "Najdorf — The English Attack (6.Be3)",
+  minutes: 10,
+  orientation: "black",
+  beats: [
+    b({ id: "ea1", moves: "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5", say: "The English Attack — White's most testing modern try: Be3, f3, Qd2 and queenside castling, then g4-g5 and a kingside pawn storm. Black strikes immediately with e5, grabbing central space and kicking the d4-knight off its perch before White is set.", sayShort: "e5 — hit the knight, claim the centre.", highlights: [H("e5", KEY)] }),
+    b({ id: "ea2", moves: "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be7 f3 Be6", say: "The knight retreats to b3, and Black develops naturally — Be7 and Be6, the bishop settling on e6 where it guards the d5-hole and eyes the queenside light squares. Black's set-up is harmonious and rock-solid.", sayShort: "Be6 — guard d5, eye the queenside.", arrows: [A("e6", "d5", VIS)], highlights: [H("e6", KEY), H("d5", SOFT)] }),
+    b({ id: "ea3", moves: "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be7 f3 Be6 Qd2 Nbd7 O-O-O b5", say: "Qd2 and O-O-O commit White to the kingside attack — and Black answers in kind with b5, the queenside pawn storm under way at once. Opposite-side castling means it is a pure race, and Black's b5-b4 lever points straight at the white king.", sayShort: "b5 — the queenside storm begins.", highlights: [H("b5", KEY)] }),
+    b({ id: "ea4", moves: "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be7 f3 Be6 Qd2 Nbd7 O-O-O b5 g4 b4 Na4", say: "g4 launches White's storm, b4 fires Black's — and the knight is chased to the rim with Na4, awkwardly offside. There is the English Attack tabiya: two pawn avalanches racing at opposite kings, dead level by the engine and famously double-edged. Black's counterplay arrives on time, and the practical results are excellent.", sayShort: "b4 — chase the knight, the race is even.", highlights: [H("b4", KEY), H("a4", SOFT)] }),
+  ],
+},
+
   "sicilian-najdorf::Najdorf: Classical (6.Be2 with ...e5)": {
   openingId: "sicilian-najdorf",
   sources: ['concept:att-queenside-attack', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
