@@ -36,6 +36,9 @@ interface PendingAnalysis {
    *  the call carried per-analysis options (Skill Level, etc.). */
   cacheFen?: string;
   cacheDepth?: number;
+  /** Hard-timeout handle that recovers this analysis if the worker dies
+   *  silently (no bestmove). Cleared when the analysis settles. */
+  hardTimeout?: ReturnType<typeof setTimeout>;
 }
 
 interface QueueEntry {
@@ -168,6 +171,25 @@ const WORKER_ERROR_DEDUP_WINDOW_MS = 500;
  *  a truly stuck engine never returns at all. Audit-only — does not alter
  *  the resolve/reject flow (callers own their own timeouts). */
 const ANALYSIS_STALL_MS = 12_000;
+/** Hard recovery timeout for a single analysis. The 12s stall above is
+ *  audit-ONLY (it logs a dead eval bar but never settles the promise),
+ *  which is exactly how the coach froze: `analyzeWithBudget`'s 300ms
+ *  budget calls `stop()`, but `stop()` is a no-op on a worker iOS killed
+ *  while backgrounded / that crashed mid-search without firing `onerror`,
+ *  so the underlying analyze promise NEVER settles and every awaiting
+ *  caller (the grounded coach answer) hangs forever (David 2026-06-16).
+ *  When this fires, `recoverStuckAnalysis` REJECTS the caller and resets
+ *  the dead worker so the next analyze respawns a fresh one. Generous so
+ *  a legit deep single-thread search never gets killed mid-flight; a
+ *  truly dead worker is the only thing that reaches it. */
+const ANALYSIS_HARD_TIMEOUT_MS = 30_000;
+/** Grace window AFTER the brain budget's `stop()` before we give up on a
+ *  live bestmove and recover. On a healthy engine `stop()` yields a
+ *  bestmove in a few ms; if nothing comes back within the grace the
+ *  worker is dead, so recover FAST (don't make the coach wait the full
+ *  30s engine-level backstop) — reject → the brain serves its grounded
+ *  "I can't verify" fallback instead of freezing. */
+const ANALYSIS_BUDGET_GRACE_MS = 2_000;
 /** localStorage key for the persisted "multi-thread is broken on
  *  this host" flag. Per audit cycle ccd0057: multi-thread crashes
  *  reliably on David's machine. Without persistence, every new
@@ -625,6 +647,7 @@ class StockfishEngine {
       summary: `worker crash/init-fail (variant=${this.workerVariant ?? '?'}, attempt ${this._crashRetries}/${MAX_CRASH_RETRIES}): ${reason.slice(0, 160)}`,
     });
     if (this.pending) {
+      if (this.pending.hardTimeout) clearTimeout(this.pending.hardTimeout);
       this.pending.reject(new Error(`worker crashed: ${reason}`));
       this.pending = null;
     }
@@ -648,6 +671,31 @@ class StockfishEngine {
     }
     console.log('[Stockfish] Worker crashed, reinitializing...');
     // Don't await — let the next analyze call drive reinit naturally.
+  }
+
+  /** Reject the in-flight analysis and reset the (presumed dead) worker so
+   *  the NEXT analyze spawns a fresh one. The recovery path for a worker
+   *  that died silently — iOS background-kill mid-session, a WASM crash
+   *  that didn't fire `onerror`, the single-thread iOS `call_indirect`
+   *  fault — none of which ever emit `bestmove`, so the awaiting caller
+   *  (the grounded coach answer) would otherwise hang forever and freeze
+   *  the UI (David 2026-06-16). No-ops if `pending` already settled. */
+  private recoverStuckAnalysis(reason: string): void {
+    if (!this.pending) return;
+    const p = this.pending;
+    this.pending = null;
+    if (p.hardTimeout) clearTimeout(p.hardTimeout);
+    void logAppAudit({
+      kind: 'stockfish-analysis-stalled',
+      category: 'subsystem',
+      source: 'stockfishEngine.recoverStuckAnalysis',
+      summary: `${reason} — resetting worker (variant=${this.workerVariant ?? '?'})`,
+    });
+    try { this.worker?.terminate(); } catch { /* already gone */ }
+    this.worker = null;
+    this.isReady = false;
+    this.initPromise = null;
+    try { p.reject(new Error(`analysis aborted: ${reason}`)); } catch { /* ignore */ }
   }
 
   async analyzePosition(
@@ -738,6 +786,7 @@ class StockfishEngine {
       if (this.pending) {
         const oldPending = this.pending;
         this.pending = null;
+        if (oldPending.hardTimeout) clearTimeout(oldPending.hardTimeout);
         this.send('stop');
         oldPending.reject(new Error('Analysis interrupted by new request'));
       }
@@ -759,6 +808,17 @@ class StockfishEngine {
         cacheFen: options ? undefined : fen,
         cacheDepth: options ? undefined : depth,
       };
+
+      // Hard-recovery backstop covering the WHOLE window (readyok-never AND
+      // bestmove-never). If the worker died silently this is the only thing
+      // that settles the promise — without it the coach hangs forever
+      // (David 2026-06-16 freeze). Cleared on bestmove in handleMessage.
+      const watchedPending = this.pending;
+      this.pending.hardTimeout = setTimeout(() => {
+        if (this.pending === watchedPending) {
+          this.recoverStuckAnalysis(`no bestmove in ${ANALYSIS_HARD_TIMEOUT_MS}ms`);
+        }
+      }, ANALYSIS_HARD_TIMEOUT_MS);
 
       this.send('ucinewgame');
       this.send('isready');
@@ -886,11 +946,20 @@ class StockfishEngine {
       // Force Stockfish to emit bestmove from current best line.
       this.stop();
     }, budgetMs);
+    // Brain-path fast recovery: `stop()` above is a no-op on a dead worker,
+    // so if no bestmove lands within the grace, the engine is gone — recover
+    // NOW so the brain (and the coach UI awaiting it) doesn't hang. Rejecting
+    // here surfaces to stockfishEval → { ok:false } → the grounded
+    // "I can't verify" fallback, never a frozen turn (David 2026-06-16).
+    const graceTimer = setTimeout(() => {
+      this.recoverStuckAnalysis('budget grace exceeded (engine not responding to stop)');
+    }, budgetMs + ANALYSIS_BUDGET_GRACE_MS);
     try {
       const result = await promise;
       return result;
     } finally {
       clearTimeout(timer);
+      clearTimeout(graceTimer);
     }
   }
 
@@ -898,6 +967,7 @@ class StockfishEngine {
     this.stop();
     // Reject the currently running analysis, if any
     if (this.pending) {
+      if (this.pending.hardTimeout) clearTimeout(this.pending.hardTimeout);
       this.pending.reject(new Error('Engine destroyed'));
       this.pending = null;
     }
@@ -937,6 +1007,7 @@ class StockfishEngine {
     if (this.pending) {
       const p = this.pending;
       this.pending = null;
+      if (p.hardTimeout) clearTimeout(p.hardTimeout);
       p.reject(new Error(line.slice(0, 200)));
     }
   }
@@ -1010,6 +1081,7 @@ class StockfishEngine {
         stockfishCache.set(this.pending.cacheFen, this.pending.cacheDepth, analysis);
       }
 
+      if (this.pending.hardTimeout) clearTimeout(this.pending.hardTimeout);
       this.pending.resolve(analysis);
       this.pending = null;
 
@@ -1027,6 +1099,7 @@ class StockfishEngine {
    *  worker. Idempotent + safe to call on every foreground. */
   handleAppResume(): void {
     if (this.pending) {
+      if (this.pending.hardTimeout) clearTimeout(this.pending.hardTimeout);
       try { this.pending.reject(new Error('engine reset on app resume')); } catch { /* ignore */ }
       this.pending = null;
     }

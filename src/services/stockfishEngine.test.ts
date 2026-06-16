@@ -437,6 +437,84 @@ describe('StockfishEngine', () => {
   });
 
   // -----------------------------------------------------------------------
+  // Stuck-analysis recovery (David 2026-06-16 "Learn with coach freezes")
+  //
+  // The freeze: iOS suspends/kills the worker while backgrounded, or it
+  // crashes mid-search without firing onerror. It then accepts UCI but
+  // NEVER emits `bestmove`, so the analyze promise used to hang forever —
+  // freezing every awaiting caller (the grounded coach answer). The engine
+  // now hard-recovers: rejects the caller and resets the dead worker.
+  // -----------------------------------------------------------------------
+  describe('stuck-analysis recovery', () => {
+    // Worker that completes the handshake (answers `isready`) but goes
+    // silent on `go` — never returns `bestmove`. The dead-worker freeze.
+    function scheduleReadyButNoBestmove(): void {
+      const pmMock = mockWorker.instance.postMessage as ReturnType<typeof vi.fn>;
+      pmMock.mockImplementation((msg: string) => {
+        mockWorker.postMessageCalls.push(msg);
+        if (msg === 'isready') {
+          queueMicrotask(() => mockWorker.emit('readyok'));
+        }
+        // 'go ...' deliberately produces NO bestmove.
+      });
+    }
+
+    it('rejects analyzePosition (and does not hang) when no bestmove arrives', async () => {
+      const { stockfishEngine } = await getEngine();
+      await initEngine(stockfishEngine);
+      scheduleReadyButNoBestmove();
+
+      vi.useFakeTimers();
+      const p = stockfishEngine.analyzePosition(STARTING_FEN, 18);
+      // Attach the rejection handler BEFORE advancing timers so the
+      // fake-timer-driven rejection is never momentarily unhandled.
+      const expectation = expect(p).rejects.toThrow(/analysis aborted/);
+      // Settle the readyok handshake + the `go` dispatch.
+      await vi.advanceTimersByTimeAsync(0);
+      expect(mockWorker.postMessageCalls).toContain('go depth 18');
+      // No bestmove ever comes; advance past the 30s hard timeout.
+      await vi.advanceTimersByTimeAsync(31_000);
+      await expectation;
+      vi.useRealTimers();
+    });
+
+    it('recovers fast on the brain budget path (grace) instead of the 30s backstop', async () => {
+      const { stockfishEngine } = await getEngine();
+      await initEngine(stockfishEngine);
+      scheduleReadyButNoBestmove();
+
+      vi.useFakeTimers();
+      const p = stockfishEngine.analyzeWithBudget(STARTING_FEN, 12, 300);
+      const expectation = expect(p).rejects.toThrow(/analysis aborted/);
+      await vi.advanceTimersByTimeAsync(0);
+      // budget(300) + grace(2000) ≈ 2.3s — recovers well before the 30s backstop.
+      await vi.advanceTimersByTimeAsync(2_400);
+      await expectation;
+      vi.useRealTimers();
+    });
+
+    it('respawns a fresh worker after a stuck analysis is recovered', async () => {
+      const { stockfishEngine } = await getEngine();
+      await initEngine(stockfishEngine);
+      scheduleReadyButNoBestmove();
+
+      vi.useFakeTimers();
+      const stuck = stockfishEngine.analyzePosition(STARTING_FEN, 18);
+      const expectation = expect(stuck).rejects.toThrow(/analysis aborted/);
+      await vi.advanceTimersByTimeAsync(0);
+      await vi.advanceTimersByTimeAsync(31_000);
+      await expectation;
+      vi.useRealTimers();
+
+      // The dead worker was dropped → the next analyze drives a fresh init.
+      scheduleAnalysisResponse();
+      completeInit();
+      const analysis = await stockfishEngine.analyzePosition(STARTING_FEN, 18);
+      expect(analysis.bestMove).toBeTruthy();
+    });
+  });
+
+  // -----------------------------------------------------------------------
   // Mate score handling
   // -----------------------------------------------------------------------
   describe('mate score handling', () => {
