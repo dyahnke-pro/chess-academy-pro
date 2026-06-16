@@ -30,9 +30,10 @@ export function CourseTrainerPage(): JSX.Element {
   const [lines, setLines] = useState<DrillLine[]>([]);
 
   const progressRef = useRef<Record<string, TrainerProgress>>({});
+  const STARTPOS = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
   const chessRef = useRef(new Chess());
   const [line, setLine] = useState<DrillLine | null>(null);
-  const [fen, setFen] = useState('start');
+  const [fen, setFen] = useState(STARTPOS);
   const [boardKey, setBoardKey] = useState(0);
   const [plyPtr, setPlyPtr] = useState(0);
   const [status, setStatus] = useState<Status>('playing');
@@ -142,12 +143,11 @@ export function CourseTrainerPage(): JSX.Element {
       </div>
 
       <div className="max-w-lg mx-auto w-full">
-        <ChessBoard
-          key={boardKey}
-          initialFen={fen}
-          orientation={opening.color}
-          onMove={handleMove}
-        />
+        {line ? (
+          <ChessBoard key={boardKey} initialFen={fen} orientation={opening.color} onMove={handleMove} />
+        ) : (
+          <p className="text-sm text-theme-text-muted py-8 text-center">Setting up…</p>
+        )}
       </div>
 
       {/* Prompt / feedback */}

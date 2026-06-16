@@ -55,15 +55,27 @@ export function AcademyCourses(): JSX.Element {
 
   useEffect(() => {
     let alive = true;
-    void Promise.all([getMasterclassOpenings(), getAntiOpenings(), getGambitCourseOpenings()]).then(
-      ([mc, anti, gam]) => {
-        if (!alive) return;
-        setMasterclasses(mc);
-        setAntiOpenings(anti);
-        setGambits(gam);
-        setLoading(false);
-      },
-    );
+    let tries = 0;
+    // Anti-openings + gambits seed in the DEFERRED backfill, so on a cold first
+    // load they aren't in Dexie yet at mount. Re-poll until they land (or give
+    // up after ~40s) so their shelves appear without a manual reload.
+    const fetchAll = async (): Promise<void> => {
+      const [mc, anti, gam] = await Promise.all([
+        getMasterclassOpenings(),
+        getAntiOpenings(),
+        getGambitCourseOpenings(),
+      ]);
+      if (!alive) return;
+      setMasterclasses(mc);
+      setAntiOpenings(anti);
+      setGambits(gam);
+      setLoading(false);
+      if ((anti.length === 0 || gam.length === 0) && tries < 20) {
+        tries += 1;
+        setTimeout(() => { void fetchAll(); }, 2000);
+      }
+    };
+    void fetchAll();
     return () => { alive = false; };
   }, []);
 
