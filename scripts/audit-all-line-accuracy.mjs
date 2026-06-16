@@ -20,6 +20,7 @@ for (const o of gam) if (o && o.id) { colorOf[o.id] = o.color; gambitOf[o.id] = 
 for (const o of anti) if (o && o.id) { colorOf[o.id] = o.color; gambitOf[o.id] = false; }
 function sans(pgn) { if (!pgn) return null; const t = pgn.trim().split(/\s+/).map((x) => x.replace(/^\d+\.(\.\.)?/, '')).filter((x) => x && !/^\d+\.?$/.test(x)); const c = new Chess(); const o = []; for (const m of t) { try { o.push(c.move(m).san); } catch { return null; } } return o; }
 function ev(fen, d = 12) { return new Promise((res) => { const p = spawn(SF); let b = 0, o = ''; p.stdout.on('data', (x) => { o += x; let i; while ((i = o.indexOf('\n')) >= 0) { const ln = o.slice(0, i); o = o.slice(i + 1); const m = /score (cp|mate) (-?\d+)/.exec(ln); if (m) b = m[1] === 'mate' ? (+m[2] > 0 ? 1000 : -1000) : +m[2]; if (ln.startsWith('bestmove')) { p.kill(); res(b); } } }); p.stdin.write(`uci\nposition fen ${fen}\ngo depth ${d}\n`); }); }
+const THRESH = Number(process.env.THRESH || -1.0);
 const lines = [];
 for (const o of [...rep, ...pro, ...gam, ...anti]) { if (!o || !o.id) continue;
   if (o.pgn) lines.push({ id: o.id, role: 'play', kind: 'main', label: 'main', moves: sans(o.pgn), raw: o.pgn });
@@ -36,7 +37,7 @@ for (const L of lines) { done++; if (done % 500 === 0) console.log(`  ${done}/${
   const c = new Chess(); let ok = true; for (const m of L.moves) { try { c.move(m); } catch { ok = false; break; } }
   if (!ok) { illegal.push(L); continue; }
   const stm = c.turn() === 'w' ? 'white' : 'black'; const raw = await ev(c.fen()); const se = (stm === color ? raw : -raw) / 100;
-  if (L.role === 'play') { if (se < -1.0 && !gambitOf[L.id]) losing.push({ id: L.id, kind: L.kind, label: L.label, eval: +se.toFixed(2), line: L.raw }); }
+  if (L.role === 'play') { if (se < THRESH && !gambitOf[L.id]) losing.push({ id: L.id, kind: L.kind, label: L.label, eval: +se.toFixed(2), line: L.raw }); }
   else if (L.role === 'trap') { if (se < 0) toothless.push({ id: L.id, label: L.label, eval: +se.toFixed(2), line: L.raw }); }
 }
 losing.sort((a, b) => a.eval - b.eval); toothless.sort((a, b) => a.eval - b.eval);
