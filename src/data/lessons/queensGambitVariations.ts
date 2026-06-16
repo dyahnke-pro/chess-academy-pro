@@ -10,6 +10,20 @@ const SOFT = 'rgba(80,140,255,0.32)';
 // reaches >=20 plies (lessonDepth). chess.js computes the FENs. Keys match the
 // repertoire.json variation names EXACTLY (getVariationLessonScript lookup).
 export const QUEENS_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'queens-gambit::Classical Mainline': {
+    openingId: 'queens-gambit',
+    sources: ['book:queens-gambit', 'concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+    title: 'Classical Mainline — the Orthodox QGD',
+    minutes: 11,
+    orientation: 'white',
+    beats: [
+      { id: 'qcm1', moves: ['d4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6', 'Bg5', 'Be7', 'e3', 'O-O', 'Nf3', 'Nbd7'], highlights: [{ square: 'd5', color: KEY }], say: "The Queen's Gambit in its grandest form — the Orthodox Declined. White's pieces take their classical posts: Bg5 pinning, e3 solidifying, then Nf3 and a battery to come. Black answers with the soundest defence in chess, the d5-pawn held firm, but it is cramped, and White enjoys a risk-free space edge with a clear plan. White presses; Black defends.", sayShort: 'Bg5, e3, Nf3 — the classical bind.' },
+      { id: 'qcm2', moves: ['d4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6', 'Bg5', 'Be7', 'e3', 'O-O', 'Nf3', 'Nbd7', 'Rc1', 'c6', 'Bd3', 'dxc4', 'Bxc4', 'Nd5'], highlights: [{ square: 'c1', color: KEY }, { square: 'd5', color: SOFT }], say: "White completes the ideal set-up — Rc1 onto the half-open c-file, Bd3 eyeing the kingside — and stands clearly more comfortable. But Black has the antidote: …Nd5, Capablanca's freeing manoeuvre, offering trades to relieve the cramp. White must accept that precise defence equalises; the practical edge is in making Black find it.", sayShort: 'Rc1, Bd3 — the ideal bind; …Nd5 frees.' },
+      { id: 'qcm3', moves: ['d4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6', 'Bg5', 'Be7', 'e3', 'O-O', 'Nf3', 'Nbd7', 'Rc1', 'c6', 'Bd3', 'dxc4', 'Bxc4', 'Nd5', 'Bxe7', 'Qxe7', 'O-O', 'Nxc3', 'Rxc3'], highlights: [{ square: 'c3', color: KEY }], say: "The trades come: Bxe7 takes Black's dark-squared bishop, and after …Nxc3 the rook recaptures on c3, lined up on the half-open file. White still owns a touch more space and the more active rook, but each exchange brings Black closer to comfort. The edge is symbolic now, not structural.", sayShort: 'Rxc3 — the rook holds the c-file.' },
+      { id: 'qcm4', moves: ['d4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6', 'Bg5', 'Be7', 'e3', 'O-O', 'Nf3', 'Nbd7', 'Rc1', 'c6', 'Bd3', 'dxc4', 'Bxc4', 'Nd5', 'Bxe7', 'Qxe7', 'O-O', 'Nxc3', 'Rxc3', 'e5', 'dxe5', 'Nxe5', 'Nxe5', 'Qxe5'], highlights: [{ square: 'e5', color: KEY }], say: "Black completes the freeing plan with …e5, and after the exchanges the queen lands on e5 — the centre is liquidated and the position is level. This is the honest verdict on the Orthodox main line: White gets a pleasant, risk-free pull and the easier game, but against accurate defence Black holds the balance. The Queen's Gambit is a positional squeeze, not a knockout — and that squeeze wins plenty of games when Black goes wrong.", sayShort: '…e5 equalises — White had the pull.' },
+    ],
+  },
+
   'queens-gambit::Exchange Variation': {
     openingId: 'queens-gambit',
     sources: [
