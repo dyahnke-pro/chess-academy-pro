@@ -154,6 +154,25 @@ main, Vienna lines, Caro Advance, `pro-carlsen-kid` Sämisch, `pro-naroditsky-ki
 Four Pawns + Fianchetto, `pro-caruana-nimzo` Rubinstein. These are fighting/sharp
 choices (objectively a touch worse, practically dangerous) — the product's edge.
 
+## C-SCREEN (2026-06-16) — win%-gate run over the Section-C openings
+Most Section-C lines are RESCUED by the win% gate (club ≥45%) — they're keeps, not
+defects. Screen (`screen-sectionC.mjs`, eval@20 + masters/club win%) found only a
+few genuine defects (fail BOTH levels). Status:
+- ✅ **Philidor Antoshin** — was the …g6 fianchetto into Be3/Qd2/O-O-O storm,
+  narrated "dynamic equality" but actually −0.94 / 33% M / **38% club (7,561 g)** —
+  a worse line dressed up as sharp. Re-anchored to the TRUE textbook Antoshin
+  (…Nf6 …Be7 small-centre + …d5 break): −0.15, 52% M / 55% club. Lesson rebuilt by
+  hand (5 beats, describable purpose per move), data pgn + sublines synced. Gates green.
+- ⬜ **Old Indian: Tartakower** (−0.84, 41% M / 31% club, 137 g) — genuine defect, next.
+- ⬜ **Philidor Modern d3 Hybrid** (eval −2.06 floor-breach, but 58% M / 49% club) —
+  needs a deep look: likely a deep-line over-extension artifact (trim) vs the line
+  itself; masters 58% suggests the early line is fine.
+- KEEPS confirmed by club ≥45%: Caro main/Classical/Advance/Panov/Fantasy/Exchange/
+  Tartakower; Old Indian Czech/Janowski/Ukrainian/Main-d5/Seirawan/Be2; Philidor
+  main/Hanham/Nimzowitsch/Exchange/Counter-Gambit; Scandinavian main/Qa5/Icelandic/
+  Tiviakov/Portuguese/Gubinsky. (Small-sample "check" tabs: Caro Two-Knights/Short,
+  Scand Nf6-Modern/Qa5-Bd2 — low club% but <60-game samples; revisit if flagged.)
+
 ## C. REMOVE / REPLACE — not a good line (do NOT trim to fake-equal)
 No opening-phase culprit, the line walks deep into a worse position, and it is NOT
 aggressive-by-design — so it's simply not a good recommendation. Per the policy we

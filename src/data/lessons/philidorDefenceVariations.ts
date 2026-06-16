@@ -29,19 +29,22 @@ export const PHILIDOR_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = 
   },
 
   'philidor-defence::Antoshin Variation': {
-    // DATA-REBUILD (2026-05-30): the old lesson taught 3...Nf6 4.dxe5 Nxe4 and
-    // claimed "dead-level" — but that's only true vs White's soft 5.Bd3; against
-    // the critical 5.Qd5 Black is -1.58 (engine). The REAL Antoshin is the
-    // 3...exd4 4.Nxd4 g6 fianchetto, a sound (-0.40) sharp opposite-castling
-    // fight. Rebuilt on the most-played master line, narrated honestly as sharp.
+    // ACCURACY RE-ANCHOR (2026-06-16): the previous lesson taught the …g6
+    // fianchetto into White's Be3/Qd2/O-O-O storm and called it "dynamic
+    // equality" — but the data says Black LOSES that opposite-castling race
+    // (-0.94 engine, 33% masters / 38% club on 7,561 games: a worse line
+    // dressed up as sharp). Re-anchored to the TRUE textbook Antoshin — the
+    // 4…Nf6 5.Nc3 Be7 compact small-centre setup with the …d5 freeing break
+    // (engine -0.15, 52% masters / 55% club): genuinely level, with a
+    // describable plan on every move. (f3 + …c6 + …d5 keeps it distinct from
+    // the Exchange's f4 + …c5 plan above.)
     openingId: 'philidor-defence', title: 'Philidor — The Antoshin Variation', minutes: 10, orientation: 'black', sources: SRC,
     beats: [
-      b({ id: 'a1', moves: 'e4 e5 Nf3 d6 d4 exd4 Nxd4 g6', say: "The true Antoshin: Black trades in the centre with …exd4, then strikes a hypermodern pose with …g6, preparing …Bg7 on the long dark diagonal. This isn't passive defence — Black is setting up a sharp, double-edged fight where the fianchettoed bishop rakes White's queenside.", sayShort: '…g6 — the hypermodern Antoshin.', highlights: [H('g7', SOFT)] }),
-      b({ id: 'a2', moves: 'e4 e5 Nf3 d6 d4 exd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6', say: "Nc3 and Be3 develop for White; Black completes the fianchetto with …Bg7 — the bishop eyes the long diagonal toward White's centre and queenside — and …Nf6 develops with a glance at e4. Every Black piece has a purpose.", sayShort: '…Bg7, …Nf6 — fianchetto and develop.', arrows: [A('f6', 'e4')], highlights: [H('e4')] }),
-      b({ id: 'a3', moves: 'e4 e5 Nf3 d6 d4 exd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6 Qd2 O-O O-O-O', say: "Qd2 and O-O-O — White castles queenside and shows his hand: a kingside pawn-storm at Black's king. Black castles short and braces. With the kings on opposite wings the game becomes a sprint — whoever's attack arrives first wins, and Black must race, not defend.", sayShort: 'O-O-O — opposite castling, a sprint.' }),
-      b({ id: 'a4', moves: 'e4 e5 Nf3 d6 d4 exd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6 Qd2 O-O O-O-O Re8 f3 Nc6', say: "…Re8 lifts the rook to the e-file, f3 braces White's centre and clears g4 for the storm, and …Nc6 strikes the d4-knight — gaining a tempo Black will spend on his own queenside attack.", sayShort: '…Nc6 — hit d4, gain a tempo.', arrows: [A('c6', 'd4')], highlights: [H('d4')] }),
-      b({ id: 'a5', moves: 'e4 e5 Nf3 d6 d4 exd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6 Qd2 O-O O-O-O Re8 f3 Nc6 g4 Ne5', say: "g4 — the storm rolls forward. But Black has his own ideas: …Ne5 plants the knight on a magnificent outpost, eyeing c4 and f3 deep in White's position. The race is on, and Black's pieces are already the more active.", sayShort: '…Ne5 — outpost knight, eye c4/f3.', arrows: [A('e5', 'c4'), A('e5', 'f3')], highlights: [H('c4'), H('f3')] }),
-      b({ id: 'a6', moves: 'e4 e5 Nf3 d6 d4 exd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6 Qd2 O-O O-O-O Re8 f3 Nc6 g4 Ne5 Be2 a6 h4 b5 h5 c5 Nb3 c4 Nd4 b4 Nd5 Nxd5 exd5 Qa5', say: "Now both storms clash. White hurls h4–h5 at the king; Black answers blow for blow — …a6, …b5, …c5, …c4 and …b4 tearing open lines toward White's king on c1 — and after the knights trade on d5, …Qa5 swings the queen into the attack. There is the Antoshin in full cry: a razor-sharp opposite-castling race where Black's counterplay is every bit as fast as White's. Dynamic equality, and a real fight.", sayShort: '…Qa5 — queenside counter-storm, sharp.', highlights: [H('a5'), H('c1')] }),
+      b({ id: 'a1', moves: 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Nf6', say: "The Antoshin: Black resolves the central tension with …exd4 and develops …Nf6, immediately pressing the e4-pawn. Rather than the cramped old-Philidor with the locked …e5/…d6 chain, Black accepts a small but completely sound centre and a clean, flexible position — no weaknesses for White to gnaw at.", sayShort: '…Nf6 — the small-centre Antoshin.', arrows: [A('f6', 'e4')], highlights: [H('e4')] }),
+      b({ id: 'a2', moves: 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Nf6 Nc3 Be7', say: "…Be7 is the move that defines the variation. Modest, but exact: the bishop completes a compact set-up, prepares to castle, and keeps every option open. Black's whole plan is to finish development safely and then break the centre with …d5 — there is nothing for White to attack in the meantime.", sayShort: '…Be7 — compact, prepare …d5.', highlights: [H('e7', SOFT)] }),
+      b({ id: 'a3', moves: 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Nf6 Nc3 Be7 Be2 O-O O-O Re8', say: "Both sides develop and castle, and Black swings the rook to e8 — straight onto the half-open e-file, the file Black owns because the e-pawn was traded on move three. For now the rook sits behind its own bishop, but that is about to change.", sayShort: '…Re8 — claim the e-file.', highlights: [H('e8', KEY)] }),
+      b({ id: 'a4', moves: 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Nf6 Nc3 Be7 Be2 O-O O-O Re8 f3 Bf8', say: "White braces e4 with f3; Black answers with the quiet, clever …Bf8 — the bishop tucks back to reinforce the king and, crucially, clears the e-file so the rook on e8 now bears directly down on the e4-pawn. This regrouping is the heart of the small-centre Philidor: every piece finds its best square before the break.", sayShort: '…Bf8 — clear the e-file onto e4.', arrows: [A('e8', 'e4')], highlights: [H('e4', KEY)] }),
+      b({ id: 'a5', moves: 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Nf6 Nc3 Be7 Be2 O-O O-O Re8 f3 Bf8 Be3 c6 Qd2 d5', say: "…c6 supports the break and then comes the thematic blow — …d5, the freeing strike the whole set-up was built for. Black hits e4, the centre opens, and every Black piece springs to life down the e-file and the long diagonals. The engine confirms it: the position is dead level, Black is fully developed and active, with no weaknesses to defend. That is the Antoshin bargain — concede White a little space early, then equalise cleanly with …d5.", sayShort: '…d5 — the freeing break, fully equal.', highlights: [H('d5', KEY), H('e4', KEY)] }),
     ],
   },
 

@@ -1366,8 +1366,8 @@
       },
       {
         "name": "Antoshin Variation",
-        "pgn": "e4 e5 Nf3 d6 d4 exd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6 Qd2 O-O O-O-O",
-        "explanation": "The Antoshin Variation arises after dxe5 Nxe4, where Black temporarily wins a pawn but must handle the resulting complications accurately. The key idea is that after ...d5, Black establishes a strong central presence and the knight captures on d2 disrupting White's coordination. The ensuing endgame-type middlegame is comfortable for Black with the active piece on d5 and the bishops controlling key diagonals. Black should aim for simplification to exploit the extra central space."
+        "pgn": "e4 e5 Nf3 d6 d4 exd4 Nxd4 Nf6 Nc3 Be7 Be2 O-O O-O Re8 f3 Bf8 Be3 c6 Qd2 d5",
+        "explanation": "The textbook Antoshin — Black trades in the centre with ...exd4 and sets up the compact ...Be7/...Re8/...Bf8 small-centre, then equalises cleanly with the thematic ...d5 break. Sound and flexible, scoring 55% at club level."
       },
       {
         "name": "Philidor Counter-Gambit",
