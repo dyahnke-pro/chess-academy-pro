@@ -12,8 +12,19 @@ never clearly worse**. Rules:
    Aggression is the tiebreaker, never a cover for a worse line.
 3. **No trim-to-fake-equal.** Don't trim a bad line to an earlier equal point. If no
    genuinely equal-or-better line exists for an opening/subline, **don't teach it.**
-4. **Gambits** that are objectively negative are NOT core recommendations (they can
-   only live as explicitly-labeled surprise gambles, not in the "solid sold" set).
+4. **Gambits get their OWN researched bar (David 2026-06-16) — NOT equal-or-better.**
+   A gambit sacrifices a pawn (≈ −1.0 raw); compensation pulls the eval back toward 0.
+   Researched bar (consensus: full comp ≈ within ~50cp of equal; a pawn ≈ 100cp +
+   our own engine evals of the gambit set):
+   - **Sound gambit (core recommendation): gambiteer ≥ ~−0.5** — full compensation
+     (Scotch +0.31, Smith-Morra +0.77, Danish +0.01, Vienna 0.00, Evans). Gold tier.
+   - **Acceptable/respected sacrifice (teachable, labeled a true gambit): −0.5 to ~−1.0**
+     — real accepted long-term comp (e.g. Marshall −1.17 is borderline-respected).
+   - **Dubious / surprise-only (NOT a solid recommendation): worse than ~−1.0**
+     (Stafford −2.93, Max Lange −2.60, Halloween −1.37) — explicitly-labeled surprise/
+     trap weapon only, never sold as "sound."
+   So gambits are judged on the gambit bar (≥ ~−1.0 to be a recommendation, ≥ −0.5
+   to be "sound"); normal lines on equal-or-better.
 The −1.0-threshold triage below was the FIRST screen; the real campaign re-derives
 every clearly-negative line to equal-or-better (aggressive-preferred). Bigger scope.
 
