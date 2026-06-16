@@ -42,12 +42,25 @@ parity automatically (they already have coachService.ask + tactics).
       (gated on trap/tactics question + liveState.fen). Remove the per-surface
       copy from CoachTeachPage (now inherited). Brings GameChatPanel/Explain/
       Analyse to trap parity for free. + envelope carve-out (already shipped).
-- [ ] Commit B — OpeningPlayMode: add a grounded coach Q&A path
-      (`getCoachChatResponse` + buildTacticsLiveContext + the centralized trap),
-      + logAppAudit instrumentation. masterPlayWatcher already mounted.
-- [ ] Commit C — MiddlegamePractice: call the already-imported
-      `getCoachChatResponse` in the post-move handler with a real liveState.
+- [x] Commit B — OpeningPlayMode: mount the SAME GameChatPanel /coach/play
+      uses (inline Chat toggle + bottom drawer). Inherits the full stack via
+      coachService.ask. masterPlayWatcher already mounted. Q&A + arrows only.
+- [x] Commit C — MiddlegamePractice: mount GameChatPanel too (it already
+      called getCoachChatResponse for auto-feedback, but via the legacy flat
+      path; the panel adds the full coachService.ask grounded Q&A + arrows).
 - [ ] ship-check + prod 3-instrument audit + iOS build.
+
+## Topology confirmed (2026-06-16)
+- `coachService.ask` = its OWN envelope+provider path (assembleEnvelope →
+  deepseek/anthropic). The centralized trap scan + tactics + book/plan
+  grounding all live here.
+- `GameChatPanel` routes through `coachService.ask` (lines 748/1058) → so
+  mounting it = full grounded stack by reuse. This is the unifier.
+- `getCoachChatResponse` (coachApi) = a SEPARATE flatter path (master-play
+  grounding + personality + gates, no envelope tactics/trap). Surfaces that
+  only used it (MiddlegamePractice auto-feedback) now ALSO mount GameChatPanel
+  for the full grounded Q&A.
+- Drill/Train/Practice/SRS surfaces: template/silent BY DESIGN — left as-is.
 
 ## Risk
 - Commit A: LOW (chokepoint, additive, gated; per-surface copy removed = less code).
