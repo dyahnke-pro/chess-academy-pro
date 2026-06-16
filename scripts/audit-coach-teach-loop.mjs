@@ -38,7 +38,11 @@ const BOOT_TIMEOUT_MS = 30_000;
 // The coach brain races a 30s/provider timeout then falls back to the OTHER
 // provider (another ~30s) — so a legit answer under load can take ~60s. Only
 // flag a TRUE hang past that.
-const ANSWER_TIMEOUT_MS = 60_000;
+// Heavy brain questions (eval / "best move and why") legitimately take ~16s
+// even in ISOLATION (the surface spends ~10s on pre-flight before the LLM
+// call even fires — isolation repro 2026-06-16), so under any concurrent
+// load the old 60s window false-flagged them as silent-hangs. 90s window.
+const ANSWER_TIMEOUT_MS = 90_000;
 // Gap between brain-bound asks. Default 4.5s — a real single user does NOT
 // fire move-by-move questions faster than this, and tighter pacing on the
 // 45-input harder pass saturated the shared brain proxy into false hangs.

@@ -38,20 +38,26 @@ async function run(browser, text) {
     if (ttsMs === null && isTTS(u)) ttsMs = Date.now() - ts;
   });
   try {
-    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: 60000 });
-    await page.waitForTimeout(1500);
-    const calib = page.locator('[data-testid="strength-calibration-bubble"]');
-    if (await calib.count()) { await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 4000 }).catch(() => {}); await calib.waitFor({ state: 'detached', timeout: 15000 }).catch(() => {}); }
+    // Single full load of /coach/teach, then WAIT OUT THE BOOT SPLASH + the
+    // deferred seed (25-60s) before the chat input exists — the prior probe
+    // did a 2nd page.goto that re-triggered the splash and gave up at 15s,
+    // sitting on the loading screen (false "no response").
     await page.goto(`${BASE_URL}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 60000 });
-    await page.waitForTimeout(2000);
+    await page.waitForFunction(() => {
+      const a = window.__AUDIT__;
+      return !!a && typeof a.isStreamHydrated === 'function' && a.isStreamHydrated();
+    }, { timeout: 45000 }).catch(() => {});
+    const calib = page.locator('[data-testid="strength-calibration-bubble"]');
+    if (await calib.count()) { await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 4000 }).catch(() => {}); await calib.waitFor({ state: 'detached', timeout: 20000 }).catch(() => {}); }
     const help = page.locator('[data-testid="page-help-modal"]'); if (await help.count()) { await page.keyboard.press('Escape'); await page.waitForTimeout(500); }
     const input = page.locator('[data-testid="chat-text-input"]');
-    const inputThere = await input.count();
     await mkdir(SHOT_DIR, { recursive: true }).catch(() => {});
     const slug = text.slice(0, 16).replace(/[^a-z0-9]/gi, '_');
+    // Wait (up to 60s) for the input to actually exist — i.e. boot is done.
+    const appeared = await input.waitFor({ state: 'visible', timeout: 60000 }).then(() => true).catch(() => false);
     await page.screenshot({ path: `${SHOT_DIR}/${slug}-before.png` }).catch(() => {});
-    console.log(`    [${slug}] chat-input present=${inputThere} url=${page.url()}`);
-    await input.waitFor({ timeout: 15000 }).catch(() => {});
+    console.log(`    [${slug}] chat-input ready=${appeared} url=${page.url()}`);
+    if (!appeared) { console.log(`  "${text.slice(0, 48)}"  → BOOT-FAILED (input never appeared) — harness, not app`); return { text, harnessFail: true }; }
     // Baseline: a NARRATING walkthrough panel that's already up (none expected
     // on a fresh teach — the ever-present empty-state teach-picker is NOT a
     // response and is intentionally excluded).
