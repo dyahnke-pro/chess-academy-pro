@@ -2432,7 +2432,7 @@
       },
       {
         "name": "Modern 5.f3 System",
-        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 f3 g6 e4 Bxf1 Kxf1 Bg7 g3 Nfd7",
         "explanation": "The f3 system gives White extra central support but slows the development. The f3 pawn weakens the kingside and blocks the Nf3 square. Black gets even more time for queenside pressure with the rooks on a8/b8 and the queen on a5."
       }
     ],
@@ -2543,7 +2543,7 @@
       },
       {
         "name": "Budapest Gambit: Rubinstein Variation",
-        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nc3 Bxc3+ bxc3 Qe7 Qd5 f6 exf6 Nxf6 Qd3",
+        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nc3 Bxc3+ bxc3 Qe7 Qd5 f6 exf6 Nxf6 Qd3 d6 g3 O-O",
         "explanation": "In the Rubinstein, White plays 6.Nc3 allowing the doubled pawns after Bxc3+. Black targets the shattered queenside structure while White tries to exploit the bishop pair. The Qd5 thrust looks aggressive but after f6 and Nxf6, Black develops rapidly with tempo. Black's centralized knights and active pieces more than compensate for White's structural concessions on the queenside."
       },
       {
@@ -2558,7 +2558,7 @@
       },
       {
         "name": "Budapest Gambit: Alekhine Variation with Bc5",
-        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Nf3 Bc5 e3 Nc6 Nc3 Ngxe5 Nxe5 Nxe5 Be2 d6 O-O O-O b3",
+        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Nf3 Bc5 e3 Nc6 Nc3 Ngxe5 Nxe5 Nxe5 Be2 d6 O-O O-O b3 Re8",
         "explanation": "In the Alekhine Variation with the bishop developed early to c5, Black combines rapid piece activity with pressure on the dark squares. After recovering the pawn with Ngxe5, Black develops naturally with d6, O-O, and Bf5 obtaining a harmonious position with no structural weaknesses. The bishop pair and central control give Black comfortable equality, and the rooks activate on the central files to maintain dynamic balance. White must play accurately to avoid drifting into a slightly passive position where Black's active minor pieces dominate the middlegame."
       },
       {

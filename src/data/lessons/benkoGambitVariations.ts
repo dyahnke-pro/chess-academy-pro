@@ -10,6 +10,16 @@ interface BeatInit { id: string; moves: string; say: string; sayShort?: string; 
 function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return { ...rest, moves: moves.trim().split(/\s+/) }; }
 
 export const BENKO_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'benko-gambit::Modern 5.f3 System': {
+    openingId: 'benko-gambit', title: 'Benko Gambit — vs the Modern 5.f3', minutes: 10, orientation: 'black',
+    sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
+    beats: [
+      b({ id: 'mf1', moves: 'd4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 f3', say: "The critical modern test of the Benko: instead of fianchettoing, White plays f3, bracing a big e4-centre and keeping the light-squared bishop home to blunt Black's pressure on the a6-f1 diagonal. Black's recommendation here is to trust the gambit's logic — the queenside files and the dark-squared bishop are still worth the pawn.", sayShort: "f3 — White's critical e4-centre try.", highlights: [H('e4', SOFT)] }),
+      b({ id: 'mf2', moves: 'd4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 f3 g6 e4 Bxf1 Kxf1', say: "Black continues …g6 to fianchetto, and forces the same Benko dividend with …Bxf1 — White must recapture Kxf1, losing the right to castle. Even in the solid 5.f3 set-up, Black strips White's king of its shelter and gains time; the queenside attack will come all the same.", sayShort: '…Bxf1 — Kxf1, no castling again.', highlights: [H('f1', SOFT)] }),
+      b({ id: 'mf3', moves: 'd4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 f3 g6 e4 Bxf1 Kxf1 Bg7 g3 Nfd7', say: "Black completes the Benko machine — …Bg7 on the long diagonal and …Nfd7 rerouting toward c5/e5 and clearing the way for …Qa5 and the rooks. There is the 5.f3 tabiya: White has the broad e4-centre, but Black has the open a- and b-files, the fianchettoed bishop, and the standard lasting compensation. The practical record is excellent — Black scores around sixty percent here, proving the gambit holds even against the critical line.", sayShort: '…Bg7, …Nfd7 — full comp vs the big centre.', highlights: [H('g7')] }),
+    ],
+  },
+
   'benko-gambit::Fully Accepted: Main Line': {
     openingId: 'benko-gambit', title: 'Benko Gambit — Fully Accepted Main Line', minutes: 11, orientation: 'black',
     sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
