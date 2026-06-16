@@ -24,6 +24,36 @@ function b(init: BeatInit): LessonBeat {
 }
 
 export const EVANS_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
+  "evans-gambit::Evans Gambit: Anderssen Variation": {
+    openingId: 'evans-gambit', title: 'Evans Gambit — the Anderssen Accepted', minutes: 11, orientation: 'white',
+    sources: ['book:evans-gambit', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Evans_Gambit'],
+    beats: [
+      b({ id: 'an1', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3', say: "The Evans Gambit — White throws the b-pawn at the bishop with b4, and after …Bxb4 plays c3. Why give up a pawn? For tempo and a centre: c3 hits the bishop AND prepares d4, so White will build a big pawn front with gain of time. This is the most romantic and dangerous gambit in the open games, and it is fully sound.", sayShort: 'c3 — gain a tempo, prepare d4.', highlights: [H('c3', SOFT)] }),
+      b({ id: 'an2', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Bb6 cxd4', say: "…Ba5 retreats, and White crashes through: d4 and, after …exd4 and castling, cxd4 — White has the full classical centre on d4 and e4, the bishop pair, a big lead in development, and the king already safe. The sacrificed pawn bought all of that. Black is cramped and behind.", sayShort: 'cxd4 — the full centre, for one pawn.', highlights: [H('d4'), H('e4', SOFT)] }),
+      b({ id: 'an3', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Bb6 cxd4 d6 Nc3 Nf6 e5 dxe5 dxe5', say: "Nc3 develops with tempo, and White strikes again with e5! — gaining space and hounding the f6-knight. After the exchanges White recaptures dxe5, keeping a powerful pawn on e5 and a dominant position. The engine is blunt: White is clearly better here, around plus-one. This is the Evans at its best — the pawn is a distant memory, the initiative is everything.", sayShort: 'e5, dxe5 — White is clearly better.', highlights: [H('e5')] }),
+    ],
+  },
+
+  "evans-gambit::Evans Gambit: Morphy Attack": {
+    openingId: 'evans-gambit', title: 'Evans Gambit — the Morphy Attack', minutes: 10, orientation: 'white',
+    sources: ['book:evans-gambit', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Evans_Gambit'],
+    beats: [
+      b({ id: 'mo1', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6', say: "The same Evans bargain — b4 and c3 to grab the centre with tempo. Here Black plays the solid …d6 to brace e5 before White's avalanche. White will still get the broad centre and the lead in development that justify the pawn; the only question is how Black tries to weather the storm.", sayShort: '…d6 — Black braces; White keeps the centre.', highlights: [H('e5', SOFT)] }),
+      b({ id: 'mo2', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 d5', say: "cxd4 rebuilds the centre, and d5! is the Morphy thrust — the pawn jabs forward, gaining space and kicking the c6-knight to the rim. White seizes a big spatial bind while Black's pieces are shoved backward, all powered by the gambit's head start in development.", sayShort: 'd5 — gain space, knight to the rim.', highlights: [H('d5')] }),
+      b({ id: 'mo3', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 d5 Na5 Bb2 Nf6', say: "…Na5 is driven to the edge, and White completes the dream set-up with Bb2 — both bishops now rake the long diagonals, the Bc4 at f7 and the Bb2 down toward g7. There is the Morphy tabiya: full compensation for the pawn, two raking bishops, a space-gripping pawn on d5, and Black's a5-knight stranded. The engine calls it dead level, but it is White who is attacking and far easier to play.", sayShort: 'Bb2 — two raking bishops, full comp.', highlights: [H('b2'), H('a5', SOFT)] }),
+    ],
+  },
+
+  "evans-gambit::Evans Gambit: Slow Variation": {
+    openingId: 'evans-gambit', title: 'Evans Gambit — the Slow (Qb3) Variation', minutes: 10, orientation: 'white',
+    sources: ['book:evans-gambit', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Evans_Gambit'],
+    beats: [
+      b({ id: 'sl1', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d6', say: "The positional face of the Evans. After b4 …Bxb4 c3 …Ba5 d4, Black holds the centre with …d6 instead of grabbing more. White will not rush — the recommendation here is a slow squeeze: recover the initiative (and often the pawn) by piling pressure on Black's weakest point, the f7-square.", sayShort: '…d6 — Black holds; White plays the slow squeeze.', highlights: [H('d4', SOFT)] }),
+      b({ id: 'sl2', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d6 Qb3 Qd7 dxe5 dxe5', say: "Qb3! — the key move, building the Qb3-plus-Bc4 battery aimed straight at f7, the eternal weak point in front of Black's king. After dxe5 dxe5 the centre clears and Black is tied to defending f7, unable to develop freely. The pressure, not the pawn count, is what matters.", sayShort: 'Qb3 — the battery hammers f7.', arrows: [A('c4', 'f7', ATK)], highlights: [H('f7')] }),
+      b({ id: 'sl3', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d6 Qb3 Qd7 dxe5 dxe5 O-O Bb6 Rd1 Qe7', say: "White castles and swings the rook to d1, seizing the open d-file and gaining tempo on Black's queen, which is driven to the passive e7. There is the Slow Evans tabiya: White has the open d-file, the f7-pressure, the better development and the initiative — full, lasting compensation for the pawn, with an easy and pleasant game. The romantic gambit, played like a positional grandmaster.", sayShort: 'Rd1 — open file, pressure, full comp.', highlights: [H('d1')] }),
+    ],
+  },
+
   "evans-gambit::Evans Gambit Declined": {
   openingId: "evans-gambit",
   sources: ['book:evans-gambit', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Evans_Gambit'],

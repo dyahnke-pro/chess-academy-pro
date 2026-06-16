@@ -3010,7 +3010,7 @@
     "variations": [
       {
         "name": "Evans Gambit: Slow Variation",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d6 Qb3 Qd7 dxe5 dxe5 O-O Bb6",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d6 Qb3 Qd7 dxe5 dxe5 O-O Bb6 Rd1 Qe7",
         "explanation": "The Slow Evans with Qb3 puts pressure on f7 before opening the center. White delays O-O to keep Qb3's pressure active. Black must defend precisely against threats on f7 and the center."
       },
       {
@@ -3035,12 +3035,12 @@
       },
       {
         "name": "Evans Gambit: Morphy Attack",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 d5 Na5 Bb2",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 d5 Na5 Bb2 Nf6",
         "explanation": "The Morphy Attack prioritizes rapid development with O-O followed by Bb2 and Nbd2, aiming for a kingside assault. White drives the knight away with d5 and builds a powerful center while every piece finds an active square. The bishop pair and open lines give White lasting pressure against Black's cramped position, often culminating in a direct attack on the king."
       },
       {
         "name": "Evans Gambit: Anderssen Variation",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Bb6 cxd4 d6 Nc3 Nf6",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Bb6 cxd4 d6 Nc3 Nf6 e5 dxe5 dxe5",
         "explanation": "The Anderssen Variation features the aggressive a4-a5 pawn advance to chase the bishop from the a7-g1 diagonal and create queenside space. White combines central control with flank expansion, often reaching positions where the a5 pawn restricts Black's queenside counterplay. After d5 followed by Nxe5 and Be2, White has a stable center and lasting positional pressure on both sides of the board."
       },
       {
