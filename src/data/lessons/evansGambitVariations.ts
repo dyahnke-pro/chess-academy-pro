@@ -54,6 +54,26 @@ export const EVANS_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
     ],
   },
 
+  "evans-gambit::Evans Gambit: Stone-Ware Variation": {
+    openingId: 'evans-gambit', title: 'Evans Gambit — the Stone-Ware (…Bd6)', minutes: 10, orientation: 'white',
+    sources: ['book:evans-gambit', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Evans_Gambit'],
+    beats: [
+      b({ id: 'sw1', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Bd6', say: "The Stone-Ware — Black declines the sharp retreats and tucks the bishop on …Bd6, planning to return the pawn for a solid, simplified game. White is happy to oblige on his own terms: the recommendation is to play the centre and development, not chase complications, and convert the gambit into a lasting positional pull.", sayShort: '…Bd6 — Black plays it solid; White builds.', highlights: [H('d6', SOFT)] }),
+      b({ id: 'sw2', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Bd6 d4 h6 O-O Nge7 Bb3', say: "d4 claims the centre, and White develops precisely — O-O for safety, and the key Bb3, dropping the bishop back onto the a2-g8 diagonal where it eyes f7 and stays clear of Black's knights. This calm, accurate set-up is what turns the Stone-Ware in White's favour.", sayShort: 'Bb3 — retreat the bishop, eye f7.', highlights: [H('b3')] }),
+      b({ id: 'sw3', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Bd6 d4 h6 O-O Nge7 Bb3 Ng6 dxe5 Ngxe5 Nxe5 Bxe5', say: "After …Ng6 White clarifies with dxe5 and the knights trade, …Bxe5. There is the recommended tabiya: material is level, but White has the centre pawn on e4, the strong b3-bishop, the safer king and the freer development. The engine confirms a clear White edge here. Played accurately, the Stone-Ware is not an equaliser for Black at all — it is a comfortable, risk-free plus for White.", sayShort: 'Nxe5 — clear White edge, easy game.', highlights: [H('e4'), H('b3', SOFT)] }),
+    ],
+  },
+
+  "evans-gambit::Evans Gambit: Main Line with Qb3": {
+    openingId: 'evans-gambit', title: 'Evans Gambit — the Main Line with Qb3', minutes: 11, orientation: 'white',
+    sources: ['book:evans-gambit', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Evans_Gambit'],
+    beats: [
+      b({ id: 'q1', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d6 Qb3', say: "The main line: after …Ba5 and …d6, White uncorks Qb3 — the queen and the c4-bishop form a battery bearing down on f7, Black's most vulnerable point. This is the heart of the Evans recommendation: don't fixate on regaining the pawn, generate concrete pressure on the king.", sayShort: 'Qb3 — the Qb3+Bc4 battery hits f7.', arrows: [A('c4', 'f7', ATK)], highlights: [H('f7')] }),
+      b({ id: 'q2', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d6 Qb3 Qd7 O-O Bb6 Nbd2', say: "…Qd7 defends f7, so White switches to the centre and development — O-O for safety and the precise Nbd2, heading for c4 or f3 to support the big pawn front. The accurate move order matters: White keeps the bishop on c4 and the initiative, rather than grabbing on d6 and letting Black untangle.", sayShort: 'Nbd2 — develop, keep the centre and bishop.', highlights: [H('c4', SOFT)] }),
+      b({ id: 'q3', moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d6 Qb3 Qd7 O-O Bb6 Nbd2 exd4 cxd4 Na5 Qc3 Ne7', say: "Black resolves the centre with …exd4 cxd4 and tries …Na5 to trade the strong c4-bishop, but Qc3 sidesteps and keeps it on the board. There is the Main Line tabiya: White has the broad d4/e4 centre, the bishop pair aiming at Black's king, a safe king and the better development. The engine gives White a clear edge — this is the Evans done right, a genuine, sound plus for the pawn.", sayShort: 'Qc3 — keep the bishop; clear White edge.', highlights: [H('d4'), H('e4', SOFT)] }),
+    ],
+  },
+
   "evans-gambit::Evans Gambit Declined": {
   openingId: "evans-gambit",
   sources: ['book:evans-gambit', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Evans_Gambit'],

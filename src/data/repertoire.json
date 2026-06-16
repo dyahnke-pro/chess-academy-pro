@@ -3025,7 +3025,7 @@
       },
       {
         "name": "Evans Gambit: Stone-Ware Variation",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Bd6 d4 Nf6 dxe5 Bxe5",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Bd6 d4 h6 O-O Nge7 Bb3 Ng6 dxe5 Ngxe5 Nxe5 Bxe5",
         "explanation": "Black retreats to d6 instead of a5, blocking the d-pawn. This leads to a quieter game but White still has the initiative with natural development and the open center."
       },
       {
@@ -3045,7 +3045,7 @@
       },
       {
         "name": "Evans Gambit: Main Line with Qb3",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d6 Qb3 Qd7 dxe5 Bb6 exd6 Na5",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d6 Qb3 Qd7 O-O Bb6 Nbd2 exd4 cxd4 Na5 Qc3 Ne7",
         "explanation": "The Main Line with Qb3 applies immediate pressure on f7 and forces Black to make concessions in the center. After dxe5 Bb6 exd6, White trades queens but retains a superior minor piece configuration and open lines. The endgame-oriented approach with Nbd2-Nb3 and Rd1 gives White a small but persistent edge where the better development and active rooks outweigh the sacrificed pawn."
       }
     ],
