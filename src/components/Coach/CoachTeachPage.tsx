@@ -2585,7 +2585,7 @@ export function CoachTeachPage(): JSX.Element {
       moveNarration:
         !walkthrough.isActive &&
         (opts?.coachReplyPlayed !== undefined ||
-          /\bi\s+(?:just\s+)?played\b[\s\S]*\byour\s+(?:move|turn)\b/i.test(text)),
+          /^\s*i\s+(?:just\s+)?played\b/i.test(text)),
       ...(evalForAsk ?? {}),
       ...(lichessForAsk ?? {}),
     };
