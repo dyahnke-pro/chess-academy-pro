@@ -26,6 +26,16 @@ function b(init: BeatInit): LessonBeat {
 }
 
 export const SICILIAN_ALAPIN_VARIATION_LESSONS: Record<string, LessonScript> = {
+  "sicilian-alapin::Alapin: 2...Nf6 3.e5 Nd5 4.d4 cxd4 5.cxd4 d6 (IQP Accepted)": {
+    openingId: 'sicilian-alapin', title: 'Alapin — the IQP Accepted (play vs d4)', minutes: 10, orientation: 'black',
+    sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation'],
+    beats: [
+      b({ id: 'iq1', moves: 'e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 cxd4 d6', say: "Black provokes the Alapin's most testing structure on purpose. …Nf6 pokes e5, …Nd5 hops to a fine central square, and after the trades on d4 Black hits the chain with …d6. The plan is clear from move one: liquidate White's centre and leave him with an isolated d-pawn to defend.", sayShort: "…d6 — provoke White's isolated d-pawn.", highlights: [H('d5', SOFT)] }),
+      b({ id: 'iq2', moves: 'e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 cxd4 d6 Nf3 Nc6 Bc4 Nb6 Bb5 dxe5 Nxe5', say: "…Nc6 develops with a hit on d4, the knight retreats …Nb6 nudging the bishop, and …dxe5 finally dissolves White's spearhead. When the dust settles White is left with the isolated queen's pawn on d4 — exactly the weakness Black has been aiming at the whole time.", sayShort: '…dxe5 — liquidate to the isolated d4-pawn.', highlights: [H('d4')] }),
+      b({ id: 'iq3', moves: 'e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 cxd4 d6 Nf3 Nc6 Bc4 Nb6 Bb5 dxe5 Nxe5 Bd7 Nxd7 Qxd7 Nc3 e6 O-O Be7', say: "Black trades into the pure structure: …Bd7 and …Qxd7 swap a pair of minors, then …e6 and …Be7 erect the blockade. There is the recommended tabiya: White has the isolated d4-pawn, Black has the ideal blockading squares and the easier middlegame plan — pile on d4, trade pieces, win the endgame. The classic 'play against the IQP' recipe, and the reason this line is a comfortable equaliser.", sayShort: '…Be7 — blockade and besiege d4.', highlights: [H('d4'), H('e6', SOFT)] }),
+    ],
+  },
+
   "sicilian-alapin::Alapin: 2...d5 Central Counter (IQP Play)": {
   openingId: "sicilian-alapin",
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation'],
