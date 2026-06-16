@@ -141,11 +141,11 @@ move; extend it to surface the aggressive moves within ~0.3 of best + sound, and
 prefer those.)
 
 ## A. FIX — genuine errors with a clear better move (clean, data-checkable)
-| Opening | Defect | Re-anchor | Notes |
+| Opening | Defect | Re-anchor | Status |
 |---|---|---|---|
-| `pro-carlsen-modern` Classical Nf3 | …e5 (−1.27) | **…c5** (−0.44) | pro-rep variation; re-anchor the line |
-| `two-knights-defence` Polerio | …Nxd5 (−1.29) | **…b5** (−0.21) | the Fritz/Ulvestad …b5 |
-| `four-knights-game` 4.Bc4 | Bxf7+ sac (−2.09) | **4.d4** (+0.36) | re-anchor off the unsound sac |
+| `four-knights-game` Italian 4.Bc4 | Bxf7+ sac (−1.55, **7% masters**) | **fork-trick** `Nxe4 Nxe4 d5 Bd3 dxe4 Bxe4 Bd6 O-O O-O Re1 Re8 d3 h6 c3` (−0.18, balanced) | ✅ DONE — DATA RE-SYNC (the lesson already taught the sound fork-trick; only repertoire.json's variation pgn was the stale Bxf7 sac) |
+| `two-knights-defence` "Polerio" | …Nxd5 → Fried-Liver walk (−1.29, 35% club) — DOUBLY wrong (…Nxd5 is the *slip* the Fried Liver punishes; the real Polerio is …Na5) | **Fritz …Nd4** `…Nd4 c3 b5 cxd4 bxc4 dxe5 Qxd5 exf6 Qxg5` (+0.16, **55% club / 13.8k g**) + renamed tab → "Fritz Variation 5...Nd4" | ✅ DONE — re-anchor + rename (sound aggressive, distinct from the existing …Na5 + …b5 tabs; manifest floor 8 held) |
+| `pro-carlsen-modern` Classical Nf3 | deep terminus −1.27 | (…e5 is −0.41 / **58% masters** at 14p — the defect is only the DEEP tail) | ⬜ DEFERRED — pro-rep, needs careful deep look; …e5 itself scores 58% masters, not a clean swap |
 
 ## B. KEEP — aggressive by design (label honestly, do NOT neuter)
 Traxler (…Bc5 sac), KID main + Fianchetto, Pirc Austrian + 150, Sicilian Dragon

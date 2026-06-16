@@ -555,7 +555,7 @@
       },
       {
         "name": "Italian Four Knights: 4.Bc4",
-        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bc4 Nxe4 Bxf7+ Kxf7 Nxe4 d5 Neg5+ Kg8 d4",
+        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bc4 Nxe4 Nxe4 d5 Bd3 dxe4 Bxe4 Bd6 O-O O-O Re1 Re8 d3 h6 c3",
         "explanation": "The Italian approach with 4.Bc4 targets f7 directly and leads to sharp tactical play. After 4...Nxe4 5.Bxf7+, White sacrifices the bishop to expose Black's king, winning back the material while leaving the piece on f7 vulnerable. The resulting positions are complex with the Black king displaced and White's knights dancing into aggressive squares. While theory considers the sacrifice sound, the practical difficulties for Black are severe as every move must be precise to avoid falling into a mating attack."
       },
       {
@@ -2961,9 +2961,9 @@
         "explanation": "Against the modern quiet Italian with 4.d3, Black's most reliable setup is ...Be7 followed by natural development. The position is solid and strategic, giving Black a flexible structure that can adapt to White's plans. The maneuver ...Na5-c6 and ...Be6 ensures Black controls the center and develops harmoniously. Black should aim for the ...d5 break when the time is right to equalize the central tension and activate the pieces fully."
       },
       {
-        "name": "Two Knights: Polerio Defence",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Nb4",
-        "explanation": "The Polerio Defence arises when Black daringly captures with 5...Nxd5 and accepts the piece sacrifice 6.Nxf7. The Black king marches to e6, seemingly walking into danger, but concrete analysis shows Black can survive and even thrive with the extra material. White generates fierce attacking chances with Qf3+ and Nc3, but Black's defensive resources with ...Nb4, ...c6, and ...Nc7 are surprisingly robust. This line requires iron nerves and precise calculation from both sides."
+        "name": "Two Knights: Fritz Variation 5...Nd4",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nd4 c3 b5 cxd4 bxc4 dxe5 Qxd5 exf6 Qxg5",
+        "explanation": "The Fritz Variation — Black meets the Knight Attack with the sharp ...Nd4, counterpunching in the centre. After the forcing sequence Black regains the material with the bishop pair and active pieces, scoring well above 50% at club level. A sound, aggressive answer to 4.Ng5."
       },
       {
         "name": "Two Knights: Ulvestad Variation",
