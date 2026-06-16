@@ -15,7 +15,8 @@ const load = (p) => { try { const j = JSON.parse(readFileSync(root + p, 'utf8'))
 const all = [...load('src/data/repertoire.json'), ...load('src/data/pro-repertoires.json'), ...load('src/data/gambits.json'), ...load('src/data/anti-openings.json')];
 const colorOf = {}; for (const o of all) if (o && o.id) colorOf[o.id] = o.color;
 function uciList(pgn) { const t = pgn.trim().split(/\s+/).map((x) => x.replace(/^\d+\.(\.\.)?/, '')).filter((x) => x && !/^\d+\.?$/.test(x)); const c = new Chess(); const u = []; for (const m of t) { try { const r = c.move(m); u.push(r.from + r.to + (r.promotion || '')); } catch { return null; } } return u; }
-async function masters(uci) { try { const r = await fetch(`${PROXY}?source=masters&play=${uci.join(',')}`); const d = await r.json(); const w = d.white || 0, dr = d.draws || 0, b = d.black || 0; return { w, dr, b, tot: w + dr + b }; } catch { return null; } }
+const SRC = process.env.SOURCE || 'masters';
+async function masters(uci) { try { const extra = SRC === 'lichess' ? '&ratings=1400,1600,1800,2000&speeds=blitz,rapid' : ''; const r = await fetch(`${PROXY}?source=${SRC}&play=${uci.join(',')}${extra}`); const d = await r.json(); const w = d.white || 0, dr = d.draws || 0, b = d.black || 0; return { w, dr, b, tot: w + dr + b }; } catch { return null; } }
 const lines = (rep.losing || []).slice(0, Number(process.argv[3] || 30));
 console.log(`line | eval | deepest>=${MIN}-game ply | master games | STUDENT score% | verdict`);
 for (const L of lines) {
