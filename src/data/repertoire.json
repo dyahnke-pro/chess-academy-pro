@@ -2952,7 +2952,7 @@
       },
       {
         "name": "Two Knights: Max Lange Attack",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Bc5 e5 d5 exf6 dxc4 Re1+ Be6 Ng5 Qd5 Nc3 Qf5 Nce4 Bf8 g4 Qg6",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Nxe4 Re1 d5 Bxd5 Qxd5 Nc3 Qd8 Rxe4+ Be7 Nxd4 f5 Rf4 O-O",
         "explanation": "The Max Lange Attack is one of the most theoretically dense and tactically brilliant lines in all of chess. After 5.O-O Bc5 6.e5, White blows open the center and both sides must calculate with extreme precision. Black's key resource is the counterattack with ...d5 followed by ...Be6, blocking the e-file and creating counterplay. The resulting positions require deep knowledge, but Black has been shown to hold with accurate play, making this a thrilling battleground for prepared players."
       },
       {
