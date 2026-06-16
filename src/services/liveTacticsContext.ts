@@ -36,6 +36,7 @@ import {
   scanUpcomingTactics,
 } from './tacticClassifier';
 import { getTacticLookahead } from './tacticAlertService';
+import { stockfishEngine } from './stockfishEngine';
 import type { TacticPattern, UpcomingTactic } from '../types/tacticTypes';
 
 /**
@@ -93,6 +94,49 @@ export function buildTacticsLiveContext(
     lookaheadDepth,
     boardFacts: computeBoardFacts(fen),
   };
+}
+
+/** Default analyzer for the fed builder — a hang-protected, budgeted engine
+ *  read. Bounded (1.5s) so a slow/dead engine rejects fast (the engine now
+ *  recovers a stuck worker) and we degrade to the FEN-only context instead of
+ *  hanging the coach turn. */
+async function defaultFedAnalyze(fen: string): Promise<StockfishAnalysis | null> {
+  try {
+    return await stockfishEngine.analyzeWithBudget(fen, 12, 1500);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * buildFedTacticsContext — the ROOT fix for hallucinated tactics (David
+ * 2026-06-16). `buildTacticsLiveContext` is only as good as the `analysis` it
+ * is handed, and every coach surface was passing the best-effort eval-bar
+ * cache — which is `null` on a miss (and the eval bar times out on iOS). A
+ * null analysis drops the PV-lookahead tactics, so the LLM gets a thin/empty
+ * tactics block and INVENTS one to fill the void ("knight fork").
+ *
+ * This wrapper GUARANTEES the package is fed: when no fresh analysis is in
+ * hand (or the cached one has no PV), it fetches one itself before building
+ * the context — so a surface can't starve the package by forgetting to pass
+ * an analysis. When the engine is genuinely down it degrades to the FEN-only
+ * context (immediate + hanging), which is still grounded — empty > invented.
+ * The LLM is HANDED the real tactics; it never has to decide them (G0/G3).
+ *
+ * `analyze` is injectable for tests; it defaults to the real engine.
+ */
+export async function buildFedTacticsContext(
+  fen: string,
+  playerColor: 'w' | 'b',
+  playerRating: number,
+  cachedAnalysis?: StockfishAnalysis | null,
+  analyze: (fen: string) => Promise<StockfishAnalysis | null> = defaultFedAnalyze,
+): Promise<TacticsLiveContext> {
+  let analysis = cachedAnalysis ?? null;
+  if (!analysis || analysis.topLines.length === 0) {
+    analysis = await analyze(fen);
+  }
+  return buildTacticsLiveContext(fen, analysis, playerColor, playerRating);
 }
 
 /** Deterministic ground-truth facts from the FEN — king squares, side

@@ -89,7 +89,7 @@ import type { OpeningRecord } from '../../types';
 import type { LiveState } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
+import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { explainBestMoveGrounded } from '../../services/groundedAnswer';
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { applyCandidateArrows, candidateHighlightMarkers } from '../../services/coachAnswerGates';
@@ -2562,40 +2562,26 @@ export function CoachTeachPage(): JSX.Element {
     // master-play / opening-name grounding pattern. Only attaches
     // when we have a fresh analysis for this exact FEN; stale evals
     // would mislead the scan.
-    let cachedAnalysis =
+    const cachedAnalysis =
       latestEvalRef.current && latestEvalRef.current.fen === fen
         ? latestEvalRef.current.analysis
         : null;
-    // FEED THE TACTICS PACKAGE — the ROOT fix for hallucinated tactics (David
-    // 2026-06-16: false "knight fork"). The package's fork/pin/skewer scan
-    // needs `analysis.topLines`; the eval-bar cache above is best-effort and
-    // goes EMPTY exactly when the engine times out on a move (the
-    // `eval-bar-analysis-failed` we see on iOS). A null analysis STARVES the
-    // scan → the LLM gets an empty tactics block → it invents a tactic to fill
-    // the void. So on a cache MISS, AWAIT a real, hang-protected, budgeted
-    // analysis and feed the package its actual tactics. If the engine is
-    // genuinely down it rejects fast (budget grace) and we fall back to the
-    // FEN-only context — the enforcing tactic gate then keeps the coach from
-    // inventing either way (empty > invented). This is the wiring gap, not a
-    // mis-wire: the block IS injected (envelope formatTacticsSubBlock); it was
-    // just being fed a cache that's null on a miss.
-    if (!cachedAnalysis) {
-      try {
-        cachedAnalysis = await stockfishEngine.analyzeWithBudget(fen, 12, 1500);
-      } catch {
-        cachedAnalysis = null; // engine down — FEN-only context + enforcing gate
-      }
-    }
     const studentColor = fenTurn === 'white' ? 'w' : 'b';
     // Rating proxy = puzzleRating (1200 fresh, drifts up/down with
     // adaptive puzzles). Drives lookahead depth via
     // `getTacticLookahead` — 4 plies once the student crosses 1400.
     const studentRating = activeProfile?.puzzleRating ?? 1200;
-    const tacticsForAsk = buildTacticsLiveContext(
+    // FED context (ROOT fix, David 2026-06-16): hand the LLM the position's
+    // REAL tactics. The eval-bar cache is null on a miss (and times out on
+    // iOS) — buildFedTacticsContext fetches a hang-protected analysis itself
+    // so the package is never starved, so the LLM never has to invent a
+    // "knight fork" to fill an empty block. Degrades to FEN-only if the
+    // engine is genuinely down (empty > invented).
+    const tacticsForAsk = await buildFedTacticsContext(
       fen,
-      cachedAnalysis,
       studentColor,
       studentRating,
+      cachedAnalysis,
     );
     // Position trap detection (David 2026-06-16) is CENTRALIZED in
     // coachService.ask — every surface that routes through the grounded coach
