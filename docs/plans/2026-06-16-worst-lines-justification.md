@@ -20,6 +20,30 @@ common thread: **sharp / aggressive / out-of-prep weapons** — the product's ed
 | 9 | **Vienna: Hamppe-Muzio Gambit** | −1.46 | — | **58%** | Romantic piece-sac gambit — devastating when the opponent doesn't know it. 58% at club level. Pure surprise weapon (labeled). |
 | 10 | **Sicilian Dragon: Dragadorf Hybrid** | −1.39 | 18% | **45%** | Sharp Dragon/Najdorf hybrid; double-edged attacking weapon, club-balanced. |
 
+## The CHESS reason per line (David 2026-06-16: "why those moves give an advantage")
+Win% validates; the IDEA explains. Mainstream/consensus understanding (board-
+verified at narration time):
+1. **Stafford** — sac e-pawn for a development lead + open d-file; pieces (…Bc5/…Ng4/
+   …Qh4) swarm f2 + the uncastled king; natural White moves walk into …Bxf2+/…Nxf2.
+   Edge = tempo + concrete traps.
+2. **Max Lange** — give the pawn back to open the e-file with Re1+ vs a king stuck
+   in the center; Ng5 + queen hit e6/f7; f6-pawn jams the kingside. Edge = attack on
+   the uncastled king.
+3. **Philidor Modern-d3** — rock-solid e5/d6, no weaknesses, autopilot development
+   toward the …d5 break. Edge = solidity + clear plan + low theory.
+4/7. **Philidor Counter-Gambit (…f5!)** — strike the center, open the f-file for
+   piece play. Edge = active counterplay/initiative vs an unprepared White.
+5. **Four Knights 4.Bc4** — rapid development + d4 central breaks; sharp open play.
+   (Caveat: the deep Bxf7+ sac sub-line −2.09 — verify.)
+6. **Giuoco Piano w/ Nc3** — big c3+d4 center, dynamic IQP-style middlegame after
+   …Bb4+/…d5. Edge = central space + piece activity.
+8. **Vienna vs 2…Nc6 (f4)** — King's-Gambit-style attack with Nc3 in; open f-file +
+   center. Edge = fast attack, better-developed pieces.
+9. **Hamppe-Muzio** — piece sac to blast f7 + the f-file vs Black's airy king. Edge =
+   overwhelming practical attack (club Black rarely finds the only-moves).
+10. **Dragadorf** — Dragon fianchetto attack (…Bg7/…Rc8/…b5-b4) + Najdorf …a6
+    flexibility. Edge = a double-edged race Black's attack often wins first.
+
 ## The honest verdict
 All 10 are **defensible recommendations** under the win% standard: each wins ≥45%
 at the buyer's level. Where eval and club results disagree, **club results are the

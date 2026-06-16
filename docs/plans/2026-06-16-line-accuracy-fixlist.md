@@ -1,5 +1,22 @@
 # Line-accuracy fix-list (2026-06-16) — the sold-repertoire soundness campaign
 
+## 🔒🔒🔒 NON-NEGOTIABLE — VERIFIED WHY OR FIX THE LINE (David 2026-06-16)
+"Don't make shit up. If you don't know the why, we fix those lines." We compete
+with pro-hand-picked repertoires — a plausible-sounding reason is NOT good enough.
+- **Every recommended line needs a VERIFIED why**, reduced to concrete atoms the
+  machine checks: tactical claims → Stockfish-verified at the exact position;
+  structural claims (open file, pawn center, bishop diagonal) → chess.js
+  board-verified; plan claims (a break/maneuver) → the actual masters continuation
+  + engine-approved.
+- **If the why can't be reduced to verified atoms → the line is FIXED** (re-anchor
+  to a line whose why IS verifiable), never shipped on assertion.
+- This binds the BUILD and the NARRATION (the `explainBestMoveGrounded` +
+  `narrationAccuracy` grounding). LLM prose voices verified facts only; it never
+  invents the reason. The win% is the practical VALIDATION, not the reason.
+- ⚠️ The "10 worst-kept" chess reasons below were written from consensus/training
+  and are NOT yet atom-verified — treat as UNPROVEN until engine/board-checked.
+
+
 ## 🔒🔒 FINAL "WELL-TAUGHT LINE" GATE (David 2026-06-16 — practical results, supersedes equal-or-better)
 Eval alone is too blunt. A line is **well-taught if the student scores ≥ ~45% at
 masters OR at the student's club level (~1400-2000)** — AND it isn't
