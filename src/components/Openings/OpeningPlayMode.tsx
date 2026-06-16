@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Chess } from 'chess.js';
-import { ArrowLeft, Volume2, VolumeX, Swords, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Volume2, VolumeX, Swords, RotateCcw, MessageCircle, X } from 'lucide-react';
 import { useChessGame } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { useHintSystem } from '../../hooks/useHintSystem';
@@ -25,9 +25,10 @@ import { voiceService } from '../../services/voiceService';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useMasterPlayWatcher } from '../../hooks/useMasterPlayWatcher';
 import { logAppAudit } from '../../services/appAuditor';
-import type { OpeningRecord, OpeningVariation, OpeningPlayResult, CoachDifficulty, AnalysisLine, LichessCloudEval } from '../../types';
+import type { OpeningRecord, OpeningVariation, OpeningPlayResult, CoachDifficulty, AnalysisLine, LichessCloudEval, BoardArrow, BoardHighlight, BoardAnnotationCommand } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MoveQuality } from '../Board/ChessBoard';
+import { GameChatPanel } from '../Coach/GameChatPanel';
 
 interface OpeningPlayModeProps {
   opening: OpeningRecord;
@@ -74,6 +75,35 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   const isComputerThinking = useRef(false);
   const moveCountRef = useRef(0);
   const { playCelebration } = usePieceSound();
+
+  // ─── Grounded coach chat (David 2026-06-16: every play surface gets the
+  //     SAME coach as /coach/play + /coach/teach) ────────────────────────────
+  // Mounts the SAME `GameChatPanel` /coach/play uses — so the opening-play
+  // surface inherits the entire grounded stack by reuse: getCoachChatResponse
+  // → coachService.ask (live tactics + the centralized trap scan + master-play
+  // + book/plan grounding), groundArrows, and the panel's logAppAudit
+  // instrumentation. Q&A + arrows only here — the coach never mutates the play
+  // board (no play_move/takeback handlers), so the WLPP Play LOCK is untouched.
+  const [chatOpen, setChatOpen] = useState(false);
+  const [chatArrows, setChatArrows] = useState<BoardArrow[]>([]);
+  const [chatHighlights, setChatHighlights] = useState<BoardHighlight[]>([]);
+  const handleChatBoardAnnotation = useCallback((commands: BoardAnnotationCommand[]) => {
+    const newArrows: BoardArrow[] = [];
+    const newHighlights: BoardHighlight[] = [];
+    let hasClear = false;
+    for (const cmd of commands) {
+      if (cmd.type === 'arrow') newArrows.push(...(cmd.arrows ?? []));
+      else if (cmd.type === 'highlight') newHighlights.push(...(cmd.highlights ?? []));
+      else if (cmd.type === 'clear') hasClear = true;
+    }
+    if (hasClear) {
+      setChatArrows([]);
+      setChatHighlights([]);
+    } else {
+      if (newArrows.length > 0) setChatArrows(newArrows);
+      if (newHighlights.length > 0) setChatHighlights(newHighlights);
+    }
+  }, []);
 
   // Analysis toggle overrides (user can toggle in-game)
   const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
@@ -657,7 +687,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
 
   // ─── Game screen ──────────────────────────────────────────────────────────
   return (
-    <div className="flex flex-col flex-1 overflow-hidden" data-testid="opening-play-mode">
+    <div className="relative flex flex-col flex-1 overflow-hidden" data-testid="opening-play-mode">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-theme-border">
         <div className="flex items-center gap-3">
@@ -699,6 +729,17 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
           >
             {voiceOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
           </button>
+          {/* Inline Chat button — same grounded coach as /coach/play (David
+              2026-06-16). Toggles the GameChatPanel drawer below. */}
+          <button
+            onClick={() => setChatOpen((v) => !v)}
+            className={`p-2 rounded-lg hover:bg-theme-surface ${chatOpen ? 'text-theme-accent' : 'text-theme-text-muted'}`}
+            aria-label={chatOpen ? 'Close coach chat' : 'Ask the coach'}
+            aria-pressed={chatOpen}
+            data-testid="opening-play-chat-toggle"
+          >
+            <MessageCircle size={18} />
+          </button>
         </div>
       </div>
 
@@ -736,7 +777,8 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
             highlightSquares={computerLastMove}
             showLastMoveHighlight={settings.highlightLastMove}
             moveQualityFlash={moveFlash}
-            arrows={hintState.arrows.length > 0 ? hintState.arrows : undefined}
+            arrows={chatArrows.length > 0 ? chatArrows : (hintState.arrows.length > 0 ? hintState.arrows : undefined)}
+            annotationHighlights={chatHighlights.length > 0 ? chatHighlights : undefined}
             ghostMove={hintState.ghostMove}
           />
         </div>
@@ -802,6 +844,50 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
         onSkip={() => void discussion.skip()}
         onDismissTeach={discussion.dismissTeach}
       />
+
+      {/* Grounded coach chat — the SAME GameChatPanel /coach/play mounts, so
+          the opening-play surface has the identical grounded coach (tactics +
+          centralized trap scan + master-play + book/plan grounding + audit).
+          Rendered as a bottom drawer so it never disturbs the board / the WLPP
+          Play lock. Q&A + arrows only (no move-mutation handlers). */}
+      {chatOpen && (
+        <div
+          className="absolute inset-x-0 bottom-0 z-30 flex flex-col bg-theme-bg border-t border-theme-border rounded-t-2xl shadow-2xl"
+          style={{ height: 'min(70%, 28rem)' }}
+          data-testid="opening-play-chat"
+        >
+          <div className="flex items-center justify-between px-4 py-2 border-b border-theme-border shrink-0">
+            <div className="flex items-center gap-2">
+              <MessageCircle size={16} className="text-theme-accent" />
+              <span className="text-sm font-semibold text-theme-text">Ask the coach</span>
+            </div>
+            <button
+              onClick={() => setChatOpen(false)}
+              className="p-1.5 rounded-lg hover:bg-theme-surface text-theme-text-muted"
+              aria-label="Close coach chat"
+              data-testid="opening-play-chat-close"
+            >
+              <X size={18} />
+            </button>
+          </div>
+          <div className="flex-1 min-h-0 overflow-hidden">
+            <GameChatPanel
+              fen={game.fen}
+              getLiveFen={game.getFen}
+              pgn={game.history.join(' ')}
+              moveNumber={moveCountRef.current}
+              playerColor={playerColor}
+              turn={game.turn}
+              isGameOver={game.isGameOver}
+              gameResult={game.isGameOver ? 'completed' : ''}
+              history={game.history}
+              onBoardAnnotation={handleChatBoardAnnotation}
+              hideHeader
+              className="h-full"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
