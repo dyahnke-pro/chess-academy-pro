@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, CheckCircle2, Lock, Trophy, GraduationCap, PlayCircle } from 'lucide-react';
+import { ChevronLeft, ChevronRight, CheckCircle2, Lock, Trophy, GraduationCap, PlayCircle, Target } from 'lucide-react';
 import { getOpeningById } from '../../services/openingService';
 import { buildCourse } from '../../services/openingCourse';
 import { sublineWhyFact } from '../../services/courseWhyFacts';
@@ -114,6 +114,16 @@ export function CourseSyllabusPage(): JSX.Element {
         >
           <PlayCircle size={18} />
           {resumeLabel}
+        </button>
+
+        {/* Spar — the adaptive tree-trainer: opponent throws the lines, you respond */}
+        <button
+          onClick={() => void navigate(`/academy/course/${opening.id}/train`)}
+          className="w-full rounded-xl bg-rose-500/15 border-2 border-rose-400/40 py-2.5 font-semibold text-rose-200 hover:bg-rose-500/25 transition-colors flex items-center justify-center gap-2"
+          data-testid="course-spar"
+        >
+          <Target size={16} />
+          Spar the tree
         </button>
       </div>
 

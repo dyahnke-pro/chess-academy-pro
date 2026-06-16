@@ -26,6 +26,7 @@ import { StarAnimationLayer } from './components/StarAnimationLayer';
 import { DashboardPage } from './components/Dashboard/DashboardPage';
 import { AcademyPage } from './components/Academy/AcademyPage';
 import { CourseSyllabusPage } from './components/Academy/CourseSyllabusPage';
+import { CourseTrainerPage } from './components/Academy/CourseTrainerPage';
 import { OpeningExplorerPage } from './components/Openings/OpeningExplorerPage';
 import { OpeningDetailPage } from './components/Openings/OpeningDetailPage';
 import { SrsTrainerPage } from './components/Openings/SrsTrainerPage';
@@ -303,6 +304,7 @@ export function App(): JSX.Element {
           <Route path="/" element={<ErrorBoundary><DashboardPage /></ErrorBoundary>} />
           <Route path="/academy" element={<ErrorBoundary><AcademyPage /></ErrorBoundary>} />
           <Route path="/academy/course/:id" element={<ErrorBoundary><CourseSyllabusPage /></ErrorBoundary>} />
+          <Route path="/academy/course/:id/train" element={<ErrorBoundary><CourseTrainerPage /></ErrorBoundary>} />
           {/* Openings */}
           <Route path="/openings" element={<ErrorBoundary><OpeningExplorerPage /></ErrorBoundary>} />
           <Route path="/openings/srs" element={<ErrorBoundary><SrsTrainerPage /></ErrorBoundary>} />
