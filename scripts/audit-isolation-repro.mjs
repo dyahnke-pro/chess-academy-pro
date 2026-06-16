@@ -73,8 +73,23 @@ async function run(browser, text) {
 
     ts = Date.now();
     armed = true;
-    await input.fill(text, { timeout: 8000 });
-    await page.locator('[data-testid="chat-send-btn"]').click({ timeout: 8000, force: true });
+    if (text === 'MASH') {
+      // Reproduce the loop's chaos #1: rapid-fire opening names without
+      // letting each settle — the suspected trigger of the 51-pageerror
+      // flood on "Sicilian" (a fast-use render/state collision invisible
+      // in slow play). Do several rounds to provoke the flood.
+      for (let round = 0; round < 4; round++) {
+        for (const t of ['Vienna', 'Sicilian', 'teach me the Najdorf', 'Caro-Kann']) {
+          await input.fill(t, { timeout: 3000 }).catch(() => {});
+          await page.locator('[data-testid="chat-send-btn"]').click({ timeout: 3000, force: true }).catch(() => {});
+          await page.waitForTimeout(130); // mash — don't settle
+        }
+      }
+      await page.waitForTimeout(6000);
+    } else {
+      await input.fill(text, { timeout: 8000 });
+      await page.locator('[data-testid="chat-send-btn"]').click({ timeout: 8000, force: true });
+    }
 
     // Authoritative "responded" = the brain RESPONSE returned, OR the voice
     // fired, OR a NARRATING lesson panel/line-picker newly appeared, OR the
