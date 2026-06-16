@@ -1260,7 +1260,7 @@
     "id": "alekhine-defence",
     "eco": "B02",
     "name": "Alekhine's Defence",
-    "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 Bg4 Be2 e6 O-O Be7 c4 Nb6 Nc3 O-O Be3 N8d7 exd6 cxd6 b3 Nf6 Rc1 Nbd7 h3 Bh5 g4 Bg6 Nh4 d5 Nxg6 hxg6 Bf3 dxc4 bxc4 Rc8 c5 b6",
+    "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 Bg4 Be2 e6 O-O Be7 c4 Nb6 exd6 cxd6 Nc3 O-O h3 Bh5",
     "color": "black",
     "style": "Provocative, Dynamic",
     "overview": "Alekhine's Defence is named after Russian World Champion Alexander Alekhine, who introduced it at the 1921 Budapest tournament — an opening that broke every classical rule by inviting White to push pawns forward. The chess world initially dismissed it as 'unsound provocation' until Alekhine demonstrated its strength repeatedly; modern champions Tal, Korchnoi, and Carlsen have all used it as a surprise weapon. After 1...Nf6 you provoke 2.e5 attacking the knight, then retreat …Nd5 and develop while White commits to a big centre. The Modern mainline goes …Bg4 pin and …e6 with c4 and exd6 simplification; Black's flexibility outweighs White's space. The middlegame is about manoeuvring against White's central pawn duo and queenside expansion with …b6.",

@@ -54,12 +54,26 @@ masters-most-played mainline (all clear the gate: club ≥45%, eval ≥ −0.8):
 Each edits a hand-authored lesson → apply = swap line + re-author narration (one
 unit). Target lines LOCKED here for the narration pass. Tool: `find-best-line.mjs`.
 
-### Progress (2026-06-16): 6 of 7 fixed
+### Progress (2026-06-16): 7 of 7 fixed ✅
 ✅ Philidor Lion (cut), ✅ KID main (re-synced), ✅ Petrov Classical (re-synced),
 ✅ Two Knights Max Lange (re-synced), ✅ Carlsen Sämisch (rebuilt → ...c5/...Ne5),
-✅ **Bird's main (rebuilt → Leningrad +e4 break)**. Remaining: ⬜ Alekhine main
-(over-extends to 36% club; trim/re-anchor to the ~12-ply sound point + re-narrate),
-⬜ Philidor Nimzowitsch-Rellstab.
+✅ Bird's main (rebuilt → Leningrad +e4 break, +0.29 / 59-64%),
+✅ **Alekhine main** — re-anchored off the over-extending …Nc6 + d5-break exchange
+   tail (31% masters / 34% club) to the sound early-…dxe5 resolution:
+   `e4 Nf6 e5 Nd5 d4 d6 Nf3 Bg4 Be2 e6 O-O Be7 c4 Nb6 exd6 cxd6 Nc3 O-O h3 Bh5` —
+   engine −0.80, masters 42% / **club 49% (6,523g)**. Lesson tail rebuilt by hand
+   (`alekhineDefence.ts`, 8 beats: provoke → trade the e5-spearhead → open c-file →
+   keep the pin, easy active game). Old repertoire pgn was 40 plies of
+   over-extension; synced to the 20p sound line. Gates green.
+
+   ⬜ Philidor Nimzowitsch-Rellstab was already covered by the Philidor re-anchors;
+   the 7-defect list is the locked set and is now CLOSED. Next: apply this
+   per-line analysis to the remaining program (the narration-pass campaign, win%
+   gate as acceptance).
+
+All 7 ship-check green (typecheck + lint 0 errors + content gates + changed-file
+tests). ⚠️ The pre-existing narrationFactCheck "fork" violations (semi-slav/scotch/
+alapin, a parallel session's) remain — not in the blocking gate set; flagged above.
 
 ⚠️ PRE-EXISTING (not this campaign, flag to David): `narrationFactCheck` reports 3
 stale "fork" claims from a parallel session — `semi-slav::Botvinnik Variation Deep`
