@@ -16,6 +16,26 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defence'];
 
 export const QUEENS_INDIAN_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'queens-indian::Queen\'s Indian: Fianchetto Variation (Deep)': {
+    openingId: 'queens-indian', title: "Queen's Indian — the Fianchetto Battle", minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'fd1', moves: 'd4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2 Be7 O-O O-O Nc3 d5', say: "The main Fianchetto battle — both sides fianchetto and White adds Nc3, the most testing set-up. Black's recommendation is to meet strength with strength: …d5, challenging the centre directly rather than sitting passively. The fight is for the light squares and the e4-break, and Black grabs his share.", sayShort: '…d5 — challenge the centre directly.', highlights: [H('d5', SOFT)] }),
+      b({ id: 'fd2', moves: 'd4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2 Be7 O-O O-O Nc3 d5 cxd5 Nxd5 Nxd5 Bxd5', say: "After cxd5 the knights trade on d5 and Black recaptures …Bxd5, the bishop landing on a fine central square where it stares down the long diagonal at White's king and queenside. The position has simplified, but Black's pieces are active and there are no weaknesses to defend.", sayShort: '…Bxd5 — active bishop on the long diagonal.', highlights: [H('d5')] }),
+      b({ id: 'fd3', moves: 'd4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2 Be7 O-O O-O Nc3 d5 cxd5 Nxd5 Nxd5 Bxd5 Qc2 f5', say: "Qc2 eyes the queen-trade and the centre, but Black answers with the ambitious …f5! — clamping the e4-square for good and grabbing kingside space. This is the modern, fighting Queen's Indian: not a passive hold, but an active bid to control the light squares and play for the initiative.", sayShort: '…f5 — clamp e4, grab the initiative.', highlights: [H('f5')] }),
+      b({ id: 'fd4', moves: 'd4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2 Be7 O-O O-O Nc3 d5 cxd5 Nxd5 Nxd5 Bxd5 Qc2 f5 Bf4 Nc6', say: "Bf4 develops the last minor with a glance at c7, and Black brings the knight out — …Nc6, eyeing d4 and supporting the …f5 advance. There is the recommended tabiya: Black is fully developed, owns e4, has the active d5-bishop and kingside space. Be honest — White's extra central space gives a tiny pull, but Black is comfortable, active, and scoring around forty-five percent. A sound, fighting equaliser, not a passive crouch.", sayShort: '…Nc6 — active, comfortable, owns e4.', highlights: [H('c6'), H('f5', SOFT)] }),
+    ],
+  },
+
+  'queens-indian::Queen\'s Indian: 4.e3 System': {
+    openingId: 'queens-indian', title: "Queen's Indian — vs the 4.e3 System", minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'e31', moves: 'd4 Nf6 c4 e6 Nf3 b6 e3 Bb7 Bd3 Be7', say: "The 4.e3 System — White develops modestly with e3 and Bd3, a flexible, low-theory set-up that keeps the centre fluid and the bishop pointed at Black's kingside. Black's recommendation is to develop naturally and strike in the centre; there is nothing to fear from White's quiet build-up.", sayShort: '…Be7 — develop, prepare …d5.', highlights: [H('e3', SOFT)] }),
+      b({ id: 'e32', moves: 'd4 Nf6 c4 e6 Nf3 b6 e3 Bb7 Bd3 Be7 O-O O-O Nc3 d5 cxd5 exd5', say: "Both castle, and after Nc3 Black strikes …d5; this time …exd5 recaptures with the pawn, accepting a clean central pawn on d5 and the half-open e-file. Black gets a small, solid centre and easy development — exactly the kind of position the Queen's Indian player is comfortable steering.", sayShort: '…exd5 — solid centre, half-open e-file.', highlights: [H('d5')] }),
+      b({ id: 'e33', moves: 'd4 Nf6 c4 e6 Nf3 b6 e3 Bb7 Bd3 Be7 O-O O-O Nc3 d5 cxd5 exd5 b3 Nbd7 Bb2 c5', say: "White double-fianchettoes with b3 and Bb2; Black completes the picture with …Nbd7 and the freeing …c5, hitting d4. Now the central tension is Black's to release on his terms, the b7-bishop and the d5-pawn jointly fighting for the centre. Symmetrical, balanced, double-edged.", sayShort: '…c5 — free the game, hit d4.', highlights: [H('c5'), H('d4', SOFT)] }),
+      b({ id: 'e34', moves: 'd4 Nf6 c4 e6 Nf3 b6 e3 Bb7 Bd3 Be7 O-O O-O Nc3 d5 cxd5 exd5 b3 Nbd7 Bb2 c5 Ne5 Re8', say: "White posts the knight aggressively on e5, and Black calmly challenges it — …Re8 backs the e-file and prepares to meet the knight with …Nxe5 or …Bd6. There is the 4.e3 tabiya: a balanced, manoeuvring middlegame where Black is fully developed and equal, the engine reading it as level. White's modest system gives no advantage against accurate, active play.", sayShort: '…Re8 — challenge Ne5, fully equal.', highlights: [H('e5')] }),
+    ],
+  },
+
   'queens-indian::Queen\'s Indian: Classical Variation (...Be7)': {
     openingId: 'queens-indian', title: "Queen's Indian — the Classical …Be7", minutes: 10, orientation: 'black', sources: SRC,
     beats: [

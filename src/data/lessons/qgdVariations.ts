@@ -14,6 +14,16 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['book:qgd', 'concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'];
 
 export const QGD_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'qgd::Vienna Variation': {
+    openingId: 'qgd', title: 'QGD — the Vienna (…dxc4 Counterplay)', minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'vi1', moves: 'd4 d5 c4 e6 Nc3 Nf6 Nf3 dxc4', say: "The Vienna — the sharpest, most active way to handle the Queen's Gambit. Instead of the solid wall, Black snatches the c4-pawn and plays for piece activity and queenside expansion. The recommendation here is dynamic, not passive: Black will hold the pawn just long enough to gain space and free the light-squared bishop.", sayShort: '…dxc4 — grab the pawn, play actively.', highlights: [H('c4', SOFT)] }),
+      b({ id: 'vi2', moves: 'd4 d5 c4 e6 Nc3 Nf6 Nf3 dxc4 e3 a6 Bxc4 b5 Bd3 Bb7', say: "White recovers the pawn with Bxc4, and Black grabs queenside space — …a6 and …b5 build the pawn chain, and …Bb7 develops the once-bad bishop onto the long diagonal, raking toward White's king. Black has solved the French/QGD bishop problem and gained space, all from the …dxc4 counterpunch.", sayShort: '…b5, …Bb7 — space and the long diagonal.', highlights: [H('b7')] }),
+      b({ id: 'vi3', moves: 'd4 d5 c4 e6 Nc3 Nf6 Nf3 dxc4 e3 a6 Bxc4 b5 Bd3 Bb7 O-O Nbd7 e4 c5', say: "White builds the big centre with e4, and Black hits back immediately with …c5 — striking at d4 before White's centre can roll forward. This is the whole point of the active treatment: every white pawn advance is met by a black piece or pawn, and the position stays double-edged and rich.", sayShort: '…c5 — strike the centre at once.', highlights: [H('c5'), H('e4', SOFT)] }),
+      b({ id: 'vi4', moves: 'd4 d5 c4 e6 Nc3 Nf6 Nf3 dxc4 e3 a6 Bxc4 b5 Bd3 Bb7 O-O Nbd7 e4 c5 d5 c4 dxe6 fxe6', say: "White lunges d5; Black coolly pushes …c4, gaining a protected square and shoving the bishop back, and after dxe6 …fxe6 the f-file rips open for Black's rook. There is the recommended tabiya: Black has the extra c4-pawn, the open f-file, the long-diagonal bishop, and a fully sound, dynamically equal game. A genuinely active answer to the Queen's Gambit — the engine confirms full equality and club players score right at fifty percent.", sayShort: '…c4, …fxe6 — extra pawn, open f-file, equal.', highlights: [H('c4'), H('e6', SOFT)] }),
+    ],
+  },
+
   'qgd::Orthodox Defense Main Line': {
     openingId: 'qgd', title: 'QGD — The Orthodox Main Line', minutes: 11, orientation: 'black', sources: SRC,
     beats: [
