@@ -26,7 +26,9 @@
  *
  * See `docs/COACH-BRAIN-00.md` for the architecture this implements.
  */
+import { Chess } from 'chess.js';
 import { logAppAudit } from '../services/appAuditor';
+import { scanPositionForTrap } from '../services/positionTrapScan';
 import { groundCoachReply, applyCandidateArrows } from '../services/coachAnswerGates';
 import { assembleEnvelope } from './envelope';
 import { loadAnnotationContextForLive } from './sources/annotationContext';
@@ -934,6 +936,77 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
         category: 'subsystem',
         source: 'coachService.ask.playerGames',
         summary: `player games load failed: ${(err as Error)?.message?.slice(0, 120) ?? 'unknown'}`,
+      });
+    }
+  }
+
+  // Position TRAP SCAN — the runtime trap-mining tool (the SAME
+  // `scanPositionForTrap` /coach/play + /coach/teach use), CENTRALIZED here so
+  // EVERY play/chat surface that routes through coachService.ask gets identical
+  // trap detection with NO per-surface code (David 2026-06-16: "all playing
+  // surfaces should now be identically coded"). Gated on a trap/tactics-shaped
+  // question + a live FEN so a normal ask never pays the per-candidate
+  // cloud-eval cost. G0: code decides the trap; the LLM only voices it
+  // (the envelope renders it under "Position trap scan"). Surfaces that already
+  // set trapSignal (none today) aren't overwritten. Off-book / no explorer
+  // coverage → null → correctly silent (G3).
+  const asksAboutTrap =
+    /\b(trap|traps|tactic|tactics|blunder|fall(?:ing)?\s+into|caught|punish|refut|trick|tricks)\b/i.test(
+      input.ask,
+    );
+  if (!input.liveState.trapSignal && input.liveState.fen && asksAboutTrap) {
+    const fen = input.liveState.fen;
+    try {
+      const mover: 'w' | 'b' = fen.split(' ')[1] === 'b' ? 'b' : 'w';
+      let engineBestSan: string | undefined;
+      const bestUci = input.liveState.engineBestMoveUci;
+      if (bestUci && bestUci.length >= 4) {
+        try {
+          const c = new Chess(fen);
+          const mv = c.move({
+            from: bestUci.slice(0, 2),
+            to: bestUci.slice(2, 4),
+            promotion: bestUci.slice(4, 5) || undefined,
+          });
+          engineBestSan = mv?.san;
+        } catch {
+          /* refutation hint is optional */
+        }
+      }
+      let legalSan: string[] | undefined;
+      try {
+        legalSan = new Chess(fen).moves();
+      } catch {
+        /* detector skips legality filtering when absent */
+      }
+      const trap = await scanPositionForTrap({ fen, mover, engineBestSan, legalSan });
+      if (trap) {
+        input = {
+          ...input,
+          liveState: { ...input.liveState, trapSignal: trap },
+        };
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'coachService.ask.trapScan',
+          summary: `trap: ${trap.trapMove} (${trap.gamesPlayed}g ${trap.evalCpForMover}cp ${trap.severity}) on ${input.liveState.surface}`,
+        });
+      } else {
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'coachService.ask.trapScan',
+          summary: `no trap at fen (scan ran, none qualified) on ${input.liveState.surface}`,
+        });
+      }
+    } catch (err) {
+      // Trap scan failures must NEVER block the brain call — the surface
+      // still has FEN/eval/tactics grounding and answers without it.
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'coachService.ask.trapScan',
+        summary: `trap scan failed: ${(err as Error)?.message?.slice(0, 120) ?? 'unknown'}`,
       });
     }
   }
