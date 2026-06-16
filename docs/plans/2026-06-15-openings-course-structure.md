@@ -222,6 +222,23 @@ already exists for that line.
 
 ---
 
+## 🔒 COURSE PLAY/NARRATION USES THE COACH GROUNDING ARCHITECTURE (David 2026-06-16)
+Another session shipped the **move-narration grounding package** (merged from
+origin/main): when the coach voices a move it computes EVERYTHING in code —
+captured piece + squares (chess.js), check/mate (chess.js), *why it's strong*
+(`explainBestMoveGrounded`), the *real* tactics (`buildTacticsLiveContext.immediate`),
+hanging pieces — and the LLM voices ONLY those, never inventing. **Directive: the
+course's Play + narration (Stage-2) MUST route through THIS architecture, not a
+parallel path** (`explainBestMoveGrounded` + `buildTacticsLiveContext` + the
+`voiceFacts` chokepoint). The win: using the coach architecture ALSO loads the
+course's narration with the coach's AUDIT TOOLING for free — the claim validators,
+master-play enforcement, and `logAppAudit` events fire automatically. This is also
+the answer to "load it up with audit tools anywhere there's a coach/nondeterministic
+function": the course is deterministic TODAY (zero LLM calls — verified), so the
+LLM only enters at narration, and routing narration through the coach grounds AND
+audits it. For the deterministic course surfaces now: `logAppAudit` observability +
+a G1 Playwright audit script.
+
 ## BUILD STATUS (2026-06-16)
 - ✅ P1 engine · ✅ P2 cards · ✅ P3 syllabus (two-level tree) · ✅ subline engine
   (frequency-derived, 2,659 sublines / 58 courses) · ✅ Stage-1 frequency why +

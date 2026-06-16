@@ -13,6 +13,7 @@ import {
 } from '../../services/courseTrainer';
 import type { OpeningRecord } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
+import { logAppAudit } from '../../services/appAuditor';
 
 type Status = 'playing' | 'wrong' | 'lineDone';
 
@@ -56,7 +57,14 @@ export function CourseTrainerPage(): JSX.Element {
   const startLine = useCallback((l: DrillLine) => {
     const c = new Chess();
     let ply = 0;
-    while (ply < l.moves.length && !isStudentPly(ply, l.studentColor)) { c.move(l.moves[ply]); ply++; }
+    try {
+      while (ply < l.moves.length && !isStudentPly(ply, l.studentColor)) { c.move(l.moves[ply]); ply++; }
+    } catch {
+      // A drill line should be chess.js-legal (validated at build) — a throw here
+      // is a real continuity break worth auditing (G2). Show the line as done so
+      // the UI never hangs.
+      void logAppAudit({ kind: 'continuity-error', category: 'subsystem', source: 'courseTrainer.startLine', summary: `illegal drill line ${l.id}`, context: l.moves.join(' ') });
+    }
     chessRef.current = c;
     setLine(l);
     setPlyPtr(ply);
