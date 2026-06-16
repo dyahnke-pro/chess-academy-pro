@@ -1,5 +1,9 @@
 # Novel Openings — rare moves Stockfish rates sound
 
+> **Full machine-readable data log:** [`docs/novel-openings-2026-06-16-data.json`](./novel-openings-2026-06-16-data.json)
+> — every labeled candidate with FEN, full PGN, ECO, evals, frequencies, and the scan trace.
+> Source script: `scripts/find-novel-openings.mjs` · regenerate: `node scripts/find-novel-openings.mjs 4000 8000`.
+
 _Generated 2026-06-16T00:01:13.073Z · Stockfish 18 (depth ~30 verify) × Lichess masters/strong-amateur explorer._
 
 ## Method
