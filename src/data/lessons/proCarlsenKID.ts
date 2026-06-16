@@ -57,8 +57,8 @@ const MAKOGONOV: LessonScript = {
 const SAEMISCH: LessonScript = {
   openingId: 'pro-carlsen-kid', title: "Sämisch f3", minutes: 6, orientation: 'black', kind: 'variation', sources: SRC,
   beats: [
-    b({ id: 'f3', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 e5', arrows: [A('e5', 'd4')], highlights: [H('e5')], say: "The Sämisch — White supports the centre with f3 and prepares Be3, Qd2 and a kingside pawn storm of his own. It's the most aggressive anti-King's-Indian. Black meets it classically with ...e5, striking the centre before White's slow build-up gets rolling.", sayShort: 'e5 — strike before the Sämisch rolls.' }),
-    b({ id: 'lock', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 e5 Nge2 Nc6 d5 Nd4', arrows: [A('d4', 'e2')], highlights: [H('d4')], say: "After White locks with d5, Black plants the knight on the magnificent d4-outpost, where it sits in the heart of White's position and forces concessions. Black follows with ...c5 to lock the queenside and ...f5 to attack the king. The Sämisch becomes a sharp mutual-attack race — and Black's chances are excellent.", sayShort: 'Nd4 — the monster outpost.' }),
+    b({ id: 'f3', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 c5', highlights: [H('c5'), H('d4')], say: "The Sämisch — White braces the centre with f3 and prepares Be3, Qd2 and a kingside pawn storm. Rather than let that slow plan roll, Black strikes the centre at once with ...c5, challenging d4 and opening lines for counterplay before White is ready.", sayShort: '...c5 — counter the centre at once.' }),
+    b({ id: 'lock', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 c5 Nge2 Nc6 d5 Ne5', arrows: [A('e5', 'c4')], highlights: [H('e5')], say: "White locks the centre with d5; Black's knight swings to the e5-outpost — a superb square in the heart of White's camp, eyeing c4 and d3 and impossible to chase off with a pawn. Black follows with ...a6 and ...b5 to open the queenside while White is committed to the other wing.", sayShort: '...Ne5 — the outpost, play the queenside.' }),
   ],
 };
 

@@ -4636,7 +4636,7 @@
         },
         {
           "name": "Sämisch f3",
-          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 e5 Nge2 Nc6 d5 Nd4",
+          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 c5 Nge2 Nc6 d5 Ne5",
           "explanation": "13 games. Meet the aggressive Sämisch with ...e5; the knight lands on the monster d4-outpost and Black races on the kingside.",
           "sources": [
             "book:chess-fundamentals",
