@@ -15,6 +15,33 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'];
 
 export const GRUNFELD_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'grunfeld-defence::Exchange Variation: Main Line': {
+    openingId: 'grunfeld-defence', title: 'Grünfeld — The Exchange Main Line', minutes: 11, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'gem1', moves: 'd4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7', say: "The Grünfeld in its purest form. Black invites White to build a giant pawn centre — c3, d4 and e4 — then fianchettoes the bishop to g7 and takes dead aim at it down the long diagonal. The whole opening is a wager: is that big centre a strength, or just a target waiting to be torn down?", sayShort: '…Bg7 — aim at the big centre.', arrows: [A('g7', 'd4')], highlights: [H('d4'), H('e4', SOFT)] }),
+      b({ id: 'gem2', moves: 'd4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Nf3 c5 Be3 Qa5', say: "…c5 strikes the base of the centre, and …Qa5 swings the queen out to press the weakened c3-pawn and pin White's plans. Black's pieces flow toward the centre with purpose — every one of them is trained on White's proud but brittle pawns.", sayShort: '…c5, …Qa5 — hit the centre and c3.', highlights: [H('c5'), H('c3')] }),
+      b({ id: 'gem3', moves: 'd4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Nf3 c5 Be3 Qa5 Qd2 O-O Rc1 cxd4 cxd4', say: "Black castles and trades on d4 — …cxd4 cxd4 — and now White's centre is reduced to the lone d4-e4 duo, with no c-pawn to support it. The proud phalanx has become a pair of targets, and every black piece is pointed straight at them.", sayShort: '…cxd4 — strip the centre to targets.', highlights: [H('d4'), H('e4', SOFT)] }),
+      b({ id: 'gem4', moves: 'd4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Nf3 c5 Be3 Qa5 Qd2 O-O Rc1 cxd4 cxd4 Qxd2+ Nxd2 Rd8 d5 e6 Bc4 exd5 Bxd5 Nc6', say: "The queens come off, and Black goes to work on the pawns: …Rd8 hits down the d-file, …e6 challenges the d5-pawn, and after the exchanges …Nc6 brings the last piece to bear. There is the Exchange Grünfeld endgame — Black's bishop on g7, knight on c6 and rook on d8 swarming White's centre. The bargain pays off: fully equal, and far easier to play with the activity all on Black's side.", sayShort: '…Nc6 — swarm the centre, easy game.', highlights: [H('c6'), H('d8', SOFT)] }),
+    ],
+  },
+
+  'grunfeld-defence::Exchange: Be3 Qa5 Qd2 with Rc1': {
+    openingId: 'grunfeld-defence', title: 'Grünfeld — Exchange with …Qa5 and …Nc6', minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'bq1', moves: 'd4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7', say: "The Exchange Grünfeld again, but this time Black keeps the queens on for a sharper fight. Same philosophy: let White erect the c3-d4-e4 centre, then assault it. The g7-bishop is the spearhead, raking the long diagonal at the pawn front.", sayShort: '…Bg7 — the spearhead on the long diagonal.', arrows: [A('g7', 'd4')], highlights: [H('d4'), H('e4', SOFT)] }),
+      b({ id: 'bq2', moves: 'd4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Nf3 c5 Be3 Qa5', say: "…c5 hits the base, …Qa5 presses the c3-pawn and ties White down. The queen on a5 is a typical Grünfeld nuisance — it eyes c3, supports the queenside, and keeps White's pieces busy with defence instead of attack.", sayShort: '…Qa5 — press c3, tie White down.', highlights: [H('c5'), H('c3')] }),
+      b({ id: 'bq3', moves: 'd4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Nf3 c5 Be3 Qa5 Qd2 Nc6 Rc1 cxd4 cxd4', say: "…Nc6 piles a second attacker onto d4, and after …cxd4 cxd4 White is left nursing the isolated d4-e4 pair with queens still on the board. Black has the bishop on g7, the knight on c6 and the queen on a5 all converging on the centre — active, dynamic, and fully equal. The Grünfeld promise delivered.", sayShort: '…Nc6, …cxd4 — converge on the centre.', arrows: [A('c6', 'd4')], highlights: [H('c6'), H('d4')] }),
+    ],
+  },
+
+  'grunfeld-defence::Taimanov Variation (f3)': {
+    openingId: 'grunfeld-defence', title: 'Grünfeld — The Taimanov (Bc4/Ne2)', minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'tm1', moves: 'd4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7', say: "Whatever White's exact set-up, the Grünfeld idea never changes: concede the big centre, fianchetto to g7, and attack. Here White will deploy the bishop actively to c4 and the knight to e2, bracing the d4 and e4 pawns — but the long diagonal still belongs to Black.", sayShort: '…Bg7 — the constant Grünfeld idea.', arrows: [A('g7', 'd4')], highlights: [H('d4'), H('e4', SOFT)] }),
+      b({ id: 'tm2', moves: 'd4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Bc4 c5 Ne2 Nc6 Be3 O-O', say: "Bc4 and Ne2 support the centre, but Black hits it anyway — …c5 at the base, …Nc6 developing with a hit on d4, and …O-O for safety. White's pieces are committed to defending the pawns; Black's are committed to winning them.", sayShort: '…c5, …Nc6 — strike and develop.', highlights: [H('c5'), H('c6')] }),
+      b({ id: 'tm3', moves: 'd4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Bc4 c5 Ne2 Nc6 Be3 O-O O-O cxd4 cxd4 Bd7 Rc1 Rc8', say: "…cxd4 opens lines, …Bd7 develops, and …Rc8 seizes the half-open c-file, pointing at White's c-pawn and the queenside. There is the Taimanov tabiya: the d4-e4 centre under siege from the g7-bishop and the c6-knight, the c-file in Black's hands. Sharp, double-edged, and the practical results favour the well-prepared Black player.", sayShort: '…Rc8 — seize the c-file, besiege the centre.', highlights: [H('c8'), H('d4', SOFT)] }),
+    ],
+  },
   'grunfeld-defence::Russian System (Qb3)': {
     openingId: 'grunfeld-defence', title: 'Grünfeld — The Russian System (Qb3)', minutes: 10, orientation: 'black', sources: SRC,
     beats: [
