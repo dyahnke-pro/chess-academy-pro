@@ -454,6 +454,95 @@ const TK_MAXLANGE: SublineNarration = {
   sources: TK,
 };
 
+// ── Four Knights Game (student WHITE). triggerMove is BLACK's deviation. ──
+const FK = ['book:four-knights-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Four_Knights_Game'];
+const FK_CTR = ['book:four-knights-game', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Four_Knights_Game'];
+const FK_INIT = ['book:four-knights-game', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Four_Knights_Game'];
+
+// Spanish Four Knights, symmetric Bb5…Bb4 maneuvering. Break symmetry first.
+const FK_SPANISH: SublineNarration = {
+  intro: {
+    say: "The Spanish Four Knights — symmetric, solid, and famously level. Your trump is the extra tempo of moving first, so break the symmetry on YOUR terms: the Metger unpin with Ne2 and Ng3 reroutes the knight to the kingside, Bg5 pins, and d4 grabs the centre a beat before Black can. Small and durable, but it's a pull, and it's yours.",
+    sayShort: 'Break symmetry first — Ne2-g3 and d4.',
+  },
+  sources: FK,
+};
+// Bc5@7 / Bd6@7 — Black's other bishop tries vs Bb5.
+const FK_BC5BD6: SublineNarration = {
+  intro: {
+    say: "Black develops the bishop off the symmetric square. Make the tempo tell: d3 and the Nd5 leap put the knight on a commanding central outpost, and Bg5 pins the f6-knight to fix the kingside. With your development a step ahead you take the centre with d4 when ready and keep a comfortable, pleasant initiative throughout.",
+    sayShort: 'Press with Nd5 and d4, develop ahead.',
+  },
+  sources: FK,
+};
+// Scotch Four Knights (var1, d4 exd4 Nxd4 Bb4 Nxc6 …). Active pieces, Bg5/Qf3.
+const FK_SCOTCH_FK: SublineNarration = {
+  intro: {
+    say: "The Scotch Four Knights — you've opened the centre with d4 and reached a lively, near-symmetrical structure where your pieces find the more active posts. Bg5 pins the f6-knight, Qf3 swings toward the kingside, and the rooks pour onto the central files. The game is balanced but yours to drive — keep the pieces aimed at Black's king and probe the weakened squares.",
+    sayShort: 'Scotch FK — active pieces, Bg5 and Qf3.',
+  },
+  sources: FK_CTR,
+};
+// Bb4@7 var2 — Black pins before resolving the centre (d4 Bb4).
+const FK_D4_PIN: SublineNarration = {
+  intro: {
+    say: "…Bb4 — Black pins the c3-knight before deciding on the centre. Don't let it stall you: d5 gains space and kicks the c6-knight, or the sharp Nxe5 grabs a pawn and tests the pin. Either way the centre opens in your favour while Black's bishop is committed — develop with tempo and keep the initiative.",
+    sayShort: '…Bb4 — answer d5 or the sharp Nxe5.',
+  },
+  sources: FK_CTR,
+};
+// var2 Nd5 lines — White's central knight leap regains material, stays active.
+const FK_NMD5: SublineNarration = {
+  intro: {
+    say: "Nd5 — the knight vaults to the central outpost, hitting the f6-knight and the c7-square and regaining the gambit pawn by force. Black must spend time untangling while your pieces stay forward and active. You emerge with a small but real lead in space and development — keep the knight's grip on d5 and press the freer game.",
+    sayShort: 'Nd5 — central leap, regain the pawn.',
+  },
+  sources: FK_INIT,
+};
+// Halloween Gambit (var3, Nxe5 Nxe5 d4) — a knight sac for a huge centre.
+const FK_HALLOWEEN: SublineNarration = {
+  intro: {
+    say: "The Halloween Gambit — you've flung a knight onto e5 to build a monstrous pawn centre and stampede Black's pieces backward with d4, f4 and e5. Objectively it's dubious and a calm defender holds the extra piece, but over the board it is a terrifying practical weapon: the pawns roll, Black's knights get herded home, and one inaccuracy and the centre crashes through. Attack at full tilt and make Black prove it.",
+    sayShort: 'Halloween — sac the knight, storm the centre.',
+  },
+  sources: FK_INIT,
+};
+// var5 fork-trick line (Bc4 Nxe4 Nxe4 d5 …) — symmetrical, tiny White pull.
+const FK_ITALIAN_FT: SublineNarration = {
+  intro: {
+    say: "The fork-trick line — the centre has simplified into a near-symmetrical position with bishops on open diagonals. There's no attack here, just a quiet, even game where your slightly freer pieces give a nagging edge. Castle, post a rook on e1, and pressure the e-file; the win, if it comes, is squeezed from tiny advantages, not conjured.",
+    sayShort: 'Symmetrical — press the e-file, squeeze.',
+  },
+  sources: FK,
+};
+// Rubinstein Counterattack deep (var6, …Nd4 … dxc3/cxd2+) — sharp, consolidate.
+const FK_RUBINSTEIN: SublineNarration = {
+  intro: {
+    say: "The Rubinstein Counterattack — Black has thrown a pawn forward to c3 (or c2!) to disrupt your camp and seize the initiative. Keep your nerve: round up the advanced pawn, complete development, and let your extra material or healthier structure speak. The lines are sharp and theory-soaked, but with accurate consolidation you steer to a safe, balanced-to-better game.",
+    sayShort: 'Rubinstein — consolidate, mop up the pawn.',
+  },
+  sources: FK_INIT,
+};
+// Glek System (var8, g3 Bc5 Bg2 d6 d3) — White fianchettoes, presses.
+const FK_GLEK: SublineNarration = {
+  intro: {
+    say: "The Glek System — you've fianchettoed the king's bishop, and the g2-bishop rakes the long diagonal toward Black's queenside and centre. This is the modern, flexible Four Knights: castle, brace with d3 and c3, and prepare the Nh4 or d4 levers to open lines for the bishop. A quiet, strategically rich game where your harmonious setup gives the lasting pull.",
+    sayShort: 'Glek — fianchetto, press the long diagonal.',
+  },
+  sources: FK,
+};
+// g6@5 cont — Black fianchettoes, White takes the big centre.
+const FK_G6: SublineNarration = {
+  intro: {
+    say: "…g6 — Black heads for a Pirc-style fianchetto against your Four Knights. Punish the slight passivity by grabbing the centre: d4 opens it, and after the exchanges you own the broad d4-e4 space while Black is still untangling. Develop quickly, castle, and lean on your space edge — the fianchetto bishop bites on granite.",
+    sayShort: '…g6 — seize the centre with d4.',
+  },
+  beats: [
+    { atMove: 8, say: "Nxd4 — you've claimed the full classical centre against Black's fianchetto. The knight dominates from d4 and the e4-pawn cramps Black's whole kingside; with more space and faster development, you set the agenda while the g7-bishop stares at your solid centre.", arrows: [A('d4', 'c6')], highlights: [H('d4', KEY), H('e4', SOFT)] },
+  ],
+  sources: FK_CTR,
+};
+
 export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   // ── Ruy Lopez ──
   'ruy-lopez::0::Nf6@5': RUY_BERLIN,
@@ -679,4 +768,89 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'two-knights-defence::3::Nxd4@10': TK_MAXLANGE,
   'two-knights-defence::3::Nb5@18': TK_MAXLANGE,
   'two-knights-defence::3::Rxe7+@20': TK_MAXLANGE,
+
+  // ── Four Knights Game ──
+  'four-knights-game::0::Bd6@7': FK_BC5BD6,
+  'four-knights-game::0::Bxc3@11': FK_SPANISH,
+  'four-knights-game::0::Bc5@7': FK_BC5BD6,
+  'four-knights-game::0::g6@5': FK_G6,
+  'four-knights-game::0::d6@7': FK_SPANISH,
+  'four-knights-game::0::h6@15': FK_SPANISH,
+  'four-knights-game::0::Bd7@15': FK_SPANISH,
+  'four-knights-game::0::Ne7@13': FK_SPANISH,
+  'four-knights-game::0::Ne7@15': FK_SPANISH,
+  'four-knights-game::1::Bxc3+@11': FK_SCOTCH_FK,
+  'four-knights-game::1::dxc6@11': FK_SCOTCH_FK,
+  'four-knights-game::1::Bd6@21': FK_SCOTCH_FK,
+  'four-knights-game::1::h6@21': FK_SCOTCH_FK,
+  'four-knights-game::1::c6@17': FK_SCOTCH_FK,
+  'four-knights-game::1::Bxc3@17': FK_SCOTCH_FK,
+  'four-knights-game::1::Rb8@21': FK_SCOTCH_FK,
+  'four-knights-game::1::Be6@21': FK_SCOTCH_FK,
+  'four-knights-game::1::Be6@23': FK_SCOTCH_FK,
+  'four-knights-game::1::Re8@21': FK_SCOTCH_FK,
+  'four-knights-game::2::Bb4@7': FK_D4_PIN,
+  'four-knights-game::2::g6@5': FK_G6,
+  'four-knights-game::2::Be7@9': FK_NMD5,
+  'four-knights-game::2::Nb4@9': FK_NMD5,
+  'four-knights-game::2::Nxd5@9': FK_NMD5,
+  'four-knights-game::2::d6@9': FK_NMD5,
+  'four-knights-game::2::Bc5@9': FK_NMD5,
+  'four-knights-game::3::Nb8@11': FK_HALLOWEEN,
+  'four-knights-game::3::Ne7@11': FK_HALLOWEEN,
+  'four-knights-game::3::Qb6@19': FK_HALLOWEEN,
+  'four-knights-game::3::Neg4@13': FK_HALLOWEEN,
+  'four-knights-game::3::Bc5@7': FK_HALLOWEEN,
+  'four-knights-game::3::Qe7@15': FK_HALLOWEEN,
+  'four-knights-game::3::Nb4@11': FK_HALLOWEEN,
+  'four-knights-game::3::Nf6@19': FK_HALLOWEEN,
+  'four-knights-game::3::Qh4+@19': FK_HALLOWEEN,
+  'four-knights-game::3::Bxd6@19': FK_HALLOWEEN,
+  'four-knights-game::4::Bd6@7': FK_BC5BD6,
+  'four-knights-game::4::Bxc3@11': FK_SPANISH,
+  'four-knights-game::4::Bc5@7': FK_BC5BD6,
+  'four-knights-game::4::g6@5': FK_G6,
+  'four-knights-game::4::d6@7': FK_SPANISH,
+  'four-knights-game::4::c6@17': FK_SPANISH,
+  'four-knights-game::4::Bxc3@9': FK_SPANISH,
+  'four-knights-game::4::Bg4@13': FK_SPANISH,
+  'four-knights-game::4::c6@19': FK_SPANISH,
+  'four-knights-game::5::Bc5@13': FK_ITALIAN_FT,
+  'four-knights-game::5::Bg4@13': FK_ITALIAN_FT,
+  'four-knights-game::5::f5@13': FK_ITALIAN_FT,
+  'four-knights-game::5::Bd7@13': FK_ITALIAN_FT,
+  'four-knights-game::5::Nd4@13': FK_ITALIAN_FT,
+  'four-knights-game::5::Bg4@15': FK_ITALIAN_FT,
+  'four-knights-game::5::Bd7@15': FK_ITALIAN_FT,
+  'four-knights-game::5::f5@15': FK_ITALIAN_FT,
+  'four-knights-game::5::Bg4@17': FK_ITALIAN_FT,
+  'four-knights-game::5::f5@17': FK_ITALIAN_FT,
+  'four-knights-game::6::cxd2+@13': FK_RUBINSTEIN,
+  'four-knights-game::6::Bc5@15': FK_BC5BD6,
+  'four-knights-game::6::c6@15': FK_RUBINSTEIN,
+  'four-knights-game::6::Bb4@7': FK_SPANISH,
+  'four-knights-game::6::Qe7@11': FK_RUBINSTEIN,
+  'four-knights-game::6::cxb2@13': FK_RUBINSTEIN,
+  'four-knights-game::6::Be7@15': FK_RUBINSTEIN,
+  'four-knights-game::6::Bd6@7': FK_BC5BD6,
+  'four-knights-game::6::Ng8@11': FK_RUBINSTEIN,
+  'four-knights-game::6::c6@11': FK_RUBINSTEIN,
+  'four-knights-game::7::Bd6@7': FK_BC5BD6,
+  'four-knights-game::7::Bxc3@11': FK_SPANISH,
+  'four-knights-game::7::Bc5@7': FK_BC5BD6,
+  'four-knights-game::7::g6@5': FK_G6,
+  'four-knights-game::7::d6@7': FK_SPANISH,
+  'four-knights-game::7::h6@15': FK_SPANISH,
+  'four-knights-game::7::c5@21': FK_SPANISH,
+  'four-knights-game::7::Bd7@15': FK_SPANISH,
+  'four-knights-game::7::Ne7@13': FK_SPANISH,
+  'four-knights-game::8::h6@11': FK_GLEK,
+  'four-knights-game::8::O-O@11': FK_GLEK,
+  'four-knights-game::8::Be6@11': FK_GLEK,
+  'four-knights-game::8::h6@13': FK_GLEK,
+  'four-knights-game::8::Ng4@11': FK_GLEK,
+  'four-knights-game::8::Bg4@13': FK_GLEK,
+  'four-knights-game::8::Nd4@11': FK_GLEK,
+  'four-knights-game::8::Be6@13': FK_GLEK,
+  'four-knights-game::8::Be6@15': FK_GLEK,
 };
