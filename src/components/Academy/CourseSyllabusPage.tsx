@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, CheckCircle2, Lock, Trophy, GraduationCap, PlayCircle, Target } from 'lucide-react';
+import { ChevronLeft, ChevronRight, CheckCircle2, Lock, Trophy, GraduationCap, PlayCircle, Target, Eye, Swords } from 'lucide-react';
 import { getOpeningById } from '../../services/openingService';
 import { buildCourse } from '../../services/openingCourse';
 import { sublineWhyFact } from '../../services/courseWhyFacts';
+import { sublineToPlayableLine, sublineToCustomLine } from '../../services/sublineLesson';
+import { PlayableLinePlayer } from '../Openings/PlayableLinePlayer';
+import { OpeningPlayMode } from '../Openings/OpeningPlayMode';
 import { useCourseAccess } from '../../hooks/useCourseAccess';
 import { isChapterUnlockedByAccess } from '../../services/courseEntitlement';
 import { MAIN_LINE_INDEX, type Rung } from '../../utils/wlppLadder';
 import type { OpeningRecord } from '../../types';
-import type { CourseChapter } from '../../services/openingCourse';
+import type { CourseChapter, CourseSubline } from '../../services/openingCourse';
 
 /**
  * The course front door (P3) — the opening rendered as an enrolled GM-style
@@ -23,6 +26,9 @@ export function CourseSyllabusPage(): JSX.Element {
   const navigate = useNavigate();
   const [opening, setOpening] = useState<OpeningRecord | null>(null);
   const [loading, setLoading] = useState(true);
+  // The Level-3 subline player: Watch (narrated walkthrough) or Play (locked
+  // OpeningPlayMode). Mounted full-bleed over the syllabus; onExit clears it.
+  const [activeSub, setActiveSub] = useState<{ subline: CourseSubline; mode: 'watch' | 'play' } | null>(null);
   const access = useCourseAccess(id ?? '');
 
   useEffect(() => {
@@ -70,6 +76,21 @@ export function CourseSyllabusPage(): JSX.Element {
     void navigate(chapterHref(lineIndex), { state: { from: `/academy/course/${opening.id}` } });
   };
   const resume = (): void => { if (course.nextStep) openChapter(course.nextStep.lineIndex); };
+
+  // Level-3 subline player. Watch → narrated walkthrough; Play → coach LOCKED
+  // to the subline's exact moves (the existing customLine lock — no new engine
+  // work). Mounted full-bleed; exit returns to the syllabus.
+  if (activeSub) {
+    const close = (): void => setActiveSub(null);
+    if (activeSub.mode === 'play') {
+      return <OpeningPlayMode opening={opening} customLine={sublineToCustomLine(activeSub.subline)} onExit={close} />;
+    }
+    const line = sublineToPlayableLine(activeSub.subline);
+    if (!line) { setActiveSub(null); return wrap(<p className="text-sm text-theme-text-muted py-8 text-center">Couldn't load that line.</p>); }
+    return <PlayableLinePlayer line={line} boardOrientation={opening.color} mode="watch" onComplete={() => undefined} onExit={close} />;
+  }
+  const onWatchSubline = (s: CourseSubline): void => setActiveSub({ subline: s, mode: 'watch' });
+  const onPlaySubline = (s: CourseSubline): void => setActiveSub({ subline: s, mode: 'play' });
 
   const resumeLabel = course.complete
     ? 'Review the course'
@@ -158,6 +179,8 @@ export function CourseSyllabusPage(): JSX.Element {
             chapter={ch}
             locked={!isChapterUnlockedByAccess(ch.n, access)}
             onOpen={() => openChapter(ch.lineIndex)}
+            onWatchSubline={onWatchSubline}
+            onPlaySubline={onPlaySubline}
           />
         ))}
       </div>
@@ -173,9 +196,18 @@ function subName(name: string): string {
   return name.includes(':') ? name.split(':').slice(1).join(':').trim() : name;
 }
 
-function ChapterRow({ chapter, onOpen, locked }: { chapter: CourseChapter; onOpen: () => void; locked: boolean }): JSX.Element {
+function ChapterRow({ chapter, onOpen, locked, onWatchSubline, onPlaySubline }: {
+  chapter: CourseChapter;
+  onOpen: () => void;
+  locked: boolean;
+  onWatchSubline: (s: CourseSubline) => void;
+  onPlaySubline: (s: CourseSubline) => void;
+}): JSX.Element {
   const done = chapter.status === 'complete';
   const sublines = chapter.sublines;
+  const [expanded, setExpanded] = useState(false);
+  const OPEN_COUNT = 3;
+  const shown = expanded ? sublines : sublines.slice(0, OPEN_COUNT);
   return (
     <div
       className={`rounded-2xl bg-theme-surface border-2 border-indigo-500/20 overflow-hidden ${locked ? 'opacity-60' : ''}`}
@@ -226,7 +258,7 @@ function ChapterRow({ chapter, onOpen, locked }: { chapter: CourseChapter; onOpe
           chapter is locked (paid content). */}
       {!locked && sublines.length > 0 && (
         <div className="px-4 pb-3 pt-2 flex flex-col gap-1 border-t border-indigo-500/10" data-testid={`course-sublines-${chapter.n}`}>
-          <p className="text-[10px] uppercase tracking-wide text-theme-text-muted/70">They might play</p>
+          <p className="text-[10px] uppercase tracking-wide text-theme-text-muted/70">They might play · Watch the reply or play it out</p>
           {(() => {
             // Selective frequency caption — only when the top deviation is a
             // dominant or rare try (the rule: speak the % only when it adds value).
@@ -235,15 +267,40 @@ function ChapterRow({ chapter, onOpen, locked }: { chapter: CourseChapter; onOpe
               <p className="text-[11px] italic text-indigo-300/80" data-testid={`course-subline-why-${chapter.n}`}>{why.text}</p>
             ) : null;
           })()}
-          {sublines.slice(0, 6).map((s) => (
-            <div key={`${s.triggerMove}-${s.atPly}`} className="flex items-center gap-2 text-[11px] pl-1">
-              <span className="font-mono font-semibold text-indigo-300 shrink-0">{s.triggerMove}</span>
+          {shown.map((s) => (
+            <div key={`${s.triggerMove}-${s.atPly}`} className="flex items-center gap-2 text-[11px] pl-1 py-0.5">
+              <span className="font-mono font-semibold text-indigo-300 shrink-0 w-12">{s.triggerMove}</span>
               <span className="truncate flex-1" style={{ color: 'var(--color-text-muted)' }}>{subName(s.name)}</span>
-              <span className="text-theme-text-muted/60 shrink-0">{s.pct}%</span>
+              <span className="text-theme-text-muted/60 shrink-0 w-9 text-right">{s.pct}%</span>
+              <button
+                type="button"
+                onClick={() => onWatchSubline(s)}
+                className="shrink-0 flex items-center gap-1 px-2 py-1 rounded-lg bg-indigo-500/15 text-indigo-200 hover:bg-indigo-500/25 transition-colors font-semibold"
+                data-testid={`subline-watch-${chapter.n}-${s.atPly}-${s.triggerMove}`}
+                aria-label={`Watch how to meet ${s.triggerMove}`}
+              >
+                <Eye size={12} /> Watch
+              </button>
+              <button
+                type="button"
+                onClick={() => onPlaySubline(s)}
+                className="shrink-0 flex items-center gap-1 px-2 py-1 rounded-lg bg-rose-500/15 text-rose-200 hover:bg-rose-500/25 transition-colors font-semibold"
+                data-testid={`subline-play-${chapter.n}-${s.atPly}-${s.triggerMove}`}
+                aria-label={`Play out ${s.triggerMove}`}
+              >
+                <Swords size={12} /> Play
+              </button>
             </div>
           ))}
-          {sublines.length > 6 && (
-            <p className="text-[10px] text-theme-text-muted/60 pl-1">+{sublines.length - 6} more</p>
+          {sublines.length > OPEN_COUNT && (
+            <button
+              type="button"
+              onClick={() => setExpanded((v) => !v)}
+              className="text-[10px] text-indigo-300/80 hover:text-indigo-200 pl-1 self-start font-semibold"
+              data-testid={`course-sublines-toggle-${chapter.n}`}
+            >
+              {expanded ? 'Show fewer' : `Show ${sublines.length - OPEN_COUNT} more`}
+            </button>
           )}
         </div>
       )}
