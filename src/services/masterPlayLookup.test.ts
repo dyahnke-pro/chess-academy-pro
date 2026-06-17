@@ -5,6 +5,8 @@ import {
 } from './masterPlayLookup';
 import { _resetLichessCircuitBreaker } from './lichessExplorerService';
 import { masterPlayCache, positionFen } from './masterPlayCache';
+import { __resetMasterPlayPersistenceForTests } from './masterPlayPersistence';
+import { db } from '../db/schema';
 import fixture from '../test/fixtures/masters-test-db.json';
 
 const STARTING_FEN_4 = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -';
@@ -25,9 +27,14 @@ function stubFetch(payload: unknown, status = 200): ReturnType<typeof vi.fn> {
   return fn;
 }
 
-beforeEach(() => {
+beforeEach(async () => {
   __resetMasterPlayLookupForTests();
+  __resetMasterPlayPersistenceForTests();
   _resetLichessCircuitBreaker();
+  // The durable Dexie master-play cache persists across tests; clear it
+  // so a prior test's live result doesn't short-circuit a later test's
+  // expected fetch.
+  await db.masterPlayCache.clear();
 });
 
 afterEach(() => {

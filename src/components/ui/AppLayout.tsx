@@ -185,7 +185,7 @@ export function AppLayout(): JSX.Element {
 
   return (
     <div
-      className="flex flex-col min-h-dvh"
+      className="flex flex-col h-dvh min-h-dvh overflow-hidden"
       style={{ background: 'var(--color-bg)' }}
       data-testid="app-layout"
       data-profile-loaded={activeProfile ? 'true' : 'false'}
@@ -294,7 +294,7 @@ export function AppLayout(): JSX.Element {
         </>
       )}
 
-      <div className="flex flex-1">
+      <div className="flex flex-1 min-h-0">
         {/* Desktop sidebar */}
         <nav
           className="hidden md:flex flex-col w-56 shrink-0 border-r py-6"
