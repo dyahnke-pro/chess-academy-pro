@@ -1,0 +1,68 @@
+// ── Schliemann Defence (student BLACK). triggerMove is WHITE's deviation. ──
+const SCH = ['concept:pos-initiative', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'];
+const SCH_DEV = ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Ruy_Lopez'];
+
+// Nc3@6 — the main antidote (Bb5 f5 Nc3 fxe4 Nxe4 Nf6). Active, sharp equality.
+const SCH_NC3: SublineNarration = {
+  intro: {
+    say: "Nc3 — the principled main line against your Schliemann. Don't blink: …fxe4 and …Nf6 keep the initiative rolling, challenging White's knight on e4 and grabbing the centre. The position is razor-sharp and theory-rich, but it's fully sound for you — your active pieces and the open f-file give real attacking chances. This is the brawl the Schliemann is for; play it boldly.",
+    sayShort: 'Nc3 — …fxe4 and …Nf6, keep attacking.',
+  },
+  sources: SCH,
+};
+// d3@6 — the modern positional try (Bb5 f5 d3 fxe4 dxe4). Solid, equal.
+const SCH_D3: SublineNarration = {
+  intro: {
+    say: "d3 — the modern, positional answer, refusing the sharp lines and keeping the centre solid. Take the sting out of it calmly: after …fxe4 dxe4 you develop with …Nf6 and …Bc5, eyeing the kingside, and the half-open f-file is yours to use. White avoids the fireworks, but you stand at least equal with the freer, more aggressive plan.",
+    sayShort: 'd3 — …Nf6, …Bc5, press the f-file.',
+  },
+  sources: SCH_DEV,
+};
+// d4@6 — central counter (Bb5 f5 d4). Open it up.
+const SCH_D4: SublineNarration = {
+  intro: {
+    say: "d4 — White meets your gambit with a central counter-thrust, striking before you can build. Stay aggressive: …fxe4 keeps the lines open and your knights and the f-file stay active. The position is sharp and double-edged, exactly the kind of open battle the Schliemann thrives in — keep developing with threats and don't let White consolidate the centre.",
+    sayShort: 'd4 — …fxe4, keep the lines open.',
+  },
+  sources: SCH,
+};
+// Bxc6@6 — early trade (Bb5 f5 Bxc6 dxc6). Bishop pair + central pawns.
+const SCH_BXC6: SublineNarration = {
+  intro: {
+    say: "Bxc6 — White trades off the bishop early to dent your structure. Recapture with …dxc6 and count your trumps: the bishop pair, a big pawn centre, and open lines for both rooks. Your doubled c-pawns are a tiny price; with …Nf6, …Bc5 and the …f4 push you grab kingside space and the initiative. The trade hands you the more dynamic position.",
+    sayShort: 'Bxc6 — …dxc6, bishop pair and centre.',
+  },
+  sources: SCH_DEV,
+};
+// Sharp e4-push lines (exf5 e4, Bxc6 in the e4 lines, Ng1@10, d3@10). Gambit initiative.
+const SCH_SHARP: SublineNarration = {
+  intro: {
+    say: "You've thrown the e-pawn forward to e4, the gambit heart of the Schliemann: the pawn cramps White's kingside and strips the f3-knight of its best square. White scrambles to untangle while your pieces pour out with tempo. It's wild and theory-soaked, but the initiative is yours — keep the e-pawn supported, develop with threats, and make White prove he can survive the pressure.",
+    sayShort: '…e4 — cramp White, drive the initiative.',
+  },
+  sources: SCH,
+};
+// Bc4@4 — White declines into an Italian (Bc4 Bc5).
+const SCH_ITALIAN: SublineNarration = {
+  intro: {
+    say: "Bc4 — White sidesteps your Schliemann into a quiet Italian. No problem: …Bc5 develops the bishop to its best diagonal and you're in familiar, comfortable territory. Castle, play …d6 and …Nf6, and aim for the …d5 break — a sound, equal game where you know every plan and White has gained nothing by avoiding the fight.",
+    sayShort: 'Bc4 — …Bc5, a comfortable Italian.',
+  },
+  sources: SCH_DEV,
+};
+// Nc3@4 — Four Knights (Nc3 Nf6). Symmetric, solid.
+const SCH_FOUR_KNIGHTS: SublineNarration = {
+  intro: {
+    say: "Nc3 — White steers into a calm Four Knights instead of allowing the Schliemann. Mirror him with …Nf6 and you stand on equal, weakness-free ground. The …Bb4 pin and the …Nd4 counter wait in reserve if White drifts; until then develop in comfort. White has dodged the brawl, but you have a sound, fighting position with nothing to fear.",
+    sayShort: 'Nc3 — Four Knights: …Nf6, easy equality.',
+  },
+  sources: SCH_DEV,
+};
+// d4@4 — Scotch (d4 exd4 Nxd4). Equalize with …Qe7/…Nd5.
+const SCH_SCOTCH: SublineNarration = {
+  intro: {
+    say: "d4 — White avoids the Schliemann with the Scotch. The book equalizer is clean: after the exchanges, …Qe7 pressures the advanced e5-pawn and …Nd5 plants the knight on a dominant central blockade. You take doubled c-pawns but gain the bishop pair and easy piece play — a comfortable, fully equal game, and White's sidestep has cost him the initiative.",
+    sayShort: 'd4 — Scotch: …Qe7 and …Nd5 equalize.',
+  },
+  sources: SCH_DEV,
+};
