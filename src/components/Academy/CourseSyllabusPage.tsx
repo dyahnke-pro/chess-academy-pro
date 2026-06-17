@@ -61,7 +61,12 @@ export function CourseSyllabusPage(): JSX.Element {
   const course = buildCourse(opening);
   const chapterHref = (lineIndex: number): string =>
     lineIndex === MAIN_LINE_INDEX ? `/openings/${opening.id}` : `/openings/${opening.id}?line=${lineIndex}`;
-  const openChapter = (lineIndex: number): void => { void navigate(chapterHref(lineIndex)); };
+  const openChapter = (lineIndex: number): void => {
+    // Open the lesson but keep the course as the origin, so the lesson's
+    // Back button returns to THIS course syllabus (not the Openings explorer)
+    // — the course stays a self-contained build under The Academy.
+    void navigate(chapterHref(lineIndex), { state: { from: `/academy/course/${opening.id}` } });
+  };
   const resume = (): void => { if (course.nextStep) openChapter(course.nextStep.lineIndex); };
 
   const resumeLabel = course.complete

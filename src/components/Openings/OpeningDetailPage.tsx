@@ -1529,7 +1529,10 @@ export function OpeningDetailPage(): JSX.Element {
       {/* Header */}
       <div className="flex items-center gap-3 mb-5">
         <button
-          onClick={() => void navigate(isProContext && playerId ? `/openings/pro/${playerId}` : '/openings')}
+          onClick={() => {
+            const from = (location.state as { from?: string } | null)?.from;
+            void navigate(from ?? (isProContext && playerId ? `/openings/pro/${playerId}` : '/openings'));
+          }}
           className="p-2 rounded-lg hover:bg-theme-surface transition-colors"
           aria-label="Back to openings"
           data-testid="back-button"
