@@ -1,8 +1,2667 @@
+import type { AnnotationArrow, AnnotationHighlight } from '../../types';
 import type { SublineNarration } from '../../services/sublineLesson';
 
-// GROUP C — 1.d4 / flank (QG, Slav, Nimzo, QID, KID, Grünfeld, Benoni, Benko,
-// Budapest, Dutch, Catalan, London, Trompowsky, Old Indian, English, Réti, KIA,
-// Bird's, Albin, Englund) + their counter-weapons. Owned by ONE parallel session.
-// Author hand-written, board-verified subline narration here (see the WO).
-// Key format: `${openingId}::${variationIndex}::${triggerMove}@${atPly}`.
-export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {};
+// GROUP C — 1.d4 / flank families (QG, Slav, Nimzo, QID, KID, Grünfeld, Benoni,
+// Benko, Budapest, Dutch, Catalan, London, Trompowsky, Old Indian, English, Réti,
+// KIA, Bird's, Albin, Englund) + their counter-weapons. Hand-authored, board-
+// grounded subline narration keyed `${openingId}::${variationIndex}::${trigger}@${atPly}`.
+// Each entry frames the IDEA/PLAN of the position the deviation reaches (per the
+// narration voice rules — carry the idea, not "you play X") so it teaches the same
+// truth whichever side made the move. Strategic situations are authored once as a
+// const and mapped to every subline that reaches them. Keys already authored in
+// sublineNarration.ts are intentionally NOT duplicated here.
+
+const KEY = 'rgba(255,214,0,0.88)';
+const ATK = 'rgba(40,185,95,0.92)';
+const SOFT = 'rgba(80,140,255,0.32)';
+const _H = (square: string, color = KEY): AnnotationHighlight => ({ square, color });
+const _A = (from: string, to: string, color = ATK): AnnotationArrow => ({ from, to, color });
+void _H; void _A; void SOFT;
+
+// queens-gambit :: orthodox
+const C0: SublineNarration = {
+  intro: { say: "The Orthodox Queen's Gambit Declined, the most respected way to meet 1.d4. Black is solid as a rock behind …e6, …Be7, …O-O — there is nothing to refute, so you squeeze. The two healthy plans are the central e3-e4 break once you're fully developed, or trading on d5 and grinding the minority attack. Patience and a small, durable space edge are the whole game.", sayShort: "QGD — squeeze with e4 or minority." },
+  sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+// queens-gambit :: catalan
+const C1: SublineNarration = {
+  intro: { say: "With g3 and Bg2 this has slid into Catalan waters — the fianchettoed bishop rakes the long light diagonal straight at d5 and b7. Black's eternal problem is freeing the queenside; yours is simply to keep the pressure. Castle, regain the c4-pawn at leisure with Qc2 or a4, and let that bishop choke Black's development.", sayShort: "Catalan — the g2-bishop chokes the long diagonal." },
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+// queens-gambit :: carlsbad
+const C2: SublineNarration = {
+  intro: { say: "This is the Carlsbad structure — White has taken on d5 and Black recaptured with the e-pawn, leaving that classic pawn skeleton. Your plan writes itself: the minority attack. Push b4-b5 on the queenside to chew at Black's c6-pawn, and when it falls you inherit a long-term target on the half-open c-file while your own centre stays sound.", sayShort: "Carlsbad — launch the minority attack b4-b5." },
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit'],
+};
+// queens-gambit :: ragozin
+const C3: SublineNarration = {
+  intro: { say: "Black pins with …Bb4 — the Ragozin/Vienna complex, mixing Nimzo ideas into the Queen's Gambit. Stay principled: you can break the pin with the e4 push backed by your big centre, or accept doubled c-pawns for the bishop pair and the half-open files. Either way your central pawn mass and easy development give you the more comfortable side.", sayShort: "Bb4 pin — break e4 or take c3." },
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit'],
+};
+// queens-gambit :: qga
+const C4: SublineNarration = {
+  intro: { say: "Black has grabbed the c4-pawn — the Queen's Gambit Accepted. Don't chase it; you'll win it back with Bxc4 while building the ideal centre. The fight is about that centre: complete development, meet …a6 and …b5 with the timely a4 to crack the queenside, and when you land e4 your space advantage becomes real pressure.", sayShort: "QGA — rebuild centre, meet …b5 with a4." },
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
+};
+// queens-gambit :: tarrasch
+const C5: SublineNarration = {
+  intro: { say: "Black strikes with …c5, the Tarrasch — accepting an isolated d-pawn for free, active piece play. Your job is to make that isolani a weakness, not a strength. Fianchetto with g3 and Bg2 to bear down the long diagonal on d5, blockade the pawn with a knight, trade pieces, and steer toward an endgame where the lone d-pawn simply drops.", sayShort: "Tarrasch — blockade and pressure the d5-isolani." },
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit'],
+};
+// queens-gambit :: harrwitz
+const C6: SublineNarration = {
+  intro: { say: "Bf4 instead of Bg5 — the modern Harrwitz treatment. The bishop sits outside the pawn chain eyeing the b8-h2 diagonal and the e5-square, and you'll build with e3, Bd3 and the knight to d2. The plan is a kingside-flavoured setup: clamp e5, and look for the central break or a minority push depending on how Black reacts.", sayShort: "Bf4 — clamp e5, build the Bd3 battery." },
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit'],
+};
+// qgd :: exchange_be7
+const C7: SublineNarration = {
+  intro: { say: "White trades on d5 and you're in a calm, symmetrical-flavoured QGD. The bishop belongs on e7, the knight on d7, and the long-term lever is …c5 or the …Ne4 jump that frees your game. Solid and resilient — White's edge is microscopic and you equalise by simply finishing development and contesting the c-file.", sayShort: "Exchange QGD — finish developing, lever …c5." },
+  sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+// qgd :: main
+const C8: SublineNarration = {
+  intro: { say: "This is the heart of the Queen's Gambit Declined — your fortress. Pieces go to their natural homes: …Be7, …O-O, …Nbd7, …c6, and the freeing break is always …dxc4 followed by …c5 or the …e5 thrust when White's pieces drift. You have no weaknesses and no bad bishop worries once you trade light bishops; just complete development and pick your freeing break.", sayShort: "QGD — free with …c5 or …e5." },
+  sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+// qgd :: carlsbad
+const C9: SublineNarration = {
+  intro: { say: "White has clarified with cxd5 — the Carlsbad. Expect the minority attack, b4-b5 against your c6-pawn. Don't sit and suffer it: meet queenside play with central counter-energy. Reroute the knight Nd7-f8-g6 toward the kingside, prepare …Ne4 and …f5, and turn the game toward White's king while he chips at your pawns.", sayShort: "Carlsbad — answer b4-b5 with kingside play." },
+  sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+// qgd :: semitarr
+const C10: SublineNarration = {
+  intro: { say: "With …c5 in this structure you're pressing the centre Tarrasch-style. The play is active: trade in the centre, develop your pieces to their most aggressive posts, and use the open lines. You accept a slightly looser pawn structure in return for piece activity and easy development — a fighting equality.", sayShort: "…c5 — active piece play for the structure." },
+  sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+// qgd :: ragozin
+const C11: SublineNarration = {
+  intro: { say: "You've gone for …Bb4, the Ragozin — pinning the c3-knight to inject Nimzo bite into the QGD. The bishop pressures e4 and is ready to take on c3 to fracture White's pawns. Combine the pin with …dxc4 and …c5 hits; you reach a dynamic, fully equal middlegame where White's centre is under constant question.", sayShort: "Ragozin …Bb4 — pin, then strike …c5." },
+  sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+// qga :: main
+const C12: SublineNarration = {
+  intro: { say: "Queen's Gambit Accepted — you grabbed the pawn on c4 not to keep it, but to free your game. The plan is clean: return the pawn, strike the centre with …c5 and …a6 followed by …b5 to gain queenside space, and get the light bishop active outside the chain. White owns a little centre; you own easy development and no weaknesses.", sayShort: "QGA — …c5, then …a6 and …b5." },
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
+};
+// qga :: big_centre
+const C13: SublineNarration = {
+  intro: { say: "White has built the broad e4-d4 centre against your QGA. This is the critical test, and your method is undermining: hit with …c5 and …b5, pile on d4 with …Nc6 and the b7-bishop, and watch the overextended pawns become targets. Trade White's space for your piece activity and the centre cracks.", sayShort: "Undermine the big centre with …c5 and …b5." },
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
+};
+// qga :: bg4
+const C14: SublineNarration = {
+  intro: { say: "You've developed the light bishop to g4 before …e6, the modern QGA antidote that solves the problem piece. The bishop pins or trades White's f3-knight, easing the pressure on your centre. Follow with …e6, …c5 and quick development; with your worst piece already settled outside the pawn chain, the rest of the game flows comfortably.", sayShort: "…Bg4 first — the bishop is solved." },
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
+};
+// qga :: queenless
+const C15: SublineNarration = {
+  intro: { say: "White goes for the early queen trade, steering toward a tiny-edge endgame. That suits you fine — recapture, keep your structure clean, and remember the endgame is held with active rooks and a quick …b5/…a6 grab of queenside space. There is nothing to fear and, with accurate piece placement, real winning chances of your own.", sayShort: "Queens off — activity holds the endgame." },
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
+};
+// slav-defence :: dxc4_a4
+const C16: SublineNarration = {
+  intro: { say: "You've taken on c4 and White recaptures the central tension with a4, the main-line Slav. The point of …dxc4 was to free …Bf5 first; now you simply complete development. White's a4 weakens b4 and the queenside dark squares — a square your knight or bishop will be glad to use later. Equal, rich, and famously solid.", sayShort: "…dxc4 then …Bf5 — a4 weakens b4." },
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+// slav-defence :: quiet_e3
+const C17: SublineNarration = {
+  intro: { say: "White plays the quiet e3, locking his OWN light bishop behind the pawn chain. That's a gift — your …Bf5 steps outside and you simply own the better bishop for the whole game. Develop naturally, keep the structure flexible, and look to break with …c5 or …e5 once your pieces are home.", sayShort: "e3 — your bishop is the good one." },
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+// slav-defence :: exchange
+const C18: SublineNarration = {
+  intro: { say: "The Exchange Slav — White released with cxd5 and signals for a quiet, symmetrical game. The drawish reputation is a trap for the lazy: develop the bishop actively to f5, contest the half-open c-file with your rooks, and out-coordinate him. Symmetry favours the better-placed army, and that can be yours.", sayShort: "Exchange Slav — …Bf5, fight the c-file." },
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+// slav-defence :: nh4
+const C19: SublineNarration = {
+  intro: { say: "White's Nh4 hunts your active f5-bishop, the Slav's pride. Don't let it be chased for nothing: meet it with …Bg6, and if Nxg6 hxg6 you get the half-open h-file pointing at White's king plus a strengthened centre. The trade of your 'good' bishop comes with real compensation in open lines and attacking chances.", sayShort: "Nh4 — …Bg6; trade opens the h-file." },
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+// slav-defence :: sharp_e4
+const C20: SublineNarration = {
+  intro: { say: "White lunges with e4 in the sharp …dxc4 Slav, sacrificing structure for the broad centre and rapid development. Hold your nerve and your extra pawn: …b5 props the booty, …e6 and …a6 build the queenside wall, and the centre, for all its menace, can be hit with …c5 in due course. Theory-heavy, fully sound for Black.", sayShort: "Sharp e4 — hold the pawn with …b5." },
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+// slav-defence :: main_bf5
+const C21: SublineNarration = {
+  intro: { say: "The pure Slav — and your trump is already on the board: the light-squared bishop gets out to f5 OUTSIDE the pawn chain before …e6 ever shuts it in. That solves the one problem every …e6 defence struggles with. Develop behind the bishop, hold the …dxc4 with …b5 if White lets you, and you reach a sound, comfortable middlegame with the good bishop.", sayShort: "Slav — get …Bf5 out, then settle." },
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+// semi-slav :: botvinnik
+const C22: SublineNarration = {
+  intro: { say: "White pins with Bg5 and you can plunge into the Botvinnik — …dxc4 and …b5, grabbing the pawn and lashing out with …g5 to smash the h4-bishop. It is the sharpest forest in chess: both kings get hunted, every move is theory, and the verdict is that Black holds. Know the line and you wield a genuine weapon.", sayShort: "Bg5 — the Botvinnik: …dxc4, …b5, …g5." },
+  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Semi-Slav_Defense'],
+};
+// semi-slav :: anti_meran
+const C23: SublineNarration = {
+  intro: { say: "White avoids the sharpest lines with the quiet Qc2/e3 setup. No fireworks means you equalise comfortably: complete the …Bd6 and …O-O development, prepare the …e5 break (the key freeing move in this structure), and contest the centre. A healthy, balanced middlegame with both breaks, …c5 and …e5, in reserve.", sayShort: "Quiet line — prepare the …e5 break." },
+  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Semi-Slav_Defense'],
+};
+// semi-slav :: meran
+const C24: SublineNarration = {
+  intro: { say: "The Semi-Slav — solid as the Slav but with bite. After …Nbd7 you prepare the great freeing break: …dxc4 followed by …b5 and …c5, the Meran, blowing the centre open with your pieces ready. White's pieces look active but your structure is bombproof and your counterplay on the queenside is real.", sayShort: "Semi-Slav — free with …dxc4, …b5, …c5." },
+  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Semi-Slav_Defense'],
+};
+// semi-slav :: stonewall_e4
+const C25: SublineNarration = {
+  intro: { say: "White has built and pushed the e4-e5 centre. This is the critical Semi-Slav battleground: undermine it. …c5 hits the base, your pieces swarm d4 and e5, and White's proud pawns become a row of targets. You invited the centre precisely so you could tear it down with timely pawn breaks.", sayShort: "e4-e5 — undermine with …c5." },
+  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Semi-Slav_Defense'],
+};
+// nimzo-indian :: rubinstein_e3
+const C26: SublineNarration = {
+  intro: { say: "The Rubinstein, e3 — White's most flexible Nimzo. Your bishop already pins the c3-knight, the guardian of e4. The Nimzo bargain is yours to set: take on c3 to saddle White with doubled pawns and play against them, or keep the pin and strike the centre with …c5 and …d5. Either road gives you a rich, equal fight on the light squares.", sayShort: "Rubinstein — pin, then …c5 or c3." },
+  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+// nimzo-indian :: fianchetto_g3
+const C27: SublineNarration = {
+  intro: { say: "White fianchettoes with g3, declining the doubled-pawn structure for a calm light-square game. Meet it classically: …d5 and …Be7, or …O-O and …d5, contesting the long diagonal. The bishop on g2 is strong but slow, and with sound development you reach an easy, balanced middlegame.", sayShort: "g3 — contest the long diagonal, …d5." },
+  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+// nimzo-indian :: classical_qc2
+const C28: SublineNarration = {
+  intro: { say: "The Classical Qc2 — White avoids doubled pawns by recapturing on c3 with the queen, and keeps the bishop pair as his trump. You answer with the centre: …d5 and …c5, or the quick …O-O and …d5, fixing a target. White's bishops want open lines, so keep the position closed enough to neutralise them while you press the queenside.", sayShort: "Qc2 — strike with …d5 and …c5." },
+  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+// nimzo-indian :: saemisch_f3
+const C29: SublineNarration = {
+  intro: { say: "White plays the Sämisch with a3 and f3, accepting doubled c-pawns to build a huge e4 centre. Hand over the bishop — bxc3 leaves White with crippled pawns — then blockade and besiege: …d5 or …c5, …Nc6, and pile on the fixed c4/c3 weaknesses. Your knights and the light squares are worth more than his bishops here.", sayShort: "Sämisch — take c3, blockade the doubled pawns." },
+  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+// nimzo-indian :: ne2
+const C30: SublineNarration = {
+  intro: { say: "White's Ne2 recaptures on c3 with the knight to dodge the doubled pawns. That costs him time and central control: strike at once with …c5 and …d5, exploiting the awkwardly-placed knight. With faster, more harmonious development you seize the initiative in the centre while White untangles.", sayShort: "Ne2 — punish with …c5 and …d5." },
+  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+// nimzo-indian :: bg5
+const C31: SublineNarration = {
+  intro: { say: "White pins back with Bg5 — the Leningrad. The pressure on your f6-knight is real, so meet it head-on: …h6 puts the question, and …c5 or …d5 hits the centre while the dark-squared tension resolves. Trade the right pieces and your structure holds; the bishop pair White covets never gets to bite.", sayShort: "Bg5 Leningrad — …h6 and strike the centre." },
+  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+// queens-indian :: fianchetto_g3
+const C32: SublineNarration = {
+  intro: { say: "White fianchettoes with g3 and Bg2, the main Queen's Indian battleground on the long light diagonal. Place your bishop on b7 (or ride …Ba6 to provoke first), castle, and contest e4 — the …Ne4 trade and the …d5 break are your equalisers. Patient, principled, and a fortress once your pieces are home.", sayShort: "g3 — contest e4, …d5 or …Ne4." },
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense'],
+};
+// queens-indian :: petrosian_a3
+const C33: SublineNarration = {
+  intro: { say: "White plays a3, the Petrosian — pre-empting …Bb4 and preparing Nc3 with tempo. No matter: complete the …Bb7 and …d5 setup, and meet the eventual cxd5 with the knight recapture and …c5, fighting for the centre. White's a3 is a small loosening you'll target later on the queenside.", sayShort: "a3 Petrosian — develop …Bb7 and break …d5." },
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense'],
+};
+// queens-indian :: bb7
+const C34: SublineNarration = {
+  intro: { say: "The classical Queen's Indian with …Bb7 — your bishop mirrors White's on the long diagonal, fighting for e4 and the light squares. Develop with …Be7 and …O-O, then challenge the centre with …d5 or the …Ne4 jump that trades into comfort. A famously sound, control-based defence where you simply refuse White any target.", sayShort: "…Bb7 — mirror, then …d5 or …Ne4." },
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense'],
+};
+// queens-indian :: ba6
+const C35: SublineNarration = {
+  intro: { say: "The modern Queen's Indian — …Ba6, biting at the c4-pawn and forcing White to make a concession before the g2-bishop can settle. The light-square fight is the whole opening: contest the long diagonal that both sides crave, complete development with …Be7 and …O-O, and break with …d5 or …c5 at the right moment. Rock-solid and richly strategic.", sayShort: "…Ba6 — contest c4 and the light squares." },
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense'],
+};
+// kings-indian-defence :: saemisch
+const C36: SublineNarration = {
+  intro: { say: "The Sämisch — White plops the pawn on f3 to brace e4 and prepare a queenside-and-centre clamp. Two great answers: the classical …e5 strike, or the sharp …c5 gambit hitting the broad centre. Castle first, then choose your break; the f3-pawn means White's own kingside is committed, so your …f5 storm gains extra force.", sayShort: "Sämisch f3 — break with …e5 or …c5." },
+  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
+};
+// kings-indian-defence :: fianchetto
+const C37: SublineNarration = {
+  intro: { say: "White fianchettoes with g3 — the Fianchetto KID, the most solid anti-King's-Indian. The g2-bishop blunts your long-diagonal pressure, so adapt: …Nbd7 and …e5, or the …c6 and …e5 setup, and contest the centre patiently. The kingside storm is harder here, so play for the central break and a balanced, manoeuvring fight.", sayShort: "Fianchetto g3 — patient …e5, central play." },
+  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
+};
+// kings-indian-defence :: classical
+const C38: SublineNarration = {
+  intro: { say: "The Classical King's Indian, the main road. You've fianchettoed and castled; now comes the soul of the opening — …e5 striking the centre. Once White locks with d5, the race is on: he expands on the queenside with c5 and the minority push, while you throw everything at his king — …Nd7, …f5, …f4, and the kingside avalanche. Trust the attack; it usually arrives first.", sayShort: "Classical KID — …e5, then the …f5-f4 storm." },
+  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
+};
+// kings-indian-defence :: main_tabiya
+const C39: SublineNarration = {
+  intro: { say: "You've landed the key …e5 break and reached the Classical main tabiya. Now the King's Indian truly begins: White swings c5 and the queenside minority push, and you commit to the attack — …Nd7, …f5, …f4, …g5-g4, the kingside avalanche. Burn your boats and race; in the King's Indian, the king-hunter usually crowns first.", sayShort: "Tabiya — commit to the …f5-f4-g5 storm." },
+  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
+};
+// kings-indian-defence :: four_pawns
+const C40: SublineNarration = {
+  intro: { say: "The Four Pawns Attack — White throws four pawns across the board, the most violent KID try. Its flaw is overextension: don't flinch. Counterstrike with …c5 and …dxe5 hitting the centre, develop with tempo, and those proud pawns become targets while White's loose front crashes down. Sharpest of all, but Black is doing well.", sayShort: "Four Pawns — counterstrike …c5, …dxe5." },
+  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
+};
+// kings-indian-defence :: averbakh_bg5
+const C41: SublineNarration = {
+  intro: { say: "White pins with Bg5 (Averbakh-flavoured), eyeing your kingside before you can castle into the storm. Put the question to the bishop and keep the …e5 break in hand; if White trades on f6 you get the bishop pair and open lines toward the centre. Stay flexible and the standard …e5/…c5 plans still deliver counterplay.", sayShort: "Bg5 — question the bishop, keep …e5." },
+  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
+};
+// grunfeld-defence :: russian_nf3
+const C42: SublineNarration = {
+  intro: { say: "White develops Nf3 toward the modern main lines, keeping the centre flexible. Stay true to the Grünfeld creed: …Bg7 on the long diagonal, …c5 hitting d4, …Qa5 and …Nc6 piling on. You let White build so you can undermine — meet the central pawns with piece pressure and dynamic equality is yours.", sayShort: "Nf3 — …Bg7 and …c5, undermine d4." },
+  sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
+};
+// grunfeld-defence :: exchange
+const C43: SublineNarration = {
+  intro: { say: "The Exchange Grünfeld, the critical main line and the whole point of the opening. White builds the broad d4-e4 centre; your entire strategy is to demolish it. The g7-bishop rakes the long diagonal at d4, and …c5, …Nc6, …Bg4, …Qa5 all pour onto that pawn. Invite the big centre — then tear it down.", sayShort: "Exchange — demolish the d4-e4 centre." },
+  sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
+};
+// grunfeld-defence :: classical_main
+const C44: SublineNarration = {
+  intro: { say: "You've reached the great Exchange Grünfeld tabiya with …c5 and the pieces poised. White's centre is the target of your life: trade on d4, hit with …Qa5 and …Bg4, and if the d4-e4 pawns ever crack, White is simply worse. This is the position the whole opening is built to reach — keep hammering the centre.", sayShort: "Tabiya — keep hammering the centre." },
+  sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
+};
+// grunfeld-defence :: bf4
+const C45: SublineNarration = {
+  intro: { say: "White's Bf4 supports the centre and eyes c7. No problem for the Grünfeld plan: …Bg7, …O-O, …c5 and …dxc4 or …Nbd7 hitting back. The bishop on f4 is exposed to …Nh5 or …c5-c4 ideas later; develop naturally and strike d4 with your usual piece pressure for comfortable equality.", sayShort: "Bf4 — …Bg7 and …c5 as ever." },
+  sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
+};
+// grunfeld-defence :: bg5
+const C46: SublineNarration = {
+  intro: { say: "White pins with Bg5 early, hoping to disrupt your …d5 setup. Hit back immediately — …Ne4 challenges the bishop and the c3-knight at once, the standard Grünfeld counter-thrust. Trade into clarity and continue with …Bg7 and …c5; the bishop sortie costs White time you'll use to strike the centre.", sayShort: "Bg5 — counter with …Ne4." },
+  sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
+};
+// grunfeld-defence :: fianchetto_g3
+const C47: SublineNarration = {
+  intro: { say: "White fianchettoes with g3 — the quiet Fianchetto Grünfeld. He declines the big centre, so equalise cleanly: castle, hit with …d5 and …c5, and if White grabs on c4 you regain it comfortably with …Na6 or …Nbd7. A balanced, healthy game where your fianchettoed bishop and central breaks keep everything in harmony.", sayShort: "Fianchetto g3 — castle, break …d5 / …c5." },
+  sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
+};
+// benoni-defence :: modern_main
+const C48: SublineNarration = {
+  intro: { say: "The Modern Benoni — you've traded the structure for dynamism: White's big d5-e4 pawn front against your queenside pawn majority and the long-diagonal g7-bishop. The plan is all energy: …a6 and …b5 to roll the queenside, …Re8 and …Nbd7 pressure on e4, and the …c4 lever. Sharpest defence in the book, and a joy to attack with.", sayShort: "Modern Benoni — roll …a6-b5, press e4." },
+  sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
+};
+// benoni-defence :: czech_e5
+const C49: SublineNarration = {
+  intro: { say: "A Czech-Benoni flavoured structure with …e5 locking the centre. The play turns slow and manoeuvring: pieces reroute behind the locked pawns, and the breaks are …f5 on the kingside or …b5 on the queen's wing. Patience is everything — set up the right break and the cramped position uncoils with venom.", sayShort: "Locked centre — prepare …f5 or …b5." },
+  sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
+};
+// benoni-defence :: fianchetto_g3
+const C50: SublineNarration = {
+  intro: { say: "White fianchettoes with g3, the positional anti-Benoni. The g2-bishop guards e4 and the long diagonal, blunting your usual …b5 fireworks. Adapt: …a6 and …b5 still come, but more patiently, and …Re8 with …Nbd7 keeps the central tension. A slower Benoni where you grind the queenside majority instead of storming.", sayShort: "g3 — patient …a6-b5, grind the majority." },
+  sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
+};
+// benoni-defence :: classical_e4
+const C51: SublineNarration = {
+  intro: { say: "The Classical Benoni with e4 and the pieces developing naturally — White claims the centre, you claim the wings. This is the main tabiya: complete the fianchetto, castle, and unleash the queenside with …a6 and …b5 while pressuring e4 along the e-file. Dynamic imbalance where your activity answers his space.", sayShort: "Classical — …a6-b5 against his centre." },
+  sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
+};
+// benoni-defence :: taimanov_bb5
+const C52: SublineNarration = {
+  intro: { say: "White checks with Bb5+ — the dangerous Taimanov, the critical anti-Benoni. Block with …Nbd7 (or …Nfd7), tuck the king away, and ride out the early pressure: White's f4-e5 push is the threat, so neutralise it with …a6, …Re8 and accurate defence. Survive the storm and your queenside majority tells in the long game.", sayShort: "Bb5+ Taimanov — block …Nbd7, weather f4-e5." },
+  sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
+};
+// benoni-defence :: snake_dxe6
+const C53: SublineNarration = {
+  intro: { say: "White captures dxe6, opening the f-file and handing you a half-open file and a mobile centre. Recapture and develop with purpose: …Nc6, …e5 to claim the centre, and the rooks love the open lines. White traded his space for activity — match it and the dynamic balance favours the better-coordinated side, which is yours.", sayShort: "dxe6 — open the f-file, claim the centre." },
+  sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
+};
+// benko-gambit :: declined_e4
+const C54: SublineNarration = {
+  intro: { say: "White declines or plays e4-Nb5 lines, returning the pawn for space and a clamp. Stay true to the Benko spirit: …d6, …g6, …Bg7, and contest the queenside files anyway. Even without the pawn sacrifice landing cleanly, your dark-squared bishop and the half-open b-file give you the easy, active game the gambit promises.", sayShort: "Declined — …g6, …Bg7, fight the b-file." },
+  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
+};
+// benko-gambit :: b6_declined
+const C55: SublineNarration = {
+  intro: { say: "White declines with the b6 push, returning the pawn to keep lines closed. Recapture and develop normally — …d6, …g6, …Bg7, …Nbd7 — and the position resembles a comfortable Benoni where your queenside play comes for free. White's b6-pawn is a target as much as a wedge; nudge it and the files reopen.", sayShort: "b6 declined — develop, target the wedge." },
+  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
+};
+// benko-gambit :: accepted_main
+const C56: SublineNarration = {
+  intro: { say: "The Benko Gambit accepted — you've given a pawn for the clearest long-term compensation in chess. The a- and b-files open like cannon barrels for your rooks, the g7-bishop rakes the long diagonal, and White's queenside is permanently under siege. You don't need to win the pawn back; the pressure simply never lets up. Pure positional gambit, fully sound.", sayShort: "Benko accepted — the open a/b-files are forever." },
+  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
+};
+// benko-gambit :: fianchetto_g3
+const C57: SublineNarration = {
+  intro: { say: "White returns the pawn and fianchettoes with g3, meeting your queenside pressure on the long diagonal. Adapt patiently: …Bg7, …d6, …Nbd7, double rooks on the a- and b-files, and probe. White's setup is solid but passive on the queenside — exactly the wing where your whole army is aimed.", sayShort: "g3 — double rooks on the queenside." },
+  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
+};
+// benko-gambit :: kingwalk
+const C58: SublineNarration = {
+  intro: { say: "White grabs on f1 and walks the king after Bxf1 Kxf1, keeping the extra pawn at the cost of castling. That's your dream Benko: the king is stuck in the centre, your rooks swing to a8 and b8, and …Bg7, …d6, …Nbd7 complete a textbook squeeze. The pawn is a memory; the queenside pressure is permanent.", sayShort: "King stuck — pile rooks on a/b-files." },
+  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
+};
+// budapest-gambit :: rubinstein_bf4
+const C59: SublineNarration = {
+  intro: { say: "The main Budapest with Bf4 — White clings to the e5-pawn and you set about regaining it. …Nc6 and …Bb4+ develop with tempo, and …Ngxe5 wins the pawn back cleanly, leaving a lively, equal middlegame. Your pieces leap out fast; White's small space edge is balanced by your activity and the open lines you generate.", sayShort: "Bf4 main — …Nc6, …Bb4+, regain with …Ngxe5." },
+  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
+};
+// budapest-gambit :: declined_d5
+const C60: SublineNarration = {
+  intro: { say: "White declines with d5, pushing past rather than grabbing on e5. You keep your central pawn and still get the Budapest's real idea — roll the e-pawn forward to e4 and e3, cramping White's kingside before he untangles. You sacrificed nothing and you still own the initiative.", sayShort: "d5 declined — roll …e4-e3 and cramp." },
+  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
+};
+// budapest-gambit :: fajarowicz_ne4
+const C61: SublineNarration = {
+  intro: { say: "The Fajarowicz — …Ne4 instead of …Ng4, planting the knight aggressively and eyeing tricks on c3 and f2. It's a sharp surprise weapon: develop quickly with …Nc6 and …Bb4+, and look for the tactical chances the centralised knight creates. Double-edged, but full of venom against an unprepared White.", sayShort: "Fajarowicz …Ne4 — sharp, central knight." },
+  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
+};
+// budapest-gambit :: kf2
+const C62: SublineNarration = {
+  intro: { say: "White has been greedy and the king is dragged to f2 — exactly the chaos the Budapest dreams of. The pawns may be even but White can't castle and his king sits in the crossfire. Keep developing with check and tempo, open lines toward f2, and let the exposed monarch be the weakness that decides.", sayShort: "King on f2 — hunt the king." },
+  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
+};
+// budapest-gambit :: adler_e4
+const C63: SublineNarration = {
+  intro: { say: "White grabs the centre with e4, the Adler — keeping the pawn and the broad front. Hit back: …Nxe5 regroups the knight, then …Bb4+ and …Nec6 develop while you target d4 and the slightly loose centre. White has space, you have piece activity and the open e-file ideas; a fighting, balanced game.", sayShort: "Adler e4 — …Nxe5, develop with tempo." },
+  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
+};
+// dutch-defence :: leningrad
+const C64: SublineNarration = {
+  intro: { say: "The Leningrad Dutch — …f5 paired with the King's-Indian fianchetto. The g7-bishop and the …f5 pawn point at White's centre and kingside together. Castle, contest the centre with …d6 and the …e5 break, and when the position opens your dark-squared bishop and the half-open f-file drive a genuine kingside attack. Sharp, ambitious, and fun.", sayShort: "Leningrad — castle, break …e5, attack the king." },
+  sources: ['book:dutch-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+// dutch-defence :: staunton_bg5
+const C65: SublineNarration = {
+  intro: { say: "White lunges with the Bg5 anti-Dutch (Staunton-flavoured), hunting your kingside before you settle. Don't panic: …e6 and …Be7 break the pin, …d5 claims the centre, and once the early aggression is parried your Dutch plans return in full. Weather the first wave and Black is comfortably fine.", sayShort: "Bg5 anti-Dutch — …e6, …Be7, then …d5." },
+  sources: ['book:dutch-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+// dutch-defence :: stonewall
+const C66: SublineNarration = {
+  intro: { say: "The Stonewall Dutch — …f5, …e6, …d5, …c6, that famous pawn wall. You cede e5 but seize e4: the knight lands there as an unshakeable outpost, and the b8-c1 bishop reroutes via d6 toward the kingside for the classic …Qe8-h5 attack. Slow to build, lethal once the storm breaks over White's king.", sayShort: "Stonewall — outpost e4, swing the attack." },
+  sources: ['book:dutch-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+// dutch-defence :: classical_be7
+const C67: SublineNarration = {
+  intro: { say: "The Classical Dutch with …e6 and …Be7 — solid and flexible. Castle, keep the centre fluid, and choose your break: …d5 for a Stonewall feel, or …e5 to open lines for the f-file rook. White's quiet development gives you time to set up the kingside expansion that is every Dutch player's dream.", sayShort: "Classical — castle, pick …d5 or …e5." },
+  sources: ['book:dutch-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+// dutch-defence :: nh3
+const C68: SublineNarration = {
+  intro: { say: "White's Nh3 heads for f4 to bolster the kingside light squares against your …f5. Meet it calmly: complete the fianchetto, castle, and play the standard …d6 and …e5 break. The knight on h3 is offside for now; develop in good order and your central counterplay comes through on schedule.", sayShort: "Nh3 — develop, hit …e5 on schedule." },
+  sources: ['book:dutch-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+// catalan-opening :: open_dxc4
+const C69: SublineNarration = {
+  intro: { say: "The Open Catalan — Black grabs c4, but the pawn is a loan, not a gain. Your whole game is the g2-bishop scything down the long light diagonal at b7 and d5, plus the easy recapture with Qa4+, Qc2 or a later Ne5/a4. Castle, regain the pawn at leisure, and squeeze: Black's queenside is forever cramped under that bishop's gaze.", sayShort: "Open Catalan — the g2-bishop owns the diagonal." },
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+// catalan-opening :: closed_be7
+const C70: SublineNarration = {
+  intro: { say: "The Closed Catalan — Black holds the centre with …d5 and …Be7 rather than grabbing c4. Solid, but passive: build the bind with Qc2, b3, Bb2 and Nbd2, prepare the e4 break, and use your space and the long-diagonal bishop to slowly suffocate Black's light-squared bishop, the eternal problem piece in this structure.", sayShort: "Closed Catalan — bind, then break e4." },
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+// catalan-opening :: bb4_check
+const C71: SublineNarration = {
+  intro: { say: "Black interposes …Bb4+, the Catalan check, the most reliable equalising try. Block with Bd2 — and welcome the trade: you regain time, keep the long-diagonal bishop that defines the Catalan, and emerge with the same pleasant space and pressure. Don't fear the check; it removes one of Black's pieces, not your advantage.", sayShort: "…Bb4+ — block Bd2, keep the big bishop." },
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+// catalan-opening :: ne5
+const C72: SublineNarration = {
+  intro: { say: "You've planted the knight on e5, the Catalan's most aggressive post — reinforcing the g2-bishop's pressure and eyeing c6 and f7. Black must react to the central knight; meanwhile you reclaim the c4-pawn and keep the initiative on the queenside and the long diagonal. A model Catalan squeeze with extra bite.", sayShort: "Ne5 — the knight reinforces the diagonal." },
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+// catalan-opening :: slav_catalan
+const C73: SublineNarration = {
+  intro: { say: "This is a Slav-Catalan hybrid — Black props the centre with …c6 before fianchetto pressure builds. Develop the bishop to g2, castle, and prepare e4 or the queenside expansion with a4. Black is solid but cramped; lean on the long diagonal and the central break and the small, durable edge grows.", sayShort: "Slav-Catalan — g2-bishop, prepare e4 / a4." },
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+// london-system :: cxd4
+const C74: SublineNarration = {
+  intro: { say: "Black has released the central tension with …cxd4. Recapture and you reach the London's ideal: a healthy centre, the Bf4-Bd3 battery aimed at the king, and open lines for your pieces. Develop, castle, and turn to the kingside — Ne5 and the queen lift are the standard attacking plan once the structure clarifies.", sayShort: "…cxd4 — recapture, aim the battery kingside." },
+  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
+};
+// london-system :: benoni_push
+const C75: SublineNarration = {
+  intro: { say: "Black hits with an early …c5 and you've pushed d5 (or held), steering into a Benoni-flavoured London. Now your space and the Bf4-bishop count: brace the centre, prepare e4 or the queenside clamp, and keep the dark-squared bishop on its diagonal. The London's flexibility means you reach a comfortable, familiar middlegame whatever Black tries.", sayShort: "Early …c5 — push or hold." },
+  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
+};
+// london-system :: accel_indian
+const C76: SublineNarration = {
+  intro: { say: "This is the Indian-flavoured London where Black plays …g6 and …d6 and you've set up the full Bf4-e3-Be2-h3-c3-Nbd2 machine. The plan is patient and proven: complete the bind, watch for …e5 or …c5, and answer with the central tension held and the kingside pieces ready. Same setup, same comfortable pull, every single game.", sayShort: "Indian London — complete the bind, watch …e5." },
+  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
+};
+// london-system :: vs_kid
+const C77: SublineNarration = {
+  intro: { say: "Black fianchettoes King's-Indian-style with …g6 and …Bg7 against your London. Keep your shape: e3, Be2, h3 to save the bishop a tempo, c3 to brace d4, and castle. The Bf4-bishop eyes the long diagonal's blind spots; when Black commits …c5 or …e5, meet it calmly and use your solid centre to play on both wings.", sayShort: "London vs KID — keep shape, h3." },
+  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
+};
+// london-system :: bf5_mirror
+const C78: SublineNarration = {
+  intro: { say: "Black mirrors with …Bf5, getting his bishop outside the chain just as you did. No problem — your structure is so solid it barely matters: c3, e3, Bd3 to challenge the bishop or Nbd2 to develop, and the same kingside plans apply. If bishops trade, the resulting position is dead-equal but eminently playable for the better-prepared side: you.", sayShort: "Mirror …Bf5 — challenge with Bd3, play on." },
+  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
+};
+// london-system :: main_qgd
+const C79: SublineNarration = {
+  intro: { say: "The classic London setup against …d5 and …e6 — your reliable machine. The Bf4-Bd3 battery trains on h7, c3 braces d4, and Nbd2 completes the harmony. Meet …c5 by holding the tension or recapturing toward the centre, keep the dark-squared bishop healthy, and play for the kingside: Ne5, Qf3 or the f-pawn, the same plan every game.", sayShort: "London — Bf4-Bd3 battery, play the kingside." },
+  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
+};
+// trompowsky-attack :: ne4_main
+const C80: SublineNarration = {
+  intro: { say: "The main Trompowsky — Black hits the bishop with …Ne4 and you retreat to f4, keeping the pair and the tempo-gaining f3 push in hand. Build with f3 kicking the knight, then e4 or d5 to claim the centre. You've sidestepped all of Black's prepared 1.d4 theory and reach an unbalanced middlegame on your own terms.", sayShort: "…Ne4 — Bf4, kick f3, take centre." },
+  sources: ['concept:pos-development', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+// trompowsky-attack :: c5_qb6
+const C81: SublineNarration = {
+  intro: { say: "Black counters with …c5, and after d5 the queen often grabs on b2 — the critical Trompowsky gambit line. Don't fear it: Nc3 and Bd2 trap-or-harass the wandering queen, and your lead in development plus the open lines are worth far more than the pawn. Sharp, forcing, and a known good bargain for White.", sayShort: "…c5 — let the queen roam." },
+  sources: ['concept:pos-development', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+// trompowsky-attack :: d5_bxf6
+const C82: SublineNarration = {
+  intro: { say: "Black challenges with …d5 and you take on f6, the structural Trompowsky. Whether Black recaptures with the e- or g-pawn, he gets doubled pawns and you keep a clean structure plus the bishop pair. Play against the pawn weaknesses: a queenside pawn break, piece pressure on the open lines, and a small, lasting endgame edge.", sayShort: "…d5 — Bxf6, play against doubled pawns." },
+  sources: ['concept:pos-development', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+// trompowsky-attack :: e6_e4
+const C83: SublineNarration = {
+  intro: { say: "Black plays the solid …e6, and you grab the centre with e4, a big-space Trompowsky. After the …h6 question you take on f6, doubling Black's pawns or trading into a comfortable pawn-centre game with the bishop pair. Your space and the half-open lines give a pleasant, aggressive pull with little theory for Black to lean on.", sayShort: "…e6 — take the centre with e4." },
+  sources: ['concept:pos-development', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+// trompowsky-attack :: qb6_centre
+const C84: SublineNarration = {
+  intro: { say: "Black has grabbed a pawn or jabbed with …Qb6 and you've castled the issue with Nc3-Bd2 development. Your trumps are the lead in development and the open b-file the queen left behind: harass the queen, complete development with tempo, and convert the initiative. The Trompowsky's pawn is cheap rent for a roaring position.", sayShort: "…Qb6 — harass the queen, lead in development." },
+  sources: ['concept:pos-development', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+// trompowsky-attack :: endgame_grind
+const C85: SublineNarration = {
+  intro: { say: "The line has simplified into the queenless Trompowsky structure — bishop pair, sounder pawns, Black's doubled f-pawns as the target. This is a classic technical edge: centralise, occupy the open files, and grind. With no queens to create counterplay, Black's structural defects become a long-term liability you patiently squeeze.", sayShort: "Queenless — grind the doubled-pawn weakness." },
+  sources: ['concept:pos-development', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+// old-indian-defence :: classical_be2
+const C86: SublineNarration = {
+  intro: { say: "The Classical Old Indian with Be2 and the standard development — White takes space, you take solidity. After …e5 and …O-O the plan is the …c6 and …Re8 regroup, preparing …exd4 or …d5 at the right moment. White's edge is space alone; neutralise it with accurate piece placement and a timely central break.", sayShort: "Classical Be2 — regroup, time the break." },
+  sources: ['book:old-indian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Old_Indian_Defense'],
+};
+// old-indian-defence :: main_e5
+const C87: SublineNarration = {
+  intro: { say: "The Old Indian main line — …d6 and …e5, the cramped-but-bombproof cousin of the King's Indian. You strike the centre with …e5, complete with …Be7 and …O-O, and bide your time. The freeing breaks are …exd4 followed by …Re8 and …Bf8 regrouping, or a later …c6 and …d5. Patient manoeuvring behind a solid wall, then a well-timed break.", sayShort: "Old Indian — …e5, regroup, break …c6/…d5." },
+  sources: ['book:old-indian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Old_Indian_Defense'],
+};
+// old-indian-defence :: bf5_janowski
+const C88: SublineNarration = {
+  intro: { say: "You've developed the bishop to f5 first — the Janowski/Czech treatment, getting the light bishop active outside the chain before …e5. White may chase with Nh4 or grab space with f3-e4; meet it with …Bg6 and the standard …e5 strike. Solving the bishop early is the whole point: no bad piece, comfortable development.", sayShort: "…Bf5 — bishop out first, then …e5." },
+  sources: ['book:old-indian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Old_Indian_Defense'],
+};
+// old-indian-defence :: e4_clamp
+const C89: SublineNarration = {
+  intro: { say: "White builds the full e4 centre against your …d6/…e5 setup, the classical clamp. Don't be passive: …Nbd7, …Be7, …O-O, then …exd4 and …Re8 to fight for the open lines, or …c6 preparing …d5. Your position is springy, not just solid — pick the freeing break carefully and the cramp uncoils into a fully equal game.", sayShort: "e4 clamp — free with …exd4 or …c6-d5." },
+  sources: ['book:old-indian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Old_Indian_Defense'],
+};
+// old-indian-defence :: fianchetto_g3
+const C90: SublineNarration = {
+  intro: { say: "White meets your Old Indian with the quiet g3 fianchetto. Adapt to a King's-Indian-lite: …Bg7, …O-O, …Nbd7 and …e5, contesting the centre. The g2-bishop blunts long-diagonal play, so lean on the …e5 break and patient manoeuvring. Cramped but sound — equalise by completing development and choosing the right central lever.", sayShort: "g3 — …Bg7 and …e5, patient play." },
+  sources: ['book:old-indian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Old_Indian_Defense'],
+};
+// english-opening :: reversed_dragon
+const C91: SublineNarration = {
+  intro: { say: "Black sets up …d5 and a Reversed-Dragon structure, propping the centre. You're playing a Dragon a tempo to the good: fianchetto, chip at the centre, contest the long light diagonal with the g2-bishop, and use the extra move to grab exactly the initiative White can only envy in the real Dragon. Press on the queenside and the long diagonal.", sayShort: "Reversed Dragon — press with the extra tempo." },
+  sources: ['concept:pos-space', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/English_Opening'],
+};
+// english-opening :: reversed_sicilian
+const C92: SublineNarration = {
+  intro: { say: "Black answers 1.c4 with …e5 — a Sicilian with colours reversed, and you're the one a full tempo up. Play it like an extra-move Sicilian: g3 and Bg2 on the long diagonal, Nc3, and the d3/d4 break in good time. That spare tempo lets you reach the attacking setups Black only dreams of in the real Sicilian.", sayShort: "Reversed Sicilian — a Sicilian up a tempo." },
+  sources: ['concept:pos-space', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/English_Opening'],
+};
+// english-opening :: symmetrical
+const C93: SublineNarration = {
+  intro: { say: "The Symmetrical English — Black mirrors with …c5 and the double fianchetto. Balanced, so make the first imbalance yourself: Rb1 and b4 to roll the queenside, lean on the long diagonal with Bg2, and turn your move-one head start into a lasting space grab. The symmetry breaks in favour of whoever expands first — that's you.", sayShort: "Symmetrical — make the first imbalance, b4." },
+  sources: ['concept:pos-space', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/English_Opening'],
+};
+// english-opening :: botvinnik_e4
+const C94: SublineNarration = {
+  intro: { say: "You've built the Botvinnik English setup — c4, Nc3, g3, Bg2, e4, Nge2 — the great clamp. The pawns on c4 and e4 grip d5, the g2-bishop rakes the long diagonal, and the plan is a kingside expansion with f4 in due course. A powerful, harmonious structure that squeezes Black off the key central squares.", sayShort: "Botvinnik clamp — grip d5, expand f4." },
+  sources: ['concept:pos-space', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/English_Opening'],
+};
+// english-opening :: mikenas_e4
+const C95: SublineNarration = {
+  intro: { say: "The Mikenas-flavoured line — after …e6 you've struck with e4, claiming a big centre. The play sharpens: the exf6/e5 thrusts and the central pawn mass give you space and attacking chances. Develop quickly behind the pawns and use the central majority to cramp Black before he can untangle. Aggressive and concrete.", sayShort: "Mikenas e4 — claim the big centre." },
+  sources: ['concept:pos-space', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/English_Opening'],
+};
+// reti-opening :: kia_e4
+const C96: SublineNarration = {
+  intro: { say: "You've reached a King's-Indian-Attack flavoured Réti — d3, Nbd2, e4, the central expansion behind the fianchetto. Now the kingside beckons: the e4-e5 clamp, the Nf1-g3 or Nh4 reroute, and the f4 lever. Black's solid centre simply becomes the thing you expand around. A rich, plan-rich middlegame on your terms.", sayShort: "KIA Réti — expand e4, swing the kingside." },
+  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+// reti-opening :: main_fianchetto
+const C97: SublineNarration = {
+  intro: { say: "The pure Réti — Nf3, c4 and the g3 fianchetto against Black's …d5. The hypermodern bet: let Black hold the centre so you can lean on it from the wings. The g2-bishop rakes the long diagonal, c4 pressures d5, and the d3/e4 or b4 breaks come at your leisure. Flexible, low-theory, and built to undermine what Black builds.", sayShort: "Réti — fianchetto, undermine the centre." },
+  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+// reti-opening :: dxc4
+const C98: SublineNarration = {
+  intro: { say: "Black grabs the c4-pawn. No matter — you regain it easily and the gain is positional: the g2-bishop's diagonal opens fully and Black has surrendered the centre. Recapture with Qa4+ or e3-Bxc4, complete development, and press d5 and b7 along the long light diagonal. A comfortable, space-flavoured Réti.", sayShort: "…dxc4 — regain it, open the diagonal." },
+  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+// reti-opening :: qxd4_endgame
+const C99: SublineNarration = {
+  intro: { say: "The line has simplified after an early queen trade or central exchange. This is the Réti's quiet technical face: the bishop pair or the better minor piece, sound structure, and the open files. Centralise, claim the open lines, and grind — with the long-diagonal bishop and a clean pawn skeleton, the small edge is real and durable.", sayShort: "Simplified — centralise and grind the edge." },
+  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+// reti-opening :: slav_reti
+const C100: SublineNarration = {
+  intro: { say: "Black props the centre with …c6, a Slav-Réti hybrid. Develop the standard way — g3, Bg2, b3, Bb2, the double fianchetto — and probe with the c4/e4 breaks. Black is solid but passive; lean on the long diagonals from both bishops and the small, durable space edge of the Réti slowly accumulates into pressure.", sayShort: "Slav-Réti — double fianchetto, probe c4/e4." },
+  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+// reti-opening :: d4_advance
+const C101: SublineNarration = {
+  intro: { say: "Black advances …d4, grabbing space and gaining a tempo on your knight. The hypermodern reply is to undermine, not block: b4 (the gambit) to chip at the c5/d4 pawn chain, or e3 to challenge the spearhead directly. Black's advanced pawn becomes overextended; surround it and the space he grabbed turns into a target.", sayShort: "…d4 — undermine with b4 or e3." },
+  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+// kings-indian-attack :: french_setup
+const C102: SublineNarration = {
+  intro: { say: "The King's Indian Attack against a French structure — Black has …e6 and …d5, you've built d3, Nbd2, g3, Bg2 and e4. This is the KIA's bread and butter: trade on e4 or push e5 to clamp, then swing the kingside — Nf1-g3 or Nh4, the f4 lever, and the pawn storm at Black's king. The whole system is one long attacking plan.", sayShort: "KIA vs French — clamp e5, attack." },
+  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+// kings-indian-attack :: double_fianchetto
+const C103: SublineNarration = {
+  intro: { say: "Black mirrors with a …g6 double-fianchetto setup. The kingside storm is harder against the fianchetto, so play the dual-purpose KIA: complete development, keep the e4-e5 option, and probe with both the d4/c3 central setup and the slow kingside build. Patience — the fianchetto blunts the attack but not the long-term plan of expanding where you choose.", sayShort: "Double fianchetto — patient, keep e5 in hand." },
+  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+// kings-indian-attack :: sicilian_setup
+const C104: SublineNarration = {
+  intro: { say: "Black plays a Sicilian-flavoured setup with …c5 and …Nc6. Your KIA machine doesn't change: d3, Nbd2, g3, Bg2, O-O, then e4 and the kingside expansion. Black gets queenside space; you get the king-hunt. The classic KIA race — your attack down the kingside against his pawns on the other wing, and yours arrives with tempo.", sayShort: "KIA vs Sicilian — race the kingside attack." },
+  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+// kings-indian-attack :: caro_setup
+const C105: SublineNarration = {
+  intro: { say: "Black sets up Caro-style with …c6, …d5 and …e5. Against this central wedge the KIA plan adapts: complete the fianchetto, castle, and turn to the kingside with the Nf1-h2-g4 or f4 ideas. Black's broad centre is precisely the soil the King's Indian Attack thrives on — you regroup behind it and attack around it.", sayShort: "KIA vs Caro — regroup, attack." },
+  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+// kings-indian-attack :: e5_tabiya
+const C106: SublineNarration = {
+  intro: { say: "You've reached the KIA attacking tabiya — the e4-e5 wedge clamps Black's kingside and the pieces are poised. Now execute: Nf1-g3 (or Nh2-g4), Re1, the f4 lever, Qe2 and the rook lift, all aimed at h7 and the castled king. Black is solid on the queenside but you have the whole kingside to work with. Press the attack.", sayShort: "Tabiya — e5 clamp, Nf1-g3, f4, attack h7." },
+  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+// birds-opening :: leningrad
+const C107: SublineNarration = {
+  intro: { say: "The Leningrad Bird — f4 with the g3 fianchetto, a reversed Leningrad Dutch a tempo up. The g2-bishop and the f-pawn combine on the kingside while you hold the centre with d3 and c3. Castle, expand with the e4 or Ne5 push, and turn the extra tempo into the kingside initiative the Dutch player can only dream of.", sayShort: "Leningrad Bird — fianchetto, e4/Ne5, attack." },
+  sources: ['concept:pos-space', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Bird%27s_Opening'],
+};
+// birds-opening :: from_gambit
+const C108: SublineNarration = {
+  intro: { say: "Black tries the From Gambit — 1…e5, offering a pawn to blow open your kingside after fxe5 d6. Decline the complications by accepting carefully: take the pawns, return one if needed with e4 or Nf3, and consolidate. The d-pawn and the development lead are Black's only compensation; defend accurately and the extra material tells.", sayShort: "From Gambit — accept, consolidate, keep the pawn." },
+  sources: ['concept:pos-space', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Bird%27s_Opening'],
+};
+// birds-opening :: classical
+const C109: SublineNarration = {
+  intro: { say: "The Classical Bird — f4 against …d5, with the b3/Bb2 and e3/Be2 setup. You aim for a reversed-Dutch attack: the f-pawn and the Bb2 on the long diagonal both point at Black's kingside, and Ne5 plus the queen lift drive the assault. Solid in the centre, ambitious on the wing — the Bird rewards the bold attacker.", sayShort: "Classical Bird — Bb2 diagonal, Ne5, kingside." },
+  sources: ['concept:pos-space', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Bird%27s_Opening'],
+};
+// birds-opening :: stonewall
+const C110: SublineNarration = {
+  intro: { say: "Black sets up a Stonewall-style wall against your Bird. Break the symmetry: target the e5 (your e4-e5 in reverse) or e4 outpost, reroute a knight to the strong square, and use the half-open f-file. The Bird's reversed-Dutch logic means you're the one a move ahead in the structure both sides know — press that tempo.", sayShort: "Stonewall — fight for the e5 outpost." },
+  sources: ['concept:pos-space', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Bird%27s_Opening'],
+};
+// birds-opening :: double_fpawn
+const C111: SublineNarration = {
+  intro: { say: "Black answers …f5, the symmetrical double-f-pawn Bird. Now it's a battle of mirror structures: develop the long-diagonal bishop, contest the centre with e4 (your reversed-gambit lever), and exploit the slight weakening around Black's king that the …f5 push creates. Whoever opens the centre with better-placed pieces presses — and that's you, a tempo ahead.", sayShort: "…f5 — open with e4, exploit the king." },
+  sources: ['concept:pos-space', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Bird%27s_Opening'],
+};
+// albin-countergambit :: main_nf3
+const C112: SublineNarration = {
+  intro: { say: "The Albin Countergambit main line — you've thrown …e5 and pushed …d4, a thorn that cramps White and defines the whole game. After Nf3, Nc6 and g3 develop; the standard plan is …Bg4 (or …Nge7-g6), …Qd7 and the bold …O-O-O, throwing the kingside pawns at White while your d4-wedge cramps him. A genuine, aggressive surprise weapon.", sayShort: "Albin — guard d4, …Bg4, …Qd7, …O-O-O." },
+  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Albin_Countergambit'],
+};
+// albin-countergambit :: lasker_trap
+const C113: SublineNarration = {
+  intro: { say: "This is Lasker Trap territory — White grabbed with e3 against your d4-wedge, and the …dxe3! resource is poison. If White recaptures fxe3, …Qh4+ rakes the loosened kingside and you regain the material with a fine game. The whole point of the Albin: tempt White to win the pawn and spring the tactic. Know it cold and you score heavily.", sayShort: "Lasker Trap — …dxe3!, …Qh4+ punishes fxe3." },
+  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Albin_Countergambit'],
+};
+// albin-countergambit :: underpromotion
+const C114: SublineNarration = {
+  intro: { say: "The famous Albin underpromotion line — after …dxe3 and Bxb4, the …exf2+ shot drags White's king out, and the …fxg1=N+! knight-promotion trick wins material in the purest form. Here White has avoided the worst with Kxf2, but the king is exposed and you stand at least equal: develop with tempo and hunt the displaced monarch.", sayShort: "Underpromotion line — exposed king, press." },
+  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Albin_Countergambit'],
+};
+// albin-countergambit :: e4_lines
+const C115: SublineNarration = {
+  intro: { say: "White grabs more space with e4 against your Albin wedge. Hold your nerve and your pawn: …Nc6 and …f6 chip at the e5-pawn, recapturing on f6 to open lines, while the d4-pawn stays a cramping thorn. White's broad centre is overextended; surround it with pieces and the space he grabbed becomes a liability you exploit.", sayShort: "e4 — chip with …f6, keep the d4-thorn." },
+  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Albin_Countergambit'],
+};
+// englund-gambit :: main_qb4
+const C116: SublineNarration = {
+  intro: { say: "The Englund Gambit's main trick — …Qe7 and …Qb4+ hitting the b2-pawn after White's Bf4. You're betting on activity, not material: after Bd2 Qxb2 you grab the pawn and the open b-file, daring White to prove his extra centre pawn while your queen and pieces buzz. A sharp surprise weapon — know the traps and White must play accurately to refute it.", sayShort: "Englund — …Qb4+ and grab b2 for activity." },
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+// englund-gambit :: nc3_decline
+const C117: SublineNarration = {
+  intro: { say: "White declines the b2-pawn and develops Nc3, returning the gambit pawn for a clean lead in development. Be realistic: the Englund is a practical surprise, not full equality, so play actively — develop with tempo, contest the centre, and create problems before White consolidates his small edge. Your best chance is energy and initiative.", sayShort: "Nc3 — develop actively, create problems." },
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+// englund-gambit :: qxb2_bc3
+const C118: SublineNarration = {
+  intro: { say: "You've snatched on b2 and White challenges with Bc3, trying to trap the queen. The …Bb4 pin is the key resource — pinning the bishop so the queen escapes, and after the trades you reach a position where White's extra pawn is offset by your active pieces and his slightly loosened queenside. Stay alert: this is a tactics-rich, practical fight.", sayShort: "…Qxb2 — …Bb4 pins, free the queen." },
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+// anti-benoni-push :: benko_b5
+const C119: SublineNarration = {
+  intro: { say: "Black tries the Benko-style …b5, sacrificing a pawn for queenside files against your d5-push. Accept and stay solid: take the pawns, give one back with the bishop trade on f1 if needed, and prioritise king safety with Nge2 and a quick castle. Your extra pawn or your big centre, plus a sound king, outweighs Black's open files when you defend accurately.", sayShort: "…b5 — accept, finish development, hold the edge." },
+  sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
+};
+// anti-benoni-push :: modern_benoni
+const C120: SublineNarration = {
+  intro: { say: "Black goes for the Modern Benoni with …e6 and the exchange on d5. Now you have the dream White centre — pawns on d5 and e4 — and the plan is space and attack: f4 and Nf3, Be2, O-O, and the e4-e5 break that cracks Black's position open. Restrain …b5 with a4 and your space advantage becomes a kingside initiative.", sayShort: "Modern Benoni — e4-f4 centre, restrain …b5." },
+  sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
+};
+// anti-benoni-push :: kid_benoni
+const C121: SublineNarration = {
+  intro: { say: "Black fianchettoes with …g6 and …Bg7, a King's-Indian-Benoni hybrid. Build the broad centre — e4, Nc3, and develop with Nf3 or Nge2, Be2, O-O — and you stand better with more space and a clear plan. Meet …e5 by closing or …c5-based play by clamping; the extra space is a lasting, comfortable trump.", sayShort: "KID-Benoni — build the e4 centre, take space." },
+  sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
+};
+// anti-benoni-push :: czech_e5
+const C122: SublineNarration = {
+  intro: { say: "Black locks the centre with …e5, a Czech-Benoni structure. The play turns slow and strategic: you own more space, so manoeuvre behind the pawns and prepare the right break — b4 on the queenside or f4 on the king's wing. Patience is the watchword; pick the lever that opens lines where you're strongest and Black's cramped position cracks.", sayShort: "Czech …e5 — manoeuvre, pick b4 or f4." },
+  sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
+};
+// anti-englund :: qe7_main
+const C123: SublineNarration = {
+  intro: { say: "Black plays the Englund tricks — …Qe7 hitting your extra e5-pawn, hoping you grab greedily or misplace a piece. The refutation is calm development: Nf3 and Nc3 defend e5, you simply finish developing, and the extra pawn stays yours. Don't get cute — return nothing you don't have to, keep the king safe, and the material decides.", sayShort: "…Qe7 — develop calmly, keep the e5-pawn." },
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+// anti-englund :: bg5_d6
+const C124: SublineNarration = {
+  intro: { say: "Black tries the …d6 and …f6 break with Bg5 ideas to pry the e5-pawn loose. Hold firm: keep pieces defending e5, meet …f6 with the bishop retreat or a timely return that leaves you ahead, and complete development. The Englund's whole hope is your carelessness — play solid, principled chess and the gambit simply fails.", sayShort: "…d6/…f6 — hold e5, develop, stay ahead." },
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+// anti-englund :: consolidate
+const C125: SublineNarration = {
+  intro: { say: "Black scrambles for activity to justify the gambit pawn. Your job is the least glamorous and most effective: consolidate. Develop every piece to a sound square, tuck the king away, and neutralise the open lines. Once you're fully developed with the king safe, the extra pawn is simply an extra pawn — convert it in the endgame.", sayShort: "Consolidate — king safe, then the pawn tells." },
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+// anti-kid-saemisch :: saemisch_c5
+const C126: SublineNarration = {
+  intro: { say: "Black hits with …c5 against your Sämisch, a Benoni-flavoured counter to the f3-e4 centre. Choose your structure: d5 to close and clamp with space, or dxc5 to open with a development lead. Either way your big centre and the f3-prop give you a comfortable game — the Sämisch is built to meet exactly this central challenge from a position of strength.", sayShort: "…c5 — d5 closes or dxc5 opens." },
+  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
+};
+// anti-kid-saemisch :: saemisch_main
+const C127: SublineNarration = {
+  intro: { say: "The Sämisch main tabiya — your pawns stand f3-e4 with Be3 and the queen heading to d2. Now choose the plan that fits: the kingside pawn storm with g4-h4-h5 against Black's fianchetto, or O-O-O and a full-blooded attack, or the patient queenside expansion. The Sämisch's strength is its flexibility — a rock-solid centre backing an assault on either flank.", sayShort: "Sämisch — g4-h4 or O-O-O storm." },
+  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
+};
+// anti-kid-saemisch :: saemisch_nc6
+const C128: SublineNarration = {
+  intro: { say: "Black develops …Nc6, pressuring your d4-pawn in the Sämisch. Meet it head-on: Nge2 to bolster d4, then d5 hitting the knight with tempo and grabbing space, or Be3 and Qd2 completing the clamp. The knight gets kicked, you gain space, and the broad f3-e4 centre stands firm — a pleasant Sämisch squeeze.", sayShort: "…Nc6 — Nge2 and d5, gain space." },
+  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
+};
+// anti-kid-saemisch :: saemisch_e5
+const C129: SublineNarration = {
+  intro: { say: "Black strikes …e5 in the Sämisch. Lock the centre with d5 and the game splits into two wings: you expand on the queenside with c5 and the minority push, or storm the kingside yourself with g4 and h4 behind the f3-pawn. The Sämisch's solid centre lets you attack on whichever flank you choose — pick your wing and roll.", sayShort: "…e5 — lock d5, attack a wing." },
+  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
+};
+// anti-grunfeld-exchange :: nf3_bg7
+const C130: SublineNarration = {
+  intro: { say: "A quieter Exchange-Grünfeld move order with Nf3 and …Bg7 development. The same battle applies: your central pawns versus Black's piece pressure. Develop solidly — Be2 or Bc4, O-O, Be3 — keep d4 defended, and prepare the e5 or d5 advance at the right moment. The broad centre is your asset; nurse it and the space tells.", sayShort: "Nf3 Exchange — develop, guard d4, advance later." },
+  sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
+};
+// anti-grunfeld-exchange :: exchange_main
+const C131: SublineNarration = {
+  intro: { say: "The Exchange Grünfeld from White's side — you've built the broad d4-e4 centre that the whole opening is fought over. Black's g7-bishop and …c5 will hammer at d4, so prop and advance: Bc4, Ne2, O-O, Be3 and Qd2 to defend the centre, then the d5 push that turns your pawns from target into battering ram. Hold the centre and you're better; let it fall and you're worse — so guard it and roll.", sayShort: "Exchange — defend the centre, then push d5." },
+  sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
+};
+// anti-nimzo-qc2 :: qc2_d5
+const C132: SublineNarration = {
+  intro: { say: "Black strikes …d5 against your Qc2. Resolve with cxd5 and you reach a comfortable structure: the bishop pair is in your pocket once Black takes on c3, and the e4 break or the central majority gives lasting pressure. Develop smoothly with Nf3, e3, Bd3 and castle — the two bishops do the long-term work.", sayShort: "Qc2 …d5 — cxd5, keep the two bishops." },
+  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+// anti-nimzo-qc2 :: qc2_c5
+const C133: SublineNarration = {
+  intro: { say: "Black hits …c5 against your Qc2 setup. Take with dxc5 and invite Black to spend time regaining the pawn while you complete development with the bishop pair and a lead in tempo. The queenside opens to your benefit; develop actively, keep the long-term bishop advantage, and the small structural edge grows into a pull.", sayShort: "Qc2 …c5 — dxc5, lead in development." },
+  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+// anti-nimzo-qc2 :: qc2_main
+const C134: SublineNarration = {
+  intro: { say: "The Qc2 anti-Nimzo where Black develops modestly with …d6, …Nc6 or …b6. Your plan never changes: a3 to clarify the bishop, recapture toward the centre to keep the pair, and build the e4 push. The two bishops plus a broad centre are a durable, classical advantage — develop in good order and expand when ready.", sayShort: "Qc2 — a3, build e4, two bishops." },
+  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+// anti-nimzo-qc2 :: qc2_oo
+const C135: SublineNarration = {
+  intro: { say: "The Classical Qc2 anti-Nimzo — you sidestep the doubled pawns by recapturing on c3 with the queen, and keep the bishop pair as your trump. After …O-O, play a3 to force the bishop's hand: if it takes on c3 you get the pair and the half-open b-file, and the plan is e4, building a big centre for the bishops to rake. Patience, then central expansion.", sayShort: "Qc2 …O-O — a3, win the bishops." },
+  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+// anti-qid-fianchetto :: qid_d5
+const C136: SublineNarration = {
+  intro: { say: "Black answers …d5, steering toward a symmetrical or IQP-flavoured structure. Resolve with cxd5 and develop naturally — Nc3, e3, the g2-bishop pressuring the centre. Whether Black ends with an isolated d-pawn to besiege or a symmetrical position to out-coordinate, your fianchetto and easy development give the comfortable side.", sayShort: "…d5 — cxd5, develop, press the centre." },
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense'],
+};
+// anti-qid-fianchetto :: qid_bb4
+const C137: SublineNarration = {
+  intro: { say: "Black checks with …Bb4+ before committing. Block with Bd2 and welcome the trade — you regain time, keep the powerful g2-bishop, and emerge with the same pleasant space. Don't fear the check; it swaps off one of Black's developing pieces while your long-diagonal trump stays right where it belongs.", sayShort: "…Bb4+ — block Bd2, keep the big bishop." },
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense'],
+};
+// anti-qid-fianchetto :: qid_bb7
+const C138: SublineNarration = {
+  intro: { say: "Black develops …Bb7, the classical Queen's Indian, mirroring your bishop on the long diagonal. Build toward e4: Nc3, the g2-bishop, and the central push that claims more space. The battle is for the e4-square — out-prepare Black there with the d-pawn and knight support, and your central majority slowly tells.", sayShort: "…Bb7 — fight for e4, claim central space." },
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense'],
+};
+// anti-qid-fianchetto :: qid_ba6
+const C139: SublineNarration = {
+  intro: { say: "Black plays the modern …Ba6, biting at your c4-pawn before you can settle the g2-bishop. Answer b3 (or Qa4/Nbd2) to defend c4 and keep the long-diagonal bishop, then complete the fianchetto and contest the light squares. The fight is all about e4 and the long diagonal — hold c4, finish development, and your space and central control give the pull.", sayShort: "…Ba6 — defend c4 with b3." },
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense'],
+};
+// anti-dutch-staunton :: qh5
+const C140: SublineNarration = {
+  intro: { say: "Black grabs and you've got the sharp Qh5+ resource available, hitting the loosened kingside after …f5 and …e6. Play energetically: the queen sortie exploits the weak light squares, and quick development keeps Black's king pinned in the centre. The Staunton rewards initiative — keep checking, keep developing, and let the exposed king be the target.", sayShort: "Qh5+ — exploit the weak light squares." },
+  sources: ['book:dutch-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+// anti-dutch-staunton :: staunton_d5
+const C141: SublineNarration = {
+  intro: { say: "Black bolsters with …d5 instead of clinging to the pawn. Keep the initiative: f3 to open the centre, recover the pawn with the better structure, and pile pieces toward Black's loosened kingside, where the early …f5 left lasting holes. The gambit's compensation is development and the weak light squares around Black's king — exploit both.", sayShort: "…d5 — f3, recover, hit the king." },
+  sources: ['book:dutch-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+// anti-dutch-staunton :: staunton_main
+const C142: SublineNarration = {
+  intro: { say: "The Staunton Gambit — you've offered e4 against the Dutch, and after …fxe4 Nc3 Nf6 Bg5 you have a roaring development lead for the pawn. The plan is concrete: f3 to blast open the centre, fast piece play down the e- and f-files, and pressure on the e4-pawn and Black's kingside. Black's extra pawn is a liability while his king is stuck — attack.", sayShort: "Staunton — f3 opens, attack the king." },
+  sources: ['book:dutch-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+// anti-qgd-exchange :: central_e4
+const C143: SublineNarration = {
+  intro: { say: "In this Exchange QGD you can favour the central plan over the minority attack: e3, Bd3, Nge2 and f3, preparing the e4 break that frees your pieces and opens lines toward Black's king. The choice between minority attack and central e4 is yours — here the central break gives the more aggressive, double-edged game with real attacking chances.", sayShort: "Exchange QGD — prepare the central e4 break." },
+  sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+// anti-qgd-exchange :: qxd5
+const C144: SublineNarration = {
+  intro: { say: "Black recaptures with …Qxd5 instead of the e-pawn, avoiding the Carlsbad. Develop with tempo: Nf3, Nc3 hitting the queen, e4 grabbing the centre, and you emerge with a clear space advantage and the more active pieces. Black dodged the minority-attack structure but handed you the centre and a lead in development — press it.", sayShort: "…Qxd5 — Nc3 and e4 grab centre." },
+  sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+// anti-qgd-exchange :: minority
+const C145: SublineNarration = {
+  intro: { say: "The Exchange QGD with the Carlsbad structure — your textbook plan is the minority attack. Push b4-b5 to chew at Black's c6-pawn; when it falls, the half-open c-file and the backward c-pawn become permanent targets while your own centre stays sound. Develop Bg5, e3, Bd3, Nge2, castle, and roll the queenside pawns. A model strategic squeeze.", sayShort: "Exchange QGD — minority attack b4-b5." },
+  sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+// anti-budapest :: ne4
+const C146: SublineNarration = {
+  intro: { say: "Black tries the Fajarowicz …Ne4, planting the knight aggressively. Neutralise it calmly: Nf3 and Nbd2 challenge the intruder, and after the trades you keep a comfortable game with the extra space and sound development. The centralised knight looks scary but has no real support — chase it off and your structural edge remains.", sayShort: "Fajarowicz …Ne4 — Nf3, Nbd2, neutralise." },
+  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
+};
+// anti-budapest :: bf4_main
+const C147: SublineNarration = {
+  intro: { say: "Against the Budapest you hold the e5-pawn with Bf4 and Nf3, the principled anti-gambit. Black regains it with …Nc6 and …Bb4+/…Ngxe5, but you come out with the freer position: a small space edge, the bishop pair potential, and easy development. Don't cling greedily to the pawn — give it back on your terms and keep the structural pull.", sayShort: "Bf4 — hold e5, give back later." },
+  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
+};
+// anti-london-black :: c4_clamp
+const C148: SublineNarration = {
+  intro: { say: "You've grabbed queenside space with …c4, clamping White's b3-and-c-pawn breaks and gaining a free hand on the wing. The plan from here: …b5-b4 to roll the pawns, …Na5-c4 or …Bf5 for piece activity, and patient pressure on White's now-static queenside. The London is at its weakest when you seize space first — keep rolling.", sayShort: "…c4 — clamp the queenside, roll …b5-b4." },
+  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
+};
+// anti-london-black :: e4_push
+const C149: SublineNarration = {
+  intro: { say: "White lashes out with the e4 push instead of the quiet London. Meet the central break head-on: capture and develop with tempo, exploit that White has spent moves on the slow Bf4 setup, and seize the centre yourself. The aggressive e4 abandons the London's solidity — punish it with quick, active development and central control.", sayShort: "e4 — take it, seize the centre." },
+  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
+};
+// anti-catalan-black :: open
+const C150: SublineNarration = {
+  intro: { say: "The Open Catalan from Black's side — you've taken on c4 and will hold it briefly with …a6 and …b5, or give it back for free development. The point is to solve your game before White's g2-bishop chokes you: get the light bishop active, complete development with …Nc6 or …Nbd7, and break with …c5. Hold the pawn or return it cleanly — either way you equalise.", sayShort: "Open Catalan — hold or return c4." },
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+// anti-catalan-black :: nimzo_nc3
+const C151: SublineNarration = {
+  intro: { say: "White plays Nc3 instead of the pure Catalan fianchetto, inviting a Nimzo with …Bb4. Pin the knight, fight for e4, and you're in comfortable Nimzo-Indian territory — fracture White's pawns with …Bxc3 or hold the pin and strike the centre. The Catalan's fianchetto pressure never materialises; you reach a well-charted, equal structure.", sayShort: "Nc3 — …Bb4, play the Nimzo." },
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+// anti-catalan-black :: bb4_check
+const C152: SublineNarration = {
+  intro: { say: "You check with …Bb4+, the reliable Catalan equaliser. After Bd2 trade or retreat with gain of time, neutralising the g2-bishop's pull before it ever bites. This is the cleanest way to take the sting out of the Catalan — swap off a piece, complete development, and reach a balanced game with no long-term light-square worries.", sayShort: "…Bb4+ — defuse the Catalan, trade with tempo." },
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+// anti-catalan-black :: qa4_nbd7
+const C153: SublineNarration = {
+  intro: { say: "White harries with Qa4+ to regain the c4-pawn. Block with …Nbd7 and develop in good order — the check costs White a little time and your pieces come out naturally. After White recaptures on c4, strike with …c5 or …a6 and …b5 to free the queenside; the long-diagonal bishop is annoying but containable with active play.", sayShort: "Qa4+ — …Nbd7, free with …c5." },
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+// anti-colle-black :: c4_transpo
+const C154: SublineNarration = {
+  intro: { say: "White plays c4, transposing toward a Queen's-Gambit or Slav structure rather than a pure Colle. Adapt to the well-charted main roads: …e6 and a solid QGD setup, or …c6 holding the centre. Develop soundly, contest the centre, and you reach the same reliable equality the Queen's Gambit Declined offers — no Colle bind to worry about.", sayShort: "c4 — transpose, play a solid QGD setup." },
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit'],
+};
+// anti-colle-black :: bf4_london
+const C155: SublineNarration = {
+  intro: { say: "White develops Bf4, a London-flavoured Colle. Counter with the same energy: …c5 and …Nc6 hitting d4, …Qb6 eyeing b2, and the active light-bishop development. White's bishop on f4 is committed and can be a target for …Nh5 or …c4 ideas; press on d4 and the queenside and your active pieces give a comfortable game.", sayShort: "Bf4 — …c5, …Nc6, press d4 and b2." },
+  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
+};
+// anti-colle-black :: zukertort_b3
+const C156: SublineNarration = {
+  intro: { say: "White goes for the Zukertort with b3 and Bb2, aiming the bishop down the long diagonal at your kingside. Blunt it: develop …Bd6 to contest the b8-h2 diagonal, castle, and prepare the …e5 break that challenges the centre and frees your game. Neutralise the Bb2's stare with …e5 and active pieces, and White's slow setup gives you easy equality.", sayShort: "Zukertort b3 — …Bd6 and the …e5 break." },
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit'],
+};
+// anti-colle-black :: main
+const C157: SublineNarration = {
+  intro: { say: "The anti-Colle recipe — and the golden rule is to free your light-squared bishop BEFORE …e6 ever shuts it in. Strike with …c5 and …Nc6, develop the bishop actively to f5 or g4, and only then play …e6. That single idea solves the Colle's whole point; with your bad bishop turned good, you reach a comfortable, fully equal game with active pieces.", sayShort: "Anti-Colle — get the bishop out before …e6." },
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit'],
+};
+// anti-colle-black :: exchange_dxc5
+const C158: SublineNarration = {
+  intro: { say: "White releases with dxc5, opening the centre. Recapture and you reach a free, active game — the bishops breathe, the pieces develop to natural squares, and White's small space edge has evaporated. The Colle thrives on a closed centre; once it opens with dxc5, your easy development gives a comfortable, balanced middlegame.", sayShort: "dxc5 — recapture, free pieces, easy game." },
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit'],
+};
+
+export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
+  // ── queens-gambit ──
+  'queens-gambit::0::h6@19': C0,
+  'queens-gambit::0::c6@5': C0,
+  'queens-gambit::0::Be7@5': C0,
+  'queens-gambit::0::c6@9': C0,
+  'queens-gambit::0::Ne4@19': C0,
+  'queens-gambit::0::c5@5': C1,
+  'queens-gambit::0::Nf8@17': C2,
+  'queens-gambit::0::Bg4@21': C0,
+  'queens-gambit::0::Ne4@21': C0,
+  'queens-gambit::0::Bb4@5': C3,
+  'queens-gambit::1::c6@5': C0,
+  'queens-gambit::1::Be7@5': C0,
+  'queens-gambit::1::c5@5': C1,
+  'queens-gambit::1::h6@11': C0,
+  'queens-gambit::1::Bb4@5': C3,
+  'queens-gambit::1::a6@5': C2,
+  'queens-gambit::1::Nbd7@7': C0,
+  'queens-gambit::1::h6@9': C0,
+  'queens-gambit::1::Nxe7@19': C4,
+  'queens-gambit::1::c6@7': C0,
+  'queens-gambit::2::Nxe7@17': C2,
+  'queens-gambit::2::c6@5': C0,
+  'queens-gambit::2::Be7@5': C0,
+  'queens-gambit::2::c5@5': C1,
+  'queens-gambit::2::Bb4@5': C3,
+  'queens-gambit::2::Nbd7@11': C0,
+  'queens-gambit::2::a6@5': C2,
+  'queens-gambit::2::Ne4@13': C0,
+  'queens-gambit::2::Nbd7@7': C0,
+  'queens-gambit::2::h6@9': C0,
+  'queens-gambit::3::a6@5': C4,
+  'queens-gambit::3::Bg4@7': C4,
+  'queens-gambit::3::Nc6@11': C5,
+  'queens-gambit::3::c5@5': C5,
+  'queens-gambit::3::a6@7': C4,
+  'queens-gambit::3::e6@5': C5,
+  'queens-gambit::3::c4@15': C5,
+  'queens-gambit::3::c6@5': C1,
+  'queens-gambit::3::b5@7': C1,
+  'queens-gambit::4::a6@7': C0,
+  'queens-gambit::4::Nbd7@11': C4,
+  'queens-gambit::4::e6@5': C0,
+  'queens-gambit::4::Nbd7@15': C3,
+  'queens-gambit::4::e6@9': C4,
+  'queens-gambit::4::Bg4@9': C4,
+  'queens-gambit::4::Bg6@17': C3,
+  'queens-gambit::4::Na6@9': C4,
+  'queens-gambit::4::Nbd7@13': C4,
+  'queens-gambit::5::dxc4@7': C4,
+  'queens-gambit::5::a6@7': C0,
+  'queens-gambit::5::Bd6@13': C4,
+  'queens-gambit::5::Nb6@13': C4,
+  'queens-gambit::5::Be7@13': C4,
+  'queens-gambit::5::e6@5': C0,
+  'queens-gambit::5::a6@15': C4,
+  'queens-gambit::5::Be7@19': C4,
+  'queens-gambit::5::a6@9': C3,
+  'queens-gambit::5::Bd6@11': C0,
+  'queens-gambit::6::c6@9': C1,
+  'queens-gambit::6::dxc4@9': C1,
+  'queens-gambit::6::b6@9': C1,
+  'queens-gambit::6::Nbd7@9': C1,
+  'queens-gambit::6::Bb4+@7': C1,
+  'queens-gambit::6::dxc4@7': C1,
+  'queens-gambit::6::c6@5': C0,
+  'queens-gambit::6::c5@5': C1,
+  'queens-gambit::6::c6@11': C1,
+  'queens-gambit::6::Nbd7@11': C1,
+  'queens-gambit::7::Bxg3@9': C6,
+  'queens-gambit::7::c6@5': C0,
+  'queens-gambit::7::c6@9': C6,
+  'queens-gambit::7::Be7@5': C0,
+  'queens-gambit::7::c5@9': C6,
+  'queens-gambit::7::c6@11': C6,
+  'queens-gambit::7::b6@11': C6,
+  'queens-gambit::7::c5@5': C1,
+  'queens-gambit::7::Nc6@9': C6,
+  'queens-gambit::7::dxc4@9': C6,
+  // ── qgd ──
+  'qgd::0::cxd5@6': C7,
+  'qgd::0::Nf3@6': C8,
+  'qgd::0::Qc2@12': C8,
+  'qgd::0::Nf3@8': C8,
+  'qgd::0::cxd5@12': C9,
+  'qgd::0::cxd5@8': C7,
+  'qgd::0::Bd3@12': C8,
+  'qgd::0::Rc1@10': C8,
+  'qgd::0::Ne4@20': C8,
+  'qgd::0::Qc2@14': C8,
+  'qgd::1::cxd5@6': C7,
+  'qgd::1::Nf3@6': C8,
+  'qgd::1::Be2@14': C8,
+  'qgd::1::Bd3@14': C8,
+  'qgd::1::Rc1@14': C8,
+  'qgd::1::Nf3@8': C8,
+  'qgd::1::Bxf6@12': C8,
+  'qgd::1::cxd5@8': C7,
+  'qgd::1::Qb3@14': C8,
+  'qgd::1::Qc2@14': C8,
+  'qgd::2::cxd5@6': C7,
+  'qgd::2::Nf3@6': C8,
+  'qgd::2::Rc1@16': C8,
+  'qgd::2::Nf3@8': C8,
+  'qgd::2::Bxf6@12': C8,
+  'qgd::2::cxd5@8': C7,
+  'qgd::2::Qc2@16': C8,
+  'qgd::2::Rc1@10': C8,
+  'qgd::2::cxd5@10': C7,
+  'qgd::2::Qc2@10': C8,
+  'qgd::3::Nf3@8': C7,
+  'qgd::3::Bf4@8': C7,
+  'qgd::3::e3@8': C10,
+  'qgd::3::g3@8': C10,
+  'qgd::3::Ne5@20': C9,
+  'qgd::3::O-O@16': C9,
+  'qgd::3::h3@20': C9,
+  'qgd::3::Bg5@6': C8,
+  'qgd::3::Nf3@6': C8,
+  'qgd::3::O-O-O@18': C9,
+  'qgd::4::cxd5@6': C7,
+  'qgd::4::Bg5@6': C8,
+  'qgd::4::cxd5@8': C11,
+  'qgd::4::Qa4+@8': C11,
+  'qgd::4::e3@8': C11,
+  'qgd::4::Qb3@8': C11,
+  'qgd::4::e5@12': C11,
+  'qgd::4::Bxf6@16': C11,
+  'qgd::4::Bxf6@14': C11,
+  'qgd::4::Qxd4@14': C11,
+  'qgd::5::Bb3@12': C8,
+  'qgd::5::Be2@12': C8,
+  'qgd::5::cxd5@6': C7,
+  'qgd::5::a3@14': C8,
+  'qgd::5::a3@16': C8,
+  'qgd::5::Bg5@6': C8,
+  'qgd::5::Re1@16': C8,
+  'qgd::5::e4@14': C8,
+  'qgd::5::Qc2@14': C8,
+  'qgd::5::Qe2@16': C8,
+  'qgd::6::cxd5@6': C7,
+  'qgd::6::Nf3@6': C8,
+  'qgd::6::cxd5@10': C9,
+  'qgd::6::cxd5@12': C9,
+  'qgd::6::e3@8': C8,
+  'qgd::6::Be2@16': C11,
+  'qgd::6::cxd5@8': C9,
+  'qgd::6::Bxf6@12': C8,
+  'qgd::6::Rc1@14': C11,
+  'qgd::6::a3@16': C11,
+  'qgd::7::Bd3@10': C8,
+  'qgd::7::cxd5@6': C7,
+  'qgd::7::c5@10': C10,
+  'qgd::7::h3@10': C8,
+  'qgd::7::cxd5@10': C7,
+  'qgd::7::Bg5@6': C8,
+  'qgd::7::Nf3@6': C8,
+  'qgd::7::a3@12': C8,
+  'qgd::7::Be2@12': C8,
+  'qgd::7::Qc2@12': C8,
+  // ── qga ──
+  'qga::0::Nc3@8': C12,
+  'qga::0::dxc5@12': C12,
+  'qga::0::Bb3@12': C12,
+  'qga::0::Nc3@6': C13,
+  'qga::0::a4@12': C12,
+  'qga::0::b3@12': C12,
+  'qga::0::Qa4+@6': C12,
+  'qga::0::Bd3@12': C12,
+  'qga::0::Qe2@10': C12,
+  'qga::0::e4@20': C13,
+  'qga::1::Bb3@12': C12,
+  'qga::1::a4@12': C12,
+  'qga::1::Qe2@12': C12,
+  'qga::1::b3@12': C12,
+  'qga::1::Bd3@12': C12,
+  'qga::1::a4@10': C12,
+  'qga::1::Nc3@12': C12,
+  'qga::1::Qe2@10': C12,
+  'qga::1::a4@6': C14,
+  'qga::1::e4@12': C13,
+  'qga::2::O-O@12': C14,
+  'qga::2::g4@12': C14,
+  'qga::2::Nbd2@12': C14,
+  'qga::2::Be2@12': C14,
+  'qga::2::Nc3@6': C13,
+  'qga::2::Qb3@12': C14,
+  'qga::2::O-O@14': C14,
+  'qga::2::Qa4+@6': C12,
+  'qga::2::a3@12': C14,
+  'qga::2::Qa4+@12': C14,
+  'qga::3::a4@10': C13,
+  'qga::3::e3@6': C12,
+  'qga::3::a3@10': C13,
+  'qga::3::Bg5@10': C13,
+  'qga::3::Be2@10': C13,
+  'qga::3::Nxd5@12': C13,
+  'qga::3::b3@10': C13,
+  'qga::3::Be2@12': C13,
+  'qga::3::Ne4@12': C13,
+  'qga::3::Bf4@10': C13,
+  'qga::4::Nc3@8': C12,
+  'qga::4::dxc5@12': C12,
+  'qga::4::Nc3@6': C13,
+  'qga::4::a4@12': C12,
+  'qga::4::Qe2@12': C12,
+  'qga::4::b3@12': C12,
+  'qga::4::Qa4+@6': C12,
+  'qga::4::Bd3@12': C12,
+  'qga::4::Qe2@10': C12,
+  'qga::4::Bc2@22': C12,
+  'qga::5::Nc3@8': C12,
+  'qga::5::Bb3@12': C12,
+  'qga::5::Nc3@6': C13,
+  'qga::5::a4@12': C12,
+  'qga::5::Qe2@12': C12,
+  'qga::5::b3@12': C12,
+  'qga::5::Qxd8+@14': C15,
+  'qga::5::Qa4+@6': C12,
+  'qga::5::Bd3@12': C12,
+  'qga::5::Qe2@10': C12,
+  // ── slav-defence ──
+  'slav-defence::0::Bd2@14': C16,
+  'slav-defence::0::Qb3@14': C16,
+  'slav-defence::0::Ne5@10': C16,
+  'slav-defence::0::Qc2@6': C17,
+  'slav-defence::0::cxd5@6': C18,
+  'slav-defence::0::Qb3@6': C17,
+  'slav-defence::0::g3@6': C17,
+  'slav-defence::0::Nh4@10': C19,
+  'slav-defence::0::e4@8': C20,
+  'slav-defence::1::Nc3@10': C17,
+  'slav-defence::1::Nf3@8': C16,
+  'slav-defence::1::Nf3@10': C17,
+  'slav-defence::1::a3@10': C17,
+  'slav-defence::1::Nd2@10': C17,
+  'slav-defence::1::Bb5@10': C17,
+  'slav-defence::1::a3@8': C16,
+  'slav-defence::1::h3@10': C17,
+  'slav-defence::1::Nc3@6': C16,
+  'slav-defence::2::Qc2@6': C17,
+  'slav-defence::2::cxd5@6': C18,
+  'slav-defence::2::c5@8': C21,
+  'slav-defence::2::Qb3@6': C17,
+  'slav-defence::2::g3@6': C17,
+  'slav-defence::2::a4@8': C16,
+  'slav-defence::2::cxd5@8': C16,
+  'slav-defence::2::Qb3@10': C17,
+  'slav-defence::2::g3@8': C16,
+  'slav-defence::3::cxd5@14': C19,
+  'slav-defence::3::h3@14': C19,
+  'slav-defence::3::Be2@14': C19,
+  'slav-defence::3::Bd2@14': C19,
+  'slav-defence::3::Qb3@14': C19,
+  'slav-defence::3::Qc2@6': C17,
+  'slav-defence::3::cxd5@6': C18,
+  'slav-defence::3::g3@14': C19,
+  'slav-defence::3::Qb3@6': C17,
+  'slav-defence::4::a4@8': C16,
+  'slav-defence::4::Qc2@6': C17,
+  'slav-defence::4::cxd5@6': C18,
+  'slav-defence::4::Qb3@6': C17,
+  'slav-defence::4::g3@6': C17,
+  'slav-defence::4::Be2@18': C20,
+  'slav-defence::4::Ng5@14': C20,
+  'slav-defence::4::Bg5@18': C20,
+  'slav-defence::4::Be2@14': C20,
+  'slav-defence::5::b3@18': C17,
+  'slav-defence::5::Qc2@6': C17,
+  'slav-defence::5::cxd5@6': C18,
+  'slav-defence::5::cxd5@18': C17,
+  'slav-defence::5::Qb3@6': C17,
+  'slav-defence::5::Re1@18': C17,
+  'slav-defence::5::Be2@10': C17,
+  'slav-defence::5::Rd1@18': C17,
+  'slav-defence::5::g3@6': C17,
+  'slav-defence::6::e3@8': C17,
+  'slav-defence::6::a4@12': C16,
+  'slav-defence::6::e3@12': C17,
+  'slav-defence::6::Bxf6@10': C17,
+  'slav-defence::6::Qc2@6': C17,
+  'slav-defence::6::cxd5@6': C18,
+  'slav-defence::6::Qb3@6': C17,
+  'slav-defence::6::cxd5@8': C18,
+  'slav-defence::6::g3@8': C21,
+  'slav-defence::7::e3@6': C17,
+  'slav-defence::7::Nc3@10': C21,
+  'slav-defence::7::cxd5@6': C18,
+  'slav-defence::7::Qb3@6': C17,
+  'slav-defence::7::e4@8': C20,
+  'slav-defence::7::g3@6': C17,
+  'slav-defence::7::Bf4@10': C21,
+  'slav-defence::7::Ne5@10': C21,
+  'slav-defence::7::e3@10': C17,
+  // ── semi-slav ──
+  'semi-slav::0::Bg5@8': C22,
+  'semi-slav::0::Qc2@10': C23,
+  'semi-slav::0::Qc2@6': C23,
+  'semi-slav::0::cxd5@6': C24,
+  'semi-slav::0::Qb3@6': C24,
+  'semi-slav::0::cxd5@8': C24,
+  'semi-slav::0::g3@8': C24,
+  'semi-slav::0::g3@6': C24,
+  'semi-slav::0::Be2@10': C24,
+  'semi-slav::1::e3@8': C24,
+  'semi-slav::1::exf6@14': C22,
+  'semi-slav::1::Qc2@6': C23,
+  'semi-slav::1::Bxf6@14': C22,
+  'semi-slav::1::cxd5@6': C24,
+  'semi-slav::1::Be2@22': C22,
+  'semi-slav::1::Qb3@6': C24,
+  'semi-slav::1::cxd5@8': C24,
+  'semi-slav::1::g3@8': C24,
+  'semi-slav::2::Bg5@8': C22,
+  'semi-slav::2::Qc2@10': C23,
+  'semi-slav::2::Qc2@6': C23,
+  'semi-slav::2::cxd5@6': C24,
+  'semi-slav::2::Qb3@6': C24,
+  'semi-slav::2::cxd5@8': C24,
+  'semi-slav::2::g3@8': C24,
+  'semi-slav::2::g3@6': C24,
+  'semi-slav::2::Be2@10': C24,
+  'semi-slav::3::Bg5@8': C22,
+  'semi-slav::3::Bd3@10': C24,
+  'semi-slav::3::Qc2@6': C23,
+  'semi-slav::3::cxd5@6': C24,
+  'semi-slav::3::b3@12': C23,
+  'semi-slav::3::Be2@12': C23,
+  'semi-slav::3::Qb3@6': C24,
+  'semi-slav::3::cxd5@8': C24,
+  'semi-slav::3::g4@12': C23,
+  'semi-slav::4::e3@8': C24,
+  'semi-slav::4::Bh4@10': C22,
+  'semi-slav::4::Qc2@6': C23,
+  'semi-slav::4::cxd5@14': C24,
+  'semi-slav::4::cxd5@6': C24,
+  'semi-slav::4::Qb3@6': C24,
+  'semi-slav::4::Be2@14': C24,
+  'semi-slav::4::cxd5@8': C24,
+  'semi-slav::4::g3@8': C24,
+  'semi-slav::5::Bg5@8': C22,
+  'semi-slav::5::Qc2@10': C23,
+  'semi-slav::5::Qc2@6': C23,
+  'semi-slav::5::cxd5@6': C24,
+  'semi-slav::5::Bg5@22': C25,
+  'semi-slav::5::Bg5@20': C25,
+  'semi-slav::5::Qb3@6': C24,
+  'semi-slav::5::cxd5@8': C24,
+  'semi-slav::5::Bd3@20': C25,
+  'semi-slav::6::Bg5@8': C22,
+  'semi-slav::6::Qc2@10': C23,
+  'semi-slav::6::Qc2@6': C23,
+  'semi-slav::6::cxd5@6': C24,
+  'semi-slav::6::Qb3@6': C24,
+  'semi-slav::6::cxd5@8': C24,
+  'semi-slav::6::g3@8': C24,
+  'semi-slav::6::g3@6': C24,
+  'semi-slav::6::Be2@10': C24,
+  // ── nimzo-indian ──
+  'nimzo-indian::0::e3@6': C26,
+  'nimzo-indian::0::g3@4': C27,
+  'nimzo-indian::0::Bg5@12': C28,
+  'nimzo-indian::0::bxc3@10': C28,
+  'nimzo-indian::0::e3@12': C28,
+  'nimzo-indian::0::f3@6': C29,
+  'nimzo-indian::0::Nf3@6': C26,
+  'nimzo-indian::0::cxd5@12': C28,
+  'nimzo-indian::0::e4@8': C28,
+  'nimzo-indian::1::g3@4': C27,
+  'nimzo-indian::1::Qc2@6': C28,
+  'nimzo-indian::1::f3@6': C29,
+  'nimzo-indian::1::Nf3@6': C26,
+  'nimzo-indian::1::Ne2@8': C30,
+  'nimzo-indian::1::Bg5@6': C31,
+  'nimzo-indian::1::a3@10': C26,
+  'nimzo-indian::1::g3@6': C27,
+  'nimzo-indian::1::a3@6': C26,
+  'nimzo-indian::2::g3@4': C27,
+  'nimzo-indian::2::Qc2@6': C28,
+  'nimzo-indian::2::f3@6': C29,
+  'nimzo-indian::2::Nf3@6': C26,
+  'nimzo-indian::2::Ne2@8': C30,
+  'nimzo-indian::2::Bg5@6': C31,
+  'nimzo-indian::2::g3@6': C27,
+  'nimzo-indian::2::a3@6': C26,
+  'nimzo-indian::2::Ne2@10': C30,
+  'nimzo-indian::3::Nf3@4': C26,
+  'nimzo-indian::3::e3@6': C26,
+  'nimzo-indian::3::g3@4': C27,
+  'nimzo-indian::3::Qc2@6': C28,
+  'nimzo-indian::3::Bd2@8': C31,
+  'nimzo-indian::3::f3@6': C29,
+  'nimzo-indian::3::Nf3@6': C26,
+  'nimzo-indian::3::g3@6': C27,
+  'nimzo-indian::3::a3@6': C26,
+  'nimzo-indian::4::e3@6': C26,
+  'nimzo-indian::4::g3@4': C27,
+  'nimzo-indian::4::Qc2@6': C28,
+  'nimzo-indian::4::f3@6': C29,
+  'nimzo-indian::4::Bg5@6': C31,
+  'nimzo-indian::4::g3@6': C27,
+  'nimzo-indian::4::a3@6': C26,
+  'nimzo-indian::4::e3@8': C26,
+  'nimzo-indian::4::Bd2@16': C27,
+  'nimzo-indian::5::e3@6': C26,
+  'nimzo-indian::5::g3@4': C27,
+  'nimzo-indian::5::Qc2@6': C28,
+  'nimzo-indian::5::f3@6': C29,
+  'nimzo-indian::5::Nf3@6': C26,
+  'nimzo-indian::5::Bg5@6': C31,
+  'nimzo-indian::5::g3@6': C27,
+  'nimzo-indian::5::f3@10': C29,
+  'nimzo-indian::5::O-O@16': C30,
+  'nimzo-indian::6::Bg5@8': C29,
+  'nimzo-indian::6::e3@8': C29,
+  'nimzo-indian::6::e3@6': C26,
+  'nimzo-indian::6::g3@4': C27,
+  'nimzo-indian::6::Qc2@6': C28,
+  'nimzo-indian::6::cxd5@8': C29,
+  'nimzo-indian::6::Bd2@8': C29,
+  'nimzo-indian::6::e4@8': C29,
+  'nimzo-indian::6::Nf3@6': C26,
+  'nimzo-indian::7::g3@4': C27,
+  'nimzo-indian::7::Qc2@6': C28,
+  'nimzo-indian::7::f3@6': C29,
+  'nimzo-indian::7::Nf3@6': C26,
+  'nimzo-indian::7::Ne2@8': C30,
+  'nimzo-indian::7::Bg5@6': C31,
+  'nimzo-indian::7::g3@6': C27,
+  'nimzo-indian::7::a3@6': C26,
+  'nimzo-indian::7::Re1@18': C26,
+  // ── queens-indian ──
+  'queens-indian::0::g3@4': C32,
+  'queens-indian::0::a3@6': C33,
+  'queens-indian::0::Nc3@6': C34,
+  'queens-indian::0::e3@6': C34,
+  'queens-indian::0::Nc3@10': C32,
+  'queens-indian::0::Re1@12': C32,
+  'queens-indian::0::Bf4@18': C32,
+  'queens-indian::0::Re1@18': C32,
+  'queens-indian::0::d5@12': C32,
+  'queens-indian::1::g3@6': C35,
+  'queens-indian::1::g3@4': C32,
+  'queens-indian::1::Nc3@6': C34,
+  'queens-indian::1::e3@6': C34,
+  'queens-indian::1::Bg5@10': C33,
+  'queens-indian::1::e3@12': C33,
+  'queens-indian::1::Bd2@12': C33,
+  'queens-indian::1::Qc2@10': C33,
+  'queens-indian::1::Bf4@8': C33,
+  'queens-indian::2::g3@6': C35,
+  'queens-indian::2::g3@4': C32,
+  'queens-indian::2::a3@6': C33,
+  'queens-indian::2::e3@6': C34,
+  'queens-indian::2::Bg5@10': C33,
+  'queens-indian::2::Bg5@8': C34,
+  'queens-indian::2::e3@12': C33,
+  'queens-indian::2::Bd2@12': C33,
+  'queens-indian::2::Qc2@10': C33,
+  'queens-indian::3::g3@4': C32,
+  'queens-indian::3::a3@6': C33,
+  'queens-indian::3::Nc3@6': C34,
+  'queens-indian::3::e3@6': C34,
+  'queens-indian::3::Nbd2@10': C32,
+  'queens-indian::3::Rfe1@22': C32,
+  'queens-indian::3::O-O@14': C32,
+  'queens-indian::3::b4@22': C32,
+  'queens-indian::3::Rad1@22': C32,
+  'queens-indian::4::g3@4': C32,
+  'queens-indian::4::a3@6': C33,
+  'queens-indian::4::Nc3@6': C34,
+  'queens-indian::4::e3@6': C34,
+  'queens-indian::4::Bd2@14': C32,
+  'queens-indian::4::Nc3@10': C32,
+  'queens-indian::4::Re1@12': C32,
+  'queens-indian::4::Nxe4@14': C32,
+  'queens-indian::4::d5@12': C32,
+  'queens-indian::5::g3@4': C32,
+  'queens-indian::5::b3@8': C35,
+  'queens-indian::5::a3@6': C33,
+  'queens-indian::5::Nc3@6': C34,
+  'queens-indian::5::Qc2@8': C35,
+  'queens-indian::5::e3@6': C34,
+  'queens-indian::5::Nbd2@8': C35,
+  'queens-indian::5::Qb3@8': C35,
+  'queens-indian::5::O-O@12': C35,
+  'queens-indian::6::g3@6': C35,
+  'queens-indian::6::g3@4': C32,
+  'queens-indian::6::b3@14': C34,
+  'queens-indian::6::Re1@14': C34,
+  'queens-indian::6::a3@6': C33,
+  'queens-indian::6::Qe2@14': C34,
+  'queens-indian::6::a3@14': C33,
+  'queens-indian::6::Nc3@10': C34,
+  'queens-indian::6::Ne5@14': C34,
+  // ── kings-indian-defence ──
+  'kings-indian-defence::0::f3@8': C36,
+  'kings-indian-defence::0::g3@4': C37,
+  'kings-indian-defence::0::Nf3@4': C38,
+  'kings-indian-defence::0::b4@16': C39,
+  'kings-indian-defence::0::h3@10': C38,
+  'kings-indian-defence::0::h3@8': C38,
+  'kings-indian-defence::0::Be3@12': C38,
+  'kings-indian-defence::0::d5@12': C38,
+  'kings-indian-defence::0::Nf3@6': C38,
+  'kings-indian-defence::1::f3@8': C36,
+  'kings-indian-defence::1::g3@4': C37,
+  'kings-indian-defence::1::Nf3@4': C38,
+  'kings-indian-defence::1::h3@10': C38,
+  'kings-indian-defence::1::Ne1@16': C39,
+  'kings-indian-defence::1::h3@8': C38,
+  'kings-indian-defence::1::Be3@12': C38,
+  'kings-indian-defence::1::d5@12': C38,
+  'kings-indian-defence::1::Nf3@6': C38,
+  'kings-indian-defence::2::Be2@8': C38,
+  'kings-indian-defence::2::g3@4': C37,
+  'kings-indian-defence::2::Nf3@4': C38,
+  'kings-indian-defence::2::h3@8': C38,
+  'kings-indian-defence::2::Nf3@6': C38,
+  'kings-indian-defence::2::f3@4': C36,
+  'kings-indian-defence::2::f4@8': C40,
+  'kings-indian-defence::2::Bd3@8': C38,
+  'kings-indian-defence::2::Bg5@10': C41,
+  'kings-indian-defence::3::h3@10': C40,
+  'kings-indian-defence::3::Be2@10': C40,
+  'kings-indian-defence::3::Bd3@10': C40,
+  'kings-indian-defence::3::Nf3@8': C38,
+  'kings-indian-defence::3::Be2@8': C38,
+  'kings-indian-defence::3::f3@8': C36,
+  'kings-indian-defence::3::g3@4': C37,
+  'kings-indian-defence::3::Nf3@4': C38,
+  'kings-indian-defence::3::e6@22': C40,
+  'kings-indian-defence::4::Nc3@6': C38,
+  'kings-indian-defence::4::Nc3@8': C37,
+  'kings-indian-defence::4::g3@4': C37,
+  'kings-indian-defence::4::Nc3@10': C37,
+  'kings-indian-defence::4::f3@4': C36,
+  'kings-indian-defence::4::h3@14': C37,
+  'kings-indian-defence::4::Qc2@12': C37,
+  'kings-indian-defence::4::e3@6': C38,
+  'kings-indian-defence::4::b3@16': C37,
+  'kings-indian-defence::5::Be2@8': C38,
+  'kings-indian-defence::5::f3@8': C36,
+  'kings-indian-defence::5::g3@4': C37,
+  'kings-indian-defence::5::Nf3@4': C38,
+  'kings-indian-defence::5::h3@10': C38,
+  'kings-indian-defence::5::h3@8': C38,
+  'kings-indian-defence::5::Be3@12': C38,
+  'kings-indian-defence::5::Nf3@6': C38,
+  'kings-indian-defence::5::f3@4': C36,
+  'kings-indian-defence::6::f3@8': C36,
+  'kings-indian-defence::6::g3@4': C37,
+  'kings-indian-defence::6::Nf3@4': C38,
+  'kings-indian-defence::6::Nf3@10': C38,
+  'kings-indian-defence::6::h3@8': C38,
+  'kings-indian-defence::6::Nf3@6': C38,
+  'kings-indian-defence::6::f3@4': C36,
+  'kings-indian-defence::6::f4@8': C40,
+  'kings-indian-defence::6::Be3@10': C38,
+  'kings-indian-defence::7::Be2@10': C38,
+  'kings-indian-defence::7::Be3@12': C38,
+  'kings-indian-defence::7::Be2@8': C38,
+  'kings-indian-defence::7::f3@8': C36,
+  'kings-indian-defence::7::g3@4': C37,
+  'kings-indian-defence::7::Nf3@4': C38,
+  'kings-indian-defence::7::Be2@12': C38,
+  'kings-indian-defence::7::h3@8': C38,
+  'kings-indian-defence::7::Nf3@6': C38,
+  // ── grunfeld-defence ──
+  'grunfeld-defence::0::Nf3@6': C42,
+  'grunfeld-defence::0::Nf3@4': C42,
+  'grunfeld-defence::0::Bc4@12': C43,
+  'grunfeld-defence::0::Rb1@14': C43,
+  'grunfeld-defence::0::Be2@18': C44,
+  'grunfeld-defence::0::f3@4': C43,
+  'grunfeld-defence::0::Bf4@6': C45,
+  'grunfeld-defence::0::Bd2@8': C43,
+  'grunfeld-defence::0::Bg5@6': C46,
+  'grunfeld-defence::1::Nf3@6': C42,
+  'grunfeld-defence::1::Nf3@4': C42,
+  'grunfeld-defence::1::Bc4@12': C43,
+  'grunfeld-defence::1::Rb1@14': C43,
+  'grunfeld-defence::1::f3@4': C43,
+  'grunfeld-defence::1::Be2@18': C43,
+  'grunfeld-defence::1::Bf4@6': C45,
+  'grunfeld-defence::1::Bd2@8': C43,
+  'grunfeld-defence::1::Bg5@6': C46,
+  'grunfeld-defence::2::g3@4': C47,
+  'grunfeld-defence::2::Nf3@4': C42,
+  'grunfeld-defence::2::cxd5@8': C42,
+  'grunfeld-defence::2::f3@4': C43,
+  'grunfeld-defence::2::Bg5@8': C46,
+  'grunfeld-defence::2::Bf4@6': C45,
+  'grunfeld-defence::2::Bg5@6': C46,
+  'grunfeld-defence::2::e3@8': C42,
+  'grunfeld-defence::2::Bf4@8': C45,
+  'grunfeld-defence::3::Nc3@6': C42,
+  'grunfeld-defence::3::g3@4': C47,
+  'grunfeld-defence::3::f3@4': C43,
+  'grunfeld-defence::3::cxd5@8': C47,
+  'grunfeld-defence::3::e3@6': C42,
+  'grunfeld-defence::3::e3@16': C47,
+  'grunfeld-defence::3::Nc4@16': C47,
+  'grunfeld-defence::3::Bb2@16': C47,
+  'grunfeld-defence::3::Re1@16': C47,
+  'grunfeld-defence::4::Nf3@14': C43,
+  'grunfeld-defence::4::g3@4': C47,
+  'grunfeld-defence::4::Nf3@6': C42,
+  'grunfeld-defence::4::Nf3@4': C42,
+  'grunfeld-defence::4::Nf3@12': C43,
+  'grunfeld-defence::4::Qxf1@26': C44,
+  'grunfeld-defence::4::f3@4': C43,
+  'grunfeld-defence::4::d5@18': C44,
+  'grunfeld-defence::4::Bf4@6': C45,
+  'grunfeld-defence::5::Nf3@4': C42,
+  'grunfeld-defence::5::f3@4': C43,
+  'grunfeld-defence::5::cxd5@8': C43,
+  'grunfeld-defence::5::cxd5@10': C47,
+  'grunfeld-defence::5::e3@16': C47,
+  'grunfeld-defence::5::Nc4@16': C47,
+  'grunfeld-defence::5::Bb2@16': C47,
+  'grunfeld-defence::5::Re1@16': C47,
+  'grunfeld-defence::5::Ne5@16': C47,
+  'grunfeld-defence::6::Nf3@6': C42,
+  'grunfeld-defence::6::Nf3@4': C42,
+  'grunfeld-defence::6::Bc4@12': C43,
+  'grunfeld-defence::6::Be3@16': C44,
+  'grunfeld-defence::6::f3@4': C43,
+  'grunfeld-defence::6::Qd2@20': C44,
+  'grunfeld-defence::6::Bf4@6': C45,
+  'grunfeld-defence::6::Bc4@16': C44,
+  'grunfeld-defence::6::Be3@14': C43,
+  'grunfeld-defence::7::Nf3@14': C43,
+  'grunfeld-defence::7::g3@4': C47,
+  'grunfeld-defence::7::Nf3@6': C42,
+  'grunfeld-defence::7::Nf3@4': C42,
+  'grunfeld-defence::7::O-O@16': C44,
+  'grunfeld-defence::7::Nf3@12': C43,
+  'grunfeld-defence::7::f3@4': C43,
+  'grunfeld-defence::7::d5@16': C43,
+  'grunfeld-defence::7::Bf4@6': C45,
+  // ── benoni-defence ──
+  'benoni-defence::0::e4@10': C48,
+  'benoni-defence::0::Nf3@4': C49,
+  'benoni-defence::0::Bf4@12': C48,
+  'benoni-defence::0::Nd2@12': C48,
+  'benoni-defence::0::g3@12': C50,
+  'benoni-defence::0::h3@12': C48,
+  'benoni-defence::0::e3@4': C48,
+  'benoni-defence::0::h3@14': C51,
+  'benoni-defence::0::Bg5@12': C48,
+  'benoni-defence::1::e4@10': C48,
+  'benoni-defence::1::Nf3@4': C49,
+  'benoni-defence::1::Bf4@12': C48,
+  'benoni-defence::1::e4@12': C51,
+  'benoni-defence::1::Nd2@12': C48,
+  'benoni-defence::1::h3@12': C48,
+  'benoni-defence::1::e3@4': C48,
+  'benoni-defence::1::Bg5@12': C48,
+  'benoni-defence::1::g3@10': C50,
+  'benoni-defence::2::e4@10': C48,
+  'benoni-defence::2::Nf3@4': C49,
+  'benoni-defence::2::e4@12': C51,
+  'benoni-defence::2::Nd2@12': C48,
+  'benoni-defence::2::h3@16': C48,
+  'benoni-defence::2::g3@12': C50,
+  'benoni-defence::2::h3@12': C48,
+  'benoni-defence::2::e3@4': C48,
+  'benoni-defence::2::Bd3@16': C48,
+  'benoni-defence::3::Nf3@10': C48,
+  'benoni-defence::3::Nf3@4': C49,
+  'benoni-defence::3::Nf3@12': C51,
+  'benoni-defence::3::e3@4': C48,
+  'benoni-defence::3::h3@12': C51,
+  'benoni-defence::3::Bd3@12': C51,
+  'benoni-defence::3::Bc4@22': C52,
+  'benoni-defence::3::f3@12': C51,
+  'benoni-defence::3::Nf3@16': C52,
+  'benoni-defence::4::e6@22': C48,
+  'benoni-defence::4::Nf3@10': C48,
+  'benoni-defence::4::Nf3@4': C49,
+  'benoni-defence::4::d6@26': C48,
+  'benoni-defence::4::O-O@22': C48,
+  'benoni-defence::4::Bb5+@14': C52,
+  'benoni-defence::4::Bf4@22': C48,
+  'benoni-defence::4::Nf3@12': C51,
+  'benoni-defence::4::e3@4': C48,
+  'benoni-defence::5::Bd3@10': C49,
+  'benoni-defence::5::dxe6@6': C53,
+  'benoni-defence::5::Nf3@10': C49,
+  'benoni-defence::5::f4@10': C49,
+  'benoni-defence::5::h3@10': C49,
+  'benoni-defence::5::Be2@10': C49,
+  'benoni-defence::5::Bg5@10': C49,
+  'benoni-defence::5::f3@10': C49,
+  'benoni-defence::5::e4@6': C49,
+  'benoni-defence::5::Bg5@6': C49,
+  'benoni-defence::6::e4@10': C48,
+  'benoni-defence::6::Nf3@4': C49,
+  'benoni-defence::6::Bf4@12': C48,
+  'benoni-defence::6::Nd2@12': C48,
+  'benoni-defence::6::g3@12': C50,
+  'benoni-defence::6::h3@12': C48,
+  'benoni-defence::6::e3@4': C48,
+  'benoni-defence::6::h3@14': C51,
+  'benoni-defence::6::Bg5@12': C48,
+  // ── benko-gambit ──
+  'benko-gambit::0::Nf3@4': C54,
+  'benko-gambit::0::b6@8': C55,
+  'benko-gambit::0::Nf3@6': C55,
+  'benko-gambit::0::e3@8': C56,
+  'benko-gambit::0::Nf3@12': C56,
+  'benko-gambit::0::g3@12': C57,
+  'benko-gambit::0::e3@4': C56,
+  'benko-gambit::0::f3@8': C54,
+  'benko-gambit::0::Nf3@16': C58,
+  'benko-gambit::0::Qc2@6': C56,
+  'benko-gambit::1::Nf3@4': C54,
+  'benko-gambit::1::b6@8': C55,
+  'benko-gambit::1::Nf3@6': C55,
+  'benko-gambit::1::e3@8': C56,
+  'benko-gambit::1::e3@4': C56,
+  'benko-gambit::1::f3@8': C54,
+  'benko-gambit::1::g3@16': C58,
+  'benko-gambit::1::Qc2@6': C56,
+  'benko-gambit::1::Re1@22': C58,
+  'benko-gambit::1::Nd2@6': C56,
+  'benko-gambit::2::cxb5@6': C58,
+  'benko-gambit::2::Re1@16': C56,
+  'benko-gambit::2::Bg5@16': C56,
+  'benko-gambit::2::Nf3@4': C54,
+  'benko-gambit::2::e3@8': C56,
+  'benko-gambit::2::h3@14': C56,
+  'benko-gambit::2::Bg5@14': C56,
+  'benko-gambit::2::Bf4@18': C56,
+  'benko-gambit::2::e5@14': C56,
+  'benko-gambit::2::e5@16': C56,
+  'benko-gambit::3::bxa6@8': C58,
+  'benko-gambit::3::e5@12': C54,
+  'benko-gambit::3::Nf3@4': C54,
+  'benko-gambit::3::b6@8': C55,
+  'benko-gambit::3::Nf3@6': C55,
+  'benko-gambit::3::e3@8': C56,
+  'benko-gambit::3::e5@16': C54,
+  'benko-gambit::3::e3@4': C56,
+  'benko-gambit::3::f3@8': C54,
+  'benko-gambit::3::Qc2@6': C56,
+  'benko-gambit::4::bxa6@8': C58,
+  'benko-gambit::4::Nf3@4': C54,
+  'benko-gambit::4::b6@8': C55,
+  'benko-gambit::4::Nf3@6': C55,
+  'benko-gambit::4::e3@4': C56,
+  'benko-gambit::4::f3@8': C54,
+  'benko-gambit::4::Qc2@6': C56,
+  'benko-gambit::4::Nd2@6': C56,
+  'benko-gambit::4::Nc3@8': C54,
+  'benko-gambit::4::a4@6': C56,
+  'benko-gambit::5::Nf3@4': C54,
+  'benko-gambit::5::b6@8': C55,
+  'benko-gambit::5::Nf3@6': C55,
+  'benko-gambit::5::e3@8': C56,
+  'benko-gambit::5::e3@4': C56,
+  'benko-gambit::5::f3@8': C54,
+  'benko-gambit::5::Nf3@16': C58,
+  'benko-gambit::5::Qc2@6': C56,
+  'benko-gambit::5::Nd2@6': C56,
+  'benko-gambit::5::a4@22': C58,
+  'benko-gambit::6::Nge2@18': C58,
+  'benko-gambit::6::Nf3@4': C54,
+  'benko-gambit::6::b6@8': C55,
+  'benko-gambit::6::Nf3@6': C55,
+  'benko-gambit::6::e3@8': C56,
+  'benko-gambit::6::e3@4': C56,
+  'benko-gambit::6::f3@8': C54,
+  'benko-gambit::6::Qc2@6': C56,
+  'benko-gambit::6::Nd2@6': C56,
+  'benko-gambit::6::Nf3@12': C56,
+  // ── budapest-gambit ──
+  'budapest-gambit::0::Nc3@4': C59,
+  'budapest-gambit::0::e3@4': C60,
+  'budapest-gambit::0::Nf3@4': C59,
+  'budapest-gambit::0::O-O@12': C59,
+  'budapest-gambit::0::Nc3@16': C59,
+  'budapest-gambit::0::Nbd2@12': C59,
+  'budapest-gambit::0::Nc3@12': C59,
+  'budapest-gambit::0::a3@16': C59,
+  'budapest-gambit::0::Nc3@14': C59,
+  'budapest-gambit::1::Nc3@4': C59,
+  'budapest-gambit::1::e3@4': C60,
+  'budapest-gambit::1::Nf3@4': C59,
+  'budapest-gambit::1::Qd5@16': C61,
+  'budapest-gambit::1::e3@16': C61,
+  'budapest-gambit::1::e3@10': C61,
+  'budapest-gambit::1::Qc2@10': C61,
+  'budapest-gambit::1::Qf4@16': C61,
+  'budapest-gambit::1::g3@10': C61,
+  'budapest-gambit::2::Nc3@4': C59,
+  'budapest-gambit::2::e3@4': C60,
+  'budapest-gambit::2::Nf3@4': C59,
+  'budapest-gambit::2::e3@20': C59,
+  'budapest-gambit::2::e3@8': C59,
+  'budapest-gambit::2::Qd2@18': C59,
+  'budapest-gambit::2::Qd5@8': C59,
+  'budapest-gambit::2::h3@8': C59,
+  'budapest-gambit::2::e3@14': C59,
+  'budapest-gambit::3::Nc3@4': C59,
+  'budapest-gambit::3::e3@4': C60,
+  'budapest-gambit::3::Nf3@4': C59,
+  'budapest-gambit::3::e3@12': C59,
+  'budapest-gambit::3::axb4@14': C59,
+  'budapest-gambit::3::Bxe5@16': C59,
+  'budapest-gambit::3::e3@8': C59,
+  'budapest-gambit::3::h3@12': C59,
+  'budapest-gambit::3::Qd5@8': C59,
+  'budapest-gambit::4::Nc3@4': C59,
+  'budapest-gambit::4::e3@4': C60,
+  'budapest-gambit::4::Nf3@4': C59,
+  'budapest-gambit::4::Bf4@6': C59,
+  'budapest-gambit::4::Nf3@6': C59,
+  'budapest-gambit::4::e3@6': C59,
+  'budapest-gambit::4::Kf2@14': C62,
+  'budapest-gambit::4::Be3@10': C63,
+  'budapest-gambit::4::Nf3@10': C63,
+  'budapest-gambit::5::Nc3@4': C59,
+  'budapest-gambit::5::e3@4': C60,
+  'budapest-gambit::5::Nf3@4': C59,
+  'budapest-gambit::5::Be2@12': C59,
+  'budapest-gambit::5::a3@18': C59,
+  'budapest-gambit::5::Qd5@14': C59,
+  'budapest-gambit::5::a3@12': C59,
+  'budapest-gambit::5::f4@14': C59,
+  'budapest-gambit::5::a3@14': C59,
+  'budapest-gambit::6::Nc3@4': C59,
+  'budapest-gambit::6::e3@4': C60,
+  'budapest-gambit::6::Nf3@4': C59,
+  'budapest-gambit::6::e3@10': C61,
+  'budapest-gambit::6::a3@10': C61,
+  'budapest-gambit::6::Nb3@10': C61,
+  'budapest-gambit::6::b3@10': C61,
+  'budapest-gambit::6::e4@10': C61,
+  'budapest-gambit::6::Nf3@6': C61,
+  // ── dutch-defence ──
+  'dutch-defence::0::Re1@14': C64,
+  'dutch-defence::0::Nf3@4': C64,
+  'dutch-defence::0::c4@4': C64,
+  'dutch-defence::0::Bg5@14': C65,
+  'dutch-defence::0::b3@14': C64,
+  'dutch-defence::0::Qc2@14': C64,
+  'dutch-defence::0::Qb3@14': C64,
+  'dutch-defence::0::Bf4@14': C64,
+  'dutch-defence::0::e4@14': C64,
+  'dutch-defence::0::Nd4@16': C64,
+  'dutch-defence::1::b3@10': C66,
+  'dutch-defence::1::c4@8': C66,
+  'dutch-defence::1::Bg5@8': C65,
+  'dutch-defence::1::Bg5@10': C65,
+  'dutch-defence::1::Nbd2@10': C66,
+  'dutch-defence::1::Nf3@4': C64,
+  'dutch-defence::1::c3@10': C66,
+  'dutch-defence::1::c3@8': C66,
+  'dutch-defence::1::Ne5@8': C66,
+  'dutch-defence::1::c4@4': C64,
+  'dutch-defence::2::c4@8': C67,
+  'dutch-defence::2::b3@10': C67,
+  'dutch-defence::2::Nf3@4': C64,
+  'dutch-defence::2::c3@10': C67,
+  'dutch-defence::2::c4@4': C64,
+  'dutch-defence::2::Nbd2@10': C67,
+  'dutch-defence::2::Re1@10': C67,
+  'dutch-defence::2::Bg5@8': C65,
+  'dutch-defence::2::Ne5@18': C66,
+  'dutch-defence::2::Bg5@10': C65,
+  'dutch-defence::3::Nf3@8': C65,
+  'dutch-defence::3::h4@8': C65,
+  'dutch-defence::3::Bxf6@8': C65,
+  'dutch-defence::3::Be2@8': C65,
+  'dutch-defence::3::h3@8': C65,
+  'dutch-defence::3::Qd2@8': C65,
+  'dutch-defence::3::Nd2@4': C65,
+  'dutch-defence::3::e3@4': C65,
+  'dutch-defence::3::e4@6': C65,
+  'dutch-defence::4::Nf3@4': C64,
+  'dutch-defence::4::c4@4': C64,
+  'dutch-defence::4::b3@10': C64,
+  'dutch-defence::4::c4@6': C64,
+  'dutch-defence::4::Nh3@6': C68,
+  'dutch-defence::4::c4@8': C64,
+  'dutch-defence::4::c3@6': C64,
+  'dutch-defence::4::b3@6': C64,
+  'dutch-defence::4::b4@10': C64,
+  'dutch-defence::4::Nbd2@10': C64,
+  'dutch-defence::5::c4@8': C67,
+  'dutch-defence::5::b3@10': C67,
+  'dutch-defence::5::Nf3@4': C64,
+  'dutch-defence::5::c3@10': C67,
+  'dutch-defence::5::c4@4': C64,
+  'dutch-defence::5::Nbd2@10': C67,
+  'dutch-defence::5::Re1@10': C67,
+  'dutch-defence::5::Bg5@8': C65,
+  'dutch-defence::5::Bg5@10': C65,
+  'dutch-defence::5::c3@8': C67,
+  'dutch-defence::6::Qd3@18': C64,
+  'dutch-defence::6::b3@10': C64,
+  'dutch-defence::6::Qb3@18': C64,
+  'dutch-defence::6::Bf4@18': C64,
+  'dutch-defence::6::c4@4': C64,
+  'dutch-defence::6::Nd2@18': C64,
+  'dutch-defence::6::Rb1@14': C64,
+  'dutch-defence::6::b3@14': C64,
+  'dutch-defence::6::c4@8': C64,
+  'dutch-defence::6::Ng5@18': C64,
+  // ── catalan-opening ──
+  'catalan-opening::0::c5@5': C69,
+  'catalan-opening::0::a6@9': C69,
+  'catalan-opening::0::Be7@7': C70,
+  'catalan-opening::0::Nbd7@19': C69,
+  'catalan-opening::0::Bb4+@7': C71,
+  'catalan-opening::0::Nc6@9': C69,
+  'catalan-opening::0::c5@9': C69,
+  'catalan-opening::0::Bb4+@9': C71,
+  'catalan-opening::0::b5@13': C69,
+  'catalan-opening::1::dxc4@9': C69,
+  'catalan-opening::1::b6@9': C70,
+  'catalan-opening::1::Nbd7@9': C70,
+  'catalan-opening::1::dxc4@11': C69,
+  'catalan-opening::1::Bb4+@5': C71,
+  'catalan-opening::1::c5@5': C69,
+  'catalan-opening::1::c6@11': C70,
+  'catalan-opening::1::Bb4+@7': C71,
+  'catalan-opening::1::dxc4@7': C69,
+  'catalan-opening::2::c5@5': C69,
+  'catalan-opening::2::Be7@7': C70,
+  'catalan-opening::2::Nc6@11': C69,
+  'catalan-opening::2::Bb4+@7': C71,
+  'catalan-opening::2::Nc6@9': C69,
+  'catalan-opening::2::c5@9': C69,
+  'catalan-opening::2::Bb4+@9': C71,
+  'catalan-opening::2::Ra7@13': C72,
+  'catalan-opening::2::Bd7@9': C69,
+  'catalan-opening::3::dxc4@9': C69,
+  'catalan-opening::3::b6@9': C70,
+  'catalan-opening::3::Nbd7@9': C70,
+  'catalan-opening::3::Bb4+@5': C71,
+  'catalan-opening::3::c5@5': C69,
+  'catalan-opening::3::Nc6@15': C69,
+  'catalan-opening::3::c6@11': C70,
+  'catalan-opening::3::Bb4+@7': C71,
+  'catalan-opening::3::dxc4@7': C69,
+  'catalan-opening::4::e6@5': C69,
+  'catalan-opening::4::Qc7@13': C72,
+  'catalan-opening::4::Qb6@13': C72,
+  'catalan-opening::4::a6@11': C73,
+  'catalan-opening::4::Nd5@13': C72,
+  'catalan-opening::4::Bf5@7': C73,
+  'catalan-opening::4::b4@11': C73,
+  'catalan-opening::4::e6@11': C72,
+  'catalan-opening::4::Qc8@13': C72,
+  'catalan-opening::4::g6@7': C73,
+  'catalan-opening::5::dxc4@9': C69,
+  'catalan-opening::5::b6@9': C70,
+  'catalan-opening::5::Nbd7@9': C70,
+  'catalan-opening::5::dxc4@11': C69,
+  'catalan-opening::5::Bb4+@5': C71,
+  'catalan-opening::5::c5@5': C69,
+  'catalan-opening::5::c6@11': C70,
+  'catalan-opening::5::Bb4+@7': C71,
+  'catalan-opening::5::c5@23': C70,
+  'catalan-opening::6::c5@5': C69,
+  'catalan-opening::6::a6@9': C69,
+  'catalan-opening::6::Be7@7': C70,
+  'catalan-opening::6::Bb4+@7': C71,
+  'catalan-opening::6::Nc6@9': C69,
+  'catalan-opening::6::c5@9': C69,
+  'catalan-opening::6::Bb4+@9': C71,
+  'catalan-opening::6::c6@9': C72,
+  'catalan-opening::6::Nbd7@9': C69,
+  // ── london-system ──
+  'london-system::0::cxd4@9': C74,
+  'london-system::0::Bd6@9': C75,
+  'london-system::0::Be7@11': C75,
+  'london-system::0::c4@9': C75,
+  'london-system::0::cxd4@11': C74,
+  'london-system::0::Be7@9': C75,
+  'london-system::0::Qb6@11': C75,
+  'london-system::0::Qb6@9': C75,
+  'london-system::0::b6@15': C75,
+  'london-system::0::a6@11': C75,
+  'london-system::1::Re8@17': C76,
+  'london-system::1::c5@17': C76,
+  'london-system::1::Ne4@17': C76,
+  'london-system::1::Nh5@17': C76,
+  'london-system::1::e5@17': C76,
+  'london-system::1::Qe8@17': C76,
+  'london-system::1::Rc8@17': C76,
+  'london-system::1::a6@17': C76,
+  'london-system::1::e6@17': C76,
+  'london-system::1::Nd5@17': C76,
+  'london-system::2::cxd4@9': C74,
+  'london-system::2::Bd6@9': C75,
+  'london-system::2::c4@9': C75,
+  'london-system::2::Be7@9': C75,
+  'london-system::2::Qb6@9': C75,
+  'london-system::2::Be7@13': C75,
+  'london-system::2::cxd4@13': C74,
+  'london-system::2::cxd4@11': C74,
+  'london-system::2::Bd6@11': C75,
+  'london-system::3::Nbd7@11': C77,
+  'london-system::3::c6@11': C77,
+  'london-system::3::Nc6@11': C77,
+  'london-system::3::b6@11': C77,
+  'london-system::3::Bg4@11': C77,
+  'london-system::3::Bf5@11': C78,
+  'london-system::3::cxd4@13': C74,
+  'london-system::3::Re8@11': C77,
+  'london-system::3::Nh5@11': C77,
+  'london-system::3::cxd4@15': C74,
+  'london-system::4::Be7@7': C79,
+  'london-system::4::b6@7': C79,
+  'london-system::4::d6@7': C79,
+  'london-system::4::Bd6@7': C79,
+  'london-system::4::Bb4+@7': C79,
+  'london-system::4::Be7@9': C79,
+  'london-system::4::c6@7': C79,
+  'london-system::4::c6@9': C75,
+  'london-system::4::Nc6@7': C79,
+  'london-system::4::c5@9': C75,
+  'london-system::5::Bd6@7': C78,
+  'london-system::5::c5@7': C78,
+  'london-system::5::Nc6@7': C78,
+  'london-system::5::Bb4@11': C78,
+  'london-system::5::a6@7': C78,
+  'london-system::5::h6@7': C78,
+  'london-system::5::Nbd7@11': C78,
+  'london-system::5::c6@7': C78,
+  'london-system::5::Be7@11': C78,
+  'london-system::5::Bd6@9': C78,
+  'london-system::6::c5@7': C75,
+  'london-system::6::b6@15': C75,
+  'london-system::6::Be7@7': C79,
+  'london-system::6::Re8@15': C75,
+  'london-system::6::Bxg3@9': C79,
+  'london-system::6::c5@9': C75,
+  'london-system::6::cxd4@15': C74,
+  'london-system::6::c4@15': C75,
+  'london-system::6::Nc6@7': C79,
+  'london-system::6::a6@15': C75,
+  'london-system::7::d6@5': C75,
+  'london-system::7::d6@9': C76,
+  'london-system::7::Qb6@5': C75,
+  'london-system::7::a6@9': C77,
+  'london-system::7::b4@9': C77,
+  'london-system::7::Qa5+@9': C77,
+  'london-system::7::g6@5': C76,
+  'london-system::7::Qb6@9': C77,
+  'london-system::7::e6@5': C75,
+  'london-system::7::d6@7': C75,
+  // ── trompowsky-attack ──
+  'trompowsky-attack::0::e6@7': C80,
+  'trompowsky-attack::0::Bf5@7': C80,
+  'trompowsky-attack::0::g6@7': C80,
+  'trompowsky-attack::0::g5@7': C80,
+  'trompowsky-attack::0::c6@7': C81,
+  'trompowsky-attack::0::Nc6@7': C80,
+  'trompowsky-attack::0::c5@5': C81,
+  'trompowsky-attack::0::Nd7@7': C80,
+  'trompowsky-attack::0::cxd4@9': C81,
+  'trompowsky-attack::0::Nf6@9': C81,
+  'trompowsky-attack::1::c5@7': C82,
+  'trompowsky-attack::1::c6@7': C82,
+  'trompowsky-attack::1::Nc6@7': C82,
+  'trompowsky-attack::1::Bf5@7': C82,
+  'trompowsky-attack::1::Be7@7': C82,
+  'trompowsky-attack::1::Bb4+@7': C82,
+  'trompowsky-attack::1::g6@7': C82,
+  'trompowsky-attack::1::Be6@7': C82,
+  'trompowsky-attack::1::c6@9': C82,
+  'trompowsky-attack::1::Be6@9': C82,
+  'trompowsky-attack::2::Bb4@9': C83,
+  'trompowsky-attack::2::gxf6@7': C83,
+  'trompowsky-attack::2::c5@9': C83,
+  'trompowsky-attack::2::Nc6@9': C83,
+  'trompowsky-attack::2::d5@9': C83,
+  'trompowsky-attack::2::b6@9': C83,
+  'trompowsky-attack::2::g6@9': C83,
+  'trompowsky-attack::2::e5@9': C83,
+  'trompowsky-attack::2::c5@5': C83,
+  'trompowsky-attack::2::g6@11': C83,
+  'trompowsky-attack::3::g6@13': C84,
+  'trompowsky-attack::3::Bg4@13': C84,
+  'trompowsky-attack::3::Nbd7@13': C84,
+  'trompowsky-attack::3::a6@9': C84,
+  'trompowsky-attack::3::d6@9': C84,
+  'trompowsky-attack::3::e5@11': C84,
+  'trompowsky-attack::3::a6@13': C84,
+  'trompowsky-attack::3::e5@13': C84,
+  'trompowsky-attack::3::e6@9': C84,
+  'trompowsky-attack::3::g6@9': C84,
+  'trompowsky-attack::5::d5@5': C80,
+  'trompowsky-attack::5::g6@9': C81,
+  'trompowsky-attack::5::d6@9': C81,
+  'trompowsky-attack::5::c4@9': C81,
+  'trompowsky-attack::5::d6@5': C80,
+  'trompowsky-attack::5::e6@5': C80,
+  'trompowsky-attack::5::e6@7': C81,
+  'trompowsky-attack::5::d6@13': C81,
+  'trompowsky-attack::5::d6@7': C81,
+  'trompowsky-attack::5::Qa5+@11': C81,
+  'trompowsky-attack::6::Qa5+@7': C81,
+  'trompowsky-attack::6::d6@9': C81,
+  'trompowsky-attack::6::g5@7': C81,
+  'trompowsky-attack::6::d5@5': C80,
+  'trompowsky-attack::6::e6@9': C81,
+  'trompowsky-attack::6::g6@9': C81,
+  'trompowsky-attack::6::e6@11': C81,
+  'trompowsky-attack::6::g6@11': C81,
+  'trompowsky-attack::6::e6@13': C81,
+  'trompowsky-attack::6::d6@5': C80,
+  'trompowsky-attack::7::Nc6@19': C85,
+  'trompowsky-attack::7::Nc6@17': C85,
+  'trompowsky-attack::7::a6@19': C85,
+  'trompowsky-attack::7::Bd7@19': C85,
+  'trompowsky-attack::7::Bb4+@17': C85,
+  'trompowsky-attack::7::Rd8@19': C85,
+  'trompowsky-attack::7::Rg8@19': C85,
+  'trompowsky-attack::7::b6@19': C85,
+  'trompowsky-attack::7::Rg8@17': C85,
+  'trompowsky-attack::7::a6@17': C85,
+  // ── old-indian-defence ──
+  'old-indian-defence::0::d5@14': C86,
+  'old-indian-defence::0::Be3@14': C86,
+  'old-indian-defence::0::Qc2@14': C86,
+  'old-indian-defence::0::Bg5@14': C86,
+  'old-indian-defence::0::Nf3@4': C87,
+  'old-indian-defence::0::h3@12': C86,
+  'old-indian-defence::0::b3@14': C86,
+  'old-indian-defence::0::Be3@12': C86,
+  'old-indian-defence::0::dxe5@14': C86,
+  'old-indian-defence::1::Nf3@4': C87,
+  'old-indian-defence::1::dxe5@10': C88,
+  'old-indian-defence::1::g3@6': C88,
+  'old-indian-defence::1::Nf3@6': C88,
+  'old-indian-defence::1::Be3@10': C88,
+  'old-indian-defence::1::Nge2@10': C88,
+  'old-indian-defence::1::d5@8': C88,
+  'old-indian-defence::1::dxe5@8': C88,
+  'old-indian-defence::1::Bg5@6': C88,
+  'old-indian-defence::1::Qb3@6': C88,
+  'old-indian-defence::2::Nf3@4': C87,
+  'old-indian-defence::2::h3@12': C86,
+  'old-indian-defence::2::Be3@12': C86,
+  'old-indian-defence::2::Nf3@6': C87,
+  'old-indian-defence::2::d5@12': C86,
+  'old-indian-defence::2::d5@8': C89,
+  'old-indian-defence::2::Be3@16': C86,
+  'old-indian-defence::2::Nge2@8': C89,
+  'old-indian-defence::2::g3@6': C90,
+  'old-indian-defence::2::f4@16': C86,
+  'old-indian-defence::3::b3@14': C90,
+  'old-indian-defence::3::dxe5@14': C90,
+  'old-indian-defence::3::Nf3@4': C87,
+  'old-indian-defence::3::Qc2@14': C90,
+  'old-indian-defence::3::e4@8': C89,
+  'old-indian-defence::3::h3@14': C90,
+  'old-indian-defence::3::Bg5@14': C90,
+  'old-indian-defence::3::Re1@14': C90,
+  'old-indian-defence::3::d5@14': C90,
+  'old-indian-defence::3::e3@14': C90,
+  'old-indian-defence::4::Re1@14': C86,
+  'old-indian-defence::4::Be3@14': C86,
+  'old-indian-defence::4::Qc2@14': C86,
+  'old-indian-defence::4::Bg5@14': C86,
+  'old-indian-defence::4::Nf3@4': C87,
+  'old-indian-defence::4::h3@12': C86,
+  'old-indian-defence::4::b3@14': C86,
+  'old-indian-defence::4::h3@16': C86,
+  'old-indian-defence::4::Be3@12': C86,
+  'old-indian-defence::5::Re1@14': C86,
+  'old-indian-defence::5::Be3@14': C86,
+  'old-indian-defence::5::Qc2@14': C86,
+  'old-indian-defence::5::Bg5@14': C86,
+  'old-indian-defence::5::Nf3@4': C87,
+  'old-indian-defence::5::h3@12': C86,
+  'old-indian-defence::5::b3@14': C86,
+  'old-indian-defence::5::Be3@12': C86,
+  'old-indian-defence::5::dxe5@14': C86,
+  'old-indian-defence::6::Re1@14': C86,
+  'old-indian-defence::6::d5@14': C86,
+  'old-indian-defence::6::Be3@14': C86,
+  'old-indian-defence::6::Bg5@14': C86,
+  'old-indian-defence::6::Nf3@4': C87,
+  'old-indian-defence::6::h3@12': C86,
+  'old-indian-defence::6::b3@14': C86,
+  'old-indian-defence::6::Be3@12': C86,
+  'old-indian-defence::6::dxe5@14': C86,
+  // ── english-opening ──
+  'english-opening::0::Bd6@13': C91,
+  'english-opening::0::Bb4@7': C92,
+  'english-opening::0::f5@19': C91,
+  'english-opening::0::Nd5@19': C91,
+  'english-opening::0::Bc5@7': C92,
+  'english-opening::0::Bc5@11': C91,
+  'english-opening::0::Nd4@7': C92,
+  'english-opening::0::Qd7@19': C91,
+  'english-opening::0::Re8@17': C91,
+  'english-opening::1::Bg4@17': C93,
+  'english-opening::1::b5@19': C93,
+  'english-opening::1::d6@9': C93,
+  'english-opening::1::e6@9': C93,
+  'english-opening::1::Qc7@17': C93,
+  'english-opening::1::e5@17': C92,
+  'english-opening::1::e5@9': C93,
+  'english-opening::1::b6@19': C93,
+  'english-opening::1::e6@17': C93,
+  'english-opening::2::Re8@11': C92,
+  'english-opening::2::Bxc3@11': C92,
+  'english-opening::2::d5@11': C91,
+  'english-opening::2::d5@7': C91,
+  'english-opening::2::h6@11': C92,
+  'english-opening::2::a6@11': C92,
+  'english-opening::2::Bc5@7': C92,
+  'english-opening::2::Nd4@7': C92,
+  'english-opening::2::d6@5': C92,
+  'english-opening::3::Bc5@5': C92,
+  'english-opening::3::h6@15': C94,
+  'english-opening::3::Nf6@5': C92,
+  'english-opening::3::Ne7@17': C94,
+  'english-opening::3::Be6@17': C94,
+  'english-opening::3::d6@5': C92,
+  'english-opening::3::Be6@15': C94,
+  'english-opening::3::h6@17': C94,
+  'english-opening::3::fxe4@15': C94,
+  'english-opening::4::e6@9': C93,
+  'english-opening::4::e5@9': C93,
+  'english-opening::4::Nh6@9': C93,
+  'english-opening::4::d6@11': C93,
+  'english-opening::4::d5@13': C93,
+  'english-opening::4::a6@13': C93,
+  'english-opening::4::Nf6@5': C93,
+  'english-opening::4::d5@11': C93,
+  'english-opening::4::Bd7@15': C93,
+  'english-opening::5::c5@13': C95,
+  'english-opening::5::b6@13': C95,
+  'english-opening::5::gxf6@11': C95,
+  'english-opening::5::Be7@13': C95,
+  'english-opening::5::Nc6@13': C95,
+  'english-opening::5::c5@5': C95,
+  'english-opening::5::h6@13': C95,
+  'english-opening::5::Bd6@13': C95,
+  'english-opening::5::Nc6@15': C95,
+  'english-opening::5::e4@15': C95,
+  'english-opening::6::a5@19': C91,
+  'english-opening::6::a6@19': C91,
+  'english-opening::6::Bd6@13': C91,
+  'english-opening::6::Bb4@7': C92,
+  'english-opening::6::a6@17': C91,
+  'english-opening::6::Nd4@19': C91,
+  'english-opening::6::f6@17': C91,
+  'english-opening::6::Re8@17': C91,
+  'english-opening::6::Bc5@7': C92,
+  'english-opening::7::Bg4@17': C93,
+  'english-opening::7::b5@19': C93,
+  'english-opening::7::d6@9': C93,
+  'english-opening::7::e6@9': C93,
+  'english-opening::7::Qc7@17': C93,
+  'english-opening::7::e5@17': C92,
+  'english-opening::7::e5@9': C93,
+  'english-opening::7::b6@19': C93,
+  'english-opening::7::e6@17': C93,
+  // ── reti-opening ──
+  'reti-opening::0::d4@13': C96,
+  'reti-opening::0::Bc5@13': C96,
+  'reti-opening::0::Be7@15': C96,
+  'reti-opening::0::Be7@13': C96,
+  'reti-opening::0::Qc7@15': C96,
+  'reti-opening::0::e6@9': C97,
+  'reti-opening::0::Bd6@15': C96,
+  'reti-opening::0::e6@11': C97,
+  'reti-opening::0::Nc5@15': C96,
+  'reti-opening::1::dxc4@13': C98,
+  'reti-opening::1::b6@13': C97,
+  'reti-opening::1::a6@13': C97,
+  'reti-opening::1::c6@9': C97,
+  'reti-opening::1::h6@13': C97,
+  'reti-opening::1::Nxe4@19': C97,
+  'reti-opening::1::Re8@13': C97,
+  'reti-opening::1::dxc4@11': C98,
+  'reti-opening::1::Ne4@13': C97,
+  'reti-opening::1::dxc4@9': C98,
+  'reti-opening::2::Be7@9': C98,
+  'reti-opening::2::Bd6@9': C98,
+  'reti-opening::2::Nc6@9': C98,
+  'reti-opening::2::Bc5@9': C98,
+  'reti-opening::2::a6@9': C98,
+  'reti-opening::2::b6@9': C98,
+  'reti-opening::2::c6@9': C98,
+  'reti-opening::2::Qxd1@13': C99,
+  'reti-opening::2::Nc6@11': C98,
+  'reti-opening::2::Nc6@15': C98,
+  'reti-opening::3::dxe4@13': C96,
+  'reti-opening::3::c6@5': C100,
+  'reti-opening::3::d4@13': C96,
+  'reti-opening::3::b6@13': C96,
+  'reti-opening::3::c5@5': C97,
+  'reti-opening::3::Bb7@19': C96,
+  'reti-opening::3::Qc7@19': C96,
+  'reti-opening::3::g6@5': C97,
+  'reti-opening::3::b5@13': C96,
+  'reti-opening::3::Bf5@5': C97,
+  'reti-opening::4::c6@9': C97,
+  'reti-opening::4::dxc4@9': C98,
+  'reti-opening::4::dxc4@7': C98,
+  'reti-opening::4::d4@7': C97,
+  'reti-opening::4::b6@11': C97,
+  'reti-opening::4::dxc4@5': C98,
+  'reti-opening::4::cxd4@19': C97,
+  'reti-opening::4::c5@7': C97,
+  'reti-opening::4::dxc4@19': C98,
+  'reti-opening::4::d4@11': C97,
+  'reti-opening::5::Nf6@11': C99,
+  'reti-opening::5::c6@11': C99,
+  'reti-opening::5::Bf5@11': C99,
+  'reti-opening::5::Bb4@13': C99,
+  'reti-opening::5::Bg4@11': C99,
+  'reti-opening::5::Nf6@13': C99,
+  'reti-opening::5::Bg4@7': C101,
+  'reti-opening::5::e6@11': C99,
+  'reti-opening::5::Be6@11': C99,
+  'reti-opening::5::a6@11': C99,
+  'reti-opening::6::Rc8@17': C97,
+  'reti-opening::6::h6@13': C97,
+  'reti-opening::6::h6@15': C97,
+  'reti-opening::6::Rc8@19': C97,
+  'reti-opening::6::a5@17': C97,
+  'reti-opening::6::Re8@17': C97,
+  'reti-opening::6::dxc4@7': C98,
+  'reti-opening::6::a5@19': C97,
+  'reti-opening::6::Qc7@17': C97,
+  'reti-opening::7::c5@5': C101,
+  'reti-opening::7::f6@5': C101,
+  'reti-opening::7::c6@15': C101,
+  'reti-opening::7::Bg4@5': C101,
+  'reti-opening::7::Bg4@11': C101,
+  'reti-opening::7::g5@5': C101,
+  'reti-opening::7::a5@15': C101,
+  'reti-opening::7::Nf6@5': C101,
+  'reti-opening::7::b6@11': C101,
+  'reti-opening::7::b6@9': C101,
+  // ── kings-indian-attack ──
+  'kings-indian-attack::0::O-O@13': C102,
+  'kings-indian-attack::0::Bc5@9': C102,
+  'kings-indian-attack::0::Bb4@11': C102,
+  'kings-indian-attack::0::e5@9': C102,
+  'kings-indian-attack::0::Be7@11': C102,
+  'kings-indian-attack::0::c5@5': C102,
+  'kings-indian-attack::0::Be7@9': C102,
+  'kings-indian-attack::0::Ng4@13': C102,
+  'kings-indian-attack::0::Bd6@9': C102,
+  'kings-indian-attack::1::Nf6@9': C103,
+  'kings-indian-attack::1::e6@9': C104,
+  'kings-indian-attack::1::e6@11': C104,
+  'kings-indian-attack::1::Bg4@11': C103,
+  'kings-indian-attack::1::e5@11': C103,
+  'kings-indian-attack::1::d5@9': C103,
+  'kings-indian-attack::1::e5@9': C103,
+  'kings-indian-attack::1::Bg4@13': C103,
+  'kings-indian-attack::1::Bd7@11': C103,
+  'kings-indian-attack::1::a6@15': C103,
+  'kings-indian-attack::2::Bg4@7': C105,
+  'kings-indian-attack::2::Nd7@7': C105,
+  'kings-indian-attack::2::Bg4@9': C105,
+  'kings-indian-attack::2::Bg4@13': C105,
+  'kings-indian-attack::2::Ne7@9': C105,
+  'kings-indian-attack::2::Bg4@11': C105,
+  'kings-indian-attack::2::f6@7': C105,
+  'kings-indian-attack::2::Qc7@7': C105,
+  'kings-indian-attack::2::Nf6@7': C105,
+  'kings-indian-attack::2::f5@9': C105,
+  'kings-indian-attack::3::Bd6@11': C104,
+  'kings-indian-attack::3::Be6@11': C104,
+  'kings-indian-attack::3::Bg4@11': C104,
+  'kings-indian-attack::3::O-O@13': C104,
+  'kings-indian-attack::3::h6@11': C104,
+  'kings-indian-attack::3::e4@11': C104,
+  'kings-indian-attack::3::dxe4@13': C104,
+  'kings-indian-attack::3::Bf5@11': C104,
+  'kings-indian-attack::3::Be6@13': C104,
+  'kings-indian-attack::3::Bg4@13': C104,
+  'kings-indian-attack::4::c5@5': C102,
+  'kings-indian-attack::4::b6@7': C102,
+  'kings-indian-attack::4::Nc6@7': C102,
+  'kings-indian-attack::4::b6@13': C102,
+  'kings-indian-attack::4::Qc7@15': C102,
+  'kings-indian-attack::4::Qc7@13': C102,
+  'kings-indian-attack::4::Be7@7': C102,
+  'kings-indian-attack::4::Nc6@5': C102,
+  'kings-indian-attack::4::g6@11': C102,
+  'kings-indian-attack::4::Bc5@7': C102,
+  'kings-indian-attack::5::Qc7@19': C106,
+  'kings-indian-attack::5::b5@15': C102,
+  'kings-indian-attack::5::f6@19': C106,
+  'kings-indian-attack::5::b6@13': C102,
+  'kings-indian-attack::5::Nf6@5': C104,
+  'kings-indian-attack::5::Qc7@15': C102,
+  'kings-indian-attack::5::Ba6@19': C106,
+  'kings-indian-attack::5::e5@7': C104,
+  'kings-indian-attack::5::Qc7@13': C102,
+  'kings-indian-attack::5::d4@19': C106,
+  'kings-indian-attack::6::Nbd7@11': C103,
+  'kings-indian-attack::6::c5@11': C104,
+  'kings-indian-attack::6::Nc6@11': C103,
+  'kings-indian-attack::6::c6@11': C103,
+  'kings-indian-attack::6::Nbd7@13': C103,
+  'kings-indian-attack::6::c6@13': C105,
+  'kings-indian-attack::6::Bg4@13': C103,
+  'kings-indian-attack::6::Bg4@11': C103,
+  'kings-indian-attack::6::c5@13': C104,
+  'kings-indian-attack::6::Be6@13': C103,
+  'kings-indian-attack::7::e5@13': C102,
+  'kings-indian-attack::7::Bc5@9': C102,
+  'kings-indian-attack::7::Bb4@11': C102,
+  'kings-indian-attack::7::e5@9': C102,
+  'kings-indian-attack::7::Be7@11': C102,
+  'kings-indian-attack::7::c5@5': C102,
+  'kings-indian-attack::7::Be7@9': C102,
+  'kings-indian-attack::7::Ng4@13': C102,
+  'kings-indian-attack::7::Bd6@9': C102,
+  // ── birds-opening ──
+  'birds-opening::0::c5@7': C107,
+  'birds-opening::0::c6@7': C107,
+  'birds-opening::0::c6@11': C107,
+  'birds-opening::0::c5@9': C107,
+  'birds-opening::0::a6@15': C107,
+  'birds-opening::0::Nh6@7': C107,
+  'birds-opening::0::e6@7': C107,
+  'birds-opening::0::b6@11': C107,
+  'birds-opening::0::c6@9': C107,
+  'birds-opening::0::Nc6@7': C107,
+  'birds-opening::1::f6@11': C108,
+  'birds-opening::1::Nc6@11': C108,
+  'birds-opening::1::Nge7@17': C108,
+  'birds-opening::1::Qh4+@11': C108,
+  'birds-opening::1::Be6@17': C108,
+  'birds-opening::1::Nd7@11': C108,
+  'birds-opening::1::Ne7@11': C108,
+  'birds-opening::1::Bf5@15': C108,
+  'birds-opening::1::Be6@15': C108,
+  'birds-opening::1::Ne7@15': C108,
+  'birds-opening::2::c5@9': C109,
+  'birds-opening::2::Bg4@9': C109,
+  'birds-opening::2::Bg4@11': C109,
+  'birds-opening::2::c6@11': C109,
+  'birds-opening::2::Nc6@11': C109,
+  'birds-opening::2::b6@11': C109,
+  'birds-opening::2::Nc6@9': C109,
+  'birds-opening::2::b6@13': C109,
+  'birds-opening::2::Nbd7@11': C109,
+  'birds-opening::2::Bf5@15': C109,
+  'birds-opening::3::Be7@7': C109,
+  'birds-opening::3::Bd6@7': C109,
+  'birds-opening::3::Be7@11': C110,
+  'birds-opening::3::cxd4@9': C109,
+  'birds-opening::3::Nc6@7': C109,
+  'birds-opening::3::Ne4@7': C109,
+  'birds-opening::3::cxd4@11': C109,
+  'birds-opening::3::c4@11': C109,
+  'birds-opening::3::Nbd7@7': C109,
+  'birds-opening::3::Bb4+@7': C109,
+  'birds-opening::4::Nf6@5': C111,
+  'birds-opening::4::e6@9': C111,
+  'birds-opening::4::e3@5': C111,
+  'birds-opening::4::d6@9': C111,
+  'birds-opening::4::d5@5': C111,
+  'birds-opening::4::g6@7': C111,
+  'birds-opening::4::Nc6@7': C111,
+  'birds-opening::4::e6@7': C111,
+  'birds-opening::4::Nc6@9': C111,
+  'birds-opening::4::g6@9': C111,
+  'birds-opening::5::c5@9': C109,
+  'birds-opening::5::Bg4@9': C109,
+  'birds-opening::5::Bg4@11': C109,
+  'birds-opening::5::Qc7@15': C109,
+  'birds-opening::5::c6@11': C109,
+  'birds-opening::5::Nc6@11': C109,
+  'birds-opening::5::b6@11': C109,
+  'birds-opening::5::Nc6@9': C109,
+  'birds-opening::5::b6@13': C109,
+  'birds-opening::5::d4@15': C109,
+  'birds-opening::6::Nbd7@9': C109,
+  'birds-opening::6::c5@9': C109,
+  'birds-opening::6::h6@9': C109,
+  'birds-opening::6::Bd6@9': C109,
+  'birds-opening::6::Nc6@9': C109,
+  'birds-opening::6::c6@9': C109,
+  'birds-opening::6::c5@13': C110,
+  'birds-opening::6::Bc5@9': C109,
+  'birds-opening::6::Bb4@9': C109,
+  'birds-opening::6::Nc6@7': C109,
+  // ── albin-countergambit ──
+  'albin-countergambit::0::Nbd2@14': C112,
+  'albin-countergambit::0::a3@14': C112,
+  'albin-countergambit::0::Qa4@14': C112,
+  'albin-countergambit::0::Bf4@14': C112,
+  'albin-countergambit::0::Bg5@14': C112,
+  'albin-countergambit::0::b3@14': C112,
+  'albin-countergambit::0::Re1@14': C112,
+  'albin-countergambit::0::a3@8': C112,
+  'albin-countergambit::0::Nbd2@8': C112,
+  'albin-countergambit::0::e3@4': C112,
+  'albin-countergambit::1::fxe3@10': C113,
+  'albin-countergambit::1::Qa4+@10': C113,
+  'albin-countergambit::1::Nd2@8': C113,
+  'albin-countergambit::1::Kxf2@12': C114,
+  'albin-countergambit::1::Ke2@8': C113,
+  'albin-countergambit::1::Nf3@6': C112,
+  'albin-countergambit::1::e3@4': C112,
+  'albin-countergambit::1::a3@6': C112,
+  'albin-countergambit::1::e4@6': C115,
+  'albin-countergambit::2::Nf3@8': C115,
+  'albin-countergambit::2::e5@12': C115,
+  'albin-countergambit::2::Bf4@8': C115,
+  'albin-countergambit::2::Nf3@10': C115,
+  'albin-countergambit::2::Bd3@8': C115,
+  'albin-countergambit::2::Nf3@6': C112,
+  'albin-countergambit::2::e6@10': C115,
+  'albin-countergambit::2::e3@4': C112,
+  'albin-countergambit::2::a3@6': C112,
+  // ── englund-gambit ──
+  'englund-gambit::0::Nc3@10': C116,
+  'englund-gambit::0::Nc3@8': C117,
+  'englund-gambit::0::Nbd2@8': C117,
+  'englund-gambit::0::Bxb4@12': C118,
+  'englund-gambit::0::Qd2@8': C117,
+  'englund-gambit::0::c3@8': C117,
+  'englund-gambit::0::Qd3@12': C118,
+  'englund-gambit::0::Nfd2@12': C118,
+  'englund-gambit::0::Nxc3@14': C118,
+  'englund-gambit::0::Nbd2@12': C118,
+  // ── anti-benoni-push ──
+  'anti-benoni-push::0::d6@13': C119,
+  'anti-benoni-push::0::e6@5': C120,
+  'anti-benoni-push::0::Bg7@13': C119,
+  'anti-benoni-push::0::g6@5': C121,
+  'anti-benoni-push::0::e5@5': C122,
+  'anti-benoni-push::0::Bxa6@9': C119,
+  'anti-benoni-push::0::d6@5': C121,
+  'anti-benoni-push::0::Bg7@11': C119,
+  'anti-benoni-push::0::e6@9': C119,
+  'anti-benoni-push::1::Be7@11': C120,
+  'anti-benoni-push::1::d6@7': C120,
+  'anti-benoni-push::1::a6@11': C120,
+  'anti-benoni-push::1::Nbd7@11': C120,
+  'anti-benoni-push::1::a6@7': C120,
+  'anti-benoni-push::1::Bg4@11': C120,
+  'anti-benoni-push::1::Be7@7': C120,
+  'anti-benoni-push::1::Qa5@11': C120,
+  'anti-benoni-push::1::b5@5': C119,
+  'anti-benoni-push::1::g6@5': C121,
+  'anti-benoni-push::2::b5@5': C119,
+  'anti-benoni-push::2::e6@5': C120,
+  'anti-benoni-push::2::e5@5': C122,
+  'anti-benoni-push::2::d6@5': C121,
+  'anti-benoni-push::2::d6@7': C121,
+  'anti-benoni-push::2::O-O@9': C121,
+  'anti-benoni-push::2::d6@9': C121,
+  'anti-benoni-push::2::e6@9': C120,
+  'anti-benoni-push::2::a6@9': C121,
+  'anti-benoni-push::2::Qa5@9': C121,
+  'anti-benoni-push::3::b5@5': C119,
+  'anti-benoni-push::3::e6@5': C120,
+  'anti-benoni-push::3::Bd6@7': C122,
+  'anti-benoni-push::3::a6@7': C122,
+  'anti-benoni-push::3::g6@5': C121,
+  'anti-benoni-push::3::d6@5': C121,
+  'anti-benoni-push::3::O-O@11': C122,
+  'anti-benoni-push::3::Nbd7@9': C122,
+  'anti-benoni-push::3::g6@9': C122,
+  'anti-benoni-push::3::Nbd7@11': C122,
+  // ── anti-englund ──
+  'anti-englund::0::Nxf3+@9': C123,
+  'anti-englund::0::Nf6@9': C123,
+  'anti-englund::0::d6@9': C124,
+  'anti-englund::0::Nc6@9': C123,
+  'anti-englund::0::Nf6@11': C123,
+  'anti-englund::0::d6@11': C124,
+  'anti-englund::0::d5@11': C123,
+  'anti-englund::0::Nxf3+@11': C123,
+  'anti-englund::0::g6@11': C123,
+  'anti-englund::0::h6@11': C123,
+  'anti-englund::1::f6@7': C124,
+  'anti-englund::1::Be7@7': C124,
+  'anti-englund::1::Nge7@7': C124,
+  'anti-englund::1::Qe7@5': C123,
+  'anti-englund::1::h6@9': C124,
+  'anti-englund::1::dxe5@9': C124,
+  'anti-englund::1::Nge7@5': C125,
+  'anti-englund::1::f6@5': C124,
+  'anti-englund::1::Qf5@9': C124,
+  'anti-englund::1::Nxe5@9': C124,
+  // ── anti-kid-saemisch ──
+  'anti-kid-saemisch::0::d5@5': C126,
+  'anti-kid-saemisch::0::O-O@7': C127,
+  'anti-kid-saemisch::0::Nc6@11': C128,
+  'anti-kid-saemisch::0::e5@11': C129,
+  'anti-kid-saemisch::0::a6@11': C127,
+  'anti-kid-saemisch::0::Nbd7@11': C127,
+  'anti-kid-saemisch::0::b6@11': C127,
+  'anti-kid-saemisch::0::c6@11': C127,
+  'anti-kid-saemisch::0::c6@9': C127,
+  'anti-kid-saemisch::0::a6@9': C127,
+  'anti-kid-saemisch::1::d5@5': C126,
+  'anti-kid-saemisch::1::O-O@7': C127,
+  'anti-kid-saemisch::1::c5@11': C126,
+  'anti-kid-saemisch::1::e5@11': C129,
+  'anti-kid-saemisch::1::a6@11': C127,
+  'anti-kid-saemisch::1::Nbd7@11': C127,
+  'anti-kid-saemisch::1::b6@11': C127,
+  'anti-kid-saemisch::1::c6@11': C127,
+  'anti-kid-saemisch::1::c6@9': C127,
+  'anti-kid-saemisch::1::a6@9': C127,
+  'anti-kid-saemisch::2::d5@5': C126,
+  'anti-kid-saemisch::2::O-O@7': C127,
+  'anti-kid-saemisch::2::c5@11': C126,
+  'anti-kid-saemisch::2::Nc6@11': C128,
+  'anti-kid-saemisch::2::a6@11': C127,
+  'anti-kid-saemisch::2::Nbd7@11': C127,
+  'anti-kid-saemisch::2::b6@11': C127,
+  'anti-kid-saemisch::2::c6@11': C127,
+  'anti-kid-saemisch::2::c6@9': C127,
+  'anti-kid-saemisch::2::a6@9': C127,
+  'anti-kid-saemisch::3::d5@5': C126,
+  'anti-kid-saemisch::3::O-O@7': C127,
+  'anti-kid-saemisch::3::c5@11': C126,
+  'anti-kid-saemisch::3::Nc6@11': C128,
+  'anti-kid-saemisch::3::e5@11': C129,
+  'anti-kid-saemisch::3::Nbd7@11': C127,
+  'anti-kid-saemisch::3::b6@11': C127,
+  'anti-kid-saemisch::3::c6@11': C127,
+  'anti-kid-saemisch::3::c6@9': C127,
+  'anti-kid-saemisch::3::a6@9': C127,
+  'anti-kid-saemisch::4::d5@5': C126,
+  'anti-kid-saemisch::4::O-O@7': C127,
+  'anti-kid-saemisch::4::c5@11': C126,
+  'anti-kid-saemisch::4::Nc6@11': C128,
+  'anti-kid-saemisch::4::e5@11': C129,
+  'anti-kid-saemisch::4::a6@11': C127,
+  'anti-kid-saemisch::4::b6@11': C127,
+  'anti-kid-saemisch::4::c6@11': C127,
+  'anti-kid-saemisch::4::c6@9': C127,
+  'anti-kid-saemisch::4::a6@9': C127,
+  // ── anti-grunfeld-exchange ──
+  'anti-grunfeld-exchange::0::Bg7@5': C130,
+  'anti-grunfeld-exchange::0::O-O@13': C131,
+  'anti-grunfeld-exchange::0::c5@11': C131,
+  'anti-grunfeld-exchange::1::Bg7@5': C130,
+  'anti-grunfeld-exchange::1::c5@13': C131,
+  'anti-grunfeld-exchange::1::c5@11': C131,
+  // ── anti-nimzo-qc2 ──
+  'anti-nimzo-qc2::0::d5@5': C132,
+  'anti-nimzo-qc2::0::d5@7': C132,
+  'anti-nimzo-qc2::0::c5@7': C133,
+  'anti-nimzo-qc2::0::c5@5': C132,
+  'anti-nimzo-qc2::0::d6@7': C134,
+  'anti-nimzo-qc2::0::Nc6@7': C134,
+  'anti-nimzo-qc2::0::b6@7': C133,
+  'anti-nimzo-qc2::1::O-O@7': C135,
+  'anti-nimzo-qc2::1::d5@5': C132,
+  'anti-nimzo-qc2::1::c5@7': C133,
+  'anti-nimzo-qc2::1::c5@5': C132,
+  'anti-nimzo-qc2::1::d6@7': C134,
+  'anti-nimzo-qc2::1::Nc6@7': C134,
+  'anti-nimzo-qc2::1::Qxd5@9': C132,
+  'anti-nimzo-qc2::1::b6@7': C133,
+  'anti-nimzo-qc2::2::O-O@7': C135,
+  'anti-nimzo-qc2::2::d5@5': C132,
+  'anti-nimzo-qc2::2::d5@7': C132,
+  'anti-nimzo-qc2::2::c5@5': C132,
+  'anti-nimzo-qc2::2::d6@7': C134,
+  'anti-nimzo-qc2::2::Nc6@7': C134,
+  'anti-nimzo-qc2::2::Bxc5@9': C133,
+  'anti-nimzo-qc2::2::Na6@9': C133,
+  'anti-nimzo-qc2::2::b6@7': C133,
+  'anti-nimzo-qc2::2::Qc7@9': C133,
+  // ── anti-qid-fianchetto ──
+  'anti-qid-fianchetto::0::d5@5': C136,
+  'anti-qid-fianchetto::0::Bb4+@5': C137,
+  'anti-qid-fianchetto::0::c5@5': C136,
+  'anti-qid-fianchetto::0::Bb7@7': C138,
+  'anti-qid-fianchetto::0::Bb4+@7': C137,
+  'anti-qid-fianchetto::0::Bb7@9': C139,
+  'anti-qid-fianchetto::0::d5@9': C139,
+  'anti-qid-fianchetto::0::b5@9': C139,
+  'anti-qid-fianchetto::1::d5@5': C136,
+  'anti-qid-fianchetto::1::Bb4+@5': C137,
+  'anti-qid-fianchetto::1::Ba6@7': C139,
+  'anti-qid-fianchetto::1::c5@5': C136,
+  'anti-qid-fianchetto::1::Bb4+@7': C137,
+  // ── anti-dutch-staunton ──
+  'anti-dutch-staunton::0::d5@5': C140,
+  'anti-dutch-staunton::0::g6@7': C141,
+  'anti-dutch-staunton::0::c6@7': C142,
+  'anti-dutch-staunton::0::e6@7': C142,
+  'anti-dutch-staunton::1::d5@5': C140,
+  'anti-dutch-staunton::1::Nc6@7': C142,
+  'anti-dutch-staunton::1::c6@7': C142,
+  'anti-dutch-staunton::1::e6@7': C142,
+  'anti-dutch-staunton::1::exf3@9': C142,
+  'anti-dutch-staunton::1::dxe4@11': C141,
+  'anti-dutch-staunton::1::e3@9': C142,
+  'anti-dutch-staunton::2::d5@5': C140,
+  'anti-dutch-staunton::2::Nc6@7': C142,
+  'anti-dutch-staunton::2::g6@7': C141,
+  'anti-dutch-staunton::2::exf3@11': C142,
+  'anti-dutch-staunton::2::d5@11': C141,
+  'anti-dutch-staunton::2::e6@7': C142,
+  'anti-dutch-staunton::2::d5@9': C141,
+  'anti-dutch-staunton::2::e3@11': C142,
+  'anti-dutch-staunton::2::exf3@9': C141,
+  'anti-dutch-staunton::2::e3@9': C141,
+  // ── anti-qgd-exchange ──
+  'anti-qgd-exchange::0::c6@7': C143,
+  'anti-qgd-exchange::0::Qxd5@5': C144,
+  'anti-qgd-exchange::0::Bb4@7': C143,
+  'anti-qgd-exchange::0::c5@7': C143,
+  'anti-qgd-exchange::0::Be6@7': C145,
+  'anti-qgd-exchange::0::Nf6@5': C145,
+  'anti-qgd-exchange::0::Nc6@7': C145,
+  'anti-qgd-exchange::0::Be7@9': C145,
+  'anti-qgd-exchange::0::h6@11': C143,
+  'anti-qgd-exchange::0::Bf5@11': C145,
+  'anti-qgd-exchange::1::c6@7': C143,
+  'anti-qgd-exchange::1::Qxd5@5': C144,
+  'anti-qgd-exchange::1::Bb4@7': C143,
+  'anti-qgd-exchange::1::c5@7': C143,
+  'anti-qgd-exchange::1::Be6@7': C145,
+  'anti-qgd-exchange::1::Nf6@5': C145,
+  'anti-qgd-exchange::1::Nc6@7': C145,
+  'anti-qgd-exchange::1::c6@9': C145,
+  'anti-qgd-exchange::1::Bb4@9': C145,
+  'anti-qgd-exchange::1::Nbd7@9': C145,
+  // ── anti-budapest ──
+  'anti-budapest::0::Ne4@5': C146,
+  'anti-budapest::0::g5@7': C147,
+  'anti-budapest::0::Bb4+@7': C147,
+  'anti-budapest::1::Nc6@7': C147,
+  'anti-budapest::1::Ne4@5': C146,
+  'anti-budapest::1::Bb4+@7': C147,
+  'anti-budapest::1::Nc6@9': C147,
+  'anti-budapest::2::Nc6@7': C147,
+  'anti-budapest::2::Ne4@5': C146,
+  'anti-budapest::2::g5@7': C147,
+  // ── anti-london-black ──
+  'anti-london-black::0::Nf3@8': C148,
+  'anti-london-black::0::Nd2@8': C148,
+  'anti-london-black::0::b3@8': C148,
+  'anti-london-black::0::Be2@8': C148,
+  'anti-london-black::0::h3@8': C148,
+  'anti-london-black::0::a4@8': C148,
+  'anti-london-black::0::Nf3@6': C148,
+  'anti-london-black::0::e4@4': C149,
+  'anti-london-black::0::Nc3@6': C148,
+  'anti-london-black::0::c3@4': C148,
+  'anti-london-black::1::c3@8': C148,
+  'anti-london-black::1::b3@8': C148,
+  'anti-london-black::1::Nc3@8': C148,
+  'anti-london-black::1::Be2@8': C148,
+  'anti-london-black::1::Nbd2@8': C148,
+  'anti-london-black::1::c3@6': C148,
+  'anti-london-black::1::e4@4': C149,
+  'anti-london-black::1::Nc3@6': C148,
+  'anti-london-black::1::c3@4': C148,
+  'anti-london-black::1::Nc3@4': C148,
+  // ── anti-catalan-black ──
+  'anti-catalan-black::0::Nf3@4': C150,
+  'anti-catalan-black::0::Nc3@4': C151,
+  'anti-catalan-black::0::Nf3@6': C152,
+  'anti-catalan-black::0::Ne5@10': C152,
+  'anti-catalan-black::0::Qa4+@8': C153,
+  'anti-catalan-black::0::a4@10': C150,
+  'anti-catalan-black::1::Nf3@4': C150,
+  'anti-catalan-black::1::Nc3@4': C151,
+  'anti-catalan-black::1::Nf3@6': C152,
+  'anti-catalan-black::1::Nf3@8': C150,
+  'anti-catalan-black::1::Nf3@10': C153,
+  'anti-catalan-black::1::Nd2@10': C153,
+  'anti-catalan-black::1::Be3@12': C153,
+  'anti-catalan-black::1::Qd3@12': C153,
+  'anti-catalan-black::1::Nf3@12': C153,
+  'anti-catalan-black::1::Nc3@10': C153,
+  // ── anti-colle-black ──
+  'anti-colle-black::0::c4@4': C154,
+  'anti-colle-black::0::Bf4@4': C155,
+  'anti-colle-black::0::g3@4': C156,
+  'anti-colle-black::0::Bg5@4': C155,
+  'anti-colle-black::0::c3@6': C157,
+  'anti-colle-black::0::dxc5@6': C158,
+  'anti-colle-black::0::Nbd2@6': C156,
+  'anti-colle-black::0::b3@6': C154,
+  'anti-colle-black::0::Be2@6': C157,
+  'anti-colle-black::0::Bd3@6': C157,
+  'anti-colle-black::1::c4@4': C154,
+  'anti-colle-black::1::Bf4@4': C155,
+  'anti-colle-black::1::g3@4': C156,
+  'anti-colle-black::1::Bg5@4': C155,
+  'anti-colle-black::1::c4@6': C154,
+  'anti-colle-black::1::dxc5@6': C158,
+  'anti-colle-black::1::Nbd2@6': C156,
+  'anti-colle-black::1::b3@6': C154,
+  'anti-colle-black::1::Be2@6': C157,
+  'anti-colle-black::1::Nbd2@8': C154,
+  'anti-colle-black::2::c4@4': C154,
+  'anti-colle-black::2::b4@8': C158,
+  'anti-colle-black::2::Bf4@4': C155,
+  'anti-colle-black::2::Bb5+@8': C158,
+  'anti-colle-black::2::c4@8': C154,
+  'anti-colle-black::2::Nc3@8': C158,
+  'anti-colle-black::2::Be2@8': C158,
+  'anti-colle-black::2::g3@4': C156,
+  'anti-colle-black::2::Bd3@8': C158,
+  'anti-colle-black::2::c3@8': C158,
+  'anti-colle-black::3::c4@4': C154,
+  'anti-colle-black::3::Bf4@4': C155,
+  'anti-colle-black::3::exd4@8': C156,
+  'anti-colle-black::3::g3@4': C156,
+  'anti-colle-black::3::Nxd4@8': C156,
+  'anti-colle-black::3::Bg5@4': C155,
+  'anti-colle-black::3::c4@6': C154,
+  'anti-colle-black::3::c3@6': C157,
+  'anti-colle-black::3::dxc5@6': C158,
+  'anti-colle-black::3::b3@6': C154,
+  'anti-colle-black::4::Bb2@8': C156,
+  'anti-colle-black::4::c4@4': C154,
+  'anti-colle-black::4::Bd3@8': C156,
+  'anti-colle-black::4::Bf4@4': C155,
+  'anti-colle-black::4::g3@4': C156,
+  'anti-colle-black::4::Bg5@4': C155,
+  'anti-colle-black::4::c4@6': C154,
+  'anti-colle-black::4::c3@6': C157,
+  'anti-colle-black::4::dxc5@6': C158,
+  'anti-colle-black::4::Nbd2@6': C156,
+  'anti-colle-black::5::c4@4': C154,
+  'anti-colle-black::5::Bf4@4': C155,
+  'anti-colle-black::5::g3@4': C156,
+  'anti-colle-black::5::Bg5@4': C155,
+  'anti-colle-black::5::c4@6': C154,
+  'anti-colle-black::5::c3@6': C157,
+  'anti-colle-black::5::dxc5@6': C158,
+  'anti-colle-black::5::Nbd2@6': C156,
+  'anti-colle-black::5::b3@6': C154,
+  'anti-colle-black::5::Bd3@6': C157,
+};
