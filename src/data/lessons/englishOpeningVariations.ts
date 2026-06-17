@@ -24,6 +24,46 @@ function b(init: BeatInit): LessonBeat {
 }
 
 export const ENGLISH_OPENING_VARIATION_LESSONS: Record<string, LessonScript> = {
+  "english-opening::English: Reversed Sicilian": {
+    openingId: 'english-opening', title: 'English — the Reversed Sicilian', minutes: 11, orientation: 'white',
+    sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/English_Opening'],
+    beats: [
+      b({ id: 'rs1', moves: 'c4 e5 Nc3 Nf6 Nf3 Nc6 g3 d5', say: "The Reversed Sicilian — Black answers 1.c4 with …e5, and the position becomes a Sicilian with colours reversed and White a full tempo up. Why recommend it? Because everything you know about the Sicilian now works for you, with an extra move: White fianchettoes the king's bishop and plays for queenside and central pressure a tempo ahead, while Black's d5-centre becomes the very target White's set-up is built to exploit.", sayShort: 'g3 — a Sicilian a tempo up.', highlights: [H('d5', SOFT)] }),
+      b({ id: 'rs2', moves: 'c4 e5 Nc3 Nf6 Nf3 Nc6 g3 d5 cxd5 Nxd5 Bg2 Nb6 O-O Be7 d3', say: "cxd5 …Nxd5, and after Bg2 and castling White has the harmonious reversed-Dragon set-up: the g2-bishop on the long diagonal, the knight ready to hop, and d3 keeping the structure flexible. Black's centre looks impressive, but it is also a target — exactly the role White's pieces are built to exploit.", sayShort: 'Bg2, d3 — harmonious reversed-Dragon.', highlights: [H('d3', SOFT)] }),
+      b({ id: 'rs3', moves: 'c4 e5 Nc3 Nf6 Nf3 Nc6 g3 d5 cxd5 Nxd5 Bg2 Nb6 O-O Be7 d3 O-O Be3 Be6 Rc1 f6 Na4 Nxa4 Qxa4', say: "White completes development — Be3, Rc1 onto the half-open c-file — and plays Na4 to trade a pair of knights, easing toward the squares he wants. Black props the centre with …Be6, but there is the Reversed-Sicilian tabiya: White has the c-file, the long-diagonal bishop, and the easier game, with the extra tempo translating into a small, durable pull. A low-theory way to play for a win with White.", sayShort: 'Qxa4 — c-file, bishop, the tempo-up pull.', highlights: [H('e6', SOFT)] }),
+    ],
+  },
+
+  "english-opening::English: Botvinnik System": {
+    openingId: 'english-opening', title: 'English — the Botvinnik System', minutes: 10, orientation: 'white',
+    sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/English_Opening'],
+    beats: [
+      b({ id: 'bv1', moves: 'c4 e5 Nc3 Nc6 g3 g6 Bg2 Bg7 e4', say: "The Botvinnik System — White's most ambitious English set-up. The signature is e4: combined with the c4-pawn, it builds the famous Botvinnik clamp, a pair of pawns gripping the key d5- and f5-squares. Behind the g2-bishop, White takes a big slice of the centre and plays for a long-term space squeeze.", sayShort: 'e4 — the c4+e4 Botvinnik clamp.', highlights: [H('e4'), H('c4', SOFT)] }),
+      b({ id: 'bv2', moves: 'c4 e5 Nc3 Nc6 g3 g6 Bg2 Bg7 e4 d6 Nge2 f5 d3 Nf6 O-O O-O Nd5', say: "White develops the knight to e2 (not f3, keeping the f-pawn free), plays d3, and castles. The key leap is Nd5 — planting the knight on the magnificent central outpost the c4/e4 clamp created, where it cannot be chased by a pawn and dominates the position. Black strikes the clamp with …f5, the thematic counter.", sayShort: 'Nd5 — the dominating central outpost.', highlights: [H('d5')] }),
+      b({ id: 'bv3', moves: 'c4 e5 Nc3 Nc6 g3 g6 Bg2 Bg7 e4 d6 Nge2 f5 d3 Nf6 O-O O-O Nd5 Nxd5 cxd5 Ne7 f4', say: "After …Nxd5 cxd5 White's pawn takes the outpost, gaining queenside space and a protected wedge; …Ne7 retreats, and White strikes with f4, opening lines on the kingside where his space is. There is the Botvinnik tabiya: White owns the centre and the d5-wedge, has space on both wings, and a clear plan — a powerful, low-theory squeeze that has scored heavily for over fifty years.", sayShort: 'f4 — open the kingside, total clamp.', highlights: [H('d5'), H('f4', SOFT)] }),
+    ],
+  },
+
+  "english-opening::Bremen System": {
+    openingId: 'english-opening', title: 'English — the Bremen System (g3 + b4)', minutes: 10, orientation: 'white',
+    sources: ['concept:pos-space', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/English_Opening'],
+    beats: [
+      b({ id: 'br1', moves: 'c4 e5 Nc3 Nf6 Nf3 Nc6 g3 d5 cxd5 Nxd5 Bg2 Nb6', say: "The Bremen — White's clean, flexible Reversed-Sicilian treatment with an early kingside fianchetto. After cxd5 …Nxd5, the knight retreats to b6, and White's plan crystallises: fianchetto, castle, then expand on the queenside with a3 and b4, using the extra tempo to seize space where Black is committed in the centre.", sayShort: 'Bg2 — fianchetto, plan a3-b4.', highlights: [H('d5', SOFT)] }),
+      b({ id: 'br2', moves: 'c4 e5 Nc3 Nf6 Nf3 Nc6 g3 d5 cxd5 Nxd5 Bg2 Nb6 O-O Be7 a3', say: "Castled and safe, White plays a3 — the quiet prelude to b4. The point is pure Reversed-Sicilian strategy: gain queenside space with the pawn storm, open the b-file or fix targets, and let the g2-bishop and the c-file do the rest. Black's big centre will need constant tending while White expands.", sayShort: 'a3 — prepare the b4 space-grab.', highlights: [H('a3', SOFT)] }),
+      b({ id: 'br3', moves: 'c4 e5 Nc3 Nf6 Nf3 Nc6 g3 d5 cxd5 Nxd5 Bg2 Nb6 O-O Be7 a3 O-O b4 Be6 d3 f6', say: "b4 grabs the queenside space, …Be6 and …f6 prop Black's centre, and the battle lines are set. There is the Bremen tabiya: White has queenside space, the long-diagonal bishop, the half-open c-file and an easy, risk-free plan of b5 and minority pressure; Black must defend a big but static centre. A pleasant, strategic pull with White and almost nothing to memorise.", sayShort: 'b4 — queenside space, risk-free pull.', highlights: [H('b4'), H('e6', SOFT)] }),
+    ],
+  },
+
+  "english-opening::Ultra-Symmetrical Variation": {
+    openingId: 'english-opening', title: 'English — the Ultra-Symmetrical', minutes: 10, orientation: 'white',
+    sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/English_Opening'],
+    beats: [
+      b({ id: 'us1', moves: 'c4 c5 Nc3 Nc6 g3 g6 Bg2 Bg7 Nf3 Nf6 O-O O-O', say: "The Ultra-Symmetrical — Black mirrors every move, both sides fianchettoing into a double-Maróczy structure with the c4- and c5-pawns staking the centre. It looks dead drawn, but White has one priceless asset: the move. The recommendation is to use that tempo decisively — be the first to break the symmetry and gain space, forcing Black to react a tempo behind.", sayShort: 'O-O — symmetric, but White has the move.', highlights: [H('c4', SOFT)] }),
+      b({ id: 'us2', moves: 'c4 c5 Nc3 Nc6 g3 g6 Bg2 Bg7 Nf3 Nf6 O-O O-O d3 d6 a3 a6 Rb1', say: "White unveils the plan first: d3, then a3 and Rb1, all preparing the b4 break. Because White moves first, he reaches this set-up a tempo ahead of Black's mirror — and that single tempo is enough to be the one who opens lines and grabs space on the queenside.", sayShort: 'Rb1 — load the b4 break first.', highlights: [H('b4', SOFT)] }),
+      b({ id: 'us3', moves: 'c4 c5 Nc3 Nc6 g3 g6 Bg2 Bg7 Nf3 Nf6 O-O O-O d3 d6 a3 a6 Rb1 Rb8 b4 cxb4', say: "b4 breaks the symmetry, and after …cxb4 White will have the queenside majority rolling and the open lines first. There is the Ultra-Symmetrical tabiya: a tiny but real pull, the whole point being that the extra tempo lets White act while Black reacts. Risk-free, strategic, and a model of how to squeeze a win out of a symmetrical structure.", sayShort: 'b4 — break first, the tempo tells.', highlights: [H('b4')] }),
+    ],
+  },
+
   "english-opening::English: Symmetrical Variation": {
   openingId: "english-opening",
   sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/English_Opening'],
