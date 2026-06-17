@@ -598,11 +598,6 @@ const C115: SublineNarration = {
   intro: { say: "White grabs more space with e4 against your Albin wedge. Hold your nerve and your pawn: …Nc6 and …f6 chip at the e5-pawn, recapturing on f6 to open lines, while the d4-pawn stays a cramping thorn. White's broad centre is overextended; surround it with pieces and the space he grabbed becomes a liability you exploit.", sayShort: "e4 — chip with …f6, keep the d4-thorn." },
   sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Albin_Countergambit'],
 };
-// englund-gambit :: main_qb4
-const C116: SublineNarration = {
-  intro: { say: "The Englund Gambit's main trick — …Qe7 and …Qb4+ hitting the b2-pawn after White's Bf4. You're betting on activity, not material: after Bd2 Qxb2 you grab the pawn and the open b-file, daring White to prove his extra centre pawn while your queen and pieces buzz. A sharp surprise weapon — know the traps and White must play accurately to refute it.", sayShort: "Englund — …Qb4+ and grab b2 for activity." },
-  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
-};
 // englund-gambit :: nc3_decline
 const C117: SublineNarration = {
   intro: { say: "White declines the b2-pawn and develops Nc3, returning the gambit pawn for a clean lead in development. Be realistic: the Englund is a practical surprise, not full equality, so play actively — develop with tempo, contest the centre, and create problems before White consolidates his small edge. Your best chance is energy and initiative.", sayShort: "Nc3 — develop actively, create problems." },
@@ -816,96 +811,264 @@ const C158: SublineNarration = {
 
 // DEEP DSLAV :: slav-defence::4::a4@8
 const DSLAV: SublineNarration = {
-  intro: { say: "The main-line Slav — you took on c4 and White fixed the tension with a4. The whole point of grabbing c4 first was to free your light-squared bishop, and now it steps out: the move that defines the Slav. Your problem piece becomes your best piece, sitting proudly outside the pawn chain.", sayShort: "Main Slav — free the bishop, …Bf5." },
+  intro: { say: "Look what White's a4 just did — nothing for his development, but it does fix the queenside. So this is your moment: the whole reason you grabbed on c4 first was to let your light-squared bishop breathe, and now you free it. Get that bishop out before …e6 ever locks it away, and your worst piece becomes your best.", sayShort: "Main Slav — free the bishop now." },
   beats: [
-    { atMove: 9, say: "…Bf5 — there it is, the bishop the whole Slav is built around, out OUTSIDE the pawn chain before …e6 ever locks it in. It rakes the b1-h7 diagonal toward c2, right beside White's king, and a4 has handed you the b4-square to use later.", sayShort: "…Bf5 — the good bishop, outside.", arrows: [_A('f5', 'b1', ATK)], highlights: [_H('f5', KEY)] },
+    { atMove: 9, say: "There it is — the bishop steps out to f5, OUTSIDE the pawn chain, exactly where it can never get trapped. Follow the arrow: it rakes the diagonal toward c2, right next to White's king. And remember, his a4 handed you the b4-square to use later. You're already the more comfortable side.", sayShort: "…Bf5 — the good bishop, free.", arrows: [_A('f5', 'b1', ATK)], highlights: [_H('f5', KEY)] },
   ],
   sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
 };
 // DEEP DSSL :: semi-slav::4::Bh4@10
 const DSSL: SublineNarration = {
-  intro: { say: "The sharpest Semi-Slav — White pins with Bg5, you poke with …h6, and after Bh4 you plunge in. This is Botvinnik and Anti-Moscow territory, the most analysed jungle in all of chess, and the verdict is that Black holds. Nerve and preparation win here.", sayShort: "Sharp Semi-Slav — …dxc4 then …g5." },
+  intro: { say: "White pins with Bg5 and after your …h6 drops back to h4 — now you get to be brave. This is the sharpest Semi-Slav there is, the Botvinnik jungle, and the plan is simple to say and scary to play: grab the pawn, then hit back hard before he can settle. Trust your preparation here; theory says you're fine.", sayShort: "Sharp Semi-Slav — grab, then …g5." },
   beats: [
-    { atMove: 11, say: "…dxc4 — you snatch the gambit pawn and commit to the fight. White gets the broad e4-centre and a lead in development for it; your job is to hold the extra material behind a coming wall of …b5 and queenside pawns.", sayShort: "…dxc4 — grab the gambit pawn.", highlights: [_H('c4', ATK)] },
-    { atMove: 13, say: "…g5! — the thunderbolt, smashing into the h4-bishop and grabbing kingside space in one stroke. You've taken the pawn and now you punch back before White consolidates the centre; the board erupts, and theory says Black is fine.", sayShort: "…g5 — hit the h4-bishop.", arrows: [_A('g5', 'h4', ATK)], highlights: [_H('g5', ATK), _H('h4', KEY)] },
+    { atMove: 11, say: "Take it — …dxc4 banks the gambit pawn. Yes, White gets a big centre and quick pieces for it, but that's the deal you signed up for. Your job now is to hold that extra pawn behind a wall of …b5 and queenside pawns while the storm rages.", sayShort: "…dxc4 — bank the gambit pawn.", highlights: [_H('c4', ATK)] },
+    { atMove: 13, say: "Now the punch — …g5, smashing straight into the h4-bishop and grabbing kingside space in one stroke. See why this works? You've taken material and you refuse to sit passively; you hit back before White consolidates. The board catches fire, and you're holding the extra pawn.", sayShort: "…g5 — punch the h4-bishop.", arrows: [_A('g5', 'h4', ATK)], highlights: [_H('g5', ATK), _H('h4', KEY)] },
   ],
   sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Semi-Slav_Defense'],
 };
 // DEEP DNIM :: nimzo-indian::5::f3@10
 const DNIM: SublineNarration = {
-  intro: { say: "The Sämisch Nimzo — you've already traded on c3 to saddle White with doubled, crippled c-pawns, and now f3 props the big e4-centre he wants. Your plan is to blockade and besiege: hit the centre, clamp it, and grind the fixed c4 and c3 pawns. Knights and light squares beat his bishops here.", sayShort: "Sämisch — …e5, …e4, target c4/c3." },
+  intro: { say: "You've already given up the bishop on c3, and here's why that was a fine trade: it left White with doubled, crippled c-pawns. Now his f3 props the big e4-centre he's proud of — so your whole plan is to blockade it and grind those weak c-pawns. Knights and the light squares beat his bishops in this kind of position.", sayShort: "Sämisch — blockade, grind the c-pawns." },
   beats: [
-    { atMove: 7, say: "…Bxc3+ — the structural heart of the Sämisch. You hand over the bishop, but bxc3 leaves White with doubled, crippled c-pawns: a permanent weakness you'll grind against all game.", sayShort: "…Bxc3+ — wreck the c-pawns.", highlights: [_H('c3', KEY)] },
-    { atMove: 11, say: "…e5 — striking the centre. The pawn leans on d4, and with White's pieces still at home the broad front suddenly carries a real load.", sayShort: "…e5 — hit d4.", arrows: [_A('e5', 'd4', ATK)], highlights: [_H('e5', ATK), _H('d4', KEY)] },
-    { atMove: 13, say: "…e4! — the clamp. The pawn jams against f3 and freezes White's kingside, stealing the f3-square from his knight and locking the position in your favour while you finish developing in comfort.", sayShort: "…e4 — clamp and freeze f3.", arrows: [_A('e4', 'f3', ATK)], highlights: [_H('e4', ATK), _H('f3', KEY)] },
+    { atMove: 7, say: "…Bxc3+ — don't hesitate. You're handing over a bishop, but look at what bxc3 does: it saddles White with doubled c-pawns that can never be healed. That permanent weakness is the target you'll lean on for the rest of the game.", sayShort: "…Bxc3+ — give it, wreck c-pawns.", highlights: [_H('c3', KEY)] },
+    { atMove: 11, say: "Time to hit the centre — …e5 leans straight on d4, as the arrow shows. With White's pieces still sitting at home, that broad centre he built is suddenly carrying real weight and starting to creak.", sayShort: "…e5 — lean on d4.", arrows: [_A('e5', 'd4', ATK)], highlights: [_H('e5', ATK), _H('d4', KEY)] },
+    { atMove: 13, say: "And the clamp — …e4 jams right up against f3 and freezes White's whole kingside. Notice the point: it steals the f3-square from his knight, so his pieces have nowhere good to go while you calmly finish developing. The position is locked in your favour.", sayShort: "…e4 — clamp and freeze f3.", arrows: [_A('e4', 'f3', ATK)], highlights: [_H('e4', ATK), _H('f3', KEY)] },
   ],
   sources: ['concept:pawn-doubled', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
 };
 // DEEP DGRU :: grunfeld-defence::0::Bc4@12 | grunfeld-defence::1::Bc4@12 | grunfeld-defence::6::Bc4@12
 const DGRU: SublineNarration = {
-  intro: { say: "The Exchange Grünfeld main line, the whole point of the opening. White has built the broad d4-e4 centre and developed the bishop to c4; your entire strategy is to tear that centre down with the long-diagonal bishop and the …c5 hammer.", sayShort: "Exchange Grünfeld — demolish d4." },
+  intro: { say: "This is the position the whole Grünfeld is built to reach. White has the big d4-e4 centre and just developed his bishop to c4 — and your entire job is to tear that centre down. Your fianchettoed bishop and a well-timed …c5 are the wrecking crew. Invite the centre, then demolish it.", sayShort: "Exchange Grünfeld — demolish the centre." },
   beats: [
-    { atMove: 11, say: "…Bg7 — the soul of the Grünfeld. The bishop sits on the long diagonal with a clear run straight at d4, the keystone of White's whole centre. Everything else flows from here.", sayShort: "…Bg7 — the long-diagonal sniper.", arrows: [_A('g7', 'd4', ATK)], highlights: [_H('d4', KEY)] },
-    { atMove: 13, say: "…c5 — the hammer falls on d4. Joined by the g7-bishop bearing down the diagonal, the pawn attacks the base of White's centre; if those pawns ever crack, White is simply worse.", sayShort: "…c5 — hammer the d4-base.", arrows: [_A('c5', 'd4', ATK)], highlights: [_H('c5', ATK), _H('d4', KEY)] },
+    { atMove: 11, say: "…Bg7 — the soul of the Grünfeld. Follow the arrow down the long diagonal: it points dead at d4, the keystone holding White's centre together. Everything you do from here flows from this bishop's stare.", sayShort: "…Bg7 — aim down the long diagonal.", arrows: [_A('g7', 'd4', ATK)], highlights: [_H('d4', KEY)] },
+    { atMove: 13, say: "Now the hammer falls — …c5 strikes the base of the centre, and with the g7-bishop already bearing down on d4, that pawn is under fire from two directions. The reason this matters: if White's centre cracks, his whole game collapses with it.", sayShort: "…c5 — hammer d4's base.", arrows: [_A('c5', 'd4', ATK)], highlights: [_H('c5', ATK), _H('d4', KEY)] },
   ],
   sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
 };
 // DEEP DBENKO :: benko-gambit::3::bxa6@8 | benko-gambit::4::bxa6@8
 const DBENKO: SublineNarration = {
-  intro: { say: "The fully accepted Benko Gambit — you've given a pawn for the clearest long-term compensation in chess. The a- and b-files open like cannon barrels for your rooks, the g7-bishop will rake the long diagonal, and White's queenside is under permanent siege. You don't need the pawn back; the pressure never relents.", sayShort: "Benko accepted — pressure, not the pawn." },
+  intro: { say: "You've given a pawn, and here's why you'll never miss it: the a- and b-files swing open like cannon barrels for your rooks, your bishop will rake the long diagonal, and White's queenside is under siege for the rest of the game. You're not trying to win the pawn back — you're playing for pressure that simply never stops.", sayShort: "Benko — pressure, never miss the pawn." },
   beats: [
-    { atMove: 9, say: "…g6 — preparing the fianchetto. The bishop is coming to g7, the second barrel of the Benko's queenside artillery alongside the open a- and b-files.", sayShort: "…g6 — the fianchetto is coming.", highlights: [_H('g6', SOFT)] },
-    { atMove: 11, say: "…Bxa6 — recapturing and training the bishop on the a6-f1 diagonal. The moment White advances his e-pawn, this bishop crashes into f1 and ruins his castling. Every Benko piece points at the white king and queenside.", sayShort: "…Bxa6 — eye the a6-f1 diagonal.", highlights: [_H('a6', KEY), _H('f1', SOFT)] },
-    { atMove: 13, say: "…Bxf1 — and the bishop strikes, forcing Kxf1. White's castling is wrecked and his king stranded in the centre — exactly the structural damage that justifies the whole gambit. Your rooks pour down the open files at the exposed monarch.", sayShort: "…Bxf1 — wreck White's castling.", highlights: [_H('f1', ATK)] },
+    { atMove: 9, say: "…g6 — getting ready to fianchetto. That bishop is heading to g7, where it becomes the second barrel of your queenside artillery, working alongside the open a- and b-files.", sayShort: "…g6 — the fianchetto is coming.", highlights: [_H('g6', SOFT)] },
+    { atMove: 11, say: "…Bxa6 recaptures and trains the bishop on the a6-f1 diagonal — keep an eye on f1. The moment White pushes his e-pawn, this bishop crashes in and wrecks his castling. Every Benko piece is pointed at his king and queenside.", sayShort: "…Bxa6 — eye the a6-f1 diagonal.", highlights: [_H('a6', KEY), _H('f1', SOFT)] },
+    { atMove: 13, say: "…Bxf1 — and it strikes, forcing Kxf1. See what you've done: his castling is gone and his king is stranded in the centre. That structural damage is exactly what justifies the whole gambit — now pour your rooks down the open files at that exposed king.", sayShort: "…Bxf1 — strand his king.", highlights: [_H('f1', ATK)] },
   ],
   sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
 };
 // DEEP DALBIN :: albin-countergambit::1::fxe3@10
 const DALBIN: SublineNarration = {
-  intro: { say: "Lasker Trap territory — the most famous trap in the Albin. White has grabbed with e3 against your d4-wedge, and …dxe3 is poison: the f-pawn's recapture rips open the diagonal to White's king, and …Qh4+ wins the material straight back with a raging attack.", sayShort: "Lasker Trap — …dxe3 then …Qh4+." },
+  intro: { say: "This is the famous Lasker Trap, and you're about to spring it. White grabbed with e3 against your d4-pawn — greedy. The point you need to see: …dxe3 forces him to recapture with the f-pawn, and that rips open the diagonal straight to his own king. Then a check wins the material right back.", sayShort: "Lasker Trap — …dxe3 springs it." },
   beats: [
-    { atMove: 9, say: "…dxe3! — the poisoned thrust. The pawn lands on e3, and White's natural fxe3 recapture will fatally bare the e1-h4 diagonal right into his own king.", sayShort: "…dxe3 — the poisoned pawn.", highlights: [_H('e3', ATK), _H('f2', SOFT)] },
-    { atMove: 11, say: "…Qh4+ — the trap springs. With the f2-pawn gone the diagonal to e1 is wide open, and the check rakes straight at White's stranded king. You regain the material with a crushing initiative — the Albin's whole point, paid in full.", sayShort: "…Qh4+ — the diagonal is open.", arrows: [_A('h4', 'e1', ATK)], highlights: [_H('h4', ATK), _H('e1', KEY)] },
+    { atMove: 9, say: "…dxe3 — the poisoned pawn. It lands on e3, and watch what White's natural fxe3 will do: it bares the e1-h4 diagonal right into his own king. You're baiting him into the recapture.", sayShort: "…dxe3 — the poisoned pawn.", highlights: [_H('e3', ATK), _H('f2', SOFT)] },
+    { atMove: 11, say: "…Qh4+ — and the trap snaps shut. Follow the arrow: with the f2-pawn gone, the queen rakes straight down the open diagonal at White's stranded king. You regain everything with a crushing attack — that's the Albin's whole promise, paid in full.", sayShort: "…Qh4+ — the diagonal is open.", arrows: [_A('h4', 'e1', ATK)], highlights: [_H('h4', ATK), _H('e1', KEY)] },
   ],
   sources: ['concept:tac-trap', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Albin_Countergambit'],
 };
 // DEEP DQID :: queens-indian::1::g3@6 | queens-indian::2::g3@6 | queens-indian::6::g3@6
 const DQID: SublineNarration = {
-  intro: { say: "The modern Queen's Indian — White fianchettoes with g3, so you bite first with …Ba6, attacking the c4-pawn before the g2-bishop can settle. The whole opening is a fight for the light squares and the long diagonal; by hitting c4 you force a concession before White is ready.", sayShort: "QID — …Ba6 hits c4 first." },
+  intro: { say: "White fianchettoes with g3, so don't let him get comfortable — bite first. The whole opening is a scrap over the light squares and the long diagonal, and by hitting his c4-pawn straight away you force him to make a concession before he's ready for it.", sayShort: "QID — bite c4 before he settles." },
   beats: [
-    { atMove: 7, say: "…Ba6 — the modern move, the bishop swinging to the rim to bear down on c4. White must defend with b3 or Qa4, loosening his grip on the light squares — exactly the concession you wanted.", sayShort: "…Ba6 — pressure the c4-pawn.", arrows: [_A('a6', 'c4', ATK)], highlights: [_H('c4', KEY)] },
-    { atMove: 9, say: "…Bb4+ — a useful check before retreating, dragging White's bishop to d2 with gain of time. You develop with tempo while keeping the long-diagonal fight squarely in your favour.", sayShort: "…Bb4+ — check, gain a tempo.", arrows: [_A('b4', 'e1', ATK)], highlights: [_H('e1', SOFT)] },
+    { atMove: 7, say: "…Ba6 — the modern move. Follow the arrow: the bishop swings to the rim just to bear down on c4. Now White has to defend with b3 or Qa4, and either one loosens his grip on the light squares — exactly the concession you were fishing for.", sayShort: "…Ba6 — pressure the c4-pawn.", arrows: [_A('a6', 'c4', ATK)], highlights: [_H('c4', KEY)] },
+    { atMove: 9, say: "…Bb4+ — a handy check before you retreat, dragging White's bishop to d2 and gaining a free tempo. You develop with time to spare while the long-diagonal fight stays firmly in your hands.", sayShort: "…Bb4+ — check, steal a tempo.", arrows: [_A('b4', 'e1', ATK)], highlights: [_H('e1', SOFT)] },
   ],
   sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense'],
 };
 // DEEP DBUD :: budapest-gambit::4::Bf4@6
 const DBUD: SublineNarration = {
-  intro: { say: "The main-line Budapest — White holds the extra e5-pawn with Bf4, and you set about winning it back. …Nc6 develops with a direct hit on e5, and after …Bb4+ and …Ngxe5 the pawn returns, leaving a lively, equal game where your pieces leap out faster than White can untangle.", sayShort: "Budapest — …Nc6 hits e5." },
+  intro: { say: "White is hanging onto your pawn with Bf4, so you set about winning it straight back. Develop with purpose and you'll regain it with ease — and notice the bonus: your pieces leap into the game faster than White can untangle his.", sayShort: "Budapest — win the pawn back fast." },
   beats: [
-    { atMove: 7, say: "…Nc6 — developing with purpose, the knight attacking the e5-pawn White is trying to hold. With the coming …Bb4+ and …Ngxe5 your pieces regain the pawn with tempo and easy activity.", sayShort: "…Nc6 — attack the e5-pawn.", arrows: [_A('c6', 'e5', ATK)], highlights: [_H('e5', KEY)] },
+    { atMove: 7, say: "…Nc6 — develop and attack at the same time. Follow the arrow: the knight hits the e5-pawn White is trying to hold. With …Bb4+ and …Ngxe5 coming, you scoop the pawn back with tempo and an easy, active game.", sayShort: "…Nc6 — hit the e5-pawn.", arrows: [_A('c6', 'e5', ATK)], highlights: [_H('e5', KEY)] },
   ],
   sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
 };
 // DEEP DDUT :: dutch-defence::3::e4@6
 const DDUT: SublineNarration = {
-  intro: { say: "White lunges with the e4 anti-Leningrad thrust, offering a pawn to crack the centre against your …f5. Don't flinch — …f4 grabs kingside space and shuts White's bishop out, while your g7-bishop already rakes the long diagonal at d4. You ride the sharp lines and the Leningrad's dynamic energy is yours.", sayShort: "Leningrad — …f4 grabs space." },
+  intro: { say: "White lunges with e4, throwing a pawn at you to crack the centre open against your …f5. Don't blink. …f4 grabs kingside space and shuts his bishop out, and your g7-bishop is already glaring down the long diagonal. You ride the sharp lines — this is the Leningrad's whole point.", sayShort: "Leningrad — meet e4 with …f4." },
   beats: [
-    { atMove: 7, say: "…f4 — clamping the kingside and seizing space, while the fianchettoed g7-bishop bears down the long diagonal at d4. White's centre looks broad but it's loose; your pieces and the …f4 wedge give you a full-blooded fight.", sayShort: "…f4 — clamp; g7-bishop eyes d4.", arrows: [_A('g7', 'd4', ATK)], highlights: [_H('f4', ATK), _H('d4', KEY)] },
+    { atMove: 7, say: "…f4 — clamp the kingside and grab the space, while the g7-bishop (follow the arrow) bears down the long diagonal at d4. White's centre looks broad, but it's loose, and your wedge plus that bishop give you a real fight.", sayShort: "…f4 — clamp; bishop eyes d4.", arrows: [_A('g7', 'd4', ATK)], highlights: [_H('f4', ATK), _H('d4', KEY)] },
   ],
   sources: ['book:dutch-defence', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
 };
 // DEEP DBEN :: benoni-defence::0::e4@10 | benoni-defence::1::e4@10 | benoni-defence::2::e4@10 | benoni-defence::6::e4@10
 const DBEN: SublineNarration = {
-  intro: { say: "The Modern Benoni in full flow — you've traded structure for dynamism: White's big d5-e4-f4 pawn front against your queenside majority and the long-diagonal g7-bishop. The plan is pure energy: fianchetto, castle, then roll …a6 and …b5 on the queenside while pressuring e4.", sayShort: "Modern Benoni — fianchetto, roll …a6-b5." },
+  intro: { say: "You've traded a quiet structure for pure energy: White's big d5-e4-f4 pawn front against your queenside pawn majority and that powerful g7-bishop. The plan is all dynamism — fianchetto, castle, then roll …a6 and …b5 on the queenside while you needle his e4-pawn.", sayShort: "Modern Benoni — fianchetto, roll …a6-b5." },
   beats: [
-    { atMove: 11, say: "…g6 — preparing the Benoni's signature fianchetto. The bishop heads for g7, where it anchors the dark squares and eyes the long diagonal once the …b5 or …e-file breaks open lines.", sayShort: "…g6 — the fianchetto setup.", highlights: [_H('g6', SOFT)] },
-    { atMove: 13, say: "…Bg7 — the Benoni bishop takes its post on the long diagonal. Your own knight on f6 screens it for now, but the moment you break with …b5 or trade in the centre, its pressure toward d4 and b2 comes alive. The dynamic imbalance is set.", sayShort: "…Bg7 — the dark-square anchor.", highlights: [_H('g7', KEY)] },
+    { atMove: 11, say: "…g6 — setting up the Benoni's signature fianchetto. The bishop heads for g7, where it'll anchor the dark squares and spring to life the moment you break with …b5 or open the centre.", sayShort: "…g6 — set up the fianchetto.", highlights: [_H('g6', SOFT)] },
+    { atMove: 13, say: "…Bg7 takes its post. Right now your own knight on f6 screens it, but here's the idea: the instant you play …b5 or trade in the centre, this bishop's pressure toward d4 and b2 roars to life. The imbalance is set — now you go play for the win.", sayShort: "…Bg7 — the dark-square anchor.", highlights: [_H('g7', KEY)] },
   ],
   sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
 };
 // DEEP DKID :: kings-indian-defence::0::b4@16
 const DKID: SublineNarration = {
-  intro: { say: "The Classical King's Indian tabiya — White has locked the centre with d5 and just played b4, the queenside minority push. Now the race is on, and you've been waiting for it: throw everything at his king. The e7-knight is already rerouting toward g6, and …f5, …f4, …g5-g4 and the kingside avalanche follow. In the King's Indian the king-hunter usually crowns first — trust the attack and storm.", sayShort: "KID race — …f5-f4 storm the king." },
+  intro: { say: "White's just locked the centre with d5 and played b4 — he's launching on the queenside. This is the King's Indian race you've been waiting for, so throw everything at his king. Your e7-knight is rerouting toward g6, and then comes the avalanche: …f5, …f4, …g5-g4. Here's the key: in this opening the side that storms the king usually gets there first. Don't count material — attack.", sayShort: "KID race — storm the king, …f5-f4." },
+  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
+};
+
+// DEEP EQGA :: qga::3::e3@6
+const EQGA: SublineNarration = {
+  intro: { say: "You handed the c4-pawn back to get your pieces out fast and free — that's the whole spirit of the Accepted. Now you cash in with the freeing break: strike at White's centre and watch his little space edge simply melt away.", sayShort: "QGA — free the game with …c5." },
+  beats: [
+    { atMove: 9, say: "…c5 — strike d4 head-on (follow the arrow). The centre opens, your light-squared bishop and the whole army finally breathe, and any pull White had dissolves into a balanced, comfortable game. This is exactly why you gave the pawn back.", sayShort: "…c5 — strike d4, breathe.", arrows: [_A('c5', 'd4', ATK)], highlights: [_H('c5', ATK), _H('d4', KEY)] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
+};
+// DEEP ETRO :: trompowsky-attack::6::d6@9
+const ETRO: SublineNarration = {
+  intro: { say: "Black jabbed your bishop with …Ne4, but you kept the pair with Bf4 — now make him pay for the early adventure. You're going to kick that knight and grab space, and the best part is you've sidestepped everything Black prepared against 1.d4. You're calling the shots.", sayShort: "Trompowsky — kick the knight, grab space." },
+  beats: [
+    { atMove: 6, say: "f3 — boot the e4-knight straight back where it came from (follow the arrow). His clever sortie just cost him time, and you're left with the bishop pair and a totally free hand to expand.", sayShort: "f3 — boot the knight back.", arrows: [_A('f3', 'e4', ATK)], highlights: [_H('e4', KEY)] },
+    { atMove: 8, say: "d5 — clamp the centre and seize space. Black's pieces get shoved back, his position cramps, and you build at your own pace behind that broad pawn front. No rush — the space won't go anywhere.", sayShort: "d5 — clamp and seize space.", highlights: [_H('d5', ATK)] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+// DEEP EENG :: englund-gambit::0::Nc3@10
+const EENG: SublineNarration = {
+  intro: { say: "Here's your trick — …Qb4+ and …Qxb2 swipe a pawn and the open b-file. Be honest with yourself though: this is a surprise weapon, not a guarantee of equality. You're betting White slips, so play sharp, keep that queen safe, and make problems fast before he gets organised.", sayShort: "Englund — swipe b2, play sharp." },
+  beats: [
+    { atMove: 7, say: "…Qb4+ — the whole point. It's a check that also forks down the b-file at b2 (follow the arrow). White has to answer the check, and the pawn drops into your lap.", sayShort: "…Qb4+ — check and hit b2.", arrows: [_A('b4', 'b2', ATK)], highlights: [_H('b2', ATK)] },
+    { atMove: 9, say: "…Qxb2 — the pawn's yours, and so is the half-open b-file. Just stay alert: that queen is exposed, so meet White's tempo moves, develop fast, and turn these open lines into genuine counterplay.", sayShort: "…Qxb2 — grab it, stay sharp.", highlights: [_H('b2', ATK)] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+// DEEP EABEN :: anti-benoni-push::0::e6@5 | anti-benoni-push::2::e6@5 | anti-benoni-push::3::e6@5
+const EABEN: SublineNarration = {
+  intro: { say: "Black goes Modern Benoni, and that hands you the dream White centre — pawns side by side on d5 and e4. So play for space and attack: f4 and Nf3, then the e4-e5 break, and keep his …b5 in check with a4. You've got more room; use it.", sayShort: "Modern Benoni — build e4-f4, attack." },
+  beats: [
+    { atMove: 10, say: "e4 — stake out the broad centre. With pawns abreast on d5 and e4 you simply own more of the board, and Black has to scramble for counterplay before you roll forward and crush him.", sayShort: "e4 — claim the broad centre.", highlights: [_H('e4', KEY)] },
+    { atMove: 12, say: "f4 — gain even more space and get ready for the e4-e5 break that pries Black's position open. This is the aggressive clamp: your pawns advance while he's still untangling on the queenside.", sayShort: "f4 — gain space, prep e5.", highlights: [_H('f4', ATK)] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
+};
+// DEEP EAENG :: anti-englund::1::Qe7@5
+const EAENG: SublineNarration = {
+  intro: { say: "Black's trying Englund tricks with …Qe7, eyeing your extra e5-pawn. Don't get greedy — the clean refutation is to develop, give the pawn back on your terms with e4, and walk away with the centre and a lead in development. Let structure and time do the work.", sayShort: "Anti-Englund — return it, take centre." },
+  beats: [
+    { atMove: 8, say: "e4 — hand the pawn back and seize the centre instead. See the trade you're making: Black spent queen moves just to win a pawn, while you've built a broad front and developed faster. Against a shaky gambit, that's the deal you want every time.", sayShort: "e4 — seize the centre, lead develops.", highlights: [_H('e4', KEY)] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+// DEEP EANIM :: anti-nimzo-qc2::1::Qxd5@9
+const EANIM: SublineNarration = {
+  intro: { say: "With Qc2 you've dodged the doubled pawns and pocketed the bishop pair — that's your long-term trump. Now Black's …Qxd5 leaves his queen sitting exposed in the centre, and that's your cue: develop with tempo and get ready to play e4, hitting the queen while your two bishops promise a lasting edge.", sayShort: "Qc2 — gain tempo on the queen." },
+  beats: [
+    { atMove: 10, say: "Nf3 — develop and prepare e4, which will hit that centralised black queen with tempo. Every move you gain chasing her (look at d5) is a move closer to unleashing your bishop pair on an opening centre.", sayShort: "Nf3 — prepare e4 with tempo.", highlights: [_H('d5', SOFT)] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+// DEEP EAQID :: anti-qid-fianchetto::1::Ba6@7
+const EAQID: SublineNarration = {
+  intro: { say: "Black plays the modern …Ba6 to nag your c4-pawn before your bishop settles. Answer cleanly with b3 — you keep the pawn, keep your long-diagonal bishop, and the light-square battle stays in your favour while you finish the fianchetto.", sayShort: "…Ba6 — answer with b3." },
+  beats: [
+    { atMove: 8, say: "b3 — prop the c4-pawn and refuse the concession Black's …Ba6 was demanding. The pawn holds (look at c4), your bishop heads to g2 next, and your grip on the light squares and the centre is fully intact.", sayShort: "b3 — hold c4, keep the diagonal.", highlights: [_H('c4', KEY)] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense'],
+};
+// DEEP EADUT :: anti-dutch-staunton::1::dxe4@11
+const EADUT: SublineNarration = {
+  intro: { say: "You've offered the e4 pawn against the Dutch and now you play for a roaring lead in development. f3 is your lever — it rips open the centre and the f-file at Black's stiff …f5 structure, and your pieces flood toward his king while it's still stuck in the middle.", sayShort: "Staunton — f3 opens, hunt the king." },
+  beats: [
+    { atMove: 8, say: "f3 — the hammer. It pries the centre open to free your pieces and expose Black's weakened kingside (look at e4). That pawn he grabbed? It's a liability while his king sits uncastled right in the firing line.", sayShort: "f3 — pry the centre open.", highlights: [_H('e4', KEY)] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+// DEEP EAQGD :: anti-qgd-exchange::1::c6@9
+const EAQGD: SublineNarration = {
+  intro: { say: "This is the Carlsbad, and your textbook plan is the minority attack. Push b4-b5 to gnaw at Black's c6-pawn — and here's why it works: when that pawn falls, you're left with a permanent target on the half-open c-file while your own centre stays rock-solid.", sayShort: "Carlsbad — launch the minority attack." },
+  beats: [
+    { atMove: 10, say: "e3 — tidy up your setup before the real plan kicks in: b4-b5 against c6. Keep your eye on that c6-pawn (highlighted) — it's the heart of the minority attack, the single target your whole queenside advance is aimed at.", sayShort: "e3 — prepare b4-b5 vs c6.", highlights: [_H('c6', KEY), _H('d5', SOFT)] },
+  ],
+  sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+// DEEP EABUD :: anti-budapest::1::Nc6@7 | anti-budapest::2::Nc6@7
+const EABUD: SublineNarration = {
+  intro: { say: "Against the Budapest you hold the extra pawn with Bf4 — the principled way. Black will win it back with …Nc6 and …Ngxe5, but don't cling to it: give it back on your terms and you come out with the freer position, more space and easier development.", sayShort: "Anti-Budapest — hold, then give back." },
+  beats: [
+    { atMove: 8, say: "Nf3 — bolster the e5-pawn (follow the arrow) and develop toward the kingside. You'll return the pawn when it suits you, keeping that slightly freer game and the sounder structure that quietly refutes Black's gambit.", sayShort: "Nf3 — bolster e5, develop.", arrows: [_A('f3', 'e5', ATK)], highlights: [_H('e5', KEY)] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
+};
+// DEEP EALON :: anti-london-black::1::c3@6
+const EALON: SublineNarration = {
+  intro: { say: "You've hit White's d4 with …c5 and …Nc6, and now you clamp the queenside with …c4. Here's the secret to beating the London: grab space first. With …b5 and …a5-a4 to follow, you get a free hand on the wing where his slow setup has no answer.", sayShort: "Anti-London — clamp with …c4." },
+  beats: [
+    { atMove: 7, say: "…c4 — clamp the queenside and grab the space, freezing White's b- and c-pawn breaks before they start (look at c4). Now …b5 and the pawn roll give you the initiative on the side where the London is weakest.", sayShort: "…c4 — clamp, then roll …b5.", highlights: [_H('c4', ATK)] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/London_System'],
+};
+// DEEP EACAT :: anti-catalan-black::1::Nf3@8
+const EACAT: SublineNarration = {
+  intro: { say: "This is the Open Catalan, and you're going to hold that extra c4-pawn with …a6 and …b5 — solving your game before White's g2-bishop can choke you. Get the queenside rolling, finish developing, and break with …c5. Bank the pawn or hand it back cleanly; either way you equalise.", sayShort: "Open Catalan — hold c4 with …a6, …b5." },
+  beats: [
+    { atMove: 9, say: "…a6 — preparing …b5 to hold the c4-pawn and free your queenside (look at c4). This is how you take the sting out of the Catalan: bank the pawn, expand on the wing, and leave that famous g2-bishop biting on thin air.", sayShort: "…a6 — prep …b5, hold c4.", highlights: [_H('c4', KEY), _H('a6', SOFT)] },
+  ],
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+// DEEP EACOL :: anti-colle-black::3::exd4@8
+const EACOL: SublineNarration = {
+  intro: { say: "Your …c5 and …Nc6 pressured d4, and White's exd4 leaves him with an isolated d-pawn — there's your target for the whole game. Blockade the square in front of it, train your pieces on d4, and steer toward the endgame where that lonely pawn just drops.", sayShort: "Anti-Colle — besiege the d4-isolani." },
+  beats: [
+    { atMove: 8, say: "exd4 — and White accepts an isolated d-pawn (highlighted). That pawn is now your long-term target: park a knight on the blockade square in front of it, pile pieces onto d4, and the weakness tells more with every trade.", sayShort: "exd4 — White's d4 is the target.", highlights: [_H('d4', KEY)] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Colle_System'],
+};
+// DEEP TQGQGA :: queens-gambit::3::Nc6@11
+const TQGQGA: SublineNarration = {
+  intro: { say: "Black has equalised his development and struck with …c5 — and after the coming trades he'll be left carrying an isolated or hanging d-pawn. That's your blueprint: blockade the pawn with a knight, swap the right pieces, and grind that weakness toward an endgame where it simply falls.", sayShort: "QGA — play against the isolani." },
+  sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
+};
+// DEEP TQGD :: qgd::6::Be2@16
+const TQGD: SublineNarration = {
+  intro: { say: "You've reached the QGD fortress — …Nbd7, …c6, …Qa5 and the …Bb4 pin all in place — and White's quiet Be2 is an admission that there's nothing here to attack. So now you free the game on your own terms: the …dxc4 and …e5 (or …c5) breaks are coming. No weaknesses, no worries — you play for the full point.", sayShort: "QGD fortress — free with …e5 / …c5." },
+  sources: ['book:qgd', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+// DEEP TCAT :: catalan-opening::2::Nc6@11
+const TCAT: SublineNarration = {
+  intro: { say: "Black grabbed c4, but treat it as a loan, not a loss. Your g2-bishop scythes down the long diagonal at b7, and you'll calmly win the pawn back with Ne5, Qc2 or a4. The real prize is the bind: while Black struggles to untangle his queenside, you squeeze the light squares.", sayShort: "Open Catalan — the g2-bishop binds." },
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+// DEEP TLON :: london-system::0::b6@15
+const TLON: SublineNarration = {
+  intro: { say: "Your London machine is fully built — the Bf4-Bd3 battery aimed at h7, c3 bracing d4, knights on d2 and f3. Black's …b6 is trying to challenge your diagonal, so turn to the kingside now: Ne5, the queen lift, and the attacking plan your setup reaches every single game. Same system, same ideas, every time — that's the beauty of it.", sayShort: "London tabiya — turn to the kingside." },
+  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
+};
+// DEEP TOLD :: old-indian-defence::3::e4@8
+const TOLD: SublineNarration = {
+  intro: { say: "White's built the full e4 centre against your …d6 and …e5 — cramped, sure, but bombproof. Finish with …Be7 and …O-O, then pick your freeing lever: …exd4 with …Re8 to open lines, or …c6 preparing …d5. Choose the break carefully and watch the cramp uncoil into a fully equal game.", sayShort: "Old Indian — free with …exd4 or …c6-d5." },
+  sources: ['book:old-indian-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Old_Indian_Defense'],
+};
+// DEEP TENG :: english-opening::2::d5@7
+const TENG: SublineNarration = {
+  intro: { say: "Black set up …e5 and …d5, which means you're playing a Sicilian Dragon with the colours reversed — and a whole tempo to the good. Take on d5, fianchetto with Bg2 to fight for the long diagonal, and use that extra move to grab exactly the initiative the White side only dreams about in the real Dragon.", sayShort: "Reversed Dragon — press a tempo up." },
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/English_Opening'],
+};
+// DEEP TRETI :: reti-opening::1::dxc4@11
+const TRETI: SublineNarration = {
+  intro: { say: "Black grabbed c4, but again — it's a loan. Your g2-bishop rakes the long diagonal at b7 and d5, and you'll regain the pawn easily with e3 or Qc2. Lean on the centre and that diagonal; the hypermodern bet pays off as Black's queenside stays passive and you slowly take over.", sayShort: "Réti — regain c4, press the diagonal." },
+  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+// DEEP TKIA :: kings-indian-attack::5::e5@7
+const TKIA: SublineNarration = {
+  intro: { say: "Black stakes a big centre with …c5 and …e5 — and that's exactly the soil your King's Indian Attack grows in. Regroup behind your wall with d3, Nbd2 and e4, then turn to the kingside: the f4 lever, the Nf1-g3 reroute, the pawn storm. His proud centre just becomes the thing you attack around.", sayShort: "KIA — regroup, then storm the kingside." },
+  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+// DEEP TBIRD :: birds-opening::1::Nge7@17
+const TBIRD: SublineNarration = {
+  intro: { say: "The From Gambit has burned itself out in your favour — queens are off and you're a clean pawn up with the bishop on f4 and a healthy extra pawn on e5. Pure technique from here: tuck the king to safety, bring the rooks to the centre, and convert. Black's fire gave him nothing lasting.", sayShort: "From Gambit refuted — a pawn up." },
+  sources: ['concept:pos-bishop-pair', 'concept:pawn-majority', 'https://en.wikipedia.org/wiki/Bird%27s_Opening'],
+};
+// DEEP TAKID :: anti-kid-saemisch::1::c5@11
+const TAKID: SublineNarration = {
+  intro: { say: "Black challenges your big f3-e4 centre with a Benoni-style …c5. Pick your structure: d5 to slam it shut and clamp space on both wings, or dxc5 to open up with a lead in development. The Sämisch was built to meet exactly this from strength — choose your plan and the centre holds firm.", sayShort: "Sämisch …c5 — close d5 or open dxc5." },
+  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
+};
+// DEEP TAGRU :: anti-grunfeld-exchange::1::c5@13
+const TAGRU: SublineNarration = {
+  intro: { say: "You're on the White side of the Exchange Grünfeld now — broad d4-e4 centre, and Black hammering it with …Bg7 and …c5. This is the whole fight: prop the centre and then advance it. Bring the bishop to c4, knight to e2, castle, Be3 and Qd2 to defend d4, then push d5 and turn your pawns from target into battering ram. Hold that centre and you're better.", sayShort: "Exchange Grünfeld — defend d4, push d5." },
+  sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
+};
+// DEEP TKID2 :: kings-indian-defence::0::d5@12
+const TKID2: SublineNarration = {
+  intro: { say: "The centre locks — White meets your …e5 with d5, and the King's Indian race is on. This is what you've been waiting for: the kingside is yours to storm. Reroute the knight toward g6, then …f5, …f4, …g5-g4 crashing into his king while he plays for c5 on the far wing. Trust the attack — the king-hunter usually crowns first.", sayShort: "Locked centre — storm with …f5-f4." },
   sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
 };
 
@@ -943,7 +1106,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'queens-gambit::2::h6@9': C0,
   'queens-gambit::3::a6@5': C4,
   'queens-gambit::3::Bg4@7': C4,
-  'queens-gambit::3::Nc6@11': C5,
+  'queens-gambit::3::Nc6@11': TQGQGA,
   'queens-gambit::3::c5@5': C5,
   'queens-gambit::3::a6@7': C4,
   'queens-gambit::3::e6@5': C5,
@@ -1055,7 +1218,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'qgd::6::cxd5@10': C9,
   'qgd::6::cxd5@12': C9,
   'qgd::6::e3@8': C8,
-  'qgd::6::Be2@16': C11,
+  'qgd::6::Be2@16': TQGD,
   'qgd::6::cxd5@8': C9,
   'qgd::6::Bxf6@12': C8,
   'qgd::6::Rc1@14': C11,
@@ -1102,7 +1265,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'qga::2::a3@12': C14,
   'qga::2::Qa4+@12': C14,
   'qga::3::a4@10': C13,
-  'qga::3::e3@6': C12,
+  'qga::3::e3@6': EQGA,
   'qga::3::a3@10': C13,
   'qga::3::Bg5@10': C13,
   'qga::3::Be2@10': C13,
@@ -1413,7 +1576,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'kings-indian-defence::0::h3@10': C38,
   'kings-indian-defence::0::h3@8': C38,
   'kings-indian-defence::0::Be3@12': C38,
-  'kings-indian-defence::0::d5@12': C38,
+  'kings-indian-defence::0::d5@12': TKID2,
   'kings-indian-defence::0::Nf3@6': C38,
   'kings-indian-defence::1::f3@8': C36,
   'kings-indian-defence::1::g3@4': C37,
@@ -1842,7 +2005,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'catalan-opening::1::dxc4@7': C69,
   'catalan-opening::2::c5@5': C69,
   'catalan-opening::2::Be7@7': C70,
-  'catalan-opening::2::Nc6@11': C69,
+  'catalan-opening::2::Nc6@11': TCAT,
   'catalan-opening::2::Bb4+@7': C71,
   'catalan-opening::2::Nc6@9': C69,
   'catalan-opening::2::c5@9': C69,
@@ -1895,7 +2058,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'london-system::0::Be7@9': C75,
   'london-system::0::Qb6@11': C75,
   'london-system::0::Qb6@9': C75,
-  'london-system::0::b6@15': C75,
+  'london-system::0::b6@15': TLON,
   'london-system::0::a6@11': C75,
   'london-system::1::Re8@17': C76,
   'london-system::1::c5@17': C76,
@@ -2018,7 +2181,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'trompowsky-attack::5::d6@7': C81,
   'trompowsky-attack::5::Qa5+@11': C81,
   'trompowsky-attack::6::Qa5+@7': C81,
-  'trompowsky-attack::6::d6@9': C81,
+  'trompowsky-attack::6::d6@9': ETRO,
   'trompowsky-attack::6::g5@7': C81,
   'trompowsky-attack::6::d5@5': C80,
   'trompowsky-attack::6::e6@9': C81,
@@ -2071,7 +2234,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'old-indian-defence::3::dxe5@14': C90,
   'old-indian-defence::3::Nf3@4': C87,
   'old-indian-defence::3::Qc2@14': C90,
-  'old-indian-defence::3::e4@8': C89,
+  'old-indian-defence::3::e4@8': TOLD,
   'old-indian-defence::3::h3@14': C90,
   'old-indian-defence::3::Bg5@14': C90,
   'old-indian-defence::3::Re1@14': C90,
@@ -2126,7 +2289,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'english-opening::2::Re8@11': C92,
   'english-opening::2::Bxc3@11': C92,
   'english-opening::2::d5@11': C91,
-  'english-opening::2::d5@7': C91,
+  'english-opening::2::d5@7': TENG,
   'english-opening::2::h6@11': C92,
   'english-opening::2::a6@11': C92,
   'english-opening::2::Bc5@7': C92,
@@ -2195,7 +2358,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'reti-opening::1::h6@13': C97,
   'reti-opening::1::Nxe4@19': C97,
   'reti-opening::1::Re8@13': C97,
-  'reti-opening::1::dxc4@11': C98,
+  'reti-opening::1::dxc4@11': TRETI,
   'reti-opening::1::Ne4@13': C97,
   'reti-opening::1::dxc4@9': C98,
   'reti-opening::2::Be7@9': C98,
@@ -2314,7 +2477,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'kings-indian-attack::5::Nf6@5': C104,
   'kings-indian-attack::5::Qc7@15': C102,
   'kings-indian-attack::5::Ba6@19': C106,
-  'kings-indian-attack::5::e5@7': C104,
+  'kings-indian-attack::5::e5@7': TKIA,
   'kings-indian-attack::5::Qc7@13': C102,
   'kings-indian-attack::5::d4@19': C106,
   'kings-indian-attack::6::Nbd7@11': C103,
@@ -2349,7 +2512,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'birds-opening::0::Nc6@7': C107,
   'birds-opening::1::f6@11': C108,
   'birds-opening::1::Nc6@11': C108,
-  'birds-opening::1::Nge7@17': C108,
+  'birds-opening::1::Nge7@17': TBIRD,
   'birds-opening::1::Qh4+@11': C108,
   'birds-opening::1::Be6@17': C108,
   'birds-opening::1::Nd7@11': C108,
@@ -2437,7 +2600,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'albin-countergambit::2::e3@4': C112,
   'albin-countergambit::2::a3@6': C112,
   // ── englund-gambit ──
-  'englund-gambit::0::Nc3@10': C116,
+  'englund-gambit::0::Nc3@10': EENG,
   'englund-gambit::0::Nc3@8': C117,
   'englund-gambit::0::Nbd2@8': C117,
   'englund-gambit::0::Bxb4@12': C118,
@@ -2449,7 +2612,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'englund-gambit::0::Nbd2@12': C118,
   // ── anti-benoni-push ──
   'anti-benoni-push::0::d6@13': C119,
-  'anti-benoni-push::0::e6@5': C120,
+  'anti-benoni-push::0::e6@5': EABEN,
   'anti-benoni-push::0::Bg7@13': C119,
   'anti-benoni-push::0::g6@5': C121,
   'anti-benoni-push::0::e5@5': C122,
@@ -2468,7 +2631,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-benoni-push::1::b5@5': C119,
   'anti-benoni-push::1::g6@5': C121,
   'anti-benoni-push::2::b5@5': C119,
-  'anti-benoni-push::2::e6@5': C120,
+  'anti-benoni-push::2::e6@5': EABEN,
   'anti-benoni-push::2::e5@5': C122,
   'anti-benoni-push::2::d6@5': C121,
   'anti-benoni-push::2::d6@7': C121,
@@ -2478,7 +2641,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-benoni-push::2::a6@9': C121,
   'anti-benoni-push::2::Qa5@9': C121,
   'anti-benoni-push::3::b5@5': C119,
-  'anti-benoni-push::3::e6@5': C120,
+  'anti-benoni-push::3::e6@5': EABEN,
   'anti-benoni-push::3::Bd6@7': C122,
   'anti-benoni-push::3::a6@7': C122,
   'anti-benoni-push::3::g6@5': C121,
@@ -2501,7 +2664,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-englund::1::f6@7': C124,
   'anti-englund::1::Be7@7': C124,
   'anti-englund::1::Nge7@7': C124,
-  'anti-englund::1::Qe7@5': C123,
+  'anti-englund::1::Qe7@5': EAENG,
   'anti-englund::1::h6@9': C124,
   'anti-englund::1::dxe5@9': C124,
   'anti-englund::1::Nge7@5': C125,
@@ -2521,7 +2684,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-kid-saemisch::0::a6@9': C127,
   'anti-kid-saemisch::1::d5@5': C126,
   'anti-kid-saemisch::1::O-O@7': C127,
-  'anti-kid-saemisch::1::c5@11': C126,
+  'anti-kid-saemisch::1::c5@11': TAKID,
   'anti-kid-saemisch::1::e5@11': C129,
   'anti-kid-saemisch::1::a6@11': C127,
   'anti-kid-saemisch::1::Nbd7@11': C127,
@@ -2564,7 +2727,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-grunfeld-exchange::0::O-O@13': C131,
   'anti-grunfeld-exchange::0::c5@11': C131,
   'anti-grunfeld-exchange::1::Bg7@5': C130,
-  'anti-grunfeld-exchange::1::c5@13': C131,
+  'anti-grunfeld-exchange::1::c5@13': TAGRU,
   'anti-grunfeld-exchange::1::c5@11': C131,
   // ── anti-nimzo-qc2 ──
   'anti-nimzo-qc2::0::d5@5': C132,
@@ -2580,7 +2743,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-nimzo-qc2::1::c5@5': C132,
   'anti-nimzo-qc2::1::d6@7': C134,
   'anti-nimzo-qc2::1::Nc6@7': C134,
-  'anti-nimzo-qc2::1::Qxd5@9': C132,
+  'anti-nimzo-qc2::1::Qxd5@9': EANIM,
   'anti-nimzo-qc2::1::b6@7': C133,
   'anti-nimzo-qc2::2::O-O@7': C135,
   'anti-nimzo-qc2::2::d5@5': C132,
@@ -2603,7 +2766,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-qid-fianchetto::0::b5@9': C139,
   'anti-qid-fianchetto::1::d5@5': C136,
   'anti-qid-fianchetto::1::Bb4+@5': C137,
-  'anti-qid-fianchetto::1::Ba6@7': C139,
+  'anti-qid-fianchetto::1::Ba6@7': EAQID,
   'anti-qid-fianchetto::1::c5@5': C136,
   'anti-qid-fianchetto::1::Bb4+@7': C137,
   // ── anti-dutch-staunton ──
@@ -2616,7 +2779,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-dutch-staunton::1::c6@7': C142,
   'anti-dutch-staunton::1::e6@7': C142,
   'anti-dutch-staunton::1::exf3@9': C142,
-  'anti-dutch-staunton::1::dxe4@11': C141,
+  'anti-dutch-staunton::1::dxe4@11': EADUT,
   'anti-dutch-staunton::1::e3@9': C142,
   'anti-dutch-staunton::2::d5@5': C140,
   'anti-dutch-staunton::2::Nc6@7': C142,
@@ -2646,18 +2809,18 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-qgd-exchange::1::Be6@7': C145,
   'anti-qgd-exchange::1::Nf6@5': C145,
   'anti-qgd-exchange::1::Nc6@7': C145,
-  'anti-qgd-exchange::1::c6@9': C145,
+  'anti-qgd-exchange::1::c6@9': EAQGD,
   'anti-qgd-exchange::1::Bb4@9': C145,
   'anti-qgd-exchange::1::Nbd7@9': C145,
   // ── anti-budapest ──
   'anti-budapest::0::Ne4@5': C146,
   'anti-budapest::0::g5@7': C147,
   'anti-budapest::0::Bb4+@7': C147,
-  'anti-budapest::1::Nc6@7': C147,
+  'anti-budapest::1::Nc6@7': EABUD,
   'anti-budapest::1::Ne4@5': C146,
   'anti-budapest::1::Bb4+@7': C147,
   'anti-budapest::1::Nc6@9': C147,
-  'anti-budapest::2::Nc6@7': C147,
+  'anti-budapest::2::Nc6@7': EABUD,
   'anti-budapest::2::Ne4@5': C146,
   'anti-budapest::2::g5@7': C147,
   // ── anti-london-black ──
@@ -2676,7 +2839,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-london-black::1::Nc3@8': C148,
   'anti-london-black::1::Be2@8': C148,
   'anti-london-black::1::Nbd2@8': C148,
-  'anti-london-black::1::c3@6': C148,
+  'anti-london-black::1::c3@6': EALON,
   'anti-london-black::1::e4@4': C149,
   'anti-london-black::1::Nc3@6': C148,
   'anti-london-black::1::c3@4': C148,
@@ -2691,7 +2854,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-catalan-black::1::Nf3@4': C150,
   'anti-catalan-black::1::Nc3@4': C151,
   'anti-catalan-black::1::Nf3@6': C152,
-  'anti-catalan-black::1::Nf3@8': C150,
+  'anti-catalan-black::1::Nf3@8': EACAT,
   'anti-catalan-black::1::Nf3@10': C153,
   'anti-catalan-black::1::Nd2@10': C153,
   'anti-catalan-black::1::Be3@12': C153,
@@ -2731,7 +2894,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-colle-black::2::c3@8': C158,
   'anti-colle-black::3::c4@4': C154,
   'anti-colle-black::3::Bf4@4': C155,
-  'anti-colle-black::3::exd4@8': C156,
+  'anti-colle-black::3::exd4@8': EACOL,
   'anti-colle-black::3::g3@4': C156,
   'anti-colle-black::3::Nxd4@8': C156,
   'anti-colle-black::3::Bg5@4': C155,
