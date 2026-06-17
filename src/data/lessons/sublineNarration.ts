@@ -78,6 +78,49 @@ const ENG_BE6: SublineNarration = {
   sources: ENG_SRC,
 };
 
+const QP_SRC = ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit'];
+// Nimzo, White's anti-Nimzo Nf3 (delaying Nc3). d4 Nf6 c4 e6 Nf3 d5 Nc3 Be7
+const NIMZO_NF3: SublineNarration = {
+  intro: {
+    say: "Nf3 — White delays Nc3 to dodge the Nimzo pin. Don't force it: answer …d5, reaching a sound, classical Queen's-Gambit structure where you're fully equal. If White ever does play Nc3, the …Bb4 pin is still there waiting; until then you develop comfortably with no weaknesses.",
+    sayShort: 'Nf3 — flexible …d5, stay solid.',
+  },
+  sources: QP_SRC,
+};
+// Queen's Indian → Nc3 transposing to a Nimzo. d4 Nf6 c4 e6 Nc3 Bb4
+const QID_NC3: SublineNarration = {
+  intro: {
+    say: "Nc3 — and this slides straight into Nimzo-Indian territory. Answer …Bb4, pinning the knight and contesting e4 just as you would in the Nimzo proper. The Queen's Indian and the Nimzo are sisters — whichever way White moves, you reach a comfortable, well-charted structure with easy equality.",
+    sayShort: 'Nc3 — transpose: pin with …Bb4.',
+  },
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense'],
+};
+// Scotch declined with …d6 (student White). e4 e5 Nf3 Nc6 d4 d6 Bb5 Bd7
+const SCOTCH_D6: SublineNarration = {
+  intro: {
+    say: "…d6 — Black declines the Scotch tension passively, propping up e5 instead of taking on d4. Make him pay for the meekness: Bb5 pins the c6-knight, you keep the central pawn duo, and with a clean space edge and faster development you press a comfortable, risk-free pull.",
+    sayShort: '…d6 — pin Bb5, keep the space.',
+  },
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scotch_Game'],
+};
+// Grünfeld Exchange — the critical main line (student Black).
+// d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Bc4 c5
+const GRUN_EXCHANGE: SublineNarration = {
+  intro: {
+    say: "cxd5 — the Exchange Grünfeld, the critical main line and the whole point of the opening. White builds the broad d4-e4 pawn centre; your entire strategy is to tear it down. The g7-bishop rakes it on the long diagonal, …c5 and …Bg4 and …Nc6 pile on, and if that centre cracks White is simply worse. You invite the big centre precisely so you can demolish it.",
+    sayShort: 'cxd5 — Exchange: demolish the centre.',
+  },
+  sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
+};
+// Grünfeld Fianchetto (quiet g3). d4 Nf6 c4 g6 g3 Bg7 Bg2 O-O
+const GRUN_G3: SublineNarration = {
+  intro: {
+    say: "g3 — the quiet Fianchetto Grünfeld, where White declines the big centre and develops calmly. There's no pressure to react to, so equalise cleanly: castle, hit the centre with …d5, and if White grabs on c4 you regain it comfortably. A balanced, healthy game with no weaknesses.",
+    sayShort: 'g3 — castle and break …d5.',
+  },
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
+};
+
 // French — White's 3rd-move SYSTEM choices surface as the top deviation across
 // several Black variation tabs (the subline generator branches at the shared
 // fork). Author each unique line ONCE and map it to every tab that shows it.
@@ -453,6 +496,72 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
       sayShort: '…f5 — stay calm, hit back with d4.',
     },
     sources: ['concept:pos-center', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/English_Opening'],
+  },
+
+  // ── Nimzo-Indian (student Black) ──
+  'nimzo-indian::0::Nf3@4': NIMZO_NF3,
+  'nimzo-indian::1::Nf3@4': NIMZO_NF3,
+  'nimzo-indian::2::Nf3@4': NIMZO_NF3,
+  'nimzo-indian::4::Nf3@4': NIMZO_NF3,
+  'nimzo-indian::5::Nf3@4': NIMZO_NF3,
+  'nimzo-indian::6::Nf3@4': NIMZO_NF3,
+  'nimzo-indian::7::Nf3@4': NIMZO_NF3,
+  'nimzo-indian::3::Bxf6@8': {
+    intro: {
+      say: "Bxf6 — White trades the pinning bishop to dent your structure. Recapture toward the centre with …Qxf6: yes, White takes the bishop pair, but you keep the Nimzo's real trump — you'll play …Bxc3 to saddle him with doubled c-pawns and then strike with …e5, a fine, fighting game where the structure is yours to exploit.",
+      sayShort: 'Bxf6 — …Qxf6; play on the c-pawns.',
+    },
+    sources: QP_SRC,
+  },
+
+  // ── Queen's Indian (student Black) — Nc3 transposes to a Nimzo on every tab ──
+  'queens-indian::0::Nc3@4': QID_NC3,
+  'queens-indian::1::Nc3@4': QID_NC3,
+  'queens-indian::2::Nc3@4': QID_NC3,
+  'queens-indian::3::Nc3@4': QID_NC3,
+  'queens-indian::4::Nc3@4': QID_NC3,
+  'queens-indian::5::Nc3@4': QID_NC3,
+  'queens-indian::6::Nc3@4': QID_NC3,
+
+  // ── Semi-Slav (student Black) — quiet e3 …Bf5 on every tab (same as the Slav) ──
+  'semi-slav::0::e3@6': SLAV_E3,
+  'semi-slav::1::e3@6': SLAV_E3,
+  'semi-slav::2::e3@6': SLAV_E3,
+  'semi-slav::3::e3@6': SLAV_E3,
+  'semi-slav::4::e3@6': SLAV_E3,
+  'semi-slav::5::e3@6': SLAV_E3,
+  'semi-slav::6::e3@6': SLAV_E3,
+
+  // ── Scotch Game (student White) — …d6 decline on every tab ──
+  'scotch-game::0::d6@5': SCOTCH_D6,
+  'scotch-game::1::d6@5': SCOTCH_D6,
+  'scotch-game::2::d6@5': SCOTCH_D6,
+  'scotch-game::3::d6@5': SCOTCH_D6,
+  'scotch-game::4::d6@5': SCOTCH_D6,
+  'scotch-game::5::d6@5': SCOTCH_D6,
+  'scotch-game::6::d6@5': SCOTCH_D6,
+  'scotch-game::7::d6@5': SCOTCH_D6,
+
+  // ── Grünfeld Defence (student Black) ──
+  'grunfeld-defence::2::cxd5@6': GRUN_EXCHANGE,
+  'grunfeld-defence::0::g3@4': GRUN_G3,
+  'grunfeld-defence::1::g3@4': GRUN_G3,
+  'grunfeld-defence::6::g3@4': GRUN_G3,
+  'grunfeld-defence::4::Be3@14': GRUN_EXCHANGE,
+  'grunfeld-defence::7::Be3@14': GRUN_EXCHANGE,
+  'grunfeld-defence::3::Nc3@4': {
+    intro: {
+      say: "Nc3 — White heads into the main Grünfeld/King's-Indian crossroads. Stay true to the plan: fianchetto with …Bg7, castle, and if White grabs the big centre, attack it with …d5 or …c5 and piece pressure. You let White overextend so you can hit back. Comfortable, dynamic equality.",
+      sayShort: 'Nc3 — fianchetto, then strike the centre.',
+    },
+    sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
+  },
+  'grunfeld-defence::5::Nc3@4': {
+    intro: {
+      say: "Nc3 — White heads into the main Grünfeld/King's-Indian crossroads. Stay true to the plan: fianchetto with …Bg7, castle, and if White grabs the big centre, attack it with …d5 or …c5 and piece pressure. You let White overextend so you can hit back. Comfortable, dynamic equality.",
+      sayShort: 'Nc3 — fianchetto, then strike the centre.',
+    },
+    sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
   },
 };
 
