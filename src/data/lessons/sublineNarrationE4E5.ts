@@ -864,6 +864,26 @@ const VN_QG4: SublineNarration = {
   sources: VN,
 };
 
+// ── Vienna Gambit (student WHITE). triggerMove is BLACK's deviation. ──
+const VG = ['concept:pos-initiative', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Vienna_Game'];
+
+// var0 — accepted with e5 (f4 exf4 e5 Ng8 Nf3). Space and attack.
+const VG_E5: SublineNarration = {
+  intro: {
+    say: "The Vienna Gambit accepted — your e5-pawn shoves the f6-knight back to g8, winning a big lead in space and development while Black is forced into reverse. Build the attack: Nf3 and d4 erect the broad centre, Bxf4 reclaims the gambit pawn, and the half-open f-file aims at f7. You're a pawn down for a commanding initiative — develop with threats and storm the kingside before Black can untangle.",
+    sayShort: 'Accepted — e5 space, d4 and Bxf4.',
+  },
+  sources: VG,
+};
+// var1 — f4 d5 fxe5 Nxe4 Qf3. White's Qf3/Bf4/O-O-O attack with the bishop pair.
+const VG_QF3: SublineNarration = {
+  intro: {
+    say: "…d5 fxe5 …Nxe4 Qf3 — the modern main line, and your pieces flow to fighting squares. After …Nxc3 dxc3 you hold the bishop pair and open lines, Bf4 develops with tempo, and O-O-O throws the rook onto the d-file for an opposite-wing attack. The e5-pawn cramps Black's kingside while you castle long and roll the h- and g-pawns — a rich, attacking game with the initiative firmly yours.",
+    sayShort: 'Qf3 — bishop pair, O-O-O, attack.',
+  },
+  sources: VG,
+};
+
 export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   // ── Ruy Lopez ──
   'ruy-lopez::0::Nf6@5': RUY_BERLIN,
@@ -1523,4 +1543,26 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'vienna-game::7::Bd6@11': VN_QG4,
   'vienna-game::7::Nge7@11': VN_QG4,
   'vienna-game::7::h5@13': VN_QG4,
+
+  // -- Vienna Gambit --
+  'vienna-gambit::0::Qe7@7': VG_E5,
+  'vienna-gambit::0::Nc6@9': VG_E5,
+  'vienna-gambit::0::Bb4@9': VG_E5,
+  'vienna-gambit::0::g5@9': VG_E5,
+  'vienna-gambit::0::Bc5@9': VG_E5,
+  'vienna-gambit::0::d5@9': VG_E5,
+  'vienna-gambit::0::Be7@9': VG_E5,
+  'vienna-gambit::0::Bg4@11': VG_E5,
+  'vienna-gambit::0::f6@9': VG_E5,
+  'vienna-gambit::0::h6@9': VG_E5,
+  'vienna-gambit::1::Nc6@13': VG_QF3,
+  'vienna-gambit::1::Bc5@13': VG_QF3,
+  'vienna-gambit::1::c5@13': VG_QF3,
+  'vienna-gambit::1::Nd7@13': VG_QF3,
+  'vienna-gambit::1::O-O@15': VG_QF3,
+  'vienna-gambit::1::c6@13': VG_QF3,
+  'vienna-gambit::1::Nd7@15': VG_QF3,
+  'vienna-gambit::1::Bg5@15': VG_QF3,
+  'vienna-gambit::1::c5@15': VG_QF3,
+  'vienna-gambit::1::Nc6@9': VG_QF3,
 };
