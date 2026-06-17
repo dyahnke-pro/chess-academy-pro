@@ -30,6 +30,22 @@ export const SLAV_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
       b({ id: 'sq3', moves: 'd4 d5 c4 c6 Nf3 Nf6 Qc2 dxc4 Qxc4 Bf5 g3 e6 Bg2 Nbd7 O-O Be7 Nc3 O-O Re1 Ne4 Qb3 Qb6', say: "Black plants the knight on the powerful …Ne4 outpost and offers a queen trade with …Qb6, equalising cleanly. There is the Modern Slav tabiya: the active bishop on f5, the dominant knight on e4, the solid …c6/…e6 structure and easy piece play — comfortable equality that scores 59% at club level.", sayShort: '…Ne4, …Qb6 — outpost and full equality.', highlights: [H('e4', KEY), H('b6', SOFT)] }),
     ],
   },
+  'slav-defence::Exchange Variation': {
+    openingId: 'slav-defence', title: 'Slav — The Exchange Variation', minutes: 9, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'se1', moves: 'd4 d5 c4 c6 cxd5 cxd5 Bf4 Nc6', say: "The Exchange Slav: White releases the tension with cxd5, leaving a symmetric structure with a drawish reputation. But Black plays for the full point by developing actively — …Nc6 hits d4, and Black will get the light bishop out before …e6, the whole point of the Slav.", sayShort: '…Nc6 — develop actively for the win.', highlights: [H('d5', KEY)] }),
+      b({ id: 'se2', moves: 'd4 d5 c4 c6 cxd5 cxd5 Bf4 Nc6 e3 Nf6 Bd3 Bg4 Nf3 e6 Nbd2 Bd6', say: "Black mirrors White's development but gets the light bishop OUTSIDE the chain with …Bg4 before …e6, then meets Bf4 with …Bd6. Symmetric, yes, but Black has solved the opening completely — no bad pieces and no weaknesses.", sayShort: '…Bg4, …Bd6 — bishop out, then mirror.', highlights: [H('g4', KEY), H('d6', SOFT)] }),
+      b({ id: 'se3', moves: 'd4 d5 c4 c6 cxd5 cxd5 Bf4 Nc6 e3 Nf6 Bd3 Bg4 Nf3 e6 Nbd2 Bd6 Bg3 O-O O-O Rc8 Rc1 Bxg3', say: "White offers the bishop trade with Bg3; Black castles, grabs the c-file with …Rc8, and trades …Bxg3 — saddling White with doubled g-pawns after the recapture. There is the Exchange tabiya: symmetric and solid, but Black holds the c-file and the cleaner pawn structure to press for a win. The drawish reputation, refuted by activity.", sayShort: '…Bxg3 — damage the pawns, hold the c-file.', highlights: [H('g3', KEY), H('c8', SOFT)] }),
+    ],
+  },
+  'slav-defence::Chebanenko Variation (4...a6)': {
+    openingId: 'slav-defence', title: 'Slav — The Chebanenko (…a6)', minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'ch1', moves: 'd4 d5 c4 c6 Nf3 Nf6 Nc3 a6', say: "The Chebanenko Slav — the modern, flexible …a6. It looks modest, but it does a lot: it prepares …b5 to grab queenside space, keeps the light bishop's options open between …Bf5 and …Bg4, and waits to see White's plan. One of the most reliable Slav systems.", sayShort: '…a6 — flexible, prepares …b5.', highlights: [H('a6', KEY)] }),
+      b({ id: 'ch2', moves: 'd4 d5 c4 c6 Nf3 Nf6 Nc3 a6 e3 Bf5 Be2 e6 O-O Nbd7 b3 Bd6', say: "Black gets the bishop out to …Bf5 before locking the centre, then develops …e6, …Nbd7 and …Bd6 and castles. Every piece reaches a natural, active square — the harmonious, weakness-free position the Slav is built for.", sayShort: '…Bf5, …Bd6 — harmonious development.', highlights: [H('f5', KEY), H('d6', SOFT)] }),
+      b({ id: 'ch3', moves: 'd4 d5 c4 c6 Nf3 Nf6 Nc3 a6 e3 Bf5 Be2 e6 O-O Nbd7 b3 Bd6 Bb2 O-O Rc1 Rc8 h3 Bb8', say: "Both sides develop and contest the c-file; Black tucks …Bb8, keeping the bishop on the active b8-h2 diagonal while clearing d6 for the other pieces. There is the Chebanenko tabiya: the rock-solid Slav structure, active bishops on f5 and b8, queenside space coming with …b5 — a comfortable, even slightly preferable game for Black.", sayShort: '…Bb8 — keep the diagonal, ready …b5.', highlights: [H('b8', KEY)] }),
+    ],
+  },
   'slav-defence::Geller Gambit': {
     openingId: 'slav-defence', title: 'Slav — The Geller Gambit (5.e4)', minutes: 9, orientation: 'black', sources: SRC,
     beats: [

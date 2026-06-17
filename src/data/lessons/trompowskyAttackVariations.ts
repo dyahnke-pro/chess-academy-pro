@@ -9,6 +9,36 @@ const SOFT = 'rgba(80,140,255,0.32)';
 const TROMP = 'https://en.wikipedia.org/wiki/Trompowsky_Attack';
 
 export const TROMPOWSKY_ATTACK_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'trompowsky-attack::2...Ne4 3.Bf4 Main Line': {
+    openingId: 'trompowsky-attack',
+    sources: ['concept:pos-space', 'concept:pos-development', TROMP],
+    title: '2...Ne4 — The 3.Bf4 Main Line',
+    minutes: 9,
+    orientation: 'white',
+    beats: [
+      {
+        id: 'tn1',
+        moves: ['d4', 'Nf6', 'Bg5', 'Ne4', 'Bf4'],
+        highlights: [{ square: 'f4', color: KEY }, { square: 'e4', color: SOFT }],
+        say: "The Trompowsky — 2.Bg5 pins the f6-knight at once, and against the most common reply, Black's 2…Ne4 hitting the bishop, White simply retreats to f4. The bishop stays active on a great diagonal and White has avoided all the doubled-pawn structures. A low-theory, off-beat way to fight for the centre on White's terms.",
+        sayShort: 'Bf4 — keep the bishop active.',
+      },
+      {
+        id: 'tn2',
+        moves: ['d4', 'Nf6', 'Bg5', 'Ne4', 'Bf4', 'd5', 'e3', 'c5', 'Bd3', 'Nc6', 'Bxe4', 'dxe4'],
+        highlights: [{ square: 'e4', color: KEY }, { square: 'c5', color: SOFT }],
+        say: "Black grabs the centre with …d5 and …c5; White challenges the advanced knight with Bd3 and trades it off with Bxe4. After …dxe4 Black is left with a loose, over-extended pawn on e4 — a long-term target — while White's pieces are ready to swarm around it.",
+        sayShort: 'Bxe4 dxe4 — leave Black a loose e4-pawn.',
+      },
+      {
+        id: 'tn3',
+        moves: ['d4', 'Nf6', 'Bg5', 'Ne4', 'Bf4', 'd5', 'e3', 'c5', 'Bd3', 'Nc6', 'Bxe4', 'dxe4', 'd5', 'Nb4', 'Nc3', 'e6', 'd6', 'f5', 'a3', 'Nc6'],
+        highlights: [{ square: 'd6', color: KEY }, { square: 'f5', color: SOFT }],
+        say: "White surges d5 and then the cheeky d6! — a cramping pawn wedge jammed deep in Black's camp — while developing Nc3; Black blocks with …e6 and props the centre with …f5. There is the tabiya: a roughly level but unbalanced fight where White's d6-wedge and easy development hand White the more pleasant, low-theory game — scoring 54% at club.",
+        sayShort: 'd6 — the cramping wedge, easy game.',
+      },
+    ],
+  },
   'trompowsky-attack::2...d5 3.Bxf6 Doubled Pawns': {
     openingId: 'trompowsky-attack',
     sources: ['concept:pos-bishop-pair', 'concept:pawn-doubled', TROMP],
