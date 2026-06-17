@@ -543,6 +543,75 @@ const FK_G6: SublineNarration = {
   sources: FK_CTR,
 };
 
+// ── Scotch Game (student WHITE). triggerMove is BLACK's deviation. ──
+const SC = ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scotch_Game'];
+const SC_INIT = ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scotch_Game'];
+
+// Classical Scotch (var0 + shared Bc5@7) — …Bc5 Be3 Qf6 c3 lines.
+const SC_CLASSICAL: SublineNarration = {
+  intro: {
+    say: "…Bc5 — the Classical Scotch, Black posting the bishop opposite your d4-knight. Meet it with Be3 to challenge the bishop and brace the knight, c3 to bolster the centre, and Bc4 eyeing f7. You'll castle, line the rooks on the central files, and use your space and the half-open d-file to keep a small, lasting pull while Black untangles.",
+    sayShort: '…Bc5 — Be3, c3, press the centre.',
+  },
+  sources: SC,
+};
+// Mieses main line (var1, Nf6 Nxc6 bxc6 e5 Qe7 Qe2 Nd5 c4) — e5 space + Black's doubled c-pawns.
+const SC_MIESES: SublineNarration = {
+  intro: {
+    say: "The Mieses main line — your e5-pawn cramps Black's kingside and c4 kicks the d5-knight back to the rim. The structural verdict is yours to exploit: Black carries doubled, sickly c-pawns while your queenside majority is healthy. Develop behind the e5-wedge, finish your king's safety, and grind the long-term pawn weakness in the endgame.",
+    sayShort: 'Mieses — e5 space, target the c-pawns.',
+  },
+  sources: SC,
+};
+// Scotch with Bc4 (var2, Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4) — sharp, active pieces.
+const SC_BC4: SublineNarration = {
+  intro: {
+    say: "The Bc4 Scotch — you've kept the bishop trained on f7 and thrown the e5-pawn forward to cramp and to open lines. After Bb5 pins the c6-knight, your pieces swarm the centre while Black scrambles to consolidate. It's sharp and rich in initiative: pressure f7 and the loose queenside, castle, and keep Black solving problems on every move.",
+    sayShort: 'Bc4 — e5 wedge, Bb5 pin, attack f7.',
+  },
+  sources: SC_INIT,
+};
+// Scotch with Nc3 / Bd3 IQP (var3 & var6, Nf6 Nc3 Bb4 Nxc6 bxc6 Bd3 d5 …).
+const SC_NC3_IQP: SublineNarration = {
+  intro: {
+    say: "The Nc3 Scotch — the exchanges have left a lively, near-symmetrical middlegame where your pieces find the more active squares. Bg5 pins the f6-knight, Qf3 swings to the kingside, and the rooks claim the open central files. The game is balanced, so the win is MADE: keep the pieces aimed at Black's king and probe the weak light squares before he consolidates.",
+    sayShort: 'Nc3 Scotch — active pieces, Bg5 and Qf3.',
+  },
+  sources: SC,
+};
+// Göring Gambit (var4, c3 dxc3 Nxc3 Bb4 Bc4 …) — a pawn for a roaring lead in development.
+const SC_GORING: SublineNarration = {
+  intro: {
+    say: "The Göring Gambit — you've fed a pawn to rip the centre open and seize a commanding lead in development. This is attacking chess: Bc4 glares at f7, you castle in a flash, and the open lines pour your rooks toward Black's king before he can untangle. Down a pawn and completely on top — develop with threats and make the initiative pay.",
+    sayShort: 'Göring — a pawn for a roaring attack.',
+  },
+  sources: SC_INIT,
+};
+// Steinitz …Qh4 raid (var5, Nxd4 Qh4 Nb5) — harass the early queen.
+const SC_STEINITZ_QH4: SublineNarration = {
+  intro: {
+    say: "…Qh4 — Steinitz's audacious early queen raid, snapping at e4 and the h-pawn. Don't panic, punish it: Nb5 leaps in hitting c7 and the a7-rook fork while gaining tempo, and the loose black queen gets chased around the board. You complete development with threats and emerge a clear tempo or two ahead — the raid is a gift, not a danger.",
+    sayShort: '…Qh4 — Nb5 hits c7, chase the queen.',
+  },
+  sources: SC_INIT,
+};
+// Modern Nb3 main line (var7, Nxd4 Bc5 Nb3 Bb6 Nc3 Nf6 Qe2) — opposite-side play.
+const SC_NB3_MODERN: SublineNarration = {
+  intro: {
+    say: "The modern Nb3 main line — you've nudged Black's bishop to b6 and built the flexible Qe2-and-Be3 setup. Now choose your battleground: Be3 trades the dark bishops and O-O-O sets up an opposite-wing pawn-storm race, or O-O keeps it quiet and positional. Either way you hold the central space and the bishop-pair option — pick the structure that suits and press.",
+    sayShort: 'Nb3 — Be3, then choose O-O-O or O-O.',
+  },
+  sources: SC,
+};
+// Nf6@5 cont — Black delays the capture (d4 Nf6). White takes on e5.
+const SC_NF6_EARLY: SublineNarration = {
+  intro: {
+    say: "…Nf6 — Black hits e4 before recapturing on d4, a slippery move-order. Answer dxe5 and after …Nxe4 the centre clears into a balanced, open game; you keep a touch more space and the freer development. Don't over-press the symmetry — finish developing, claim an open file, and squeeze the small edge that moving first hands you.",
+    sayShort: '…Nf6 — answer dxe5, keep the small edge.',
+  },
+  sources: SC,
+};
+
 export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   // ── Ruy Lopez ──
   'ruy-lopez::0::Nf6@5': RUY_BERLIN,
@@ -853,4 +922,77 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'four-knights-game::8::Nd4@11': FK_GLEK,
   'four-knights-game::8::Be6@13': FK_GLEK,
   'four-knights-game::8::Be6@15': FK_GLEK,
+
+  // ── Scotch Game ──
+  'scotch-game::0::Nf6@5': SC_NF6_EARLY,
+  'scotch-game::0::Ne5@13': SC_CLASSICAL,
+  'scotch-game::0::d6@13': SC_CLASSICAL,
+  'scotch-game::0::Ne5@15': SC_CLASSICAL,
+  'scotch-game::0::Bb6@15': SC_CLASSICAL,
+  'scotch-game::0::Bb6@13': SC_CLASSICAL,
+  'scotch-game::0::Qg6@13': SC_CLASSICAL,
+  'scotch-game::0::a6@15': SC_CLASSICAL,
+  'scotch-game::0::Nxd4@13': SC_CLASSICAL,
+  'scotch-game::1::Nf6@5': SC_NF6_EARLY,
+  'scotch-game::1::dxc6@9': SC_MIESES,
+  'scotch-game::1::Nb6@15': SC_MIESES,
+  'scotch-game::1::O-O-O@17': SC_MIESES,
+  'scotch-game::1::Bc5@7': SC_CLASSICAL,
+  'scotch-game::1::Qb4+@15': SC_MIESES,
+  'scotch-game::1::Qh4@17': SC_MIESES,
+  'scotch-game::1::Nb6@17': SC_MIESES,
+  'scotch-game::1::g5@17': SC_MIESES,
+  'scotch-game::2::Nf6@5': SC_NF6_EARLY,
+  'scotch-game::2::O-O@19': SC_BC4,
+  'scotch-game::2::Be7@17': SC_BC4,
+  'scotch-game::2::Bxc6@15': SC_BC4,
+  'scotch-game::2::Bb6@19': SC_BC4,
+  'scotch-game::2::c5@17': SC_BC4,
+  'scotch-game::2::Qe7@19': SC_BC4,
+  'scotch-game::2::Bc5@7': SC_CLASSICAL,
+  'scotch-game::2::Bc5@13': SC_BC4,
+  'scotch-game::3::Nf6@5': SC_NF6_EARLY,
+  'scotch-game::3::Bxc3+@11': SC_NC3_IQP,
+  'scotch-game::3::dxc6@11': SC_NC3_IQP,
+  'scotch-game::3::Bd6@21': SC_NC3_IQP,
+  'scotch-game::3::h6@21': SC_NC3_IQP,
+  'scotch-game::3::c6@17': SC_NC3_IQP,
+  'scotch-game::3::Bxc3@17': SC_NC3_IQP,
+  'scotch-game::3::Bc5@7': SC_CLASSICAL,
+  'scotch-game::3::Rb8@21': SC_NC3_IQP,
+  'scotch-game::4::Nf6@5': SC_NF6_EARLY,
+  'scotch-game::4::Nf6@13': SC_GORING,
+  'scotch-game::4::Bg4@13': SC_GORING,
+  'scotch-game::4::Bg4@15': SC_GORING,
+  'scotch-game::4::Be6@15': SC_GORING,
+  'scotch-game::4::Be6@13': SC_GORING,
+  'scotch-game::4::h6@13': SC_GORING,
+  'scotch-game::4::Nge7@13': SC_GORING,
+  'scotch-game::4::h6@15': SC_GORING,
+  'scotch-game::5::Nf6@5': SC_NF6_EARLY,
+  'scotch-game::5::Nf6@7': SC_STEINITZ_QH4,
+  'scotch-game::5::Bc5@7': SC_CLASSICAL,
+  'scotch-game::5::Bb4+@7': SC_STEINITZ_QH4,
+  'scotch-game::5::Qf6@7': SC_STEINITZ_QH4,
+  'scotch-game::5::Qxe4+@11': SC_STEINITZ_QH4,
+  'scotch-game::5::Bc5@9': SC_STEINITZ_QH4,
+  'scotch-game::5::Qxe4+@9': SC_STEINITZ_QH4,
+  'scotch-game::6::Nf6@5': SC_NF6_EARLY,
+  'scotch-game::6::Bxc3+@11': SC_NC3_IQP,
+  'scotch-game::6::dxc6@11': SC_NC3_IQP,
+  'scotch-game::6::c6@17': SC_NC3_IQP,
+  'scotch-game::6::Bxc3@17': SC_NC3_IQP,
+  'scotch-game::6::h6@21': SC_NC3_IQP,
+  'scotch-game::6::Bc5@7': SC_CLASSICAL,
+  'scotch-game::6::Be7@21': SC_NC3_IQP,
+  'scotch-game::6::Bg4@21': SC_NC3_IQP,
+  'scotch-game::7::Nf6@5': SC_NF6_EARLY,
+  'scotch-game::7::O-O@13': SC_NB3_MODERN,
+  'scotch-game::7::O-O@15': SC_NB3_MODERN,
+  'scotch-game::7::Nf6@7': SC_NB3_MODERN,
+  'scotch-game::7::Be6@15': SC_NB3_MODERN,
+  'scotch-game::7::Bg4@15': SC_NB3_MODERN,
+  'scotch-game::7::Qe7@13': SC_NB3_MODERN,
+  'scotch-game::7::Re8@19': SC_NB3_MODERN,
+  'scotch-game::7::Qe7@15': SC_NB3_MODERN,
 };
