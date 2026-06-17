@@ -16,7 +16,7 @@ const ATK = 'rgba(40,185,95,0.92)';
 const SOFT = 'rgba(80,140,255,0.32)';
 const _H = (square: string, color = KEY): AnnotationHighlight => ({ square, color });
 const _A = (from: string, to: string, color = ATK): AnnotationArrow => ({ from, to, color });
-void _H; void _A; void SOFT;
+void SOFT;
 
 // queens-gambit :: orthodox
 const C0: SublineNarration = {
@@ -814,6 +814,101 @@ const C158: SublineNarration = {
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit'],
 };
 
+// DEEP DSLAV :: slav-defence::4::a4@8
+const DSLAV: SublineNarration = {
+  intro: { say: "The main-line Slav — you took on c4 and White fixed the tension with a4. The whole point of grabbing c4 first was to free your light-squared bishop, and now it steps out: the move that defines the Slav. Your problem piece becomes your best piece, sitting proudly outside the pawn chain.", sayShort: "Main Slav — free the bishop, …Bf5." },
+  beats: [
+    { atMove: 9, say: "…Bf5 — there it is, the bishop the whole Slav is built around, out OUTSIDE the pawn chain before …e6 ever locks it in. It rakes the b1-h7 diagonal toward c2, right beside White's king, and a4 has handed you the b4-square to use later.", sayShort: "…Bf5 — the good bishop, outside.", arrows: [_A('f5', 'b1', ATK)], highlights: [_H('f5', KEY)] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+// DEEP DSSL :: semi-slav::4::Bh4@10
+const DSSL: SublineNarration = {
+  intro: { say: "The sharpest Semi-Slav — White pins with Bg5, you poke with …h6, and after Bh4 you plunge in. This is Botvinnik and Anti-Moscow territory, the most analysed jungle in all of chess, and the verdict is that Black holds. Nerve and preparation win here.", sayShort: "Sharp Semi-Slav — …dxc4 then …g5." },
+  beats: [
+    { atMove: 11, say: "…dxc4 — you snatch the gambit pawn and commit to the fight. White gets the broad e4-centre and a lead in development for it; your job is to hold the extra material behind a coming wall of …b5 and queenside pawns.", sayShort: "…dxc4 — grab the gambit pawn.", highlights: [_H('c4', ATK)] },
+    { atMove: 13, say: "…g5! — the thunderbolt, smashing into the h4-bishop and grabbing kingside space in one stroke. You've taken the pawn and now you punch back before White consolidates the centre; the board erupts, and theory says Black is fine.", sayShort: "…g5 — hit the h4-bishop.", arrows: [_A('g5', 'h4', ATK)], highlights: [_H('g5', ATK), _H('h4', KEY)] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Semi-Slav_Defense'],
+};
+// DEEP DNIM :: nimzo-indian::5::f3@10
+const DNIM: SublineNarration = {
+  intro: { say: "The Sämisch Nimzo — you've already traded on c3 to saddle White with doubled, crippled c-pawns, and now f3 props the big e4-centre he wants. Your plan is to blockade and besiege: hit the centre, clamp it, and grind the fixed c4 and c3 pawns. Knights and light squares beat his bishops here.", sayShort: "Sämisch — …e5, …e4, target c4/c3." },
+  beats: [
+    { atMove: 7, say: "…Bxc3+ — the structural heart of the Sämisch. You hand over the bishop, but bxc3 leaves White with doubled, crippled c-pawns: a permanent weakness you'll grind against all game.", sayShort: "…Bxc3+ — wreck the c-pawns.", highlights: [_H('c3', KEY)] },
+    { atMove: 11, say: "…e5 — striking the centre. The pawn leans on d4, and with White's pieces still at home the broad front suddenly carries a real load.", sayShort: "…e5 — hit d4.", arrows: [_A('e5', 'd4', ATK)], highlights: [_H('e5', ATK), _H('d4', KEY)] },
+    { atMove: 13, say: "…e4! — the clamp. The pawn jams against f3 and freezes White's kingside, stealing the f3-square from his knight and locking the position in your favour while you finish developing in comfort.", sayShort: "…e4 — clamp and freeze f3.", arrows: [_A('e4', 'f3', ATK)], highlights: [_H('e4', ATK), _H('f3', KEY)] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+// DEEP DGRU :: grunfeld-defence::0::Bc4@12 | grunfeld-defence::1::Bc4@12 | grunfeld-defence::6::Bc4@12
+const DGRU: SublineNarration = {
+  intro: { say: "The Exchange Grünfeld main line, the whole point of the opening. White has built the broad d4-e4 centre and developed the bishop to c4; your entire strategy is to tear that centre down with the long-diagonal bishop and the …c5 hammer.", sayShort: "Exchange Grünfeld — demolish d4." },
+  beats: [
+    { atMove: 11, say: "…Bg7 — the soul of the Grünfeld. The bishop sits on the long diagonal with a clear run straight at d4, the keystone of White's whole centre. Everything else flows from here.", sayShort: "…Bg7 — the long-diagonal sniper.", arrows: [_A('g7', 'd4', ATK)], highlights: [_H('d4', KEY)] },
+    { atMove: 13, say: "…c5 — the hammer falls on d4. Joined by the g7-bishop bearing down the diagonal, the pawn attacks the base of White's centre; if those pawns ever crack, White is simply worse.", sayShort: "…c5 — hammer the d4-base.", arrows: [_A('c5', 'd4', ATK)], highlights: [_H('c5', ATK), _H('d4', KEY)] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
+};
+// DEEP DBENKO :: benko-gambit::3::bxa6@8 | benko-gambit::4::bxa6@8
+const DBENKO: SublineNarration = {
+  intro: { say: "The fully accepted Benko Gambit — you've given a pawn for the clearest long-term compensation in chess. The a- and b-files open like cannon barrels for your rooks, the g7-bishop will rake the long diagonal, and White's queenside is under permanent siege. You don't need the pawn back; the pressure never relents.", sayShort: "Benko accepted — pressure, not the pawn." },
+  beats: [
+    { atMove: 9, say: "…g6 — preparing the fianchetto. The bishop is coming to g7, the second barrel of the Benko's queenside artillery alongside the open a- and b-files.", sayShort: "…g6 — the fianchetto is coming.", highlights: [_H('g6', SOFT)] },
+    { atMove: 11, say: "…Bxa6 — recapturing and training the bishop on the a6-f1 diagonal. The moment White advances his e-pawn, this bishop crashes into f1 and ruins his castling. Every Benko piece points at the white king and queenside.", sayShort: "…Bxa6 — eye the a6-f1 diagonal.", highlights: [_H('a6', KEY), _H('f1', SOFT)] },
+    { atMove: 13, say: "…Bxf1 — and the bishop strikes, forcing Kxf1. White's castling is wrecked and his king stranded in the centre — exactly the structural damage that justifies the whole gambit. Your rooks pour down the open files at the exposed monarch.", sayShort: "…Bxf1 — wreck White's castling.", highlights: [_H('f1', ATK)] },
+  ],
+  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
+};
+// DEEP DALBIN :: albin-countergambit::1::fxe3@10
+const DALBIN: SublineNarration = {
+  intro: { say: "Lasker Trap territory — the most famous trap in the Albin. White has grabbed with e3 against your d4-wedge, and …dxe3 is poison: the f-pawn's recapture rips open the diagonal to White's king, and …Qh4+ wins the material straight back with a raging attack.", sayShort: "Lasker Trap — …dxe3 then …Qh4+." },
+  beats: [
+    { atMove: 9, say: "…dxe3! — the poisoned thrust. The pawn lands on e3, and White's natural fxe3 recapture will fatally bare the e1-h4 diagonal right into his own king.", sayShort: "…dxe3 — the poisoned pawn.", highlights: [_H('e3', ATK), _H('f2', SOFT)] },
+    { atMove: 11, say: "…Qh4+ — the trap springs. With the f2-pawn gone the diagonal to e1 is wide open, and the check rakes straight at White's stranded king. You regain the material with a crushing initiative — the Albin's whole point, paid in full.", sayShort: "…Qh4+ — the diagonal is open.", arrows: [_A('h4', 'e1', ATK)], highlights: [_H('h4', ATK), _H('e1', KEY)] },
+  ],
+  sources: ['concept:tac-trap', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Albin_Countergambit'],
+};
+// DEEP DQID :: queens-indian::1::g3@6 | queens-indian::2::g3@6 | queens-indian::6::g3@6
+const DQID: SublineNarration = {
+  intro: { say: "The modern Queen's Indian — White fianchettoes with g3, so you bite first with …Ba6, attacking the c4-pawn before the g2-bishop can settle. The whole opening is a fight for the light squares and the long diagonal; by hitting c4 you force a concession before White is ready.", sayShort: "QID — …Ba6 hits c4 first." },
+  beats: [
+    { atMove: 7, say: "…Ba6 — the modern move, the bishop swinging to the rim to bear down on c4. White must defend with b3 or Qa4, loosening his grip on the light squares — exactly the concession you wanted.", sayShort: "…Ba6 — pressure the c4-pawn.", arrows: [_A('a6', 'c4', ATK)], highlights: [_H('c4', KEY)] },
+    { atMove: 9, say: "…Bb4+ — a useful check before retreating, dragging White's bishop to d2 with gain of time. You develop with tempo while keeping the long-diagonal fight squarely in your favour.", sayShort: "…Bb4+ — check, gain a tempo.", arrows: [_A('b4', 'e1', ATK)], highlights: [_H('e1', SOFT)] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense'],
+};
+// DEEP DBUD :: budapest-gambit::4::Bf4@6
+const DBUD: SublineNarration = {
+  intro: { say: "The main-line Budapest — White holds the extra e5-pawn with Bf4, and you set about winning it back. …Nc6 develops with a direct hit on e5, and after …Bb4+ and …Ngxe5 the pawn returns, leaving a lively, equal game where your pieces leap out faster than White can untangle.", sayShort: "Budapest — …Nc6 hits e5." },
+  beats: [
+    { atMove: 7, say: "…Nc6 — developing with purpose, the knight attacking the e5-pawn White is trying to hold. With the coming …Bb4+ and …Ngxe5 your pieces regain the pawn with tempo and easy activity.", sayShort: "…Nc6 — attack the e5-pawn.", arrows: [_A('c6', 'e5', ATK)], highlights: [_H('e5', KEY)] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
+};
+// DEEP DDUT :: dutch-defence::3::e4@6
+const DDUT: SublineNarration = {
+  intro: { say: "White lunges with the e4 anti-Leningrad thrust, offering a pawn to crack the centre against your …f5. Don't flinch — …f4 grabs kingside space and shuts White's bishop out, while your g7-bishop already rakes the long diagonal at d4. You ride the sharp lines and the Leningrad's dynamic energy is yours.", sayShort: "Leningrad — …f4 grabs space." },
+  beats: [
+    { atMove: 7, say: "…f4 — clamping the kingside and seizing space, while the fianchettoed g7-bishop bears down the long diagonal at d4. White's centre looks broad but it's loose; your pieces and the …f4 wedge give you a full-blooded fight.", sayShort: "…f4 — clamp; g7-bishop eyes d4.", arrows: [_A('g7', 'd4', ATK)], highlights: [_H('f4', ATK), _H('d4', KEY)] },
+  ],
+  sources: ['book:dutch-defence', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+// DEEP DBEN :: benoni-defence::0::e4@10 | benoni-defence::1::e4@10 | benoni-defence::2::e4@10 | benoni-defence::6::e4@10
+const DBEN: SublineNarration = {
+  intro: { say: "The Modern Benoni in full flow — you've traded structure for dynamism: White's big d5-e4-f4 pawn front against your queenside majority and the long-diagonal g7-bishop. The plan is pure energy: fianchetto, castle, then roll …a6 and …b5 on the queenside while pressuring e4.", sayShort: "Modern Benoni — fianchetto, roll …a6-b5." },
+  beats: [
+    { atMove: 11, say: "…g6 — preparing the Benoni's signature fianchetto. The bishop heads for g7, where it anchors the dark squares and eyes the long diagonal once the …b5 or …e-file breaks open lines.", sayShort: "…g6 — the fianchetto setup.", highlights: [_H('g6', SOFT)] },
+    { atMove: 13, say: "…Bg7 — the Benoni bishop takes its post on the long diagonal. Your own knight on f6 screens it for now, but the moment you break with …b5 or trade in the centre, its pressure toward d4 and b2 comes alive. The dynamic imbalance is set.", sayShort: "…Bg7 — the dark-square anchor.", highlights: [_H('g7', KEY)] },
+  ],
+  sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
+};
+// DEEP DKID :: kings-indian-defence::0::b4@16
+const DKID: SublineNarration = {
+  intro: { say: "The Classical King's Indian tabiya — White has locked the centre with d5 and just played b4, the queenside minority push. Now the race is on, and you've been waiting for it: throw everything at his king. The e7-knight is already rerouting toward g6, and …f5, …f4, …g5-g4 and the kingside avalanche follow. In the King's Indian the king-hunter usually crowns first — trust the attack and storm.", sayShort: "KID race — …f5-f4 storm the king." },
+  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   // ── queens-gambit ──
   'queens-gambit::0::h6@19': C0,
@@ -1073,7 +1168,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'slav-defence::3::cxd5@6': C18,
   'slav-defence::3::g3@14': C19,
   'slav-defence::3::Qb3@6': C17,
-  'slav-defence::4::a4@8': C16,
+  'slav-defence::4::a4@8': DSLAV,
   'slav-defence::4::Qc2@6': C17,
   'slav-defence::4::cxd5@6': C18,
   'slav-defence::4::Qb3@6': C17,
@@ -1147,7 +1242,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'semi-slav::3::cxd5@8': C24,
   'semi-slav::3::g4@12': C23,
   'semi-slav::4::e3@8': C24,
-  'semi-slav::4::Bh4@10': C22,
+  'semi-slav::4::Bh4@10': DSSL,
   'semi-slav::4::Qc2@6': C23,
   'semi-slav::4::cxd5@14': C24,
   'semi-slav::4::cxd5@6': C24,
@@ -1226,7 +1321,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'nimzo-indian::5::Nf3@6': C26,
   'nimzo-indian::5::Bg5@6': C31,
   'nimzo-indian::5::g3@6': C27,
-  'nimzo-indian::5::f3@10': C29,
+  'nimzo-indian::5::f3@10': DNIM,
   'nimzo-indian::5::O-O@16': C30,
   'nimzo-indian::6::Bg5@8': C29,
   'nimzo-indian::6::e3@8': C29,
@@ -1256,7 +1351,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'queens-indian::0::Bf4@18': C32,
   'queens-indian::0::Re1@18': C32,
   'queens-indian::0::d5@12': C32,
-  'queens-indian::1::g3@6': C35,
+  'queens-indian::1::g3@6': DQID,
   'queens-indian::1::g3@4': C32,
   'queens-indian::1::Nc3@6': C34,
   'queens-indian::1::e3@6': C34,
@@ -1265,7 +1360,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'queens-indian::1::Bd2@12': C33,
   'queens-indian::1::Qc2@10': C33,
   'queens-indian::1::Bf4@8': C33,
-  'queens-indian::2::g3@6': C35,
+  'queens-indian::2::g3@6': DQID,
   'queens-indian::2::g3@4': C32,
   'queens-indian::2::a3@6': C33,
   'queens-indian::2::e3@6': C34,
@@ -1301,7 +1396,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'queens-indian::5::Nbd2@8': C35,
   'queens-indian::5::Qb3@8': C35,
   'queens-indian::5::O-O@12': C35,
-  'queens-indian::6::g3@6': C35,
+  'queens-indian::6::g3@6': DQID,
   'queens-indian::6::g3@4': C32,
   'queens-indian::6::b3@14': C34,
   'queens-indian::6::Re1@14': C34,
@@ -1314,7 +1409,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'kings-indian-defence::0::f3@8': C36,
   'kings-indian-defence::0::g3@4': C37,
   'kings-indian-defence::0::Nf3@4': C38,
-  'kings-indian-defence::0::b4@16': C39,
+  'kings-indian-defence::0::b4@16': DKID,
   'kings-indian-defence::0::h3@10': C38,
   'kings-indian-defence::0::h3@8': C38,
   'kings-indian-defence::0::Be3@12': C38,
@@ -1386,7 +1481,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   // ── grunfeld-defence ──
   'grunfeld-defence::0::Nf3@6': C42,
   'grunfeld-defence::0::Nf3@4': C42,
-  'grunfeld-defence::0::Bc4@12': C43,
+  'grunfeld-defence::0::Bc4@12': DGRU,
   'grunfeld-defence::0::Rb1@14': C43,
   'grunfeld-defence::0::Be2@18': C44,
   'grunfeld-defence::0::f3@4': C43,
@@ -1395,7 +1490,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'grunfeld-defence::0::Bg5@6': C46,
   'grunfeld-defence::1::Nf3@6': C42,
   'grunfeld-defence::1::Nf3@4': C42,
-  'grunfeld-defence::1::Bc4@12': C43,
+  'grunfeld-defence::1::Bc4@12': DGRU,
   'grunfeld-defence::1::Rb1@14': C43,
   'grunfeld-defence::1::f3@4': C43,
   'grunfeld-defence::1::Be2@18': C43,
@@ -1440,7 +1535,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'grunfeld-defence::5::Ne5@16': C47,
   'grunfeld-defence::6::Nf3@6': C42,
   'grunfeld-defence::6::Nf3@4': C42,
-  'grunfeld-defence::6::Bc4@12': C43,
+  'grunfeld-defence::6::Bc4@12': DGRU,
   'grunfeld-defence::6::Be3@16': C44,
   'grunfeld-defence::6::f3@4': C43,
   'grunfeld-defence::6::Qd2@20': C44,
@@ -1457,7 +1552,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'grunfeld-defence::7::d5@16': C43,
   'grunfeld-defence::7::Bf4@6': C45,
   // ── benoni-defence ──
-  'benoni-defence::0::e4@10': C48,
+  'benoni-defence::0::e4@10': DBEN,
   'benoni-defence::0::Nf3@4': C49,
   'benoni-defence::0::Bf4@12': C48,
   'benoni-defence::0::Nd2@12': C48,
@@ -1466,7 +1561,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'benoni-defence::0::e3@4': C48,
   'benoni-defence::0::h3@14': C51,
   'benoni-defence::0::Bg5@12': C48,
-  'benoni-defence::1::e4@10': C48,
+  'benoni-defence::1::e4@10': DBEN,
   'benoni-defence::1::Nf3@4': C49,
   'benoni-defence::1::Bf4@12': C48,
   'benoni-defence::1::e4@12': C51,
@@ -1475,7 +1570,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'benoni-defence::1::e3@4': C48,
   'benoni-defence::1::Bg5@12': C48,
   'benoni-defence::1::g3@10': C50,
-  'benoni-defence::2::e4@10': C48,
+  'benoni-defence::2::e4@10': DBEN,
   'benoni-defence::2::Nf3@4': C49,
   'benoni-defence::2::e4@12': C51,
   'benoni-defence::2::Nd2@12': C48,
@@ -1512,7 +1607,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'benoni-defence::5::f3@10': C49,
   'benoni-defence::5::e4@6': C49,
   'benoni-defence::5::Bg5@6': C49,
-  'benoni-defence::6::e4@10': C48,
+  'benoni-defence::6::e4@10': DBEN,
   'benoni-defence::6::Nf3@4': C49,
   'benoni-defence::6::Bf4@12': C48,
   'benoni-defence::6::Nd2@12': C48,
@@ -1552,7 +1647,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'benko-gambit::2::Bf4@18': C56,
   'benko-gambit::2::e5@14': C56,
   'benko-gambit::2::e5@16': C56,
-  'benko-gambit::3::bxa6@8': C58,
+  'benko-gambit::3::bxa6@8': DBENKO,
   'benko-gambit::3::e5@12': C54,
   'benko-gambit::3::Nf3@4': C54,
   'benko-gambit::3::b6@8': C55,
@@ -1562,7 +1657,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'benko-gambit::3::e3@4': C56,
   'benko-gambit::3::f3@8': C54,
   'benko-gambit::3::Qc2@6': C56,
-  'benko-gambit::4::bxa6@8': C58,
+  'benko-gambit::4::bxa6@8': DBENKO,
   'benko-gambit::4::Nf3@4': C54,
   'benko-gambit::4::b6@8': C55,
   'benko-gambit::4::Nf3@6': C55,
@@ -1632,7 +1727,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'budapest-gambit::4::Nc3@4': C59,
   'budapest-gambit::4::e3@4': C60,
   'budapest-gambit::4::Nf3@4': C59,
-  'budapest-gambit::4::Bf4@6': C59,
+  'budapest-gambit::4::Bf4@6': DBUD,
   'budapest-gambit::4::Nf3@6': C59,
   'budapest-gambit::4::e3@6': C59,
   'budapest-gambit::4::Kf2@14': C62,
@@ -1695,7 +1790,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'dutch-defence::3::Qd2@8': C65,
   'dutch-defence::3::Nd2@4': C65,
   'dutch-defence::3::e3@4': C65,
-  'dutch-defence::3::e4@6': C65,
+  'dutch-defence::3::e4@6': DDUT,
   'dutch-defence::4::Nf3@4': C64,
   'dutch-defence::4::c4@4': C64,
   'dutch-defence::4::b3@10': C64,
@@ -2323,7 +2418,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'albin-countergambit::0::a3@8': C112,
   'albin-countergambit::0::Nbd2@8': C112,
   'albin-countergambit::0::e3@4': C112,
-  'albin-countergambit::1::fxe3@10': C113,
+  'albin-countergambit::1::fxe3@10': DALBIN,
   'albin-countergambit::1::Qa4+@10': C113,
   'albin-countergambit::1::Nd2@8': C113,
   'albin-countergambit::1::Kxf2@12': C114,
