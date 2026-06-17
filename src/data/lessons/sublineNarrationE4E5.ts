@@ -1037,6 +1037,123 @@ const SCH_SCOTCH: SublineNarration = {
   sources: SCH_DEV,
 };
 
+// ── Danish Gambit (student WHITE). triggerMove is BLACK's deviation. ──
+const DAN = ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Danish_Gambit'];
+
+// Main accepted lines (Bc4 …Bc5/…Nf6/…d6/…Ne5). Development lead and bishops for the pawn.
+const DAN_MAIN: SublineNarration = {
+  intro: {
+    say: "The Danish Gambit accepted — you've fed a pawn (or two) to rip the centre open and hurl your pieces out. The bishop on c4 glares at f7, the knight on c3 eyes d5 and e4, and your development is far ahead. This is romantic attacking chess: castle, swing the rooks to the open files, and pour pressure onto Black's king before he can untangle and return the material.",
+    sayShort: 'Danish — bishops and development, attack f7.',
+  },
+  sources: DAN,
+};
+// …Bb4 lines (…Bb4 Nf3 d6 O-O …Bxc3/…Bg4/…Be6). Two bishops, open b-file.
+const DAN_BB4: SublineNarration = {
+  intro: {
+    say: "Black pins with …Bb4 and may trade on c3, handing you doubled c-pawns — but look closer: bxc3 hands you a half-open b-file pointing at b7 and a monstrous pawn centre to roll forward. You keep the bishop pair and the lead in development the gambit bought. Open lines with d4-d5 or Bg5, aim the rooks at the king, and let the initiative do the work.",
+    sayShort: '…Bb4 — bxc3, open b-file, two bishops.',
+  },
+  sources: DAN,
+};
+
+// ── Stafford Gambit (student BLACK). triggerMove is WHITE's deviation. ──
+const STAF = ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Stafford_Gambit'];
+
+// Accepted (Nxc6 dxc6) + White's quiet setups. A tricky, trap-laden practical gambit.
+const STAF_ACCEPTED: SublineNarration = {
+  intro: {
+    say: "The Stafford accepted — after …dxc6 you've traded a pawn for a flying lead in development and a board full of traps. Be honest: with accurate play White stands a little better, so this is a practical weapon, not a refutation. Bank on speed — …Bc5 and …Ng4 swarm f2, …Qd4 and …Qh4 join the hunt, and the open d- and g-files feed the attack. Set the traps and make White find every only-move.",
+    sayShort: 'Stafford — fast development, swarm f2.',
+  },
+  sources: STAF,
+};
+// e5 push (Nxc6 dxc6 e5 Ne4). White grabs space; Black stays active.
+const STAF_E5: SublineNarration = {
+  intro: {
+    say: "e5 — White lunges the pawn forward to gain space and kick your knight. Bounce to e4, a strong central outpost, and hit back with …c5 and …Bc5, keeping your pieces active and the lines toward f2 alive. White's extra pawn means little while his king sits uncastled and your development races ahead — keep generating threats and don't let the position simplify.",
+    sayShort: 'e5 — …Ne4 outpost, hit back …c5.',
+  },
+  sources: STAF,
+};
+// White declines the trade (Nf3 retreat or d4 hold). Black regains the pawn / gets play.
+const STAF_DECLINED: SublineNarration = {
+  intro: {
+    say: "White sidesteps the main Stafford trade, retreating the knight or propping it with d4 rather than capturing on c6. That eases your task: …Nxe4 snatches the pawn straight back, or you develop briskly with …Bc5 and …d6 and claim full equality. Without the gambit complications White has nothing extra — finish development, keep the pieces active, and you stand at least equal.",
+    sayShort: 'Declined — …Nxe4 regains, easy game.',
+  },
+  sources: STAF,
+};
+// Critical Nxf7 (forks queen and rook). White's best; Black gets partial compensation.
+const STAF_CRITICAL: SublineNarration = {
+  intro: {
+    say: "Nxf7 — White's critical try, forking your queen and rook to win the exchange. This is the line where the Stafford is, honestly, at its thinnest: you'll be down material. But you're not without resources — the knight on f7 is loose, your development springs ahead, and …Qe7 and the open lines hand you practical compensation. Play for activity and traps, eyes open that you must fight for the draw.",
+    sayShort: 'Nxf7 — down the exchange, play for tricks.',
+  },
+  sources: STAF,
+};
+
+// ── Marshall Attack (student BLACK). triggerMove is WHITE's deviation. ──
+const MAR = ['concept:pos-initiative', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Marshall_Attack'];
+const MAR_DEV = ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Marshall_Attack'];
+
+// exd5@16 — the Marshall accepted. Sac the pawn for a kingside attack.
+const MAR_MAIN: SublineNarration = {
+  intro: {
+    say: "exd5 — White accepts, and the Marshall is on. You've burned the e5-pawn for one of the most feared attacks in chess: …Nxd5 recaptures, then …Nf6, …Bd6, …Qh4 and …Bb7 swing every piece at White's king while the rook lifts to e6-g6 or h6. It is deeply analysed and fully sound — the initiative and the open lines are worth far more than the pawn. Attack with total conviction.",
+    sayShort: 'exd5 — Marshall on: …Nxd5, storm the king.',
+  },
+  sources: MAR,
+};
+// a4@14 / h3@14 — the Anti-Marshall. White sidesteps the gambit.
+const MAR_ANTI: SublineNarration = {
+  intro: {
+    say: "The Anti-Marshall — White slips in a4 or h3 to dodge your gambit before you can play …d5. No matter: …Bb7 develops the bishop to the long diagonal aimed at e4, and you transpose toward sound Zaitsev-style Ruy structures with comfortable equality. White has avoided the fireworks but conceded the initiative's edge — develop naturally and you have a rich, balanced game.",
+    sayShort: 'Anti-Marshall — …Bb7, solid equality.',
+  },
+  sources: MAR_DEV,
+};
+// d3@8 / d3@10 — quiet d3 Ruy. Develop comfortably.
+const MAR_D3: SublineNarration = {
+  intro: {
+    say: "d3 — White chooses the quiet, modern Ruy, refusing to commit the centre and sidestepping your Marshall. Develop in comfort: …d6 or …d5 in one go, …Be7 and …O-O, and the …Na5 or …Nb8-d7 reroutes to challenge the b3-bishop. There's no pressure to meet — match White's patience, claim your share of the centre, and you stand fully equal with easy piece play.",
+    sayShort: 'd3 — develop, …Be7 and …O-O, equalize.',
+  },
+  sources: MAR_DEV,
+};
+// Bxc6@6 / Bxc6@10 — Exchange (delayed) Ruy. Bishop pair, structural play.
+const MAR_EXCHANGE: SublineNarration = {
+  intro: {
+    say: "Bxc6 — White trades into an Exchange Ruy structure, swapping the strong bishop to dent your queenside pawns. Recapture with …dxc6 and you gain the bishop pair and the half-open d-file in return. The doubled c-pawns are no weakness in the middlegame; with …Bg4, …Qd6 and …f6 you keep the centre fluid and the two bishops give you the long-term trumps. A sound, fighting game.",
+    sayShort: 'Bxc6 — …dxc6, bishop pair, press the centre.',
+  },
+  sources: MAR_DEV,
+};
+// Bc4@4 — White plays the Italian instead (Bc4 Bc5).
+const MAR_ITALIAN: SublineNarration = {
+  intro: {
+    say: "Bc4 — White avoids the whole Ruy with an Italian. Comfortable for you: …Bc5 posts the bishop on its best diagonal, and you head for familiar Giuoco territory with …d6, …Nf6 and the …d5 break. Castle, develop harmoniously, and you have an equal, well-charted game — White's sidestep has handed you a sound position with every plan at your fingertips.",
+    sayShort: 'Bc4 — …Bc5, a comfortable Italian.',
+  },
+  sources: MAR_DEV,
+};
+// Nc3@4 — Four Knights (Nc3 Nf6). Symmetric, solid.
+const MAR_FOUR_KNIGHTS: SublineNarration = {
+  intro: {
+    say: "Nc3 — White steers into a calm Four Knights. Mirror with …Nf6 and you stand on equal, weakness-free ground, with the …Bb4 pin and the …Nd4 Rubinstein counter held in reserve. White has dodged the Ruy and the Marshall, but you have a perfectly sound, fighting position — develop in comfort and there is nothing to fear.",
+    sayShort: 'Nc3 — Four Knights: …Nf6, easy equality.',
+  },
+  sources: MAR_DEV,
+};
+// d4@4 — Scotch (d4 exd4 Nxd4). Equalize with …Qe7/…Nd5.
+const MAR_SCOTCH: SublineNarration = {
+  intro: {
+    say: "d4 — White avoids the Ruy with the Scotch. The book equalizer is clean: after the exchanges, …Qe7 leans on the advanced e5-pawn and …Nd5 plants the knight on a dominant central blockade. You accept doubled c-pawns for the bishop pair and easy development — a comfortable, fully equal game, and White's sidestep of your Marshall has cost him any edge.",
+    sayShort: 'd4 — Scotch: …Qe7 and …Nd5 equalize.',
+  },
+  sources: MAR_DEV,
+};
+
 export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   // ── Ruy Lopez ──
   'ruy-lopez::0::Nf6@5': RUY_BERLIN,
@@ -1873,4 +1990,48 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'schliemann-defence::2::Nc3@6': SCH_NC3,
   'schliemann-defence::2::Bxc6@6': SCH_BXC6,
   'schliemann-defence::2::d4@6': SCH_D4,
+
+  // -- Danish Gambit --
+  'danish-gambit::0::Nf6@9': DAN_MAIN,
+  'danish-gambit::0::d6@9': DAN_MAIN,
+  'danish-gambit::0::Bc5@9': DAN_MAIN,
+  'danish-gambit::0::Ne5@9': DAN_MAIN,
+  'danish-gambit::0::Nf6@13': DAN_BB4,
+  'danish-gambit::0::Bg4@13': DAN_BB4,
+  'danish-gambit::0::Bg4@15': DAN_BB4,
+  'danish-gambit::0::Be6@15': DAN_BB4,
+  'danish-gambit::0::h6@17': DAN_BB4,
+  'danish-gambit::0::Be6@13': DAN_BB4,
+  // -- Stafford Gambit --
+  'stafford-gambit::0::Nc3@8': STAF_ACCEPTED,
+  'stafford-gambit::0::Be2@10': STAF_ACCEPTED,
+  'stafford-gambit::0::e5@8': STAF_E5,
+  'stafford-gambit::0::Nf3@6': STAF_DECLINED,
+  'stafford-gambit::0::h3@10': STAF_ACCEPTED,
+  'stafford-gambit::0::Be3@10': STAF_ACCEPTED,
+  'stafford-gambit::0::d4@6': STAF_DECLINED,
+  'stafford-gambit::0::Bc4@8': STAF_ACCEPTED,
+  'stafford-gambit::0::Nxf7@6': STAF_CRITICAL,
+  'stafford-gambit::0::f3@8': STAF_ACCEPTED,
+  'stafford-gambit::1::d3@8': STAF_ACCEPTED,
+  'stafford-gambit::1::e5@8': STAF_E5,
+  'stafford-gambit::1::Bc4@10': STAF_ACCEPTED,
+  'stafford-gambit::1::Nf3@6': STAF_DECLINED,
+  'stafford-gambit::1::h3@10': STAF_ACCEPTED,
+  'stafford-gambit::1::d4@6': STAF_DECLINED,
+  'stafford-gambit::1::Be2@10': STAF_ACCEPTED,
+  'stafford-gambit::1::Be3@12': STAF_ACCEPTED,
+  'stafford-gambit::1::Bc4@8': STAF_ACCEPTED,
+  'stafford-gambit::1::Nxf7@6': STAF_CRITICAL,
+  // -- Marshall Attack --
+  'marshall-attack::0::Bc4@4': MAR_ITALIAN,
+  'marshall-attack::0::d4@4': MAR_SCOTCH,
+  'marshall-attack::0::Nc3@4': MAR_FOUR_KNIGHTS,
+  'marshall-attack::0::Bxc6@6': MAR_EXCHANGE,
+  'marshall-attack::0::d3@8': MAR_D3,
+  'marshall-attack::0::d3@10': MAR_D3,
+  'marshall-attack::0::exd5@16': MAR_MAIN,
+  'marshall-attack::0::h3@14': MAR_ANTI,
+  'marshall-attack::0::a4@14': MAR_ANTI,
+  'marshall-attack::0::Bxc6@10': MAR_EXCHANGE,
 };
