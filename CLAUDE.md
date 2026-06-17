@@ -2919,32 +2919,39 @@ straight to main.
 **iOS / TestFlight builds** are produced locally via Capacitor when
 needed.
 
-**🚨 BUILD TO INTERNAL TESTFLIGHT IS THE DEFAULT — David should NEVER have
-to ask for it (David 2026-06-15: "that is now the obvious default for future
-sessions right? do i have to keep saying it?" — answer: NO, you don't).**
-When a change lands on `main` and David needs to test it on his iPhone (any
-runtime/UI/coach/engine/voice change — i.e. almost everything), the session
-ALSO triggers the iOS TestFlight build WITHOUT being asked:
+**🚨 iOS TESTFLIGHT BUILDS ONLY WHEN DAVID ASKS — do NOT auto-build (David
+2026-06-17, REVERSES the prior 2026-06-15 "build-to-internal-is-the-default"
+rule).** When David asked whether to keep auto-building on every coach change
+or only on request, he answered **"Only when asked."** So a change landing on
+`main` (web deploy, per the policy above) does NOT automatically trigger an
+iOS build. Web prod is shipped; iOS is a SEPARATE, ON-DEMAND step. Wait for
+David to ask ("send it to my phone", "cut a TestFlight build", "build for
+iOS", etc.) before triggering one. Do NOT ask "want me to build?" either —
+just don't build until told.
 
-1. Land the change on `main` (web deploy, per the policy above).
+When David DOES ask, trigger the build:
+
+1. Ensure the changes are on `main`.
 2. Trigger the iOS build: the `daily-deploy.yml` workflow
-   (`mcp__github__actions_run_trigger` → `workflow_dispatch` on `main`). It
-   builds via Xcode Cloud, waits for VALID, and **auto-distributes to BOTH
-   the internal group ("Chess Academy Pro" — David, instant, no review) AND
-   the external "Beta Test" group (after Apple Beta App Review)** via
-   `scripts/ci/distribute-testflight.mjs`.
+   (`mcp__github__actions_run_trigger` → `run_workflow` on `main`,
+   `inputs.external="false"` for internal-only — no external-tester email).
+   It builds via Xcode Cloud, waits for VALID, and distributes to the
+   internal group ("Chess Academy Pro" — David, instant, no review) via
+   `scripts/ci/distribute-testflight.mjs`. Pass `external="true"` only if
+   David explicitly wants the external "Beta Test" group (Apple Beta App
+   Review + a tester email).
 3. The internal assign is instant — David installs from TestFlight in
    minutes, no review wait. If the internal assign returns a transient Apple
-   5xx, the script now retries (apiRetry); if it ever still fails, re-run the
+   5xx, the script retries (apiRetry); if it ever still fails, re-run the
    assign via the ASC API directly.
 4. Watch the build to VALID + distribute, confirm the build number, and tell
    David it's installable. THEN run the post-deploy audit / pull the audit
    stream for the surfaces touched.
 
-Batching still applies (don't fire a build per commit — build once the body
-of work David wants to test is complete), but the build-to-internal step
-itself is NOT optional and NOT something to ask about. It's the on-device
-delivery half of "shipped."
+NB: the scheduled nightly `daily-deploy` at 21:00 America/Chicago still runs
+on its own cadence (that's the external/beta channel, unchanged) — the
+"only when asked" rule governs ON-DEMAND internal builds a session would
+otherwise fire after landing a change.
 
 **Don't ask for permission to push.** Just do it. Asking adds
 round-trips David doesn't want.
