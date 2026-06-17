@@ -207,6 +207,54 @@ const SIC_BD3: SublineNarration = {
   sources: SIC_SRC,
 };
 
+// Two Knights → White switches to a Ruy with Bb5 (student Black).
+const TK_BB5: SublineNarration = {
+  intro: {
+    say: "Bb5 — White sidesteps the Two Knights and transposes to a Ruy Lopez. Nothing to fear: put the question with …a6, and you're in familiar Spanish territory. Keep the bishop guessing, develop solidly, and the game is balanced and well-charted.",
+    sayShort: "Bb5 — it's a Ruy: …a6.",
+  },
+  sources: ['book:italian-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Two_Knights_Defense'],
+};
+// Anti-Benoni: White recaptures on d5 with the knight (student Black).
+const BENONI_NXD5: SublineNarration = {
+  intro: {
+    say: "Nxd5 — White recaptures with the knight, ducking the sharp Modern Benoni structure for a quiet game. That suits you fine: trade with …Nxd5 and develop freely. Without the locked d5-pawn cramping you, Black equalises easily with active, unobstructed pieces.",
+    sayShort: 'Nxd5 — trade off, free game.',
+  },
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
+};
+// Sveshnikov → White offers a c3 Morra-style gambit (student Black).
+const SVESH_C3: SublineNarration = {
+  intro: {
+    say: "c3 — White swerves into a Smith-Morra-style gambit rather than entering the main Open Sicilian. You sidestep all the Sveshnikov theory: decline cleanly into an Alapin-type game, or take the pawn and hand it back for easy development. Either road gives Black a comfortable, fully sound position.",
+    sayShort: 'c3 — Morra try; decline, stay sound.',
+  },
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation'],
+};
+// Catalan check (student Black).
+const CAT_BB4: SublineNarration = {
+  intro: {
+    say: "…Bb4+ — the Catalan check, one of Black's most reliable equalizers. The bishop checks, and after Bd2 you trade or retreat with gain of time — neutralising the g2-bishop's pull on the long diagonal before it ever bites. A clean, well-tested way to take the sting out of the Catalan.",
+    sayShort: '…Bb4+ — defuse the Catalan.',
+  },
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+const CAT_C6: SublineNarration = {
+  intro: {
+    say: "…c6 — the Closed Catalan, rock-solid. You bolster d5 and prepare …Nbd7 and …b6, holding the centre firm against the long-range g2-bishop. It's patient and famously hard to crack — Black sits behind a wall and waits for a break.",
+    sayShort: '…c6 — Closed Catalan, hold firm.',
+  },
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+// Modern Alekhine main line (student Black).
+const ALE_MODERN: SublineNarration = {
+  intro: {
+    say: "The Modern Alekhine main line. You've baited White into the big pawn centre — now make him regret it. …Bg4 pins, …dxe5 and …Nc6 chip at the pawns, and the overextended front becomes a row of targets. That's the whole Alekhine bet: provoke the centre, then tear it down.",
+    sayShort: 'Undermine the big centre: …Bg4.',
+  },
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Alekhine%27s_Defence'],
+};
+
 const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   // Caro-Kann, Advance Variation (var 1) — the Short System, White's most
   // common try here (about a third of games). Line:
@@ -626,6 +674,70 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
       sayShort: 'O-O — solid …Qa5 setup; press on.',
     },
     sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
+  },
+
+  // ── Two Knights (student Black) — Bb5 Ruy transposition on every tab ──
+  'two-knights-defence::1::Bb5@4': TK_BB5,
+  'two-knights-defence::2::Bb5@4': TK_BB5,
+  'two-knights-defence::3::Bb5@4': TK_BB5,
+  'two-knights-defence::4::Bb5@4': TK_BB5,
+  'two-knights-defence::5::Bb5@4': TK_BB5,
+  'two-knights-defence::6::Bb5@4': TK_BB5,
+  'two-knights-defence::7::Bb5@4': TK_BB5,
+
+  // ── Benoni (student Black) — anti-Benoni Nxd5 ──
+  'benoni-defence::0::Nxd5@8': BENONI_NXD5,
+  'benoni-defence::1::Nxd5@8': BENONI_NXD5,
+  'benoni-defence::2::Nxd5@8': BENONI_NXD5,
+  'benoni-defence::3::Nxd5@8': BENONI_NXD5,
+  'benoni-defence::4::Nxd5@8': BENONI_NXD5,
+  'benoni-defence::6::Nxd5@8': BENONI_NXD5,
+
+  // ── Sveshnikov (student Black) — c3 Morra try ──
+  'sicilian-sveshnikov::0::c3@6': SVESH_C3,
+  'sicilian-sveshnikov::1::c3@6': SVESH_C3,
+  'sicilian-sveshnikov::2::c3@6': SVESH_C3,
+  'sicilian-sveshnikov::3::c3@6': SVESH_C3,
+  'sicilian-sveshnikov::4::c3@6': SVESH_C3,
+  'sicilian-sveshnikov::5::c3@6': SVESH_C3,
+  'sicilian-sveshnikov::7::c3@6': SVESH_C3,
+
+  // ── Catalan (student Black) ──
+  'catalan-opening::0::Bb4+@5': CAT_BB4,
+  'catalan-opening::2::Bb4+@5': CAT_BB4,
+  'catalan-opening::6::Bb4+@5': CAT_BB4,
+  'catalan-opening::1::c6@9': CAT_C6,
+  'catalan-opening::3::c6@9': CAT_C6,
+  'catalan-opening::5::c6@9': CAT_C6,
+
+  // ── Alekhine (student Black) — the Modern main line ──
+  'alekhine-defence::2::Nf3@6': ALE_MODERN,
+  'alekhine-defence::6::Nf3@6': ALE_MODERN,
+  'alekhine-defence::3::d4@4': ALE_MODERN,
+
+  // ── Philidor (student Black) — the Re1 main tabiya ──
+  'philidor-defence::1::Re1@12': {
+    intro: {
+      say: "Re1 — the main Philidor tabiya. White stacks the e-file behind his big centre, and you're solid but cramped. The cure is patience and timing: prepare …c6 and …Qc7, take on d4 at the right moment with …exd4, and aim for the freeing …d5 break. Hold the line accurately and the cramp dissolves into a sound game.",
+      sayShort: 'Re1 — free up with …c6 and …d5.',
+    },
+    sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Philidor_Defence'],
+  },
+
+  // ── Queen's Gambit (student White) — answering Black's main defences ──
+  'queens-gambit::3::a6@9': {
+    intro: {
+      say: "…a6 — the Queen's Gambit Accepted main line; Black prepares …b5 to hold the c4-pawn and free the light bishop. You've already recaptured and built a fine centre, so meet …b5 head-on with a4 to crack the queenside, or just complete development and roll your central majority. White keeps a pleasant, lasting initiative.",
+      sayShort: '…a6 — meet …b5 with a4.',
+    },
+    sources: QP_SRC,
+  },
+  'queens-gambit::4::e6@7': {
+    intro: {
+      say: "…dxc4 and …g5 — Black plunges into the razor-edged Botvinnik Semi-Slav, grabbing the pawn and lashing out on the kingside. This is theory to the teeth: your trumps are the big e4-centre and a roaring initiative. Both kings will be hunted — know the line, and White's attack arrives with crushing force.",
+      sayShort: 'Botvinnik — roll e4, attack.',
+    },
+    sources: QP_SRC,
   },
 };
 
