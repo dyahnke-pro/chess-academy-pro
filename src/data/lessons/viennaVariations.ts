@@ -287,7 +287,49 @@ const PAULSEN: LessonScript = {
   ],
 };
 
+const STANLEY: LessonScript = {
+  openingId: 'vienna-game',
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Vienna_Game'],
+  title: 'Vienna — The Stanley Variation',
+  minutes: 9,
+  orientation: 'white',
+  beats: [
+    b({ id: 'st1', moves: 'e4 e5 Nc3 Nf6 Bc4 Bc5 d3 d6', say: "The Stanley Variation — White marries the Vienna's Nc3 with the Italian bishop on c4. It is a calm, solid system: d3 braces the centre and White develops harmoniously, aiming for a slow build-up rather than an early skirmish. Low theory, no risk.", sayShort: 'Bc4 — the calm Vienna-Italian system.', highlights: [H('c4', KEY)] }),
+    b({ id: 'st2', moves: 'e4 e5 Nc3 Nf6 Bc4 Bc5 d3 d6 Nf3 O-O O-O Bg4 h3 Bh5 Bg5', say: "Both sides castle and develop symmetrically; White pins the f6-knight with Bg5 while Black pins back with …Bg4-h5. A quiet, manoeuvring middlegame where small positional improvements decide the game.", sayShort: 'Bg5 — pin and manoeuvre.', highlights: [H('g5', KEY), H('h5', SOFT)] }),
+    b({ id: 'st3', moves: 'e4 e5 Nc3 Nf6 Bc4 Bc5 d3 d6 Nf3 O-O O-O Bg4 h3 Bh5 Bg5 h6 Bh4 Nbd7 Nd5 c6 Nxf6+ Nxf6', say: "White probes the d5-square with the knight, but …c6 meets it and the knights come off on f6. There is the Stanley tabiya: a calm, balanced, low-theory middlegame where White has an easy, risk-free game with simple plans and the safer structure — a sound system to reach a playable position every time.", sayShort: 'Nxf6 — simplify to a balanced game.', highlights: [H('f6', KEY), H('c6', SOFT)] }),
+  ],
+};
+
+const VGA: LessonScript = {
+  openingId: 'vienna-game',
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Vienna_Game'],
+  title: 'Vienna — The Gambit Accepted',
+  minutes: 7,
+  orientation: 'white',
+  kind: 'roadmap',
+  beats: [
+    b({ id: 'vg1', moves: 'e4 e5 Nc3 Nf6 f4 exf4 e5', say: "The Vienna Gambit Accepted: White plays f4 and, after …exf4, strikes with e5 — kicking the f6-knight and grabbing the centre. White gives up the f4-pawn for a big lead in space and development, the classic gambit bargain that powers the Vienna's attacking reputation.", sayShort: 'e5 — gambit the pawn, seize the centre.', highlights: [H('e5', KEY), H('f4', SOFT)] }),
+    b({ id: 'vg2', moves: 'e4 e5 Nc3 Nf6 f4 exf4 e5 Ng8 Nf3 d5 d4 g5 h4 g4', say: "The knight is driven home to …Ng8, and White erects the big centre with d4 while Black grabs kingside space with …g5; White hits straight back with h4, prising the kingside open. From this launchpad White's broad centre and initiative fan out into the sharp Vienna attacking lines — well worth a pawn.", sayShort: 'd4, h4 — big centre, prise the kingside.', highlights: [H('d4', KEY)] }),
+  ],
+};
+
+const COPYCAT: LessonScript = {
+  openingId: 'vienna-game',
+  sources: ['concept:pos-development', 'concept:att-greek-gift', 'https://en.wikipedia.org/wiki/Vienna_Game'],
+  title: 'Vienna — Punishing the Copycat',
+  minutes: 7,
+  orientation: 'white',
+  kind: 'roadmap',
+  beats: [
+    b({ id: 'cp1', moves: 'e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4', say: "The Copycat trap — when Black mindlessly mirrors White move for move, White shatters the symmetry with Qg4!, swinging out to hit g7 and daring Black to keep copying. This is the one move Black cannot safely mirror, and the punishment for trying is severe.", sayShort: 'Qg4! — break the mirror, hit g7.', arrows: [A('g4', 'g7', ATK)], highlights: [H('g7', KEY)] }),
+    b({ id: 'cp2', moves: 'e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5 Qxf2+ Kd1 Kf8 Nh3 Qd4 d3', say: "Black copies with …Qf6, but Nd5 sets the trap: the greedy …Qxf2+ runs into Kd1 and Nh3, and the queen is chased to d4 while White develops with tempo. There is the verdict — Black's queen raid is repelled, White is winning with a commanding lead in development and the knight dominating d5. The lesson: never copy into an attack.", sayShort: 'Nd5 — trap the copying queen.', highlights: [H('d5', KEY), H('d4', SOFT)] }),
+  ],
+};
+
 export const VIENNA_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'vienna-game::Stanley Variation': STANLEY,
+  'vienna-game::Vienna Gambit Accepted': VGA,
+  'vienna-game::Copycat Variation': COPYCAT,
   'vienna-game::Vienna Gambit': GAMBIT,
   'vienna-game::Vienna vs 2...Nc6': VS_NC6,
   // Frankenstein-Dracula tab — the CURATED regex matches the "Falkbeer
