@@ -930,6 +930,44 @@ const PT_5NC3: SublineNarration = {
   sources: PT,
 };
 
+// ── Philidor Defence (student BLACK). triggerMove is WHITE's deviation. ──
+const PH = ['book:philidor-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Philidor_Defence'];
+const PH_CTR = ['book:philidor-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Philidor_Defence'];
+const PH_INIT = ['book:philidor-defence', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Philidor_Defence'];
+
+// var0/var1 — Hanham main (d4 Nf6 Nc3 Nbd7 Bc4 Be7 O-O O-O Re1 c6). Solid, cramped, free with the breaks.
+const PH_HANHAM: SublineNarration = {
+  intro: {
+    say: "The Hanham Philidor — cramped but bombproof. Your pawns on e5 and d6 form a low, solid wall and every piece has a safe home: …Nbd7, …Be7, …c6 and castle. The position is a coiled spring — bide your time, then uncoil with …exd4 to open lines or the freeing …d5 break at the perfect moment. Defend accurately and the cramp dissolves into a sound, fully playable game.",
+    sayShort: 'Hanham — solid setup, free with …d5.',
+  },
+  sources: PH,
+};
+// var2/var3 + d4@4 — Improved/open Hanham via 3…exd4 (d4 exd4 Nxd4 Nf6 Nc3 Be7).
+const PH_OPEN: SublineNarration = {
+  intro: {
+    say: "The modern Philidor — you've taken on d4 early to reach the Improved Hanham, a more elastic version of the defence. Build the same sturdy shell: …Be7, …O-O, …Re8 or …Nbd7, and reroute the knight via …Nf5 or break with …d5 when White over-commits. Your structure is compact and weakness-free; meet White's Be3, Bg5 or f4 calmly and the position holds the balance with active piece play.",
+    sayShort: 'Modern Philidor — …Be7, …O-O, …d5 break.',
+  },
+  sources: PH_CTR,
+};
+// var4 — Philidor Counter-Gambit (d4 f5). Sharp, Black seizes the initiative.
+const PH_COUNTERGAMBIT: SublineNarration = {
+  intro: {
+    say: "…f5 — the Philidor Counter-Gambit, the fighting soul of the opening: instead of sitting cramped, you strike back at White's centre at once. It's sharp and double-edged — the …fxe4 and …e4 ideas grab space and wrest the game on dynamics, not structure. Play it with energy: seize the initiative, open lines for your pieces, and make White prove he can hold the centre under fire.",
+    sayShort: '…f5 — counter-gambit: seize the initiative.',
+  },
+  sources: PH_INIT,
+};
+// var5 — White's quiet d3/g3 KIA setup. Black develops comfortably.
+const PH_D3_QUIET: SublineNarration = {
+  intro: {
+    say: "White chooses the quiet d3 and g3 setup, a King's-Indian-Attack in reverse rather than a fight for the centre. That hands you an easy game: develop naturally with …Be7, …O-O and …Nc6, claim your share of the centre, and prepare …d5 or …Nd4 to seize the initiative. There's no pressure to react to — match White's calm and you stand at least equal with the freer plan.",
+    sayShort: 'Quiet d3 — develop, …Nc6, then …d5.',
+  },
+  sources: PH,
+};
+
 export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   // ── Ruy Lopez ──
   'ruy-lopez::0::Nf6@5': RUY_BERLIN,
@@ -1680,4 +1718,65 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'petrov-defence::6::Bb5@20': PT_5NC3,
   'petrov-defence::6::Bb5@18': PT_5NC3,
   'petrov-defence::6::Bc4@14': PT_5NC3,
+
+  // -- Philidor Defence --
+  'philidor-defence::0::Bg5@14': PH_HANHAM,
+  'philidor-defence::0::h3@14': PH_HANHAM,
+  'philidor-defence::0::dxe5@14': PH_HANHAM,
+  'philidor-defence::0::h3@16': PH_HANHAM,
+  'philidor-defence::0::a4@12': PH_HANHAM,
+  'philidor-defence::0::Bb3@14': PH_HANHAM,
+  'philidor-defence::0::a3@14': PH_HANHAM,
+  'philidor-defence::0::d5@14': PH_HANHAM,
+  'philidor-defence::0::Be3@14': PH_HANHAM,
+  'philidor-defence::0::b3@16': PH_HANHAM,
+  'philidor-defence::1::a4@12': PH_HANHAM,
+  'philidor-defence::1::a4@10': PH_HANHAM,
+  'philidor-defence::1::g4@8': PH_HANHAM,
+  'philidor-defence::1::h3@12': PH_HANHAM,
+  'philidor-defence::1::Rg1@8': PH_HANHAM,
+  'philidor-defence::1::g3@8': PH_HANHAM,
+  'philidor-defence::1::Be2@8': PH_HANHAM,
+  'philidor-defence::1::dxe5@6': PH_HANHAM,
+  'philidor-defence::1::Rd1@14': PH_HANHAM,
+  'philidor-defence::2::Bd3@8': PH_OPEN,
+  'philidor-defence::2::Bg5@8': PH_OPEN,
+  'philidor-defence::2::Bc4@8': PH_OPEN,
+  'philidor-defence::2::Be3@14': PH_OPEN,
+  'philidor-defence::2::Nf5@14': PH_OPEN,
+  'philidor-defence::2::h3@14': PH_OPEN,
+  'philidor-defence::2::Bg5@14': PH_OPEN,
+  'philidor-defence::2::Re1@14': PH_OPEN,
+  'philidor-defence::2::g3@10': PH_OPEN,
+  'philidor-defence::2::Bf4@14': PH_OPEN,
+  'philidor-defence::3::Bd3@8': PH_OPEN,
+  'philidor-defence::3::Bg5@8': PH_OPEN,
+  'philidor-defence::3::Bc4@8': PH_OPEN,
+  'philidor-defence::3::f4@14': PH_OPEN,
+  'philidor-defence::3::Be3@14': PH_OPEN,
+  'philidor-defence::3::Re1@14': PH_OPEN,
+  'philidor-defence::3::h3@14': PH_OPEN,
+  'philidor-defence::3::Bg5@14': PH_OPEN,
+  'philidor-defence::3::g3@10': PH_OPEN,
+  'philidor-defence::3::Bf4@10': PH_OPEN,
+  'philidor-defence::4::Nc3@10': PH_COUNTERGAMBIT,
+  'philidor-defence::4::Nxe5@10': PH_COUNTERGAMBIT,
+  'philidor-defence::4::Ng3@10': PH_COUNTERGAMBIT,
+  'philidor-defence::4::Bg5@10': PH_COUNTERGAMBIT,
+  'philidor-defence::4::Nc5@10': PH_COUNTERGAMBIT,
+  'philidor-defence::4::Ng5@8': PH_COUNTERGAMBIT,
+  'philidor-defence::4::dxe5@10': PH_COUNTERGAMBIT,
+  'philidor-defence::4::Qxd4@12': PH_COUNTERGAMBIT,
+  'philidor-defence::4::dxe5@6': PH_COUNTERGAMBIT,
+  'philidor-defence::4::Ne5@12': PH_COUNTERGAMBIT,
+  'philidor-defence::5::c3@12': PH_D3_QUIET,
+  'philidor-defence::5::Nc3@12': PH_D3_QUIET,
+  'philidor-defence::5::d4@4': PH_OPEN,
+  'philidor-defence::5::h3@12': PH_D3_QUIET,
+  'philidor-defence::5::Re1@12': PH_D3_QUIET,
+  'philidor-defence::5::Bg5@12': PH_D3_QUIET,
+  'philidor-defence::5::Be3@12': PH_D3_QUIET,
+  'philidor-defence::5::Nc3@10': PH_D3_QUIET,
+  'philidor-defence::5::Nbd2@10': PH_D3_QUIET,
+  'philidor-defence::5::b3@12': PH_D3_QUIET,
 };
