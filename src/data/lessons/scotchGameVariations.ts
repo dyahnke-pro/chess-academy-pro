@@ -28,6 +28,24 @@ function b(init: BeatInit): LessonBeat {
 }
 
 export const SCOTCH_GAME_VARIATION_LESSONS: Record<string, LessonScript> = {
+  "scotch-game::Scotch: Classical 4...Bc5 (Be3 Qf6 Main Line)": {
+    openingId: "scotch-game", title: "Scotch — Classical 4…Bc5", minutes: 10, orientation: "white",
+    sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scotch_Game'],
+    beats: [
+      b({ id: "sc1", moves: "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5", say: "The Scotch — White cracks the centre open early with d4, the most direct way to fight for the initiative against 1…e5. Black's classical reply …Bc5 pressures the d4-knight and the f2-square; White's whole plan is to neutralise that bishop and keep a small structural edge.", sayShort: "d4 — open the centre at once.", highlights: [H("c5", KEY)] }),
+      b({ id: "sc2", moves: "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Be3 Qf6 c3 Nge7 Bc4 O-O O-O d6", say: "White challenges the bishop with Be3, props the knight with c3, and develops Bc4 — pointing straight at the f7-square. Both sides castle. Every White piece sits on a natural, active post while the d4-knight stays rock-solid.", sayShort: "Bc4 — develop, aim at f7.", highlights: [H("c4", KEY), H("f7", SOFT)] }),
+      b({ id: "sc3", moves: "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Be3 Qf6 c3 Nge7 Bc4 O-O O-O d6 Nxc6 Nxc6 Bxc5 dxc5 f4 Be6", say: "White trades on c6 and then on c5 — and the recapture …dxc5 saddles Black with doubled c-pawns. Then f4 grabs kingside space, and …Be6 challenges the c4-bishop. There is the Classical Scotch tabiya: White owns the healthier structure, the f4-space, and a comfortable, risk-free pull against Black's split queenside.", sayShort: "f4 — space, and Black's doubled c-pawns.", highlights: [H("c5", KEY), H("e6", SOFT), H("f4", SOFT)] }),
+    ],
+  },
+  "scotch-game::Scotch: Göring Gambit (4.c3)": {
+    openingId: "scotch-game", title: "Scotch — The Göring Gambit", minutes: 10, orientation: "white",
+    sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scotch_Game'],
+    beats: [
+      b({ id: "gg1", moves: "e4 e5 Nf3 Nc6 d4 exd4 c3", say: "The Göring Gambit — White offers the c-pawn with c3, the cousin of the Danish. The bet is classic gambit logic: a fast lead in development and open central lines are worth more than a single pawn. An aggressive, principled way to blow the game wide open.", sayShort: "c3 — offer the pawn for the initiative.", highlights: [H("c3", KEY)] }),
+      b({ id: "gg2", moves: "e4 e5 Nf3 Nc6 d4 exd4 c3 dxc3 Nxc3 Bb4 Bc4 d6 O-O Bxc3 bxc3 Nf6 e5", say: "Black accepts, and White pours out the pieces: Nxc3, Bc4 hitting f7, and O-O. After …Bxc3 bxc3 White has the bishop pair and the half-open b-file, and then e5 rips another line open, kicking the f6-knight. Every White move is development with menace.", sayShort: "Bc4, e5 — develop fast, open lines.", highlights: [H("c4", KEY), H("e5", SOFT)] }),
+      b({ id: "gg3", moves: "e4 e5 Nf3 Nc6 d4 exd4 c3 dxc3 Nxc3 Bb4 Bc4 d6 O-O Bxc3 bxc3 Nf6 e5 Nxe5 Nxe5 dxe5 Qb3", say: "The centre clears, and White springs Qb3 — lining up behind the c4-bishop so the queen and bishop hammer f7 together, while the queen also eyes b7, with Black's king still stranded on e8. There is the Göring tabiya: a pawn down, but with the bishop pair, open lines, and a lasting initiative against an uncastled king — a sound, dangerous gambit that scores 51% at club level.", sayShort: "Qb3 — the battery hammers f7.", arrows: [A("c4", "f7", ATK)], highlights: [H("f7", KEY), H("b3", SOFT)] }),
+    ],
+  },
   "scotch-game::Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)": {
     openingId: 'scotch-game', title: 'Scotch — the Schmidt (IQP Play)', minutes: 10, orientation: 'white',
     sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scotch_Game'],
