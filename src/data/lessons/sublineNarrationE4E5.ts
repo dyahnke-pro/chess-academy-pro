@@ -343,6 +343,117 @@ const IT_MAXLANGE_DEEP: SublineNarration = {
   sources: ['concept:pos-initiative', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Two_Knights_Defense'],
 };
 
+// ── Two Knights Defence (student BLACK). triggerMove is WHITE's deviation. ──
+const TK = ['book:two-knights-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Two_Knights_Defense'];
+const TK_INIT = ['book:two-knights-defence', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Two_Knights_Defense'];
+
+// d3@6 — Bc4 Nf6 d3, the quiet Modern (White ducks Ng5).
+const TK_D3_QUIET: SublineNarration = {
+  intro: {
+    say: "d3 — White declines the sharp Ng5 lunge for the quiet Modern treatment, propping the bishop and biding time. That suits you perfectly: develop in comfort with …Bc5 or …Be7, …d6 and …O-O, and aim for the freeing …d5 break or …Na5 to swap off White's strong light bishop. No tricks, no pressure — a sound, equal game where your pieces flow freely.",
+    sayShort: 'd3 — develop freely, aim for …d5.',
+  },
+  sources: TK,
+};
+// Ng5@6 — the Knight Attack / Fried Liver lunge at f7. Answer …d5.
+const TK_NG5: SublineNarration = {
+  intro: {
+    say: "Ng5 — the Knight Attack, lunging straight at f7 and the Fried Liver. It looks scary and it is completely fine for you: answer …d5! striking the centre and slamming the door, the move every theory book demands. After exd5 you have the Polerio's …Na5 hitting the c4-bishop, or the razor-sharp …b5 and …Nd4 gambits — in every one you get a roaring initiative for a pawn. Never fear Ng5; welcome it.",
+    sayShort: 'Ng5 — answer …d5, seize the initiative.',
+  },
+  sources: TK,
+};
+// d4@6 — Bc4 Nf6 d4, the Scotch Gambit. Take …exd4.
+const TK_D4_GAMBIT: SublineNarration = {
+  intro: {
+    say: "d4 — the Scotch Gambit, offering a pawn to prise the centre open. Take it with …exd4: you're a pawn up and the way to neutralise the coming Max Lange is the central counter …d5 yourself, returning the pawn to free your pieces and blunt White's bishop. Defend the first few energetic moves accurately and the position is balanced — or better, with that extra pawn.",
+    sayShort: 'd4 — take …exd4, then strike …d5.',
+  },
+  sources: TK,
+};
+// d4@4 cont — the Scotch Game (e4 e5 Nf3 Nc6 d4). Equalize with …Qe7/…Nd5.
+const TK_SCOTCH: SublineNarration = {
+  intro: {
+    say: "d4 — White swerves into the Scotch, trading the central pawns to free his pieces early. The book equalizer is precise and well worth knowing: after the exchanges, …Qe7 pressures the advanced e5-pawn and …Nd5 plants the knight on a dominant central blockade. You accept doubled c-pawns but gain the bishop pair and rock-solid piece play — a comfortable, fully equal game.",
+    sayShort: 'd4 — Scotch: …Qe7 and …Nd5 equalize.',
+  },
+  beats: [
+    { atMove: 11, say: "…Qe7 — the queen swings out to lean on the advanced e5-pawn, the cramping spearhead of White's position. It defends the attacked f6-knight and prepares …Nd5, after which e5 becomes a target rather than a thorn. This is the move that takes the sting out of the Scotch.", arrows: [A('e7', 'e5')], highlights: [H('e5', KEY)] },
+    { atMove: 13, say: "…Nd5 — the knight lands on its dream central square, blockading and eyeing both wings. Yes, your c-pawns are doubled, but you hold the bishop pair and the freer game; the strong knight and open b-file are full compensation. You've equalised cleanly from the Scotch.", highlights: [H('d5', KEY)] },
+  ],
+  sources: TK,
+};
+// Nc3@4 cont — the Four Knights (e4 e5 Nf3 Nc6 Nc3 Nf6). Symmetrical, solid.
+const TK_FOUR_KNIGHTS: SublineNarration = {
+  intro: {
+    say: "Nc3 — White steers into the calm, classical Four Knights, mirroring development. Match him with …Nf6 and you stand on perfectly equal ground: solid, symmetrical, no weaknesses. If White ever drifts you have the …Bb4 pin and the …Nd4 Rubinstein counter waiting; until then, develop comfortably and there is simply nothing to fear.",
+    sayShort: 'Nc3 — Four Knights: …Nf6, easy equality.',
+  },
+  beats: [
+    { atMove: 5, say: "…Nf6 — the symmetrical reply, claiming your own share of the centre. The position is balanced and weakness-free; from here the …Bb4 pin and the …Nd4 Rubinstein keep dynamic resources in reserve while you develop in total comfort.", highlights: [H('e4', SOFT), H('e5', SOFT)] },
+  ],
+  sources: TK,
+};
+// Bb5@4 cont (var0) — White transposes to a Ruy. Play …a6.
+const TK_RUY: SublineNarration = {
+  intro: {
+    say: "Bb5 — White sidesteps the Two Knights and transposes to a Ruy Lopez. Nothing to fear: put the question with …a6, and after Ba4 you're in familiar Spanish territory with …b5 held in reserve to kick the bishop. Develop solidly with …Be7 and …O-O — a balanced, deeply-charted game where you know every plan.",
+    sayShort: "Bb5 — it's a Ruy: …a6 and develop.",
+  },
+  beats: [
+    { atMove: 5, say: "…a6 — the Morphy move, putting the bishop on the spot at once. After Ba4 it clings to the diagonal, but now …b5 is loaded to chase it away whenever you choose. White's anti-Italian has become a main-line Ruy Lopez, and you're right at home.", highlights: [H('b5', KEY)] },
+  ],
+  sources: TK,
+};
+// Quiet Italian/Two-Knights middlegame (var4/var7, d3 Be7 O-O O-O Re1 d6 + a quiet White move).
+const TK_QUIET_MIDDLE: SublineNarration = {
+  intro: {
+    say: "White settles for a slow, quiet manoeuvring game in the d3 Italian — no break, no threat, just patient improvement. Answer in kind and you're completely fine: reroute with …Na5 to challenge the strong c4-bishop, swing the knight via …Nd7-f8-g6, and prepare the …d5 or …c6-and-…d5 break to free the position. Equal and rich — out-play, don't out-rush.",
+    sayShort: 'Quiet — …Na5, reroute, break with …d5.',
+  },
+  sources: TK,
+};
+// Bb5@14 — White pins after …Na5 (…c3 Na5 Bb5). Kick with …c6.
+const TK_QUIET_BB5: SublineNarration = {
+  intro: {
+    say: "Bb5 — White pins your knight after …Na5, trying to make the offside steed awkward. Shrug it off with …c6, putting the question to the bishop; after it retreats you've gained space, your knight returns via c6 or sits on a5 eyeing the bishop pair, and the position is comfortably level. The pin is a pinprick, not a problem.",
+    sayShort: 'Bb5 — kick it with …c6, stay equal.',
+  },
+  sources: TK,
+};
+// Fried Liver Polerio deep (var1, Ng5 d5 exd5 Na5 …). Pawn sac for the initiative.
+const TK_POLERIO: SublineNarration = {
+  intro: {
+    say: "The Polerio — you've given a pawn in the main Knight-Attack line, and the compensation is textbook and lasting: a big lead in development, the bishop pair, and White's pieces tangled and retreating while yours pour out. The …e4 thrust gains space and chases the knight home, and White spends the whole opening untangling. The pawn is a fair price for this initiative.",
+    sayShort: 'Polerio — a pawn for the raging initiative.',
+  },
+  sources: TK_INIT,
+};
+// Fritz / Ulvestad sharpest lines (var5/var6) — Black's attack for material.
+const TK_FRITZ_ULVESTAD: SublineNarration = {
+  intro: {
+    say: "The sharpest forest in the Two Knights — the Fritz and Ulvestad, where …Nd4 and …b5 throw material onto the fire for a withering attack. White's king is stuck in the centre, your pieces swarm the open lines, and the …Qxg5 and …e4 ideas keep the initiative blazing. This is theory to the teeth and double-edged to the hilt — know it, and Black's attack is worth every pawn.",
+    sayShort: 'Fritz/Ulvestad — sac material, hunt the king.',
+  },
+  sources: TK_INIT,
+};
+// 4…Bc5 Bxf7+ lines (var2) — king walks to e7, Black gets the piece/initiative back.
+const TK_BC5_BXF7: SublineNarration = {
+  intro: {
+    say: "You've met the Knight Attack with the bold …Bc5, and White grabbed on f7 with check. Your king walks to e7 — ugly but completely safe, because White's attacking pieces have nothing to follow up with. You'll round up the loose bishop on d5, untangle with …Rf8 and …d6, and emerge with the bishop pair and a sound game. The check looked terrifying; it was a bluff.",
+    sayShort: '…Bc5 — walk …Ke7, round up the bishop.',
+  },
+  sources: TK_INIT,
+};
+// Scotch Gambit / Max Lange e5-advance defence (var0/var3). Black holds with …d5/…Ne4.
+const TK_MAXLANGE: SublineNarration = {
+  intro: {
+    say: "The Max Lange complex — White has pushed e5 to cramp you and open lines for the attack. The defence is known and sound: …d5 returns the pawn to free your game, …Ne4 plants the knight on a strong central post, and …Bd7 and …Be7 calmly complete development. Weather the tactical storm with precise moves and the extra space evaporates into a balanced, even game.",
+    sayShort: 'Max Lange — defend with …d5 and …Ne4.',
+  },
+  sources: TK,
+};
+
 export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   // ── Ruy Lopez ──
   'ruy-lopez::0::Nf6@5': RUY_BERLIN,
@@ -493,4 +604,79 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'italian-game::5::Qf5@23': IT_MAXLANGE_DEEP,
   'italian-game::5::h6@23': IT_MAXLANGE_DEEP,
   'italian-game::5::f5@11': IT_MAXLANGE_DEEP,
+
+  // ── Two Knights Defence ──
+  'two-knights-defence::1::d3@6': TK_D3_QUIET,
+  'two-knights-defence::2::d3@6': TK_D3_QUIET,
+  'two-knights-defence::3::d3@6': TK_D3_QUIET,
+  'two-knights-defence::5::d3@6': TK_D3_QUIET,
+  'two-knights-defence::6::d3@6': TK_D3_QUIET,
+  'two-knights-defence::3::Ng5@6': TK_NG5,
+  'two-knights-defence::4::Ng5@6': TK_NG5,
+  'two-knights-defence::1::d4@6': TK_D4_GAMBIT,
+  'two-knights-defence::2::d4@6': TK_D4_GAMBIT,
+  'two-knights-defence::5::d4@6': TK_D4_GAMBIT,
+  'two-knights-defence::6::d4@6': TK_D4_GAMBIT,
+  'two-knights-defence::1::d4@4': TK_SCOTCH,
+  'two-knights-defence::2::d4@4': TK_SCOTCH,
+  'two-knights-defence::3::d4@4': TK_SCOTCH,
+  'two-knights-defence::4::d4@4': TK_SCOTCH,
+  'two-knights-defence::5::d4@4': TK_SCOTCH,
+  'two-knights-defence::6::d4@4': TK_SCOTCH,
+  'two-knights-defence::7::d4@4': TK_SCOTCH,
+  'two-knights-defence::1::Nc3@4': TK_FOUR_KNIGHTS,
+  'two-knights-defence::2::Nc3@4': TK_FOUR_KNIGHTS,
+  'two-knights-defence::3::Nc3@4': TK_FOUR_KNIGHTS,
+  'two-knights-defence::4::Nc3@4': TK_FOUR_KNIGHTS,
+  'two-knights-defence::5::Nc3@4': TK_FOUR_KNIGHTS,
+  'two-knights-defence::6::Nc3@4': TK_FOUR_KNIGHTS,
+  'two-knights-defence::7::Nc3@4': TK_FOUR_KNIGHTS,
+  'two-knights-defence::0::Bb5@4': TK_RUY,
+  'two-knights-defence::4::c3@12': TK_QUIET_MIDDLE,
+  'two-knights-defence::4::h3@12': TK_QUIET_MIDDLE,
+  'two-knights-defence::7::h3@12': TK_QUIET_MIDDLE,
+  'two-knights-defence::4::Nbd2@12': TK_QUIET_MIDDLE,
+  'two-knights-defence::7::Nbd2@12': TK_QUIET_MIDDLE,
+  'two-knights-defence::4::Nc3@12': TK_QUIET_MIDDLE,
+  'two-knights-defence::7::Nc3@12': TK_QUIET_MIDDLE,
+  'two-knights-defence::4::a3@12': TK_QUIET_MIDDLE,
+  'two-knights-defence::7::a3@12': TK_QUIET_MIDDLE,
+  'two-knights-defence::7::a4@12': TK_QUIET_MIDDLE,
+  'two-knights-defence::4::Bg5@12': TK_QUIET_MIDDLE,
+  'two-knights-defence::7::Bg5@12': TK_QUIET_MIDDLE,
+  'two-knights-defence::7::Bb5@14': TK_QUIET_BB5,
+  'two-knights-defence::1::Bd3@14': TK_POLERIO,
+  'two-knights-defence::1::Nd4@18': TK_POLERIO,
+  'two-knights-defence::1::Ng1@18': TK_POLERIO,
+  'two-knights-defence::1::Nh4@18': TK_POLERIO,
+  'two-knights-defence::1::O-O@24': TK_POLERIO,
+  'two-knights-defence::5::O-O@16': TK_FRITZ_ULVESTAD,
+  'two-knights-defence::5::Qa4+@14': TK_FRITZ_ULVESTAD,
+  'two-knights-defence::5::Nf3@16': TK_FRITZ_ULVESTAD,
+  'two-knights-defence::5::Qe2@16': TK_FRITZ_ULVESTAD,
+  'two-knights-defence::5::d4@16': TK_FRITZ_ULVESTAD,
+  'two-knights-defence::6::O-O@18': TK_FRITZ_ULVESTAD,
+  'two-knights-defence::6::Nc3@12': TK_FRITZ_ULVESTAD,
+  'two-knights-defence::6::Bc6@18': TK_FRITZ_ULVESTAD,
+  'two-knights-defence::6::d3@16': TK_FRITZ_ULVESTAD,
+  'two-knights-defence::6::dxe5@16': TK_FRITZ_ULVESTAD,
+  'two-knights-defence::2::Bxc6@14': TK_BC5_BXF7,
+  'two-knights-defence::2::c3@12': TK_BC5_BXF7,
+  'two-knights-defence::2::d3@12': TK_BC5_BXF7,
+  'two-knights-defence::2::d3@14': TK_BC5_BXF7,
+  'two-knights-defence::2::h3@14': TK_BC5_BXF7,
+  'two-knights-defence::0::Bb3@10': TK_MAXLANGE,
+  'two-knights-defence::0::Bxc6+@12': TK_MAXLANGE,
+  'two-knights-defence::0::Nxc6@14': TK_MAXLANGE,
+  'two-knights-defence::0::O-O@12': TK_MAXLANGE,
+  'two-knights-defence::0::O-O@14': TK_MAXLANGE,
+  'two-knights-defence::0::c3@18': TK_MAXLANGE,
+  'two-knights-defence::0::f3@18': TK_MAXLANGE,
+  'two-knights-defence::0::exd6@10': TK_MAXLANGE,
+  'two-knights-defence::0::exf6@10': TK_MAXLANGE,
+  'two-knights-defence::3::e5@8': TK_MAXLANGE,
+  'two-knights-defence::3::Nc3@10': TK_MAXLANGE,
+  'two-knights-defence::3::Nxd4@10': TK_MAXLANGE,
+  'two-knights-defence::3::Nb5@18': TK_MAXLANGE,
+  'two-knights-defence::3::Rxe7+@20': TK_MAXLANGE,
 };
