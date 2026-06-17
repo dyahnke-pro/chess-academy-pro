@@ -14,6 +14,31 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Semi-Slav_Defense'];
 
 export const SEMI_SLAV_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'semi-slav::Anti-Meran Bd3 Line': {
+    openingId: 'semi-slav', title: 'Semi-Slav — The Anti-Meran (Bd3)', minutes: 11, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'as1', moves: 'd4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Bd3', say: "The Semi-Slav: Black builds the famous …d5/…c6/…e6 triangle, the soundest structure against 1.d4 — Slav solidity plus the option to grab the c4-pawn and play sharply. White develops Bd3, the Anti-Meran handling.", sayShort: 'the …d5/…c6/…e6 triangle.', highlights: [H('d5', KEY)] }),
+      b({ id: 'as2', moves: 'd4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Bd3 dxc4 Bxc4 b5 Bd3 a6 e4 c5 e5 cxd4 Nxb5 axb5', say: "Black grabs …dxc4 and expands with the Meran pawns …b5 and …a6. White throws everything forward — e4-e5 and the piece sacrifice Nxb5 — but after …axb5 the smoke clears with Black a clean piece ahead for a couple of pawns. The position is razor-sharp, but the material favours Black.", sayShort: '…axb5 — Black is up a piece.', highlights: [H('b5', KEY)] }),
+      b({ id: 'as3', moves: 'd4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Bd3 dxc4 Bxc4 b5 Bd3 a6 e4 c5 e5 cxd4 Nxb5 axb5 exf6 gxf6', say: "White grabs material back with exf6, and Black recaptures …gxf6 — yes, the kingside pawns are shattered, but the g-file rips open pointing at White's king, and Black keeps the extra material. Concrete play: structure traded for force.", sayShort: '…gxf6 — open the g-file, keep the edge.', highlights: [H('f6', KEY)] }),
+      b({ id: 'as4', moves: 'd4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Bd3 dxc4 Bxc4 b5 Bd3 a6 e4 c5 e5 cxd4 Nxb5 axb5 exf6 gxf6 O-O Qb6 Qe2 Bb7 Rd1 Rg8', say: "Black centralises …Qb6 to guard the extra d4-pawn, develops …Bb7 onto the long diagonal, and swings …Rg8 onto the open g-file straight at White's king. There is the Anti-Meran tabiya: Black has the extra material, the bishop pair, the b7-bishop raking the long diagonal, and the more dangerous attack — sharp, but objectively better for Black.", sayShort: '…Bb7, …Rg8 — material plus attack.', highlights: [H('b7', KEY), H('g8', SOFT), H('d4', SOFT)] }),
+    ],
+  },
+  'semi-slav::Reynolds Variation': {
+    openingId: 'semi-slav', title: 'Semi-Slav — The Reynolds (…Bd6)', minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'rn1', moves: 'd4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Bd3 Bd6', say: "The active Semi-Slav with …Bd6 — instead of grabbing the pawn, Black develops the dark-squared bishop to its best square, aiming at White's kingside and preparing quick castling and a central break. Solid and harmonious.", sayShort: '…Bd6 — the active bishop, eyeing the king.', highlights: [H('d6', KEY)] }),
+      b({ id: 'rn2', moves: 'd4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Bd3 Bd6 O-O O-O e4 dxe4 Nxe4 Nxe4 Bxe4 Nf6', say: "Both castle, White expands with e4, and Black resolves the centre crisply: …dxe4 and the knight trades, then …Nf6 hits the e4-bishop with tempo. Black neutralises White's central ambitions and develops with gain of time.", sayShort: '…Nf6 — hit the bishop, gain time.', highlights: [H('f6', KEY), H('e4', SOFT)] }),
+      b({ id: 'rn3', moves: 'd4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Bd3 Bd6 O-O O-O e4 dxe4 Nxe4 Nxe4 Bxe4 Nf6 Bc2 c5 dxc5 Bxc5 Bg5 h6 Bh4 b6', say: "White retreats Bc2, and Black completes equality with the …c5 break, recapturing …Bxc5; after Bg5 …h6 Bh4, Black plays …b6 to fianchetto the last piece. There is the Reynolds tabiya: the freeing break achieved, active bishops on c5 and soon b7, and not a weakness in sight — clean, comfortable equality.", sayShort: '…c5, …b6 — the freeing break, full equality.', highlights: [H('c5', KEY), H('b6', SOFT)] }),
+    ],
+  },
+  'semi-slav::Romih ...Bd6 System': {
+    openingId: 'semi-slav', title: 'Semi-Slav — The Romih (…Bd6 + …e5)', minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'ro1', moves: 'd4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Bd3 Bd6', say: "The Semi-Slav with the active …Bd6 again, the bishop trained on White's kingside. The Romih treatment aims to combine this development with grabbing queenside space and the central …e5 break.", sayShort: '…Bd6 — active bishop, …e5 in mind.', highlights: [H('d6', KEY)] }),
+      b({ id: 'ro2', moves: 'd4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Bd3 Bd6 O-O O-O Qc2 dxc4 Bxc4 b5 Bd3 Bb7', say: "Black castles, then grabs …dxc4 and gains real queenside space with …b5, fianchettoing …Bb7 onto the long diagonal where it bears down on White's centre. Black's pieces are busy and well-placed.", sayShort: '…b5, …Bb7 — space and the long diagonal.', highlights: [H('b5', KEY), H('b7', SOFT)] }),
+      b({ id: 'ro3', moves: 'd4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Bd3 Bd6 O-O O-O Qc2 dxc4 Bxc4 b5 Bd3 Bb7 a3 a6 e4 e5', say: "White props the centre with a3, Black replies …a6, and then the key …e5! break strikes White's centre and frees Black completely. There is the Romih tabiya: the active bishops on d6 and b7, queenside space, and the …e5 break achieved — a dynamic position where Black is comfortable and even a shade better.", sayShort: '…e5 — the freeing central break.', highlights: [H('e5', KEY), H('a6', SOFT), H('d6', SOFT)] }),
+    ],
+  },
   'semi-slav::Meran Variation Deeper': {
     openingId: 'semi-slav', title: 'Semi-Slav — The Meran', minutes: 11, orientation: 'black', sources: SRC,
     beats: [

@@ -15,6 +15,14 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Modern_Benoni'];
 
 export const BENONI_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'benoni-defence::Snake Benoni (...Bd7-a4 Maneuver)': {
+    openingId: 'benoni-defence', title: 'Benoni — The Snake (…Na6-c7)', minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'sn1', moves: 'd4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7', say: "The Modern Benoni: Black challenges with …c5 and …e6, trades to hand White the big d5/e4 pawn duo, then fianchettoes …Bg7 onto the long diagonal. It's a deliberate bargain — Black accepts a space disadvantage in return for dynamic piece play and the thematic …b5 break.", sayShort: '…Bg7 — fianchetto, accept the space bind.', highlights: [H('g7', KEY)] }),
+      b({ id: 'sn2', moves: 'd4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Re8 Nd2 Na6', say: "Both sides castle; Black posts …Re8 to pressure the e-file and the e4-pawn, then starts the Snake manoeuvre with …Na6, the knight heading for c7. White repositions Nd2 to bolster e4 and prepare a queenside answer.", sayShort: '…Re8, …Na6 — pressure e4, start the Snake.', highlights: [H('a6', KEY), H('e8', SOFT)] }),
+      b({ id: 'sn3', moves: 'd4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 e4 Bg7 Be2 O-O O-O Re8 Nd2 Na6 Re1 Nc7', say: "White contests the e-file with Re1, and Black completes the Snake with …Nc7 — the knight now braces the …b5 break and eyes the d5-pawn. There is the Snake Benoni tabiya: the g7-bishop raking the long diagonal, the rook pressuring e4, and the …b5 lever loaded — the classic dynamic Benoni counterplay against White's central space.", sayShort: '…Nc7 — load …b5, eye d5.', highlights: [H('c7', KEY)] }),
+    ],
+  },
   'benoni-defence::Fianchetto Variation (g3/Bg2)': {
     openingId: 'benoni-defence', title: 'Benoni — The Fianchetto (g3/Bg2)', minutes: 10, orientation: 'black', sources: SRC,
     beats: [
