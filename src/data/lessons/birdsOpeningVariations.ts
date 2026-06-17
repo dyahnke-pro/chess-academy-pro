@@ -8,6 +8,36 @@ const SOFT = 'rgba(80,140,255,0.32)';
 const BIRD = 'https://en.wikipedia.org/wiki/Bird%27s_Opening';
 
 export const BIRDS_OPENING_VARIATION_LESSONS: Record<string, LessonScript> = {
+  "birds-opening::Bird's: From's Gambit Declined": {
+    openingId: 'birds-opening',
+    sources: ['concept:pos-space', 'concept:pos-outpost', BIRD],
+    title: "Bird's — From's Gambit Declined",
+    minutes: 9,
+    orientation: 'white',
+    beats: [
+      {
+        id: 'fd1',
+        moves: ['f4', 'd5', 'Nf3', 'Nf6', 'e3', 'g6', 'b3', 'Bg7'],
+        highlights: [{ square: 'f4', color: KEY }],
+        say: "Bird's Opening — White opens with 1.f4, a reversed Dutch that grips the e5-square. When Black sidesteps any From's-gambit ideas with the solid 1…d5, White builds a harmonious reversed-Leningrad set-up: Nf3, e3, and the queenside fianchetto with b3 to follow. No risk, all structure.",
+        sayShort: 'f4 — the reversed-Dutch e5 grip.',
+      },
+      {
+        id: 'fd2',
+        moves: ['f4', 'd5', 'Nf3', 'Nf6', 'e3', 'g6', 'b3', 'Bg7', 'Bb2', 'O-O', 'Be2', 'c5', 'O-O', 'Nc6', 'Ne5'],
+        highlights: [{ square: 'e5', color: KEY }, { square: 'b2', color: SOFT }],
+        say: "Both sides fianchetto and castle, and White plants the knight on e5 — the key outpost in every Bird's, supported by the f4-pawn and impossible to chase with a pawn. From e5 it dominates the centre and stares at Black's kingside. The b2-bishop reinforces the long diagonal behind it.",
+        sayShort: 'Ne5 — the dominating outpost.',
+      },
+      {
+        id: 'fd3',
+        moves: ['f4', 'd5', 'Nf3', 'Nf6', 'e3', 'g6', 'b3', 'Bg7', 'Bb2', 'O-O', 'Be2', 'c5', 'O-O', 'Nc6', 'Ne5', 'Nxe5', 'Bxe5', 'Nd7', 'Bxg7', 'Kxg7'],
+        highlights: [{ square: 'f4', color: KEY }, { square: 'e5', color: SOFT }],
+        say: "Black challenges the outpost and the pieces come off on e5 and g7. There is the From's-Declined tabiya: a sound, harmonious position where the f4-pawn keeps a permanent clamp on e5, White's development is easy, and the reversed-Dutch structure offers comfortable play with kingside attacking ideas. Equal, low-theory, and pleasant for White.",
+        sayShort: 'f4 — a lasting clamp on e5.',
+      },
+    ],
+  },
   "birds-opening::Bird's: Leningrad Formation": {
     openingId: 'birds-opening',
     sources: ['concept:pos-space', 'concept:pos-development', BIRD],
