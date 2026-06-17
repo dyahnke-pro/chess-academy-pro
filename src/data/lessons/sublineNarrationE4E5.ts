@@ -657,6 +657,67 @@ const SCG_D6: SublineNarration = {
   sources: SCG_CTR,
 };
 
+// ── Evans Gambit (student WHITE). triggerMove is BLACK's deviation. ──
+const EV = ['book:evans-gambit', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Evans_Gambit'];
+const EV_CTR = ['book:evans-gambit', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Evans_Gambit'];
+
+// Bxb4@7 — Black accepts the gambit pawn.
+const EV_BXB4: SublineNarration = {
+  intro: {
+    say: "…Bxb4 — accepted. You've handed over the b-pawn to gain a tempo hitting the bishop and the time to build the dream centre. Play c3 and d4: the pawns roll forward, the bishop swings to a3 raking Black's king, and Qb3 lines up with the c4-bishop on f7. This is the Evans bargain — a pawn for a lead in development you turn straight into an attack.",
+    sayShort: '…Bxb4 — c3 and d4, build the attack.',
+  },
+  sources: EV,
+};
+// Ba5@9 — the main retreat. Build with d4.
+const EV_BA5: SublineNarration = {
+  intro: {
+    say: "…Ba5 — the main retreat, keeping the bishop on the a5-e1 diagonal eyeing your knight's pin. Now strike: d4 throws the centre forward, Qb3 trains the queen-and-bishop battery on f7, and O-O brings the rook into the attack. The gambit pawn is a memory; the rolling centre and the lead in development are the reality — pour it on.",
+    sayShort: '…Ba5 — d4 centre, Qb3 battery on f7.',
+  },
+  sources: EV_CTR,
+};
+// Bd6@9 + var3 deep — the solid modern …Bd6 retreat (blocks the d-pawn).
+const EV_BD6: SublineNarration = {
+  intro: {
+    say: "…Bd6 — the solid modern retreat, planting the bishop to overprotect e5 and slow your d4 break. It's resilient but passive, blocking Black's own d-pawn. Carry on with d4 and O-O; you keep the broad centre, the bishop pair option, and a long initiative for the pawn. Patient pressure on the cramped position is the way — the bishop on d6 just gets in Black's way.",
+    sayShort: '…Bd6 — d4 and O-O, press the cramp.',
+  },
+  sources: EV_CTR,
+};
+// Bb6@7 early + var2 a4 lines — Black retreats early; White harasses with a4.
+const EV_BB6_QUIET: SublineNarration = {
+  intro: {
+    say: "…Bb6 — Black retreats the bishop without grabbing the pawn, steering for the quieter Evans. Make the tempo tell: a4 lunges at the queenside, threatening a5 to trap or chase the bishop and forcing …a6 or …a5 in reply. Then Nc3, d3 and a calm build-up leave you with more space and the easier game — the positional face of the Evans still favours you.",
+    sayShort: '…Bb6 — harass with a4, then Nc3.',
+  },
+  sources: EV,
+};
+// Be7@5 / Be7@9 — Black declines the fight, retreats passively to e7.
+const EV_BE7: SublineNarration = {
+  intro: {
+    say: "…Be7 — the meek retreat, tucking the bishop back and declining the gambit's fire. Take the gift of space: d4 builds the full centre, you castle and develop freely, and Black sits cramped with a passive bishop and no counterplay. There are no tricks here — just a clean central clamp and an easy, pleasant initiative to grind.",
+    sayShort: '…Be7 — d4 centre, squeeze the passivity.',
+  },
+  sources: EV_CTR,
+};
+// Nf6@5 — Bc4 Nf6, Black sidesteps into the Two Knights.
+const EV_NF6: SublineNarration = {
+  intro: {
+    say: "…Nf6 — Black declines the Evans entirely and heads for the Two Knights, hitting your e4-pawn. Fine by you: the swashbuckling Ng5 lunges at f7, or the principled d4 break opens the centre. Black has merely swapped one sharp battleground for another — pick your attack and play it with the same Evans aggression.",
+    sayShort: '…Nf6 — Two Knights: d4 or Ng5.',
+  },
+  sources: EV,
+};
+// Deep accepted attack (the many …Ba5/…Bb6 main-line attacking positions).
+const EV_ATTACK: SublineNarration = {
+  intro: {
+    say: "Deep in the Evans Gambit accepted — your pieces dominate the board for the price of a pawn. The d4-e4 centre cramps Black, the Qb3-and-Bc4 battery glares at f7, and Ba3 and the rooks pour toward the king. The pawn is irrelevant; the lead in development and the open lines are everything. Keep developing with threats, open the position, and make the initiative crash through.",
+    sayShort: 'Evans attack — centre, battery on f7, storm.',
+  },
+  sources: EV,
+};
+
 export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   // ── Ruy Lopez ──
   'ruy-lopez::0::Nf6@5': RUY_BERLIN,
@@ -1072,4 +1133,86 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'scotch-gambit::2::Bc5@7': SCG_MAIN,
   'scotch-gambit::2::Bc5@13': SCG_MAXLANGE,
   'scotch-gambit::2::Ne4@9': SCG_MAXLANGE,
+
+  // ── Evans Gambit ──
+  'evans-gambit::0::Nf6@5': EV_NF6,
+  'evans-gambit::0::Qe7@13': EV_ATTACK,
+  'evans-gambit::0::Qf6@13': EV_ATTACK,
+  'evans-gambit::0::Be7@5': EV_BE7,
+  'evans-gambit::0::Nf6@17': EV_ATTACK,
+  'evans-gambit::0::Be7@9': EV_BE7,
+  'evans-gambit::0::exd4@11': EV_ATTACK,
+  'evans-gambit::0::Na5@19': EV_ATTACK,
+  'evans-gambit::0::Bb6@7': EV_BB6_QUIET,
+  'evans-gambit::0::Bb6@15': EV_ATTACK,
+  'evans-gambit::1::Qf6@15': EV_ATTACK,
+  'evans-gambit::1::Nf6@5': EV_NF6,
+  'evans-gambit::1::Nh6@15': EV_ATTACK,
+  'evans-gambit::1::Be7@5': EV_BE7,
+  'evans-gambit::1::d6@11': EV_ATTACK,
+  'evans-gambit::1::Be7@9': EV_BE7,
+  'evans-gambit::1::Bb6@7': EV_BB6_QUIET,
+  'evans-gambit::1::Nge7@13': EV_ATTACK,
+  'evans-gambit::1::Bd6@9': EV_BD6,
+  'evans-gambit::1::Nf6@13': EV_ATTACK,
+  'evans-gambit::2::Nf6@5': EV_NF6,
+  'evans-gambit::2::Bxb4@7': EV_BXB4,
+  'evans-gambit::2::Be7@5': EV_BE7,
+  'evans-gambit::2::h6@13': EV_BB6_QUIET,
+  'evans-gambit::2::O-O@13': EV_BB6_QUIET,
+  'evans-gambit::2::Nxb4@13': EV_BB6_QUIET,
+  'evans-gambit::2::d6@11': EV_BB6_QUIET,
+  'evans-gambit::2::Nd4@13': EV_BB6_QUIET,
+  'evans-gambit::2::a5@9': EV_BB6_QUIET,
+  'evans-gambit::2::Ng4@13': EV_BB6_QUIET,
+  'evans-gambit::3::Nf6@5': EV_NF6,
+  'evans-gambit::3::Nf6@13': EV_BD6,
+  'evans-gambit::3::exd4@13': EV_BD6,
+  'evans-gambit::3::Qf6@13': EV_BD6,
+  'evans-gambit::3::Be7@5': EV_BE7,
+  'evans-gambit::3::Ba5@9': EV_BA5,
+  'evans-gambit::3::Qe7@13': EV_BD6,
+  'evans-gambit::3::Be7@9': EV_BE7,
+  'evans-gambit::3::Bb6@7': EV_BB6_QUIET,
+  'evans-gambit::3::Nf6@11': EV_BD6,
+  'evans-gambit::4::Nf6@5': EV_NF6,
+  'evans-gambit::4::Nxe5@15': EV_ATTACK,
+  'evans-gambit::4::Bg4@15': EV_ATTACK,
+  'evans-gambit::4::Be7@5': EV_BE7,
+  'evans-gambit::4::Qe7@17': EV_ATTACK,
+  'evans-gambit::4::Nge7@15': EV_ATTACK,
+  'evans-gambit::4::Be7@9': EV_BE7,
+  'evans-gambit::4::exd4@11': EV_ATTACK,
+  'evans-gambit::4::Bb6@7': EV_BB6_QUIET,
+  'evans-gambit::4::Na5@17': EV_ATTACK,
+  'evans-gambit::5::Nf6@5': EV_NF6,
+  'evans-gambit::5::Bg4@15': EV_ATTACK,
+  'evans-gambit::5::Nf6@15': EV_ATTACK,
+  'evans-gambit::5::Nge7@15': EV_ATTACK,
+  'evans-gambit::5::Ne5@17': EV_ATTACK,
+  'evans-gambit::5::h6@15': EV_ATTACK,
+  'evans-gambit::5::Nce7@17': EV_ATTACK,
+  'evans-gambit::5::Bd7@15': EV_ATTACK,
+  'evans-gambit::5::Be7@5': EV_BE7,
+  'evans-gambit::5::d6@11': EV_ATTACK,
+  'evans-gambit::6::Nf6@5': EV_NF6,
+  'evans-gambit::6::Nf6@15': EV_ATTACK,
+  'evans-gambit::6::Nge7@15': EV_ATTACK,
+  'evans-gambit::6::h6@15': EV_ATTACK,
+  'evans-gambit::6::Qf6@15': EV_ATTACK,
+  'evans-gambit::6::Be7@5': EV_BE7,
+  'evans-gambit::6::d6@11': EV_ATTACK,
+  'evans-gambit::6::Be7@9': EV_BE7,
+  'evans-gambit::6::Bb6@7': EV_BB6_QUIET,
+  'evans-gambit::6::Nge7@13': EV_ATTACK,
+  'evans-gambit::7::Nf6@5': EV_NF6,
+  'evans-gambit::7::Qe7@13': EV_ATTACK,
+  'evans-gambit::7::Qf6@13': EV_ATTACK,
+  'evans-gambit::7::Nf6@15': EV_ATTACK,
+  'evans-gambit::7::Be7@5': EV_BE7,
+  'evans-gambit::7::Na5@17': EV_ATTACK,
+  'evans-gambit::7::exd4@15': EV_ATTACK,
+  'evans-gambit::7::Be7@9': EV_BE7,
+  'evans-gambit::7::exd4@11': EV_ATTACK,
+  'evans-gambit::7::Bb6@7': EV_BB6_QUIET,
 };
