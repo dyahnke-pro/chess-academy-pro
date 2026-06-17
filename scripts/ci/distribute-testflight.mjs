@@ -101,6 +101,18 @@ const main = async () => {
   }
   console.log(`whatsNew verified (${whatsNewValue.length} chars)`);
 
+  // External group + Beta App Review — ONLY when TF_EXTERNAL=1. Default is
+  // INTERNAL-ONLY so the frequent per-change builds David tests don't FLOOD
+  // external beta testers with a notification email on every build (David
+  // 2026-06-17). The nightly daily-deploy run sets TF_EXTERNAL=1 for the
+  // once-a-day external push (≤1 tester email/day); per-push / on-demand
+  // internal builds skip external entirely. whatsNew is still set above, so
+  // the internal build also carries the proper "What to Test" description.
+  if (process.env.TF_EXTERNAL !== '1') {
+    console.log('\nDone (INTERNAL ONLY). External skipped — TF_EXTERNAL!=1, so NO beta-tester emails for this build. Internal testers can install now.');
+    return;
+  }
+
   // External group + Beta App Review.
   const ext = await apiRetry('POST', `/v1/betaGroups/${EXTERNAL_GROUP}/relationships/builds`, { data: [{ type: 'builds', id: buildId }] });
   console.log(`external assign: ${ext.status === 204 ? 'OK' : ext.status} ${ext.status >= 400 ? JSON.stringify(ext.j).slice(0, 200) : ''}`);
