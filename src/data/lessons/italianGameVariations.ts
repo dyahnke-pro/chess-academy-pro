@@ -74,4 +74,32 @@ export const ITALIAN_GAME_VARIATION_LESSONS: Record<string, LessonScript> = {
     b({ id: "o6", moves: "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3 Nxe4 O-O Nxc3 bxc3 Bxc3 Qb3 Bxa1 Bxf7+ Kf8 Bg5 Ne7 Ne5 Bxd4 Bg6 d5 Qf3+ Bf5 Bxf5", say: "The finish is a hurricane: Bxd4 Bg6! d5 Qf3+ Bf5 Bxf5 — the bishop sacrifices itself again to drag out a defender, the queen swings to f3 with check, and White's attack rolls on with crushing force. Modern analysis has shown that with inhuman precision Black can hold parts of the Møller to a draw — but across the board, against a human, this is one of the deadliest practical weapons in all of chess. The lesson of the Møller: pawns and even rooks are worth nothing next to an attack on a king that cannot run.", sayShort: "Bg6, Qf3+ — the hurricane; an unstoppable attack.", highlights: [H("f5", KEY), H("f3", SOFT)] }),
   ],
 },
+
+  "italian-game::Giuoco Piano: Main Line with Nc3": {
+  openingId: "italian-game",
+  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Giuoco_Piano'],
+  title: "Italian — Giuoco Piano Main Line (Nc3)",
+  minutes: 11,
+  orientation: "white",
+  beats: [
+    b({ id: "gn1", moves: "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4", say: "The classical Giuoco Piano main line. White builds the full centre with c3 and d4, the boldest treatment of the Italian. This is no quiet game — White is staking a claim to the whole board and inviting Black into the sharpest theory in the opening.", sayShort: "d4 — the bold central main line.", highlights: [H("d4", KEY)] }),
+    b({ id: "gn2", moves: "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3", say: "exd4 cxd4 Bb4+ Nc3! — there is the great pawn offer. Rather than block the check meekly with Bd2, White interposes the knight, leaving the e4-pawn hanging. White is betting that a lead in development and the initiative are worth more than a pawn — the spirit of the whole line.", sayShort: "Nc3! — the e4-pawn offered for the initiative.", arrows: [A("b4", "c3", ATK)], highlights: [H("c3", KEY)] }),
+    b({ id: "gn3", moves: "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3 Nxe4 O-O Bxc3 bxc3 d5 Ba3", say: "Nxe4 O-O Bxc3 bxc3 d5 Ba3! — Black grabs the pawn, but White castles, recaptures on c3, and unfurls the key move Ba3. The bishop rakes the long dark diagonal toward f8, freezing Black's king in the centre by taking away castling. White's pieces are humming while Black's king is stranded.", sayShort: "Ba3! — the bishop freezes Black's king.", arrows: [A("a3", "f8", ATK)], highlights: [H("a3", KEY), H("d5", SOFT)] }),
+    b({ id: "gn4", moves: "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3 Nxe4 O-O Bxc3 bxc3 d5 Ba3 dxc4", say: "dxc4 — Black returns material to blunt the attack, and with perfect defence the engine calls Black a touch better. But this is a knife fight: White has the bishop on a3, a lead in development, the half-open b-file, and Black's king nailed to e8. Across the board it scores well over fifty percent for White at club level — an aggressive, principled main line where activity is the currency, not pawns.", sayShort: "dxc4 — a knife fight; activity over material.", highlights: [H("a3", KEY), H("c4", SOFT)] }),
+  ],
+},
+
+  "italian-game::Giuoco Piano: Greco Attack (Bd2 line)": {
+  openingId: "italian-game",
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Giuoco_Piano'],
+  title: "Italian — Greco Attack (Bd2)",
+  minutes: 11,
+  orientation: "white",
+  beats: [
+    b({ id: "gc1", moves: "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2", say: "The Greco Attack with Bd2 — the sound, positional way to handle the Giuoco Piano main line. Instead of the wild piece-offer with Nc3, White simply blocks the check with the bishop, keeping the whole position healthy. The pay-off is a smooth game with a small but lasting structural pull and no risk.", sayShort: "Bd2 — the solid, sound main line.", highlights: [H("d2", KEY)] }),
+    b({ id: "gc2", moves: "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 Qb3", say: "Bxd2+ Nbxd2 d5 exd5 Nxd5 Qb3! — the dark bishops come off, Black frees himself with the …d5 break, and after the trade White springs Qb3, hitting the knight on d5 and aiming at f7 at the same time. One developing move, two threats — the tempo-gaining idea at the heart of White's set-up.", sayShort: "Qb3! — hits d5 and eyes f7.", highlights: [H("b3", KEY), H("d5", SOFT)] }),
+    b({ id: "gc3", moves: "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 Qb3 Na5 Qa4+ Nc6 Qb3 Nce7 O-O O-O", say: "Na5 Qa4+ Nc6 Qb3 Nce7 O-O O-O — Black scrambles his knights to neutralise the queen's pressure and both sides castle. White emerges with the freer position, the famous isolated d-pawn giving him active, dynamic piece play rather than a weakness.", sayShort: "O-O — White castles with the freer game.", highlights: [H("e7", KEY)] }),
+    b({ id: "gc4", moves: "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 Qb3 Na5 Qa4+ Nc6 Qb3 Nce7 O-O O-O Rfe1 c6 a4", say: "Rfe1 c6 a4 — White seizes the open e-file with the rook and grabs queenside space with a4. There is the Greco tabiya: the d4-pawn is isolated, but it is a SOURCE of energy — it controls e5 and c5, supports piece activity, and can spearhead a d5 break later. A balanced, sound position where White plays for the initiative with zero opening risk.", sayShort: "Rfe1, a4 — the IQP as a dynamic engine.", highlights: [H("e1", KEY), H("d4", SOFT), H("a4", SOFT)] }),
+  ],
+},
 };

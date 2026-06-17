@@ -27,6 +27,47 @@ function b(init: BeatInit): LessonBeat {
 }
 
 export const SICILIAN_SVESHNIKOV_VARIATION_LESSONS: Record<string, LessonScript> = {
+  "sicilian-sveshnikov::Sveshnikov: Main Line 9.Nd5 (Deep)": {
+  openingId: "sicilian-sveshnikov",
+  sources: ['concept:pos-outpost', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation'],
+  title: "Sveshnikov — Main Line 9.Nd5 (Deep)",
+  minutes: 11,
+  orientation: "black",
+  beats: [
+    b({ id: "sv1", moves: "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5", say: "The Sveshnikov — and the bold move that defines it: …e5, kicking the d4-knight and voluntarily accepting a backward d-pawn and a hole on d5. For decades this was thought too ugly to play. Modern chess proved the opposite: the activity and the bishop pair Black gets in return are full value, and it's now one of the most respected answers to 1.e4.", sayShort: "…e5 — accept the d5-hole for activity.", highlights: [H("e5", KEY)] }),
+    b({ id: "sv2", moves: "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5", say: "White probes with Ndb5 and pins with Bg5, but Black calmly kicks the knights with …a6 and …b5, gaining queenside space and chasing one knight to the dismal a3-square. White plants the other on the d5-outpost — the square Black conceded — but Black is happy to challenge it.", sayShort: "…a6, …b5 — gain space, chase the knight.", highlights: [H("b5", KEY), H("d5", SOFT)] }),
+    b({ id: "sv3", moves: "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Bg5", say: "After …Be7, White trades on f6 and Black recaptures with the bishop — keeping the precious dark-squared bishop rather than wrecking the kingside. Castled, Black reroutes that bishop to g5, clearing the way for the thematic …f5 break that strikes back at White's centre.", sayShort: "…Bxf6, …Bg5 — keep the bishop, ready …f5.", highlights: [H("g5", KEY), H("f6", SOFT)] }),
+    b({ id: "sv4", moves: "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Bg5 Be2 Be6 O-O", say: "Both sides complete development; …Be6 pressures the d5-knight directly. There is the Sveshnikov tabiya: Black has the two bishops, queenside space with …a6 and …b5, and the …f5 lever loaded to blow open the centre — genuine, battle-tested compensation for the d5-square. Dynamic, sound, and a true winning try with Black.", sayShort: "…Be6 — bishops, space, and the …f5 lever.", highlights: [H("e6", KEY)] }),
+  ],
+},
+
+  "sicilian-sveshnikov::Sveshnikov: Novosibirsk (...Bg5 System)": {
+  openingId: "sicilian-sveshnikov",
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation'],
+  title: "Sveshnikov — Novosibirsk (...Bg5)",
+  minutes: 11,
+  orientation: "black",
+  beats: [
+    b({ id: "nv1", moves: "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5", say: "The Sveshnikov again opens with …e5, accepting the d5-hole for piece activity. The Novosibirsk is a sharp, dark-square-flavoured way to handle the resulting positions, favoured by players who want more than the quiet main-line manoeuvring.", sayShort: "…e5 — the Sveshnikov foundation.", highlights: [H("e5", KEY)] }),
+    b({ id: "nv2", moves: "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3", say: "The standard route to the d5-outpost: …a6 and …b5 grab queenside space, and after the trade on f6 Black recaptures with the bishop to keep his dark-squared bishop intact. White supports d5 with c3.", sayShort: "…b5, …Bxf6 — space and the dark bishop kept.", highlights: [H("b5", KEY), H("f6", SOFT)] }),
+    b({ id: "nv3", moves: "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 Bg5 Nc2 Rb8 h4 Bh6", say: "The Novosibirsk signature: …Bg5 pokes the bishop forward to provoke h4, then it drops to h6 — a more aggressive diagonal than the usual g7. Meanwhile …Rb8 prepares queenside expansion instead of hurrying to castle. Black plays for activity on the dark squares.", sayShort: "…Bh6, …Rb8 — active bishop, queenside plan.", highlights: [H("h6", KEY), H("b8", SOFT)] }),
+    b({ id: "nv4", moves: "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 Bg5 Nc2 Rb8 h4 Bh6 Be2 O-O", say: "White develops and Black finally castles. There is the Novosibirsk tabiya: the dark-squared bishop glares at White's kingside from h6, the rook is primed on b8 for …a5 and …b4, and Black has lively, dark-square-based counterplay against the d5-outpost. It scores an excellent 55% for Black at club level.", sayShort: "…O-O — the bishop bites, the rook loads.", highlights: [H("h6", KEY)] }),
+  ],
+},
+
+  "sicilian-sveshnikov::Sveshnikov: ...Rb8 Expansion Plan": {
+  openingId: "sicilian-sveshnikov",
+  sources: ['concept:pos-outpost', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation'],
+  title: "Sveshnikov — ...Rb8 Expansion Plan",
+  minutes: 10,
+  orientation: "black",
+  beats: [
+    b({ id: "rb1", moves: "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5", say: "The Sveshnikov begins with …e5, trading a structural concession on d5 for dynamic piece play. This particular plan is all about the queenside, where Black's space advantage gives him a concrete pawn-lever to work with.", sayShort: "…e5 — the Sveshnikov, queenside in mind.", highlights: [H("e5", KEY)] }),
+    b({ id: "rb2", moves: "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O", say: "Black reaches the standard tabiya: …a6 and …b5 for space, …Bxf6 keeping the dark-squared bishop, and quick castling. White's knight sits proudly on d5, but Black's whole queenside is mobile and ready to advance.", sayShort: "…b5, …O-O — queenside space, king safe.", highlights: [H("b5", KEY), H("f6", SOFT)] }),
+    b({ id: "rb3", moves: "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Rb8 a4 bxa4 Rxa4 a5", say: "The plan unfolds: …Rb8 backs the b-pawn, and when White strikes with a4 Black takes …bxa4 and fixes the structure with …a5. Black hands back the b-file but gains a protected, advanced a-pawn and a permanent outpost on b4 for a knight. There is the tabiya — Black has a clear, concrete queenside minority plan to chew at White's pawns, the most practical of the Sveshnikov set-ups.", sayShort: "…a5 — fix the pawn, claim b4.", highlights: [H("a5", KEY), H("b8", SOFT)] }),
+  ],
+},
+
   "sicilian-sveshnikov::Sveshnikov: 9.Bxf6 gxf6 Early Exchange": {
   openingId: "sicilian-sveshnikov",
   sources: ['concept:pos-outpost', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation'],

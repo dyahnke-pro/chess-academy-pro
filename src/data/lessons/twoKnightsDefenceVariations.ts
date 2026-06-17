@@ -15,6 +15,14 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['book:two-knights-defence', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Two_Knights_Defense'];
 
 export const TWO_KNIGHTS_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'two-knights-defence::Two Knights: Ulvestad Variation': {
+    openingId: 'two-knights-defence', title: 'Two Knights — The Ulvestad Variation', minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'ul1', moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 b5', say: "The Two Knights with 4.Ng5 is White's most aggressive try, threatening the Fried Liver. Instead of defending passively, Black answers the recapture exd5 with the bold …b5!? — the Ulvestad. It's a pawn sacrifice with one job: deflect the c4-bishop and grab the initiative before White is organised.", sayShort: '…b5!? — sac a pawn, seize the initiative.', highlights: [H('b5', KEY)] }),
+      b({ id: 'ul2', moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 b5 Bf1 Nd4 c3 Nxd5 cxd4 Qxg5', say: "The bishop must retreat all the way to f1, and Black piles in: …Nd4 jumps to the centre, and after the forcing sequence Black regains the piece and snaps off White's adventurous g5-knight with …Qxg5. The dust clears with Black a pawn down but bursting with energy.", sayShort: '…Nd4, …Qxg5 — win back the piece, stay active.', highlights: [H('g5', KEY)] }),
+      b({ id: 'ul3', moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 b5 Bf1 Nd4 c3 Nxd5 cxd4 Qxg5 Bxb5+ Kd8 Qf3 Bb7', say: "White grabs another pawn with Bxb5+, but after …Kd8 — the king is safe enough behind its own pawns — Black develops …Bb7, planting the bishop on the long light-squared diagonal pointed at White's kingside. There is the Ulvestad tabiya: a pawn down, but with the bishop pair, a huge development lead, and a raging initiative against an uncastled king. A dangerous practical gambit that holds even at master level.", sayShort: '…Bb7 — the bishop takes the long diagonal.', highlights: [H('b7', KEY), H('d8', SOFT)] }),
+    ],
+  },
   'two-knights-defence::Two Knights: Italian Two Knights d4': {
     openingId: 'two-knights-defence', title: 'Two Knights — The 4.d4 Italian', minutes: 10, orientation: 'black', sources: SRC,
     beats: [

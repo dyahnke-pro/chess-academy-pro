@@ -11,6 +11,16 @@ interface BeatInit { id: string; moves: string; say: string; sayShort?: string; 
 function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return { ...rest, moves: moves.trim().split(/\s+/) }; }
 
 export const ALEKHINE_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'alekhine-defence::Modern Variation': {
+    openingId: 'alekhine-defence', title: "Alekhine — The Modern Variation", minutes: 10, orientation: 'black',
+    sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Alekhine%27s_Defence'],
+    beats: [
+      b({ id: 'am1', moves: 'e4 Nf6 e5 Nd5 d4 d6 Nf3 Bg4', say: "Alekhine's whole idea in one move: 1…Nf6 dares White to chase the knight with pawns, building a big centre that Black will then attack as a target. In the Modern main line White develops calmly with Nf3, and Black pins it with …Bg4 — getting the light-squared bishop active OUTSIDE the pawn chain before …e6, the key to a healthy game.", sayShort: '…Bg4 — pin first, the good bishop out.', highlights: [H('g4', KEY)] }),
+      b({ id: 'am2', moves: 'e4 Nf6 e5 Nd5 d4 d6 Nf3 Bg4 Be2 e6 O-O Be7 c4 Nb6 Nc3 O-O', say: "White grows the centre, gaining space and kicking the knight back to b6 with c4. Both sides castle. Black has deliberately let White build a broad pawn front of c4, d4 and e5 — not out of weakness, but because that imposing centre is also overextended and will become the object of attack.", sayShort: '…Nb6, …O-O — let the big centre overreach.', highlights: [H('b6', KEY)] }),
+      b({ id: 'am3', moves: 'e4 Nf6 e5 Nd5 d4 d6 Nf3 Bg4 Be2 e6 O-O Be7 c4 Nb6 Nc3 O-O Be3 d5 c5 Bxf3 Bxf3 Nc4', say: "Now the counterstrike. White lunges c5 to gain more space, but Black trades …Bxf3 to remove the centre's defender, then springs …Nc4! — the knight leaps into the hole, hitting the e3-bishop and the b2-pawn and clamping White's queenside. The overextended pawns are suddenly the ones under fire.", sayShort: '…Bxf3, …Nc4! — knight into the hole.', highlights: [H('c4', KEY)] }),
+      b({ id: 'am4', moves: 'e4 Nf6 e5 Nd5 d4 d6 Nf3 Bg4 Be2 e6 O-O Be7 c4 Nb6 Nc3 O-O Be3 d5 c5 Bxf3 Bxf3 Nc4 Bf4 b6 b3 Na5', say: "White props up with Bf4, Black undermines the c5-wedge with …b6, and after b3 the knight reroutes to a5, eyeing the holes around White's queenside. There is the Modern tabiya: White's broad centre on c5, d4 and e5 looks commanding but is rigid and over-stretched, and Black has clear targets and active pieces. A respected, sound line that scores 55% for Black at club level.", sayShort: '…b6, …Na5 — undermine the wedge.', highlights: [H('a5', KEY), H('b6', SOFT), H('c5', SOFT)] }),
+    ],
+  },
   'alekhine-defence::Four Pawns Attack': {
     openingId: 'alekhine-defence', title: "Alekhine — The Four Pawns Attack", minutes: 10, orientation: 'black',
     sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Alekhine%27s_Defence'],

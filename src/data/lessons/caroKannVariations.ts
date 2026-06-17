@@ -186,7 +186,35 @@ const TARTAKOWER: LessonScript = {
   ],
 };
 
+const CLASSICAL: LessonScript = {
+  openingId: 'caro-kann',
+  sources: ['book:caro-kann', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
+  title: 'Caro-Kann — The Classical Variation',
+  minutes: 9,
+  orientation: 'black',
+  kind: 'variation',
+  beats: [
+    b({ id: 'cl1', moves: 'e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5',
+      say: "The Classical — the flagship Caro-Kann, and the reason to play the whole opening. After the centre is traded, Black develops the light-squared bishop to f5, OUTSIDE the pawn chain, before ever playing …e6. That single difference is what makes the Caro better than the French: the bishop that rots on c8 in the French here becomes an active, well-placed piece.",
+      sayShort: '…Bf5 — the good bishop, out before …e6.',
+      highlights: [H('f5', KEY)] }),
+    b({ id: 'cl2', moves: 'e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7',
+      say: "White harasses the bishop with Ng3 and the h4-h5 thrust; Black calmly tucks it to g6 and plays the prophylactic …h6 to give it the h7-square. Then …Nd7 develops, preparing …Ngf6 and …e6. Black's pieces come out smoothly to their best squares with no concessions.",
+      sayShort: '…Bg6, …h6, …Nd7 — calm, ideal development.',
+      highlights: [H('g6', KEY), H('h6', SOFT), H('d7', SOFT)] }),
+    b({ id: 'cl3', moves: 'e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7 h5 Bh7 Bd3 Bxd3 Qxd3 e6 Bf4 Ngf6',
+      say: "h5 forces the bishop to h7, but on Bd3 Black trades it for White's strong attacking bishop — happily swapping a piece that has done its job for one that wanted to do damage. Then …e6 frees the position and …Ngf6 completes development. The point: Black has no bad pieces and no weak pawns, a famously durable structure.",
+      sayShort: '…Bxd3, …e6, …Ngf6 — no bad pieces left.',
+      highlights: [H('f6', KEY), H('e6', SOFT)] }),
+    b({ id: 'cl4', moves: 'e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7 h5 Bh7 Bd3 Bxd3 Qxd3 e6 Bf4 Ngf6 O-O-O Be7 Ne4 O-O',
+      say: "White castles long and Black short — the classic opposite-wings tabiya. But Black is fully developed, rock-solid, and has the easier game: just complete with …Be7 and castle, then strike at White's king with the freeing …c5 break. Solid, principled, and statistically Black's best Caro-Kann.",
+      sayShort: '…O-O — solid, then the …c5 break.',
+      highlights: [H('e7', KEY), H('c5', ATK)] }),
+  ],
+};
+
 export const CARO_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'caro-kann::Classical Variation': CLASSICAL,
   'caro-kann::Advance Variation': ADVANCE,
   'caro-kann::Exchange Variation': EXCHANGE,
   'caro-kann::Two Knights Variation': TWO_KNIGHTS,

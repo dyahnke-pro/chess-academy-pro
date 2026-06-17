@@ -14,6 +14,19 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['book:petrov-defence', 'concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Petrov%27s_Defence'];
 
 export const PETROV_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'petrov-defence::Kaufmann Attack': {
+    openingId: 'petrov-defence',
+    sources: SRC,
+    title: 'Petrov — The Kaufmann Attack',
+    minutes: 10,
+    orientation: 'black',
+    beats: [
+      b({ id: 'kf1', moves: 'e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 Nc3', say: "The Petrov — Black answers 1.e4 e5 2.Nf3 not by defending the e5-pawn but by copying with …Nf6, counter-attacking in the centre. The symmetry is the whole point: Black reaches a clean, solid, well-understood position with none of the cramped passivity of other defences. Here White tries the Kaufmann idea with Nc3, hitting the knight on e4.", sayShort: '…Nf6 — counter-attack, the Petrov symmetry.', highlights: [H('e4', KEY)] }),
+      b({ id: 'kf2', moves: 'e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 Nc3 Nxc3 dxc3 Be7 Bf4 Nc6 Qd2 Be6 O-O-O', say: "Black trades on c3 and develops with the most natural moves in chess — …Be7, …Nc6, …Be6 — every piece going to its best square. White, meanwhile, throws his queen to d2 and castles queenside, signalling an opposite-wings attack. But Black is already harmoniously placed to meet it.", sayShort: '…Be7, …Nc6, …Be6 — natural development.', highlights: [H('e6', KEY), H('e7', SOFT)] }),
+      b({ id: 'kf3', moves: 'e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 Nc3 Nxc3 dxc3 Be7 Bf4 Nc6 Qd2 Be6 O-O-O Qd7 Kb1 O-O-O Nd4 Nxd4 Qxd4 Bf6', say: "Black castles queenside too — and that is the key defensive idea. With both kings on the same wing, White's attack has no pawn-storm to launch; an assault would only expose his own king. After …Nd4 trades a pair of knights, …Bf6 hits the white queen and gains time. Black has completely defused the attack.", sayShort: '…O-O-O, …Bf6 — same-wing castling defuses it.', highlights: [H('f6', KEY)] }),
+      b({ id: 'kf4', moves: 'e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 Nc3 Nxc3 dxc3 Be7 Bf4 Nc6 Qd2 Be6 O-O-O Qd7 Kb1 O-O-O Nd4 Nxd4 Qxd4 Bf6 Qa4 Kb8 Bd3 c6 Be3 d5', say: "Both kings tuck into the corner, and Black expands in the centre with …c6 and …d5, taking a share of the space. There is the Kaufmann tabiya: Black is rock-solid, fully developed, with the bishop pair pointing at White's king and not a single weakness in the camp. The Petrov's promise delivered — comfortable, principled equality with the safer king.", sayShort: '…c6, …d5 — solid, bishop pair, safe king.', highlights: [H('d5', KEY), H('c6', SOFT)] }),
+    ],
+  },
   'petrov-defence::Steinitz Variation': {
     openingId: 'petrov-defence', title: 'Petrov — The Steinitz 3.d4', minutes: 10, orientation: 'black', sources: SRC,
     beats: [
