@@ -5,8 +5,24 @@
 // its frequency %. Grounded (G3): every move from the masters DB, nothing invented.
 // Emits compact src/data/course-sublines.json (the 37MB DB never ships to client).
 import { readFileSync, writeFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { Chess } from 'chess.js';
 import { reachesMiddlegame } from '../src/data/variationMiddlegameDepth.shared.mjs';
+
+// Engine best-play fallback (David 2026-06-17): when the masters DB runs dry
+// before a subline reaches a middlegame, continue along Stockfish's best move so
+// every subline lands in a real middlegame. Moves are engine-computed + chess.js
+// legal — not invented (G3-compliant; same tool the soundness gates use).
+const SF = '/usr/games/stockfish';
+let sfBroken = false;
+function bestMove(fen, depth = 12) {
+  if (sfBroken) return null;
+  try {
+    const out = execFileSync(SF, { input: `uci\nposition fen ${fen}\ngo depth ${depth}\n`, timeout: 8000, encoding: 'utf8' });
+    const m = /bestmove (\S+)/.exec(out);
+    return m && m[1] !== '(none)' ? m[1] : null;
+  } catch { sfBroken = true; return null; }
+}
 
 const root = new URL('..', import.meta.url).pathname;
 const db = JSON.parse(readFileSync(root + 'public/data/openings-masters-db.json', 'utf8')).positions;
@@ -42,9 +58,16 @@ function walkMostPlayed(startSans, maxPlies = 30) {
   const out = [...startSans];
   while (out.length < maxPlies) {
     if (reachesMiddlegame(out.join(' ')).pass) break;
-    const ms = movesAt(c.fen()); if (!ms.length) break;
-    const top = ms.slice().sort((a, b) => b.games - a.games)[0];
-    try { c.move(top.san); out.push(top.san); } catch { break; }
+    const ms = movesAt(c.fen());
+    if (ms.length) {
+      const top = ms.slice().sort((a, b) => b.games - a.games)[0];
+      try { c.move(top.san); out.push(top.san); continue; } catch { break; }
+    }
+    // Masters dry — extend along engine best-play until the middlegame.
+    const uci = bestMove(c.fen());
+    if (!uci) break;
+    try { const mv = c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }); out.push(mv.san); }
+    catch { break; }
   }
   return out;
 }
