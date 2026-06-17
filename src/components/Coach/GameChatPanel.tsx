@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useAppStore } from '../../stores/appStore';
 import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { validateTacticClaims, stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
+import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech } from '../../services/sanitizeCoachText';
 import { routeChatIntent } from '../../services/coachSessionRouter';
 import { detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
@@ -986,7 +987,21 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           // Memory rehydration on the next turn re-feeds prior
           // assistant text into the prompt; if [[ACTION:...]] markup
           // is in there, the LLM learns the wrong protocol.
-          const assistantText = sanitizeCoachText(textWithoutBoardTags);
+          const assistantTextRaw = sanitizeCoachText(textWithoutBoardTags);
+          // WRITTEN == VERBAL (David 2026-06-17): the voice (queueSpeak →
+          // speakGrounded + the tactic strip) drops any board-false or
+          // out-of-vocab-tactic sentence before speaking — so the displayed
+          // bubble must get the SAME grounding, or the student reads
+          // something different from what they hear. Apply the identical
+          // board + tactic gates (same live FEN, same fed tactics context the
+          // voice uses) to the displayed/stored text.
+          let assistantText = assistantTextRaw;
+          try {
+            const fenNow = getLiveFen?.() ?? fen ?? null;
+            if (fenNow) assistantText = stripDisprovenSentences(assistantText, fenNow).clean || assistantText;
+            const tac = stripUngroundedTacticSentences(assistantText, currentTacticsRef.current);
+            if (tac.dropped.length > 0) assistantText = tac.clean || assistantText;
+          } catch { /* keep the sanitized text on a validator fault */ }
           // G3 enforcement on in-game chat replies. Bounded vocabulary
           // is the gameChatTactics block we attached to the envelope
           // above; out-of-vocab claims surface as audit events.
