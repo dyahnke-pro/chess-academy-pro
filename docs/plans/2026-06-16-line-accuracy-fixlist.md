@@ -281,3 +281,53 @@ markers, all 6 content gates green, committed per-opening-batch.
 
 These need either a deliberate move-order transposition pass (London especially —
 common opening, worth a follow-up) or a content decision; flagged for David.
+
+---
+
+## SESSION 2026-06-17 — CORRECTION + RECOVERY PASS (after "why did you stop?" pushback)
+
+I initially deferred ~45 lines citing the gate friction (masters-extension stalling <20p)
+and stopped. That was premature: the club (lichess) pool keeps going where the masters
+pool dries up. Built `scripts/extend-club.mjs` and recovered **13 more lessons** that I'd
+wrongly shelved — total **43 lessons this session**:
+KIA vs French / Botvinnik / Fischer; kid Makogonov; Italian Hungarian (refutation, +3.1);
+two-knights 4.d3; petrov Classical; slav Exchange + Chebanenko; trompowsky 2…Ne4;
+vienna Stanley (full) + Vienna-Gambit-Accepted & Copycat (legit `kind:'roadmap'` — genuine
+gambit / forcing-trap, short by nature). All gate-green, pushed.
+
+### The ~50 still un-narrated, with the HONEST reason each is blocked (NOT laziness):
+
+**A. The recommendation itself is UNSOUND — needs a line FIX, not narration (this is the
+"fix the lines" half of the task; flagged for David's call on the replacement line):**
+- old-indian: Czech/Tartakower/Ukrainian/Main-d5/Seirawan/Be2 — all eval −0.78 to −1.30,
+  quiet/passive lines that leave Black clearly worse (fail the soundness bar).
+- benoni: Classical-Bf4 (−1.44), Czech (−1.77), Modern-b5-Race (−1.18 / M 13%).
+- english: Four Knights (−1.75 / 30% club — a genuinely bad White line as currently set).
+  → These should be REBUILT onto a sound line (or demoted). I did not fabricate a "fix";
+  that's a per-line content decision worth doing deliberately next.
+
+**B. The line is NOT in our Lichess DB at depth (G3 canon — don't invent):**
+- All d5-based London tabs (vs Queen's Pawn / Bf5-Mirror / Nh4-f5 / Dutch / Grünfeld /
+  Early-c5) — the DB's deep London is the KID-structure order, already covered.
+- reti Accepted / Reversed-Benoni / Reti-Gambit (anchor 5); alapin 2…e6 / 2…g6 (anchor 3);
+  philidor Modern-d3-Hybrid (anchor 4); KIA vs Sicilian / vs Caro-Kann (system setups,
+  anchor 2–5, not forced theory).
+
+**C. Below the win% bar / tiny sample (teaching it would be teaching a bad line):**
+- caro Short (19% M), scandinavian Qa5-Bd2 (42/43), qga Central-3.e4 (38%) /
+  Modern-Tabiya (36% M), catalan Early-Qa4+ (34%), sveshnikov 11.c4 (36%),
+  two-knights Quiet-d3-Be7 (37%), alekhine Two-Pawns (43/44 borderline),
+  grunfeld Neo (19p, 42% small sample).
+
+**D. Duplicate of an already-authored tab (same position / system):**
+- english Hedgehog (= the symmetric-b4 line, same as Ultra-Symmetrical),
+  dutch Leningrad-g6 (= the Leningrad already authored under the Hopton tab),
+  KIA e5-Wedge (transposes to the exact KIA-vs-French position).
+
+**E. Sharp gambits relying on the opponent's error — would mislead as "winning":**
+- two-knights Fritz (+3.57 only because the club line has White's inferior cxd4; vs Bf1
+  it's dubious). Traxler / Belgrade / Cochrane are genuine sharp gambits that COULD be
+  `roadmap` lessons with honest "surprise weapon" framing — a reasonable next batch.
+
+Bucket A is the real remaining WORK (fix unsound recommendations); B/C/D are correctly
+left alone per the canon + "empty > forced." E is an optional roadmap batch.
