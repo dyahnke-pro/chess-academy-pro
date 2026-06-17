@@ -8,6 +8,21 @@ import type {
 import type { CourseSubline } from './openingCourse';
 import { sublineWhyFact } from './courseWhyFacts';
 
+/**
+ * HAND-AUTHORED narration for a subline (David 2026-06-17: "these are hand
+ * authored"). Never generated, never templated at runtime — written by hand,
+ * grounded in the real line + facts, exactly like the variation lessons. When
+ * present it drives the Watch; when absent the converter falls back to the
+ * honest baseline (a factual frequency frame + a silent, arrow-led walk).
+ */
+export interface SublineNarration {
+  /** Spoken on the static position before the walk. */
+  intro: { say: string; sayShort?: string };
+  /** Sparse per-move beats: atMove = index into subline.moves. */
+  beats?: Array<{ atMove: number; say: string; sayShort?: string; arrows?: AnnotationArrow[]; highlights?: AnnotationHighlight[] }>;
+  sources?: string[];
+}
+
 // Converters that make a frequency-derived CourseSubline PLAYABLE — the Level-3
 // "Watch + Play" design (David 2026-06-17). A subline is the opponent's
 // deviation within a variation, walked to a middlegame; it ships as a move list
@@ -15,11 +30,14 @@ import { sublineWhyFact } from './courseWhyFacts';
 // wrap it so the existing players can drive it:
 //   • sublineToPlayableLine → PlayableLinePlayer mode="watch" (see the reply)
 //   • sublineToCustomLine    → OpeningPlayMode customLine    (play it out, locked)
-// No chess content is invented here: arrows are the literal from→to of each
-// DB move (chess.js-derived), and the only prose is the grounded FREQUENCY
-// why-fact (courseWhyFacts) — never an eval/line claim. Deep per-move "why"
-// narration is layered on top in Step 3 by hand; this is the honest baseline so
-// every subline is immediately watchable and playable.
+// No chess content is invented here (G0/G3): arrows are the literal from→to of
+// each DB move (chess.js-derived); the spoken prose is built ONLY from facts
+// computed in code — the FREQUENCY why-fact (courseWhyFacts) and the terminus
+// STRUCTURAL read (sublineStructure: IQP / bishop pair / open files / passed
+// pawns, all chess.js-derived). The intro frames the deviation + what the
+// student is playing FOR; the walk stays silent (voice rule §3 — don't restate
+// moves) until a grounded structural payoff on the final move. The LLM writes
+// none of it.
 
 const MOVE_ARROW = 'rgba(40,185,95,0.92)'; // green — the move played
 const TRIGGER = 'rgba(255,214,0,0.88)'; // yellow — the deviation square
@@ -45,12 +63,15 @@ function destSquare(beforeFen: string, san: string): string | null {
  */
 export function sublineToPlayableLine(
   subline: CourseSubline,
+  narration?: SublineNarration | null,
   sources?: string[],
 ): PlayableMiddlegameLine | null {
   const chess = new Chess();
   const arrows: AnnotationArrow[][] = [];
   const highlights: AnnotationHighlight[][] = [];
   const annotations: string[] = [];
+  // Sparse hand-authored beats, keyed by move index.
+  const authored = new Map((narration?.beats ?? []).map((bt) => [bt.atMove, bt]));
   for (let i = 0; i < subline.moves.length; i++) {
     const san = subline.moves[i];
     let mv;
@@ -60,24 +81,40 @@ export function sublineToPlayableLine(
       return null;
     }
     if (!mv) return null;
-    arrows.push([{ from: mv.from, to: mv.to, color: MOVE_ARROW }]);
-    // Highlight only the deviation square (the trigger ply); everything else
-    // is led by its move-arrow alone so the eye isn't cluttered.
-    highlights.push(i === subline.atPly ? [{ square: mv.to, color: TRIGGER }] : []);
-    annotations.push('');
+    const beat = authored.get(i);
+    const moveArrow: AnnotationArrow = { from: mv.from, to: mv.to, color: MOVE_ARROW };
+    // Authored beats lead the eye with their own arrows/highlights (the move
+    // arrow first); un-authored moves get the move arrow only and stay silent.
+    arrows.push(beat?.arrows?.length ? [moveArrow, ...beat.arrows] : [moveArrow]);
+    highlights.push(
+      beat?.highlights?.length
+        ? beat.highlights
+        : i === subline.atPly
+          ? [{ square: mv.to, color: TRIGGER }]
+          : [],
+    );
+    annotations.push(beat?.say ?? '');
   }
 
-  const why = sublineWhyFact(subline);
   const trigger = subline.triggerMove;
-  const introSquare = destSquare(startBefore(subline), trigger);
-  const introArrows: AnnotationArrow[] = [];
   const introHi: AnnotationHighlight[] = [];
-  if (introSquare) {
-    introHi.push({ square: introSquare, color: TRIGGER });
+  const introSquare = destSquare(startBefore(subline), trigger);
+  if (introSquare) introHi.push({ square: introSquare, color: TRIGGER });
+
+  // Intro: hand-authored when present; otherwise the honest factual frame
+  // (deviation + frequency fact — a data caption, never invented teaching prose).
+  let introSay: string;
+  let introShort: string;
+  if (narration?.intro) {
+    introSay = narration.intro.say;
+    introShort = narration.intro.sayShort ?? `${trigger} — your reply`;
+  } else {
+    const why = sublineWhyFact(subline);
+    introSay = why.text
+      ? `${trigger} — ${shortName(subline.name)}. ${why.text}`
+      : `${trigger} — ${shortName(subline.name)}.`;
+    introShort = `${trigger} — your reply`;
   }
-  const frame = why.text
-    ? `${trigger} — ${shortName(subline.name)}. ${why.text}`
-    : `${trigger} — ${shortName(subline.name)}. Here's how you meet it.`;
 
   return {
     fen: new Chess().fen(),
@@ -85,13 +122,8 @@ export function sublineToPlayableLine(
     annotations,
     arrows,
     highlights,
-    intro: {
-      say: frame,
-      sayShort: `${trigger} — your reply`,
-      arrows: introArrows,
-      highlights: introHi,
-    },
-    sources: sources && sources.length ? sources : ['concept:pos-development'],
+    intro: { say: introSay, sayShort: introShort, arrows: [], highlights: introHi },
+    sources: narration?.sources?.length ? narration.sources : sources && sources.length ? sources : ['concept:pos-development'],
     title: shortName(subline.name),
   };
 }

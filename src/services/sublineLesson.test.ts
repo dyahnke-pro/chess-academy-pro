@@ -30,11 +30,22 @@ describe('sublineToPlayableLine', () => {
     expect(withHi).toEqual([sub.atPly]);
   });
 
-  it('frames the deviation with the grounded frequency fact in the intro', () => {
+  it('baseline intro frames the deviation by name (no invented teaching prose)', () => {
     const line = sublineToPlayableLine(sub)!;
     expect(line.intro?.say).toContain(sub.triggerMove);
-    // 31% is the "common" tier → frequency text is suppressed, so the default frame is used.
-    expect(line.intro?.say).toContain("meet it");
+    // un-authored: silent walk (every annotation empty), arrows lead the eye
+    expect(line.annotations.every((a) => a === '')).toBe(true);
+  });
+
+  it('uses hand-authored narration when provided (never templated)', () => {
+    const line = sublineToPlayableLine(sub, {
+      intro: { say: 'Hand-written framing for this deviation.', sayShort: 'Authored cue.' },
+      beats: [{ atMove: 7, say: 'Authored keystone on move 7.', highlights: [{ square: 'e6' }] }],
+      sources: ['concept:pos-center'],
+    })!;
+    expect(line.intro?.say).toBe('Hand-written framing for this deviation.');
+    expect(line.annotations[7]).toBe('Authored keystone on move 7.');
+    expect(line.sources).toContain('concept:pos-center');
   });
 
   it('carries a resolvable source', () => {
