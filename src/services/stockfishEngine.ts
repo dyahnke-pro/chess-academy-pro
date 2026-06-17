@@ -450,12 +450,18 @@ class StockfishEngine {
             // hunt) — for a worker SCRIPT load/parse failure `error.message`
             // is empty, but `filename`/`lineno` name the resource that died,
             // which is what was missing when the iOS lila crash logged blank.
+            // PostHog audit (2026-06-17) proved `filename` can ALSO be empty
+            // on some browsers — in that case fall back to `resolved.url` so
+            // we still know WHICH file failed to load.
             const ee = error as Partial<ErrorEvent>;
-            const loc = ee.filename
+            const useFilename = ee.filename
               ? ` @ ${ee.filename}:${ee.lineno ?? '?'}:${ee.colno ?? '?'}`
               : '';
-            const msg =
-              (error.message || 'Uncaught RuntimeError or worker load failure') + loc;
+            const baseMsg =
+              error.message || 'Uncaught RuntimeError or worker load failure';
+            const msg = useFilename
+              ? baseMsg + useFilename
+              : baseMsg + (error.message ? '' : ` (tried: ${resolved.url})`);
             // Phase 8 Bug A — suppress the bubble to window.onerror.
             // A crashing multi-thread bundle emits 60+ ErrorEvents
             // in ~100ms; if any of those reach the global error
