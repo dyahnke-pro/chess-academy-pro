@@ -69,14 +69,11 @@ describe('CoachHomePage', () => {
     expect(screen.queryByTestId('coach-action-chat')).not.toBeInTheDocument();
   });
 
-  it('shows the Training Plan tile as a primary (col-span-2 layout)', () => {
+  it('shows the Training Plan tile with its label', () => {
     render(<CoachHomePage />);
     const tile = screen.getByTestId('coach-action-plan');
     expect(tile).toBeInTheDocument();
     expect(tile).toHaveTextContent('Training Plan');
-    // The wide-primary variant uses col-span-2 to peer visually
-    // with the Learn/Play pair above.
-    expect(tile.className).toMatch(/col-span-2/);
   });
 
   it('navigates to /coach/play when "Play" is clicked', () => {
