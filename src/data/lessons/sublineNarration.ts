@@ -255,6 +255,21 @@ const ALE_MODERN: SublineNarration = {
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Alekhine%27s_Defence'],
 };
 
+// Budapest declined with d5 (student Black) — all 7 tabs share this exact line:
+// d4 Nf6 c4 e5 d5 Bc5 Nc3 d6 a3 e4 b3 e3 f3 a6
+const BUDAPEST_D5: SublineNarration = {
+  intro: {
+    say: "d5 — White declines the Budapest, pushing the pawn past rather than grabbing on e5. This is the outcome you're happy with: you keep your central pawn and, far from going quiet, you get to play the Budapest's real idea — throw the e-pawn forward to e4 and e3, cramping White's kingside before he can untangle. You sacrificed nothing and you still get the initiative.",
+    sayShort: 'd5 — declined; roll the e-pawn forward.',
+  },
+  beats: [
+    { atMove: 5, say: "…Bc5 — straight to the bishop's dream diagonal, drilling down toward f2, the tender square right beside White's uncastled king. d4 and e3 are empty, so the sight-line is wide open: even with the gambit declined, the Budapest bishop already has White's weak point in its crosshairs.", arrows: [A('c5', 'f2')], highlights: [H('f2', KEY), H('c5', SOFT)] },
+    { atMove: 9, say: "…e4 — the pawn marches and does two jobs at once: it grabs space in White's half of the board and it steals the f3-square from White's knight, which now has no natural route into the game. White is being quietly strangled.", highlights: [H('e4', ATK), H('f3', KEY)] },
+    { atMove: 11, say: "…e3! — the spearhead jams deep into e3, a thorn White can't easily remove. It freezes the f2-pawn to its defence and clogs the whole kingside, so White burns move after move untangling while you finish developing in comfort. The declined Budapest bites just as hard as the accepted one.", highlights: [H('e3', ATK), H('f2', SOFT)] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
+};
+
 const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   // Caro-Kann, Advance Variation (var 1) — the Short System, White's most
   // common try here (about a third of games). Line:
@@ -739,6 +754,15 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
     },
     sources: QP_SRC,
   },
+
+  // ── Budapest Gambit (student Black) — declined with d5 on every tab ──
+  'budapest-gambit::0::d5@4': BUDAPEST_D5,
+  'budapest-gambit::1::d5@4': BUDAPEST_D5,
+  'budapest-gambit::2::d5@4': BUDAPEST_D5,
+  'budapest-gambit::3::d5@4': BUDAPEST_D5,
+  'budapest-gambit::4::d5@4': BUDAPEST_D5,
+  'budapest-gambit::5::d5@4': BUDAPEST_D5,
+  'budapest-gambit::6::d5@4': BUDAPEST_D5,
 };
 
 /** Hand-authored narration for a subline, or null to use the honest baseline. */
