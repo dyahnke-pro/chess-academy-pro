@@ -10,6 +10,8 @@ import {
 } from './masterPlayLookup';
 import { _resetLichessCircuitBreaker } from './lichessExplorerService';
 import { masterPlayCache } from './masterPlayCache';
+import { __resetMasterPlayPersistenceForTests } from './masterPlayPersistence';
+import { db } from '../db/schema';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 const AFTER_E4_FEN_4 = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -';
@@ -59,9 +61,13 @@ const STARTING_FEN_EXPLORER_PAYLOAD = {
   opening: null,
 };
 
-beforeEach(() => {
+beforeEach(async () => {
   __resetMasterPlayLookupForTests();
+  __resetMasterPlayPersistenceForTests();
   _resetLichessCircuitBreaker();
+  // Clear the durable Dexie master-play cache so a prior test's
+  // persisted live result doesn't short-circuit this test's lookup.
+  await db.masterPlayCache.clear();
 });
 
 afterEach(() => {

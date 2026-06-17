@@ -45,6 +45,10 @@ import type {
   MasterPlayTopGame,
 } from './masterPlayTypes';
 import { fetchLichessExplorer } from './lichessExplorerService';
+import {
+  readPersistedMasterPlay,
+  writePersistedMasterPlay,
+} from './masterPlayPersistence';
 import { logAppAudit } from './appAuditor';
 import type { LichessExplorerResult } from '../types';
 
@@ -358,6 +362,16 @@ export async function lookupMasterPlay(
         return buildResultFromLocal(key, localMoves);
       }
     }
+    // Durable Dexie cache of prior LIVE results (master stats are
+    // immutable). A hit here serves the position from disk at ZERO edge
+    // cost — the whole point is to stop re-fetching the same positions
+    // from /api/lichess-explorer every cold start (David 2026-06-17).
+    // Checked before the localOnly / offline gates since it's local I/O,
+    // not a network call. Fail-open: returns null on any error.
+    const persisted = await readPersistedMasterPlay(key);
+    if (persisted) {
+      return persisted;
+    }
     if (opts.localOnly) {
       return emptyResult(key);
     }
@@ -366,7 +380,12 @@ export async function lookupMasterPlay(
     }
     try {
       const payload = await fetchLichessExplorer(key, 'masters');
-      return buildResultFromLichess(key, payload);
+      const live = buildResultFromLichess(key, payload);
+      // Persist genuine live data so the next session skips the edge.
+      // best-effort, fire-and-forget (only 'lichess-live' w/ games is
+      // actually written — see masterPlayPersistence).
+      void writePersistedMasterPlay(key, live);
+      return live;
     } catch {
       // lichessExplorerService already emits its own `lichess-error`
       // audit — don't double-log. Just return empty.

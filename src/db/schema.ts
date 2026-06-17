@@ -25,6 +25,7 @@ import type {
   MisconceptionTagRecord,
 } from '../types';
 import type { WalkthroughTree } from '../types/walkthroughTree';
+import type { MasterPlayResult } from '../services/masterPlayTypes';
 
 /** A cached LLM-generated opening walkthrough tree. Once an opening
  *  is requested via "Teach me [opening]" and successfully generated,
@@ -41,6 +42,27 @@ export interface CachedOpening {
   tree: WalkthroughTree;
   /** Unix ms when this was generated. */
   generatedAt: number;
+}
+
+/** A persisted master-play lookup result. Master statistics are
+ *  IMMUTABLE historical aggregates, so once a position has been
+ *  resolved from live Lichess we never need to re-fetch it — cache it
+ *  to disk so repeat visits (across sessions) cost ZERO edge requests
+ *  instead of re-hitting `/api/lichess-explorer` on every cold start
+ *  (David 2026-06-17 — Vercel Hobby edge-request fair-use). Only
+ *  genuine live results with data are persisted; transient empties /
+ *  the bundled local-DB hits are not (see masterPlayPersistence). */
+export interface MasterPlayCacheRecord {
+  /** Normalized 4-field position-FEN — primary key. */
+  fen: string;
+  /** The resolved, immutable master-play statistics. */
+  result: MasterPlayResult;
+  /** Unix ms when persisted — index for LRU-style pruning. */
+  cachedAt: number;
+  /** Record-shape version. A reader ignores rows with a mismatched
+   *  version (treated as a miss → re-fetch) so a future shape change
+   *  to MasterPlayResult can't surface stale-shaped data. */
+  v: number;
 }
 
 class ChessAcademyDB extends Dexie {
@@ -65,6 +87,7 @@ class ChessAcademyDB extends Dexie {
   srsOpeningCards!: EntityTable<SrsOpeningCard, 'id'>;
   findSquareAttempts!: EntityTable<FindSquareAttempt, 'id'>;
   misconceptionTags!: EntityTable<MisconceptionTagRecord, 'id'>;
+  masterPlayCache!: EntityTable<MasterPlayCacheRecord, 'fen'>;
 
   constructor() {
     super('ChessAcademyDB');
@@ -728,6 +751,34 @@ class ChessAcademyDB extends Dexie {
       misconceptionTags: 'id, tag, source, status, createdAt, openingId, sourceGameId',
     }).upgrade(async () => {
       // No-op: the Ruth→Joanna voice flip was reverted (David preferred Ruth).
+    });
+
+    // v31 — persist immutable master-play lookups so repeat positions
+    // stop re-hitting the /api/lichess-explorer edge function every cold
+    // start (David 2026-06-17, Vercel Hobby edge-request fair-use).
+    this.version(31).stores({
+      puzzles: 'id, rating, *themes, srsDueDate, userRating',
+      openings: 'id, eco, name, color, isRepertoire, isFavorite',
+      games: 'id, source, eco, date, isMasterGame, openingId',
+      flashcards: 'id, openingId, type, srsDueDate',
+      profiles: 'id',
+      sessions: 'id, date, profileId',
+      meta: 'key',
+      mistakePuzzles: 'id, sourceGameId, classification, srsDueDate, status, sourceMode, gamePhase',
+      modelGames: 'id, openingId',
+      proGameReferences: 'id, playerId, openingId, proOpeningId, variation',
+      middlegamePlans: 'id, openingId',
+      generatedContent: 'id, openingId, type, generatedAt',
+      openingWeakSpots: 'id, openingId, failCount, lastFailedAt',
+      classifiedTactics: 'id, sourceGameId, tacticType, playerColor, createdAt',
+      setupPuzzles: 'id, tacticType, difficulty, srsDueDate, status, sourceGameId',
+      openingNarrations: 'id, openingName, variation, moveSan, fen, approved',
+      cachedOpenings: 'normalizedName, eco, generatedAt',
+      endgameProgress: 'id, lessonId, lastPlayedAt',
+      srsOpeningCards: 'id, openingId, nextReviewAt, [openingId+nextReviewAt]',
+      findSquareAttempts: 'id, timestamp, target, correct, color',
+      misconceptionTags: 'id, tag, source, status, createdAt, openingId, sourceGameId',
+      masterPlayCache: 'fen, cachedAt',
     });
   }
 }
