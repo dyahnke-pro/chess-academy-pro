@@ -884,6 +884,52 @@ const VG_QF3: SublineNarration = {
   sources: VG,
 };
 
+// ── Petrov Defence (student BLACK). triggerMove is WHITE's deviation. ──
+const PT = ['book:petrov-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Petrov%27s_Defence'];
+const PT_CTR = ['book:petrov-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Petrov%27s_Defence'];
+const PT_KS = ['book:petrov-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Petrov%27s_Defence'];
+
+// var0/var5 — Classical main line (Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3). Symmetry holds.
+const PT_MAIN: SublineNarration = {
+  intro: {
+    say: "The Petrov main line, the fortress you reach when you want no weaknesses. Its whole logic is symmetry: your knight sits proudly on e4, mirrored by White's, and your …d5 pawn anchors it while opening the light bishop. Finish with …Bd6 or …Be7, castle, and meet c4 with …c6 — by the time White probes with Nc3 or Re1 you have a rock-solid position that simply offers nothing to attack.",
+    sayShort: 'Main Petrov — symmetry, …d5, then castle.',
+  },
+  sources: PT,
+};
+// var1 — 3.d4 line (d4 Nxe4 Bd3 d5 Nxe5 Nd7). Solid equality.
+const PT_D4: SublineNarration = {
+  intro: {
+    say: "The 3.d4 Petrov — White opens the centre early instead of recapturing on e5. The antidote is precise and well-charted: …d5 anchors your e4-knight, …Nd7 challenges White's advanced knight and offers the trade that defuses all pressure, and …Bd6 develops toward the kingside. Castle, and you sit behind a symmetrical, weakness-free structure that holds the balance with ease.",
+    sayShort: '3.d4 — …d5, …Nd7, trade and equalize.',
+  },
+  sources: PT_CTR,
+};
+// var2 — 3.Nc3 transposing to a Four Knights / Scotch (Nc3 Nc6 d4 exd4 Nxd4 Bb4).
+const PT_NC3_TRANSPOSE: SublineNarration = {
+  intro: {
+    say: "Nc3 — White steers the Petrov into Four-Knights and Scotch territory. Follow the principled path: …Nc6 and after d4 the …Bb4 pin contests the e4-square just as in the Nimzo spirit. You'll trade on c3 to dent White's pawns or hold the pin and develop; either way you reach a balanced, well-known structure where your pieces are as active as White's and there's nothing to fear.",
+    sayShort: 'Nc3 — …Nc6 and the …Bb4 pin, equalize.',
+  },
+  sources: PT,
+};
+// var3 — Cochrane Gambit (Nxe5 d6 Nxf7 Kxf7) + Nxf7 sacs. A piece up; get the king safe.
+const PT_COCHRANE: SublineNarration = {
+  intro: {
+    say: "The Cochrane Gambit — White has flung a knight onto f7 to drag your king into the open. It looks terrifying and it is completely sound for you: you're a full piece up for one or two pawns, and the entire game hinges on a single idea — get the king to safety and the extra material wins itself. Play …d5 to slam the diagonal shut, walk the king to g8, untangle with …Re8, and don't grab, don't panic.",
+    sayShort: 'Cochrane — …d5, tuck the king away.',
+  },
+  sources: PT_KS,
+};
+// var4/var6 — 5.Nc3 / Nimzowitsch line (Nf3 Nxe4 Nc3 Nxc3 dxc3 Be7). Solid, opposite-castling.
+const PT_5NC3: SublineNarration = {
+  intro: {
+    say: "The 5.Nc3 line — White trades knights and recaptures with dxc3, taking the bishop pair and a half-open d-file in return for doubled c-pawns. There's nothing to fear: develop naturally with …Be7, …Nc6 and …Be6, get the queen to d7 and castle long, and your structure is the sounder one. White's bishops look active, but your solid setup and healthy pawns hold the balance comfortably.",
+    sayShort: '5.Nc3 — …Be7, …Nc6, …Be6, castle long.',
+  },
+  sources: PT,
+};
+
 export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   // ── Ruy Lopez ──
   'ruy-lopez::0::Nf6@5': RUY_BERLIN,
@@ -1565,4 +1611,73 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'vienna-gambit::1::Bg5@15': VG_QF3,
   'vienna-gambit::1::c5@15': VG_QF3,
   'vienna-gambit::1::Nc6@9': VG_QF3,
+
+  // -- Petrov Defence --
+  'petrov-defence::0::c4@10': PT_MAIN,
+  'petrov-defence::0::Nc3@10': PT_MAIN,
+  'petrov-defence::0::Be2@10': PT_MAIN,
+  'petrov-defence::0::c4@12': PT_MAIN,
+  'petrov-defence::0::c3@12': PT_MAIN,
+  'petrov-defence::0::h3@12': PT_MAIN,
+  'petrov-defence::0::Nbd2@14': PT_MAIN,
+  'petrov-defence::0::Re1@14': PT_MAIN,
+  'petrov-defence::0::Nc3@14': PT_MAIN,
+  'petrov-defence::0::cxd5@16': PT_MAIN,
+  'petrov-defence::1::Nxf7@10': PT_COCHRANE,
+  'petrov-defence::1::Nc3@10': PT_D4,
+  'petrov-defence::1::Nf3@10': PT_D4,
+  'petrov-defence::1::Bxe4@10': PT_D4,
+  'petrov-defence::1::Re1@14': PT_D4,
+  'petrov-defence::1::Bf4@10': PT_D4,
+  'petrov-defence::1::Qe2@10': PT_D4,
+  'petrov-defence::1::Nc3@14': PT_D4,
+  'petrov-defence::1::Nd2@12': PT_D4,
+  'petrov-defence::2::Bd2@12': PT_NC3_TRANSPOSE,
+  'petrov-defence::2::f3@10': PT_NC3_TRANSPOSE,
+  'petrov-defence::2::Bg5@10': PT_NC3_TRANSPOSE,
+  'petrov-defence::2::Bg5@12': PT_NC3_TRANSPOSE,
+  'petrov-defence::2::e5@12': PT_NC3_TRANSPOSE,
+  'petrov-defence::2::Qd3@10': PT_NC3_TRANSPOSE,
+  'petrov-defence::2::Qd4@12': PT_NC3_TRANSPOSE,
+  'petrov-defence::2::f3@12': PT_NC3_TRANSPOSE,
+  'petrov-defence::2::Bd3@10': PT_NC3_TRANSPOSE,
+  'petrov-defence::2::Bd2@10': PT_NC3_TRANSPOSE,
+  'petrov-defence::3::Bd3@10': PT_COCHRANE,
+  'petrov-defence::3::Bd3@12': PT_COCHRANE,
+  'petrov-defence::3::d5@14': PT_COCHRANE,
+  'petrov-defence::3::f4@12': PT_COCHRANE,
+  'petrov-defence::3::Bg5@12': PT_COCHRANE,
+  'petrov-defence::3::Be2@12': PT_COCHRANE,
+  'petrov-defence::3::Qe2@14': PT_COCHRANE,
+  'petrov-defence::3::Nc3@8': PT_COCHRANE,
+  'petrov-defence::4::Bd3@12': PT_5NC3,
+  'petrov-defence::4::Bc4@12': PT_5NC3,
+  'petrov-defence::4::Bf4@12': PT_5NC3,
+  'petrov-defence::4::bxc3@10': PT_5NC3,
+  'petrov-defence::4::Be2@12': PT_5NC3,
+  'petrov-defence::4::Bd3@14': PT_5NC3,
+  'petrov-defence::4::Bd3@16': PT_5NC3,
+  'petrov-defence::4::Nd4@16': PT_5NC3,
+  'petrov-defence::4::Bb5@20': PT_5NC3,
+  'petrov-defence::4::Bc4@14': PT_5NC3,
+  'petrov-defence::5::c4@10': PT_MAIN,
+  'petrov-defence::5::c4@12': PT_MAIN,
+  'petrov-defence::5::Nc3@10': PT_MAIN,
+  'petrov-defence::5::Be2@10': PT_MAIN,
+  'petrov-defence::5::h3@12': PT_MAIN,
+  'petrov-defence::5::Nbd2@12': PT_MAIN,
+  'petrov-defence::5::Qe2@12': PT_MAIN,
+  'petrov-defence::5::Re1@16': PT_MAIN,
+  'petrov-defence::5::Nc3@16': PT_MAIN,
+  'petrov-defence::5::cxd5@16': PT_MAIN,
+  'petrov-defence::6::Be3@12': PT_5NC3,
+  'petrov-defence::6::Bd3@12': PT_5NC3,
+  'petrov-defence::6::Bc4@12': PT_5NC3,
+  'petrov-defence::6::bxc3@10': PT_5NC3,
+  'petrov-defence::6::Be2@12': PT_5NC3,
+  'petrov-defence::6::Bd3@14': PT_5NC3,
+  'petrov-defence::6::Bd3@16': PT_5NC3,
+  'petrov-defence::6::Bb5@20': PT_5NC3,
+  'petrov-defence::6::Bb5@18': PT_5NC3,
+  'petrov-defence::6::Bc4@14': PT_5NC3,
 };
