@@ -612,6 +612,51 @@ const SC_NF6_EARLY: SublineNarration = {
   sources: SC,
 };
 
+// ── Scotch Gambit (student WHITE). triggerMove is BLACK's deviation. ──
+const SCG = ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scotch_Gambit'];
+const SCG_CTR = ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Scotch_Gambit'];
+
+// Main Scotch Gambit (var0 + Bc5@7) — Bc4 Bc5 c3 Nf6 e5, the classical attack.
+const SCG_MAIN: SublineNarration = {
+  intro: {
+    say: "The Scotch Gambit proper — you've given the d-pawn to rush your pieces out and aim the bishop at f7. The e5-pawn jabs the f6-knight and grabs space, Bb5 pins, and your lead in development is the whole point. Castle fast, throw the rooks onto the open files, and pour the attack onto Black's king before he untangles. Down a pawn, fully on top.",
+    sayShort: 'Scotch Gambit — e5, Bb5, attack f7.',
+  },
+  sources: SCG,
+};
+// Sharp …Bb4+ pawn-grab line (var1) — White gets a violent attack (exf6, fxg7).
+const SCG_SHARP: SublineNarration = {
+  intro: {
+    say: "Black has gorged on pawns with …Bb4+ and …dxc3, and now you collect the bill in initiative. e5 hits the knight, and the thunderbolts exf6 and fxg7 rip open Black's king before he has a piece out. This is romantic-era fire: every tempo is a threat, the open lines all point at the black monarch, and the extra pawns are meaningless against the storm. Attack.",
+    sayShort: '…Bb4+ — e5 then exf6, storm the king.',
+  },
+  sources: SCG,
+};
+// Max Lange complex (var2, Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4) — active pieces, sharp.
+const SCG_MAXLANGE: SublineNarration = {
+  intro: {
+    say: "The Max Lange complex — your e5-wedge cramps Black and Bb5 pins the defender while the pieces swarm the centre. It's razor-sharp and brimming with initiative: f7 is the target, the e-file is your highway, and Black must defend with absolute precision. Keep forcing, castle into the attack, and make the gambit pawn pay in pure activity.",
+    sayShort: 'Max Lange — e5 wedge, swarm the king.',
+  },
+  sources: SCG_CTR,
+};
+// Nf6@5 / Nf6@7 — Black hits e4 first. White recovers, small pull.
+const SCG_NF6_EARLY: SublineNarration = {
+  intro: {
+    say: "…Nf6 — Black strikes at e4 before you can build, a slippery move-order. Take on e5 and the centre clears into a balanced, open game where you keep a shade more space and the faster development. Don't force the symmetry — finish developing, seize an open file, and squeeze the small edge that the first move hands you.",
+    sayShort: '…Nf6 — recover on e5, keep the edge.',
+  },
+  sources: SCG,
+};
+// d6@5 cont — Black declines with …d6 (d4 d6 Bb5 Bd7). White keeps the centre.
+const SCG_D6: SublineNarration = {
+  intro: {
+    say: "…d6 — Black declines the gambit and props the e5-pawn instead of grabbing on d4. Make the meekness cost something: Bb5 pins the c6-knight, you keep the full d4-e4 pawn duo, and with a clean space edge and quicker development you press a comfortable, risk-free pull. He gave you the centre for free — use it.",
+    sayShort: '…d6 — Bb5 pin, keep the big centre.',
+  },
+  sources: SCG_CTR,
+};
+
 export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   // ── Ruy Lopez ──
   'ruy-lopez::0::Nf6@5': RUY_BERLIN,
@@ -995,4 +1040,36 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'scotch-game::7::Qe7@13': SC_NB3_MODERN,
   'scotch-game::7::Re8@19': SC_NB3_MODERN,
   'scotch-game::7::Qe7@15': SC_NB3_MODERN,
+
+  // ── Scotch Gambit ──
+  'scotch-gambit::0::d6@5': SCG_D6,
+  'scotch-gambit::0::Nf6@5': SCG_NF6_EARLY,
+  'scotch-gambit::0::Ng4@11': SCG_MAIN,
+  'scotch-gambit::0::Ne4@11': SCG_MAIN,
+  'scotch-gambit::0::Qe7@11': SCG_MAIN,
+  'scotch-gambit::0::Ng8@11': SCG_MAIN,
+  'scotch-gambit::0::Nd7@13': SCG_MAIN,
+  'scotch-gambit::0::Bg4@17': SCG_MAIN,
+  'scotch-gambit::0::Ng4@13': SCG_MAIN,
+  'scotch-gambit::0::Qe7@13': SCG_MAIN,
+  'scotch-gambit::1::d6@5': SCG_D6,
+  'scotch-gambit::1::Nf6@5': SCG_NF6_EARLY,
+  'scotch-gambit::1::Ng4@13': SCG_SHARP,
+  'scotch-gambit::1::Ne4@13': SCG_SHARP,
+  'scotch-gambit::1::cxb2@13': SCG_SHARP,
+  'scotch-gambit::1::Nf6@7': SCG_NF6_EARLY,
+  'scotch-gambit::1::Ng8@13': SCG_SHARP,
+  'scotch-gambit::1::Bc5@7': SCG_MAIN,
+  'scotch-gambit::1::Qxf6@15': SCG_SHARP,
+  'scotch-gambit::1::Qe7@19': SCG_SHARP,
+  'scotch-gambit::2::d6@5': SCG_D6,
+  'scotch-gambit::2::Nf6@5': SCG_NF6_EARLY,
+  'scotch-gambit::2::Be7@17': SCG_MAXLANGE,
+  'scotch-gambit::2::Bxc6@15': SCG_MAXLANGE,
+  'scotch-gambit::2::c5@17': SCG_MAXLANGE,
+  'scotch-gambit::2::Ne6@21': SCG_MAXLANGE,
+  'scotch-gambit::2::Bxd4+@19': SCG_MAXLANGE,
+  'scotch-gambit::2::Bc5@7': SCG_MAIN,
+  'scotch-gambit::2::Bc5@13': SCG_MAXLANGE,
+  'scotch-gambit::2::Ne4@9': SCG_MAXLANGE,
 };
