@@ -1034,12 +1034,6 @@
         "shortExplanation": "Fantasy (f3): strike with ...e5 immediately; ...Bg4 pin + ...Bd6/O-O keeps White's weakened king under pressure."
       },
       {
-        "name": "Short Variation",
-        "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 Nd7 O-O Ne7 Nbd2 h6 Nb3 Ng6 Ne1 h5 Be3 c5 Nxc5 Bxc5 dxc5 Ngxe5",
-        "explanation": "Named after Nigel Short, this quiet system avoids the sharp main lines of the Advance. White develops modestly with Be2 and O-O. Black's bishop is well-placed on f5 before ...e6, and the knight reroutes via e7 to g6 targeting e5. The Ne1 maneuver tries to reroute, but Black plays ...h5/c5 with ...Nxc5/dxc5/Ngxe5 — capturing the central pawn after the trades. The resulting position has Black with active pieces and a healthy structure.",
-        "shortExplanation": "Short Variation: quiet Be2/O-O; Black reroutes ...Ne7-Ng6, then ...c5/Nxc5 captures the e5 pawn."
-      },
-      {
         "name": "Exchange Variation",
         "pgn": "e4 c6 d4 d5 exd5 cxd5 Bd3 Nc6 c3 Nf6 Bf4 Bg4 Qb3 Qd7 Nd2 e6 Ngf3 Bd6 Bxd6 Qxd6 O-O O-O Rfe1 Rab8 Ne5 Bh5 a4 Bg6",
         "explanation": "The Exchange Variation without c4 leads to a quieter game than the Panov, but Black should not relax. White aims for a small edge based on the slightly more active minor pieces and the open e-file. Black develops actively with ...Nc6, ...Bg4, and ...Bd6, maintaining equality through piece activity. After the Bxd6 trade, Black's Rab8 prepares ...b5 expansion and the ...Bh5-Bg6 maneuver keeps the bishop active on the long diagonal.",
@@ -1843,11 +1837,6 @@
         "name": "Sadler Variation ...Bg4",
         "pgn": "d4 d5 c4 dxc4 Nf3 Nf6 e3 Bg4 Bxc4 e6 h3 Bh5 Nc3 Nbd7 g4 Bg6 Nh4 Be4 Nxe4 Nxe4",
         "explanation": "The Sadler/Bg4 line is an active approach where Black develops the bishop outside the pawn chain before playing ...e6, avoiding the traditional light-square bishop problem. After h3 Bh5, White plays aggressively with g4, but Black maneuvers the bishop to e4 via g6. The resulting positions are sharp and double-edged, with White's kingside expansion creating both attacking chances and structural weaknesses that Black can exploit in the middlegame."
-      },
-      {
-        "name": "Central Variation 3.e4",
-        "pgn": "d4 d5 c4 dxc4 e4 e5 Nf3 exd4 Bxc4 Nc6 O-O Nf6 Ng5",
-        "explanation": "Against the aggressive 3.e4, Black strikes back immediately with ...e5, creating a sharp tactical battle. The critical line features White's knight raid with Ng5-Nxf7, winning the exchange but giving Black a massive lead in development with ...Bg4 and ...O-O-O. Black's pieces are perfectly coordinated while White must untangle the trapped knight on h8. The resulting positions are complex and offer Black excellent practical chances despite the material deficit."
       },
       {
         "name": "Alekhine Variation 4.Nc3",
