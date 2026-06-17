@@ -36,6 +36,33 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
     ],
     sources: ['book:caro-kann', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
   },
+
+  // Caro-Kann, Two Knights with …Bg4 (var 2) — White's dominant continuation,
+  // grabbing space with e5. Line:
+  // e4 c6 Nf3 d5 Nc3 Bg4 h3 Bxf3 Qxf3 e6 d4 Nf6 e5 c5
+  'caro-kann::2::e5@12': {
+    intro: {
+      say: "e5 — White grabs the centre and shifts into an Advance-style structure, by far the most common path here, over half the games. But you've already swapped your light bishop for the f3-knight, so you carry no bad piece into this — answer in true Caro style by hitting the base of the chain with …c5.",
+      sayShort: 'e5 — strike back with …c5.',
+    },
+    beats: [
+      { atMove: 13, say: "…c5 — hammering d4, the foot of White's d4-e5 pawn chain. This is the Caro's whole method: undermine the chain at its base rather than sit and defend. With your problem bishop long gone and no weaknesses to nurse, you get a free, comfortable game against the broad centre.", highlights: [H('d4', KEY), H('c5', ATK)] },
+    ],
+    sources: ['book:caro-kann', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
+  },
+
+  // Caro-Kann, Exchange Variation (var 5) — White develops Nf3. Line:
+  // e4 c6 d4 d5 exd5 cxd5 Bd3 Nc6 Nf3 Bg4
+  'caro-kann::5::Nf3@8': {
+    intro: {
+      say: "Nf3 — White just develops in the Exchange, the calm main path here. Your reply is pure Caro: …Bg4, bringing the light bishop out free and active OUTSIDE the pawn chain before you ever play …e6, and pinning the knight to the queen on the way out.",
+      sayShort: 'Nf3 — pin it with …Bg4.',
+    },
+    beats: [
+      { atMove: 9, say: "…Bg4 — the Caro's signature move. The light-squared bishop, the piece that suffocates in most …e6 defences, steps out actively and pins the f3-knight against the queen. You'll develop everything else behind it and simply never own a bad bishop in this whole game.", highlights: [H('f3', KEY), H('g4', SOFT)] },
+    ],
+    sources: ['book:caro-kann', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
+  },
 };
 
 /** Hand-authored narration for a subline, or null to use the honest baseline. */
