@@ -233,3 +233,51 @@ confirms the remaining negative-eval lines are the documented gambit/aggressive
 KEEPS (win%-validated at club level). Only open items: Fort Knox (borderline, David's
 call) + the pre-existing `mp-*` middlegame-plan soundness CI failures (separate
 artifact, mostly gambit sacs — not opening lines).
+
+---
+
+## SESSION 2026-06-17 — NARRATION BACKLOG PASS (branch claude/awesome-pasteur-ji7aj3, PR #725)
+
+Authored **30 hand-written variation lessons** this session, each: soundness-screened
+(Stockfish eval + masters/club win% via the explorer proxy), DB-anchored ≥6 plies
+(G3), deepest beat ≥20 plies reaching a middlegame, two registers + lead-the-eye
+markers, all 6 content gates green, committed per-opening-batch.
+
+**Authored (sound, ≥20p, anchored):**
+- English: Reversed Sicilian, Botvinnik, Bremen, Ultra-Symmetrical
+- Caro-Kann: Classical
+- Italian: Giuoco Piano Main (Nc3), Greco Attack (Bd2)
+- Petrov: Kaufmann Attack
+- Alekhine: Modern
+- Sveshnikov: Main 9.Nd5 Deep, Novosibirsk, …Rb8 Expansion
+- Two Knights: Ulvestad
+- QGA: Alekhine 4.Nc3 (extended)
+- QGD: Ragozin (extended)
+- Grünfeld: Fianchetto (extended)
+- Four Knights: Spanish Main, Halloween Gambit, Symmetrical, Metger Unpin
+- Dutch: Leningrad (Hopton tab; transposed to DB move-order)
+- Scotch: Classical 4…Bc5 (extended), Göring Gambit (extended)
+- Semi-Slav: Anti-Meran Bd3, Reynolds, Romih …Bd6
+- Benoni: Snake
+- KIA: vs QGD-Style
+- Philidor: Hanham
+- Slav: Main Line (a4 …Bf5) (extended), Modern Qc2 (extended)
+- Bird's: From's Gambit Declined
+
+**Deferred (legitimately blocked — NOT force-authored, per G3 + ≥20p depth + "empty > forced"):**
+- **Masters theory dries up before 20 plies** (can't extend without inventing):
+  vienna Stanley/Copycat/VGA, slav Exchange/Chebanenko/Quiet/Winawer,
+  KIA vs French/Sicilian/Caro/Botvinnik/Fischer/e5-Wedge, kid Makogonov,
+  benoni Classical-Bf4/Czech, reti Reti-Gambit, trompowsky 2…Ne4 lines,
+  catalan Early-Qa4+, italian Closed/Hungarian, two-knights Fritz/4.d3,
+  petrov Classical/Cochrane.
+- **Move-order doesn't anchor ≥6 in openings-lichess.json** (DB canon): all
+  London `d4 d5 Bf4` tabs (DB only carries the `d4 Nf6 …Bf4` KID-structure
+  London deep), reti Accepted/Reversed-Benoni, alapin 2…e6/2…g6,
+  philidor Modern-d3-Hybrid.
+- **Below win% bar / tiny sample / not a good recommendation:** caro Short,
+  scand Qa5-Bd2, english Four-Knights (33%/38g after extension),
+  qga Modern-Tabiya-Rd1, nimzo Kasparov.
+
+These need either a deliberate move-order transposition pass (London especially —
+common opening, worth a follow-up) or a content decision; flagged for David.
