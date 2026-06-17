@@ -795,6 +795,75 @@ const KG_ACCEPTED: SublineNarration = {
   sources: KG,
 };
 
+// ── Vienna Game (student WHITE). triggerMove is BLACK's deviation. ──
+const VN = ['book:vienna-game', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Vienna_Game'];
+const VN_CTR = ['book:vienna-game', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Vienna_Game'];
+
+// var0 — Vienna with f4 d5 (fxe5 Nxe4 Nf3). Open game, slight pull.
+const VN_F4D5: SublineNarration = {
+  intro: {
+    say: "…d5 — Black's principled central counter to your f4, the soundest reply to the Vienna Gambit. The game opens up: fxe5 and Nf3 develop, and after the dust settles you reach a lively, roughly level middlegame with the half-open f-file and easy piece play. Don't force it — develop, castle, contest the centre, and the f-file pressure gives a small, pleasant edge.",
+    sayShort: '…d5 — open it up, press the f-file.',
+  },
+  sources: VN_CTR,
+};
+// var1 / var3 Qh5 lines — the Frankenstein-Dracula attack (Bc4 Nxe4 Qh5).
+const VN_FRANKENSTEIN: SublineNarration = {
+  intro: {
+    say: "Bc4 …Nxe4 Qh5 — the Frankenstein-Dracula, one of the wildest tabiyas in chess. Your queen barges to h5 hitting e5 and forcing …Nd6, then Bb3 keeps the bishop alive and Nb5 leaps at c7, ripping into Black's queenside. Theory calls it roughly balanced, but the practical pressure is enormous — Black walks a tightrope while you hurl pieces at the king. Attack with conviction.",
+    sayShort: 'Qh5 — Frankenstein: Bb3, Nb5, attack c7.',
+  },
+  sources: VN,
+};
+// var2 — quiet Bc4 Bc5 d3 maneuvering.
+const VN_QUIET: SublineNarration = {
+  intro: {
+    say: "…Bc5 with …d6 — the quiet, modern Vienna where both sides build slowly. Match the patience and use your space: Nf3 and O-O finish development, and the f4 break is loaded to open the f-file toward Black's king at the right moment. A rich manoeuvring game where your kingside pawn lever and the better-placed pieces give a small, lasting initiative.",
+    sayShort: 'Quiet Vienna — develop, ready the f4 break.',
+  },
+  sources: VN,
+};
+// var1/var3 non-Qh5 — early Bc4 bishop/pawn development.
+const VN_BC4_DEV: SublineNarration = {
+  intro: {
+    say: "Black develops calmly against your Bc4 Vienna rather than grabbing on e4. That suits you: complete your own development with Nf3 and d3, keep the bishop trained on f7, and prepare the thematic f4 break to prise the centre open. With harmonious pieces and the kingside lever in hand, you steer toward a comfortable game with the easier plan.",
+    sayShort: 'Develop, hold f7, prepare the f4 break.',
+  },
+  sources: VN,
+};
+// var4 — Hamppe / KG-style Vienna (Nc3 Nc6 f4 exf4 Nf3 g5 Bc4 Bg7 d4).
+const VN_HAMPPE: SublineNarration = {
+  intro: {
+    say: "The Hamppe lines — a King's-Gambit-flavoured Vienna where Black props f4 with …g5 and fianchettoes on g7. You strike at the over-extended kingside: d4 grabs the centre, Bc4 and O-O bring the pieces toward f7, and h4 or the f-file pressure crack the g5-f4 chain. The gambit pawn buys a roaring initiative — open lines at Black's king and pour it on.",
+    sayShort: 'Hamppe — d4 centre, crack the g5 chain.',
+  },
+  sources: VN,
+};
+// var5 — Vienna Gambit accepted with e5 (f4 exf4 e5 Ng8 Nf3). Space, attack.
+const VN_GAMBIT_E5: SublineNarration = {
+  intro: {
+    say: "The Vienna Gambit accepted — your e5-pawn stabs the f6-knight back to g8, gaining a big lead in space and time while Black is shoved backward. Develop fast: Nf3, d4 and Bxf4 reclaim the gambit pawn and the broad centre, and the half-open f-file points straight at f7. You're playing for a kingside attack with the better-developed army — keep the pressure on and don't let Black untangle.",
+    sayShort: 'Vienna Gambit — e5 space, d4 and attack.',
+  },
+  sources: VN_CTR,
+};
+// var6 — Mieses g3 fianchetto (Nc3 Nf6 g3 d5 exd5 Nxd5 Bg2).
+const VN_G3: SublineNarration = {
+  intro: {
+    say: "The Mieses g3 system — you fianchetto the king's bishop and let the g2-bishop rake the long light diagonal toward Black's queenside. After the central trades you carry the bishop pair and a flexible structure; castle, play d3 and Nf3, and lean on the long diagonal and the half-open b-file. A calm, strategically rich game where your harmonious setup gives the durable pull.",
+    sayShort: 'g3 — fianchetto, press the long diagonal.',
+  },
+  sources: VN,
+};
+// var7 — Qg4 f2-sacrifice attack (Bc4 Bc5 Qg4 Qf6 Nd5 Qxf2+ Kd1).
+const VN_QG4: SublineNarration = {
+  intro: {
+    say: "The Qg4 gambit — you throw the queen to g4 hitting g7, and after the f2-pawn falls Nd5 leaps to the heart of the board threatening c7 and the fork while Black's queen is misplaced. It's a swashbuckling, double-edged attack: your king walks to d1 but your pieces swarm Black's loose camp and uncastled king. Sharp and dangerous — keep the initiative roaring and hunt the king.",
+    sayShort: 'Qg4 — Nd5 central, hunt the king.',
+  },
+  sources: VN,
+};
+
 export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   // ── Ruy Lopez ──
   'ruy-lopez::0::Nf6@5': RUY_BERLIN,
@@ -1374,4 +1443,84 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'kings-gambit::7::d5@5': KG_BISHOPS,
   'kings-gambit::7::f3@15': KG_BISHOPS,
   'kings-gambit::7::Bc5@9': KG_BISHOPS,
+
+  // -- Vienna Game --
+  'vienna-game::0::Bc5@9': VN_F4D5,
+  'vienna-game::0::Nc6@9': VN_F4D5,
+  'vienna-game::0::Be6@13': VN_F4D5,
+  'vienna-game::0::Nc6@13': VN_F4D5,
+  'vienna-game::0::Bg4@13': VN_F4D5,
+  'vienna-game::0::Bg4@9': VN_F4D5,
+  'vienna-game::0::c6@13': VN_F4D5,
+  'vienna-game::0::d6@5': VN_F4D5,
+  'vienna-game::0::f5@11': VN_F4D5,
+  'vienna-game::1::g6@7': VN_FRANKENSTEIN,
+  'vienna-game::1::d5@7': VN_FRANKENSTEIN,
+  'vienna-game::1::Ng5@7': VN_FRANKENSTEIN,
+  'vienna-game::1::Qf6@7': VN_FRANKENSTEIN,
+  'vienna-game::1::Qe7@7': VN_FRANKENSTEIN,
+  'vienna-game::1::Nc6@5': VN_BC4_DEV,
+  'vienna-game::1::Qf6@11': VN_FRANKENSTEIN,
+  'vienna-game::1::Bc5@5': VN_BC4_DEV,
+  'vienna-game::1::Be7@9': VN_FRANKENSTEIN,
+  'vienna-game::1::Bg7@19': VN_FRANKENSTEIN,
+  'vienna-game::2::Nc6@11': VN_QUIET,
+  'vienna-game::2::c6@11': VN_QUIET,
+  'vienna-game::2::Be6@11': VN_QUIET,
+  'vienna-game::2::a6@11': VN_QUIET,
+  'vienna-game::2::Nc6@5': VN_QUIET,
+  'vienna-game::2::Nxe4@5': VN_FRANKENSTEIN,
+  'vienna-game::2::c6@7': VN_QUIET,
+  'vienna-game::2::Bb4@5': VN_QUIET,
+  'vienna-game::2::Nc6@7': VN_QUIET,
+  'vienna-game::3::g6@7': VN_FRANKENSTEIN,
+  'vienna-game::3::d5@7': VN_FRANKENSTEIN,
+  'vienna-game::3::Ng5@7': VN_FRANKENSTEIN,
+  'vienna-game::3::Qf6@7': VN_FRANKENSTEIN,
+  'vienna-game::3::Qe7@7': VN_FRANKENSTEIN,
+  'vienna-game::3::Nc6@5': VN_BC4_DEV,
+  'vienna-game::3::Bc5@5': VN_BC4_DEV,
+  'vienna-game::3::Bb4@5': VN_BC4_DEV,
+  'vienna-game::3::Nc6@9': VN_FRANKENSTEIN,
+  'vienna-game::3::c6@5': VN_BC4_DEV,
+  'vienna-game::4::Bg4@13': VN_HAMPPE,
+  'vienna-game::4::h6@11': VN_HAMPPE,
+  'vienna-game::4::g4@13': VN_HAMPPE,
+  'vienna-game::4::g4@11': VN_HAMPPE,
+  'vienna-game::4::Nge7@13': VN_HAMPPE,
+  'vienna-game::4::Bd7@13': VN_HAMPPE,
+  'vienna-game::4::Nh6@13': VN_HAMPPE,
+  'vienna-game::4::Nh6@11': VN_HAMPPE,
+  'vienna-game::4::Nge7@11': VN_HAMPPE,
+  'vienna-game::4::Bc5@5': VN_HAMPPE,
+  'vienna-game::5::Qe7@7': VN_GAMBIT_E5,
+  'vienna-game::5::d6@9': VN_GAMBIT_E5,
+  'vienna-game::5::Nc6@9': VN_GAMBIT_E5,
+  'vienna-game::5::Bb4@9': VN_GAMBIT_E5,
+  'vienna-game::5::g5@9': VN_GAMBIT_E5,
+  'vienna-game::5::Bc5@9': VN_GAMBIT_E5,
+  'vienna-game::5::Be7@9': VN_GAMBIT_E5,
+  'vienna-game::5::f6@9': VN_GAMBIT_E5,
+  'vienna-game::5::h6@9': VN_GAMBIT_E5,
+  'vienna-game::5::Bg4@11': VN_GAMBIT_E5,
+  'vienna-game::6::Be6@9': VN_G3,
+  'vienna-game::6::Bc5@11': VN_G3,
+  'vienna-game::6::c6@9': VN_G3,
+  'vienna-game::6::c6@11': VN_G3,
+  'vienna-game::6::Bd6@11': VN_G3,
+  'vienna-game::6::Bg4@17': VN_G3,
+  'vienna-game::6::Nb6@9': VN_G3,
+  'vienna-game::6::Be7@11': VN_G3,
+  'vienna-game::6::Bc5@5': VN_G3,
+  'vienna-game::6::Bg4@15': VN_G3,
+  'vienna-game::7::d6@11': VN_QG4,
+  'vienna-game::7::Nf6@11': VN_QG4,
+  'vienna-game::7::g6@11': VN_QG4,
+  'vienna-game::7::Bb6@11': VN_QG4,
+  'vienna-game::7::Qg6@9': VN_QG4,
+  'vienna-game::7::Na5@11': VN_QG4,
+  'vienna-game::7::Bxf2+@9': VN_QG4,
+  'vienna-game::7::Bd6@11': VN_QG4,
+  'vienna-game::7::Nge7@11': VN_QG4,
+  'vienna-game::7::h5@13': VN_QG4,
 };
