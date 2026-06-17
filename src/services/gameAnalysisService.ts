@@ -221,9 +221,16 @@ function spawnDedicatedWorker(index: number): Promise<DedicatedWorker> {
     try {
       const worker = new Worker('/stockfish/stockfish-18-lite-single.js');
 
-      worker.onerror = () => {
+      worker.onerror = (ev: Event | ErrorEvent) => {
         clearTimeout(timeoutId);
-        reject(new Error(`Worker ${index} failed to load`));
+        const ee = ev as ErrorEvent;
+        const detail =
+          ee.error instanceof Error ? ee.error.message : ee.message;
+        reject(
+          new Error(
+            `Worker ${index} failed to load${detail ? `: ${detail}` : ''}`,
+          ),
+        );
       };
 
       const readyHandler = (event: MessageEvent<string>): void => {

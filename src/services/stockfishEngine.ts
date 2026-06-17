@@ -454,8 +454,20 @@ class StockfishEngine {
             const loc = ee.filename
               ? ` @ ${ee.filename}:${ee.lineno ?? '?'}:${ee.colno ?? '?'}`
               : '';
+            // Phase 8 Bug D — extract the ACTUAL thrown error from the
+            // ErrorEvent's `.error` property (David 2026-06-17). When WASM
+            // instantiation throws inside a worker, `error.message` on the
+            // ErrorEvent is often empty, but `error.error` holds the real
+            // Error (RuntimeError, RangeError, etc.) with a meaningful
+            // message. The global error handler in appAuditor.ts:1488
+            // already does this; the worker handler was missing it.
+            // Without extraction: "Uncaught RuntimeError or worker load failure"
+            // With extraction: "Aborted(RangeError: WebAssembly.instantiate(): Out of memory: Cannot allocate Wasm memory for new instance)"
+            const errObj: unknown = error.error;
+            const errDetail =
+              errObj instanceof Error ? errObj.message : null;
             const msg =
-              (error.message || 'Uncaught RuntimeError or worker load failure') + loc;
+              (error.message || errDetail || 'Uncaught RuntimeError or worker load failure') + loc;
             // Phase 8 Bug A — suppress the bubble to window.onerror.
             // A crashing multi-thread bundle emits 60+ ErrorEvents
             // in ~100ms; if any of those reach the global error
