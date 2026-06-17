@@ -53,6 +53,24 @@ const NARRATION_KINDS = new Set([
   'coach-voice-marker-extracted', 'phase-narration-spoken',
 ]);
 
+/** Resolve the board to check a spoken line against. The line often
+ *  describes a HYPOTHETICAL ("Watch out — if I play Nxd3+, knight on d3
+ *  forks…"): the piece-on-square claims are about the position AFTER that
+ *  move, not the current one. Detect a leading "if I play <SAN>" / "<SAN>
+ *  from you" and apply it to `fen` first, so the post-move claims are
+ *  checked against the post-move board (kills the false positives the
+ *  current-FEN check produced). Returns the FEN to verify against. */
+function resolveClaimFen(text, fen) {
+  if (!fen) return fen;
+  const m = /\bif i play\s+([A-Za-z][a-h1-8x+#=-]{1,6})|^([A-Za-z][a-h1-8x+#=-]{1,6})\s+from you/i.exec(String(text));
+  const san = (m && (m[1] || m[2]) || '').trim().replace(/[.,!?]$/, '');
+  if (!san) return fen;
+  for (const f of [fen, fen.replace(/ (w|b) /, (s, c) => ` ${c === 'w' ? 'b' : 'w'} `)]) {
+    try { const c = new Chess(f); if (c.move(san, { strict: false })) return c.fen(); } catch { /* try next */ }
+  }
+  return fen;
+}
+
 /** Conservative HEARD-HALLUCINATION check: flag only a PROVABLY-false
  *  piece-on-square claim against `fen` (the strongest signal — e.g. "the
  *  knight on f6" when f6 is empty or holds another piece). Subtler invented
@@ -223,8 +241,17 @@ async function main() {
         inconclusive = true;
       }
 
-      // Play the game. Student = White (moves first); coach = Black.
+      // Sync the mirror to the app's REAL starting board + detect which side
+      // the STUDENT plays (the coach may open as White). The side to move on
+      // the app, before we've moved, is the student's side.
       const mirror = new Chess();
+      {
+        const a0 = await dumpAudits();
+        for (let i = a0.length - 1; i >= 0; i--) { if (a0[i]?.fen) { try { mirror.load(a0[i].fen); } catch { /* keep start */ } break; } }
+        // If the coach already moved (it's the student's turn now), or it's a
+        // fresh board (White = student), mirror.turn() is the student's side.
+      }
+      const studentColor = mirror.turn();
       let seed = 0x5eed + game * 131;
       const rand = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 0xffffffff; };
       let appliedCoach = 0;
@@ -232,11 +259,14 @@ async function main() {
       let ply = 0;
 
       while (!inconclusive && !mirror.isGameOver() && ply < PLY_CAP) {
-        if (mirror.turn() !== 'w') {
-          // Shouldn't happen (we apply coach replies below), but guard.
-          break;
+        if (mirror.turn() !== studentColor) {
+          // Coach hasn't replied yet — sync + wait briefly.
+          await page.waitForTimeout(1500);
+          const a = await dumpAudits();
+          for (let i = a.length - 1; i >= 0; i--) { if (a[i]?.fen) { try { mirror.load(a[i].fen); } catch { /* */ } break; } }
+          if (mirror.turn() !== studentColor) break;
         }
-        // ---- student (White) move ----
+        // ---- student move ----
         const legal = mirror.moves({ verbose: true });
         if (legal.length === 0) break;
         // Prefer a capture/checking/central developing move; else random.
@@ -261,8 +291,18 @@ async function main() {
         const narr = narrationSince(audits, lastNarrTs);
         const newestTs = Math.max(lastNarrTs, ...spoken.map((s) => s.ts), ...narr.map((n) => n.ts));
         lastNarrTs = Number.isFinite(newestTs) ? newestTs : lastNarrTs;
+        // VERIFY AGAINST THE APP'S REAL BOARD, not the (drift-prone) mirror:
+        // take the FEN off the most recent fen-bearing audit event. This is
+        // the app's ground truth, so a desynced mirror can't cause false
+        // board-claim flags (David 2026-06-17 #3 — the harness fix).
+        const appFen = (() => {
+          for (let i = audits.length - 1; i >= 0; i--) { if (audits[i]?.fen) return audits[i].fen; }
+          return mirror.fen();
+        })();
         for (const s of spoken) {
-          const fenForCheck = mirror.fen();
+          // Resolve hypotheticals ("if I play Nxd3+, knight on d3 forks…") to
+          // the POST-move board before checking the claims.
+          const fenForCheck = resolveClaimFen(s.text, appFen);
           const bad = falseBoardClaims(s.text, fenForCheck);
           transcript.push({ ply, source: 'VOICE(/api/tts)', text: s.text, fen: fenForCheck, falseClaims: bad });
           if (bad.length) recordBreak('false-board-claim(spoken)', `${bad.join(' | ')} :: HEARD "${s.text.slice(0, 110)}"`);
@@ -273,35 +313,32 @@ async function main() {
           if (/hit a snag|having trouble connecting|coach is unavailable/i.test(n.text)) recordBreak('error-fallback', n.text.slice(0, 120));
         }
 
-        // apply the coach's new reply move(s) to the mirror
-        const sans = coachSans(audits);
-        if (sans.length > appliedCoach) {
-          for (let k = appliedCoach; k < sans.length; k++) {
-            const san = sans[k];
-            if (mirror.turn() === 'b') {
-              const res = mirror.move(san, { strict: false });
-              if (!res) { inconclusive = true; recordBreak('mirror-desync', `coach SAN ${san} illegal in mirror @ ${mirror.fen()}`); break; }
-              ply += 1;
-            }
-          }
-          appliedCoach = sans.length;
-        } else if (!mirror.isGameOver()) {
-          // No coach reply within the settle window. Could be game-end, a
-          // stuck turn, or the click not registering. Re-poll once more.
+        // SYNC THE MIRROR TO THE APP'S REAL BOARD (David 2026-06-17 #3): the
+        // old coach-SAN replay drifted and false-flagged 'mirror-desync'.
+        // Instead, after the coach replies, load the app's current FEN (off
+        // its audit events) into the mirror. When it's White's turn again the
+        // coach has moved and we continue; when it's still Black's the coach
+        // hasn't replied — poll once more, then call a real silent-hang.
+        const syncOnce = async () => {
+          const a = await dumpAudits();
+          let f = null;
+          for (let i = a.length - 1; i >= 0; i--) { if (a[i]?.fen) { f = a[i].fen; break; } }
+          if (!f) return false;
+          try { mirror.load(f); return true; } catch { return false; }
+        };
+        await syncOnce();
+        if (mirror.turn() === 'b' && !mirror.isGameOver()) {
+          // coach hasn't replied yet — give it one more window.
           await page.waitForTimeout(MOVE_SETTLE_MS);
-          const a2 = await dumpAudits();
-          const s2 = coachSans(a2);
-          if (s2.length > appliedCoach) {
-            for (let k = appliedCoach; k < s2.length; k++) {
-              if (mirror.turn() === 'b') { const r = mirror.move(s2[k], { strict: false }); if (r) ply += 1; }
-            }
-            appliedCoach = s2.length;
-          } else {
+          await syncOnce();
+          if (mirror.turn() === 'b' && !mirror.isGameOver()) {
             recordBreak('silent-hang', `no coach reply in ${2 * MOVE_SETTLE_MS}ms after student ${pick.san}`);
             inconclusive = true;
             break;
           }
         }
+        ply += 1; // coach's half-move (approx; mirror is authoritative now)
+        void appliedCoach;
       }
 
       // also fold in the SHOWN coach text for the transcript record
