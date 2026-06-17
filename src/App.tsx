@@ -12,6 +12,7 @@ import { runAutoImportIfDue } from './services/autoImportScheduler';
 import { getSharedAudioContext } from './services/audioContextManager';
 import { speechService } from './services/speechService';
 import { voiceService } from './services/voiceService';
+import { stockfishEngine } from './services/stockfishEngine';
 import { db } from './db/schema';
 import { installGlobalErrorHooks, installConsoleBackdoor, logAppAudit, loadAuditStreamConfig } from './services/appAuditor';
 import { initAnalytics } from './services/analytics';
@@ -251,6 +252,15 @@ export function App(): JSX.Element {
         void seedDatabase().catch((e: unknown) => console.error('[seed] failed:', e));
         void seedVerifiedLibraryNote();
         void seedPuzzles();
+
+        // Warm the Stockfish WASM engine shortly after boot (David 2026-06-17)
+        // so it's READY before the user reaches a coach question. The cold
+        // WASM init (~5-9s) is the only real first-question latency, and the
+        // coach hands the LLM the engine's best move / eval — a warm engine =
+        // no cold wait when the student first asks. Deferred ~2.5s so it never
+        // competes with first paint or the critical seed; idempotent +
+        // fire-and-forget (never blocks boot, NEVER an LLM call).
+        setTimeout(() => { void stockfishEngine.initialize().catch(() => undefined); }, 2500);
 
         // Biweekly chess.com / lichess auto-import. Fire-and-forget,
         // deferred 30s after boot so it never competes with the user's
