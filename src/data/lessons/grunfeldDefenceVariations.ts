@@ -15,6 +15,14 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'];
 
 export const GRUNFELD_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'grunfeld-defence::Fianchetto Variation': {
+    openingId: 'grunfeld-defence', title: 'Grünfeld — The Fianchetto Variation', minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'gf1', moves: 'd4 Nf6 c4 g6 Nf3 Bg7 g3 d5', say: "The Grünfeld against White's quiet Fianchetto set-up. Black develops …Bg7 onto the long diagonal and immediately challenges the centre with …d5 — the Grünfeld's defining idea. Rather than occupy the centre, Black invites White to build it, then attacks it with pieces and pawns.", sayShort: '…d5 — challenge the centre at once.', highlights: [H('d5', KEY), H('g7', SOFT)] }),
+      b({ id: 'gf2', moves: 'd4 Nf6 c4 g6 Nf3 Bg7 g3 d5 Bg2 dxc4 Na3 c3 bxc3 c5', say: "Black snatches …dxc4, and after Na3 plays the cheeky …c3! — fixing White's queenside pawns into a target before they can be useful. Then …c5 strikes the d4-pawn. The whole queenside is now under pressure, and White's structure is damaged.", sayShort: '…c3, …c5 — damage and strike the centre.', highlights: [H('c5', KEY)] }),
+      b({ id: 'gf3', moves: 'd4 Nf6 c4 g6 Nf3 Bg7 g3 d5 Bg2 dxc4 Na3 c3 bxc3 c5 O-O O-O Rb1 Nc6 Ne5 Nd5', say: "Both sides castle and the pieces flood out: White centralises with Ne5 and probes the b-file with Rb1, while Black develops …Nc6 hitting the centre and reroutes …Nd5, blockading and dominating the key central square. There is the Fianchetto tabiya: the g7-bishop on the long diagonal, knights swarming the centre, and White's damaged queenside as a target — exactly the active, counter-attacking game the Grünfeld promises. It scores 54% for Black at club level.", sayShort: '…Nc6, …Nd5 — knights swarm the centre.', highlights: [H('d5', KEY), H('c6', SOFT)] }),
+    ],
+  },
   'grunfeld-defence::Exchange Variation: Main Line': {
     openingId: 'grunfeld-defence', title: 'Grünfeld — The Exchange Main Line', minutes: 11, orientation: 'black', sources: SRC,
     beats: [

@@ -14,6 +14,14 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['concept:pos-center', 'concept:pos-development', 'concept:pos-tempo', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'];
 
 export const QGA_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'qga::Alekhine Variation 4.Nc3': {
+    openingId: 'qga', title: 'QGA — The Alekhine Variation (4.Nc3)', minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'qa1', moves: 'd4 d5 c4 dxc4 Nf3 Nf6 Nc3', say: "The Queen's Gambit Accepted: Black takes the c4-pawn — not out of greed, but to deflect White's centre pawn and free the light-squared bishop, which so often sits passive in 1.d4 openings. Here White develops aggressively with Nc3, the Alekhine Variation, hurrying to build a big centre.", sayShort: '…dxc4 — deflect the centre, free the game.', highlights: [H('c4', KEY)] }),
+      b({ id: 'qa2', moves: 'd4 d5 c4 dxc4 Nf3 Nf6 Nc3 a6 e4 b5 e5 Nd5 a4 Nxc3 bxc3 Qd5', say: "Black bolsters the extra pawn with …a6 and …b5, taking real queenside space. White grabs the centre with e4-e5, kicking the knight to d5; after the trade …Nxc3 Black centralises with …Qd5, hitting White's loose pawns. The extra pawn and the active queen give Black genuine counterweight to White's centre.", sayShort: '…b5, …Qd5 — hold the pawn, centralise.', highlights: [H('d5', KEY), H('b5', SOFT)] }),
+      b({ id: 'qa3', moves: 'd4 d5 c4 dxc4 Nf3 Nf6 Nc3 a6 e4 b5 e5 Nd5 a4 Nxc3 bxc3 Qd5 g3 Bb7 Bg2 Qd7 Ba3 g6', say: "Both sides fianchetto on the long diagonals — White's Bg2 against Black's …Bb7, which X-rays through White's centre. Black tucks the queen to d7 and prepares …Bg7 with …g6. There is the Alekhine tabiya: White has the broad pawn centre, but Black has the extra c-pawn, the powerful b7-bishop, and concrete targets in White's loosened structure — a dynamic, fully playable game.", sayShort: '…Bb7, …g6 — the bishop bites the centre.', highlights: [H('b7', KEY), H('g6', SOFT)] }),
+    ],
+  },
   'qga::Smyslov Variation 3...a6': {
     openingId: 'qga', title: 'QGA — The Smyslov 3…a6', minutes: 10, orientation: 'black', sources: SRC,
     beats: [

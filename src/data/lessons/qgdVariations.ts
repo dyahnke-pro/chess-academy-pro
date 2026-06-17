@@ -14,6 +14,15 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['book:qgd', 'concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'];
 
 export const QGD_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'qgd::Ragozin Variation': {
+    openingId: 'qgd', title: 'QGD — the Ragozin Variation', minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'rg1', moves: 'd4 d5 c4 e6 Nc3 Nf6 Nf3 Bb4', say: "The Ragozin — the most active way to play the Queen's Gambit Declined. Black sets up the solid …d5/…e6 wall, then adds a Nimzo-Indian touch with …Bb4, pinning the c3-knight against the queen. It marries QGD solidity with genuine piece pressure on White's centre.", sayShort: '…Bb4 — QGD solidity plus a Nimzo pin.', highlights: [H('b4', KEY)] }),
+      b({ id: 'rg2', moves: 'd4 d5 c4 e6 Nc3 Nf6 Nf3 Bb4 Bg5 dxc4 e4 c5', say: "White pins back with Bg5 and Black strikes: …dxc4 grabs a pawn and clears the centre, then …c5! hits the d4-pawn immediately. Black refuses to sit passively — every move challenges White's centre while the pieces stay active.", sayShort: '…dxc4, …c5 — grab and hit the centre.', highlights: [H('c5', KEY), H('c4', SOFT)] }),
+      b({ id: 'rg3', moves: 'd4 d5 c4 e6 Nc3 Nf6 Nf3 Bb4 Bg5 dxc4 e4 c5 Bxc4 cxd4 Nxd4 Qa5 Bd2 Qc5', say: "White regains the pawn with Bxc4, the centre dissolves after …cxd4 Nxd4, and Black's queen springs out: …Qa5 then …Qc5, eyeing the pinned knight and gaining time. Black's pieces are buzzing while White is still untangling.", sayShort: '…Qc5 — the queen sortie gains time.', highlights: [H('c5', KEY)] }),
+      b({ id: 'rg4', moves: 'd4 d5 c4 e6 Nc3 Nf6 Nf3 Bb4 Bg5 dxc4 e4 c5 Bxc4 cxd4 Nxd4 Qa5 Bd2 Qc5 Bb5+ Bd7 Nb3 Qe7', say: "Bb5+ provokes …Bd7, developing with tempo, and after Nb3 the queen settles on …Qe7. There is the Ragozin tabiya: Black has dissolved the centre, developed every piece actively — the bishops on b4 and d7, the queen on e7 — and reached a balanced, dynamic middlegame. It scores an excellent 56% for Black at club level.", sayShort: '…Qe7 — active pieces, dynamic balance.', highlights: [H('e7', KEY), H('d7', SOFT), H('b4', SOFT)] }),
+    ],
+  },
   'qgd::Vienna Variation': {
     openingId: 'qgd', title: 'QGD — the Vienna (…dxc4 Counterplay)', minutes: 10, orientation: 'black', sources: SRC,
     beats: [
