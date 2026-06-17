@@ -646,16 +646,26 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   // ── Petrov Defence (student Black) ──
   'petrov-defence::3::Bc4+@10': {
     intro: {
-      say: "Bc4+ — you're in the Cochrane Gambit, where White has thrown a knight onto f7 to drag your king out. Don't be rattled: you are a whole piece up for two pawns. Block with …d5, tuck the king to safety, and untangle with …Re8 and …Kg8 ideas. Defend a few accurate moves and the extra piece simply wins.",
-      sayShort: "Bc4+ — …d5, you're a piece up.",
+      say: "The Cochrane Gambit — White has just hurled a knight onto f7 to drag your king into the open. It looks terrifying and it is completely sound for you: you're a piece up for two pawns, and the entire game now hinges on one idea — get the king safe and the extra material wins itself. Don't grab, don't panic; just tuck the king away.",
+      sayShort: 'Cochrane — get the king safe.',
     },
+    beats: [
+      { atMove: 7, say: "…Kxf7 — you take the knight, because you must and because you should. White has spent a whole piece for two pawns and a few checks; if your king reaches safety, nothing else he has can replace that piece. The fear is the only weapon White has left.", highlights: [H('f7', KEY)] },
+      { atMove: 11, say: "…d5! — the move that defuses the whole gambit. The pawn jams onto d5 and slams shut the c4-bishop's diagonal to your king, snuffing the check while giving nothing back. From here you simply walk the king to g8, untangle with …Re8, and the piece tells.", highlights: [H('d5', ATK), H('c4', KEY)] },
+      { atMove: 13, say: "…a6 — a quiet luxury move that takes b5 away from White's pieces, and that says everything: the storm has blown out, your king is safe, and you're a piece up for two pawns. The Cochrane is a bluff, and you've called it.", highlights: [H('a6', SOFT), H('b5', KEY)] },
+    ],
     sources: ['concept:pos-king-safety', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Petrov%27s_Defence'],
   },
   'petrov-defence::1::O-O@10': {
     intro: {
-      say: "O-O — the Petrov main line. You grabbed the e4-pawn, White grabbed e5, and now you develop into the Petrov's famously bulletproof structure — …Nd7, …Bd6, …O-O. Symmetrical, sound, and frustrating for an attacker: this is the defence you reach for when you want a rock.",
-      sayShort: 'O-O — develop, bulletproof and equal.',
+      say: "The Petrov main line — the defence you reach for when you want a fortress. Its logic is pure symmetry: you don't defend the e5-pawn, you counter-grab on e4, and from there everything White tries, you can answer in kind. By move ten you've castled into a position with no weaknesses and nothing for an attacker to bite on.",
+      sayShort: 'Petrov main — symmetry, then castle.',
     },
+    beats: [
+      { atMove: 5, say: "…Nxe4 — the heart of the Petrov. Rather than passively guard e5, you snatch the e4-pawn and let the symmetry work for you. Whatever White does to your knight, you have the mirror — that balance is exactly why this defence is so hard to beat.", highlights: [H('e4', ATK)] },
+      { atMove: 7, say: "…d5 — the key support, anchoring your e4-knight on its outpost so it can't be cheaply chased, and at the same time opening a free diagonal for your light-squared bishop. This little pawn is what makes the whole structure hold together.", highlights: [H('d5', ATK), H('e4', KEY)] },
+      { atMove: 9, say: "…Nd7 — developing while challenging White's advanced e5-knight head-on, offering the trade that dissolves any pressure. Simple, solid, symmetrical: White is left with a position that simply refuses to give him a target.", highlights: [H('e5', KEY)] },
+    ],
     sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Petrov%27s_Defence'],
   },
 
