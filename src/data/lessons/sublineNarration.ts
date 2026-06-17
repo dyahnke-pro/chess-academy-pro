@@ -61,6 +61,10 @@ const SLAV_NC3: SublineNarration = {
     say: "Nc3 — the sharp Slav, steering toward the razor-edged Botvinnik and Anti-Moscow tangles. White develops aggressively and pins with Bg5. The principled answer is to grab the pawn with …dxc4 and hold it with …b5, daring White to prove the gambit while you cling to the extra material behind a wall of queenside pawns. Theory-heavy, but Black is doing fine everywhere.",
     sayShort: 'Nc3 — grab …dxc4, hold with …b5.',
   },
+  beats: [
+    { atMove: 11, say: "…dxc4 — you snatch the gambit pawn and step into the Botvinnik, the sharpest forest in all of chess. White will lash out with e4 and the pieces; your whole plan is to hold the extra pawn behind a coming wall of …b5 and queenside pawns. Nerve-wracking, deeply analysed — and fully sound for Black.", highlights: [H('c4', ATK)] },
+    { atMove: 13, say: "…g5! — the Botvinnik thunderbolt, smashing into the h4-bishop and seizing kingside space in the same breath. You've taken White's pawn and now you punch straight back; the board erupts into chaos, and the theory verdict is clear: Black holds.", highlights: [H('g5', ATK), H('h4', KEY)] },
+  ],
   sources: SLAV_SRC,
 };
 const ENG_SRC = ['concept:pos-space', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/English_Opening'];
@@ -239,6 +243,9 @@ const BENONI_NXD5: SublineNarration = {
     say: "Nxd5 — White recaptures with the knight, ducking the sharp Modern Benoni structure for a quiet game. That suits you fine: trade with …Nxd5 and develop freely. Without the locked d5-pawn cramping you, Black equalises easily with active, unobstructed pieces.",
     sayShort: 'Nxd5 — trade off, free game.',
   },
+  beats: [
+    { atMove: 9, say: "…Nxd5 — trade the knights and the whole point of White's quiet line evaporates. The cramping d5-pawn that defines the Modern Benoni never appears; instead the centre simplifies, your pieces get open lines, and you reach an easy, level game where nothing is squeezed. White dodged the sharp Benoni and got nothing for it.", highlights: [H('d5', KEY)] },
+  ],
   sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
 };
 // Sveshnikov → White offers a c3 Morra-style gambit (student Black).
