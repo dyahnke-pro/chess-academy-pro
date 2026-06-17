@@ -63,6 +63,59 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
     ],
     sources: ['book:caro-kann', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
   },
+
+  // Caro-Kann, Two Knights / 2.Nc3 (var 0) — the Rasa-Studier Gambit. Line:
+  // e4 c6 d4 d5 Nc3 dxe4 f3 exf3 Nxf3 Nf6 Bd3 Bg4
+  'caro-kann::0::f3@6': {
+    intro: {
+      say: "f3 — the Rasa-Studier Gambit, a rare but tricky pawn offer. White wants to blow open the f-file and the centre for his pieces. Don't be shy: take it with …exf3. You'll be a clean pawn up, and the right plan is simply to develop everything to a natural square and let White try to prove a compensation that isn't really there.",
+      sayShort: 'f3 — just take it, …exf3.',
+    },
+    beats: [
+      { atMove: 11, say: "…Bg4 — out comes the good bishop, pinning the f3-knight, the very piece White's whole gambit is built around. You're a clean pawn to the good with every piece flowing to its best square. Stay solid and the extra pawn simply tells.", highlights: [H('f3', KEY), H('g4', SOFT)] },
+    ],
+    sources: ['book:caro-kann', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
+  },
+
+  // Caro-Kann, Panov Attack (var 3) — White develops Nf3. Line:
+  // e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nf3 g6 Nc3 Bg7
+  'caro-kann::3::Nf3@8': {
+    intro: {
+      say: "Nf3 — White develops in the Panov, steering toward an isolated-queen-pawn middlegame. The most reliable answer is the fianchetto: …g6 and …Bg7. Instead of blockading the coming isolated d-pawn passively, you train the long diagonal on it and swarm it with pieces — the modern, Grünfeld-flavoured antidote to the Panov.",
+      sayShort: 'Nf3 — fianchetto, …g6 and …Bg7.',
+    },
+    beats: [
+      { atMove: 11, say: "…Bg7 — the bishop takes aim down the long diagonal toward d4 and the heart of White's centre. This is the whole plan against the Panov's isolated pawn: pressure it with the pieces, don't sit in front of it, and the d-pawn becomes a long-term target rather than a battering ram.", highlights: [H('d4', KEY), H('g7', SOFT)] },
+    ],
+    sources: ['book:caro-kann', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
+  },
+
+  // Caro-Kann, Fantasy / Maróczy (var 4) — c3 props the centre. Line:
+  // e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 c3 c5 a3 c4
+  'caro-kann::4::c3@10': {
+    intro: {
+      say: "c3 — White props the centre in the Fantasy after you've already struck with …e5. The Maróczy treatment. You keep the initiative on the queenside with …c5 and then …c4, clamping the position and fixing White's pawns before you turn the attack toward the king.",
+      sayShort: 'c3 — clamp with …c5 and …c4.',
+    },
+    beats: [
+      { atMove: 11, say: "…c5 — a second hammer on d4, joining the …e5-pawn that is already leaning on it. White's propped-up centre is suddenly carrying a real load, and you have all the easy, natural moves.", highlights: [H('d4', KEY), H('c5', ATK)] },
+      { atMove: 13, say: "…c4 — grabbing queenside space and clamping the structure. With the centre locked in your favour and your pieces free, the game now belongs on the kingside, where you hold the easier attack.", highlights: [H('c4', ATK)] },
+    ],
+    sources: ['book:caro-kann', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
+  },
+
+  // Caro-Kann, Tartakower (var 6) — White castles into the main tabiya. Line:
+  // e4 c6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ exf6 c3 Bd6 Bd3 O-O Qc2 Re8+ Ne2 h5 O-O
+  'caro-kann::6::O-O@18': {
+    intro: {
+      say: "O-O — White castles into the main Tartakower tabiya, and it's time to count your trumps. Your rook already owns the half-open e-file, you hold the bishop pair, and the …h5 pawn is rolling at the king. Those doubled f-pawns are not a weakness — they clamp e5 and g5 and form a sturdy shield. You have the easier, more natural attacking game.",
+      sayShort: 'O-O — the Tartakower tabiya; you press.',
+    },
+    beats: [
+      { atMove: 18, say: "There's the tabiya. The doubled f-pawns deny White's pieces the e5 and g5 outposts while you build with the bishop pair, the open e-file, and the …h5-h4 storm. The Tartakower's bargain — structure for the initiative — pays off.", highlights: [H('e5', SOFT), H('g5', SOFT)] },
+    ],
+    sources: ['book:caro-kann', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
+  },
 };
 
 /** Hand-authored narration for a subline, or null to use the honest baseline. */
