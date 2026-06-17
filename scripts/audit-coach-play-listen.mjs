@@ -326,13 +326,20 @@ async function main() {
           if (!f) return false;
           try { mirror.load(f); return true; } catch { return false; }
         };
+        // Wait for the coach to reply — i.e. for it to become the STUDENT's
+        // turn again (the coach may play either colour). Deeper positions take
+        // a longer adaptive search, so give several windows before calling a
+        // real silent-hang. (Bugfix: was hardcoded to 'b'/coach-is-Black.)
         await syncOnce();
-        if (mirror.turn() === 'b' && !mirror.isGameOver()) {
-          // coach hasn't replied yet — give it one more window.
+        let waited = 0;
+        while (mirror.turn() !== studentColor && !mirror.isGameOver() && waited < 5) {
           await page.waitForTimeout(MOVE_SETTLE_MS);
           await syncOnce();
-          if (mirror.turn() === 'b' && !mirror.isGameOver()) {
-            recordBreak('silent-hang', `no coach reply in ${2 * MOVE_SETTLE_MS}ms after student ${pick.san}`);
+          waited += 1;
+        }
+        if (mirror.turn() !== studentColor && !mirror.isGameOver()) {
+          {
+            recordBreak('silent-hang', `no coach reply in ${(waited + 1) * MOVE_SETTLE_MS}ms after student ${pick.san}`);
             inconclusive = true;
             break;
           }
