@@ -88,6 +88,9 @@ const NIMZO_NF3: SublineNarration = {
     say: "Nf3 — White delays Nc3 to dodge the Nimzo pin. Don't force it: answer …d5, reaching a sound, classical Queen's-Gambit structure where you're fully equal. If White ever does play Nc3, the …Bb4 pin is still there waiting; until then you develop comfortably with no weaknesses.",
     sayShort: 'Nf3 — flexible …d5, stay solid.',
   },
+  beats: [
+    { atMove: 5, say: "…d5 — the flexible answer that commits to nothing premature. White ducked the Nimzo pin by holding back Nc3, so you stake your own claim in the centre. You reach a rock-solid Queen's-Gambit structure, and the moment White does play Nc3 the …Bb4 pin snaps back into your hands. Whichever way he turns, you're at home.", highlights: [H('d5', KEY)] },
+  ],
   sources: QP_SRC,
 };
 // Queen's Indian → Nc3 transposing to a Nimzo. d4 Nf6 c4 e6 Nc3 Bb4
@@ -96,6 +99,9 @@ const QID_NC3: SublineNarration = {
     say: "Nc3 — and this slides straight into Nimzo-Indian territory. Answer …Bb4, pinning the knight and contesting e4 just as you would in the Nimzo proper. The Queen's Indian and the Nimzo are sisters — whichever way White moves, you reach a comfortable, well-charted structure with easy equality.",
     sayShort: 'Nc3 — transpose: pin with …Bb4.',
   },
+  beats: [
+    { atMove: 5, say: "…Bb4 — and you've transposed into a full Nimzo-Indian. The bishop pins the c3-knight, the piece that controls the central e4-square, so right away you're fighting for the key light square White wants. The plan is pure Nimzo: trade the bishop for the knight to wreck White's c-pawns, or hold the pin and keep squeezing. Either road is comfortable.", highlights: [H('c3', KEY), H('e4', SOFT)] },
+  ],
   sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense'],
 };
 // Scotch declined with …d6 (student White). e4 e5 Nf3 Nc6 d4 d6 Bb5 Bd7
@@ -104,6 +110,9 @@ const SCOTCH_D6: SublineNarration = {
     say: "…d6 — Black declines the Scotch tension passively, propping up e5 instead of taking on d4. Make him pay for the meekness: Bb5 pins the c6-knight, you keep the central pawn duo, and with a clean space edge and faster development you press a comfortable, risk-free pull.",
     sayShort: '…d6 — pin Bb5, keep the space.',
   },
+  beats: [
+    { atMove: 6, say: "Bb5 — clamp down on the passivity. Black's meek …d6 left the c6-knight tied to defending e5, so you pin it to the king and pile on. With your pawns already abreast on d4 and e4 you simply own more space and quicker development — squeeze the cramped position and the small edge grows.", highlights: [H('c6', KEY), H('e5', SOFT)] },
+  ],
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scotch_Game'],
 };
 // Grünfeld Exchange — the critical main line (student Black).
@@ -216,6 +225,9 @@ const TK_BB5: SublineNarration = {
     say: "Bb5 — White sidesteps the Two Knights and transposes to a Ruy Lopez. Nothing to fear: put the question with …a6, and you're in familiar Spanish territory. Keep the bishop guessing, develop solidly, and the game is balanced and well-charted.",
     sayShort: "Bb5 — it's a Ruy: …a6.",
   },
+  beats: [
+    { atMove: 5, say: "…a6 — the Morphy move, putting the bishop on the spot at once. After Ba4 it clings to the diagonal, but now you hold …b5 in reserve to kick it away whenever you please. In one move you've turned White's anti-Italian into a main-line Ruy Lopez where you know every plan.", highlights: [H('b5', KEY)] },
+  ],
   sources: ['book:italian-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Two_Knights_Defense'],
 };
 // Anti-Benoni: White recaptures on d5 with the knight (student Black).
