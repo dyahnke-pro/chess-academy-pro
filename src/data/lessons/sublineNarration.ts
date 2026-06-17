@@ -304,6 +304,39 @@ const BUDAPEST_D5: SublineNarration = {
   sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
 };
 
+// Four Knights, Rubinstein counter (student White).
+const FK_ND4: SublineNarration = {
+  intro: {
+    say: "…Nd4 — the Rubinstein, Black's sharpest Four Knights try: instead of defending e5 he counterattacks your Bb5 outright. The clean answer is Nxd4 exd4, when Black's recaptured pawn lands on d4 as a long-term target and you hold the easier game; if you prefer, Ba4 or Bc4 keeps the pieces on. No tricks to fear — just a small, safe pull.",
+    sayShort: '…Nd4 — Nxd4, target the d4-pawn.',
+  },
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Four_Knights_Game'],
+};
+// Old Indian, quiet h3 (student Black) — terminus deviation.
+const OLDIND_H3: SublineNarration = {
+  intro: {
+    say: "h3 — a quiet prophylactic luft in the Old Indian; White isn't forcing anything. Keep to the patient plan: regroup with …Re8 and …Bf8, prepare the …c6 and …exd4 breaks, and strike only when you're ready. The Old Indian is cramped but bombproof — you maneuver behind the lines and pick your own moment.",
+    sayShort: 'h3 — maneuver: …Re8, …Bf8, break later.',
+  },
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Old_Indian_Defense'],
+};
+// Réti — Black sets up a solid …e5 centre (student White).
+const RETI_BD6: SublineNarration = {
+  intro: {
+    say: "…Bd6 — Black props up a broad …e5 centre against your Réti. That's exactly what the hypermodern set-up wants: you let Black build the big centre so you can lean on it. With e4 already challenging and the g2-bishop raking the long diagonal, trade and press d5 and e5 — the Réti's whole bet is to undermine what you invited.",
+    sayShort: '…Bd6 — undermine the centre you invited.',
+  },
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+// King's Indian Attack — Black builds a big centre (student White).
+const KIA_E5: SublineNarration = {
+  intro: {
+    say: "…e5 — Black stakes out a big centre against your King's Indian Attack, and that's the soil the KIA grows in. Regroup behind your wall and turn to the kingside: the Nf1-g3 or Nh4 reroute, the f4 lever against e5, and the pawn storm that is the whole point of the system. Black's proud centre simply becomes the thing you attack around.",
+    sayShort: '…e5 — regroup, f4 and the kingside storm.',
+  },
+  sources: ['concept:pos-center', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+
 const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   // Caro-Kann, Advance Variation (var 1) — the Short System, White's most
   // common try here (about a third of games). Line:
@@ -807,6 +840,50 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   'budapest-gambit::4::d5@4': BUDAPEST_D5,
   'budapest-gambit::5::d5@4': BUDAPEST_D5,
   'budapest-gambit::6::d5@4': BUDAPEST_D5,
+
+  // ── Four Knights (student White) ──
+  'four-knights-game::0::Nd4@7': FK_ND4,
+  'four-knights-game::4::Nd4@7': FK_ND4,
+  'four-knights-game::7::Nd4@7': FK_ND4,
+  'four-knights-game::8::Bg4@11': {
+    intro: {
+      say: "…Bg4 — Black pins in the quiet g3 Four Knights. No need to react sharply: break the pin with h3 when it suits you and reroute. Your fianchettoed g2-bishop eyes the centre, your structure is sound, and you keep a small, risk-free flexibility to play for the win without ever being worse.",
+      sayShort: '…Bg4 — break the pin with h3.',
+    },
+    sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Four_Knights_Game'],
+  },
+
+  // ── Dutch Defence (student Black) — the anti-Dutch Bg5/Bc4 attack ──
+  'dutch-defence::3::Bc4@8': {
+    intro: {
+      say: "Bc4 — White goes for a quick kingside attack in the anti-Dutch, the Bg5-and-Bc4 battery aiming at f7. Don't panic: …e6 blunts the bishop, …d5 claims the centre, and once the early aggression is parried your Leningrad bishop on g7 and the …e5 break give you a full, fighting game. Weather the first wave and Black is fine.",
+      sayShort: 'Bc4 — blunt it with …e6, …d5.',
+    },
+    sources: ['concept:pos-king-safety', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+  },
+
+  // ── Réti (student White) ──
+  'reti-opening::0::Bd6@13': RETI_BD6,
+  'reti-opening::6::Bd6@13': RETI_BD6,
+
+  // ── King's Indian Attack (student White) ──
+  'kings-indian-attack::0::e5@11': KIA_E5,
+  'kings-indian-attack::7::e5@11': KIA_E5,
+
+  // ── Old Indian (student Black) ──
+  'old-indian-defence::0::h3@14': OLDIND_H3,
+  'old-indian-defence::4::h3@14': OLDIND_H3,
+  'old-indian-defence::5::h3@14': OLDIND_H3,
+  'old-indian-defence::6::h3@14': OLDIND_H3,
+
+  // ── London System (student White) ──
+  'london-system::2::Nc6@9': {
+    intro: {
+      say: "…Nc6 — Black challenges your London centre head-on. Hold the system's shape: c3 to brace d4, keep the Bf4-and-Bd3 battery trained on h7, and meet …c5 by keeping the central tension. The London's whole strength is its reliability — you reach the same comfortable structure every game and play for the kingside.",
+      sayShort: '…Nc6 — brace c3, hold the battery.',
+    },
+    sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
+  },
 };
 
 /** Hand-authored narration for a subline, or null to use the honest baseline. */
