@@ -563,6 +563,70 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
     },
     sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
   },
+
+  // ── Vienna Game (student White) — the Gambit main line ──
+  'vienna-game::0::O-O@13': {
+    intro: {
+      say: "Black castles into the Vienna Gambit tabiya. You gave the f-pawn for a real lead in development and the open f-file pointing at Black's king. Now pour it on: the rook belongs on f1, the queen is already active on e2, and your central pawns roll. The Vienna Gambit punishes anyone who treats it like a quiet opening.",
+      sayShort: 'O-O — press the f-file attack.',
+    },
+    sources: ['concept:pos-initiative', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Vienna_Game'],
+  },
+  'vienna-game::2::h6@11': {
+    intro: {
+      say: "…h6 — Black keeps it quiet in the slow Vienna with d3. No gambit here, so play the long game: castle, complete development, and prepare the f4 break or the Nbd2-f1-g3 regroup toward the kingside. A small, safe space edge you can nurse for a long time.",
+      sayShort: '…h6 — build slowly toward f4.',
+    },
+    sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Vienna_Game'],
+  },
+
+  // ── Petrov Defence (student Black) ──
+  'petrov-defence::3::Bc4+@10': {
+    intro: {
+      say: "Bc4+ — you're in the Cochrane Gambit, where White has thrown a knight onto f7 to drag your king out. Don't be rattled: you are a whole piece up for two pawns. Block with …d5, tuck the king to safety, and untangle with …Re8 and …Kg8 ideas. Defend a few accurate moves and the extra piece simply wins.",
+      sayShort: "Bc4+ — …d5, you're a piece up.",
+    },
+    sources: ['concept:pos-king-safety', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Petrov%27s_Defence'],
+  },
+  'petrov-defence::1::O-O@10': {
+    intro: {
+      say: "O-O — the Petrov main line. You grabbed the e4-pawn, White grabbed e5, and now you develop into the Petrov's famously bulletproof structure — …Nd7, …Bd6, …O-O. Symmetrical, sound, and frustrating for an attacker: this is the defence you reach for when you want a rock.",
+      sayShort: 'O-O — develop, bulletproof and equal.',
+    },
+    sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Petrov%27s_Defence'],
+  },
+
+  // ── Pirc Defence (student Black) — the Austrian Attack ──
+  'pirc-defence::7::Bd3@10': {
+    intro: {
+      say: "Bd3 — the Austrian Attack, White's most aggressive Pirc try: pawns on d4-e4-f4 and the pieces aimed at your king. The Pirc plan is to invite that big centre and then crack it. You've fianchettoed and castled; now counterpunch with …Nc6 or …Na6 and the …e5 or …c5 breaks, blowing the overextended pawns apart before the attack lands.",
+      sayShort: 'Bd3 — counterpunch …e5 / …c5.',
+    },
+    sources: ['concept:pos-center', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
+  },
+
+  // ── Scandinavian Defence (student Black) ──
+  'scandinavian-defence::2::Nc3@10': {
+    intro: {
+      say: "Nc3 — White blocks the check and clings to the pawn in the Icelandic Gambit. Let him keep it: you have a raging lead in development and the bishop pair for one pawn. Castle long, slam both rooks onto the central files against White's stuck king, and the initiative is worth far more than the material.",
+      sayShort: 'Nc3 — develop fast, rooks to the centre.',
+    },
+    sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
+  },
+  'scandinavian-defence::0::O-O@14': {
+    intro: {
+      say: "O-O — the classical …Qa5 Scandinavian tabiya. Count your comforts: the light bishop is already out and active on f5, your structure is rock-solid Caro-like, and with castling settled you head for a sound, double-edged middlegame with no weaknesses to defend. Exactly the safe, sturdy game the Scandinavian promises.",
+      sayShort: 'O-O — solid …Qa5 setup; press on.',
+    },
+    sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
+  },
+  'scandinavian-defence::6::O-O@14': {
+    intro: {
+      say: "O-O — the classical …Qa5 Scandinavian tabiya. Count your comforts: the light bishop is already out and active on f5, your structure is rock-solid Caro-like, and with castling settled you head for a sound, double-edged middlegame with no weaknesses to defend. Exactly the safe, sturdy game the Scandinavian promises.",
+      sayShort: 'O-O — solid …Qa5 setup; press on.',
+    },
+    sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
+  },
 };
 
 /** Hand-authored narration for a subline, or null to use the honest baseline. */
