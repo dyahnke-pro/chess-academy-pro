@@ -59,12 +59,14 @@ export function CourseSyllabusPage(): JSX.Element {
   }
 
   const course = buildCourse(opening);
+  // Course chapters open the lesson on the course's OWN academy-scoped surface
+  // (`/academy/course/:id/lesson`), NEVER the Openings tab — courses are a
+  // totally separate build. The lesson's Back button returns to this syllabus.
   const chapterHref = (lineIndex: number): string =>
-    lineIndex === MAIN_LINE_INDEX ? `/openings/${opening.id}` : `/openings/${opening.id}?line=${lineIndex}`;
+    lineIndex === MAIN_LINE_INDEX
+      ? `/academy/course/${opening.id}/lesson`
+      : `/academy/course/${opening.id}/lesson?line=${lineIndex}`;
   const openChapter = (lineIndex: number): void => {
-    // Open the lesson but keep the course as the origin, so the lesson's
-    // Back button returns to THIS course syllabus (not the Openings explorer)
-    // — the course stays a self-contained build under The Academy.
     void navigate(chapterHref(lineIndex), { state: { from: `/academy/course/${opening.id}` } });
   };
   const resume = (): void => { if (course.nextStep) openChapter(course.nextStep.lineIndex); };

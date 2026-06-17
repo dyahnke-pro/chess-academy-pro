@@ -89,9 +89,9 @@ export function AcademyCourses(): JSX.Element {
         </p>
       ) : (
         <>
-          <CourseSection title="Masterclasses" icon={<GraduationCap size={14} className="text-amber-400" />} openings={masterclasses} testid="academy-section-masterclasses" onOpen={open} />
-          <CourseSection title="Counter-Weapons — beat their opening" icon={<Swords size={14} className="text-rose-400" />} openings={antiOpenings} testid="academy-section-anti" onOpen={open} />
-          <CourseSection title="Gambits" icon={<Flame size={14} className="text-orange-400" />} openings={gambits} testid="academy-section-gambits" onOpen={open} />
+          <CourseSection title="Masterclasses" icon={<GraduationCap size={14} className="text-indigo-400" />} openings={masterclasses} testid="academy-section-masterclasses" onOpen={open} />
+          <CourseSection title="Counter-Weapons — beat their opening" icon={<Swords size={14} className="text-sky-400" />} openings={antiOpenings} testid="academy-section-anti" onOpen={open} />
+          <CourseSection title="Gambits" icon={<Flame size={14} className="text-blue-400" />} openings={gambits} testid="academy-section-gambits" onOpen={open} />
           {masterclasses.length === 0 && antiOpenings.length === 0 && gambits.length === 0 && (
             <p className="text-sm text-theme-text-muted py-4 text-center" data-testid="academy-courses-empty">No courses available yet.</p>
           )}

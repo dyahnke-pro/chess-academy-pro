@@ -316,6 +316,10 @@ export function App(): JSX.Element {
           <Route path="/academy" element={<ErrorBoundary><AcademyPage /></ErrorBoundary>} />
           <Route path="/academy/course/:id" element={<ErrorBoundary><CourseSyllabusPage /></ErrorBoundary>} />
           <Route path="/academy/course/:id/train" element={<ErrorBoundary><CourseTrainerPage /></ErrorBoundary>} />
+          {/* The course's own WLPP lesson surface — keeps courses SELF-CONTAINED
+              under The Academy so a chapter never throws the student into the
+              Openings tab. Reuses the lesson player; reads ?line= for variations. */}
+          <Route path="/academy/course/:id/lesson" element={<ErrorBoundary><OpeningDetailPage /></ErrorBoundary>} />
           {/* Openings */}
           <Route path="/openings" element={<ErrorBoundary><OpeningExplorerPage /></ErrorBoundary>} />
           <Route path="/openings/srs" element={<ErrorBoundary><SrsTrainerPage /></ErrorBoundary>} />

@@ -11,8 +11,8 @@ describe('resolveCourseAccess', () => {
   it('owning the course (à-la-carte) unlocks it', () => {
     expect(resolveCourseAccess(true, false, true)).toEqual({ full: true, previewOnly: false });
   });
-  it('gate on + not Pro + not owned = preview only', () => {
-    expect(resolveCourseAccess(true, false, false)).toEqual({ full: false, previewOnly: true });
+  it('paywalls removed — full access even with the gate on (David 2026-06-17)', () => {
+    expect(resolveCourseAccess(true, false, false)).toEqual({ full: true, previewOnly: false });
   });
 });
 

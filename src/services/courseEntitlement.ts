@@ -17,11 +17,12 @@ export interface CourseAccess {
 /** How many leading chapters are free when a course is preview-only. */
 export const FREE_PREVIEW_CHAPTERS = 1;
 
-/** Pure resolver — testable without the build flag / store. */
-export function resolveCourseAccess(gateEnabled: boolean, isPro: boolean, owned: boolean): CourseAccess {
-  if (!gateEnabled) return { full: true, previewOnly: false };
-  const full = isPro || owned;
-  return { full, previewOnly: !full };
+/** Pure resolver — testable without the build flag / store.
+ *  PAYWALLS REMOVED (David 2026-06-17): everything is unlocked for everyone —
+ *  every course, chapter, and subline is open. The args are ignored so no
+ *  caller can re-gate it without changing this one function. */
+export function resolveCourseAccess(_gateEnabled: boolean, _isPro: boolean, _owned: boolean): CourseAccess {
+  return { full: true, previewOnly: false };
 }
 
 /** Is a given chapter (1-based) unlocked under this access level? The free
