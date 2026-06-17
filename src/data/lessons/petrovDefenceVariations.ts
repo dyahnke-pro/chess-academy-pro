@@ -14,6 +14,13 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['book:petrov-defence', 'concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Petrov%27s_Defence'];
 
 export const PETROV_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'petrov-defence::Cochrane Gambit': {
+    openingId: 'petrov-defence', title: 'Petrov — Defusing the Cochrane Gambit', minutes: 7, orientation: 'black', kind: 'roadmap', sources: SRC,
+    beats: [
+      b({ id: 'co1', moves: 'e4 e5 Nf3 Nf6 Nxe5 d6 Nxf7', say: "The Cochrane Gambit — a 19th-century shock: White sacrifices the knight on f7, dragging the black king out into the open. It is objectively unsound, but the exposed king makes it dangerous in practice. The key is to defend accurately and bank the extra material.", sayShort: 'Nxf7 — the speculative king-hunt sac.', highlights: [H('f7', KEY)] }),
+      b({ id: 'co2', moves: 'e4 e5 Nf3 Nf6 Nxe5 d6 Nxf7 Kxf7 Nc3 c5 Bc4+ Be6 Bxe6+ Kxe6 d4 Kf7', say: "Black takes the knight and defends precisely: …c5 blunts White's central break, …Be6 trades off the checking bishop, and the king tucks back to …Kf7 once the dust settles. There is the Cochrane verdict — Black is a clean piece up and objectively better. Weather the early checks, complete development, and convert the extra material.", sayShort: '…Be6, …Kf7 — trade down, a piece up.', highlights: [H('f7', KEY), H('e6', SOFT)] }),
+    ],
+  },
   'petrov-defence::Classical Variation': {
     openingId: 'petrov-defence', title: 'Petrov — The Classical Variation', minutes: 10, orientation: 'black', sources: SRC,
     beats: [

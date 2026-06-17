@@ -15,6 +15,13 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['book:two-knights-defence', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Two_Knights_Defense'];
 
 export const TWO_KNIGHTS_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'two-knights-defence::Two Knights: Traxler Counterattack': {
+    openingId: 'two-knights-defence', title: 'Two Knights — The Traxler Counterattack', minutes: 7, orientation: 'black', kind: 'roadmap', sources: SRC,
+    beats: [
+      b({ id: 'tx1', moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5', say: "The Traxler Counterattack — pure audacity. White's Ng5 threatens the brutal Fried Liver on f7, and Black, instead of defending, ignores the threat entirely and counterattacks with …Bc5!?, training the bishop on f2. It becomes a race: whoever's attack on the enemy king lands first wins.", sayShort: '…Bc5!? — ignore f7, counter on f2.', arrows: [A('c5', 'f2', VIS)], highlights: [H('f2', KEY)] }),
+      b({ id: 'tx2', moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Nxf7 Bxf2+ Kxf2 Nxe4+ Kg1 Qh4 g3 Nxg3 hxg3 Qxg3+', say: "White grabs f7, but Black crashes through: …Bxf2+! tears open the king, …Nxe4+ and …Qh4 pour in, and after the fireworks …Qxg3+ forces at least a perpetual check. There is the Traxler verdict — objectively equal with best play, but a nightmare to meet over the board: Black scores a remarkable 61% at club level across 17,000 games. One of the great surprise weapons.", sayShort: '…Qxg3+ — perpetual at least; 61% in practice.', highlights: [H('g3', KEY), H('f7', SOFT)] }),
+    ],
+  },
   'two-knights-defence::Two Knights: 4.d3 Main Line with ...Be7': {
     openingId: 'two-knights-defence', title: 'Two Knights — The Quiet 4.d3', minutes: 10, orientation: 'black', sources: SRC,
     beats: [
