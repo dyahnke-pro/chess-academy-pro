@@ -71,7 +71,28 @@ function walkMostPlayed(startSans, maxPlies = 30) {
   }
   return out;
 }
-function buildSublines(variationPgn, studentColor) {
+const RATE = '&ratings=1400,1600,1800,2000&speeds=blitz,rapid';
+const PROXY = 'https://chess-academy-pro.vercel.app/api/lichess-explorer';
+function sansToUci(sans) { const c = new Chess(); const u = []; for (const m of sans) { const r = c.move(m); u.push(r.from + r.to + (r.promotion || '')); } return u.join(','); }
+async function clubMovesAt(spinePrefix) {
+  try {
+    const r = await fetch(`${PROXY}?source=lichess&play=${sansToUci(spinePrefix)}${RATE}`);
+    const d = await r.json(); await new Promise(z => setTimeout(z, 90));
+    return (d.moves || []).map(m => ({ san: m.san, games: (m.white || 0) + (m.draws || 0) + (m.black || 0) }));
+  } catch { return []; }
+}
+// Fork candidates at an opponent node: masters first (theory); if masters is
+// thin (<2 real choices — offbeat systems the masters DB barely covers), fall
+// back to the CLUB DB so every course opening gets a real subline tree.
+async function forkMovesAt(fenBefore, spinePrefix) {
+  const m = movesAt(fenBefore);
+  const tot = m.reduce((s, x) => s + x.games, 0) || 1;
+  const real = m.filter(x => x.games >= Math.max(4, tot * 0.02));
+  if (real.length >= 2) return { moves: m, source: 'masters' };
+  const club = await clubMovesAt(spinePrefix);
+  return club.length >= 2 ? { moves: club, source: 'club' } : { moves: m, source: 'masters' };
+}
+async function buildSublines(variationPgn, studentColor) {
   const spine = sansFromPgn(variationPgn);
   if (spine.length < 2) return [];
   const oppIsWhite = studentColor === 'black';
@@ -86,7 +107,7 @@ function buildSublines(variationPgn, studentColor) {
     const fenBefore = c.fen();
     const opponentNode = (c.turn() === 'w') === oppIsWhite;
     if (opponentNode && i >= establishment) {
-      const ms = movesAt(fenBefore);
+      const { moves: ms } = await forkMovesAt(fenBefore, spine.slice(0, i));
       const total = ms.reduce((s, m) => s + m.games, 0) || 1;
       const spineMove = spine[i];
       const thresh = Math.max(4, total * 0.02);
@@ -111,7 +132,7 @@ const targets = [
 for (const o of targets) {
   if (only && !only.has(o.id)) continue;
   const perVar = {};
-  o.variations.forEach((v, idx) => { const subs = buildSublines(v.pgn, o.color); if (subs.length) { perVar[idx] = subs; totalSubs += subs.length; } });
+  for (let idx = 0; idx < o.variations.length; idx++) { const subs = await buildSublines(o.variations[idx].pgn, o.color); if (subs.length) { perVar[idx] = subs; totalSubs += subs.length; } }
   if (Object.keys(perVar).length) out[o.id] = perVar;
   console.log(`${o.id.padEnd(24)} ${o.color.padEnd(5)} vars=${o.variations.length} sublines/var=[${o.variations.map((v,i)=>(perVar[i]?.length||0)).join(',')}]`);
 }
