@@ -21,6 +21,42 @@ function b(init: BeatInit): LessonBeat {
 }
 
 export const KINGS_INDIAN_ATTACK_VARIATION_LESSONS: Record<string, LessonScript> = {
+  "kings-indian-attack::KIA vs French Structure": {
+    openingId: "kings-indian-attack",
+    sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+    title: "KIA — vs a French Structure",
+    minutes: 10,
+    orientation: "white",
+    beats: [
+      b({ id: "kf1", moves: "e4 e6 d3 d5 Nd2 Nf6 Ngf3 Nc6 g3", say: "The King's Indian Attack against a French-style …e6/…d5 — White declines to fight for the centre with d4 and instead plays a reversed King's Indian: d3, Nd2, Ngf3 and the g3 fianchetto. One complete, low-theory plan that works against almost anything Black builds.", sayShort: "g3 — the reversed-KID system.", highlights: [H("d3", KEY)] }),
+      b({ id: "kf2", moves: "e4 e6 d3 d5 Nd2 Nf6 Ngf3 Nc6 g3 dxe4 dxe4 Bc5 Bg2 e5 O-O O-O", say: "Black trades …dxe4 and stakes the centre with …e5; White fianchettoes and castles. The structure is now a reversed King's Indian, and White's plan is crystal clear — Nc4 to pressure e5, then expansion on the wings.", sayShort: "…e5 — Black takes the centre.", highlights: [H("e5", KEY)] }),
+      b({ id: "kf3", moves: "e4 e6 d3 d5 Nd2 Nf6 Ngf3 Nc6 g3 dxe4 dxe4 Bc5 Bg2 e5 O-O O-O c3 a5 Qc2 b6 Nc4 Ba6", say: "White prepares with c3 and Qc2, then leaps Nc4 — hitting the e5-pawn and heading for d6; Black answers …b6 and …Ba6 to challenge it. There is the tabiya: a balanced reversed-KID where White has the clearer plan — pressure on e5, the knight tour, and kingside expansion behind the fianchetto. Easy, system-based play.", sayShort: "Nc4 — pressure e5, the clear plan.", highlights: [H("c4", KEY), H("e5", SOFT)] }),
+    ],
+  },
+  "kings-indian-attack::KIA: Botvinnik Setup": {
+    openingId: "kings-indian-attack",
+    sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+    title: "KIA — The Botvinnik Setup",
+    minutes: 10,
+    orientation: "white",
+    beats: [
+      b({ id: "kb1", moves: "Nf3 d5 g3 c5 Bg2 Nc6 O-O e5 d3", say: "The KIA Botvinnik setup — White fianchettoes and lets Black build a broad pawn centre with …d5, …c5 and …e5. The flexible d3 keeps the powder dry: White's plan is to lock the centre with e4 and then manoeuvre on the wings behind the wall.", sayShort: "Bg2, d3 — invite the big centre.", highlights: [H("g2", KEY)] }),
+      b({ id: "kb2", moves: "Nf3 d5 g3 c5 Bg2 Nc6 O-O e5 d3 Nf6 Nbd2 Be7 e4 d4 Nc4", say: "White slams the door with e4; Black clamps with …d4, and White springs Nc4 — the knight hits e5 and eyes the juicy d6- and b6-squares. With the centre locked, White has all the time in the world to manoeuvre.", sayShort: "e4, Nc4 — lock the centre, reroute.", highlights: [H("c4", KEY), H("d4", SOFT)] }),
+      b({ id: "kb3", moves: "Nf3 d5 g3 c5 Bg2 Nc6 O-O e5 d3 Nf6 Nbd2 Be7 e4 d4 Nc4 Qc7 a4 O-O Nh4 Be6 b3 a6", say: "White grabs queenside space with a4 and b3 and swings Nh4 toward the f5-outpost — the classic KIA kingside lever. There is the Botvinnik tabiya: the locked centre, knights aimed at both wings, and a clean plan that scores 56% at club. A pleasant, low-theory pull.", sayShort: "Nh4, a4 — both wings, the KIA squeeze.", highlights: [H("h4", KEY), H("a4", SOFT)] }),
+    ],
+  },
+  "kings-indian-attack::KIA: Fischer Attack": {
+    openingId: "kings-indian-attack",
+    sources: ['concept:att-kingside-storm', 'concept:pos-space', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+    title: "KIA — The Fischer Attack",
+    minutes: 10,
+    orientation: "white",
+    beats: [
+      b({ id: "fi1", moves: "e4 e6 d3 d5 Nd2 Nf6 Ngf3 c5 g3 Nc6 Bg2 Be7 O-O O-O", say: "The Fischer Attack — Bobby Fischer's favourite KIA handling against …e6/…d5. White builds the fianchetto system and both sides castle, but White has one ruthless plan in mind: a direct pawn storm against the black king.", sayShort: "O-O — set up the Fischer storm.", highlights: [H("d5", SOFT)] }),
+      b({ id: "fi2", moves: "e4 e6 d3 d5 Nd2 Nf6 Ngf3 c5 g3 Nc6 Bg2 Be7 O-O O-O Re1 b5 e5 Nd7 Nf1", say: "White fires the defining advance e5! — the space-gaining wedge that cramps Black and shoves the f6-knight back to d7 — then begins the famous Nf1-g3/h2 reroute toward the kingside. Black expands on the other wing with …b5.", sayShort: "e5, Nf1 — the wedge and the reroute.", highlights: [H("e5", KEY)] }),
+      b({ id: "fi3", moves: "e4 e6 d3 d5 Nd2 Nf6 Ngf3 c5 g3 Nc6 Bg2 Be7 O-O O-O Re1 b5 e5 Nd7 Nf1 a5 h4 b4", say: "White launches the storm with h4 — heading for h5 and the knight for f5 — while Black races on the queenside with …a5-b4. There is the Fischer tabiya: opposite-wing pawn storms where White's attack, fed by the e5-wedge and the h-pawn, crashes into the king first. Sharp and plan-rich, scoring 51% at club.", sayShort: "h4 — the kingside storm rolls.", highlights: [H("h4", KEY), H("e5", SOFT)] }),
+    ],
+  },
   "kings-indian-attack::KIA vs QGD-Style Response": {
     openingId: "kings-indian-attack",
     sources: ['concept:pos-space', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],

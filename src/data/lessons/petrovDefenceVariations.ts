@@ -14,6 +14,14 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['book:petrov-defence', 'concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Petrov%27s_Defence'];
 
 export const PETROV_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'petrov-defence::Classical Variation': {
+    openingId: 'petrov-defence', title: 'Petrov — The Classical Variation', minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'pc1', moves: 'e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 Nc6', say: "The Petrov Classical — Black answers symmetrically with …Nf6, recaptures on e4, and after d4 anchors the knight with …d5, reaching the rock-solid symmetric structure. …Nc6 develops actively, hitting the d4-pawn. Pure equality with no weaknesses.", sayShort: '…d5, …Nc6 — anchor and develop.', highlights: [H('d5', KEY), H('e4', SOFT)] }),
+      b({ id: 'pc2', moves: 'e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 Nc6 O-O Be7 c4 Nb4 Be2 O-O Nc3', say: "Both sides castle; White challenges the centre with c4, and Black hops …Nb4 to harass the bishop and gain time before retreating. The position is dead symmetric, and Black's pieces are every bit as active as White's.", sayShort: '…Nb4 — harass, gain time.', highlights: [H('b4', KEY), H('c4', SOFT)] }),
+      b({ id: 'pc3', moves: 'e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 Nc6 O-O Be7 c4 Nb4 Be2 O-O Nc3 Bf5 a3 Nxc3', say: "Black develops …Bf5 to its active diagonal and trades …Nxc3, simplifying toward the draw-margin equality the Petrov promises. There is the Classical tabiya: the symmetric structure, active pieces on f5 and d5, and not a weakness in either camp — Black is comfortable and solid against 1.e4.", sayShort: '…Bf5, …Nxc3 — active and equal.', highlights: [H('f5', KEY), H('d5', SOFT)] }),
+    ],
+  },
   'petrov-defence::Kaufmann Attack': {
     openingId: 'petrov-defence',
     sources: SRC,

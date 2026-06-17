@@ -27,6 +27,18 @@ function b(init: BeatInit): LessonBeat {
 }
 
 export const ITALIAN_GAME_VARIATION_LESSONS: Record<string, LessonScript> = {
+  "italian-game::Italian: Hungarian Defense": {
+    openingId: "italian-game",
+    sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Hungarian_Defense'],
+    title: "Italian — Refuting the Hungarian Defense",
+    minutes: 9,
+    orientation: "white",
+    beats: [
+      b({ id: "hu1", moves: "e4 e5 Nf3 Nc6 Bc4 Be7 d4", say: "The Hungarian Defense — Black answers the Italian bishop with the timid …Be7 instead of …Bc5 or …Nf6, ducking all the sharp lines but handing White the centre for free. White punishes the passivity at once with d4, striking while Black is undeveloped.", sayShort: "d4 — punish the passive …Be7.", highlights: [H("d4", KEY)] }),
+      b({ id: "hu2", moves: "e4 e5 Nf3 Nc6 Bc4 Be7 d4 d6 dxe5 Nxe5 Nxe5 dxe5 Qh5 g6 Qxe5", say: "White rips the centre open and trades down, and the Qh5–Qxe5 manoeuvre simply wins the e5-pawn — …g6 was forced to save the queen, fatally loosening the kingside. White emerges a clean pawn up with a dominating centralised queen.", sayShort: "Qxe5 — win the pawn, dominate.", highlights: [H("e5", KEY), H("g6", SOFT)] }),
+      b({ id: "hu3", moves: "e4 e5 Nf3 Nc6 Bc4 Be7 d4 d6 dxe5 Nxe5 Nxe5 dxe5 Qh5 g6 Qxe5 Nf6 Bg5 O-O Nc3 Re8 Rd1 Bd7", say: "Black scrambles to develop, but White just keeps piling up — Bg5 pins, Nc3 and Rd1 come with threats, and Black stays passive and a pawn down. There is the tabiya: White a clean pawn up with the bishop pair, the centralised queen, and a commanding position. The Hungarian's passivity, punished — White scores a huge 68% at club.", sayShort: "Bg5, Rd1 — pile up, a pawn ahead.", highlights: [H("g5", KEY)] }),
+    ],
+  },
   "italian-game::Italian: Two Knights with d4": {
   openingId: "italian-game",
   sources: ['book:italian-game', 'concept:pos-center', 'https://www.chess.com/openings/Italian-Game'],

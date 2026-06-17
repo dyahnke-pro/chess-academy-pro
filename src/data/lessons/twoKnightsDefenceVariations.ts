@@ -15,6 +15,14 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['book:two-knights-defence', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Two_Knights_Defense'];
 
 export const TWO_KNIGHTS_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'two-knights-defence::Two Knights: 4.d3 Main Line with ...Be7': {
+    openingId: 'two-knights-defence', title: 'Two Knights — The Quiet 4.d3', minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'td1', moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 O-O O-O', say: "The quiet 4.d3 — White sidesteps the wild 4.Ng5 lines and settles for a slow Italian. Black has nothing to fear: …Be7 and …O-O reach a sound, comfortable Giuoco-Pianissimo structure where Black holds the e5-point and equalises with natural moves.", sayShort: '…Be7, …O-O — solid and easy.', highlights: [H('e5', KEY)] }),
+      b({ id: 'td2', moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 O-O O-O Re1 d6 c3 Na5 Bb3 Nxb3 axb3', say: "Black solidifies with …d6, then plays the key equalising manoeuvre …Na5xb3 — trading off White's dangerous light-squared bishop and handing White doubled b-pawns in return. The Italian bishop, so often the attacker, is simply removed.", sayShort: '…Nxb3 — trade the Italian bishop off.', highlights: [H('b3', KEY), H('d6', SOFT)] }),
+      b({ id: 'td3', moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 O-O O-O Re1 d6 c3 Na5 Bb3 Nxb3 axb3 Bg4 Nbd2 a6 Nf1 h6', say: "Black develops …Bg4 to pin the knight, and against White's slow Nbd2-f1 regrouping plays the handy …a6 and …h6. There is the tabiya: Black has comfortably equalised — the dangerous bishop traded into a sound symmetrical structure, White left with doubled b-pawns as a standing target. A safe, easy game.", sayShort: '…Bg4 — pin; equal and comfortable.', highlights: [H('g4', KEY)] }),
+    ],
+  },
   'two-knights-defence::Two Knights: Ulvestad Variation': {
     openingId: 'two-knights-defence', title: 'Two Knights — The Ulvestad Variation', minutes: 10, orientation: 'black', sources: SRC,
     beats: [

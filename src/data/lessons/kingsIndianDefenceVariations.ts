@@ -18,6 +18,14 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'];
 
 export const KINGS_INDIAN_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'kings-indian-defence::Makogonov Variation (h3)': {
+    openingId: 'kings-indian-defence', title: 'KID — The Makogonov (h3)', minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'mk1', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O h3', say: "The King's Indian: Black fianchettoes …Bg7 and castles behind White's big centre, primed for the thematic …e5 strike. White's h3 is the Makogonov move — it restrains …Ng4 and prepares to expand with g4, a slower, restraining set-up.", sayShort: '…Bg7, …O-O — KID, ready for …e5.', highlights: [H('g7', KEY)] }),
+      b({ id: 'mk2', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O h3 e5 d5 Nh5 Be2 Nf4', say: "Black plays the KID break …e5; White closes the centre with d5, and Black reroutes …Nh5-Nf4! — the knight leaps to the superb f4-outpost right in front of White's king, where it cannot be comfortably tolerated.", sayShort: '…Nf4 — the knight to its outpost.', highlights: [H('f4', KEY), H('e5', SOFT)] }),
+      b({ id: 'mk3', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O h3 e5 d5 Nh5 Be2 Nf4 Bxf4 exf4 Qd2 Qf6 O-O', say: "White trades the outpost knight, but …exf4! leaves Black a cramping pawn jammed on f4 plus the half-open e-file, and …Qf6 swings the queen toward the kingside. There is the Makogonov tabiya: the g7-bishop on the long diagonal, the cramping f4-pawn, and real kingside attacking chances — a comfortable, even preferable King's Indian for Black.", sayShort: '…exf4, …Qf6 — cramp and attack.', highlights: [H('f4', KEY), H('f6', SOFT)] }),
+    ],
+  },
   'kings-indian-defence::Bayonet Attack (9.b4)': {
     openingId: 'kings-indian-defence', title: "King's Indian — The Bayonet Attack (9.b4)", minutes: 10, orientation: 'black', sources: SRC,
     beats: [
