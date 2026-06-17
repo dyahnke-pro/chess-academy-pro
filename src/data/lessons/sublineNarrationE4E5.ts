@@ -718,6 +718,83 @@ const EV_ATTACK: SublineNarration = {
   sources: EV,
 };
 
+// ── King's Gambit (student WHITE). triggerMove is BLACK's deviation. ──
+const KG = ['book:kings-gambit', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Gambit'];
+const KG_CTR = ['book:kings-gambit', 'concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Gambit'];
+
+// var0 — Hanstein/classical …g5 Bg7 defence (exf4 Nf3 g5 Bc4 Bg7 h4 d4 Nc3).
+const KG_HANSTEIN: SublineNarration = {
+  intro: {
+    say: "The classical defence — Black holds the f4-pawn with …g5 and fianchettoes the bishop on g7. You take dead aim at the wobbly kingside chain: h4 to prise open the g5-pawn, d4 to seize the centre, and Nc3 and the rooks pouring down the half-open f-file at f7. The gambit pawn buys you a roaring initiative; pry the chain apart and the attack flows toward Black's king.",
+    sayShort: 'Classical — h4 and d4, hit g5.',
+  },
+  sources: KG,
+};
+// var1 — Fischer Defence (exf4 Nf3 d6 d4). Big centre, methodical attack.
+const KG_FISCHER: SublineNarration = {
+  intro: {
+    say: "…d6 — the Fischer Defence, a cool, modern way to hold the gambit pawn and keep the kingside flexible. Don't be rushed: d4 builds the broad centre, Nc3 and Bc4 develop with purpose, and you prepare to regain f4 or blast open the f-file at the right moment. The extra pawn is temporary; your space and the open lines toward f7 are the lasting trumps.",
+    sayShort: '…d6 — Fischer: d4 centre, eye the f-file.',
+  },
+  sources: KG_CTR,
+};
+// var2 — Muzio Gambit (exf4 Nf3 g5 Bc4 g4 O-O gxf3 Qxf3). Knight sac for a ferocious attack.
+const KG_MUZIO: SublineNarration = {
+  intro: {
+    say: "The Muzio Gambit — the wildest sacrifice in classical chess. You let Black take the f3-knight with …gxf3, and Qxf3 unleashes the storm: queen, bishop and rook all train on f7 while Black has barely a piece off the back rank. Objectively it is unclear, but over the board it is sheer terror — Bxf4, Nc3 and Rae1 pile on faster than Black can untangle. Attack with total abandon.",
+    sayShort: 'Muzio — sac the knight, storm f7.',
+  },
+  sources: KG,
+};
+// var3 — Falkbeer / Modern Counter-Gambit (f4 d5 exd5 e4 d3). Open game, small edge.
+const KG_FALKBEER: SublineNarration = {
+  intro: {
+    say: "…d5 — the Falkbeer Counter-Gambit, refusing your gambit and striking back in the centre with a pawn of Black's own. Defuse it with d3, undermining the advanced e4-pawn and opening the position for your pieces. After the central pawns clear you reach a balanced, lively game where your better development and the bishop pair hand you a small but genuine pull. Open it up and out-play.",
+    sayShort: '…d5 — Falkbeer: undermine with d3.',
+  },
+  sources: KG_CTR,
+};
+// var4 — King's Gambit Declined with …Bc5 (f4 Bc5 Nf3 d6 Nc3 Bc4 d3 f5).
+const KG_DECLINED: SublineNarration = {
+  intro: {
+    say: "…Bc5 — the King's Gambit Declined, the safe and respected refusal: Black ignores the pawn and plants the bishop on the a7-g1 diagonal eyeing your king. Play it positionally: Nf3, Nc3 and Bc4 develop, d3 braces the centre, and the f5 advance grabs kingside space and clamps Black in. No sacrifices needed — you nurse the space edge and the half-open f-file into a lasting initiative.",
+    sayShort: '…Bc5 — KGD: develop, clamp with f5.',
+  },
+  sources: KG,
+};
+// var5 — Kieseritzky (exf4 Nf3 g5 h4 g4 Ne5). Main line, knight on e5, attack.
+const KG_KIESERITZKY: SublineNarration = {
+  intro: {
+    say: "The Kieseritzky — the main line of the King's Knight's Gambit. Your knight leaps to e5, a dominant outpost from which it eyes f7, g4 and d7, while h4 and the coming d4 and Bxf4 reclaim the kingside and open lines. This is the sharpest theory in the opening: play energetically, keep the knight's grip, and drive the attack at Black's exposed king.",
+    sayShort: 'Kieseritzky — Ne5 outpost, d4 and Bxf4.',
+  },
+  sources: KG,
+};
+// var6 — Allgaier (exf4 Nf3 g5 h4 g4 Ng5 h6 Nxf7). Sac the knight, drag the king out.
+const KG_ALLGAIER: SublineNarration = {
+  intro: {
+    say: "The Allgaier — you fling the knight onto f7 with Nxf7, dragging Black's king into the open before a single defender is developed. It's a romantic, double-edged gambit: the king walks to f7, but d4, Bxf4 and Nc3 hurl your whole army at the bared monarch down the f-file. Objectively risky, practically lethal — chase the king and never let it find shelter.",
+    sayShort: 'Allgaier — Nxf7, hunt the bare king.',
+  },
+  sources: KG,
+};
+// var7 — King's Bishop's Gambit (exf4 Bc4). Aim at f7, develop fast.
+const KG_BISHOPS: SublineNarration = {
+  intro: {
+    say: "The King's Bishop's Gambit — instead of Nf3 you throw the bishop to c4 at once, aiming straight at f7 and keeping the queen's path to h5 open. Black usually strikes with …Nf6 and …d5; meet it with Nc3 and d4, recapture the centre, and your pieces flood toward the king. Rapid development and the f-file pressure are the gambit's payment — develop with threats and attack.",
+    sayShort: "Bishop's Gambit — Bc4 at f7, develop fast.",
+  },
+  sources: KG,
+};
+// Early accepted offbeat 4th moves shared by var5/var6 (Be7/Ne7/Nf6/d5/d6 @5).
+const KG_ACCEPTED: SublineNarration = {
+  intro: {
+    say: "Black accepts the gambit but sidesteps the sharp …g5 main lines with a quieter developing move. That eases your task: Bc4 eyes f7, d4 claims the full centre, and you prepare to win back the f4-pawn with Bxf4 or to blast open the f-file. With a lead in development and the half-open f-file pointing at Black's king, you keep a comfortable, attacking initiative for the pawn.",
+    sayShort: 'Accepted — Bc4, d4, regain f4 and attack.',
+  },
+  sources: KG,
+};
+
 export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   // ── Ruy Lopez ──
   'ruy-lopez::0::Nf6@5': RUY_BERLIN,
@@ -1215,4 +1292,86 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'evans-gambit::7::Be7@9': EV_BE7,
   'evans-gambit::7::exd4@11': EV_ATTACK,
   'evans-gambit::7::Bb6@7': EV_BB6_QUIET,
+
+  // -- Kings Gambit --
+  'kings-gambit::0::g4@9': KG_HANSTEIN,
+  'kings-gambit::0::Bg4@13': KG_HANSTEIN,
+  'kings-gambit::0::Nc6@11': KG_HANSTEIN,
+  'kings-gambit::0::g4@11': KG_HANSTEIN,
+  'kings-gambit::0::g4@13': KG_HANSTEIN,
+  'kings-gambit::0::c6@13': KG_HANSTEIN,
+  'kings-gambit::0::f6@9': KG_HANSTEIN,
+  'kings-gambit::0::c6@11': KG_HANSTEIN,
+  'kings-gambit::0::Be6@13': KG_HANSTEIN,
+  'kings-gambit::0::f6@11': KG_HANSTEIN,
+  'kings-gambit::1::Bg4@7': KG_FISCHER,
+  'kings-gambit::1::Nf6@7': KG_FISCHER,
+  'kings-gambit::1::Be7@7': KG_FISCHER,
+  'kings-gambit::1::Nc6@7': KG_FISCHER,
+  'kings-gambit::1::h6@7': KG_FISCHER,
+  'kings-gambit::1::f6@9': KG_FISCHER,
+  'kings-gambit::1::Be7@9': KG_FISCHER,
+  'kings-gambit::1::Bg4@9': KG_FISCHER,
+  'kings-gambit::1::Qf6@11': KG_FISCHER,
+  'kings-gambit::1::Bh6@9': KG_FISCHER,
+  'kings-gambit::2::Bh6@11': KG_MUZIO,
+  'kings-gambit::2::Bc5+@11': KG_MUZIO,
+  'kings-gambit::2::Bd6@11': KG_MUZIO,
+  'kings-gambit::2::d6@11': KG_MUZIO,
+  'kings-gambit::2::d5@11': KG_MUZIO,
+  'kings-gambit::2::Qe7@11': KG_MUZIO,
+  'kings-gambit::2::Qg5@11': KG_MUZIO,
+  'kings-gambit::2::Nf6@11': KG_MUZIO,
+  'kings-gambit::2::Nc6@11': KG_MUZIO,
+  'kings-gambit::2::Qf5@13': KG_MUZIO,
+  'kings-gambit::3::Bc5@9': KG_FALKBEER,
+  'kings-gambit::3::O-O@15': KG_FALKBEER,
+  'kings-gambit::3::Nxc3@17': KG_FALKBEER,
+  'kings-gambit::3::Bb4@15': KG_FALKBEER,
+  'kings-gambit::3::exf4@5': KG_FALKBEER,
+  'kings-gambit::3::Bf2+@15': KG_FALKBEER,
+  'kings-gambit::3::c6@5': KG_FALKBEER,
+  'kings-gambit::3::Bb4@17': KG_FALKBEER,
+  'kings-gambit::3::O-O@19': KG_FALKBEER,
+  'kings-gambit::3::Nd7@17': KG_FALKBEER,
+  'kings-gambit::4::exf4@5': KG_DECLINED,
+  'kings-gambit::4::Nc6@5': KG_DECLINED,
+  'kings-gambit::4::Nf6@5': KG_DECLINED,
+  'kings-gambit::4::d5@5': KG_DECLINED,
+  'kings-gambit::4::Nc6@9': KG_DECLINED,
+  'kings-gambit::4::Bg4@9': KG_DECLINED,
+  'kings-gambit::4::Ng4@9': KG_DECLINED,
+  'kings-gambit::4::Bg4@11': KG_DECLINED,
+  'kings-gambit::4::a6@13': KG_DECLINED,
+  'kings-gambit::4::Nd4@13': KG_DECLINED,
+  'kings-gambit::5::d6@5': KG_ACCEPTED,
+  'kings-gambit::5::Qe7@15': KG_KIESERITZKY,
+  'kings-gambit::5::d5@5': KG_ACCEPTED,
+  'kings-gambit::5::Nxe4@11': KG_KIESERITZKY,
+  'kings-gambit::5::Nf6@5': KG_ACCEPTED,
+  'kings-gambit::5::Ne7@5': KG_ACCEPTED,
+  'kings-gambit::5::Be7@5': KG_ACCEPTED,
+  'kings-gambit::5::Nc6@15': KG_KIESERITZKY,
+  'kings-gambit::5::d5@11': KG_KIESERITZKY,
+  'kings-gambit::5::d6@9': KG_KIESERITZKY,
+  'kings-gambit::6::d6@13': KG_ALLGAIER,
+  'kings-gambit::6::h5@13': KG_ALLGAIER,
+  'kings-gambit::6::d6@5': KG_ACCEPTED,
+  'kings-gambit::6::d5@5': KG_ACCEPTED,
+  'kings-gambit::6::Qf6@13': KG_ALLGAIER,
+  'kings-gambit::6::Nf6@13': KG_ALLGAIER,
+  'kings-gambit::6::Nf6@5': KG_ACCEPTED,
+  'kings-gambit::6::Ne7@5': KG_ACCEPTED,
+  'kings-gambit::6::f3@13': KG_ALLGAIER,
+  'kings-gambit::6::Be7@5': KG_ACCEPTED,
+  'kings-gambit::7::Bb4@13': KG_BISHOPS,
+  'kings-gambit::7::Nxd5@11': KG_BISHOPS,
+  'kings-gambit::7::Nc6@13': KG_BISHOPS,
+  'kings-gambit::7::Bg4@13': KG_BISHOPS,
+  'kings-gambit::7::Bb4@9': KG_BISHOPS,
+  'kings-gambit::7::g5@13': KG_BISHOPS,
+  'kings-gambit::7::Be6@13': KG_BISHOPS,
+  'kings-gambit::7::d5@5': KG_BISHOPS,
+  'kings-gambit::7::f3@15': KG_BISHOPS,
+  'kings-gambit::7::Bc5@9': KG_BISHOPS,
 };

@@ -1,0 +1,76 @@
+// ── King's Gambit (student WHITE). triggerMove is BLACK's deviation. ──
+const KG = ['book:kings-gambit', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Gambit'];
+const KG_CTR = ['book:kings-gambit', 'concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Gambit'];
+
+// var0 — Hanstein/classical …g5 Bg7 defence (exf4 Nf3 g5 Bc4 Bg7 h4 d4 Nc3).
+const KG_HANSTEIN: SublineNarration = {
+  intro: {
+    say: "The classical defence — Black holds the f4-pawn with …g5 and fianchettoes the bishop on g7. You take dead aim at the wobbly kingside chain: h4 to prise open the g5-pawn, d4 to seize the centre, and Nc3 and the rooks pouring down the half-open f-file at f7. The gambit pawn buys you a roaring initiative; pry the chain apart and the attack flows toward Black's king.",
+    sayShort: 'Classical — h4 and d4, hit the g5 chain.',
+  },
+  sources: KG,
+};
+// var1 — Fischer Defence (exf4 Nf3 d6 d4). Big centre, methodical attack.
+const KG_FISCHER: SublineNarration = {
+  intro: {
+    say: "…d6 — the Fischer Defence, a cool, modern way to hold the gambit pawn and keep the kingside flexible. Don't be rushed: d4 builds the broad centre, Nc3 and Bc4 develop with purpose, and you prepare to regain f4 or blast open the f-file at the right moment. The extra pawn is temporary; your space and the open lines toward f7 are the lasting trumps.",
+    sayShort: '…d6 — Fischer: d4 centre, eye the f-file.',
+  },
+  sources: KG_CTR,
+};
+// var2 — Muzio Gambit (exf4 Nf3 g5 Bc4 g4 O-O gxf3 Qxf3). Knight sac for a ferocious attack.
+const KG_MUZIO: SublineNarration = {
+  intro: {
+    say: "The Muzio Gambit — the wildest sacrifice in classical chess. You let Black take the f3-knight with …gxf3, and Qxf3 unleashes the storm: queen, bishop and rook all train on f7 while Black has barely a piece off the back rank. Objectively it is unclear, but over the board it is sheer terror — Bxf4, Nc3 and Rae1 pile on faster than Black can untangle. Attack with total abandon.",
+    sayShort: 'Muzio — sac the knight, storm f7.',
+  },
+  sources: KG,
+};
+// var3 — Falkbeer / Modern Counter-Gambit (f4 d5 exd5 e4 d3). Open game, small edge.
+const KG_FALKBEER: SublineNarration = {
+  intro: {
+    say: "…d5 — the Falkbeer Counter-Gambit, refusing your gambit and striking back in the centre with a pawn of Black's own. Defuse it with d3, undermining the advanced e4-pawn and opening the position for your pieces. After the central pawns clear you reach a balanced, lively game where your better development and the bishop pair hand you a small but genuine pull. Open it up and out-play.",
+    sayShort: '…d5 — Falkbeer: undermine with d3.',
+  },
+  sources: KG_CTR,
+};
+// var4 — King's Gambit Declined with …Bc5 (f4 Bc5 Nf3 d6 Nc3 Bc4 d3 f5).
+const KG_DECLINED: SublineNarration = {
+  intro: {
+    say: "…Bc5 — the King's Gambit Declined, the safe and respected refusal: Black ignores the pawn and plants the bishop on the a7-g1 diagonal eyeing your king. Play it positionally: Nf3, Nc3 and Bc4 develop, d3 braces the centre, and the f5 advance grabs kingside space and clamps Black in. No sacrifices needed — you nurse the space edge and the half-open f-file into a lasting initiative.",
+    sayShort: '…Bc5 — KGD: develop, clamp with f5.',
+  },
+  sources: KG,
+};
+// var5 — Kieseritzky (exf4 Nf3 g5 h4 g4 Ne5). Main line, knight on e5, attack.
+const KG_KIESERITZKY: SublineNarration = {
+  intro: {
+    say: "The Kieseritzky — the main line of the King's Knight's Gambit. Your knight leaps to e5, a dominant outpost from which it eyes f7, g4 and d7, while h4 and the coming d4 and Bxf4 reclaim the kingside and open lines. This is the sharpest theory in the opening: play energetically, keep the knight's grip, and drive the attack at Black's exposed king.",
+    sayShort: 'Kieseritzky — Ne5 outpost, d4 and Bxf4.',
+  },
+  sources: KG,
+};
+// var6 — Allgaier (exf4 Nf3 g5 h4 g4 Ng5 h6 Nxf7). Sac the knight, drag the king out.
+const KG_ALLGAIER: SublineNarration = {
+  intro: {
+    say: "The Allgaier — you fling the knight onto f7 with Nxf7, dragging Black's king into the open before a single defender is developed. It's a romantic, double-edged gambit: the king walks to f7, but d4, Bxf4 and Nc3 hurl your whole army at the bared monarch down the f-file. Objectively risky, practically lethal — chase the king and never let it find shelter.",
+    sayShort: 'Allgaier — Nxf7, hunt the bare king.',
+  },
+  sources: KG,
+};
+// var7 — King's Bishop's Gambit (exf4 Bc4). Aim at f7, develop fast.
+const KG_BISHOPS: SublineNarration = {
+  intro: {
+    say: "The King's Bishop's Gambit — instead of Nf3 you throw the bishop to c4 at once, aiming straight at f7 and keeping the queen's path to h5 open. Black usually strikes with …Nf6 and …d5; meet it with Nc3 and d4, recapture the centre, and your pieces flood toward the king. Rapid development and the f-file pressure are the gambit's payment — develop with threats and attack.",
+    sayShort: "Bishop's Gambit — Bc4 at f7, develop fast.",
+  },
+  sources: KG,
+};
+// Early accepted offbeat 4th moves shared by var5/var6 (Be7/Ne7/Nf6/d5/d6 @5).
+const KG_ACCEPTED: SublineNarration = {
+  intro: {
+    say: "Black accepts the gambit but sidesteps the sharp …g5 main lines with a quieter developing move. That eases your task: Bc4 eyes f7, d4 claims the full centre, and you prepare to win back the f4-pawn with Bxf4 or to blast open the f-file. With a lead in development and the half-open f-file pointing at Black's king, you keep a comfortable, attacking initiative for the pawn.",
+    sayShort: 'Accepted — Bc4, d4, regain f4 and attack.',
+  },
+  sources: KG,
+};
