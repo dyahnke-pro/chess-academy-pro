@@ -85,7 +85,7 @@ const SECTIONS: TocSection[] = [
     items: [
       { label: 'Learn with Coach', route: '/coach/teach', desc: 'Guided, voice-narrated walkthroughs of any line.' },
       { label: 'Play with Coach', route: '/coach/play', desc: 'Real game vs the engine, coach narrating and hinting.' },
-      { label: 'The Coaches Library', route: '/coach/library', desc: 'Master books read aloud with live playable boards.' },
+      { label: 'The Academy', route: '/coach/academy', desc: 'Opening Courses and the Coaches Library of master books — a separate build.' },
       { label: 'Game Insights', route: '/coach/report', desc: 'Analytics across all your games.' },
       {
         label: 'Endgame',
@@ -143,11 +143,13 @@ const SECTIONS: TocSection[] = [
   },
   {
     key: 'academy',
-    label: 'Academy',
+    label: 'The Academy',
     rgb: '99, 102, 241',
     colorClass: 'text-indigo-400',
     icon: Swords,
     items: [
+      { label: 'Opening Courses', route: '/academy', desc: 'Structured GM-style courses with a chapter syllabus and progress.' },
+      { label: 'The Coaches Library', route: '/coach/library', desc: 'Master books read aloud with live playable boards.' },
       { label: 'The Philosophy of a General', route: '/academy', desc: 'Our board-free doctrine, read aloud as an audiobook.' },
     ],
   },

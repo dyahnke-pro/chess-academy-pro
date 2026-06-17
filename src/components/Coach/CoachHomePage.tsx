@@ -125,23 +125,23 @@ export function CoachHomePage(): JSX.Element {
           testId="coach-action-play"
         />
 
-        {/* The Coaches Library — the featured wide tile: five complete
-            public-domain master books, read aloud with live boards to
-            train from. */}
+        {/* The Academy — the school surface: the structured Opening
+            Courses (the build) plus the Coaches Library of master books,
+            kept together and SEPARATE from the openings explorer. */}
         <PrimaryTile
           icon={<Library size={40} className="text-rose-400" />}
-          label="The Coaches Library"
-          subtitle="Pro chess books to train from — the masters' own words, read aloud, with live boards."
+          label="The Academy"
+          subtitle="Your school: structured Opening Courses and the Coaches Library of master books."
           info={
-            "The masters' own books, brought to life. Tap a book and it opens like a book — the author's real public-domain words, read aloud (tap any sentence to start there), turnable pages — and wherever the original printed a drawn diagram, a LIVE, playable board sits in its place.\n\nFive complete books: Capablanca's Chess Fundamentals, Nimzowitsch's My System, Edward Lasker's Chess Strategy and Chess and Checkers, plus our own. Search across all of them to jump straight to any topic."
+            "The Academy holds two things, side by side:\n\n• Opening Courses — enrolled GM-style courses with a numbered chapter syllabus, progress and a finish line.\n\n• The Coaches Library — five complete public-domain master books (Capablanca, Nimzowitsch, Edward Lasker, and our own), read aloud with live playable boards where the original printed a diagram.\n\nThis is a separate build from the Openings explorer."
           }
           rgb="244, 63, 94"
           bgClass="bg-rose-500/10"
           textColorClass="text-rose-400"
-          onClick={goTo('library', '/coach/library')}
+          onClick={goTo('academy', '/coach/academy')}
           gB={gB}
           gS={gS}
-          testId="coach-action-library"
+          testId="coach-action-academy"
           wide
         />
 

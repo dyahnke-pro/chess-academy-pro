@@ -140,11 +140,11 @@ export function AcademyPage(): JSX.Element {
       data-testid="academy"
     >
       <div className="relative mt-2">
-        <h1 className="text-xl font-bold text-center">The Academy</h1>
+        <h1 className="text-xl font-bold text-center">Opening Courses</h1>
         <div className="absolute right-0 top-1/2 -translate-y-1/2">
           <PageHelp
             helpId="academy"
-            title="The Academy"
+            title="Opening Courses"
             steps={[
               { label: 'Courses', body: 'Enrolled GM-style opening courses — a numbered chapter syllabus with progress and a finish line. Tap a course to pick up where you left off.' },
               { label: 'Listen', body: 'Tap play to hear the whole book read aloud — made for the commute. It keeps playing chapter to chapter, so you can pocket the phone and just listen.' },
