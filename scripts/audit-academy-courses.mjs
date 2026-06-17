@@ -9,6 +9,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { chromium } from 'playwright';
 import { sandboxLaunchArgs, sandboxContextOptions, resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'http://localhost:5173';
 const results = [];
@@ -17,6 +18,10 @@ const record = (name, ok, detail = '') => { results.push({ name, ok, detail }); 
 const exe = await resolveChromiumExecutable();
 const browser = await chromium.launch({ executablePath: exe, args: sandboxLaunchArgs() });
 const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 420, height: 900 } });
+// Auto-neutralize the strength-calibration bubble on EVERY navigation so it
+// can't re-appear on a fresh-context surface mount and intercept clicks
+// (it re-rendered over the subline buttons — known G1 fresh-context issue).
+await ctx.addInitScript(autoDismissCalibration);
 const page = await ctx.newPage();
 const pageErrors = [];
 page.on('pageerror', (e) => pageErrors.push(e.message));
