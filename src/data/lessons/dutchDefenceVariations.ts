@@ -10,6 +10,15 @@ interface BeatInit { id: string; moves: string; say: string; sayShort?: string; 
 function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return { ...rest, moves: moves.trim().split(/\s+/) }; }
 
 export const DUTCH_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'dutch-defence::Hopton Attack Response': {
+    openingId: 'dutch-defence', title: 'Dutch — The Leningrad System', minutes: 10, orientation: 'black',
+    sources: ['book:dutch-defence', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+    beats: [
+      b({ id: 'dh1', moves: 'd4 f5 g3 Nf6 Bg2 g6 Nf3 Bg7 O-O O-O', say: "The Leningrad Dutch — Black's most aggressive answer to 1.d4. The …f5 pawn stakes out the kingside light squares and fights for e4, while the …Bg7 fianchetto adds King's-Indian punch on the long diagonal. Both sides castle, and Black is set up for a real fight, not a passive defence.", sayShort: '…f5, …Bg7 — the fighting Leningrad set-up.', highlights: [H('g7', KEY), H('f5', SOFT)] }),
+      b({ id: 'dh2', moves: 'd4 f5 g3 Nf6 Bg2 g6 Nf3 Bg7 O-O O-O c4 d6 Nc3 c6 d5 e5', say: "White grabs space with c4, and Black supports the centre with …d6 and …c6 before striking with the thematic …e5 break. That advance is the heart of the Leningrad — it opens lines for the g7-bishop and the f5-pawn and seizes central space of Black's own.", sayShort: '…e5 — the thematic Leningrad break.', highlights: [H('e5', KEY), H('c6', SOFT)] }),
+      b({ id: 'dh3', moves: 'd4 f5 g3 Nf6 Bg2 g6 Nf3 Bg7 O-O O-O c4 d6 Nc3 c6 d5 e5 dxe6 Bxe6 b3 Na6 Bb2 Nc5', say: "White takes en passant, and Black recaptures …Bxe6, developing the light bishop to an active post; then the knight swings …Na6-c5 to a powerful central square, eyeing White's queenside pawns. There is the Leningrad tabiya: active pieces on e6 and c5, the half-open f-file for the rook, and the dynamic, double-edged counterplay the opening is built for. It scores 50% against masters.", sayShort: '…Bxe6, …Nc5 — active pieces, half-open f-file.', highlights: [H('e6', KEY), H('c5', SOFT)] }),
+    ],
+  },
   'dutch-defence::Stonewall d5 e6 Bd6': {
     openingId: 'dutch-defence', title: 'Dutch — The Stonewall', minutes: 11, orientation: 'black',
     sources: ['book:dutch-defence', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Dutch_Defence'],

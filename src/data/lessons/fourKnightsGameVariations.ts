@@ -26,6 +26,42 @@ function b(init: BeatInit): LessonBeat {
 }
 
 export const FOUR_KNIGHTS_GAME_VARIATION_LESSONS: Record<string, LessonScript> = {
+  "four-knights-game::Spanish Four Knights: 4.Bb5 Bb4 Main Line": {
+    openingId: "four-knights-game", title: "Four Knights — Spanish Main Line", minutes: 10, orientation: "white",
+    sources: ['book:four-knights-game', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Four_Knights_Game'],
+    beats: [
+      b({ id: "sf1", moves: "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5", say: "The Four Knights, Spanish style — the soundest, most natural line. Both sides bring out the knights symmetrically, then White pins with Bb5 exactly as in the Ruy Lopez, pressuring the c6-knight and the e5-pawn behind it. Calm, classical, and a reliable small edge.", sayShort: "Bb5 — the Ruy-style pin.", highlights: [H("b5", KEY)] }),
+      b({ id: "sf2", moves: "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Bg5 Bxc3 bxc3", say: "Black mirrors with …Bb4 and both castle, but White breaks the symmetry first: Bg5 pins the f6-knight, and after …Bxc3 bxc3 White owns the bishop pair and a broad, sturdy pawn centre. That pair of bishops is the long-term trump.", sayShort: "Bg5, bxc3 — win the bishop pair.", highlights: [H("c3", KEY), H("g5", SOFT)] }),
+      b({ id: "sf3", moves: "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Bg5 Bxc3 bxc3 Qe7 Re1 Nd8 d4 Ne6 Bh4", say: "Black regroups with the classic …Nd8-e6 manoeuvre, heading for f4 or d4; White expands with d4 and keeps the pin alive by retreating Bh4. There is the Spanish Four Knights tabiya: White has the bishop pair, the bigger centre on d4 and e4, and a pleasant, risk-free pull — pure Ruy-style pressure.", sayShort: "d4, Bh4 — bishop pair and the big centre.", highlights: [H("e6", KEY), H("d4", SOFT), H("h4", SOFT)] }),
+    ],
+  },
+  "four-knights-game::Halloween Gambit: 4.Nxe5": {
+    openingId: "four-knights-game", title: "Four Knights — The Halloween Gambit", minutes: 9, orientation: "white",
+    sources: ['book:four-knights-game', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Halloween_Gambit'],
+    beats: [
+      b({ id: "hl1", moves: "e4 e5 Nf3 Nc6 Nc3 Nf6 Nxe5", say: "The Halloween Gambit — a genuine shock. White sacrifices a whole knight on e5, planning to drive Black's pieces backward with a pawn avalanche and seize the entire centre. It is objectively dubious — but as a surprise weapon it is terrifying, and at club level it scores a startling 61%.", sayShort: "Nxe5 — sacrifice a knight for the centre.", highlights: [H("e5", KEY)] }),
+      b({ id: "hl2", moves: "e4 e5 Nf3 Nc6 Nc3 Nf6 Nxe5 Nxe5 d4 Nc6 d5 Ne5 f4 Ng6 e5", say: "Black takes the knight, and the pawns charge: d4 and d5 chase the knight, f4 and e5 chase it again. White's pawns roll forward in a wave, herding Black's pieces back to the edge while grabbing massive space. Black is up a piece but completely on the defensive.", sayShort: "d5, f4, e5 — the pawn avalanche rolls.", highlights: [H("e5", KEY), H("d5", SOFT)] }),
+      b({ id: "hl3", moves: "e4 e5 Nf3 Nc6 Nc3 Nf6 Nxe5 Nxe5 d4 Nc6 d5 Ne5 f4 Ng6 e5 Ng8 d6 cxd6 exd6 Qf6 Nb5", say: "The pawns crash through: …Ng8 sees a knight driven all the way home, and the d6-pawn lodges like a dagger in Black's camp; Nb5 piles in on c7 and d6. There is the Halloween tabiya: White is down a knight, but Black's pieces are shoved onto the back rank and the cramping d6-pawn ties him in knots — a practical nightmare that wins again and again below master level.", sayShort: "d6, Nb5 — the cramping dagger lands.", highlights: [H("d6", KEY), H("b5", SOFT)] }),
+    ],
+  },
+  "four-knights-game::Symmetrical Variation: 4.Bb5 Bb4": {
+    openingId: "four-knights-game", title: "Four Knights — The Symmetrical Variation", minutes: 9, orientation: "white",
+    sources: ['book:four-knights-game', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Four_Knights_Game'],
+    beats: [
+      b({ id: "sm1", moves: "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6", say: "The Symmetrical Four Knights — Black copies White move for move. In a perfectly mirrored position the player who breaks the symmetry first holds the whip hand, and White, moving first, is the one a tempo ahead with the pin on Bb5 already in place.", sayShort: "Bb5 — symmetric, but White moves first.", highlights: [H("b5", KEY)] }),
+      b({ id: "sm2", moves: "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Ne2 Ne7 c3 Ba5 Ng3 Ng6 d4", say: "White reroutes the knight via e2 to g3 and prepares the central break, then strikes with d4 — the move that shatters the mirror and claims the centre a full tempo before Black can do the same. The extra move finally tells.", sayShort: "d4 — break the symmetry first.", highlights: [H("d4", KEY), H("g3", SOFT)] }),
+      b({ id: "sm3", moves: "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Ne2 Ne7 c3 Ba5 Ng3 Ng6 d4 Bb6", say: "Black retreats the bishop to b6, but White has already broken first and stands better. There is the Symmetrical tabiya: more central space, the freer game, and the small but real pull that the extra tempo converts into — a model of how to win a symmetrical position by acting before your opponent can copy you.", sayShort: "…Bb6 — White's tempo becomes a pull.", highlights: [H("b6", KEY)] }),
+    ],
+  },
+  "four-knights-game::Metger Unpin: ...Qe7 System": {
+    openingId: "four-knights-game", title: "Four Knights — The Metger Unpin", minutes: 10, orientation: "white",
+    sources: ['book:four-knights-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Four_Knights_Game'],
+    beats: [
+      b({ id: "mu1", moves: "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Bg5 Bxc3 bxc3", say: "The same sound Spanish Four Knights structure: White pins with Bg5, and after …Bxc3 bxc3 collects the bishop pair and a solid central pawn mass. This is the mature, low-risk way to play the opening for an edge.", sayShort: "bxc3 — the bishop pair, solid centre.", highlights: [H("c3", KEY)] }),
+      b({ id: "mu2", moves: "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Bg5 Bxc3 bxc3 Qe7 Re1 Nd8 d4 Ne6 Bc1", say: "Black plays the …Nd8-e6 regrouping; White answers with the Metger idea — Bc1, calmly tucking the bishop back to keep it flexible and dodge an exchange, rather than committing it to h4. White keeps every trump intact.", sayShort: "Bc1 — the flexible Metger retreat.", highlights: [H("e6", KEY)] }),
+      b({ id: "mu3", moves: "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Bg5 Bxc3 bxc3 Qe7 Re1 Nd8 d4 Ne6 Bc1 c6 Bd3", say: "Black solidifies with …c6, and White redeploys the bishop to d3, training it on the kingside for a later attack. There is the Metger tabiya: bishop pair, a broad centre, and a flexible, risk-free position where White presses on both wings — the classic Four Knights squeeze.", sayShort: "Bd3 — re-aim the bishop kingside.", highlights: [H("d3", KEY), H("c6", SOFT)] }),
+    ],
+  },
   "four-knights-game::Scotch Four Knights: 4.d4 exd4 5.Nxd4": {
   openingId: "four-knights-game",
   sources: ['book:four-knights-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Four_Knights_Game'],
