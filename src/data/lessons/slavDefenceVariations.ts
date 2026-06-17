@@ -14,6 +14,22 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'];
 
 export const SLAV_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'slav-defence::Main Line (a4 Bf5)': {
+    openingId: 'slav-defence', title: 'Slav — The Main Line (a4 …Bf5)', minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'sl1', moves: 'd4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Bf5', say: "The Slav main line, and the idea that makes the whole opening great: Black plays …dxc4 and then …Bf5, developing the light-squared bishop OUTSIDE the pawn chain before …e6 — exactly the freedom the Queen's Gambit Declined never grants. White regains the pawn with a4.", sayShort: '…Bf5 — the good bishop, out early.', highlights: [H('f5', KEY)] }),
+      b({ id: 'sl2', moves: 'd4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Bf5 e3 e6 Bxc4 Bb4 O-O Nbd7', say: "White recovers the pawn with Bxc4 and castles; Black completes development with the most natural moves — …e6, …Bb4 pinning the c3-knight, and …Nbd7. Every piece reaches a good square and Black has no weaknesses at all.", sayShort: '…Bb4, …Nbd7 — harmonious development.', highlights: [H('b4', KEY), H('e6', SOFT)] }),
+      b({ id: 'sl3', moves: 'd4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Bf5 e3 e6 Bxc4 Bb4 O-O Nbd7 Qe2 Bg6 e4 O-O Bd3 Bh5', say: "White grabs the centre with e4; Black sidesteps with …Bg6 and then …Bh5, pinning the f3-knight and keeping the bishop active. There is the Slav tabiya: White has the big d4/e4 centre, but Black is rock-solid, fully developed, both bishops active and not a weakness in sight — the Slav's famously reliable equality.", sayShort: '…Bh5 — pin the knight, solid equality.', highlights: [H('h5', KEY)] }),
+    ],
+  },
+  'slav-defence::Modern Qc2/Qb3 Line': {
+    openingId: 'slav-defence', title: 'Slav — The Modern (Qc2)', minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'sq1', moves: 'd4 d5 c4 c6 Nf3 Nf6 Qc2 dxc4 Qxc4 Bf5', say: "The Modern Slav: White recaptures the c-pawn with the queen, Qc2-xc4, rather than committing a4. Black answers in pure Slav style with …dxc4 and …Bf5 — the good bishop developed outside the pawn chain, the heart of the whole defence.", sayShort: '…Bf5 — the trademark Slav bishop.', highlights: [H('f5', KEY)] }),
+      b({ id: 'sq2', moves: 'd4 d5 c4 c6 Nf3 Nf6 Qc2 dxc4 Qxc4 Bf5 g3 e6 Bg2 Nbd7 O-O Be7 Nc3 O-O', say: "White fianchettoes with g3 and Bg2, aiming the bishop down the long diagonal; Black develops solidly — …e6, …Nbd7, …Be7 — and both castle. A calm, harmonious set-up that fully neutralises White's bishop.", sayShort: '…Be7, …O-O — solid against the fianchetto.', highlights: [H('e7', KEY), H('e6', SOFT)] }),
+      b({ id: 'sq3', moves: 'd4 d5 c4 c6 Nf3 Nf6 Qc2 dxc4 Qxc4 Bf5 g3 e6 Bg2 Nbd7 O-O Be7 Nc3 O-O Re1 Ne4 Qb3 Qb6', say: "Black plants the knight on the powerful …Ne4 outpost and offers a queen trade with …Qb6, equalising cleanly. There is the Modern Slav tabiya: the active bishop on f5, the dominant knight on e4, the solid …c6/…e6 structure and easy piece play — comfortable equality that scores 59% at club level.", sayShort: '…Ne4, …Qb6 — outpost and full equality.', highlights: [H('e4', KEY), H('b6', SOFT)] }),
+    ],
+  },
   'slav-defence::Geller Gambit': {
     openingId: 'slav-defence', title: 'Slav — The Geller Gambit (5.e4)', minutes: 9, orientation: 'black', sources: SRC,
     beats: [
