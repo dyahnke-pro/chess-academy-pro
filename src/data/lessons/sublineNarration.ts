@@ -1,6 +1,9 @@
 import type { AnnotationArrow, AnnotationHighlight } from '../../types';
 import type { CourseSubline } from '../../services/openingCourse';
 import type { SublineNarration } from '../../services/sublineLesson';
+import { SUBLINE_NARRATION_E4E5 } from './sublineNarrationE4E5';
+import { SUBLINE_NARRATION_E4OTHER } from './sublineNarrationE4Other';
+import { SUBLINE_NARRATION_D4FLANK } from './sublineNarrationD4Flank';
 
 // HAND-AUTHORED subline narration (David 2026-06-17: "these are hand authored").
 // Each entry is written by hand, grounded in the real DB line + verified against
@@ -886,13 +889,24 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   },
 };
 
+// Merge the base map with the three parallel-session group maps. Each group
+// file is owned by ONE session (see the WO), so they never edit the same file.
+// Later spreads win on collision — but keys are per-deviation, so groups don't
+// overlap in practice.
+const MERGED_NARRATION: Record<string, SublineNarration> = {
+  ...SUBLINE_NARRATION,
+  ...SUBLINE_NARRATION_E4E5,
+  ...SUBLINE_NARRATION_E4OTHER,
+  ...SUBLINE_NARRATION_D4FLANK,
+};
+
 /** Hand-authored narration for a subline, or null to use the honest baseline. */
 export function getSublineNarration(
   openingId: string,
   variationIndex: number,
   subline: CourseSubline,
 ): SublineNarration | null {
-  return SUBLINE_NARRATION[sublineKey(openingId, variationIndex, subline)] ?? null;
+  return MERGED_NARRATION[sublineKey(openingId, variationIndex, subline)] ?? null;
 }
 
-export const _SUBLINE_NARRATION = SUBLINE_NARRATION;
+export const _SUBLINE_NARRATION = MERGED_NARRATION;
