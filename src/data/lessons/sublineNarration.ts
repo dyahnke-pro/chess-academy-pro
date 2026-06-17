@@ -22,6 +22,62 @@ export const sublineKey = (openingId: string, variationIndex: number, s: CourseS
 
 const FR_SRC = ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'];
 
+// ── Shared deviation narrations (one line, many tabs) ───────────────────────
+// Many openings show the SAME top deviation across several variation tabs (the
+// subline generator branches at a shared fork). Author once, map to every key.
+
+const KID_SRC = ['concept:pos-center', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'];
+// KID, Classical (White's Be2). d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Be2
+const KID_BE2: SublineNarration = {
+  intro: {
+    say: "Be2 — the Classical King's Indian, White's most respected setup. He builds the broad d4-e4 centre and develops solidly. Don't fight it head-on: castle, then play the thematic …e5, striking the centre and unlocking the whole King's Indian plan — a kingside pawn storm while White expands on the other wing. This is the race the KID lives for.",
+    sayShort: 'Be2 — castle, then strike …e5.',
+  },
+  sources: KID_SRC,
+};
+// KID, White's flexible Nf3. d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3
+const KID_NF3: SublineNarration = {
+  intro: {
+    say: "Nf3 — White develops flexibly toward the main lines. Your reply never changes in spirit: finish the fianchetto setup, castle, and break the centre with …e5. Once the centre locks, the King's Indian attack writes itself — pawns and pieces storming the kingside while White plays on the queenside.",
+    sayShort: 'Nf3 — castle and break …e5.',
+  },
+  sources: KID_SRC,
+};
+const SLAV_SRC = ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'];
+// Slav, quiet e3 (shutting in White's own bishop). d4 d5 c4 c6 Nf3 Nf6 e3 Bf5
+const SLAV_E3: SublineNarration = {
+  intro: {
+    say: "e3 — the quiet Slav, and it comes with a quiet concession: White shuts his own light-squared bishop in behind the pawn chain. You make the most of it the Slav way — …Bf5, getting YOUR light bishop out to an active post OUTSIDE the chain before locking the centre. Free bishop, rock-solid structure, no weaknesses: exactly what the Slav promises.",
+    sayShort: 'e3 — get …Bf5 out, then settle.',
+  },
+  sources: SLAV_SRC,
+};
+// Slav, sharp Nc3 (the …dxc4 + …b5 / Botvinnik & Geller complex). d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 Bg5 ...
+const SLAV_NC3: SublineNarration = {
+  intro: {
+    say: "Nc3 — the sharp Slav, steering toward the razor-edged Botvinnik and Anti-Moscow tangles. White develops aggressively and pins with Bg5. The principled answer is to grab the pawn with …dxc4 and hold it with …b5, daring White to prove the gambit while you cling to the extra material behind a wall of queenside pawns. Theory-heavy, but Black is doing fine everywhere.",
+    sayShort: 'Nc3 — grab …dxc4, hold with …b5.',
+  },
+  sources: SLAV_SRC,
+};
+const ENG_SRC = ['concept:pos-space', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/English_Opening'];
+// English (student White) — reversed-Sicilian …d6 setups.
+const ENG_D6: SublineNarration = {
+  intro: {
+    say: "…d6 — Black settles into a reversed-Sicilian setup. This is the English at its finest: you're a full tempo up on a Sicilian, so play it like White with an extra move in hand. Expand on the queenside with Rb1 and b4, lean on the long diagonal with the g2-bishop, and use that spare tempo to get there first.",
+    sayShort: '…d6 — expand b4, press the long diagonal.',
+  },
+  sources: ENG_SRC,
+};
+// English (student White) — Reversed Dragon …Be6 propping d5.
+const ENG_BE6: SublineNarration = {
+  intro: {
+    say: "…Be6 — Black props up the d5-square in the Reversed Dragon. You're effectively playing a Sicilian Dragon a tempo up: chip at the centre, contest the long light diagonal with your g2-bishop, and use the extra move to seize exactly the initiative the White side only dreams of in the real Dragon.",
+    sayShort: '…Be6 — a Dragon up a tempo; press.',
+  },
+  sources: ENG_SRC,
+};
+
 // French — White's 3rd-move SYSTEM choices surface as the top deviation across
 // several Black variation tabs (the subline generator branches at the shared
 // fork). Author each unique line ONCE and map it to every tab that shows it.
@@ -321,6 +377,83 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   'sicilian-dragon::4::Bd3@8': SIC_BD3,
   'sicilian-dragon::6::Bd3@8': SIC_BD3,
   'sicilian-dragon::7::Bd3@8': SIC_BD3,
+
+  // ── King's Indian Defence (student Black) ──
+  'kings-indian-defence::0::Be2@8': KID_BE2,
+  'kings-indian-defence::1::Be2@8': KID_BE2,
+  'kings-indian-defence::2::Nf3@8': KID_NF3,
+  'kings-indian-defence::6::Nf3@8': KID_NF3,
+  'kings-indian-defence::4::Nc3@4': {
+    intro: {
+      say: "Nc3 — White heads straight into the main King's Indian. Nothing fancy is needed: complete the setup with …d6, castle, and play the thematic …e5 break. Once the centre locks, the King's Indian race is on — your kingside pawn storm against White's queenside expansion.",
+      sayShort: 'Nc3 — main KID: …d6, …O-O, …e5.',
+    },
+    sources: KID_SRC,
+  },
+  'kings-indian-defence::3::e5@10': {
+    intro: {
+      say: "e5 — the Four Pawns Attack, White's most violent King's Indian try, throwing four pawns across the board. The overextension is its flaw: don't flinch, counterstrike with …dxe5 and the …c5 break, and those proud pawns become targets while White's loose centre comes crashing down.",
+      sayShort: 'e5 — counterstrike …dxe5, …c5.',
+    },
+    sources: KID_SRC,
+  },
+  'kings-indian-defence::5::O-O@12': {
+    intro: {
+      say: "O-O — White castles into the Classical main line, and you've already landed the key …e5 break. Now the real King's Indian begins: White plays c5 and the minority push on the queenside while you throw everything at his king — …Nd7, …f5, …f4, and the kingside avalanche. Trust the race; your attack arrives first more often than not.",
+      sayShort: 'O-O — launch the …f5-f4 storm.',
+    },
+    sources: KID_SRC,
+  },
+  'kings-indian-defence::7::dxe5@12': {
+    intro: {
+      say: "dxe5 — White releases the central tension early. Recapture with …dxe5 and the game opens into a near-symmetrical, queens-on middlegame where your fianchettoed g7-bishop and the half-open d-file give easy, comfortable play. White's space edge has simply evaporated.",
+      sayShort: 'dxe5 — recapture, comfortable game.',
+    },
+    sources: KID_SRC,
+  },
+
+  // ── Slav Defence (student Black) ──
+  'slav-defence::0::e3@6': SLAV_E3,
+  'slav-defence::2::e3@6': SLAV_E3,
+  'slav-defence::4::e3@6': SLAV_E3,
+  'slav-defence::5::e3@6': SLAV_E3,
+  'slav-defence::6::e3@6': SLAV_E3,
+  'slav-defence::3::Nc3@6': SLAV_NC3,
+  'slav-defence::7::Nc3@6': SLAV_NC3,
+  'slav-defence::1::Nc3@8': {
+    intro: {
+      say: "Nc3 in the Exchange Slav — White has already released the tension with cxd5, signalling for a quiet, symmetrical game. There's no danger: develop naturally, get the light bishop out with …Bf5, and contest the half-open c-file. The symmetry only looks drawish — with active pieces Black is the one who can press for more.",
+      sayShort: 'Nc3 — …Bf5, contest the c-file.',
+    },
+    sources: SLAV_SRC,
+  },
+
+  // ── English Opening (student White) ──
+  'english-opening::2::d6@11': ENG_D6,
+  'english-opening::4::d6@9': ENG_D6,
+  'english-opening::0::Be6@13': ENG_BE6,
+  'english-opening::6::Be6@13': ENG_BE6,
+  'english-opening::1::Bd7@17': {
+    intro: {
+      say: "…Bd7 — Black completes a solid Symmetrical English setup. The game is balanced and maneuvering; the winning try is to make the first imbalance yourself. Roll the queenside with Rb1, b4 and a steady space grab, and turn your move-one head start into a lasting initiative on that wing.",
+      sayShort: '…Bd7 — grind the queenside with b4.',
+    },
+    sources: ENG_SRC,
+  },
+  'english-opening::7::Bd7@17': {
+    intro: {
+      say: "…Bd7 — Black completes a solid Symmetrical English setup. The game is balanced and maneuvering; the winning try is to make the first imbalance yourself. Roll the queenside with Rb1, b4 and a steady space grab, and turn your move-one head start into a lasting initiative on that wing.",
+      sayShort: '…Bd7 — grind the queenside with b4.',
+    },
+    sources: ENG_SRC,
+  },
+  'english-opening::3::f5@5': {
+    intro: {
+      say: "…f5 — the Reversed Grand Prix, Black grabbing kingside space aggressively. It's double-edged and slightly loosening: meet it calmly, finish your fianchetto, strike with d4 at the right moment, and the holes Black left around his own king become your targets.",
+      sayShort: '…f5 — stay calm, hit back with d4.',
+    },
+    sources: ['concept:pos-center', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/English_Opening'],
+  },
 };
 
 /** Hand-authored narration for a subline, or null to use the honest baseline. */
