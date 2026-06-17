@@ -331,3 +331,47 @@ gambit / forcing-trap, short by nature). All gate-green, pushed.
 
 Bucket A is the real remaining WORK (fix unsound recommendations); B/C/D are correctly
 left alone per the canon + "empty > forced." E is an optional roadmap batch.
+
+---
+
+## SESSION 2026-06-17 — BUCKET A REVISITED (engine-best, not club-most-played)
+
+Critical correction: my club-pool extender walked into the OPPONENT's club-level
+errors and reported misleadingly negative evals. The TRUTH is the engine-best line
+(`scripts/extend-engine.mjs`, depth-24 best play both sides). Several "unsound"
+deferrals were artifacts:
+- english Four Knights: club-extend said −1.75; engine-best is **−0.04 (dead equal)**.
+- benoni Classical: −1.44 → **−0.83**; benoni Czech: −1.77 → **−0.67** (within floor).
+
+Re-applying the real bar (sound if within ≈−1.0 quiet-line floor AND club≥45% OR
+masters≥45%), I authored **5 more** (total **48 this session**), with HONEST framing
+(no false "equal" on a minus line — they lean on the practical record):
+old-indian Tartakower (−0.94 / 48% club), old-indian Ukrainian (−0.74 / 50% M),
+benoni Classical (−0.83 / 47% M), benoni Czech (−0.67 / 49% club),
+english Four Knights (−0.04 / 51% M — the honest equalizer; Botvinnik/Reversed-Sicilian
+remain the winning tries).
+
+### THE ONE GENUINE FORK LEFT FOR DAVID — the Old Indian worse-than-(−1.0) lines:
+Engine-best (depth 24), these are quiet lines leaving Black CLEARLY worse, yet they
+pass the win% bar — the Old Indian is just an inherently passive defence:
+- Czech −1.21 / 54% M, 49% club  *(already shipped as a lesson — pre-existing)*
+- Be2 −1.31 / 45% club            *(already shipped as a lesson — pre-existing)*
+- Main-d5 −1.13 / 45% club        *(un-narrated)*
+- Seirawan −1.26 / 49% club (7,557 games)  *(un-narrated)*
+
+Per the SOUNDNESS-SWEEP doctrine these are "quiet line, student clearly worse" =
+defects → rebuild to a sound line, OR demote/relabel honestly, OR cut. But there is
+NO sound (≤−1.0) Old Indian line — the opening is passive by nature. So this is a
+PRODUCT decision only David can make:
+  (a) KEEP the Old Indian, narrated honestly as "a solid but passive system — you'll
+      be a bit worse, but it's rock-solid and scores well in practice," OR
+  (b) CUT the Old Indian from the sold set and point those students at a sounder
+      defence (e.g. the KID / Slav / Caro already built).
+Same question, smaller, for the Czech/Be2 lessons already live. Flagging, not guessing.
+
+### Still genuinely blocked (unchanged, correct): not-in-DB (london d5-tabs, reti,
+alapin e6/g6, philidor-d3, KIA vs Sic/Caro); below win% bar (caro Short, scand Qa5-Bd2,
+qga Central/Modern-Tabiya, catalan Qa4+, sveshnikov 11.c4, two-knights Quiet-d3,
+alekhine Two-Pawns); duplicates (english Hedgehog, dutch Leningrad-g6, KIA e5-Wedge).
+Optional next batch: the sharp gambit ROADMAPS (two-knights Traxler, four-knights
+Belgrade, petrov Cochrane) — honest "surprise weapon" framing.
