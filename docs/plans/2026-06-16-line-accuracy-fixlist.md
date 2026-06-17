@@ -375,3 +375,38 @@ qga Central/Modern-Tabiya, catalan Qa4+, sveshnikov 11.c4, two-knights Quiet-d3,
 alekhine Two-Pawns); duplicates (english Hedgehog, dutch Leningrad-g6, KIA e5-Wedge).
 Optional next batch: the sharp gambit ROADMAPS (two-knights Traxler, four-knights
 Belgrade, petrov Cochrane) — honest "surprise weapon" framing.
+
+---
+
+## SESSION 2026-06-17 — BORDERLINE PLAYABILITY INVESTIGATION (David: "see if those positions are actually playable, if pros reach them, and if there's a way to improve them; warn + redirect away from bad sublines")
+
+Method: masters-explorer reach + practical score, engine-best eval (not club-most-played,
+which misleads), and a best-Black-plan search at each branch.
+
+**IMPROVED to sound, on-bar lines (authored):**
+- **Old Indian** — pros reach it (Topalov/Giri/Svidler/Jobava), but the ...c6 cramp scores
+  39% (White clamps with d5, 59–68%). Improvement = **...exd4 Tartakower, 47%** (frees before
+  the clamp). Headlined the Tartakower; rewrote the Czech + Be2 lessons to **warn + redirect**
+  to ...exd4. (Seirawan/Main-d5 ...c6 lines: −1.1/−1.3, kept honest or David cuts — see below.)
+- **Alekhine Two Pawns** → ...d6/...exd6 main, **−0.52 / 50%** over ~20k games. Authored.
+- **Scandinavian Qa5 vs Bd2** → ...Bg4 (trade the problem bishop), **−0.05 / 54%**. Authored.
+
+**SHARP GAMBIT ROADMAPS (authored, honest "surprise weapon" framing):**
+- Two Knights **Traxler** (+0.00 / **61%**, 17k games), Four Knights **Belgrade** (−0.50 / 57%),
+  Petrov **Cochrane** (Black defends the sac, +0.50 / a clean piece up).
+
+**NO IMPROVEMENT EXISTS — mild mainstream pulls, not "bad," but no ≥45% subline to redirect to
+(David's call to keep-honest or cut; do NOT dress up as winning):**
+- **Caro Advance "Short"**: every Black plan scores 42–44% at masters (Bf5 44%, c5 43% — 33k
+  games). It's a hugely-respected solid line that simply concedes White a small pull; there is
+  no better subline. Keep honestly ("solid, mainstream, slightly passive") or cut.
+- **QGA Central 3.e4**: 42–45% across replies; ...b5 peaks at 45% but deep lines drift to 44%.
+  Same verdict.
+- **Old Indian Czech/Be2/Seirawan/Main-d5 (the ...c6 cramp)**: −1.1 to −1.3, ~45–49% club.
+  Kept honest with a redirect to the Tartakower; no sound (≤−1.0) Old Indian line exists, so
+  the only "fix" is the redirect already shipped, or cutting the passive tabs.
+
+**SESSION TOTAL: 53 hand-authored lessons + the Old Indian steer/warn rework**, all six content
+gates green, pushed to `claude/awesome-pasteur-ji7aj3` (PR #725). Tooling added:
+`scripts/extend-club.mjs` (club-pool extender) + `scripts/extend-engine.mjs` (engine-best
+extender — the soundness truth).
