@@ -52,6 +52,26 @@ try {
   record('Masterclass syllabus renders (chapters + sublines)', mcChapters > 0 && mcSublines > 0, `chapters=${mcChapters} subline-blocks=${mcSublines}`);
   record('Masterclass syllabus has Resume + Spar', (await page.locator('[data-testid="course-resume"]').count()) > 0 && (await page.locator('[data-testid="course-spar"]').count()) > 0);
 
+  // Level-3 subline Watch + Play (David 2026-06-17). Each "They might play"
+  // deviation carries a Watch (narrated walkthrough) and a Play (OpeningPlayMode
+  // customLine lock) action. Verify both mount their player.
+  const watchBtns = await page.locator('[data-testid^="subline-watch-"]').count();
+  const playBtns = await page.locator('[data-testid^="subline-play-"]').count();
+  record('Sublines carry Watch + Play actions', watchBtns > 0 && playBtns > 0, `watch=${watchBtns} play=${playBtns}`);
+
+  await page.locator('[data-testid^="subline-watch-"]').first().click();
+  const watchMounted = await page.locator('[data-testid="replay-demo"], [data-testid="skip-to-memory"], [data-testid="line-exit"]')
+    .first().isVisible({ timeout: 20000 }).catch(() => false);
+  record('Subline Watch mounts the walkthrough player', watchMounted);
+  await page.locator('[data-testid="line-exit"]').first().click({ timeout: 5000 }).catch(() => {});
+
+  await page.goto(`${BASE}/academy/course/caro-kann`, { waitUntil: 'domcontentloaded' });
+  await page.waitForSelector('[data-testid="course-chapters"]', { timeout: 30000 });
+  await page.locator('[data-testid^="subline-play-"]').first().click();
+  const playMounted = await page.locator('[data-testid="opening-play-mode"]').first().isVisible({ timeout: 20000 }).catch(() => false);
+  record('Subline Play mounts OpeningPlayMode (customLine lock)', playMounted);
+  await page.goto(`${BASE}/academy`, { waitUntil: 'domcontentloaded' });
+
   // An anti-opening course syllabus
   await page.goto(`${BASE}/academy/course/anti-sicilian-rossolimo`, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('[data-testid="course-cover"]', { timeout: 30000 });
