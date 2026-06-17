@@ -3663,7 +3663,7 @@ export function CoachTeachPage(): JSX.Element {
 
   return (
     <div
-      className="relative flex flex-col md:flex-row h-full overflow-hidden pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-0"
+      className="relative flex flex-col md:flex-row h-full overflow-y-auto md:overflow-hidden pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-0"
       data-testid="coach-teach-page"
     >
       {/* In-page middlegame plan (David 2026-05-29). When the student
@@ -4848,6 +4848,25 @@ function WalkthroughControls({
       cancelled = true;
     };
   }, [tree, phase]);
+
+  // When an action-required phase appears (leaf / fork / stage-menu /
+  // choose-mode / trap-prompt / pickers), scroll its control panel into
+  // the clear zone so its buttons sit ABOVE the fixed bottom nav on
+  // mobile. The board column is `flex-none` and can push these controls
+  // below the fold / under the nav at the resting scroll position; a tap
+  // there would otherwise land on the nav tab (David 2026-06-17 — the
+  // "Continue learning" bounce-to-/coach/home). One-shot per phase change;
+  // no-op on narration phases (no matching panel) and on desktop (the
+  // panel is already in view). Pure UI — no LLM, no behavior change.
+  useEffect(() => {
+    const id = window.setTimeout(() => {
+      const el = document.querySelector(
+        '[data-testid="walkthrough-leaf-panel"],[data-testid="walkthrough-fork-panel"],[data-testid="walkthrough-stage-menu"],[data-testid="walkthrough-choose-mode"],[data-testid="walkthrough-trap-prompt"],[data-testid="walkthrough-quiz-panel"],[data-testid="walkthrough-drill-picker"],[data-testid="walkthrough-punish-picker"]',
+      );
+      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 150);
+    return () => window.clearTimeout(id);
+  }, [phase]);
 
   // Poll the cache while in stage-menu so background-generated
   // stages appear as cards when they finish. Stops polling once all
