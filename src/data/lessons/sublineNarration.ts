@@ -122,6 +122,9 @@ const GRUN_EXCHANGE: SublineNarration = {
     say: "cxd5 — the Exchange Grünfeld, the critical main line and the whole point of the opening. White builds the broad d4-e4 pawn centre; your entire strategy is to tear it down. The g7-bishop rakes it on the long diagonal, …c5 and …Bg4 and …Nc6 pile on, and if that centre cracks White is simply worse. You invite the big centre precisely so you can demolish it.",
     sayShort: 'cxd5 — Exchange: demolish the centre.',
   },
+  beats: [
+    { atMove: 11, say: "…Bg7 — the soul of the Grünfeld. The bishop sits on the long diagonal with a clear, open run straight at d4, the keystone of White's whole centre. From here everything else flows — …c5, …Nc6, …Bg4 all pour onto that pawn until it falls, and a fallen centre means a lost game for White.", arrows: [A('g7', 'd4')], highlights: [H('d4', KEY)] },
+  ],
   sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
 };
 // Grünfeld Fianchetto (quiet g3). d4 Nf6 c4 g6 g3 Bg7 Bg2 O-O
@@ -273,6 +276,9 @@ const ALE_MODERN: SublineNarration = {
     say: "The Modern Alekhine main line. You've baited White into the big pawn centre — now make him regret it. …Bg4 pins, …dxe5 and …Nc6 chip at the pawns, and the overextended front becomes a row of targets. That's the whole Alekhine bet: provoke the centre, then tear it down.",
     sayShort: 'Undermine the big centre: …Bg4.',
   },
+  beats: [
+    { atMove: 7, say: "…Bg4 — and the demolition begins. The bishop pins the f3-knight, one of the props holding White's broad centre together; with the defender tied down, your coming …dxe5 and …Nc6 hammer at d4. You let White build the centre for exactly this — so you could take aim and pull it apart.", highlights: [H('f3', KEY), H('d4', SOFT)] },
+  ],
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Alekhine%27s_Defence'],
 };
 
