@@ -2610,15 +2610,17 @@ export function CoachTeachPage(): JSX.Element {
       // when the cached analysis is for THIS exact FEN (same gate as the eval).
       engineBestMoveUci: cachedAnalysis?.bestMove || undefined,
       // Step-by-step move narration: the engine-driven reply (coachReplyPlayed
-      // defined) OR a typed "I played X. Your move." report, outside a
-      // walkthrough. Tells the grounding pipeline this turn is move discussion
-      // (coach narrates the played move + tactical ideas a ply ahead), so the
-      // bare-SAN gate is skipped — the deep Learn game stocked out ~half its
-      // turns otherwise (David 2026-06-04).
+      // defined) OR a typed "I played X." / "I played X. Your move." report,
+      // outside a walkthrough. "Your move." is optional — bare "I played e5."
+      // is also a move report (PostHog 2026-06-16: coach_non_answer / re-ask
+      // on [coach-teach]). Tells the grounding pipeline this turn is move
+      // discussion (coach narrates the played move + tactical ideas a ply
+      // ahead), so the bare-SAN gate is skipped — the deep Learn game stocked
+      // out ~half its turns otherwise (David 2026-06-04).
       moveNarration:
         !walkthrough.isActive &&
         (opts?.coachReplyPlayed !== undefined ||
-          /\bi\s+(?:just\s+)?played\b[\s\S]*\byour\s+(?:move|turn)\b/i.test(text)),
+          /\bi\s+(?:just\s+)?played\b(?:[\s\S]*\byour\s+(?:move|turn)\b)?/i.test(text)),
       ...(evalForAsk ?? {}),
       ...(lichessForAsk ?? {}),
     };
@@ -2668,14 +2670,17 @@ export function CoachTeachPage(): JSX.Element {
       });
     }
 
-    // Step-by-step move report ("I played e4. Your move.") with NO
-    // active walkthrough. Without this, the brain treats it as ordinary
-    // chat and bleeds the PRIOR topic — the audit (2026-06-02) caught it
-    // answering "I played e4. Your move." with "Back to where we were —
-    // three pillars of Black's French strategy" instead of replying to
-    // the move. Augment the ask with a focused directive (and trigger
-    // the G6 arrow obligation) WITHOUT mutating the displayed message.
-    const STEP_BY_STEP_RE = /\bi\s+(?:just\s+)?played\b[\s\S]*\byour\s+(?:move|turn)\b/i;
+    // Step-by-step move report ("I played e4.", "I played e5. Your move.")
+    // with NO active walkthrough. Without this, the brain treats it as
+    // ordinary chat and bleeds the PRIOR topic — the audit (2026-06-02)
+    // caught it answering "I played e4. Your move." with "Back to where we
+    // were — three pillars of Black's French strategy" instead of replying
+    // to the move. "Your move." is OPTIONAL — real users just say
+    // "I played e5." and expect the same focused treatment (PostHog
+    // 2026-06-16: coach_non_answer / re-ask on [coach-teach]: "I played e5.").
+    // Augment the ask with a focused directive (and trigger the G6 arrow
+    // obligation) WITHOUT mutating the displayed message.
+    const STEP_BY_STEP_RE = /\bi\s+(?:just\s+)?played\b(?:[\s\S]*\byour\s+(?:move|turn)\b)?/i;
     // `coachReplyPlayed` defined = the ENGINE already played the coach's reply
     // (the grounding-truth path); play_move is disabled below so the LLM
     // cannot move — it only narrates. A non-empty value is the SAN to narrate.
