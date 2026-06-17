@@ -21,6 +21,18 @@ function b(init: BeatInit): LessonBeat {
 }
 
 export const KINGS_INDIAN_ATTACK_VARIATION_LESSONS: Record<string, LessonScript> = {
+  "kings-indian-attack::KIA vs QGD-Style Response": {
+    openingId: "kings-indian-attack",
+    sources: ['concept:pos-space', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+    title: "KIA — vs a QGD-Style Setup",
+    minutes: 10,
+    orientation: "white",
+    beats: [
+      b({ id: "kq1", moves: "Nf3 d5 g3 c5 Bg2 Nc6 O-O Nf6 d3 e6", say: "The King's Indian Attack — a complete system White can play against almost anything: Nf3, g3, the fianchetto on g2, and d3. Here Black sets up a Queen's-Gambit-style centre with …d5 and …e6. White isn't fighting for the centre yet; the whole plan is to castle, build, and storm the kingside later.", sayShort: "Bg2 — the flexible KIA system.", highlights: [H("g2", KEY)] }),
+      b({ id: "kq2", moves: "Nf3 d5 g3 c5 Bg2 Nc6 O-O Nf6 d3 e6 Nbd2 Be7 e4 O-O Re1 b6 e5", say: "White completes the setup with Nbd2 and Re1, then fires the signature advance: e4-e5! The pawn clamps down on the kingside and gains space, the move that launches every KIA attack. Black is solid but suddenly cramped on the side where White wants to play.", sayShort: "e5 — the KIA space-gaining clamp.", highlights: [H("e5", KEY)] }),
+      b({ id: "kq3", moves: "Nf3 d5 g3 c5 Bg2 Nc6 O-O Nf6 d3 e6 Nbd2 Be7 e4 O-O Re1 b6 e5 Nd7 Nf1 Bb7 Bf4", say: "The e5-pawn shoves the knight back to d7, and White begins the famous knight journey — Nd2-f1, heading for g3 or h2 to join the attack — while Bf4 reinforces the e5-spearhead. There is the KIA tabiya: kingside space, the e5-wedge, and the classic plan of Nf1-g3 and f4-f5 to crash through. A low-theory system that scores 60% at club level.", sayShort: "Nf1, Bf4 — reroute the knight, attack.", highlights: [H("f4", KEY), H("e5", SOFT)] }),
+    ],
+  },
   "kings-indian-attack::KIA vs KID-Style Response": {
   openingId: "kings-indian-attack",
   sources: ['concept:att-kingside-storm', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],

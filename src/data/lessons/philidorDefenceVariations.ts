@@ -14,6 +14,14 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['book:philidor-defence', 'concept:pos-center', 'concept:pos-prophylaxis', 'https://en.wikipedia.org/wiki/Philidor_Defence'];
 
 export const PHILIDOR_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'philidor-defence::Hanham Variation': {
+    openingId: 'philidor-defence', title: 'Philidor — The Hanham Variation', minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'ha1', moves: 'e4 e5 Nf3 d6 d4 Nf6 Nc3 Nbd7 Bc4 Be7 O-O O-O', say: "The Hanham Philidor — reached by the safe modern move-order with …d6 and …Nf6 first. Black builds a compact, rock-solid set-up: …Nbd7 and …Be7 hold the e5-point without creating a single weakness. It is the most reliable, low-risk way to meet 1.e4 with …e5.", sayShort: '…Nbd7, …Be7 — the solid Hanham wall.', highlights: [H('e5', KEY)] }),
+      b({ id: 'ha2', moves: 'e4 e5 Nf3 d6 d4 Nf6 Nc3 Nbd7 Bc4 Be7 O-O O-O Re1 c6 a4 a5 d5 Nc5', say: "Black tucks in …c6 to control d5, fixes the queenside with …a5, and after White closes with d5 the knight jumps to the excellent …Nc5 outpost — eyeing the e4-pawn and the hole on a4. Black's pieces find active squares inside the solid structure.", sayShort: '…Nc5 — the knight to its outpost.', highlights: [H('c5', KEY), H('c6', SOFT)] }),
+      b({ id: 'ha3', moves: 'e4 e5 Nf3 d6 d4 Nf6 Nc3 Nbd7 Bc4 Be7 O-O O-O Re1 c6 a4 a5 d5 Nc5 Bg5 Qc7 Bxf6 Bxf6 Nd2 Be7 Nb3 Nxb3', say: "White trades on f6 and manoeuvres a knight to b3 to challenge the c5-knight; after the trades Black keeps a sound, compact game. There is the Hanham tabiya: the …e5/…d6/…c6 pawn chain intact, no weaknesses, and easy piece play — the comfortable equality the Philidor is built to deliver. It scores 56% at club level.", sayShort: '…Nxb3 — trade to comfortable equality.', highlights: [H('e5', KEY), H('c6', SOFT)] }),
+    ],
+  },
   'philidor-defence::Exchange Variation': {
     // DATA-REBUILD (2026-05-30): spine = most-played master line (the modern
     // …Re8/…Bf8/…c5/…Nc6 setup), engine-equal for Black (−0.10). Replaces the
