@@ -209,11 +209,17 @@ async function main() {
 
       inFlight = 'open /coach/play';
       await page.goto(`${BASE_URL}/coach/play`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-      await page.locator('[data-testid="coach-game-page"]').waitFor({ timeout: 20000 }).catch(() => {});
-      await page.waitForTimeout(2500);
+      // The 2nd goto re-triggers the boot splash + deferred seed, so wait it
+      // OUT (up to 40s) before expecting the board (the iso probe taught me
+      // an under-wait here lands on the loading splash).
+      await page.locator('[data-testid="coach-game-page"]').waitFor({ timeout: 40000 }).catch(() => {});
       await clearOverlays();
-      if ((await page.locator('[data-testid="coach-game-page"]').count()) === 0) {
-        recordBreak('surface-missing', 'coach-game-page never mounted');
+      // Board must be interactive before we click moves.
+      const boardReady = await page.locator('[data-square="e2"], [data-square="e7"]').first().waitFor({ state: 'visible', timeout: 30000 }).then(() => true).catch(() => false);
+      await page.waitForTimeout(1500);
+      await clearOverlays();
+      if ((await page.locator('[data-testid="coach-game-page"]').count()) === 0 || !boardReady) {
+        recordBreak('surface-missing', `coach-game-page mounted=${(await page.locator('[data-testid="coach-game-page"]').count()) > 0} boardReady=${boardReady}`);
         inconclusive = true;
       }
 
