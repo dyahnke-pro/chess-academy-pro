@@ -20,6 +20,41 @@ const A = (from: string, to: string, color = ATK): AnnotationArrow => ({ from, t
 export const sublineKey = (openingId: string, variationIndex: number, s: CourseSubline): string =>
   `${openingId}::${variationIndex}::${s.triggerMove}@${s.atPly}`;
 
+const FR_SRC = ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'];
+
+// French — White's 3rd-move SYSTEM choices surface as the top deviation across
+// several Black variation tabs (the subline generator branches at the shared
+// fork). Author each unique line ONCE and map it to every tab that shows it.
+
+// 3.Nc3 — the Winawer. Line:
+// e4 e6 d4 d5 Nc3 Bb4 e5 c5 a3 Bxc3+ bxc3 Ne7 Qg4 O-O
+const FR_WINAWER: SublineNarration = {
+  intro: {
+    say: "Nc3 — the most principled French, and it invites the sharpest line in the whole opening: the Winawer. You answer …Bb4, pinning the knight that defends e4 — so the pin turns the screw on White's centre. The bargain you strike is famous: you'll trade the dark-squared bishop for that knight, shattering White's queenside pawns, and in return White gets the bishop pair and a kingside lunge with Qg4. Wildly double-edged, and Black scores heavily.",
+    sayShort: 'Nc3 — the Winawer: …Bb4.',
+  },
+  beats: [
+    { atMove: 5, say: "…Bb4 — the Winawer pin. The bishop nails the c3-knight to the king; because that knight is the defender of e4, the pin turns the screw on White's centre, forcing him to resolve it on your terms rather than his.", highlights: [H('c3', KEY), H('e4', SOFT)] },
+    { atMove: 9, say: "…Bxc3+ — the structural heart of the Winawer. You hand over the dark bishop, but bxc3 saddles White with crippled, doubled c-pawns: a permanent target you'll grind against all game while White hunts for kingside play.", highlights: [H('c3', KEY)] },
+    { atMove: 13, say: "…O-O — castling straight into Qg4, the critical test. You're inviting Qxg7, because after …Rg8 the half-open g-file and your queenside pressure hand you a raging attack for the pawn. This is the Winawer's gambit spirit: structure and initiative over material.", highlights: [H('g7', KEY)] },
+  ],
+  sources: FR_SRC,
+};
+
+// 3.Nd2 — the Tarrasch. Line:
+// e4 e6 d4 d5 Nd2 c5 exd5 Qxd5 Ngf3 cxd4 Bc4 Qd6 O-O
+const FR_TARRASCH: SublineNarration = {
+  intro: {
+    say: "Nd2 — the Tarrasch, sidestepping the Winawer pin by blocking the c3-square with the knight. The price White pays is activity: the knight sits passively, and you strike the centre at once with …c5. You'll reach an open, comfortable game with easy piece play and — at last — no bad bishop.",
+    sayShort: 'Nd2 — the Tarrasch: hit …c5.',
+  },
+  beats: [
+    { atMove: 5, say: "…c5 — striking at d4 immediately, the whole point of meeting Nd2. The knight on d2 is clumsily placed for this central fight, and the position cracks open in your favour.", highlights: [H('d4', KEY), H('c5', ATK)] },
+    { atMove: 11, say: "…Qd6 — the queen sidesteps the c4-bishop and lands on an active central post eyeing both wings. You've equalised cleanly, with the freer development and an open game to press in.", highlights: [H('d6', KEY)] },
+  ],
+  sources: FR_SRC,
+};
+
 const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   // Caro-Kann, Advance Variation (var 1) — the Short System, White's most
   // common try here (about a third of games). Line:
@@ -115,6 +150,54 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
       { atMove: 18, say: "There's the tabiya. The doubled f-pawns deny White's pieces the e5 and g5 outposts while you build with the bishop pair, the open e-file, and the …h5-h4 storm. The Tartakower's bargain — structure for the initiative — pays off.", highlights: [H('e5', SOFT), H('g5', SOFT)] },
     ],
     sources: ['book:caro-kann', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
+  },
+
+  // French — the Winawer (3.Nc3) surfaces as the top deviation on every tab
+  // whose spine runs through the shared fork; the Tarrasch (3.Nd2) on the rest.
+  'french-defence::0::Nc3@4': FR_WINAWER,
+  'french-defence::3::Nc3@4': FR_WINAWER,
+  'french-defence::6::Nc3@4': FR_WINAWER,
+  'french-defence::7::Nc3@4': FR_WINAWER,
+  'french-defence::1::Nd2@4': FR_TARRASCH,
+  'french-defence::2::Nd2@4': FR_TARRASCH,
+  'french-defence::8::Nd2@4': FR_TARRASCH,
+
+  // French Exchange (var 4) — h3, the symmetric, drawish line. Line:
+  // e4 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bd3 Bd6 O-O O-O h3
+  'french-defence::4::h3@12': {
+    intro: {
+      say: "h3 — a quiet luft in the Exchange French, the symmetrical line with a drawish reputation. There's nothing to fear and nothing handed to you: mirror the setup, finish developing, and remember the win here is MADE, not given. Grab an open file first, find the better square for a piece, and manufacture the small imbalance yourself — with active play Black is the one who can press.",
+      sayShort: "h3 — symmetric; outplay, don't wait.",
+    },
+    sources: FR_SRC,
+  },
+
+  // French Classical, Burn Variation (var 5) — Bxf6. Line:
+  // e4 e6 d4 d5 Nc3 Nf6 Bg5 dxe4 Bxf6 gxf6 Nxe4 f5 a3 f4
+  'french-defence::5::Bxf6@8': {
+    intro: {
+      say: "Bxf6 — the Burn Variation. White trades on f6 to win back the e4-pawn cleanly. You recapture toward the centre with …gxf6, accepting doubled f-pawns for a serious payoff: the half-open g-file pointing at White's king, the bishop pair, and a mobile pawn mass you'll roll forward with …f5-f4.",
+      sayShort: 'Bxf6 — recapture …gxf6, open the g-file.',
+    },
+    beats: [
+      { atMove: 9, say: "…gxf6 — doubling the f-pawns by choice. In exchange the g-file tears open toward White's king and you keep the bishop pair. These pawns aren't a weakness to defend; they're a battering ram to attack with.", highlights: [H('f6', KEY)] },
+      { atMove: 13, say: "…f4 — the pawns roll. You seize kingside space and cramp White's pieces, the …f5-f4 wedge gaining ground while the bishop pair and the open g-file do the heavy work.", highlights: [H('f4', ATK)] },
+    ],
+    sources: FR_SRC,
+  },
+
+  // French Rubinstein, sharp f3 try (var 9). Line:
+  // e4 e6 d4 d5 Nc3 dxe4 f3 Bb4 fxe4 Qh4+ g3 e5 a3 a6
+  'french-defence::9::f3@6': {
+    intro: {
+      say: "f3 — White tries to build a broad centre by recapturing on e4 with the f-pawn. You strike before he can settle: …Bb4 pins, and after fxe4 the bombshell …Qh4+ rips into the loosened kingside, then …e5 blasts the half-built centre open while White's king is still stuck on e1. Sharp, forcing, and a joy to play for Black.",
+      sayShort: 'f3 — hit back: …Bb4 and …Qh4+.',
+    },
+    beats: [
+      { atMove: 7, say: "…Bb4 — the pin comes first, freezing the c3-knight before White can prop up his centre. Now the f3-f-pawn push to recapture on e4 will leave the e1-h4 diagonal fatally bare.", highlights: [H('c3', KEY)] },
+      { atMove: 11, say: "…e5 — the follow-through. The check already forced g3, loosening White's kingside dark squares for good; now you smash open the centre while White's king still sits on e1, uncastled and exposed.", highlights: [H('e5', ATK), H('g3', SOFT)] },
+    ],
+    sources: FR_SRC,
   },
 };
 
