@@ -21,6 +21,15 @@ export const ALEKHINE_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = 
       b({ id: 'am4', moves: 'e4 Nf6 e5 Nd5 d4 d6 Nf3 Bg4 Be2 e6 O-O Be7 c4 Nb6 Nc3 O-O Be3 d5 c5 Bxf3 Bxf3 Nc4 Bf4 b6 b3 Na5', say: "White props up with Bf4, Black undermines the c5-wedge with …b6, and after b3 the knight reroutes to a5, eyeing the holes around White's queenside. There is the Modern tabiya: White's broad centre on c5, d4 and e5 looks commanding but is rigid and over-stretched, and Black has clear targets and active pieces. A respected, sound line that scores 55% for Black at club level.", sayShort: '…b6, …Na5 — undermine the wedge.', highlights: [H('a5', KEY), H('b6', SOFT), H('c5', SOFT)] }),
     ],
   },
+  'alekhine-defence::Two Pawns Attack': {
+    openingId: 'alekhine-defence', title: "Alekhine — The Two Pawns Attack", minutes: 10, orientation: 'black',
+    sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Alekhine%27s_Defence'],
+    beats: [
+      b({ id: 'a2p1', moves: 'e4 Nf6 e5 Nd5 c4 Nb6 d4 d6', say: "The Two Pawns Attack — White grabs c4 and d4 to bully the knight back to b6. It looks aggressive, but Black strikes back at once with …d6, challenging the e5-spearhead before White's centre can roll forward. Don't let the pawns settle.", sayShort: '…d6 — hit the e5-spearhead at once.', highlights: [H('d6', KEY), H('e5', SOFT)] }),
+      b({ id: 'a2p2', moves: 'e4 Nf6 e5 Nd5 c4 Nb6 d4 d6 exd6 cxd6 Nc3 g6 Nf3 Bg7 Be3 O-O', say: "…exd6 …cxd6 trades off White's spearhead and defuses the space advantage; Black fianchettoes …Bg7 onto the long diagonal and castles. The imposing centre is gone, and Black has an easy, harmonious position.", sayShort: '…Bg7 — fianchetto, the big centre defused.', highlights: [H('g7', KEY), H('d6', SOFT)] }),
+      b({ id: 'a2p3', moves: 'e4 Nf6 e5 Nd5 c4 Nb6 d4 d6 exd6 cxd6 Nc3 g6 Nf3 Bg7 Be3 O-O Be2 Nc6 O-O Bg4 b3 e5', say: "Black develops …Nc6 and …Bg4, pinning the f3-knight, then strikes the centre with …e5! There is the Two Pawns tabiya: White's pawns are neutralised, Black has the active g7-bishop, the g4-pin and the …e5 break in — a sound, comfortable game that scores 50% at club across nearly 20,000 games. The aggressive-looking attack, fully equalised.", sayShort: '…e5 — strike; comfortable equality.', highlights: [H('e5', KEY), H('g4', SOFT)] }),
+    ],
+  },
   'alekhine-defence::Four Pawns Attack': {
     openingId: 'alekhine-defence', title: "Alekhine — The Four Pawns Attack", minutes: 10, orientation: 'black',
     sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Alekhine%27s_Defence'],

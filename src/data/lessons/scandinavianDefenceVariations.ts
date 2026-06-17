@@ -13,6 +13,14 @@ interface BeatInit { id: string; moves: string; say: string; sayShort?: string; 
 function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return { ...rest, moves: moves.trim().split(/\s+/) }; }
 
 export const SCANDINAVIAN_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'scandinavian-defence::Qa5 with Bd2 Main Line': {
+    openingId: 'scandinavian-defence', title: 'Scandinavian — Qa5 vs Bd2 (…Bg4)', minutes: 10, orientation: 'black', sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
+    beats: [
+      b({ id: 'sb1', moves: 'e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Bd2 Bg4', say: "The Scandinavian with …Qa5 — Black recaptures with the queen and tucks it to a5 out of harm's way. Against White's Bd2, the key is …Bg4: Black develops the light-squared bishop ACTIVELY and prepares to trade it, solving the one piece that is awkward in this whole opening.", sayShort: '…Bg4 — develop and trade the problem bishop.', highlights: [H('g4', KEY), H('a5', SOFT)] }),
+      b({ id: 'sb2', moves: 'e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Bd2 Bg4 Be2 Bxe2 Ngxe2 Nc6 O-O O-O-O', say: "Black trades …Bxe2 — the problem bishop gone — develops …Nc6 hitting d4, and castles queenside, onto the opposite wing from White. That signals a sharp, mutual-attack middlegame, exactly the kind of game Black is happy to enter here.", sayShort: '…Bxe2, …O-O-O — opposite-wings fight.', highlights: [H('c6', KEY)] }),
+      b({ id: 'sb3', moves: 'e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Bd2 Bg4 Be2 Bxe2 Ngxe2 Nc6 O-O O-O-O Ne4 Qf5 Nxf6 gxf6 c3 Rg8', say: "White jumps Ne4, Black sidesteps …Qf5, and after the trade Nxf6 …gxf6 Black's g-file rips open for the rook on …Rg8, aimed straight at White's king. There is the Qa5 tabiya: opposite-side castling, the bad bishop already swapped off, the queen active on f5 and the open g-file — a comfortable, fully equal, double-edged game that scores an excellent 54% for Black at club level.", sayShort: '…Rg8 — open g-file, equal and sharp.', highlights: [H('f5', KEY), H('g8', SOFT)] }),
+    ],
+  },
   'scandinavian-defence::Qa5 Main Line': {
     openingId: 'scandinavian-defence', title: 'Scandinavian — The Solid …c6 Qa5', minutes: 10, orientation: 'black',
     sources: ['book:scandinavian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
