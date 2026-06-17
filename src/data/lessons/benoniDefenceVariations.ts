@@ -15,6 +15,22 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Modern_Benoni'];
 
 export const BENONI_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'benoni-defence::Classical Variation (Bf4 — d6 Pressure)': {
+    openingId: 'benoni-defence', title: 'Benoni — The Classical (Bf4)', minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'bc1', moves: 'd4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 Bf4', say: "The Modern Benoni against the Classical Bf4 set-up: Black gets the trademark Benoni structure and White develops the bishop actively to f4, leaning on the d6-pawn. Black willingly accepts a space disadvantage for the dynamic counterplay the Benoni lives on.", sayShort: 'Bf4 — White leans on d6.', highlights: [H('f4', KEY), H('d6', SOFT)] }),
+      b({ id: 'bc2', moves: 'd4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 Bf4 Bg7 e3 O-O Be2 Re8', say: "Black fianchettoes …Bg7 onto the long diagonal and posts …Re8 on the half-open e-file. Those two pieces — the raking bishop and the e-file rook — are the engines of Black's counterplay against White's centre.", sayShort: '…Bg7, …Re8 — the counterplay engines.', highlights: [H('g7', KEY), H('e8', SOFT)] }),
+      b({ id: 'bc3', moves: 'd4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 Nf3 g6 Bf4 Bg7 e3 O-O Be2 Re8 Nd2 Na6 O-O Nc7', say: "White reroutes Nd2 to bolster the centre, and Black plays the …Na6-c7 manoeuvre to brace the …b5 break and lean on d5. There is the Classical Benoni tabiya: the g7-bishop, the e-file rook, and the …b5 lever loaded. Be honest — White's space gives a small pull, but it's sharp and double-edged, and Black scores well in practice playing for the …b5 and …f5 breaks.", sayShort: '…Nc7 — load …b5, pressure d5.', highlights: [H('c7', KEY), H('d5', SOFT)] }),
+    ],
+  },
+  'benoni-defence::Czech Benoni (...e5 Closed Center)': {
+    openingId: 'benoni-defence', title: 'Benoni — The Czech (Closed Centre)', minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'bz1', moves: 'd4 Nf6 c4 c5 d5 e5', say: "The Czech Benoni — Black locks the centre completely with …c5 and …e5, declining to open a single line. It is the most solid, closed member of the Benoni family: a slow manoeuvring battle where Black bides his time and aims for the …f5 break behind the locked pawns.", sayShort: '…e5 — lock the centre, close the game.', highlights: [H('e5', KEY), H('c5', SOFT)] }),
+      b({ id: 'bz2', moves: 'd4 Nf6 c4 c5 d5 e5 Nc3 d6 e4 Be7 g3 O-O Bg2 Ne8', say: "Black completes the closed structure with …d6 and …Be7, castles, and begins the long knight reroute …Ne8 — bound for g7 to support the …f5 break. Pure patient, manoeuvring chess.", sayShort: '…Ne8 — reroute toward the …f5 break.', highlights: [H('e8', KEY), H('d6', SOFT)] }),
+      b({ id: 'bz3', moves: 'd4 Nf6 c4 c5 d5 e5 Nc3 d6 e4 Be7 g3 O-O Bg2 Ne8 Nge2 g6 O-O Ng7 f4 exf4 gxf4 Bg4', say: "White prepares and plays f4; after …exf4 gxf4 the position opens a crack, and …Bg4 develops with a pin. There is the Czech tabiya: a closed manoeuvring struggle where …Ng7 and …Bg4 set up the …f5 break. Honestly, White's space gives a pull, but the structure is rock-solid and holds up well in practice (49% at club).", sayShort: '…Ng7, …Bg4 — prep …f5, rock-solid.', highlights: [H('g7', KEY), H('g4', SOFT)] }),
+    ],
+  },
   'benoni-defence::Snake Benoni (...Bd7-a4 Maneuver)': {
     openingId: 'benoni-defence', title: 'Benoni — The Snake (…Na6-c7)', minutes: 10, orientation: 'black', sources: SRC,
     beats: [

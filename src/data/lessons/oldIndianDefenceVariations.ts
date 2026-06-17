@@ -13,6 +13,22 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 const SRC = ['book:old-indian-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Old_Indian_Defense'];
 
 export const OLD_INDIAN_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'old-indian-defence::Old Indian: Tartakower Variation': {
+    openingId: 'old-indian-defence', title: 'Old Indian — The Tartakower (…exd4)', minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'ot1', moves: 'd4 Nf6 c4 d6 Nc3 Nbd7 e4 e5', say: "The Old Indian — a solid, no-frills defence: Black plays …d6 and …Nbd7 and strikes the centre with …e5, a King's-Indian structure without the kingside fianchetto. It concedes White a little space, but it is compact and famously hard to break down.", sayShort: '…e5 — the solid Old Indian strike.', highlights: [H('e5', KEY)] }),
+      b({ id: 'ot2', moves: 'd4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O exd4 Nxd4 Re8', say: "Black develops modestly with …Be7 and …O-O, then the Tartakower idea: …exd4 to free the cramped position, followed by …Re8 to pressure the e4-pawn down the half-open file. No weaknesses, easy piece play.", sayShort: '…exd4, …Re8 — free up, pressure e4.', highlights: [H('e8', KEY)] }),
+      b({ id: 'ot3', moves: 'd4 Nf6 c4 d6 Nc3 Nbd7 e4 e5 Nf3 Be7 Be2 O-O O-O exd4 Nxd4 Re8 f3 Bf8 g4 Nc5 Kh1 c6', say: "White grabs kingside space with f3 and g4; Black regroups the bishop to …Bf8 on the long diagonal and lands …Nc5, a fine outpost hitting the e4-pawn. There is the Tartakower tabiya — be honest about it: White has more space and the engine prefers him by a hair, but Black is rock-solid, flexible, and armed with the …Nc5 outpost and the …c6/…d5 breaks. A resilient practical defence that holds its own (48% at club).", sayShort: '…Nc5 — the outpost; solid and resilient.', highlights: [H('c5', KEY), H('c6', SOFT)] }),
+    ],
+  },
+  'old-indian-defence::Old Indian: Ukrainian Variation': {
+    openingId: 'old-indian-defence', title: 'Old Indian — The Ukrainian (…e5 early)', minutes: 10, orientation: 'black', sources: SRC,
+    beats: [
+      b({ id: 'ou1', moves: 'd4 Nf6 c4 d6 Nc3 e5', say: "The Ukrainian Old Indian — Black strikes with …e5 as early as move 3, the most direct version. It immediately challenges White's centre and keeps Black's structure compact and flexible, the Old Indian's calling card.", sayShort: '…e5 — the direct early strike.', highlights: [H('e5', KEY)] }),
+      b({ id: 'ou2', moves: 'd4 Nf6 c4 d6 Nc3 e5 Nf3 Nbd7 g3 Be7 Bg2 O-O O-O c6 e4 a5', say: "Against White's fianchetto, Black develops …Be7, castles, braces the centre with …c6, and then begins the thematic queenside expansion with …a5. The plan is clear: gain space and counterplay on the wing where Black is better placed.", sayShort: '…c6, …a5 — brace and expand queenside.', highlights: [H('c6', KEY), H('a5', SOFT)] }),
+      b({ id: 'ou3', moves: 'd4 Nf6 c4 d6 Nc3 e5 Nf3 Nbd7 g3 Be7 Bg2 O-O O-O c6 e4 a5 h3 Re8 Be3 a4 Qc2 Qa5', say: "Black pushes …a4 to fix a queenside target and swings …Qa5 to pressure White's queenside while …Re8 eyes e4. There is the Ukrainian tabiya: a solid, flexible Old Indian with genuine queenside counterplay. The engine likes White's centre, but in practice Black holds comfortably — scoring 50% even at master level.", sayShort: '…a4, …Qa5 — queenside counterplay.', highlights: [H('a4', KEY), H('a5', SOFT)] }),
+    ],
+  },
   'old-indian-defence::Old Indian: Czech Variation': {
     openingId: 'old-indian-defence', title: 'Old Indian — The Czech (…c6/…c5)', minutes: 9, orientation: 'black', sources: SRC,
     beats: [

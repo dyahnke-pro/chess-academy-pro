@@ -24,6 +24,16 @@ function b(init: BeatInit): LessonBeat {
 }
 
 export const ENGLISH_OPENING_VARIATION_LESSONS: Record<string, LessonScript> = {
+  "english-opening::English: Four Knights Variation": {
+    openingId: 'english-opening', title: 'English — The Four Knights', minutes: 10, orientation: 'white',
+    sources: ['concept:pos-center', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/English_Opening'],
+    beats: [
+      b({ id: 'e4k1', moves: 'c4 e5 Nc3 Nf6 Nf3 Nc6 g3 Bb4', say: "The English Four Knights — a Reversed Sicilian with all four knights developed. Black's most testing reply is …Bb4, pinning the c3-knight and fighting for the centre. White answers calmly with the kingside fianchetto, keeping the position sound and flexible.", sayShort: '…Bb4 — Black pins, fights for the centre.', highlights: [H('b4', KEY)] }),
+      b({ id: 'e4k2', moves: 'c4 e5 Nc3 Nf6 Nf3 Nc6 g3 Bb4 Bg2 O-O O-O e4 Ng5 Bxc3 bxc3', say: "Black grabs space with …e4, kicking the f3-knight to g5; after …Bxc3 bxc3 White takes the bishop pair and a solid centre, while Black's e4-pawn is advanced but over-extended — a long-term target.", sayShort: 'bxc3 — the bishop pair vs a loose e4.', highlights: [H('e4', KEY), H('c3', SOFT)] }),
+      b({ id: 'e4k3', moves: 'c4 e5 Nc3 Nf6 Nf3 Nc6 g3 Bb4 Bg2 O-O O-O e4 Ng5 Bxc3 bxc3 Re8 Qc2 Qe7 d3 exd3 exd3 d6', say: "White challenges the spearhead with d3 and wins it back cleanly (…exd3 exd3), reaching a balanced middlegame. There is the Four Knights tabiya — and the honest verdict: this is Black's reliable equalizer, dead level, with White holding the bishop pair against a solid structure. For a real winning try with the English, prefer the Botvinnik or Reversed-Sicilian set-ups; here White is comfortable and sound, never worse.", sayShort: 'd3 — regain the pawn, equal and sound.', highlights: [H('d3', KEY)] }),
+    ],
+  },
+
   "english-opening::English: Reversed Sicilian": {
     openingId: 'english-opening', title: 'English — the Reversed Sicilian', minutes: 11, orientation: 'white',
     sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/English_Opening'],
