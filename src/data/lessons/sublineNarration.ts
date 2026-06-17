@@ -47,9 +47,12 @@ const SLAV_SRC = ['concept:pos-development', 'concept:pos-center', 'https://en.w
 // Slav, quiet e3 (shutting in White's own bishop). d4 d5 c4 c6 Nf3 Nf6 e3 Bf5
 const SLAV_E3: SublineNarration = {
   intro: {
-    say: "e3 — the quiet Slav, and it comes with a quiet concession: White shuts his own light-squared bishop in behind the pawn chain. You make the most of it the Slav way — …Bf5, getting YOUR light bishop out to an active post OUTSIDE the chain before locking the centre. Free bishop, rock-solid structure, no weaknesses: exactly what the Slav promises.",
-    sayShort: 'e3 — get …Bf5 out, then settle.',
+    say: "e3 — the quiet Slav, and it hands you a quiet gift: with this pawn White boxes his OWN light-squared bishop in behind the chain. The Slav's whole identity is the answer — …Bf5, getting your light bishop out to an active post before you ever close the centre. One side ends up with a good bishop and one with a bad one, and it's you holding the good one.",
+    sayShort: 'e3 — get …Bf5 out first.',
   },
+  beats: [
+    { atMove: 7, say: "…Bf5 — there it is, the move that justifies the entire Slav. White's e3 just entombed his own bishop; yours steps outside the pawn chain onto f5, raking the b1-h7 diagonal and bearing down on c2. This is the difference between a good bishop and a bad one, decided on move four of the opening — and the comfort of the whole defence flows from it.", arrows: [A('f5', 'c2')], highlights: [H('f5', KEY), H('c2', SOFT)] },
+  ],
   sources: SLAV_SRC,
 };
 // Slav, sharp Nc3 (the …dxc4 + …b5 / Botvinnik & Geller complex). d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 Bg5 ...
@@ -224,11 +227,17 @@ const BENONI_NXD5: SublineNarration = {
   sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
 };
 // Sveshnikov → White offers a c3 Morra-style gambit (student Black).
+// Sveshnikov → c3 Morra gambit, accepted (student Black, a pawn up). Line:
+// e4 c5 Nf3 Nc6 d4 cxd4 c3 dxc3 Nxc3 e6 Bc4 a6 O-O
 const SVESH_C3: SublineNarration = {
   intro: {
-    say: "c3 — White swerves into a Smith-Morra-style gambit rather than entering the main Open Sicilian. You sidestep all the Sveshnikov theory: decline cleanly into an Alapin-type game, or take the pawn and hand it back for easy development. Either road gives Black a comfortable, fully sound position.",
-    sayShort: 'c3 — Morra try; decline, stay sound.',
+    say: "c3 — White swerves into a Smith-Morra-style gambit instead of the main Open Sicilian, sidestepping all your Sveshnikov theory. So take the pawn — …dxc3. White gets a lead in development for it, but that's a debt with an expiry date: trade a pair of pieces, finish with …e6 and …a6, get the king safe, and the extra pawn is simply yours.",
+    sayShort: 'c3 — accept …dxc3, consolidate.',
   },
+  beats: [
+    { atMove: 7, say: "…dxc3 — grab it. Declining hands White the comfortable game he wants; accepting means he has to PROVE the gambit. After he recaptures you're a clean pawn up, and your only job is to weather a few energetic moves by trading pieces and developing — once the initiative burns out, the pawn decides.", highlights: [H('c3', ATK)] },
+    { atMove: 11, say: "…a6 — the single most important move in any Morra defence. It denies b5 to White's bishop and knight, and prepares your own …b5 to kick the c4-bishop off its f7-aiming diagonal. This quiet move is what extinguishes the gambit: no targets, no sacrifices, just an extra pawn.", highlights: [H('a6', SOFT), H('b5', KEY)] },
+  ],
   sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation'],
 };
 // Catalan check (student Black).
