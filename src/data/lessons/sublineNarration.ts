@@ -55,6 +55,59 @@ const FR_TARRASCH: SublineNarration = {
   sources: FR_SRC,
 };
 
+const RUY_SRC = ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'];
+const IT_SRC = ['book:italian-game', 'concept:pos-development', 'https://www.chess.com/openings/Italian-Game'];
+const SIC_SRC = ['concept:pos-initiative', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence'];
+
+// Ruy (student White). The same Black replies surface across several tabs.
+// …Be7 — the Closed Ruy main line (72%). e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7
+const RUY_BE7: SublineNarration = {
+  intro: {
+    say: "Be7 — the Closed Ruy Lopez, the main road and the richest middlegame in all of chess. Black develops solidly and prepares to castle. Now you unfurl the great Spanish build-up: c3 to prepare d4, Re1 to back the e-pawn, and the famous knight tour Nbd2-f1-g3, swinging the knight toward the kingside. You're playing for a slow, suffocating central clamp.",
+    sayShort: 'Be7 — Closed Ruy: build c3 and d4.',
+  },
+  sources: RUY_SRC,
+};
+// …Na5 — the Chigorin (18%). …c3 Na5
+const RUY_NA5: SublineNarration = {
+  intro: {
+    say: "Na5 — the Chigorin, the classical Closed Ruy plan: Black chases your prized light-squared bishop off the a2-g8 diagonal. Don't allow the trade — retreat Bc2, where the bishop swings onto the b1-h7 diagonal aimed at Black's king instead. The knight on a5 is offside on the rim, and you'll claim the centre with d4 while it sulks.",
+    sayShort: 'Na5 — keep the bishop: Bc2.',
+  },
+  sources: RUY_SRC,
+};
+// Italian (student White). …d6 — the quiet Pianissimo (28%). e4 e5 Nf3 Nc6 Bc4 Bc5 c3 d6
+const IT_D6: SublineNarration = {
+  intro: {
+    say: "…d6 — the quiet Giuoco Pianissimo, where Black props the e5-pawn and keeps everything solid. No fireworks, so you build slowly: d3, the Ruy-style knight tour Nbd2-f1-g3, castle, and prepare a later d4 or kingside expansion. This is the modern main-line Italian — patient maneuvering where small, lasting space is the whole game.",
+    sayShort: '…d6 — quiet Italian: build slowly.',
+  },
+  sources: IT_SRC,
+};
+// …Nf6 — the Two Knights (44%). e4 e5 Nf3 Nc6 Bc4 Nf6
+const IT_NF6: SublineNarration = {
+  intro: {
+    say: "…Nf6 — the Two Knights, the aggressive reply, striking your e4-pawn at once and inviting a brawl. You have a real choice here: the swashbuckling Ng5 lunging straight at f7, or the principled centre break d4 (both covered in the variation lessons). Black has picked the sharpest battleground in the Italian — meet it head-on.",
+    sayShort: '…Nf6 — Two Knights: d4 or Ng5.',
+  },
+  beats: [
+    { atMove: 5, say: "…Nf6 hits e4 immediately, refusing the quiet game. This is the move that makes the Italian sharp — and both the d4 break and the f7-lunge Ng5 are yours to choose.", highlights: [H('e4', KEY)] },
+  ],
+  sources: IT_SRC,
+};
+// Sicilian (student Black). Bd3 — an offbeat White 6th. Appears on every
+// Najdorf/Dragon tab via the shared fork. e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Bd3 Nc6
+const SIC_BD3: SublineNarration = {
+  intro: {
+    say: "Bd3 — an offbeat sixth move. The bishop normally belongs on e2, c4 or g5; on d3 it blocks White's own d-file and bites on nothing. Punish the lazy development with natural play: …Nc6 challenges the d4-knight at once, and you'll follow with …g6 or …e5 to seize the centre while the bishop sits misplaced.",
+    sayShort: 'Bd3 — punish with …Nc6.',
+  },
+  beats: [
+    { atMove: 9, say: "…Nc6 — striking the d4-knight straight away. With White's bishop committed passively to d3, you develop with tempo and head for a comfortable, fully equal game where every one of your pieces reaches a better square than its counterpart.", highlights: [H('d4', KEY)] },
+  ],
+  sources: SIC_SRC,
+};
+
 const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   // Caro-Kann, Advance Variation (var 1) — the Short System, White's most
   // common try here (about a third of games). Line:
@@ -199,6 +252,75 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
     ],
     sources: FR_SRC,
   },
+
+  // ── Ruy Lopez (student White) ──
+  'ruy-lopez::3::Be7@9': RUY_BE7,
+  'ruy-lopez::7::Be7@9': RUY_BE7,
+  'ruy-lopez::0::Na5@15': RUY_NA5,
+  'ruy-lopez::1::Na5@15': RUY_NA5,
+  'ruy-lopez::2::Na5@15': RUY_NA5,
+  // …a6 — the Morphy Defence (71%). e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6
+  'ruy-lopez::4::a6@5': {
+    intro: {
+      say: "…a6 — the Morphy Defence, by far Black's main reply, putting the question to your bishop. The principled answer is Ba4: keep the bishop rather than trade it, holding the pressure on the c6-knight and reserving the strong retreat to b3. This is the gateway to the entire main-line Ruy.",
+      sayShort: '…a6 — keep the bishop: Ba4.',
+    },
+    beats: [
+      { atMove: 6, say: "Ba4 — retreat, but keep the bishop alive. It still eyes the c6-knight down the diagonal, with the powerful drop to b3 in reserve, aiming toward f7 and the centre. You decline the trade and keep every drop of Spanish pressure.", highlights: [H('c6', KEY)] },
+    ],
+    sources: RUY_SRC,
+  },
+  // …d6 — Closed Ruy with …d6 (7%). e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 d6
+  'ruy-lopez::5::d6@11': {
+    intro: {
+      say: "…d6 — Black bolsters the e5-pawn in Closed-Ruy style before committing the knight. Nothing changes about your plan: c3 and d4 for the big centre, and the Nbd2-f1-g3 tour to the kingside. Solid from Black, but slightly passive — you take the space and the initiative.",
+      sayShort: '…d6 — build c3 and d4 anyway.',
+    },
+    sources: RUY_SRC,
+  },
+  'ruy-lopez::6::d6@11': {
+    intro: {
+      say: "…d6 — Black bolsters the e5-pawn in Closed-Ruy style before committing the knight. Nothing changes about your plan: c3 and d4 for the big centre, and the Nbd2-f1-g3 tour to the kingside. Solid from Black, but slightly passive — you take the space and the initiative.",
+      sayShort: '…d6 — build c3 and d4 anyway.',
+    },
+    sources: RUY_SRC,
+  },
+  // bxc6 — the Exchange Ruy (12%). e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 bxc6 O-O
+  'ruy-lopez::8::bxc6@7': {
+    intro: {
+      say: "The Exchange Ruy — you've traded on c6 and …bxc6 recaptures. Here's your long-term trump: Black now has doubled c-pawns and a queenside majority that can never manufacture a passed pawn, while your clean kingside majority can. Castle, trade pieces, and steer for the endgame where that structural edge tells — Fischer's favourite way to play the Spanish.",
+      sayShort: 'bxc6 — play the Exchange endgame.',
+    },
+    beats: [
+      { atMove: 8, say: "O-O — and the plan is set: aim for the endgame. Your kingside majority is healthy and can roll to a passed pawn; Black's doubled c-pawns make his extra queenside pawn worthless. Trade pieces, keep the structure, grind it home.", highlights: [H('c6', KEY)] },
+    ],
+    sources: RUY_SRC,
+  },
+
+  // ── Italian Game (student White) ──
+  'italian-game::0::d6@7': IT_D6,
+  'italian-game::1::d6@7': IT_D6,
+  'italian-game::6::d6@7': IT_D6,
+  'italian-game::2::Nf6@5': IT_NF6,
+  'italian-game::3::Nf6@5': IT_NF6,
+
+  // ── Sicilian Najdorf + Dragon (student Black): the offbeat Bd3 ──
+  'sicilian-najdorf::0::Bd3@8': SIC_BD3,
+  'sicilian-najdorf::1::Bd3@8': SIC_BD3,
+  'sicilian-najdorf::2::Bd3@8': SIC_BD3,
+  'sicilian-najdorf::3::Bd3@8': SIC_BD3,
+  'sicilian-najdorf::4::Bd3@8': SIC_BD3,
+  'sicilian-najdorf::5::Bd3@8': SIC_BD3,
+  'sicilian-najdorf::6::Bd3@8': SIC_BD3,
+  'sicilian-najdorf::7::Bd3@8': SIC_BD3,
+  'sicilian-najdorf::8::Bd3@8': SIC_BD3,
+  'sicilian-dragon::0::Bd3@8': SIC_BD3,
+  'sicilian-dragon::1::Bd3@8': SIC_BD3,
+  'sicilian-dragon::2::Bd3@8': SIC_BD3,
+  'sicilian-dragon::3::Bd3@8': SIC_BD3,
+  'sicilian-dragon::4::Bd3@8': SIC_BD3,
+  'sicilian-dragon::6::Bd3@8': SIC_BD3,
+  'sicilian-dragon::7::Bd3@8': SIC_BD3,
 };
 
 /** Hand-authored narration for a subline, or null to use the honest baseline. */
