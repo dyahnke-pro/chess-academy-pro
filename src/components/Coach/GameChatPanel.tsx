@@ -2,8 +2,9 @@ import { useState, useCallback, useRef, useEffect, forwardRef, useImperativeHand
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAppStore } from '../../stores/appStore';
-import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
-import { validateTacticClaims } from '../../services/tacticClaimValidator';
+import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
+import { validateTacticClaims, stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
+import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech } from '../../services/sanitizeCoachText';
 import { routeChatIntent } from '../../services/coachSessionRouter';
 import { detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
@@ -17,7 +18,7 @@ import { parseActions } from '../../services/coachActionDispatcher';
 import { coachService, isPlanQuestion } from '../../coach/coachService';
 import { buildEnginePlan } from '../../services/enginePlanContext';
 import { withTimeout } from '../../coach/withTimeout';
-import type { LiveState } from '../../coach/types';
+import type { LiveState, TacticsLiveContext } from '../../coach/types';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { logAppAudit } from '../../services/appAuditor';
 import { voiceService } from '../../services/voiceService';
@@ -194,6 +195,13 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     // this the coach kept talking after leaving the classroom and
     // collided with whatever the user did next on return.
     const speechAbortedRef = useRef(false);
+    // This turn's bounded tactics context — set when each ask builds it, read
+    // by queueSpeak so the SPOKEN sentence is tactic-grounded too. The voice
+    // streams mid-response, BEFORE the spine's final-text gate runs, so
+    // without this a hallucinated tactic ("knight fork") gets SPOKEN even
+    // though the chat bubble is clean (David 2026-06-16). speakGrounded only
+    // board-grounds; this adds the tactic gate to the voice path.
+    const currentTacticsRef = useRef<TacticsLiveContext | null>(null);
     useEffect(() => {
       return () => {
         speechAbortedRef.current = true;
@@ -216,13 +224,24 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       // anyway — exactly what made the coach "keep talking" after
       // the user left the classroom or started speaking.
       const myGen = voiceService.currentStopGeneration;
+      // Tactic-ground the spoken sentence BEFORE it reaches Polly: drop any
+      // sentence claiming a tactic absent from this turn's bounded context.
+      // speakGrounded board-grounds; this is the tactic half (David
+      // 2026-06-16 — the false "knight fork" was HEARD, not read). Negation/
+      // avoidance phrasing is kept; a real listed tactic is never touched.
+      let spoken = trimmed;
+      try {
+        const tac = stripUngroundedTacticSentences(spoken, currentTacticsRef.current);
+        if (tac.dropped.length > 0) spoken = tac.clean;
+      } catch { /* never silence the voice on a validator fault */ }
+      if (!spoken.trim()) return;
       speechChainRef.current = speechChainRef.current
         .then(() => {
           if (speechAbortedRef.current) return;
           if (voiceService.currentStopGeneration !== myGen) return;
           // GROUND the spoken coach sentence against the live board (David
           // 2026-06-06: the /coach/play voice must be grounded like the text).
-          return voiceService.speakGrounded(trimmed, getLiveFen?.() ?? null);
+          return voiceService.speakGrounded(spoken, getLiveFen?.() ?? null);
         })
         .catch(() => undefined);
     }, [getLiveFen]);
@@ -677,12 +696,23 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           const gameChatStudentColor = liveFen.split(' ')[1] === 'b' ? 'b' : 'w';
           const gameChatStudentRating =
             useAppStore.getState().activeProfile?.puzzleRating ?? 1200;
+          // Sync thin context for the brain envelope — the SPINE re-feeds it
+          // richly (coachService.ask runs buildFedTacticsContext when thin),
+          // so we must NOT block the chat reply on an engine read here.
           const gameChatTactics = buildTacticsLiveContext(
             liveFen,
             null,
             gameChatStudentColor,
             gameChatStudentRating,
           );
+          // FED context for the SPOKEN gate (queueSpeak), fire-and-forget so
+          // it never delays the reply (ROOT fix, David 2026-06-16). The voice
+          // streams seconds later (after the brain responds), so this
+          // resolves first; if not, the spoken gate falls back to board-only
+          // for the first sentence and the displayed text stays spine-gated.
+          void buildFedTacticsContext(liveFen, gameChatStudentColor, gameChatStudentRating)
+            .then((fed) => { currentTacticsRef.current = fed; })
+            .catch(() => { /* engine down — leave board-only */ });
           void logAppAudit({
             kind: 'coach-surface-migrated',
             category: 'subsystem',
@@ -957,7 +987,21 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           // Memory rehydration on the next turn re-feeds prior
           // assistant text into the prompt; if [[ACTION:...]] markup
           // is in there, the LLM learns the wrong protocol.
-          const assistantText = sanitizeCoachText(textWithoutBoardTags);
+          const assistantTextRaw = sanitizeCoachText(textWithoutBoardTags);
+          // WRITTEN == VERBAL (David 2026-06-17): the voice (queueSpeak →
+          // speakGrounded + the tactic strip) drops any board-false or
+          // out-of-vocab-tactic sentence before speaking — so the displayed
+          // bubble must get the SAME grounding, or the student reads
+          // something different from what they hear. Apply the identical
+          // board + tactic gates (same live FEN, same fed tactics context the
+          // voice uses) to the displayed/stored text.
+          let assistantText = assistantTextRaw;
+          try {
+            const fenNow = getLiveFen?.() ?? fen ?? null;
+            if (fenNow) assistantText = stripDisprovenSentences(assistantText, fenNow).clean || assistantText;
+            const tac = stripUngroundedTacticSentences(assistantText, currentTacticsRef.current);
+            if (tac.dropped.length > 0) assistantText = tac.clean || assistantText;
+          } catch { /* keep the sanitized text on a validator fault */ }
           // G3 enforcement on in-game chat replies. Bounded vocabulary
           // is the gameChatTactics block we attached to the envelope
           // above; out-of-vocab claims surface as audit events.

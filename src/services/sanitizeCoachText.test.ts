@@ -380,3 +380,30 @@ describe('sanitizeCoachText — escaped board markers (David 2026-06-15)', () =>
     expect(sanitizeCoachText('done \\[[ACTION:play_move {"san":"e4"}]]')).toBe('done');
   });
 });
+
+describe('sanitizeCoachText — prose "Board arrows:" leak (David 2026-06-16)', () => {
+  it('strips a "Board arrows:" header + its bullet list whole', () => {
+    // The exact leak from the /coach/teach screenshot — markup the LLM
+    // wrote as prose (not a [BOARD:] marker), including an invented
+    // "hanging pawn" self-highlight.
+    const leaked =
+      'I played Nc3.\n\nBoard arrows:\n- `f8-e7` (green, showing Black\'s last move Be7)\n- `c6-c6` (green, highlighting the hanging pawn)';
+    const out = sanitizeCoachText(leaked);
+    expect(out).toContain('I played Nc3.');
+    expect(out).not.toMatch(/board arrows/i);
+    expect(out).not.toContain('f8-e7');
+    expect(out).not.toContain('c6-c6');
+    expect(out).not.toContain('hanging pawn');
+  });
+
+  it('strips a "Board highlights:" block too', () => {
+    const out = sanitizeCoachText('The d5 outpost is strong.\nBoard highlights:\n- d5 (yellow)');
+    expect(out).toContain('The d5 outpost is strong.');
+    expect(out).not.toMatch(/board highlights/i);
+  });
+
+  it('leaves ordinary prose containing the word "arrows" alone', () => {
+    const text = 'The arrows on the board point at the weak squares.';
+    expect(sanitizeCoachText(text)).toBe(text);
+  });
+});

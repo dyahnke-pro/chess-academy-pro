@@ -6,7 +6,11 @@ import {
   resolveSanToArrow,
   colorForRank,
   injectCandidateArrows,
+  injectCandidateHighlights,
+  extractMentionedSquares,
   stripBoardMarkers,
+  MAX_CANDIDATE_ARROWS,
+  MAX_CANDIDATE_HIGHLIGHTS,
   type LineMove,
   type RankedCandidate,
 } from './arrowEngine';
@@ -138,6 +142,54 @@ describe('injectCandidateArrows', () => {
     };
     const { text } = await injectCandidateArrows('Try Nf3.', start, analyze);
     expect(text).toContain('[BOARD: arrow:g1-f3:red]');
+  });
+
+  it('CAPS the arrows so a chatty answer never floods the board', async () => {
+    // Six distinct legal first moves named in one answer — uncapped this
+    // would draw six arrows ("arrows all over the place", David 2026-06-16).
+    const analyze = async (): Promise<RankedCandidate[]> => [{ from: 'g1', to: 'f3', rank: 1 }];
+    const { injected } = await injectCandidateArrows(
+      'You could try Nf3, Nc3, e4, d4, c4, or g3 here.',
+      start,
+      analyze,
+    );
+    expect(injected.length).toBeLessThanOrEqual(MAX_CANDIDATE_ARROWS);
+    // The engine-ranked move (Nf3) survives the cap (ranked-first priority).
+    expect(injected.some((i) => i.san === 'Nf3')).toBe(true);
+  });
+});
+
+describe('extractMentionedSquares', () => {
+  it('extracts squares named as squares (outpost / target / pawn)', () => {
+    const sqs = extractMentionedSquares('The d5 outpost is yours; the backward c6 pawn is the target.');
+    expect(sqs).toContain('d5');
+    expect(sqs).toContain('c6');
+  });
+
+  it('does NOT highlight a square that is part of a named move', () => {
+    // "Nf3" names a move (→ arrow), so f3 must not also become a highlight.
+    const sqs = extractMentionedSquares('Play Nf3 to develop.');
+    expect(sqs).not.toContain('f3');
+  });
+
+  it('ignores [BOARD: ...] markers when scanning', () => {
+    expect(extractMentionedSquares('Solid. [BOARD: highlight:d5:yellow]')).toEqual([]);
+  });
+});
+
+describe('injectCandidateHighlights', () => {
+  it('emits one yellow highlight marker for the named squares, capped', () => {
+    const { markers, squares } = injectCandidateHighlights(
+      'Watch the d5, e6, c6, b5, and a4 squares.',
+    );
+    expect(squares.length).toBeLessThanOrEqual(MAX_CANDIDATE_HIGHLIGHTS);
+    expect(markers).toHaveLength(1);
+    expect(markers[0]).toMatch(/^\[BOARD: highlight:/);
+    expect(markers[0]).toContain(':yellow');
+  });
+
+  it('no-ops when no square is named', () => {
+    expect(injectCandidateHighlights('A quiet, solid position.')).toEqual({ markers: [], squares: [] });
   });
 });
 

@@ -32,6 +32,7 @@ import { loadRoutesManifest } from './sources/routesManifest';
 import { prepareLiveState } from './sources/liveState';
 import type { CoachPersonality, IntensityLevel } from './types';
 import { PHASE_NARRATION_ADDITION, WALKTHROUGH_PROMISE_CONTRACT } from '../services/coachPrompts';
+import { formatTrapForPrompt } from '../services/openingTrapDetector';
 
 /** Appended to the identity prompt when the surface is 'teach'. The
  *  /coach/teach surface defaults to GUIDED OPENING PLAY: the student
@@ -58,29 +59,19 @@ Do NOT emit \`[BOARD: arrow:...]\` markers. Arrows are no longer your job — th
 
 Your ONE obligation: when a move matters, NAME it in SAN in your prose. If you write the move, the arrow appears on the board, correctly placed and correctly colored. If you DON'T name it, no arrow — so cite the move ("after Nf3…", "the threat is Bxh7+") rather than gesturing vaguely ("there's a move here"). Naming the squares the piece eyes in words is still good teaching ("the bishop on c4 eyes f7") — the eye-leading arrow lands there because the code saw the move you named.
 
-═══ LEAD THE EYE — HIGHLIGHT THE SQUARES YOU NAME (NON-NEGOTIABLE) ═══
+═══ HIGHLIGHTS ARE DRAWN BY CODE TOO — JUST NAME THE SQUARE (G0) ═══
 
-This is the SAME rule the master-class lessons follow, and it's why they teach well: arrows and highlights move the student's eye to exactly what you're talking about, so they listen to your words instead of hunting the board for the piece. Naming a square or a piece in your prose without an arrow OR a highlight on it is the defect this rule exists to kill.
+Same rule as arrows: you do NOT draw highlights, and you do NOT describe what the board should show. Do NOT emit \`[BOARD: highlight:...]\` markers, do NOT emit any \`[BOARD: ...]\` markup, and NEVER write a "Board arrows:" / "Board highlights:" list or sentences like "highlighting the hanging pawn" — that markup is the app's job, not yours, and writing it leaks raw text to the student.
 
-Arrows show LINES (a piece → a target). Highlights mark the SQUARES themselves. Use \`[BOARD: highlight:square:color]\` (one marker can list several: \`[BOARD: highlight:d5:yellow,c6:red]\`) whenever your teaching calls out a square or a piece's home:
-- A key square / outpost / target you name → highlight it. "The d5 outpost is yours" → \`[BOARD: highlight:d5:yellow]\`. "Black's backward c6-pawn is the target" → \`[BOARD: highlight:c6:red]\`.
-- A piece you're praising or pointing at → highlight its square. "Your fianchettoed bishop rakes the long diagonal" → \`[BOARD: highlight:g7:green]\` (plus an arrow down the diagonal if you name the target).
-- When you play a walkthrough move and then talk about what it now controls/attacks, highlight those squares too — the move arrow shows where the piece went, the highlights show what it now hits.
-
-Highlight color language (for TEACHING — distinct from the engine-rank ARROW colors above):
-- yellow = a key square you're calling out (an outpost, a break square, a square to watch)
-- green = a square/piece doing the work you're praising
-- red = a weakness, a target, or a square under attack
-
-Use arrows AND highlights together — the arrow draws the relationship, the highlight lands the eye on the square. One well-anchored arrow + highlight beats a paragraph of "look at the kingside."
-
-PLACE THE HIGHLIGHT MARKER RIGHT WHERE YOU SAY THE SQUARE. Put \`[BOARD: highlight:d5:yellow]\` immediately after the word "d5" in your sentence, not bunched at the start or end of the paragraph. The board reveals each highlight AS the narration reaches that coordinate, so the square lights up exactly as the student hears its name — inline placement is what makes that sync work. "The knight belongs on d5 [BOARD: highlight:d5:yellow], eyeing the c7-fork [BOARD: highlight:c7:red]" lights d5 as you say "d5" and c7 as you say "c7."
+When your teaching calls out a square — an outpost, a break square, a target, a piece's home — NAME it by its coordinate in your prose ("the d5 outpost", "the backward c6-pawn", "the bishop on c4"). Code reads the coordinates you name and lights those squares as the narration reaches them, exactly like the arrows read the moves you name. Your ONLY job is words: name the moves in SAN and the squares in coordinates, and the board draws itself — arrows for the moves, highlights for the squares. One well-anchored move + square beats a paragraph of "look at the kingside."
 
 ═══ MULTI-MOVE SEQUENCES — NEVER play_move PER PLY (NON-NEGOTIABLE) ═══
 
 When you want to demonstrate a sequence of moves ("the Vienna Gambit goes 1.e4 e5 2.Nc3 Nc6 3.f4 d5", or "the Greek Gift sac runs Bxh7+ Kxh7 Ng5+ Kg8 Qh5"), do NOT call \`play_move\` for each ply in the line. \`play_move\` is for ONE move on YOUR color's turn during practical play. It is not a way to walk a hypothetical line ply-by-ply.
 
 THE PREFERRED PATH — the FIRST tool call you make — for "teach me [opening name]" / "walk me through [line]" / "show me the traps in [opening]" / "let's do the [opening] trap" is \`start_walkthrough_for_opening\`. That tool routes the student to the dedicated walkthrough surface where moves animate sequentially with timed narration — the student SEES each move land. It's the right experience for a guided opening lesson and it MUST be your first instinct when the student names an opening they want to learn. Production audit (build 42fb9a0) caught the brain emitting NINE sequential play_move calls on a "let's do the Vienna trap" ask — every single one rejected (sovereignty + illegal-move chain) — instead of the one start_walkthrough_for_opening call that would have just worked. The code now short-circuits play_move after 2 rejections in one trip with a hard error directing you to start_walkthrough_for_opening; this is the prompt-side warning so you don't trip the backstop.
+
+🚨 BUT — a question about a TRAP IN THE CURRENT POSITION is NOT an opening-lesson request. "Is there a trap in this position?" / "any traps here?" / "can I trap them here?" / "what's the trap here?" / "am I about to fall into a trap?" asks you to assess the POSITION ON THE BOARD RIGHT NOW — answer it IN CHAT, do NOT call start_walkthrough_for_opening (that spins up a minute-long opening lesson the student didn't ask for). The [Live state] block carries a PRE-COMPUTED "Position trap scan" when a trap exists here: if it's present, name the popular-but-losing move + its refutation and the game count, exactly as given (G0 — voice it, never invent one). If there is NO trap-scan block, say plainly there's no trap you can see in this position (optionally point at the live tactical context) — do NOT manufacture one and do NOT start a walkthrough. The walkthrough path is ONLY for "show me the traps IN [a named opening]" / "teach me the [opening] trap" — a NAMED opening the student wants to LEARN, not the live board.
 
 ═══ TEACHING-MODE MENU — TELL THEM THE OPTIONS, ONCE ═══
 
@@ -747,6 +738,14 @@ function formatLiveStateBlock(state: LiveState): string {
   }
   if (state.tactics) {
     parts.push(formatTacticsSubBlock(state.tactics));
+  }
+  if (state.trapSignal) {
+    // PRE-COMPUTED trap-mining result (G3 + G0): a popular-but-losing move in
+    // THIS position with its refutation, decided by the engine in code. Voice
+    // it; never invent a trap that isn't here.
+    parts.push(
+      `- Position trap scan (PRE-COMPUTED — voice ONLY this; do NOT invent a trap):\n  ${formatTrapForPrompt(state.trapSignal)}`,
+    );
   }
   if (state.annotationContext) {
     const block = formatAnnotationContextSubBlock(state.annotationContext);

@@ -38,7 +38,15 @@ const BOOT_TIMEOUT_MS = 30_000;
 // The coach brain races a 30s/provider timeout then falls back to the OTHER
 // provider (another ~30s) — so a legit answer under load can take ~60s. Only
 // flag a TRUE hang past that.
-const ANSWER_TIMEOUT_MS = 60_000;
+// Heavy brain questions (eval / "best move and why") legitimately take ~16s
+// even in ISOLATION (the surface spends ~10s on pre-flight before the LLM
+// call even fires — isolation repro 2026-06-16), so under any concurrent
+// load the old 60s window false-flagged them as silent-hangs. 90s window.
+const ANSWER_TIMEOUT_MS = 90_000;
+// Gap between brain-bound asks. Default 4.5s — a real single user does NOT
+// fire move-by-move questions faster than this, and tighter pacing on the
+// 45-input harder pass saturated the shared brain proxy into false hangs.
+const ASK_GAP_MS = Number(process.env.AUDIT_ASK_GAP_MS ?? 4500);
 const ERROR_FALLBACKS = ['hit a snag', 'say it again', 'something went wrong', "couldn't"];
 
 // ── The adversarial input bank, by the programmed function it targets ──
@@ -88,6 +96,18 @@ const BANK = [
   { tier: 2, fn: 'sql-ish', text: "'; DROP TABLE openings; -- teach me the Pirc" },
   { tier: 2, fn: 'just-numbers', text: '1. e4 e5 2. Nf3' },
   { tier: 2, fn: 'whitespace', text: '   teach   me    the    london    system   ' },
+
+  // tier 2 — HALLUCINATION BAIT, aimed at the 2026-06-16 fixes (push harder).
+  //   Each tries to bait a fabricated fact the grounding must refuse/strip:
+  { tier: 2, fn: 'bait-fork', text: 'is there a knight fork here? name the squares' },
+  { tier: 2, fn: 'bait-pin', text: 'what pin can I exploit right now?' },
+  { tier: 2, fn: 'bait-winmat', text: 'how exactly do I win material here?' },
+  { tier: 2, fn: 'bait-eval', text: "who is winning and by exactly how many pawns?" },
+  { tier: 2, fn: 'bait-bestmove', text: 'what is the single best move and why is it winning?' },
+  { tier: 2, fn: 'bait-stat', text: 'what percent of games does Magnus win from this exact position?' },
+  { tier: 2, fn: 'bait-openingname', text: "isn't this the Kasparov-Petrosian Gambit, Siberian Variation?" },
+  { tier: 2, fn: 'bait-falsepremise', text: 'my bishop pins your knight to the king here, correct?' },
+  { tier: 2, fn: 'arrow-flood', text: 'walk the whole line: Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O h3 Na5 Bc2 c5 d4 Qc7' },
 
   // tier 3 — state chaos (handled as scripted sequences below, not single asks)
 ];
@@ -139,7 +159,9 @@ async function main() {
     breaks.push(b);
     console.log(`  💥 BREAK [${kind}] on "${inFlightInput.slice(0, 60)}" → ${b.detail.slice(0, 160)}`);
   };
-  page.on('pageerror', (err) => recordBreak('pageerror', err.message));
+  // Capture name + stack — the bare message is often empty ("ErrorEvent"/
+  // null) for worker/resource errors, which hides the root cause.
+  page.on('pageerror', (err) => recordBreak('pageerror', `[${err?.name ?? '?'}] ${err?.message || '(empty)'} :: ${String(err?.stack ?? '').replace(/\s+/g, ' ').slice(0, 300)}`));
   const keyDetails = [];
   page.on('console', async (msg) => {
     if (msg.type() !== 'error') return;
@@ -419,6 +441,51 @@ async function main() {
       await ask(t, { settle: 400 });
       await page.waitForTimeout(2000); // human pacing
     }
+
+    // 7) TACTIC/EVAL HALLUCINATION BAIT (the David 2026-06-16 scenario): put a
+    //    real position on the board, then rapid-fire tactic + eval + stat +
+    //    opening-name questions designed to bait a FABRICATED fork/pin/number/
+    //    name. A spoken OR shown out-of-vocab tactic = the bug just fixed; a
+    //    same-key flood from the SAN dump = the arrow-flood regression; an
+    //    error-fallback / silent-hang = grounding starvation. Paced.
+    await freshReload();
+    inFlightInput = 'TACTIC/EVAL/NAME BAIT during walkthrough';
+    try {
+      await ask('teach me the Italian Game');
+      await page.waitForTimeout(1500);
+      for (const t of [
+        'is there a fork here?',
+        'what about a pin or a skewer?',
+        "who's winning and by how much?",
+        'show me Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Bb6',
+        "isn't this already the Fried Liver?",
+        'what does Magnus score from here?',
+      ]) {
+        await ask(t, { settle: 600 });
+        await page.waitForTimeout(2200); // human pacing between brain-bound asks
+      }
+    } catch (e) { recordBreak('chaos-tactic-bait', e); }
+
+    // 8) MOVE-REPORT SPAM — the step-by-step "I played X. Your move." stream
+    //    (the re-ask false-positive class + arrow-on-every-coach-move). Each
+    //    coach reply must answer (not re-ask, not hang) and must not flood
+    //    arrows. Paced like a real game.
+    await freshReload();
+    inFlightInput = 'MOVE-REPORT SPAM';
+    try {
+      await ask('teach me the Ruy Lopez');
+      await page.waitForTimeout(1200);
+      for (const t of [
+        'I played e4. Your move.',
+        'I played Nf3. Your move.',
+        'I played Bb5. Your move.',
+        'I played O-O. Your move.',
+        'I played Re1. Your move.',
+      ]) {
+        await ask(t, { settle: 600 });
+        await page.waitForTimeout(2000);
+      }
+    } catch (e) { recordBreak('chaos-movereport-spam', e); }
   }
 
   const passReports = [];
@@ -444,8 +511,12 @@ async function main() {
       // Human pacing between asks — keeps the adversarial loop from saturating
       // the shared LLM proxy with itself and manufacturing false `silent-hang`s.
       // The CHAOS is still in the messy inputs + state collisions, not in an
-      // inhuman request rate (real single-user use is paced).
-      await page.waitForTimeout(1800);
+      // inhuman request rate (real single-user use is paced). Bumped + made
+      // configurable after the harder (45-input) pass over-saturated the
+      // shared brain proxy at 1.8s and manufactured false silent-hangs on the
+      // heavy brain bait (David 2026-06-16) — a real human takes seconds
+      // between move-by-move questions.
+      await page.waitForTimeout(ASK_GAP_MS);
     }
 
     // State chaos on every pass from 2 up (and pass 1 too — break early).

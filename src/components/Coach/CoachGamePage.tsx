@@ -53,8 +53,8 @@ import { coachService } from '../../coach/coachService';
 import { withTimeout } from '../../coach/withTimeout';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
 import { isCriticalThreat } from '../../services/tacticAlertService';
-import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
-import { validateTacticClaims } from '../../services/tacticClaimValidator';
+import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
+import { validateTacticClaims, stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { getScenarioTemplate } from '../../services/coachTemplates';
 import { generateMoveCommentary } from '../../services/coachMoveCommentary';
 import { isSpokenSentenceGrounded } from '../../services/coachAnswerGates';
@@ -66,9 +66,10 @@ import {
   loadCoachPlayChat,
   saveCoachPlayChat,
 } from '../../services/coachPlayPersistence';
-import { fetchLichessExplorer, fetchCloudEval } from '../../services/lichessExplorerService';
+import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { addAddressedConversion } from '../../services/conversionProgress';
-import { detectTrapInPosition, formatTrapForPrompt, type MoveEvaluation } from '../../services/openingTrapDetector';
+import { formatTrapForPrompt } from '../../services/openingTrapDetector';
+import { scanPositionForTrap } from '../../services/positionTrapScan';
 import { buildFastMoveLine } from '../../utils/fastMoveNarration';
 import { dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
 
@@ -105,60 +106,6 @@ function withFetchTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
     new Promise<T>((_, reject) => setTimeout(() => reject(new Error('timeout')), ms)),
   ]);
 }
-
-/**
- * Evaluate a set of candidate SAN moves on the position reached AFTER
- * each move. Uses Lichess cloud-eval (no auth, free, cached) per
- * candidate in parallel. Candidates whose FEN has no cloud eval
- * (404) are skipped — better to miss a trap than to mis-flag one.
- *
- * Eval is normalised to the MOVER's POV: positive = the candidate
- * player got better, negative = they lost ground. This matches what
- * `detectTrapInPosition` expects (it looks for popular moves where
- * evalCp &lt;= -200 for the mover).
- */
-/** Max Lichess cloud-eval requests in flight at once. Previously
- *  Promise.all fired 5+ candidates in parallel on every trap check,
- *  which could 429 on the public endpoint or just pile up on slow
- *  networks. 2-at-a-time is enough to keep latency reasonable
- *  without burst. */
-const LICHESS_CLOUD_EVAL_CONCURRENCY = 2;
-
-async function evaluateExplorerCandidates(
-  fen: string,
-  sanList: string[],
-  mover: 'w' | 'b',
-): Promise<MoveEvaluation[]> {
-  const ChessCtor = (await import('chess.js')).Chess;
-
-  const evalOne = async (san: string): Promise<MoveEvaluation | null> => {
-    try {
-      const board = new ChessCtor(fen);
-      const moved = board.move(san);
-      if (!moved) return null;
-      const resultingFen = board.fen();
-      const eval_ = await withFetchTimeout(fetchCloudEval(resultingFen, 1), LICHESS_FETCH_TIMEOUT_MS);
-      if (!eval_ || !eval_.pvs || eval_.pvs.length === 0) return null;
-      // cloud-eval cp is from WHITE's POV. Flip for black movers so
-      // the detector gets a "this was good/bad for the MOVER" number.
-      const cpWhitePov = eval_.pvs[0].cp ?? 0;
-      const evalCp = mover === 'w' ? cpWhitePov : -cpWhitePov;
-      return { san, evalCp };
-    } catch {
-      return null;
-    }
-  };
-
-  // Chunked Promise.all — process LICHESS_CLOUD_EVAL_CONCURRENCY at a
-  // time to cap outbound request bursts against the free Lichess API.
-  const results: (MoveEvaluation | null)[] = [];
-  for (let i = 0; i < sanList.length; i += LICHESS_CLOUD_EVAL_CONCURRENCY) {
-    const chunk = sanList.slice(i, i + LICHESS_CLOUD_EVAL_CONCURRENCY);
-    const chunkResults = await Promise.all(chunk.map(evalOne));
-    results.push(...chunkResults);
-  }
-  return results.filter((r): r is MoveEvaluation => r !== null);
-}
 import { resolveVerbosity, shouldCallLlmForMove } from '../../services/coachCommentaryPolicy';
 import { resolvePhaseNarrationVerbosity, resolveLlmNarrationDensity } from '../../utils/coachNarration';
 import { BLUNDER_ALERT_ADDITION, EXPLORE_REACTION_ADDITION } from '../../services/coachPrompts';
@@ -188,6 +135,7 @@ import type {
   ChatMessage,
 } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
+import type { TacticsLiveContext } from '../../coach/types';
 import { isMateEval } from '../../services/engineConstants';
 
 function classifyMove(
@@ -3237,33 +3185,21 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                 `[Lichess Opening Explorer at current position${openingLabel}]\n${topMoves}`,
               );
 
-              // Trap detection — cloud-eval each top explorer move on
-              // its RESULTING position to get a correct per-candidate
-              // eval. The prior implementation paired explorer moves
-              // (ranked by popularity) with Stockfish top-lines
-              // (ranked by strength) by array index. Those arrays
-              // don't align, so the detector was reading the wrong
-              // eval for the wrong move. Now each candidate is
-              // evaluated on its own resulting FEN; missing cloud
-              // evals (404) are skipped, never misattributed.
-              const evaluations = await evaluateExplorerCandidates(
-                probe.fen(),
-                explorer.moves.slice(0, 5).map((m) => m.san),
+              // Trap detection — the SHARED `scanPositionForTrap` (the same
+              // tool /coach/teach uses): cloud-eval each top explorer move on
+              // its RESULTING position and flag a popular-but-losing one. Pass
+              // the already-fetched `explorer` so we don't double-fetch.
+              const trap = await scanPositionForTrap({
+                fen: probe.fen(),
                 mover,
-              );
-              if (evaluations.length > 0) {
-                const trap = detectTrapInPosition({
-                  explorer,
-                  evaluations,
-                  engineBestSan: engineBestMoveSan !== '?' ? engineBestMoveSan : undefined,
-                  // Gate against the CURRENT legal-move set so an
-                  // explorer/FEN mismatch can't surface a trap for a
-                  // move that isn't playable right now.
-                  legalSan: probe.moves(),
-                });
-                if (trap) {
-                  groundedNotes.push(formatTrapForPrompt(trap));
-                }
+                explorer,
+                engineBestSan: engineBestMoveSan !== '?' ? engineBestMoveSan : undefined,
+                // Gate against the CURRENT legal-move set so an explorer/FEN
+                // mismatch can't surface a trap for an unplayable move.
+                legalSan: probe.moves(),
+              });
+              if (trap) {
+                groundedNotes.push(formatTrapForPrompt(trap));
               }
             }
           } catch (err: unknown) {
@@ -3298,6 +3234,21 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         // If yes, the post-LLM speak path below skips (the streamed
         // sentences ARE the narration; speaking again would double up).
         let streamedAnything = false;
+        // FED tactics for the post-move position so the auto-narration is
+        // tactic-grounded (David 2026-06-16). generateMoveCommentary is a
+        // legacy brain that isn't centrally fed, and its voice streams
+        // sentence-by-sentence BEFORE any final-text gate — so a hallucinated
+        // "knight fork" would otherwise be SPOKEN. moveTactics gates the
+        // spoken sentences (the gate below) and the displayed prose. Fed so
+        // it carries real PV tactics, not just FEN-only; degrades cleanly.
+        let moveTactics: TacticsLiveContext | null = null;
+        try {
+          moveTactics = await buildFedTacticsContext(
+            probe.fen(),
+            playerColor === 'white' ? 'w' : 'b',
+            useAppStore.getState().activeProfile?.puzzleRating ?? 1200,
+          );
+        } catch { moveTactics = null; }
         const llm = await generateMoveCommentary({
           gameAfter: probe,
           mover,
@@ -3368,7 +3319,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                 // Per-sentence spoken gate: move commentary streams to Polly
                 // before the spine's final-text gate runs, so a board-false
                 // sentence must be dropped HERE against the post-move FEN.
-                if (sentence && isSpokenSentenceGrounded(sentence, probe.fen(), 'coachGamePage.moveCommentary')) {
+                if (sentence && isSpokenSentenceGrounded(sentence, probe.fen(), 'coachGamePage.moveCommentary', moveTactics)) {
                   streamedAnything = true;
                   speaker.add(sentence);
                 }
@@ -3384,7 +3335,18 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         if (llm && resolvedSubject && isFirstSeeingOpening) {
           openingIntroSpokenRef.current = true;
         }
-        commentary = llm ? llm + tacticSuffix : tacticSuffix.trim();
+        // Tactic-ground the DISPLAYED LLM prose (the code-grounded
+        // tacticSuffix is already real, so strip only the `llm` portion):
+        // drop any sentence claiming a tactic absent from the fed context so
+        // the false claim isn't read either (David 2026-06-16).
+        let llmGrounded = llm;
+        if (moveTactics && llmGrounded.trim()) {
+          try {
+            const t = stripUngroundedTacticSentences(llmGrounded, moveTactics);
+            if (t.dropped.length > 0) llmGrounded = t.clean;
+          } catch { /* keep the prose as-is on a validator fault */ }
+        }
+        commentary = llmGrounded ? llmGrounded + tacticSuffix : tacticSuffix.trim();
         // Audit-only board-claim check on the DISPLAYED commentary. The
         // spoken sentences are board-grounded above (isSpokenSentenceGrounded),
         // but the displayed `commentary` text is NOT — so a board-false

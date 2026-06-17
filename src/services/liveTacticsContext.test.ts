@@ -1,8 +1,48 @@
-import { describe, it, expect } from 'vitest';
-import { buildTacticsLiveContext } from './liveTacticsContext';
+import { describe, it, expect, vi } from 'vitest';
+import { buildTacticsLiveContext, buildFedTacticsContext } from './liveTacticsContext';
 import type { StockfishAnalysis } from '../types';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+const fakeAnalysis = (): StockfishAnalysis => ({
+  bestMove: 'e2e4',
+  evaluation: 20,
+  isMate: false,
+  mateIn: null,
+  depth: 12,
+  topLines: [{ rank: 1, evaluation: 20, moves: ['e2e4', 'e7e5'], mate: null }],
+  nodesPerSecond: 0,
+});
+
+describe('buildFedTacticsContext (ROOT fix — never starve the package)', () => {
+  it('fetches an analysis itself when none is cached (the LLM is never handed an empty PV)', async () => {
+    const analyze = vi.fn().mockResolvedValue(fakeAnalysis());
+    await buildFedTacticsContext(STARTING_FEN, 'w', 1500, null, analyze);
+    expect(analyze).toHaveBeenCalledTimes(1);
+    expect(analyze).toHaveBeenCalledWith(STARTING_FEN);
+  });
+
+  it('uses a cached analysis with a PV without fetching again', async () => {
+    const analyze = vi.fn().mockResolvedValue(fakeAnalysis());
+    await buildFedTacticsContext(STARTING_FEN, 'w', 1500, fakeAnalysis(), analyze);
+    expect(analyze).not.toHaveBeenCalled();
+  });
+
+  it('re-fetches when the cached analysis has no PV (topLines empty)', async () => {
+    const analyze = vi.fn().mockResolvedValue(fakeAnalysis());
+    const empty: StockfishAnalysis = { ...fakeAnalysis(), topLines: [] };
+    await buildFedTacticsContext(STARTING_FEN, 'w', 1500, empty, analyze);
+    expect(analyze).toHaveBeenCalledTimes(1);
+  });
+
+  it('degrades to a FEN-only context (no throw) when the engine is down', async () => {
+    const analyze = vi.fn().mockResolvedValue(null);
+    const ctx = await buildFedTacticsContext(STARTING_FEN, 'w', 1500, null, analyze);
+    expect(ctx.threats).toEqual([]);
+    expect(ctx.opportunities).toEqual([]);
+    expect(ctx.lookaheadDepth).toBe(4);
+  });
+});
 
 describe('buildTacticsLiveContext', () => {
   it('returns an empty context on the starting position (nothing tactical yet)', () => {

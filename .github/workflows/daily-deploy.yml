@@ -17,7 +17,12 @@ on:
   schedule:
     - cron: '0 2 * * *'   # 21:00 CDT (summer, UTC-5)
     - cron: '0 3 * * *'   # 21:00 CST (winter, UTC-6)
-  workflow_dispatch: {}    # manual on-demand run (bypasses the hour gate)
+  workflow_dispatch:       # manual on-demand run (bypasses the hour gate)
+    inputs:
+      external:
+        description: 'Also push to EXTERNAL beta testers (sends a tester email). Default OFF — internal-only, no tester email.'
+        type: boolean
+        default: false
 
 concurrency:
   group: daily-deploy
@@ -122,12 +127,46 @@ jobs:
           fi
           node scripts/ci/trigger-ios-build.mjs
 
-      - name: Distribute iOS build to TestFlight external + internal
+      # Build a real "What to Test" from this build's actual changes — the
+      # user-facing feat/fix/perf commit subjects since the last build, with
+      # the conventional-commit prefixes stripped (David 2026-06-17: "better
+      # descriptions on the What to Test"). Replaces the old generic
+      # boilerplate. Manual override still wins via a TF_WHATS_NEW env.
+      - name: Compose "What to Test" notes
+        if: ${{ !cancelled() && steps.gate.outputs.run == 'true' && steps.changed.outputs.ship == 'true' && env.SKIP_IOS != '1' }}
+        run: |
+          NOTES=$(git log --since="26 hours ago" --no-merges --pretty='%s' \
+            | grep -iE '^(feat|fix|perf)(\(|!|:)' \
+            | sed -E 's/^(feat|fix|perf)(\([^)]*\))?!?:[[:space:]]*//' \
+            | sed -E 's/^(.)/\U\1/' \
+            | head -12 \
+            | sed 's/^/• /')
+          [ -z "$NOTES" ] && NOTES="• Bug fixes and stability improvements."
+          {
+            echo 'TF_WHATS_NEW<<WTNEOF'
+            echo "What's new in this build — please test these and report anything that looks off:"
+            echo ''
+            echo "$NOTES"
+            echo ''
+            echo 'Focus areas: Learn-with-Coach + Play-with-Coach (typing questions, voice narration), board arrows/highlights, and general navigation.'
+            echo 'WTNEOF'
+          } >> "$GITHUB_ENV"
+
+      - name: Distribute iOS build to TestFlight (internal always; external only on the nightly run or explicit opt-in)
         if: ${{ !cancelled() && steps.gate.outputs.run == 'true' && steps.changed.outputs.ship == 'true' && env.SKIP_IOS != '1' }}
         env:
           APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
           APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          # External (which emails beta testers) ONLY on the scheduled nightly
+          # run, or when a manual run explicitly opts in. Per-push / on-demand
+          # manual builds stay INTERNAL-ONLY so testers aren't flooded with an
+          # email per build (David 2026-06-17). TF_WHATS_NEW is composed above.
+          TF_EXTERNAL: ${{ (github.event_name == 'schedule' || github.event.inputs.external == 'true') && '1' || '' }}
         run: |
           node scripts/ci/distribute-testflight.mjs
-          echo "## iOS built + sent to external (Beta App Review) + internal 📲" >> "$GITHUB_STEP_SUMMARY"
+          if [ "${TF_EXTERNAL}" = "1" ]; then
+            echo "## iOS built + sent to EXTERNAL (Beta App Review) + internal 📲" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "## iOS built + sent to INTERNAL only (no beta-tester email) 📲" >> "$GITHUB_STEP_SUMMARY"
+          fi

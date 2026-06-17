@@ -26,7 +26,9 @@
  *
  * See `docs/COACH-BRAIN-00.md` for the architecture this implements.
  */
+import { Chess } from 'chess.js';
 import { logAppAudit } from '../services/appAuditor';
+import { scanPositionForTrap } from '../services/positionTrapScan';
 import { groundCoachReply, applyCandidateArrows } from '../services/coachAnswerGates';
 import { assembleEnvelope } from './envelope';
 import { loadAnnotationContextForLive } from './sources/annotationContext';
@@ -746,6 +748,19 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     }),
   });
 
+  // NOTE on hallucinated tactics (David 2026-06-16, false "knight fork"):
+  // the fix is NOT a blocking engine read here. `runAnswerGates` below
+  // ALREADY enforces the tactic gate against whatever bounded context the
+  // surface passed — and a THIN context still ENFORCES (it strips any
+  // out-of-vocabulary tactic the LLM invented), so a fabricated fork can't
+  // reach the returned text. Surfaces that also want the LLM HANDED richer
+  // tactics pre-feed their own context via buildFedTacticsContext WITHOUT
+  // blocking the brain call (coach-teach for its lesson + voice; the play
+  // surfaces for their streamed-voice gate). Doing the engine read in the
+  // spine added latency to EVERY turn and could block on a cold engine
+  // (the eval-bar's own analysis already warms the cache where it matters)
+  // — so it's intentionally NOT done here.
+
   // WO-FOUNDATION-02 trace harness — fires at the start of every
   // ask, mirroring coach-brain-ask-received but carrying the
   // traceId so the audit pipeline can be reconstructed.
@@ -934,6 +949,77 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
         category: 'subsystem',
         source: 'coachService.ask.playerGames',
         summary: `player games load failed: ${(err as Error)?.message?.slice(0, 120) ?? 'unknown'}`,
+      });
+    }
+  }
+
+  // Position TRAP SCAN — the runtime trap-mining tool (the SAME
+  // `scanPositionForTrap` /coach/play + /coach/teach use), CENTRALIZED here so
+  // EVERY play/chat surface that routes through coachService.ask gets identical
+  // trap detection with NO per-surface code (David 2026-06-16: "all playing
+  // surfaces should now be identically coded"). Gated on a trap/tactics-shaped
+  // question + a live FEN so a normal ask never pays the per-candidate
+  // cloud-eval cost. G0: code decides the trap; the LLM only voices it
+  // (the envelope renders it under "Position trap scan"). Surfaces that already
+  // set trapSignal (none today) aren't overwritten. Off-book / no explorer
+  // coverage → null → correctly silent (G3).
+  const asksAboutTrap =
+    /\b(trap|traps|tactic|tactics|blunder|fall(?:ing)?\s+into|caught|punish|refut|trick|tricks)\b/i.test(
+      input.ask,
+    );
+  if (!input.liveState.trapSignal && input.liveState.fen && asksAboutTrap) {
+    const fen = input.liveState.fen;
+    try {
+      const mover: 'w' | 'b' = fen.split(' ')[1] === 'b' ? 'b' : 'w';
+      let engineBestSan: string | undefined;
+      const bestUci = input.liveState.engineBestMoveUci;
+      if (bestUci && bestUci.length >= 4) {
+        try {
+          const c = new Chess(fen);
+          const mv = c.move({
+            from: bestUci.slice(0, 2),
+            to: bestUci.slice(2, 4),
+            promotion: bestUci.slice(4, 5) || undefined,
+          });
+          engineBestSan = mv?.san;
+        } catch {
+          /* refutation hint is optional */
+        }
+      }
+      let legalSan: string[] | undefined;
+      try {
+        legalSan = new Chess(fen).moves();
+      } catch {
+        /* detector skips legality filtering when absent */
+      }
+      const trap = await scanPositionForTrap({ fen, mover, engineBestSan, legalSan });
+      if (trap) {
+        input = {
+          ...input,
+          liveState: { ...input.liveState, trapSignal: trap },
+        };
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'coachService.ask.trapScan',
+          summary: `trap: ${trap.trapMove} (${trap.gamesPlayed}g ${trap.evalCpForMover}cp ${trap.severity}) on ${input.liveState.surface}`,
+        });
+      } else {
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'coachService.ask.trapScan',
+          summary: `no trap at fen (scan ran, none qualified) on ${input.liveState.surface}`,
+        });
+      }
+    } catch (err) {
+      // Trap scan failures must NEVER block the brain call — the surface
+      // still has FEN/eval/tactics grounding and answers without it.
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'coachService.ask.trapScan',
+        summary: `trap scan failed: ${(err as Error)?.message?.slice(0, 120) ?? 'unknown'}`,
       });
     }
   }
@@ -1467,7 +1553,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
           `play_move SHORT-CIRCUITED — this trip has already had ${playMoveRejectionsThisTrip} play_move rejections. ` +
           `STOP attempting to walk through a sequence via play_move. play_move is for ONE move on YOUR color's turn during practical play, not a way to enact hypothetical lines. ` +
           `If the student asked for a guided opening lesson ("teach me [opening]" / "show me the trap"), call start_walkthrough_for_opening with the opening name — that routes them to a surface where each move animates sequentially. ` +
-          `If you just want to show one position to discuss, call set_board_position ONCE with the FEN and explain in prose + [BOARD: arrow] markers.`;
+          `If you just want to show one position to discuss, call set_board_position ONCE with the FEN and explain in prose — name the key moves in SAN and the app draws the arrows (do NOT emit [BOARD: arrow] markers yourself).`;
         toolResults.push({ name: call.name, ok: false, error });
         void logAppAudit({
           kind: 'tool-call-error',

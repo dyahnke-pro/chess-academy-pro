@@ -4,6 +4,7 @@
  * the names below map to.
  */
 import type { CoachMessage, HintRequestRecord, IntendedOpening } from '../stores/coachMemoryStore';
+import type { TrapSignal } from '../services/openingTrapDetector';
 
 // ─── Identity ────────────────────────────────────────────────────────────────
 
@@ -174,6 +175,16 @@ export interface LiveState {
    *  contains. It must not invent tactics that didn't appear in the
    *  pre-computed scan. */
   tactics?: TacticsLiveContext;
+  /** Position TRAP signal — the runtime "trap mining" result for the current
+   *  FEN (the same `detectTrapInPosition` scan the /coach/play + opening tab
+   *  use). Set by a surface that ran `scanPositionForTrap`: a POPULAR move
+   *  (≥40 Lichess games) the engine says is LOSING (≤ −200cp), plus its
+   *  refutation. Lets the coach answer "is there a trap here?" from the live
+   *  board instead of generating an opening lesson. Quiet (undefined) when
+   *  the position has no explorer coverage or no popular move qualifies —
+   *  correctly silent off-book (G3). G0: code decides the trap; the LLM only
+   *  voices it. David 2026-06-16. */
+  trapSignal?: TrapSignal;
   /** Curated per-move annotation context drawn from the 1893
    *  opening-book JSONs in `src/data/annotations/`. Populated by
    *  `coachService.ask` when `lichessSnapshot.name` is known and a

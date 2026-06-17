@@ -11,14 +11,17 @@ import { sanitizeForTTS } from '../../services/voiceService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from './DiscussionPracticePanel';
 import { useAppStore } from '../../stores/appStore';
-import { ArrowLeft, MessageCircle, Volume2, VolumeX, Undo, Lightbulb } from 'lucide-react';
+import { ArrowLeft, MessageCircle, Volume2, VolumeX, Undo, Lightbulb, X } from 'lucide-react';
 import type {
   MiddlegamePlan,
   StockfishAnalysis,
   AnalysisLine,
   BoardArrow,
+  BoardHighlight,
+  BoardAnnotationCommand,
 } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
+import { GameChatPanel } from '../Coach/GameChatPanel';
 
 interface MiddlegamePracticeProps {
   plan: MiddlegamePlan;
@@ -163,6 +166,34 @@ export function MiddlegamePractice({
   const [engineArrows, setEngineArrows] = useState<BoardArrow[]>([]);
   const [topLines, setTopLines] = useState<AnalysisLine[]>([]);
   const [isEngineMoving, setIsEngineMoving] = useState(false);
+
+  // ─── Grounded coach chat (David 2026-06-16: every play surface gets the
+  //     SAME coach as /coach/play + /coach/teach) ────────────────────────────
+  // Mounts the SAME `GameChatPanel` /coach/play uses → routes through
+  // coachService.ask, so this surface inherits the full grounded stack by
+  // reuse (live tactics + the centralized trap scan + master-play + book/plan
+  // grounding + groundArrows + the panel's audit instrumentation). Q&A +
+  // arrows only — no move-mutation handlers, so the practice loop is untouched.
+  const [chatOpen, setChatOpen] = useState(false);
+  const [chatArrows, setChatArrows] = useState<BoardArrow[]>([]);
+  const [chatHighlights, setChatHighlights] = useState<BoardHighlight[]>([]);
+  const handleChatBoardAnnotation = useCallback((commands: BoardAnnotationCommand[]) => {
+    const newArrows: BoardArrow[] = [];
+    const newHighlights: BoardHighlight[] = [];
+    let hasClear = false;
+    for (const cmd of commands) {
+      if (cmd.type === 'arrow') newArrows.push(...(cmd.arrows ?? []));
+      else if (cmd.type === 'highlight') newHighlights.push(...(cmd.highlights ?? []));
+      else if (cmd.type === 'clear') hasClear = true;
+    }
+    if (hasClear) {
+      setChatArrows([]);
+      setChatHighlights([]);
+    } else {
+      if (newArrows.length > 0) setChatArrows(newArrows);
+      if (newHighlights.length > 0) setChatHighlights(newHighlights);
+    }
+  }, []);
 
   const chatHistoryRef = useRef<CoachMessage[]>([]);
   const planContextRef = useRef(buildPlanContext(plan));
@@ -426,7 +457,7 @@ export function MiddlegamePractice({
   const canTakeback = isPlayerTurn && moveCount > 0;
 
   return (
-    <div className="flex flex-col h-full" data-testid="middlegame-practice">
+    <div className="relative flex flex-col h-full" data-testid="middlegame-practice">
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-3 border-b border-theme-border flex-shrink-0">
         <button
@@ -446,6 +477,16 @@ export function MiddlegamePractice({
             {isEngineMoving ? ' — Engine thinking...' : ''}
           </p>
         </div>
+        {/* Inline Chat — same grounded coach as /coach/play (David 2026-06-16) */}
+        <button
+          onClick={() => setChatOpen((v) => !v)}
+          className={`p-2 rounded-lg hover:bg-theme-border/50 transition-colors ${chatOpen ? 'text-theme-accent' : 'text-theme-text-muted'}`}
+          aria-label={chatOpen ? 'Close coach chat' : 'Ask the coach'}
+          aria-pressed={chatOpen}
+          data-testid="middlegame-practice-chat-toggle"
+        >
+          <MessageCircle size={18} />
+        </button>
       </div>
 
       {/* Board */}
@@ -474,7 +515,8 @@ export function MiddlegamePractice({
             evaluation={engineAnalysis?.evaluation ?? null}
             isMate={engineAnalysis?.isMate ?? false}
             mateIn={engineAnalysis?.mateIn ?? null}
-            arrows={engineArrows}
+            arrows={chatArrows.length > 0 ? chatArrows : engineArrows}
+            annotationHighlights={chatHighlights.length > 0 ? chatHighlights : undefined}
             showLastMoveHighlight
           />
 
@@ -542,6 +584,49 @@ export function MiddlegamePractice({
         onSkip={() => void discussion.skip()}
         onDismissTeach={discussion.dismissTeach}
       />
+
+      {/* Grounded coach chat — the SAME GameChatPanel /coach/play mounts, so
+          middlegame practice has the identical grounded coach (tactics +
+          centralized trap scan + master-play + book/plan grounding + audit).
+          Bottom drawer; Q&A + arrows only, practice loop untouched. */}
+      {chatOpen && (
+        <div
+          className="absolute inset-x-0 bottom-0 z-30 flex flex-col bg-theme-bg border-t border-theme-border rounded-t-2xl shadow-2xl"
+          style={{ height: 'min(70%, 28rem)' }}
+          data-testid="middlegame-practice-chat"
+        >
+          <div className="flex items-center justify-between px-4 py-2 border-b border-theme-border shrink-0">
+            <div className="flex items-center gap-2">
+              <MessageCircle size={16} className="text-theme-accent" />
+              <span className="text-sm font-semibold text-theme-text">Ask the coach</span>
+            </div>
+            <button
+              onClick={() => setChatOpen(false)}
+              className="p-1.5 rounded-lg hover:bg-theme-surface text-theme-text-muted"
+              aria-label="Close coach chat"
+              data-testid="middlegame-practice-chat-close"
+            >
+              <X size={18} />
+            </button>
+          </div>
+          <div className="flex-1 min-h-0 overflow-hidden">
+            <GameChatPanel
+              fen={game.fen}
+              getLiveFen={game.getFen}
+              pgn={game.history.join(' ')}
+              moveNumber={moveCount}
+              playerColor={playerColor}
+              turn={game.turn}
+              isGameOver={game.isCheckmate || game.isStalemate || game.isDraw}
+              gameResult={game.isCheckmate ? 'checkmate' : (game.isStalemate || game.isDraw) ? 'draw' : ''}
+              history={game.history}
+              onBoardAnnotation={handleChatBoardAnnotation}
+              hideHeader
+              className="h-full"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -12,12 +12,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
-import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2 } from 'lucide-react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
 import { NarrationArrowOverlay } from './NarrationArrowOverlay';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
+import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { useTeachWalkthrough } from '../../hooks/useTeachWalkthrough';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
@@ -43,7 +44,7 @@ import {
 } from '../../services/openingDetectionService';
 import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
 import { parseCoachIntent } from '../../services/coachAgent';
-import { reportCoachReask } from '../../services/coachNonAnswer';
+import { reportCoachReask, isMoveReport } from '../../services/coachNonAnswer';
 import { tryCaptureOpeningIntent, tryCaptureForgetIntent } from '../../services/openingIntentCapture';
 import { findPlansForOpening, sessionFromPlan } from '../../services/middlegamePlanner';
 import { MiddlegamePlanInline } from './MiddlegamePlanInline';
@@ -69,6 +70,7 @@ import { ChatInput } from './ChatInput';
 import { DifficultyToggle } from './DifficultyToggle';
 import type { CoachDifficulty, MiddlegamePlan } from '../../types';
 import { PlayerInfoBar } from './PlayerInfoBar';
+import { PositionNarrationBanner } from './PositionNarrationBanner';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { coachService } from '../../coach/coachService';
@@ -84,13 +86,13 @@ import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { useSettings } from '../../hooks/useSettings';
 import { getFavoriteOpenings } from '../../services/openingService';
 import type { OpeningRecord } from '../../types';
-import type { LiveState } from '../../coach/types';
+import type { LiveState, TacticsLiveContext } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
+import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { explainBestMoveGrounded } from '../../services/groundedAnswer';
-import { validateTacticClaims } from '../../services/tacticClaimValidator';
-import { applyCandidateArrows } from '../../services/coachAnswerGates';
+import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
+import { applyCandidateArrows, candidateHighlightMarkers } from '../../services/coachAnswerGates';
 import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
@@ -623,6 +625,9 @@ export function CoachTeachPage(): JSX.Element {
   // that: each play_move handler writes the chess instance's current
   // FEN into it, and getLiveFen reads from this ref. */
   const liveFenRef = useRef(game.fen);
+  // Background-fed tactics context (real PV tactics) for the SPOKEN + displayed
+  // tactic strips, so the brain call never blocks on an engine read.
+  const fedTacticsRef = useRef<TacticsLiveContext | null>(null);
   // Keep liveFenRef in sync with the rendered fen on every render too,
   // so external mutations to `game` (loadFen, resetGame, undoMove
   // called from non-coach paths) flow through.
@@ -1076,7 +1081,10 @@ export function CoachTeachPage(): JSX.Element {
     const trimmedText = text.trim();
     {
       const prev = recentUserInputsRef.current[recentUserInputsRef.current.length - 1];
-      if (prev && Date.now() - prev.at < 5 * 60_000) {
+      // A step-by-step move report ("I played e4." → "I played dxc6.") is NOT
+      // a re-ask — consecutive reports share "I played" and falsely tripped the
+      // token-overlap heuristic, spamming coach_non_answer (David 2026-06-16).
+      if (prev && !isMoveReport(trimmedText) && !isMoveReport(prev.text) && Date.now() - prev.at < 5 * 60_000) {
         const norm = (s: string) =>
           s.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
         const prevTokens = new Set(norm(prev.text).split(' ').filter((t) => t.length >= 4));
@@ -2430,6 +2438,26 @@ export function CoachTeachPage(): JSX.Element {
           });
         }
       } catch { /* unparseable FEN — speak raw rather than go silent */ }
+      // ALSO strip any sentence claiming a TACTIC that isn't in the bounded
+      // live context. The board gate above only catches false piece-on-square
+      // claims, so a hallucinated "knight fork" with no false piece claim used
+      // to be SPOKEN here — before the (audit-only) final-text check ever ran
+      // (David 2026-06-16: false knight-fork claim on /coach/teach). This is
+      // the only gate between the brain and the voice, so it must ENFORCE, not
+      // just audit. Guarded so it never silences a turn on a fault.
+      try {
+        const tac = stripUngroundedTacticSentences(grounded, fedTacticsRef.current ?? tacticsForAsk);
+        if (tac.dropped.length > 0) {
+          grounded = tac.clean;
+          void logAppAudit({
+            kind: 'claim-validator-trip',
+            category: 'subsystem',
+            source: 'CoachTeachPage.queueSpeak.tacticGrounding',
+            summary: `voice grounding stripped ${tac.dropped.length} ungrounded tactic sentence(s)`,
+            details: JSON.stringify({ fen, dropped: tac.dropped.slice(0, 5) }),
+          });
+        }
+      } catch { /* context not ready / parse fault — speak board-grounded text */ }
       const sentence = formatForSpeech(grounded);
       if (!sentence) return;
       if (sentence === lastQueuedSentence) return;
@@ -2546,12 +2574,24 @@ export function CoachTeachPage(): JSX.Element {
     // adaptive puzzles). Drives lookahead depth via
     // `getTacticLookahead` — 4 plies once the student crosses 1400.
     const studentRating = activeProfile?.puzzleRating ?? 1200;
-    const tacticsForAsk = buildTacticsLiveContext(
-      fen,
-      cachedAnalysis,
-      studentColor,
-      studentRating,
-    );
+    // Tactics context for the prompt — SYNC, no engine await (David 2026-06-17:
+    // trim the ~2.5s the blocking fed-read added to every turn's pre-flight).
+    // A warm engine already makes this RICH via cachedAnalysis; the spine's
+    // enforcing tactic gate works off it either way (a thin context still
+    // strips inventions — empty > invented). The richer FED context (real PV
+    // tactics, hang-protected) is fetched in the BACKGROUND and lands in
+    // `fedTacticsRef` by the time the voice streams / the reply is graded, so
+    // the spoken + displayed tactic strips use it without blocking the brain.
+    const tacticsForAsk = buildTacticsLiveContext(fen, cachedAnalysis, studentColor, studentRating);
+    fedTacticsRef.current = tacticsForAsk;
+    void buildFedTacticsContext(fen, studentColor, studentRating, cachedAnalysis)
+      .then((fed) => { fedTacticsRef.current = fed; })
+      .catch(() => { /* engine down — keep the sync context */ });
+    // Position trap detection (David 2026-06-16) is CENTRALIZED in
+    // coachService.ask — every surface that routes through the grounded coach
+    // inherits the same `scanPositionForTrap` → `liveState.trapSignal`, gated
+    // on a trap/tactics question. Nothing to compute here; we just pass the
+    // FEN + engineBestMoveUci (below) and the chokepoint does the scan.
     const liveState: LiveState = {
       surface: 'teach',
       currentRoute: '/coach/teach',
@@ -3109,74 +3149,62 @@ export function CoachTeachPage(): JSX.Element {
         }
       }
 
-      // Parse [BOARD: arrow:e2-e4:green] / highlight: / clear markers
-      // out of the LLM's response and render them on the board. Each
-      // new coach turn clears prior annotations and applies fresh
-      // ones, so the board never accumulates stale arrows.
-      const board = parseBoardTags(result.text);
-      const nextArrows: BoardArrow[] = [];
-      const nextHighlights: BoardHighlight[] = [];
-      let cleared = false;
-      for (const cmd of board.commands) {
-        if (cmd.type === 'clear') cleared = true;
-        if (cmd.type === 'arrow' && cmd.arrows) nextArrows.push(...cmd.arrows);
-        if (cmd.type === 'highlight' && cmd.highlights) nextHighlights.push(...cmd.highlights);
-      }
-      // Always replace prior arrows/highlights with this turn's set —
-      // a turn with no annotations clears the board (cleared=true is
-      // the explicit form). Caller has the option to leave them by
-      // emitting the same arrow markers in the follow-up turn.
-      void cleared;
-      // Ground the brain's arrows against the board before rendering: drop any
-      // arrow that starts on an empty square or cuts a line the piece can't
-      // actually see (and cap the count) so the board never shows ungrounded
-      // arrows scattered across it (David's audit 2026-06-10). The synthesized
-      // arrows appended below are chess.js-derived, so they're grounded by
-      // construction.
-      setArrows(uniqueArrows(groundArrows(nextArrows, fen)));
-      setHighlights(nextHighlights);
+      // Board annotations are CODE-DERIVED ONLY (G0): the LLM no longer
+      // draws arrows or highlights. It just NAMES moves (→ arrows) and
+      // squares (→ highlights) in prose; code resolves the geometry +
+      // Stockfish-rank color below. Any `[BOARD: ...]` markup (or a prose
+      // "Board arrows:" list) the LLM emitted anyway is stripped from the
+      // display and IGNORED as a board source — that markup is exactly what
+      // leaked to the student ("Board arrows: c6-c6 highlighting the hanging
+      // pawn", David 2026-06-16) and produced ungrounded arrows. Clear this
+      // turn's annotations up front; the code-derived set is applied after
+      // the final text is known (see the candidate-annotation pass below).
+      setArrows([]);
+      setHighlights([]);
 
       // Sanitize the FINAL response too — both for transcript display
       // and for the conversation memory record. Memory rehydration on
       // the next turn re-feeds prior assistant text into the prompt;
       // unsanitized text would teach the LLM that markup is normal.
-      const finalText = sanitizeCoachText(result.text);
+      let finalText = sanitizeCoachText(result.text);
+      // ENFORCING tactic gate (David 2026-06-16: false knight-fork claim on
+      // /coach/teach). This used to be AUDIT-ONLY — it logged the out-of-vocab
+      // tactic and shipped the false claim to the student anyway. Now it STRIPS
+      // any sentence claiming a tactic absent from the bounded live context,
+      // from the SHOWN bubble + the memory record (the spoken path is gated in
+      // queueSpeak). Negation/avoidance phrasing is kept; a real tactic that's
+      // in the context is never touched. Mirrors the shared groundCoachReply
+      // gate so there is one tactic-grounding standard.
+      try {
+        const ft = stripUngroundedTacticSentences(finalText, fedTacticsRef.current ?? tacticsForAsk);
+        if (ft.dropped.length > 0) {
+          finalText = ft.clean;
+          void logAppAudit({
+            kind: 'claim-validator-trip',
+            category: 'subsystem',
+            source: 'CoachTeachPage.tacticClaimGate',
+            summary: `STRIPPED ${ft.dropped.length} ungrounded tactic sentence(s) from the reply`,
+            details: JSON.stringify({ fen, dropped: ft.dropped.slice(0, 5) }),
+            fen,
+          });
+        }
+      } catch { /* never block the reply on a validator fault */ }
       // What the student READS is exactly what the voice SPOKE (text ==
       // narration, David 2026-06-11). `spokenDisplayText` is the raw
       // `[VOICE:]` inner (or the fallback first sentence) — the one thing
       // we actually said. Fall back to the full prose only when nothing
       // was spoken at all (empty response), so the bubble is never blank.
-      const displayText = spokenDisplayText.trim()
+      let displayText = spokenDisplayText.trim()
         ? sanitizeCoachText(spokenDisplayText)
         : finalText;
+      // The shown [VOICE:] inner bypasses the finalText strip above — clean it
+      // too so the false tactic claim isn't READ even if it was caught before
+      // being SPOKEN.
+      try {
+        const dt = stripUngroundedTacticSentences(displayText, fedTacticsRef.current ?? tacticsForAsk);
+        if (dt.dropped.length > 0) displayText = dt.clean.trim() || finalText;
+      } catch { /* never block the reply */ }
       if (finalText) {
-        // G3 enforcement (Phase 2.5 of WO-COACH-TACTICAL-AWARENESS):
-        // scan the response for tactic vocabulary against the bounded
-        // context we sent in the envelope. Audit-only for now — log
-        // violations so we can observe how often the brain invents
-        // tactics in prod. Future iteration: trigger a regen with a
-        // strengthened addendum (mirrors the master-play claim
-        // validator's regen pattern).
-        const validation = validateTacticClaims(finalText, tacticsForAsk);
-        if (validation.violations.length > 0) {
-          void logAppAudit({
-            kind: 'claim-validator-trip',
-            category: 'subsystem',
-            source: 'CoachTeachPage.tacticClaimValidator',
-            summary: `out-of-vocab tactics: ${validation.violations.map((v) => v.type).join(', ')}`,
-            details: JSON.stringify({
-              violations: validation.violations,
-              tacticContext: {
-                immediateTypes: tacticsForAsk.immediate.map((t) => t.type),
-                threatTypes: tacticsForAsk.threats.map((t) => t.type),
-                opportunityTypes: tacticsForAsk.opportunities.map((t) => t.type),
-                hangingCount: tacticsForAsk.hanging.length,
-                lookaheadDepth: tacticsForAsk.lookaheadDepth,
-              },
-            }),
-            fen,
-          });
-        }
         // Arrow-claim validator (Phase D of streaming-TTS standardization,
         // 2026-05-18). Scans the response for SAN-shaped move
         // mentions that don't have a matching [BOARD: arrow:from-to:color]
@@ -3192,22 +3220,28 @@ export function CoachTeachPage(): JSX.Element {
         // markers. The synthesized markers are re-parsed below so the
         // board renders the arrows the LLM forgot — closes the G6
         // loop without an extra LLM round-trip.
-        // Arrow standard (G0): the LLM no longer emits arrow markers.
-        // Code resolves every mentioned move's geometry and colors it by
-        // Stockfish rank (the ONE arrow path, shared via arrowEngine).
-        // Display text (`finalText`) stays as the LLM wrote it; we only
-        // extract the code-derived markers onto the board.
+        // Annotation standard (G0): the LLM no longer emits arrow OR
+        // highlight markers. Code resolves every NAMED move's geometry
+        // (colored by Stockfish rank, capped so the board never floods)
+        // and every NAMED square's highlight — the ONE shared path via
+        // arrowEngine. This is the SOLE board source; the LLM's own markup
+        // was already cleared above and is ignored. Display text
+        // (`finalText`) stays as the LLM wrote it; we only extract the
+        // code-derived markers onto the board.
         const arrowed = await applyCandidateArrows(finalText, fen, 'CoachTeachPage');
-        if (arrowed !== finalText) {
-          const arrowBoard = parseBoardTags(arrowed);
-          const codeArrows: BoardArrow[] = [];
-          for (const cmd of arrowBoard.commands) {
-            if (cmd.type === 'arrow' && cmd.arrows) codeArrows.push(...cmd.arrows);
-          }
-          if (codeArrows.length > 0) {
-            setArrows((prev) => uniqueArrows([...prev, ...codeArrows]));
-          }
+        const highlightMarkers = candidateHighlightMarkers(finalText, 'CoachTeachPage');
+        const annotated = highlightMarkers.length > 0
+          ? `${arrowed} ${highlightMarkers.join(' ')}`
+          : arrowed;
+        const annoBoard = parseBoardTags(annotated);
+        const codeArrows: BoardArrow[] = [];
+        const codeHighlights: BoardHighlight[] = [];
+        for (const cmd of annoBoard.commands) {
+          if (cmd.type === 'arrow' && cmd.arrows) codeArrows.push(...cmd.arrows);
+          if (cmd.type === 'highlight' && cmd.highlights) codeHighlights.push(...cmd.highlights);
         }
+        setArrows(uniqueArrows(groundArrows(codeArrows, fen)));
+        setHighlights(codeHighlights);
         setMessages((prev) => [...prev, {
           id: `${turnId}-c`,
           role: 'assistant',
@@ -3332,7 +3366,27 @@ export function CoachTeachPage(): JSX.Element {
     return random ? uciToSan(random) : null;
   }, [walkthrough.tree?.openingName, activeProfile?.puzzleRating]);
 
+  // "Read this position" — the SAME on-demand affordance Play carries
+  // (David 2026-06-15: "You didn't like the read this position button?").
+  // Reads the LIVE free-play position (not the walkthrough animation) so a
+  // student stuck on a played-out move can hear the position explained.
+  // Routes through usePositionNarration → voiceService.speakReadAloud
+  // (bypassVerbosity, G5 third sanctioned exemption — an explicit tapped
+  // read button). Declared before handleStudentMove so the move handler can
+  // dismiss the banner on a board move (David: "make a move on the board to
+  // close it out").
+  const positionNarration = usePositionNarration({
+    fen: game.fen,
+    pgn: game.history.join(' '),
+    moveNumber: Math.floor(game.history.length / 2) + 1,
+    playerColor,
+    openingName: walkthrough.tree?.openingName ?? null,
+  });
+
   const handleStudentMove = useCallback((move: MoveResult): void => {
+    // A board move DISMISSES the "Read this position" banner (clears its
+    // text) — same as Play. The student answered the position by playing.
+    positionNarration.cancel();
     // Block a new move ONLY while the opponent is still computing its reply —
     // never while the coach is merely narrating the last move (that was the
     // 3+s lag David hit 2026-06-10). If the student moves while a prior
@@ -3455,7 +3509,7 @@ export function CoachTeachPage(): JSX.Element {
         setOpponentThinking(false);
       }
     })();
-  }, [handleSubmit, discussion, walkthrough.tree?.openingName, playerColor, resolveCoachReplyMove, handlePlayMove, setOpponentThinking, activeProfile?.puzzleRating, activeProfile?.currentRating]);
+  }, [handleSubmit, discussion, walkthrough.tree?.openingName, playerColor, resolveCoachReplyMove, handlePlayMove, setOpponentThinking, activeProfile?.puzzleRating, activeProfile?.currentRating, positionNarration]);
 
   // ─── Guided-opening-play kickoff ─────────────────────────────────────────
   // On mount, pull the student's last 5 games + weakness profile so the
@@ -3602,6 +3656,10 @@ export function CoachTeachPage(): JSX.Element {
   const teachCaptured = getCapturedPieces(teachBoardFen);
   const teachMaterialAdv = getMaterialAdvantage(teachBoardFen);
   const isTeachPlayerWhite = playerColor === 'white';
+
+  const handleReadPosition = useCallback(() => {
+    void positionNarration.narrate();
+  }, [positionNarration]);
 
   return (
     <div
@@ -3839,6 +3897,16 @@ export function CoachTeachPage(): JSX.Element {
           />
         </div>
 
+        {/* "Read this position" subtitle — same banner Play uses. Persists
+            until the student taps X or makes a board move (onDismiss → the
+            dismissible mode). Only meaningful in free play; the walkthrough
+            has its own narration overlay. */}
+        <PositionNarrationBanner
+          text={positionNarration.currentText}
+          active={positionNarration.isNarrating}
+          onDismiss={() => positionNarration.cancel()}
+        />
+
         {/* Board — same `<ControlledChessBoard>` Play uses, so click-
             to-move, legal-move dots, drag-and-drop, last-move highlight
             all work identically. No eval bar, no flip/undo/reset chrome
@@ -3987,8 +4055,28 @@ export function CoachTeachPage(): JSX.Element {
           // 2026-06-15: "make these buttons match play") — outlined border-2 +
           // colored glow: Takeback amber, Restart cyan, End Lesson red (Play's
           // Resign). Same buttons + functions as before, so navigation is
-          // unchanged; only the look matches Play.
-          <div className="flex items-center justify-center gap-2 px-4 py-2">
+          // unchanged; only the look matches Play. Plus the "Read this
+          // position" row above (emerald, Volume2), identical to Play's.
+          <div className="flex flex-col gap-2 px-4 py-2">
+          <div className="flex justify-center">
+            <button
+              onClick={handleReadPosition}
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-emerald-500/30 text-sm font-medium text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 transition-all duration-200"
+              style={{ boxShadow: '0 0 10px rgba(16, 185, 129, 0.25), 0 0 3px rgba(16, 185, 129, 0.15)' }}
+              onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 18px rgba(16, 185, 129, 0.45), 0 0 6px rgba(16, 185, 129, 0.25)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 10px rgba(16, 185, 129, 0.25), 0 0 3px rgba(16, 185, 129, 0.15)'; }}
+              data-testid="teach-read-position-btn"
+              aria-label={positionNarration.isNarrating ? 'Restart position narration' : 'Read this position aloud'}
+            >
+              {positionNarration.isNarrating ? (
+                <Loader2 size={16} className="animate-spin" />
+              ) : (
+                <Volume2 size={16} />
+              )}
+              <span>{positionNarration.isNarrating ? 'Reading…' : 'Read this position'}</span>
+            </button>
+          </div>
+          <div className="flex items-center justify-center gap-2">
             <button
               onClick={() => game.undoMove()}
               disabled={busy || game.history.length === 0}
@@ -4022,6 +4110,7 @@ export function CoachTeachPage(): JSX.Element {
               <Flag size={15} />
               <span>End Lesson</span>
             </button>
+          </div>
           </div>
         )}
       </div>

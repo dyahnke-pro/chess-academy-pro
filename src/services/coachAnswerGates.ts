@@ -31,7 +31,7 @@
 import { logAppAudit } from './appAuditor';
 import { groundCoachAnswerBoardClaims, validateBoardClaims, stripDisprovenSentences } from './boardClaimValidator';
 import { stripUngroundedPlayerStats } from './claimValidator';
-import { injectCandidateArrows, type RankedCandidate } from './arrowEngine';
+import { injectCandidateArrows, injectCandidateHighlights, type RankedCandidate } from './arrowEngine';
 import { stockfishEngine } from './stockfishEngine';
 import { validateTacticClaims, stripUngroundedTacticSentences } from './tacticClaimValidator';
 import { stripDisprovenEvalSentences } from './evalClaimValidator';
@@ -45,7 +45,12 @@ import type { TacticsLiveContext } from '../coach/types';
  *  it makes a provably-false board-fact claim against `fen`. Cheap: one
  *  `new Chess(fen)` + regexes on one sentence (~0.5–1ms). When `fen` is
  *  absent there's no board to check against, so it passes (speak it). */
-export function isSpokenSentenceGrounded(sentence: string, fen: string | null | undefined, source: string): boolean {
+export function isSpokenSentenceGrounded(
+  sentence: string,
+  fen: string | null | undefined,
+  source: string,
+  tactics?: TacticsLiveContext | null,
+): boolean {
   if (!fen) return true;
   try {
     const { violations } = validateBoardClaims(sentence, fen);
@@ -59,6 +64,25 @@ export function isSpokenSentenceGrounded(sentence: string, fen: string | null | 
         fen,
       });
       return false;
+    }
+    // TACTIC gate on the spoken sentence (David 2026-06-16): the voice
+    // streams BEFORE the spine's final-text gate, so a hallucinated tactic
+    // ("knight fork") not in the bounded context would otherwise be SPOKEN.
+    // Drop the sentence when it asserts an out-of-vocabulary tactic (kept:
+    // negation/avoidance phrasing — see stripUngroundedTacticSentences).
+    if (tactics) {
+      const t = stripUngroundedTacticSentences(sentence, tactics);
+      if (t.dropped.length > 0) {
+        void logAppAudit({
+          kind: 'claim-validator-trip',
+          category: 'subsystem',
+          source: `${source}.spokenSentenceGate`,
+          summary: `dropped an ungrounded-tactic sentence before speaking: "${sentence.slice(0, 60)}"`,
+          details: JSON.stringify({ source, sentence: sentence.slice(0, 200), dropped: t.dropped.slice(0, 3) }),
+          fen,
+        });
+        return false;
+      }
     }
   } catch { /* never block speech on a validator fault */ }
   return true;
@@ -295,5 +319,29 @@ export async function applyCandidateArrows(text: string, fen: string | null | un
     return out;
   } catch {
     return text; // never block the reply on an arrow fault
+  }
+}
+
+/** Code-derived HIGHLIGHT markers for a coach answer — the highlight twin
+ *  of `applyCandidateArrows` (G0: highlights are derived from the squares
+ *  the coach NAMED in prose, never drawn by the LLM). Returns just the
+ *  marker strings to append; the caller parses them onto the board. Never
+ *  throws. Synchronous — no engine needed (highlights are geometry-free). */
+export function candidateHighlightMarkers(text: string, source: string): string[] {
+  if (!text.trim()) return [];
+  try {
+    const { markers, squares } = injectCandidateHighlights(text);
+    if (squares.length > 0) {
+      void logAppAudit({
+        kind: 'coach-narration-spoken',
+        category: 'subsystem',
+        source: `${source}.highlightEngine`,
+        summary: `injected ${squares.length} code-highlight(s): ${squares.join(', ')}`,
+        details: JSON.stringify({ source, squares }),
+      });
+    }
+    return markers;
+  } catch {
+    return [];
   }
 }

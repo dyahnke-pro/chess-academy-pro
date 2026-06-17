@@ -283,6 +283,36 @@ describe('formatEnvelopeAsUserMessage', () => {
     expect(msg).toMatch(/What opening do I have set\?/);
   });
 
+  it('renders the position trap-scan block when liveState.trapSignal is set', () => {
+    // The grounded trap-mining result (David 2026-06-16) — code-decided,
+    // LLM-voiced (G0). The envelope must surface it so the coach answers
+    // "is there a trap here?" from the live board.
+    const env = assembleEnvelope({
+      toolbelt: getToolDefinitions(),
+      input: {
+        surface: 'teach',
+        ask: 'is there a trap in this position?',
+        liveState: {
+          surface: 'teach',
+          fen: 'rnbqkbnr/pppp1ppp/8/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3',
+          trapSignal: {
+            trapMove: 'Qh5',
+            gamesPlayed: 120,
+            evalCpForMover: -350,
+            severity: 'trap',
+            refutationSan: 'Nf3',
+          },
+        },
+      },
+    });
+    const msg = formatEnvelopeAsUserMessage(env);
+    expect(msg).toMatch(/Position trap scan/);
+    expect(msg).toMatch(/Qh5/);
+    expect(msg).toMatch(/Nf3/);
+    // The G3 framing must be present so the LLM voices, not invents.
+    expect(msg).toMatch(/do NOT invent a trap/i);
+  });
+
   it('includes recent conversation history when present (BRAIN-04 punt #3)', () => {
     // Append a back-and-forth from a chat surface — both user and
     // coach roles should land in the envelope's memory block.
