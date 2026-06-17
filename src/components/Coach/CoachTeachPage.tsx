@@ -86,7 +86,7 @@ import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { useSettings } from '../../hooks/useSettings';
 import { getFavoriteOpenings } from '../../services/openingService';
 import type { OpeningRecord } from '../../types';
-import type { LiveState } from '../../coach/types';
+import type { LiveState, TacticsLiveContext } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
@@ -625,6 +625,9 @@ export function CoachTeachPage(): JSX.Element {
   // that: each play_move handler writes the chess instance's current
   // FEN into it, and getLiveFen reads from this ref. */
   const liveFenRef = useRef(game.fen);
+  // Background-fed tactics context (real PV tactics) for the SPOKEN + displayed
+  // tactic strips, so the brain call never blocks on an engine read.
+  const fedTacticsRef = useRef<TacticsLiveContext | null>(null);
   // Keep liveFenRef in sync with the rendered fen on every render too,
   // so external mutations to `game` (loadFen, resetGame, undoMove
   // called from non-coach paths) flow through.
@@ -2443,7 +2446,7 @@ export function CoachTeachPage(): JSX.Element {
       // the only gate between the brain and the voice, so it must ENFORCE, not
       // just audit. Guarded so it never silences a turn on a fault.
       try {
-        const tac = stripUngroundedTacticSentences(grounded, tacticsForAsk);
+        const tac = stripUngroundedTacticSentences(grounded, fedTacticsRef.current ?? tacticsForAsk);
         if (tac.dropped.length > 0) {
           grounded = tac.clean;
           void logAppAudit({
@@ -2571,18 +2574,19 @@ export function CoachTeachPage(): JSX.Element {
     // adaptive puzzles). Drives lookahead depth via
     // `getTacticLookahead` — 4 plies once the student crosses 1400.
     const studentRating = activeProfile?.puzzleRating ?? 1200;
-    // FED context (ROOT fix, David 2026-06-16): hand the LLM the position's
-    // REAL tactics. The eval-bar cache is null on a miss (and times out on
-    // iOS) — buildFedTacticsContext fetches a hang-protected analysis itself
-    // so the package is never starved, so the LLM never has to invent a
-    // "knight fork" to fill an empty block. Degrades to FEN-only if the
-    // engine is genuinely down (empty > invented).
-    const tacticsForAsk = await buildFedTacticsContext(
-      fen,
-      studentColor,
-      studentRating,
-      cachedAnalysis,
-    );
+    // Tactics context for the prompt — SYNC, no engine await (David 2026-06-17:
+    // trim the ~2.5s the blocking fed-read added to every turn's pre-flight).
+    // A warm engine already makes this RICH via cachedAnalysis; the spine's
+    // enforcing tactic gate works off it either way (a thin context still
+    // strips inventions — empty > invented). The richer FED context (real PV
+    // tactics, hang-protected) is fetched in the BACKGROUND and lands in
+    // `fedTacticsRef` by the time the voice streams / the reply is graded, so
+    // the spoken + displayed tactic strips use it without blocking the brain.
+    const tacticsForAsk = buildTacticsLiveContext(fen, cachedAnalysis, studentColor, studentRating);
+    fedTacticsRef.current = tacticsForAsk;
+    void buildFedTacticsContext(fen, studentColor, studentRating, cachedAnalysis)
+      .then((fed) => { fedTacticsRef.current = fed; })
+      .catch(() => { /* engine down — keep the sync context */ });
     // Position trap detection (David 2026-06-16) is CENTRALIZED in
     // coachService.ask — every surface that routes through the grounded coach
     // inherits the same `scanPositionForTrap` → `liveState.trapSignal`, gated
@@ -3172,7 +3176,7 @@ export function CoachTeachPage(): JSX.Element {
       // in the context is never touched. Mirrors the shared groundCoachReply
       // gate so there is one tactic-grounding standard.
       try {
-        const ft = stripUngroundedTacticSentences(finalText, tacticsForAsk);
+        const ft = stripUngroundedTacticSentences(finalText, fedTacticsRef.current ?? tacticsForAsk);
         if (ft.dropped.length > 0) {
           finalText = ft.clean;
           void logAppAudit({
@@ -3197,7 +3201,7 @@ export function CoachTeachPage(): JSX.Element {
       // too so the false tactic claim isn't READ even if it was caught before
       // being SPOKEN.
       try {
-        const dt = stripUngroundedTacticSentences(displayText, tacticsForAsk);
+        const dt = stripUngroundedTacticSentences(displayText, fedTacticsRef.current ?? tacticsForAsk);
         if (dt.dropped.length > 0) displayText = dt.clean.trim() || finalText;
       } catch { /* never block the reply */ }
       if (finalText) {
