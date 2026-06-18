@@ -1385,6 +1385,189 @@ const MAR_SCOTCH: SublineNarration = {
   sources: MAR_DEV,
 };
 
+// ════════════════════════════════════════════════════════════════════════════
+// COVERAGE COMPLETION — every remaining course-subline of the Group-A openings,
+// authored to the full bar (lead with the deviation move, second person, a
+// talk-and-point beat, board-verified). These keys override the base map's
+// older entries (this file is spread AFTER the base in MERGED_NARRATION).
+// ════════════════════════════════════════════════════════════════════════════
+
+// ── Ruy Lopez (student WHITE) ──
+const COV_RUY_NA5: SublineNarration = {
+  intro: {
+    say: "…Na5 — the Chigorin: Black's knight chases your prized light-squared bishop off the a2-g8 diagonal. Don't allow the trade — slide it back to c2, where it eyes Black's king on the b1-h7 road while you roll d4 and seize the centre. The a5-knight sulks offside on the rim.",
+    sayShort: "…Na5 — keep the bishop, Bc2.",
+  },
+  beats: [
+    { atMove: 15, say: "Na5 lunges at your bishop — refuse the swap. Bc2 keeps it alive, re-aimed at Black's kingside, and after d4 your big centre rolls while the rim-knight on a5 does nothing useful.", sayShort: "Bc2 — save the bishop.", arrows: [A('b3', 'c2')], highlights: [H('c2', KEY), H('a5', SOFT)] },
+  ],
+  sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
+};
+const COV_RUY_BE7: SublineNarration = {
+  intro: {
+    say: "…Be7 — the main Closed Ruy: Black develops solidly and tucks the king away. Take your time and build: Re1 props the e4-pawn, then c3 and d4 raise the broad centre while the a4-bishop keeps a long-range bind on c6. Slow, rich, and pleasant — the classical Spanish squeeze is yours.",
+    sayShort: "…Be7 — Re1, back the centre.",
+  },
+  beats: [
+    { atMove: 9, say: "Be7 finishes Black's setup — now claim the centre. Re1 backs the e4-pawn so c3 and d4 can follow, and your a4-bishop keeps leaning on c6 the whole time.", sayShort: "Re1 — back e4, prep d4.", arrows: [A('f1', 'e1')], highlights: [H('e1', KEY), H('e4', SOFT)] },
+  ],
+  sources: ['book:ruy-lopez', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
+};
+const COV_RUY_A6: SublineNarration = {
+  intro: {
+    say: "…a6 — the Morphy Defence, by far Black's most popular try: he puts the question to your bishop at once. Retreat to a4, keeping the pin on the a4-e8 diagonal so the c6-knight stays tied down; you castle, play c3 and d4, and steer into the main Closed Ruy with a comfortable, lasting initiative.",
+    sayShort: "…a6 — Ba4, hold the pin.",
+  },
+  beats: [
+    { atMove: 6, say: "a6 pokes the bishop — don't surrender the pin. Ba4 keeps the clamp on c6 along the a4-e8 road, so Black can't free his game easily while you prepare c3 and d4.", sayShort: "Ba4 — keep the c6 pin.", arrows: [A('a4', 'c6')], highlights: [H('c6', KEY)] },
+  ],
+  sources: ['book:ruy-lopez', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
+};
+const COV_RUY_D6: SublineNarration = {
+  intro: {
+    say: "…d6 — Black shores up e5 quietly instead of grabbing space with …b5. That's a touch passive: build the classic centre with c3 and d4, keep the a4-bishop trained on c6, and you enjoy more room and the freer pieces in a calm, risk-free Spanish.",
+    sayShort: "…d6 — prep c3 and d4.",
+  },
+  beats: [
+    { atMove: 11, say: "d6 props up e5 but cedes you space — take the centre. c3 then d4 builds the broad pawn duo, while your a4-bishop keeps the long bind on c6 and Black stays cramped.", sayShort: "c3 and d4 — take the centre.", arrows: [A('a4', 'c6')], highlights: [H('d4', KEY)] },
+  ],
+  sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
+};
+const COV_RUY_BXC6: SublineNarration = {
+  intro: {
+    say: "…bxc6 — the Exchange Ruy, Black recapturing toward the centre. He keeps a half-open b-file, but you've handed him doubled c-pawns against your clean kingside pawn majority. Castle, play d4 to trade pieces, and steer toward an endgame where that healthy 4-against-3 majority is a real, nagging edge.",
+    sayShort: "…bxc6 — castle, aim for d4.",
+  },
+  beats: [
+    { atMove: 8, say: "bxc6 doubles Black's c-pawns — the long-term trump is yours. Castle, then d4 to open and trade down toward the ending, where your healthy kingside majority outweighs his crippled queenside.", sayShort: "Re1 — play for d4.", arrows: [A('f1', 'e1')], highlights: [H('c6', SOFT), H('c7', SOFT), H('d4', KEY)] },
+  ],
+  sources: ['book:ruy-lopez', 'concept:pawn-majority', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
+};
+
+// ── Italian Game (student WHITE) ──
+const COV_IT_D6: SublineNarration = {
+  intro: {
+    say: "…d6 — the Giuoco Pianissimo, Black settling in for a slow game. Don't drift: prepare the d4 break, keep your Bc4 aimed at f7, and reroute with Nbd2-f1-g3 in the classic Italian buildup. With the central lever in hand you press a small, durable pull.",
+    sayShort: "…d6 — break with d4.",
+  },
+  beats: [
+    { atMove: 7, say: "d6 closes the centre for now — your job is to crack it open. The d4 break is the lever, and the c4-bishop's stare down the a2-g8 diagonal keeps f7 a permanent worry for Black.", sayShort: "d4 — open it, hit f7.", arrows: [A('c4', 'f7')], highlights: [H('d4', KEY)] },
+  ],
+  sources: ['book:italian-game', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Italian_Game'],
+};
+const COV_IT_NF6: SublineNarration = {
+  intro: {
+    say: "…Nf6 — the Two Knights, Black's sharpest reply, hitting your e4-pawn and inviting a brawl. You choose the battleground: the swashbuckling Ng5 lunging straight at f7, or the principled d4 break blowing the centre open. Either way the c4-bishop already glares at f7 — meet the fight head-on.",
+    sayShort: "…Nf6 — Ng5 or d4 at f7.",
+  },
+  beats: [
+    { atMove: 5, say: "Nf6 strikes e4 and dares you forward. Ng5 jumps at f7 while the c4-bishop joins the assault on the same square — or play d4 to rip the centre. Pick your weapon; both aim at f7.", sayShort: "Ng5 and Bc4 — hit f7.", arrows: [A('f3', 'g5'), A('c4', 'f7')], highlights: [H('f7', KEY)] },
+  ],
+  sources: ['book:italian-game', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Italian_Game'],
+};
+
+// ── Two Knights Defence (student BLACK) ──
+const COV_TK_BB5: SublineNarration = {
+  intro: {
+    say: "Bb5 — White swerves out of the Two Knights and into a Ruy Lopez. Nothing to fear: put the question with …a6, and after Ba4 …Nf6 you're in familiar, well-charted Spanish territory. Keep the bishop guessing, eye the …Nxe4 and …b5 breaks, and play for the fully sound counter-chances Black gets in the Ruy.",
+    sayShort: "Bb5 — it's a Ruy: …a6.",
+  },
+  beats: [
+    { atMove: 7, say: "Bb5 makes it a Ruy — so play like it. …Nf6 already leans on the e4-pawn, the way Black fights for the initiative in the Open Spanish; develop fast, ask the bishop with …b5, and the position is balanced and rich.", sayShort: "…Nf6 — hit the e4-pawn.", arrows: [A('f6', 'e4')], highlights: [H('e4', ATK)] },
+  ],
+  sources: ['book:two-knights-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Two_Knights_Defense'],
+};
+
+// ── Four Knights Game (student WHITE) ──
+const COV_FK_ND4: SublineNarration = {
+  intro: {
+    say: "…Nd4 — the Rubinstein, Black's sharpest Four Knights try: he ignores the hit on c6 and jumps into your camp. The clean reply is Nxd4 exd4, when Black's recaptured pawn lands on d4 as a long-term target and you hold the easier game; if you'd rather keep pieces on, Ba4 or Bc4 also leaves you a small, safe pull. No tricks to fear.",
+    sayShort: "…Nd4 — trade with Nxd4.",
+  },
+  beats: [
+    { atMove: 7, say: "Nd4 leaps in expecting tricks — just trade it off. Nxd4 exd4 leaves that black pawn on d4 as a target you'll round up later, and your development flows while Black untangles.", sayShort: "Nxd4 — make d4 a target.", arrows: [A('f3', 'd4')], highlights: [H('d4', KEY)] },
+  ],
+  sources: ['book:four-knights-game', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Four_Knights_Game'],
+};
+const COV_FK_BG4: SublineNarration = {
+  intro: {
+    say: "…Bg4 — Black pins your f3-knight in the fianchetto Four Knights. Break the pin with tempo: h3 puts the question, and whether he takes or retreats you follow with Nd5, planting a knight on the central outpost. With the g2-bishop raking the long diagonal you keep a comfortable, harmonious game.",
+    sayShort: "…Bg4 — h3, then Nd5.",
+  },
+  beats: [
+    { atMove: 11, say: "Bg4 pins the f3-knight to your queen — meet it calmly. After h3 questions the bishop, the c3-knight springs to d5, a dominating outpost, while your fianchettoed bishop keeps watching the long light diagonal.", sayShort: "Nd5 — leap to the outpost.", arrows: [A('c3', 'd5')], highlights: [H('f3', SOFT), H('d5', KEY)] },
+  ],
+  sources: ['book:four-knights-game', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Four_Knights_Game'],
+};
+
+// ── Scotch Game (student WHITE) ──
+const COV_SC_D6: SublineNarration = {
+  intro: {
+    say: "…d6 — Black declines the Scotch tension and props up e5 passively instead of taking on d4. Make him pay for the meekness: Bb5 pins the c6-knight, your d4-and-e4 pawns command the centre, and with a clean space edge and faster development you press a comfortable, risk-free pull.",
+    sayShort: "…d6 — pin with Bb5.",
+  },
+  beats: [
+    { atMove: 6, say: "d6 keeps the centre rigid and passive — punish it. Bb5 pins the c6-knight, your d4-e4 duo dominates the middle, and Black is left cramped with no counterplay while you finish developing.", sayShort: "Bb5 — pin, keep the duo.", arrows: [A('b5', 'c6')], highlights: [H('c6', KEY), H('d4', SOFT), H('e4', SOFT)] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Scotch_Game'],
+};
+
+// ── Vienna Game (student WHITE) ──
+const COV_VN_GAMBIT_OO: SublineNarration = {
+  intro: {
+    say: "…O-O — Black castles into the Vienna Gambit tabiya. You gave the f-pawn for a roaring lead in development and a half-open f-file pointed at Black's king. Pour it on: develop the dark-squared bishop with menace, swing a rook to the f-file, and let the cramping e5-pawn choke Black while your pieces attack.",
+    sayShort: "…O-O — storm the f-file.",
+  },
+  beats: [
+    { atMove: 13, say: "O-O tucks Black's king away — now you hunt it. Bg5 develops with menace, pinning and pressuring the kingside, and the f-file plus the cramping e5-pawn give your attack all the fuel it needs.", sayShort: "Bg5 — develop with menace.", arrows: [A('c1', 'g5')], highlights: [H('f7', ATK), H('e5', KEY)] },
+  ],
+  sources: ['book:vienna-game', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Vienna_Game'],
+};
+const COV_VN_H6: SublineNarration = {
+  intro: {
+    say: "…h6 — a quiet, useful luft that stops your Bg5 and Ng5 pins before they start. Nothing forcing here, so out-build him: jump the knight to the d5 outpost or prepare the c3-and-d4 central break, keep the Bc4 trained on f7, and play a rich Italian-style middlegame with the freer game.",
+    sayShort: "…h6 — knight to d5.",
+  },
+  beats: [
+    { atMove: 11, say: "h6 makes a quiet luft but doesn't fight for the centre — so seize it. The c3-knight heads to the d5 outpost, dominating the board, while your Bc4 keeps one eye fixed on f7.", sayShort: "Nd5 — grab the outpost.", arrows: [A('c3', 'd5')], highlights: [H('d5', KEY)] },
+  ],
+  sources: ['book:vienna-game', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Vienna_Game'],
+};
+
+// ── Petrov Defence (student BLACK) ──
+const COV_PT_OO: SublineNarration = {
+  intro: {
+    say: "O-O — White castles in the Petrov main line, and your position is a fortress built on pure symmetry. Trade on e5 with …Nxe5: your e4-knight stays rock-solid, you develop the bishop toward d6, and you reach a dead-level middlegame with no weakness for White to bite on.",
+    sayShort: "O-O — recapture with …Nxe5.",
+  },
+  beats: [
+    { atMove: 10, say: "White castles, but the Petrov gives nothing away. …Nxe5 restores the balance, your knight on e4 sits proud in the centre, and after …Bd6 you're solid as granite with everything defended.", sayShort: "…Nxe5 — win the pawn back.", arrows: [A('d7', 'e5')], highlights: [H('e5', ATK), H('e4', KEY)] },
+  ],
+  sources: ['book:petrov-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Petrov%27s_Defence'],
+};
+const COV_PT_BC4: SublineNarration = {
+  intro: {
+    say: "Bc4+ — the Cochrane bite: White checks to justify the knight he sacrificed on f7. Block with …d5 — your f6-knight guards the pawn, the check fizzles, and you simply keep the extra piece. Tuck the king to safety, untangle, and convert; White's two pawns aren't nearly enough for the material.",
+    sayShort: "Bc4+ — block with …d5.",
+  },
+  beats: [
+    { atMove: 11, say: "Bc4+ tries to make the sacrifice work — calmly block. …d5 interposes, and because the f6-knight defends it the check leads nowhere; you stay up a clean piece and just need to bring the king to safety and trade down.", sayShort: "…d5 — the f6-knight guards it.", arrows: [A('f6', 'd5')], highlights: [H('d5', KEY), H('f7', SOFT)] },
+  ],
+  sources: ['book:petrov-defence', 'concept:tac-sacrifice', 'https://en.wikipedia.org/wiki/Petrov%27s_Defence'],
+};
+
+// ── Philidor Defence (student BLACK) ──
+const COV_PH_RE1: SublineNarration = {
+  intro: {
+    say: "Re1 — the Philidor main tabiya; White piles on the e-file behind his big centre and you're solid but cramped. Free it with patience: play …c6 and …Qc7 first, then strike with …exd4 and aim for the …d5 break to blow the centre open. Played accurately, the cramp dissolves into a fully sound game.",
+    sayShort: "Re1 — free it with …d5.",
+  },
+  beats: [
+    { atMove: 12, say: "Re1 stacks the e-file on your centre — answer with timing, not panic. Prepare with …c6 and …Qc7, then …exd4 opens lines and the …d5 break is the freeing blow that equalizes the position.", sayShort: "…exd4 then …d5 — break free.", arrows: [A('e5', 'd4')], highlights: [H('d5', KEY), H('c6', SOFT)] },
+  ],
+  sources: ['book:philidor-defence', 'concept:pos-prophylaxis', 'https://en.wikipedia.org/wiki/Philidor_Defence'],
+};
+
 export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   // ── Ruy Lopez ──
   'ruy-lopez::0::Nf6@5': RUY_BERLIN,
@@ -2265,4 +2448,44 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'marshall-attack::0::h3@14': MAR_ANTI,
   'marshall-attack::0::a4@14': MAR_ANTI,
   'marshall-attack::0::Bxc6@10': { ...MAR_EXCHANGE, beats: [{ atMove: 10, say: "Bxc6 trades the strong bishop to dent your pawns — recapture …dxc6 for the bishop pair and the half-open d-file. With …Bd6, …Qe7 and …f6 you keep the centre fluid; the two bishops are the lasting trump, doubled pawns or not.", sayShort: "Bxc6 — …dxc6, two bishops.", arrows: [A('c8', 'g4')], highlights: [H('c6', KEY)] }] },
+
+  // ── Coverage completion (every remaining course-subline, overriding base) ──
+  'ruy-lopez::0::Na5@15': COV_RUY_NA5,
+  'ruy-lopez::1::Na5@15': COV_RUY_NA5,
+  'ruy-lopez::2::Na5@15': COV_RUY_NA5,
+  'ruy-lopez::3::Be7@9': COV_RUY_BE7,
+  'ruy-lopez::7::Be7@9': COV_RUY_BE7,
+  'ruy-lopez::4::a6@5': COV_RUY_A6,
+  'ruy-lopez::5::d6@11': COV_RUY_D6,
+  'ruy-lopez::6::d6@11': COV_RUY_D6,
+  'ruy-lopez::8::bxc6@7': COV_RUY_BXC6,
+  'italian-game::0::d6@7': COV_IT_D6,
+  'italian-game::1::d6@7': COV_IT_D6,
+  'italian-game::6::d6@7': COV_IT_D6,
+  'italian-game::2::Nf6@5': COV_IT_NF6,
+  'italian-game::3::Nf6@5': COV_IT_NF6,
+  'two-knights-defence::1::Bb5@4': COV_TK_BB5,
+  'two-knights-defence::2::Bb5@4': COV_TK_BB5,
+  'two-knights-defence::3::Bb5@4': COV_TK_BB5,
+  'two-knights-defence::4::Bb5@4': COV_TK_BB5,
+  'two-knights-defence::5::Bb5@4': COV_TK_BB5,
+  'two-knights-defence::6::Bb5@4': COV_TK_BB5,
+  'two-knights-defence::7::Bb5@4': COV_TK_BB5,
+  'four-knights-game::0::Nd4@7': COV_FK_ND4,
+  'four-knights-game::4::Nd4@7': COV_FK_ND4,
+  'four-knights-game::7::Nd4@7': COV_FK_ND4,
+  'four-knights-game::8::Bg4@11': COV_FK_BG4,
+  'scotch-game::0::d6@5': COV_SC_D6,
+  'scotch-game::1::d6@5': COV_SC_D6,
+  'scotch-game::2::d6@5': COV_SC_D6,
+  'scotch-game::3::d6@5': COV_SC_D6,
+  'scotch-game::4::d6@5': COV_SC_D6,
+  'scotch-game::5::d6@5': COV_SC_D6,
+  'scotch-game::6::d6@5': COV_SC_D6,
+  'scotch-game::7::d6@5': COV_SC_D6,
+  'vienna-game::0::O-O@13': COV_VN_GAMBIT_OO,
+  'vienna-game::2::h6@11': COV_VN_H6,
+  'petrov-defence::1::O-O@10': COV_PT_OO,
+  'petrov-defence::3::Bc4+@10': COV_PT_BC4,
+  'philidor-defence::1::Re1@12': COV_PH_RE1,
 };
