@@ -314,7 +314,7 @@ const N59: SublineNarration = {
 };
 
 const N60: SublineNarration = {
-  intro: { say: "exd6 — White clears the e5-pawn here with his knight already on f3, and is left holding the isolated d4-pawn. Recapture and play freely against it; …a6 denies b5 to his bishop and knight. Blockade on d5 and grind the lone pawn down.", sayShort: "Trade on d6, isolani is the target" },
+  intro: { say: "exd6 — White clears the e5-pawn with his knight already on f3, leaving himself the isolated d4-pawn. Recapture and play freely against it: your …a6 denies b5 to his bishop and knight, then you blockade d5 and grind that lone pawn down.", sayShort: "Trade on d6, isolani is the target" },
   sources: ['concept:pawn-isolated', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Alapin_Variation'],
 };
 
@@ -359,7 +359,7 @@ const N68: SublineNarration = {
 };
 
 const N69: SublineNarration = {
-  intro: { say: "Nc6 — expand with c4 to kick the d5-knight, then unleash the e6 break, shattering his kingside pawns after …fxe6. The doubled, isolated e-pawns and the open f-file leave his structure permanently damaged. Develop with pressure on that weakened kingside and exploit the ruin the e6 thrust created.", sayShort: "e6 break wrecks Black's kingside" },
+  intro: { say: "Nc6 — expand with c4 to kick his d5-knight, then unleash your e6 break, shattering his kingside pawns after …fxe6. The doubled, isolated e-pawns and the open f-file leave his structure permanently damaged. Develop your pieces with pressure on that weakened kingside and exploit the ruin your e6 thrust created.", sayShort: "e6 break wrecks Black's kingside" },
   sources: ['concept:pawn-doubled', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Alekhine%27s_Defence'],
 };
 
@@ -379,12 +379,12 @@ const N72: SublineNarration = {
 };
 
 const N73: SublineNarration = {
-  intro: { say: "e6 — Black plays the solid setup, so grab maximum space with c4, kicking the d5-knight to b6 and erecting a broad front on c4, d4 and e5. This is the Four Pawns spirit of the Modern: your space is enormous and Black is severely cramped. Develop with Nc3 and Nf3, hold the chain, and suffocate his pieces with the bind.", sayShort: "c4 grabs space, cramp Black" },
+  intro: { say: "…e6 — Black chooses the solid setup, so grab maximum space with c4, kicking his d5-knight to b6 and erecting a broad front on c4, d4 and e5. In the Four Pawns spirit of the Modern, your space is enormous and Black is severely cramped. Develop with Nc3 and Nf3, hold the chain, and suffocate his pieces with the bind.", sayShort: "c4 grabs space, cramp Black" },
   sources: ['concept:pos-space', 'concept:pawn-chain', 'https://en.wikipedia.org/wiki/Alekhine%27s_Defence'],
 };
 
 const N74: SublineNarration = {
-  intro: { say: "…Nb6 challenges your c4-bishop, so retreat to b3 where it keeps a fine diagonal at f7. Black completes the fianchetto with …Bg7, but you hold the imposing e5 and d4 centre and the freer position. Castle, support the centre with c3 or Re1, and use the space edge to restrict him and prepare a central or kingside advance.", sayShort: "Bb3 keeps the diagonal and the center" },
+  intro: { say: "…g6 — Black heads for the …Bg7 fianchetto against your big centre. When …Nb6 challenges your c4-bishop, retreat it to b3 where it keeps the fine diagonal aimed at f7; you still hold the imposing e5 and d4 pawns and the freer game. Castle, brace the centre with c3 or Re1, and use your space edge to restrict him and prepare a central or kingside advance.", sayShort: "Bb3 keeps the diagonal and the center" },
   sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Alekhine%27s_Defence'],
 };
 
@@ -634,12 +634,12 @@ const N123: SublineNarration = {
 };
 
 const N124: SublineNarration = {
-  intro: { say: "Nf3 — without the f4-thrust, grab the centre directly with …e5, Sveshnikov-style. The e5-pawn controls d4 and f4, denying him the squares the Grand Prix attack craves. Follow with …Be7 and quick development, intending …d6 and …Nf6 for a sound, space-gaining structure with no kingside attack to fear.", sayShort: "…e5 seizes the center" },
+  intro: { say: "Nf3 — with no f4-thrust, grab the centre directly with your …e5, Sveshnikov-style. Your e5-pawn controls d4 and f4, denying him the very squares the Grand Prix attack craves. Follow with …Be7 and quick development, intending …d6 and …Nf6 for a sound, space-gaining structure with no kingside attack to fear.", sayShort: "…e5 seizes the center" },
   sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
 };
 
 const N125: SublineNarration = {
-  intro: { say: "Nge2 — keeps his options flexible but blocks the f1-bishop and delays the kingside attack. Develop actively with …Nf6, pressuring e4 and preparing …d5 or …g6 with a fianchetto. With his pieces tangled on the back rank, get in quick development and contest the centre before any f4-storm can be organised.", sayShort: "…Nf6 hits e4, develop quickly" },
+  intro: { say: "Nge2 — keeps his options open but blocks his own f1-bishop and delays the kingside attack. Develop actively with your …Nf6, pressuring e4 and preparing …d5 or …g6 with a fianchetto. With his pieces tangled on the back rank, get your development in fast and contest the centre before any f4-storm can be organised.", sayShort: "…Nf6 hits e4, develop quickly" },
   sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
 };
 
@@ -654,7 +654,7 @@ const N127: SublineNarration = {
 };
 
 const N128: SublineNarration = {
-  intro: { say: "g3 — White fianchettoes into a closed Sicilian rather than the sharp f4-attack, fighting for the long light diagonal. Mirror it with …g6 and …Bg7, contesting the same diagonal and the dark squares around d4. With both kings tucked behind fianchettoes, prepare …d6 and …e5, or …Rb8 with …b5, to expand where his pieces are less active.", sayShort: "Mirror the fianchetto, expand queenside" },
+  intro: { say: "g3 — White fianchettoes into a closed Sicilian rather than the sharp f4-attack, fighting for the long light diagonal. Mirror him with your …g6 and …Bg7, contesting that diagonal and the dark squares around d4. With both kings tucked behind fianchettoes, prepare …d6 and …e5, or …Rb8 and …b5, to expand where his pieces are least active.", sayShort: "Mirror the fianchetto, expand queenside" },
   sources: ['concept:pawn-fianchetto', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Grand_Prix_Attack'],
 };
 
@@ -669,7 +669,7 @@ const N130: SublineNarration = {
 };
 
 const N131: SublineNarration = {
-  intro: { say: "…Bg7 — this is the Hanstein: support the f4-pawn with …g5 and fianchetto to g7 to bear down on his centre and king. After he castles into the half-open f-file, develop calmly with …d6 and …Nc6, keeping the extra pawn and the powerful g7-bishop. With sound development and material in hand, neutralise the attack and convert the gambit pawn.", sayShort: "Hanstein — …Bg7 holds the booty" },
+  intro: { say: "Bc4 — White eyes f7 in this King's Gambit, but you're set for the Hanstein: you've already propped your f4-pawn with …g5, so fianchetto …Bg7 to bear down on his centre and king. After he castles into the half-open f-file, develop calmly with …d6 and …Nc6, keeping your extra pawn and the powerful g7-bishop. With sound development and material in hand, you neutralise the attack and convert the gambit pawn.", sayShort: "Hanstein — …Bg7 holds the booty" },
   sources: ['concept:pawn-fianchetto', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
 };
 
@@ -714,7 +714,7 @@ const N139: SublineNarration = {
 };
 
 const N140: SublineNarration = {
-  intro: { say: "Qe2 — defends e4 but again exposes the queen on the e-file. Play …d5, and after exd5+ slot in the zwischenzug …Ne4, blocking the check and planting a powerful knight in the centre with tempo. Then push …f3 to hit the queen and jam the kingside, keeping the initiative while he scrambles to coordinate.", sayShort: "…Ne4 blocks, …f3 hits the queen" },
+  intro: { say: "Qe2 — defends e4 but again exposes the queen on the e-file. Play your …d5, and after exd5+ slot in the zwischenzug …Ne4, blocking the check and planting a powerful knight in the centre with tempo. Then push …f3 to hit his queen and jam the kingside, keeping your initiative while he scrambles to coordinate.", sayShort: "…Ne4 blocks, …f3 hits the queen" },
   sources: ['concept:tac-zwischen', 'concept:pos-centralization', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
 };
 
@@ -919,7 +919,7 @@ const N180: SublineNarration = {
 };
 
 const N181: SublineNarration = {
-  intro: { say: "…c6 — the …Qd8 retreat is the most passive, and …c6 builds a small but solid shell. Seize the centre with d4, develop Nf3 and Bc4 to target f7, and enjoy a clear lead in development from the early queen chase. After …Bf5, prepare O-O and central play, dominating space against his cramped setup.", sayShort: "Qd8 passive — Bc4 and centre dominate" },
+  intro: { say: "…c6 — after the passive …Qd8 retreat, Black builds a small but solid shell. Seize the centre with your d4, develop Nf3 and Bc4 to target f7, and cash in the lead in development your early queen-chase earned. Meet …Bf5 with O-O and central play, dominating the space against his cramped setup.", sayShort: "Qd8 passive — Bc4 and centre dominate" },
   sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
 };
 
@@ -949,7 +949,7 @@ const N186: SublineNarration = {
 };
 
 const N187: SublineNarration = {
-  intro: { say: "e5 — Black grabs central space, but it leaves the d5-square permanently weak and the d6-pawn potentially backward. Castle and exploit the d5-hole, rerouting a knight there and pressuring the soft d6-point. Trade on c6 if useful, then occupy the d5 outpost, turning his space grab into a chronic liability.", sayShort: "Castle, exploit the d5-hole" },
+  intro: { say: "…e5 — Black grabs central space, but it leaves the d5-square permanently weak and the d6-pawn potentially backward. Castle and exploit that d5-hole: reroute your knight there and lean on the soft d6-point. Trade on c6 if it helps, then plant a piece on the d5 outpost, turning his space grab into a chronic liability for you to target.", sayShort: "Castle, exploit the d5-hole" },
   sources: ['concept:pos-outpost', 'concept:pos-weak-squares', 'https://en.wikipedia.org/wiki/Rossolimo_Variation'],
 };
 
@@ -989,7 +989,7 @@ const N194: SublineNarration = {
 };
 
 const N195: SublineNarration = {
-  intro: { say: "Nf3 — White delays the knight recapture before Nxc3, but keep the gambit pawn and develop normally with …Nc6, …e6 and …a6. Head the knight to e7 and g6 rather than f6, sidestepping any Bg5 pin, and …b5 will chase the c4-bishop off the f7-diagonal. Hold the material, build a shell with no weaknesses, and let White try to prove the initiative is worth a pawn — it usually falls short.", sayShort: "…e6, …a6 — hold the pawn, no weaknesses" },
+  intro: { say: "Nf3 — White delays the recapture before Nxc3, but you keep the gambit pawn and develop normally with …Nc6, …e6 and …a6. Steer your knight to e7 and g6 rather than f6, sidestepping any Bg5 pin, and your …b5 chases the c4-bishop off the f7-diagonal. Hold the material, build a shell with no weaknesses, and let White try to prove his initiative is worth a pawn — it usually falls short.", sayShort: "…e6, …a6 — hold the pawn, no weaknesses" },
   sources: ['concept:pos-king-safety', 'concept:pawn-majority', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
@@ -1149,7 +1149,7 @@ const N226: SublineNarration = {
 };
 
 const N227: SublineNarration = {
-  intro: { say: "gxf3 — White recaptures with the g-pawn, taking doubled f-pawns and an open g-file for the rook in return for the bishop pair. Exploit that structural concession: …e6, …Nf6 and the …c5 break challenge the centre and target White's damaged kingside. With White's king cover compromised, play for the better structure and aim at those weak f-pawns and the half-open files in the long game.", sayShort: "Two Knights — …c5, target doubled f-pawns" },
+  intro: { say: "gxf3 — White recaptures with the g-pawn, accepting doubled f-pawns and an open g-file for the bishop pair. Exploit that structural concession: your …e6, …Nf6 and …c5 break challenge the centre and hit his damaged kingside. With his king cover compromised, play for the better structure and target those weak f-pawns and the half-open files in the long game.", sayShort: "Two Knights — …c5, target doubled f-pawns" },
   sources: ['concept:pawn-doubled', 'concept:pos-center'],
 };
 
@@ -1169,12 +1169,12 @@ const N230: SublineNarration = {
 };
 
 const N231: SublineNarration = {
-  intro: { say: "Nxd5 — White trades knights on d5, so recapture and keep the typical IQP setup with active pieces. Your bishop on b4, knight on c6 blockading d4, and the half-open files give you plenty of counterplay against White's isolated d-pawn. The plan is clear: restrain and round up the d4-pawn, finish developing, and use the d5 and e4 squares as outposts.", sayShort: "Panov — recapture, target d4" },
+  intro: { say: "Nxd5 — White trades knights on d5, so recapture and keep the typical IQP setup with active pieces. Your bishop on b4, your knight on c6 blockading d4, and the half-open files hand you plenty of counterplay against his isolated d-pawn. Your task is clear: restrain and round up that d4-pawn, finish developing, and use the d5 and e4 squares as your outposts.", sayShort: "Panov — recapture, target d4" },
   sources: ['concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Panov%E2%80%93Botvinnik_Attack'],
 };
 
 const N232: SublineNarration = {
-  intro: { say: "Nxd5 — White trades on d5 with both sides castled and developed, simplifying toward the isolated-queen's-pawn battle. Recapture and keep the standard plan: knight on c6 blockading d4, bishop on b4 pressuring the dark squares, pieces swarming the lone d-pawn. With sound development and active pieces, restrain and target White's isolated d4-pawn as the game's long-term weakness.", sayShort: "Panov — recapture, blockade d4" },
+  intro: { say: "Nxd5 — White trades on d5 with both sides castled and developed, simplifying toward the isolated-queen's-pawn battle. Recapture and keep your standard plan: your knight on c6 blockades d4, your bishop on b4 pressures the dark squares, your pieces swarm the lone d-pawn. With sound development and active pieces, restrain and round up his isolated d4-pawn as the long-term weakness.", sayShort: "Panov — recapture, blockade d4" },
   sources: ['concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Panov%E2%80%93Botvinnik_Attack'],
 };
 
@@ -1479,7 +1479,7 @@ const N292: SublineNarration = {
 };
 
 const N293: SublineNarration = {
-  intro: { say: "Nc3 — White pressures d5 and angles for the e4-break in this Exchange French. Mirror with …c6 to bolster d5 and …Bg4 or …Bf5 to get the bishop outside the chain. Play …Re8 to grab the e-file, …Nbd7, and …Qc7 with the bishop pointed at h2 — hold d5, contest the central files, and the symmetrical position stays fully balanced.", sayShort: "Exchange — hold d5 with …c6, …Re8" },
+  intro: { say: "Nc3 — White pressures d5 and angles for the e4-break in this Exchange French. Mirror him with your …c6 to bolster d5 and …Bg4 or …Bf5 to get your bishop outside the chain. Grab the e-file with your …Re8, play …Nbd7 and …Qc7 with your bishop pointed at h2 — hold d5, contest the central files, and the symmetrical position stays fully balanced for you.", sayShort: "Exchange — hold d5 with …c6, …Re8" },
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-open-file', 'concept:pos-development'],
 };
 
@@ -1494,12 +1494,12 @@ const N295: SublineNarration = {
 };
 
 const N296: SublineNarration = {
-  intro: { say: "Re1 — White grabs the e-file in this Exchange French, where symmetry is broken only by who acts first. Answer …Re8 to contest the open file directly, then complete with …c6, …Nbd7, and …Qc7 lining up the bishop and queen at h2. Seize the e-file and aim a minority advance or a kingside regrouping — the side controlling the e-file and the e4/e5 squares holds the edge.", sayShort: "Exchange — contest the e-file, …Re8" },
+  intro: { say: "Re1 — White grabs the e-file in this Exchange French, where symmetry breaks only by who acts first. Answer with your …Re8 to contest the open file directly, then complete with …c6, …Nbd7 and …Qc7, lining up your bishop and queen at h2. Seize the e-file and aim for a minority advance or a kingside regrouping — whoever controls the e-file and the e4/e5 squares holds the edge.", sayShort: "Exchange — contest the e-file, …Re8" },
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-open-file', 'concept:pos-development'],
 };
 
 const N297: SublineNarration = {
-  intro: { say: "c3 — White supports d4 and settles into a slow symmetrical struggle in this Exchange French. Mirror with …c6 and develop …Bg4 or …Bf5 outside the pawn chain, then …Nbd7 and …Qc7 to point the battery at h2. Contest the e-file with …Re8 and prepare a minority advance with …b5-b4 against c3 — whoever creates the first real target in this symmetry takes the initiative.", sayShort: "Exchange — …c6, develop the bishop out" },
+  intro: { say: "c3 — White props up d4 and settles into a slow symmetrical struggle in this Exchange French. Mirror him with your …c6 and develop …Bg4 or …Bf5 outside the chain, then …Nbd7 and …Qc7 to aim your battery at h2. Contest the e-file with your …Re8 and prepare your minority advance …b5-b4 against c3 — whoever creates the first real target in this symmetry grabs the initiative.", sayShort: "Exchange — …c6, develop the bishop out" },
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-minority-attack', 'concept:pos-development'],
 };
 
@@ -1539,7 +1539,7 @@ const N304: SublineNarration = {
 };
 
 const N305: SublineNarration = {
-  intro: { say: "f3 — White tries to win back the e4-pawn in this offbeat French. Don't hand it over: …e3 jams the pawn deep into White's camp, a permanent thorn cramping the f1-bishop and freezing the whole kingside. The advanced pawn on e3 is worth far more than the tempo White recovers.", sayShort: "f3 — …e3 jams a thorn." },
+  intro: { say: "f3 — White tries to win back the e4-pawn in this offbeat French. Don't hand it over: your …e3 jams the pawn deep into his camp, a permanent thorn cramping his f1-bishop and freezing his whole kingside. That advanced pawn on e3 is worth far more to you than the tempo White recovers.", sayShort: "f3 — …e3 jams a thorn." },
   sources: ['concept:pos-space', 'concept:pawn-passed', 'https://en.wikipedia.org/wiki/French_Defence'],
 };
 
@@ -1814,7 +1814,7 @@ const N359: SublineNarration = {
 };
 
 const N360: SublineNarration = {
-  intro: { say: "h3 — White slips in h3 to deny …Ng4 hitting the e3-bishop and to prepare a kingside pawn advance. Respond in the centre and on the queenside: …c6 readies …b5, while …e5 or …c5 challenges d4 to undercut any wing attack before it gains momentum. With the Be3-Qd2 battery aiming at h6, expect a later Bh6 — answer it with …Bxh6 and …b5, and meet the slow setup with an active central or queenside break.", sayShort: "h3 stops …Ng4 — break …c6, …b5" },
+  intro: { say: "h3 — White denies your …Ng4 hit on the e3-bishop and prepares a kingside pawn advance. Hit back in the centre and on the queenside: your …c6 readies …b5, while …e5 or …c5 challenges d4 to undercut any wing attack before it rolls. With his Be3-Qd2 battery aiming at h6, expect Bh6 — answer it with …Bxh6 and …b5, and meet the slow setup with an active central or queenside break.", sayShort: "h3 stops …Ng4 — break …c6, …b5" },
   sources: ['concept:pos-prophylaxis', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
 };
 
@@ -2264,7 +2264,7 @@ const N449: SublineNarration = {
 };
 
 const N450: SublineNarration = {
-  intro: { say: "Bg5 — White pins your f6-knight while your h5-bishop keeps its own pin on f3 down the d1-h5 diagonal. Break the pin with …Be7, after which both sides are fully developed and ready to castle. Your structure is rock-solid: the queen safely home on d8, no pawn weaknesses, and …Nbd7 or …Nc6 plus a timely …c5 or …b5 break ahead. This is the heart of the modern …Qd8 Scandinavian.", sayShort: "Bg5 pin — …Be7 unties it" },
+  intro: { say: "Bg5 — White pins your f6-knight while your h5-bishop keeps its own pin on f3 down the d1-h5 diagonal. Break the pin with …Be7, after which both sides are fully developed and ready to castle. Your structure is rock-solid: your queen safely home on d8, no pawn weaknesses, and …Nbd7 or …Nc6 plus a timely …c5 or …b5 break ahead — the very heart of the modern …Qd8 Scandinavian you're playing.", sayShort: "Bg5 pin — …Be7 unties it" },
   sources: ['concept:tac-pin', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
 };
 
@@ -2632,12 +2632,12 @@ const N522: SublineNarration = {
 };
 
 const N523: SublineNarration = {
-  intro: { say: "c3 — the Alapin-flavoured Anti-Sicilian, White building a d4-pawn centre on the cheap. Don't let him have it free: …Nf6 pressures e4, and …g6 with …Bg7 fianchettoes onto the long diagonal eyeing the centre. Aim for a timely …d5 or …Bg4 to undermine d4, reaching a comfortable game where White's slow setup gives no edge.", sayShort: "c3 — …Nf6, fianchetto, hit the centre." },
+  intro: { say: "c3 — the Alapin-flavoured Anti-Sicilian, White building a d4-pawn centre on the cheap. Don't let him have it free: your …Nf6 pressures e4, and …g6 with …Bg7 fianchettoes onto the long diagonal, eyeing the centre. Aim your …d5 or …Bg4 break to undermine d4, reaching a comfortable game where his slow setup gives you no trouble.", sayShort: "c3 — …Nf6, fianchetto, hit the centre." },
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation'],
 };
 
 const N524: SublineNarration = {
-  intro: { say: "f3 with an early c4 — White angles for a Maroczy bind, clamping d5 and e4. Refuse to be squeezed: …e5 grabs the centre, …Be6 pressures the queenside, and the powerful …d5 break blows the position open before the bind can solidify. Striking in the centre is the antidote to every flank clamp — and here it equalises cleanly.", sayShort: "c4 — …d5 break shatters the bind." },
+  intro: { say: "f3 — paired with an early c4, White angles for a Maroczy bind, clamping d5 and e4. Don't let yourself be squeezed: your …e5 grabs the centre, …Be6 pressures the queenside, and the powerful …d5 break blows the position open before the bind can solidify. Striking the centre is your antidote to the flank clamp — and here it equalises cleanly.", sayShort: "c4 — …d5 break shatters the bind." },
   beats: [
     { atMove: 13, say: "…d5! — the thematic central break that refutes the bind. White's c4 and e4 pawns are challenged head-on; if cxd5 then …Bxb3 and …Nxd5 leaves Black perfectly placed. The lesson is permanent: answer a flank clamp by striking the centre, and the clamp dissolves.", sayShort: "…d5 — break the Maroczy bind.", arrows: [A('d5','c4','rgba(40,185,95,0.92)'), A('d5','e4','rgba(40,185,95,0.92)')], highlights: [H('d5','rgba(255,214,0,0.88)')] },
   ],
@@ -2745,7 +2745,7 @@ const N544: SublineNarration = {
 };
 
 const N545: SublineNarration = {
-  intro: { say: "f4 — in this Maroczy Bind White grabs more space, intending e5 or f5 to expand on the kingside while the c4-pawn keeps the bind on d5 and b5. Counter before he rolls forward: …Nxd4 and …Bc6 to trade pieces and hit the e4-pawn, …Rc8 and …a6 to contest the c-file, and the …b5 break to free the queenside — leaning on the g7-bishop to keep the dark squares secure against his pawn advance.", sayShort: "Maroczy f4 — trade and break …b5" },
+  intro: { say: "f4 — in this Maroczy Bind White grabs more space, intending e5 or f5 to expand on the kingside while his c4-pawn keeps the bind on d5 and b5. Counter before he rolls forward: your …Nxd4 and …Bc6 trade pieces and hit e4, …Rc8 and …a6 contest the c-file, and your …b5 break frees the queenside — leaning on your g7-bishop to keep the dark squares secure against his advance.", sayShort: "Maroczy f4 — trade and break …b5" },
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pos-space', 'concept:pos-center'],
 };
 
@@ -2855,7 +2855,7 @@ const N563: SublineNarration = {
 };
 
 const N564: SublineNarration = {
-  intro: { say: "Bd3 — after Bg5 and f4, the classical main line against the Najdorf, White building a big pawn centre with the bishop pinning f6. Break the pin with …Be7; his bishop on d3 invites …O-O and a later …b5 or …Qc7. Castle, finish development, and prepare the …b5/…Bb7 counter on the long diagonal against his ambitious but loosening setup.", sayShort: "Bg5 f4 — …Be7, castle, then …b5." },
+  intro: { say: "Bd3 — after Bg5 and f4, the classical main line, White builds a big centre with the bishop pinning your f6-knight. Break the pin with …Be7; his bishop on d3 invites your …O-O and a later …b5 or …Qc7. Castle, finish development, and prepare your …b5/…Bb7 counter on the long diagonal against his ambitious but loosening setup.", sayShort: "Bg5 f4 — …Be7, castle, then …b5." },
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
 };
 
@@ -2885,7 +2885,7 @@ const N569: SublineNarration = {
 };
 
 const N570: SublineNarration = {
-  intro: { say: "Nde2 — after f3, White retreats the knight toward g3 to bear down on the d5- and f5-squares. Meet it with the standard wall: …e5 staked the centre, now …Be6 guards d5 head-on. Continue …Nbd7, …b5 and …Nb6, fighting him for that one outpost — the entire strategic point of this whole Najdorf structure.", sayShort: "f3 — …Be6 guards d5." },
+  intro: { say: "Nde2 — after f3, White reroutes the knight toward g3 to bear down on your d5- and f5-squares. Meet it with the standard wall: your …e5 staked the centre, now …Be6 guards d5 head-on. Continue …Nbd7, …b5 and …Nb6, fighting him for that one outpost — the entire strategic point of your whole Najdorf structure.", sayShort: "f3 — …Be6 guards d5." },
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
 };
 
@@ -2900,7 +2900,7 @@ const N572: SublineNarration = {
 };
 
 const N573: SublineNarration = {
-  intro: { say: "f3 — White braces e4 and prepares to castle long after the bishop's retreat to g3. You've already gained kingside space with …g5 and …h6; the g7-bishop completes the picture, glaring down the long diagonal at the heart of his position. This is the sharp, modern Najdorf where you play for the attack, not equality.", sayShort: "f3 — fianchetto g7, attack." },
+  intro: { say: "f3 — White braces e4 and prepares to castle long after the bishop's retreat to g3. You've already gained kingside space with …g5 and …h6; your g7-bishop completes the picture, glaring down the long diagonal at the heart of his position. You're in the sharp, modern Najdorf now — playing for the attack, not equality.", sayShort: "f3 — fianchetto g7, attack." },
   sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
 };
 
@@ -2935,7 +2935,7 @@ const N579: SublineNarration = {
 };
 
 const N580: SublineNarration = {
-  intro: { say: "Nxc6 — White trades a move early and develops modestly with Bd3, declining any fight for d5. Recapture …bxc6 to open the b-file and …e5 to stake the centre, gaining the c5/d-file mass typical of these structures. After a3, the …c5 advance grabs space and the dark squares; continue …d6, …Be7 and …O-O, leaning on the bishop pair and a mobile central majority to outgun his passive setup.", sayShort: "…e5 and …c5 seize the centre" },
+  intro: { say: "Nxc6 — White trades a move early and develops modestly with Bd3, declining the fight for d5. Recapture …bxc6 to open your b-file and …e5 to stake the centre, building the pawn mass typical of these structures. After a3, your …c5 advance grabs space and the dark squares; continue …d6, …Be7 and …O-O, leaning on your bishop pair and mobile central majority to outgun his passive setup.", sayShort: "…e5 and …c5 seize the centre" },
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:pos-center', 'concept:pos-space'],
 };
 
@@ -2995,7 +2995,7 @@ const N591: SublineNarration = {
 };
 
 const N592: SublineNarration = {
-  intro: { say: "Nf3 — via the Kalashnikov order White meets …e5 by retreating, attacking e5 rather than jumping to b5. Support the centre and develop …Nf6, eyeing e4 and d5. After Nc3, continue …Bb4 or …Be7 and …d5 in many lines, using the e5-pawn's space and quick development to fight for the centre without the d5-hole the …Ndb5 main lines concede.", sayShort: "Nf3 retreat — support e5, play …d5" },
+  intro: { say: "Nf3 — via the Kalashnikov order White meets …e5 by retreating, attacking your e5-pawn rather than jumping to b5. Support the centre with your …Nf6, eyeing e4 and d5. After Nc3, continue …Bb4 or …Be7 and …d5, using your e5-space and quick development to fight for the centre without conceding the d5-hole the …Ndb5 lines allow.", sayShort: "Nf3 retreat — support e5, play …d5" },
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:pos-center', 'concept:pos-development'],
 };
 
@@ -3110,7 +3110,7 @@ const N614: SublineNarration = {
 };
 
 const N615: SublineNarration = {
-  intro: { say: "…Nf6 — Black sidesteps the gambit, so push the pawn to e5, kick the knight to d5, and c3xd4 rebuilds a broad pawn centre on d4 and e4. This is the declined Morra: instead of an extra pawn for Black, you own the centre and a free game. Play the little move a3 to stop …Nb4 hitting the d5-knight and clamp b4 before rolling the centre forward.", sayShort: "Declined — broad center on d4-e4" },
+  intro: { say: "…Nf6 — Black sidesteps the gambit, so push your pawn to e5, kick the knight to d5, and recapture cxd4 to rebuild a broad centre on d4 and e4. In the declined Morra, instead of an extra pawn for Black, you own the centre and a free game. Slip in the little move a3 to stop …Nb4 hitting your d5-knight, then clamp b4 before rolling the centre forward.", sayShort: "Declined — broad center on d4-e4" },
   sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
@@ -3150,7 +3150,7 @@ const N622: SublineNarration = {
 };
 
 const N623: SublineNarration = {
-  intro: { say: "…e6 — Black sets up the g7-fianchetto, a flexible Maroczy structure aiming for …Nge7 and a later …d5 or …b5. Keep the c4-e4 bind that smothers the …d5 freeing move and claim the extra space. Castle and bring the bishop to e3 over the dark squares to complete the clamp — the declined Morra is a positional bind, so patience and central control, not a sacrifice, carry the day.", sayShort: "…e6 fianchetto — keep c4-e4 bind" },
+  intro: { say: "…e6 — Black sets up the …g7-fianchetto, a flexible Maroczy structure aiming for …Nge7 and a later …d5 or …b5. Keep your c4-e4 bind that smothers his …d5 freeing break and claim the extra space. Castle and post your bishop on e3 over the dark squares to complete the clamp — the declined Morra is a positional bind, so your patience and central control, not a sacrifice, carry the day.", sayShort: "…e6 fianchetto — keep c4-e4 bind" },
   sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
