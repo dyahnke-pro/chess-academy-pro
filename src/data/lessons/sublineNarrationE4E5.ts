@@ -1155,44 +1155,52 @@ const SCH_DEV = ['concept:pos-development', 'concept:pos-initiative', 'https://e
 // Nc3@6 — the main antidote (Bb5 f5 Nc3 fxe4 Nxe4 Nf6). Active, sharp equality.
 const SCH_NC3: SublineNarration = {
   intro: {
-    say: "Nc3 — the principled main line against your Schliemann. Don't blink: …fxe4 and …Nf6 keep the initiative rolling, challenging White's knight on e4 and grabbing the centre. The position is razor-sharp and theory-rich, but it's fully sound for you — your active pieces and the open f-file give real attacking chances. This is the brawl the Schliemann is for; play it boldly.",
+    say: "Nc3 — the principled main line against your Schliemann, calmly developing and defending e4 instead of grabbing on f5. This is the theory-rich brawl the gambit is built for, and it's fully sound for you: you trade on e4, chase White's pieces, and develop with the initiative down the half-open f-file. Don't go quiet now — keep punching.",
     sayShort: 'Nc3 — …fxe4 and …Nf6, keep attacking.',
   },
   beats: [
-    { atMove: 6, say: "Nc3 — the main line. Don't blink: fxe4 and Nf6 keep the initiative rolling, challenging White's knight and grabbing the centre. Sharp, sound, and yours to attack.", sayShort: "Nc3 — …fxe4 and …Nf6.", highlights: [H('e4', KEY)] },
+    { atMove: 6, say: "Nc3 develops and braces the e4-pawn — the critical main line. Don't hesitate: the open f-file and your lead in piece activity are the whole point of the gambit, so strike at the centre at once with …fxe4.", sayShort: "Nc3 — answer …fxe4.", arrows: [A('f5', 'e4')], highlights: [H('e4', KEY)] },
+    { atMove: 7, say: "…fxe4 rips open the centre and the f-file in one stroke. White must recapture — Nxe4 — bringing the knight to a square where you can hit it immediately and gain time for your development.", sayShort: "…fxe4 — White retakes Nxe4.", arrows: [A('c3', 'e4')], highlights: [H('e4', ATK)] },
+    { atMove: 9, say: "…Nf6 challenges the centralised knight and develops with tempo — exactly the active, pressing game the Schliemann promises. From here …d5, …Bd6 and castling pour your pieces toward White's king while the f-file stays yours.", sayShort: "…Nf6 — challenge the e4-knight.", arrows: [A('f6', 'e4')], highlights: [H('e4', ATK)] },
   ],
   sources: SCH,
 };
 // d3@6 — the modern positional try (Bb5 f5 d3 fxe4 dxe4). Solid, equal.
 const SCH_D3: SublineNarration = {
   intro: {
-    say: "d3 — the modern, positional answer, refusing the sharp lines and keeping the centre solid. Take the sting out of it calmly: after …fxe4 dxe4 you develop with …Nf6 and …Bc5, eyeing the kingside, and the half-open f-file is yours to use. White avoids the fireworks, but you stand at least equal with the freer, more aggressive plan.",
-    sayShort: 'd3 — …Nf6, …Bc5, press the f-file.',
+    say: "d3 — the modern, positional answer, refusing the sharp lines and keeping the centre solid. Defuse it calmly: trade on e4, let White recapture with the d-pawn, and then develop with …Bc5 and …Nf6 to use the half-open f-file. White avoids the fireworks, but you stand at least equal with the freer, more aggressive setup.",
+    sayShort: 'd3 — …fxe4, then …Bc5.',
   },
   beats: [
-    { atMove: 6, say: "d3 keeps it solid — defuse it calmly. After fxe4 dxe4 you develop Nf6 and Bc5, eyeing the kingside down the half-open f-file. At least equal, and the more aggressive side.", sayShort: "d3 — …Bc5, press the f-file.", arrows: [A('f8', 'c5')], highlights: [H('c5', KEY), H('f5', SOFT)] },
+    { atMove: 6, say: "d3 keeps it solid and sidesteps the brawl — no problem. Open the position on your terms with …fxe4; you'll trade White's centre pawn and hand yourself a clean half-open f-file to work with.", sayShort: "d3 — answer …fxe4.", arrows: [A('f5', 'e4')], highlights: [H('e4', KEY)] },
+    { atMove: 7, say: "…fxe4 — and White recaptures with dxe4, leaving a single central pawn and that lovely open f-file aimed at f2. Now you develop with purpose.", sayShort: "…fxe4 — White retakes dxe4.", arrows: [A('d3', 'e4')], highlights: [H('e4', ATK)] },
+    { atMove: 8, say: "…Bc5 swings the bishop to its most aggressive diagonal, eyeing f2, while the f8-rook will pile onto the half-open f-file after you castle. Solid, active, and the freer side — White's caution gave you the initiative.", sayShort: "…Bc5 — press the half-open f-file.", arrows: [A('f8', 'c5')], highlights: [H('c5', KEY)] },
   ],
   sources: SCH_DEV,
 };
-// d4@6 — central counter (Bb5 f5 d4). Open it up.
+// d4@6 — central counter (Bb5 f5 d4 fxe4 Nxe5 Nxe5). Open it up.
 const SCH_D4: SublineNarration = {
   intro: {
-    say: "d4 — White meets your gambit with a central counter-thrust, striking before you can build. Stay aggressive: …fxe4 keeps the lines open and your knights and the f-file stay active. The position is sharp and double-edged, exactly the kind of open battle the Schliemann thrives in — keep developing with threats and don't let White consolidate the centre.",
-    sayShort: 'd4 — …fxe4, keep the lines open.',
+    say: "d4 — White meets your gambit with a central counter-thrust, striking at e5 before you can build. Stay aggressive: take on e4 to keep the lines open, and when White grabs on e5 you simply recapture, landing a strong knight in the centre with an extra cramping pawn. This is the open, double-edged battle the Schliemann thrives in.",
+    sayShort: 'd4 — …fxe4, keep it sharp.',
   },
   beats: [
-    { atMove: 6, say: "d4 counters in the centre — stay aggressive. fxe4 keeps the lines open and your knights and the f-file stay live. The open brawl is exactly where the Schliemann thrives.", sayShort: "d4 — …fxe4, keep lines open.", highlights: [H('e4', KEY)] },
+    { atMove: 6, say: "d4 hits e5 and tries to blow the centre open before you're ready — meet force with force. …fxe4 keeps the lines open and your e4-pawn cramps White's kingside; don't let him consolidate.", sayShort: "d4 — answer …fxe4.", arrows: [A('f5', 'e4')], highlights: [H('e4', KEY)] },
+    { atMove: 7, say: "…fxe4 — now White snatches the loose e5-pawn with Nxe5, but it's a trade you welcome: your c6-knight is ready to recapture and seize the centre.", sayShort: "…fxe4 — White grabs e5.", arrows: [A('f3', 'e5')], highlights: [H('e5', ATK)] },
+    { atMove: 9, say: "…Nxe5 plants a powerful knight on e5, and you've kept the advanced e4-pawn jamming White's kingside. Dynamic equality with the initiative — develop quickly and let that cramping pawn and active knight do the talking.", sayShort: "…Nxe5 — strong knight, extra pawn.", arrows: [A('e5', 'f3')], highlights: [H('e4', KEY), H('e5', SOFT)] },
   ],
   sources: SCH,
 };
-// Bxc6@6 — early trade (Bb5 f5 Bxc6 dxc6). Bishop pair + central pawns.
+// Bxc6@6 — early trade (Bb5 f5 Bxc6 dxc6 Nc3 Nf6). Bishop pair + central pawns.
 const SCH_BXC6: SublineNarration = {
   intro: {
-    say: "Bxc6 — White trades off the bishop early to dent your structure. Recapture with …dxc6 and count your trumps: the bishop pair, a big pawn centre, and open lines for both rooks. Your doubled c-pawns are a tiny price; with …Nf6, …Bc5 and the …f4 push you grab kingside space and the initiative. The trade hands you the more dynamic position.",
-    sayShort: 'Bxc6 — …dxc6, bishop pair and centre.',
+    say: "Bxc6 — White trades off the bishop early to dent your structure. Recapture toward the centre and count your trumps: the bishop pair, a broad pawn front, and open lines for both rooks. The doubled c-pawns are a trifle; with …Nf6, …Bc5 and the …f4 push you grab kingside space and the initiative. The trade hands you the more dynamic game.",
+    sayShort: 'Bxc6 — …dxc6, bishop pair rolls.',
   },
   beats: [
-    { atMove: 6, say: "Bxc6 trades to dent you — recapture dxc6 and count the trumps: the bishop pair, a big centre, open rook files. With Bc5 and the f4 push you grab the dynamic side.", sayShort: "Bxc6 — …dxc6, bishop pair.", highlights: [H('c6', KEY), H('f4', SOFT)] },
+    { atMove: 6, say: "Bxc6 swaps the bishop to wreck your queenside pawns — but recapturing toward the centre is all upside for you. …dxc6 opens the d-file and keeps a big pawn front.", sayShort: "Bxc6 — recapture …dxc6.", arrows: [A('d7', 'c6')], highlights: [H('c6', KEY)] },
+    { atMove: 7, say: "…dxc6 — and look at the compensation: the bishop pair, an e5-f5 pawn duo cramping White, and the d-file pried open for your rook. Doubled c-pawns never mattered less.", sayShort: "…dxc6 — bishop pair, big centre.", arrows: [A('c8', 'e6')], highlights: [H('e5', SOFT), H('f5', SOFT)] },
+    { atMove: 9, say: "…Nf6 develops and eyes e4; next comes …Bc5 to the active diagonal and the …f4 thrust to grab kingside space. The two bishops and the initiative make this the side you want.", sayShort: "…Nf6 — then …Bc5 and …f4.", arrows: [A('f8', 'c5')], highlights: [H('f4', KEY)] },
   ],
   sources: SCH_DEV,
 };
@@ -1208,10 +1216,11 @@ const SCH_SHARP: SublineNarration = {
 const SCH_ITALIAN: SublineNarration = {
   intro: {
     say: "Bc4 — White sidesteps your Schliemann into a quiet Italian. No problem: …Bc5 develops the bishop to its best diagonal and you're in familiar, comfortable territory. Castle, play …d6 and …Nf6, and aim for the …d5 break — a sound, equal game where you know every plan and White has gained nothing by avoiding the fight.",
-    sayShort: 'Bc4 — …Bc5, a comfortable Italian.',
+    sayShort: 'Bc4 — …Bc5, a comfy Italian.',
   },
   beats: [
-    { atMove: 4, say: "Bc4 sidesteps into an Italian — comfortable for you. The bishop swings to c5, you castle and head for the d5 break. Familiar, equal, every plan at your fingertips.", sayShort: "Bc4 — …Bc5, easy Italian.", arrows: [A('f8', 'c5')], highlights: [H('c5', KEY)] },
+    { atMove: 4, say: "Bc4 ducks the gambit into a quiet Italian — happily met. Mirror it: …Bc5 stakes your bishop on the strong a7-g1 diagonal, eye to eye with his, and you're on home ground.", sayShort: "Bc4 — answer …Bc5.", arrows: [A('f8', 'c5')], highlights: [H('c5', KEY)] },
+    { atMove: 5, say: "…Bc5 trains on f2 down the same diagonal White is using. Now castle, play …d6 and …Nf6, and prepare the …d5 break — a comfortable, equal game where every plan is at your fingertips.", sayShort: "…Bc5 — eye f2, plan …d5.", arrows: [A('c5', 'f2')], highlights: [H('f2', ATK), H('d5', SOFT)] },
   ],
   sources: SCH_DEV,
 };
@@ -1219,21 +1228,27 @@ const SCH_ITALIAN: SublineNarration = {
 const SCH_FOUR_KNIGHTS: SublineNarration = {
   intro: {
     say: "Nc3 — White steers into a calm Four Knights instead of allowing the Schliemann. Mirror him with …Nf6 and you stand on equal, weakness-free ground. The …Bb4 pin and the …Nd4 counter wait in reserve if White drifts; until then develop in comfort. White has dodged the brawl, but you have a sound, fighting position with nothing to fear.",
-    sayShort: 'Nc3 — Four Knights: …Nf6, easy equality.',
+    sayShort: 'Nc3 — …Nf6, easy equality.',
   },
   beats: [
-    { atMove: 4, say: "Nc3 steers to a calm Four Knights — mirror it. Nf6 claims your share of the centre, weakness-free, with the Bb4 pin and Nd4 counter held in reserve. Nothing to fear.", sayShort: "Nc3 — …Nf6, easy equality.", highlights: [H('e4', KEY), H('e5', SOFT)] },
+    { atMove: 4, say: "Nc3 steers into a calm, symmetrical Four Knights — meet it in kind. …Nf6 mirrors the development, claims your share of the centre, and keeps the …Bb4 pin and …Nd4 counter in reserve for if White overreaches.", sayShort: "Nc3 — mirror with …Nf6.", highlights: [H('e4', KEY), H('e5', SOFT)] },
+    { atMove: 5, say: "…Nf6 hits the e4-pawn and finishes mirroring White's setup — fully equal, weakness-free, and easy to play. Castle, complete development, and the position is balanced with chances for both.", sayShort: "…Nf6 — hit e4, fully equal.", arrows: [A('f6', 'e4')], highlights: [H('e4', ATK)] },
   ],
   sources: SCH_DEV,
 };
-// d4@4 — Scotch (d4 exd4 Nxd4). Equalize with …Qe7/…Nd5.
+// d4@4 — Scotch (d4 exd4 Nxd4 Nf6 Nxc6 bxc6 e5 Qe7 Qe2 Nd5). Equalize with …Qe7/…Nd5.
 const SCH_SCOTCH: SublineNarration = {
   intro: {
-    say: "d4 — White avoids the Schliemann with the Scotch. The book equalizer is clean: after the exchanges, …Qe7 pressures the advanced e5-pawn and …Nd5 plants the knight on a dominant central blockade. You take doubled c-pawns but gain the bishop pair and easy piece play — a comfortable, fully equal game, and White's sidestep has cost him the initiative.",
-    sayShort: 'd4 — Scotch: …Qe7 and …Nd5 equalize.',
+    say: "d4 — White avoids the Schliemann with the Scotch, but the book equalizer is clean and active. Trade on d4, develop with tempo by hitting e4, and after the dust settles …Qe7 leans on White's advanced e5-pawn and …Nd5 lands the knight on a dominant central blockade. Doubled c-pawns, yes — but the bishop pair and easy play hand you a fully comfortable game.",
+    sayShort: 'd4 — Scotch sidestep: …exd4, equalize active.',
   },
   beats: [
-    { atMove: 4, say: "d4 avoids the Schliemann with a Scotch — equalize cleanly. After exd4, Qe7 leans on e5 and Nd5 plants a central blockade; the bishop pair and easy play are yours.", sayShort: "d4 — …Qe7 and …Nd5.", highlights: [H('d4', SOFT), H('d5', KEY)] },
+    { atMove: 4, say: "d4 ducks the gambit into a Scotch — open the centre on your terms. …exd4 grabs the pawn and forces White to spend time recapturing; your pieces will flood out with tempo behind it.", sayShort: "d4 — answer …exd4.", arrows: [A('e5', 'd4')], highlights: [H('d4', KEY)] },
+    { atMove: 5, say: "…exd4 — and White must retake with the knight, drifting it to d4 where it sits in the path of your coming development. The centre is opening exactly how you want it.", sayShort: "…exd4 — White must retake on d4.", arrows: [A('f3', 'd4')], highlights: [H('d4', ATK)] },
+    { atMove: 7, say: "…Nf6 develops with a hit on the e4-pawn, forcing the pace. White usually relieves the pressure by trading on c6 — which only hands you the bishop pair and a half-open b-file pointing at his queenside.", sayShort: "…Nf6 — develop, strike e4.", arrows: [A('f6', 'e4')], highlights: [H('e4', ATK)] },
+    { atMove: 9, say: "…bxc6 recaptures toward the centre, opening the b-file for your rook and reinforcing the d5-square for the knight to come. The doubled c-pawns are a small price for the two bishops and a fluid centre.", sayShort: "…bxc6 — head for …Nd5.", arrows: [A('f6', 'd5')], highlights: [H('d5', KEY)] },
+    { atMove: 11, say: "…Qe7 leans on White's over-extended e5-pawn and eyes the open e-file; White props it with Qe2, and now you spring the knight to its dream square.", sayShort: "…Qe7 — lean on e5.", arrows: [A('e7', 'e5')], highlights: [H('e5', ATK)] },
+    { atMove: 13, say: "…Nd5 lands on the perfect central blockade, screening everything and eyeing f4 and c3. With the bishop pair, the rock on d5 and effortless development, you're fully equal and pleasant to play — White's sidestep gained him nothing.", sayShort: "…Nd5 — the dream blockade.", arrows: [A('d5', 'f4')], highlights: [H('d5', KEY)] },
   ],
   sources: SCH_DEV,
 };
@@ -2387,7 +2402,10 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'schliemann-defence::0::Nc3@6': SCH_NC3,
   'schliemann-defence::0::d3@6': SCH_D3,
   'schliemann-defence::0::Bxc6@6': SCH_BXC6,
-  'schliemann-defence::0::Bxc6@8': { ...SCH_SHARP, beats: [{ atMove: 8, say: "Bxc6 trades to dent your pawns — recapture …dxc6 and your gambit rolls on. The e4-pawn cramps White's kingside, the bishop pair is yours, and …e3 jams deeper still. The trade hasn't slowed your initiative one bit.", sayShort: "Bxc6 — …dxc6, the e-pawn rolls.", highlights: [H('c6', KEY), H('e4', ATK)] }] },
+  'schliemann-defence::0::Bxc6@8': { ...SCH_SHARP, beats: [
+    { atMove: 8, say: "Bxc6 trades the bishop to dent your pawns — but you've already shoved the e-pawn to e4, cramping White's kingside. Recapture toward the centre and the gambit rolls on with no loss of steam.", sayShort: "Bxc6 — recapture …dxc6.", highlights: [H('c6', KEY), H('e4', ATK)] },
+    { atMove: 9, say: "…dxc6 opens the d-file for your rook and frees the light bishop, which now rakes the long diagonal all the way to White's kingside. The e4-pawn jams him, the bishop pair is yours — White won a bishop but handed you the initiative.", sayShort: "…dxc6 — bishop pair, e-pawn cramps.", arrows: [A('c8', 'g4')], highlights: [H('e4', KEY), H('c6', SOFT)] },
+  ] },
   'schliemann-defence::1::Bc4@4': SCH_ITALIAN,
   'schliemann-defence::1::d4@4': SCH_SCOTCH,
   'schliemann-defence::1::Nc3@4': SCH_FOUR_KNIGHTS,
