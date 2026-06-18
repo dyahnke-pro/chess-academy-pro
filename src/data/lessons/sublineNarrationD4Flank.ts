@@ -481,30 +481,10 @@ const C95: SublineNarration = {
 // reti-opening :: slav_reti
 // reti-opening :: d4_advance
 // kings-indian-attack :: french_setup
-const C102: SublineNarration = {
-  intro: { say: "The King's Indian Attack against a French structure — Black has …e6 and …d5, you've built d3, Nbd2, g3, Bg2 and e4. The KIA's bread and butter: trade on e4 or push e5 to clamp, then swing the kingside — Nf1-g3 or Nh4, the f4 lever, and the pawn storm at Black's king. The whole system is one long attacking plan.", sayShort: "KIA vs French — clamp e5, attack." },
-  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
-};
 // kings-indian-attack :: double_fianchetto
-const C103: SublineNarration = {
-  intro: { say: "Black mirrors with a …g6 double-fianchetto setup. The kingside storm is harder against the fianchetto, so play the dual-purpose KIA: complete development, keep the e4-e5 option, and probe with both the d4/c3 central setup and the slow kingside build. Patience — the fianchetto blunts the attack but not the long-term plan of expanding where you choose.", sayShort: "Double fianchetto — patient, keep e5 in hand." },
-  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
-};
 // kings-indian-attack :: sicilian_setup
-const C104: SublineNarration = {
-  intro: { say: "Black plays a Sicilian-flavoured setup with …c5 and …Nc6. Your KIA machine doesn't change: d3, Nbd2, g3, Bg2, O-O, then e4 and the kingside expansion. Black gets queenside space; you get the king-hunt. The classic KIA race — your attack down the kingside against his pawns on the other wing, and yours arrives with tempo.", sayShort: "KIA vs Sicilian — race the kingside attack." },
-  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
-};
 // kings-indian-attack :: caro_setup
-const C105: SublineNarration = {
-  intro: { say: "Black sets up Caro-style with …c6, …d5 and …e5. Against this central wedge the KIA plan adapts: complete the fianchetto, castle, and turn to the kingside with the Nf1-h2-g4 or f4 ideas. Black's broad centre is precisely the soil the King's Indian Attack thrives on — you regroup behind it and attack around it.", sayShort: "KIA vs Caro — regroup, attack." },
-  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
-};
 // kings-indian-attack :: e5_tabiya
-const C106: SublineNarration = {
-  intro: { say: "You've reached the KIA attacking tabiya — the e4-e5 wedge clamps Black's kingside and the pieces are poised. Now execute: Nf1-g3 (or Nh2-g4), Re1, the f4 lever, Qe2 and the rook lift, all aimed at h7 and the castled king. Black is solid on the queenside but you have the whole kingside to work with. Press the attack.", sayShort: "Tabiya — e5 clamp, Nf1-g3, f4, attack h7." },
-  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
-};
 // birds-opening :: leningrad
 const C107: SublineNarration = {
   intro: { say: "The Leningrad Bird — f4 with the g3 fianchetto, a reversed Leningrad Dutch a tempo up. The g2-bishop and the f-pawn combine on the kingside while you hold the centre with d3 and c3. Castle, expand with the e4 or Ne5 push, and turn the extra tempo into the kingside initiative the Dutch player can only dream of.", sayShort: "Leningrad Bird — fianchetto, e4/Ne5, attack." },
@@ -3025,7 +3005,785 @@ const RT79: SublineNarration = {
   sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
 };
 
+const KA01: SublineNarration = {
+  intro: { say: "Black locks the centre with …e5. Since Black has taken central space, you switch wings: c3 and b4-b5 expand on the queenside, the knight heads to c4, and you play where you are stronger.", sayShort: "…e5 — c3, b4-b5, Nc4" },
+  beats: [
+    { atMove: 12, say: "c3 — preparing b4. With the centre fixed, the King's Indian Attack plays on the queenside where you hold the initiative.", sayShort: "c3 — prepare b4", highlights: [_H('b4')] },
+    { atMove: 14, say: "b4 — gaining queenside space, the thematic plan against Black's …e5 clamp.", sayShort: "b4 — queenside space", arrows: [_A('b4', 'b5')] },
+    { atMove: 20, say: "b5 — pushing on to kick the c6-knight back, gaining ground on the wing.", sayShort: "b5 — kick the knight", arrows: [_A('b5', 'c6')] },
+    { atMove: 22, say: "Nc4 — the knight heads to c4, eyeing d6 and pressing the queenside weaknesses.", sayShort: "Nc4 — eye d6", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KA02: SublineNarration = {
+  intro: { say: "Black castles. You gain space with e5, tuck the king away, trade in the centre, then expand with a4 — a comfortable King's Indian Attack with space on both wings.", sayShort: "…O-O — e5, O-O, Nxe5, a4" },
+  beats: [
+    { atMove: 14, say: "e5 — the thematic KIA advance, gaining central space and clamping Black's kingside.", sayShort: "e5 — gain central space", highlights: [_H('e5')] },
+    { atMove: 16, say: "O-O — castling to safety before the middlegame battle opens up.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 18, say: "Nxe5 — recapturing in the centre after the knight trades, keeping a sound, active position.", sayShort: "Nxe5 — recapture in the centre", highlights: [_H('e5')] },
+    { atMove: 20, say: "a4 — gaining queenside space, squeezing Black on the wing where he is passive.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KA03: SublineNarration = {
+  intro: { say: "Black develops …Bc5. You gain space with e5, hit the bishop with Nb3, build the big centre with d4, then storm the kingside with h4 — the KIA in full flow.", sayShort: "…Bc5 — e5, Nb3, d4, h4" },
+  beats: [
+    { atMove: 10, say: "e5 — gaining central space and kicking the f6-knight, the KIA's signature advance.", sayShort: "e5 — gain space, kick the knight", highlights: [_H('e5')] },
+    { atMove: 12, say: "Nb3 — hitting the c5-bishop with tempo, forcing it to a more passive square.", sayShort: "Nb3 — hit the bishop", arrows: [_A('b3', 'c5')] },
+    { atMove: 14, say: "d4 — building the broad centre now Black has retreated, claiming a space bind.", sayShort: "d4 — build the big centre", highlights: [_H('d4')] },
+    { atMove: 20, say: "h4 — the kingside pawn storm begins, prising open lines toward Black's king.", sayShort: "h4 — storm the kingside", arrows: [_A('h4', 'h5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KA04: SublineNarration = {
+  intro: { say: "Black pins with …Bb4. You gain space with e5, centralise with Qe2, finish developing, then leap Ng5 to attack the kingside light squares.", sayShort: "…Bb4 — e5, Qe2, Rd1, Ng5" },
+  beats: [
+    { atMove: 12, say: "e5 — gaining central space and cramping Black, the KIA's thematic clamp.", sayShort: "e5 — gain central space", highlights: [_H('e5')] },
+    { atMove: 14, say: "Qe2 — centralising the queen, preparing to bring pieces to the kingside.", sayShort: "Qe2 — centralise", highlights: [_H('e2')] },
+    { atMove: 20, say: "Rd1 — the rook takes the d-file, eyeing the centre and supporting a break.", sayShort: "Rd1 — to the d-file", arrows: [_A('d1', 'd8')] },
+    { atMove: 22, say: "Ng5 — the knight jumps in to attack f7, h7 and e6, the kingside light squares.", sayShort: "Ng5 — attack the light squares", arrows: [_A('g5', 'f7')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KA05: SublineNarration = {
+  intro: { say: "Black develops …Be7. You fianchetto with Bg2, centralise with Qe2, leap the knight to the c4-outpost, then reroute Ne3 toward d5 and f5 with a comfortable game.", sayShort: "…Be7 — Qe2, Nc4, c3, Ne3" },
+  beats: [
+    { atMove: 14, say: "Qe2 — centralising the queen, the KIA build-up toward kingside play.", sayShort: "Qe2 — centralise", highlights: [_H('e2')] },
+    { atMove: 16, say: "Nc4 — the knight to the strong c4-outpost, eyeing e5 and d6.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+    { atMove: 20, say: "c3 — solidifying the centre and preparing queenside or central play.", sayShort: "c3 — solidify", highlights: [_H('c3')] },
+    { atMove: 22, say: "Ne3 — rerouting the knight toward d5 and f5, the key central squares.", sayShort: "Ne3 — reroute to d5/f5", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KA06: SublineNarration = {
+  intro: { say: "Black develops …Be7 early. You fianchetto with Bg2, recapture on e4, centralise with Qe2, leap to the c4-outpost, then reroute Ne3 toward d5 and f5.", sayShort: "…Be7 — dxe4, Qe2, Nc4, Ne3" },
+  beats: [
+    { atMove: 12, say: "dxe4 — recapturing toward the centre, the KIA structure with the bishop on g2.", sayShort: "dxe4 — KIA centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "Nc4 — the knight to the c4-outpost, eyeing e5 and d6.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+    { atMove: 20, say: "c3 — solidifying the centre, preparing the next phase of play.", sayShort: "c3 — solidify", highlights: [_H('c3')] },
+    { atMove: 22, say: "Ne3 — rerouting the knight toward the central d5 and f5 squares.", sayShort: "Ne3 — reroute to d5/f5", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KA07: SublineNarration = {
+  intro: { say: "Black lunges …Ng4. You castle to safety first, kick the knight with h3, centralise the queen on c2, then leap to the c4-outpost.", sayShort: "…Ng4 — O-O, h3, Qc2, Nc4" },
+  beats: [
+    { atMove: 14, say: "O-O — king to safety before dealing with the loose knight on g4.", sayShort: "O-O — king safe first", highlights: [_H('g1')] },
+    { atMove: 16, say: "h3 — kicking the g4-knight back, gaining a tempo and the bishop pair if it stays.", sayShort: "h3 — kick the knight", highlights: [_H('g4')] },
+    { atMove: 20, say: "Qc2 — centralising the queen on the b1-h7 diagonal, eyeing the kingside.", sayShort: "Qc2 — eye the kingside", arrows: [_A('c2', 'h7')] },
+    { atMove: 22, say: "Nc4 — the knight to the c4-outpost, eyeing e5 and d6 with the better game.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-prophylaxis', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KA08: SublineNarration = {
+  intro: { say: "Black plays …c5 early. You complete the KIA set-up, post the rook on e1, solidify with c3, centralise with Qe2, then begin the signature Nf1-h2-g4 reroute toward the kingside.", sayShort: "…c5 — Re1, c3, Qe2, Nf1" },
+  beats: [
+    { atMove: 14, say: "Re1 — the rook supports the e-pawn, the standard KIA build-up before the kingside push.", sayShort: "Re1 — KIA build-up", arrows: [_A('e1', 'e4')] },
+    { atMove: 16, say: "c3 — solidifying the centre, giving the knight the c2-square if needed.", sayShort: "c3 — solidify", highlights: [_H('c3')] },
+    { atMove: 18, say: "Qe2 — centralising the queen, preparing the kingside knight maneuver.", sayShort: "Qe2 — centralise", highlights: [_H('e2')] },
+    { atMove: 20, say: "Nf1 — the signature KIA reroute, the knight heading via h2 to g4 and the attack.", sayShort: "Nf1 — reroute toward g4", highlights: [_H('f1')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KA09: SublineNarration = {
+  intro: { say: "Black overextends with …e5. You open the centre with exd5, fianchetto and castle, post the rook on e1, then expand with a4 and reroute Nb3 — pressing Black's loosened centre.", sayShort: "…e5 — exd5, Re1, a4, Nb3" },
+  beats: [
+    { atMove: 10, say: "exd5 — opening the centre to exploit Black's overextended …e5 push.", sayShort: "exd5 — open the centre", highlights: [_H('d5')] },
+    { atMove: 16, say: "Re1 — the rook takes the e-file, pressing Black's central pawn.", sayShort: "Re1 — pressure the centre", arrows: [_A('e1', 'e5')] },
+    { atMove: 20, say: "a4 — gaining queenside space, fixing Black's pawns.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+    { atMove: 22, say: "Nb3 — rerouting the knight toward c5 and d4, pressing the loosened position.", sayShort: "Nb3 — reroute to c5", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KA10: SublineNarration = {
+  intro: { say: "Black develops …Bd6. You recapture on e4 with the knight, point the bishop at e6 from h3, centralise with Qe2, then develop Be3 — pressing Black's light-square holes.", sayShort: "…Bd6 — Nxe4, Bh3, Qe2, Be3" },
+  beats: [
+    { atMove: 12, say: "Nxe4 — recapturing, trading into a KIA structure where your pieces flow freely.", sayShort: "Nxe4 — recapture, KIA centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "Bh3 — the bishop eyes e6, exploiting the light squares Black's set-up left tender.", sayShort: "Bh3 — eye e6", arrows: [_A('h3', 'e6')] },
+    { atMove: 18, say: "Qe2 — centralising the queen, supporting the central pawn and the kingside.", sayShort: "Qe2 — centralise", highlights: [_H('e2')] },
+    { atMove: 20, say: "Be3 — developing the bishop, eyeing the queenside dark squares with a comfortable game.", sayShort: "Be3 — develop, eye the queenside", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-weak-squares', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KA71: SublineNarration = {
+  intro: { say: "Black locks the centre with …e5. Since Black has taken central space, you switch wings: c3 and b4-b5 expand on the queenside, the knight heads to c4, and you play where you are stronger.", sayShort: "…e5 — c3, b4-b5, Nc4" },
+  beats: [
+    { atMove: 12, say: "c3 — preparing b4. With the centre fixed, the KIA plays on the queenside where you hold the initiative.", sayShort: "c3 — prepare b4", highlights: [_H('b4')] },
+    { atMove: 14, say: "b4 — gaining queenside space, the thematic plan against Black's …e5 clamp.", sayShort: "b4 — queenside space", arrows: [_A('b4', 'b5')] },
+    { atMove: 20, say: "b5 — pushing on to kick the c6-knight back, gaining ground on the wing.", sayShort: "b5 — kick the knight", arrows: [_A('b5', 'c6')] },
+    { atMove: 22, say: "Nc4 — the knight heads to c4, eyeing d6 and pressing the queenside.", sayShort: "Nc4 — eye d6", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KA72: SublineNarration = {
+  intro: { say: "Black plays …e5 after …Bc5. You castle to safety, solidify with c3, centralise the queen, then reroute the knights — Nh4 toward the kingside and Nc4 to the outpost.", sayShort: "…e5 — O-O, c3, Nh4, Nc4" },
+  beats: [
+    { atMove: 14, say: "O-O — king to safety before the middlegame battle.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 16, say: "c3 — solidifying the centre and preparing queenside play.", sayShort: "c3 — solidify", highlights: [_H('c3')] },
+    { atMove: 20, say: "Nh4 — rerouting the knight toward f5 and g6, eyeing the kingside.", sayShort: "Nh4 — reroute toward f5", highlights: [_H('h4')] },
+    { atMove: 22, say: "Nc4 — the other knight to the c4-outpost, eyeing e5 and d6.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KA73: SublineNarration = {
+  intro: { say: "Black develops …Bc5. You gain space with e5, hit the bishop with Nb3, build the big centre with d4, then storm the kingside with h4 — the KIA in full flow.", sayShort: "…Bc5 — e5, Nb3, d4, h4" },
+  beats: [
+    { atMove: 10, say: "e5 — gaining central space and kicking the f6-knight, the KIA's signature advance.", sayShort: "e5 — gain space, kick the knight", highlights: [_H('e5')] },
+    { atMove: 12, say: "Nb3 — hitting the c5-bishop with tempo, forcing it to a passive square.", sayShort: "Nb3 — hit the bishop", arrows: [_A('b3', 'c5')] },
+    { atMove: 14, say: "d4 — building the broad centre now Black has retreated, claiming a space bind.", sayShort: "d4 — build the big centre", highlights: [_H('d4')] },
+    { atMove: 20, say: "h4 — the kingside pawn storm begins, prising open lines toward Black's king.", sayShort: "h4 — storm the kingside", arrows: [_A('h4', 'h5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KA74: SublineNarration = {
+  intro: { say: "Black pins with …Bb4. You gain space with e5, centralise with Qe2, finish developing, then leap Ng5 to attack the kingside light squares.", sayShort: "…Bb4 — e5, Qe2, Rd1, Ng5" },
+  beats: [
+    { atMove: 12, say: "e5 — gaining central space and cramping Black, the KIA's thematic clamp.", sayShort: "e5 — gain central space", highlights: [_H('e5')] },
+    { atMove: 14, say: "Qe2 — centralising the queen, preparing to bring pieces to the kingside.", sayShort: "Qe2 — centralise", highlights: [_H('e2')] },
+    { atMove: 20, say: "Rd1 — the rook takes the d-file, eyeing the centre and supporting a break.", sayShort: "Rd1 — to the d-file", arrows: [_A('d1', 'd8')] },
+    { atMove: 22, say: "Ng5 — the knight jumps in to attack f7, h7 and e6.", sayShort: "Ng5 — attack the light squares", arrows: [_A('g5', 'f7')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KA75: SublineNarration = {
+  intro: { say: "Black develops …Be7. You centralise with Qe2, leap the knight to the c4-outpost, solidify with c3, then reroute Ne3 toward d5 and f5.", sayShort: "…Be7 — Qe2, Nc4, c3, Ne3" },
+  beats: [
+    { atMove: 14, say: "Qe2 — centralising the queen, the KIA build-up toward kingside play.", sayShort: "Qe2 — centralise", highlights: [_H('e2')] },
+    { atMove: 16, say: "Nc4 — the knight to the c4-outpost, eyeing e5 and d6.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+    { atMove: 20, say: "c3 — solidifying the centre, preparing the next phase.", sayShort: "c3 — solidify", highlights: [_H('c3')] },
+    { atMove: 22, say: "Ne3 — rerouting the knight toward the central d5 and f5 squares.", sayShort: "Ne3 — reroute to d5/f5", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KA76: SublineNarration = {
+  intro: { say: "Black develops …Be7 early. You fianchetto, recapture on e4, centralise with Qe2, leap to the c4-outpost, then reroute Ne3 toward d5 and f5.", sayShort: "…Be7 — dxe4, Qe2, Nc4, Ne3" },
+  beats: [
+    { atMove: 12, say: "dxe4 — recapturing toward the centre, the KIA structure with the g2-bishop.", sayShort: "dxe4 — KIA centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "Nc4 — the knight to the c4-outpost, eyeing e5 and d6.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+    { atMove: 20, say: "c3 — solidifying the centre, preparing the next phase.", sayShort: "c3 — solidify", highlights: [_H('c3')] },
+    { atMove: 22, say: "Ne3 — rerouting the knight toward the central d5 and f5 squares.", sayShort: "Ne3 — reroute to d5/f5", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KA77: SublineNarration = {
+  intro: { say: "Black lunges …Ng4. You castle first, kick the knight with h3, centralise the queen on c2, then leap to the c4-outpost.", sayShort: "…Ng4 — O-O, h3, Qc2, Nc4" },
+  beats: [
+    { atMove: 14, say: "O-O — king to safety before dealing with the g4-knight.", sayShort: "O-O — king safe first", highlights: [_H('g1')] },
+    { atMove: 16, say: "h3 — kicking the g4-knight back, gaining a tempo.", sayShort: "h3 — kick the knight", highlights: [_H('g4')] },
+    { atMove: 20, say: "Qc2 — centralising the queen on the b1-h7 diagonal, eyeing the kingside.", sayShort: "Qc2 — eye the kingside", arrows: [_A('c2', 'h7')] },
+    { atMove: 22, say: "Nc4 — the knight to the c4-outpost, eyeing e5 and d6.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-prophylaxis', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KA78: SublineNarration = {
+  intro: { say: "Black plays …c5 early. You complete the KIA set-up, post the rook on e1, solidify with c3, centralise with Qe2, then begin the Nf1-h2-g4 reroute toward the kingside.", sayShort: "…c5 — Re1, c3, Qe2, Nf1" },
+  beats: [
+    { atMove: 14, say: "Re1 — the rook supports the e-pawn, the KIA build-up before the kingside push.", sayShort: "Re1 — KIA build-up", arrows: [_A('e1', 'e4')] },
+    { atMove: 16, say: "c3 — solidifying the centre, giving the knight the c2-square.", sayShort: "c3 — solidify", highlights: [_H('c3')] },
+    { atMove: 18, say: "Qe2 — centralising the queen, preparing the kingside maneuver.", sayShort: "Qe2 — centralise", highlights: [_H('e2')] },
+    { atMove: 20, say: "Nf1 — the signature KIA reroute, the knight heading via h2 to g4 and the attack.", sayShort: "Nf1 — reroute toward g4", highlights: [_H('f1')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KA79: SublineNarration = {
+  intro: { say: "Black overextends with …e5. You open with exd5, fianchetto and castle, post the rook on e1, expand with a4, then reroute Nb3 — pressing Black's loosened centre.", sayShort: "…e5 — exd5, Re1, a4, Nb3" },
+  beats: [
+    { atMove: 10, say: "exd5 — opening the centre to exploit Black's overextended …e5.", sayShort: "exd5 — open the centre", highlights: [_H('d5')] },
+    { atMove: 16, say: "Re1 — the rook takes the e-file, pressing Black's central pawn.", sayShort: "Re1 — pressure the centre", arrows: [_A('e1', 'e5')] },
+    { atMove: 20, say: "a4 — gaining queenside space, fixing Black's pawns.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+    { atMove: 22, say: "Nb3 — rerouting the knight toward c5 and d4, pressing the loosened position.", sayShort: "Nb3 — reroute to c5", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KA80: SublineNarration = {
+  intro: { say: "Black develops …Bd6. You recapture on e4 with the knight, point the bishop at e6 from h3, centralise with Qe2, then develop Be3 — pressing Black's light-square holes.", sayShort: "…Bd6 — Nxe4, Bh3, Qe2, Be3" },
+  beats: [
+    { atMove: 12, say: "Nxe4 — recapturing, trading into a KIA structure where your pieces flow freely.", sayShort: "Nxe4 — recapture, KIA centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "Bh3 — the bishop eyes e6, exploiting the light squares Black left tender.", sayShort: "Bh3 — eye e6", arrows: [_A('h3', 'e6')] },
+    { atMove: 18, say: "Qe2 — centralising the queen, supporting the centre and the kingside.", sayShort: "Qe2 — centralise", highlights: [_H('e2')] },
+    { atMove: 20, say: "Be3 — developing the bishop, eyeing the queenside with a comfortable game.", sayShort: "Be3 — develop, eye queenside", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-weak-squares', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+
+const KB11: SublineNarration = {
+  intro: { say: "Black sets up symmetrically with …Nf6. You claim the centre English-style with c4, develop Nc3 to contest d5, then after the central trades centralise the knight on d4 — active, balanced piece play.", sayShort: "…Nf6 — c4, Nc3, Nxd5, Nd4" },
+  beats: [
+    { atMove: 10, say: "c4 — claiming central space, turning the game into a reversed-English battle for d5.", sayShort: "c4 — claim the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 12, say: "Nc3 — developing with pressure on d5, contesting the key central square.", sayShort: "Nc3 — contest d5", highlights: [_H('d5')] },
+    { atMove: 16, say: "Nxd5 — trading to open the centre, simplifying toward a balanced middlegame.", sayShort: "Nxd5 — open the centre", highlights: [_H('d5')] },
+    { atMove: 22, say: "Nd4 — centralising the knight, eyeing c6 and f5 with active piece play in a level position.", sayShort: "Nd4 — centralise, active play", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KB12: SublineNarration = {
+  intro: { say: "Black plays …e6 and …Nge7. You solidify with c3, build the centre with e4, strike with d4, then lunge d5 to gain space and kick the pieces.", sayShort: "…e6 — e4, d4, d5, Nbd2" },
+  beats: [
+    { atMove: 12, say: "e4 — building the broad centre, the KIA's central expansion against the …e6 set-up.", sayShort: "e4 — build the centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "d4 — striking in the centre, opening lines for your better-developed pieces.", sayShort: "d4 — strike the centre", highlights: [_H('d4')] },
+    { atMove: 20, say: "d5 — the central pawn lunges, gaining space and kicking Black's knight.", sayShort: "d5 — gain space", highlights: [_H('d5')] },
+    { atMove: 22, say: "Nbd2 — developing the last piece, supporting the broad centre.", sayShort: "Nbd2 — support the centre", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KB13: SublineNarration = {
+  intro: { say: "Black plays …e6. You build with e4, make luft with h3, post the rook on e1, then open the centre with exd5 to leave Black an isolated d-pawn.", sayShort: "…e6 — h3, Re1, exd5, Nbd2" },
+  beats: [
+    { atMove: 14, say: "h3 — a useful luft, taking g4 from Black's pieces before you build.", sayShort: "h3 — luft, deny g4", highlights: [_H('g4')] },
+    { atMove: 16, say: "Re1 — the rook backs the centre, the standard KIA post.", sayShort: "Re1 — back the centre", arrows: [_A('e1', 'e4')] },
+    { atMove: 20, say: "exd5 — opening the centre, leaving Black with an isolated d-pawn to besiege.", sayShort: "exd5 — create the isolani", highlights: [_H('d5')] },
+    { atMove: 22, say: "Nbd2 — developing to blockade and pressure the isolated d5-pawn.", sayShort: "Nbd2 — pressure d5", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KB14: SublineNarration = {
+  intro: { say: "Black pins with …Bg4. You question it with h3 (it must retreat, a wasted tempo), then expand on the queenside with b4-b5 and c4 — the plan in this closed centre.", sayShort: "…Bg4 — h3, b4-b5, c4" },
+  beats: [
+    { atMove: 12, say: "h3 — questioning the g4-bishop, forcing it back to c8 — Black has lost time.", sayShort: "h3 — question the bishop", highlights: [_H('g4')] },
+    { atMove: 18, say: "b4 — the queenside expansion begins, gaining space where you are stronger.", sayShort: "b4 — queenside space", arrows: [_A('b4', 'b5')] },
+    { atMove: 20, say: "b5 — pushing on to kick the c6-knight to the rim.", sayShort: "b5 — kick the knight", arrows: [_A('b5', 'c6')] },
+    { atMove: 22, say: "c4 — gaining more queenside space, cementing the bind.", sayShort: "c4 — cement the bind", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-prophylaxis', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KB15: SublineNarration = {
+  intro: { say: "Black locks with …e5. You gain queenside space with a4, reroute the knight via a3-c2 toward e3 and the b4 break, then strike b4 — playing on the wing.", sayShort: "…e5 — a4, Na3, Nc2, b4" },
+  beats: [
+    { atMove: 12, say: "a4 — gaining queenside space and preparing the knight reroute.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+    { atMove: 14, say: "Na3 — rerouting the knight toward c2, where it supports b4 and eyes e3.", sayShort: "Na3 — reroute via c2", highlights: [_H('a3')] },
+    { atMove: 18, say: "Nc2 — the knight reaches c2, supporting the b4 break and the queenside play.", sayShort: "Nc2 — support b4", highlights: [_H('c2')] },
+    { atMove: 20, say: "b4 — the queenside break, the thematic plan against Black's fixed centre.", sayShort: "b4 — the queenside break", arrows: [_A('b4', 'c5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KB16: SublineNarration = {
+  intro: { say: "Black builds a big centre with …d5. You challenge with c3 and d4, open with dxc5 gaining a tempo, expand with b4, then plant the knight on the e5-outpost.", sayShort: "…d5 — d4, dxc5, b4, Ne5" },
+  beats: [
+    { atMove: 12, say: "d4 — striking the centre, challenging Black's broad pawn front.", sayShort: "d4 — strike the centre", highlights: [_H('d4')] },
+    { atMove: 14, say: "dxc5 — opening lines and gaining a tempo on the queen.", sayShort: "dxc5 — open with tempo", highlights: [_H('c5')] },
+    { atMove: 16, say: "b4 — gaining queenside space with tempo on the queen.", sayShort: "b4 — space with tempo", arrows: [_A('b4', 'b5')] },
+    { atMove: 22, say: "Ne5 — the knight grabs the central outpost, the dominant square.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KB17: SublineNarration = {
+  intro: { say: "Black plays …e5. You claim space with c4, develop Nc3, then reroute the knight to the dominant d5-outpost and the other via c2 — a closed-position bind.", sayShort: "…e5 — c4, Nd5, Nc2, a4" },
+  beats: [
+    { atMove: 10, say: "c4 — claiming queenside space, the closed English-style structure.", sayShort: "c4 — claim space", highlights: [_H('c4')] },
+    { atMove: 16, say: "Nd5 — the knight reaches the dominant d5-outpost, the soul of these positions.", sayShort: "Nd5 — the d5-outpost", highlights: [_H('d5')] },
+    { atMove: 18, say: "Nc2 — rerouting the other knight toward e3 or the queenside expansion.", sayShort: "Nc2 — reroute the knight", highlights: [_H('c2')] },
+    { atMove: 20, say: "a4 — gaining queenside space, fixing Black's pawns.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-space', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KB18: SublineNarration = {
+  intro: { say: "Black pins with …Bg4. You post the rook on e1, leap the knight to the c4-outpost, gain queenside space with a4, then reposition Bd2 for the expansion.", sayShort: "…Bg4 — Re1, Nc4, a4, Bd2" },
+  beats: [
+    { atMove: 14, say: "Re1 — the rook backs the centre, the standard KIA post.", sayShort: "Re1 — back the centre", arrows: [_A('e1', 'e4')] },
+    { atMove: 16, say: "Nc4 — the knight to the c4-outpost, eyeing e5 and d6.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+    { atMove: 20, say: "a4 — gaining queenside space, preparing the expansion.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+    { atMove: 22, say: "Bd2 — repositioning the bishop to support the queenside push.", sayShort: "Bd2 — support the expansion", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-space', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KB19: SublineNarration = {
+  intro: { say: "Black develops …Bd7. You post the rook on e1, gain queenside space with a4, then reroute the knight via a3-c4-e3 toward the central d5 and f5 squares.", sayShort: "…Bd7 — Re1, a4, Na3-c4, Ne3" },
+  beats: [
+    { atMove: 12, say: "Re1 — the rook backs the centre, the standard KIA post.", sayShort: "Re1 — back the centre", arrows: [_A('e1', 'e4')] },
+    { atMove: 16, say: "a4 — gaining queenside space, fixing Black's pawns.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+    { atMove: 20, say: "Nc4 — the knight reaches the c4-outpost, eyeing e5 and d6.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+    { atMove: 22, say: "Ne3 — rerouting toward the central d5 and f5 squares.", sayShort: "Ne3 — reroute to d5/f5", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KB20: SublineNarration = {
+  intro: { say: "Black plays …a6. You leap to the c4-outpost, gain space with e5 kicking the knight, clamp with a5, then open lines favourably with exd6.", sayShort: "…a6 — Nc4, e5, a5, exd6" },
+  beats: [
+    { atMove: 16, say: "Nc4 — the knight to the c4-outpost, eyeing e5 and d6.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+    { atMove: 18, say: "e5 — the central advance, gaining space and kicking the f6-knight.", sayShort: "e5 — gain space, kick the knight", highlights: [_H('e5')] },
+    { atMove: 20, say: "a5 — clamping the queenside, fixing Black's pawns.", sayShort: "a5 — clamp the queenside", arrows: [_A('a5', 'b6')] },
+    { atMove: 22, say: "exd6 — opening lines, trading favourably with the space edge in hand.", sayShort: "exd6 — open favourably", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KB21: SublineNarration = {
+  intro: { say: "In the Caro KIA Black pins with …Bg4. You break the pin with Be2, recapture on f3 keeping the bishop pair, build the KIA centre, then leap to the c4-outpost and seize the d-file.", sayShort: "…Bg4 — Bxf3, dxe4, Nc4, Rd1" },
+  beats: [
+    { atMove: 10, say: "Bxf3 — recapturing, keeping the bishop pair after Black parts with the light bishop.", sayShort: "Bxf3 — keep the bishop pair", highlights: [_H('f3')] },
+    { atMove: 14, say: "dxe4 — recapturing toward the centre, the KIA structure with the bishop pair.", sayShort: "dxe4 — KIA centre", highlights: [_H('e4')] },
+    { atMove: 18, say: "Nc4 — the knight to the c4-outpost, eyeing e5 and d6.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+    { atMove: 22, say: "Rd1 — the rook takes the d-file, pressing the centre with a comfortable game.", sayShort: "Rd1 — seize the d-file", arrows: [_A('d1', 'd8')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KB22: SublineNarration = {
+  intro: { say: "Black plays …Nd7. You strike with d4, open with exd5 to leave an isolated d-pawn, recapture with the knight, then post the rook on e1 to press.", sayShort: "…Nd7 — d4, exd5, Nxd4, Re1" },
+  beats: [
+    { atMove: 8, say: "d4 — striking the centre, opening lines into Black's slightly loose set-up.", sayShort: "d4 — strike the centre", highlights: [_H('d4')] },
+    { atMove: 10, say: "exd5 — opening the position, leaving Black with an isolated d-pawn.", sayShort: "exd5 — create the isolani", highlights: [_H('d5')] },
+    { atMove: 12, say: "Nxd4 — recapturing, the centralised knight eyeing f5 and c6.", sayShort: "Nxd4 — centralise the knight", highlights: [_H('d4')] },
+    { atMove: 20, say: "Re1 — the rook takes the e-file, pressing Black's position.", sayShort: "Re1 — seize the e-file", arrows: [_A('e1', 'e8')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KB23: SublineNarration = {
+  intro: { say: "Black harasses with …Bg4 and the bishop dance …Bh3-Bg4. The position is dead level: you can accept the repetition for a draw, or break it earlier with h3 to question the bishop and keep playing.", sayShort: "…Bg4 — hold equal or break with h3" },
+  beats: [
+    { atMove: 10, say: "Be2 — sidestepping the bishop's harassment; the position is balanced and solid.", sayShort: "Be2 — sidestep, stay solid", highlights: [_H('e2')] },
+    { atMove: 12, say: "Bf1 — the bishop holds; Black repeats with …Bg4-h3. You are fine — the balance holds.", sayShort: "Bf1 — hold the balance", highlights: [_H('f1')] },
+    { atMove: 14, say: "Be2 — the repetition is on offer. Accept the draw, or insert h3 a move earlier to break it and play for more.", sayShort: "Be2 — draw, or break with h3", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-prophylaxis', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KB24: SublineNarration = {
+  intro: { say: "Black pins with …Bg4. You question it with h3, gain kingside space with g4 chasing it to g6, target it with Nh4, then open the centre with exd5 to isolate Black's d-pawn.", sayShort: "…Bg4 — h3, g4, Nh4, exd5" },
+  beats: [
+    { atMove: 14, say: "h3 — questioning the g4-bishop, forcing it to declare.", sayShort: "h3 — question the bishop", highlights: [_H('g4')] },
+    { atMove: 18, say: "g4 — gaining kingside space and chasing the bishop to g6.", sayShort: "g4 — chase to g6", arrows: [_A('g4', 'g5')] },
+    { atMove: 20, say: "Nh4 — targeting the g6-bishop, aiming to trade it and seize the light squares.", sayShort: "Nh4 — target the bishop", arrows: [_A('h4', 'g6')] },
+    { atMove: 22, say: "exd5 — opening the centre, leaving Black with an isolated d-pawn.", sayShort: "exd5 — create the isolani", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KB25: SublineNarration = {
+  intro: { say: "Black develops …Ne7. You strike with d4, recapture with the knight centralising it, post the rook on e1, then centralise the queen on c2.", sayShort: "…Ne7 — d4, Nxd4, Re1, Qc2" },
+  beats: [
+    { atMove: 12, say: "d4 — striking the centre, opening lines for your active pieces.", sayShort: "d4 — strike the centre", highlights: [_H('d4')] },
+    { atMove: 14, say: "Nxd4 — recapturing, the centralised knight eyeing f5 and c6.", sayShort: "Nxd4 — centralise the knight", highlights: [_H('d4')] },
+    { atMove: 18, say: "Re1 — the rook takes the e-file, the standard KIA post.", sayShort: "Re1 — seize the e-file", arrows: [_A('e1', 'e8')] },
+    { atMove: 22, say: "Qc2 — centralising the queen on the b1-h7 diagonal, eyeing the kingside.", sayShort: "Qc2 — eye the kingside", arrows: [_A('c2', 'h7')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KB26: SublineNarration = {
+  intro: { say: "Black pins with …Bg4. You question it with h3, gain kingside space with g4 chasing it, target the bishop with Nh4, then open the centre with exd5.", sayShort: "…Bg4 — h3, g4, Nh4, exd5" },
+  beats: [
+    { atMove: 14, say: "h3 — questioning the g4-bishop, forcing it to declare.", sayShort: "h3 — question the bishop", highlights: [_H('g4')] },
+    { atMove: 18, say: "g4 — gaining kingside space and chasing the bishop to g6.", sayShort: "g4 — chase to g6", arrows: [_A('g4', 'g5')] },
+    { atMove: 20, say: "Nh4 — targeting the g6-bishop, aiming to trade it for light-square control.", sayShort: "Nh4 — target the bishop", arrows: [_A('h4', 'g6')] },
+    { atMove: 22, say: "exd5 — opening the centre, leaving Black with an isolated d-pawn.", sayShort: "exd5 — create the isolani", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KB27: SublineNarration = {
+  intro: { say: "Black props the centre with …f6, weakening the kingside. You strike with d4, question the bishop with h3, open with c4, then centralise the queen aiming at the queenside where Black castles.", sayShort: "…f6 — d4, h3, c4, Qc2" },
+  beats: [
+    { atMove: 8, say: "d4 — striking the centre at once; …f6 has weakened Black's king position.", sayShort: "d4 — strike the centre", highlights: [_H('d4')] },
+    { atMove: 14, say: "h3 — questioning the g4-bishop, gaining time.", sayShort: "h3 — question the bishop", highlights: [_H('g4')] },
+    { atMove: 16, say: "c4 — opening the centre, attacking d5 and prising open lines.", sayShort: "c4 — open the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 20, say: "Qc2 — centralising the queen, eyeing the queenside where Black has castled long.", sayShort: "Qc2 — eye the queenside king", arrows: [_A('c2', 'h7')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KB28: SublineNarration = {
+  intro: { say: "Black plays …Qc7. You strike with d4, open with exd5, recapture centralising the knight, grab the c6-pawn, then leap Nb5 hitting the queen with tempo.", sayShort: "…Qc7 — d4, exd5, dxc6, Nb5" },
+  beats: [
+    { atMove: 8, say: "d4 — striking the centre immediately, opening lines.", sayShort: "d4 — strike the centre", highlights: [_H('d4')] },
+    { atMove: 10, say: "exd5 — opening the position with tempo on Black's pieces.", sayShort: "exd5 — open with tempo", highlights: [_H('d5')] },
+    { atMove: 16, say: "dxc6 — grabbing the pawn, opening lines while ahead in development.", sayShort: "dxc6 — grab the pawn", highlights: [_H('c6')] },
+    { atMove: 20, say: "Nb5 — the knight jumps in hitting the c7-queen, gaining a tempo with the better game.", sayShort: "Nb5 — hit the queen", arrows: [_A('b5', 'c7')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KB29: SublineNarration = {
+  intro: { say: "Black blunders with …Nf6, leaving e5 hanging. You snatch it with Nxe5, retreat the knight to bank the pawn, post the rook on e1, then fianchetto the bishop — a clean extra pawn.", sayShort: "…Nf6 — Nxe5 wins the pawn, Nef3" },
+  beats: [
+    { atMove: 8, say: "Nxe5 — snatching the central pawn: …Nf6 left e5 undefended. You are up a clean pawn.", sayShort: "Nxe5 — win the pawn", highlights: [_H('e5')] },
+    { atMove: 10, say: "Nef3 — retreating the knight to safety, banking the extra material.", sayShort: "Nef3 — bank the pawn", highlights: [_H('f3')] },
+    { atMove: 16, say: "Re1 — the rook takes the e-file, consolidating the advantage.", sayShort: "Re1 — consolidate", arrows: [_A('e1', 'e8')] },
+    { atMove: 22, say: "Bb2 — fianchettoing the bishop to rake the long diagonal with the extra pawn in hand.", sayShort: "Bb2 — rake the diagonal", arrows: [_A('b2', 'g7')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KB30: SublineNarration = {
+  intro: { say: "Black overreaches with …f5. You open with exd5, strike d5 again with c4, plant the knight on the powerful d4-square, then leap into e6 — a monster outpost in Black's camp.", sayShort: "…f5 — exd5, c4, Nd4, Ne6" },
+  beats: [
+    { atMove: 10, say: "exd5 — opening the centre, exploiting the loosening …f5 push.", sayShort: "exd5 — open the centre", highlights: [_H('d5')] },
+    { atMove: 12, say: "c4 — striking at d5 again, prising the centre fully open.", sayShort: "c4 — hit d5 again", arrows: [_A('c4', 'd5')] },
+    { atMove: 14, say: "Nd4 — the knight to the powerful central square, eyeing e6 and f5.", sayShort: "Nd4 — powerful centre knight", highlights: [_H('d4')] },
+    { atMove: 20, say: "Ne6 — the knight leaps into e6, a monster outpost cramping Black's whole position.", sayShort: "Ne6 — monster outpost", highlights: [_H('e6')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+
+const KC31: SublineNarration = {
+  intro: { say: "Black develops …Bd6 over the big centre. You break with e4, open with exd5 to isolate Black's d-pawn, hit the bishop with Nc4, then strike d4 to open lines.", sayShort: "…Bd6 — e4, exd5, Nc4, d4" },
+  beats: [
+    { atMove: 12, say: "e4 — the central break, challenging Black's broad pawn front with everything developed.", sayShort: "e4 — the central break", highlights: [_H('e4')] },
+    { atMove: 14, say: "exd5 — opening the centre, leaving Black with an isolated d-pawn to besiege.", sayShort: "exd5 — create the isolani", highlights: [_H('d5')] },
+    { atMove: 16, say: "Nc4 — the knight to c4, hitting the d6-bishop and eyeing e5.", sayShort: "Nc4 — hit the bishop", arrows: [_A('c4', 'd6')] },
+    { atMove: 22, say: "d4 — striking the centre, opening lines for your better-placed pieces.", sayShort: "d4 — strike the centre", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KC32: SublineNarration = {
+  intro: { say: "Black develops …Be6. You attack it with Ng5 to win the bishop pair, break with e4, advance f4 to gain kingside space and hit e5, then leap to the c4-outpost.", sayShort: "…Be6 — Ng5, e4, f4, Nc4" },
+  beats: [
+    { atMove: 12, say: "Ng5 — attacking the e6-bishop, gaining the bishop pair or a tempo.", sayShort: "Ng5 — attack the bishop", arrows: [_A('g5', 'e6')] },
+    { atMove: 16, say: "e4 — the central break, challenging Black's pawn front.", sayShort: "e4 — the central break", highlights: [_H('e4')] },
+    { atMove: 20, say: "f4 — the kingside pawn advance, gaining space and striking at e5.", sayShort: "f4 — gain space, hit e5", arrows: [_A('f4', 'e5')] },
+    { atMove: 22, say: "Nc4 — the knight to c4, eyeing e5 and d6 with the better game.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KC33: SublineNarration = {
+  intro: { say: "Black pins with …Bg4. You break with e4, gain kingside space with g4 chasing the bishop, then strike at e5 with a knight and f4 — a sharp, roughly balanced melee in the centre.", sayShort: "…Bg4 — e4, g4, Nxe5, fxe5" },
+  beats: [
+    { atMove: 12, say: "e4 — the central break, challenging Black's broad pawn front.", sayShort: "e4 — the central break", highlights: [_H('e4')] },
+    { atMove: 16, say: "g4 — gaining kingside space and chasing the bishop to g6.", sayShort: "g4 — gain space, chase the bishop", arrows: [_A('g4', 'g5')] },
+    { atMove: 18, say: "Nxe5 — striking at the e5-pawn, opening the centre in a sharp, balanced fight.", sayShort: "Nxe5 — strike the centre", highlights: [_H('e5')] },
+    { atMove: 20, say: "fxe5 — opening the f-file toward f7, keeping the initiative in the double-edged play.", sayShort: "fxe5 — open the f-file", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KC34: SublineNarration = {
+  intro: { say: "Black castles. You break with e4 and centralise with Qe2; after …Bg4 and …Nd4 the position turns sharp and roughly balanced — sidestep with Qd1 and recapture accurately to hold the equilibrium.", sayShort: "…O-O — e4, Qe2, Qd1, Bxf3" },
+  beats: [
+    { atMove: 14, say: "Qe2 — centralising the queen, supporting the centre after the e4 break.", sayShort: "Qe2 — centralise", highlights: [_H('e2')] },
+    { atMove: 16, say: "Nxe4 — recapturing on e4, keeping the centre open in the sharp middlegame.", sayShort: "Nxe4 — recapture in the centre", highlights: [_H('e4')] },
+    { atMove: 20, say: "Qd1 — sidestepping the …Nd4 fork of queen and knight; calm defence holds the balance.", sayShort: "Qd1 — sidestep, hold the balance", highlights: [_H('d1')] },
+    { atMove: 22, say: "Bxf3 — recapturing accurately. The position stays sharp and roughly level — defend precisely.", sayShort: "Bxf3 — recapture, stay level", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-prophylaxis', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KC35: SublineNarration = {
+  intro: { say: "Black plays …h6. You break with e4, reroute Nh4 toward f5, then advance f4 to open the kingside — a sharp, roughly balanced fight where you must play energetically.", sayShort: "…h6 — e4, Nh4, f4, gxf4" },
+  beats: [
+    { atMove: 12, say: "e4 — the central break, challenging Black's pawn front.", sayShort: "e4 — the central break", highlights: [_H('e4')] },
+    { atMove: 14, say: "Nh4 — rerouting the knight toward f5, the key kingside square.", sayShort: "Nh4 — reroute toward f5", highlights: [_H('h4')] },
+    { atMove: 16, say: "f4 — the kingside pawn advance, striking at e5 and opening lines.", sayShort: "f4 — strike at e5", arrows: [_A('f4', 'e5')] },
+    { atMove: 18, say: "gxf4 — recapturing, opening the g-file toward Black's king in the sharp, balanced melee.", sayShort: "gxf4 — open the g-file", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KC36: SublineNarration = {
+  intro: { say: "Black lunges …e4. You open with dxe4, leap Ng5 to attack the centre, win the sacrificed e3-pawn with fxe3, then centralise the knight on e4 with a small edge.", sayShort: "…e4 — dxe4, Ng5, fxe3, Nge4" },
+  beats: [
+    { atMove: 12, say: "dxe4 — opening the centre, meeting the …e4 thrust head-on.", sayShort: "dxe4 — open the centre", highlights: [_H('e4')] },
+    { atMove: 14, say: "Ng5 — the knight jumps in to attack e4 and f7, exploiting the open lines.", sayShort: "Ng5 — attack e4 and f7", arrows: [_A('g5', 'f7')] },
+    { atMove: 16, say: "fxe3 — collecting the sacrificed pawn and opening the f-file toward f7.", sayShort: "fxe3 — win the pawn, open the f-file", highlights: [_H('e3')] },
+    { atMove: 20, say: "Nge4 — centralising the knight on the strong e4-square, pressing with a small edge.", sayShort: "Nge4 — centralise the knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KC37: SublineNarration = {
+  intro: { say: "Black trades …dxe4. You recapture toward the centre, solidify with c3, centralise with Qe2, then reroute the knights — Nh4 toward f5 and Nc4 to the outpost.", sayShort: "…dxe4 — dxe4, c3, Nh4, Nc4" },
+  beats: [
+    { atMove: 14, say: "dxe4 — recapturing toward the centre, the KIA structure with the e-pawn.", sayShort: "dxe4 — KIA centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "c3 — solidifying the centre, supporting the d-pawn break later.", sayShort: "c3 — solidify", highlights: [_H('c3')] },
+    { atMove: 20, say: "Nh4 — rerouting the knight toward f5, the key kingside square.", sayShort: "Nh4 — reroute toward f5", highlights: [_H('h4')] },
+    { atMove: 22, say: "Nc4 — the other knight to the c4-outpost, eyeing e5 and d6.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KC38: SublineNarration = {
+  intro: { say: "Black develops …Bf5. You break with e4, recapture, attack the bishop with Ng5, then advance f4 and leap to the c4-outpost.", sayShort: "…Bf5 — e4, Ng5, f4, Nc4" },
+  beats: [
+    { atMove: 12, say: "e4 — the central break, challenging Black's pawn front.", sayShort: "e4 — the central break", highlights: [_H('e4')] },
+    { atMove: 16, say: "Ng5 — attacking the e6-bishop, gaining the bishop pair or a tempo.", sayShort: "Ng5 — attack the bishop", arrows: [_A('g5', 'e6')] },
+    { atMove: 20, say: "f4 — the kingside pawn advance, gaining space and striking at e5.", sayShort: "f4 — gain space, hit e5", arrows: [_A('f4', 'e5')] },
+    { atMove: 22, say: "Nc4 — the knight to c4, eyeing e5 and d6.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KC39: SublineNarration = {
+  intro: { say: "Black develops …Be6. You open with exd5 to isolate Black's d-pawn, solidify with c3, post the rook on e1, then strike d4 to open lines.", sayShort: "…Be6 — exd5, c3, Re1, d4" },
+  beats: [
+    { atMove: 14, say: "exd5 — opening the centre, leaving Black with an isolated d-pawn.", sayShort: "exd5 — create the isolani", highlights: [_H('d5')] },
+    { atMove: 16, say: "c3 — solidifying the centre, preparing the d4 break.", sayShort: "c3 — solidify, prep d4", highlights: [_H('c3')] },
+    { atMove: 18, say: "Re1 — the rook takes the e-file, pressing Black's position.", sayShort: "Re1 — seize the e-file", arrows: [_A('e1', 'e8')] },
+    { atMove: 22, say: "d4 — striking the centre, opening lines against the isolated pawn.", sayShort: "d4 — strike the centre", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KC40: SublineNarration = {
+  intro: { say: "Black pins with …Bg4. You question it with h3, attack the e6-bishop with Ng5, gain queenside space with a4, then leap to the c4-outpost.", sayShort: "…Bg4 — h3, Ng5, a4, Nc4" },
+  beats: [
+    { atMove: 14, say: "h3 — questioning the g4-bishop, forcing it to declare.", sayShort: "h3 — question the bishop", highlights: [_H('g4')] },
+    { atMove: 16, say: "Ng5 — attacking the e6-bishop, gaining a tempo or the bishop pair.", sayShort: "Ng5 — attack the bishop", arrows: [_A('g5', 'e6')] },
+    { atMove: 18, say: "a4 — gaining queenside space, fixing Black's pawns.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+    { atMove: 22, say: "Nc4 — the knight to c4, eyeing e5 and d6 with the better game.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-prophylaxis', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KC41: SublineNarration = {
+  intro: { say: "Black plays …c5 early. You complete the KIA set-up, post the rook on e1, solidify with c3, centralise with Qe2, then begin the Nf1-h2-g4 reroute toward the kingside.", sayShort: "…c5 — Re1, c3, Qe2, Nf1" },
+  beats: [
+    { atMove: 14, say: "Re1 — the rook supports the e-pawn, the KIA build-up.", sayShort: "Re1 — KIA build-up", arrows: [_A('e1', 'e4')] },
+    { atMove: 16, say: "c3 — solidifying the centre, giving the knight the c2-square.", sayShort: "c3 — solidify", highlights: [_H('c3')] },
+    { atMove: 18, say: "Qe2 — centralising the queen, preparing the kingside maneuver.", sayShort: "Qe2 — centralise", highlights: [_H('e2')] },
+    { atMove: 20, say: "Nf1 — the signature KIA reroute toward h2 and g4 and the attack.", sayShort: "Nf1 — reroute toward g4", highlights: [_H('f1')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KC42: SublineNarration = {
+  intro: { say: "Black fianchettoes with …b6. You clamp with e5, build the big centre with d4, storm with h4, leap Ng5, then snatch the b5-pawn — a clear plus.", sayShort: "…b6 — e5, d4, h4, Bxb5" },
+  beats: [
+    { atMove: 8, say: "e5 — the French-KIA clamp, gaining space and kicking the f6-knight.", sayShort: "e5 — clamp, kick the knight", highlights: [_H('e5')] },
+    { atMove: 12, say: "d4 — building the broad centre, claiming a space bind.", sayShort: "d4 — build the big centre", highlights: [_H('d4')] },
+    { atMove: 14, say: "h4 — the kingside pawn storm begins, gaining space toward the king.", sayShort: "h4 — kingside storm", arrows: [_A('h4', 'h5')] },
+    { atMove: 22, say: "Bxb5 — snatching the pawn, emerging a clean pawn up with the better game.", sayShort: "Bxb5 — win the pawn", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:tac-double-attack', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KC43: SublineNarration = {
+  intro: { say: "Black develops …Nc6. You clamp with e5, build the centre with d4, support it with c3, then reposition the bishop to d3 aiming at h7.", sayShort: "…Nc6 — e5, d4, c3, Bd3" },
+  beats: [
+    { atMove: 8, say: "e5 — the French-KIA space clamp, kicking the f6-knight.", sayShort: "e5 — clamp, kick the knight", highlights: [_H('e5')] },
+    { atMove: 10, say: "d4 — building the broad centre, claiming a space bind.", sayShort: "d4 — build the big centre", highlights: [_H('d4')] },
+    { atMove: 16, say: "c3 — supporting the centre, solidifying your space advantage.", sayShort: "c3 — support the centre", highlights: [_H('c3')] },
+    { atMove: 20, say: "Bd3 — repositioning the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KC44: SublineNarration = {
+  intro: { say: "Black fianchettoes with …b6. You post the rook on e1, clamp with e5, then begin the kingside attack: Nf1, h4 and the knight reroute via h2 to g4.", sayShort: "…b6 — Re1, e5, Nf1, h4" },
+  beats: [
+    { atMove: 16, say: "e5 — the space-gaining clamp, kicking the f6-knight and cramping Black.", sayShort: "e5 — clamp the kingside", highlights: [_H('e5')] },
+    { atMove: 18, say: "Nf1 — the signature KIA reroute, heading via h2 to g4.", sayShort: "Nf1 — reroute toward g4", highlights: [_H('f1')] },
+    { atMove: 20, say: "h4 — the kingside pawn storm begins, gaining space toward the king.", sayShort: "h4 — kingside storm", arrows: [_A('h4', 'h5')] },
+    { atMove: 22, say: "N1h2 — the knight reaches h2, heading to g4 to join the assault.", sayShort: "N1h2 — knight to g4", highlights: [_H('h2')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KC45: SublineNarration = {
+  intro: { say: "Black centralises …Qc7. You solidify with c3, centralise with Qe2, then begin the Nf1-h2-g4 reroute toward the kingside attack.", sayShort: "…Qc7 — c3, Qe2, Nf1" },
+  beats: [
+    { atMove: 16, say: "c3 — solidifying the centre, giving the knight the c2-square.", sayShort: "c3 — solidify", highlights: [_H('c3')] },
+    { atMove: 18, say: "Qe2 — centralising the queen, preparing the kingside maneuver.", sayShort: "Qe2 — centralise", highlights: [_H('e2')] },
+    { atMove: 20, say: "Nf1 — the signature KIA reroute toward h2 and g4 and the attack.", sayShort: "Nf1 — reroute toward g4", highlights: [_H('f1')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KC46: SublineNarration = {
+  intro: { say: "Black centralises …Qc7. You post the rook on e1, solidify with c3, centralise with Qe2, then begin the Nf1 reroute toward the kingside.", sayShort: "…Qc7 — Re1, c3, Qe2, Nf1" },
+  beats: [
+    { atMove: 14, say: "Re1 — the rook supports the e-pawn, the KIA build-up.", sayShort: "Re1 — KIA build-up", arrows: [_A('e1', 'e4')] },
+    { atMove: 16, say: "c3 — solidifying the centre.", sayShort: "c3 — solidify", highlights: [_H('c3')] },
+    { atMove: 18, say: "Qe2 — centralising the queen, preparing the kingside maneuver.", sayShort: "Qe2 — centralise", highlights: [_H('e2')] },
+    { atMove: 20, say: "Nf1 — the signature KIA reroute toward h2 and g4 and the attack.", sayShort: "Nf1 — reroute toward g4", highlights: [_H('f1')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KC47: SublineNarration = {
+  intro: { say: "Black develops …Be7. You clamp with e5, build the centre with d4, aim the bishop at h7 from d3, then reroute Nb3 to press the position.", sayShort: "…Be7 — e5, d4, Bd3, Nb3" },
+  beats: [
+    { atMove: 8, say: "e5 — the French-KIA clamp, gaining space and kicking the f6-knight.", sayShort: "e5 — clamp, kick the knight", highlights: [_H('e5')] },
+    { atMove: 12, say: "d4 — building the broad centre, claiming a space bind.", sayShort: "d4 — build the big centre", highlights: [_H('d4')] },
+    { atMove: 14, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 22, say: "Nb3 — rerouting the knight toward c5 and d4, pressing the position.", sayShort: "Nb3 — reroute, press", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KC48: SublineNarration = {
+  intro: { say: "Black develops …Nc6 and …e5. You open with exd5 gaining a tempo on the queen, leap to the c4-outpost, post the rook on e1, then centralise the queen on c2.", sayShort: "…Nc6 — exd5, Nc4, Re1, Qc2" },
+  beats: [
+    { atMove: 8, say: "exd5 — opening the centre and gaining a tempo on the queen recapture.", sayShort: "exd5 — open with tempo", highlights: [_H('d5')] },
+    { atMove: 12, say: "Nc4 — the knight to the c4-outpost, eyeing e5 and d6.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+    { atMove: 18, say: "Re1 — the rook takes the e-file, pressing the centre.", sayShort: "Re1 — seize the e-file", arrows: [_A('e1', 'e8')] },
+    { atMove: 20, say: "Qc2 — centralising the queen on the b1-h7 diagonal, eyeing the kingside.", sayShort: "Qc2 — eye the kingside", arrows: [_A('c2', 'h7')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KC49: SublineNarration = {
+  intro: { say: "Black fianchettoes …g6. You castle and solidify with c3, clamp with e5, build the big centre with d4, gain queenside space with a4, then reroute Nb1 to support the centre.", sayShort: "…g6 — e5, d4, a4, Nb1" },
+  beats: [
+    { atMove: 16, say: "e5 — the space-gaining clamp, kicking the f6-knight.", sayShort: "e5 — clamp the kingside", highlights: [_H('e5')] },
+    { atMove: 18, say: "d4 — building the broad centre against the fianchetto.", sayShort: "d4 — build the big centre", highlights: [_H('d4')] },
+    { atMove: 20, say: "a4 — gaining queenside space, fixing Black's pawns.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+    { atMove: 22, say: "Nb1 — rerouting the knight via c3 or d2 to support the broad centre.", sayShort: "Nb1 — reroute to support", highlights: [_H('b1')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KC50: SublineNarration = {
+  intro: { say: "Black develops …Bc5. You clamp with e5 gaining a tempo, build the centre with d4, aim the bishop at h7 from d3, then open lines favourably with exf6.", sayShort: "…Bc5 — e5, d4, Bd3, exf6" },
+  beats: [
+    { atMove: 8, say: "e5 — the clamp, gaining space and a tempo on the c5-bishop.", sayShort: "e5 — clamp, gain a tempo", highlights: [_H('e5')] },
+    { atMove: 12, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 18, say: "Re1 — the rook takes the e-file, supporting the centre.", sayShort: "Re1 — seize the e-file", arrows: [_A('e1', 'e4')] },
+    { atMove: 22, say: "exf6 — opening lines favourably, with the space edge in hand.", sayShort: "exf6 — open favourably", highlights: [_H('f6')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+
+const KD51: SublineNarration = {
+  intro: { say: "With the e5-spearhead set, Black plays …Qc7. You develop Bf4 to support e5, solidify with c3, then launch the kingside storm with h4.", sayShort: "…Qc7 — Bf4, c3, h4" },
+  beats: [
+    { atMove: 20, say: "Bf4 — developing the bishop to buttress the e5-pawn and eye the c7-queen.", sayShort: "Bf4 — support e5", arrows: [_A('f4', 'c7')] },
+    { atMove: 22, say: "c3 — solidifying the centre, preparing queenside or central play.", sayShort: "c3 — solidify", highlights: [_H('c3')] },
+    { atMove: 24, say: "h4 — the kingside pawn storm begins, prising open the king's cover.", sayShort: "h4 — start the storm", arrows: [_A('h4', 'h5')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KD52: SublineNarration = {
+  intro: { say: "Black fianchettoes with …g6. You strike d4 into a symmetric structure, challenge with c4, develop Nc3, then trade queens into a slightly better ending with Black's doubled c-pawns.", sayShort: "…Nf6 — d4, c4, Nc3, Qxd8" },
+  beats: [
+    { atMove: 8, say: "d4 — striking the centre, opening into a symmetric Catalan-style structure.", sayShort: "d4 — strike the centre", highlights: [_H('d4')] },
+    { atMove: 12, say: "c4 — challenging d5, the broad pawn front.", sayShort: "c4 — challenge d5", arrows: [_A('c4', 'd5')] },
+    { atMove: 16, say: "Nc3 — developing with pressure on d5, contesting the centre.", sayShort: "Nc3 — contest d5", highlights: [_H('d5')] },
+    { atMove: 22, say: "Qxd8 — trading queens into an ending where Black's doubled c-pawns are the lasting weakness.", sayShort: "Qxd8 — into a better ending", highlights: [_H('d8')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KD53: SublineNarration = {
+  intro: { say: "Black centralises …Qc7. You open with exd5, reroute Nb3 toward c5, gain queenside space with c4, then develop Bd2 for the queenside play.", sayShort: "…Qc7 — exd5, Nb3, c4, Bd2" },
+  beats: [
+    { atMove: 14, say: "exd5 — opening the centre and gaining a tempo on the recapture.", sayShort: "exd5 — open with tempo", highlights: [_H('d5')] },
+    { atMove: 16, say: "Nb3 — the knight eyes c5 and d4, pressing the queenside.", sayShort: "Nb3 — press the queenside", highlights: [_H('c5')] },
+    { atMove: 18, say: "c4 — gaining queenside space and hitting d5.", sayShort: "c4 — gain space, hit d5", arrows: [_A('c4', 'd5')] },
+    { atMove: 22, say: "Bd2 — developing the bishop, preparing the queenside expansion.", sayShort: "Bd2 — prepare expansion", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KD54: SublineNarration = {
+  intro: { say: "Black centralises …Qc7. You solidify with c3, centralise with Qe2, then begin the Nf1-h2-g4 reroute toward the kingside attack.", sayShort: "…Qc7 — c3, Qe2, Nf1" },
+  beats: [
+    { atMove: 16, say: "c3 — solidifying the centre, giving the knight the c2-square.", sayShort: "c3 — solidify", highlights: [_H('c3')] },
+    { atMove: 18, say: "Qe2 — centralising the queen, preparing the kingside maneuver.", sayShort: "Qe2 — centralise", highlights: [_H('e2')] },
+    { atMove: 20, say: "Nf1 — the signature KIA reroute toward h2 and g4 and the attack.", sayShort: "Nf1 — reroute toward g4", highlights: [_H('f1')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KD55: SublineNarration = {
+  intro: { say: "Black fianchettoes with …b6. You post the rook on e1, clamp with e5, then begin the kingside attack: Nf1, h4 and the knight reroute via h2 to g4.", sayShort: "…b6 — Re1, e5, Nf1, h4" },
+  beats: [
+    { atMove: 14, say: "Re1 — the rook supports the e-pawn, the KIA build-up.", sayShort: "Re1 — KIA build-up", arrows: [_A('e1', 'e4')] },
+    { atMove: 16, say: "e5 — the space-gaining clamp, kicking the f6-knight.", sayShort: "e5 — clamp the kingside", highlights: [_H('e5')] },
+    { atMove: 20, say: "h4 — the kingside pawn storm begins, gaining space toward the king.", sayShort: "h4 — kingside storm", arrows: [_A('h4', 'h5')] },
+    { atMove: 22, say: "N1h2 — the knight reaches h2, heading to g4 to join the assault.", sayShort: "N1h2 — knight to g4", highlights: [_H('h2')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KD56: SublineNarration = {
+  intro: { say: "Black overreaches with …d4. You snap it with Nxd4, and after …cxd4 the loose c6-knight falls to Bxc6 — you win material with the better game.", sayShort: "…d4 — Nxd4 then Bxc6 wins material" },
+  beats: [
+    { atMove: 20, say: "Nxd4 — snapping the overextended pawn. The c6-knight is now loose on the long diagonal.", sayShort: "Nxd4 — snap the pawn", highlights: [_H('d4')] },
+    { atMove: 22, say: "Bxc6 — collecting the loose knight down the long diagonal. You win material and stand clearly better.", sayShort: "Bxc6 — win material", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:tac-double-attack', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KD57: SublineNarration = {
+  intro: { say: "Black plays …f6 against the e5-spearhead. You open with exf6, exploiting the weakening of Black's king, solidify with c3, then trade in the centre with Nxe5.", sayShort: "…f6 — exf6, c3, Nxe5" },
+  beats: [
+    { atMove: 20, say: "exf6 — opening the position, exploiting the …f6 weakening of Black's king cover.", sayShort: "exf6 — open the king", highlights: [_H('f6')] },
+    { atMove: 22, say: "c3 — solidifying the centre, preparing central play.", sayShort: "c3 — solidify", highlights: [_H('c3')] },
+    { atMove: 24, say: "Nxe5 — trading in the centre, keeping a sound, active position.", sayShort: "Nxe5 — trade in the centre", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KD61: SublineNarration = {
+  intro: { say: "In the symmetric double-fianchetto KIA Black plays …Nbd7. You post the rook on e1, gain queenside space with a4, then break with e4 and leap to the c4-outpost.", sayShort: "…Nbd7 — Re1, a4, e4, Nc4" },
+  beats: [
+    { atMove: 12, say: "Re1 — the rook backs the centre, preparing the e4 break.", sayShort: "Re1 — prepare e4", arrows: [_A('e1', 'e4')] },
+    { atMove: 18, say: "e4 — the central break, claiming space in the symmetric structure.", sayShort: "e4 — the central break", highlights: [_H('e4')] },
+    { atMove: 20, say: "Nc4 — the knight to the c4-outpost, eyeing e5 and d6.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+    { atMove: 22, say: "b3 — preparing Bb2, completing the queenside structure.", sayShort: "b3 — prepare Bb2", highlights: [_H('b3')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KD62: SublineNarration = {
+  intro: { say: "Black plays …c5. You gain queenside space with a4, break with e4, leap to the c4-outpost, then clamp with a5.", sayShort: "…c5 — a4, e4, Nc4, a5" },
+  beats: [
+    { atMove: 14, say: "e4 — the central break, claiming space in the symmetric KIA.", sayShort: "e4 — the central break", highlights: [_H('e4')] },
+    { atMove: 16, say: "Nc4 — the knight to the c4-outpost, eyeing e5 and d6 and the queenside.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+    { atMove: 20, say: "a5 — clamping the queenside, gaining space and fixing Black's pawns.", sayShort: "a5 — clamp the queenside", arrows: [_A('a5', 'b6')] },
+    { atMove: 22, say: "c3 — solidifying the centre, completing a comfortable bind.", sayShort: "c3 — solidify", highlights: [_H('c3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KD63: SublineNarration = {
+  intro: { say: "Black develops …Nc6. You break with e4, gain queenside space with a4, leap to the c4-outpost, then open lines with exd5 and fianchetto Bb2.", sayShort: "…Nc6 — e4, Nc4, exd5, Bb2" },
+  beats: [
+    { atMove: 12, say: "e4 — the central break, claiming space.", sayShort: "e4 — the central break", highlights: [_H('e4')] },
+    { atMove: 16, say: "Nc4 — the knight to the c4-outpost, eyeing e5 and d6.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+    { atMove: 20, say: "exd5 — opening the centre, leaving Black with an isolated d-pawn.", sayShort: "exd5 — create the isolani", highlights: [_H('d5')] },
+    { atMove: 22, say: "Bb2 — the bishop rakes the long diagonal, pressing the isolated pawn and the kingside.", sayShort: "Bb2 — rake the diagonal", arrows: [_A('b2', 'g7')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KD64: SublineNarration = {
+  intro: { say: "Black plays …c6. You break with e4, gain space with e5 kicking the knight, post the rook on e1, then plant the knight on the strong e4-square.", sayShort: "…c6 — e4, e5, Ne4, Bd2" },
+  beats: [
+    { atMove: 12, say: "e4 — the central break, claiming space.", sayShort: "e4 — the central break", highlights: [_H('e4')] },
+    { atMove: 14, say: "e5 — the space-gaining clamp, kicking the f6-knight.", sayShort: "e5 — clamp, kick the knight", highlights: [_H('e5')] },
+    { atMove: 20, say: "Ne4 — the knight reaches the strong e4-square, eyeing d6 and f6.", sayShort: "Ne4 — strong central knight", highlights: [_H('e4')] },
+    { atMove: 22, say: "Bd2 — developing the bishop, preparing the queenside and supporting the knight.", sayShort: "Bd2 — develop, support", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KD65: SublineNarration = {
+  intro: { say: "Black plays …e5 then …Nbd7. You gain queenside space with a4, leap to the c4-outpost, post the rook on e1, then swing the bishop to a3 eyeing the queenside.", sayShort: "…Nbd7 — a4, Nc4, Re1, Ba3" },
+  beats: [
+    { atMove: 16, say: "Nc4 — the knight to the c4-outpost, eyeing e5 and d6.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+    { atMove: 18, say: "Re1 — the rook backs the centre, the KIA post.", sayShort: "Re1 — back the centre", arrows: [_A('e1', 'e4')] },
+    { atMove: 20, say: "b3 — preparing Bb2 or Ba3, completing the queenside structure.", sayShort: "b3 — prepare the fianchetto", highlights: [_H('b3')] },
+    { atMove: 22, say: "Ba3 — the bishop swings to a3, pressing the queenside and the c5-knight.", sayShort: "Ba3 — press the queenside", arrows: [_A('a3', 'f8')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-space', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KD66: SublineNarration = {
+  intro: { say: "Black plays …e5 then …c6. You prepare b4 with c3, break on the queenside with b4, open with bxc5, then snap the centre with Nxe5 in the sharp play.", sayShort: "…c6 — c3, b4, bxc5, Nxe5" },
+  beats: [
+    { atMove: 14, say: "c3 — preparing the queenside break b4.", sayShort: "c3 — prepare b4", highlights: [_H('b4')] },
+    { atMove: 16, say: "b4 — the queenside pawn break, gaining space and opening lines.", sayShort: "b4 — queenside break", arrows: [_A('b4', 'c5')] },
+    { atMove: 18, say: "bxc5 — opening the queenside, prising open lines for your pieces.", sayShort: "bxc5 — open the queenside", highlights: [_H('c5')] },
+    { atMove: 20, say: "Nxe5 — snapping the central pawn in the tactics, keeping the better game.", sayShort: "Nxe5 — snap the centre", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KD67: SublineNarration = {
+  intro: { say: "Black pins with …Bg4. You solidify with c3, leap to the c4-outpost, gain queenside space with a4, then develop Bd2 for the queenside play.", sayShort: "…Bg4 — c3, Nc4, a4, Bd2" },
+  beats: [
+    { atMove: 16, say: "Nc4 — the knight to the c4-outpost, eyeing e5 and d6.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+    { atMove: 18, say: "a4 — gaining queenside space, fixing Black's pawns.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+    { atMove: 20, say: "Re1 — the rook backs the centre, the KIA post.", sayShort: "Re1 — back the centre", arrows: [_A('e1', 'e4')] },
+    { atMove: 22, say: "Bd2 — developing the bishop, preparing the queenside expansion.", sayShort: "Bd2 — prepare expansion", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-space', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KD68: SublineNarration = {
+  intro: { say: "Black pins with …Bg4. You question it with h3, break with e4, gain queenside space with a4, leap to the c4-outpost, then jump Ng5 toward e6 and f7.", sayShort: "…Bg4 — h3, e4, Nc4, Ng5" },
+  beats: [
+    { atMove: 12, say: "h3 — questioning the g4-bishop, forcing it to declare.", sayShort: "h3 — question the bishop", highlights: [_H('g4')] },
+    { atMove: 16, say: "e4 — the central break, claiming space.", sayShort: "e4 — the central break", highlights: [_H('e4')] },
+    { atMove: 20, say: "Nc4 — the knight to the c4-outpost, eyeing e5 and d6.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+    { atMove: 22, say: "Ng5 — the knight jumps toward e6 and f7, eyeing the kingside.", sayShort: "Ng5 — jump toward e6/f7", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pos-prophylaxis', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KD69: SublineNarration = {
+  intro: { say: "Black plays …e5 then …c5. You gain queenside space with a4, leap to the c4-outpost, reroute Ne3 toward d5 and f5, then solidify with c3.", sayShort: "…c5 — a4, Nc4, Ne3, c3" },
+  beats: [
+    { atMove: 16, say: "Nc4 — the knight to the c4-outpost, eyeing e5 and d6.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+    { atMove: 18, say: "Ne3 — rerouting the knight toward the central d5 and f5 squares.", sayShort: "Ne3 — reroute to d5/f5", highlights: [_H('e3')] },
+    { atMove: 20, say: "Nd2 — rerouting the other knight to support the centre and the kingside.", sayShort: "Nd2 — reroute the knight", highlights: [_H('d2')] },
+    { atMove: 22, say: "c3 — solidifying the centre, completing a comfortable bind.", sayShort: "c3 — solidify", highlights: [_H('c3')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-space', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const KD70: SublineNarration = {
+  intro: { say: "Black develops …Be6. You break on the queenside with b4, open with bxc5, take the open b-file with Rb1, then jump Ng5 — a sharp, roughly balanced fight where the b-file gives full play for the a2-pawn.", sayShort: "…Be6 — b4, bxc5, Rb1, Ng5" },
+  beats: [
+    { atMove: 14, say: "b4 — the queenside pawn break, gaining space and opening lines.", sayShort: "b4 — queenside break", arrows: [_A('b4', 'c5')] },
+    { atMove: 16, say: "bxc5 — opening the queenside, prising open files for your rooks.", sayShort: "bxc5 — open the queenside", highlights: [_H('c5')] },
+    { atMove: 18, say: "Rb1 — the rook takes the open b-file, pressing b7 — full compensation for the a2-pawn.", sayShort: "Rb1 — seize the b-file", arrows: [_A('b1', 'b7')] },
+    { atMove: 20, say: "Ng5 — the knight jumps toward e6 and f7 in the sharp, balanced melee.", sayShort: "Ng5 — jump toward e6/f7", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+
+const KD58: SublineNarration = {
+  intro: { say: "With the e5-spearhead set, Black develops …Ba6 to pressure d3. You launch the kingside storm with h4, then gain queenside space with a4 — playing on both wings while Black is cramped.", sayShort: "…Ba6 — h4, a4" },
+  beats: [
+    { atMove: 20, say: "h4 — the kingside pawn storm begins, the KIA's attacking plan against the castled king.", sayShort: "h4 — start the storm", arrows: [_A('h4', 'h5')] },
+    { atMove: 22, say: "a4 — gaining queenside space and fixing Black's pawns, squeezing on both wings.", sayShort: "a4 — squeeze both wings", arrows: [_A('a4', 'a5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
+  'kings-indian-attack::7::e5@11': KA71,
+  'kings-indian-attack::0::e5@11': KA01,
   'reti-opening::6::Bd6@13': RT60,
   'reti-opening::0::Bd6@13': RT01,
   'london-system::2::Nc6@9': LN20,
@@ -4396,84 +5154,84 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'reti-opening::7::b6@11': RT78,
   'reti-opening::7::b6@9': RT79,
   // ── kings-indian-attack ──
-  'kings-indian-attack::0::O-O@13': C102,
-  'kings-indian-attack::0::Bc5@9': C102,
-  'kings-indian-attack::0::Bb4@11': C102,
-  'kings-indian-attack::0::e5@9': C102,
-  'kings-indian-attack::0::Be7@11': C102,
-  'kings-indian-attack::0::c5@5': C102,
-  'kings-indian-attack::0::Be7@9': C102,
-  'kings-indian-attack::0::Ng4@13': C102,
-  'kings-indian-attack::0::Bd6@9': C102,
-  'kings-indian-attack::1::Nf6@9': C103,
-  'kings-indian-attack::1::e6@9': C104,
-  'kings-indian-attack::1::e6@11': C104,
-  'kings-indian-attack::1::Bg4@11': C103,
-  'kings-indian-attack::1::e5@11': C103,
-  'kings-indian-attack::1::d5@9': C103,
-  'kings-indian-attack::1::e5@9': C103,
-  'kings-indian-attack::1::Bg4@13': C103,
-  'kings-indian-attack::1::Bd7@11': C103,
-  'kings-indian-attack::1::a6@15': C103,
-  'kings-indian-attack::2::Bg4@7': C105,
-  'kings-indian-attack::2::Nd7@7': C105,
-  'kings-indian-attack::2::Bg4@9': C105,
-  'kings-indian-attack::2::Bg4@13': C105,
-  'kings-indian-attack::2::Ne7@9': C105,
-  'kings-indian-attack::2::Bg4@11': C105,
-  'kings-indian-attack::2::f6@7': C105,
-  'kings-indian-attack::2::Qc7@7': C105,
-  'kings-indian-attack::2::Nf6@7': C105,
-  'kings-indian-attack::2::f5@9': C105,
-  'kings-indian-attack::3::Bd6@11': C104,
-  'kings-indian-attack::3::Be6@11': C104,
-  'kings-indian-attack::3::Bg4@11': C104,
-  'kings-indian-attack::3::O-O@13': C104,
-  'kings-indian-attack::3::h6@11': C104,
-  'kings-indian-attack::3::e4@11': C104,
-  'kings-indian-attack::3::dxe4@13': C104,
-  'kings-indian-attack::3::Bf5@11': C104,
-  'kings-indian-attack::3::Be6@13': C104,
-  'kings-indian-attack::3::Bg4@13': C104,
-  'kings-indian-attack::4::c5@5': C102,
-  'kings-indian-attack::4::b6@7': C102,
-  'kings-indian-attack::4::Nc6@7': C102,
-  'kings-indian-attack::4::b6@13': C102,
-  'kings-indian-attack::4::Qc7@15': C102,
-  'kings-indian-attack::4::Qc7@13': C102,
-  'kings-indian-attack::4::Be7@7': C102,
-  'kings-indian-attack::4::Nc6@5': C102,
-  'kings-indian-attack::4::g6@11': C102,
-  'kings-indian-attack::4::Bc5@7': C102,
-  'kings-indian-attack::5::Qc7@19': C106,
+  'kings-indian-attack::0::O-O@13': KA02,
+  'kings-indian-attack::0::Bc5@9': KA03,
+  'kings-indian-attack::0::Bb4@11': KA04,
+  'kings-indian-attack::0::e5@9': KA09,
+  'kings-indian-attack::0::Be7@11': KA05,
+  'kings-indian-attack::0::c5@5': KA08,
+  'kings-indian-attack::0::Be7@9': KA06,
+  'kings-indian-attack::0::Ng4@13': KA07,
+  'kings-indian-attack::0::Bd6@9': KA10,
+  'kings-indian-attack::1::Nf6@9': KB11,
+  'kings-indian-attack::1::e6@9': KB12,
+  'kings-indian-attack::1::e6@11': KB13,
+  'kings-indian-attack::1::Bg4@11': KB14,
+  'kings-indian-attack::1::e5@11': KB15,
+  'kings-indian-attack::1::d5@9': KB16,
+  'kings-indian-attack::1::e5@9': KB17,
+  'kings-indian-attack::1::Bg4@13': KB18,
+  'kings-indian-attack::1::Bd7@11': KB19,
+  'kings-indian-attack::1::a6@15': KB20,
+  'kings-indian-attack::2::Bg4@7': KB21,
+  'kings-indian-attack::2::Nd7@7': KB22,
+  'kings-indian-attack::2::Bg4@9': KB23,
+  'kings-indian-attack::2::Bg4@13': KB24,
+  'kings-indian-attack::2::Ne7@9': KB25,
+  'kings-indian-attack::2::Bg4@11': KB26,
+  'kings-indian-attack::2::f6@7': KB27,
+  'kings-indian-attack::2::Qc7@7': KB28,
+  'kings-indian-attack::2::Nf6@7': KB29,
+  'kings-indian-attack::2::f5@9': KB30,
+  'kings-indian-attack::3::Bd6@11': KC31,
+  'kings-indian-attack::3::Be6@11': KC32,
+  'kings-indian-attack::3::Bg4@11': KC33,
+  'kings-indian-attack::3::O-O@13': KC34,
+  'kings-indian-attack::3::h6@11': KC35,
+  'kings-indian-attack::3::e4@11': KC36,
+  'kings-indian-attack::3::dxe4@13': KC37,
+  'kings-indian-attack::3::Bf5@11': KC38,
+  'kings-indian-attack::3::Be6@13': KC39,
+  'kings-indian-attack::3::Bg4@13': KC40,
+  'kings-indian-attack::4::c5@5': KC41,
+  'kings-indian-attack::4::b6@7': KC42,
+  'kings-indian-attack::4::Nc6@7': KC43,
+  'kings-indian-attack::4::b6@13': KC44,
+  'kings-indian-attack::4::Qc7@15': KC45,
+  'kings-indian-attack::4::Qc7@13': KC46,
+  'kings-indian-attack::4::Be7@7': KC47,
+  'kings-indian-attack::4::Nc6@5': KC48,
+  'kings-indian-attack::4::g6@11': KC49,
+  'kings-indian-attack::4::Bc5@7': KC50,
+  'kings-indian-attack::5::Qc7@19': KD51,
   'kings-indian-attack::5::b5@15': WKIAB5,
-  'kings-indian-attack::5::f6@19': C106,
-  'kings-indian-attack::5::b6@13': C102,
-  'kings-indian-attack::5::Nf6@5': C104,
-  'kings-indian-attack::5::Qc7@15': C102,
-  'kings-indian-attack::5::Ba6@19': C106,
+  'kings-indian-attack::5::f6@19': KD57,
+  'kings-indian-attack::5::b6@13': KD55,
+  'kings-indian-attack::5::Nf6@5': KD52,
+  'kings-indian-attack::5::Qc7@15': KD54,
+  'kings-indian-attack::5::Ba6@19': KD58,
   'kings-indian-attack::5::e5@7': WKIAE5,
-  'kings-indian-attack::5::Qc7@13': C102,
-  'kings-indian-attack::5::d4@19': C106,
-  'kings-indian-attack::6::Nbd7@11': C103,
-  'kings-indian-attack::6::c5@11': C104,
-  'kings-indian-attack::6::Nc6@11': C103,
-  'kings-indian-attack::6::c6@11': C103,
-  'kings-indian-attack::6::Nbd7@13': C103,
-  'kings-indian-attack::6::c6@13': C105,
-  'kings-indian-attack::6::Bg4@13': C103,
-  'kings-indian-attack::6::Bg4@11': C103,
-  'kings-indian-attack::6::c5@13': C104,
-  'kings-indian-attack::6::Be6@13': C103,
-  'kings-indian-attack::7::e5@13': C102,
-  'kings-indian-attack::7::Bc5@9': C102,
-  'kings-indian-attack::7::Bb4@11': C102,
-  'kings-indian-attack::7::e5@9': C102,
-  'kings-indian-attack::7::Be7@11': C102,
-  'kings-indian-attack::7::c5@5': C102,
-  'kings-indian-attack::7::Be7@9': C102,
-  'kings-indian-attack::7::Ng4@13': C102,
-  'kings-indian-attack::7::Bd6@9': C102,
+  'kings-indian-attack::5::Qc7@13': KD53,
+  'kings-indian-attack::5::d4@19': KD56,
+  'kings-indian-attack::6::Nbd7@11': KD61,
+  'kings-indian-attack::6::c5@11': KD62,
+  'kings-indian-attack::6::Nc6@11': KD63,
+  'kings-indian-attack::6::c6@11': KD64,
+  'kings-indian-attack::6::Nbd7@13': KD65,
+  'kings-indian-attack::6::c6@13': KD66,
+  'kings-indian-attack::6::Bg4@13': KD67,
+  'kings-indian-attack::6::Bg4@11': KD68,
+  'kings-indian-attack::6::c5@13': KD69,
+  'kings-indian-attack::6::Be6@13': KD70,
+  'kings-indian-attack::7::e5@13': KA72,
+  'kings-indian-attack::7::Bc5@9': KA73,
+  'kings-indian-attack::7::Bb4@11': KA74,
+  'kings-indian-attack::7::e5@9': KA79,
+  'kings-indian-attack::7::Be7@11': KA75,
+  'kings-indian-attack::7::c5@5': KA78,
+  'kings-indian-attack::7::Be7@9': KA76,
+  'kings-indian-attack::7::Ng4@13': KA77,
+  'kings-indian-attack::7::Bd6@9': KA80,
   // ── birds-opening ──
   'birds-opening::0::c5@7': C107,
   'birds-opening::0::c6@7': C107,
