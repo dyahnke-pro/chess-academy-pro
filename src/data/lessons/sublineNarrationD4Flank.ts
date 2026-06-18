@@ -1024,26 +1024,6 @@ const TLON: SublineNarration = {
   intro: { say: "Your London machine is fully built — the Bf4-Bd3 battery aimed at h7, c3 bracing d4, knights on d2 and f3. Black's …b6 is trying to challenge your diagonal, so turn to the kingside now: Ne5, the queen lift, and the attacking plan your setup reaches every single game. Same system, same ideas, every time — that's the beauty of it.", sayShort: "London tabiya — turn to the kingside." },
   sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
 };
-// DEEP TOLD :: old-indian-defence::3::e4@8
-const TOLD: SublineNarration = {
-  intro: { say: "White's built the full e4 centre against your …d6 and …e5 — cramped, sure, but bombproof. Finish with …Be7 and …O-O, then pick your freeing lever: …exd4 with …Re8 to open lines, or …c6 preparing …d5. Choose the break carefully and watch the cramp uncoil into a fully equal game.", sayShort: "Old Indian — free with …exd4 or …c6-d5." },
-  sources: ['book:old-indian-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Old_Indian_Defense'],
-};
-// DEEP TENG :: english-opening::2::d5@7
-const TENG: SublineNarration = {
-  intro: { say: "Black set up …e5 and …d5, which means you're playing a Sicilian Dragon with the colours reversed — and a whole tempo to the good. Take on d5, fianchetto with Bg2 to fight for the long diagonal, and use that extra move to grab exactly the initiative the White side only dreams about in the real Dragon.", sayShort: "Reversed Dragon — press a tempo up." },
-  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/English_Opening'],
-};
-// DEEP TRETI :: reti-opening::1::dxc4@11
-const TRETI: SublineNarration = {
-  intro: { say: "Black grabbed c4, but again — it's a loan. Your g2-bishop rakes the long diagonal at b7 and d5, and you'll regain the pawn easily with e3 or Qc2. Lean on the centre and that diagonal; the hypermodern bet pays off as Black's queenside stays passive and you slowly take over.", sayShort: "Réti — regain c4, press the diagonal." },
-  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
-};
-// DEEP TKIA :: kings-indian-attack::5::e5@7
-const TKIA: SublineNarration = {
-  intro: { say: "Black stakes a big centre with …c5 and …e5 — and that's exactly the soil your King's Indian Attack grows in. Regroup behind your wall with d3, Nbd2 and e4, then turn to the kingside: the f4 lever, the Nf1-g3 reroute, the pawn storm. His proud centre just becomes the thing you attack around.", sayShort: "KIA — regroup, then storm the kingside." },
-  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
-};
 // DEEP TBIRD :: birds-opening::1::Nge7@17
 const TBIRD: SublineNarration = {
   intro: { say: "The From Gambit has burned itself out in your favour — queens are off and you're a clean pawn up with the bishop on f4 and a healthy extra pawn on e5. Pure technique from here: tuck the king to safety, bring the rooks to the centre, and convert. Black's fire gave him nothing lasting.", sayShort: "From Gambit refuted — a pawn up." },
@@ -1351,6 +1331,63 @@ const WGRUG3: SublineNarration = {
     { atMove: 7, say: "…O-O — castle and prepare …d5; if White takes on c4 you regain it cleanly. A balanced, healthy game where your central break keeps you fully equal.", sayShort: "…O-O — then break …d5", highlights: [_H('d5', KEY)] },
   ],
   sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
+};
+
+// WAVE WRETIDXC :: 1 keys
+const WRETIDXC: SublineNarration = {
+  intro: { say: "…dxc4 — Black grabs the c4-pawn in this Catalan-flavoured Réti, but treat it as a loan, not a loss. Your g2-bishop already rakes the long diagonal at b7, and you reclaim the pawn at leisure with Qa4 and Qxc4. The lasting prize is the bind: while Black scrambles to free his queenside with …b5 and …Bb7, you squeeze the light squares.", sayShort: "…dxc4 — a loan; regain it, then bind" },
+  beats: [
+    { atMove: 11, say: "…dxc4 grabs the pawn, but you gave nothing real away — the g2-bishop's long-diagonal pressure is worth more than a tempo spent recapturing. Don't chase it crudely; collect it with the queen.", sayShort: "…dxc4 — the pawn is a loan", highlights: [_H('c4', KEY)] },
+    { atMove: 12, say: "Qa4 — the queen swings out to recover the pawn, following the rank straight to c4 while also eyeing the a-file. Methodical, no concession; the c4-pawn comes home next move.", sayShort: "Qa4 — regain the c4-pawn", arrows: [_A('a4', 'c4', ATK)], highlights: [_H('c4', KEY)] },
+    { atMove: 14, say: "Qxc4 — pawn back, and now the bind tells. The g2-bishop chokes b7 and the long light diagonal while Black must spend moves on …b5 and …Bb7 just to breathe. You have the freer, more pleasant game.", sayShort: "Qxc4 — pawn back, the bind tells", highlights: [_H('c4', KEY)] },
+    { atMove: 18, say: "Bg5 — pressuring the f6-knight and preparing to trade it, loosening Black's hold on e4 and the centre. You keep nagging on the light squares; Black is solid but you press the easier side all game.", sayShort: "Bg5 — press f6, keep nagging", highlights: [_H('f6', KEY)] },
+  ],
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+// WAVE WKIAE5 :: 1 keys
+const WKIAE5: SublineNarration = {
+  intro: { say: "…e5 — Black stakes out a big centre against your King's Indian Attack, and that is exactly the soil the KIA grows in. Regroup behind your wall with d3, reroute the knight via a3 to c4, clamp with e4, and then turn to the kingside with the f4 lever. Black's proud centre simply becomes the thing you attack around.", sayShort: "…e5 — regroup, reroute, then f4" },
+  beats: [
+    { atMove: 7, say: "…e5 builds the broad centre — c5, d5 and e5 all staked out. Don't contest it head-on; the KIA lets Black overextend so you can lean on the centre from the wings.", sayShort: "…e5 — Black's big centre", highlights: [_H('e5', KEY)] },
+    { atMove: 8, say: "d3 — the modest KIA centre. You hold back, complete development behind the pawns, and prepare the knight reroute that defines the system.", sayShort: "d3 — restrain, then reroute", highlights: [_H('d3', KEY)] },
+    { atMove: 10, say: "Na3 — heading for c4, the knight's dream square in the KIA, where it eyes e5 and d6 and pressures the dark squares. Follow the arrow: a3 to c4 is the reroute that gets the attack rolling.", sayShort: "Na3 — reroute the knight to c4", arrows: [_A('a3', 'c4', ATK)], highlights: [_H('c4', KEY)] },
+    { atMove: 12, say: "e4 — now you clamp, challenging d5 and grabbing your share of the centre. With the structure set, the plan turns to the kingside, exactly where the King's Indian Attack wants to strike.", sayShort: "e4 — clamp, then go kingside", highlights: [_H('e4', KEY)] },
+    { atMove: 20, say: "f4 — the signature lever, striking at e5 to crack open lines toward Black's king. The whole KIA build-up pays off here: pawns and pieces storming the kingside while Black is busy on the other wing.", sayShort: "f4 — the kingside storm begins", arrows: [_A('f4', 'e5', ATK)], highlights: [_H('f4', KEY), _H('e5', KEY)] },
+  ],
+  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+// WAVE WENGREVD :: 1 keys
+const WENGREVD: SublineNarration = {
+  intro: { say: "…d5 — Black stakes a Reversed-Dragon centre, and you are playing a Sicilian Dragon with the colours reversed and a full tempo to the good. Take on d5, fianchetto with Bg2 to contest the long diagonal, and use that spare move to do what White can only dream of in the real Dragon: expand on the queenside with b4 and seize the initiative first.", sayShort: "…d5 — a Dragon up a tempo" },
+  beats: [
+    { atMove: 7, say: "…d5 strikes in the centre, the Reversed Dragon. You don't fear it — you're a tempo up on a Sicilian, so you get to the plans first.", sayShort: "…d5 — the Reversed Dragon", highlights: [_H('d5', KEY)] },
+    { atMove: 8, say: "cxd5 — open the position and welcome the recapture; Black's knight comes to d5 where you'll gain time hitting it. The extra tempo means you reach your setup a move ahead.", sayShort: "cxd5 — open it, gain time", highlights: [_H('d5', KEY)] },
+    { atMove: 10, say: "Bg2 — the fianchetto, the bishop training on the long light diagonal toward b7 and the centre. This is the Dragon bishop, only it's yours and a move early.", sayShort: "Bg2 — the Dragon bishop, early", highlights: [_H('g2', KEY)] },
+    { atMove: 16, say: "b4 — the point of the extra tempo: you expand on the queenside first, gaining space and a target before Black can organise. The Reversed Dragon hands you the initiative the real Dragon's White player can only envy.", sayShort: "b4 — expand first, seize space", highlights: [_H('b4', KEY)] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/English_Opening'],
+};
+// WAVE WOLDE4 :: 1 keys
+const WOLDE4: SublineNarration = {
+  intro: { say: "e4 — White builds the full centre against your …d6/…e5 Old Indian. Cramped but bombproof: fianchetto with …g6 and …Bg7 for a King's-Indian flavour, castle, and free the position with the …Ng4 and …Bf6 regroup to trade the dark-squared bishops. Once the tension eases you strike with …exd4 or …c6 and …d5.", sayShort: "e4 — fianchetto, regroup, then break" },
+  beats: [
+    { atMove: 8, say: "e4 completes White's broad centre, and your position is cramped — but solid as a rock. Don't panic for space; manoeuvre patiently and pick your freeing break.", sayShort: "e4 — cramped but bombproof", highlights: [_H('e4', KEY)] },
+    { atMove: 9, say: "…g6 — a King's-Indian flavour, preparing to fianchetto. The bishop heads to g7 where it pressures the long diagonal and the d4-centre once lines open.", sayShort: "…g6 — fianchetto for pressure", highlights: [_H('g6', KEY)] },
+    { atMove: 11, say: "…Bg7 takes the long diagonal, screened by the f6-knight for now but aimed at d4. With the bishop home you castle and turn to freeing the cramped position.", sayShort: "…Bg7 — aim at the d4-centre", highlights: [_H('g7', KEY), _H('d4', KEY)] },
+    { atMove: 15, say: "…Ng4 — the freeing regroup. The knight jumps out to provoke and prepare …Bf6, trading White's dark-squared bishop to ease your cramp; after the swaps your pieces breathe and …exd4 or …c6-d5 comes next.", sayShort: "…Ng4 — regroup, trade, free up", arrows: [_A('g4', 'e3', ATK)], highlights: [_H('e3', KEY)] },
+  ],
+  sources: ['book:old-indian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Old_Indian_Defense'],
+};
+// WAVE WLONRE8 :: 1 keys
+const WLONRE8: SublineNarration = {
+  intro: { say: "…Re8 — Black readies the …e5 break against your London KID-setup. Keep your shape: tuck the bishop back to h2 so it survives on the b8-h2 diagonal, meet …e5 by trading, and your Bh2-and-Bd3 battery keeps aiming at the king. The London reaches the same comfortable structure every game — now you play for the kingside.", sayShort: "…Re8 — Bh2, meet …e5, eye the king" },
+  beats: [
+    { atMove: 17, say: "…Re8 backs up the coming …e5 break, Black's main freeing try in this structure. You don't prevent it; you prepare to meet it and keep your pieces pointed at the king.", sayShort: "…Re8 — Black readies …e5", highlights: [_H('e5', KEY)] },
+    { atMove: 18, say: "Bh2 — slip the bishop back so it lives on the b8-h2 diagonal whatever Black does. This is the London's whole idea: the dark-squared bishop never gets traded off cheaply and keeps glaring at h7.", sayShort: "Bh2 — save the diagonal bishop", arrows: [_A('h2', 'b8', ATK)], highlights: [_H('h2', KEY)] },
+    { atMove: 19, say: "…e5 — Black strikes for freedom. Welcome it: opening the centre suits your better-placed pieces, and the Bh2 bishop's diagonal springs to life as the pawns clear.", sayShort: "…e5 — let the centre open", highlights: [_H('e5', KEY)] },
+    { atMove: 21, say: "dxe5 — trade and the position opens with your battery primed: Bh2 and Be2/Bd3 aimed at the kingside, Ne5 and a queen lift to come. The London delivers its reliable, comfortable middlegame pull.", sayShort: "dxe5 — open, battery primed", highlights: [_H('e5', KEY), _H('h2', KEY)] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
 };
 
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
@@ -2355,7 +2392,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'london-system::0::Qb6@9': C75,
   'london-system::0::b6@15': TLON,
   'london-system::0::a6@11': C75,
-  'london-system::1::Re8@17': C76,
+  'london-system::1::Re8@17': WLONRE8,
   'london-system::1::c5@17': C76,
   'london-system::1::Ne4@17': C76,
   'london-system::1::Nh5@17': C76,
@@ -2529,7 +2566,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'old-indian-defence::3::dxe5@14': C90,
   'old-indian-defence::3::Nf3@4': C87,
   'old-indian-defence::3::Qc2@14': C90,
-  'old-indian-defence::3::e4@8': TOLD,
+  'old-indian-defence::3::e4@8': WOLDE4,
   'old-indian-defence::3::h3@14': C90,
   'old-indian-defence::3::Bg5@14': C90,
   'old-indian-defence::3::Re1@14': C90,
@@ -2584,7 +2621,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'english-opening::2::Re8@11': C92,
   'english-opening::2::Bxc3@11': C92,
   'english-opening::2::d5@11': C91,
-  'english-opening::2::d5@7': TENG,
+  'english-opening::2::d5@7': WENGREVD,
   'english-opening::2::h6@11': C92,
   'english-opening::2::a6@11': C92,
   'english-opening::2::Bc5@7': C92,
@@ -2653,7 +2690,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'reti-opening::1::h6@13': C97,
   'reti-opening::1::Nxe4@19': C97,
   'reti-opening::1::Re8@13': C97,
-  'reti-opening::1::dxc4@11': TRETI,
+  'reti-opening::1::dxc4@11': WRETIDXC,
   'reti-opening::1::Ne4@13': C97,
   'reti-opening::1::dxc4@9': C98,
   'reti-opening::2::Be7@9': C98,
@@ -2772,7 +2809,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'kings-indian-attack::5::Nf6@5': C104,
   'kings-indian-attack::5::Qc7@15': C102,
   'kings-indian-attack::5::Ba6@19': C106,
-  'kings-indian-attack::5::e5@7': TKIA,
+  'kings-indian-attack::5::e5@7': WKIAE5,
   'kings-indian-attack::5::Qc7@13': C102,
   'kings-indian-attack::5::d4@19': C106,
   'kings-indian-attack::6::Nbd7@11': C103,
