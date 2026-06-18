@@ -735,7 +735,6 @@ export function PlayableLinePlayer({
           pgn: line.moves.slice(0, Math.max(0, demoMoveIndex + 1)).join(' '),
           playerColor: boardOrientation,
         }}
-        onChatOpenChange={(open) => { if (open && isPlaying) togglePlayPause(); }}
       />
     );
   }

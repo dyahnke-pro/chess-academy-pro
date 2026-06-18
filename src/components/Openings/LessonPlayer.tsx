@@ -292,11 +292,6 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
         pgn: beat.moves.join(' '),
         playerColor: orientation,
       }}
-      onChatOpenChange={(open) => {
-        // Pause the auto-playing lesson while the student is asking, so the
-        // narration doesn't talk over the chat (David 2026-06-18).
-        if (open && isAutoPlaying) toggleAutoPlay();
-      }}
       footer={
         atEnd && onContinueToNext ? (
           <button

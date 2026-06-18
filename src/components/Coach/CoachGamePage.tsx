@@ -4284,7 +4284,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   }
 
   return (
-    <div className="flex flex-col md:flex-row h-full overflow-y-auto md:overflow-hidden pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-0" data-testid="coach-game-page">
+    <div className="flex flex-col md:flex-row h-full overflow-x-hidden overflow-y-auto md:overflow-hidden pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-0" data-testid="coach-game-page">
       {/* Left column: board + controls. On mobile the OUTER container
           scrolls (flex-col), so this column flows at its natural height;
           on desktop (md:flex-row) it's a fixed 3/5 column that scrolls

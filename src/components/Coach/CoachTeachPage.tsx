@@ -3663,7 +3663,7 @@ export function CoachTeachPage(): JSX.Element {
 
   return (
     <div
-      className="relative flex flex-col md:flex-row h-full overflow-y-auto md:overflow-hidden pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-0"
+      className="relative flex flex-col md:flex-row h-full overflow-x-hidden overflow-y-auto md:overflow-hidden pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-0"
       data-testid="coach-teach-page"
     >
       {/* In-page middlegame plan (David 2026-05-29). When the student
@@ -4120,7 +4120,12 @@ export function CoachTeachPage(): JSX.Element {
           intervening chrome — the input sits flush against the board
           so the student can type without scrolling. Older messages
           scroll DOWN. */}
-      <div className="flex flex-col flex-1 md:w-2/5 min-h-0 border-t md:border-t-0 md:border-l border-theme-border bg-theme-bg">
+      {/* `flex-none min-h-[60vh]` on mobile so the chat column keeps a real,
+          usable height instead of collapsing to zero — `flex-1` made it shrink
+          to fit the fixed-height parent, so the whole page never overflowed
+          and couldn't scroll (David 2026-06-18 "can't scroll down in learn
+          with coach"; same fix as #733 for /coach/play). */}
+      <div className="flex flex-col flex-none md:flex-1 md:w-2/5 min-h-[60vh] md:min-h-0 border-t md:border-t-0 md:border-l border-theme-border bg-theme-bg">
         {/* Pinned input — first thing under the board. */}
         <div className="border-b border-theme-border">
           <ChatInput
