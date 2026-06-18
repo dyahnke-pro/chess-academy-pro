@@ -1193,7 +1193,88 @@ const WNIME3: SublineNarration = {
   sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
 };
 
+// WAVE WQIDNC3 :: 7 keys
+const WQIDNC3: SublineNarration = {
+  intro: { say: "Nc3 — White slides toward Nimzo territory, and you are happy to follow. Answer …Bb4, pinning the knight that guards e4, and you reach a comfortable, well-charted structure: fracture White's c-pawns with …Bxc3, or hold the pin and strike the centre. The Queen's Indian and the Nimzo are sisters — whichever way White turns, you are at home.", sayShort: "Nc3 — transpose: pin with …Bb4" },
+  beats: [
+    { atMove: 4, say: "Nc3 develops the knight to its Nimzo square, guarding e4. That invites the pin — and you take the invitation.", sayShort: "Nc3 — the Nimzo invitation", highlights: [_H('c3', KEY)] },
+    { atMove: 5, say: "…Bb4 pins the c3-knight against the king, and because that knight is the guardian of e4 you are already fighting for the key central light square. Trade it off to wreck White's pawns, or keep the pin and squeeze.", sayShort: "…Bb4 — pin c3, fight for e4", arrows: [_A('b4', 'c3', ATK)], highlights: [_H('c3', KEY), _H('e4', KEY)] },
+    { atMove: 6, say: "e3 — the Rubinstein, solid and non-committal. You keep the pin biting and develop in comfort, with no premature commitments to undo.", sayShort: "e3 — flexible; keep the pin", highlights: [_H('c3', KEY)] },
+    { atMove: 7, say: "…O-O — tuck the king away and prepare your plan: …c5 and …d5 to hit the centre, or …Bxc3 to double White's pawns and grind. Either road is an easy, equal game.", sayShort: "…O-O — castle, then strike", highlights: [_H('c3', KEY)] },
+  ],
+  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense'],
+};
+// WAVE WQIDA3 :: 6 keys
+const WQIDA3: SublineNarration = {
+  intro: { say: "a3 — the Petrosian, White spending a tempo to rule out …Bb4 before he plays Nc3. No matter: complete the …Bb7 and …d5 setup, and the eventual cxd5 lets you fight for the centre with the knight recapture and …c5. White's little a3 is a small loosening you will target on the queenside later.", sayShort: "a3 Petrosian — develop …Bb7, break …d5" },
+  beats: [
+    { atMove: 6, say: "a3 pre-empts your …Bb4 pin, but it costs White a tempo and does nothing for his development. Carry on with your own plan.", sayShort: "a3 — a slow, useful-to-you move", highlights: [_H('b4', KEY)] },
+    { atMove: 7, say: "…Bb7 takes the long diagonal, mirroring White's structure and fighting for e4 and the light squares. This is the Queen's Indian's calm, control-based heart.", sayShort: "…Bb7 — fight the long diagonal", arrows: [_A('b7', 'e4', ATK)], highlights: [_H('e4', KEY)] },
+    { atMove: 8, say: "Nc3 — White finally develops the knight. Now …d5 challenges the centre, and after cxd5 you recapture and meet the game on equal terms, with the a3-weakness to nag later.", sayShort: "Nc3 — answer with …d5", highlights: [_H('d5', KEY)] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense'],
+};
+// WAVE WKIDMAIN :: 1 keys
+const WKIDMAIN: SublineNarration = {
+  intro: { say: "Nc3 — White heads into the main King's Indian, building the broad d4-e4 centre. Nothing fancy is needed: complete the fianchetto, play …d6 and castle, then strike with the thematic …e5. Once the centre locks, the King's Indian race is on — your kingside pawn storm against White's queenside expansion.", sayShort: "Nc3 — main KID: …d6, …O-O, …e5" },
+  beats: [
+    { atMove: 4, say: "Nc3 develops toward the big centre — the main-line King's Indian. You welcome it: the bigger White builds, the more you will have to strike at.", sayShort: "Nc3 — the main line", highlights: [_H('c3', KEY)] },
+    { atMove: 5, say: "…Bg7 completes the fianchetto, the bishop glaring down the long diagonal toward d4 and the centre White is erecting. Everything you do orbits this bishop.", sayShort: "…Bg7 — the long-diagonal bishop", arrows: [_A('g7', 'd4', ATK)], highlights: [_H('d4', KEY)] },
+    { atMove: 6, say: "e4 — White claims the broad centre. Don't be impressed; the King's Indian invites exactly this so you can blow it open with …e5 once you are castled.", sayShort: "e4 — the centre you'll strike", highlights: [_H('e4', KEY)] },
+    { atMove: 7, say: "…d6 props the e5-break to come and opens the bishop's path. Next you castle, then …e5 lights the fuse: the centre locks and the kingside storm begins.", sayShort: "…d6 — prepare the …e5 break", highlights: [_H('e5', KEY)] },
+  ],
+  sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
+};
+// WAVE WBUDRUB :: 1 keys
+const WBUDRUB: SublineNarration = {
+  intro: { say: "Nf3 — the main-line Budapest, White holding the extra e5-pawn and developing. You set about winning it straight back: …Bc5 trains the bishop on f2 beside White's king, and …Nc6 with …Ngxe5 reclaims the pawn. Your pieces leap out faster than White can untangle — a lively, fully equal game.", sayShort: "Nf3 — …Bc5 and …Nc6 regain e5" },
+  beats: [
+    { atMove: 6, say: "Nf3 develops and bolsters the e5-pawn White is clinging to. Fine — you'll win it back with interest while your pieces spring to active squares.", sayShort: "Nf3 — props the e5-pawn", highlights: [_H('e5', KEY)] },
+    { atMove: 7, say: "…Bc5 — straight to the bishop's dream diagonal, drilling toward f2, the tender square beside White's uncastled king. Even as you chase the pawn, the bishop already eyes the weak point.", sayShort: "…Bc5 — aim the bishop at f2", arrows: [_A('c5', 'f2', ATK)], highlights: [_H('f2', KEY)] },
+    { atMove: 9, say: "…Nc6 develops with a direct hit on the e5-pawn. With …Ngxe5 coming you regain the material and reach a lively, equal middlegame where your activity answers White's small space.", sayShort: "…Nc6 — hit e5, regain the pawn", arrows: [_A('c6', 'e5', ATK)], highlights: [_H('e5', KEY)] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
+};
+// WAVE WBUDADL :: 1 keys
+const WBUDADL: SublineNarration = {
+  intro: { say: "Be3 — in the Adler, White props his big e4-f4 centre and develops. You have already regrouped the knight to e5 and back; now …Bb4+ develops with check, dragging a piece in front of the king and gaining a tempo while you target the over-extended pawns on d4, e4 and f4.", sayShort: "Be3 — …Bb4+ develops with check" },
+  beats: [
+    { atMove: 10, say: "Be3 braces White's broad pawn front. It looks imposing, but those pawns on e4 and f4 are over-extended — your pieces, not your pawns, will pull them apart.", sayShort: "Be3 — the centre is over-extended", highlights: [_H('e4', KEY), _H('f4', KEY)] },
+    { atMove: 11, say: "…Bb4+ — develop with check, forcing White to block and spending his tempo for him. You gain time to pile onto the loose centre while his king lingers in the middle.", sayShort: "…Bb4+ — develop, gain a tempo", arrows: [_A('b4', 'e1', ATK)], highlights: [_H('e1', KEY)] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
+};
+// WAVE WDUTLEN :: 1 keys
+const WDUTLEN: SublineNarration = {
+  intro: { say: "c4 — White grabs central space against your Leningrad Dutch. Stay on plan: complete the King's-Indian-style fianchetto, castle, and prepare the thematic …d6 and …e5 break. Your g7-bishop and the …f5-pawn both point at White's centre and kingside — once you strike with …e5 the position opens in your favour.", sayShort: "c4 — fianchetto, then …d6 and …e5" },
+  beats: [
+    { atMove: 6, say: "c4 stakes out space, the broadest anti-Leningrad setup. Don't react nervously; your plan is fixed and your pieces are coming to their best squares.", sayShort: "c4 — White grabs space", highlights: [_H('c4', KEY)] },
+    { atMove: 7, say: "…Bg7 completes the fianchetto, the bishop raking the long diagonal toward d4. Combined with the …f5-pawn it trains real fire on White's centre and kingside.", sayShort: "…Bg7 — rake the long diagonal", arrows: [_A('g7', 'd4', ATK)], highlights: [_H('d4', KEY)] },
+    { atMove: 8, say: "Nc3 — White develops. You castle and prepare …d6 and the …e5 break that is the Leningrad's whole point; when it lands, the long diagonal opens and your attack flows.", sayShort: "Nc3 — castle, prepare …e5", highlights: [_H('e5', KEY)] },
+  ],
+  sources: ['book:dutch-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+// WAVE WQGDCAR :: 7 keys
+const WQGDCAR: SublineNarration = {
+  intro: { say: "cxd5 — White clarifies into the Carlsbad, the Exchange QGD. Expect the minority attack, b4-b5 against your c6-pawn — so don't sit and suffer it. Develop solidly behind …c6 and …Be7, then answer queenside play with central energy: …Ne4 and …f5, turning the game toward White's king while he chips at your pawns.", sayShort: "cxd5 — Carlsbad; counter with …f5" },
+  beats: [
+    { atMove: 6, say: "cxd5 trades into the Carlsbad pawn skeleton, signalling the minority attack to come. You meet a plan on the queenside with a plan on the kingside.", sayShort: "cxd5 — into the Carlsbad", highlights: [_H('d5', KEY)] },
+    { atMove: 8, say: "Bg5 pins your f6-knight against the queen, the standard developing jab. Prepare …Be7 to break it, and complete your solid Carlsbad setup with no weaknesses.", sayShort: "Bg5 — pins f6; meet with …Be7", arrows: [_A('g5', 'd8', ATK)], highlights: [_H('f6', KEY)] },
+    { atMove: 9, say: "…c6 locks the Carlsbad structure. That pawn is White's minority-attack target — so plan your counter now: …Ne4 and …f5 throw the game toward his king before b4-b5 can bite.", sayShort: "…c6 — plan the …f5 counter", highlights: [_H('c6', KEY)] },
+    { atMove: 11, say: "…Be7 breaks the pin and readies castling. You have a rock-solid Carlsbad with the kingside counterplay queued up; meet White's queenside push by attacking where you are strongest.", sayShort: "…Be7 — unpin, then attack kingside", highlights: [_H('f6', KEY)] },
+  ],
+  sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
+  'queens-indian::0::Nc3@4': WQIDNC3,
+  'queens-indian::1::Nc3@4': WQIDNC3,
+  'queens-indian::2::Nc3@4': WQIDNC3,
+  'queens-indian::3::Nc3@4': WQIDNC3,
+  'queens-indian::4::Nc3@4': WQIDNC3,
+  'queens-indian::5::Nc3@4': WQIDNC3,
+  'queens-indian::6::Nc3@4': WQIDNC3,
+  'kings-indian-defence::4::Nc3@4': WKIDMAIN,
   'nimzo-indian::3::Bxf6@8': WNIMBXF,
   'slav-defence::3::Nc3@6': WSLNC3,
   'slav-defence::7::Nc3@6': WSLNC3,
@@ -1277,7 +1358,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'queens-gambit::7::Nc6@9': C6,
   'queens-gambit::7::dxc4@9': C6,
   // ── qgd ──
-  'qgd::0::cxd5@6': C7,
+  'qgd::0::cxd5@6': WQGDCAR,
   'qgd::0::Nf3@6': C8,
   'qgd::0::Qc2@12': C8,
   'qgd::0::Nf3@8': C8,
@@ -1287,7 +1368,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'qgd::0::Rc1@10': C8,
   'qgd::0::Ne4@20': C8,
   'qgd::0::Qc2@14': C8,
-  'qgd::1::cxd5@6': C7,
+  'qgd::1::cxd5@6': WQGDCAR,
   'qgd::1::Nf3@6': C8,
   'qgd::1::Be2@14': C8,
   'qgd::1::Bd3@14': C8,
@@ -1297,7 +1378,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'qgd::1::cxd5@8': C7,
   'qgd::1::Qb3@14': C8,
   'qgd::1::Qc2@14': C8,
-  'qgd::2::cxd5@6': C7,
+  'qgd::2::cxd5@6': WQGDCAR,
   'qgd::2::Nf3@6': C8,
   'qgd::2::Rc1@16': C8,
   'qgd::2::Nf3@8': C8,
@@ -1317,7 +1398,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'qgd::3::Bg5@6': C8,
   'qgd::3::Nf3@6': C8,
   'qgd::3::O-O-O@18': C9,
-  'qgd::4::cxd5@6': C7,
+  'qgd::4::cxd5@6': WQGDCAR,
   'qgd::4::Bg5@6': C8,
   'qgd::4::cxd5@8': C11,
   'qgd::4::Qa4+@8': C11,
@@ -1329,7 +1410,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'qgd::4::Qxd4@14': C11,
   'qgd::5::Bb3@12': C8,
   'qgd::5::Be2@12': C8,
-  'qgd::5::cxd5@6': C7,
+  'qgd::5::cxd5@6': WQGDCAR,
   'qgd::5::a3@14': C8,
   'qgd::5::a3@16': C8,
   'qgd::5::Bg5@6': C8,
@@ -1337,7 +1418,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'qgd::5::e4@14': C8,
   'qgd::5::Qc2@14': C8,
   'qgd::5::Qe2@16': C8,
-  'qgd::6::cxd5@6': C7,
+  'qgd::6::cxd5@6': WQGDCAR,
   'qgd::6::Nf3@6': C8,
   'qgd::6::cxd5@10': C9,
   'qgd::6::cxd5@12': C9,
@@ -1348,7 +1429,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'qgd::6::Rc1@14': C11,
   'qgd::6::a3@16': C11,
   'qgd::7::Bd3@10': C8,
-  'qgd::7::cxd5@6': C7,
+  'qgd::7::cxd5@6': WQGDCAR,
   'qgd::7::c5@10': C10,
   'qgd::7::h3@10': C8,
   'qgd::7::cxd5@10': C7,
@@ -1630,7 +1711,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'nimzo-indian::7::Re1@18': C26,
   // ── queens-indian ──
   'queens-indian::0::g3@4': C32,
-  'queens-indian::0::a3@6': C33,
+  'queens-indian::0::a3@6': WQIDA3,
   'queens-indian::0::Nc3@6': C34,
   'queens-indian::0::e3@6': C34,
   'queens-indian::0::Nc3@10': C32,
@@ -1649,7 +1730,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'queens-indian::1::Bf4@8': C33,
   'queens-indian::2::g3@6': DQID,
   'queens-indian::2::g3@4': C32,
-  'queens-indian::2::a3@6': C33,
+  'queens-indian::2::a3@6': WQIDA3,
   'queens-indian::2::e3@6': C34,
   'queens-indian::2::Bg5@10': C33,
   'queens-indian::2::Bg5@8': C34,
@@ -1657,7 +1738,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'queens-indian::2::Bd2@12': C33,
   'queens-indian::2::Qc2@10': C33,
   'queens-indian::3::g3@4': C32,
-  'queens-indian::3::a3@6': C33,
+  'queens-indian::3::a3@6': WQIDA3,
   'queens-indian::3::Nc3@6': C34,
   'queens-indian::3::e3@6': C34,
   'queens-indian::3::Nbd2@10': C32,
@@ -1666,7 +1747,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'queens-indian::3::b4@22': C32,
   'queens-indian::3::Rad1@22': C32,
   'queens-indian::4::g3@4': C32,
-  'queens-indian::4::a3@6': C33,
+  'queens-indian::4::a3@6': WQIDA3,
   'queens-indian::4::Nc3@6': C34,
   'queens-indian::4::e3@6': C34,
   'queens-indian::4::Bd2@14': C32,
@@ -1676,7 +1757,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'queens-indian::4::d5@12': C32,
   'queens-indian::5::g3@4': C32,
   'queens-indian::5::b3@8': C35,
-  'queens-indian::5::a3@6': C33,
+  'queens-indian::5::a3@6': WQIDA3,
   'queens-indian::5::Nc3@6': C34,
   'queens-indian::5::Qc2@8': C35,
   'queens-indian::5::e3@6': C34,
@@ -1687,7 +1768,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'queens-indian::6::g3@4': C32,
   'queens-indian::6::b3@14': C34,
   'queens-indian::6::Re1@14': C34,
-  'queens-indian::6::a3@6': C33,
+  'queens-indian::6::a3@6': WQIDA3,
   'queens-indian::6::Qe2@14': C34,
   'queens-indian::6::a3@14': C33,
   'queens-indian::6::Nc3@10': C34,
@@ -2015,10 +2096,10 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'budapest-gambit::4::e3@4': C60,
   'budapest-gambit::4::Nf3@4': C59,
   'budapest-gambit::4::Bf4@6': DBUD,
-  'budapest-gambit::4::Nf3@6': C59,
+  'budapest-gambit::4::Nf3@6': WBUDRUB,
   'budapest-gambit::4::e3@6': C59,
   'budapest-gambit::4::Kf2@14': C62,
-  'budapest-gambit::4::Be3@10': C63,
+  'budapest-gambit::4::Be3@10': WBUDADL,
   'budapest-gambit::4::Nf3@10': C63,
   'budapest-gambit::5::Nc3@4': C59,
   'budapest-gambit::5::e3@4': C60,
@@ -2081,7 +2162,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'dutch-defence::4::Nf3@4': C64,
   'dutch-defence::4::c4@4': C64,
   'dutch-defence::4::b3@10': C64,
-  'dutch-defence::4::c4@6': C64,
+  'dutch-defence::4::c4@6': WDUTLEN,
   'dutch-defence::4::Nh3@6': C68,
   'dutch-defence::4::c4@8': C64,
   'dutch-defence::4::c3@6': C64,
