@@ -2590,16 +2590,47 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'schliemann-defence::2::d4@6': SCH_D4,
 
   // -- Danish Gambit --
-  'danish-gambit::0::Nf6@9': DAN_MAIN,
-  'danish-gambit::0::d6@9': DAN_MAIN,
-  'danish-gambit::0::Bc5@9': DAN_MAIN,
+  'danish-gambit::0::Nf6@9': { ...DAN_MAIN, beats: [
+    { atMove: 9, say: "Nf6 develops, but for a pawn you're miles ahead in firepower — two raking bishops and a lead in development. Pour it in: Nf3 and Bg5 to pin while the c4-bishop glares at f7.", sayShort: "Nf6 — develop, Bg5 to pin.", arrows: [A('c4', 'f7')], highlights: [H('f7', KEY)] },
+    { atMove: 14, say: "e5! the pawn punches forward, kicking the f6-knight to the rim and clamping the centre while your bishops bear down on Black's king.", sayShort: "e5 — kick the knight, clamp.", arrows: [A('e5', 'f6')], highlights: [H('f6', ATK)] },
+    { atMove: 16, say: "Bxe7 trades off into a pleasant pull — you've recouped material and kept the freer game, the bishop pair's pressure and faster development worth every bit of the gambit pawn.", sayShort: "Bxe7 — keep the freer game.", highlights: [H('f7', SOFT)] },
+  ] },
+  'danish-gambit::0::d6@9': { ...DAN_MAIN, beats: [
+    { atMove: 9, say: "d6 shores up the centre and clings to the extra pawn — the Danish is a true gambit, so play for activity, not the pawn count. Aim the knight at the d5 outpost.", sayShort: "d6 — play for activity, eye d5.", highlights: [H('d5', KEY)] },
+    { atMove: 14, say: "Nd5 plants the knight on a dominant central outpost, eyeing c7 and f6 and daring Black to spend tempi dislodging it. Your pieces stay forward and active for the pawn.", sayShort: "Nd5 — dominant central outpost.", arrows: [A('d5', 'c7')], highlights: [H('d5', KEY)] },
+    { atMove: 16, say: "Nf3 finishes developing; you're fully mobilised with both bishops raking the board while Black still untangles. The pawn is gone, but the initiative and piece activity are real compensation — keep pressing.", sayShort: "Nf3 — fully mobilised, keep pressing.", highlights: [H('d5', SOFT)] },
+  ] },
+  'danish-gambit::0::Bc5@9': { ...DAN_MAIN, beats: [
+    { atMove: 9, say: "Bc5 develops actively — but it walks straight into a thunderbolt. Bxf7+! the bishop crashes through the king's door.", sayShort: "Bc5 — answer Bxf7+!", arrows: [A('c4', 'f7')], highlights: [H('f7', ATK)] },
+    { atMove: 10, say: "Bxf7+ — the sacrifice rips the king out. After Kxf7 the queen leaps to h5 with check, forking the exposed king and the loose c5-bishop in one stroke.", sayShort: "Bxf7+ — rip open the king.", arrows: [A('f7', 'e8')], highlights: [H('e8', ATK)] },
+    { atMove: 12, say: "Qh5+ — the point. The king must shuffle to f8, and now Qxc5+ snaps off the bishop with check. You regain the material and shred Black's castling rights.", sayShort: "Qh5+ — then Qxc5+ wins it back.", arrows: [A('h5', 'c5')], highlights: [H('c5', ATK)] },
+    { atMove: 14, say: "Qxc5+ scoops the bishop with check — you've recouped the material and left Black's king marooned on f8 with no shelter. The gambit has paid in full.", sayShort: "Qxc5+ — material back, king bare.", highlights: [H('c5', KEY)] },
+  ] },
   'danish-gambit::0::Ne5@9': DAN_MAIN,
-  'danish-gambit::0::Nf6@13': { ...DAN_BB4, beats: [{ atMove: 13, say: "Nf6 develops, but you're flying — castled, both bishops raking, the c4-bishop already on f7. Pile in: e5 to kick the knight, or Bg5 and the rooks down the open files. Your initiative is worth the pawn many times over.", sayShort: "Nf6 — pile in: e5 or Bg5.", arrows: [A('c4', 'f7')], highlights: [H('f7', KEY)] }] },
-  'danish-gambit::0::Bg4@13': { ...DAN_BB4, beats: [{ atMove: 13, say: "Bg4 pins your f3-knight — no bother. Your bishops blaze: c4 at f7, and with Qb3 you double on f7 and b7 in one stroke. The pin is a trifle against your roaring development; keep developing and attack.", sayShort: "Bg4 — Qb3 doubles on f7.", arrows: [A('c4', 'f7')], highlights: [H('f7', KEY)] }] },
-  'danish-gambit::0::Bg4@15': { ...DAN_BB4, beats: [{ atMove: 15, say: "Bg4 pins the knight, but bxc3 handed you the gift: a half-open b-file at b7 and a towering centre. Hit b7 with Qb3 or Rb1, roll d5, and the open lines reach Black's king long before the pawn count matters.", sayShort: "Bg4 — hit b7, roll the centre.", arrows: [A('c4', 'f7')], highlights: [H('b7', KEY), H('d4', SOFT)] }] },
-  'danish-gambit::0::Be6@15': { ...DAN_BB4, beats: [{ atMove: 15, say: "Be6 challenges your prized bishop — don't trade tamely. Bxe6 fxe6 wrecks Black's kingside and rips open the f-file for your rook, or Bd3 keeps the bishop aimed at h7. The half-open b-file and the big centre keep the attack alive.", sayShort: "Be6 — Bxe6 wrecks his kingside.", highlights: [H('e6', KEY), H('b7', SOFT)] }] },
-  'danish-gambit::0::h6@17': { ...DAN_BB4, beats: [{ atMove: 17, say: "h6 questions your g5-bishop — answer with purpose. Bxf6 doubles Black's pawns and bares his king, or Bh4 keeps the pin. With the open b-file, the c4-bishop and your broad centre, the initiative rolls on either way.", sayShort: "h6 — Bxf6 doubles and bares him.", arrows: [A('g5', 'f6')], highlights: [H('f6', KEY)] }] },
-  'danish-gambit::0::Be6@13': { ...DAN_BB4, beats: [{ atMove: 13, say: "Be6 offers to swap your attacking bishop — sidestep with Bd3 or Bb3, keeping it trained on Black's kingside. You're castled and developed for the price of a pawn; hold the bishop and keep the pieces pouring at the king.", sayShort: "Be6 — keep the bishop: Bd3 or Bb3.", arrows: [A('c4', 'd3')], highlights: [H('e6', KEY)] }] },
+  'danish-gambit::0::Nf6@13': { ...DAN_BB4, beats: [
+    { atMove: 13, say: "Nf6 develops, but you're flying — castled, both bishops raking, the c4-bishop already on f7. The knight on d5 and Bg5 begin the kingside assault.", sayShort: "Nf6 — start the assault, Nd5.", arrows: [A('c4', 'f7')], highlights: [H('f7', KEY)] },
+    { atMove: 16, say: "Bg5 pins the f6-knight and prepares Bxf6 to smash Black's kingside; with the knight on d5 and the queen swinging to h6, your attack crashes through for the pawn.", sayShort: "Bg5 — pin, then Bxf6 and Qh6.", arrows: [A('g5', 'f6')], highlights: [H('f6', ATK)] },
+  ] },
+  'danish-gambit::0::Bg4@13': { ...DAN_BB4, beats: [
+    { atMove: 13, say: "Bg4 pins your f3-knight — no bother. Your bishops blaze, the c4-bishop on f7, and the queen is about to join with crushing effect.", sayShort: "Bg4 — ignore it, attack.", arrows: [A('c4', 'f7')], highlights: [H('f7', KEY)] },
+    { atMove: 14, say: "Qb3 — the queen storms in, raking down the b-file at b7 while adding a second attacker behind the bishop on f7. Black can't cover both; the gambit's initiative breaks through.", sayShort: "Qb3 — hit b7 and pile on f7.", arrows: [A('b3', 'b7')], highlights: [H('b7', ATK)] },
+  ] },
+  'danish-gambit::0::Bg4@15': { ...DAN_BB4, beats: [
+    { atMove: 15, say: "Bg4 pins the knight, but bxc3 handed you a half-open b-file at b7 and a towering centre. The pin is a trifle against your roaring lines.", sayShort: "Bg4 — ignore it, hit b7.", arrows: [A('c4', 'f7')], highlights: [H('b7', KEY), H('d4', SOFT)] },
+    { atMove: 16, say: "Qb3 — the queen swings to the b-file, hammering b7 and joining the bishop's pressure on f7. The open lines reach Black's king long before the pawn count ever matters.", sayShort: "Qb3 — hammer b7 and f7.", arrows: [A('b3', 'b7')], highlights: [H('b7', ATK)] },
+  ] },
+  'danish-gambit::0::Be6@15': { ...DAN_BB4, beats: [
+    { atMove: 15, say: "Be6 challenges your prized bishop — don't trade tamely on his terms; take it on yours. Bxe6 forces …fxe6 and wrecks Black's kingside structure.", sayShort: "Be6 — answer Bxe6.", highlights: [H('e6', KEY)] },
+    { atMove: 17, say: "…fxe6 leaves Black's kingside pawns shattered and the f-file half-open at his king. Pile your rook onto f-file, hit b7 with the queen, and the gambit's initiative rolls on.", sayShort: "…fxe6 — shattered king, open f-file.", highlights: [H('e6', SOFT), H('b7', SOFT)] },
+  ] },
+  'danish-gambit::0::h6@17': { ...DAN_BB4, beats: [
+    { atMove: 17, say: "h6 questions your g5-bishop — answer with purpose. Keep the pin alive with Bh4, refusing to release the pressure on f6.", sayShort: "h6 — keep the pin, Bh4.", arrows: [A('g5', 'f6')], highlights: [H('f6', KEY)] },
+    { atMove: 18, say: "Bh4 maintains the pin on the f6-knight; with the c4-bishop on f7, the open b-file and your broad centre, Black's …h6 only made a target. Keep the pieces pouring in.", sayShort: "Bh4 — hold the pin, keep attacking.", arrows: [A('h4', 'f6')], highlights: [H('f6', ATK)] },
+  ] },
+  'danish-gambit::0::Be6@13': { ...DAN_BB4, beats: [
+    { atMove: 13, say: "Be6 offers to swap your attacking bishop — but you've a sharper idea than trading. Nd5! leaps to the central outpost with tempo.", sayShort: "Be6 — answer Nd5!", highlights: [H('e6', KEY)] },
+    { atMove: 14, say: "Nd5 lands on the dominant outpost, hitting the b4-bishop and c7. When Black deals with it, Ng5 and Qxf7 crash into the king — the attack is worth far more than the pawn.", sayShort: "Nd5 — outpost, then Ng5 and Qxf7.", arrows: [A('d5', 'b4')], highlights: [H('b4', ATK)] },
+  ] },
   // -- Stafford Gambit --
   'stafford-gambit::0::Nc3@8': STAF_ACCEPTED,
   'stafford-gambit::0::Be2@10': STAF_ACCEPTED,
