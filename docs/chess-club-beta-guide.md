@@ -5,6 +5,8 @@ openings, sharpens your tactics, plays you, and reviews your real games —
 then tells you precisely what to fix next. A coach named Ruth talks you
 through all of it out loud.
 
+**Watch. Learn. Identify your weaknesses. Drill them shut.**
+
 The promise under the hood: **a real engine (Stockfish) and a real master
 database do the chess; the AI only translates it into plain English.** The
 advice is grounded, never invented.
@@ -28,7 +30,8 @@ back through your mistakes.
 **🎯 Tactics**
 Puzzle training that adapts as you improve — plus puzzle rushes,
 opening-trap drills, and targeted sets on whatever pattern (forks, pins,
-back-rank…) you're weakest at.
+back-rank…) you're weakest at. It can even turn your own live in-game
+mistakes into custom puzzles, so you drill the exact position you blew.
 
 **⚠️ Weaknesses**
 Link your Chess.com or Lichess account (or import games) and it analyzes
