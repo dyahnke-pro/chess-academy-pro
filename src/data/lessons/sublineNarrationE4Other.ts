@@ -5108,146 +5108,281 @@ const N595: SublineNarration = {
 
 const N596: SublineNarration = {
   intro: { say: "…Bd7 — Black connects the back rank and prepares …Rc8 to contest the c-file. Your machine is fully in place: bishop on c4 at f7, knight on c3 ready for d5 or b5, rook on d1 against the d6-pawn, queen on e2 holding e4. Bring the last rook to c1 and keep the pieces pointing at the king before Black coordinates — the initiative is your compensation, not the pawn.", sayShort: "…Bd7 — fight for the c-file" },
+  beats: [
+    { atMove: 18, say: "Bf4 develops with tempo, training on the d6-weakness at the heart of the Morra.", sayShort: "Bf4 — eye d6.", highlights: [H('d6')] },
+    { atMove: 20, say: "Bg5 repositions to pin and pressure, your pieces swarming for the pawn.", sayShort: "Bg5 — pin and pressure.", highlights: [H('g5')] },
+    { atMove: 22, say: "Nb5 leaps toward the d6-outpost, the thematic Morra jump at the weak square.", sayShort: "Nb5 — head for d6.", arrows: [A('b5', 'd6')], highlights: [H('d6')] },
+  ],
   sources: ['concept:pos-open-file', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N597: SublineNarration = {
   intro: { say: "…Be6 — Black offers a trade of light-squared bishops to ease the pressure on f7, with both your rooks on the c- and d-files and the queen on e2. Trade there if you like; the engine of the gambit stays the same — the c-file rook hammers the c6-knight and the backward d6-pawn, and the bishop on e3 eyes the queenside. Your initiative outweighs the pawn as long as Black's pieces stay passive.", sayShort: "…Be6 offers trade — keep the files" },
+  beats: [
+    { atMove: 22, say: "b4 gains queenside space and supports your pieces' pressure for the gambit pawn.", sayShort: "b4 — gain queenside space.", highlights: [H('b4')] },
+    { atMove: 26, say: "Bxe6 trades to open lines at Black's king, your initiative the payment for the pawn.", sayShort: "Bxe6 — open lines.", highlights: [H('e6')] },
+  ],
   sources: ['concept:pos-open-file', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N598: SublineNarration = {
   intro: { say: "…Bg4 — Black has played …e5 to blunt the centre and now pins your f3-knight, hoping to trade an attacker. Ignore the pin and keep building: the rook on d1 stares down the d6-pawn, the queen sits on e2 holding e4, and the bishop on e3 pressures the dark squares. The pin is loose — h3 can question the bishop, and the half-open files keep Black tied to defence.", sayShort: "Meet …Bg4 pin — keep the d-file pressure" },
+  beats: [
+    { atMove: 20, say: "h3 puts the question to the g4-bishop, gaining tempo as your pieces press.", sayShort: "h3 — question the bishop.", arrows: [A('h3', 'g4')], highlights: [H('g4')] },
+    { atMove: 22, say: "Bxe6 trades to open lines at Black's king, your initiative full payment for the pawn.", sayShort: "Bxe6 — open lines at the king.", highlights: [H('e6')] },
+    { atMove: 24, say: "Rac1 piles onto the open c-file, the Morra's heavy pressure on c6 and c7.", sayShort: "Rac1 — the open c-file.", arrows: [A('c1', 'c6')], highlights: [H('c6')] },
+  ],
   sources: ['concept:tac-pin', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N599: SublineNarration = {
   intro: { say: "…Nf6 — Black declines and develops the queen's knight to c6 to hit your d4-pawn, but after e5 kicks the knight to d5 and cxd4 rebuilds, you hold the broad centre on d4 and e4. This declined Morra is played for space rather than a pawn. Play the quiet a3 to take the b4-square from Black's pieces and prepare to expand on the queenside while the centre rolls.", sayShort: "Declined — central space, a3 clamp" },
+  beats: [
+    { atMove: 6, say: "e5 strikes, kicking Black's knight and seizing the centre as the gambit accelerates.", sayShort: "e5 — kick, seize the centre.", highlights: [H('e5')] },
+    { atMove: 12, say: "Bc4 develops the bishop, eyeing f7 and Black's king with the gambit initiative.", sayShort: "Bc4 — aim at f7.", arrows: [A('c4', 'f7')], highlights: [H('f7')] },
+    { atMove: 14, say: "Nxe5 regains the pawn, your pieces dominant and the initiative rolling.", sayShort: "Nxe5 — regain, dominate.", highlights: [H('e5')] },
+  ],
   sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N600: SublineNarration = {
   intro: { say: "O-O — Black castles into the standard accepted-Morra structure, and now every piece points at the king: bishop on c4 at f7, knight on c3 ready for d5, rook on d1 on the d6-pawn, queen on e2 fuelling e4. Keep developing toward the king — a rook to c1, or d5 ideas — rather than rushing to win the pawn back. Black's lack of counterplay is the whole point; your lead in development is the compensation.", sayShort: "Black castles — pile pieces toward f7" },
+  beats: [
+    { atMove: 18, say: "e5 strikes, ripping open the centre against Black's king while your pieces are primed.", sayShort: "e5 — rip open the centre.", highlights: [H('e5')] },
+    { atMove: 22, say: "Nb5 leaps toward the d6-outpost, the Morra's thematic jump at Black's weak square.", sayShort: "Nb5 — head for d6.", arrows: [A('b5', 'd6')], highlights: [H('d6')] },
+  ],
   sources: ['concept:pos-development', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N601: SublineNarration = {
   intro: { say: "…Qa5 — Black swings the queen out, pinning your c3-knight against nothing concrete but eyeing the a5-e1 diagonal and the e5-square. Carry on with the same plan: the rook on d1 pressures d6, the bishop on c4 watches f7, and the knight on c3 still wants d5 where it can't be taken comfortably. Hit that misplaced queen with b4 or Nd5 — the initiative keeps rolling and the gambit pawn stays a fair price.", sayShort: "…Qa5 — target the queen, keep pressing" },
+  beats: [
+    { atMove: 18, say: "Nb5 leaps in with tempo, hitting Black's queen and eyeing the d6-outpost.", sayShort: "Nb5 — hit the queen, eye d6.", arrows: [A('b5', 'd6')], highlights: [H('d6')] },
+    { atMove: 20, say: "exd5 opens the centre, your pieces and open files giving full gambit compensation.", sayShort: "exd5 — open the centre.", highlights: [H('d5')] },
+    { atMove: 22, say: "Bd2 redeploys with tempo on the queen, keeping the initiative rolling.", sayShort: "Bd2 — hit the queen.", highlights: [H('d2')] },
+  ],
   sources: ['concept:pos-initiative', 'concept:tac-double-attack', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N602: SublineNarration = {
   intro: { say: "…Qb6 — Black hops the queen out to hit b2 and f2 and disrupt your smooth setup. Ignore the b2-pawn or guard it and keep the initiative: the rook on d1 presses d6, the bishop on c4 watches f7, and the knight on c3 eyes d5 and b5 hitting the loose queen. The exposed queen on b6 is a target — chase it with Na4 or Be3 with tempo, and your pressure only grows.", sayShort: "…Qb6 hits b2 — chase the queen" },
+  beats: [
+    { atMove: 18, say: "Bf4 develops with tempo, hitting the queen and eyeing the d6-weakness.", sayShort: "Bf4 — hit the queen, eye d6.", highlights: [H('d6')] },
+    { atMove: 20, say: "Bxd6 cashes in on the weak square, winning material as the gambit pressure tells.", sayShort: "Bxd6 — cash in on d6.", highlights: [H('d6')] },
+    { atMove: 22, say: "Rxd6 recaptures with a dominant rook, your initiative converting to a clear edge.", sayShort: "Rxd6 — dominant rook.", highlights: [H('d6')] },
+  ],
   sources: ['concept:pos-initiative', 'concept:tac-double-attack', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N603: SublineNarration = {
   intro: { say: "…Qc7 — Black drops the queen to the natural Morra square, lining up on the c-file, guarding e5 and eyeing the b8-h2 diagonal. Keep the standard machinery: rook on d1 against the d6-pawn, bishop on c4 against f7, knight on c3 ready to jump to d5 or b5. Since Black's queen shares the file with your rook, lean on Nd5 and Nb5 hitting c7 to keep the initiative pressing.", sayShort: "…Qc7 — answer with Nd5/Nb5 ideas" },
+  beats: [
+    { atMove: 18, say: "Bf4 develops with tempo, hitting Black's queen and training on the d6-weakness the gambit targets.", sayShort: "Bf4 — hit the queen, eye d6.", highlights: [H('d6')] },
+    { atMove: 20, say: "Rac1 piles onto the open c-file, the Morra's signature — heavy pressure on c6 and c7 for the pawn.", sayShort: "Rac1 — the open c-file.", arrows: [A('c1', 'c6')], highlights: [H('c6')] },
+    { atMove: 22, say: "Bb3 tucks the bishop safe, keeping it trained on f7 and the a2-g8 diagonal.", sayShort: "Bb3 — keep eyeing f7.", arrows: [A('b3', 'f7')], highlights: [H('f7')] },
+  ],
   sources: ['concept:pos-initiative', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N604: SublineNarration = {
   intro: { say: "…a6 — Black takes the b5-square from your knight and prepares …b5 against the c4-bishop before castling. Don't slow down: the rook on d1 eyes the d6-pawn, the bishop watches f7, and the knight on c3 still has the d5-outpost. Meet …b5 by dropping the bishop to b3 to keep the diagonal alive, and play Rac1 to pile onto the c-file — your lead in development is the lasting compensation.", sayShort: "…a6 readies …b5 — keep developing" },
+  beats: [
+    { atMove: 18, say: "e5 strikes, ripping open the centre against Black's king with your pieces primed.", sayShort: "e5 — rip open the centre.", highlights: [H('e5')] },
+    { atMove: 22, say: "Bd3 redeploys the bishop toward Black's king, your initiative full payment for the pawn.", sayShort: "Bd3 — aim at the king.", arrows: [A('d3', 'h7')], highlights: [H('h7')] },
+  ],
   sources: ['concept:pos-development', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N605: SublineNarration = {
   intro: { say: "…a6 — with both your rooks bearing on the c- and d-files, Black plays …a6 to stop Nb5 and prepare …b5 against the c4-bishop. Keep the squeeze: the rook on c1 hammers the c-file and the c6-knight, the bishop on e3 covers the dark squares, and Bb3 tucks the bishop to safety while keeping the f7 diagonal. Black is solid but passive, and the open files are lasting compensation for the pawn.", sayShort: "…a6 prepares …b5 — hold the files" },
+  beats: [
+    { atMove: 22, say: "h3 makes luft and prepares to keep the bishop pair, your open files pressing.", sayShort: "h3 — luft, keep pressing.", highlights: [H('h3')] },
+    { atMove: 24, say: "Bb3 tucks the bishop safe, trained on f7 and the a2-g8 diagonal.", sayShort: "Bb3 — keep eyeing f7.", arrows: [A('b3', 'f7')], highlights: [H('f7')] },
+  ],
   sources: ['concept:pos-open-file', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N606: SublineNarration = {
   intro: { say: "…Bd7 — in the declined line the d5-knight retreated to b6 to attack your c4-bishop, which sidestepped to b5 to keep pinning the c6-knight, and now Black unpins. Your edge is the e5-pawn cramping Black plus the bishop-pair pressure; after exchanges on c6 or d7 the broad d4-e4 structure remains your trump. Keep the e5-pawn supported and the d-file in mind.", sayShort: "…Bd7 unpins — central clamp stands" },
+  beats: [
+    { atMove: 16, say: "Nc3 develops with a hit on the centre, your pieces swarming for the pawn.", sayShort: "Nc3 — develop, press.", highlights: [H('c3')] },
+    { atMove: 18, say: "Nxe5 regains the pawn, your central knight dominant.", sayShort: "Nxe5 — regain, dominate.", highlights: [H('e5')] },
+    { atMove: 22, say: "O-O tucks the king safe, your active pieces ready to press the open files.", sayShort: "O-O — king safe, press.", highlights: [H('g1')] },
+  ],
   sources: ['concept:pos-center', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N607: SublineNarration = {
   intro: { say: "…Bg4 — Black pins your f3-knight to chip at the support of the e5-pawn and the d4-centre, with the b6-knight and c6-knight already engaged. Meet the pin calmly: Be3, or h3 and Be2 ideas keep the centre intact, and the e5-pawn keeps cramping Black. The declined Morra leaves you the broad d4-e4 centre and freer pieces, so trade into a structure where space tells.", sayShort: "…Bg4 pins f3 — keep e5 centre" },
+  beats: [
+    { atMove: 16, say: "d5 rams the spearhead forward, ripping into Black's position with the gambit fire.", sayShort: "d5 — ram the spearhead.", highlights: [H('d5')] },
+    { atMove: 18, say: "dxc6 crashes through, opening lines and winning back material as the attack lands.", sayShort: "dxc6 — crash through.", highlights: [H('c6')] },
+    { atMove: 20, say: "cxb7 grabs the pawn and the rook in the corner, your breakthrough decisive.", sayShort: "cxb7 — win material.", highlights: [H('b7')] },
+  ],
   sources: ['concept:tac-pin', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N608: SublineNarration = {
   intro: { say: "…a6 — after the d5-knight hit c4 and your bishop dropped to b5, Black questions the pinning bishop at once. Take on c6 to damage Black's structure, or retreat keeping the pin — either way your broad d4-e4 centre and the cramping e5-pawn are the lasting pluses. The declined Morra is about space and freer development, and …a6 spends a tempo that lets you keep building.", sayShort: "…a6 hits the bishop — clamp holds" },
+  beats: [
+    { atMove: 16, say: "Bxc6+ trades to damage Black's structure and open lines for the gambit pressure.", sayShort: "Bxc6+ — damage the structure.", highlights: [H('c6')] },
+    { atMove: 18, say: "Qc2 swings the queen to the open c-file, eyeing c6 and Black's queenside.", sayShort: "Qc2 — the open c-file.", arrows: [A('c2', 'c6')], highlights: [H('c6')] },
+    { atMove: 22, say: "Qxc6+ regains the pawn with check, your initiative converting to a clear edge.", sayShort: "Qxc6+ — regain with check.", highlights: [H('c6')] },
+  ],
   sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N609: SublineNarration = {
   intro: { say: "…a6 — Black has traded down through …dxe5 and the knights on d7 into a calmer declined-Morra structure, and now drives your b5-bishop back. Keep a pleasant pull: the pawn on d4 anchors the centre, the knight on c3 eyes d5, and the half-open d-file gives your rooks a target. With queens still on, your slightly freer development and central space remain the assets even without the gambit pawn.", sayShort: "Simplified declined — central pull stands" },
+  beats: [
+    { atMove: 22, say: "Bxc6 trades to damage Black's structure, opening lines for the gambit pressure.", sayShort: "Bxc6 — damage the structure.", highlights: [H('c6')] },
+    { atMove: 24, say: "Qb3 swings the queen toward f7 and the queenside, building the attack.", sayShort: "Qb3 — aim at f7.", arrows: [A('b3', 'f7')], highlights: [H('f7')] },
+  ],
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N610: SublineNarration = {
   intro: { say: "…d5 — Black tries to free himself with the central thrust, hitting your e4-pawn and challenging the bind, with the b6-knight already on your c4-bishop that moved to b5. Meet it with exd6 en passant to keep the e5-wedge gone but the d-file open, or hold e4 with pieces. Your lead in development and the pin on the c6-knight mean this freeing break opens lines for the better-mobilised side — you.", sayShort: "…d5 break — open lines favour White" },
+  beats: [
+    { atMove: 16, say: "O-O tucks the king safe, your active pieces primed on the open files.", sayShort: "O-O — king safe.", highlights: [H('g1')] },
+    { atMove: 18, say: "Bxc6+ trades to damage Black's structure and open lines for the pressure.", sayShort: "Bxc6+ — damage the structure.", highlights: [H('c6')] },
+    { atMove: 22, say: "Qd2 connects and eyes the open files, your initiative full payment for the pawn.", sayShort: "Qd2 — connect, press.", highlights: [H('d2')] },
+  ],
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N611: SublineNarration = {
   intro: { say: "…dxc3 — Black grabs on c3, your knight recaptures, and the full gambit is on: one pawn invested for a raking lead in development. The bishop bites at f7 from c4, the knight on c3 eyes d5, and after castling your rooks come to the half-open c- and d-files straight at Black's queen and the d6-square. Play pure initiative — pile on the dark squares before Black untangles the kingside.", sayShort: "Accepted Morra — initiative for the pawn" },
+  beats: [
+    { atMove: 6, say: "Nxc3 recaptures, the knight developing with the gambit's lead in development.", sayShort: "Nxc3 — develop the knight.", highlights: [H('c3')] },
+    { atMove: 16, say: "Bc4 develops the bishop, eyeing f7 and Black's king.", sayShort: "Bc4 — aim at f7.", arrows: [A('c4', 'f7')], highlights: [H('f7')] },
+    { atMove: 20, say: "Nb5 leaps toward the d6-outpost, the thematic Morra jump at the weak square.", sayShort: "Nb5 — head for d6.", arrows: [A('b5', 'd6')], highlights: [H('d6')] },
+  ],
   sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N612: SublineNarration = {
   intro: { say: "…dxe5 — Black strikes at your cramping e5-pawn, the principled try to free the declined Morra. Recapture and keep the initiative: Nxe5 centralises the knight, hits the c6-knight and f7, and trades into a structure where your d4-pawn and active pieces dominate. With the bishop on c4 and the open lines, Black still has to prove the freeing trade didn't just open the game for you.", sayShort: "…dxe5 — recapture, keep the initiative" },
+  beats: [
+    { atMove: 14, say: "Nxe5 regains the pawn with a dominant central knight, the gambit paying off.", sayShort: "Nxe5 — regain, dominate.", highlights: [H('e5')] },
+    { atMove: 16, say: "O-O tucks the king safe, your active pieces ready to press the open files.", sayShort: "O-O — king safe, press.", highlights: [H('g1')] },
+    { atMove: 18, say: "Qf3 swings the queen toward f7 and the kingside, building the attack.", sayShort: "Qf3 — aim at f7.", arrows: [A('f3', 'f7')], highlights: [H('f7')] },
+  ],
   sources: ['concept:pos-centralization', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N613: SublineNarration = {
   intro: { say: "…e6 — Black gives the d5-knight a retreat and challenges your c4-bishop's diagonal toward f7. Keep the declined-Morra blueprint: pawns on d4 and e4 hold the centre, the e5-pawn cramps Black's kingside, and the bishop eyes the weakened light squares around d5 and f7. Trades that open the d-file or the long diagonal favour the side with more space — you.", sayShort: "…e6 — central space, light-square pressure" },
+  beats: [
+    { atMove: 14, say: "O-O tucks the king safe, your active pieces primed on the open files.", sayShort: "O-O — king safe.", highlights: [H('g1')] },
+    { atMove: 16, say: "Bb5 pins and pressures the c6-knight, leaning on Black's queenside for the pawn.", sayShort: "Bb5 — pin the knight.", arrows: [A('b5', 'c6')], highlights: [H('c6')] },
+    { atMove: 18, say: "Nxe5 regains the pawn, your pieces dominant with the initiative.", sayShort: "Nxe5 — regain, dominate.", highlights: [H('e5')] },
+  ],
   sources: ['concept:pos-center', 'concept:pos-weak-squares', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N614: SublineNarration = {
   intro: { say: "…e6 — Black frees the f8-bishop and prepares to break the e5-cramp, after the b6-knight chased your bishop to b5 where it pins the c6-knight. Keep the declined-Morra trumps: the e5-pawn cramps Black, the d4-pawn anchors the centre, and the pinned knight on c6 limits Black's freeing moves. Hold e5 and the central space — this is a positional pull, not a tactical strike.", sayShort: "…e6 frees Black — hold e5 cramp" },
+  beats: [
+    { atMove: 16, say: "O-O tucks the king safe, your active pieces ready to press the open files.", sayShort: "O-O — king safe.", highlights: [H('g1')] },
+    { atMove: 18, say: "Nxe5 regains the pawn with a dominant central knight.", sayShort: "Nxe5 — regain, dominate.", highlights: [H('e5')] },
+    { atMove: 20, say: "Nc3 develops with a hit on the centre, your pieces swarming.", sayShort: "Nc3 — develop, press.", highlights: [H('c3')] },
+  ],
   sources: ['concept:pos-space', 'concept:tac-pin', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N615: SublineNarration = {
   intro: { say: "…e6 — Black has declined with …Nf6 and props the d5-knight, but you've pushed e5 to kick it and now recapture cxd4, rebuilding a broad centre on d4 and e4. In the declined Morra, instead of an extra pawn for Black, you own the centre and a free game. Slip in a3 to stop …Nb4 hitting your d5-knight, then clamp b4 before rolling the centre forward.", sayShort: "Declined — broad center on d4-e4" },
+  beats: [
+    { atMove: 10, say: "cxd4 recaptures, restoring your big centre with the Morra's development lead.", sayShort: "cxd4 — restore the centre.", highlights: [H('d4')] },
+    { atMove: 12, say: "Bc4 develops the bishop, eyeing f7 and Black's king.", sayShort: "Bc4 — aim at f7.", arrows: [A('c4', 'f7')], highlights: [H('f7')] },
+    { atMove: 16, say: "Qe2 connects the rooks toward the open files, your initiative the payment for the pawn.", sayShort: "Qe2 — connect, press.", highlights: [H('e2')] },
+  ],
   sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N616: SublineNarration = {
   intro: { say: "…Bd7 — Black completes the Hedgehog under the Maroczy bind and develops the bishop, planning …a6 and …b5 or a rook lift to c8. Your job is to keep the c4-e4 clamp that denies the …d5 break and the d5-square. The bishop on e3 holds the dark squares, the knight on c3 guards d5 and e4, and slow queenside restraint plus a timely f4 or central pressure keeps Black boxed in.", sayShort: "Hedgehog vs bind — restrain …b5" },
+  beats: [
+    { atMove: 20, say: "Rc1 piles onto the open c-file, the Morra's heavy pressure on c6.", sayShort: "Rc1 — the open c-file.", arrows: [A('c1', 'c6')], highlights: [H('c6')] },
+    { atMove: 22, say: "Bb1 redeploys the bishop onto the b1-h7 diagonal, aiming at Black's king.", sayShort: "Bb1 — aim at the king.", arrows: [A('b1', 'h7')], highlights: [H('h7')] },
+  ],
   sources: ['concept:pos-space', 'concept:pos-weak-squares', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N617: SublineNarration = {
   intro: { say: "…Be6 — in the Maroczy-bind Morra declined, Black pressures your c4-pawn and prepares …Nd7 with …b5 later. Hold the clamp: the c4 and e4 pawns deny the …d5 break, the bishop on e3 controls the dark squares, and the knight on c3 covers d5. If Black trades the e6-bishop for c4's guardian, recapture and keep the bind — the squeeze, not a quick attack, is how you win here.", sayShort: "…Be6 hits c4 — keep the bind" },
+  beats: [
+    { atMove: 20, say: "Ng5 leaps toward f7 and Black's king, your attack gathering for the pawn.", sayShort: "Ng5 — attack f7.", arrows: [A('g5', 'f7')], highlights: [H('f7')] },
+    { atMove: 22, say: "Nxe6 trades to open lines at Black's king, your initiative the payment.", sayShort: "Nxe6 — open lines.", highlights: [H('e6')] },
+  ],
   sources: ['concept:pos-space', 'concept:pos-weak-squares', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N618: SublineNarration = {
   intro: { say: "…Bg4 — Black pins your f3-knight before castling, trying to trade a defender of the centre. Under the Maroczy bind that pin is harmless: Be2 or h3 unravels it, and the c4-e4 pawns keep choking the …d5 break either way. Finish development, keep the clamp on d5, and use your extra space to push the queenside or central pawns when Black runs out of useful moves.", sayShort: "…Bg4 pin — break it, hold the bind" },
+  beats: [
+    { atMove: 16, say: "Rb1 prepares to pry open the queenside, your pieces pressing for the gambit pawn.", sayShort: "Rb1 — prepare queenside play.", highlights: [H('b1')] },
+    { atMove: 18, say: "h3 puts the question to the g4-bishop, gaining tempo.", sayShort: "h3 — question the bishop.", arrows: [A('h3', 'g4')], highlights: [H('g4')] },
+    { atMove: 20, say: "Qxf3 recaptures, keeping the initiative and the open files.", sayShort: "Qxf3 — recapture, press.", highlights: [H('f3')] },
+  ],
   sources: ['concept:tac-pin', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N619: SublineNarration = {
   intro: { say: "…Nf6 — Black completes development, having declined the safe way with the early …d3 your bishop recaptured. Your Maroczy bind is already built: pawns on c4 and e4 clamp the d5-square and choke Black's freeing …d5 break. With the g7-fianchetto meeting your knight on c3, this is a positional squeeze, not a sacrifice — space and the bind do the work.", sayShort: "Morra declined — Maroczy c4-e4 bind" },
+  beats: [
+    { atMove: 14, say: "h3 makes luft and stops …Ng4/…Bg4, keeping your pieces coordinated for the pawn.", sayShort: "h3 — luft, stop pins.", highlights: [H('h3')] },
+    { atMove: 16, say: "Be3 develops and supports the centre, your pieces eyeing the open files.", sayShort: "Be3 — support the centre.", highlights: [H('e3')] },
+    { atMove: 18, say: "Rc1 piles onto the open c-file, the Morra's heavy pressure on c6.", sayShort: "Rc1 — the open c-file.", arrows: [A('c1', 'c6')], highlights: [H('c6')] },
+  ],
   sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N620: SublineNarration = {
   intro: { say: "…a6 — Black plays it early in the Maroczy structure, before castling, to prepare …b5 against your c4-pawn and gain queenside space. Stay on plan: keep the c4-e4 clamp that denies …d5, finish development with the bishop to e3, and watch the d5-square the bind controls. The …a6 and …b5 expansion is slow, so meet it with piece pressure and central space to keep the bind that is the soul of the declined Morra.", sayShort: "Early …a6 — keep the central clamp" },
+  beats: [
+    { atMove: 18, say: "Be3 develops and supports the centre, your pieces eyeing the open files.", sayShort: "Be3 — support the centre.", highlights: [H('e3')] },
+    { atMove: 20, say: "Rc1 piles onto the open c-file, the Morra's heavy pressure on c6.", sayShort: "Rc1 — the open c-file.", arrows: [A('c1', 'c6')], highlights: [H('c6')] },
+    { atMove: 22, say: "Qe2 connects the rooks, your initiative full payment for the gambit pawn.", sayShort: "Qe2 — connect, press.", highlights: [H('e2')] },
+  ],
   sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N621: SublineNarration = {
   intro: { say: "…a6 — in the declined Morra with the Maroczy bind, Black sets up the Hedgehog with …d6, …g6 and …a6, planning a slow …b5 against your c4-pawn. Keep the clamp: pawns on c4 and e4 deny the d5-square, the bishop sits on e3 over the dark squares, and h3 gives your king luft and stops …Ng4. The …a6 signals queenside play, so meet …b5 with patience and piece pressure to keep the bind intact.", sayShort: "Maroczy bind — restrain Black's …b5" },
+  beats: [
+    { atMove: 20, say: "Rc1 piles onto the open c-file, the Morra's signature pressure on c6.", sayShort: "Rc1 — the open c-file.", arrows: [A('c1', 'c6')], highlights: [H('c6')] },
+    { atMove: 22, say: "Qd2 connects and eyes the open files, your initiative full payment for the pawn.", sayShort: "Qd2 — connect, press.", highlights: [H('d2')] },
+  ],
   sources: ['concept:pos-space', 'concept:pos-weak-squares', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N622: SublineNarration = {
   intro: { say: "…b6 — Black fianchettoes the queen's bishop to b7, double-pressuring your e4-pawn and supporting an eventual …d5 break under the Maroczy bind. Overprotect e4 and keep the c4-pawn clamp on d5: the knight on c3 plus a queen or rook backing e4 hold the centre. The bishop on e3 keeps the dark squares, and your extra space lets you meet …d5 with a favourable opening of the position.", sayShort: "…b6 eyes e4 — overprotect, keep bind" },
+  beats: [
+    { atMove: 20, say: "Rc1 piles onto the open c-file, the Morra's heavy pressure on c6.", sayShort: "Rc1 — the open c-file.", arrows: [A('c1', 'c6')], highlights: [H('c6')] },
+    { atMove: 22, say: "Qd2 connects and eyes the open files, your initiative full payment for the pawn.", sayShort: "Qd2 — connect, press.", highlights: [H('d2')] },
+  ],
   sources: ['concept:pawn-fianchetto', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N623: SublineNarration = {
   intro: { say: "…e6 — Black sets up the …g7-fianchetto, a flexible Maroczy structure aiming for …Nge7 and a later …d5 or …b5. Keep your c4-e4 bind that smothers his …d5 freeing break and claim the extra space. Castle and post your bishop on e3 over the dark squares to complete the clamp — the declined Morra is a positional bind, so your patience and central control, not a sacrifice, carry the day.", sayShort: "…e6 fianchetto — keep c4-e4 bind" },
+  beats: [
+    { atMove: 14, say: "Nb5 leaps in with tempo, eyeing the d6-outpost at Black's weak square.", sayShort: "Nb5 — head for d6.", arrows: [A('b5', 'd6')], highlights: [H('d6')] },
+    { atMove: 16, say: "e5 strikes, ripping open the centre as your knight lands on d6.", sayShort: "e5 — rip open the centre.", highlights: [H('e5')] },
+    { atMove: 18, say: "Nd6+ lands on the dream outpost with check, your knight dominating Black's camp.", sayShort: "Nd6+ — the dream outpost.", highlights: [H('d6')] },
+  ],
   sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N624: SublineNarration = {
   intro: { say: "…h6 — Black slips this in under the Maroczy bind to deny your pieces the g5-square and rule out a future Bg5 pin. It's slow and doesn't free the position, so keep clamping: the c4-e4 pawns deny …d5, the bishop on e3 holds the dark squares, and the knight on c3 covers d5. With Black short of active breaks, expand on the queenside or prepare f4 to claim even more space.", sayShort: "…h6 is slow — keep the bind" },
+  beats: [
+    { atMove: 20, say: "Rc1 piles onto the open c-file, the Morra's signature pressure on c6.", sayShort: "Rc1 — the open c-file.", arrows: [A('c1', 'c6')], highlights: [H('c6')] },
+    { atMove: 22, say: "b3 supports your pieces and prepares to develop the bishop on the long diagonal.", sayShort: "b3 — prep the fianchetto.", highlights: [H('b3')] },
+  ],
   sources: ['concept:pos-space', 'concept:pos-prophylaxis', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
