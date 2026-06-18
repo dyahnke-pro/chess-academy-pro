@@ -1,7 +1,7 @@
 import type { AnnotationArrow, AnnotationHighlight } from '../../types';
 import type { SublineNarration } from '../../services/sublineLesson';
 
-// GROUP A — 1.e4 e5 complex + e4 gambits. Owned by ONE parallel session.
+// GROUP A — e4 e5 complex + e4 gambits. Owned by ONE parallel session.
 // Hand-written, board-verified subline narration. Every entry binds to a REAL
 // subline in course-sublines.json (key `${openingId}::${variationIndex}::${trigger}@${atPly}`),
 // the line replays legally, beats land on real plies, vision-arrow origins sit on
@@ -448,7 +448,7 @@ const IT_HUNGARIAN_QH5: SublineNarration = {
   },
   sources: IT,
 };
-// Scotch Gambit / Two Knights 4.d4 (var5) — Nxe4@7, Nxd4@7, d5@7, d6@7.
+// Scotch Gambit / Two Knights d4 (var5) — Nxe4@7, Nxd4@7, d5@7, d6@7.
 const IT_SCOTCH_GAMBIT: SublineNarration = {
   intro: {
     say: "You've met the Two Knights with d4, the Scotch Gambit, offering a pawn to seize the initiative. After …exd4 your lead in development is the asset: O-O and Re1 throw the rook onto the open e-file, the bishop glares at f7, and the Max Lange and Canal attacks loom. Black must defend precisely — play energetically and make the gambit pawn pay in pure activity.",
@@ -581,7 +581,7 @@ const TK_FRITZ_ULVESTAD: SublineNarration = {
   },
   sources: TK_INIT,
 };
-// 4…Bc5 Bxf7+ lines (var2) — king walks to e7, Black gets the piece/initiative back.
+// …Bc5 Bxf7+ lines (var2) — king walks to e7, Black gets the piece/initiative back.
 const TK_BC5_BXF7: SublineNarration = {
   intro: {
     say: "You've met the Knight Attack with the bold …Bc5, and White grabbed on f7 with check. Your king walks to e7 — ugly but completely safe, because White's attacking pieces have nothing to follow up with. You'll round up the loose white bishop, untangle with …Rf8 and …d6, and emerge with the bishop pair and a sound game. The check looked terrifying; it was a bluff.",
@@ -1253,18 +1253,18 @@ const PT_MAIN: SublineNarration = {
   ],
   sources: PT,
 };
-// var1 — 3.d4 line (d4 Nxe4 Bd3 d5 Nxe5 Nd7). Solid equality.
+// var1 — d4 line (d4 Nxe4 Bd3 d5 Nxe5 Nd7). Solid equality.
 const PT_D4: SublineNarration = {
   intro: {
-    say: "The 3.d4 Petrov — White opens the centre early instead of recapturing on e5. The antidote is precise and well-charted: …d5 anchors your e4-knight, …Nd7 challenges White's advanced knight and offers the trade that defuses all pressure, and …Bd6 develops toward the kingside. Castle, and you sit behind a symmetrical, weakness-free structure that holds the balance with ease.",
-    sayShort: '3.d4 — …d5, …Nd7, trade and equalize.',
+    say: "The d4 Petrov — White opens the centre early instead of recapturing on e5. The antidote is precise and well-charted: …d5 anchors your e4-knight, …Nd7 challenges White's advanced knight and offers the trade that defuses all pressure, and …Bd6 develops toward the kingside. Castle, and you sit behind a symmetrical, weakness-free structure that holds the balance with ease.",
+    sayShort: 'd4 — …d5, …Nd7, trade and equalize.',
   },
   beats: [
     { atMove: 9, say: "…Nd7 — challenge White's advanced e5-knight head-on, offering the trade that dissolves all his pressure. Simple, solid, symmetrical: White is left with a position that refuses to give him a target.", sayShort: "…Nd7 — challenge e5, trade off.", highlights: [H('e5', KEY)] },
   ],
   sources: PT_CTR,
 };
-// var2 — 3.Nc3 transposing to a Four Knights / Scotch (Nc3 Nc6 d4 exd4 Nxd4 Bb4).
+// var2 — Nc3 transposing to a Four Knights / Scotch (Nc3 Nc6 d4 exd4 Nxd4 Bb4).
 const PT_NC3_TRANSPOSE: SublineNarration = {
   intro: {
     say: "Nc3 — White steers the Petrov into Four-Knights and Scotch territory. Follow the principled path: …Nc6 and after d4 the …Bb4 pin contests the e4-square just as in the Nimzo spirit. You'll trade on c3 to dent White's pawns or hold the pin and develop; either way you reach a balanced, well-known structure where your pieces are as active as White's and there's nothing to fear.",
@@ -1283,11 +1283,11 @@ const PT_COCHRANE: SublineNarration = {
   },
   sources: PT_KS,
 };
-// var4/var6 — 5.Nc3 / Nimzowitsch line (Nf3 Nxe4 Nc3 Nxc3 dxc3 Be7). Solid, opposite-castling.
+// var4/var6 — Nc3 / Nimzowitsch line (Nf3 Nxe4 Nc3 Nxc3 dxc3 Be7). Solid, opposite-castling.
 const PT_5NC3: SublineNarration = {
   intro: {
-    say: "The 5.Nc3 line — White trades knights and recaptures with dxc3, taking the bishop pair and a half-open d-file in return for doubled c-pawns. There's nothing to fear: develop naturally with …Be7, …Nc6 and …Be6, get the queen to d7 and castle long, and your structure is the sounder one. White's bishops look active, but your solid setup and healthy pawns hold the balance comfortably.",
-    sayShort: '5.Nc3 — …Be7, …Nc6, …Be6, castle long.',
+    say: "The Nc3 line — White trades knights and recaptures with dxc3, taking the bishop pair and a half-open d-file in return for doubled c-pawns. There's nothing to fear: develop naturally with …Be7, …Nc6 and …Be6, get the queen to d7 and castle long, and your structure is the sounder one. White's bishops look active, but your solid setup and healthy pawns hold the balance comfortably.",
+    sayShort: 'Nc3 — …Be7, …Nc6, …Be6, castle long.',
   },
   beats: [
     { atMove: 9, say: "…Nxc3 — trade the knights; after dxc3 White grabs the bishop pair but saddles himself with doubled c-pawns. Your structure is the sounder one — develop, castle long, and let the healthy pawns tell.", sayShort: "…Nxc3 — trade, give White doubled pawns.", highlights: [H('c3', KEY)] },
