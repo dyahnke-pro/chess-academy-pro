@@ -144,7 +144,32 @@ const ANTI_BENONI: SN = {
   sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
 };
 
+// ── anti-London (student BLACK) — hit the loose b2, seize the initiative.
+//    Every line shares …c5@3. ──
+const ANTI_LONDON: SN = {
+  intro: { say: "Bf4 — the London System, solid but a shade passive. Punish that passivity: …c5 hits d4 at once, and because the Bf4 has left the b2-pawn loose, …Qb6 jabs straight at it. Add …Nc6 and …Bf5 and you've grabbed the initiative the London is built to avoid — active, comfortable, and full of bite.", sayShort: '…c5 — hit d4 and the loose b2.' },
+  beats: [
+    { atMove: 3, say: "…c5 — striking at d4 immediately. The London's Bf4 abandoned the b2-pawn, so you'll follow with …Qb6 hitting b2 and …Nc6, …Bf5 developing with tempo. The system that wants a quiet life suddenly has problems to solve.", highlights: [H('d4', ATK), H('b2', SOFT)] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/London_System'],
+};
+// ── anti-QGD Exchange (student WHITE) — Carlsbad + minority attack.
+//    Every line shares cxd5@4. ──
+const ANTI_QGD_X: SN = {
+  intro: { say: "cxd5 — the Exchange QGD, steering into the Carlsbad structure. Your plan is the textbook minority attack: roll b4-b5 to crack open the c6-pawn and saddle Black with a lasting weakness, while Bf4/Bg5 and Nge2 hold the centre. A clean, low-risk way to grind for the win.", sayShort: 'cxd5 — Carlsbad; minority attack b4-b5.' },
+  beats: [
+    { atMove: 4, say: "cxd5 — entering the Carlsbad. After …exd5 the structure is fixed and your plan is set: b4-b5 to undermine c6, leaving Black a weak pawn to besiege. Slow, safe, and one of the most reliable winning tries against the QGD.", highlights: [H('c6', KEY)] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+
 export const SUBLINE_NARRATION_HELP_B: Record<string, SN> = {
+  // anti-London (all share …c5@3)
+  'anti-london-black::0::Nf3@8': ANTI_LONDON, 'anti-london-black::0::Nd2@8': ANTI_LONDON, 'anti-london-black::0::b3@8': ANTI_LONDON, 'anti-london-black::0::Be2@8': ANTI_LONDON, 'anti-london-black::0::h3@8': ANTI_LONDON, 'anti-london-black::0::a4@8': ANTI_LONDON, 'anti-london-black::0::Nf3@6': ANTI_LONDON, 'anti-london-black::0::e4@4': ANTI_LONDON, 'anti-london-black::0::Nc3@6': ANTI_LONDON, 'anti-london-black::0::c3@4': ANTI_LONDON,
+  'anti-london-black::1::c3@8': ANTI_LONDON, 'anti-london-black::1::b3@8': ANTI_LONDON, 'anti-london-black::1::Nc3@8': ANTI_LONDON, 'anti-london-black::1::Be2@8': ANTI_LONDON, 'anti-london-black::1::Nbd2@8': ANTI_LONDON, 'anti-london-black::1::c3@6': ANTI_LONDON, 'anti-london-black::1::e4@4': ANTI_LONDON, 'anti-london-black::1::Nc3@6': ANTI_LONDON, 'anti-london-black::1::c3@4': ANTI_LONDON, 'anti-london-black::1::Nc3@4': ANTI_LONDON,
+  // anti-QGD Exchange (all share cxd5@4)
+  'anti-qgd-exchange::0::c6@7': ANTI_QGD_X, 'anti-qgd-exchange::0::Qxd5@5': ANTI_QGD_X, 'anti-qgd-exchange::0::Bb4@7': ANTI_QGD_X, 'anti-qgd-exchange::0::c5@7': ANTI_QGD_X, 'anti-qgd-exchange::0::Be6@7': ANTI_QGD_X, 'anti-qgd-exchange::0::Nf6@5': ANTI_QGD_X, 'anti-qgd-exchange::0::Nc6@7': ANTI_QGD_X, 'anti-qgd-exchange::0::Be7@9': ANTI_QGD_X, 'anti-qgd-exchange::0::h6@11': ANTI_QGD_X, 'anti-qgd-exchange::0::Bf5@11': ANTI_QGD_X,
+  'anti-qgd-exchange::1::c6@7': ANTI_QGD_X, 'anti-qgd-exchange::1::Qxd5@5': ANTI_QGD_X, 'anti-qgd-exchange::1::Bb4@7': ANTI_QGD_X, 'anti-qgd-exchange::1::c5@7': ANTI_QGD_X, 'anti-qgd-exchange::1::Be6@7': ANTI_QGD_X, 'anti-qgd-exchange::1::Nf6@5': ANTI_QGD_X, 'anti-qgd-exchange::1::Nc6@7': ANTI_QGD_X, 'anti-qgd-exchange::1::c6@9': ANTI_QGD_X, 'anti-qgd-exchange::1::Bb4@9': ANTI_QGD_X, 'anti-qgd-exchange::1::Nbd7@9': ANTI_QGD_X,
   // anti-Benoni push — every line shares d5@4
   'anti-benoni-push::0::d6@13': ANTI_BENONI, 'anti-benoni-push::0::e6@5': ANTI_BENONI, 'anti-benoni-push::0::Bg7@13': ANTI_BENONI, 'anti-benoni-push::0::g6@5': ANTI_BENONI, 'anti-benoni-push::0::e5@5': ANTI_BENONI, 'anti-benoni-push::0::Bxa6@9': ANTI_BENONI, 'anti-benoni-push::0::d6@5': ANTI_BENONI, 'anti-benoni-push::0::Bg7@11': ANTI_BENONI, 'anti-benoni-push::0::e6@9': ANTI_BENONI,
   'anti-benoni-push::1::Be7@11': ANTI_BENONI, 'anti-benoni-push::1::d6@7': ANTI_BENONI, 'anti-benoni-push::1::a6@11': ANTI_BENONI, 'anti-benoni-push::1::Nbd7@11': ANTI_BENONI, 'anti-benoni-push::1::a6@7': ANTI_BENONI, 'anti-benoni-push::1::Bg4@11': ANTI_BENONI, 'anti-benoni-push::1::Be7@7': ANTI_BENONI, 'anti-benoni-push::1::Qa5@11': ANTI_BENONI, 'anti-benoni-push::1::b5@5': ANTI_BENONI, 'anti-benoni-push::1::g6@5': ANTI_BENONI,
