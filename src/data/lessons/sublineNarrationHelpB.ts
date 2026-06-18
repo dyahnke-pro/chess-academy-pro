@@ -134,7 +134,22 @@ const ANTI_ENGLUND: SN = {
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
 };
 
+// ── anti-Benoni push (student WHITE) — meet …c5 with d5, the space bind.
+//    Every line runs through d5@4. ──
+const ANTI_BENONI: SN = {
+  intro: { say: "…c5 — Black heads for a Benoni. You answer with d5, seizing space instead of allowing equality. That advanced pawn is the engine of your whole edge: it cramps Black for the rest of the game while you brace it with e4 and develop Nc3, Nf3, Be2. If he lashes out with the Benko …b5, you can grab it or decline — the wedge and your space tell either way.", sayShort: '…c5 — answer d5, bind the space.' },
+  beats: [
+    { atMove: 4, say: "d5 — the space-grabbing advance. You decline the symmetrical game and push, and this wedge cramps Black's whole position. Back it with e4, develop naturally, and squeeze — the Benoni is sharp, but the space is yours.", highlights: [H('d5', ATK)] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
+};
+
 export const SUBLINE_NARRATION_HELP_B: Record<string, SN> = {
+  // anti-Benoni push — every line shares d5@4
+  'anti-benoni-push::0::d6@13': ANTI_BENONI, 'anti-benoni-push::0::e6@5': ANTI_BENONI, 'anti-benoni-push::0::Bg7@13': ANTI_BENONI, 'anti-benoni-push::0::g6@5': ANTI_BENONI, 'anti-benoni-push::0::e5@5': ANTI_BENONI, 'anti-benoni-push::0::Bxa6@9': ANTI_BENONI, 'anti-benoni-push::0::d6@5': ANTI_BENONI, 'anti-benoni-push::0::Bg7@11': ANTI_BENONI, 'anti-benoni-push::0::e6@9': ANTI_BENONI,
+  'anti-benoni-push::1::Be7@11': ANTI_BENONI, 'anti-benoni-push::1::d6@7': ANTI_BENONI, 'anti-benoni-push::1::a6@11': ANTI_BENONI, 'anti-benoni-push::1::Nbd7@11': ANTI_BENONI, 'anti-benoni-push::1::a6@7': ANTI_BENONI, 'anti-benoni-push::1::Bg4@11': ANTI_BENONI, 'anti-benoni-push::1::Be7@7': ANTI_BENONI, 'anti-benoni-push::1::Qa5@11': ANTI_BENONI, 'anti-benoni-push::1::b5@5': ANTI_BENONI, 'anti-benoni-push::1::g6@5': ANTI_BENONI,
+  'anti-benoni-push::2::b5@5': ANTI_BENONI, 'anti-benoni-push::2::e6@5': ANTI_BENONI, 'anti-benoni-push::2::e5@5': ANTI_BENONI, 'anti-benoni-push::2::d6@5': ANTI_BENONI, 'anti-benoni-push::2::d6@7': ANTI_BENONI, 'anti-benoni-push::2::O-O@9': ANTI_BENONI, 'anti-benoni-push::2::d6@9': ANTI_BENONI, 'anti-benoni-push::2::e6@9': ANTI_BENONI, 'anti-benoni-push::2::a6@9': ANTI_BENONI, 'anti-benoni-push::2::Qa5@9': ANTI_BENONI,
+  'anti-benoni-push::3::b5@5': ANTI_BENONI, 'anti-benoni-push::3::e6@5': ANTI_BENONI, 'anti-benoni-push::3::Bd6@7': ANTI_BENONI, 'anti-benoni-push::3::a6@7': ANTI_BENONI, 'anti-benoni-push::3::g6@5': ANTI_BENONI, 'anti-benoni-push::3::d6@5': ANTI_BENONI, 'anti-benoni-push::3::O-O@11': ANTI_BENONI, 'anti-benoni-push::3::Nbd7@9': ANTI_BENONI, 'anti-benoni-push::3::g6@9': ANTI_BENONI, 'anti-benoni-push::3::Nbd7@11': ANTI_BENONI,
   // anti-Englund (var-0 e4-centre cluster)
   'anti-englund::0::Nxf3+@9': ANTI_ENGLUND,
   'anti-englund::0::Nf6@9': ANTI_ENGLUND,
