@@ -4,6 +4,8 @@ import type { SublineNarration } from '../../services/sublineLesson';
 import { SUBLINE_NARRATION_E4E5 } from './sublineNarrationE4E5';
 import { SUBLINE_NARRATION_E4OTHER } from './sublineNarrationE4Other';
 import { SUBLINE_NARRATION_D4FLANK } from './sublineNarrationD4Flank';
+import { SUBLINE_NARRATION_HELP_A } from './sublineNarrationHelpA';
+import { SUBLINE_NARRATION_HELP_B } from './sublineNarrationHelpB';
 
 // HAND-AUTHORED subline narration (David 2026-06-17: "these are hand authored").
 // Each entry is written by hand, grounded in the real DB line + verified against
@@ -59,18 +61,6 @@ const SLAV_E3: SublineNarration = {
   sources: SLAV_SRC,
 };
 
-const QP_SRC = ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit'];
-// Nimzo, White's anti-Nimzo Nf3 (delaying Nc3). d4 Nf6 c4 e6 Nf3 d5 Nc3 Be7
-const NIMZO_NF3: SublineNarration = {
-  intro: {
-    say: "Nf3 — White delays Nc3 to dodge the Nimzo pin. Don't force it: answer …d5, reaching a sound, classical Queen's-Gambit structure where you're fully equal. If White ever does play Nc3, the …Bb4 pin is still there waiting; until then you develop comfortably with no weaknesses.",
-    sayShort: 'Nf3 — flexible …d5, stay solid.',
-  },
-  beats: [
-    { atMove: 5, say: "…d5 — the flexible answer that commits to nothing premature. White ducked the Nimzo pin by holding back Nc3, so you stake your own claim in the centre. You reach a rock-solid Queen's-Gambit structure, and the moment White does play Nc3 the …Bb4 pin snaps back into your hands. Whichever way he turns, you're at home.", highlights: [H('d5', KEY)] },
-  ],
-  sources: QP_SRC,
-};
 // Grünfeld Exchange — the critical main line (student Black).
 // d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Bc4 c5
 const GRUN_EXCHANGE: SublineNarration = {
@@ -409,13 +399,6 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   // ── English Opening (student White) ──
 
   // ── Nimzo-Indian (student Black) ──
-  'nimzo-indian::0::Nf3@4': NIMZO_NF3,
-  'nimzo-indian::1::Nf3@4': NIMZO_NF3,
-  'nimzo-indian::2::Nf3@4': NIMZO_NF3,
-  'nimzo-indian::4::Nf3@4': NIMZO_NF3,
-  'nimzo-indian::5::Nf3@4': NIMZO_NF3,
-  'nimzo-indian::6::Nf3@4': NIMZO_NF3,
-  'nimzo-indian::7::Nf3@4': NIMZO_NF3,
 
   // ── Queen's Indian (student Black) — Nc3 transposes to a Nimzo on every tab ──
 
@@ -533,13 +516,6 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   // ── Four Knights (student White) ──
 
   // ── Dutch Defence (student Black) — the anti-Dutch Bg5/Bc4 attack ──
-  'dutch-defence::3::Bc4@8': {
-    intro: {
-      say: "Bc4 — White goes for a quick kingside attack in the anti-Dutch, the Bg5-and-Bc4 battery aiming at f7. Don't panic: …e6 blunts the bishop, …d5 claims the centre, and once the early aggression is parried your Leningrad bishop on g7 and the …e5 break give you a full, fighting game. Weather the first wave and Black is fine.",
-      sayShort: 'Bc4 — blunt it with …e6, …d5.',
-    },
-    sources: ['concept:pos-king-safety', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
-  },
 
   // ── Réti (student White) ──
 
@@ -559,6 +535,10 @@ const MERGED_NARRATION: Record<string, SublineNarration> = {
   ...SUBLINE_NARRATION_E4E5,
   ...SUBLINE_NARRATION_E4OTHER,
   ...SUBLINE_NARRATION_D4FLANK,
+  // Override layer (helper sessions) — spread LAST so a deeper teach-past
+  // version here supersedes the intro-only one in a group file (David 2026-06-18).
+  ...SUBLINE_NARRATION_HELP_A,
+  ...SUBLINE_NARRATION_HELP_B,
 };
 
 /** Hand-authored narration for a subline, or null to use the honest baseline. */
