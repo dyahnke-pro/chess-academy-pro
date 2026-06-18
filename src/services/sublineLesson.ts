@@ -83,15 +83,28 @@ export function sublineToPlayableLine(
     if (!mv) return null;
     const beat = authored.get(i);
     const moveArrow: AnnotationArrow = { from: mv.from, to: mv.to, color: MOVE_ARROW };
-    // Authored beats lead the eye with their own arrows/highlights (the move
-    // arrow first); un-authored moves get the move arrow only and stay silent.
-    arrows.push(beat?.arrows?.length ? [moveArrow, ...beat.arrows] : [moveArrow]);
+    // Arrow CONSISTENCY (David 2026-06-18): vision arrows only ever originate on
+    // a PIECE. A hand-authored vision arrow whose origin is a pawn (e.g. a pawn
+    // break c5→d4) is converted to a highlight on its target square — the
+    // masterclass lead-the-eye standard (pawns/targets shown via highlights,
+    // pieces via arrows). The move-arrow is unaffected.
+    const visionArrows: AnnotationArrow[] = [];
+    const pawnTargetHi: AnnotationHighlight[] = [];
+    for (const a of beat?.arrows ?? []) {
+      const pc = chess.get(a.from as Parameters<typeof chess.get>[0]);
+      if (pc && pc.type === 'p') pawnTargetHi.push({ square: a.to, color: TRIGGER });
+      else visionArrows.push(a);
+    }
+    arrows.push([moveArrow, ...visionArrows]);
+    const baseHi = beat?.highlights?.length
+      ? beat.highlights
+      : i === subline.atPly
+        ? [{ square: mv.to, color: TRIGGER }]
+        : [];
+    // Dedupe by square (a converted pawn-target may coincide with an authored highlight).
+    const seen = new Set<string>();
     highlights.push(
-      beat?.highlights?.length
-        ? beat.highlights
-        : i === subline.atPly
-          ? [{ square: mv.to, color: TRIGGER }]
-          : [],
+      [...baseHi, ...pawnTargetHi].filter((h) => (seen.has(h.square) ? false : (seen.add(h.square), true))),
     );
     annotations.push(beat?.say ?? '');
   }
