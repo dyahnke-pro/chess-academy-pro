@@ -180,6 +180,16 @@ export default defineConfig(({ mode }) => {
             if (id.includes('chess-concepts.json') || id.includes('opening-book-pages.json')) {
               return 'appdata-book';
             }
+            // The frequency-derived subline data + the hand-authored subline
+            // narration prose (the three `sublineNarration*` group files, ~0.5 MB
+            // and growing as each group is authored). Kept out of the entry chunk
+            // so narration growth lands here instead of re-bloating `index` past
+            // the Workbox precache cap — the exact regression WO-PERF-BUNDLE-01
+            // guards against, retriggered when the new subline data was added
+            // without a matching chunk rule.
+            if (id.includes('course-sublines.json')) return 'appdata-sublines';
+            if (id.includes('/lessons/sublineNarration')) return 'appdata-subline-narration';
+            if (id.includes('model-games.json')) return 'appdata-modelgames';
           }
           if (id.includes('/node_modules/')) {
             if (/\/node_modules\/(react|react-dom|react-router-dom)\//.test(id)) return 'react-vendor';
