@@ -19,7 +19,8 @@ what to train today, and a search bar — type any opening, tactic, or
 
 **📖 Openings**
 Your opening repertoire. Pick a line (Italian, Caro-Kann, Sicilian, or a
-specific pro's repertoire like Naroditsky's) and learn it through four
+deep grandmaster-style repertoire built from real master games) and learn
+it through four
 steps: **Watch** (coach plays it and narrates the ideas), **Learn** (the
 coach calls the moves, you play them), **Practice** (same line, silent,
 with a hint button), and **Play** (you play the line against the engine,
