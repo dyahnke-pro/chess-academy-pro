@@ -776,7 +776,9 @@ const SCG_D6: SublineNarration = {
     sayShort: '…d6 — Bb5 pin, keep the big centre.',
   },
   beats: [
-    { atMove: 5, say: "d6 declines the gambit meekly — make it cost. Bb5 pins the c6-knight, you keep the full d4-e4 duo, and a clean space edge gives a risk-free pull. He handed you the centre.", sayShort: "d6 — Bb5 pin, keep the centre.", arrows: [A('f1', 'b5')], highlights: [H('d4', KEY), H('b5', SOFT)] },
+    { atMove: 5, say: "…d6 declines the gambit meekly — make it cost. Bb5 pins the c6-knight while your d4-e4 duo dominates and a clean space edge gives a risk-free pull.", sayShort: "…d6 — answer Bb5.", arrows: [A('f1', 'b5')], highlights: [H('d4', KEY)] },
+    { atMove: 6, say: "Bb5 pins the c6-knight to the king, freezing Black's grip on e5 and the centre while you finish developing with a clear space edge.", sayShort: "Bb5 — pin, keep the duo.", arrows: [A('b5', 'c6')], highlights: [H('c6', KEY), H('d4', SOFT), H('e4', SOFT)] },
+    { atMove: 7, say: "…Bd7 breaks the pin, but you keep the central duo and the room. Trade or retreat, castle, and press the freer game while Black stays cramped and passive.", sayShort: "…Bd7 — keep space, press on.", highlights: [H('d4', SOFT), H('e4', SOFT)] },
   ],
   sources: SCG_CTR,
 };
@@ -1448,7 +1450,8 @@ const MAR_ITALIAN: SublineNarration = {
     sayShort: 'Bc4 — …Bc5, a comfortable Italian.',
   },
   beats: [
-    { atMove: 4, say: "Bc4 dodges into an Italian — comfortable. The bishop posts to c5, you head for d6 and the d5 break. Equal and well-charted; White's gained nothing by avoiding the fight.", sayShort: "Bc4 — …Bc5, comfortable Italian.", arrows: [A('f8', 'c5')], highlights: [H('c5', KEY)] },
+    { atMove: 4, say: "Bc4 dodges into an Italian — comfortable. Mirror it: …Bc5 posts your bishop on the strong a7-g1 diagonal, eye to eye with his.", sayShort: "Bc4 — answer …Bc5.", arrows: [A('f8', 'c5')], highlights: [H('c5', KEY)] },
+    { atMove: 5, say: "…Bc5 trains on f2 down the same diagonal. Now …d6, …Nf6 and the …d5 break follow — an equal, well-charted Giuoco where every plan is at your fingertips.", sayShort: "…Bc5 — eye f2, plan …d5.", arrows: [A('c5', 'f2')], highlights: [H('f2', ATK), H('d5', SOFT)] },
   ],
   sources: MAR_DEV,
 };
@@ -1459,7 +1462,8 @@ const MAR_FOUR_KNIGHTS: SublineNarration = {
     sayShort: 'Nc3 — Four Knights: …Nf6, easy equality.',
   },
   beats: [
-    { atMove: 4, say: "Nc3 — a calm Four Knights. Mirror with Nf6, weakness-free, the Bb4 pin and the Nd4 Rubinstein in reserve. White dodged the Marshall, but you stand perfectly sound.", sayShort: "Nc3 — …Nf6, easy equality.", highlights: [H('e4', KEY), H('e5', SOFT)] },
+    { atMove: 4, say: "Nc3 — a calm Four Knights. Mirror it: …Nf6 claims your share of the centre, weakness-free, with the …Bb4 pin and …Nd4 Rubinstein held in reserve.", sayShort: "Nc3 — answer …Nf6.", highlights: [H('e4', KEY), H('e5', SOFT)] },
+    { atMove: 5, say: "…Nf6 hits the e4-pawn and finishes mirroring White's setup — perfectly sound and easy to play. Castle, complete development, and the game is balanced with chances for both.", sayShort: "…Nf6 — hit e4, fully equal.", arrows: [A('f6', 'e4')], highlights: [H('e4', ATK)] },
   ],
   sources: MAR_DEV,
 };
@@ -2017,7 +2021,10 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'scotch-game::3::h6@21': { ...SC_NC3_IQP, beats: [{ atMove: 21, say: "h6 questions your g5-bishop — Bh4 keeps the pin, or Bxf6 to damage Black's kingside. Your pieces are active, Qf3 and Bd3 eye the king, and the IQP is a dynamic asset. Keep forcing on the kingside.", sayShort: "h6 — Bh4 or Bxf6, keep attacking.", highlights: [H('g5', KEY), H('d5', SOFT)] }] },
   'scotch-game::3::c6@17': { ...SC_NC3_IQP, beats: [{ atMove: 17, say: "c6 props Black's d5-pawn. Develop and attack: Bg5 pins the f6-knight, Qf3 swings at the king, and the rooks come to the central files. The near-symmetrical IQP structure is level — press the kingside light squares.", sayShort: "c6 — Bg5 and Qf3, attack.", highlights: [H('d5', KEY)] }] },
   'scotch-game::3::Bxc3@17': { ...SC_NC3_IQP, beats: [{ atMove: 17, say: "Bxc3 — Black trades to dent your structure; recapture bxc3 and the half-open b-file and bishop pair are yours. Bd3, Bg5 and Qf3 swing at the king; the doubled c-pawns are a small price for the active pieces.", sayShort: "Bxc3 — bxc3, bishop pair, attack.", highlights: [H('c3', KEY)] }] },
-  'scotch-game::3::Bc5@7': { ...SC_CLASSICAL, beats: [{ atMove: 7, say: "Bc5 — the Classical Scotch, Black posting the bishop opposite your d4-knight. Meet it with Be3 to challenge and brace, c3 to bolster, and Bc4 eyeing f7. Castle, line the rooks on the central files, and keep a small, lasting pull.", sayShort: "Bc5 — Be3, c3, press the centre.", highlights: [H('d4', KEY)] }] },
+  'scotch-game::3::Bc5@7': { ...SC_CLASSICAL, beats: [
+    { atMove: 7, say: "…Bc5 — the Classical Scotch, the bishop posted opposite your d4-knight. Challenge it head-on with Be3.", sayShort: "…Bc5 — answer Be3.", arrows: [A('c1', 'e3')], highlights: [H('e3', KEY)] },
+    { atMove: 8, say: "Be3 braces the knight and offers the bishop trade. Follow with c3, Bc4 and castling for a small, lasting pull down the half-open d-file while Black untangles.", sayShort: "Be3 — brace, then c3 and Bc4.", highlights: [H('d4', KEY), H('c5', SOFT)] },
+  ] },
   'scotch-game::3::Rb8@21': { ...SC_NC3_IQP, beats: [{ atMove: 21, say: "Rb8 — Black eyes the half-open b-file. No matter: your kingside attack is faster. Bg5 pins, Qf3 and Bd3 train on the king, and Rad1 backs the centre. The IQP is dynamic; press at the king before Black's counterplay arrives.", sayShort: "Rb8 — your attack is faster, press.", highlights: [H('d5', KEY)] }] },
   'scotch-game::4::Nf6@5': SC_NF6_EARLY,
   'scotch-game::4::Nf6@13': SC_GORING,
@@ -2035,7 +2042,10 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
     { atMove: 10, say: "e5 — the wedge rolls up, kicking the f6-knight to the rim and clamping the middle. Black scrambles with …Qe7 to bite at the pawn.", sayShort: "e5 — clamp, kick the knight.", arrows: [A('e5', 'f6')], highlights: [H('e5', KEY), H('f6', SOFT)] },
     { atMove: 12, say: "Qe2 props the e5-wedge and develops. Black blockades with …Nd5 to level the game, but you keep the spatial pull and the safer structure — castle and lean on those doubled c-pawns.", sayShort: "Qe2 — hold e5, press the pawns.", arrows: [A('e2', 'e5')], highlights: [H('e5', KEY), H('c6', SOFT)] },
   ] },
-  'scotch-game::5::Bc5@7': { ...SC_CLASSICAL, beats: [{ atMove: 7, say: "Bc5 — the Classical Scotch, Black posting the bishop opposite your d4-knight. Meet it with Be3 to challenge and brace, c3 to bolster, and Bc4 eyeing f7. Castle, line the rooks on the central files, and keep a small, lasting pull.", sayShort: "Bc5 — Be3, c3, press the centre.", highlights: [H('d4', KEY)] }] },
+  'scotch-game::5::Bc5@7': { ...SC_CLASSICAL, beats: [
+    { atMove: 7, say: "…Bc5 — the Classical Scotch, the bishop posted opposite your d4-knight. Challenge it head-on with Be3.", sayShort: "…Bc5 — answer Be3.", arrows: [A('c1', 'e3')], highlights: [H('e3', KEY)] },
+    { atMove: 8, say: "Be3 braces the knight and offers the bishop trade. Follow with c3, Bc4 and castling for a small, lasting pull down the half-open d-file while Black untangles.", sayShort: "Be3 — brace, then c3 and Bc4.", highlights: [H('d4', KEY), H('c5', SOFT)] },
+  ] },
   'scotch-game::5::Bb4+@7': { ...SC_STEINITZ_QH4, beats: [
     { atMove: 7, say: "…Bb4+ checks to disrupt your development — but you welcome it. Block with c3, gaining a free tempo to build the centre while hitting the bishop.", sayShort: "…Bb4+ — block with c3.", arrows: [A('c2', 'c3')], highlights: [H('c3', KEY)] },
     { atMove: 8, say: "c3 blocks the check and jabs at the b4-bishop, which retreats to c5. You've gained a tempo and a broad centre.", sayShort: "c3 — block, hit the bishop.", arrows: [A('c3', 'b4')], highlights: [H('b4', ATK)] },
@@ -2047,7 +2057,10 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
     { atMove: 9, say: "…Bc5 piles onto d4 — but c3, Bc4 and castling consolidate everything. Your space and the half-open files hand you the pull while Black's pieces sit awkwardly around your knight.", sayShort: "…Bc5 — consolidate, keep the pull.", highlights: [H('d4', KEY), H('c5', SOFT)] },
   ] },
   'scotch-game::5::Qxe4+@11': { ...SC_STEINITZ_QH4, beats: [{ atMove: 11, say: "Qxe4+ — Black snatches a pawn with check in the Steinitz raid, but Be3 blocks and develops, and Nxc7+ ideas loom. The black queen is overworked and the king exposed; develop with threats and the initiative outweighs the pawn.", sayShort: "Qxe4+ — Be3 blocks, Nb5 bites.", highlights: [H('e4', KEY)] }] },
-  'scotch-game::5::Bc5@9': { ...SC_STEINITZ_QH4, beats: [{ atMove: 9, say: "Bc5 develops in the Steinitz raid line. Your Nb5 eyes c7 and the loose black queen on h4 is a target; Qe2 develops and threatens. You're a tempo or two ahead — keep developing with threats and punish the early queen sortie.", sayShort: "Bc5 — Nb5 hits c7, develop fast.", arrows: [A('b5', 'c7')], highlights: [H('c7', KEY)] }] },
+  'scotch-game::5::Bc5@9': { ...SC_STEINITZ_QH4, beats: [
+    { atMove: 9, say: "…Bc5 develops in the Steinitz raid line, but Black's early queen sortie has left him loose. Your Nb5 already eyes c7 — develop and threaten.", sayShort: "…Bc5 — Nb5 eyes c7.", arrows: [A('b5', 'c7')], highlights: [H('c7', KEY)] },
+    { atMove: 10, say: "Qe2 develops with threats, supporting the Nb5 raid on c7 and the fork of a8 while Black's queen sits awkwardly on h4. You're a tempo or two ahead — keep developing and punish the early sortie.", sayShort: "Qe2 — back Nb5, press the lead.", arrows: [A('b5', 'c7')], highlights: [H('c7', KEY), H('h4', SOFT)] },
+  ] },
   'scotch-game::5::Qxe4+@9': { ...SC_STEINITZ_QH4, beats: [{ atMove: 9, say: "Qxe4+ — Black grabs e4 with check, but it's greedy. Be2 blocks and develops, Nxc7+ forks loom, and the wandering black queen will be chased. You emerge a clear tempo ahead with the initiative; develop with threats.", sayShort: "Qxe4+ — Be2 blocks, Nc7+ looms.", highlights: [H('e4', KEY), H('c7', SOFT)] }] },
   'scotch-game::6::Nf6@5': SC_NF6_EARLY,
   'scotch-game::6::Bxc3+@11': { ...SC_NC3_IQP, beats: [{ atMove: 11, say: "Bxc3+ — Black trades to dent your pawns; bxc3 hands you a broad centre and the bishop pair. Your pieces find active squares: Bd3, Bg5 and Qf3 swing at the king. The doubled c-pawns are a small price for the initiative.", sayShort: "Bxc3+ — bxc3, bishop pair, attack.", highlights: [H('c3', KEY)] }] },
@@ -2055,13 +2068,21 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'scotch-game::6::c6@17': { ...SC_NC3_IQP, beats: [{ atMove: 17, say: "c6 props Black's d5-pawn. Develop and attack: Bg5 pins the f6-knight, Qf3 swings at the king, and the rooks come to the central files. The near-symmetrical IQP structure is level — press the kingside light squares.", sayShort: "c6 — Bg5 and Qf3, attack.", highlights: [H('d5', KEY)] }] },
   'scotch-game::6::Bxc3@17': { ...SC_NC3_IQP, beats: [{ atMove: 17, say: "Bxc3 — Black trades to dent your structure; recapture bxc3 and the half-open b-file and bishop pair are yours. Bd3, Bg5 and Qf3 swing at the king; the doubled c-pawns are a small price for the active pieces.", sayShort: "Bxc3 — bxc3, bishop pair, attack.", highlights: [H('c3', KEY)] }] },
   'scotch-game::6::h6@21': { ...SC_NC3_IQP, beats: [{ atMove: 21, say: "h6 questions your g5-bishop — Bh4 holds the pin or Bxf6 dents the kingside. Your pieces flow toward the king with Qf3 and Bd3, the knight reroutes via Ne2-g3, and the IQP gives dynamic play. Keep forcing.", sayShort: "h6 — Bh4, reroute Ng3, attack.", highlights: [H('g5', KEY), H('d5', SOFT)] }] },
-  'scotch-game::6::Bc5@7': { ...SC_CLASSICAL, beats: [{ atMove: 7, say: "Bc5 — the Classical Scotch, Black posting the bishop opposite your d4-knight. Meet it with Be3 to challenge and brace, c3 to bolster, and Bc4 eyeing f7. Castle, line the rooks on the central files, and keep a small, lasting pull.", sayShort: "Bc5 — Be3, c3, press the centre.", highlights: [H('d4', KEY)] }] },
+  'scotch-game::6::Bc5@7': { ...SC_CLASSICAL, beats: [
+    { atMove: 7, say: "…Bc5 — the Classical Scotch, the bishop posted opposite your d4-knight. Challenge it head-on with Be3.", sayShort: "…Bc5 — answer Be3.", arrows: [A('c1', 'e3')], highlights: [H('e3', KEY)] },
+    { atMove: 8, say: "Be3 braces the knight and offers the bishop trade. Follow with c3, Bc4 and castling for a small, lasting pull down the half-open d-file while Black untangles.", sayShort: "Be3 — brace, then c3 and Bc4.", highlights: [H('d4', KEY), H('c5', SOFT)] },
+  ] },
   'scotch-game::6::Be7@21': { ...SC_NC3_IQP, beats: [{ atMove: 21, say: "Be7 breaks the pin on f6. Reroute and press: Ne2-g3 heads for f5, Qf3 and Bd3 aim at the king, and the rooks claim the central files. The near-symmetrical IQP is level; make the win on the kingside.", sayShort: "Be7 — Ng3 and Qf3, press the king.", highlights: [H('d5', KEY)] }] },
   'scotch-game::6::Bg4@21': { ...SC_NC3_IQP, beats: [{ atMove: 21, say: "Bg4 hits your queen — drop it to g3 or e3, keeping the attack alive. Ne2-g3 reroutes toward f5, Bd3 eyes h7, and the central files are yours. The IQP is dynamic; keep the pieces pointed at Black's king.", sayShort: "Bg4 — retreat the queen, keep attacking.", highlights: [H('d5', KEY)] }] },
   'scotch-game::7::Nf6@5': SC_NF6_EARLY,
   'scotch-game::7::O-O@13': { ...SC_NB3_MODERN, beats: [{ atMove: 13, say: "O-O — Black castles in the modern Nb3 line. Now choose: Be3 to trade the dark bishops and O-O-O for an opposite-wing pawn-storm race, or O-O for a quiet positional game. You hold the central space and the bishop-pair option — pick your structure and press.", sayShort: "O-O — choose O-O-O or O-O, press.", highlights: [H('e4', KEY)] }] },
   'scotch-game::7::O-O@15': { ...SC_NB3_MODERN, beats: [{ atMove: 15, say: "O-O — Black castles after the Be3 setup. Spring the plan: Bxb6 and O-O-O launch an opposite-wing pawn-storm race, or O-O keeps it positional. Your space and the open lines give the pull — pick the battleground and attack.", sayShort: "O-O — O-O-O and storm, or press.", highlights: [H('e4', KEY)] }] },
-  'scotch-game::7::Nf6@7': { ...SC_NB3_MODERN, beats: [{ atMove: 7, say: "Nf6 develops, hitting e4 — push e5 and the knight is shoved back while you grab space. Nxc6 doubles Black's c-pawns, and after the queens shuffle your e5-wedge and the structural weakness give the edge. Develop and press.", sayShort: "Nf6 — push e5, gain space.", highlights: [H('d4', KEY)] }] },
+  'scotch-game::7::Nf6@7': { ...SC_NB3_MODERN, beats: [
+    { atMove: 7, say: "…Nf6 develops and pokes at e4. The clean plan: trade on c6 to wreck Black's pawns, then ram e5 to seize the centre and gain time on the knight.", sayShort: "…Nf6 — Nxc6, then e5.", arrows: [A('d4', 'c6')], highlights: [H('c6', KEY)] },
+    { atMove: 9, say: "…bxc6 — Black's queenside pawns are doubled and his structure dented. Now seize the centre by force.", sayShort: "…bxc6 — his pawns are doubled.", arrows: [A('e4', 'e5')], highlights: [H('c6', SOFT), H('e5', KEY)] },
+    { atMove: 10, say: "e5 — the wedge rolls up, kicking the f6-knight to the rim and clamping the middle. Black scrambles with …Qe7 to bite at the pawn.", sayShort: "e5 — clamp, kick the knight.", arrows: [A('e5', 'f6')], highlights: [H('e5', KEY), H('f6', SOFT)] },
+    { atMove: 12, say: "Qe2 props the e5-wedge and develops. Black blockades with …Nd5 to level the game, but you keep the spatial pull and the safer structure — castle and lean on those doubled c-pawns.", sayShort: "Qe2 — hold e5, press the pawns.", arrows: [A('e2', 'e5')], highlights: [H('e5', KEY), H('c6', SOFT)] },
+  ] },
   'scotch-game::7::Be6@15': { ...SC_NB3_MODERN, beats: [{ atMove: 15, say: "Be6 develops and offers the light-bishop trade. Carry on: Bxb6 and O-O-O for the opposite-wing race, or O-O and the central files. Your space and the better structure give a small, lasting pull — choose and press.", sayShort: "Be6 — Bxb6, then O-O-O or O-O.", highlights: [H('e4', KEY)] }] },
   'scotch-game::7::Bg4@15': { ...SC_NB3_MODERN, beats: [{ atMove: 15, say: "Bg4 hits your e2-queen — drop it to d2 or e1, or block with f3. The pin is fleeting; Bxb6 and O-O-O still launch the queenside storm, or O-O keeps it solid. Neutralise and press your space edge.", sayShort: "Bg4 — sidestep the queen, press.", highlights: [H('e4', KEY)] }] },
   'scotch-game::7::Qe7@13': { ...SC_NB3_MODERN, beats: [{ atMove: 13, say: "Qe7 lines Black's queen up opposite yours. Develop and choose: Be3 and O-O-O for the opposite-wing race, or O-O and the central files. The queens facing off suit your space edge; pick the structure and press for more.", sayShort: "Qe7 — develop, choose your wing.", highlights: [H('e4', KEY)] }] },
@@ -2287,7 +2308,11 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'vienna-game::0::Bg4@13': { ...VN_F4D5, beats: [{ atMove: 13, say: "Bg4 pins your f3-knight — Be2 or h3 breaks it. You hold the bishop pair from dxc3 and the half-open files; develop, castle, and double the rooks on the d- and f-files. The pin is a trifle against your structural pull.", sayShort: "Bg4 — break the pin, press the files.", highlights: [H('f3', KEY)] }] },
   'vienna-game::0::Bg4@9': { ...VN_F4D5, beats: [{ atMove: 9, say: "Bg4 pins your knight early — h3 puts the question, or Be2. Develop and recover: hold or trade the e5-pawn, castle, and the half-open f-file feeds your rook. The open game is level with a small pull — press the f-file.", sayShort: "Bg4 — h3, press the f-file.", highlights: [H('f3', KEY), H('f7', SOFT)] }] },
   'vienna-game::0::c6@13': { ...VN_F4D5, beats: [{ atMove: 13, say: "c6 props Black's centre. You hold the bishop pair from dxc3 and the half-open d- and f-files; develop Bf4 and the rooks, castle, and press both files. The two bishops and the structure give the pull — squeeze.", sayShort: "c6 — bishop pair, press the files.", highlights: [H('f7', KEY)] }] },
-  'vienna-game::0::d6@5': { ...VN_F4D5, beats: [{ atMove: 5, say: "d6 — Black declines the gambit with a quiet move. Take the space: Nf3, Bc4 or Bb5, and fxe5 to open the f-file when it suits. You have the centre and the half-open f-file aimed at the king — develop and press.", sayShort: "d6 — take space, open the f-file.", highlights: [H('f7', KEY)] }] },
+  'vienna-game::0::d6@5': { ...VN_F4D5, beats: [
+    { atMove: 5, say: "…d6 declines the gambit quietly, propping up e5. Take the space and develop: Nf3 eyes e5 and prepares to open the f-file with fxe5 when it suits.", sayShort: "…d6 — develop Nf3, hold f4.", arrows: [A('g1', 'f3')], highlights: [H('f4', KEY)] },
+    { atMove: 6, say: "Nf3 develops, leans on e5 and braces the f4-lever. The half-open f-file points at f7, and fxe5 opens lines whenever you choose.", sayShort: "Nf3 — eye e5, ready fxe5.", arrows: [A('f3', 'e5')], highlights: [H('e5', SOFT)] },
+    { atMove: 7, say: "…Nbd7 props the centre, but you hold the space and the f4-break in hand. Bc4, castle, and fxe5 to crack open the f-file at the king when the moment comes — a comfortable, pressing game.", sayShort: "…Nbd7 — keep the f-file lever.", highlights: [H('f7', KEY)] },
+  ] },
   'vienna-game::0::f5@11': { ...VN_F4D5, beats: [{ atMove: 11, say: "f5 props Black's knight but loosens the king badly. Strike: d3 hits the e4-knight, or exf6 en passant rips open the f-file. The weakened light squares around Black's king are your targets — develop with threats and attack.", sayShort: "f5 — hit e4, rip the f-file open.", highlights: [H('e4', KEY)] }] },
   'vienna-game::1::g6@7': { ...VN_FRANKENSTEIN, beats: [{ atMove: 7, say: "g6 — Black blocks the queen but bares the dark squares. Qf3 or Qe2 keeps the heat, Nb5 leaps at c7, and the c4-bishop glares at f7. You've a roaring initiative for the pawn — develop with threats and hunt the loosened king.", sayShort: "g6 — Qf3 and Nb5, attack the king.", arrows: [A('c4', 'f7')], highlights: [H('f7', KEY)] }] },
   'vienna-game::1::d5@7': { ...VN_FRANKENSTEIN, beats: [{ atMove: 7, say: "d5 blocks the bishop's diagonal — take it: Bxd5 keeps the attack, the queen rakes from h5, and Nb5 eyes c7. Black's king is loose and his pieces tangled; develop with threats and the initiative is worth the pawn.", sayShort: "d5 — take Bxd5, keep attacking.", highlights: [H('d5', KEY), H('f7', SOFT)] }] },
@@ -2323,7 +2348,11 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'vienna-game::3::Bc5@5': VN_BC4_DEV,
   'vienna-game::3::Bb4@5': VN_BC4_DEV,
   'vienna-game::3::Nc6@9': { ...VN_FRANKENSTEIN, beats: [{ atMove: 9, say: "Nc6 develops in the main line. Spring Nb5! hitting c7 and a8, the b3-bishop and queen rake the kingside, and the threats pile up. Black's king has no shelter; he holds only with precision, so keep forcing and make him find every move.", sayShort: "Nc6 — Nb5 hits c7, pile on.", arrows: [A('c3', 'b5')], highlights: [H('c7', KEY)] }] },
-  'vienna-game::3::c6@5': VN_BC4_DEV,
+  'vienna-game::3::c6@5': { ...VN_BC4_DEV, beats: [
+    { atMove: 5, say: "…c6 prepares the …d5 freeing break — strike first. d4 seizes the centre at once, before Black can get …d5 in on his terms.", sayShort: "…c6 — answer d4.", arrows: [A('d2', 'd4')], highlights: [H('d4', KEY)] },
+    { atMove: 6, say: "d4 grabs the full centre and jabs at e5. Black pins with …Bb4, but you're better developed with more space.", sayShort: "d4 — take the centre, hit e5.", arrows: [A('d4', 'e5')], highlights: [H('e5', ATK)] },
+    { atMove: 7, say: "…Bb4 pins your c3-knight — a nuisance, not a threat. Bd3, Nf3 or Qe2 and castling consolidate the broad centre and the space edge while you keep the bishop trained on f7.", sayShort: "…Bb4 — consolidate, keep the space.", highlights: [H('c3', SOFT)] },
+  ] },
   'vienna-game::4::Bg4@13': { ...VN_HAMPPE, beats: [{ atMove: 13, say: "Bg4 pins your f3-knight in the Hamppe. No fear: h3 puts the question, Be3 and Qd2 develop, and you press the over-extended g5-f4 chain. Your d4-centre and the f-file feed the attack — the gambit pawn buys a roaring initiative.", sayShort: "Bg4 — h3, press the g5 chain.", arrows: [A('c4', 'f7')], highlights: [H('f4', KEY)] }] },
   'vienna-game::4::h6@11': { ...VN_HAMPPE, beats: [{ atMove: 11, say: "h6 props Black's g5-pawn. Crack the chain anyway: h4 hits g5, O-O and the f-file pressure build, and the c4-bishop eyes f7. Your d4-centre dominates; the gambit pawn buys an attack — pry the kingside open and pour it on.", sayShort: "h6 — h4 cracks g5, attack.", arrows: [A('c4', 'f7')], highlights: [H('g5', KEY), H('f4', SOFT)] }] },
   'vienna-game::4::g4@13': { ...VN_HAMPPE, beats: [{ atMove: 13, say: "g4 lunges at your knight but over-extends fatally. Ne1 or Ng5 reroutes, and the loosened kingside is riddled with holes — Bxf4, the f-file, and a piece sac on the bared king all loom. Your d4-centre dominates; punish the over-reach.", sayShort: "g4 — reroute, punish the over-reach.", arrows: [A('c4', 'f7')], highlights: [H('f4', KEY)] }] },
@@ -2333,7 +2362,10 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'vienna-game::4::Nh6@13': { ...VN_HAMPPE, beats: [{ atMove: 13, say: "Nh6 develops toward f5 to defend. Strike the chain: h4 hits g5, Bxf4 recovers the pawn, and the f-file pours at Black's king. Your d4-centre and the c4-bishop dominate the board — pry the kingside open and attack.", sayShort: "Nh6 — h4 and Bxf4, press.", arrows: [A('c4', 'f7')], highlights: [H('f4', KEY)] }] },
   'vienna-game::4::Nh6@11': { ...VN_HAMPPE, beats: [{ atMove: 11, say: "Nh6 heads for f5. Crack the kingside: h4 hits g5, O-O and the f-file build the attack, and Bxf4 recovers the pawn. Your d4-centre dominates and the c4-bishop eyes f7 — the gambit pawn buys a roaring initiative.", sayShort: "Nh6 — h4, Bxf4, attack.", arrows: [A('c4', 'f7')], highlights: [H('f4', KEY)] }] },
   'vienna-game::4::Nge7@11': { ...VN_HAMPPE, beats: [{ atMove: 11, say: "Nge7 develops to bolster the kingside. Press: h4 cracks g5, O-O and the f-file build, and Bxf4 recovers the pawn with the initiative. Your d4-centre and the bishop eyeing f7 dominate — open lines and attack the king.", sayShort: "Nge7 — h4 and Bxf4, press.", arrows: [A('c4', 'f7')], highlights: [H('f4', KEY)] }] },
-  'vienna-game::4::Bc5@5': { ...VN_HAMPPE, beats: [{ atMove: 5, say: "Bc5 — Black develops actively rather than grab the pawn. Take the centre: Nf3, Bc4 and d3, then fxe5 or the f4-tension to open the f-file at the king. Your space and the half-open f-file give the pull — develop and press.", sayShort: "Bc5 — take the centre, press f-file.", highlights: [H('f4', KEY)] }] },
+  'vienna-game::4::Bc5@5': { ...VN_HAMPPE, beats: [
+    { atMove: 5, say: "…Bc5 develops actively instead of grabbing the pawn. Develop with purpose: Nf3 adds a guard to e5 and readies the f4-lever to open the file.", sayShort: "…Bc5 — develop Nf3.", arrows: [A('g1', 'f3')], highlights: [H('f4', KEY)] },
+    { atMove: 6, say: "Nf3 leans on e5 and supports the f4-tension. With d3, Bc4 and castling you keep the space and the half-open f-file aimed at Black's king — a comfortable, pressing game.", sayShort: "Nf3 — guard e5, ready f4.", arrows: [A('f3', 'e5')], highlights: [H('e5', SOFT)] },
+  ] },
   'vienna-game::5::Qe7@7': VN_GAMBIT_E5,
   'vienna-game::5::d6@9': VN_GAMBIT_E5,
   'vienna-game::5::Nc6@9': VN_GAMBIT_E5,
@@ -2352,7 +2384,10 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'vienna-game::6::Bg4@17': { ...VN_G3, beats: [{ atMove: 17, say: "Bg4 pins your f3-knight in the Mieses — h3 puts the question, or Be3 and Nbd2 around it. The g2-bishop rakes the long diagonal, your structure is sound, and the d4 lever opens lines. The pin is a nuisance — press the long diagonal.", sayShort: "Bg4 — h3, press the long diagonal.", highlights: [H('d4', KEY)] }] },
   'vienna-game::6::Nb6@9': { ...VN_G3, beats: [{ atMove: 9, say: "Nb6 retreats the knight from the centre. Seize space: d4 or c4 expands, the g2-bishop rakes the long diagonal, and Nf3 and O-O develop. Your harmonious Mieses setup gives a small, durable edge — improve the pieces and press.", sayShort: "Nb6 — expand d4, press the diagonal.", highlights: [H('d5', KEY)] }] },
   'vienna-game::6::Be7@11': { ...VN_G3, beats: [{ atMove: 11, say: "Be7 develops solidly; with bxc3 you hold the bishop pair and the half-open b-file. The g2-bishop rakes the long diagonal, and your two bishops plus the open file give the pull. Develop Nf3, castle, and press the file and diagonal.", sayShort: "Be7 — bishop pair, press the file.", highlights: [H('b7', KEY)] }] },
-  'vienna-game::6::Bc5@5': { ...VN_G3, beats: [{ atMove: 5, say: "Bc5 develops actively against the Mieses g3. Continue the fianchetto: Bg2, O-O, d3 and Nf3, the bishop then raking the long diagonal. A calm, strategically rich game where your harmonious setup gives the lasting pull — develop and press.", sayShort: "Bc5 — fianchetto, press the diagonal.", highlights: [H('d4', KEY)] }] },
+  'vienna-game::6::Bc5@5': { ...VN_G3, beats: [
+    { atMove: 5, say: "…Bc5 develops actively against your Mieses g3 setup. Stay the course: Bg2 completes the fianchetto, putting the bishop on the long light diagonal.", sayShort: "…Bc5 — answer Bg2.", arrows: [A('f1', 'g2')], highlights: [H('g2', KEY)] },
+    { atMove: 6, say: "Bg2 finishes the fianchetto. With O-O, d3 and Nf3 to follow, the bishop will rake the long diagonal once the centre clears — a calm, strategically rich game where your harmonious setup gives the lasting pull.", sayShort: "Bg2 — fianchetto, long diagonal.", highlights: [H('g2', KEY)] },
+  ] },
   'vienna-game::6::Bg4@15': { ...VN_G3, beats: [{ atMove: 15, say: "Bg4 pins your f3-knight — h3 puts the question, or Be3 and Nbd2. The g2-bishop rakes the long diagonal, your structure is harmonious, and the d4 break opens lines. The pin is a trifle; press the long diagonal and the centre.", sayShort: "Bg4 — h3, press the centre.", highlights: [H('d4', KEY)] }] },
   'vienna-game::7::d6@11': VN_QG4,
   'vienna-game::7::Nf6@11': VN_QG4,
@@ -2385,7 +2420,10 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'vienna-gambit::1::Nd7@15': VG_QF3,
   'vienna-gambit::1::Bg5@15': VG_QF3,
   'vienna-gambit::1::c5@15': VG_QF3,
-  'vienna-gambit::1::Nc6@9': VG_QF3,
+  'vienna-gambit::1::Nc6@9': { ...VG_QF3, beats: [
+    { atMove: 9, say: "…Nc6 develops and props the e4-knight — answer with Bb5, pinning the knight and piling pressure on the loose centre while you complete development.", sayShort: "…Nc6 — answer Bb5.", arrows: [A('f1', 'b5')], highlights: [H('b5', KEY)] },
+    { atMove: 10, say: "Bb5 pins the c6-knight and adds a piece to the assault. Your queen rakes from f3, the e5-pawn cramps Black, and you'll regain the material with the better game — develop with threats.", sayShort: "Bb5 — pin, keep the initiative.", arrows: [A('b5', 'c6')], highlights: [H('c6', ATK)] },
+  ] },
 
   // -- Petrov Defence --
   'petrov-defence::0::c4@10': PT_MAIN,
@@ -2424,7 +2462,10 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'petrov-defence::3::Bg5@12': { ...PT_COCHRANE, beats: [{ atMove: 12, say: "Bg5 pins your f6-knight against the queen — shrug it off with …h6. After Bxf6 Bxf6 you've traded into a clean, safe extra piece; tuck the king to g8 and convert at your leisure.", sayShort: "Bg5 — …h6 breaks the pin.", highlights: [H('h6', KEY), H('f6', SOFT)] }] },
   'petrov-defence::3::Be2@12': { ...PT_COCHRANE, beats: [{ atMove: 12, say: "Be2 — a meek developing move that does nothing to your fortress. You're a piece up; finish the job with …Kg8, …c6 and …Nbd7, and the material tells with no counterplay in sight.", sayShort: "Be2 — king to g8, consolidate.", arrows: [A('f7', 'g8')], highlights: [H('g8', KEY)] }] },
   'petrov-defence::3::Qe2@14': { ...PT_COCHRANE, beats: [{ atMove: 14, say: "Qe2 lines the queen up behind the bishop's old diagonal — but you've already blunted it with …Be6. A piece up, walk the king to g8, offer the light-bishop trade, and convert the extra piece.", sayShort: "Qe2 — king to g8, trade down.", arrows: [A('f7', 'g8')], highlights: [H('g8', KEY), H('e6', SOFT)] }] },
-  'petrov-defence::3::Nc3@8': { ...PT_COCHRANE, beats: [{ atMove: 8, say: "Nc3 develops, but without the d4-and-Bc4 pressure White has even less for the piece. Plant …Be6 to guard the light squares, roll …d5, walk the king home, and the extra piece is decisive.", sayShort: "Nc3 — …Be6 and …d5, convert.", arrows: [A('c8', 'e6')], highlights: [H('e6', KEY), H('d5', SOFT)] }] },
+  'petrov-defence::3::Nc3@8': { ...PT_COCHRANE, beats: [
+    { atMove: 8, say: "Nc3 develops, but without the d4-and-Bc4 pressure White has even less for the sacrificed piece. Trade his dangerous light-squared bishop with …Be6.", sayShort: "Nc3 — answer …Be6.", arrows: [A('c8', 'e6')], highlights: [H('e6', KEY)] },
+    { atMove: 9, say: "…Be6 offers to swap White's most dangerous attacker and braces the …d5 wall. Trade it, build the pawn shield, walk the king home, and the extra piece is decisive.", sayShort: "…Be6 — trade, build …d5, convert.", arrows: [A('e6', 'c4')], highlights: [H('d5', SOFT)] },
+  ] },
   'petrov-defence::4::Bd3@12': PT_5NC3,
   'petrov-defence::4::Bc4@12': PT_5NC3,
   'petrov-defence::4::Bf4@12': PT_5NC3,
@@ -2493,7 +2534,10 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'philidor-defence::2::Re1@14': PH_OPEN,
   'philidor-defence::2::g3@10': PH_OPEN,
   'philidor-defence::2::Bf4@14': PH_OPEN,
-  'philidor-defence::3::Bd3@8': PH_OPEN,
+  'philidor-defence::3::Bd3@8': { ...PH_OPEN, beats: [
+    { atMove: 8, say: "Bd3 aims the bishop at your kingside on the b1-h7 diagonal — sidestep its glare with a fianchetto. …g6 prepares …Bg7, blunting the bishop and guarding the dark squares.", sayShort: "Bd3 — answer …g6.", highlights: [H('g6', KEY)] },
+    { atMove: 9, say: "…g6 clears the way for …Bg7 to neutralise the d3-bishop and command the long diagonal. Fianchetto, castle, and your Improved Hanham shell is rock-solid and weakness-free.", sayShort: "…g6 — then …Bg7, solid shell.", arrows: [A('f8', 'g7')], highlights: [H('g7', KEY)] },
+  ] },
   'philidor-defence::3::Bg5@8': PH_OPEN,
   'philidor-defence::3::Bc4@8': PH_OPEN,
   'philidor-defence::3::f4@14': PH_OPEN,
@@ -2592,7 +2636,10 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'marshall-attack::0::Bc4@4': MAR_ITALIAN,
   'marshall-attack::0::d4@4': MAR_SCOTCH,
   'marshall-attack::0::Nc3@4': MAR_FOUR_KNIGHTS,
-  'marshall-attack::0::Bxc6@6': { ...MAR_EXCHANGE, beats: [{ atMove: 6, say: "Bxc6 trades into the Exchange — recapture …dxc6 and your trumps appear: the bishop pair and the half-open d-file. The doubled c-pawns are no weakness in the middlegame; with …Bg4, …Qd6 and …f6 you keep the centre fluid and the two bishops decide.", sayShort: "Bxc6 — …dxc6, bishop pair.", arrows: [A('c8', 'g4')], highlights: [H('c6', KEY)] }] },
+  'marshall-attack::0::Bxc6@6': { ...MAR_EXCHANGE, beats: [
+    { atMove: 6, say: "Bxc6 trades into the Exchange to dent your pawns — but recapture toward the centre and your trumps appear. …dxc6 keeps the bishop pair and opens the d-file for your rook.", sayShort: "Bxc6 — recapture …dxc6.", highlights: [H('c6', KEY)] },
+    { atMove: 7, say: "…dxc6 — the d-file is yours and the light bishop is freed to rake the kingside. Doubled c-pawns are no weakness here; with …Bg4, …Qd6 and …f6 you keep the centre fluid and the two bishops do the deciding.", sayShort: "…dxc6 — bishop pair, open d-file.", arrows: [A('c8', 'g4')], highlights: [H('c6', SOFT)] },
+  ] },
   'marshall-attack::0::d3@8': { ...MAR_D3, beats: [{ atMove: 8, say: "d3 — the quiet Ruy, sidestepping your Marshall before you can play …d5. Develop in comfort: …b5 and …Bc5 or …Be7, castle, and the …Na5 or …d5 breaks beckon. No pressure to meet; you stand fully equal with the freer plan.", sayShort: "d3 — develop, aim for …d5.", highlights: [H('d5', KEY)] }] },
   'marshall-attack::0::d3@10': { ...MAR_D3, beats: [{ atMove: 10, say: "d3 keeps it quiet, dodging your Marshall gambit. You're comfortably placed — reroute with …Na5 to hit the bishop, prepare …c5 or …d5, and play the rich middlegame from at least equality. White's caution costs him the initiative's edge.", sayShort: "d3 — …Na5, then …c5 or …d5.", highlights: [H('d5', KEY)] }] },
   'marshall-attack::0::exd5@16': MAR_MAIN,
