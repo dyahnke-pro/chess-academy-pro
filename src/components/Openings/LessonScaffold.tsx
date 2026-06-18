@@ -223,6 +223,10 @@ export function LessonScaffold({
   const isMobile = useIsMobile();
 
   const [chatOpen, setChatOpen] = useState(false);
+  // When the mobile chat splits the screen, the lesson column shrinks — so the
+  // narration + controls must yield room or they starve the (height-capped)
+  // board to nothing (David 2026-06-18 "board got cut off").
+  const chatSplit = Boolean(chat) && isMobile && chatOpen;
   const toggleChat = (): void => {
     setChatOpen((prev) => {
       const next = !prev;
@@ -330,7 +334,7 @@ export function LessonScaffold({
               {/* Cap the prose height so a long Watch beat (60-120 words)
                   scrolls internally instead of pushing the controls off a
                   short screen — full text stays readable + is spoken. */}
-              <p className="text-sm text-theme-text leading-relaxed max-h-[26vh] overflow-y-auto">{narration}</p>
+              <p className={`text-sm text-theme-text leading-relaxed overflow-y-auto ${chatSplit ? 'max-h-[7vh]' : 'max-h-[26vh]'}`}>{narration}</p>
             </div>
           )}
         </div>
@@ -338,7 +342,7 @@ export function LessonScaffold({
 
       {/* Controls */}
       {hasControls && (
-        <div className="px-4 py-3 pb-[calc(4.75rem+env(safe-area-inset-bottom,0px))] md:pb-4 shrink-0">
+        <div className={`px-4 py-3 shrink-0 ${chatSplit ? 'pb-2' : 'pb-[calc(4.75rem+env(safe-area-inset-bottom,0px))] md:pb-4'}`}>
           {customControls ?? <LessonControls {...controls} />}
         </div>
       )}
@@ -363,13 +367,14 @@ export function LessonScaffold({
         </div>
       )}
 
-      {/* MOBILE: the inline Chat button opens GameChatPanel as a bottom sheet
-          (above the bottom nav via z-40), so the student can ask at any time
-          without losing the single-screen lesson. */}
+      {/* MOBILE: the inline Chat button splits the screen — the lesson column
+          above (its board shrinks to stay FULLY visible, since the scaffold
+          caps the board to its region) and the chat below, the same stacked
+          shape /coach/teach uses on mobile. In-flow (not an overlay) so the
+          board is never covered/cut off (David 2026-06-18). */}
       {chat && isMobile && chatOpen && (
         <div
-          className="absolute inset-x-0 bottom-0 z-40 flex flex-col bg-theme-bg border-t border-theme-border rounded-t-2xl shadow-2xl"
-          style={{ height: 'min(72%, 30rem)' }}
+          className="flex flex-col shrink-0 h-[42vh] bg-theme-bg border-t border-theme-border"
           data-testid="lesson-chat"
         >
           <div className="flex items-center justify-between px-4 py-2 border-b border-theme-border shrink-0">
@@ -387,7 +392,9 @@ export function LessonScaffold({
               <X size={18} />
             </button>
           </div>
-          <div className="flex-1 min-h-0">{chatPanel}</div>
+          {/* Bottom-nav clearance so the chat content clears the fixed mobile
+              nav (the input is pinned at the top, so it's reachable regardless). */}
+          <div className="flex-1 min-h-0 pb-[calc(4.25rem+env(safe-area-inset-bottom,0px))]">{chatPanel}</div>
         </div>
       )}
     </div>
