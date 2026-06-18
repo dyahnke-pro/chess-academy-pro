@@ -973,6 +973,11 @@ const N188: SublineNarration = {
 
 const N189: SublineNarration = {
   intro: { say: "g6 — you've sidestepped the Open Sicilian with the Rossolimo, threatening Bxc6 to damage his structure. Black fianchettoes with …g6, preparing …Bg7 to bear down the long diagonal on e5 and the centre. After short castling he follows with …Bg7 and …e5 or …Nf6, content that the bishop pair you might win is offset by his solid dark-square grip and ready central counterplay.", sayShort: "Rossolimo — fianchetto and hold the centre" },
+  beats: [
+    { atMove: 5, say: "…g6 heads for the fianchetto despite White's Rossolimo bishop, planning …Bg7 and a solid hypermodern setup.", sayShort: "…g6 — head for the fianchetto.", highlights: [H('g6')] },
+    { atMove: 7, say: "…bxc6 recaptures toward the centre, taking the bishop pair and a half-open b-file; the doubled pawns guard d5 and e4.", sayShort: "…bxc6 — bishop pair, central pawns.", highlights: [H('c6')] },
+    { atMove: 21, say: "…Ne6 reroutes the knight to a fine central square, eyeing d4 and supporting the …f6 break to challenge White's e5-pawn.", sayShort: "…Ne6 — central knight, prep …f6.", arrows: [A('e6', 'd4')], highlights: [H('d4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:pawn-fianchetto', 'concept:pos-development'],
 };
 
@@ -2623,21 +2628,41 @@ const N517: SublineNarration = {
 
 const N518: SublineNarration = {
   intro: { say: "Bg5 — in this Soltis position White pins your f6-knight, the defender of the h5-pawn and the e4/d5 squares, prepping Nd5 or f4 to soften your kingside. You've got …h5 already keeping the kingside shut, so race on the queenside: …Rc4 or …Rxc3, …Qa5 and …b5. He's spent a tempo on the pin, and your …Rxc3 exchange sac smashes the c1-king's cover faster than his attack arrives.", sayShort: "Bg5 pin — race on the queenside" },
+  beats: [
+    { atMove: 25, say: "…Rc5 — a clever rook lift along the fifth rank, keeping the c-file pressure while freeing c8 and eyeing the kingside.", sayShort: "…Rc5 — flexible rook lift.", highlights: [H('c5')] },
+    { atMove: 27, say: "…b5 launches the pawn storm at White's king, gaining space and preparing …b4 to blast open c3.", sayShort: "…b5 — launch the storm.", highlights: [H('b5')] },
+    { atMove: 29, say: "…a5 feeds the second pawn into the storm — …a4 and …b4 next, cracking the queenside faster than White's kingside push arrives.", sayShort: "…a5 — feed the pawn storm.", highlights: [H('a5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:tac-pin', 'concept:att-exchange-sac'],
 };
 
 const N519: SublineNarration = {
   intro: { say: "Bh6 — the Soltis main line of the Yugoslav, where White hunts your g7 Dragon bishop, the dark-square defender and soul of your counterattack. Answer …Bxh6 and after Qxh6 keep fighting: your …h5-pawn has frozen White's h-pawn, so the kingside can't be ripped open by h5xg6. Crash through first with …Rxc3 and …Qa5, …b5 against the c1-king before his pieces reach the h-file and g7.", sayShort: "Bh6 swaps your Dragon bishop" },
+  beats: [
+    { atMove: 25, say: "…Nc4 — the knight jumps to its dream square, hitting the queen on d2 and forcing the trade that rips open the c-file. The Dragon machine engages.", sayShort: "…Nc4 — hit the queen, open the file.", arrows: [A('c4', 'd2')], highlights: [H('d2')] },
+    { atMove: 27, say: "…Rxc4 recaptures and slams onto the c-file, bearing down on c3 and White's king. This is the Dragon's whole point: trade the light pieces, open the file, attack.", sayShort: "…Rxc4 — the c-file battery.", arrows: [A('c4', 'c3')], highlights: [H('c3')] },
+    { atMove: 29, say: "…Kxg7 recaptures the dark bishop; your king sits fine behind the …h5 wall while your heavy pieces mass against c3. The race is on and you're rolling.", sayShort: "…Kxg7 — king safe, attack rolls.", highlights: [H('g7')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:att-exchange-sac', 'concept:pos-king-safety'],
 };
 
 const N520: SublineNarration = {
   intro: { say: "Nde2 — you've already played …Nc4 and after Bxc4 …Rxc4 your rook sits active on c4, raking the half-open c-file and eyeing e4; now White's knight retreats to overprotect c3 and reroute toward the kingside. You've swapped off his light-squared bishop, easing the heat on your king. Drive …b5-b4 and …Qa5 to crash the c-file against the b1-king, …Be6 to trade his last bishop, with the ever-present …Rxc3 break waiting.", sayShort: "…Rxc4 active — drive …b5-b4 in" },
+  beats: [
+    { atMove: 29, say: "…b5 opens the pawn storm at White's king, the rook already on c4 backing it. The Dragon race is in full flow.", sayShort: "…b5 — open the storm.", highlights: [H('b5')] },
+    { atMove: 31, say: "…b4 rams the queenside, prying open lines at the c1-king while White's kingside push lags behind.", sayShort: "…b4 — ram the queenside.", highlights: [H('b4')] },
+    { atMove: 33, say: "…Kxg7 recaptures; your king sits safe behind its pawns as your rooks and queen swarm the open queenside. You're winning the race.", sayShort: "…Kxg7 — king safe, swarm.", highlights: [H('g7')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pos-open-file', 'concept:att-queenside-attack'],
 };
 
 const N521: SublineNarration = {
   intro: { say: "O-O-O — the Yugoslav tabiya. White's castled queenside, primed for h4-h5 to pry open your kingside while you sit short-castled behind the g7-bishop. Both kings opposite, so it's a pure pawn-storm race: play …Rc8, …Ne5 and …Nc4 or the …Rxc3 exchange sac to smash his queenside cover, with …a6 and …b5 opening lines at the c1-king before the h-file opens against yours.", sayShort: "Yugoslav Attack — opposite-side race" },
+  beats: [
+    { atMove: 17, say: "…Nxd4 trades a pair of knights; after Bxd4 you gain the time to challenge the dark bishop and develop with tempo.", sayShort: "…Nxd4 — trade, gain time.", highlights: [H('d4')] },
+    { atMove: 19, say: "…Be6 develops eyeing a2 and the c4-square, daring White's setup while you prepare …Rc8 and the queenside attack.", sayShort: "…Be6 — eye a2, prep …Rc8.", arrows: [A('e6', 'a2')], highlights: [H('a2')] },
+    { atMove: 23, say: "…h5 — the standard freeze, jamming White's h4-h5 pawn-storm before it opens your king. Your king is safe; now you attack.", sayShort: "…h5 — freeze the h-pawn storm.", highlights: [H('h5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:att-queenside-attack', 'concept:att-exchange-sac'],
 };
 
@@ -2671,116 +2696,231 @@ const N524: SublineNarration = {
 
 const N525: SublineNarration = {
   intro: { say: "g4 — in this Soltis structure you've locked the kingside with …h5, so White plays g4 to pry it open with gxh5 and a file for the rooks and queen at your king. Answer …hxg4 or …Nxg4, keeping your king's cover intact and trading down his attackers. Stay in the race: …Rxc3 and …Qa5 with …b5 to break the c1-king's shelter, leaning on the g7-bishop and the c-file faster than his h- and g-file assault.", sayShort: "g4 pries open the locked kingside" },
+  beats: [
+    { atMove: 25, say: "…hxg4 — meet the storm by trading. The f3-pawn falls, the h-file cracks open both ways, but your queenside attack is the faster one.", sayShort: "…hxg4 — trade, open the h-file.", highlights: [H('g4')] },
+    { atMove: 27, say: "…Nxh5 grabs the pawn and heads for f4; the knight eyes the holes round White's king while your rooks load the c-file.", sayShort: "…Nxh5 — grab it, eye f4.", highlights: [H('h5')] },
+    { atMove: 29, say: "…e6 shores up d5 and f5, blunting White's Bh6 and Nd5 tricks. Centre solid, you turn back to the queenside assault that wins these races.", sayShort: "…e6 — solid centre, then attack.", highlights: [H('e6')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:att-kingside-storm', 'concept:att-exchange-sac'],
 };
 
 const N526: SublineNarration = {
   intro: { say: "Be2 — the Classical Dragon: White develops modestly rather than the sharp Yugoslav f3 and Be3, aiming to castle short and play a quieter positional game. With both kings heading kingside, the venom of opposite-side storms is gone. Keep your Dragon machine running: …O-O, …Nc6, …Bd7 and …Rc8 with …Ne5 or …a6 and …b5, using the long-diagonal bishop and c-file pressure to fight for the centre and the d4-square.", sayShort: "Classical Dragon — quieter, both castle short" },
+  beats: [
+    { atMove: 11, say: "…Bg7 — the Dragon bishop takes the long diagonal, raking toward b2 and White's queenside. This is your pride and joy.", sayShort: "…Bg7 — the long diagonal.", arrows: [A('g7', 'b2')], highlights: [H('b2')] },
+    { atMove: 13, say: "…Nc6 develops with a hit on d4; after the trades or …Ne5 you pressure the centre. The Classical Dragon is calm, but your play is easy and harmonious.", sayShort: "…Nc6 — hit d4.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
+    { atMove: 19, say: "…Rc8 loads the half-open c-file behind White's position. Even in the quiet Classical, the c-file is your highway.", sayShort: "…Rc8 — the c-file highway.", arrows: [A('c8', 'c3')], highlights: [H('c3')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pawn-fianchetto', 'concept:pos-development'],
 };
 
 const N527: SublineNarration = {
   intro: { say: "Kb1 — the prophylactic king-tuck of the Yugoslav Soltis line, stepping off the c-file and the a7-g1 diagonal to blunt your …Rxc3 and …Qa5 before White presses the kingside. You've got the kingside locked with …h5 and the knight on e5, so push on: …Nc4 hits the queen and bishop, then …Rxc3 exchange sac and …b5-b4 to tear open the queenside, racing the b1-king even with the tempo he's spent.", sayShort: "Kb1 prophylaxis — push …Nc4, …b5" },
+  beats: [
+    { atMove: 25, say: "…Nc4 leaps in with tempo, hitting the queen and forcing the trade that opens the c-file for your attack.", sayShort: "…Nc4 — hit the queen.", arrows: [A('c4', 'd2')], highlights: [H('d2')] },
+    { atMove: 27, say: "…Rxc4 recaptures onto the open c-file, the rook glaring at c3 and the king on b1. The Dragon's battery is built.", sayShort: "…Rxc4 — build the battery.", arrows: [A('c4', 'c3')], highlights: [H('c3')] },
+    { atMove: 29, say: "…Qc7 brings the queen behind the rook, doubling on the c-file straight at White's king. The pressure becomes unbearable.", sayShort: "…Qc7 — double on the c-file.", arrows: [A('c7', 'c3')], highlights: [H('c3')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pos-prophylaxis', 'concept:att-queenside-attack'],
 };
 
 const N528: SublineNarration = {
   intro: { say: "g3 — White meets your Dragon with a restrained mirror fianchetto, contesting the long light diagonal and blunting your g7-bishop with a bishop on g2. It's a quiet positional line, not a storm. Develop naturally: …Nc6 hits d4, then …Bg7, …O-O and …Bd7 with …Rc8 or …a6 and …Nxd4, fighting for the centre and the c-file. With no opposite-side attack, aim for comfortable equality and the standard …b5 or …d5 freeing breaks.", sayShort: "g3 fianchetto — quiet positional Dragon" },
+  beats: [
+    { atMove: 11, say: "…Bg7 — your Dragon bishop faces off against White's own fianchetto. In this quiet line you fight for the long diagonal and the …d5 break.", sayShort: "…Bg7 — contest the long diagonal.", arrows: [A('g7', 'b2')], highlights: [H('b2')] },
+    { atMove: 21, say: "…d5 — the freeing break that equalises in the fianchetto lines. You strike the centre with everything developed; the diagonal opens for your bishop.", sayShort: "…d5 — the freeing break.", arrows: [A('d5', 'e4')], highlights: [H('e4')] },
+    { atMove: 23, say: "…dxe4 opens the centre and the long diagonal; your g7-bishop springs to life and you reach a fully equal, comfortable game.", sayShort: "…dxe4 — open the diagonal.", highlights: [H('e4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pawn-fianchetto', 'concept:pos-development'],
 };
 
 const N529: SublineNarration = {
   intro: { say: "g4 — White flings the g-pawn before castling, an aggressive Yugoslav move-order intending h4-h5 and g5 to blow open your kingside fast. Generate counterplay immediately on the other wing: …Rc8, …Ne5 and …Nc4 to harass his pieces, …a6 and …b5 to pry open the queenside, and the standard …Rxc3 exchange sac — striking at his king before the g- and h-pawns crash through against your fianchettoed king.", sayShort: "Early g4 storm — counter fast queenside" },
+  beats: [
+    { atMove: 17, say: "…Nxd4 trades the knights; after Bxd4 you've gained time to swing the queen out and counter while White's g4 commits him.", sayShort: "…Nxd4 — trade, gain time.", highlights: [H('d4')] },
+    { atMove: 19, say: "…Qa5 — the queen springs to the active diagonal, eyeing c3 and supporting the …Rc8/…b5 attack. Counterplay before the storm lands.", sayShort: "…Qa5 — active queen, eye c3.", arrows: [A('a5', 'c3')], highlights: [H('c3')] },
+    { atMove: 23, say: "…Nxh5 grabs the pawn White's g4-storm left loose; your knight finds f4 and the attack swings back at his exposed king.", sayShort: "…Nxh5 — grab it, eye f4.", highlights: [H('h5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:att-kingside-storm', 'concept:att-exchange-sac'],
 };
 
 const N530: SublineNarration = {
   intro: { say: "h4 — White launches the h-pawn before castling long, the most direct Yugoslav try; h4-h5 aims to rip open the h-file and the g6-square in front of your king. Counterstrike on the queenside without delay: …Rc8, …Ne5 hitting the c4-bishop, …h5 to jam his h-pawn, and the …Rxc3 exchange sac with …Qa5 and …b5 to break through on the queenside before the h-file opens against the g7-bishop's king.", sayShort: "h4 storm — counter on the queenside" },
+  beats: [
+    { atMove: 19, say: "…Rc8 loads the c-file at once — in the Yugoslav you don't dawdle; the rook lines up on c3 and the king behind it.", sayShort: "…Rc8 — load the c-file fast.", arrows: [A('c8', 'c3')], highlights: [H('c3')] },
+    { atMove: 21, say: "…h5 — the freeze. White's h4-h5 storm is stopped dead before it opens your king. Now you attack and he can't.", sayShort: "…h5 — freeze the storm.", highlights: [H('h5')] },
+    { atMove: 23, say: "…Ne5 — the knight heads for c4, the dream square, eyeing the queen and the exchange sac on c3 that defines the Dragon.", sayShort: "…Ne5 — head for c4.", arrows: [A('e5', 'c4')], highlights: [H('c4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:att-kingside-storm', 'concept:att-queenside-attack'],
 };
 
 const N531: SublineNarration = {
   intro: { say: "Bc4 — White's bishop eyes f7 and the a2-g8 diagonal, often a prelude to the Yugoslav or a quick attacking setup. Complete the fianchetto with …Bg7, putting your bishop on its dominant diagonal. Then …O-O, …Nc6 or …a6 and …b5 to challenge the c4-bishop with tempo, …Bd7 and …Rc8 for the c-file, generating the usual Dragon counterplay against his king once both sides commit.", sayShort: "Bc4 setup — …b5 will hit the bishop" },
+  beats: [
+    { atMove: 11, say: "…Bg7 — the long-diagonal bishop, your trump against White's aggressive Bc4.", sayShort: "…Bg7 — your trump bishop.", arrows: [A('g7', 'b2')], highlights: [H('b2')] },
+    { atMove: 15, say: "…bxc6 recaptures toward the centre, handing you a half-open b-file and a sturdy pawn mass guarding the key central squares.", sayShort: "…bxc6 — recapture to the centre.", highlights: [H('c6')] },
+    { atMove: 23, say: "…O-O tucks the king away with development complete; your bishop pair and central pawns give a comfortable, balanced game.", sayShort: "…O-O — king safe, comfortable.", highlights: [H('g8')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pawn-fianchetto', 'concept:pos-development'],
 };
 
 const N532: SublineNarration = {
   intro: { say: "Be3 — White signals the dreaded Yugoslav Attack, intending f3, Qd2, O-O-O and a pawn storm with h4-h5 and g4. Your fianchettoed bishop on g7 rakes the long diagonal toward d4 and b2, the engine of all your counterplay. Castle, play …Nc6, …Bd7 and …Rc8, then race down the c-file with the …Rxc3 exchange sac and queenside pressure before his kingside avalanche lands.", sayShort: "Dragon bishop eyes the long diagonal" },
+  beats: [
+    { atMove: 11, say: "…Bg7 takes the long diagonal — your bishop's home, aimed at b2 and White's queenside.", sayShort: "…Bg7 — bishop home.", arrows: [A('g7', 'b2')], highlights: [H('b2')] },
+    { atMove: 13, say: "…Ng4 — a tempo-gaining poke at the e3-bishop, dragging it to a worse square before you settle your setup.", sayShort: "…Ng4 — poke the bishop.", arrows: [A('g4', 'e3')], highlights: [H('e3')] },
+    { atMove: 21, say: "…Nge5 plants a knight in the centre, eyeing c4 and d3 — a powerful Dragon outpost from which to coordinate the attack.", sayShort: "…Nge5 — central outpost.", arrows: [A('e5', 'c4')], highlights: [H('c4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pawn-fianchetto', 'concept:att-queenside-attack'],
 };
 
 const N533: SublineNarration = {
   intro: { say: "Qd2 — a Classical Dragon where White connects rooks and eyes Bh6 to trade your powerful g7-bishop. Both kings sit safe on the kingside, so it's a positional middlegame, not a storm race. Meet Bh6 with …Bxh6 only when it favours you, play …Rc8 and …a6-a5 to expand and pressure the b3-knight, and look to …Na5 or …Nd7-e5 outposts and the c-file for active piece play.", sayShort: "Classical Qd2 — guard the g7 bishop" },
+  beats: [
+    { atMove: 19, say: "…Rc8 — the c-file rook, the Dragon's signature even in the calm Classical. It eyes c3 and White's queenside.", sayShort: "…Rc8 — the signature rook.", arrows: [A('c8', 'c3')], highlights: [H('c3')] },
+    { atMove: 21, say: "…Ne5 heads for c4, the outpost, eyeing the queen and pressuring through the structure.", sayShort: "…Ne5 — head for c4.", arrows: [A('e5', 'c4')], highlights: [H('c4')] },
+    { atMove: 23, say: "…Nc4 lands on its dream square, hitting the queen on d2 and forcing concessions. Your pieces dominate the queenside.", sayShort: "…Nc4 — dream square.", arrows: [A('c4', 'd2')], highlights: [H('d2')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pos-development', 'concept:pos-king-safety'],
 };
 
 const N534: SublineNarration = {
   intro: { say: "f3 — a Classical Dragon where White's castled short and played Nb3, a solid setup with no opposite-side storm; the f3-pawn guards e4 and the g4-square. You're developed harmoniously, …Be6 controlling key light squares and …Nc6 pressuring d4. Play …Rc8 and …a6-a5 to gain queenside space and harass the b3-knight, …Na5 or …Ne5 for an outpost, and maneuver patiently — the g7-bishop and c-file pressure give comfortable equality.", sayShort: "Classical f3 — …Rc8 and …a5 space" },
+  beats: [
+    { atMove: 19, say: "…d5 — the freeing break. White's slow f3 let you strike the centre with everything ready; the position opens for your active pieces.", sayShort: "…d5 — strike the centre.", arrows: [A('d5', 'e4')], highlights: [H('e4')] },
+    { atMove: 21, say: "…Nxd5 recaptures, centralising and inviting trades that leave you comfortable with the freer game.", sayShort: "…Nxd5 — centralise.", highlights: [H('d5')] },
+    { atMove: 23, say: "…Bxd5 — the bishop recaptures on a dominant central post, raking toward a2 and White's king. Full equality with the better pieces.", sayShort: "…Bxd5 — dominant bishop.", highlights: [H('d5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pos-development', 'concept:pos-space'],
 };
 
 const N535: SublineNarration = {
   intro: { say: "Bc4 — this Levenfish line with f4 and the trade on c6 left you doubled c-pawns but the half-open b-file and the bishop pair, and now White develops aggressively toward f7. You're solid and ready to fight for the centre: …Bg7 finishes the fianchetto, …O-O, then …d5 striking the centre and opening lines for your bishops, or …Rb8 to exploit the b-file — using dark-square control and the central break to punish his loosening f4-push.", sayShort: "Levenfish Bc4 — …d5 hits the centre" },
+  beats: [
+    { atMove: 15, say: "…Bg7 takes the long diagonal, your bishop biting at b2 behind White's broad centre.", sayShort: "…Bg7 — take the diagonal.", arrows: [A('g7', 'b2')], highlights: [H('b2')] },
+    { atMove: 17, say: "…Nd7 — when White lunges e5, the knight retreats actively to d7, eyeing c5 and undermining the e5-pawn.", sayShort: "…Nd7 — undermine e5.", arrows: [A('d7', 'c5')], highlights: [H('c5')] },
+    { atMove: 23, say: "…Qc7 connects the rooks and eyes the c-file and e5; your pieces target White's overextended centre.", sayShort: "…Qc7 — target the centre.", highlights: [H('c7')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pawn-doubled', 'concept:pos-center'],
 };
 
 const N536: SublineNarration = {
   intro: { say: "Bd3 — the Levenfish Attack with an early f4: White grabbed space and traded on c6, giving you doubled c-pawns but a half-open b-file and a strong centre, and now the bishop eyes your kingside. After …bxc6 your structure is compact. Play …Bg7 to finish the fianchetto, …O-O, then …d5 or …Rb8 — using the open b-file, the bishop pair on the long diagonals, and the central …d5 break to exploit his loosened f4-advance and overextended kingside.", sayShort: "Levenfish — …bxc6 and …d5 break" },
+  beats: [
+    { atMove: 15, say: "…Bg7 — your bishop claims the long diagonal even with White's f4 looming; it bites at b2 and the centre.", sayShort: "…Bg7 — claim the diagonal.", arrows: [A('g7', 'b2')], highlights: [H('b2')] },
+    { atMove: 17, say: "…a5 starts the queenside pawn storm, gaining space and preparing …a4 to harass White's pieces.", sayShort: "…a5 — start the storm.", highlights: [H('a5')] },
+    { atMove: 23, say: "…Nd7 reroutes the knight toward c5 and b6, eyeing the holes f4 created and the e4-pawn. Comfortable and active.", sayShort: "…Nd7 — reroute to c5.", arrows: [A('d7', 'c5')], highlights: [H('c5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pawn-doubled', 'concept:pos-open-file'],
 };
 
 const N537: SublineNarration = {
   intro: { say: "Be3 — this Levenfish line with f4 traded on c6 and now develops, leaving you doubled c-pawns but the open b-file and the bishop pair. Your structure is compact and ready for central action: …Bg7 completes the fianchetto, …O-O, then the …d5 break to hit his centre and free your bishops, or …Rb8 and …Qa5 to exploit the half-open b-file — turning the structural concession into dynamic dark-square play against his overextended f4-pawn.", sayShort: "Levenfish Be3 — …d5 and b-file play" },
+  beats: [
+    { atMove: 15, say: "…Qa5 — the queen jumps out, leaning on c3 and eyeing White's queenside, gaining time before he coordinates.", sayShort: "…Qa5 — active, lean on c3.", arrows: [A('a5', 'c3')], highlights: [H('c3')] },
+    { atMove: 17, say: "…Bg7 takes the long diagonal, the Dragon bishop bearing on b2 behind the queen's pressure.", sayShort: "…Bg7 — the long diagonal.", arrows: [A('g7', 'b2')], highlights: [H('b2')] },
+    { atMove: 23, say: "…Qh5 swings the queen to the kingside, combining with …Ng4 to harass White's king. Your initiative builds on both wings.", sayShort: "…Qh5 — swing to the kingside.", highlights: [H('h5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pawn-doubled', 'concept:pos-open-file'],
 };
 
 const N538: SublineNarration = {
   intro: { say: "Qd2 — a Maroczy Bind where White connects rooks and prepares Bh6 to challenge your strong g7-bishop while the c4-e4 clamp holds. You're cramped but solid behind the fianchetto: play …Bd7 and …a6 with …Rc8 to fight for the c-file, …Nxd4 and …Bc6 to pressure e4, and meet Bh6 by keeping the dark-squared bishop where it matters — building patiently toward the …b5 break that escapes the bind.", sayShort: "Maroczy Qd2 — hold the g7 bishop" },
+  beats: [
+    { atMove: 17, say: "…Ng4 — a tempo-gaining trade offer; after Bxg4 you swap a pair of minors and ease the cramped Maroczy.", sayShort: "…Ng4 — offer a trade.", arrows: [A('g4', 'e3')], highlights: [H('e3')] },
+    { atMove: 19, say: "…Bxg4 recaptures, trading off your potentially bad bishop and reaching a comfortable Maroczy where the bind has lost its bite.", sayShort: "…Bxg4 — trade the bad bishop.", highlights: [H('g4')] },
+    { atMove: 23, say: "…Bd7 repositions the bishop toward c6 and the long diagonal, eyeing e4 to pressure the bind's keystone.", sayShort: "…Bd7 — reroute to c6.", highlights: [H('d7')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pos-space', 'concept:pos-development'],
 };
 
 const N539: SublineNarration = {
   intro: { say: "Rc1 — the Maroczy Bind: White's c4 and e4 pawns clamp the d5- and b5-squares, denying you the freeing breaks and the open c-file rush of the Yugoslav, and now the rook overprotects c4 and eyes the half-open file. Settle into the long maneuvering battle: …a6 and …Rc8 to fight for the c-file, …Nxd4 and …Bc6 to challenge e4, and the patient …a5-a4 or freeing …b5 break to escape the bind without losing the dark-square strength of the g7-bishop.", sayShort: "Maroczy Bind — break the clamp" },
+  beats: [
+    { atMove: 19, say: "…Nxd4 trades into the Maroczy structure; after Bxd4 you challenge the dark bishop and free yourself from the bind.", sayShort: "…Nxd4 — ease the bind.", highlights: [H('d4')] },
+    { atMove: 21, say: "…Bc6 — the bishop swings to the long diagonal, pressuring e4, the heart of White's bind. Trade or provoke f3 and the cramp eases.", sayShort: "…Bc6 — pressure e4.", arrows: [A('c6', 'e4')], highlights: [H('e4')] },
+    { atMove: 23, say: "…a5 grabs queenside space and fixes White's pawns, the standard Maroczy plan for a foothold and a later …a4.", sayShort: "…a5 — queenside foothold.", highlights: [H('a5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pos-space', 'concept:pawn-minority-attack'],
 };
 
 const N540: SublineNarration = {
   intro: { say: "c3 — the Smith-Morra Gambit declined into an open game: White sacrifices the c3-pawn for development, recaptures with the knight and aims the c4-bishop and open c- and d-files at your king. You've taken the extra pawn — shore up with …e6 and …a6, blunting the bishop and preparing …b5 and …d6. Develop carefully: …d6, …Be7, …Nf6, …O-O, neutralising his lead and converting the extra material once your king is safe.", sayShort: "Morra Gambit — develop, hold the pawn" },
+  beats: [
+    { atMove: 7, say: "…dxc3 — snap off the gambit pawn. White gets a little development for it, but you're a clean pawn up with no weaknesses; just develop soundly.", sayShort: "…dxc3 — take the gambit pawn.", highlights: [H('c3')] },
+    { atMove: 15, say: "…d5 strikes the centre, freeing your game and challenging White's development on your terms.", sayShort: "…d5 — free your game.", arrows: [A('d5', 'e4')], highlights: [H('e4')] },
+    { atMove: 21, say: "…d4 — the passed pawn rolls, cramping White and gaining space; your extra gambit pawn becomes a powerful spearhead.", sayShort: "…d4 — the pawn rolls.", highlights: [H('d4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:pos-development', 'concept:pos-open-file'],
 };
 
 const N541: SublineNarration = {
   intro: { say: "f3 — a Maroczy Bind where White bolsters e4 early, locking in the c4-e4 space clamp before finishing development. Your g7-bishop anchors the dark squares and you're cramped but sound. Play …O-O, …d6 and …Bd7 with …a6 and …Rc8 to fight for the c-file, …Nxd4 and …Bc6 to pressure e4, and prepare the thematic …b5 break — the move that liberates you from the clamp without surrendering the long-diagonal bishop's strength.", sayShort: "Maroczy f3 — clamp then break …b5" },
+  beats: [
+    { atMove: 13, say: "…Qb6 hits the d4-knight and b2, exploiting the early f3 that weakened the a7-g1 diagonal. White must react.", sayShort: "…Qb6 — hit d4 and b2.", arrows: [A('b6', 'd4')], highlights: [H('d4')] },
+    { atMove: 15, say: "…Qxb2 grabs the pawn; after Nxg7+ you calmly tuck the king and emerge with the bishop pair and active play, the complications favouring you.", sayShort: "…Qxb2 — grab, complications favour you.", highlights: [H('b2')] },
+    { atMove: 19, say: "…Kxg7 recovers the piece; the dust settles with the bishop pair and active play, the bold queen raid vindicated.", sayShort: "…Kxg7 — recover the piece.", highlights: [H('g7')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pos-space', 'concept:pawn-minority-attack'],
 };
 
 const N542: SublineNarration = {
   intro: { say: "f3 — a Maroczy Bind where White buttresses e4 before completing development, settling into the positional clamp that denies you the …d5 and …b5 breaks. Your g7-bishop holds the dark squares while you sit cramped but resilient. Play …d6, …Bd7 and …a6 with …Rc8 to fight for the c-file, then …Nxd4 and …Bc6 to challenge e4, and build patiently toward the freeing …b5 break that escapes the bind without conceding the dark-square grip.", sayShort: "Maroczy f3 — fight for the c-file" },
+  beats: [
+    { atMove: 15, say: "…d6 solidifies the centre against the Maroczy bind, completing the Accelerated Dragon's transposition before counterplay.", sayShort: "…d6 — solidify the centre.", highlights: [H('d6')] },
+    { atMove: 17, say: "…Qa5 activates the queen, leaning on c3 and the queenside — the standard way to generate play in the bind.", sayShort: "…Qa5 — generate play.", arrows: [A('a5', 'c3')], highlights: [H('c3')] },
+    { atMove: 21, say: "…Be6 develops eyeing c4 and a2, probing White's bind for the …d5 or …b5 break to come.", sayShort: "…Be6 — probe the bind.", arrows: [A('e6', 'c4')], highlights: [H('c4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pos-space', 'concept:pos-prophylaxis'],
 };
 
 const N543: SublineNarration = {
   intro: { say: "f3 — a Maroczy Bind where White reinforces e4 and the c4-e4 pawns squeeze your position, denying the freeing breaks. Your g7-bishop is your pride, holding the long diagonal. Play the classic anti-Maroczy treatment: …Bd7 and …a6 with …Rc8 for the c-file, …Nxd4 and …Bc6 to challenge the e4-pawn, and the carefully prepared …b5 break — backed by …Qa5 and …Rfc8 — to crack the bind and liberate your pieces before he expands further.", sayShort: "Maroczy f3 — prepare the …b5 break" },
+  beats: [
+    { atMove: 17, say: "…Nh5 reroutes the knight toward f4, a strong outpost eyeing White's kingside holes, sidestepping the bind.", sayShort: "…Nh5 — reroute to f4.", arrows: [A('h5', 'f4')], highlights: [H('f4')] },
+    { atMove: 19, say: "…bxc6 recaptures toward the centre, opening the b-file and reinforcing d5 to challenge the bind.", sayShort: "…bxc6 — reinforce d5.", highlights: [H('c6')] },
+    { atMove: 23, say: "…c5 grabs central space and challenges White's c4-pawn, freeing your position from the bind.", sayShort: "…c5 — free the position.", highlights: [H('c5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pos-space', 'concept:pawn-minority-attack'],
 };
 
 const N544: SublineNarration = {
   intro: { say: "f3 — another Maroczy Bind setup, the pawn reinforcing e4 and the c4-e4 clamp, settling in for a positional squeeze rather than a Yugoslav storm. You're cramped but solid, the g7-bishop controlling the dark squares. Play …Nxd4 and …Bc6 to pressure e4, …a6 and …Rc8 for the c-file, and the long-prepared …b5 break — supported by …Qa5 and …Rfc8 — to crack the bind and free the position before he expands further on the queenside.", sayShort: "f3 Maroczy — patient …b5 break" },
+  beats: [
+    { atMove: 19, say: "…Nxd4 trades to relieve the Maroczy bind; Bxd4 lets you challenge the bishop and develop with tempo.", sayShort: "…Nxd4 — relieve the bind.", highlights: [H('d4')] },
+    { atMove: 21, say: "…a5 — queenside space, the Maroczy antidote. You gain a foothold and prepare …a4 to fix White's pawns.", sayShort: "…a5 — the Maroczy antidote.", highlights: [H('a5')] },
+    { atMove: 23, say: "…Bc6 trains the bishop on e4, the bind's keystone, pressuring it down the long diagonal.", sayShort: "…Bc6 — pressure e4.", arrows: [A('c6', 'e4')], highlights: [H('e4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pos-space', 'concept:pos-prophylaxis'],
 };
 
 const N545: SublineNarration = {
   intro: { say: "f4 — in this Maroczy Bind White grabs more space, intending e5 or f5 to expand on the kingside while his c4-pawn keeps the bind on d5 and b5. Counter before he rolls forward: your …Nxd4 and …Bc6 trade pieces and hit e4, …Rc8 and …a6 contest the c-file, and your …b5 break frees the queenside — leaning on your g7-bishop to keep the dark squares secure against his advance.", sayShort: "Maroczy f4 — trade and break …b5" },
+  beats: [
+    { atMove: 19, say: "…Nxd4 trades to ease the bind; Bxd4 invites you to challenge the bishop next.", sayShort: "…Nxd4 — ease the bind.", highlights: [H('d4')] },
+    { atMove: 21, say: "…Bc6 trains on e4 down the long diagonal, pressuring the bind's keystone pawn.", sayShort: "…Bc6 — pressure e4.", arrows: [A('c6', 'e4')], highlights: [H('e4')] },
+    { atMove: 23, say: "…Nd7 reroutes toward c5 and e5, eyeing the holes f4 left and undermining White's centre.", sayShort: "…Nd7 — undermine the centre.", arrows: [A('d7', 'c5')], highlights: [H('c5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pos-space', 'concept:pos-center'],
 };
 
 const N546: SublineNarration = {
   intro: { say: "h3 — in this Maroczy Bind White plays a quiet prophylactic move, ruling out …Ng4 and …Bg4 pins and settling in for the long positional squeeze behind the c4-e4 clamp. You're solid with the g7-bishop and harmonious development: play …Rc8 and …a6 to contest the c-file, …Nxd4 and …Bc6 to challenge the e4-pawn, …a5-a4 to gain queenside space and pin down his b-pawn, and the eventual …b5 break to free yourself from the bind.", sayShort: "Maroczy h3 — patient …a5 and …b5" },
+  beats: [
+    { atMove: 19, say: "…Nxd4 trades into the bind, gaining the time to free your game.", sayShort: "…Nxd4 — gain time.", highlights: [H('d4')] },
+    { atMove: 21, say: "…Bc6 pressures e4 on the long diagonal — the standard Maroczy lever against the keystone pawn.", sayShort: "…Bc6 — the Maroczy lever.", arrows: [A('c6', 'e4')], highlights: [H('e4')] },
+    { atMove: 23, say: "…a5 claims queenside space, the bind's antidote, preparing …a4 and a lasting foothold.", sayShort: "…a5 — claim space.", highlights: [H('a5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pos-space', 'concept:pos-prophylaxis'],
 };
 
 const N547: SublineNarration = {
   intro: { say: "Bc4 — the Dragadorf, where White sets up the Yugoslav with the bishop aimed at f7 and the a2-g8 diagonal while your …a6 readies the queenside pawn storm. With opposite-side castling looming, it's a sharp race: play …b5 to hit the c4-bishop and gain tempo, …Bb7 raking e4 on the long diagonal, …Nbd7-b6 and …b4 to break open the b- and c-files against his king, racing your assault before his kingside pawns advance.", sayShort: "Dragadorf — …b5 hits the c4 bishop" },
+  beats: [
+    { atMove: 17, say: "…b5 — the storm begins, hitting the c4-bishop and gaining a tempo for the queenside attack.", sayShort: "…b5 — begin the storm.", arrows: [A('b5', 'c4')], highlights: [H('c4')] },
+    { atMove: 19, say: "…b4 drives the c3-knight away, cracking open lines toward White's king as your pawns roll.", sayShort: "…b4 — crack open lines.", arrows: [A('b4', 'c3')], highlights: [H('c3')] },
+    { atMove: 23, say: "…Bxf6 recaptures when White trades on f6, keeping a solid wall and the dark bishop active toward his king.", sayShort: "…Bxf6 — solid, active bishop.", highlights: [H('f6')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:att-queenside-attack', 'concept:pos-tempo'],
 };
 
@@ -2802,16 +2942,31 @@ const N549: SublineNarration = {
 
 const N550: SublineNarration = {
   intro: { say: "Bh6 — in this Dragadorf White rushes to swap off your fianchettoed g7-bishop, the dark-square guardian and spearhead of your counterattack, before the …a6/…b5 plan rolls. Answer …Bxh6 and after Qxh6 replace that defender with active counterplay: …b5 and …Bb7 on the long diagonal, …Nbd7-b6 and …b4 to chase the c3-knight and crash through on the queenside, racing his pressure on the now-weakened dark squares near your king.", sayShort: "Bh6 swaps the Dragon bishop early" },
+  beats: [
+    { atMove: 17, say: "…Bxh6 — accept the trade of dark bishops. White's attacking piece is gone; your king is airier but he has no follow-up, and your queenside play rolls on.", sayShort: "…Bxh6 — trade off the attacker.", highlights: [H('h6')] },
+    { atMove: 19, say: "…Nc6 develops with a hit on d4, trading down toward a structure where your c-file and queenside majority shine.", sayShort: "…Nc6 — hit d4, trade down.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
+    { atMove: 23, say: "…Qa5 swings the queen to the attack, eyeing a2 and the c3-knight while you mass on the queenside.", sayShort: "…Qa5 — swing to attack.", highlights: [H('a5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pos-weak-squares', 'concept:att-queenside-attack'],
 };
 
 const N551: SublineNarration = {
   intro: { say: "g4 — a Dragadorf hybrid where White skips queenside castling and storms immediately with g4-g5 to dislodge your f6-knight and open lines at your king. You've played …a6 to prepare the queenside expansion that defines this system, so push on: …b5 and …b4 to chase the c3-knight and rip open the b- and c-files, …Bb7 raking e4 on the long diagonal, and …Nbd7-b6, racing the attack on his still-uncastled king before g5 does damage.", sayShort: "Dragadorf — meet g4 with …b5-b4" },
+  beats: [
+    { atMove: 17, say: "…Nc6 develops with a hit on d4 just as White's g4 starts; you trade and counter before he opens your king.", sayShort: "…Nc6 — hit d4, counter fast.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
+    { atMove: 19, say: "…Nxd4 trades the knights; after Bxd4 you challenge the dark bishop and swing into queenside counterplay.", sayShort: "…Nxd4 — trade, swing over.", highlights: [H('d4')] },
+    { atMove: 23, say: "…Rc8 loads the c-file at White's king. The Dragadorf race is on — you strike the queenside while he storms the kingside.", sayShort: "…Rc8 — load the c-file.", arrows: [A('c8', 'c2')], highlights: [H('c2')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:att-queenside-attack', 'concept:att-kingside-storm'],
 };
 
 const N552: SublineNarration = {
   intro: { say: "g4 — the Dragadorf, a Najdorf-Dragon hybrid where you've already played …a6 and …b5 to open the queenside before White's g4 launches the kingside storm. Both sides are flinging pawns at the enemy king in a sharp opposite-castling race: play …b4 to chase the c3-knight and tear open the b- and c-files, …Bb7 raking the long diagonal at e4, and …Nbd7-b6 with rooks to the queenside, betting your attack on the c1-king arrives first.", sayShort: "Dragadorf — …b5-b4 races g4" },
+  beats: [
+    { atMove: 19, say: "…b4 — the storm rolls, kicking the c3-knight and tearing open lines at White's king. You're racing his g4-push and you're ahead.", sayShort: "…b4 — kick the knight, open lines.", arrows: [A('b4', 'c3')], highlights: [H('c3')] },
+    { atMove: 21, say: "…Qc7 swings the queen toward the queenside and the c-file, joining the assault on White's king.", sayShort: "…Qc7 — join the assault.", highlights: [H('c7')] },
+    { atMove: 23, say: "…e5 — a central counterpunch, kicking the knight and grabbing space just as White commits to the kingside. The position explodes your way.", sayShort: "…e5 — central counterpunch.", highlights: [H('e5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:att-queenside-attack', 'concept:att-kingside-storm'],
 };
 
@@ -2827,6 +2982,11 @@ const N553: SublineNarration = {
 
 const N554: SublineNarration = {
   intro: { say: "Bb5+ — White tries an offbeat order with Bg5 and this check, hoping to disrupt your development before the g7 Dragon bishop gets to work. Interpose calmly with …Bd7 or …Nbd7, neutralising the check and preparing to castle. Your plan is unchanged: complete development, contest the centre, and let the g7-bishop and …Rc8 c-file pressure generate counterplay — the early Bb5+ commits his bishop without solving your solid setup.", sayShort: "Bb5+ check — interpose and develop" },
+  beats: [
+    { atMove: 13, say: "…Bd7 blocks the check and offers a trade; you don't mind swapping light bishops, easing your position.", sayShort: "…Bd7 — block, offer a trade.", arrows: [A('d7', 'b5')], highlights: [H('b5')] },
+    { atMove: 15, say: "…Qa5 activates the queen with tempo, eyeing the queenside and unpinning ideas, gaining time to develop.", sayShort: "…Qa5 — activate with tempo.", highlights: [H('a5')] },
+    { atMove: 21, say: "…Nxd5 trades off White's centralised knight; after exd5 the position simplifies toward a comfortable, balanced game.", sayShort: "…Nxd5 — trade, simplify.", highlights: [H('d5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation', 'concept:pawn-fianchetto', 'concept:pos-development'],
 };
 
