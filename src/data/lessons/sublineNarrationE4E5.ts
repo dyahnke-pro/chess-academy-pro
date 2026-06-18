@@ -1542,7 +1542,9 @@ const COV_IT_D6: SublineNarration = {
     sayShort: "…d6 — break with d4.",
   },
   beats: [
-    { atMove: 7, say: "d6 closes the centre for now — your job is to crack it open. The d4 break is the lever, and the c4-bishop's stare down the a2-g8 diagonal keeps f7 a permanent worry for Black.", sayShort: "d4 — open it, hit f7.", arrows: [A('c4', 'f7')], highlights: [H('d4', KEY)] },
+    { atMove: 7, say: "…d6 closes the centre for now — your job is to crack it open. The d4 break is the lever, and the c4-bishop's stare down the a2-g8 diagonal keeps f7 a permanent worry.", sayShort: "…d6 — break with d4.", arrows: [A('c4', 'f7')], highlights: [H('d4', KEY)] },
+    { atMove: 8, say: "d4 strikes; after …Bb6 you take on e5, and exd6 nets a clean pawn while ripping open lines toward Black's king. The central lever pays off.", sayShort: "d4 — crack it, win a pawn.", arrows: [A('d4', 'e5')], highlights: [H('e5', ATK)] },
+    { atMove: 12, say: "exd6 grabs the pawn and prises the position open — you stand a clean pawn up with the bishop on f7 and the freer game. The Pianissimo has turned firmly in your favour.", sayShort: "exd6 — a pawn up, open lines.", highlights: [H('d6', KEY)] },
   ],
   sources: ['book:italian-game', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Italian_Game'],
 };
@@ -1776,11 +1778,27 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'italian-game::1::Nce7@19': { ...IT_BD2_FREEING, beats: [{ atMove: 19, say: "Nce7 reroutes the knight to blockade your isolated d-pawn — the book equalizing method. Don't drift: Qb3 and the rooks pressure d5 and f7, and probe the kingside before the blockade sets. The win is made — keep the initiative.", sayShort: "Nce7 — Qb3, press before the blockade.", highlights: [H('d5', KEY), H('f7', SOFT)] }] },
   'italian-game::1::Na5@23': { ...IT_BD2_FREEING, beats: [{ atMove: 23, say: "Na5 hits your queen again, shuffling for the draw — sidestep and keep pressing. The bishop and queen eye f7 and d5, the isolated pawn is dynamic not weak, and you hold the freer game. Avoid the repetition and play for more.", sayShort: "Na5 — keep pressing, avoid the draw.", highlights: [H('d5', KEY), H('f7', SOFT)] }] },
   'italian-game::1::d6@15': IT_BD2_D6,
-  'italian-game::0::a6@7': IT_GP_WAIT,
-  'italian-game::1::a6@7': IT_GP_WAIT,
+  'italian-game::0::a6@7': { ...IT_GP_WAIT, beats: [
+    { atMove: 7, say: "…a6 is a slow waiting move — pounce on the free tempo. d4 strikes the centre at once, before Black is ready for it.", sayShort: "…a6 — strike d4 now.", arrows: [A('d2', 'd4')], highlights: [H('d4', KEY)] },
+    { atMove: 8, say: "d4 cracks the centre open. Black tucks the bishop to a7, and now the tactical Nxe5 wins a pawn or tears open the e-file toward his king.", sayShort: "d4 — crack it, then Nxe5.", arrows: [A('d4', 'e5')], highlights: [H('e5', ATK)] },
+    { atMove: 14, say: "Qh5 swings the queen to the kingside, hammering f7 while the e5-pawn cramps and the Bc4 glares in. Your initiative rolls — the lazy …a6 cost Black dearly.", sayShort: "Qh5 — hammer f7, attack.", arrows: [A('h5', 'f7')], highlights: [H('f7', ATK)] },
+  ] },
+  'italian-game::1::a6@7': { ...IT_GP_WAIT, beats: [
+    { atMove: 7, say: "…a6 is a slow waiting move — pounce on the free tempo. d4 strikes the centre at once, before Black is ready for it.", sayShort: "…a6 — strike d4 now.", arrows: [A('d2', 'd4')], highlights: [H('d4', KEY)] },
+    { atMove: 8, say: "d4 cracks the centre open. Black tucks the bishop to a7, and now the tactical Nxe5 wins a pawn or tears open the e-file toward his king.", sayShort: "d4 — crack it, then Nxe5.", arrows: [A('d4', 'e5')], highlights: [H('e5', ATK)] },
+    { atMove: 14, say: "Qh5 swings the queen to the kingside, hammering f7 while the e5-pawn cramps and the Bc4 glares in. Your initiative rolls — the lazy …a6 cost Black dearly.", sayShort: "Qh5 — hammer f7, attack.", arrows: [A('h5', 'f7')], highlights: [H('f7', ATK)] },
+  ] },
   'italian-game::6::a6@7': IT_GP_WAIT,
-  'italian-game::0::h6@7': IT_GP_WAIT,
-  'italian-game::1::h6@7': IT_GP_WAIT,
+  'italian-game::0::h6@7': { ...IT_GP_WAIT, beats: [
+    { atMove: 7, say: "…h6 is a slow luft — pounce on the tempo. d4 strikes the centre while Black dawdles.", sayShort: "…h6 — strike d4 now.", arrows: [A('d2', 'd4')], highlights: [H('d4', KEY)] },
+    { atMove: 8, say: "d4 — and after …exd4 cxd4 you own the classical centre, the broad d4-e4 duo cramping Black. Develop Nc3, castle, and point the pieces at his king.", sayShort: "d4 — claim the full centre.", arrows: [A('d4', 'e5')], highlights: [H('e5', ATK)] },
+    { atMove: 12, say: "Nc3 develops behind the broad centre; with Re1, the Bc4 on f7 and your space edge, you press a lasting Italian pull while Black defends passively.", sayShort: "Nc3 — develop behind the centre.", highlights: [H('d4', KEY), H('e4', SOFT)] },
+  ] },
+  'italian-game::1::h6@7': { ...IT_GP_WAIT, beats: [
+    { atMove: 7, say: "…h6 is a slow luft — pounce on the tempo. d4 strikes the centre while Black dawdles.", sayShort: "…h6 — strike d4 now.", arrows: [A('d2', 'd4')], highlights: [H('d4', KEY)] },
+    { atMove: 8, say: "d4 — and after …exd4 cxd4 you own the classical centre, the broad d4-e4 duo cramping Black. Develop Nc3, castle, and point the pieces at his king.", sayShort: "d4 — claim the full centre.", arrows: [A('d4', 'e5')], highlights: [H('e5', ATK)] },
+    { atMove: 12, say: "Nc3 develops behind the broad centre; with Re1, the Bc4 on f7 and your space edge, you press a lasting Italian pull while Black defends passively.", sayShort: "Nc3 — develop behind the centre.", highlights: [H('d4', KEY), H('e4', SOFT)] },
+  ] },
   'italian-game::6::h6@7': IT_GP_WAIT,
   'italian-game::0::Qf6@7': IT_GP_WAIT,
   'italian-game::1::Qf6@7': IT_GP_WAIT,
