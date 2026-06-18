@@ -1150,11 +1150,6 @@ const N114: SublineNarration = {
 
 const N115: SublineNarration = {
   intro: { say: "…Nc6 — this is the main-line Advance French battery against d4, with …c5, …Nc6, and …Bd7 readying …Qb6. His whole game targets your d4-pawn, defended only by c3 and the f3-knight. Expect …Qb6 hitting d4 and b2, then …Rc8 and …cxd4 or …Nh6-f5, piling on the base of the chain until your centre cracks — so shore it up.", sayShort: "Advance — battery on d4, …Qb6 next" },
-  beats: [
-    { atMove: 8, say: "Nf3 develops and defends the d4-chain, the Advance French's anchor.", sayShort: "Nf3 — defend the chain.", highlights: [H('f3')] },
-    { atMove: 10, say: "a3 prepares b4 and shores up the chain against …Qb6 ideas.", sayShort: "a3 — shore up the chain.", highlights: [H('a3')] },
-    { atMove: 18, say: "h4 launches the kingside pawn storm at Black's cramped king.", sayShort: "h4 — storm the kingside.", highlights: [H('h4')] },
-  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-chain', 'concept:pos-development'],
 };
 
