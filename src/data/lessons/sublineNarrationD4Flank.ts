@@ -285,30 +285,10 @@ const C73: SublineNarration = {
 // trompowsky-attack :: qb6_centre
 // trompowsky-attack :: endgame_grind
 // old-indian-defence :: classical_be2
-const C86: SublineNarration = {
-  intro: { say: "The Classical Old Indian with Be2 and the standard development — White takes space, you take solidity. After …e5 and …O-O the plan is the …c6 and …Re8 regroup, preparing …exd4 or …d5 at the right moment. White's edge is space alone; neutralise it with accurate piece placement and a timely central break.", sayShort: "Classical Be2 — regroup, time the break." },
-  sources: ['book:old-indian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Old_Indian_Defense'],
-};
 // old-indian-defence :: main_e5
-const C87: SublineNarration = {
-  intro: { say: "The Old Indian main line — …d6 and …e5, the cramped-but-bombproof cousin of the King's Indian. You strike the centre with …e5, complete with …Be7 and …O-O, and bide your time. The freeing breaks are …exd4 followed by …Re8 and …Bf8 regrouping, or a later …c6 and …d5. Patient manoeuvring behind a solid wall, then a well-timed break.", sayShort: "Old Indian — …e5, regroup, break …c6/…d5." },
-  sources: ['book:old-indian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Old_Indian_Defense'],
-};
 // old-indian-defence :: bf5_janowski
-const C88: SublineNarration = {
-  intro: { say: "You've developed the bishop to f5 first — the Janowski/Czech treatment, getting the light bishop active outside the chain before …e5. White may chase with Nh4 or grab space with f3-e4; meet it with …Bg6 and the standard …e5 strike. Solving the bishop early is the whole point: no bad piece, comfortable development.", sayShort: "…Bf5 — bishop out first, then …e5." },
-  sources: ['book:old-indian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Old_Indian_Defense'],
-};
 // old-indian-defence :: e4_clamp
-const C89: SublineNarration = {
-  intro: { say: "White builds the full e4 centre against your …d6/…e5 setup, the classical clamp. Don't be passive: …Nbd7, …Be7, …O-O, then …exd4 and …Re8 to fight for the open lines, or …c6 preparing …d5. Your position is springy, not just solid — pick the freeing break carefully and the cramp uncoils into a fully equal game.", sayShort: "e4 clamp — free with …exd4 or …c6-d5." },
-  sources: ['book:old-indian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Old_Indian_Defense'],
-};
 // old-indian-defence :: fianchetto_g3
-const C90: SublineNarration = {
-  intro: { say: "White meets your Old Indian with the quiet g3 fianchetto. Adapt to a King's-Indian-lite: …Bg7, …O-O, …Nbd7 and …e5, contesting the centre. The g2-bishop blunts long-diagonal play, so lean on the …e5 break and patient manoeuvring. Cramped but sound — equalise by completing development and choosing the right central lever.", sayShort: "g3 — …Bg7 and …e5, patient play." },
-  sources: ['book:old-indian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Old_Indian_Defense'],
-};
 // english-opening :: reversed_dragon
 // english-opening :: reversed_sicilian
 // english-opening :: symmetrical
@@ -1028,16 +1008,6 @@ const WENGREVD: SublineNarration = {
   sources: ['concept:pos-space', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/English_Opening'],
 };
 // WAVE WOLDE4 :: 1 keys
-const WOLDE4: SublineNarration = {
-  intro: { say: "e4 — White builds the full centre against your …d6/…e5 Old Indian. Cramped but bombproof: fianchetto with …g6 and …Bg7 for a King's-Indian flavour, castle, and free the position with the …Ng4 and …Bf6 regroup to trade the dark-squared bishops. Once the tension eases you strike with …exd4 or …c6 and …d5.", sayShort: "e4 — fianchetto, regroup, then break" },
-  beats: [
-    { atMove: 8, say: "e4 completes White's broad centre, and your position is cramped — but solid as a rock. Don't panic for space; manoeuvre patiently and pick your freeing break.", sayShort: "e4 — cramped but bombproof", highlights: [_H('e4', KEY)] },
-    { atMove: 9, say: "…g6 — a King's-Indian flavour, preparing to fianchetto. The bishop heads to g7 where it pressures the long diagonal and the d4-centre once lines open.", sayShort: "…g6 — fianchetto for pressure", highlights: [_H('g6', KEY)] },
-    { atMove: 11, say: "…Bg7 takes the long diagonal, screened by the f6-knight for now but aimed at d4. With the bishop home you castle and turn to freeing the cramped position.", sayShort: "…Bg7 — aim at the d4-centre", highlights: [_H('g7', KEY), _H('d4', KEY)] },
-    { atMove: 15, say: "…Ng4 — the freeing regroup. The knight jumps out to provoke and prepare …Bf6, trading White's dark-squared bishop to ease your cramp; after the swaps your pieces breathe and …exd4 or …c6-d5 comes next.", sayShort: "…Ng4 — regroup, trade, free up", arrows: [_A('g4', 'e3', ATK)], highlights: [_H('e3', KEY)] },
-  ],
-  sources: ['book:old-indian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Old_Indian_Defense'],
-};
 // WAVE WLONRE8 :: 1 keys
 
 // WAVE WBIRDC5 :: 1 keys
@@ -1118,15 +1088,6 @@ const WQGAGAR: SublineNarration = {
   sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
 };
 // WAVE WOLDH3 :: 4 keys
-const WOLDH3: SublineNarration = {
-  intro: { say: "h3 — a quiet luft in the Old Indian; White isn't forcing anything, so pick your freeing moment. Release the centre with …exd4, and reroute the knight to the superb c5 outpost where it eyes e4, d3 and b3. The Old Indian is cramped but bombproof — you manoeuvre patiently and the well-placed knight gives you a fully equal game.", sayShort: "h3 — free with …exd4, knight to c5" },
-  beats: [
-    { atMove: 14, say: "h3 is a slow prophylactic move — White gives you time, so use it to free your cramped position rather than sit and wait.", sayShort: "h3 — White marks time", highlights: [_H('h3', KEY)] },
-    { atMove: 15, say: "…exd4 — release the central tension on your terms, opening lines for your pieces and clearing e5 for a knight. The cramp eases the moment the centre opens.", sayShort: "…exd4 — free the position", highlights: [_H('d4', KEY)] },
-    { atMove: 17, say: "…Nc5 — the knight lands on its dream outpost, eyeing e4, d3 and b3 and impossible to chase. From this strong square your once-cramped position springs to full, comfortable life.", sayShort: "…Nc5 — the dream outpost", highlights: [_H('c5', KEY)] },
-  ],
-  sources: ['book:old-indian-defence', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Old_Indian_Defense'],
-};
 // WAVE WALBLASK :: 1 keys
 const WALBLASK: SublineNarration = {
   intro: { say: "fxe3 — White recaptures, and you spring the Lasker Trap. …Qh4+ rakes the diagonal opened by that very recapture, and after g3 the killer is …Qe4! — forking the e3-pawn and the h1-rook at once. You regain the material with a clean, equal game; the trap that punishes White's greed in the Albin, sprung perfectly.", sayShort: "fxe3 — …Qh4+ then …Qe4! forks" },
@@ -9413,6 +9374,707 @@ const NI_78: SublineNarration = {
   sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
 };
 
+const OI_0: SublineNarration = {
+  intro: { say: "White props the centre with h3 in the main Old Indian. Release the tension with …exd4, post the knight on …Nc5, pressure the e-file, and regroup …Bf8 — solid and balanced.", sayShort: "Main line: …exd4, …Nc5, …Bf8" },
+  beats: [
+    { atMove: 15, say: "Release the tension with …exd4, opening the e-file for your pieces.", sayShort: "…exd4, open the e-file", highlights: [_H('d4')] },
+    { atMove: 17, say: "Hop …Nc5, eyeing e4 and d3 — the knight's best Old-Indian square.", sayShort: "…Nc5, the active square", highlights: [_H('c5')] },
+    { atMove: 19, say: "Lift …Re8, pressuring down the open e-file.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
+    { atMove: 21, say: "Regroup …Bf8, the standard retreat that re-aims the bishop; solid and balanced.", sayShort: "…Bf8, regroup", highlights: [_H('f8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_1: SublineNarration = {
+  intro: { say: "White locks the centre with d5. Back it with …Re8, reroute …Nf8-g6 to the kingside, and complete with …Bd7 — solid and balanced.", sayShort: "…Re8, …Nf8-g6 regroup" },
+  beats: [
+    { atMove: 15, say: "Lift …Re8, backing the centre after White locks it with d5.", sayShort: "…Re8, back the centre", highlights: [_H('e8')] },
+    { atMove: 17, say: "Reroute …Nf8, heading to g6 to support …f5 and the kingside.", sayShort: "…Nf8, reroute", highlights: [_H('f8')] },
+    { atMove: 19, say: "Land …Ng6, pressuring f4 and eyeing the kingside break.", sayShort: "…Ng6, eye the kingside", highlights: [_H('g6')] },
+    { atMove: 21, say: "Develop …Bd7, completing your regrouping; solid and balanced.", sayShort: "…Bd7, complete the setup", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_2: SublineNarration = {
+  intro: { say: "White develops Be3. Back the centre with …Re8, take g5 with …h6, then reroute …Nf8-g6 to the kingside — solid and balanced.", sayShort: "…Re8, …h6, …Nf8-g6" },
+  beats: [
+    { atMove: 15, say: "Lift …Re8, backing the centre.", sayShort: "…Re8, back the centre", highlights: [_H('e8')] },
+    { atMove: 17, say: "Play …h6, taking the g5-square from White's pieces.", sayShort: "…h6, take g5", highlights: [_H('g5')] },
+    { atMove: 21, say: "Reroute …Nf8 toward g6 and the kingside.", sayShort: "…Nf8, reroute", highlights: [_H('f8')] },
+    { atMove: 23, say: "Land …Ng6, eyeing the kingside; solid and balanced.", sayShort: "…Ng6, eye the kingside", highlights: [_H('g6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_3: SublineNarration = {
+  intro: { say: "White develops Qc2 and Rd1. Back the centre with …Re8, release with …exd4, regroup …Bf8, and fianchetto …g6 — solid and balanced.", sayShort: "…Re8, …exd4, …Bf8, …g6" },
+  beats: [
+    { atMove: 15, say: "Lift …Re8, backing the centre.", sayShort: "…Re8, back the centre", highlights: [_H('e8')] },
+    { atMove: 17, say: "Release with …exd4, opening the e-file.", sayShort: "…exd4, open the e-file", highlights: [_H('d4')] },
+    { atMove: 19, say: "Regroup …Bf8, the standard Old-Indian retreat.", sayShort: "…Bf8, regroup", highlights: [_H('f8')] },
+    { atMove: 23, say: "Fianchetto with …g6, re-aiming the bishop to g7; solid and balanced.", sayShort: "…g6, re-aim the bishop", highlights: [_H('g6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_4: SublineNarration = {
+  intro: { say: "White pins with Bg5. Release with …exd4, then snap …Nxe4 — a tactical shot exploiting the pin to win a pawn and equalise cleanly.", sayShort: "…exd4 then …Nxe4 tactic" },
+  beats: [
+    { atMove: 15, say: "Release with …exd4, opening lines for the tactics.", sayShort: "…exd4, open lines", highlights: [_H('d4')] },
+    { atMove: 17, say: "Snap …Nxe4, exploiting the pin to win a pawn.", sayShort: "…Nxe4, win a pawn", highlights: [_H('e4')] },
+    { atMove: 21, say: "Recapture …Qxe7, having simplified favourably.", sayShort: "…Qxe7, simplify", highlights: [_H('e7')] },
+    { atMove: 23, say: "Hit …Qg5, regaining the piece and equalising cleanly.", sayShort: "…Qg5, equalise", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_5: SublineNarration = {
+  intro: { say: "White allows a King's-Indian-style setup. Fianchetto …g6, strike …e5, and after d5 launch the …f5 kingside lever — double-edged and balanced.", sayShort: "KID-style: …g6, …e5, …f5" },
+  beats: [
+    { atMove: 5, say: "Fianchetto with …g6, steering into a King's-Indian-style setup.", sayShort: "…g6, the fianchetto", highlights: [_H('g6')] },
+    { atMove: 11, say: "Strike …e5, the thematic break challenging White's centre.", sayShort: "…e5, the break", highlights: [_H('e5')] },
+    { atMove: 15, say: "Launch …f5, the kingside lever after White locks with d5.", sayShort: "…f5, the kingside lever", highlights: [_H('f5')] },
+    { atMove: 23, say: "Clamp …f4, gaining kingside space for an attack; balanced.", sayShort: "…f4, kingside space", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_6: SublineNarration = {
+  intro: { say: "White props with h3 before castling. Release …exd4, post …Nc5, pressure the e-file, and regroup …Bf8 — the standard Old-Indian plan, balanced.", sayShort: "…exd4, …Nc5, …Re8, …Bf8" },
+  beats: [
+    { atMove: 13, say: "Release the tension with …exd4, opening the e-file.", sayShort: "…exd4, open the e-file", highlights: [_H('d4')] },
+    { atMove: 15, say: "Hop …Nc5, the knight's best square eyeing e4.", sayShort: "…Nc5, the active square", highlights: [_H('c5')] },
+    { atMove: 17, say: "Lift …Re8, pressuring the e-file.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
+    { atMove: 19, say: "Regroup …Bf8; solid and balanced.", sayShort: "…Bf8, regroup", highlights: [_H('f8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_7: SublineNarration = {
+  intro: { say: "White fianchettoes with b3. Back the centre with …Re8, release …exd4, regroup …Bf8, and post …Nc5 — solid and balanced.", sayShort: "…Re8, …exd4, …Bf8, …Nc5" },
+  beats: [
+    { atMove: 15, say: "Lift …Re8, backing the centre.", sayShort: "…Re8, back the centre", highlights: [_H('e8')] },
+    { atMove: 17, say: "Release with …exd4, opening the e-file.", sayShort: "…exd4, open the e-file", highlights: [_H('d4')] },
+    { atMove: 19, say: "Regroup …Bf8, the standard retreat.", sayShort: "…Bf8, regroup", highlights: [_H('f8')] },
+    { atMove: 21, say: "Hop …Nc5, eyeing e4 and the light squares; balanced.", sayShort: "…Nc5, the active square", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_8: SublineNarration = {
+  intro: { say: "White develops Be3. Harass with …Ng4, release …exd4, develop …Bf6 on the long diagonal, and centralise your knights — balanced with active pieces.", sayShort: "…Ng4, …exd4, …Bf6, …Ne5" },
+  beats: [
+    { atMove: 13, say: "Hit …Ng4, harassing White's bishop and gaining a tempo.", sayShort: "…Ng4, harass the bishop", highlights: [_H('g4')] },
+    { atMove: 15, say: "Release with …exd4, opening the e-file.", sayShort: "…exd4, open the e-file", highlights: [_H('d4')] },
+    { atMove: 17, say: "Develop …Bf6, pressuring the d4-knight and the long diagonal.", sayShort: "…Bf6, the long diagonal", highlights: [_H('f6')] },
+    { atMove: 19, say: "Centralise …Nge5, a fine outpost; balanced.", sayShort: "…Ne5, the outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_9: SublineNarration = {
+  intro: { say: "White trades on e5. Recapture …dxe5, develop …Qc7, post …Nc5, and plant …Nd4 — a dominant central outpost, balanced or better.", sayShort: "…dxe5, …Qc7, …Nd4" },
+  beats: [
+    { atMove: 15, say: "Recapture …dxe5, keeping a healthy central pawn.", sayShort: "…dxe5, hold the centre", highlights: [_H('e5')] },
+    { atMove: 17, say: "Develop …Qc7, eyeing the e5-pawn and the c-file.", sayShort: "…Qc7, eye the e-file", highlights: [_H('c7')] },
+    { atMove: 19, say: "Hop …Nc5, the knight's active square.", sayShort: "…Nc5, the active square", highlights: [_H('c5')] },
+    { atMove: 23, say: "Plant …Nd4, a dominant central outpost; balanced or better.", sayShort: "…Nd4, central outpost", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_10: SublineNarration = {
+  intro: { say: "White allows a King's-Indian-style setup. Fianchetto …g6, strike …e5, and after d5 launch the …f5 kingside lever — double-edged and balanced.", sayShort: "KID-style: …g6, …e5, …f5" },
+  beats: [
+    { atMove: 5, say: "Fianchetto with …g6, steering into a King's-Indian-style setup.", sayShort: "…g6, the fianchetto", highlights: [_H('g6')] },
+    { atMove: 11, say: "Strike …e5, the thematic break challenging White's centre.", sayShort: "…e5, the break", highlights: [_H('e5')] },
+    { atMove: 15, say: "Launch …f5, the kingside lever after White locks with d5.", sayShort: "…f5, the kingside lever", highlights: [_H('f5')] },
+    { atMove: 23, say: "Clamp …f4, gaining kingside space for an attack; balanced.", sayShort: "…f4, kingside space", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_11: SublineNarration = {
+  intro: { say: "White trades into a queenless middlegame. Recapture …dxe5, solidify …c6, centralise your king with …Kc7, and brace …f6 — a balanced ending.", sayShort: "Queenless: …dxe5, …Kc7" },
+  beats: [
+    { atMove: 11, say: "Recapture …dxe5, holding the centre as queens come off.", sayShort: "…dxe5, hold the centre", highlights: [_H('e5')] },
+    { atMove: 15, say: "Solidify …c6, securing your structure in the ending.", sayShort: "…c6, solidify", highlights: [_H('c6')] },
+    { atMove: 19, say: "Centralise the king with …Kc7 — in the ending the king is a fighter.", sayShort: "…Kc7, activate the king", highlights: [_H('c7')] },
+    { atMove: 23, say: "Brace …f6, holding your central pawns; balanced ending.", sayShort: "…f6, hold the pawns", highlights: [_H('f6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_12: SublineNarration = {
+  intro: { say: "White fianchettoes with g3. Strike …e5, leap …Nd4 against the bishop, strike …c5 at the d5-wedge, and pressure the b-file — balanced.", sayShort: "…e5, …Nd4, …c5" },
+  beats: [
+    { atMove: 7, say: "Strike …e5 at once, contesting the centre.", sayShort: "…e5, contest the centre", highlights: [_H('e5')] },
+    { atMove: 11, say: "Leap …Nd4, a strong central knight against the fianchetto.", sayShort: "…Nd4, central knight", highlights: [_H('d4')] },
+    { atMove: 17, say: "Strike …c5, challenging White's d5-wedge.", sayShort: "…c5, hit the wedge", highlights: [_H('c5')] },
+    { atMove: 23, say: "Lift …Rb8, pressuring the b-file; balanced.", sayShort: "…Rb8, press the b-file", highlights: [_H('b8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_13: SublineNarration = {
+  intro: { say: "White hits your bishop with Nh4. Solidify …c6, strike …e5, develop …Be7, and regroup …Bf8 — solid and balanced.", sayShort: "…c6, …e5, …Be7, …Bf8" },
+  beats: [
+    { atMove: 7, say: "Solidify …c6, bracing for …e5.", sayShort: "…c6, brace …e5", highlights: [_H('c6')] },
+    { atMove: 11, say: "Strike …e5, the thematic Old-Indian break.", sayShort: "…e5, the break", highlights: [_H('e5')] },
+    { atMove: 15, say: "Develop …Be7, preparing to castle.", sayShort: "…Be7, develop", highlights: [_H('e7')] },
+    { atMove: 23, say: "Regroup …Bf8; solid and balanced.", sayShort: "…Bf8, regroup", highlights: [_H('f8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_14: SublineNarration = {
+  intro: { say: "White builds with f3 and Be3. Reroute …Nfd7 to support the centre, develop …Be7 and …Nc6, and castle — balanced.", sayShort: "…Nfd7, …Be7, …Nc6" },
+  beats: [
+    { atMove: 11, say: "Reroute …Nfd7, supporting …e5 and the centre.", sayShort: "…Nfd7, support the centre", highlights: [_H('d7')] },
+    { atMove: 15, say: "Develop …Be7.", sayShort: "…Be7, develop", highlights: [_H('e7')] },
+    { atMove: 17, say: "Develop …Nc6, pressuring the centre.", sayShort: "…Nc6, develop", highlights: [_H('c6')] },
+    { atMove: 23, say: "Castle …O-O, completing development; balanced.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_15: SublineNarration = {
+  intro: { say: "White develops Nge2. Develop …Be7, reroute …Nb6 to pressure c4, and expand …a5 on the queenside — balanced.", sayShort: "…Be7, …Nb6, …a5" },
+  beats: [
+    { atMove: 11, say: "Develop …Be7.", sayShort: "…Be7, develop", highlights: [_H('e7')] },
+    { atMove: 15, say: "Reroute …Nb6, pressuring c4 and the queenside.", sayShort: "…Nb6, pressure c4", highlights: [_H('b6')] },
+    { atMove: 19, say: "Expand …a5, gaining queenside space.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
+    { atMove: 23, say: "Develop …Na6, heading for the dark squares; balanced.", sayShort: "…Na6, develop", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_16: SublineNarration = {
+  intro: { say: "White locks with d5. Retreat …Bd7, develop …Na6, strike …c6 at the wedge, and pressure the queenside with …Qa5 — balanced.", sayShort: "…Bd7, …Na6, …c6, …Qa5" },
+  beats: [
+    { atMove: 9, say: "Retreat …Bd7, repositioning the bishop after White's d5.", sayShort: "…Bd7, reposition", highlights: [_H('d7')] },
+    { atMove: 13, say: "Develop …Na6, heading for c5 or c7.", sayShort: "…Na6, develop", highlights: [_H('a6')] },
+    { atMove: 15, say: "Strike …c6, challenging White's d5-wedge.", sayShort: "…c6, hit the wedge", highlights: [_H('c6')] },
+    { atMove: 21, say: "Develop …Qa5, pressuring the queenside; balanced.", sayShort: "…Qa5, pressure", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_17: SublineNarration = {
+  intro: { say: "White trades into a queenless middlegame. Recapture …dxe5, solidify …c6, centralise …Kc7, and expand …c5 — a balanced ending.", sayShort: "Queenless: …dxe5, …Kc7, …c5" },
+  beats: [
+    { atMove: 9, say: "Recapture …dxe5 as queens come off.", sayShort: "…dxe5, into the ending", highlights: [_H('e5')] },
+    { atMove: 15, say: "Solidify …c6 in the ending.", sayShort: "…c6, solidify", highlights: [_H('c6')] },
+    { atMove: 19, say: "Centralise …Kc7, the king a fighter in the ending.", sayShort: "…Kc7, activate the king", highlights: [_H('c7')] },
+    { atMove: 23, say: "Expand …c5, grabbing space; balanced ending.", sayShort: "…c5, grab space", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_18: SublineNarration = {
+  intro: { say: "White pins with Bg5. Develop …Nbd7, strike …c5 at the centre, lunge …g5 to grab the bishop and space, and centralise …Ne5 — balanced.", sayShort: "…c5, …g5, …Ne5" },
+  beats: [
+    { atMove: 7, say: "Develop …Nbd7, supporting the centre.", sayShort: "…Nbd7, develop", highlights: [_H('d7')] },
+    { atMove: 11, say: "Strike …c5, challenging the centre.", sayShort: "…c5, challenge the centre", highlights: [_H('c5')] },
+    { atMove: 15, say: "Lunge …g5, hitting White's bishop and grabbing space.", sayShort: "…g5, hit the bishop", highlights: [_H('g5')] },
+    { atMove: 21, say: "Centralise …Ne5, a fine outpost; balanced.", sayShort: "…Ne5, the outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_19: SublineNarration = {
+  intro: { say: "White probes with Qb3. Tuck …Qc8 to defend b7, strike …e5, solidify …c6, and castle — solid and balanced.", sayShort: "…Qc8, …e5, …c6" },
+  beats: [
+    { atMove: 7, say: "Tuck …Qc8, defending b7 and keeping the bishop's retreat open.", sayShort: "…Qc8, defend b7", highlights: [_H('c8')] },
+    { atMove: 9, say: "Strike …e5, the thematic break.", sayShort: "…e5, the break", highlights: [_H('e5')] },
+    { atMove: 17, say: "Solidify …c6, challenging d5.", sayShort: "…c6, challenge d5", highlights: [_H('c6')] },
+    { atMove: 23, say: "Castle …O-O; solid and balanced.", sayShort: "…O-O, safe king", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_20: SublineNarration = {
+  intro: { say: "White allows a King's-Indian-style setup. Fianchetto …g6, strike …e5, and after d5 launch the …f5 kingside lever — double-edged and balanced.", sayShort: "KID-style: …g6, …e5, …f5" },
+  beats: [
+    { atMove: 5, say: "Fianchetto with …g6, steering into a King's-Indian-style setup.", sayShort: "…g6, the fianchetto", highlights: [_H('g6')] },
+    { atMove: 11, say: "Strike …e5, the thematic break challenging White's centre.", sayShort: "…e5, the break", highlights: [_H('e5')] },
+    { atMove: 15, say: "Launch …f5, the kingside lever after White locks with d5.", sayShort: "…f5, the kingside lever", highlights: [_H('f5')] },
+    { atMove: 23, say: "Clamp …f4, gaining kingside space for an attack; balanced.", sayShort: "…f4, kingside space", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_21: SublineNarration = {
+  intro: { say: "White props with h3 before castling. Release …exd4, post …Nc5, pressure the e-file, and regroup …Bf8 — the standard Old-Indian plan, balanced.", sayShort: "…exd4, …Nc5, …Re8, …Bf8" },
+  beats: [
+    { atMove: 13, say: "Release the tension with …exd4, opening the e-file.", sayShort: "…exd4, open the e-file", highlights: [_H('d4')] },
+    { atMove: 15, say: "Hop …Nc5, the knight's best square eyeing e4.", sayShort: "…Nc5, the active square", highlights: [_H('c5')] },
+    { atMove: 17, say: "Lift …Re8, pressuring the e-file.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
+    { atMove: 19, say: "Regroup …Bf8; solid and balanced.", sayShort: "…Bf8, regroup", highlights: [_H('f8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_22: SublineNarration = {
+  intro: { say: "White develops Be3. Harass with …Ng4, release …exd4, develop …Bf6 on the long diagonal, and centralise your knights — balanced with active pieces.", sayShort: "…Ng4, …exd4, …Bf6, …Ne5" },
+  beats: [
+    { atMove: 13, say: "Hit …Ng4, harassing White's bishop and gaining a tempo.", sayShort: "…Ng4, harass the bishop", highlights: [_H('g4')] },
+    { atMove: 15, say: "Release with …exd4, opening the e-file.", sayShort: "…exd4, open the e-file", highlights: [_H('d4')] },
+    { atMove: 17, say: "Develop …Bf6, pressuring the d4-knight and the long diagonal.", sayShort: "…Bf6, the long diagonal", highlights: [_H('f6')] },
+    { atMove: 19, say: "Centralise …Nge5, a fine outpost; balanced.", sayShort: "…Ne5, the outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_23: SublineNarration = {
+  intro: { say: "White allows a King's-Indian-style setup. Fianchetto …g6, strike …e5, develop …Bf6, and prepare …Bb7 with …b6 — balanced.", sayShort: "KID-style: …g6, …e5, …Bf6" },
+  beats: [
+    { atMove: 7, say: "Fianchetto …g6, a King's-Indian-style setup.", sayShort: "…g6, the fianchetto", highlights: [_H('g6')] },
+    { atMove: 13, say: "Strike …e5, the thematic break.", sayShort: "…e5, the break", highlights: [_H('e5')] },
+    { atMove: 17, say: "Develop …Bf6, pressuring the centre.", sayShort: "…Bf6, the long diagonal", highlights: [_H('f6')] },
+    { atMove: 23, say: "Prepare …Bb7 with …b6; balanced.", sayShort: "…b6, prepare …Bb7", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_24: SublineNarration = {
+  intro: { say: "White locks with d5. Strike …c6 at the wedge immediately, post …Nc5, develop …Bg4 to pin, and expand …a5 — balanced.", sayShort: "…c6, …Nc5, …Bg4, …a5" },
+  beats: [
+    { atMove: 13, say: "Strike …c6, challenging White's d5-wedge at once.", sayShort: "…c6, hit the wedge", highlights: [_H('c6')] },
+    { atMove: 15, say: "Hop …Nc5, the knight's active square.", sayShort: "…Nc5, the active square", highlights: [_H('c5')] },
+    { atMove: 19, say: "Develop …Bg4, pinning the f3-knight.", sayShort: "…Bg4, pin the knight", highlights: [_H('g4')] },
+    { atMove: 23, say: "Expand …a5, gaining queenside space; balanced.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_25: SublineNarration = {
+  intro: { say: "White locks with d5. Post …Nc5 on its best square, fianchetto …g6, expand …a5, and lever …a3 to pry open the queenside — double-edged and balanced.", sayShort: "…Nc5, …g6, …a5-a3" },
+  beats: [
+    { atMove: 9, say: "Hop …Nc5, the knight's best square after White's d5.", sayShort: "…Nc5, the active square", highlights: [_H('c5')] },
+    { atMove: 11, say: "Fianchetto …g6, re-aiming toward the long diagonal.", sayShort: "…g6, the fianchetto", highlights: [_H('g6')] },
+    { atMove: 13, say: "Expand …a5, gaining queenside space and fixing c4.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
+    { atMove: 23, say: "Lever …a3, prying open White's queenside; balanced.", sayShort: "…a3, pry the queenside", highlights: [_H('a3')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_26: SublineNarration = {
+  intro: { say: "White recaptures on d4. Lift …Re8 on the e-file, solidify …c6, regroup …Bf8, and prepare …b5 with …a6 — solid and balanced.", sayShort: "…Re8, …c6, …Bf8, …a6" },
+  beats: [
+    { atMove: 15, say: "Lift …Re8, pressuring the e-file.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
+    { atMove: 17, say: "Solidify …c6, bracing your structure.", sayShort: "…c6, solidify", highlights: [_H('c6')] },
+    { atMove: 19, say: "Regroup …Bf8, the standard retreat.", sayShort: "…Bf8, regroup", highlights: [_H('f8')] },
+    { atMove: 23, say: "Play …h6, taking g5; solid and balanced.", sayShort: "…h6, take g5", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_27: SublineNarration = {
+  intro: { say: "White develops Nge2. Solidify …c6, fianchetto …g6 and …Bg7, and prepare …b5 with …Rb8 — solid and balanced.", sayShort: "…c6, …g6, …Bg7, …Rb8" },
+  beats: [
+    { atMove: 9, say: "Solidify …c6, bracing the centre.", sayShort: "…c6, solidify", highlights: [_H('c6')] },
+    { atMove: 15, say: "Fianchetto …g6, re-aiming the bishop.", sayShort: "…g6, the fianchetto", highlights: [_H('g6')] },
+    { atMove: 17, say: "Develop …Bg7 on the long diagonal.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 21, say: "Lift …Rb8, preparing …b5 queenside expansion; balanced.", sayShort: "…Rb8, prepare …b5", highlights: [_H('b8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_28: SublineNarration = {
+  intro: { say: "White fianchettoes with g3. Strike …e5, develop …Bg7, release …exd4, post …Nc5, and reroute …Ne6 — balanced.", sayShort: "…e5, …Bg7, …Nc5, …Ne6" },
+  beats: [
+    { atMove: 7, say: "Strike …e5, the thematic break.", sayShort: "…e5, the break", highlights: [_H('e5')] },
+    { atMove: 11, say: "Develop …Bg7 on the long diagonal.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Hop …Nc5, the knight's active square.", sayShort: "…Nc5, the active square", highlights: [_H('c5')] },
+    { atMove: 23, say: "Reroute …Ne6, eyeing d4 and f4; balanced.", sayShort: "…Ne6, reroute", highlights: [_H('e6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_29: SublineNarration = {
+  intro: { say: "White plays the aggressive f4. Lift …Re8, solidify …c6, post …Nc5, and regroup …Bf8 then …g6 — solid and balanced.", sayShort: "…Re8, …c6, …Nc5, …Bf8" },
+  beats: [
+    { atMove: 15, say: "Lift …Re8, pressuring the e-file.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
+    { atMove: 17, say: "Solidify …c6, bracing your structure.", sayShort: "…c6, solidify", highlights: [_H('c6')] },
+    { atMove: 19, say: "Post …Nc5, eyeing e4 and the light squares.", sayShort: "…Nc5, the active square", highlights: [_H('c5')] },
+    { atMove: 23, say: "Fianchetto …g6, re-aiming the bishop; balanced.", sayShort: "…g6, re-aim the bishop", highlights: [_H('g6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_30: SublineNarration = {
+  intro: { say: "White fianchettoes. After …e5, push …e4 to gain space, strike …d5, and develop …Bb4 with pressure — active and balanced.", sayShort: "…e4, …d5, …Bb4" },
+  beats: [
+    { atMove: 15, say: "Push …e4, gaining space and clamping White's kingside knight.", sayShort: "…e4, gain space", highlights: [_H('e4')] },
+    { atMove: 17, say: "Strike …d5, claiming the centre behind your e4-pawn.", sayShort: "…d5, claim the centre", highlights: [_H('d5')] },
+    { atMove: 19, say: "Develop …Bb4, pinning and pressuring; active play.", sayShort: "…Bb4, pin and press", highlights: [_H('b4')] },
+    { atMove: 23, say: "Reroute …Na6, heading for c5/b4; balanced.", sayShort: "…Na6, reroute", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_31: SublineNarration = {
+  intro: { say: "White trades on e5. Recapture …dxe5, lift …Re8, regroup …Bf8, and develop …Qc7 — solid and balanced.", sayShort: "…dxe5, …Re8, …Bf8, …Qc7" },
+  beats: [
+    { atMove: 15, say: "Recapture …dxe5, keeping a healthy central pawn.", sayShort: "…dxe5, hold the centre", highlights: [_H('e5')] },
+    { atMove: 17, say: "Lift …Re8, pressuring the e-file.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
+    { atMove: 19, say: "Regroup …Bf8, the standard retreat.", sayShort: "…Bf8, regroup", highlights: [_H('f8')] },
+    { atMove: 23, say: "Develop …Qc7, eyeing the e-file; balanced.", sayShort: "…Qc7, eye the e-file", highlights: [_H('c7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_32: SublineNarration = {
+  intro: { say: "White allows a King's-Indian-style setup. Fianchetto …g6, strike …e5, and after d5 launch the …f5 kingside lever — double-edged and balanced.", sayShort: "KID-style: …g6, …e5, …f5" },
+  beats: [
+    { atMove: 5, say: "Fianchetto with …g6, steering into a King's-Indian-style setup.", sayShort: "…g6, the fianchetto", highlights: [_H('g6')] },
+    { atMove: 11, say: "Strike …e5, the thematic break challenging White's centre.", sayShort: "…e5, the break", highlights: [_H('e5')] },
+    { atMove: 15, say: "Launch …f5, the kingside lever after White locks with d5.", sayShort: "…f5, the kingside lever", highlights: [_H('f5')] },
+    { atMove: 23, say: "Clamp …f4, gaining kingside space for an attack; balanced.", sayShort: "…f4, kingside space", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_33: SublineNarration = {
+  intro: { say: "White develops Qc2. Take g5 with …h6, develop …Qc7, and harass with …Ng4 while maintaining the tension — solid and balanced.", sayShort: "…h6, …Qc7, …Ng4" },
+  beats: [
+    { atMove: 15, say: "Play …h6, taking the g5-square from White.", sayShort: "…h6, take g5", highlights: [_H('g5')] },
+    { atMove: 17, say: "Develop …Qc7, eyeing e5 and the c-file.", sayShort: "…Qc7, eye the e-file", highlights: [_H('c7')] },
+    { atMove: 19, say: "Hit …Ng4, harassing White's bishop.", sayShort: "…Ng4, harass the bishop", highlights: [_H('g4')] },
+    { atMove: 21, say: "Reposition …Ngf6, maintaining the tension; balanced.", sayShort: "…Ngf6, keep the tension", highlights: [_H('f6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_34: SublineNarration = {
+  intro: { say: "White allows a King's-Indian-style setup. Fianchetto …g6, develop …Bg7, exchange via …Bf6, and prepare …Bb7 with …b6 — balanced.", sayShort: "KID-style: …g6, …Bg7, …Bf6" },
+  beats: [
+    { atMove: 9, say: "Fianchetto …g6, a King's-Indian-style setup.", sayShort: "…g6, the fianchetto", highlights: [_H('g6')] },
+    { atMove: 11, say: "Develop …Bg7 on the long diagonal.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Develop …Bf6, pressuring the centre.", sayShort: "…Bf6, pressure the centre", highlights: [_H('f6')] },
+    { atMove: 23, say: "Prepare …Bb7 with …b6; balanced.", sayShort: "…b6, prepare …Bb7", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_35: SublineNarration = {
+  intro: { say: "White props with h3. Push …e4 to clamp, strike …d5 to claim the centre, reroute …Nb6 to pressure c4, and back up with …Re8 — balanced.", sayShort: "…e4, …d5, …Nb6" },
+  beats: [
+    { atMove: 15, say: "Push …e4, clamping White's kingside knight.", sayShort: "…e4, clamp", highlights: [_H('e4')] },
+    { atMove: 17, say: "Strike …d5, claiming the centre behind e4.", sayShort: "…d5, claim the centre", highlights: [_H('d5')] },
+    { atMove: 19, say: "Reroute …Nb6, pressuring c4.", sayShort: "…Nb6, pressure c4", highlights: [_H('b6')] },
+    { atMove: 23, say: "Lift …Re8, backing your space; balanced.", sayShort: "…Re8, back the space", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_36: SublineNarration = {
+  intro: { say: "White pins with Bg5. Push …e4 to clamp, strike …d5 to claim the centre, expand …a5, and reroute …Nb6 — balanced.", sayShort: "…e4, …d5, …a5, …Nb6" },
+  beats: [
+    { atMove: 15, say: "Push …e4, clamping the kingside.", sayShort: "…e4, clamp", highlights: [_H('e4')] },
+    { atMove: 17, say: "Strike …d5, claiming the centre behind e4.", sayShort: "…d5, claim the centre", highlights: [_H('d5')] },
+    { atMove: 19, say: "Expand …a5, gaining queenside space.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
+    { atMove: 21, say: "Reroute …Nb6, pressuring c4; balanced.", sayShort: "…Nb6, pressure c4", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_37: SublineNarration = {
+  intro: { say: "White lifts Re1. Push …e4 to clamp, strike …d5, recapture …cxd5 to keep a strong centre, and take g5 with …h6 — balanced.", sayShort: "…e4, …d5, strong centre" },
+  beats: [
+    { atMove: 15, say: "Push …e4, clamping the kingside.", sayShort: "…e4, clamp", highlights: [_H('e4')] },
+    { atMove: 17, say: "Strike …d5, claiming the centre.", sayShort: "…d5, claim the centre", highlights: [_H('d5')] },
+    { atMove: 19, say: "Recapture …cxd5, keeping a strong centre.", sayShort: "…cxd5, strong centre", highlights: [_H('d5')] },
+    { atMove: 23, say: "Play …h6, taking g5; balanced.", sayShort: "…h6, take g5", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_38: SublineNarration = {
+  intro: { say: "White locks with d5. Expand …a5 for queenside space, develop …Qc7, post …Nc5, and reroute …Na6 — solid and balanced.", sayShort: "…a5, …Qc7, …Nc5" },
+  beats: [
+    { atMove: 15, say: "Expand …a5, gaining queenside space after White locks with d5.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
+    { atMove: 17, say: "Develop …Qc7, supporting your structure.", sayShort: "…Qc7, support", highlights: [_H('c7')] },
+    { atMove: 19, say: "Post …Nc5, the knight's active square.", sayShort: "…Nc5, the active square", highlights: [_H('c5')] },
+    { atMove: 21, say: "Reroute …Na6 toward c5/b4; balanced.", sayShort: "…Na6, reroute", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_39: SublineNarration = {
+  intro: { say: "White plays the quiet e3. Push …e4 to clamp, strike …d5, grab …dxc4 as lines open, and reroute …Nb6 — balanced.", sayShort: "…e4, …d5, …dxc4" },
+  beats: [
+    { atMove: 15, say: "Push …e4, clamping the kingside.", sayShort: "…e4, clamp", highlights: [_H('e4')] },
+    { atMove: 17, say: "Strike …d5, claiming the centre.", sayShort: "…d5, claim the centre", highlights: [_H('d5')] },
+    { atMove: 21, say: "Grab …dxc4, snatching a pawn as lines open.", sayShort: "…dxc4, win a pawn", highlights: [_H('c4')] },
+    { atMove: 23, say: "Reroute …Nb6, defending c4 and pressuring; balanced.", sayShort: "…Nb6, pressure c4", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_40: SublineNarration = {
+  intro: { say: "White props the centre with h3 in the main Old Indian. Release the tension with …exd4, post the knight on …Nc5, pressure the e-file, and regroup …Bf8 — solid and balanced.", sayShort: "Main line: …exd4, …Nc5, …Bf8" },
+  beats: [
+    { atMove: 15, say: "Release the tension with …exd4, opening the e-file for your pieces.", sayShort: "…exd4, open the e-file", highlights: [_H('d4')] },
+    { atMove: 17, say: "Hop …Nc5, eyeing e4 and d3 — the knight's best Old-Indian square.", sayShort: "…Nc5, the active square", highlights: [_H('c5')] },
+    { atMove: 19, say: "Lift …Re8, pressuring down the open e-file.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
+    { atMove: 21, say: "Regroup …Bf8, the standard retreat that re-aims the bishop; solid and balanced.", sayShort: "…Bf8, regroup", highlights: [_H('f8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_41: SublineNarration = {
+  intro: { say: "White lifts Re1. Back the centre with …Re8, take g5 with …h6, and reroute …Nf8-g6 to the kingside — solid and balanced.", sayShort: "…Re8, …h6, …Nf8-g6" },
+  beats: [
+    { atMove: 15, say: "Lift …Re8, backing the centre.", sayShort: "…Re8, back the centre", highlights: [_H('e8')] },
+    { atMove: 17, say: "Play …h6, taking the g5-square.", sayShort: "…h6, take g5", highlights: [_H('g5')] },
+    { atMove: 19, say: "Reroute …Nf8, heading to g6 and the kingside.", sayShort: "…Nf8, reroute", highlights: [_H('f8')] },
+    { atMove: 23, say: "Land …Ng6, eyeing the kingside; balanced.", sayShort: "…Ng6, eye the kingside", highlights: [_H('g6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_42: SublineNarration = {
+  intro: { say: "White develops Be3. Prepare …b5 with …a6, expand …b5, fianchetto …Bb7, and lift …Re8 — active queenside play, balanced.", sayShort: "…a6, …b5, …Bb7" },
+  beats: [
+    { atMove: 15, say: "Prepare …b5 with …a6, gaining queenside space.", sayShort: "…a6, prepare …b5", highlights: [_H('a6')] },
+    { atMove: 17, say: "Expand …b5, striking at White's queenside.", sayShort: "…b5, queenside expansion", highlights: [_H('b5')] },
+    { atMove: 19, say: "Fianchetto …Bb7, opposing on the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 21, say: "Lift …Re8; balanced.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_43: SublineNarration = {
+  intro: { say: "White develops Qc2 and Rd1. Back the centre with …Re8, release with …exd4, regroup …Bf8, and fianchetto …g6 — solid and balanced.", sayShort: "…Re8, …exd4, …Bf8, …g6" },
+  beats: [
+    { atMove: 15, say: "Lift …Re8, backing the centre.", sayShort: "…Re8, back the centre", highlights: [_H('e8')] },
+    { atMove: 17, say: "Release with …exd4, opening the e-file.", sayShort: "…exd4, open the e-file", highlights: [_H('d4')] },
+    { atMove: 19, say: "Regroup …Bf8, the standard Old-Indian retreat.", sayShort: "…Bf8, regroup", highlights: [_H('f8')] },
+    { atMove: 23, say: "Fianchetto with …g6, re-aiming the bishop to g7; solid and balanced.", sayShort: "…g6, re-aim the bishop", highlights: [_H('g6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_44: SublineNarration = {
+  intro: { say: "White pins with Bg5. Release with …exd4, then snap …Nxe4 — a tactical shot exploiting the pin to win a pawn and equalise cleanly.", sayShort: "…exd4 then …Nxe4 tactic" },
+  beats: [
+    { atMove: 15, say: "Release with …exd4, opening lines for the tactics.", sayShort: "…exd4, open lines", highlights: [_H('d4')] },
+    { atMove: 17, say: "Snap …Nxe4, exploiting the pin to win a pawn.", sayShort: "…Nxe4, win a pawn", highlights: [_H('e4')] },
+    { atMove: 21, say: "Recapture …Qxe7, having simplified favourably.", sayShort: "…Qxe7, simplify", highlights: [_H('e7')] },
+    { atMove: 23, say: "Hit …Qg5, regaining the piece and equalising cleanly.", sayShort: "…Qg5, equalise", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_45: SublineNarration = {
+  intro: { say: "White allows a King's-Indian-style setup. Fianchetto …g6, strike …e5, and after d5 launch the …f5 kingside lever — double-edged and balanced.", sayShort: "KID-style: …g6, …e5, …f5" },
+  beats: [
+    { atMove: 5, say: "Fianchetto with …g6, steering into a King's-Indian-style setup.", sayShort: "…g6, the fianchetto", highlights: [_H('g6')] },
+    { atMove: 11, say: "Strike …e5, the thematic break challenging White's centre.", sayShort: "…e5, the break", highlights: [_H('e5')] },
+    { atMove: 15, say: "Launch …f5, the kingside lever after White locks with d5.", sayShort: "…f5, the kingside lever", highlights: [_H('f5')] },
+    { atMove: 23, say: "Clamp …f4, gaining kingside space for an attack; balanced.", sayShort: "…f4, kingside space", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_46: SublineNarration = {
+  intro: { say: "White props with h3 before castling. Release …exd4, post …Nc5, pressure the e-file, and regroup …Bf8 — the standard Old-Indian plan, balanced.", sayShort: "…exd4, …Nc5, …Re8, …Bf8" },
+  beats: [
+    { atMove: 13, say: "Release the tension with …exd4, opening the e-file.", sayShort: "…exd4, open the e-file", highlights: [_H('d4')] },
+    { atMove: 15, say: "Hop …Nc5, the knight's best square eyeing e4.", sayShort: "…Nc5, the active square", highlights: [_H('c5')] },
+    { atMove: 17, say: "Lift …Re8, pressuring the e-file.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
+    { atMove: 19, say: "Regroup …Bf8; solid and balanced.", sayShort: "…Bf8, regroup", highlights: [_H('f8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_47: SublineNarration = {
+  intro: { say: "White fianchettoes with b3. Back the centre with …Re8, release …exd4, regroup …Bf8, and post …Nc5 — solid and balanced.", sayShort: "…Re8, …exd4, …Bf8, …Nc5" },
+  beats: [
+    { atMove: 15, say: "Lift …Re8, backing the centre.", sayShort: "…Re8, back the centre", highlights: [_H('e8')] },
+    { atMove: 17, say: "Release with …exd4, opening the e-file.", sayShort: "…exd4, open the e-file", highlights: [_H('d4')] },
+    { atMove: 19, say: "Regroup …Bf8, the standard retreat.", sayShort: "…Bf8, regroup", highlights: [_H('f8')] },
+    { atMove: 21, say: "Hop …Nc5, eyeing e4 and the light squares; balanced.", sayShort: "…Nc5, the active square", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_48: SublineNarration = {
+  intro: { say: "White locks with d5 and you grab space with …c5. Tuck …Kh8 to prepare …f5, brace …b6, and reroute …Nh7 to support the break — balanced.", sayShort: "…c5, …Kh8, …f5 prep" },
+  beats: [
+    { atMove: 15, say: "Strike …c5, gaining queenside space after d5.", sayShort: "…c5, grab space", highlights: [_H('c5')] },
+    { atMove: 17, say: "Tuck …Kh8, preparing the …f5 kingside break.", sayShort: "…Kh8, prepare …f5", highlights: [_H('h8')] },
+    { atMove: 21, say: "Play …b6, bracing your queenside structure.", sayShort: "…b6, brace the queenside", highlights: [_H('b6')] },
+    { atMove: 23, say: "Reroute …Nh7, heading to support …f5; balanced.", sayShort: "…Nh7, support …f5", highlights: [_H('h7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_49: SublineNarration = {
+  intro: { say: "White develops Be3. Harass with …Ng4, release …exd4, develop …Bf6 on the long diagonal, and centralise your knights — balanced with active pieces.", sayShort: "…Ng4, …exd4, …Bf6, …Ne5" },
+  beats: [
+    { atMove: 13, say: "Hit …Ng4, harassing White's bishop and gaining a tempo.", sayShort: "…Ng4, harass the bishop", highlights: [_H('g4')] },
+    { atMove: 15, say: "Release with …exd4, opening the e-file.", sayShort: "…exd4, open the e-file", highlights: [_H('d4')] },
+    { atMove: 17, say: "Develop …Bf6, pressuring the d4-knight and the long diagonal.", sayShort: "…Bf6, the long diagonal", highlights: [_H('f6')] },
+    { atMove: 19, say: "Centralise …Nge5, a fine outpost; balanced.", sayShort: "…Ne5, the outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_50: SublineNarration = {
+  intro: { say: "White props the centre with h3 in the main Old Indian. Release the tension with …exd4, post the knight on …Nc5, pressure the e-file, and regroup …Bf8 — solid and balanced.", sayShort: "Main line: …exd4, …Nc5, …Bf8" },
+  beats: [
+    { atMove: 15, say: "Release the tension with …exd4, opening the e-file for your pieces.", sayShort: "…exd4, open the e-file", highlights: [_H('d4')] },
+    { atMove: 17, say: "Hop …Nc5, eyeing e4 and d3 — the knight's best Old-Indian square.", sayShort: "…Nc5, the active square", highlights: [_H('c5')] },
+    { atMove: 19, say: "Lift …Re8, pressuring down the open e-file.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
+    { atMove: 21, say: "Regroup …Bf8, the standard retreat that re-aims the bishop; solid and balanced.", sayShort: "…Bf8, regroup", highlights: [_H('f8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_51: SublineNarration = {
+  intro: { say: "White lifts Re1. Back the centre with …Re8, take g5 with …h6, and reroute …Nf8-g6 to the kingside — solid and balanced.", sayShort: "…Re8, …h6, …Nf8-g6" },
+  beats: [
+    { atMove: 15, say: "Lift …Re8, backing the centre.", sayShort: "…Re8, back the centre", highlights: [_H('e8')] },
+    { atMove: 17, say: "Play …h6, taking the g5-square.", sayShort: "…h6, take g5", highlights: [_H('g5')] },
+    { atMove: 19, say: "Reroute …Nf8, heading to g6 and the kingside.", sayShort: "…Nf8, reroute", highlights: [_H('f8')] },
+    { atMove: 23, say: "Land …Ng6, eyeing the kingside; balanced.", sayShort: "…Ng6, eye the kingside", highlights: [_H('g6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_52: SublineNarration = {
+  intro: { say: "White develops Be3. Back the centre with …Re8, take g5 with …h6, then reroute …Nf8-g6 to the kingside — solid and balanced.", sayShort: "…Re8, …h6, …Nf8-g6" },
+  beats: [
+    { atMove: 15, say: "Lift …Re8, backing the centre.", sayShort: "…Re8, back the centre", highlights: [_H('e8')] },
+    { atMove: 17, say: "Play …h6, taking the g5-square from White's pieces.", sayShort: "…h6, take g5", highlights: [_H('g5')] },
+    { atMove: 21, say: "Reroute …Nf8 toward g6 and the kingside.", sayShort: "…Nf8, reroute", highlights: [_H('f8')] },
+    { atMove: 23, say: "Land …Ng6, eyeing the kingside; solid and balanced.", sayShort: "…Ng6, eye the kingside", highlights: [_H('g6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_53: SublineNarration = {
+  intro: { say: "White develops Qc2 and Rd1. Back the centre with …Re8, release with …exd4, regroup …Bf8, and fianchetto …g6 — solid and balanced.", sayShort: "…Re8, …exd4, …Bf8, …g6" },
+  beats: [
+    { atMove: 15, say: "Lift …Re8, backing the centre.", sayShort: "…Re8, back the centre", highlights: [_H('e8')] },
+    { atMove: 17, say: "Release with …exd4, opening the e-file.", sayShort: "…exd4, open the e-file", highlights: [_H('d4')] },
+    { atMove: 19, say: "Regroup …Bf8, the standard Old-Indian retreat.", sayShort: "…Bf8, regroup", highlights: [_H('f8')] },
+    { atMove: 23, say: "Fianchetto with …g6, re-aiming the bishop to g7; solid and balanced.", sayShort: "…g6, re-aim the bishop", highlights: [_H('g6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_54: SublineNarration = {
+  intro: { say: "White pins with Bg5. Release with …exd4, then snap …Nxe4 — a tactical shot exploiting the pin to win a pawn and equalise cleanly.", sayShort: "…exd4 then …Nxe4 tactic" },
+  beats: [
+    { atMove: 15, say: "Release with …exd4, opening lines for the tactics.", sayShort: "…exd4, open lines", highlights: [_H('d4')] },
+    { atMove: 17, say: "Snap …Nxe4, exploiting the pin to win a pawn.", sayShort: "…Nxe4, win a pawn", highlights: [_H('e4')] },
+    { atMove: 21, say: "Recapture …Qxe7, having simplified favourably.", sayShort: "…Qxe7, simplify", highlights: [_H('e7')] },
+    { atMove: 23, say: "Hit …Qg5, regaining the piece and equalising cleanly.", sayShort: "…Qg5, equalise", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_55: SublineNarration = {
+  intro: { say: "White allows a King's-Indian-style setup. Fianchetto …g6, strike …e5, and after d5 launch the …f5 kingside lever — double-edged and balanced.", sayShort: "KID-style: …g6, …e5, …f5" },
+  beats: [
+    { atMove: 5, say: "Fianchetto with …g6, steering into a King's-Indian-style setup.", sayShort: "…g6, the fianchetto", highlights: [_H('g6')] },
+    { atMove: 11, say: "Strike …e5, the thematic break challenging White's centre.", sayShort: "…e5, the break", highlights: [_H('e5')] },
+    { atMove: 15, say: "Launch …f5, the kingside lever after White locks with d5.", sayShort: "…f5, the kingside lever", highlights: [_H('f5')] },
+    { atMove: 23, say: "Clamp …f4, gaining kingside space for an attack; balanced.", sayShort: "…f4, kingside space", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_56: SublineNarration = {
+  intro: { say: "White props with h3 before castling. Release …exd4, post …Nc5, pressure the e-file, and regroup …Bf8 — the standard Old-Indian plan, balanced.", sayShort: "…exd4, …Nc5, …Re8, …Bf8" },
+  beats: [
+    { atMove: 13, say: "Release the tension with …exd4, opening the e-file.", sayShort: "…exd4, open the e-file", highlights: [_H('d4')] },
+    { atMove: 15, say: "Hop …Nc5, the knight's best square eyeing e4.", sayShort: "…Nc5, the active square", highlights: [_H('c5')] },
+    { atMove: 17, say: "Lift …Re8, pressuring the e-file.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
+    { atMove: 19, say: "Regroup …Bf8; solid and balanced.", sayShort: "…Bf8, regroup", highlights: [_H('f8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_57: SublineNarration = {
+  intro: { say: "White fianchettoes with b3. Back the centre with …Re8, release …exd4, regroup …Bf8, and post …Nc5 — solid and balanced.", sayShort: "…Re8, …exd4, …Bf8, …Nc5" },
+  beats: [
+    { atMove: 15, say: "Lift …Re8, backing the centre.", sayShort: "…Re8, back the centre", highlights: [_H('e8')] },
+    { atMove: 17, say: "Release with …exd4, opening the e-file.", sayShort: "…exd4, open the e-file", highlights: [_H('d4')] },
+    { atMove: 19, say: "Regroup …Bf8, the standard retreat.", sayShort: "…Bf8, regroup", highlights: [_H('f8')] },
+    { atMove: 21, say: "Hop …Nc5, eyeing e4 and the light squares; balanced.", sayShort: "…Nc5, the active square", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_58: SublineNarration = {
+  intro: { say: "White develops Be3. Harass with …Ng4, release …exd4, develop …Bf6 on the long diagonal, and centralise your knights — balanced with active pieces.", sayShort: "…Ng4, …exd4, …Bf6, …Ne5" },
+  beats: [
+    { atMove: 13, say: "Hit …Ng4, harassing White's bishop and gaining a tempo.", sayShort: "…Ng4, harass the bishop", highlights: [_H('g4')] },
+    { atMove: 15, say: "Release with …exd4, opening the e-file.", sayShort: "…exd4, open the e-file", highlights: [_H('d4')] },
+    { atMove: 17, say: "Develop …Bf6, pressuring the d4-knight and the long diagonal.", sayShort: "…Bf6, the long diagonal", highlights: [_H('f6')] },
+    { atMove: 19, say: "Centralise …Nge5, a fine outpost; balanced.", sayShort: "…Ne5, the outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_59: SublineNarration = {
+  intro: { say: "White trades on e5. Recapture …dxe5, develop …Qc7, post …Nc5, and plant …Nd4 — a dominant central outpost, balanced or better.", sayShort: "…dxe5, …Qc7, …Nd4" },
+  beats: [
+    { atMove: 15, say: "Recapture …dxe5, keeping a healthy central pawn.", sayShort: "…dxe5, hold the centre", highlights: [_H('e5')] },
+    { atMove: 17, say: "Develop …Qc7, eyeing the e5-pawn and the c-file.", sayShort: "…Qc7, eye the e-file", highlights: [_H('c7')] },
+    { atMove: 19, say: "Hop …Nc5, the knight's active square.", sayShort: "…Nc5, the active square", highlights: [_H('c5')] },
+    { atMove: 23, say: "Plant …Nd4, a dominant central outpost; balanced or better.", sayShort: "…Nd4, central outpost", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_60: SublineNarration = {
+  intro: { say: "White props the centre with h3 in the main Old Indian. Release the tension with …exd4, post the knight on …Nc5, pressure the e-file, and regroup …Bf8 — solid and balanced.", sayShort: "Main line: …exd4, …Nc5, …Bf8" },
+  beats: [
+    { atMove: 15, say: "Release the tension with …exd4, opening the e-file for your pieces.", sayShort: "…exd4, open the e-file", highlights: [_H('d4')] },
+    { atMove: 17, say: "Hop …Nc5, eyeing e4 and d3 — the knight's best Old-Indian square.", sayShort: "…Nc5, the active square", highlights: [_H('c5')] },
+    { atMove: 19, say: "Lift …Re8, pressuring down the open e-file.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
+    { atMove: 21, say: "Regroup …Bf8, the standard retreat that re-aims the bishop; solid and balanced.", sayShort: "…Bf8, regroup", highlights: [_H('f8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_61: SublineNarration = {
+  intro: { say: "White lifts Re1. Back the centre with …Re8, take g5 with …h6, and reroute …Nf8-g6 to the kingside — solid and balanced.", sayShort: "…Re8, …h6, …Nf8-g6" },
+  beats: [
+    { atMove: 15, say: "Lift …Re8, backing the centre.", sayShort: "…Re8, back the centre", highlights: [_H('e8')] },
+    { atMove: 17, say: "Play …h6, taking the g5-square.", sayShort: "…h6, take g5", highlights: [_H('g5')] },
+    { atMove: 19, say: "Reroute …Nf8, heading to g6 and the kingside.", sayShort: "…Nf8, reroute", highlights: [_H('f8')] },
+    { atMove: 23, say: "Land …Ng6, eyeing the kingside; balanced.", sayShort: "…Ng6, eye the kingside", highlights: [_H('g6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_62: SublineNarration = {
+  intro: { say: "White locks the centre with d5. Back it with …Re8, reroute …Nf8-g6 to the kingside, and complete with …Bd7 — solid and balanced.", sayShort: "…Re8, …Nf8-g6 regroup" },
+  beats: [
+    { atMove: 15, say: "Lift …Re8, backing the centre after White locks it with d5.", sayShort: "…Re8, back the centre", highlights: [_H('e8')] },
+    { atMove: 17, say: "Reroute …Nf8, heading to g6 to support …f5 and the kingside.", sayShort: "…Nf8, reroute", highlights: [_H('f8')] },
+    { atMove: 19, say: "Land …Ng6, pressuring f4 and eyeing the kingside break.", sayShort: "…Ng6, eye the kingside", highlights: [_H('g6')] },
+    { atMove: 21, say: "Develop …Bd7, completing your regrouping; solid and balanced.", sayShort: "…Bd7, complete the setup", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_63: SublineNarration = {
+  intro: { say: "White develops Be3 and Rc1. Prepare …b5 with …a6, expand …b5, fianchetto …Bb7, and contest the c-file with …Rc8 — active and balanced.", sayShort: "…a6, …b5, …Bb7, …Rc8" },
+  beats: [
+    { atMove: 15, say: "Prepare …b5 with …a6, gaining queenside space.", sayShort: "…a6, prepare …b5", highlights: [_H('a6')] },
+    { atMove: 17, say: "Expand …b5, striking at White's queenside.", sayShort: "…b5, queenside expansion", highlights: [_H('b5')] },
+    { atMove: 19, say: "Fianchetto …Bb7, opposing on the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 21, say: "Lift …Rc8, pressuring the c-file; balanced.", sayShort: "…Rc8, press the c-file", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_64: SublineNarration = {
+  intro: { say: "White pins with Bg5. Release with …exd4, then snap …Nxe4 — a tactical shot exploiting the pin to win a pawn and equalise cleanly.", sayShort: "…exd4 then …Nxe4 tactic" },
+  beats: [
+    { atMove: 15, say: "Release with …exd4, opening lines for the tactics.", sayShort: "…exd4, open lines", highlights: [_H('d4')] },
+    { atMove: 17, say: "Snap …Nxe4, exploiting the pin to win a pawn.", sayShort: "…Nxe4, win a pawn", highlights: [_H('e4')] },
+    { atMove: 21, say: "Recapture …Qxe7, having simplified favourably.", sayShort: "…Qxe7, simplify", highlights: [_H('e7')] },
+    { atMove: 23, say: "Hit …Qg5, regaining the piece and equalising cleanly.", sayShort: "…Qg5, equalise", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_65: SublineNarration = {
+  intro: { say: "White allows a King's-Indian-style setup. Fianchetto …g6, strike …e5, and after d5 launch the …f5 kingside lever — double-edged and balanced.", sayShort: "KID-style: …g6, …e5, …f5" },
+  beats: [
+    { atMove: 5, say: "Fianchetto with …g6, steering into a King's-Indian-style setup.", sayShort: "…g6, the fianchetto", highlights: [_H('g6')] },
+    { atMove: 11, say: "Strike …e5, the thematic break challenging White's centre.", sayShort: "…e5, the break", highlights: [_H('e5')] },
+    { atMove: 15, say: "Launch …f5, the kingside lever after White locks with d5.", sayShort: "…f5, the kingside lever", highlights: [_H('f5')] },
+    { atMove: 23, say: "Clamp …f4, gaining kingside space for an attack; balanced.", sayShort: "…f4, kingside space", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_66: SublineNarration = {
+  intro: { say: "White props with h3 before castling. Release …exd4, post …Nc5, pressure the e-file, and regroup …Bf8 — the standard Old-Indian plan, balanced.", sayShort: "…exd4, …Nc5, …Re8, …Bf8" },
+  beats: [
+    { atMove: 13, say: "Release the tension with …exd4, opening the e-file.", sayShort: "…exd4, open the e-file", highlights: [_H('d4')] },
+    { atMove: 15, say: "Hop …Nc5, the knight's best square eyeing e4.", sayShort: "…Nc5, the active square", highlights: [_H('c5')] },
+    { atMove: 17, say: "Lift …Re8, pressuring the e-file.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
+    { atMove: 19, say: "Regroup …Bf8; solid and balanced.", sayShort: "…Bf8, regroup", highlights: [_H('f8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_67: SublineNarration = {
+  intro: { say: "White fianchettoes with b3. Back the centre with …Re8, release …exd4, regroup …Bf8, and post …Nc5 — solid and balanced.", sayShort: "…Re8, …exd4, …Bf8, …Nc5" },
+  beats: [
+    { atMove: 15, say: "Lift …Re8, backing the centre.", sayShort: "…Re8, back the centre", highlights: [_H('e8')] },
+    { atMove: 17, say: "Release with …exd4, opening the e-file.", sayShort: "…exd4, open the e-file", highlights: [_H('d4')] },
+    { atMove: 19, say: "Regroup …Bf8, the standard retreat.", sayShort: "…Bf8, regroup", highlights: [_H('f8')] },
+    { atMove: 21, say: "Hop …Nc5, eyeing e4 and the light squares; balanced.", sayShort: "…Nc5, the active square", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_68: SublineNarration = {
+  intro: { say: "White develops Be3. Harass with …Ng4, release …exd4, develop …Bf6 on the long diagonal, and centralise your knights — balanced with active pieces.", sayShort: "…Ng4, …exd4, …Bf6, …Ne5" },
+  beats: [
+    { atMove: 13, say: "Hit …Ng4, harassing White's bishop and gaining a tempo.", sayShort: "…Ng4, harass the bishop", highlights: [_H('g4')] },
+    { atMove: 15, say: "Release with …exd4, opening the e-file.", sayShort: "…exd4, open the e-file", highlights: [_H('d4')] },
+    { atMove: 17, say: "Develop …Bf6, pressuring the d4-knight and the long diagonal.", sayShort: "…Bf6, the long diagonal", highlights: [_H('f6')] },
+    { atMove: 19, say: "Centralise …Nge5, a fine outpost; balanced.", sayShort: "…Ne5, the outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+const OI_69: SublineNarration = {
+  intro: { say: "White trades on e5. Recapture …dxe5, develop …Qc7, post …Nc5, and plant …Nd4 — a dominant central outpost, balanced or better.", sayShort: "…dxe5, …Qc7, …Nd4" },
+  beats: [
+    { atMove: 15, say: "Recapture …dxe5, keeping a healthy central pawn.", sayShort: "…dxe5, hold the centre", highlights: [_H('e5')] },
+    { atMove: 17, say: "Develop …Qc7, eyeing the e5-pawn and the c-file.", sayShort: "…Qc7, eye the e-file", highlights: [_H('c7')] },
+    { atMove: 19, say: "Hop …Nc5, the knight's active square.", sayShort: "…Nc5, the active square", highlights: [_H('c5')] },
+    { atMove: 23, say: "Plant …Nd4, a dominant central outpost; balanced or better.", sayShort: "…Nd4, central outpost", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'nimzo-indian::7::Nf3@4': NI_69,
   'nimzo-indian::6::Nf3@4': NI_59,
@@ -9441,10 +10103,10 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'reti-opening::6::Bd6@13': RT60,
   'reti-opening::0::Bd6@13': RT01,
   'london-system::2::Nc6@9': LN20,
-  'old-indian-defence::0::h3@14': WOLDH3,
-  'old-indian-defence::4::h3@14': WOLDH3,
-  'old-indian-defence::5::h3@14': WOLDH3,
-  'old-indian-defence::6::h3@14': WOLDH3,
+  'old-indian-defence::0::h3@14': OI_0,
+  'old-indian-defence::4::h3@14': OI_40,
+  'old-indian-defence::5::h3@14': OI_50,
+  'old-indian-defence::6::h3@14': OI_60,
   'queens-gambit::4::e6@7': WQGMERAN,
   'grunfeld-defence::0::g3@4': WGRUG3,
   'grunfeld-defence::1::g3@4': WGRUG3,
@@ -10588,72 +11250,72 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'trompowsky-attack::7::Rg8@17': TR_V7_RG8_17,
   'trompowsky-attack::7::a6@17': TR_V7_A6_17,
   // ── old-indian-defence ──
-  'old-indian-defence::0::d5@14': C86,
-  'old-indian-defence::0::Be3@14': C86,
-  'old-indian-defence::0::Qc2@14': C86,
-  'old-indian-defence::0::Bg5@14': C86,
-  'old-indian-defence::0::Nf3@4': C87,
-  'old-indian-defence::0::h3@12': C86,
-  'old-indian-defence::0::b3@14': C86,
-  'old-indian-defence::0::Be3@12': C86,
-  'old-indian-defence::0::dxe5@14': C86,
-  'old-indian-defence::1::Nf3@4': C87,
-  'old-indian-defence::1::dxe5@10': C88,
-  'old-indian-defence::1::g3@6': C88,
-  'old-indian-defence::1::Nf3@6': C88,
-  'old-indian-defence::1::Be3@10': C88,
-  'old-indian-defence::1::Nge2@10': C88,
-  'old-indian-defence::1::d5@8': C88,
-  'old-indian-defence::1::dxe5@8': C88,
-  'old-indian-defence::1::Bg5@6': C88,
-  'old-indian-defence::1::Qb3@6': C88,
-  'old-indian-defence::2::Nf3@4': C87,
-  'old-indian-defence::2::h3@12': C86,
-  'old-indian-defence::2::Be3@12': C86,
-  'old-indian-defence::2::Nf3@6': C87,
-  'old-indian-defence::2::d5@12': C86,
-  'old-indian-defence::2::d5@8': C89,
-  'old-indian-defence::2::Be3@16': C86,
-  'old-indian-defence::2::Nge2@8': C89,
-  'old-indian-defence::2::g3@6': C90,
-  'old-indian-defence::2::f4@16': C86,
-  'old-indian-defence::3::b3@14': C90,
-  'old-indian-defence::3::dxe5@14': C90,
-  'old-indian-defence::3::Nf3@4': C87,
-  'old-indian-defence::3::Qc2@14': C90,
-  'old-indian-defence::3::e4@8': WOLDE4,
-  'old-indian-defence::3::h3@14': C90,
-  'old-indian-defence::3::Bg5@14': C90,
-  'old-indian-defence::3::Re1@14': C90,
-  'old-indian-defence::3::d5@14': C90,
-  'old-indian-defence::3::e3@14': C90,
-  'old-indian-defence::4::Re1@14': C86,
-  'old-indian-defence::4::Be3@14': C86,
-  'old-indian-defence::4::Qc2@14': C86,
-  'old-indian-defence::4::Bg5@14': C86,
-  'old-indian-defence::4::Nf3@4': C87,
-  'old-indian-defence::4::h3@12': C86,
-  'old-indian-defence::4::b3@14': C86,
-  'old-indian-defence::4::h3@16': C86,
-  'old-indian-defence::4::Be3@12': C86,
-  'old-indian-defence::5::Re1@14': C86,
-  'old-indian-defence::5::Be3@14': C86,
-  'old-indian-defence::5::Qc2@14': C86,
-  'old-indian-defence::5::Bg5@14': C86,
-  'old-indian-defence::5::Nf3@4': C87,
-  'old-indian-defence::5::h3@12': C86,
-  'old-indian-defence::5::b3@14': C86,
-  'old-indian-defence::5::Be3@12': C86,
-  'old-indian-defence::5::dxe5@14': C86,
-  'old-indian-defence::6::Re1@14': C86,
-  'old-indian-defence::6::d5@14': C86,
-  'old-indian-defence::6::Be3@14': C86,
-  'old-indian-defence::6::Bg5@14': C86,
-  'old-indian-defence::6::Nf3@4': C87,
-  'old-indian-defence::6::h3@12': C86,
-  'old-indian-defence::6::b3@14': C86,
-  'old-indian-defence::6::Be3@12': C86,
-  'old-indian-defence::6::dxe5@14': C86,
+  'old-indian-defence::0::d5@14': OI_1,
+  'old-indian-defence::0::Be3@14': OI_2,
+  'old-indian-defence::0::Qc2@14': OI_3,
+  'old-indian-defence::0::Bg5@14': OI_4,
+  'old-indian-defence::0::Nf3@4': OI_5,
+  'old-indian-defence::0::h3@12': OI_6,
+  'old-indian-defence::0::b3@14': OI_7,
+  'old-indian-defence::0::Be3@12': OI_8,
+  'old-indian-defence::0::dxe5@14': OI_9,
+  'old-indian-defence::1::Nf3@4': OI_10,
+  'old-indian-defence::1::dxe5@10': OI_11,
+  'old-indian-defence::1::g3@6': OI_12,
+  'old-indian-defence::1::Nf3@6': OI_13,
+  'old-indian-defence::1::Be3@10': OI_14,
+  'old-indian-defence::1::Nge2@10': OI_15,
+  'old-indian-defence::1::d5@8': OI_16,
+  'old-indian-defence::1::dxe5@8': OI_17,
+  'old-indian-defence::1::Bg5@6': OI_18,
+  'old-indian-defence::1::Qb3@6': OI_19,
+  'old-indian-defence::2::Nf3@4': OI_20,
+  'old-indian-defence::2::h3@12': OI_21,
+  'old-indian-defence::2::Be3@12': OI_22,
+  'old-indian-defence::2::Nf3@6': OI_23,
+  'old-indian-defence::2::d5@12': OI_24,
+  'old-indian-defence::2::d5@8': OI_25,
+  'old-indian-defence::2::Be3@16': OI_26,
+  'old-indian-defence::2::Nge2@8': OI_27,
+  'old-indian-defence::2::g3@6': OI_28,
+  'old-indian-defence::2::f4@16': OI_29,
+  'old-indian-defence::3::b3@14': OI_30,
+  'old-indian-defence::3::dxe5@14': OI_31,
+  'old-indian-defence::3::Nf3@4': OI_32,
+  'old-indian-defence::3::Qc2@14': OI_33,
+  'old-indian-defence::3::e4@8': OI_34,
+  'old-indian-defence::3::h3@14': OI_35,
+  'old-indian-defence::3::Bg5@14': OI_36,
+  'old-indian-defence::3::Re1@14': OI_37,
+  'old-indian-defence::3::d5@14': OI_38,
+  'old-indian-defence::3::e3@14': OI_39,
+  'old-indian-defence::4::Re1@14': OI_41,
+  'old-indian-defence::4::Be3@14': OI_42,
+  'old-indian-defence::4::Qc2@14': OI_43,
+  'old-indian-defence::4::Bg5@14': OI_44,
+  'old-indian-defence::4::Nf3@4': OI_45,
+  'old-indian-defence::4::h3@12': OI_46,
+  'old-indian-defence::4::b3@14': OI_47,
+  'old-indian-defence::4::h3@16': OI_48,
+  'old-indian-defence::4::Be3@12': OI_49,
+  'old-indian-defence::5::Re1@14': OI_51,
+  'old-indian-defence::5::Be3@14': OI_52,
+  'old-indian-defence::5::Qc2@14': OI_53,
+  'old-indian-defence::5::Bg5@14': OI_54,
+  'old-indian-defence::5::Nf3@4': OI_55,
+  'old-indian-defence::5::h3@12': OI_56,
+  'old-indian-defence::5::b3@14': OI_57,
+  'old-indian-defence::5::Be3@12': OI_58,
+  'old-indian-defence::5::dxe5@14': OI_59,
+  'old-indian-defence::6::Re1@14': OI_61,
+  'old-indian-defence::6::d5@14': OI_62,
+  'old-indian-defence::6::Be3@14': OI_63,
+  'old-indian-defence::6::Bg5@14': OI_64,
+  'old-indian-defence::6::Nf3@4': OI_65,
+  'old-indian-defence::6::h3@12': OI_66,
+  'old-indian-defence::6::b3@14': OI_67,
+  'old-indian-defence::6::Be3@12': OI_68,
+  'old-indian-defence::6::dxe5@14': OI_69,
   // ── english-opening ──
   'english-opening::0::Bd6@13': EN02,
   'english-opening::0::Bb4@7': EN03,
