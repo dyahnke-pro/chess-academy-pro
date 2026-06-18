@@ -41,25 +41,9 @@ void SOFT;
 // slav-defence :: sharp_e4
 // slav-defence :: main_bf5
 // semi-slav :: botvinnik
-const C22: SublineNarration = {
-  intro: { say: "White pins with Bg5 and you can plunge into the Botvinnik — …dxc4 and …b5, grabbing the pawn and lashing out with …g5 to smash the h4-bishop. It is the sharpest forest in chess: both kings get hunted, every move is theory, and the verdict is that Black holds. Know the line and you wield a genuine weapon.", sayShort: "Bg5 — the Botvinnik: …dxc4, …b5, …g5." },
-  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Semi-Slav_Defense'],
-};
 // semi-slav :: anti_meran
-const C23: SublineNarration = {
-  intro: { say: "White avoids the sharpest lines with the quiet Qc2/e3 setup. No fireworks means you equalise comfortably: complete the …Bd6 and …O-O development, prepare the …e5 break (the key freeing move in this structure), and contest the centre. A healthy, balanced middlegame with both breaks, …c5 and …e5, in reserve.", sayShort: "Quiet line — prepare the …e5 break." },
-  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Semi-Slav_Defense'],
-};
 // semi-slav :: meran
-const C24: SublineNarration = {
-  intro: { say: "The Semi-Slav — solid as the Slav but with bite. After …Nbd7 you prepare the great freeing break: …dxc4 followed by …b5 and …c5, the Meran, blowing the centre open with your pieces ready. White's pieces look active but your structure is bombproof and your counterplay on the queenside is real.", sayShort: "Semi-Slav — free with …dxc4, …b5, …c5." },
-  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Semi-Slav_Defense'],
-};
 // semi-slav :: stonewall_e4
-const C25: SublineNarration = {
-  intro: { say: "White has built and pushed the e4-e5 centre. The critical Semi-Slav battleground: undermine it. …c5 hits the base, your pieces swarm d4 and e5, and White's proud pawns become a row of targets. You invited the centre precisely so you could tear it down with timely pawn breaks.", sayShort: "e4-e5 — undermine with …c5." },
-  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Semi-Slav_Defense'],
-};
 // nimzo-indian :: rubinstein_e3
 // nimzo-indian :: fianchetto_g3
 // nimzo-indian :: classical_qc2
@@ -443,14 +427,6 @@ const C153: SublineNarration = {
 
 // DEEP DSLAV :: slav-defence::4::a4@8
 // DEEP DSSL :: semi-slav::4::Bh4@10
-const DSSL: SublineNarration = {
-  intro: { say: "White pins with Bg5 and after your …h6 drops back to h4 — now you get to be brave. The sharpest Semi-Slav there is, the Botvinnik jungle, and the plan is simple to say and scary to play: grab the pawn, then hit back hard before he can settle. Trust your preparation here; theory says you're fine.", sayShort: "Sharp Semi-Slav — grab, then …g5." },
-  beats: [
-    { atMove: 11, say: "Take it — …dxc4 banks the gambit pawn. Yes, White gets a big centre and quick pieces for it, but that's the deal you signed up for. Your job now is to hold that extra pawn behind a wall of …b5 and queenside pawns while the storm rages.", sayShort: "…dxc4 — bank the gambit pawn.", highlights: [_H('c4', ATK)] },
-    { atMove: 13, say: "Now the punch — …g5, smashing straight into the h4-bishop and grabbing kingside space in one stroke. See why this works? You've taken material and you refuse to sit passively; you hit back before White consolidates. The board catches fire, and you're holding the extra pawn.", sayShort: "…g5 — punch the h4-bishop.", arrows: [_A('g5', 'h4', ATK)], highlights: [_H('g5', ATK), _H('h4', KEY)] },
-  ],
-  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Semi-Slav_Defense'],
-};
 // DEEP DNIM :: nimzo-indian::5::f3@10
 // DEEP DGRU :: grunfeld-defence::0::Bc4@12 | grunfeld-defence::1::Bc4@12 | grunfeld-defence::6::Bc4@12
 const DGRU: SublineNarration = {
@@ -585,18 +561,6 @@ const TKID2: SublineNarration = {
 };
 
 // WAVE WSSL :: 5 keys
-const WSSL: SublineNarration = {
-  intro: { say: "Bg5 — White pins your f6-knight and steers into the sharpest corner of the Semi-Slav, the Botvinnik and Anti-Moscow crossroads where the opening earns its fearsome name. Don't shrink: poke the bishop, grab the gambit pawn, and hit back before White lights the fuse first. Every move is deep theory, and the verdict is that Black holds.", sayShort: "Bg5 — into the Botvinnik; hit back" },
-  beats: [
-    { atMove: 8, say: "Bg5 pins your f6-knight against the queen and dares you into the main lines. Put the question to it at once — no reason to let the bishop sit and cramp you.", sayShort: "Bg5 — pins f6; question it", arrows: [_A('g5', 'd8', ATK)], highlights: [_H('f6', KEY)] },
-    { atMove: 9, say: "…h6 makes the bishop declare itself: drop back to h4 and keep the pin, or take on f6 and hand you the bishop pair. Either way you have gained a tempo and clarity.", sayShort: "…h6 — put the question", highlights: [_H('g5', KEY)] },
-    { atMove: 10, say: "Bh4 holds the pin, but now the bishop is committed to the h4-d8 diagonal — exactly the line you will blow up when …g5 comes crashing in.", sayShort: "Bh4 — pinned to the diagonal", arrows: [_A('h4', 'd8', ATK)], highlights: [_H('f6', KEY)] },
-    { atMove: 11, say: "…dxc4 — you snatch the gambit pawn and commit to the fight. White gets a broad centre and a lead in development for it; your task is to cling to that extra pawn behind a coming wall of …b5 and queenside pawns.", sayShort: "…dxc4 — bank the gambit pawn", highlights: [_H('c4', KEY)] },
-    { atMove: 12, say: "e4 — White claims the broad centre and readies the pawns to roll at your kingside. The critical moment: you must strike back instantly, before his pawns and pieces gather.", sayShort: "e4 — White's centre; strike now", highlights: [_H('e4', KEY)] },
-    { atMove: 13, say: "…g5 — the thunderbolt. The pawn smashes into the h4-bishop and grabs kingside space in one stroke; you have taken material and now you punch back before White consolidates. The board erupts, and theory says you hold.", sayShort: "…g5 — smash the h4-bishop", arrows: [_A('g5', 'h4', ATK)], highlights: [_H('g5', KEY), _H('h4', KEY)] },
-  ],
-  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Semi-Slav_Defense'],
-};
 // WAVE WBENKO :: 1 keys
 // WAVE WGRUF :: 1 keys
 const WGRUF: SublineNarration = {
@@ -13191,7 +13155,716 @@ const QGAR_59: SublineNarration = {
   sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
 };
 
+const SSR_0: SublineNarration = {
+  intro: { say: "White goes after your good bishop with Nh4. Let it sit on g6 to be exchanged — you've solved the Slav's problem child, take c4, and counter with …b5.", sayShort: "Slav: trade the bad bishop, …b5" },
+  beats: [
+    { atMove: 11, say: "Slide …Be4, keeping the bishop active and forcing White to spend moves chasing it.", sayShort: "…Be4, stay active", highlights: [_H('e4')] },
+    { atMove: 15, say: "Take …dxc4, grabbing the pawn now that White has spent time on the kingside.", sayShort: "…dxc4, grab the pawn", highlights: [_H('c4')] },
+    { atMove: 21, say: "Recapture …hxg6, opening the h-file for your rook — the trade left you with a sound structure.", sayShort: "…hxg6, open the h-file", highlights: [_H('g6')] },
+    { atMove: 23, say: "Counter …b5, gaining queenside space; fully equal.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_1: SublineNarration = {
+  intro: { say: "This is the Botvinnik — the sharpest line in all of chess. Grab the pawn, lash …g5 to win the bishop's diagonal, and storm …b5-b4. Memorise the moves; the tactics favour the prepared side.", sayShort: "Botvinnik: …dxc4, …g5, …b5-b4" },
+  beats: [
+    { atMove: 11, say: "Take …dxc4, grabbing the pawn that ignites the Botvinnik.", sayShort: "…dxc4, ignite it", highlights: [_H('c4')] },
+    { atMove: 13, say: "Lash …g5, blunting the bishop and claiming the kingside.", sayShort: "…g5, claim the kingside", highlights: [_H('g5')] },
+    { atMove: 15, say: "Expand …b5, defending the pawn and rolling the queenside avalanche.", sayShort: "…b5, the avalanche", highlights: [_H('b5')] },
+    { atMove: 21, say: "Smash …b4, hitting the knight at the heart of the razor-sharp tactics; the prepared player is fine.", sayShort: "…b4, smash through", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_2: SublineNarration = {
+  intro: { say: "White plays the quiet anti-Meran with Qc2 and b3. Develop the bishop to d6 and unleash the freeing …e5 break — you equalise with active piece play.", sayShort: "Anti-Meran: …Bd6 and the …e5 break" },
+  beats: [
+    { atMove: 11, say: "Develop …Bd6, aiming the bishop at h2 and readying …e5.", sayShort: "…Bd6, aim at h2", highlights: [_H('d6')] },
+    { atMove: 13, say: "Castle …O-O, getting safe before the central break.", sayShort: "…O-O, get safe", highlights: [_H('g8')] },
+    { atMove: 15, say: "Strike …e5! The thematic Semi-Slav break frees your game completely.", sayShort: "…e5, the freeing break", highlights: [_H('e5')] },
+    { atMove: 19, say: "Recapture …Bxe5, the bishop dominating the long diagonal; fully equal.", sayShort: "…Bxe5, dominate", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_3: SublineNarration = {
+  intro: { say: "White's early Qc2 invites a Schlechter setup. Fianchetto with …g6, develop …Bf5 actively, and meet the queen sortie with …Qb6 — solid and balanced.", sayShort: "Schlechter: …g6, …Bf5, …Qb6" },
+  beats: [
+    { atMove: 7, say: "Fianchetto …g6, heading for a solid Schlechter Slav structure.", sayShort: "…g6, the Schlechter", highlights: [_H('g6')] },
+    { atMove: 9, say: "Develop …Bf5, the bishop active outside the pawn chain.", sayShort: "…Bf5, active bishop", highlights: [_H('f5')] },
+    { atMove: 11, say: "Answer …Qb6, offering a queen trade that defuses White's pressure.", sayShort: "…Qb6, offer the trade", highlights: [_H('b6')] },
+    { atMove: 23, say: "Solidify …e6, completing a sound, balanced setup.", sayShort: "…e6, solidify", highlights: [_H('e6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_4: SublineNarration = {
+  intro: { say: "White heads for the symmetrical Exchange Slav. It's drawish but not dead — develop naturally, prod the bishop with …Nh5, and fianchetto for an even, sound game.", sayShort: "Exchange Slav: develop and equalise" },
+  beats: [
+    { atMove: 9, say: "Develop …Nc6, mirroring White's setup in the symmetrical structure.", sayShort: "…Nc6, mirror", highlights: [_H('c6')] },
+    { atMove: 11, say: "Prod …Nh5, nudging White's bishop to declare itself.", sayShort: "…Nh5, prod the bishop", highlights: [_H('h5')] },
+    { atMove: 17, say: "Develop …Be7, preparing to castle.", sayShort: "…Be7, prepare to castle", highlights: [_H('e7')] },
+    { atMove: 23, say: "Fianchetto …Bb7, contesting the long diagonal; dead level.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_5: SublineNarration = {
+  intro: { say: "White regains the pawn with Qb3. Develop the bishop to f5 before …e6, and offer queens with …Qb6 to reach a comfortable, balanced ending.", sayShort: "Qb3: …Bf5, …Qb6 trade" },
+  beats: [
+    { atMove: 9, say: "Develop …Bf5, getting the bishop out before locking it in with …e6.", sayShort: "…Bf5, free the bishop", highlights: [_H('f5')] },
+    { atMove: 13, say: "Develop …Nbd7, supporting the centre.", sayShort: "…Nbd7, support the centre", highlights: [_H('d7')] },
+    { atMove: 17, say: "Offer …Qb6, steering toward a queen trade and an even ending.", sayShort: "…Qb6, offer the trade", highlights: [_H('b6')] },
+    { atMove: 23, say: "Develop …Bd6 in the balanced ending; fully equal.", sayShort: "…Bd6, balanced ending", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_6: SublineNarration = {
+  intro: { say: "White takes the Exchange with …e6 already played. Develop the bishop to f5, trade the light bishops, and pin with …Bb4 — a rock-solid, balanced position.", sayShort: "Exchange: …Bf5 trade, …Bb4 pin" },
+  beats: [
+    { atMove: 11, say: "Develop …Bf5, the bishop active outside the chain.", sayShort: "…Bf5, active bishop", highlights: [_H('f5')] },
+    { atMove: 13, say: "Develop …Nbd7, completing the kingside setup.", sayShort: "…Nbd7, develop", highlights: [_H('d7')] },
+    { atMove: 17, say: "Pin with …Bb4, tying down the c3-knight.", sayShort: "…Bb4, pin the knight", highlights: [_H('b4')] },
+    { atMove: 23, say: "Activate …Re8 on the e-file; rock-solid and equal.", sayShort: "…Re8, the e-file", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_7: SublineNarration = {
+  intro: { say: "White fianchettoes the king's bishop. Develop …Nbd7, gain space with …a5, and after the central trades you check with …Bb4+ to simplify — fully equal.", sayShort: "g3: …Nbd7, …a5, …Bb4+" },
+  beats: [
+    { atMove: 9, say: "Develop …Nbd7, completing your flexible Semi-Slav setup.", sayShort: "…Nbd7, flexible setup", highlights: [_H('d7')] },
+    { atMove: 11, say: "Gain space with …a5, fixing White's queenside before he expands.", sayShort: "…a5, gain space", highlights: [_H('a5')] },
+    { atMove: 17, say: "Check …Bb4+, developing with tempo and forcing simplification.", sayShort: "…Bb4+, simplify", highlights: [_H('b4')] },
+    { atMove: 23, say: "Expand …b5, grabbing queenside space; fully equal.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_8: SublineNarration = {
+  intro: { say: "White combines g3 with Nh4 to win the bishop. Keep it active on g6, trade queens, and the resulting structure is comfortable and balanced.", sayShort: "g3 Nh4: trade bishops and queens" },
+  beats: [
+    { atMove: 11, say: "Slide …Be4, keeping the bishop active and provoking f3.", sayShort: "…Be4, stay active", highlights: [_H('e4')] },
+    { atMove: 15, say: "Answer …Qb6, offering the queen trade that eases your game.", sayShort: "…Qb6, offer the trade", highlights: [_H('b6')] },
+    { atMove: 17, say: "Recapture …hxg6, opening the h-file with a sound structure.", sayShort: "…hxg6, open the h-file", highlights: [_H('g6')] },
+    { atMove: 23, say: "Reroute …Nc7, the knight heading to a good square; balanced.", sayShort: "…Nc7, reroute", highlights: [_H('c7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_9: SublineNarration = {
+  intro: { say: "White develops modestly with Be2. Plant a knight on e4, recapture toward a Stonewall structure with …dxe4, and bolster it with …f5 — a sound, balanced grip.", sayShort: "…Ne4 and the …f5 grip" },
+  beats: [
+    { atMove: 11, say: "Develop …Bd6, aiming at the kingside and supporting …e5/…Ne4.", sayShort: "…Bd6, aim kingside", highlights: [_H('d6')] },
+    { atMove: 13, say: "Plant …Ne4, the strong central outpost.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 17, say: "Bolster the structure with …f5, locking in a Stonewall grip.", sayShort: "…f5, the grip", highlights: [_H('f5')] },
+    { atMove: 23, say: "Castle …O-O; a sound, balanced position.", sayShort: "…O-O, sound and balanced", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_10: SublineNarration = {
+  intro: { say: "White goes after your good bishop with Nh4. Let it sit on g6 to be exchanged — you've solved the Slav's problem child, take c4, and counter with …b5.", sayShort: "Slav: trade the bad bishop, …b5" },
+  beats: [
+    { atMove: 11, say: "Slide …Be4, keeping the bishop active and forcing White to spend moves chasing it.", sayShort: "…Be4, stay active", highlights: [_H('e4')] },
+    { atMove: 15, say: "Take …dxc4, grabbing the pawn now that White has spent time on the kingside.", sayShort: "…dxc4, grab the pawn", highlights: [_H('c4')] },
+    { atMove: 21, say: "Recapture …hxg6, opening the h-file for your rook — the trade left you with a sound structure.", sayShort: "…hxg6, open the h-file", highlights: [_H('g6')] },
+    { atMove: 23, say: "Counter …b5, gaining queenside space; fully equal.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_11: SublineNarration = {
+  intro: { say: "This is the Meran. Take c4, expand …b5, and fianchetto …Bb7 — then your queenside pawns and the …c5 break give dynamic, balanced counterplay.", sayShort: "Meran: …dxc4, …b5, …Bb7" },
+  beats: [
+    { atMove: 11, say: "Take …dxc4, the Meran's defining capture.", sayShort: "…dxc4, the Meran", highlights: [_H('c4')] },
+    { atMove: 13, say: "Expand …b5, gaining queenside space and a tempo on the bishop.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+    { atMove: 15, say: "Fianchetto …Bb7, raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Strike …e5, springing the centre open; dynamic and balanced.", sayShort: "…e5, spring the centre", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_12: SublineNarration = {
+  intro: { say: "The Botvinnik with the exf6 pawn-storm. Grab c4, expand …b5, and in the wild pawn-grabbing race your queenside passers and bishop pair come out ahead.", sayShort: "Botvinnik exf6: …b5 and the passers" },
+  beats: [
+    { atMove: 9, say: "Take …dxc4, lighting the Botvinnik fuse.", sayShort: "…dxc4, light the fuse", highlights: [_H('c4')] },
+    { atMove: 11, say: "Expand …b5, defending the pawn and starting the queenside roll.", sayShort: "…b5, the roll", highlights: [_H('b5')] },
+    { atMove: 17, say: "Recapture …Bxg7, regaining the piece — material is level amid the chaos.", sayShort: "…Bxg7, regain the piece", highlights: [_H('g7')] },
+    { atMove: 21, say: "Push …b4, the passed pawns and bishop pair leaving you better.", sayShort: "…b4, the passers", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_13: SublineNarration = {
+  intro: { say: "White's early Qc2 invites a Schlechter setup. Fianchetto with …g6, develop …Bf5 actively, and meet the queen sortie with …Qb6 — solid and balanced.", sayShort: "Schlechter: …g6, …Bf5, …Qb6" },
+  beats: [
+    { atMove: 7, say: "Fianchetto …g6, heading for a solid Schlechter Slav structure.", sayShort: "…g6, the Schlechter", highlights: [_H('g6')] },
+    { atMove: 9, say: "Develop …Bf5, the bishop active outside the pawn chain.", sayShort: "…Bf5, active bishop", highlights: [_H('f5')] },
+    { atMove: 11, say: "Answer …Qb6, offering a queen trade that defuses White's pressure.", sayShort: "…Qb6, offer the trade", highlights: [_H('b6')] },
+    { atMove: 23, say: "Solidify …e6, completing a sound, balanced setup.", sayShort: "…e6, solidify", highlights: [_H('e6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_14: SublineNarration = {
+  intro: { say: "The Botvinnik where White trades on f6. Recapture …gxf6, lock the centre with …f5, and fianchetto — your extra pawn and the half-open g-file give a balanced fight.", sayShort: "Botvinnik Bxf6: …gxf6, …f5" },
+  beats: [
+    { atMove: 9, say: "Take …dxc4, entering the Botvinnik.", sayShort: "…dxc4, enter it", highlights: [_H('c4')] },
+    { atMove: 11, say: "Expand …b5, holding the pawn and gaining space.", sayShort: "…b5, hold and gain", highlights: [_H('b5')] },
+    { atMove: 15, say: "Recapture …gxf6, keeping the extra pawn and opening the g-file.", sayShort: "…gxf6, open the g-file", highlights: [_H('f6')] },
+    { atMove: 23, say: "Fianchetto …Bb7, raking the long diagonal; balanced.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_15: SublineNarration = {
+  intro: { say: "White heads for the symmetrical Exchange Slav. It's drawish but not dead — develop naturally, prod the bishop with …Nh5, and fianchetto for an even, sound game.", sayShort: "Exchange Slav: develop and equalise" },
+  beats: [
+    { atMove: 9, say: "Develop …Nc6, mirroring White's setup in the symmetrical structure.", sayShort: "…Nc6, mirror", highlights: [_H('c6')] },
+    { atMove: 11, say: "Prod …Nh5, nudging White's bishop to declare itself.", sayShort: "…Nh5, prod the bishop", highlights: [_H('h5')] },
+    { atMove: 17, say: "Develop …Be7, preparing to castle.", sayShort: "…Be7, prepare to castle", highlights: [_H('e7')] },
+    { atMove: 23, say: "Fianchetto …Bb7, contesting the long diagonal; dead level.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_16: SublineNarration = {
+  intro: { say: "The main Botvinnik with the …g5 piece sacrifice. After Nxg5 hxg5 Bxg5, you've given a knight for two pawns and a raging initiative — develop …Bb7 and castle long into the attack.", sayShort: "Botvinnik: the …g5 sacrifice" },
+  beats: [
+    { atMove: 9, say: "Take …dxc4, the Botvinnik capture.", sayShort: "…dxc4, the capture", highlights: [_H('c4')] },
+    { atMove: 15, say: "Lash …g5! The piece sacrifice rips open lines for your queenside pawns and bishops.", sayShort: "…g5, the sacrifice", highlights: [_H('g5')] },
+    { atMove: 21, say: "Develop …Bb7, the bishop joining the attack down the long diagonal.", sayShort: "…Bb7, join the attack", highlights: [_H('b7')] },
+    { atMove: 25, say: "Castle …O-O-O, throwing the rook into the fray; the compensation is full.", sayShort: "…O-O-O, full attack", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_17: SublineNarration = {
+  intro: { say: "White regains the pawn with Qb3. Develop the bishop to f5 before …e6, and offer queens with …Qb6 to reach a comfortable, balanced ending.", sayShort: "Qb3: …Bf5, …Qb6 trade" },
+  beats: [
+    { atMove: 9, say: "Develop …Bf5, getting the bishop out before locking it in with …e6.", sayShort: "…Bf5, free the bishop", highlights: [_H('f5')] },
+    { atMove: 13, say: "Develop …Nbd7, supporting the centre.", sayShort: "…Nbd7, support the centre", highlights: [_H('d7')] },
+    { atMove: 17, say: "Offer …Qb6, steering toward a queen trade and an even ending.", sayShort: "…Qb6, offer the trade", highlights: [_H('b6')] },
+    { atMove: 23, say: "Develop …Bd6 in the balanced ending; fully equal.", sayShort: "…Bd6, balanced ending", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_18: SublineNarration = {
+  intro: { say: "White takes the Exchange with …e6 already played. Develop the bishop to f5, trade the light bishops, and pin with …Bb4 — a rock-solid, balanced position.", sayShort: "Exchange: …Bf5 trade, …Bb4 pin" },
+  beats: [
+    { atMove: 11, say: "Develop …Bf5, the bishop active outside the chain.", sayShort: "…Bf5, active bishop", highlights: [_H('f5')] },
+    { atMove: 13, say: "Develop …Nbd7, completing the kingside setup.", sayShort: "…Nbd7, develop", highlights: [_H('d7')] },
+    { atMove: 17, say: "Pin with …Bb4, tying down the c3-knight.", sayShort: "…Bb4, pin the knight", highlights: [_H('b4')] },
+    { atMove: 23, say: "Activate …Re8 on the e-file; rock-solid and equal.", sayShort: "…Re8, the e-file", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_19: SublineNarration = {
+  intro: { say: "White fianchettoes the king's bishop. Develop …Nbd7, gain space with …a5, and after the central trades you check with …Bb4+ to simplify — fully equal.", sayShort: "g3: …Nbd7, …a5, …Bb4+" },
+  beats: [
+    { atMove: 9, say: "Develop …Nbd7, completing your flexible Semi-Slav setup.", sayShort: "…Nbd7, flexible setup", highlights: [_H('d7')] },
+    { atMove: 11, say: "Gain space with …a5, fixing White's queenside before he expands.", sayShort: "…a5, gain space", highlights: [_H('a5')] },
+    { atMove: 17, say: "Check …Bb4+, developing with tempo and forcing simplification.", sayShort: "…Bb4+, simplify", highlights: [_H('b4')] },
+    { atMove: 23, say: "Expand …b5, grabbing queenside space; fully equal.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_20: SublineNarration = {
+  intro: { say: "White goes after your good bishop with Nh4. Let it sit on g6 to be exchanged — you've solved the Slav's problem child, take c4, and counter with …b5.", sayShort: "Slav: trade the bad bishop, …b5" },
+  beats: [
+    { atMove: 11, say: "Slide …Be4, keeping the bishop active and forcing White to spend moves chasing it.", sayShort: "…Be4, stay active", highlights: [_H('e4')] },
+    { atMove: 15, say: "Take …dxc4, grabbing the pawn now that White has spent time on the kingside.", sayShort: "…dxc4, grab the pawn", highlights: [_H('c4')] },
+    { atMove: 21, say: "Recapture …hxg6, opening the h-file for your rook — the trade left you with a sound structure.", sayShort: "…hxg6, open the h-file", highlights: [_H('g6')] },
+    { atMove: 23, say: "Counter …b5, gaining queenside space; fully equal.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_21: SublineNarration = {
+  intro: { say: "This is the Botvinnik — the sharpest line in all of chess. Grab the pawn, lash …g5 to win the bishop's diagonal, and storm …b5-b4. Memorise the moves; the tactics favour the prepared side.", sayShort: "Botvinnik: …dxc4, …g5, …b5-b4" },
+  beats: [
+    { atMove: 11, say: "Take …dxc4, grabbing the pawn that ignites the Botvinnik.", sayShort: "…dxc4, ignite it", highlights: [_H('c4')] },
+    { atMove: 13, say: "Lash …g5, blunting the bishop and claiming the kingside.", sayShort: "…g5, claim the kingside", highlights: [_H('g5')] },
+    { atMove: 15, say: "Expand …b5, defending the pawn and rolling the queenside avalanche.", sayShort: "…b5, the avalanche", highlights: [_H('b5')] },
+    { atMove: 21, say: "Smash …b4, hitting the knight at the heart of the razor-sharp tactics; the prepared player is fine.", sayShort: "…b4, smash through", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_22: SublineNarration = {
+  intro: { say: "White plays the quiet anti-Meran with Qc2 and b3. Develop the bishop to d6 and unleash the freeing …e5 break — you equalise with active piece play.", sayShort: "Anti-Meran: …Bd6 and the …e5 break" },
+  beats: [
+    { atMove: 11, say: "Develop …Bd6, aiming the bishop at h2 and readying …e5.", sayShort: "…Bd6, aim at h2", highlights: [_H('d6')] },
+    { atMove: 13, say: "Castle …O-O, getting safe before the central break.", sayShort: "…O-O, get safe", highlights: [_H('g8')] },
+    { atMove: 15, say: "Strike …e5! The thematic Semi-Slav break frees your game completely.", sayShort: "…e5, the freeing break", highlights: [_H('e5')] },
+    { atMove: 19, say: "Recapture …Bxe5, the bishop dominating the long diagonal; fully equal.", sayShort: "…Bxe5, dominate", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_23: SublineNarration = {
+  intro: { say: "White's early Qc2 invites a Schlechter setup. Fianchetto with …g6, develop …Bf5 actively, and meet the queen sortie with …Qb6 — solid and balanced.", sayShort: "Schlechter: …g6, …Bf5, …Qb6" },
+  beats: [
+    { atMove: 7, say: "Fianchetto …g6, heading for a solid Schlechter Slav structure.", sayShort: "…g6, the Schlechter", highlights: [_H('g6')] },
+    { atMove: 9, say: "Develop …Bf5, the bishop active outside the pawn chain.", sayShort: "…Bf5, active bishop", highlights: [_H('f5')] },
+    { atMove: 11, say: "Answer …Qb6, offering a queen trade that defuses White's pressure.", sayShort: "…Qb6, offer the trade", highlights: [_H('b6')] },
+    { atMove: 23, say: "Solidify …e6, completing a sound, balanced setup.", sayShort: "…e6, solidify", highlights: [_H('e6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_24: SublineNarration = {
+  intro: { say: "White heads for the symmetrical Exchange Slav. It's drawish but not dead — develop naturally, prod the bishop with …Nh5, and fianchetto for an even, sound game.", sayShort: "Exchange Slav: develop and equalise" },
+  beats: [
+    { atMove: 9, say: "Develop …Nc6, mirroring White's setup in the symmetrical structure.", sayShort: "…Nc6, mirror", highlights: [_H('c6')] },
+    { atMove: 11, say: "Prod …Nh5, nudging White's bishop to declare itself.", sayShort: "…Nh5, prod the bishop", highlights: [_H('h5')] },
+    { atMove: 17, say: "Develop …Be7, preparing to castle.", sayShort: "…Be7, prepare to castle", highlights: [_H('e7')] },
+    { atMove: 23, say: "Fianchetto …Bb7, contesting the long diagonal; dead level.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_25: SublineNarration = {
+  intro: { say: "White regains the pawn with Qb3. Develop the bishop to f5 before …e6, and offer queens with …Qb6 to reach a comfortable, balanced ending.", sayShort: "Qb3: …Bf5, …Qb6 trade" },
+  beats: [
+    { atMove: 9, say: "Develop …Bf5, getting the bishop out before locking it in with …e6.", sayShort: "…Bf5, free the bishop", highlights: [_H('f5')] },
+    { atMove: 13, say: "Develop …Nbd7, supporting the centre.", sayShort: "…Nbd7, support the centre", highlights: [_H('d7')] },
+    { atMove: 17, say: "Offer …Qb6, steering toward a queen trade and an even ending.", sayShort: "…Qb6, offer the trade", highlights: [_H('b6')] },
+    { atMove: 23, say: "Develop …Bd6 in the balanced ending; fully equal.", sayShort: "…Bd6, balanced ending", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_26: SublineNarration = {
+  intro: { say: "White takes the Exchange with …e6 already played. Develop the bishop to f5, trade the light bishops, and pin with …Bb4 — a rock-solid, balanced position.", sayShort: "Exchange: …Bf5 trade, …Bb4 pin" },
+  beats: [
+    { atMove: 11, say: "Develop …Bf5, the bishop active outside the chain.", sayShort: "…Bf5, active bishop", highlights: [_H('f5')] },
+    { atMove: 13, say: "Develop …Nbd7, completing the kingside setup.", sayShort: "…Nbd7, develop", highlights: [_H('d7')] },
+    { atMove: 17, say: "Pin with …Bb4, tying down the c3-knight.", sayShort: "…Bb4, pin the knight", highlights: [_H('b4')] },
+    { atMove: 23, say: "Activate …Re8 on the e-file; rock-solid and equal.", sayShort: "…Re8, the e-file", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_27: SublineNarration = {
+  intro: { say: "White fianchettoes the king's bishop. Develop …Nbd7, gain space with …a5, and after the central trades you check with …Bb4+ to simplify — fully equal.", sayShort: "g3: …Nbd7, …a5, …Bb4+" },
+  beats: [
+    { atMove: 9, say: "Develop …Nbd7, completing your flexible Semi-Slav setup.", sayShort: "…Nbd7, flexible setup", highlights: [_H('d7')] },
+    { atMove: 11, say: "Gain space with …a5, fixing White's queenside before he expands.", sayShort: "…a5, gain space", highlights: [_H('a5')] },
+    { atMove: 17, say: "Check …Bb4+, developing with tempo and forcing simplification.", sayShort: "…Bb4+, simplify", highlights: [_H('b4')] },
+    { atMove: 23, say: "Expand …b5, grabbing queenside space; fully equal.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_28: SublineNarration = {
+  intro: { say: "White combines g3 with Nh4 to win the bishop. Keep it active on g6, trade queens, and the resulting structure is comfortable and balanced.", sayShort: "g3 Nh4: trade bishops and queens" },
+  beats: [
+    { atMove: 11, say: "Slide …Be4, keeping the bishop active and provoking f3.", sayShort: "…Be4, stay active", highlights: [_H('e4')] },
+    { atMove: 15, say: "Answer …Qb6, offering the queen trade that eases your game.", sayShort: "…Qb6, offer the trade", highlights: [_H('b6')] },
+    { atMove: 17, say: "Recapture …hxg6, opening the h-file with a sound structure.", sayShort: "…hxg6, open the h-file", highlights: [_H('g6')] },
+    { atMove: 23, say: "Reroute …Nc7, the knight heading to a good square; balanced.", sayShort: "…Nc7, reroute", highlights: [_H('c7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_29: SublineNarration = {
+  intro: { say: "White develops modestly with Be2. Plant a knight on e4, recapture toward a Stonewall structure with …dxe4, and bolster it with …f5 — a sound, balanced grip.", sayShort: "…Ne4 and the …f5 grip" },
+  beats: [
+    { atMove: 11, say: "Develop …Bd6, aiming at the kingside and supporting …e5/…Ne4.", sayShort: "…Bd6, aim kingside", highlights: [_H('d6')] },
+    { atMove: 13, say: "Plant …Ne4, the strong central outpost.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 17, say: "Bolster the structure with …f5, locking in a Stonewall grip.", sayShort: "…f5, the grip", highlights: [_H('f5')] },
+    { atMove: 23, say: "Castle …O-O; a sound, balanced position.", sayShort: "…O-O, sound and balanced", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_30: SublineNarration = {
+  intro: { say: "White goes after your good bishop with Nh4. Let it sit on g6 to be exchanged — you've solved the Slav's problem child, take c4, and counter with …b5.", sayShort: "Slav: trade the bad bishop, …b5" },
+  beats: [
+    { atMove: 11, say: "Slide …Be4, keeping the bishop active and forcing White to spend moves chasing it.", sayShort: "…Be4, stay active", highlights: [_H('e4')] },
+    { atMove: 15, say: "Take …dxc4, grabbing the pawn now that White has spent time on the kingside.", sayShort: "…dxc4, grab the pawn", highlights: [_H('c4')] },
+    { atMove: 21, say: "Recapture …hxg6, opening the h-file for your rook — the trade left you with a sound structure.", sayShort: "…hxg6, open the h-file", highlights: [_H('g6')] },
+    { atMove: 23, say: "Counter …b5, gaining queenside space; fully equal.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_31: SublineNarration = {
+  intro: { say: "This is the Botvinnik — the sharpest line in all of chess. Grab the pawn, lash …g5 to win the bishop's diagonal, and storm …b5-b4. Memorise the moves; the tactics favour the prepared side.", sayShort: "Botvinnik: …dxc4, …g5, …b5-b4" },
+  beats: [
+    { atMove: 11, say: "Take …dxc4, grabbing the pawn that ignites the Botvinnik.", sayShort: "…dxc4, ignite it", highlights: [_H('c4')] },
+    { atMove: 13, say: "Lash …g5, blunting the bishop and claiming the kingside.", sayShort: "…g5, claim the kingside", highlights: [_H('g5')] },
+    { atMove: 15, say: "Expand …b5, defending the pawn and rolling the queenside avalanche.", sayShort: "…b5, the avalanche", highlights: [_H('b5')] },
+    { atMove: 21, say: "Smash …b4, hitting the knight at the heart of the razor-sharp tactics; the prepared player is fine.", sayShort: "…b4, smash through", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_32: SublineNarration = {
+  intro: { say: "This is the Meran. Take c4, expand …b5, and fianchetto …Bb7 — then your queenside pawns and the …c5 break give dynamic, balanced counterplay.", sayShort: "Meran: …dxc4, …b5, …Bb7" },
+  beats: [
+    { atMove: 11, say: "Take …dxc4, the Meran's defining capture.", sayShort: "…dxc4, the Meran", highlights: [_H('c4')] },
+    { atMove: 13, say: "Expand …b5, gaining queenside space and a tempo on the bishop.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+    { atMove: 15, say: "Fianchetto …Bb7, raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Strike …e5, springing the centre open; dynamic and balanced.", sayShort: "…e5, spring the centre", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_33: SublineNarration = {
+  intro: { say: "White's early Qc2 invites a Schlechter setup. Fianchetto with …g6, develop …Bf5 actively, and meet the queen sortie with …Qb6 — solid and balanced.", sayShort: "Schlechter: …g6, …Bf5, …Qb6" },
+  beats: [
+    { atMove: 7, say: "Fianchetto …g6, heading for a solid Schlechter Slav structure.", sayShort: "…g6, the Schlechter", highlights: [_H('g6')] },
+    { atMove: 9, say: "Develop …Bf5, the bishop active outside the pawn chain.", sayShort: "…Bf5, active bishop", highlights: [_H('f5')] },
+    { atMove: 11, say: "Answer …Qb6, offering a queen trade that defuses White's pressure.", sayShort: "…Qb6, offer the trade", highlights: [_H('b6')] },
+    { atMove: 23, say: "Solidify …e6, completing a sound, balanced setup.", sayShort: "…e6, solidify", highlights: [_H('e6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_34: SublineNarration = {
+  intro: { say: "White heads for the symmetrical Exchange Slav. It's drawish but not dead — develop naturally, prod the bishop with …Nh5, and fianchetto for an even, sound game.", sayShort: "Exchange Slav: develop and equalise" },
+  beats: [
+    { atMove: 9, say: "Develop …Nc6, mirroring White's setup in the symmetrical structure.", sayShort: "…Nc6, mirror", highlights: [_H('c6')] },
+    { atMove: 11, say: "Prod …Nh5, nudging White's bishop to declare itself.", sayShort: "…Nh5, prod the bishop", highlights: [_H('h5')] },
+    { atMove: 17, say: "Develop …Be7, preparing to castle.", sayShort: "…Be7, prepare to castle", highlights: [_H('e7')] },
+    { atMove: 23, say: "Fianchetto …Bb7, contesting the long diagonal; dead level.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_35: SublineNarration = {
+  intro: { say: "White plays the quiet anti-Meran with Qc2 and b3. Develop the bishop to d6 and unleash the freeing …e5 break — you equalise with active piece play.", sayShort: "Anti-Meran: …Bd6 and the …e5 break" },
+  beats: [
+    { atMove: 11, say: "Develop …Bd6, aiming the bishop at h2 and readying …e5.", sayShort: "…Bd6, aim at h2", highlights: [_H('d6')] },
+    { atMove: 13, say: "Castle …O-O, getting safe before the central break.", sayShort: "…O-O, get safe", highlights: [_H('g8')] },
+    { atMove: 15, say: "Strike …e5! The thematic Semi-Slav break frees your game completely.", sayShort: "…e5, the freeing break", highlights: [_H('e5')] },
+    { atMove: 19, say: "Recapture …Bxe5, the bishop dominating the long diagonal; fully equal.", sayShort: "…Bxe5, dominate", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_36: SublineNarration = {
+  intro: { say: "The anti-Meran with Be2. Develop …Bd6, castle, and fire the …e5 break — the simplifications leave you with an easy, balanced game.", sayShort: "Anti-Meran: …Bd6, …e5" },
+  beats: [
+    { atMove: 11, say: "Develop …Bd6, eyeing h2 and readying …e5.", sayShort: "…Bd6, eye h2", highlights: [_H('d6')] },
+    { atMove: 13, say: "Castle …O-O, getting safe before the break.", sayShort: "…O-O, get safe", highlights: [_H('g8')] },
+    { atMove: 15, say: "Strike …e5, the freeing Semi-Slav break.", sayShort: "…e5, the break", highlights: [_H('e5')] },
+    { atMove: 23, say: "Centralise …Qc7, connecting the rooks; fully equal.", sayShort: "…Qc7, connect", highlights: [_H('c7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_37: SublineNarration = {
+  intro: { say: "White regains the pawn with Qb3. Develop the bishop to f5 before …e6, and offer queens with …Qb6 to reach a comfortable, balanced ending.", sayShort: "Qb3: …Bf5, …Qb6 trade" },
+  beats: [
+    { atMove: 9, say: "Develop …Bf5, getting the bishop out before locking it in with …e6.", sayShort: "…Bf5, free the bishop", highlights: [_H('f5')] },
+    { atMove: 13, say: "Develop …Nbd7, supporting the centre.", sayShort: "…Nbd7, support the centre", highlights: [_H('d7')] },
+    { atMove: 17, say: "Offer …Qb6, steering toward a queen trade and an even ending.", sayShort: "…Qb6, offer the trade", highlights: [_H('b6')] },
+    { atMove: 23, say: "Develop …Bd6 in the balanced ending; fully equal.", sayShort: "…Bd6, balanced ending", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_38: SublineNarration = {
+  intro: { say: "White takes the Exchange with …e6 already played. Develop the bishop to f5, trade the light bishops, and pin with …Bb4 — a rock-solid, balanced position.", sayShort: "Exchange: …Bf5 trade, …Bb4 pin" },
+  beats: [
+    { atMove: 11, say: "Develop …Bf5, the bishop active outside the chain.", sayShort: "…Bf5, active bishop", highlights: [_H('f5')] },
+    { atMove: 13, say: "Develop …Nbd7, completing the kingside setup.", sayShort: "…Nbd7, develop", highlights: [_H('d7')] },
+    { atMove: 17, say: "Pin with …Bb4, tying down the c3-knight.", sayShort: "…Bb4, pin the knight", highlights: [_H('b4')] },
+    { atMove: 23, say: "Activate …Re8 on the e-file; rock-solid and equal.", sayShort: "…Re8, the e-file", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_39: SublineNarration = {
+  intro: { say: "White lunges g4 in the anti-Meran. Develop …Bd6, take c4, and blast the centre with …e5 — your active knights snap up the loose g4-pawn in a balanced fight.", sayShort: "Anti-Meran g4: …e5 and …Nxg4" },
+  beats: [
+    { atMove: 11, say: "Develop …Bd6, aiming at the kingside.", sayShort: "…Bd6, aim kingside", highlights: [_H('d6')] },
+    { atMove: 13, say: "Take …dxc4, grabbing the pawn as White commits to g4.", sayShort: "…dxc4, grab the pawn", highlights: [_H('c4')] },
+    { atMove: 15, say: "Blast …e5, hitting the centre while White's kingside is loose.", sayShort: "…e5, hit the centre", highlights: [_H('e5')] },
+    { atMove: 19, say: "Centralise …Ne5, the knight eyeing the weak g4-pawn; balanced.", sayShort: "…Ne5, eye g4", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_40: SublineNarration = {
+  intro: { say: "White goes after your good bishop with Nh4. Let it sit on g6 to be exchanged — you've solved the Slav's problem child, take c4, and counter with …b5.", sayShort: "Slav: trade the bad bishop, …b5" },
+  beats: [
+    { atMove: 11, say: "Slide …Be4, keeping the bishop active and forcing White to spend moves chasing it.", sayShort: "…Be4, stay active", highlights: [_H('e4')] },
+    { atMove: 15, say: "Take …dxc4, grabbing the pawn now that White has spent time on the kingside.", sayShort: "…dxc4, grab the pawn", highlights: [_H('c4')] },
+    { atMove: 21, say: "Recapture …hxg6, opening the h-file for your rook — the trade left you with a sound structure.", sayShort: "…hxg6, open the h-file", highlights: [_H('g6')] },
+    { atMove: 23, say: "Counter …b5, gaining queenside space; fully equal.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_41: SublineNarration = {
+  intro: { say: "This is the Meran. Take c4, expand …b5, and fianchetto …Bb7 — then your queenside pawns and the …c5 break give dynamic, balanced counterplay.", sayShort: "Meran: …dxc4, …b5, …Bb7" },
+  beats: [
+    { atMove: 11, say: "Take …dxc4, the Meran's defining capture.", sayShort: "…dxc4, the Meran", highlights: [_H('c4')] },
+    { atMove: 13, say: "Expand …b5, gaining queenside space and a tempo on the bishop.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+    { atMove: 15, say: "Fianchetto …Bb7, raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Strike …e5, springing the centre open; dynamic and balanced.", sayShort: "…e5, spring the centre", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_42: SublineNarration = {
+  intro: { say: "This is the Botvinnik — the sharpest line in all of chess. Grab the pawn, lash …g5 to win the bishop's diagonal, and storm …b5-b4. Memorise the moves; the tactics favour the prepared side.", sayShort: "Botvinnik: …dxc4, …g5, …b5-b4" },
+  beats: [
+    { atMove: 11, say: "Take …dxc4, grabbing the pawn that ignites the Botvinnik.", sayShort: "…dxc4, ignite it", highlights: [_H('c4')] },
+    { atMove: 13, say: "Lash …g5, blunting the bishop and claiming the kingside.", sayShort: "…g5, claim the kingside", highlights: [_H('g5')] },
+    { atMove: 15, say: "Expand …b5, defending the pawn and rolling the queenside avalanche.", sayShort: "…b5, the avalanche", highlights: [_H('b5')] },
+    { atMove: 21, say: "Smash …b4, hitting the knight at the heart of the razor-sharp tactics; the prepared player is fine.", sayShort: "…b4, smash through", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_43: SublineNarration = {
+  intro: { say: "White's early Qc2 invites a Schlechter setup. Fianchetto with …g6, develop …Bf5 actively, and meet the queen sortie with …Qb6 — solid and balanced.", sayShort: "Schlechter: …g6, …Bf5, …Qb6" },
+  beats: [
+    { atMove: 7, say: "Fianchetto …g6, heading for a solid Schlechter Slav structure.", sayShort: "…g6, the Schlechter", highlights: [_H('g6')] },
+    { atMove: 9, say: "Develop …Bf5, the bishop active outside the pawn chain.", sayShort: "…Bf5, active bishop", highlights: [_H('f5')] },
+    { atMove: 11, say: "Answer …Qb6, offering a queen trade that defuses White's pressure.", sayShort: "…Qb6, offer the trade", highlights: [_H('b6')] },
+    { atMove: 23, say: "Solidify …e6, completing a sound, balanced setup.", sayShort: "…e6, solidify", highlights: [_H('e6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_44: SublineNarration = {
+  intro: { say: "The Moscow Variation, where White trades on f6. Recapture with the queen to keep the bishop pair, develop, and pin with …Bg4 — a comfortable, balanced game.", sayShort: "Moscow: …Qxf6 keeps the bishops" },
+  beats: [
+    { atMove: 11, say: "Recapture …Qxf6, keeping the bishop pair as your trump.", sayShort: "…Qxf6, keep the bishops", highlights: [_H('f6')] },
+    { atMove: 13, say: "Develop …Nd7, heading the knight toward b6 and the centre.", sayShort: "…Nd7, toward b6", highlights: [_H('d7')] },
+    { atMove: 17, say: "Reroute …Nb6, eyeing c4 and a4.", sayShort: "…Nb6, eye c4", highlights: [_H('b6')] },
+    { atMove: 23, say: "Trade …Bxf3, easing into a balanced game with the bishop pair.", sayShort: "…Bxf3, ease the game", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_45: SublineNarration = {
+  intro: { say: "White heads for the symmetrical Exchange Slav. It's drawish but not dead — develop naturally, prod the bishop with …Nh5, and fianchetto for an even, sound game.", sayShort: "Exchange Slav: develop and equalise" },
+  beats: [
+    { atMove: 9, say: "Develop …Nc6, mirroring White's setup in the symmetrical structure.", sayShort: "…Nc6, mirror", highlights: [_H('c6')] },
+    { atMove: 11, say: "Prod …Nh5, nudging White's bishop to declare itself.", sayShort: "…Nh5, prod the bishop", highlights: [_H('h5')] },
+    { atMove: 17, say: "Develop …Be7, preparing to castle.", sayShort: "…Be7, prepare to castle", highlights: [_H('e7')] },
+    { atMove: 23, say: "Fianchetto …Bb7, contesting the long diagonal; dead level.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_46: SublineNarration = {
+  intro: { say: "White regains the pawn with Qb3. Develop the bishop to f5 before …e6, and offer queens with …Qb6 to reach a comfortable, balanced ending.", sayShort: "Qb3: …Bf5, …Qb6 trade" },
+  beats: [
+    { atMove: 9, say: "Develop …Bf5, getting the bishop out before locking it in with …e6.", sayShort: "…Bf5, free the bishop", highlights: [_H('f5')] },
+    { atMove: 13, say: "Develop …Nbd7, supporting the centre.", sayShort: "…Nbd7, support the centre", highlights: [_H('d7')] },
+    { atMove: 17, say: "Offer …Qb6, steering toward a queen trade and an even ending.", sayShort: "…Qb6, offer the trade", highlights: [_H('b6')] },
+    { atMove: 23, say: "Develop …Bd6 in the balanced ending; fully equal.", sayShort: "…Bd6, balanced ending", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_47: SublineNarration = {
+  intro: { say: "Another Moscow line with Be2. Keep the bishop pair with …Qxf6, develop …Bd6, and the central break gives you active piece play with check ideas — fully equal.", sayShort: "Moscow: …Qxf6, …Bd6, …Bb4+" },
+  beats: [
+    { atMove: 11, say: "Recapture …Qxf6, keeping the two bishops.", sayShort: "…Qxf6, the two bishops", highlights: [_H('f6')] },
+    { atMove: 13, say: "Develop …Nd7, supporting the centre.", sayShort: "…Nd7, support the centre", highlights: [_H('d7')] },
+    { atMove: 15, say: "Develop …Bd6, aiming at the kingside.", sayShort: "…Bd6, aim kingside", highlights: [_H('d6')] },
+    { atMove: 19, say: "Check …Bb4+, developing with tempo into a fully equal game.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_48: SublineNarration = {
+  intro: { say: "White takes the Exchange with …e6 already played. Develop the bishop to f5, trade the light bishops, and pin with …Bb4 — a rock-solid, balanced position.", sayShort: "Exchange: …Bf5 trade, …Bb4 pin" },
+  beats: [
+    { atMove: 11, say: "Develop …Bf5, the bishop active outside the chain.", sayShort: "…Bf5, active bishop", highlights: [_H('f5')] },
+    { atMove: 13, say: "Develop …Nbd7, completing the kingside setup.", sayShort: "…Nbd7, develop", highlights: [_H('d7')] },
+    { atMove: 17, say: "Pin with …Bb4, tying down the c3-knight.", sayShort: "…Bb4, pin the knight", highlights: [_H('b4')] },
+    { atMove: 23, say: "Activate …Re8 on the e-file; rock-solid and equal.", sayShort: "…Re8, the e-file", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_49: SublineNarration = {
+  intro: { say: "White fianchettoes the king's bishop. Develop …Nbd7, gain space with …a5, and after the central trades you check with …Bb4+ to simplify — fully equal.", sayShort: "g3: …Nbd7, …a5, …Bb4+" },
+  beats: [
+    { atMove: 9, say: "Develop …Nbd7, completing your flexible Semi-Slav setup.", sayShort: "…Nbd7, flexible setup", highlights: [_H('d7')] },
+    { atMove: 11, say: "Gain space with …a5, fixing White's queenside before he expands.", sayShort: "…a5, gain space", highlights: [_H('a5')] },
+    { atMove: 17, say: "Check …Bb4+, developing with tempo and forcing simplification.", sayShort: "…Bb4+, simplify", highlights: [_H('b4')] },
+    { atMove: 23, say: "Expand …b5, grabbing queenside space; fully equal.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_50: SublineNarration = {
+  intro: { say: "White goes after your good bishop with Nh4. Let it sit on g6 to be exchanged — you've solved the Slav's problem child, take c4, and counter with …b5.", sayShort: "Slav: trade the bad bishop, …b5" },
+  beats: [
+    { atMove: 11, say: "Slide …Be4, keeping the bishop active and forcing White to spend moves chasing it.", sayShort: "…Be4, stay active", highlights: [_H('e4')] },
+    { atMove: 15, say: "Take …dxc4, grabbing the pawn now that White has spent time on the kingside.", sayShort: "…dxc4, grab the pawn", highlights: [_H('c4')] },
+    { atMove: 21, say: "Recapture …hxg6, opening the h-file for your rook — the trade left you with a sound structure.", sayShort: "…hxg6, open the h-file", highlights: [_H('g6')] },
+    { atMove: 23, say: "Counter …b5, gaining queenside space; fully equal.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_51: SublineNarration = {
+  intro: { say: "This is the Botvinnik — the sharpest line in all of chess. Grab the pawn, lash …g5 to win the bishop's diagonal, and storm …b5-b4. Memorise the moves; the tactics favour the prepared side.", sayShort: "Botvinnik: …dxc4, …g5, …b5-b4" },
+  beats: [
+    { atMove: 11, say: "Take …dxc4, grabbing the pawn that ignites the Botvinnik.", sayShort: "…dxc4, ignite it", highlights: [_H('c4')] },
+    { atMove: 13, say: "Lash …g5, blunting the bishop and claiming the kingside.", sayShort: "…g5, claim the kingside", highlights: [_H('g5')] },
+    { atMove: 15, say: "Expand …b5, defending the pawn and rolling the queenside avalanche.", sayShort: "…b5, the avalanche", highlights: [_H('b5')] },
+    { atMove: 21, say: "Smash …b4, hitting the knight at the heart of the razor-sharp tactics; the prepared player is fine.", sayShort: "…b4, smash through", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_52: SublineNarration = {
+  intro: { say: "White plays the quiet anti-Meran with Qc2 and b3. Develop the bishop to d6 and unleash the freeing …e5 break — you equalise with active piece play.", sayShort: "Anti-Meran: …Bd6 and the …e5 break" },
+  beats: [
+    { atMove: 11, say: "Develop …Bd6, aiming the bishop at h2 and readying …e5.", sayShort: "…Bd6, aim at h2", highlights: [_H('d6')] },
+    { atMove: 13, say: "Castle …O-O, getting safe before the central break.", sayShort: "…O-O, get safe", highlights: [_H('g8')] },
+    { atMove: 15, say: "Strike …e5! The thematic Semi-Slav break frees your game completely.", sayShort: "…e5, the freeing break", highlights: [_H('e5')] },
+    { atMove: 19, say: "Recapture …Bxe5, the bishop dominating the long diagonal; fully equal.", sayShort: "…Bxe5, dominate", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_53: SublineNarration = {
+  intro: { say: "White's early Qc2 invites a Schlechter setup. Fianchetto with …g6, develop …Bf5 actively, and meet the queen sortie with …Qb6 — solid and balanced.", sayShort: "Schlechter: …g6, …Bf5, …Qb6" },
+  beats: [
+    { atMove: 7, say: "Fianchetto …g6, heading for a solid Schlechter Slav structure.", sayShort: "…g6, the Schlechter", highlights: [_H('g6')] },
+    { atMove: 9, say: "Develop …Bf5, the bishop active outside the pawn chain.", sayShort: "…Bf5, active bishop", highlights: [_H('f5')] },
+    { atMove: 11, say: "Answer …Qb6, offering a queen trade that defuses White's pressure.", sayShort: "…Qb6, offer the trade", highlights: [_H('b6')] },
+    { atMove: 23, say: "Solidify …e6, completing a sound, balanced setup.", sayShort: "…e6, solidify", highlights: [_H('e6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_54: SublineNarration = {
+  intro: { say: "White heads for the symmetrical Exchange Slav. It's drawish but not dead — develop naturally, prod the bishop with …Nh5, and fianchetto for an even, sound game.", sayShort: "Exchange Slav: develop and equalise" },
+  beats: [
+    { atMove: 9, say: "Develop …Nc6, mirroring White's setup in the symmetrical structure.", sayShort: "…Nc6, mirror", highlights: [_H('c6')] },
+    { atMove: 11, say: "Prod …Nh5, nudging White's bishop to declare itself.", sayShort: "…Nh5, prod the bishop", highlights: [_H('h5')] },
+    { atMove: 17, say: "Develop …Be7, preparing to castle.", sayShort: "…Be7, prepare to castle", highlights: [_H('e7')] },
+    { atMove: 23, say: "Fianchetto …Bb7, contesting the long diagonal; dead level.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_55: SublineNarration = {
+  intro: { say: "The main anti-Meran with e4. Develop …Bd6, castle, trade in the centre, and hit back with …c5 — the freeing break equalises with active pieces.", sayShort: "Anti-Meran e4: …Bd6, …c5" },
+  beats: [
+    { atMove: 11, say: "Develop …Bd6, the bishop eyeing h2.", sayShort: "…Bd6, eye h2", highlights: [_H('d6')] },
+    { atMove: 13, say: "Castle …O-O, completing development.", sayShort: "…O-O, complete development", highlights: [_H('g8')] },
+    { atMove: 19, say: "Develop …Nf6, hitting White's centralised bishop.", sayShort: "…Nf6, hit the bishop", highlights: [_H('f6')] },
+    { atMove: 21, say: "Strike …c5, the freeing break; fully equal.", sayShort: "…c5, the freeing break", highlights: [_H('c5')] },
+    { atMove: 23, say: "Question the bishop with …h6, gaining a tempo; fully equal.", sayShort: "…h6, question the bishop", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_56: SublineNarration = {
+  intro: { say: "The same anti-Meran, with White's Bg5 pin. Trade in the centre, kick the bishop with …h6, and recapture with the queen — you reach a comfortable, balanced game.", sayShort: "Anti-Meran e4: …Nf6, …h6" },
+  beats: [
+    { atMove: 11, say: "Develop …Bd6, eyeing the kingside.", sayShort: "…Bd6, eye the kingside", highlights: [_H('d6')] },
+    { atMove: 13, say: "Castle …O-O, getting safe.", sayShort: "…O-O, get safe", highlights: [_H('g8')] },
+    { atMove: 19, say: "Develop …Nf6, challenging White's bishop on e4.", sayShort: "…Nf6, challenge the bishop", highlights: [_H('f6')] },
+    { atMove: 23, say: "Recapture …Qxf6, the queen active; fully equal.", sayShort: "…Qxf6, active queen", highlights: [_H('f6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_57: SublineNarration = {
+  intro: { say: "White regains the pawn with Qb3. Develop the bishop to f5 before …e6, and offer queens with …Qb6 to reach a comfortable, balanced ending.", sayShort: "Qb3: …Bf5, …Qb6 trade" },
+  beats: [
+    { atMove: 9, say: "Develop …Bf5, getting the bishop out before locking it in with …e6.", sayShort: "…Bf5, free the bishop", highlights: [_H('f5')] },
+    { atMove: 13, say: "Develop …Nbd7, supporting the centre.", sayShort: "…Nbd7, support the centre", highlights: [_H('d7')] },
+    { atMove: 17, say: "Offer …Qb6, steering toward a queen trade and an even ending.", sayShort: "…Qb6, offer the trade", highlights: [_H('b6')] },
+    { atMove: 23, say: "Develop …Bd6 in the balanced ending; fully equal.", sayShort: "…Bd6, balanced ending", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_58: SublineNarration = {
+  intro: { say: "White takes the Exchange with …e6 already played. Develop the bishop to f5, trade the light bishops, and pin with …Bb4 — a rock-solid, balanced position.", sayShort: "Exchange: …Bf5 trade, …Bb4 pin" },
+  beats: [
+    { atMove: 11, say: "Develop …Bf5, the bishop active outside the chain.", sayShort: "…Bf5, active bishop", highlights: [_H('f5')] },
+    { atMove: 13, say: "Develop …Nbd7, completing the kingside setup.", sayShort: "…Nbd7, develop", highlights: [_H('d7')] },
+    { atMove: 17, say: "Pin with …Bb4, tying down the c3-knight.", sayShort: "…Bb4, pin the knight", highlights: [_H('b4')] },
+    { atMove: 23, say: "Activate …Re8 on the e-file; rock-solid and equal.", sayShort: "…Re8, the e-file", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_59: SublineNarration = {
+  intro: { say: "Another anti-Meran e4 line. Trade in the centre, challenge with …Nf6, and break …c5 — recapturing leaves the bishop active in a balanced position.", sayShort: "Anti-Meran e4: …Nf6, …c5" },
+  beats: [
+    { atMove: 11, say: "Develop …Bd6, aiming at h2.", sayShort: "…Bd6, aim at h2", highlights: [_H('d6')] },
+    { atMove: 13, say: "Castle …O-O, completing development.", sayShort: "…O-O, complete development", highlights: [_H('g8')] },
+    { atMove: 19, say: "Develop …Nf6, hitting the e4-bishop.", sayShort: "…Nf6, hit the bishop", highlights: [_H('f6')] },
+    { atMove: 21, say: "Strike …c5, the freeing break; balanced.", sayShort: "…c5, the freeing break", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_60: SublineNarration = {
+  intro: { say: "White goes after your good bishop with Nh4. Let it sit on g6 to be exchanged — you've solved the Slav's problem child, take c4, and counter with …b5.", sayShort: "Slav: trade the bad bishop, …b5" },
+  beats: [
+    { atMove: 11, say: "Slide …Be4, keeping the bishop active and forcing White to spend moves chasing it.", sayShort: "…Be4, stay active", highlights: [_H('e4')] },
+    { atMove: 15, say: "Take …dxc4, grabbing the pawn now that White has spent time on the kingside.", sayShort: "…dxc4, grab the pawn", highlights: [_H('c4')] },
+    { atMove: 21, say: "Recapture …hxg6, opening the h-file for your rook — the trade left you with a sound structure.", sayShort: "…hxg6, open the h-file", highlights: [_H('g6')] },
+    { atMove: 23, say: "Counter …b5, gaining queenside space; fully equal.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_61: SublineNarration = {
+  intro: { say: "This is the Botvinnik — the sharpest line in all of chess. Grab the pawn, lash …g5 to win the bishop's diagonal, and storm …b5-b4. Memorise the moves; the tactics favour the prepared side.", sayShort: "Botvinnik: …dxc4, …g5, …b5-b4" },
+  beats: [
+    { atMove: 11, say: "Take …dxc4, grabbing the pawn that ignites the Botvinnik.", sayShort: "…dxc4, ignite it", highlights: [_H('c4')] },
+    { atMove: 13, say: "Lash …g5, blunting the bishop and claiming the kingside.", sayShort: "…g5, claim the kingside", highlights: [_H('g5')] },
+    { atMove: 15, say: "Expand …b5, defending the pawn and rolling the queenside avalanche.", sayShort: "…b5, the avalanche", highlights: [_H('b5')] },
+    { atMove: 21, say: "Smash …b4, hitting the knight at the heart of the razor-sharp tactics; the prepared player is fine.", sayShort: "…b4, smash through", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_62: SublineNarration = {
+  intro: { say: "White plays the quiet anti-Meran with Qc2 and b3. Develop the bishop to d6 and unleash the freeing …e5 break — you equalise with active piece play.", sayShort: "Anti-Meran: …Bd6 and the …e5 break" },
+  beats: [
+    { atMove: 11, say: "Develop …Bd6, aiming the bishop at h2 and readying …e5.", sayShort: "…Bd6, aim at h2", highlights: [_H('d6')] },
+    { atMove: 13, say: "Castle …O-O, getting safe before the central break.", sayShort: "…O-O, get safe", highlights: [_H('g8')] },
+    { atMove: 15, say: "Strike …e5! The thematic Semi-Slav break frees your game completely.", sayShort: "…e5, the freeing break", highlights: [_H('e5')] },
+    { atMove: 19, say: "Recapture …Bxe5, the bishop dominating the long diagonal; fully equal.", sayShort: "…Bxe5, dominate", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_63: SublineNarration = {
+  intro: { say: "White's early Qc2 invites a Schlechter setup. Fianchetto with …g6, develop …Bf5 actively, and meet the queen sortie with …Qb6 — solid and balanced.", sayShort: "Schlechter: …g6, …Bf5, …Qb6" },
+  beats: [
+    { atMove: 7, say: "Fianchetto …g6, heading for a solid Schlechter Slav structure.", sayShort: "…g6, the Schlechter", highlights: [_H('g6')] },
+    { atMove: 9, say: "Develop …Bf5, the bishop active outside the pawn chain.", sayShort: "…Bf5, active bishop", highlights: [_H('f5')] },
+    { atMove: 11, say: "Answer …Qb6, offering a queen trade that defuses White's pressure.", sayShort: "…Qb6, offer the trade", highlights: [_H('b6')] },
+    { atMove: 23, say: "Solidify …e6, completing a sound, balanced setup.", sayShort: "…e6, solidify", highlights: [_H('e6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_64: SublineNarration = {
+  intro: { say: "White heads for the symmetrical Exchange Slav. It's drawish but not dead — develop naturally, prod the bishop with …Nh5, and fianchetto for an even, sound game.", sayShort: "Exchange Slav: develop and equalise" },
+  beats: [
+    { atMove: 9, say: "Develop …Nc6, mirroring White's setup in the symmetrical structure.", sayShort: "…Nc6, mirror", highlights: [_H('c6')] },
+    { atMove: 11, say: "Prod …Nh5, nudging White's bishop to declare itself.", sayShort: "…Nh5, prod the bishop", highlights: [_H('h5')] },
+    { atMove: 17, say: "Develop …Be7, preparing to castle.", sayShort: "…Be7, prepare to castle", highlights: [_H('e7')] },
+    { atMove: 23, say: "Fianchetto …Bb7, contesting the long diagonal; dead level.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_65: SublineNarration = {
+  intro: { say: "White regains the pawn with Qb3. Develop the bishop to f5 before …e6, and offer queens with …Qb6 to reach a comfortable, balanced ending.", sayShort: "Qb3: …Bf5, …Qb6 trade" },
+  beats: [
+    { atMove: 9, say: "Develop …Bf5, getting the bishop out before locking it in with …e6.", sayShort: "…Bf5, free the bishop", highlights: [_H('f5')] },
+    { atMove: 13, say: "Develop …Nbd7, supporting the centre.", sayShort: "…Nbd7, support the centre", highlights: [_H('d7')] },
+    { atMove: 17, say: "Offer …Qb6, steering toward a queen trade and an even ending.", sayShort: "…Qb6, offer the trade", highlights: [_H('b6')] },
+    { atMove: 23, say: "Develop …Bd6 in the balanced ending; fully equal.", sayShort: "…Bd6, balanced ending", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_66: SublineNarration = {
+  intro: { say: "White takes the Exchange with …e6 already played. Develop the bishop to f5, trade the light bishops, and pin with …Bb4 — a rock-solid, balanced position.", sayShort: "Exchange: …Bf5 trade, …Bb4 pin" },
+  beats: [
+    { atMove: 11, say: "Develop …Bf5, the bishop active outside the chain.", sayShort: "…Bf5, active bishop", highlights: [_H('f5')] },
+    { atMove: 13, say: "Develop …Nbd7, completing the kingside setup.", sayShort: "…Nbd7, develop", highlights: [_H('d7')] },
+    { atMove: 17, say: "Pin with …Bb4, tying down the c3-knight.", sayShort: "…Bb4, pin the knight", highlights: [_H('b4')] },
+    { atMove: 23, say: "Activate …Re8 on the e-file; rock-solid and equal.", sayShort: "…Re8, the e-file", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_67: SublineNarration = {
+  intro: { say: "White fianchettoes the king's bishop. Develop …Nbd7, gain space with …a5, and after the central trades you check with …Bb4+ to simplify — fully equal.", sayShort: "g3: …Nbd7, …a5, …Bb4+" },
+  beats: [
+    { atMove: 9, say: "Develop …Nbd7, completing your flexible Semi-Slav setup.", sayShort: "…Nbd7, flexible setup", highlights: [_H('d7')] },
+    { atMove: 11, say: "Gain space with …a5, fixing White's queenside before he expands.", sayShort: "…a5, gain space", highlights: [_H('a5')] },
+    { atMove: 17, say: "Check …Bb4+, developing with tempo and forcing simplification.", sayShort: "…Bb4+, simplify", highlights: [_H('b4')] },
+    { atMove: 23, say: "Expand …b5, grabbing queenside space; fully equal.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_68: SublineNarration = {
+  intro: { say: "White combines g3 with Nh4 to win the bishop. Keep it active on g6, trade queens, and the resulting structure is comfortable and balanced.", sayShort: "g3 Nh4: trade bishops and queens" },
+  beats: [
+    { atMove: 11, say: "Slide …Be4, keeping the bishop active and provoking f3.", sayShort: "…Be4, stay active", highlights: [_H('e4')] },
+    { atMove: 15, say: "Answer …Qb6, offering the queen trade that eases your game.", sayShort: "…Qb6, offer the trade", highlights: [_H('b6')] },
+    { atMove: 17, say: "Recapture …hxg6, opening the h-file with a sound structure.", sayShort: "…hxg6, open the h-file", highlights: [_H('g6')] },
+    { atMove: 23, say: "Reroute …Nc7, the knight heading to a good square; balanced.", sayShort: "…Nc7, reroute", highlights: [_H('c7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+const SSR_69: SublineNarration = {
+  intro: { say: "White develops modestly with Be2. Plant a knight on e4, recapture toward a Stonewall structure with …dxe4, and bolster it with …f5 — a sound, balanced grip.", sayShort: "…Ne4 and the …f5 grip" },
+  beats: [
+    { atMove: 11, say: "Develop …Bd6, aiming at the kingside and supporting …e5/…Ne4.", sayShort: "…Bd6, aim kingside", highlights: [_H('d6')] },
+    { atMove: 13, say: "Plant …Ne4, the strong central outpost.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 17, say: "Bolster the structure with …f5, locking in a Stonewall grip.", sayShort: "…f5, the grip", highlights: [_H('f5')] },
+    { atMove: 23, say: "Castle …O-O; a sound, balanced position.", sayShort: "…O-O, sound and balanced", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
+  'semi-slav::6::e3@6': SSR_60,
+  'semi-slav::5::e3@6': SSR_50,
+  'semi-slav::4::e3@6': SSR_40,
+  'semi-slav::3::e3@6': SSR_30,
+  'semi-slav::2::e3@6': SSR_20,
+  'semi-slav::1::e3@6': SSR_10,
+  'semi-slav::0::e3@6': SSR_0,
   'budapest-gambit::6::d5@4': BGR_60,
   'budapest-gambit::5::d5@4': BGR_50,
   'budapest-gambit::4::d5@4': BGR_40,
@@ -13546,69 +14219,69 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'slav-defence::7::Ne5@10': SL77,
   'slav-defence::7::e3@10': SL78,
   // ── semi-slav ──
-  'semi-slav::0::Bg5@8': WSSL,
-  'semi-slav::0::Qc2@10': C23,
-  'semi-slav::0::Qc2@6': C23,
-  'semi-slav::0::cxd5@6': C24,
-  'semi-slav::0::Qb3@6': C24,
-  'semi-slav::0::cxd5@8': C24,
-  'semi-slav::0::g3@8': C24,
-  'semi-slav::0::g3@6': C24,
-  'semi-slav::0::Be2@10': C24,
-  'semi-slav::1::e3@8': C24,
-  'semi-slav::1::exf6@14': C22,
-  'semi-slav::1::Qc2@6': C23,
-  'semi-slav::1::Bxf6@14': C22,
-  'semi-slav::1::cxd5@6': C24,
-  'semi-slav::1::Be2@22': C22,
-  'semi-slav::1::Qb3@6': C24,
-  'semi-slav::1::cxd5@8': C24,
-  'semi-slav::1::g3@8': C24,
-  'semi-slav::2::Bg5@8': WSSL,
-  'semi-slav::2::Qc2@10': C23,
-  'semi-slav::2::Qc2@6': C23,
-  'semi-slav::2::cxd5@6': C24,
-  'semi-slav::2::Qb3@6': C24,
-  'semi-slav::2::cxd5@8': C24,
-  'semi-slav::2::g3@8': C24,
-  'semi-slav::2::g3@6': C24,
-  'semi-slav::2::Be2@10': C24,
-  'semi-slav::3::Bg5@8': WSSL,
-  'semi-slav::3::Bd3@10': C24,
-  'semi-slav::3::Qc2@6': C23,
-  'semi-slav::3::cxd5@6': C24,
-  'semi-slav::3::b3@12': C23,
-  'semi-slav::3::Be2@12': C23,
-  'semi-slav::3::Qb3@6': C24,
-  'semi-slav::3::cxd5@8': C24,
-  'semi-slav::3::g4@12': C23,
-  'semi-slav::4::e3@8': C24,
-  'semi-slav::4::Bh4@10': DSSL,
-  'semi-slav::4::Qc2@6': C23,
-  'semi-slav::4::cxd5@14': C24,
-  'semi-slav::4::cxd5@6': C24,
-  'semi-slav::4::Qb3@6': C24,
-  'semi-slav::4::Be2@14': C24,
-  'semi-slav::4::cxd5@8': C24,
-  'semi-slav::4::g3@8': C24,
-  'semi-slav::5::Bg5@8': WSSL,
-  'semi-slav::5::Qc2@10': C23,
-  'semi-slav::5::Qc2@6': C23,
-  'semi-slav::5::cxd5@6': C24,
-  'semi-slav::5::Bg5@22': C25,
-  'semi-slav::5::Bg5@20': C25,
-  'semi-slav::5::Qb3@6': C24,
-  'semi-slav::5::cxd5@8': C24,
-  'semi-slav::5::Bd3@20': C25,
-  'semi-slav::6::Bg5@8': WSSL,
-  'semi-slav::6::Qc2@10': C23,
-  'semi-slav::6::Qc2@6': C23,
-  'semi-slav::6::cxd5@6': C24,
-  'semi-slav::6::Qb3@6': C24,
-  'semi-slav::6::cxd5@8': C24,
-  'semi-slav::6::g3@8': C24,
-  'semi-slav::6::g3@6': C24,
-  'semi-slav::6::Be2@10': C24,
+  'semi-slav::0::Bg5@8': SSR_1,
+  'semi-slav::0::Qc2@10': SSR_2,
+  'semi-slav::0::Qc2@6': SSR_3,
+  'semi-slav::0::cxd5@6': SSR_4,
+  'semi-slav::0::Qb3@6': SSR_5,
+  'semi-slav::0::cxd5@8': SSR_6,
+  'semi-slav::0::g3@8': SSR_7,
+  'semi-slav::0::g3@6': SSR_8,
+  'semi-slav::0::Be2@10': SSR_9,
+  'semi-slav::1::e3@8': SSR_11,
+  'semi-slav::1::exf6@14': SSR_12,
+  'semi-slav::1::Qc2@6': SSR_13,
+  'semi-slav::1::Bxf6@14': SSR_14,
+  'semi-slav::1::cxd5@6': SSR_15,
+  'semi-slav::1::Be2@22': SSR_16,
+  'semi-slav::1::Qb3@6': SSR_17,
+  'semi-slav::1::cxd5@8': SSR_18,
+  'semi-slav::1::g3@8': SSR_19,
+  'semi-slav::2::Bg5@8': SSR_21,
+  'semi-slav::2::Qc2@10': SSR_22,
+  'semi-slav::2::Qc2@6': SSR_23,
+  'semi-slav::2::cxd5@6': SSR_24,
+  'semi-slav::2::Qb3@6': SSR_25,
+  'semi-slav::2::cxd5@8': SSR_26,
+  'semi-slav::2::g3@8': SSR_27,
+  'semi-slav::2::g3@6': SSR_28,
+  'semi-slav::2::Be2@10': SSR_29,
+  'semi-slav::3::Bg5@8': SSR_31,
+  'semi-slav::3::Bd3@10': SSR_32,
+  'semi-slav::3::Qc2@6': SSR_33,
+  'semi-slav::3::cxd5@6': SSR_34,
+  'semi-slav::3::b3@12': SSR_35,
+  'semi-slav::3::Be2@12': SSR_36,
+  'semi-slav::3::Qb3@6': SSR_37,
+  'semi-slav::3::cxd5@8': SSR_38,
+  'semi-slav::3::g4@12': SSR_39,
+  'semi-slav::4::e3@8': SSR_41,
+  'semi-slav::4::Bh4@10': SSR_42,
+  'semi-slav::4::Qc2@6': SSR_43,
+  'semi-slav::4::cxd5@14': SSR_44,
+  'semi-slav::4::cxd5@6': SSR_45,
+  'semi-slav::4::Qb3@6': SSR_46,
+  'semi-slav::4::Be2@14': SSR_47,
+  'semi-slav::4::cxd5@8': SSR_48,
+  'semi-slav::4::g3@8': SSR_49,
+  'semi-slav::5::Bg5@8': SSR_51,
+  'semi-slav::5::Qc2@10': SSR_52,
+  'semi-slav::5::Qc2@6': SSR_53,
+  'semi-slav::5::cxd5@6': SSR_54,
+  'semi-slav::5::Bg5@22': SSR_55,
+  'semi-slav::5::Bg5@20': SSR_56,
+  'semi-slav::5::Qb3@6': SSR_57,
+  'semi-slav::5::cxd5@8': SSR_58,
+  'semi-slav::5::Bd3@20': SSR_59,
+  'semi-slav::6::Bg5@8': SSR_61,
+  'semi-slav::6::Qc2@10': SSR_62,
+  'semi-slav::6::Qc2@6': SSR_63,
+  'semi-slav::6::cxd5@6': SSR_64,
+  'semi-slav::6::Qb3@6': SSR_65,
+  'semi-slav::6::cxd5@8': SSR_66,
+  'semi-slav::6::g3@8': SSR_67,
+  'semi-slav::6::g3@6': SSR_68,
+  'semi-slav::6::Be2@10': SSR_69,
   // ── nimzo-indian ──
   'nimzo-indian::0::e3@6': NI_1,
   'nimzo-indian::0::g3@4': NI_2,
