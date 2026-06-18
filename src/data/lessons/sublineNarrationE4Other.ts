@@ -2615,346 +2615,678 @@ const N262: SublineNarration = {
 
 const N263: SublineNarration = {
   intro: { say: "Nd2 — the Tarrasch, where White shields the centre with the knight; answer …c5 to dissolve it and win the d4-pawn, dropping the queen to the safe d6-square in the open lines. White's lead in development and the active Bc4 are his compensation, but you're solid with no weaknesses to attack. Play …Nf6, …Nc6 and …Be7 to castle fast, handing back the pawn if needed to kill the initiative and reach a comfortable middlegame.", sayShort: "Open Tarrasch — …c5 wins d4-pawn" },
+  beats: [
+    { atMove: 5, say: "…c5 strikes at White's centre at once, the French's standard counter to the Tarrasch.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
+    { atMove: 9, say: "…Bd7 develops the light bishop, solving the French's problem piece early.", sayShort: "…Bd7 — free the bad bishop.", highlights: [H('d7')] },
+    { atMove: 17, say: "…Bxc5 recaptures with an active developed bishop eyeing f2 and the centre.", sayShort: "…Bxc5 — active bishop.", arrows: [A('c5', 'f2')], highlights: [H('f2')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-development', 'concept:pos-initiative'],
 };
 
 const N264: SublineNarration = {
   intro: { say: "Ne1 — White reroutes the knight toward d3 or g2 behind his chain, now that your …c5-c4 has frozen the queenside in this closed Advance French. With the center locked, your play is on the flanks: hit with …f6 to break the e5-d4 chain from above, or storm with …g5-g4. Your a5-knight props up c4, and …Nec6 or …Nf5 brings the kingside knight to bear on his static center.", sayShort: "Advance — closed center, break with …f6" },
+  beats: [
+    { atMove: 19, say: "…Nf5 lands the knight on a strong square, eyeing d4 and the kingside.", sayShort: "…Nf5 — strong knight.", arrows: [A('f5', 'd4')], highlights: [H('d4')] },
+    { atMove: 21, say: "…O-O-O castles queenside, your rook joining the Winawer counterplay.", sayShort: "…O-O-O — castle long.", highlights: [H('c8')] },
+    { atMove: 23, say: "…h6 makes luft, securing your king for the long game.", sayShort: "…h6 — make luft.", highlights: [H('h6')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-chain', 'concept:att-kingside-storm'],
 };
 
 const N265: SublineNarration = {
   intro: { say: "Ng5 — the knight jumps toward e4, or provokes …h6 to weaken your kingside, with the queenside clamped by your …c4 in this closed Advance French. Stay on plan: …h6 repels the knight, then …f6 or …g5 breaks White's e5-d4 structure from above. Your a5-knight anchors c4, and reroute the kingside knight via …Nec6 or …Nf5 to join the assault on his static center.", sayShort: "Advance — …h6 then break with …f6" },
+  beats: [
+    { atMove: 19, say: "…h6 questions White's knight, gaining tempo as you consolidate.", sayShort: "…h6 — question the knight.", highlights: [H('h6')] },
+    { atMove: 21, say: "…O-O-O castles queenside, your rook joining the Winawer counterplay.", sayShort: "…O-O-O — castle long.", highlights: [H('c8')] },
+    { atMove: 23, say: "…g6 braces the kingside, your structure holding for the long game.", sayShort: "…g6 — brace the kingside.", highlights: [H('g6')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-chain', 'concept:att-kingside-storm'],
 };
 
 const N266: SublineNarration = {
   intro: { say: "Qc2 — White readies b2-b3 or a central f4-break, with your …c4 freezing the queenside in this closed Advance French. The locked center hands the game to the wings: play …f6 to undermine the e5-d4 chain, or …g5-g4 to storm the kingside. Your a5-knight guards c4 and eyes b3, and …Nec6 or …Nf5 redeploys the kingside knight against his stable but passive structure.", sayShort: "Advance — locked …c4, …f6 break" },
+  beats: [
+    { atMove: 19, say: "…h6 makes luft and secures the kingside before committing the king.", sayShort: "…h6 — make luft.", highlights: [H('h6')] },
+    { atMove: 21, say: "…O-O-O castles queenside, away from White's pawns, your rook active.", sayShort: "…O-O-O — castle long.", highlights: [H('c8')] },
+    { atMove: 23, say: "…Kb8 tucks the king safe, your counterplay against the doubled pawns rolling.", sayShort: "…Kb8 — king safe.", highlights: [H('b8')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-chain', 'concept:att-kingside-storm'],
 };
 
 const N267: SublineNarration = {
   intro: { say: "Qe1 — White reroutes the queen toward the kingside, but you've locked the queenside with …c4, fixing his c3 and d4 pawns and freeing your hands for a pawn storm in this closed Advance French. Your a5-knight guards c4 and eyes b3, while …Ne7 prepares …Nf5 or …g5-g4 against his king. Break with …f6 or …g5 to crack his chain — with the centre closed, the wing pawns decide.", sayShort: "Advance — locked …c4, prepare …f6" },
+  beats: [
+    { atMove: 19, say: "…Ba4 repositions the bishop to pressure White's queenside and the c2-pawn.", sayShort: "…Ba4 — pressure the queenside.", highlights: [H('a4')] },
+    { atMove: 21, say: "…Qc6 centralises the queen, eyeing White's weakened pawns and the centre.", sayShort: "…Qc6 — centralise, press.", highlights: [H('c6')] },
+    { atMove: 23, say: "…h6 makes luft, your Winawer counterplay against the doubled pawns continuing.", sayShort: "…h6 — make luft.", highlights: [H('h6')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-chain', 'concept:att-kingside-storm'],
 };
 
 const N268: SublineNarration = {
   intro: { say: "Rb1 — White readies b2-b3 to challenge your cramping c4-pawn, with your …c4 already freezing the queenside in this closed Advance French. Hold the bind: your a5-knight and a …b5 push keep c4 defended and the structure clamped. Play …b5, …Ne7, and …f6 or …g5, generating play on whichever wing White doesn't, since the locked center hands the game to the flank pawns.", sayShort: "Advance — hold …c4, expand with …b5" },
+  beats: [
+    { atMove: 17, say: "…Ne7 reroutes toward f5 and g6 to attack White's kingside, the Winawer plan.", sayShort: "…Ne7 — reroute toward f5.", highlights: [H('e7')] },
+    { atMove: 21, say: "…O-O-O castles queenside, away from White's pawns, your rook joining the play.", sayShort: "…O-O-O — castle long.", highlights: [H('c8')] },
+    { atMove: 23, say: "…Kb8 tucks the king safe, your Winawer counterplay against the doubled pawns rolling.", sayShort: "…Kb8 — king safe.", highlights: [H('b8')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-chain', 'concept:pos-space'],
 };
 
 const N269: SublineNarration = {
   intro: { say: "Re1 — White readies a central break with f2-f4 or Nf1-h2, your …c4 having frozen the queenside in this closed Advance French. With the center locked, your play is on the wings: …Nec6 or …g5 and …f6 to undermine his e5-d4 chain. Your a5-knight anchors c4 — open the kingside or break with …f6 before he can organize his own pawn storm.", sayShort: "Advance — closed …c4, break with …f6" },
+  beats: [
+    { atMove: 19, say: "…h6 makes luft and secures the kingside before you commit the king.", sayShort: "…h6 — make luft.", highlights: [H('h6')] },
+    { atMove: 21, say: "…O-O-O castles queenside, away from White's pawns, your rook active.", sayShort: "…O-O-O — castle long.", highlights: [H('c8')] },
+    { atMove: 23, say: "…Kb8 tucks the king safe, your Winawer counterplay rolling.", sayShort: "…Kb8 — king safe.", highlights: [H('b8')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-chain', 'concept:att-kingside-storm'],
 };
 
 const N270: SublineNarration = {
   intro: { say: "exd5 — the Exchange French, and the symmetrical structure puts a premium on piece activity and the open e-file. Mirror with …Bd6 aiming at h2, then …O-O, …c6, and …Bg4 to get your problem bishop outside the chain. Seize the e-file with …Re8 and contest the central squares — whoever finds the first concrete target in this symmetry takes the initiative.", sayShort: "Exchange — mirror development, fight for e-file" },
+  beats: [
+    { atMove: 5, say: "…exd5 recaptures into a symmetrical Exchange structure with free development.", sayShort: "…exd5 — Exchange structure.", highlights: [H('d5')] },
+    { atMove: 9, say: "…Bd6 develops the dark bishop to an active post eyeing the kingside.", sayShort: "…Bd6 — active bishop.", highlights: [H('d6')] },
+    { atMove: 19, say: "…Nc6 develops with pressure, your pieces harmonious in the balanced game.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-open-file', 'concept:pos-development'],
 };
 
 const N271: SublineNarration = {
   intro: { say: "h3 — White just makes luft and stops …Ng4 ideas, your …c4 having fixed the queenside in this closed Advance French. With the center locked solid, your plans live on the wings: break with …f6 from above, or storm with …g5-g4. Your a5-knight guards c4 and eyes b3, and …Nec6 or …Nf5 brings the kingside knight into the attack on his stable but passive center.", sayShort: "Advance — …c4 bind, …f6 or …g5" },
+  beats: [
+    { atMove: 19, say: "…Nf5 lands the knight on a strong square, eyeing d4 and the kingside dark squares.", sayShort: "…Nf5 — strong knight.", arrows: [A('f5', 'd4')], highlights: [H('d4')] },
+    { atMove: 21, say: "…h6 makes luft, your Winawer counterplay against the doubled pawns continuing.", sayShort: "…h6 — make luft.", highlights: [H('h6')] },
+    { atMove: 23, say: "…Qc7 repositions the queen, eyeing the c-file and White's weakened structure.", sayShort: "…Qc7 — eye the c-file.", highlights: [H('c7')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-chain', 'concept:att-kingside-storm'],
 };
 
 const N272: SublineNarration = {
   intro: { say: "Bd2 — White prepares to recapture on c3 with the bishop, dodging the doubled pawns if you trade, in this Winawer. Develop …Ne7 toward g6 or f5 and keep the tension with …Nbc6 hitting d4. Time …cxd4 and …Qa5 or …Bxc3 to undermine his e5-d4 chain — if he does recapture with the bishop, you grab the c-file and the better structure.", sayShort: "Winawer — …Ne7, pressure the d4-chain" },
+  beats: [
+    { atMove: 9, say: "…Nc6 develops with pressure on d4, the French's standard lever.", sayShort: "…Nc6 — pressure d4.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
+    { atMove: 13, say: "…Nxd4 grabs the central pawn, your pieces active in the opened centre.", sayShort: "…Nxd4 — grab the centre.", highlights: [H('d4')] },
+    { atMove: 17, say: "…Qb6 sorties the queen, pressuring b2 and the centre with tempo.", sayShort: "…Qb6 — pressure b2.", arrows: [A('b6', 'b2')], highlights: [H('b2')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-chain', 'concept:pos-development'],
 };
 
 const N273: SublineNarration = {
   intro: { say: "Ne2 — White wants to recapture on c3 with a knight and dodge the doubled pawns, but take on e4 first and retreat the bishop intact to e7. After Nxe4 and …Nf6, challenge his centralized knight and keep the bishop pair with no structural concessions. Play …Nxe4 or …Nbd7, then …b6 and …Bb7 — you have a sound, harmonious position with nothing to attack.", sayShort: "Winawer — …dxe4, keep the bishop on e7" },
+  beats: [
+    { atMove: 7, say: "…dxe4 wins the centre pawn, your pieces active as White must regain it.", sayShort: "…dxe4 — grab the centre.", highlights: [H('e4')] },
+    { atMove: 9, say: "…Bxc3+ doubles White's pawns, the Winawer's lasting structural plus.", sayShort: "…Bxc3+ — double the pawns.", highlights: [H('c3')] },
+    { atMove: 11, say: "…Nc6 develops with pressure, your pieces targeting the weakened centre.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-development', 'concept:pos-bishop-pair'],
 };
 
 const N274: SublineNarration = {
   intro: { say: "Nf3 — White develops quietly instead of launching Qg4 at your kingside in this Winawer. You hold the structural trumps: his doubled c-pawns and the d4-base are chronic weaknesses, and …Bd7 prepares …Bc6 or …Ba4 to pressure them. Play …Qa5, …Nbc6, and …c4, fixing the c3-pawn and opening the queenside against his crippled camp.", sayShort: "Winawer — pressure doubled c-pawns" },
+  beats: [
+    { atMove: 13, say: "…Nbc6 develops with pressure on d4, your Winawer counterplay building.", sayShort: "…Nbc6 — pressure d4.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
+    { atMove: 15, say: "…Qa5 activates the queen, eyeing the queenside and White's weak pawns.", sayShort: "…Qa5 — active queen.", highlights: [H('a5')] },
+    { atMove: 21, say: "…Bd7 develops the light bishop, your pieces coordinated for the middlegame.", sayShort: "…Bd7 — develop the bishop.", highlights: [H('d7')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-doubled', 'concept:att-queenside-attack'],
 };
 
 const N275: SublineNarration = {
   intro: { say: "Qd3 — White retreats the queen to defend and untangle after grabbing both your kingside pawns in this Winawer Poisoned Pawn. You've sacrificed for a roaring initiative: your rook on g8 commands the open g-file and …cxd4 has ripped open the center. Play …Nxe5 or …d4, then …Bd7 and …O-O-O, hurling pieces at his uncastled king — the open g-file and lead in development far outweigh the pawns.", sayShort: "Winawer Poisoned Pawn — g-file attack" },
+  beats: [
+    { atMove: 21, say: "…Nxe5 wins the central pawn, your pieces active with the better game.", sayShort: "…Nxe5 — win the pawn.", highlights: [H('e5')] },
+    { atMove: 23, say: "…Nf5 reroutes the knight to a strong square, eyeing the kingside.", sayShort: "…Nf5 — strong knight.", highlights: [H('f5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-initiative', 'concept:tac-sacrifice'],
 };
 
 const N276: SublineNarration = {
   intro: { say: "…cxd4 — you've sacrificed both kingside pawns to open the g-file and seize the initiative against White's exposed setup in this Winawer Poisoned Pawn. Your rook on g8 already glares down the open file at g2, and the center is cracked open while his queen sits offside on h7. Continue …Nxd4 or …Bd7 with …O-O-O, throwing every piece at his king — the pawn deficit is irrelevant against the raging g-file attack.", sayShort: "Winawer Poisoned Pawn — g-file initiative" },
+  beats: [
+    { atMove: 21, say: "…Nxd4 grabs the central pawn, your knight dominant in the opened centre.", sayShort: "…Nxd4 — grab the centre.", highlights: [H('d4')] },
+    { atMove: 23, say: "…Ndf5 reroutes the knight to a strong square, eyeing the kingside dark squares.", sayShort: "…Ndf5 — strong knight.", highlights: [H('f5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-initiative', 'concept:tac-sacrifice'],
 };
 
 const N277: SublineNarration = {
   intro: { say: "exd5 — White exchanges to reach a symmetrical, open structure, your bishop still pinning the c3-knight on b4 in this Winawer. Your knight on c6 pressures d4, and you're comfortable and weakness-free. Play …Nge7, …O-O, and …Bg4 or …Re8, developing harmoniously and keeping the pin on c3 to restrain his center — the open position gives you easy, equal play.", sayShort: "Winawer Exchange — pin holds, …Nge7" },
+  beats: [
+    { atMove: 7, say: "…exd5 recaptures, opening the position with free development in the Winawer.", sayShort: "…exd5 — open the position.", highlights: [H('d5')] },
+    { atMove: 11, say: "…Bxc3+ doubles White's pawns, the Winawer's structural trump for your pieces.", sayShort: "…Bxc3+ — double the pawns.", highlights: [H('c3')] },
+    { atMove: 21, say: "…c5 strikes at White's centre, your pieces active against the weakened structure.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:tac-pin', 'concept:pos-development'],
 };
 
 const N278: SublineNarration = {
   intro: { say: "h4 — the sharp Winawer thrust, White grabbing kingside space and eyeing h5 before you can pile onto his shattered c-pawns. Strike the base instead: …Qc7 trains on the c3- and e5-pawns at once. Those doubled c-pawns are White's permanent Winawer weakness, and the queen begins the siege.", sayShort: "h4 — …Qc7 hits c3 and e5." },
+  beats: [
+    { atMove: 13, say: "…Qc7 repositions the queen, eyeing the c-file and White's e5-pawn.", sayShort: "…Qc7 — eye the c-file.", highlights: [H('c7')] },
+    { atMove: 15, say: "…Nbc6 develops with pressure on d4, your counterplay building.", sayShort: "…Nbc6 — pressure d4.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
+    { atMove: 19, say: "…Nf5 lands the knight on a strong square, eyeing d4 and the kingside.", sayShort: "…Nf5 — strong knight.", arrows: [A('f5', 'd4')], highlights: [H('d4')] },
+  ],
   sources: ['concept:pawn-doubled', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
 };
 
 const N279: SublineNarration = {
   intro: { say: "Bd3 — White has released the tension with dxc5, letting you recapture with the queen on the active c5-square in this Classical French. With the dark-squared bishops gone and the d-file half-open, you develop easily with a clear target on his e5-pawn and the d4-square. Play …Nb4 hitting d3, …Bd7, and …Rc8, contesting the c-file while the knight eyes the d5 and d3 outposts.", sayShort: "Classical — queen active on c5" },
+  beats: [
+    { atMove: 21, say: "…b5 launches the queenside expansion, gaining space against White's king.", sayShort: "…b5 — queenside expansion.", highlights: [H('b5')] },
+    { atMove: 23, say: "…Bb7 develops the bishop onto the long diagonal, raking toward White's king.", sayShort: "…Bb7 — rake the diagonal.", arrows: [A('b7', 'e4')], highlights: [H('e4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-open-file', 'concept:pos-development'],
 };
 
 const N280: SublineNarration = {
   intro: { say: "Be2 — White develops modestly and prepares to castle in this Classical French with the dark-squared bishops traded. You've already played …c5 and …Nc6 to hit the d4-base of his chain, with …a6 controlling b5. Play …cxd4, …Qb6, and …Bd7-b5 or …Rc8, opening the c-file and pressing the d4-pawn — your queenside play against the chain is the heart of the Classical.", sayShort: "Classical — …c5 hits d4, open the c-file" },
+  beats: [
+    { atMove: 19, say: "…cxd4 opens the centre, your pieces active as the tension resolves.", sayShort: "…cxd4 — open the centre.", highlights: [H('d4')] },
+    { atMove: 21, say: "…O-O tucks the king safe, your active pieces ready to press.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 23, say: "…Nc5 reroutes the knight to a fine outpost, eyeing d3 and e4.", sayShort: "…Nc5 — fine outpost.", highlights: [H('c5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-chain', 'concept:pos-open-file'],
 };
 
 const N281: SublineNarration = {
   intro: { say: "Ne2 — White lifts the knight to overprotect d4 and reroute toward f4 or g3 in this Classical French with bishops traded. You've already struck with …c5 and …Nc6 at the chain's base, and …a6 covers b5. Play …cxd4, …Qb6, and …Bd7-b5, opening the c-file and pressing d4 — with the dark-squared bishops gone, your queenside pawn-and-piece play against his center is the standing theme.", sayShort: "Classical — …c5 hits d4, …Qb6 next" },
+  beats: [
+    { atMove: 19, say: "…f6 strikes at White's e5-pawn, undermining the chain at its head.", sayShort: "…f6 — undermine e5.", highlights: [H('e5')] },
+    { atMove: 21, say: "…O-O tucks the king safe, your active pieces ready to press.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 23, say: "…Nb6 reroutes the knight, eyeing c4 and pressing White's centre.", sayShort: "…Nb6 — eye c4.", highlights: [H('b6')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-chain', 'concept:pos-open-file'],
 };
 
 const N282: SublineNarration = {
   intro: { say: "O-O-O — White's long castle signals a race of opposite-wing attacks in this Classical French with the dark-squared bishops traded. You've already struck with …c5 and brought the knight to c6, so the d4-base is under fire and the c-file is opening toward his king on c1. Play …cxd4, …b5-b4, and …Rb8, hurling your queenside pawns at his king while he storms the kingside with g4-f5.", sayShort: "Classical — race, …c5 and …b5 storm" },
+  beats: [
+    { atMove: 19, say: "…b5 launches the queenside expansion, gaining space against White's king.", sayShort: "…b5 — queenside expansion.", highlights: [H('b5')] },
+    { atMove: 21, say: "…Nxc5 regains the pawn with an active knight, eyeing d3 and e4.", sayShort: "…Nxc5 — regain, stay active.", highlights: [H('c5')] },
+    { atMove: 23, say: "…b4 rams forward, prying open the queenside at White's king.", sayShort: "…b4 — ram the queenside.", highlights: [H('b4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:att-queenside-attack', 'concept:pawn-chain'],
 };
 
 const N283: SublineNarration = {
   intro: { say: "a3 — White stops …Nb4 and …Qb4 after releasing the tension with dxc5, you having recaptured the queen to the active c5-post in this Classical French. With the dark-squared bishops gone and the d-file half-open, you develop easily and eye his e5-pawn and the d4-square. Play …Bd7, …O-O-O or …O-O, and …Rc8, using the c-file and your queen's activity to pressure his loose center.", sayShort: "Classical — queen active on c5, …Rc8" },
+  beats: [
+    { atMove: 21, say: "…b5 launches the queenside expansion, gaining space against White's king.", sayShort: "…b5 — queenside expansion.", highlights: [H('b5')] },
+    { atMove: 23, say: "…O-O tucks the king safe, your active pieces ready to press.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 25, say: "…Nxd4 grabs the central pawn, your knight dominant.", sayShort: "…Nxd4 — grab the centre.", highlights: [H('d4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-open-file', 'concept:pos-development'],
 };
 
 const N284: SublineNarration = {
   intro: { say: "e5 — White grabs space and props it with f4 in the Steinitz Classical French, so undermine the chain at its base with …c5 and …Nc6. The d4-pawn is your target — pressure from the c6-knight and the queen forces him to give it up or accept a cramped, locked structure. Play …cxd4, …Qb6, and …Be7, prying open the c-file and the queenside.", sayShort: "Steinitz — hit the chain base, …c5" },
+  beats: [
+    { atMove: 7, say: "…Nfd7 retreats the knight, preparing the …c5 break against White's centre.", sayShort: "…Nfd7 — prep …c5.", highlights: [H('d7')] },
+    { atMove: 9, say: "…c5 strikes at White's centre, the French's standard counter to the Advance.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
+    { atMove: 11, say: "…Nc6 develops with pressure on d4, undermining the chain.", sayShort: "…Nc6 — pressure d4.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-chain', 'concept:pos-center'],
 };
 
 const N285: SublineNarration = {
   intro: { say: "h4 — the Alekhine-Chatard Attack: instead of trading on e7, White lunges to support Bg5 and threaten g4-g5, opening the h-file at your king. Answer …Bxg5 then …hxg5, accepting damaged kingside pawns to kill his attacking bishop and trade off the aggressor. After that, play …c5 and …Nc6 to hit d4 — the structure favors whoever strikes at the chain.", sayShort: "Alekhine-Chatard — take on g5, hit d4" },
+  beats: [
+    { atMove: 11, say: "…Bxg5 trades off into a sharp line, exploiting White's h4 lunge.", sayShort: "…Bxg5 — trade, exploit h4.", highlights: [H('g5')] },
+    { atMove: 21, say: "…Nc6 develops with pressure on d4, your counterplay building.", sayShort: "…Nc6 — pressure d4.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
+    { atMove: 23, say: "…Nb6 reroutes the knight, eyeing c4 and pressing the centre.", sayShort: "…Nb6 — eye c4.", highlights: [H('b6')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:att-kingside-storm', 'concept:pawn-chain'],
 };
 
 const N286: SublineNarration = {
   intro: { say: "Nc3 — White adds a defender to his isolated d4-pawn and eyes e4 and b5 in this open Tarrasch. You're excellently placed: knight on c6, bishop on d6 toward h2, queen on c7 stacked on the c-file. Play …O-O, …a6 to deny Nb5, and pressure d4 with …Bd7 and the rooks — that isolated d4-pawn stays the permanent weakness you blockade and besiege.", sayShort: "Tarrasch — besiege the isolated d4-pawn" },
+  beats: [
+    { atMove: 23, say: "…a6 secures the queenside, preparing to expand with …b5.", sayShort: "…a6 — prep …b5.", highlights: [H('a6')] },
+    { atMove: 25, say: "…O-O tucks the king safe, your active pieces ready to press.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 27, say: "…Nh5 reroutes the knight toward f4, eyeing the kingside.", sayShort: "…Nh5 — reroute toward f4.", arrows: [A('h5', 'f4')], highlights: [H('f4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-isolated', 'concept:pos-development'],
 };
 
 const N287: SublineNarration = {
   intro: { say: "Ng3 — White reroutes the knight toward f5 or h5 to harass your kingside, his d4-pawn isolated in this open Tarrasch. You're splendidly developed: knight on c6, bishop on d6 toward h2, queen on c7 on the c-file. Play …O-O, …Re8, and …Bd7-e8 piling onto d4, with …e5 in reserve to break free — his isolated d4-pawn is the permanent weakness you blockade and besiege.", sayShort: "Tarrasch — siege the isolated d4-pawn" },
+  beats: [
+    { atMove: 23, say: "…O-O tucks the king safe, your active pieces ready to press.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 25, say: "…Bd7 develops the light bishop, your pieces coordinated.", sayShort: "…Bd7 — develop the bishop.", highlights: [H('d7')] },
+    { atMove: 27, say: "…Qb6 sorties the queen, pressuring b2 and the queenside.", sayShort: "…Qb6 — pressure b2.", arrows: [A('b6', 'b2')], highlights: [H('b2')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-isolated', 'concept:pos-development'],
 };
 
 const N288: SublineNarration = {
   intro: { say: "Rc1 — you've dissolved the center with …c5 and …f6, leaving White an isolated d4-pawn to blockade and besiege in this open Italian-style Tarrasch. Your pieces are ideal: knight on c6, bishop on d6 aiming at h2, queen on c7 lined up on the c-file behind his rook. Play …Bd7-e8-h5 or …e5 to free everything, while the d4-pawn stays a permanent weakness.", sayShort: "Tarrasch — blockade White's isolated d4-pawn" },
+  beats: [
+    { atMove: 25, say: "…Bd7 develops the light bishop, your pieces coordinated for the middlegame.", sayShort: "…Bd7 — develop the bishop.", highlights: [H('d7')] },
+    { atMove: 27, say: "…Qb6 sorties the queen, pressuring b2 and the queenside.", sayShort: "…Qb6 — pressure b2.", arrows: [A('b6', 'b2')], highlights: [H('b2')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-isolated', 'concept:pos-development'],
 };
 
 const N289: SublineNarration = {
   intro: { say: "a3 — White stops …Nb4 hitting your d3-bishop and prepares b2-b4 for space, his d4-pawn isolated in this open Tarrasch. Your pieces are model-placed: knight on c6, bishop on d6 toward h2, queen on c7 on the c-file. Play …O-O, …Bd7-e8-h5 to pile on d4, and the …e5 break to free the game — the isolated d4-pawn is the standing weakness you blockade and besiege.", sayShort: "Tarrasch — blockade and pressure d4" },
+  beats: [
+    { atMove: 23, say: "…O-O tucks the king safe, your active pieces ready to press.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 25, say: "…Bd7 develops the light bishop, your pieces coordinated.", sayShort: "…Bd7 — develop the bishop.", highlights: [H('d7')] },
+    { atMove: 27, say: "…a6 secures the queenside, preparing to expand with …b5.", sayShort: "…a6 — prep …b5.", highlights: [H('a6')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-isolated', 'concept:pos-development'],
 };
 
 const N290: SublineNarration = {
   intro: { say: "c3 — White builds the e5-d4-c3 pawn chain, so attack its base at once with …c5 and …Nc6 in this closed Tarrasch. Your light-squared bishop on d3 and the cramped d7-knight tell the story: generate counterplay against d4 before his kingside space crushes you. Branch into …Qb6 hitting d4 and b2, or …f6 to break the chain from above and free the position.", sayShort: "Closed Tarrasch — …c5 and …Nc6 on d4" },
+  beats: [
+    { atMove: 9, say: "…c5 strikes at White's centre, the French's standard counter.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
+    { atMove: 11, say: "…Nc6 develops with pressure on d4, undermining the chain.", sayShort: "…Nc6 — pressure d4.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
+    { atMove: 13, say: "…Qb6 sorties the queen, pressuring b2 and the d4-pawn.", sayShort: "…Qb6 — pressure b2 and d4.", arrows: [A('b6', 'b2')], highlights: [H('b2')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-chain', 'concept:pos-space'],
 };
 
 const N291: SublineNarration = {
   intro: { say: "f4 — White clamps the e5-square and discourages your …e5 freeing break in this open Tarrasch. You're well-placed: knight on c6, bishop on d6 toward h2, the recaptured knight on f6 eyeing e4 and g4. Play …O-O, …Qc7 or …Qb6, and …Bd7 piling onto the isolated d4-pawn — the f4-push weakens e3 and the g1-a7 diagonal, giving you fresh squares to target.", sayShort: "Tarrasch — besiege d4, exploit e3 hole" },
+  beats: [
+    { atMove: 21, say: "…O-O tucks the king safe, your active pieces ready to press.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 23, say: "…Qb6 sorties the queen, pressuring b2 and the centre.", sayShort: "…Qb6 — pressure b2.", arrows: [A('b6', 'b2')], highlights: [H('b2')] },
+    { atMove: 25, say: "…Bd7 develops the light bishop, your pieces coordinated.", sayShort: "…Bd7 — develop the bishop.", highlights: [H('d7')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-isolated', 'concept:pos-weak-squares'],
 };
 
 const N292: SublineNarration = {
   intro: { say: "h3 — White just makes luft and stops …Ng4 or …Bg4, his d4-pawn fixed as the long-term weakness in this open Tarrasch. You're ideally coordinated: knight on c6, bishop on d6 aiming at h2, queen on c7 stacked on the c-file. Play …O-O, …Bd7-e8-h5 to add pressure, or the …e5 break to free the position — the blockade and siege of d4 is your standing edge.", sayShort: "Tarrasch — blockade and besiege d4" },
+  beats: [
+    { atMove: 23, say: "…O-O tucks the king safe, your active pieces ready to press.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 25, say: "…Bd7 develops the light bishop, your pieces coordinated.", sayShort: "…Bd7 — develop the bishop.", highlights: [H('d7')] },
+    { atMove: 27, say: "…Rae8 contests the e-file, your rook joining the central pressure.", sayShort: "…Rae8 — contest the e-file.", highlights: [H('e8')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-isolated', 'concept:pos-development'],
 };
 
 const N293: SublineNarration = {
   intro: { say: "Nc3 — White pressures d5 and angles for the e4-break in this Exchange French. Mirror him with your …c6 to bolster d5 and …Bg4 or …Bf5 to get your bishop outside the chain. Grab the e-file with your …Re8, play …Nbd7 and …Qc7 with your bishop pointed at h2 — hold d5, contest the central files, and the symmetrical position stays fully balanced for you.", sayShort: "Exchange — hold d5 with …c6, …Re8" },
+  beats: [
+    { atMove: 13, say: "…c6 braces the centre, your solid Exchange structure complete.", sayShort: "…c6 — brace the centre.", highlights: [H('c6')] },
+    { atMove: 15, say: "…Re8 contests the e-file, your rook joining the central play.", sayShort: "…Re8 — contest the e-file.", highlights: [H('e8')] },
+    { atMove: 21, say: "…Qc7 repositions the queen, eyeing the c-file and the centre.", sayShort: "…Qc7 — eye the c-file.", highlights: [H('c7')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-open-file', 'concept:pos-development'],
 };
 
 const N294: SublineNarration = {
   intro: { say: "Nc3 — the main-line Winawer; pin with …Bb4 and trade on c3 to saddle White with doubled, weak c-pawns, then castle into Qg4's kingside aim. The bargain is structural: he owns the bishop pair and space, but his c3- and c4-pawns and the d4-base are chronic targets. Press with …Nbc6, …Qa5 and …cxd4, opening lines against the crippled queenside while your king sits safely on g8.", sayShort: "Winawer — doubled c-pawns the target" },
+  beats: [
+    { atMove: 7, say: "…Nfd7 retreats the knight, preparing the …c5 break against the centre.", sayShort: "…Nfd7 — prep …c5.", highlights: [H('d7')] },
+    { atMove: 9, say: "…c5 strikes at White's centre, the French's standard counter.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
+    { atMove: 11, say: "…Nc6 develops with pressure on d4, undermining the chain.", sayShort: "…Nc6 — pressure d4.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-doubled', 'concept:pos-bishop-pair'],
 };
 
 const N295: SublineNarration = {
   intro: { say: "Ne5 — White posts the knight on the natural central outpost in this symmetrical Exchange French. Challenge it directly with …Nbd7 or …Nc6 to trade off the intruder, or play …c5 to strike at d4 and undermine its support. Play …Re8 for the e-file, …c5, and exchange on e5 — your harmonious pieces and the open center give fully equal, active play.", sayShort: "Exchange — challenge the e5-knight, …c5" },
+  beats: [
+    { atMove: 13, say: "…c5 strikes at White's centre, your pieces active against the chain.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
+    { atMove: 17, say: "…Qb6 sorties the queen, pressuring b2 and the d4-pawn.", sayShort: "…Qb6 — pressure b2 and d4.", arrows: [A('b6', 'b2')], highlights: [H('b2')] },
+    { atMove: 21, say: "…Nc6 develops with pressure on d4, your counterplay building.", sayShort: "…Nc6 — pressure d4.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-outpost', 'concept:pos-open-file'],
 };
 
 const N296: SublineNarration = {
   intro: { say: "Re1 — White grabs the e-file in this Exchange French, where symmetry breaks only by who acts first. Answer with your …Re8 to contest the open file directly, then complete with …c6, …Nbd7 and …Qc7, lining up your bishop and queen at h2. Seize the e-file and aim for a minority advance or a kingside regrouping — whoever controls the e-file and the e4/e5 squares holds the edge.", sayShort: "Exchange — contest the e-file, …Re8" },
+  beats: [
+    { atMove: 13, say: "…h6 makes luft and secures the kingside in the Exchange French.", sayShort: "…h6 — make luft.", highlights: [H('h6')] },
+    { atMove: 15, say: "…Nc6 develops with pressure, your pieces flowing out.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
+    { atMove: 21, say: "…Be6 develops the bishop to a fine post, guarding key squares.", sayShort: "…Be6 — fine bishop post.", highlights: [H('e6')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-open-file', 'concept:pos-development'],
 };
 
 const N297: SublineNarration = {
   intro: { say: "c3 — White props up d4 and settles into a slow symmetrical struggle in this Exchange French. Mirror him with your …c6 and develop …Bg4 or …Bf5 outside the chain, then …Nbd7 and …Qc7 to aim your battery at h2. Contest the e-file with your …Re8 and prepare your minority advance …b5-b4 against c3 — whoever creates the first real target in this symmetry grabs the initiative.", sayShort: "Exchange — …c6, develop the bishop out" },
+  beats: [
+    { atMove: 13, say: "…h6 makes luft and secures the kingside before you contest the files.", sayShort: "…h6 — make luft.", highlights: [H('h6')] },
+    { atMove: 15, say: "…Re8 contests the e-file, your rook joining the central play.", sayShort: "…Re8 — contest the e-file.", highlights: [H('e8')] },
+    { atMove: 21, say: "…c5 strikes at the centre, gaining space and freeing your game.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-minority-attack', 'concept:pos-development'],
 };
 
 const N298: SublineNarration = {
   intro: { say: "c3 — White props up d4 with both bishops already out in this Exchange French. Your g4-bishop pins the f3-knight, restraining his central breaks, while …Nbd7 and …c6 round out your harmonious setup. Play …Re8 to seize the e-file and …h6 to ask the g5-bishop its intentions, keeping the symmetrical position double-edged with full chances for you.", sayShort: "Exchange — pin on f3, …Re8" },
+  beats: [
+    { atMove: 15, say: "…Nbd7 develops toward the centre, your pieces coordinating.", sayShort: "…Nbd7 — develop the knight.", highlights: [H('d7')] },
+    { atMove: 19, say: "…c5 strikes at the centre, gaining space and freeing your game.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
+    { atMove: 21, say: "…Qc7 repositions the queen, eyeing the c-file and the centre.", sayShort: "…Qc7 — eye the c-file.", highlights: [H('c7')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:tac-pin', 'concept:pos-open-file'],
 };
 
 const N299: SublineNarration = {
   intro: { say: "c4 — White breaks the symmetry, pressuring d5 and accepting an isolated queen's pawn if you play …dxc4, in this Exchange French. Take with …dxc4 to win the bishop pair after …Bxc4, or hold with …c6, leaving him a potential isolated d-pawn. Play …c6 and …Bg4 to pin f3, then …Re8 and …Nbd7, blockading d5 or d4 and exploiting whichever isolated pawn he ends up with.", sayShort: "Exchange — …c6, target the isolated pawn" },
+  beats: [
+    { atMove: 13, say: "…dxc4 wins the pawn when White overextends, your pieces active.", sayShort: "…dxc4 — win the pawn.", highlights: [H('c4')] },
+    { atMove: 15, say: "…Nc6 develops with pressure, consolidating your edge.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
+    { atMove: 19, say: "…Bf5 develops the bishop actively, eyeing the light squares.", sayShort: "…Bf5 — active bishop.", highlights: [H('f5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-isolated', 'concept:pos-development'],
 };
 
 const N300: SublineNarration = {
   intro: { say: "h3 — White asks your g4-bishop to declare itself in this mirrored Exchange French. Keep the pin alive with …Bh5 or trade with …Bxf3, conceding the bishop pair to plant a knight on the e4-outpost. The symmetry is only surface-deep — play for …Nbd7, …c6, and a minority push or …Re8 to seize the open e-file before he does.", sayShort: "Exchange — …Bh5 or trade for e4" },
+  beats: [
+    { atMove: 15, say: "…Bh5 keeps the bishop's pin, your pieces well-placed.", sayShort: "…Bh5 — keep the pin.", highlights: [H('h5')] },
+    { atMove: 19, say: "…Nbd7 develops toward the centre, your pieces coordinating.", sayShort: "…Nbd7 — develop the knight.", highlights: [H('d7')] },
+    { atMove: 21, say: "…Bf4 trades to ease your position, exchanging the dark bishops.", sayShort: "…Bf4 — trade, ease the game.", highlights: [H('f4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-open-file', 'concept:tac-pin'],
 };
 
 const N301: SublineNarration = {
   intro: { say: "Bb5 — White pins your d7-knight and pressures the queenside before you finish developing in this Burn Variation. You keep the bishop pair, with the dark-squared bishop active on f6 against d4. Play …c6 to chase the b5-bishop or …a6 and …c5 to break the pin and hit the center — once you play …b6 and …Bb7, both bishops sweep the long diagonals for a comfortable game.", sayShort: "Burn — break the pin, …c6 then …c5" },
+  beats: [
+    { atMove: 15, say: "…Be7 develops and prepares castling, your solid setup holding.", sayShort: "…Be7 — develop, prep castle.", highlights: [H('e7')] },
+    { atMove: 19, say: "…c5 strikes at the centre, gaining space and freeing your game.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
+    { atMove: 21, say: "…Qa5+ checks and develops with tempo, dragging White awkward.", sayShort: "…Qa5+ — develop with check.", highlights: [H('a5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:tac-pin', 'concept:pos-bishop-pair'],
 };
 
 const N302: SublineNarration = {
   intro: { say: "Bd3 — your …dxe4 handed White the center but left you the bishop pair after the f6-bishop traded for the knight in this Burn Variation. Your dark-squared bishop sits active on f6, pressing d4 and the long diagonal, and the d7-knight can reroute to b6 or f6. Complete with …b6, …Bb7, and …c5, striking at d4 and putting both bishops to work on the long diagonals.", sayShort: "Burn — bishop pair, …b6 and …c5" },
+  beats: [
+    { atMove: 15, say: "…c5 strikes at White's centre, the French's standard counter.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
+    { atMove: 19, say: "…cxd4 opens the centre, your pieces active as the tension resolves.", sayShort: "…cxd4 — open the centre.", highlights: [H('d4')] },
+    { atMove: 23, say: "…e5 strikes the centre, freeing your game with active pieces.", sayShort: "…e5 — strike the centre.", highlights: [H('e5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-bishop-pair', 'concept:pos-development'],
 };
 
 const N303: SublineNarration = {
   intro: { say: "Nxf6+ — White trades the e4-knight, so recapture with the d7-knight to keep a sound, symmetrical structure in this Burn Variation. The second bishop is gone, but you're solid and weakness-free, with the c8-bishop ready for b7 after …b6. Play …b6, …Bb7, …c5, and …O-O, hitting the d4-pawn and putting the long-diagonal bishop to work for comfortable equality.", sayShort: "Burn — recapture …Nxf6, …b6 and …c5" },
+  beats: [
+    { atMove: 15, say: "…Nxf6 recaptures, your knight redeveloped and the position sound.", sayShort: "…Nxf6 — recapture soundly.", highlights: [H('f6')] },
+    { atMove: 17, say: "…O-O tucks the king safe, your pieces ready for the middlegame.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 23, say: "…Bb7 develops the bishop onto the long diagonal, raking the centre.", sayShort: "…Bb7 — rake the diagonal.", arrows: [A('b7', 'e4')], highlights: [H('e4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-development', 'concept:pawn-chain'],
 };
 
 const N304: SublineNarration = {
   intro: { say: "c3 — White shores up the d4-base but leaves his center static and slightly passive in this Burn Variation, where you hold the two bishops and your dark-squared bishop is already active on f6 against d4. Play …b6 and …Bb7 to harness the long light diagonal, then …c5 to challenge d4 — with both bishops working, you have the more comfortable middlegame.", sayShort: "Burn — bishop pair, …b6 then …c5" },
+  beats: [
+    { atMove: 15, say: "…O-O tucks the king safe, your pieces ready for the central break.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 17, say: "…e5 strikes the centre, freeing your game with active pieces.", sayShort: "…e5 — strike the centre.", highlights: [H('e5')] },
+    { atMove: 23, say: "…Bxd4 grabs the central pawn with a dominant bishop.", sayShort: "…Bxd4 — dominant bishop.", highlights: [H('d4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-bishop-pair', 'concept:pawn-chain'],
 };
 
 const N305: SublineNarration = {
   intro: { say: "f3 — White tries to win back the e4-pawn in this offbeat French. Don't hand it over: your …e3 jams the pawn deep into his camp, a permanent thorn cramping his f1-bishop and freezing his whole kingside. That advanced pawn on e3 is worth far more to you than the tempo White recovers.", sayShort: "f3 — …e3 jams a thorn." },
+  beats: [
+    { atMove: 9, say: "…exf3 grabs the gambit pawn, your extra material backed by solid development.", sayShort: "…exf3 — take the pawn.", highlights: [H('f3')] },
+    { atMove: 11, say: "…Be7 develops and prepares castling, consolidating your edge.", sayShort: "…Be7 — develop, prep castle.", highlights: [H('e7')] },
+    { atMove: 17, say: "…Nb6 reroutes the knight, eyeing c4 and pressing White's centre.", sayShort: "…Nb6 — eye c4.", highlights: [H('b6')] },
+  ],
   sources: ['concept:pos-space', 'concept:pawn-passed', 'https://en.wikipedia.org/wiki/French_Defence'],
 };
 
 const N306: SublineNarration = {
   intro: { say: "Bg5 — White pins your f6-knight, the c6-bishop already freed, in this Rubinstein setup. You're perfectly solid: the bishop on c6 trades off his strong e4-knight or supports …Nxe4, and with the c3-pawn his d4 has no natural support beyond the queen. Play …Be7, break the pin, and aim for …c5 to liquidate the center and equalize fully.", sayShort: "Rubinstein — break the pin, …c5" },
+  beats: [
+    { atMove: 15, say: "…h6 questions White's bishop, gaining the bishop pair or a tempo.", sayShort: "…h6 — question the bishop.", highlights: [H('h6')] },
+    { atMove: 21, say: "…Bd6 develops the dark bishop to an active diagonal.", sayShort: "…Bd6 — active bishop.", highlights: [H('d6')] },
+    { atMove: 23, say: "…Bxg3 trades to damage White's kingside structure.", sayShort: "…Bxg3 — damage the kingside.", highlights: [H('g3')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:tac-pin', 'concept:pos-development'],
 };
 
 const N307: SublineNarration = {
   intro: { say: "Bg5 — White pins your recaptured knight, the e4-knight having been swapped on f6, in this Rubinstein. Your bishop on c6 already controls the long light diagonal and bears down on f3, so you're fully developed and free of weaknesses. Break the pin with …Be7 and prepare …c5 or …Qd5, liquidating the d4-pawn and reaching dead equality with active pieces.", sayShort: "Rubinstein — c6-bishop strong, …c5 frees" },
+  beats: [
+    { atMove: 17, say: "…h6 questions White's bishop, gaining the bishop pair or a tempo.", sayShort: "…h6 — question the bishop.", highlights: [H('h6')] },
+    { atMove: 21, say: "…Bd6 develops the dark bishop to an active diagonal.", sayShort: "…Bd6 — active bishop.", highlights: [H('d6')] },
+    { atMove: 23, say: "…Bxg3 trades to damage White's kingside structure.", sayShort: "…Bxg3 — damage the kingside.", highlights: [H('g3')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:tac-pin', 'concept:pos-development'],
 };
 
 const N308: SublineNarration = {
   intro: { say: "Ng3 — White sidesteps the trade of his e4-knight by dropping it back, keeping pieces on, in this Rubinstein. You're fully developed and untroubled: your bishop on c6 commands the long light diagonal, and the c3-pawn leaves his d4 reliant on the queen alone. Play …Be7, castle, and prepare the …c5 break to liquidate d4, reaching the comfortable, solid equality the Rubinstein promises.", sayShort: "Rubinstein — c6-bishop strong, …c5" },
+  beats: [
+    { atMove: 15, say: "…Bd5 centralises the bishop on a dominant square, controlling the light squares.", sayShort: "…Bd5 — dominant bishop.", highlights: [H('d5')] },
+    { atMove: 17, say: "…c5 strikes at the centre, gaining space and freeing your game.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
+    { atMove: 19, say: "…Be7 develops and prepares castling, your pieces coordinated.", sayShort: "…Be7 — develop, prep castle.", highlights: [H('e7')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-development', 'concept:pos-center'],
 };
 
 const N309: SublineNarration = {
   intro: { say: "O-O — your …dxe4 conceded the center for a rock-solid, congestion-free game in this Rubinstein French. Your light-squared bishop has already escaped the pawn chain to c6, eyeing the e4-knight and the long diagonal. With castling done, finish with …Ngf6 and …Be7, then play the freeing breaks …c5 or …e5 to challenge his lone d4-pawn.", sayShort: "Rubinstein — solid, bishop freed on c6" },
+  beats: [
+    { atMove: 13, say: "…Ngf6 develops the knight, eyeing e4 and the centre.", sayShort: "…Ngf6 — develop, eye e4.", highlights: [H('f6')] },
+    { atMove: 15, say: "…Bxf3 trades to damage White's structure, then you target the weakness.", sayShort: "…Bxf3 — damage the structure.", highlights: [H('f3')] },
+    { atMove: 21, say: "…Bb4 pins and pressures, your active pieces reaching equality.", sayShort: "…Bb4 — pin and pressure.", highlights: [H('b4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-development', 'concept:pos-center'],
 };
 
 const N310: SublineNarration = {
   intro: { say: "Qc2 — White defends e4 indirectly and eyes the b1-h7 diagonal, your c6-bishop already developed, in this Rubinstein. You're solid and symmetrical in feel, with the light-squared bishop active on c6 toward f3 and g2. Play …Be7, …O-O, and the …c5 break to liquidate his d4-pawn — with no weaknesses and harmonious development, you equalize comfortably.", sayShort: "Rubinstein — bishop on c6, …c5 frees" },
+  beats: [
+    { atMove: 15, say: "…Bxe4 trades into a comfortable position, simplifying the light-square tension.", sayShort: "…Bxe4 — trade, simplify.", highlights: [H('e4')] },
+    { atMove: 19, say: "…c6 braces the centre, your solid structure holding.", sayShort: "…c6 — brace the centre.", highlights: [H('c6')] },
+    { atMove: 23, say: "…Nd5 centralises the knight on a dominant square, eyeing key points.", sayShort: "…Nd5 — central knight.", highlights: [H('d5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-development', 'concept:pos-center'],
 };
 
 const N311: SublineNarration = {
   intro: { say: "Qe2 — White centralizes the queen to connect rooks before deciding on a setup in this Rubinstein. Your freed light-squared bishop on c6 is the point of the whole variation, bearing on his e4-knight and the long diagonal toward g2. Play …Ngf6 to challenge e4, then …Be7 and …O-O, with the standard …c5 break in reserve to liquidate d4 and equalize.", sayShort: "Rubinstein — bishop on c6, …Ngf6" },
+  beats: [
+    { atMove: 13, say: "…Ngf6 develops the knight, eyeing e4 and completing your setup.", sayShort: "…Ngf6 — develop, eye e4.", highlights: [H('f6')] },
+    { atMove: 17, say: "…c5 strikes at White's centre, your pieces active against the chain.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
+    { atMove: 23, say: "…Ne5 centralises the knight on a strong square, eyeing key points.", sayShort: "…Ne5 — central knight.", highlights: [H('e5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-development', 'concept:pos-center'],
 };
 
 const N312: SublineNarration = {
   intro: { say: "Qe2 — White lifts the queen to connect the rooks and prepare central play, your c6-bishop already developed, in this Rubinstein. You're solid and symmetrical in spirit: the bishop on c6 contests his e4-knight and the long diagonal, and the c3-pawn keeps his d4 from extra support. Play …Be7, castle, and aim for …c5 or …Qd5 to dissolve d4 and reach a comfortable, weakness-free equality.", sayShort: "Rubinstein — solid, …c5 frees" },
+  beats: [
+    { atMove: 15, say: "…Nxe4 snaps the central pawn, your pieces active in the opened centre.", sayShort: "…Nxe4 — snap the pawn.", highlights: [H('e4')] },
+    { atMove: 19, say: "…c6 braces the centre, your solid structure holding.", sayShort: "…c6 — brace the centre.", highlights: [H('c6')] },
+    { atMove: 23, say: "…Nd5 centralises the knight on a dominant square, eyeing key points.", sayShort: "…Nd5 — central knight.", highlights: [H('d5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-development', 'concept:pos-center'],
 };
 
 const N313: SublineNarration = {
   intro: { say: "Be3 — White hits your centralized queen to gain a tempo for the attack in this Milner-Barry Gambit accepted. You hold the extra d4-pawn and have already played …a6 to deny Nb5, so just step the queen back to safety. Play …Qb6 or …Qd8, then …Ne7 and …Nc6, completing development and tucking the king away — keep the pawn, weather the initiative, win the endgame.", sayShort: "Milner-Barry — extra pawn, retreat the queen" },
+  beats: [
+    { atMove: 21, say: "…Qxe5 grabs the central pawn, your queen active and a pawn ahead.", sayShort: "…Qxe5 — grab the pawn.", highlights: [H('e5')] },
+    { atMove: 23, say: "…Nf6 develops the knight, consolidating your extra material.", sayShort: "…Nf6 — develop, consolidate.", highlights: [H('f6')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-king-safety', 'concept:pos-development'],
 };
 
 const N314: SublineNarration = {
   intro: { say: "Kh1 — White clears g1 to prepare f2-f4 and his attacking initiative in this Milner-Barry Gambit accepted. You have the extra d4-pawn, the queen well-centralized, and …a6 stopping Nb5. Play …Qb6 or …Bc6 to defuse his pieces, then …Ne7 and …O-O-O — consolidate around the centralized queen and convert the extra pawn once your king is safe.", sayShort: "Milner-Barry — extra pawn, finish development" },
+  beats: [
+    { atMove: 21, say: "…Qxe5 grabs the central pawn, your queen active and a pawn ahead.", sayShort: "…Qxe5 — grab the pawn.", highlights: [H('e5')] },
+    { atMove: 23, say: "…Qd6 repositions the queen safely, consolidating your edge.", sayShort: "…Qd6 — reposition, consolidate.", highlights: [H('d6')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-king-safety', 'concept:pos-centralization'],
 };
 
 const N315: SublineNarration = {
   intro: { say: "Qf3 — White eyes your f7-pawn and the kingside, seeking compensation for the lost pawn, in this Milner-Barry Gambit accepted. You're up a clean pawn with the queen well-centralized on d4 and …a6 covering b5. Play …Qb6 or …Bc6 to neutralize his queen's aim, then …Ne7 and …O-O-O or …Be7 — once your king is safe, the extra pawn carries you into a winning endgame.", sayShort: "Milner-Barry — extra pawn, guard f7" },
+  beats: [
+    { atMove: 21, say: "…Qxe5 grabs the central pawn, your queen active with the edge.", sayShort: "…Qxe5 — grab the pawn.", highlights: [H('e5')] },
+    { atMove: 23, say: "…Qf6 repositions the queen safely, consolidating your material.", sayShort: "…Qf6 — reposition, consolidate.", highlights: [H('f6')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-king-safety', 'concept:pos-centralization'],
 };
 
 const N316: SublineNarration = {
   intro: { say: "Rd1 — White's rook swings over to harass your centralized queen and regain the pawn in this Milner-Barry Gambit accepted. You have the extra d-pawn and have prudently played …a6 to deny Nb5 and …Ne7 to bolster the kingside. Play …Nc6 or …Qb6 to retreat the queen safely, then …Be7 and …O-O — once the king is tucked away, the pawn is yours to keep.", sayShort: "Milner-Barry — extra pawn, untangle the queen" },
+  beats: [
+    { atMove: 23, say: "…Nc6 develops with pressure, reinforcing your position.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
+    { atMove: 25, say: "…Qxe5 grabs the central pawn, your queen active with the edge.", sayShort: "…Qxe5 — grab the pawn.", highlights: [H('e5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-king-safety', 'concept:pos-centralization'],
 };
 
 const N317: SublineNarration = {
   intro: { say: "Re1 — White prepares his piece play for the lost material, you having snatched the d4-pawn with the knight and recaptured by queen in this Advance French Milner-Barry-style gambit. You're up a clean pawn and just need to consolidate: the queen on d4 is well-centralized and …a6 has covered b5. Play …Ne7-c6 or …Bc5 to challenge the queen, then …O-O-O or …Be7, keeping the extra pawn and weathering the initiative.", sayShort: "Advance — extra pawn, consolidate the d4-queen" },
+  beats: [
+    { atMove: 21, say: "…Ne7 develops the knight, reinforcing the centre after winning material.", sayShort: "…Ne7 — develop, reinforce.", highlights: [H('e7')] },
+    { atMove: 23, say: "…Qxe5 grabs the central pawn, your queen active with the extra material.", sayShort: "…Qxe5 — grab the pawn.", highlights: [H('e5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-centralization', 'concept:pos-king-safety'],
 };
 
 const N318: SublineNarration = {
   intro: { say: "a3 — White takes the b4-square from your queen and bishop and supports a future b2-b4 in this Milner-Barry Gambit accepted. You hold the extra d4-pawn with the queen strongly centralized and …a6 already denying Nb5. Play …Qb6 or …Bc6 to retreat the queen and trade attackers, then …Ne7 and …O-O-O — consolidate and convert the clean extra pawn in the endgame.", sayShort: "Milner-Barry — keep the pawn, untangle" },
+  beats: [
+    { atMove: 21, say: "…Qxe5 grabs the central pawn, your queen active with the material edge.", sayShort: "…Qxe5 — grab the pawn.", highlights: [H('e5')] },
+    { atMove: 23, say: "…Qd6 repositions the queen safely, consolidating your extra pawn.", sayShort: "…Qd6 — reposition, consolidate.", highlights: [H('d6')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-king-safety', 'concept:pos-centralization'],
 };
 
 const N319: SublineNarration = {
   intro: { say: "g3 — White prepares Bf4 or a fianchetto to chip at your centralized queen and exploit the dark squares in this Milner-Barry Gambit accepted. You're a clean pawn up with the queen strong on d4 and …a6 covering b5. Play …Qb6 or …Bc6 to neutralize his developing pieces, then …Ne7 and …O-O-O or …Be7 — once your king is safe, the extra d-pawn decides the game.", sayShort: "Milner-Barry — extra pawn, retreat the queen" },
+  beats: [
+    { atMove: 21, say: "…h5 gains kingside space, restraining White's pawns as you consolidate.", sayShort: "…h5 — gain kingside space.", highlights: [H('h5')] },
+    { atMove: 23, say: "…Qa7 tucks the queen safe on the long diagonal, keeping your extra material.", sayShort: "…Qa7 — safe, keep material.", highlights: [H('a7')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-king-safety', 'concept:pos-centralization'],
 };
 
 const N320: SublineNarration = {
   intro: { say: "Bc1 — White retreats the bishop all the way back to dodge the …Bxc3 doubling in this MacCutcheon Lasker line, so plant your knight on the e4-outpost. With Qg4 hitting g7, …g6 shores up the kingside and blunts the queen's aim. Play …Bxc3 and …c5, smashing into his d4-e5 chain while your e4-knight and the half-open structure give sharp, active counterplay.", sayShort: "MacCutcheon — knight on e4, …c5 break" },
+  beats: [
+    { atMove: 11, say: "…Ne4 centralises the knight on a dominant square, eyeing White's weaknesses.", sayShort: "…Ne4 — dominant knight.", highlights: [H('e4')] },
+    { atMove: 13, say: "…Nxc3 trades and damages White's queenside pawns, a lasting plus.", sayShort: "…Nxc3 — wreck the pawns.", highlights: [H('c3')] },
+    { atMove: 17, say: "…c5 strikes at White's centre, your pieces active.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-outpost', 'concept:pawn-chain'],
 };
 
 const N321: SublineNarration = {
   intro: { say: "Be3 — White retreats the bishop rather than allow the damage of …Bxc3 in this MacCutcheon line, and your f6-knight is pinned no longer. Play …Ne4 hitting the c3-knight to force clarification on the queenside. Then …Bxc3, …Nxc3 or …bxc3 damaging his pawns, followed by …c5 to attack the d4-e5 chain at its base while your king finds safety.", sayShort: "MacCutcheon — …Ne4 then …c5" },
+  beats: [
+    { atMove: 11, say: "…Ne4 centralises the knight on a dominant square, eyeing White's weaknesses.", sayShort: "…Ne4 — dominant knight.", highlights: [H('e4')] },
+    { atMove: 15, say: "…Bxc3+ doubles White's pawns, the Winawer's structural trump.", sayShort: "…Bxc3+ — double the pawns.", highlights: [H('c3')] },
+    { atMove: 17, say: "…c5 strikes at White's centre, your pieces active against the structure.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pawn-chain', 'concept:pos-development'],
 };
 
 const N322: SublineNarration = {
   intro: { say: "dxc5 — White's king sits on d2 and he releases the center rather than hold the chain under fire in this MacCutcheon. You've already damaged his queenside with …Bxc3 and provoked Kxd2, and now the center opens with his king exposed. Play …Nc6 and …Qa5 hitting c5 and the loose c3-pawn, with …Bd7 and …O-O-O to swing the rooks against his stranded monarch.", sayShort: "MacCutcheon — open lines at the d2-king" },
+  beats: [
+    { atMove: 21, say: "…Qc7 repositions the queen, eyeing the c-file and the e5-pawn.", sayShort: "…Qc7 — eye the c-file.", highlights: [H('c7')] },
+    { atMove: 23, say: "…Nd7 develops the knight, preparing to regain the c5-pawn.", sayShort: "…Nd7 — develop, target c5.", highlights: [H('d7')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-king-safety', 'concept:pawn-doubled'],
 };
 
 const N323: SublineNarration = {
   intro: { say: "exd5 — White sidesteps the main lines by capturing on d5 immediately in this MacCutcheon. Recapture with …exd5 or the sharper …Qxd5, opening the position while your active b4-bishop keeps pinning the c3-knight. With …exd5 you get a free, symmetrical structure and easy development to …Nc6, …O-O, and …Re8 — the pinned knight and the open e-file give comfortable, weakness-free play.", sayShort: "MacCutcheon — recapture …exd5, free game" },
+  beats: [
+    { atMove: 9, say: "…Qxd5 recaptures, the queen central with your Winawer structure intact.", sayShort: "…Qxd5 — recapture central.", highlights: [H('d5')] },
+    { atMove: 11, say: "…Bxc3+ doubles White's pawns, the Winawer's lasting structural plus.", sayShort: "…Bxc3+ — double the pawns.", highlights: [H('c3')] },
+    { atMove: 19, say: "…Bb7 develops the bishop onto the long diagonal, raking the centre.", sayShort: "…Bb7 — rake the diagonal.", arrows: [A('b7', 'e4')], highlights: [H('e4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:tac-pin', 'concept:pos-development'],
 };
 
 const N324: SublineNarration = {
   intro: { say: "f4 — White reinforces e5 and braces the center against your …c5 break, his king on d2 in this MacCutcheon. You hold the structural trumps: his doubled c-pawns and the awkward king are permanent liabilities. Play …Nc6 and …Qa5 to hit c3 and the d4-pawn, then …cxd4 and …Bd7 with …O-O-O, opening files against his king before it can find shelter.", sayShort: "MacCutcheon — …Nc6 and …Qa5 on the king" },
+  beats: [
+    { atMove: 21, say: "…Bd7 develops the light bishop, your pieces coordinated for the middlegame.", sayShort: "…Bd7 — develop the bishop.", highlights: [H('d7')] },
+    { atMove: 23, say: "…Nc6 develops with pressure on d4, your counterplay building.", sayShort: "…Nc6 — pressure d4.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-king-safety', 'concept:pawn-doubled'],
 };
 
 const N325: SublineNarration = {
   intro: { say: "h4 — White's king is stranded on d2 and this push aims to pry open the h-file against your weakened kingside in a sharp MacCutcheon. You've won the dark-squared bishop and damaged his queenside pawns, and your …c5 break already hits the d4-base. Play …Nc6, …Qa5, and …c4, turning the central tension into a queenside assault while his misplaced king and doubled c-pawns tell.", sayShort: "MacCutcheon — White king stuck, …c5 strike" },
+  beats: [
+    { atMove: 21, say: "…Nc6 develops with pressure on d4, your counterplay building.", sayShort: "…Nc6 — pressure d4.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
+    { atMove: 23, say: "…cxd4 opens the centre, your pieces active as the tension resolves.", sayShort: "…cxd4 — open the centre.", highlights: [H('d4')] },
+    { atMove: 25, say: "…Qa5+ checks and develops with tempo, dragging White awkward.", sayShort: "…Qa5+ — develop with check.", highlights: [H('a5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-king-safety', 'concept:pawn-doubled'],
 };
 
 const N326: SublineNarration = {
   intro: { say: "Bb5+ — White checks after the center opened with dxc5 and …Bxc5 in this Rubinstein, so just block with …Bd7 or …Nd7, trading off his developed bishop and easing any pressure. With the structure symmetrical and your c5-bishop active toward f2, complete …O-O and …Qe7, reaching an open, equal middlegame where your harmonious pieces are at least his match.", sayShort: "Rubinstein — block the check, …Bd7" },
+  beats: [
+    { atMove: 17, say: "…Bd7 blocks the check and offers a trade, easing your position.", sayShort: "…Bd7 — block, offer trade.", arrows: [A('d7', 'b5')], highlights: [H('b5')] },
+    { atMove: 21, say: "…Qc7 repositions the queen, eyeing the c-file and the centre.", sayShort: "…Qc7 — eye the c-file.", highlights: [H('c7')] },
+    { atMove: 23, say: "…O-O tucks the king safe, your pieces ready for the middlegame.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-development', 'concept:pos-center'],
 };
 
 const N327: SublineNarration = {
   intro: { say: "Be3 — White develops the dark-squared bishop to bolster d4 against your …c5 strike in this Rubinstein. You're solid and symmetrical in feel, with knights traded on f6 and no weaknesses to defend. Play …cxd4 and …Bc5 hitting e3, or …Be7 and …O-O with …b6 and …Bb7 — contest d4 and bring your pieces to their natural, harmonious squares for full equality.", sayShort: "Rubinstein — …c5 challenges the d4-pawn" },
+  beats: [
+    { atMove: 15, say: "…Qc7 repositions the queen, eyeing the c-file and the centre.", sayShort: "…Qc7 — eye the c-file.", highlights: [H('c7')] },
+    { atMove: 17, say: "…a6 secures the queenside, preparing to expand with …b5.", sayShort: "…a6 — prep …b5.", highlights: [H('a6')] },
+    { atMove: 19, say: "…Nd5 centralises the knight on a dominant square, eyeing White's bishop.", sayShort: "…Nd5 — central knight.", highlights: [H('d5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-development', 'concept:pos-center'],
 };
 
 const N328: SublineNarration = {
   intro: { say: "Bg5 — White pins your recaptured f6-knight after you struck the center with …c5 in this Rubinstein. You're solid with a symmetrical feel and no structural weaknesses to defend. Play …Be7 to break the pin or …cxd4 first, then …b6 and …Bb7 to command the long light diagonal — once developed, challenge the d4-pawn and reach a comfortable, balanced middlegame.", sayShort: "Rubinstein — break the pin, …c5 strikes d4" },
+  beats: [
+    { atMove: 15, say: "…cxd4 opens the centre, your pieces active.", sayShort: "…cxd4 — open the centre.", highlights: [H('d4')] },
+    { atMove: 17, say: "…Be7 develops and prepares castling, breaking the pin.", sayShort: "…Be7 — develop, break the pin.", highlights: [H('e7')] },
+    { atMove: 19, say: "…Qc7 repositions the queen, eyeing the c-file and the centre.", sayShort: "…Qc7 — eye the c-file.", highlights: [H('c7')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:tac-pin', 'concept:pos-development'],
 };
 
 const N329: SublineNarration = {
   intro: { say: "Bg5 — White develops with a pin on the f6-knight now that the c5-pawn has been traded off. Unravel calmly: …O-O tucks the king away and a later …Be7 or …h6 breaks the pin. With your bishop already active on c5 and the structure symmetrical, Black has easy, equal piece play.", sayShort: "Bg5 — castle, then break the pin." },
+  beats: [
+    { atMove: 17, say: "…Bd7 develops the light bishop, your pieces coordinated.", sayShort: "…Bd7 — develop the bishop.", highlights: [H('d7')] },
+    { atMove: 19, say: "…h6 questions White's bishop, gaining the bishop pair or a tempo.", sayShort: "…h6 — question the bishop.", highlights: [H('h6')] },
+    { atMove: 21, say: "…Qc7 repositions the queen, eyeing the c-file and the centre.", sayShort: "…Qc7 — eye the c-file.", highlights: [H('c7')] },
+  ],
   sources: ['concept:tac-pin', 'concept:pos-development', 'https://en.wikipedia.org/wiki/French_Defence'],
 };
 
 const N330: SublineNarration = {
   intro: { say: "O-O — White castles, you having already struck d4 with …c5 in this Rubinstein. With knights swapped on f6 and the center fluid, you have a free, weakness-free game and clear development to …Be7, …O-O, and …b6. The d4-pawn, no longer guarded by a knight, is your standing target — coordinate rooks on c8 and d8 and press it while completing your harmonious setup.", sayShort: "Rubinstein — …c5 break, target d4" },
+  beats: [
+    { atMove: 15, say: "…cxd4 opens the centre, your pieces active.", sayShort: "…cxd4 — open the centre.", highlights: [H('d4')] },
+    { atMove: 17, say: "…Bc5 develops the bishop actively, eyeing f2.", sayShort: "…Bc5 — active bishop.", arrows: [A('c5', 'f2')], highlights: [H('f2')] },
+    { atMove: 23, say: "…e5 strikes the centre, freeing your game with active pieces.", sayShort: "…e5 — strike the centre.", highlights: [H('e5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/French_Defence', 'concept:pos-development', 'concept:pos-center'],
 };
 
 const N331: SublineNarration = {
   intro: { say: "c3 — White shores up the d4-pawn against your …c5 break in this solid Rubinstein structure. Develop naturally with …Bd6, …O-O and …Qc7, keeping the pressure trained on d4. With the position symmetrical and your pieces a touch freer, Black reaches comfortable, fully equal play.", sayShort: "c3 — develop, keep hitting d4." },
+  beats: [
+    { atMove: 15, say: "…cxd4 opens the centre, your pieces active as the tension resolves.", sayShort: "…cxd4 — open the centre.", highlights: [H('d4')] },
+    { atMove: 17, say: "…Bc5 develops the bishop actively, eyeing f2 with pressure.", sayShort: "…Bc5 — active bishop.", arrows: [A('c5', 'f2')], highlights: [H('f2')] },
+    { atMove: 19, say: "…Qc7 repositions the queen, eyeing the c-file and the centre.", sayShort: "…Qc7 — eye the c-file.", highlights: [H('c7')] },
+  ],
   sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
 };
 
