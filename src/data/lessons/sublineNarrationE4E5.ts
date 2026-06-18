@@ -1916,7 +1916,11 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
     { atMove: 12, say: "Nc3 develops behind the broad centre; with Re1, the Bc4 on f7 and your space edge, you press a lasting Italian pull while Black defends passively.", sayShort: "Nc3 — develop behind the centre.", highlights: [H('d4', KEY), H('e4', SOFT)] },
   ] },
   'italian-game::6::h6@7': IT_GP_WAIT,
-  'italian-game::0::Qf6@7': IT_GP_WAIT,
+  'italian-game::0::Qf6@7': { ...IT_GP_WAIT, intro: { say: "…Qf6 brings the queen out early to eye f2 — but it's a target, not a threat. Gain space and tempo: b4 nudges the c5-bishop back, a4 and b5 cramp the queenside, and d4 claims the centre while Black's queen sits awkwardly.", sayShort: "…Qf6 — gain space, b4 and d4." }, beats: [
+    { atMove: 7, say: "…Qf6 develops the queen early, eyeing f2 — but it's exposed. b4 gains queenside space with tempo, nudging the c5-bishop back.", sayShort: "…Qf6 — answer b4.", arrows: [A('b2', 'b4')], highlights: [H('b4', KEY)] },
+    { atMove: 8, say: "b4 hits the bishop and grabs space; a4 and b5 follow to cramp Black, and d4 claims the centre while his queen is misplaced.", sayShort: "b4 — gain space, hit the bishop.", arrows: [A('b4', 'c5')], highlights: [H('c5', ATK)] },
+    { atMove: 14, say: "d4 seizes the centre — your space on both wings squeezes Black while the early …Qf6 has cost him coordination. Castle and press the bind.", sayShort: "d4 — seize the centre, squeeze.", arrows: [A('d4', 'e5')], highlights: [H('e5', ATK)] },
+  ] },
   'italian-game::1::Qf6@7': IT_GP_WAIT,
   'italian-game::6::Qf6@7': IT_GP_WAIT,
   'italian-game::3::d6@11': IT_EVANS,
