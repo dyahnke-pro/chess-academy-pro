@@ -1131,11 +1131,11 @@ const PH_OPEN: SublineNarration = {
 // var4 — Philidor Counter-Gambit (d4 f5). Sharp, Black seizes the initiative.
 const PH_COUNTERGAMBIT: SublineNarration = {
   intro: {
-    say: "…f5 — the Philidor Counter-Gambit, the fighting soul of the opening: instead of sitting cramped, you strike back at White's centre at once. It's sharp and double-edged — the …fxe4 and …e4 ideas grab space and wrest the game on dynamics, not structure. Play it with energy: seize the initiative, open lines for your pieces, and make White prove he can hold the centre under fire.",
-    sayShort: '…f5 — counter-gambit: seize the initiative.',
+    say: "…f5 — the Philidor Counter-Gambit, the sharpest and riskiest way to play the Philidor. Be clear-eyed: with accurate play White keeps a real edge, so this is a practical weapon that banks on complications and White slipping, not a sound equalizer. If you play it, play it with fire — grab space with …fxe4 and …e4, open lines, and make White prove the refutation over the board.",
+    sayShort: '…f5 — sharp, risky counter-gambit.',
   },
   beats: [
-    { atMove: 5, say: "…f5 — the counter-gambit, the fighting soul of the Philidor: you strike at the centre at once. The …fxe4 and …e4 ideas grab space and wrest the game onto dynamics — seize the initiative, open lines, make White prove he can hold.", sayShort: "…f5 — counter-strike, seize the initiative.", highlights: [H('f5', KEY), H('e4', SOFT)] },
+    { atMove: 5, say: "…f5 — the counter-gambit, sharp but objectively risky: White keeps an edge with precise play. You bank on complications — grab space with …fxe4 and …e4, open lines, and make White prove the refutation at the board.", sayShort: "…f5 — risky gambit, bank on complications.", highlights: [H('f5', KEY), H('e4', SOFT)] },
   ],
   sources: PH_INIT,
 };
