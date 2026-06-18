@@ -1121,7 +1121,82 @@ const WCATBB: SublineNarration = {
   sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
 };
 
+// WAVE2 WNIMBXF :: 1 keys
+const WNIMBXF: SublineNarration = {
+  intro: { say: "Bxf6 — White trades the pinning bishop to dent your kingside pawns, the Leningrad treatment of the Nimzo. Recapture toward the centre and you keep the Nimzo's real trumps: the bishop pair is White's, but you'll fracture his c-pawns with …Bxc3 and seize the centre with …e5 and …e4. A fighting game where the structure is yours to exploit.", sayShort: "Bxf6 — recapture …Qxf6, grab the centre" },
+  beats: [
+    { atMove: 8, say: "Bxf6 — White swaps the bishop off rather than retreat, hoping to spoil your structure. Don't mind it; recapturing with the queen keeps you active and points the lady straight down the f-file and the long diagonal.", sayShort: "Bxf6 — let him trade", highlights: [_H('f6', KEY)] },
+    { atMove: 9, say: "…Qxf6 — recapture toward the centre, eyeing d4 and the c3-knight. Your dark-squared bishop still pins c3, so White's queenside pawns are about to be wrecked by …Bxc3.", sayShort: "…Qxf6 — active, eyes d4", highlights: [_H('d4', KEY), _H('c3', KEY)] },
+    { atMove: 11, say: "…e5 — striking at d4, the freeing break. The centre cracks open in your favour while your queen and bishop are already trained on White's loosened position.", sayShort: "…e5 — strike d4, break open", arrows: [_A('e5', 'd4', ATK)], highlights: [_H('e5', KEY), _H('d4', KEY)] },
+    { atMove: 13, say: "…e4 — the pawn rolls on, clamping the centre and stealing the f3-square from White's knight. With the bishop pair offset by his shattered c-pawns and your space, you have a rich, fully equal middlegame to press.", sayShort: "…e4 — clamp, cramp the knight", highlights: [_H('e4', KEY)] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+// WAVE2 WSLNC3 :: 2 keys
+const WSLNC3: SublineNarration = {
+  intro: { say: "Nc3 — White develops aggressively and steers the Slav toward its sharpest tangle, the Botvinnik. Don't be talked out of the fight: head in with …e6, let White pin with Bg5, then grab the gambit pawn and lash back with …g5. It's the most analysed jungle in chess, and the verdict is that Black holds — bring your nerve and your preparation.", sayShort: "Nc3 — steer into the Botvinnik" },
+  beats: [
+    { atMove: 6, say: "Nc3 develops with bite and invites the razor lines. You go straight in with …e6, refusing the quiet game and reaching for the Botvinnik's double-edged riches.", sayShort: "Nc3 — head into the sharp lines", highlights: [_H('c3', KEY)] },
+    { atMove: 8, say: "Bg5 pins your f6-knight to the queen. Put the question to it with …h6; whichever way the bishop turns, you have gained a tempo for the coming counterpunch.", sayShort: "Bg5 — pins f6; question it", arrows: [_A('g5', 'd8', ATK)], highlights: [_H('f6', KEY)] },
+    { atMove: 11, say: "…dxc4 — you bank the gambit pawn and commit to the brawl. White gets a broad centre and quick pieces; your job is to hold that extra pawn behind a wall of …b5 and queenside pawns.", sayShort: "…dxc4 — bank the gambit pawn", highlights: [_H('c4', KEY)] },
+    { atMove: 12, say: "e4 — White claims the centre and prepares to roll at your king. Now or never: you must strike back before the pawns and pieces gather force.", sayShort: "e4 — his centre; counter now", highlights: [_H('e4', KEY)] },
+    { atMove: 13, say: "…g5 — the thunderbolt, smashing the h4-bishop and grabbing kingside space in one stroke. You've taken material and punched back before White could consolidate; the board erupts, and theory says you hold.", sayShort: "…g5 — smash the h4-bishop", arrows: [_A('g5', 'h4', ATK)], highlights: [_H('g5', KEY), _H('h4', KEY)] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+// WAVE2 WSLMOS :: 1 keys
+const WSLMOS: SublineNarration = {
+  intro: { say: "Bxf6 — the Moscow Slav, White trading on f6 to dent your structure rather than enter the Botvinnik. Recapture with the queen and you come out comfortable: the bishop pair is White's, but you get the half-open g-file pointing at his king, easy development, and the freeing …c5 break. A calm, sound game where you press.", sayShort: "Bxf6 — …Qxf6, then break …c5" },
+  beats: [
+    { atMove: 10, say: "Bxf6 — White swaps off the bishop to spoil your kingside pawns. No matter; recapturing with the queen keeps you active and opens the g-file toward his king.", sayShort: "Bxf6 — let him trade", highlights: [_H('f6', KEY)] },
+    { atMove: 11, say: "…Qxf6 — the queen recaptures, eyeing the long diagonal and the half-open g-file. You have easy development and no weaknesses to nurse; now prepare the central break.", sayShort: "…Qxf6 — active queen, open g-file", highlights: [_H('f6', KEY)] },
+    { atMove: 13, say: "…c5 — the freeing break, striking at d4. The centre opens, your pieces breathe, and any pull White had from the bishop pair dissolves into a balanced game you can fight for.", sayShort: "…c5 — strike d4, free up", arrows: [_A('c5', 'd4', ATK)], highlights: [_H('c5', KEY), _H('d4', KEY)] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+// WAVE2 WBENB6 :: 6 keys
+const WBENB6: SublineNarration = {
+  intro: { say: "b6 — White declines the Benko, pushing the pawn past rather than opening the files. That suits you fine: the b6-pawn is now a weakling deep in your camp, a target you'll round up, while you complete the Benko setup with …d6, …g6 and …Bg7. You keep the dark-squared pressure and the half-open files for free.", sayShort: "b6 — declined; round up the weak pawn" },
+  beats: [
+    { atMove: 8, say: "b6 declines the gambit, shoving the pawn past instead of grabbing on a6. Fine by you — that b6-pawn is overextended and cut off, a long-term target while you develop in comfort.", sayShort: "b6 — the pawn is a target", highlights: [_H('b6', KEY)] },
+    { atMove: 9, say: "…d6 — solidify the centre and prepare the fianchetto. You're building the standard Benko shell, only now without giving up a pawn at all.", sayShort: "…d6 — solidify, prepare …g6", highlights: [_H('d6', KEY)] },
+    { atMove: 11, say: "…Nbd7 — the knight develops eyeing b6 and e5, ready to round up the stray pawn or reroute to the kingside. Your pieces flow to natural squares while White nurses his weakling.", sayShort: "…Nbd7 — eye the b6-pawn", arrows: [_A('d7', 'b6', ATK)], highlights: [_H('b6', KEY)] },
+    { atMove: 13, say: "…c4 — clamp the queenside, fixing White's structure and grabbing space. The position takes on a comfortable Benoni shape where your pressure on the half-open files and the weak b6-pawn gives the easier game.", sayShort: "…c4 — clamp the queenside", highlights: [_H('c4', KEY)] },
+  ],
+  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
+};
+// WAVE2 WCATA6 :: 2 keys
+const WCATA6: SublineNarration = {
+  intro: { say: "…a6 — Black grabs the c4-pawn and prepares …b5 to hold it, the most testing Open Catalan try. Don't chase the pawn directly; your g2-bishop already rakes the long diagonal at b7, and you regain c4 at leisure with Qc2, Ne5 or a4 cracking the …b5 chain. Castle and keep the bind — Black's queenside stays awkward all game.", sayShort: "…a6 — castle, regain c4 at leisure" },
+  beats: [
+    { atMove: 9, say: "…a6 holds the extra c4-pawn and readies …b5 to cling to it. Let him; the pawn is a loan, and chasing it now only helps Black develop. Your long-diagonal bishop is the real asset.", sayShort: "…a6 — he clings to c4", highlights: [_H('c4', KEY)] },
+    { atMove: 10, say: "O-O — finish development and bide your time. The c4-pawn comes back with Qc2 or a4 hitting …b5, and meanwhile the g2-bishop chokes the b7-square while Black's queenside scrambles to untangle.", sayShort: "O-O — bind, then regain c4", arrows: [_A('g2', 'b7', ATK)], highlights: [_H('c4', KEY)] },
+  ],
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+// WAVE2 WGRUC5 :: 2 keys
+const WGRUC5: SublineNarration = {
+  intro: { say: "Nf3 — White develops in the Exchange Grünfeld, bracing the d4-centre before you can hit it. Strike anyway: …c5 hammers the base of the broad pawn front, and with your g7-bishop already raking d4 down the long diagonal, the centre is under fire from two directions. Demolishing that centre is the whole point of the Grünfeld.", sayShort: "Nf3 — answer …c5, hammer d4" },
+  beats: [
+    { atMove: 12, say: "Nf3 develops and props the d4-pawn, the keystone of White's centre. He's daring you to leave it alone — so don't. The lever is ready.", sayShort: "Nf3 — props the d4-keystone", highlights: [_H('d4', KEY)] },
+    { atMove: 13, say: "…c5 — the hammer falls on d4. Joined by the g7-bishop bearing down the long diagonal, the pawn attacks the base of White's centre; if those pawns crack, his whole game collapses with them.", sayShort: "…c5 — hammer d4's base", arrows: [_A('c5', 'd4', ATK), _A('g7', 'd4', ATK)], highlights: [_H('c5', KEY), _H('d4', KEY)] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
+};
+// WAVE2 WNIME3 :: 5 keys
+const WNIME3: SublineNarration = {
+  intro: { say: "e3 — the Rubinstein, White's most flexible Nimzo. Your bishop already pins the c3-knight, the guardian of e4, so the bargain is yours to set: castle first, then either take on c3 to saddle White with doubled pawns and grind them, or hold the pin and strike with …c5 and …d5. Either road is a rich, equal fight on the light squares.", sayShort: "e3 Rubinstein — castle, then …c5/…d5" },
+  beats: [
+    { atMove: 6, say: "e3 — solid and non-committal, the Rubinstein. White keeps his options open, so you do too: nothing premature, just keep the pin biting on c3 and the central tension humming.", sayShort: "e3 — flexible; keep the pin", highlights: [_H('c3', KEY)] },
+    { atMove: 7, say: "…O-O — tuck the king away and prepare to choose your plan. The pin on c3 still cramps White's e4-break; now …c5 and …d5 (or …Bxc3 wrecking his pawns) come on your terms.", sayShort: "…O-O — castle, then strike centre", highlights: [_H('c3', KEY)] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
+  'nimzo-indian::3::Bxf6@8': WNIMBXF,
+  'slav-defence::3::Nc3@6': WSLNC3,
+  'slav-defence::7::Nc3@6': WSLNC3,
   // ── queens-gambit ──
   'queens-gambit::0::h6@19': C0,
   'queens-gambit::0::c6@5': C0,
@@ -1401,7 +1476,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'slav-defence::6::e3@8': C17,
   'slav-defence::6::a4@12': C16,
   'slav-defence::6::e3@12': C17,
-  'slav-defence::6::Bxf6@10': C17,
+  'slav-defence::6::Bxf6@10': WSLMOS,
   'slav-defence::6::Qc2@6': C17,
   'slav-defence::6::cxd5@6': C18,
   'slav-defence::6::Qb3@6': C17,
@@ -1481,7 +1556,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'semi-slav::6::g3@6': C24,
   'semi-slav::6::Be2@10': C24,
   // ── nimzo-indian ──
-  'nimzo-indian::0::e3@6': C26,
+  'nimzo-indian::0::e3@6': WNIME3,
   'nimzo-indian::0::g3@4': C27,
   'nimzo-indian::0::Bg5@12': C28,
   'nimzo-indian::0::bxc3@10': C28,
@@ -1509,7 +1584,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'nimzo-indian::2::a3@6': C26,
   'nimzo-indian::2::Ne2@10': C30,
   'nimzo-indian::3::Nf3@4': C26,
-  'nimzo-indian::3::e3@6': C26,
+  'nimzo-indian::3::e3@6': WNIME3,
   'nimzo-indian::3::g3@4': C27,
   'nimzo-indian::3::Qc2@6': C28,
   'nimzo-indian::3::Bd2@8': C31,
@@ -1517,7 +1592,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'nimzo-indian::3::Nf3@6': C26,
   'nimzo-indian::3::g3@6': C27,
   'nimzo-indian::3::a3@6': C26,
-  'nimzo-indian::4::e3@6': C26,
+  'nimzo-indian::4::e3@6': WNIME3,
   'nimzo-indian::4::g3@4': C27,
   'nimzo-indian::4::Qc2@6': C28,
   'nimzo-indian::4::f3@6': C29,
@@ -1526,7 +1601,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'nimzo-indian::4::a3@6': C26,
   'nimzo-indian::4::e3@8': C26,
   'nimzo-indian::4::Bd2@16': C27,
-  'nimzo-indian::5::e3@6': C26,
+  'nimzo-indian::5::e3@6': WNIME3,
   'nimzo-indian::5::g3@4': C27,
   'nimzo-indian::5::Qc2@6': C28,
   'nimzo-indian::5::f3@6': C29,
@@ -1537,7 +1612,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'nimzo-indian::5::O-O@16': C30,
   'nimzo-indian::6::Bg5@8': C29,
   'nimzo-indian::6::e3@8': C29,
-  'nimzo-indian::6::e3@6': C26,
+  'nimzo-indian::6::e3@6': WNIME3,
   'nimzo-indian::6::g3@4': C27,
   'nimzo-indian::6::Qc2@6': C28,
   'nimzo-indian::6::cxd5@8': C29,
@@ -1731,7 +1806,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'grunfeld-defence::4::g3@4': C47,
   'grunfeld-defence::4::Nf3@6': C42,
   'grunfeld-defence::4::Nf3@4': C42,
-  'grunfeld-defence::4::Nf3@12': C43,
+  'grunfeld-defence::4::Nf3@12': WGRUC5,
   'grunfeld-defence::4::Qxf1@26': C44,
   'grunfeld-defence::4::f3@4': C43,
   'grunfeld-defence::4::d5@18': C44,
@@ -1759,7 +1834,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'grunfeld-defence::7::Nf3@6': C42,
   'grunfeld-defence::7::Nf3@4': C42,
   'grunfeld-defence::7::O-O@16': C44,
-  'grunfeld-defence::7::Nf3@12': C43,
+  'grunfeld-defence::7::Nf3@12': WGRUC5,
   'grunfeld-defence::7::f3@4': C43,
   'grunfeld-defence::7::d5@16': C43,
   'grunfeld-defence::7::Bf4@6': C45,
@@ -1830,7 +1905,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'benoni-defence::6::Bg5@12': C48,
   // ── benko-gambit ──
   'benko-gambit::0::Nf3@4': C54,
-  'benko-gambit::0::b6@8': C55,
+  'benko-gambit::0::b6@8': WBENB6,
   'benko-gambit::0::Nf3@6': C55,
   'benko-gambit::0::e3@8': C56,
   'benko-gambit::0::Nf3@12': C56,
@@ -1840,7 +1915,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'benko-gambit::0::Nf3@16': C58,
   'benko-gambit::0::Qc2@6': C56,
   'benko-gambit::1::Nf3@4': C54,
-  'benko-gambit::1::b6@8': C55,
+  'benko-gambit::1::b6@8': WBENB6,
   'benko-gambit::1::Nf3@6': C55,
   'benko-gambit::1::e3@8': C56,
   'benko-gambit::1::e3@4': C56,
@@ -1862,7 +1937,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'benko-gambit::3::bxa6@8': DBENKO,
   'benko-gambit::3::e5@12': C54,
   'benko-gambit::3::Nf3@4': C54,
-  'benko-gambit::3::b6@8': C55,
+  'benko-gambit::3::b6@8': WBENB6,
   'benko-gambit::3::Nf3@6': C55,
   'benko-gambit::3::e3@8': C56,
   'benko-gambit::3::e5@16': C54,
@@ -1871,7 +1946,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'benko-gambit::3::Qc2@6': C56,
   'benko-gambit::4::bxa6@8': DBENKO,
   'benko-gambit::4::Nf3@4': C54,
-  'benko-gambit::4::b6@8': C55,
+  'benko-gambit::4::b6@8': WBENB6,
   'benko-gambit::4::Nf3@6': C55,
   'benko-gambit::4::e3@4': C56,
   'benko-gambit::4::f3@8': C54,
@@ -1880,7 +1955,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'benko-gambit::4::Nc3@8': C54,
   'benko-gambit::4::a4@6': C56,
   'benko-gambit::5::Nf3@4': C54,
-  'benko-gambit::5::b6@8': C55,
+  'benko-gambit::5::b6@8': WBENB6,
   'benko-gambit::5::Nf3@6': C55,
   'benko-gambit::5::e3@8': C56,
   'benko-gambit::5::e3@4': C56,
@@ -1891,7 +1966,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'benko-gambit::5::a4@22': C58,
   'benko-gambit::6::Nge2@18': C58,
   'benko-gambit::6::Nf3@4': C54,
-  'benko-gambit::6::b6@8': C55,
+  'benko-gambit::6::b6@8': WBENB6,
   'benko-gambit::6::Nf3@6': C55,
   'benko-gambit::6::e3@8': C56,
   'benko-gambit::6::e3@4': C56,
@@ -2035,7 +2110,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'dutch-defence::6::Ng5@18': C64,
   // ── catalan-opening ──
   'catalan-opening::0::c5@5': C69,
-  'catalan-opening::0::a6@9': C69,
+  'catalan-opening::0::a6@9': WCATA6,
   'catalan-opening::0::Be7@7': C70,
   'catalan-opening::0::Nbd7@19': C69,
   'catalan-opening::0::Bb4+@7': WCATBB,
@@ -2090,7 +2165,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'catalan-opening::5::Bb4+@7': WCATBB,
   'catalan-opening::5::c5@23': C70,
   'catalan-opening::6::c5@5': C69,
-  'catalan-opening::6::a6@9': C69,
+  'catalan-opening::6::a6@9': WCATA6,
   'catalan-opening::6::Be7@7': C70,
   'catalan-opening::6::Bb4+@7': WCATBB,
   'catalan-opening::6::Nc6@9': C69,
