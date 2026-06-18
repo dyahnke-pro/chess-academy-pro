@@ -1,3 +1,5 @@
+import { Capacitor } from '@capacitor/core';
+
 type ResultHandler = (text: string) => void;
 type InterimHandler = (text: string) => void;
 type EndHandler = () => void;
@@ -190,7 +192,25 @@ class VoiceInputService {
    *  ask + warm up the audio pipeline once. */
   private micPreWarmed = false;
 
+  /** True while a NATIVE (Capacitor @capacitor-community/speech-recognition)
+   *  session is active. The native path is used inside the iOS/Android app
+   *  (WKWebView), where the browser Web Speech API is blocked by Apple
+   *  (David 2026-06-18: "works on vercel, not the iOS app"). */
+  private nativeListening = false;
+  /** Latest partial transcript from the native recognizer within the current
+   *  utterance — dispatched as final when the utterance stops. */
+  private nativeLatest = '';
+
+  /** Running inside the native app shell (Capacitor WKWebView), where the
+   *  native speech plugin is available and Web Speech is not. */
+  private isNativePlatform(): boolean {
+    try { return Capacitor.isNativePlatform(); } catch { return false; }
+  }
+
   isSupported(): boolean {
+    // Native app: the @capacitor-community/speech-recognition plugin provides
+    // recognition even though the WKWebView has no Web Speech API.
+    if (this.isNativePlatform()) return true;
     return typeof window !== 'undefined' && (
       'SpeechRecognition' in window ||
       'webkitSpeechRecognition' in window
@@ -293,13 +313,7 @@ class VoiceInputService {
       this.audit('mic-start-failed', 'Web Speech recognition unsupported on this platform', caps);
       return false;
     }
-    if (this.listening) return true;
-
-    const SpeechRecognitionClass = this.getSpeechRecognitionClass();
-    if (SpeechRecognitionClass == null) {
-      this.audit('mic-start-failed', 'SpeechRecognition constructor missing despite isSupported', caps);
-      return false;
-    }
+    if (this.listening || this.nativeListening) return true;
 
     this.interimHandler = options.onInterim ?? null;
     this.endHandler = options.onEnd ?? null;
@@ -308,6 +322,22 @@ class VoiceInputService {
     this.speechStartFired = false;
     this.userStopped = false;
     this.restartAttempts = 0;
+
+    // Native app (iOS/Android WKWebView): use the Capacitor speech plugin —
+    // the browser Web Speech API is unavailable there. The flow is async; we
+    // start it and optimistically report success (errors surface via
+    // errorHandler), since startListening's contract is synchronous.
+    if (this.isNativePlatform()) {
+      this.nativeListening = true;
+      void this.startNative();
+      return true;
+    }
+
+    const SpeechRecognitionClass = this.getSpeechRecognitionClass();
+    if (SpeechRecognitionClass == null) {
+      this.audit('mic-start-failed', 'SpeechRecognition constructor missing despite isSupported', caps);
+      return false;
+    }
 
     // Listen for the browser/PWA telling us the app is leaving the
     // foreground. `visibilitychange` fires on tab switch or window
@@ -327,6 +357,13 @@ class VoiceInputService {
 
   stopListening(): void {
     this.userStopped = true;
+    if (this.nativeListening) {
+      this.nativeListening = false;
+      this.nativeLatest = '';
+      void this.stopNative();
+      this.endHandler?.();
+      return;
+    }
     if (this.recognition && this.listening) {
       try {
         this.recognition.stop();
@@ -336,6 +373,69 @@ class VoiceInputService {
     }
     this.listening = false;
     this.detachLifecycleListeners();
+  }
+
+  /** Native recognition (Capacitor) — used inside the app shell where Web
+   *  Speech is unavailable. Streams partial results; the latest partial is the
+   *  utterance's final transcript when listening stops. iOS uses SFSpeechRecognizer
+   *  + the NSMicrophone/NSSpeechRecognition usage strings injected at build. */
+  private async startNative(): Promise<void> {
+    try {
+      const { SpeechRecognition } = await import('@capacitor-community/speech-recognition');
+      const avail = await SpeechRecognition.available().catch(() => ({ available: false }));
+      if (!avail.available) {
+        this.nativeListening = false;
+        this.audit('mic-start-failed', 'native speech recognition unavailable', this.capabilitySnapshot());
+        this.errorHandler?.('unavailable');
+        this.endHandler?.();
+        return;
+      }
+      const perm = await SpeechRecognition.requestPermissions().catch(() => ({ speechRecognition: 'denied' as const }));
+      if (perm.speechRecognition !== 'granted') {
+        this.nativeListening = false;
+        this.audit('mic-start-failed', `native permission ${perm.speechRecognition}`, this.capabilitySnapshot());
+        this.errorHandler?.('permission-denied');
+        this.endHandler?.();
+        return;
+      }
+      await SpeechRecognition.removeAllListeners();
+      await SpeechRecognition.addListener('partialResults', (data: { matches: string[] }) => {
+        const m = data.matches?.[0]?.trim();
+        if (!m) return;
+        this.nativeLatest = m;
+        if (!this.speechStartFired) { this.speechStartFired = true; this.speechStartHandler?.(); }
+        this.interimHandler?.(m);
+      });
+      await SpeechRecognition.addListener('listeningState', (data: { status: 'started' | 'stopped' }) => {
+        if (data.status !== 'stopped') return;
+        // The recognizer stopped (user stop, silence timeout, or end of
+        // speech). Dispatch the latest partial as the final transcript and end
+        // the session — no auto-restart loop (the user taps again to keep
+        // talking). Predictable + loop-safe on a path we can't observe here.
+        if (!this.nativeListening && !this.nativeLatest) return;
+        const final = this.nativeLatest.trim();
+        this.nativeLatest = '';
+        this.speechStartFired = false;
+        this.nativeListening = false;
+        if (final) this.dispatchFinal(final);
+        this.endHandler?.();
+      });
+      await SpeechRecognition.start({ language: 'en-US', maxResults: 2, partialResults: true, popup: false });
+      this.audit('mic-started', 'native speech recognition started');
+    } catch (e) {
+      this.nativeListening = false;
+      this.audit('mic-start-failed', `native start threw: ${(e as Error)?.message ?? e}`, this.capabilitySnapshot());
+      this.errorHandler?.('unavailable');
+      this.endHandler?.();
+    }
+  }
+
+  private async stopNative(): Promise<void> {
+    try {
+      const { SpeechRecognition } = await import('@capacitor-community/speech-recognition');
+      await SpeechRecognition.stop().catch(() => {});
+      await SpeechRecognition.removeAllListeners().catch(() => {});
+    } catch { /* plugin unavailable — nothing to stop */ }
   }
 
   /**
@@ -356,7 +456,7 @@ class VoiceInputService {
   }
 
   isListening(): boolean {
-    return this.listening;
+    return this.listening || this.nativeListening;
   }
 
   private getSpeechRecognitionClass(): SpeechRecognitionConstructor | null {

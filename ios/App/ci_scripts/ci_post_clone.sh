@@ -74,6 +74,18 @@ PLIST="ios/App/App/Info.plist"
   || /usr/libexec/PlistBuddy -c "Set :ITSAppUsesNonExemptEncryption false" "$PLIST" 2>/dev/null \
   || true
 
+# Mic + speech-recognition usage strings — REQUIRED or the app crashes the
+# instant @capacitor-community/speech-recognition requests permission (voice-to-
+# coach in the native app — David 2026-06-18 "mic doesn't work in the iOS app").
+# `cap add` regenerates Info.plist every build, so inject here (not in a
+# committed plist). Add-then-Set so it's idempotent across re-runs.
+MIC_MSG="Chess Academy uses the microphone so you can talk to your coach by voice."
+SPEECH_MSG="Chess Academy uses speech recognition to turn what you say into messages for your coach."
+/usr/libexec/PlistBuddy -c "Add :NSMicrophoneUsageDescription string \"$MIC_MSG\"" "$PLIST" 2>/dev/null \
+  || /usr/libexec/PlistBuddy -c "Set :NSMicrophoneUsageDescription \"$MIC_MSG\"" "$PLIST" 2>/dev/null || true
+/usr/libexec/PlistBuddy -c "Add :NSSpeechRecognitionUsageDescription string \"$SPEECH_MSG\"" "$PLIST" 2>/dev/null \
+  || /usr/libexec/PlistBuddy -c "Set :NSSpeechRecognitionUsageDescription \"$SPEECH_MSG\"" "$PLIST" 2>/dev/null || true
+
 # --- Swift Package resolution -------------------------------------------------
 # Xcode Cloud archives with "only use versions from Package.resolved" forced ON
 # globally (IDEPackageOnlyUseVersionsFromResolvedFile), so the Archive step
