@@ -51,35 +51,11 @@ const C15: SublineNarration = {
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
 };
 // slav-defence :: dxc4_a4
-const C16: SublineNarration = {
-  intro: { say: "You've taken on c4 and White recaptures the central tension with a4, the main-line Slav. The point of …dxc4 was to free …Bf5 first; now you simply complete development. White's a4 weakens b4 and the queenside dark squares — a square your knight or bishop will be glad to use later. Equal, rich, and famously solid.", sayShort: "…dxc4 then …Bf5 — a4 weakens b4." },
-  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
-};
 // slav-defence :: quiet_e3
-const C17: SublineNarration = {
-  intro: { say: "White plays the quiet e3, locking his OWN light bishop behind the pawn chain. That's a gift — your …Bf5 steps outside and you simply own the better bishop for the whole game. Develop naturally, keep the structure flexible, and look to break with …c5 or …e5 once your pieces are home.", sayShort: "e3 — your bishop is the good one." },
-  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
-};
 // slav-defence :: exchange
-const C18: SublineNarration = {
-  intro: { say: "The Exchange Slav — White released with cxd5 and signals for a quiet, symmetrical game. The drawish reputation is a trap for the lazy: develop the bishop actively to f5, contest the half-open c-file with your rooks, and out-coordinate him. Symmetry favours the better-placed army, and that can be yours.", sayShort: "Exchange Slav — …Bf5, fight the c-file." },
-  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
-};
 // slav-defence :: nh4
-const C19: SublineNarration = {
-  intro: { say: "White's Nh4 hunts your active f5-bishop, the Slav's pride. Don't let it be chased for nothing: meet it with …Bg6, and if Nxg6 hxg6 you get the half-open h-file pointing at White's king plus a strengthened centre. The trade of your 'good' bishop comes with real compensation in open lines and attacking chances.", sayShort: "Nh4 — …Bg6; trade opens the h-file." },
-  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
-};
 // slav-defence :: sharp_e4
-const C20: SublineNarration = {
-  intro: { say: "White lunges with e4 in the sharp …dxc4 Slav, sacrificing structure for the broad centre and rapid development. Hold your nerve and your extra pawn: …b5 props the booty, …e6 and …a6 build the queenside wall, and the centre, for all its menace, can be hit with …c5 in due course. Theory-heavy, fully sound for Black.", sayShort: "Sharp e4 — hold the pawn with …b5." },
-  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
-};
 // slav-defence :: main_bf5
-const C21: SublineNarration = {
-  intro: { say: "The pure Slav — and your trump is already on the board: the light-squared bishop gets out to f5 OUTSIDE the pawn chain before …e6 ever shuts it in. That solves the one problem every …e6 defence struggles with. Develop behind the bishop, hold the …dxc4 with …b5 if White lets you, and you reach a sound, comfortable middlegame with the good bishop.", sayShort: "Slav — get …Bf5 out, then settle." },
-  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
-};
 // semi-slav :: botvinnik
 const C22: SublineNarration = {
   intro: { say: "White pins with Bg5 and you can plunge into the Botvinnik — …dxc4 and …b5, grabbing the pawn and lashing out with …g5 to smash the h4-bishop. It is the sharpest forest in chess: both kings get hunted, every move is theory, and the verdict is that Black holds. Know the line and you wield a genuine weapon.", sayShort: "Bg5 — the Botvinnik: …dxc4, …b5, …g5." },
@@ -674,13 +650,6 @@ const C158: SublineNarration = {
 };
 
 // DEEP DSLAV :: slav-defence::4::a4@8
-const DSLAV: SublineNarration = {
-  intro: { say: "Look what White's a4 just did — nothing for his development, but it does fix the queenside. So this is your moment: the whole reason you grabbed on c4 first was to let your light-squared bishop breathe, and now you free it. Get that bishop out before …e6 ever locks it away, and your worst piece becomes your best.", sayShort: "Main Slav — free the bishop now." },
-  beats: [
-    { atMove: 9, say: "There it is — the bishop steps out to f5, OUTSIDE the pawn chain, exactly where it can never get trapped. Follow the arrow: it rakes the diagonal toward c2, right next to White's king. And remember, his a4 handed you the b4-square to use later. You're already the more comfortable side.", sayShort: "…Bf5 — the good bishop, free.", arrows: [_A('f5', 'b1', ATK)], highlights: [_H('f5', KEY)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
-};
 // DEEP DSSL :: semi-slav::4::Bh4@10
 const DSSL: SublineNarration = {
   intro: { say: "White pins with Bg5 and after your …h6 drops back to h4 — now you get to be brave. The sharpest Semi-Slav there is, the Botvinnik jungle, and the plan is simple to say and scary to play: grab the pawn, then hit back hard before he can settle. Trust your preparation here; theory says you're fine.", sayShort: "Sharp Semi-Slav — grab, then …g5." },
@@ -954,27 +923,7 @@ const WNIMBXF: SublineNarration = {
   sources: ['concept:pos-bishop-pair', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
 };
 // WAVE2 WSLNC3 :: 2 keys
-const WSLNC3: SublineNarration = {
-  intro: { say: "Nc3 — White develops aggressively and steers the Slav toward its sharpest tangle, the Botvinnik. Don't be talked out of the fight: head in with …e6, let White pin with Bg5, then grab the gambit pawn and lash back with …g5. It's the most analysed jungle in chess, and the verdict is that Black holds — bring your nerve and your preparation.", sayShort: "Nc3 — steer into the Botvinnik" },
-  beats: [
-    { atMove: 6, say: "Nc3 develops with bite and invites the razor lines. You go straight in with …e6, refusing the quiet game and reaching for the Botvinnik's double-edged riches.", sayShort: "Nc3 — head into the sharp lines", highlights: [_H('c3', KEY)] },
-    { atMove: 8, say: "Bg5 pins your f6-knight to the queen. Put the question to it with …h6; whichever way the bishop turns, you have gained a tempo for the coming counterpunch.", sayShort: "Bg5 — pins f6; question it", arrows: [_A('g5', 'd8', ATK)], highlights: [_H('f6', KEY)] },
-    { atMove: 11, say: "…dxc4 — you bank the gambit pawn and commit to the brawl. White gets a broad centre and quick pieces; your job is to hold that extra pawn behind a wall of …b5 and queenside pawns.", sayShort: "…dxc4 — bank the gambit pawn", highlights: [_H('c4', KEY)] },
-    { atMove: 12, say: "e4 — White claims the centre and prepares to roll at your king. Now or never: you must strike back before the pawns and pieces gather force.", sayShort: "e4 — his centre; counter now", highlights: [_H('e4', KEY)] },
-    { atMove: 13, say: "…g5 — the thunderbolt, smashing the h4-bishop and grabbing kingside space in one stroke. You've taken material and punched back before White could consolidate; the board erupts, and theory says you hold.", sayShort: "…g5 — smash the h4-bishop", arrows: [_A('g5', 'h4', ATK)], highlights: [_H('g5', KEY), _H('h4', KEY)] },
-  ],
-  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Slav_Defense'],
-};
 // WAVE2 WSLMOS :: 1 keys
-const WSLMOS: SublineNarration = {
-  intro: { say: "Bxf6 — the Moscow Slav, White trading on f6 to dent your structure rather than enter the Botvinnik. Recapture with the queen and you come out comfortable: the bishop pair is White's, but you get the half-open g-file pointing at his king, easy development, and the freeing …c5 break. A calm, sound game where you press.", sayShort: "Bxf6 — …Qxf6, then break …c5" },
-  beats: [
-    { atMove: 10, say: "Bxf6 — White swaps off the bishop to spoil your kingside pawns. No matter; recapturing with the queen keeps you active and opens the g-file toward his king.", sayShort: "Bxf6 — let him trade", highlights: [_H('f6', KEY)] },
-    { atMove: 11, say: "…Qxf6 — the queen recaptures, eyeing the long diagonal and the half-open g-file. You have easy development and no weaknesses to nurse; now prepare the central break.", sayShort: "…Qxf6 — active queen, open g-file", highlights: [_H('f6', KEY)] },
-    { atMove: 13, say: "…c5 — the freeing break, striking at d4. The centre opens, your pieces breathe, and any pull White had from the bishop pair dissolves into a balanced game you can fight for.", sayShort: "…c5 — strike d4, free up", arrows: [_A('c5', 'd4', ATK)], highlights: [_H('c5', KEY), _H('d4', KEY)] },
-  ],
-  sources: ['concept:pos-bishop-pair', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
-};
 // WAVE2 WBENB6 :: 6 keys
 const WBENB6: SublineNarration = {
   intro: { say: "b6 — White declines the Benko, pushing the pawn past rather than opening the files. That suits you fine: the b6-pawn is now a weakling deep in your camp, a target you'll round up, while you complete the Benko setup with …d6, …g6 and …Bg7. You keep the dark-squared pressure and the half-open files for free.", sayShort: "b6 — declined; round up the weak pawn" },
@@ -1307,15 +1256,6 @@ const WKIAB5: SublineNarration = {
   sources: ['concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
 };
 // WAVE WSLAVG6 :: 1 keys
-const WSLAVG6: SublineNarration = {
-  intro: { say: "Be2 — White develops quietly in the Schlechter Slav, where you've fianchettoed with …g6. Castle, then trade White's active f3-knight with …Bg4 and …Bxf3 before you commit the centre, and grab the pawn with …dxc4 once the bishop is gone. You reach a sound, harmonious game where your fianchettoed bishop has no rival.", sayShort: "Be2 — castle, trade with …Bg4" },
-  beats: [
-    { atMove: 10, say: "Be2 — modest development; White isn't trying to refute you, so build your harmonious Schlechter setup at ease.", sayShort: "Be2 — quiet development", highlights: [_H('e2', KEY)] },
-    { atMove: 13, say: "…Bg4 — pin and pressure the f3-knight, White's most active piece. Trading it (follow the arrow) eases any pressure on your centre and frees you to grab on c4.", sayShort: "…Bg4 — pressure the f3-knight", arrows: [_A('g4', 'f3', ATK)], highlights: [_H('f3', KEY)] },
-    { atMove: 15, say: "…Bxf3 — trade off the knight, and now …dxc4 wins a pawn or frees the game on your terms. Your g7-bishop reigns on the long diagonal with no opposite number.", sayShort: "…Bxf3 — trade, then …dxc4", highlights: [_H('f3', KEY)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Slav_Defense'],
-};
 // WAVE WQGAGAR :: 1 keys
 const WQGAGAR: SublineNarration = {
   intro: { say: "O-O — White castles in this QGA where you've solved your light bishop early with …Bg4 and …Bh5. Now develop actively: …Bb4 pins the c3-knight to fight for the centre, complete development, and free the game with the …c5 break. With your problem piece already outside the chain, you reach an easy, comfortable middlegame.", sayShort: "O-O — …Bb4 pin, then …c5" },
@@ -5950,7 +5890,803 @@ const QD79: SublineNarration = {
   sources: ['concept:pawn-isolated', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
 };
 
+const SL01: SublineNarration = {
+  intro: { say: "You choose e3. After …Bf5 you hunt the bishop with Nh4, fix it with f3, develop Bd2 to regain the pawn, then trade on g6 to damage Black's kingside pawns.", sayShort: "e3 — Nh4, Bd2, Bxc4, Nxg6" },
+  beats: [
+    { atMove: 10, say: "Nh4 — hunting the f5-bishop, the key Slav idea: trade off Black's good bishop.", sayShort: "Nh4 — hunt the bishop", arrows: [_A('h4', 'f5')] },
+    { atMove: 14, say: "Bd2 — developing and preparing to regain the c4-pawn.", sayShort: "Bd2 — prepare to regain c4", highlights: [_H('d2')] },
+    { atMove: 16, say: "Bxc4 — regaining the pawn, the bishop active.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 20, say: "Nxg6 — trading to damage Black's kingside pawns, a lasting structural edge.", sayShort: "Nxg6 — damage the kingside", highlights: [_H('g6')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL02: SublineNarration = {
+  intro: { say: "You centralise Qc2. You press b7 with Qb3, hunt the f5-bishop with g4, trade to win the bishop pair, then fianchetto Bg2 raking the long diagonal.", sayShort: "Qc2 — Qb3, g4, Nxe4, Bg2" },
+  beats: [
+    { atMove: 10, say: "Qb3 — pressing b7 and offering the queen trade.", sayShort: "Qb3 — pressure b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 14, say: "g4 — hunting the f5-bishop with a kingside expansion.", sayShort: "g4 — hunt the bishop", arrows: [_A('g4', 'f5')] },
+    { atMove: 16, say: "Nxe4 — trading, gaining the bishop pair.", sayShort: "Nxe4 — win the bishop pair", highlights: [_H('e4')] },
+    { atMove: 18, say: "Bg2 — fianchettoing to rake the long diagonal at d5 and b7.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL03: SublineNarration = {
+  intro: { say: "You play the Exchange Slav with cxd5. You develop Bf4, aim the bishop at h7 from d3, take the c-file with Rc1, then pressure the queenside with Qa4.", sayShort: "cxd5 — Bf4, Bd3, Rc1, Qa4" },
+  beats: [
+    { atMove: 8, say: "Bf4 — developing the bishop in the Exchange, eyeing c7.", sayShort: "Bf4 — eye c7", arrows: [_A('f4', 'c7')] },
+    { atMove: 16, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 18, say: "Rc1 — the rook takes the c-file, the Exchange-Slav pressure.", sayShort: "Rc1 — claim the c-file", arrows: [_A('c1', 'c8')] },
+    { atMove: 22, say: "Qa4 — pressing the queenside, the symmetric Exchange edge.", sayShort: "Qa4 — press the queenside", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL04: SublineNarration = {
+  intro: { say: "You choose Qb3. After …dxc4 you regain it, fianchetto with g3 and Bg2, press b7 with Qb3, then trade into a comfortable ending.", sayShort: "Qb3 — Qxc4, Bg2, Qb3, Nxb3" },
+  beats: [
+    { atMove: 8, say: "Qxc4 — regaining the pawn, the queen active.", sayShort: "Qxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 12, say: "Bg2 — the fianchetto, raking the long diagonal at d5 and b7.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+    { atMove: 16, say: "Qb3 — pressing b7 and offering the queen trade.", sayShort: "Qb3 — pressure b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 20, say: "Nxb3 — recapturing into a comfortable ending with the bishop on the long diagonal.", sayShort: "Nxb3 — comfortable ending", highlights: [_H('b3')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL05: SublineNarration = {
+  intro: { say: "You choose g3. After …Bf5 you hunt the bishop with Nh4, press b7 with Qb3, trade on g6 to damage the kingside, then clamp with c5.", sayShort: "g3 — Nh4, Qb3, Nxg6, c5" },
+  beats: [
+    { atMove: 10, say: "Nh4 — hunting the f5-bishop, the key Slav idea.", sayShort: "Nh4 — hunt the bishop", arrows: [_A('h4', 'f5')] },
+    { atMove: 14, say: "Qb3 — pressing b7 and offering the queen trade.", sayShort: "Qb3 — pressure b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 16, say: "Nxg6 — trading to damage Black's kingside pawns.", sayShort: "Nxg6 — damage the kingside", highlights: [_H('g6')] },
+    { atMove: 18, say: "c5 — gaining queenside space, clamping the position.", sayShort: "c5 — clamp the queenside", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL06: SublineNarration = {
+  intro: { say: "You meet …Bb4 with Bd2. You reroute Ne2 to unblock the pin, castle, press b7 with Qb3, then take the long diagonal with Bc3.", sayShort: "Bd2 — Ne2, O-O, Qb3, Bc3" },
+  beats: [
+    { atMove: 16, say: "Ne2 — rerouting the knight, unblocking the c3-square.", sayShort: "Ne2 — reroute the knight", highlights: [_H('e2')] },
+    { atMove: 18, say: "O-O — king to safety, completing development.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 20, say: "Qb3 — pressing b7 and the queenside.", sayShort: "Qb3 — pressure b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 22, say: "Bc3 — the bishop to the long diagonal, eyeing g7.", sayShort: "Bc3 — rake the diagonal", arrows: [_A('c3', 'g7')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL07: SublineNarration = {
+  intro: { say: "You meet …Bb4 with Qb3. You castle, hunt the f5-bishop with Nh4, reposition Be2, then post the rook on d1.", sayShort: "Qb3 — O-O, Nh4, Be2, Rd1" },
+  beats: [
+    { atMove: 16, say: "O-O — king to safety, completing development.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 18, say: "Nh4 — hunting the f5-bishop, the key Slav idea.", sayShort: "Nh4 — hunt the bishop", arrows: [_A('h4', 'f5')] },
+    { atMove: 20, say: "Be2 — repositioning, keeping the pieces flexible.", sayShort: "Be2 — flexible development", highlights: [_H('e2')] },
+    { atMove: 22, say: "Rd1 — the rook to the d-file, central pressure.", sayShort: "Rd1 — central pressure", arrows: [_A('d1', 'd8')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL08: SublineNarration = {
+  intro: { say: "You leap Ne5. You set up with e3, regain the pawn with Nxc4, develop Be2, then support the centre with f3 and trade on e5.", sayShort: "Ne5 — Nxc4, Be2, f3, Nxe5" },
+  beats: [
+    { atMove: 14, say: "Nxc4 — regaining the pawn, the knight active.", sayShort: "Nxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 16, say: "Be2 — developing solidly, completing the set-up.", sayShort: "Be2 — develop", highlights: [_H('e2')] },
+    { atMove: 20, say: "f3 — supporting the centre, restraining …e5.", sayShort: "f3 — support the centre", highlights: [_H('f3')] },
+    { atMove: 22, say: "Nxe5 — trading in the centre, a comfortable game.", sayShort: "Nxe5 — trade, comfortable", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL09: SublineNarration = {
+  intro: { say: "You hunt the bishop with Nh4. You trade on g6 to damage Black's kingside, set up with e3, regain the pawn, then recapture into a sound centre.", sayShort: "Nh4 — Nxg6, Bxc4, O-O, exd4" },
+  beats: [
+    { atMove: 12, say: "Nxg6 — trading to damage Black's kingside pawns.", sayShort: "Nxg6 — damage the kingside", highlights: [_H('g6')] },
+    { atMove: 16, say: "Bxc4 — regaining the pawn, the bishop active.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 18, say: "O-O — king to safety.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 22, say: "exd4 — recapturing into a sound centre with a small edge.", sayShort: "exd4 — sound centre", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL10: SublineNarration = {
+  intro: { say: "You play the sharp e4 gambit. After …b5 you challenge with a4, regain the pawn with Bxc4, develop Bf4, then complete with O-O — a double-edged fight where your big centre and initiative balance the pawn.", sayShort: "e4 — a4, Bxc4, Bf4, O-O" },
+  beats: [
+    { atMove: 10, say: "a4 — challenging Black's …b5 queenside expansion.", sayShort: "a4 — challenge …b5", arrows: [_A('a4', 'b5')] },
+    { atMove: 14, say: "Bxc4 — regaining the pawn, the bishop active behind the big centre.", sayShort: "Bxc4 — regain, big centre", highlights: [_H('c4')] },
+    { atMove: 18, say: "Bf4 — developing the bishop, eyeing c7 in the sharp fight.", sayShort: "Bf4 — develop, eye c7", arrows: [_A('f4', 'c7')] },
+    { atMove: 22, say: "O-O — king safe; your centre and initiative balance the double-edged play.", sayShort: "O-O — safe, balanced", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL11: SublineNarration = {
+  intro: { say: "In the Exchange Slav you develop Nc3 and Bf4. You trade the dark bishops, aim at h7 from d3, take the c-file with Rc1, then build the battery with Qd3.", sayShort: "Nc3 — Bf4, Bxd6, Bd3, Qd3" },
+  beats: [
+    { atMove: 8, say: "Bf4 — developing the bishop, eyeing c7 and d6.", sayShort: "Bf4 — eye c7", arrows: [_A('f4', 'c7')] },
+    { atMove: 10, say: "Bxd6 — trading the dark bishops, fixing the structure.", sayShort: "Bxd6 — trade the dark bishops", highlights: [_H('d6')] },
+    { atMove: 14, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 22, say: "Qd3 — the battery toward h7, the kingside attacking plan.", sayShort: "Qd3 — battery toward h7", arrows: [_A('d3', 'h7')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL12: SublineNarration = {
+  intro: { say: "In the Exchange Slav you develop Nc3. You aim at h7 from d3, trade the dark bishops, set up the Pillsbury f4-Ne5 attack, then plant the knight on e5.", sayShort: "Nc3 — Bd3, Bxd6, f4, Ne5" },
+  beats: [
+    { atMove: 12, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 14, say: "Bxd6 — trading the dark bishops, clarifying the structure.", sayShort: "Bxd6 — trade the dark bishops", highlights: [_H('d6')] },
+    { atMove: 16, say: "f4 — the Pillsbury setup, supporting an Ne5 outpost and a kingside attack.", sayShort: "f4 — Pillsbury attack", arrows: [_A('f4', 'e5')] },
+    { atMove: 20, say: "Ne5 — the knight to the central outpost, the attacking square.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL13: SublineNarration = {
+  intro: { say: "In the Exchange Slav you develop Nc3. You aim at h7 from d3, trade the dark bishops, set up the Pillsbury f4, then plant the knight on e5.", sayShort: "Nc3 — Bd3, Bxd6, f4, Ne5" },
+  beats: [
+    { atMove: 12, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 14, say: "Bxd6 — trading the dark bishops.", sayShort: "Bxd6 — trade the dark bishops", highlights: [_H('d6')] },
+    { atMove: 16, say: "f4 — the Pillsbury setup, supporting Ne5 and a kingside attack.", sayShort: "f4 — Pillsbury attack", arrows: [_A('f4', 'e5')] },
+    { atMove: 20, say: "Ne5 — the knight to the central outpost.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL14: SublineNarration = {
+  intro: { say: "In the Exchange Slav you develop Nf3. You trade the dark bishops, take the c-file with Rc1, then reroute Na4 toward the c5-outpost.", sayShort: "Nf3 — Bxd6, Rc1, Na4" },
+  beats: [
+    { atMove: 14, say: "Bxd6 — trading the dark bishops, fixing the structure.", sayShort: "Bxd6 — trade the dark bishops", highlights: [_H('d6')] },
+    { atMove: 16, say: "Rc1 — the rook takes the c-file, the Exchange pressure.", sayShort: "Rc1 — claim the c-file", arrows: [_A('c1', 'c8')] },
+    { atMove: 18, say: "Na4 — rerouting the knight toward the c5-outpost.", sayShort: "Na4 — toward c5", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL15: SublineNarration = {
+  intro: { say: "In the Exchange Slav you develop Nf3. You offer the queen trade with Qb3, recapture opening the a-file, develop Bd3, then plant the knight on e5.", sayShort: "Nf3 — Qb3, axb3, Bd3, Ne5" },
+  beats: [
+    { atMove: 12, say: "Qb3 — offering the queen trade and pressing b7.", sayShort: "Qb3 — offer the trade", arrows: [_A('b3', 'b7')] },
+    { atMove: 14, say: "axb3 — recapturing toward the centre, opening the a-file.", sayShort: "axb3 — open the a-file", highlights: [_H('a1')] },
+    { atMove: 18, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 20, say: "Ne5 — the knight to the central outpost.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL16: SublineNarration = {
+  intro: { say: "In the Exchange Slav you play a3. You meet …Bg4 with h3 and g4 to gain space, press b7 with Qb3, then develop Nc3.", sayShort: "a3 — h3, g4, Qb3, Nc3" },
+  beats: [
+    { atMove: 10, say: "h3 — questioning the g4-bishop.", sayShort: "h3 — question the bishop", highlights: [_H('g4')] },
+    { atMove: 12, say: "g4 — gaining kingside space, chasing the bishop.", sayShort: "g4 — gain space", arrows: [_A('g4', 'f5')] },
+    { atMove: 16, say: "Qb3 — pressing b7 and the queenside.", sayShort: "Qb3 — pressure b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 18, say: "Nc3 — developing, completing the set-up with active play.", sayShort: "Nc3 — develop", highlights: [_H('c3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL17: SublineNarration = {
+  intro: { say: "In the Exchange Slav you play a3. You develop Nf3, question the bishop with h3, reroute Nbd2, then aim at h7 from d3.", sayShort: "a3 — Nf3, h3, Nbd2, Bd3" },
+  beats: [
+    { atMove: 12, say: "Nf3 — developing, supporting the centre.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+    { atMove: 14, say: "h3 — questioning the g4-bishop.", sayShort: "h3 — question the bishop", highlights: [_H('g4')] },
+    { atMove: 16, say: "Nbd2 — rerouting the knight, preparing central play.", sayShort: "Nbd2 — reroute", highlights: [_H('d2')] },
+    { atMove: 18, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL18: SublineNarration = {
+  intro: { say: "In the Exchange Slav you reroute Nd2. You offer the queen trade with Qb3, recapture toward the centre, then post the bishop on e5 and pressure with Rc1.", sayShort: "Nd2 — Qb3, Nxb3, Be5, Rc1" },
+  beats: [
+    { atMove: 12, say: "Qb3 — offering the queen trade and pressing b7.", sayShort: "Qb3 — offer the trade", arrows: [_A('b3', 'b7')] },
+    { atMove: 14, say: "Nxb3 — recapturing, the knight heading toward c5 and a5.", sayShort: "Nxb3 — toward c5", highlights: [_H('b3')] },
+    { atMove: 16, say: "Be5 — the bishop to the central outpost, dominating the dark squares.", sayShort: "Be5 — central outpost", highlights: [_H('e5')] },
+    { atMove: 20, say: "Rc1 — the rook takes the c-file, the Exchange pressure.", sayShort: "Rc1 — claim the c-file", arrows: [_A('c1', 'c8')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL19: SublineNarration = {
+  intro: { say: "In the Exchange Slav you pin with Bb5. You develop Nf3, castle, recapture on f3 keeping the structure, then take the c-file with Rc1.", sayShort: "Bb5 — Nf3, O-O, Qxf3, Rc1" },
+  beats: [
+    { atMove: 12, say: "Nf3 — developing, completing the set-up behind the pin.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+    { atMove: 14, say: "O-O — king to safety.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 16, say: "Qxf3 — recapturing, the queen active eyeing the long diagonal.", sayShort: "Qxf3 — active queen", arrows: [_A('f3', 'b7')] },
+    { atMove: 18, say: "Rc1 — the rook takes the c-file, the Exchange pressure.", sayShort: "Rc1 — claim the c-file", arrows: [_A('c1', 'c8')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL20: SublineNarration = {
+  intro: { say: "In the Exchange Slav you play h3. You offer the queen trade with Qb3, recapture opening the a-file, develop Nc3 and Bd3 aiming at h7.", sayShort: "h3 — Qb3, axb3, Nc3, Bd3" },
+  beats: [
+    { atMove: 12, say: "Qb3 — offering the queen trade and pressing b7.", sayShort: "Qb3 — offer the trade", arrows: [_A('b3', 'b7')] },
+    { atMove: 14, say: "axb3 — recapturing toward the centre, opening the a-file.", sayShort: "axb3 — open the a-file", highlights: [_H('a1')] },
+    { atMove: 16, say: "Nc3 — developing, contesting the centre.", sayShort: "Nc3 — develop", highlights: [_H('c3')] },
+    { atMove: 18, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+
+const SL21: SublineNarration = {
+  intro: { say: "You choose e3. After …Bf5 you hunt the bishop with Nh4, fix it with f3, develop Bd2 to regain the pawn, then trade on g6 to damage Black's kingside pawns.", sayShort: "e3 — Nh4, Bd2, Bxc4, Nxg6" },
+  beats: [
+    { atMove: 10, say: "Nh4 — hunting the f5-bishop, the key Slav idea.", sayShort: "Nh4 — hunt the bishop", arrows: [_A('h4', 'f5')] },
+    { atMove: 14, say: "Bd2 — developing and preparing to regain the c4-pawn.", sayShort: "Bd2 — prepare to regain c4", highlights: [_H('d2')] },
+    { atMove: 16, say: "Bxc4 — regaining the pawn, the bishop active.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 20, say: "Nxg6 — trading to damage Black's kingside pawns.", sayShort: "Nxg6 — damage the kingside", highlights: [_H('g6')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL22: SublineNarration = {
+  intro: { say: "You centralise Qc2. You press b7 with Qb3, hunt the f5-bishop with g4, trade to win the bishop pair, then fianchetto Bg2.", sayShort: "Qc2 — Qb3, g4, Nxe4, Bg2" },
+  beats: [
+    { atMove: 10, say: "Qb3 — pressing b7 and offering the queen trade.", sayShort: "Qb3 — pressure b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 14, say: "g4 — hunting the f5-bishop with a kingside expansion.", sayShort: "g4 — hunt the bishop", arrows: [_A('g4', 'f5')] },
+    { atMove: 16, say: "Nxe4 — trading, gaining the bishop pair.", sayShort: "Nxe4 — win the bishop pair", highlights: [_H('e4')] },
+    { atMove: 18, say: "Bg2 — fianchettoing to rake the long diagonal.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL23: SublineNarration = {
+  intro: { say: "You play the Exchange Slav. You develop Bf4, aim at h7 from d3, take the c-file with Rc1, then pressure the queenside with Qa4.", sayShort: "cxd5 — Bf4, Bd3, Rc1, Qa4" },
+  beats: [
+    { atMove: 8, say: "Bf4 — developing the bishop in the Exchange, eyeing c7.", sayShort: "Bf4 — eye c7", arrows: [_A('f4', 'c7')] },
+    { atMove: 16, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 18, say: "Rc1 — the rook takes the c-file.", sayShort: "Rc1 — claim the c-file", arrows: [_A('c1', 'c8')] },
+    { atMove: 22, say: "Qa4 — pressing the queenside, the symmetric edge.", sayShort: "Qa4 — press the queenside", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL24: SublineNarration = {
+  intro: { say: "You choose Qb3. After …dxc4 you regain it, fianchetto with g3 and Bg2, press b7, then trade into a comfortable ending.", sayShort: "Qb3 — Qxc4, Bg2, Qb3, Nxb3" },
+  beats: [
+    { atMove: 8, say: "Qxc4 — regaining the pawn, the queen active.", sayShort: "Qxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 12, say: "Bg2 — the fianchetto, raking the long diagonal.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+    { atMove: 16, say: "Qb3 — pressing b7 and offering the queen trade.", sayShort: "Qb3 — pressure b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 20, say: "Nxb3 — recapturing into a comfortable ending.", sayShort: "Nxb3 — comfortable ending", highlights: [_H('b3')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL25: SublineNarration = {
+  intro: { say: "You choose g3. After …Bf5 you hunt the bishop with Nh4, press b7 with Qb3, trade on g6, then clamp with c5.", sayShort: "g3 — Nh4, Qb3, Nxg6, c5" },
+  beats: [
+    { atMove: 10, say: "Nh4 — hunting the f5-bishop.", sayShort: "Nh4 — hunt the bishop", arrows: [_A('h4', 'f5')] },
+    { atMove: 14, say: "Qb3 — pressing b7 and offering the queen trade.", sayShort: "Qb3 — pressure b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 16, say: "Nxg6 — trading to damage Black's kingside pawns.", sayShort: "Nxg6 — damage the kingside", highlights: [_H('g6')] },
+    { atMove: 18, say: "c5 — gaining queenside space, clamping.", sayShort: "c5 — clamp the queenside", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL26: SublineNarration = {
+  intro: { say: "You clamp with c5, grabbing queenside space. You develop Bf4, set up with e3, trade off the e4-knight, then meet …e5 by opening the centre with dxe5.", sayShort: "c5 — Bf4, Nxe4, dxe5, Rc1" },
+  beats: [
+    { atMove: 12, say: "Bf4 — developing the bishop, eyeing the dark squares behind the c5-clamp.", sayShort: "Bf4 — eye the dark squares", arrows: [_A('f4', 'c7')] },
+    { atMove: 16, say: "Nxe4 — trading off the active e4-knight, easing your grip.", sayShort: "Nxe4 — trade the knight", highlights: [_H('e4')] },
+    { atMove: 20, say: "dxe5 — meeting Black's …e5 break by opening the centre favourably.", sayShort: "dxe5 — open the centre", highlights: [_H('e5')] },
+    { atMove: 22, say: "Rc1 — the rook takes the c-file behind the clamp, keeping the space edge.", sayShort: "Rc1 — claim the c-file", arrows: [_A('c1', 'c8')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL27: SublineNarration = {
+  intro: { say: "You play a4 to clamp the queenside. You fianchetto with g3, advance a5 to gain space, regain the pawn with Qxc4, then plant the knight on e5.", sayShort: "a4 — g3, a5, Qxc4, Ne5" },
+  beats: [
+    { atMove: 10, say: "g3 — the fianchetto setup, raking the long diagonal.", sayShort: "g3 — fianchetto setup", highlights: [_H('g3')] },
+    { atMove: 12, say: "a5 — clamping the queenside, gaining space.", sayShort: "a5 — clamp the queenside", arrows: [_A('a5', 'b6')] },
+    { atMove: 16, say: "Qxc4 — regaining the gambit pawn, the queen active.", sayShort: "Qxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 22, say: "Ne5 — the knight to the central outpost.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL28: SublineNarration = {
+  intro: { say: "You play the Exchange with cxd5. You develop Bf4, plant the knight on e5, recapture the bishop dominating the centre, castle, then reroute Na4 toward c5.", sayShort: "cxd5 — Bf4, Ne5, Bxe5, Na4" },
+  beats: [
+    { atMove: 10, say: "Bf4 — developing the bishop, eyeing c7.", sayShort: "Bf4 — eye c7", arrows: [_A('f4', 'c7')] },
+    { atMove: 12, say: "Ne5 — the knight to the central outpost.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+    { atMove: 18, say: "Bxe5 — recapturing, the bishop dominating the centre.", sayShort: "Bxe5 — dominate the centre", arrows: [_A('e5', 'g7')] },
+    { atMove: 22, say: "Na4 — rerouting the knight toward the c5-outpost.", sayShort: "Na4 — toward c5", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL29: SublineNarration = {
+  intro: { say: "You press with Qb3. After Black overreaches with …b5-b4 you open with cxd5, grab the pawn with Qxb4, win a second on a6, then keep the initiative with Qb5+.", sayShort: "Qb3 — cxd5, Qxb4, Bxa6, Qb5+" },
+  beats: [
+    { atMove: 12, say: "cxd5 — opening the centre, exposing Black's overextension.", sayShort: "cxd5 — open the centre", highlights: [_H('d5')] },
+    { atMove: 16, say: "Qxb4 — grabbing the pawn, punishing the …b5-b4 overreach.", sayShort: "Qxb4 — grab the pawn", highlights: [_H('b4')] },
+    { atMove: 20, say: "Bxa6 — winning a second pawn, ripping open Black's queenside.", sayShort: "Bxa6 — win a second pawn", highlights: [_H('a6')] },
+    { atMove: 22, say: "Qb5+ — the check keeps the initiative with the material edge.", sayShort: "Qb5+ — keep the initiative", arrows: [_A('b5', 'e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL30: SublineNarration = {
+  intro: { say: "You fianchetto with g3. You develop Bg2, clamp with a4, open lines with dxc5 and trade queens, plant the knight on e5, then regain the gambit pawn.", sayShort: "g3 — Bg2, dxc5, Ne5, Nxc4" },
+  beats: [
+    { atMove: 10, say: "Bg2 — the fianchetto, raking the long diagonal.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+    { atMove: 14, say: "dxc5 — opening lines and trading into a comfortable ending.", sayShort: "dxc5 — open lines", highlights: [_H('c5')] },
+    { atMove: 18, say: "Ne5 — the knight to the central outpost.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+    { atMove: 22, say: "Nxc4 — regaining the gambit pawn, a comfortable ending.", sayShort: "Nxc4 — regain the pawn", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL31: SublineNarration = {
+  intro: { say: "You choose the sharp Nc3 and Bg5. After …dxc4 you build the broad centre with e4, lunge d5 to prise open lines, then crash through with dxe6 in a sharp, double-edged fight.", sayShort: "Nc3 — Bg5, e4, d5, dxe6" },
+  beats: [
+    { atMove: 8, say: "Bg5 — pinning the f6-knight, the sharp anti-Slav.", sayShort: "Bg5 — pin the knight", arrows: [_A('g5', 'd8')] },
+    { atMove: 12, say: "e4 — building the broad centre, seizing space.", sayShort: "e4 — build the centre", highlights: [_H('e4')] },
+    { atMove: 18, say: "d5 — the central pawn lunges, prising open lines.", sayShort: "d5 — prise open lines", highlights: [_H('d5')] },
+    { atMove: 22, say: "dxe6 — crashing through toward Black's king in the sharp fight.", sayShort: "dxe6 — crash through", highlights: [_H('e6')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL32: SublineNarration = {
+  intro: { say: "You centralise Qc2. You press b7 with Qb3, hunt the f5-bishop with g4, trade to win the bishop pair, then fianchetto Bg2.", sayShort: "Qc2 — Qb3, g4, Nxe4, Bg2" },
+  beats: [
+    { atMove: 10, say: "Qb3 — pressing b7 and offering the queen trade.", sayShort: "Qb3 — pressure b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 14, say: "g4 — hunting the f5-bishop with a kingside expansion.", sayShort: "g4 — hunt the bishop", arrows: [_A('g4', 'f5')] },
+    { atMove: 16, say: "Nxe4 — trading, gaining the bishop pair.", sayShort: "Nxe4 — win the bishop pair", highlights: [_H('e4')] },
+    { atMove: 18, say: "Bg2 — fianchettoing to rake the long diagonal.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL33: SublineNarration = {
+  intro: { say: "You play the Exchange Slav. You develop Bf4, aim at h7 from d3, take the c-file with Rc1, then pressure the queenside with Qa4.", sayShort: "cxd5 — Bf4, Bd3, Rc1, Qa4" },
+  beats: [
+    { atMove: 8, say: "Bf4 — developing the bishop in the Exchange, eyeing c7.", sayShort: "Bf4 — eye c7", arrows: [_A('f4', 'c7')] },
+    { atMove: 16, say: "Bd3 — the bishop to the diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 18, say: "Rc1 — the rook takes the c-file.", sayShort: "Rc1 — claim the c-file", arrows: [_A('c1', 'c8')] },
+    { atMove: 22, say: "Qa4 — pressing the queenside, the symmetric edge.", sayShort: "Qa4 — press the queenside", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL34: SublineNarration = {
+  intro: { say: "You choose Qb3. After …dxc4 you regain it, fianchetto, press b7, then trade into a comfortable ending.", sayShort: "Qb3 — Qxc4, Bg2, Qb3, Nxb3" },
+  beats: [
+    { atMove: 8, say: "Qxc4 — regaining the pawn, the queen active.", sayShort: "Qxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 12, say: "Bg2 — the fianchetto, raking the long diagonal.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+    { atMove: 16, say: "Qb3 — pressing b7 and offering the queen trade.", sayShort: "Qb3 — pressure b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 20, say: "Nxb3 — recapturing into a comfortable ending.", sayShort: "Nxb3 — comfortable ending", highlights: [_H('b3')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL35: SublineNarration = {
+  intro: { say: "Having traded off Black's bishop with Nxg6, you open with cxd5 to isolate the d-pawn. You develop Bd2, fianchetto Bg2 to besiege d5, then castle with the bishop pair.", sayShort: "cxd5 — Bd2, g3, Bg2, O-O" },
+  beats: [
+    { atMove: 16, say: "Bd2 — developing, preparing to meet …Bb4.", sayShort: "Bd2 — develop", highlights: [_H('d2')] },
+    { atMove: 18, say: "g3 — preparing the fianchetto to bear on d5.", sayShort: "g3 — prepare the fianchetto", highlights: [_H('g3')] },
+    { atMove: 20, say: "Bg2 — the bishop rakes the long diagonal at the isolated d5-pawn.", sayShort: "Bg2 — besiege d5", arrows: [_A('g2', 'd5')] },
+    { atMove: 22, say: "O-O — king safe, the bishop pair and the d5-target in hand.", sayShort: "O-O — king safe, press d5", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL36: SublineNarration = {
+  intro: { say: "Having won the bishop pair, you play h3. You develop Bd2, storm with g4 down the half-open files, centralise Qf3, then castle long for an opposite-side attack.", sayShort: "h3 — Bd2, g4, Qf3, O-O-O" },
+  beats: [
+    { atMove: 16, say: "Bd2 — developing, preparing the kingside expansion.", sayShort: "Bd2 — develop", highlights: [_H('d2')] },
+    { atMove: 18, say: "g4 — the kingside pawn storm, exploiting the open lines and bishop pair.", sayShort: "g4 — kingside storm", arrows: [_A('g4', 'g5')] },
+    { atMove: 20, say: "Qf3 — centralising the queen toward the kingside.", sayShort: "Qf3 — toward the kingside", highlights: [_H('f3')] },
+    { atMove: 22, say: "O-O-O — castling long, the opposite-side attack rolling.", sayShort: "O-O-O — opposite-side attack", highlights: [_H('c1')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL37: SublineNarration = {
+  intro: { say: "Having won the bishop pair, you develop Be2. You develop Bd2, press b7 with Qb3, prepare the bishop's diagonal with g3, then castle.", sayShort: "Be2 — Bd2, Qb3, g3, O-O" },
+  beats: [
+    { atMove: 16, say: "Bd2 — developing the last minor piece.", sayShort: "Bd2 — develop", highlights: [_H('d2')] },
+    { atMove: 18, say: "Qb3 — pressing b7 and the queenside.", sayShort: "Qb3 — pressure b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 20, say: "g3 — preparing to redeploy the bishop and secure the kingside.", sayShort: "g3 — secure the kingside", highlights: [_H('g3')] },
+    { atMove: 22, say: "O-O — king safe, the bishop pair as a lasting edge.", sayShort: "O-O — king safe, bishop pair", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL38: SublineNarration = {
+  intro: { say: "Having won the bishop pair, you develop Bd2. You centralise Qc2, open the c-file with cxd5, press b7 and d5 with Qb3, then aim at h7 from d3.", sayShort: "Bd2 — Qc2, cxd5, Qb3, Bd3" },
+  beats: [
+    { atMove: 16, say: "Qc2 — centralising the queen on the b1-h7 diagonal.", sayShort: "Qc2 — centralise", arrows: [_A('c2', 'h7')] },
+    { atMove: 18, say: "cxd5 — opening the c-file, isolating Black's d-pawn.", sayShort: "cxd5 — create the isolani", highlights: [_H('d5')] },
+    { atMove: 20, say: "Qb3 — pressing b7 and the isolated d5-pawn.", sayShort: "Qb3 — pressure b7 and d5", arrows: [_A('b3', 'b7')] },
+    { atMove: 22, say: "Bd3 — the bishop to the diagonal, aiming at h7 with the bishop pair.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL39: SublineNarration = {
+  intro: { say: "Having won the bishop pair, you play Qb3. You sidestep the queen trade with Qc2, meet …Bb4 with Bd2, recapture keeping the structure, then gain queenside space with a4.", sayShort: "Qb3 — Qc2, Bd2, Bxc3, a4" },
+  beats: [
+    { atMove: 16, say: "Qc2 — sidestepping the queen trade, keeping the queens on with the bishop pair.", sayShort: "Qc2 — keep the queens on", arrows: [_A('c2', 'h7')] },
+    { atMove: 18, say: "Bd2 — developing, meeting …Bb4.", sayShort: "Bd2 — meet …Bb4", highlights: [_H('d2')] },
+    { atMove: 20, say: "Bxc3 — recapturing, keeping the structure sound.", sayShort: "Bxc3 — keep the structure", highlights: [_H('c3')] },
+    { atMove: 22, say: "a4 — gaining queenside space with the bishop pair in hand.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL40: SublineNarration = {
+  intro: { say: "Having won the bishop pair, you play g3. You develop Bd2, aim at h7 from d3, question the bishop with a3, then open the c-file with cxd5.", sayShort: "g3 — Bd2, Bd3, a3, cxd5" },
+  beats: [
+    { atMove: 16, say: "Bd2 — developing, meeting …Bb4.", sayShort: "Bd2 — meet …Bb4", highlights: [_H('d2')] },
+    { atMove: 18, say: "Bd3 — the bishop to the diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 20, say: "a3 — questioning the b4-bishop.", sayShort: "a3 — question the bishop", highlights: [_H('b4')] },
+    { atMove: 22, say: "cxd5 — opening the c-file, isolating Black's d-pawn.", sayShort: "cxd5 — create the isolani", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+
+const SL41: SublineNarration = {
+  intro: { say: "You choose e3. After …Bf5 you hunt the bishop with Nh4, fix it with f3, develop Bd2 to regain the pawn, then trade on g6 to damage Black's kingside.", sayShort: "e3 — Nh4, Bd2, Bxc4, Nxg6" },
+  beats: [
+    { atMove: 10, say: "Nh4 — hunting the f5-bishop, the key Slav idea.", sayShort: "Nh4 — hunt the bishop", arrows: [_A('h4', 'f5')] },
+    { atMove: 14, say: "Bd2 — developing and preparing to regain the c4-pawn.", sayShort: "Bd2 — prepare to regain c4", highlights: [_H('d2')] },
+    { atMove: 16, say: "Bxc4 — regaining the pawn, the bishop active.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 20, say: "Nxg6 — trading to damage Black's kingside pawns.", sayShort: "Nxg6 — damage the kingside", highlights: [_H('g6')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL42: SublineNarration = {
+  intro: { say: "You centralise Qc2. You press b7 with Qb3, hunt the f5-bishop with g4, trade to win the bishop pair, then fianchetto Bg2.", sayShort: "Qc2 — Qb3, g4, Nxe4, Bg2" },
+  beats: [
+    { atMove: 10, say: "Qb3 — pressing b7 and offering the queen trade.", sayShort: "Qb3 — pressure b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 14, say: "g4 — hunting the f5-bishop with a kingside expansion.", sayShort: "g4 — hunt the bishop", arrows: [_A('g4', 'f5')] },
+    { atMove: 16, say: "Nxe4 — trading, gaining the bishop pair.", sayShort: "Nxe4 — win the bishop pair", highlights: [_H('e4')] },
+    { atMove: 18, say: "Bg2 — fianchettoing to rake the long diagonal.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL43: SublineNarration = {
+  intro: { say: "You play the Exchange Slav. You develop Bf4, aim at h7 from d3, take the c-file with Rc1, then pressure the queenside with Qa4.", sayShort: "cxd5 — Bf4, Bd3, Rc1, Qa4" },
+  beats: [
+    { atMove: 8, say: "Bf4 — developing the bishop in the Exchange, eyeing c7.", sayShort: "Bf4 — eye c7", arrows: [_A('f4', 'c7')] },
+    { atMove: 16, say: "Bd3 — the bishop to the diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 18, say: "Rc1 — the rook takes the c-file.", sayShort: "Rc1 — claim the c-file", arrows: [_A('c1', 'c8')] },
+    { atMove: 22, say: "Qa4 — pressing the queenside, the symmetric edge.", sayShort: "Qa4 — press the queenside", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL44: SublineNarration = {
+  intro: { say: "You choose Qb3. After …dxc4 you regain it, fianchetto, press b7, then trade into a comfortable ending.", sayShort: "Qb3 — Qxc4, Bg2, Qb3, Nxb3" },
+  beats: [
+    { atMove: 8, say: "Qxc4 — regaining the pawn, the queen active.", sayShort: "Qxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 12, say: "Bg2 — the fianchetto, raking the long diagonal.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+    { atMove: 16, say: "Qb3 — pressing b7 and offering the queen trade.", sayShort: "Qb3 — pressure b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 20, say: "Nxb3 — recapturing into a comfortable ending.", sayShort: "Nxb3 — comfortable ending", highlights: [_H('b3')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL45: SublineNarration = {
+  intro: { say: "You choose g3. After …Bf5 you hunt the bishop with Nh4, press b7 with Qb3, trade on g6, then clamp with c5.", sayShort: "g3 — Nh4, Qb3, Nxg6, c5" },
+  beats: [
+    { atMove: 10, say: "Nh4 — hunting the f5-bishop.", sayShort: "Nh4 — hunt the bishop", arrows: [_A('h4', 'f5')] },
+    { atMove: 14, say: "Qb3 — pressing b7 and offering the queen trade.", sayShort: "Qb3 — pressure b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 16, say: "Nxg6 — trading to damage Black's kingside pawns.", sayShort: "Nxg6 — damage the kingside", highlights: [_H('g6')] },
+    { atMove: 18, say: "c5 — gaining queenside space, clamping.", sayShort: "c5 — clamp the queenside", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL46: SublineNarration = {
+  intro: { say: "You play a4 to clamp the queenside. After …Bf5 you regain the pawn, centralise with Qe2, then break with e4-e5 to seize space and kick the knight.", sayShort: "a4 — Bxc4, Qe2, e4, e5" },
+  beats: [
+    { atMove: 12, say: "Bxc4 — regaining the gambit pawn, the bishop active.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 16, say: "Qe2 — centralising the queen, preparing the e4 break.", sayShort: "Qe2 — prep e4", highlights: [_H('e2')] },
+    { atMove: 18, say: "e4 — the central break, seizing space.", sayShort: "e4 — the central break", highlights: [_H('e4')] },
+    { atMove: 22, say: "e5 — gaining space and kicking the f6-knight.", sayShort: "e5 — gain space, kick the knight", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL47: SublineNarration = {
+  intro: { say: "This is the sharp e4 Slav gambit. Black has grabbed the c4-pawn and is consolidating, so you seek practical complications: Ng5 and h4 generate kingside play, but the line is double-edged and Black's extra pawn is real — play for activity, not material.", sayShort: "Ng5 — h4, Nh3, Ne4: seek play" },
+  beats: [
+    { atMove: 16, say: "h4 — supporting the g5-knight and gaining kingside space, your source of practical play.", sayShort: "h4 — kingside play", arrows: [_A('h4', 'h5')] },
+    { atMove: 18, say: "Nh3 — rerouting the knight toward f4 and the kingside in the double-edged fight.", sayShort: "Nh3 — reroute the knight", highlights: [_H('h3')] },
+    { atMove: 22, say: "Ne4 — the knight to the strong e4-square; activity is your compensation for the gambit pawn.", sayShort: "Ne4 — central knight, activity", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL48: SublineNarration = {
+  intro: { say: "In the sharp e4 Slav gambit you develop Be2. You castle behind the big centre, open the queenside with axb5, recapture toward the centre, then take the b-file with Rb1 in a double-edged fight.", sayShort: "Be2 — O-O, axb5, bxc3, Rb1" },
+  beats: [
+    { atMove: 16, say: "O-O — king to safety behind your broad centre.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 18, say: "axb5 — opening the queenside, prising open lines.", sayShort: "axb5 — open the queenside", highlights: [_H('b5')] },
+    { atMove: 20, say: "bxc3 — recapturing toward the centre, keeping the big pawn front.", sayShort: "bxc3 — keep the centre", highlights: [_H('c3')] },
+    { atMove: 22, say: "Rb1 — the rook to the b-file, active play in the double-edged middlegame.", sayShort: "Rb1 — active, double-edged", highlights: [_H('b1')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL49: SublineNarration = {
+  intro: { say: "In the sharp e4 Slav gambit you develop Bg5. You reroute Nd2 toward e4, then swing the queen to g4 toward the kingside — seeking the initiative for the gambit pawn in a double-edged position.", sayShort: "Bg5 — Nd2, Qg4: seek the initiative" },
+  beats: [
+    { atMove: 20, say: "Nd2 — rerouting the knight toward e4 and c4 to press.", sayShort: "Nd2 — reroute toward e4", highlights: [_H('d2')] },
+    { atMove: 22, say: "Qg4 — the queen swings to the kingside, your source of practical play for the pawn.", sayShort: "Qg4 — kingside initiative", highlights: [_H('g4')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL50: SublineNarration = {
+  intro: { say: "In the sharp e4 Slav gambit you develop Be2. You jump Ng5 toward e6 and f7, then challenge the long diagonal with Bf3 — seeking activity for the gambit pawn in a double-edged fight.", sayShort: "Be2 — Ng5, Bf3: seek activity" },
+  beats: [
+    { atMove: 20, say: "Ng5 — the knight leaps toward e6 and f7, your source of kingside play.", sayShort: "Ng5 — toward e6 and f7", highlights: [_H('g5')] },
+    { atMove: 22, say: "Bf3 — challenging the long diagonal, fighting for the light squares in the double-edged position.", sayShort: "Bf3 — challenge the diagonal", arrows: [_A('f3', 'b7')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL51: SublineNarration = {
+  intro: { say: "You choose e3. After …Bf5 you hunt the bishop with Nh4, develop Bd2 to regain the pawn, then trade on g6 to damage Black's kingside.", sayShort: "e3 — Nh4, Bd2, Bxc4, Nxg6" },
+  beats: [
+    { atMove: 10, say: "Nh4 — hunting the f5-bishop, the key Slav idea.", sayShort: "Nh4 — hunt the bishop", arrows: [_A('h4', 'f5')] },
+    { atMove: 14, say: "Bd2 — developing and preparing to regain the c4-pawn.", sayShort: "Bd2 — prepare to regain c4", highlights: [_H('d2')] },
+    { atMove: 16, say: "Bxc4 — regaining the pawn, the bishop active.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 20, say: "Nxg6 — trading to damage Black's kingside pawns.", sayShort: "Nxg6 — damage the kingside", highlights: [_H('g6')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL52: SublineNarration = {
+  intro: { say: "You centralise Qc2. You press b7 with Qb3, hunt the f5-bishop with g4, trade to win the bishop pair, then fianchetto Bg2.", sayShort: "Qc2 — Qb3, g4, Nxe4, Bg2" },
+  beats: [
+    { atMove: 10, say: "Qb3 — pressing b7 and offering the queen trade.", sayShort: "Qb3 — pressure b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 14, say: "g4 — hunting the f5-bishop with a kingside expansion.", sayShort: "g4 — hunt the bishop", arrows: [_A('g4', 'f5')] },
+    { atMove: 16, say: "Nxe4 — trading, gaining the bishop pair.", sayShort: "Nxe4 — win the bishop pair", highlights: [_H('e4')] },
+    { atMove: 18, say: "Bg2 — fianchettoing to rake the long diagonal.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL53: SublineNarration = {
+  intro: { say: "You play the Exchange Slav. You develop Bf4, aim at h7 from d3, take the c-file with Rc1, then pressure the queenside with Qa4.", sayShort: "cxd5 — Bf4, Bd3, Rc1, Qa4" },
+  beats: [
+    { atMove: 8, say: "Bf4 — developing the bishop, eyeing c7.", sayShort: "Bf4 — eye c7", arrows: [_A('f4', 'c7')] },
+    { atMove: 16, say: "Bd3 — the bishop to the diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 18, say: "Rc1 — the rook takes the c-file.", sayShort: "Rc1 — claim the c-file", arrows: [_A('c1', 'c8')] },
+    { atMove: 22, say: "Qa4 — pressing the queenside, the symmetric edge.", sayShort: "Qa4 — press the queenside", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL54: SublineNarration = {
+  intro: { say: "You choose Qb3. After …dxc4 you regain it, fianchetto, press b7, then trade into a comfortable ending.", sayShort: "Qb3 — Qxc4, Bg2, Qb3, Nxb3" },
+  beats: [
+    { atMove: 8, say: "Qxc4 — regaining the pawn, the queen active.", sayShort: "Qxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 12, say: "Bg2 — the fianchetto, raking the long diagonal.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+    { atMove: 16, say: "Qb3 — pressing b7 and offering the queen trade.", sayShort: "Qb3 — pressure b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 20, say: "Nxb3 — recapturing into a comfortable ending.", sayShort: "Nxb3 — comfortable ending", highlights: [_H('b3')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL55: SublineNarration = {
+  intro: { say: "You choose g3. After …Bf5 you hunt the bishop with Nh4, press b7 with Qb3, trade on g6, then clamp with c5.", sayShort: "g3 — Nh4, Qb3, Nxg6, c5" },
+  beats: [
+    { atMove: 10, say: "Nh4 — hunting the f5-bishop.", sayShort: "Nh4 — hunt the bishop", arrows: [_A('h4', 'f5')] },
+    { atMove: 14, say: "Qb3 — pressing b7 and offering the queen trade.", sayShort: "Qb3 — pressure b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 16, say: "Nxg6 — trading to damage Black's kingside pawns.", sayShort: "Nxg6 — damage the kingside", highlights: [_H('g6')] },
+    { atMove: 18, say: "c5 — gaining queenside space, clamping.", sayShort: "c5 — clamp the queenside", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL56: SublineNarration = {
+  intro: { say: "In the Schlechter, having won the bishop pair, you play b3. You complete the double fianchetto with Bb2, then centralise the rooks with Rad1 — pressing with the two bishops.", sayShort: "b3 — Bb2, Rad1" },
+  beats: [
+    { atMove: 20, say: "Bb2 — the double fianchetto, raking the long diagonal toward Black's king.", sayShort: "Bb2 — rake the diagonal", arrows: [_A('b2', 'g7')] },
+    { atMove: 22, say: "Rad1 — centralising the rooks, pressing with the bishop pair.", sayShort: "Rad1 — centralise the rooks", arrows: [_A('d1', 'd8')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL57: SublineNarration = {
+  intro: { say: "In the Schlechter you open with cxd5, leaving Black an isolated d-pawn. You post the rook on d1 to besiege it, then develop Bd2 with the bishop pair.", sayShort: "cxd5 — Rd1, Bd2" },
+  beats: [
+    { atMove: 20, say: "Rd1 — the rook to the d-file, besieging the isolated d-pawn.", sayShort: "Rd1 — besiege the isolani", arrows: [_A('d1', 'd8')] },
+    { atMove: 22, say: "Bd2 — developing, the bishop pair pressing the position.", sayShort: "Bd2 — develop, bishop pair", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL58: SublineNarration = {
+  intro: { say: "In the Schlechter you post the rook on d1. You prepare the double fianchetto with b3, then complete it with Bb2 — pressing with the two bishops.", sayShort: "Rd1 — b3, Bb2" },
+  beats: [
+    { atMove: 20, say: "b3 — preparing the double fianchetto.", sayShort: "b3 — prepare Bb2", highlights: [_H('b3')] },
+    { atMove: 22, say: "Bb2 — the bishop rakes the long diagonal with the bishop pair.", sayShort: "Bb2 — rake the diagonal", arrows: [_A('b2', 'g7')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL59: SublineNarration = {
+  intro: { say: "In the Schlechter you post the rook on e1. You double on the central files with Rd1, then gain queenside space with a4 — pressing with the bishop pair.", sayShort: "Re1 — Rd1, a4" },
+  beats: [
+    { atMove: 20, say: "Rd1 — doubling on the central files, pressing the centre.", sayShort: "Rd1 — central pressure", arrows: [_A('d1', 'd8')] },
+    { atMove: 22, say: "a4 — gaining queenside space with the bishop pair in hand.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL60: SublineNarration = {
+  intro: { say: "In the Schlechter you develop Be2. You recapture on f3 keeping the bishop pair, undermine c4 with b3, regain the pawn, then take the b-file with Rb1.", sayShort: "Be2 — Bxf3, b3, Qxb3, Rb1" },
+  beats: [
+    { atMove: 16, say: "Bxf3 — recapturing, the bishop pair on the long diagonal.", sayShort: "Bxf3 — keep the bishop pair", arrows: [_A('f3', 'b7')] },
+    { atMove: 18, say: "b3 — undermining the c4-pawn to regain the material.", sayShort: "b3 — undermine c4", arrows: [_A('b3', 'c4')] },
+    { atMove: 20, say: "Qxb3 — regaining the pawn, the queen active.", sayShort: "Qxb3 — regain the pawn", highlights: [_H('b3')] },
+    { atMove: 22, say: "Rb1 — the rook to the b-file, pressing the queenside.", sayShort: "Rb1 — press the queenside", highlights: [_H('b1')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+
+const SL61: SublineNarration = {
+  intro: { say: "You choose e3. After …Bf5 you hunt the bishop with Nh4, develop Bd2 to regain the pawn, then trade on g6 to damage Black's kingside.", sayShort: "e3 — Nh4, Bd2, Bxc4, Nxg6" },
+  beats: [
+    { atMove: 10, say: "Nh4 — hunting the f5-bishop, the key Slav idea.", sayShort: "Nh4 — hunt the bishop", arrows: [_A('h4', 'f5')] },
+    { atMove: 14, say: "Bd2 — developing and preparing to regain the c4-pawn.", sayShort: "Bd2 — prepare to regain c4", highlights: [_H('d2')] },
+    { atMove: 16, say: "Bxc4 — regaining the pawn, the bishop active.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 20, say: "Nxg6 — trading to damage Black's kingside pawns.", sayShort: "Nxg6 — damage the kingside", highlights: [_H('g6')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL62: SublineNarration = {
+  intro: { say: "You centralise Qc2. You press b7 with Qb3, hunt the f5-bishop with g4, trade to win the bishop pair, then fianchetto Bg2.", sayShort: "Qc2 — Qb3, g4, Nxe4, Bg2" },
+  beats: [
+    { atMove: 10, say: "Qb3 — pressing b7 and offering the queen trade.", sayShort: "Qb3 — pressure b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 14, say: "g4 — hunting the f5-bishop with a kingside expansion.", sayShort: "g4 — hunt the bishop", arrows: [_A('g4', 'f5')] },
+    { atMove: 16, say: "Nxe4 — trading, gaining the bishop pair.", sayShort: "Nxe4 — win the bishop pair", highlights: [_H('e4')] },
+    { atMove: 18, say: "Bg2 — fianchettoing to rake the long diagonal.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL63: SublineNarration = {
+  intro: { say: "You play the Exchange Slav. You develop Bf4, aim at h7 from d3, take the c-file with Rc1, then pressure the queenside with Qa4.", sayShort: "cxd5 — Bf4, Bd3, Rc1, Qa4" },
+  beats: [
+    { atMove: 8, say: "Bf4 — developing the bishop, eyeing c7.", sayShort: "Bf4 — eye c7", arrows: [_A('f4', 'c7')] },
+    { atMove: 16, say: "Bd3 — the bishop to the diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 18, say: "Rc1 — the rook takes the c-file.", sayShort: "Rc1 — claim the c-file", arrows: [_A('c1', 'c8')] },
+    { atMove: 22, say: "Qa4 — pressing the queenside, the symmetric edge.", sayShort: "Qa4 — press the queenside", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL64: SublineNarration = {
+  intro: { say: "You choose Qb3. After …dxc4 you regain it, fianchetto, press b7, then trade into a comfortable ending.", sayShort: "Qb3 — Qxc4, Bg2, Qb3, Nxb3" },
+  beats: [
+    { atMove: 8, say: "Qxc4 — regaining the pawn, the queen active.", sayShort: "Qxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 12, say: "Bg2 — the fianchetto, raking the long diagonal.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+    { atMove: 16, say: "Qb3 — pressing b7 and offering the queen trade.", sayShort: "Qb3 — pressure b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 20, say: "Nxb3 — recapturing into a comfortable ending.", sayShort: "Nxb3 — comfortable ending", highlights: [_H('b3')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL65: SublineNarration = {
+  intro: { say: "You fianchetto with g3. You centralise Qd3, break with e4, recapture, then meet …Bb4+ with Bd2 and trade into a comfortable game.", sayShort: "g3 — Qd3, e4, Qxe4, Bd2" },
+  beats: [
+    { atMove: 10, say: "Qd3 — centralising the queen, preparing the e4 break.", sayShort: "Qd3 — prep e4", highlights: [_H('d3')] },
+    { atMove: 12, say: "e4 — the central break, seizing space.", sayShort: "e4 — the central break", highlights: [_H('e4')] },
+    { atMove: 16, say: "Qxe4 — recapturing, the queen centralised dominating the centre.", sayShort: "Qxe4 — centralise the queen", highlights: [_H('e4')] },
+    { atMove: 18, say: "Bd2 — meeting …Bb4+, simplifying into a comfortable game.", sayShort: "Bd2 — meet …Bb4+", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL66: SublineNarration = {
+  intro: { say: "You enter the Meran with e3. You regain the pawn with Bxc4, aim at h7 from d3, fire the central e4 break, lunge d5 to gain space, then redeploy behind …c4.", sayShort: "e3 — Bxc4, e4, d5, Bc2" },
+  beats: [
+    { atMove: 12, say: "Bxc4 — regaining the pawn, the bishop active.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 18, say: "e4 — the Meran central break, seizing space.", sayShort: "e4 — the central break", highlights: [_H('e4')] },
+    { atMove: 20, say: "d5 — the central pawn lunges, gaining space and opening lines.", sayShort: "d5 — gain space", highlights: [_H('d5')] },
+    { atMove: 22, say: "Bc2 — redeploying the bishop behind …c4, building toward the kingside.", sayShort: "Bc2 — redeploy the bishop", highlights: [_H('c2')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Semi-Slav_Defense'],
+};
+const SL67: SublineNarration = {
+  intro: { say: "In the Botvinnik-style Bg5 line you play a4. You trade on f6 to damage Black's kingside, set up with e3 and g3, then fianchetto Bg2 raking the long diagonal.", sayShort: "a4 — Bxf6, e3, g3, Bg2" },
+  beats: [
+    { atMove: 14, say: "Bxf6 — trading to damage Black's kingside pawns.", sayShort: "Bxf6 — damage the kingside", highlights: [_H('f6')] },
+    { atMove: 16, say: "e3 — solidifying, preparing the fianchetto.", sayShort: "e3 — solidify", highlights: [_H('e3')] },
+    { atMove: 18, say: "g3 — preparing Bg2 to bear on the long diagonal.", sayShort: "g3 — prepare the fianchetto", highlights: [_H('g3')] },
+    { atMove: 20, say: "Bg2 — the bishop rakes the long diagonal at the weakened structure.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL68: SublineNarration = {
+  intro: { say: "In the Bg5 line you play e3. You challenge …b5 with a4, develop Be2, plant the knight on e5, then build pressure on the queenside.", sayShort: "e3 — a4, Be2, O-O, Ne5" },
+  beats: [
+    { atMove: 14, say: "a4 — challenging Black's …b5 expansion.", sayShort: "a4 — challenge …b5", arrows: [_A('a4', 'b5')] },
+    { atMove: 16, say: "Be2 — developing, completing the set-up.", sayShort: "Be2 — develop", highlights: [_H('e2')] },
+    { atMove: 18, say: "O-O — king to safety.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 20, say: "Ne5 — the knight to the central outpost, pressing the position.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL69: SublineNarration = {
+  intro: { say: "You trade Bxf6 and after …c5 you open lines: cxd5, then Nxd5 wins a clean pawn. You take on c5, develop Bb5+ with check, then post the rook on c1 — clearly better.", sayShort: "Bxf6 — cxd5, Nxd5, Bb5+, Rc1" },
+  beats: [
+    { atMove: 12, say: "e3 — solidifying before the tactics.", sayShort: "e3 — solidify", highlights: [_H('e3')] },
+    { atMove: 16, say: "Nxd5 — winning a clean central pawn after the trades.", sayShort: "Nxd5 — win the pawn", highlights: [_H('d5')] },
+    { atMove: 20, say: "Bb5+ — developing with check, pinning the c6-knight.", sayShort: "Bb5+ — develop with check", arrows: [_A('b5', 'c6')] },
+    { atMove: 22, say: "Rc1 — the rook to the c-file, pressing with the extra pawn.", sayShort: "Rc1 — press, pawn up", arrows: [_A('c1', 'c8')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL70: SublineNarration = {
+  intro: { say: "You play the Exchange with cxd5. You develop Bf4, offer the bishop trade from d3, recapture centralising the queen toward h7, then castle and prepare the minority attack.", sayShort: "cxd5 — Bf4, Bd3, Qxd3, O-O" },
+  beats: [
+    { atMove: 10, say: "Bf4 — developing the bishop, eyeing c7.", sayShort: "Bf4 — eye c7", arrows: [_A('f4', 'c7')] },
+    { atMove: 14, say: "Bd3 — offering the bishop trade while aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'f5')] },
+    { atMove: 16, say: "Qxd3 — recapturing, the queen centralised toward h7.", sayShort: "Qxd3 — centralise the queen", arrows: [_A('d3', 'h7')] },
+    { atMove: 18, say: "O-O — king safe, ready for the minority attack.", sayShort: "O-O — prepare the minority attack", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL71: SublineNarration = {
+  intro: { say: "You choose e3. After …Bf5 you hunt the bishop with Nh4 and, when it takes b1, recapture and develop solidly with the better structure.", sayShort: "e3 — Nh4, Rxb1, Bd2, Be2" },
+  beats: [
+    { atMove: 8, say: "Nh4 — hunting the f5-bishop, the key Slav idea.", sayShort: "Nh4 — hunt the bishop", arrows: [_A('h4', 'f5')] },
+    { atMove: 10, say: "Rxb1 — recapturing; you keep the bishop pair after Black gives up the light bishop.", sayShort: "Rxb1 — keep the bishop pair", highlights: [_H('b1')] },
+    { atMove: 14, say: "Bd2 — developing, meeting …Bb4+.", sayShort: "Bd2 — meet …Bb4+", highlights: [_H('d2')] },
+    { atMove: 18, say: "Be2 — completing development with a comfortable, slightly better game.", sayShort: "Be2 — develop, comfortable", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL72: SublineNarration = {
+  intro: { say: "You play the Exchange Slav. You develop Bf4, aim at h7 from d3, take the c-file with Rc1, then pressure the queenside with Qa4.", sayShort: "cxd5 — Bf4, Bd3, Rc1, Qa4" },
+  beats: [
+    { atMove: 8, say: "Bf4 — developing the bishop, eyeing c7.", sayShort: "Bf4 — eye c7", arrows: [_A('f4', 'c7')] },
+    { atMove: 16, say: "Bd3 — the bishop to the diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 18, say: "Rc1 — the rook takes the c-file.", sayShort: "Rc1 — claim the c-file", arrows: [_A('c1', 'c8')] },
+    { atMove: 22, say: "Qa4 — pressing the queenside, the symmetric edge.", sayShort: "Qa4 — press the queenside", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL73: SublineNarration = {
+  intro: { say: "You choose Qb3. After …dxc4 you regain it, fianchetto, press b7, then trade into a comfortable ending.", sayShort: "Qb3 — Qxc4, Bg2, Qb3, Nxb3" },
+  beats: [
+    { atMove: 8, say: "Qxc4 — regaining the pawn, the queen active.", sayShort: "Qxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 12, say: "Bg2 — the fianchetto, raking the long diagonal.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+    { atMove: 16, say: "Qb3 — pressing b7 and offering the queen trade.", sayShort: "Qb3 — pressure b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 20, say: "Nxb3 — recapturing into a comfortable ending.", sayShort: "Nxb3 — comfortable ending", highlights: [_H('b3')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL74: SublineNarration = {
+  intro: { say: "You choose g3. After …Bf5 you hunt the bishop with Nh4, press b7 with Qb3, trade on g6, then clamp with c5.", sayShort: "g3 — Nh4, Qb3, Nxg6, c5" },
+  beats: [
+    { atMove: 10, say: "Nh4 — hunting the f5-bishop.", sayShort: "Nh4 — hunt the bishop", arrows: [_A('h4', 'f5')] },
+    { atMove: 14, say: "Qb3 — pressing b7 and offering the queen trade.", sayShort: "Qb3 — pressure b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 16, say: "Nxg6 — trading to damage Black's kingside pawns.", sayShort: "Nxg6 — damage the kingside", highlights: [_H('g6')] },
+    { atMove: 18, say: "c5 — gaining queenside space, clamping.", sayShort: "c5 — clamp the queenside", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL75: SublineNarration = {
+  intro: { say: "In the Qc2 Slav, having regained the pawn, you develop Nc3. You fianchetto with g3 and Bg2, castle, post the rook on e1, then develop Bf4 and press b7.", sayShort: "Nc3 — Bg2, Re1, Bf4, Qb3" },
+  beats: [
+    { atMove: 14, say: "Bg2 — the fianchetto, raking the long diagonal.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+    { atMove: 18, say: "Re1 — the rook to e1, preparing the e4 break.", sayShort: "Re1 — prep e4", arrows: [_A('e1', 'e4')] },
+    { atMove: 20, say: "Bf4 — developing the bishop, eyeing c7.", sayShort: "Bf4 — eye c7", arrows: [_A('f4', 'c7')] },
+    { atMove: 22, say: "Qb3 — pressing b7 and the queenside.", sayShort: "Qb3 — pressure b7", arrows: [_A('b3', 'b7')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL76: SublineNarration = {
+  intro: { say: "In the Qc2 Slav you develop Bf4. You develop Nbd2 and Be2, castle, hunt the f5-bishop with Nh4, then trade it off for the better structure.", sayShort: "Bf4 — Nbd2, Be2, Nh4, Bxg4" },
+  beats: [
+    { atMove: 12, say: "Nbd2 — developing, completing the set-up.", sayShort: "Nbd2 — develop", highlights: [_H('d2')] },
+    { atMove: 16, say: "Be2 — developing the bishop, preparing to castle.", sayShort: "Be2 — develop", highlights: [_H('e2')] },
+    { atMove: 20, say: "Nh4 — hunting the f5/g4-bishop, the key Slav idea.", sayShort: "Nh4 — hunt the bishop", arrows: [_A('h4', 'g6')] },
+    { atMove: 22, say: "Bxg4 — trading the bishop off, a comfortable game with the sounder structure.", sayShort: "Bxg4 — trade, comfortable", highlights: [_H('g4')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL77: SublineNarration = {
+  intro: { say: "In the Qc2 Slav you leap Ne5. You set up with e3, trade on d7, support with f3, centralise with Qe2, then challenge …b5 with a4.", sayShort: "Ne5 — Nxd7, f3, Qe2, a4" },
+  beats: [
+    { atMove: 12, say: "e3 — solidifying behind the e5-knight.", sayShort: "e3 — solidify", highlights: [_H('e3')] },
+    { atMove: 14, say: "Nxd7 — trading off into a solid, comfortable structure.", sayShort: "Nxd7 — trade, solid", highlights: [_H('d7')] },
+    { atMove: 18, say: "Qe2 — centralising the queen, preparing queenside play.", sayShort: "Qe2 — centralise", highlights: [_H('e2')] },
+    { atMove: 20, say: "a4 — challenging Black's …b5 expansion.", sayShort: "a4 — challenge …b5", arrows: [_A('a4', 'b5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL78: SublineNarration = {
+  intro: { say: "In the Qc2 Slav you play e3. You challenge the f5-bishop from d3, prepare Bb2 with b3, recapture centralising the queen toward h7, then challenge …b5 with a4.", sayShort: "e3 — Bd3, b3, Qxd3, a4" },
+  beats: [
+    { atMove: 12, say: "Bd3 — challenging the f5-bishop while aiming at h7.", sayShort: "Bd3 — challenge the bishop", arrows: [_A('d3', 'f5')] },
+    { atMove: 16, say: "b3 — preparing Bb2 and the queenside structure.", sayShort: "b3 — prepare Bb2", highlights: [_H('b3')] },
+    { atMove: 20, say: "Qxd3 — recapturing, the queen centralised toward h7.", sayShort: "Qxd3 — centralise toward h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 22, say: "a4 — challenging Black's …b5 expansion.", sayShort: "a4 — challenge …b5", arrows: [_A('a4', 'b5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL79: SublineNarration = {
+  intro: { say: "You play the sharp e4 gambit. After …b5 you undermine with b3, recapture toward the centre, develop Nc3, gain space with e5, then aim at the f5-bishop from d3 — a double-edged fight with the big centre for the pawn.", sayShort: "e4 — b3, Nc3, e5, Bd3" },
+  beats: [
+    { atMove: 10, say: "b3 — undermining the c4-pawn to regain the gambit material.", sayShort: "b3 — undermine c4", arrows: [_A('b3', 'c4')] },
+    { atMove: 14, say: "Nc3 — developing behind the broad centre.", sayShort: "Nc3 — develop", highlights: [_H('c3')] },
+    { atMove: 16, say: "e5 — gaining space, clamping Black's kingside.", sayShort: "e5 — clamp the kingside", highlights: [_H('e5')] },
+    { atMove: 18, say: "Bd3 — challenging the f5-bishop while aiming at h7 in the double-edged fight.", sayShort: "Bd3 — challenge, aim at h7", arrows: [_A('d3', 'f5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+const SL80: SublineNarration = {
+  intro: { say: "You choose the sharp Nc3 and Bg5. After …dxc4 you build the broad centre with e4, lunge d5 to prise open lines, then crash through with dxe6 in a double-edged fight.", sayShort: "Nc3 — Bg5, e4, d5, dxe6" },
+  beats: [
+    { atMove: 8, say: "Bg5 — pinning the f6-knight, the sharp anti-Slav.", sayShort: "Bg5 — pin the knight", arrows: [_A('g5', 'd8')] },
+    { atMove: 12, say: "e4 — building the broad centre, seizing space.", sayShort: "e4 — build the centre", highlights: [_H('e4')] },
+    { atMove: 18, say: "d5 — the central pawn lunges, prising open lines.", sayShort: "d5 — prise open lines", highlights: [_H('d5')] },
+    { atMove: 22, say: "dxe6 — crashing through toward Black's king in the sharp fight.", sayShort: "dxe6 — crash through", highlights: [_H('e6')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Slav_Defense'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
+  'slav-defence::6::e3@6': SL61,
+  'slav-defence::5::e3@6': SL51,
+  'slav-defence::4::e3@6': SL41,
+  'slav-defence::2::e3@6': SL21,
+  'slav-defence::1::Nc3@8': SL12,
+  'slav-defence::0::e3@6': SL01,
   'english-opening::7::Bd7@17': EN71,
   'english-opening::6::Be6@13': EN61,
   'english-opening::4::d6@9': EN41,
@@ -5981,8 +6717,8 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'queens-indian::6::Nc3@4': WQIDNC3,
   'kings-indian-defence::4::Nc3@4': WKIDMAIN,
   'nimzo-indian::3::Bxf6@8': WNIMBXF,
-  'slav-defence::3::Nc3@6': WSLNC3,
-  'slav-defence::7::Nc3@6': WSLNC3,
+  'slav-defence::3::Nc3@6': SL31,
+  'slav-defence::7::Nc3@6': SL80,
   // ── queens-gambit ──
   'queens-gambit::0::h6@19': QG06,
   'queens-gambit::0::c6@5': QG03,
@@ -6205,78 +6941,78 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'qga::5::Bd3@12': C12,
   'qga::5::Qe2@10': C12,
   // ── slav-defence ──
-  'slav-defence::0::Bd2@14': C16,
-  'slav-defence::0::Qb3@14': C16,
-  'slav-defence::0::Ne5@10': C16,
-  'slav-defence::0::Qc2@6': C17,
-  'slav-defence::0::cxd5@6': C18,
-  'slav-defence::0::Qb3@6': C17,
-  'slav-defence::0::g3@6': C17,
-  'slav-defence::0::Nh4@10': C19,
-  'slav-defence::0::e4@8': C20,
-  'slav-defence::1::Nc3@10': C17,
-  'slav-defence::1::Nf3@8': C16,
-  'slav-defence::1::Nf3@10': C17,
-  'slav-defence::1::a3@10': C17,
-  'slav-defence::1::Nd2@10': C17,
-  'slav-defence::1::Bb5@10': C17,
-  'slav-defence::1::a3@8': C16,
-  'slav-defence::1::h3@10': C17,
-  'slav-defence::1::Nc3@6': C16,
-  'slav-defence::2::Qc2@6': C17,
-  'slav-defence::2::cxd5@6': C18,
-  'slav-defence::2::c5@8': C21,
-  'slav-defence::2::Qb3@6': C17,
-  'slav-defence::2::g3@6': C17,
-  'slav-defence::2::a4@8': C16,
-  'slav-defence::2::cxd5@8': C16,
-  'slav-defence::2::Qb3@10': C17,
-  'slav-defence::2::g3@8': C16,
-  'slav-defence::3::cxd5@14': C19,
-  'slav-defence::3::h3@14': C19,
-  'slav-defence::3::Be2@14': C19,
-  'slav-defence::3::Bd2@14': C19,
-  'slav-defence::3::Qb3@14': C19,
-  'slav-defence::3::Qc2@6': C17,
-  'slav-defence::3::cxd5@6': C18,
-  'slav-defence::3::g3@14': C19,
-  'slav-defence::3::Qb3@6': C17,
-  'slav-defence::4::a4@8': DSLAV,
-  'slav-defence::4::Qc2@6': C17,
-  'slav-defence::4::cxd5@6': C18,
-  'slav-defence::4::Qb3@6': C17,
-  'slav-defence::4::g3@6': C17,
-  'slav-defence::4::Be2@18': C20,
-  'slav-defence::4::Ng5@14': C20,
-  'slav-defence::4::Bg5@18': C20,
-  'slav-defence::4::Be2@14': C20,
-  'slav-defence::5::b3@18': C17,
-  'slav-defence::5::Qc2@6': C17,
-  'slav-defence::5::cxd5@6': C18,
-  'slav-defence::5::cxd5@18': C17,
-  'slav-defence::5::Qb3@6': C17,
-  'slav-defence::5::Re1@18': C17,
-  'slav-defence::5::Be2@10': WSLAVG6,
-  'slav-defence::5::Rd1@18': C17,
-  'slav-defence::5::g3@6': C17,
-  'slav-defence::6::e3@8': C17,
-  'slav-defence::6::a4@12': C16,
-  'slav-defence::6::e3@12': C17,
-  'slav-defence::6::Bxf6@10': WSLMOS,
-  'slav-defence::6::Qc2@6': C17,
-  'slav-defence::6::cxd5@6': C18,
-  'slav-defence::6::Qb3@6': C17,
-  'slav-defence::6::cxd5@8': C18,
-  'slav-defence::6::g3@8': C21,
-  'slav-defence::7::e3@6': C17,
-  'slav-defence::7::Nc3@10': C21,
-  'slav-defence::7::cxd5@6': C18,
-  'slav-defence::7::Qb3@6': C17,
-  'slav-defence::7::e4@8': C20,
-  'slav-defence::7::g3@6': C17,
-  'slav-defence::7::Bf4@10': C21,
-  'slav-defence::7::Ne5@10': C21,
-  'slav-defence::7::e3@10': C17,
+  'slav-defence::0::Bd2@14': SL06,
+  'slav-defence::0::Qb3@14': SL07,
+  'slav-defence::0::Ne5@10': SL08,
+  'slav-defence::0::Qc2@6': SL02,
+  'slav-defence::0::cxd5@6': SL03,
+  'slav-defence::0::Qb3@6': SL04,
+  'slav-defence::0::g3@6': SL05,
+  'slav-defence::0::Nh4@10': SL09,
+  'slav-defence::0::e4@8': SL10,
+  'slav-defence::1::Nc3@10': SL13,
+  'slav-defence::1::Nf3@8': SL14,
+  'slav-defence::1::Nf3@10': SL15,
+  'slav-defence::1::a3@10': SL17,
+  'slav-defence::1::Nd2@10': SL18,
+  'slav-defence::1::Bb5@10': SL19,
+  'slav-defence::1::a3@8': SL16,
+  'slav-defence::1::h3@10': SL20,
+  'slav-defence::1::Nc3@6': SL11,
+  'slav-defence::2::Qc2@6': SL22,
+  'slav-defence::2::cxd5@6': SL23,
+  'slav-defence::2::c5@8': SL26,
+  'slav-defence::2::Qb3@6': SL24,
+  'slav-defence::2::g3@6': SL25,
+  'slav-defence::2::a4@8': SL27,
+  'slav-defence::2::cxd5@8': SL28,
+  'slav-defence::2::Qb3@10': SL29,
+  'slav-defence::2::g3@8': SL30,
+  'slav-defence::3::cxd5@14': SL35,
+  'slav-defence::3::h3@14': SL36,
+  'slav-defence::3::Be2@14': SL37,
+  'slav-defence::3::Bd2@14': SL38,
+  'slav-defence::3::Qb3@14': SL39,
+  'slav-defence::3::Qc2@6': SL32,
+  'slav-defence::3::cxd5@6': SL33,
+  'slav-defence::3::g3@14': SL40,
+  'slav-defence::3::Qb3@6': SL34,
+  'slav-defence::4::a4@8': SL46,
+  'slav-defence::4::Qc2@6': SL42,
+  'slav-defence::4::cxd5@6': SL43,
+  'slav-defence::4::Qb3@6': SL44,
+  'slav-defence::4::g3@6': SL45,
+  'slav-defence::4::Be2@18': SL50,
+  'slav-defence::4::Ng5@14': SL47,
+  'slav-defence::4::Bg5@18': SL49,
+  'slav-defence::4::Be2@14': SL48,
+  'slav-defence::5::b3@18': SL56,
+  'slav-defence::5::Qc2@6': SL52,
+  'slav-defence::5::cxd5@6': SL53,
+  'slav-defence::5::cxd5@18': SL57,
+  'slav-defence::5::Qb3@6': SL54,
+  'slav-defence::5::Re1@18': SL59,
+  'slav-defence::5::Be2@10': SL60,
+  'slav-defence::5::Rd1@18': SL58,
+  'slav-defence::5::g3@6': SL55,
+  'slav-defence::6::e3@8': SL66,
+  'slav-defence::6::a4@12': SL67,
+  'slav-defence::6::e3@12': SL68,
+  'slav-defence::6::Bxf6@10': SL69,
+  'slav-defence::6::Qc2@6': SL62,
+  'slav-defence::6::cxd5@6': SL63,
+  'slav-defence::6::Qb3@6': SL64,
+  'slav-defence::6::cxd5@8': SL70,
+  'slav-defence::6::g3@8': SL65,
+  'slav-defence::7::e3@6': SL71,
+  'slav-defence::7::Nc3@10': SL75,
+  'slav-defence::7::cxd5@6': SL72,
+  'slav-defence::7::Qb3@6': SL73,
+  'slav-defence::7::e4@8': SL79,
+  'slav-defence::7::g3@6': SL74,
+  'slav-defence::7::Bf4@10': SL76,
+  'slav-defence::7::Ne5@10': SL77,
+  'slav-defence::7::e3@10': SL78,
   // ── semi-slav ──
   'semi-slav::0::Bg5@8': WSSL,
   'semi-slav::0::Qc2@10': C23,
