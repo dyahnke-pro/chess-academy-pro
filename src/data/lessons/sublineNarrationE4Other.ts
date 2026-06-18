@@ -530,6 +530,11 @@ const N52: SublineNarration = {
 
 const N53: SublineNarration = {
   intro: { say: "Bc4 — White hits your d5-knight and eyes f7, but the bishop bites on granite: …e6 props up d5 with tempo. Play …dxe5 to leave him an isolated d4-pawn, then blockade it with your knight on d5. The c-file and that d5 outpost outlast his short-lived poke at f7.", sayShort: "…e6 shores d5, blockade the isolani" },
+  beats: [
+    { atMove: 13, say: "…Nb6 reroutes the knight, eyeing c4 and pressing White's centre.", sayShort: "…Nb6 — eye c4.", highlights: [H('b6')] },
+    { atMove: 15, say: "…dxe5 wins back the centre pawn, the position comfortable and balanced.", sayShort: "…dxe5 — win back the centre.", highlights: [H('e5')] },
+    { atMove: 23, say: "…Be7 completes development, your pieces harmonious with full equality.", sayShort: "…Be7 — finish developing.", highlights: [H('e7')] },
+  ],
   sources: ['concept:pos-outpost', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Alapin_Variation'],
 };
 
@@ -545,6 +550,11 @@ const N54: SublineNarration = {
 
 const N55: SublineNarration = {
   intro: { say: "Be2 — a quiet developing move that leaves the d4-pawn without dynamic support. Strike with …dxe5 to open the position and expose that isolated d4-pawn as a fixed target. Blockade with your d5-knight, press with the c6-knight, and take the initiative down the half-open c-file.", sayShort: "…dxe5, fix and besiege d4" },
+  beats: [
+    { atMove: 13, say: "…g6 prepares the fianchetto, your bishop bound for the long diagonal.", sayShort: "…g6 — prep the fianchetto.", highlights: [H('g6')] },
+    { atMove: 15, say: "…dxe5 wins back the centre pawn, the position comfortable.", sayShort: "…dxe5 — win back the centre.", highlights: [H('e5')] },
+    { atMove: 17, say: "…Be6 develops the bishop to a fine post, guarding key squares.", sayShort: "…Be6 — fine bishop post.", highlights: [H('e6')] },
+  ],
   sources: ['concept:pawn-isolated', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Alapin_Variation'],
 };
 
@@ -610,21 +620,41 @@ const N61: SublineNarration = {
 
 const N62: SublineNarration = {
   intro: { say: "Bc4 — White develops against your d5-knight and f7, but without the d4-push it has little bite: …e6 reinforces d5 at will. Expand with …a5 and …b6, then fianchetto your long-diagonal bishop to bear down on his centre. The c5-pawn and the d5 outpost give you a free hand while his setup stays passive.", sayShort: "…e6 holds d5, expand queenside" },
+  beats: [
+    { atMove: 7, say: "…Nb6 reroutes the knight, hitting White's Bc4 and eyeing c4.", sayShort: "…Nb6 — hit the bishop.", highlights: [H('b6')] },
+    { atMove: 11, say: "…e5 strikes the centre, claiming space and freeing your pieces.", sayShort: "…e5 — strike the centre.", highlights: [H('e5')] },
+    { atMove: 21, say: "…Bxd6 develops the bishop with the recapture, your pieces active and equal.", sayShort: "…Bxd6 — active bishop.", highlights: [H('d6')] },
+  ],
   sources: ['concept:pos-outpost', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Alapin_Variation'],
 };
 
 const N63: SublineNarration = {
   intro: { say: "d4 — the Alapin's e5-d4 duo, but your d5-knight already eyes that centre. Take and play …d6 to strike the e5-spearhead at its base; once …dxe5 trades, his d4-pawn is isolated on the half-open c-file. Swarm d4 and e5 with your knights on c6 and d5, and get the light-squared bishop out before …e6 locks it in.", sayShort: "Hit e5 at its base with …d6" },
+  beats: [
+    { atMove: 7, say: "…cxd4 opens the centre, your active pieces springing out against the Alapin.", sayShort: "…cxd4 — open the centre.", highlights: [H('d4')] },
+    { atMove: 11, say: "…Nc6 develops with pressure on the centre, your pieces active.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
+    { atMove: 15, say: "…dxe5 wins back the centre pawn, the position comfortable and balanced.", sayShort: "…dxe5 — win back the centre.", highlights: [H('e5')] },
+  ],
   sources: ['concept:pawn-isolated', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Alapin_Variation'],
 };
 
 const N64: SublineNarration = {
   intro: { say: "d4 — White strikes in the centre, but instead of capturing with …cxd4, clamp with …c4: lock the queenside and fix his pawn chain on c3 and d4. Your d5-knight becomes a permanent thorn and the c4-pawn cramps him, daring b3 to open lines for you. Follow the wedge with queenside expansion, undermining the base of the chain rather than trading into his central space.", sayShort: "Clamp with …c4, fix the chain" },
+  beats: [
+    { atMove: 9, say: "…cxd4 opens the centre, your active pieces springing out.", sayShort: "…cxd4 — open the centre.", highlights: [H('d4')] },
+    { atMove: 13, say: "…Nb6 reroutes the knight, eyeing c4 and pressing White's centre.", sayShort: "…Nb6 — eye c4.", highlights: [H('b6')] },
+    { atMove: 15, say: "…dxe5 wins back the centre pawn, the position comfortable.", sayShort: "…dxe5 — win back the centre.", highlights: [H('e5')] },
+  ],
   sources: ['concept:pawn-chain', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Alapin_Variation'],
 };
 
 const N65: SublineNarration = {
   intro: { say: "g3 — White fianchettoes to challenge your d5-knight on the long diagonal, but the plan is slow. Strike the spearhead at once with …d6 to undermine e5; after exd6 the centre opens in your favour, with your centralised knight and a clear lead in development.", sayShort: "g3 — …d6 undermines e5." },
+  beats: [
+    { atMove: 7, say: "…d6 braces the centre, your solid setup against White's fianchetto.", sayShort: "…d6 — brace the centre.", highlights: [H('d6')] },
+    { atMove: 9, say: "…cxd4 opens the centre, your active pieces springing out.", sayShort: "…cxd4 — open the centre.", highlights: [H('d4')] },
+    { atMove: 13, say: "…Nc6 develops with pressure on the centre, your pieces active.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
+  ],
   sources: ['concept:pos-center', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Alapin_Variation'],
 };
 
@@ -1698,56 +1728,111 @@ const N189: SublineNarration = {
 
 const N190: SublineNarration = {
   intro: { say: "Bc4 — White's bishop eyes f7, but you've kept the gambit pawn and chased it: …a6 and …b5 push it back to b3, and now …Bb7 plants the bishop on the long diagonal at e4 and g2, the ideal anti-Morra post. With the extra pawn, a solid e6-shell, and this strong fianchetto, trade into a position where your material edge tells.", sayShort: "…Bb7 rakes the long diagonal, pawn up" },
+  beats: [
+    { atMove: 9, say: "…Nc6 develops with pressure, returning toward a solid setup while you hold the gambit pawn.", sayShort: "…Nc6 — develop, hold the pawn.", highlights: [H('c6')] },
+    { atMove: 13, say: "…d6 braces the centre, blunting White's initiative and keeping your extra material.", sayShort: "…d6 — brace, hold material.", highlights: [H('d6')] },
+    { atMove: 21, say: "…Bd6 develops the dark bishop, consolidating your sound, slightly-better position.", sayShort: "…Bd6 — develop, consolidate.", highlights: [H('d6')] },
+  ],
   sources: ['concept:pawn-fianchetto', 'concept:pawn-majority', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N191: SublineNarration = {
   intro: { say: "Bc4 — White aims the bishop at f7, so meet it with …e6 and …a6, preparing …b5 to chase it and seize queenside space. Hold the gambit pawn; develop the knight to e7 and on to g6 rather than f6, sidestepping any Bg5 pin. A solid shell behind the e6-pawn plus your extra pawn means White must prove the initiative is worth the material — it usually isn't.", sayShort: "…e6, …a6, …b5 — blunt the bishop" },
+  beats: [
+    { atMove: 9, say: "…e6 braces the centre, a solid wall against White's open files.", sayShort: "…e6 — brace the centre.", highlights: [H('e6')] },
+    { atMove: 13, say: "…b5 expands and hits White's bishop, gaining queenside space with tempo.", sayShort: "…b5 — expand, hit the bishop.", highlights: [H('b5')] },
+    { atMove: 23, say: "…Nf6 develops with a hit on e4, completing your solid setup.", sayShort: "…Nf6 — develop, hit e4.", arrows: [A('f6', 'e4')], highlights: [H('e4')] },
+  ],
   sources: ['concept:pos-space', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N192: SublineNarration = {
   intro: { say: "Be2 — White develops quietly instead of the aggressive c4-bishop, so seize the centre with …e5, claiming the d4-square with a broad pawn front while a pawn up. With no bishop eyeing f7 there's no pressure to parry, so …a6 prepares …b5 and easy development with …Nf6, …Be7 and castling. Solid, simple, and a pawn ahead — your central pawns and material edge do the work.", sayShort: "…e5 grabs the center, pawn up" },
+  beats: [
+    { atMove: 11, say: "…Be7 develops and prepares castling, your solid setup holding firm.", sayShort: "…Be7 — develop, prep castle.", highlights: [H('e7')] },
+    { atMove: 17, say: "…e5 strikes the centre, gaining space and freeing your pieces.", sayShort: "…e5 — strike the centre.", highlights: [H('e5')] },
+    { atMove: 19, say: "…O-O tucks the king safe, your solid setup ready to consolidate.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+  ],
   sources: ['concept:pos-center', 'concept:pawn-majority', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N193: SublineNarration = {
   intro: { say: "Be3 — White's bishop comes to e3 watching the queenside dark squares, after your …e6, …a6, …Nge7 system held the gambit pawn. Answer with …Ng6 to free the f8-bishop and press his grip, then castle behind your solid pawn shell. The recipe stays constant: develop without weaknesses, neutralise the c4-bishop with …b5, and convert your extra pawn once the initiative runs dry.", sayShort: "…Ng6 — develop, keep the pawn" },
+  beats: [
+    { atMove: 15, say: "…Ng6 reroutes the knight to a fine square, eyeing f4 and the centre.", sayShort: "…Ng6 — reroute, eye f4.", arrows: [A('g6', 'f4')], highlights: [H('f4')] },
+    { atMove: 17, say: "…Bb4 pins and pressures White's structure, gaining tempo.", sayShort: "…Bb4 — pin and pressure.", highlights: [H('b4')] },
+    { atMove: 19, say: "…b5 expands on the queenside, gaining space in the comfortable game.", sayShort: "…b5 — queenside space.", highlights: [H('b5')] },
+  ],
   sources: ['concept:pos-development', 'concept:pawn-majority', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N194: SublineNarration = {
   intro: { say: "Nf3 — White declines the gambit, recapturing on d4 with the knight, so this is simply an Open Sicilian and you hand no pawn back. With …d6, …Nf6 and …a6 set up a Najdorf, and …e5 hits the d4-knight, driving it to b3 and gaining the d5-square as an outpost. Bring the bishop to e6 to fight for d5, and take the familiar Sicilian counterplay on both wings with a fully sound game.", sayShort: "Morra declined — Najdorf-style …e5, …Be6" },
+  beats: [
+    { atMove: 5, say: "…Qa5+ checks and develops the queen with tempo, disrupting White's gambit flow.", sayShort: "…Qa5+ — check, gain tempo.", highlights: [H('a5')] },
+    { atMove: 9, say: "…e6 braces the centre, a solid wall against White's open files.", sayShort: "…e6 — brace the centre.", highlights: [H('e6')] },
+    { atMove: 15, say: "…Nf6 develops with a hit on e4, completing your solid setup.", sayShort: "…Nf6 — develop, hit e4.", arrows: [A('f6', 'e4')], highlights: [H('e4')] },
+  ],
   sources: ['concept:pos-outpost', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N195: SublineNarration = {
   intro: { say: "Nf3 — White delays the recapture before Nxc3, but you keep the gambit pawn and develop normally with …Nc6, …e6 and …a6. Steer your knight to e7 and g6 rather than f6, sidestepping any Bg5 pin, and your …b5 chases the c4-bishop off the f7-diagonal. Hold the material, build a shell with no weaknesses, and let White try to prove his initiative is worth a pawn — it usually falls short.", sayShort: "…e6, …a6 — hold the pawn, no weaknesses" },
+  beats: [
+    { atMove: 9, say: "…e6 braces the centre, a solid wall that blunts White's open-file pressure.", sayShort: "…e6 — brace the centre.", highlights: [H('e6')] },
+    { atMove: 13, say: "…Bb4+ develops with check, gaining tempo and trading to ease White's initiative.", sayShort: "…Bb4+ — develop with check.", highlights: [H('b4')] },
+    { atMove: 19, say: "…O-O tucks the king safe, your solid setup ready to consolidate the edge.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+  ],
   sources: ['concept:pos-king-safety', 'concept:pawn-majority', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N196: SublineNarration = {
   intro: { say: "Qe2 — White lifts the queen to support e4 and ready the rooks for the central files, so strike with …b5 at once, kicking the c4-bishop and grabbing queenside space while a pawn up. The bishop must retreat, and …Bb7 follows to rake the long diagonal at e4 and g2. Your method holds firm: blunt the c4-bishop, finish development behind the e6-pawn, and ride the extra pawn into the better game.", sayShort: "…b5 hits the bishop, pawn up" },
+  beats: [
+    { atMove: 13, say: "…Bc5 develops the bishop actively, eyeing f2 with pressure.", sayShort: "…Bc5 — active bishop.", arrows: [A('c5', 'f2')], highlights: [H('f2')] },
+    { atMove: 17, say: "…d5 strikes the centre, freeing your game with active pieces.", sayShort: "…d5 — strike the centre.", highlights: [H('d5')] },
+    { atMove: 21, say: "…O-O tucks the king safe, your active pieces ready to press.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+  ],
   sources: ['concept:pos-space', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N197: SublineNarration = {
   intro: { say: "Qe2 — White lifts the queen to back e4 and connect the rooks, and you're a clean pawn up in the model shell of …e6, …a6 and the knight on e7. Answer with …Ng6 to free the f8-bishop and challenge his setup, then …b5 to drive the c4-bishop off the f7-diagonal. Hold the extra pawn, complete development without weaknesses, and let White's missing breakthrough turn the material into the win.", sayShort: "…Ng6 then …b5 — keep the pawn" },
+  beats: [
+    { atMove: 15, say: "…Ng6 reroutes the knight to a fine square, eyeing f4 and the centre.", sayShort: "…Ng6 — reroute, eye f4.", arrows: [A('g6', 'f4')], highlights: [H('f4')] },
+    { atMove: 17, say: "…b5 expands on the queenside, gaining space against White's setup.", sayShort: "…b5 — queenside space.", highlights: [H('b5')] },
+    { atMove: 19, say: "…Bd6 develops the dark bishop to an active diagonal.", sayShort: "…Bd6 — active bishop.", highlights: [H('d6')] },
+  ],
   sources: ['concept:pos-king-safety', 'concept:pawn-majority', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N198: SublineNarration = {
   intro: { say: "Qxd4 — White declines by recapturing with the queen, so you lose no material and gain a tempo hitting the queen with …Nc6. After Qd3 expand on the queenside with …a6, …a5 and …a4, prying at White's b3-pawn, then fianchetto with …b6 to put the bishop on b7. Play sound Sicilian chess with a free tempo banked: aim the b7-bishop at e4 and use the queenside space against White's loosened pawns.", sayShort: "Qxd4 declined — …a4 and …b6 pry queenside" },
+  beats: [
+    { atMove: 5, say: "…Nc6 develops with a hit on White's centralised queen, gaining tempo.", sayShort: "…Nc6 — hit the queen.", highlights: [H('c6')] },
+    { atMove: 9, say: "…Bg7 fianchettoes onto the long diagonal, your bishop raking the centre.", sayShort: "…Bg7 — the long diagonal.", arrows: [A('g7', 'b2')], highlights: [H('b2')] },
+    { atMove: 13, say: "…Bg4 develops with a pin, pressuring White's setup.", sayShort: "…Bg4 — pin and pressure.", highlights: [H('g4')] },
+  ],
   sources: ['concept:pos-tempo', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N199: SublineNarration = {
   intro: { say: "a4 — White stops your …b5 freeing break before it comes, but the move costs time and leaves the b4-square weak. Continue the antidote with …Nge7, heading for g6, keeping the extra pawn and a flexible structure. The b4-hole and White's spent tempo favour you: develop calmly, eye a knight to b4 or a …d5 break, and let the material edge plus the lack of a White breakthrough decide.", sayShort: "a4 weakens b4 — …Nge7 stays solid" },
+  beats: [
+    { atMove: 13, say: "…d6 braces the centre, your solid setup blunting White's initiative.", sayShort: "…d6 — brace the centre.", highlights: [H('d6')] },
+    { atMove: 17, say: "…Nf6 develops with a hit on e4, completing your setup.", sayShort: "…Nf6 — develop, hit e4.", arrows: [A('f6', 'e4')], highlights: [H('e4')] },
+    { atMove: 21, say: "…e5 strikes the centre, gaining space and freeing your pieces.", sayShort: "…e5 — strike the centre.", highlights: [H('e5')] },
+  ],
   sources: ['concept:pos-weak-squares', 'concept:pos-tempo', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
 const N200: SublineNarration = {
   intro: { say: "Bg5 — you've taken the gambit pawn with …dxc3 and built the model antidote of …e6, …a6 and the knight to e7, holding the pawn and a sound structure. White swings the bishop to g5 to provoke a weakness, but with your knight on e7 rather than f6 there's nothing to pin — it bites on granite. Play …Ng6 to hit the g5-bishop and free the f8-bishop, then …b5 to chase the c4-bishop off the f7-diagonal, holding the pawn while White's initiative thins.", sayShort: "Keep the pawn — …Ng6 answers Bg5" },
+  beats: [
+    { atMove: 15, say: "…b5 expands on the queenside, gaining space against White's setup.", sayShort: "…b5 — queenside space.", highlights: [H('b5')] },
+    { atMove: 19, say: "…Bb7 develops the bishop onto the long diagonal, raking e4 and the centre.", sayShort: "…Bb7 — rake the diagonal.", arrows: [A('b7', 'e4')], highlights: [H('e4')] },
+    { atMove: 23, say: "…Be7 completes development, your solid setup ready to consolidate.", sayShort: "…Be7 — finish developing.", highlights: [H('e7')] },
+  ],
   sources: ['concept:pos-king-safety', 'concept:pawn-majority', 'https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit'],
 };
 
