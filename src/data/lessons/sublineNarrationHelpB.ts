@@ -58,15 +58,40 @@ const AB_NE4: SN = {
   sources: ['concept:pos-space', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
 };
 
+// ── Albin Counter-Gambit (student BLACK) — the …d4 wedge + opposite-wing attack.
+// The move-14 deviations all branch from one tabiya; the plan never changes.
+// Spine: d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 g3 Bg4 Bg2 Qd7 O-O O-O-O
+const ALBIN_TABIYA: SN = {
+  intro: {
+    say: "You're in the Albin main tabiya, and White's move here is just one of many tries — your plan never changes. The …d4 wedge is the soul of the gambit: it jams deep into White's camp and refuses to be shifted. With the kings on opposite wings you've got the head start — storm White's king with …h5-h4 while …Nge7-g6 rounds up the e5-pawn. Sharp, attacking, full of practical venom.",
+    sayShort: 'Hold d4, storm with …h5-h4.',
+  },
+  beats: [
+    { atMove: 5, say: "…d4 — the soul of the Albin. Your pawn jams deep into White's position, cramping his pieces and refusing to be dislodged. Every plan you have is built around protecting and using this wedge.", highlights: [H('d4', ATK)] },
+    { atMove: 9, say: "…Bg4 — pinning the f3-knight, the very piece that most wants to chip away at your proud d4-pawn. Pin its attacker and the wedge only grows stronger.", highlights: [H('f3', KEY)] },
+    { atMove: 13, say: "…O-O-O — castling straight into the attack. Kings on opposite wings means a race, and you have the jump: hurl the h-pawn at White's king while the d4-wedge keeps him too cramped to strike back in time.", highlights: [H('d4', ATK)] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Albin_Countergambit'],
+};
+
 export const SUBLINE_NARRATION_HELP_B: Record<string, SN> = {
+  // anti-Budapest
   'anti-budapest::0::g5@7': AB_G5,
   'anti-budapest::2::g5@7': AB_G5,
   'anti-budapest::0::Bb4+@7': AB_BB4,
   'anti-budapest::1::Bb4+@7': AB_BB4,
   'anti-budapest::1::Nc6@7': AB_NC6,
   'anti-budapest::2::Nc6@7': AB_NC6,
-  'anti-budapest::1::Nc6@9': AB_G5, // Nc6@9 is the …g5 main line — same teaching
+  'anti-budapest::1::Nc6@9': AB_G5,
   'anti-budapest::0::Ne4@5': AB_NE4,
   'anti-budapest::1::Ne4@5': AB_NE4,
   'anti-budapest::2::Ne4@5': AB_NE4,
+  // Albin Counter-Gambit — move-14 tabiya cluster (all var 0)
+  'albin-countergambit::0::Nbd2@14': ALBIN_TABIYA,
+  'albin-countergambit::0::a3@14': ALBIN_TABIYA,
+  'albin-countergambit::0::Qa4@14': ALBIN_TABIYA,
+  'albin-countergambit::0::Bf4@14': ALBIN_TABIYA,
+  'albin-countergambit::0::Bg5@14': ALBIN_TABIYA,
+  'albin-countergambit::0::b3@14': ALBIN_TABIYA,
+  'albin-countergambit::0::Re1@14': ALBIN_TABIYA,
 };
