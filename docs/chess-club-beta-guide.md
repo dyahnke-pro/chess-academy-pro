@@ -1,87 +1,60 @@
-# Chess Academy Pro — Beta Tester Guide
+# Chess Academy Pro — Beta Guide
 
-A pocket chess coach. It plays you, teaches you openings, drills your
-tactics, reviews your real games, and tells you *exactly* what to work
-on next — all in one app, all spoken out loud by a coach named Ruth.
+Think of it as a personal chess coach in your pocket. It teaches your
+openings, sharpens your tactics, plays you, and reviews your real games —
+then tells you precisely what to fix next. A coach named Ruth talks you
+through all of it out loud.
 
-It's built around one idea: **the app does the chess thinking with a real
-engine (Stockfish) and a real master/opening database, and the AI only
-puts it into plain English.** So the advice is grounded, not made up.
-
----
+The promise under the hood: **a real engine (Stockfish) and a real master
+database do the chess; the AI only translates it into plain English.** The
+advice is grounded, never invented.
 
 ## The tabs
 
-**🏠 Home**
-Your dashboard and starting point. Shows your rating, your current streak,
-what to train today, and a search bar — type any opening, tactic, or
-"play me a game" and it jumps you straight there.
-
 **📖 Openings**
-Your opening repertoire. Pick a line (Italian, Caro-Kann, Sicilian, or a
-deep grandmaster-style repertoire built from real master games) and learn
-it through four
-steps: **Watch** (coach plays it and narrates the ideas), **Learn** (the
-coach calls the moves, you play them), **Practice** (same line, silent,
-with a hint button), and **Play** (you play the line against the engine,
-locked to that opening). Also flags the traps to set and the ones to avoid.
+Build your repertoire one line at a time through four rungs: **Watch** it
+played and explained → **Learn** it with the coach calling each move →
+**Practice** it silently with a hint button → **Play** it against the
+engine, locked to that opening. Choose classic lines or deep
+grandmaster-style repertoires built from real master games. Shows the
+traps to set and the ones to dodge.
 
 **🎓 Coach**
-The heart of the app. Play a full game against an engine matched to your
-level and ask questions any time — "why is that move bad?", "what should I
-be doing here?" — and the coach answers about the *actual position* on the
-board, with arrows. It can also walk you through openings, run drills,
-quiz you, and review the game when you're done.
+The core. Play a full game at a level matched to you, and ask questions
+mid-game — "why is this losing?", "what's my plan here?" — and get answers
+about the *actual board*, with arrows. When the game's done, it walks you
+back through your mistakes.
 
 **🎯 Tactics**
-Puzzle training. Adaptive puzzles that get harder as you improve, classic
-puzzle rushes, opening-trap drills, and targeted drills on whatever
-tactical theme (forks, pins, back-rank, etc.) you're weakest at.
+Puzzle training that adapts as you improve — plus puzzle rushes,
+opening-trap drills, and targeted sets on whatever pattern (forks, pins,
+back-rank…) you're weakest at.
 
 **⚠️ Weaknesses**
-Connect your Chess.com or Lichess account (or import games) and the app
-analyzes your real games to find your recurring mistakes — the openings
-you lose in, the tactics you miss, the phase of the game where you slip.
-Each weakness links straight to a drill that fixes it.
+Link your Chess.com or Lichess account (or import games) and it analyzes
+your real games to find recurring mistakes — the openings you lose in, the
+tactics you miss, the phase where you slip — and links each one straight to
+a drill that fixes it.
 
-**⚙️ Settings**
-Voice on/off and verbosity (full narration, brief, or silent), board
-theme, account sync, and difficulty calibration.
+*(Two more: **🏠 Home** is your dashboard — rating, daily streak, what to
+train, and a search bar to jump anywhere. **⚙️ Settings** covers voice,
+board theme, account sync, and difficulty.)*
 
----
+## How it fits together
 
-## How they fit together
-
-It's a loop, not seven separate apps:
-
-1. **Play** a game in **Coach** (or import your real games).
-2. **Weaknesses** reads those games and tells you what's broken.
-3. It sends you to **Tactics** or **Openings** to drill exactly that.
-4. **Home** tracks the progress and queues tomorrow's work.
-
-You can also just start anywhere — learn an opening, smash some puzzles,
-or ask the coach a question mid-game. Everything feeds the same picture of
-your chess.
-
----
+A loop, not separate apps: **play** a game in Coach (or import your real
+ones) → **Weaknesses** finds what's broken → it routes you to **Tactics**
+or **Openings** to drill exactly that → **Home** tracks the progress and
+queues tomorrow's work. You can start anywhere; everything feeds one
+picture of your chess.
 
 ## Why it'll help the club
 
-- **A coach for every player, at every level.** It auto-calibrates to each
-  student's strength, so a beginner and a 1600 get the right difficulty
-  from move one.
-- **It explains the *why*.** Most apps say "best move: Nf3." This one tells
-  you what the move does and points an arrow at it — out loud.
-- **It turns losses into lessons.** Import a club member's online games and
-  it builds a personalized to-do list of their real weaknesses.
-- **It's grounded, not guessing.** Moves and evaluations come from a real
-  engine and a master database; the AI only does the talking, so it won't
-  feed students wrong chess.
-- **One app for the whole spread** — from absolute beginners (Kids Mode) to
-  tournament players grinding their repertoire.
-
----
-
-*Beta tip: connect a Chess.com or Lichess account in Settings on day one —
-that's what powers the personalized weakness analysis. And try asking the
-coach questions out loud during a game; that's where it shines.*
+- **One coach, every level** — auto-calibrates to each player's strength,
+  so a beginner and a 1600 both get the right difficulty from move one.
+- **It explains the *why*** — not just "best move: Nf3," but what the move
+  does, with an arrow pointing at it, spoken aloud.
+- **It turns losses into lessons** — imports real games into a personalized
+  to-do list of each player's actual weaknesses.
+- **It's grounded, not guessing** — moves and evaluations come from a real
+  engine and a master database, so it won't teach students wrong chess.
