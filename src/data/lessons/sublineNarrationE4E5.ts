@@ -20,7 +20,7 @@ const RUY_DEV = ['book:ruy-lopez', 'concept:pos-development', 'https://en.wikipe
 // ── Ruy Lopez (student WHITE). triggerMove is BLACK's deviation; narrate White's plan. ──
 
 // Nf6@5 — the Berlin Defence (Bb5 Nf6). Berlin Wall endgame OR quiet d3.
-const RUY_BERLIN: SublineNarration = {
+export const RUY_BERLIN: SublineNarration = {
   intro: {
     say: "Nf6 — the Berlin Defence, the granite wall Kramnik used to take Kasparov's crown. Black ignores the hit on e5 and just develops, daring you into the famous Berlin endgame. Castle: after …Nxe4, d4, …Nd6, Bxc6 dxc6, dxe5 the queens come off and you nurse a small, nagging pull — Black's doubled c-pawns against your healthy kingside majority. Want queens on? d3 keeps a quiet, lasting Italian-style squeeze.",
     sayShort: 'Nf6 — Berlin: castle and squeeze.',
@@ -260,7 +260,7 @@ const IT_GP_BC5: SublineNarration = {
   sources: IT,
 };
 // Nf6@5 — Bc4 Nf6, the Two Knights.
-const IT_TWO_KNIGHTS: SublineNarration = {
+export const IT_TWO_KNIGHTS: SublineNarration = {
   intro: {
     say: "…Nf6 — the Two Knights, the fighting reply, hitting your e4-pawn at once and inviting a brawl. The choice is yours: the swashbuckling Ng5 lunging straight at f7, or the principled d4 break tearing open the centre. Black has picked the sharpest battleground in the Italian — meet it head-on and play for the initiative.",
     sayShort: '…Nf6 — Two Knights: d4 or Ng5.',
@@ -920,7 +920,7 @@ const EV_BB6_QUIET: SublineNarration = {
   sources: EV,
 };
 // Be7@5 / Be7@9 — Black declines the fight, retreats passively to e7.
-const EV_BE7: SublineNarration = {
+export const EV_BE7: SublineNarration = {
   intro: {
     say: "…Be7 — the meek retreat, tucking the bishop back and declining the gambit's fire. Take the gift of space: d4 builds the full centre, you castle and develop freely, and Black sits cramped with a passive bishop and no counterplay. There are no tricks here — just a clean central clamp and an easy, pleasant initiative to grind.",
     sayShort: '…Be7 — d4 centre, squeeze the passivity.',
@@ -1636,7 +1636,7 @@ const COV_RUY_A6: SublineNarration = {
   ],
   sources: ['book:ruy-lopez', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
 };
-const COV_RUY_D6: SublineNarration = {
+export const COV_RUY_D6: SublineNarration = {
   intro: {
     say: "…d6 — Black shores up e5 quietly instead of grabbing space with …b5. That's a touch passive: build the classic centre with c3 and d4, keep the a4-bishop trained on c6, and you enjoy more room and the freer pieces in a calm, risk-free Spanish.",
     sayShort: "…d6 — prep c3 and d4.",
@@ -1670,7 +1670,7 @@ const COV_IT_D6: SublineNarration = {
   ],
   sources: ['book:italian-game', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Italian_Game'],
 };
-const COV_IT_NF6: SublineNarration = {
+export const COV_IT_NF6: SublineNarration = {
   intro: {
     say: "…Nf6 — the Two Knights, Black's sharpest reply, hitting your e4-pawn and inviting a brawl. You choose the battleground: the swashbuckling Ng5 lunging straight at f7, or the principled d4 break blowing the centre open. Either way the c4-bishop already glares at f7 — meet the fight head-on.",
     sayShort: "…Nf6 — Ng5 or d4 at f7.",
@@ -1694,7 +1694,7 @@ const COV_TK_BB5: SublineNarration = {
 };
 
 // ── Four Knights Game (student WHITE) ──
-const COV_FK_ND4: SublineNarration = {
+export const COV_FK_ND4: SublineNarration = {
   intro: {
     say: "…Nd4 — the Rubinstein, Black's sharpest Four Knights try: he ignores the hit on c6 and jumps into your camp. The clean reply is Nxd4 exd4, when Black's recaptured pawn lands on d4 as a long-term target and you hold the easier game; if you'd rather keep pieces on, Ba4 or Bc4 also leaves you a small, safe pull. No tricks to fear.",
     sayShort: "…Nd4 — trade with Nxd4.",
