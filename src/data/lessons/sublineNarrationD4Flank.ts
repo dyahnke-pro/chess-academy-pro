@@ -323,35 +323,11 @@ const C73: SublineNarration = {
 // london-system :: bf5_mirror
 // london-system :: main_qgd
 // trompowsky-attack :: ne4_main
-const C80: SublineNarration = {
-  intro: { say: "The main Trompowsky — Black hits the bishop with …Ne4 and you retreat to f4, keeping the pair and the tempo-gaining f3 push in hand. Build with f3 kicking the knight, then e4 or d5 to claim the centre. You've sidestepped all of Black's prepared d4 theory and reach an unbalanced middlegame on your own terms.", sayShort: "…Ne4 — Bf4, kick f3, take centre." },
-  sources: ['concept:pos-development', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
-};
 // trompowsky-attack :: c5_qb6
-const C81: SublineNarration = {
-  intro: { say: "Black counters with …c5, and after d5 the queen often grabs on b2 — the critical Trompowsky gambit line. Don't fear it: Nc3 and Bd2 trap-or-harass the wandering queen, and your lead in development plus the open lines are worth far more than the pawn. Sharp, forcing, and a known good bargain for White.", sayShort: "…c5 — let the queen roam." },
-  sources: ['concept:pos-development', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
-};
 // trompowsky-attack :: d5_bxf6
-const C82: SublineNarration = {
-  intro: { say: "Black challenges with …d5 and you take on f6, the structural Trompowsky. Whether Black recaptures with the e- or g-pawn, he gets doubled pawns and you keep a clean structure plus the bishop pair. Play against the pawn weaknesses: a queenside pawn break, piece pressure on the open lines, and a small, lasting endgame edge.", sayShort: "…d5 — Bxf6, play against doubled pawns." },
-  sources: ['concept:pos-development', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
-};
 // trompowsky-attack :: e6_e4
-const C83: SublineNarration = {
-  intro: { say: "Black plays the solid …e6, and you grab the centre with e4, a big-space Trompowsky. After the …h6 question you take on f6, doubling Black's pawns or trading into a comfortable pawn-centre game with the bishop pair. Your space and the half-open lines give a pleasant, aggressive pull with little theory for Black to lean on.", sayShort: "…e6 — take the centre with e4." },
-  sources: ['concept:pos-development', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
-};
 // trompowsky-attack :: qb6_centre
-const C84: SublineNarration = {
-  intro: { say: "Black has grabbed a pawn or jabbed with …Qb6 and you've castled the issue with Nc3-Bd2 development. Your trumps are the lead in development and the open b-file the queen left behind: harass the queen, complete development with tempo, and convert the initiative. The Trompowsky's pawn is cheap rent for a roaring position.", sayShort: "…Qb6 — harass the queen, lead in development." },
-  sources: ['concept:pos-development', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
-};
 // trompowsky-attack :: endgame_grind
-const C85: SublineNarration = {
-  intro: { say: "The line has simplified into the queenless Trompowsky structure — bishop pair, sounder pawns, Black's doubled f-pawns as the target. This is a classic technical edge: centralise, occupy the open files, and grind. With no queens to create counterplay, Black's structural defects become a long-term liability you patiently squeeze.", sayShort: "Queenless — grind the doubled-pawn weakness." },
-  sources: ['concept:pos-development', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
-};
 // old-indian-defence :: classical_be2
 const C86: SublineNarration = {
   intro: { say: "The Classical Old Indian with Be2 and the standard development — White takes space, you take solidity. After …e5 and …O-O the plan is the …c6 and …Re8 regroup, preparing …exd4 or …d5 at the right moment. White's edge is space alone; neutralise it with accurate piece placement and a timely central break.", sayShort: "Classical Be2 — regroup, time the break." },
@@ -734,14 +710,6 @@ const EQGA: SublineNarration = {
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
 };
 // DEEP ETRO :: trompowsky-attack::6::d6@9
-const ETRO: SublineNarration = {
-  intro: { say: "Black jabbed your bishop with …Ne4, but you kept the pair with Bf4 — now make him pay for the early adventure. You're going to kick that knight and grab space, and the best part is you've sidestepped everything Black prepared against d4. You're calling the shots.", sayShort: "Trompowsky — kick the knight, grab space." },
-  beats: [
-    { atMove: 6, say: "f3 — boot the e4-knight straight back where it came from (follow the arrow). His clever sortie just cost him time, and you're left with the bishop pair and a totally free hand to expand.", sayShort: "f3 — boot the knight back.", arrows: [_A('f3', 'e4', ATK)], highlights: [_H('e4', KEY)] },
-    { atMove: 8, say: "d5 — clamp the centre and seize space. Black's pieces get shoved back, his position cramps, and you build at your own pace behind that broad pawn front. No rush — the space won't go anywhere.", sayShort: "d5 — clamp and seize space.", highlights: [_H('d5', ATK)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
-};
 // DEEP EENG :: englund-gambit::0::Nc3@10
 const EENG: SublineNarration = {
   intro: { say: "Here's your trick — …Qb4+ and …Qxb2 swipe a pawn and the open b-file. Be honest with yourself though: this is a surprise weapon, not a guarantee of equality. You're betting White slips, so play sharp, keep that queen safe, and make problems fast before he gets organised.", sayShort: "Englund — swipe b2, play sharp." },
@@ -1181,16 +1149,6 @@ const WBIRDC5: SublineNarration = {
   sources: ['concept:pos-space', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Bird%27s_Opening'],
 };
 // WAVE WTROC5 :: 1 keys
-const WTROC5: SublineNarration = {
-  intro: { say: "…c5 — Black counters in the centre, but you keep the bishop pair and grab space. Kick the e4-knight with f3, then roll d5 and e4 to clamp the position and shove Black's pieces back. You've dodged all his prepared d4 theory and you call the shots from a position of space.", sayShort: "…c5 — f3, then d5 and e4 clamp" },
-  beats: [
-    { atMove: 5, say: "…c5 strikes at d4 for counterplay. Follow the arrow — the pawn hits your centre — but you have a strong reply that gains time and space rather than conceding.", sayShort: "…c5 — hits your d4", arrows: [_A('c5', 'd4', ATK)], highlights: [_H('d4', KEY)] },
-    { atMove: 6, say: "f3 — boot the e4-knight straight back. Follow the arrow: the pawn attacks the intruder, and his clever sortie has cost him time while you keep the bishop pair.", sayShort: "f3 — boot the knight back", arrows: [_A('f3', 'e4', ATK)], highlights: [_H('e4', KEY)] },
-    { atMove: 10, say: "d5 — clamp the centre and grab space, shoving Black's pieces onto passive squares. You build at your own pace behind the broad pawn front.", sayShort: "d5 — clamp, grab space", highlights: [_H('d5', KEY)] },
-    { atMove: 12, say: "e4 — the big centre is yours. With pawns on d5 and e4 you simply own more of the board, and Black must scramble for counterplay before you roll forward.", sayShort: "e4 — the big centre, yours", highlights: [_H('e4', KEY)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
-};
 // WAVE WQGMERAN :: 1 keys
 const WQGMERAN: SublineNarration = {
   intro: { say: "…e6 — Black settles into a solid Semi-Slav/Meran setup against your Queen's Gambit. Develop the Bd3 battery toward the kingside, and when Black frees with …dxc4 and …b5, answer in the centre: e4 builds the broad front and d5 clamps. Your space and the kingside-aiming pieces give a lasting initiative.", sayShort: "…e6 — build e4, then clamp d5" },
@@ -6680,6 +6638,710 @@ const SL80: SublineNarration = {
   sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Slav_Defense'],
 };
 
+const TR01: SublineNarration = {
+  intro: { say: "In the Trompowsky Black plays …e6. You challenge the e4-knight with Nd2, recapture, aim the bishop at h7 from d3, gain kingside space with f4, then open lines with dxc5.", sayShort: "…e6 — Nd2, Bd3, f4, dxc5" },
+  beats: [
+    { atMove: 8, say: "Nd2 — challenging Black's e4-knight, trading off the intruder.", sayShort: "Nd2 — challenge the e4-knight", arrows: [_A('d2', 'e4')] },
+    { atMove: 14, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 18, say: "f4 — gaining kingside space and supporting an e5 advance.", sayShort: "f4 — gain kingside space", arrows: [_A('f4', 'e5')] },
+    { atMove: 22, say: "dxc5 — opening lines favourably with active pieces.", sayShort: "dxc5 — open favourably", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+const TR02: SublineNarration = {
+  intro: { say: "Black develops …Bf5. You gain kingside space with h4, challenge the e4-knight with Nd2, then trade on f5 to leave Black doubled f-pawns, building a battery toward the king.", sayShort: "…Bf5 — h4, Nd2, Bxf5, Qd3" },
+  beats: [
+    { atMove: 8, say: "h4 — gaining kingside space and restraining Black's bishop and …g5.", sayShort: "h4 — gain kingside space", arrows: [_A('h4', 'h5')] },
+    { atMove: 10, say: "Nd2 — challenging Black's e4-knight.", sayShort: "Nd2 — challenge the knight", arrows: [_A('d2', 'e4')] },
+    { atMove: 18, say: "Bxf5 — trading to leave Black with doubled f-pawns, a fixed weakness.", sayShort: "Bxf5 — doubled f-pawns", highlights: [_H('f5')] },
+    { atMove: 22, say: "Qd3 — the battery toward the kingside, pressing the weakened structure.", sayShort: "Qd3 — battery toward the king", highlights: [_H('d3')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+const TR03: SublineNarration = {
+  intro: { say: "Black fianchettoes …g6. You challenge the e4-knight with Nd2, gain kingside space with h4 against the fianchetto, aim the bishop at h7 from d3, then expand with a4.", sayShort: "…g6 — Nd2, h4, Bd3, a4" },
+  beats: [
+    { atMove: 8, say: "Nd2 — challenging Black's e4-knight.", sayShort: "Nd2 — challenge the knight", arrows: [_A('d2', 'e4')] },
+    { atMove: 16, say: "h4 — gaining kingside space against the fianchetto.", sayShort: "h4 — kingside space", arrows: [_A('h4', 'h5')] },
+    { atMove: 18, say: "Bd3 — the bishop to the diagonal, eyeing h7 and f5.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 20, say: "a4 — gaining queenside space, squeezing on both wings.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+const TR04: SublineNarration = {
+  intro: { say: "Black lashes out …g5. You punish it: Be5 seizes the centre, then Bxh7 grabs the loosened pawn and dxe5 nets a clean extra pawn.", sayShort: "…g5 — Be5, Bxh7, dxe5" },
+  beats: [
+    { atMove: 8, say: "Be5 — the bishop seizes the central outpost, exploiting the …g5 weakening.", sayShort: "Be5 — seize the outpost", highlights: [_H('e5')] },
+    { atMove: 16, say: "Bxh7 — grabbing the loosened h7-pawn, a clean material gain.", sayShort: "Bxh7 — grab the pawn", highlights: [_H('h7')] },
+    { atMove: 18, say: "dxe5 — recapturing, banking the extra pawn.", sayShort: "dxe5 — bank the pawn", highlights: [_H('e5')] },
+    { atMove: 22, say: "Bxc4 — consolidating the material edge with the better game.", sayShort: "Bxc4 — consolidate, ahead", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:tac-double-attack', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+const TR05: SublineNarration = {
+  intro: { say: "Black plays …c6. You aim the bishop at h7 from d3, develop and castle, then expand on the queenside with a4-a5 and c3 — a comfortable space edge.", sayShort: "…c6 — Bd3, O-O, a4, a5" },
+  beats: [
+    { atMove: 8, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 14, say: "O-O — king to safety, completing development.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 18, say: "a4 — gaining queenside space.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+    { atMove: 22, say: "a5 — clamping the queenside, the comfortable bind.", sayShort: "a5 — clamp the queenside", arrows: [_A('a5', 'b6')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+const TR06: SublineNarration = {
+  intro: { say: "Black develops …Nc6. You gain kingside space with h4, pin with Bb5, challenge the e4-knight with Nd2, then trade on d6 to give Black doubled pawns.", sayShort: "…Nc6 — h4, Bb5, Nd2, Bxd6" },
+  beats: [
+    { atMove: 8, say: "h4 — gaining kingside space.", sayShort: "h4 — kingside space", arrows: [_A('h4', 'h5')] },
+    { atMove: 10, say: "Bb5 — pinning the c6-knight, adding pressure.", sayShort: "Bb5 — pin the knight", arrows: [_A('b5', 'c6')] },
+    { atMove: 12, say: "Nd2 — challenging Black's e4-knight.", sayShort: "Nd2 — challenge the knight", arrows: [_A('d2', 'e4')] },
+    { atMove: 20, say: "Bxd6 — trading to give Black doubled d-pawns, a fixed weakness.", sayShort: "Bxd6 — doubled d-pawns", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+const TR07: SublineNarration = {
+  intro: { say: "Black strikes …c5. You kick the e4-knight with f3, build the big centre with d5 and e4, develop with tempo, then check on b5 — a commanding space advantage.", sayShort: "…c5 — f3, d5, e4, Bb5+" },
+  beats: [
+    { atMove: 6, say: "f3 — kicking Black's e4-knight back, gaining the centre.", sayShort: "f3 — kick the knight", highlights: [_H('e4')] },
+    { atMove: 10, say: "d5 — the central pawn lunges, gaining space.", sayShort: "d5 — gain space", highlights: [_H('d5')] },
+    { atMove: 12, say: "e4 — building the broad pawn front, a big-centre bind.", sayShort: "e4 — build the big centre", highlights: [_H('e4')] },
+    { atMove: 22, say: "Bb5+ — developing with check, completing a commanding position.", sayShort: "Bb5+ — develop with check", arrows: [_A('b5', 'e8')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+const TR08: SublineNarration = {
+  intro: { say: "Black plays …Nd7. You aim at the e4-knight from d3, trade on e4 to leave Black a loose e-pawn, undermine it with f3, then trade the dark bishops with a small edge.", sayShort: "…Nd7 — Bd3, Bxe4, f3, Bxe7" },
+  beats: [
+    { atMove: 8, say: "Bd3 — the bishop eyes the e4-knight and h7.", sayShort: "Bd3 — eye e4 and h7", arrows: [_A('d3', 'e4')] },
+    { atMove: 10, say: "Bxe4 — trading to saddle Black with a loose, advanced e4-pawn.", sayShort: "Bxe4 — loose e4-pawn", highlights: [_H('e4')] },
+    { atMove: 14, say: "f3 — undermining the e4-pawn at its base.", sayShort: "f3 — undermine e4", arrows: [_A('f3', 'e4')] },
+    { atMove: 20, say: "Bxe7 — trading the dark bishops, simplifying with a small edge.", sayShort: "Bxe7 — simplify with an edge", highlights: [_H('e7')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+const TR09: SublineNarration = {
+  intro: { say: "Black trades …cxd4. You recapture exd4, develop Nc3, trade off the e4-knight, recapture with the bishop dominating the centre, then centralise into a balanced game.", sayShort: "…cxd4 — exd4, Nxe4, Bxe4, Qxd4" },
+  beats: [
+    { atMove: 10, say: "exd4 — recapturing, opening lines for your pieces.", sayShort: "exd4 — open lines", highlights: [_H('d4')] },
+    { atMove: 14, say: "Nxe4 — trading off Black's active e4-knight.", sayShort: "Nxe4 — trade the knight", highlights: [_H('e4')] },
+    { atMove: 16, say: "Bxe4 — recapturing, the bishop dominating the centre.", sayShort: "Bxe4 — dominate the centre", arrows: [_A('e4', 'b7')] },
+    { atMove: 22, say: "Qxd4 — centralising the queen into a balanced, comfortable position.", sayShort: "Qxd4 — centralise, balanced", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+const TR10: SublineNarration = {
+  intro: { say: "Black retreats …Nf6. You grab space with dxc5, pin with Bb5, centralise the queen on d4 to hold the gain, then expand with b4 — a balanced position where you keep the initiative.", sayShort: "…Nf6 — dxc5, Bb5, Qd4, b4" },
+  beats: [
+    { atMove: 10, say: "dxc5 — grabbing space, gaining a tempo.", sayShort: "dxc5 — grab space", highlights: [_H('c5')] },
+    { atMove: 12, say: "Bb5 — pinning the d7-knight, developing with tempo.", sayShort: "Bb5 — pin, develop", arrows: [_A('b5', 'd7')] },
+    { atMove: 18, say: "Qd4 — centralising the queen, holding the c5-pawn and the initiative.", sayShort: "Qd4 — centralise, hold c5", highlights: [_H('d4')] },
+    { atMove: 20, say: "b4 — gaining queenside space, supporting c5 in the balanced fight.", sayShort: "b4 — support c5", arrows: [_A('b4', 'c5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+const TR11: SublineNarration = {
+  intro: { say: "After Bxf6 exf6 Black plays …c5. With the bishop pair against Black's doubled f-pawns, you develop flexibly, open with dxc5, expand with b4, then trade into a balanced game where the two bishops are your trump.", sayShort: "…c5 — Ne2, dxc5, b4, Nxd5" },
+  beats: [
+    { atMove: 8, say: "Ne2 — developing flexibly behind the bishop pair.", sayShort: "Ne2 — flexible development", highlights: [_H('e2')] },
+    { atMove: 16, say: "dxc5 — opening lines, gaining a tempo on the bishop.", sayShort: "dxc5 — open with tempo", highlights: [_H('c5')] },
+    { atMove: 20, say: "b4 — gaining queenside space, the minority idea.", sayShort: "b4 — queenside space", arrows: [_A('b4', 'b5')] },
+    { atMove: 22, say: "Nxd5 — trading into a balanced position; the two bishops remain your long-term trump.", sayShort: "Nxd5 — trade, keep the bishops", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+const TR12: SublineNarration = {
+  intro: { say: "After Bxf6 exf6 Black plays …c6. You challenge with c4, recapture with the active bishop, centralise Qc2, then double rooks on the central files — the bishop pair pressing the doubled f-pawns.", sayShort: "…c6 — c4, Bxc4, Qc2, Rad1" },
+  beats: [
+    { atMove: 8, say: "c4 — challenging the centre, opening lines for the two bishops.", sayShort: "c4 — challenge the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 10, say: "Bxc4 — recapturing, the bishop active.", sayShort: "Bxc4 — active bishop", highlights: [_H('c4')] },
+    { atMove: 14, say: "Qc2 — centralising the queen, eyeing h7.", sayShort: "Qc2 — eye h7", arrows: [_A('c2', 'h7')] },
+    { atMove: 20, say: "Rad1 — centralising the rooks, the bishop pair pressing the doubled pawns.", sayShort: "Rad1 — centralise, press", arrows: [_A('d1', 'd8')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+const TR13: SublineNarration = {
+  intro: { say: "After Bxf6 exf6 Black plays …Nc6. You challenge with c4, recapture actively, castle, then reposition Bb3 eyeing f7 — the bishop pair against the doubled pawns.", sayShort: "…Nc6 — c4, Bxc4, O-O, Bb3" },
+  beats: [
+    { atMove: 8, say: "c4 — challenging the centre, freeing the bishop pair.", sayShort: "c4 — challenge the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 10, say: "Bxc4 — recapturing, the bishop active.", sayShort: "Bxc4 — active bishop", highlights: [_H('c4')] },
+    { atMove: 18, say: "O-O — king to safety.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 22, say: "Bb3 — repositioning, eyeing f7 with the bishop pair.", sayShort: "Bb3 — eye f7", arrows: [_A('b3', 'f7')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+const TR14: SublineNarration = {
+  intro: { say: "After Bxf6 exf6 Black develops …Bf5. You develop Nd2, prepare the c4 break with b3, fire c4, then challenge …b5 with a4 — the bishop pair against the doubled pawns.", sayShort: "…Bf5 — Nd2, b3, c4, a4" },
+  beats: [
+    { atMove: 8, say: "Nd2 — developing, preparing the c4 break.", sayShort: "Nd2 — prepare c4", highlights: [_H('d2')] },
+    { atMove: 14, say: "b3 — preparing the c4 break.", sayShort: "b3 — prepare c4", highlights: [_H('b3')] },
+    { atMove: 18, say: "c4 — challenging the centre, opening lines for the bishops.", sayShort: "c4 — challenge the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 22, say: "a4 — gaining queenside space, fixing Black's pawns.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+const TR15: SublineNarration = {
+  intro: { say: "After Bxf6 exf6 Black plays …Be7. You challenge with c4, develop Nc3, centralise with Nxd4, trade queens, then regain the pawn — the bishop pair edge in the ending.", sayShort: "…Be7 — c4, Nxd4, Qxd8+, Bxc4" },
+  beats: [
+    { atMove: 8, say: "c4 — challenging the centre, freeing the bishops.", sayShort: "c4 — challenge the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 14, say: "Nxd4 — centralising the knight in the central battle.", sayShort: "Nxd4 — centralise the knight", highlights: [_H('d4')] },
+    { atMove: 18, say: "Qxd8+ — trading queens, the bishop pair telling in the ending.", sayShort: "Qxd8+ — into a better ending", highlights: [_H('d8')] },
+    { atMove: 20, say: "Bxc4 — regaining the pawn, the bishop active in the ending.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:end-key-squares', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+const TR16: SublineNarration = {
+  intro: { say: "After Bxf6 exf6 Black checks …Bb4+. You block with Nd2, aim at h7 from d3, fire the c4 break, then castle — the bishop pair pressing the doubled pawns.", sayShort: "…Bb4+ — Nd2, Bd3, c4, O-O" },
+  beats: [
+    { atMove: 8, say: "Nd2 — blocking the check, developing.", sayShort: "Nd2 — block and develop", highlights: [_H('d2')] },
+    { atMove: 10, say: "Bd3 — the bishop to the diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 16, say: "c4 — challenging the centre, freeing the bishops.", sayShort: "c4 — challenge the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 22, say: "O-O — king safe with the bishop pair as a lasting edge.", sayShort: "O-O — king safe, bishop pair", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+const TR17: SublineNarration = {
+  intro: { say: "After Bxf6 exf6 Black fianchettoes …g6. You challenge with c4, recapture actively, gain kingside space with h4 against the loosened structure, then castle.", sayShort: "…g6 — c4, Bxc4, h4, O-O" },
+  beats: [
+    { atMove: 8, say: "c4 — challenging the centre, freeing the bishops.", sayShort: "c4 — challenge the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 12, say: "Bxc4 — recapturing, the bishop active.", sayShort: "Bxc4 — active bishop", highlights: [_H('c4')] },
+    { atMove: 14, say: "h4 — gaining kingside space against the weakened kingside.", sayShort: "h4 — kingside space", arrows: [_A('h4', 'h5')] },
+    { atMove: 22, say: "O-O — king to safety with the bishop-pair edge.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+const TR18: SublineNarration = {
+  intro: { say: "After Bxf6 exf6 Black develops …Be6. You develop Nd2, prepare with g3, fire c4, recapture and trade the light bishops, then develop Nf3 — the dark-squared bishop pair edge.", sayShort: "…Be6 — Nd2, c4, Bxc4, Nf3" },
+  beats: [
+    { atMove: 8, say: "Nd2 — developing, preparing the c4 break.", sayShort: "Nd2 — prepare c4", highlights: [_H('d2')] },
+    { atMove: 14, say: "c4 — challenging the centre, opening lines.", sayShort: "c4 — challenge the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 16, say: "Bxc4 — recapturing, trading the light bishops favourably.", sayShort: "Bxc4 — trade favourably", highlights: [_H('c4')] },
+    { atMove: 22, say: "Nf3 — developing, the bishop-pair edge against the doubled pawns.", sayShort: "Nf3 — develop, press", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+const TR19: SublineNarration = {
+  intro: { say: "After Bxf6 exf6 Black sets up …Bd6 and …c6. You develop Nf3, prepare with b3, open with dxc5, castle, then develop Nc3 — the bishop pair against the doubled pawns.", sayShort: "…c6 — Nf3, b3, dxc5, Nc3" },
+  beats: [
+    { atMove: 10, say: "Nf3 — developing, completing the set-up.", sayShort: "Nf3 — develop", highlights: [_H('f3')] },
+    { atMove: 14, say: "dxc5 — opening lines, gaining a tempo.", sayShort: "dxc5 — open with tempo", highlights: [_H('c5')] },
+    { atMove: 16, say: "O-O — king to safety.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 18, say: "Nc3 — developing, contesting the centre with the bishop pair.", sayShort: "Nc3 — develop, contest", highlights: [_H('c3')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+const TR20: SublineNarration = {
+  intro: { say: "After Bxf6 exf6 Black sets up …Bd6 and …Be6. You develop Nd2, centralise Qf3 eyeing the doubled-pawn structure, route the knight to f4, then swing the queen to g3.", sayShort: "…Be6 — Nd2, Qf3, Nf4, Qg3" },
+  beats: [
+    { atMove: 10, say: "Nd2 — developing, completing the set-up.", sayShort: "Nd2 — develop", highlights: [_H('d2')] },
+    { atMove: 14, say: "Qf3 — centralising the queen, eyeing the doubled-pawn structure.", sayShort: "Qf3 — eye the structure", highlights: [_H('f3')] },
+    { atMove: 20, say: "Nf4 — the knight to f4, eyeing e6, d5 and g6.", sayShort: "Nf4 — eye e6 and d5", highlights: [_H('f4')] },
+    { atMove: 22, say: "Qg3 — the queen swings to the kingside, pressing with the bishop pair.", sayShort: "Qg3 — press the kingside", highlights: [_H('g3')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+
+const TR_V2_BB4: SublineNarration = {
+  intro: { say: "Black pins your knight with …Bb4 and strikes the centre with …d5. You traded the dark bishop for the f6-knight, but d4 plus e4 and a lead in development are full value — castle long and play on the wings.", sayShort: "Big centre versus the bishop pair" },
+  beats: [
+    { atMove: 10, say: "Lift the queen to d3. It shields e4 and points at the kingside, where Black already loosened himself with …h6.", sayShort: "Queen to d3, guard e4", highlights: [_H('e4'), _H('d3')] },
+    { atMove: 12, say: "Castle queenside. Your rook lands opposite Black's centre and the g- and h-pawns are now free to march at his king.", sayShort: "Castle long, ready to storm", highlights: [_H('d4')] },
+    { atMove: 18, say: "Snatch the loose c7-pawn. Black's bishop pair can't drum up enough to punish the grab, and the game stays sharp and balanced.", sayShort: "Take c7, stay balanced", highlights: [_H('c7')] },
+    { atMove: 22, say: "Tuck the queen back to e3 and consolidate. The structure is level, so keep your king tidy and work the open lines.", sayShort: "Queen back to e3, consolidate", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V2_GXF6: SublineNarration = {
+  intro: { say: "Recapturing with …gxf6 shatters Black's kingside but hands him the open g-file. Develop fast, keep your healthy structure, and the long-term pawns favour you.", sayShort: "Black's pawns are wrecked" },
+  beats: [
+    { atMove: 8, say: "Drop the bishop to d3, aiming straight at h7 and discouraging Black from ever castling short into that ruined kingside.", sayShort: "Bishop to d3, eye h7", arrows: [_A('d3', 'h7')], highlights: [_H('h7')] },
+    { atMove: 10, say: "Bring the knight to c3, finishing development before Black's rook gets rolling down the g-file.", sayShort: "Knight to c3, develop", highlights: [_H('c3')] },
+    { atMove: 14, say: "Cover g2 with Qe2. Let Black grab the pawn with …Rxg2 if he likes — his rook drifts offside while your centre and king stay sound.", sayShort: "Qe2, ignore the g2-pawn", highlights: [_H('g2')] },
+    { atMove: 22, say: "Recentralise the queen on d2 and connect your play; your sturdy pawns outlast Black's broken kingside in the long game.", sayShort: "Qd2, your structure outlasts his", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-development', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V2_C5_9: SublineNarration = {
+  intro: { say: "Black hits the centre with …c5. Slam the door with e5, then d5 — your pawns cramp him while his queen and king get tangled, and you can even win heavy material.", sayShort: "Clamp with e5 and d5" },
+  beats: [
+    { atMove: 10, say: "Push e5, locking the centre and shoving Black's queen back to d8 before he's untangled.", sayShort: "e5, gain space, chase the queen", highlights: [_H('e5')] },
+    { atMove: 12, say: "Ram d5 too. Black's pieces are boxed in behind the pawns while yours pour out with tempo.", sayShort: "d5, the centre clamps him", highlights: [_H('d5')] },
+    { atMove: 16, say: "Swing the queen to e4, hitting the a8-rook along the long diagonal and forcing weakening pawn moves.", sayShort: "Qe4, target the a8-rook", arrows: [_A('e4', 'a8')], highlights: [_H('a8')] },
+    { atMove: 22, say: "Collect the rook with Qxa8. Black's king is stuck on d8 and your extra exchange decides the game.", sayShort: "Qxa8 wins the exchange", highlights: [_H('a8')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V2_NC6_9: SublineNarration = {
+  intro: { say: "Black develops with …Nc6 and pressures d4. Answer with e5 to gain space, castle long, and aim your pawns at his king.", sayShort: "e5 grabs space, castle long" },
+  beats: [
+    { atMove: 10, say: "Advance e5, cramping Black and steering his queen offside before he can finish developing.", sayShort: "e5, gain space", highlights: [_H('e5')] },
+    { atMove: 12, say: "Centralise with Qd2, connecting toward queenside castling and the open lines.", sayShort: "Qd2, prepare to castle long", highlights: [_H('d2')] },
+    { atMove: 14, say: "Castle queenside. Now your rook backs the d-file and the king is safe while you expand.", sayShort: "Castle long, rook to the centre", highlights: [_H('d4')] },
+    { atMove: 20, say: "Develop the knight to f3, completing your forces; your space and safer king carry a pleasant edge.", sayShort: "Nf3, finish developing", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-development', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V2_D5_9: SublineNarration = {
+  intro: { say: "Black challenges with …d5. Take it — exd5 opens the position, and a quick check on b5 trades into a clean, balanced ending where your structure is fine.", sayShort: "Take d5, simplify cleanly" },
+  beats: [
+    { atMove: 10, say: "Capture with exd5, opening lines while Black is still a step from castling.", sayShort: "exd5, open the position", highlights: [_H('d5')] },
+    { atMove: 12, say: "Check with Bb5+, forcing a trade of light bishops and easing any pressure on your king.", sayShort: "Bb5+, trade light bishops", highlights: [_H('b5')] },
+    { atMove: 18, say: "Offer queens with Qe2. Heading into the ending, your pawns are sound and the game is level and safe.", sayShort: "Qe2, steer to a level ending", highlights: [_H('e2')] },
+    { atMove: 22, say: "Recapture on e2 with the knight and reach the endgame a tempo up in development; the position is balanced.", sayShort: "Nxe2, balanced endgame", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-development', 'concept:end-key-squares', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V2_B6_9: SublineNarration = {
+  intro: { say: "Black fianchettoes with …b6 to fight your centre from afar. Grab space with e5, then develop and pressure his slightly cramped position.", sayShort: "e5, then squeeze the fianchetto" },
+  beats: [
+    { atMove: 10, say: "Play e5, seizing space and bumping Black's queen to e7 before his bishop gets active on the long diagonal.", sayShort: "e5, gain space", highlights: [_H('e5')] },
+    { atMove: 12, say: "Develop Nf3, supporting e5 and preparing to castle into safety.", sayShort: "Nf3, support e5", highlights: [_H('f3')] },
+    { atMove: 14, say: "Post the bishop on c4, raking at f7 and Black's loosened kingside.", sayShort: "Bishop to c4, eye f7", arrows: [_A('c4', 'f7')], highlights: [_H('f7')] },
+    { atMove: 18, say: "Castle short and finish your setup; your central pawns leave Black passive while you choose where to break.", sayShort: "Castle, your centre presses", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-space', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V2_G6_9: SublineNarration = {
+  intro: { say: "Black sets up a kingside fianchetto with …g6. Centralise your queen, castle long, and roll the f- and h-pawns at his king while he tucks the bishop on g7.", sayShort: "Castle long, storm the kingside" },
+  beats: [
+    { atMove: 10, say: "Bring the queen to d2, linking your rooks toward long castling and the coming pawn storm.", sayShort: "Qd2, head for queenside castling", highlights: [_H('d2')] },
+    { atMove: 14, say: "Castle queenside. With kings on opposite wings, your kingside pawns become a battering ram.", sayShort: "Castle long, opposite-side attack", highlights: [_H('d4')] },
+    { atMove: 16, say: "Throw f4 forward, beginning the kingside advance straight at Black's fianchettoed king.", sayShort: "f4, start the pawn storm", highlights: [_H('f4')] },
+    { atMove: 22, say: "Lever with h4, prying open lines toward g6; your attack arrives first in the opposite-castling race.", sayShort: "h4, pry open the kingside", highlights: [_H('g6')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-king-safety', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V2_E5_9: SublineNarration = {
+  intro: { say: "Black lashes out with …e5 and then grabs b2 with the queen. Don't panic — develop with tempo, your lead and Black's offside queen are worth far more than the pawn.", sayShort: "Punish the greedy …Qxb2" },
+  beats: [
+    { atMove: 10, say: "Take the centre pawn with dxe5; the file opens and Black's …Qxb2 raid will only lose him time.", sayShort: "dxe5, open lines", highlights: [_H('e5')] },
+    { atMove: 12, say: "Leap into d5 with the knight, a beautiful central outpost that eyes c7 and screens your b2-pawn.", sayShort: "Knight to d5, strong outpost", arrows: [_A('d5', 'c7')], highlights: [_H('d5')] },
+    { atMove: 18, say: "Develop Nf3 and keep mobilising; the queen on b2 has nowhere useful to go while your pieces flow out.", sayShort: "Nf3, develop with tempo", highlights: [_H('f3')] },
+    { atMove: 20, say: "Drop the rook to b1, hunting the strayed queen and seizing the half-open b-file; you stand clearly better.", sayShort: "Rb1, trap the wandering queen", arrows: [_A('b1', 'b7')], highlights: [_H('a3')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-outpost', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V2_C5_5: SublineNarration = {
+  intro: { say: "Black hits early with …c5; you wedge a pawn to d5 and gain a Benoni-style space clamp. Trade off the light bishops and develop smoothly into a comfortable, balanced game.", sayShort: "d5 wedge, trade and develop" },
+  beats: [
+    { atMove: 8, say: "Check with Bb5+, dragging a piece to d7 so you can swap light bishops and ease your development.", sayShort: "Bb5+, trade light bishops", highlights: [_H('b5')] },
+    { atMove: 10, say: "Bring the knight to c3, reinforcing d5 and pointing toward the b5 and e4 squares.", sayShort: "Knight to c3, support d5", highlights: [_H('d5')] },
+    { atMove: 14, say: "Develop Nf3 to round out your pieces; the d5 wedge keeps Black cramped while you finish mobilising.", sayShort: "Nf3, complete development", highlights: [_H('f3')] },
+    { atMove: 18, say: "Recapture on d5 with the knight, planting it on a dominant central square in a level, easy-to-play position.", sayShort: "Nxd5, central knight, balanced", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-development', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V2_G6_11: SublineNarration = {
+  intro: { say: "Black plays …d6 and …g6, building a small centre with a kingside fianchetto. Castle long and prepare e5 and a pawn storm against his king.", sayShort: "Castle long, expand and attack" },
+  beats: [
+    { atMove: 12, say: "Castle queenside, putting your king to safety and the rook behind the d-pawn for the coming break.", sayShort: "Castle long, rook to the d-file", highlights: [_H('d4')] },
+    { atMove: 14, say: "Advance f4, gaining kingside space and readying the e5 push into Black's centre.", sayShort: "f4, gain kingside space", highlights: [_H('f4')] },
+    { atMove: 18, say: "Strike with e5, ripping open the centre against Black's uncastled king before he's organised.", sayShort: "e5, blast the centre open", highlights: [_H('e5')] },
+    { atMove: 20, say: "Follow up with d5, cracking the position fully open while your pieces are the better placed.", sayShort: "d5, open lines on his king", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-king-safety', 'concept:pos-center', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V3_G6_13: SublineNarration = {
+  intro: { say: "Black grabs the b2-pawn with …Qxb2 in this sharp …c5 gambit line. Make him pay: develop with tempo, build a big centre, and chase the offside queen all the way home.", sayShort: "Punish the …Qxb2 grab" },
+  beats: [
+    { atMove: 8, say: "Play Bd2, calmly developing and preparing Rb1 to hammer the b-file against the strayed queen.", sayShort: "Bd2, prepare Rb1", highlights: [_H('b2')] },
+    { atMove: 10, say: "Throw up e4. With d5 already cramping Black, you own a huge pawn centre while his queen is misplaced.", sayShort: "e4, build the big centre", highlights: [_H('e4'), _H('d5')] },
+    { atMove: 16, say: "Swing the rook to b1, gaining a tempo on the queen and seizing the half-open b-file.", sayShort: "Rb1, tempo on the queen", arrows: [_A('b1', 'b6')], highlights: [_H('b6')] },
+    { atMove: 22, say: "Reroute the bishop to f4, bracing your e5 spearhead; the pawn long forgotten, your centre and lead win it.", sayShort: "Bf4 supports the e5 wedge", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V3_BG4_13: SublineNarration = {
+  intro: { say: "After the …Qxb2 grab Black pins with …Bg4. Sidestep it, keep building your centre, and your development lead converts the gambit pawn into a lasting bind.", sayShort: "Keep the centre, ignore the pin" },
+  beats: [
+    { atMove: 8, say: "Develop Bd2, eyeing Rb1 to chase the queen off b2 and gain time.", sayShort: "Bd2, prepare Rb1", highlights: [_H('b2')] },
+    { atMove: 10, say: "Build with e4, claiming a broad centre while Black's queen and bishop sit far from his king.", sayShort: "e4, claim the centre", highlights: [_H('e4'), _H('d5')] },
+    { atMove: 14, say: "Tuck the queen to c1, unpinning and keeping an eye on the dark squares and the b-file.", sayShort: "Qc1, calmly unpin", highlights: [_H('c1')] },
+    { atMove: 16, say: "Push e5, gaining more space and kicking the f6-knight; your central wedge leaves Black gasping.", sayShort: "e5, kick the knight, gain space", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V3_NBD7_13: SublineNarration = {
+  intro: { say: "Black returns the queen and develops …Nbd7. You're left with the big centre, the bishop pair, and a clean development edge for the gambit pawn — keep mobilising and squeeze.", sayShort: "Big centre, easy development edge" },
+  beats: [
+    { atMove: 8, say: "Play Bd2, completing development and keeping Rb1 in reserve to harass the queen.", sayShort: "Bd2, develop", highlights: [_H('b2')] },
+    { atMove: 10, say: "Erect the centre with e4, with d5 already gained you stand broad and free while Black is cramped.", sayShort: "e4, broad centre", highlights: [_H('e4'), _H('d5')] },
+    { atMove: 14, say: "Develop Nf3, defending d4-e5 ideas and pointing the knight toward the e5 and g5 squares.", sayShort: "Nf3, finish developing", highlights: [_H('f3')] },
+    { atMove: 16, say: "Centralise the queen on e2, connecting rooks and preparing to break with e5 or a4-a5 against the queenside.", sayShort: "Qe2, connect and prepare e5", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-bishop-pair', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V3_A6_9: SublineNarration = {
+  intro: { say: "Black plays …a6 to give the queen a bolt-hole after grabbing b2. Strike before he's ready: Rb1, e4, f4 and you crash through on the open lines.", sayShort: "Open lines, hunt the queen" },
+  beats: [
+    { atMove: 10, say: "Build the centre with e4; your space and lead dwarf the single pawn Black spent his queen's time to win.", sayShort: "e4, central space", highlights: [_H('e4'), _H('d5')] },
+    { atMove: 12, say: "Swing the rook to b1, gaining a tempo on the b2-queen and opening the b-file at Black's queenside.", sayShort: "Rb1, tempo on the queen", arrows: [_A('b1', 'b7')], highlights: [_H('a3')] },
+    { atMove: 14, say: "Advance f4, readying e5 and an attack against Black's king still stuck in the centre.", sayShort: "f4, prepare e5", highlights: [_H('f4')] },
+    { atMove: 18, say: "Crash in with Rxb7, ripping open Black's queenside while his king has nowhere safe to hide.", sayShort: "Rxb7, smash the queenside", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-initiative', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V3_D6_9: SublineNarration = {
+  intro: { say: "Black tries to hold the extra pawn with …d6. Punish it directly: Rb1, Nb5 and the queen runs out of squares — you win the a8-rook by force.", sayShort: "Trap the queen, win the rook" },
+  beats: [
+    { atMove: 10, say: "Bring the rook to b1, hitting the b2-queen with tempo and driving her to the edge on a3.", sayShort: "Rb1, chase the queen", arrows: [_A('b1', 'b7')], highlights: [_H('a3')] },
+    { atMove: 12, say: "Leap to b5 with the knight, threatening Nc7+ to fork king and rook — the queen is running out of air.", sayShort: "Nb5, threaten the c7 fork", arrows: [_A('b5', 'c7')], highlights: [_H('c7')] },
+    { atMove: 20, say: "Check on c7 with the knight, forking the king and the a8-rook now that the queen can't cover both.", sayShort: "Nc7+, fork king and rook", highlights: [_H('c7')] },
+    { atMove: 22, say: "Scoop up the rook with Nxa8; you've won the exchange and Black's whole gambit collapses.", sayShort: "Nxa8 wins the exchange", highlights: [_H('a8')] },
+  ],
+  sources: ['concept:tac-fork', 'concept:tac-trap', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V3_E5_11: SublineNarration = {
+  intro: { say: "Black lunges with …e5 to free his game after the pawn-grab. Meet it head-on: g4 and f4 expand on the kingside and your space advantage tells while his queen loiters on b6.", sayShort: "Expand, exploit the offside queen" },
+  beats: [
+    { atMove: 10, say: "Plant e4, sealing the centre so Black's …e5 only frees you to swing play to the wings.", sayShort: "e4, seal the centre", highlights: [_H('e4'), _H('d5')] },
+    { atMove: 12, say: "Gain space with g4, the start of a kingside pawn roll while Black's queen is far from the defence.", sayShort: "g4, grab kingside space", highlights: [_H('g4')] },
+    { atMove: 14, say: "Add f4, prying the position open against Black's centre and king before he can untangle.", sayShort: "f4, pry it open", highlights: [_H('f4')] },
+    { atMove: 20, say: "Centralise the queen on f3, eyeing both the kingside files and the loose queenside; your initiative rolls on.", sayShort: "Qf3, press on both wings", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V3_A6_13: SublineNarration = {
+  intro: { say: "Black slots in …a6 to shelter the queen, but you already have the centre and the lead. Push e5, develop, and your bind keeps Black permanently cramped.", sayShort: "Centre and lead, keep the bind" },
+  beats: [
+    { atMove: 10, say: "Erect the centre with e4; broad pawns plus your development lead are worth far more than the b2-pawn.", sayShort: "e4, broad centre", highlights: [_H('e4'), _H('d5')] },
+    { atMove: 12, say: "Advance f4, gaining space and preparing the e5 thrust into Black's position.", sayShort: "f4, prepare e5", highlights: [_H('f4')] },
+    { atMove: 14, say: "Strike with e5, kicking the f6-knight back and clamping Black under a powerful pawn wedge.", sayShort: "e5, kick the knight", highlights: [_H('e5')] },
+    { atMove: 20, say: "Lever h4, opening a path toward Black's king as he tries to fianchetto into shelter.", sayShort: "h4, open kingside lines", highlights: [_H('h4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V3_E5_13: SublineNarration = {
+  intro: { say: "Black breaks with …e5 deep in the gambit line. Open the f-file with fxe5, develop quickly, and castle — your activity and centre outweigh the pawn.", sayShort: "Open the f-file, develop fast" },
+  beats: [
+    { atMove: 10, say: "Throw up e4 first, building the broad centre that justifies the sacrificed b2-pawn.", sayShort: "e4, big centre", highlights: [_H('e4'), _H('d5')] },
+    { atMove: 14, say: "Capture with fxe5, opening the f-file straight at f7 and Black's uncastled king.", sayShort: "fxe5, open the f-file", arrows: [_A('f1', 'f7')], highlights: [_H('f7')] },
+    { atMove: 16, say: "Develop the knight to f3, defending e5 and rounding out your attacking pieces.", sayShort: "Nf3, support e5", highlights: [_H('f3')] },
+    { atMove: 20, say: "Castle short, tucking the king away while your rook bears down the open f-file; you're comfortably on top.", sayShort: "Castle, rook on the open file", highlights: [_H('f7')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-development', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V3_E6_9: SublineNarration = {
+  intro: { say: "Black plays …e6 to break the d5-wedge, but his queen still sits on b2. Rb1 and Nb5 net you the a8-rook by force, just like the …d6 line.", sayShort: "Trap the queen, win the rook" },
+  beats: [
+    { atMove: 10, say: "Bring the rook to b1, hitting the b2-queen with tempo and driving her to a3.", sayShort: "Rb1, chase the queen", arrows: [_A('b1', 'b7')], highlights: [_H('a3')] },
+    { atMove: 12, say: "Take on e6 to rip open the centre against Black's stranded king before he can react.", sayShort: "dxe6, open the centre", highlights: [_H('e6')] },
+    { atMove: 14, say: "Spring the knight to b5, threatening Nc7+ to fork king and rook with the queen unable to guard both.", sayShort: "Nb5, threaten the c7 fork", arrows: [_A('b5', 'c7')], highlights: [_H('c7')] },
+    { atMove: 18, say: "Grab the rook with Nxa8 after the c7 check; you've won the exchange and a winning attack.", sayShort: "Nxa8 wins the exchange", highlights: [_H('a8')] },
+  ],
+  sources: ['concept:tac-fork', 'concept:tac-trap', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V3_G6_9: SublineNarration = {
+  intro: { say: "Black tries to fianchetto and give the b2-queen luft with …g6. Rb1 chases her to a3, then your centre and the dark-square pressure leave you firmly better.", sayShort: "Rb1 chases, centre dominates" },
+  beats: [
+    { atMove: 10, say: "Swing the rook to b1, gaining a tempo on the queen and clamping the b-file before Black is set.", sayShort: "Rb1, tempo on the queen", arrows: [_A('b1', 'b7')], highlights: [_H('a3')] },
+    { atMove: 12, say: "Build with e4, raising the broad centre that Black's queen-raid let you erect for free.", sayShort: "e4, broad centre", highlights: [_H('e4'), _H('d5')] },
+    { atMove: 14, say: "Push e5, gaining space and trading off Black's dark bishop so his fianchetto loses its sting.", sayShort: "e5, neutralise the fianchetto", highlights: [_H('e5')] },
+    { atMove: 20, say: "Develop Nf3, completing your forces with a healthy plus; the gambit pawn is a distant memory.", sayShort: "Nf3, finish developing", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+
+const TR_V5_D5_5: SublineNarration = {
+  intro: { say: "Black meets your bishop with the …Ne4 jump and …d5 and …Bf5. Clamp the kingside with h4, trade off the active e4-knight, and swap on f5 to leave Black with a static doubled pawn you can probe.", sayShort: "Clamp, trade, give doubled pawns" },
+  beats: [
+    { atMove: 8, say: "Gain kingside space with h4, fixing Black's …h5 and clamping the g5-square for your pieces.", sayShort: "h4, clamp the kingside", highlights: [_H('g5')] },
+    { atMove: 10, say: "Challenge the advanced knight with Nd2, offering a trade that frees and harmonises your position.", sayShort: "Nd2, trade the e4-knight", highlights: [_H('e4')] },
+    { atMove: 18, say: "Swap on f5, saddling Black with a doubled f-pawn and a rigid structure you can work at leisure.", sayShort: "Bxf5, give doubled pawns", highlights: [_H('f5')] },
+    { atMove: 22, say: "Reposition the queen to d3, leaning on the f5-pawn and keeping a small, comfortable pull.", sayShort: "Qd3, press the f5-pawn", highlights: [_H('f5')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-space', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V5_G6_9: SublineNarration = {
+  intro: { say: "In the …Ne4 …c5 line Black fianchettoes with …g6. Kick the knight with f3, build the full centre with e4, and your space clamp leaves Black cramped.", sayShort: "Kick, build the centre, clamp" },
+  beats: [
+    { atMove: 10, say: "Evict the knight with f3; Black's …Ne4 cost time and now you reclaim the centre.", sayShort: "f3, evict the knight", highlights: [_H('e4')] },
+    { atMove: 14, say: "Raise the full centre with e4. Backed by d5, your pawns grab serious space.", sayShort: "e4, big centre", highlights: [_H('e4'), _H('d5')] },
+    { atMove: 18, say: "Reroute the knight to c4, hitting the b6 and d6 squares and eyeing the e5 outpost.", sayShort: "Nc4, eye the dark squares", highlights: [_H('d6')] },
+    { atMove: 22, say: "Develop the bishop to d3, finishing your setup with a clear space edge; you stand comfortably better.", sayShort: "Bd3, finish with a space plus", highlights: [_H('d3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V5_D6_9: SublineNarration = {
+  intro: { say: "Black plays …d6 in the …c5 Ne4 line. Drive the knight back with f3, take the big centre with e4, and keep your protected d5-passer as a clamp.", sayShort: "Centre, then keep the d5 wedge" },
+  beats: [
+    { atMove: 10, say: "Play f3 to evict the e4-knight and prepare the central advance.", sayShort: "f3, evict the knight", highlights: [_H('e4')] },
+    { atMove: 14, say: "Erect the broad centre with e4; your pawns dominate while Black stays cramped.", sayShort: "e4, broad centre", highlights: [_H('e4'), _H('d5')] },
+    { atMove: 18, say: "Recapture on d5, keeping the protected passed pawn as the spearhead of your space clamp.", sayShort: "exd5, keep the d5 wedge", highlights: [_H('d5')] },
+    { atMove: 22, say: "Expand with g4, grabbing kingside space to roll your pawns at Black's king.", sayShort: "g4, kingside space", highlights: [_H('g4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-passed', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V5_C4_9: SublineNarration = {
+  intro: { say: "Black grabs space with …c4. Develop calmly — e3 and f3 shore up the centre, then e4 stamps your dominance while Black's queenside push proves loose.", sayShort: "Solid centre answers …c4" },
+  beats: [
+    { atMove: 10, say: "Meet …c4 with e3, reinforcing d4 and freeing your light bishop.", sayShort: "e3, solid development", highlights: [_H('d4')] },
+    { atMove: 12, say: "Play f3 to drive the e4-knight back and prepare the e4 advance.", sayShort: "f3, evict the knight", highlights: [_H('e4')] },
+    { atMove: 14, say: "Erect the broad centre with e4; Black's queenside space is offset by your dominant pawns.", sayShort: "e4, broad centre", highlights: [_H('e4'), _H('d5')] },
+    { atMove: 22, say: "Plant the knight on f4, eyeing e6 and g6; with the centre clamped you press for the break.", sayShort: "Nf4, eye e6 and g6", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V5_D6_5: SublineNarration = {
+  intro: { say: "Black plays …d6 against the …Ne4 line. Kick the knight with f3, build the full classical centre with e4, and set up for queenside castling and a kingside storm.", sayShort: "Classical centre, castle long, attack" },
+  beats: [
+    { atMove: 8, say: "Build the big classical centre with e4; you've evicted the knight and own the board's middle.", sayShort: "e4, full classical centre", highlights: [_H('e4'), _H('d4')] },
+    { atMove: 12, say: "Bring the second knight to c3, a harmonious classical setup behind your pawns.", sayShort: "Nbc3, classical development", highlights: [_H('c3')] },
+    { atMove: 18, say: "Centralise the queen on d2, connecting rooks for queenside castling and a pawn storm.", sayShort: "Qd2, prepare O-O-O", highlights: [_H('d2')] },
+    { atMove: 22, say: "Castle queenside; with opposite-side kings you'll hurl the g- and h-pawns at Black's monarch.", sayShort: "Castle long, attack the king", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-king-safety', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V5_E6_5: SublineNarration = {
+  intro: { say: "Black goes …e6 and …d5 for a solid wall. Trade the e4-knight off, swap dark bishops, and play the balanced middlegame with easy, harmonious development.", sayShort: "Trade down, balanced game" },
+  beats: [
+    { atMove: 8, say: "Offer to trade the active knight with Nd2, smoothing your development.", sayShort: "Nd2, trade the e4-knight", highlights: [_H('e4')] },
+    { atMove: 14, say: "Develop the bishop to d3 and prepare to swap Black's good bishop on d6.", sayShort: "Bd3, eye the d6-bishop", highlights: [_H('d6')] },
+    { atMove: 18, say: "Grab kingside space with f4, supporting an eventual e4 break in this balanced middlegame.", sayShort: "f4, gain space", highlights: [_H('f4')] },
+    { atMove: 22, say: "Capture on c5 to clarify the centre; the game is level, so trade into a comfortable structure.", sayShort: "dxc5, balanced position", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V5_E6_7: SublineNarration = {
+  intro: { say: "Black challenges the d5-wedge with …e6. Take on e6 to hand him doubled, isolated e-pawns, then develop smoothly and probe the weakness for a steady edge.", sayShort: "dxe6 leaves him weak pawns" },
+  beats: [
+    { atMove: 8, say: "Capture on e6, doubling Black's e-pawns and handing him a lasting structural weakness.", sayShort: "dxe6, double his pawns", highlights: [_H('e6')] },
+    { atMove: 12, say: "Develop Nf3, controlling e5 and preparing to castle into safety.", sayShort: "Nf3, control e5", highlights: [_H('e5')] },
+    { atMove: 18, say: "Post the bishop on d3, eyeing the kingside and Black's weak e6-pawn.", sayShort: "Bd3, target e6", highlights: [_H('e6')] },
+    { atMove: 22, say: "Tuck the bishop to g3 on a safe diagonal; you hold a small, steady pull against the weak pawns.", sayShort: "Bg3, keep a steady pull", highlights: [_H('g3')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-development', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V5_D6_13: SublineNarration = {
+  intro: { say: "Black sets up …e6 and …d6 against your big centre. Gain queenside space with a4, keep the protected d5-passer, and reroute your knights toward the holes.", sayShort: "a4, keep the wedge, target holes" },
+  beats: [
+    { atMove: 14, say: "Gain queenside space with a4, fixing Black's pawns and preparing Na3-c4 into the holes.", sayShort: "a4, queenside space", highlights: [_H('a4')] },
+    { atMove: 16, say: "Recapture on d5, keeping the protected passer that cramps Black's whole position.", sayShort: "exd5, keep the d5 wedge", highlights: [_H('d5')] },
+    { atMove: 18, say: "Develop the knight via e2, heading for c3 or f4 to bolster the spearhead.", sayShort: "Ne2, reroute the knight", highlights: [_H('d5')] },
+    { atMove: 22, say: "Swing the knight to a3 and on to c4, hitting the dark squares; your clamp leaves you better.", sayShort: "Na3, heading for c4", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pawn-passed', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V5_QA5_11: SublineNarration = {
+  intro: { say: "Black tosses in …Qa5+ before settling. Block with c3 to gain a tempo on the queen, build the broad centre, and keep your protected passer as a clamp.", sayShort: "Block the check, take the centre" },
+  beats: [
+    { atMove: 12, say: "Block the check with c3, gaining a tempo on the queen and reinforcing d4.", sayShort: "c3, block the check", highlights: [_H('c3')] },
+    { atMove: 14, say: "Raise the broad centre with e4; your pawns dominate while the queen has drifted to a5.", sayShort: "e4, broad centre", highlights: [_H('e4'), _H('d5')] },
+    { atMove: 18, say: "Recapture on d5, your protected passer the heart of a lasting space clamp.", sayShort: "exd5, keep the wedge", highlights: [_H('d5')] },
+    { atMove: 22, say: "Expand with g4, seizing kingside space to roll your pawns at Black's king.", sayShort: "g4, kingside space", highlights: [_H('g4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V6_QA5_7: SublineNarration = {
+  intro: { say: "In the early f3 line Black checks with …Qa5+. Block with c3 to gain a tempo, stake the d5-wedge, and complete a dominant pawn centre in a balanced, double-edged game.", sayShort: "Block, then build the big centre" },
+  beats: [
+    { atMove: 8, say: "Block the check with c3, gaining a tempo on the queen and shoring up your centre.", sayShort: "c3, block the check", highlights: [_H('c3')] },
+    { atMove: 10, say: "Stake space with d5, a Benoni-style wedge that cramps Black.", sayShort: "d5, gain the wedge", highlights: [_H('d5')] },
+    { atMove: 12, say: "Complete the big centre with e4; your pawns dominate in a balanced, sharp position.", sayShort: "e4, dominate the centre", highlights: [_H('e4'), _H('d5')] },
+    { atMove: 22, say: "Check with Bb5+ to trade light bishops and ease into an equal game where your space is comfortable.", sayShort: "Bb5+, trade and equalise", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V6_D6_9: SublineNarration = {
+  intro: { say: "Black overextends with …c4 and …c3 in the early f3 line. Build your centre and simply pick off the loose c3-pawn — you emerge a clean pawn up with the better position.", sayShort: "Win the overextended pawn" },
+  beats: [
+    { atMove: 14, say: "Erect the broad centre with e4 — Black's …c4-c3 lunge has only loosened his own camp.", sayShort: "e4, broad centre", highlights: [_H('e4'), _H('d5')] },
+    { atMove: 16, say: "Scoop the overextended c3-pawn with Nxc3; you're a clean pawn up with the stronger centre.", sayShort: "Nxc3, win the pawn", highlights: [_H('c3')] },
+    { atMove: 20, say: "Centralise the queen on d2, connecting rooks behind your dominant pawns.", sayShort: "Qd2, connect the rooks", highlights: [_H('d2')] },
+    { atMove: 22, say: "Open the position with dxe6 while you're up material and better developed — Black is busted.", sayShort: "dxe6, cash in the edge", highlights: [_H('e6')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V6_G5_7: SublineNarration = {
+  intro: { say: "Black lashes out with …g5 to win your f4-bishop. Don't retreat — grab the b8-knight, then the e4-knight, and the whole idea simply drops a piece.", sayShort: "…g5 loses a piece" },
+  beats: [
+    { atMove: 8, say: "Snatch the b8-knight with Bxb8! The …g5 fork attempt backfires — your bishop takes material before retreating.", sayShort: "Bxb8 grabs material", highlights: [_H('b8')] },
+    { atMove: 10, say: "Collect the stranded e4-knight with fxe4; you've emerged a clear piece to the good.", sayShort: "fxe4, up a piece", highlights: [_H('e4')] },
+    { atMove: 18, say: "Push e5, using your extra material and central pawns to clamp Black down completely.", sayShort: "e5, clamp with the extra piece", highlights: [_H('e5')] },
+    { atMove: 22, say: "Plant the knight on d5, a dominating outpost; with an extra piece the game is long decided.", sayShort: "Nxd5, total domination", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:tac-trap', 'concept:pos-outpost', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V6_D5_5: SublineNarration = {
+  intro: { say: "Black answers with …d5 and …Bf5. Clamp the kingside with h4, trade the active e4-knight, and swap on f5 to leave a static doubled pawn you can probe in a balanced game.", sayShort: "Clamp, trade, give doubled pawns" },
+  beats: [
+    { atMove: 8, say: "Gain kingside space with h4, fixing …h5 and clamping the g5-square.", sayShort: "h4, clamp the kingside", highlights: [_H('g5')] },
+    { atMove: 10, say: "Challenge the advanced knight with Nd2, offering a freeing trade.", sayShort: "Nd2, trade the e4-knight", highlights: [_H('e4')] },
+    { atMove: 18, say: "Swap on f5, saddling Black with a doubled f-pawn and a rigid structure.", sayShort: "Bxf5, give doubled pawns", highlights: [_H('f5')] },
+    { atMove: 22, say: "Reposition the queen to d3, leaning on f5 and keeping a small, comfortable pull.", sayShort: "Qd3, press the f5-pawn", highlights: [_H('f5')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-space', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V6_E6_9: SublineNarration = {
+  intro: { say: "Black breaks at the wedge with …e6. Develop Nc3, build the centre with e4, and capture on e6 to leave Black an isolated weak pawn you can lean on.", sayShort: "Build, then weaken his pawns" },
+  beats: [
+    { atMove: 10, say: "Develop Nc3, supporting d5 and the coming e4 advance.", sayShort: "Nc3, support the centre", highlights: [_H('c3')] },
+    { atMove: 12, say: "Build the broad centre with e4; your space gives a pleasant pull.", sayShort: "e4, broad centre", highlights: [_H('e4'), _H('d5')] },
+    { atMove: 14, say: "Capture on e6, saddling Black with an isolated, weak e-pawn to target.", sayShort: "dxe6, weaken his pawns", highlights: [_H('e6')] },
+    { atMove: 18, say: "Centralise with Qd2, linking rooks and keeping a small, durable edge.", sayShort: "Qd2, keep the edge", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-center', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V6_G6_9: SublineNarration = {
+  intro: { say: "Black fianchettoes with …g6. Take the full centre, centralise the queen, and trade off the g7-bishop with Bh6 to strip Black's king of its best defender.", sayShort: "Centre, then trade the g7-bishop" },
+  beats: [
+    { atMove: 10, say: "Raise the full centre with e4; with d5 in place your pawns clamp Black hard.", sayShort: "e4, clamp the centre", highlights: [_H('e4'), _H('d5')] },
+    { atMove: 12, say: "Centralise the queen on d2, preparing Bh6 to swap Black's key defensive bishop.", sayShort: "Qd2, prepare Bh6", highlights: [_H('d2')] },
+    { atMove: 16, say: "Offer the trade with Bh6, removing the fianchetto bishop that guards Black's king.", sayShort: "Bh6, trade the g7-bishop", highlights: [_H('h6')] },
+    { atMove: 22, say: "Expand with a4, clamping the queenside; your space edge is comfortable on both wings.", sayShort: "a4, clamp the queenside", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-king-safety', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V6_G6_11: SublineNarration = {
+  intro: { say: "Black delays with …Qb6 and …g6. Grab queenside space with a4, complete the broad centre, and reroute your knight to f4 to reinforce the d5-wedge.", sayShort: "Space, centre, Nf4 reinforces d5" },
+  beats: [
+    { atMove: 12, say: "Grab queenside space with a4, fixing Black's pawns before he's organised.", sayShort: "a4, queenside space", highlights: [_H('a4')] },
+    { atMove: 14, say: "Complete the broad centre with e4 — your clamp leaves Black passive.", sayShort: "e4, broad centre", highlights: [_H('e4'), _H('d5')] },
+    { atMove: 20, say: "Reroute the knight via e2 toward f4, supporting the d5-wedge.", sayShort: "Nge2, head for f4", highlights: [_H('d5')] },
+    { atMove: 22, say: "Land the knight on f4, eyeing e6 and g6; you press with a clear space advantage.", sayShort: "Nf4, eye e6 and g6", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V6_E6_13: SublineNarration = {
+  intro: { say: "Black prepares …e6 behind …Qb6 and …d6. Seize queenside space with a4, keep the protected d5-passer, and march your knights toward c4 for a clear pull.", sayShort: "a4, keep the wedge, target c4" },
+  beats: [
+    { atMove: 14, say: "Seize queenside space with a4 and prepare Na3-c4 into the holes.", sayShort: "a4, queenside space", highlights: [_H('a4')] },
+    { atMove: 16, say: "Recapture on d5, keeping the protected passer at the heart of your bind.", sayShort: "exd5, keep the wedge", highlights: [_H('d5')] },
+    { atMove: 20, say: "Reroute the knight to c3, reinforcing d5 and eyeing b5 and e4.", sayShort: "Nec3, reinforce d5", highlights: [_H('d5')] },
+    { atMove: 22, say: "Bring the other knight to a3, heading for c4; your clamp gives a clear pull.", sayShort: "Na3, heading for c4", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pawn-passed', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V6_D6_5: SublineNarration = {
+  intro: { say: "Black plays …d6 against the early f3 setup. Build the full classical centre with e4, develop your knights behind it, and prepare queenside castling for a kingside storm.", sayShort: "Classical centre, castle long, attack" },
+  beats: [
+    { atMove: 8, say: "Build the big classical centre with e4; the knight is evicted and you own the middle.", sayShort: "e4, full classical centre", highlights: [_H('e4'), _H('d4')] },
+    { atMove: 12, say: "Bring the second knight to c3, a harmonious classical setup behind your pawns.", sayShort: "Nbc3, classical development", highlights: [_H('c3')] },
+    { atMove: 18, say: "Centralise the queen on d2, connecting rooks for queenside castling and a pawn storm.", sayShort: "Qd2, prepare O-O-O", highlights: [_H('d2')] },
+    { atMove: 22, say: "Castle queenside; with opposite-side kings you'll hurl the g- and h-pawns at Black's king.", sayShort: "Castle long, attack the king", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-king-safety', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V7_NC6_19: SublineNarration = {
+  intro: { say: "In the …d5 line you trade into a level queenless ending. Black's doubled f-pawns and displaced king are your long-term targets — centralise, clear the c-file, and squeeze.", sayShort: "Level ending, target his weak pawns" },
+  beats: [
+    { atMove: 12, say: "Force the queens off with Qxd8+. Without queens, Black's exposed king and doubled f-pawns become permanent targets.", sayShort: "Qxd8+, into the ending", highlights: [_H('d8')] },
+    { atMove: 14, say: "Recapture the pawn on c4; material is level and you steer for a clean technical game.", sayShort: "Bxc4, regain the pawn", highlights: [_H('c4')] },
+    { atMove: 20, say: "Reposition the bishop to e2, clearing the c-file for your rook to swing into Black's camp.", sayShort: "Be2, clear the c-file", highlights: [_H('e2')] },
+    { atMove: 22, say: "Occupy the open c-file with Rc1, the natural endgame plan — pressure builds on Black's weak queenside.", sayShort: "Rc1, seize the c-file", arrows: [_A('c1', 'c5')], highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-open-file', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V7_NC6_17: SublineNarration = {
+  intro: { say: "Black develops …Nc6 in the queenless ending. It's level, but his doubled f-pawns and shaky king are yours to probe — develop, castle, and aim at the c-file.", sayShort: "Level ending, probe his pawns" },
+  beats: [
+    { atMove: 12, say: "Trade queens with Qxd8+; the ending favours the side without structural scars, and that's you.", sayShort: "Qxd8+, into the ending", highlights: [_H('d8')] },
+    { atMove: 14, say: "Recapture on c4 to level the material; now it's a pure technical fight.", sayShort: "Bxc4, regain the pawn", highlights: [_H('c4')] },
+    { atMove: 18, say: "Develop the knight to c3, controlling d5 and b5 as you mobilise toward the c-file.", sayShort: "Nc3, develop and control d5", highlights: [_H('d5')] },
+    { atMove: 22, say: "Reposition the bishop to e2, clearing the c-file for your rooks and keeping a steady pull.", sayShort: "Be2, clear the c-file", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-development', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V7_A6_19: SublineNarration = {
+  intro: { say: "Black plays …a6 in the level ending. Material is even, but his doubled f-pawns and exposed king are nagging weaknesses — develop, then expand with a4 to fix his queenside.", sayShort: "Level ending, fix his queenside" },
+  beats: [
+    { atMove: 12, say: "Force the queens off with Qxd8+, heading for the ending where Black's structure tells.", sayShort: "Qxd8+, into the ending", highlights: [_H('d8')] },
+    { atMove: 14, say: "Recapture on c4 to even the material; a clean technical game lies ahead.", sayShort: "Bxc4, regain the pawn", highlights: [_H('c4')] },
+    { atMove: 20, say: "Reposition the bishop to e2, freeing the c-file and eyeing the queenside light squares.", sayShort: "Be2, free the c-file", highlights: [_H('e2')] },
+    { atMove: 22, say: "Clamp with a4, stopping Black's …b5 and fixing the pawns you mean to attack.", sayShort: "a4, fix the queenside", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-prophylaxis', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V7_BD7_19: SublineNarration = {
+  intro: { say: "Black develops …Bd7 in the queenless ending. Level on material, you target the doubled f-pawns and the king on d8 — restrain his queenside, then occupy the c-file.", sayShort: "Level ending, take the c-file" },
+  beats: [
+    { atMove: 12, say: "Trade queens with Qxd8+; the structurally sounder side is happy in the ending.", sayShort: "Qxd8+, into the ending", highlights: [_H('d8')] },
+    { atMove: 14, say: "Recapture on c4 to level the material and start the technical phase.", sayShort: "Bxc4, regain the pawn", highlights: [_H('c4')] },
+    { atMove: 20, say: "Restrain Black's queenside with a3, taking the b4-square away before he expands.", sayShort: "a3, restrain …b4", highlights: [_H('b4')] },
+    { atMove: 22, say: "Reposition the bishop to e2, freeing the c-file for your rooks to invade.", sayShort: "Be2, free the c-file", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-prophylaxis', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V7_BB4_17: SublineNarration = {
+  intro: { say: "Black checks with …Bb4+ in the ending. Block with the knight, develop, and the level game still leaves you probing his doubled f-pawns and stranded king.", sayShort: "Block, develop, probe his pawns" },
+  beats: [
+    { atMove: 12, say: "Force the queens off with Qxd8+, steering into the ending where Black's scars matter.", sayShort: "Qxd8+, into the ending", highlights: [_H('d8')] },
+    { atMove: 14, say: "Recapture on c4 to even the material for the technical fight.", sayShort: "Bxc4, regain the pawn", highlights: [_H('c4')] },
+    { atMove: 18, say: "Block the check with Nbd2, developing the knight toward c4 and e4 with tempo.", sayShort: "Nbd2, block and develop", highlights: [_H('d2')] },
+    { atMove: 22, say: "Restrain the queenside with a3, kicking the b4-bishop and keeping your steady pull.", sayShort: "a3, kick the bishop", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-development', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V7_RD8_19: SublineNarration = {
+  intro: { say: "Black contests the d-file with …Rd8. The ending is level, but castle, take the c-file, and grind on Black's doubled f-pawns and weak queenside.", sayShort: "Castle, seize the c-file" },
+  beats: [
+    { atMove: 12, say: "Trade queens with Qxd8+; the side with the healthier pawns is comfortable here.", sayShort: "Qxd8+, into the ending", highlights: [_H('d8')] },
+    { atMove: 14, say: "Recapture on c4 to level the material and begin the technical game.", sayShort: "Bxc4, regain the pawn", highlights: [_H('c4')] },
+    { atMove: 20, say: "Castle, connecting your rooks and bringing the king toward the centre for the endgame.", sayShort: "Castle, connect the rooks", highlights: [_H('f1')] },
+    { atMove: 22, say: "Double intentions on the c-file with Rac1, the natural plan against Black's queenside.", sayShort: "Rac1, seize the c-file", arrows: [_A('c1', 'c5')], highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-open-file', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V7_RG8_19: SublineNarration = {
+  intro: { say: "Black activates with …Rg8 on the half-open g-file. Stay calm — castle, defend g2, and your healthier structure carries the level ending.", sayShort: "Castle, hold g2, grind on" },
+  beats: [
+    { atMove: 12, say: "Force the queens off with Qxd8+ and head into a technical ending.", sayShort: "Qxd8+, into the ending", highlights: [_H('d8')] },
+    { atMove: 14, say: "Recapture on c4 to level the material before the grind.", sayShort: "Bxc4, regain the pawn", highlights: [_H('c4')] },
+    { atMove: 20, say: "Castle, tucking the king safely and connecting rooks against Black's g-file pressure.", sayShort: "Castle, neutralise the g-file", highlights: [_H('g2')] },
+    { atMove: 22, say: "Solidify with g3, blunting the open g-file; your sounder pawns decide the long game.", sayShort: "g3, blunt the g-file", highlights: [_H('g3')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-king-safety', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V7_B6_19: SublineNarration = {
+  intro: { say: "Black fianchettoes with …b6 in the ending. Level on material, develop and castle while your healthier pawns and Black's stranded king give a small, lasting edge.", sayShort: "Level ending, develop and castle" },
+  beats: [
+    { atMove: 12, say: "Trade queens with Qxd8+, entering the ending on your terms.", sayShort: "Qxd8+, into the ending", highlights: [_H('d8')] },
+    { atMove: 14, say: "Recapture on c4 to even the material for the technical phase.", sayShort: "Bxc4, regain the pawn", highlights: [_H('c4')] },
+    { atMove: 20, say: "Reposition the bishop to e2, neutralising Black's long-diagonal bishop and freeing the c-file.", sayShort: "Be2, blunt his bishop", highlights: [_H('e2')] },
+    { atMove: 22, say: "Castle, connecting the rooks for the endgame; your structure keeps a quiet pull.", sayShort: "Castle, connect the rooks", highlights: [_H('f1')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V7_RG8_17: SublineNarration = {
+  intro: { say: "Black grabs the g-file early with …Rg8. The ending is balanced; defend g2 with g3, centralise your king, and lean on Black's doubled f-pawns.", sayShort: "Hold g2, centralise, grind" },
+  beats: [
+    { atMove: 12, say: "Force the queens off with Qxd8+, steering into the technical ending.", sayShort: "Qxd8+, into the ending", highlights: [_H('d8')] },
+    { atMove: 14, say: "Recapture on c4 to level the material before the grind.", sayShort: "Bxc4, regain the pawn", highlights: [_H('c4')] },
+    { atMove: 18, say: "Blunt the g-file with g3, taking the sting out of Black's rook.", sayShort: "g3, blunt the g-file", highlights: [_H('g3')] },
+    { atMove: 22, say: "Develop the knight to d2, heading for c4 or e4 as you complete your endgame setup.", sayShort: "Nbd2, complete development", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:end-key-squares', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V7_A6_17: SublineNarration = {
+  intro: { say: "Black plays …a6 early in the ending. Material is level; develop, castle, and occupy the c-file to grind on Black's doubled f-pawns and loose queenside.", sayShort: "Develop, castle, take the c-file" },
+  beats: [
+    { atMove: 12, say: "Trade queens with Qxd8+; the structurally sounder side is happy in the ending.", sayShort: "Qxd8+, into the ending", highlights: [_H('d8')] },
+    { atMove: 14, say: "Recapture on c4 to even the material and start the technical game.", sayShort: "Bxc4, regain the pawn", highlights: [_H('c4')] },
+    { atMove: 18, say: "Reposition the bishop to e2, freeing the c-file for your rooks to invade.", sayShort: "Be2, free the c-file", highlights: [_H('e2')] },
+    { atMove: 22, say: "Occupy the open c-file with Rc1, the natural endgame plan against Black's weak queenside.", sayShort: "Rc1, seize the c-file", arrows: [_A('c1', 'c5')], highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-open-file', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+const TR_V5_D6_7: SublineNarration = {
+  intro: { say: "Black plays …d6 in the …c5 wedge line. Evict the knight with f3, build the broad centre, and keep your protected d5-passer with the bishop pair for a comfortable game.", sayShort: "Centre and bishop pair, comfortable" },
+  beats: [
+    { atMove: 8, say: "Evict the e4-knight with f3, reclaiming the centre Black spent time to occupy.", sayShort: "f3, evict the knight", highlights: [_H('e4')] },
+    { atMove: 10, say: "Erect the broad centre with e4; backed by d5 your pawns clamp Black down.", sayShort: "e4, broad centre", highlights: [_H('e4'), _H('d5')] },
+    { atMove: 16, say: "Recapture on d5, keeping the protected passer as your space-clamping spearhead.", sayShort: "exd5, keep the wedge", highlights: [_H('d5')] },
+    { atMove: 22, say: "Recapture on c4, keeping the bishop pair aimed at f7; you hold a comfortable, balanced pull.", sayShort: "Bxc4, eye f7", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-bishop-pair', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+
+const TR_V6_E6_11: SublineNarration = {
+  intro: { say: "Black strikes the wedge with …e6 behind …Qb6. Bolster d5 with c4, recapture to keep the protected passer, and play the balanced middlegame around your central spearhead.", sayShort: "Bolster d5, balanced chances" },
+  beats: [
+    { atMove: 12, say: "Bolster the d5-wedge with c4, holding your space clamp against the …e6 break.", sayShort: "c4, support d5", highlights: [_H('d5')] },
+    { atMove: 14, say: "Recapture on d5, keeping the protected passer that cramps Black's position.", sayShort: "cxd5, keep the wedge", highlights: [_H('d5')] },
+    { atMove: 16, say: "Develop Nc3, guarding d5 and eyeing the e4 and b5 squares.", sayShort: "Nc3, guard d5", highlights: [_H('c3')] },
+    { atMove: 20, say: "Win back the pawn on c4; the game is balanced with mutual chances around the d5-passer.", sayShort: "Bxc4, balanced position", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-passed', 'https://lichess.org/opening/Trompowsky-Attack'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'slav-defence::6::e3@6': SL61,
   'slav-defence::5::e3@6': SL51,
@@ -7776,76 +8438,76 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'london-system::7::e6@5': LN78,
   'london-system::7::d6@7': LN79,
   // ── trompowsky-attack ──
-  'trompowsky-attack::0::e6@7': C80,
-  'trompowsky-attack::0::Bf5@7': C80,
-  'trompowsky-attack::0::g6@7': C80,
-  'trompowsky-attack::0::g5@7': C80,
-  'trompowsky-attack::0::c6@7': C81,
-  'trompowsky-attack::0::Nc6@7': C80,
-  'trompowsky-attack::0::c5@5': WTROC5,
-  'trompowsky-attack::0::Nd7@7': C80,
-  'trompowsky-attack::0::cxd4@9': C81,
-  'trompowsky-attack::0::Nf6@9': C81,
-  'trompowsky-attack::1::c5@7': C82,
-  'trompowsky-attack::1::c6@7': C82,
-  'trompowsky-attack::1::Nc6@7': C82,
-  'trompowsky-attack::1::Bf5@7': C82,
-  'trompowsky-attack::1::Be7@7': C82,
-  'trompowsky-attack::1::Bb4+@7': C82,
-  'trompowsky-attack::1::g6@7': C82,
-  'trompowsky-attack::1::Be6@7': C82,
-  'trompowsky-attack::1::c6@9': C82,
-  'trompowsky-attack::1::Be6@9': C82,
-  'trompowsky-attack::2::Bb4@9': C83,
-  'trompowsky-attack::2::gxf6@7': C83,
-  'trompowsky-attack::2::c5@9': C83,
-  'trompowsky-attack::2::Nc6@9': C83,
-  'trompowsky-attack::2::d5@9': C83,
-  'trompowsky-attack::2::b6@9': C83,
-  'trompowsky-attack::2::g6@9': C83,
-  'trompowsky-attack::2::e5@9': C83,
-  'trompowsky-attack::2::c5@5': C83,
-  'trompowsky-attack::2::g6@11': C83,
-  'trompowsky-attack::3::g6@13': C84,
-  'trompowsky-attack::3::Bg4@13': C84,
-  'trompowsky-attack::3::Nbd7@13': C84,
-  'trompowsky-attack::3::a6@9': C84,
-  'trompowsky-attack::3::d6@9': C84,
-  'trompowsky-attack::3::e5@11': C84,
-  'trompowsky-attack::3::a6@13': C84,
-  'trompowsky-attack::3::e5@13': C84,
-  'trompowsky-attack::3::e6@9': C84,
-  'trompowsky-attack::3::g6@9': C84,
-  'trompowsky-attack::5::d5@5': C80,
-  'trompowsky-attack::5::g6@9': C81,
-  'trompowsky-attack::5::d6@9': C81,
-  'trompowsky-attack::5::c4@9': C81,
-  'trompowsky-attack::5::d6@5': C80,
-  'trompowsky-attack::5::e6@5': C80,
-  'trompowsky-attack::5::e6@7': C81,
-  'trompowsky-attack::5::d6@13': C81,
-  'trompowsky-attack::5::d6@7': C81,
-  'trompowsky-attack::5::Qa5+@11': C81,
-  'trompowsky-attack::6::Qa5+@7': C81,
-  'trompowsky-attack::6::d6@9': ETRO,
-  'trompowsky-attack::6::g5@7': C81,
-  'trompowsky-attack::6::d5@5': C80,
-  'trompowsky-attack::6::e6@9': C81,
-  'trompowsky-attack::6::g6@9': C81,
-  'trompowsky-attack::6::e6@11': C81,
-  'trompowsky-attack::6::g6@11': C81,
-  'trompowsky-attack::6::e6@13': C81,
-  'trompowsky-attack::6::d6@5': C80,
-  'trompowsky-attack::7::Nc6@19': C85,
-  'trompowsky-attack::7::Nc6@17': C85,
-  'trompowsky-attack::7::a6@19': C85,
-  'trompowsky-attack::7::Bd7@19': C85,
-  'trompowsky-attack::7::Bb4+@17': C85,
-  'trompowsky-attack::7::Rd8@19': C85,
-  'trompowsky-attack::7::Rg8@19': C85,
-  'trompowsky-attack::7::b6@19': C85,
-  'trompowsky-attack::7::Rg8@17': C85,
-  'trompowsky-attack::7::a6@17': C85,
+  'trompowsky-attack::0::e6@7': TR01,
+  'trompowsky-attack::0::Bf5@7': TR02,
+  'trompowsky-attack::0::g6@7': TR03,
+  'trompowsky-attack::0::g5@7': TR04,
+  'trompowsky-attack::0::c6@7': TR05,
+  'trompowsky-attack::0::Nc6@7': TR06,
+  'trompowsky-attack::0::c5@5': TR07,
+  'trompowsky-attack::0::Nd7@7': TR08,
+  'trompowsky-attack::0::cxd4@9': TR09,
+  'trompowsky-attack::0::Nf6@9': TR10,
+  'trompowsky-attack::1::c5@7': TR11,
+  'trompowsky-attack::1::c6@7': TR12,
+  'trompowsky-attack::1::Nc6@7': TR13,
+  'trompowsky-attack::1::Bf5@7': TR14,
+  'trompowsky-attack::1::Be7@7': TR15,
+  'trompowsky-attack::1::Bb4+@7': TR16,
+  'trompowsky-attack::1::g6@7': TR17,
+  'trompowsky-attack::1::Be6@7': TR18,
+  'trompowsky-attack::1::c6@9': TR19,
+  'trompowsky-attack::1::Be6@9': TR20,
+  'trompowsky-attack::2::Bb4@9': TR_V2_BB4,
+  'trompowsky-attack::2::gxf6@7': TR_V2_GXF6,
+  'trompowsky-attack::2::c5@9': TR_V2_C5_9,
+  'trompowsky-attack::2::Nc6@9': TR_V2_NC6_9,
+  'trompowsky-attack::2::d5@9': TR_V2_D5_9,
+  'trompowsky-attack::2::b6@9': TR_V2_B6_9,
+  'trompowsky-attack::2::g6@9': TR_V2_G6_9,
+  'trompowsky-attack::2::e5@9': TR_V2_E5_9,
+  'trompowsky-attack::2::c5@5': TR_V2_C5_5,
+  'trompowsky-attack::2::g6@11': TR_V2_G6_11,
+  'trompowsky-attack::3::g6@13': TR_V3_G6_13,
+  'trompowsky-attack::3::Bg4@13': TR_V3_BG4_13,
+  'trompowsky-attack::3::Nbd7@13': TR_V3_NBD7_13,
+  'trompowsky-attack::3::a6@9': TR_V3_A6_9,
+  'trompowsky-attack::3::d6@9': TR_V3_D6_9,
+  'trompowsky-attack::3::e5@11': TR_V3_E5_11,
+  'trompowsky-attack::3::a6@13': TR_V3_A6_13,
+  'trompowsky-attack::3::e5@13': TR_V3_E5_13,
+  'trompowsky-attack::3::e6@9': TR_V3_E6_9,
+  'trompowsky-attack::3::g6@9': TR_V3_G6_9,
+  'trompowsky-attack::5::d5@5': TR_V5_D5_5,
+  'trompowsky-attack::5::g6@9': TR_V5_G6_9,
+  'trompowsky-attack::5::d6@9': TR_V5_D6_9,
+  'trompowsky-attack::5::c4@9': TR_V5_C4_9,
+  'trompowsky-attack::5::d6@5': TR_V5_D6_5,
+  'trompowsky-attack::5::e6@5': TR_V5_E6_5,
+  'trompowsky-attack::5::e6@7': TR_V5_E6_7,
+  'trompowsky-attack::5::d6@13': TR_V5_D6_13,
+  'trompowsky-attack::5::d6@7': TR_V5_D6_7,
+  'trompowsky-attack::5::Qa5+@11': TR_V5_QA5_11,
+  'trompowsky-attack::6::Qa5+@7': TR_V6_QA5_7,
+  'trompowsky-attack::6::d6@9': TR_V6_D6_9,
+  'trompowsky-attack::6::g5@7': TR_V6_G5_7,
+  'trompowsky-attack::6::d5@5': TR_V6_D5_5,
+  'trompowsky-attack::6::e6@9': TR_V6_E6_9,
+  'trompowsky-attack::6::g6@9': TR_V6_G6_9,
+  'trompowsky-attack::6::e6@11': TR_V6_E6_11,
+  'trompowsky-attack::6::g6@11': TR_V6_G6_11,
+  'trompowsky-attack::6::e6@13': TR_V6_E6_13,
+  'trompowsky-attack::6::d6@5': TR_V6_D6_5,
+  'trompowsky-attack::7::Nc6@19': TR_V7_NC6_19,
+  'trompowsky-attack::7::Nc6@17': TR_V7_NC6_17,
+  'trompowsky-attack::7::a6@19': TR_V7_A6_19,
+  'trompowsky-attack::7::Bd7@19': TR_V7_BD7_19,
+  'trompowsky-attack::7::Bb4+@17': TR_V7_BB4_17,
+  'trompowsky-attack::7::Rd8@19': TR_V7_RD8_19,
+  'trompowsky-attack::7::Rg8@19': TR_V7_RG8_19,
+  'trompowsky-attack::7::b6@19': TR_V7_B6_19,
+  'trompowsky-attack::7::Rg8@17': TR_V7_RG8_17,
+  'trompowsky-attack::7::a6@17': TR_V7_A6_17,
   // ── old-indian-defence ──
   'old-indian-defence::0::d5@14': C86,
   'old-indian-defence::0::Be3@14': C86,
