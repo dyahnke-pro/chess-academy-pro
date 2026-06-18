@@ -824,13 +824,26 @@ const N161: SublineNarration = {
 };
 
 const N162: SublineNarration = {
-  intro: { say: "…c5 — the principled Austrian counter, hitting d4 before you can roll forward. Answer with the energetic d5, gaining space and locking the centre, or Bb5+ to disrupt his development; either way your e4-f4 pawns and the f3-knight keep the kingside ambitions alive. It all turns on whether your central pawns become a steamroller or his c5 break loosens them — so push to make them roll.", sayShort: "c5 hits centre — d5 or Bb5+" },
-  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
+  intro: { say: "…c5 — the principled Austrian counter, striking at the base of your d4-centre before it can roll forward. This is the moment the whole Austrian is built for: you're the better-developed side, so you don't retreat — you hit first. Meet it with Bb5+, fouling Black's development before he's coordinated, and then storm the e-pawn forward to tear open his uncastled king. Watch the lead in development turn straight into an attack.", sayShort: "…c5 — Bb5+, then storm e5-e6" },
+  beats: [
+    { atMove: 9, say: "…c5 strikes at d4, the base of your big centre — the critical break. Don't recoil and don't trade tamely; this is exactly where your faster development is meant to pay off.", sayShort: "…c5 hits d4 — the critical moment", arrows: [A('c5', 'd4')], highlights: [H('d4'), H('c5')] },
+    { atMove: 10, say: "Bb5+ — the punch. Before Black is castled or coordinated you check, dragging a piece to a passive blocking square and banking a tempo for the assault to come. Development lead plus initiative — that is the Austrian's whole promise.", sayShort: "Bb5+ — disrupt before he castles", arrows: [A('b5', 'e8')], highlights: [H('e8')] },
+    { atMove: 12, say: "e5! — the signature break, the pawn smashing into the f6-knight and seizing the centre. The knight must scramble offside to g4, and every tempo Black spends shuffling it is a tempo you spend opening his king.", sayShort: "e5 — hit f6, grab the centre", arrows: [A('e5', 'f6')], highlights: [H('f6')] },
+    { atMove: 14, say: "e6! — the battering ram. The pawn jabs into f7 and d7, prying open the squares around a king still stuck in the centre. Black gets no time to consolidate; the lines are torn open by force.", sayShort: "e6 — pry open f7 and the king", arrows: [A('e6', 'f7'), A('e6', 'd7')], highlights: [H('f7')] },
+    { atMove: 16, say: "exf7+ — the pawn crashes through with check. The king is hauled out to d7, marooned in the open while you stand fully developed with the rooks ready to pile in. The …c5 break never got rolling; instead Black's king is the one in the firing line.", sayShort: "exf7+ — the king is hunted", arrows: [A('f7', 'e8')], highlights: [H('e8')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
 };
 
 const N163: SublineNarration = {
-  intro: { say: "O-O — he castles into your Austrian Attack, the sharpest weapon against the Pirc, where you've built a broad e4-d4-f4 front with knights on c3 and f3 backing an eventual e5. Develop the bishop to d3 or e2, castle, and prepare the e5 break or a kingside push that exploits the space behind your f4 pawn. The big centre is your engine — mobilize it before he hits back with c5 or e5.", sayShort: "Austrian Attack — big centre rolls" },
-  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
+  intro: { say: "O-O — Black tucks his king away and invites you to prove the Austrian Attack, the sharpest weapon against the Pirc. You've built the broad e4-d4-f4 front with knights on c3 and f3; now bring the light bishop to d3 and castle, and the game becomes a question of whose attack lands first. The answer is yours: your centre is bigger and your space greater, so you steer toward the d5-clamp and a kingside pawn storm while Black is still hunting for counterplay.", sayShort: "O-O — build the centre, then clamp d5" },
+  beats: [
+    { atMove: 10, say: "Bd3 — the bishop slots in behind the centre, bracing the e4-pawn and lining up on the kingside for the moment your pawns advance and the diagonal opens. Simple, strong development with the attack already in mind.", sayShort: "Bd3 — develop, brace e4", highlights: [H('d3'), H('e4')] },
+    { atMove: 13, say: "…c5 — Black strikes at d4 for counterplay, the standard Pirc lever. You won't release the tension and hand him an easy open game; instead you answer in the most ambitious way.", sayShort: "…c5 — he strikes at d4", arrows: [A('c5', 'd4')], highlights: [H('d4')] },
+    { atMove: 14, say: "d5! — you ram the pawn forward instead of trading, clamping the centre and grabbing a big Benoni-style space edge. Now the plan writes itself: pieces in behind the d5-spearhead, then f5 and a kingside pawn storm while Black is squeezed for room.", sayShort: "d5 — clamp the centre, take space", arrows: [A('d5', 'e6'), A('d5', 'c6')], highlights: [H('d5')] },
+    { atMove: 16, say: "Bc4 — the bishop swings behind the d5-pawn, bolstering the spearhead and eyeing the e6-break. With the extra space and the bishop trained on Black's kingside you build for f5 and an attack; his knight forced back to c7 shows just how cramped he has become.", sayShort: "Bc4 — back d5, build for f5", highlights: [H('c4'), H('d5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
 };
 
 const N164: SublineNarration = {
