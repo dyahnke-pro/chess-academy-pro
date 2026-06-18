@@ -4158,106 +4158,211 @@ const N574: SublineNarration = {
 
 const N575: SublineNarration = {
   intro: { say: "Be2 — the modern positional treatment of the Sveshnikov: White supports d5 with c3, develops quietly and aims to reroute the a3-knight to c2 and e3. You hold the bishop pair and the dark-squared bishop on f6 eyeing the long diagonal. Play …Bg5 to trade off his good bishop or relocate, …Be6 hitting d5, …Rb8 and the freeing …f5 break to challenge his central knight and open lines.", sayShort: "Positional Be2 — reroute toward d5" },
+  beats: [
+    { atMove: 23, say: "…Bg5 trades off into the kingside, easing your position and contesting dark squares.", sayShort: "…Bg5 — trade, ease the game.", highlights: [H('g5')] },
+    { atMove: 25, say: "…Ne7 reroutes the knight toward d5 and f5, fighting for the central outpost.", sayShort: "…Ne7 — reroute toward d5.", highlights: [H('e7')] },
+    { atMove: 27, say: "…a5 gains queenside space, supporting your play in the balanced middlegame.", sayShort: "…a5 — gain queenside space.", highlights: [H('a5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:pos-outpost', 'concept:pos-bishop-pair'],
 };
 
 const N576: SublineNarration = {
   intro: { say: "Nb3 — rather than the sharp Ndb5, White simply retreats the attacked knight, declining the Sveshnikov tabiya for a quieter game. Your e5-pawn cramps him and you've a free hand to develop without conceding the d5-hole as starkly. Play …Be7, …O-O, and …Be6 or …a5-a4 to harass the b3-knight, with …d5 a recurring break to liberate your position and claim equal central play.", sayShort: "Quiet Nb3 retreat — develop freely" },
+  beats: [
+    { atMove: 11, say: "…Bb4 pins the c3-knight, the guardian of the d5-square and e4.", sayShort: "…Bb4 — pin the knight.", highlights: [H('b4')] },
+    { atMove: 13, say: "…Bxc3 trades to shatter White's queenside pawns and loosen his grip on d5.", sayShort: "…Bxc3 — wreck the structure.", highlights: [H('c3')] },
+    { atMove: 17, say: "…d5 strikes the centre, the thematic Sveshnikov break freeing your game.", sayShort: "…d5 — the central break.", arrows: [A('d5', 'e4')], highlights: [H('e4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:pos-development', 'concept:pos-space'],
 };
 
 const N577: SublineNarration = {
   intro: { say: "Nf3 — instead of the critical Ndb5, White meekly retreats, where the knight hits your e5-pawn but allows you easy development. You've gained central space with …e5 and avoided conceding the sharp d5-hole on his terms. Play …Bb4 pinning the c3-knight and …d5, or …Be7 and …O-O, with the e5-pawn and free piece play promising at least equality.", sayShort: "Passive Nf3 — Black develops freely" },
+  beats: [
+    { atMove: 11, say: "…Bb4 pins the c3-knight, pressuring the defender of the centre.", sayShort: "…Bb4 — pin the knight.", highlights: [H('b4')] },
+    { atMove: 15, say: "…Bxc3 trades to damage White's structure, weakening his hold on d5.", sayShort: "…Bxc3 — damage the structure.", highlights: [H('c3')] },
+    { atMove: 19, say: "…Re8 contests the e-file, your rook backing the central pawn and pressing.", sayShort: "…Re8 — contest the e-file.", highlights: [H('e8')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:pos-development', 'concept:pos-space'],
 };
 
 const N578: SublineNarration = {
   intro: { say: "Nf5 — White answers …e5 with an aggressive leap, the knight sitting near your king but challengeable at once. Play …d5, striking the centre and threatening to engulf the f5-knight after …d4 or …Bxf5. The point: that knight has no stable support, so you open the position with …d5, exploit the loose piece, and emerge with the central pawn duo and the bishop pair.", sayShort: "…d5 punishes the f5 knight" },
+  beats: [
+    { atMove: 11, say: "…d5! — the textbook counter to the knight's leap to the rim, striking the centre at once.", sayShort: "…d5 — punish the rim knight.", arrows: [A('d5', 'e4')], highlights: [H('e4')] },
+    { atMove: 13, say: "…Bxf5 rounds up the offside knight, your bishop pair telling in the open position.", sayShort: "…Bxf5 — win the bishop pair.", highlights: [H('f5')] },
+    { atMove: 23, say: "…Nd5 centralises the knight on a dominant outpost, blockading and pressing.", sayShort: "…Nd5 — dominant knight.", highlights: [H('d5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:pos-center', 'concept:tac-trap'],
 };
 
 const N579: SublineNarration = {
   intro: { say: "Nxc6 — White retreats by capturing rather than allowing the full Sveshnikov, handing you the bishop pair and a strong e5-pawn. Recapture …bxc6 to open the b-file, then …Bb4 pins the c3-knight, hitting the e4-pawn and pressuring d5. Follow with …d5 or …O-O, using the pin and the central pawn mass to seize the initiative on the light squares around his centre.", sayShort: "…Bb4 pins the c3 knight" },
+  beats: [
+    { atMove: 11, say: "…bxc6 recaptures toward the centre, your pawns guarding key squares and the bishop pair yours.", sayShort: "…bxc6 — central pawns.", highlights: [H('c6')] },
+    { atMove: 13, say: "…Bb4 pins the c3-knight, pressuring the defender of e4 and the centre.", sayShort: "…Bb4 — pin the knight.", highlights: [H('b4')] },
+    { atMove: 15, say: "…d5 strikes the centre, the freeing break that opens lines for your bishops.", sayShort: "…d5 — the freeing break.", arrows: [A('d5', 'e4')], highlights: [H('e4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:tac-pin', 'concept:pos-bishop-pair'],
 };
 
 const N580: SublineNarration = {
   intro: { say: "Nxc6 — White trades a move early and develops modestly with Bd3, declining the fight for d5. Recapture …bxc6 to open your b-file and …e5 to stake the centre, building the pawn mass typical of these structures. After a3, your …c5 advance grabs space and the dark squares; continue …d6, …Be7 and …O-O, leaning on your bishop pair and mobile central majority to outgun his passive setup.", sayShort: "…e5 and …c5 seize the centre" },
+  beats: [
+    { atMove: 9, say: "…bxc6 recaptures toward the centre, the doubled pawns guarding d5 and e4 while you keep the bishop pair.", sayShort: "…bxc6 — central pawns, bishop pair.", highlights: [H('c6')] },
+    { atMove: 15, say: "…Bg7 fianchettoes onto the long diagonal, your bishop raking the centre and queenside.", sayShort: "…Bg7 — the long diagonal.", arrows: [A('g7', 'b2')], highlights: [H('b2')] },
+    { atMove: 17, say: "…Rb8 loads the half-open b-file, pressuring White's queenside as you complete development.", sayShort: "…Rb8 — load the b-file.", highlights: [H('b8')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:pos-center', 'concept:pos-space'],
 };
 
 const N581: SublineNarration = {
   intro: { say: "a4 — the Sveshnikov positional main line: you kept the dark-squared bishop with …Bxf6 and rerouted it to g5, while White reroutes the offside a3-knight via c2 to e3 to reinforce d5. Now a4 strikes at your queenside chain, trying to crack the b5-pawn and the a6-square before you finish …Be6 and …Rb8. Hold the queenside with …bxa4 or …b4, then keep challenging d5 and push …f5 to free the position.", sayShort: "a4 hits the queenside chain" },
+  beats: [
+    { atMove: 25, say: "…bxa4 recaptures, opening the b-file for your rook against White's queenside.", sayShort: "…bxa4 — open the b-file.", highlights: [H('a4')] },
+    { atMove: 27, say: "…a5 gains queenside space, fixing White's pawns and supporting your play.", sayShort: "…a5 — gain queenside space.", highlights: [H('a5')] },
+    { atMove: 29, say: "…Rb8 loads the half-open b-file, your rook pressing White's queenside.", sayShort: "…Rb8 — load the b-file.", highlights: [H('b8')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:pawn-chain', 'concept:pos-outpost'],
 };
 
 const N582: SublineNarration = {
   intro: { say: "f3 — White plays it early, you grab the centre with …e5, and after the knight hops to b5 and meets …d6 and a3, you strike with the freeing …d5 break. This central thrust opens the position before he can consolidate the b5-knight, hitting e4 and freeing your pieces. Follow …d5 with …Be7 or …Be6 and rapid development, using the break to seize the initiative against his awkward setup.", sayShort: "…d5 break frees Black's centre" },
+  beats: [
+    { atMove: 9, say: "…e5 stakes the centre, the Sveshnikov claim of space against White's f3.", sayShort: "…e5 — stake the centre.", highlights: [H('e5')] },
+    { atMove: 17, say: "…Be6 guards the d5-square head-on, contesting the Sveshnikov's key battleground.", sayShort: "…Be6 — guard d5.", arrows: [A('e6', 'd5')], highlights: [H('d5')] },
+    { atMove: 23, say: "…Nd4 plants the knight on a dominant central square, the heart of your counterplay.", sayShort: "…Nd4 — dominant knight.", highlights: [H('d4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:pos-center', 'concept:pos-initiative'],
 };
 
 const N583: SublineNarration = {
   intro: { say: "Nc3 — White delays d4 and you answer with the …e5 thrust, a Sveshnikov-flavoured setup grabbing central space and discouraging the natural d4 break. Bc4 eyes your f7-pawn and the a2-g8 diagonal, so develop …Be7 to prepare castling. Play …Nf6, …O-O and …d6, holding the e5-point and contesting d5, content that his bishop on c4 finds few targets behind your solid pawn front.", sayShort: "…e5 setup — solid central space" },
+  beats: [
+    { atMove: 5, say: "…e5 stakes the centre, the Sveshnikov/Kalashnikov claim of central space.", sayShort: "…e5 — stake the centre.", highlights: [H('e5')] },
+    { atMove: 21, say: "…Be6 guards the d5-square, contesting the Sveshnikov's key central battleground.", sayShort: "…Be6 — guard d5.", arrows: [A('e6', 'd5')], highlights: [H('d5')] },
+    { atMove: 23, say: "…Nb4 jumps to harass White's pieces and eye d5 and c2 with tempo.", sayShort: "…Nb4 — harass, eye d5.", highlights: [H('b4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:pos-center', 'concept:pos-space'],
 };
 
 const N584: SublineNarration = {
   intro: { say: "Nd5 — the Sveshnikov main tabiya: your …e5 seized the centre, …a6 booted the b5-knight to the dismal a3-square, and …b5 clamped it out of play. Now White plants the knight on the hole you conceded, the strong d5-outpost, threatening Nxf6 to wreck your kingside. Answer …Be7, recapture on f6 with the bishop after Bxf6, and fight back with …Ne7 and …Bxd5 or …Nxd5 in due course, leaning on the bishop pair and the e5/f5 break to justify the d5-hole.", sayShort: "Knight to d5 — outpost in the hole" },
+  beats: [
+    { atMove: 17, say: "…Be7 develops and prepares to challenge White's d5-knight, holding firm.", sayShort: "…Be7 — develop, hold.", highlights: [H('e7')] },
+    { atMove: 19, say: "…Bxf6 recaptures, keeping a solid structure and the bishop pair after the trade.", sayShort: "…Bxf6 — solid, bishop pair.", highlights: [H('f6')] },
+    { atMove: 21, say: "…Rb8 loads the half-open b-file, pressuring White's queenside.", sayShort: "…Rb8 — load the b-file.", highlights: [H('b8')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:pos-outpost', 'concept:pos-bishop-pair'],
 };
 
 const N585: SublineNarration = {
   intro: { say: "Bxf6 — White trades before you can untangle, the main line of the Sveshnikov. Recapture …gxf6: it shatters your kingside but opens the g-file and hands you the bishop pair plus a granite e5/f6 pawn mass controlling key central squares. Play …Bg7 or …f5, hitting the e4-pawn and the d5-knight, generating play on the dark squares and down the g-file against his king.", sayShort: "Bxf6 — …gxf6 for the bishop pair" },
+  beats: [
+    { atMove: 17, say: "…gxf6 recaptures toward the centre, the open g-file pointing at White's king.", sayShort: "…gxf6 — open the g-file.", highlights: [H('f6')] },
+    { atMove: 19, say: "…f5 strikes at the centre, the thematic Sveshnikov break opening lines.", sayShort: "…f5 — strike the centre.", highlights: [H('f5')] },
+    { atMove: 23, say: "…Bg7 fianchettoes onto the long diagonal, your bishop raking the centre.", sayShort: "…Bg7 — the long diagonal.", arrows: [A('g7', 'b2')], highlights: [H('b2')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:pos-bishop-pair', 'concept:pawn-doubled'],
 };
 
 const N586: SublineNarration = {
   intro: { say: "Ndb5 — the defining Sveshnikov moment: your …e5 hit the d4-knight, and rather than retreat passively White leaps to b5, eyeing d6 and the threat of Nd6+. You've voluntarily weakened the d5-square and the d6-pawn for a lead in development and central pawns. Play …d6 to deny the knight d6, then …a6 to chase it offside to a3, …b5 to box it in, and active piece play on the half-open c-file and the kingside.", sayShort: "Knight jumps to b5 — defining move" },
+  beats: [
+    { atMove: 11, say: "…d6 braces the centre, the main Sveshnikov, accepting the d5-hole for active play.", sayShort: "…d6 — brace the centre.", highlights: [H('d6')] },
+    { atMove: 15, say: "…b5 expands on the queenside, gaining space and the bishop pair's scope.", sayShort: "…b5 — queenside expansion.", highlights: [H('b5')] },
+    { atMove: 19, say: "…Bxf6 recaptures, keeping a solid structure and the bishop pair after the trade.", sayShort: "…Bxf6 — solid, bishop pair.", highlights: [H('f6')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:pos-development', 'concept:pos-weak-squares'],
 };
 
 const N587: SublineNarration = {
   intro: { say: "O-O — White retreated to f3 rather than b5, and you seized the moment with …Bb4 pinning the c3-knight and the freeing …d5 break, equalising in the centre at once. With the pin tying down c3, …d5 strikes e4 and frees your game; now that he's castled, you've a comfortable position with the …d5-pawn and active pieces. Play …O-O, …Bxc3 if needed to win the e4-pawn, and play against his centre.", sayShort: "…Bb4 and …d5 — instant freedom" },
+  beats: [
+    { atMove: 15, say: "…Bxc3 trades to shatter White's queenside pawns and free your game.", sayShort: "…Bxc3 — wreck the pawns.", highlights: [H('c3')] },
+    { atMove: 17, say: "…Qxd5 recentralises the queen, simplifying with the bishop pair toward equality.", sayShort: "…Qxd5 — recentralise.", highlights: [H('d5')] },
+    { atMove: 19, say: "…Bg4 pins the f3-knight, pressuring White's loosened kingside.", sayShort: "…Bg4 — pin the knight.", arrows: [A('g4', 'f3')], highlights: [H('f3')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:tac-pin', 'concept:pos-center'],
 };
 
 const N588: SublineNarration = {
   intro: { say: "Bd3 — White develops in this Kalashnikov-Sveshnikov, defending e4 and preparing to castle while the d5-knight anchors the position. You hold the familiar trumps: the bishop pair after a future …Nxd5, the e5/d6 centre and queenside space from …b5. Play …Be7, …O-O, …Bb7 or …Be6 to pressure d5, and the …f5 break to challenge his centre and activate your dark-squared bishop along the long diagonal.", sayShort: "Bd3 develops — Black eyes …f5" },
+  beats: [
+    { atMove: 17, say: "…Be7 develops and prepares castling, your solid setup holding the centre.", sayShort: "…Be7 — develop, prep castle.", highlights: [H('e7')] },
+    { atMove: 21, say: "…Bxf6 recaptures, keeping the bishop pair and a solid structure.", sayShort: "…Bxf6 — keep the bishop pair.", highlights: [H('f6')] },
+    { atMove: 23, say: "…Be6 develops the light bishop, guarding d5 and completing your setup.", sayShort: "…Be6 — guard d5.", arrows: [A('e6', 'd5')], highlights: [H('d5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:pos-bishop-pair', 'concept:pos-development'],
 };
 
 const N589: SublineNarration = {
   intro: { say: "Be3 — in this Kalashnikov-to-Sveshnikov structure White develops rather than pinning on g5, eyeing a future c4 to undermine your queenside and bolstering control of d5. You've the standard bishop-pair prospects and a big centre with …e5 and …b5. Play …Be7, …O-O, …Be6 challenging the d5-knight, and …Rb8 with …f5 to break his grip and open the position for your bishops.", sayShort: "Be3 — bolster d5, prepare c4" },
+  beats: [
+    { atMove: 17, say: "…Nxd5 trades off White's d5-knight, easing the central pressure.", sayShort: "…Nxd5 — trade the knight.", highlights: [H('d5')] },
+    { atMove: 19, say: "…Ne7 reroutes the knight toward f5 and d5, fighting for the central outpost.", sayShort: "…Ne7 — reroute toward f5.", highlights: [H('e7')] },
+    { atMove: 21, say: "…Nf5 lands the knight on a strong square, eyeing d4 and the kingside.", sayShort: "…Nf5 — strong knight.", arrows: [A('f5', 'd4')], highlights: [H('d4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:pos-outpost', 'concept:pos-weak-squares'],
 };
 
 const N590: SublineNarration = {
   intro: { say: "Bg5 — reaching the Sveshnikov by the Kalashnikov order, you've grabbed the centre with …e5 and kicked the knights to the rim, the a3-knight offside and the d5-knight his only active piece. The pin on your f6-knight pressures the d5-square you must contest. Play …Be7 and meet Bxf6 with …Bxf6, keeping the dark-squared bishop and aiming the standard …Ne7 to challenge the d5-knight, accepting the backward d6-pawn for piece activity and the bishop pair.", sayShort: "Sveshnikov — contest the d5 knight" },
+  beats: [
+    { atMove: 17, say: "…Be7 develops and prepares to meet White's Bg5 pin, holding firm.", sayShort: "…Be7 — develop, hold.", highlights: [H('e7')] },
+    { atMove: 19, say: "…Bxf6 recaptures, keeping a solid structure and the bishop pair.", sayShort: "…Bxf6 — solid, bishop pair.", highlights: [H('f6')] },
+    { atMove: 21, say: "…Rb8 loads the half-open b-file, pressuring White's queenside.", sayShort: "…Rb8 — load the b-file.", highlights: [H('b8')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:tac-pin', 'concept:pos-bishop-pair'],
 };
 
 const N591: SublineNarration = {
   intro: { say: "Nb3 — by the Kalashnikov order you've played …e5 and White retreats the knight to b3 rather than jumping to b5. Meet it with …Nf6, developing toward d5 and e4; when White pins with Bg5, continue …Be7 and meet Bxf6 with …Bxf6, keeping the dark-squared bishop. Then …O-O and …Be6 contest d5, with …d5 or …a5 as the standard freeing ideas.", sayShort: "Bg5 pins — keep the dark bishop" },
+  beats: [
+    { atMove: 9, say: "…Nf6 develops with a hit on e4, the natural Sveshnikov developing move.", sayShort: "…Nf6 — develop, hit e4.", highlights: [H('e4')] },
+    { atMove: 13, say: "…Bxf6 recaptures, keeping the bishop pair and a solid structure after the trade.", sayShort: "…Bxf6 — keep the bishop pair.", highlights: [H('f6')] },
+    { atMove: 19, say: "…Be6 develops the bishop to a fine post, guarding d5 and eyeing the queenside.", sayShort: "…Be6 — guard d5.", arrows: [A('e6', 'd5')], highlights: [H('d5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:tac-pin', 'concept:pos-bishop-pair'],
 };
 
 const N592: SublineNarration = {
   intro: { say: "Nf3 — via the Kalashnikov order White meets …e5 by retreating, attacking your e5-pawn rather than jumping to b5. Support the centre with your …Nf6, eyeing e4 and d5. After Nc3, continue …Bb4 or …Be7 and …d5, using your e5-space and quick development to fight for the centre without conceding the d5-hole the …Ndb5 lines allow.", sayShort: "Nf3 retreat — support e5, play …d5" },
+  beats: [
+    { atMove: 9, say: "…Nf6 develops with a hit on e4, putting White's quiet Nf3 to the test.", sayShort: "…Nf6 — develop, hit e4.", highlights: [H('e4')] },
+    { atMove: 11, say: "…d5 strikes the centre, the freeing break that equalises at once.", sayShort: "…d5 — the freeing break.", arrows: [A('d5', 'e4')], highlights: [H('e4')] },
+    { atMove: 15, say: "…Bg4 pins the f3-knight, pressuring White's setup with active development.", sayShort: "…Bg4 — pin the knight.", arrows: [A('g4', 'f3')], highlights: [H('f3')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:pos-center', 'concept:pos-development'],
 };
 
 const N593: SublineNarration = {
   intro: { say: "Nf5 — by the Kalashnikov order White lunged here, you hit back with …d5, and after the queen trade on d5 the position has simplified with the f5-knight still loose and far from home. You hold the bishop pair and easy development while that knight must justify itself or retreat. Play …Nf6, …Bxf5 or …g6 to harass it, and develop quickly to exploit the half-open queenside files and your two bishops in an open position.", sayShort: "Queens off — harass the f5 knight" },
+  beats: [
+    { atMove: 9, say: "…d5! — the central counter to the knight's leap to f5, striking at once.", sayShort: "…d5 — punish the rim knight.", arrows: [A('d5', 'e4')], highlights: [H('e4')] },
+    { atMove: 13, say: "…Bxf5 rounds up the offside knight, the bishop pair telling in the open game.", sayShort: "…Bxf5 — win the bishop pair.", highlights: [H('f5')] },
+    { atMove: 21, say: "…Nd5 centralises the knight on a dominant outpost, blockading and pressing.", sayShort: "…Nd5 — dominant knight.", highlights: [H('d5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:pos-bishop-pair', 'concept:pos-development'],
 };
 
 const N594: SublineNarration = {
   intro: { say: "Nxc6 — White declines the Sveshnikov tension and trades, conceding you a broad pawn centre with the c5/d-file and e5 pawns. Recapture …bxc6 to open the b-file for your rook and prepare …c5 and …d5 to roll the centre forward. After Bc4 and a3 keeping his bishop on the a2-g8 diagonal, …c5 gains space and clamps the dark squares; continue …d6, …Be7, …O-O and a central pawn advance backed by the bishop pair.", sayShort: "Nxc6 — Black builds a pawn centre" },
+  beats: [
+    { atMove: 9, say: "…bxc6 recaptures toward the centre, central pawns and the bishop pair yours.", sayShort: "…bxc6 — central pawns.", highlights: [H('c6')] },
+    { atMove: 13, say: "…Bb4 pins the c3-knight, pressuring the defender of e4 and d5.", sayShort: "…Bb4 — pin the knight.", highlights: [H('b4')] },
+    { atMove: 15, say: "…d5 strikes the centre, the freeing break opening lines for your bishops.", sayShort: "…d5 — the freeing break.", arrows: [A('d5', 'e4')], highlights: [H('e4')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:pos-center', 'concept:pos-open-file'],
 };
 
 const N595: SublineNarration = {
   intro: { say: "f3 — White props up e4, an English-Attack-style move in this Kalashnikov-Sveshnikov preparing Be3, Qd2 and a possible kingside pawn storm. You hold the bishop pair and the e5/d6 centre with queenside space from …b5. Play …Be7, …O-O, …Be6 to contest the d5-knight and …Rb8, then the thematic …f5 to break in the centre before his slow buildup against your king gathers steam.", sayShort: "f3 props e4 — race with …f5" },
+  beats: [
+    { atMove: 17, say: "…Nxd5 trades off White's strong d5-knight, easing the central tension.", sayShort: "…Nxd5 — trade the knight.", highlights: [H('d5')] },
+    { atMove: 19, say: "…Ne7 reroutes the knight toward f5, fighting for the central outpost.", sayShort: "…Ne7 — reroute toward f5.", highlights: [H('e7')] },
+    { atMove: 21, say: "…Rb8 loads the half-open b-file, pressuring White's queenside.", sayShort: "…Rb8 — load the b-file.", highlights: [H('b8')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation', 'concept:pos-center', 'concept:att-kingside-storm'],
 };
 
