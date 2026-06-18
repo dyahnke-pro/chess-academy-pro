@@ -267,30 +267,10 @@ const C63: SublineNarration = {
   sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
 };
 // dutch-defence :: leningrad
-const C64: SublineNarration = {
-  intro: { say: "The Leningrad Dutch — …f5 paired with the King's-Indian fianchetto. The g7-bishop and the …f5 pawn point at White's centre and kingside together. Castle, contest the centre with …d6 and the …e5 break, and when the position opens your dark-squared bishop and the half-open f-file drive a genuine kingside attack. Sharp, ambitious, and fun.", sayShort: "Leningrad — castle, break …e5, attack the king." },
-  sources: ['book:dutch-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
-};
 // dutch-defence :: staunton_bg5
-const C65: SublineNarration = {
-  intro: { say: "White lunges with the Bg5 anti-Dutch (Staunton-flavoured), hunting your kingside before you settle. Don't panic: …e6 and …Be7 break the pin, …d5 claims the centre, and once the early aggression is parried your Dutch plans return in full. Weather the first wave and Black is comfortably fine.", sayShort: "Bg5 anti-Dutch — …e6, …Be7, then …d5." },
-  sources: ['book:dutch-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
-};
 // dutch-defence :: stonewall
-const C66: SublineNarration = {
-  intro: { say: "The Stonewall Dutch — …f5, …e6, …d5, …c6, that famous pawn wall. You cede e5 but seize e4: the knight lands there as an unshakeable outpost, and the b8-c1 bishop reroutes via d6 toward the kingside for the classic …Qe8-h5 attack. Slow to build, lethal once the storm breaks over White's king.", sayShort: "Stonewall — outpost e4, swing the attack." },
-  sources: ['book:dutch-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
-};
 // dutch-defence :: classical_be7
-const C67: SublineNarration = {
-  intro: { say: "The Classical Dutch with …e6 and …Be7 — solid and flexible. Castle, keep the centre fluid, and choose your break: …d5 for a Stonewall feel, or …e5 to open lines for the f-file rook. White's quiet development gives you time to set up the kingside expansion that is every Dutch player's dream.", sayShort: "Classical — castle, pick …d5 or …e5." },
-  sources: ['book:dutch-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
-};
 // dutch-defence :: nh3
-const C68: SublineNarration = {
-  intro: { say: "White's Nh3 heads for f4 to bolster the kingside light squares against your …f5. Meet it calmly: complete the fianchetto, castle, and play the standard …d6 and …e5 break. The knight on h3 is offside for now; develop in good order and your central counterplay comes through on schedule.", sayShort: "Nh3 — develop, hit …e5 on schedule." },
-  sources: ['book:dutch-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
-};
 // catalan-opening :: open_dxc4
 const C69: SublineNarration = {
   intro: { say: "The Open Catalan — Black grabs c4, but the pawn is a loan, not a gain. Your whole game is the g2-bishop scything down the long light diagonal at b7 and d5, plus the easy recapture with Qa4+, Qc2 or a later Ne5/a4. Castle, regain the pawn at leisure, and squeeze: Black's queenside is forever cramped under that bishop's gaze.", sayShort: "Open Catalan — the g2-bishop owns the diagonal." },
@@ -662,10 +642,6 @@ const DBUD: SublineNarration = {
   sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
 };
 // DEEP DDUT :: dutch-defence::3::e4@6
-const DDUT: SublineNarration = {
-  intro: { say: "White meets your Leningrad with the critical e4 thrust — the most testing anti-Dutch try, hitting your …f5 and the centre at once. Be careful here: this is sharp and genuinely double-edged, and the committal …f4 advance can leave you worse if you overpush, because White's broad centre and the g5-bishop bite hard. Keep your king safe, develop with precision, and aim for a solid, defensible game rather than a reckless pawn-storm — accuracy is what holds Black together against e4.", sayShort: "White's e4 — meet it with care." },
-  sources: ['book:dutch-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
-};
 // DEEP DBEN :: benoni-defence::0::e4@10 | benoni-defence::1::e4@10 | benoni-defence::2::e4@10 | benoni-defence::6::e4@10
 const DBEN: SublineNarration = {
   intro: { say: "You've traded a quiet structure for pure energy: White's big d5-e4-f4 pawn front against your queenside pawn majority and that powerful g7-bishop. Your plan is all dynamism — fianchetto, castle, then roll …a6 and …b5 on the queenside while you needle his e4-pawn.", sayShort: "Modern Benoni — fianchetto, roll …a6-b5." },
@@ -959,15 +935,6 @@ const WBUDADL: SublineNarration = {
   sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
 };
 // WAVE WDUTLEN :: 1 keys
-const WDUTLEN: SublineNarration = {
-  intro: { say: "c4 — White grabs central space against your Leningrad Dutch. Stay on plan: complete the King's-Indian-style fianchetto, castle, and prepare the thematic …d6 and …e5 break. Your g7-bishop and the …f5-pawn both point at White's centre and kingside — once you strike with …e5 the position opens in your favour.", sayShort: "c4 — fianchetto, then …d6 and …e5" },
-  beats: [
-    { atMove: 6, say: "c4 stakes out space, the broadest anti-Leningrad setup. Don't react nervously; your plan is fixed and your pieces are coming to their best squares.", sayShort: "c4 — White grabs space", highlights: [_H('c4', KEY)] },
-    { atMove: 7, say: "…Bg7 completes the fianchetto, the bishop raking the long diagonal toward d4. Combined with the …f5-pawn it trains real fire on White's centre and kingside.", sayShort: "…Bg7 — rake the long diagonal", arrows: [_A('g7', 'd4', ATK)], highlights: [_H('d4', KEY)] },
-    { atMove: 8, say: "Nc3 — White develops. You castle and prepare …d6 and the …e5 break that is the Leningrad's whole point; when it lands, the long diagonal opens and your attack flows.", sayShort: "Nc3 — castle, prepare …e5", highlights: [_H('e5', KEY)] },
-  ],
-  sources: ['book:dutch-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
-};
 // WAVE WQGDCAR :: 7 keys
 const WQGDCAR: SublineNarration = {
   intro: { say: "cxd5 — White clarifies into the Carlsbad, the Exchange QGD. Expect the minority attack, b4-b5 against your c6-pawn — so don't sit and suffer it. Develop solidly behind …c6 and …Be7, then answer queenside play with central energy: …Ne4 and …f5, turning the game toward White's king while he chips at your pawns.", sayShort: "cxd5 — Carlsbad; counter with …f5" },
@@ -8012,7 +7979,704 @@ const BD_V6_NC6_7: SublineNarration = {
   sources: ['concept:pos-space', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
 };
 
+const DU_V0_RE1_14: SublineNarration = {
+  intro: { say: "White lifts the rook to e1 to prepare e4. Meet the central break on your terms: expand with …a5, trade on e4 to open the long diagonal for your Leningrad bishop, and develop with active piece play.", sayShort: "Leningrad: …a5 and meet e4" },
+  beats: [
+    { atMove: 15, say: "Grab queenside space with …a5, the standard Leningrad lever that fixes White's pawns and clears a6 for your knight.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
+    { atMove: 17, say: "When White plays e4, trade with …Nxe4 — opening the f-file and the long diagonal for your g7-bishop.", sayShort: "…Nxe4, open the diagonal", highlights: [_H('e4')] },
+    { atMove: 21, say: "Develop …Nc6, hitting White's centre and the d4-square; you have active play despite White's small pull.", sayShort: "…Nc6, pressure the centre", highlights: [_H('d4')] },
+    { atMove: 23, say: "Develop …Bf5 with tempo on the rook; White holds a slight edge, but your counterplay flows down the f-file.", sayShort: "…Bf5, hit the rook", highlights: [_H('f5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V0_NF3_4: SublineNarration = {
+  intro: { say: "White develops Nf3 against your Leningrad. Set up the fianchetto, expand with …a5-a4 to crack White's queenside, and grab the exchange when his structure collapses — a sharp, balanced fight.", sayShort: "Leningrad with …a5-a4 break" },
+  beats: [
+    { atMove: 5, say: "Fianchetto with …g6, the Leningrad — your bishop will rake the long diagonal at White's centre.", sayShort: "…g6, the Leningrad", highlights: [_H('g6')] },
+    { atMove: 7, say: "Expand with …a5, gaining queenside space and preparing to push the pawn further.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
+    { atMove: 19, say: "Leap to …e4, the active Leningrad knight, hitting White's pieces and the c3-knight.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+    { atMove: 21, say: "Grab the exchange with …Bxa1; White gets knight counterplay on g5, but you've won material in a sharp, balanced position.", sayShort: "…Bxa1, win the exchange", highlights: [_H('a1')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-space', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V0_C4_4: SublineNarration = {
+  intro: { say: "White plays c4. Switch to a Stonewall-flavoured setup: check with …Bb4+, build the d5 wall, and snatch the c4-pawn to free your game.", sayShort: "…Bb4+, d5 wall, grab c4" },
+  beats: [
+    { atMove: 7, say: "Check with …Bb4+, developing with tempo and provoking a slight weakening.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 13, say: "Build the wall with …d5, the e6-d5-f5 pawn chain that grips the e4-square.", sayShort: "…d5, the Stonewall", highlights: [_H('d5')] },
+    { atMove: 15, say: "Snatch the c4-pawn with …dxc4; White must spend time regaining it while you develop freely.", sayShort: "…dxc4, win time", highlights: [_H('c4')] },
+    { atMove: 21, say: "Develop …Nc6, completing your pieces in a balanced, comfortable position.", sayShort: "…Nc6, finish developing", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pawn-chain', 'concept:pos-development', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V0_BG5_14: SublineNarration = {
+  intro: { say: "White pins with Bg5. Break free in the centre with …e5 — the thematic Leningrad strike that opens the long diagonal for your bishop and seizes the initiative.", sayShort: "…e5, the Leningrad break" },
+  beats: [
+    { atMove: 15, say: "Strike with …e5, the thematic Leningrad break, freeing your g7-bishop on the long diagonal.", sayShort: "…e5, the central break", highlights: [_H('e5')] },
+    { atMove: 19, say: "Develop …Nc6, defending e5 and eyeing the d4-square.", sayShort: "…Nc6, defend e5", highlights: [_H('c6')] },
+    { atMove: 21, say: "Reroute the queen to …f7, defending and eyeing the kingside and the c4-pawn.", sayShort: "…Qf7, reposition the queen", highlights: [_H('f7')] },
+    { atMove: 23, say: "Recapture …gxf5, opening the g-file toward White's king; balanced and double-edged.", sayShort: "…gxf5, open the g-file", highlights: [_H('f5')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V0_B3_14: SublineNarration = {
+  intro: { say: "White fianchettoes the other bishop with b3. Hit the centre with …e5, the Leningrad break, and maneuver your queen to a safe, active square — balanced with mutual chances.", sayShort: "…e5 break, balanced game" },
+  beats: [
+    { atMove: 15, say: "Strike with …e5, the thematic Leningrad break opening lines for your bishop.", sayShort: "…e5, the central break", highlights: [_H('e5')] },
+    { atMove: 19, say: "Develop …Nc6, defending e5 and pressuring White's centre.", sayShort: "…Nc6, defend e5", highlights: [_H('c6')] },
+    { atMove: 21, say: "Tuck the queen back to …d8, sidestepping White's d5-knight and keeping your structure intact.", sayShort: "…Qd8, sidestep the knight", highlights: [_H('d8')] },
+    { atMove: 23, say: "Reposition the queen to …d6, defending and eyeing both wings; the game is balanced.", sayShort: "…Qd6, active and balanced", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V0_QC2_14: SublineNarration = {
+  intro: { say: "White develops Qc2. Break with …e5, then clamp with …e4 to cramp White's kingside and anchor your space with …c5 — a strong Leningrad bind.", sayShort: "…e5-e4 clamp, …c5 anchor" },
+  beats: [
+    { atMove: 15, say: "Strike with …e5, the thematic Leningrad break freeing your position.", sayShort: "…e5, the central break", highlights: [_H('e5')] },
+    { atMove: 19, say: "Push …e4, gaining space and clamping White's kingside knight under your pawn.", sayShort: "…e4, clamp the kingside", highlights: [_H('e4')] },
+    { atMove: 21, say: "Develop …Na6, heading for c5 to support your centre.", sayShort: "…Na6, head for c5", highlights: [_H('c5')] },
+    { atMove: 23, say: "Anchor with …c5, blunting White's d4-knight; balanced with good Leningrad play.", sayShort: "…c5, anchor the centre", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V0_QB3_14: SublineNarration = {
+  intro: { say: "White probes with Qb3. Expand with …a5 to harass the queen, sidestep the c5-check, and recapture toward a solid centre with active piece play.", sayShort: "…a5 harasses, solid centre" },
+  beats: [
+    { atMove: 15, say: "Expand with …a5, gaining space and threatening …a4 to chase the queen.", sayShort: "…a5, harass the queen", highlights: [_H('a5')] },
+    { atMove: 17, say: "Tuck the king to …h8, sidestepping the c5-check and unpinning your pieces.", sayShort: "…Kh8, sidestep the check", highlights: [_H('h8')] },
+    { atMove: 19, say: "Recapture …exd6, opening the e-file for your rook and keeping a solid centre.", sayShort: "…exd6, open the e-file", highlights: [_H('d6')] },
+    { atMove: 21, say: "Develop …Na6, eyeing c5 and the dark squares; the game is balanced.", sayShort: "…Na6, eye c5", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-development', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V0_BF4_14: SublineNarration = {
+  intro: { say: "White develops Bf4. Take the g5-square with …h6, strike with …c5 and …e5 to challenge the centre, and develop into a balanced, dynamic game.", sayShort: "…h6, then …c5 and …e5" },
+  beats: [
+    { atMove: 15, say: "Play …h6, taking the g5-square from White's pieces before you expand.", sayShort: "…h6, take g5", highlights: [_H('g5')] },
+    { atMove: 17, say: "Strike with …c5, challenging White's d-pawn and grabbing queenside space.", sayShort: "…c5, challenge the centre", highlights: [_H('c5')] },
+    { atMove: 19, say: "Break with …e5; if White takes en passant you recapture and free your position.", sayShort: "…e5, free the position", highlights: [_H('e5')] },
+    { atMove: 23, say: "Develop …Nc6, completing your pieces in a balanced, dynamic game.", sayShort: "…Nc6, finish developing", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V0_E4_14: SublineNarration = {
+  intro: { say: "White lunges with e4. Snap it off with …fxe4, develop …Bg4 with tempo, and …Nc6 — you've won a pawn for balanced, active play.", sayShort: "…fxe4 wins the pawn" },
+  beats: [
+    { atMove: 15, say: "Take with …fxe4, snapping off White's adventurous pawn and opening the f-file.", sayShort: "…fxe4, win the pawn", highlights: [_H('e4')] },
+    { atMove: 17, say: "Develop …Bg4 with tempo, harassing the knight's defenders.", sayShort: "…Bg4, develop with tempo", highlights: [_H('g4')] },
+    { atMove: 19, say: "Develop …Nc6, pressuring White's centre; you've won a pawn for balanced play.", sayShort: "…Nc6, pressure the centre", highlights: [_H('c6')] },
+    { atMove: 21, say: "Hop …Na5, attacking the queen and eyeing the c4-pawn; balanced with chances.", sayShort: "…Na5, hit the queen", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V0_ND4_16: SublineNarration = {
+  intro: { say: "White centralises a knight on d4. Complete development with …Bd7, trade on e4 to open the long diagonal, and challenge the d5-wedge with …c6 in a balanced game.", sayShort: "…Bd7, …Nxe4, …c6" },
+  beats: [
+    { atMove: 17, say: "Develop …Bd7, connecting your pieces and preparing …c6 to challenge the d5-wedge.", sayShort: "…Bd7, connect the pieces", highlights: [_H('d7')] },
+    { atMove: 19, say: "When White breaks e4, trade …Nxe4 to open the long diagonal for your bishop.", sayShort: "…Nxe4, open the diagonal", highlights: [_H('e4')] },
+    { atMove: 23, say: "Challenge the d5-pawn with …c6, striking at White's centre; the game is balanced.", sayShort: "…c6, challenge d5", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V1_B3_10: SublineNarration = {
+  intro: { say: "In the Stonewall, White fianchettoes with b3 and aims to trade your dark bishop. Castle, swap on a3, and plant your knight on the e4-outpost — the Stonewall's beating heart.", sayShort: "Stonewall: trade, then …Ne4" },
+  beats: [
+    { atMove: 11, say: "Castle with …O-O; your king is snug behind the e6-d5-f5 wall.", sayShort: "…O-O, safe king", highlights: [_H('g8')] },
+    { atMove: 15, say: "Trade dark bishops with …Bxa3 — White's good bishop is gone and your knight heads for e4.", sayShort: "…Bxa3, trade dark bishops", highlights: [_H('a3')] },
+    { atMove: 19, say: "Plant the knight on …e4, the Stonewall's signature outpost, gripping the centre and the kingside.", sayShort: "…Ne4, the Stonewall outpost", highlights: [_H('e4')] },
+    { atMove: 21, say: "Solidify with …c6, bracing your d5-pawn and the whole wall; balanced with mutual chances.", sayShort: "…c6, brace the wall", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pawn-chain', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V1_C4_8: SublineNarration = {
+  intro: { say: "White plays c4 against your Stonewall. Solidify the d5-pawn with …c6, develop …Bd6 toward the kingside, and reroute your knight — a balanced, attacking Stonewall.", sayShort: "…c6, …Bd6, develop" },
+  beats: [
+    { atMove: 9, say: "Solidify with …c6, bracing the d5-pawn — the backbone of your Stonewall.", sayShort: "…c6, brace d5", highlights: [_H('d5')] },
+    { atMove: 11, say: "Develop …Bd6, aiming the bishop at h2 and the kingside, a key Stonewall attacker.", sayShort: "…Bd6, aim at h2", highlights: [_H('h2')] },
+    { atMove: 15, say: "Develop …Nbd7, rerouting toward e4 or f6 to support the centre.", sayShort: "…Nbd7, reroute the knight", highlights: [_H('d7')] },
+    { atMove: 23, say: "Centralise the queen on …e7, connecting rooks in a balanced Stonewall.", sayShort: "…Qe7, connect the rooks", highlights: [_H('e7')] },
+  ],
+  sources: ['concept:pawn-chain', 'concept:pos-development', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V1_BG5_8: SublineNarration = {
+  intro: { say: "White pins with Bg5. Question it with …h6, develop …Bd6 toward the kingside, and free your bad bishop with …b6 and …Ba6 — a comfortable Stonewall.", sayShort: "…h6, …Bd6, free the bishop" },
+  beats: [
+    { atMove: 9, say: "Play …h6, questioning the bishop and gaining the g5-square.", sayShort: "…h6, question the bishop", highlights: [_H('g5')] },
+    { atMove: 11, say: "Develop …Bd6, training the bishop on the kingside dark squares.", sayShort: "…Bd6, aim at h2", highlights: [_H('h2')] },
+    { atMove: 17, say: "Solidify with …c6, bracing the d5-pawn.", sayShort: "…c6, brace d5", highlights: [_H('d5')] },
+    { atMove: 21, say: "Prepare …Ba6 with …b6, trading off your bad light bishop — a key Stonewall freeing idea.", sayShort: "…b6, free the bad bishop", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pawn-chain', 'concept:pos-development', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V1_BG5_10: SublineNarration = {
+  intro: { say: "White pins with Bg5 after castling. Question it with …h6, grab the c4-pawn to free your game, and centralise your knight on d5 in a balanced Stonewall.", sayShort: "…h6, grab c4, …Nd5" },
+  beats: [
+    { atMove: 11, say: "Play …h6, questioning the bishop and gaining the g5-square.", sayShort: "…h6, question the bishop", highlights: [_H('g5')] },
+    { atMove: 15, say: "Grab the c4-pawn with …dxc4; White spends time regaining it while you free your game.", sayShort: "…dxc4, win time", highlights: [_H('c4')] },
+    { atMove: 19, say: "Centralise …Nd5, a fine outpost hitting White's f4-pawn and the c3-square.", sayShort: "…Nd5, central outpost", highlights: [_H('d5')] },
+    { atMove: 23, say: "Prepare …Ba6 with …b6, activating your light bishop; the game is balanced.", sayShort: "…b6, free the bishop", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V1_NBD2_10: SublineNarration = {
+  intro: { say: "White develops Nbd2. Gain space with …a5, lift your queen to e8 toward the kingside, and plant the knight on the e4-outpost — the Stonewall attacking plan.", sayShort: "…a5, …Qe8-h5, …Ne4" },
+  beats: [
+    { atMove: 11, say: "Gain queenside space with …a5, fixing White's pawns.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
+    { atMove: 19, say: "Lift the queen to …e8, the Stonewall maneuver heading for h5 and a kingside attack.", sayShort: "…Qe8, head for h5", highlights: [_H('e8')] },
+    { atMove: 21, say: "Plant the knight on …e4, the Stonewall outpost dominating the centre.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 23, say: "Trade on …e5, simplifying while keeping your strong structure; balanced.", sayShort: "…Nxe5, simplify", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-initiative', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V1_NF3_4: SublineNarration = {
+  intro: { say: "White develops Nf3. Steer into the Leningrad with …g6, expand with …a5, and grab the exchange when White's queenside cracks — a sharp, balanced fight.", sayShort: "Leningrad with …a5-a4" },
+  beats: [
+    { atMove: 5, say: "Fianchetto with …g6, the Leningrad — your bishop rakes the long diagonal.", sayShort: "…g6, the Leningrad", highlights: [_H('g6')] },
+    { atMove: 7, say: "Expand with …a5, gaining queenside space and preparing …a4.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
+    { atMove: 19, say: "Leap to …e4, the active Leningrad knight hitting White's pieces.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+    { atMove: 21, say: "Grab the exchange with …Bxa1; White gets knight counterplay, but you've won material in a sharp, balanced game.", sayShort: "…Bxa1, win the exchange", highlights: [_H('a1')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-space', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V1_C3_10: SublineNarration = {
+  intro: { say: "White plays the modest c3. Solidify with …c6, centralise the queen, and free your bad bishop with …b6 and …Ba6 — a comfortable, balanced Stonewall.", sayShort: "…c6, free the bishop" },
+  beats: [
+    { atMove: 11, say: "Solidify with …c6, bracing the d5-pawn at the heart of your wall.", sayShort: "…c6, brace d5", highlights: [_H('d5')] },
+    { atMove: 17, say: "Centralise the queen on …e7, connecting your rooks.", sayShort: "…Qe7, connect the rooks", highlights: [_H('e7')] },
+    { atMove: 19, say: "Prepare …Ba6 with …b6, readying the trade of your problem bishop.", sayShort: "…b6, prepare …Ba6", highlights: [_H('a6')] },
+    { atMove: 23, say: "Activate the light bishop with …Ba6, trading off your problem piece; balanced Stonewall.", sayShort: "…Ba6, trade the bad bishop", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pawn-chain', 'concept:pos-development', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V1_C3_8: SublineNarration = {
+  intro: { say: "White plays c3. Develop …Bd6 toward the kingside, brace the wall with …c6, and plant your knight on e4 — the Stonewall attacking setup, balanced with chances.", sayShort: "…Bd6, …c6, …Ne4" },
+  beats: [
+    { atMove: 9, say: "Develop …Bd6, aiming the bishop at the kingside dark squares.", sayShort: "…Bd6, aim at h2", highlights: [_H('h2')] },
+    { atMove: 11, say: "Solidify with …c6, bracing the d5-pawn.", sayShort: "…c6, brace d5", highlights: [_H('d5')] },
+    { atMove: 17, say: "Centralise the queen on …e7, connecting your rooks.", sayShort: "…Qe7, connect the rooks", highlights: [_H('e7')] },
+    { atMove: 21, say: "Plant the knight on …e4, the Stonewall outpost; balanced with kingside chances.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pawn-chain', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V1_NE5_8: SublineNarration = {
+  intro: { say: "White jumps Ne5. Hit back at once with …c5, develop …Nc6 to challenge the knight, and check with …Qa5+ to seize the initiative in a balanced, open game.", sayShort: "…c5 and …Nc6 challenge Ne5" },
+  beats: [
+    { atMove: 9, say: "Counter …c5, challenging White's centre and the e5-knight at once.", sayShort: "…c5, challenge the centre", highlights: [_H('c5')] },
+    { atMove: 11, say: "Develop …Nc6, hitting the e5-knight and the d4-pawn.", sayShort: "…Nc6, hit the knight", highlights: [_H('c6')] },
+    { atMove: 15, say: "Check with …Qa5+, developing with tempo and grabbing the initiative.", sayShort: "…Qa5+, develop with tempo", highlights: [_H('a5')] },
+    { atMove: 23, say: "Develop …Be7, completing your pieces in a balanced, open position.", sayShort: "…Be7, finish developing", highlights: [_H('e7')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V1_C4_4: SublineNarration = {
+  intro: { say: "White plays c4. Check with …Bb4+ to develop with tempo, build the d5 wall, and grab the c4-pawn to free your game in a balanced Stonewall.", sayShort: "…Bb4+, d5 wall, grab c4" },
+  beats: [
+    { atMove: 7, say: "Check with …Bb4+, developing with tempo and provoking a weakening.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 13, say: "Build the wall with …d5, the chain that grips the e4-square.", sayShort: "…d5, the Stonewall", highlights: [_H('d5')] },
+    { atMove: 15, say: "Snatch the c4-pawn with …dxc4; White spends time regaining it while you develop.", sayShort: "…dxc4, win time", highlights: [_H('c4')] },
+    { atMove: 21, say: "Develop …Nc6, completing your pieces in a balanced, comfortable position.", sayShort: "…Nc6, finish developing", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pawn-chain', 'concept:pos-development', 'https://lichess.org/opening/Dutch-Defense'],
+};
+
+const DU_V2_C4_8: SublineNarration = {
+  intro: { say: "White plays c4 against your classical Dutch. Castle, build the d5 wall, and brace it with …c6 — a solid, balanced Stonewall-flavoured setup.", sayShort: "Castle, …d5 wall, …c6" },
+  beats: [
+    { atMove: 9, say: "Castle with …O-O, tucking your king safely behind the pawns.", sayShort: "…O-O, safe king", highlights: [_H('g8')] },
+    { atMove: 11, say: "Build the wall with …d5, gripping e4 and giving your Dutch a solid core.", sayShort: "…d5, the wall", highlights: [_H('d5')] },
+    { atMove: 15, say: "Question the bishop with …h6 to clarify the kingside before developing.", sayShort: "…h6, question the bishop", highlights: [_H('g5')] },
+    { atMove: 21, say: "Develop …Bd7, rerouting via e8 to free the bishop; the game is balanced.", sayShort: "…Bd7, reroute the bishop", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pawn-chain', 'concept:pos-development', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V2_B3_10: SublineNarration = {
+  intro: { say: "White fianchettoes with b3. Plant your knight on …e4, fianchetto your own bishop with …b6 and …Bb7, and contest the long diagonal in a balanced game.", sayShort: "…Ne4, …Bb7 contest the diagonal" },
+  beats: [
+    { atMove: 11, say: "Plant …Ne4, the active outpost dominating the centre.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 13, say: "Prepare …Bb7 with …b6, fianchettoing to contest the long diagonal.", sayShort: "…b6, prepare …Bb7", highlights: [_H('b7')] },
+    { atMove: 15, say: "Develop …Bb7, opposing White's bishop on the long diagonal.", sayShort: "…Bb7, contest the diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Trade light bishops with …Bxg2, easing into a balanced middlegame.", sayShort: "…Bxg2, trade and ease", highlights: [_H('g2')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V2_NF3_4: SublineNarration = {
+  intro: { say: "White develops Nf3. Steer into the Leningrad with …g6, expand with …a5, and grab the exchange when White's queenside cracks — a sharp, balanced fight.", sayShort: "Leningrad with …a5-a4" },
+  beats: [
+    { atMove: 5, say: "Fianchetto with …g6, the Leningrad — your bishop rakes the long diagonal.", sayShort: "…g6, the Leningrad", highlights: [_H('g6')] },
+    { atMove: 7, say: "Expand with …a5, gaining queenside space and preparing …a4.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
+    { atMove: 19, say: "Leap to …e4, the active Leningrad knight hitting White's pieces.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+    { atMove: 21, say: "Grab the exchange with …Bxa1; White gets knight counterplay, but you've won material in a balanced, sharp game.", sayShort: "…Bxa1, win the exchange", highlights: [_H('a1')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-space', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V2_C3_10: SublineNarration = {
+  intro: { say: "White plays the modest c3. Plant …Ne4, fianchetto with …b6 and …Bb7, and contest the long diagonal in a balanced classical Dutch.", sayShort: "…Ne4, …Bb7, balanced" },
+  beats: [
+    { atMove: 11, say: "Plant …Ne4, the active outpost in the centre.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 13, say: "Prepare …Bb7 with …b6, fianchettoing your bishop.", sayShort: "…b6, prepare …Bb7", highlights: [_H('b7')] },
+    { atMove: 15, say: "Develop …Bb7, opposing White's bishop on the long diagonal.", sayShort: "…Bb7, contest the diagonal", highlights: [_H('b7')] },
+    { atMove: 21, say: "Develop …Nc6, hitting White's e5-knight; the game is balanced.", sayShort: "…Nc6, hit the knight", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V2_C4_4: SublineNarration = {
+  intro: { say: "White plays c4. Check with …Bb4+ to develop with tempo, build the d5 wall, and grab the c4-pawn to free your game in a balanced Stonewall.", sayShort: "…Bb4+, d5 wall, grab c4" },
+  beats: [
+    { atMove: 7, say: "Check with …Bb4+, developing with tempo and provoking a weakening.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 13, say: "Build the wall with …d5, the chain that grips e4.", sayShort: "…d5, the Stonewall", highlights: [_H('d5')] },
+    { atMove: 15, say: "Snatch the c4-pawn with …dxc4; White spends time regaining it while you develop.", sayShort: "…dxc4, win time", highlights: [_H('c4')] },
+    { atMove: 21, say: "Develop …Nc6, completing your pieces in a balanced position.", sayShort: "…Nc6, finish developing", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pawn-chain', 'concept:pos-development', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V2_NBD2_10: SublineNarration = {
+  intro: { say: "White develops Nbd2. Build the d5 wall, plant …Ne4, and lift the queen to e8 toward the kingside — the classical Dutch attacking plan, balanced with chances.", sayShort: "…d5, …Ne4, …Qe8-h5" },
+  beats: [
+    { atMove: 11, say: "Build the wall with …d5, gripping the e4-square.", sayShort: "…d5, the wall", highlights: [_H('d5')] },
+    { atMove: 17, say: "Plant …Ne4, the active outpost dominating the centre.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 19, say: "Lift …Qe8, heading for h5 and a kingside attack.", sayShort: "…Qe8, head for h5", highlights: [_H('e8')] },
+    { atMove: 23, say: "Develop …Bb7 after …b6, contesting the long diagonal; balanced.", sayShort: "…Bb7, contest the diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-initiative', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V2_RE1_10: SublineNarration = {
+  intro: { say: "White lifts the rook to e1. Build the d5 wall, brace it with …c6, and develop …Bd6 toward the kingside before planting your knight on e4 — a balanced classical Dutch.", sayShort: "…d5, …c6, …Bd6, …Ne4" },
+  beats: [
+    { atMove: 11, say: "Build the wall with …d5, gripping the e4-square.", sayShort: "…d5, the wall", highlights: [_H('d5')] },
+    { atMove: 13, say: "Brace the wall with …c6, securing your d5-pawn.", sayShort: "…c6, brace d5", highlights: [_H('c6')] },
+    { atMove: 19, say: "Develop …Bd6, aiming the bishop at the kingside dark squares.", sayShort: "…Bd6, aim at h2", highlights: [_H('h2')] },
+    { atMove: 23, say: "Plant …Ne4, the outpost; the game is balanced.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pawn-chain', 'concept:pos-outpost', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V2_BG5_8: SublineNarration = {
+  intro: { say: "White pins with Bg5. Question it with …h6, develop …Nc6, and seize kingside space with …g5 and the …e5 break — an aggressive, balanced classical Dutch.", sayShort: "…h6, …g5, then …e5" },
+  beats: [
+    { atMove: 9, say: "Question the bishop with …h6 to clarify the kingside.", sayShort: "…h6, question the bishop", highlights: [_H('g5')] },
+    { atMove: 13, say: "Develop …Nc6, supporting the centre and the …e5 break.", sayShort: "…Nc6, support …e5", highlights: [_H('c6')] },
+    { atMove: 15, say: "Gain kingside space with …g5, clamping White's f4-break and grabbing the initiative.", sayShort: "…g5, clamp the kingside", highlights: [_H('g5')] },
+    { atMove: 23, say: "Strike with …e5, opening the centre for your bishop pair; balanced and double-edged.", sayShort: "…e5, open the centre", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V2_NE5_18: SublineNarration = {
+  intro: { say: "White jumps Ne5. Simplify with a pair of trades and grab the c4-pawn — you reach a balanced ending with no problems.", sayShort: "Trade off, grab c4" },
+  beats: [
+    { atMove: 19, say: "Trade with …Nxd2, removing a defender and simplifying.", sayShort: "…Nxd2, simplify", highlights: [_H('d2')] },
+    { atMove: 21, say: "Capture …Nxe5, winning a tempo and easing your game.", sayShort: "…Nxe5, gain a tempo", highlights: [_H('e5')] },
+    { atMove: 23, say: "Grab the c4-pawn with …dxc4, snagging material into a balanced ending.", sayShort: "…dxc4, into a balanced ending", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:end-key-squares', 'concept:pos-development', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V2_BG5_10: SublineNarration = {
+  intro: { say: "White pins with Bg5. Question it with …h6, build the d5 wall, and plant your knight on the e4-outpost in a balanced classical Dutch.", sayShort: "…h6, …d5, …Ne4" },
+  beats: [
+    { atMove: 11, say: "Question the bishop with …h6 to clarify the kingside.", sayShort: "…h6, question the bishop", highlights: [_H('g5')] },
+    { atMove: 13, say: "Build the wall with …d5, gripping the e4-square.", sayShort: "…d5, the wall", highlights: [_H('d5')] },
+    { atMove: 19, say: "Plant …Ne4, the active outpost in the centre.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 23, say: "Develop …Bd6, aiming at the kingside; balanced Stonewall-style game.", sayShort: "…Bd6, aim at h2", highlights: [_H('h2')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pawn-chain', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V3_BC4_8: SublineNarration = {
+  intro: { say: "In the Bg5 anti-Dutch you've set up the Leningrad. White develops Bc4 — blunt it with …c6 and …d5, then break with …e5 to free your bishops in a balanced game.", sayShort: "…c6 and …d5 blunt the bishop" },
+  beats: [
+    { atMove: 9, say: "Solidify with …c6, bracing d5 and blunting White's bishop.", sayShort: "…c6, brace d5", highlights: [_H('d5')] },
+    { atMove: 11, say: "Build the centre with …d5, gaining space and taking the bite out of the c4-bishop.", sayShort: "…d5, gain the centre", highlights: [_H('d5')] },
+    { atMove: 19, say: "Strike with …e5, the freeing break that opens the centre for your bishops.", sayShort: "…e5, the freeing break", highlights: [_H('e5')] },
+    { atMove: 23, say: "Develop …Be6, completing your pieces in a balanced, comfortable game.", sayShort: "…Be6, finish developing", highlights: [_H('e6')] },
+  ],
+  sources: ['concept:pawn-chain', 'concept:pos-initiative', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V3_NF3_8: SublineNarration = {
+  intro: { say: "White develops Nf3 in the anti-Dutch. Solidify with …c6, castle, and recapture toward an active rook on f6 — then seize kingside space with …g5 in a balanced, double-edged game.", sayShort: "…c6, castle, then …g5" },
+  beats: [
+    { atMove: 9, say: "Solidify with …c6, bracing your centre.", sayShort: "…c6, brace the centre", highlights: [_H('c6')] },
+    { atMove: 11, say: "Castle with …O-O, tucking your king to safety.", sayShort: "…O-O, safe king", highlights: [_H('g8')] },
+    { atMove: 17, say: "Recapture …Rxf6, placing the rook on an active file behind your f-pawn.", sayShort: "…Rxf6, active rook", highlights: [_H('f6')] },
+    { atMove: 23, say: "Gain kingside space with …g5, seizing the initiative; balanced and double-edged.", sayShort: "…g5, kingside space", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V3_H4_8: SublineNarration = {
+  intro: { say: "White lunges with h4 to storm your king. Stake the centre with …d5 and trade off the e4-knight — White's attack fizzles and you stand comfortably balanced.", sayShort: "…d5 blunts the h4 storm" },
+  beats: [
+    { atMove: 9, say: "Stake the centre with …d5, blunting White's setup before he storms with h5.", sayShort: "…d5, stake the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Leap to …Ne4, trading off into a comfortable structure.", sayShort: "…Ne4, trade off", highlights: [_H('e4')] },
+    { atMove: 19, say: "Develop …Bg4 with tempo, harassing White's pieces.", sayShort: "…Bg4, develop with tempo", highlights: [_H('g4')] },
+    { atMove: 23, say: "Check with …Qa5+, regaining the pawn with tempo; balanced.", sayShort: "…Qa5+, regain the pawn", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V3_BXF6_8: SublineNarration = {
+  intro: { say: "White trades on f6. Recapture with the bishop to keep the bishop pair, stake the centre with …d5, and maneuver your knight to e4 in a balanced game.", sayShort: "…Bxf6 keeps the bishop pair" },
+  beats: [
+    { atMove: 9, say: "Recapture …Bxf6 — you keep the bishop pair, your trump in this structure.", sayShort: "…Bxf6, keep the bishops", highlights: [_H('f6')] },
+    { atMove: 11, say: "Stake the centre with …d5, gaining space.", sayShort: "…d5, stake the centre", highlights: [_H('d5')] },
+    { atMove: 19, say: "Reroute …Nc5, eyeing the e4 and d3 squares with your active knight.", sayShort: "…Nc5, active knight", highlights: [_H('c5')] },
+    { atMove: 21, say: "Plant …Ne4, the strong outpost; balanced with the bishop pair.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-outpost', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V3_BE2_8: SublineNarration = {
+  intro: { say: "White develops Be2. Stake the centre with …d5, trade the e4-knight, and strike with …c5 and …d4 to build a cramping passed pawn in a sharp, balanced game.", sayShort: "…d5, …c5, …d4 passer" },
+  beats: [
+    { atMove: 9, say: "Stake the centre with …d5, gaining space.", sayShort: "…d5, stake the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Leap to …Ne4, trading off into a comfortable structure.", sayShort: "…Ne4, trade off", highlights: [_H('e4')] },
+    { atMove: 15, say: "Strike with …c5, challenging White's centre and opening lines.", sayShort: "…c5, challenge the centre", highlights: [_H('c5')] },
+    { atMove: 21, say: "Push …d4, a strong passed pawn cramping White; balanced and sharp.", sayShort: "…d4, the passed pawn", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-passed', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V3_H3_8: SublineNarration = {
+  intro: { say: "White plays the slow h3. Stake the centre with …d5, expand with …b5, and trade queens into a comfortable, balanced ending.", sayShort: "…d5, …b5, balanced ending" },
+  beats: [
+    { atMove: 9, say: "Stake the centre with …d5, gaining space.", sayShort: "…d5, stake the centre", highlights: [_H('d5')] },
+    { atMove: 13, say: "Expand with …b5, gaining queenside space and preparing …b4.", sayShort: "…b5, queenside space", highlights: [_H('b5')] },
+    { atMove: 17, say: "Trade queens with …Qxd2+; the resulting ending is comfortably balanced for you.", sayShort: "…Qxd2+, balanced ending", highlights: [_H('d2')] },
+    { atMove: 23, say: "Develop …Nbd7, completing your pieces in a balanced ending.", sayShort: "…Nbd7, finish developing", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-space', 'concept:end-key-squares', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V3_QD2_8: SublineNarration = {
+  intro: { say: "White develops Qd2. Solidify with …c6, expand with …b5, and leap to …Ne4 with tempo on the queen — then strike with …e5 in a balanced game.", sayShort: "…c6, …b5, …Ne4 with tempo" },
+  beats: [
+    { atMove: 9, say: "Solidify with …c6, bracing your centre.", sayShort: "…c6, brace the centre", highlights: [_H('c6')] },
+    { atMove: 13, say: "Expand with …b5, gaining queenside space.", sayShort: "…b5, queenside space", highlights: [_H('b5')] },
+    { atMove: 15, say: "Leap to …Ne4 with tempo, hitting White's queen and forcing a favourable trade.", sayShort: "…Ne4, hit the queen", highlights: [_H('e4')] },
+    { atMove: 23, say: "Strike with …e5, opening the centre for your pieces; balanced.", sayShort: "…e5, open the centre", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V3_ND2_4: SublineNarration = {
+  intro: { say: "White develops Nd2 in the anti-Dutch. Reroute your knight via …Nh6-f7 to support …e5, stake the centre with …d5, and grab queenside space with …c4 in a balanced game.", sayShort: "…Nh6-f7, …d5, …c4" },
+  beats: [
+    { atMove: 5, say: "Develop the knight via …Nh6, heading for f7 to support …e5 and free your game.", sayShort: "…Nh6, reroute to f7", highlights: [_H('h6')] },
+    { atMove: 11, say: "Stake the centre with …d5, gaining space.", sayShort: "…d5, stake the centre", highlights: [_H('d5')] },
+    { atMove: 15, say: "Gain space with …c4, kicking White's bishop and clamping the queenside.", sayShort: "…c4, clamp the queenside", highlights: [_H('c4')] },
+    { atMove: 23, say: "Expand with …g5, seizing kingside space and the initiative; balanced.", sayShort: "…g5, kingside space", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V3_E3_4: SublineNarration = {
+  intro: { say: "White plays the quiet e3. Fianchetto with …Bg7, develop …Qa5 to pressure the queenside, and strike with …e5 and …f4 to clamp White's kingside in a balanced game.", sayShort: "…Bg7, …Qa5, …e5-…f4" },
+  beats: [
+    { atMove: 5, say: "Fianchetto with …Bg7, the bishop eyeing the long diagonal.", sayShort: "…Bg7, the fianchetto", highlights: [_H('g7')] },
+    { atMove: 11, say: "Develop …Qa5, pinning ideas and pressuring White's queenside.", sayShort: "…Qa5, pressure the queenside", highlights: [_H('a5')] },
+    { atMove: 17, say: "Strike with …e5, the freeing central break opening your position.", sayShort: "…e5, the freeing break", highlights: [_H('e5')] },
+    { atMove: 23, say: "Clamp with …f4, locking White's kingside and seizing space; balanced with chances.", sayShort: "…f4, clamp the kingside", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-initiative', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V3_E4_6: SublineNarration = {
+  intro: { say: "White gambits with e4. Take it, hit the knight with …d5, and grab the b2-pawn as White overextends — you trade into a balanced ending a pawn up.", sayShort: "…fxe4 and …d5, grab b2" },
+  beats: [
+    { atMove: 7, say: "Take with …fxe4, winning White's pawn and opening the f-file.", sayShort: "…fxe4, win the pawn", highlights: [_H('e4')] },
+    { atMove: 9, say: "Hit the knight with …d5, gaining the centre with tempo.", sayShort: "…d5, gain the centre", highlights: [_H('d5')] },
+    { atMove: 15, say: "Grab the b2-pawn with …Bxb2 as White overextends.", sayShort: "…Bxb2, grab material", highlights: [_H('b2')] },
+    { atMove: 23, say: "Trade queens with …Qxd2+, heading into a balanced ending with your extra pawn.", sayShort: "…Qxd2+, balanced ending", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pos-center', 'concept:end-key-squares', 'https://lichess.org/opening/Dutch-Defense'],
+};
+
+const DU_V4_NF3_4: SublineNarration = {
+  intro: { say: "White develops Nf3. Steer into the Leningrad with …g6, expand with …a5, and grab the exchange when White's queenside cracks — a sharp, balanced fight.", sayShort: "Leningrad with …a5-a4" },
+  beats: [
+    { atMove: 5, say: "Fianchetto with …g6, the Leningrad — your bishop rakes the long diagonal.", sayShort: "…g6, the Leningrad", highlights: [_H('g6')] },
+    { atMove: 7, say: "Expand with …a5, gaining queenside space and preparing …a4.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
+    { atMove: 19, say: "Leap to …e4, the active Leningrad knight hitting White's pieces.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+    { atMove: 21, say: "Grab the exchange with …Bxa1; White gets knight counterplay, but you've won material in a balanced, sharp game.", sayShort: "…Bxa1, win the exchange", highlights: [_H('a1')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-space', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V4_C4_4: SublineNarration = {
+  intro: { say: "White plays c4. Check with …Bb4+ to develop with tempo, build the d5 wall, and grab the c4-pawn to free your game in a balanced Stonewall.", sayShort: "…Bb4+, d5 wall, grab c4" },
+  beats: [
+    { atMove: 7, say: "Check with …Bb4+, developing with tempo and provoking a weakening.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 13, say: "Build the wall with …d5, the chain that grips e4.", sayShort: "…d5, the Stonewall", highlights: [_H('d5')] },
+    { atMove: 15, say: "Snatch the c4-pawn with …dxc4; White spends time regaining it while you develop.", sayShort: "…dxc4, win time", highlights: [_H('c4')] },
+    { atMove: 21, say: "Develop …Nc6, completing your pieces in a balanced position.", sayShort: "…Nc6, finish developing", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pawn-chain', 'concept:pos-development', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V4_B3_10: SublineNarration = {
+  intro: { say: "White fianchettoes with b3. Expand with …a5, plant your knight on e4, and develop with …Nc6 and …d5 in a balanced Leningrad.", sayShort: "…a5, …Ne4, …d5" },
+  beats: [
+    { atMove: 11, say: "Expand with …a5, gaining queenside space.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
+    { atMove: 15, say: "Plant …Ne4, the active outpost dominating the centre.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 19, say: "Develop …Nc6, supporting the centre and your breaks.", sayShort: "…Nc6, develop", highlights: [_H('c6')] },
+    { atMove: 23, say: "Strike with …d5, grabbing central space; balanced Leningrad.", sayShort: "…d5, central space", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V4_C4_6: SublineNarration = {
+  intro: { say: "White plays c4. Complete the Leningrad fianchetto, lift your queen to e8 to prepare …e5, and meet the e4 break by trading to open the long diagonal.", sayShort: "…Bg7, …Qe8, meet e4" },
+  beats: [
+    { atMove: 7, say: "Fianchetto with …Bg7, the bishop eyeing the long diagonal.", sayShort: "…Bg7, the fianchetto", highlights: [_H('g7')] },
+    { atMove: 13, say: "Lift …Qe8, the Leningrad maneuver preparing …e5 and a kingside attack.", sayShort: "…Qe8, prepare …e5", highlights: [_H('e8')] },
+    { atMove: 17, say: "When White breaks e4, trade …Nxe4 to open the long diagonal for your bishop.", sayShort: "…Nxe4, open the diagonal", highlights: [_H('e4')] },
+    { atMove: 21, say: "Develop …Nc6, pressuring White's centre; balanced with active play.", sayShort: "…Nc6, pressure the centre", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-development', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V4_NH3_6: SublineNarration = {
+  intro: { say: "White develops the knight to the rim with Nh3. Fianchetto, then route your knight via …Na6-c5 to the strong outpost and challenge with …Ne4 in a balanced Leningrad.", sayShort: "…Bg7, …Na6-c5 outpost" },
+  beats: [
+    { atMove: 7, say: "Fianchetto with …Bg7, eyeing the long diagonal.", sayShort: "…Bg7, the fianchetto", highlights: [_H('g7')] },
+    { atMove: 13, say: "Develop …Na6, heading for the strong c5-outpost.", sayShort: "…Na6, head for c5", highlights: [_H('c5')] },
+    { atMove: 15, say: "Plant …Nc5, a fine outpost eyeing the e4 and d3 squares.", sayShort: "…Nc5, the outpost", highlights: [_H('c5')] },
+    { atMove: 17, say: "Leap …Ne4, the active Leningrad knight; the game is balanced.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V4_C4_8: SublineNarration = {
+  intro: { say: "White plays c4. Castle, lift the queen to e8 to prepare …e5, and meet the e4 break by trading to open the long diagonal for your bishop — active Leningrad play.", sayShort: "Castle, …Qe8, meet e4" },
+  beats: [
+    { atMove: 9, say: "Castle with …O-O, tucking your king safely behind the fianchetto.", sayShort: "…O-O, safe king", highlights: [_H('g8')] },
+    { atMove: 13, say: "Lift …Qe8, the Leningrad maneuver preparing …e5 and a kingside attack.", sayShort: "…Qe8, prepare …e5", highlights: [_H('e8')] },
+    { atMove: 17, say: "When White breaks e4, trade …Nxe4 to open the long diagonal.", sayShort: "…Nxe4, open the diagonal", highlights: [_H('e4')] },
+    { atMove: 21, say: "Develop …Nc6, pressuring White's centre; balanced with active play.", sayShort: "…Nc6, pressure the centre", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-development', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V4_C3_6: SublineNarration = {
+  intro: { say: "White plays the modest c3. Support …e5 with …d6, fianchetto, and break with …e5 to open the long diagonal — then expand with …a5 in a balanced Leningrad.", sayShort: "…d6, …Bg7, …e5 break" },
+  beats: [
+    { atMove: 7, say: "Support …e5 with …d6, building your Leningrad setup.", sayShort: "…d6, prepare …e5", highlights: [_H('d6')] },
+    { atMove: 11, say: "Fianchetto with …Bg7, eyeing the long diagonal.", sayShort: "…Bg7, the fianchetto", highlights: [_H('g7')] },
+    { atMove: 17, say: "Strike with …e5, the freeing Leningrad break opening the long diagonal.", sayShort: "…e5, the central break", highlights: [_H('e5')] },
+    { atMove: 21, say: "Expand with …a5, gaining queenside space; balanced with chances.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V4_B3_6: SublineNarration = {
+  intro: { say: "White fianchettoes with b3. Stake the centre with …d5, fianchetto, and lever the queenside with …a5-a4-a3 to pry open weaknesses in a balanced game.", sayShort: "…d5, …a5-a4-a3 lever" },
+  beats: [
+    { atMove: 7, say: "Stake the centre with …d5, a Stonewall-Leningrad hybrid gripping e4.", sayShort: "…d5, grip e4", highlights: [_H('d5')] },
+    { atMove: 11, say: "Expand with …a5, gaining queenside space.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
+    { atMove: 15, say: "Lever …a3, prying open White's queenside and fixing weaknesses.", sayShort: "…a3, pry the queenside", highlights: [_H('a3')] },
+    { atMove: 21, say: "Plant …Ne4, the outpost; the game is balanced.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pawn-chain', 'concept:pos-space', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V4_B4_10: SublineNarration = {
+  intro: { say: "White grabs space with b4. Stake the centre with …d5, plant …Ne4, and restrain the b-pawn with …a6 before trading off your light bishop in a balanced game.", sayShort: "…d5, …Ne4, …a6 restrains b4" },
+  beats: [
+    { atMove: 11, say: "Stake the centre with …d5, gaining space.", sayShort: "…d5, stake the centre", highlights: [_H('d5')] },
+    { atMove: 13, say: "Plant …Ne4, the active outpost in the centre.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 19, say: "Restrain White's b-pawn with …a6, blunting the queenside expansion.", sayShort: "…a6, restrain b4", highlights: [_H('a6')] },
+    { atMove: 21, say: "Develop …Bb5, trading off your light bishop and easing your game; balanced.", sayShort: "…Bb5, ease your game", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-space', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V4_NBD2_10: SublineNarration = {
+  intro: { say: "White develops Nbd2. Expand with …a5, strike with …e5, and clamp with …f4 to lock White's kingside and seize space in a balanced, double-edged Leningrad.", sayShort: "…a5, …e5, …f4 clamp" },
+  beats: [
+    { atMove: 11, say: "Expand with …a5, gaining queenside space.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
+    { atMove: 17, say: "Strike with …e5, the Leningrad break opening the centre.", sayShort: "…e5, the central break", highlights: [_H('e5')] },
+    { atMove: 19, say: "Clamp with …f4, locking White's kingside and grabbing space.", sayShort: "…f4, clamp the kingside", highlights: [_H('f4')] },
+    { atMove: 23, say: "Recapture …dxe5, keeping a strong central pawn; balanced and double-edged.", sayShort: "…dxe5, strong centre", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V5_C4_8: SublineNarration = {
+  intro: { say: "White plays c4 against your classical Dutch. Castle, build the d5 wall, and brace it with …c6 — a solid, balanced Stonewall-flavoured setup.", sayShort: "Castle, …d5 wall, …c6" },
+  beats: [
+    { atMove: 9, say: "Castle with …O-O, tucking your king safely behind the pawns.", sayShort: "…O-O, safe king", highlights: [_H('g8')] },
+    { atMove: 11, say: "Build the wall with …d5, gripping e4 and giving your Dutch a solid core.", sayShort: "…d5, the wall", highlights: [_H('d5')] },
+    { atMove: 15, say: "Question the bishop with …h6 to clarify the kingside before developing.", sayShort: "…h6, question the bishop", highlights: [_H('g5')] },
+    { atMove: 21, say: "Develop …Bd7, rerouting via e8 to free the bishop; the game is balanced.", sayShort: "…Bd7, reroute the bishop", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pawn-chain', 'concept:pos-development', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V5_B3_10: SublineNarration = {
+  intro: { say: "White fianchettoes with b3. Plant your knight on …e4, fianchetto your own bishop with …b6 and …Bb7, and contest the long diagonal in a balanced game.", sayShort: "…Ne4, …Bb7 contest the diagonal" },
+  beats: [
+    { atMove: 11, say: "Plant …Ne4, the active outpost dominating the centre.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 13, say: "Prepare …Bb7 with …b6, fianchettoing to contest the long diagonal.", sayShort: "…b6, prepare …Bb7", highlights: [_H('b7')] },
+    { atMove: 15, say: "Develop …Bb7, opposing White's bishop on the long diagonal.", sayShort: "…Bb7, contest the diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Trade light bishops with …Bxg2, easing into a balanced middlegame.", sayShort: "…Bxg2, trade and ease", highlights: [_H('g2')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V5_NF3_4: SublineNarration = {
+  intro: { say: "White develops Nf3. Steer into the Leningrad with …g6, expand with …a5, and grab the exchange when White's queenside cracks — a sharp, balanced fight.", sayShort: "Leningrad with …a5-a4" },
+  beats: [
+    { atMove: 5, say: "Fianchetto with …g6, the Leningrad — your bishop rakes the long diagonal.", sayShort: "…g6, the Leningrad", highlights: [_H('g6')] },
+    { atMove: 7, say: "Expand with …a5, gaining queenside space and preparing …a4.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
+    { atMove: 19, say: "Leap to …e4, the active Leningrad knight hitting White's pieces.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+    { atMove: 21, say: "Grab the exchange with …Bxa1; White gets counterplay, but you've won material in a balanced, sharp game.", sayShort: "…Bxa1, win the exchange", highlights: [_H('a1')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-space', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V5_C3_10: SublineNarration = {
+  intro: { say: "White plays c3. Plant …Ne4, fianchetto with …b6 and …Bb7, and contest the long diagonal in a balanced classical Dutch.", sayShort: "…Ne4, …Bb7, balanced" },
+  beats: [
+    { atMove: 11, say: "Plant …Ne4, the active outpost in the centre.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 13, say: "Prepare …Bb7 with …b6, fianchettoing your bishop.", sayShort: "…b6, prepare …Bb7", highlights: [_H('b7')] },
+    { atMove: 15, say: "Develop …Bb7, opposing White's bishop on the long diagonal.", sayShort: "…Bb7, contest the diagonal", highlights: [_H('b7')] },
+    { atMove: 21, say: "Develop …Nc6, hitting White's e5-knight; the game is balanced.", sayShort: "…Nc6, hit the knight", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V5_C4_4: SublineNarration = {
+  intro: { say: "White plays c4. Check with …Bb4+ to develop with tempo, build the d5 wall, and grab the c4-pawn to free your game in a balanced Stonewall.", sayShort: "…Bb4+, d5 wall, grab c4" },
+  beats: [
+    { atMove: 7, say: "Check with …Bb4+, developing with tempo and provoking a weakening.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 13, say: "Build the wall with …d5, the chain that grips e4.", sayShort: "…d5, the Stonewall", highlights: [_H('d5')] },
+    { atMove: 15, say: "Snatch the c4-pawn with …dxc4; White spends time regaining it while you develop.", sayShort: "…dxc4, win time", highlights: [_H('c4')] },
+    { atMove: 21, say: "Develop …Nc6, completing your pieces in a balanced position.", sayShort: "…Nc6, finish developing", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pawn-chain', 'concept:pos-development', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V5_NBD2_10: SublineNarration = {
+  intro: { say: "White develops Nbd2. Build the d5 wall, plant …Ne4, and lift the queen to e8 toward the kingside — the classical Dutch attacking plan, balanced with chances.", sayShort: "…d5, …Ne4, …Qe8-h5" },
+  beats: [
+    { atMove: 11, say: "Build the wall with …d5, gripping the e4-square.", sayShort: "…d5, the wall", highlights: [_H('d5')] },
+    { atMove: 17, say: "Plant …Ne4, the active outpost dominating the centre.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 19, say: "Lift …Qe8, heading for h5 and a kingside attack.", sayShort: "…Qe8, head for h5", highlights: [_H('e8')] },
+    { atMove: 23, say: "Develop …Bb7 after …b6, contesting the long diagonal; balanced.", sayShort: "…Bb7, contest the diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-initiative', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V5_RE1_10: SublineNarration = {
+  intro: { say: "White lifts the rook to e1. Build the d5 wall, brace it with …c6, and develop …Bd6 toward the kingside before planting your knight on e4 — a balanced classical Dutch.", sayShort: "…d5, …c6, …Bd6, …Ne4" },
+  beats: [
+    { atMove: 11, say: "Build the wall with …d5, gripping the e4-square.", sayShort: "…d5, the wall", highlights: [_H('d5')] },
+    { atMove: 13, say: "Brace the wall with …c6, securing your d5-pawn.", sayShort: "…c6, brace d5", highlights: [_H('c6')] },
+    { atMove: 19, say: "Develop …Bd6, aiming the bishop at the kingside dark squares.", sayShort: "…Bd6, aim at h2", highlights: [_H('h2')] },
+    { atMove: 23, say: "Plant …Ne4, the outpost; the game is balanced.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pawn-chain', 'concept:pos-outpost', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V5_BG5_8: SublineNarration = {
+  intro: { say: "White pins with Bg5. Question it with …h6, develop …Nc6, and seize kingside space with …g5 and the …e5 break — an aggressive, balanced classical Dutch.", sayShort: "…h6, …g5, then …e5" },
+  beats: [
+    { atMove: 9, say: "Question the bishop with …h6 to clarify the kingside.", sayShort: "…h6, question the bishop", highlights: [_H('g5')] },
+    { atMove: 13, say: "Develop …Nc6, supporting the centre and the …e5 break.", sayShort: "…Nc6, support …e5", highlights: [_H('c6')] },
+    { atMove: 15, say: "Gain kingside space with …g5, clamping White's f4-break and grabbing the initiative.", sayShort: "…g5, clamp the kingside", highlights: [_H('g5')] },
+    { atMove: 23, say: "Strike with …e5, opening the centre for your bishop pair; balanced and double-edged.", sayShort: "…e5, open the centre", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V5_BG5_10: SublineNarration = {
+  intro: { say: "White pins with Bg5. Question it with …h6, build the d5 wall, and plant your knight on the e4-outpost in a balanced classical Dutch.", sayShort: "…h6, …d5, …Ne4" },
+  beats: [
+    { atMove: 11, say: "Question the bishop with …h6 to clarify the kingside.", sayShort: "…h6, question the bishop", highlights: [_H('g5')] },
+    { atMove: 13, say: "Build the wall with …d5, gripping the e4-square.", sayShort: "…d5, the wall", highlights: [_H('d5')] },
+    { atMove: 19, say: "Plant …Ne4, the active outpost in the centre.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 23, say: "Develop …Bd6, aiming at the kingside; balanced Stonewall-style game.", sayShort: "…Bd6, aim at h2", highlights: [_H('h2')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pawn-chain', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V5_C3_8: SublineNarration = {
+  intro: { say: "White plays c3. Castle, build the d5 wall, plant …Ne4, and strike with …c5 to challenge the centre in a balanced classical Dutch.", sayShort: "…d5, …Ne4, …c5" },
+  beats: [
+    { atMove: 9, say: "Castle with …O-O, tucking your king to safety.", sayShort: "…O-O, safe king", highlights: [_H('g8')] },
+    { atMove: 11, say: "Build the wall with …d5, gripping the e4-square.", sayShort: "…d5, the wall", highlights: [_H('d5')] },
+    { atMove: 13, say: "Plant …Ne4, the active outpost in the centre.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 19, say: "Strike with …c5, challenging White's centre; the game is balanced.", sayShort: "…c5, challenge the centre", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pawn-chain', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V6_QD3_18: SublineNarration = {
+  intro: { say: "You've broken with …e5 and recaptured on e6. White develops Qd3 — complete your pieces, centralise the queen, and contest the open d-file in a balanced Leningrad middlegame.", sayShort: "…Na6, …Qe7, contest the d-file" },
+  beats: [
+    { atMove: 19, say: "Develop …Na6, heading for c5 or c7 to support your centre.", sayShort: "…Na6, head for c5", highlights: [_H('a6')] },
+    { atMove: 21, say: "Centralise …Qe7, connecting rooks and eyeing the e-file.", sayShort: "…Qe7, centralise", highlights: [_H('e7')] },
+    { atMove: 23, say: "Bring the rook to …d8, contesting the open d-file; the game is balanced.", sayShort: "…Rad8, contest the d-file", highlights: [_H('d8')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-development', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V6_B3_10: SublineNarration = {
+  intro: { say: "White fianchettoes with b3. Expand with …a5, plant your knight on e4, and develop with …Nc6 and …d5 in a balanced Leningrad.", sayShort: "…a5, …Ne4, …d5" },
+  beats: [
+    { atMove: 11, say: "Expand with …a5, gaining queenside space.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
+    { atMove: 15, say: "Plant …Ne4, the active outpost dominating the centre.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 19, say: "Develop …Nc6, supporting the centre and your breaks.", sayShort: "…Nc6, develop", highlights: [_H('c6')] },
+    { atMove: 23, say: "Strike with …d5, grabbing central space; balanced Leningrad.", sayShort: "…d5, central space", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pawn-fianchetto', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V6_QB3_18: SublineNarration = {
+  intro: { say: "White probes with Qb3. Hit back with …b5, grab the c4-pawn, and offer a queen trade — you reach a balanced game with the extra pawn.", sayShort: "…b5 and …bxc4 win a pawn" },
+  beats: [
+    { atMove: 19, say: "Counter …b5, hitting the c4-pawn and grabbing queenside space.", sayShort: "…b5, hit c4", highlights: [_H('b5')] },
+    { atMove: 21, say: "Take …bxc4, opening the b-file and winning a pawn for active play.", sayShort: "…bxc4, win a pawn", highlights: [_H('c4')] },
+    { atMove: 23, say: "Centralise …Qd7, defending and offering a queen trade; balanced with the extra pawn.", sayShort: "…Qd7, consolidate", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-initiative', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V6_BF4_18: SublineNarration = {
+  intro: { say: "White develops Bf4, eyeing d6. Grab the c4-pawn first, activate your rook, and consolidate — you reach a balanced game with the extra pawn.", sayShort: "…Bxc4 grabs the pawn" },
+  beats: [
+    { atMove: 19, say: "Grab the c4-pawn with …Bxc4, snatching material as White's d6-capture loses time.", sayShort: "…Bxc4, win the pawn", highlights: [_H('c4')] },
+    { atMove: 21, say: "Activate the rook to …e8, contesting the e-file against White's pieces.", sayShort: "…Re8, activate the rook", highlights: [_H('e8')] },
+    { atMove: 23, say: "Reposition …Be6, consolidating your extra pawn; the game is balanced.", sayShort: "…Be6, consolidate", highlights: [_H('e6')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-development', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V6_C4_4: SublineNarration = {
+  intro: { say: "White plays c4. Complete the Leningrad fianchetto, castle, and develop …Qc7 to support the …e5 break before routing your knight to the c5-outpost in a balanced game.", sayShort: "Leningrad: …Bg7, …Qc7, …Nc5" },
+  beats: [
+    { atMove: 5, say: "Fianchetto with …g6, the Leningrad — your bishop rakes the long diagonal.", sayShort: "…g6, the Leningrad", highlights: [_H('g6')] },
+    { atMove: 11, say: "Castle with …O-O, tucking your king to safety.", sayShort: "…O-O, safe king", highlights: [_H('g8')] },
+    { atMove: 15, say: "Develop …Qc7, supporting the …e5 break and eyeing the long diagonal.", sayShort: "…Qc7, support …e5", highlights: [_H('c7')] },
+    { atMove: 23, say: "Plant …Nc5, a fine outpost; balanced Leningrad.", sayShort: "…Nc5, the outpost", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-outpost', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V6_ND2_18: SublineNarration = {
+  intro: { say: "White develops Nd2. Centralise your queen on e7, expand with …a5, and route your knight to c5 — a balanced Leningrad middlegame after the …e5 break.", sayShort: "…Qe7, …a5, …Na6-c5" },
+  beats: [
+    { atMove: 19, say: "Centralise …Qe7, connecting rooks and eyeing the e-file.", sayShort: "…Qe7, centralise", highlights: [_H('e7')] },
+    { atMove: 21, say: "Expand with …a5, gaining queenside space.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
+    { atMove: 23, say: "Develop …Na6, heading for the strong c5-outpost; balanced.", sayShort: "…Na6, head for c5", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-outpost', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V6_RB1_14: SublineNarration = {
+  intro: { say: "White prepares a queenside push with Rb1. Expand with …a5, lift your rook to e8 to back the …e5 break, and route your knight to the c5-outpost in a balanced Leningrad.", sayShort: "…a5, …Re8, …e6-…Nc5" },
+  beats: [
+    { atMove: 15, say: "Expand with …a5, gaining queenside space and blunting White's b-pawn push.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
+    { atMove: 17, say: "Lift …Re8, supporting the …e5 break.", sayShort: "…Re8, support …e5", highlights: [_H('e8')] },
+    { atMove: 21, say: "Prepare …e5 with …e6, building your central break.", sayShort: "…e6, prepare …e5", highlights: [_H('e6')] },
+    { atMove: 23, say: "Plant …Nc5, a fine outpost; balanced Leningrad.", sayShort: "…Nc5, the outpost", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-outpost', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V6_B3_14: SublineNarration = {
+  intro: { say: "White fianchettoes with b3. Develop …Qc7 to support …e5, expand with …a5, and route your knight to the c5-outpost in a balanced Leningrad.", sayShort: "…Qc7, …a5, …Na6-c5" },
+  beats: [
+    { atMove: 15, say: "Develop …Qc7, supporting the …e5 break and eyeing the long diagonal.", sayShort: "…Qc7, support …e5", highlights: [_H('c7')] },
+    { atMove: 17, say: "Expand with …a5, gaining queenside space.", sayShort: "…a5, queenside space", highlights: [_H('a5')] },
+    { atMove: 19, say: "Develop …Na6, heading for the strong c5-outpost.", sayShort: "…Na6, head for c5", highlights: [_H('a6')] },
+    { atMove: 23, say: "Plant …Nc5, a fine outpost; balanced Leningrad.", sayShort: "…Nc5, the outpost", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-outpost', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V6_C4_8: SublineNarration = {
+  intro: { say: "White plays c4. Castle, lift the queen to e8 to prepare …e5, and meet the e4 break by trading to open the long diagonal — active Leningrad play.", sayShort: "Castle, …Qe8, meet e4" },
+  beats: [
+    { atMove: 9, say: "Castle with …O-O, tucking your king safely behind the fianchetto.", sayShort: "…O-O, safe king", highlights: [_H('g8')] },
+    { atMove: 13, say: "Lift …Qe8, the Leningrad maneuver preparing …e5 and a kingside attack.", sayShort: "…Qe8, prepare …e5", highlights: [_H('e8')] },
+    { atMove: 17, say: "When White breaks e4, trade …Nxe4 to open the long diagonal.", sayShort: "…Nxe4, open the diagonal", highlights: [_H('e4')] },
+    { atMove: 21, say: "Develop …Nc6, pressuring White's centre; balanced with active play.", sayShort: "…Nc6, pressure the centre", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-development', 'https://lichess.org/opening/Dutch-Defense'],
+};
+const DU_V6_NG5_18: SublineNarration = {
+  intro: { say: "White lunges Ng5 at your bishop. Grab the c4-pawn, retreat the bishop to safety, and stake the centre with …d5 — you stand balanced or better with the extra pawn.", sayShort: "…Bxc4 wins the pawn" },
+  beats: [
+    { atMove: 19, say: "Grab …Bxc4, snatching the pawn as White's knight wanders to g5.", sayShort: "…Bxc4, win the pawn", highlights: [_H('c4')] },
+    { atMove: 21, say: "Retreat …Bf7, safeguarding the bishop and your extra pawn.", sayShort: "…Bf7, safeguard the bishop", highlights: [_H('f7')] },
+    { atMove: 23, say: "Stake …d5, claiming the centre with your extra pawn; balanced or better.", sayShort: "…d5, claim the centre", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://lichess.org/opening/Dutch-Defense'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
+  'dutch-defence::3::Bc4@8': DU_V3_BC4_8,
   'slav-defence::6::e3@6': SL61,
   'slav-defence::5::e3@6': SL51,
   'slav-defence::4::e3@6': SL41,
@@ -8893,75 +9557,75 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'budapest-gambit::6::e4@10': C61,
   'budapest-gambit::6::Nf3@6': C61,
   // ── dutch-defence ──
-  'dutch-defence::0::Re1@14': C64,
-  'dutch-defence::0::Nf3@4': C64,
-  'dutch-defence::0::c4@4': C64,
-  'dutch-defence::0::Bg5@14': C65,
-  'dutch-defence::0::b3@14': C64,
-  'dutch-defence::0::Qc2@14': C64,
-  'dutch-defence::0::Qb3@14': C64,
-  'dutch-defence::0::Bf4@14': C64,
-  'dutch-defence::0::e4@14': C64,
-  'dutch-defence::0::Nd4@16': C64,
-  'dutch-defence::1::b3@10': C66,
-  'dutch-defence::1::c4@8': C66,
-  'dutch-defence::1::Bg5@8': C65,
-  'dutch-defence::1::Bg5@10': C65,
-  'dutch-defence::1::Nbd2@10': C66,
-  'dutch-defence::1::Nf3@4': C64,
-  'dutch-defence::1::c3@10': C66,
-  'dutch-defence::1::c3@8': C66,
-  'dutch-defence::1::Ne5@8': C66,
-  'dutch-defence::1::c4@4': C64,
-  'dutch-defence::2::c4@8': C67,
-  'dutch-defence::2::b3@10': C67,
-  'dutch-defence::2::Nf3@4': C64,
-  'dutch-defence::2::c3@10': C67,
-  'dutch-defence::2::c4@4': C64,
-  'dutch-defence::2::Nbd2@10': C67,
-  'dutch-defence::2::Re1@10': C67,
-  'dutch-defence::2::Bg5@8': C65,
-  'dutch-defence::2::Ne5@18': C66,
-  'dutch-defence::2::Bg5@10': C65,
-  'dutch-defence::3::Nf3@8': C65,
-  'dutch-defence::3::h4@8': C65,
-  'dutch-defence::3::Bxf6@8': C65,
-  'dutch-defence::3::Be2@8': C65,
-  'dutch-defence::3::h3@8': C65,
-  'dutch-defence::3::Qd2@8': C65,
-  'dutch-defence::3::Nd2@4': C65,
-  'dutch-defence::3::e3@4': C65,
-  'dutch-defence::3::e4@6': DDUT,
-  'dutch-defence::4::Nf3@4': C64,
-  'dutch-defence::4::c4@4': C64,
-  'dutch-defence::4::b3@10': C64,
-  'dutch-defence::4::c4@6': WDUTLEN,
-  'dutch-defence::4::Nh3@6': C68,
-  'dutch-defence::4::c4@8': C64,
-  'dutch-defence::4::c3@6': C64,
-  'dutch-defence::4::b3@6': C64,
-  'dutch-defence::4::b4@10': C64,
-  'dutch-defence::4::Nbd2@10': C64,
-  'dutch-defence::5::c4@8': C67,
-  'dutch-defence::5::b3@10': C67,
-  'dutch-defence::5::Nf3@4': C64,
-  'dutch-defence::5::c3@10': C67,
-  'dutch-defence::5::c4@4': C64,
-  'dutch-defence::5::Nbd2@10': C67,
-  'dutch-defence::5::Re1@10': C67,
-  'dutch-defence::5::Bg5@8': C65,
-  'dutch-defence::5::Bg5@10': C65,
-  'dutch-defence::5::c3@8': C67,
-  'dutch-defence::6::Qd3@18': C64,
-  'dutch-defence::6::b3@10': C64,
-  'dutch-defence::6::Qb3@18': C64,
-  'dutch-defence::6::Bf4@18': C64,
-  'dutch-defence::6::c4@4': C64,
-  'dutch-defence::6::Nd2@18': C64,
-  'dutch-defence::6::Rb1@14': C64,
-  'dutch-defence::6::b3@14': C64,
-  'dutch-defence::6::c4@8': C64,
-  'dutch-defence::6::Ng5@18': C64,
+  'dutch-defence::0::Re1@14': DU_V0_RE1_14,
+  'dutch-defence::0::Nf3@4': DU_V0_NF3_4,
+  'dutch-defence::0::c4@4': DU_V0_C4_4,
+  'dutch-defence::0::Bg5@14': DU_V0_BG5_14,
+  'dutch-defence::0::b3@14': DU_V0_B3_14,
+  'dutch-defence::0::Qc2@14': DU_V0_QC2_14,
+  'dutch-defence::0::Qb3@14': DU_V0_QB3_14,
+  'dutch-defence::0::Bf4@14': DU_V0_BF4_14,
+  'dutch-defence::0::e4@14': DU_V0_E4_14,
+  'dutch-defence::0::Nd4@16': DU_V0_ND4_16,
+  'dutch-defence::1::b3@10': DU_V1_B3_10,
+  'dutch-defence::1::c4@8': DU_V1_C4_8,
+  'dutch-defence::1::Bg5@8': DU_V1_BG5_8,
+  'dutch-defence::1::Bg5@10': DU_V1_BG5_10,
+  'dutch-defence::1::Nbd2@10': DU_V1_NBD2_10,
+  'dutch-defence::1::Nf3@4': DU_V1_NF3_4,
+  'dutch-defence::1::c3@10': DU_V1_C3_10,
+  'dutch-defence::1::c3@8': DU_V1_C3_8,
+  'dutch-defence::1::Ne5@8': DU_V1_NE5_8,
+  'dutch-defence::1::c4@4': DU_V1_C4_4,
+  'dutch-defence::2::c4@8': DU_V2_C4_8,
+  'dutch-defence::2::b3@10': DU_V2_B3_10,
+  'dutch-defence::2::Nf3@4': DU_V2_NF3_4,
+  'dutch-defence::2::c3@10': DU_V2_C3_10,
+  'dutch-defence::2::c4@4': DU_V2_C4_4,
+  'dutch-defence::2::Nbd2@10': DU_V2_NBD2_10,
+  'dutch-defence::2::Re1@10': DU_V2_RE1_10,
+  'dutch-defence::2::Bg5@8': DU_V2_BG5_8,
+  'dutch-defence::2::Ne5@18': DU_V2_NE5_18,
+  'dutch-defence::2::Bg5@10': DU_V2_BG5_10,
+  'dutch-defence::3::Nf3@8': DU_V3_NF3_8,
+  'dutch-defence::3::h4@8': DU_V3_H4_8,
+  'dutch-defence::3::Bxf6@8': DU_V3_BXF6_8,
+  'dutch-defence::3::Be2@8': DU_V3_BE2_8,
+  'dutch-defence::3::h3@8': DU_V3_H3_8,
+  'dutch-defence::3::Qd2@8': DU_V3_QD2_8,
+  'dutch-defence::3::Nd2@4': DU_V3_ND2_4,
+  'dutch-defence::3::e3@4': DU_V3_E3_4,
+  'dutch-defence::3::e4@6': DU_V3_E4_6,
+  'dutch-defence::4::Nf3@4': DU_V4_NF3_4,
+  'dutch-defence::4::c4@4': DU_V4_C4_4,
+  'dutch-defence::4::b3@10': DU_V4_B3_10,
+  'dutch-defence::4::c4@6': DU_V4_C4_6,
+  'dutch-defence::4::Nh3@6': DU_V4_NH3_6,
+  'dutch-defence::4::c4@8': DU_V4_C4_8,
+  'dutch-defence::4::c3@6': DU_V4_C3_6,
+  'dutch-defence::4::b3@6': DU_V4_B3_6,
+  'dutch-defence::4::b4@10': DU_V4_B4_10,
+  'dutch-defence::4::Nbd2@10': DU_V4_NBD2_10,
+  'dutch-defence::5::c4@8': DU_V5_C4_8,
+  'dutch-defence::5::b3@10': DU_V5_B3_10,
+  'dutch-defence::5::Nf3@4': DU_V5_NF3_4,
+  'dutch-defence::5::c3@10': DU_V5_C3_10,
+  'dutch-defence::5::c4@4': DU_V5_C4_4,
+  'dutch-defence::5::Nbd2@10': DU_V5_NBD2_10,
+  'dutch-defence::5::Re1@10': DU_V5_RE1_10,
+  'dutch-defence::5::Bg5@8': DU_V5_BG5_8,
+  'dutch-defence::5::Bg5@10': DU_V5_BG5_10,
+  'dutch-defence::5::c3@8': DU_V5_C3_8,
+  'dutch-defence::6::Qd3@18': DU_V6_QD3_18,
+  'dutch-defence::6::b3@10': DU_V6_B3_10,
+  'dutch-defence::6::Qb3@18': DU_V6_QB3_18,
+  'dutch-defence::6::Bf4@18': DU_V6_BF4_18,
+  'dutch-defence::6::c4@4': DU_V6_C4_4,
+  'dutch-defence::6::Nd2@18': DU_V6_ND2_18,
+  'dutch-defence::6::Rb1@14': DU_V6_RB1_14,
+  'dutch-defence::6::b3@14': DU_V6_B3_14,
+  'dutch-defence::6::c4@8': DU_V6_C4_8,
+  'dutch-defence::6::Ng5@18': DU_V6_NG5_18,
   // ── catalan-opening ──
   'catalan-opening::0::c5@5': C69,
   'catalan-opening::0::a6@9': WCATA6,
