@@ -794,7 +794,9 @@ const SC_NF6_EARLY: SublineNarration = {
     sayShort: '…Nf6 — answer dxe5, keep the small edge.',
   },
   beats: [
-    { atMove: 5, say: "Nf6 hits e4 before recapturing — answer dxe5. After Nxe4 the centre clears into a balanced game where your extra space and faster development give the nagging edge.", sayShort: "Nf6 — take dxe5, keep the edge.", arrows: [A('f3', 'e5')], highlights: [H('e5', KEY)] },
+    { atMove: 5, say: "…Nf6 hits e4 before recapturing — answer dxe5, grabbing the e5-wedge. After …Nxe4 the centre clears, but your extra space and faster development give the nagging edge.", sayShort: "…Nf6 — answer dxe5.", arrows: [A('d4', 'e5')], highlights: [H('e5', KEY)] },
+    { atMove: 6, say: "dxe5 clamps the centre; Black regains the pawn with …Nxe4, but the e5-wedge cramps his game while you develop Bc4 and Bd3 toward his king.", sayShort: "dxe5 — clamp the e5-wedge.", arrows: [A('e5', 'f6')], highlights: [H('f6', ATK)] },
+    { atMove: 14, say: "Bc4 develops with the bishop eyeing f7 while your e5-pawn cramps Black. Build with Bd3 and castle, pressing the small space edge into a comfortable middlegame.", sayShort: "Bc4 — eye f7, press the space.", arrows: [A('c4', 'f7')], highlights: [H('f7', SOFT)] },
   ],
   sources: SC,
 };
