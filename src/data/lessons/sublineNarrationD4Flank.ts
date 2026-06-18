@@ -1009,16 +1009,6 @@ const TQGQGA: SublineNarration = {
   intro: { say: "Black has equalised his development and struck with …c5 — and after the coming trades he'll be left carrying an isolated or hanging d-pawn. That's your blueprint: blockade the pawn with a knight, swap the right pieces, and grind that weakness toward an endgame where it simply falls.", sayShort: "QGA — play against the isolani." },
   sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
 };
-// DEEP TQGD :: qgd::6::Be2@16
-const TQGD: SublineNarration = {
-  intro: { say: "You've reached the QGD fortress — …Nbd7, …c6, …Qa5 and the …Bb4 pin all in place — and White's quiet Be2 is an admission that there's nothing here to attack. So now you free the game on your own terms: the …dxc4 and …e5 (or …c5) breaks are coming. No weaknesses, no worries — you play for the full point.", sayShort: "QGD fortress — free with …e5 / …c5." },
-  sources: ['book:qgd', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
-};
-// DEEP TCAT :: catalan-opening::2::Nc6@11
-const TCAT: SublineNarration = {
-  intro: { say: "Black grabbed c4, but treat it as a loan, not a loss. Your g2-bishop scythes down the long diagonal at b7, and you'll calmly win the pawn back with Ne5, Qc2 or a4. The real prize is the bind: while Black struggles to untangle his queenside, you squeeze the light squares.", sayShort: "Open Catalan — the g2-bishop binds." },
-  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
-};
 // DEEP TLON :: london-system::0::b6@15
 const TLON: SublineNarration = {
   intro: { say: "Your London machine is fully built — the Bf4-Bd3 battery aimed at h7, c3 bracing d4, knights on d2 and f3. Black's …b6 is trying to challenge your diagonal, so turn to the kingside now: Ne5, the queen lift, and the attacking plan your setup reaches every single game. Same system, same ideas, every time — that's the beauty of it.", sayShort: "London tabiya — turn to the kingside." },
@@ -1390,7 +1380,73 @@ const WLONRE8: SublineNarration = {
   sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
 };
 
+// WAVE WBIRDC5 :: 1 keys
+const WBIRDC5: SublineNarration = {
+  intro: { say: "…c5 — Black grabs queenside space in your Classical Bird. Welcome it, and play the reversed-Dutch attack: plant the knight on the e5 outpost backed by the b2-bishop on the long diagonal, then reroute your pieces toward the kingside. The whole system aims at Black's king while he expands on the wing.", sayShort: "…c5 — plant Ne5, attack the king" },
+  beats: [
+    { atMove: 13, say: "…c5 stakes out queenside space. That's fine — your play is on the other wing, so let Black expand here while you build the kingside attack the Bird is made for.", sayShort: "…c5 — Black expands queenside", highlights: [_H('c5', KEY)] },
+    { atMove: 14, say: "Ne5 — the knight slams into the e5 outpost, the dream square in the Bird, supported and unkickable. Backed by the b2-bishop raking the long diagonal, it's the spearhead of your kingside attack.", sayShort: "Ne5 — the outpost spearhead", highlights: [_H('e5', KEY), _H('g7', KEY)] },
+    { atMove: 20, say: "Nd2 — reroute the second knight toward f3 and the kingside, massing your pieces where Black's king lives. Slow and inevitable: the Bird's attack builds while Black plays on the queenside.", sayShort: "Nd2 — reroute toward the king", highlights: [_H('d2', KEY)] },
+  ],
+  sources: ['concept:pos-space', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Bird%27s_Opening'],
+};
+// WAVE WTROC5 :: 1 keys
+const WTROC5: SublineNarration = {
+  intro: { say: "…c5 — Black counters in the centre, but you keep the bishop pair and grab space. Kick the e4-knight with f3, then roll d5 and e4 to clamp the position and shove Black's pieces back. You've dodged all his prepared 1.d4 theory and you call the shots from a position of space.", sayShort: "…c5 — f3, then d5 and e4 clamp" },
+  beats: [
+    { atMove: 5, say: "…c5 strikes at d4 for counterplay. Follow the arrow — the pawn hits your centre — but you have a strong reply that gains time and space rather than conceding.", sayShort: "…c5 — hits your d4", arrows: [_A('c5', 'd4', ATK)], highlights: [_H('d4', KEY)] },
+    { atMove: 6, say: "f3 — boot the e4-knight straight back. Follow the arrow: the pawn attacks the intruder, and his clever sortie has cost him time while you keep the bishop pair.", sayShort: "f3 — boot the knight back", arrows: [_A('f3', 'e4', ATK)], highlights: [_H('e4', KEY)] },
+    { atMove: 10, say: "d5 — clamp the centre and grab space, shoving Black's pieces onto passive squares. You build at your own pace behind the broad pawn front.", sayShort: "d5 — clamp, grab space", highlights: [_H('d5', KEY)] },
+    { atMove: 12, say: "e4 — the big centre is yours. With pawns on d5 and e4 you simply own more of the board, and Black must scramble for counterplay before you roll forward.", sayShort: "e4 — the big centre, yours", highlights: [_H('e4', KEY)] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Trompowsky_Attack'],
+};
+// WAVE WQGMERAN :: 1 keys
+const WQGMERAN: SublineNarration = {
+  intro: { say: "…e6 — Black settles into a solid Semi-Slav/Meran setup against your Queen's Gambit. Develop the Bd3 battery toward the kingside, and when Black frees with …dxc4 and …b5, answer in the centre: e4 builds the broad front and d5 clamps. Your space and the kingside-aiming pieces give a lasting initiative.", sayShort: "…e6 — build e4, then clamp d5" },
+  beats: [
+    { atMove: 7, say: "…e6 locks in the Meran structure — solid, but a touch passive. You develop smoothly and aim your pieces at the kingside while Black untangles.", sayShort: "…e6 — Black's Meran setup", highlights: [_H('e6', KEY)] },
+    { atMove: 10, say: "Bd3 — the bishop slots in eyeing h7 and the kingside, the start of your attacking battery. Black will grab c4 and play …b5, but you welcome the open lines.", sayShort: "Bd3 — aim at the kingside", highlights: [_H('d3', KEY)] },
+    { atMove: 18, say: "e4 — claim the broad centre. With the pawns rolling and your pieces aimed at the king, Black's queenside expansion suddenly looks slow next to your central pawn mass.", sayShort: "e4 — claim the broad centre", highlights: [_H('e4', KEY)] },
+    { atMove: 20, say: "d5 — clamp the centre and grab even more space, fixing Black's structure and opening lines for your better-placed pieces. The initiative is firmly yours.", sayShort: "d5 — clamp, seize space", highlights: [_H('d5', KEY)] },
+  ],
+  sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+// WAVE WQGDTAB :: 1 keys
+const WQGDTAB: SublineNarration = {
+  intro: { say: "Be2 — White's quiet developing move in the main QGD tabiya, and it's an admission that there's nothing here to attack. You've reached the fortress with …Qa5, …Bb4 and …O-O; now free the game on your terms with …dxc4, trade off, and reach a comfortable middlegame with no weaknesses and the …c5 or …e5 breaks in hand.", sayShort: "Be2 — free with …dxc4, no weaknesses" },
+  beats: [
+    { atMove: 16, say: "Be2 — modest and harmless; White has run out of pressure. This is your cue to free the position rather than sit and wait.", sayShort: "Be2 — White has no pressure", highlights: [_H('e2', KEY)] },
+    { atMove: 17, say: "…dxc4 — the freeing capture. You hand back the centre tension and open lines for your pieces, dissolving any cramp; the …Bb4 pin already nags White's structure.", sayShort: "…dxc4 — free the position", highlights: [_H('c4', KEY)] },
+    { atMove: 19, say: "…Nxf6 — recapture cleanly; your structure is sound and weakness-free. You've equalised comfortably and can press with …c5 or …e5 whenever the moment is right.", sayShort: "…Nxf6 — sound, weakness-free", highlights: [_H('f6', KEY)] },
+    { atMove: 21, say: "…Qc7 — the queen settles on an active square, eyeing the kingside diagonal and supporting the …e5 break. Full equality reached; now you play for the win with active pieces.", sayShort: "…Qc7 — active, ready …e5", highlights: [_H('c7', KEY)] },
+  ],
+  sources: ['book:qgd', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+// WAVE WBENTAIM :: 1 keys
+const WBENTAIM: SublineNarration = {
+  intro: { say: "Bb5+ — the dangerous Taimanov, White's most testing anti-Benoni: the check disrupts you before the f4-e5 storm. Block calmly with …Nfd7, throw in …Qh4+ to provoke g3 and weaken White's dark squares, then retreat and castle. Weather the early aggression and your queenside pawn majority tells in the long game.", sayShort: "Bb5+ — block …Nfd7, then …Qh4+" },
+  beats: [
+    { atMove: 14, say: "Bb5+ checks before you're coordinated, the sharp Taimanov idea aimed at the f4-e5 break to come. Don't panic — you have a calm, solid block.", sayShort: "Bb5+ — the dangerous check", arrows: [_A('b5', 'e8', ATK)], highlights: [_H('e8', KEY)] },
+    { atMove: 15, say: "…Nfd7 — block the check with the knight, keeping your structure intact and your king's path to safety open. The piece reroutes usefully toward e5 and b6 later.", sayShort: "…Nfd7 — block, stay solid", highlights: [_H('d7', KEY)] },
+    { atMove: 17, say: "…Qh4+ — a clever zwischenzug: with f4 played, the diagonal to e1 is open (follow the arrow), so the check forces g3 and permanently loosens White's dark squares around his king.", sayShort: "…Qh4+ — force g3, loosen dark squares", arrows: [_A('h4', 'e1', ATK)], highlights: [_H('e1', KEY)] },
+    { atMove: 21, say: "…O-O — king safely tucked away, the storm weathered. Now the Benoni's engine kicks in: your queenside pawn majority and the g7-bishop give you the long-term play.", sayShort: "…O-O — king safe, majority rolls", highlights: [_H('g8', KEY)] },
+  ],
+  sources: ['concept:pos-king-safety', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
+};
+// WAVE WCATNC6 :: 1 keys
+const WCATNC6: SublineNarration = {
+  intro: { say: "…Nc6 — Black develops and clings to the c4-pawn in the Open Catalan, but it's a loan. Prepare Qe2 and Qxc4 to collect it, and lean on the long diagonal with the g2-bishop. Black's queenside stays awkward to untangle while you enjoy the bind and the more comfortable game.", sayShort: "…Nc6 — prepare Qe2-Qxc4, then bind" },
+  beats: [
+    { atMove: 11, say: "…Nc6 develops and supports holding the c4-pawn. Don't chase it crudely; reroute your queen to collect it while the g2-bishop does the long-term work.", sayShort: "…Nc6 — Black holds c4", highlights: [_H('c6', KEY)] },
+    { atMove: 14, say: "Qe2 — lining the queen up behind the c4-pawn, ready to regain it next move. Patient and methodical; the g2-bishop already binds the long light diagonal.", sayShort: "Qe2 — prepare to regain c4", highlights: [_H('e2', KEY)] },
+    { atMove: 16, say: "Qxc4 — pawn back, and the bind tells: the g2-bishop chokes the long diagonal while Black scrambles to free his queenside. You hold the easier, more pleasant game.", sayShort: "Qxc4 — pawn back, the bind tells", highlights: [_H('c4', KEY)] },
+  ],
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
+  'queens-gambit::4::e6@7': WQGMERAN,
   'grunfeld-defence::0::g3@4': WGRUG3,
   'grunfeld-defence::1::g3@4': WGRUG3,
   'grunfeld-defence::6::g3@4': WGRUG3,
@@ -1550,7 +1606,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'qgd::6::cxd5@10': C9,
   'qgd::6::cxd5@12': C9,
   'qgd::6::e3@8': C8,
-  'qgd::6::Be2@16': TQGD,
+  'qgd::6::Be2@16': WQGDTAB,
   'qgd::6::cxd5@8': C9,
   'qgd::6::Bxf6@12': C8,
   'qgd::6::Rc1@14': C11,
@@ -2088,7 +2144,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'benoni-defence::4::Nf3@4': C49,
   'benoni-defence::4::d6@26': C48,
   'benoni-defence::4::O-O@22': C48,
-  'benoni-defence::4::Bb5+@14': C52,
+  'benoni-defence::4::Bb5+@14': WBENTAIM,
   'benoni-defence::4::Bf4@22': C48,
   'benoni-defence::4::Nf3@12': C51,
   'benoni-defence::4::e3@4': C48,
@@ -2337,7 +2393,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'catalan-opening::1::dxc4@7': C69,
   'catalan-opening::2::c5@5': C69,
   'catalan-opening::2::Be7@7': C70,
-  'catalan-opening::2::Nc6@11': TCAT,
+  'catalan-opening::2::Nc6@11': WCATNC6,
   'catalan-opening::2::Bb4+@7': WCATBB,
   'catalan-opening::2::Nc6@9': C69,
   'catalan-opening::2::c5@9': C69,
@@ -2468,7 +2524,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'trompowsky-attack::0::g5@7': C80,
   'trompowsky-attack::0::c6@7': C81,
   'trompowsky-attack::0::Nc6@7': C80,
-  'trompowsky-attack::0::c5@5': C81,
+  'trompowsky-attack::0::c5@5': WTROC5,
   'trompowsky-attack::0::Nd7@7': C80,
   'trompowsky-attack::0::cxd4@9': C81,
   'trompowsky-attack::0::Nf6@9': C81,
@@ -2898,7 +2954,7 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'birds-opening::6::Bd6@9': C109,
   'birds-opening::6::Nc6@9': C109,
   'birds-opening::6::c6@9': C109,
-  'birds-opening::6::c5@13': C110,
+  'birds-opening::6::c5@13': WBIRDC5,
   'birds-opening::6::Bc5@9': C109,
   'birds-opening::6::Bb4@9': C109,
   'birds-opening::6::Nc6@7': C109,
