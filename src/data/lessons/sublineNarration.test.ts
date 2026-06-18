@@ -1,6 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { _SUBLINE_NARRATION } from './sublineNarration';
+import { SUBLINE_NARRATION_E4E5 } from './sublineNarrationE4E5';
+import { SUBLINE_NARRATION_E4OTHER } from './sublineNarrationE4Other';
+import { SUBLINE_NARRATION_D4FLANK } from './sublineNarrationD4Flank';
 import { isResolvableSource } from '../narrationSources';
 import sublinesData from '../course-sublines.json';
 import type { CourseSubline } from '../../services/openingCourse';
@@ -22,6 +25,30 @@ function findSubline(openingId: string, varIndex: string, trigger: string, atPly
 }
 
 const entries = Object.entries(_SUBLINE_NARRATION);
+
+// Duplicate-key guard across the three parallel-session group maps. The merged
+// map in sublineNarration.ts is built by object-spread, which SILENTLY keeps the
+// last map's value on a key collision and drops the other group's work — and the
+// authored-entry tests below only see the survivor, so they can never catch it.
+// This asserts the three maps are disjoint, failing loudly with the offending
+// key + groups. Owned by the D4FLANK (last/largest) group; the other group files
+// must not touch it.
+describe('no duplicate keys across group maps', () => {
+  it('each subline key is authored by exactly one group', () => {
+    const maps = {
+      E4E5: SUBLINE_NARRATION_E4E5,
+      E4OTHER: SUBLINE_NARRATION_E4OTHER,
+      D4FLANK: SUBLINE_NARRATION_D4FLANK,
+    };
+    const seen = new Map<string, string>();
+    for (const [group, map] of Object.entries(maps)) {
+      for (const key of Object.keys(map)) {
+        expect(seen.has(key), `dup key ${key} in ${group} and ${seen.get(key)}`).toBe(false);
+        seen.set(key, group);
+      }
+    }
+  });
+});
 
 describe('hand-authored subline narration', () => {
   it('has at least one authored entry', () => {
