@@ -163,7 +163,36 @@ const ANTI_QGD_X: SN = {
   sources: ['concept:pawn-minority-attack', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
 };
 
+// ── anti-Catalan (student BLACK) — Open Catalan: grab c4 and hold it. ──
+const ANTI_CATALAN: SN = {
+  intro: { say: "g3 — the Catalan, planning to rule the long light diagonal with Bg2. Take the gambit pawn with …dxc4 and don't rush to give it back: …a6 and …b5 hold it, making White prove his compensation. The Bg2 bishop's pressure is real, but with the pawn in hand and a solid setup Black is comfortably fine.", sayShort: '…dxc4 — grab it, hold with …a6/…b5.' },
+  beats: [
+    { atMove: 7, say: "…dxc4 — the Open Catalan. You grab the c4-pawn and prepare …a6 and …b5 to keep it, forcing White to demonstrate real compensation for the diagonal. No need to be generous — make him work for the pawn back.", highlights: [H('c4', ATK)] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+// Bb4+ Ragozin (3.Nf3 … Bg5 Bb4+) and Nimzo (3.Nc3 Bb4) move orders.
+const ANTI_CAT_NF3: SN = {
+  intro: { say: "Nf3 — White delays the fianchetto. Answer …d5 and, after Bg5, the useful …Bb4+: you check and develop, then trade or hold the pin, steering into a sound Ragozin-flavoured structure where Black equalises comfortably and the light-square fight is even.", sayShort: '…d5 then …Bb4+ — sound and equal.' },
+  beats: [
+    { atMove: 7, say: "…Bb4+ — checking and developing in one. White must block, and you'll either trade the bishop for the knight or keep the pin; either way you reach a comfortable Ragozin where the centre is contested and Black is fine.", highlights: [H('c3', SOFT)] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+const ANTI_CAT_NC3: SN = {
+  intro: { say: "Nc3 — this transposes to a Nimzo-Indian. Answer …Bb4, pinning the knight that guards e4 and fighting for the central light square. Trade it to wreck White's c-pawns or hold the pin — a comfortable, well-charted equality, the Catalan defused.", sayShort: 'Nc3 — Nimzo: pin with …Bb4.' },
+  beats: [
+    { atMove: 5, say: "…Bb4 — the Nimzo pin. The bishop nails the c3-knight, e4's defender, and you contest the centre at once. Trade for the doubled c-pawns or keep squeezing the pin — either road is comfortable for Black.", highlights: [H('c3', KEY)] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+
 export const SUBLINE_NARRATION_HELP_B: Record<string, SN> = {
+  // anti-Catalan — Open Catalan dxc4@7 (12) + Ragozin/Nimzo transpositions (4)
+  'anti-catalan-black::0::Nf3@6': ANTI_CATALAN, 'anti-catalan-black::0::Ne5@10': ANTI_CATALAN, 'anti-catalan-black::0::Qa4+@8': ANTI_CATALAN, 'anti-catalan-black::0::a4@10': ANTI_CATALAN,
+  'anti-catalan-black::1::Nf3@6': ANTI_CATALAN, 'anti-catalan-black::1::Nf3@8': ANTI_CATALAN, 'anti-catalan-black::1::Nf3@10': ANTI_CATALAN, 'anti-catalan-black::1::Nd2@10': ANTI_CATALAN, 'anti-catalan-black::1::Be3@12': ANTI_CATALAN, 'anti-catalan-black::1::Qd3@12': ANTI_CATALAN, 'anti-catalan-black::1::Nf3@12': ANTI_CATALAN, 'anti-catalan-black::1::Nc3@10': ANTI_CATALAN,
+  'anti-catalan-black::0::Nf3@4': ANTI_CAT_NF3, 'anti-catalan-black::1::Nf3@4': ANTI_CAT_NF3,
+  'anti-catalan-black::0::Nc3@4': ANTI_CAT_NC3, 'anti-catalan-black::1::Nc3@4': ANTI_CAT_NC3,
   // anti-London (all share …c5@3)
   'anti-london-black::0::Nf3@8': ANTI_LONDON, 'anti-london-black::0::Nd2@8': ANTI_LONDON, 'anti-london-black::0::b3@8': ANTI_LONDON, 'anti-london-black::0::Be2@8': ANTI_LONDON, 'anti-london-black::0::h3@8': ANTI_LONDON, 'anti-london-black::0::a4@8': ANTI_LONDON, 'anti-london-black::0::Nf3@6': ANTI_LONDON, 'anti-london-black::0::e4@4': ANTI_LONDON, 'anti-london-black::0::Nc3@6': ANTI_LONDON, 'anti-london-black::0::c3@4': ANTI_LONDON,
   'anti-london-black::1::c3@8': ANTI_LONDON, 'anti-london-black::1::b3@8': ANTI_LONDON, 'anti-london-black::1::Nc3@8': ANTI_LONDON, 'anti-london-black::1::Be2@8': ANTI_LONDON, 'anti-london-black::1::Nbd2@8': ANTI_LONDON, 'anti-london-black::1::c3@6': ANTI_LONDON, 'anti-london-black::1::e4@4': ANTI_LONDON, 'anti-london-black::1::Nc3@6': ANTI_LONDON, 'anti-london-black::1::c3@4': ANTI_LONDON, 'anti-london-black::1::Nc3@4': ANTI_LONDON,
