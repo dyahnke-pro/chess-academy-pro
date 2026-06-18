@@ -2364,7 +2364,7 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   ] },
   'kings-gambit::2::d6@11': { ...KG_MUZIO, beats: [
     { atMove: 11, say: "…d6 tries to free the c8-bishop, but it's too slow against the Muzio fire. Qxf4 regains a pawn and keeps the queen trained on f7.", sayShort: "…d6 — Qxf4, keep the heat.", highlights: [H('f4', KEY), H('f7', SOFT)] },
-    { atMove: 14, say: "Bxf7+! the bishop crashes through; the king is hauled into the open, and Nc3, e5 and the rooks finish the hunt. The Muzio delivers.", sayShort: "Bxf7+ — crash through!", arrows: [A('c4', 'f7')], highlights: [H('f7', ATK)] },
+    { atMove: 14, say: "Bxf7+! the bishop crashes through with check; the king is hauled into the open, and Nc3, e5 and the rooks finish the hunt. The Muzio delivers.", sayShort: "Bxf7+ — crash through!", arrows: [A('f7', 'e8')], highlights: [H('f7', ATK)] },
   ] },
   'kings-gambit::2::d5@11': KG_MUZIO,
   'kings-gambit::2::Qe7@11': KG_MUZIO,
