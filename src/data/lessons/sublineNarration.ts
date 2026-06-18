@@ -357,16 +357,18 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
     sources: ['book:caro-kann', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
   },
 
-  // Caro-Kann, Two Knights with …Bg4 (var 2) — White's dominant continuation,
-  // grabbing space with e5. Line:
-  // e4 c6 Nf3 d5 Nc3 Bg4 h3 Bxf3 Qxf3 e6 d4 Nf6 e5 c5
+  // Caro-Kann, Two Knights with …Bg4 (var 2) — White grabs space with e5. Line
+  // (engine-sound, +0.34 Black): …Nfd7 first, THEN the …c5 break.
+  // e4 c6 Nf3 d5 Nc3 Bg4 h3 Bxf3 Qxf3 e6 d4 Nf6 e5 Nfd7 Bf4 a6 O-O-O c5 dxc5 Nc6 h4 Bxc5
   'caro-kann::2::e5@12': {
     intro: {
-      say: "e5 — White grabs the centre and shifts into an Advance-style structure, by far the most common path here, over half the games. But you've already swapped your light bishop for the f3-knight, so you carry no bad piece into this — answer in true Caro style by hitting the base of the chain with …c5.",
-      sayShort: 'e5 — strike back with …c5.',
+      say: "e5 — White grabs the centre and shifts into an Advance-style structure, by far the most common path here. Don't strike with …c5 immediately — that walks into Nb5 and the Nc7+ fork on your rook. Retreat the knight first with …Nfd7, tuck it behind the chain, and only THEN play …c5 to hit the base on d4. You've already traded your bad light bishop, so once the break comes you're fully equal with an easy game.",
+      sayShort: 'e5 — …Nfd7 first, then break …c5.',
     },
     beats: [
-      { atMove: 13, say: "…c5 — hammering d4, the foot of White's d4-e5 pawn chain. This is the Caro's whole method: undermine the chain at its base rather than sit and defend. With your problem bishop long gone and no weaknesses to nurse, you get a free, comfortable game against the broad centre.", highlights: [H('d4', KEY), H('c5', ATK)] },
+      { atMove: 13, say: "…Nfd7 — the careful retreat. The space-grabbing e5-pawn kicks your knight, and the right square is d7, not f5 or a premature …c5. From d7 the knight eyes the c5- and e5-breaks and sidesteps the Nb5-Nc7+ fork that would have skewered your rook. Patience first.", arrows: [A('d7', 'c5')], highlights: [H('d4', KEY)] },
+      { atMove: 17, say: "…c5 — NOW the Caro break lands, hammering d4 at the foot of White's chain with your pieces already in order. Undermine the base rather than sit and defend; with no bad bishop and no weaknesses, the broad centre gives White nothing.", arrows: [A('c5', 'd4')], highlights: [H('d4', KEY), H('c5', ATK)] },
+      { atMove: 21, say: "…Bxc5 — you regain the pawn cleanly, the dark bishop landing on an active diagonal aimed back at White's king. Equal material, the better minor piece, and a comfortable Caro middlegame.", highlights: [H('c5', ATK)] },
     ],
     sources: ['book:caro-kann', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
   },
@@ -410,16 +412,18 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
     sources: ['book:caro-kann', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
   },
 
-  // Caro-Kann, Fantasy / Maróczy (var 4) — c3 props the centre. Line:
-  // e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 c3 c5 a3 c4
+  // Caro-Kann, Fantasy / Maróczy (var 4) — c3 props the centre. Line (engine-
+  // sound, equal): develop, don't push …c4 (it just drops to Bxc4 here).
+  // e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 c3 Nd7 Bd3 Be7 O-O Ngf6 Kh1 O-O Qc2 Qc7 Nbd2 b5
   'caro-kann::4::c3@10': {
     intro: {
-      say: "c3 — White props the centre in the Fantasy after you've already struck with …e5. The Maróczy treatment. You keep the initiative on the queenside with …c5 and then …c4, clamping the position and fixing White's pawns before you turn the attack toward the king.",
-      sayShort: 'c3 — clamp with …c5 and …c4.',
+      say: "c3 — White props his centre in the Fantasy after you've struck with …e5. Resist the urge to ram …c5 and …c4: that c4-pawn has nothing behind it and simply drops to Bxc4. Instead just complete a clean, classical development — …Nd7, …Be7, …Ngf6 and castle. Your bishop is already outside the chain on g4, you have no weaknesses, and then …b5 gains queenside space at your leisure. Comfortable equality, no risk.",
+      sayShort: 'c3 — develop soundly, then …b5.',
     },
     beats: [
-      { atMove: 11, say: "…c5 — a second hammer on d4, joining the …e5-pawn that is already leaning on it. White's propped-up centre is suddenly carrying a real load, and you have all the easy, natural moves.", highlights: [H('d4', KEY), H('c5', ATK)] },
-      { atMove: 13, say: "…c4 — grabbing queenside space and clamping the structure. With the centre locked in your favour and your pieces free, the game now belongs on the kingside, where you hold the easier attack.", highlights: [H('c4', ATK)] },
+      { atMove: 11, say: "…Nd7 — calm development, supporting the …e5 strongpoint and clearing the way for the other knight to f6. Against a propped centre you don't lunge; you finish developing and keep every pawn healthy.", highlights: [H('e5', ATK), H('d4', KEY)] },
+      { atMove: 15, say: "…Ngf6 — the second knight joins, leaning on White's e4-pawn and completing your kingside. Everything is out, your king is about to be safe, and your light bishop already sits actively on g4 outside the chain.", arrows: [A('f6', 'e4')], highlights: [H('e4', KEY)] },
+      { atMove: 21, say: "…b5 — there's the real plan in this structure: queenside expansion. You gain space with …b5 and …a6, the pawns rolling on the side where you're better, with no loose c4-pawn to defend. A risk-free, pleasant game.", highlights: [H('b5', ATK)] },
     ],
     sources: ['book:caro-kann', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
   },
@@ -457,30 +461,33 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
     sources: FR_SRC,
   },
 
-  // French Classical, Burn Variation (var 5) — Bxf6. Line:
-  // e4 e6 d4 d5 Nc3 Nf6 Bg5 dxe4 Bxf6 gxf6 Nxe4 f5 a3 f4
+  // French Classical, Burn Variation (var 5) — Bxf6. Line (engine-sound, +0.52
+  // Black): develop the dark bishop to g7 — don't push …f4 yet (it just hangs).
+  // e4 e6 d4 d5 Nc3 Nf6 Bg5 dxe4 Bxf6 gxf6 Nxe4 f5 Nc3 Bg7 Nf3 O-O Qd2 Nc6 Rd1 Ne7 h4 b6 Rh3 Bb7
   'french-defence::5::Bxf6@8': {
     intro: {
-      say: "Bxf6 — the Burn Variation. White trades on f6 to win back the e4-pawn cleanly. You recapture toward the centre with …gxf6, accepting doubled f-pawns for a serious payoff: the half-open g-file pointing at White's king, the bishop pair, and a mobile pawn mass you'll roll forward with …f5-f4.",
-      sayShort: 'Bxf6 — recapture …gxf6, open the g-file.',
+      say: "Bxf6 — the Burn Variation. White trades on f6 to win back the e4-pawn. Recapture toward the centre with …gxf6: doubled f-pawns, yes, but in return the half-open g-file, the bishop pair, and a big pawn mass. Then …f5 kicks the knight — but don't rush …f4, it just drops a pawn. The strong move is …Bg7, planting the dark bishop on the open long diagonal where it rakes b2 and White's king. Develop, castle, and the two bishops do the work.",
+      sayShort: 'Bxf6 — …gxf6, then …Bg7 (not …f4).',
     },
     beats: [
-      { atMove: 9, say: "…gxf6 — doubling the f-pawns by choice. In exchange the g-file tears open toward White's king and you keep the bishop pair. These pawns aren't a weakness to defend; they're a battering ram to attack with.", highlights: [H('f6', KEY)] },
-      { atMove: 13, say: "…f4 — the pawns roll. You seize kingside space and cramp White's pieces, the …f5-f4 wedge gaining ground while the bishop pair and the open g-file do the heavy work.", highlights: [H('f4', ATK)] },
+      { atMove: 9, say: "…gxf6 — doubling the f-pawns by choice. In exchange the g-file tears open toward White's king and you keep the bishop pair. These pawns aren't a weakness to defend; they're the half-open file your rook will use.", highlights: [H('f6', KEY)] },
+      { atMove: 13, say: "…Bg7 — the move that makes the whole structure sing. Instead of shoving …f4 (which only hangs the pawn), you fianchetto onto the long diagonal. The bishop glares at b2 and clean through to White's king down a diagonal your own doubled pawns have opened.", arrows: [A('g7', 'b2')], highlights: [H('g7', KEY)] },
+      { atMove: 23, say: "…Bb7 — the second bishop joins the first on the long light diagonal. Both bishops and the open g-file now bear down on White's position; the doubled pawns gave you the bishop pair and the files, and the trade has paid for itself many times over.", highlights: [H('b7', KEY)] },
     ],
     sources: FR_SRC,
   },
 
-  // French Rubinstein, sharp f3 try (var 9). Line:
-  // e4 e6 d4 d5 Nc3 dxe4 f3 Bb4 fxe4 Qh4+ g3 e5 a3 a6
+  // French Rubinstein, sharp f3 try (var 9). Line (engine-sound, +0.76 Black):
+  // e4 e6 d4 d5 Nc3 dxe4 f3 Bb4 fxe4 Bxc3+ bxc3 Qh4+ Ke2 Qxe4+ Kf2 Nf6 Nf3 Qc6 Bd3 Qxc3
   'french-defence::9::f3@6': {
     intro: {
-      say: "f3 — White tries to build a broad centre by recapturing on e4 with the f-pawn. You strike before he can settle: …Bb4 pins, and after fxe4 the bombshell …Qh4+ rips into the loosened kingside, then …e5 blasts the half-built centre open while White's king is still stuck on e1. Sharp, forcing, and a joy to play for Black.",
-      sayShort: 'f3 — hit back: …Bb4 and …Qh4+.',
+      say: "f3 — White wants to recapture your extra e4-pawn with the f-pawn and build a big centre. There's a precise refutation, and move order is everything. First …Bb4, pinning the c3-knight. Then, after fxe4, don't lash out with …Qh4+ yet — play …Bxc3+ FIRST to remove the knight that would block the check. Only then …Qh4+, and White's king is dragged to e2 into …Qxe4+, snapping off a second pawn. You end up two pawns up with White's king stranded in the centre.",
+      sayShort: 'f3 — …Bb4, then …Bxc3+ before …Qh4+.',
     },
     beats: [
-      { atMove: 7, say: "…Bb4 — the pin comes first, freezing the c3-knight before White can prop up his centre. Now the f3-f-pawn push to recapture on e4 will leave the e1-h4 diagonal fatally bare.", highlights: [H('c3', KEY)] },
-      { atMove: 11, say: "…e5 — the follow-through. The check already forced g3, loosening White's kingside dark squares for good; now you smash open the centre while White's king still sits on e1, uncastled and exposed.", highlights: [H('e5', ATK), H('g3', SOFT)] },
+      { atMove: 7, say: "…Bb4 — the pin comes first, freezing the c3-knight to the king before White can prop up his centre. This knight is the one piece that could later block a check on the e1-h4 diagonal, so you tie it down right away.", arrows: [A('b4', 'c3')], highlights: [H('c3', KEY)] },
+      { atMove: 9, say: "…Bxc3+ — the key, and the move most players miss. Trade the bishop for the pinned knight NOW, before the check. With that knight gone from c3 there's nothing left to interpose on the e1-h4 diagonal, and White's queenside pawns are shattered into the bargain.", arrows: [A('c3', 'e1')], highlights: [H('c3', ATK)] },
+      { atMove: 13, say: "…Qxe4+ — the payoff. …Qh4+ forced the king to e2 (no knight to block anymore), and now the queen scoops the e4-pawn with check. You're two clean pawns up, White's king is marooned on f2 with no castling, and the rest is technique.", arrows: [A('e4', 'e2')], highlights: [H('e4', ATK)] },
     ],
     sources: FR_SRC,
   },

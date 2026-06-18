@@ -1,9 +1,11 @@
 // Extend each course subline PAST the opponent's deviation into a GROUNDED
-// middlegame (David 2026-06-18): masters explorer most-played → Stockfish
-// best-move where masters runs out (G3-sanctioned engine, never invented) →
-// stop. Pre-existing pawn-shuffle FILLER is stripped; real-theory lines and
-// already-deep flagships are PRESERVED. Keys stay stable (triggerMove/atPly
-// fixed; only `moves` past the deviation changes). Parallel + checkpointed.
+// middlegame (David 2026-06-18). ENGINE-PRIMARY: "use stockfish more than the
+// DB" — the DB's most-played walked the student into popular blunders (…d5
+// −2.5); Stockfish best-move is sound by construction and drives the line ALL
+// THE WAY to a real middlegame (move ~12-14) so the narration can teach plans.
+// Keys stay stable (triggerMove/atPly fixed; only `moves` past the deviation
+// changes). Beated lines keep every authored move (we only APPEND). Parallel,
+// persistent-engine pool (no per-ply spawn), checkpointed.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { spawn } from 'node:child_process';
@@ -13,89 +15,99 @@ const ROOT = new URL('..', import.meta.url).pathname + '/';
 const PATH = ROOT + 'src/data/course-sublines.json';
 const data = JSON.parse(readFileSync(PATH, 'utf8'));
 const only = process.env.OPENINGS ? new Set(process.env.OPENINGS.split(',')) : null;
-const PROXY = 'https://chess-academy-pro.vercel.app/api/lichess-explorer?source=masters&play=';
-const SF = '/usr/games/stockfish', SF_MS = 600;
-const MIN_GAMES = 8, MIN_EXTRA = 6, MAX_EXTRA = 14, ENGINE_CAP = 4, CONCURRENCY = 10;
 
-const MEMBER_MIN = 3; // a move played in >= this many master games counts as real theory
-const mCache = new Map(), eCache = new Map();
-// Returns the full move list [{san, games}] at a position (cached).
-function mastersList(uciCsv) {
-  if (mCache.has(uciCsv)) return mCache.get(uciCsv);
-  const pr = (async () => {
-    for (let a = 0; a < 3; a++) {
-      try {
-        const j = await (await fetch(PROXY + uciCsv)).json();
-        if (j && Array.isArray(j.moves)) return j.moves.map((m) => ({ san: m.san, games: (m.white || 0) + (m.draws || 0) + (m.black || 0) }));
-      } catch { await new Promise((r) => setTimeout(r, 300)); }
+const SF = '/usr/games/stockfish';
+const DEPTH = 14;            // sound on quiet positions, ~80-200ms each
+const MAX_EXTRA = 26;        // hard cap on plies appended past the safe prefix
+const TARGET_PLIES = 24;     // drive to ~move 12 before we even check middlegame
+const HARD_PLIES = 30;       // absolute ceiling (move 15)
+const CONCURRENCY = 4;       // 4 cores
+
+// ── persistent engine pool ────────────────────────────────────────────────
+// One long-lived Stockfish per worker: pay the uci handshake ONCE, then feed
+// positions. A shared fen→bestmove cache dedups identical positions across
+// the whole run (every deviation's first engine reply is shared by all lines
+// under it).
+const eCache = new Map();
+function makeEngine() {
+  const p = spawn(SF);
+  let resolver = null, buf = '';
+  p.stdout.on('data', (d) => {
+    buf += d;
+    let i;
+    while ((i = buf.indexOf('\n')) >= 0) {
+      const line = buf.slice(0, i); buf = buf.slice(i + 1);
+      const m = line.match(/^bestmove (\S+)/);
+      if (m && resolver) { const r = resolver; resolver = null; r(m[1] === '(none)' ? null : m[1]); }
     }
-    return [];
-  })();
-  mCache.set(uciCsv, pr); return pr;
-}
-// Most-played reply (for BUILDING the continuation) — needs real frequency.
-async function mastersTop(uciCsv) { const l = await mastersList(uciCsv); return l.length && l[0].games >= MIN_GAMES ? l[0].san : null; }
-// Is this exact move real theory here (for FILLER detection) — membership, rank-independent.
-async function mastersHas(uciCsv, san) { const l = await mastersList(uciCsv); return l.some((m) => m.san === san && m.games >= MEMBER_MIN); }
-function engine(fen) {
-  if (eCache.has(fen)) return eCache.get(fen);
-  const pr = new Promise((res) => {
-    const p = spawn(SF); let best = null, buf = '';
-    p.stdout.on('data', (d) => { buf += d; for (const l of buf.split('\n')) { const b = l.match(/^bestmove (\S+)/); if (b) { best = b[1] === '(none)' ? null : b[1]; p.kill(); } } });
-    p.on('close', () => res(best)); p.on('error', () => res(null));
-    p.stdin.write(`uci\nisready\nucinewgame\nposition fen ${fen}\ngo movetime ${SF_MS}\n`);
-    setTimeout(() => { try { p.kill(); } catch { /* noop */ } }, SF_MS + 3000);
   });
-  eCache.set(fen, pr); return pr;
+  p.on('error', () => { if (resolver) { const r = resolver; resolver = null; r(null); } });
+  p.stdin.write('uci\nisready\nucinewgame\n');
+  return {
+    raw(fen) {
+      return new Promise((res) => {
+        const t = setTimeout(() => { if (resolver) { resolver = null; res(null); } }, 6000);
+        resolver = (v) => { clearTimeout(t); res(v); };
+        p.stdin.write(`position fen ${fen}\ngo depth ${DEPTH}\n`);
+      });
+    },
+    quit() { try { p.stdin.write('quit\n'); p.kill(); } catch { /* noop */ } },
+  };
 }
-const uciList = (moves) => { const c = new Chess(); return moves.map((m) => { const x = c.move(m); return x.from + x.to + (x.promotion || ''); }); };
+function best(eng, fen) {
+  if (eCache.has(fen)) return eCache.get(fen);
+  const pr = eng.raw(fen);
+  eCache.set(fen, pr);
+  return pr;
+}
 
-async function process1(s) {
-  const c = new Chess(); for (let i = 0; i <= s.atPly; i++) c.move(s.moves[i]);
-  let uci = uciList(s.moves.slice(0, s.atPly + 1)), realLen = s.atPly + 1;
-  for (let i = s.atPly + 1; i < s.moves.length; i++) {
-    if (!(await mastersHas(uci.join(','), s.moves[i]))) break;   // first non-theory move = filler starts
-    const mv = c.move(s.moves[i]); uci.push(mv.from + mv.to + (mv.promotion || '')); realLen++;
-  }
-  const realMoves = s.moves.slice(0, realLen);
-  if (realLen - 1 - s.atPly >= MIN_EXTRA && reachesMiddlegame(realMoves.join(' '))) {
-    if (realLen !== s.moves.length) s.moves = realMoves;  // strip trailing filler, keep deep real theory
-    return;
-  }
-  let added = realLen - 1 - s.atPly, eng = 0;
+// ── per-subline walk ──────────────────────────────────────────────────────
+async function process1(eng, s, maxBeat) {
+  // beated lines: preserve the WHOLE existing line (moves+beats+prose intact),
+  // only APPEND past its end. non-beated: re-walk from the deviation.
+  const keepTo = (maxBeat != null) ? s.moves.length - 1 : s.atPly;
+  const c = new Chess();
+  for (let i = 0; i <= keepTo; i++) c.move(s.moves[i]);
+  let added = keepTo - s.atPly;
   while (added < MAX_EXTRA) {
-    let san = await mastersTop(uci.join(','));
-    if (!san) { if (eng >= ENGINE_CAP) break; const u = await engine(c.fen()); if (!u) break; const mv = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); san = mv.san; eng++; }
-    else c.move(san);
-    uci = uciList(c.history()); added++;
-    if (added >= MIN_EXTRA && reachesMiddlegame(c.history().join(' '))) break;
+    const len = c.history().length;
+    if (len >= HARD_PLIES) break;
+    if (len >= TARGET_PLIES && reachesMiddlegame(c.history().join(' ')).pass) break;
+    const u = await best(eng, c.fen());
+    if (!u) break;
+    try { c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { break; }
+    added++;
   }
   if (c.history().join(' ') !== s.moves.join(' ')) s.moves = c.history();
 }
 
-// NEVER touch a subline that already has authored beats — its moves are locked
-// to those beats (A/C/B flagships). Extend only the still-intro-only lines.
-let beated = new Set();
-try { beated = new Set(JSON.parse(readFileSync('/tmp/beatkeys.json', 'utf8'))); } catch { /* none */ }
+// ── job collection ────────────────────────────────────────────────────────
+// Lock ONLY lines already at a real middlegame (>= TARGET_PLIES and passing
+// the predicate); extend everything else, including short beat-authored lines
+// (we append past the deviation so their beats stay valid).
+const beatMax = (() => { try { return JSON.parse(readFileSync('/tmp/beatmax.json', 'utf8')); } catch { return {}; } })();
 const jobs = [];
-let lockedSkipped = 0;
+let locked = 0;
 for (const o of Object.keys(data)) {
   if (only && !only.has(o)) continue;
   for (const v of Object.keys(data[o])) for (const s of data[o][v]) {
-    if (beated.has(`${o}::${v}::${s.triggerMove}@${s.atPly}`)) { lockedSkipped++; continue; }
-    jobs.push(s);
+    if (s.moves.length >= TARGET_PLIES && reachesMiddlegame(s.moves.join(' ')).pass) { locked++; continue; }
+    const key = `${o}::${v}::${s.triggerMove}@${s.atPly}`;
+    jobs.push({ s, maxBeat: beatMax[key] });
   }
 }
-console.error(`locked (authored beats, preserved): ${lockedSkipped}`);
+console.error(`locked (already middlegame): ${locked}; to extend: ${jobs.length}`);
 const total = jobs.length; let done = 0, lastCk = Date.now();
 async function worker() {
+  const eng = makeEngine();
   while (jobs.length) {
-    const s = jobs.pop();
-    try { await process1(s); } catch { /* leave subline as-is on error */ }
+    const { s, maxBeat } = jobs.pop();
+    try { await process1(eng, s, maxBeat); } catch { /* leave subline as-is on error */ }
     done++;
-    if (done % 100 === 0) console.error(`  ${done}/${total}`);
+    if (done % 100 === 0) console.error(`  ${done}/${total}  (cache ${eCache.size})`);
     if (Date.now() - lastCk > 30000) { lastCk = Date.now(); writeFileSync(PATH, JSON.stringify(data)); }
   }
+  eng.quit();
 }
 await Promise.all(Array.from({ length: CONCURRENCY }, worker));
 writeFileSync(PATH, JSON.stringify(data));
