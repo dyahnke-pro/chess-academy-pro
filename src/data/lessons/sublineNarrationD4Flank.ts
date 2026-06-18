@@ -389,35 +389,11 @@ const C73: SublineNarration = {
   sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
 };
 // london-system :: cxd4
-const C74: SublineNarration = {
-  intro: { say: "Black has released the central tension with …cxd4. Recapture and you reach the London's ideal: a healthy centre, the Bf4-Bd3 battery aimed at the king, and open lines for your pieces. Develop, castle, and turn to the kingside — Ne5 and the queen lift are the standard attacking plan once the structure clarifies.", sayShort: "…cxd4 — recapture, aim the battery kingside." },
-  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
-};
 // london-system :: benoni_push
-const C75: SublineNarration = {
-  intro: { say: "Black hits with an early …c5 and you've pushed d5 (or held), steering into a Benoni-flavoured London. Now your space and the Bf4-bishop count: brace the centre, prepare e4 or the queenside clamp, and keep the dark-squared bishop on its diagonal. The London's flexibility means you reach a comfortable, familiar middlegame whatever Black tries.", sayShort: "Early …c5 — push or hold." },
-  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
-};
 // london-system :: accel_indian
-const C76: SublineNarration = {
-  intro: { say: "The Indian-flavoured London where Black plays …g6 and …d6 and you've set up the full Bf4-e3-Be2-h3-c3-Nbd2 machine. Your plan is patient and proven: complete the bind, watch for …e5 or …c5, and answer with the central tension held and the kingside pieces ready. Same setup, same comfortable pull, every single game.", sayShort: "Indian London — complete the bind, watch …e5." },
-  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
-};
 // london-system :: vs_kid
-const C77: SublineNarration = {
-  intro: { say: "Black fianchettoes King's-Indian-style with …g6 and …Bg7 against your London. Keep your shape: e3, Be2, h3 to save the bishop a tempo, c3 to brace d4, and castle. The Bf4-bishop eyes the long diagonal's blind spots; when Black commits …c5 or …e5, meet it calmly and use your solid centre to play on both wings.", sayShort: "London vs KID — keep shape, h3." },
-  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
-};
 // london-system :: bf5_mirror
-const C78: SublineNarration = {
-  intro: { say: "Black mirrors with …Bf5, getting his bishop outside the chain just as you did. No problem — your structure is so solid it barely matters: c3, e3, Bd3 to challenge the bishop or Nbd2 to develop, and the same kingside plans apply. If bishops trade, the resulting position is dead-equal but eminently playable for the better-prepared side: you.", sayShort: "Mirror …Bf5 — challenge with Bd3, play on." },
-  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
-};
 // london-system :: main_qgd
-const C79: SublineNarration = {
-  intro: { say: "The classic London setup against …d5 and …e6 — your reliable machine. The Bf4-Bd3 battery trains on h7, c3 braces d4, and Nbd2 completes the harmony. Meet …c5 by holding the tension or recapturing toward the centre, keep the dark-squared bishop healthy, and play for the kingside: Ne5, Qf3 or the f-pawn, the same plan every game.", sayShort: "London — Bf4-Bd3 battery, play the kingside." },
-  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
-};
 // trompowsky-attack :: ne4_main
 const C80: SublineNarration = {
   intro: { say: "The main Trompowsky — Black hits the bishop with …Ne4 and you retreat to f4, keeping the pair and the tempo-gaining f3 push in hand. Build with f3 kicking the knight, then e4 or d5 to claim the centre. You've sidestepped all of Black's prepared d4 theory and reach an unbalanced middlegame on your own terms.", sayShort: "…Ne4 — Bf4, kick f3, take centre." },
@@ -1005,10 +981,6 @@ const TQGQGA: SublineNarration = {
   sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
 };
 // DEEP TLON :: london-system::0::b6@15
-const TLON: SublineNarration = {
-  intro: { say: "Your London machine is fully built — the Bf4-Bd3 battery aimed at h7, c3 bracing d4, knights on d2 and f3. Black's …b6 is trying to challenge your diagonal, so turn to the kingside now: Ne5, the queen lift, and the attacking plan your setup reaches every single game. Same system, same ideas, every time — that's the beauty of it.", sayShort: "London tabiya — turn to the kingside." },
-  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
-};
 // DEEP TBIRD :: birds-opening::1::Nge7@17
 const TBIRD: SublineNarration = {
   intro: { say: "The From Gambit has burned itself out in your favour — queens are off and you're a clean pawn up with the bishop on f4 and a healthy extra pawn on e5. Pure technique from here: tuck the king to safety, bring the rooks to the centre, and convert. Black's fire gave him nothing lasting.", sayShort: "From Gambit refuted — a pawn up." },
@@ -1364,16 +1336,6 @@ const WOLDE4: SublineNarration = {
   sources: ['book:old-indian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Old_Indian_Defense'],
 };
 // WAVE WLONRE8 :: 1 keys
-const WLONRE8: SublineNarration = {
-  intro: { say: "…Re8 — Black readies the …e5 break against your London KID-setup. Keep your shape: tuck the bishop back to h2 so it survives on the b8-h2 diagonal, meet …e5 by trading, and your Bh2-and-Bd3 battery keeps aiming at the king. The London reaches the same comfortable structure every game — now you play for the kingside.", sayShort: "…Re8 — Bh2, meet …e5, eye the king" },
-  beats: [
-    { atMove: 17, say: "…Re8 backs up the coming …e5 break, Black's main freeing try in this structure. You don't prevent it; you prepare to meet it and keep your pieces pointed at the king.", sayShort: "…Re8 — Black readies …e5", highlights: [_H('e5', KEY)] },
-    { atMove: 18, say: "Bh2 — slip the bishop back so it lives on the b8-h2 diagonal whatever Black does. This is the London's whole idea: the dark-squared bishop never gets traded off cheaply and keeps glaring at h7.", sayShort: "Bh2 — save the diagonal bishop", arrows: [_A('h2', 'b8', ATK)], highlights: [_H('h2', KEY)] },
-    { atMove: 19, say: "…e5 — Black strikes for freedom. Welcome it: opening the centre suits your better-placed pieces, and the Bh2 bishop's diagonal springs to life as the pawns clear.", sayShort: "…e5 — let the centre open", highlights: [_H('e5', KEY)] },
-    { atMove: 21, say: "dxe5 — trade and the position opens with your battery primed: Bh2 and Be2/Bd3 aimed at the kingside, Ne5 and a queen lift to come. The London delivers its reliable, comfortable middlegame pull.", sayShort: "dxe5 — open, battery primed", highlights: [_H('e5', KEY), _H('h2', KEY)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
-};
 
 // WAVE WBIRDC5 :: 1 keys
 const WBIRDC5: SublineNarration = {
@@ -1522,7 +1484,803 @@ const WNIMNE2: SublineNarration = {
   sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
 };
 
+const LN01: SublineNarration = {
+  intro: { say: "Black releases the central tension with …cxd4. You recapture exd4, and the London turns into a small-centre middlegame: the e-file opens for your rook and the Bb5xc6 plan looms, ready to wreck Black's queenside pawns.", sayShort: "…cxd4 — recapture, then Bb5xc6" },
+  beats: [
+    { atMove: 10, say: "exd4 — recapture toward the centre. The e-file swings open for your rook and you keep a healthy, mobile d-pawn. Black has nothing to attack while you build.", sayShort: "exd4 — open the e-file", highlights: [_H('d4'), _H('e1')] },
+    { atMove: 12, say: "Bb5 — the key London idea against …Nc6. The bishop eyes the knight, preparing Bxc6 to leave Black with doubled, immobile c-pawns you can blockade at leisure.", sayShort: "Bb5 — target the c6-knight", arrows: [_A('b5', 'c6')] },
+    { atMove: 14, say: "Bxc6+ — taking the moment Black plays …a6. Those doubled c-pawns are a permanent weakness; your knights will route to b3 and d2 to clamp c4 and c5.", sayShort: "Bxc6+ — saddle the doubled pawns", highlights: [_H('c6')] },
+    { atMove: 20, say: "Nb3 — the blockading knight heads for c5 and a5, fixing Black's shattered queenside. Same material, far healthier structure — you are simply better.", sayShort: "Nb3 — blockade c5", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN02: SublineNarration = {
+  intro: { say: "Black offers the bishop trade with …Bd6. You insert Bb5+ first, swap on c6 to double the pawns, then take on d6 — emerging with the better structure and the queen swinging to a4-a3 to needle the dark squares.", sayShort: "…Bd6 — Bb5+ then Bxc6, better pawns" },
+  beats: [
+    { atMove: 10, say: "Bb5+ — the zwischenzug. Before trading bishops you provoke a concession on the queenside, where Black is about to take on damaged pawns.", sayShort: "Bb5+ — provoke first", arrows: [_A('b5', 'e8')] },
+    { atMove: 12, say: "Bxc6+ — doubling the c-pawns. Black's queenside is now permanently weak, and only then do you resolve the bishop trade on d6.", sayShort: "Bxc6+ — double the c-pawns", highlights: [_H('c6')] },
+    { atMove: 16, say: "Qa4 — the queen pounces on the light squares Black can no longer cover. Heading to a3, it pressures the backward queenside and the d6-pawn.", sayShort: "Qa4 — into the soft squares", arrows: [_A('a4', 'a3')] },
+    { atMove: 22, say: "Rc1 — the rook claims the half-open c-file aimed straight at the doubled c-pawns. Patient pressure on a fixed weakness is the whole game.", sayShort: "Rc1 — pile on the c-file", arrows: [_A('c1', 'c6')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN03: SublineNarration = {
+  intro: { say: "Black plays the modest …Be7. With the centre fixed you grab queenside and kingside space at once — h3 and g4 to roll the kingside, a4 to gain on the queenside, and the e3-e4 break waiting in the wings.", sayShort: "…Be7 — h3, g4, then e4" },
+  beats: [
+    { atMove: 12, say: "h3 — a useful prophylactic move, taking g4 away from Black's pieces and preparing your own pawn storm on that wing.", sayShort: "h3 — prep the g4 storm", highlights: [_H('g4')] },
+    { atMove: 14, say: "g4 — the space-gaining thrust. With Black's centre static, you expand on the kingside, cramping the knight and bishop and opening lines toward the king.", sayShort: "g4 — seize kingside space", arrows: [_A('g4', 'g5')] },
+    { atMove: 16, say: "a4 — the other wing. You squeeze on both sides while Black has no active break, the hallmark of a healthy London bind.", sayShort: "a4 — squeeze the queenside", arrows: [_A('a4', 'a5')] },
+    { atMove: 22, say: "e4 — the central break finally lands. With both wings clamped, opening the centre catches Black's passive pieces flat-footed.", sayShort: "e4 — break in the centre", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN04: SublineNarration = {
+  intro: { say: "Black grabs space with …c4, locking the queenside. You undermine it immediately with b3 — prising the pawn loose, then leaning on the doubled queenside pawns with Bb5xc6 and Ra5.", sayShort: "…c4 — b3 to undermine" },
+  beats: [
+    { atMove: 10, say: "b3 — striking at the head of Black's pawn chain at once. If …cxb3 axb3, the a-file opens for your rook and Black's overextension tells.", sayShort: "b3 — undermine the c4-pawn", arrows: [_A('b3', 'c4')] },
+    { atMove: 14, say: "Bb5+ — the familiar London check, steering toward Bxc6 and a fresh set of doubled pawns to clamp.", sayShort: "Bb5+ — toward Bxc6", arrows: [_A('b5', 'e8')] },
+    { atMove: 18, say: "Bxd6 — trading the dark bishops once Black's structure is fixed. Your remaining pieces target the weak c- and d-pawns.", sayShort: "Bxd6 — trade, keep the targets", highlights: [_H('d6')] },
+    { atMove: 20, say: "Ra5 — the rook lifts to the fifth, swinging to attack the loose queenside pawns from the side. Black is tied to defence.", sayShort: "Ra5 — rook lift to attack", arrows: [_A('a5', 'd5')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN05: SublineNarration = {
+  intro: { say: "Black trades on d4 a move later. You recapture exd4 and, after …Nh5 hits your bishop, calmly retreat to e3 and develop — the central pawn and bishop pair giving you the freer game.", sayShort: "…cxd4 — exd4, Be3, freer game" },
+  beats: [
+    { atMove: 12, say: "exd4 — the recapture opens the e-file and hands you a mobile centre pawn. Your pieces have more room than Black's.", sayShort: "exd4 — open lines, free play", highlights: [_H('d4'), _H('e1')] },
+    { atMove: 14, say: "Be3 — sidestepping the …Nh5 lunge while keeping the bishop active. Black has spent time chasing; you have spent it developing.", sayShort: "Be3 — keep the bishop, develop", highlights: [_H('e3')] },
+    { atMove: 16, say: "Bb5 — back to the c6-knight, the recurring London pressure point. The pin sets up doubling or a favourable trade.", sayShort: "Bb5 — pressure c6 again", arrows: [_A('b5', 'c6')] },
+    { atMove: 22, say: "a4 — gaining queenside space and fixing Black's pawns before they can expand with …a6 and …b5. A small, durable edge.", sayShort: "a4 — fix the queenside", arrows: [_A('a4', 'a5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN06: SublineNarration = {
+  intro: { say: "Black develops quietly with …Be7. You post the bishop on d3 aiming at h7, and when …Qb6 and …Nh5 come, you sidestep with Bg5 to trade the offside knight and keep your healthy structure.", sayShort: "…Be7 — Bd3, then Bg5 trade" },
+  beats: [
+    { atMove: 10, say: "Bd3 — the bishop takes its best diagonal, eyeing h7 and supporting the eventual e4 break. The London pieces almost place themselves.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 12, say: "Qc2 — connecting with the bishop on the b1-h7 diagonal and defending against …Nh5 ideas. The battery quietly grows.", sayShort: "Qc2 — build the diagonal battery", arrows: [_A('c2', 'h7')] },
+    { atMove: 14, say: "Bg5 — meeting …Nh5 by offering the trade. You will not let Black swap off your good bishop for nothing; instead the offside knight comes off.", sayShort: "Bg5 — trade the stray knight", arrows: [_A('g5', 'h5')] },
+    { atMove: 22, say: "Qb3 — the queen shifts to pressure b7 and d5 once the dust settles. Same structure, more active pieces — a typical London plus.", sayShort: "Qb3 — pressure b7 and d5", arrows: [_A('b3', 'b7')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN07: SublineNarration = {
+  intro: { say: "Black hits b2 with …Qb6. You offer the queen trade with Qb3 — the safest answer, since trading queens leaves you with the steadier structure and an easy queenside majority to nurse.", sayShort: "…Qb6 — Qb3, trade into a plus" },
+  beats: [
+    { atMove: 12, say: "Qb3 — the principled reply. Trading queens defuses Black's only active piece and steers into an endgame where your sound pawns matter most.", sayShort: "Qb3 — offer the trade", arrows: [_A('b3', 'b6')] },
+    { atMove: 16, say: "Qxb6 — taking when Black castles. With queens off, your task is simple: target the weakened queenside and out-maneuver the passive bishop.", sayShort: "Qxb6 — into a better ending", highlights: [_H('b6')] },
+    { atMove: 18, say: "a3 — fixing the queenside and preparing b4 to gain space. In these endings the side with the cleaner pawns presses for free.", sayShort: "a3 — prepare b4", highlights: [_H('b4')] },
+    { atMove: 20, say: "g4 — even in the ending you grab kingside space, restricting Black's knight and bishop. A risk-free squeeze on both wings.", sayShort: "g4 — restrict and squeeze", arrows: [_A('g4', 'g5')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:end-key-squares', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN08: SublineNarration = {
+  intro: { say: "Black lunges …Qb6 early. You decline the b2-pawn and reroute the bishop to e5, the proud London outpost, daring Black to trade into a structure that only helps your central grip.", sayShort: "…Qb6 — Qc2, Be5 outpost" },
+  beats: [
+    { atMove: 10, say: "Qc2 — calmly guarding b2 and eyeing h7. You never need to defend passively in the London; the queen does double duty.", sayShort: "Qc2 — guard b2, eye h7", arrows: [_A('c2', 'h7')] },
+    { atMove: 12, say: "Be5 — the dark-squared bishop seizes its dream square, dominating the centre and discouraging …Nc6 ideas. This piece is the soul of the London.", sayShort: "Be5 — claim the outpost", highlights: [_H('e5')] },
+    { atMove: 16, say: "dxc5 — opening the position at the right moment, when your pieces are the more active and Black's queen is exposed on b6.", sayShort: "dxc5 — open with the lead", highlights: [_H('c5')] },
+    { atMove: 18, say: "c4 — striking at d5 to fracture Black's centre. The resulting lines favour your better-placed minor pieces.", sayShort: "c4 — hit the d5-pawn", arrows: [_A('c4', 'd5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN09: SublineNarration = {
+  intro: { say: "Black fianchettoes with …b6. You have completed the ideal London set-up, so you fire the central break e4 — opening lines for the Bd3 and rooks while Black's bishop bites on the d5-granite.", sayShort: "…b6 — the e4 break" },
+  beats: [
+    { atMove: 16, say: "e4 — the thematic break, perfectly timed now that every piece is developed. The centre opens toward Black's king and the d3-bishop roars to life.", sayShort: "e4 — the central break", highlights: [_H('e4')] },
+    { atMove: 18, say: "O-O — tucking the king away before the centre fully ignites. With the safer king you can play for the attack without worry.", sayShort: "O-O — king safe first", highlights: [_H('g1')] },
+    { atMove: 20, say: "e5 — gaining space and kicking the f6-knight, clearing the b1-h7 diagonal for a direct kingside assault.", sayShort: "e5 — kick the knight, open lines", arrows: [_A('d3', 'h7')] },
+    { atMove: 22, say: "Qe2 — bringing the last piece toward the kingside, where your space and the open diagonal promise a lasting initiative.", sayShort: "Qe2 — reinforce the attack", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN10: SublineNarration = {
+  intro: { say: "Black prepares queenside expansion with …a6. You develop naturally to d3, meet …Nh5 with Bg5, and answer the …cxd4 release by recapturing with the knight — keeping a compact centre and the bishop pair.", sayShort: "…a6 — Bd3, Bg5, Nxd4" },
+  beats: [
+    { atMove: 12, say: "Bd3 — the bishop to its best square, aiming at h7 and backing the e4 break. Black's …a6 is slow; you simply finish developing.", sayShort: "Bd3 — best diagonal", arrows: [_A('d3', 'h7')] },
+    { atMove: 16, say: "Bg5 — meeting the …Nh5 chase by pinning instead of retreating, keeping your good bishop active and Black's knight awkward.", sayShort: "Bg5 — pin, do not retreat", arrows: [_A('g5', 'd8')] },
+    { atMove: 20, say: "Nxd4 — recapturing with the knight to keep pawns compact. The centralised knight eyes c6 and f5, the better minor piece on the board.", sayShort: "Nxd4 — centralise the knight", highlights: [_H('d4')] },
+    { atMove: 22, say: "Nxc6 — trading to leave Black with a fresh structural concession on the queenside. You convert the small, lasting edge.", sayShort: "Nxc6 — fix the structure", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN11: SublineNarration = {
+  intro: { say: "Against the King's Indian set-up Black readies …e5 with …Re8. You retreat Bh2 to keep the bishop safe on the long diagonal, then meet …e5 with dxe5 — opening the centre into Black's slightly loose pieces.", sayShort: "…Re8 — Bh2, then dxe5" },
+  beats: [
+    { atMove: 18, say: "Bh2 — tucking the bishop away before …e5 can hit it with tempo. From h2 it still rakes the b8-h2 diagonal and watches e5.", sayShort: "Bh2 — preserve the bishop", arrows: [_A('h2', 'e5')] },
+    { atMove: 20, say: "dxe5 — meeting the central thrust by opening lines. After …dxe5 the e-file and the h2-bishop both bear on Black's centre.", sayShort: "dxe5 — open the centre", highlights: [_H('e5')] },
+    { atMove: 22, say: "Qc2 — connecting the rooks and lining up with the h2-bishop on the b1-h7 diagonal. A flexible, comfortable middlegame with the better bishop.", sayShort: "Qc2 — battery on the diagonal", arrows: [_A('c2', 'h7')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN12: SublineNarration = {
+  intro: { say: "Black strikes with …c5 on the queenside. You meet it with a4 to clamp the …b5 break, then Bh2 and Qb3 — pressuring b7 down the diagonal while Black struggles to find a plan.", sayShort: "…c5 — a4, Bh2, Qb3" },
+  beats: [
+    { atMove: 18, say: "a4 — stopping …b5 cold before Black can expand. With the queenside frozen, Black's …c5 achieves little.", sayShort: "a4 — stop the …b5 break", arrows: [_A('a4', 'a5')] },
+    { atMove: 20, say: "Bh2 — the routine London retreat, keeping the dark bishop on its long diagonal and clear of any …e5 tempo.", sayShort: "Bh2 — safe long diagonal", arrows: [_A('h2', 'd6')] },
+    { atMove: 22, say: "Qb3 — eyeing b7 and d5, exploiting the holes …c5 left behind. You hold a small, nagging initiative on the light squares.", sayShort: "Qb3 — hit b7 and d5", arrows: [_A('b3', 'b7')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN13: SublineNarration = {
+  intro: { say: "Black jumps …Ne4 to trade pieces. You swap it off with Nxe4, and after …Bxe4 reroute with Nd2 to challenge the bishop — simplifying into a pleasant position where your structure is the sounder.", sayShort: "…Ne4 — Nxe4, Nd2 challenge" },
+  beats: [
+    { atMove: 18, say: "Nxe4 — accepting the trade. Each swap eases your slightly more compact position and removes a potential attacker.", sayShort: "Nxe4 — take the trade", highlights: [_H('e4')] },
+    { atMove: 20, say: "Nd2 — challenging the e4-bishop at once. Forcing it to declare keeps the initiative and avoids letting Black settle.", sayShort: "Nd2 — challenge the bishop", arrows: [_A('d2', 'e4')] },
+    { atMove: 22, say: "Bf3 — offering to trade the light bishops too, heading for a clean structure where your pieces are the more harmonious.", sayShort: "Bf3 — trade toward a plus", arrows: [_A('f3', 'b7')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN14: SublineNarration = {
+  intro: { say: "Black chases with …Nh5. You simply retreat Bh2 — the bishop is untouchable there — then meet …e5 with dxe5 and gain space with a4, leaving the h5-knight stranded on the rim.", sayShort: "…Nh5 — Bh2, dxe5, a4" },
+  beats: [
+    { atMove: 18, say: "Bh2 — the knight on h5 attacks nothing; the bishop sits safely on the long diagonal while Black's piece languishes on the edge.", sayShort: "Bh2 — bishop untouchable", arrows: [_A('h2', 'e5')] },
+    { atMove: 20, say: "a4 — grabbing queenside space and fixing Black's pawns. You expand on both wings while the rim-knight does nothing.", sayShort: "a4 — expand queenside", arrows: [_A('a4', 'a5')] },
+    { atMove: 22, say: "dxe5 — cracking the centre open at the right moment, when your pieces are coordinated and Black's are scattered.", sayShort: "dxe5 — open with coordination", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN15: SublineNarration = {
+  intro: { say: "Black breaks immediately with …e5. You take dxe5 dxe5, then snap the pawn with Nxe5 — a healthy extra centre pawn, since the natural recaptures leave Black's pieces awkwardly placed.", sayShort: "…e5 — dxe5 then Nxe5" },
+  beats: [
+    { atMove: 18, say: "dxe5 — opening the centre the instant Black commits. The exchange leaves the e5-pawn ripe for collection.", sayShort: "dxe5 — open the centre", highlights: [_H('e5')] },
+    { atMove: 20, say: "Nxe5 — winning the pawn cleanly. The knight sits proudly in the centre and Black has insufficient compensation for the material.", sayShort: "Nxe5 — grab the centre pawn", highlights: [_H('e5')] },
+    { atMove: 22, say: "Nb3 — unwinding the queenside knight toward c5 and d4, consolidating the extra pawn into a lasting advantage.", sayShort: "Nb3 — consolidate the edge", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:tac-double-attack', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN16: SublineNarration = {
+  intro: { say: "Black reroutes with …Qe8, planning …e5. You answer Bh2 and meet the break with dxe5, then post the knight on c4 — a comfortable game where your minor pieces eye the queenside holes.", sayShort: "…Qe8 — Bh2, dxe5, Nc4" },
+  beats: [
+    { atMove: 18, say: "Bh2 — the standard preparation, keeping the bishop out of the path of …e5 while it watches the long diagonal.", sayShort: "Bh2 — out of …e5's path", arrows: [_A('h2', 'e5')] },
+    { atMove: 20, say: "dxe5 — opening the centre as Black commits to the break. Your developed pieces meet the position better than Black's.", sayShort: "dxe5 — open the centre", highlights: [_H('e5')] },
+    { atMove: 22, say: "Nc4 — the knight leaps to a fine outpost, eyeing d6 and b6. You press on the squares Black's set-up left soft.", sayShort: "Nc4 — outpost on c4", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN17: SublineNarration = {
+  intro: { say: "Black readies …c5 with …Rc8. You pre-empt with a4 to deny …b5, then meet …c5 by trading on e4 and centralising — a balanced but slightly easier game for the better-coordinated side.", sayShort: "…Rc8 — a4, Bh2, then trades" },
+  beats: [
+    { atMove: 18, say: "a4 — fixing the queenside before Black's rook-backed …c5 and …b5 gain steam. Prophylaxis is the London's quiet weapon.", sayShort: "a4 — pre-empt …b5", arrows: [_A('a4', 'a5')] },
+    { atMove: 20, say: "Bh2 — the bishop slides to safety on the long diagonal, ready to support the centre after the coming exchanges.", sayShort: "Bh2 — long-diagonal post", arrows: [_A('h2', 'd6')] },
+    { atMove: 22, say: "Nxe4 — accepting the trade Black offers, simplifying toward a position where your harmonious pieces hold a nagging edge.", sayShort: "Nxe4 — simplify to a plus", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN18: SublineNarration = {
+  intro: { say: "Black plays the slow …a6. You use the free time to manoeuvre Bg3 and prepare g4 — a kingside expansion that exploits Black's lack of a concrete plan, while …e5 is met by keeping the tension.", sayShort: "…a6 — Bg3, then g4 expansion" },
+  beats: [
+    { atMove: 18, say: "Bg3 — repositioning the bishop to eye e5 and d6, sidestepping Black's …Nh5 ideas before they arrive.", sayShort: "Bg3 — eye e5 and d6", arrows: [_A('g3', 'd6')] },
+    { atMove: 20, say: "Bh2 — completing the regroup; the bishop is now perfectly placed behind the pawns, immune to harassment.", sayShort: "Bh2 — bishop perfectly placed", arrows: [_A('h2', 'e5')] },
+    { atMove: 22, say: "g4 — the space-gaining storm. With Black drifting, you seize the kingside and open lines toward the castled king.", sayShort: "g4 — kingside pawn storm", arrows: [_A('g4', 'g5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN19: SublineNarration = {
+  intro: { say: "Black solidifies with …e6, blunting the long diagonal. You expand with a4 to clamp the queenside, regroup the bishop to h2, and improve with Nc4 — a typical risk-free London squeeze.", sayShort: "…e6 — a4, Bh2, Nc4" },
+  beats: [
+    { atMove: 18, say: "a4 — staking out queenside space and preventing …b5, fixing Black's pawns where you can later target them.", sayShort: "a4 — clamp the queenside", arrows: [_A('a4', 'a5')] },
+    { atMove: 20, say: "Bh2 — the bishop retreats to its long-diagonal home, ready to bite once the centre opens.", sayShort: "Bh2 — long-diagonal home", arrows: [_A('h2', 'd6')] },
+    { atMove: 22, say: "Nc4 — the knight reaches a dominant outpost, pressing d6 and b6. You hold the only real plan on the board.", sayShort: "Nc4 — dominant outpost", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/London_System'],
+};
+
+const LN20: SublineNarration = {
+  intro: { say: "With Nc3 in, the London turns aggressive. After …Nc6 the knight leaps to b5 hitting c7, and Black's panicky …Kd7 walks into a knight raid: Ng5, Nc7 and Nxf7 crash through the light squares for a winning attack.", sayShort: "…Nc6 — Nb5 and the knight raid" },
+  beats: [
+    { atMove: 10, say: "Nb5 — the Jobava jab. The knight threatens Nc7+, forking king and rook on a8. Already Black's position is under real strain.", sayShort: "Nb5 — threaten the c7 fork", arrows: [_A('b5', 'c7')] },
+    { atMove: 12, say: "Ng5 — a second knight piles onto f7 while the king sits stranded on d7. The light squares around the king are collapsing.", sayShort: "Ng5 — swarm the weak f7", arrows: [_A('g5', 'f7')] },
+    { atMove: 18, say: "Nxf7 — the raid pays off, snatching the pawn and forking queen and rook. Black's early king walk is refuted in full.", sayShort: "Nxf7 — fork and win material", highlights: [_H('f7')] },
+    { atMove: 20, say: "Bd3 — bringing the bishop into the attack with the material already banked. Aim at h7 and convert the spoils.", sayShort: "Bd3 — join up, convert", arrows: [_A('d3', 'h7')] },
+  ],
+  sources: ['concept:tac-fork', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN21: SublineNarration = {
+  intro: { say: "Black releases with …cxd4. You recapture exd4 into a mobile centre, develop the bishop to d3 eyeing h7, then trade the dark bishops on d6 and seize the open e-file — a smooth, slightly freer game.", sayShort: "…cxd4 — exd4, Bd3, Rfe1" },
+  beats: [
+    { atMove: 10, say: "exd4 — the recapture opens the e-file and gives you a mobile centre pawn. Your pieces breathe more easily than Black's.", sayShort: "exd4 — open the e-file", highlights: [_H('d4'), _H('e1')] },
+    { atMove: 14, say: "Bd3 — the bishop takes its best diagonal, aimed at h7 and supporting any later central push.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 20, say: "Bxd6 — trading the dark bishops on your terms, leaving Black's queen passively placed and your structure the sounder.", sayShort: "Bxd6 — trade on your terms", highlights: [_H('d6')] },
+    { atMove: 22, say: "Rfe1 — the rook claims the open e-file, the natural home in these London middlegames. You press a small, durable edge.", sayShort: "Rfe1 — seize the e-file", arrows: [_A('e1', 'e6')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN22: SublineNarration = {
+  intro: { say: "Black offers the bishop trade with …Bd6. You check on b5 first to gain a tempo, then sidestep with Bg3 to keep your good bishop, and the knight lands on the e5 outpost — the dream square in any London.", sayShort: "…Bd6 — Bb5+, Bg3, Ne5" },
+  beats: [
+    { atMove: 10, say: "Bb5+ — the zwischenzug, forcing a block before Black resolves anything. Small tempo gains add up in the London.", sayShort: "Bb5+ — gain a tempo", arrows: [_A('b5', 'e8')] },
+    { atMove: 12, say: "Bg3 — declining the trade. You will not swap your active dark bishop; it sits on the b8-h2 diagonal eyeing e5.", sayShort: "Bg3 — keep the good bishop", arrows: [_A('g3', 'e5')] },
+    { atMove: 20, say: "Ne5 — the knight seizes the central outpost, dominating the board and cramping Black's pieces. This square is the soul of the system.", sayShort: "Ne5 — claim the outpost", highlights: [_H('e5')] },
+    { atMove: 22, say: "Nxd7 — trading off Black's good bishop, leaving you with the superior minor pieces and the freer position.", sayShort: "Nxd7 — keep the better pieces", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN23: SublineNarration = {
+  intro: { say: "Black locks the queenside with …c4. You reroute Nd2 to hit the pawn, trade the dark bishops, then undermine with b3 — prising c4 loose and steering toward the queenside holes with Na4.", sayShort: "…c4 — Nd2, b3, Na4" },
+  beats: [
+    { atMove: 10, say: "Nd2 — rerouting the knight now the centre is locked. From d2 it eyes b3 and the c4-pawn that Black just over-committed.", sayShort: "Nd2 — reroute toward c4", arrows: [_A('d2', 'b3')] },
+    { atMove: 14, say: "b3 — striking the head of the pawn chain. After …cxb3 axb3 the a-file opens and Black's space-grab becomes a liability.", sayShort: "b3 — undermine c4", arrows: [_A('b3', 'c4')] },
+    { atMove: 18, say: "Be2 — calm development; the structural fight is won, now you simply complete and target the loose queenside pawns.", sayShort: "Be2 — finish developing", highlights: [_H('e2')] },
+    { atMove: 22, say: "Na4 — the knight heads for c5 and b6, the squares …c4 left soft. You hold the only real plan on the board.", sayShort: "Na4 — into the holes", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN24: SublineNarration = {
+  intro: { say: "Black develops modestly with …Be7. You exploit the Nc3 set-up with Nb5, clamp the queenside with a4, and trade off into a structure where Black is saddled with doubled, weak a-pawns.", sayShort: "…Be7 — Nb5, a4, Bxa6" },
+  beats: [
+    { atMove: 10, say: "Nb5 — the knight jumps in eyeing c7 and d6, the point of meeting this set-up with an early Nc3.", sayShort: "Nb5 — eye c7 and d6", arrows: [_A('b5', 'c7')] },
+    { atMove: 16, say: "a4 — clamping the queenside and supporting the b5-knight, fixing Black's pawns where you can target them.", sayShort: "a4 — clamp and support", arrows: [_A('a4', 'a5')] },
+    { atMove: 20, say: "Bxa6 — capturing to leave Black with doubled, isolated a-pawns. A permanent weakness to grind against.", sayShort: "Bxa6 — inflict doubled pawns", highlights: [_H('a6')] },
+    { atMove: 22, say: "O-O — king to safety with the structural edge in hand. Now you bring the rooks to the open files and press.", sayShort: "O-O — safe, then press", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-development', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN25: SublineNarration = {
+  intro: { say: "Black pokes b2 with …Qb6. You ignore the pawn — Nb5 is worth far more, hitting c7 — gain kingside room with h4, and recapture on b5 to fix Black's queenside and open the a-file.", sayShort: "…Qb6 — Nb5, h4, axb5" },
+  beats: [
+    { atMove: 10, say: "Nb5 — declining to defend b2 passively. The knight to b5 hits c7 and is worth more than the offered pawn.", sayShort: "Nb5 — ignore b2, hit c7", arrows: [_A('b5', 'c7')] },
+    { atMove: 14, say: "h4 — grabbing kingside space while Black is tangled on the queenside. The pawn cramps Black and eyes h5.", sayShort: "h4 — gain kingside room", arrows: [_A('h4', 'h5')] },
+    { atMove: 20, say: "axb5 — recapturing toward the centre, fixing Black's queenside pawns and handing your rook the open a-file.", sayShort: "axb5 — fix pawns, open a-file", highlights: [_H('b5'), _H('a1')] },
+    { atMove: 22, say: "Bc2 — the bishop to the long diagonal, eyeing h7 with a pleasant space advantage on both wings.", sayShort: "Bc2 — diagonal and space", arrows: [_A('c2', 'h7')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN26: SublineNarration = {
+  intro: { say: "After …a6 and …Be7 Black sets up solidly. You open with dxc5 to gain the bishop-pair tempo, post the bishop on d3, then provoke kingside weaknesses with Bg5-h4 — creating the targets you will play against.", sayShort: "…Be7 — dxc5, Bd3, Bg5" },
+  beats: [
+    { atMove: 14, say: "dxc5 — opening lines as Black finishes developing, gaining a tempo on the bishop and freeing your pieces.", sayShort: "dxc5 — open with tempo", highlights: [_H('c5')] },
+    { atMove: 16, say: "Bd3 — the bishop to its best diagonal, aimed at h7 and ready to support a kingside build-up.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 20, say: "Bg5 — provoking …h6 and …g5, loosening Black's kingside. Every pawn move there is a future target.", sayShort: "Bg5 — provoke weaknesses", arrows: [_A('g5', 'd8')] },
+    { atMove: 22, say: "Bh4 — maintaining the pin and baiting the further loosening …g5, after which the holes become yours to exploit.", sayShort: "Bh4 — keep the pin", arrows: [_A('h4', 'd8')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN27: SublineNarration = {
+  intro: { say: "Black trades on d4. You recapture exd4 into a mobile centre, plant the knight on the e5 outpost, and reroute the second knight via e2 toward f4 — a textbook London kingside build-up.", sayShort: "…cxd4 — exd4, Ne5, Ne2" },
+  beats: [
+    { atMove: 14, say: "exd4 — recapture toward the centre, opening the e-file and keeping a mobile pawn duo.", sayShort: "exd4 — mobile centre", highlights: [_H('d4'), _H('e1')] },
+    { atMove: 16, say: "Ne5 — the knight grabs the great central outpost, the heart of White's whole set-up. Black must reckon with it constantly.", sayShort: "Ne5 — the central outpost", highlights: [_H('e5')] },
+    { atMove: 20, say: "Bd3 — supporting the e5-knight and aiming at h7, every piece pointing at Black's king.", sayShort: "Bd3 — support e5, eye h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 22, say: "Ne2 — rerouting the second knight toward f4 and g3, doubling down on the kingside attack.", sayShort: "Ne2 — reroute to f4", arrows: [_A('e2', 'f4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN28: SublineNarration = {
+  intro: { say: "Black releases the tension early with …cxd4. You recapture exd4, sidestep …Nh5 with Bg5, dominate e5 with the knight, then trade on c6 to inflict doubled pawns — small, lasting pluses stacked together.", sayShort: "…cxd4 — exd4, Bg5, Ne5, Nxc6" },
+  beats: [
+    { atMove: 12, say: "exd4 — open the e-file and keep a mobile centre. The recapture toward the middle is almost always right here.", sayShort: "exd4 — open the e-file", highlights: [_H('d4'), _H('e1')] },
+    { atMove: 16, say: "Bg5 — meeting the …Nh5 chase by pinning rather than retreating, keeping your active bishop and awkwardly placing Black's knight.", sayShort: "Bg5 — pin, don't retreat", arrows: [_A('g5', 'd8')] },
+    { atMove: 18, say: "Ne5 — the knight takes the central outpost, eyeing c6 and the kingside. Black's pieces are cramped.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+    { atMove: 20, say: "Nxc6 — trading to leave Black with doubled c-pawns, a fixed weakness you will play against all game.", sayShort: "Nxc6 — inflict doubled pawns", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN29: SublineNarration = {
+  intro: { say: "Black goes for a quick …b5 and the …Bxf2+ trick. You stay calm: take on c5, build the e4 break, and after the speculative …Bxf2+ you weather it — emerging with the extra material and the better game once the king tucks in.", sayShort: "…Bd6 — dxc5, e4, weather …Bxf2+" },
+  beats: [
+    { atMove: 12, say: "dxc5 — accepting the pawn and gaining a tempo on the bishop. Black's coming …b5 expansion will overreach.", sayShort: "dxc5 — take, gain tempo", highlights: [_H('c5')] },
+    { atMove: 16, say: "e4 — striking in the centre while you are the better developed. Opening lines favours your harmonious pieces.", sayShort: "e4 — strike the centre", highlights: [_H('e4')] },
+    { atMove: 20, say: "Kxf2 — calmly accepting the sacrifice. Black has only two pawns for the bishop; you are up material with a king that quickly finds safety.", sayShort: "Kxf2 — take, you're up material", highlights: [_H('f2')] },
+    { atMove: 22, say: "Bc4 — developing with tempo and shoring up the king's surroundings. Consolidate and the extra piece decides.", sayShort: "Bc4 — consolidate the edge", arrows: [_A('c4', 'e6')] },
+  ],
+  sources: ['concept:tac-double-attack', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN30: SublineNarration = {
+  intro: { say: "Against the King's Indian set-up Black plays …Nbd7. You grab queenside space with a4, plant the bishop on e5 to contest the long diagonal, and when chased retreat to g3 — keeping the bishop while Black shuffles.", sayShort: "…Nbd7 — a4, Be5, Bg3" },
+  beats: [
+    { atMove: 12, say: "a4 — staking out queenside space and preparing a5 and a knight route to b5. You start play where Black is least active.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+    { atMove: 14, say: "Be5 — the bishop seizes the central outpost, contesting the g7-bishop's diagonal and eyeing the kingside.", sayShort: "Be5 — contest the long diagonal", highlights: [_H('e5')] },
+    { atMove: 16, say: "Bg3 — when challenged you retreat, never trading your good bishop cheaply. It still rakes the b8-h2 diagonal.", sayShort: "Bg3 — preserve the bishop", arrows: [_A('g3', 'd6')] },
+    { atMove: 22, say: "Nbd2 — developing the last piece and offering to swap Black's active e4-knight, easing into a comfortable game.", sayShort: "Nbd2 — challenge the e4-knight", arrows: [_A('d2', 'e4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN31: SublineNarration = {
+  intro: { say: "Black plays the passive …c6. You strike with c4 to challenge the centre, recapture with the bishop onto the active diagonal, centralise the knight on d4, then trade queens into a structure where Black's b-pawns are weak.", sayShort: "…c6 — c4, Bxc4, Nxd4" },
+  beats: [
+    { atMove: 12, say: "c4 — challenging Black's centre at once. Against a slow …c6 you open lines for your better-placed pieces.", sayShort: "c4 — challenge the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 14, say: "Bxc4 — recapturing with the bishop, which now eyes e6 and f7 on the active diagonal.", sayShort: "Bxc4 — active diagonal", arrows: [_A('c4', 'f7')] },
+    { atMove: 18, say: "Nxd4 — centralising the knight after the trades, eyeing c6 and f5 from its commanding post.", sayShort: "Nxd4 — centralise the knight", highlights: [_H('d4')] },
+    { atMove: 22, say: "Qxb6 — trading into an ending where Black's doubled b-pawns are a long-term liability. Press the structure.", sayShort: "Qxb6 — into a better ending", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN32: SublineNarration = {
+  intro: { say: "Black develops …Nc6. You make luft with h3, complete development, then execute the signature regroup Bf1 and Bh2 — repositioning the pieces behind the pawns to prepare the central e4 break.", sayShort: "…Nc6 — h3, Re1, Bf1-h2" },
+  beats: [
+    { atMove: 12, say: "h3 — a useful luft, taking g4 from Black's pieces before you begin the regroup.", sayShort: "h3 — luft, deny g4", highlights: [_H('g4')] },
+    { atMove: 16, say: "Re1 — the rook supports the coming e4 break, lining up behind the e-pawn.", sayShort: "Re1 — back the e4 break", arrows: [_A('e1', 'e4')] },
+    { atMove: 20, say: "Bh2 — completing the elegant Bf1-h2 regroup. The bishop now sits on the long diagonal, every piece poised for e4.", sayShort: "Bh2 — regroup for e4", arrows: [_A('h2', 'e5')] },
+    { atMove: 22, say: "Nb1 — even the knight reroutes, heading via d2 to support e4 and contest the e4-square. Patience, then the break.", sayShort: "Nb1 — reroute toward e4", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN33: SublineNarration = {
+  intro: { say: "Black fianchettoes with …b6. You challenge the centre with c4, recapture with the bishop onto the attack, clamp the queenside with a4, then thrust d5 — shutting the b7-bishop out of the game.", sayShort: "…b6 — c4, a4, d5" },
+  beats: [
+    { atMove: 12, say: "c4 — striking the centre against the fianchetto. Opening lines suits your active development.", sayShort: "c4 — strike the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 16, say: "Bxc4 — recapturing; the bishop joins the fight against e6 and f7 on the open diagonal.", sayShort: "Bxc4 — onto the attack", arrows: [_A('c4', 'f7')] },
+    { atMove: 20, say: "a4 — clamping the queenside to deny …b5, fixing Black's pawns before they can free the position.", sayShort: "a4 — deny …b5", arrows: [_A('a4', 'a5')] },
+    { atMove: 22, say: "d5 — the space-gaining thrust, slamming the door on the b7-bishop and handing you a lasting bind.", sayShort: "d5 — entomb the bishop", highlights: [_H('d5'), _H('b7')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN34: SublineNarration = {
+  intro: { say: "Black pins with …Bg4. You question it with h3; …Bxf3 hands you the bishop pair, which you make tell by opening the centre with c4 and pressing the light squares Black abandoned.", sayShort: "…Bg4 — h3, Bxf3, c4" },
+  beats: [
+    { atMove: 12, say: "h3 — challenging the bishop immediately. Black either retreats or, as here, trades on f3 and gives up the bishop pair.", sayShort: "h3 — question the bishop", highlights: [_H('g4')] },
+    { atMove: 14, say: "Bxf3 — recapturing toward the centre. Your bishop now rakes the long light diagonal and d5; you hold the bishop pair.", sayShort: "Bxf3 — bishop pair, long diagonal", arrows: [_A('f3', 'd5')] },
+    { atMove: 18, say: "c4 — opening the centre to let the two bishops breathe. The more open the game, the more they dominate.", sayShort: "c4 — open for the bishops", arrows: [_A('c4', 'd5')] },
+    { atMove: 20, say: "Qb3 — pressing b7 and d5, exploiting the light squares Black weakened by parting with the bishop.", sayShort: "Qb3 — press the light squares", arrows: [_A('b3', 'b7')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-center', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN35: SublineNarration = {
+  intro: { say: "Black develops …Bf5. You solidify with c3, bring the knight to d2 and the queen to b3 hitting b7 and b6, trade into a fixed queenside, then harry the bishop with h3 and g4.", sayShort: "…Bf5 — c3, Qb3, g4" },
+  beats: [
+    { atMove: 12, say: "c3 — solidifying the centre and preparing Nbd2 and Qb3. Quiet moves that set up real pressure.", sayShort: "c3 — solidify, prepare Qb3", highlights: [_H('c3')] },
+    { atMove: 16, say: "Qb3 — double-attacking b7 and pressuring b6, forcing Black to make a queenside concession.", sayShort: "Qb3 — hit b7 and b6", arrows: [_A('b3', 'b7')] },
+    { atMove: 18, say: "Qxb6 — trading into a structure where Black's queenside pawns are fixed and vulnerable. The ending favours you.", sayShort: "Qxb6 — fix the queenside", highlights: [_H('b6')] },
+    { atMove: 22, say: "g4 — gaining kingside space and chasing the f5-bishop back to passivity. You squeeze on both wings.", sayShort: "g4 — chase the bishop", arrows: [_A('g4', 'f5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN36: SublineNarration = {
+  intro: { say: "Black trades with …cxd4. You recapture cxd4, accepting a mobile centre with active pieces, offer the queen trade with Qb3 to defuse Black's pressure, and develop Nc3 into an easy equal-plus.", sayShort: "…cxd4 — cxd4, Qb3, Nc3" },
+  beats: [
+    { atMove: 14, say: "cxd4 — recapturing to keep a broad, mobile centre. Your pieces flow naturally around it.", sayShort: "cxd4 — keep the big centre", highlights: [_H('d4')] },
+    { atMove: 18, say: "Qb3 — offering the queen trade to neutralise Black's only active piece and steer toward a comfortable ending.", sayShort: "Qb3 — offer the trade", arrows: [_A('b3', 'b7')] },
+    { atMove: 20, say: "axb3 — recapturing toward the centre, opening the a-file for your rook and keeping a sound structure.", sayShort: "axb3 — open the a-file", highlights: [_H('a1')] },
+    { atMove: 22, say: "Nc3 — developing with gain, eyeing b5 and d5 on the open lines. You hold the slightly easier game.", sayShort: "Nc3 — develop, eye d5", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN37: SublineNarration = {
+  intro: { say: "Black readies …e5 with the slow …Re8. You challenge with c4 and grab the pawn on c5, then push the passer to c6 to disrupt Black's queenside — your lead in development carries the day.", sayShort: "…Re8 — c4, dxc5, c6" },
+  beats: [
+    { atMove: 12, say: "c4 — challenging the centre, the standard try when Black plays a slow rook move instead of committing.", sayShort: "c4 — challenge the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 14, say: "dxc5 — grabbing the pawn, betting your superior development outweighs Black's brief activity.", sayShort: "dxc5 — grab the pawn", highlights: [_H('c5')] },
+    { atMove: 18, say: "c6 — the passed pawn lunges forward, splitting Black's queenside and gaining time on the pieces.", sayShort: "c6 — push the passer", highlights: [_H('c6')] },
+    { atMove: 20, say: "Bxc4 — recapturing, the bishop swinging to hit f7 with a pleasant, material-plus position.", sayShort: "Bxc4 — eye f7, stay ahead", arrows: [_A('c4', 'f7')] },
+  ],
+  sources: ['concept:pos-development', 'concept:tac-double-attack', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN38: SublineNarration = {
+  intro: { say: "Black chases with …Nh5. You plant the bishop on e5 hitting the f6/g7 complex, retreat to g3 when challenged, and recapture hxg3 — opening the h-file for a rook lift toward Black's king.", sayShort: "…Nh5 — Be5, Bg3, hxg3" },
+  beats: [
+    { atMove: 12, say: "Be5 — the bishop grabs the outpost, pressing the f6 and g7 squares and refusing to be shooed away cheaply.", sayShort: "Be5 — seize the outpost", highlights: [_H('e5')] },
+    { atMove: 14, say: "Bg3 — retreating only when forced, ready to recapture toward the centre and open lines if Black takes.", sayShort: "Bg3 — retreat, stay useful", arrows: [_A('g3', 'd6')] },
+    { atMove: 18, say: "hxg3 — recapturing with the h-pawn, opening the h-file for your rook to swing toward the castled king.", sayShort: "hxg3 — open the h-file", highlights: [_H('h1')] },
+    { atMove: 22, say: "Rb1 — switching wings to prepare the b4 minority attack, the right plan in this fixed pawn structure.", sayShort: "Rb1 — prepare b4", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-space', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN39: SublineNarration = {
+  intro: { say: "Black trades on d4 deep in the line. You recapture exd4 into a mobile centre, sidestep …Nh5 with Be3 while guarding d4, reroute Nb3 toward c5, and post the rook on e1 — a harmonious, slightly freer game.", sayShort: "…cxd4 — exd4, Be3, Nb3, Re1" },
+  beats: [
+    { atMove: 16, say: "exd4 — recapturing toward the centre, opening the e-file and keeping a mobile pawn.", sayShort: "exd4 — open the e-file", highlights: [_H('d4'), _H('e1')] },
+    { atMove: 18, say: "Be3 — sidestepping the …Nh5 lunge while the bishop guards d4 and eyes the queenside. No tempo wasted.", sayShort: "Be3 — guard d4, dodge …Nh5", highlights: [_H('e3'), _H('d4')] },
+    { atMove: 20, say: "Nb3 — the knight heads for c5 and a5, pressing the queenside where Black is least secure.", sayShort: "Nb3 — toward c5", highlights: [_H('c5')] },
+    { atMove: 22, say: "Re1 — the rook takes the open e-file, completing a textbook London set-up with a small, durable edge.", sayShort: "Re1 — seize the e-file", arrows: [_A('e1', 'e6')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/London_System'],
+};
+
+const LN40: SublineNarration = {
+  intro: { say: "Black meets your London with a Dutch …f5 and the quiet …Be7. You grab queenside space with c4, challenge the …Ne4 outpost with Nfd2, then expand with Nc3 and b4 — a modern, space-based anti-Dutch plan.", sayShort: "…Be7 — c4, Nfd2, Nc3, b4" },
+  beats: [
+    { atMove: 8, say: "c4 — the modern anti-Dutch. Rather than the timid e3-only set-up, you claim queenside space and pressure d5 from the start.", sayShort: "c4 — claim queenside space", arrows: [_A('c4', 'd5')] },
+    { atMove: 16, say: "Nfd2 — challenging Black's proud e4-knight. Trading off the Dutch's best piece leaves Black without active play.", sayShort: "Nfd2 — challenge the e4-knight", arrows: [_A('d2', 'e4')] },
+    { atMove: 20, say: "Nc3 — developing the last piece, eyeing b5 and d5. Your space edge is real and Black has no break.", sayShort: "Nc3 — develop, eye d5", highlights: [_H('d5')] },
+    { atMove: 22, say: "b4 — the queenside expansion rolls forward, gaining ground where Black is passive. A risk-free squeeze.", sayShort: "b4 — expand the queenside", arrows: [_A('b4', 'b5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+const LN41: SublineNarration = {
+  intro: { say: "Black fianchettoes both bishops Dutch-style with …b6 and …g6. You take the centre with c4, jump in with Nb5 to disrupt c7 and d6, expand with b4, then storm the kingside fianchetto with h4.", sayShort: "…b6 — c4, Nb5, b4, h4" },
+  beats: [
+    { atMove: 10, say: "c4 — claiming the centre against the double fianchetto. Space is your edge in these slow Dutch structures.", sayShort: "c4 — take the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 14, say: "Nb5 — leaping in to harass c7 and d6, exploiting the dark-square holes Black's set-up leaves behind.", sayShort: "Nb5 — harass c7 and d6", arrows: [_A('b5', 'c7')] },
+    { atMove: 16, say: "b4 — grabbing queenside space, the wing where your pieces are aimed and Black has no counterplay.", sayShort: "b4 — queenside space", arrows: [_A('b4', 'b5')] },
+    { atMove: 22, say: "h4 — launching the pawn storm against the fianchettoed king, prising open the long diagonal and the h-file.", sayShort: "h4 — storm the fianchetto", arrows: [_A('h4', 'h5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+const LN42: SublineNarration = {
+  intro: { say: "Black plays a Leningrad-Dutch …d6 and …g6. You post the bishop on d3 to hit the f5/h7 light squares, prepare e4 with Re1, then build the Bg3-Bc2 battery aimed straight at the king.", sayShort: "…d6 — Bd3, Re1, Bg3-Bc2" },
+  beats: [
+    { atMove: 8, say: "Bd3 — the bishop takes aim at the f5-pawn and the h7-square that Black's early …f5 weakened. Pressure on the light squares.", sayShort: "Bd3 — aim at f5 and h7", arrows: [_A('d3', 'f5')] },
+    { atMove: 16, say: "Re1 — loading the rook behind the e-pawn, preparing the central e4 break that opens lines toward Black's king.", sayShort: "Re1 — back the e4 break", arrows: [_A('e1', 'e4')] },
+    { atMove: 20, say: "Bg3 — repositioning the bishop to watch e5 and d6, sidestepping any …e5 tempo while staying on the key diagonal.", sayShort: "Bg3 — watch e5 and d6", arrows: [_A('g3', 'd6')] },
+    { atMove: 22, say: "Bc2 — completing the battery; bishop and queen now rake the b1-h7 diagonal toward the castled king.", sayShort: "Bc2 — build the diagonal battery", arrows: [_A('c2', 'h7')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+const LN43: SublineNarration = {
+  intro: { say: "Black offers a trade with …Bd6. You take at once to give Black doubled d-pawns, challenge the centre with c4, then reroute the knight via e2 to f4 — the better minor piece eyeing e6 and d5.", sayShort: "…Bd6 — Bxd6, c4, Ne2-f4" },
+  beats: [
+    { atMove: 8, say: "Bxd6 — accepting the trade to saddle Black with doubled d-pawns. The structural concession is permanent.", sayShort: "Bxd6 — inflict doubled pawns", highlights: [_H('d6')] },
+    { atMove: 10, say: "c4 — striking the centre while Black's structure is compromised, opening lines for your active pieces.", sayShort: "c4 — strike the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 20, say: "Ne2 — rerouting the knight toward f4, where it will eye e6, d5 and the kingside.", sayShort: "Ne2 — reroute to f4", arrows: [_A('e2', 'f4')] },
+    { atMove: 22, say: "Nf4 — the knight lands on its dream square, the better minor piece pressing Black's weakened light squares.", sayShort: "Nf4 — dominant knight", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+const LN44: SublineNarration = {
+  intro: { say: "Black sets up a Stonewall with …d5, …f5 and …e6. You undermine it with c4, develop Nc3 to press d5 and the e4-square, swing the rook to c1, then trade the dark bishops to highlight Black's holes.", sayShort: "…Be7 — c4, Nc3, Rc1, Bxd6" },
+  beats: [
+    { atMove: 10, say: "c4 — the principled answer to the Stonewall, challenging d5 and gaining space before Black can dig in.", sayShort: "c4 — challenge the Stonewall", arrows: [_A('c4', 'd5')] },
+    { atMove: 16, say: "Nc3 — developing with pressure on d5 and contesting the e4-square Black wants for a knight.", sayShort: "Nc3 — press d5 and e4", highlights: [_H('d5'), _H('e4')] },
+    { atMove: 18, say: "Rc1 — the rook takes the half-open c-file, the natural file once you trade on d5 or push c5.", sayShort: "Rc1 — claim the c-file", arrows: [_A('c1', 'c8')] },
+    { atMove: 22, say: "Bxd6 — trading the dark bishops to expose the e5 and dark-square holes of the Stonewall, your long-term target.", sayShort: "Bxd6 — expose the dark holes", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Stonewall_Attack'],
+};
+const LN45: SublineNarration = {
+  intro: { say: "Black develops …Nc6 and fianchettoes. You castle, plant the knight on the e5 outpost, buttress it with f4 Stonewall-style, then trade on f6 to fix the structure and gain space with c4.", sayShort: "…Nc6 — Ne5, f4, Bxf6, c4" },
+  beats: [
+    { atMove: 12, say: "Ne5 — the knight seizes the central outpost, the dominant square against any Dutch set-up.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+    { atMove: 16, say: "f4 — buttressing the e5-knight and gripping the centre, turning Black's own Stonewall idea back on them.", sayShort: "f4 — buttress e5", arrows: [_A('f4', 'e5')] },
+    { atMove: 20, say: "Bxf6 — trading to fix Black's structure and weaken the dark squares around the king.", sayShort: "Bxf6 — fix the structure", highlights: [_H('f6')] },
+    { atMove: 22, say: "c4 — gaining queenside space to complete the bind. Black is passive on both wings.", sayShort: "c4 — complete the bind", arrows: [_A('c4', 'd5')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+const LN46: SublineNarration = {
+  intro: { say: "Black strikes with …c5. You challenge the centre with c4, recapture exd4 into a mobile centre, trade the dark bishops, then gain space and tempo with c5 against the queen.", sayShort: "…c5 — c4, exd4, Bxd6, c5" },
+  beats: [
+    { atMove: 10, say: "c4 — meeting …c5 by challenging d5 in return, opening the position while your pieces are the better placed.", sayShort: "c4 — challenge d5", arrows: [_A('c4', 'd5')] },
+    { atMove: 12, say: "exd4 — recapturing toward the centre, opening the e-file and keeping a mobile pawn.", sayShort: "exd4 — mobile centre", highlights: [_H('d4'), _H('e1')] },
+    { atMove: 20, say: "Bxd6 — trading the dark bishops on your terms, leaving Black's queen to recapture passively.", sayShort: "Bxd6 — trade on your terms", highlights: [_H('d6')] },
+    { atMove: 22, say: "c5 — gaining space with tempo on the queen, gripping the queenside and restricting Black's pieces.", sayShort: "c5 — space with tempo", arrows: [_A('c5', 'd6')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+const LN47: SublineNarration = {
+  intro: { say: "Black builds a solid …c6 and …d5 Stonewall. You aim the bishop at h7 from d3, challenge with c4, open lines with dxc5, then route the knight to b3 to besiege Black's hanging pawns.", sayShort: "…c6 — Bd3, c4, dxc5, Nb3" },
+  beats: [
+    { atMove: 10, say: "Bd3 — the bishop to its best diagonal, eyeing h7 and the light squares Black's …f5 left soft.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 16, say: "c4 — challenging the centre to pry open lines for your harmoniously placed pieces.", sayShort: "c4 — challenge the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 20, say: "dxc5 — opening the position to leave Black with hanging pawns, a target for your minor pieces.", sayShort: "dxc5 — create hanging pawns", highlights: [_H('c5')] },
+    { atMove: 22, say: "Nb3 — the knight heads for c5 and d4, blockading and besieging Black's loose queenside pawns.", sayShort: "Nb3 — blockade and besiege", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Stonewall_Attack'],
+};
+const LN48: SublineNarration = {
+  intro: { say: "Black sets up the …c6 Stonewall. You challenge with c4, develop Nc3 to pressure the centre, then trade off the e4-knight with Nd2 and contest the square with Qc2 — denying the Stonewall its only active piece.", sayShort: "…c6 — c4, Nc3, Nd2, Qc2" },
+  beats: [
+    { atMove: 10, say: "c4 — striking at d5, the right way to meet the Stonewall before Black completes the bind.", sayShort: "c4 — strike d5", arrows: [_A('c4', 'd5')] },
+    { atMove: 14, say: "Nc3 — developing with pressure on d5 and the e4-square, the knight Black hopes to occupy.", sayShort: "Nc3 — pressure d5 and e4", highlights: [_H('d5'), _H('e4')] },
+    { atMove: 20, say: "Nd2 — challenging the e4-knight, the Stonewall's pride. Trade it and Black has no active play left.", sayShort: "Nd2 — challenge e4-knight", arrows: [_A('d2', 'e4')] },
+    { atMove: 22, say: "Qc2 — contesting e4 and eyeing h7, the queen reinforcing the fight for the key central square.", sayShort: "Qc2 — contest e4, eye h7", arrows: [_A('c2', 'h7')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Stonewall_Attack'],
+};
+const LN49: SublineNarration = {
+  intro: { say: "Black checks with …Bb4+. You block with c3, gaining a tempo on the bishop that must retreat, claim space with c4, develop Nbd2, then clamp with c5 — a comfortable space-based game.", sayShort: "…Bb4+ — c3, c4, Nbd2, c5" },
+  beats: [
+    { atMove: 8, say: "c3 — blocking the check and gaining a tempo: the b4-bishop has nothing better than a sheepish retreat.", sayShort: "c3 — block, gain a tempo", highlights: [_H('c3')] },
+    { atMove: 10, say: "c4 — following up by claiming the centre and queenside space, your structural plan against the Dutch.", sayShort: "c4 — claim space", arrows: [_A('c4', 'd5')] },
+    { atMove: 14, say: "Nbd2 — developing the knight and pre-empting another …Bb4 check, since you can simply block again.", sayShort: "Nbd2 — develop, pre-empt checks", highlights: [_H('d2')] },
+    { atMove: 22, say: "c5 — the clamp. Gaining queenside space restricts Black's pieces and hands you the only plan.", sayShort: "c5 — clamp the queenside", arrows: [_A('c5', 'd6')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+const LN50: SublineNarration = {
+  intro: { say: "Black develops …Bf5 and …Bd6. You sidestep the trade with Bg3, grab the centre with c4, recapture hxg3 to open the h-file, then press b7 and d5 with Qb3.", sayShort: "…Bd6 — Bg3, c4, hxg3, Qb3" },
+  beats: [
+    { atMove: 8, say: "Bg3 — declining the bishop trade Black wants. You keep your good dark bishop, even at the cost of doubled g-pawns later.", sayShort: "Bg3 — keep the good bishop", arrows: [_A('g3', 'd6')] },
+    { atMove: 10, say: "c4 — challenging the centre and gaining queenside space, the engine of your plan.", sayShort: "c4 — challenge the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 14, say: "hxg3 — recapturing with the h-pawn, opening the h-file for your rook to point at Black's king.", sayShort: "hxg3 — open the h-file", highlights: [_H('h1')] },
+    { atMove: 16, say: "Qb3 — pressing b7 and d5 at once, exploiting the queenside while Black is still untangling.", sayShort: "Qb3 — pressure b7 and d5", arrows: [_A('b3', 'b7')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN51: SublineNarration = {
+  intro: { say: "Black strikes with …c5. You check on b5 to gain a tempo, trade and open with cxd5, take on c5, then plant the knight on d4 to blockade Black's isolated d-pawn — a clean structural plus.", sayShort: "…c5 — Bb5+, cxd5, Nd4 blockade" },
+  beats: [
+    { atMove: 8, say: "Bb5+ — the check pins the c6-knight to the king and gains a tempo before the pawn tension resolves.", sayShort: "Bb5+ — pin and gain tempo", arrows: [_A('b5', 'e8')] },
+    { atMove: 14, say: "cxd5 — opening the centre and leaving Black with an isolated d-pawn after the recaptures.", sayShort: "cxd5 — create the isolani", highlights: [_H('d5')] },
+    { atMove: 20, say: "Nd4 — the knight takes the perfect blockading square in front of the isolated pawn, the classic technique.", sayShort: "Nd4 — blockade the isolani", highlights: [_H('d4'), _H('d5')] },
+    { atMove: 22, say: "O-O — king to safety with the structure won. Now pile pieces onto the d5-pawn and grind.", sayShort: "O-O — safe, then besiege d5", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Isolated_pawn'],
+};
+const LN52: SublineNarration = {
+  intro: { say: "Black plays …Nc6 with …Bf5. You make luft for the bishop with a3, retreat Bg3 to keep it, grab the centre with c4, then launch the b4-b5 minority attack on the queenside.", sayShort: "…Nc6 — a3, Bg3, c4, b4-b5" },
+  beats: [
+    { atMove: 10, say: "Bg3 — keeping the dark bishop out of trades. It sits on g3 watching the b8-h2 diagonal.", sayShort: "Bg3 — preserve the bishop", arrows: [_A('g3', 'd6')] },
+    { atMove: 12, say: "c4 — challenging the centre and opening the queenside, where your play is aimed.", sayShort: "c4 — challenge the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 20, say: "b4 — the minority attack begins, gaining space and preparing b5 to create a target on c6.", sayShort: "b4 — start the minority attack", arrows: [_A('b4', 'b5')] },
+    { atMove: 22, say: "b5 — the spearhead lands, fixing a weakness in Black's queenside pawns for you to besiege.", sayShort: "b5 — fix the weakness", arrows: [_A('b5', 'c6')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pawn-minority-attack', 'https://en.wikipedia.org/wiki/Minority_attack'],
+};
+const LN53: SublineNarration = {
+  intro: { say: "Black pins with …Bb4. You hit b7 and d5 with Qb3 while the bishop is offside, unpin calmly with Nd2, question the bishop with a3, then recapture into a broad centre with the bishop pair.", sayShort: "…Bb4 — Qb3, Nd2, a3, bxc3" },
+  beats: [
+    { atMove: 12, say: "Qb3 — pouncing on b7 and d5 while Black's bishop sits offside on b4. The pin gains you nothing to fear.", sayShort: "Qb3 — hit b7 and d5", arrows: [_A('b3', 'b7')] },
+    { atMove: 14, say: "Nd2 — unpinning without fuss, keeping your structure intact and preparing to challenge the bishop.", sayShort: "Nd2 — unpin calmly", highlights: [_H('d2')] },
+    { atMove: 18, say: "a3 — questioning the b4-bishop. It must take on c3 or retreat, and either way you gain.", sayShort: "a3 — question the bishop", highlights: [_H('b4')] },
+    { atMove: 22, say: "bxc3 — recapturing into a broad centre while keeping the bishop pair, a lasting structural trump.", sayShort: "bxc3 — big centre, bishop pair", highlights: [_H('c3')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-center', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN54: SublineNarration = {
+  intro: { say: "Black prepares queenside play with …a6. You take the centre with c4, plant the knight on e5, trade on c6 to damage Black's pawns, then expand on the kingside with h4 behind your bishop pair.", sayShort: "…a6 — c4, Ne5, Nxc6, h4" },
+  beats: [
+    { atMove: 8, say: "c4 — claiming the centre immediately, the modern way to handle Black's flexible set-up.", sayShort: "c4 — take the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 14, say: "Ne5 — the knight seizes the dominant central outpost, cramping Black and eyeing c6.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+    { atMove: 16, say: "Nxc6 — trading to inflict doubled c-pawns, a permanent target on the queenside.", sayShort: "Nxc6 — doubled c-pawns", highlights: [_H('c6')] },
+    { atMove: 20, say: "h4 — gaining kingside space behind the bishop pair, your trumps in this open structure.", sayShort: "h4 — kingside space", arrows: [_A('h4', 'h5')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN55: SublineNarration = {
+  intro: { say: "Black wastes a move with …h6. You punish it: c4 hits the centre, Qb3 forks b7 and d5, and Qxb7 grabs the pawn — the queen escaping cleanly via b4-a3 with the material banked.", sayShort: "…h6 — c4, Qb3, Qxb7" },
+  beats: [
+    { atMove: 10, say: "Qb3 — the double attack on b7 and d5. Black's slow …h6 left no time to defend both.", sayShort: "Qb3 — fork b7 and d5", arrows: [_A('b3', 'b7')] },
+    { atMove: 12, say: "Qxb7 — snatching the pawn. The queen has a safe route home and Black lacks real compensation.", sayShort: "Qxb7 — grab the pawn", highlights: [_H('b7')] },
+    { atMove: 18, say: "Qa3 — the queen retreats to safety, extra pawn in pocket. No swindles, just careful consolidation.", sayShort: "Qa3 — retreat with the pawn", highlights: [_H('a3')] },
+    { atMove: 22, say: "Bxc4 — developing and shoring up, converting the clean extra pawn into a winning endgame.", sayShort: "Bxc4 — develop, consolidate", arrows: [_A('c4', 'f7')] },
+  ],
+  sources: ['concept:tac-double-attack', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN56: SublineNarration = {
+  intro: { say: "Black develops …Nbd7. You press b7 and d5 with Qb3, contest the centre with Be5, gain space with c5, then expand the bind with b4 — a classic queenside clamp.", sayShort: "…Nbd7 — Qb3, Be5, c5, b4" },
+  beats: [
+    { atMove: 12, say: "Qb3 — pressing b7 and d5, putting Black on the defensive before development is complete.", sayShort: "Qb3 — pressure b7 and d5", arrows: [_A('b3', 'b7')] },
+    { atMove: 14, say: "Be5 — the bishop grabs the central outpost, contesting the dark squares and eyeing the kingside.", sayShort: "Be5 — central outpost", highlights: [_H('e5')] },
+    { atMove: 18, say: "c5 — gaining queenside space and gripping the position, restricting Black's minor pieces.", sayShort: "c5 — grip the queenside", arrows: [_A('c5', 'd6')] },
+    { atMove: 22, say: "b4 — expanding the bind with the minority advance, the natural plan in this fixed structure.", sayShort: "b4 — expand the bind", arrows: [_A('b4', 'b5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN57: SublineNarration = {
+  intro: { say: "Black plays the solid …c6. You trade the dark bishops on d6, press with Qb3, take the c-file with Rc1, then open it with cxd5 to leave Black an isolated d-pawn to besiege.", sayShort: "…c6 — Bxd6, Qb3, Rc1, cxd5" },
+  beats: [
+    { atMove: 10, say: "Bxd6 — trading the dark bishops, then playing against Black's slightly passive resulting structure.", sayShort: "Bxd6 — trade the dark bishops", highlights: [_H('d6')] },
+    { atMove: 12, say: "Qb3 — pressing b7 and d5, the recurring London pressure that ties Black down.", sayShort: "Qb3 — pressure b7 and d5", arrows: [_A('b3', 'b7')] },
+    { atMove: 18, say: "Rc1 — the rook claims the half-open c-file, lining up for the cxd5 break.", sayShort: "Rc1 — claim the c-file", arrows: [_A('c1', 'c6')] },
+    { atMove: 20, say: "cxd5 — opening the c-file and leaving Black with an isolated d-pawn, your long-term target.", sayShort: "cxd5 — create the isolani", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN58: SublineNarration = {
+  intro: { say: "Black sets up passively with …Be7. You press b7 and d5 with Qb3, take the c-file with Rc1, recapture on c4 with the bishop hitting f7, then reposition Be2 to keep the queenside under watch.", sayShort: "…Be7 — Qb3, Rc1, Bxc4" },
+  beats: [
+    { atMove: 12, say: "Qb3 — pressing b7 and d5 while Black develops slowly. You take the initiative for free.", sayShort: "Qb3 — pressure b7 and d5", arrows: [_A('b3', 'b7')] },
+    { atMove: 16, say: "Rc1 — the rook to the c-file, preparing to meet …dxc4 or push your own break.", sayShort: "Rc1 — to the c-file", arrows: [_A('c1', 'c8')] },
+    { atMove: 20, say: "Bxc4 — recapturing; the bishop now eyes f7 and e6 on the active a2-g8 diagonal.", sayShort: "Bxc4 — active diagonal", arrows: [_A('c4', 'f7')] },
+    { atMove: 22, say: "Be2 — repositioning to blunt …b5 and keep Black's queenside expansion under control. Patient, solid play.", sayShort: "Be2 — watch the queenside", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN59: SublineNarration = {
+  intro: { say: "Black trades with …Bd6. You take to give Black doubled d-pawns, develop Nc3 and recapture actively with the bishop, plant the knight on e5, then take the c-file with Rc1.", sayShort: "…Bd6 — Bxd6, Bxc4, Ne5, Rc1" },
+  beats: [
+    { atMove: 10, say: "Bxd6 — accepting the trade to leave Black with doubled d-pawns, a permanent structural target.", sayShort: "Bxd6 — doubled d-pawns", highlights: [_H('d6')] },
+    { atMove: 14, say: "Bxc4 — recapturing; the bishop hits e6 and f7 from the active diagonal.", sayShort: "Bxc4 — active diagonal", arrows: [_A('c4', 'f7')] },
+    { atMove: 20, say: "Ne5 — the knight takes the dominant central outpost, pressing the weak d-pawns and the kingside.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+    { atMove: 22, say: "Rc1 — the rook claims the open c-file, aiming at Black's queenside and completing your edge.", sayShort: "Rc1 — seize the c-file", arrows: [_A('c1', 'c8')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/London_System'],
+};
+
+const LN60: SublineNarration = {
+  intro: { say: "With Nd2 in, Black hits the centre with …c5. You guard b2 with Rb1, trade the dark bishops, capture on c5, then challenge with c4 and develop the bishop actively to c4 — an easy, harmonious game.", sayShort: "…c5 — Rb1, Bxd6, c4, Bc4" },
+  beats: [
+    { atMove: 10, say: "Rb1 — a quiet prophylactic, defending b2 against …Qb6 so you never have to react. The London prizes such small safety moves.", sayShort: "Rb1 — guard b2", highlights: [_H('b2')] },
+    { atMove: 12, say: "Bxd6 — trading the dark bishops, then playing against Black's slightly loose structure.", sayShort: "Bxd6 — trade the dark bishops", highlights: [_H('d6')] },
+    { atMove: 16, say: "c4 — challenging the centre to open lines for your harmoniously placed pieces.", sayShort: "c4 — challenge the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 22, say: "Bc4 — the bishop swings to an active post hitting f7, completing a comfortable, slightly freer set-up.", sayShort: "Bc4 — active, hit f7", arrows: [_A('c4', 'f7')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN61: SublineNarration = {
+  intro: { say: "Black fianchettoes with …b6. You have the full London set-up, so you fire e4: castle behind it, push e5 to kick the knight and open the b1-h7 diagonal, then pile up with Qe2 for a kingside attack.", sayShort: "…b6 — e4, O-O, e5, Qe2" },
+  beats: [
+    { atMove: 16, say: "e4 — the thematic break, perfectly timed with every piece developed. The centre opens toward Black's king.", sayShort: "e4 — the central break", highlights: [_H('e4')] },
+    { atMove: 18, say: "O-O — tucking the king away before the centre fully ignites. Safety first, then the attack.", sayShort: "O-O — king safe first", highlights: [_H('g1')] },
+    { atMove: 20, say: "e5 — gaining space and kicking the f6-knight, clearing the b1-h7 diagonal for the d3-bishop.", sayShort: "e5 — kick the knight, open lines", arrows: [_A('d3', 'h7')] },
+    { atMove: 22, say: "Qe2 — bringing the last piece toward the kingside, where your space promises a lasting initiative.", sayShort: "Qe2 — reinforce the attack", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN62: SublineNarration = {
+  intro: { say: "Black develops quietly with …Be7. You solidify with c3, insert Bb5+ before trading, swap the dark bishops, then centralise with Qe2 and Rfd1 to prepare the e4 break.", sayShort: "…Be7 — Bb5+, Bxd6, Qe2, Rfd1" },
+  beats: [
+    { atMove: 12, say: "Bb5+ — the useful check, provoking a block before you resolve the central tension.", sayShort: "Bb5+ — provoke first", arrows: [_A('b5', 'e8')] },
+    { atMove: 14, say: "Bxd6 — trading the dark bishops to leave Black's queen recapturing passively on d6.", sayShort: "Bxd6 — trade the dark bishops", highlights: [_H('d6')] },
+    { atMove: 20, say: "Qe2 — centralising the queen and connecting the rooks, supporting the coming central break.", sayShort: "Qe2 — centralise, connect rooks", highlights: [_H('e2')] },
+    { atMove: 22, say: "Rfd1 — the rook to the d-file, completing development and preparing e4. A model London build-up.", sayShort: "Rfd1 — to the d-file", arrows: [_A('d1', 'd8')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN63: SublineNarration = {
+  intro: { say: "Black readies …e5 with …Re8. You pre-empt by planting the knight on e5 yourself, recapture exd4 into a mobile centre, support with Ndf3, then trade off Black's active knight.", sayShort: "…Re8 — Ne5, exd4, Ndf3" },
+  beats: [
+    { atMove: 16, say: "Ne5 — occupying the key central square before Black can play …e5, dominating the board.", sayShort: "Ne5 — seize the outpost", highlights: [_H('e5')] },
+    { atMove: 18, say: "exd4 — recapturing toward the centre, opening the e-file and keeping a mobile pawn.", sayShort: "exd4 — mobile centre", highlights: [_H('d4'), _H('e1')] },
+    { atMove: 20, say: "Ndf3 — reinforcing the e5-knight with its partner, keeping the central grip firm.", sayShort: "Ndf3 — support e5", arrows: [_A('f3', 'e5')] },
+    { atMove: 22, say: "Bxe4 — trading off Black's active knight, simplifying into a position where your structure is the sounder.", sayShort: "Bxe4 — trade, keep the edge", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN64: SublineNarration = {
+  intro: { say: "Black trades on g3. You recapture hxg3 to open the h-file, challenge with c4, then advance g4-g5 to gain kingside space and seize the initiative — emerging clearly better after the smoke clears.", sayShort: "…Bxg3 — hxg3, c4, g4-g5" },
+  beats: [
+    { atMove: 10, say: "hxg3 — recapturing with the h-pawn, opening the h-file for your rook to bear down on the kingside.", sayShort: "hxg3 — open the h-file", highlights: [_H('h1')] },
+    { atMove: 12, say: "c4 — challenging the centre, gaining queenside space while your kingside ambitions brew.", sayShort: "c4 — challenge the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 14, say: "g4 — the pawn rolls forward, gaining space and preparing g5 to seize the initiative on the kingside.", sayShort: "g4 — gain kingside space", arrows: [_A('g4', 'g5')] },
+    { atMove: 22, say: "Be2 — developing and consolidating after the sharp play; you emerge with the freer, slightly better game.", sayShort: "Be2 — develop, consolidate", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN65: SublineNarration = {
+  intro: { say: "Black hits the centre with …c5. You solidify with c3, point the queen at h7 with Qc2, plant the knight on e5, clamp the queenside with a4, then castle into a harmonious set-up.", sayShort: "…c5 — Qc2, Ne5, a4, O-O" },
+  beats: [
+    { atMove: 12, say: "Qc2 — the queen eyes h7 and guards the centre, the flexible London square that does double duty.", sayShort: "Qc2 — eye h7, guard centre", arrows: [_A('c2', 'h7')] },
+    { atMove: 16, say: "Ne5 — the knight grabs the dominant central outpost, cramping Black's pieces.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+    { atMove: 18, say: "a4 — clamping the queenside to stop …a5 and …b5, fixing the structure in your favour.", sayShort: "a4 — clamp the queenside", arrows: [_A('a4', 'a5')] },
+    { atMove: 22, say: "O-O — king to safety with a comfortable, space-based position and the better minor piece on e5.", sayShort: "O-O — safe and comfortable", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN66: SublineNarration = {
+  intro: { say: "Black trades with …cxd4. You recapture exd4 into a mobile centre, trade the dark bishops to fix Black's queen, secure the kingside with g3 after …Nh5, then challenge with c4.", sayShort: "…cxd4 — exd4, Bxd6, g3, c4" },
+  beats: [
+    { atMove: 16, say: "exd4 — recapturing toward the centre, opening the e-file and keeping a mobile pawn.", sayShort: "exd4 — mobile centre", highlights: [_H('d4'), _H('e1')] },
+    { atMove: 18, say: "Bxd6 — trading the dark bishops, leaving Black's queen to recapture and your structure the sounder.", sayShort: "Bxd6 — trade the dark bishops", highlights: [_H('d6')] },
+    { atMove: 20, say: "g3 — securing the kingside light squares after …Nh5, calmly defusing any pinprick on f4 and g3.", sayShort: "g3 — secure the kingside", highlights: [_H('g3')] },
+    { atMove: 22, say: "c4 — challenging the centre to open lines for your pieces, a small but lasting space edge.", sayShort: "c4 — challenge the centre", arrows: [_A('c4', 'd5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN67: SublineNarration = {
+  intro: { say: "Black locks the queenside with …c4. You retreat Bc2 to keep the diagonal, then strike e4 — the right response when the queenside closes — recapturing with the knight and bishop to dominate the centre.", sayShort: "…c4 — Bc2, e4, Bxe4" },
+  beats: [
+    { atMove: 16, say: "Bc2 — the bishop steps back to keep the b1-h7 diagonal. With the queenside locked, the battle shifts to the centre and kingside.", sayShort: "Bc2 — keep the diagonal", arrows: [_A('c2', 'h7')] },
+    { atMove: 18, say: "e4 — the thematic break, the correct reaction to …c4: when Black commits on one wing, you open the centre.", sayShort: "e4 — open the centre", highlights: [_H('e4')] },
+    { atMove: 20, say: "Nxe4 — recapturing, the knight reaching a fine central square and opening lines toward Black's king.", sayShort: "Nxe4 — open lines", highlights: [_H('e4')] },
+    { atMove: 22, say: "Bxe4 — the bishop recaptures, dominating the long diagonal with a clear initiative.", sayShort: "Bxe4 — dominate the diagonal", arrows: [_A('e4', 'b7')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN68: SublineNarration = {
+  intro: { say: "Black develops …Nc6. You solidify with c3, pin the knight with Bb5, challenge with c4, then trade on c6 to inflict doubled pawns and route the knight to c4.", sayShort: "…Nc6 — Bb5, c4, Bxc6, Nxc4" },
+  beats: [
+    { atMove: 12, say: "Bb5 — pinning and pressuring the c6-knight, the recurring London idea against …Nc6.", sayShort: "Bb5 — pressure c6", arrows: [_A('b5', 'c6')] },
+    { atMove: 18, say: "c4 — challenging the centre to open lines while Black's pieces are still being placed.", sayShort: "c4 — challenge the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 20, say: "Bxc6 — trading to leave Black with doubled c-pawns, a permanent target.", sayShort: "Bxc6 — doubled c-pawns", highlights: [_H('c6')] },
+    { atMove: 22, say: "Nxc4 — the knight reaches c4, eyeing d6 and e5 with the better structure on the board.", sayShort: "Nxc4 — eye d6 and e5", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN69: SublineNarration = {
+  intro: { say: "Black plays the slow …a6. You use the time to centralise with Qe2, reroute the bishop via h4, swing it to c2 aiming at h7, then open with dxc5 — pressing a small, durable edge.", sayShort: "…a6 — Qe2, Bh4, Bc2, dxc5" },
+  beats: [
+    { atMove: 16, say: "Qe2 — centralising the queen and preparing the e4 break while Black drifts without a plan.", sayShort: "Qe2 — centralise, prep e4", highlights: [_H('e2')] },
+    { atMove: 18, say: "Bh4 — repositioning the bishop to eye the kingside dark squares, sidestepping any exchange.", sayShort: "Bh4 — eye the dark squares", arrows: [_A('h4', 'd8')] },
+    { atMove: 20, say: "Bc2 — the bishop slides to the long diagonal, lining up with the queen toward h7.", sayShort: "Bc2 — aim at h7", arrows: [_A('c2', 'h7')] },
+    { atMove: 22, say: "dxc5 — opening the position at the right moment, when your pieces are the more active and coordinated.", sayShort: "dxc5 — open with the lead", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/London_System'],
+};
+const LN70: SublineNarration = {
+  intro: { say: "Black meets the d5 push with a Benoni …d6 and …e5. You pin and trade on f6 to weaken the dark squares, build the big centre with e4, then clamp the queenside with a5 — a space-based Benoni bind.", sayShort: "…d6 — Bg5, Bxf6, e4, a5" },
+  beats: [
+    { atMove: 8, say: "Bg5 — pinning the f6-knight, preparing to trade it and loosen Black's grip on e5 and the dark squares.", sayShort: "Bg5 — pin the knight", arrows: [_A('g5', 'd8')] },
+    { atMove: 12, say: "e4 — building the broad Benoni centre. Your space advantage is the whole point of the early d5.", sayShort: "e4 — build the big centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "a5 — clamping the queenside, fixing Black's pawns and denying the freeing …b5 break.", sayShort: "a5 — clamp the queenside", arrows: [_A('a5', 'b6')] },
+    { atMove: 18, say: "Nf3 — developing toward the centre, completing a harmonious set-up behind your space.", sayShort: "Nf3 — develop behind space", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+const LN71: SublineNarration = {
+  intro: { say: "Black gambits with an early …b5. You snatch it with Bxb5+ check, develop solidly with Nc3 and Nge2, tuck the rook to b1, and after opening with exf5 you hold the extra pawn with a clear advantage.", sayShort: "…d6 — Bxb5+, Nc3, Rb1, exf5" },
+  beats: [
+    { atMove: 10, say: "Bxb5+ — grabbing the gambit pawn with check, the principled answer. Black must prove the compensation.", sayShort: "Bxb5+ — take the gambit pawn", arrows: [_A('b5', 'e8')] },
+    { atMove: 12, say: "Nc3 — developing while holding the extra pawn, calmly completing your position.", sayShort: "Nc3 — develop, hold the pawn", highlights: [_H('c3')] },
+    { atMove: 16, say: "Rb1 — tucking the rook off the long diagonal and defending b2, taking the sting from Black's pressure.", sayShort: "Rb1 — defuse the diagonal", highlights: [_H('b2')] },
+    { atMove: 22, say: "exf5 — opening lines while a pawn up. With the centre clarified you convert the material edge.", sayShort: "exf5 — open up, stay ahead", highlights: [_H('f5')] },
+  ],
+  sources: ['concept:tac-double-attack', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
+};
+const LN72: SublineNarration = {
+  intro: { say: "Black pokes with …Qb6. You sidestep with Qc1, keeping b2, build the big centre with e4, then trade off Black's knight on a6 to leave doubled pawns before castling into a commanding space edge.", sayShort: "…Qb6 — Qc1, e4, Bxa6, O-O" },
+  beats: [
+    { atMove: 8, say: "Qc1 — calmly sidestepping the …Qb6 poke while guarding b2. No need to weaken your structure.", sayShort: "Qc1 — sidestep, guard b2", highlights: [_H('b2')] },
+    { atMove: 12, say: "e4 — building the broad centre, the reward for the early d5 space grab.", sayShort: "e4 — build the big centre", highlights: [_H('e4')] },
+    { atMove: 20, say: "Bxa6 — trading to saddle Black with doubled a-pawns, a permanent queenside weakness.", sayShort: "Bxa6 — doubled a-pawns", highlights: [_H('a6')] },
+    { atMove: 22, say: "O-O — king to safety with a big centre and a structural edge. Now you expand and press.", sayShort: "O-O — safe, big centre", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+const LN73: SublineNarration = {
+  intro: { say: "Black supports the …b5 gambit with …a6. You challenge it with a4, push the passed d-pawn to d6, regain the pawn with Nxa4, then gain kingside space with h4 — a healthy plus.", sayShort: "…a6 — a4, d6, Nxa4, h4" },
+  beats: [
+    { atMove: 10, say: "a4 — challenging the gambit pawn at its base. Black cannot comfortably hold the queenside.", sayShort: "a4 — challenge the b5-pawn", arrows: [_A('a4', 'b5')] },
+    { atMove: 12, say: "d6 — the passed pawn lunges forward, splitting Black's position and gaining time on the pieces.", sayShort: "d6 — push the passer", highlights: [_H('d6')] },
+    { atMove: 18, say: "Nxa4 — regaining the pawn, the knight eyeing c5 and b6 in Black's loose camp.", sayShort: "Nxa4 — regain, eye c5", highlights: [_H('a4')] },
+    { atMove: 22, say: "h4 — gaining kingside space against the fianchetto, prising open lines toward the king.", sayShort: "h4 — kingside space", arrows: [_A('h4', 'h5')] },
+  ],
+  sources: ['concept:tac-double-attack', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
+};
+const LN74: SublineNarration = {
+  intro: { say: "Black pushes …b4 to keep the gambit pawn. You challenge with a3, undermine with c3, recapture to centralise the knight, then reposition Be3 to support your big centre.", sayShort: "…b4 — a3, c3, Nxc3, Be3" },
+  beats: [
+    { atMove: 10, say: "a3 — challenging the advanced b4-pawn at once, refusing to let Black settle the queenside.", sayShort: "a3 — challenge b4", arrows: [_A('a3', 'b4')] },
+    { atMove: 14, say: "c3 — undermining again, opening lines on the queenside where Black has overextended.", sayShort: "c3 — undermine, open lines", arrows: [_A('c3', 'b4')] },
+    { atMove: 16, say: "Nxc3 — recapturing, the knight centralising and eyeing b5 and d5 in Black's camp.", sayShort: "Nxc3 — centralise the knight", highlights: [_H('c3')] },
+    { atMove: 22, say: "Be3 — repositioning to support the big centre and eye the queenside, completing a strong set-up.", sayShort: "Be3 — support the centre", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+const LN75: SublineNarration = {
+  intro: { say: "Black checks with …Qa5+. You block with Nd2, challenge the gambit pawn with a4, regain it with the rook on a4, then clamp the queenside with b4 for a lasting bind.", sayShort: "…Qa5+ — Nd2, a4, Rxa4, b4" },
+  beats: [
+    { atMove: 10, say: "Nd2 — blocking the check while developing, a tempo-neutral reply that keeps your structure intact.", sayShort: "Nd2 — block and develop", highlights: [_H('d2')] },
+    { atMove: 12, say: "a4 — challenging the …b5 gambit pawn at its base, forcing the queenside to clarify in your favour.", sayShort: "a4 — challenge the gambit", arrows: [_A('a4', 'b5')] },
+    { atMove: 18, say: "Rxa4 — regaining the pawn, the rook active on the open a-file in Black's loosened camp.", sayShort: "Rxa4 — regain on the a-file", highlights: [_H('a4')] },
+    { atMove: 22, say: "b4 — clamping the queenside, gaining space and gripping the position with the better game.", sayShort: "b4 — clamp the queenside", arrows: [_A('b4', 'c5')] },
+  ],
+  sources: ['concept:tac-double-attack', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
+};
+const LN76: SublineNarration = {
+  intro: { say: "Black fianchettoes with …g6. You build a Maróczy-style big centre with c4 and e4, open lines with dxe6, then develop and reroute the bishop to h2 — a commanding space advantage.", sayShort: "…g6 — c4, dxe6, e4, Bh2" },
+  beats: [
+    { atMove: 6, say: "c4 — building the broad pawn centre, turning the early d5 into a Benoni-style space bind.", sayShort: "c4 — build the big centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 10, say: "dxe6 — opening the position to gain time on Black's pieces while you hold the central majority.", sayShort: "dxe6 — open with tempo", highlights: [_H('e6')] },
+    { atMove: 12, say: "e4 — completing the broad centre, cramping Black's fianchetto set-up.", sayShort: "e4 — complete the centre", highlights: [_H('e4')] },
+    { atMove: 18, say: "Nf3 — developing toward the centre, the better central grip carrying a clear space edge.", sayShort: "Nf3 — develop, hold space", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+const LN77: SublineNarration = {
+  intro: { say: "Black hits b-pawn squares with …Qb6 while a pawn up. You challenge with a4, manoeuvre the knight to the fine c4-square, regain the pawn on a4, then trade the fianchetto bishop with Bh6 to expose the king.", sayShort: "…Qb6 — a4, Nc4, Rxa4, Bh6" },
+  beats: [
+    { atMove: 10, say: "a4 — challenging the …b5 pawn at its base, refusing to let Black consolidate the gambit.", sayShort: "a4 — challenge the gambit", arrows: [_A('a4', 'b5')] },
+    { atMove: 14, say: "Nc4 — the knight leaps to a dominant square, eyeing d6 and b6 and harassing the queen.", sayShort: "Nc4 — dominant knight", highlights: [_H('c4')] },
+    { atMove: 18, say: "Rxa4 — regaining the pawn with an active rook, your structure intact and Black's loosened.", sayShort: "Rxa4 — regain the pawn", highlights: [_H('a4')] },
+    { atMove: 22, say: "Bh6 — trading the fianchettoed bishop to strip the king's dark-square defender before you attack.", sayShort: "Bh6 — strip the king's guard", arrows: [_A('h6', 'g7')] },
+  ],
+  sources: ['concept:tac-double-attack', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
+};
+const LN78: SublineNarration = {
+  intro: { say: "Black challenges with …e6. After the trades you centralise the queen on d5, castle long onto the d-file, build the big centre with e4, then grab the pawn with Bxd6 for the better game.", sayShort: "…e6 — Qxd5, O-O-O, e4, Bxd6" },
+  beats: [
+    { atMove: 10, say: "Qxd5 — recapturing into the centre, the queen eyeing the queenside and Black's loose development.", sayShort: "Qxd5 — centralise the queen", highlights: [_H('d5')] },
+    { atMove: 12, say: "O-O-O — castling long, the rook landing on the open d-file with immediate pressure.", sayShort: "O-O-O — rook to the d-file", arrows: [_A('d1', 'd8')] },
+    { atMove: 14, say: "e4 — building the broad centre, the space advantage that the early d5 promised.", sayShort: "e4 — build the centre", highlights: [_H('e4')] },
+    { atMove: 22, say: "Bxd6 — collecting the pawn, emerging with the better structure and the freer game.", sayShort: "Bxd6 — grab the pawn", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-center', 'concept:tac-double-attack', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+const LN79: SublineNarration = {
+  intro: { say: "Black plays …b5 and …d6. You build the big centre with e4, challenge with a4, open with dxe6, then route the knight to f4 and the bishop to d3 — a strong, space-based set-up.", sayShort: "…d6 — e4, dxe6, Nf4, Bd3" },
+  beats: [
+    { atMove: 8, say: "e4 — building the broad Benoni centre, your space the reward for the early d5 thrust.", sayShort: "e4 — build the big centre", highlights: [_H('e4')] },
+    { atMove: 14, say: "dxe6 — opening the position to gain time on Black's pieces while you keep the central majority.", sayShort: "dxe6 — open with tempo", highlights: [_H('e6')] },
+    { atMove: 20, say: "Nf4 — the knight reaches f4, eyeing e6, d5 and g6, pressing Black's weakened light squares.", sayShort: "Nf4 — press the light squares", highlights: [_H('f4')] },
+    { atMove: 22, say: "Bd3 — the bishop takes aim at h7, completing development behind your commanding centre.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Benoni_Defense'],
+};
+
+const LN80: SublineNarration = {
+  intro: { say: "Black centralises with …Nd5, hitting your bishop. You retreat Bg3 to the long diagonal, gain queenside space with a4 where Black has no counterplay, then post the rook on e1 to meet the coming …e5-e4 advance with f3.", sayShort: "…Nd5 — Bg3, a4, Re1" },
+  beats: [
+    { atMove: 18, say: "Bg3 — calmly retreating off the knight's attack, keeping the bishop on its long diagonal eyeing e5 and d6.", sayShort: "Bg3 — keep the diagonal", arrows: [_A('g3', 'e5')] },
+    { atMove: 20, say: "a4 — gaining queenside space and fixing Black's pawns, starting play on the wing where you are stronger.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+    { atMove: 22, say: "Re1 — the rook backs the e-file, preparing f3 to undermine Black's …e4 thrust and keep the centre under control.", sayShort: "Re1 — prepare f3", arrows: [_A('e1', 'e4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/London_System'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
+  'london-system::2::Nc6@9': LN20,
   'old-indian-defence::0::h3@14': WOLDH3,
   'old-indian-defence::4::h3@14': WOLDH3,
   'old-indian-defence::5::h3@14': WOLDH3,
@@ -2519,85 +3277,85 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'catalan-opening::6::c6@9': C72,
   'catalan-opening::6::Nbd7@9': C69,
   // ── london-system ──
-  'london-system::0::cxd4@9': C74,
-  'london-system::0::Bd6@9': C75,
-  'london-system::0::Be7@11': C75,
-  'london-system::0::c4@9': C75,
-  'london-system::0::cxd4@11': C74,
-  'london-system::0::Be7@9': C75,
-  'london-system::0::Qb6@11': C75,
-  'london-system::0::Qb6@9': C75,
-  'london-system::0::b6@15': TLON,
-  'london-system::0::a6@11': C75,
-  'london-system::1::Re8@17': WLONRE8,
-  'london-system::1::c5@17': C76,
-  'london-system::1::Ne4@17': C76,
-  'london-system::1::Nh5@17': C76,
-  'london-system::1::e5@17': C76,
-  'london-system::1::Qe8@17': C76,
-  'london-system::1::Rc8@17': C76,
-  'london-system::1::a6@17': C76,
-  'london-system::1::e6@17': C76,
-  'london-system::1::Nd5@17': C76,
-  'london-system::2::cxd4@9': C74,
-  'london-system::2::Bd6@9': C75,
-  'london-system::2::c4@9': C75,
-  'london-system::2::Be7@9': C75,
-  'london-system::2::Qb6@9': C75,
-  'london-system::2::Be7@13': C75,
-  'london-system::2::cxd4@13': C74,
-  'london-system::2::cxd4@11': C74,
-  'london-system::2::Bd6@11': C75,
-  'london-system::3::Nbd7@11': C77,
-  'london-system::3::c6@11': C77,
-  'london-system::3::Nc6@11': C77,
-  'london-system::3::b6@11': C77,
-  'london-system::3::Bg4@11': C77,
-  'london-system::3::Bf5@11': C78,
-  'london-system::3::cxd4@13': C74,
-  'london-system::3::Re8@11': C77,
-  'london-system::3::Nh5@11': C77,
-  'london-system::3::cxd4@15': C74,
-  'london-system::4::Be7@7': C79,
-  'london-system::4::b6@7': C79,
-  'london-system::4::d6@7': C79,
-  'london-system::4::Bd6@7': C79,
-  'london-system::4::Bb4+@7': C79,
-  'london-system::4::Be7@9': C79,
-  'london-system::4::c6@7': C79,
-  'london-system::4::c6@9': C75,
-  'london-system::4::Nc6@7': C79,
-  'london-system::4::c5@9': C75,
-  'london-system::5::Bd6@7': C78,
-  'london-system::5::c5@7': C78,
-  'london-system::5::Nc6@7': C78,
-  'london-system::5::Bb4@11': C78,
-  'london-system::5::a6@7': C78,
-  'london-system::5::h6@7': C78,
-  'london-system::5::Nbd7@11': C78,
-  'london-system::5::c6@7': C78,
-  'london-system::5::Be7@11': C78,
-  'london-system::5::Bd6@9': C78,
-  'london-system::6::c5@7': C75,
-  'london-system::6::b6@15': C75,
-  'london-system::6::Be7@7': C79,
-  'london-system::6::Re8@15': C75,
-  'london-system::6::Bxg3@9': C79,
-  'london-system::6::c5@9': C75,
-  'london-system::6::cxd4@15': C74,
-  'london-system::6::c4@15': C75,
-  'london-system::6::Nc6@7': C79,
-  'london-system::6::a6@15': C75,
-  'london-system::7::d6@5': C75,
-  'london-system::7::d6@9': C76,
-  'london-system::7::Qb6@5': C75,
-  'london-system::7::a6@9': C77,
-  'london-system::7::b4@9': C77,
-  'london-system::7::Qa5+@9': C77,
-  'london-system::7::g6@5': C76,
-  'london-system::7::Qb6@9': C77,
-  'london-system::7::e6@5': C75,
-  'london-system::7::d6@7': C75,
+  'london-system::0::cxd4@9': LN01,
+  'london-system::0::Bd6@9': LN02,
+  'london-system::0::Be7@11': LN03,
+  'london-system::0::c4@9': LN04,
+  'london-system::0::cxd4@11': LN05,
+  'london-system::0::Be7@9': LN06,
+  'london-system::0::Qb6@11': LN07,
+  'london-system::0::Qb6@9': LN08,
+  'london-system::0::b6@15': LN09,
+  'london-system::0::a6@11': LN10,
+  'london-system::1::Re8@17': LN11,
+  'london-system::1::c5@17': LN12,
+  'london-system::1::Ne4@17': LN13,
+  'london-system::1::Nh5@17': LN14,
+  'london-system::1::e5@17': LN15,
+  'london-system::1::Qe8@17': LN16,
+  'london-system::1::Rc8@17': LN17,
+  'london-system::1::a6@17': LN18,
+  'london-system::1::e6@17': LN19,
+  'london-system::1::Nd5@17': LN80,
+  'london-system::2::cxd4@9': LN21,
+  'london-system::2::Bd6@9': LN22,
+  'london-system::2::c4@9': LN23,
+  'london-system::2::Be7@9': LN24,
+  'london-system::2::Qb6@9': LN25,
+  'london-system::2::Be7@13': LN26,
+  'london-system::2::cxd4@13': LN27,
+  'london-system::2::cxd4@11': LN28,
+  'london-system::2::Bd6@11': LN29,
+  'london-system::3::Nbd7@11': LN30,
+  'london-system::3::c6@11': LN31,
+  'london-system::3::Nc6@11': LN32,
+  'london-system::3::b6@11': LN33,
+  'london-system::3::Bg4@11': LN34,
+  'london-system::3::Bf5@11': LN35,
+  'london-system::3::cxd4@13': LN36,
+  'london-system::3::Re8@11': LN37,
+  'london-system::3::Nh5@11': LN38,
+  'london-system::3::cxd4@15': LN39,
+  'london-system::4::Be7@7': LN40,
+  'london-system::4::b6@7': LN41,
+  'london-system::4::d6@7': LN42,
+  'london-system::4::Bd6@7': LN43,
+  'london-system::4::Bb4+@7': LN49,
+  'london-system::4::Be7@9': LN44,
+  'london-system::4::c6@7': LN47,
+  'london-system::4::c6@9': LN48,
+  'london-system::4::Nc6@7': LN45,
+  'london-system::4::c5@9': LN46,
+  'london-system::5::Bd6@7': LN50,
+  'london-system::5::c5@7': LN51,
+  'london-system::5::Nc6@7': LN52,
+  'london-system::5::Bb4@11': LN53,
+  'london-system::5::a6@7': LN54,
+  'london-system::5::h6@7': LN55,
+  'london-system::5::Nbd7@11': LN56,
+  'london-system::5::c6@7': LN57,
+  'london-system::5::Be7@11': LN58,
+  'london-system::5::Bd6@9': LN59,
+  'london-system::6::c5@7': LN60,
+  'london-system::6::b6@15': LN61,
+  'london-system::6::Be7@7': LN62,
+  'london-system::6::Re8@15': LN63,
+  'london-system::6::Bxg3@9': LN64,
+  'london-system::6::c5@9': LN65,
+  'london-system::6::cxd4@15': LN66,
+  'london-system::6::c4@15': LN67,
+  'london-system::6::Nc6@7': LN68,
+  'london-system::6::a6@15': LN69,
+  'london-system::7::d6@5': LN70,
+  'london-system::7::d6@9': LN71,
+  'london-system::7::Qb6@5': LN72,
+  'london-system::7::a6@9': LN73,
+  'london-system::7::b4@9': LN74,
+  'london-system::7::Qa5+@9': LN75,
+  'london-system::7::g6@5': LN76,
+  'london-system::7::Qb6@9': LN77,
+  'london-system::7::e6@5': LN78,
+  'london-system::7::d6@7': LN79,
   // ── trompowsky-attack ──
   'trompowsky-attack::0::e6@7': C80,
   'trompowsky-attack::0::Bf5@7': C80,
