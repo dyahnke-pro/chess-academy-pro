@@ -338,35 +338,11 @@ const C145: SublineNarration = {
 // anti-budapest :: ne4
 // anti-budapest :: bf4_main
 // anti-london-black :: c4_clamp
-const C148: SublineNarration = {
-  intro: { say: "You've grabbed queenside space with …c4, clamping White's b3-and-c-pawn breaks and gaining a free hand on the wing. The plan from here: …b5-b4 to roll the pawns, …Na5-c4 or …Bf5 for piece activity, and patient pressure on White's now-static queenside. The London is at its weakest when you seize space first — keep rolling.", sayShort: "…c4 — clamp the queenside, roll …b5-b4." },
-  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
-};
 // anti-london-black :: e4_push
-const C149: SublineNarration = {
-  intro: { say: "White lashes out with the e4 push instead of the quiet London. Meet the central break head-on: capture and develop with tempo, exploit that White has spent moves on the slow Bf4 setup, and seize the centre yourself. The aggressive e4 abandons the London's solidity — punish it with quick, active development and central control.", sayShort: "e4 — take it, seize the centre." },
-  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
-};
 // anti-catalan-black :: open
-const C150: SublineNarration = {
-  intro: { say: "The Open Catalan from Black's side — you've taken on c4 and will hold it briefly with …a6 and …b5, or give it back for free development. The point is to solve your game before White's g2-bishop chokes you: get the light bishop active, complete development with …Nc6 or …Nbd7, and break with …c5. Hold the pawn or return it cleanly — either way you equalise.", sayShort: "Open Catalan — hold or return c4." },
-  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
-};
 // anti-catalan-black :: nimzo_nc3
-const C151: SublineNarration = {
-  intro: { say: "White plays Nc3 instead of the pure Catalan fianchetto, inviting a Nimzo with …Bb4. Pin the knight, fight for e4, and you're in comfortable Nimzo-Indian territory — fracture White's pawns with …Bxc3 or hold the pin and strike the centre. The Catalan's fianchetto pressure never materialises; you reach a well-charted, equal structure.", sayShort: "Nc3 — …Bb4, play the Nimzo." },
-  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
-};
 // anti-catalan-black :: bb4_check
-const C152: SublineNarration = {
-  intro: { say: "You check with …Bb4+, the reliable Catalan equaliser. After Bd2 trade or retreat with gain of time, neutralising the g2-bishop's pull before it ever bites. The cleanest way to take the sting out of the Catalan — swap off a piece, complete development, and reach a balanced game with no long-term light-square worries.", sayShort: "…Bb4+ — defuse the Catalan, trade with tempo." },
-  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
-};
 // anti-catalan-black :: qa4_nbd7
-const C153: SublineNarration = {
-  intro: { say: "White harries with Qa4+ to regain the c4-pawn. Block with …Nbd7 and develop in good order — the check costs White a little time and your pieces come out naturally. After White recaptures on c4, strike with …c5 or …a6 and …b5 to free the queenside; the long-diagonal bishop is annoying but containable with active play.", sayShort: "Qa4+ — …Nbd7, free with …c5." },
-  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
-};
 // anti-colle-black :: c4_transpo
 // anti-colle-black :: bf4_london
 // anti-colle-black :: zukertort_b3
@@ -458,21 +434,7 @@ const EAQGD: SublineNarration = {
 };
 // DEEP EABUD :: anti-budapest::1::Nc6@7 | anti-budapest::2::Nc6@7
 // DEEP EALON :: anti-london-black::1::c3@6
-const EALON: SublineNarration = {
-  intro: { say: "You've hit White's d4 with …c5 and …Nc6, and now you clamp the queenside with …c4. The idea against the London is to grab space first — but know that …c4 commits you, so follow up energetically: …b5 and the queenside roll give you active counterplay on the wing where his slow setup is least prepared.", sayShort: "Anti-London — clamp with …c4." },
-  beats: [
-    { atMove: 7, say: "…c4 — clamp the queenside and grab the space, freezing White's b- and c-pawn breaks before they start (look at c4). Now …b5 and the pawn roll give you active queenside counterplay — just be ready to follow through, since …c4 has released the central tension.", sayShort: "…c4 — clamp, then roll …b5.", highlights: [_H('c4', ATK)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/London_System'],
-};
 // DEEP EACAT :: anti-catalan-black::1::Nf3@8
-const EACAT: SublineNarration = {
-  intro: { say: "The Open Catalan, and you're going to hold that extra c4-pawn with …a6 and …b5 — solving your game before White's g2-bishop can choke you. Get the queenside rolling, finish developing, and break with …c5. Bank the pawn or hand it back cleanly; either way you equalise.", sayShort: "Open Catalan — hold c4 with …a6, …b5." },
-  beats: [
-    { atMove: 9, say: "…a6 — preparing …b5 to hold the c4-pawn and free your queenside (look at c4). This is how you take the sting out of the Catalan: bank the pawn, expand on the wing, and leave that famous g2-bishop biting on thin air.", sayShort: "…a6 — prep …b5, hold c4.", highlights: [_H('c4', KEY), _H('a6', SOFT)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
-};
 // DEEP EACOL :: anti-colle-black::3::exd4@8
 // DEEP TQGQGA :: queens-gambit::3::Nc6@11
 // DEEP TLON :: london-system::0::b6@15
@@ -14933,6 +14895,368 @@ const ABUW2_9: SublineNarration = {
   sources: ['concept:pos-space', 'https://lichess.org/opening/Budapest-Defense'],
 };
 
+const ACATW_0: SublineNarration = {
+  intro: { say: "White steers toward a Catalan-flavoured d5/e6 structure with Bg5. Hit back at once: pin with …Bb4+ and strike the centre with …c5. When you trade on c3 you saddle White with doubled pawns, and the queen sortie to a5 wins back the bishop on b5 — you've equalised with the structural trumps.", sayShort: "Anti-Catalan: …c5, double the pawns" },
+  beats: [
+    { atMove: 5, say: "Stake the centre with …d5, meeting White's set-up head-on.", sayShort: "…d5, stake the centre", highlights: [_H('d5')] },
+    { atMove: 7, say: "Pin …Bb4+, pressuring the knight before White consolidates.", sayShort: "…Bb4+, pin the knight", highlights: [_H('b4')] },
+    { atMove: 15, say: "Trade …Bxc3+, leaving White with shattered doubled c-pawns.", sayShort: "…Bxc3+, shatter the pawns", highlights: [_H('c3')] },
+    { atMove: 23, say: "Collect …Qxb5; the loose bishop falls — you're equal with the better structure.", sayShort: "…Qxb5, win the bishop", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const ACATW_1: SublineNarration = {
+  intro: { say: "With Nc3 White invites a Nimzo-Indian. Clamp the centre with …Bb4 and challenge it with …c5. After trading on c3 you fix White's pawns, then plant the knight on e4 — the outpost in the heart of the board. With …f5 supporting it, your piece play balances White's centre.", sayShort: "Anti-Catalan: Nimzo …Bb4, knight to e4" },
+  beats: [
+    { atMove: 5, say: "Pin …Bb4, the Nimzo clamp on White's queenside knight.", sayShort: "…Bb4, the Nimzo clamp", highlights: [_H('b4')] },
+    { atMove: 9, say: "Strike …cxd4, opening the position before White completes development.", sayShort: "…cxd4, open the centre", highlights: [_H('d4')] },
+    { atMove: 15, say: "Counter …d5, staking your own claim in the centre.", sayShort: "…d5, stake your claim", highlights: [_H('d5')] },
+    { atMove: 19, say: "Leap …Ne4! The knight lands on a dominant central outpost.", sayShort: "…Ne4, the central outpost", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const ACATW_2: SublineNarration = {
+  intro: { say: "This is the Open Catalan — grab the c4-pawn and make White work to regain it. Check with …Bb4+, then anchor the extra pawn with …a5 and …b5. White will eventually win it back, but you've gained tempi and a free, harmonious development. Castle and untangle with the rook lift; fully equal.", sayShort: "Anti-Catalan: Open, hold c4 with …b5" },
+  beats: [
+    { atMove: 7, say: "Snatch …dxc4, the Open Catalan pawn — make White spend time to regain it.", sayShort: "…dxc4, grab the pawn", highlights: [_H('c4')] },
+    { atMove: 9, say: "Check …Bb4+, developing with tempo before White can recapture.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 15, say: "Anchor …b5, propping up your extra c4-pawn with the queenside chain.", sayShort: "…b5, prop up the pawn", highlights: [_H('b5')] },
+    { atMove: 23, say: "Lift …Ra7, untangling smoothly — you've equalised with easy development.", sayShort: "…Ra7, untangle and equalise", highlights: [_H('a7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const ACATW_3: SublineNarration = {
+  intro: { say: "White lunges Ne5 to hurry the pawn back, but it overreaches. Check …Bb4+ to deflect the dark-squared bishop, then snap …Qxd4 hitting the loose knight — and follow with …Qxe5, scooping it up. The smoke clears with material level, your bishop raking the long diagonal from b7.", sayShort: "Anti-Catalan: …Qxd4 then …Qxe5" },
+  beats: [
+    { atMove: 11, say: "Check …Bb4+, dragging White's bishop away from the e5-knight's defence.", sayShort: "…Bb4+, deflect the defender", highlights: [_H('b4')] },
+    { atMove: 13, say: "Grab …Qxd4, hitting the now-undefended e5-knight in passing.", sayShort: "…Qxd4, hit the knight", highlights: [_H('d4')] },
+    { atMove: 15, say: "Take …Qxe5! The overextended knight falls — material is level.", sayShort: "…Qxe5, win the knight", highlights: [_H('e5')] },
+    { atMove: 23, say: "Reposition …Qf5; your b7-bishop dominates the long diagonal. Equal.", sayShort: "…Qf5, dominate the diagonal", highlights: [_H('f5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const ACATW_4: SublineNarration = {
+  intro: { say: "White recovers the pawn with the check Qa4+. Block with …Nbd7 — developing, not just defending. Tuck the rook to b8 ready for …b5, develop the bishop actively to d6, and castle. Then the freeing break …e5 strikes the centre, and after the trades your knight jumps into c5. Comfortable equality.", sayShort: "Anti-Catalan: …Nbd7, the …e5 break" },
+  beats: [
+    { atMove: 9, say: "Block …Nbd7, meeting the check by developing a piece.", sayShort: "…Nbd7, block and develop", highlights: [_H('d7')] },
+    { atMove: 15, say: "Post …Bd6, eyeing the kingside and supporting the coming …e5.", sayShort: "…Bd6, eye the kingside", highlights: [_H('d6')] },
+    { atMove: 19, say: "Break …e5! The central thrust frees your game completely.", sayShort: "…e5, free your game", highlights: [_H('e5')] },
+    { atMove: 23, say: "Jump …Nc5, the knight reaching its ideal square. Fully equal.", sayShort: "…Nc5, the ideal square", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const ACATW_5: SublineNarration = {
+  intro: { say: "White plays a4 to stop …b5 and round up the c4-pawn. Fine — hit the centre instead with …c5. Trade on d4 to open lines, develop the knight to c6 and the bishop actively to c5, eyeing f2. You castle into a free, equal position with all your pieces working.", sayShort: "Anti-Catalan: …c5 strike, …Bc5 active" },
+  beats: [
+    { atMove: 11, say: "Strike …c5, switching plans to attack White's centre directly.", sayShort: "…c5, attack the centre", highlights: [_H('c5')] },
+    { atMove: 13, say: "Open …cxd4, clearing lines for your active pieces.", sayShort: "…cxd4, clear the lines", highlights: [_H('d4')] },
+    { atMove: 17, say: "Develop …Bc5, the bishop bearing down on the f2-square.", sayShort: "…Bc5, bear down on f2", highlights: [_H('c5')] },
+    { atMove: 23, say: "Tuck …Ba7, keeping the bishop's diagonal alive. Equal and easy.", sayShort: "…Ba7, keep the diagonal", highlights: [_H('a7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const ACATW_6: SublineNarration = {
+  intro: { say: "White steers toward a Catalan-flavoured d5/e6 structure with Bg5. Hit back at once: pin with …Bb4+ and strike the centre with …c5. When you trade on c3 you saddle White with doubled pawns, and the queen sortie to a5 wins back the bishop on b5 — you've equalised with the structural trumps.", sayShort: "Anti-Catalan: …c5, double the pawns" },
+  beats: [
+    { atMove: 5, say: "Stake the centre with …d5, meeting White's set-up head-on.", sayShort: "…d5, stake the centre", highlights: [_H('d5')] },
+    { atMove: 7, say: "Pin …Bb4+, pressuring the knight before White consolidates.", sayShort: "…Bb4+, pin the knight", highlights: [_H('b4')] },
+    { atMove: 15, say: "Trade …Bxc3+, leaving White with shattered doubled c-pawns.", sayShort: "…Bxc3+, shatter the pawns", highlights: [_H('c3')] },
+    { atMove: 23, say: "Collect …Qxb5; the loose bishop falls — you're equal with the better structure.", sayShort: "…Qxb5, win the bishop", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const ACATW_7: SublineNarration = {
+  intro: { say: "With Nc3 White invites a Nimzo-Indian. Clamp the centre with …Bb4 and challenge it with …c5. After trading on c3 you fix White's pawns, then plant the knight on e4 — the outpost in the heart of the board. With …f5 supporting it, your piece play balances White's centre.", sayShort: "Anti-Catalan: Nimzo …Bb4, knight to e4" },
+  beats: [
+    { atMove: 5, say: "Pin …Bb4, the Nimzo clamp on White's queenside knight.", sayShort: "…Bb4, the Nimzo clamp", highlights: [_H('b4')] },
+    { atMove: 9, say: "Strike …cxd4, opening the position before White completes development.", sayShort: "…cxd4, open the centre", highlights: [_H('d4')] },
+    { atMove: 15, say: "Counter …d5, staking your own claim in the centre.", sayShort: "…d5, stake your claim", highlights: [_H('d5')] },
+    { atMove: 19, say: "Leap …Ne4! The knight lands on a dominant central outpost.", sayShort: "…Ne4, the central outpost", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const ACATW_8: SublineNarration = {
+  intro: { say: "This is the Open Catalan — grab the c4-pawn and make White work to regain it. Check with …Bb4+, then anchor the extra pawn with …a5 and …b5. White will eventually win it back, but you've gained tempi and a free, harmonious development. Castle and untangle with the rook lift; fully equal.", sayShort: "Anti-Catalan: Open, hold c4 with …b5" },
+  beats: [
+    { atMove: 7, say: "Snatch …dxc4, the Open Catalan pawn — make White spend time to regain it.", sayShort: "…dxc4, grab the pawn", highlights: [_H('c4')] },
+    { atMove: 9, say: "Check …Bb4+, developing with tempo before White can recapture.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 15, say: "Anchor …b5, propping up your extra c4-pawn with the queenside chain.", sayShort: "…b5, prop up the pawn", highlights: [_H('b5')] },
+    { atMove: 23, say: "Lift …Ra7, untangling smoothly — you've equalised with easy development.", sayShort: "…Ra7, untangle and equalise", highlights: [_H('a7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const ACATW_9: SublineNarration = {
+  intro: { say: "In the Open Catalan, support your extra pawn with …a6 and develop briskly. Bring the knight to c6, the bishop to d7 and d6, and castle. White regains c4, but you've achieved the freeing break …e5, meeting White's e4 head-on. The position is balanced with active, harmonious pieces.", sayShort: "Anti-Catalan: …a6, develop, …e5" },
+  beats: [
+    { atMove: 9, say: "Support …a6, preparing …b5 and securing your queenside.", sayShort: "…a6, prepare …b5", highlights: [_H('a6')] },
+    { atMove: 11, say: "Develop …Nc6, hitting the d4-pawn and the centre.", sayShort: "…Nc6, hit the centre", highlights: [_H('c6')] },
+    { atMove: 15, say: "Post …Bd6, the bishop eyeing h2 and backing the …e5 break.", sayShort: "…Bd6, eye h2", highlights: [_H('d6')] },
+    { atMove: 23, say: "Strike …e5! You meet e4 in the centre with full equality.", sayShort: "…e5, meet e4 head-on", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const ACATW_10: SublineNarration = {
+  intro: { say: "You blocked the check with …Nbd7 and now build the queenside. Prepare with …a6, swing the rook to b8, and gain space with …b5, fianchettoing the bishop to b7 onto the long diagonal that contests White's Catalan bishop. The …c5 break completes your freeing plan — comfortable equality.", sayShort: "Anti-Catalan: …b5, contest the diagonal" },
+  beats: [
+    { atMove: 11, say: "Prepare …a6, the prelude to your queenside expansion.", sayShort: "…a6, prepare expansion", highlights: [_H('a6')] },
+    { atMove: 15, say: "Gain space with …b5, then the bishop heads to b7 to fight for the long diagonal.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+    { atMove: 21, say: "Break …c5, opening lines for your harmoniously placed pieces.", sayShort: "…c5, open lines", highlights: [_H('c5')] },
+    { atMove: 23, say: "Recapture …Bxc5, the bishop active. You've equalised with ease.", sayShort: "…Bxc5, active and equal", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const ACATW_11: SublineNarration = {
+  intro: { say: "White recaptures the pawn via Nd2. Hit the centre immediately with …c5, and after the trade your bishop springs to c5 with tempo. Probe with …Qb6 and …Ne5, then plant the bishop on d4 — a monster in the centre that cramps White. Your pieces are the more active; you're already pressing.", sayShort: "Anti-Catalan: …c5, bishop to d4" },
+  beats: [
+    { atMove: 13, say: "Strike …c5, challenging White's centre the moment the pawn is regained.", sayShort: "…c5, challenge the centre", highlights: [_H('c5')] },
+    { atMove: 15, say: "Develop …Bxc5, the bishop entering the game with tempo.", sayShort: "…Bxc5, enter with tempo", highlights: [_H('c5')] },
+    { atMove: 19, say: "Centralise …Ne5, the knight eyeing key squares near White's king.", sayShort: "…Ne5, eye the king", highlights: [_H('e5')] },
+    { atMove: 21, say: "Plant …Bd4! The bishop dominates the centre — you're the more active side.", sayShort: "…Bd4, dominate the centre", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const ACATW_12: SublineNarration = {
+  intro: { say: "White regains the pawn and develops solidly with Be3. Match it calmly: post the bishop on d6, castle, and prepare the key idea — …b6 and …Bb7, planting your bishop on the long diagonal to neutralise White's Catalan bishop. With the diagonals contested and pieces developed, the game is dead level.", sayShort: "Anti-Catalan: …b6-Bb7 neutralise" },
+  beats: [
+    { atMove: 13, say: "Post …Bd6, an active diagonal for the bishop toward White's king.", sayShort: "…Bd6, active diagonal", highlights: [_H('d6')] },
+    { atMove: 15, say: "Castle …O-O, tucking the king before the middlegame manoeuvres.", sayShort: "…O-O, tuck the king", highlights: [_H('g8')] },
+    { atMove: 19, say: "Prepare …b6, clearing the way for the key fianchetto.", sayShort: "…b6, prepare the fianchetto", highlights: [_H('b6')] },
+    { atMove: 23, say: "Fianchetto …Bb7! Your bishop contests the long diagonal — fully equal.", sayShort: "…Bb7, contest the diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const ACATW_13: SublineNarration = {
+  intro: { say: "With the queen on d3 White eyes the centre. Strike first with …c5, then expand with …b5, claiming queenside space. Recapture on c5 with the bishop, retreat it to the active b6-square, and complete the fianchetto with …Bb7. You've seized the initiative with a broad queenside and well-placed bishops.", sayShort: "Anti-Catalan: …c5/…b5 queenside grab" },
+  beats: [
+    { atMove: 13, say: "Strike …c5, hitting the centre before White is fully coordinated.", sayShort: "…c5, hit the centre", highlights: [_H('c5')] },
+    { atMove: 15, say: "Expand …b5, grabbing queenside space and supporting your pieces.", sayShort: "…b5, grab the space", highlights: [_H('b5')] },
+    { atMove: 17, say: "Recapture …Bxc5, the bishop active and eyeing f2.", sayShort: "…Bxc5, active bishop", highlights: [_H('c5')] },
+    { atMove: 23, say: "Fianchetto …Bb7; both bishops rake the centre — you hold the initiative.", sayShort: "…Bb7, rake the centre", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const ACATW_14: SublineNarration = {
+  intro: { say: "White grabbed the pawn, so chase the queen with …b5! The greedy Qc6 walks into trouble — develop …Bb7 hitting it, and although White snatches c7, you regain it with interest. The check …Bb4+ wins a tempo and …Rc8 traps the wayward bishop's escape, leaving you the more comfortable side.", sayShort: "Anti-Catalan: …b5 chases the queen" },
+  beats: [
+    { atMove: 13, say: "Chase …b5! The pawn harasses White's queen and gains queenside space.", sayShort: "…b5, chase the queen", highlights: [_H('b5')] },
+    { atMove: 17, say: "Develop …Bb7, hitting the exposed queen on c6 along the diagonal.", sayShort: "…Bb7, hit the queen", highlights: [_H('b7')] },
+    { atMove: 19, say: "Recapture …Qxc7, regaining the pawn with an active queen.", sayShort: "…Qxc7, regain the pawn", highlights: [_H('c7')] },
+    { atMove: 23, say: "Swing …Rc8, snaring the loose bishop — you stand more comfortably.", sayShort: "…Rc8, snare the bishop", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const ACATW_15: SublineNarration = {
+  intro: { say: "White develops Nc3 and regains the pawn. Solidify with …c6, then unleash the central break …e5! Trade on d4 to open the position, hop the knight to b6 with tempo on the queen, and develop the bishop to c5. The tactics flow in your favour — after the exchanges you emerge fully equal with active pieces.", sayShort: "Anti-Catalan: …c6 then the …e5 break" },
+  beats: [
+    { atMove: 11, say: "Solidify …c6, bolstering d5 and preparing the central break.", sayShort: "…c6, bolster the centre", highlights: [_H('c6')] },
+    { atMove: 13, say: "Unleash …e5! The freeing break strikes the heart of the board.", sayShort: "…e5, the freeing break", highlights: [_H('e5')] },
+    { atMove: 17, say: "Hop …Nb6, gaining a tempo by hitting White's queen.", sayShort: "…Nb6, gain a tempo", highlights: [_H('b6')] },
+    { atMove: 23, say: "Capture …Bxe3; the exchanges leave you equal with active pieces.", sayShort: "…Bxe3, equal and active", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+
+const ALONW_0: SublineNarration = {
+  intro: { say: "You've met the London with the most testing plan: …c5, …Nc6, and the space-grabbing …c4, locking White's queenside and burying his light bishop's prospects. Develop …Bf5 outside the pawn chain, post the knights, and after the central trades you reach a balanced ending with the rook swinging to the open c-file.", sayShort: "Anti-London: …c4 clamp, …Bf5 out" },
+  beats: [
+    { atMove: 9, say: "Develop …Bf5, getting the bishop active outside the pawn chain.", sayShort: "…Bf5, bishop outside", highlights: [_H('f5')] },
+    { atMove: 11, say: "Bring …Nf6, completing development and eyeing e4.", sayShort: "…Nf6, complete development", highlights: [_H('f6')] },
+    { atMove: 19, say: "Hop …Nc5, the knight reaching a strong central square.", sayShort: "…Nc5, strong square", highlights: [_H('c5')] },
+    { atMove: 23, say: "Swing …Rc8 to the open file; the ending is balanced and easy.", sayShort: "…Rc8, seize the c-file", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/London-System'],
+};
+const ALONW_1: SublineNarration = {
+  intro: { say: "White tries to break with e4-e5, but your queenside space is the bigger asset. Behind the …c4 wedge, roll the pawns: …b5, …a5, …b4 and …a4, prising open lines against White's king while your knights reroute via b6. The race favours you — your pawn-storm crashes home first.", sayShort: "Anti-London: queenside pawn-storm" },
+  beats: [
+    { atMove: 9, say: "Develop …Nf6, putting a piece on its best square before the storm.", sayShort: "…Nf6, develop first", highlights: [_H('f6')] },
+    { atMove: 11, say: "Advance …b5, beginning the queenside pawn-roll White cannot match.", sayShort: "…b5, begin the roll", highlights: [_H('b5')] },
+    { atMove: 21, say: "Push …b4! The storm crashes into White's queenside.", sayShort: "…b4, the storm hits", highlights: [_H('b4')] },
+    { atMove: 23, say: "Ram …a4, prising open lines toward White's king. You're faster.", sayShort: "…a4, prise it open", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/London-System'],
+};
+const ALONW_2: SublineNarration = {
+  intro: { say: "White challenges your wedge with b3. Take it — …cxb3 — and after the recapture you've traded off White's space gambit. Trade the dark-squared bishops with …Bd6, and when White lunges Qg4 just sidestep with the king and offer the queen swap. The resulting structure is level and pleasant for you.", sayShort: "Anti-London: take b3, trade bishops" },
+  beats: [
+    { atMove: 9, say: "Capture …cxb3, dissolving White's attempt to undermine your wedge.", sayShort: "…cxb3, dissolve the wedge", highlights: [_H('b3')] },
+    { atMove: 13, say: "Offer …Bd6, trading off White's prized London bishop.", sayShort: "…Bd6, trade the bishop", highlights: [_H('d6')] },
+    { atMove: 19, say: "Swap …Qxg3, simplifying into a balanced endgame.", sayShort: "…Qxg3, simplify", highlights: [_H('g3')] },
+    { atMove: 23, say: "Fianchetto …g6, harmonising your structure. Dead level.", sayShort: "…g6, harmonise", highlights: [_H('g6')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/London-System'],
+};
+const ALONW_3: SublineNarration = {
+  intro: { say: "White lashes out with g4 to chase your bishop, but it only loosens his own king. Retreat calmly to g6, and when g5 kicks the knight, leap into e4 — a dominating central outpost. After the trade your bishop settles on d3, a thorn White cannot dislodge. The position is dead equal with your pieces beautifully placed.", sayShort: "Anti-London: …Ne4 outpost, …Bd3" },
+  beats: [
+    { atMove: 9, say: "Develop …Bf5, the bishop eyeing White's loosened kingside.", sayShort: "…Bf5, eye the kingside", highlights: [_H('f5')] },
+    { atMove: 15, say: "Leap …Ne4! The knight occupies a powerful central outpost.", sayShort: "…Ne4, central outpost", highlights: [_H('e4')] },
+    { atMove: 17, say: "Recapture …Bxe4, the bishop now raking the long diagonal.", sayShort: "…Bxe4, rake the diagonal", highlights: [_H('e4')] },
+    { atMove: 19, say: "Plant …Bd3, a thorn in White's camp he cannot remove. Equal.", sayShort: "…Bd3, the thorn", highlights: [_H('d3')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/London-System'],
+};
+const ALONW_4: SublineNarration = {
+  intro: { say: "With the …c4 wedge fixed, expand on the queenside with …b5 and …a6. When White strikes b3, you have the in-between …Ba3, sneaking the bishop behind White's pawns. After the captures, …bxc4 keeps you a pawn up and …Bb2 forks the a1-rook — you emerge clearly better with extra material.", sayShort: "Anti-London: …Ba3, win material" },
+  beats: [
+    { atMove: 9, say: "Expand …b5, gaining queenside space behind the wedge.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+    { atMove: 17, say: "Slip …Ba3! The bishop infiltrates behind White's pawns.", sayShort: "…Ba3, infiltrate", highlights: [_H('a3')] },
+    { atMove: 21, say: "Recapture …bxc4, staying a clean pawn to the good.", sayShort: "…bxc4, a pawn up", highlights: [_H('c4')] },
+    { atMove: 23, say: "Fork …Bb2, snaring the a1-rook — you're clearly winning material.", sayShort: "…Bb2, snare the rook", highlights: [_H('b2')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/London-System'],
+};
+const ALONW_5: SublineNarration = {
+  intro: { say: "White plays a4 and b4 to break your wedge, but it backfires. Press with …Qb6 hitting b2, then capture …cxb3 en passant. Develop …Bd7 and …Rc8, and after the trade on c6 your queen raids: …Qxc3 grabs a pawn and forces White's king to wander. With …Qxb3 you collect more — a winning material edge.", sayShort: "Anti-London: …Qb6, raid with the queen" },
+  beats: [
+    { atMove: 9, say: "Pressure …Qb6, training the queen on the loose b2-pawn.", sayShort: "…Qb6, pressure b2", highlights: [_H('b6')] },
+    { atMove: 11, say: "Capture …cxb3 en passant, opening lines on the queenside.", sayShort: "…cxb3, open lines", highlights: [_H('b3')] },
+    { atMove: 21, say: "Grab …Qxc3! The queen snatches a pawn and harries White's king.", sayShort: "…Qxc3, snatch and harry", highlights: [_H('c3')] },
+    { atMove: 23, say: "Collect …Qxb3, banking more material — you're winning.", sayShort: "…Qxb3, bank the material", highlights: [_H('b3')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/London-System'],
+};
+const ALONW_6: SublineNarration = {
+  intro: { say: "When White develops naturally with Nf3, hit the queenside with …Qb6, pressuring b2. Develop …Nf6 and then …Nh5 to harass the London bishop off f4. After the central exchanges your knight lands on f4 with tempo, and …Bb4 develops with a pin. You've equalised comfortably with active pieces.", sayShort: "Anti-London: …Qb6, kick the bishop" },
+  beats: [
+    { atMove: 7, say: "Play …e6, opening the bishop's diagonal and bolstering d5.", sayShort: "…e6, open the diagonal", highlights: [_H('e6')] },
+    { atMove: 9, say: "Pressure …Qb6, hitting the b2-pawn and discouraging Qb3.", sayShort: "…Qb6, hit b2", highlights: [_H('b6')] },
+    { atMove: 13, say: "Sidle …Nh5, kicking White's prized bishop off the f4-square.", sayShort: "…Nh5, kick the bishop", highlights: [_H('h5')] },
+    { atMove: 23, say: "Pin …Bb4, developing with tempo. Comfortable equality.", sayShort: "…Bb4, develop with a pin", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/London-System'],
+};
+const ALONW_7: SublineNarration = {
+  intro: { say: "White overreaches with the e4 gambit. Snap it off: …dxe4 wins a central pawn, and …cxd4 grabs another. Trade queens to defuse White's initiative, and calmly consolidate — …Bd7, …Nf6, knights to active squares. White's compensation falls short; you're a clean pawn up and clearly better.", sayShort: "Anti-London: bust the e4 gambit" },
+  beats: [
+    { atMove: 5, say: "Capture …dxe4! Snatch the central pawn White rashly offered.", sayShort: "…dxe4, snatch the pawn", highlights: [_H('e4')] },
+    { atMove: 7, say: "Grab …cxd4, helping yourself to a second pawn.", sayShort: "…cxd4, a second pawn", highlights: [_H('d4')] },
+    { atMove: 11, say: "Trade …Qxd4, swapping queens to kill White's initiative.", sayShort: "…Qxd4, kill the attack", highlights: [_H('d4')] },
+    { atMove: 21, say: "Centralise …Nc6, consolidating — a clean pawn up and winning.", sayShort: "…Nc6, consolidate the win", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/London-System'],
+};
+const ALONW_8: SublineNarration = {
+  intro: { say: "White's Nc3 allows you to clarify the centre with …cxd4. Develop the light bishop to f5 — the piece that's often hard to activate against the London — and trade it for White's good bishop on d3. With the problem piece swapped, finish development and seize the c-file. The position is perfectly equal.", sayShort: "Anti-London: …Bf5, trade the bad bishop" },
+  beats: [
+    { atMove: 7, say: "Clarify …cxd4, fixing the central pawn structure.", sayShort: "…cxd4, fix the centre", highlights: [_H('d4')] },
+    { atMove: 11, say: "Develop …Bf5, activating the bishop before …e6 shuts it in.", sayShort: "…Bf5, activate the bishop", highlights: [_H('f5')] },
+    { atMove: 13, say: "Trade …Bxd3, swapping off your problem piece for White's good one.", sayShort: "…Bxd3, swap the bad bishop", highlights: [_H('d3')] },
+    { atMove: 23, say: "Occupy …Rc8 on the open file. Perfectly equal.", sayShort: "…Rc8, the open file", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/London-System'],
+};
+const ALONW_9: SublineNarration = {
+  intro: { say: "White meets …c5 with c3, so probe at once with …Qb6, hitting b2 and discouraging White's set-up. After dxc5 you regain the pawn with …Qxc5, develop …Bd6 to trade the London bishop, and complete development. With the dark-squared bishops off and your pieces active, you reach an equal, comfortable middlegame.", sayShort: "Anti-London: …Qb6, regain and trade" },
+  beats: [
+    { atMove: 5, say: "Probe …Qb6, hitting b2 the moment White plays c3.", sayShort: "…Qb6, hit b2", highlights: [_H('b6')] },
+    { atMove: 11, say: "Recapture …Qxc5, regaining the pawn with an active queen.", sayShort: "…Qxc5, regain the pawn", highlights: [_H('c5')] },
+    { atMove: 15, say: "Offer …Bd6, trading off White's strong London bishop.", sayShort: "…Bd6, trade the bishop", highlights: [_H('d6')] },
+    { atMove: 23, say: "Castle …O-O, fully developed and equal.", sayShort: "…O-O, fully developed", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/London-System'],
+};
+const ALONW_10: SublineNarration = {
+  intro: { say: "With the …c4 space-grab set, build a solid, flexible position. Support the queenside with …a6, open the bishop with …e6, and develop naturally. When White trades on d7 and pushes e4-e5, simply reroute the knight to d7, where it eyes the holes White's advance created. Your space and structure keep you fully comfortable.", sayShort: "Anti-London: …c4 clamp, solid setup" },
+  beats: [
+    { atMove: 9, say: "Support …a6, securing the queenside before developing.", sayShort: "…a6, secure the flank", highlights: [_H('a6')] },
+    { atMove: 11, say: "Open …e6, freeing the bishop and bolstering d5.", sayShort: "…e6, free the bishop", highlights: [_H('e6')] },
+    { atMove: 17, say: "Develop …Be7, completing the kingside calmly.", sayShort: "…Be7, complete development", highlights: [_H('e7')] },
+    { atMove: 23, say: "Reroute …Nd7, the knight eyeing the squares e4-e5 vacated. Comfortable.", sayShort: "…Nd7, eye the holes", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/London-System'],
+};
+const ALONW_11: SublineNarration = {
+  intro: { say: "White undermines with b3, so capture …cxb3 to liquidate the tension. Develop …e6 and …Bd6, offering to trade White's London bishop — when it's gone, your dark squares breathe. Castle, then expand with …b6 and …a5 to challenge White's queenside pawns. The game is level with chances for both.", sayShort: "Anti-London: take b3, trade and expand" },
+  beats: [
+    { atMove: 9, say: "Capture …cxb3, liquidating to free your position.", sayShort: "…cxb3, liquidate", highlights: [_H('b3')] },
+    { atMove: 13, say: "Develop …Bd6, offering to trade White's key bishop.", sayShort: "…Bd6, offer the trade", highlights: [_H('d6')] },
+    { atMove: 17, say: "Recapture …Qxd6, the dark squares now yours to use.", sayShort: "…Qxd6, claim the dark squares", highlights: [_H('d6')] },
+    { atMove: 23, say: "Expand …a5, challenging White's queenside pawns. Balanced.", sayShort: "…a5, challenge the flank", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/London-System'],
+};
+const ALONW_12: SublineNarration = {
+  intro: { say: "White's Nc3 lets you pin and trade with …Bg4xf3, doubling nothing but removing a defender. Pin again with …Bb4, and when White opens the centre, snap off the knight with …Bxc3. The point comes at the end: after the central trades, …Nxf4 captures White's prized London bishop. You've won the bishop pair and equalised easily.", sayShort: "Anti-London: trade down, win the bishop" },
+  beats: [
+    { atMove: 9, say: "Pin …Bg4, training the bishop on the f3-knight.", sayShort: "…Bg4, pin the knight", highlights: [_H('g4')] },
+    { atMove: 15, say: "Pin …Bb4, pressuring the c3-knight as well.", sayShort: "…Bb4, pin again", highlights: [_H('b4')] },
+    { atMove: 21, say: "Recapture …Nxd5, centralising the knight after the trades.", sayShort: "…Nxd5, centralise", highlights: [_H('d5')] },
+    { atMove: 23, say: "Capture …Nxf4! You snare White's prized bishop. Equal and easy.", sayShort: "…Nxf4, snare the bishop", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/London-System'],
+};
+const ALONW_13: SublineNarration = {
+  intro: { say: "You grabbed space with …c4; when White challenges with b3, recapture and reroute the knight to h5 to win White's London bishop. Trade it off with …Nxg3, depriving White of his best piece. Then complete development with …e6 and …Bd6. White holds a small edge here — play accurately, trade actively, and the maneuvering battle stays balanced.", sayShort: "Anti-London: …Nh5 wins the bishop" },
+  beats: [
+    { atMove: 9, say: "Develop …Nf6, then plan to chase the f4-bishop.", sayShort: "…Nf6, plan the chase", highlights: [_H('f6')] },
+    { atMove: 13, say: "Sidle …Nh5, attacking White's prized London bishop.", sayShort: "…Nh5, attack the bishop", highlights: [_H('h5')] },
+    { atMove: 17, say: "Capture …Nxg3, removing White's best minor piece.", sayShort: "…Nxg3, remove the best piece", highlights: [_H('g3')] },
+    { atMove: 23, say: "Post …Bd6, completing development. Keep the balance with active play.", sayShort: "…Bd6, keep the balance", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/London-System'],
+};
+const ALONW_14: SublineNarration = {
+  intro: { say: "Behind the …c4 wedge, expand with …e6 and …b5, claiming the queenside. Develop smoothly and castle. When White strikes with b3, capture and then ram …b4! — fixing White's c3-pawn as a target and gaining still more space. With …Bd7 completing development, your queenside initiative gives a comfortable, equal game.", sayShort: "Anti-London: …b5-b4 queenside grab" },
+  beats: [
+    { atMove: 9, say: "Open …e6, freeing the bishop behind the wedge.", sayShort: "…e6, free the bishop", highlights: [_H('e6')] },
+    { atMove: 11, say: "Advance …b5, claiming queenside space at once.", sayShort: "…b5, claim the space", highlights: [_H('b5')] },
+    { atMove: 21, say: "Ram …b4! Fixing c3 as a target and gaining more space.", sayShort: "…b4, fix the target", highlights: [_H('b4')] },
+    { atMove: 23, say: "Develop …Bd7, finishing the job. Comfortable and equal.", sayShort: "…Bd7, finish developing", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/London-System'],
+};
+const ALONW_15: SublineNarration = {
+  intro: { say: "White's quiet c3 invites …Qb6, hitting b2 right away. Develop the kingside knight, clarify with …cxd4, and bring the bishop to f5 — outside the chain, where it belongs against the London. After regrouping, …Na5 harasses White's queen and eyes the c4-square. You hold a small initiative with the more purposeful pieces.", sayShort: "Anti-London: …Qb6 and …Na5 probes" },
+  beats: [
+    { atMove: 7, say: "Probe …Qb6, hitting the b2-pawn immediately.", sayShort: "…Qb6, hit b2", highlights: [_H('b6')] },
+    { atMove: 11, say: "Clarify …cxd4, fixing the centre to your liking.", sayShort: "…cxd4, fix the centre", highlights: [_H('d4')] },
+    { atMove: 13, say: "Develop …Bf5, the bishop active outside the pawn chain.", sayShort: "…Bf5, bishop outside", highlights: [_H('f5')] },
+    { atMove: 23, say: "Jump …Na5, harrying White's queen and eyeing c4. You hold the initiative.", sayShort: "…Na5, harry the queen", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/London-System'],
+};
+const ALONW_16: SublineNarration = {
+  intro: { say: "White overreaches with the e4 gambit. Snap it off: …dxe4 wins a central pawn, and …cxd4 grabs another. Trade queens to defuse White's initiative, and calmly consolidate — …Bd7, …Nf6, knights to active squares. White's compensation falls short; you're a clean pawn up and clearly better.", sayShort: "Anti-London: bust the e4 gambit" },
+  beats: [
+    { atMove: 5, say: "Capture …dxe4! Snatch the central pawn White rashly offered.", sayShort: "…dxe4, snatch the pawn", highlights: [_H('e4')] },
+    { atMove: 7, say: "Grab …cxd4, helping yourself to a second pawn.", sayShort: "…cxd4, a second pawn", highlights: [_H('d4')] },
+    { atMove: 11, say: "Trade …Qxd4, swapping queens to kill White's initiative.", sayShort: "…Qxd4, kill the attack", highlights: [_H('d4')] },
+    { atMove: 21, say: "Centralise …Nc6, consolidating — a clean pawn up and winning.", sayShort: "…Nc6, consolidate the win", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/London-System'],
+};
+const ALONW_17: SublineNarration = {
+  intro: { say: "White's Nc3 allows you to clarify the centre with …cxd4. Develop the light bishop to f5 — the piece that's often hard to activate against the London — and trade it for White's good bishop on d3. With the problem piece swapped, finish development and seize the c-file. The position is perfectly equal.", sayShort: "Anti-London: …Bf5, trade the bad bishop" },
+  beats: [
+    { atMove: 7, say: "Clarify …cxd4, fixing the central pawn structure.", sayShort: "…cxd4, fix the centre", highlights: [_H('d4')] },
+    { atMove: 11, say: "Develop …Bf5, activating the bishop before …e6 shuts it in.", sayShort: "…Bf5, activate the bishop", highlights: [_H('f5')] },
+    { atMove: 13, say: "Trade …Bxd3, swapping off your problem piece for White's good one.", sayShort: "…Bxd3, swap the bad bishop", highlights: [_H('d3')] },
+    { atMove: 23, say: "Occupy …Rc8 on the open file. Perfectly equal.", sayShort: "…Rc8, the open file", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/London-System'],
+};
+const ALONW_18: SublineNarration = {
+  intro: { say: "White meets …c5 with c3, so probe at once with …Qb6, hitting b2 and discouraging White's set-up. After dxc5 you regain the pawn with …Qxc5, develop …Bd6 to trade the London bishop, and complete development. With the dark-squared bishops off and your pieces active, you reach an equal, comfortable middlegame.", sayShort: "Anti-London: …Qb6, regain and trade" },
+  beats: [
+    { atMove: 5, say: "Probe …Qb6, hitting b2 the moment White plays c3.", sayShort: "…Qb6, hit b2", highlights: [_H('b6')] },
+    { atMove: 11, say: "Recapture …Qxc5, regaining the pawn with an active queen.", sayShort: "…Qxc5, regain the pawn", highlights: [_H('c5')] },
+    { atMove: 15, say: "Offer …Bd6, trading off White's strong London bishop.", sayShort: "…Bd6, trade the bishop", highlights: [_H('d6')] },
+    { atMove: 23, say: "Castle …O-O, fully developed and equal.", sayShort: "…O-O, fully developed", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/London-System'],
+};
+const ALONW_19: SublineNarration = {
+  intro: { say: "White's aggressive Nc3 and e4 lead to a flurry of central exchanges. Capture accurately: …cxd4 and …dxc3 win material in the sequence, and after the queens come off you emerge with a sound structure. Centralise the knight on d5 — a dominant outpost — and strike …e5 to claim the centre. You stand a touch better in the ending.", sayShort: "Anti-London: trade to a fine ending" },
+  beats: [
+    { atMove: 5, say: "Develop …Nc6, hitting the centre as White commits early.", sayShort: "…Nc6, hit the centre", highlights: [_H('c6')] },
+    { atMove: 7, say: "Capture …cxd4, opening lines in the central melee.", sayShort: "…cxd4, open the centre", highlights: [_H('d4')] },
+    { atMove: 17, say: "Centralise …Nd5, the knight on a dominant outpost.", sayShort: "…Nd5, dominant outpost", highlights: [_H('d5')] },
+    { atMove: 23, say: "Strike …e5, claiming the centre — you're a shade better.", sayShort: "…e5, claim the centre", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/London-System'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'catalan-opening::6::Bb4+@5': CATR_60,
   'catalan-opening::5::c6@9': CATR_50,
@@ -16757,43 +17081,43 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-budapest::2::Ne4@5': ABUW2_8,
   'anti-budapest::2::g5@7': ABUW2_9,
   // ── anti-london-black ──
-  'anti-london-black::0::Nf3@8': C148,
-  'anti-london-black::0::Nd2@8': C148,
-  'anti-london-black::0::b3@8': C148,
-  'anti-london-black::0::Be2@8': C148,
-  'anti-london-black::0::h3@8': C148,
-  'anti-london-black::0::a4@8': C148,
-  'anti-london-black::0::Nf3@6': C148,
-  'anti-london-black::0::e4@4': C149,
-  'anti-london-black::0::Nc3@6': C148,
-  'anti-london-black::0::c3@4': C148,
-  'anti-london-black::1::c3@8': C148,
-  'anti-london-black::1::b3@8': C148,
-  'anti-london-black::1::Nc3@8': C148,
-  'anti-london-black::1::Be2@8': C148,
-  'anti-london-black::1::Nbd2@8': C148,
-  'anti-london-black::1::c3@6': EALON,
-  'anti-london-black::1::e4@4': C149,
-  'anti-london-black::1::Nc3@6': C148,
-  'anti-london-black::1::c3@4': C148,
-  'anti-london-black::1::Nc3@4': C148,
+  'anti-london-black::0::Nf3@8': ALONW_0,
+  'anti-london-black::0::Nd2@8': ALONW_1,
+  'anti-london-black::0::b3@8': ALONW_2,
+  'anti-london-black::0::Be2@8': ALONW_3,
+  'anti-london-black::0::h3@8': ALONW_4,
+  'anti-london-black::0::a4@8': ALONW_5,
+  'anti-london-black::0::Nf3@6': ALONW_6,
+  'anti-london-black::0::e4@4': ALONW_7,
+  'anti-london-black::0::Nc3@6': ALONW_8,
+  'anti-london-black::0::c3@4': ALONW_9,
+  'anti-london-black::1::c3@8': ALONW_10,
+  'anti-london-black::1::b3@8': ALONW_11,
+  'anti-london-black::1::Nc3@8': ALONW_12,
+  'anti-london-black::1::Be2@8': ALONW_13,
+  'anti-london-black::1::Nbd2@8': ALONW_14,
+  'anti-london-black::1::c3@6': ALONW_15,
+  'anti-london-black::1::e4@4': ALONW_16,
+  'anti-london-black::1::Nc3@6': ALONW_17,
+  'anti-london-black::1::c3@4': ALONW_18,
+  'anti-london-black::1::Nc3@4': ALONW_19,
   // ── anti-catalan-black ──
-  'anti-catalan-black::0::Nf3@4': C150,
-  'anti-catalan-black::0::Nc3@4': C151,
-  'anti-catalan-black::0::Nf3@6': C152,
-  'anti-catalan-black::0::Ne5@10': C152,
-  'anti-catalan-black::0::Qa4+@8': C153,
-  'anti-catalan-black::0::a4@10': C150,
-  'anti-catalan-black::1::Nf3@4': C150,
-  'anti-catalan-black::1::Nc3@4': C151,
-  'anti-catalan-black::1::Nf3@6': C152,
-  'anti-catalan-black::1::Nf3@8': EACAT,
-  'anti-catalan-black::1::Nf3@10': C153,
-  'anti-catalan-black::1::Nd2@10': C153,
-  'anti-catalan-black::1::Be3@12': C153,
-  'anti-catalan-black::1::Qd3@12': C153,
-  'anti-catalan-black::1::Nf3@12': C153,
-  'anti-catalan-black::1::Nc3@10': C153,
+  'anti-catalan-black::0::Nf3@4': ACATW_0,
+  'anti-catalan-black::0::Nc3@4': ACATW_1,
+  'anti-catalan-black::0::Nf3@6': ACATW_2,
+  'anti-catalan-black::0::Ne5@10': ACATW_3,
+  'anti-catalan-black::0::Qa4+@8': ACATW_4,
+  'anti-catalan-black::0::a4@10': ACATW_5,
+  'anti-catalan-black::1::Nf3@4': ACATW_6,
+  'anti-catalan-black::1::Nc3@4': ACATW_7,
+  'anti-catalan-black::1::Nf3@6': ACATW_8,
+  'anti-catalan-black::1::Nf3@8': ACATW_9,
+  'anti-catalan-black::1::Nf3@10': ACATW_10,
+  'anti-catalan-black::1::Nd2@10': ACATW_11,
+  'anti-catalan-black::1::Be3@12': ACATW_12,
+  'anti-catalan-black::1::Qd3@12': ACATW_13,
+  'anti-catalan-black::1::Nf3@12': ACATW_14,
+  'anti-catalan-black::1::Nc3@10': ACATW_15,
   // ── anti-colle-black ──
   'anti-colle-black::0::c4@4': ACR_0,
   'anti-colle-black::0::Bf4@4': ACR_1,
