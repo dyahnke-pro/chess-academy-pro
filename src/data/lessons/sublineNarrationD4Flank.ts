@@ -193,30 +193,10 @@ const C53: SublineNarration = {
   sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
 };
 // benko-gambit :: declined_e4
-const C54: SublineNarration = {
-  intro: { say: "White declines or plays e4-Nb5 lines, returning the pawn for space and a clamp. Stay true to the Benko spirit: …d6, …g6, …Bg7, and contest the queenside files anyway. Even without the pawn sacrifice landing cleanly, your dark-squared bishop and the half-open b-file give you the easy, active game the gambit promises.", sayShort: "Declined — …g6, …Bg7, fight the b-file." },
-  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
-};
 // benko-gambit :: b6_declined
-const C55: SublineNarration = {
-  intro: { say: "White declines with the b6 push, returning the pawn to keep lines closed. Recapture and develop normally — …d6, …g6, …Bg7, …Nbd7 — and the position resembles a comfortable Benoni where your queenside play comes for free. White's b6-pawn is a target as much as a wedge; nudge it and the files reopen.", sayShort: "b6 declined — develop, target the wedge." },
-  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
-};
 // benko-gambit :: accepted_main
-const C56: SublineNarration = {
-  intro: { say: "The Benko Gambit accepted — you've given a pawn for the clearest long-term compensation in chess. The a- and b-files open like cannon barrels for your rooks, the g7-bishop rakes the long diagonal, and White's queenside is permanently under siege. You don't need to win the pawn back; the pressure simply never lets up. Pure positional gambit, fully sound.", sayShort: "Benko accepted — the open a/b-files are forever." },
-  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
-};
 // benko-gambit :: fianchetto_g3
-const C57: SublineNarration = {
-  intro: { say: "White returns the pawn and fianchettoes with g3, meeting your queenside pressure on the long diagonal. Adapt patiently: …Bg7, …d6, …Nbd7, double rooks on the a- and b-files, and probe. White's setup is solid but passive on the queenside — exactly the wing where your whole army is aimed.", sayShort: "g3 — double rooks on the queenside." },
-  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
-};
 // benko-gambit :: kingwalk
-const C58: SublineNarration = {
-  intro: { say: "White grabs on f1 and walks the king after Bxf1 Kxf1, keeping the extra pawn at the cost of castling. That's your dream Benko: the king is stuck in the centre, your rooks swing to a8 and b8, and …Bg7, …d6, …Nbd7 complete a textbook squeeze. The pawn is a memory; the queenside pressure is permanent.", sayShort: "King stuck — pile rooks on a/b-files." },
-  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
-};
 // budapest-gambit :: rubinstein_bf4
 const C59: SublineNarration = {
   intro: { say: "The main Budapest with Bf4 — White clings to the e5-pawn and you set about regaining it. …Nc6 and …Bb4+ develop with tempo, and …Ngxe5 wins the pawn back cleanly, leaving a lively, equal middlegame. Your pieces leap out fast; White's small space edge is balanced by your activity and the open lines you generate.", sayShort: "Bf4 main — …Nc6, …Bb4+, regain with …Ngxe5." },
@@ -562,15 +542,6 @@ const DGRU: SublineNarration = {
   sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
 };
 // DEEP DBENKO :: benko-gambit::3::bxa6@8 | benko-gambit::4::bxa6@8
-const DBENKO: SublineNarration = {
-  intro: { say: "You've given a pawn, and here's why you'll never miss it: the a- and b-files swing open like cannon barrels for your rooks, your bishop will rake the long diagonal, and White's queenside is under siege for the rest of the game. You're not trying to win the pawn back — you're playing for pressure that simply never stops.", sayShort: "Benko — pressure, never miss the pawn." },
-  beats: [
-    { atMove: 9, say: "…g6 — getting ready to fianchetto. That bishop is heading to g7, where it becomes the second barrel of your queenside artillery, working alongside the open a- and b-files.", sayShort: "…g6 — the fianchetto is coming.", highlights: [_H('g6', SOFT)] },
-    { atMove: 11, say: "…Bxa6 recaptures and trains the bishop on the a6-f1 diagonal — keep an eye on f1. The moment White pushes his e-pawn, this bishop crashes in and wrecks his castling. Every Benko piece is pointed at his king and queenside.", sayShort: "…Bxa6 — eye the a6-f1 diagonal.", highlights: [_H('a6', KEY), _H('f1', SOFT)] },
-    { atMove: 13, say: "…Bxf1 — and it strikes, forcing Kxf1. See what you've done: his castling is gone and his king is stranded in the centre. That structural damage is exactly what justifies the whole gambit — now pour your rooks down the open files at that exposed king.", sayShort: "…Bxf1 — strand his king.", highlights: [_H('f1', ATK)] },
-  ],
-  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
-};
 // DEEP DQID :: queens-indian::1::g3@6 | queens-indian::2::g3@6 | queens-indian::6::g3@6
 const DQID: SublineNarration = {
   intro: { say: "White fianchettoes with g3, so don't let him get comfortable — bite first. The whole opening is a scrap over the light squares and the long diagonal, and by hitting his c4-pawn straight away you force him to make a concession before he's ready for it.", sayShort: "QID — bite c4 before he settles." },
@@ -736,18 +707,6 @@ const WSSL: SublineNarration = {
   sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Semi-Slav_Defense'],
 };
 // WAVE WBENKO :: 1 keys
-const WBENKO: SublineNarration = {
-  intro: { say: "cxb5 — White accepts the Benko Gambit, and you are delighted. You give a pawn for the clearest long-term compensation in chess: the a- and b-files crack open like cannon barrels for your rooks, the g7-bishop rakes the long diagonal, and White's queenside stays under siege all game. You are not trying to win the pawn back — you are playing for pressure that never lets up.", sayShort: "cxb5 — accept; pressure, not the pawn" },
-  beats: [
-    { atMove: 6, say: "cxb5 — White grabs the pawn. Good: now you pry the queenside wide open, and your rooks inherit the a- and b-files for the rest of the game.", sayShort: "cxb5 — the files will open", highlights: [_H('b5', KEY)] },
-    { atMove: 7, say: "…a6 — the gambit's key move, challenging the b5-pawn to tear the a- and b-files open. You do not mind losing the pawn; you mind keeping the lines shut.", sayShort: "…a6 — pry the files open", arrows: [_A('a6', 'b5', ATK)], highlights: [_H('b5', KEY)] },
-    { atMove: 8, say: "bxa6 — and the files swing open. Your light bishop will scoop up a6 and the rooks pour onto a8 and b8, bearing down on White's static queenside.", sayShort: "bxa6 — files open for the rooks", highlights: [_H('a6', KEY)] },
-    { atMove: 9, say: "…g6 — fianchetto time. The g7-bishop becomes the second barrel of the Benko's artillery, raking the long diagonal alongside the open files.", sayShort: "…g6 — the long-diagonal bishop comes", highlights: [_H('g6', KEY)] },
-    { atMove: 11, say: "…Bxa6 — the bishop recaptures and trains on the a6-f1 diagonal, straight at White's king. Every Benko piece now points at his queenside and king; the pawn you gave is a distant memory.", sayShort: "…Bxa6 — eye the a6-f1 diagonal", highlights: [_H('a6', KEY), _H('f1', KEY)] },
-    { atMove: 13, say: "…Bxf1 — the bishop strikes, forcing Kxf1 and wrecking White's castling. His king is stranded in the centre while your rooks command the open files — textbook Benko pressure that simply never stops.", sayShort: "…Bxf1 — wreck White's castling", highlights: [_H('f1', KEY)] },
-  ],
-  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
-};
 // WAVE WGRUF :: 1 keys
 const WGRUF: SublineNarration = {
   intro: { say: "cxd5 — in the Fianchetto Grünfeld White takes on d5 to build the broad e4-centre. That is the invitation you wanted: recapture, let the big pawn front rise, then tear it down. Your g7-bishop and the coming …c5 are the wrecking crew — you invite the centre precisely so you can demolish it.", sayShort: "cxd5 — let the centre rise, then break" },
@@ -792,16 +751,6 @@ const WNIMBXF: SublineNarration = {
 // WAVE2 WSLNC3 :: 2 keys
 // WAVE2 WSLMOS :: 1 keys
 // WAVE2 WBENB6 :: 6 keys
-const WBENB6: SublineNarration = {
-  intro: { say: "b6 — White declines the Benko, pushing the pawn past rather than opening the files. That suits you fine: the b6-pawn is now a weakling deep in your camp, a target you'll round up, while you complete the Benko setup with …d6, …g6 and …Bg7. You keep the dark-squared pressure and the half-open files for free.", sayShort: "b6 — declined; round up the weak pawn" },
-  beats: [
-    { atMove: 8, say: "b6 declines the gambit, shoving the pawn past instead of grabbing on a6. Fine by you — that b6-pawn is overextended and cut off, a long-term target while you develop in comfort.", sayShort: "b6 — the pawn is a target", highlights: [_H('b6', KEY)] },
-    { atMove: 9, say: "…d6 — solidify the centre and prepare the fianchetto. You're building the standard Benko shell, only now without giving up a pawn at all.", sayShort: "…d6 — solidify, prepare …g6", highlights: [_H('d6', KEY)] },
-    { atMove: 11, say: "…Nbd7 — the knight develops eyeing b6 and e5, ready to round up the stray pawn or reroute to the kingside. Your pieces flow to natural squares while White nurses his weakling.", sayShort: "…Nbd7 — eye the b6-pawn", arrows: [_A('d7', 'b6', ATK)], highlights: [_H('b6', KEY)] },
-    { atMove: 13, say: "…c4 — clamp the queenside, fixing White's structure and grabbing space. The position takes on a comfortable Benoni shape where your pressure on the half-open files and the weak b6-pawn gives the easier game.", sayShort: "…c4 — clamp the queenside", highlights: [_H('c4', KEY)] },
-  ],
-  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
-};
 // WAVE2 WCATA6 :: 2 keys
 const WCATA6: SublineNarration = {
   intro: { say: "…a6 — Black grabs the c4-pawn and prepares …b5 to hold it, the most testing Open Catalan try. Don't chase the pawn directly; your g2-bishop already rakes the long diagonal at b7, and you regain c4 at leisure with Qc2, Ne5 or a4 cracking the …b5 chain. Castle and keep the bind — Black's queenside stays awkward all game.", sayShort: "…a6 — castle, regain c4 at leisure" },
@@ -10075,6 +10024,707 @@ const OI_69: SublineNarration = {
   sources: ['concept:pos-development', 'https://lichess.org/opening/Old-Indian-Defense'],
 };
 
+const BK_0: SublineNarration = {
+  intro: { say: "White steers into a Symmetric structure. Release …cxd4, strike …d5, gain space with …e5, and develop to full equality.", sayShort: "Symmetric: …cxd4, …d5, …e5" },
+  beats: [
+    { atMove: 5, say: "Release with …cxd4, steering into a balanced Symmetric structure.", sayShort: "…cxd4, release", highlights: [_H('d4')] },
+    { atMove: 9, say: "Strike …d5, freeing your game in the centre.", sayShort: "…d5, free the centre", highlights: [_H('d5')] },
+    { atMove: 17, say: "Gain space with …e5, claiming the centre with active pieces.", sayShort: "…e5, gain space", highlights: [_H('e5')] },
+    { atMove: 23, say: "Castle …O-O; the game is balanced and equal.", sayShort: "…O-O, equal", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_1: SublineNarration = {
+  intro: { say: "White declines with the annoying …b6 push. Blunt it with …d6, recapture the pawn with …Qxb6, develop, and defend accurately — White keeps a pull, so play actively.", sayShort: "Declined …b6: recapture, defend" },
+  beats: [
+    { atMove: 9, say: "Meet White's …b6 push with …d6, blunting the wedge.", sayShort: "…d6, blunt the wedge", highlights: [_H('d6')] },
+    { atMove: 15, say: "Recapture with …Qxb6; material is level but White keeps a pull — play actively.", sayShort: "…Qxb6, regain the pawn", highlights: [_H('b6')] },
+    { atMove: 17, say: "Fianchetto …g6, developing the bishop and bracing your king.", sayShort: "…g6, develop", highlights: [_H('g6')] },
+    { atMove: 23, say: "Trade on …b4 into an ending you must defend; White holds the edge.", sayShort: "…Rxb4, into the ending", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_2: SublineNarration = {
+  intro: { say: "White meets the gambit with Nf3 and a big centre. Grab …bxc4, fianchetto, and trade off toward your queenside play — full Benko compensation.", sayShort: "Accepted: …bxc4, …g6, …Ba6" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, accepting the gambit — a pawn for lasting queenside pressure.", sayShort: "…bxc4, accept the gambit", highlights: [_H('c4')] },
+    { atMove: 9, say: "Fianchetto …g6, the Benko bishop bearing down the long diagonal.", sayShort: "…g6, the Benko bishop", highlights: [_H('g6')] },
+    { atMove: 15, say: "Develop …Bg7, eyeing b2 and the queenside your gambit targets.", sayShort: "…Bg7, target b2", highlights: [_H('g7')] },
+    { atMove: 19, say: "Develop …Ba6, pressuring the centre and trading toward queenside play.", sayShort: "…Ba6, pressure", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_3: SublineNarration = {
+  intro: { say: "White returns the pawn with e3. Recapture …axb5 to open the a-file, strike …e6, and develop the bishop to b7 — full Benko pressure.", sayShort: "Accepted e3: …axb5, …e6, …Bb7" },
+  beats: [
+    { atMove: 9, say: "Recapture …axb5, opening the a-file for your Benko pressure.", sayShort: "…axb5, open the a-file", highlights: [_H('b5')] },
+    { atMove: 11, say: "Strike …e6, challenging White's d5-wedge.", sayShort: "…e6, hit the wedge", highlights: [_H('e6')] },
+    { atMove: 15, say: "Develop …Bb7, the bishop raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Hop …Nb4, hitting the queen and the c2/d3 squares; balanced.", sayShort: "…Nb4, active knight", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_4: SublineNarration = {
+  intro: { say: "White accepts fully. Develop …Qa5 to pressure c3, fianchetto …Bg7 at b2, and regain the pawn with …Nxd5 — full Benko compensation.", sayShort: "Accepted: …Qa5, …Bg7, …Nxd5" },
+  beats: [
+    { atMove: 13, say: "Develop …Qa5, the Benko queen pressuring c3 and the a-file.", sayShort: "…Qa5, pressure c3", highlights: [_H('a5')] },
+    { atMove: 15, say: "Develop …Bg7, eyeing b2 on the long diagonal.", sayShort: "…Bg7, target b2", highlights: [_H('g7')] },
+    { atMove: 21, say: "Snatch …Nxd5, regaining the gambit pawn with active pieces.", sayShort: "…Nxd5, regain the pawn", highlights: [_H('d5')] },
+    { atMove: 23, say: "Reroute …Nb6, eyeing c4 and the queenside; full compensation.", sayShort: "…Nb6, eye c4", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_5: SublineNarration = {
+  intro: { say: "White fianchettoes. Develop …Bg7, play …d6, route …Na6 to the queenside, and double rooks with …Rb8 — the classic Benko pressure.", sayShort: "Accepted: …Bg7, …Na6, …Rb8" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7, the Benko bishop on the long diagonal.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Play …d6, solidifying and supporting …e5.", sayShort: "…d6, solidify", highlights: [_H('d6')] },
+    { atMove: 21, say: "Develop …Na6, heading for c5/b4 to pressure the queenside.", sayShort: "…Na6, head queenside", highlights: [_H('a6')] },
+    { atMove: 23, say: "Lift …Rb8, doubling on the half-open b-file; full compensation.", sayShort: "…Rb8, double the rooks", highlights: [_H('b8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_6: SublineNarration = {
+  intro: { say: "White plays a quiet e3 declining the gambit. Build with …e6 and …d5, expand …b5, fianchetto …Bb7, and pressure the c-file — balanced.", sayShort: "Declined e3: …d5, …b5, …Bb7" },
+  beats: [
+    { atMove: 5, say: "Meet e3 with …e6, building a solid central structure.", sayShort: "…e6, solid centre", highlights: [_H('e6')] },
+    { atMove: 13, say: "Expand …b5, gaining queenside space and the bishop's diagonal.", sayShort: "…b5, queenside space", highlights: [_H('b5')] },
+    { atMove: 21, say: "Fianchetto …Bb7, the bishop raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Lift …Rc8, pressuring the half-open c-file; balanced.", sayShort: "…Rc8, press the c-file", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_7: SublineNarration = {
+  intro: { say: "White plays the f3 line. Recapture …axb5, check …Qa5+ to develop with tempo, strike …e6, and play …d6 — full Benko compensation.", sayShort: "f3 line: …axb5, …Qa5+, …e6" },
+  beats: [
+    { atMove: 9, say: "Recapture …axb5, opening the a-file for your pressure.", sayShort: "…axb5, open the a-file", highlights: [_H('b5')] },
+    { atMove: 11, say: "Check …Qa5+, developing the queen with tempo onto the queenside.", sayShort: "…Qa5+, develop with tempo", highlights: [_H('a5')] },
+    { atMove: 15, say: "Strike …e6, challenging White's d5-wedge.", sayShort: "…e6, hit the wedge", highlights: [_H('e6')] },
+    { atMove: 21, say: "Play …d6, completing your setup; full compensation for the pawn.", sayShort: "…d6, complete the setup", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_8: SublineNarration = {
+  intro: { say: "White grabs space with e4. Strip his castling with …Bxf1, play …d6, and swing the queen via c8 to a6 to harass the stuck king — full compensation.", sayShort: "Accepted: …Bxf1, …Qa6+ harass" },
+  beats: [
+    { atMove: 13, say: "Capture …Bxf1, stripping White's right to castle — a key Benko theme.", sayShort: "…Bxf1, strip castling", highlights: [_H('f1')] },
+    { atMove: 15, say: "Play …d6, solidifying your structure.", sayShort: "…d6, solidify", highlights: [_H('d6')] },
+    { atMove: 17, say: "Reroute …Qc8, heading to a6 to pressure White's stuck king.", sayShort: "…Qc8, reroute to a6", highlights: [_H('c8')] },
+    { atMove: 21, say: "Develop …Bg7, the long-diagonal bishop; full compensation.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_9: SublineNarration = {
+  intro: { say: "White declines with Qc2. Grab …bxc4, fianchetto …g6, develop …Ba6 to trade, and reroute …Nb6 to the queenside — balanced with compensation.", sayShort: "Qc2: …bxc4, …g6, …Ba6, …Nb6" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, accepting the pawn for queenside pressure.", sayShort: "…bxc4, accept", highlights: [_H('c4')] },
+    { atMove: 11, say: "Fianchetto …g6, the Benko bishop setup.", sayShort: "…g6, the Benko bishop", highlights: [_H('g6')] },
+    { atMove: 17, say: "Develop …Ba6, defending c4 and trading toward queenside play.", sayShort: "…Ba6, pressure", highlights: [_H('a6')] },
+    { atMove: 21, say: "Reroute …Nb6, eyeing c4 and the queenside; balanced.", sayShort: "…Nb6, eye c4", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_10: SublineNarration = {
+  intro: { say: "White steers into a Symmetric structure. Release …cxd4, strike …d5, gain space with …e5, and develop to full equality.", sayShort: "Symmetric: …cxd4, …d5, …e5" },
+  beats: [
+    { atMove: 5, say: "Release with …cxd4, steering into a balanced Symmetric structure.", sayShort: "…cxd4, release", highlights: [_H('d4')] },
+    { atMove: 9, say: "Strike …d5, freeing your game in the centre.", sayShort: "…d5, free the centre", highlights: [_H('d5')] },
+    { atMove: 17, say: "Gain space with …e5, claiming the centre with active pieces.", sayShort: "…e5, gain space", highlights: [_H('e5')] },
+    { atMove: 23, say: "Castle …O-O; the game is balanced and equal.", sayShort: "…O-O, equal", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_11: SublineNarration = {
+  intro: { say: "White declines with the annoying …b6 push. Blunt it with …d6, recapture the pawn with …Qxb6, develop, and defend accurately — White keeps a pull, so play actively.", sayShort: "Declined …b6: recapture, defend" },
+  beats: [
+    { atMove: 9, say: "Meet White's …b6 push with …d6, blunting the wedge.", sayShort: "…d6, blunt the wedge", highlights: [_H('d6')] },
+    { atMove: 15, say: "Recapture with …Qxb6; material is level but White keeps a pull — play actively.", sayShort: "…Qxb6, regain the pawn", highlights: [_H('b6')] },
+    { atMove: 17, say: "Fianchetto …g6, developing the bishop and bracing your king.", sayShort: "…g6, develop", highlights: [_H('g6')] },
+    { atMove: 23, say: "Trade on …b4 into an ending you must defend; White holds the edge.", sayShort: "…Rxb4, into the ending", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_12: SublineNarration = {
+  intro: { say: "White meets the gambit with Nf3 and a big centre. Grab …bxc4, fianchetto, and trade off toward your queenside play — full Benko compensation.", sayShort: "Accepted: …bxc4, …g6, …Ba6" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, accepting the gambit — a pawn for lasting queenside pressure.", sayShort: "…bxc4, accept the gambit", highlights: [_H('c4')] },
+    { atMove: 9, say: "Fianchetto …g6, the Benko bishop bearing down the long diagonal.", sayShort: "…g6, the Benko bishop", highlights: [_H('g6')] },
+    { atMove: 15, say: "Develop …Bg7, eyeing b2 and the queenside your gambit targets.", sayShort: "…Bg7, target b2", highlights: [_H('g7')] },
+    { atMove: 19, say: "Develop …Ba6, pressuring the centre and trading toward queenside play.", sayShort: "…Ba6, pressure", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_13: SublineNarration = {
+  intro: { say: "White returns the pawn with e3. Recapture …axb5 to open the a-file, strike …e6, and develop the bishop to b7 — full Benko pressure.", sayShort: "Accepted e3: …axb5, …e6, …Bb7" },
+  beats: [
+    { atMove: 9, say: "Recapture …axb5, opening the a-file for your Benko pressure.", sayShort: "…axb5, open the a-file", highlights: [_H('b5')] },
+    { atMove: 11, say: "Strike …e6, challenging White's d5-wedge.", sayShort: "…e6, hit the wedge", highlights: [_H('e6')] },
+    { atMove: 15, say: "Develop …Bb7, the bishop raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Hop …Nb4, hitting the queen and the c2/d3 squares; balanced.", sayShort: "…Nb4, active knight", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_14: SublineNarration = {
+  intro: { say: "White plays a quiet e3 declining the gambit. Build with …e6 and …d5, expand …b5, fianchetto …Bb7, and pressure the c-file — balanced.", sayShort: "Declined e3: …d5, …b5, …Bb7" },
+  beats: [
+    { atMove: 5, say: "Meet e3 with …e6, building a solid central structure.", sayShort: "…e6, solid centre", highlights: [_H('e6')] },
+    { atMove: 13, say: "Expand …b5, gaining queenside space and the bishop's diagonal.", sayShort: "…b5, queenside space", highlights: [_H('b5')] },
+    { atMove: 21, say: "Fianchetto …Bb7, the bishop raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Lift …Rc8, pressuring the half-open c-file; balanced.", sayShort: "…Rc8, press the c-file", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_15: SublineNarration = {
+  intro: { say: "White plays the f3 line. Recapture …axb5, check …Qa5+ to develop with tempo, strike …e6, and play …d6 — full Benko compensation.", sayShort: "f3 line: …axb5, …Qa5+, …e6" },
+  beats: [
+    { atMove: 9, say: "Recapture …axb5, opening the a-file for your pressure.", sayShort: "…axb5, open the a-file", highlights: [_H('b5')] },
+    { atMove: 11, say: "Check …Qa5+, developing the queen with tempo onto the queenside.", sayShort: "…Qa5+, develop with tempo", highlights: [_H('a5')] },
+    { atMove: 15, say: "Strike …e6, challenging White's d5-wedge.", sayShort: "…e6, hit the wedge", highlights: [_H('e6')] },
+    { atMove: 21, say: "Play …d6, completing your setup; full compensation for the pawn.", sayShort: "…d6, complete the setup", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_16: SublineNarration = {
+  intro: { say: "White grabs e4. Recapture …Bxa6, strip castling with …Bxf1, route …Na6 and …Bg7, then hop …Nb4 — the textbook Benko pressure for the pawn.", sayShort: "Main accepted: …Bxa6, …Bxf1" },
+  beats: [
+    { atMove: 9, say: "Recapture …Bxa6, the Benko bishop pressuring White's queenside and king.", sayShort: "…Bxa6, the Benko bishop", highlights: [_H('a6')] },
+    { atMove: 13, say: "Capture …Bxf1, stripping White's right to castle.", sayShort: "…Bxf1, strip castling", highlights: [_H('f1')] },
+    { atMove: 19, say: "Develop …Bg7, bearing down at b2.", sayShort: "…Bg7, target b2", highlights: [_H('g7')] },
+    { atMove: 23, say: "Hop …Nb4, eyeing c2 and d3; the classic Benko pressure.", sayShort: "…Nb4, the bind", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_17: SublineNarration = {
+  intro: { say: "White declines with Qc2. Grab …bxc4, fianchetto …g6, develop …Ba6 to trade, and reroute …Nb6 to the queenside — balanced with compensation.", sayShort: "Qc2: …bxc4, …g6, …Ba6, …Nb6" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, accepting the pawn for queenside pressure.", sayShort: "…bxc4, accept", highlights: [_H('c4')] },
+    { atMove: 11, say: "Fianchetto …g6, the Benko bishop setup.", sayShort: "…g6, the Benko bishop", highlights: [_H('g6')] },
+    { atMove: 17, say: "Develop …Ba6, defending c4 and trading toward queenside play.", sayShort: "…Ba6, pressure", highlights: [_H('a6')] },
+    { atMove: 21, say: "Reroute …Nb6, eyeing c4 and the queenside; balanced.", sayShort: "…Nb6, eye c4", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_18: SublineNarration = {
+  intro: { say: "White grabs e4. Strip castling with …Bxf1, develop …Bg7, bring …Nbd7, and hop …Ng4 to provoke weaknesses — full Benko compensation.", sayShort: "Accepted: …Bxf1, …Bg7, …Ng4" },
+  beats: [
+    { atMove: 13, say: "Capture …Bxf1, stripping White's castling.", sayShort: "…Bxf1, strip castling", highlights: [_H('f1')] },
+    { atMove: 17, say: "Develop …Bg7 on the long diagonal.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 21, say: "Develop …Nbd7, supporting …Ne5 and …c4 ideas.", sayShort: "…Nbd7, develop", highlights: [_H('d7')] },
+    { atMove: 23, say: "Hop …Ng4, eyeing e5 and provoking weaknesses; full compensation.", sayShort: "…Ng4, provoke", highlights: [_H('g4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_19: SublineNarration = {
+  intro: { say: "White declines with Nd2. Grab …bxc4, strike …exd5 to open the centre, develop …Nbd7, and regain material with …Nxc4 — balanced.", sayShort: "Nd2: …bxc4, …exd5, …Nxc4" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, taking the gambit pawn.", sayShort: "…bxc4, accept", highlights: [_H('c4')] },
+    { atMove: 11, say: "Strike …exd5, opening the centre and challenging the wedge.", sayShort: "…exd5, open the centre", highlights: [_H('d5')] },
+    { atMove: 19, say: "Develop …Nbd7, rerouting toward b6 and c4.", sayShort: "…Nbd7, reroute", highlights: [_H('d7')] },
+    { atMove: 23, say: "Snatch …Nxc4, regaining material with active pieces; balanced.", sayShort: "…Nxc4, regain material", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_20: SublineNarration = {
+  intro: { say: "White grabs e4. Recapture …Bxa6, strip castling with …Bxf1, route …Na6 and …Bg7, then hop …Nb4 — the textbook Benko pressure.", sayShort: "Main accepted: …Bxa6, …Bxf1, …Nb4" },
+  beats: [
+    { atMove: 11, say: "Recapture …Bxa6, the Benko bishop pressuring White's queenside and king.", sayShort: "…Bxa6, the Benko bishop", highlights: [_H('a6')] },
+    { atMove: 13, say: "Capture …Bxf1, stripping White's right to castle.", sayShort: "…Bxf1, strip castling", highlights: [_H('f1')] },
+    { atMove: 19, say: "Develop …Bg7, bearing down at b2.", sayShort: "…Bg7, target b2", highlights: [_H('g7')] },
+    { atMove: 23, say: "Hop …Nb4, eyeing c2 and d3; the classic Benko pressure.", sayShort: "…Nb4, the bind", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_21: SublineNarration = {
+  intro: { say: "White recaptures c4 and plays a big centre. Grab …bxc4, fianchetto …Bg7, pin with …Bg4, and reroute …Ne8 to the queenside — full compensation.", sayShort: "Accepted: …bxc4, …Bg7, …Bg4" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, accepting the gambit.", sayShort: "…bxc4, accept", highlights: [_H('c4')] },
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Develop …Bg4, pinning the f3-knight to ease the pressure.", sayShort: "…Bg4, pin the knight", highlights: [_H('g4')] },
+    { atMove: 23, say: "Reroute …Ne8 toward c7/d6 to support the queenside; full compensation.", sayShort: "…Ne8, reroute", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_22: SublineNarration = {
+  intro: { say: "White pins with Bg5. Grab …bxc4, fianchetto …Bg7, sidestep with …Nfd7, and expand …h5 — full Benko compensation.", sayShort: "Accepted Bg5: …Nfd7, …h5" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, accepting the gambit.", sayShort: "…bxc4, accept", highlights: [_H('c4')] },
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Reroute …Nfd7, sidestepping the pin and supporting …Ne5.", sayShort: "…Nfd7, sidestep the pin", highlights: [_H('d7')] },
+    { atMove: 23, say: "Expand …h5, gaining kingside space; full compensation.", sayShort: "…h5, kingside space", highlights: [_H('h5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_23: SublineNarration = {
+  intro: { say: "White steers into a Symmetric structure. Release …cxd4, strike …d5, gain space with …e5, and develop to full equality.", sayShort: "Symmetric: …cxd4, …d5, …e5" },
+  beats: [
+    { atMove: 5, say: "Release with …cxd4, steering into a balanced Symmetric structure.", sayShort: "…cxd4, release", highlights: [_H('d4')] },
+    { atMove: 9, say: "Strike …d5, freeing your game in the centre.", sayShort: "…d5, free the centre", highlights: [_H('d5')] },
+    { atMove: 17, say: "Gain space with …e5, claiming the centre with active pieces.", sayShort: "…e5, gain space", highlights: [_H('e5')] },
+    { atMove: 23, say: "Castle …O-O; the game is balanced and equal.", sayShort: "…O-O, equal", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_24: SublineNarration = {
+  intro: { say: "White plays e3 and Ba6 is met. Grab …bxc4, develop …Ba6 to defend it, fianchetto …Bg7, and complete with …Nbd7 — balanced with compensation.", sayShort: "Accepted e3: …Ba6, …Bg7, …Nbd7" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, accepting the gambit.", sayShort: "…bxc4, accept", highlights: [_H('c4')] },
+    { atMove: 9, say: "Develop …Ba6, defending c4 and pressuring White's centre.", sayShort: "…Ba6, defend c4", highlights: [_H('a6')] },
+    { atMove: 17, say: "Develop …Bg7 on the long diagonal.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 23, say: "Develop …Nbd7, completing your setup; balanced with compensation.", sayShort: "…Nbd7, complete", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_25: SublineNarration = {
+  intro: { say: "White props with h3. Grab …bxc4, fianchetto …Bg7, trade with …Ba6, and develop …Qb6 to pressure b2 and d4 — full compensation.", sayShort: "Accepted h3: …Bg7, …Ba6, …Qb6" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, accepting the gambit.", sayShort: "…bxc4, accept", highlights: [_H('c4')] },
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Develop …Ba6, trading toward your queenside pressure.", sayShort: "…Ba6, pressure", highlights: [_H('a6')] },
+    { atMove: 21, say: "Develop …Qb6, hitting b2 and d4; full compensation.", sayShort: "…Qb6, pressure b2", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_26: SublineNarration = {
+  intro: { say: "White pins with Bg5. Grab …bxc4, fianchetto …Bg7, develop …Nbd7, and reroute …Nb6 to eye c4 — full Benko compensation.", sayShort: "Accepted Bg5: …Bg7, …Nbd7, …Nb6" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, accepting the gambit.", sayShort: "…bxc4, accept", highlights: [_H('c4')] },
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Develop …Nbd7, supporting …Ne5 and the queenside.", sayShort: "…Nbd7, develop", highlights: [_H('d7')] },
+    { atMove: 21, say: "Reroute …Nb6, eyeing c4; full Benko compensation.", sayShort: "…Nb6, eye c4", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_27: SublineNarration = {
+  intro: { say: "White props with h3. Grab …bxc4, fianchetto, develop …Nbd7, and hit …Nh5 to grab the bishop pair while pressuring b2 with …Qb6 — full compensation.", sayShort: "Accepted: …Bg7, …Nh5, …Qb6" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, accepting the gambit.", sayShort: "…bxc4, accept", highlights: [_H('c4')] },
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 19, say: "Hit …Nh5, harassing White's bishop and grabbing the bishop pair.", sayShort: "…Nh5, win the bishop pair", highlights: [_H('h5')] },
+    { atMove: 21, say: "Develop …Qb6, pressuring b2; full compensation.", sayShort: "…Qb6, pressure b2", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_28: SublineNarration = {
+  intro: { say: "White lunges e5. Grab …bxc4, fianchetto, castle, and trade with …Ba6 toward your queenside play — full Benko compensation.", sayShort: "Accepted e5: …Bg7, …O-O, …Ba6" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, accepting the gambit.", sayShort: "…bxc4, accept", highlights: [_H('c4')] },
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Castle …O-O, completing development with your pressure intact.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
+    { atMove: 23, say: "Develop …Qd7, connecting and eyeing the queenside; full compensation.", sayShort: "…Qd7, connect", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_29: SublineNarration = {
+  intro: { say: "White lunges e5. Grab …bxc4, fianchetto, castle, and meet e5 with …Nfd7 then …Nb6 — full Benko compensation.", sayShort: "Accepted e5: …Nfd7, …Nb6" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, accepting the gambit.", sayShort: "…bxc4, accept", highlights: [_H('c4')] },
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Reroute …Nfd7, meeting White's e5 push and supporting the queenside.", sayShort: "…Nfd7, meet e5", highlights: [_H('d7')] },
+    { atMove: 21, say: "Reroute …Nb6, eyeing c4; full compensation.", sayShort: "…Nb6, eye c4", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_30: SublineNarration = {
+  intro: { say: "White grabs e4. Recapture …Bxa6, strip castling with …Bxf1, route …Na6 and …Bg7, then hop …Nb4 — the textbook Benko pressure.", sayShort: "Main accepted: …Bxa6, …Bxf1, …Nb4" },
+  beats: [
+    { atMove: 11, say: "Recapture …Bxa6, the Benko bishop pressuring White's queenside and king.", sayShort: "…Bxa6, the Benko bishop", highlights: [_H('a6')] },
+    { atMove: 13, say: "Capture …Bxf1, stripping White's right to castle.", sayShort: "…Bxf1, strip castling", highlights: [_H('f1')] },
+    { atMove: 19, say: "Develop …Bg7, bearing down at b2.", sayShort: "…Bg7, target b2", highlights: [_H('g7')] },
+    { atMove: 23, say: "Hop …Nb4, eyeing c2 and d3; the classic Benko pressure.", sayShort: "…Nb4, the bind", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_31: SublineNarration = {
+  intro: { say: "White tries the e4 mainline. Recapture …axb5, push …b4 to kick the knight, and steer through the forcing line into a balanced ending — full compensation.", sayShort: "Forcing line into a balanced ending" },
+  beats: [
+    { atMove: 9, say: "Recapture …axb5, opening the a-file.", sayShort: "…axb5, open the a-file", highlights: [_H('b5')] },
+    { atMove: 11, say: "Push …b4, kicking White's knight and gaining queenside space.", sayShort: "…b4, kick the knight", highlights: [_H('b4')] },
+    { atMove: 17, say: "Check …Qa5+, forcing a queen trade to defuse the tactics.", sayShort: "…Qa5+, trade queens", highlights: [_H('a5')] },
+    { atMove: 23, say: "Develop …Bg7 into a balanced ending; full compensation for the pawn.", sayShort: "…Bg7, balanced ending", highlights: [_H('g7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_32: SublineNarration = {
+  intro: { say: "White steers into a Symmetric structure. Release …cxd4, strike …d5, gain space with …e5, and develop to full equality.", sayShort: "Symmetric: …cxd4, …d5, …e5" },
+  beats: [
+    { atMove: 5, say: "Release with …cxd4, steering into a balanced Symmetric structure.", sayShort: "…cxd4, release", highlights: [_H('d4')] },
+    { atMove: 9, say: "Strike …d5, freeing your game in the centre.", sayShort: "…d5, free the centre", highlights: [_H('d5')] },
+    { atMove: 17, say: "Gain space with …e5, claiming the centre with active pieces.", sayShort: "…e5, gain space", highlights: [_H('e5')] },
+    { atMove: 23, say: "Castle …O-O; the game is balanced and equal.", sayShort: "…O-O, equal", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_33: SublineNarration = {
+  intro: { say: "White declines with the annoying …b6 push. Blunt it with …d6, recapture the pawn with …Qxb6, develop, and defend accurately — White keeps a pull, so play actively.", sayShort: "Declined …b6: recapture, defend" },
+  beats: [
+    { atMove: 9, say: "Meet White's …b6 push with …d6, blunting the wedge.", sayShort: "…d6, blunt the wedge", highlights: [_H('d6')] },
+    { atMove: 15, say: "Recapture with …Qxb6; material is level but White keeps a pull — play actively.", sayShort: "…Qxb6, regain the pawn", highlights: [_H('b6')] },
+    { atMove: 17, say: "Fianchetto …g6, developing the bishop and bracing your king.", sayShort: "…g6, develop", highlights: [_H('g6')] },
+    { atMove: 23, say: "Trade on …b4 into an ending you must defend; White holds the edge.", sayShort: "…Rxb4, into the ending", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_34: SublineNarration = {
+  intro: { say: "White meets the gambit with Nf3 and a big centre. Grab …bxc4, fianchetto, and trade off toward your queenside play — full Benko compensation.", sayShort: "Accepted: …bxc4, …g6, …Ba6" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, accepting the gambit — a pawn for lasting queenside pressure.", sayShort: "…bxc4, accept the gambit", highlights: [_H('c4')] },
+    { atMove: 9, say: "Fianchetto …g6, the Benko bishop bearing down the long diagonal.", sayShort: "…g6, the Benko bishop", highlights: [_H('g6')] },
+    { atMove: 15, say: "Develop …Bg7, eyeing b2 and the queenside your gambit targets.", sayShort: "…Bg7, target b2", highlights: [_H('g7')] },
+    { atMove: 19, say: "Develop …Ba6, pressuring the centre and trading toward queenside play.", sayShort: "…Ba6, pressure", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_35: SublineNarration = {
+  intro: { say: "White returns the pawn with e3. Recapture …axb5 to open the a-file, strike …e6, and develop the bishop to b7 — full Benko pressure.", sayShort: "Accepted e3: …axb5, …e6, …Bb7" },
+  beats: [
+    { atMove: 9, say: "Recapture …axb5, opening the a-file for your Benko pressure.", sayShort: "…axb5, open the a-file", highlights: [_H('b5')] },
+    { atMove: 11, say: "Strike …e6, challenging White's d5-wedge.", sayShort: "…e6, hit the wedge", highlights: [_H('e6')] },
+    { atMove: 15, say: "Develop …Bb7, the bishop raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Hop …Nb4, hitting the queen and the c2/d3 squares; balanced.", sayShort: "…Nb4, active knight", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_36: SublineNarration = {
+  intro: { say: "White plays e4 and Nb5. Recapture …axb5, push …b4 to kick the knight, fianchetto …g6, and develop …Bg7 — full Benko compensation.", sayShort: "e4 line: …axb5, …b4, …Bg7" },
+  beats: [
+    { atMove: 9, say: "Recapture …axb5, opening the a-file.", sayShort: "…axb5, open the a-file", highlights: [_H('b5')] },
+    { atMove: 11, say: "Push …b4, kicking the knight and grabbing space.", sayShort: "…b4, kick the knight", highlights: [_H('b4')] },
+    { atMove: 15, say: "Fianchetto …g6, the Benko bishop setup.", sayShort: "…g6, the Benko bishop", highlights: [_H('g6')] },
+    { atMove: 19, say: "Develop …Bg7 on the long diagonal; full compensation.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_37: SublineNarration = {
+  intro: { say: "White plays a quiet e3 declining the gambit. Build with …e6 and …d5, expand …b5, fianchetto …Bb7, and pressure the c-file — balanced.", sayShort: "Declined e3: …d5, …b5, …Bb7" },
+  beats: [
+    { atMove: 5, say: "Meet e3 with …e6, building a solid central structure.", sayShort: "…e6, solid centre", highlights: [_H('e6')] },
+    { atMove: 13, say: "Expand …b5, gaining queenside space and the bishop's diagonal.", sayShort: "…b5, queenside space", highlights: [_H('b5')] },
+    { atMove: 21, say: "Fianchetto …Bb7, the bishop raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Lift …Rc8, pressuring the half-open c-file; balanced.", sayShort: "…Rc8, press the c-file", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_38: SublineNarration = {
+  intro: { say: "White plays the f3 line. Recapture …axb5, check …Qa5+ to develop with tempo, strike …e6, and play …d6 — full Benko compensation.", sayShort: "f3 line: …axb5, …Qa5+, …e6" },
+  beats: [
+    { atMove: 9, say: "Recapture …axb5, opening the a-file for your pressure.", sayShort: "…axb5, open the a-file", highlights: [_H('b5')] },
+    { atMove: 11, say: "Check …Qa5+, developing the queen with tempo onto the queenside.", sayShort: "…Qa5+, develop with tempo", highlights: [_H('a5')] },
+    { atMove: 15, say: "Strike …e6, challenging White's d5-wedge.", sayShort: "…e6, hit the wedge", highlights: [_H('e6')] },
+    { atMove: 21, say: "Play …d6, completing your setup; full compensation for the pawn.", sayShort: "…d6, complete the setup", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_39: SublineNarration = {
+  intro: { say: "White declines with Qc2. Grab …bxc4, fianchetto …g6, develop …Ba6 to trade, and reroute …Nb6 to the queenside — balanced with compensation.", sayShort: "Qc2: …bxc4, …g6, …Ba6, …Nb6" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, accepting the pawn for queenside pressure.", sayShort: "…bxc4, accept", highlights: [_H('c4')] },
+    { atMove: 11, say: "Fianchetto …g6, the Benko bishop setup.", sayShort: "…g6, the Benko bishop", highlights: [_H('g6')] },
+    { atMove: 17, say: "Develop …Ba6, defending c4 and trading toward queenside play.", sayShort: "…Ba6, pressure", highlights: [_H('a6')] },
+    { atMove: 21, say: "Reroute …Nb6, eyeing c4 and the queenside; balanced.", sayShort: "…Nb6, eye c4", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_40: SublineNarration = {
+  intro: { say: "White grabs e4. Recapture …Bxa6, strip castling with …Bxf1, route …Na6 and …Bg7, then hop …Nb4 — the textbook Benko pressure.", sayShort: "Main accepted: …Bxa6, …Bxf1, …Nb4" },
+  beats: [
+    { atMove: 11, say: "Recapture …Bxa6, the Benko bishop pressuring White's queenside and king.", sayShort: "…Bxa6, the Benko bishop", highlights: [_H('a6')] },
+    { atMove: 13, say: "Capture …Bxf1, stripping White's right to castle.", sayShort: "…Bxf1, strip castling", highlights: [_H('f1')] },
+    { atMove: 19, say: "Develop …Bg7, bearing down at b2.", sayShort: "…Bg7, target b2", highlights: [_H('g7')] },
+    { atMove: 23, say: "Hop …Nb4, eyeing c2 and d3; the classic Benko pressure.", sayShort: "…Nb4, the bind", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_41: SublineNarration = {
+  intro: { say: "White steers into a Symmetric structure. Release …cxd4, strike …d5, gain space with …e5, and develop to full equality.", sayShort: "Symmetric: …cxd4, …d5, …e5" },
+  beats: [
+    { atMove: 5, say: "Release with …cxd4, steering into a balanced Symmetric structure.", sayShort: "…cxd4, release", highlights: [_H('d4')] },
+    { atMove: 9, say: "Strike …d5, freeing your game in the centre.", sayShort: "…d5, free the centre", highlights: [_H('d5')] },
+    { atMove: 17, say: "Gain space with …e5, claiming the centre with active pieces.", sayShort: "…e5, gain space", highlights: [_H('e5')] },
+    { atMove: 23, say: "Castle …O-O; the game is balanced and equal.", sayShort: "…O-O, equal", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_42: SublineNarration = {
+  intro: { say: "White declines with the annoying …b6 push. Blunt it with …d6, recapture the pawn with …Qxb6, develop, and defend accurately — White keeps a pull, so play actively.", sayShort: "Declined …b6: recapture, defend" },
+  beats: [
+    { atMove: 9, say: "Meet White's …b6 push with …d6, blunting the wedge.", sayShort: "…d6, blunt the wedge", highlights: [_H('d6')] },
+    { atMove: 15, say: "Recapture with …Qxb6; material is level but White keeps a pull — play actively.", sayShort: "…Qxb6, regain the pawn", highlights: [_H('b6')] },
+    { atMove: 17, say: "Fianchetto …g6, developing the bishop and bracing your king.", sayShort: "…g6, develop", highlights: [_H('g6')] },
+    { atMove: 23, say: "Trade on …b4 into an ending you must defend; White holds the edge.", sayShort: "…Rxb4, into the ending", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_43: SublineNarration = {
+  intro: { say: "White meets the gambit with Nf3 and a big centre. Grab …bxc4, fianchetto, and trade off toward your queenside play — full Benko compensation.", sayShort: "Accepted: …bxc4, …g6, …Ba6" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, accepting the gambit — a pawn for lasting queenside pressure.", sayShort: "…bxc4, accept the gambit", highlights: [_H('c4')] },
+    { atMove: 9, say: "Fianchetto …g6, the Benko bishop bearing down the long diagonal.", sayShort: "…g6, the Benko bishop", highlights: [_H('g6')] },
+    { atMove: 15, say: "Develop …Bg7, eyeing b2 and the queenside your gambit targets.", sayShort: "…Bg7, target b2", highlights: [_H('g7')] },
+    { atMove: 19, say: "Develop …Ba6, pressuring the centre and trading toward queenside play.", sayShort: "…Ba6, pressure", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_44: SublineNarration = {
+  intro: { say: "White plays a quiet e3 declining the gambit. Build with …e6 and …d5, expand …b5, fianchetto …Bb7, and pressure the c-file — balanced.", sayShort: "Declined e3: …d5, …b5, …Bb7" },
+  beats: [
+    { atMove: 5, say: "Meet e3 with …e6, building a solid central structure.", sayShort: "…e6, solid centre", highlights: [_H('e6')] },
+    { atMove: 13, say: "Expand …b5, gaining queenside space and the bishop's diagonal.", sayShort: "…b5, queenside space", highlights: [_H('b5')] },
+    { atMove: 21, say: "Fianchetto …Bb7, the bishop raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Lift …Rc8, pressuring the half-open c-file; balanced.", sayShort: "…Rc8, press the c-file", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_45: SublineNarration = {
+  intro: { say: "White plays the f3 line. Recapture …axb5, check …Qa5+ to develop with tempo, strike …e6, and play …d6 — full Benko compensation.", sayShort: "f3 line: …axb5, …Qa5+, …e6" },
+  beats: [
+    { atMove: 9, say: "Recapture …axb5, opening the a-file for your pressure.", sayShort: "…axb5, open the a-file", highlights: [_H('b5')] },
+    { atMove: 11, say: "Check …Qa5+, developing the queen with tempo onto the queenside.", sayShort: "…Qa5+, develop with tempo", highlights: [_H('a5')] },
+    { atMove: 15, say: "Strike …e6, challenging White's d5-wedge.", sayShort: "…e6, hit the wedge", highlights: [_H('e6')] },
+    { atMove: 21, say: "Play …d6, completing your setup; full compensation for the pawn.", sayShort: "…d6, complete the setup", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_46: SublineNarration = {
+  intro: { say: "White declines with Qc2. Grab …bxc4, fianchetto …g6, develop …Ba6 to trade, and reroute …Nb6 to the queenside — balanced with compensation.", sayShort: "Qc2: …bxc4, …g6, …Ba6, …Nb6" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, accepting the pawn for queenside pressure.", sayShort: "…bxc4, accept", highlights: [_H('c4')] },
+    { atMove: 11, say: "Fianchetto …g6, the Benko bishop setup.", sayShort: "…g6, the Benko bishop", highlights: [_H('g6')] },
+    { atMove: 17, say: "Develop …Ba6, defending c4 and trading toward queenside play.", sayShort: "…Ba6, pressure", highlights: [_H('a6')] },
+    { atMove: 21, say: "Reroute …Nb6, eyeing c4 and the queenside; balanced.", sayShort: "…Nb6, eye c4", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_47: SublineNarration = {
+  intro: { say: "White declines with Nd2. Grab …bxc4, strike …exd5 to open the centre, develop …Nbd7, and regain material with …Nxc4 — balanced.", sayShort: "Nd2: …bxc4, …exd5, …Nxc4" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, taking the gambit pawn.", sayShort: "…bxc4, accept", highlights: [_H('c4')] },
+    { atMove: 11, say: "Strike …exd5, opening the centre and challenging the wedge.", sayShort: "…exd5, open the centre", highlights: [_H('d5')] },
+    { atMove: 19, say: "Develop …Nbd7, rerouting toward b6 and c4.", sayShort: "…Nbd7, reroute", highlights: [_H('d7')] },
+    { atMove: 23, say: "Snatch …Nxc4, regaining material with active pieces; balanced.", sayShort: "…Nxc4, regain material", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_48: SublineNarration = {
+  intro: { say: "White grabs with Nxb5. Recapture …axb5, strike …e6, develop …Ba6 to pin the stuck king, and castle — balanced with active play.", sayShort: "Nxb5: …e6, …Ba6, …O-O" },
+  beats: [
+    { atMove: 9, say: "Recapture …axb5, opening the a-file.", sayShort: "…axb5, open the a-file", highlights: [_H('b5')] },
+    { atMove: 11, say: "Strike …e6, challenging the d5-wedge and opening lines.", sayShort: "…e6, hit the wedge", highlights: [_H('e6')] },
+    { atMove: 15, say: "Develop …Ba6, pinning and pressuring White's stuck king.", sayShort: "…Ba6, pin the king", highlights: [_H('a6')] },
+    { atMove: 23, say: "Castle …O-O, completing development; balanced with active play.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_49: SublineNarration = {
+  intro: { say: "White declines with a4. Keep your pawn with …b4, fianchetto …g6, strike …e5, and develop …Bg4 — balanced.", sayShort: "Declined a4: …b4, …g6, …e5" },
+  beats: [
+    { atMove: 7, say: "Push …b4, keeping your queenside pawn and gaining space.", sayShort: "…b4, keep the pawn", highlights: [_H('b4')] },
+    { atMove: 11, say: "Fianchetto …g6, the Benko-style bishop.", sayShort: "…g6, the bishop", highlights: [_H('g6')] },
+    { atMove: 17, say: "Strike …e5, challenging the centre and freeing your game.", sayShort: "…e5, free the game", highlights: [_H('e5')] },
+    { atMove: 23, say: "Develop …Bg4, pinning and pressuring; balanced.", sayShort: "…Bg4, pin", highlights: [_H('g4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_50: SublineNarration = {
+  intro: { say: "White steers into a Symmetric structure. Release …cxd4, strike …d5, gain space with …e5, and develop to full equality.", sayShort: "Symmetric: …cxd4, …d5, …e5" },
+  beats: [
+    { atMove: 5, say: "Release with …cxd4, steering into a balanced Symmetric structure.", sayShort: "…cxd4, release", highlights: [_H('d4')] },
+    { atMove: 9, say: "Strike …d5, freeing your game in the centre.", sayShort: "…d5, free the centre", highlights: [_H('d5')] },
+    { atMove: 17, say: "Gain space with …e5, claiming the centre with active pieces.", sayShort: "…e5, gain space", highlights: [_H('e5')] },
+    { atMove: 23, say: "Castle …O-O; the game is balanced and equal.", sayShort: "…O-O, equal", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_51: SublineNarration = {
+  intro: { say: "White declines with the annoying …b6 push. Blunt it with …d6, recapture the pawn with …Qxb6, develop, and defend accurately — White keeps a pull, so play actively.", sayShort: "Declined …b6: recapture, defend" },
+  beats: [
+    { atMove: 9, say: "Meet White's …b6 push with …d6, blunting the wedge.", sayShort: "…d6, blunt the wedge", highlights: [_H('d6')] },
+    { atMove: 15, say: "Recapture with …Qxb6; material is level but White keeps a pull — play actively.", sayShort: "…Qxb6, regain the pawn", highlights: [_H('b6')] },
+    { atMove: 17, say: "Fianchetto …g6, developing the bishop and bracing your king.", sayShort: "…g6, develop", highlights: [_H('g6')] },
+    { atMove: 23, say: "Trade on …b4 into an ending you must defend; White holds the edge.", sayShort: "…Rxb4, into the ending", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_52: SublineNarration = {
+  intro: { say: "White meets the gambit with Nf3 and a big centre. Grab …bxc4, fianchetto, and trade off toward your queenside play — full Benko compensation.", sayShort: "Accepted: …bxc4, …g6, …Ba6" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, accepting the gambit — a pawn for lasting queenside pressure.", sayShort: "…bxc4, accept the gambit", highlights: [_H('c4')] },
+    { atMove: 9, say: "Fianchetto …g6, the Benko bishop bearing down the long diagonal.", sayShort: "…g6, the Benko bishop", highlights: [_H('g6')] },
+    { atMove: 15, say: "Develop …Bg7, eyeing b2 and the queenside your gambit targets.", sayShort: "…Bg7, target b2", highlights: [_H('g7')] },
+    { atMove: 19, say: "Develop …Ba6, pressuring the centre and trading toward queenside play.", sayShort: "…Ba6, pressure", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_53: SublineNarration = {
+  intro: { say: "White returns the pawn with e3. Recapture …axb5 to open the a-file, strike …e6, and develop the bishop to b7 — full Benko pressure.", sayShort: "Accepted e3: …axb5, …e6, …Bb7" },
+  beats: [
+    { atMove: 9, say: "Recapture …axb5, opening the a-file for your Benko pressure.", sayShort: "…axb5, open the a-file", highlights: [_H('b5')] },
+    { atMove: 11, say: "Strike …e6, challenging White's d5-wedge.", sayShort: "…e6, hit the wedge", highlights: [_H('e6')] },
+    { atMove: 15, say: "Develop …Bb7, the bishop raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Hop …Nb4, hitting the queen and the c2/d3 squares; balanced.", sayShort: "…Nb4, active knight", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_54: SublineNarration = {
+  intro: { say: "White plays a quiet e3 declining the gambit. Build with …e6 and …d5, expand …b5, fianchetto …Bb7, and pressure the c-file — balanced.", sayShort: "Declined e3: …d5, …b5, …Bb7" },
+  beats: [
+    { atMove: 5, say: "Meet e3 with …e6, building a solid central structure.", sayShort: "…e6, solid centre", highlights: [_H('e6')] },
+    { atMove: 13, say: "Expand …b5, gaining queenside space and the bishop's diagonal.", sayShort: "…b5, queenside space", highlights: [_H('b5')] },
+    { atMove: 21, say: "Fianchetto …Bb7, the bishop raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Lift …Rc8, pressuring the half-open c-file; balanced.", sayShort: "…Rc8, press the c-file", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_55: SublineNarration = {
+  intro: { say: "White plays the f3 line. Recapture …axb5, check …Qa5+ to develop with tempo, strike …e6, and play …d6 — full Benko compensation.", sayShort: "f3 line: …axb5, …Qa5+, …e6" },
+  beats: [
+    { atMove: 9, say: "Recapture …axb5, opening the a-file for your pressure.", sayShort: "…axb5, open the a-file", highlights: [_H('b5')] },
+    { atMove: 11, say: "Check …Qa5+, developing the queen with tempo onto the queenside.", sayShort: "…Qa5+, develop with tempo", highlights: [_H('a5')] },
+    { atMove: 15, say: "Strike …e6, challenging White's d5-wedge.", sayShort: "…e6, hit the wedge", highlights: [_H('e6')] },
+    { atMove: 21, say: "Play …d6, completing your setup; full compensation for the pawn.", sayShort: "…d6, complete the setup", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_56: SublineNarration = {
+  intro: { say: "White grabs e4. Strip castling with …Bxf1, swing the queen via c8 to a6 to harass the stuck king, and develop …Bg7 — full Benko compensation.", sayShort: "Accepted: …Bxf1, …Qa6+ harass" },
+  beats: [
+    { atMove: 13, say: "Capture …Bxf1, stripping White's right to castle.", sayShort: "…Bxf1, strip castling", highlights: [_H('f1')] },
+    { atMove: 17, say: "Reroute …Qc8 toward a6 to pressure White's stuck king.", sayShort: "…Qc8, reroute to a6", highlights: [_H('c8')] },
+    { atMove: 19, say: "Check …Qa6+, harassing the king that can no longer castle.", sayShort: "…Qa6+, harass the king", highlights: [_H('a6')] },
+    { atMove: 21, say: "Develop …Bg7; full Benko compensation.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_57: SublineNarration = {
+  intro: { say: "White declines with Qc2. Grab …bxc4, fianchetto …g6, develop …Ba6 to trade, and reroute …Nb6 to the queenside — balanced with compensation.", sayShort: "Qc2: …bxc4, …g6, …Ba6, …Nb6" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, accepting the pawn for queenside pressure.", sayShort: "…bxc4, accept", highlights: [_H('c4')] },
+    { atMove: 11, say: "Fianchetto …g6, the Benko bishop setup.", sayShort: "…g6, the Benko bishop", highlights: [_H('g6')] },
+    { atMove: 17, say: "Develop …Ba6, defending c4 and trading toward queenside play.", sayShort: "…Ba6, pressure", highlights: [_H('a6')] },
+    { atMove: 21, say: "Reroute …Nb6, eyeing c4 and the queenside; balanced.", sayShort: "…Nb6, eye c4", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_58: SublineNarration = {
+  intro: { say: "White declines with Nd2. Grab …bxc4, strike …exd5 to open the centre, develop …Nbd7, and regain material with …Nxc4 — balanced.", sayShort: "Nd2: …bxc4, …exd5, …Nxc4" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, taking the gambit pawn.", sayShort: "…bxc4, accept", highlights: [_H('c4')] },
+    { atMove: 11, say: "Strike …exd5, opening the centre and challenging the wedge.", sayShort: "…exd5, open the centre", highlights: [_H('d5')] },
+    { atMove: 19, say: "Develop …Nbd7, rerouting toward b6 and c4.", sayShort: "…Nbd7, reroute", highlights: [_H('d7')] },
+    { atMove: 23, say: "Snatch …Nxc4, regaining material with active pieces; balanced.", sayShort: "…Nxc4, regain material", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_59: SublineNarration = {
+  intro: { say: "White grabs e4. Strip castling with …Bxf1, develop …Bg7, bring …Nbd7, and press …Qb6 against b2 — full Benko compensation.", sayShort: "Accepted: …Bxf1, …Bg7, …Qb6" },
+  beats: [
+    { atMove: 13, say: "Capture …Bxf1, stripping White's castling.", sayShort: "…Bxf1, strip castling", highlights: [_H('f1')] },
+    { atMove: 17, say: "Develop …Bg7 on the long diagonal.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 21, say: "Develop …Nbd7, supporting the queenside.", sayShort: "…Nbd7, develop", highlights: [_H('d7')] },
+    { atMove: 23, say: "Develop …Qb6, pressuring b2; full compensation.", sayShort: "…Qb6, pressure b2", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_60: SublineNarration = {
+  intro: { say: "White builds with f3. Strip castling with …Bxf1, develop …Bg7, bring …Nbd7, and centralise …Ne5 — full Benko compensation.", sayShort: "Accepted f3: …Bxf1, …Ne5" },
+  beats: [
+    { atMove: 15, say: "Capture …Bxf1, stripping White's castling.", sayShort: "…Bxf1, strip castling", highlights: [_H('f1')] },
+    { atMove: 17, say: "Develop …Bg7 on the long diagonal.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 21, say: "Develop …Nbd7, completing your setup.", sayShort: "…Nbd7, develop", highlights: [_H('d7')] },
+    { atMove: 23, say: "Centralise …Ne5, a powerful outpost; full Benko compensation.", sayShort: "…Ne5, the outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_61: SublineNarration = {
+  intro: { say: "White steers into a Symmetric structure. Release …cxd4, strike …d5, gain space with …e5, and develop to full equality.", sayShort: "Symmetric: …cxd4, …d5, …e5" },
+  beats: [
+    { atMove: 5, say: "Release with …cxd4, steering into a balanced Symmetric structure.", sayShort: "…cxd4, release", highlights: [_H('d4')] },
+    { atMove: 9, say: "Strike …d5, freeing your game in the centre.", sayShort: "…d5, free the centre", highlights: [_H('d5')] },
+    { atMove: 17, say: "Gain space with …e5, claiming the centre with active pieces.", sayShort: "…e5, gain space", highlights: [_H('e5')] },
+    { atMove: 23, say: "Castle …O-O; the game is balanced and equal.", sayShort: "…O-O, equal", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_62: SublineNarration = {
+  intro: { say: "White declines with the annoying …b6 push. Blunt it with …d6, recapture the pawn with …Qxb6, develop, and defend accurately — White keeps a pull, so play actively.", sayShort: "Declined …b6: recapture, defend" },
+  beats: [
+    { atMove: 9, say: "Meet White's …b6 push with …d6, blunting the wedge.", sayShort: "…d6, blunt the wedge", highlights: [_H('d6')] },
+    { atMove: 15, say: "Recapture with …Qxb6; material is level but White keeps a pull — play actively.", sayShort: "…Qxb6, regain the pawn", highlights: [_H('b6')] },
+    { atMove: 17, say: "Fianchetto …g6, developing the bishop and bracing your king.", sayShort: "…g6, develop", highlights: [_H('g6')] },
+    { atMove: 23, say: "Trade on …b4 into an ending you must defend; White holds the edge.", sayShort: "…Rxb4, into the ending", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_63: SublineNarration = {
+  intro: { say: "White meets the gambit with Nf3 and a big centre. Grab …bxc4, fianchetto, and trade off toward your queenside play — full Benko compensation.", sayShort: "Accepted: …bxc4, …g6, …Ba6" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, accepting the gambit — a pawn for lasting queenside pressure.", sayShort: "…bxc4, accept the gambit", highlights: [_H('c4')] },
+    { atMove: 9, say: "Fianchetto …g6, the Benko bishop bearing down the long diagonal.", sayShort: "…g6, the Benko bishop", highlights: [_H('g6')] },
+    { atMove: 15, say: "Develop …Bg7, eyeing b2 and the queenside your gambit targets.", sayShort: "…Bg7, target b2", highlights: [_H('g7')] },
+    { atMove: 19, say: "Develop …Ba6, pressuring the centre and trading toward queenside play.", sayShort: "…Ba6, pressure", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_64: SublineNarration = {
+  intro: { say: "White returns the pawn with e3. Recapture …axb5 to open the a-file, strike …e6, and develop the bishop to b7 — full Benko pressure.", sayShort: "Accepted e3: …axb5, …e6, …Bb7" },
+  beats: [
+    { atMove: 9, say: "Recapture …axb5, opening the a-file for your Benko pressure.", sayShort: "…axb5, open the a-file", highlights: [_H('b5')] },
+    { atMove: 11, say: "Strike …e6, challenging White's d5-wedge.", sayShort: "…e6, hit the wedge", highlights: [_H('e6')] },
+    { atMove: 15, say: "Develop …Bb7, the bishop raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Hop …Nb4, hitting the queen and the c2/d3 squares; balanced.", sayShort: "…Nb4, active knight", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_65: SublineNarration = {
+  intro: { say: "White plays a quiet e3 declining the gambit. Build with …e6 and …d5, expand …b5, fianchetto …Bb7, and pressure the c-file — balanced.", sayShort: "Declined e3: …d5, …b5, …Bb7" },
+  beats: [
+    { atMove: 5, say: "Meet e3 with …e6, building a solid central structure.", sayShort: "…e6, solid centre", highlights: [_H('e6')] },
+    { atMove: 13, say: "Expand …b5, gaining queenside space and the bishop's diagonal.", sayShort: "…b5, queenside space", highlights: [_H('b5')] },
+    { atMove: 21, say: "Fianchetto …Bb7, the bishop raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Lift …Rc8, pressuring the half-open c-file; balanced.", sayShort: "…Rc8, press the c-file", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_66: SublineNarration = {
+  intro: { say: "White plays the f3 line. Recapture …axb5, check …Qa5+ to develop with tempo, strike …e6, and play …d6 — full Benko compensation.", sayShort: "f3 line: …axb5, …Qa5+, …e6" },
+  beats: [
+    { atMove: 9, say: "Recapture …axb5, opening the a-file for your pressure.", sayShort: "…axb5, open the a-file", highlights: [_H('b5')] },
+    { atMove: 11, say: "Check …Qa5+, developing the queen with tempo onto the queenside.", sayShort: "…Qa5+, develop with tempo", highlights: [_H('a5')] },
+    { atMove: 15, say: "Strike …e6, challenging White's d5-wedge.", sayShort: "…e6, hit the wedge", highlights: [_H('e6')] },
+    { atMove: 21, say: "Play …d6, completing your setup; full compensation for the pawn.", sayShort: "…d6, complete the setup", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_67: SublineNarration = {
+  intro: { say: "White declines with Qc2. Grab …bxc4, fianchetto …g6, develop …Ba6 to trade, and reroute …Nb6 to the queenside — balanced with compensation.", sayShort: "Qc2: …bxc4, …g6, …Ba6, …Nb6" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, accepting the pawn for queenside pressure.", sayShort: "…bxc4, accept", highlights: [_H('c4')] },
+    { atMove: 11, say: "Fianchetto …g6, the Benko bishop setup.", sayShort: "…g6, the Benko bishop", highlights: [_H('g6')] },
+    { atMove: 17, say: "Develop …Ba6, defending c4 and trading toward queenside play.", sayShort: "…Ba6, pressure", highlights: [_H('a6')] },
+    { atMove: 21, say: "Reroute …Nb6, eyeing c4 and the queenside; balanced.", sayShort: "…Nb6, eye c4", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_68: SublineNarration = {
+  intro: { say: "White declines with Nd2. Grab …bxc4, strike …exd5 to open the centre, develop …Nbd7, and regain material with …Nxc4 — balanced.", sayShort: "Nd2: …bxc4, …exd5, …Nxc4" },
+  beats: [
+    { atMove: 7, say: "Grab …bxc4, taking the gambit pawn.", sayShort: "…bxc4, accept", highlights: [_H('c4')] },
+    { atMove: 11, say: "Strike …exd5, opening the centre and challenging the wedge.", sayShort: "…exd5, open the centre", highlights: [_H('d5')] },
+    { atMove: 19, say: "Develop …Nbd7, rerouting toward b6 and c4.", sayShort: "…Nbd7, reroute", highlights: [_H('d7')] },
+    { atMove: 23, say: "Snatch …Nxc4, regaining material with active pieces; balanced.", sayShort: "…Nxc4, regain material", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+const BK_69: SublineNarration = {
+  intro: { say: "White plays Nf3 then e4. Strip castling with …Bxf1, swing the queen to a6 to harass the king, and develop …Bg7 — full Benko compensation.", sayShort: "Accepted: …Bxf1, …Qa6+" },
+  beats: [
+    { atMove: 15, say: "Capture …Bxf1, stripping White's castling.", sayShort: "…Bxf1, strip castling", highlights: [_H('f1')] },
+    { atMove: 17, say: "Reroute …Qc8 toward a6 to pressure the stuck king.", sayShort: "…Qc8, reroute to a6", highlights: [_H('c8')] },
+    { atMove: 19, say: "Check …Qa6+, harassing the king that can't castle.", sayShort: "…Qa6+, harass the king", highlights: [_H('a6')] },
+    { atMove: 21, say: "Develop …Bg7; full compensation.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benko-Gambit'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'nimzo-indian::7::Nf3@4': NI_69,
   'nimzo-indian::6::Nf3@4': NI_59,
@@ -10829,76 +11479,76 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'benoni-defence::6::h3@14': C51,
   'benoni-defence::6::Bg5@12': C48,
   // ── benko-gambit ──
-  'benko-gambit::0::Nf3@4': C54,
-  'benko-gambit::0::b6@8': WBENB6,
-  'benko-gambit::0::Nf3@6': C55,
-  'benko-gambit::0::e3@8': C56,
-  'benko-gambit::0::Nf3@12': C56,
-  'benko-gambit::0::g3@12': C57,
-  'benko-gambit::0::e3@4': C56,
-  'benko-gambit::0::f3@8': C54,
-  'benko-gambit::0::Nf3@16': C58,
-  'benko-gambit::0::Qc2@6': C56,
-  'benko-gambit::1::Nf3@4': C54,
-  'benko-gambit::1::b6@8': WBENB6,
-  'benko-gambit::1::Nf3@6': C55,
-  'benko-gambit::1::e3@8': C56,
-  'benko-gambit::1::e3@4': C56,
-  'benko-gambit::1::f3@8': C54,
-  'benko-gambit::1::g3@16': C58,
-  'benko-gambit::1::Qc2@6': C56,
-  'benko-gambit::1::Re1@22': C58,
-  'benko-gambit::1::Nd2@6': C56,
-  'benko-gambit::2::cxb5@6': WBENKO,
-  'benko-gambit::2::Re1@16': C56,
-  'benko-gambit::2::Bg5@16': C56,
-  'benko-gambit::2::Nf3@4': C54,
-  'benko-gambit::2::e3@8': C56,
-  'benko-gambit::2::h3@14': C56,
-  'benko-gambit::2::Bg5@14': C56,
-  'benko-gambit::2::Bf4@18': C56,
-  'benko-gambit::2::e5@14': C56,
-  'benko-gambit::2::e5@16': C56,
-  'benko-gambit::3::bxa6@8': DBENKO,
-  'benko-gambit::3::e5@12': C54,
-  'benko-gambit::3::Nf3@4': C54,
-  'benko-gambit::3::b6@8': WBENB6,
-  'benko-gambit::3::Nf3@6': C55,
-  'benko-gambit::3::e3@8': C56,
-  'benko-gambit::3::e5@16': C54,
-  'benko-gambit::3::e3@4': C56,
-  'benko-gambit::3::f3@8': C54,
-  'benko-gambit::3::Qc2@6': C56,
-  'benko-gambit::4::bxa6@8': DBENKO,
-  'benko-gambit::4::Nf3@4': C54,
-  'benko-gambit::4::b6@8': WBENB6,
-  'benko-gambit::4::Nf3@6': C55,
-  'benko-gambit::4::e3@4': C56,
-  'benko-gambit::4::f3@8': C54,
-  'benko-gambit::4::Qc2@6': C56,
-  'benko-gambit::4::Nd2@6': C56,
-  'benko-gambit::4::Nc3@8': C54,
-  'benko-gambit::4::a4@6': C56,
-  'benko-gambit::5::Nf3@4': C54,
-  'benko-gambit::5::b6@8': WBENB6,
-  'benko-gambit::5::Nf3@6': C55,
-  'benko-gambit::5::e3@8': C56,
-  'benko-gambit::5::e3@4': C56,
-  'benko-gambit::5::f3@8': C54,
-  'benko-gambit::5::Nf3@16': C58,
-  'benko-gambit::5::Qc2@6': C56,
-  'benko-gambit::5::Nd2@6': C56,
-  'benko-gambit::5::a4@22': C58,
-  'benko-gambit::6::Nge2@18': C58,
-  'benko-gambit::6::Nf3@4': C54,
-  'benko-gambit::6::b6@8': WBENB6,
-  'benko-gambit::6::Nf3@6': C55,
-  'benko-gambit::6::e3@8': C56,
-  'benko-gambit::6::e3@4': C56,
-  'benko-gambit::6::f3@8': C54,
-  'benko-gambit::6::Qc2@6': C56,
-  'benko-gambit::6::Nd2@6': C56,
-  'benko-gambit::6::Nf3@12': C56,
+  'benko-gambit::0::Nf3@4': BK_0,
+  'benko-gambit::0::b6@8': BK_1,
+  'benko-gambit::0::Nf3@6': BK_2,
+  'benko-gambit::0::e3@8': BK_3,
+  'benko-gambit::0::Nf3@12': BK_4,
+  'benko-gambit::0::g3@12': BK_5,
+  'benko-gambit::0::e3@4': BK_6,
+  'benko-gambit::0::f3@8': BK_7,
+  'benko-gambit::0::Nf3@16': BK_8,
+  'benko-gambit::0::Qc2@6': BK_9,
+  'benko-gambit::1::Nf3@4': BK_10,
+  'benko-gambit::1::b6@8': BK_11,
+  'benko-gambit::1::Nf3@6': BK_12,
+  'benko-gambit::1::e3@8': BK_13,
+  'benko-gambit::1::e3@4': BK_14,
+  'benko-gambit::1::f3@8': BK_15,
+  'benko-gambit::1::g3@16': BK_16,
+  'benko-gambit::1::Qc2@6': BK_17,
+  'benko-gambit::1::Re1@22': BK_18,
+  'benko-gambit::1::Nd2@6': BK_19,
+  'benko-gambit::2::cxb5@6': BK_20,
+  'benko-gambit::2::Re1@16': BK_21,
+  'benko-gambit::2::Bg5@16': BK_22,
+  'benko-gambit::2::Nf3@4': BK_23,
+  'benko-gambit::2::e3@8': BK_24,
+  'benko-gambit::2::h3@14': BK_25,
+  'benko-gambit::2::Bg5@14': BK_26,
+  'benko-gambit::2::Bf4@18': BK_27,
+  'benko-gambit::2::e5@14': BK_28,
+  'benko-gambit::2::e5@16': BK_29,
+  'benko-gambit::3::bxa6@8': BK_30,
+  'benko-gambit::3::e5@12': BK_31,
+  'benko-gambit::3::Nf3@4': BK_32,
+  'benko-gambit::3::b6@8': BK_33,
+  'benko-gambit::3::Nf3@6': BK_34,
+  'benko-gambit::3::e3@8': BK_35,
+  'benko-gambit::3::e5@16': BK_36,
+  'benko-gambit::3::e3@4': BK_37,
+  'benko-gambit::3::f3@8': BK_38,
+  'benko-gambit::3::Qc2@6': BK_39,
+  'benko-gambit::4::bxa6@8': BK_40,
+  'benko-gambit::4::Nf3@4': BK_41,
+  'benko-gambit::4::b6@8': BK_42,
+  'benko-gambit::4::Nf3@6': BK_43,
+  'benko-gambit::4::e3@4': BK_44,
+  'benko-gambit::4::f3@8': BK_45,
+  'benko-gambit::4::Qc2@6': BK_46,
+  'benko-gambit::4::Nd2@6': BK_47,
+  'benko-gambit::4::Nc3@8': BK_48,
+  'benko-gambit::4::a4@6': BK_49,
+  'benko-gambit::5::Nf3@4': BK_50,
+  'benko-gambit::5::b6@8': BK_51,
+  'benko-gambit::5::Nf3@6': BK_52,
+  'benko-gambit::5::e3@8': BK_53,
+  'benko-gambit::5::e3@4': BK_54,
+  'benko-gambit::5::f3@8': BK_55,
+  'benko-gambit::5::Nf3@16': BK_56,
+  'benko-gambit::5::Qc2@6': BK_57,
+  'benko-gambit::5::Nd2@6': BK_58,
+  'benko-gambit::5::a4@22': BK_59,
+  'benko-gambit::6::Nge2@18': BK_60,
+  'benko-gambit::6::Nf3@4': BK_61,
+  'benko-gambit::6::b6@8': BK_62,
+  'benko-gambit::6::Nf3@6': BK_63,
+  'benko-gambit::6::e3@8': BK_64,
+  'benko-gambit::6::e3@4': BK_65,
+  'benko-gambit::6::f3@8': BK_66,
+  'benko-gambit::6::Qc2@6': BK_67,
+  'benko-gambit::6::Nd2@6': BK_68,
+  'benko-gambit::6::Nf3@12': BK_69,
   // ── budapest-gambit ──
   'budapest-gambit::0::Nc3@4': C59,
   'budapest-gambit::0::e3@4': C60,
