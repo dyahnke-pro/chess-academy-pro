@@ -152,30 +152,10 @@ const C47: SublineNarration = {
 // dutch-defence :: classical_be7
 // dutch-defence :: nh3
 // catalan-opening :: open_dxc4
-const C69: SublineNarration = {
-  intro: { say: "The Open Catalan — Black grabs c4, but the pawn is a loan, not a gain. Your whole game is the g2-bishop scything down the long light diagonal at b7 and d5, plus the easy recapture with Qa4+, Qc2 or a later Ne5/a4. Castle, regain the pawn at leisure, and squeeze: Black's queenside is forever cramped under that bishop's gaze.", sayShort: "Open Catalan — the g2-bishop owns the diagonal." },
-  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
-};
 // catalan-opening :: closed_be7
-const C70: SublineNarration = {
-  intro: { say: "The Closed Catalan — Black holds the centre with …d5 and …Be7 rather than grabbing c4. Solid, but passive: build the bind with Qc2, b3, Bb2 and Nbd2, prepare the e4 break, and use your space and the long-diagonal bishop to slowly suffocate Black's light-squared bishop, the eternal problem piece in this structure.", sayShort: "Closed Catalan — bind, then break e4." },
-  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
-};
 // catalan-opening :: bb4_check
-const C71: SublineNarration = {
-  intro: { say: "Black interposes …Bb4+, the Catalan check, the most reliable equalising try. Block with Bd2 — and welcome the trade: you regain time, keep the long-diagonal bishop that defines the Catalan, and emerge with the same pleasant space and pressure. Don't fear the check; it removes one of Black's pieces, not your advantage.", sayShort: "…Bb4+ — block Bd2, keep the big bishop." },
-  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
-};
 // catalan-opening :: ne5
-const C72: SublineNarration = {
-  intro: { say: "You've planted the knight on e5, the Catalan's most aggressive post — reinforcing the g2-bishop's pressure and eyeing c6 and f7. Black must react to the central knight; meanwhile you reclaim the c4-pawn and keep the initiative on the queenside and the long diagonal. A model Catalan squeeze with extra bite.", sayShort: "Ne5 — the knight reinforces the diagonal." },
-  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
-};
 // catalan-opening :: slav_catalan
-const C73: SublineNarration = {
-  intro: { say: "This is a Slav-Catalan hybrid — Black props the centre with …c6 before fianchetto pressure builds. Develop the bishop to g2, castle, and prepare e4 or the queenside expansion with a4. Black is solid but cramped; lean on the long diagonal and the central break and the small, durable edge grows.", sayShort: "Slav-Catalan — g2-bishop, prepare e4 / a4." },
-  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
-};
 // london-system :: cxd4
 // london-system :: benoni_push
 // london-system :: accel_indian
@@ -583,14 +563,6 @@ const WQGCAR: SublineNarration = {
   sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
 };
 // WAVE WCATBB :: 6 keys
-const WCATBB: SublineNarration = {
-  intro: { say: "…Bb4+ — the Catalan check, Black's most reliable equaliser, jabbing from b4 before you can settle. Welcome it: Bd2 blocks, and after the trade or retreat you keep the powerful g2-bishop and the same pleasant space. The check removes one of Black's pieces, not your advantage.", sayShort: "…Bb4+ — block Bd2, keep the bishop" },
-  beats: [
-    { atMove: 7, say: "…Bb4+ checks from the rim, trying to wring a concession before you castle. Don't be rattled — you have a clean blocking move that keeps every trump intact.", sayShort: "…Bb4+ — the Catalan check", arrows: [_A('b4', 'e1', ATK)], highlights: [_H('e1', KEY)] },
-    { atMove: 8, say: "Bd2 — block the check and offer the trade. If Black takes you recapture toward the centre and keep the long-diagonal bishop that defines the Catalan; if he retreats you have gained time. Either way the g2-bishop keeps choking the queenside.", sayShort: "Bd2 — block, keep the g2-bishop", highlights: [_H('d2', KEY), _H('g2', KEY)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
-};
 
 // WAVE2 WNIMBXF :: 1 keys
 const WNIMBXF: SublineNarration = {
@@ -607,14 +579,6 @@ const WNIMBXF: SublineNarration = {
 // WAVE2 WSLMOS :: 1 keys
 // WAVE2 WBENB6 :: 6 keys
 // WAVE2 WCATA6 :: 2 keys
-const WCATA6: SublineNarration = {
-  intro: { say: "…a6 — Black grabs the c4-pawn and prepares …b5 to hold it, the most testing Open Catalan try. Don't chase the pawn directly; your g2-bishop already rakes the long diagonal at b7, and you regain c4 at leisure with Qc2, Ne5 or a4 cracking the …b5 chain. Castle and keep the bind — Black's queenside stays awkward all game.", sayShort: "…a6 — castle, regain c4 at leisure" },
-  beats: [
-    { atMove: 9, say: "…a6 holds the extra c4-pawn and readies …b5 to cling to it. Let him; the pawn is a loan, and chasing it now only helps Black develop. Your long-diagonal bishop is the real asset.", sayShort: "…a6 — he clings to c4", highlights: [_H('c4', KEY)] },
-    { atMove: 10, say: "O-O — finish development and bide your time. The c4-pawn comes back with Qc2 or a4 hitting …b5, and meanwhile the g2-bishop chokes the b7-square while Black's queenside scrambles to untangle.", sayShort: "O-O — bind, then regain c4", arrows: [_A('g2', 'b7', ATK)], highlights: [_H('c4', KEY)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
-};
 // WAVE2 WGRUC5 :: 2 keys
 const WGRUC5: SublineNarration = {
   intro: { say: "Nf3 — White develops in the Exchange Grünfeld, bracing the d4-centre before you can hit it. Strike anyway: …c5 hammers the base of the broad pawn front, and with your g7-bishop already raking d4 down the long diagonal, the centre is under fire from two directions. Demolishing that centre is the whole point of the Grünfeld.", sayShort: "Nf3 — answer …c5, hammer d4" },
@@ -823,15 +787,6 @@ const WQGDTAB: SublineNarration = {
 };
 // WAVE WBENTAIM :: 1 keys
 // WAVE WCATNC6 :: 1 keys
-const WCATNC6: SublineNarration = {
-  intro: { say: "…Nc6 — Black develops and clings to the c4-pawn in the Open Catalan, but it's a loan. Prepare Qe2 and Qxc4 to collect it, and lean on the long diagonal with the g2-bishop. Black's queenside stays awkward to untangle while you enjoy the bind and the more comfortable game.", sayShort: "…Nc6 — prepare Qe2-Qxc4, then bind" },
-  beats: [
-    { atMove: 11, say: "…Nc6 develops and supports holding the c4-pawn. Don't chase it crudely; reroute your queen to collect it while the g2-bishop does the long-term work.", sayShort: "…Nc6 — Black holds c4", highlights: [_H('c6', KEY)] },
-    { atMove: 14, say: "Qe2 — lining the queen up behind the c4-pawn, ready to regain it next move. Patient and methodical; the g2-bishop already binds the long light diagonal.", sayShort: "Qe2 — prepare to regain c4", highlights: [_H('e2', KEY)] },
-    { atMove: 16, say: "Qxc4 — pawn back, and the bind tells: the g2-bishop chokes the long diagonal while Black scrambles to free his queenside. You hold the easier, more pleasant game.", sayShort: "Qxc4 — pawn back, the bind tells", highlights: [_H('c4', KEY)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
-};
 
 // WAVE WRETIQXD :: 1 keys
 const WRETIQXD: SublineNarration = {
@@ -13857,7 +13812,715 @@ const SSR_69: SublineNarration = {
   sources: ['concept:pos-development', 'https://lichess.org/opening/Semi-Slav-Defense'],
 };
 
+const CATR_0: SublineNarration = {
+  intro: { say: "White heads for a Catalan but you strike first. Check …Bb4+, hit the centre with …c5, and stake …d5 to blunt the long-diagonal bishop — full equality.", sayShort: "Bogo-Catalan: …Bb4+, …c5, …d5" },
+  beats: [
+    { atMove: 7, say: "Strike …c5 at once, hitting the centre before White's setup is complete.", sayShort: "…c5, hit the centre", highlights: [_H('c5')] },
+    { atMove: 11, say: "Take …cxd4, opening the centre while White's light bishop still sits home.", sayShort: "…cxd4, open the centre", highlights: [_H('d4')] },
+    { atMove: 19, say: "Stake …d5, claiming the centre and blunting the g2-bishop.", sayShort: "…d5, blunt the bishop", highlights: [_H('d5')] },
+    { atMove: 23, say: "Leap …Ne4, the active knight; fully equal.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_1: SublineNarration = {
+  intro: { say: "White meets …c5 with d5, reaching a Benoni-Catalan. Build …d6 and fianchetto, then your g7-bishop and …Ne4 generate dynamic, balanced play.", sayShort: "Benoni-Catalan: …g6, …Bg7" },
+  beats: [
+    { atMove: 7, say: "Play …d6, steering into a Benoni structure behind your coming fianchetto.", sayShort: "…d6, the Benoni", highlights: [_H('d6')] },
+    { atMove: 11, say: "Fianchetto …g6, the bishop bearing on the long diagonal.", sayShort: "…g6, the fianchetto", highlights: [_H('g6')] },
+    { atMove: 13, say: "Develop …Bg7, glaring at White's d5-pawn and the centre.", sayShort: "…Bg7, glare at d5", highlights: [_H('g7')] },
+    { atMove: 21, say: "Leap …Ne4, the active knight; dynamic and balanced.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_2: SublineNarration = {
+  intro: { say: "In the Open Catalan you grab the pawn and play …a6 to hold it briefly. Develop actively and prepare the …e5 freeing break that equalises.", sayShort: "Open Catalan: …a6 and …e5" },
+  beats: [
+    { atMove: 11, say: "Develop …Nc6, supporting an …e5 break and the centre.", sayShort: "…Nc6, support …e5", highlights: [_H('c6')] },
+    { atMove: 15, say: "Develop …Bd6, the bishop eyeing the kingside.", sayShort: "…Bd6, eye the kingside", highlights: [_H('d6')] },
+    { atMove: 19, say: "Centralise …Qe7, readying the freeing …e5 push.", sayShort: "…Qe7, ready …e5", highlights: [_H('e7')] },
+    { atMove: 23, say: "Strike …e5, the freeing break that equalises the Open Catalan.", sayShort: "…e5, the freeing break", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_3: SublineNarration = {
+  intro: { say: "The Closed Catalan where you delay …dxc4 until castled. Grab the pawn, hold it with …a6 and …b5, and fianchetto to contest the long diagonal — fully equal.", sayShort: "Closed Catalan: …dxc4, …b5, …Bb7" },
+  beats: [
+    { atMove: 9, say: "Castle …O-O, getting safe before you grab the pawn.", sayShort: "…O-O, get safe", highlights: [_H('g8')] },
+    { atMove: 11, say: "Take …dxc4, snatching the pawn you'll defend with …a6 and …b5.", sayShort: "…dxc4, snatch the pawn", highlights: [_H('c4')] },
+    { atMove: 15, say: "Hold it with …b5, gaining queenside space.", sayShort: "…b5, hold the pawn", highlights: [_H('b5')] },
+    { atMove: 17, say: "Fianchetto …Bb7, opposing White's Catalan bishop.", sayShort: "…Bb7, oppose the bishop", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_4: SublineNarration = {
+  intro: { say: "An Open Catalan where White recovers the pawn with Qc2. Expand …b5, fianchetto, and contest the c-file — your pieces are active and the game is level.", sayShort: "Open Catalan: …b5, …Bb7, …Rc8" },
+  beats: [
+    { atMove: 7, say: "Take …dxc4, the Open Catalan pawn grab.", sayShort: "…dxc4, grab the pawn", highlights: [_H('c4')] },
+    { atMove: 15, say: "Hold and expand with …b5, gaining queenside space.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+    { atMove: 17, say: "Fianchetto …Bb7, opposing the Catalan bishop.", sayShort: "…Bb7, oppose the bishop", highlights: [_H('b7')] },
+    { atMove: 21, say: "Lift …Rc8, pressing the half-open c-file; balanced.", sayShort: "…Rc8, the c-file", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_5: SublineNarration = {
+  intro: { say: "White blocks the check with Bd2. Fix the queenside with …a5, reposition the bishop, and plant a knight on e4 — a solid, fully equal Closed Catalan.", sayShort: "…Bb4+ Bd2: …a5 and …Ne4" },
+  beats: [
+    { atMove: 9, say: "Fix the queenside with …a5, securing the bishop's retreat squares.", sayShort: "…a5, fix the queenside", highlights: [_H('a5')] },
+    { atMove: 11, say: "Reposition …Be7, keeping the bishop flexible.", sayShort: "…Be7, stay flexible", highlights: [_H('e7')] },
+    { atMove: 15, say: "Plant …Ne4, the active outpost hitting White's pieces.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 21, say: "Castle …O-O; fully equal.", sayShort: "…O-O, fully equal", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_6: SublineNarration = {
+  intro: { say: "An Open Catalan with the active …Nc6. Develop …Bd6, centralise …Nd5, and check …Bb4+ to develop with tempo — your active pieces hold the balance.", sayShort: "Open Catalan: …Nc6, …Nd5" },
+  beats: [
+    { atMove: 11, say: "Develop …Bd6, the bishop eyeing the kingside.", sayShort: "…Bd6, eye the kingside", highlights: [_H('d6')] },
+    { atMove: 17, say: "Centralise …Nd5, the knight on a commanding square.", sayShort: "…Nd5, commanding square", highlights: [_H('d5')] },
+    { atMove: 19, say: "Check …Bb4+, developing with tempo.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 23, say: "Strike …c5, freeing your game; balanced.", sayShort: "…c5, free the game", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_7: SublineNarration = {
+  intro: { say: "An Open Catalan where you hit the centre with …c5 and trade queens. Recapture the pawn and develop — the queenless middlegame is comfortable and even.", sayShort: "Open Catalan: …c5, queen trade" },
+  beats: [
+    { atMove: 11, say: "Develop …Nc6, hitting the d4-pawn.", sayShort: "…Nc6, hit d4", highlights: [_H('c6')] },
+    { atMove: 13, say: "Trade queens with …Qxd1, simplifying into a comfortable game.", sayShort: "…Qxd1, simplify", highlights: [_H('d1')] },
+    { atMove: 15, say: "Recapture …Bxc5, regaining the pawn with an active bishop.", sayShort: "…Bxc5, regain the pawn", highlights: [_H('c5')] },
+    { atMove: 19, say: "Castle …O-O; balanced.", sayShort: "…O-O, balanced", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_8: SublineNarration = {
+  intro: { say: "An Open Catalan with …Bb4+ and Qc1. Fix …a5, trade the bishop, and hold the extra pawn with …b5 — you reach a balanced game a pawn to the good.", sayShort: "Open Catalan: …Bb4+, …a5, …b5" },
+  beats: [
+    { atMove: 11, say: "Fix …a5, securing the bishop and gaining queenside space.", sayShort: "…a5, fix the wing", highlights: [_H('a5')] },
+    { atMove: 13, say: "Trade …Bxd2+, simplifying while keeping the extra pawn.", sayShort: "…Bxd2+, simplify ahead", highlights: [_H('d2')] },
+    { atMove: 15, say: "Hold with …b5, expanding on the queenside.", sayShort: "…b5, hold the pawn", highlights: [_H('b5')] },
+    { atMove: 21, say: "Solidify …c6, anchoring your queenside pawns; balanced.", sayShort: "…c6, anchor", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_9: SublineNarration = {
+  intro: { say: "An Open Catalan where you grab the pawn and meet a4 with …b5. Fianchetto, blunt the Catalan bishop with …Bd5, and your active pieces equalise.", sayShort: "Open Catalan: …b5, …Bb7, …Bd5" },
+  beats: [
+    { atMove: 15, say: "Fianchetto …Bb7, opposing the Catalan bishop.", sayShort: "…Bb7, oppose the bishop", highlights: [_H('b7')] },
+    { atMove: 19, say: "Recapture …Nxa6, the knight rerouting to the queenside.", sayShort: "…Nxa6, reroute", highlights: [_H('a6')] },
+    { atMove: 21, say: "Centralise …Bd5, blunting the g2-bishop.", sayShort: "…Bd5, blunt the bishop", highlights: [_H('d5')] },
+    { atMove: 23, say: "Leap …Ne4, the active knight; balanced.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_10: SublineNarration = {
+  intro: { say: "The Closed Catalan with …c6 and …b6. Set up the …Bb7 fianchetto, complete development, and prepare a central break — a rock-solid, balanced game.", sayShort: "Closed Catalan: …c6, …b6, …Bb7" },
+  beats: [
+    { atMove: 13, say: "Prepare …b6, readying the bishop's path to b7.", sayShort: "…b6, prepare …Bb7", highlights: [_H('b6')] },
+    { atMove: 15, say: "Develop …Nbd7, completing the closed setup.", sayShort: "…Nbd7, complete the setup", highlights: [_H('d7')] },
+    { atMove: 19, say: "Fianchetto …Bb7, contesting the long diagonal.", sayShort: "…Bb7, contest the diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Centralise …Rfe8, readying a central break; balanced.", sayShort: "…Rfe8, ready the break", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_11: SublineNarration = {
+  intro: { say: "White's Qa4+ aims to round up the pawn. Block with …Qd7 and offer the queen trade with …Qc6 — the simplifications equalise comfortably.", sayShort: "Open Catalan: …Qd7, …Qc6 trade" },
+  beats: [
+    { atMove: 11, say: "Block …Qd7, offering a queen trade to defuse the Catalan pressure.", sayShort: "…Qd7, offer the trade", highlights: [_H('d7')] },
+    { atMove: 13, say: "Steer with …Qc6, heading into the trade that equalises.", sayShort: "…Qc6, into the trade", highlights: [_H('c6')] },
+    { atMove: 19, say: "Activate …Rd8 on the open file.", sayShort: "…Rd8, the open file", highlights: [_H('d8')] },
+    { atMove: 23, say: "Centralise …Nd5, the blockading knight; fully equal.", sayShort: "…Nd5, blockade", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_12: SublineNarration = {
+  intro: { say: "A Closed Catalan with an early …b6. Recapture toward a solid centre, fianchetto, and plant …Ne4 — your pieces are well-placed in a balanced game.", sayShort: "Closed Catalan: …b6, …Bb7, …Ne4" },
+  beats: [
+    { atMove: 11, say: "Recapture …exd5, keeping a solid central pawn.", sayShort: "…exd5, solid centre", highlights: [_H('d5')] },
+    { atMove: 15, say: "Fianchetto …Bb7, opposing the Catalan bishop.", sayShort: "…Bb7, oppose the bishop", highlights: [_H('b7')] },
+    { atMove: 19, say: "Plant …Ne4, the active outpost.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 23, say: "Trade …Nxc3, simplifying favourably; balanced.", sayShort: "…Nxc3, simplify", highlights: [_H('c3')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_13: SublineNarration = {
+  intro: { say: "A Closed Catalan with …Nbd7. Gain space with …a5, solidify …c6, and grab the pawn at the right moment, blockading on d5 — fully equal.", sayShort: "Closed Catalan: …a5, …c6, …dxc4" },
+  beats: [
+    { atMove: 11, say: "Gain space with …a5, restraining White's queenside.", sayShort: "…a5, restrain the wing", highlights: [_H('a5')] },
+    { atMove: 17, say: "Solidify …c6, bracing the centre.", sayShort: "…c6, brace the centre", highlights: [_H('c6')] },
+    { atMove: 19, say: "Take …dxc4, grabbing the pawn at the right moment.", sayShort: "…dxc4, grab the pawn", highlights: [_H('c4')] },
+    { atMove: 21, say: "Centralise …Nd5, the blockading knight; balanced.", sayShort: "…Nd5, blockade", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_14: SublineNarration = {
+  intro: { say: "The Closed Catalan where you delay …dxc4 until castled. Grab the pawn, hold it with …a6 and …b5, and fianchetto to contest the long diagonal — fully equal.", sayShort: "Closed Catalan: …dxc4, …b5, …Bb7" },
+  beats: [
+    { atMove: 9, say: "Castle …O-O, getting safe before you grab the pawn.", sayShort: "…O-O, get safe", highlights: [_H('g8')] },
+    { atMove: 11, say: "Take …dxc4, snatching the pawn you'll defend with …a6 and …b5.", sayShort: "…dxc4, snatch the pawn", highlights: [_H('c4')] },
+    { atMove: 15, say: "Hold it with …b5, gaining queenside space.", sayShort: "…b5, hold the pawn", highlights: [_H('b5')] },
+    { atMove: 17, say: "Fianchetto …Bb7, opposing White's Catalan bishop.", sayShort: "…Bb7, oppose the bishop", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_15: SublineNarration = {
+  intro: { say: "White heads for a Catalan but you strike first. Check …Bb4+, hit the centre with …c5, and stake …d5 to blunt the long-diagonal bishop — full equality.", sayShort: "Bogo-Catalan: …Bb4+, …c5, …d5" },
+  beats: [
+    { atMove: 7, say: "Strike …c5 at once, hitting the centre before White's setup is complete.", sayShort: "…c5, hit the centre", highlights: [_H('c5')] },
+    { atMove: 11, say: "Take …cxd4, opening the centre while White's light bishop still sits home.", sayShort: "…cxd4, open the centre", highlights: [_H('d4')] },
+    { atMove: 19, say: "Stake …d5, claiming the centre and blunting the g2-bishop.", sayShort: "…d5, blunt the bishop", highlights: [_H('d5')] },
+    { atMove: 23, say: "Leap …Ne4, the active knight; fully equal.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_16: SublineNarration = {
+  intro: { say: "White meets …c5 with d5, reaching a Benoni-Catalan. Build …d6 and fianchetto, then your g7-bishop and …Ne4 generate dynamic, balanced play.", sayShort: "Benoni-Catalan: …g6, …Bg7" },
+  beats: [
+    { atMove: 7, say: "Play …d6, steering into a Benoni structure behind your coming fianchetto.", sayShort: "…d6, the Benoni", highlights: [_H('d6')] },
+    { atMove: 11, say: "Fianchetto …g6, the bishop bearing on the long diagonal.", sayShort: "…g6, the fianchetto", highlights: [_H('g6')] },
+    { atMove: 13, say: "Develop …Bg7, glaring at White's d5-pawn and the centre.", sayShort: "…Bg7, glare at d5", highlights: [_H('g7')] },
+    { atMove: 21, say: "Leap …Ne4, the active knight; dynamic and balanced.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_17: SublineNarration = {
+  intro: { say: "The Closed Catalan where you prepare …c5. Gain space with …a5, develop, and break …c5 to free your game — the trades leave a balanced position.", sayShort: "Closed Catalan: …a5 then …c5" },
+  beats: [
+    { atMove: 13, say: "Gain space with …a5, restraining the queenside.", sayShort: "…a5, restrain", highlights: [_H('a5')] },
+    { atMove: 17, say: "Strike …c5, the freeing break in the Closed Catalan.", sayShort: "…c5, the freeing break", highlights: [_H('c5')] },
+    { atMove: 19, say: "Recapture …exd5, opening lines for your pieces.", sayShort: "…exd5, open lines", highlights: [_H('d5')] },
+    { atMove: 23, say: "Develop …Bg4, pinning the knight; balanced.", sayShort: "…Bg4, pin", highlights: [_H('g4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_18: SublineNarration = {
+  intro: { say: "White blocks the check with Bd2. Fix the queenside with …a5, reposition the bishop, and plant a knight on e4 — a solid, fully equal Closed Catalan.", sayShort: "…Bb4+ Bd2: …a5 and …Ne4" },
+  beats: [
+    { atMove: 9, say: "Fix the queenside with …a5, securing the bishop's retreat squares.", sayShort: "…a5, fix the queenside", highlights: [_H('a5')] },
+    { atMove: 11, say: "Reposition …Be7, keeping the bishop flexible.", sayShort: "…Be7, stay flexible", highlights: [_H('e7')] },
+    { atMove: 15, say: "Plant …Ne4, the active outpost hitting White's pieces.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 21, say: "Castle …O-O; fully equal.", sayShort: "…O-O, fully equal", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_19: SublineNarration = {
+  intro: { say: "An Open Catalan with …Bb4+ and Qc1. Fix …a5, trade the bishop, and hold the extra pawn with …b5 — you reach a balanced game a pawn to the good.", sayShort: "Open Catalan: …Bb4+, …a5, …b5" },
+  beats: [
+    { atMove: 11, say: "Fix …a5, securing the bishop and gaining queenside space.", sayShort: "…a5, fix the wing", highlights: [_H('a5')] },
+    { atMove: 13, say: "Trade …Bxd2+, simplifying while keeping the extra pawn.", sayShort: "…Bxd2+, simplify ahead", highlights: [_H('d2')] },
+    { atMove: 15, say: "Hold with …b5, expanding on the queenside.", sayShort: "…b5, hold the pawn", highlights: [_H('b5')] },
+    { atMove: 21, say: "Solidify …c6, anchoring your queenside pawns; balanced.", sayShort: "…c6, anchor", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_20: SublineNarration = {
+  intro: { say: "White heads for a Catalan but you strike first. Check …Bb4+, hit the centre with …c5, and stake …d5 to blunt the long-diagonal bishop — full equality.", sayShort: "Bogo-Catalan: …Bb4+, …c5, …d5" },
+  beats: [
+    { atMove: 7, say: "Strike …c5 at once, hitting the centre before White's setup is complete.", sayShort: "…c5, hit the centre", highlights: [_H('c5')] },
+    { atMove: 11, say: "Take …cxd4, opening the centre while White's light bishop still sits home.", sayShort: "…cxd4, open the centre", highlights: [_H('d4')] },
+    { atMove: 19, say: "Stake …d5, claiming the centre and blunting the g2-bishop.", sayShort: "…d5, blunt the bishop", highlights: [_H('d5')] },
+    { atMove: 23, say: "Leap …Ne4, the active knight; fully equal.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_21: SublineNarration = {
+  intro: { say: "White meets …c5 with d5, reaching a Benoni-Catalan. Build …d6 and fianchetto, then your g7-bishop and …Ne4 generate dynamic, balanced play.", sayShort: "Benoni-Catalan: …g6, …Bg7" },
+  beats: [
+    { atMove: 7, say: "Play …d6, steering into a Benoni structure behind your coming fianchetto.", sayShort: "…d6, the Benoni", highlights: [_H('d6')] },
+    { atMove: 11, say: "Fianchetto …g6, the bishop bearing on the long diagonal.", sayShort: "…g6, the fianchetto", highlights: [_H('g6')] },
+    { atMove: 13, say: "Develop …Bg7, glaring at White's d5-pawn and the centre.", sayShort: "…Bg7, glare at d5", highlights: [_H('g7')] },
+    { atMove: 21, say: "Leap …Ne4, the active knight; dynamic and balanced.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_22: SublineNarration = {
+  intro: { say: "The Closed Catalan where you delay …dxc4 until castled. Grab the pawn, hold it with …a6 and …b5, and fianchetto to contest the long diagonal — fully equal.", sayShort: "Closed Catalan: …dxc4, …b5, …Bb7" },
+  beats: [
+    { atMove: 9, say: "Castle …O-O, getting safe before you grab the pawn.", sayShort: "…O-O, get safe", highlights: [_H('g8')] },
+    { atMove: 11, say: "Take …dxc4, snatching the pawn you'll defend with …a6 and …b5.", sayShort: "…dxc4, snatch the pawn", highlights: [_H('c4')] },
+    { atMove: 15, say: "Hold it with …b5, gaining queenside space.", sayShort: "…b5, hold the pawn", highlights: [_H('b5')] },
+    { atMove: 17, say: "Fianchetto …Bb7, opposing White's Catalan bishop.", sayShort: "…Bb7, oppose the bishop", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_23: SublineNarration = {
+  intro: { say: "In the Open Catalan you grab the pawn and play …a6 to hold it briefly. Develop actively and prepare the …e5 freeing break that equalises.", sayShort: "Open Catalan: …a6 and …e5" },
+  beats: [
+    { atMove: 11, say: "Develop …Nc6, supporting an …e5 break and the centre.", sayShort: "…Nc6, support …e5", highlights: [_H('c6')] },
+    { atMove: 15, say: "Develop …Bd6, the bishop eyeing the kingside.", sayShort: "…Bd6, eye the kingside", highlights: [_H('d6')] },
+    { atMove: 19, say: "Centralise …Qe7, readying the freeing …e5 push.", sayShort: "…Qe7, ready …e5", highlights: [_H('e7')] },
+    { atMove: 23, say: "Strike …e5, the freeing break that equalises the Open Catalan.", sayShort: "…e5, the freeing break", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_24: SublineNarration = {
+  intro: { say: "White blocks the check with Bd2. Fix the queenside with …a5, reposition the bishop, and plant a knight on e4 — a solid, fully equal Closed Catalan.", sayShort: "…Bb4+ Bd2: …a5 and …Ne4" },
+  beats: [
+    { atMove: 9, say: "Fix the queenside with …a5, securing the bishop's retreat squares.", sayShort: "…a5, fix the queenside", highlights: [_H('a5')] },
+    { atMove: 11, say: "Reposition …Be7, keeping the bishop flexible.", sayShort: "…Be7, stay flexible", highlights: [_H('e7')] },
+    { atMove: 15, say: "Plant …Ne4, the active outpost hitting White's pieces.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 21, say: "Castle …O-O; fully equal.", sayShort: "…O-O, fully equal", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_25: SublineNarration = {
+  intro: { say: "An Open Catalan with the active …Nc6. Develop …Bd6, centralise …Nd5, and check …Bb4+ to develop with tempo — your active pieces hold the balance.", sayShort: "Open Catalan: …Nc6, …Nd5" },
+  beats: [
+    { atMove: 11, say: "Develop …Bd6, the bishop eyeing the kingside.", sayShort: "…Bd6, eye the kingside", highlights: [_H('d6')] },
+    { atMove: 17, say: "Centralise …Nd5, the knight on a commanding square.", sayShort: "…Nd5, commanding square", highlights: [_H('d5')] },
+    { atMove: 19, say: "Check …Bb4+, developing with tempo.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 23, say: "Strike …c5, freeing your game; balanced.", sayShort: "…c5, free the game", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_26: SublineNarration = {
+  intro: { say: "An Open Catalan where you hit the centre with …c5 and trade queens. Recapture the pawn and develop — the queenless middlegame is comfortable and even.", sayShort: "Open Catalan: …c5, queen trade" },
+  beats: [
+    { atMove: 11, say: "Develop …Nc6, hitting the d4-pawn.", sayShort: "…Nc6, hit d4", highlights: [_H('c6')] },
+    { atMove: 13, say: "Trade queens with …Qxd1, simplifying into a comfortable game.", sayShort: "…Qxd1, simplify", highlights: [_H('d1')] },
+    { atMove: 15, say: "Recapture …Bxc5, regaining the pawn with an active bishop.", sayShort: "…Bxc5, regain the pawn", highlights: [_H('c5')] },
+    { atMove: 19, say: "Castle …O-O; balanced.", sayShort: "…O-O, balanced", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_27: SublineNarration = {
+  intro: { say: "An Open Catalan with …Bb4+ and Qc1. Fix …a5, trade the bishop, and hold the extra pawn with …b5 — you reach a balanced game a pawn to the good.", sayShort: "Open Catalan: …Bb4+, …a5, …b5" },
+  beats: [
+    { atMove: 11, say: "Fix …a5, securing the bishop and gaining queenside space.", sayShort: "…a5, fix the wing", highlights: [_H('a5')] },
+    { atMove: 13, say: "Trade …Bxd2+, simplifying while keeping the extra pawn.", sayShort: "…Bxd2+, simplify ahead", highlights: [_H('d2')] },
+    { atMove: 15, say: "Hold with …b5, expanding on the queenside.", sayShort: "…b5, hold the pawn", highlights: [_H('b5')] },
+    { atMove: 21, say: "Solidify …c6, anchoring your queenside pawns; balanced.", sayShort: "…c6, anchor", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_28: SublineNarration = {
+  intro: { say: "An Open Catalan where you hold the pawn with …a6 and …b5. The odd-looking …Ra7 defends along the rank; trade the bishops and recover with active play — balanced.", sayShort: "Open Catalan: …a6-b5, …Ra7" },
+  beats: [
+    { atMove: 15, say: "Fianchetto …Bb7, opposing the Catalan bishop.", sayShort: "…Bb7, oppose the bishop", highlights: [_H('b7')] },
+    { atMove: 17, say: "Trade …Bxg2, removing White's strong long-diagonal bishop.", sayShort: "…Bxg2, remove the bishop", highlights: [_H('g2')] },
+    { atMove: 19, say: "Check …Qd5+, centralising the queen with tempo.", sayShort: "…Qd5+, centralise", highlights: [_H('d5')] },
+    { atMove: 21, say: "Recapture …Qxb5, holding your extra pawn; balanced.", sayShort: "…Qxb5, hold the pawn", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_29: SublineNarration = {
+  intro: { say: "An Open Catalan where …Bd7-c6 challenges the Catalan bishop directly. Trade it off, develop, and reroute the knight to c4 — a comfortable, balanced game.", sayShort: "Open Catalan: …Bd7-c6 challenge" },
+  beats: [
+    { atMove: 11, say: "Develop …Bc6, challenging the Catalan bishop head-on.", sayShort: "…Bc6, challenge the bishop", highlights: [_H('c6')] },
+    { atMove: 15, say: "Centralise …Qd7, connecting your pieces.", sayShort: "…Qd7, connect", highlights: [_H('d7')] },
+    { atMove: 19, say: "Hop …Na5, the knight heading for the c4-square.", sayShort: "…Na5, head for c4", highlights: [_H('a5')] },
+    { atMove: 23, say: "Recapture …Nxc4, regaining the pawn; balanced.", sayShort: "…Nxc4, regain the pawn", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_30: SublineNarration = {
+  intro: { say: "The Closed Catalan with …c6 and …b6. Set up the …Bb7 fianchetto, complete development, and prepare a central break — a rock-solid, balanced game.", sayShort: "Closed Catalan: …c6, …b6, …Bb7" },
+  beats: [
+    { atMove: 13, say: "Prepare …b6, readying the bishop's path to b7.", sayShort: "…b6, prepare …Bb7", highlights: [_H('b6')] },
+    { atMove: 15, say: "Develop …Nbd7, completing the closed setup.", sayShort: "…Nbd7, complete the setup", highlights: [_H('d7')] },
+    { atMove: 19, say: "Fianchetto …Bb7, contesting the long diagonal.", sayShort: "…Bb7, contest the diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Centralise …Rfe8, readying a central break; balanced.", sayShort: "…Rfe8, ready the break", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_31: SublineNarration = {
+  intro: { say: "White's Qa4+ aims to round up the pawn. Block with …Qd7 and offer the queen trade with …Qc6 — the simplifications equalise comfortably.", sayShort: "Open Catalan: …Qd7, …Qc6 trade" },
+  beats: [
+    { atMove: 11, say: "Block …Qd7, offering a queen trade to defuse the Catalan pressure.", sayShort: "…Qd7, offer the trade", highlights: [_H('d7')] },
+    { atMove: 13, say: "Steer with …Qc6, heading into the trade that equalises.", sayShort: "…Qc6, into the trade", highlights: [_H('c6')] },
+    { atMove: 19, say: "Activate …Rd8 on the open file.", sayShort: "…Rd8, the open file", highlights: [_H('d8')] },
+    { atMove: 23, say: "Centralise …Nd5, the blockading knight; fully equal.", sayShort: "…Nd5, blockade", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_32: SublineNarration = {
+  intro: { say: "A Closed Catalan with an early …b6. Recapture toward a solid centre, fianchetto, and plant …Ne4 — your pieces are well-placed in a balanced game.", sayShort: "Closed Catalan: …b6, …Bb7, …Ne4" },
+  beats: [
+    { atMove: 11, say: "Recapture …exd5, keeping a solid central pawn.", sayShort: "…exd5, solid centre", highlights: [_H('d5')] },
+    { atMove: 15, say: "Fianchetto …Bb7, opposing the Catalan bishop.", sayShort: "…Bb7, oppose the bishop", highlights: [_H('b7')] },
+    { atMove: 19, say: "Plant …Ne4, the active outpost.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 23, say: "Trade …Nxc3, simplifying favourably; balanced.", sayShort: "…Nxc3, simplify", highlights: [_H('c3')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_33: SublineNarration = {
+  intro: { say: "A Closed Catalan with …Nbd7. Gain space with …a5, solidify …c6, and grab the pawn at the right moment, blockading on d5 — fully equal.", sayShort: "Closed Catalan: …a5, …c6, …dxc4" },
+  beats: [
+    { atMove: 11, say: "Gain space with …a5, restraining White's queenside.", sayShort: "…a5, restrain the wing", highlights: [_H('a5')] },
+    { atMove: 17, say: "Solidify …c6, bracing the centre.", sayShort: "…c6, brace the centre", highlights: [_H('c6')] },
+    { atMove: 19, say: "Take …dxc4, grabbing the pawn at the right moment.", sayShort: "…dxc4, grab the pawn", highlights: [_H('c4')] },
+    { atMove: 21, say: "Centralise …Nd5, the blockading knight; balanced.", sayShort: "…Nd5, blockade", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_34: SublineNarration = {
+  intro: { say: "White heads for a Catalan but you strike first. Check …Bb4+, hit the centre with …c5, and stake …d5 to blunt the long-diagonal bishop — full equality.", sayShort: "Bogo-Catalan: …Bb4+, …c5, …d5" },
+  beats: [
+    { atMove: 7, say: "Strike …c5 at once, hitting the centre before White's setup is complete.", sayShort: "…c5, hit the centre", highlights: [_H('c5')] },
+    { atMove: 11, say: "Take …cxd4, opening the centre while White's light bishop still sits home.", sayShort: "…cxd4, open the centre", highlights: [_H('d4')] },
+    { atMove: 19, say: "Stake …d5, claiming the centre and blunting the g2-bishop.", sayShort: "…d5, blunt the bishop", highlights: [_H('d5')] },
+    { atMove: 23, say: "Leap …Ne4, the active knight; fully equal.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_35: SublineNarration = {
+  intro: { say: "White meets …c5 with d5, reaching a Benoni-Catalan. Build …d6 and fianchetto, then your g7-bishop and …Ne4 generate dynamic, balanced play.", sayShort: "Benoni-Catalan: …g6, …Bg7" },
+  beats: [
+    { atMove: 7, say: "Play …d6, steering into a Benoni structure behind your coming fianchetto.", sayShort: "…d6, the Benoni", highlights: [_H('d6')] },
+    { atMove: 11, say: "Fianchetto …g6, the bishop bearing on the long diagonal.", sayShort: "…g6, the fianchetto", highlights: [_H('g6')] },
+    { atMove: 13, say: "Develop …Bg7, glaring at White's d5-pawn and the centre.", sayShort: "…Bg7, glare at d5", highlights: [_H('g7')] },
+    { atMove: 21, say: "Leap …Ne4, the active knight; dynamic and balanced.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_36: SublineNarration = {
+  intro: { say: "An Open Catalan where you develop …Nc6 and offer a queen trade with …Qd5. The exchanges and …Bxa3 win material balance into a level game.", sayShort: "Open Catalan: …Nc6, …Qd5" },
+  beats: [
+    { atMove: 13, say: "Play …a6, preparing to hold the pawn.", sayShort: "…a6, prepare to hold", highlights: [_H('a6')] },
+    { atMove: 15, say: "Develop …Nc6, pressing the centre.", sayShort: "…Nc6, press the centre", highlights: [_H('c6')] },
+    { atMove: 19, say: "Snatch …Bxa3, grabbing material in the tactics.", sayShort: "…Bxa3, grab material", highlights: [_H('a3')] },
+    { atMove: 23, say: "Activate …Re8 in the resulting balanced position.", sayShort: "…Re8, activate", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_37: SublineNarration = {
+  intro: { say: "The Closed Catalan where you prepare …c5. Gain space with …a5, develop, and break …c5 to free your game — the trades leave a balanced position.", sayShort: "Closed Catalan: …a5 then …c5" },
+  beats: [
+    { atMove: 13, say: "Gain space with …a5, restraining the queenside.", sayShort: "…a5, restrain", highlights: [_H('a5')] },
+    { atMove: 17, say: "Strike …c5, the freeing break in the Closed Catalan.", sayShort: "…c5, the freeing break", highlights: [_H('c5')] },
+    { atMove: 19, say: "Recapture …exd5, opening lines for your pieces.", sayShort: "…exd5, open lines", highlights: [_H('d5')] },
+    { atMove: 23, say: "Develop …Bg4, pinning the knight; balanced.", sayShort: "…Bg4, pin", highlights: [_H('g4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_38: SublineNarration = {
+  intro: { say: "White blocks the check with Bd2. Fix the queenside with …a5, reposition the bishop, and plant a knight on e4 — a solid, fully equal Closed Catalan.", sayShort: "…Bb4+ Bd2: …a5 and …Ne4" },
+  beats: [
+    { atMove: 9, say: "Fix the queenside with …a5, securing the bishop's retreat squares.", sayShort: "…a5, fix the queenside", highlights: [_H('a5')] },
+    { atMove: 11, say: "Reposition …Be7, keeping the bishop flexible.", sayShort: "…Be7, stay flexible", highlights: [_H('e7')] },
+    { atMove: 15, say: "Plant …Ne4, the active outpost hitting White's pieces.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 21, say: "Castle …O-O; fully equal.", sayShort: "…O-O, fully equal", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_39: SublineNarration = {
+  intro: { say: "An Open Catalan with …Bb4+ and Qc1. Fix …a5, trade the bishop, and hold the extra pawn with …b5 — you reach a balanced game a pawn to the good.", sayShort: "Open Catalan: …Bb4+, …a5, …b5" },
+  beats: [
+    { atMove: 11, say: "Fix …a5, securing the bishop and gaining queenside space.", sayShort: "…a5, fix the wing", highlights: [_H('a5')] },
+    { atMove: 13, say: "Trade …Bxd2+, simplifying while keeping the extra pawn.", sayShort: "…Bxd2+, simplify ahead", highlights: [_H('d2')] },
+    { atMove: 15, say: "Hold with …b5, expanding on the queenside.", sayShort: "…b5, hold the pawn", highlights: [_H('b5')] },
+    { atMove: 21, say: "Solidify …c6, anchoring your queenside pawns; balanced.", sayShort: "…c6, anchor", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_40: SublineNarration = {
+  intro: { say: "White plays a Colle-style e3 instead of g3. Develop …Be7, fianchetto …Bb7, and complete a sound, symmetrical structure with no weaknesses — fully equal.", sayShort: "Colle-style: …Be7, …Bb7" },
+  beats: [
+    { atMove: 9, say: "Develop …Be7, a solid, flexible setup.", sayShort: "…Be7, solid setup", highlights: [_H('e7')] },
+    { atMove: 13, say: "Prepare …b6, readying the bishop's fianchetto.", sayShort: "…b6, prepare …Bb7", highlights: [_H('b6')] },
+    { atMove: 15, say: "Fianchetto …Bb7, raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 21, say: "Centralise …Rad8, eyeing a central break; balanced.", sayShort: "…Rad8, ready the break", highlights: [_H('d8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_41: SublineNarration = {
+  intro: { say: "An Open Catalan from the Slav move-order, holding the pawn with …b5. Defend the e5-knight with …Qc7, harry the bishop with …Nh5, and consolidate — balanced.", sayShort: "Open Catalan (Slav): …b5, …Qc7" },
+  beats: [
+    { atMove: 13, say: "Develop …Qc7, defending and eyeing White's e5-knight.", sayShort: "…Qc7, defend and eye", highlights: [_H('c7')] },
+    { atMove: 15, say: "Hit …Nh5, harrying the bishop and grabbing the bishop pair.", sayShort: "…Nh5, win the bishop pair", highlights: [_H('h5')] },
+    { atMove: 17, say: "Solidify …e6, anchoring your structure.", sayShort: "…e6, anchor", highlights: [_H('e6')] },
+    { atMove: 19, say: "Develop …Be7; balanced with the extra pawn.", sayShort: "…Be7, develop", highlights: [_H('e7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_42: SublineNarration = {
+  intro: { say: "The same Slav-Catalan, here defending the pawn with …Qb6. Hit b2 and d4, return the pawn cleanly, and complete development — a balanced game.", sayShort: "Open Catalan (Slav): …b5, …Qb6" },
+  beats: [
+    { atMove: 13, say: "Develop …Qb6, defending the pawn and eyeing d4 and b2.", sayShort: "…Qb6, eye d4 and b2", highlights: [_H('b6')] },
+    { atMove: 15, say: "Take …cxb3, opening the c-file and keeping material level.", sayShort: "…cxb3, open the c-file", highlights: [_H('b3')] },
+    { atMove: 17, say: "Solidify …e6, completing your structure.", sayShort: "…e6, solidify", highlights: [_H('e6')] },
+    { atMove: 23, say: "Push …b4, gaining queenside space; balanced.", sayShort: "…b4, gain space", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_43: SublineNarration = {
+  intro: { say: "The Slav-Catalan where you brace the queenside with …a6. Hold the structure, fianchetto, and blockade on d5 — a sound, balanced position.", sayShort: "Open Catalan (Slav): …a6, …Bb7" },
+  beats: [
+    { atMove: 11, say: "Play …a6, bracing the chain that holds your extra pawn.", sayShort: "…a6, brace the chain", highlights: [_H('a6')] },
+    { atMove: 13, say: "Take …cxb3, opening the c-file and keeping material even.", sayShort: "…cxb3, open the c-file", highlights: [_H('b3')] },
+    { atMove: 15, say: "Fianchetto …Bb7, opposing the Catalan bishop.", sayShort: "…Bb7, oppose the bishop", highlights: [_H('b7')] },
+    { atMove: 21, say: "Centralise …Nd5, the blockading knight; balanced.", sayShort: "…Nd5, blockade", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_44: SublineNarration = {
+  intro: { say: "The Slav-Catalan with the active …Nd5. Blockade on d5, challenge the e5-knight with …Nd7, and trade into a balanced position where material is level.", sayShort: "Open Catalan (Slav): …Nd5, …Nd7" },
+  beats: [
+    { atMove: 13, say: "Centralise …Nd5, the knight blockading and eyeing c3.", sayShort: "…Nd5, blockade", highlights: [_H('d5')] },
+    { atMove: 17, say: "Develop …Nd7, challenging White's e5-knight.", sayShort: "…Nd7, challenge e5", highlights: [_H('d7')] },
+    { atMove: 19, say: "Trade …Nxe5, simplifying while ahead in material.", sayShort: "…Nxe5, simplify", highlights: [_H('e5')] },
+    { atMove: 23, say: "Take …bxc4, levelling material; balanced.", sayShort: "…bxc4, level material", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_45: SublineNarration = {
+  intro: { say: "White combines g3 with Nh4 to win your good bishop. Keep it active on g6 to be exchanged, trade queens, and your sound structure equalises.", sayShort: "Slav-Catalan: …Bf5, trade bishops" },
+  beats: [
+    { atMove: 9, say: "Solidify …e6, supporting the bishop's outpost.", sayShort: "…e6, support the bishop", highlights: [_H('e6')] },
+    { atMove: 11, say: "Slide …Be4, keeping the bishop active and provoking f3.", sayShort: "…Be4, stay active", highlights: [_H('e4')] },
+    { atMove: 17, say: "Recapture …hxg6, opening the h-file with a sound structure.", sayShort: "…hxg6, open the h-file", highlights: [_H('g6')] },
+    { atMove: 23, say: "Reroute …Nc7, the knight toward a good square; balanced.", sayShort: "…Nc7, reroute", highlights: [_H('c7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_46: SublineNarration = {
+  intro: { say: "The Slav-Catalan where you ram …b4 to keep the pawn wedged. Lock the queenside, develop, and your extra pawn gives a balanced game with chances.", sayShort: "Open Catalan (Slav): …b4 wedge" },
+  beats: [
+    { atMove: 11, say: "Push …b4, wedging the pawn forward and gaining queenside space.", sayShort: "…b4, wedge it forward", highlights: [_H('b4')] },
+    { atMove: 13, say: "Solidify …e6, opening the bishop's diagonal.", sayShort: "…e6, open the diagonal", highlights: [_H('e6')] },
+    { atMove: 21, say: "Develop …Qc7, connecting and eyeing the centre.", sayShort: "…Qc7, connect", highlights: [_H('c7')] },
+    { atMove: 23, say: "Castle …O-O; balanced with the extra pawn.", sayShort: "…O-O, balanced", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_47: SublineNarration = {
+  intro: { say: "The Slav-Catalan where you open with …e6 and check …Bb4+. The tactics with …Bxc3+ and …Qxd4 snatch a pawn — sharp but balanced.", sayShort: "Open Catalan (Slav): …Bb4+ tactics" },
+  beats: [
+    { atMove: 11, say: "Solidify …e6, opening lines for your pieces.", sayShort: "…e6, open lines", highlights: [_H('e6')] },
+    { atMove: 13, say: "Check …Bb4+, developing with tempo.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 19, say: "Take …Bxc3+, damaging White's structure in the tactics.", sayShort: "…Bxc3+, damage the structure", highlights: [_H('c3')] },
+    { atMove: 21, say: "Grab …Qxd4, snatching the pawn; balanced.", sayShort: "…Qxd4, grab the pawn", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_48: SublineNarration = {
+  intro: { say: "The Slav-Catalan where you tuck the queen to c8. Keep it flexible behind the pawns, solidify …e6, and develop — a balanced game holding the extra pawn.", sayShort: "Open Catalan (Slav): …Qc8" },
+  beats: [
+    { atMove: 13, say: "Tuck …Qc8, keeping the queen flexible behind your pawns.", sayShort: "…Qc8, stay flexible", highlights: [_H('c8')] },
+    { atMove: 15, say: "Solidify …e6, completing your structure.", sayShort: "…e6, solidify", highlights: [_H('e6')] },
+    { atMove: 17, say: "Take …cxb3, opening the c-file.", sayShort: "…cxb3, open the c-file", highlights: [_H('b3')] },
+    { atMove: 21, say: "Develop …Nbd7; balanced.", sayShort: "…Nbd7, develop", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_49: SublineNarration = {
+  intro: { say: "A Grünfeld-flavoured answer to the Catalan with …g6. Recapture symmetrically, fianchetto, and develop the bishop to f5 — active, balanced piece play.", sayShort: "Catalan-Grünfeld: …g6, …Bg7, …Bf5" },
+  beats: [
+    { atMove: 7, say: "Fianchetto …g6, a Grünfeld-style setup against the Catalan.", sayShort: "…g6, the Grünfeld", highlights: [_H('g6')] },
+    { atMove: 13, say: "Develop …Bg7, opposing the Catalan bishop on the long diagonal.", sayShort: "…Bg7, oppose the bishop", highlights: [_H('g7')] },
+    { atMove: 17, say: "Develop …Bf5, the active bishop eyeing the queenside.", sayShort: "…Bf5, active bishop", highlights: [_H('f5')] },
+    { atMove: 23, say: "Leap …Ne4, the active knight; balanced.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_50: SublineNarration = {
+  intro: { say: "The Closed Catalan with …c6 and …b6. Set up the …Bb7 fianchetto, complete development, and prepare a central break — a rock-solid, balanced game.", sayShort: "Closed Catalan: …c6, …b6, …Bb7" },
+  beats: [
+    { atMove: 13, say: "Prepare …b6, readying the bishop's path to b7.", sayShort: "…b6, prepare …Bb7", highlights: [_H('b6')] },
+    { atMove: 15, say: "Develop …Nbd7, completing the closed setup.", sayShort: "…Nbd7, complete the setup", highlights: [_H('d7')] },
+    { atMove: 19, say: "Fianchetto …Bb7, contesting the long diagonal.", sayShort: "…Bb7, contest the diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Centralise …Rfe8, readying a central break; balanced.", sayShort: "…Rfe8, ready the break", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_51: SublineNarration = {
+  intro: { say: "White's Qa4+ aims to round up the pawn. Block with …Qd7 and offer the queen trade with …Qc6 — the simplifications equalise comfortably.", sayShort: "Open Catalan: …Qd7, …Qc6 trade" },
+  beats: [
+    { atMove: 11, say: "Block …Qd7, offering a queen trade to defuse the Catalan pressure.", sayShort: "…Qd7, offer the trade", highlights: [_H('d7')] },
+    { atMove: 13, say: "Steer with …Qc6, heading into the trade that equalises.", sayShort: "…Qc6, into the trade", highlights: [_H('c6')] },
+    { atMove: 19, say: "Activate …Rd8 on the open file.", sayShort: "…Rd8, the open file", highlights: [_H('d8')] },
+    { atMove: 23, say: "Centralise …Nd5, the blockading knight; fully equal.", sayShort: "…Nd5, blockade", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_52: SublineNarration = {
+  intro: { say: "A Closed Catalan with an early …b6. Recapture toward a solid centre, fianchetto, and plant …Ne4 — your pieces are well-placed in a balanced game.", sayShort: "Closed Catalan: …b6, …Bb7, …Ne4" },
+  beats: [
+    { atMove: 11, say: "Recapture …exd5, keeping a solid central pawn.", sayShort: "…exd5, solid centre", highlights: [_H('d5')] },
+    { atMove: 15, say: "Fianchetto …Bb7, opposing the Catalan bishop.", sayShort: "…Bb7, oppose the bishop", highlights: [_H('b7')] },
+    { atMove: 19, say: "Plant …Ne4, the active outpost.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 23, say: "Trade …Nxc3, simplifying favourably; balanced.", sayShort: "…Nxc3, simplify", highlights: [_H('c3')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_53: SublineNarration = {
+  intro: { say: "A Closed Catalan with …Nbd7. Gain space with …a5, solidify …c6, and grab the pawn at the right moment, blockading on d5 — fully equal.", sayShort: "Closed Catalan: …a5, …c6, …dxc4" },
+  beats: [
+    { atMove: 11, say: "Gain space with …a5, restraining White's queenside.", sayShort: "…a5, restrain the wing", highlights: [_H('a5')] },
+    { atMove: 17, say: "Solidify …c6, bracing the centre.", sayShort: "…c6, brace the centre", highlights: [_H('c6')] },
+    { atMove: 19, say: "Take …dxc4, grabbing the pawn at the right moment.", sayShort: "…dxc4, grab the pawn", highlights: [_H('c4')] },
+    { atMove: 21, say: "Centralise …Nd5, the blockading knight; balanced.", sayShort: "…Nd5, blockade", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_54: SublineNarration = {
+  intro: { say: "The Closed Catalan where you delay …dxc4 until castled. Grab the pawn, hold it with …a6 and …b5, and fianchetto to contest the long diagonal — fully equal.", sayShort: "Closed Catalan: …dxc4, …b5, …Bb7" },
+  beats: [
+    { atMove: 9, say: "Castle …O-O, getting safe before you grab the pawn.", sayShort: "…O-O, get safe", highlights: [_H('g8')] },
+    { atMove: 11, say: "Take …dxc4, snatching the pawn you'll defend with …a6 and …b5.", sayShort: "…dxc4, snatch the pawn", highlights: [_H('c4')] },
+    { atMove: 15, say: "Hold it with …b5, gaining queenside space.", sayShort: "…b5, hold the pawn", highlights: [_H('b5')] },
+    { atMove: 17, say: "Fianchetto …Bb7, opposing White's Catalan bishop.", sayShort: "…Bb7, oppose the bishop", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_55: SublineNarration = {
+  intro: { say: "White heads for a Catalan but you strike first. Check …Bb4+, hit the centre with …c5, and stake …d5 to blunt the long-diagonal bishop — full equality.", sayShort: "Bogo-Catalan: …Bb4+, …c5, …d5" },
+  beats: [
+    { atMove: 7, say: "Strike …c5 at once, hitting the centre before White's setup is complete.", sayShort: "…c5, hit the centre", highlights: [_H('c5')] },
+    { atMove: 11, say: "Take …cxd4, opening the centre while White's light bishop still sits home.", sayShort: "…cxd4, open the centre", highlights: [_H('d4')] },
+    { atMove: 19, say: "Stake …d5, claiming the centre and blunting the g2-bishop.", sayShort: "…d5, blunt the bishop", highlights: [_H('d5')] },
+    { atMove: 23, say: "Leap …Ne4, the active knight; fully equal.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_56: SublineNarration = {
+  intro: { say: "White meets …c5 with d5, reaching a Benoni-Catalan. Build …d6 and fianchetto, then your g7-bishop and …Ne4 generate dynamic, balanced play.", sayShort: "Benoni-Catalan: …g6, …Bg7" },
+  beats: [
+    { atMove: 7, say: "Play …d6, steering into a Benoni structure behind your coming fianchetto.", sayShort: "…d6, the Benoni", highlights: [_H('d6')] },
+    { atMove: 11, say: "Fianchetto …g6, the bishop bearing on the long diagonal.", sayShort: "…g6, the fianchetto", highlights: [_H('g6')] },
+    { atMove: 13, say: "Develop …Bg7, glaring at White's d5-pawn and the centre.", sayShort: "…Bg7, glare at d5", highlights: [_H('g7')] },
+    { atMove: 21, say: "Leap …Ne4, the active knight; dynamic and balanced.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_57: SublineNarration = {
+  intro: { say: "The Closed Catalan where you prepare …c5. Gain space with …a5, develop, and break …c5 to free your game — the trades leave a balanced position.", sayShort: "Closed Catalan: …a5 then …c5" },
+  beats: [
+    { atMove: 13, say: "Gain space with …a5, restraining the queenside.", sayShort: "…a5, restrain", highlights: [_H('a5')] },
+    { atMove: 17, say: "Strike …c5, the freeing break in the Closed Catalan.", sayShort: "…c5, the freeing break", highlights: [_H('c5')] },
+    { atMove: 19, say: "Recapture …exd5, opening lines for your pieces.", sayShort: "…exd5, open lines", highlights: [_H('d5')] },
+    { atMove: 23, say: "Develop …Bg4, pinning the knight; balanced.", sayShort: "…Bg4, pin", highlights: [_H('g4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_58: SublineNarration = {
+  intro: { say: "White blocks the check with Bd2. Fix the queenside with …a5, reposition the bishop, and plant a knight on e4 — a solid, fully equal Closed Catalan.", sayShort: "…Bb4+ Bd2: …a5 and …Ne4" },
+  beats: [
+    { atMove: 9, say: "Fix the queenside with …a5, securing the bishop's retreat squares.", sayShort: "…a5, fix the queenside", highlights: [_H('a5')] },
+    { atMove: 11, say: "Reposition …Be7, keeping the bishop flexible.", sayShort: "…Be7, stay flexible", highlights: [_H('e7')] },
+    { atMove: 15, say: "Plant …Ne4, the active outpost hitting White's pieces.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 21, say: "Castle …O-O; fully equal.", sayShort: "…O-O, fully equal", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_59: SublineNarration = {
+  intro: { say: "A Closed Catalan main line. Set up …c6, …b6 and …Bb7, then break …c5 against White's e4 centre — your pieces are coordinated in a balanced fight.", sayShort: "Closed Catalan: …c6, …b6, …c5" },
+  beats: [
+    { atMove: 11, say: "Develop …Nbd7, the closed Catalan setup.", sayShort: "…Nbd7, the setup", highlights: [_H('d7')] },
+    { atMove: 13, say: "Solidify …c6, bracing the centre.", sayShort: "…c6, brace the centre", highlights: [_H('c6')] },
+    { atMove: 17, say: "Fianchetto …Bb7, contesting the long diagonal.", sayShort: "…Bb7, contest the diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Strike …c5, the freeing break against White's e4; balanced.", sayShort: "…c5, the freeing break", highlights: [_H('c5')] },
+    { atMove: 25, say: "Recapture …Nxf6, keeping a sound structure; balanced.", sayShort: "…Nxf6, sound structure", highlights: [_H('f6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_60: SublineNarration = {
+  intro: { say: "White heads for a Catalan but you strike first. Check …Bb4+, hit the centre with …c5, and stake …d5 to blunt the long-diagonal bishop — full equality.", sayShort: "Bogo-Catalan: …Bb4+, …c5, …d5" },
+  beats: [
+    { atMove: 7, say: "Strike …c5 at once, hitting the centre before White's setup is complete.", sayShort: "…c5, hit the centre", highlights: [_H('c5')] },
+    { atMove: 11, say: "Take …cxd4, opening the centre while White's light bishop still sits home.", sayShort: "…cxd4, open the centre", highlights: [_H('d4')] },
+    { atMove: 19, say: "Stake …d5, claiming the centre and blunting the g2-bishop.", sayShort: "…d5, blunt the bishop", highlights: [_H('d5')] },
+    { atMove: 23, say: "Leap …Ne4, the active knight; fully equal.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_61: SublineNarration = {
+  intro: { say: "White meets …c5 with d5, reaching a Benoni-Catalan. Build …d6 and fianchetto, then your g7-bishop and …Ne4 generate dynamic, balanced play.", sayShort: "Benoni-Catalan: …g6, …Bg7" },
+  beats: [
+    { atMove: 7, say: "Play …d6, steering into a Benoni structure behind your coming fianchetto.", sayShort: "…d6, the Benoni", highlights: [_H('d6')] },
+    { atMove: 11, say: "Fianchetto …g6, the bishop bearing on the long diagonal.", sayShort: "…g6, the fianchetto", highlights: [_H('g6')] },
+    { atMove: 13, say: "Develop …Bg7, glaring at White's d5-pawn and the centre.", sayShort: "…Bg7, glare at d5", highlights: [_H('g7')] },
+    { atMove: 21, say: "Leap …Ne4, the active knight; dynamic and balanced.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_62: SublineNarration = {
+  intro: { say: "In the Open Catalan you grab the pawn and play …a6 to hold it briefly. Develop actively and prepare the …e5 freeing break that equalises.", sayShort: "Open Catalan: …a6 and …e5" },
+  beats: [
+    { atMove: 11, say: "Develop …Nc6, supporting an …e5 break and the centre.", sayShort: "…Nc6, support …e5", highlights: [_H('c6')] },
+    { atMove: 15, say: "Develop …Bd6, the bishop eyeing the kingside.", sayShort: "…Bd6, eye the kingside", highlights: [_H('d6')] },
+    { atMove: 19, say: "Centralise …Qe7, readying the freeing …e5 push.", sayShort: "…Qe7, ready …e5", highlights: [_H('e7')] },
+    { atMove: 23, say: "Strike …e5, the freeing break that equalises the Open Catalan.", sayShort: "…e5, the freeing break", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_63: SublineNarration = {
+  intro: { say: "The Closed Catalan where you delay …dxc4 until castled. Grab the pawn, hold it with …a6 and …b5, and fianchetto to contest the long diagonal — fully equal.", sayShort: "Closed Catalan: …dxc4, …b5, …Bb7" },
+  beats: [
+    { atMove: 9, say: "Castle …O-O, getting safe before you grab the pawn.", sayShort: "…O-O, get safe", highlights: [_H('g8')] },
+    { atMove: 11, say: "Take …dxc4, snatching the pawn you'll defend with …a6 and …b5.", sayShort: "…dxc4, snatch the pawn", highlights: [_H('c4')] },
+    { atMove: 15, say: "Hold it with …b5, gaining queenside space.", sayShort: "…b5, hold the pawn", highlights: [_H('b5')] },
+    { atMove: 17, say: "Fianchetto …Bb7, opposing White's Catalan bishop.", sayShort: "…Bb7, oppose the bishop", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_64: SublineNarration = {
+  intro: { say: "White blocks the check with Bd2. Fix the queenside with …a5, reposition the bishop, and plant a knight on e4 — a solid, fully equal Closed Catalan.", sayShort: "…Bb4+ Bd2: …a5 and …Ne4" },
+  beats: [
+    { atMove: 9, say: "Fix the queenside with …a5, securing the bishop's retreat squares.", sayShort: "…a5, fix the queenside", highlights: [_H('a5')] },
+    { atMove: 11, say: "Reposition …Be7, keeping the bishop flexible.", sayShort: "…Be7, stay flexible", highlights: [_H('e7')] },
+    { atMove: 15, say: "Plant …Ne4, the active outpost hitting White's pieces.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 21, say: "Castle …O-O; fully equal.", sayShort: "…O-O, fully equal", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_65: SublineNarration = {
+  intro: { say: "An Open Catalan with the active …Nc6. Develop …Bd6, centralise …Nd5, and check …Bb4+ to develop with tempo — your active pieces hold the balance.", sayShort: "Open Catalan: …Nc6, …Nd5" },
+  beats: [
+    { atMove: 11, say: "Develop …Bd6, the bishop eyeing the kingside.", sayShort: "…Bd6, eye the kingside", highlights: [_H('d6')] },
+    { atMove: 17, say: "Centralise …Nd5, the knight on a commanding square.", sayShort: "…Nd5, commanding square", highlights: [_H('d5')] },
+    { atMove: 19, say: "Check …Bb4+, developing with tempo.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 23, say: "Strike …c5, freeing your game; balanced.", sayShort: "…c5, free the game", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_66: SublineNarration = {
+  intro: { say: "An Open Catalan where you hit the centre with …c5 and trade queens. Recapture the pawn and develop — the queenless middlegame is comfortable and even.", sayShort: "Open Catalan: …c5, queen trade" },
+  beats: [
+    { atMove: 11, say: "Develop …Nc6, hitting the d4-pawn.", sayShort: "…Nc6, hit d4", highlights: [_H('c6')] },
+    { atMove: 13, say: "Trade queens with …Qxd1, simplifying into a comfortable game.", sayShort: "…Qxd1, simplify", highlights: [_H('d1')] },
+    { atMove: 15, say: "Recapture …Bxc5, regaining the pawn with an active bishop.", sayShort: "…Bxc5, regain the pawn", highlights: [_H('c5')] },
+    { atMove: 19, say: "Castle …O-O; balanced.", sayShort: "…O-O, balanced", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_67: SublineNarration = {
+  intro: { say: "An Open Catalan with …Bb4+ and Qc1. Fix …a5, trade the bishop, and hold the extra pawn with …b5 — you reach a balanced game a pawn to the good.", sayShort: "Open Catalan: …Bb4+, …a5, …b5" },
+  beats: [
+    { atMove: 11, say: "Fix …a5, securing the bishop and gaining queenside space.", sayShort: "…a5, fix the wing", highlights: [_H('a5')] },
+    { atMove: 13, say: "Trade …Bxd2+, simplifying while keeping the extra pawn.", sayShort: "…Bxd2+, simplify ahead", highlights: [_H('d2')] },
+    { atMove: 15, say: "Hold with …b5, expanding on the queenside.", sayShort: "…b5, hold the pawn", highlights: [_H('b5')] },
+    { atMove: 21, say: "Solidify …c6, anchoring your queenside pawns; balanced.", sayShort: "…c6, anchor", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_68: SublineNarration = {
+  intro: { say: "An Open Catalan where you hold the pawn with …c6 and check …Bb4+. Blockade on d5, expand …b5, and trade off — a balanced game with the extra pawn.", sayShort: "Open Catalan: …c6, …Bb4+, …Nd5" },
+  beats: [
+    { atMove: 9, say: "Play …c6, bracing to hold the c4-pawn.", sayShort: "…c6, hold the pawn", highlights: [_H('c6')] },
+    { atMove: 11, say: "Check …Bb4+, developing with tempo.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 13, say: "Centralise …Nd5, the knight blockading.", sayShort: "…Nd5, blockade", highlights: [_H('d5')] },
+    { atMove: 21, say: "Trade …Nxc3, simplifying; balanced.", sayShort: "…Nxc3, simplify", highlights: [_H('c3')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+const CATR_69: SublineNarration = {
+  intro: { say: "An Open Catalan where …Nbd7 and …Rb8 prepare queenside expansion. Trade the Catalan bishop off, develop …Bb4, and break …c5 — a comfortable, balanced game.", sayShort: "Open Catalan: …Nbd7, …Rb8, …c5" },
+  beats: [
+    { atMove: 9, say: "Develop …Nbd7, supporting the queenside expansion.", sayShort: "…Nbd7, support the wing", highlights: [_H('d7')] },
+    { atMove: 13, say: "Prepare …b6, readying …Bb7.", sayShort: "…b6, prepare …Bb7", highlights: [_H('b6')] },
+    { atMove: 15, say: "Fianchetto …Bb7, trading off the strong Catalan bishop.", sayShort: "…Bb7, trade the bishop", highlights: [_H('b7')] },
+    { atMove: 23, say: "Strike …c5, the freeing break; balanced.", sayShort: "…c5, the freeing break", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
+  'catalan-opening::6::Bb4+@5': CATR_60,
+  'catalan-opening::5::c6@9': CATR_50,
+  'catalan-opening::3::c6@9': CATR_30,
+  'catalan-opening::2::Bb4+@5': CATR_20,
+  'catalan-opening::1::c6@9': CATR_10,
+  'catalan-opening::0::Bb4+@5': CATR_0,
   'semi-slav::6::e3@6': SSR_60,
   'semi-slav::5::e3@6': SSR_50,
   'semi-slav::4::e3@6': SSR_40,
@@ -14836,70 +15499,70 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'dutch-defence::6::c4@8': DU_V6_C4_8,
   'dutch-defence::6::Ng5@18': DU_V6_NG5_18,
   // ── catalan-opening ──
-  'catalan-opening::0::c5@5': C69,
-  'catalan-opening::0::a6@9': WCATA6,
-  'catalan-opening::0::Be7@7': C70,
-  'catalan-opening::0::Nbd7@19': C69,
-  'catalan-opening::0::Bb4+@7': WCATBB,
-  'catalan-opening::0::Nc6@9': C69,
-  'catalan-opening::0::c5@9': C69,
-  'catalan-opening::0::Bb4+@9': C71,
-  'catalan-opening::0::b5@13': C69,
-  'catalan-opening::1::dxc4@9': C69,
-  'catalan-opening::1::b6@9': C70,
-  'catalan-opening::1::Nbd7@9': C70,
-  'catalan-opening::1::dxc4@11': C69,
-  'catalan-opening::1::Bb4+@5': C71,
-  'catalan-opening::1::c5@5': C69,
-  'catalan-opening::1::c6@11': C70,
-  'catalan-opening::1::Bb4+@7': WCATBB,
-  'catalan-opening::1::dxc4@7': C69,
-  'catalan-opening::2::c5@5': C69,
-  'catalan-opening::2::Be7@7': C70,
-  'catalan-opening::2::Nc6@11': WCATNC6,
-  'catalan-opening::2::Bb4+@7': WCATBB,
-  'catalan-opening::2::Nc6@9': C69,
-  'catalan-opening::2::c5@9': C69,
-  'catalan-opening::2::Bb4+@9': C71,
-  'catalan-opening::2::Ra7@13': C72,
-  'catalan-opening::2::Bd7@9': C69,
-  'catalan-opening::3::dxc4@9': C69,
-  'catalan-opening::3::b6@9': C70,
-  'catalan-opening::3::Nbd7@9': C70,
-  'catalan-opening::3::Bb4+@5': C71,
-  'catalan-opening::3::c5@5': C69,
-  'catalan-opening::3::Nc6@15': C69,
-  'catalan-opening::3::c6@11': C70,
-  'catalan-opening::3::Bb4+@7': WCATBB,
-  'catalan-opening::3::dxc4@7': C69,
-  'catalan-opening::4::e6@5': C69,
-  'catalan-opening::4::Qc7@13': C72,
-  'catalan-opening::4::Qb6@13': C72,
-  'catalan-opening::4::a6@11': C73,
-  'catalan-opening::4::Nd5@13': C72,
-  'catalan-opening::4::Bf5@7': C73,
-  'catalan-opening::4::b4@11': C73,
-  'catalan-opening::4::e6@11': C72,
-  'catalan-opening::4::Qc8@13': C72,
-  'catalan-opening::4::g6@7': C73,
-  'catalan-opening::5::dxc4@9': C69,
-  'catalan-opening::5::b6@9': C70,
-  'catalan-opening::5::Nbd7@9': C70,
-  'catalan-opening::5::dxc4@11': C69,
-  'catalan-opening::5::Bb4+@5': C71,
-  'catalan-opening::5::c5@5': C69,
-  'catalan-opening::5::c6@11': C70,
-  'catalan-opening::5::Bb4+@7': WCATBB,
-  'catalan-opening::5::c5@23': C70,
-  'catalan-opening::6::c5@5': C69,
-  'catalan-opening::6::a6@9': WCATA6,
-  'catalan-opening::6::Be7@7': C70,
-  'catalan-opening::6::Bb4+@7': WCATBB,
-  'catalan-opening::6::Nc6@9': C69,
-  'catalan-opening::6::c5@9': C69,
-  'catalan-opening::6::Bb4+@9': C71,
-  'catalan-opening::6::c6@9': C72,
-  'catalan-opening::6::Nbd7@9': C69,
+  'catalan-opening::0::c5@5': CATR_1,
+  'catalan-opening::0::a6@9': CATR_2,
+  'catalan-opening::0::Be7@7': CATR_3,
+  'catalan-opening::0::Nbd7@19': CATR_4,
+  'catalan-opening::0::Bb4+@7': CATR_5,
+  'catalan-opening::0::Nc6@9': CATR_6,
+  'catalan-opening::0::c5@9': CATR_7,
+  'catalan-opening::0::Bb4+@9': CATR_8,
+  'catalan-opening::0::b5@13': CATR_9,
+  'catalan-opening::1::dxc4@9': CATR_11,
+  'catalan-opening::1::b6@9': CATR_12,
+  'catalan-opening::1::Nbd7@9': CATR_13,
+  'catalan-opening::1::dxc4@11': CATR_14,
+  'catalan-opening::1::Bb4+@5': CATR_15,
+  'catalan-opening::1::c5@5': CATR_16,
+  'catalan-opening::1::c6@11': CATR_17,
+  'catalan-opening::1::Bb4+@7': CATR_18,
+  'catalan-opening::1::dxc4@7': CATR_19,
+  'catalan-opening::2::c5@5': CATR_21,
+  'catalan-opening::2::Be7@7': CATR_22,
+  'catalan-opening::2::Nc6@11': CATR_23,
+  'catalan-opening::2::Bb4+@7': CATR_24,
+  'catalan-opening::2::Nc6@9': CATR_25,
+  'catalan-opening::2::c5@9': CATR_26,
+  'catalan-opening::2::Bb4+@9': CATR_27,
+  'catalan-opening::2::Ra7@13': CATR_28,
+  'catalan-opening::2::Bd7@9': CATR_29,
+  'catalan-opening::3::dxc4@9': CATR_31,
+  'catalan-opening::3::b6@9': CATR_32,
+  'catalan-opening::3::Nbd7@9': CATR_33,
+  'catalan-opening::3::Bb4+@5': CATR_34,
+  'catalan-opening::3::c5@5': CATR_35,
+  'catalan-opening::3::Nc6@15': CATR_36,
+  'catalan-opening::3::c6@11': CATR_37,
+  'catalan-opening::3::Bb4+@7': CATR_38,
+  'catalan-opening::3::dxc4@7': CATR_39,
+  'catalan-opening::4::e6@5': CATR_40,
+  'catalan-opening::4::Qc7@13': CATR_41,
+  'catalan-opening::4::Qb6@13': CATR_42,
+  'catalan-opening::4::a6@11': CATR_43,
+  'catalan-opening::4::Nd5@13': CATR_44,
+  'catalan-opening::4::Bf5@7': CATR_45,
+  'catalan-opening::4::b4@11': CATR_46,
+  'catalan-opening::4::e6@11': CATR_47,
+  'catalan-opening::4::Qc8@13': CATR_48,
+  'catalan-opening::4::g6@7': CATR_49,
+  'catalan-opening::5::dxc4@9': CATR_51,
+  'catalan-opening::5::b6@9': CATR_52,
+  'catalan-opening::5::Nbd7@9': CATR_53,
+  'catalan-opening::5::dxc4@11': CATR_54,
+  'catalan-opening::5::Bb4+@5': CATR_55,
+  'catalan-opening::5::c5@5': CATR_56,
+  'catalan-opening::5::c6@11': CATR_57,
+  'catalan-opening::5::Bb4+@7': CATR_58,
+  'catalan-opening::5::c5@23': CATR_59,
+  'catalan-opening::6::c5@5': CATR_61,
+  'catalan-opening::6::a6@9': CATR_62,
+  'catalan-opening::6::Be7@7': CATR_63,
+  'catalan-opening::6::Bb4+@7': CATR_64,
+  'catalan-opening::6::Nc6@9': CATR_65,
+  'catalan-opening::6::c5@9': CATR_66,
+  'catalan-opening::6::Bb4+@9': CATR_67,
+  'catalan-opening::6::c6@9': CATR_68,
+  'catalan-opening::6::Nbd7@9': CATR_69,
   // ── london-system ──
   'london-system::0::cxd4@9': LN01,
   'london-system::0::Bd6@9': LN02,
