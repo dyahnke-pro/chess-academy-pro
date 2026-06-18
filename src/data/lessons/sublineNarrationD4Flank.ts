@@ -77,35 +77,11 @@ const C25: SublineNarration = {
   sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Semi-Slav_Defense'],
 };
 // nimzo-indian :: rubinstein_e3
-const C26: SublineNarration = {
-  intro: { say: "The Rubinstein, e3 — White's most flexible Nimzo. Your bishop already pins the c3-knight, the guardian of e4. The Nimzo bargain is yours to set: take on c3 to saddle White with doubled pawns and play against them, or keep the pin and strike the centre with …c5 and …d5. Either road gives you a rich, equal fight on the light squares.", sayShort: "Rubinstein — pin, then …c5 or c3." },
-  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
-};
 // nimzo-indian :: fianchetto_g3
-const C27: SublineNarration = {
-  intro: { say: "White fianchettoes with g3, declining the doubled-pawn structure for a calm light-square game. Meet it classically: …d5 and …Be7, or …O-O and …d5, contesting the long diagonal. The bishop on g2 is strong but slow, and with sound development you reach an easy, balanced middlegame.", sayShort: "g3 — contest the long diagonal, …d5." },
-  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
-};
 // nimzo-indian :: classical_qc2
-const C28: SublineNarration = {
-  intro: { say: "The Classical Qc2 — White avoids doubled pawns by recapturing on c3 with the queen, and keeps the bishop pair as his trump. You answer with the centre: …d5 and …c5, or the quick …O-O and …d5, fixing a target. White's bishops want open lines, so keep the position closed enough to neutralise them while you press the queenside.", sayShort: "Qc2 — strike with …d5 and …c5." },
-  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
-};
 // nimzo-indian :: saemisch_f3
-const C29: SublineNarration = {
-  intro: { say: "White plays the Sämisch with a3 and f3, accepting doubled c-pawns to build a huge e4 centre. Hand over the bishop — bxc3 leaves White with crippled pawns — then blockade and besiege: …d5 or …c5, …Nc6, and pile on the fixed c4/c3 weaknesses. Your knights and the light squares are worth more than his bishops here.", sayShort: "Sämisch — take c3, blockade the doubled pawns." },
-  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
-};
 // nimzo-indian :: ne2
-const C30: SublineNarration = {
-  intro: { say: "White's Ne2 recaptures on c3 with the knight to dodge the doubled pawns. That costs him time and central control: strike at once with …c5 and …d5, exploiting the awkwardly-placed knight. With faster, more harmonious development you seize the initiative in the centre while White untangles.", sayShort: "Ne2 — punish with …c5 and …d5." },
-  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
-};
 // nimzo-indian :: bg5
-const C31: SublineNarration = {
-  intro: { say: "White pins back with Bg5 — the Leningrad. The pressure on your f6-knight is real, so meet it head-on: …h6 puts the question, and …c5 or …d5 hits the centre while the dark-squared tension resolves. Trade the right pieces and your structure holds; the bishop pair White covets never gets to bite.", sayShort: "Bg5 Leningrad — …h6 and strike the centre." },
-  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
-};
 // queens-indian :: fianchetto_g3
 const C32: SublineNarration = {
   intro: { say: "White fianchettoes with g3 and Bg2, the main Queen's Indian battleground on the long light diagonal. Place your bishop on b7 (or ride …Ba6 to provoke first), castle, and contest e4 — the …Ne4 trade and the …d5 break are your equalisers. Patient, principled, and a fortress once your pieces are home.", sayShort: "g3 — contest e4, …d5 or …Ne4." },
@@ -596,15 +572,6 @@ const DSSL: SublineNarration = {
   sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Semi-Slav_Defense'],
 };
 // DEEP DNIM :: nimzo-indian::5::f3@10
-const DNIM: SublineNarration = {
-  intro: { say: "You've already given up the bishop on c3, and here's why that was a fine trade: it left White with doubled, crippled c-pawns. Now his f3 props the big e4-centre he's proud of — so your whole plan is to blockade it and grind those weak c-pawns. Knights and the light squares beat his bishops in this kind of position.", sayShort: "Sämisch — blockade, grind the c-pawns." },
-  beats: [
-    { atMove: 7, say: "…Bxc3+ — don't hesitate. You're handing over a bishop, but look at what bxc3 does: it saddles White with doubled c-pawns that can never be healed. That permanent weakness is the target you'll lean on for the rest of the game.", sayShort: "…Bxc3+ — give it, wreck c-pawns.", highlights: [_H('c3', KEY)] },
-    { atMove: 11, say: "Time to hit the centre — …e5 leans straight on d4, as the arrow shows. With White's pieces still sitting at home, that broad centre he built is suddenly carrying real weight and starting to creak.", sayShort: "…e5 — lean on d4.", arrows: [_A('e5', 'd4', ATK)], highlights: [_H('e5', ATK), _H('d4', KEY)] },
-    { atMove: 13, say: "And the clamp — …e4 jams right up against f3 and freezes White's whole kingside. Notice the point: it steals the f3-square from his knight, so his pieces have nowhere good to go while you calmly finish developing. The position is locked, and you have a clear plan: keep piling on those weak c-pawns.", sayShort: "…e4 — clamp and freeze f3.", arrows: [_A('e4', 'f3', ATK)], highlights: [_H('e4', ATK), _H('f3', KEY)] },
-  ],
-  sources: ['concept:pawn-doubled', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
-};
 // DEEP DGRU :: grunfeld-defence::0::Bc4@12 | grunfeld-defence::1::Bc4@12 | grunfeld-defence::6::Bc4@12
 const DGRU: SublineNarration = {
   intro: { say: "The position the whole Grünfeld is built to reach. White has the big d4-e4 centre and just developed his bishop to c4 — and your entire job is to tear that centre down. Your fianchettoed bishop and a well-timed …c5 are the wrecking crew. Invite the centre, then demolish it.", sayShort: "Exchange Grünfeld — demolish the centre." },
@@ -874,14 +841,6 @@ const WGRUC5: SublineNarration = {
   sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
 };
 // WAVE2 WNIME3 :: 5 keys
-const WNIME3: SublineNarration = {
-  intro: { say: "e3 — the Rubinstein, White's most flexible Nimzo. Your bishop already pins the c3-knight, the guardian of e4, so the bargain is yours to set: castle first, then either take on c3 to saddle White with doubled pawns and grind them, or hold the pin and strike with …c5 and …d5. Either road is a rich, equal fight on the light squares.", sayShort: "e3 Rubinstein — castle, then …c5/…d5" },
-  beats: [
-    { atMove: 6, say: "e3 — solid and non-committal, the Rubinstein. White keeps his options open, so you do too: nothing premature, just keep the pin biting on c3 and the central tension humming.", sayShort: "e3 — flexible; keep the pin", highlights: [_H('c3', KEY)] },
-    { atMove: 7, say: "…O-O — tuck the king away and prepare to choose your plan. The pin on c3 still cramps White's e4-break; now …c5 and …d5 (or …Bxc3 wrecking his pawns) come on your terms.", sayShort: "…O-O — castle, then strike centre", highlights: [_H('c3', KEY)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
-};
 
 // WAVE WQIDNC3 :: 7 keys
 const WQIDNC3: SublineNarration = {
@@ -1190,15 +1149,6 @@ const WENGRAID: SublineNarration = {
   sources: ['concept:pos-initiative', 'concept:tac-trap', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
 };
 // WAVE WNIMNE2 :: 1 keys
-const WNIMNE2: SublineNarration = {
-  intro: { say: "Ne2 — White sidesteps the doubled pawns by recapturing on c3 with the knight rather than a pawn. Strike before he coordinates: …Ne4 plants a knight in the heart of the position, and after the trades you reach a comfortable game where White's slow Ne2 has cost him time and central control.", sayShort: "Ne2 — punish with …Ne4" },
-  beats: [
-    { atMove: 8, say: "Ne2 avoids the doubled c-pawns, but the knight sits passively and surrenders central control. That's your cue to seize the centre.", sayShort: "Ne2 — passive, cedes the centre", highlights: [_H('e2', KEY)] },
-    { atMove: 9, say: "…Ne4 — the knight leaps to the strongest square on the board, eyeing c3, d2 and f2 and daring White to challenge it. You've grabbed the initiative the awkward Ne2 handed you.", sayShort: "…Ne4 — seize the centre", highlights: [_H('e4', KEY)] },
-    { atMove: 11, say: "…Nxd2 — trade into a comfortable game with the bishop pair contained and no weaknesses. White's wasted tempo on Ne2 leaves you fully equal with the easier plan.", sayShort: "…Nxd2 — trade, stay comfortable", highlights: [_H('d2', KEY)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
-};
 
 const LN01: SublineNarration = {
   intro: { say: "Black releases the central tension with …cxd4. You recapture exd4, and the London turns into a small-centre middlegame: the e-file opens for your rook and the Bb5xc6 plan looms, ready to wreck Black's queenside pawns.", sayShort: "…cxd4 — recapture, then Bb5xc6" },
@@ -8675,7 +8625,802 @@ const DU_V6_NG5_18: SublineNarration = {
   sources: ['concept:pos-center', 'concept:pos-initiative', 'https://lichess.org/opening/Dutch-Defense'],
 };
 
+const NI_0: SublineNarration = {
+  intro: { say: "White steers into a Queen's Gambit setup with Nf3 and Bf4. Stake the centre with …d5, develop your bishop via …b6, and free your game with …c5 — equalising cleanly.", sayShort: "QGD: …d5, …b6, …c5" },
+  beats: [
+    { atMove: 5, say: "Meet the setup with …d5, staking your claim in the centre.", sayShort: "…d5, stake the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Prepare …Bb7 with …b6, developing your bishop to the long diagonal.", sayShort: "…b6, develop the bishop", highlights: [_H('b7')] },
+    { atMove: 17, say: "Strike with …c5, freeing your game and simplifying toward equality.", sayShort: "…c5, free your game", highlights: [_H('c5')] },
+    { atMove: 21, say: "Check with …Qa5+, forcing queens off into a dead-level ending.", sayShort: "…Qa5+, trade queens", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_1: SublineNarration = {
+  intro: { say: "In the Rubinstein Nimzo White plays e3. Castle, build with …d5, brace it with …c6, and break with …e5 to free your position with full equality.", sayShort: "Rubinstein: …d5, …c6, …e5" },
+  beats: [
+    { atMove: 7, say: "Castle into safety; the Nimzo king is snug while you contest the centre.", sayShort: "…O-O, safe king", highlights: [_H('g8')] },
+    { atMove: 9, say: "Build with …d5, the classical Nimzo central stake.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 15, say: "Solidify with …c6, bracing d5 and preparing the …e5 break.", sayShort: "…c6, brace d5", highlights: [_H('d5')] },
+    { atMove: 23, say: "Strike with …e5, freeing your position with equality.", sayShort: "…e5, free your game", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_2: SublineNarration = {
+  intro: { say: "White fianchettoes in Catalan style. Meet it with …d5, grab the c4-pawn, and hold it with …b5 and …Bb7 to blunt White's long-diagonal bishop.", sayShort: "Catalan: …d5, grab c4, …Bb7" },
+  beats: [
+    { atMove: 5, say: "Meet the Catalan with …d5, contesting the centre.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Grab the c4-pawn with …dxc4; you'll hold it with …b5 and …Bb7.", sayShort: "…dxc4, win the pawn", highlights: [_H('c4')] },
+    { atMove: 15, say: "Defend the pawn with …b5, gaining queenside space.", sayShort: "…b5, hold the pawn", highlights: [_H('b5')] },
+    { atMove: 17, say: "Develop …Bb7, blunting White's Catalan bishop on the long diagonal; balanced.", sayShort: "…Bb7, blunt the diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_3: SublineNarration = {
+  intro: { say: "White pins with Bg5. Strike with …c5 while he's spent time on the bishop pair, pile on d4, and snatch the d5-pawn in the tactical melee — coming out comfortably.", sayShort: "…c5 strike, win d5" },
+  beats: [
+    { atMove: 13, say: "Strike with …c5, hitting White's centre.", sayShort: "…c5, hit the centre", highlights: [_H('c5')] },
+    { atMove: 17, say: "Develop …Nc6, piling on the d4-pawn.", sayShort: "…Nc6, pile on d4", highlights: [_H('d4')] },
+    { atMove: 19, say: "Grab the d5-pawn with …Nxd5, winning material in the melee.", sayShort: "…Nxd5, win material", highlights: [_H('d5')] },
+    { atMove: 23, say: "Consolidate with …e5; the dust settles in your favour or balanced.", sayShort: "…e5, consolidate", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_4: SublineNarration = {
+  intro: { say: "White recaptures with bxc3, accepting doubled c-pawns. Stake …d5, strike …c5, and push …d4 to freeze the doubled pawns as long-term targets.", sayShort: "Target the doubled c-pawns" },
+  beats: [
+    { atMove: 11, say: "Stake …d5, attacking White's doubled c-pawns.", sayShort: "…d5, hit the pawns", highlights: [_H('d5')] },
+    { atMove: 13, say: "Strike …c5, pressuring d4 and the c-file.", sayShort: "…c5, pressure d4", highlights: [_H('c5')] },
+    { atMove: 21, say: "Push …d4, fixing White's doubled c-pawns as targets; balanced.", sayShort: "…d4, fix the pawns", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_5: SublineNarration = {
+  intro: { say: "White recaptures with the queen and keeps the bishop pair. Prepare …Ba6 with …b6, trade White's good bishop, and exploit his weak light squares.", sayShort: "Trade for the light squares" },
+  beats: [
+    { atMove: 13, say: "Prepare …Ba6 with …b6, aiming to trade White's good bishop.", sayShort: "…b6, prepare …Ba6", highlights: [_H('a6')] },
+    { atMove: 17, say: "Trade light bishops with …Ba6, exploiting White's weak light squares.", sayShort: "…Ba6, trade bishops", highlights: [_H('a6')] },
+    { atMove: 23, say: "Centralise …Re8, completing development; balanced structure.", sayShort: "…Re8, centralise", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_6: SublineNarration = {
+  intro: { say: "White builds a big centre with f3. Stake …d5, trade …Bxc3+ to double his pawns, and blockade with …Na4 — your main Nimzo trumps against the Saemisch.", sayShort: "Saemisch: double, blockade" },
+  beats: [
+    { atMove: 7, say: "Stake …d5, striking at White's f3-e4 centre plan.", sayShort: "…d5, hit the centre", highlights: [_H('d5')] },
+    { atMove: 9, say: "Trade with …Bxc3+, saddling White with doubled c-pawns — your main trump.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 11, say: "Strike …c5, opening lines against the doubled pawns.", sayShort: "…c5, open lines", highlights: [_H('c5')] },
+    { atMove: 21, say: "Hop …Na4, blockading the c-pawns; balanced with chances.", sayShort: "…Na4, blockade", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_7: SublineNarration = {
+  intro: { say: "White develops Nf3. Strike …c5 at once, leap …Ne4 to force trades, and complete development with …Nc6 and …e5 — equalising actively.", sayShort: "…c5, …Ne4, …e5" },
+  beats: [
+    { atMove: 7, say: "Strike …c5, challenging White's centre at once.", sayShort: "…c5, challenge the centre", highlights: [_H('c5')] },
+    { atMove: 9, say: "Leap …Ne4, the active knight forcing trades and easing your game.", sayShort: "…Ne4, force trades", highlights: [_H('e4')] },
+    { atMove: 17, say: "Develop …Nc6, completing your pieces.", sayShort: "…Nc6, develop", highlights: [_H('c6')] },
+    { atMove: 21, say: "Strike …e5, freeing your game with equality.", sayShort: "…e5, free your game", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_8: SublineNarration = {
+  intro: { say: "White trades on d5. Plant …Ne4, recapture toward a solid centre, and grab kingside space with …g5 to hit White's bishop — balanced and active.", sayShort: "…Ne4 outpost, …g5 space" },
+  beats: [
+    { atMove: 13, say: "Plant …Ne4, the active outpost dominating the centre.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+    { atMove: 15, say: "Recapture …exd5, keeping a solid centre against the bishop pair.", sayShort: "…exd5, solid centre", highlights: [_H('d5')] },
+    { atMove: 19, say: "Develop …Nc6, supporting your centre.", sayShort: "…Nc6, develop", highlights: [_H('c6')] },
+    { atMove: 21, say: "Lunge …g5, hitting White's bishop and grabbing space; balanced.", sayShort: "…g5, hit the bishop", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_9: SublineNarration = {
+  intro: { say: "White grabs the centre with e4. Hit back with …d5 at once, blockade with …Ne4, strike …c5, and snatch the d4-pawn — equalising in the complications.", sayShort: "…d5, …Ne4, …c5, win d4" },
+  beats: [
+    { atMove: 9, say: "Strike …d5 at once, challenging White's big centre before it rolls.", sayShort: "…d5, hit the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Leap …Ne4, blockading and forcing exchanges.", sayShort: "…Ne4, blockade", highlights: [_H('e4')] },
+    { atMove: 13, say: "Strike …c5, hitting d4 and opening lines.", sayShort: "…c5, hit d4", highlights: [_H('c5')] },
+    { atMove: 23, say: "Grab the d4-pawn with …Qxd4 into a balanced game.", sayShort: "…Qxd4, win the pawn", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_10: SublineNarration = {
+  intro: { say: "White steers into a Queen's Gambit setup with Nf3 and Bf4. Stake the centre with …d5, develop your bishop via …b6, and free your game with …c5 — equalising cleanly.", sayShort: "QGD: …d5, …b6, …c5" },
+  beats: [
+    { atMove: 5, say: "Meet the setup with …d5, staking your claim in the centre.", sayShort: "…d5, stake the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Prepare …Bb7 with …b6, developing your bishop to the long diagonal.", sayShort: "…b6, develop the bishop", highlights: [_H('b7')] },
+    { atMove: 17, say: "Strike with …c5, freeing your game and simplifying toward equality.", sayShort: "…c5, free your game", highlights: [_H('c5')] },
+    { atMove: 21, say: "Check with …Qa5+, forcing queens off into a dead-level ending.", sayShort: "…Qa5+, trade queens", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_11: SublineNarration = {
+  intro: { say: "White fianchettoes in Catalan style. Meet it with …d5, grab the c4-pawn, and hold it with …b5 and …Bb7 to blunt White's long-diagonal bishop.", sayShort: "Catalan: …d5, grab c4, …Bb7" },
+  beats: [
+    { atMove: 5, say: "Meet the Catalan with …d5, contesting the centre.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Grab the c4-pawn with …dxc4; you'll hold it with …b5 and …Bb7.", sayShort: "…dxc4, win the pawn", highlights: [_H('c4')] },
+    { atMove: 15, say: "Defend the pawn with …b5, gaining queenside space.", sayShort: "…b5, hold the pawn", highlights: [_H('b5')] },
+    { atMove: 17, say: "Develop …Bb7, blunting White's Catalan bishop on the long diagonal; balanced.", sayShort: "…Bb7, blunt the diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_12: SublineNarration = {
+  intro: { say: "In the Classical Nimzo with Qc2, reply …d5 to stake the centre, fianchetto with …b6 and …Bb7, and reposition …Bd6 toward the kingside — comfortable equality.", sayShort: "Classical: …d5, …Bb7, …Bd6" },
+  beats: [
+    { atMove: 7, say: "Meet Qc2 with …d5, the solid classical reply staking the centre.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Prepare …Bb7 with …b6, fianchettoing your bishop.", sayShort: "…b6, fianchetto", highlights: [_H('b7')] },
+    { atMove: 19, say: "Reposition …Bd6, aiming at the kingside dark squares.", sayShort: "…Bd6, aim kingside", highlights: [_H('d6')] },
+    { atMove: 23, say: "Expand …b5, gaining queenside space; balanced classical Nimzo.", sayShort: "…b5, queenside space", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_13: SublineNarration = {
+  intro: { say: "White builds a big centre with f3. Stake …d5, trade …Bxc3+ to double his pawns, and blockade with …Na4 — your main Nimzo trumps against the Saemisch.", sayShort: "Saemisch: double, blockade" },
+  beats: [
+    { atMove: 7, say: "Stake …d5, striking at White's f3-e4 centre plan.", sayShort: "…d5, hit the centre", highlights: [_H('d5')] },
+    { atMove: 9, say: "Trade with …Bxc3+, saddling White with doubled c-pawns — your main trump.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 11, say: "Strike …c5, opening lines against the doubled pawns.", sayShort: "…c5, open lines", highlights: [_H('c5')] },
+    { atMove: 21, say: "Hop …Na4, blockading the c-pawns; balanced with chances.", sayShort: "…Na4, blockade", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_14: SublineNarration = {
+  intro: { say: "White develops Nf3. Strike …c5 at once, leap …Ne4 to force trades, and complete development with …Nc6 and …e5 — equalising actively.", sayShort: "…c5, …Ne4, …e5" },
+  beats: [
+    { atMove: 7, say: "Strike …c5, challenging White's centre at once.", sayShort: "…c5, challenge the centre", highlights: [_H('c5')] },
+    { atMove: 9, say: "Leap …Ne4, the active knight forcing trades and easing your game.", sayShort: "…Ne4, force trades", highlights: [_H('e4')] },
+    { atMove: 17, say: "Develop …Nc6, completing your pieces.", sayShort: "…Nc6, develop", highlights: [_H('c6')] },
+    { atMove: 21, say: "Strike …e5, freeing your game with equality.", sayShort: "…e5, free your game", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_15: SublineNarration = {
+  intro: { say: "White reroutes with Ne2. Lift …Re8, stake …d5, strike …c5, and centralise …Ne5 — active piece play with full equality.", sayShort: "…Re8, …d5, …c5, …Ne5" },
+  beats: [
+    { atMove: 9, say: "Lift …Re8, supporting the …e5 break and the centre.", sayShort: "…Re8, support the centre", highlights: [_H('e8')] },
+    { atMove: 11, say: "Stake …d5, contesting the centre.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 13, say: "Strike …c5, hitting White's centre.", sayShort: "…c5, hit the centre", highlights: [_H('c5')] },
+    { atMove: 21, say: "Centralise …Ne5, a fine outpost; balanced.", sayShort: "…Ne5, the outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_16: SublineNarration = {
+  intro: { say: "White pins with Bg5 in the Leningrad Nimzo. Strike …c5, question the bishop with …h6, keep your bishop active on …Ba5, and break …d5 — equalising freely.", sayShort: "Leningrad: …c5, …h6, …d5" },
+  beats: [
+    { atMove: 7, say: "Strike …c5, challenging the centre.", sayShort: "…c5, challenge the centre", highlights: [_H('c5')] },
+    { atMove: 9, say: "Question the bishop with …h6, clarifying the pin.", sayShort: "…h6, question the bishop", highlights: [_H('g5')] },
+    { atMove: 15, say: "Retreat …Ba5, keeping the bishop active and the pin alive.", sayShort: "…Ba5, keep the pin", highlights: [_H('a5')] },
+    { atMove: 19, say: "Strike …d5, freeing your game with equality.", sayShort: "…d5, free your game", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_17: SublineNarration = {
+  intro: { say: "White plays a3 to win the bishop pair. Trade …Bxc3+ to double his pawns, prepare …Ba6 with …b6, and trade White's good bishop to exploit his weak light squares.", sayShort: "Double, then trade for light squares" },
+  beats: [
+    { atMove: 11, say: "Trade …Bxc3+, doubling White's c-pawns — your Nimzo trump.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 13, say: "Prepare …Ba6 with …b6, aiming to trade White's good bishop.", sayShort: "…b6, prepare …Ba6", highlights: [_H('a6')] },
+    { atMove: 17, say: "Trade light bishops with …Ba6, exploiting the weak light squares.", sayShort: "…Ba6, trade bishops", highlights: [_H('a6')] },
+    { atMove: 23, say: "Centralise …Re8; balanced with the favourable structure.", sayShort: "…Re8, centralise", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_18: SublineNarration = {
+  intro: { say: "White fianchettoes with g3. Trade …Bxc3+ to double his pawns, develop …Nc6, and break …e5 to hit the centre — then pressure c4 with …Ba6.", sayShort: "Double, …Nc6, …e5" },
+  beats: [
+    { atMove: 7, say: "Trade …Bxc3+, doubling White's c-pawns before he fianchettoes.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 9, say: "Develop …Nc6, preparing the …e5 break.", sayShort: "…Nc6, prepare …e5", highlights: [_H('c6')] },
+    { atMove: 17, say: "Strike …e5, the thematic break hitting the centre.", sayShort: "…e5, the break", highlights: [_H('e5')] },
+    { atMove: 23, say: "Develop …Ba6, pressuring the c4-pawn; balanced.", sayShort: "…Ba6, pressure c4", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_19: SublineNarration = {
+  intro: { say: "White plays the Saemisch a3. Trade …Bxc3+ for the doubled-pawn structure, stake …d5, strike …c5, and pressure c4 with …Ba6.", sayShort: "Saemisch: double, …d5, …c5" },
+  beats: [
+    { atMove: 7, say: "Trade …Bxc3+, accepting the doubled-pawn structure in your favour.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 13, say: "Stake …d5, attacking the doubled c-pawns.", sayShort: "…d5, hit the pawns", highlights: [_H('d5')] },
+    { atMove: 15, say: "Strike …c5, opening lines against White's structure.", sayShort: "…c5, open lines", highlights: [_H('c5')] },
+    { atMove: 21, say: "Develop …Ba6, hitting c4; balanced with the better structure.", sayShort: "…Ba6, pressure c4", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_20: SublineNarration = {
+  intro: { say: "White steers into a Queen's Gambit setup with Nf3 and Bf4. Stake the centre with …d5, develop your bishop via …b6, and free your game with …c5 — equalising cleanly.", sayShort: "QGD: …d5, …b6, …c5" },
+  beats: [
+    { atMove: 5, say: "Meet the setup with …d5, staking your claim in the centre.", sayShort: "…d5, stake the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Prepare …Bb7 with …b6, developing your bishop to the long diagonal.", sayShort: "…b6, develop the bishop", highlights: [_H('b7')] },
+    { atMove: 17, say: "Strike with …c5, freeing your game and simplifying toward equality.", sayShort: "…c5, free your game", highlights: [_H('c5')] },
+    { atMove: 21, say: "Check with …Qa5+, forcing queens off into a dead-level ending.", sayShort: "…Qa5+, trade queens", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_21: SublineNarration = {
+  intro: { say: "White fianchettoes in Catalan style. Meet it with …d5, grab the c4-pawn, and hold it with …b5 and …Bb7 to blunt White's long-diagonal bishop.", sayShort: "Catalan: …d5, grab c4, …Bb7" },
+  beats: [
+    { atMove: 5, say: "Meet the Catalan with …d5, contesting the centre.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Grab the c4-pawn with …dxc4; you'll hold it with …b5 and …Bb7.", sayShort: "…dxc4, win the pawn", highlights: [_H('c4')] },
+    { atMove: 15, say: "Defend the pawn with …b5, gaining queenside space.", sayShort: "…b5, hold the pawn", highlights: [_H('b5')] },
+    { atMove: 17, say: "Develop …Bb7, blunting White's Catalan bishop on the long diagonal; balanced.", sayShort: "…Bb7, blunt the diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_22: SublineNarration = {
+  intro: { say: "In the Classical Nimzo with Qc2, reply …d5 to stake the centre, fianchetto with …b6 and …Bb7, and reposition …Bd6 toward the kingside — comfortable equality.", sayShort: "Classical: …d5, …Bb7, …Bd6" },
+  beats: [
+    { atMove: 7, say: "Meet Qc2 with …d5, the solid classical reply staking the centre.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Prepare …Bb7 with …b6, fianchettoing your bishop.", sayShort: "…b6, fianchetto", highlights: [_H('b7')] },
+    { atMove: 19, say: "Reposition …Bd6, aiming at the kingside dark squares.", sayShort: "…Bd6, aim kingside", highlights: [_H('d6')] },
+    { atMove: 23, say: "Expand …b5, gaining queenside space; balanced classical Nimzo.", sayShort: "…b5, queenside space", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_23: SublineNarration = {
+  intro: { say: "White builds a big centre with f3. Stake …d5, trade …Bxc3+ to double his pawns, and blockade with …Na4 — your main Nimzo trumps against the Saemisch.", sayShort: "Saemisch: double, blockade" },
+  beats: [
+    { atMove: 7, say: "Stake …d5, striking at White's f3-e4 centre plan.", sayShort: "…d5, hit the centre", highlights: [_H('d5')] },
+    { atMove: 9, say: "Trade with …Bxc3+, saddling White with doubled c-pawns — your main trump.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 11, say: "Strike …c5, opening lines against the doubled pawns.", sayShort: "…c5, open lines", highlights: [_H('c5')] },
+    { atMove: 21, say: "Hop …Na4, blockading the c-pawns; balanced with chances.", sayShort: "…Na4, blockade", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_24: SublineNarration = {
+  intro: { say: "White develops Nf3. Strike …c5 at once, leap …Ne4 to force trades, and complete development with …Nc6 and …e5 — equalising actively.", sayShort: "…c5, …Ne4, …e5" },
+  beats: [
+    { atMove: 7, say: "Strike …c5, challenging White's centre at once.", sayShort: "…c5, challenge the centre", highlights: [_H('c5')] },
+    { atMove: 9, say: "Leap …Ne4, the active knight forcing trades and easing your game.", sayShort: "…Ne4, force trades", highlights: [_H('e4')] },
+    { atMove: 17, say: "Develop …Nc6, completing your pieces.", sayShort: "…Nc6, develop", highlights: [_H('c6')] },
+    { atMove: 21, say: "Strike …e5, freeing your game with equality.", sayShort: "…e5, free your game", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_25: SublineNarration = {
+  intro: { say: "White reroutes with Ne2 after …c5. Open …cxd4, trade …Bxc3+ to double his pawns, stake …d5, and plant …Ne4 — active equality.", sayShort: "…cxd4, double, …d5, …Ne4" },
+  beats: [
+    { atMove: 9, say: "Open …cxd4, clarifying the centre.", sayShort: "…cxd4, clarify", highlights: [_H('d4')] },
+    { atMove: 13, say: "Trade …Bxc3+, doubling White's c-pawns.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 15, say: "Stake …d5, hitting the centre.", sayShort: "…d5, hit the centre", highlights: [_H('d5')] },
+    { atMove: 19, say: "Plant …Ne4, the active outpost; balanced.", sayShort: "…Ne4, the outpost", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_26: SublineNarration = {
+  intro: { say: "White pins with Bg5 in the Leningrad Nimzo. Strike …c5, question the bishop with …h6, keep your bishop active on …Ba5, and break …d5 — equalising freely.", sayShort: "Leningrad: …c5, …h6, …d5" },
+  beats: [
+    { atMove: 7, say: "Strike …c5, challenging the centre.", sayShort: "…c5, challenge the centre", highlights: [_H('c5')] },
+    { atMove: 9, say: "Question the bishop with …h6, clarifying the pin.", sayShort: "…h6, question the bishop", highlights: [_H('g5')] },
+    { atMove: 15, say: "Retreat …Ba5, keeping the bishop active and the pin alive.", sayShort: "…Ba5, keep the pin", highlights: [_H('a5')] },
+    { atMove: 19, say: "Strike …d5, freeing your game with equality.", sayShort: "…d5, free your game", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_27: SublineNarration = {
+  intro: { say: "White fianchettoes with g3. Trade …Bxc3+ to double his pawns, develop …Nc6, and break …e5 to hit the centre — then pressure c4 with …Ba6.", sayShort: "Double, …Nc6, …e5" },
+  beats: [
+    { atMove: 7, say: "Trade …Bxc3+, doubling White's c-pawns before he fianchettoes.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 9, say: "Develop …Nc6, preparing the …e5 break.", sayShort: "…Nc6, prepare …e5", highlights: [_H('c6')] },
+    { atMove: 17, say: "Strike …e5, the thematic break hitting the centre.", sayShort: "…e5, the break", highlights: [_H('e5')] },
+    { atMove: 23, say: "Develop …Ba6, pressuring the c4-pawn; balanced.", sayShort: "…Ba6, pressure c4", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_28: SublineNarration = {
+  intro: { say: "White plays the Saemisch a3. Trade …Bxc3+ for the doubled-pawn structure, stake …d5, strike …c5, and pressure c4 with …Ba6.", sayShort: "Saemisch: double, …d5, …c5" },
+  beats: [
+    { atMove: 7, say: "Trade …Bxc3+, accepting the doubled-pawn structure in your favour.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 13, say: "Stake …d5, attacking the doubled c-pawns.", sayShort: "…d5, hit the pawns", highlights: [_H('d5')] },
+    { atMove: 15, say: "Strike …c5, opening lines against White's structure.", sayShort: "…c5, open lines", highlights: [_H('c5')] },
+    { atMove: 21, say: "Develop …Ba6, hitting c4; balanced with the better structure.", sayShort: "…Ba6, pressure c4", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_29: SublineNarration = {
+  intro: { say: "White develops Bd3 and Ne2. Open …cxd4, stake …d5, trade …Bxc3+ to double his pawns, and blockade on the light squares with …Bb7.", sayShort: "…cxd4, …d5, double, …Bb7" },
+  beats: [
+    { atMove: 11, say: "Open …cxd4, clarifying the centre.", sayShort: "…cxd4, clarify", highlights: [_H('d4')] },
+    { atMove: 13, say: "Stake …d5, striking at the centre.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 17, say: "Trade …Bxc3+, doubling White's c-pawns.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 23, say: "Develop …Bb7, blockading on the light squares; balanced.", sayShort: "…Bb7, blockade", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_30: SublineNarration = {
+  intro: { say: "White tries Bg5 with Nf3. Stake …d5, check …Bb4+ to develop with tempo, strike …c5, and regain material with …Qxb5 — equalising in the tactics.", sayShort: "…d5, …Bb4+, …c5" },
+  beats: [
+    { atMove: 5, say: "Meet Nf3 with …d5, staking the centre.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 7, say: "Check …Bb4+, developing with tempo and pinning the knight.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 11, say: "Strike …c5, challenging the centre.", sayShort: "…c5, challenge the centre", highlights: [_H('c5')] },
+    { atMove: 23, say: "Win the bishop with …Qxb5, regaining material into a balanced game.", sayShort: "…Qxb5, regain material", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_31: SublineNarration = {
+  intro: { say: "In the Rubinstein Nimzo White plays e3. Castle, build with …d5, brace it with …c6, and break with …e5 to free your position with full equality.", sayShort: "Rubinstein: …d5, …c6, …e5" },
+  beats: [
+    { atMove: 7, say: "Castle into safety; the Nimzo king is snug while you contest the centre.", sayShort: "…O-O, safe king", highlights: [_H('g8')] },
+    { atMove: 9, say: "Build with …d5, the classical Nimzo central stake.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 15, say: "Solidify with …c6, bracing d5 and preparing the …e5 break.", sayShort: "…c6, brace d5", highlights: [_H('d5')] },
+    { atMove: 23, say: "Strike with …e5, freeing your position with equality.", sayShort: "…e5, free your game", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_32: SublineNarration = {
+  intro: { say: "White fianchettoes in Catalan style. Meet it with …d5, grab the c4-pawn, and hold it with …b5 and …Bb7 to blunt White's long-diagonal bishop.", sayShort: "Catalan: …d5, grab c4, …Bb7" },
+  beats: [
+    { atMove: 5, say: "Meet the Catalan with …d5, contesting the centre.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Grab the c4-pawn with …dxc4; you'll hold it with …b5 and …Bb7.", sayShort: "…dxc4, win the pawn", highlights: [_H('c4')] },
+    { atMove: 15, say: "Defend the pawn with …b5, gaining queenside space.", sayShort: "…b5, hold the pawn", highlights: [_H('b5')] },
+    { atMove: 17, say: "Develop …Bb7, blunting White's Catalan bishop on the long diagonal; balanced.", sayShort: "…Bb7, blunt the diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_33: SublineNarration = {
+  intro: { say: "In the Classical Nimzo with Qc2, reply …d5 to stake the centre, fianchetto with …b6 and …Bb7, and reposition …Bd6 toward the kingside — comfortable equality.", sayShort: "Classical: …d5, …Bb7, …Bd6" },
+  beats: [
+    { atMove: 7, say: "Meet Qc2 with …d5, the solid classical reply staking the centre.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Prepare …Bb7 with …b6, fianchettoing your bishop.", sayShort: "…b6, fianchetto", highlights: [_H('b7')] },
+    { atMove: 19, say: "Reposition …Bd6, aiming at the kingside dark squares.", sayShort: "…Bd6, aim kingside", highlights: [_H('d6')] },
+    { atMove: 23, say: "Expand …b5, gaining queenside space; balanced classical Nimzo.", sayShort: "…b5, queenside space", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_34: SublineNarration = {
+  intro: { say: "White retreats Bd2. Strike …c5, trade …Bxc3 to win the bishop pair battle, leap …Ne4, and break …e5 — comfortable equality.", sayShort: "…c5, …Bxc3, …Ne4, …e5" },
+  beats: [
+    { atMove: 9, say: "Strike …c5, challenging the centre.", sayShort: "…c5, challenge the centre", highlights: [_H('c5')] },
+    { atMove: 11, say: "Trade …Bxc3, doubling White's c-pawns.", sayShort: "…Bxc3, double the pawns", highlights: [_H('c3')] },
+    { atMove: 13, say: "Leap …Ne4, hitting the c3-pawn and the centre.", sayShort: "…Ne4, hit c3", highlights: [_H('e4')] },
+    { atMove: 23, say: "Strike …e5, freeing your game; balanced.", sayShort: "…e5, free your game", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_35: SublineNarration = {
+  intro: { say: "White builds a big centre with f3. Stake …d5, trade …Bxc3+ to double his pawns, and blockade with …Na4 — your main Nimzo trumps against the Saemisch.", sayShort: "Saemisch: double, blockade" },
+  beats: [
+    { atMove: 7, say: "Stake …d5, striking at White's f3-e4 centre plan.", sayShort: "…d5, hit the centre", highlights: [_H('d5')] },
+    { atMove: 9, say: "Trade with …Bxc3+, saddling White with doubled c-pawns — your main trump.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 11, say: "Strike …c5, opening lines against the doubled pawns.", sayShort: "…c5, open lines", highlights: [_H('c5')] },
+    { atMove: 21, say: "Hop …Na4, blockading the c-pawns; balanced with chances.", sayShort: "…Na4, blockade", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_36: SublineNarration = {
+  intro: { say: "White develops Nf3. Strike …c5 at once, leap …Ne4 to force trades, and complete development with …Nc6 and …e5 — equalising actively.", sayShort: "…c5, …Ne4, …e5" },
+  beats: [
+    { atMove: 7, say: "Strike …c5, challenging White's centre at once.", sayShort: "…c5, challenge the centre", highlights: [_H('c5')] },
+    { atMove: 9, say: "Leap …Ne4, the active knight forcing trades and easing your game.", sayShort: "…Ne4, force trades", highlights: [_H('e4')] },
+    { atMove: 17, say: "Develop …Nc6, completing your pieces.", sayShort: "…Nc6, develop", highlights: [_H('c6')] },
+    { atMove: 21, say: "Strike …e5, freeing your game with equality.", sayShort: "…e5, free your game", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_37: SublineNarration = {
+  intro: { say: "White fianchettoes with g3. Trade …Bxc3+ to double his pawns, develop …Nc6, and break …e5 to hit the centre — then pressure c4 with …Ba6.", sayShort: "Double, …Nc6, …e5" },
+  beats: [
+    { atMove: 7, say: "Trade …Bxc3+, doubling White's c-pawns before he fianchettoes.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 9, say: "Develop …Nc6, preparing the …e5 break.", sayShort: "…Nc6, prepare …e5", highlights: [_H('c6')] },
+    { atMove: 17, say: "Strike …e5, the thematic break hitting the centre.", sayShort: "…e5, the break", highlights: [_H('e5')] },
+    { atMove: 23, say: "Develop …Ba6, pressuring the c4-pawn; balanced.", sayShort: "…Ba6, pressure c4", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_38: SublineNarration = {
+  intro: { say: "White plays the Saemisch a3. Trade …Bxc3+ for the doubled-pawn structure, stake …d5, strike …c5, and pressure c4 with …Ba6.", sayShort: "Saemisch: double, …d5, …c5" },
+  beats: [
+    { atMove: 7, say: "Trade …Bxc3+, accepting the doubled-pawn structure in your favour.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 13, say: "Stake …d5, attacking the doubled c-pawns.", sayShort: "…d5, hit the pawns", highlights: [_H('d5')] },
+    { atMove: 15, say: "Strike …c5, opening lines against White's structure.", sayShort: "…c5, open lines", highlights: [_H('c5')] },
+    { atMove: 21, say: "Develop …Ba6, hitting c4; balanced with the better structure.", sayShort: "…Ba6, pressure c4", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_39: SublineNarration = {
+  intro: { say: "White steers into a Queen's Gambit setup with Nf3 and Bf4. Stake the centre with …d5, develop your bishop via …b6, and free your game with …c5 — equalising cleanly.", sayShort: "QGD: …d5, …b6, …c5" },
+  beats: [
+    { atMove: 5, say: "Meet the setup with …d5, staking your claim in the centre.", sayShort: "…d5, stake the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Prepare …Bb7 with …b6, developing your bishop to the long diagonal.", sayShort: "…b6, develop the bishop", highlights: [_H('b7')] },
+    { atMove: 17, say: "Strike with …c5, freeing your game and simplifying toward equality.", sayShort: "…c5, free your game", highlights: [_H('c5')] },
+    { atMove: 21, say: "Check with …Qa5+, forcing queens off into a dead-level ending.", sayShort: "…Qa5+, trade queens", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_40: SublineNarration = {
+  intro: { say: "In the Rubinstein Nimzo White plays e3. Castle, build with …d5, brace it with …c6, and break with …e5 to free your position with full equality.", sayShort: "Rubinstein: …d5, …c6, …e5" },
+  beats: [
+    { atMove: 7, say: "Castle into safety; the Nimzo king is snug while you contest the centre.", sayShort: "…O-O, safe king", highlights: [_H('g8')] },
+    { atMove: 9, say: "Build with …d5, the classical Nimzo central stake.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 15, say: "Solidify with …c6, bracing d5 and preparing the …e5 break.", sayShort: "…c6, brace d5", highlights: [_H('d5')] },
+    { atMove: 23, say: "Strike with …e5, freeing your position with equality.", sayShort: "…e5, free your game", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_41: SublineNarration = {
+  intro: { say: "White fianchettoes in Catalan style. Meet it with …d5, grab the c4-pawn, and hold it with …b5 and …Bb7 to blunt White's long-diagonal bishop.", sayShort: "Catalan: …d5, grab c4, …Bb7" },
+  beats: [
+    { atMove: 5, say: "Meet the Catalan with …d5, contesting the centre.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Grab the c4-pawn with …dxc4; you'll hold it with …b5 and …Bb7.", sayShort: "…dxc4, win the pawn", highlights: [_H('c4')] },
+    { atMove: 15, say: "Defend the pawn with …b5, gaining queenside space.", sayShort: "…b5, hold the pawn", highlights: [_H('b5')] },
+    { atMove: 17, say: "Develop …Bb7, blunting White's Catalan bishop on the long diagonal; balanced.", sayShort: "…Bb7, blunt the diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_42: SublineNarration = {
+  intro: { say: "In the Classical Nimzo with Qc2, reply …d5 to stake the centre, fianchetto with …b6 and …Bb7, and reposition …Bd6 toward the kingside — comfortable equality.", sayShort: "Classical: …d5, …Bb7, …Bd6" },
+  beats: [
+    { atMove: 7, say: "Meet Qc2 with …d5, the solid classical reply staking the centre.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Prepare …Bb7 with …b6, fianchettoing your bishop.", sayShort: "…b6, fianchetto", highlights: [_H('b7')] },
+    { atMove: 19, say: "Reposition …Bd6, aiming at the kingside dark squares.", sayShort: "…Bd6, aim kingside", highlights: [_H('d6')] },
+    { atMove: 23, say: "Expand …b5, gaining queenside space; balanced classical Nimzo.", sayShort: "…b5, queenside space", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_43: SublineNarration = {
+  intro: { say: "White builds a big centre with f3. Stake …d5, trade …Bxc3+ to double his pawns, and blockade with …Na4 — your main Nimzo trumps against the Saemisch.", sayShort: "Saemisch: double, blockade" },
+  beats: [
+    { atMove: 7, say: "Stake …d5, striking at White's f3-e4 centre plan.", sayShort: "…d5, hit the centre", highlights: [_H('d5')] },
+    { atMove: 9, say: "Trade with …Bxc3+, saddling White with doubled c-pawns — your main trump.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 11, say: "Strike …c5, opening lines against the doubled pawns.", sayShort: "…c5, open lines", highlights: [_H('c5')] },
+    { atMove: 21, say: "Hop …Na4, blockading the c-pawns; balanced with chances.", sayShort: "…Na4, blockade", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_44: SublineNarration = {
+  intro: { say: "White pins with Bg5 in the Leningrad Nimzo. Strike …c5, question the bishop with …h6, keep your bishop active on …Ba5, and break …d5 — equalising freely.", sayShort: "Leningrad: …c5, …h6, …d5" },
+  beats: [
+    { atMove: 7, say: "Strike …c5, challenging the centre.", sayShort: "…c5, challenge the centre", highlights: [_H('c5')] },
+    { atMove: 9, say: "Question the bishop with …h6, clarifying the pin.", sayShort: "…h6, question the bishop", highlights: [_H('g5')] },
+    { atMove: 15, say: "Retreat …Ba5, keeping the bishop active and the pin alive.", sayShort: "…Ba5, keep the pin", highlights: [_H('a5')] },
+    { atMove: 19, say: "Strike …d5, freeing your game with equality.", sayShort: "…d5, free your game", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_45: SublineNarration = {
+  intro: { say: "White fianchettoes with g3. Trade …Bxc3+ to double his pawns, develop …Nc6, and break …e5 to hit the centre — then pressure c4 with …Ba6.", sayShort: "Double, …Nc6, …e5" },
+  beats: [
+    { atMove: 7, say: "Trade …Bxc3+, doubling White's c-pawns before he fianchettoes.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 9, say: "Develop …Nc6, preparing the …e5 break.", sayShort: "…Nc6, prepare …e5", highlights: [_H('c6')] },
+    { atMove: 17, say: "Strike …e5, the thematic break hitting the centre.", sayShort: "…e5, the break", highlights: [_H('e5')] },
+    { atMove: 23, say: "Develop …Ba6, pressuring the c4-pawn; balanced.", sayShort: "…Ba6, pressure c4", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_46: SublineNarration = {
+  intro: { say: "White plays the Saemisch a3. Trade …Bxc3+ for the doubled-pawn structure, stake …d5, strike …c5, and pressure c4 with …Ba6.", sayShort: "Saemisch: double, …d5, …c5" },
+  beats: [
+    { atMove: 7, say: "Trade …Bxc3+, accepting the doubled-pawn structure in your favour.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 13, say: "Stake …d5, attacking the doubled c-pawns.", sayShort: "…d5, hit the pawns", highlights: [_H('d5')] },
+    { atMove: 15, say: "Strike …c5, opening lines against White's structure.", sayShort: "…c5, open lines", highlights: [_H('c5')] },
+    { atMove: 21, say: "Develop …Ba6, hitting c4; balanced with the better structure.", sayShort: "…Ba6, pressure c4", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_47: SublineNarration = {
+  intro: { say: "White plays a quiet e3. Castle, stake …d5, trade …Bxc3 to double his pawns, and pressure c4 with …Ba6 — equalising with the better structure.", sayShort: "…O-O, …d5, double, …Ba6" },
+  beats: [
+    { atMove: 9, say: "Castle to safety.", sayShort: "…O-O, safe king", highlights: [_H('g8')] },
+    { atMove: 11, say: "Stake …d5, contesting the centre.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 17, say: "Trade …Bxc3, doubling White's c-pawns.", sayShort: "…Bxc3, double the pawns", highlights: [_H('c3')] },
+    { atMove: 23, say: "Recapture …Bxc4, regaining the pawn into a balanced game.", sayShort: "…Bxc4, regain the pawn", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_48: SublineNarration = {
+  intro: { say: "White fianchettoes with g3. Stake …d5, develop the bishop actively to …Bc5, and break …e5 to claim central space — balanced with active pieces.", sayShort: "…d5, …Bc5, …e5" },
+  beats: [
+    { atMove: 11, say: "Strike …d5, contesting the centre in this fianchetto line.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 17, say: "Develop …Bc5, an active diagonal hitting White's position.", sayShort: "…Bc5, active bishop", highlights: [_H('c5')] },
+    { atMove: 21, say: "Strike …e5, claiming central space; balanced.", sayShort: "…e5, central space", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_49: SublineNarration = {
+  intro: { say: "White steers into a Queen's Gambit setup with Nf3 and Bf4. Stake the centre with …d5, develop your bishop via …b6, and free your game with …c5 — equalising cleanly.", sayShort: "QGD: …d5, …b6, …c5" },
+  beats: [
+    { atMove: 5, say: "Meet the setup with …d5, staking your claim in the centre.", sayShort: "…d5, stake the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Prepare …Bb7 with …b6, developing your bishop to the long diagonal.", sayShort: "…b6, develop the bishop", highlights: [_H('b7')] },
+    { atMove: 17, say: "Strike with …c5, freeing your game and simplifying toward equality.", sayShort: "…c5, free your game", highlights: [_H('c5')] },
+    { atMove: 21, say: "Check with …Qa5+, forcing queens off into a dead-level ending.", sayShort: "…Qa5+, trade queens", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_50: SublineNarration = {
+  intro: { say: "In the Rubinstein Nimzo White plays e3. Castle, build with …d5, brace it with …c6, and break with …e5 to free your position with full equality.", sayShort: "Rubinstein: …d5, …c6, …e5" },
+  beats: [
+    { atMove: 7, say: "Castle into safety; the Nimzo king is snug while you contest the centre.", sayShort: "…O-O, safe king", highlights: [_H('g8')] },
+    { atMove: 9, say: "Build with …d5, the classical Nimzo central stake.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 15, say: "Solidify with …c6, bracing d5 and preparing the …e5 break.", sayShort: "…c6, brace d5", highlights: [_H('d5')] },
+    { atMove: 23, say: "Strike with …e5, freeing your position with equality.", sayShort: "…e5, free your game", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_51: SublineNarration = {
+  intro: { say: "White fianchettoes in Catalan style. Meet it with …d5, grab the c4-pawn, and hold it with …b5 and …Bb7 to blunt White's long-diagonal bishop.", sayShort: "Catalan: …d5, grab c4, …Bb7" },
+  beats: [
+    { atMove: 5, say: "Meet the Catalan with …d5, contesting the centre.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Grab the c4-pawn with …dxc4; you'll hold it with …b5 and …Bb7.", sayShort: "…dxc4, win the pawn", highlights: [_H('c4')] },
+    { atMove: 15, say: "Defend the pawn with …b5, gaining queenside space.", sayShort: "…b5, hold the pawn", highlights: [_H('b5')] },
+    { atMove: 17, say: "Develop …Bb7, blunting White's Catalan bishop on the long diagonal; balanced.", sayShort: "…Bb7, blunt the diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_52: SublineNarration = {
+  intro: { say: "In the Classical Nimzo with Qc2, reply …d5 to stake the centre, fianchetto with …b6 and …Bb7, and reposition …Bd6 toward the kingside — comfortable equality.", sayShort: "Classical: …d5, …Bb7, …Bd6" },
+  beats: [
+    { atMove: 7, say: "Meet Qc2 with …d5, the solid classical reply staking the centre.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Prepare …Bb7 with …b6, fianchettoing your bishop.", sayShort: "…b6, fianchetto", highlights: [_H('b7')] },
+    { atMove: 19, say: "Reposition …Bd6, aiming at the kingside dark squares.", sayShort: "…Bd6, aim kingside", highlights: [_H('d6')] },
+    { atMove: 23, say: "Expand …b5, gaining queenside space; balanced classical Nimzo.", sayShort: "…b5, queenside space", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_53: SublineNarration = {
+  intro: { say: "White builds a big centre with f3. Stake …d5, trade …Bxc3+ to double his pawns, and blockade with …Na4 — your main Nimzo trumps against the Saemisch.", sayShort: "Saemisch: double, blockade" },
+  beats: [
+    { atMove: 7, say: "Stake …d5, striking at White's f3-e4 centre plan.", sayShort: "…d5, hit the centre", highlights: [_H('d5')] },
+    { atMove: 9, say: "Trade with …Bxc3+, saddling White with doubled c-pawns — your main trump.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 11, say: "Strike …c5, opening lines against the doubled pawns.", sayShort: "…c5, open lines", highlights: [_H('c5')] },
+    { atMove: 21, say: "Hop …Na4, blockading the c-pawns; balanced with chances.", sayShort: "…Na4, blockade", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_54: SublineNarration = {
+  intro: { say: "White develops Nf3. Strike …c5 at once, leap …Ne4 to force trades, and complete development with …Nc6 and …e5 — equalising actively.", sayShort: "…c5, …Ne4, …e5" },
+  beats: [
+    { atMove: 7, say: "Strike …c5, challenging White's centre at once.", sayShort: "…c5, challenge the centre", highlights: [_H('c5')] },
+    { atMove: 9, say: "Leap …Ne4, the active knight forcing trades and easing your game.", sayShort: "…Ne4, force trades", highlights: [_H('e4')] },
+    { atMove: 17, say: "Develop …Nc6, completing your pieces.", sayShort: "…Nc6, develop", highlights: [_H('c6')] },
+    { atMove: 21, say: "Strike …e5, freeing your game with equality.", sayShort: "…e5, free your game", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_55: SublineNarration = {
+  intro: { say: "White pins with Bg5 in the Leningrad Nimzo. Strike …c5, question the bishop with …h6, keep your bishop active on …Ba5, and break …d5 — equalising freely.", sayShort: "Leningrad: …c5, …h6, …d5" },
+  beats: [
+    { atMove: 7, say: "Strike …c5, challenging the centre.", sayShort: "…c5, challenge the centre", highlights: [_H('c5')] },
+    { atMove: 9, say: "Question the bishop with …h6, clarifying the pin.", sayShort: "…h6, question the bishop", highlights: [_H('g5')] },
+    { atMove: 15, say: "Retreat …Ba5, keeping the bishop active and the pin alive.", sayShort: "…Ba5, keep the pin", highlights: [_H('a5')] },
+    { atMove: 19, say: "Strike …d5, freeing your game with equality.", sayShort: "…d5, free your game", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_56: SublineNarration = {
+  intro: { say: "White fianchettoes with g3. Trade …Bxc3+ to double his pawns, develop …Nc6, and break …e5 to hit the centre — then pressure c4 with …Ba6.", sayShort: "Double, …Nc6, …e5" },
+  beats: [
+    { atMove: 7, say: "Trade …Bxc3+, doubling White's c-pawns before he fianchettoes.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 9, say: "Develop …Nc6, preparing the …e5 break.", sayShort: "…Nc6, prepare …e5", highlights: [_H('c6')] },
+    { atMove: 17, say: "Strike …e5, the thematic break hitting the centre.", sayShort: "…e5, the break", highlights: [_H('e5')] },
+    { atMove: 23, say: "Develop …Ba6, pressuring the c4-pawn; balanced.", sayShort: "…Ba6, pressure c4", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_57: SublineNarration = {
+  intro: { say: "After doubling White's pawns you meet f3 with the …e5-e4 clamp. Freeze his centre, support the wedge with …f5, and solidify …d6 for a strong bind.", sayShort: "…e5-e4 clamp, …f5" },
+  beats: [
+    { atMove: 11, say: "Strike …e5, clamping the centre against the doubled pawns.", sayShort: "…e5, clamp the centre", highlights: [_H('e5')] },
+    { atMove: 13, say: "Push …e4, freezing White's f3-pawn and gaining space.", sayShort: "…e4, freeze the centre", highlights: [_H('e4')] },
+    { atMove: 19, say: "Support the wedge with …f5, locking White's centre; balanced.", sayShort: "…f5, lock the centre", highlights: [_H('f5')] },
+    { atMove: 23, say: "Solidify …d6, completing your bind; balanced.", sayShort: "…d6, complete the bind", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_58: SublineNarration = {
+  intro: { say: "Having doubled White's pawns, pressure them: …Ba6 hits the backward c4-pawn, …Ne8-d6 blockades, and …f5 challenges White's centre.", sayShort: "…Ba6, …Nd6 blockade, …f5" },
+  beats: [
+    { atMove: 17, say: "Develop …Ba6, pressuring White's backward c4-pawn.", sayShort: "…Ba6, pressure c4", highlights: [_H('c4')] },
+    { atMove: 19, say: "Reroute …Ne8, heading to d6 to blockade and support …f5.", sayShort: "…Ne8, reroute to d6", highlights: [_H('d6')] },
+    { atMove: 21, say: "Strike …f5, challenging White's centre and grabbing space.", sayShort: "…f5, challenge the centre", highlights: [_H('f5')] },
+    { atMove: 23, say: "Open …cxd4, fixing White's doubled pawns; balanced.", sayShort: "…cxd4, fix the pawns", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_59: SublineNarration = {
+  intro: { say: "White steers into a Queen's Gambit setup with Nf3 and Bf4. Stake the centre with …d5, develop your bishop via …b6, and free your game with …c5 — equalising cleanly.", sayShort: "QGD: …d5, …b6, …c5" },
+  beats: [
+    { atMove: 5, say: "Meet the setup with …d5, staking your claim in the centre.", sayShort: "…d5, stake the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Prepare …Bb7 with …b6, developing your bishop to the long diagonal.", sayShort: "…b6, develop the bishop", highlights: [_H('b7')] },
+    { atMove: 17, say: "Strike with …c5, freeing your game and simplifying toward equality.", sayShort: "…c5, free your game", highlights: [_H('c5')] },
+    { atMove: 21, say: "Check with …Qa5+, forcing queens off into a dead-level ending.", sayShort: "…Qa5+, trade queens", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_60: SublineNarration = {
+  intro: { say: "White pins with Bg5 in the f3 line. Grab …dxc4, trade …Bxc3+ to double his pawns, strike …c5, and snatch the d4-pawn — coming out well.", sayShort: "…dxc4, double, …c5" },
+  beats: [
+    { atMove: 9, say: "Grab …dxc4, snatching the pawn White's Bg5 ignored.", sayShort: "…dxc4, win the pawn", highlights: [_H('c4')] },
+    { atMove: 11, say: "Trade …Bxc3+, doubling White's c-pawns.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 17, say: "Strike …c5, hitting White's centre.", sayShort: "…c5, hit the centre", highlights: [_H('c5')] },
+    { atMove: 21, say: "Grab …Qxd4, winning material; you stand well in a balanced game.", sayShort: "…Qxd4, win material", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_61: SublineNarration = {
+  intro: { say: "White meets your …d5 with e3. Strike …c5, recapture …Nxd5, and trade down with …Qxd5 into a level ending where you're fully equal.", sayShort: "…c5, …Nxd5, equal ending" },
+  beats: [
+    { atMove: 9, say: "Strike …c5, hitting White's centre.", sayShort: "…c5, hit the centre", highlights: [_H('c5')] },
+    { atMove: 11, say: "Recapture …Nxd5, centralising your knight.", sayShort: "…Nxd5, centralise", highlights: [_H('d5')] },
+    { atMove: 17, say: "Recapture …Qxd5, keeping the initiative as queens come off.", sayShort: "…Qxd5, keep the initiative", highlights: [_H('d5')] },
+    { atMove: 23, say: "Develop …Nc6 in the equal ending; balanced.", sayShort: "…Nc6, equal ending", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_62: SublineNarration = {
+  intro: { say: "In the Rubinstein Nimzo White plays e3. Castle, build with …d5, brace it with …c6, and break with …e5 to free your position with full equality.", sayShort: "Rubinstein: …d5, …c6, …e5" },
+  beats: [
+    { atMove: 7, say: "Castle into safety; the Nimzo king is snug while you contest the centre.", sayShort: "…O-O, safe king", highlights: [_H('g8')] },
+    { atMove: 9, say: "Build with …d5, the classical Nimzo central stake.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 15, say: "Solidify with …c6, bracing d5 and preparing the …e5 break.", sayShort: "…c6, brace d5", highlights: [_H('d5')] },
+    { atMove: 23, say: "Strike with …e5, freeing your position with equality.", sayShort: "…e5, free your game", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_63: SublineNarration = {
+  intro: { say: "White fianchettoes in Catalan style. Meet it with …d5, grab the c4-pawn, and hold it with …b5 and …Bb7 to blunt White's long-diagonal bishop.", sayShort: "Catalan: …d5, grab c4, …Bb7" },
+  beats: [
+    { atMove: 5, say: "Meet the Catalan with …d5, contesting the centre.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Grab the c4-pawn with …dxc4; you'll hold it with …b5 and …Bb7.", sayShort: "…dxc4, win the pawn", highlights: [_H('c4')] },
+    { atMove: 15, say: "Defend the pawn with …b5, gaining queenside space.", sayShort: "…b5, hold the pawn", highlights: [_H('b5')] },
+    { atMove: 17, say: "Develop …Bb7, blunting White's Catalan bishop on the long diagonal; balanced.", sayShort: "…Bb7, blunt the diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_64: SublineNarration = {
+  intro: { say: "In the Classical Nimzo with Qc2, reply …d5 to stake the centre, fianchetto with …b6 and …Bb7, and reposition …Bd6 toward the kingside — comfortable equality.", sayShort: "Classical: …d5, …Bb7, …Bd6" },
+  beats: [
+    { atMove: 7, say: "Meet Qc2 with …d5, the solid classical reply staking the centre.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Prepare …Bb7 with …b6, fianchettoing your bishop.", sayShort: "…b6, fianchetto", highlights: [_H('b7')] },
+    { atMove: 19, say: "Reposition …Bd6, aiming at the kingside dark squares.", sayShort: "…Bd6, aim kingside", highlights: [_H('d6')] },
+    { atMove: 23, say: "Expand …b5, gaining queenside space; balanced classical Nimzo.", sayShort: "…b5, queenside space", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_65: SublineNarration = {
+  intro: { say: "White takes …cxd5. Recapture …Nxd5, keep the bishop active on …Ba5, strike …c5, and castle into a balanced, active game.", sayShort: "…Nxd5, …Ba5, …c5" },
+  beats: [
+    { atMove: 9, say: "Recapture …Nxd5, centralising against White's centre.", sayShort: "…Nxd5, centralise", highlights: [_H('d5')] },
+    { atMove: 11, say: "Retreat …Ba5, keeping the bishop active and pinning ideas alive.", sayShort: "…Ba5, keep it active", highlights: [_H('a5')] },
+    { atMove: 15, say: "Strike …c5, hitting White's centre and opening lines.", sayShort: "…c5, open lines", highlights: [_H('c5')] },
+    { atMove: 23, say: "Castle …O-O, completing development; balanced with active pieces.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_66: SublineNarration = {
+  intro: { say: "White plays Bd2 in the f3 line. Grab …dxc4, strike …c5, and trade queens with …Qxd1+ — you reach a balanced ending holding the extra pawn.", sayShort: "…dxc4, …c5, balanced ending" },
+  beats: [
+    { atMove: 9, say: "Grab …dxc4, snatching a pawn White left loose.", sayShort: "…dxc4, win the pawn", highlights: [_H('c4')] },
+    { atMove: 11, say: "Strike …c5, hitting the centre.", sayShort: "…c5, hit the centre", highlights: [_H('c5')] },
+    { atMove: 17, say: "Trade queens with …Qxd1+ into a balanced ending with the extra pawn.", sayShort: "…Qxd1+, trade queens", highlights: [_H('d1')] },
+    { atMove: 23, say: "Defend the extra pawn with …b5; balanced or slightly better.", sayShort: "…b5, hold the pawn", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_67: SublineNarration = {
+  intro: { say: "White lunges e4. Take …dxe4, trade …Bxc3+ to double his pawns, strike …c5, and push …e5 — Black comes out comfortably ahead.", sayShort: "…dxe4, double, …c5, …e5" },
+  beats: [
+    { atMove: 9, say: "Take …dxe4, winning the centre pawn and opening lines.", sayShort: "…dxe4, win the pawn", highlights: [_H('e4')] },
+    { atMove: 11, say: "Trade …Bxc3+, doubling White's pawns.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 13, say: "Strike …c5, hitting the centre.", sayShort: "…c5, hit the centre", highlights: [_H('c5')] },
+    { atMove: 21, say: "Push …e5, clamping; you stand well in a balanced-to-better game.", sayShort: "…e5, clamp", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_68: SublineNarration = {
+  intro: { say: "White develops Nf3. Strike …c5 at once, leap …Ne4 to force trades, and complete development with …Nc6 and …e5 — equalising actively.", sayShort: "…c5, …Ne4, …e5" },
+  beats: [
+    { atMove: 7, say: "Strike …c5, challenging White's centre at once.", sayShort: "…c5, challenge the centre", highlights: [_H('c5')] },
+    { atMove: 9, say: "Leap …Ne4, the active knight forcing trades and easing your game.", sayShort: "…Ne4, force trades", highlights: [_H('e4')] },
+    { atMove: 17, say: "Develop …Nc6, completing your pieces.", sayShort: "…Nc6, develop", highlights: [_H('c6')] },
+    { atMove: 21, say: "Strike …e5, freeing your game with equality.", sayShort: "…e5, free your game", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_69: SublineNarration = {
+  intro: { say: "White steers into a Queen's Gambit setup with Nf3 and Bf4. Stake the centre with …d5, develop your bishop via …b6, and free your game with …c5 — equalising cleanly.", sayShort: "QGD: …d5, …b6, …c5" },
+  beats: [
+    { atMove: 5, say: "Meet the setup with …d5, staking your claim in the centre.", sayShort: "…d5, stake the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Prepare …Bb7 with …b6, developing your bishop to the long diagonal.", sayShort: "…b6, develop the bishop", highlights: [_H('b7')] },
+    { atMove: 17, say: "Strike with …c5, freeing your game and simplifying toward equality.", sayShort: "…c5, free your game", highlights: [_H('c5')] },
+    { atMove: 21, say: "Check with …Qa5+, forcing queens off into a dead-level ending.", sayShort: "…Qa5+, trade queens", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_70: SublineNarration = {
+  intro: { say: "White fianchettoes in Catalan style. Meet it with …d5, grab the c4-pawn, and hold it with …b5 and …Bb7 to blunt White's long-diagonal bishop.", sayShort: "Catalan: …d5, grab c4, …Bb7" },
+  beats: [
+    { atMove: 5, say: "Meet the Catalan with …d5, contesting the centre.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Grab the c4-pawn with …dxc4; you'll hold it with …b5 and …Bb7.", sayShort: "…dxc4, win the pawn", highlights: [_H('c4')] },
+    { atMove: 15, say: "Defend the pawn with …b5, gaining queenside space.", sayShort: "…b5, hold the pawn", highlights: [_H('b5')] },
+    { atMove: 17, say: "Develop …Bb7, blunting White's Catalan bishop on the long diagonal; balanced.", sayShort: "…Bb7, blunt the diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_71: SublineNarration = {
+  intro: { say: "In the Classical Nimzo with Qc2, reply …d5 to stake the centre, fianchetto with …b6 and …Bb7, and reposition …Bd6 toward the kingside — comfortable equality.", sayShort: "Classical: …d5, …Bb7, …Bd6" },
+  beats: [
+    { atMove: 7, say: "Meet Qc2 with …d5, the solid classical reply staking the centre.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 11, say: "Prepare …Bb7 with …b6, fianchettoing your bishop.", sayShort: "…b6, fianchetto", highlights: [_H('b7')] },
+    { atMove: 19, say: "Reposition …Bd6, aiming at the kingside dark squares.", sayShort: "…Bd6, aim kingside", highlights: [_H('d6')] },
+    { atMove: 23, say: "Expand …b5, gaining queenside space; balanced classical Nimzo.", sayShort: "…b5, queenside space", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_72: SublineNarration = {
+  intro: { say: "White builds a big centre with f3. Stake …d5, trade …Bxc3+ to double his pawns, and blockade with …Na4 — your main Nimzo trumps against the Saemisch.", sayShort: "Saemisch: double, blockade" },
+  beats: [
+    { atMove: 7, say: "Stake …d5, striking at White's f3-e4 centre plan.", sayShort: "…d5, hit the centre", highlights: [_H('d5')] },
+    { atMove: 9, say: "Trade with …Bxc3+, saddling White with doubled c-pawns — your main trump.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 11, say: "Strike …c5, opening lines against the doubled pawns.", sayShort: "…c5, open lines", highlights: [_H('c5')] },
+    { atMove: 21, say: "Hop …Na4, blockading the c-pawns; balanced with chances.", sayShort: "…Na4, blockade", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_73: SublineNarration = {
+  intro: { say: "White develops Nf3. Strike …c5 at once, leap …Ne4 to force trades, and complete development with …Nc6 and …e5 — equalising actively.", sayShort: "…c5, …Ne4, …e5" },
+  beats: [
+    { atMove: 7, say: "Strike …c5, challenging White's centre at once.", sayShort: "…c5, challenge the centre", highlights: [_H('c5')] },
+    { atMove: 9, say: "Leap …Ne4, the active knight forcing trades and easing your game.", sayShort: "…Ne4, force trades", highlights: [_H('e4')] },
+    { atMove: 17, say: "Develop …Nc6, completing your pieces.", sayShort: "…Nc6, develop", highlights: [_H('c6')] },
+    { atMove: 21, say: "Strike …e5, freeing your game with equality.", sayShort: "…e5, free your game", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_74: SublineNarration = {
+  intro: { say: "White reroutes Ne2 after your …b6. Leap …Ne4 to force trades, castle, develop …Nc6, and pressure c4 with …Ba6 — comfortable equality.", sayShort: "…Ne4, …Nc6, …Ba6" },
+  beats: [
+    { atMove: 9, say: "Leap …Ne4, the active knight forcing trades.", sayShort: "…Ne4, force trades", highlights: [_H('e4')] },
+    { atMove: 13, say: "Castle to safety.", sayShort: "…O-O, safe king", highlights: [_H('g8')] },
+    { atMove: 17, say: "Develop …Nc6, completing your pieces.", sayShort: "…Nc6, develop", highlights: [_H('c6')] },
+    { atMove: 21, say: "Develop …Ba6, pressuring the c4-pawn; balanced.", sayShort: "…Ba6, pressure c4", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_75: SublineNarration = {
+  intro: { say: "White pins with Bg5 in the Leningrad Nimzo. Strike …c5, question the bishop with …h6, keep your bishop active on …Ba5, and break …d5 — equalising freely.", sayShort: "Leningrad: …c5, …h6, …d5" },
+  beats: [
+    { atMove: 7, say: "Strike …c5, challenging the centre.", sayShort: "…c5, challenge the centre", highlights: [_H('c5')] },
+    { atMove: 9, say: "Question the bishop with …h6, clarifying the pin.", sayShort: "…h6, question the bishop", highlights: [_H('g5')] },
+    { atMove: 15, say: "Retreat …Ba5, keeping the bishop active and the pin alive.", sayShort: "…Ba5, keep the pin", highlights: [_H('a5')] },
+    { atMove: 19, say: "Strike …d5, freeing your game with equality.", sayShort: "…d5, free your game", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_76: SublineNarration = {
+  intro: { say: "White fianchettoes with g3. Trade …Bxc3+ to double his pawns, develop …Nc6, and break …e5 to hit the centre — then pressure c4 with …Ba6.", sayShort: "Double, …Nc6, …e5" },
+  beats: [
+    { atMove: 7, say: "Trade …Bxc3+, doubling White's c-pawns before he fianchettoes.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 9, say: "Develop …Nc6, preparing the …e5 break.", sayShort: "…Nc6, prepare …e5", highlights: [_H('c6')] },
+    { atMove: 17, say: "Strike …e5, the thematic break hitting the centre.", sayShort: "…e5, the break", highlights: [_H('e5')] },
+    { atMove: 23, say: "Develop …Ba6, pressuring the c4-pawn; balanced.", sayShort: "…Ba6, pressure c4", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_77: SublineNarration = {
+  intro: { say: "White plays the Saemisch a3. Trade …Bxc3+ for the doubled-pawn structure, stake …d5, strike …c5, and pressure c4 with …Ba6.", sayShort: "Saemisch: double, …d5, …c5" },
+  beats: [
+    { atMove: 7, say: "Trade …Bxc3+, accepting the doubled-pawn structure in your favour.", sayShort: "…Bxc3+, double the pawns", highlights: [_H('c3')] },
+    { atMove: 13, say: "Stake …d5, attacking the doubled c-pawns.", sayShort: "…d5, hit the pawns", highlights: [_H('d5')] },
+    { atMove: 15, say: "Strike …c5, opening lines against White's structure.", sayShort: "…c5, open lines", highlights: [_H('c5')] },
+    { atMove: 21, say: "Develop …Ba6, hitting c4; balanced with the better structure.", sayShort: "…Ba6, pressure c4", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+const NI_78: SublineNarration = {
+  intro: { say: "White lifts Re1 in this …b6 Nimzo. Stake …d5, reposition …Bd6 toward the kingside, and prepare …b5 with …a6 — balanced with active piece play.", sayShort: "…d5, …Bd6, …a6-b5" },
+  beats: [
+    { atMove: 11, say: "Stake …d5, contesting the centre.", sayShort: "…d5, the centre", highlights: [_H('d5')] },
+    { atMove: 17, say: "Develop …Bd6, aiming at the kingside dark squares.", sayShort: "…Bd6, aim kingside", highlights: [_H('d6')] },
+    { atMove: 21, say: "Prepare …b5 with …a6, gaining queenside space.", sayShort: "…a6, prepare …b5", highlights: [_H('a6')] },
+    { atMove: 23, say: "Lift …Rb8, backing the …b5 break; balanced.", sayShort: "…Rb8, back …b5", highlights: [_H('b8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Nimzo-Indian-Defense'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
+  'nimzo-indian::7::Nf3@4': NI_69,
+  'nimzo-indian::6::Nf3@4': NI_59,
+  'nimzo-indian::5::Nf3@4': NI_49,
+  'nimzo-indian::4::Nf3@4': NI_39,
+  'nimzo-indian::2::Nf3@4': NI_20,
+  'nimzo-indian::1::Nf3@4': NI_10,
+  'nimzo-indian::0::Nf3@4': NI_0,
   'dutch-defence::3::Bc4@8': DU_V3_BC4_8,
   'slav-defence::6::e3@6': SL61,
   'slav-defence::5::e3@6': SL51,
@@ -9074,78 +9819,78 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'semi-slav::6::g3@6': C24,
   'semi-slav::6::Be2@10': C24,
   // ── nimzo-indian ──
-  'nimzo-indian::0::e3@6': WNIME3,
-  'nimzo-indian::0::g3@4': C27,
-  'nimzo-indian::0::Bg5@12': C28,
-  'nimzo-indian::0::bxc3@10': C28,
-  'nimzo-indian::0::e3@12': C28,
-  'nimzo-indian::0::f3@6': C29,
-  'nimzo-indian::0::Nf3@6': C26,
-  'nimzo-indian::0::cxd5@12': C28,
-  'nimzo-indian::0::e4@8': C28,
-  'nimzo-indian::1::g3@4': C27,
-  'nimzo-indian::1::Qc2@6': C28,
-  'nimzo-indian::1::f3@6': C29,
-  'nimzo-indian::1::Nf3@6': C26,
-  'nimzo-indian::1::Ne2@8': C30,
-  'nimzo-indian::1::Bg5@6': C31,
-  'nimzo-indian::1::a3@10': C26,
-  'nimzo-indian::1::g3@6': C27,
-  'nimzo-indian::1::a3@6': C26,
-  'nimzo-indian::2::g3@4': C27,
-  'nimzo-indian::2::Qc2@6': C28,
-  'nimzo-indian::2::f3@6': C29,
-  'nimzo-indian::2::Nf3@6': C26,
-  'nimzo-indian::2::Ne2@8': C30,
-  'nimzo-indian::2::Bg5@6': C31,
-  'nimzo-indian::2::g3@6': C27,
-  'nimzo-indian::2::a3@6': C26,
-  'nimzo-indian::2::Ne2@10': C30,
-  'nimzo-indian::3::Nf3@4': C26,
-  'nimzo-indian::3::e3@6': WNIME3,
-  'nimzo-indian::3::g3@4': C27,
-  'nimzo-indian::3::Qc2@6': C28,
-  'nimzo-indian::3::Bd2@8': C31,
-  'nimzo-indian::3::f3@6': C29,
-  'nimzo-indian::3::Nf3@6': C26,
-  'nimzo-indian::3::g3@6': C27,
-  'nimzo-indian::3::a3@6': C26,
-  'nimzo-indian::4::e3@6': WNIME3,
-  'nimzo-indian::4::g3@4': C27,
-  'nimzo-indian::4::Qc2@6': C28,
-  'nimzo-indian::4::f3@6': C29,
-  'nimzo-indian::4::Bg5@6': C31,
-  'nimzo-indian::4::g3@6': C27,
-  'nimzo-indian::4::a3@6': C26,
-  'nimzo-indian::4::e3@8': C26,
-  'nimzo-indian::4::Bd2@16': C27,
-  'nimzo-indian::5::e3@6': WNIME3,
-  'nimzo-indian::5::g3@4': C27,
-  'nimzo-indian::5::Qc2@6': C28,
-  'nimzo-indian::5::f3@6': C29,
-  'nimzo-indian::5::Nf3@6': C26,
-  'nimzo-indian::5::Bg5@6': C31,
-  'nimzo-indian::5::g3@6': C27,
-  'nimzo-indian::5::f3@10': DNIM,
-  'nimzo-indian::5::O-O@16': C30,
-  'nimzo-indian::6::Bg5@8': C29,
-  'nimzo-indian::6::e3@8': C29,
-  'nimzo-indian::6::e3@6': WNIME3,
-  'nimzo-indian::6::g3@4': C27,
-  'nimzo-indian::6::Qc2@6': C28,
-  'nimzo-indian::6::cxd5@8': C29,
-  'nimzo-indian::6::Bd2@8': C29,
-  'nimzo-indian::6::e4@8': C29,
-  'nimzo-indian::6::Nf3@6': C26,
-  'nimzo-indian::7::g3@4': C27,
-  'nimzo-indian::7::Qc2@6': C28,
-  'nimzo-indian::7::f3@6': C29,
-  'nimzo-indian::7::Nf3@6': C26,
-  'nimzo-indian::7::Ne2@8': WNIMNE2,
-  'nimzo-indian::7::Bg5@6': C31,
-  'nimzo-indian::7::g3@6': C27,
-  'nimzo-indian::7::a3@6': C26,
-  'nimzo-indian::7::Re1@18': C26,
+  'nimzo-indian::0::e3@6': NI_1,
+  'nimzo-indian::0::g3@4': NI_2,
+  'nimzo-indian::0::Bg5@12': NI_3,
+  'nimzo-indian::0::bxc3@10': NI_4,
+  'nimzo-indian::0::e3@12': NI_5,
+  'nimzo-indian::0::f3@6': NI_6,
+  'nimzo-indian::0::Nf3@6': NI_7,
+  'nimzo-indian::0::cxd5@12': NI_8,
+  'nimzo-indian::0::e4@8': NI_9,
+  'nimzo-indian::1::g3@4': NI_11,
+  'nimzo-indian::1::Qc2@6': NI_12,
+  'nimzo-indian::1::f3@6': NI_13,
+  'nimzo-indian::1::Nf3@6': NI_14,
+  'nimzo-indian::1::Ne2@8': NI_15,
+  'nimzo-indian::1::Bg5@6': NI_16,
+  'nimzo-indian::1::a3@10': NI_17,
+  'nimzo-indian::1::g3@6': NI_18,
+  'nimzo-indian::1::a3@6': NI_19,
+  'nimzo-indian::2::g3@4': NI_21,
+  'nimzo-indian::2::Qc2@6': NI_22,
+  'nimzo-indian::2::f3@6': NI_23,
+  'nimzo-indian::2::Nf3@6': NI_24,
+  'nimzo-indian::2::Ne2@8': NI_25,
+  'nimzo-indian::2::Bg5@6': NI_26,
+  'nimzo-indian::2::g3@6': NI_27,
+  'nimzo-indian::2::a3@6': NI_28,
+  'nimzo-indian::2::Ne2@10': NI_29,
+  'nimzo-indian::3::Nf3@4': NI_30,
+  'nimzo-indian::3::e3@6': NI_31,
+  'nimzo-indian::3::g3@4': NI_32,
+  'nimzo-indian::3::Qc2@6': NI_33,
+  'nimzo-indian::3::Bd2@8': NI_34,
+  'nimzo-indian::3::f3@6': NI_35,
+  'nimzo-indian::3::Nf3@6': NI_36,
+  'nimzo-indian::3::g3@6': NI_37,
+  'nimzo-indian::3::a3@6': NI_38,
+  'nimzo-indian::4::e3@6': NI_40,
+  'nimzo-indian::4::g3@4': NI_41,
+  'nimzo-indian::4::Qc2@6': NI_42,
+  'nimzo-indian::4::f3@6': NI_43,
+  'nimzo-indian::4::Bg5@6': NI_44,
+  'nimzo-indian::4::g3@6': NI_45,
+  'nimzo-indian::4::a3@6': NI_46,
+  'nimzo-indian::4::e3@8': NI_47,
+  'nimzo-indian::4::Bd2@16': NI_48,
+  'nimzo-indian::5::e3@6': NI_50,
+  'nimzo-indian::5::g3@4': NI_51,
+  'nimzo-indian::5::Qc2@6': NI_52,
+  'nimzo-indian::5::f3@6': NI_53,
+  'nimzo-indian::5::Nf3@6': NI_54,
+  'nimzo-indian::5::Bg5@6': NI_55,
+  'nimzo-indian::5::g3@6': NI_56,
+  'nimzo-indian::5::f3@10': NI_57,
+  'nimzo-indian::5::O-O@16': NI_58,
+  'nimzo-indian::6::Bg5@8': NI_60,
+  'nimzo-indian::6::e3@8': NI_61,
+  'nimzo-indian::6::e3@6': NI_62,
+  'nimzo-indian::6::g3@4': NI_63,
+  'nimzo-indian::6::Qc2@6': NI_64,
+  'nimzo-indian::6::cxd5@8': NI_65,
+  'nimzo-indian::6::Bd2@8': NI_66,
+  'nimzo-indian::6::e4@8': NI_67,
+  'nimzo-indian::6::Nf3@6': NI_68,
+  'nimzo-indian::7::g3@4': NI_70,
+  'nimzo-indian::7::Qc2@6': NI_71,
+  'nimzo-indian::7::f3@6': NI_72,
+  'nimzo-indian::7::Nf3@6': NI_73,
+  'nimzo-indian::7::Ne2@8': NI_74,
+  'nimzo-indian::7::Bg5@6': NI_75,
+  'nimzo-indian::7::g3@6': NI_76,
+  'nimzo-indian::7::a3@6': NI_77,
+  'nimzo-indian::7::Re1@18': NI_78,
   // ── queens-indian ──
   'queens-indian::0::g3@4': WQIDG3,
   'queens-indian::0::a3@6': WQIDA3,
