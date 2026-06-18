@@ -311,6 +311,8 @@ const IT_GIUOCO_BB6: SublineNarration = {
   },
   beats: [
     { atMove: 11, say: "Bb6 hands you the prize — a broad d4-e4 centre. Roll it forward: d5 grabs space and cramps the c6-knight, and your central majority squeezes Black off the board.", sayShort: "Bb6 — push d5, cramp c6.", highlights: [H('d5', KEY), H('c6', SOFT)] },
+    { atMove: 12, say: "e5 rolls the centre forward, kicking the f6-knight to e4 and grabbing space; your big pawn duo cramps Black's whole game.", sayShort: "e5 — roll the centre, cramp.", arrows: [A('e5', 'f6')], highlights: [H('f6', ATK)] },
+    { atMove: 16, say: "exd6 opens lines and dents Black's structure; with the bishop pair and the central majority you press a clear, lasting initiative — develop and pile up.", sayShort: "exd6 — open lines, press.", highlights: [H('d6', SOFT)] }
   ],
   sources: IT_CTR,
 };
@@ -333,6 +335,8 @@ const IT_GRECO_BXC3: SublineNarration = {
   },
   beats: [
     { atMove: 13, say: "Bxc3+ trades to dent your pawns — but bxc3 hands you a towering d4-e4 centre and a half-open b-file. Push d5 or e5 and storm: those pawns are a battering ram, not a weakness.", sayShort: "Bxc3+ — bxc3, towering centre.", highlights: [H('d4', KEY), H('e4', ATK)] },
+    { atMove: 16, say: "d5! the Greco gambit — sacrifice a pawn to rip the centre open. The c6-knight is kicked back and your raking bishops and open lines roar at Black's king.", sayShort: "d5 — the Greco sac, open it.", arrows: [A('d5', 'c6')], highlights: [H('c6', ATK)] },
+    { atMove: 18, say: "O-O completes development; a pawn down, but the open lines, the bishop pair and Black's lagging king give a roaring initiative — Re1 and Bg5 pile in.", sayShort: "O-O — down a pawn, raging attack.", highlights: [H('e4', SOFT)] }
   ],
   sources: IT_CTR,
 };
@@ -344,6 +348,8 @@ const IT_GRECO_OO: SublineNarration = {
   },
   beats: [
     { atMove: 13, say: "O-O castles right into your guns — uncork the attack. d5 kicks the c6-knight, Bg5 pins its defender, and the e-pawn rolls at the king. Centre, bishops, initiative: go fast.", sayShort: "O-O — d5 and Bg5, attack.", arrows: [A('c1', 'g5')], highlights: [H('d5', KEY), H('g5', ATK)] },
+    { atMove: 16, say: "Bxf6 removes the kingside defender; after …Qxf6 you castle and the centre rolls while Nd5 looms with tempo. The Greco attack crashes in.", sayShort: "Bxf6 — strip the defender.", highlights: [H('f6', ATK)] },
+    { atMove: 20, say: "Nd5 forks the f6-queen and c7, gaining tempo; with the centre, the bishop pair and the initiative, you press a dangerous attack.", sayShort: "Nd5 — fork, press the attack.", arrows: [A('d5', 'f6')], highlights: [H('f6', ATK)] }
   ],
   sources: IT_CTR,
 };
@@ -1884,9 +1890,17 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'italian-game::6::Bxc3+@13': IT_GRECO_BXC3,
   'italian-game::0::O-O@13': IT_GRECO_OO,
   'italian-game::6::O-O@13': IT_GRECO_OO,
-  'italian-game::0::d6@13': { ...IT_GRECO_BREAK, beats: [{ atMove: 13, say: "d6 challenges your big centre — don't let it be undermined cheaply. Hold the duo with d5 or Bg5 and a-pawn ideas, and keep developing. The centre is your engine; protect it, then advance it at Black's king.", sayShort: "d6 — defend the centre, then advance.", arrows: [A('c4', 'f7')], highlights: [H('d4', KEY), H('d5', SOFT)] }] },
+  'italian-game::0::d6@13': { ...IT_GRECO_BREAK, beats: [
+    { atMove: 13, say: "d6 challenges your big centre — don't let it be undermined cheaply. Hold the duo with d5 or Bg5 and a-pawn ideas, and keep developing. The centre is your engine; protect it, then advance it at Black's king.", sayShort: "d6 — defend the centre, then advance.", arrows: [A('c4', 'f7')], highlights: [H('d4', KEY), H('d5', SOFT)] },
+    { atMove: 14, say: "d5 advances with tempo, kicking the c6-knight to the rim and grabbing a big space bind; your central majority and bishop pair squeeze Black.", sayShort: "d5 — kick the knight, grab space.", highlights: [H('d5', KEY)] },
+    { atMove: 18, say: "O-O finishes development behind the broad centre; with the space edge and the two bishops, you press a comfortable, lasting initiative — roll the e-pawn at the king.", sayShort: "O-O — press the central bind.", highlights: [H('d5', SOFT)] },
+  ] },
   'italian-game::6::d6@13': { ...IT_GRECO_BREAK, beats: [{ atMove: 13, say: "d6 challenges your big centre — don't let it be undermined cheaply. Hold the duo with d5 or Bg5 and a-pawn ideas, and keep developing. The centre is your engine; protect it, then advance it at Black's king.", sayShort: "d6 — defend the centre, then advance.", arrows: [A('c4', 'f7')], highlights: [H('d4', KEY), H('d5', SOFT)] }] },
-  'italian-game::0::d5@13': { ...IT_GRECO_BREAK, beats: [{ atMove: 13, say: "d5 strikes back in the centre — meet it with e5, clamping and gaining space, or exd5 to keep the lines open. Your broad centre and the bishop trained on f7 keep the initiative; advance the pawns at the king.", sayShort: "d5 — answer e5, clamp the centre.", highlights: [H('e5', KEY), H('d5', SOFT)] }] },
+  'italian-game::0::d5@13': { ...IT_GRECO_BREAK, beats: [
+    { atMove: 13, say: "d5 strikes back in the centre — meet it with e5, clamping and gaining space, or exd5 to keep the lines open. Your broad centre and the bishop trained on f7 keep the initiative; advance the pawns at the king.", sayShort: "d5 — answer e5, clamp the centre.", highlights: [H('e5', KEY), H('d5', SOFT)] },
+    { atMove: 14, say: "exd5 takes the pawn; after …Nxd5 the centre clears, and your isolated d4-pawn is a mobile, attacking spearhead supporting e5 and c5 advances.", sayShort: "exd5 — open it, mobile d-pawn.", highlights: [H('d4', KEY)] },
+    { atMove: 16, say: "O-O castles behind the active d4-pawn; with the bishop pair and the half-open files, you press the initiative — Re1 and the pieces flood toward Black's king.", sayShort: "O-O — active d-pawn, press.", highlights: [H('d4', SOFT)] },
+  ] },
   'italian-game::6::d5@13': { ...IT_GRECO_BREAK, beats: [{ atMove: 13, say: "d5 strikes back in the centre — meet it with e5, clamping and gaining space, or exd5 to keep the lines open. Your broad centre and the bishop trained on f7 keep the initiative; advance the pawns at the king.", sayShort: "d5 — answer e5, clamp the centre.", highlights: [H('e5', KEY), H('d5', SOFT)] }] },
   'italian-game::0::Nxc3@15': IT_MOLLER,
   'italian-game::6::Bxc3@15': IT_MOLLER,
