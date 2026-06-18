@@ -832,7 +832,7 @@ const DNIM: SublineNarration = {
   beats: [
     { atMove: 7, say: "…Bxc3+ — don't hesitate. You're handing over a bishop, but look at what bxc3 does: it saddles White with doubled c-pawns that can never be healed. That permanent weakness is the target you'll lean on for the rest of the game.", sayShort: "…Bxc3+ — give it, wreck c-pawns.", highlights: [_H('c3', KEY)] },
     { atMove: 11, say: "Time to hit the centre — …e5 leans straight on d4, as the arrow shows. With White's pieces still sitting at home, that broad centre he built is suddenly carrying real weight and starting to creak.", sayShort: "…e5 — lean on d4.", arrows: [_A('e5', 'd4', ATK)], highlights: [_H('e5', ATK), _H('d4', KEY)] },
-    { atMove: 13, say: "And the clamp — …e4 jams right up against f3 and freezes White's whole kingside. Notice the point: it steals the f3-square from his knight, so his pieces have nowhere good to go while you calmly finish developing. The position is locked in your favour.", sayShort: "…e4 — clamp and freeze f3.", arrows: [_A('e4', 'f3', ATK)], highlights: [_H('e4', ATK), _H('f3', KEY)] },
+    { atMove: 13, say: "And the clamp — …e4 jams right up against f3 and freezes White's whole kingside. Notice the point: it steals the f3-square from his knight, so his pieces have nowhere good to go while you calmly finish developing. The position is locked, and you have a clear plan: keep piling on those weak c-pawns.", sayShort: "…e4 — clamp and freeze f3.", arrows: [_A('e4', 'f3', ATK)], highlights: [_H('e4', ATK), _H('f3', KEY)] },
   ],
   sources: ['concept:pawn-doubled', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
 };
@@ -857,11 +857,7 @@ const DBENKO: SublineNarration = {
 };
 // DEEP DALBIN :: albin-countergambit::1::fxe3@10
 const DALBIN: SublineNarration = {
-  intro: { say: "This is the famous Lasker Trap, and you're about to spring it. White grabbed with e3 against your d4-pawn — greedy. The point you need to see: …dxe3 forces him to recapture with the f-pawn, and that rips open the diagonal straight to his own king. Then a check wins the material right back.", sayShort: "Lasker Trap — …dxe3 springs it." },
-  beats: [
-    { atMove: 9, say: "…dxe3 — the poisoned pawn. It lands on e3, and watch what White's natural fxe3 will do: it bares the e1-h4 diagonal right into his own king. You're baiting him into the recapture.", sayShort: "…dxe3 — the poisoned pawn.", highlights: [_H('e3', ATK), _H('f2', SOFT)] },
-    { atMove: 11, say: "…Qh4+ — and the trap snaps shut. Follow the arrow: with the f2-pawn gone, the queen rakes straight down the open diagonal at White's stranded king. You regain everything with a crushing attack — that's the Albin's whole promise, paid in full.", sayShort: "…Qh4+ — the diagonal is open.", arrows: [_A('h4', 'e1', ATK)], highlights: [_H('h4', ATK), _H('e1', KEY)] },
-  ],
+  intro: { say: "The Albin Countergambit's sharpest corner — and you need both eyes open here. The famous Lasker Trap is real: if White ever recaptures on b4 with the bishop, …exf2+ and the underpromotion …fxg1=N+ win on the spot. But be honest about the rest — the Albin is a dubious gambit you play for surprise and activity, not equality. Take with …dxe3, know the exact follow-up cold, and tread carefully: one loose move and the whole attack evaporates and you are simply worse.", sayShort: "Albin — real trap, but tread carefully." },
   sources: ['concept:tac-trap', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Albin_Countergambit'],
 };
 // DEEP DQID :: queens-indian::1::g3@6 | queens-indian::2::g3@6 | queens-indian::6::g3@6
@@ -877,17 +873,14 @@ const DQID: SublineNarration = {
 const DBUD: SublineNarration = {
   intro: { say: "White is hanging onto your pawn with Bf4, so you set about winning it straight back. Develop with purpose and you'll regain it with ease — and notice the bonus: your pieces leap into the game faster than White can untangle his.", sayShort: "Budapest — win the pawn back fast." },
   beats: [
-    { atMove: 7, say: "…Nc6 — develop and attack at the same time. Follow the arrow: the knight hits the e5-pawn White is trying to hold. With …Bb4+ and …Ngxe5 coming, you scoop the pawn back with tempo and an easy, active game.", sayShort: "…Nc6 — hit the e5-pawn.", arrows: [_A('c6', 'e5', ATK)], highlights: [_H('e5', KEY)] },
+    { atMove: 7, say: "…Nc6 — develop and attack at the same time. Follow the arrow: the knight hits the e5-pawn White is trying to hold. With …Bb4+ and …Ngxe5 coming, you scoop the pawn back with tempo and an active, fighting game.", sayShort: "…Nc6 — hit the e5-pawn.", arrows: [_A('c6', 'e5', ATK)], highlights: [_H('e5', KEY)] },
   ],
   sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
 };
 // DEEP DDUT :: dutch-defence::3::e4@6
 const DDUT: SublineNarration = {
-  intro: { say: "White lunges with e4, throwing a pawn at you to crack the centre open against your …f5. Don't blink. …f4 grabs kingside space and shuts his bishop out, and your g7-bishop is already glaring down the long diagonal. You ride the sharp lines — this is the Leningrad's whole point.", sayShort: "Leningrad — meet e4 with …f4." },
-  beats: [
-    { atMove: 7, say: "…f4 — clamp the kingside and grab the space, while the g7-bishop (follow the arrow) bears down the long diagonal at d4. White's centre looks broad, but it's loose, and your wedge plus that bishop give you a real fight.", sayShort: "…f4 — clamp; bishop eyes d4.", arrows: [_A('g7', 'd4', ATK)], highlights: [_H('f4', ATK), _H('d4', KEY)] },
-  ],
-  sources: ['book:dutch-defence', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+  intro: { say: "White meets your Leningrad with the critical e4 thrust — the most testing anti-Dutch try, hitting your …f5 and the centre at once. Be careful here: this is sharp and genuinely double-edged, and the committal …f4 advance can leave you worse if you overpush, because White's broad centre and the g5-bishop bite hard. Keep your king safe, develop with precision, and aim for a solid, defensible game rather than a reckless pawn-storm — accuracy is what holds Black together against e4.", sayShort: "White's e4 — meet it with care." },
+  sources: ['book:dutch-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
 };
 // DEEP DBEN :: benoni-defence::0::e4@10 | benoni-defence::1::e4@10 | benoni-defence::2::e4@10 | benoni-defence::6::e4@10
 const DBEN: SublineNarration = {
@@ -989,9 +982,9 @@ const EABUD: SublineNarration = {
 };
 // DEEP EALON :: anti-london-black::1::c3@6
 const EALON: SublineNarration = {
-  intro: { say: "You've hit White's d4 with …c5 and …Nc6, and now you clamp the queenside with …c4. Here's the secret to beating the London: grab space first. With …b5 and …a5-a4 to follow, you get a free hand on the wing where his slow setup has no answer.", sayShort: "Anti-London — clamp with …c4." },
+  intro: { say: "You've hit White's d4 with …c5 and …Nc6, and now you clamp the queenside with …c4. The idea against the London is to grab space first — but know that …c4 commits you, so follow up energetically: …b5 and the queenside roll give you active counterplay on the wing where his slow setup is least prepared.", sayShort: "Anti-London — clamp with …c4." },
   beats: [
-    { atMove: 7, say: "…c4 — clamp the queenside and grab the space, freezing White's b- and c-pawn breaks before they start (look at c4). Now …b5 and the pawn roll give you the initiative on the side where the London is weakest.", sayShort: "…c4 — clamp, then roll …b5.", highlights: [_H('c4', ATK)] },
+    { atMove: 7, say: "…c4 — clamp the queenside and grab the space, freezing White's b- and c-pawn breaks before they start (look at c4). Now …b5 and the pawn roll give you active queenside counterplay — just be ready to follow through, since …c4 has released the central tension.", sayShort: "…c4 — clamp, then roll …b5.", highlights: [_H('c4', ATK)] },
   ],
   sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/London_System'],
 };
