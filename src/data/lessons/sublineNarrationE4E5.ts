@@ -941,6 +941,71 @@ const KG_ACCEPTED: SublineNarration = {
   ],
   sources: KG,
 };
+// Accepted, …d6 quiet hold (exf4 Nf3 d6 d4 g5 h4 g4). Take the centre, crack g5.
+const KG_ACC_D6: SublineNarration = {
+  intro: {
+    say: "…d6 — Black holds the extra f-pawn the quiet way, propping up the kingside and keeping options open. Seize the centre by force: d4 hands you a broad pawn duo, and when Black grabs space with …g5 to defend f4, you crack the chain open with h4. You're playing for the f-file and a kingside initiative — the pawn is only borrowed.",
+    sayShort: '…d6 — d4 centre, then h4.',
+  },
+  beats: [
+    { atMove: 5, say: "…d6 props the position and clings to the gambit pawn — solid, but slow. Punish the delay: d4 grabs the full centre at once while Black is still uncommitted.", sayShort: "…d6 — answer d4.", arrows: [A('d2', 'd4')], highlights: [H('d4', KEY)] },
+    { atMove: 6, say: "d4 — the broad centre is yours. Now Bc4, Nc3 and castling line up smoothly, and you're ready to win f4 back with Bxf4 whenever you choose.", sayShort: "d4 — broad centre, regain f4.", highlights: [H('d4', KEY), H('f4', SOFT)] },
+    { atMove: 8, say: "…g5 lunged to defend f4 — answer h4! The pawn levers the g5-point, the g-file cracks open, and your rooks get a highway toward Black's bared king. The gambit pawn bought you exactly this attack.", sayShort: "h4 — prise the g5 chain open.", arrows: [A('h4', 'g5')], highlights: [H('g5', KEY), H('h4', SOFT)] },
+  ],
+  sources: KG,
+};
+// Accepted, …d5 Modern (exf4 Nf3 d5 exd5 Nf6 Bc4 Nxd5 O-O). Open, level, faster develop.
+const KG_ACC_D5: SublineNarration = {
+  intro: {
+    say: "…d5 — the Modern Defence, Black handing the pawn straight back to free his game and kill your attack. Accept the deal: take on d5, and you out-develop him in the open position. Material levels out, but Bc4, castling and the half-open f-file leave you a step ahead with the pleasanter game.",
+    sayShort: '…d5 — take exd5, out-develop.',
+  },
+  beats: [
+    { atMove: 5, say: "…d5 gives the pawn back to open lines and blunt your initiative — happily taken. exd5 grabs it and clears the centre, where your lead in development will tell.", sayShort: "…d5 — answer exd5.", arrows: [A('e4', 'd5')], highlights: [H('d5', KEY)] },
+    { atMove: 6, say: "exd5 — the centre opens. Black will regain the pawn with …Nf6 and …Nxd5, levelling material, but you finish developing first and keep the pressure.", sayShort: "exd5 — open it, stay ahead.", highlights: [H('d5', KEY)] },
+    { atMove: 8, say: "Bc4 braces the d5-pawn that …Nf6 is eyeing and will rake the a2-g8 diagonal the moment it clears. After …Nxd5 you castle a clear tempo ahead.", sayShort: "Bc4 — hold d5, develop.", arrows: [A('c4', 'd5')], highlights: [H('d5', KEY)] },
+    { atMove: 10, say: "O-O — king safe and the rook drops onto the half-open f-file, glaring down at f7. Material is level, but your faster development and that open file hand you a small, lasting pull. Develop, double rooks, press.", sayShort: "O-O — rook to the f-file.", highlights: [H('f7', KEY)] },
+  ],
+  sources: KG_CTR,
+};
+// Accepted, …Nf6 (exf4 Nf3 Nf6 e5 Nh5 d4). Gain time, big centre.
+const KG_ACC_NF6: SublineNarration = {
+  intro: {
+    say: "…Nf6 develops and pokes at your e4-pawn — so push past it and gain time. e5 kicks the knight to the rim at h5, where it bites on nothing, and d4 rolls up the broad centre behind it. The f4-pawn comes back with Bxf4 at your leisure; for now you have space, tempo and a stranded enemy knight.",
+    sayShort: '…Nf6 — push e5, gain time.',
+  },
+  beats: [
+    { atMove: 5, say: "…Nf6 hits e4 to slow you down — turn it into a gift. e5! shoves the pawn forward with tempo, chasing the knight to the edge of the board.", sayShort: "…Nf6 — answer e5.", arrows: [A('e4', 'e5')], highlights: [H('e5', KEY), H('f6', SOFT)] },
+    { atMove: 6, say: "e5 drives the knight to h5, offside on the rim, while you bank central space for free. Every tempo Black spends on that knight, you spend building.", sayShort: "e5 — chase the knight to h5.", highlights: [H('e5', KEY), H('h5', SOFT)] },
+    { atMove: 8, say: "d4 — the centre is a wall, the h5-knight is stranded, and your pieces flow out toward f7. Bxf4 reclaims the pawn whenever you like; the space and initiative are already yours.", sayShort: "d4 — big centre, knight stranded.", highlights: [H('d4', KEY), H('h5', SOFT)] },
+  ],
+  sources: KG_CTR,
+};
+// Accepted, …Ne7 (exf4 Nf3 Ne7 d4 d5 Nc3). Take the centre, press d5.
+const KG_ACC_NE7: SublineNarration = {
+  intro: {
+    say: "…Ne7 — a flexible developing move, the knight rerouting toward g6 to bolster f4. Don't let Black settle: d4 grabs the full centre at once, and when he hits back with …d5 you develop Nc3 with pressure on it. Your centre and lead in development dominate while the e7-knight sits passive — Bxf4 regains the pawn in time.",
+    sayShort: '…Ne7 — d4, press the centre.',
+  },
+  beats: [
+    { atMove: 5, say: "…Ne7 heads quietly for g6 to prop up f4 — but it's slow. Take the centre now with d4 while Black is still untangling.", sayShort: "…Ne7 — answer d4.", arrows: [A('d2', 'd4')], highlights: [H('d4', KEY)] },
+    { atMove: 6, say: "d4 — the broad centre stands. Black strikes back with …d5 to stake his own claim; you simply keep developing toward it.", sayShort: "d4 — full centre, keep rolling.", highlights: [H('d4', KEY)] },
+    { atMove: 8, say: "Nc3 develops with tempo, leaning on the d5-pawn while your centre cramps Black and the e7-knight does little. Bxf4 wins the pawn back soon; the initiative stays with you.", sayShort: "Nc3 — pressure d5, stay on top.", arrows: [A('c3', 'd5')], highlights: [H('d5', KEY)] },
+  ],
+  sources: KG_CTR,
+};
+// Accepted, …Be7 (exf4 Nf3 Be7 Bc4 Nf6). Solid; develop with threats.
+const KG_ACC_BE7: SublineNarration = {
+  intro: {
+    say: "…Be7 — a modest, solid hold, the bishop covering the h4-e1 diagonal and eyeing the spite-check …Bh4+. Develop with threats of your own: Bc4 trains on f7, then d4, Nc3 and Bxf4 build the centre and reclaim the pawn. You keep the half-open f-file and a free, comfortable initiative for the gambit pawn.",
+    sayShort: '…Be7 — Bc4, then d4.',
+  },
+  beats: [
+    { atMove: 5, say: "…Be7 quietly shores up the kingside and keeps …Bh4+ in reserve — sound but passive. Answer in kind but with bite: Bc4 swings onto the a2-g8 diagonal at f7.", sayShort: "…Be7 — answer Bc4.", arrows: [A('f1', 'c4')], highlights: [H('c4', KEY)] },
+    { atMove: 6, say: "Bc4 aims straight at f7 and clears the back rank for castling. Black develops …Nf6; you follow with d4, Nc3 and Bxf4, regaining the pawn with the freer game and the f-file pointed at his king.", sayShort: "Bc4 — aim f7, then d4.", arrows: [A('c4', 'f7')], highlights: [H('f7', KEY)] },
+  ],
+  sources: KG,
+};
 
 // ── Vienna Game (student WHITE). triggerMove is BLACK's deviation. ──
 const VN = ['book:vienna-game', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Vienna_Game'];
@@ -2116,9 +2181,16 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'kings-gambit::3::O-O@15': { ...KG_FALKBEER, beats: [{ atMove: 15, say: "O-O — Black castles in the Falkbeer main line. You've untangled with Nf3, Qe2 and Nc3; the position is balanced and open, your pieces as active as his. Complete development, contest the centre, and outplay from the better-coordinated side.", sayShort: "O-O — develop, contest the centre.", highlights: [H('e4', KEY)] }] },
   'kings-gambit::3::Nxc3@17': { ...KG_FALKBEER, beats: [{ atMove: 17, say: "Nxc3 — Black trades the active knight. Recapture bxc3, and your doubled c-pawns are offset by the half-open b-file and the bishop pair. The Falkbeer's fire is out; play the calm middlegame from equality, pressing the better structure.", sayShort: "Nxc3 — bxc3, douse the Falkbeer.", highlights: [H('c3', KEY)] }] },
   'kings-gambit::3::Bb4@15': { ...KG_FALKBEER, beats: [{ atMove: 15, say: "Bb4 pins your c3-knight — unpin in comfort with Bd2 or Qd2, or simply O-O-O and let the pin lapse. You've fully neutralised the counter-gambit; the open position is level and yours to outplay.", sayShort: "Bb4 — unpin Bd2, you're fine.", highlights: [H('c3', KEY)] }] },
-  'kings-gambit::3::exf4@5': { ...KG_FALKBEER, beats: [{ atMove: 5, say: "exf4 — Black recaptures the gambit pawn, but you're up the d5-pawn and ahead in development. Nf3, Bc4 and O-O complete your game; the extra central pawn and the lead in development outweigh Black's loose f4-pawn.", sayShort: "exf4 — a pawn up, develop quickly.", highlights: [H('d5', KEY), H('f4', SOFT)] }] },
+  'kings-gambit::3::exf4@5': { ...KG_FALKBEER, beats: [
+    { atMove: 5, say: "exf4 — Black snatches your f-pawn back, levelling material in this Falkbeer-Modern order. No matter: you're the better-developed side and the d5-pawn cramps him. Race your pieces out and round up f4 later.", sayShort: "exf4 — level; you lead development.", highlights: [H('d5', KEY), H('f4', SOFT)] },
+    { atMove: 8, say: "Bc4 props the d5-pawn that …Nf6 is eyeing and lines up on the kingside. You're a clean step ahead in development; just keep finishing it.", sayShort: "Bc4 — hold d5, develop.", arrows: [A('c4', 'd5')], highlights: [H('d5', KEY)] },
+    { atMove: 10, say: "O-O — king safe and the rook drops onto the half-open f-file, glaring at f7. Black regains d5 and material stays level, but your faster development and that open file give you the easier, more pleasant game.", sayShort: "O-O — rook to the f-file.", highlights: [H('f7', KEY)] },
+  ] },
   'kings-gambit::3::Bf2+@15': { ...KG_FALKBEER, beats: [{ atMove: 15, say: "Bf2+ — a check that lands the bishop in your camp, but it's just a sortie. Kxf2 or Kd1, and the bishop is stranded deep in your position; round it up or chase it, and your sound structure and pieces tell.", sayShort: "Bf2+ — Kxf2, the bishop's stranded.", arrows: [A('e1', 'f2')], highlights: [H('f2', KEY)] }] },
-  'kings-gambit::3::c6@5': { ...KG_FALKBEER, beats: [{ atMove: 5, say: "c6 — Black gambits to open lines after exd5. Decline complications: Nc3 develops and holds, and after …exf4 you have the extra pawn and a healthy game. Don't get greedy; develop and consolidate the material.", sayShort: "c6 — Nc3, hold the extra pawn.", highlights: [H('d5', KEY)] }] },
+  'kings-gambit::3::c6@5': { ...KG_FALKBEER, beats: [
+    { atMove: 5, say: "…c6 offers a pawn to blast the centre open after …cxd5 — don't oblige. Nc3 develops and holds everything together, keeping the game on your terms with the d5-pawn cramping Black's centre.", sayShort: "…c6 — answer Nc3, decline.", arrows: [A('b1', 'c3')], highlights: [H('c3', KEY)] },
+    { atMove: 8, say: "Nf3 develops and eyes the loose f4-pawn. Material is level after …exf4, but your pieces flow out fast and the advanced d5-pawn keeps Black cramped — Bc4, O-O and Bxf4 follow for a sound, pleasant edge.", sayShort: "Nf3 — develop, level and easy.", highlights: [H('d5', KEY)] },
+  ] },
   'kings-gambit::3::Bb4@17': { ...KG_FALKBEER, beats: [{ atMove: 17, say: "Bb4 pins the c3-knight in the deep Falkbeer — calmly met by O-O-O or Qd2. You've consolidated with Be3 and Qe2; the open middlegame is balanced and yours to press from the more harmonious setup.", sayShort: "Bb4 — O-O-O and unpin, level.", highlights: [H('c3', KEY)] }] },
   'kings-gambit::3::O-O@19': { ...KG_FALKBEER, beats: [{ atMove: 19, say: "O-O — the dust settles in the Falkbeer with queens facing off. Your structure is sound, the pieces developed, and the game level with a pull for whoever grabs the open files first. Centralise the rooks and outplay.", sayShort: "O-O — grab the open files, outplay.", highlights: [H('e4', KEY)] }] },
   'kings-gambit::3::Nd7@17': { ...KG_FALKBEER, beats: [{ atMove: 17, say: "Nd7 retreats the active knight to regroup — exactly the lull you want. Castle long, line the rooks on the central files, and your consolidated position and the bishop pair give a small, lasting pull in the open game.", sayShort: "Nd7 — castle long, press the files.", highlights: [H('e4', KEY)] }] },
@@ -2132,26 +2204,30 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'kings-gambit::4::Bg4@11': { ...KG_DECLINED, beats: [{ atMove: 11, say: "Bg4 pins the knight in the positional KGD — meet it with h3 and Be3, or Nbd2. Your setup is solid, the f5 break looms, and you keep the kingside space and the easier plan. Out-manoeuvre the pinned position.", sayShort: "Bg4 — break the pin, aim f5.", highlights: [H('f5', KEY)] }] },
   'kings-gambit::4::a6@13': { ...KG_DECLINED, beats: [{ atMove: 13, say: "a6 — a slow move; you've already clamped with f5, grabbing kingside space and the half-open f-file. Build the attack: g4 and the rook-lift, or Bd2 and O-O-O for an opposite-wing storm. The space edge is yours to press.", sayShort: "a6 — press the f5 clamp, attack.", highlights: [H('f5', KEY), H('g4', SOFT)] }] },
   'kings-gambit::4::Nd4@13': { ...KG_DECLINED, beats: [{ atMove: 13, say: "Nd4 plants a knight in the centre — challenge it with Nxd4 or Bd2 and O-O-O. You've already grabbed kingside space with f5; trade off the intruder and storm the king with g4 and the rooks. The clamp is the asset.", sayShort: "Nd4 — trade it, storm with g4.", arrows: [A('f3', 'd4')], highlights: [H('d4', KEY), H('f5', SOFT)] }] },
-  'kings-gambit::5::d6@5': KG_ACCEPTED,
+  'kings-gambit::5::d6@5': KG_ACC_D6,
   'kings-gambit::5::Qe7@15': KG_KIESERITZKY,
-  'kings-gambit::5::d5@5': KG_ACCEPTED,
+  'kings-gambit::5::d5@5': KG_ACC_D5,
   'kings-gambit::5::Nxe4@11': KG_KIESERITZKY,
-  'kings-gambit::5::Nf6@5': KG_ACCEPTED,
-  'kings-gambit::5::Ne7@5': KG_ACCEPTED,
-  'kings-gambit::5::Be7@5': KG_ACCEPTED,
+  'kings-gambit::5::Nf6@5': KG_ACC_NF6,
+  'kings-gambit::5::Ne7@5': KG_ACC_NE7,
+  'kings-gambit::5::Be7@5': KG_ACC_BE7,
   'kings-gambit::5::Nc6@15': KG_KIESERITZKY,
   'kings-gambit::5::d5@11': KG_KIESERITZKY,
-  'kings-gambit::5::d6@9': KG_KIESERITZKY,
+  'kings-gambit::5::d6@9': { ...KG_KIESERITZKY, beats: [
+    { atMove: 9, say: "…d6 hits your dominant e5-knight and tries to blunt the attack — but it walks into a crushing little sequence. Nxg4! the knight skips back with tempo, snapping off the g4-pawn and keeping the initiative.", sayShort: "…d6 — answer Nxg4.", arrows: [A('e5', 'g4')], highlights: [H('g4', KEY)] },
+    { atMove: 10, say: "Nxg4 — a pawn regained and the knight still eyeing f6 and h6. Black challenges it with …Nf6; you welcome the trade that opens his king.", sayShort: "Nxg4 — pawn back, keep pressing.", highlights: [H('g4', SOFT)] },
+    { atMove: 12, say: "Nxf6+ — rip off Black's best defender with check; after …Qxf6 the kingside is shattered, the f-file wide open, and Bxf4, d4 and Nc3 pour in. The Kieseritzky attack rolls on with the king exposed.", sayShort: "Nxf6+ — wreck the kingside.", arrows: [A('f6', 'e8')], highlights: [H('f6', KEY)] },
+  ] },
   'kings-gambit::6::d6@13': KG_ALLGAIER,
   'kings-gambit::6::h5@13': KG_ALLGAIER,
-  'kings-gambit::6::d6@5': KG_ACCEPTED,
-  'kings-gambit::6::d5@5': KG_ACCEPTED,
+  'kings-gambit::6::d6@5': KG_ACC_D6,
+  'kings-gambit::6::d5@5': KG_ACC_D5,
   'kings-gambit::6::Qf6@13': KG_ALLGAIER,
   'kings-gambit::6::Nf6@13': KG_ALLGAIER,
-  'kings-gambit::6::Nf6@5': KG_ACCEPTED,
-  'kings-gambit::6::Ne7@5': KG_ACCEPTED,
+  'kings-gambit::6::Nf6@5': KG_ACC_NF6,
+  'kings-gambit::6::Ne7@5': KG_ACC_NE7,
   'kings-gambit::6::f3@13': KG_ALLGAIER,
-  'kings-gambit::6::Be7@5': KG_ACCEPTED,
+  'kings-gambit::6::Be7@5': KG_ACC_BE7,
   'kings-gambit::7::Bb4@13': KG_BISHOPS,
   'kings-gambit::7::Nxd5@11': KG_BISHOPS,
   'kings-gambit::7::Nc6@13': KG_BISHOPS,
@@ -2159,7 +2235,11 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'kings-gambit::7::Bb4@9': KG_BISHOPS,
   'kings-gambit::7::g5@13': KG_BISHOPS,
   'kings-gambit::7::Be6@13': KG_BISHOPS,
-  'kings-gambit::7::d5@5': KG_BISHOPS,
+  'kings-gambit::7::d5@5': { ...KG_BISHOPS, beats: [
+    { atMove: 5, say: "…d5 strikes the centre in the Bishop's Gambit, offering the pawn back to break open the position — so take it. Bxd5! the bishop snaps the pawn and keeps blazing down the a2-g8 diagonal at f7.", sayShort: "…d5 — answer Bxd5.", arrows: [A('c4', 'd5')], highlights: [H('d5', KEY)] },
+    { atMove: 6, say: "Bxd5 — the bishop grabs the centre pawn and trains on f7. Black hits it with …Nf6; you simply develop Nc3 and keep building.", sayShort: "Bxd5 — grab it, eye f7.", arrows: [A('d5', 'f7')], highlights: [H('f7', SOFT)] },
+    { atMove: 8, say: "Nc3 develops and guards e4 as Black pins with …Bb4. Material is level, but you hold the bishop pair, open lines and the f4-pawn still to round up — castle and let your faster development decide.", sayShort: "Nc3 — develop, level and active.", arrows: [A('c3', 'e4')], highlights: [H('e4', KEY)] },
+  ] },
   'kings-gambit::7::f3@15': KG_BISHOPS,
   'kings-gambit::7::Bc5@9': KG_BISHOPS,
 
