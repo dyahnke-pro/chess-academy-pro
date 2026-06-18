@@ -290,6 +290,20 @@ const IT_PIANISSIMO: SublineNarration = {
   sources: IT,
 };
 // Bb6@11 — cxd4 Bb6, Black retreats; White owns the broad d4-e4 centre.
+// Italian …Nf6@5 quiet Giuoco Pianissimo (data: d3 Bc5 c3 Bb6 O-O O-O Re1 d6 h3 h6 Nbd2 Ne7 Nf1 Ng6 ...) — student WHITE
+const IT_NF6_PIANISSIMO: SublineNarration = {
+  intro: {
+    say: "…Nf6 develops and eyes e4 — meet it with the quiet, positional Giuoco Pianissimo. d3 props the centre, c3 prepares a later d4, and the Nbd2-f1-g3 reroute swings the knight toward the kingside while the Bc4 keeps an eye on f7. A rich, lasting pull, no fireworks needed.",
+    sayShort: '…Nf6 — quiet Pianissimo, d3.',
+  },
+  beats: [
+    { atMove: 5, say: "…Nf6 develops and eyes e4 — meet it with the quiet Giuoco Pianissimo. d3 props the centre and keeps the tension.", sayShort: "…Nf6 — answer d3.", arrows: [A('c4', 'f7')], highlights: [H('f7', KEY)] },
+    { atMove: 6, say: "d3 — the slow build. c3 prepares a later d4, you castle, and the bishop on c4 keeps a permanent eye on f7 as you plan the knight reroute.", sayShort: "d3 — slow build, eye f7.", highlights: [H('d3', KEY)] },
+    { atMove: 18, say: "Nf1 begins the classic knight reroute toward g3, heading for f5 and h5, while Bb3 keeps the bishop on the a2-g8 diagonal.", sayShort: "Nf1 — reroute toward g3.", arrows: [A('f1', 'g3')], highlights: [H('g3', KEY)] },
+    { atMove: 22, say: "Ng3 completes the reroute, the knight eyeing f5 and h5. With Bb3, the rooks centralised and the kingside build-up underway, you press a comfortable, lasting Italian initiative.", sayShort: "Ng3 — eye f5, build kingside.", arrows: [A('g3', 'f5')], highlights: [H('f5', KEY)] },
+  ],
+  sources: IT,
+};
 const IT_GIUOCO_BB6: SublineNarration = {
   intro: {
     say: "…Bb6 — Black tucks the bishop back to safety, leaving you with the prize: a broad, mobile d4-e4 pawn centre. This is the whole point of the c3-d4 Giuoco. Roll the pawns — d5 to gain space and cramp the c6-knight, or develop with Nc3 and pile up — and use your central majority to squeeze Black off the board.",
@@ -1851,8 +1865,8 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   // ── Italian Game ──
   'italian-game::4::Bc5@5': IT_GP_BC5,
   'italian-game::5::Bc5@5': IT_GP_BC5,
-  'italian-game::1::Nf6@5': IT_TWO_KNIGHTS,
-  'italian-game::4::Nf6@5': IT_TWO_KNIGHTS,
+  'italian-game::1::Nf6@5': IT_NF6_PIANISSIMO,
+  'italian-game::4::Nf6@5': IT_NF6_PIANISSIMO,
   'italian-game::2::Be7@5': IT_HUNGARIAN,
   'italian-game::3::Be7@5': IT_HUNGARIAN,
   'italian-game::2::O-O@9': { ...IT_PIANISSIMO, beats: [{ atMove: 9, say: "O-O — both sides settle into the quiet Pianissimo. Play the modern plan: a3 and c3 to prepare a clamping b4 or d4, the Nbd2-f1-g3 tour to the kingside, and Re1 behind the e-pawn. Tiny, lasting space is the whole game.", sayShort: "O-O — a3, c3, the knight tour.", arrows: [A('c4', 'f7')], highlights: [H('d4', KEY)] }] },
@@ -3014,8 +3028,8 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'italian-game::0::d6@7': COV_IT_D6,
   'italian-game::1::d6@7': COV_IT_D6,
   'italian-game::6::d6@7': COV_IT_D6,
-  'italian-game::2::Nf6@5': COV_IT_NF6,
-  'italian-game::3::Nf6@5': COV_IT_NF6,
+  'italian-game::2::Nf6@5': IT_NF6_PIANISSIMO,
+  'italian-game::3::Nf6@5': IT_NF6_PIANISSIMO,
   'two-knights-defence::1::Bb5@4': COV_TK_BB5,
   'two-knights-defence::2::Bb5@4': COV_TK_BB5,
   'two-knights-defence::3::Bb5@4': COV_TK_BB5,
