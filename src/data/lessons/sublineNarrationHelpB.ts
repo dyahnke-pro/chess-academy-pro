@@ -97,6 +97,29 @@ const STAUNTON_E6: SN = {
   ],
   sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
 };
+// Bg5 lines where Black holds e4 — White strikes its base with f3.
+// …g6: d4 f5 e4 fxe4 Nc3 Nf6 Bg5 g6 f3   |   …c6: …Bg5 c6 f3
+const STAUNTON_F3: SN = {
+  intro: {
+    say: "Black hangs onto the e4-pawn, so undermine it at the base: f3. The whole Staunton idea is that the extra pawn is a liability — once you play f3 and the centre clears, you regain it with a lead in development, the open f-file aimed at f7, and Black's …f5-weakened kingside to attack. The pawn was never the point.",
+    sayShort: 'Hold the pawn? — f3 wins it back.',
+  },
+  beats: [
+    { atMove: 8, say: "f3 — striking the e4-pawn at its base. As the centre opens you'll round the pawn back up with your pieces already developed and the f-file pointing at Black's king. The Staunton gambit collects its investment with interest.", highlights: [H('e4', KEY)] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+// Bg5 line, …Nc6.  d4 f5 e4 fxe4 Nc3 Nf6 Bg5 Nc6 d5 Ne5 Qe2 Nf7 Bxf6 exf6 Nxe4
+const STAUNTON_NC6: SN = {
+  intro: {
+    say: "…Nc6 develops but ignores the e4-pawn's fate. Punish the loose play: d5 kicks the knight with gain of tempo, and after the trades Nxe4 simply restores material. You come out with more space, the bishop pair traded into a lead, and the open f-file — a clean Staunton dividend.",
+    sayShort: '…Nc6 — d5 kicks, Nxe4 regains.',
+  },
+  beats: [
+    { atMove: 8, say: "d5 — shoving the c6-knight offside with tempo before you scoop the e4-pawn back. …Nc6 spent a move on a piece that now has to retreat, and you convert the time into the better game.", highlights: [H('d5', ATK)] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
 
 export const SUBLINE_NARRATION_HELP_B: Record<string, SN> = {
   // anti-Budapest
@@ -125,4 +148,10 @@ export const SUBLINE_NARRATION_HELP_B: Record<string, SN> = {
   'anti-dutch-staunton::0::e6@7': STAUNTON_E6,
   'anti-dutch-staunton::1::e6@7': STAUNTON_E6,
   'anti-dutch-staunton::2::e6@7': STAUNTON_E6,
+  'anti-dutch-staunton::0::g6@7': STAUNTON_F3,
+  'anti-dutch-staunton::2::g6@7': STAUNTON_F3,
+  'anti-dutch-staunton::0::c6@7': STAUNTON_F3,
+  'anti-dutch-staunton::1::c6@7': STAUNTON_F3,
+  'anti-dutch-staunton::1::Nc6@7': STAUNTON_NC6,
+  'anti-dutch-staunton::2::Nc6@7': STAUNTON_NC6,
 };
