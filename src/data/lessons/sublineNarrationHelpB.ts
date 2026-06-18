@@ -187,7 +187,162 @@ const ANTI_CAT_NC3: SN = {
   sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
 };
 
+// ── anti-Nimzo Qc2 (Classical / Capablanca, student WHITE) ──────────────────
+// Spine: d4 Nf6 c4 e6 Nc3 Bb4 Qc2. The whole point of Qc2 is that if Black ever
+// plays …Bxc3+, the QUEEN recaptures — no doubled c-pawns, and White banks the
+// bishop pair with a clean structure. Board-verified vs course-sublines.json.
+const NIMZO_WIKI = 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence';
+
+// 5…d5 — Black leaves the Nimzo for the Ragozin; Bg5 pin nets a clean pawn.
+const NQ_RAGOZIN: SN = {
+  intro: {
+    say: "…d5 leaves the Nimzo for the Ragozin — Black pins your c3-knight to lean on the centre. Answer with Bg5, a pin of your own on the f6-knight. The forcing trades that follow hand you an extra, healthy pawn while Black's kingside is left shattered with doubled f-pawns.",
+    sayShort: '…d5 Ragozin — Bg5, win a pawn.',
+  },
+  beats: [
+    { atMove: 6, say: "Bg5 develops with a pin of its own: the f6-knight is tied to the d8-queen down the diagonal, so Black can no longer comfortably prop up d5.", arrows: [A('g5', 'f6')], highlights: [H('f6', KEY)] },
+    { atMove: 12, say: "Take the pinned knight. After the queenside trades, Black must recapture with …gxf6 — splitting the kingside into permanently doubled, weak pawns.", highlights: [H('f6', ATK)] },
+    { atMove: 16, say: "The king sits safely on e2: no enemy minor pieces remain to harass it, and you own the open b- and c-files plus a clean extra pawn.", highlights: [H('e2', KEY)] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:tac-pin', NIMZO_WIKI],
+};
+
+// 7…d5 — transposes to a QGD/Carlsbad; quiet space edge, Bb2 + c-file.
+const NQ_D5: SN = {
+  intro: {
+    say: "…d5 steers into a Queen's Gambit Declined structure — solid but passive. Keep your pieces harmonious, fianchetto the dark bishop to b2 behind the centre, and grind on the half-open c-file with a lasting space advantage.",
+    sayShort: '…d5 — QGD: Bb2 and the c-file.',
+  },
+  beats: [
+    { atMove: 12, say: "Release the tension. After …exd5 Black holds the slightly loose Carlsbad centre, and the c-file opens up for your rooks to work.", highlights: [H('d5', KEY)] },
+    { atMove: 22, say: "The bishop swings to b2, lining up on the long diagonal behind the knight — once that knight steps aside, the diagonal points straight at Black's king.", highlights: [H('b2', KEY)] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-open-file', NIMZO_WIKI],
+};
+
+// 7…c5 (and the 9…Bxc5 move-order) — dxc5, then a3/b4 with tempo + e4 centre.
+const NQ_C5: SN = {
+  intro: {
+    say: "…c5 strikes at your centre, but dxc5 and the recapture …Bxc5 just gain you time: that bishop becomes a target for a3 and b4, you plant a pawn on e4, and your smoother development leaves you comfortably better.",
+    sayShort: '…c5 — dxc5, then a3-b4 with tempo.',
+  },
+  beats: [
+    { atMove: 8, say: "Take the pawn. Black recaptures with the bishop, but that piece is now a hook for a3 and a later b4.", highlights: [H('c5', KEY)] },
+    { atMove: 14, say: "a3 prepares b4 — gaining queenside space and nudging the c5-bishop back to a passive square.", highlights: [H('c5', ATK)] },
+    { atMove: 22, say: "Development complete, e4 stakes out the full centre. Your pieces are ready and Black has no real counterplay.", highlights: [H('e4', KEY)] },
+  ],
+  sources: ['concept:pos-tempo', 'concept:pos-center', NIMZO_WIKI],
+};
+
+// 5…c5 — a Benoni try; d5 clamps, active bishops on c4/h6.
+const NQ_C5_5: SN = {
+  intro: {
+    say: "…c5 invites a Benoni. Push d5 to clamp the centre on your terms; the advanced d-pawn and your active bishops give you a durable space advantage and pressure on Black's king.",
+    sayShort: '…c5 — d5 clamps the centre.',
+  },
+  beats: [
+    { atMove: 6, say: "d5 gains space and fixes the centre your way — Black's …exd5 only opens lines for your better-placed pieces.", highlights: [H('d5', KEY)] },
+    { atMove: 16, say: "Bc4 takes aim from behind, supporting the d5-pawn and preparing to prise open the centre.", highlights: [H('c4', KEY), H('d5', SOFT)] },
+    { atMove: 22, say: "Bh6 plants beside Black's king, hitting the weak dark squares around g7 that …g6 left behind.", highlights: [H('h6', KEY), H('g7', ATK)] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', NIMZO_WIKI],
+};
+
+// 7…d6 — a modest setup; the Na4 manoeuvre nets the bishop pair.
+const NQ_D6: SN = {
+  intro: {
+    say: "…d6 is a restrained, modest setup. Steer for the bishop pair: after …c5, the Na4 manoeuvre swaps off Black's dark-squared bishop, leaving you two bishops and the more pleasant game.",
+    sayShort: '…d6 — Na4 nets the bishop pair.',
+  },
+  beats: [
+    { atMove: 14, say: "Na4 targets the c5-bishop — Black's most active piece — to win the bishop pair.", arrows: [A('a4', 'c5')], highlights: [H('c5', KEY)] },
+    { atMove: 16, say: "Take the bishop. With two bishops against bishop and knight, patiently open the position to give them scope.", highlights: [H('c5', ATK)] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-prophylaxis', NIMZO_WIKI],
+};
+
+// 7…Nc6 — blocks Black's own c-pawn; a3 wins the pair, then opposite-side storm.
+const NQ_NC6: SN = {
+  intro: {
+    say: "…Nc6 blocks Black's own c-pawn — an awkward square for it. Play a3 to win the bishop pair after …Bxc3, castle queenside, and roll the kingside pawns with g4 while Black's break crawls.",
+    sayShort: '…Nc6 — a3, take the pair, g4 storm.',
+  },
+  beats: [
+    { atMove: 12, say: "a3 forces the question: Black retreats or trades on c3, handing you the bishop pair either way.", highlights: [H('b4', KEY)] },
+    { atMove: 16, say: "Castle queenside, into the attack — with the bishops aimed at the kingside, g4-g5 will come crashing through.", highlights: [H('c1', KEY)] },
+    { atMove: 22, say: "g4 launches the storm; Black's …e5 and …a5 are too slow to race your kingside avalanche.", highlights: [H('g4', ATK)] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:att-kingside-storm', NIMZO_WIKI],
+};
+
+// 7…b6 — swap-and-pressure-e4 plan; e4 centre, doubled c-pawns but f4-f5 attack.
+const NQ_B6: SN = {
+  intro: {
+    say: "…b6 prepares …Bxc3 and pressure on e4 from b7. Let it happen: e4 builds a broad centre, and though you accept doubled c-pawns, the bishop pair plus a quick f4-e5-f5 storm gives you a powerful kingside initiative.",
+    sayShort: '…b6 — e4 centre, f4-f5 storm.',
+  },
+  beats: [
+    { atMove: 8, say: "e4 grabs the whole centre at once — the Qc2 dividend: the e-pawn rolls up unhindered by any pin.", highlights: [H('e4', KEY)] },
+    { atMove: 12, say: "Bd3 backs the e4-pawn and points at the kingside, the front piece of your two-bishop attacking battery.", highlights: [H('d3', KEY)] },
+    { atMove: 22, say: "f5 tears open lines as Black castles into the other wing — your attack simply arrives first.", highlights: [H('f5', ATK)] },
+  ],
+  sources: ['concept:pos-center', 'concept:att-kingside-storm', NIMZO_WIKI],
+};
+
+// 7…O-O — the main line; e4 then e5 with a big-centre clamp.
+const NQ_OO: SN = {
+  intro: {
+    say: "…O-O is the main line. Grab the centre with e4; after …d5 e5 the knight is kicked to e4 and you build a big space advantage. The play is sharp — keep your bishops active and target the kingside that …c5 leaves loose.",
+    sayShort: '…O-O — e4, e5, big-centre clamp.',
+  },
+  beats: [
+    { atMove: 8, say: "e4 takes the centre — once more the Qc2 point, the e-pawn striding forward without pin worries.", highlights: [H('e4', KEY)] },
+    { atMove: 10, say: "e5 gains space and drives the f6-knight to e4 — active-looking, but a piece you can challenge at leisure.", highlights: [H('e5', KEY)] },
+    { atMove: 18, say: "Bf4 develops behind the e5-spearhead, eyeing the dark squares near Black's king; the bishops are your trumps in the melee.", highlights: [H('f4', KEY)] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', NIMZO_WIKI],
+};
+
+// 9…Na6 (after 7…c5 8.dxc5) — rim knight; fianchetto + bishop pair.
+const NQ_NA6: SN = {
+  intro: {
+    say: "…Na6 regains the c5-pawn but parks the knight on the rim. Fianchetto with g3 and Bg2: you bank the bishop pair when Black trades on c3, and the g2-bishop rakes the long light diagonal against Black's centre.",
+    sayShort: '…Na6 — g3, Bg2, take the pair.',
+  },
+  beats: [
+    { atMove: 10, say: "g3 prepares the fianchetto — the bishop belongs on g2, bearing down the long light-squared diagonal.", highlights: [H('g2', KEY)] },
+    { atMove: 12, say: "Bg2 rakes the open diagonal to b7; with the bishop pair coming, the light squares belong to you.", arrows: [A('g2', 'b7')], highlights: [H('b7', ATK)] },
+    { atMove: 14, say: "a3 invites …Bxc3, when Qxc3 keeps the pawns intact and leaves you the two bishops.", highlights: [H('b4', KEY)] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pawn-fianchetto', NIMZO_WIKI],
+};
+
+// 9…Qc7 (after 7…c5 8.dxc5) — queen regains the pawn slowly; develop and dominate.
+const NQ_QC7: SN = {
+  intro: {
+    say: "…Qc7 wins the c5-pawn back with the queen, but at the cost of time. Just develop: a3 hits the bishop, e4 claims the centre, and your lead in development leaves you comfortably better while Black scrambles to catch up.",
+    sayShort: '…Qc7 — develop fast, claim the centre.',
+  },
+  beats: [
+    { atMove: 10, say: "a3 questions the b4-bishop with tempo, before Black is anywhere near organised.", highlights: [H('b4', KEY)] },
+    { atMove: 12, say: "e4 seizes the full centre — your pieces flow out while the queen sortie cost Black development.", highlights: [H('e4', KEY)] },
+    { atMove: 16, say: "Bg5 pressures the f6-knight and completes your development; the better-coordinated side stands clearly better here.", arrows: [A('g5', 'f6')], highlights: [H('f6', ATK)] },
+  ],
+  sources: ['concept:pos-tempo', 'concept:pos-development', NIMZO_WIKI],
+};
+
 export const SUBLINE_NARRATION_HELP_B: Record<string, SN> = {
+  // anti-Nimzo Qc2 (Classical / Capablanca) — student WHITE, 10 lines / 24 keys
+  'anti-nimzo-qc2::0::d5@5': NQ_RAGOZIN, 'anti-nimzo-qc2::1::d5@5': NQ_RAGOZIN, 'anti-nimzo-qc2::2::d5@5': NQ_RAGOZIN,
+  'anti-nimzo-qc2::0::d5@7': NQ_D5, 'anti-nimzo-qc2::2::d5@7': NQ_D5,
+  'anti-nimzo-qc2::0::c5@7': NQ_C5, 'anti-nimzo-qc2::1::c5@7': NQ_C5, 'anti-nimzo-qc2::2::Bxc5@9': NQ_C5,
+  'anti-nimzo-qc2::0::c5@5': NQ_C5_5, 'anti-nimzo-qc2::1::c5@5': NQ_C5_5, 'anti-nimzo-qc2::2::c5@5': NQ_C5_5,
+  'anti-nimzo-qc2::0::d6@7': NQ_D6, 'anti-nimzo-qc2::1::d6@7': NQ_D6, 'anti-nimzo-qc2::2::d6@7': NQ_D6,
+  'anti-nimzo-qc2::0::Nc6@7': NQ_NC6, 'anti-nimzo-qc2::1::Nc6@7': NQ_NC6, 'anti-nimzo-qc2::2::Nc6@7': NQ_NC6,
+  'anti-nimzo-qc2::0::b6@7': NQ_B6, 'anti-nimzo-qc2::1::b6@7': NQ_B6, 'anti-nimzo-qc2::2::b6@7': NQ_B6,
+  'anti-nimzo-qc2::1::O-O@7': NQ_OO, 'anti-nimzo-qc2::2::O-O@7': NQ_OO,
+  'anti-nimzo-qc2::2::Na6@9': NQ_NA6,
+  'anti-nimzo-qc2::2::Qc7@9': NQ_QC7,
   // anti-Catalan — Open Catalan dxc4@7 (12) + Ragozin/Nimzo transpositions (4)
   'anti-catalan-black::0::Nf3@6': ANTI_CATALAN, 'anti-catalan-black::0::Ne5@10': ANTI_CATALAN, 'anti-catalan-black::0::Qa4+@8': ANTI_CATALAN, 'anti-catalan-black::0::a4@10': ANTI_CATALAN,
   'anti-catalan-black::1::Nf3@6': ANTI_CATALAN, 'anti-catalan-black::1::Nf3@8': ANTI_CATALAN, 'anti-catalan-black::1::Nf3@10': ANTI_CATALAN, 'anti-catalan-black::1::Nd2@10': ANTI_CATALAN, 'anti-catalan-black::1::Be3@12': ANTI_CATALAN, 'anti-catalan-black::1::Qd3@12': ANTI_CATALAN, 'anti-catalan-black::1::Nf3@12': ANTI_CATALAN, 'anti-catalan-black::1::Nc3@10': ANTI_CATALAN,
