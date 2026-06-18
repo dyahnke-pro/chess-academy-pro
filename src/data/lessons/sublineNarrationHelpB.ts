@@ -74,6 +74,30 @@ const ALBIN_TABIYA: SN = {
   sources: ['concept:pos-initiative', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Albin_Countergambit'],
 };
 
+// ── Staunton Gambit vs Dutch (student WHITE) — gambit the e-pawn for development.
+// …d5 grab.  d4 f5 e4 fxe4 Nc3 d5 Qh5+ g6 Qxd5 Nf6 Qxd8+ Kxd8
+const STAUNTON_D5: SN = {
+  intro: {
+    say: "…d5 — Black tries to cling to the extra pawn behind a big centre. Punish it at once: Qh5+ forces …g6 (shredding the light squares Black's …f5 already loosened), and Qxd5 wins the pawn straight back. After Qxd8+ the queens come off and you're simply better — a healthy structure against Black's wrecked kingside.",
+    sayShort: '…d5 — Qh5+ then Qxd5 regains it.',
+  },
+  beats: [
+    { atMove: 8, say: "Qxd5 — the gambit pawn is back, and Qxd8+ next trades queens into an ending where your structure is clean and Black's …f5-…g6 kingside is full of holes. The Staunton's investment pays off with no risk at all.", highlights: [H('d5', KEY)] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+// Bg5 line, …e6.  d4 f5 e4 fxe4 Nc3 Nf6 Bg5 e6 Nxe4 Be7 Bxf6 Bxf6 c3 O-O Nf3 Nc6 h4
+const STAUNTON_E6: SN = {
+  intro: {
+    say: "…e6 — Black returns the pawn to develop solidly. That's fine by you: Nxe4 regains it immediately, and the Staunton has done its job — you have a lead in development, the half-open f-file, and the lingering weakness of Black's …f5 to work against. Pure attacking compensation, pawn already recovered.",
+    sayShort: '…e6 — Nxe4 regains it, you lead.',
+  },
+  beats: [
+    { atMove: 8, say: "Nxe4 — the pawn's back and the gambit was really just development bait. You stand with the freer pieces, the open f-file pointing at f7, and Black's loosened kingside to target. The Staunton paid for itself.", highlights: [H('e4', KEY)] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
+};
+
 export const SUBLINE_NARRATION_HELP_B: Record<string, SN> = {
   // anti-Budapest
   'anti-budapest::0::g5@7': AB_G5,
@@ -94,4 +118,11 @@ export const SUBLINE_NARRATION_HELP_B: Record<string, SN> = {
   'albin-countergambit::0::Bg5@14': ALBIN_TABIYA,
   'albin-countergambit::0::b3@14': ALBIN_TABIYA,
   'albin-countergambit::0::Re1@14': ALBIN_TABIYA,
+  // Staunton Gambit vs Dutch
+  'anti-dutch-staunton::0::d5@5': STAUNTON_D5,
+  'anti-dutch-staunton::1::d5@5': STAUNTON_D5,
+  'anti-dutch-staunton::2::d5@5': STAUNTON_D5,
+  'anti-dutch-staunton::0::e6@7': STAUNTON_E6,
+  'anti-dutch-staunton::1::e6@7': STAUNTON_E6,
+  'anti-dutch-staunton::2::e6@7': STAUNTON_E6,
 };
