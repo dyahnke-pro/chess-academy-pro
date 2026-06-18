@@ -58,35 +58,6 @@ const SLAV_E3: SublineNarration = {
   ],
   sources: SLAV_SRC,
 };
-// Slav, sharp Nc3 (the …dxc4 + …b5 / Botvinnik & Geller complex). d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 Bg5 ...
-const SLAV_NC3: SublineNarration = {
-  intro: {
-    say: "Nc3 — the sharp Slav, steering toward the razor-edged Botvinnik and Anti-Moscow tangles. White develops aggressively and pins with Bg5. The principled answer is to grab the pawn with …dxc4 and hold it with …b5, daring White to prove the gambit while you cling to the extra material behind a wall of queenside pawns. Theory-heavy, but Black is doing fine everywhere.",
-    sayShort: 'Nc3 — grab …dxc4, hold with …b5.',
-  },
-  beats: [
-    { atMove: 11, say: "…dxc4 — you snatch the gambit pawn and step into the Botvinnik, the sharpest forest in all of chess. White will lash out with e4 and the pieces; your whole plan is to hold the extra pawn behind a coming wall of …b5 and queenside pawns. Nerve-wracking, deeply analysed — and fully sound for Black.", highlights: [H('c4', ATK)] },
-    { atMove: 13, say: "…g5! — the Botvinnik thunderbolt, smashing into the h4-bishop and seizing kingside space in the same breath. You've taken White's pawn and now you punch straight back; the board erupts into chaos, and the theory verdict is clear: Black holds.", highlights: [H('g5', ATK), H('h4', KEY)] },
-  ],
-  sources: SLAV_SRC,
-};
-const ENG_SRC = ['concept:pos-space', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/English_Opening'];
-// English (student White) — reversed-Sicilian …d6 setups.
-const ENG_D6: SublineNarration = {
-  intro: {
-    say: "…d6 — Black settles into a reversed-Sicilian setup. This is the English at its finest: you're a full tempo up on a Sicilian, so play it like White with an extra move in hand. Expand on the queenside with Rb1 and b4, lean on the long diagonal with the g2-bishop, and use that spare tempo to get there first.",
-    sayShort: '…d6 — expand b4, press the long diagonal.',
-  },
-  sources: ENG_SRC,
-};
-// English (student White) — Reversed Dragon …Be6 propping d5.
-const ENG_BE6: SublineNarration = {
-  intro: {
-    say: "…Be6 — Black props up the d5-square in the Reversed Dragon. You're effectively playing a Sicilian Dragon a tempo up: chip at the centre, contest the long light diagonal with your g2-bishop, and use the extra move to seize exactly the initiative the White side only dreams of in the real Dragon.",
-    sayShort: '…Be6 — a Dragon up a tempo; press.',
-  },
-  sources: ENG_SRC,
-};
 
 const QP_SRC = ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit'];
 // Nimzo, White's anti-Nimzo Nf3 (delaying Nc3). d4 Nf6 c4 e6 Nf3 d5 Nc3 Be7
@@ -100,28 +71,6 @@ const NIMZO_NF3: SublineNarration = {
   ],
   sources: QP_SRC,
 };
-// Queen's Indian → Nc3 transposing to a Nimzo. d4 Nf6 c4 e6 Nc3 Bb4
-const QID_NC3: SublineNarration = {
-  intro: {
-    say: "Nc3 — and this slides straight into Nimzo-Indian territory. Answer …Bb4, pinning the knight and contesting e4 just as you would in the Nimzo proper. The Queen's Indian and the Nimzo are sisters — whichever way White moves, you reach a comfortable, well-charted structure with easy equality.",
-    sayShort: 'Nc3 — transpose: pin with …Bb4.',
-  },
-  beats: [
-    { atMove: 5, say: "…Bb4 — and you've transposed into a full Nimzo-Indian. The bishop pins the c3-knight, the piece that controls the central e4-square, so right away you're fighting for the key light square White wants. The plan is pure Nimzo: trade the bishop for the knight to wreck White's c-pawns, or hold the pin and keep squeezing. Either road is comfortable.", highlights: [H('c3', KEY), H('e4', SOFT)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense'],
-};
-// Scotch declined with …d6 (student White). e4 e5 Nf3 Nc6 d4 d6 Bb5 Bd7
-const SCOTCH_D6: SublineNarration = {
-  intro: {
-    say: "…d6 — Black declines the Scotch tension passively, propping up e5 instead of taking on d4. Make him pay for the meekness: Bb5 pins the c6-knight, you keep the central pawn duo, and with a clean space edge and faster development you press a comfortable, risk-free pull.",
-    sayShort: '…d6 — pin Bb5, keep the space.',
-  },
-  beats: [
-    { atMove: 6, say: "Bb5 — clamp down on the passivity. Black's meek …d6 left the c6-knight tied to defending e5, so you pin it to the king and pile on. With your pawns already abreast on d4 and e4 you simply own more space and quicker development — squeeze the cramped position and the small edge grows.", highlights: [H('c6', KEY), H('e5', SOFT)] },
-  ],
-  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scotch_Game'],
-};
 // Grünfeld Exchange — the critical main line (student Black).
 // d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Bc4 c5
 const GRUN_EXCHANGE: SublineNarration = {
@@ -133,14 +82,6 @@ const GRUN_EXCHANGE: SublineNarration = {
     { atMove: 11, say: "…Bg7 — the soul of the Grünfeld. The bishop sits on the long diagonal with a clear, open run straight at d4, the keystone of White's whole centre. From here everything else flows — …c5, …Nc6, …Bg4 all pour onto that pawn until it falls, and a fallen centre means a lost game for White.", arrows: [A('g7', 'd4')], highlights: [H('d4', KEY)] },
   ],
   sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
-};
-// Grünfeld Fianchetto (quiet g3). d4 Nf6 c4 g6 g3 Bg7 Bg2 O-O
-const GRUN_G3: SublineNarration = {
-  intro: {
-    say: "g3 — the quiet Fianchetto Grünfeld, where White declines the big centre and develops calmly. There's no pressure to react to, so equalise cleanly: castle, hit the centre with …d5, and if White grabs on c4 you regain it comfortably. A balanced, healthy game with no weaknesses.",
-    sayShort: 'g3 — castle and break …d5.',
-  },
-  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
 };
 
 // French — White's 3rd-move SYSTEM choices surface as the top deviation across
@@ -176,46 +117,8 @@ const FR_TARRASCH: SublineNarration = {
   sources: FR_SRC,
 };
 
-const RUY_SRC = ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'];
-const IT_SRC = ['book:italian-game', 'concept:pos-development', 'https://www.chess.com/openings/Italian-Game'];
 const SIC_SRC = ['concept:pos-initiative', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence'];
 
-// Ruy (student White). The same Black replies surface across several tabs.
-// …Be7 — the Closed Ruy main line (72%). e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7
-const RUY_BE7: SublineNarration = {
-  intro: {
-    say: "Be7 — the Closed Ruy Lopez, the main road and the richest middlegame in all of chess. Black develops solidly and prepares to castle. Now you unfurl the great Spanish build-up: c3 to prepare d4, Re1 to back the e-pawn, and the famous knight tour Nbd2-f1-g3, swinging the knight toward the kingside. You're playing for a slow, suffocating central clamp.",
-    sayShort: 'Be7 — Closed Ruy: build c3 and d4.',
-  },
-  sources: RUY_SRC,
-};
-// …Na5 — the Chigorin (18%). …c3 Na5
-const RUY_NA5: SublineNarration = {
-  intro: {
-    say: "Na5 — the Chigorin, the classical Closed Ruy plan: Black chases your prized light-squared bishop off the a2-g8 diagonal. Don't allow the trade — retreat Bc2, where the bishop swings onto the b1-h7 diagonal aimed at Black's king instead. The knight on a5 is offside on the rim, and you'll claim the centre with d4 while it sulks.",
-    sayShort: 'Na5 — keep the bishop: Bc2.',
-  },
-  sources: RUY_SRC,
-};
-// Italian (student White). …d6 — the quiet Pianissimo (28%). e4 e5 Nf3 Nc6 Bc4 Bc5 c3 d6
-const IT_D6: SublineNarration = {
-  intro: {
-    say: "…d6 — the quiet Giuoco Pianissimo, where Black props the e5-pawn and keeps everything solid. No fireworks, so you build slowly: d3, the Ruy-style knight tour Nbd2-f1-g3, castle, and prepare a later d4 or kingside expansion. This is the modern main-line Italian — patient maneuvering where small, lasting space is the whole game.",
-    sayShort: '…d6 — quiet Italian: build slowly.',
-  },
-  sources: IT_SRC,
-};
-// …Nf6 — the Two Knights (44%). e4 e5 Nf3 Nc6 Bc4 Nf6
-const IT_NF6: SublineNarration = {
-  intro: {
-    say: "…Nf6 — the Two Knights, the aggressive reply, striking your e4-pawn at once and inviting a brawl. You have a real choice here: the swashbuckling Ng5 lunging straight at f7, or the principled centre break d4 (both covered in the variation lessons). Black has picked the sharpest battleground in the Italian — meet it head-on.",
-    sayShort: '…Nf6 — Two Knights: d4 or Ng5.',
-  },
-  beats: [
-    { atMove: 5, say: "…Nf6 hits e4 immediately, refusing the quiet game. This is the move that makes the Italian sharp — and both the d4 break and the f7-lunge Ng5 are yours to choose.", highlights: [H('e4', KEY)] },
-  ],
-  sources: IT_SRC,
-};
 // Sicilian (student Black). Bd3 — an offbeat White 6th. Appears on every
 // Najdorf/Dragon tab via the shared fork. e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Bd3 Nc6
 const SIC_BD3: SublineNarration = {
@@ -229,17 +132,6 @@ const SIC_BD3: SublineNarration = {
   sources: SIC_SRC,
 };
 
-// Two Knights → White switches to a Ruy with Bb5 (student Black).
-const TK_BB5: SublineNarration = {
-  intro: {
-    say: "Bb5 — White sidesteps the Two Knights and transposes to a Ruy Lopez. Nothing to fear: put the question with …a6, and you're in familiar Spanish territory. Keep the bishop guessing, develop solidly, and the game is balanced and well-charted.",
-    sayShort: "Bb5 — it's a Ruy: …a6.",
-  },
-  beats: [
-    { atMove: 5, say: "…a6 — the Morphy move, putting the bishop on the spot at once. After Ba4 it clings to the diagonal, but now you hold …b5 in reserve to kick it away whenever you please. In one move you've turned White's anti-Italian into a main-line Ruy Lopez where you know every plan.", highlights: [H('b5', KEY)] },
-  ],
-  sources: ['book:italian-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Two_Knights_Defense'],
-};
 // Anti-Benoni: White recaptures on d5 with the knight (student Black).
 const BENONI_NXD5: SublineNarration = {
   intro: {
@@ -307,38 +199,6 @@ const BUDAPEST_D5: SublineNarration = {
   sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
 };
 
-// Four Knights, Rubinstein counter (student White).
-const FK_ND4: SublineNarration = {
-  intro: {
-    say: "…Nd4 — the Rubinstein, Black's sharpest Four Knights try: instead of defending e5 he counterattacks your Bb5 outright. The clean answer is Nxd4 exd4, when Black's recaptured pawn lands on d4 as a long-term target and you hold the easier game; if you prefer, Ba4 or Bc4 keeps the pieces on. No tricks to fear — just a small, safe pull.",
-    sayShort: '…Nd4 — Nxd4, target the d4-pawn.',
-  },
-  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Four_Knights_Game'],
-};
-// Old Indian, quiet h3 (student Black) — terminus deviation.
-const OLDIND_H3: SublineNarration = {
-  intro: {
-    say: "h3 — a quiet prophylactic luft in the Old Indian; White isn't forcing anything. Keep to the patient plan: regroup with …Re8 and …Bf8, prepare the …c6 and …exd4 breaks, and strike only when you're ready. The Old Indian is cramped but bombproof — you maneuver behind the lines and pick your own moment.",
-    sayShort: 'h3 — maneuver: …Re8, …Bf8, break later.',
-  },
-  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Old_Indian_Defense'],
-};
-// Réti — Black sets up a solid …e5 centre (student White).
-const RETI_BD6: SublineNarration = {
-  intro: {
-    say: "…Bd6 — Black props up a broad …e5 centre against your Réti. That's exactly what the hypermodern set-up wants: you let Black build the big centre so you can lean on it. With e4 already challenging and the g2-bishop raking the long diagonal, trade and press d5 and e5 — the Réti's whole bet is to undermine what you invited.",
-    sayShort: '…Bd6 — undermine the centre you invited.',
-  },
-  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
-};
-// King's Indian Attack — Black builds a big centre (student White).
-const KIA_E5: SublineNarration = {
-  intro: {
-    say: "…e5 — Black stakes out a big centre against your King's Indian Attack, and that's the soil the KIA grows in. Regroup behind your wall and turn to the kingside: the Nf1-g3 or Nh4 reroute, the f4 lever against e5, and the pawn storm that is the whole point of the system. Black's proud centre simply becomes the thing you attack around.",
-    sayShort: '…e5 — regroup, f4 and the kingside storm.',
-  },
-  sources: ['concept:pos-center', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
-};
 
 const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   // Caro-Kann, Advance Variation (var 1) — the Short System, White's most
@@ -493,55 +353,11 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   },
 
   // ── Ruy Lopez (student White) ──
-  'ruy-lopez::3::Be7@9': RUY_BE7,
-  'ruy-lopez::7::Be7@9': RUY_BE7,
-  'ruy-lopez::0::Na5@15': RUY_NA5,
-  'ruy-lopez::1::Na5@15': RUY_NA5,
-  'ruy-lopez::2::Na5@15': RUY_NA5,
   // …a6 — the Morphy Defence (71%). e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6
-  'ruy-lopez::4::a6@5': {
-    intro: {
-      say: "…a6 — the Morphy Defence, by far Black's main reply, putting the question to your bishop. The principled answer is Ba4: keep the bishop rather than trade it, holding the pressure on the c6-knight and reserving the strong retreat to b3. This is the gateway to the entire main-line Ruy.",
-      sayShort: '…a6 — keep the bishop: Ba4.',
-    },
-    beats: [
-      { atMove: 6, say: "Ba4 — retreat, but keep the bishop alive. It still eyes the c6-knight down the diagonal, with the powerful drop to b3 in reserve, aiming toward f7 and the centre. You decline the trade and keep every drop of Spanish pressure.", highlights: [H('c6', KEY)] },
-    ],
-    sources: RUY_SRC,
-  },
   // …d6 — Closed Ruy with …d6 (7%). e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 d6
-  'ruy-lopez::5::d6@11': {
-    intro: {
-      say: "…d6 — Black bolsters the e5-pawn in Closed-Ruy style before committing the knight. Nothing changes about your plan: c3 and d4 for the big centre, and the Nbd2-f1-g3 tour to the kingside. Solid from Black, but slightly passive — you take the space and the initiative.",
-      sayShort: '…d6 — build c3 and d4 anyway.',
-    },
-    sources: RUY_SRC,
-  },
-  'ruy-lopez::6::d6@11': {
-    intro: {
-      say: "…d6 — Black bolsters the e5-pawn in Closed-Ruy style before committing the knight. Nothing changes about your plan: c3 and d4 for the big centre, and the Nbd2-f1-g3 tour to the kingside. Solid from Black, but slightly passive — you take the space and the initiative.",
-      sayShort: '…d6 — build c3 and d4 anyway.',
-    },
-    sources: RUY_SRC,
-  },
   // bxc6 — the Exchange Ruy (12%). e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 bxc6 O-O
-  'ruy-lopez::8::bxc6@7': {
-    intro: {
-      say: "The Exchange Ruy — you've traded on c6 and …bxc6 recaptures. Here's your long-term trump: Black now has doubled c-pawns and a queenside majority that can never manufacture a passed pawn, while your clean kingside majority can. Castle, trade pieces, and steer for the endgame where that structural edge tells — Fischer's favourite way to play the Spanish.",
-      sayShort: 'bxc6 — play the Exchange endgame.',
-    },
-    beats: [
-      { atMove: 8, say: "O-O — and the plan is set: aim for the endgame. Your kingside majority is healthy and can roll to a passed pawn; Black's doubled c-pawns make his extra queenside pawn worthless. Trade pieces, keep the structure, grind it home.", highlights: [H('c6', KEY)] },
-    ],
-    sources: RUY_SRC,
-  },
 
   // ── Italian Game (student White) ──
-  'italian-game::0::d6@7': IT_D6,
-  'italian-game::1::d6@7': IT_D6,
-  'italian-game::6::d6@7': IT_D6,
-  'italian-game::2::Nf6@5': IT_NF6,
-  'italian-game::3::Nf6@5': IT_NF6,
 
   // ── Sicilian Najdorf + Dragon (student Black): the offbeat Bd3 ──
   'sicilian-najdorf::0::Bd3@8': SIC_BD3,
@@ -566,13 +382,6 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   'kings-indian-defence::1::Be2@8': KID_BE2,
   'kings-indian-defence::2::Nf3@8': KID_NF3,
   'kings-indian-defence::6::Nf3@8': KID_NF3,
-  'kings-indian-defence::4::Nc3@4': {
-    intro: {
-      say: "Nc3 — White heads straight into the main King's Indian. Nothing fancy is needed: complete the setup with …d6, castle, and play the thematic …e5 break. Once the centre locks, the King's Indian race is on — your kingside pawn storm against White's queenside expansion.",
-      sayShort: 'Nc3 — main KID: …d6, …O-O, …e5.',
-    },
-    sources: KID_SRC,
-  },
   'kings-indian-defence::3::e5@10': {
     intro: {
       say: "e5 — the Four Pawns Attack, White's most violent King's Indian try, throwing four pawns across the board. The overextension is its flaw: don't flinch, counterstrike with …dxe5 and the …c5 break, and those proud pawns become targets while White's loose centre comes crashing down.",
@@ -596,47 +405,8 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   },
 
   // ── Slav Defence (student Black) ──
-  'slav-defence::0::e3@6': SLAV_E3,
-  'slav-defence::2::e3@6': SLAV_E3,
-  'slav-defence::4::e3@6': SLAV_E3,
-  'slav-defence::5::e3@6': SLAV_E3,
-  'slav-defence::6::e3@6': SLAV_E3,
-  'slav-defence::3::Nc3@6': SLAV_NC3,
-  'slav-defence::7::Nc3@6': SLAV_NC3,
-  'slav-defence::1::Nc3@8': {
-    intro: {
-      say: "Nc3 in the Exchange Slav — White has already released the tension with cxd5, signalling for a quiet, symmetrical game. There's no danger: develop naturally, get the light bishop out with …Bf5, and contest the half-open c-file. The symmetry only looks drawish — with active pieces Black is the one who can press for more.",
-      sayShort: 'Nc3 — …Bf5, contest the c-file.',
-    },
-    sources: SLAV_SRC,
-  },
 
   // ── English Opening (student White) ──
-  'english-opening::2::d6@11': ENG_D6,
-  'english-opening::4::d6@9': ENG_D6,
-  'english-opening::0::Be6@13': ENG_BE6,
-  'english-opening::6::Be6@13': ENG_BE6,
-  'english-opening::1::Bd7@17': {
-    intro: {
-      say: "…Bd7 — Black completes a solid Symmetrical English setup. The game is balanced and maneuvering; the winning try is to make the first imbalance yourself. Roll the queenside with Rb1, b4 and a steady space grab, and turn your move-one head start into a lasting initiative on that wing.",
-      sayShort: '…Bd7 — grind the queenside with b4.',
-    },
-    sources: ENG_SRC,
-  },
-  'english-opening::7::Bd7@17': {
-    intro: {
-      say: "…Bd7 — Black completes a solid Symmetrical English setup. The game is balanced and maneuvering; the winning try is to make the first imbalance yourself. Roll the queenside with Rb1, b4 and a steady space grab, and turn your move-one head start into a lasting initiative on that wing.",
-      sayShort: '…Bd7 — grind the queenside with b4.',
-    },
-    sources: ENG_SRC,
-  },
-  'english-opening::3::f5@5': {
-    intro: {
-      say: "…f5 — the Reversed Grand Prix, Black grabbing kingside space aggressively. It's double-edged and slightly loosening: meet it calmly, finish your fianchetto, strike with d4 at the right moment, and the holes Black left around his own king become your targets.",
-      sayShort: '…f5 — stay calm, hit back with d4.',
-    },
-    sources: ['concept:pos-center', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/English_Opening'],
-  },
 
   // ── Nimzo-Indian (student Black) ──
   'nimzo-indian::0::Nf3@4': NIMZO_NF3,
@@ -646,22 +416,8 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   'nimzo-indian::5::Nf3@4': NIMZO_NF3,
   'nimzo-indian::6::Nf3@4': NIMZO_NF3,
   'nimzo-indian::7::Nf3@4': NIMZO_NF3,
-  'nimzo-indian::3::Bxf6@8': {
-    intro: {
-      say: "Bxf6 — White trades the pinning bishop to dent your structure. Recapture toward the centre with …Qxf6: yes, White takes the bishop pair, but you keep the Nimzo's real trump — you'll play …Bxc3 to saddle him with doubled c-pawns and then strike with …e5, a fine, fighting game where the structure is yours to exploit.",
-      sayShort: 'Bxf6 — …Qxf6; play on the c-pawns.',
-    },
-    sources: QP_SRC,
-  },
 
   // ── Queen's Indian (student Black) — Nc3 transposes to a Nimzo on every tab ──
-  'queens-indian::0::Nc3@4': QID_NC3,
-  'queens-indian::1::Nc3@4': QID_NC3,
-  'queens-indian::2::Nc3@4': QID_NC3,
-  'queens-indian::3::Nc3@4': QID_NC3,
-  'queens-indian::4::Nc3@4': QID_NC3,
-  'queens-indian::5::Nc3@4': QID_NC3,
-  'queens-indian::6::Nc3@4': QID_NC3,
 
   // ── Semi-Slav (student Black) — quiet e3 …Bf5 on every tab (same as the Slav) ──
   'semi-slav::0::e3@6': SLAV_E3,
@@ -673,20 +429,9 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   'semi-slav::6::e3@6': SLAV_E3,
 
   // ── Scotch Game (student White) — …d6 decline on every tab ──
-  'scotch-game::0::d6@5': SCOTCH_D6,
-  'scotch-game::1::d6@5': SCOTCH_D6,
-  'scotch-game::2::d6@5': SCOTCH_D6,
-  'scotch-game::3::d6@5': SCOTCH_D6,
-  'scotch-game::4::d6@5': SCOTCH_D6,
-  'scotch-game::5::d6@5': SCOTCH_D6,
-  'scotch-game::6::d6@5': SCOTCH_D6,
-  'scotch-game::7::d6@5': SCOTCH_D6,
 
   // ── Grünfeld Defence (student Black) ──
   'grunfeld-defence::2::cxd5@6': GRUN_EXCHANGE,
-  'grunfeld-defence::0::g3@4': GRUN_G3,
-  'grunfeld-defence::1::g3@4': GRUN_G3,
-  'grunfeld-defence::6::g3@4': GRUN_G3,
   'grunfeld-defence::4::Be3@14': GRUN_EXCHANGE,
   'grunfeld-defence::7::Be3@14': GRUN_EXCHANGE,
   'grunfeld-defence::3::Nc3@4': {
@@ -705,46 +450,8 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   },
 
   // ── Vienna Game (student White) — the Gambit main line ──
-  'vienna-game::0::O-O@13': {
-    intro: {
-      say: "Black castles into the Vienna Gambit tabiya. You gave the f-pawn for a real lead in development and the open f-file pointing at Black's king. Now pour it on: the rook belongs on f1, the queen is already active on e2, and your central pawns roll. The Vienna Gambit punishes anyone who treats it like a quiet opening.",
-      sayShort: 'O-O — press the f-file attack.',
-    },
-    sources: ['concept:pos-initiative', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Vienna_Game'],
-  },
-  'vienna-game::2::h6@11': {
-    intro: {
-      say: "…h6 — Black keeps it quiet in the slow Vienna with d3. No gambit here, so play the long game: castle, complete development, and prepare the f4 break or the Nbd2-f1-g3 regroup toward the kingside. A small, safe space edge you can nurse for a long time.",
-      sayShort: '…h6 — build slowly toward f4.',
-    },
-    sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Vienna_Game'],
-  },
 
   // ── Petrov Defence (student Black) ──
-  'petrov-defence::3::Bc4+@10': {
-    intro: {
-      say: "The Cochrane Gambit — White has just hurled a knight onto f7 to drag your king into the open. It looks terrifying and it is completely sound for you: you're a piece up for two pawns, and the entire game now hinges on one idea — get the king safe and the extra material wins itself. Don't grab, don't panic; just tuck the king away.",
-      sayShort: 'Cochrane — get the king safe.',
-    },
-    beats: [
-      { atMove: 7, say: "…Kxf7 — you take the knight, because you must and because you should. White has spent a whole piece for two pawns and a few checks; if your king reaches safety, nothing else he has can replace that piece. The fear is the only weapon White has left.", highlights: [H('f7', KEY)] },
-      { atMove: 11, say: "…d5! — the move that defuses the whole gambit. The pawn jams onto d5 and slams shut the c4-bishop's diagonal to your king, snuffing the check while giving nothing back. From here you simply walk the king to g8, untangle with …Re8, and the piece tells.", highlights: [H('d5', ATK), H('c4', KEY)] },
-      { atMove: 13, say: "…a6 — a quiet luxury move that takes b5 away from White's pieces, and that says everything: the storm has blown out, your king is safe, and you're a piece up for two pawns. The Cochrane is a bluff, and you've called it.", highlights: [H('a6', SOFT), H('b5', KEY)] },
-    ],
-    sources: ['concept:pos-king-safety', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Petrov%27s_Defence'],
-  },
-  'petrov-defence::1::O-O@10': {
-    intro: {
-      say: "The Petrov main line — the defence you reach for when you want a fortress. Its logic is pure symmetry: you don't defend the e5-pawn, you counter-grab on e4, and from there everything White tries, you can answer in kind. By move ten you've castled into a position with no weaknesses and nothing for an attacker to bite on.",
-      sayShort: 'Petrov main — symmetry, then castle.',
-    },
-    beats: [
-      { atMove: 5, say: "…Nxe4 — the heart of the Petrov. Rather than passively guard e5, you snatch the e4-pawn and let the symmetry work for you. Whatever White does to your knight, you have the mirror — that balance is exactly why this defence is so hard to beat.", highlights: [H('e4', ATK)] },
-      { atMove: 7, say: "…d5 — the key support, anchoring your e4-knight on its outpost so it can't be cheaply chased, and at the same time opening a free diagonal for your light-squared bishop. This little pawn is what makes the whole structure hold together.", highlights: [H('d5', ATK), H('e4', KEY)] },
-      { atMove: 9, say: "…Nd7 — developing while challenging White's advanced e5-knight head-on, offering the trade that dissolves any pressure. Simple, solid, symmetrical: White is left with a position that simply refuses to give him a target.", highlights: [H('e5', KEY)] },
-    ],
-    sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Petrov%27s_Defence'],
-  },
 
   // ── Pirc Defence (student Black) — the Austrian Attack ──
   'pirc-defence::7::Bd3@10': {
@@ -779,13 +486,6 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   },
 
   // ── Two Knights (student Black) — Bb5 Ruy transposition on every tab ──
-  'two-knights-defence::1::Bb5@4': TK_BB5,
-  'two-knights-defence::2::Bb5@4': TK_BB5,
-  'two-knights-defence::3::Bb5@4': TK_BB5,
-  'two-knights-defence::4::Bb5@4': TK_BB5,
-  'two-knights-defence::5::Bb5@4': TK_BB5,
-  'two-knights-defence::6::Bb5@4': TK_BB5,
-  'two-knights-defence::7::Bb5@4': TK_BB5,
 
   // ── Benoni (student Black) — anti-Benoni Nxd5 ──
   'benoni-defence::0::Nxd5@8': BENONI_NXD5,
@@ -818,29 +518,8 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   'alekhine-defence::3::d4@4': ALE_MODERN,
 
   // ── Philidor (student Black) — the Re1 main tabiya ──
-  'philidor-defence::1::Re1@12': {
-    intro: {
-      say: "Re1 — the main Philidor tabiya. White stacks the e-file behind his big centre, and you're solid but cramped. The cure is patience and timing: prepare …c6 and …Qc7, take on d4 at the right moment with …exd4, and aim for the freeing …d5 break. Hold the line accurately and the cramp dissolves into a sound game.",
-      sayShort: 'Re1 — free up with …c6 and …d5.',
-    },
-    sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Philidor_Defence'],
-  },
 
   // ── Queen's Gambit (student White) — answering Black's main defences ──
-  'queens-gambit::3::a6@9': {
-    intro: {
-      say: "…a6 — the Queen's Gambit Accepted main line; Black prepares …b5 to hold the c4-pawn and free the light bishop. You've already recaptured and built a fine centre, so meet …b5 head-on with a4 to crack the queenside, or just complete development and roll your central majority. White keeps a pleasant, lasting initiative.",
-      sayShort: '…a6 — meet …b5 with a4.',
-    },
-    sources: QP_SRC,
-  },
-  'queens-gambit::4::e6@7': {
-    intro: {
-      say: "…dxc4 and …g5 — Black plunges into the razor-edged Botvinnik Semi-Slav, grabbing the pawn and lashing out on the kingside. This is theory to the teeth: your trumps are the big e4-centre and a roaring initiative. Both kings will be hunted — know the line, and White's attack arrives with crushing force.",
-      sayShort: 'Botvinnik — roll e4, attack.',
-    },
-    sources: QP_SRC,
-  },
 
   // ── Budapest Gambit (student Black) — declined with d5 on every tab ──
   'budapest-gambit::0::d5@4': BUDAPEST_D5,
@@ -852,16 +531,6 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   'budapest-gambit::6::d5@4': BUDAPEST_D5,
 
   // ── Four Knights (student White) ──
-  'four-knights-game::0::Nd4@7': FK_ND4,
-  'four-knights-game::4::Nd4@7': FK_ND4,
-  'four-knights-game::7::Nd4@7': FK_ND4,
-  'four-knights-game::8::Bg4@11': {
-    intro: {
-      say: "…Bg4 — Black pins in the quiet g3 Four Knights. No need to react sharply: break the pin with h3 when it suits you and reroute. Your fianchettoed g2-bishop eyes the centre, your structure is sound, and you keep a small, risk-free flexibility to play for the win without ever being worse.",
-      sayShort: '…Bg4 — break the pin with h3.',
-    },
-    sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Four_Knights_Game'],
-  },
 
   // ── Dutch Defence (student Black) — the anti-Dutch Bg5/Bc4 attack ──
   'dutch-defence::3::Bc4@8': {
@@ -873,27 +542,12 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   },
 
   // ── Réti (student White) ──
-  'reti-opening::0::Bd6@13': RETI_BD6,
-  'reti-opening::6::Bd6@13': RETI_BD6,
 
   // ── King's Indian Attack (student White) ──
-  'kings-indian-attack::0::e5@11': KIA_E5,
-  'kings-indian-attack::7::e5@11': KIA_E5,
 
   // ── Old Indian (student Black) ──
-  'old-indian-defence::0::h3@14': OLDIND_H3,
-  'old-indian-defence::4::h3@14': OLDIND_H3,
-  'old-indian-defence::5::h3@14': OLDIND_H3,
-  'old-indian-defence::6::h3@14': OLDIND_H3,
 
   // ── London System (student White) ──
-  'london-system::2::Nc6@9': {
-    intro: {
-      say: "…Nc6 — Black challenges your London centre head-on. Hold the system's shape: c3 to brace d4, keep the Bf4-and-Bd3 battery trained on h7, and meet …c5 by keeping the central tension. The London's whole strength is its reliability — you reach the same comfortable structure every game and play for the kingside.",
-      sayShort: '…Nc6 — brace c3, hold the battery.',
-    },
-    sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/London_System'],
-  },
 };
 
 // Merge the base map with the three parallel-session group maps. Each group
