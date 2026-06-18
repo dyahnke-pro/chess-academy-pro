@@ -2629,12 +2629,42 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
     { atMove: 6, say: "Bxc6 trades into the Exchange to dent your pawns — but recapture toward the centre and your trumps appear. …dxc6 keeps the bishop pair and opens the d-file for your rook.", sayShort: "Bxc6 — recapture …dxc6.", highlights: [H('c6', KEY)] },
     { atMove: 7, say: "…dxc6 — the d-file is yours and the light bishop is freed to rake the kingside. Doubled c-pawns are no weakness here; with …Bg4, …Qd6 and …f6 you keep the centre fluid and the two bishops do the deciding.", sayShort: "…dxc6 — bishop pair, open d-file.", arrows: [A('c8', 'g4')], highlights: [H('c6', SOFT)] },
   ] },
-  'marshall-attack::0::d3@8': { ...MAR_D3, beats: [{ atMove: 8, say: "d3 — the quiet Ruy, sidestepping your Marshall before you can play …d5. Develop in comfort: …b5 and …Bc5 or …Be7, castle, and the …Na5 or …d5 breaks beckon. No pressure to meet; you stand fully equal with the freer plan.", sayShort: "d3 — develop, aim for …d5.", highlights: [H('d5', KEY)] }] },
-  'marshall-attack::0::d3@10': { ...MAR_D3, beats: [{ atMove: 10, say: "d3 keeps it quiet, dodging your Marshall gambit. You're comfortably placed — reroute with …Na5 to hit the bishop, prepare …c5 or …d5, and play the rich middlegame from at least equality. White's caution costs him the initiative's edge.", sayShort: "d3 — …Na5, then …c5 or …d5.", highlights: [H('d5', KEY)] }] },
-  'marshall-attack::0::exd5@16': MAR_MAIN,
-  'marshall-attack::0::h3@14': MAR_ANTI,
-  'marshall-attack::0::a4@14': MAR_ANTI,
-  'marshall-attack::0::Bxc6@10': { ...MAR_EXCHANGE, beats: [{ atMove: 10, say: "Bxc6 trades the strong bishop to dent your pawns — recapture …dxc6 for the bishop pair and the half-open d-file. With …Bd6, …Qe7 and …f6 you keep the centre fluid; the two bishops are the lasting trump, doubled pawns or not.", sayShort: "Bxc6 — …dxc6, two bishops.", arrows: [A('c8', 'g4')], highlights: [H('c6', KEY)] }] },
+  'marshall-attack::0::d3@8': { ...MAR_D3, beats: [
+    { atMove: 8, say: "d3 — the Anti-Marshall, a quiet Ruy that dodges your gambit before …d5. No problem: settle into a rich maneuvering game with …Bc5, posting the bishop actively on the a7-g1 diagonal.", sayShort: "d3 — answer …Bc5.", arrows: [A('f8', 'c5')], highlights: [H('c5', KEY)] },
+    { atMove: 9, say: "…Bc5 trains on f2 and the centre. Castle, play …d6, then slide the bishop back to a7 — active but tucked safe from White's b4 and d4 tempo-gainers.", sayShort: "…Bc5 — eye f2, then …Ba7.", arrows: [A('c5', 'f2')], highlights: [H('f2', ATK)] },
+    { atMove: 13, say: "…Ba7 sits the bishop on the long diagonal, immune to pawn pushes yet still glaring at your centre and the f2-square. Now the knight begins its tour.", sayShort: "…Ba7 — safe, eyes f2.", arrows: [A('a7', 'f2')], highlights: [H('a7', KEY)] },
+    { atMove: 21, say: "…Ng6 completes the classic knight tour from c6 via e7, eyeing f4 and h4 to join a kingside attack. With …O-O and the …d5 break in reserve, you have a rich, fully equal game and every plan in hand.", sayShort: "…Ng6 — knight tour, eye f4.", arrows: [A('g6', 'f4')], highlights: [H('f4', KEY)] },
+  ] },
+  'marshall-attack::0::d3@10': { ...MAR_D3, beats: [
+    { atMove: 10, say: "d3 — the quiet Anti-Marshall, dodging your gambit. Settle in comfortably: …b5 gains queenside space and chases the a4-bishop back.", sayShort: "d3 — answer …b5.", arrows: [A('b7', 'b5')], highlights: [H('b5', KEY)] },
+    { atMove: 11, say: "…b5 expands and kicks the bishop to b3. Build the classic Ruy chain with …d6 and castle, then reroute the knight to challenge that bishop.", sayShort: "…b5 — gain space, hit the bishop.", arrows: [A('b5', 'a4')], highlights: [H('a4', ATK)] },
+    { atMove: 17, say: "…Na5 jumps to challenge White's strong b3-bishop — the classic Chigorin maneuver. Trade or chase it, then …c5 and …d5 expand in the centre.", sayShort: "…Na5 — challenge the b3-bishop.", arrows: [A('a5', 'b3')], highlights: [H('b3', ATK)] },
+    { atMove: 19, say: "…c5 grabs central space and clamps White's d4 break. With …Re8 and the …d5 lever you have a rich, fully equal middlegame and the freer plan.", sayShort: "…c5 — grab space, clamp d4.", arrows: [A('c5', 'd4')], highlights: [H('d4', KEY)] },
+  ] },
+  'marshall-attack::0::exd5@16': { ...MAR_MAIN, beats: [
+    { atMove: 16, say: "exd5 — White grabs the pawn and the Marshall is ON. You've burned e5 for one of chess's most feared attacks: …Nxd5 recaptures and the storm gathers.", sayShort: "exd5 — Marshall on: …Nxd5.", arrows: [A('f6', 'd5')], highlights: [H('d5', KEY)] },
+    { atMove: 17, say: "…Nxd5 recaptures, the knight proud in the centre. White snatches on e5, but you win it straight back and the e-file rips open for your attack.", sayShort: "…Nxd5 — centralise the knight.", highlights: [H('d5', KEY)] },
+    { atMove: 21, say: "…Nf6 redevelops with tempo, eyeing e4 and g4 and clearing d5. The pieces gather now: …Bd6, …Qh4 and …Bb7 swing at White's king while he clings to the pawn.", sayShort: "…Nf6 — regroup, gather the attack.", arrows: [A('f6', 'g4')], highlights: [H('g4', KEY)] },
+    { atMove: 23, say: "…Bd6 develops and hits the exposed rook on e5 with tempo, the bishop heading for the b8-h2 diagonal aimed at White's king. The Marshall is in full cry — the initiative is worth far more than the pawn.", sayShort: "…Bd6 — hit the rook, aim h2.", arrows: [A('d6', 'e5')], highlights: [H('e5', ATK)] },
+  ] },
+  'marshall-attack::0::h3@14': { ...MAR_ANTI, beats: [
+    { atMove: 14, say: "h3 — the Anti-Marshall, White stopping …Bg4 and dodging your gambit. Develop naturally: …Bb7 puts the bishop on the long diagonal, training toward e4.", sayShort: "h3 — answer …Bb7.", arrows: [A('c8', 'b7')], highlights: [H('b7', KEY)] },
+    { atMove: 15, say: "…Bb7 eyes e4 down the long diagonal — the heart of the Zaitsev setup. Play …d6, then reroute the knight so the bishop's stare on e4 comes alive.", sayShort: "…Bb7 — eye e4, Zaitsev setup.", highlights: [H('e4', KEY)] },
+    { atMove: 19, say: "…Na5 challenges White's a2-bishop, the thematic Ruy maneuver, clearing c6 so the b7-bishop bears fully on e4.", sayShort: "…Na5 — hit the bishop, free b7.", arrows: [A('a5', 'b3')], highlights: [H('b3', ATK)] },
+    { atMove: 21, say: "…c5 grabs queenside space and prepares to expand. With the knight rerouting back to c6 and the b7-bishop raking e4, you have a rich, balanced Zaitsev middlegame and the freer plan.", sayShort: "…c5 — expand, free the game.", highlights: [H('c5', KEY)] },
+  ] },
+  'marshall-attack::0::a4@14': { ...MAR_ANTI, beats: [
+    { atMove: 14, say: "a4 — the Anti-Marshall, White striking your b5-pawn to dodge the gambit. Push past it: …b4 keeps the queenside chain intact and gains space.", sayShort: "a4 — answer …b4.", arrows: [A('b5', 'b4')], highlights: [H('b4', KEY)] },
+    { atMove: 15, say: "…b4 locks the queenside and fixes White's c-pawn. With …d6 you complete the Ruy structure and meet his c3-d4 break head-on.", sayShort: "…b4 — lock the queenside.", arrows: [A('b4', 'c3')], highlights: [H('c3', KEY)] },
+    { atMove: 19, say: "…Rb8 swings the rook to the half-open b-file, pressuring White's queenside. When he plays d4, you trade on c3 to blast the file open.", sayShort: "…Rb8 — load the b-file.", highlights: [H('b4', SOFT)] },
+    { atMove: 21, say: "…bxc3 cracks the queenside open; the b-file is now a highway for your rook bearing down on b2 while the centre resolves in your favour — a rich, equal game with active pieces.", sayShort: "…bxc3 — open the b-file.", arrows: [A('b8', 'b2')], highlights: [H('b2', ATK)] },
+  ] },
+  'marshall-attack::0::Bxc6@10': { ...MAR_EXCHANGE, beats: [
+    { atMove: 10, say: "Bxc6 trades into the Exchange to dent your pawns — but recapture toward the centre and your trumps appear: the bishop pair and an open d-file.", sayShort: "Bxc6 — recapture …dxc6.", highlights: [H('c6', KEY)] },
+    { atMove: 11, say: "…dxc6 opens the d-file and frees the light bishop. The doubled c-pawns are no weakness; your two bishops and the file are the lasting trumps.", sayShort: "…dxc6 — bishop pair, open d-file.", arrows: [A('d8', 'd2')], highlights: [H('c6', SOFT)] },
+    { atMove: 13, say: "…Qd6 centralises the queen, eyeing the kingside and clearing the back rank for …O-O-O onto the open d-file. Your pieces flow to active squares while White untangles.", sayShort: "…Qd6 — centralise, prep …O-O-O.", highlights: [H('d6', KEY)] },
+    { atMove: 17, say: "…O-O-O throws the rook straight behind your queen on the open d-file — a powerful battery bearing down on d3. With the bishop pair and the initiative, yours is the more dangerous game.", sayShort: "…O-O-O — rook to the d-file.", highlights: [H('d3', ATK), H('d6', SOFT)] },
+  ] },
 
   // ── Coverage completion (every remaining course-subline, overriding base) ──
   'ruy-lopez::0::Na5@15': COV_RUY_NA5,
