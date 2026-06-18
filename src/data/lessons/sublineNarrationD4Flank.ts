@@ -9914,707 +9914,6 @@ const OI_69: SublineNarration = {
 
 
 
-const BG_0: SublineNarration = {
-  intro: { say: "White declines with d5. Develop …Bc5 hitting f2, support with …d6, and clamp with …e4-e3 — you gain a strong space-grabbing wedge and active play.", sayShort: "Declined d5: …Bc5, …e4-e3" },
-  beats: [
-    { atMove: 5, say: "Develop …Bc5, the active Budapest bishop eyeing f2 and the centre.", sayShort: "…Bc5, eye f2", highlights: [_H('c5')] },
-    { atMove: 7, say: "Play …d6, solidifying and opening your bishop's diagonal.", sayShort: "…d6, solidify", highlights: [_H('d6')] },
-    { atMove: 9, say: "Push …e4, gaining space and cramping White's kingside.", sayShort: "…e4, gain space", highlights: [_H('e4')] },
-    { atMove: 11, say: "Clamp …e3, jamming a pawn into White's camp for lasting pressure; balanced or better.", sayShort: "…e3, the wedge", highlights: [_H('e3')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_1: SublineNarration = {
-  intro: { say: "White grabs with Qxd4. Hit the queen with …Nc6, pin with …Bb4, castle, and leap …Ne4 — fully equal with active piece play.", sayShort: "…Nc6, …Bb4, …Ne4" },
-  beats: [
-    { atMove: 7, say: "Develop …Nc6, hitting the e5-pawn you'll soon regain.", sayShort: "…Nc6, hit e5", highlights: [_H('c6')] },
-    { atMove: 9, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 11, say: "Castle …O-O, completing development with active, balanced play.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
-    { atMove: 21, say: "Leap …Ne4, the active knight hitting White's bishop; fully equal.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_2: SublineNarration = {
-  intro: { say: "White plays e3. Check …Bb4+, strike …d5, grab …dxc4, and develop actively — comfortable equality.", sayShort: "…Bb4+, …d5, …dxc4" },
-  beats: [
-    { atMove: 7, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 9, say: "Strike …d5, freeing your game in the centre.", sayShort: "…d5, free the centre", highlights: [_H('d5')] },
-    { atMove: 13, say: "Grab …dxc4, gaining time as White regains the pawn.", sayShort: "…dxc4, win time", highlights: [_H('c4')] },
-    { atMove: 21, say: "Lift …Re8, pressuring the e-file; active and balanced.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_3: SublineNarration = {
-  intro: { say: "White plays Nf3 against your …e5. Push …e4 to gain space, strike …d5, grab …dxc4, and develop with active piece play — balanced.", sayShort: "…e4, …d5, …dxc4" },
-  beats: [
-    { atMove: 5, say: "Push …e4, gaining space and chasing White's knight back.", sayShort: "…e4, gain space", highlights: [_H('e4')] },
-    { atMove: 7, say: "Strike …d5, claiming the centre.", sayShort: "…d5, claim the centre", highlights: [_H('d5')] },
-    { atMove: 9, say: "Grab …dxc4, snatching a pawn as White scrambles.", sayShort: "…dxc4, win a pawn", highlights: [_H('c4')] },
-    { atMove: 21, say: "Reposition …Qf5, keeping your queen active; balanced.", sayShort: "…Qf5, active queen", highlights: [_H('f5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_4: SublineNarration = {
-  intro: { say: "White plays Nf3 and e3. Leap …Ng4, develop …Bc5, regain the pawn with …Ngxe5, and centralise …Ne5 — active, balanced piece play.", sayShort: "…Ng4, …Bc5, …Ngxe5" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Develop …Bc5, the active Budapest bishop eyeing f2 and the centre.", sayShort: "…Bc5, eye f2", highlights: [_H('c5')] },
-    { atMove: 11, say: "Regain the pawn with …Ngxe5, restoring material with harmonious, active pieces.", sayShort: "…Ngxe5, regain the pawn", highlights: [_H('e5')] },
-    { atMove: 19, say: "Re-centralise …Ne5, a dominant outpost eyeing f3; active and balanced.", sayShort: "…Ne5, the outpost", highlights: [_H('e5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_5: SublineNarration = {
-  intro: { say: "White trades on e5. Leap …Ng4, develop …Bc5, regain the pawn, castle, and lift …Re8 — active equality.", sayShort: "…Ng4, …Bc5, regain, …Re8" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Develop …Bc5, the active Budapest bishop eyeing f2 and the centre.", sayShort: "…Bc5, eye f2", highlights: [_H('c5')] },
-    { atMove: 11, say: "Regain the pawn with …Ngxe5, restoring material with harmonious, active pieces.", sayShort: "…Ngxe5, regain the pawn", highlights: [_H('e5')] },
-    { atMove: 23, say: "Lift …Re8, pressuring the e-file; active and balanced.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_6: SublineNarration = {
-  intro: { say: "White plays Nbd2. Leap …Ng4, develop …Bc5, regain the pawn, and centralise …Ne5 — active, balanced piece play.", sayShort: "…Ng4, …Bc5, …Ne5" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Develop …Bc5, the active Budapest bishop eyeing f2 and the centre.", sayShort: "…Bc5, eye f2", highlights: [_H('c5')] },
-    { atMove: 11, say: "Regain the pawn with …Ngxe5, restoring material with harmonious, active pieces.", sayShort: "…Ngxe5, regain the pawn", highlights: [_H('e5')] },
-    { atMove: 15, say: "Re-centralise …Ne5, the dominant outpost; active and balanced.", sayShort: "…Ne5, the outpost", highlights: [_H('e5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_7: SublineNarration = {
-  intro: { say: "White plays Nc3. Leap …Ng4, develop …Bc5, regain the pawn, and complete with …d6 and …O-O — active equality.", sayShort: "…Ng4, …Bc5, …d6, …O-O" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Develop …Bc5, the active Budapest bishop eyeing f2 and the centre.", sayShort: "…Bc5, eye f2", highlights: [_H('c5')] },
-    { atMove: 11, say: "Regain the pawn with …Ngxe5, restoring material with harmonious, active pieces.", sayShort: "…Ngxe5, regain the pawn", highlights: [_H('e5')] },
-    { atMove: 13, say: "Play …d6, solidifying and opening your bishop's diagonal.", sayShort: "…d6, solidify", highlights: [_H('d6')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_8: SublineNarration = {
-  intro: { say: "White trades and plays f4. Leap …Ng4, develop …Bc5, regain the pawn, and reroute …Ng6 then strike …f5 — active, balanced play.", sayShort: "…Ng4, …Bc5, …Ng6, …f5" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Develop …Bc5, the active Budapest bishop eyeing f2 and the centre.", sayShort: "…Bc5, eye f2", highlights: [_H('c5')] },
-    { atMove: 11, say: "Regain the pawn with …Ngxe5, restoring material with harmonious, active pieces.", sayShort: "…Ngxe5, regain the pawn", highlights: [_H('e5')] },
-    { atMove: 23, say: "Strike …f5, challenging White's f4-pawn and grabbing space; balanced.", sayShort: "…f5, challenge f4", highlights: [_H('f5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_9: SublineNarration = {
-  intro: { say: "White trades and develops Nc3. Leap …Ng4, develop …Bc5, regain the pawn, and lift the rook to …Re6 for a kingside swing — active equality.", sayShort: "…Ng4, …Bc5, …Re8-e6" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Develop …Bc5, the active Budapest bishop eyeing f2 and the centre.", sayShort: "…Bc5, eye f2", highlights: [_H('c5')] },
-    { atMove: 11, say: "Regain the pawn with …Ngxe5, restoring material with harmonious, active pieces.", sayShort: "…Ngxe5, regain the pawn", highlights: [_H('e5')] },
-    { atMove: 21, say: "Lift …Re8, pressuring the e-file; active and balanced.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_10: SublineNarration = {
-  intro: { say: "White declines with d5. Develop …Bc5 hitting f2, support with …d6, and clamp with …e4-e3 — you gain a strong space-grabbing wedge and active play.", sayShort: "Declined d5: …Bc5, …e4-e3" },
-  beats: [
-    { atMove: 5, say: "Develop …Bc5, the active Budapest bishop eyeing f2 and the centre.", sayShort: "…Bc5, eye f2", highlights: [_H('c5')] },
-    { atMove: 7, say: "Play …d6, solidifying and opening your bishop's diagonal.", sayShort: "…d6, solidify", highlights: [_H('d6')] },
-    { atMove: 9, say: "Push …e4, gaining space and cramping White's kingside.", sayShort: "…e4, gain space", highlights: [_H('e4')] },
-    { atMove: 11, say: "Clamp …e3, jamming a pawn into White's camp for lasting pressure; balanced or better.", sayShort: "…e3, the wedge", highlights: [_H('e3')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_11: SublineNarration = {
-  intro: { say: "White grabs with Qxd4. Hit the queen with …Nc6, pin with …Bb4, castle, and leap …Ne4 — fully equal with active piece play.", sayShort: "…Nc6, …Bb4, …Ne4" },
-  beats: [
-    { atMove: 7, say: "Develop …Nc6, hitting the e5-pawn you'll soon regain.", sayShort: "…Nc6, hit e5", highlights: [_H('c6')] },
-    { atMove: 9, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 11, say: "Castle …O-O, completing development with active, balanced play.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
-    { atMove: 21, say: "Leap …Ne4, the active knight hitting White's bishop; fully equal.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_12: SublineNarration = {
-  intro: { say: "White plays e3. Check …Bb4+, strike …d5, grab …dxc4, and develop actively — comfortable equality.", sayShort: "…Bb4+, …d5, …dxc4" },
-  beats: [
-    { atMove: 7, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 9, say: "Strike …d5, freeing your game in the centre.", sayShort: "…d5, free the centre", highlights: [_H('d5')] },
-    { atMove: 13, say: "Grab …dxc4, gaining time as White regains the pawn.", sayShort: "…dxc4, win time", highlights: [_H('c4')] },
-    { atMove: 21, say: "Lift …Re8, pressuring the e-file; active and balanced.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_13: SublineNarration = {
-  intro: { say: "White plays Nf3 against your …e5. Push …e4 to gain space, strike …d5, grab …dxc4, and develop with active piece play — balanced.", sayShort: "…e4, …d5, …dxc4" },
-  beats: [
-    { atMove: 5, say: "Push …e4, gaining space and chasing White's knight back.", sayShort: "…e4, gain space", highlights: [_H('e4')] },
-    { atMove: 7, say: "Strike …d5, claiming the centre.", sayShort: "…d5, claim the centre", highlights: [_H('d5')] },
-    { atMove: 9, say: "Grab …dxc4, snatching a pawn as White scrambles.", sayShort: "…dxc4, win a pawn", highlights: [_H('c4')] },
-    { atMove: 21, say: "Reposition …Qf5, keeping your queen active; balanced.", sayShort: "…Qf5, active queen", highlights: [_H('f5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_14: SublineNarration = {
-  intro: { say: "White meets …Ne4 with Nf3. Check …Bb4+, develop …Nc6, trade off, and develop …Bb7 to regain the e5-pawn with active play — balanced.", sayShort: "…Ne4, …Bb4+, …Bb7" },
-  beats: [
-    { atMove: 5, say: "Leap …Ne4, the Fajarowicz — active piece play to regain the e5-pawn.", sayShort: "…Ne4, the Fajarowicz", highlights: [_H('e4')] },
-    { atMove: 7, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 9, say: "Develop …Nc6, hitting the e5-pawn you'll soon regain.", sayShort: "…Nc6, hit e5", highlights: [_H('c6')] },
-    { atMove: 19, say: "Develop …Bb7, eyeing the long diagonal and the e5-pawn; balanced.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_15: SublineNarration = {
-  intro: { say: "White plays e3. Leap …Ne4, check …Bb4+, develop …Nc6, and regain the pawn with …Nxe5 — fully equal.", sayShort: "…Ne4, …Bb4+, …Nxe5" },
-  beats: [
-    { atMove: 5, say: "Leap …Ne4, the Fajarowicz — active piece play to regain the e5-pawn.", sayShort: "…Ne4, the Fajarowicz", highlights: [_H('e4')] },
-    { atMove: 7, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 9, say: "Develop …Nc6, hitting the e5-pawn you'll soon regain.", sayShort: "…Nc6, hit e5", highlights: [_H('c6')] },
-    { atMove: 17, say: "Regain the pawn with …Nxe5, the centralised knight; fully equal.", sayShort: "…Nxe5, regain the pawn", highlights: [_H('e5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_16: SublineNarration = {
-  intro: { say: "White plays e3. Leap …Ne4, check …Bb4+, develop …Nc6, play …d6, and regain the pawn with …dxe5 — balanced.", sayShort: "…Ne4, …Bb4+, …d6, …dxe5" },
-  beats: [
-    { atMove: 5, say: "Leap …Ne4, the Fajarowicz — active piece play to regain the e5-pawn.", sayShort: "…Ne4, the Fajarowicz", highlights: [_H('e4')] },
-    { atMove: 7, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 9, say: "Develop …Nc6, hitting the e5-pawn you'll soon regain.", sayShort: "…Nc6, hit e5", highlights: [_H('c6')] },
-    { atMove: 17, say: "Regain the pawn with …dxe5, restoring material balance; balanced.", sayShort: "…dxe5, regain the pawn", highlights: [_H('e5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_17: SublineNarration = {
-  intro: { say: "White plays Qc2. Leap …Ne4, check …Bb4+, develop …Nc6, and regain the pawn with …Nxe5 — fully equal.", sayShort: "…Ne4, …Bb4+, …Nxe5" },
-  beats: [
-    { atMove: 5, say: "Leap …Ne4, the Fajarowicz — active piece play to regain the e5-pawn.", sayShort: "…Ne4, the Fajarowicz", highlights: [_H('e4')] },
-    { atMove: 7, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 9, say: "Develop …Nc6, hitting the e5-pawn you'll soon regain.", sayShort: "…Nc6, hit e5", highlights: [_H('c6')] },
-    { atMove: 17, say: "Regain the pawn with …Nxe5, the centralised knight; fully equal.", sayShort: "…Nxe5, regain the pawn", highlights: [_H('e5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_18: SublineNarration = {
-  intro: { say: "White plays Qf4. Leap …Ne4, check …Bb4+, trade off, and develop …Bb7 to round up the e5-pawn — balanced.", sayShort: "…Ne4, …Bb4+, …Bb7" },
-  beats: [
-    { atMove: 5, say: "Leap …Ne4, the Fajarowicz — active piece play to regain the e5-pawn.", sayShort: "…Ne4, the Fajarowicz", highlights: [_H('e4')] },
-    { atMove: 7, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 9, say: "Develop …Nc6, hitting the e5-pawn you'll soon regain.", sayShort: "…Nc6, hit e5", highlights: [_H('c6')] },
-    { atMove: 19, say: "Develop …Bb7, eyeing the long diagonal and the e5-pawn; balanced.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_19: SublineNarration = {
-  intro: { say: "White fianchettoes with g3. Leap …Ne4, check …Bb4+, play …d6 and …dxe5, and snatch …Nxf2 — dynamic, balanced tactics.", sayShort: "…Ne4, …d6, …Nxf2" },
-  beats: [
-    { atMove: 5, say: "Leap …Ne4, the Fajarowicz — active piece play to regain the e5-pawn.", sayShort: "…Ne4, the Fajarowicz", highlights: [_H('e4')] },
-    { atMove: 7, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 11, say: "Play …d6, opening lines to regain the e5-pawn.", sayShort: "…d6, open lines", highlights: [_H('d6')] },
-    { atMove: 15, say: "Snatch …Nxf2, grabbing material in the tactics; dynamic and balanced.", sayShort: "…Nxf2, grab material", highlights: [_H('f2')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_20: SublineNarration = {
-  intro: { say: "White declines with d5. Develop …Bc5 hitting f2, support with …d6, and clamp with …e4-e3 — you gain a strong space-grabbing wedge and active play.", sayShort: "Declined d5: …Bc5, …e4-e3" },
-  beats: [
-    { atMove: 5, say: "Develop …Bc5, the active Budapest bishop eyeing f2 and the centre.", sayShort: "…Bc5, eye f2", highlights: [_H('c5')] },
-    { atMove: 7, say: "Play …d6, solidifying and opening your bishop's diagonal.", sayShort: "…d6, solidify", highlights: [_H('d6')] },
-    { atMove: 9, say: "Push …e4, gaining space and cramping White's kingside.", sayShort: "…e4, gain space", highlights: [_H('e4')] },
-    { atMove: 11, say: "Clamp …e3, jamming a pawn into White's camp for lasting pressure; balanced or better.", sayShort: "…e3, the wedge", highlights: [_H('e3')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_21: SublineNarration = {
-  intro: { say: "White grabs with Qxd4. Hit the queen with …Nc6, pin with …Bb4, castle, and leap …Ne4 — fully equal with active piece play.", sayShort: "…Nc6, …Bb4, …Ne4" },
-  beats: [
-    { atMove: 7, say: "Develop …Nc6, hitting the e5-pawn you'll soon regain.", sayShort: "…Nc6, hit e5", highlights: [_H('c6')] },
-    { atMove: 9, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 11, say: "Castle …O-O, completing development with active, balanced play.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
-    { atMove: 21, say: "Leap …Ne4, the active knight hitting White's bishop; fully equal.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_22: SublineNarration = {
-  intro: { say: "White plays e3. Check …Bb4+, strike …d5, grab …dxc4, and develop actively — comfortable equality.", sayShort: "…Bb4+, …d5, …dxc4" },
-  beats: [
-    { atMove: 7, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 9, say: "Strike …d5, freeing your game in the centre.", sayShort: "…d5, free the centre", highlights: [_H('d5')] },
-    { atMove: 13, say: "Grab …dxc4, gaining time as White regains the pawn.", sayShort: "…dxc4, win time", highlights: [_H('c4')] },
-    { atMove: 21, say: "Lift …Re8, pressuring the e-file; active and balanced.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_23: SublineNarration = {
-  intro: { say: "White plays Nf3 against your …e5. Push …e4 to gain space, strike …d5, grab …dxc4, and develop with active piece play — balanced.", sayShort: "…e4, …d5, …dxc4" },
-  beats: [
-    { atMove: 5, say: "Push …e4, gaining space and chasing White's knight back.", sayShort: "…e4, gain space", highlights: [_H('e4')] },
-    { atMove: 7, say: "Strike …d5, claiming the centre.", sayShort: "…d5, claim the centre", highlights: [_H('d5')] },
-    { atMove: 9, say: "Grab …dxc4, snatching a pawn as White scrambles.", sayShort: "…dxc4, win a pawn", highlights: [_H('c4')] },
-    { atMove: 21, say: "Reposition …Qf5, keeping your queen active; balanced.", sayShort: "…Qf5, active queen", highlights: [_H('f5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_24: SublineNarration = {
-  intro: { say: "White defends with Bf4. Leap …Ng4, develop …Nc6, check …Bb4+ to double White's pawns, and recapture …Nxf6 to regain the pawn — balanced.", sayShort: "…Ng4, …Bb4+, …Nxf6" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Develop …Nc6, hitting the e5-pawn you'll soon regain.", sayShort: "…Nc6, hit e5", highlights: [_H('c6')] },
-    { atMove: 9, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 17, say: "Recapture …Nxf6, regaining the e5-pawn with active pieces; balanced.", sayShort: "…Nxf6, regain the pawn", highlights: [_H('f6')] },
-    { atMove: 23, say: "Leap …Ne4, the active knight regrouping toward c5; balanced.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_25: SublineNarration = {
-  intro: { say: "White defends with Bf4. Leap …Ng4, develop …Nc6, check …Bb4+, and regain the pawn with …Ngxe5 — balanced.", sayShort: "…Ng4, …Bb4+, …Ngxe5" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Develop …Nc6, hitting the e5-pawn you'll soon regain.", sayShort: "…Nc6, hit e5", highlights: [_H('c6')] },
-    { atMove: 9, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 11, say: "Regain the pawn with …Ngxe5, restoring material with harmonious, active pieces.", sayShort: "…Ngxe5, regain the pawn", highlights: [_H('e5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_26: SublineNarration = {
-  intro: { say: "White defends with Bf4. Leap …Ng4, develop …Nc6, check …Bb4+ doubling White's pawns, and recapture …Nxf6 — balanced.", sayShort: "…Ng4, …Bb4+, …Nxf6" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Develop …Nc6, hitting the e5-pawn you'll soon regain.", sayShort: "…Nc6, hit e5", highlights: [_H('c6')] },
-    { atMove: 9, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 17, say: "Recapture …Nxf6, regaining the e5-pawn; balanced.", sayShort: "…Nxf6, regain the pawn", highlights: [_H('f6')] },
-    { atMove: 23, say: "Develop …Be6, completing development; balanced.", sayShort: "…Be6, develop", highlights: [_H('e6')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_27: SublineNarration = {
-  intro: { say: "White lunges Qd5. Leap …Ng4, develop …Nc6, play …d6 to challenge, and regain the pawn with …Qxd6 — balanced.", sayShort: "…Ng4, …d6, …Qxd6" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Develop …Nc6, hitting the e5-pawn you'll soon regain.", sayShort: "…Nc6, hit e5", highlights: [_H('c6')] },
-    { atMove: 9, say: "Play …d6, challenging White's advanced pawn.", sayShort: "…d6, challenge the pawn", highlights: [_H('d6')] },
-    { atMove: 15, say: "Regain the pawn with …Qxd6, restoring material balance; balanced.", sayShort: "…Qxd6, regain the pawn", highlights: [_H('d6')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_28: SublineNarration = {
-  intro: { say: "White plays h3. Leap …Ng4, develop …Nc6, regain the pawn with …Ngxe5, and develop …Bb4+ then …Bf5 — balanced with active pieces.", sayShort: "…Ng4, …Ngxe5, …Bf5" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Develop …Nc6, hitting the e5-pawn you'll soon regain.", sayShort: "…Nc6, hit e5", highlights: [_H('c6')] },
-    { atMove: 9, say: "Regain the pawn with …Ngxe5, restoring material with harmonious, active pieces.", sayShort: "…Ngxe5, regain the pawn", highlights: [_H('e5')] },
-    { atMove: 19, say: "Develop …Bf5, the active bishop; balanced.", sayShort: "…Bf5, active bishop", highlights: [_H('f5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_29: SublineNarration = {
-  intro: { say: "White defends Bf4. Leap …Ng4, check …Bb4+ doubling White's pawns, and regain with …Ngxe5 — active, balanced play.", sayShort: "…Ng4, …Bb4+, …Ngxe5" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Develop …Nc6, hitting the e5-pawn you'll soon regain.", sayShort: "…Nc6, hit e5", highlights: [_H('c6')] },
-    { atMove: 9, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 15, say: "Regain the pawn with …Ngxe5, restoring material with harmonious, active pieces.", sayShort: "…Ngxe5, regain the pawn", highlights: [_H('e5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_30: SublineNarration = {
-  intro: { say: "White declines with d5. Develop …Bc5 hitting f2, support with …d6, and clamp with …e4-e3 — you gain a strong space-grabbing wedge and active play.", sayShort: "Declined d5: …Bc5, …e4-e3" },
-  beats: [
-    { atMove: 5, say: "Develop …Bc5, the active Budapest bishop eyeing f2 and the centre.", sayShort: "…Bc5, eye f2", highlights: [_H('c5')] },
-    { atMove: 7, say: "Play …d6, solidifying and opening your bishop's diagonal.", sayShort: "…d6, solidify", highlights: [_H('d6')] },
-    { atMove: 9, say: "Push …e4, gaining space and cramping White's kingside.", sayShort: "…e4, gain space", highlights: [_H('e4')] },
-    { atMove: 11, say: "Clamp …e3, jamming a pawn into White's camp for lasting pressure; balanced or better.", sayShort: "…e3, the wedge", highlights: [_H('e3')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_31: SublineNarration = {
-  intro: { say: "White grabs with Qxd4. Hit the queen with …Nc6, pin with …Bb4, castle, and leap …Ne4 — fully equal with active piece play.", sayShort: "…Nc6, …Bb4, …Ne4" },
-  beats: [
-    { atMove: 7, say: "Develop …Nc6, hitting the e5-pawn you'll soon regain.", sayShort: "…Nc6, hit e5", highlights: [_H('c6')] },
-    { atMove: 9, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 11, say: "Castle …O-O, completing development with active, balanced play.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
-    { atMove: 21, say: "Leap …Ne4, the active knight hitting White's bishop; fully equal.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_32: SublineNarration = {
-  intro: { say: "White plays e3. Check …Bb4+, strike …d5, grab …dxc4, and develop actively — comfortable equality.", sayShort: "…Bb4+, …d5, …dxc4" },
-  beats: [
-    { atMove: 7, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 9, say: "Strike …d5, freeing your game in the centre.", sayShort: "…d5, free the centre", highlights: [_H('d5')] },
-    { atMove: 13, say: "Grab …dxc4, gaining time as White regains the pawn.", sayShort: "…dxc4, win time", highlights: [_H('c4')] },
-    { atMove: 21, say: "Lift …Re8, pressuring the e-file; active and balanced.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_33: SublineNarration = {
-  intro: { say: "White plays Nf3 against your …e5. Push …e4 to gain space, strike …d5, grab …dxc4, and develop with active piece play — balanced.", sayShort: "…e4, …d5, …dxc4" },
-  beats: [
-    { atMove: 5, say: "Push …e4, gaining space and chasing White's knight back.", sayShort: "…e4, gain space", highlights: [_H('e4')] },
-    { atMove: 7, say: "Strike …d5, claiming the centre.", sayShort: "…d5, claim the centre", highlights: [_H('d5')] },
-    { atMove: 9, say: "Grab …dxc4, snatching a pawn as White scrambles.", sayShort: "…dxc4, win a pawn", highlights: [_H('c4')] },
-    { atMove: 21, say: "Reposition …Qf5, keeping your queen active; balanced.", sayShort: "…Qf5, active queen", highlights: [_H('f5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_34: SublineNarration = {
-  intro: { say: "White plays Nbd2. Leap …Ng4, check …Bb4+, centralise …Qe7, and regain with …Ngxe5 — fully equal.", sayShort: "…Ng4, …Bb4+, …Qe7, …Ngxe5" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 9, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 11, say: "Centralise …Qe7, eyeing the e-file and supporting your knights.", sayShort: "…Qe7, centralise", highlights: [_H('e7')] },
-    { atMove: 13, say: "Regain the pawn with …Ngxe5, restoring material with harmonious, active pieces.", sayShort: "…Ngxe5, regain the pawn", highlights: [_H('e5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_35: SublineNarration = {
-  intro: { say: "This is the famous Budapest mate trap. White's greedy …axb4 walks straight into …Nd3 — a smothered checkmate. Punish it!", sayShort: "The …Nd3# Budapest trap" },
-  beats: [
-    { atMove: 9, say: "Check …Bb4+, setting the trap that punishes a careless capture.", sayShort: "…Bb4+, set the trap", highlights: [_H('b4')] },
-    { atMove: 13, say: "Regain the pawn with …Ngxe5, eyeing the d3-square.", sayShort: "…Ngxe5, eye d3", highlights: [_H('e5')] },
-    { atMove: 15, say: "Deliver mate with …Nd3 — White's …axb4 was fatal, the knight smothers the king.", sayShort: "…Nd3 is checkmate", highlights: [_H('d3')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_36: SublineNarration = {
-  intro: { say: "White plays Nbd2. Leap …Ng4, check …Bb4+, centralise …Qe7, and regain the pawn with …Qxe5 — fully equal.", sayShort: "…Ng4, …Bb4+, …Qxe5" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 9, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 11, say: "Centralise …Qe7, eyeing the e-file and supporting your knights.", sayShort: "…Qe7, centralise", highlights: [_H('e7')] },
-    { atMove: 19, say: "Regain the pawn with …Qxe5, centralising the queen; fully equal.", sayShort: "…Qxe5, regain the pawn", highlights: [_H('e5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_37: SublineNarration = {
-  intro: { say: "White defends with Bf4. Leap …Ng4, develop …Nc6, check …Bb4+, and regain the pawn with …Ngxe5 — balanced.", sayShort: "…Ng4, …Bb4+, …Ngxe5" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Develop …Nc6, hitting the e5-pawn you'll soon regain.", sayShort: "…Nc6, hit e5", highlights: [_H('c6')] },
-    { atMove: 9, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 11, say: "Regain the pawn with …Ngxe5, restoring material with harmonious, active pieces.", sayShort: "…Ngxe5, regain the pawn", highlights: [_H('e5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_38: SublineNarration = {
-  intro: { say: "White plays h3. Leap …Ng4, check …Bb4+, centralise …Qe7, and regain with …Ngxe5 — fully equal.", sayShort: "…Ng4, …Bb4+, …Ngxe5" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 9, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 11, say: "Centralise …Qe7, eyeing the e-file and supporting your knights.", sayShort: "…Qe7, centralise", highlights: [_H('e7')] },
-    { atMove: 13, say: "Regain the pawn with …Ngxe5, restoring material with harmonious, active pieces.", sayShort: "…Ngxe5, regain the pawn", highlights: [_H('e5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_39: SublineNarration = {
-  intro: { say: "White lunges Qd5. Leap …Ng4, develop …Nc6, play …d6 to challenge, and regain the pawn with …Qxd6 — balanced.", sayShort: "…Ng4, …d6, …Qxd6" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Develop …Nc6, hitting the e5-pawn you'll soon regain.", sayShort: "…Nc6, hit e5", highlights: [_H('c6')] },
-    { atMove: 9, say: "Play …d6, challenging White's advanced pawn.", sayShort: "…d6, challenge the pawn", highlights: [_H('d6')] },
-    { atMove: 15, say: "Regain the pawn with …Qxd6, restoring material balance; balanced.", sayShort: "…Qxd6, regain the pawn", highlights: [_H('d6')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_40: SublineNarration = {
-  intro: { say: "White declines with d5. Develop …Bc5 hitting f2, support with …d6, and clamp with …e4-e3 — you gain a strong space-grabbing wedge and active play.", sayShort: "Declined d5: …Bc5, …e4-e3" },
-  beats: [
-    { atMove: 5, say: "Develop …Bc5, the active Budapest bishop eyeing f2 and the centre.", sayShort: "…Bc5, eye f2", highlights: [_H('c5')] },
-    { atMove: 7, say: "Play …d6, solidifying and opening your bishop's diagonal.", sayShort: "…d6, solidify", highlights: [_H('d6')] },
-    { atMove: 9, say: "Push …e4, gaining space and cramping White's kingside.", sayShort: "…e4, gain space", highlights: [_H('e4')] },
-    { atMove: 11, say: "Clamp …e3, jamming a pawn into White's camp for lasting pressure; balanced or better.", sayShort: "…e3, the wedge", highlights: [_H('e3')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_41: SublineNarration = {
-  intro: { say: "White grabs with Qxd4. Hit the queen with …Nc6, pin with …Bb4, castle, and leap …Ne4 — fully equal with active piece play.", sayShort: "…Nc6, …Bb4, …Ne4" },
-  beats: [
-    { atMove: 7, say: "Develop …Nc6, hitting the e5-pawn you'll soon regain.", sayShort: "…Nc6, hit e5", highlights: [_H('c6')] },
-    { atMove: 9, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 11, say: "Castle …O-O, completing development with active, balanced play.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
-    { atMove: 21, say: "Leap …Ne4, the active knight hitting White's bishop; fully equal.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_42: SublineNarration = {
-  intro: { say: "White plays e3. Check …Bb4+, strike …d5, grab …dxc4, and develop actively — comfortable equality.", sayShort: "…Bb4+, …d5, …dxc4" },
-  beats: [
-    { atMove: 7, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 9, say: "Strike …d5, freeing your game in the centre.", sayShort: "…d5, free the centre", highlights: [_H('d5')] },
-    { atMove: 13, say: "Grab …dxc4, gaining time as White regains the pawn.", sayShort: "…dxc4, win time", highlights: [_H('c4')] },
-    { atMove: 21, say: "Lift …Re8, pressuring the e-file; active and balanced.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_43: SublineNarration = {
-  intro: { say: "White plays Nf3 against your …e5. Push …e4 to gain space, strike …d5, grab …dxc4, and develop with active piece play — balanced.", sayShort: "…e4, …d5, …dxc4" },
-  beats: [
-    { atMove: 5, say: "Push …e4, gaining space and chasing White's knight back.", sayShort: "…e4, gain space", highlights: [_H('e4')] },
-    { atMove: 7, say: "Strike …d5, claiming the centre.", sayShort: "…d5, claim the centre", highlights: [_H('d5')] },
-    { atMove: 9, say: "Grab …dxc4, snatching a pawn as White scrambles.", sayShort: "…dxc4, win a pawn", highlights: [_H('c4')] },
-    { atMove: 21, say: "Reposition …Qf5, keeping your queen active; balanced.", sayShort: "…Qf5, active queen", highlights: [_H('f5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_44: SublineNarration = {
-  intro: { say: "White defends Bf4. Leap …Ng4, check …Bb4+ doubling White's pawns, and recapture …Nxf6 to regain the pawn — balanced.", sayShort: "…Ng4, …Bb4+, …Nxf6" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Develop …Nc6, hitting the e5-pawn you'll soon regain.", sayShort: "…Nc6, hit e5", highlights: [_H('c6')] },
-    { atMove: 9, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 17, say: "Recapture …Nxf6, regaining the e5-pawn; balanced.", sayShort: "…Nxf6, regain the pawn", highlights: [_H('f6')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_45: SublineNarration = {
-  intro: { say: "White plays Nf3. Leap …Ng4, develop …Bc5, regain the pawn, and lift …Re8-e6 for a kingside swing — active equality.", sayShort: "…Ng4, …Bc5, …Re6" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Develop …Bc5, the active Budapest bishop eyeing f2 and the centre.", sayShort: "…Bc5, eye f2", highlights: [_H('c5')] },
-    { atMove: 11, say: "Regain the pawn with …Ngxe5, restoring material with harmonious, active pieces.", sayShort: "…Ngxe5, regain the pawn", highlights: [_H('e5')] },
-    { atMove: 21, say: "Lift …Re8, pressuring the e-file; active and balanced.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_46: SublineNarration = {
-  intro: { say: "White plays e3. Leap …Ng4, regain with …Nxe5, fianchetto …g6, and strike …f5 for a dynamic kingside game — balanced.", sayShort: "…Ng4, …Nxe5, …g6, …f5" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Regain the pawn with …Nxe5, centralising the knight.", sayShort: "…Nxe5, regain the pawn", highlights: [_H('e5')] },
-    { atMove: 9, say: "Fianchetto …g6, an active King's-Indian-style setup.", sayShort: "…g6, the fianchetto", highlights: [_H('g6')] },
-    { atMove: 17, say: "Strike …f5, opening the kingside for a dynamic attack; balanced.", sayShort: "…f5, open the kingside", highlights: [_H('f5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_47: SublineNarration = {
-  intro: { say: "White grabs the centre with e4. Leap …Ng4, regain with …Nxe5, develop …Bc5 and …Bb4+, and castle — balanced with active pieces.", sayShort: "…Ng4, …Nxe5, …Bc5, …O-O" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Regain the pawn with …Nxe5, centralising the knight.", sayShort: "…Nxe5, regain the pawn", highlights: [_H('e5')] },
-    { atMove: 11, say: "Develop …Bc5, the active bishop eyeing f2.", sayShort: "…Bc5, eye f2", highlights: [_H('c5')] },
-    { atMove: 15, say: "Castle …O-O; balanced with active pieces.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_48: SublineNarration = {
-  intro: { say: "White plays e4 and Be3. Leap …Ng4, regain with …Nxe5, check …Bb4+ doubling White's pawns, and fianchetto …Bb7 — balanced.", sayShort: "…Ng4, …Nxe5, …Bb4+, …Bb7" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Regain the pawn with …Nxe5, centralising the knight.", sayShort: "…Nxe5, regain the pawn", highlights: [_H('e5')] },
-    { atMove: 11, say: "Check …Bb4+, developing with tempo and doubling White's pawns.", sayShort: "…Bb4+, double the pawns", highlights: [_H('b4')] },
-    { atMove: 23, say: "Fianchetto …Bb7, the long-diagonal bishop; balanced.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_49: SublineNarration = {
-  intro: { say: "White plays e4 and Nf3. Leap …Ng4, regain with …Nxe5, develop …Bc5, and strike …f5 — balanced with active play.", sayShort: "…Ng4, …Nxe5, …Bc5, …f5" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Regain the pawn with …Nxe5, centralising the knight.", sayShort: "…Nxe5, regain the pawn", highlights: [_H('e5')] },
-    { atMove: 11, say: "Develop …Bc5, the active bishop eyeing f2.", sayShort: "…Bc5, eye f2", highlights: [_H('c5')] },
-    { atMove: 21, say: "Strike …f5, opening the position for active play; balanced.", sayShort: "…f5, open lines", highlights: [_H('f5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_50: SublineNarration = {
-  intro: { say: "White declines with d5. Develop …Bc5 hitting f2, support with …d6, and clamp with …e4-e3 — you gain a strong space-grabbing wedge and active play.", sayShort: "Declined d5: …Bc5, …e4-e3" },
-  beats: [
-    { atMove: 5, say: "Develop …Bc5, the active Budapest bishop eyeing f2 and the centre.", sayShort: "…Bc5, eye f2", highlights: [_H('c5')] },
-    { atMove: 7, say: "Play …d6, solidifying and opening your bishop's diagonal.", sayShort: "…d6, solidify", highlights: [_H('d6')] },
-    { atMove: 9, say: "Push …e4, gaining space and cramping White's kingside.", sayShort: "…e4, gain space", highlights: [_H('e4')] },
-    { atMove: 11, say: "Clamp …e3, jamming a pawn into White's camp for lasting pressure; balanced or better.", sayShort: "…e3, the wedge", highlights: [_H('e3')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_51: SublineNarration = {
-  intro: { say: "White grabs with Qxd4. Hit the queen with …Nc6, pin with …Bb4, castle, and leap …Ne4 — fully equal with active piece play.", sayShort: "…Nc6, …Bb4, …Ne4" },
-  beats: [
-    { atMove: 7, say: "Develop …Nc6, hitting the e5-pawn you'll soon regain.", sayShort: "…Nc6, hit e5", highlights: [_H('c6')] },
-    { atMove: 9, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 11, say: "Castle …O-O, completing development with active, balanced play.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
-    { atMove: 21, say: "Leap …Ne4, the active knight hitting White's bishop; fully equal.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_52: SublineNarration = {
-  intro: { say: "White plays e3. Check …Bb4+, strike …d5, grab …dxc4, and develop actively — comfortable equality.", sayShort: "…Bb4+, …d5, …dxc4" },
-  beats: [
-    { atMove: 7, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 9, say: "Strike …d5, freeing your game in the centre.", sayShort: "…d5, free the centre", highlights: [_H('d5')] },
-    { atMove: 13, say: "Grab …dxc4, gaining time as White regains the pawn.", sayShort: "…dxc4, win time", highlights: [_H('c4')] },
-    { atMove: 21, say: "Lift …Re8, pressuring the e-file; active and balanced.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_53: SublineNarration = {
-  intro: { say: "White plays Nf3 against your …e5. Push …e4 to gain space, strike …d5, grab …dxc4, and develop with active piece play — balanced.", sayShort: "…e4, …d5, …dxc4" },
-  beats: [
-    { atMove: 5, say: "Push …e4, gaining space and chasing White's knight back.", sayShort: "…e4, gain space", highlights: [_H('e4')] },
-    { atMove: 7, say: "Strike …d5, claiming the centre.", sayShort: "…d5, claim the centre", highlights: [_H('d5')] },
-    { atMove: 9, say: "Grab …dxc4, snatching a pawn as White scrambles.", sayShort: "…dxc4, win a pawn", highlights: [_H('c4')] },
-    { atMove: 21, say: "Reposition …Qf5, keeping your queen active; balanced.", sayShort: "…Qf5, active queen", highlights: [_H('f5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_54: SublineNarration = {
-  intro: { say: "White plays Nc3. Leap …Ng4, develop …Bc5, regain with …Ngxe5, and complete with …d6 and …O-O — active equality.", sayShort: "…Ng4, …Bc5, …Ngxe5" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Develop …Bc5, the active Budapest bishop eyeing f2 and the centre.", sayShort: "…Bc5, eye f2", highlights: [_H('c5')] },
-    { atMove: 11, say: "Regain the pawn with …Ngxe5, restoring material with harmonious, active pieces.", sayShort: "…Ngxe5, regain the pawn", highlights: [_H('e5')] },
-    { atMove: 13, say: "Play …d6, solidifying and opening your bishop's diagonal.", sayShort: "…d6, solidify", highlights: [_H('d6')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_55: SublineNarration = {
-  intro: { say: "White plays Nc3. Leap …Ng4, develop …Bc5, regain with …Ngxe5, and lift …Re8-e6 — active equality.", sayShort: "…Ng4, …Bc5, …Re6" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Develop …Bc5, the active Budapest bishop eyeing f2 and the centre.", sayShort: "…Bc5, eye f2", highlights: [_H('c5')] },
-    { atMove: 11, say: "Regain the pawn with …Ngxe5, restoring material with harmonious, active pieces.", sayShort: "…Ngxe5, regain the pawn", highlights: [_H('e5')] },
-    { atMove: 21, say: "Lift …Re8, pressuring the e-file; active and balanced.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_56: SublineNarration = {
-  intro: { say: "White plays Nc3 then Qd5. Leap …Ng4, develop …Bc5, regain with …Ngxe5, and solidify …c6 and …d6 — fully equal.", sayShort: "…Ng4, …Bc5, …Ngxe5, …c6" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Develop …Bc5, the active Budapest bishop eyeing f2 and the centre.", sayShort: "…Bc5, eye f2", highlights: [_H('c5')] },
-    { atMove: 11, say: "Regain the pawn with …Ngxe5, restoring material with harmonious, active pieces.", sayShort: "…Ngxe5, regain the pawn", highlights: [_H('e5')] },
-    { atMove: 17, say: "Solidify …c6, kicking White's queen and securing the centre; fully equal.", sayShort: "…c6, kick the queen", highlights: [_H('c6')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_57: SublineNarration = {
-  intro: { say: "White plays Nc3 and a3. Leap …Ng4, develop …Bc5, regain with …Ngxe5, and reroute …Ng6-e5 — active, balanced piece play.", sayShort: "…Ng4, …Bc5, …Ngxe5" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Develop …Bc5, the active Budapest bishop eyeing f2 and the centre.", sayShort: "…Bc5, eye f2", highlights: [_H('c5')] },
-    { atMove: 11, say: "Regain the pawn with …Ngxe5, restoring material with harmonious, active pieces.", sayShort: "…Ngxe5, regain the pawn", highlights: [_H('e5')] },
-    { atMove: 21, say: "Re-centralise …Ne5, the dominant outpost; balanced.", sayShort: "…Ne5, the outpost", highlights: [_H('e5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_58: SublineNarration = {
-  intro: { say: "White plays Nc3 then f4. Leap …Ng4, develop …Bc5, regain with …Ngxe5, reroute …Ng6, and re-centralise …Ne5 — active equality.", sayShort: "…Ng4, …Bc5, …Ng6-e5" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Develop …Bc5, the active Budapest bishop eyeing f2 and the centre.", sayShort: "…Bc5, eye f2", highlights: [_H('c5')] },
-    { atMove: 11, say: "Regain the pawn with …Ngxe5, restoring material with harmonious, active pieces.", sayShort: "…Ngxe5, regain the pawn", highlights: [_H('e5')] },
-    { atMove: 23, say: "Re-centralise …Ne5, a dominant outpost; active and balanced.", sayShort: "…Ne5, the outpost", highlights: [_H('e5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_59: SublineNarration = {
-  intro: { say: "White plays Nc3 and a3. Leap …Ng4, develop …Bc5, regain with …Ngxe5, play …d6, and develop …Qg5 actively — balanced.", sayShort: "…Ng4, …Bc5, …Ngxe5, …Qg5" },
-  beats: [
-    { atMove: 5, say: "Leap …Ng4, the Budapest — you'll round up the e5-pawn with active pieces.", sayShort: "…Ng4, the Budapest", highlights: [_H('g4')] },
-    { atMove: 7, say: "Develop …Bc5, the active Budapest bishop eyeing f2 and the centre.", sayShort: "…Bc5, eye f2", highlights: [_H('c5')] },
-    { atMove: 11, say: "Regain the pawn with …Ngxe5, restoring material with harmonious, active pieces.", sayShort: "…Ngxe5, regain the pawn", highlights: [_H('e5')] },
-    { atMove: 19, say: "Develop …Qg5, eyeing the kingside and g2; balanced with active play.", sayShort: "…Qg5, active queen", highlights: [_H('g5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_60: SublineNarration = {
-  intro: { say: "White declines with d5. Develop …Bc5 hitting f2, support with …d6, and clamp with …e4-e3 — you gain a strong space-grabbing wedge and active play.", sayShort: "Declined d5: …Bc5, …e4-e3" },
-  beats: [
-    { atMove: 5, say: "Develop …Bc5, the active Budapest bishop eyeing f2 and the centre.", sayShort: "…Bc5, eye f2", highlights: [_H('c5')] },
-    { atMove: 7, say: "Play …d6, solidifying and opening your bishop's diagonal.", sayShort: "…d6, solidify", highlights: [_H('d6')] },
-    { atMove: 9, say: "Push …e4, gaining space and cramping White's kingside.", sayShort: "…e4, gain space", highlights: [_H('e4')] },
-    { atMove: 11, say: "Clamp …e3, jamming a pawn into White's camp for lasting pressure; balanced or better.", sayShort: "…e3, the wedge", highlights: [_H('e3')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_61: SublineNarration = {
-  intro: { say: "White grabs with Qxd4. Hit the queen with …Nc6, pin with …Bb4, castle, and leap …Ne4 — fully equal with active piece play.", sayShort: "…Nc6, …Bb4, …Ne4" },
-  beats: [
-    { atMove: 7, say: "Develop …Nc6, hitting the e5-pawn you'll soon regain.", sayShort: "…Nc6, hit e5", highlights: [_H('c6')] },
-    { atMove: 9, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 11, say: "Castle …O-O, completing development with active, balanced play.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
-    { atMove: 21, say: "Leap …Ne4, the active knight hitting White's bishop; fully equal.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_62: SublineNarration = {
-  intro: { say: "White plays e3. Check …Bb4+, strike …d5, grab …dxc4, and develop actively — comfortable equality.", sayShort: "…Bb4+, …d5, …dxc4" },
-  beats: [
-    { atMove: 7, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 9, say: "Strike …d5, freeing your game in the centre.", sayShort: "…d5, free the centre", highlights: [_H('d5')] },
-    { atMove: 13, say: "Grab …dxc4, gaining time as White regains the pawn.", sayShort: "…dxc4, win time", highlights: [_H('c4')] },
-    { atMove: 21, say: "Lift …Re8, pressuring the e-file; active and balanced.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_63: SublineNarration = {
-  intro: { say: "White plays Nf3 against your …e5. Push …e4 to gain space, strike …d5, grab …dxc4, and develop with active piece play — balanced.", sayShort: "…e4, …d5, …dxc4" },
-  beats: [
-    { atMove: 5, say: "Push …e4, gaining space and chasing White's knight back.", sayShort: "…e4, gain space", highlights: [_H('e4')] },
-    { atMove: 7, say: "Strike …d5, claiming the centre.", sayShort: "…d5, claim the centre", highlights: [_H('d5')] },
-    { atMove: 9, say: "Grab …dxc4, snatching a pawn as White scrambles.", sayShort: "…dxc4, win a pawn", highlights: [_H('c4')] },
-    { atMove: 21, say: "Reposition …Qf5, keeping your queen active; balanced.", sayShort: "…Qf5, active queen", highlights: [_H('f5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_64: SublineNarration = {
-  intro: { say: "White plays Nd2 against …Ne4. Reroute …Nc5, develop …Nc6, play …d6 to regain the pawn, and trade into a balanced ending — equal.", sayShort: "…Ne4, …Nc5, …d6, balanced" },
-  beats: [
-    { atMove: 5, say: "Leap …Ne4, the Fajarowicz — active piece play to regain the e5-pawn.", sayShort: "…Ne4, the Fajarowicz", highlights: [_H('e4')] },
-    { atMove: 7, say: "Reroute …Nc5, the active knight eyeing d3 and e4.", sayShort: "…Nc5, active knight", highlights: [_H('c5')] },
-    { atMove: 11, say: "Play …d6, opening lines to regain the e5-pawn.", sayShort: "…d6, open lines", highlights: [_H('d6')] },
-    { atMove: 17, say: "Re-centralise …Ne4 in the ending; balanced.", sayShort: "…Ne4, central knight", highlights: [_H('e4')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_65: SublineNarration = {
-  intro: { say: "White plays Nd2 and a3. Reroute …Nc5, develop …Nc6, centralise …Qe7, and regain with …Nxe5 — fully equal.", sayShort: "…Ne4, …Nc5, …Qe7, …Nxe5" },
-  beats: [
-    { atMove: 5, say: "Leap …Ne4, the Fajarowicz — active piece play to regain the e5-pawn.", sayShort: "…Ne4, the Fajarowicz", highlights: [_H('e4')] },
-    { atMove: 7, say: "Reroute …Nc5, the active knight.", sayShort: "…Nc5, active knight", highlights: [_H('c5')] },
-    { atMove: 11, say: "Centralise …Qe7, eyeing the e-file and supporting your knights.", sayShort: "…Qe7, centralise", highlights: [_H('e7')] },
-    { atMove: 13, say: "Regain the pawn with …Nxe5; fully equal.", sayShort: "…Nxe5, regain the pawn", highlights: [_H('e5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_66: SublineNarration = {
-  intro: { say: "White plays Nb3. Reroute …Nc5, trade …Nxb3, play …d6 and …Bg4, and regain the pawn with active pieces — balanced.", sayShort: "…Ne4, …Nc5, …d6, …Bg4" },
-  beats: [
-    { atMove: 5, say: "Leap …Ne4, the Fajarowicz — active piece play to regain the e5-pawn.", sayShort: "…Ne4, the Fajarowicz", highlights: [_H('e4')] },
-    { atMove: 7, say: "Reroute …Nc5, the active knight.", sayShort: "…Nc5, active knight", highlights: [_H('c5')] },
-    { atMove: 13, say: "Play …d6, opening lines to regain the e5-pawn.", sayShort: "…d6, open lines", highlights: [_H('d6')] },
-    { atMove: 15, say: "Develop …Bg4, pinning and pressuring; balanced.", sayShort: "…Bg4, pin", highlights: [_H('g4')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_67: SublineNarration = {
-  intro: { say: "White plays b3. Reroute …Nc5, develop …Nc6, play …d6 to regain the pawn, and centralise …Ne5 — balanced with active pieces.", sayShort: "…Ne4, …Nc5, …d6, …Ne5" },
-  beats: [
-    { atMove: 5, say: "Leap …Ne4, the Fajarowicz — active piece play to regain the e5-pawn.", sayShort: "…Ne4, the Fajarowicz", highlights: [_H('e4')] },
-    { atMove: 7, say: "Reroute …Nc5, the active knight.", sayShort: "…Nc5, active knight", highlights: [_H('c5')] },
-    { atMove: 11, say: "Play …d6, opening lines to regain the e5-pawn.", sayShort: "…d6, open lines", highlights: [_H('d6')] },
-    { atMove: 19, say: "Centralise …Ne5, the dominant outpost; balanced.", sayShort: "…Ne5, the outpost", highlights: [_H('e5')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_68: SublineNarration = {
-  intro: { say: "White lunges e4-e6. Reroute …Nc5, develop …Nc6, take …Bxe6, and grab …Nxe4 — balanced with active pieces.", sayShort: "…Ne4, …Nc5, …Bxe6, …Nxe4" },
-  beats: [
-    { atMove: 5, say: "Leap …Ne4, the Fajarowicz — active piece play to regain the e5-pawn.", sayShort: "…Ne4, the Fajarowicz", highlights: [_H('e4')] },
-    { atMove: 7, say: "Reroute …Nc5, the active knight.", sayShort: "…Nc5, active knight", highlights: [_H('c5')] },
-    { atMove: 13, say: "Take …Bxe6, recapturing White's advanced pawn.", sayShort: "…Bxe6, recapture", highlights: [_H('e6')] },
-    { atMove: 17, say: "Grab …Nxe4, snatching the centre pawn; balanced.", sayShort: "…Nxe4, win the pawn", highlights: [_H('e4')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
-const BG_69: SublineNarration = {
-  intro: { say: "White plays Bd2. Leap …Ne4, check …Bb4+, trade off, centralise …Qe7, and develop …Nc6 to regain the e5-pawn — balanced.", sayShort: "…Ne4, …Bb4+, …Qe7, …Nc6" },
-  beats: [
-    { atMove: 5, say: "Leap …Ne4, the Fajarowicz — active piece play to regain the e5-pawn.", sayShort: "…Ne4, the Fajarowicz", highlights: [_H('e4')] },
-    { atMove: 7, say: "Check …Bb4+, developing with tempo and pinning White's defender.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
-    { atMove: 11, say: "Centralise …Qe7, eyeing the e-file and supporting your knights.", sayShort: "…Qe7, centralise", highlights: [_H('e7')] },
-    { atMove: 17, say: "Develop …Nc6, regaining the e5-pawn with active pieces; balanced.", sayShort: "…Nc6, regain the pawn", highlights: [_H('c6')] },
-  ],
-  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
-};
 
 const BKR_0: SublineNarration = {
   intro: { say: "This isn't a true Benko — White's Nf3 invites a symmetrical fight. Trade in the centre, plant a pawn on e5, and you reach a free, equal game with no weaknesses.", sayShort: "Symmetrical, free and equal" },
@@ -12621,14 +11920,716 @@ const BNR_69: SublineNarration = {
   sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
 };
 
+const BGR_0: SublineNarration = {
+  intro: { say: "White declines with d5, keeping the pawn but giving you a free hand. Plant the bishop on c5, ram the e-pawn to e3, and your wedge cramps White while you develop with ease.", sayShort: "Declined d5: …Bc5 and the …e3 wedge" },
+  beats: [
+    { atMove: 5, say: "Develop …Bc5 with gain of time, the bishop biting at f2 and the centre.", sayShort: "…Bc5, bite at f2", highlights: [_H('c5')] },
+    { atMove: 9, say: "Advance …e4, gaining space and cramping White's kingside development.", sayShort: "…e4, cramp the kingside", highlights: [_H('e4')] },
+    { atMove: 11, say: "Jam …e3! The pawn wedges into White's camp and snarls his pieces for moves to come.", sayShort: "…e3, the wedge", highlights: [_H('e3')] },
+    { atMove: 15, say: "Centralise …Qe7, supporting the wedge and connecting toward the queenside; you stand at least equal.", sayShort: "…Qe7, support the wedge", highlights: [_H('e7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_1: SublineNarration = {
+  intro: { say: "White grabs the pawn with the queen, but she's a target. Hit her with …Nc6, pin the knight with …Bb4, and after the dust settles your …Ne4 leap gives full equality.", sayShort: "…Nc6 hits the queen, …Bb4 pin" },
+  beats: [
+    { atMove: 7, say: "Develop …Nc6, gaining time by attacking the exposed queen.", sayShort: "…Nc6, hit the queen", highlights: [_H('c6')] },
+    { atMove: 9, say: "Pin with …Bb4, fixing the c3-knight to its queen.", sayShort: "…Bb4, pin the knight", highlights: [_H('b4')] },
+    { atMove: 13, say: "Lift …Re8, eyeing the e-file where White's king lingers.", sayShort: "…Re8, eye the e-file", highlights: [_H('e8')] },
+    { atMove: 21, say: "Spring …Ne4, the active knight hitting the bishop — fully equal with easy play.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_2: SublineNarration = {
+  intro: { say: "White returns the pawn with e3. Check with …Bb4+ to develop with tempo, strike …d5, and snatch c4 — your free, harmonious development equalises comfortably.", sayShort: "e3 return: …Bb4+, …d5, …dxc4" },
+  beats: [
+    { atMove: 7, say: "Check …Bb4+, developing the bishop while White must respond.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 9, say: "Break …d5, hitting the centre and freeing your game.", sayShort: "…d5, free the game", highlights: [_H('d5')] },
+    { atMove: 13, say: "Take …dxc4, gaining a tempo on the bishop as you develop.", sayShort: "…dxc4, gain a tempo", highlights: [_H('c4')] },
+    { atMove: 21, say: "Activate …Re8 on the e-file; the position is balanced and easy to handle.", sayShort: "…Re8, the e-file", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_3: SublineNarration = {
+  intro: { say: "White's Nf3 lets you push the pawn forward instead of sacrificing it. …e4 cramps White, …d5 stakes the centre, and …dxc4 grabs a pawn — a strong, space-grabbing setup.", sayShort: "Nf3: …e4 and …d5 grab space" },
+  beats: [
+    { atMove: 5, say: "Push …e4, shoving the knight back to g1 and seizing central space.", sayShort: "…e4, shove the knight", highlights: [_H('e4')] },
+    { atMove: 7, say: "Stake …d5, claiming the centre while White untangles.", sayShort: "…d5, claim the centre", highlights: [_H('d5')] },
+    { atMove: 9, say: "Snatch …dxc4, picking up the pawn and keeping your space edge.", sayShort: "…dxc4, grab the pawn", highlights: [_H('c4')] },
+    { atMove: 21, say: "Reposition …Qf5, keeping the queen active and the position balanced.", sayShort: "…Qf5, active queen", highlights: [_H('f5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_4: SublineNarration = {
+  intro: { say: "This is the main Budapest. Leap …Ng4, develop the bishop to c5, and round the e5-pawn back up with …Ngxe5 — then your knight returns to the dominant e5-square.", sayShort: "Main: …Ng4, …Bc5, regain on e5" },
+  beats: [
+    { atMove: 5, say: "Spring …Ng4, the Budapest leap that will reclaim the e5-pawn.", sayShort: "…Ng4, the leap", highlights: [_H('g4')] },
+    { atMove: 7, say: "Develop …Bc5, the bishop glaring at f2 — the gambit's pressure point.", sayShort: "…Bc5, glare at f2", highlights: [_H('c5')] },
+    { atMove: 11, say: "Reclaim the pawn with …Ngxe5; material is level and your pieces are harmonious.", sayShort: "…Ngxe5, reclaim the pawn", highlights: [_H('e5')] },
+    { atMove: 19, say: "Re-route …Ne5, parking the knight on its dream central square.", sayShort: "…Ne5, the dream square", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_5: SublineNarration = {
+  intro: { say: "After the standard recapture, both sides castle and settle. You hold the bishop pair and a fine knight on e5 — gain queenside space with …a5 and contest the e-file.", sayShort: "Main: …a5 and the e-file" },
+  beats: [
+    { atMove: 5, say: "Spring …Ng4 to begin winning the gambit pawn back.", sayShort: "…Ng4, the leap", highlights: [_H('g4')] },
+    { atMove: 7, say: "Post …Bc5, the active bishop on the a7-g1 diagonal.", sayShort: "…Bc5, the active diagonal", highlights: [_H('c5')] },
+    { atMove: 11, say: "Recapture …Ngxe5; level material and the e5-knight is a rock.", sayShort: "…Ngxe5, the e5-rock", highlights: [_H('e5')] },
+    { atMove: 23, say: "Contest the e-file with …Re8; balanced, with your active pieces.", sayShort: "…Re8, the e-file", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_6: SublineNarration = {
+  intro: { say: "White develops the queen's knight to d2. Reclaim e5, and after the trades park the surviving knight back on the magnificent e5-outpost — equal and pleasant.", sayShort: "Nbd2: regain, …Ne5 outpost" },
+  beats: [
+    { atMove: 5, say: "Leap …Ng4 to harvest the e5-pawn.", sayShort: "…Ng4, the leap", highlights: [_H('g4')] },
+    { atMove: 7, say: "Develop …Bc5, aiming at f2 along the open diagonal.", sayShort: "…Bc5, aim at f2", highlights: [_H('c5')] },
+    { atMove: 11, say: "Recapture …Ngxe5, restoring the material with active pieces.", sayShort: "…Ngxe5, restore material", highlights: [_H('e5')] },
+    { atMove: 15, say: "Plant …Ne5 again, the knight commanding the centre; balanced.", sayShort: "…Ne5, command the centre", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_7: SublineNarration = {
+  intro: { say: "White keeps a knight on the board with Nc3 and Nd4. Recapture, tuck the bishop to b6, and complete development smoothly — your structure is sound and even.", sayShort: "Nc3: regain, …Bb6, develop" },
+  beats: [
+    { atMove: 5, say: "Spring …Ng4, eyeing the e5-pawn.", sayShort: "…Ng4, the leap", highlights: [_H('g4')] },
+    { atMove: 7, say: "Develop …Bc5, the bishop on its best diagonal.", sayShort: "…Bc5, best diagonal", highlights: [_H('c5')] },
+    { atMove: 11, say: "Win the pawn back with …Ngxe5; the game is level.", sayShort: "…Ngxe5, level the game", highlights: [_H('e5')] },
+    { atMove: 13, say: "Anchor …d6, solidifying and supporting your knight on e5.", sayShort: "…d6, solidify", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_8: SublineNarration = {
+  intro: { say: "White tries to expand with f4 after the trades. Recapture, reroute the kicked knight to g6, and counter with …f5 — your active play balances White's space.", sayShort: "Main: f4 met by …Ng6 and …f5" },
+  beats: [
+    { atMove: 5, say: "Leap …Ng4 to reclaim the gambit pawn.", sayShort: "…Ng4, the leap", highlights: [_H('g4')] },
+    { atMove: 7, say: "Develop …Bc5, pressing the a7-g1 diagonal.", sayShort: "…Bc5, press the diagonal", highlights: [_H('c5')] },
+    { atMove: 11, say: "Recapture …Ngxe5; material is even.", sayShort: "…Ngxe5, even material", highlights: [_H('e5')] },
+    { atMove: 23, say: "Counter …f5, striking at White's f4-pawn and grabbing space; balanced.", sayShort: "…f5, strike back", highlights: [_H('f5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_9: SublineNarration = {
+  intro: { say: "A quiet main-line treatment. Recapture, anchor with …d6, and swing the rook to e6 for a kingside lift — your pieces are active and the game is level.", sayShort: "Main: …d6 and the …Re6 lift" },
+  beats: [
+    { atMove: 5, say: "Spring …Ng4 to win back e5.", sayShort: "…Ng4, the leap", highlights: [_H('g4')] },
+    { atMove: 7, say: "Develop …Bc5, the bishop biting toward f2.", sayShort: "…Bc5, bite at f2", highlights: [_H('c5')] },
+    { atMove: 11, say: "Recapture …Ngxe5, restoring material.", sayShort: "…Ngxe5, restore material", highlights: [_H('e5')] },
+    { atMove: 23, say: "Lift …Re6, swinging the rook toward the kingside; balanced.", sayShort: "…Re6, the rook lift", highlights: [_H('e6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_10: SublineNarration = {
+  intro: { say: "White declines with d5, keeping the pawn but giving you a free hand. Plant the bishop on c5, ram the e-pawn to e3, and your wedge cramps White while you develop with ease.", sayShort: "Declined d5: …Bc5 and the …e3 wedge" },
+  beats: [
+    { atMove: 5, say: "Develop …Bc5 with gain of time, the bishop biting at f2 and the centre.", sayShort: "…Bc5, bite at f2", highlights: [_H('c5')] },
+    { atMove: 9, say: "Advance …e4, gaining space and cramping White's kingside development.", sayShort: "…e4, cramp the kingside", highlights: [_H('e4')] },
+    { atMove: 11, say: "Jam …e3! The pawn wedges into White's camp and snarls his pieces for moves to come.", sayShort: "…e3, the wedge", highlights: [_H('e3')] },
+    { atMove: 15, say: "Centralise …Qe7, supporting the wedge and connecting toward the queenside; you stand at least equal.", sayShort: "…Qe7, support the wedge", highlights: [_H('e7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_11: SublineNarration = {
+  intro: { say: "White grabs the pawn with the queen, but she's a target. Hit her with …Nc6, pin the knight with …Bb4, and after the dust settles your …Ne4 leap gives full equality.", sayShort: "…Nc6 hits the queen, …Bb4 pin" },
+  beats: [
+    { atMove: 7, say: "Develop …Nc6, gaining time by attacking the exposed queen.", sayShort: "…Nc6, hit the queen", highlights: [_H('c6')] },
+    { atMove: 9, say: "Pin with …Bb4, fixing the c3-knight to its queen.", sayShort: "…Bb4, pin the knight", highlights: [_H('b4')] },
+    { atMove: 13, say: "Lift …Re8, eyeing the e-file where White's king lingers.", sayShort: "…Re8, eye the e-file", highlights: [_H('e8')] },
+    { atMove: 21, say: "Spring …Ne4, the active knight hitting the bishop — fully equal with easy play.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_12: SublineNarration = {
+  intro: { say: "White returns the pawn with e3. Check with …Bb4+ to develop with tempo, strike …d5, and snatch c4 — your free, harmonious development equalises comfortably.", sayShort: "e3 return: …Bb4+, …d5, …dxc4" },
+  beats: [
+    { atMove: 7, say: "Check …Bb4+, developing the bishop while White must respond.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 9, say: "Break …d5, hitting the centre and freeing your game.", sayShort: "…d5, free the game", highlights: [_H('d5')] },
+    { atMove: 13, say: "Take …dxc4, gaining a tempo on the bishop as you develop.", sayShort: "…dxc4, gain a tempo", highlights: [_H('c4')] },
+    { atMove: 21, say: "Activate …Re8 on the e-file; the position is balanced and easy to handle.", sayShort: "…Re8, the e-file", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_13: SublineNarration = {
+  intro: { say: "White's Nf3 lets you push the pawn forward instead of sacrificing it. …e4 cramps White, …d5 stakes the centre, and …dxc4 grabs a pawn — a strong, space-grabbing setup.", sayShort: "Nf3: …e4 and …d5 grab space" },
+  beats: [
+    { atMove: 5, say: "Push …e4, shoving the knight back to g1 and seizing central space.", sayShort: "…e4, shove the knight", highlights: [_H('e4')] },
+    { atMove: 7, say: "Stake …d5, claiming the centre while White untangles.", sayShort: "…d5, claim the centre", highlights: [_H('d5')] },
+    { atMove: 9, say: "Snatch …dxc4, picking up the pawn and keeping your space edge.", sayShort: "…dxc4, grab the pawn", highlights: [_H('c4')] },
+    { atMove: 21, say: "Reposition …Qf5, keeping the queen active and the position balanced.", sayShort: "…Qf5, active queen", highlights: [_H('f5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_14: SublineNarration = {
+  intro: { say: "The Fajarowicz: …Ne4 instead of …Ng4. Check with …Bb4+, trade pieces, and develop the bishop to b7 to round up the e5-pawn down the long diagonal — balanced.", sayShort: "Fajarowicz: …Ne4, …Bb7 regains" },
+  beats: [
+    { atMove: 5, say: "Leap …Ne4, the Fajarowicz knight occupying the centre.", sayShort: "…Ne4, the Fajarowicz", highlights: [_H('e4')] },
+    { atMove: 7, say: "Check …Bb4+, developing with tempo and forcing exchanges.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 9, say: "Develop …Nc6, training a piece on the e5-pawn.", sayShort: "…Nc6, eye e5", highlights: [_H('c6')] },
+    { atMove: 19, say: "Develop …Bb7, the bishop down the long diagonal to recover e5; balanced.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_15: SublineNarration = {
+  intro: { say: "In the Fajarowicz, the simplest path is to trade off and recapture e5 with the knight. After …Qe7 and …Nxe5 material is level and you're fully developed.", sayShort: "Fajarowicz: …Nxe5 regains cleanly" },
+  beats: [
+    { atMove: 5, say: "Leap …Ne4, planting the knight on its central post.", sayShort: "…Ne4, central post", highlights: [_H('e4')] },
+    { atMove: 7, say: "Check …Bb4+, developing and inviting the exchanges that ease your game.", sayShort: "…Bb4+, invite trades", highlights: [_H('b4')] },
+    { atMove: 9, say: "Develop …Nc6, aiming at the e5-pawn.", sayShort: "…Nc6, aim at e5", highlights: [_H('c6')] },
+    { atMove: 17, say: "Recapture …Nxe5, the centralised knight; fully equal.", sayShort: "…Nxe5, centralise", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_16: SublineNarration = {
+  intro: { say: "White plays e3 in the Fajarowicz. Open lines with …d6, trade off the minor pieces, and recover the pawn with …dxe5 — the resulting position is balanced.", sayShort: "Fajarowicz: …d6 and …dxe5" },
+  beats: [
+    { atMove: 5, say: "Leap …Ne4, the Fajarowicz centralisation.", sayShort: "…Ne4, centralise", highlights: [_H('e4')] },
+    { atMove: 7, say: "Check …Bb4+, developing with tempo.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 11, say: "Play …d6, opening the diagonal to win the e5-pawn back.", sayShort: "…d6, open the diagonal", highlights: [_H('d6')] },
+    { atMove: 17, say: "Recapture …dxe5, restoring material into a balanced game.", sayShort: "…dxe5, restore material", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_17: SublineNarration = {
+  intro: { say: "White's Qc2 supports the e4-knight's removal. Trade everything off, centralise the queen with …Qe7, and recapture e5 — equal, with no weaknesses.", sayShort: "Fajarowicz Qc2: trade and …Nxe5" },
+  beats: [
+    { atMove: 5, say: "Leap …Ne4, occupying the centre.", sayShort: "…Ne4, occupy the centre", highlights: [_H('e4')] },
+    { atMove: 7, say: "Check …Bb4+, developing the bishop with tempo.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 9, say: "Develop …Nc6, eyeing the e5-pawn.", sayShort: "…Nc6, eye e5", highlights: [_H('c6')] },
+    { atMove: 17, say: "Recapture …Nxe5, the knight back in the centre; fully equal.", sayShort: "…Nxe5, recapture", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_18: SublineNarration = {
+  intro: { say: "White's Qf4 clings to the extra pawn. Fianchetto with …b6 and …Bb7, and the bishop's pressure down the long diagonal recovers e5 with a balanced game.", sayShort: "Fajarowicz Qf4: …Bb7 recovers" },
+  beats: [
+    { atMove: 5, say: "Leap …Ne4, the Fajarowicz knight.", sayShort: "…Ne4, the Fajarowicz", highlights: [_H('e4')] },
+    { atMove: 7, say: "Check …Bb4+, gaining time and forcing trades.", sayShort: "…Bb4+, gain time", highlights: [_H('b4')] },
+    { atMove: 9, say: "Develop …Nc6, pressing the e5-pawn.", sayShort: "…Nc6, press e5", highlights: [_H('c6')] },
+    { atMove: 19, say: "Develop …Bb7, the bishop down the long diagonal toward e5; balanced.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_19: SublineNarration = {
+  intro: { say: "White fianchettoes with g3 in the Fajarowicz. Open with …d6 and …dxe5, then the cheeky …Nxf2 fork grabs material in the tactics — sharp but balanced.", sayShort: "Fajarowicz g3: …d6 and …Nxf2" },
+  beats: [
+    { atMove: 5, say: "Leap …Ne4, planting the Fajarowicz knight.", sayShort: "…Ne4, plant the knight", highlights: [_H('e4')] },
+    { atMove: 7, say: "Check …Bb4+, developing with tempo.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 11, say: "Open …d6, undermining the e5-pawn.", sayShort: "…d6, undermine e5", highlights: [_H('d6')] },
+    { atMove: 15, say: "Snatch …Nxf2! The fork grabs material in the complications; balanced.", sayShort: "…Nxf2, the fork", highlights: [_H('f2')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_20: SublineNarration = {
+  intro: { say: "White declines with d5, keeping the pawn but giving you a free hand. Plant the bishop on c5, ram the e-pawn to e3, and your wedge cramps White while you develop with ease.", sayShort: "Declined d5: …Bc5 and the …e3 wedge" },
+  beats: [
+    { atMove: 5, say: "Develop …Bc5 with gain of time, the bishop biting at f2 and the centre.", sayShort: "…Bc5, bite at f2", highlights: [_H('c5')] },
+    { atMove: 9, say: "Advance …e4, gaining space and cramping White's kingside development.", sayShort: "…e4, cramp the kingside", highlights: [_H('e4')] },
+    { atMove: 11, say: "Jam …e3! The pawn wedges into White's camp and snarls his pieces for moves to come.", sayShort: "…e3, the wedge", highlights: [_H('e3')] },
+    { atMove: 15, say: "Centralise …Qe7, supporting the wedge and connecting toward the queenside; you stand at least equal.", sayShort: "…Qe7, support the wedge", highlights: [_H('e7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_21: SublineNarration = {
+  intro: { say: "White grabs the pawn with the queen, but she's a target. Hit her with …Nc6, pin the knight with …Bb4, and after the dust settles your …Ne4 leap gives full equality.", sayShort: "…Nc6 hits the queen, …Bb4 pin" },
+  beats: [
+    { atMove: 7, say: "Develop …Nc6, gaining time by attacking the exposed queen.", sayShort: "…Nc6, hit the queen", highlights: [_H('c6')] },
+    { atMove: 9, say: "Pin with …Bb4, fixing the c3-knight to its queen.", sayShort: "…Bb4, pin the knight", highlights: [_H('b4')] },
+    { atMove: 13, say: "Lift …Re8, eyeing the e-file where White's king lingers.", sayShort: "…Re8, eye the e-file", highlights: [_H('e8')] },
+    { atMove: 21, say: "Spring …Ne4, the active knight hitting the bishop — fully equal with easy play.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_22: SublineNarration = {
+  intro: { say: "White returns the pawn with e3. Check with …Bb4+ to develop with tempo, strike …d5, and snatch c4 — your free, harmonious development equalises comfortably.", sayShort: "e3 return: …Bb4+, …d5, …dxc4" },
+  beats: [
+    { atMove: 7, say: "Check …Bb4+, developing the bishop while White must respond.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 9, say: "Break …d5, hitting the centre and freeing your game.", sayShort: "…d5, free the game", highlights: [_H('d5')] },
+    { atMove: 13, say: "Take …dxc4, gaining a tempo on the bishop as you develop.", sayShort: "…dxc4, gain a tempo", highlights: [_H('c4')] },
+    { atMove: 21, say: "Activate …Re8 on the e-file; the position is balanced and easy to handle.", sayShort: "…Re8, the e-file", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_23: SublineNarration = {
+  intro: { say: "White's Nf3 lets you push the pawn forward instead of sacrificing it. …e4 cramps White, …d5 stakes the centre, and …dxc4 grabs a pawn — a strong, space-grabbing setup.", sayShort: "Nf3: …e4 and …d5 grab space" },
+  beats: [
+    { atMove: 5, say: "Push …e4, shoving the knight back to g1 and seizing central space.", sayShort: "…e4, shove the knight", highlights: [_H('e4')] },
+    { atMove: 7, say: "Stake …d5, claiming the centre while White untangles.", sayShort: "…d5, claim the centre", highlights: [_H('d5')] },
+    { atMove: 9, say: "Snatch …dxc4, picking up the pawn and keeping your space edge.", sayShort: "…dxc4, grab the pawn", highlights: [_H('c4')] },
+    { atMove: 21, say: "Reposition …Qf5, keeping the queen active and the position balanced.", sayShort: "…Qf5, active queen", highlights: [_H('f5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_24: SublineNarration = {
+  intro: { say: "White defends the pawn with Bf4. Check …Bb4+ and trade to wreck White's queenside pawns, then crack the centre with …f6 to win the pawn back — equal with a structural plus.", sayShort: "Bf4: …Bb4+ wrecks pawns, …f6" },
+  beats: [
+    { atMove: 5, say: "Spring …Ng4, eyeing the defended e5-pawn.", sayShort: "…Ng4, eye e5", highlights: [_H('g4')] },
+    { atMove: 7, say: "Develop …Nc6, adding pressure to e5.", sayShort: "…Nc6, pressure e5", highlights: [_H('c6')] },
+    { atMove: 9, say: "Check …Bb4+, preparing to double White's c-pawns.", sayShort: "…Bb4+, prepare doubling", highlights: [_H('b4')] },
+    { atMove: 17, say: "Recapture …Nxf6 after the …f6 break; material is level and White's pawns are damaged.", sayShort: "…Nxf6, regain and damage", highlights: [_H('f6')] },
+    { atMove: 23, say: "Re-route …Ne4, the knight hopping to c5 to harry White's queenside; balanced.", sayShort: "…Ne4, harry the queenside", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_25: SublineNarration = {
+  intro: { say: "White holds the pawn with Bf4 and e3. Check, exchange on d2, and reclaim e5 with the knight — your development and the bishop pair give a comfortable game.", sayShort: "Bf4: …Bb4+ and …Ngxe5" },
+  beats: [
+    { atMove: 5, say: "Leap …Ng4 to challenge the e5-pawn.", sayShort: "…Ng4, challenge e5", highlights: [_H('g4')] },
+    { atMove: 7, say: "Develop …Nc6, training a second piece on e5.", sayShort: "…Nc6, second attacker", highlights: [_H('c6')] },
+    { atMove: 9, say: "Check …Bb4+, developing with tempo.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 11, say: "Reclaim …Ngxe5; material is even and your pieces are active.", sayShort: "…Ngxe5, even material", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_26: SublineNarration = {
+  intro: { say: "Another Bf4 defence. Double White's pawns with …Bxc3+, then break …f6 to recover the gambit pawn — you emerge with the better structure in an even game.", sayShort: "Bf4: …Bxc3+ doubling, …f6" },
+  beats: [
+    { atMove: 5, say: "Spring …Ng4, eyeing e5.", sayShort: "…Ng4, eye e5", highlights: [_H('g4')] },
+    { atMove: 7, say: "Develop …Nc6, pressing the pawn.", sayShort: "…Nc6, press the pawn", highlights: [_H('c6')] },
+    { atMove: 9, say: "Check …Bb4+, en route to damaging White's pawns.", sayShort: "…Bb4+, damage incoming", highlights: [_H('b4')] },
+    { atMove: 17, say: "Recapture …Nxf6; the pawn is back and White's queenside is split.", sayShort: "…Nxf6, split his pawns", highlights: [_H('f6')] },
+    { atMove: 23, say: "Develop …Be6, completing development and eyeing c4; balanced.", sayShort: "…Be6, complete development", highlights: [_H('e6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_27: SublineNarration = {
+  intro: { say: "White lunges Qd5 to cling to the pawn. Counter with …d6 to undermine the chain, and the tactics with …Qf6 recover the material — a balanced middlegame.", sayShort: "Bf4 Qd5: …d6 undermines" },
+  beats: [
+    { atMove: 5, say: "Spring …Ng4, eyeing e5.", sayShort: "…Ng4, eye e5", highlights: [_H('g4')] },
+    { atMove: 7, say: "Develop …Nc6, pressing the pawn.", sayShort: "…Nc6, press the pawn", highlights: [_H('c6')] },
+    { atMove: 9, say: "Strike …d6, undermining White's advanced pawn chain.", sayShort: "…d6, undermine", highlights: [_H('d6')] },
+    { atMove: 15, say: "Recover with …Qxd6; material is restored and the game is balanced.", sayShort: "…Qxd6, restore material", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_28: SublineNarration = {
+  intro: { say: "White inserts h3 to deny g4. No matter — your knight simply takes on e5 first. Check, exchange, and develop the bishop to f5 for an active, balanced game.", sayShort: "Bf4 h3: …Ngxe5 first" },
+  beats: [
+    { atMove: 5, say: "Leap …Ng4 anyway, eyeing the e5-pawn before h3 lands.", sayShort: "…Ng4, before h3", highlights: [_H('g4')] },
+    { atMove: 7, say: "Develop …Nc6, doubling up on e5.", sayShort: "…Nc6, double up", highlights: [_H('c6')] },
+    { atMove: 9, say: "Reclaim …Ngxe5, restoring the material.", sayShort: "…Ngxe5, restore material", highlights: [_H('e5')] },
+    { atMove: 19, say: "Develop …Bf5, an active bishop; balanced.", sayShort: "…Bf5, active bishop", highlights: [_H('f5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_29: SublineNarration = {
+  intro: { say: "White defends with Bf4 and Nf3. Double the pawns with …Bxc3+, then recapture e5 with the knight — your structural edge gives an even, pleasant position.", sayShort: "Bf4: …Bxc3+ then …Ngxe5" },
+  beats: [
+    { atMove: 5, say: "Spring …Ng4, eyeing e5.", sayShort: "…Ng4, eye e5", highlights: [_H('g4')] },
+    { atMove: 7, say: "Develop …Nc6, pressing the pawn.", sayShort: "…Nc6, press the pawn", highlights: [_H('c6')] },
+    { atMove: 9, say: "Check …Bb4+, preparing to wreck White's queenside.", sayShort: "…Bb4+, prepare the wreck", highlights: [_H('b4')] },
+    { atMove: 15, say: "Reclaim …Ngxe5; material is level and White's pawns are doubled.", sayShort: "…Ngxe5, level with a plus", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_30: SublineNarration = {
+  intro: { say: "White declines with d5, keeping the pawn but giving you a free hand. Plant the bishop on c5, ram the e-pawn to e3, and your wedge cramps White while you develop with ease.", sayShort: "Declined d5: …Bc5 and the …e3 wedge" },
+  beats: [
+    { atMove: 5, say: "Develop …Bc5 with gain of time, the bishop biting at f2 and the centre.", sayShort: "…Bc5, bite at f2", highlights: [_H('c5')] },
+    { atMove: 9, say: "Advance …e4, gaining space and cramping White's kingside development.", sayShort: "…e4, cramp the kingside", highlights: [_H('e4')] },
+    { atMove: 11, say: "Jam …e3! The pawn wedges into White's camp and snarls his pieces for moves to come.", sayShort: "…e3, the wedge", highlights: [_H('e3')] },
+    { atMove: 15, say: "Centralise …Qe7, supporting the wedge and connecting toward the queenside; you stand at least equal.", sayShort: "…Qe7, support the wedge", highlights: [_H('e7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_31: SublineNarration = {
+  intro: { say: "White grabs the pawn with the queen, but she's a target. Hit her with …Nc6, pin the knight with …Bb4, and after the dust settles your …Ne4 leap gives full equality.", sayShort: "…Nc6 hits the queen, …Bb4 pin" },
+  beats: [
+    { atMove: 7, say: "Develop …Nc6, gaining time by attacking the exposed queen.", sayShort: "…Nc6, hit the queen", highlights: [_H('c6')] },
+    { atMove: 9, say: "Pin with …Bb4, fixing the c3-knight to its queen.", sayShort: "…Bb4, pin the knight", highlights: [_H('b4')] },
+    { atMove: 13, say: "Lift …Re8, eyeing the e-file where White's king lingers.", sayShort: "…Re8, eye the e-file", highlights: [_H('e8')] },
+    { atMove: 21, say: "Spring …Ne4, the active knight hitting the bishop — fully equal with easy play.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_32: SublineNarration = {
+  intro: { say: "White returns the pawn with e3. Check with …Bb4+ to develop with tempo, strike …d5, and snatch c4 — your free, harmonious development equalises comfortably.", sayShort: "e3 return: …Bb4+, …d5, …dxc4" },
+  beats: [
+    { atMove: 7, say: "Check …Bb4+, developing the bishop while White must respond.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 9, say: "Break …d5, hitting the centre and freeing your game.", sayShort: "…d5, free the game", highlights: [_H('d5')] },
+    { atMove: 13, say: "Take …dxc4, gaining a tempo on the bishop as you develop.", sayShort: "…dxc4, gain a tempo", highlights: [_H('c4')] },
+    { atMove: 21, say: "Activate …Re8 on the e-file; the position is balanced and easy to handle.", sayShort: "…Re8, the e-file", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_33: SublineNarration = {
+  intro: { say: "White's Nf3 lets you push the pawn forward instead of sacrificing it. …e4 cramps White, …d5 stakes the centre, and …dxc4 grabs a pawn — a strong, space-grabbing setup.", sayShort: "Nf3: …e4 and …d5 grab space" },
+  beats: [
+    { atMove: 5, say: "Push …e4, shoving the knight back to g1 and seizing central space.", sayShort: "…e4, shove the knight", highlights: [_H('e4')] },
+    { atMove: 7, say: "Stake …d5, claiming the centre while White untangles.", sayShort: "…d5, claim the centre", highlights: [_H('d5')] },
+    { atMove: 9, say: "Snatch …dxc4, picking up the pawn and keeping your space edge.", sayShort: "…dxc4, grab the pawn", highlights: [_H('c4')] },
+    { atMove: 21, say: "Reposition …Qf5, keeping the queen active and the position balanced.", sayShort: "…Qf5, active queen", highlights: [_H('f5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_34: SublineNarration = {
+  intro: { say: "With Nbd2, White meets the check without doubling his pawns. Centralise …Qe7, recapture e5, and you reach a comfortable, balanced position.", sayShort: "Bf4 Nbd2: …Qe7 and …Ngxe5" },
+  beats: [
+    { atMove: 5, say: "Leap …Ng4, eyeing the e5-pawn.", sayShort: "…Ng4, eye e5", highlights: [_H('g4')] },
+    { atMove: 9, say: "Check …Bb4+, developing the bishop with tempo.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 11, say: "Centralise …Qe7, lining up against e5 and supporting the recapture.", sayShort: "…Qe7, line up on e5", highlights: [_H('e7')] },
+    { atMove: 13, say: "Reclaim …Ngxe5; level material, comfortable position.", sayShort: "…Ngxe5, comfortable", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_35: SublineNarration = {
+  intro: { say: "This is the famous Budapest trap. White grabs the bishop with the greedy axb4 — and walks into a smothered mate. When you see …Nd3, take the point: it's checkmate.", sayShort: "The …Nd3# smothered-mate trap" },
+  beats: [
+    { atMove: 9, say: "Set the trap with …Bb4+, the check that baits the fatal capture.", sayShort: "…Bb4+, bait the capture", highlights: [_H('b4')] },
+    { atMove: 13, say: "Reclaim …Ngxe5, the knight now eyeing the d3-square.", sayShort: "…Ngxe5, eye d3", highlights: [_H('e5')] },
+    { atMove: 15, say: "Deliver …Nd3 — it's checkmate. The bishop on e2 and pawns on c4/f2 seal the king's escape. Always take the mate.", sayShort: "…Nd3 is checkmate", highlights: [_H('d3')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_36: SublineNarration = {
+  intro: { say: "Here White avoids the trap and trades sensibly. Recapture on e5 with the queen after the exchanges, and the position is dead level with both sides developed.", sayShort: "Bf4: …Qxe5 after the trades" },
+  beats: [
+    { atMove: 5, say: "Spring …Ng4, eyeing e5.", sayShort: "…Ng4, eye e5", highlights: [_H('g4')] },
+    { atMove: 9, say: "Check …Bb4+, developing and probing for the trap.", sayShort: "…Bb4+, develop and probe", highlights: [_H('b4')] },
+    { atMove: 11, say: "Centralise …Qe7, supporting the e5 recapture.", sayShort: "…Qe7, support e5", highlights: [_H('e7')] },
+    { atMove: 19, say: "Recapture …Qxe5, the queen centralised; fully equal.", sayShort: "…Qxe5, centralise", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_37: SublineNarration = {
+  intro: { say: "White holds the pawn with Bf4 and e3. Check, exchange on d2, and reclaim e5 with the knight — your development and the bishop pair give a comfortable game.", sayShort: "Bf4: …Bb4+ and …Ngxe5" },
+  beats: [
+    { atMove: 5, say: "Leap …Ng4 to challenge the e5-pawn.", sayShort: "…Ng4, challenge e5", highlights: [_H('g4')] },
+    { atMove: 7, say: "Develop …Nc6, training a second piece on e5.", sayShort: "…Nc6, second attacker", highlights: [_H('c6')] },
+    { atMove: 9, say: "Check …Bb4+, developing with tempo.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 11, say: "Reclaim …Ngxe5; material is even and your pieces are active.", sayShort: "…Ngxe5, even material", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_38: SublineNarration = {
+  intro: { say: "White plays h3 and Nbd2. Centralise the queen, recapture e5, and castle into a sound, balanced middlegame — nothing for White to show for the early pawn.", sayShort: "Bf4 h3: …Qe7 and …Ngxe5" },
+  beats: [
+    { atMove: 5, say: "Leap …Ng4, eyeing e5.", sayShort: "…Ng4, eye e5", highlights: [_H('g4')] },
+    { atMove: 9, say: "Check …Bb4+, developing with tempo.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 11, say: "Centralise …Qe7, supporting the recapture on e5.", sayShort: "…Qe7, support e5", highlights: [_H('e7')] },
+    { atMove: 13, say: "Reclaim …Ngxe5; level and sound.", sayShort: "…Ngxe5, level and sound", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_39: SublineNarration = {
+  intro: { say: "White lunges Qd5 to cling to the pawn. Counter with …d6 to undermine the chain, and the tactics with …Qf6 recover the material — a balanced middlegame.", sayShort: "Bf4 Qd5: …d6 undermines" },
+  beats: [
+    { atMove: 5, say: "Spring …Ng4, eyeing e5.", sayShort: "…Ng4, eye e5", highlights: [_H('g4')] },
+    { atMove: 7, say: "Develop …Nc6, pressing the pawn.", sayShort: "…Nc6, press the pawn", highlights: [_H('c6')] },
+    { atMove: 9, say: "Strike …d6, undermining White's advanced pawn chain.", sayShort: "…d6, undermine", highlights: [_H('d6')] },
+    { atMove: 15, say: "Recover with …Qxd6; material is restored and the game is balanced.", sayShort: "…Qxd6, restore material", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_40: SublineNarration = {
+  intro: { say: "White declines with d5, keeping the pawn but giving you a free hand. Plant the bishop on c5, ram the e-pawn to e3, and your wedge cramps White while you develop with ease.", sayShort: "Declined d5: …Bc5 and the …e3 wedge" },
+  beats: [
+    { atMove: 5, say: "Develop …Bc5 with gain of time, the bishop biting at f2 and the centre.", sayShort: "…Bc5, bite at f2", highlights: [_H('c5')] },
+    { atMove: 9, say: "Advance …e4, gaining space and cramping White's kingside development.", sayShort: "…e4, cramp the kingside", highlights: [_H('e4')] },
+    { atMove: 11, say: "Jam …e3! The pawn wedges into White's camp and snarls his pieces for moves to come.", sayShort: "…e3, the wedge", highlights: [_H('e3')] },
+    { atMove: 15, say: "Centralise …Qe7, supporting the wedge and connecting toward the queenside; you stand at least equal.", sayShort: "…Qe7, support the wedge", highlights: [_H('e7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_41: SublineNarration = {
+  intro: { say: "White grabs the pawn with the queen, but she's a target. Hit her with …Nc6, pin the knight with …Bb4, and after the dust settles your …Ne4 leap gives full equality.", sayShort: "…Nc6 hits the queen, …Bb4 pin" },
+  beats: [
+    { atMove: 7, say: "Develop …Nc6, gaining time by attacking the exposed queen.", sayShort: "…Nc6, hit the queen", highlights: [_H('c6')] },
+    { atMove: 9, say: "Pin with …Bb4, fixing the c3-knight to its queen.", sayShort: "…Bb4, pin the knight", highlights: [_H('b4')] },
+    { atMove: 13, say: "Lift …Re8, eyeing the e-file where White's king lingers.", sayShort: "…Re8, eye the e-file", highlights: [_H('e8')] },
+    { atMove: 21, say: "Spring …Ne4, the active knight hitting the bishop — fully equal with easy play.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_42: SublineNarration = {
+  intro: { say: "White returns the pawn with e3. Check with …Bb4+ to develop with tempo, strike …d5, and snatch c4 — your free, harmonious development equalises comfortably.", sayShort: "e3 return: …Bb4+, …d5, …dxc4" },
+  beats: [
+    { atMove: 7, say: "Check …Bb4+, developing the bishop while White must respond.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 9, say: "Break …d5, hitting the centre and freeing your game.", sayShort: "…d5, free the game", highlights: [_H('d5')] },
+    { atMove: 13, say: "Take …dxc4, gaining a tempo on the bishop as you develop.", sayShort: "…dxc4, gain a tempo", highlights: [_H('c4')] },
+    { atMove: 21, say: "Activate …Re8 on the e-file; the position is balanced and easy to handle.", sayShort: "…Re8, the e-file", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_43: SublineNarration = {
+  intro: { say: "White's Nf3 lets you push the pawn forward instead of sacrificing it. …e4 cramps White, …d5 stakes the centre, and …dxc4 grabs a pawn — a strong, space-grabbing setup.", sayShort: "Nf3: …e4 and …d5 grab space" },
+  beats: [
+    { atMove: 5, say: "Push …e4, shoving the knight back to g1 and seizing central space.", sayShort: "…e4, shove the knight", highlights: [_H('e4')] },
+    { atMove: 7, say: "Stake …d5, claiming the centre while White untangles.", sayShort: "…d5, claim the centre", highlights: [_H('d5')] },
+    { atMove: 9, say: "Snatch …dxc4, picking up the pawn and keeping your space edge.", sayShort: "…dxc4, grab the pawn", highlights: [_H('c4')] },
+    { atMove: 21, say: "Reposition …Qf5, keeping the queen active and the position balanced.", sayShort: "…Qf5, active queen", highlights: [_H('f5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_44: SublineNarration = {
+  intro: { say: "Yet another Bf4 line. Double White's c-pawns, break with …f6 to win the pawn back, then fianchetto …Bb7 to bear down the long diagonal — even, with the better structure.", sayShort: "Bf4: …Bxc3+, …f6, …Bb7" },
+  beats: [
+    { atMove: 5, say: "Spring …Ng4, eyeing the pawn.", sayShort: "…Ng4, eye the pawn", highlights: [_H('g4')] },
+    { atMove: 9, say: "Check …Bb4+, en route to doubling White's pawns.", sayShort: "…Bb4+, doubling next", highlights: [_H('b4')] },
+    { atMove: 17, say: "Recapture …Nxf6; material level, White's pawns split.", sayShort: "…Nxf6, regain", highlights: [_H('f6')] },
+    { atMove: 23, say: "Fianchetto …Bb7, raking the long diagonal; balanced with a structural plus.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_45: SublineNarration = {
+  intro: { say: "A calm main-line transposition. Recapture, anchor with …d6, castle, and lift the rook to e6 for kingside ideas — your pieces are active in a level position.", sayShort: "Main: …d6 then …Re6 lift" },
+  beats: [
+    { atMove: 5, say: "Spring …Ng4 to win e5 back.", sayShort: "…Ng4, win e5 back", highlights: [_H('g4')] },
+    { atMove: 7, say: "Develop …Bc5, the bishop on the a7-g1 diagonal.", sayShort: "…Bc5, the diagonal", highlights: [_H('c5')] },
+    { atMove: 11, say: "Recapture …Ngxe5; even material.", sayShort: "…Ngxe5, even material", highlights: [_H('e5')] },
+    { atMove: 23, say: "Swing …Re6, lifting the rook toward the kingside; balanced.", sayShort: "…Re6, the rook lift", highlights: [_H('e6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_46: SublineNarration = {
+  intro: { say: "White returns the pawn with e3. Recapture with …Nxe5, then switch plans: fianchetto with …g6 and strike …f5 for a dynamic King's-Indian-style game — balanced and double-edged.", sayShort: "e3: …Nxe5 then …g6/…f5" },
+  beats: [
+    { atMove: 5, say: "Leap …Ng4, eyeing the e5-pawn.", sayShort: "…Ng4, eye e5", highlights: [_H('g4')] },
+    { atMove: 7, say: "Recapture …Nxe5, the centralised knight.", sayShort: "…Nxe5, centralise", highlights: [_H('e5')] },
+    { atMove: 9, say: "Fianchetto …g6, switching to a King's-Indian setup.", sayShort: "…g6, KID setup", highlights: [_H('g6')] },
+    { atMove: 17, say: "Strike …f5, opening the kingside for a dynamic attack; balanced.", sayShort: "…f5, open the kingside", highlights: [_H('f5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_47: SublineNarration = {
+  intro: { say: "White grabs the centre with e4 and f4. Recapture e5, retreat the knight to c6, and develop your pieces actively — White's broad pawns are loose and you castle quickly.", sayShort: "e4-f4: …Nxe5, develop fast" },
+  beats: [
+    { atMove: 5, say: "Spring …Ng4, eyeing e5.", sayShort: "…Ng4, eye e5", highlights: [_H('g4')] },
+    { atMove: 7, say: "Recapture …Nxe5, taking the pawn back at once.", sayShort: "…Nxe5, take it back", highlights: [_H('e5')] },
+    { atMove: 11, say: "Develop …Bc5, the active bishop hitting toward f2.", sayShort: "…Bc5, hit f2", highlights: [_H('c5')] },
+    { atMove: 15, say: "Castle …O-O; balanced, with White's centre over-extended.", sayShort: "…O-O, balanced", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_48: SublineNarration = {
+  intro: { say: "White plays e4, f4 and Be3. Recapture, check to double White's pawns, and fianchetto …Bb7 to target the over-extended centre — a balanced, double-edged fight.", sayShort: "e4-f4: …Bb4+ and …Bb7" },
+  beats: [
+    { atMove: 5, say: "Leap …Ng4, eyeing the pawn.", sayShort: "…Ng4, eye the pawn", highlights: [_H('g4')] },
+    { atMove: 7, say: "Recapture …Nxe5, the knight back in the centre.", sayShort: "…Nxe5, recapture", highlights: [_H('e5')] },
+    { atMove: 11, say: "Check …Bb4+, developing and preparing to double White's pawns.", sayShort: "…Bb4+, double next", highlights: [_H('b4')] },
+    { atMove: 23, say: "Fianchetto …Bb7, hitting the broad centre; balanced.", sayShort: "…Bb7, hit the centre", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_49: SublineNarration = {
+  intro: { say: "White builds e4-f4 with Nf3. Recapture, develop …Bc5, and strike …f5 to challenge the centre — your active pieces hold the balance in a sharp game.", sayShort: "e4-f4: …Bc5 and …f5" },
+  beats: [
+    { atMove: 5, say: "Spring …Ng4, eyeing e5.", sayShort: "…Ng4, eye e5", highlights: [_H('g4')] },
+    { atMove: 7, say: "Recapture …Nxe5, restoring material.", sayShort: "…Nxe5, restore material", highlights: [_H('e5')] },
+    { atMove: 11, say: "Develop …Bc5, the bishop on its active diagonal.", sayShort: "…Bc5, active diagonal", highlights: [_H('c5')] },
+    { atMove: 21, say: "Strike …f5, challenging White's broad centre; balanced.", sayShort: "…f5, challenge the centre", highlights: [_H('f5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_50: SublineNarration = {
+  intro: { say: "White declines with d5, keeping the pawn but giving you a free hand. Plant the bishop on c5, ram the e-pawn to e3, and your wedge cramps White while you develop with ease.", sayShort: "Declined d5: …Bc5 and the …e3 wedge" },
+  beats: [
+    { atMove: 5, say: "Develop …Bc5 with gain of time, the bishop biting at f2 and the centre.", sayShort: "…Bc5, bite at f2", highlights: [_H('c5')] },
+    { atMove: 9, say: "Advance …e4, gaining space and cramping White's kingside development.", sayShort: "…e4, cramp the kingside", highlights: [_H('e4')] },
+    { atMove: 11, say: "Jam …e3! The pawn wedges into White's camp and snarls his pieces for moves to come.", sayShort: "…e3, the wedge", highlights: [_H('e3')] },
+    { atMove: 15, say: "Centralise …Qe7, supporting the wedge and connecting toward the queenside; you stand at least equal.", sayShort: "…Qe7, support the wedge", highlights: [_H('e7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_51: SublineNarration = {
+  intro: { say: "White grabs the pawn with the queen, but she's a target. Hit her with …Nc6, pin the knight with …Bb4, and after the dust settles your …Ne4 leap gives full equality.", sayShort: "…Nc6 hits the queen, …Bb4 pin" },
+  beats: [
+    { atMove: 7, say: "Develop …Nc6, gaining time by attacking the exposed queen.", sayShort: "…Nc6, hit the queen", highlights: [_H('c6')] },
+    { atMove: 9, say: "Pin with …Bb4, fixing the c3-knight to its queen.", sayShort: "…Bb4, pin the knight", highlights: [_H('b4')] },
+    { atMove: 13, say: "Lift …Re8, eyeing the e-file where White's king lingers.", sayShort: "…Re8, eye the e-file", highlights: [_H('e8')] },
+    { atMove: 21, say: "Spring …Ne4, the active knight hitting the bishop — fully equal with easy play.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_52: SublineNarration = {
+  intro: { say: "White returns the pawn with e3. Check with …Bb4+ to develop with tempo, strike …d5, and snatch c4 — your free, harmonious development equalises comfortably.", sayShort: "e3 return: …Bb4+, …d5, …dxc4" },
+  beats: [
+    { atMove: 7, say: "Check …Bb4+, developing the bishop while White must respond.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 9, say: "Break …d5, hitting the centre and freeing your game.", sayShort: "…d5, free the game", highlights: [_H('d5')] },
+    { atMove: 13, say: "Take …dxc4, gaining a tempo on the bishop as you develop.", sayShort: "…dxc4, gain a tempo", highlights: [_H('c4')] },
+    { atMove: 21, say: "Activate …Re8 on the e-file; the position is balanced and easy to handle.", sayShort: "…Re8, the e-file", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_53: SublineNarration = {
+  intro: { say: "White's Nf3 lets you push the pawn forward instead of sacrificing it. …e4 cramps White, …d5 stakes the centre, and …dxc4 grabs a pawn — a strong, space-grabbing setup.", sayShort: "Nf3: …e4 and …d5 grab space" },
+  beats: [
+    { atMove: 5, say: "Push …e4, shoving the knight back to g1 and seizing central space.", sayShort: "…e4, shove the knight", highlights: [_H('e4')] },
+    { atMove: 7, say: "Stake …d5, claiming the centre while White untangles.", sayShort: "…d5, claim the centre", highlights: [_H('d5')] },
+    { atMove: 9, say: "Snatch …dxc4, picking up the pawn and keeping your space edge.", sayShort: "…dxc4, grab the pawn", highlights: [_H('c4')] },
+    { atMove: 21, say: "Reposition …Qf5, keeping the queen active and the position balanced.", sayShort: "…Qf5, active queen", highlights: [_H('f5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_54: SublineNarration = {
+  intro: { say: "White slips in Nc3 before Be2. Recapture e5, anchor …d6, and tuck the bishop to b6 — your harmonious development gives a sound, even middlegame.", sayShort: "Nc3: …Ngxe5, …d6, …Bb6" },
+  beats: [
+    { atMove: 5, say: "Leap …Ng4, eyeing e5.", sayShort: "…Ng4, eye e5", highlights: [_H('g4')] },
+    { atMove: 7, say: "Develop …Bc5, the bishop on the long a7-g1 diagonal.", sayShort: "…Bc5, the diagonal", highlights: [_H('c5')] },
+    { atMove: 11, say: "Reclaim …Ngxe5; the game is level.", sayShort: "…Ngxe5, level", highlights: [_H('e5')] },
+    { atMove: 13, say: "Anchor …d6, supporting the e5-knight; sound and balanced.", sayShort: "…d6, anchor", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_55: SublineNarration = {
+  intro: { say: "Another Nc3 main line. Recapture, complete development, and swing the rook to e6 — your active pieces and sound structure keep things level.", sayShort: "Nc3: …Ngxe5 and …Re6" },
+  beats: [
+    { atMove: 5, say: "Spring …Ng4, eyeing e5.", sayShort: "…Ng4, eye e5", highlights: [_H('g4')] },
+    { atMove: 7, say: "Develop …Bc5, biting at f2.", sayShort: "…Bc5, bite at f2", highlights: [_H('c5')] },
+    { atMove: 11, say: "Recapture …Ngxe5; even material.", sayShort: "…Ngxe5, even material", highlights: [_H('e5')] },
+    { atMove: 23, say: "Lift …Re6, the rook heading kingside; balanced.", sayShort: "…Re6, the lift", highlights: [_H('e6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_56: SublineNarration = {
+  intro: { say: "White's Qd5 pokes around but achieves little. Recapture, anchor …d6, and kick the queen with …c6 — you reach a fully equal position with comfortable development.", sayShort: "Nc3 Qd5: …d6 and …c6" },
+  beats: [
+    { atMove: 5, say: "Leap …Ng4, eyeing e5.", sayShort: "…Ng4, eye e5", highlights: [_H('g4')] },
+    { atMove: 7, say: "Develop …Bc5, the active bishop.", sayShort: "…Bc5, active bishop", highlights: [_H('c5')] },
+    { atMove: 11, say: "Recapture …Ngxe5; material level.", sayShort: "…Ngxe5, level", highlights: [_H('e5')] },
+    { atMove: 17, say: "Kick the queen with …c6, gaining time and securing the centre; fully equal.", sayShort: "…c6, kick the queen", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_57: SublineNarration = {
+  intro: { say: "White grabs space with a3, f4 and e4. Recapture, reroute the kicked knight to g6, and the knight returns to the dominant e5-square — your piece play balances the space.", sayShort: "Nc3 a3-f4: …Ng6-e5" },
+  beats: [
+    { atMove: 5, say: "Spring …Ng4, eyeing e5.", sayShort: "…Ng4, eye e5", highlights: [_H('g4')] },
+    { atMove: 7, say: "Develop …Bc5, on the long diagonal.", sayShort: "…Bc5, the long diagonal", highlights: [_H('c5')] },
+    { atMove: 11, say: "Recapture …Ngxe5; even material.", sayShort: "…Ngxe5, even material", highlights: [_H('e5')] },
+    { atMove: 23, say: "Re-route the knight back to …Ne5, the dominant square; balanced.", sayShort: "…Ne5, dominant square", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_58: SublineNarration = {
+  intro: { say: "White expands with f4. Recapture, reroute the knight via g6, and it lands back on e5 — your active pieces neutralise White's kingside pawns; balanced.", sayShort: "Nc3 f4: …Ng6 then …Ne5" },
+  beats: [
+    { atMove: 5, say: "Leap …Ng4, eyeing e5.", sayShort: "…Ng4, eye e5", highlights: [_H('g4')] },
+    { atMove: 7, say: "Develop …Bc5, biting toward f2.", sayShort: "…Bc5, bite at f2", highlights: [_H('c5')] },
+    { atMove: 11, say: "Recapture …Ngxe5; level material.", sayShort: "…Ngxe5, level", highlights: [_H('e5')] },
+    { atMove: 23, say: "Return …Ne5, the knight back on its outpost; balanced.", sayShort: "…Ne5, back to the outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_59: SublineNarration = {
+  intro: { say: "White expands on the queenside with a3 and b4. Recapture, anchor …d6, and develop the queen actively to g5, eyeing g2 — a balanced game with active pieces.", sayShort: "Nc3 b4: …d6 and …Qg5" },
+  beats: [
+    { atMove: 5, say: "Spring …Ng4, eyeing e5.", sayShort: "…Ng4, eye e5", highlights: [_H('g4')] },
+    { atMove: 7, say: "Develop …Bc5, the active bishop.", sayShort: "…Bc5, active bishop", highlights: [_H('c5')] },
+    { atMove: 11, say: "Recapture …Ngxe5; even material.", sayShort: "…Ngxe5, even material", highlights: [_H('e5')] },
+    { atMove: 19, say: "Develop …Qg5, the queen eyeing g2 and the kingside; balanced.", sayShort: "…Qg5, eye g2", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_60: SublineNarration = {
+  intro: { say: "White declines with d5, keeping the pawn but giving you a free hand. Plant the bishop on c5, ram the e-pawn to e3, and your wedge cramps White while you develop with ease.", sayShort: "Declined d5: …Bc5 and the …e3 wedge" },
+  beats: [
+    { atMove: 5, say: "Develop …Bc5 with gain of time, the bishop biting at f2 and the centre.", sayShort: "…Bc5, bite at f2", highlights: [_H('c5')] },
+    { atMove: 9, say: "Advance …e4, gaining space and cramping White's kingside development.", sayShort: "…e4, cramp the kingside", highlights: [_H('e4')] },
+    { atMove: 11, say: "Jam …e3! The pawn wedges into White's camp and snarls his pieces for moves to come.", sayShort: "…e3, the wedge", highlights: [_H('e3')] },
+    { atMove: 15, say: "Centralise …Qe7, supporting the wedge and connecting toward the queenside; you stand at least equal.", sayShort: "…Qe7, support the wedge", highlights: [_H('e7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_61: SublineNarration = {
+  intro: { say: "White grabs the pawn with the queen, but she's a target. Hit her with …Nc6, pin the knight with …Bb4, and after the dust settles your …Ne4 leap gives full equality.", sayShort: "…Nc6 hits the queen, …Bb4 pin" },
+  beats: [
+    { atMove: 7, say: "Develop …Nc6, gaining time by attacking the exposed queen.", sayShort: "…Nc6, hit the queen", highlights: [_H('c6')] },
+    { atMove: 9, say: "Pin with …Bb4, fixing the c3-knight to its queen.", sayShort: "…Bb4, pin the knight", highlights: [_H('b4')] },
+    { atMove: 13, say: "Lift …Re8, eyeing the e-file where White's king lingers.", sayShort: "…Re8, eye the e-file", highlights: [_H('e8')] },
+    { atMove: 21, say: "Spring …Ne4, the active knight hitting the bishop — fully equal with easy play.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_62: SublineNarration = {
+  intro: { say: "White returns the pawn with e3. Check with …Bb4+ to develop with tempo, strike …d5, and snatch c4 — your free, harmonious development equalises comfortably.", sayShort: "e3 return: …Bb4+, …d5, …dxc4" },
+  beats: [
+    { atMove: 7, say: "Check …Bb4+, developing the bishop while White must respond.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 9, say: "Break …d5, hitting the centre and freeing your game.", sayShort: "…d5, free the game", highlights: [_H('d5')] },
+    { atMove: 13, say: "Take …dxc4, gaining a tempo on the bishop as you develop.", sayShort: "…dxc4, gain a tempo", highlights: [_H('c4')] },
+    { atMove: 21, say: "Activate …Re8 on the e-file; the position is balanced and easy to handle.", sayShort: "…Re8, the e-file", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_63: SublineNarration = {
+  intro: { say: "White's Nf3 lets you push the pawn forward instead of sacrificing it. …e4 cramps White, …d5 stakes the centre, and …dxc4 grabs a pawn — a strong, space-grabbing setup.", sayShort: "Nf3: …e4 and …d5 grab space" },
+  beats: [
+    { atMove: 5, say: "Push …e4, shoving the knight back to g1 and seizing central space.", sayShort: "…e4, shove the knight", highlights: [_H('e4')] },
+    { atMove: 7, say: "Stake …d5, claiming the centre while White untangles.", sayShort: "…d5, claim the centre", highlights: [_H('d5')] },
+    { atMove: 9, say: "Snatch …dxc4, picking up the pawn and keeping your space edge.", sayShort: "…dxc4, grab the pawn", highlights: [_H('c4')] },
+    { atMove: 21, say: "Reposition …Qf5, keeping the queen active and the position balanced.", sayShort: "…Qf5, active queen", highlights: [_H('f5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_64: SublineNarration = {
+  intro: { say: "White meets the Fajarowicz with Nd2. Retreat the knight to c5, develop, and open with …d6 to regain the pawn — the queens come off and you grab c4 in a balanced ending.", sayShort: "Fajarowicz Nd2: …Nc5, …d6" },
+  beats: [
+    { atMove: 5, say: "Leap …Ne4, the Fajarowicz centralisation.", sayShort: "…Ne4, centralise", highlights: [_H('e4')] },
+    { atMove: 7, say: "Retreat …Nc5, the knight eyeing d3 and e4 from a safe square.", sayShort: "…Nc5, eye d3", highlights: [_H('c5')] },
+    { atMove: 11, say: "Open …d6, undermining the e5-pawn.", sayShort: "…d6, undermine e5", highlights: [_H('d6')] },
+    { atMove: 17, say: "Re-post …Ne4 in the ending; balanced.", sayShort: "…Ne4, central knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_65: SublineNarration = {
+  intro: { say: "White plays Nd2 and a3 in the Fajarowicz. Retreat …Nc5, centralise the queen, and recapture e5 with the knight — fully equal with smooth development.", sayShort: "Fajarowicz: …Nc5, …Qe7, …Nxe5" },
+  beats: [
+    { atMove: 5, say: "Leap …Ne4, planting the knight centrally.", sayShort: "…Ne4, plant it", highlights: [_H('e4')] },
+    { atMove: 7, say: "Retreat …Nc5, the active knight on a safe square.", sayShort: "…Nc5, active and safe", highlights: [_H('c5')] },
+    { atMove: 11, say: "Centralise …Qe7, supporting the recapture on e5.", sayShort: "…Qe7, support e5", highlights: [_H('e7')] },
+    { atMove: 13, say: "Recapture …Nxe5; fully equal.", sayShort: "…Nxe5, equal", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_66: SublineNarration = {
+  intro: { say: "White trades on b3 in the Fajarowicz. Recapture, open with …d6 and pin with …Bg4, and you regain the pawn with active pieces — a balanced, lively position.", sayShort: "Fajarowicz Nb3: …d6 and …Bg4" },
+  beats: [
+    { atMove: 5, say: "Leap …Ne4, the Fajarowicz knight.", sayShort: "…Ne4, the Fajarowicz", highlights: [_H('e4')] },
+    { atMove: 7, say: "Retreat …Nc5, eyeing the queenside light squares.", sayShort: "…Nc5, eye the squares", highlights: [_H('c5')] },
+    { atMove: 13, say: "Open …d6, undermining e5 to recover the pawn.", sayShort: "…d6, undermine e5", highlights: [_H('d6')] },
+    { atMove: 15, say: "Pin with …Bg4, tying White down as you reclaim material; balanced.", sayShort: "…Bg4, pin and reclaim", highlights: [_H('g4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_67: SublineNarration = {
+  intro: { say: "White plays b3 in the Fajarowicz. Open with …d6 to recover e5, redeploy the bishop to d6, and centralise the knight to e5 — your active pieces hold the balance.", sayShort: "Fajarowicz b3: …d6, …Ne5" },
+  beats: [
+    { atMove: 5, say: "Leap …Ne4, occupying the centre.", sayShort: "…Ne4, occupy", highlights: [_H('e4')] },
+    { atMove: 7, say: "Retreat …Nc5, a flexible, active post.", sayShort: "…Nc5, flexible post", highlights: [_H('c5')] },
+    { atMove: 11, say: "Open …d6, regaining the e5-pawn.", sayShort: "…d6, regain e5", highlights: [_H('d6')] },
+    { atMove: 19, say: "Centralise …Ne5, the dominant knight; balanced.", sayShort: "…Ne5, dominant knight", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_68: SublineNarration = {
+  intro: { say: "White lunges e4-e6 to disrupt you. Take the pawn with …Bxe6, fianchetto, and grab …Nxe4 in the tactics — material is restored and the game is balanced.", sayShort: "Fajarowicz e4-e6: …Bxe6, …Nxe4" },
+  beats: [
+    { atMove: 5, say: "Leap …Ne4, the Fajarowicz centralisation.", sayShort: "…Ne4, centralise", highlights: [_H('e4')] },
+    { atMove: 7, say: "Retreat …Nc5, the active knight.", sayShort: "…Nc5, active knight", highlights: [_H('c5')] },
+    { atMove: 13, say: "Take …Bxe6, capturing White's advanced pawn.", sayShort: "…Bxe6, take the pawn", highlights: [_H('e6')] },
+    { atMove: 17, say: "Grab …Nxe4, recovering material in the tactics; balanced.", sayShort: "…Nxe4, recover material", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const BGR_69: SublineNarration = {
+  intro: { say: "White meets the Fajarowicz with Bd2. Trade the knights, check, exchange the bishop, and develop …Nc6 to win the e5-pawn back — a balanced game with the king safely tucked.", sayShort: "Fajarowicz Bd2: trade and …Nc6" },
+  beats: [
+    { atMove: 5, say: "Leap …Ne4, planting the Fajarowicz knight.", sayShort: "…Ne4, plant it", highlights: [_H('e4')] },
+    { atMove: 7, say: "Check …Bb4+, developing and forcing the bishop trade.", sayShort: "…Bb4+, force the trade", highlights: [_H('b4')] },
+    { atMove: 11, say: "Centralise …Qe7, lining up against e5.", sayShort: "…Qe7, line up on e5", highlights: [_H('e7')] },
+    { atMove: 17, say: "Develop …Nc6, regaining the e5-pawn with active pieces; balanced.", sayShort: "…Nc6, regain e5", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
-  'budapest-gambit::6::d5@4': BG_60,
-  'budapest-gambit::5::d5@4': BG_50,
-  'budapest-gambit::4::d5@4': BG_40,
-  'budapest-gambit::3::d5@4': BG_30,
-  'budapest-gambit::2::d5@4': BG_20,
-  'budapest-gambit::1::d5@4': BG_10,
-  'budapest-gambit::0::d5@4': BG_0,
+  'budapest-gambit::6::d5@4': BGR_60,
+  'budapest-gambit::5::d5@4': BGR_50,
+  'budapest-gambit::4::d5@4': BGR_40,
+  'budapest-gambit::3::d5@4': BGR_30,
+  'budapest-gambit::2::d5@4': BGR_20,
+  'budapest-gambit::1::d5@4': BGR_10,
+  'budapest-gambit::0::d5@4': BGR_0,
   'benoni-defence::6::Nxd5@8': BNR_60,
   'benoni-defence::4::Nxd5@8': BNR_40,
   'benoni-defence::3::Nxd5@8': BNR_30,
@@ -13459,69 +13460,69 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'benko-gambit::6::Nd2@6': BKR_68,
   'benko-gambit::6::Nf3@12': BKR_69,
   // ── budapest-gambit ──
-  'budapest-gambit::0::Nc3@4': BG_1,
-  'budapest-gambit::0::e3@4': BG_2,
-  'budapest-gambit::0::Nf3@4': BG_3,
-  'budapest-gambit::0::O-O@12': BG_4,
-  'budapest-gambit::0::Nc3@16': BG_5,
-  'budapest-gambit::0::Nbd2@12': BG_6,
-  'budapest-gambit::0::Nc3@12': BG_7,
-  'budapest-gambit::0::a3@16': BG_8,
-  'budapest-gambit::0::Nc3@14': BG_9,
-  'budapest-gambit::1::Nc3@4': BG_11,
-  'budapest-gambit::1::e3@4': BG_12,
-  'budapest-gambit::1::Nf3@4': BG_13,
-  'budapest-gambit::1::Qd5@16': BG_14,
-  'budapest-gambit::1::e3@16': BG_15,
-  'budapest-gambit::1::e3@10': BG_16,
-  'budapest-gambit::1::Qc2@10': BG_17,
-  'budapest-gambit::1::Qf4@16': BG_18,
-  'budapest-gambit::1::g3@10': BG_19,
-  'budapest-gambit::2::Nc3@4': BG_21,
-  'budapest-gambit::2::e3@4': BG_22,
-  'budapest-gambit::2::Nf3@4': BG_23,
-  'budapest-gambit::2::e3@20': BG_24,
-  'budapest-gambit::2::e3@8': BG_25,
-  'budapest-gambit::2::Qd2@18': BG_26,
-  'budapest-gambit::2::Qd5@8': BG_27,
-  'budapest-gambit::2::h3@8': BG_28,
-  'budapest-gambit::2::e3@14': BG_29,
-  'budapest-gambit::3::Nc3@4': BG_31,
-  'budapest-gambit::3::e3@4': BG_32,
-  'budapest-gambit::3::Nf3@4': BG_33,
-  'budapest-gambit::3::e3@12': BG_34,
-  'budapest-gambit::3::axb4@14': BG_35,
-  'budapest-gambit::3::Bxe5@16': BG_36,
-  'budapest-gambit::3::e3@8': BG_37,
-  'budapest-gambit::3::h3@12': BG_38,
-  'budapest-gambit::3::Qd5@8': BG_39,
-  'budapest-gambit::4::Nc3@4': BG_41,
-  'budapest-gambit::4::e3@4': BG_42,
-  'budapest-gambit::4::Nf3@4': BG_43,
-  'budapest-gambit::4::Bf4@6': BG_44,
-  'budapest-gambit::4::Nf3@6': BG_45,
-  'budapest-gambit::4::e3@6': BG_46,
-  'budapest-gambit::4::Kf2@14': BG_47,
-  'budapest-gambit::4::Be3@10': BG_48,
-  'budapest-gambit::4::Nf3@10': BG_49,
-  'budapest-gambit::5::Nc3@4': BG_51,
-  'budapest-gambit::5::e3@4': BG_52,
-  'budapest-gambit::5::Nf3@4': BG_53,
-  'budapest-gambit::5::Be2@12': BG_54,
-  'budapest-gambit::5::a3@18': BG_55,
-  'budapest-gambit::5::Qd5@14': BG_56,
-  'budapest-gambit::5::a3@12': BG_57,
-  'budapest-gambit::5::f4@14': BG_58,
-  'budapest-gambit::5::a3@14': BG_59,
-  'budapest-gambit::6::Nc3@4': BG_61,
-  'budapest-gambit::6::e3@4': BG_62,
-  'budapest-gambit::6::Nf3@4': BG_63,
-  'budapest-gambit::6::e3@10': BG_64,
-  'budapest-gambit::6::a3@10': BG_65,
-  'budapest-gambit::6::Nb3@10': BG_66,
-  'budapest-gambit::6::b3@10': BG_67,
-  'budapest-gambit::6::e4@10': BG_68,
-  'budapest-gambit::6::Nf3@6': BG_69,
+  'budapest-gambit::0::Nc3@4': BGR_1,
+  'budapest-gambit::0::e3@4': BGR_2,
+  'budapest-gambit::0::Nf3@4': BGR_3,
+  'budapest-gambit::0::O-O@12': BGR_4,
+  'budapest-gambit::0::Nc3@16': BGR_5,
+  'budapest-gambit::0::Nbd2@12': BGR_6,
+  'budapest-gambit::0::Nc3@12': BGR_7,
+  'budapest-gambit::0::a3@16': BGR_8,
+  'budapest-gambit::0::Nc3@14': BGR_9,
+  'budapest-gambit::1::Nc3@4': BGR_11,
+  'budapest-gambit::1::e3@4': BGR_12,
+  'budapest-gambit::1::Nf3@4': BGR_13,
+  'budapest-gambit::1::Qd5@16': BGR_14,
+  'budapest-gambit::1::e3@16': BGR_15,
+  'budapest-gambit::1::e3@10': BGR_16,
+  'budapest-gambit::1::Qc2@10': BGR_17,
+  'budapest-gambit::1::Qf4@16': BGR_18,
+  'budapest-gambit::1::g3@10': BGR_19,
+  'budapest-gambit::2::Nc3@4': BGR_21,
+  'budapest-gambit::2::e3@4': BGR_22,
+  'budapest-gambit::2::Nf3@4': BGR_23,
+  'budapest-gambit::2::e3@20': BGR_24,
+  'budapest-gambit::2::e3@8': BGR_25,
+  'budapest-gambit::2::Qd2@18': BGR_26,
+  'budapest-gambit::2::Qd5@8': BGR_27,
+  'budapest-gambit::2::h3@8': BGR_28,
+  'budapest-gambit::2::e3@14': BGR_29,
+  'budapest-gambit::3::Nc3@4': BGR_31,
+  'budapest-gambit::3::e3@4': BGR_32,
+  'budapest-gambit::3::Nf3@4': BGR_33,
+  'budapest-gambit::3::e3@12': BGR_34,
+  'budapest-gambit::3::axb4@14': BGR_35,
+  'budapest-gambit::3::Bxe5@16': BGR_36,
+  'budapest-gambit::3::e3@8': BGR_37,
+  'budapest-gambit::3::h3@12': BGR_38,
+  'budapest-gambit::3::Qd5@8': BGR_39,
+  'budapest-gambit::4::Nc3@4': BGR_41,
+  'budapest-gambit::4::e3@4': BGR_42,
+  'budapest-gambit::4::Nf3@4': BGR_43,
+  'budapest-gambit::4::Bf4@6': BGR_44,
+  'budapest-gambit::4::Nf3@6': BGR_45,
+  'budapest-gambit::4::e3@6': BGR_46,
+  'budapest-gambit::4::Kf2@14': BGR_47,
+  'budapest-gambit::4::Be3@10': BGR_48,
+  'budapest-gambit::4::Nf3@10': BGR_49,
+  'budapest-gambit::5::Nc3@4': BGR_51,
+  'budapest-gambit::5::e3@4': BGR_52,
+  'budapest-gambit::5::Nf3@4': BGR_53,
+  'budapest-gambit::5::Be2@12': BGR_54,
+  'budapest-gambit::5::a3@18': BGR_55,
+  'budapest-gambit::5::Qd5@14': BGR_56,
+  'budapest-gambit::5::a3@12': BGR_57,
+  'budapest-gambit::5::f4@14': BGR_58,
+  'budapest-gambit::5::a3@14': BGR_59,
+  'budapest-gambit::6::Nc3@4': BGR_61,
+  'budapest-gambit::6::e3@4': BGR_62,
+  'budapest-gambit::6::Nf3@4': BGR_63,
+  'budapest-gambit::6::e3@10': BGR_64,
+  'budapest-gambit::6::a3@10': BGR_65,
+  'budapest-gambit::6::Nb3@10': BGR_66,
+  'budapest-gambit::6::b3@10': BGR_67,
+  'budapest-gambit::6::e4@10': BGR_68,
+  'budapest-gambit::6::Nf3@6': BGR_69,
   // ── dutch-defence ──
   'dutch-defence::0::Re1@14': DU_V0_RE1_14,
   'dutch-defence::0::Nf3@4': DU_V0_NF3_4,
