@@ -201,25 +201,9 @@ const C47: SublineNarration = {
 // englund-gambit :: nc3_decline
 // englund-gambit :: qxb2_bc3
 // anti-benoni-push :: benko_b5
-const C119: SublineNarration = {
-  intro: { say: "Black tries the Benko-style …b5, sacrificing a pawn for queenside files against your d5-push. Accept and stay solid: take the pawns, give one back with the bishop trade on f1 if needed, and prioritise king safety with Nge2 and a quick castle. Your extra pawn or your big centre, plus a sound king, outweighs Black's open files when you defend accurately.", sayShort: "…b5 — accept, finish development, hold the edge." },
-  sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
-};
 // anti-benoni-push :: modern_benoni
-const C120: SublineNarration = {
-  intro: { say: "Black goes for the Modern Benoni with …e6 and the exchange on d5. Now you have the dream White centre — pawns on d5 and e4 — and the plan is space and attack: f4 and Nf3, Be2, O-O, and the e4-e5 break that cracks Black's position open. Restrain …b5 with a4 and your space advantage becomes a kingside initiative.", sayShort: "Modern Benoni — e4-f4 centre, restrain …b5." },
-  sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
-};
 // anti-benoni-push :: kid_benoni
-const C121: SublineNarration = {
-  intro: { say: "Black fianchettoes with …g6 and …Bg7, a King's-Indian-Benoni hybrid. Build the broad centre — e4, Nc3, and develop with Nf3 or Nge2, Be2, O-O — and you stand better with more space and a clear plan. Meet …e5 by closing or …c5-based play by clamping; the extra space is a lasting, comfortable trump.", sayShort: "KID-Benoni — build the e4 centre, take space." },
-  sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
-};
 // anti-benoni-push :: czech_e5
-const C122: SublineNarration = {
-  intro: { say: "Black locks the centre with …e5, a Czech-Benoni structure. The play turns slow and strategic: you own more space, so manoeuvre behind the pawns and prepare the right break — b4 on the queenside or f4 on the king's wing. Patience is the watchword; pick the lever that opens lines where you're strongest and Black's cramped position cracks.", sayShort: "Czech …e5 — manoeuvre, pick b4 or f4." },
-  sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
-};
 // anti-englund :: qe7_main
 // anti-englund :: bg5_d6
 // anti-englund :: consolidate
@@ -294,20 +278,8 @@ const C139: SublineNarration = {
   sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense'],
 };
 // anti-dutch-staunton :: qh5
-const C140: SublineNarration = {
-  intro: { say: "Black grabs and you've got the sharp Qh5+ resource available, hitting the loosened kingside after …f5 and …e6. Play energetically: the queen sortie exploits the weak light squares, and quick development keeps Black's king pinned in the centre. The Staunton rewards initiative — keep checking, keep developing, and let the exposed king be the target.", sayShort: "Qh5+ — exploit the weak light squares." },
-  sources: ['book:dutch-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
-};
 // anti-dutch-staunton :: staunton_d5
-const C141: SublineNarration = {
-  intro: { say: "Black bolsters with …d5 instead of clinging to the pawn. Keep the initiative: f3 to open the centre, recover the pawn with the better structure, and pile pieces toward Black's loosened kingside, where the early …f5 left lasting holes. The gambit's compensation is development and the weak light squares around Black's king — exploit both.", sayShort: "…d5 — f3, recover, hit the king." },
-  sources: ['book:dutch-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
-};
 // anti-dutch-staunton :: staunton_main
-const C142: SublineNarration = {
-  intro: { say: "The Staunton Gambit — you've offered e4 against the Dutch, and after …fxe4 Nc3 Nf6 Bg5 you have a roaring development lead for the pawn. Your plan is concrete: f3 to blast open the centre, fast piece play down the e- and f-files, and pressure on the e4-pawn and Black's kingside. Black's extra pawn is a liability while his king is stuck — attack.", sayShort: "Staunton — f3 opens, attack the king." },
-  sources: ['book:dutch-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
-};
 // anti-qgd-exchange :: central_e4
 // anti-qgd-exchange :: qxd5
 // anti-qgd-exchange :: minority
@@ -360,14 +332,6 @@ const DKID: SublineNarration = {
 // DEEP ETRO :: trompowsky-attack::6::d6@9
 // DEEP EENG :: englund-gambit::0::Nc3@10
 // DEEP EABEN :: anti-benoni-push::0::e6@5 | anti-benoni-push::2::e6@5 | anti-benoni-push::3::e6@5
-const EABEN: SublineNarration = {
-  intro: { say: "Black goes Modern Benoni, and that hands you the dream White centre — pawns side by side on d5 and e4. So play for space and attack: f4 and Nf3, then the e4-e5 break, and keep his …b5 in check with a4. You've got more room; use it.", sayShort: "Modern Benoni — build e4-f4, attack." },
-  beats: [
-    { atMove: 10, say: "e4 — stake out the broad centre. With pawns abreast on d5 and e4 you simply own more of the board, and Black has to scramble for counterplay before you roll forward and crush him.", sayShort: "e4 — claim the broad centre.", highlights: [_H('e4', KEY)] },
-    { atMove: 12, say: "f4 — gain even more space and get ready for the e4-e5 break that pries Black's position open. The aggressive clamp: your pawns advance while he's still untangling on the queenside.", sayShort: "f4 — gain space, prep e5.", highlights: [_H('f4', ATK)] },
-  ],
-  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
-};
 // DEEP EAENG :: anti-englund::1::Qe7@5
 // DEEP EANIM :: anti-nimzo-qc2::1::Qxd5@9
 const EANIM: SublineNarration = {
@@ -386,13 +350,6 @@ const EAQID: SublineNarration = {
   sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense'],
 };
 // DEEP EADUT :: anti-dutch-staunton::1::dxe4@11
-const EADUT: SublineNarration = {
-  intro: { say: "You've offered the e4 pawn against the Dutch and now you play for a roaring lead in development. f3 is your lever — it rips open the centre and the f-file at Black's stiff …f5 structure, and your pieces flood toward his king while it's still stuck in the middle.", sayShort: "Staunton — f3 opens, hunt the king." },
-  beats: [
-    { atMove: 8, say: "f3 — the hammer. It pries the centre open to free your pieces and expose Black's weakened kingside (look at e4). That pawn he grabbed? It's a liability while his king sits uncastled right in the firing line.", sayShort: "f3 — pry the centre open.", highlights: [_H('e4', KEY)] },
-  ],
-  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
-};
 // DEEP EAQGD :: anti-qgd-exchange::1::c6@9
 // DEEP EABUD :: anti-budapest::1::Nc6@7 | anti-budapest::2::Nc6@7
 // DEEP EALON :: anti-london-black::1::c3@6
@@ -15621,6 +15578,608 @@ const AQGDW_19: SublineNarration = {
   sources: ['concept:pawn-minority-attack', 'https://lichess.org/opening/Queens-Gambit-Declined-Exchange-Variation'],
 };
 
+const ADUTW_0: SublineNarration = {
+  intro: { say: "In the Staunton Gambit you've offered the e4-pawn for a roaring lead in development. When Black props it up with …d5, the check Qh5+ is the refutation — after …g6, Qxd5 regains the pawn and forces the queen trade with a far better structure. Black's king is stuck on d8; castle long, regain the e-pawn with f3, and press your development edge.", sayShort: "Staunton: Qh5+ refutes …d5" },
+  beats: [
+    { atMove: 6, say: "Check Qh5+! The bolt from the blue that punishes …d5.", sayShort: "Qh5+, the refutation", highlights: [_H('h5')] },
+    { atMove: 8, say: "Recapture Qxd5, regaining the pawn and hitting the loose pieces.", sayShort: "Qxd5, regain the pawn", highlights: [_H('d5')] },
+    { atMove: 16, say: "Undermine f3, prying open the gambit pawn for recovery.", sayShort: "f3, pry it open", highlights: [_H('f3')] },
+    { atMove: 22, say: "Pin Bb5; Black's king is stuck on d8 and you're clearly better.", sayShort: "Bb5, press the edge", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Dutch-Defense_Staunton-Gambit'],
+};
+const ADUTW_1: SublineNarration = {
+  intro: { say: "Black fianchettoes to blunt your attack and returns the pawn with …d5. Strike with f3 to recover material, and after the central trades the disruptive check Bb5+ gains a tempo. Develop the queen to e2 and the bishops to active diagonals. The dust settles level — a balanced middlegame where your active pieces give practical chances.", sayShort: "Staunton: f3 recovers, Bb5+ tempo" },
+  beats: [
+    { atMove: 8, say: "Break f3, challenging Black's extra pawn at once.", sayShort: "f3, challenge the pawn", highlights: [_H('f3')] },
+    { atMove: 14, say: "Check Bb5+! Developing with tempo to disrupt Black's king.", sayShort: "Bb5+, develop with tempo", highlights: [_H('b5')] },
+    { atMove: 16, say: "Develop Qe2, connecting and eyeing the e-file.", sayShort: "Qe2, eye the e-file", highlights: [_H('e2')] },
+    { atMove: 22, say: "Retreat Bb3, the bishop active on the a2-g8 diagonal. Balanced.", sayShort: "Bb3, active and balanced", highlights: [_H('b3')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Dutch-Defense_Staunton-Gambit'],
+};
+const ADUTW_2: SublineNarration = {
+  intro: { say: "Black supports the centre with …c6 and …d5. Blast it open with f3, then develop the bishop to c4, eyeing f7. The point: Bxf6 damages Black's pawns and Nxe4 regains the gambit pawn with a fine position. Even after the queen trade, your active rook and the better structure leave you pressing in the endgame.", sayShort: "Staunton: f3 break, regain via Nxe4" },
+  beats: [
+    { atMove: 8, say: "Break f3, immediately challenging Black's pawn chain.", sayShort: "f3, challenge the chain", highlights: [_H('f3')] },
+    { atMove: 12, say: "Develop Bc4, the bishop bearing down on f7.", sayShort: "Bc4, pressure f7", highlights: [_H('c4')] },
+    { atMove: 16, say: "Trade Bxf6, damaging Black's kingside before regaining the pawn.", sayShort: "Bxf6, damage the pawns", highlights: [_H('f6')] },
+    { atMove: 18, say: "Recapture Nxe4! The gambit pawn returns with a superior position.", sayShort: "Nxe4, regain the pawn", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Dutch-Defense_Staunton-Gambit'],
+};
+const ADUTW_3: SublineNarration = {
+  intro: { say: "Black plays the modest …e6. Just recapture: Nxe4 regains the gambit pawn at once, with a comfortable lead in development. Trade with Bxf6 to grab the bishop pair, solidify with c3, and develop. Then the aggressive h4 eyes a kingside pawn-storm. With the pawn back and the two bishops, you hold a healthy, lasting edge.", sayShort: "Staunton: Nxe4 regains, two bishops" },
+  beats: [
+    { atMove: 8, say: "Recapture Nxe4, regaining the pawn with a development lead.", sayShort: "Nxe4, regain the pawn", highlights: [_H('e4')] },
+    { atMove: 10, say: "Trade Bxf6, picking up the bishop pair.", sayShort: "Bxf6, grab the bishops", highlights: [_H('f6')] },
+    { atMove: 16, say: "Advance h4, eyeing a kingside pawn-storm.", sayShort: "h4, eye the storm", highlights: [_H('h4')] },
+    { atMove: 18, say: "Trade Nxf6+, simplifying with the healthier position. Pawn and edge.", sayShort: "Nxf6+, simplify ahead", highlights: [_H('f6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Dutch-Defense_Staunton-Gambit'],
+};
+const ADUTW_4: SublineNarration = {
+  intro: { say: "In the Staunton Gambit you've offered the e4-pawn for a roaring lead in development. When Black props it up with …d5, the check Qh5+ is the refutation — after …g6, Qxd5 regains the pawn and forces the queen trade with a far better structure. Black's king is stuck on d8; castle long, regain the e-pawn with f3, and press your development edge.", sayShort: "Staunton: Qh5+ refutes …d5" },
+  beats: [
+    { atMove: 6, say: "Check Qh5+! The bolt from the blue that punishes …d5.", sayShort: "Qh5+, the refutation", highlights: [_H('h5')] },
+    { atMove: 8, say: "Recapture Qxd5, regaining the pawn and hitting the loose pieces.", sayShort: "Qxd5, regain the pawn", highlights: [_H('d5')] },
+    { atMove: 16, say: "Undermine f3, prying open the gambit pawn for recovery.", sayShort: "f3, pry it open", highlights: [_H('f3')] },
+    { atMove: 22, say: "Pin Bb5; Black's king is stuck on d8 and you're clearly better.", sayShort: "Bb5, press the edge", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Dutch-Defense_Staunton-Gambit'],
+};
+const ADUTW_5: SublineNarration = {
+  intro: { say: "Black develops …Nc6, so gain space with d5, kicking the knight to the rim. Develop Qe2, eyeing the e-file and the loose e4-pawn. Bxf6 spoils Black's structure, Nxe4 regains the pawn, and the cheeky d6! drives a wedge that cramps Black for the rest of the game. Castle long — you're better developed with a galling passed pawn.", sayShort: "Staunton: d5 grabs space, d6 wedge" },
+  beats: [
+    { atMove: 8, say: "Advance d5, gaining space and chasing the c6-knight.", sayShort: "d5, grab the space", highlights: [_H('d5')] },
+    { atMove: 10, say: "Develop Qe2, training the queen on the e4-pawn.", sayShort: "Qe2, eye e4", highlights: [_H('e2')] },
+    { atMove: 14, say: "Recapture Nxe4, regaining the gambit pawn.", sayShort: "Nxe4, regain the pawn", highlights: [_H('e4')] },
+    { atMove: 18, say: "Ram d6! A cramping wedge that hobbles Black's pieces.", sayShort: "d6, the cramping wedge", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Dutch-Defense_Staunton-Gambit'],
+};
+const ADUTW_6: SublineNarration = {
+  intro: { say: "Black supports the centre with …c6 and …d5. Blast it open with f3, then develop the bishop to c4, eyeing f7. The point: Bxf6 damages Black's pawns and Nxe4 regains the gambit pawn with a fine position. Even after the queen trade, your active rook and the better structure leave you pressing in the endgame.", sayShort: "Staunton: f3 break, regain via Nxe4" },
+  beats: [
+    { atMove: 8, say: "Break f3, immediately challenging Black's pawn chain.", sayShort: "f3, challenge the chain", highlights: [_H('f3')] },
+    { atMove: 12, say: "Develop Bc4, the bishop bearing down on f7.", sayShort: "Bc4, pressure f7", highlights: [_H('c4')] },
+    { atMove: 16, say: "Trade Bxf6, damaging Black's kingside before regaining the pawn.", sayShort: "Bxf6, damage the pawns", highlights: [_H('f6')] },
+    { atMove: 18, say: "Recapture Nxe4! The gambit pawn returns with a superior position.", sayShort: "Nxe4, regain the pawn", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Dutch-Defense_Staunton-Gambit'],
+};
+const ADUTW_7: SublineNarration = {
+  intro: { say: "Black plays the modest …e6. Just recapture: Nxe4 regains the gambit pawn at once, with a comfortable lead in development. Trade with Bxf6 to grab the bishop pair, solidify with c3, and develop. Then the aggressive h4 eyes a kingside pawn-storm. With the pawn back and the two bishops, you hold a healthy, lasting edge.", sayShort: "Staunton: Nxe4 regains, two bishops" },
+  beats: [
+    { atMove: 8, say: "Recapture Nxe4, regaining the pawn with a development lead.", sayShort: "Nxe4, regain the pawn", highlights: [_H('e4')] },
+    { atMove: 10, say: "Trade Bxf6, picking up the bishop pair.", sayShort: "Bxf6, grab the bishops", highlights: [_H('f6')] },
+    { atMove: 16, say: "Advance h4, eyeing a kingside pawn-storm.", sayShort: "h4, eye the storm", highlights: [_H('h4')] },
+    { atMove: 18, say: "Trade Nxf6+, simplifying with the healthier position. Pawn and edge.", sayShort: "Nxf6+, simplify ahead", highlights: [_H('f6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Dutch-Defense_Staunton-Gambit'],
+};
+const ADUTW_8: SublineNarration = {
+  intro: { say: "Black returns the pawn with …exf3. Recapture Nxf3, regaining material with a big development lead. Coordinate with Qd2 and then Bh6! — offering to swap off Black's key fianchettoed bishop, his best defender. Castle long, develop with tempo, and double on the central files. With the dark-squared defender gone, your attack flows naturally.", sayShort: "Staunton: Bh6 trades the defender" },
+  beats: [
+    { atMove: 10, say: "Recapture Nxf3, regaining the pawn with a development lead.", sayShort: "Nxf3, regain the pawn", highlights: [_H('f3')] },
+    { atMove: 12, say: "Coordinate Qd2, lining up the queen and dark bishop.", sayShort: "Qd2, coordinate", highlights: [_H('d2')] },
+    { atMove: 14, say: "Strike Bh6! Offering to trade Black's key fianchettoed bishop.", sayShort: "Bh6, trade the defender", highlights: [_H('h6')] },
+    { atMove: 22, say: "Centralise Rhe1; the dark defender gone, your attack flows.", sayShort: "Rhe1, the attack flows", highlights: [_H('e1')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Dutch-Defense_Staunton-Gambit'],
+};
+const ADUTW_9: SublineNarration = {
+  intro: { say: "Black tries to hold the pawn with …d5 and …e3, but it overextends. Open with f3, then collect the wayward pawn: Qd2 and Qxe3 net it back with a dominant centralised queen. Castle long, develop the bishop to c4 eyeing f7, and bring the knight out. You're a tempo ahead with a commanding centre and a clear initiative.", sayShort: "Staunton: Qxe3 collects, big centre" },
+  beats: [
+    { atMove: 8, say: "Open f3, challenging Black's pawn chain immediately.", sayShort: "f3, challenge the chain", highlights: [_H('f3')] },
+    { atMove: 12, say: "Coordinate Qd2, preparing to round up the e3-pawn.", sayShort: "Qd2, round it up", highlights: [_H('d2')] },
+    { atMove: 14, say: "Capture Qxe3! Regaining the pawn with a dominant queen.", sayShort: "Qxe3, dominant queen", highlights: [_H('e3')] },
+    { atMove: 18, say: "Develop Bc4, the bishop eyeing f7. Commanding initiative.", sayShort: "Bc4, eye f7", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Dutch-Defense_Staunton-Gambit'],
+};
+const ADUTW_10: SublineNarration = {
+  intro: { say: "Black flicks …e3 to disrupt, but it's a gift. Develop Qe2 behind the pawn, then Qxe3 scoops it up with a centralised, active queen. Castle long and launch the pawn-storm: g4 and h4 roll at Black's king. With opposite-side castling and your forces aimed at the kingside, you're winning a thematic attacking race.", sayShort: "Staunton: Qxe3, the g4-h4 storm" },
+  beats: [
+    { atMove: 10, say: "Develop Qe2, lining the queen up behind the e3-pawn.", sayShort: "Qe2, line up the queen", highlights: [_H('e2')] },
+    { atMove: 12, say: "Capture Qxe3, regaining the pawn with an active queen.", sayShort: "Qxe3, active queen", highlights: [_H('e3')] },
+    { atMove: 14, say: "Launch g4! Beginning the kingside pawn-storm.", sayShort: "g4, begin the storm", highlights: [_H('g4')] },
+    { atMove: 16, say: "Roll h4, hurling the pawns at Black's king. Winning the race.", sayShort: "h4, hurl the pawns", highlights: [_H('h4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Dutch-Defense_Staunton-Gambit'],
+};
+const ADUTW_11: SublineNarration = {
+  intro: { say: "In the Staunton Gambit you've offered the e4-pawn for a roaring lead in development. When Black props it up with …d5, the check Qh5+ is the refutation — after …g6, Qxd5 regains the pawn and forces the queen trade with a far better structure. Black's king is stuck on d8; castle long, regain the e-pawn with f3, and press your development edge.", sayShort: "Staunton: Qh5+ refutes …d5" },
+  beats: [
+    { atMove: 6, say: "Check Qh5+! The bolt from the blue that punishes …d5.", sayShort: "Qh5+, the refutation", highlights: [_H('h5')] },
+    { atMove: 8, say: "Recapture Qxd5, regaining the pawn and hitting the loose pieces.", sayShort: "Qxd5, regain the pawn", highlights: [_H('d5')] },
+    { atMove: 16, say: "Undermine f3, prying open the gambit pawn for recovery.", sayShort: "f3, pry it open", highlights: [_H('f3')] },
+    { atMove: 22, say: "Pin Bb5; Black's king is stuck on d8 and you're clearly better.", sayShort: "Bb5, press the edge", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Dutch-Defense_Staunton-Gambit'],
+};
+const ADUTW_12: SublineNarration = {
+  intro: { say: "Black develops …Nc6, so gain space with d5, kicking the knight to the rim. Develop Qe2, eyeing the e-file and the loose e4-pawn. Bxf6 spoils Black's structure, Nxe4 regains the pawn, and the cheeky d6! drives a wedge that cramps Black for the rest of the game. Castle long — you're better developed with a galling passed pawn.", sayShort: "Staunton: d5 grabs space, d6 wedge" },
+  beats: [
+    { atMove: 8, say: "Advance d5, gaining space and chasing the c6-knight.", sayShort: "d5, grab the space", highlights: [_H('d5')] },
+    { atMove: 10, say: "Develop Qe2, training the queen on the e4-pawn.", sayShort: "Qe2, eye e4", highlights: [_H('e2')] },
+    { atMove: 14, say: "Recapture Nxe4, regaining the gambit pawn.", sayShort: "Nxe4, regain the pawn", highlights: [_H('e4')] },
+    { atMove: 18, say: "Ram d6! A cramping wedge that hobbles Black's pieces.", sayShort: "d6, the cramping wedge", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Dutch-Defense_Staunton-Gambit'],
+};
+const ADUTW_13: SublineNarration = {
+  intro: { say: "Black fianchettoes to blunt your attack and returns the pawn with …d5. Strike with f3 to recover material, and after the central trades the disruptive check Bb5+ gains a tempo. Develop the queen to e2 and the bishops to active diagonals. The dust settles level — a balanced middlegame where your active pieces give practical chances.", sayShort: "Staunton: f3 recovers, Bb5+ tempo" },
+  beats: [
+    { atMove: 8, say: "Break f3, challenging Black's extra pawn at once.", sayShort: "f3, challenge the pawn", highlights: [_H('f3')] },
+    { atMove: 14, say: "Check Bb5+! Developing with tempo to disrupt Black's king.", sayShort: "Bb5+, develop with tempo", highlights: [_H('b5')] },
+    { atMove: 16, say: "Develop Qe2, connecting and eyeing the e-file.", sayShort: "Qe2, eye the e-file", highlights: [_H('e2')] },
+    { atMove: 22, say: "Retreat Bb3, the bishop active on the a2-g8 diagonal. Balanced.", sayShort: "Bb3, active and balanced", highlights: [_H('b3')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Dutch-Defense_Staunton-Gambit'],
+};
+const ADUTW_14: SublineNarration = {
+  intro: { say: "Black defends with …c6 and …Qa5. Develop Qd2, unpinning and connecting, and when Black returns the pawn with …exf3, recapture Nxf3 with a clean development lead. Post the bishop on c4 eyeing f7, and castle. With the pawn restored, your harmonious pieces and safer king leave Black struggling to complete development.", sayShort: "Staunton: Qd2, Nxf3 with the lead" },
+  beats: [
+    { atMove: 10, say: "Develop Qd2, unpinning and connecting your forces.", sayShort: "Qd2, unpin and connect", highlights: [_H('d2')] },
+    { atMove: 12, say: "Recapture Nxf3, regaining the pawn with a development lead.", sayShort: "Nxf3, regain the pawn", highlights: [_H('f3')] },
+    { atMove: 14, say: "Post Bc4, the bishop eyeing the f7-weakness.", sayShort: "Bc4, eye f7", highlights: [_H('c4')] },
+    { atMove: 18, say: "Castle O-O; pawn restored, harmonious pieces, safer king.", sayShort: "O-O, safer and better", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Dutch-Defense_Staunton-Gambit'],
+};
+const ADUTW_15: SublineNarration = {
+  intro: { say: "Black strikes the centre with …d5. Open with fxe4 and recapture Nxe4, regaining the gambit pawn. Even after the queen trade, Bxf6 forces …gxf6, shattering Black's kingside into doubled, isolated pawns. Develop the bishop to d3 and the knight to f3. You head into an endgame a clean structure ahead, nursing the pawn weaknesses.", sayShort: "Staunton: regain, wreck the kingside" },
+  beats: [
+    { atMove: 12, say: "Open fxe4, challenging and opening lines in the centre.", sayShort: "fxe4, open the centre", highlights: [_H('e4')] },
+    { atMove: 14, say: "Recapture Nxe4, regaining the gambit pawn.", sayShort: "Nxe4, regain the pawn", highlights: [_H('e4')] },
+    { atMove: 18, say: "Trade Bxf6, forcing …gxf6 and shattering Black's pawns.", sayShort: "Bxf6, shatter the pawns", highlights: [_H('f6')] },
+    { atMove: 20, say: "Develop Bd3; into a better endgame against the weaknesses.", sayShort: "Bd3, better endgame", highlights: [_H('d3')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Dutch-Defense_Staunton-Gambit'],
+};
+const ADUTW_16: SublineNarration = {
+  intro: { say: "Black plays the modest …e6. Just recapture: Nxe4 regains the gambit pawn at once, with a comfortable lead in development. Trade with Bxf6 to grab the bishop pair, solidify with c3, and develop. Then the aggressive h4 eyes a kingside pawn-storm. With the pawn back and the two bishops, you hold a healthy, lasting edge.", sayShort: "Staunton: Nxe4 regains, two bishops" },
+  beats: [
+    { atMove: 8, say: "Recapture Nxe4, regaining the pawn with a development lead.", sayShort: "Nxe4, regain the pawn", highlights: [_H('e4')] },
+    { atMove: 10, say: "Trade Bxf6, picking up the bishop pair.", sayShort: "Bxf6, grab the bishops", highlights: [_H('f6')] },
+    { atMove: 16, say: "Advance h4, eyeing a kingside pawn-storm.", sayShort: "h4, eye the storm", highlights: [_H('h4')] },
+    { atMove: 18, say: "Trade Nxf6+, simplifying with the healthier position. Pawn and edge.", sayShort: "Nxf6+, simplify ahead", highlights: [_H('f6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Dutch-Defense_Staunton-Gambit'],
+};
+const ADUTW_17: SublineNarration = {
+  intro: { say: "Black supports the centre with …c6 and …d5. Blast it open with f3, then develop the bishop to c4, eyeing f7. The point: Bxf6 damages Black's pawns and Nxe4 regains the gambit pawn with a fine position. Even after the queen trade, your active rook and the better structure leave you pressing in the endgame.", sayShort: "Staunton: f3 break, regain via Nxe4" },
+  beats: [
+    { atMove: 8, say: "Break f3, immediately challenging Black's pawn chain.", sayShort: "f3, challenge the chain", highlights: [_H('f3')] },
+    { atMove: 12, say: "Develop Bc4, the bishop bearing down on f7.", sayShort: "Bc4, pressure f7", highlights: [_H('c4')] },
+    { atMove: 16, say: "Trade Bxf6, damaging Black's kingside before regaining the pawn.", sayShort: "Bxf6, damage the pawns", highlights: [_H('f6')] },
+    { atMove: 18, say: "Recapture Nxe4! The gambit pawn returns with a superior position.", sayShort: "Nxe4, regain the pawn", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Dutch-Defense_Staunton-Gambit'],
+};
+const ADUTW_18: SublineNarration = {
+  intro: { say: "Black tosses in …e3 to disrupt. Just take it: Bxe3 regains the pawn and develops the bishop to a fine square. Then launch the rook's pawn: h4-h5-h6! cramping Black's kingside and fixing the dark-square holes around his king. The knight leaps to e4 with dominance. You're a tempo up with a vicious space-gaining initiative.", sayShort: "Staunton: Bxe3, the h-pawn cramp" },
+  beats: [
+    { atMove: 12, say: "Capture Bxe3, regaining the pawn and developing the bishop.", sayShort: "Bxe3, regain and develop", highlights: [_H('e3')] },
+    { atMove: 14, say: "Advance h4, beginning the rook's-pawn cramp.", sayShort: "h4, begin the cramp", highlights: [_H('h4')] },
+    { atMove: 18, say: "Ram h6! Fixing dark-square holes around Black's king.", sayShort: "h6, fix the holes", highlights: [_H('h6')] },
+    { atMove: 20, say: "Leap Ne4, the knight dominating the centre. Vicious initiative.", sayShort: "Ne4, dominate and press", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Dutch-Defense_Staunton-Gambit'],
+};
+const ADUTW_19: SublineNarration = {
+  intro: { say: "Black returns the pawn with …exf3. Recapture Nxf3, regaining material with the easier development. Develop the bishop to d3, eyeing the h7-square, and castle. Coordinate with Qd2 and seize the e-file with Rae1. With the pawn restored, your pieces flow to active posts and the central files belong to you — a comfortable, lasting pull.", sayShort: "Staunton: Nxf3, seize the e-file" },
+  beats: [
+    { atMove: 10, say: "Recapture Nxf3, regaining the pawn with easy development.", sayShort: "Nxf3, regain the pawn", highlights: [_H('f3')] },
+    { atMove: 12, say: "Post Bd3, the bishop aimed at h7.", sayShort: "Bd3, aim at h7", highlights: [_H('d3')] },
+    { atMove: 14, say: "Castle O-O, tucking the king safely away.", sayShort: "O-O, tuck the king", highlights: [_H('g1')] },
+    { atMove: 20, say: "Seize Rae1, claiming the central file. A comfortable pull.", sayShort: "Rae1, claim the file", highlights: [_H('e1')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Dutch-Defense_Staunton-Gambit'],
+};
+const ADUTW_20: SublineNarration = {
+  intro: { say: "Black inserts …e3. Sidestep with Qd3, sheltering the queen, then Qxe3 scoops up the pawn with central control. Clamp the centre with f4 and develop. Trade with Bxf6 to ease your game, then advance h4 with kingside ideas and castle long. You're a tempo ahead with a strong pawn front and a safe king — pressing on both flanks.", sayShort: "Staunton: Qxe3, f4 clamps the centre" },
+  beats: [
+    { atMove: 10, say: "Reposition Qd3, sheltering the queen before recapturing.", sayShort: "Qd3, shelter the queen", highlights: [_H('d3')] },
+    { atMove: 12, say: "Capture Qxe3, regaining the pawn with central control.", sayShort: "Qxe3, central control", highlights: [_H('e3')] },
+    { atMove: 14, say: "Clamp f4, building a strong pawn front in the centre.", sayShort: "f4, clamp the centre", highlights: [_H('f4')] },
+    { atMove: 20, say: "Advance h4 with kingside ideas; a tempo up and pressing.", sayShort: "h4, press the flank", highlights: [_H('h4')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Dutch-Defense_Staunton-Gambit'],
+};
+
+const ABNW_0: SublineNarration = {
+  intro: { say: "You've accepted the Benko Gambit and you're a clean pawn to the good. Black's compensation is pressure down the half-open a- and b-files, so neutralise it: trade off the active a6-bishop with Bxa6, complete development, castle, and shore up the queenside. The defensive rook lift Rb1 takes the sting out of Black's play — you keep the extra pawn.", sayShort: "Anti-Benko: trade a6, hold the pawn" },
+  beats: [
+    { atMove: 14, say: "Trade Bxa6, removing Black's most active piece.", sayShort: "Bxa6, trade the bishop", highlights: [_H('a6')] },
+    { atMove: 16, say: "Develop Nf3, calmly completing your structure a pawn up.", sayShort: "Nf3, complete the structure", highlights: [_H('f3')] },
+    { atMove: 18, say: "Castle O-O, tucking the king before Black's files open up.", sayShort: "O-O, tuck the king", highlights: [_H('g1')] },
+    { atMove: 22, say: "Brace Rb1, taking the sting from Black's b-file pressure.", sayShort: "Rb1, blunt the pressure", highlights: [_H('b1')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_1: SublineNarration = {
+  intro: { say: "Against the Modern Benoni, grab the centre with the Four Pawns Attack. Develop Nc3, recapture cxd5 to fix the powerful d5-wedge, and build the broad pawn front with e4 and f4. The disruptive Bb5+ throws Black off, and after parrying the spite-check on h4 with g3, you castle behind a massive centre. Your space advantage is overwhelming.", sayShort: "Modern Benoni: the Four Pawns centre" },
+  beats: [
+    { atMove: 6, say: "Develop Nc3, controlling the key central squares.", sayShort: "Nc3, control the centre", highlights: [_H('c3')] },
+    { atMove: 10, say: "Build e4, staking the broad central pawn front.", sayShort: "e4, build the front", highlights: [_H('e4')] },
+    { atMove: 12, say: "Advance f4, the Four Pawns clamp gaining huge space.", sayShort: "f4, the big clamp", highlights: [_H('f4')] },
+    { atMove: 22, say: "Castle O-O behind your massive centre. Overwhelming space.", sayShort: "O-O, overwhelming space", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_2: SublineNarration = {
+  intro: { say: "In this Benko line Black delays …d6, and you pounce. Trade the a6-bishop, then ram e5! — the central pawn-storm drives Black's knight back to g8, undeveloped and humiliated. Develop with tempo, castle, and bring the queen to e2, eyeing the centre. A pawn up with a dominant centre and Black's pieces in a tangle, you're winning.", sayShort: "Anti-Benko: the crushing e5 push" },
+  beats: [
+    { atMove: 14, say: "Trade Bxa6, eliminating Black's active bishop first.", sayShort: "Bxa6, trade the bishop", highlights: [_H('a6')] },
+    { atMove: 16, say: "Ram e5! Driving Black's knight back to its starting square.", sayShort: "e5, drive it back", highlights: [_H('e5')] },
+    { atMove: 20, say: "Castle O-O, your king safe and your centre dominant.", sayShort: "O-O, safe and dominant", highlights: [_H('g1')] },
+    { atMove: 22, say: "Lift Qe2, centralising — a pawn up and Black is tangled. Winning.", sayShort: "Qe2, winning the game", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_3: SublineNarration = {
+  intro: { say: "Black fianchettoes into a Benoni structure. Build the centre with Nc3 and e4, and prophylactic h3 prevents the annoying …Bg4 pin. When Black tries to activate the bishop on f5, kick it with g4! — gaining kingside space and the bishop pair after the trades. The d5-wedge cramps Black throughout; you hold a pleasant, lasting spatial edge.", sayShort: "Modern Benoni: h3 then the g4 kick" },
+  beats: [
+    { atMove: 6, say: "Develop Nc3, the knight anchoring your centre.", sayShort: "Nc3, anchor the centre", highlights: [_H('c3')] },
+    { atMove: 10, say: "Build e4, claiming the broad central space.", sayShort: "e4, claim the space", highlights: [_H('e4')] },
+    { atMove: 18, say: "Kick g4! Gaining kingside space and chasing the bishop.", sayShort: "g4, gain space", highlights: [_H('g4')] },
+    { atMove: 22, say: "Recapture Bxf3, keeping the bishop pair and the d5-clamp.", sayShort: "Bxf3, keep the bishops", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_4: SublineNarration = {
+  intro: { say: "Black locks the centre with …e5 — the Czech Benoni. With a fixed structure, you have a free hand. Develop Nc3 and e4 to seize the centre, then complete your forces with Be2 and Be3. When Black overextends with …h5-h4, simply collect it: Nxh4 wins the pawn outright. You're a clean pawn up with the better-placed pieces in a closed position you control.", sayShort: "Czech Benoni: collect the h-pawn" },
+  beats: [
+    { atMove: 6, say: "Develop Nc3, gripping the central dark squares.", sayShort: "Nc3, grip the centre", highlights: [_H('c3')] },
+    { atMove: 8, say: "Build e4, completing your big centre against the locked pawns.", sayShort: "e4, complete the centre", highlights: [_H('e4')] },
+    { atMove: 14, say: "Develop Be3, eyeing Black's overextended kingside.", sayShort: "Be3, eye the kingside", highlights: [_H('e3')] },
+    { atMove: 20, say: "Snatch Nxh4! Winning the overextended pawn outright.", sayShort: "Nxh4, win the pawn", highlights: [_H('h4')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_5: SublineNarration = {
+  intro: { say: "Black recaptures with the bishop and trades it for your rook on f1. No matter — the king simply walks to safety. Develop Nc3 and e4 to build the centre, recapture Kxf1, then tuck the king with g3 and Kg2, where it sits perfectly safe behind the fianchetto. A pawn up with a solid centre and a tucked king, you've defused the gambit entirely.", sayShort: "Anti-Benko: the king-walk to g2" },
+  beats: [
+    { atMove: 10, say: "Develop Nc3, building toward your central control.", sayShort: "Nc3, build the centre", highlights: [_H('c3')] },
+    { atMove: 12, say: "Stake e4, claiming the centre while a pawn up.", sayShort: "e4, stake the centre", highlights: [_H('e4')] },
+    { atMove: 18, say: "Tuck Kg2, the king safe behind the fianchetto pawns.", sayShort: "Kg2, king to safety", highlights: [_H('g2')] },
+    { atMove: 22, say: "Centralise Re1; a pawn up with a solid centre. Gambit defused.", sayShort: "Re1, gambit defused", highlights: [_H('e1')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_6: SublineNarration = {
+  intro: { say: "Black heads for a Benoni with an early …d6. Take the centre your way: Nc3, h3 to rule out …Bg4, then the full e4 pawn-front. After Black challenges with …e6 and develops the bishop to f5, the thrust g4 chases it off and grabs kingside terrain. With the bishop pair and the cramping d5-pawn, you enjoy a comfortable, enduring pull.", sayShort: "Modern Benoni: clamp d5, expand g4" },
+  beats: [
+    { atMove: 6, say: "Develop Nc3, the knight supporting the d5-clamp.", sayShort: "Nc3, support d5", highlights: [_H('c3')] },
+    { atMove: 10, say: "Advance e4, raising the full central pawn-front.", sayShort: "e4, raise the front", highlights: [_H('e4')] },
+    { atMove: 18, say: "Thrust g4! Chasing the bishop and grabbing terrain.", sayShort: "g4, grab terrain", highlights: [_H('g4')] },
+    { atMove: 22, say: "Recapture Bxf3, banking the bishop pair behind the d5-pawn.", sayShort: "Bxf3, bank the bishops", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_7: SublineNarration = {
+  intro: { say: "Black delays recapturing the a6-pawn, so push it: a7! — the cheeky passed pawn deep in Black's camp, disrupting his rook and costing him time to round up. Build the centre with e4, develop, and castle. With the extra tempo Black spent on …Rxa7, your harmonious development and the central space leave you firmly on top and still a structural step ahead.", sayShort: "Anti-Benko: the cheeky a7 push" },
+  beats: [
+    { atMove: 12, say: "Push a7! The passer burrows deep, disrupting Black's rook.", sayShort: "a7, the deep passer", highlights: [_H('a7')] },
+    { atMove: 14, say: "Build e4, claiming the centre while Black untangles.", sayShort: "e4, claim the centre", highlights: [_H('e4')] },
+    { atMove: 20, say: "Castle O-O, completing development with the extra tempo.", sayShort: "O-O, complete development", highlights: [_H('g1')] },
+    { atMove: 22, say: "Centralise Re1; harmonious and a step ahead. Firmly on top.", sayShort: "Re1, firmly on top", highlights: [_H('e1')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_8: SublineNarration = {
+  intro: { say: "Black mixes Benko with a quick …e6 break. Develop Nc3 and recapture Nxd5, centralising the knight on its strong square. Build the centre with e4, and after the trades on d5 your queen lands powerfully in the middle. Mop up with Bxa6 to keep the material balance favourable, neutralise the check with Bd2, and develop. You stand better with the extra pawn and the centre.", sayShort: "Anti-Benko: Nxd5 centralises" },
+  beats: [
+    { atMove: 10, say: "Develop Nc3, eyeing the strong d5-square.", sayShort: "Nc3, eye d5", highlights: [_H('c3')] },
+    { atMove: 14, say: "Build e4, supporting your dominant centre.", sayShort: "e4, support the centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "Centralise Qxd5, the queen commanding the board.", sayShort: "Qxd5, command the board", highlights: [_H('d5')] },
+    { atMove: 22, say: "Develop Ne2; better with the extra pawn and the centre.", sayShort: "Ne2, better and ahead", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_9: SublineNarration = {
+  intro: { say: "Black plays a restrained Modern Benoni with …Be7. Adopt the classical set-up: h3 to deny …Bg4, Bd3 aiming at the kingside, and the key clamp a4, stopping Black's thematic …b5 break stone dead. Develop Nf3 and castle. With Black's queenside counterplay shut down and your central space intact, you hold a clear, comfortable advantage.", sayShort: "Modern Benoni: a4 clamps the queenside" },
+  beats: [
+    { atMove: 12, say: "Play h3, ruling out the …Bg4 pin.", sayShort: "h3, rule out …Bg4", highlights: [_H('h3')] },
+    { atMove: 14, say: "Post Bd3, the bishop aiming toward Black's king.", sayShort: "Bd3, aim at the king", highlights: [_H('d3')] },
+    { atMove: 16, say: "Clamp a4! Killing Black's thematic …b5 break.", sayShort: "a4, kill …b5", highlights: [_H('a4')] },
+    { atMove: 22, say: "Castle O-O; counterplay shut down, space intact. Clearly better.", sayShort: "O-O, clearly better", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_10: SublineNarration = {
+  intro: { say: "Black achieves the …b5 break and the play turns sharp. Build the centre with e4, develop, and when Black strikes …b5, snap it off: Nxb5 grabs the pawn. Black gets some of it back with …Nxe4, so play accurately — castle to safety and keep the structure sound. The resulting middlegame is roughly balanced, with your central pawns giving a small but real pull.", sayShort: "Modern Benoni: grab b5, play it sharp" },
+  beats: [
+    { atMove: 8, say: "Play h3, a useful prophylactic before committing the centre.", sayShort: "h3, prophylaxis first", highlights: [_H('h3')] },
+    { atMove: 12, say: "Build e4, raising the central pawn-front.", sayShort: "e4, raise the front", highlights: [_H('e4')] },
+    { atMove: 18, say: "Snatch Nxb5, grabbing the pawn Black offered.", sayShort: "Nxb5, grab the pawn", highlights: [_H('b5')] },
+    { atMove: 22, say: "Recapture Bxe4, keeping the structure sound. A small pull.", sayShort: "Bxe4, sound and pulling", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_11: SublineNarration = {
+  intro: { say: "Black prepares …b5 with …a6, but you strike first in the centre. Advance f4, building the Four Pawns front, develop Nf3, and then the decisive e5! — ramming through before Black is ready, driving his knight to the rim. Make luft with h3, develop the bishop, and castle. Your central pawns roll Black off the board; the advance is crushing.", sayShort: "Modern Benoni: the crushing e5 break" },
+  beats: [
+    { atMove: 12, say: "Advance f4, building the Four Pawns pawn-front.", sayShort: "f4, build the front", highlights: [_H('f4')] },
+    { atMove: 16, say: "Ram e5! Crashing through before Black can counter.", sayShort: "e5, crash through", highlights: [_H('e5')] },
+    { atMove: 20, say: "Develop Bd3, the bishop joining the central onslaught.", sayShort: "Bd3, join the onslaught", highlights: [_H('d3')] },
+    { atMove: 22, say: "Castle O-O; your pawns roll Black off the board. Crushing.", sayShort: "O-O, crushing space", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_12: SublineNarration = {
+  intro: { say: "Black develops modestly with …Nbd7. Take the classical Benoni set-up: Nf3 and h3, then Bd3 pointing at the kingside, and castle. The bishop sortie Bg5 provokes the weakening …f6, after which you retreat to e3, eyeing the holes Black just created. With the d5-wedge cramping his position and your pieces ideally placed, you enjoy a substantial spatial edge.", sayShort: "Modern Benoni: Bg5 provokes …f6" },
+  beats: [
+    { atMove: 12, say: "Develop Nf3, the natural classical set-up.", sayShort: "Nf3, classical set-up", highlights: [_H('f3')] },
+    { atMove: 16, say: "Post Bd3, the bishop trained on Black's king.", sayShort: "Bd3, train on the king", highlights: [_H('d3')] },
+    { atMove: 18, say: "Castle O-O, completing development behind the d5-clamp.", sayShort: "O-O, complete the clamp", highlights: [_H('g1')] },
+    { atMove: 22, say: "Retreat Be3, eyeing the holes …f6 created. Substantial edge.", sayShort: "Be3, exploit the holes", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_13: SublineNarration = {
+  intro: { say: "Black plays …a6 angling for …b5, so seize the initiative centrally. Build e4 and f4 — the Four Pawns Attack — then the thematic e5! break rips the position open before Black is castled. Recapture fxe5, develop the bishop to f4 supporting the advanced pawn, and complete development. Your big, mobile centre and lead in development give a clear advantage.", sayShort: "Modern Benoni: Four Pawns, e5 rip" },
+  beats: [
+    { atMove: 8, say: "Build e4, raising the broad pawn-front.", sayShort: "e4, raise the front", highlights: [_H('e4')] },
+    { atMove: 10, say: "Advance f4, the Four Pawns clamp gaining space.", sayShort: "f4, the clamp", highlights: [_H('f4')] },
+    { atMove: 12, say: "Ram e5! Ripping open the centre before Black castles.", sayShort: "e5, rip it open", highlights: [_H('e5')] },
+    { atMove: 18, say: "Post Bf4, supporting the advanced pawn. Clear advantage.", sayShort: "Bf4, support and press", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_14: SublineNarration = {
+  intro: { say: "Black tries to pin with …Bg4, but it's premature. Defend the centre with Qc2, then h3 questions the bishop — and since there's nothing useful on f3 yet, it must slink back to c8, having wasted two tempi. Develop Nf3 and Be2, then provoke with Bg5. Up two free tempi with the cramping d5-wedge, you're comfortably better.", sayShort: "Modern Benoni: h3 wins two tempi" },
+  beats: [
+    { atMove: 12, say: "Defend Qc2, protecting e4 and eyeing the kingside.", sayShort: "Qc2, protect e4", highlights: [_H('c2')] },
+    { atMove: 14, say: "Question h3! The bishop must retreat, wasting two tempi.", sayShort: "h3, win the tempi", highlights: [_H('h3')] },
+    { atMove: 20, say: "Provoke Bg5, pressuring the knight and the kingside.", sayShort: "Bg5, provoke and press", highlights: [_H('g5')] },
+    { atMove: 22, say: "Reposition Bf4, eyeing d6 — two tempi up and cramping.", sayShort: "Bf4, comfortably better", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_15: SublineNarration = {
+  intro: { say: "Black's passive …Be7 invites a brutal response: d6! — the wedge drives the bishop back to f8 and jams Black's whole position, his pieces unable to coordinate around the intruder. Build the centre with e4, support with Qd3, and gain space with f4. The cramping d6-pawn is a permanent thorn; Black is tied in knots and you're clearly winning.", sayShort: "Modern Benoni: the jamming d6 wedge" },
+  beats: [
+    { atMove: 8, say: "Ram d6! The wedge jams Black's position and shoves the bishop back.", sayShort: "d6, the jamming wedge", highlights: [_H('d6')] },
+    { atMove: 10, say: "Build e4, raising the centre behind the wedge.", sayShort: "e4, raise the centre", highlights: [_H('e4')] },
+    { atMove: 14, say: "Expand f4, gaining still more space.", sayShort: "f4, gain more space", highlights: [_H('f4')] },
+    { atMove: 16, say: "Capture cxb5, opening lines with Black tied in knots. Winning.", sayShort: "cxb5, open and win", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_16: SublineNarration = {
+  intro: { say: "Black's early …Qa5 is a misplaced sortie. Develop Bd2 with tempo, forcing the queen back to d8 — Black has simply lost two moves. Now seize the centre with f4, develop Nf3 and Bd3, and castle. With the queen's wasted tour and your broad central front, you've built a dominant position; Black struggles for any counterplay.", sayShort: "Modern Benoni: Bd2 refutes …Qa5" },
+  beats: [
+    { atMove: 12, say: "Develop Bd2 with tempo, shooing the queen back.", sayShort: "Bd2, gain the tempo", highlights: [_H('d2')] },
+    { atMove: 14, say: "Seize f4, building the broad central front.", sayShort: "f4, seize the centre", highlights: [_H('f4')] },
+    { atMove: 18, say: "Post Bd3, the bishop aiming at the kingside.", sayShort: "Bd3, aim at the king", highlights: [_H('d3')] },
+    { atMove: 20, say: "Castle O-O; the queen's tour wasted, you dominate.", sayShort: "O-O, you dominate", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_17: SublineNarration = {
+  intro: { say: "Black mixes Benko with a quick …e6 break. Develop Nc3 and recapture Nxd5, centralising the knight on its strong square. Build the centre with e4, and after the trades on d5 your queen lands powerfully in the middle. Mop up with Bxa6 to keep the material balance favourable, neutralise the check with Bd2, and develop. You stand better with the extra pawn and the centre.", sayShort: "Anti-Benko: Nxd5 centralises" },
+  beats: [
+    { atMove: 10, say: "Develop Nc3, eyeing the strong d5-square.", sayShort: "Nc3, eye d5", highlights: [_H('c3')] },
+    { atMove: 14, say: "Build e4, supporting your dominant centre.", sayShort: "e4, support the centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "Centralise Qxd5, the queen commanding the board.", sayShort: "Qxd5, command the board", highlights: [_H('d5')] },
+    { atMove: 22, say: "Develop Ne2; better with the extra pawn and the centre.", sayShort: "Ne2, better and ahead", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_18: SublineNarration = {
+  intro: { say: "Black fianchettoes into a Benoni structure. Build the centre with Nc3 and e4, and prophylactic h3 prevents the annoying …Bg4 pin. When Black tries to activate the bishop on f5, kick it with g4! — gaining kingside space and the bishop pair after the trades. The d5-wedge cramps Black throughout; you hold a pleasant, lasting spatial edge.", sayShort: "Modern Benoni: h3 then the g4 kick" },
+  beats: [
+    { atMove: 6, say: "Develop Nc3, the knight anchoring your centre.", sayShort: "Nc3, anchor the centre", highlights: [_H('c3')] },
+    { atMove: 10, say: "Build e4, claiming the broad central space.", sayShort: "e4, claim the space", highlights: [_H('e4')] },
+    { atMove: 18, say: "Kick g4! Gaining kingside space and chasing the bishop.", sayShort: "g4, gain space", highlights: [_H('g4')] },
+    { atMove: 22, say: "Recapture Bxf3, keeping the bishop pair and the d5-clamp.", sayShort: "Bxf3, keep the bishops", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_19: SublineNarration = {
+  intro: { say: "Black mixes Benko with a quick …e6 break. Develop Nc3 and recapture Nxd5, centralising the knight on its strong square. Build the centre with e4, and after the trades on d5 your queen lands powerfully in the middle. Mop up with Bxa6 to keep the material balance favourable, neutralise the check with Bd2, and develop. You stand better with the extra pawn and the centre.", sayShort: "Anti-Benko: Nxd5 centralises" },
+  beats: [
+    { atMove: 10, say: "Develop Nc3, eyeing the strong d5-square.", sayShort: "Nc3, eye d5", highlights: [_H('c3')] },
+    { atMove: 14, say: "Build e4, supporting your dominant centre.", sayShort: "e4, support the centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "Centralise Qxd5, the queen commanding the board.", sayShort: "Qxd5, command the board", highlights: [_H('d5')] },
+    { atMove: 22, say: "Develop Ne2; better with the extra pawn and the centre.", sayShort: "Ne2, better and ahead", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_20: SublineNarration = {
+  intro: { say: "Against the Modern Benoni, grab the centre with the Four Pawns Attack. Develop Nc3, recapture cxd5 to fix the powerful d5-wedge, and build the broad pawn front with e4 and f4. The disruptive Bb5+ throws Black off, and after parrying the spite-check on h4 with g3, you castle behind a massive centre. Your space advantage is overwhelming.", sayShort: "Modern Benoni: the Four Pawns centre" },
+  beats: [
+    { atMove: 6, say: "Develop Nc3, controlling the key central squares.", sayShort: "Nc3, control the centre", highlights: [_H('c3')] },
+    { atMove: 10, say: "Build e4, staking the broad central pawn front.", sayShort: "e4, build the front", highlights: [_H('e4')] },
+    { atMove: 12, say: "Advance f4, the Four Pawns clamp gaining huge space.", sayShort: "f4, the big clamp", highlights: [_H('f4')] },
+    { atMove: 22, say: "Castle O-O behind your massive centre. Overwhelming space.", sayShort: "O-O, overwhelming space", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_21: SublineNarration = {
+  intro: { say: "Black locks the centre with …e5 — the Czech Benoni. With a fixed structure, you have a free hand. Develop Nc3 and e4 to seize the centre, then complete your forces with Be2 and Be3. When Black overextends with …h5-h4, simply collect it: Nxh4 wins the pawn outright. You're a clean pawn up with the better-placed pieces in a closed position you control.", sayShort: "Czech Benoni: collect the h-pawn" },
+  beats: [
+    { atMove: 6, say: "Develop Nc3, gripping the central dark squares.", sayShort: "Nc3, grip the centre", highlights: [_H('c3')] },
+    { atMove: 8, say: "Build e4, completing your big centre against the locked pawns.", sayShort: "e4, complete the centre", highlights: [_H('e4')] },
+    { atMove: 14, say: "Develop Be3, eyeing Black's overextended kingside.", sayShort: "Be3, eye the kingside", highlights: [_H('e3')] },
+    { atMove: 20, say: "Snatch Nxh4! Winning the overextended pawn outright.", sayShort: "Nxh4, win the pawn", highlights: [_H('h4')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_22: SublineNarration = {
+  intro: { say: "Black heads for a Benoni with an early …d6. Take the centre your way: Nc3, h3 to rule out …Bg4, then the full e4 pawn-front. After Black challenges with …e6 and develops the bishop to f5, the thrust g4 chases it off and grabs kingside terrain. With the bishop pair and the cramping d5-pawn, you enjoy a comfortable, enduring pull.", sayShort: "Modern Benoni: clamp d5, expand g4" },
+  beats: [
+    { atMove: 6, say: "Develop Nc3, the knight supporting the d5-clamp.", sayShort: "Nc3, support d5", highlights: [_H('c3')] },
+    { atMove: 10, say: "Advance e4, raising the full central pawn-front.", sayShort: "e4, raise the front", highlights: [_H('e4')] },
+    { atMove: 18, say: "Thrust g4! Chasing the bishop and grabbing terrain.", sayShort: "g4, grab terrain", highlights: [_H('g4')] },
+    { atMove: 22, say: "Recapture Bxf3, banking the bishop pair behind the d5-pawn.", sayShort: "Bxf3, bank the bishops", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_23: SublineNarration = {
+  intro: { say: "Black fianchettoes into a Benoni structure. Build the centre with Nc3 and e4, and prophylactic h3 prevents the annoying …Bg4 pin. When Black tries to activate the bishop on f5, kick it with g4! — gaining kingside space and the bishop pair after the trades. The d5-wedge cramps Black throughout; you hold a pleasant, lasting spatial edge.", sayShort: "Modern Benoni: h3 then the g4 kick" },
+  beats: [
+    { atMove: 6, say: "Develop Nc3, the knight anchoring your centre.", sayShort: "Nc3, anchor the centre", highlights: [_H('c3')] },
+    { atMove: 10, say: "Build e4, claiming the broad central space.", sayShort: "e4, claim the space", highlights: [_H('e4')] },
+    { atMove: 18, say: "Kick g4! Gaining kingside space and chasing the bishop.", sayShort: "g4, gain space", highlights: [_H('g4')] },
+    { atMove: 22, say: "Recapture Bxf3, keeping the bishop pair and the d5-clamp.", sayShort: "Bxf3, keep the bishops", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_24: SublineNarration = {
+  intro: { say: "Black castles into a Benoni with …g6. Take the flexible a3 set-up, building e4 and developing naturally. The point comes on the queenside: a4 clamps down, denying Black the …b5 break that is his lifeblood here. Recapture toward the centre and castle. With Black's counterplay throttled and your space secured, you hold a small but persistent edge.", sayShort: "Modern Benoni: a3-a4 throttle …b5" },
+  beats: [
+    { atMove: 10, say: "Build e4, raising your central front.", sayShort: "e4, raise the front", highlights: [_H('e4')] },
+    { atMove: 16, say: "Recapture cxd5, restoring the cramping wedge.", sayShort: "cxd5, restore the wedge", highlights: [_H('d5')] },
+    { atMove: 18, say: "Clamp a4! Throttling Black's vital …b5 break.", sayShort: "a4, throttle …b5", highlights: [_H('a4')] },
+    { atMove: 22, say: "Recapture Bxf3; counterplay throttled, space secured.", sayShort: "Bxf3, persistent edge", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_25: SublineNarration = {
+  intro: { say: "With …d6 and …g6 Black aims for a King's-Indian-flavoured Benoni. Meet it with the prophylactic a3, develop Nf3, and only then the full e4. The recipe is the same and it works: after Black opens with …exd5, recapture toward the centre and slam the door with a4, killing the …b5 counter. Castle; your spatial bind leaves Black passive and you in control.", sayShort: "Modern Benoni: a3 then a4 bind" },
+  beats: [
+    { atMove: 10, say: "Develop Nf3, preparing the centre behind a3.", sayShort: "Nf3, prepare the centre", highlights: [_H('f3')] },
+    { atMove: 12, say: "Build e4, completing the central pawn-front.", sayShort: "e4, complete the front", highlights: [_H('e4')] },
+    { atMove: 18, say: "Slam a4! Killing the …b5 counterplay.", sayShort: "a4, kill the counter", highlights: [_H('a4')] },
+    { atMove: 22, say: "Recapture Bxf3; the bind leaves Black passive. In control.", sayShort: "Bxf3, in control", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_26: SublineNarration = {
+  intro: { say: "Here you try the ambitious d6 wedge, jamming a pawn deep in Black's camp. Build the big centre with e4 and f4 and roll forward — but be warned: this is a sharp, committal plan. Black's fianchetto on b7 and the …f6 break hit back hard at your overextended pawns, and if the e5-push doesn't land cleanly the centre can collapse. Play it as the double-edged gamble it is — accuracy is everything.", sayShort: "Modern Benoni: the committal d6 gamble" },
+  beats: [
+    { atMove: 10, say: "Ram d6, the committal wedge deep in Black's position.", sayShort: "d6, the committal wedge", highlights: [_H('d6')] },
+    { atMove: 12, say: "Build e4, raising the broad — but loose — pawn-front.", sayShort: "e4, the loose front", highlights: [_H('e4')] },
+    { atMove: 16, say: "Expand f4, supporting the coming push.", sayShort: "f4, support the push", highlights: [_H('f4')] },
+    { atMove: 18, say: "Advance e5 — sharp and double-edged; Black's …f6 strikes back.", sayShort: "e5, double-edged", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_27: SublineNarration = {
+  intro: { say: "Black combines …g6 with a quick …a6-b5. Build the centre with e4 and develop, using h3 against …Bg4. When Black plays …b5, you're well-placed: complete development, castle, and after the central trades recapture cxd5 to keep the wedge. The bishop swings to f4, hitting d6. With your space and the better-coordinated pieces, you keep a comfortable pull.", sayShort: "Modern Benoni: meet …a6-b5 calmly" },
+  beats: [
+    { atMove: 10, say: "Build e4, staking the broad centre.", sayShort: "e4, stake the centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "Post Bd3, the bishop eyeing Black's kingside.", sayShort: "Bd3, eye the kingside", highlights: [_H('d3')] },
+    { atMove: 20, say: "Recapture cxd5, restoring the cramping d5-wedge.", sayShort: "cxd5, restore the wedge", highlights: [_H('d5')] },
+    { atMove: 22, say: "Reposition Bf4, pressuring d6. A comfortable pull.", sayShort: "Bf4, comfortable pull", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_28: SublineNarration = {
+  intro: { say: "Black's …Qa5 is again misplaced. Develop Bd2 with tempo, and the queen has nothing better than to crawl back to d8 — two moves lost. Take the centre with e4, develop Bd3, and play h3. After the central exchanges your d5-pawn cramps Black and your pieces flow to active squares. The wasted queen tour hands you a clear, easy initiative.", sayShort: "Modern Benoni: Bd2 punishes …Qa5" },
+  beats: [
+    { atMove: 10, say: "Develop Bd2 with tempo, chasing the queen home.", sayShort: "Bd2, chase the queen", highlights: [_H('d2')] },
+    { atMove: 12, say: "Build e4, claiming the central space.", sayShort: "e4, claim the space", highlights: [_H('e4')] },
+    { atMove: 18, say: "Recapture exd5, fixing the cramping wedge.", sayShort: "exd5, fix the wedge", highlights: [_H('d5')] },
+    { atMove: 22, say: "Develop Be3; the queen tour wasted, you hold the edge.", sayShort: "Be3, hold the edge", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_29: SublineNarration = {
+  intro: { say: "Black mixes Benko with a quick …e6 break. Develop Nc3 and recapture Nxd5, centralising the knight on its strong square. Build the centre with e4, and after the trades on d5 your queen lands powerfully in the middle. Mop up with Bxa6 to keep the material balance favourable, neutralise the check with Bd2, and develop. You stand better with the extra pawn and the centre.", sayShort: "Anti-Benko: Nxd5 centralises" },
+  beats: [
+    { atMove: 10, say: "Develop Nc3, eyeing the strong d5-square.", sayShort: "Nc3, eye d5", highlights: [_H('c3')] },
+    { atMove: 14, say: "Build e4, supporting your dominant centre.", sayShort: "e4, support the centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "Centralise Qxd5, the queen commanding the board.", sayShort: "Qxd5, command the board", highlights: [_H('d5')] },
+    { atMove: 22, say: "Develop Ne2; better with the extra pawn and the centre.", sayShort: "Ne2, better and ahead", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_30: SublineNarration = {
+  intro: { say: "Against the Modern Benoni, grab the centre with the Four Pawns Attack. Develop Nc3, recapture cxd5 to fix the powerful d5-wedge, and build the broad pawn front with e4 and f4. The disruptive Bb5+ throws Black off, and after parrying the spite-check on h4 with g3, you castle behind a massive centre. Your space advantage is overwhelming.", sayShort: "Modern Benoni: the Four Pawns centre" },
+  beats: [
+    { atMove: 6, say: "Develop Nc3, controlling the key central squares.", sayShort: "Nc3, control the centre", highlights: [_H('c3')] },
+    { atMove: 10, say: "Build e4, staking the broad central pawn front.", sayShort: "e4, build the front", highlights: [_H('e4')] },
+    { atMove: 12, say: "Advance f4, the Four Pawns clamp gaining huge space.", sayShort: "f4, the big clamp", highlights: [_H('f4')] },
+    { atMove: 22, say: "Castle O-O behind your massive centre. Overwhelming space.", sayShort: "O-O, overwhelming space", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_31: SublineNarration = {
+  intro: { say: "Black's …Bd6 is a clumsy try in the Czech Benoni. Punish it sharply: g4! offers a pawn to rip open lines, and after the knight grabs it, the fork Nb5 hits the bishop. Nxc7+ snares the bishop pair, and the wedge d6 jams Black's camp. Your rook swings to g1, the bishop lands on h6, and your initiative rages — you're clearly on top with the bishops and the wedge.", sayShort: "Czech Benoni: g4 gambit, Nb5 fork" },
+  beats: [
+    { atMove: 8, say: "Offer g4! A pawn to blast open lines against …Bd6.", sayShort: "g4, blast it open", highlights: [_H('g4')] },
+    { atMove: 12, say: "Fork Nb5, hitting the awkward dark-squared bishop.", sayShort: "Nb5, fork the bishop", highlights: [_H('b5')] },
+    { atMove: 14, say: "Snare Nxc7+, winning the bishop pair.", sayShort: "Nxc7+, win the bishops", highlights: [_H('c7')] },
+    { atMove: 16, say: "Ram d6! The wedge jams Black's position. Clearly on top.", sayShort: "d6, jam and dominate", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_32: SublineNarration = {
+  intro: { say: "Black sets up a Czech Benoni with …a6. Build the centre with e4, develop with the bishop on d3 and queen on e2, and prepare the key break. The thrust f4 challenges the locked e5-pawn, and after fxe5 followed by exd6 the position opens to your advantage — your better development and the bishop pair tell in the resulting play. You hold a clear, pleasant edge.", sayShort: "Czech Benoni: the f4 break opens lines" },
+  beats: [
+    { atMove: 8, say: "Build e4, seizing the centre against the locked pawns.", sayShort: "e4, seize the centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "Break f4! Challenging Black's fixed e5-pawn.", sayShort: "f4, the break", highlights: [_H('f4')] },
+    { atMove: 20, say: "Capture fxe5, opening lines to your advantage.", sayShort: "fxe5, open the lines", highlights: [_H('e5')] },
+    { atMove: 22, say: "Recapture exd6, the position favouring your pieces. Clear edge.", sayShort: "exd6, clear edge", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_33: SublineNarration = {
+  intro: { say: "Black fianchettoes into a Benoni structure. Build the centre with Nc3 and e4, and prophylactic h3 prevents the annoying …Bg4 pin. When Black tries to activate the bishop on f5, kick it with g4! — gaining kingside space and the bishop pair after the trades. The d5-wedge cramps Black throughout; you hold a pleasant, lasting spatial edge.", sayShort: "Modern Benoni: h3 then the g4 kick" },
+  beats: [
+    { atMove: 6, say: "Develop Nc3, the knight anchoring your centre.", sayShort: "Nc3, anchor the centre", highlights: [_H('c3')] },
+    { atMove: 10, say: "Build e4, claiming the broad central space.", sayShort: "e4, claim the space", highlights: [_H('e4')] },
+    { atMove: 18, say: "Kick g4! Gaining kingside space and chasing the bishop.", sayShort: "g4, gain space", highlights: [_H('g4')] },
+    { atMove: 22, say: "Recapture Bxf3, keeping the bishop pair and the d5-clamp.", sayShort: "Bxf3, keep the bishops", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_34: SublineNarration = {
+  intro: { say: "Black heads for a Benoni with an early …d6. Take the centre your way: Nc3, h3 to rule out …Bg4, then the full e4 pawn-front. After Black challenges with …e6 and develops the bishop to f5, the thrust g4 chases it off and grabs kingside terrain. With the bishop pair and the cramping d5-pawn, you enjoy a comfortable, enduring pull.", sayShort: "Modern Benoni: clamp d5, expand g4" },
+  beats: [
+    { atMove: 6, say: "Develop Nc3, the knight supporting the d5-clamp.", sayShort: "Nc3, support d5", highlights: [_H('c3')] },
+    { atMove: 10, say: "Advance e4, raising the full central pawn-front.", sayShort: "e4, raise the front", highlights: [_H('e4')] },
+    { atMove: 18, say: "Thrust g4! Chasing the bishop and grabbing terrain.", sayShort: "g4, grab terrain", highlights: [_H('g4')] },
+    { atMove: 22, say: "Recapture Bxf3, banking the bishop pair behind the d5-pawn.", sayShort: "Bxf3, bank the bishops", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_35: SublineNarration = {
+  intro: { say: "The locked Czech Benoni is a battle of space, and you have more on both wings. Develop Bd3 toward the kingside, then expand with h4, gaining terrain where you're strongest. The queen comes to e2 and a4 clamps the queenside, denying Black his …b5 break. Reroute the bishop to b1 to keep the kingside battery alive. You squeeze Black on both flanks with a lasting bind.", sayShort: "Czech Benoni: h4 and a4 double bind" },
+  beats: [
+    { atMove: 12, say: "Post Bd3, the bishop aiming at the kingside.", sayShort: "Bd3, aim at the king", highlights: [_H('d3')] },
+    { atMove: 14, say: "Expand h4, grabbing kingside space.", sayShort: "h4, grab space", highlights: [_H('h4')] },
+    { atMove: 18, say: "Clamp a4, denying Black the …b5 break.", sayShort: "a4, deny …b5", highlights: [_H('a4')] },
+    { atMove: 22, say: "Reroute Bb1, keeping the kingside battery. A lasting bind.", sayShort: "Bb1, the lasting bind", highlights: [_H('b1')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_36: SublineNarration = {
+  intro: { say: "In this Czech Benoni Black fianchettoes. Stake your kingside space with h4 and g3, then reroute the knight via h3 — heading for f2 and g4 rather than blocking your bishop. On the queenside, a4 and the further a5 clamp Black's pawns, cramping his knight to the miserable a8-square. With more space everywhere and Black's pieces tangled, you enjoy a commanding bind.", sayShort: "Czech Benoni: Nh3 reroute, a5 clamp" },
+  beats: [
+    { atMove: 10, say: "Expand h4, grabbing kingside terrain.", sayShort: "h4, grab terrain", highlights: [_H('h4')] },
+    { atMove: 14, say: "Reroute Nh3, the knight heading for f2 and g4.", sayShort: "Nh3, reroute the knight", highlights: [_H('h3')] },
+    { atMove: 16, say: "Clamp a4, beginning the queenside squeeze.", sayShort: "a4, begin the squeeze", highlights: [_H('a4')] },
+    { atMove: 22, say: "Push a5! Cramping Black's knight to the rim. Commanding bind.", sayShort: "a5, commanding bind", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_37: SublineNarration = {
+  intro: { say: "Black locks the centre with …e5 — the Czech Benoni. With a fixed structure, you have a free hand. Develop Nc3 and e4 to seize the centre, then complete your forces with Be2 and Be3. When Black overextends with …h5-h4, simply collect it: Nxh4 wins the pawn outright. You're a clean pawn up with the better-placed pieces in a closed position you control.", sayShort: "Czech Benoni: collect the h-pawn" },
+  beats: [
+    { atMove: 6, say: "Develop Nc3, gripping the central dark squares.", sayShort: "Nc3, grip the centre", highlights: [_H('c3')] },
+    { atMove: 8, say: "Build e4, completing your big centre against the locked pawns.", sayShort: "e4, complete the centre", highlights: [_H('e4')] },
+    { atMove: 14, say: "Develop Be3, eyeing Black's overextended kingside.", sayShort: "Be3, eye the kingside", highlights: [_H('e3')] },
+    { atMove: 20, say: "Snatch Nxh4! Winning the overextended pawn outright.", sayShort: "Nxh4, win the pawn", highlights: [_H('h4')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const ABNW_38: SublineNarration = {
+  intro: { say: "A flexible Czech Benoni. Develop the bishop to d3 toward Black's king, bring the knight to f3, and play h3 to deny the …Ng4 and …Bg4 ideas. When Black tries …Nh5, simply meet it with g3, keeping your structure intact. The clamp a4 freezes Black's queenside, and Qc2 completes a harmonious set-up. With more space and the better pieces, you press a comfortable bind.", sayShort: "Czech Benoni: solid bind, a4 freeze" },
+  beats: [
+    { atMove: 12, say: "Post Bd3, the bishop trained on the kingside.", sayShort: "Bd3, train on the king", highlights: [_H('d3')] },
+    { atMove: 14, say: "Develop Nf3, completing your harmonious set-up.", sayShort: "Nf3, complete the set-up", highlights: [_H('f3')] },
+    { atMove: 20, say: "Clamp a4, freezing Black's queenside pawns.", sayShort: "a4, freeze the flank", highlights: [_H('a4')] },
+    { atMove: 22, say: "Coordinate Qc2; more space and better pieces. Comfortable bind.", sayShort: "Qc2, comfortable bind", highlights: [_H('c2')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Benoni-Defense'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'catalan-opening::6::Bb4+@5': CATR_60,
   'catalan-opening::5::c6@9': CATR_50,
@@ -17232,45 +17791,45 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'englund-gambit::0::Nxc3@14': ENGW_8,
   'englund-gambit::0::Nbd2@12': ENGW_9,
   // ── anti-benoni-push ──
-  'anti-benoni-push::0::d6@13': C119,
-  'anti-benoni-push::0::e6@5': EABEN,
-  'anti-benoni-push::0::Bg7@13': C119,
-  'anti-benoni-push::0::g6@5': C121,
-  'anti-benoni-push::0::e5@5': C122,
-  'anti-benoni-push::0::Bxa6@9': C119,
-  'anti-benoni-push::0::d6@5': C121,
-  'anti-benoni-push::0::Bg7@11': C119,
-  'anti-benoni-push::0::e6@9': C119,
-  'anti-benoni-push::1::Be7@11': C120,
-  'anti-benoni-push::1::d6@7': C120,
-  'anti-benoni-push::1::a6@11': C120,
-  'anti-benoni-push::1::Nbd7@11': C120,
-  'anti-benoni-push::1::a6@7': C120,
-  'anti-benoni-push::1::Bg4@11': C120,
-  'anti-benoni-push::1::Be7@7': C120,
-  'anti-benoni-push::1::Qa5@11': C120,
-  'anti-benoni-push::1::b5@5': C119,
-  'anti-benoni-push::1::g6@5': C121,
-  'anti-benoni-push::2::b5@5': C119,
-  'anti-benoni-push::2::e6@5': EABEN,
-  'anti-benoni-push::2::e5@5': C122,
-  'anti-benoni-push::2::d6@5': C121,
-  'anti-benoni-push::2::d6@7': C121,
-  'anti-benoni-push::2::O-O@9': C121,
-  'anti-benoni-push::2::d6@9': C121,
-  'anti-benoni-push::2::e6@9': C120,
-  'anti-benoni-push::2::a6@9': C121,
-  'anti-benoni-push::2::Qa5@9': C121,
-  'anti-benoni-push::3::b5@5': C119,
-  'anti-benoni-push::3::e6@5': EABEN,
-  'anti-benoni-push::3::Bd6@7': C122,
-  'anti-benoni-push::3::a6@7': C122,
-  'anti-benoni-push::3::g6@5': C121,
-  'anti-benoni-push::3::d6@5': C121,
-  'anti-benoni-push::3::O-O@11': C122,
-  'anti-benoni-push::3::Nbd7@9': C122,
-  'anti-benoni-push::3::g6@9': C122,
-  'anti-benoni-push::3::Nbd7@11': C122,
+  'anti-benoni-push::0::d6@13': ABNW_0,
+  'anti-benoni-push::0::e6@5': ABNW_1,
+  'anti-benoni-push::0::Bg7@13': ABNW_2,
+  'anti-benoni-push::0::g6@5': ABNW_3,
+  'anti-benoni-push::0::e5@5': ABNW_4,
+  'anti-benoni-push::0::Bxa6@9': ABNW_5,
+  'anti-benoni-push::0::d6@5': ABNW_6,
+  'anti-benoni-push::0::Bg7@11': ABNW_7,
+  'anti-benoni-push::0::e6@9': ABNW_8,
+  'anti-benoni-push::1::Be7@11': ABNW_9,
+  'anti-benoni-push::1::d6@7': ABNW_10,
+  'anti-benoni-push::1::a6@11': ABNW_11,
+  'anti-benoni-push::1::Nbd7@11': ABNW_12,
+  'anti-benoni-push::1::a6@7': ABNW_13,
+  'anti-benoni-push::1::Bg4@11': ABNW_14,
+  'anti-benoni-push::1::Be7@7': ABNW_15,
+  'anti-benoni-push::1::Qa5@11': ABNW_16,
+  'anti-benoni-push::1::b5@5': ABNW_17,
+  'anti-benoni-push::1::g6@5': ABNW_18,
+  'anti-benoni-push::2::b5@5': ABNW_19,
+  'anti-benoni-push::2::e6@5': ABNW_20,
+  'anti-benoni-push::2::e5@5': ABNW_21,
+  'anti-benoni-push::2::d6@5': ABNW_22,
+  'anti-benoni-push::2::d6@7': ABNW_23,
+  'anti-benoni-push::2::O-O@9': ABNW_24,
+  'anti-benoni-push::2::d6@9': ABNW_25,
+  'anti-benoni-push::2::e6@9': ABNW_26,
+  'anti-benoni-push::2::a6@9': ABNW_27,
+  'anti-benoni-push::2::Qa5@9': ABNW_28,
+  'anti-benoni-push::3::b5@5': ABNW_29,
+  'anti-benoni-push::3::e6@5': ABNW_30,
+  'anti-benoni-push::3::Bd6@7': ABNW_31,
+  'anti-benoni-push::3::a6@7': ABNW_32,
+  'anti-benoni-push::3::g6@5': ABNW_33,
+  'anti-benoni-push::3::d6@5': ABNW_34,
+  'anti-benoni-push::3::O-O@11': ABNW_35,
+  'anti-benoni-push::3::Nbd7@9': ABNW_36,
+  'anti-benoni-push::3::g6@9': ABNW_37,
+  'anti-benoni-push::3::Nbd7@11': ABNW_38,
   // ── anti-englund ──
   'anti-englund::0::Nxf3+@9': AENGW_0,
   'anti-englund::0::Nf6@9': AENGW_1,
@@ -17391,27 +17950,27 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-qid-fianchetto::1::c5@5': C136,
   'anti-qid-fianchetto::1::Bb4+@7': C137,
   // ── anti-dutch-staunton ──
-  'anti-dutch-staunton::0::d5@5': C140,
-  'anti-dutch-staunton::0::g6@7': C141,
-  'anti-dutch-staunton::0::c6@7': C142,
-  'anti-dutch-staunton::0::e6@7': C142,
-  'anti-dutch-staunton::1::d5@5': C140,
-  'anti-dutch-staunton::1::Nc6@7': C142,
-  'anti-dutch-staunton::1::c6@7': C142,
-  'anti-dutch-staunton::1::e6@7': C142,
-  'anti-dutch-staunton::1::exf3@9': C142,
-  'anti-dutch-staunton::1::dxe4@11': EADUT,
-  'anti-dutch-staunton::1::e3@9': C142,
-  'anti-dutch-staunton::2::d5@5': C140,
-  'anti-dutch-staunton::2::Nc6@7': C142,
-  'anti-dutch-staunton::2::g6@7': C141,
-  'anti-dutch-staunton::2::exf3@11': C142,
-  'anti-dutch-staunton::2::d5@11': C141,
-  'anti-dutch-staunton::2::e6@7': C142,
-  'anti-dutch-staunton::2::d5@9': C141,
-  'anti-dutch-staunton::2::e3@11': C142,
-  'anti-dutch-staunton::2::exf3@9': C141,
-  'anti-dutch-staunton::2::e3@9': C141,
+  'anti-dutch-staunton::0::d5@5': ADUTW_0,
+  'anti-dutch-staunton::0::g6@7': ADUTW_1,
+  'anti-dutch-staunton::0::c6@7': ADUTW_2,
+  'anti-dutch-staunton::0::e6@7': ADUTW_3,
+  'anti-dutch-staunton::1::d5@5': ADUTW_4,
+  'anti-dutch-staunton::1::Nc6@7': ADUTW_5,
+  'anti-dutch-staunton::1::c6@7': ADUTW_6,
+  'anti-dutch-staunton::1::e6@7': ADUTW_7,
+  'anti-dutch-staunton::1::exf3@9': ADUTW_8,
+  'anti-dutch-staunton::1::dxe4@11': ADUTW_9,
+  'anti-dutch-staunton::1::e3@9': ADUTW_10,
+  'anti-dutch-staunton::2::d5@5': ADUTW_11,
+  'anti-dutch-staunton::2::Nc6@7': ADUTW_12,
+  'anti-dutch-staunton::2::g6@7': ADUTW_13,
+  'anti-dutch-staunton::2::exf3@11': ADUTW_14,
+  'anti-dutch-staunton::2::d5@11': ADUTW_15,
+  'anti-dutch-staunton::2::e6@7': ADUTW_16,
+  'anti-dutch-staunton::2::d5@9': ADUTW_17,
+  'anti-dutch-staunton::2::e3@11': ADUTW_18,
+  'anti-dutch-staunton::2::exf3@9': ADUTW_19,
+  'anti-dutch-staunton::2::e3@9': ADUTW_20,
   // ── anti-qgd-exchange ──
   'anti-qgd-exchange::0::c6@7': AQGDW_0,
   'anti-qgd-exchange::0::Qxd5@5': AQGDW_1,
