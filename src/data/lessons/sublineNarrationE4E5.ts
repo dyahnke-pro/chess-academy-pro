@@ -51,7 +51,9 @@ const RUY_OPEN: SublineNarration = {
     sayShort: 'Nxe4 — Open Ruy: strike with d4.',
   },
   beats: [
-    { atMove: 9, say: "Black snatches e4 — now hammer the centre straight back. d4 prises it open, the e4-knight gets chased, and your central majority plus the loose black queenside tell the tale.", sayShort: "Nxe4 — strike d4 at the centre.", highlights: [H('d4', KEY), H('e4', ATK)] },
+    { atMove: 9, say: "…Nxe4 snatches the e4-pawn — now hammer the centre straight back with d4, before Black consolidates the extra pawn.", sayShort: "…Nxe4 — answer d4.", highlights: [H('e4', ATK)] },
+    { atMove: 10, say: "d4 prises the centre open; after …b5 Bb3 …d5 the position unlocks, but your central majority and the Re1 boring down the e-file are the lasting trumps.", sayShort: "d4 — open it, central majority.", arrows: [A('d4', 'e5')], highlights: [H('e5', ATK)] },
+    { atMove: 14, say: "dxe5 opens lines — Black's pieces are active, but his loosened queenside from …a6 and …b5 is the chronic weakness. Develop, double on the open files, and press the structural edge.", sayShort: "dxe5 — open lines, press structure.", highlights: [H('e5', SOFT)] },
   ],
   sources: RUY,
 };
@@ -62,7 +64,9 @@ const RUY_B5: SublineNarration = {
     sayShort: '…b5 — retreat Bb3, keep eyeing f7.',
   },
   beats: [
-    { atMove: 9, say: "b5 puts the question to your bishop — slide it to b3, where it still glares down the diagonal toward f7. You concede nothing, and the early b5 leaves c6 and d5 a shade loose for later.", sayShort: "b5 — retreat to b3, eye f7.", arrows: [A('a4', 'b3')], highlights: [H('b3', KEY), H('f7', SOFT)] },
+    { atMove: 9, say: "…b5 puts the question to your bishop — slide it to b3, where it still glares down the diagonal toward f7. You concede nothing, and the early …b5 leaves c6 and d5 a shade loose.", sayShort: "…b5 — retreat to b3, eye f7.", arrows: [A('a4', 'b3')], highlights: [H('b3', KEY), H('f7', SOFT)] },
+    { atMove: 14, say: "Nc3 challenges the e4-knight and develops with tempo; after the trades you hold the bishop pair and the pressure on Black's loosened queenside.", sayShort: "Nc3 — challenge e4, develop.", arrows: [A('c3', 'e4')], highlights: [H('e4', ATK)] },
+    { atMove: 20, say: "Nxe5 regains the pawn; with the bishop pair, the open central files and Black's straggling queenside, you press a pleasant, lasting edge.", sayShort: "Nxe5 — regain the pawn, press.", highlights: [H('e5', KEY)] },
   ],
   sources: RUY,
 };
@@ -75,6 +79,20 @@ const RUY_CLOSED_OO: SublineNarration = {
   sources: RUY,
 };
 // Closed Ruy — Black props e5 with …d6 (d6@11/@13/@15).
+// d6@11 quiet-d3 Closed Ruy (data: Re1 d6 c3 Bg4 d3 Nd7 Be3 h6 Nbd2 Bg5 h3 Bh5 Nf1 ...)
+const RUY_D6_11_D3: SublineNarration = {
+  intro: {
+    say: "…d6 props the e5-pawn in the Closed Ruy. Build the solid, modern d3 setup: c3 and d3 brace the centre, Be3 develops, and the Nbd2-f1-g3 reroute swings the knight toward the kingside. You own the space and dictate the maneuvering battle.",
+    sayShort: '…d6 — d3 setup, reroute the knight.',
+  },
+  beats: [
+    { atMove: 11, say: "…d6 props the e5-pawn — settle into the patient d3 Ruy. c3 braces the centre and prepares the slow, flexible build-up.", sayShort: "…d6 — answer c3.", highlights: [H('e5', SOFT)] },
+    { atMove: 14, say: "d3 — the modern, flexible setup, bracing e4 and keeping the position closed. Be3 and the knight reroute follow as you build slowly with the space edge.", sayShort: "d3 — flexible, brace e4.", highlights: [H('d3', KEY)] },
+    { atMove: 16, say: "Be3 develops and contests the dark squares; with Nbd2 and the f1-g3 reroute coming, your pieces flow to their best squares while Black maneuvers in a cramped shell.", sayShort: "Be3 — develop, contest the dark squares.", highlights: [H('e3', KEY)] },
+    { atMove: 22, say: "Nf1 begins the reroute toward g3 and the kingside — the classic Spanish maneuver. With the space edge and the knight heading for f5, you dictate where the game is fought.", sayShort: "Nf1 — reroute toward g3.", arrows: [A('f1', 'g3')], highlights: [H('g3', KEY)] },
+  ],
+  sources: RUY_DEV,
+};
 const RUY_CLOSED_D6: SublineNarration = {
   intro: {
     say: "…d6 — Black props the e5-pawn in classic Closed-Ruy style before castling. Your recipe is unhurried and unchanged: c3 and d4 for the broad centre, Nbd2-f1-g3 routing the knight to the kingside, Bc2 to keep the bishop alive on the b1-h7 diagonal. The set-up is rock-solid but a touch passive — you own the space and dictate where the game is fought.",
@@ -1741,9 +1759,9 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'ruy-lopez::6::d6@13': { ...RUY_CLOSED_D6, beats: [{ atMove: 13, say: "d6 props e5 in classic Closed-Ruy style. Your recipe is unhurried: c3 and d4 for the centre, Bc2 to keep the bishop on the b1-h7 diagonal, and the knight tour to the kingside. Solid but passive for Black — you own the space.", sayShort: "d6 — c3, d4, clamp the centre.", arrows: [A('b3', 'f7')], highlights: [H('d4', KEY)] }] },
   'ruy-lopez::5::d6@15': { ...RUY_CLOSED_D6, beats: [{ atMove: 15, say: "d6 — Black bolsters e5 with the centre already prepared. Now play d4! the thematic break, and after the tension you reach the rich Closed-Ruy middlegame with more space. Route the knight Nbd2-f1-g3 toward the king.", sayShort: "d6 — play d4, the main break.", arrows: [A('b3', 'f7')], highlights: [H('d4', KEY)] }] },
   'ruy-lopez::7::d6@15': { ...RUY_CLOSED_D6, beats: [{ atMove: 15, say: "d6 in the modern d3 Ruy — a slow maneuvering game. Reroute the knights toward d5 and the kingside, prepare the d4 break or a kingside expansion, and nurse the small, lasting space edge. Patience is the plan.", sayShort: "d6 — slow Ruy: reroute, then d4.", arrows: [A('b3', 'f7')], highlights: [H('d4', KEY)] }] },
-  'ruy-lopez::0::d6@11': { ...RUY_CLOSED_D6, beats: [{ atMove: 11, say: "d6 props e5 early in the Closed Ruy. Same patient recipe: c3 and d4 for the big centre, Bc2 to keep the bishop on the b1-h7 road, and the knight tour to the kingside. A touch cramped for Black; the space is yours.", sayShort: "d6 — c3, d4, route the knight.", highlights: [H('d4', KEY)] }] },
-  'ruy-lopez::1::d6@11': { ...RUY_CLOSED_D6, beats: [{ atMove: 11, say: "d6 props e5 early in the Closed Ruy. Same patient recipe: c3 and d4 for the big centre, Bc2 to keep the bishop on the b1-h7 road, and the knight tour to the kingside. A touch cramped for Black; the space is yours.", sayShort: "d6 — c3, d4, route the knight.", highlights: [H('d4', KEY)] }] },
-  'ruy-lopez::2::d6@11': { ...RUY_CLOSED_D6, beats: [{ atMove: 11, say: "d6 props e5 early in the Closed Ruy. Same patient recipe: c3 and d4 for the big centre, Bc2 to keep the bishop on the b1-h7 road, and the knight tour to the kingside. A touch cramped for Black; the space is yours.", sayShort: "d6 — c3, d4, route the knight.", highlights: [H('d4', KEY)] }] },
+  'ruy-lopez::0::d6@11': RUY_D6_11_D3,
+  'ruy-lopez::1::d6@11': RUY_D6_11_D3,
+  'ruy-lopez::2::d6@11': RUY_D6_11_D3,
   'ruy-lopez::0::Bg4@15': RUY_BG4,
   'ruy-lopez::1::Bg4@15': RUY_BG4,
   'ruy-lopez::2::Bg4@15': RUY_BG4,
@@ -2862,8 +2880,8 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'ruy-lopez::3::Be7@9': COV_RUY_BE7,
   'ruy-lopez::7::Be7@9': COV_RUY_BE7,
   'ruy-lopez::4::a6@5': COV_RUY_A6,
-  'ruy-lopez::5::d6@11': COV_RUY_D6,
-  'ruy-lopez::6::d6@11': COV_RUY_D6,
+  'ruy-lopez::5::d6@11': RUY_D6_11_D3,
+  'ruy-lopez::6::d6@11': RUY_D6_11_D3,
   'ruy-lopez::8::bxc6@7': COV_RUY_BXC6,
   'italian-game::0::d6@7': COV_IT_D6,
   'italian-game::1::d6@7': COV_IT_D6,
