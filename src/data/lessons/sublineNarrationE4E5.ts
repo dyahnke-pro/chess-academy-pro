@@ -453,8 +453,12 @@ const TK_SCOTCH: SublineNarration = {
     sayShort: 'd4 — Scotch: …Qe7 and …Nd5 equalize.',
   },
   beats: [
-    { atMove: 11, say: "…Qe7 — the queen swings out to lean on the advanced e5-pawn, the cramping spearhead of White's position. It defends the attacked f6-knight and prepares …Nd5, after which e5 becomes a target rather than a thorn. This is the move that takes the sting out of the Scotch.", arrows: [A('e7', 'e5')], highlights: [H('e5', KEY)] },
-    { atMove: 13, say: "…Nd5 — the knight lands on its dream central square, blockading and eyeing both wings. Yes, your c-pawns are doubled, but you hold the bishop pair and the freer game; the strong knight and open b-file are full compensation. You've equalised cleanly from the Scotch.", highlights: [H('d5', KEY)] },
+    { atMove: 4, say: "d4 ducks into a Scotch — open the centre on your terms. …exd4 grabs the pawn and forces White to spend time recapturing; your pieces flood out with tempo behind it.", sayShort: "d4 — answer …exd4.", arrows: [A('e5', 'd4')], highlights: [H('d4', KEY)] },
+    { atMove: 5, say: "…exd4 — and White must retake with the knight, drifting it to d4 right in the path of your coming development. The centre is opening exactly how you want it.", sayShort: "…exd4 — White retakes on d4.", arrows: [A('f3', 'd4')], highlights: [H('d4', ATK)] },
+    { atMove: 7, say: "…Nf6 develops with a hit on the e4-pawn, forcing the pace. White usually relieves it by trading on c6 — which only hands you the bishop pair and a half-open b-file aimed at his queenside.", sayShort: "…Nf6 — develop, strike e4.", arrows: [A('f6', 'e4')], highlights: [H('e4', ATK)] },
+    { atMove: 9, say: "…bxc6 recaptures toward the centre, opening the b-file for your rook and reinforcing the d5-square for the knight to come. Doubled c-pawns are a small price for the two bishops and a fluid centre.", sayShort: "…bxc6 — head for …Nd5.", arrows: [A('f6', 'd5')], highlights: [H('d5', KEY)] },
+    { atMove: 11, say: "…Qe7 swings the queen out to lean on White's over-extended e5-pawn and eye the open e-file; White props it with Qe2, and now you spring the knight to its dream square.", sayShort: "…Qe7 — lean on e5.", arrows: [A('e7', 'e5')], highlights: [H('e5', ATK)] },
+    { atMove: 13, say: "…Nd5 lands on the perfect central blockade, screening everything and eyeing f4 and c3. With the bishop pair, the rock on d5 and effortless development, you're fully equal and pleasant to play.", sayShort: "…Nd5 — the dream blockade.", arrows: [A('d5', 'f4')], highlights: [H('d5', KEY)] },
   ],
   sources: TK,
 };
@@ -1460,7 +1464,12 @@ const MAR_SCOTCH: SublineNarration = {
     sayShort: 'd4 — Scotch: …Qe7 and …Nd5 equalize.',
   },
   beats: [
-    { atMove: 4, say: "d4 avoids the Ruy with a Scotch — equalize cleanly. Qe7 leans on e5, Nd5 blockades the centre; the bishop pair and easy development are yours, and White's sidestep cost him any edge.", sayShort: "d4 — …Qe7 and …Nd5.", highlights: [H('d4', SOFT), H('d5', KEY)] },
+    { atMove: 4, say: "d4 ducks into a Scotch — open the centre on your terms. …exd4 grabs the pawn and forces White to spend time recapturing; your pieces flood out with tempo behind it.", sayShort: "d4 — answer …exd4.", arrows: [A('e5', 'd4')], highlights: [H('d4', KEY)] },
+    { atMove: 5, say: "…exd4 — and White must retake with the knight, drifting it to d4 right in the path of your coming development. The centre is opening exactly how you want it.", sayShort: "…exd4 — White retakes on d4.", arrows: [A('f3', 'd4')], highlights: [H('d4', ATK)] },
+    { atMove: 7, say: "…Nf6 develops with a hit on the e4-pawn, forcing the pace. White usually relieves it by trading on c6 — which only hands you the bishop pair and a half-open b-file aimed at his queenside.", sayShort: "…Nf6 — develop, strike e4.", arrows: [A('f6', 'e4')], highlights: [H('e4', ATK)] },
+    { atMove: 9, say: "…bxc6 recaptures toward the centre, opening the b-file for your rook and reinforcing the d5-square for the knight to come. Doubled c-pawns are a small price for the two bishops and a fluid centre.", sayShort: "…bxc6 — head for …Nd5.", arrows: [A('f6', 'd5')], highlights: [H('d5', KEY)] },
+    { atMove: 11, say: "…Qe7 swings the queen out to lean on White's over-extended e5-pawn and eye the open e-file; White props it with Qe2, and now you spring the knight to its dream square.", sayShort: "…Qe7 — lean on e5.", arrows: [A('e7', 'e5')], highlights: [H('e5', ATK)] },
+    { atMove: 13, say: "…Nd5 lands on the perfect central blockade, screening everything and eyeing f4 and c3. With the bishop pair, the rock on d5 and effortless development, you're fully equal and pleasant to play.", sayShort: "…Nd5 — the dream blockade.", arrows: [A('d5', 'f4')], highlights: [H('d5', KEY)] },
   ],
   sources: MAR_DEV,
 };
