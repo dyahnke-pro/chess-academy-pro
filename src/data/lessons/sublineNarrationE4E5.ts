@@ -942,17 +942,6 @@ const KG_BISHOPS: SublineNarration = {
   ],
   sources: KG,
 };
-// Early accepted offbeat 4th moves shared by var5/var6 (Be7/Ne7/Nf6/d5/d6 @5).
-const KG_ACCEPTED: SublineNarration = {
-  intro: {
-    say: "Black accepts the gambit but sidesteps the sharp …g5 main lines with a quieter developing move. That eases your task: Bc4 eyes f7, d4 claims the full centre, and you prepare to win back the f4-pawn with Bxf4 or to blast open the f-file. With a lead in development and the half-open f-file pointing at Black's king, you keep a comfortable, attacking initiative for the pawn.",
-    sayShort: 'Accepted — Bc4, d4, regain f4 and attack.',
-  },
-  beats: [
-    { atMove: 5, say: "Black accepts but sidesteps the sharp g5 lines — make it easy work. Bc4 eyes f7, d4 takes the full centre, and Bxf4 wins back the pawn. A lead in development and the half-open f-file at the king keep the initiative yours.", sayShort: "Accepted — Bc4, d4, regain f4.", highlights: [H('f4', KEY), H('f7', SOFT)] },
-  ],
-  sources: KG,
-};
 // Accepted, …d6 quiet hold (exf4 Nf3 d6 d4 g5 h4 g4). Take the centre, crack g5.
 const KG_ACC_D6: SublineNarration = {
   intro: {
