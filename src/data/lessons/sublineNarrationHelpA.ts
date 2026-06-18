@@ -73,7 +73,37 @@ const KID_H3: SN = {
   beats: [KID_BG7_BEAT], sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
 };
 
+// ── Grünfeld Defence (student BLACK) — invite the big centre, then demolish it. ──
+// f3 sidestep → Benoni/KID structure.  d4 Nf6 c4 g6 f3 d6 e4 c5 d5 e6 Nc3 Bg7
+const GR_F3: SN = {
+  intro: { say: "f3 — White braces a huge e4-centre and sidesteps the pure Grünfeld. Don't force …d5 into it; transpose to a sharp Benoni-flavoured fight with …c5, hitting d4. After d5 you chip at the spearhead with …e6, and your fianchettoed bishop plus the queenside majority give rich counterplay against the broad centre.", sayShort: 'f3 — hit back with …c5.' },
+  beats: [
+    { atMove: 7, say: "…c5 — striking at d4. White's big f3-e4 centre is impressive but committal; you answer Benoni-style, and after d5 the …e6 break will gnaw at the spearhead while your dark-squared bishop rakes the long diagonal.", highlights: [H('c5', ATK), H('d4', SOFT)] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
+};
+// Modern Bf4.  d4 Nf6 c4 g6 Nc3 d5 Bf4 Bg7 Nf3 O-O Rc1 c5
+const GR_BF4: SN = {
+  intro: { say: "Bf4 — the modern main line. You've already played the Grünfeld's defining …d5, inviting White's broad centre precisely so you can tear it down. Develop …Bg7, castle, and strike with …c5 — the bishop on g7 and the …c5/…Nc6 pressure pull White's centre apart. Dynamic equality with real winning chances.", sayShort: 'Bf4 — …Bg7, castle, strike …c5.' },
+  beats: [
+    { atMove: 5, say: "…d5 — the Grünfeld's defining move and its whole philosophy: you let White build the big d4-e4 centre so you can demolish it. Everything follows — …Bg7 rakes it, …c5 and …Nc6 hammer it, and a fallen centre means a lost game for White.", highlights: [H('d5', ATK), H('c4', SOFT)] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
+};
+// Fianchetto/KID-structure (3.g3).  d4 Nf6 c4 g6 g3 Bg7 Bg2 O-O Nc3 d6 Nf3 c5
+const GR_G3: SN = {
+  intro: { say: "g3 — White fianchettoes too, steering toward a quieter, symmetrical battle for the long diagonal. Stay active: complete the setup, castle, and break with …c5 against d4. With both bishops raking the long diagonals it's a rich strategic game where Black is fully equal and can play for the win.", sayShort: 'g3 — castle, then break …c5.' },
+  beats: [
+    { atMove: 11, say: "…c5 — the freeing break, hitting d4 and opening lines for your fianchettoed bishop. You refuse the passive game White wants and contest the centre head-on; the long-diagonal pressure cuts both ways and Black is comfortable.", highlights: [H('c5', ATK), H('d4', SOFT)] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
+};
+
 export const SUBLINE_NARRATION_HELP_A: Record<string, SN> = {
+  // Grünfeld — f3 (all 8), Bf4 modern, g3 fianchetto
+  'grunfeld-defence::0::f3@4': GR_F3, 'grunfeld-defence::1::f3@4': GR_F3, 'grunfeld-defence::2::f3@4': GR_F3, 'grunfeld-defence::3::f3@4': GR_F3, 'grunfeld-defence::4::f3@4': GR_F3, 'grunfeld-defence::5::f3@4': GR_F3, 'grunfeld-defence::6::f3@4': GR_F3, 'grunfeld-defence::7::f3@4': GR_F3,
+  'grunfeld-defence::0::Bf4@6': GR_BF4, 'grunfeld-defence::1::Bf4@6': GR_BF4, 'grunfeld-defence::2::Bf4@6': GR_BF4, 'grunfeld-defence::4::Bf4@6': GR_BF4, 'grunfeld-defence::6::Bf4@6': GR_BF4, 'grunfeld-defence::7::Bf4@6': GR_BF4,
+  'grunfeld-defence::0::g3@4': GR_G3, 'grunfeld-defence::1::g3@4': GR_G3, 'grunfeld-defence::2::g3@4': GR_G3, 'grunfeld-defence::3::g3@4': GR_G3, 'grunfeld-defence::4::g3@4': GR_G3, 'grunfeld-defence::6::g3@4': GR_G3, 'grunfeld-defence::7::g3@4': GR_G3,
   // King's Indian — system clusters (all share …Bg7@5)
   'kings-indian-defence::0::g3@4': KID_G3, 'kings-indian-defence::1::g3@4': KID_G3, 'kings-indian-defence::2::g3@4': KID_G3, 'kings-indian-defence::3::g3@4': KID_G3, 'kings-indian-defence::4::g3@4': KID_G3, 'kings-indian-defence::5::g3@4': KID_G3, 'kings-indian-defence::6::g3@4': KID_G3, 'kings-indian-defence::7::g3@4': KID_G3,
   'kings-indian-defence::0::Nf3@4': KID_NF3, 'kings-indian-defence::1::Nf3@4': KID_NF3, 'kings-indian-defence::2::Nf3@4': KID_NF3, 'kings-indian-defence::3::Nf3@4': KID_NF3, 'kings-indian-defence::5::Nf3@4': KID_NF3, 'kings-indian-defence::6::Nf3@4': KID_NF3, 'kings-indian-defence::7::Nf3@4': KID_NF3,
