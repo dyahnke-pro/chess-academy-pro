@@ -30,6 +30,20 @@ const RUY_BERLIN: SublineNarration = {
   ],
   sources: RUY,
 };
+// Nf6@5 Berlin where Black follows with …Bc5 (data line): O-O Bc5 c3 O-O d4 Bb6 a4 exd4 e5 Ne4 cxd4 a6 Bxc6 bxc6 Qc2 d5 Qxc6 ...
+const RUY_NF6_BC5: SublineNarration = {
+  intro: {
+    say: "…Nf6 enters the Berlin, but Black follows with …Bc5 rather than the endgame. Take the centre and the space: O-O, c3 and d4 build a broad pawn front, a4 pressures the queenside, and e5 clamps the kingside while you round up material. A rich, space-fuelled Ruy with the easier game.",
+    sayShort: '…Nf6 — Berlin …Bc5: build d4, e5.',
+  },
+  beats: [
+    { atMove: 5, say: "…Nf6 enters the Berlin. Castle behind your development; when Black posts …Bc5 you'll answer with c3 and d4, building the broad centre while the b5-bishop keeps the pin on c6.", sayShort: "…Nf6 — castle, prep d4.", arrows: [A('b5', 'c6')], highlights: [H('c6', KEY)] },
+    { atMove: 10, say: "d4 strikes the centre; after …Bb6 you own a broad pawn front. a4 will pressure the queenside and e5 clamps the kingside — Black is squeezed for space.", sayShort: "d4 — broad centre, then e5.", arrows: [A('d4', 'e5')], highlights: [H('e5', ATK)] },
+    { atMove: 14, say: "e5 — the pawn clamps the middle, kicking the f6-knight to e4 while you bank central space. The rolling d4-e5 duo cramps Black's whole game.", sayShort: "e5 — clamp, kick the knight.", arrows: [A('e5', 'f6')], highlights: [H('f6', ATK)] },
+    { atMove: 22, say: "Qxc6 scoops a pawn while your central pawns roll on d4 and e5 — you stand with a space bind and the easier game. Black scrambles for activity with …Bg4, but the Berlin space-grab has paid off.", sayShort: "Qxc6 — grab the pawn, space bind.", highlights: [H('c6', KEY), H('e5', SOFT)] },
+  ],
+  sources: RUY,
+};
 // Nxe4@9 — the Open Ruy Lopez (Ba4 Nf6 O-O Nxe4). Strike with d4.
 const RUY_OPEN: SublineNarration = {
   intro: {
@@ -1695,14 +1709,14 @@ const COV_PH_RE1: SublineNarration = {
 
 export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   // ── Ruy Lopez ──
-  'ruy-lopez::0::Nf6@5': RUY_BERLIN,
-  'ruy-lopez::1::Nf6@5': RUY_BERLIN,
-  'ruy-lopez::2::Nf6@5': RUY_BERLIN,
-  'ruy-lopez::3::Nf6@5': RUY_BERLIN,
-  'ruy-lopez::5::Nf6@5': RUY_BERLIN,
-  'ruy-lopez::6::Nf6@5': RUY_BERLIN,
-  'ruy-lopez::7::Nf6@5': RUY_BERLIN,
-  'ruy-lopez::8::Nf6@5': RUY_BERLIN,
+  'ruy-lopez::0::Nf6@5': RUY_NF6_BC5,
+  'ruy-lopez::1::Nf6@5': RUY_NF6_BC5,
+  'ruy-lopez::2::Nf6@5': RUY_NF6_BC5,
+  'ruy-lopez::3::Nf6@5': RUY_NF6_BC5,
+  'ruy-lopez::5::Nf6@5': RUY_NF6_BC5,
+  'ruy-lopez::6::Nf6@5': RUY_NF6_BC5,
+  'ruy-lopez::7::Nf6@5': RUY_NF6_BC5,
+  'ruy-lopez::8::Nf6@5': RUY_NF6_BC5,
   'ruy-lopez::0::Nxe4@9': RUY_OPEN,
   'ruy-lopez::1::Nxe4@9': RUY_OPEN,
   'ruy-lopez::2::Nxe4@9': RUY_OPEN,
