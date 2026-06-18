@@ -26,30 +26,10 @@ void SOFT;
 // queens-gambit :: tarrasch
 // queens-gambit :: harrwitz
 // qgd :: exchange_be7
-const C7: SublineNarration = {
-  intro: { say: "White trades on d5 and you're in a calm, symmetrical-flavoured QGD. The bishop belongs on e7, the knight on d7, and the long-term lever is …c5 or the …Ne4 jump that frees your game. Solid and resilient — White's edge is microscopic and you equalise by simply finishing development and contesting the c-file.", sayShort: "Exchange QGD — finish developing, lever …c5." },
-  sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
-};
 // qgd :: main
-const C8: SublineNarration = {
-  intro: { say: "The heart of the Queen's Gambit Declined — your fortress. Pieces go to their natural homes: …Be7, …O-O, …Nbd7, …c6, and the freeing break is always …dxc4 followed by …c5 or the …e5 thrust when White's pieces drift. You have no weaknesses and no bad bishop worries once you trade light bishops; just complete development and pick your freeing break.", sayShort: "QGD — free with …c5 or …e5." },
-  sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
-};
 // qgd :: carlsbad
-const C9: SublineNarration = {
-  intro: { say: "White has clarified with cxd5 — the Carlsbad. Expect the minority attack, b4-b5 against your c6-pawn. Don't sit and suffer it: meet queenside play with central counter-energy. Reroute the knight Nd7-f8-g6 toward the kingside, prepare …Ne4 and …f5, and turn the game toward White's king while he chips at your pawns.", sayShort: "Carlsbad — answer b4-b5 with kingside play." },
-  sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
-};
 // qgd :: semitarr
-const C10: SublineNarration = {
-  intro: { say: "With …c5 in this structure you're pressing the centre Tarrasch-style. The play is active: trade in the centre, develop your pieces to their most aggressive posts, and use the open lines. You accept a slightly looser pawn structure in return for piece activity and easy development — a fighting equality.", sayShort: "…c5 — active piece play for the structure." },
-  sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
-};
 // qgd :: ragozin
-const C11: SublineNarration = {
-  intro: { say: "You've gone for …Bb4, the Ragozin — pinning the c3-knight to inject Nimzo bite into the QGD. The bishop pressures e4 and is ready to take on c3 to fracture White's pawns. Combine the pin with …dxc4 and …c5 hits; you reach a dynamic, fully equal middlegame where White's centre is under constant question.", sayShort: "Ragozin …Bb4 — pin, then strike …c5." },
-  sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
-};
 // qga :: main
 const C12: SublineNarration = {
   intro: { say: "Queen's Gambit Accepted — you grabbed the pawn on c4 not to keep it, but to free your game. Your plan is clean: return the pawn, strike the centre with …c5 and …a6 followed by …b5 to gain queenside space, and get the light bishop active outside the chain. White owns a little centre; you own easy development and no weaknesses.", sayShort: "QGA — …c5, then …a6 and …b5." },
@@ -5261,6 +5241,715 @@ const EN80: SublineNarration = {
   sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/English_Opening'],
 };
 
+const QD01: SublineNarration = {
+  intro: { say: "You choose Nf3. After …c5 you open with cxd5, recapture with the queen, build the broad centre with e4, then trade queens into a comfortable ending with the extra central space.", sayShort: "Nf3 — cxd5, Qxd4, e4, Qxd8+" },
+  beats: [
+    { atMove: 8, say: "cxd5 — opening the position, exploiting the …c5 thrust.", sayShort: "cxd5 — open the position", highlights: [_H('d5')] },
+    { atMove: 12, say: "e4 — building the broad centre, seizing space.", sayShort: "e4 — build the centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "Qxd8+ — trading queens into an ending where your central space tells.", sayShort: "Qxd8+ — into a better ending", highlights: [_H('d8')] },
+    { atMove: 22, say: "Ngxe4 — regaining the pawn, the knights centralised with a comfortable edge.", sayShort: "Ngxe4 — regain, comfortable", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD02: SublineNarration = {
+  intro: { say: "You develop Nf3 against the Tartakower …b6. You keep the bishop with Bg3, aim at h7 from d3, castle, then regain the pawn on c4 — a comfortable, slightly freer game.", sayShort: "Nf3 — Bd3, Bg3, Bxc4" },
+  beats: [
+    { atMove: 14, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 18, say: "Bg3 — keeping the dark bishop, sidestepping the trade Black wants.", sayShort: "Bg3 — keep the bishop", arrows: [_A('g3', 'c7')] },
+    { atMove: 20, say: "Bxc4 — regaining the gambit pawn, the bishop active.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 22, say: "a4 — gaining queenside space, fixing Black's pawns with a small edge.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD03: SublineNarration = {
+  intro: { say: "You take the Carlsbad with cxd5. After the bishop trade you press b7 and d5 with Qb3, fianchetto with g3 and Bg2, then castle with a small, durable edge.", sayShort: "cxd5 — Qb3, g3, Bg2" },
+  beats: [
+    { atMove: 12, say: "Qb3 — pressing b7 and d5, the queen joining the play.", sayShort: "Qb3 — pressure b7 and d5", arrows: [_A('b3', 'b7')] },
+    { atMove: 18, say: "g3 — preparing the fianchetto to bear down on d5.", sayShort: "g3 — prepare the fianchetto", highlights: [_H('g3')] },
+    { atMove: 20, say: "Bg2 — the bishop rakes the long diagonal at d5 and b7.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+    { atMove: 22, say: "O-O — king safe, a small structural edge in hand.", sayShort: "O-O — king safe, small edge", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD04: SublineNarration = {
+  intro: { say: "You take the c-file with Rc1. After …c5 you open with dxc5, regain the pawn, then trade into an endgame where your c-file pressure and the better structure give a small edge.", sayShort: "Rc1 — dxc5, Bxc4, c-file edge" },
+  beats: [
+    { atMove: 12, say: "dxc5 — opening lines, gaining a tempo before the trades.", sayShort: "dxc5 — open with tempo", highlights: [_H('c5')] },
+    { atMove: 14, say: "Bxc4 — regaining the pawn, the bishop active.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 16, say: "Rxd1 — recapturing into the ending with the c-file and the better structure.", sayShort: "Rxd1 — into a better ending", highlights: [_H('d1')] },
+    { atMove: 18, say: "Nf3 — developing, completing a comfortable, slightly better position.", sayShort: "Nf3 — develop, press", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD05: SublineNarration = {
+  intro: { say: "You open with cxd5 mid-line. You trade the dark bishops, swap on d5, aim the bishop at the kingside from d3, then castle — leaving Black an isolated d-pawn to besiege.", sayShort: "cxd5 — Bxe7, Nxd5, Bd3, O-O" },
+  beats: [
+    { atMove: 14, say: "Bxe7 — trading the dark bishops, simplifying favourably.", sayShort: "Bxe7 — trade the dark bishops", highlights: [_H('e7')] },
+    { atMove: 16, say: "Nxd5 — trading to leave Black with an isolated d-pawn.", sayShort: "Nxd5 — create the isolani", highlights: [_H('d5')] },
+    { atMove: 18, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 22, say: "O-O — king safe, ready to besiege the isolated d-pawn.", sayShort: "O-O — besiege the isolani", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD06: SublineNarration = {
+  intro: { say: "You develop Bd3. After …dxc4 you recapture, challenge …a6/…b5 with a4, maintain the pin with Bh4, then castle into a comfortable QGD with the bishop on the kingside diagonal.", sayShort: "Bd3 — Bxc4, a4, Bh4, O-O" },
+  beats: [
+    { atMove: 14, say: "Bxc4 — recapturing the pawn, the bishop active on the diagonal.", sayShort: "Bxc4 — recapture", highlights: [_H('c4')] },
+    { atMove: 16, say: "a4 — challenging Black's …a6/…b5 queenside expansion.", sayShort: "a4 — challenge …b5", arrows: [_A('a4', 'a5')] },
+    { atMove: 18, say: "Bh4 — maintaining the pin on the f6-knight.", sayShort: "Bh4 — maintain the pin", arrows: [_A('h4', 'd8')] },
+    { atMove: 20, say: "O-O — king to safety with a comfortable QGD set-up.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD07: SublineNarration = {
+  intro: { say: "You centralise Qc2 on the b1-h7 diagonal. You maintain the pin with Bh4, post the rook on d1, recapture centralising the knight, then trade on f6 to weaken Black's structure.", sayShort: "Qc2 — Bh4, Rd1, Nxd4, Bxf6" },
+  beats: [
+    { atMove: 14, say: "Bh4 — maintaining the pin on the f6-knight.", sayShort: "Bh4 — maintain the pin", arrows: [_A('h4', 'd8')] },
+    { atMove: 16, say: "Rd1 — the rook to the d-file, supporting the centre.", sayShort: "Rd1 — back the centre", arrows: [_A('d1', 'd8')] },
+    { atMove: 18, say: "Nxd4 — recapturing, the centralised knight eyeing f5 and c6.", sayShort: "Nxd4 — centralise the knight", highlights: [_H('d4')] },
+    { atMove: 22, say: "Bxf6 — trading to weaken Black's structure and gain a tempo.", sayShort: "Bxf6 — weaken, gain tempo", highlights: [_H('f6')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD08: SublineNarration = {
+  intro: { say: "You centralise Qc2. You open with cxd5 to isolate Black's d-pawn, aim the bishop at h7 from d3, maintain the pin with Bh4, then castle and besiege the isolani.", sayShort: "Qc2 — cxd5, Bd3, Bh4, O-O" },
+  beats: [
+    { atMove: 16, say: "cxd5 — opening the c-file, leaving Black an isolated d-pawn.", sayShort: "cxd5 — create the isolani", highlights: [_H('d5')] },
+    { atMove: 18, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 20, say: "Bh4 — maintaining the pin on the f6-knight.", sayShort: "Bh4 — maintain the pin", arrows: [_A('h4', 'd8')] },
+    { atMove: 22, say: "O-O — king safe, ready to besiege the isolated d-pawn.", sayShort: "O-O — besiege the isolani", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD09: SublineNarration = {
+  intro: { say: "After the trades Black tries …Ne4. You reroute Ng3 to challenge it, then trade queens into a comfortable, slightly better ending with the sounder structure.", sayShort: "Ne4 — Ng3, Qd2, Kxd2" },
+  beats: [
+    { atMove: 22, say: "Ng3 — rerouting the knight to challenge Black's e4-knight.", sayShort: "Ng3 — challenge the knight", highlights: [_H('g3')] },
+    { atMove: 24, say: "Qd2 — offering the queen trade, steering into a comfortable ending.", sayShort: "Qd2 — offer the trade", highlights: [_H('d2')] },
+    { atMove: 26, say: "Kxd2 — recapturing into the ending, the king centralised with a small edge.", sayShort: "Kxd2 — centralise, small edge", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pos-development', 'concept:end-key-squares', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD11: SublineNarration = {
+  intro: { say: "You choose Nf3. After …c5 you open with cxd5, recapture with the queen, build the centre with e4, then trade queens into a comfortable ending.", sayShort: "Nf3 — cxd5, Qxd4, e4, Qxd8+" },
+  beats: [
+    { atMove: 8, say: "cxd5 — opening the position, exploiting the …c5 thrust.", sayShort: "cxd5 — open the position", highlights: [_H('d5')] },
+    { atMove: 12, say: "e4 — building the broad centre, seizing space.", sayShort: "e4 — build the centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "Qxd8+ — trading queens into an ending where your space tells.", sayShort: "Qxd8+ — into a better ending", highlights: [_H('d8')] },
+    { atMove: 22, say: "Ngxe4 — regaining the pawn, the knights centralised with a comfortable edge.", sayShort: "Ngxe4 — regain, comfortable", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD12: SublineNarration = {
+  intro: { say: "You develop Nf3 against the Tartakower. You keep the bishop with Bg3, aim at h7 from d3, castle, then regain the pawn on c4.", sayShort: "Nf3 — Bd3, Bg3, Bxc4" },
+  beats: [
+    { atMove: 14, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 18, say: "Bg3 — keeping the dark bishop, sidestepping the trade.", sayShort: "Bg3 — keep the bishop", arrows: [_A('g3', 'c7')] },
+    { atMove: 20, say: "Bxc4 — regaining the gambit pawn, the bishop active.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 22, say: "a4 — gaining queenside space with a small edge.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD13: SublineNarration = {
+  intro: { say: "You take the Carlsbad with cxd5. After the bishop trade you press with Qb3, fianchetto with g3 and Bg2, then castle with a small, durable edge.", sayShort: "cxd5 — Qb3, g3, Bg2" },
+  beats: [
+    { atMove: 12, say: "Qb3 — pressing b7 and d5, the queen joining the play.", sayShort: "Qb3 — pressure b7 and d5", arrows: [_A('b3', 'b7')] },
+    { atMove: 18, say: "g3 — preparing the fianchetto to bear down on d5.", sayShort: "g3 — prepare the fianchetto", highlights: [_H('g3')] },
+    { atMove: 20, say: "Bg2 — the bishop rakes the long diagonal at d5 and b7.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+    { atMove: 22, say: "O-O — king safe, a small structural edge in hand.", sayShort: "O-O — king safe, small edge", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD14: SublineNarration = {
+  intro: { say: "You develop Bd3 in the Tartakower. You keep the bishop with Bg3, regain the pawn on c4, then gain queenside space with a4.", sayShort: "Bd3 — Bg3, Bxc4, a4" },
+  beats: [
+    { atMove: 16, say: "O-O — king to safety, completing development.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 18, say: "Bg3 — keeping the dark bishop on its diagonal, eyeing c7.", sayShort: "Bg3 — keep the bishop", arrows: [_A('g3', 'c7')] },
+    { atMove: 20, say: "Bxc4 — regaining the gambit pawn, the bishop active.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 22, say: "a4 — gaining queenside space with a small edge.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD15: SublineNarration = {
+  intro: { say: "You develop Be2 in the Tartakower. You pressure the queenside with Qa4, regain the pawn on c4, keep the bishop with Bg3, then open with dxc5 for a comfortable game.", sayShort: "Be2 — Qa4, Qxc4, Bg3" },
+  beats: [
+    { atMove: 16, say: "Qa4 — pressing the queenside, preparing to regain the c4-pawn.", sayShort: "Qa4 — pressure the queenside", highlights: [_H('a4')] },
+    { atMove: 18, say: "Qxc4 — regaining the gambit pawn, the queen active.", sayShort: "Qxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 20, say: "Bg3 — keeping the dark bishop on its diagonal.", sayShort: "Bg3 — keep the bishop", arrows: [_A('g3', 'c7')] },
+    { atMove: 22, say: "dxc5 — opening lines, gaining a tempo with a comfortable game.", sayShort: "dxc5 — open with tempo", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD16: SublineNarration = {
+  intro: { say: "You trade Bxf6 to weaken Black's structure. You take the c-file with Rc1, regain the pawn on c4, open with dxc5, then steer into a queenless middlegame with the better structure.", sayShort: "Bxf6 — Rc1, Bxc4, dxc5, Ke2" },
+  beats: [
+    { atMove: 14, say: "Rc1 — the rook takes the c-file after the dark bishops come off.", sayShort: "Rc1 — claim the c-file", arrows: [_A('c1', 'c8')] },
+    { atMove: 16, say: "Bxc4 — regaining the pawn, the bishop active.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 18, say: "dxc5 — opening lines, steering toward a favourable ending.", sayShort: "dxc5 — into the ending", highlights: [_H('c5')] },
+    { atMove: 22, say: "Ke2 — centralising the king in the queenless middlegame, a small edge.", sayShort: "Ke2 — centralise, small edge", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:end-key-squares', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD17: SublineNarration = {
+  intro: { say: "You pressure with Qb3 in the Tartakower. After …dxc4 you regain it, then the knight raid Ne5 and the sacrifice Nxf7 rip open Black's king — a sharp try giving you a dangerous initiative.", sayShort: "Qb3 — Bxc4, Ne5, Nxf7" },
+  beats: [
+    { atMove: 16, say: "Bxc4 — regaining the gambit pawn, the bishop eyeing e6 and f7.", sayShort: "Bxc4 — regain, eye f7", arrows: [_A('c4', 'f7')] },
+    { atMove: 18, say: "Ne5 — the knight leaps to the centre, eyeing f7 and the kingside.", sayShort: "Ne5 — eye f7", highlights: [_H('e5')] },
+    { atMove: 20, say: "Nxf7 — the sacrifice, ripping open Black's king for a dangerous initiative in a sharp, double-edged fight.", sayShort: "Nxf7 — the king-ripping sac", highlights: [_H('f7')] },
+  ],
+  sources: ['concept:tac-sacrifice', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD18: SublineNarration = {
+  intro: { say: "You centralise Qc2 in the Tartakower. You post the rook on d1, recapture centralising the knight, trade on f6, then open the centre with cxd5.", sayShort: "Qc2 — Rd1, Nxd4, Bxf6, cxd5" },
+  beats: [
+    { atMove: 16, say: "Rd1 — the rook to the d-file, supporting the centre.", sayShort: "Rd1 — back the centre", arrows: [_A('d1', 'd8')] },
+    { atMove: 18, say: "Nxd4 — recapturing, the centralised knight eyeing f5 and c6.", sayShort: "Nxd4 — centralise the knight", highlights: [_H('d4')] },
+    { atMove: 20, say: "Bxf6 — trading to weaken Black's structure and gain a tempo.", sayShort: "Bxf6 — weaken, gain tempo", highlights: [_H('f6')] },
+    { atMove: 22, say: "cxd5 — opening the centre, leaving Black an isolated d-pawn.", sayShort: "cxd5 — create the isolani", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD19: SublineNarration = {
+  intro: { say: "You take the c-file with Rc1 in the Tartakower. You trade on f6 to weaken Black's structure, open with cxd5, fianchetto with g3 and Bg2.", sayShort: "Rc1 — Bxf6, cxd5, g3, Bg2" },
+  beats: [
+    { atMove: 16, say: "Bxf6 — trading to weaken Black's kingside dark squares.", sayShort: "Bxf6 — weaken the dark squares", highlights: [_H('f6')] },
+    { atMove: 18, say: "cxd5 — opening the position, leaving Black an isolated d-pawn.", sayShort: "cxd5 — create the isolani", highlights: [_H('d5')] },
+    { atMove: 20, say: "g3 — preparing the fianchetto to bear down on d5.", sayShort: "g3 — prepare the fianchetto", highlights: [_H('g3')] },
+    { atMove: 22, say: "Bg2 — the bishop rakes the long diagonal at the isolated pawn.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'd5')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+
+const QD21: SublineNarration = {
+  intro: { say: "You choose Nf3. After …c5 you open with cxd5, recapture, build the centre with e4, then trade queens into a comfortable ending.", sayShort: "Nf3 — cxd5, Qxd4, e4, Qxd8+" },
+  beats: [
+    { atMove: 8, say: "cxd5 — opening the position, exploiting the …c5 thrust.", sayShort: "cxd5 — open the position", highlights: [_H('d5')] },
+    { atMove: 12, say: "e4 — building the broad centre, seizing space.", sayShort: "e4 — build the centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "Qxd8+ — trading queens into an ending where your space tells.", sayShort: "Qxd8+ — into a better ending", highlights: [_H('d8')] },
+    { atMove: 22, say: "Ngxe4 — regaining the pawn with a comfortable edge.", sayShort: "Ngxe4 — regain, comfortable", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD22: SublineNarration = {
+  intro: { say: "You develop Nf3 against the Tartakower. You keep the bishop with Bg3, aim at h7 from d3, then regain the pawn on c4.", sayShort: "Nf3 — Bd3, Bg3, Bxc4" },
+  beats: [
+    { atMove: 14, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 18, say: "Bg3 — keeping the dark bishop, sidestepping the trade.", sayShort: "Bg3 — keep the bishop", arrows: [_A('g3', 'c7')] },
+    { atMove: 20, say: "Bxc4 — regaining the gambit pawn, the bishop active.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 22, say: "a4 — gaining queenside space with a small edge.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD23: SublineNarration = {
+  intro: { say: "You take the Carlsbad with cxd5. After the bishop trade you press with Qb3, fianchetto, then castle with a small edge.", sayShort: "cxd5 — Qb3, g3, Bg2" },
+  beats: [
+    { atMove: 12, say: "Qb3 — pressing b7 and d5.", sayShort: "Qb3 — pressure b7 and d5", arrows: [_A('b3', 'b7')] },
+    { atMove: 18, say: "g3 — preparing the fianchetto to bear on d5.", sayShort: "g3 — prepare the fianchetto", highlights: [_H('g3')] },
+    { atMove: 20, say: "Bg2 — the bishop rakes the long diagonal at d5 and b7.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+    { atMove: 22, say: "O-O — king safe, a small structural edge.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD24: SublineNarration = {
+  intro: { say: "You take the c-file with Rc1. After …c5 you open with dxc5, regain the pawn, then trade into an ending with the c-file and the better structure.", sayShort: "Rc1 — dxc5, Bxc4, Rxd1, Nf3" },
+  beats: [
+    { atMove: 12, say: "dxc5 — opening lines, gaining a tempo.", sayShort: "dxc5 — open with tempo", highlights: [_H('c5')] },
+    { atMove: 14, say: "Bxc4 — regaining the pawn, the bishop active.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 16, say: "Rxd1 — recapturing into the ending with the c-file edge.", sayShort: "Rxd1 — into a better ending", highlights: [_H('d1')] },
+    { atMove: 18, say: "Nf3 — developing, a comfortable, slightly better position.", sayShort: "Nf3 — develop, press", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD25: SublineNarration = {
+  intro: { say: "You trade Bxf6 to weaken Black's structure. You take the c-file with Rc1, regain the pawn, open with dxc5, then steer into a queenless middlegame with the better structure.", sayShort: "Bxf6 — Rc1, Bxc4, dxc5, Ke2" },
+  beats: [
+    { atMove: 14, say: "Rc1 — the rook takes the c-file after the dark bishops come off.", sayShort: "Rc1 — claim the c-file", arrows: [_A('c1', 'c8')] },
+    { atMove: 16, say: "Bxc4 — regaining the pawn, the bishop active.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 18, say: "dxc5 — opening lines, steering toward a favourable ending.", sayShort: "dxc5 — into the ending", highlights: [_H('c5')] },
+    { atMove: 22, say: "Ke2 — centralising the king in the queenless middlegame, a small edge.", sayShort: "Ke2 — centralise, small edge", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:end-key-squares', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD26: SublineNarration = {
+  intro: { say: "You centralise Qc2. You open lines with dxc5, open the centre with cxd5, aim the bishop at h7 from d3, then post the rook on d1.", sayShort: "Qc2 — dxc5, cxd5, Bd3, Rd1" },
+  beats: [
+    { atMove: 12, say: "dxc5 — opening lines, gaining a tempo.", sayShort: "dxc5 — open with tempo", highlights: [_H('c5')] },
+    { atMove: 14, say: "cxd5 — opening the centre with active pieces.", sayShort: "cxd5 — open the centre", highlights: [_H('d5')] },
+    { atMove: 18, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 20, say: "Rd1 — the rook to the d-file, pressing the centre.", sayShort: "Rd1 — press the centre", arrows: [_A('d1', 'd8')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD27: SublineNarration = {
+  intro: { say: "You centralise Qc2 after …Ne4. You recapture on c3 onto the long diagonal, regain the pawn on c4, then take the c-file with Rc1 for a comfortable game.", sayShort: "Qc2 — Qxc3, Qxc4, Rc1" },
+  beats: [
+    { atMove: 18, say: "Qxc3 — recapturing, the queen on the long diagonal eyeing g7.", sayShort: "Qxc3 — onto the long diagonal", arrows: [_A('c3', 'g7')] },
+    { atMove: 20, say: "Qxc4 — regaining the pawn, the queen active.", sayShort: "Qxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 22, say: "Rc1 — the rook takes the c-file, pressing into an equal-plus.", sayShort: "Rc1 — claim the c-file", arrows: [_A('c1', 'c8')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD28: SublineNarration = {
+  intro: { say: "You take the c-file with Rc1 after …Ne4. You aim the bishop at h7 from d3, recapture on c3, then regain the pawn on c4 with the open c-file.", sayShort: "Rc1 — Bd3, Rxc3, Rxc4" },
+  beats: [
+    { atMove: 18, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 20, say: "Rxc3 — recapturing, the rook active on the third rank.", sayShort: "Rxc3 — active rook", highlights: [_H('c3')] },
+    { atMove: 22, say: "Rxc4 — regaining the pawn, the open c-file in hand.", sayShort: "Rxc4 — regain the pawn", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD29: SublineNarration = {
+  intro: { say: "You open with cxd5. You trade the dark bishops, swap on d5 to leave an isolated pawn, then route the knight to f4 eyeing d5 and e6.", sayShort: "cxd5 — Bxe7, Nxd5, Nf4, Bd3" },
+  beats: [
+    { atMove: 12, say: "Bxe7 — trading the dark bishops, simplifying favourably.", sayShort: "Bxe7 — trade the dark bishops", highlights: [_H('e7')] },
+    { atMove: 14, say: "Nxd5 — trading to leave Black an isolated d-pawn.", sayShort: "Nxd5 — create the isolani", highlights: [_H('d5')] },
+    { atMove: 18, say: "Nf4 — the knight to f4, eyeing d5 and e6.", sayShort: "Nf4 — eye d5 and e6", highlights: [_H('f4')] },
+    { atMove: 20, say: "Bd3 — the bishop to the diagonal, completing a small structural edge.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'f5')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD31: SublineNarration = {
+  intro: { say: "You choose Nf3. After …c5 you open with cxd5, build the centre with e4, then trade queens into a comfortable ending.", sayShort: "Nf3 — cxd5, e4, Qxd8+" },
+  beats: [
+    { atMove: 8, say: "cxd5 — opening the position, exploiting …c5.", sayShort: "cxd5 — open the position", highlights: [_H('d5')] },
+    { atMove: 12, say: "e4 — building the broad centre.", sayShort: "e4 — build the centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "Qxd8+ — trading queens into an ending where your space tells.", sayShort: "Qxd8+ — into a better ending", highlights: [_H('d8')] },
+    { atMove: 22, say: "Ngxe4 — regaining the pawn with a comfortable edge.", sayShort: "Ngxe4 — regain, comfortable", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD32: SublineNarration = {
+  intro: { say: "You develop Nf3 in the Exchange QGD. You post the bishop on f4, aim at h7 from d3, recapture centralising the queen, then make luft with h3 and prepare the minority attack.", sayShort: "Nf3 — Bf4, Bd3, Qxd3, h3" },
+  beats: [
+    { atMove: 10, say: "Bf4 — developing the bishop in the Exchange, eyeing c7 and the e5-square.", sayShort: "Bf4 — eye c7", arrows: [_A('f4', 'c7')] },
+    { atMove: 14, say: "Bd3 — offering to trade the light bishops while aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'f5')] },
+    { atMove: 16, say: "Qxd3 — recapturing, the queen centralised on the b1-h7 diagonal.", sayShort: "Qxd3 — centralise the queen", arrows: [_A('d3', 'h7')] },
+    { atMove: 22, say: "h3 — luft, preparing the minority attack b4-b5.", sayShort: "h3 — prepare the minority attack", highlights: [_H('h3')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD33: SublineNarration = {
+  intro: { say: "You choose Bg5, the QGD pin. Into the Tartakower you keep the bishop with Bg3, aim at h7 from d3, castle, then regain the pawn on c4.", sayShort: "Bg5 — Bd3, Bg3, Bxc4" },
+  beats: [
+    { atMove: 14, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 18, say: "Bg3 — keeping the dark bishop, sidestepping the trade.", sayShort: "Bg3 — keep the bishop", arrows: [_A('g3', 'c7')] },
+    { atMove: 20, say: "Bxc4 — regaining the gambit pawn, the bishop active.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 22, say: "a4 — gaining queenside space with a small edge.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD34: SublineNarration = {
+  intro: { say: "You choose Bf4 in the Exchange. You pin the c6-knight with Bb5, recapture centralising the queen, pressure the queenside with Qa4, then post the rook on d1.", sayShort: "Bf4 — Bb5, Qxd4, Qa4, Rfd1" },
+  beats: [
+    { atMove: 12, say: "Bb5 — pinning the c6-knight, adding pressure.", sayShort: "Bb5 — pin the knight", arrows: [_A('b5', 'c6')] },
+    { atMove: 14, say: "Qxd4 — recapturing, the queen centralised.", sayShort: "Qxd4 — centralise the queen", highlights: [_H('d4')] },
+    { atMove: 18, say: "Qa4 — pressing the queenside, tying Black down.", sayShort: "Qa4 — press the queenside", highlights: [_H('a4')] },
+    { atMove: 22, say: "Rfd1 — the rook to the d-file, pressing with active pieces.", sayShort: "Rfd1 — to the d-file", arrows: [_A('d1', 'd8')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD35: SublineNarration = {
+  intro: { say: "You choose e3 in the Exchange Carlsbad. You aim the bishop at h7 from d3, route the knight via e2 to g3 and f5, then roll the minority attack with b4.", sayShort: "e3 — Bd3, Nge2-g3, b4" },
+  beats: [
+    { atMove: 10, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 14, say: "Nge2 — the Carlsbad knight route toward g3 and f5.", sayShort: "Nge2 — route to g3/f5", highlights: [_H('e2')] },
+    { atMove: 18, say: "Ng3 — the knight to g3, eyeing f5 and h5.", sayShort: "Ng3 — eye f5 and h5", highlights: [_H('g3')] },
+    { atMove: 20, say: "b4 — the minority attack begins on the queenside.", sayShort: "b4 — the minority attack", arrows: [_A('b4', 'b5')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD36: SublineNarration = {
+  intro: { say: "You choose g3 in the Exchange. You offer the bishop trade with Bf4, recapture gxf4 for the half-open g-file and a strong f4-pawn, plant the knight on e5, then aim the bishop at h7.", sayShort: "g3 — Bf4, gxf4, Ne5, Bd3" },
+  beats: [
+    { atMove: 12, say: "Bf4 — offering the bishop trade to fix the structure.", sayShort: "Bf4 — offer the trade", arrows: [_A('f4', 'c7')] },
+    { atMove: 14, say: "gxf4 — recapturing, gaining the half-open g-file and a strong f4-pawn.", sayShort: "gxf4 — open the g-file", highlights: [_H('f4')] },
+    { atMove: 18, say: "Ne5 — the knight to the central outpost.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+    { atMove: 20, say: "Bd3 — the bishop to the diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'f5')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD37: SublineNarration = {
+  intro: { say: "You castle in the Carlsbad. You build the battery with Qc2, reposition the bishop to f4, then make luft with h3 and prepare the minority attack.", sayShort: "O-O — Qc2, Bf4, h3" },
+  beats: [
+    { atMove: 18, say: "Qc2 — the battery on the b1-h7 diagonal, aiming at h7.", sayShort: "Qc2 — diagonal battery", arrows: [_A('c2', 'h7')] },
+    { atMove: 20, say: "Bf4 — the Carlsbad regroup, eyeing c7.", sayShort: "Bf4 — Carlsbad regroup", arrows: [_A('f4', 'c7')] },
+    { atMove: 22, say: "h3 — luft, preparing the minority attack b4-b5.", sayShort: "h3 — prepare the minority attack", highlights: [_H('h3')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD38: SublineNarration = {
+  intro: { say: "You castle long in the Carlsbad. With opposite-side play you make luft with h3, tuck the king to b1, then storm with g4 against Black's kingside.", sayShort: "O-O-O — h3, Kb1, g4" },
+  beats: [
+    { atMove: 20, say: "h3 — preparing g4, the kingside pawn storm with opposite castling.", sayShort: "h3 — prepare g4", highlights: [_H('h3')] },
+    { atMove: 22, say: "Kb1 — tucking the king to safety before the storm.", sayShort: "Kb1 — king to safety", highlights: [_H('b1')] },
+    { atMove: 24, say: "g4 — the kingside storm rolls forward against Black's king.", sayShort: "g4 — storm the kingside", arrows: [_A('g4', 'g5')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD39: SublineNarration = {
+  intro: { say: "You plant the knight on e5. You trade the dark bishops, then trade off Black's active pieces and centralise the rook with the Carlsbad edge.", sayShort: "Ne5 — Bxe7, Nxg4, Rae1" },
+  beats: [
+    { atMove: 22, say: "Bxe7 — trading the dark bishops, clarifying the position.", sayShort: "Bxe7 — trade the dark bishops", highlights: [_H('e7')] },
+    { atMove: 24, say: "Nxg4 — trading to simplify with a small edge.", sayShort: "Nxg4 — simplify with an edge", highlights: [_H('g4')] },
+    { atMove: 26, say: "Rae1 — centralising the rook, the Carlsbad structural edge.", sayShort: "Rae1 — centralise the rook", arrows: [_A('e1', 'e8')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD40: SublineNarration = {
+  intro: { say: "You play h3 in the Carlsbad. You prepare the minority attack with Rab1, reposition the bishop to h4, then roll b4 toward Black's queenside.", sayShort: "h3 — Rab1, Bh4, b4" },
+  beats: [
+    { atMove: 22, say: "Rab1 — preparing the minority attack b4-b5.", sayShort: "Rab1 — prepare the minority attack", highlights: [_H('b4')] },
+    { atMove: 24, say: "Bh4 — repositioning the bishop, eyeing the kingside.", sayShort: "Bh4 — eye the kingside", arrows: [_A('h4', 'd8')] },
+    { atMove: 26, say: "b4 — the minority attack rolls toward Black's queenside.", sayShort: "b4 — the minority attack", arrows: [_A('b4', 'b5')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+
+const QD41: SublineNarration = {
+  intro: { say: "You choose Bg5 into the Tartakower. You aim at h7 from d3, keep the bishop with Bg3, regain the pawn on c4, then gain queenside space with a4.", sayShort: "Bg5 — Bd3, Bg3, Bxc4, a4" },
+  beats: [
+    { atMove: 14, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 18, say: "Bg3 — keeping the dark bishop, sidestepping the trade.", sayShort: "Bg3 — keep the bishop", arrows: [_A('g3', 'c7')] },
+    { atMove: 20, say: "Bxc4 — regaining the gambit pawn.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 22, say: "a4 — gaining queenside space with a small edge.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD42: SublineNarration = {
+  intro: { say: "You open with cxd5 against the Ragozin. You pin with Bg5, develop the queen with the check Qa4+, trade on f6 to weaken Black's structure, then recapture into a broad centre.", sayShort: "cxd5 — Bg5, Qa4+, Bxf6, bxc3" },
+  beats: [
+    { atMove: 10, say: "Bg5 — pinning the f6-knight, adding pressure.", sayShort: "Bg5 — pin the knight", arrows: [_A('g5', 'd8')] },
+    { atMove: 12, say: "Qa4+ — the check develops the queen with a tempo.", sayShort: "Qa4+ — develop with tempo", arrows: [_A('a4', 'e8')] },
+    { atMove: 14, say: "Bxf6 — trading to weaken Black's kingside structure.", sayShort: "Bxf6 — weaken the structure", highlights: [_H('f6')] },
+    { atMove: 22, say: "bxc3 — recapturing into a broad centre with a small edge.", sayShort: "bxc3 — broad centre", highlights: [_H('c3')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD43: SublineNarration = {
+  intro: { say: "You answer the Ragozin with Qa4+. You reroute the queen to challenge the e4-knight, aim the bishop at h7, recapture into a broad centre, then win the e4-pawn with Qxe4 — a clear plus.", sayShort: "Qa4+ — Qc2, bxc3, Qxe4" },
+  beats: [
+    { atMove: 12, say: "Qc2 — rerouting the queen to challenge Black's e4-knight.", sayShort: "Qc2 — challenge the knight", arrows: [_A('c2', 'e4')] },
+    { atMove: 14, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'e4')] },
+    { atMove: 18, say: "bxc3 — recapturing into a broad centre.", sayShort: "bxc3 — broad centre", highlights: [_H('c3')] },
+    { atMove: 22, say: "Qxe4 — winning the central pawn, emerging clearly better.", sayShort: "Qxe4 — win the pawn", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:tac-double-attack', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD44: SublineNarration = {
+  intro: { say: "You answer the Ragozin with Qb3. You grab the pawn with dxc5, open with cxd5, trade queens, recapture into a broad centre, then plant the knight on e5 with a clear edge.", sayShort: "Qb3 — dxc5, bxc3, Ne5" },
+  beats: [
+    { atMove: 10, say: "dxc5 — grabbing the pawn, the point of Qb3.", sayShort: "dxc5 — grab the pawn", highlights: [_H('c5')] },
+    { atMove: 14, say: "a3 — questioning the b4-bishop.", sayShort: "a3 — question the bishop", highlights: [_H('b4')] },
+    { atMove: 18, say: "bxc3 — recapturing into a broad centre with the extra pawn.", sayShort: "bxc3 — broad centre, pawn up", highlights: [_H('c3')] },
+    { atMove: 22, say: "Ne5 — the knight to the central outpost, a clear edge.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD45: SublineNarration = {
+  intro: { say: "You answer the Ragozin with e3. You aim at h7 from d3, regain the pawn on c4, recapture into an IQP with active pieces, centralise with Qe2, then post the rook on d1.", sayShort: "e3 — Bxc4, exd4, Qe2, Rd1" },
+  beats: [
+    { atMove: 12, say: "Bxc4 — regaining the pawn, the bishop active.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 16, say: "exd4 — recapturing into an isolated d-pawn position with active pieces.", sayShort: "exd4 — active IQP", highlights: [_H('d4')] },
+    { atMove: 18, say: "Qe2 — centralising the queen, supporting the centre.", sayShort: "Qe2 — centralise", highlights: [_H('e2')] },
+    { atMove: 20, say: "Rd1 — the rook to the d-file, backing the IQP.", sayShort: "Rd1 — back the IQP", arrows: [_A('d1', 'd8')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD46: SublineNarration = {
+  intro: { say: "You strike e5 in a sharp Ragozin line. You recapture centralising the knight, open lines with exf6, crash through with fxg7, then centralise the queen — a sharp, double-edged fight you meet head-on.", sayShort: "e5 — Nxd4, exf6, fxg7, Qf3" },
+  beats: [
+    { atMove: 14, say: "Nxd4 — recapturing, the knight centralised in the melee.", sayShort: "Nxd4 — centralise the knight", highlights: [_H('d4')] },
+    { atMove: 18, say: "exf6 — opening lines in the sharp, double-edged fight.", sayShort: "exf6 — open lines", highlights: [_H('f6')] },
+    { atMove: 20, say: "fxg7 — the pawn crashes through toward Black's king.", sayShort: "fxg7 — crash through", highlights: [_H('g7')] },
+    { atMove: 22, say: "Qf3 — centralising the queen in the balanced, sharp position.", sayShort: "Qf3 — centralise, balanced", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD47: SublineNarration = {
+  intro: { say: "You trade Bxf6 in the sharp Ragozin. You recapture centralising the queen and knight, then recapture into a broad centre — a balanced ending with the central majority.", sayShort: "Bxf6 — Qxd4, Nxd4, bxc3" },
+  beats: [
+    { atMove: 16, say: "Qxd4 — recapturing, centralising the queen.", sayShort: "Qxd4 — centralise the queen", highlights: [_H('d4')] },
+    { atMove: 18, say: "Nxd4 — recapturing, the knight centralised in the ending.", sayShort: "Nxd4 — centralise the knight", highlights: [_H('d4')] },
+    { atMove: 22, say: "bxc3 — recapturing into a broad centre, a balanced ending with the central majority.", sayShort: "bxc3 — central majority", highlights: [_H('c3')] },
+  ],
+  sources: ['concept:pos-center', 'concept:end-key-squares', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD48: SublineNarration = {
+  intro: { say: "You trade Bxf6 in a sharp Ragozin line. You sidestep the check with Ke2, recapture into a broad centre, then take the b-file with Rb1 — a balanced, double-edged middlegame.", sayShort: "Bxf6 — Ke2, bxc3, Rb1" },
+  beats: [
+    { atMove: 18, say: "Ke2 — sidestepping the check, keeping the central pawns; the king is safe enough here.", sayShort: "Ke2 — sidestep, hold the centre", highlights: [_H('e2')] },
+    { atMove: 20, say: "bxc3 — recapturing into a broad centre.", sayShort: "bxc3 — broad centre", highlights: [_H('c3')] },
+    { atMove: 22, say: "Rb1 — the rook to the b-file, active play in a balanced position.", sayShort: "Rb1 — active, balanced", highlights: [_H('b1')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD49: SublineNarration = {
+  intro: { say: "You recapture Qxd4 in the sharp Ragozin. You trade queens, recapture centralising the knight, develop Be3, then challenge with Bd2 into a balanced ending.", sayShort: "Qxd4 — Nxd4, Be3, Bd2" },
+  beats: [
+    { atMove: 16, say: "Nxd4 — recapturing, the knight centralised.", sayShort: "Nxd4 — centralise the knight", highlights: [_H('d4')] },
+    { atMove: 18, say: "Be3 — developing, eyeing the queenside dark squares.", sayShort: "Be3 — develop", highlights: [_H('e3')] },
+    { atMove: 22, say: "Bd2 — challenging the stray bishop, regaining into a balanced ending.", sayShort: "Bd2 — challenge, balanced", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pos-development', 'concept:end-key-squares', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD51: SublineNarration = {
+  intro: { say: "In this QGA-style line you retreat Bb3. You castle, centralise with Qe2, post the rook on d1, strike the centre with e4, then centralise with Nxd4.", sayShort: "Bb3 — O-O, Qe2, e4, Nxd4" },
+  beats: [
+    { atMove: 14, say: "O-O — king to safety, completing development.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 16, say: "Qe2 — centralising the queen, preparing e4.", sayShort: "Qe2 — prep e4", highlights: [_H('e2')] },
+    { atMove: 20, say: "e4 — the central break, seizing space.", sayShort: "e4 — the central break", highlights: [_H('e4')] },
+    { atMove: 22, say: "Nxd4 — recapturing, the knight centralised.", sayShort: "Nxd4 — centralise the knight", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD52: SublineNarration = {
+  intro: { say: "You retreat Be2. You castle, prepare Bb2 with b3, reroute Nd2, challenge the long diagonal with Bf3, then recapture into an IQP with active pieces.", sayShort: "Be2 — O-O, b3, Bf3, exd4" },
+  beats: [
+    { atMove: 14, say: "O-O — king to safety.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 16, say: "b3 — preparing Bb2 and the queenside structure.", sayShort: "b3 — prepare Bb2", highlights: [_H('b3')] },
+    { atMove: 20, say: "Bf3 — challenging the b7-bishop on the long diagonal.", sayShort: "Bf3 — challenge the diagonal", arrows: [_A('f3', 'b7')] },
+    { atMove: 22, say: "exd4 — recapturing into an IQP position with active pieces.", sayShort: "exd4 — active IQP", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD53: SublineNarration = {
+  intro: { say: "You choose Bg5 into the Tartakower. You aim at h7 from d3, keep the bishop with Bg3, regain the pawn on c4, then gain queenside space with a4.", sayShort: "Bg5 — Bd3, Bg3, Bxc4, a4" },
+  beats: [
+    { atMove: 14, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 18, say: "Bg3 — keeping the dark bishop, sidestepping the trade.", sayShort: "Bg3 — keep the bishop", arrows: [_A('g3', 'c7')] },
+    { atMove: 20, say: "Bxc4 — regaining the gambit pawn.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 22, say: "a4 — gaining queenside space with a small edge.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD54: SublineNarration = {
+  intro: { say: "You centralise Qc2. You open with dxc5, restrain …b4 with a3, castle, then post the rook on d1 — a comfortable game.", sayShort: "Qc2 — dxc5, a3, O-O, Rd1" },
+  beats: [
+    { atMove: 16, say: "dxc5 — opening lines, gaining a tempo on the bishop.", sayShort: "dxc5 — open with tempo", highlights: [_H('c5')] },
+    { atMove: 18, say: "a3 — restraining …b4 and preparing b4 yourself.", sayShort: "a3 — restrain …b4", highlights: [_H('a3')] },
+    { atMove: 20, say: "O-O — king to safety.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 22, say: "Rd1 — the rook to the d-file, pressing the centre.", sayShort: "Rd1 — press the centre", arrows: [_A('d1', 'd8')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD55: SublineNarration = {
+  intro: { say: "You centralise Qe2. You post the rook on d1, open with dxc5, then prepare Bb2 with b3 — a comfortable, flexible game.", sayShort: "Qe2 — Rd1, dxc5, b3" },
+  beats: [
+    { atMove: 18, say: "Rd1 — the rook to the d-file, preparing the centre.", sayShort: "Rd1 — prepare the centre", arrows: [_A('d1', 'd8')] },
+    { atMove: 20, say: "dxc5 — opening lines, gaining a tempo.", sayShort: "dxc5 — open with tempo", highlights: [_H('c5')] },
+    { atMove: 22, say: "b3 — preparing Bb2, the queenside structure.", sayShort: "b3 — prepare Bb2", highlights: [_H('b3')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD56: SublineNarration = {
+  intro: { say: "You post the rook on e1. You challenge …b5 with a4, reroute the knight via b1 toward e4 and c4, then complete the regroup with Nbd2.", sayShort: "Re1 — a4, Nb1, Nbd2" },
+  beats: [
+    { atMove: 18, say: "a4 — challenging Black's …b5, prising open the queenside.", sayShort: "a4 — challenge …b5", arrows: [_A('a4', 'b5')] },
+    { atMove: 20, say: "Nb1 — rerouting the knight via d2 toward e4 and c4.", sayShort: "Nb1 — reroute the knight", highlights: [_H('b1')] },
+    { atMove: 22, say: "Nbd2 — the knight heads to e4, pressing the position.", sayShort: "Nbd2 — head to e4", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD57: SublineNarration = {
+  intro: { say: "You play a3 to prepare b4. You open with dxc5, gain queenside space with b4, fianchetto Bb2, then castle with a space edge.", sayShort: "a3 — dxc5, b4, Bb2, O-O" },
+  beats: [
+    { atMove: 16, say: "dxc5 — opening lines, gaining a tempo on the bishop.", sayShort: "dxc5 — open with tempo", highlights: [_H('c5')] },
+    { atMove: 18, say: "b4 — gaining queenside space, the clamp.", sayShort: "b4 — queenside space", arrows: [_A('b4', 'b5')] },
+    { atMove: 20, say: "Bb2 — fianchettoing to rake the long diagonal.", sayShort: "Bb2 — rake the diagonal", arrows: [_A('b2', 'g7')] },
+    { atMove: 22, say: "O-O — king safe with a comfortable space edge.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD58: SublineNarration = {
+  intro: { say: "You play a3 to prepare b4. You open with dxc5, reposition Bc2, then clamp the queenside with b4.", sayShort: "a3 — dxc5, Bc2, b4" },
+  beats: [
+    { atMove: 18, say: "dxc5 — opening lines, gaining a tempo.", sayShort: "dxc5 — open with tempo", highlights: [_H('c5')] },
+    { atMove: 20, say: "Bc2 — repositioning the bishop to the b1-h7 diagonal.", sayShort: "Bc2 — to the diagonal", arrows: [_A('c2', 'h7')] },
+    { atMove: 22, say: "b4 — clamping the queenside, gaining space.", sayShort: "b4 — clamp the queenside", arrows: [_A('b4', 'b5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD59: SublineNarration = {
+  intro: { say: "You strike the centre with e4. You open with dxc5, gain space with e5 kicking the knight, castle, then recapture into a broad centre.", sayShort: "e4 — dxc5, e5, O-O, bxc3" },
+  beats: [
+    { atMove: 16, say: "dxc5 — opening lines, gaining a tempo on the bishop.", sayShort: "dxc5 — open with tempo", highlights: [_H('c5')] },
+    { atMove: 18, say: "e5 — gaining space and kicking the f6-knight.", sayShort: "e5 — gain space, kick the knight", highlights: [_H('e5')] },
+    { atMove: 20, say: "O-O — king to safety behind the broad centre.", sayShort: "O-O — king safe", highlights: [_H('g1')] },
+    { atMove: 22, say: "bxc3 — recapturing into a broad centre with a space edge.", sayShort: "bxc3 — broad centre", highlights: [_H('c3')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+
+const QD61: SublineNarration = {
+  intro: { say: "You choose Nf3. After …c5 you open with cxd5, build the centre with e4, then trade queens into a comfortable ending.", sayShort: "Nf3 — cxd5, e4, Qxd8+" },
+  beats: [
+    { atMove: 8, say: "cxd5 — opening the position, exploiting …c5.", sayShort: "cxd5 — open the position", highlights: [_H('d5')] },
+    { atMove: 12, say: "e4 — building the broad centre.", sayShort: "e4 — build the centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "Qxd8+ — trading queens into an ending where your space tells.", sayShort: "Qxd8+ — into a better ending", highlights: [_H('d8')] },
+    { atMove: 22, say: "Ngxe4 — regaining the pawn with a comfortable edge.", sayShort: "Ngxe4 — regain, comfortable", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD62: SublineNarration = {
+  intro: { say: "You take the Carlsbad with cxd5. You aim at h7 from d3, regroup the bishop to f4, build the battery with Qc2, then castle and prepare the minority attack.", sayShort: "cxd5 — Bd3, Bf4, Qc2, O-O" },
+  beats: [
+    { atMove: 12, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 14, say: "Bf4 — the Carlsbad regroup, eyeing c7.", sayShort: "Bf4 — Carlsbad regroup", arrows: [_A('f4', 'c7')] },
+    { atMove: 18, say: "Qc2 — the battery on the b1-h7 diagonal.", sayShort: "Qc2 — diagonal battery", arrows: [_A('c2', 'h7')] },
+    { atMove: 22, say: "O-O — king safe, ready to roll b4-b5.", sayShort: "O-O — prepare the minority attack", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD63: SublineNarration = {
+  intro: { say: "You take the Carlsbad with cxd5. You maintain the pin with Bh4, aim at h7 from d3, recapture hxg3 to open the h-file, then roll the minority attack with b4.", sayShort: "cxd5 — Bh4, Bd3, hxg3, b4" },
+  beats: [
+    { atMove: 14, say: "Bh4 — maintaining the pin on the f6-knight.", sayShort: "Bh4 — maintain the pin", arrows: [_A('h4', 'd8')] },
+    { atMove: 18, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 20, say: "hxg3 — recapturing, opening the h-file toward Black's king.", sayShort: "hxg3 — open the h-file", highlights: [_H('h1')] },
+    { atMove: 22, say: "b4 — the minority attack rolls on the queenside.", sayShort: "b4 — the minority attack", arrows: [_A('b4', 'b5')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD64: SublineNarration = {
+  intro: { say: "You open with cxd5. You meet …Bb4 with Qd2, take the c-file with Rc1, aim at h7 from d3, then maintain the pin with Bh4.", sayShort: "cxd5 — Qd2, Rc1, Bd3, Bh4" },
+  beats: [
+    { atMove: 14, say: "Qd2 — centralising, meeting …Bb4 and keeping the structure intact.", sayShort: "Qd2 — meet …Bb4", highlights: [_H('d2')] },
+    { atMove: 16, say: "Rc1 — the rook takes the c-file, the QGD pressure.", sayShort: "Rc1 — claim the c-file", arrows: [_A('c1', 'c8')] },
+    { atMove: 18, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 22, say: "Bh4 — maintaining the pin, eyeing the kingside.", sayShort: "Bh4 — maintain the pin", arrows: [_A('h4', 'd8')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD65: SublineNarration = {
+  intro: { say: "You choose e3. After …dxc4 you regain it with Bxc4, recapture into an IQP, post the rook on e1, then plant the knight on the e5-outpost.", sayShort: "e3 — Bxc4, exd4, Re1, Ne5" },
+  beats: [
+    { atMove: 12, say: "Bxc4 — regaining the pawn, the bishop active.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 14, say: "exd4 — recapturing into an isolated d-pawn position with active pieces.", sayShort: "exd4 — active IQP", highlights: [_H('d4')] },
+    { atMove: 18, say: "Re1 — the rook to the e-file, pressing.", sayShort: "Re1 — seize the e-file", arrows: [_A('e1', 'e8')] },
+    { atMove: 22, say: "Ne5 — the knight to the e5-outpost, the IQP's attacking square.", sayShort: "Ne5 — the IQP outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD66: SublineNarration = {
+  intro: { say: "You trade Bxf6 to weaken Black's structure. You aim at h7 from d3, build the battery with Qc2, prepare b4 with a3, then take the c-file with Rac1.", sayShort: "Bxf6 — Bd3, Qc2, a3, Rac1" },
+  beats: [
+    { atMove: 14, say: "Bd3 — the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 18, say: "Qc2 — the battery on the b1-h7 diagonal.", sayShort: "Qc2 — diagonal battery", arrows: [_A('c2', 'h7')] },
+    { atMove: 20, say: "a3 — preparing the minority attack b4-b5.", sayShort: "a3 — prepare b4", highlights: [_H('b4')] },
+    { atMove: 22, say: "Rac1 — the rook to the c-file, completing the minority-attack set-up.", sayShort: "Rac1 — the minority attack", arrows: [_A('c1', 'c8')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD67: SublineNarration = {
+  intro: { say: "You take the c-file with Rc1. Black grabs a2 and b2 but you keep the bishop pair and the initiative: recapture on e4, maintain the pin with Bh4, develop Be2, then trap the offside queen with Rc2.", sayShort: "Rc1 — Ncxe4, Bh4, Be2, Rc2" },
+  beats: [
+    { atMove: 16, say: "Ncxe4 — recapturing, keeping the initiative as Black's queen drifts offside.", sayShort: "Ncxe4 — keep the initiative", highlights: [_H('e4')] },
+    { atMove: 18, say: "Bh4 — maintaining the pin while Black grabs pawns far from the action.", sayShort: "Bh4 — keep the pin", arrows: [_A('h4', 'd8')] },
+    { atMove: 20, say: "Be2 — calm development; the …Qxa2/…Qxb2 grabs cost Black crucial time.", sayShort: "Be2 — develop, keep the lead", highlights: [_H('e2')] },
+    { atMove: 22, say: "Rc2 — pressing the offside queen; you keep the initiative for the pawns.", sayShort: "Rc2 — trap the offside queen", arrows: [_A('c2', 'b2')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD68: SublineNarration = {
+  intro: { say: "You play a3. You trade on f6 to weaken Black's structure, regain the pawn on c4, then trade queens into a comfortable game.", sayShort: "a3 — Bxf6, Nxc4, Qxc3" },
+  beats: [
+    { atMove: 18, say: "Bxf6 — trading to weaken Black's structure.", sayShort: "Bxf6 — weaken the structure", highlights: [_H('f6')] },
+    { atMove: 20, say: "Nxc4 — regaining the gambit pawn.", sayShort: "Nxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 22, say: "Qxc3 — recapturing, simplifying into a comfortable game.", sayShort: "Qxc3 — simplify, comfortable", highlights: [_H('c3')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD71: SublineNarration = {
+  intro: { say: "You choose Bg5 into the Tartakower. You aim at h7 from d3, keep the bishop with Bg3, regain the pawn on c4, then gain queenside space with a4.", sayShort: "Bg5 — Bd3, Bg3, Bxc4, a4" },
+  beats: [
+    { atMove: 14, say: "Bd3 — the bishop to the diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 18, say: "Bg3 — keeping the dark bishop, sidestepping the trade.", sayShort: "Bg3 — keep the bishop", arrows: [_A('g3', 'c7')] },
+    { atMove: 20, say: "Bxc4 — regaining the gambit pawn.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 22, say: "a4 — gaining queenside space with a small edge.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD72: SublineNarration = {
+  intro: { say: "You choose Nf3. After …c5 you open with cxd5, build the centre with e4, then trade queens into a comfortable ending.", sayShort: "Nf3 — cxd5, e4, Qxd8+" },
+  beats: [
+    { atMove: 8, say: "cxd5 — opening the position, exploiting …c5.", sayShort: "cxd5 — open the position", highlights: [_H('d5')] },
+    { atMove: 12, say: "e4 — building the broad centre.", sayShort: "e4 — build the centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "Qxd8+ — trading queens into an ending where your space tells.", sayShort: "Qxd8+ — into a better ending", highlights: [_H('d8')] },
+    { atMove: 22, say: "Ngxe4 — regaining the pawn with a comfortable edge.", sayShort: "Ngxe4 — regain, comfortable", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD73: SublineNarration = {
+  intro: { say: "In the Bf4 QGD you develop Bd3. After …dxc4 you regain it, reroute the bishop to f3 on the long diagonal, post the rook on c1, then strike the centre with e4.", sayShort: "Bd3 — Bxc4, Bf3, Rc1, e4" },
+  beats: [
+    { atMove: 12, say: "Bxc4 — regaining the pawn, the bishop active.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 16, say: "Bf3 — the bishop to the long diagonal, eyeing d5 and b7.", sayShort: "Bf3 — long-diagonal bishop", arrows: [_A('f3', 'b7')] },
+    { atMove: 18, say: "Rc1 — the rook to the c-file, the QGD pressure.", sayShort: "Rc1 — claim the c-file", arrows: [_A('c1', 'c8')] },
+    { atMove: 20, say: "e4 — striking the centre, seizing space.", sayShort: "e4 — strike the centre", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD74: SublineNarration = {
+  intro: { say: "In the Bf4 QGD you develop Be2. After …dxc4 you regain it, challenge …b5 with a4, recapture centralising the queen, then post the rook on d1.", sayShort: "Be2 — Bxc4, a4, Qxd4, Rfd1" },
+  beats: [
+    { atMove: 14, say: "Bxc4 — regaining the pawn, the bishop active.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 16, say: "a4 — challenging Black's …b5 expansion.", sayShort: "a4 — challenge …b5", arrows: [_A('a4', 'b5')] },
+    { atMove: 20, say: "Qxd4 — recapturing, the queen centralised.", sayShort: "Qxd4 — centralise the queen", highlights: [_H('d4')] },
+    { atMove: 22, say: "Rfd1 — the rook to the d-file, pressing with active pieces.", sayShort: "Rfd1 — to the d-file", arrows: [_A('d1', 'd8')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD75: SublineNarration = {
+  intro: { say: "In the Bf4 QGD you centralise Qc2. You post the rook on d1, recapture into an IQP, regain the pawn on c4, then plant the bishop on the e5-outpost.", sayShort: "Qc2 — Rd1, exd4, Bxc4, Be5" },
+  beats: [
+    { atMove: 14, say: "Rd1 — the rook to the d-file, supporting the centre.", sayShort: "Rd1 — back the centre", arrows: [_A('d1', 'd8')] },
+    { atMove: 16, say: "exd4 — recapturing into an isolated d-pawn position with active pieces.", sayShort: "exd4 — active IQP", highlights: [_H('d4')] },
+    { atMove: 18, say: "Bxc4 — regaining the gambit pawn.", sayShort: "Bxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 22, say: "Be5 — the bishop to the central outpost, eyeing the kingside.", sayShort: "Be5 — central outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD76: SublineNarration = {
+  intro: { say: "In the Bf4 QGD you play a3. You open with cxd5, swap to leave an isolated d-pawn, open lines with dxc5, then plant the bishop on the e5-outpost.", sayShort: "a3 — cxd5, Nxd5, dxc5, Be5" },
+  beats: [
+    { atMove: 14, say: "cxd5 — opening the position.", sayShort: "cxd5 — open the position", highlights: [_H('d5')] },
+    { atMove: 16, say: "Nxd5 — trading to leave Black an isolated d-pawn.", sayShort: "Nxd5 — create the isolani", highlights: [_H('d5')] },
+    { atMove: 18, say: "dxc5 — opening lines, gaining a tempo.", sayShort: "dxc5 — open with tempo", highlights: [_H('c5')] },
+    { atMove: 22, say: "Be5 — the bishop to the central outpost.", sayShort: "Be5 — central outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD77: SublineNarration = {
+  intro: { say: "In the Bf4 QGD you clamp with c5 and b4. You wedge the queenside, grab the central pawn with Bxe5 after …e5, recapture the rook, then trade to simplify with the space edge.", sayShort: "c5 — b4, Bxe5, Qxa1, Bxf6" },
+  beats: [
+    { atMove: 12, say: "b4 — the queenside wedge, clamping Black with the c5/b4 pawns.", sayShort: "b4 — clamp the queenside", arrows: [_A('b4', 'a5')] },
+    { atMove: 16, say: "Bxe5 — grabbing the central pawn after …e5, a clean extra pawn.", sayShort: "Bxe5 — grab the pawn", highlights: [_H('e5')] },
+    { atMove: 20, say: "Qxa1 — recapturing the rook, the queen active with the material edge.", sayShort: "Qxa1 — recapture, ahead", highlights: [_H('a1')] },
+    { atMove: 22, say: "Bxf6 — trading to simplify with the space and material edge in hand.", sayShort: "Bxf6 — simplify, ahead", highlights: [_H('f6')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD78: SublineNarration = {
+  intro: { say: "In the Bf4 QGD you open with cxd5. You trade, reroute the knight to gain a tempo on the queen, open lines with dxc5, then reposition the bishop to g3.", sayShort: "cxd5 — Nxd5, Nc3, dxc5, Bg3" },
+  beats: [
+    { atMove: 12, say: "Nxd5 — trading to open the position.", sayShort: "Nxd5 — open the position", highlights: [_H('d5')] },
+    { atMove: 16, say: "Nc3 — rerouting the knight, gaining a tempo on the queen.", sayShort: "Nc3 — gain a tempo", highlights: [_H('c3')] },
+    { atMove: 18, say: "dxc5 — opening lines, gaining a tempo on the queen.", sayShort: "dxc5 — open with tempo", highlights: [_H('c5')] },
+    { atMove: 22, say: "Bg3 — repositioning the bishop, eyeing the centre with a comfortable game.", sayShort: "Bg3 — reposition, comfortable", highlights: [_H('g3')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+const QD79: SublineNarration = {
+  intro: { say: "In the Bf4 QGD you play h3. You grab the pawn with dxc5, swap to leave an isolated d-pawn, infiltrate with Bd6, then trade the dark bishops with the better structure.", sayShort: "h3 — dxc5, Nxd5, Bd6, Bxe7" },
+  beats: [
+    { atMove: 12, say: "dxc5 — grabbing the pawn, gaining a tempo.", sayShort: "dxc5 — grab the pawn", highlights: [_H('c5')] },
+    { atMove: 16, say: "Nxd5 — trading to leave Black an isolated d-pawn.", sayShort: "Nxd5 — create the isolani", highlights: [_H('d5')] },
+    { atMove: 18, say: "Bd6 — the bishop infiltrates, hitting c5 and the e7-bishop.", sayShort: "Bd6 — infiltrate", arrows: [_A('d6', 'e7')] },
+    { atMove: 20, say: "Bxe7 — trading the dark bishops with the better structure.", sayShort: "Bxe7 — trade, better structure", highlights: [_H('e7')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'english-opening::7::Bd7@17': EN71,
   'english-opening::6::Be6@13': EN61,
@@ -5375,85 +6064,85 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'queens-gambit::7::dxc4@9': QG80,
   // ── qgd ──
   'qgd::0::cxd5@6': WQGDCAR,
-  'qgd::0::Nf3@6': C8,
-  'qgd::0::Qc2@12': C8,
-  'qgd::0::Nf3@8': C8,
-  'qgd::0::cxd5@12': C9,
-  'qgd::0::cxd5@8': C7,
-  'qgd::0::Bd3@12': C8,
-  'qgd::0::Rc1@10': C8,
-  'qgd::0::Ne4@20': C8,
-  'qgd::0::Qc2@14': C8,
+  'qgd::0::Nf3@6': QD01,
+  'qgd::0::Qc2@12': QD07,
+  'qgd::0::Nf3@8': QD02,
+  'qgd::0::cxd5@12': QD05,
+  'qgd::0::cxd5@8': QD03,
+  'qgd::0::Bd3@12': QD06,
+  'qgd::0::Rc1@10': QD04,
+  'qgd::0::Ne4@20': QD09,
+  'qgd::0::Qc2@14': QD08,
   'qgd::1::cxd5@6': WQGDCAR,
-  'qgd::1::Nf3@6': C8,
-  'qgd::1::Be2@14': C8,
-  'qgd::1::Bd3@14': C8,
-  'qgd::1::Rc1@14': C8,
-  'qgd::1::Nf3@8': C8,
-  'qgd::1::Bxf6@12': C8,
-  'qgd::1::cxd5@8': C7,
-  'qgd::1::Qb3@14': C8,
-  'qgd::1::Qc2@14': C8,
+  'qgd::1::Nf3@6': QD11,
+  'qgd::1::Be2@14': QD15,
+  'qgd::1::Bd3@14': QD14,
+  'qgd::1::Rc1@14': QD19,
+  'qgd::1::Nf3@8': QD12,
+  'qgd::1::Bxf6@12': QD16,
+  'qgd::1::cxd5@8': QD13,
+  'qgd::1::Qb3@14': QD17,
+  'qgd::1::Qc2@14': QD18,
   'qgd::2::cxd5@6': WQGDCAR,
-  'qgd::2::Nf3@6': C8,
-  'qgd::2::Rc1@16': C8,
-  'qgd::2::Nf3@8': C8,
-  'qgd::2::Bxf6@12': C8,
-  'qgd::2::cxd5@8': C7,
-  'qgd::2::Qc2@16': C8,
-  'qgd::2::Rc1@10': C8,
-  'qgd::2::cxd5@10': C7,
-  'qgd::2::Qc2@10': C8,
-  'qgd::3::Nf3@8': C7,
-  'qgd::3::Bf4@8': C7,
-  'qgd::3::e3@8': C10,
-  'qgd::3::g3@8': C10,
-  'qgd::3::Ne5@20': C9,
-  'qgd::3::O-O@16': C9,
-  'qgd::3::h3@20': C9,
-  'qgd::3::Bg5@6': C8,
-  'qgd::3::Nf3@6': C8,
-  'qgd::3::O-O-O@18': C9,
+  'qgd::2::Nf3@6': QD21,
+  'qgd::2::Rc1@16': QD28,
+  'qgd::2::Nf3@8': QD22,
+  'qgd::2::Bxf6@12': QD25,
+  'qgd::2::cxd5@8': QD23,
+  'qgd::2::Qc2@16': QD27,
+  'qgd::2::Rc1@10': QD24,
+  'qgd::2::cxd5@10': QD29,
+  'qgd::2::Qc2@10': QD26,
+  'qgd::3::Nf3@8': QD32,
+  'qgd::3::Bf4@8': QD34,
+  'qgd::3::e3@8': QD35,
+  'qgd::3::g3@8': QD36,
+  'qgd::3::Ne5@20': QD39,
+  'qgd::3::O-O@16': QD37,
+  'qgd::3::h3@20': QD40,
+  'qgd::3::Bg5@6': QD33,
+  'qgd::3::Nf3@6': QD31,
+  'qgd::3::O-O-O@18': QD38,
   'qgd::4::cxd5@6': WQGDCAR,
-  'qgd::4::Bg5@6': C8,
-  'qgd::4::cxd5@8': C11,
-  'qgd::4::Qa4+@8': C11,
-  'qgd::4::e3@8': C11,
-  'qgd::4::Qb3@8': C11,
-  'qgd::4::e5@12': C11,
-  'qgd::4::Bxf6@16': C11,
-  'qgd::4::Bxf6@14': C11,
-  'qgd::4::Qxd4@14': C11,
-  'qgd::5::Bb3@12': C8,
-  'qgd::5::Be2@12': C8,
+  'qgd::4::Bg5@6': QD41,
+  'qgd::4::cxd5@8': QD42,
+  'qgd::4::Qa4+@8': QD43,
+  'qgd::4::e3@8': QD45,
+  'qgd::4::Qb3@8': QD44,
+  'qgd::4::e5@12': QD46,
+  'qgd::4::Bxf6@16': QD48,
+  'qgd::4::Bxf6@14': QD47,
+  'qgd::4::Qxd4@14': QD49,
+  'qgd::5::Bb3@12': QD51,
+  'qgd::5::Be2@12': QD52,
   'qgd::5::cxd5@6': WQGDCAR,
-  'qgd::5::a3@14': C8,
-  'qgd::5::a3@16': C8,
-  'qgd::5::Bg5@6': C8,
-  'qgd::5::Re1@16': C8,
-  'qgd::5::e4@14': C8,
-  'qgd::5::Qc2@14': C8,
-  'qgd::5::Qe2@16': C8,
+  'qgd::5::a3@14': QD57,
+  'qgd::5::a3@16': QD58,
+  'qgd::5::Bg5@6': QD53,
+  'qgd::5::Re1@16': QD56,
+  'qgd::5::e4@14': QD59,
+  'qgd::5::Qc2@14': QD54,
+  'qgd::5::Qe2@16': QD55,
   'qgd::6::cxd5@6': WQGDCAR,
-  'qgd::6::Nf3@6': C8,
-  'qgd::6::cxd5@10': C9,
-  'qgd::6::cxd5@12': C9,
-  'qgd::6::e3@8': C8,
+  'qgd::6::Nf3@6': QD61,
+  'qgd::6::cxd5@10': QD63,
+  'qgd::6::cxd5@12': QD64,
+  'qgd::6::e3@8': QD65,
   'qgd::6::Be2@16': WQGDTAB,
-  'qgd::6::cxd5@8': C9,
-  'qgd::6::Bxf6@12': C8,
-  'qgd::6::Rc1@14': C11,
-  'qgd::6::a3@16': C11,
-  'qgd::7::Bd3@10': C8,
+  'qgd::6::cxd5@8': QD62,
+  'qgd::6::Bxf6@12': QD66,
+  'qgd::6::Rc1@14': QD67,
+  'qgd::6::a3@16': QD68,
+  'qgd::7::Bd3@10': QD73,
   'qgd::7::cxd5@6': WQGDCAR,
-  'qgd::7::c5@10': C10,
-  'qgd::7::h3@10': C8,
-  'qgd::7::cxd5@10': C7,
-  'qgd::7::Bg5@6': C8,
-  'qgd::7::Nf3@6': C8,
-  'qgd::7::a3@12': C8,
-  'qgd::7::Be2@12': C8,
-  'qgd::7::Qc2@12': C8,
+  'qgd::7::c5@10': QD77,
+  'qgd::7::h3@10': QD79,
+  'qgd::7::cxd5@10': QD78,
+  'qgd::7::Bg5@6': QD71,
+  'qgd::7::Nf3@6': QD72,
+  'qgd::7::a3@12': QD76,
+  'qgd::7::Be2@12': QD74,
+  'qgd::7::Qc2@12': QD75,
   // ── qga ──
   'qga::0::Nc3@8': C12,
   'qga::0::dxc5@12': C12,
