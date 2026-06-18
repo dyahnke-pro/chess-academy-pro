@@ -1392,7 +1392,7 @@ const WBIRDC5: SublineNarration = {
 };
 // WAVE WTROC5 :: 1 keys
 const WTROC5: SublineNarration = {
-  intro: { say: "…c5 — Black counters in the centre, but you keep the bishop pair and grab space. Kick the e4-knight with f3, then roll d5 and e4 to clamp the position and shove Black's pieces back. You've dodged all his prepared 1.d4 theory and you call the shots from a position of space.", sayShort: "…c5 — f3, then d5 and e4 clamp" },
+  intro: { say: "…c5 — Black counters in the centre, but you keep the bishop pair and grab space. Kick the e4-knight with f3, then roll d5 and e4 to clamp the position and shove Black's pieces back. You've dodged all his prepared d4 theory and you call the shots from a position of space.", sayShort: "…c5 — f3, then d5 and e4 clamp" },
   beats: [
     { atMove: 5, say: "…c5 strikes at d4 for counterplay. Follow the arrow — the pawn hits your centre — but you have a strong reply that gains time and space rather than conceding.", sayShort: "…c5 — hits your d4", arrows: [_A('c5', 'd4', ATK)], highlights: [_H('d4', KEY)] },
     { atMove: 6, say: "f3 — boot the e4-knight straight back. Follow the arrow: the pawn attacks the intruder, and his clever sortie has cost him time while you keep the bishop pair.", sayShort: "f3 — boot the knight back", arrows: [_A('f3', 'e4', ATK)], highlights: [_H('e4', KEY)] },
