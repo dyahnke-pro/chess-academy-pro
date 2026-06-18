@@ -370,30 +370,10 @@ const C90: SublineNarration = {
 // kings-indian-attack :: caro_setup
 // kings-indian-attack :: e5_tabiya
 // birds-opening :: leningrad
-const C107: SublineNarration = {
-  intro: { say: "The Leningrad Bird — f4 with the g3 fianchetto, a reversed Leningrad Dutch a tempo up. The g2-bishop and the f-pawn combine on the kingside while you hold the centre with d3 and c3. Castle, expand with the e4 or Ne5 push, and turn the extra tempo into the kingside initiative the Dutch player can only dream of.", sayShort: "Leningrad Bird — fianchetto, e4/Ne5, attack." },
-  sources: ['concept:pos-space', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Bird%27s_Opening'],
-};
 // birds-opening :: from_gambit
-const C108: SublineNarration = {
-  intro: { say: "Black tries the From Gambit — …e5, offering a pawn to blow open your kingside after fxe5 d6. Decline the complications by accepting carefully: take the pawns, return one if needed with e4 or Nf3, and consolidate. The d-pawn and the development lead are Black's only compensation; defend accurately and the extra material tells.", sayShort: "From Gambit — accept, consolidate, keep the pawn." },
-  sources: ['concept:pos-space', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Bird%27s_Opening'],
-};
 // birds-opening :: classical
-const C109: SublineNarration = {
-  intro: { say: "The Classical Bird — f4 against …d5, with the b3/Bb2 and e3/Be2 setup. You aim for a reversed-Dutch attack: the f-pawn and the Bb2 on the long diagonal both point at Black's kingside, and Ne5 plus the queen lift drive the assault. Solid in the centre, ambitious on the wing — the Bird rewards the bold attacker.", sayShort: "Classical Bird — Bb2 diagonal, Ne5, kingside." },
-  sources: ['concept:pos-space', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Bird%27s_Opening'],
-};
 // birds-opening :: stonewall
-const C110: SublineNarration = {
-  intro: { say: "Black sets up a Stonewall-style wall against your Bird. Break the symmetry: target the e5 (your e4-e5 in reverse) or e4 outpost, reroute a knight to the strong square, and use the half-open f-file. The Bird's reversed-Dutch logic means you're the one a move ahead in the structure both sides know — press that tempo.", sayShort: "Stonewall — fight for the e5 outpost." },
-  sources: ['concept:pos-space', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Bird%27s_Opening'],
-};
 // birds-opening :: double_fpawn
-const C111: SublineNarration = {
-  intro: { say: "Black answers …f5, the symmetrical double-f-pawn Bird. Now it's a battle of mirror structures: develop the long-diagonal bishop, contest the centre with e4 (your reversed-gambit lever), and exploit the slight weakening around Black's king that the …f5 push creates. Whoever opens the centre with better-placed pieces presses — and that's you, a tempo ahead.", sayShort: "…f5 — open with e4, exploit the king." },
-  sources: ['concept:pos-space', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Bird%27s_Opening'],
-};
 // albin-countergambit :: main_nf3
 const C112: SublineNarration = {
   intro: { say: "The Albin Countergambit main line — you've thrown …e5 and pushed …d4, a thorn that cramps White and defines the whole game. After Nf3, Nc6 and g3 develop; the standard plan is …Bg4 (or …Nge7-g6), …Qd7 and the bold …O-O-O, throwing the kingside pawns at White while your d4-wedge cramps him. A genuine, aggressive surprise weapon.", sayShort: "Albin — guard d4, …Bg4, …Qd7, …O-O-O." },
@@ -803,10 +783,6 @@ const EACOL: SublineNarration = {
 // DEEP TQGQGA :: queens-gambit::3::Nc6@11
 // DEEP TLON :: london-system::0::b6@15
 // DEEP TBIRD :: birds-opening::1::Nge7@17
-const TBIRD: SublineNarration = {
-  intro: { say: "The From Gambit has burned itself out in your favour — queens are off and you're a clean pawn up with the bishop on f4 and a healthy extra pawn on e5. Pure technique from here: tuck the king to safety, bring the rooks to the centre, and convert. Black's fire gave him nothing lasting.", sayShort: "From Gambit refuted — a pawn up." },
-  sources: ['concept:pos-bishop-pair', 'concept:pawn-majority', 'https://en.wikipedia.org/wiki/Bird%27s_Opening'],
-};
 // DEEP TAKID :: anti-kid-saemisch::1::c5@11
 const TAKID: SublineNarration = {
   intro: { say: "Black challenges your big f3-e4 centre with a Benoni-style …c5. Pick your structure: d5 to slam it shut and clamp space on both wings, or dxc5 to open up with a lead in development. The Sämisch was built to meet exactly this from strength — choose your plan and the centre holds firm.", sayShort: "Sämisch …c5 — close d5 or open dxc5." },
@@ -1139,15 +1115,6 @@ const WOLDE4: SublineNarration = {
 // WAVE WLONRE8 :: 1 keys
 
 // WAVE WBIRDC5 :: 1 keys
-const WBIRDC5: SublineNarration = {
-  intro: { say: "…c5 — Black grabs queenside space in your Classical Bird. Welcome it, and play the reversed-Dutch attack: plant the knight on the e5 outpost backed by the b2-bishop on the long diagonal, then reroute your pieces toward the kingside. The whole system aims at Black's king while he expands on the wing.", sayShort: "…c5 — plant Ne5, attack the king" },
-  beats: [
-    { atMove: 13, say: "…c5 stakes out queenside space. That's fine — your play is on the other wing, so let Black expand here while you build the kingside attack the Bird is made for.", sayShort: "…c5 — Black expands queenside", highlights: [_H('c5', KEY)] },
-    { atMove: 14, say: "Ne5 — the knight slams into the e5 outpost, the dream square in the Bird, supported and unkickable. Backed by the b2-bishop raking the long diagonal, it's the spearhead of your kingside attack.", sayShort: "Ne5 — the outpost spearhead", highlights: [_H('e5', KEY), _H('g7', KEY)] },
-    { atMove: 20, say: "Nd2 — reroute the second knight toward f3 and the kingside, massing your pieces where Black's king lives. Slow and inevitable: the Bird's attack builds while Black plays on the queenside.", sayShort: "Nd2 — reroute toward the king", highlights: [_H('d2', KEY)] },
-  ],
-  sources: ['concept:pos-space', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Bird%27s_Opening'],
-};
 // WAVE WTROC5 :: 1 keys
 // WAVE WQGMERAN :: 1 keys
 const WQGMERAN: SublineNarration = {
@@ -7342,6 +7309,709 @@ const TR_V6_E6_11: SublineNarration = {
   sources: ['concept:pos-center', 'concept:pawn-passed', 'https://lichess.org/opening/Trompowsky-Attack'],
 };
 
+const BD_V0_C5_7: SublineNarration = {
+  intro: { say: "Black builds a fianchetto setup and strikes with …c5. This is the Leningrad Bird's — castle, support the centre with d3, and aim for the e4 break and a knight on e5.", sayShort: "Leningrad Bird's: e5 and e4" },
+  beats: [
+    { atMove: 8, say: "Tuck the king away with O-O; the Leningrad Bird's runs on a safe king and a later kingside push.", sayShort: "Castle, safe king", highlights: [_H('g1')] },
+    { atMove: 10, say: "Underpin your plan with d3, the modest pawn that prepares the e4 break and an e5-outpost.", sayShort: "d3, prepare e4", highlights: [_H('e4')] },
+    { atMove: 16, say: "Strike with e4, the thematic Bird's break that pries open lines toward Black's king.", sayShort: "e4, the thematic break", highlights: [_H('e4')] },
+    { atMove: 20, say: "Plant the knight on e5, the dream Bird's outpost; the game is balanced, but you hold the initiative.", sayShort: "Ne5, the dream outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-center', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V0_C6_7: SublineNarration = {
+  intro: { say: "Black plays the solid …c6 in the Leningrad. Build with d3, castle, and head for the e5-outpost and the e4 break — your standard Bird's plan.", sayShort: "Solid Leningrad: e5 and e4" },
+  beats: [
+    { atMove: 8, say: "Build with d3, preparing the e4 thrust and a strong knight on e5.", sayShort: "d3, prepare e4", highlights: [_H('e4')] },
+    { atMove: 14, say: "Leap to e5, the classic Bird's outpost smothering the centre.", sayShort: "Ne5, central outpost", highlights: [_H('e5')] },
+    { atMove: 20, say: "Break with e4 now your pieces are primed, opening the position on your terms.", sayShort: "e4, open the position", highlights: [_H('e4')] },
+    { atMove: 22, say: "Develop the bishop to e3, completing your forces in a balanced, double-edged middlegame.", sayShort: "Be3, finish developing", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V0_C6_11: SublineNarration = {
+  intro: { say: "Black castles and plays …c6 before …d4. Develop Nc3, meet the central tension head-on, and use your space for easy kingside play.", sayShort: "Nc3, fight for the centre" },
+  beats: [
+    { atMove: 12, say: "Develop Nc3, eyeing the e4 and d5 squares before you break in the centre.", sayShort: "Nc3, eye e4 and d5", highlights: [_H('c3')] },
+    { atMove: 16, say: "Recapture with dxe4, keeping a broad pawn front and an open f-file for your rook.", sayShort: "dxe4, broad pawn front", highlights: [_H('e4')] },
+    { atMove: 18, say: "Clamp with e5, seizing space and the strong central file.", sayShort: "e5, seize space", highlights: [_H('e5')] },
+    { atMove: 22, say: "Open with cxd4, clarifying the centre in a balanced game where your space gives easy play.", sayShort: "cxd4, clarify the centre", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V0_C5_9: SublineNarration = {
+  intro: { say: "Black fianchettoes and hits with …c5. Support the centre with d3, reroute your knight, and strike with e4 toward the e5-outpost — the Leningrad Bird's plan.", sayShort: "Leningrad: d3, e4, Ne5" },
+  beats: [
+    { atMove: 10, say: "Underpin your setup with d3, preparing the thematic e4 break.", sayShort: "d3, prepare e4", highlights: [_H('e4')] },
+    { atMove: 14, say: "Reroute the knight to a4, hitting c5 and heading for the strong e5 or c3 squares.", sayShort: "Na4, pressure c5", highlights: [_H('c5')] },
+    { atMove: 16, say: "Strike with e4, the thematic Bird's break opening lines toward the king.", sayShort: "e4, the thematic break", highlights: [_H('e4')] },
+    { atMove: 20, say: "Occupy e5 with the knight, the dream Bird's outpost; balanced, but you hold the initiative.", sayShort: "Ne5, dream outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-center', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V0_A6_15: SublineNarration = {
+  intro: { say: "Black slots in …a6 to expand. Grab the e5-outpost, trade off Black's defenders, and maneuver your knights to the strong central squares for a comfortable, balanced game.", sayShort: "Seize e5, maneuver the knights" },
+  beats: [
+    { atMove: 16, say: "Occupy the e5-outpost with the knight, the heart of your Bird's setup.", sayShort: "Ne5, central outpost", highlights: [_H('e5')] },
+    { atMove: 18, say: "Trade on c6, damaging Black's queenside pawns and opening the b-file.", sayShort: "Nxc6, damage his pawns", highlights: [_H('c6')] },
+    { atMove: 20, say: "Reroute the other knight to c4, eyeing e5 and the weakened d6 and b6 squares.", sayShort: "Nc4, eye the weak squares", highlights: [_H('c4')] },
+    { atMove: 22, say: "Return to the e5-outpost, the engine of your setup; the position is level but pleasant.", sayShort: "Ne5, back to the outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pawn-doubled', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V0_NH6_7: SublineNarration = {
+  intro: { say: "Black develops the knight oddly to h6. Castle, prepare e4, and expand on the kingside with g4 — the wing your f-pawn already points at.", sayShort: "Castle, e4, then g4 expansion" },
+  beats: [
+    { atMove: 8, say: "Castle into safety; the Leningrad runs on a secure king behind the fianchetto.", sayShort: "Castle, safe king", highlights: [_H('g1')] },
+    { atMove: 14, say: "Break with e4, opening the centre while Black's knight sits awkwardly on the rim.", sayShort: "e4, the thematic break", highlights: [_H('e4')] },
+    { atMove: 16, say: "Recapture with the knight, centralising it and keeping a healthy share of the centre.", sayShort: "Nxe4, centralise", highlights: [_H('e4')] },
+    { atMove: 20, say: "Expand with g4, grabbing kingside space and chances in a balanced, double-edged game.", sayShort: "g4, kingside space", highlights: [_H('g4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V0_E6_7: SublineNarration = {
+  intro: { say: "Black sets up a restrained …e6 and …b6 structure. Build with d3, castle, and reroute your knight via a3-b5 toward the strong d4-outpost.", sayShort: "d3, reroute the knight to d4" },
+  beats: [
+    { atMove: 8, say: "Build with d3, supporting your centre and the eventual e4 break.", sayShort: "d3, prepare e4", highlights: [_H('e4')] },
+    { atMove: 16, say: "Reroute the knight to a3, heading for b5 and the strong d4-square.", sayShort: "Na3, reroute the knight", highlights: [_H('b5')] },
+    { atMove: 18, say: "Jump to b5, eyeing the weak c7 and d6 squares in Black's camp.", sayShort: "Nb5, eye c7 and d6", highlights: [_H('d6')] },
+    { atMove: 22, say: "Centralise the knight on d4, a fine outpost; the game is balanced and comfortable.", sayShort: "Nbd4, central outpost", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V0_B6_11: SublineNarration = {
+  intro: { say: "Black fianchettoes the queen's bishop with …b6. Grab the e5-outpost at once, then probe the queenside with a4-a5 while keeping the f-file in reserve.", sayShort: "Ne5, then a4-a5 probe" },
+  beats: [
+    { atMove: 12, say: "Plant the knight on e5, the dominant Bird's outpost in the centre.", sayShort: "Ne5, central outpost", highlights: [_H('e5')] },
+    { atMove: 14, say: "Gain queenside space with a4, probing Black's …b6 pawn.", sayShort: "a4, probe the queenside", highlights: [_H('a4')] },
+    { atMove: 16, say: "Lever with a5, prying open the queenside against Black's structure.", sayShort: "a5, pry open the queenside", highlights: [_H('a5')] },
+    { atMove: 22, say: "Recapture with fxe5, opening the f-file straight at f7; balanced but sharp.", sayShort: "fxe5, open the f-file", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-open-file', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V0_C6_9: SublineNarration = {
+  intro: { say: "Black plays the solid …c6. Now uncork the signature Bird's plan: the queen lift Qe1-h4, the e4 break, and a kingside pawn avalanche.", sayShort: "Qe1-h4 and the kingside storm" },
+  beats: [
+    { atMove: 10, say: "Lift the queen to e1, the signature Bird's maneuver heading for h4 and a kingside attack.", sayShort: "Qe1, heading for h4", highlights: [_H('e1')] },
+    { atMove: 14, say: "Break with e4, opening the centre and clearing the way for your kingside push.", sayShort: "e4, open the centre", highlights: [_H('e4')] },
+    { atMove: 20, say: "Capture with fxe5, ripping the f-file open toward Black's king.", sayShort: "fxe5, open the f-file", highlights: [_H('e5')] },
+    { atMove: 22, say: "Thrust e6, a thematic pawn break that shatters Black's kingside and feeds your attack.", sayShort: "e6, shatter the kingside", highlights: [_H('e6')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-king-safety', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V0_NC6_7: SublineNarration = {
+  intro: { say: "Black develops …Nc6 and offers a knight trade on d4. Take it, build with e3 and d3, and play the balanced middlegame with your usual e5 and kingside ideas.", sayShort: "Trade on d4, balanced game" },
+  beats: [
+    { atMove: 10, say: "Accept the trade with Nxd4; you keep a sound structure and the bishop pair stays balanced.", sayShort: "Nxd4, trade knights", highlights: [_H('d4')] },
+    { atMove: 12, say: "Bolster with e3, kicking the d4-bishop and shoring up your dark squares.", sayShort: "e3, kick the bishop", highlights: [_H('d4')] },
+    { atMove: 16, say: "Develop Nc3, completing your forces and eyeing the e4 break.", sayShort: "Nc3, develop", highlights: [_H('c3')] },
+    { atMove: 18, say: "Strike with e4 to open the centre; the position is balanced with mutual chances.", sayShort: "e4, open the centre", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V1_F6_11: SublineNarration = {
+  intro: { say: "This is From's Gambit. Black sacrifices for an attack with …g5-g4, but it overreaches — retreat the knight with tempo, build your centre, and your extra material and the bishop pair decide it.", sayShort: "From's Gambit overreaches" },
+  beats: [
+    { atMove: 12, say: "Retreat the knight to c4 with tempo, hitting the d6-bishop and keeping your extra pawn.", sayShort: "Nc4, hit the bishop", highlights: [_H('d6')] },
+    { atMove: 14, say: "Gain space and kick the c6-knight with d5; your central pawns and material dominate.", sayShort: "d5, gain space", highlights: [_H('d5')] },
+    { atMove: 16, say: "Snap off the bishop with Nxd6+, winning the bishop pair and cementing your edge.", sayShort: "Nxd6+, win the bishop pair", highlights: [_H('d6')] },
+    { atMove: 18, say: "Centralise the queen on d4, hitting the loose knight and the long diagonal; you're clearly winning.", sayShort: "Qd4, centralise, winning", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-bishop-pair', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V1_NC6_11: SublineNarration = {
+  intro: { say: "In From's Gambit Black hits your e5-knight with …Nc6. Trade it off to double his pawns, then develop calmly — your extra pawn and Black's shattered queenside give a clear edge.", sayShort: "Trade, double his pawns, hold the edge" },
+  beats: [
+    { atMove: 12, say: "Trade on c6, doubling Black's pawns and keeping your extra material.", sayShort: "Nxc6, double his pawns", highlights: [_H('c6')] },
+    { atMove: 14, say: "Centralise the queen on d3, eyeing the kingside and overprotecting your structure.", sayShort: "Qd3, centralise", highlights: [_H('d3')] },
+    { atMove: 18, say: "Fianchetto with Bg2, a strong diagonal raking at Black's weakened queenside pawns.", sayShort: "Bg2, hit the weak pawns", arrows: [_A('g2', 'c6')], highlights: [_H('c6')] },
+    { atMove: 20, say: "Pin and pressure with Bg5; with the extra pawn and Black's broken structure you stand much better.", sayShort: "Bg5, pressure, clearly better", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V1_NGE7_17: SublineNarration = {
+  intro: { say: "Black trades into an ending after …Bxe5. You're up the extra e5-pawn — centralise your king, develop, and convert the material in a clean technical game.", sayShort: "Up a pawn in the ending" },
+  beats: [
+    { atMove: 12, say: "Recapture with dxe5, keeping your extra central pawn from the gambit.", sayShort: "dxe5, hold the extra pawn", highlights: [_H('e5')] },
+    { atMove: 14, say: "Recapture with the king; queens are off, so the exposed king is no liability in the ending.", sayShort: "Kxd1, into the ending", highlights: [_H('d1')] },
+    { atMove: 18, say: "Develop Nc3, controlling d5 and e4 as you mobilise behind your extra pawn.", sayShort: "Nc3, develop", highlights: [_H('d5')] },
+    { atMove: 22, say: "Expand with e4, gaining space and a passed-pawn majority; your extra pawn tells.", sayShort: "e4, gain space", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pawn-majority', 'concept:end-key-squares', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V1_QH4_11: SublineNarration = {
+  intro: { say: "Black tries the desperado …Qh4+ in From's Gambit. Block with g3, trade off, and your extra material plus the bishop pair leave Black with nothing for the pawns.", sayShort: "Block the check, stay up material" },
+  beats: [
+    { atMove: 12, say: "Block the check with g3; the queen sortie achieves nothing and you keep your extra pawn.", sayShort: "g3, block the check", highlights: [_H('g3')] },
+    { atMove: 16, say: "Recapture with dxe5, holding the extra central pawn from the gambit.", sayShort: "dxe5, hold the pawn", highlights: [_H('e5')] },
+    { atMove: 20, say: "Trade light bishops with Bxc6+, wrecking Black's pawns while you stay clearly ahead.", sayShort: "Bxc6+, wreck his pawns", highlights: [_H('c6')] },
+    { atMove: 22, say: "Centralise the queen on d4, dominating the board; you're winning comfortably.", sayShort: "Qd4, dominate, winning", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-doubled', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V1_BE6_17: SublineNarration = {
+  intro: { say: "After the …Bxe5 trade Black develops …Be6 in the ending. You're up the e5-pawn — develop, tuck the king to c1, and push e4 to convert your material edge.", sayShort: "Up a pawn, develop and push e4" },
+  beats: [
+    { atMove: 12, say: "Recapture with dxe5, keeping your extra central pawn.", sayShort: "dxe5, hold the pawn", highlights: [_H('e5')] },
+    { atMove: 16, say: "Develop the bishop to f4, defending e5 and guarding the long dark diagonal.", sayShort: "Bf4, defend e5", highlights: [_H('e5')] },
+    { atMove: 20, say: "Tuck the king to c1, connecting your rooks safely for the endgame.", sayShort: "Kc1, king safety", highlights: [_H('c1')] },
+    { atMove: 22, say: "Expand with e4, claiming space and a pawn majority; your extra pawn carries the ending.", sayShort: "e4, gain space", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pawn-majority', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V1_ND7_11: SublineNarration = {
+  intro: { say: "Black challenges your e5-knight with …Nd7 in From's Gambit. Grab the g4-pawn, consolidate with your knight on f2, and your extra material settles the game.", sayShort: "Grab g4, consolidate, winning" },
+  beats: [
+    { atMove: 12, say: "Snatch the loose g4-pawn with Nxg4; you're now up two pawns from the gambit.", sayShort: "Nxg4, grab the pawn", highlights: [_H('g4')] },
+    { atMove: 14, say: "Develop Nc3, completing your forces while Black scrambles for compensation he doesn't have.", sayShort: "Nc3, develop", highlights: [_H('c3')] },
+    { atMove: 16, say: "Reroute the knight to f2, blunting Black's attack and shielding your king.", sayShort: "Nf2, consolidate", highlights: [_H('f2')] },
+    { atMove: 18, say: "Develop the bishop to e3, finishing your setup; with extra material you're clearly winning.", sayShort: "Be3, finish, winning", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V1_NE7_11: SublineNarration = {
+  intro: { say: "Black develops …Ne7 in From's Gambit. Reroute your knight to c4, hit the d6-bishop, trade it off, and your extra pawn plus the better structure decide it.", sayShort: "Nc4, trade, stay up material" },
+  beats: [
+    { atMove: 12, say: "Reroute the knight to c4, hitting the d6-bishop with tempo and keeping your extra pawn.", sayShort: "Nc4, hit the bishop", highlights: [_H('d6')] },
+    { atMove: 14, say: "Solidify with c3, bracing your big centre against any counterplay.", sayShort: "c3, brace the centre", highlights: [_H('d4')] },
+    { atMove: 18, say: "Trade on d6, removing Black's strong bishop and clarifying your material edge.", sayShort: "Nxd6, trade the bishop", highlights: [_H('d6')] },
+    { atMove: 22, say: "Develop the bishop to f4, completing your forces; the extra pawn and structure win it.", sayShort: "Bf4, finish, clearly better", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V1_BF5_15: SublineNarration = {
+  intro: { say: "Black develops …Bf5 in the queenless From's ending. You're up the e5-pawn — push e4 to challenge the bishop, develop, and grind the material edge home.", sayShort: "Up a pawn, push e4 and grind" },
+  beats: [
+    { atMove: 12, say: "Recapture with dxe5, keeping your extra central pawn.", sayShort: "dxe5, hold the pawn", highlights: [_H('e5')] },
+    { atMove: 16, say: "Challenge the bishop with e4, gaining space and a mobile pawn majority.", sayShort: "e4, gain space", highlights: [_H('e4')] },
+    { atMove: 18, say: "Develop Nc3, hitting the bishop and mobilising behind your extra pawn.", sayShort: "Nc3, develop with tempo", highlights: [_H('c3')] },
+    { atMove: 20, say: "Probe with Nb5, eyeing c7 and the weak dark squares; your material edge persists.", sayShort: "Nb5, probe c7", highlights: [_H('c7')] },
+  ],
+  sources: ['concept:pawn-majority', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V1_BE6_15: SublineNarration = {
+  intro: { say: "Black develops …Be6 and rounds up your e5-pawn in this queenless ending. Keep your pieces active — Bg5 and the knight to e4 generate enough play to hold the balance.", sayShort: "Active pieces hold the balance" },
+  beats: [
+    { atMove: 12, say: "Recapture with dxe5, the pawn you'll lean on while your pieces stay active.", sayShort: "dxe5, into the ending", highlights: [_H('e5')] },
+    { atMove: 16, say: "Develop the bishop to g5, hitting the squares around Black's king in the ending.", sayShort: "Bg5, active bishop", highlights: [_H('g5')] },
+    { atMove: 18, say: "Develop Nc3, heading for the strong e4-square in the centre.", sayShort: "Nc3, head for e4", highlights: [_H('e4')] },
+    { atMove: 20, say: "Centralise with Ne4, keeping your pieces active enough to balance the recovered pawn.", sayShort: "Ne4, active, balanced", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-development', 'concept:end-key-squares', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V1_NE7_15: SublineNarration = {
+  intro: { say: "Black develops …Ne7 in the queenless From's ending. You're up the e5-pawn — develop, probe b5, and convert the extra material with clean technique.", sayShort: "Up a pawn, develop and convert" },
+  beats: [
+    { atMove: 12, say: "Recapture with dxe5, holding your extra central pawn.", sayShort: "dxe5, hold the pawn", highlights: [_H('e5')] },
+    { atMove: 14, say: "Recapture with the king; with queens off, the king is a fighting piece in the ending.", sayShort: "Kxd1, into the ending", highlights: [_H('d1')] },
+    { atMove: 18, say: "Probe with Nb5, hitting c7 and the weak dark squares in Black's camp.", sayShort: "Nb5, probe c7", highlights: [_H('c7')] },
+    { atMove: 20, say: "Develop the bishop to g5, pinning and pressuring; your extra pawn steadily tells.", sayShort: "Bg5, pin and press", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pawn-majority', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+
+const BD_V2_C5_9: SublineNarration = {
+  intro: { say: "Black fianchettoes against your double-fianchetto Bird's and hits with …c5. Trade off his light bishop with a check, then grab the e5-outpost for a comfortable, balanced game.", sayShort: "Trade bishops, seize e5" },
+  beats: [
+    { atMove: 10, say: "Check with Bb5+ to trade Black's light bishop and ease your development.", sayShort: "Bb5+, trade light bishops", highlights: [_H('b5')] },
+    { atMove: 16, say: "Plant the knight on e5, the Bird's outpost dominating the centre.", sayShort: "Ne5, central outpost", highlights: [_H('e5')] },
+    { atMove: 18, say: "Lift the queen to f3, supporting the e5-knight and eyeing the kingside.", sayShort: "Qf3, support e5", highlights: [_H('f3')] },
+    { atMove: 22, say: "Reroute the knight via e2 toward d4 or g3; the game is balanced with easy maneuvering.", sayShort: "Ne2, reroute the knight", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V2_BG4_9: SublineNarration = {
+  intro: { say: "Black pins your knight with …Bg4. Question the bishop with h3, strike the centre with c4, and expand on the kingside behind your fianchetto.", sayShort: "Question the bishop, expand" },
+  beats: [
+    { atMove: 10, say: "Question the bishop with h3, winning the bishop pair or a useful tempo.", sayShort: "h3, question the bishop", highlights: [_H('h3')] },
+    { atMove: 12, say: "Strike at the centre with c4, challenging d5 and grabbing queenside space.", sayShort: "c4, challenge d5", highlights: [_H('c4')] },
+    { atMove: 14, say: "Expand with g4, claiming kingside space behind your fianchettoed king.", sayShort: "g4, kingside space", highlights: [_H('g4')] },
+    { atMove: 20, say: "Lever with g5, gaining space and clamping the kingside; balanced but you're pressing.", sayShort: "g5, clamp the kingside", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-space', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V2_BG4_11: SublineNarration = {
+  intro: { say: "Black develops …Bg4 after castling. Strike the centre with c4, develop Nc3, and grab the e5-outpost for a balanced, comfortable middlegame.", sayShort: "c4, develop, seize e5" },
+  beats: [
+    { atMove: 12, say: "Challenge the centre with c4, hitting d5 and opening the queenside.", sayShort: "c4, challenge d5", highlights: [_H('c4')] },
+    { atMove: 16, say: "Plant the knight on e5, the Bird's outpost in the heart of the board.", sayShort: "Ne5, central outpost", highlights: [_H('e5')] },
+    { atMove: 18, say: "Recapture with the queen, keeping your pieces coordinated.", sayShort: "Qxe2, recapture", highlights: [_H('e2')] },
+    { atMove: 22, say: "Open with exd4, clarifying the centre in a balanced middlegame.", sayShort: "exd4, clarify the centre", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-center', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V2_C6_11: SublineNarration = {
+  intro: { say: "Black plays the solid …c6. Strike at d5 with c4, build the big centre with d4, and press the half-open c-file in a balanced game.", sayShort: "c4 and d4, press the c-file" },
+  beats: [
+    { atMove: 12, say: "Challenge d5 with c4, grabbing queenside space.", sayShort: "c4, challenge d5", highlights: [_H('c4')] },
+    { atMove: 14, say: "Build the big centre with d4, claiming the dark squares behind your fianchetto.", sayShort: "d4, big centre", highlights: [_H('d4')] },
+    { atMove: 18, say: "Swing the rook to c1, pressuring the half-open c-file.", sayShort: "Rc1, press the c-file", highlights: [_H('c1')] },
+    { atMove: 22, say: "Trade on d5, simplifying into a balanced, easy-to-play position.", sayShort: "Nxd5, simplify, balanced", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-open-file', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V2_NC6_11: SublineNarration = {
+  intro: { say: "Black develops …Nc6. Free your rook with Qc1, win the bishop pair with h3, and expand on the kingside in a balanced double-fianchetto battle.", sayShort: "Qc1, bishop pair, kingside space" },
+  beats: [
+    { atMove: 12, say: "Tuck the queen to c1, freeing the rook and eyeing the kingside dark squares.", sayShort: "Qc1, free the rook", highlights: [_H('c1')] },
+    { atMove: 16, say: "Question the bishop with h3, forcing the trade and winning the bishop pair.", sayShort: "h3, win the bishop pair", highlights: [_H('h3')] },
+    { atMove: 20, say: "Expand with g4, grabbing kingside space behind your king.", sayShort: "g4, kingside space", highlights: [_H('g4')] },
+    { atMove: 22, say: "Lever g5, clamping the kingside; balanced but you hold the space.", sayShort: "g5, clamp the kingside", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-space', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V2_B6_11: SublineNarration = {
+  intro: { say: "Black fianchettoes with …b6. Challenge d5 with c4, castle, and grab the e5-outpost anchored by d4 for a balanced, comfortable middlegame.", sayShort: "c4, e5-outpost anchored by d4" },
+  beats: [
+    { atMove: 12, say: "Challenge d5 with c4, grabbing queenside space.", sayShort: "c4, challenge d5", highlights: [_H('c4')] },
+    { atMove: 16, say: "Take on d5, opening the c-file and clarifying the centre.", sayShort: "cxd5, clarify the centre", highlights: [_H('d5')] },
+    { atMove: 18, say: "Plant the knight on e5, the dominant Bird's outpost.", sayShort: "Ne5, central outpost", highlights: [_H('e5')] },
+    { atMove: 20, say: "Anchor the outpost with d4, cementing your e5-knight; the game is balanced.", sayShort: "d4, anchor the outpost", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-center', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V2_NC6_9: SublineNarration = {
+  intro: { say: "Black develops …Nc6 early. Pin with Bb5, castle, and build the big centre with d4, heading for a balanced game with comfortable space.", sayShort: "Bb5 pin, d4 centre" },
+  beats: [
+    { atMove: 10, say: "Pin and pressure with Bb5, aiming to trade Black's light bishop.", sayShort: "Bb5, pin the knight", highlights: [_H('b5')] },
+    { atMove: 14, say: "Build the big centre with d4, claiming dark-square space.", sayShort: "d4, big centre", highlights: [_H('d4')] },
+    { atMove: 18, say: "Brace the centre with c3, kicking the b4-knight and securing d4.", sayShort: "c3, secure d4", highlights: [_H('d4')] },
+    { atMove: 22, say: "Strike with c4, challenging d5 in a balanced game.", sayShort: "c4, challenge d5", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V2_B6_13: SublineNarration = {
+  intro: { say: "Black delays with …c5 then …b6. Challenge d5 with c4, develop with tempo, and lift the queen toward the kingside in a balanced double-fianchetto game.", sayShort: "c4, develop with tempo" },
+  beats: [
+    { atMove: 14, say: "Challenge d5 with c4, grabbing queenside space.", sayShort: "c4, challenge d5", highlights: [_H('c4')] },
+    { atMove: 16, say: "Take on d5, opening lines and clarifying the centre.", sayShort: "cxd5, clarify the centre", highlights: [_H('d5')] },
+    { atMove: 18, say: "Develop Nc3 with tempo on the d5-queen.", sayShort: "Nc3, gain a tempo", highlights: [_H('c3')] },
+    { atMove: 20, say: "Lift the queen to e1, heading for the kingside in a balanced game.", sayShort: "Qe1, head for the kingside", highlights: [_H('e1')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V2_NBD7_11: SublineNarration = {
+  intro: { say: "Black develops …Nbd7. Challenge d5 with c4, build the centre with d4, and simplify toward a balanced double-fianchetto middlegame.", sayShort: "c4 and d4, simplify, balanced" },
+  beats: [
+    { atMove: 12, say: "Challenge d5 with c4, grabbing queenside space.", sayShort: "c4, challenge d5", highlights: [_H('c4')] },
+    { atMove: 16, say: "Build the big centre with d4, claiming the dark squares.", sayShort: "d4, big centre", highlights: [_H('d4')] },
+    { atMove: 18, say: "Take on d5, opening the c-file for your rooks.", sayShort: "cxd5, open the c-file", highlights: [_H('d5')] },
+    { atMove: 22, say: "Castle, completing development in a balanced double-fianchetto middlegame.", sayShort: "Castle, finish developing", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V2_BF5_15: SublineNarration = {
+  intro: { say: "Black develops …Bf5. Support the centre with d3, trade off the dark bishops to loosen Black's king, and strike with e4 in a balanced, double-edged game.", sayShort: "d3, trade bishops, e4 break" },
+  beats: [
+    { atMove: 16, say: "Support the centre with d3, preparing the e4 break and an e5-outpost.", sayShort: "d3, prepare e4", highlights: [_H('e4')] },
+    { atMove: 18, say: "Trade dark bishops with Bxg7, weakening Black's king cover.", sayShort: "Bxg7, weaken the king", highlights: [_H('g7')] },
+    { atMove: 20, say: "Centralise the queen on d2, connecting rooks toward the kingside.", sayShort: "Qd2, connect the rooks", highlights: [_H('d2')] },
+    { atMove: 22, say: "Break with e4, opening lines in a balanced, double-edged position.", sayShort: "e4, open lines", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-king-safety', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V3_BE7_7: SublineNarration = {
+  intro: { say: "Black sets up a solid …e6 wall. This is the classical Bird's — develop Bd3 aiming at the kingside, fianchetto your dark bishop, and play for control of e5 and the f-file.", sayShort: "Classical Bird's: Bd3 and e5" },
+  beats: [
+    { atMove: 8, say: "Develop the bishop to d3, aiming straight at h7 and Black's kingside.", sayShort: "Bd3, eye h7", arrows: [_A('d3', 'h7')], highlights: [_H('h7')] },
+    { atMove: 10, say: "Prepare the fianchetto with b3, rerouting your dark bishop to the long diagonal.", sayShort: "b3, prepare the fianchetto", highlights: [_H('b3')] },
+    { atMove: 14, say: "Complete the double fianchetto with Bb2, raking toward Black's centre and king.", sayShort: "Bb2, the long diagonal", highlights: [_H('e5')] },
+    { atMove: 18, say: "Recapture with fxe5, opening the f-file toward f7 in a balanced middlegame.", sayShort: "fxe5, open the f-file", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-open-file', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V3_BD6_7: SublineNarration = {
+  intro: { say: "Black develops …Bd6 to fight for e5. Develop Bd3, fianchetto with b3 and Bb2, and contest the e5-square in a balanced classical Bird's.", sayShort: "Bd3, fianchetto, contest e5" },
+  beats: [
+    { atMove: 8, say: "Develop the bishop to d3, aiming at h7 and Black's kingside.", sayShort: "Bd3, eye h7", arrows: [_A('d3', 'h7')], highlights: [_H('h7')] },
+    { atMove: 12, say: "Complete the double fianchetto with Bb2, contesting the long diagonal and e5.", sayShort: "Bb2, the long diagonal", highlights: [_H('e5')] },
+    { atMove: 18, say: "Recapture with fxe5, opening the f-file toward Black's king.", sayShort: "fxe5, open the f-file", highlights: [_H('e5')] },
+    { atMove: 20, say: "Castle, completing development in a balanced, double-edged middlegame.", sayShort: "Castle, finish developing", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-open-file', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V3_BE7_11: SublineNarration = {
+  intro: { say: "Black plays …c5 and …Be7. Develop your knight to d2, grab the e5-outpost, and pin with Bb5 — a balanced classical Bird's with comfortable play.", sayShort: "Nd2, e5-outpost, Bb5 pin" },
+  beats: [
+    { atMove: 12, say: "Develop the knight to d2, heading for e5 or f3 to support your centre.", sayShort: "Nbd2, head for e5", highlights: [_H('d2')] },
+    { atMove: 14, say: "Plant the knight on e5, the dominant Bird's outpost.", sayShort: "Ne5, central outpost", highlights: [_H('e5')] },
+    { atMove: 16, say: "Pin with Bb5, aiming to trade Black's light bishop.", sayShort: "Bb5, pin the knight", highlights: [_H('b5')] },
+    { atMove: 22, say: "Castle, completing development in a balanced middlegame.", sayShort: "Castle, finish developing", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V3_CXD4_9: SublineNarration = {
+  intro: { say: "Black trades on d4. Recapture to keep a strong pawn duo, develop your pieces, and challenge Black's …Ne4 with Nc3 in a balanced classical Bird's.", sayShort: "Recapture, develop, challenge e4" },
+  beats: [
+    { atMove: 10, say: "Recapture with cxd4, keeping a strong pawn duo on d4 and e3.", sayShort: "cxd4, strong pawn duo", highlights: [_H('d4')] },
+    { atMove: 12, say: "Develop the bishop to d3, aiming at the kingside and the e4-knight.", sayShort: "Bd3, develop", highlights: [_H('d3')] },
+    { atMove: 16, say: "Develop Nc3, challenging the e4-knight and eyeing d5.", sayShort: "Nc3, challenge e4", highlights: [_H('e4')] },
+    { atMove: 18, say: "Castle, completing development in a balanced, double-edged game.", sayShort: "Castle, finish developing", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V3_NC6_7: SublineNarration = {
+  intro: { say: "Black develops …Nc6 and fianchettoes. Strike at d5 with c4, develop your pieces, and post the bishop on a3 to pressure Black's dark squares.", sayShort: "c4, develop, Ba3 pressure" },
+  beats: [
+    { atMove: 8, say: "Strike at the centre with c4, challenging d5 and grabbing space.", sayShort: "c4, challenge d5", highlights: [_H('c4')] },
+    { atMove: 10, say: "Develop Nc3, reinforcing your centre and eyeing d5.", sayShort: "Nc3, develop", highlights: [_H('c3')] },
+    { atMove: 14, say: "Post the bishop on a3, pressuring the d6 and e7 squares Black has weakened.", sayShort: "Ba3, pressure the dark squares", highlights: [_H('d6')] },
+    { atMove: 18, say: "Leap to g5, hitting e6 and the kingside in a balanced, active position.", sayShort: "Ng5, hit e6", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V3_NE4_7: SublineNarration = {
+  intro: { say: "Black jumps to …Ne4. Challenge it with Bd3, strike the centre with c4, and recapture toward a broad pawn centre with the e5-outpost in a balanced game.", sayShort: "Challenge e4, c4, e5-outpost" },
+  beats: [
+    { atMove: 8, say: "Develop the bishop to d3, challenging the e4-knight and aiming at the kingside.", sayShort: "Bd3, challenge e4", highlights: [_H('e4')] },
+    { atMove: 12, say: "Strike with c4, challenging d5 and opening the queenside.", sayShort: "c4, challenge d5", highlights: [_H('c4')] },
+    { atMove: 16, say: "Recapture with bxc3, building a broad pawn centre and opening the b-file.", sayShort: "bxc3, broad pawn centre", highlights: [_H('c3')] },
+    { atMove: 20, say: "Plant the knight on e5, the dominant outpost; the game is balanced.", sayShort: "Ne5, central outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-outpost', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V3_CXD4_11: SublineNarration = {
+  intro: { say: "Black trades on d4 after …Nc6. Recapture with the e-pawn to keep a strong d4-pawn, develop Be3, and seize the e5-outpost in a balanced classical Bird's.", sayShort: "exd4, Be3, e5-outpost" },
+  beats: [
+    { atMove: 12, say: "Recapture with exd4, keeping the strong d4-pawn and opening the e-file.", sayShort: "exd4, strong d4-pawn", highlights: [_H('d4')] },
+    { atMove: 14, say: "Develop the bishop to e3, defending d4 and eyeing the kingside.", sayShort: "Be3, defend d4", highlights: [_H('e3')] },
+    { atMove: 16, say: "Plant the knight on e5, the dominant Bird's outpost.", sayShort: "Ne5, central outpost", highlights: [_H('e5')] },
+    { atMove: 22, say: "Strike with c4, expanding in the centre; balanced with chances.", sayShort: "c4, expand the centre", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-outpost', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V3_C4_11: SublineNarration = {
+  intro: { say: "Black grabs space with …c4. Retreat the bishop to c2, keeping the dangerous diagonal aimed at h7, develop your knight, and grab the e5-outpost for a balanced game with attacking chances.", sayShort: "Bc2, keep the h7 diagonal" },
+  beats: [
+    { atMove: 12, say: "Retreat the bishop to c2, keeping the strong diagonal aimed at Black's king on h7.", sayShort: "Bc2, eye h7", arrows: [_A('c2', 'h7')], highlights: [_H('h7')] },
+    { atMove: 14, say: "Develop the knight to d2, heading for f3-e5 or f1-g3.", sayShort: "Nbd2, reroute the knight", highlights: [_H('d2')] },
+    { atMove: 20, say: "Plant the knight on e5, the dominant outpost in the centre.", sayShort: "Ne5, central outpost", highlights: [_H('e5')] },
+    { atMove: 22, say: "Lift the queen to f3, massing forces toward the kingside; balanced but you press.", sayShort: "Qf3, mass on the kingside", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-outpost', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V3_NBD7_7: SublineNarration = {
+  intro: { say: "Black develops …Nbd7. Develop Bd3, grab the e5-outpost, and undermine Black's queenside with b3 in a balanced classical Bird's.", sayShort: "Bd3, e5-outpost, b3 undermine" },
+  beats: [
+    { atMove: 8, say: "Develop the bishop to d3, aiming at the kingside.", sayShort: "Bd3, develop", highlights: [_H('d3')] },
+    { atMove: 14, say: "Plant the knight on e5, the dominant Bird's outpost.", sayShort: "Ne5, central outpost", highlights: [_H('e5')] },
+    { atMove: 16, say: "Undermine the c4-pawn with b3, opening lines on the queenside.", sayShort: "b3, undermine c4", highlights: [_H('c4')] },
+    { atMove: 20, say: "Recapture with the queen on b3, eyeing both the queenside and f7; balanced.", sayShort: "Qxb3, eye f7", highlights: [_H('b3')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V3_BB4_7: SublineNarration = {
+  intro: { say: "Black checks with …Bb4+. Block with the knight, reposition your bishop to d3, grab the e5-outpost, and swing a rook to the kingside in a balanced, sharp game.", sayShort: "Block, e5-outpost, rook lift" },
+  beats: [
+    { atMove: 8, say: "Block the check with Nbd2, developing toward e5 and keeping your centre intact.", sayShort: "Nbd2, block and develop", highlights: [_H('d2')] },
+    { atMove: 12, say: "Reposition the bishop to d3, aiming at the kingside.", sayShort: "Bd3, redeploy", highlights: [_H('d3')] },
+    { atMove: 16, say: "Plant the knight on e5, the dominant outpost.", sayShort: "Ne5, central outpost", highlights: [_H('e5')] },
+    { atMove: 20, say: "Lift the rook to f3, swinging it toward the kingside; balanced but sharp.", sayShort: "Rf3, swing to the kingside", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-initiative', 'https://lichess.org/opening/Birds-Opening'],
+};
+
+const BD_V4_NF6_5: SublineNarration = {
+  intro: { say: "Black mirrors with …f5 and you've gambited e4. Develop Nc3 to win it back with a lead, recapture with the bishop aiming at h7, and play actively for the kingside.", sayShort: "Regain the pawn, attack the king" },
+  beats: [
+    { atMove: 6, say: "Develop Nc3, hitting the e4-pawn and regaining your gambit material with a development lead.", sayShort: "Nc3, regain the pawn", highlights: [_H('e4')] },
+    { atMove: 8, say: "Recapture with Bxd3, the bishop now raking the diagonal straight at Black's king on h7.", sayShort: "Bxd3, eye h7", arrows: [_A('d3', 'h7')], highlights: [_H('h7')] },
+    { atMove: 14, say: "Thrust f5, gaining space and prying open lines toward Black's king.", sayShort: "f5, pry open the kingside", highlights: [_H('f5')] },
+    { atMove: 20, say: "Lift the queen to e1, heading for the kingside; active and balanced with chances.", sayShort: "Qe1, head for the kingside", highlights: [_H('e1')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-initiative', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V4_E6_9: SublineNarration = {
+  intro: { say: "Black declines the gambit and develops solidly with …e6. You have full compensation — centralise the queen, keep the bishop on the h7 diagonal, and castle long for a balanced, double-edged game.", sayShort: "Full comp: castle long, attack" },
+  beats: [
+    { atMove: 10, say: "Centralise the queen on e2, connecting toward long castling and a kingside push.", sayShort: "Qe2, prepare O-O-O", highlights: [_H('e2')] },
+    { atMove: 14, say: "Reposition the bishop to c2, keeping the diagonal trained on Black's king at h7.", sayShort: "Bc2, eye h7", arrows: [_A('c2', 'h7')], highlights: [_H('h7')] },
+    { atMove: 20, say: "Castle queenside, clearing your king from the centre and readying a kingside pawn storm.", sayShort: "O-O-O, ready the storm", highlights: [_H('c1')] },
+    { atMove: 22, say: "Recapture on e3, keeping your forces aimed at the kingside; active, balanced play.", sayShort: "Qxe3, keep the pressure", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-king-safety', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V4_E3_5: SublineNarration = {
+  intro: { say: "Black lunges with …e3 to jam your position. Grab the big centre with d4, round up the e3-pawn, and your lead in development punishes Black's pawn-grabbing — you're clearly better.", sayShort: "Punish the overreach, clearly better" },
+  beats: [
+    { atMove: 6, say: "Grab the big centre with d4; Black's …e3 push only loosens his own game.", sayShort: "d4, big centre", highlights: [_H('d4')] },
+    { atMove: 8, say: "Round up the e3-pawn with Bxe3, regaining material with a fine centre and a lead.", sayShort: "Bxe3, regain the pawn", highlights: [_H('e3')] },
+    { atMove: 18, say: "Break with d5, gaining space and kicking Black's pieces while he chases pawns.", sayShort: "d5, gain space", highlights: [_H('d5')] },
+    { atMove: 22, say: "Castle to safety; Black's …Qxc2 raid wins a pawn but leaves him far behind — you're clearly better.", sayShort: "Castle, clearly better", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V4_D6_9: SublineNarration = {
+  intro: { say: "Black plays …d6 against the gambit. Thrust f5 to pry open the kingside, open the f-file, and pile your pieces toward f7 in an active, balanced game.", sayShort: "f5, open the f-file, attack" },
+  beats: [
+    { atMove: 10, say: "Thrust f5, striking at e6 and prying open lines toward Black's king.", sayShort: "f5, pry open the kingside", highlights: [_H('f5')] },
+    { atMove: 12, say: "Open with fxe6, ripping the f-file open against Black's king.", sayShort: "fxe6, open the f-file", highlights: [_H('e6')] },
+    { atMove: 18, say: "Pin with Bg5, pressuring the f6-knight and the kingside.", sayShort: "Bg5, pin and pressure", highlights: [_H('g5')] },
+    { atMove: 22, say: "Lift the queen to f3, massing on the f-file toward f7; active and balanced.", sayShort: "Qf3, mass on the f-file", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-initiative', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V4_D5_5: SublineNarration = {
+  intro: { say: "Black challenges the centre with …d5. Open with dxe4 and trade queens — in the ending Black's loose e4-pawn and his exposed king give you a clear, pleasant edge.", sayShort: "Trade queens, better ending" },
+  beats: [
+    { atMove: 6, say: "Recapture with dxe4, opening the centre and the d-file.", sayShort: "dxe4, open the centre", highlights: [_H('e4')] },
+    { atMove: 8, say: "Force the queens off with Qxd8+; in the ending Black's loose e4-pawn and king favour you.", sayShort: "Qxd8+, into the ending", highlights: [_H('d8')] },
+    { atMove: 14, say: "Castle queenside, bringing the rook to bear on the open d-file.", sayShort: "O-O-O, rook to the d-file", highlights: [_H('d1')] },
+    { atMove: 22, say: "Gain queenside space with b4, clamping Black's pieces; your better structure gives a clear edge.", sayShort: "b4, clamp, clearly better", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:end-key-squares', 'concept:pos-space', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V4_G6_7: SublineNarration = {
+  intro: { say: "Black fianchettoes with …g6 against the gambit. Smash in with f5 before the bishop is home, prise open the king's cover, and your raging attack leaves you clearly better.", sayShort: "f5 smashes the fianchetto" },
+  beats: [
+    { atMove: 8, say: "Thrust f5, slamming into Black's fianchetto before it's complete.", sayShort: "f5, hit the fianchetto", highlights: [_H('f5')] },
+    { atMove: 10, say: "Take on g6, prying open the f- and h-files against Black's king.", sayShort: "fxg6, open the files", highlights: [_H('g6')] },
+    { atMove: 14, say: "Reroute the knight to g3, heading for the strong f5 and h5 squares.", sayShort: "Ng3, head for f5 and h5", highlights: [_H('g3')] },
+    { atMove: 20, say: "Leap to h5, hitting the g7-bishop and the kingside; your attack leaves you clearly better.", sayShort: "Nh5, attack, clearly better", highlights: [_H('h5')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-king-safety', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V4_NC6_7: SublineNarration = {
+  intro: { say: "Black's careless …Nc6 ignores the kingside — and walks into a forced mate. Check with Qh5+, sacrifice the bishop on g6, and deliver mate on g6. Punish it!", sayShort: "…Nc6 allows forced mate" },
+  beats: [
+    { atMove: 8, say: "Pounce with Qh5+! Black's …Nc6 ignored his king, and the check forces a fatal weakening.", sayShort: "Qh5+, begin the mate", highlights: [_H('h5')] },
+    { atMove: 10, say: "Crash through with Bxg6+, a bishop sacrifice that tears open the king's shelter.", sayShort: "Bxg6+, the sacrifice", highlights: [_H('g6')] },
+    { atMove: 12, say: "Deliver mate with Qxg6 — the king has no escape. Always punish a careless …Nc6 here.", sayShort: "Qxg6 is checkmate", highlights: [_H('g6')] },
+  ],
+  sources: ['concept:tac-sacrifice', 'concept:pos-king-safety', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V4_E6_7: SublineNarration = {
+  intro: { say: "Black's …e6 leaves the king stuck in the centre. Begin a winning raid with Qh5+, sacrifice on g6, and snatch the h8-rook — you win the exchange and stand clearly better.", sayShort: "Qh5+ raid wins the rook" },
+  beats: [
+    { atMove: 8, say: "Pounce with Qh5+; with the king stuck on e8 the queen check begins a winning raid.", sayShort: "Qh5+, begin the raid", highlights: [_H('h5')] },
+    { atMove: 12, say: "Sacrifice with Bg6+, deflecting the h7-pawn to open the h-file.", sayShort: "Bg6+, deflect the pawn", highlights: [_H('g6')] },
+    { atMove: 14, say: "Snatch the rook with Qxh8! You've won the exchange and stand clearly better.", sayShort: "Qxh8 wins the exchange", highlights: [_H('h8')] },
+    { atMove: 20, say: "Bring the knight to g5, freeing the queen and pressing the kingside; you're winning.", sayShort: "Ng5, free the queen, winning", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:tac-sacrifice', 'concept:pos-initiative', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V4_NC6_9: SublineNarration = {
+  intro: { say: "Black develops …Nc6. Provoke weaknesses with Ng5, thrust f5, and lift your rook into the attack — your kingside pressure leaves you clearly better.", sayShort: "Ng5 and f5, clearly better" },
+  beats: [
+    { atMove: 10, say: "Leap to g5, eyeing e6 and f7 and provoking weaknesses.", sayShort: "Ng5, provoke weaknesses", highlights: [_H('g5')] },
+    { atMove: 14, say: "Thrust f5, prying open the f-file toward Black's king.", sayShort: "f5, pry open the f-file", highlights: [_H('f5')] },
+    { atMove: 16, say: "Recapture with the rook on f5, a powerful lift that pressures the kingside.", sayShort: "Rxf5, the rook lift", highlights: [_H('f5')] },
+    { atMove: 22, say: "Centralise the knight on e4, eyeing f6 and d6; your attack leaves you clearly better.", sayShort: "Nge4, central knight, better", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-open-file', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V4_G6_9: SublineNarration = {
+  intro: { say: "Black fianchettoes with …g6. Centralise the queen, develop your knight, and castle long for a balanced, double-edged middlegame with attacking chances on both wings.", sayShort: "Develop, castle long, balanced" },
+  beats: [
+    { atMove: 10, say: "Centralise the queen on e2, connecting toward long castling.", sayShort: "Qe2, prepare O-O-O", highlights: [_H('e2')] },
+    { atMove: 12, say: "Develop Nc3, reinforcing the centre and eyeing the d5 and e4 squares.", sayShort: "Nc3, develop", highlights: [_H('c3')] },
+    { atMove: 16, say: "Castle queenside, clearing the king and readying a kingside pawn storm.", sayShort: "O-O-O, ready the storm", highlights: [_H('c1')] },
+    { atMove: 20, say: "Centralise the queen on d2, connecting rooks for play on both wings; balanced.", sayShort: "Qd2, connect the rooks", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://lichess.org/opening/Birds-Opening'],
+};
+
+const BD_V5_C5_9: SublineNarration = {
+  intro: { say: "Black fianchettoes against your double-fianchetto Bird's and hits …c5. Trade off his light bishop with a check, grab the e5-outpost, and maneuver comfortably in a balanced game.", sayShort: "Trade bishops, seize e5" },
+  beats: [
+    { atMove: 10, say: "Check with Bb5+ to trade Black's light bishop and ease your development.", sayShort: "Bb5+, trade light bishops", highlights: [_H('b5')] },
+    { atMove: 16, say: "Plant the knight on e5, the Bird's outpost dominating the centre.", sayShort: "Ne5, central outpost", highlights: [_H('e5')] },
+    { atMove: 18, say: "Lift the queen to f3, supporting the e5-knight and eyeing the kingside.", sayShort: "Qf3, support e5", highlights: [_H('f3')] },
+    { atMove: 22, say: "Reroute the knight via e2 toward d4 or g3; the game is balanced with easy maneuvering.", sayShort: "Ne2, reroute the knight", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V5_BG4_9: SublineNarration = {
+  intro: { say: "Black pins with …Bg4. Question the bishop with h3, strike the centre with c4, and expand on the kingside behind your fianchetto in a balanced game.", sayShort: "Question the bishop, expand" },
+  beats: [
+    { atMove: 10, say: "Question the bishop with h3, winning the bishop pair or a useful tempo.", sayShort: "h3, question the bishop", highlights: [_H('h3')] },
+    { atMove: 12, say: "Strike at the centre with c4, challenging d5 and grabbing queenside space.", sayShort: "c4, challenge d5", highlights: [_H('c4')] },
+    { atMove: 14, say: "Expand with g4, claiming kingside space behind your fianchettoed king.", sayShort: "g4, kingside space", highlights: [_H('g4')] },
+    { atMove: 20, say: "Lever g5, gaining space and clamping the kingside; balanced but you're pressing.", sayShort: "g5, clamp the kingside", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-space', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V5_BG4_11: SublineNarration = {
+  intro: { say: "Black develops …Bg4 after castling. Strike with c4, develop Nc3, and grab the e5-outpost for a balanced, comfortable middlegame.", sayShort: "c4, develop, seize e5" },
+  beats: [
+    { atMove: 12, say: "Challenge the centre with c4, hitting d5 and opening the queenside.", sayShort: "c4, challenge d5", highlights: [_H('c4')] },
+    { atMove: 16, say: "Plant the knight on e5, the Bird's outpost in the heart of the board.", sayShort: "Ne5, central outpost", highlights: [_H('e5')] },
+    { atMove: 18, say: "Recapture with the queen, keeping your pieces coordinated.", sayShort: "Qxe2, recapture", highlights: [_H('e2')] },
+    { atMove: 22, say: "Open with exd4, clarifying the centre in a balanced middlegame.", sayShort: "exd4, clarify the centre", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-center', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V5_QC7_15: SublineNarration = {
+  intro: { say: "Black defends e5 with …Qc7. Trade on c6 to double Black's pawns, then pressure the long diagonal and the d5-pawn in a balanced game.", sayShort: "Trade on c6, press d5" },
+  beats: [
+    { atMove: 16, say: "Trade on c6, doubling Black's pawns and opening the b-file.", sayShort: "Nxc6, double his pawns", highlights: [_H('c6')] },
+    { atMove: 18, say: "Reposition the bishop to f3, pressuring the long diagonal and Black's d5-pawn.", sayShort: "Bf3, press d5", highlights: [_H('d5')] },
+    { atMove: 20, say: "Centralise the queen on e2, connecting rooks; balanced with comfortable play.", sayShort: "Qe2, connect the rooks", highlights: [_H('e2')] },
+    { atMove: 22, say: "Gain queenside space with a4, probing Black's structure.", sayShort: "a4, probe the queenside", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V5_C6_11: SublineNarration = {
+  intro: { say: "Black plays the solid …c6. Challenge d5 with c4, build the centre with d4, and press the half-open c-file in a balanced game.", sayShort: "c4 and d4, press the c-file" },
+  beats: [
+    { atMove: 12, say: "Challenge d5 with c4, grabbing queenside space.", sayShort: "c4, challenge d5", highlights: [_H('c4')] },
+    { atMove: 14, say: "Build the big centre with d4, claiming the dark squares behind your fianchetto.", sayShort: "d4, big centre", highlights: [_H('d4')] },
+    { atMove: 18, say: "Swing the rook to c1, pressuring the half-open c-file.", sayShort: "Rc1, press the c-file", highlights: [_H('c1')] },
+    { atMove: 22, say: "Trade on d5, simplifying into a balanced, easy-to-play position.", sayShort: "Nxd5, simplify, balanced", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-open-file', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V5_NC6_11: SublineNarration = {
+  intro: { say: "Black develops …Nc6 and pushes …a5. Castle, strike at d5 with c4, and reroute your knight to c4 to eye the weak dark squares in a balanced game.", sayShort: "Castle, c4, Nc4 to the holes" },
+  beats: [
+    { atMove: 12, say: "Castle into safety behind your fianchetto.", sayShort: "Castle, safe king", highlights: [_H('g1')] },
+    { atMove: 14, say: "Challenge d5 with c4, grabbing queenside space.", sayShort: "c4, challenge d5", highlights: [_H('c4')] },
+    { atMove: 16, say: "Take on d5, opening the c-file for your rooks.", sayShort: "cxd5, open the c-file", highlights: [_H('d5')] },
+    { atMove: 20, say: "Reroute the knight to c4, eyeing e5 and the weak dark squares; balanced.", sayShort: "Nc4, eye the holes", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-outpost', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V5_B6_11: SublineNarration = {
+  intro: { say: "Black fianchettoes with …b6. Challenge d5 with c4, grab the e5-outpost anchored by d4, and play the balanced double-fianchetto middlegame.", sayShort: "c4, e5-outpost, balanced" },
+  beats: [
+    { atMove: 12, say: "Challenge d5 with c4, grabbing queenside space.", sayShort: "c4, challenge d5", highlights: [_H('c4')] },
+    { atMove: 16, say: "Take on d5, opening the c-file and clarifying the centre.", sayShort: "cxd5, clarify the centre", highlights: [_H('d5')] },
+    { atMove: 18, say: "Plant the knight on e5, the dominant Bird's outpost.", sayShort: "Ne5, central outpost", highlights: [_H('e5')] },
+    { atMove: 20, say: "Anchor the outpost with d4, cementing your e5-knight; the game is balanced.", sayShort: "d4, anchor the outpost", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-center', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V5_NC6_9: SublineNarration = {
+  intro: { say: "Black develops …Nc6 early. Pin with Bb5, support the centre with d3, and head for the e5-outpost in a balanced game with comfortable play.", sayShort: "Bb5 pin, d3, e5-outpost" },
+  beats: [
+    { atMove: 10, say: "Pin with Bb5, aiming to trade Black's light bishop.", sayShort: "Bb5, pin the knight", highlights: [_H('b5')] },
+    { atMove: 12, say: "Support the e4-break with d3 and prepare the e5-outpost.", sayShort: "d3, prepare e4", highlights: [_H('e4')] },
+    { atMove: 20, say: "Plant the knight on e5, the dominant Bird's outpost.", sayShort: "Ne5, central outpost", highlights: [_H('e5')] },
+    { atMove: 22, say: "Reroute the knight via a3 toward c4 and the strong central squares; balanced.", sayShort: "Na3, head for c4", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V5_B6_13: SublineNarration = {
+  intro: { say: "Black delays with …c5 then …b6. Challenge d5 with c4, develop with tempo, and lift the queen toward the kingside in a balanced game.", sayShort: "c4, develop with tempo" },
+  beats: [
+    { atMove: 14, say: "Challenge d5 with c4, grabbing queenside space.", sayShort: "c4, challenge d5", highlights: [_H('c4')] },
+    { atMove: 16, say: "Take on d5, opening lines and clarifying the centre.", sayShort: "cxd5, clarify the centre", highlights: [_H('d5')] },
+    { atMove: 18, say: "Develop Nc3 with tempo on the d5-queen.", sayShort: "Nc3, gain a tempo", highlights: [_H('c3')] },
+    { atMove: 20, say: "Lift the queen to e1, heading for the kingside in a balanced game.", sayShort: "Qe1, head for the kingside", highlights: [_H('e1')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V5_D4_15: SublineNarration = {
+  intro: { say: "Black clamps with …d4. Trade on c6 to double Black's pawns, blockade with your knight on c4, and undermine the advanced pawn with d3 in a balanced game.", sayShort: "Trade, blockade c4, undermine d4" },
+  beats: [
+    { atMove: 16, say: "Trade on c6, doubling Black's pawns and opening lines.", sayShort: "Nxc6, double his pawns", highlights: [_H('c6')] },
+    { atMove: 18, say: "Reroute the knight to a3, heading for the strong c4-square.", sayShort: "Na3, head for c4", highlights: [_H('a3')] },
+    { atMove: 20, say: "Land the knight on c4, blockading and eyeing the weak dark squares.", sayShort: "Nc4, blockade", highlights: [_H('c4')] },
+    { atMove: 22, say: "Undermine with d3, challenging Black's advanced d4-pawn; balanced with chances.", sayShort: "d3, undermine d4", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-prophylaxis', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V6_NBD7_9: SublineNarration = {
+  intro: { say: "Black develops …Bf5 and …Nbd7. Develop calmly, then jump the knight to h4 to harass the f5-bishop and win the bishop pair in a balanced game.", sayShort: "Nh4 harasses the f5-bishop" },
+  beats: [
+    { atMove: 10, say: "Develop the bishop to e2, completing your setup.", sayShort: "Be2, develop", highlights: [_H('e2')] },
+    { atMove: 14, say: "Jump to h4, attacking Black's f5-bishop to win the bishop pair or chase it offside.", sayShort: "Nh4, harass the bishop", highlights: [_H('f5')] },
+    { atMove: 16, say: "Offer the trade with Bd3, challenging the f5-bishop on the key diagonal.", sayShort: "Bd3, challenge the bishop", highlights: [_H('f5')] },
+    { atMove: 22, say: "Strike with c4, challenging d5; balanced with comfortable play.", sayShort: "c4, challenge d5", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V6_C5_9: SublineNarration = {
+  intro: { say: "Black plays …c5. Trade off Black's light bishop with a check, grab the e5-outpost anchored by d3, and play the balanced middlegame with comfortable space.", sayShort: "Trade bishops, seize e5" },
+  beats: [
+    { atMove: 10, say: "Check with Bb5+ to trade Black's light bishop and ease your development.", sayShort: "Bb5+, trade light bishops", highlights: [_H('b5')] },
+    { atMove: 16, say: "Plant the knight on e5, the Bird's outpost dominating the centre.", sayShort: "Ne5, central outpost", highlights: [_H('e5')] },
+    { atMove: 18, say: "Support the e5-knight with d3, anchoring your outpost.", sayShort: "d3, anchor the outpost", highlights: [_H('e5')] },
+    { atMove: 22, say: "Lift the queen to f3, eyeing the kingside; balanced and comfortable.", sayShort: "Qf3, eye the kingside", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V6_H6_9: SublineNarration = {
+  intro: { say: "Black plays …h6. Develop Nc3, trade off Black's good f5-bishop, build the centre with d4, and press the half-open c-file in a balanced game.", sayShort: "Trade the bishop, d4, c-file" },
+  beats: [
+    { atMove: 10, say: "Develop Nc3, reinforcing your centre and eyeing d5.", sayShort: "Nc3, develop", highlights: [_H('c3')] },
+    { atMove: 12, say: "Offer the trade with Bd3, challenging Black's good f5-bishop.", sayShort: "Bd3, challenge the bishop", highlights: [_H('f5')] },
+    { atMove: 16, say: "Break with d4, claiming the centre and opening lines.", sayShort: "d4, claim the centre", highlights: [_H('d4')] },
+    { atMove: 20, say: "Swing the rook to c1, pressuring the half-open c-file; balanced.", sayShort: "Rc1, press the c-file", highlights: [_H('c1')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-open-file', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V6_BD6_9: SublineNarration = {
+  intro: { say: "Black develops …Bd6 to fight for e5. Develop, jump the knight to h4 to trade Black's f5-bishop and double his pawns, then press the d5-pawn in a balanced game.", sayShort: "Nh4xf5 doubles his pawns" },
+  beats: [
+    { atMove: 10, say: "Develop the bishop to e2, completing your setup.", sayShort: "Be2, develop", highlights: [_H('e2')] },
+    { atMove: 14, say: "Jump to h4, attacking the f5-bishop.", sayShort: "Nh4, attack the bishop", highlights: [_H('f5')] },
+    { atMove: 16, say: "Trade on f5, saddling Black with doubled, weak f-pawns.", sayShort: "Nxf5, double his pawns", highlights: [_H('f5')] },
+    { atMove: 18, say: "Reposition the bishop to f3, pressuring d5 and the long diagonal; balanced.", sayShort: "Bf3, press d5", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V6_NC6_9: SublineNarration = {
+  intro: { say: "Black develops …Nc6. Pin with Bb5, centralise your knight on d4, and snatch the c6-pawn — you win a pawn with the better structure.", sayShort: "Bb5 and Nd4 win the c6-pawn" },
+  beats: [
+    { atMove: 10, say: "Pin with Bb5, aiming to win Black's c6-knight or pawn.", sayShort: "Bb5, pin the knight", highlights: [_H('b5')] },
+    { atMove: 14, say: "Trade on c6, damaging Black's queenside pawns.", sayShort: "Bxc6, damage his pawns", highlights: [_H('c6')] },
+    { atMove: 16, say: "Snatch the c6-pawn with the knight, winning a pawn with the better structure.", sayShort: "Nxc6, win the pawn", highlights: [_H('c6')] },
+    { atMove: 22, say: "Castle, banking your extra pawn; you stand slightly better.", sayShort: "Castle, up a pawn", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V6_C6_9: SublineNarration = {
+  intro: { say: "Black plays …c6. Jump the knight to h4 to harass the f5-bishop, gain queenside space with b4, and trade on f5 to double Black's pawns in a balanced game.", sayShort: "Nh4, b4, doubled pawns" },
+  beats: [
+    { atMove: 10, say: "Jump to h4, attacking Black's f5-bishop.", sayShort: "Nh4, attack the bishop", highlights: [_H('f5')] },
+    { atMove: 14, say: "Gain queenside space with b4, hitting the c5-bishop.", sayShort: "b4, gain space", highlights: [_H('b4')] },
+    { atMove: 18, say: "Trade on f5, doubling Black's pawns and gaining the bishop pair.", sayShort: "Nxf5, double his pawns", highlights: [_H('f5')] },
+    { atMove: 22, say: "Recapture on e3, keeping a sound structure in a balanced game.", sayShort: "dxe3, sound structure", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-space', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V6_C5_13: SublineNarration = {
+  intro: { say: "Black develops …Be7 and plays …c5. Grab the e5-outpost, anchor it with d3, simplify with a trade, and maneuver comfortably in a balanced game.", sayShort: "e5-outpost, anchor, simplify" },
+  beats: [
+    { atMove: 14, say: "Plant the knight on e5, the dominant Bird's outpost.", sayShort: "Ne5, central outpost", highlights: [_H('e5')] },
+    { atMove: 16, say: "Support the e5-knight with d3, anchoring your outpost.", sayShort: "d3, anchor the outpost", highlights: [_H('e5')] },
+    { atMove: 18, say: "Trade on d7, simplifying while keeping your space.", sayShort: "Nxd7, simplify", highlights: [_H('d7')] },
+    { atMove: 20, say: "Reroute the knight to d2, heading for f3 or c4; balanced.", sayShort: "Nd2, reroute the knight", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V6_BC5_9: SublineNarration = {
+  intro: { say: "Black develops the bishop to c5. Castle, challenge d5 with c4, and expand on the kingside to harass Black's bishop in a balanced game with space.", sayShort: "Castle, c4, kingside space" },
+  beats: [
+    { atMove: 12, say: "Castle into safety behind your structure.", sayShort: "Castle, safe king", highlights: [_H('g1')] },
+    { atMove: 14, say: "Challenge d5 with c4, grabbing queenside space.", sayShort: "c4, challenge d5", highlights: [_H('c4')] },
+    { atMove: 20, say: "Expand with g4, gaining kingside space and harassing Black's bishop.", sayShort: "g4, kingside space", highlights: [_H('g4')] },
+    { atMove: 22, say: "Lever g5, clamping the kingside; balanced but you hold the space.", sayShort: "g5, clamp the kingside", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V6_BB4_9: SublineNarration = {
+  intro: { say: "Black pins with …Bb4. Restrain with h3, challenge the f5-bishop with Bd3, and centralise your knight on d4 for a balanced game with a fine outpost.", sayShort: "h3, challenge f5, Nd4 outpost" },
+  beats: [
+    { atMove: 10, say: "Restrain Black's bishop ideas with h3 before developing.", sayShort: "h3, restrain the bishop", highlights: [_H('h3')] },
+    { atMove: 12, say: "Challenge the f5-bishop with Bd3 on the key diagonal.", sayShort: "Bd3, challenge the bishop", highlights: [_H('f5')] },
+    { atMove: 16, say: "Trade on e4; Black's structure is loosened and the game stays balanced.", sayShort: "Bxe4, loosen his structure", highlights: [_H('e4')] },
+    { atMove: 18, say: "Centralise the knight on d4, a fine outpost eyeing f5 and c6.", sayShort: "Nd4, central outpost", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+const BD_V6_NC6_7: SublineNarration = {
+  intro: { say: "Black develops …Nc6 early. Open your bishop's diagonal with e3, gain queenside space with b4, and challenge d5 with c4 in a balanced double-fianchetto game.", sayShort: "e3, b4, c4 — balanced" },
+  beats: [
+    { atMove: 8, say: "Open the bishop's diagonal with e3, completing your double-fianchetto setup.", sayShort: "e3, open the diagonal", highlights: [_H('e3')] },
+    { atMove: 12, say: "Gain queenside space with b4, clamping Black's pawns.", sayShort: "b4, queenside space", highlights: [_H('b4')] },
+    { atMove: 18, say: "Strike with c4, challenging d5 and opening the queenside.", sayShort: "c4, challenge d5", highlights: [_H('c4')] },
+    { atMove: 22, say: "Recapture on d3, keeping a sound, balanced position.", sayShort: "Bxd3, sound and balanced", highlights: [_H('d3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-development', 'https://lichess.org/opening/Birds-Opening'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'slav-defence::6::e3@6': SL61,
   'slav-defence::5::e3@6': SL51,
@@ -8808,76 +9478,76 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'kings-indian-attack::7::Ng4@13': KA77,
   'kings-indian-attack::7::Bd6@9': KA80,
   // ── birds-opening ──
-  'birds-opening::0::c5@7': C107,
-  'birds-opening::0::c6@7': C107,
-  'birds-opening::0::c6@11': C107,
-  'birds-opening::0::c5@9': C107,
-  'birds-opening::0::a6@15': C107,
-  'birds-opening::0::Nh6@7': C107,
-  'birds-opening::0::e6@7': C107,
-  'birds-opening::0::b6@11': C107,
-  'birds-opening::0::c6@9': C107,
-  'birds-opening::0::Nc6@7': C107,
-  'birds-opening::1::f6@11': C108,
-  'birds-opening::1::Nc6@11': C108,
-  'birds-opening::1::Nge7@17': TBIRD,
-  'birds-opening::1::Qh4+@11': C108,
-  'birds-opening::1::Be6@17': C108,
-  'birds-opening::1::Nd7@11': C108,
-  'birds-opening::1::Ne7@11': C108,
-  'birds-opening::1::Bf5@15': C108,
-  'birds-opening::1::Be6@15': C108,
-  'birds-opening::1::Ne7@15': C108,
-  'birds-opening::2::c5@9': C109,
-  'birds-opening::2::Bg4@9': C109,
-  'birds-opening::2::Bg4@11': C109,
-  'birds-opening::2::c6@11': C109,
-  'birds-opening::2::Nc6@11': C109,
-  'birds-opening::2::b6@11': C109,
-  'birds-opening::2::Nc6@9': C109,
-  'birds-opening::2::b6@13': C109,
-  'birds-opening::2::Nbd7@11': C109,
-  'birds-opening::2::Bf5@15': C109,
-  'birds-opening::3::Be7@7': C109,
-  'birds-opening::3::Bd6@7': C109,
-  'birds-opening::3::Be7@11': C110,
-  'birds-opening::3::cxd4@9': C109,
-  'birds-opening::3::Nc6@7': C109,
-  'birds-opening::3::Ne4@7': C109,
-  'birds-opening::3::cxd4@11': C109,
-  'birds-opening::3::c4@11': C109,
-  'birds-opening::3::Nbd7@7': C109,
-  'birds-opening::3::Bb4+@7': C109,
-  'birds-opening::4::Nf6@5': C111,
-  'birds-opening::4::e6@9': C111,
-  'birds-opening::4::e3@5': C111,
-  'birds-opening::4::d6@9': C111,
-  'birds-opening::4::d5@5': C111,
-  'birds-opening::4::g6@7': C111,
-  'birds-opening::4::Nc6@7': C111,
-  'birds-opening::4::e6@7': C111,
-  'birds-opening::4::Nc6@9': C111,
-  'birds-opening::4::g6@9': C111,
-  'birds-opening::5::c5@9': C109,
-  'birds-opening::5::Bg4@9': C109,
-  'birds-opening::5::Bg4@11': C109,
-  'birds-opening::5::Qc7@15': C109,
-  'birds-opening::5::c6@11': C109,
-  'birds-opening::5::Nc6@11': C109,
-  'birds-opening::5::b6@11': C109,
-  'birds-opening::5::Nc6@9': C109,
-  'birds-opening::5::b6@13': C109,
-  'birds-opening::5::d4@15': C109,
-  'birds-opening::6::Nbd7@9': C109,
-  'birds-opening::6::c5@9': C109,
-  'birds-opening::6::h6@9': C109,
-  'birds-opening::6::Bd6@9': C109,
-  'birds-opening::6::Nc6@9': C109,
-  'birds-opening::6::c6@9': C109,
-  'birds-opening::6::c5@13': WBIRDC5,
-  'birds-opening::6::Bc5@9': C109,
-  'birds-opening::6::Bb4@9': C109,
-  'birds-opening::6::Nc6@7': C109,
+  'birds-opening::0::c5@7': BD_V0_C5_7,
+  'birds-opening::0::c6@7': BD_V0_C6_7,
+  'birds-opening::0::c6@11': BD_V0_C6_11,
+  'birds-opening::0::c5@9': BD_V0_C5_9,
+  'birds-opening::0::a6@15': BD_V0_A6_15,
+  'birds-opening::0::Nh6@7': BD_V0_NH6_7,
+  'birds-opening::0::e6@7': BD_V0_E6_7,
+  'birds-opening::0::b6@11': BD_V0_B6_11,
+  'birds-opening::0::c6@9': BD_V0_C6_9,
+  'birds-opening::0::Nc6@7': BD_V0_NC6_7,
+  'birds-opening::1::f6@11': BD_V1_F6_11,
+  'birds-opening::1::Nc6@11': BD_V1_NC6_11,
+  'birds-opening::1::Nge7@17': BD_V1_NGE7_17,
+  'birds-opening::1::Qh4+@11': BD_V1_QH4_11,
+  'birds-opening::1::Be6@17': BD_V1_BE6_17,
+  'birds-opening::1::Nd7@11': BD_V1_ND7_11,
+  'birds-opening::1::Ne7@11': BD_V1_NE7_11,
+  'birds-opening::1::Bf5@15': BD_V1_BF5_15,
+  'birds-opening::1::Be6@15': BD_V1_BE6_15,
+  'birds-opening::1::Ne7@15': BD_V1_NE7_15,
+  'birds-opening::2::c5@9': BD_V2_C5_9,
+  'birds-opening::2::Bg4@9': BD_V2_BG4_9,
+  'birds-opening::2::Bg4@11': BD_V2_BG4_11,
+  'birds-opening::2::c6@11': BD_V2_C6_11,
+  'birds-opening::2::Nc6@11': BD_V2_NC6_11,
+  'birds-opening::2::b6@11': BD_V2_B6_11,
+  'birds-opening::2::Nc6@9': BD_V2_NC6_9,
+  'birds-opening::2::b6@13': BD_V2_B6_13,
+  'birds-opening::2::Nbd7@11': BD_V2_NBD7_11,
+  'birds-opening::2::Bf5@15': BD_V2_BF5_15,
+  'birds-opening::3::Be7@7': BD_V3_BE7_7,
+  'birds-opening::3::Bd6@7': BD_V3_BD6_7,
+  'birds-opening::3::Be7@11': BD_V3_BE7_11,
+  'birds-opening::3::cxd4@9': BD_V3_CXD4_9,
+  'birds-opening::3::Nc6@7': BD_V3_NC6_7,
+  'birds-opening::3::Ne4@7': BD_V3_NE4_7,
+  'birds-opening::3::cxd4@11': BD_V3_CXD4_11,
+  'birds-opening::3::c4@11': BD_V3_C4_11,
+  'birds-opening::3::Nbd7@7': BD_V3_NBD7_7,
+  'birds-opening::3::Bb4+@7': BD_V3_BB4_7,
+  'birds-opening::4::Nf6@5': BD_V4_NF6_5,
+  'birds-opening::4::e6@9': BD_V4_E6_9,
+  'birds-opening::4::e3@5': BD_V4_E3_5,
+  'birds-opening::4::d6@9': BD_V4_D6_9,
+  'birds-opening::4::d5@5': BD_V4_D5_5,
+  'birds-opening::4::g6@7': BD_V4_G6_7,
+  'birds-opening::4::Nc6@7': BD_V4_NC6_7,
+  'birds-opening::4::e6@7': BD_V4_E6_7,
+  'birds-opening::4::Nc6@9': BD_V4_NC6_9,
+  'birds-opening::4::g6@9': BD_V4_G6_9,
+  'birds-opening::5::c5@9': BD_V5_C5_9,
+  'birds-opening::5::Bg4@9': BD_V5_BG4_9,
+  'birds-opening::5::Bg4@11': BD_V5_BG4_11,
+  'birds-opening::5::Qc7@15': BD_V5_QC7_15,
+  'birds-opening::5::c6@11': BD_V5_C6_11,
+  'birds-opening::5::Nc6@11': BD_V5_NC6_11,
+  'birds-opening::5::b6@11': BD_V5_B6_11,
+  'birds-opening::5::Nc6@9': BD_V5_NC6_9,
+  'birds-opening::5::b6@13': BD_V5_B6_13,
+  'birds-opening::5::d4@15': BD_V5_D4_15,
+  'birds-opening::6::Nbd7@9': BD_V6_NBD7_9,
+  'birds-opening::6::c5@9': BD_V6_C5_9,
+  'birds-opening::6::h6@9': BD_V6_H6_9,
+  'birds-opening::6::Bd6@9': BD_V6_BD6_9,
+  'birds-opening::6::Nc6@9': BD_V6_NC6_9,
+  'birds-opening::6::c6@9': BD_V6_C6_9,
+  'birds-opening::6::c5@13': BD_V6_C5_13,
+  'birds-opening::6::Bc5@9': BD_V6_BC5_9,
+  'birds-opening::6::Bb4@9': BD_V6_BB4_9,
+  'birds-opening::6::Nc6@7': BD_V6_NC6_7,
   // ── albin-countergambit ──
   'albin-countergambit::0::Nbd2@14': C112,
   'albin-countergambit::0::a3@14': C112,
