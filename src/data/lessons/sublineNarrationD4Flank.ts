@@ -221,20 +221,8 @@ const C122: SublineNarration = {
   sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
 };
 // anti-englund :: qe7_main
-const C123: SublineNarration = {
-  intro: { say: "Black plays the Englund tricks — …Qe7 hitting your extra e5-pawn, hoping you grab greedily or misplace a piece. The refutation is calm development: Nf3 and Nc3 defend e5, you simply finish developing, and the extra pawn stays yours. Don't get cute — return nothing you don't have to, keep the king safe, and the material decides.", sayShort: "…Qe7 — develop calmly, keep the e5-pawn." },
-  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
-};
 // anti-englund :: bg5_d6
-const C124: SublineNarration = {
-  intro: { say: "Black tries the …d6 and …f6 break with Bg5 ideas to pry the e5-pawn loose. Hold firm: keep pieces defending e5, meet …f6 with the bishop retreat or a timely return that leaves you ahead, and complete development. The Englund's whole hope is your carelessness — play solid, principled chess and the gambit simply fails.", sayShort: "…d6/…f6 — hold e5, develop, stay ahead." },
-  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
-};
 // anti-englund :: consolidate
-const C125: SublineNarration = {
-  intro: { say: "Black scrambles for activity to justify the gambit pawn. Your job is the least glamorous and most effective: consolidate. Develop every piece to a sound square, tuck the king away, and neutralise the open lines. Once you're fully developed with the king safe, the extra pawn is simply an extra pawn — convert it in the endgame.", sayShort: "Consolidate — king safe, then the pawn tells." },
-  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
-};
 // anti-kid-saemisch :: saemisch_c5
 const C126: SublineNarration = {
   intro: { say: "Black hits with …c5 against your Sämisch, a Benoni-flavoured counter to the f3-e4 centre. Choose your structure: d5 to close and clamp with space, or dxc5 to open with a development lead. Either way your big centre and the f3-prop give you a comfortable game — the Sämisch is built to meet exactly this central challenge from a position of strength.", sayShort: "…c5 — d5 closes or dxc5 opens." },
@@ -321,20 +309,8 @@ const C142: SublineNarration = {
   sources: ['book:dutch-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
 };
 // anti-qgd-exchange :: central_e4
-const C143: SublineNarration = {
-  intro: { say: "In this Exchange QGD you can favour the central plan over the minority attack: e3, Bd3, Nge2 and f3, preparing the e4 break that frees your pieces and opens lines toward Black's king. The choice between minority attack and central e4 is yours — here the central break gives the more aggressive, double-edged game with real attacking chances.", sayShort: "Exchange QGD — prepare the central e4 break." },
-  sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
-};
 // anti-qgd-exchange :: qxd5
-const C144: SublineNarration = {
-  intro: { say: "Black recaptures with …Qxd5 instead of the e-pawn, avoiding the Carlsbad. Develop with tempo: Nf3, Nc3 hitting the queen, e4 grabbing the centre, and you emerge with a clear space advantage and the more active pieces. Black dodged the minority-attack structure but handed you the centre and a lead in development — press it.", sayShort: "…Qxd5 — Nc3 and e4 grab centre." },
-  sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
-};
 // anti-qgd-exchange :: minority
-const C145: SublineNarration = {
-  intro: { say: "The Exchange QGD with the Carlsbad structure — your textbook plan is the minority attack. Push b4-b5 to chew at Black's c6-pawn; when it falls, the half-open c-file and the backward c-pawn become permanent targets while your own centre stays sound. Develop Bg5, e3, Bd3, Nge2, castle, and roll the queenside pawns. A model strategic squeeze.", sayShort: "Exchange QGD — minority attack b4-b5." },
-  sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
-};
 // anti-budapest :: ne4
 // anti-budapest :: bf4_main
 // anti-london-black :: c4_clamp
@@ -393,13 +369,6 @@ const EABEN: SublineNarration = {
   sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
 };
 // DEEP EAENG :: anti-englund::1::Qe7@5
-const EAENG: SublineNarration = {
-  intro: { say: "Black's trying Englund tricks with …Qe7, eyeing your extra e5-pawn. Don't get greedy — the clean refutation is to develop, give the pawn back on your terms with e4, and walk away with the centre and a lead in development. Let structure and time do the work.", sayShort: "Anti-Englund — return it, take centre." },
-  beats: [
-    { atMove: 8, say: "e4 — hand the pawn back and seize the centre instead. See the trade you're making: Black spent queen moves just to win a pawn, while you've built a broad front and developed faster. Against a shaky gambit, that's the deal you want every time.", sayShort: "e4 — seize the centre, lead develops.", highlights: [_H('e4', KEY)] },
-  ],
-  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
-};
 // DEEP EANIM :: anti-nimzo-qc2::1::Qxd5@9
 const EANIM: SublineNarration = {
   intro: { say: "With Qc2 you've dodged the doubled pawns and pocketed the bishop pair — that's your long-term trump. Now Black's …Qxd5 leaves his queen sitting exposed in the centre, and that's your cue: develop with tempo and get ready to play e4, hitting the queen while your two bishops promise a lasting edge.", sayShort: "Qc2 — gain tempo on the queen." },
@@ -425,13 +394,6 @@ const EADUT: SublineNarration = {
   sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
 };
 // DEEP EAQGD :: anti-qgd-exchange::1::c6@9
-const EAQGD: SublineNarration = {
-  intro: { say: "The Carlsbad, and your textbook plan is the minority attack. Push b4-b5 to gnaw at Black's c6-pawn — and here's why it works: when that pawn falls, you're left with a permanent target on the half-open c-file while your own centre stays rock-solid.", sayShort: "Carlsbad — launch the minority attack." },
-  beats: [
-    { atMove: 10, say: "e3 — tidy up your setup before the real plan kicks in: b4-b5 against c6. Keep your eye on that c6-pawn (highlighted) — it's the heart of the minority attack, the single target your whole queenside advance is aimed at.", sayShort: "e3 — prepare b4-b5 vs c6.", highlights: [_H('c6', KEY), _H('d5', SOFT)] },
-  ],
-  sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
-};
 // DEEP EABUD :: anti-budapest::1::Nc6@7 | anti-budapest::2::Nc6@7
 // DEEP EALON :: anti-london-black::1::c3@6
 // DEEP EACAT :: anti-catalan-black::1::Nf3@8
@@ -15257,6 +15219,408 @@ const ALONW_19: SublineNarration = {
   sources: ['concept:pos-space', 'https://lichess.org/opening/London-System'],
 };
 
+const AENGW_0: SublineNarration = {
+  intro: { say: "You've accepted the Englund gambit and stand a clean pawn to the good. When Black trades on f3, recapture with the queen and build naturally: Bf4 develops with tempo, h3 makes luft, and you complete development with the extra pawn. Castle and you're simply better — convert the material at leisure.", sayShort: "Anti-Englund: hold the pawn, develop" },
+  beats: [
+    { atMove: 10, say: "Recapture Qxf3, the queen well-placed and the extra pawn secure.", sayShort: "Qxf3, hold the pawn", highlights: [_H('f3')] },
+    { atMove: 12, say: "Develop Bf4 with tempo, eyeing the c7-square.", sayShort: "Bf4, develop with tempo", highlights: [_H('f4')] },
+    { atMove: 18, say: "Centralise Rd1, the rook controlling the open file.", sayShort: "Rd1, control the file", highlights: [_H('d1')] },
+    { atMove: 22, say: "Castle O-O; you're a clean pawn up — convert at leisure.", sayShort: "O-O, a pawn up", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-center', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const AENGW_1: SublineNarration = {
+  intro: { say: "Black lashes out with …Nxe4, but it's a miscalculation. Develop Bf4 first, take the knight, and then the key zwischenzug Bxc7! grabs a second pawn. Offer the queen trade to defuse counterplay, and after the dust settles you're two pawns up with the bishop pair. A technically winning ending.", sayShort: "Anti-Englund: Bxc7 nabs a second pawn" },
+  beats: [
+    { atMove: 10, say: "Develop Bf4, putting the bishop on its best diagonal first.", sayShort: "Bf4, best diagonal", highlights: [_H('f4')] },
+    { atMove: 14, say: "Snatch Bxc7! The in-between capture wins a second pawn.", sayShort: "Bxc7, a second pawn", highlights: [_H('c7')] },
+    { atMove: 20, say: "Castle O-O-O, connecting the rooks with your material edge.", sayShort: "O-O-O, connect the rooks", highlights: [_H('c1')] },
+    { atMove: 22, say: "Reposition Bd6, dominating — two pawns up, technically won.", sayShort: "Bd6, dominate and win", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-center', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const AENGW_2: SublineNarration = {
+  intro: { say: "Black tries to round up the e5-pawn with …d6, but a tempo-gaining Nd5 throws a wrench in. Centralise the queen on d4, recapture on f3 to keep your structure, and when Black offers the queen trade, take it — then Bxb6 collects the pawn back with interest. You emerge a pawn up in a clean endgame.", sayShort: "Anti-Englund: Nd5 jump, Bxb6 collects" },
+  beats: [
+    { atMove: 10, say: "Leap Nd5! Hitting the queen and disrupting Black's coordination.", sayShort: "Nd5, hit the queen", highlights: [_H('d5')] },
+    { atMove: 12, say: "Centralise Qd4, dominating the long diagonal and the centre.", sayShort: "Qd4, dominate the centre", highlights: [_H('d4')] },
+    { atMove: 20, say: "Trade Qxb6, simplifying into a winning endgame.", sayShort: "Qxb6, simplify the win", highlights: [_H('b6')] },
+    { atMove: 22, say: "Capture Bxb6; you're a pawn up in a clean ending.", sayShort: "Bxb6, a pawn up", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-center', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const AENGW_3: SublineNarration = {
+  intro: { say: "Black retreats the knight to c6 to regroup, but you keep the initiative. Pin with Bb5, castle, and when chased retreat to a4 keeping the pin alive. The knight jump Nd5 dominates the centre, b4 gains space, and Bb2 lines up on the long diagonal at Black's king. A pawn up with a raging initiative.", sayShort: "Anti-Englund: Bb5 pin, Nd5 dominates" },
+  beats: [
+    { atMove: 10, say: "Pin Bb5, training the bishop on the c6-knight.", sayShort: "Bb5, pin the knight", highlights: [_H('b5')] },
+    { atMove: 16, say: "Leap Nd5! The knight seizes the dominant central outpost.", sayShort: "Nd5, central outpost", highlights: [_H('d5')] },
+    { atMove: 18, say: "Expand b4, grabbing space and rolling the queenside.", sayShort: "b4, grab space", highlights: [_H('b4')] },
+    { atMove: 22, say: "Fianchetto Bb2, raking the long diagonal at Black's king. Winning.", sayShort: "Bb2, rake the diagonal", highlights: [_H('b2')] },
+  ],
+  sources: ['concept:pos-center', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const AENGW_4: SublineNarration = {
+  intro: { say: "Black plays the patient …c6 and …Nf6. Prophylactic a3 stops …Bb4, and Qd4 centralises powerfully. After the trade on f3, the half-open g-file is a bonus — Rg1 points at g7. Trade off Black's activity on e4, develop the bishop to d3, and you keep the extra pawn with a pleasant initiative.", sayShort: "Anti-Englund: Qd4 centre, Rg1 pressure" },
+  beats: [
+    { atMove: 12, say: "Centralise Qd4, the queen dominating from the centre.", sayShort: "Qd4, dominate the centre", highlights: [_H('d4')] },
+    { atMove: 14, say: "Recapture gxf3, opening the g-file for your rook.", sayShort: "gxf3, open the g-file", highlights: [_H('f3')] },
+    { atMove: 18, say: "Capture Nxe4, trading off Black's active piece.", sayShort: "Nxe4, trade the activity", highlights: [_H('e4')] },
+    { atMove: 22, say: "Lift Qe3, keeping the extra pawn and the initiative.", sayShort: "Qe3, keep the edge", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-center', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const AENGW_5: SublineNarration = {
+  intro: { say: "Black regroups with …c6 and …d6, trying to free his game. Develop Be3, and when the knight hops to g4, the bishop sidesteps to g5 pinning. Kick the knight back with h3, then Nd4 grips the centre. Coordinate your forces with Qd2 — you're comfortably a pawn up with the more harmonious position.", sayShort: "Anti-Englund: Bg5 pin, Nd4 grip" },
+  beats: [
+    { atMove: 12, say: "Develop Be3, supporting the centre and eyeing the queenside.", sayShort: "Be3, support the centre", highlights: [_H('e3')] },
+    { atMove: 14, say: "Sidestep Bg5, pinning the f6-knight to the queen.", sayShort: "Bg5, pin the knight", highlights: [_H('g5')] },
+    { atMove: 18, say: "Plant Nd4, gripping the central squares.", sayShort: "Nd4, grip the centre", highlights: [_H('d4')] },
+    { atMove: 20, say: "Coordinate Qd2, connecting your forces. A pawn up and better.", sayShort: "Qd2, connect the forces", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pos-center', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const AENGW_6: SublineNarration = {
+  intro: { say: "Black strikes the centre with …d5. Meet it head-on: Qd4 centralises, and after the trades on f3 and e4 you recapture with fxe4, rebuilding a broad pawn front. Develop Be3, and f4 supports the centre while gaining space. Castle long — your pawn mass and the extra pawn give a clear advantage.", sayShort: "Anti-Englund: Qd4, rebuild the centre" },
+  beats: [
+    { atMove: 12, say: "Centralise Qd4, the queen commanding the board.", sayShort: "Qd4, command the centre", highlights: [_H('d4')] },
+    { atMove: 16, say: "Develop Be3, reinforcing your central control.", sayShort: "Be3, reinforce the centre", highlights: [_H('e3')] },
+    { atMove: 18, say: "Recapture fxe4, rebuilding a broad pawn front.", sayShort: "fxe4, rebuild the front", highlights: [_H('e4')] },
+    { atMove: 22, say: "Castle O-O-O; your pawn mass and extra pawn decide.", sayShort: "O-O-O, the pawns decide", highlights: [_H('c1')] },
+  ],
+  sources: ['concept:pos-center', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const AENGW_7: SublineNarration = {
+  intro: { say: "Black trades on f3 and challenges with …d5. Recapture with the queen, develop Be3, and exchange on e4. The simplifying sequence Nxf6+ followed by the queen trade leaves Black with a shattered, doubled f-pawn — and you a clean pawn up. Castle long and grind down the structural ruin.", sayShort: "Anti-Englund: trade to a won ending" },
+  beats: [
+    { atMove: 12, say: "Recapture Qxf3, keeping the extra pawn and a fine position.", sayShort: "Qxf3, keep the pawn", highlights: [_H('f3')] },
+    { atMove: 16, say: "Capture Nxe4, simplifying toward the favourable ending.", sayShort: "Nxe4, simplify favourably", highlights: [_H('e4')] },
+    { atMove: 20, say: "Trade Qxf6, wrecking Black's kingside pawns.", sayShort: "Qxf6, wreck the pawns", highlights: [_H('f6')] },
+    { atMove: 22, say: "Castle O-O-O; a pawn up versus a ruined structure. Winning.", sayShort: "O-O-O, grind it down", highlights: [_H('c1')] },
+  ],
+  sources: ['concept:pos-center', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const AENGW_8: SublineNarration = {
+  intro: { say: "Black fianchettoes with …g6. Simplify favourably: trade on e5, then develop with tempo — Qf3 and Bc4 eye the weak f7-square. Offer the dark-bishop trade with Bf4 to ease your defence, recapture with the queen, and tuck the bishop to b3. You keep the extra pawn with the safer position and an eye on f7.", sayShort: "Anti-Englund: trade on e5, target f7" },
+  beats: [
+    { atMove: 12, say: "Trade Nxe5, simplifying with the extra pawn intact.", sayShort: "Nxe5, simplify ahead", highlights: [_H('e5')] },
+    { atMove: 14, say: "Develop Qf3, the queen eyeing the sensitive f7-square.", sayShort: "Qf3, eye f7", highlights: [_H('f3')] },
+    { atMove: 16, say: "Post Bc4, adding a second attacker to f7.", sayShort: "Bc4, pressure f7", highlights: [_H('c4')] },
+    { atMove: 20, say: "Recapture Qxf4, keeping the safer position and the extra pawn.", sayShort: "Qxf4, keep it safe", highlights: [_H('f4')] },
+  ],
+  sources: ['concept:pos-center', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const AENGW_9: SublineNarration = {
+  intro: { say: "Black plays the slow …h6. Trade on e5 and then dominate with the bishop: Be3 and Bd4 plant it on the powerful central diagonal, hitting g7. Gain space with f4, develop the queen to f3, and make luft with h3. You're a healthy pawn up with a commanding centre and the bishop pointed at Black's king.", sayShort: "Anti-Englund: Bd4 commands the centre" },
+  beats: [
+    { atMove: 12, say: "Trade Nxe5, keeping your extra pawn and clarifying.", sayShort: "Nxe5, clarify ahead", highlights: [_H('e5')] },
+    { atMove: 16, say: "Plant Bd4, the bishop dominating the long diagonal at g7.", sayShort: "Bd4, dominate the diagonal", highlights: [_H('d4')] },
+    { atMove: 18, say: "Advance f4, gaining space and supporting your centre.", sayShort: "f4, gain space", highlights: [_H('f4')] },
+    { atMove: 20, say: "Develop Qf3, the queen joining the kingside build-up.", sayShort: "Qf3, join the build-up", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-center', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const AENGW_10: SublineNarration = {
+  intro: { say: "Black challenges the e5-pawn with …d6 and …f6. Pin first with Bg5, then capture exf6 — keeping the extra pawn and damaging Black's structure. Build a big centre with e4, develop Nc3 and Bf4, and complete development harmoniously. Castled and a pawn up with the better centre, you're firmly in control.", sayShort: "Anti-Englund: exf6 keeps the pawn" },
+  beats: [
+    { atMove: 8, say: "Capture exf6, keeping the extra pawn and opening lines.", sayShort: "exf6, keep the pawn", highlights: [_H('f6')] },
+    { atMove: 10, say: "Build e4, staking out a broad centre.", sayShort: "e4, build the centre", highlights: [_H('e4')] },
+    { atMove: 14, say: "Develop Bf4, the bishop active on its best diagonal.", sayShort: "Bf4, active bishop", highlights: [_H('f4')] },
+    { atMove: 22, say: "Castle O-O; a pawn up with the better centre. In control.", sayShort: "O-O, in control", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pos-center', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const AENGW_11: SublineNarration = {
+  intro: { say: "Black offers a bishop trade with …Be7. Take it, simplifying while you're up material, then grab the pawn with exd6 — Black's recapture leaves him with a weak, isolated d-pawn. Develop modestly with e3 and Be2, castle, and target the d6-weakness. A clean pawn up with a structural target to nurse.", sayShort: "Anti-Englund: exd6, nurse the weakness" },
+  beats: [
+    { atMove: 8, say: "Trade Bxe7, simplifying while ahead in material.", sayShort: "Bxe7, simplify ahead", highlights: [_H('e7')] },
+    { atMove: 10, say: "Capture exd6, saddling Black with a weak isolated pawn.", sayShort: "exd6, create the weakness", highlights: [_H('d6')] },
+    { atMove: 16, say: "Castle O-O, completing development safely.", sayShort: "O-O, complete safely", highlights: [_H('g1')] },
+    { atMove: 20, say: "Probe Qa3, pressuring the d6-weakness. A clean pawn up.", sayShort: "Qa3, pressure d6", highlights: [_H('a3')] },
+  ],
+  sources: ['concept:pos-center', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const AENGW_12: SublineNarration = {
+  intro: { say: "Black develops …Nge7, but exd6 wins the pawn outright and hands Black a backward d-pawn. Build the big centre with e4, develop Be3 and Nc3, and pin with Bb5. When chased, keep the bishop active via a4-b3. Plant the knight on d4 — you're up a pawn with a dominant centre and clearly winning.", sayShort: "Anti-Englund: exd6 wins, big centre" },
+  beats: [
+    { atMove: 8, say: "Capture exd6, winning the pawn and weakening Black's structure.", sayShort: "exd6, win the pawn", highlights: [_H('d6')] },
+    { atMove: 10, say: "Build e4, claiming a broad pawn centre.", sayShort: "e4, claim the centre", highlights: [_H('e4')] },
+    { atMove: 16, say: "Pin Bb5, pressuring Black's development.", sayShort: "Bb5, pin and pressure", highlights: [_H('b5')] },
+    { atMove: 22, say: "Plant Nd4; up a pawn with a dominant centre. Winning.", sayShort: "Nd4, dominant and winning", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-center', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const AENGW_13: SublineNarration = {
+  intro: { say: "Black overpresses with …c5 and …c4, but it leaves his king stuck in the centre. Develop with a3 and b3, then the knight bombshell Nd5 forks. After the recapture, chase the queen with b4 and b5, gaining tempi — and the killer Nc7+ forks king and rook. Black's position collapses; you're completely winning.", sayShort: "Anti-Englund: Nd5 fork, Nc7+ wins" },
+  beats: [
+    { atMove: 6, say: "Develop Nc3, completing your queenside development.", sayShort: "Nc3, develop", highlights: [_H('c3')] },
+    { atMove: 8, say: "Build e4, taking the centre with your extra pawn.", sayShort: "e4, take the centre", highlights: [_H('e4')] },
+    { atMove: 14, say: "Leap Nd5! Forking and disrupting Black's whole set-up.", sayShort: "Nd5, the fork", highlights: [_H('d5')] },
+    { atMove: 22, say: "Crash Nc7+! Forking king and rook — Black collapses.", sayShort: "Nc7+, the killer fork", highlights: [_H('c7')] },
+  ],
+  sources: ['concept:pos-center', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const AENGW_14: SublineNarration = {
+  intro: { say: "Black plays the awkward …Qd7 and lunges …h6, …g5. Retreat the bishop to safety on f4 then g3, sidestepping the pawns that only weaken Black's kingside. Capture exd6 to bank your pawn, and when Black grabs b2, trap the bishop's escape with Rb1 and Nc4. You keep your edge with Black's king badly exposed.", sayShort: "Anti-Englund: sidestep, exd6 banks it" },
+  beats: [
+    { atMove: 10, say: "Retreat Bf4, keeping the bishop safe as …g5 weakens Black.", sayShort: "Bf4, keep it safe", highlights: [_H('f4')] },
+    { atMove: 14, say: "Capture exd6, banking the extra pawn.", sayShort: "exd6, bank the pawn", highlights: [_H('d6')] },
+    { atMove: 18, say: "Cage Rb1, hemming in Black's adventurous bishop.", sayShort: "Rb1, cage the bishop", highlights: [_H('b1')] },
+    { atMove: 20, say: "Hop Nc4, attacking the bishop with Black's king exposed.", sayShort: "Nc4, attack and press", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-center', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const AENGW_15: SublineNarration = {
+  intro: { say: "Black returns the pawn to trade queens with …dxe5. Oblige — Qxd7+ swaps queens and equalises the material. Build the centre with e4, develop your bishops to active squares, and trade off Black's good bishop with Bxc5. The dust settles roughly level; play the resulting middlegame accurately for the small initiative.", sayShort: "Anti-Englund: swap queens, play on level" },
+  beats: [
+    { atMove: 10, say: "Trade Qxd7+, swapping queens and returning to material balance.", sayShort: "Qxd7+, swap the queens", highlights: [_H('d7')] },
+    { atMove: 12, say: "Build e4, claiming central space.", sayShort: "e4, claim the centre", highlights: [_H('e4')] },
+    { atMove: 18, say: "Develop Be3, eyeing the c5-bishop for a trade.", sayShort: "Be3, eye the trade", highlights: [_H('e3')] },
+    { atMove: 22, say: "Pin Bb5; the position is level — play on for the initiative.", sayShort: "Bb5, level and playable", highlights: [_H('b5')] },
+  ],
+  sources: ['concept:pos-center', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const AENGW_16: SublineNarration = {
+  intro: { say: "Black tries an early …Nge7. Develop Bf4 with tempo, and exd6 wins the pawn cleanly. Retreat the bishop to g3, develop Nc3, and trade off Black's active dark-squared bishop with Bxd6, leaving him a weak d-pawn. Coordinate with Qd2 and castle long — a pawn up with a target on d6, you're well on top.", sayShort: "Anti-Englund: exd6, trade and target d6" },
+  beats: [
+    { atMove: 6, say: "Develop Bf4 with tempo, eyeing the d6-break.", sayShort: "Bf4, develop with tempo", highlights: [_H('f4')] },
+    { atMove: 8, say: "Capture exd6, winning the pawn cleanly.", sayShort: "exd6, win the pawn", highlights: [_H('d6')] },
+    { atMove: 14, say: "Trade Bxd6, leaving Black a weak isolated d-pawn.", sayShort: "Bxd6, create the weakness", highlights: [_H('d6')] },
+    { atMove: 22, say: "Castle O-O-O; a pawn up with a target on d6. On top.", sayShort: "O-O-O, well on top", highlights: [_H('c1')] },
+  ],
+  sources: ['concept:pos-center', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const AENGW_17: SublineNarration = {
+  intro: { say: "Black's …f6 and wild …g5, …h5 are a reckless overextension. Retreat the bishop calmly to g3, then strike: exf6 and the stunning f7+! drag the king out. Be5 sets up Qd5+ forking king and knight, and the queen feast — Qxe5+, Qxg5+ — nets piece and pawns. Black's position is in ruins; you're crushing.", sayShort: "Anti-Englund: f7+ and Qd5+ crush" },
+  beats: [
+    { atMove: 6, say: "Develop Bf4, then watch Black overextend with …g5.", sayShort: "Bf4, let him overreach", highlights: [_H('f4')] },
+    { atMove: 12, say: "Strike f7+! Dragging Black's king into the open.", sayShort: "f7+, drag the king out", highlights: [_H('f7')] },
+    { atMove: 16, say: "Fork Qd5+! Hitting the king and the e5-knight at once.", sayShort: "Qd5+, the royal fork", highlights: [_H('d5')] },
+    { atMove: 18, say: "Feast Qxe5+, winning material as Black's position collapses.", sayShort: "Qxe5+, win material", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-center', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const AENGW_18: SublineNarration = {
+  intro: { say: "Black's …Qd7-f5 wandering wastes time. Cash in with exd6, keeping your extra pawn, and retreat the bishop to h4 to maintain the pin. Develop Nc3, solidify with e3, and gain queenside space with b4, harassing Black's roving queen. You stay a pawn up with the better-organised position.", sayShort: "Anti-Englund: exd6, punish the queen tour" },
+  beats: [
+    { atMove: 10, say: "Capture exd6, banking the pawn while Black's queen roams.", sayShort: "exd6, bank the pawn", highlights: [_H('d6')] },
+    { atMove: 14, say: "Develop Nc3, bringing the last minor piece into play.", sayShort: "Nc3, develop the knight", highlights: [_H('c3')] },
+    { atMove: 18, say: "Expand b4, gaining space and chasing Black's queen.", sayShort: "b4, chase the queen", highlights: [_H('b4')] },
+    { atMove: 22, say: "Retreat Bg3, keeping the bishop active. A pawn up and better.", sayShort: "Bg3, stay active", highlights: [_H('g3')] },
+  ],
+  sources: ['concept:pos-center', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const AENGW_19: SublineNarration = {
+  intro: { say: "Black regains the pawn with …Nxe5 and trades dark bishops. No matter — your lead in development is the asset. Develop Nc3, coordinate with Qd2, and after the trade keep the initiative rolling: Nb5 eyes c7 and d6, and Nfd4 centralises, hitting c6 and e6. With the more active pieces, you press for the edge.", sayShort: "Anti-Englund: lead in development presses" },
+  beats: [
+    { atMove: 10, say: "Develop Nc3, getting ahead in development.", sayShort: "Nc3, develop ahead", highlights: [_H('c3')] },
+    { atMove: 14, say: "Recapture Qxg5, the queen active after the bishop trade.", sayShort: "Qxg5, active queen", highlights: [_H('g5')] },
+    { atMove: 18, say: "Hop Nb5, eyeing the c7- and d6-squares.", sayShort: "Nb5, eye c7 and d6", highlights: [_H('b5')] },
+    { atMove: 22, say: "Centralise Nfd4, hitting c6 and e6 — you hold the initiative.", sayShort: "Nfd4, hit and press", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-center', 'https://lichess.org/opening/Englund-Gambit'],
+};
+
+const AQGDW_0: SublineNarration = {
+  intro: { say: "In the Exchange QGD you've got the better central potential. When Black develops the bishop to f5, prepare the big central break: Bf4, f3, and then e4! — blasting open the centre against Black's slightly passive set-up. With the pawn recaptured on e4 and the bishop swinging to c4, your space and initiative give a clear pull.", sayShort: "QGD Exchange: the e4 central break" },
+  beats: [
+    { atMove: 8, say: "Develop Bf4, the bishop eyeing c7 and supporting the centre.", sayShort: "Bf4, eye c7", highlights: [_H('f4')] },
+    { atMove: 12, say: "Gain space h4, fixing Black's kingside before the break.", sayShort: "h4, fix the kingside", highlights: [_H('h4')] },
+    { atMove: 14, say: "Break e4! Blasting open the centre against Black's passive pieces.", sayShort: "e4, blast it open", highlights: [_H('e4')] },
+    { atMove: 18, say: "Develop Bc4 with tempo, your initiative rolling.", sayShort: "Bc4, initiative rolls", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'https://lichess.org/opening/Queens-Gambit-Declined-Exchange-Variation'],
+};
+const AQGDW_1: SublineNarration = {
+  intro: { say: "Black recaptures with the queen — so gain time hitting it. Develop Nf3 and Nc3, kicking the queen around, then complete development. Qb3 and Rd1 pile pressure on d5 and the queenside, and the trade on c6 leaves Black with doubled, weak pawns. You hold a comfortable, lasting edge against the structural damage.", sayShort: "QGD Exchange: gain tempo, target c6" },
+  beats: [
+    { atMove: 6, say: "Develop Nf3, eyeing the centre and gaining time on the queen.", sayShort: "Nf3, gain time", highlights: [_H('f3')] },
+    { atMove: 8, say: "Bring Nc3, hitting the queen again with tempo.", sayShort: "Nc3, hit the queen", highlights: [_H('c3')] },
+    { atMove: 16, say: "Lift Qb3, pressuring d5 and the queenside.", sayShort: "Qb3, pile the pressure", highlights: [_H('b3')] },
+    { atMove: 22, say: "Trade Nxc6, saddling Black with doubled, weak pawns.", sayShort: "Nxc6, double the pawns", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'https://lichess.org/opening/Queens-Gambit-Declined-Exchange-Variation'],
+};
+const AQGDW_2: SublineNarration = {
+  intro: { say: "Black pins with …Bb4, but you turn it to your advantage. Develop Nf3 and Bg5, then the check Qa4+ forces a concession before Bxf6 hands you the bishop pair and damages Black's kingside. Recapture on c3 to build a broad pawn centre. With two bishops and the better structure, you press for the full point.", sayShort: "QGD Exchange: Qa4+, win the bishop pair" },
+  beats: [
+    { atMove: 8, say: "Develop Nf3, completing the kingside before the pin bites.", sayShort: "Nf3, complete development", highlights: [_H('f3')] },
+    { atMove: 10, say: "Pin Bg5, training the bishop on the f6-knight.", sayShort: "Bg5, pin the knight", highlights: [_H('g5')] },
+    { atMove: 12, say: "Check Qa4+! Forcing a concession and eyeing the queenside.", sayShort: "Qa4+, force a concession", highlights: [_H('a4')] },
+    { atMove: 22, say: "Recapture bxc3, building a broad centre with the bishop pair.", sayShort: "bxc3, broad centre", highlights: [_H('c3')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'https://lichess.org/opening/Queens-Gambit-Declined-Exchange-Variation'],
+};
+const AQGDW_3: SublineNarration = {
+  intro: { say: "Black plays …c5, accepting an isolated d-pawn after the trades. Switch plans: fianchetto with g3 and Bg2 to bear down on d5, castle, and post the dark bishop on b2 along the long diagonal. The knight reroutes via a4 to blockade, and you play against the IQP. A textbook positional edge against the lone d-pawn.", sayShort: "QGD Exchange: play against the IQP" },
+  beats: [
+    { atMove: 8, say: "Develop Nf3, putting pressure on the centre.", sayShort: "Nf3, pressure the centre", highlights: [_H('f3')] },
+    { atMove: 10, say: "Fianchetto g3, preparing Bg2 to bear down on d5.", sayShort: "g3, target d5", highlights: [_H('g3')] },
+    { atMove: 18, say: "Post Bb2, the bishop raking the long diagonal.", sayShort: "Bb2, rake the diagonal", highlights: [_H('b2')] },
+    { atMove: 22, say: "Recapture Nxd4, blockading in front of the isolated d-pawn.", sayShort: "Nxd4, blockade the IQP", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'https://lichess.org/opening/Queens-Gambit-Declined-Exchange-Variation'],
+};
+const AQGDW_4: SublineNarration = {
+  intro: { say: "Black develops actively with …Be6 and …Bd6. Trade the dark-squared bishops with Bxd6 — it eases your game and clears the way for the minority attack. Bring the rook to c1 behind the future b-pawn push, develop Bd3, and castle. With the c-file primed for b4-b5, you steer toward the classic Carlsbad squeeze.", sayShort: "QGD Exchange: trade, prep the minority attack" },
+  beats: [
+    { atMove: 8, say: "Develop Nf3, a flexible developing move.", sayShort: "Nf3, develop flexibly", highlights: [_H('f3')] },
+    { atMove: 10, say: "Post Bf4, offering to trade the dark-squared bishops.", sayShort: "Bf4, offer the trade", highlights: [_H('f4')] },
+    { atMove: 16, say: "Swing Rc1, the rook backing the coming b4-b5 push.", sayShort: "Rc1, back the push", highlights: [_H('c1')] },
+    { atMove: 22, say: "Make luft h3, completing your set-up for the minority attack.", sayShort: "h3, complete the set-up", highlights: [_H('h3')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'https://lichess.org/opening/Queens-Gambit-Declined-Exchange-Variation'],
+};
+const AQGDW_5: SublineNarration = {
+  intro: { say: "Black tries the tricky …Nf6, but just take the pawn: dxe6 wins material cleanly. Develop naturally, then pin with Bb5 and support it with Qa4. The key is Bxc6, doubling Black's pawns — then dxc5 grabs a second pawn while you're at it. You emerge a clean pawn up with a superior structure.", sayShort: "QGD Exchange: dxe6 wins the pawn" },
+  beats: [
+    { atMove: 6, say: "Capture dxe6! Winning the pawn cleanly against …Nf6.", sayShort: "dxe6, win the pawn", highlights: [_H('e6')] },
+    { atMove: 12, say: "Pin Bb5, pressuring the c6-knight.", sayShort: "Bb5, pin the knight", highlights: [_H('b5')] },
+    { atMove: 18, say: "Trade Bxc6, doubling and weakening Black's queenside pawns.", sayShort: "Bxc6, double the pawns", highlights: [_H('c6')] },
+    { atMove: 20, say: "Grab dxc5; a clean pawn up with the better structure.", sayShort: "dxc5, a pawn up", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'https://lichess.org/opening/Queens-Gambit-Declined-Exchange-Variation'],
+};
+const AQGDW_6: SublineNarration = {
+  intro: { say: "A standard Carlsbad position. Develop Bf4 and trade the dark bishops with Bxd6 to smooth your play. Then execute the classic plan: Rc1 behind the b-pawn, Bd3 eyeing h7, castle, and Qb3 pressuring d5 and b7. Everything points toward the minority attack b4-b5, fracturing Black's queenside. A lasting structural edge.", sayShort: "QGD Exchange: classic Carlsbad squeeze" },
+  beats: [
+    { atMove: 8, say: "Develop Nf3, a natural, flexible move.", sayShort: "Nf3, develop", highlights: [_H('f3')] },
+    { atMove: 10, say: "Post Bf4, preparing to trade off the dark bishops.", sayShort: "Bf4, prep the trade", highlights: [_H('f4')] },
+    { atMove: 16, say: "Swing Rc1, the rook ready behind the b-pawn advance.", sayShort: "Rc1, ready the b-pawn", highlights: [_H('c1')] },
+    { atMove: 22, say: "Lift Qb3, hitting d5 and b7 — the minority attack looms.", sayShort: "Qb3, the squeeze looms", highlights: [_H('b3')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'https://lichess.org/opening/Queens-Gambit-Declined-Exchange-Variation'],
+};
+const AQGDW_7: SublineNarration = {
+  intro: { say: "The mainline Carlsbad with Bg5. Maintain the pin, develop Bd3 toward Black's king, and route the knight via e2 — the signature plan, keeping the c3-pawn free for the eventual b4-b5 minority attack. Trade the dark bishops onto g3, make luft, and castle. You're set for the queenside squeeze with a comfortable, durable edge.", sayShort: "QGD Exchange: Nge2, set up b4-b5" },
+  beats: [
+    { atMove: 10, say: "Develop e3, solidifying the centre.", sayShort: "e3, solidify", highlights: [_H('e3')] },
+    { atMove: 12, say: "Post Bd3, the bishop aiming at Black's kingside.", sayShort: "Bd3, aim at the king", highlights: [_H('d3')] },
+    { atMove: 16, say: "Route Nge2, the knight headed to support b4-b5.", sayShort: "Nge2, support the push", highlights: [_H('e2')] },
+    { atMove: 22, say: "Castle O-O; set for the minority attack with a durable edge.", sayShort: "O-O, set for the squeeze", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'https://lichess.org/opening/Queens-Gambit-Declined-Exchange-Variation'],
+};
+const AQGDW_8: SublineNarration = {
+  intro: { say: "Black frees himself with …Ne4, offering trades. Keep the pin with Bh4, develop Bd3, and when the knight jumps to e4, trade everything off — Bxe7 then Bxe4. After …dxe4, Black's e4-pawn becomes a long-term target and his d5-square is yours. Reroute the knight via e2; the position is roughly balanced with a nagging edge.", sayShort: "QGD Exchange: trade, target the e4-pawn" },
+  beats: [
+    { atMove: 12, say: "Maintain Bh4, keeping the pin on the knight.", sayShort: "Bh4, keep the pin", highlights: [_H('h4')] },
+    { atMove: 16, say: "Trade Bxe7, exchanging the dark-squared bishops.", sayShort: "Bxe7, trade the bishops", highlights: [_H('e7')] },
+    { atMove: 18, say: "Capture Bxe4, leaving Black an exposed e4-pawn to target.", sayShort: "Bxe4, create the target", highlights: [_H('e4')] },
+    { atMove: 20, say: "Reroute Nge2, the knight eyeing the d5-hole. A nagging edge.", sayShort: "Nge2, eye d5", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'https://lichess.org/opening/Queens-Gambit-Declined-Exchange-Variation'],
+};
+const AQGDW_9: SublineNarration = {
+  intro: { say: "Black develops the bishop to f5, but you have a concrete idea: Qf3 pressures both f6 and d5. The sequence Bxf6 and the queen trade Qxf6 forces …gxf6, shattering Black's kingside into doubled, isolated f-pawns. Fianchetto with g3 and route the knight to e2. You head into a favourable endgame against the pawn wreckage.", sayShort: "QGD Exchange: Qf3, wreck the kingside" },
+  beats: [
+    { atMove: 12, say: "Lift Qf3! Pressuring f6 and d5 at once.", sayShort: "Qf3, double attack", highlights: [_H('f3')] },
+    { atMove: 14, say: "Capture Bxf6, forcing the trade that ruins Black's pawns.", sayShort: "Bxf6, ruin the pawns", highlights: [_H('f6')] },
+    { atMove: 16, say: "Trade Qxf6, forcing …gxf6 with doubled f-pawns.", sayShort: "Qxf6, double the f-pawns", highlights: [_H('f6')] },
+    { atMove: 22, say: "Advance h4, fixing the kingside weaknesses. A better ending.", sayShort: "h4, fix the weakness", highlights: [_H('h4')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'https://lichess.org/opening/Queens-Gambit-Declined-Exchange-Variation'],
+};
+const AQGDW_10: SublineNarration = {
+  intro: { say: "In the Exchange QGD you've got the better central potential. When Black develops the bishop to f5, prepare the big central break: Bf4, f3, and then e4! — blasting open the centre against Black's slightly passive set-up. With the pawn recaptured on e4 and the bishop swinging to c4, your space and initiative give a clear pull.", sayShort: "QGD Exchange: the e4 central break" },
+  beats: [
+    { atMove: 8, say: "Develop Bf4, the bishop eyeing c7 and supporting the centre.", sayShort: "Bf4, eye c7", highlights: [_H('f4')] },
+    { atMove: 12, say: "Gain space h4, fixing Black's kingside before the break.", sayShort: "h4, fix the kingside", highlights: [_H('h4')] },
+    { atMove: 14, say: "Break e4! Blasting open the centre against Black's passive pieces.", sayShort: "e4, blast it open", highlights: [_H('e4')] },
+    { atMove: 18, say: "Develop Bc4 with tempo, your initiative rolling.", sayShort: "Bc4, initiative rolls", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'https://lichess.org/opening/Queens-Gambit-Declined-Exchange-Variation'],
+};
+const AQGDW_11: SublineNarration = {
+  intro: { say: "Black recaptures with the queen — so gain time hitting it. Develop Nf3 and Nc3, kicking the queen around, then complete development. Qb3 and Rd1 pile pressure on d5 and the queenside, and the trade on c6 leaves Black with doubled, weak pawns. You hold a comfortable, lasting edge against the structural damage.", sayShort: "QGD Exchange: gain tempo, target c6" },
+  beats: [
+    { atMove: 6, say: "Develop Nf3, eyeing the centre and gaining time on the queen.", sayShort: "Nf3, gain time", highlights: [_H('f3')] },
+    { atMove: 8, say: "Bring Nc3, hitting the queen again with tempo.", sayShort: "Nc3, hit the queen", highlights: [_H('c3')] },
+    { atMove: 16, say: "Lift Qb3, pressuring d5 and the queenside.", sayShort: "Qb3, pile the pressure", highlights: [_H('b3')] },
+    { atMove: 22, say: "Trade Nxc6, saddling Black with doubled, weak pawns.", sayShort: "Nxc6, double the pawns", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'https://lichess.org/opening/Queens-Gambit-Declined-Exchange-Variation'],
+};
+const AQGDW_12: SublineNarration = {
+  intro: { say: "Black pins with …Bb4, but you turn it to your advantage. Develop Nf3 and Bg5, then the check Qa4+ forces a concession before Bxf6 hands you the bishop pair and damages Black's kingside. Recapture on c3 to build a broad pawn centre. With two bishops and the better structure, you press for the full point.", sayShort: "QGD Exchange: Qa4+, win the bishop pair" },
+  beats: [
+    { atMove: 8, say: "Develop Nf3, completing the kingside before the pin bites.", sayShort: "Nf3, complete development", highlights: [_H('f3')] },
+    { atMove: 10, say: "Pin Bg5, training the bishop on the f6-knight.", sayShort: "Bg5, pin the knight", highlights: [_H('g5')] },
+    { atMove: 12, say: "Check Qa4+! Forcing a concession and eyeing the queenside.", sayShort: "Qa4+, force a concession", highlights: [_H('a4')] },
+    { atMove: 22, say: "Recapture bxc3, building a broad centre with the bishop pair.", sayShort: "bxc3, broad centre", highlights: [_H('c3')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'https://lichess.org/opening/Queens-Gambit-Declined-Exchange-Variation'],
+};
+const AQGDW_13: SublineNarration = {
+  intro: { say: "Black plays …c5, accepting an isolated d-pawn after the trades. Switch plans: fianchetto with g3 and Bg2 to bear down on d5, castle, and post the dark bishop on b2 along the long diagonal. The knight reroutes via a4 to blockade, and you play against the IQP. A textbook positional edge against the lone d-pawn.", sayShort: "QGD Exchange: play against the IQP" },
+  beats: [
+    { atMove: 8, say: "Develop Nf3, putting pressure on the centre.", sayShort: "Nf3, pressure the centre", highlights: [_H('f3')] },
+    { atMove: 10, say: "Fianchetto g3, preparing Bg2 to bear down on d5.", sayShort: "g3, target d5", highlights: [_H('g3')] },
+    { atMove: 18, say: "Post Bb2, the bishop raking the long diagonal.", sayShort: "Bb2, rake the diagonal", highlights: [_H('b2')] },
+    { atMove: 22, say: "Recapture Nxd4, blockading in front of the isolated d-pawn.", sayShort: "Nxd4, blockade the IQP", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'https://lichess.org/opening/Queens-Gambit-Declined-Exchange-Variation'],
+};
+const AQGDW_14: SublineNarration = {
+  intro: { say: "Black develops actively with …Be6 and …Bd6. Trade the dark-squared bishops with Bxd6 — it eases your game and clears the way for the minority attack. Bring the rook to c1 behind the future b-pawn push, develop Bd3, and castle. With the c-file primed for b4-b5, you steer toward the classic Carlsbad squeeze.", sayShort: "QGD Exchange: trade, prep the minority attack" },
+  beats: [
+    { atMove: 8, say: "Develop Nf3, a flexible developing move.", sayShort: "Nf3, develop flexibly", highlights: [_H('f3')] },
+    { atMove: 10, say: "Post Bf4, offering to trade the dark-squared bishops.", sayShort: "Bf4, offer the trade", highlights: [_H('f4')] },
+    { atMove: 16, say: "Swing Rc1, the rook backing the coming b4-b5 push.", sayShort: "Rc1, back the push", highlights: [_H('c1')] },
+    { atMove: 22, say: "Make luft h3, completing your set-up for the minority attack.", sayShort: "h3, complete the set-up", highlights: [_H('h3')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'https://lichess.org/opening/Queens-Gambit-Declined-Exchange-Variation'],
+};
+const AQGDW_15: SublineNarration = {
+  intro: { say: "Black tries the tricky …Nf6, but just take the pawn: dxe6 wins material cleanly. Develop naturally, then pin with Bb5 and support it with Qa4. The key is Bxc6, doubling Black's pawns — then dxc5 grabs a second pawn while you're at it. You emerge a clean pawn up with a superior structure.", sayShort: "QGD Exchange: dxe6 wins the pawn" },
+  beats: [
+    { atMove: 6, say: "Capture dxe6! Winning the pawn cleanly against …Nf6.", sayShort: "dxe6, win the pawn", highlights: [_H('e6')] },
+    { atMove: 12, say: "Pin Bb5, pressuring the c6-knight.", sayShort: "Bb5, pin the knight", highlights: [_H('b5')] },
+    { atMove: 18, say: "Trade Bxc6, doubling and weakening Black's queenside pawns.", sayShort: "Bxc6, double the pawns", highlights: [_H('c6')] },
+    { atMove: 20, say: "Grab dxc5; a clean pawn up with the better structure.", sayShort: "dxc5, a pawn up", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'https://lichess.org/opening/Queens-Gambit-Declined-Exchange-Variation'],
+};
+const AQGDW_16: SublineNarration = {
+  intro: { say: "A standard Carlsbad position. Develop Bf4 and trade the dark bishops with Bxd6 to smooth your play. Then execute the classic plan: Rc1 behind the b-pawn, Bd3 eyeing h7, castle, and Qb3 pressuring d5 and b7. Everything points toward the minority attack b4-b5, fracturing Black's queenside. A lasting structural edge.", sayShort: "QGD Exchange: classic Carlsbad squeeze" },
+  beats: [
+    { atMove: 8, say: "Develop Nf3, a natural, flexible move.", sayShort: "Nf3, develop", highlights: [_H('f3')] },
+    { atMove: 10, say: "Post Bf4, preparing to trade off the dark bishops.", sayShort: "Bf4, prep the trade", highlights: [_H('f4')] },
+    { atMove: 16, say: "Swing Rc1, the rook ready behind the b-pawn advance.", sayShort: "Rc1, ready the b-pawn", highlights: [_H('c1')] },
+    { atMove: 22, say: "Lift Qb3, hitting d5 and b7 — the minority attack looms.", sayShort: "Qb3, the squeeze looms", highlights: [_H('b3')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'https://lichess.org/opening/Queens-Gambit-Declined-Exchange-Variation'],
+};
+const AQGDW_17: SublineNarration = {
+  intro: { say: "A flexible Carlsbad set-up. Develop Bd3 toward the kingside and make luft with h3. Reposition the bishop to f4 to trade the dark-squared bishops, then recapture with Qxf4 — the queen eyeing Black's kingside and the c7-square. Complete development with Nf3. You hold the structural trumps with active pieces and the minority-attack plan in reserve.", sayShort: "QGD Exchange: Bf4 trade, active queen" },
+  beats: [
+    { atMove: 12, say: "Post Bd3, the bishop pointing at Black's king.", sayShort: "Bd3, point at the king", highlights: [_H('d3')] },
+    { atMove: 16, say: "Reposition Bf4, offering the dark-bishop trade.", sayShort: "Bf4, offer the trade", highlights: [_H('f4')] },
+    { atMove: 18, say: "Lift Qf3, supporting the trade and eyeing the kingside.", sayShort: "Qf3, eye the kingside", highlights: [_H('f3')] },
+    { atMove: 22, say: "Develop Nf3; the structural trumps and minority plan are yours.", sayShort: "Nf3, the trumps are yours", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'https://lichess.org/opening/Queens-Gambit-Declined-Exchange-Variation'],
+};
+const AQGDW_18: SublineNarration = {
+  intro: { say: "Black pins with …Bb4 and strikes …c5. Develop Bd3, then route the knight via e2 so that after …cxd4 you recapture Nxd4, centralising. When Black trades on c3, recapture with bxc3, building a broad pawn front. Castle, and your two bishops plus the central pawn mass give a pleasant, lasting initiative.", sayShort: "QGD Exchange: Nxd4 centre, bishop pair" },
+  beats: [
+    { atMove: 10, say: "Solidify e3, supporting the centre.", sayShort: "e3, support the centre", highlights: [_H('e3')] },
+    { atMove: 12, say: "Develop Bd3, aiming the bishop at the kingside.", sayShort: "Bd3, aim at the king", highlights: [_H('d3')] },
+    { atMove: 16, say: "Recapture Nxd4, centralising the knight powerfully.", sayShort: "Nxd4, centralise", highlights: [_H('d4')] },
+    { atMove: 22, say: "Castle O-O; two bishops and a broad centre give the edge.", sayShort: "O-O, two bishops press", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'https://lichess.org/opening/Queens-Gambit-Declined-Exchange-Variation'],
+};
+const AQGDW_19: SublineNarration = {
+  intro: { say: "Black sets up solidly with …Nbd7. Develop Bd3 and reposition the bishop to f4 to build the powerful battery: Bd3 and Qc2 both train on h7. Black's …g6 to defend creates dark-square holes. Make luft with h3, develop Nf3, and castle. The battery toward Black's king plus the structural edge leaves you clearly better.", sayShort: "QGD Exchange: Bd3-Qc2 battery at h7" },
+  beats: [
+    { atMove: 10, say: "Solidify e3, preparing the bishop's development.", sayShort: "e3, prepare development", highlights: [_H('e3')] },
+    { atMove: 12, say: "Post Bd3, the first piece of the battery aimed at h7.", sayShort: "Bd3, aim at h7", highlights: [_H('d3')] },
+    { atMove: 18, say: "Lift Qc2, completing the battery — h7 is under fire.", sayShort: "Qc2, complete the battery", highlights: [_H('c2')] },
+    { atMove: 22, say: "Castle O-O; the battery and structure leave you clearly better.", sayShort: "O-O, clearly better", highlights: [_H('g1')] },
+  ],
+  sources: ['concept:pawn-minority-attack', 'https://lichess.org/opening/Queens-Gambit-Declined-Exchange-Variation'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'catalan-opening::6::Bb4+@5': CATR_60,
   'catalan-opening::5::c6@9': CATR_50,
@@ -16908,26 +17272,26 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-benoni-push::3::g6@9': C122,
   'anti-benoni-push::3::Nbd7@11': C122,
   // ── anti-englund ──
-  'anti-englund::0::Nxf3+@9': C123,
-  'anti-englund::0::Nf6@9': C123,
-  'anti-englund::0::d6@9': C124,
-  'anti-englund::0::Nc6@9': C123,
-  'anti-englund::0::Nf6@11': C123,
-  'anti-englund::0::d6@11': C124,
-  'anti-englund::0::d5@11': C123,
-  'anti-englund::0::Nxf3+@11': C123,
-  'anti-englund::0::g6@11': C123,
-  'anti-englund::0::h6@11': C123,
-  'anti-englund::1::f6@7': C124,
-  'anti-englund::1::Be7@7': C124,
-  'anti-englund::1::Nge7@7': C124,
-  'anti-englund::1::Qe7@5': EAENG,
-  'anti-englund::1::h6@9': C124,
-  'anti-englund::1::dxe5@9': C124,
-  'anti-englund::1::Nge7@5': C125,
-  'anti-englund::1::f6@5': C124,
-  'anti-englund::1::Qf5@9': C124,
-  'anti-englund::1::Nxe5@9': C124,
+  'anti-englund::0::Nxf3+@9': AENGW_0,
+  'anti-englund::0::Nf6@9': AENGW_1,
+  'anti-englund::0::d6@9': AENGW_2,
+  'anti-englund::0::Nc6@9': AENGW_3,
+  'anti-englund::0::Nf6@11': AENGW_4,
+  'anti-englund::0::d6@11': AENGW_5,
+  'anti-englund::0::d5@11': AENGW_6,
+  'anti-englund::0::Nxf3+@11': AENGW_7,
+  'anti-englund::0::g6@11': AENGW_8,
+  'anti-englund::0::h6@11': AENGW_9,
+  'anti-englund::1::f6@7': AENGW_10,
+  'anti-englund::1::Be7@7': AENGW_11,
+  'anti-englund::1::Nge7@7': AENGW_12,
+  'anti-englund::1::Qe7@5': AENGW_13,
+  'anti-englund::1::h6@9': AENGW_14,
+  'anti-englund::1::dxe5@9': AENGW_15,
+  'anti-englund::1::Nge7@5': AENGW_16,
+  'anti-englund::1::f6@5': AENGW_17,
+  'anti-englund::1::Qf5@9': AENGW_18,
+  'anti-englund::1::Nxe5@9': AENGW_19,
   // ── anti-kid-saemisch ──
   'anti-kid-saemisch::0::d5@5': C126,
   'anti-kid-saemisch::0::O-O@7': C127,
@@ -17049,26 +17413,26 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-dutch-staunton::2::exf3@9': C141,
   'anti-dutch-staunton::2::e3@9': C141,
   // ── anti-qgd-exchange ──
-  'anti-qgd-exchange::0::c6@7': C143,
-  'anti-qgd-exchange::0::Qxd5@5': C144,
-  'anti-qgd-exchange::0::Bb4@7': C143,
-  'anti-qgd-exchange::0::c5@7': C143,
-  'anti-qgd-exchange::0::Be6@7': C145,
-  'anti-qgd-exchange::0::Nf6@5': C145,
-  'anti-qgd-exchange::0::Nc6@7': C145,
-  'anti-qgd-exchange::0::Be7@9': C145,
-  'anti-qgd-exchange::0::h6@11': C143,
-  'anti-qgd-exchange::0::Bf5@11': C145,
-  'anti-qgd-exchange::1::c6@7': C143,
-  'anti-qgd-exchange::1::Qxd5@5': C144,
-  'anti-qgd-exchange::1::Bb4@7': C143,
-  'anti-qgd-exchange::1::c5@7': C143,
-  'anti-qgd-exchange::1::Be6@7': C145,
-  'anti-qgd-exchange::1::Nf6@5': C145,
-  'anti-qgd-exchange::1::Nc6@7': C145,
-  'anti-qgd-exchange::1::c6@9': EAQGD,
-  'anti-qgd-exchange::1::Bb4@9': C145,
-  'anti-qgd-exchange::1::Nbd7@9': C145,
+  'anti-qgd-exchange::0::c6@7': AQGDW_0,
+  'anti-qgd-exchange::0::Qxd5@5': AQGDW_1,
+  'anti-qgd-exchange::0::Bb4@7': AQGDW_2,
+  'anti-qgd-exchange::0::c5@7': AQGDW_3,
+  'anti-qgd-exchange::0::Be6@7': AQGDW_4,
+  'anti-qgd-exchange::0::Nf6@5': AQGDW_5,
+  'anti-qgd-exchange::0::Nc6@7': AQGDW_6,
+  'anti-qgd-exchange::0::Be7@9': AQGDW_7,
+  'anti-qgd-exchange::0::h6@11': AQGDW_8,
+  'anti-qgd-exchange::0::Bf5@11': AQGDW_9,
+  'anti-qgd-exchange::1::c6@7': AQGDW_10,
+  'anti-qgd-exchange::1::Qxd5@5': AQGDW_11,
+  'anti-qgd-exchange::1::Bb4@7': AQGDW_12,
+  'anti-qgd-exchange::1::c5@7': AQGDW_13,
+  'anti-qgd-exchange::1::Be6@7': AQGDW_14,
+  'anti-qgd-exchange::1::Nf6@5': AQGDW_15,
+  'anti-qgd-exchange::1::Nc6@7': AQGDW_16,
+  'anti-qgd-exchange::1::c6@9': AQGDW_17,
+  'anti-qgd-exchange::1::Bb4@9': AQGDW_18,
+  'anti-qgd-exchange::1::Nbd7@9': AQGDW_19,
   // ── anti-budapest ──
   'anti-budapest::0::Ne4@5': ABUW2_0,
   'anti-budapest::0::g5@7': ABUW2_1,
