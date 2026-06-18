@@ -2350,15 +2350,36 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'kings-gambit::1::Bg4@9': KG_FISCHER,
   'kings-gambit::1::Qf6@11': KG_FISCHER,
   'kings-gambit::1::Bh6@9': KG_FISCHER,
-  'kings-gambit::2::Bh6@11': KG_MUZIO,
-  'kings-gambit::2::Bc5+@11': KG_MUZIO,
-  'kings-gambit::2::Bd6@11': KG_MUZIO,
-  'kings-gambit::2::d6@11': KG_MUZIO,
+  'kings-gambit::2::Bh6@11': { ...KG_MUZIO, beats: [
+    { atMove: 11, say: "…Bh6 defends f4, but you're down a piece for a raging attack — keep it flowing. d4 builds the centre and rips open lines toward Black's stranded king.", sayShort: "…Bh6 — build with d4.", highlights: [H('d4', KEY), H('f7', SOFT)] },
+    { atMove: 16, say: "e5 clamps the centre and shuts Black's queen out of the defence; with Nc3 and the rooks swinging in, the assault on f7 and the bare king rolls on.", sayShort: "e5 — clamp, storm the king.", highlights: [H('e5', KEY), H('f7', ATK)] },
+  ] },
+  'kings-gambit::2::Bc5+@11': { ...KG_MUZIO, beats: [
+    { atMove: 11, say: "…Bc5+ checks, but Kh1 simply sidesteps and your attack flows on undisturbed — a piece down for a ferocious initiative.", sayShort: "…Bc5+ — Kh1, attack flows.", highlights: [H('f7', KEY)] },
+    { atMove: 14, say: "e5 hits the f6-queen and grabs the centre; Nc3 and Nb5 then pile into c7 and d6 while the bishop and queen rake f7. Black is overrun.", sayShort: "e5 — hit the queen, pile in.", highlights: [H('e5', KEY), H('f7', ATK)] },
+  ] },
+  'kings-gambit::2::Bd6@11': { ...KG_MUZIO, beats: [
+    { atMove: 11, say: "…Bd6 props f4, but you've sacrificed for the initiative — drive it home. d4 seizes the centre and opens the position for your raking pieces.", sayShort: "…Bd6 — build with d4.", highlights: [H('d4', KEY), H('f7', SOFT)] },
+    { atMove: 14, say: "e5 clamps and kicks the d6-bishop; Nc3 and Bxf4 reclaim the pawn while every piece points at f7 and Black's uncastled king. The Muzio storm crashes on.", sayShort: "e5 — clamp, storm f7.", highlights: [H('e5', KEY), H('f7', ATK)] },
+  ] },
+  'kings-gambit::2::d6@11': { ...KG_MUZIO, beats: [
+    { atMove: 11, say: "…d6 tries to free the c8-bishop, but it's too slow against the Muzio fire. Qxf4 regains a pawn and keeps the queen trained on f7.", sayShort: "…d6 — Qxf4, keep the heat.", highlights: [H('f4', KEY), H('f7', SOFT)] },
+    { atMove: 14, say: "Bxf7+! the bishop crashes through; the king is hauled into the open, and Nc3, e5 and the rooks finish the hunt. The Muzio delivers.", sayShort: "Bxf7+ — crash through!", arrows: [A('c4', 'f7')], highlights: [H('f7', ATK)] },
+  ] },
   'kings-gambit::2::d5@11': KG_MUZIO,
   'kings-gambit::2::Qe7@11': KG_MUZIO,
-  'kings-gambit::2::Qg5@11': KG_MUZIO,
-  'kings-gambit::2::Nf6@11': KG_MUZIO,
-  'kings-gambit::2::Nc6@11': KG_MUZIO,
+  'kings-gambit::2::Qg5@11': { ...KG_MUZIO, beats: [
+    { atMove: 11, say: "…Qg5 offers to trade queens and defend f4 — but you keep the initiative. d3 and Bxf4 round up the pawn and pry the position open.", sayShort: "…Qg5 — d3 and Bxf4.", highlights: [H('f4', KEY)] },
+    { atMove: 16, say: "Qxf4 trades into a position where your lead in development and Black's airy king give full value for the piece; Nc3 and Nd5 keep the pressure on. Press the open lines.", sayShort: "Qxf4 — press the open lines.", highlights: [H('f4', KEY), H('f7', SOFT)] },
+  ] },
+  'kings-gambit::2::Nf6@11': { ...KG_MUZIO, beats: [
+    { atMove: 11, say: "…Nf6 develops and blocks the queen's gaze at f7, but it costs time you can exploit. d4 builds the centre and opens lines for the attack.", sayShort: "…Nf6 — build with d4.", highlights: [H('d4', KEY), H('f7', SOFT)] },
+    { atMove: 16, say: "Qxf4 recovers the pawn and reloads on the f-file; with Nc3 and the rooks joining, you keep a roaring initiative for the piece against Black's exposed king.", sayShort: "Qxf4 — reload the f-file.", highlights: [H('f4', KEY), H('f7', ATK)] },
+  ] },
+  'kings-gambit::2::Nc6@11': { ...KG_MUZIO, beats: [
+    { atMove: 11, say: "…Nc6 develops, but does nothing for the kingside. Qxf4 grabs the pawn back and keeps the queen blazing toward f7.", sayShort: "…Nc6 — answer Qxf4.", highlights: [H('f4', KEY), H('f7', SOFT)] },
+    { atMove: 14, say: "Nc3 and Nxd5 throw more wood on the fire, the knight leaping into the centre while queen and bishop rake f7. Black's king has nowhere to hide.", sayShort: "Nc3 — pile on, hunt the king.", highlights: [H('f7', ATK)] },
+  ] },
   'kings-gambit::2::Qf5@13': KG_MUZIO,
   'kings-gambit::3::Bc5@9': { ...KG_FALKBEER, beats: [{ atMove: 9, say: "Bc5 develops actively in the Falkbeer — but you've calmly taken on e4 and stand a pawn to the good. Finish with Nf3, Be2 and O-O; once you untangle, the extra pawn and Black's thin compensation tell.", sayShort: "Bc5 — develop, a clean pawn up.", highlights: [H('e4', KEY)] }] },
   'kings-gambit::3::O-O@15': { ...KG_FALKBEER, beats: [{ atMove: 15, say: "O-O — Black castles in the Falkbeer main line. You've untangled with Nf3, Qe2 and Nc3; the position is balanced and open, your pieces as active as his. Complete development, contest the centre, and outplay from the better-coordinated side.", sayShort: "O-O — develop, contest the centre.", highlights: [H('e4', KEY)] }] },
