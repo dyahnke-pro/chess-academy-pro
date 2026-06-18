@@ -31,25 +31,9 @@ void SOFT;
 // qgd :: semitarr
 // qgd :: ragozin
 // qga :: main
-const C12: SublineNarration = {
-  intro: { say: "Queen's Gambit Accepted — you grabbed the pawn on c4 not to keep it, but to free your game. Your plan is clean: return the pawn, strike the centre with …c5 and …a6 followed by …b5 to gain queenside space, and get the light bishop active outside the chain. White owns a little centre; you own easy development and no weaknesses.", sayShort: "QGA — …c5, then …a6 and …b5." },
-  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
-};
 // qga :: big_centre
-const C13: SublineNarration = {
-  intro: { say: "White has built the broad e4-d4 centre against your QGA. The critical test, and your method is undermining: hit with …c5 and …b5, pile on d4 with …Nc6 and the b7-bishop, and watch the overextended pawns become targets. Trade White's space for your piece activity and the centre cracks.", sayShort: "Undermine the big centre with …c5 and …b5." },
-  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
-};
 // qga :: bg4
-const C14: SublineNarration = {
-  intro: { say: "You've developed the light bishop to g4 before …e6, the modern QGA antidote that solves the problem piece. The bishop pins or trades White's f3-knight, easing the pressure on your centre. Follow with …e6, …c5 and quick development; with your worst piece already settled outside the pawn chain, the rest of the game flows comfortably.", sayShort: "…Bg4 first — the bishop is solved." },
-  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
-};
 // qga :: queenless
-const C15: SublineNarration = {
-  intro: { say: "White goes for the early queen trade, steering toward a tiny-edge endgame. That suits you fine — recapture, keep your structure clean, and remember the endgame is held with active rooks and a quick …b5/…a6 grab of queenside space. There is nothing to fear and, with accurate piece placement, real winning chances of your own.", sayShort: "Queens off — activity holds the endgame." },
-  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
-};
 // slav-defence :: dxc4_a4
 // slav-defence :: quiet_e3
 // slav-defence :: exchange
@@ -497,13 +481,6 @@ const DKID: SublineNarration = {
 };
 
 // DEEP EQGA :: qga::3::e3@6
-const EQGA: SublineNarration = {
-  intro: { say: "You handed the c4-pawn back to get your pieces out fast and free — that's the whole spirit of the Accepted. Now you cash in with the freeing break: strike at White's centre and watch his little space edge simply melt away.", sayShort: "QGA — free the game with …c5." },
-  beats: [
-    { atMove: 9, say: "…c5 — strike d4 head-on (follow the arrow). The centre opens, your light-squared bishop and the whole army finally breathe, and any pull White had dissolves into a balanced, comfortable game. This is exactly why you gave the pawn back.", sayShort: "…c5 — strike d4, breathe.", arrows: [_A('c5', 'd4', ATK)], highlights: [_H('c5', ATK), _H('d4', KEY)] },
-  ],
-  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
-};
 // DEEP ETRO :: trompowsky-attack::6::d6@9
 // DEEP EENG :: englund-gambit::0::Nc3@10
 const EENG: SublineNarration = {
@@ -914,15 +891,6 @@ const WKIAB5: SublineNarration = {
 };
 // WAVE WSLAVG6 :: 1 keys
 // WAVE WQGAGAR :: 1 keys
-const WQGAGAR: SublineNarration = {
-  intro: { say: "O-O — White castles in this QGA where you've solved your light bishop early with …Bg4 and …Bh5. Now develop actively: …Bb4 pins the c3-knight to fight for the centre, complete development, and free the game with the …c5 break. With your problem piece already outside the chain, you reach an easy, comfortable middlegame.", sayShort: "O-O — …Bb4 pin, then …c5" },
-  beats: [
-    { atMove: 14, say: "O-O — White tucks the king away. Your light bishop is already happily outside the pawn chain on h5, so you have no opening problems left to solve — just develop and strike.", sayShort: "O-O — your bishop's already free", highlights: [_H('h5', KEY)] },
-    { atMove: 15, say: "…Bb4 — pin the c3-knight, the guardian of e4 and d5, to fight for the centre. You develop with purpose while nagging White's grip on the key squares.", sayShort: "…Bb4 — pin c3, fight the centre", arrows: [_A('b4', 'c3', ATK)], highlights: [_H('c3', KEY)] },
-    { atMove: 23, say: "…c5 — the freeing break at last, striking d4 and opening the position for your well-placed pieces. Any trace of White's space edge dissolves; you have a full, comfortable game.", sayShort: "…c5 — the freeing break", highlights: [_H('c5', KEY), _H('d4', KEY)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
-};
 // WAVE WOLDH3 :: 4 keys
 // WAVE WALBLASK :: 1 keys
 const WALBLASK: SublineNarration = {
@@ -12622,6 +12590,607 @@ const BGR_69: SublineNarration = {
   sources: ['concept:pos-initiative', 'https://lichess.org/opening/Budapest-Defense'],
 };
 
+const QGAR_0: SublineNarration = {
+  intro: { say: "White recaptures the c4-pawn and develops. Stay flexible with …a6, break with …c5, and blockade the isolated pawn on d5 — the classic QGA equaliser.", sayShort: "Classic: …a6, …c5, blockade" },
+  beats: [
+    { atMove: 9, say: "Play …a6, the QGA's flexible move — it eyes …b5 and …c5 and shoos the bishop off b5.", sayShort: "…a6, flexible", highlights: [_H('a6')] },
+    { atMove: 11, say: "Strike …c5, the freeing break that hits the centre and prepares to hand the c-pawn back.", sayShort: "…c5, the freeing break", highlights: [_H('c5')] },
+    { atMove: 21, say: "Centralise …Nd5, the blockading knight eyeing c3 and f4 in front of the isolated pawn.", sayShort: "…Nd5, blockade", highlights: [_H('d5')] },
+    { atMove: 23, say: "Reroute …Bf6, training the bishop on d4; fully equal.", sayShort: "…Bf6, train on d4", highlights: [_H('f6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_1: SublineNarration = {
+  intro: { say: "White swaps queens early. Recapture the pawn, walk the king to a good square, and develop smoothly — a dead-level ending with no problems.", sayShort: "Queenless: …Bxc5, …Ke7" },
+  beats: [
+    { atMove: 13, say: "Recapture …Bxc5, the bishop active on the a7-g1 diagonal.", sayShort: "…Bxc5, active bishop", highlights: [_H('c5')] },
+    { atMove: 17, say: "Walk …Ke7 — queens are off, so the king strolls to a fine central post.", sayShort: "…Ke7, centralise the king", highlights: [_H('e7')] },
+    { atMove: 21, say: "Play …b6, opening a diagonal for the bishop in the ending.", sayShort: "…b6, open the diagonal", highlights: [_H('b6')] },
+    { atMove: 23, say: "Gain space with …a5; a comfortable, balanced ending.", sayShort: "…a5, gain space", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_2: SublineNarration = {
+  intro: { say: "White retreats the bishop to b3. Grab queenside space with …b5, fianchetto, and contest the long diagonal — full equality with active piece play.", sayShort: "…b5 space, …Bb7 diagonal" },
+  beats: [
+    { atMove: 13, say: "Expand …b5, gaining space and chasing the bishop off the a2-g8 diagonal.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+    { atMove: 17, say: "Fianchetto …Bb7, raking the long diagonal toward White's king.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 19, say: "Develop …Nbd7, supporting the centre and eyeing e5 and c5.", sayShort: "…Nbd7, support the centre", highlights: [_H('d7')] },
+    { atMove: 23, say: "Double on the diagonal with …Qb7, pressing g2; balanced.", sayShort: "…Qb7, press g2", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_3: SublineNarration = {
+  intro: { say: "White builds a big centre and you fight to keep the pawn. …a6 and …b5 hold it, …b4 hits the knight, and the wild tactics resolve in your favour.", sayShort: "…a6-b5-b4 holds the pawn" },
+  beats: [
+    { atMove: 7, say: "Play …a6, preparing the …b5 advance that defends the extra pawn.", sayShort: "…a6, prepare …b5", highlights: [_H('a6')] },
+    { atMove: 9, say: "Hold with …b5, defending the c4-pawn and grabbing queenside space.", sayShort: "…b5, defend the pawn", highlights: [_H('b5')] },
+    { atMove: 11, say: "Punch …b4, shoving the knight and seizing the initiative.", sayShort: "…b4, shove the knight", highlights: [_H('b4')] },
+    { atMove: 23, say: "Check …Qa5+, regaining material in the complications; fully equal.", sayShort: "…Qa5+, regain material", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_4: SublineNarration = {
+  intro: { say: "White clamps the queenside with a4. Develop …Nc6, take on d4 to give White an isolated pawn, and reroute …Na5 to harass the bishop — fully equal.", sayShort: "…Nc6, isolate d4, …Na5" },
+  beats: [
+    { atMove: 13, say: "Develop …Nc6, training pressure on d4.", sayShort: "…Nc6, press d4", highlights: [_H('c6')] },
+    { atMove: 17, say: "Hop …Na5, hitting the c4-bishop and heading for the c4-square itself.", sayShort: "…Na5, hit the bishop", highlights: [_H('a5')] },
+    { atMove: 19, say: "Develop …Bd6, aiming the bishop at White's kingside.", sayShort: "…Bd6, aim kingside", highlights: [_H('d6')] },
+    { atMove: 23, say: "Play …b6, fianchettoing into a balanced game.", sayShort: "…b6, fianchetto", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_5: SublineNarration = {
+  intro: { say: "White fianchettoes with b3 and trades queens. Take on d4, simplify, and develop your pieces to good squares — a level, easy-to-play ending.", sayShort: "Queenless: …cxd4 and develop" },
+  beats: [
+    { atMove: 13, say: "Take …cxd4, opening the centre toward simplification.", sayShort: "…cxd4, open the centre", highlights: [_H('d4')] },
+    { atMove: 15, say: "Trade queens with …Qxd4; the ending is comfortable and even.", sayShort: "…Qxd4, trade queens", highlights: [_H('d4')] },
+    { atMove: 19, say: "Develop …Nc6, hitting White's d4-knight.", sayShort: "…Nc6, hit the knight", highlights: [_H('c6')] },
+    { atMove: 23, say: "Recapture …Bxc6, completing development in a level ending.", sayShort: "…Bxc6, complete development", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_6: SublineNarration = {
+  intro: { say: "White regains the pawn with a queen check. Block with …c6, develop the bishop actively before …e6, and you equalise comfortably.", sayShort: "…c6, …Bf5 active" },
+  beats: [
+    { atMove: 7, say: "Block …c6, the simplest reply to the check, keeping a sound structure.", sayShort: "…c6, block the check", highlights: [_H('c6')] },
+    { atMove: 9, say: "Develop …Bf5, getting the bishop into open air before …e6 shuts it in.", sayShort: "…Bf5, free the bishop", highlights: [_H('f5')] },
+    { atMove: 15, say: "Solidify …e6, completing a sound, flexible setup.", sayShort: "…e6, solid setup", highlights: [_H('e6')] },
+    { atMove: 21, say: "Castle long with …O-O-O, connecting the rooks; fully equal.", sayShort: "…O-O-O, connect", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_7: SublineNarration = {
+  intro: { say: "White's Bd3 invites an isolated-pawn struggle. Take on d4, blockade with …Nc6 and …Nb4-d5, and you have the ideal setup against the isolated pawn.", sayShort: "Isolate d4, …Nb4-d5 blockade" },
+  beats: [
+    { atMove: 13, say: "Take …cxd4, fixing White with an isolated queen's pawn.", sayShort: "…cxd4, isolate d4", highlights: [_H('d4')] },
+    { atMove: 15, say: "Develop …Nc6, blockading and pressing the d4-pawn.", sayShort: "…Nc6, blockade d4", highlights: [_H('c6')] },
+    { atMove: 19, say: "Hop …Nb4, hitting the d3-bishop and heading for the d5-blockade.", sayShort: "…Nb4, head for d5", highlights: [_H('b4')] },
+    { atMove: 23, say: "Plant …Nbd5, the perfect blockading square; fully equal.", sayShort: "…Nbd5, the blockade", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_8: SublineNarration = {
+  intro: { say: "White develops Qe2. Prepare …b5 with …a6, recapture the pawn, and fianchetto — your bishops are active and the game is balanced.", sayShort: "Qe2: …a6, …Bxc5, …Bb7" },
+  beats: [
+    { atMove: 11, say: "Play …a6, readying the …b5 expansion.", sayShort: "…a6, ready …b5", highlights: [_H('a6')] },
+    { atMove: 13, say: "Recapture …Bxc5, an active bishop and even material.", sayShort: "…Bxc5, even material", highlights: [_H('c5')] },
+    { atMove: 15, say: "Expand …b5, grabbing queenside space.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+    { atMove: 21, say: "Fianchetto …Bb7, the bishop raking the long diagonal; balanced.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_9: SublineNarration = {
+  intro: { say: "White expands with e4. Grab space with …b5, develop the queen to b6, and open the centre with …cxd4 — your active pieces hold the balance.", sayShort: "…b5, …Qb6, …cxd4" },
+  beats: [
+    { atMove: 13, say: "Expand …b5, seizing queenside space.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+    { atMove: 19, say: "Develop …Qb6, pressing d4 and b2.", sayShort: "…Qb6, press d4", highlights: [_H('b6')] },
+    { atMove: 21, say: "Take …cxd4, opening the centre with your pieces active.", sayShort: "…cxd4, open the centre", highlights: [_H('d4')] },
+    { atMove: 23, say: "Develop …Bc5, the bishop biting at d4 and f2; balanced.", sayShort: "…Bc5, bite at d4", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_10: SublineNarration = {
+  intro: { say: "An …a6 move-order reaching the …b5 systems. Expand …b5, fianchetto, and contest the long diagonal — full equality.", sayShort: "…a6 order: …b5 and …Bb7" },
+  beats: [
+    { atMove: 13, say: "Expand …b5, gaining space and harrying the b3-bishop.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+    { atMove: 17, say: "Fianchetto …Bb7, raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 19, say: "Develop …Nbd7, supporting the centre.", sayShort: "…Nbd7, support the centre", highlights: [_H('d7')] },
+    { atMove: 23, say: "Double up with …Qb7, pressing g2; balanced.", sayShort: "…Qb7, press g2", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_11: SublineNarration = {
+  intro: { say: "The a4 clamp via the …a6 move-order. Develop …Nc6, isolate the d-pawn, and reroute …Na5 — fully equal.", sayShort: "a4 clamp: …Nc6, …Na5" },
+  beats: [
+    { atMove: 13, say: "Develop …Nc6, pressing d4.", sayShort: "…Nc6, press d4", highlights: [_H('c6')] },
+    { atMove: 17, say: "Hop …Na5, hitting the bishop and eyeing c4.", sayShort: "…Na5, hit the bishop", highlights: [_H('a5')] },
+    { atMove: 19, say: "Develop …Bd6, aiming at the kingside.", sayShort: "…Bd6, aim kingside", highlights: [_H('d6')] },
+    { atMove: 23, say: "Play …b6, fianchettoing; balanced.", sayShort: "…b6, fianchetto", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_12: SublineNarration = {
+  intro: { say: "White develops Qe2 and Rd1. Expand …b5, fianchetto, recapture the pawn, and castle — a balanced, comfortable middlegame.", sayShort: "Qe2: …b5, …Bb7, …Bxc5" },
+  beats: [
+    { atMove: 13, say: "Expand …b5, gaining queenside space.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+    { atMove: 17, say: "Fianchetto …Bb7, contesting the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 19, say: "Recapture …Bxc5, regaining the pawn with an active bishop.", sayShort: "…Bxc5, regain the pawn", highlights: [_H('c5')] },
+    { atMove: 23, say: "Castle …O-O; balanced.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_13: SublineNarration = {
+  intro: { say: "b3 and a queen trade via the …a6 order. Take on d4, simplify, and develop to good squares — a level ending.", sayShort: "Queenless: …cxd4, simplify" },
+  beats: [
+    { atMove: 13, say: "Take …cxd4, heading for simplification.", sayShort: "…cxd4, simplify", highlights: [_H('d4')] },
+    { atMove: 15, say: "Trade queens with …Qxd4; an even, comfortable ending.", sayShort: "…Qxd4, trade queens", highlights: [_H('d4')] },
+    { atMove: 19, say: "Develop …Nc6, hitting the d4-knight.", sayShort: "…Nc6, hit the knight", highlights: [_H('c6')] },
+    { atMove: 23, say: "Recapture …Bxc6; a level ending.", sayShort: "…Bxc6, level ending", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_14: SublineNarration = {
+  intro: { say: "Bd3 and the isolated-pawn fight via …a6. Take on d4, blockade with …Nc6 and …Nb4-d5 — the model setup against the isolated pawn.", sayShort: "Isolate d4, …Nb4-d5" },
+  beats: [
+    { atMove: 13, say: "Take …cxd4, leaving White with an isolated queen's pawn.", sayShort: "…cxd4, isolate d4", highlights: [_H('d4')] },
+    { atMove: 15, say: "Develop …Nc6, blockading the d4-pawn.", sayShort: "…Nc6, blockade", highlights: [_H('c6')] },
+    { atMove: 19, say: "Hop …Nb4, heading for the d5-blockade and hitting the bishop.", sayShort: "…Nb4, head for d5", highlights: [_H('b4')] },
+    { atMove: 23, say: "Plant …Nbd5, the ideal square; fully equal.", sayShort: "…Nbd5, the blockade", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_15: SublineNarration = {
+  intro: { say: "White inserts a4 before castling. Break …c5, isolate the d-pawn, and blockade with …Nd5 — the standard equaliser.", sayShort: "a4: …c5 and …Nd5" },
+  beats: [
+    { atMove: 11, say: "Strike …c5, the freeing break.", sayShort: "…c5, the freeing break", highlights: [_H('c5')] },
+    { atMove: 15, say: "Develop …Nc6, pressing the isolated d4-pawn.", sayShort: "…Nc6, press d4", highlights: [_H('c6')] },
+    { atMove: 21, say: "Centralise …Nd5, blockading in front of the isolated pawn.", sayShort: "…Nd5, blockade", highlights: [_H('d5')] },
+    { atMove: 23, say: "Reroute …Bf6, training on d4; fully equal.", sayShort: "…Bf6, train on d4", highlights: [_H('f6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_16: SublineNarration = {
+  intro: { say: "White lunges d5. Expand …b5, develop …Nbd7, and fianchetto — your active pieces meet the central break and the game is balanced.", sayShort: "Nc3: …b5 and …Bb7" },
+  beats: [
+    { atMove: 13, say: "Expand …b5, gaining space and clearing b7 for the bishop.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+    { atMove: 15, say: "Develop …Nbd7, bracing for White's d5 break.", sayShort: "…Nbd7, brace for d5", highlights: [_H('d7')] },
+    { atMove: 21, say: "Fianchetto …Bb7, raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Develop …Be7, completing development; balanced.", sayShort: "…Be7, finish developing", highlights: [_H('e7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_17: SublineNarration = {
+  intro: { say: "White's Qe2 invites the …b5 push. Expand, break …c5, recapture, and fianchetto — comfortable equality.", sayShort: "Qe2: …b5, …c5, …Bb7" },
+  beats: [
+    { atMove: 11, say: "Expand …b5, grabbing queenside space.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+    { atMove: 13, say: "Strike …c5, the freeing break.", sayShort: "…c5, the freeing break", highlights: [_H('c5')] },
+    { atMove: 15, say: "Recapture …Bxc5, an active bishop.", sayShort: "…Bxc5, active bishop", highlights: [_H('c5')] },
+    { atMove: 21, say: "Fianchetto …Bb7, raking the long diagonal; balanced.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_18: SublineNarration = {
+  intro: { say: "White meets …a6 with a4. Develop …Nc6, strike …e5 boldly, and after queens come off you castle long into a balanced ending.", sayShort: "a4: bold …e5, …O-O-O" },
+  beats: [
+    { atMove: 7, say: "Develop …Nc6, supporting an early …e5 thrust.", sayShort: "…Nc6, support …e5", highlights: [_H('c6')] },
+    { atMove: 9, say: "Strike …e5, boldly seizing the full centre.", sayShort: "…e5, seize the centre", highlights: [_H('e5')] },
+    { atMove: 15, say: "Trade queens with …Qxd1+, steering into a balanced ending.", sayShort: "…Qxd1+, trade queens", highlights: [_H('d1')] },
+    { atMove: 23, say: "Castle long, bringing the rook to the open d-file; balanced ending.", sayShort: "…O-O-O, the open file", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_19: SublineNarration = {
+  intro: { say: "White pushes e4. Expand …b5 to support …Nxe4, snatch the pawn, and push …b4 — you keep the extra pawn into a balanced or better game.", sayShort: "e4: …b5 and …Nxe4 grab" },
+  beats: [
+    { atMove: 13, say: "Expand …b5, gaining space and supporting …Nxe4.", sayShort: "…b5, support …Nxe4", highlights: [_H('b5')] },
+    { atMove: 15, say: "Snatch …Nxe4, grabbing the central pawn.", sayShort: "…Nxe4, grab the pawn", highlights: [_H('e4')] },
+    { atMove: 17, say: "Push …b4, kicking the knight to keep the extra pawn.", sayShort: "…b4, kick the knight", highlights: [_H('b4')] },
+    { atMove: 23, say: "Develop …Bd6 into a balanced or better game.", sayShort: "…Bd6, develop", highlights: [_H('d6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_20: SublineNarration = {
+  intro: { say: "The …Bg4 system steers toward a queenless game. Break …c5, recapture, and double White's pawns with …Bxf3 — a comfortable, balanced ending.", sayShort: "…Bg4: …c5 and …Bxf3" },
+  beats: [
+    { atMove: 13, say: "Strike …c5, the freeing break.", sayShort: "…c5, the freeing break", highlights: [_H('c5')] },
+    { atMove: 15, say: "Recapture …Bxc5, regaining the pawn.", sayShort: "…Bxc5, regain the pawn", highlights: [_H('c5')] },
+    { atMove: 19, say: "Trade …Bxf3, doubling White's pawns in the ending.", sayShort: "…Bxf3, double the pawns", highlights: [_H('f3')] },
+    { atMove: 21, say: "Centralise …Ke7 in the queenless middlegame; balanced.", sayShort: "…Ke7, centralise the king", highlights: [_H('e7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_21: SublineNarration = {
+  intro: { say: "White lunges g4 at your bishop. Retreat to g6, develop …Nc6, and castle long — your solid setup answers White's loosening pawn moves.", sayShort: "…Bg4: …Bg6 retreat, …O-O-O" },
+  beats: [
+    { atMove: 13, say: "Retreat …Bg6, dodging the g4 lunge and keeping the bishop.", sayShort: "…Bg6, dodge g4", highlights: [_H('g6')] },
+    { atMove: 15, say: "Develop …Nc6, pressing d4.", sayShort: "…Nc6, press d4", highlights: [_H('c6')] },
+    { atMove: 19, say: "Develop …Qd7, connecting toward long castling.", sayShort: "…Qd7, connect", highlights: [_H('d7')] },
+    { atMove: 21, say: "Castle long with …O-O-O, getting safe and active; balanced.", sayShort: "…O-O-O, get safe", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_22: SublineNarration = {
+  intro: { say: "White develops quietly with Nbd2. Complete development, then break …c5 and press the c-file — comfortable equality.", sayShort: "…Bg4: develop, …c5" },
+  beats: [
+    { atMove: 13, say: "Develop …Nbd7, building toward …c5.", sayShort: "…Nbd7, build the break", highlights: [_H('d7')] },
+    { atMove: 15, say: "Develop …Be7, preparing to castle.", sayShort: "…Be7, prepare to castle", highlights: [_H('e7')] },
+    { atMove: 19, say: "Strike …c5, the freeing break.", sayShort: "…c5, the freeing break", highlights: [_H('c5')] },
+    { atMove: 23, say: "Lift …Rc8, pressing the c-file; balanced.", sayShort: "…Rc8, the c-file", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_23: SublineNarration = {
+  intro: { say: "White plays Be2. Break …c5, develop …Nc6 and …Qc7, and after the central trades you've equalised cleanly.", sayShort: "…Bg4: …c5, …Nc6, …Qc7" },
+  beats: [
+    { atMove: 13, say: "Strike …c5, the freeing break.", sayShort: "…c5, the freeing break", highlights: [_H('c5')] },
+    { atMove: 15, say: "Develop …Nc6, eyeing d4 and the centre.", sayShort: "…Nc6, eye d4", highlights: [_H('c6')] },
+    { atMove: 17, say: "Develop …Qc7, lending the queen to the centre.", sayShort: "…Qc7, support the centre", highlights: [_H('c7')] },
+    { atMove: 21, say: "Recapture …Nxd5, centralising the knight; fully equal.", sayShort: "…Nxd5, centralise", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_24: SublineNarration = {
+  intro: { say: "White builds a big centre and you fight to keep the pawn. …a6 and …b5 hold it, …b4 hits the knight, and the wild tactics resolve in your favour.", sayShort: "…a6-b5-b4 holds the pawn" },
+  beats: [
+    { atMove: 7, say: "Play …a6, preparing the …b5 advance that defends the extra pawn.", sayShort: "…a6, prepare …b5", highlights: [_H('a6')] },
+    { atMove: 9, say: "Hold with …b5, defending the c4-pawn and grabbing queenside space.", sayShort: "…b5, defend the pawn", highlights: [_H('b5')] },
+    { atMove: 11, say: "Punch …b4, shoving the knight and seizing the initiative.", sayShort: "…b4, shove the knight", highlights: [_H('b4')] },
+    { atMove: 23, say: "Check …Qa5+, regaining material in the complications; fully equal.", sayShort: "…Qa5+, regain material", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_25: SublineNarration = {
+  intro: { say: "White's Qb3 eyes b7. Trade on f3 to wreck White's kingside, break …c5, and the trades leave you fine against the shattered structure.", sayShort: "…Bg4: …Bxf3 wrecks pawns, …c5" },
+  beats: [
+    { atMove: 13, say: "Trade …Bxf3, doubling and fracturing White's kingside pawns.", sayShort: "…Bxf3, wreck the pawns", highlights: [_H('f3')] },
+    { atMove: 15, say: "Strike …c5, the freeing break.", sayShort: "…c5, the freeing break", highlights: [_H('c5')] },
+    { atMove: 19, say: "Recapture …Nxd5, centralising the knight.", sayShort: "…Nxd5, centralise", highlights: [_H('d5')] },
+    { atMove: 23, say: "Develop …Nc6 against the damaged structure; balanced.", sayShort: "…Nc6, target the weakness", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_26: SublineNarration = {
+  intro: { say: "White develops Nc3. Pin with …Bb4, then reposition flexibly and prepare the …c5 break — a sound, balanced position.", sayShort: "…Bg4: …Bb4 pin, …c5" },
+  beats: [
+    { atMove: 15, say: "Pin with …Bb4, tying down the c3-knight.", sayShort: "…Bb4, pin the knight", highlights: [_H('b4')] },
+    { atMove: 19, say: "Reposition …Be7, keeping flexibility.", sayShort: "…Be7, stay flexible", highlights: [_H('e7')] },
+    { atMove: 21, say: "Lift …Rb8, preparing …b5.", sayShort: "…Rb8, prepare …b5", highlights: [_H('b8')] },
+    { atMove: 23, say: "Strike …c5, the freeing break; balanced.", sayShort: "…c5, the freeing break", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_27: SublineNarration = {
+  intro: { say: "White regains the pawn with a queen check. Block with …c6, develop the bishop actively before …e6, and you equalise comfortably.", sayShort: "…c6, …Bf5 active" },
+  beats: [
+    { atMove: 7, say: "Block …c6, the simplest reply to the check, keeping a sound structure.", sayShort: "…c6, block the check", highlights: [_H('c6')] },
+    { atMove: 9, say: "Develop …Bf5, getting the bishop into open air before …e6 shuts it in.", sayShort: "…Bf5, free the bishop", highlights: [_H('f5')] },
+    { atMove: 15, say: "Solidify …e6, completing a sound, flexible setup.", sayShort: "…e6, solid setup", highlights: [_H('e6')] },
+    { atMove: 21, say: "Castle long with …O-O-O, connecting the rooks; fully equal.", sayShort: "…O-O-O, connect", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_28: SublineNarration = {
+  intro: { say: "White plays the quiet a3. Break …c5, trade queens, recapture, and reroute the bishop to f6 — a balanced ending with active pieces.", sayShort: "…Bg4: …c5, queen trade, …Bf6" },
+  beats: [
+    { atMove: 13, say: "Strike …c5, the freeing break.", sayShort: "…c5, the freeing break", highlights: [_H('c5')] },
+    { atMove: 15, say: "Trade queens with …Qxd1+, simplifying to your comfort.", sayShort: "…Qxd1+, simplify", highlights: [_H('d1')] },
+    { atMove: 17, say: "Recapture …Bxc5, an active bishop.", sayShort: "…Bxc5, active bishop", highlights: [_H('c5')] },
+    { atMove: 23, say: "Reroute …Bf6, pressing d4; balanced ending.", sayShort: "…Bf6, press d4", highlights: [_H('f6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_29: SublineNarration = {
+  intro: { say: "White checks with Qa4+. Block with …Nbd7, break …c5, recapture, and centralise the queen — a balanced, well-developed game.", sayShort: "…Bg4: …Nbd7, …c5, …Qe7" },
+  beats: [
+    { atMove: 13, say: "Block …Nbd7, parrying the check while developing.", sayShort: "…Nbd7, parry the check", highlights: [_H('d7')] },
+    { atMove: 15, say: "Strike …c5, the freeing break.", sayShort: "…c5, the freeing break", highlights: [_H('c5')] },
+    { atMove: 17, say: "Recapture …Bxc5, an active bishop.", sayShort: "…Bxc5, active bishop", highlights: [_H('c5')] },
+    { atMove: 21, say: "Centralise …Qe7, connecting the rooks; balanced.", sayShort: "…Qe7, connect", highlights: [_H('e7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_30: SublineNarration = {
+  intro: { say: "White builds a big centre and you fight to keep the pawn. …a6 and …b5 hold it, …b4 hits the knight, and the wild tactics resolve in your favour.", sayShort: "…a6-b5-b4 holds the pawn" },
+  beats: [
+    { atMove: 7, say: "Play …a6, preparing the …b5 advance that defends the extra pawn.", sayShort: "…a6, prepare …b5", highlights: [_H('a6')] },
+    { atMove: 9, say: "Hold with …b5, defending the c4-pawn and grabbing queenside space.", sayShort: "…b5, defend the pawn", highlights: [_H('b5')] },
+    { atMove: 11, say: "Punch …b4, shoving the knight and seizing the initiative.", sayShort: "…b4, shove the knight", highlights: [_H('b4')] },
+    { atMove: 23, say: "Check …Qa5+, regaining material in the complications; fully equal.", sayShort: "…Qa5+, regain material", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_31: SublineNarration = {
+  intro: { say: "White swaps queens early. Recapture the pawn, walk the king to a good square, and develop smoothly — a dead-level ending with no problems.", sayShort: "Queenless: …Bxc5, …Ke7" },
+  beats: [
+    { atMove: 13, say: "Recapture …Bxc5, the bishop active on the a7-g1 diagonal.", sayShort: "…Bxc5, active bishop", highlights: [_H('c5')] },
+    { atMove: 17, say: "Walk …Ke7 — queens are off, so the king strolls to a fine central post.", sayShort: "…Ke7, centralise the king", highlights: [_H('e7')] },
+    { atMove: 21, say: "Play …b6, opening a diagonal for the bishop in the ending.", sayShort: "…b6, open the diagonal", highlights: [_H('b6')] },
+    { atMove: 23, say: "Gain space with …a5; a comfortable, balanced ending.", sayShort: "…a5, gain space", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_32: SublineNarration = {
+  intro: { say: "White plays a3 in the central-majority line. Solidify …e6, fianchetto, and snatch …Bxe4 in the exchanges — you regain the pawn with active pieces.", sayShort: "Nc3 e4: …e6, …Bb7, …Bxe4" },
+  beats: [
+    { atMove: 11, say: "Solidify …e6, bracing your queenside pawns.", sayShort: "…e6, brace the pawns", highlights: [_H('e6')] },
+    { atMove: 13, say: "Fianchetto …Bb7, raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 21, say: "Snatch …Bxe4, regaining the pawn with active pieces.", sayShort: "…Bxe4, regain the pawn", highlights: [_H('e4')] },
+    { atMove: 23, say: "Castle …O-O; balanced.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_33: SublineNarration = {
+  intro: { say: "White pins with Bg5 and castles long. Fianchetto, develop …Nbd7, and crack the centre with …Bb4 and …Bxc3 — a sharp, balanced fight.", sayShort: "Nc3 Bg5: …Bb7, …Bb4, …Bxc3" },
+  beats: [
+    { atMove: 11, say: "Fianchetto …Bb7, the bishop on the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 15, say: "Question the bishop with …h6.", sayShort: "…h6, question the bishop", highlights: [_H('g5')] },
+    { atMove: 19, say: "Develop …Bb4, pinning and pressing the centre.", sayShort: "…Bb4, pin and press", highlights: [_H('b4')] },
+    { atMove: 23, say: "Trade …Bxc3, damaging White's structure; Black stands well.", sayShort: "…Bxc3, damage the structure", highlights: [_H('c3')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_34: SublineNarration = {
+  intro: { say: "White develops Be2. Solidify …e6, fianchetto, and brace the queenside chain with …c6 — a sound, balanced central-majority position.", sayShort: "Nc3: …e6, …Bb7, …c6" },
+  beats: [
+    { atMove: 11, say: "Solidify …e6, bracing the queenside pawns.", sayShort: "…e6, brace the pawns", highlights: [_H('e6')] },
+    { atMove: 13, say: "Fianchetto …Bb7, raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 19, say: "Solidify …c6, anchoring the queenside chain.", sayShort: "…c6, anchor the chain", highlights: [_H('c6')] },
+    { atMove: 21, say: "Develop …Nbd7; balanced.", sayShort: "…Nbd7, develop", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_35: SublineNarration = {
+  intro: { say: "White pushes e5. Recapture with the queen, fianchetto, and solidify …e6 — your extra pawn and active bishop give a comfortable game.", sayShort: "Nc3 e5: …Qxd5, …Bb7" },
+  beats: [
+    { atMove: 13, say: "Recapture …Qxd5, centralising the queen.", sayShort: "…Qxd5, centralise", highlights: [_H('d5')] },
+    { atMove: 15, say: "Fianchetto …Bb7, raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 19, say: "Solidify …e6, supporting your extra pawn.", sayShort: "…e6, support the pawn", highlights: [_H('e6')] },
+    { atMove: 23, say: "Trade …Bxg2, simplifying with the extra pawn; Black stands well.", sayShort: "…Bxg2, simplify ahead", highlights: [_H('g2')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_36: SublineNarration = {
+  intro: { say: "White plays b3 to break up your queenside. Strike …e5, trade queens, and grab material in the tactics — a sharp, balanced ending.", sayShort: "Nc3 b3: …e5, …Bb4, …cxb3" },
+  beats: [
+    { atMove: 11, say: "Strike …e5, opening lines and hitting the centre.", sayShort: "…e5, open lines", highlights: [_H('e5')] },
+    { atMove: 13, say: "Trade queens with …Qxd1+, into a sharp ending.", sayShort: "…Qxd1+, trade queens", highlights: [_H('d1')] },
+    { atMove: 15, say: "Pin with …Bb4, tying down the c3-knight.", sayShort: "…Bb4, pin the knight", highlights: [_H('b4')] },
+    { atMove: 21, say: "Grab …cxb3, snatching material; Black stands well.", sayShort: "…cxb3, grab material", highlights: [_H('b3')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_37: SublineNarration = {
+  intro: { say: "White plays e5 and Be2. Solidify …e6 to anchor the d5-knight, fianchetto, and develop — your strong knight and extra pawn give comfortable play.", sayShort: "Nc3 e5: …e6 anchors …Nd5" },
+  beats: [
+    { atMove: 13, say: "Solidify …e6, anchoring your strong d5-knight.", sayShort: "…e6, anchor the knight", highlights: [_H('e6')] },
+    { atMove: 15, say: "Fianchetto …Bb7, raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 17, say: "Develop …Nc6, eyeing the centre and queenside.", sayShort: "…Nc6, develop", highlights: [_H('c6')] },
+    { atMove: 21, say: "Develop …Be7; balanced with the powerful d5-knight.", sayShort: "…Be7, develop", highlights: [_H('e7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_38: SublineNarration = {
+  intro: { say: "White's Ne4 and e5 press your knight. Hit back with …f5 to kick it, solidify …e6, and fianchetto — a balanced, double-edged game.", sayShort: "Nc3 e5: …f5 kick, …Bb7" },
+  beats: [
+    { atMove: 13, say: "Strike …f5, kicking the e4-knight and grabbing space.", sayShort: "…f5, kick the knight", highlights: [_H('f5')] },
+    { atMove: 15, say: "Solidify …e6, anchoring your centre.", sayShort: "…e6, anchor", highlights: [_H('e6')] },
+    { atMove: 19, say: "Fianchetto …Bb7, raking the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Trade queens with …Qxd1+, into a balanced position.", sayShort: "…Qxd1+, simplify", highlights: [_H('d1')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_39: SublineNarration = {
+  intro: { say: "White develops Bf4. Solidify …e6, push …b4 to kick the knight, and snatch …Nxe4 — you grab the central pawn for a balanced game.", sayShort: "Nc3 Bf4: …b4, …Nxe4" },
+  beats: [
+    { atMove: 11, say: "Solidify …e6, bracing your structure.", sayShort: "…e6, brace the structure", highlights: [_H('e6')] },
+    { atMove: 13, say: "Push …b4, kicking the c3-knight.", sayShort: "…b4, kick the knight", highlights: [_H('b4')] },
+    { atMove: 15, say: "Snatch …Nxe4, grabbing the central pawn.", sayShort: "…Nxe4, grab the pawn", highlights: [_H('e4')] },
+    { atMove: 21, say: "Develop …Qf6, defending and eyeing the centre; balanced.", sayShort: "…Qf6, defend and eye", highlights: [_H('f6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_40: SublineNarration = {
+  intro: { say: "White recaptures the c4-pawn and develops. Stay flexible with …a6, break with …c5, and blockade the isolated pawn on d5 — the classic QGA equaliser.", sayShort: "Classic: …a6, …c5, blockade" },
+  beats: [
+    { atMove: 9, say: "Play …a6, the QGA's flexible move — it eyes …b5 and …c5 and shoos the bishop off b5.", sayShort: "…a6, flexible", highlights: [_H('a6')] },
+    { atMove: 11, say: "Strike …c5, the freeing break that hits the centre and prepares to hand the c-pawn back.", sayShort: "…c5, the freeing break", highlights: [_H('c5')] },
+    { atMove: 21, say: "Centralise …Nd5, the blockading knight eyeing c3 and f4 in front of the isolated pawn.", sayShort: "…Nd5, blockade", highlights: [_H('d5')] },
+    { atMove: 23, say: "Reroute …Bf6, training the bishop on d4; fully equal.", sayShort: "…Bf6, train on d4", highlights: [_H('f6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_41: SublineNarration = {
+  intro: { say: "White swaps queens early. Recapture the pawn, walk the king to a good square, and develop smoothly — a dead-level ending with no problems.", sayShort: "Queenless: …Bxc5, …Ke7" },
+  beats: [
+    { atMove: 13, say: "Recapture …Bxc5, the bishop active on the a7-g1 diagonal.", sayShort: "…Bxc5, active bishop", highlights: [_H('c5')] },
+    { atMove: 17, say: "Walk …Ke7 — queens are off, so the king strolls to a fine central post.", sayShort: "…Ke7, centralise the king", highlights: [_H('e7')] },
+    { atMove: 21, say: "Play …b6, opening a diagonal for the bishop in the ending.", sayShort: "…b6, open the diagonal", highlights: [_H('b6')] },
+    { atMove: 23, say: "Gain space with …a5; a comfortable, balanced ending.", sayShort: "…a5, gain space", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_42: SublineNarration = {
+  intro: { say: "White builds a big centre and you fight to keep the pawn. …a6 and …b5 hold it, …b4 hits the knight, and the wild tactics resolve in your favour.", sayShort: "…a6-b5-b4 holds the pawn" },
+  beats: [
+    { atMove: 7, say: "Play …a6, preparing the …b5 advance that defends the extra pawn.", sayShort: "…a6, prepare …b5", highlights: [_H('a6')] },
+    { atMove: 9, say: "Hold with …b5, defending the c4-pawn and grabbing queenside space.", sayShort: "…b5, defend the pawn", highlights: [_H('b5')] },
+    { atMove: 11, say: "Punch …b4, shoving the knight and seizing the initiative.", sayShort: "…b4, shove the knight", highlights: [_H('b4')] },
+    { atMove: 23, say: "Check …Qa5+, regaining material in the complications; fully equal.", sayShort: "…Qa5+, regain material", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_43: SublineNarration = {
+  intro: { say: "White clamps the queenside with a4. Develop …Nc6, take on d4 to give White an isolated pawn, and reroute …Na5 to harass the bishop — fully equal.", sayShort: "…Nc6, isolate d4, …Na5" },
+  beats: [
+    { atMove: 13, say: "Develop …Nc6, training pressure on d4.", sayShort: "…Nc6, press d4", highlights: [_H('c6')] },
+    { atMove: 17, say: "Hop …Na5, hitting the c4-bishop and heading for the c4-square itself.", sayShort: "…Na5, hit the bishop", highlights: [_H('a5')] },
+    { atMove: 19, say: "Develop …Bd6, aiming the bishop at White's kingside.", sayShort: "…Bd6, aim kingside", highlights: [_H('d6')] },
+    { atMove: 23, say: "Play …b6, fianchettoing into a balanced game.", sayShort: "…b6, fianchetto", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_44: SublineNarration = {
+  intro: { say: "White plays Qe2 and Rd1. Expand …b5, fianchetto, recapture, and castle — a balanced, comfortable middlegame.", sayShort: "Qe2: …b5, …Bb7, …Bxc5" },
+  beats: [
+    { atMove: 13, say: "Expand …b5, gaining queenside space.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+    { atMove: 17, say: "Fianchetto …Bb7, contesting the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 19, say: "Recapture …Bxc5, regaining the pawn with an active bishop.", sayShort: "…Bxc5, regain the pawn", highlights: [_H('c5')] },
+    { atMove: 23, say: "Castle …O-O; balanced.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_45: SublineNarration = {
+  intro: { say: "White fianchettoes with b3 and trades queens. Take on d4, simplify, and develop your pieces to good squares — a level, easy-to-play ending.", sayShort: "Queenless: …cxd4 and develop" },
+  beats: [
+    { atMove: 13, say: "Take …cxd4, opening the centre toward simplification.", sayShort: "…cxd4, open the centre", highlights: [_H('d4')] },
+    { atMove: 15, say: "Trade queens with …Qxd4; the ending is comfortable and even.", sayShort: "…Qxd4, trade queens", highlights: [_H('d4')] },
+    { atMove: 19, say: "Develop …Nc6, hitting White's d4-knight.", sayShort: "…Nc6, hit the knight", highlights: [_H('c6')] },
+    { atMove: 23, say: "Recapture …Bxc6, completing development in a level ending.", sayShort: "…Bxc6, complete development", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_46: SublineNarration = {
+  intro: { say: "White regains the pawn with a queen check. Block with …c6, develop the bishop actively before …e6, and you equalise comfortably.", sayShort: "…c6, …Bf5 active" },
+  beats: [
+    { atMove: 7, say: "Block …c6, the simplest reply to the check, keeping a sound structure.", sayShort: "…c6, block the check", highlights: [_H('c6')] },
+    { atMove: 9, say: "Develop …Bf5, getting the bishop into open air before …e6 shuts it in.", sayShort: "…Bf5, free the bishop", highlights: [_H('f5')] },
+    { atMove: 15, say: "Solidify …e6, completing a sound, flexible setup.", sayShort: "…e6, solid setup", highlights: [_H('e6')] },
+    { atMove: 21, say: "Castle long with …O-O-O, connecting the rooks; fully equal.", sayShort: "…O-O-O, connect", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_47: SublineNarration = {
+  intro: { say: "White's Bd3 invites an isolated-pawn struggle. Take on d4, blockade with …Nc6 and …Nb4-d5, and you have the ideal setup against the isolated pawn.", sayShort: "Isolate d4, …Nb4-d5 blockade" },
+  beats: [
+    { atMove: 13, say: "Take …cxd4, fixing White with an isolated queen's pawn.", sayShort: "…cxd4, isolate d4", highlights: [_H('d4')] },
+    { atMove: 15, say: "Develop …Nc6, blockading and pressing the d4-pawn.", sayShort: "…Nc6, blockade d4", highlights: [_H('c6')] },
+    { atMove: 19, say: "Hop …Nb4, hitting the d3-bishop and heading for the d5-blockade.", sayShort: "…Nb4, head for d5", highlights: [_H('b4')] },
+    { atMove: 23, say: "Plant …Nbd5, the perfect blockading square; fully equal.", sayShort: "…Nbd5, the blockade", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_48: SublineNarration = {
+  intro: { say: "White develops Qe2. Prepare …b5 with …a6, recapture the pawn, and fianchetto — your bishops are active and the game is balanced.", sayShort: "Qe2: …a6, …Bxc5, …Bb7" },
+  beats: [
+    { atMove: 11, say: "Play …a6, readying the …b5 expansion.", sayShort: "…a6, ready …b5", highlights: [_H('a6')] },
+    { atMove: 13, say: "Recapture …Bxc5, an active bishop and even material.", sayShort: "…Bxc5, even material", highlights: [_H('c5')] },
+    { atMove: 15, say: "Expand …b5, grabbing queenside space.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+    { atMove: 21, say: "Fianchetto …Bb7, the bishop raking the long diagonal; balanced.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_49: SublineNarration = {
+  intro: { say: "White builds with Bb3 and Bg5. Develop …Nc6, isolate the d-pawn, and expand …b5 — you blockade the isolated pawn and stand fully equal.", sayShort: "Bb3: …Nc6, isolate d4, …b5" },
+  beats: [
+    { atMove: 13, say: "Develop …Nc6, pressing d4.", sayShort: "…Nc6, press d4", highlights: [_H('c6')] },
+    { atMove: 15, say: "Take …cxd4, fixing the isolated queen's pawn.", sayShort: "…cxd4, isolate d4", highlights: [_H('d4')] },
+    { atMove: 19, say: "Castle …O-O, getting safe before you press the weakness.", sayShort: "…O-O, get safe", highlights: [_H('g8')] },
+    { atMove: 23, say: "Play …h6, questioning the bishop; fully equal.", sayShort: "…h6, question the bishop", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_50: SublineNarration = {
+  intro: { say: "White recaptures the c4-pawn and develops. Stay flexible with …a6, break with …c5, and blockade the isolated pawn on d5 — the classic QGA equaliser.", sayShort: "Classic: …a6, …c5, blockade" },
+  beats: [
+    { atMove: 9, say: "Play …a6, the QGA's flexible move — it eyes …b5 and …c5 and shoos the bishop off b5.", sayShort: "…a6, flexible", highlights: [_H('a6')] },
+    { atMove: 11, say: "Strike …c5, the freeing break that hits the centre and prepares to hand the c-pawn back.", sayShort: "…c5, the freeing break", highlights: [_H('c5')] },
+    { atMove: 21, say: "Centralise …Nd5, the blockading knight eyeing c3 and f4 in front of the isolated pawn.", sayShort: "…Nd5, blockade", highlights: [_H('d5')] },
+    { atMove: 23, say: "Reroute …Bf6, training the bishop on d4; fully equal.", sayShort: "…Bf6, train on d4", highlights: [_H('f6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_51: SublineNarration = {
+  intro: { say: "White retreats the bishop to b3. Grab queenside space with …b5, fianchetto, and contest the long diagonal — full equality with active piece play.", sayShort: "…b5 space, …Bb7 diagonal" },
+  beats: [
+    { atMove: 13, say: "Expand …b5, gaining space and chasing the bishop off the a2-g8 diagonal.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+    { atMove: 17, say: "Fianchetto …Bb7, raking the long diagonal toward White's king.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 19, say: "Develop …Nbd7, supporting the centre and eyeing e5 and c5.", sayShort: "…Nbd7, support the centre", highlights: [_H('d7')] },
+    { atMove: 23, say: "Double on the diagonal with …Qb7, pressing g2; balanced.", sayShort: "…Qb7, press g2", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_52: SublineNarration = {
+  intro: { say: "White builds a big centre and you fight to keep the pawn. …a6 and …b5 hold it, …b4 hits the knight, and the wild tactics resolve in your favour.", sayShort: "…a6-b5-b4 holds the pawn" },
+  beats: [
+    { atMove: 7, say: "Play …a6, preparing the …b5 advance that defends the extra pawn.", sayShort: "…a6, prepare …b5", highlights: [_H('a6')] },
+    { atMove: 9, say: "Hold with …b5, defending the c4-pawn and grabbing queenside space.", sayShort: "…b5, defend the pawn", highlights: [_H('b5')] },
+    { atMove: 11, say: "Punch …b4, shoving the knight and seizing the initiative.", sayShort: "…b4, shove the knight", highlights: [_H('b4')] },
+    { atMove: 23, say: "Check …Qa5+, regaining material in the complications; fully equal.", sayShort: "…Qa5+, regain material", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_53: SublineNarration = {
+  intro: { say: "White clamps the queenside with a4. Develop …Nc6, take on d4 to give White an isolated pawn, and reroute …Na5 to harass the bishop — fully equal.", sayShort: "…Nc6, isolate d4, …Na5" },
+  beats: [
+    { atMove: 13, say: "Develop …Nc6, training pressure on d4.", sayShort: "…Nc6, press d4", highlights: [_H('c6')] },
+    { atMove: 17, say: "Hop …Na5, hitting the c4-bishop and heading for the c4-square itself.", sayShort: "…Na5, hit the bishop", highlights: [_H('a5')] },
+    { atMove: 19, say: "Develop …Bd6, aiming the bishop at White's kingside.", sayShort: "…Bd6, aim kingside", highlights: [_H('d6')] },
+    { atMove: 23, say: "Play …b6, fianchettoing into a balanced game.", sayShort: "…b6, fianchetto", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_54: SublineNarration = {
+  intro: { say: "White plays Qe2 and Rd1. Expand …b5, fianchetto, recapture, and castle — a balanced, comfortable middlegame.", sayShort: "Qe2: …b5, …Bb7, …Bxc5" },
+  beats: [
+    { atMove: 13, say: "Expand …b5, gaining queenside space.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+    { atMove: 17, say: "Fianchetto …Bb7, contesting the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 19, say: "Recapture …Bxc5, regaining the pawn with an active bishop.", sayShort: "…Bxc5, regain the pawn", highlights: [_H('c5')] },
+    { atMove: 23, say: "Castle …O-O; balanced.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_55: SublineNarration = {
+  intro: { say: "White fianchettoes with b3 and trades queens. Take on d4, simplify, and develop your pieces to good squares — a level, easy-to-play ending.", sayShort: "Queenless: …cxd4 and develop" },
+  beats: [
+    { atMove: 13, say: "Take …cxd4, opening the centre toward simplification.", sayShort: "…cxd4, open the centre", highlights: [_H('d4')] },
+    { atMove: 15, say: "Trade queens with …Qxd4; the ending is comfortable and even.", sayShort: "…Qxd4, trade queens", highlights: [_H('d4')] },
+    { atMove: 19, say: "Develop …Nc6, hitting White's d4-knight.", sayShort: "…Nc6, hit the knight", highlights: [_H('c6')] },
+    { atMove: 23, say: "Recapture …Bxc6, completing development in a level ending.", sayShort: "…Bxc6, complete development", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_56: SublineNarration = {
+  intro: { say: "White swaps queens early. Recapture the pawn, walk the king to a good square, and develop smoothly — a dead-level ending with no problems.", sayShort: "Queenless: …Bxc5, …Ke7" },
+  beats: [
+    { atMove: 13, say: "Recapture …Bxc5, the bishop active on the a7-g1 diagonal.", sayShort: "…Bxc5, active bishop", highlights: [_H('c5')] },
+    { atMove: 17, say: "Walk …Ke7 — queens are off, so the king strolls to a fine central post.", sayShort: "…Ke7, centralise the king", highlights: [_H('e7')] },
+    { atMove: 21, say: "Play …b6, opening a diagonal for the bishop in the ending.", sayShort: "…b6, open the diagonal", highlights: [_H('b6')] },
+    { atMove: 23, say: "Gain space with …a5; a comfortable, balanced ending.", sayShort: "…a5, gain space", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_57: SublineNarration = {
+  intro: { say: "White regains the pawn with a queen check. Block with …c6, develop the bishop actively before …e6, and you equalise comfortably.", sayShort: "…c6, …Bf5 active" },
+  beats: [
+    { atMove: 7, say: "Block …c6, the simplest reply to the check, keeping a sound structure.", sayShort: "…c6, block the check", highlights: [_H('c6')] },
+    { atMove: 9, say: "Develop …Bf5, getting the bishop into open air before …e6 shuts it in.", sayShort: "…Bf5, free the bishop", highlights: [_H('f5')] },
+    { atMove: 15, say: "Solidify …e6, completing a sound, flexible setup.", sayShort: "…e6, solid setup", highlights: [_H('e6')] },
+    { atMove: 21, say: "Castle long with …O-O-O, connecting the rooks; fully equal.", sayShort: "…O-O-O, connect", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_58: SublineNarration = {
+  intro: { say: "White's Bd3 invites an isolated-pawn struggle. Take on d4, blockade with …Nc6 and …Nb4-d5, and you have the ideal setup against the isolated pawn.", sayShort: "Isolate d4, …Nb4-d5 blockade" },
+  beats: [
+    { atMove: 13, say: "Take …cxd4, fixing White with an isolated queen's pawn.", sayShort: "…cxd4, isolate d4", highlights: [_H('d4')] },
+    { atMove: 15, say: "Develop …Nc6, blockading and pressing the d4-pawn.", sayShort: "…Nc6, blockade d4", highlights: [_H('c6')] },
+    { atMove: 19, say: "Hop …Nb4, hitting the d3-bishop and heading for the d5-blockade.", sayShort: "…Nb4, head for d5", highlights: [_H('b4')] },
+    { atMove: 23, say: "Plant …Nbd5, the perfect blockading square; fully equal.", sayShort: "…Nbd5, the blockade", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+const QGAR_59: SublineNarration = {
+  intro: { say: "White develops Qe2. Prepare …b5 with …a6, recapture the pawn, and fianchetto — your bishops are active and the game is balanced.", sayShort: "Qe2: …a6, …Bxc5, …Bb7" },
+  beats: [
+    { atMove: 11, say: "Play …a6, readying the …b5 expansion.", sayShort: "…a6, ready …b5", highlights: [_H('a6')] },
+    { atMove: 13, say: "Recapture …Bxc5, an active bishop and even material.", sayShort: "…Bxc5, even material", highlights: [_H('c5')] },
+    { atMove: 15, say: "Expand …b5, grabbing queenside space.", sayShort: "…b5, gain space", highlights: [_H('b5')] },
+    { atMove: 21, say: "Fianchetto …Bb7, the bishop raking the long diagonal; balanced.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Gambit-Accepted'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'budapest-gambit::6::d5@4': BGR_60,
   'budapest-gambit::5::d5@4': BGR_50,
@@ -12843,66 +13412,66 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'qgd::7::Be2@12': QD74,
   'qgd::7::Qc2@12': QD75,
   // ── qga ──
-  'qga::0::Nc3@8': C12,
-  'qga::0::dxc5@12': C12,
-  'qga::0::Bb3@12': C12,
-  'qga::0::Nc3@6': C13,
-  'qga::0::a4@12': C12,
-  'qga::0::b3@12': C12,
-  'qga::0::Qa4+@6': C12,
-  'qga::0::Bd3@12': C12,
-  'qga::0::Qe2@10': C12,
-  'qga::0::e4@20': C13,
-  'qga::1::Bb3@12': C12,
-  'qga::1::a4@12': C12,
-  'qga::1::Qe2@12': C12,
-  'qga::1::b3@12': C12,
-  'qga::1::Bd3@12': C12,
-  'qga::1::a4@10': C12,
-  'qga::1::Nc3@12': C12,
-  'qga::1::Qe2@10': C12,
-  'qga::1::a4@6': C14,
-  'qga::1::e4@12': C13,
-  'qga::2::O-O@12': C14,
-  'qga::2::g4@12': C14,
-  'qga::2::Nbd2@12': C14,
-  'qga::2::Be2@12': C14,
-  'qga::2::Nc3@6': C13,
-  'qga::2::Qb3@12': C14,
-  'qga::2::O-O@14': WQGAGAR,
-  'qga::2::Qa4+@6': C12,
-  'qga::2::a3@12': C14,
-  'qga::2::Qa4+@12': C14,
-  'qga::3::a4@10': C13,
-  'qga::3::e3@6': EQGA,
-  'qga::3::a3@10': C13,
-  'qga::3::Bg5@10': C13,
-  'qga::3::Be2@10': C13,
-  'qga::3::Nxd5@12': C13,
-  'qga::3::b3@10': C13,
-  'qga::3::Be2@12': C13,
-  'qga::3::Ne4@12': C13,
-  'qga::3::Bf4@10': C13,
-  'qga::4::Nc3@8': C12,
-  'qga::4::dxc5@12': C12,
-  'qga::4::Nc3@6': C13,
-  'qga::4::a4@12': C12,
-  'qga::4::Qe2@12': C12,
-  'qga::4::b3@12': C12,
-  'qga::4::Qa4+@6': C12,
-  'qga::4::Bd3@12': C12,
-  'qga::4::Qe2@10': C12,
-  'qga::4::Bc2@22': C12,
-  'qga::5::Nc3@8': C12,
-  'qga::5::Bb3@12': C12,
-  'qga::5::Nc3@6': C13,
-  'qga::5::a4@12': C12,
-  'qga::5::Qe2@12': C12,
-  'qga::5::b3@12': C12,
-  'qga::5::Qxd8+@14': C15,
-  'qga::5::Qa4+@6': C12,
-  'qga::5::Bd3@12': C12,
-  'qga::5::Qe2@10': C12,
+  'qga::0::Nc3@8': QGAR_0,
+  'qga::0::dxc5@12': QGAR_1,
+  'qga::0::Bb3@12': QGAR_2,
+  'qga::0::Nc3@6': QGAR_3,
+  'qga::0::a4@12': QGAR_4,
+  'qga::0::b3@12': QGAR_5,
+  'qga::0::Qa4+@6': QGAR_6,
+  'qga::0::Bd3@12': QGAR_7,
+  'qga::0::Qe2@10': QGAR_8,
+  'qga::0::e4@20': QGAR_9,
+  'qga::1::Bb3@12': QGAR_10,
+  'qga::1::a4@12': QGAR_11,
+  'qga::1::Qe2@12': QGAR_12,
+  'qga::1::b3@12': QGAR_13,
+  'qga::1::Bd3@12': QGAR_14,
+  'qga::1::a4@10': QGAR_15,
+  'qga::1::Nc3@12': QGAR_16,
+  'qga::1::Qe2@10': QGAR_17,
+  'qga::1::a4@6': QGAR_18,
+  'qga::1::e4@12': QGAR_19,
+  'qga::2::O-O@12': QGAR_20,
+  'qga::2::g4@12': QGAR_21,
+  'qga::2::Nbd2@12': QGAR_22,
+  'qga::2::Be2@12': QGAR_23,
+  'qga::2::Nc3@6': QGAR_24,
+  'qga::2::Qb3@12': QGAR_25,
+  'qga::2::O-O@14': QGAR_26,
+  'qga::2::Qa4+@6': QGAR_27,
+  'qga::2::a3@12': QGAR_28,
+  'qga::2::Qa4+@12': QGAR_29,
+  'qga::3::a4@10': QGAR_30,
+  'qga::3::e3@6': QGAR_31,
+  'qga::3::a3@10': QGAR_32,
+  'qga::3::Bg5@10': QGAR_33,
+  'qga::3::Be2@10': QGAR_34,
+  'qga::3::Nxd5@12': QGAR_35,
+  'qga::3::b3@10': QGAR_36,
+  'qga::3::Be2@12': QGAR_37,
+  'qga::3::Ne4@12': QGAR_38,
+  'qga::3::Bf4@10': QGAR_39,
+  'qga::4::Nc3@8': QGAR_40,
+  'qga::4::dxc5@12': QGAR_41,
+  'qga::4::Nc3@6': QGAR_42,
+  'qga::4::a4@12': QGAR_43,
+  'qga::4::Qe2@12': QGAR_44,
+  'qga::4::b3@12': QGAR_45,
+  'qga::4::Qa4+@6': QGAR_46,
+  'qga::4::Bd3@12': QGAR_47,
+  'qga::4::Qe2@10': QGAR_48,
+  'qga::4::Bc2@22': QGAR_49,
+  'qga::5::Nc3@8': QGAR_50,
+  'qga::5::Bb3@12': QGAR_51,
+  'qga::5::Nc3@6': QGAR_52,
+  'qga::5::a4@12': QGAR_53,
+  'qga::5::Qe2@12': QGAR_54,
+  'qga::5::b3@12': QGAR_55,
+  'qga::5::Qxd8+@14': QGAR_56,
+  'qga::5::Qa4+@6': QGAR_57,
+  'qga::5::Bd3@12': QGAR_58,
+  'qga::5::Qe2@10': QGAR_59,
   // ── slav-defence ──
   'slav-defence::0::Bd2@14': SL06,
   'slav-defence::0::Qb3@14': SL07,
