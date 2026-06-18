@@ -99,7 +99,27 @@ const GR_G3: SN = {
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
 };
 
+// ── anti-KID Sämisch (student WHITE) — big f3/e4 centre, O-O-O, kingside storm.
+//    Nearly every Black try runs through f3@8. ──
+const SAEMISCH: SN = {
+  intro: { say: "The Sämisch King's Indian — your sharpest anti-KID weapon. Whatever Black plays in the tabiya, your plan is fixed: the broad f3/e4 centre, Be3 and Qd2, castle queenside, then roll g4-h4-h5 straight at his king. He counters in the centre or on the queenside; with the f3-pawn nailing down both g4 and e4, you race on the kingside and usually get there first.", sayShort: 'Sämisch — Be3, Qd2, O-O-O, g4 storm.' },
+  beats: [
+    { atMove: 8, say: "f3 — the foundation of the Sämisch. It braces a massive e4-centre and clears the way for Be3, Qd2 and queenside castling. With the centre nailed down, your kingside pawns — g4, h4, h5 — come crashing toward Black's king while he's still arranging his counterplay.", highlights: [H('e4', KEY), H('f3', SOFT)] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence,_S%C3%A4misch_Variation'],
+};
+
 export const SUBLINE_NARRATION_HELP_A: Record<string, SN> = {
+  // anti-KID Sämisch — f3-based tabiya (all share f3@8)
+  'anti-kid-saemisch::0::c6@9': SAEMISCH, 'anti-kid-saemisch::1::c6@9': SAEMISCH, 'anti-kid-saemisch::2::c6@9': SAEMISCH, 'anti-kid-saemisch::3::c6@9': SAEMISCH, 'anti-kid-saemisch::4::c6@9': SAEMISCH,
+  'anti-kid-saemisch::0::a6@9': SAEMISCH, 'anti-kid-saemisch::1::a6@9': SAEMISCH, 'anti-kid-saemisch::2::a6@9': SAEMISCH, 'anti-kid-saemisch::3::a6@9': SAEMISCH, 'anti-kid-saemisch::4::a6@9': SAEMISCH,
+  'anti-kid-saemisch::0::Nc6@11': SAEMISCH, 'anti-kid-saemisch::2::Nc6@11': SAEMISCH, 'anti-kid-saemisch::3::Nc6@11': SAEMISCH, 'anti-kid-saemisch::4::Nc6@11': SAEMISCH,
+  'anti-kid-saemisch::0::e5@11': SAEMISCH, 'anti-kid-saemisch::1::e5@11': SAEMISCH, 'anti-kid-saemisch::3::e5@11': SAEMISCH, 'anti-kid-saemisch::4::e5@11': SAEMISCH,
+  'anti-kid-saemisch::0::a6@11': SAEMISCH, 'anti-kid-saemisch::1::a6@11': SAEMISCH, 'anti-kid-saemisch::2::a6@11': SAEMISCH, 'anti-kid-saemisch::4::a6@11': SAEMISCH,
+  'anti-kid-saemisch::0::Nbd7@11': SAEMISCH, 'anti-kid-saemisch::1::Nbd7@11': SAEMISCH, 'anti-kid-saemisch::2::Nbd7@11': SAEMISCH, 'anti-kid-saemisch::3::Nbd7@11': SAEMISCH,
+  'anti-kid-saemisch::0::b6@11': SAEMISCH, 'anti-kid-saemisch::1::b6@11': SAEMISCH, 'anti-kid-saemisch::2::b6@11': SAEMISCH, 'anti-kid-saemisch::3::b6@11': SAEMISCH, 'anti-kid-saemisch::4::b6@11': SAEMISCH,
+  'anti-kid-saemisch::0::c6@11': SAEMISCH, 'anti-kid-saemisch::1::c6@11': SAEMISCH, 'anti-kid-saemisch::2::c6@11': SAEMISCH, 'anti-kid-saemisch::3::c6@11': SAEMISCH, 'anti-kid-saemisch::4::c6@11': SAEMISCH,
+  'anti-kid-saemisch::1::c5@11': SAEMISCH, 'anti-kid-saemisch::2::c5@11': SAEMISCH, 'anti-kid-saemisch::3::c5@11': SAEMISCH, 'anti-kid-saemisch::4::c5@11': SAEMISCH,
   // Grünfeld — f3 (all 8), Bf4 modern, g3 fianchetto
   'grunfeld-defence::0::f3@4': GR_F3, 'grunfeld-defence::1::f3@4': GR_F3, 'grunfeld-defence::2::f3@4': GR_F3, 'grunfeld-defence::3::f3@4': GR_F3, 'grunfeld-defence::4::f3@4': GR_F3, 'grunfeld-defence::5::f3@4': GR_F3, 'grunfeld-defence::6::f3@4': GR_F3, 'grunfeld-defence::7::f3@4': GR_F3,
   'grunfeld-defence::0::Bf4@6': GR_BF4, 'grunfeld-defence::1::Bf4@6': GR_BF4, 'grunfeld-defence::2::Bf4@6': GR_BF4, 'grunfeld-defence::4::Bf4@6': GR_BF4, 'grunfeld-defence::6::Bf4@6': GR_BF4, 'grunfeld-defence::7::Bf4@6': GR_BF4,
