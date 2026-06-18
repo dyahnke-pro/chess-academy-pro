@@ -1078,311 +1078,618 @@ const N200: SublineNarration = {
 
 const N201: SublineNarration = {
   intro: { say: "Bc4 — White swings the bishop at f7 and the a2-g8 diagonal, but stay unbothered: your light bishop is safely tucked on h7 and your knight sits on d7. Play …e6 to blunt the c4-bishop, then …Ngf6, …Bd6 and castle. You're neutralising that bishop and steering into the familiar rock-solid Caro middlegame.", sayShort: "Classical — meet Bc4 with …e6" },
+  beats: [
+    { atMove: 17, say: "…e6 braces the centre, the solid Caro structure with your light bishop already outside the chain.", sayShort: "…e6 — brace the centre.", highlights: [H('e6')] },
+    { atMove: 19, say: "…Bxd3 trades off White's good bishop, simplifying toward a comfortable game.", sayShort: "…Bxd3 — trade the good bishop.", highlights: [H('d3')] },
+    { atMove: 23, say: "…Be7 completes development, your pieces harmonious with no weaknesses.", sayShort: "…Be7 — finish developing.", highlights: [H('e7')] },
+  ],
   sources: ['concept:pos-development', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
 };
 
 const N202: SublineNarration = {
   intro: { say: "Bc4 — White sacrifices a pawn with Bc4 and f3 to rip lines open, but grab the material and shove your passed pawn deep to e2, hitting the f1-square. With …b5 already gaining queenside space you're materially ahead and structurally fine. Be ready to hand back some of it to finish developing and castle, holding the extra pawn while White's compensation runs dry.", sayShort: "Gambit line — …e2 passer, extra pawn" },
+  beats: [
+    { atMove: 7, say: "…Nf6 develops with a hit on e4, putting White's aggressive Bc4 line to the test.", sayShort: "…Nf6 — develop, hit e4.", highlights: [H('e4')] },
+    { atMove: 9, say: "…b5 expands and kicks the c4-bishop, gaining queenside space with tempo.", sayShort: "…b5 — kick the bishop.", arrows: [A('b5', 'c4')], highlights: [H('c4')] },
+    { atMove: 19, say: "…Ba6 trades off White's strong bishop, easing your game toward equality.", sayShort: "…Ba6 — trade the bishop.", highlights: [H('a6')] },
+  ],
   sources: ['concept:pawn-passed', 'concept:tac-sacrifice'],
 };
 
 const N203: SublineNarration = {
   intro: { say: "Kb1 — White tucks the king to b1 and prepares to throw the queenside pawns at you. Lean on your textbook structure: bishop already traded via h7, knights on d7 and f6, bishop to e7, then castle short into the storm. Hit the centre with …c5, absorb White's kingside space behind your solid wall, and counterattack on the other wing.", sayShort: "Classical main — castle into the storm" },
+  beats: [
+    { atMove: 25, say: "…O-O tucks the king to safety, your solid Caro structure ready for the middlegame.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 27, say: "…Nxe4 snaps a loose central pawn, exploiting White's setup for a clean edge.", sayShort: "…Nxe4 — snap the pawn.", highlights: [H('e4')] },
+    { atMove: 29, say: "…Nf6 redevelops the knight, consolidating your comfortable position.", sayShort: "…Nf6 — redevelop, consolidate.", highlights: [H('f6')] },
+  ],
   sources: ['concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
 };
 
 const N204: SublineNarration = {
   intro: { say: "Nd2 — White reaches the Classical via this move order, but you get the same main-line structure: develop the light bishop to f5 and g6, then secure it with …h6. Send the knights to d7 and f6, and when White plays Bd3, trade the light bishop off. Finish developing, castle, and break with …c5 — a reliable, well-mapped road with none of the French's headaches.", sayShort: "Classical via Nd2 — standard setup" },
+  beats: [
+    { atMove: 5, say: "…dxe4 wins the centre pawn, forcing White to spend time regaining it.", sayShort: "…dxe4 — grab the centre.", highlights: [H('e4')] },
+    { atMove: 11, say: "…Bd6 develops the dark bishop actively toward the kingside.", sayShort: "…Bd6 — active bishop.", highlights: [H('d6')] },
+    { atMove: 15, say: "…Bg4 develops with a pin, pressuring White's pieces and the centre.", sayShort: "…Bg4 — pin and pressure.", highlights: [H('g4')] },
+  ],
   sources: ['concept:pos-development', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
 };
 
 const N205: SublineNarration = {
   intro: { say: "Ne5 — White posts the knight on the e5 outpost, propped by the d4-pawn. You're fully prepared: the light bishop is already traded, your knights and bishop are out, so meet it with …Nxe5 or just …O-O and keep everything solid. Castle short, brace for White's pawn storm behind your rock-solid Caro wall, and break with …c5 to counter near White's king.", sayShort: "Classical — e5 outpost, castle short" },
+  beats: [
+    { atMove: 25, say: "…O-O tucks the king to safety, your solid setup ready for the middlegame.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 27, say: "…Qa5 activates the queen, eyeing the queenside and pressuring White's setup.", sayShort: "…Qa5 — active queen.", highlights: [H('a5')] },
+    { atMove: 29, say: "…Nxd7 recaptures, simplifying into a comfortable, balanced position.", sayShort: "…Nxd7 — simplify.", highlights: [H('d7')] },
+  ],
   sources: ['concept:pos-outpost', 'concept:pos-king-safety'],
 };
 
 const N206: SublineNarration = {
   intro: { say: "O-O — White skips the pawn storm and tucks the king short on g1 for a quieter game. Lean on your textbook setup: light bishop traded via h7, knights on d7 and f6, pawn on e6. Complete with …Bd6 or …Be7 and …O-O. With kings on the same wing it's a manoeuvring fight, and your solid structure plus the …c5 break keep you comfortable.", sayShort: "Classical — short castle, quiet game" },
+  beats: [
+    { atMove: 23, say: "…Be7 completes development, your solid Caro structure holding firm.", sayShort: "…Be7 — finish developing.", highlights: [H('e7')] },
+    { atMove: 25, say: "…O-O tucks the king to safety, ready to contest the open files.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 27, say: "…Re8 contests the e-file, your rook joining the central play.", sayShort: "…Re8 — contest the e-file.", highlights: [H('e8')] },
+  ],
   sources: ['concept:pos-king-safety', 'concept:pos-development'],
 };
 
 const N207: SublineNarration = {
   intro: { say: "c4 — White grabs central space instead of castling, building a broad pawn front. Trust your solid structure: light bishop traded via h7, knights on d7 and f6, pawn on e6. Develop with …Bd6 or …Bb4, castle, then strike with …c5. Your well-coordinated Caro setup neutralises that extra space, so hit the centre and don't let it intimidate you.", sayShort: "Classical — meet c4 with …c5 break" },
+  beats: [
+    { atMove: 23, say: "…Qa5+ checks and develops the queen with tempo, dragging White awkward.", sayShort: "…Qa5+ — develop with check.", highlights: [H('a5')] },
+    { atMove: 25, say: "…Bb4 pins and pressures, your active pieces reaching comfortable equality.", sayShort: "…Bb4 — pin and pressure.", highlights: [H('b4')] },
+  ],
   sources: ['concept:pos-center', 'concept:pos-development'],
 };
 
 const N208: SublineNarration = {
   intro: { say: "e5 — this is the whole point of the defence: your light bishop reached f5 before …e6 ever locked it in, so you have none of the French's bad-bishop misery. With the d4-e5 chain set, route your knight to d7 heading for f8 or b6, then strike with the freeing …c5 at the base of White's chain. Your bishop on f5 and pawn on e6 give you a solid, harmonious setup.", sayShort: "Advance — good bishop on f5" },
+  beats: [
+    { atMove: 5, say: "…Bf5 — the Caro's signature, the light bishop out and active before …e6 ever locks it in.", sayShort: "…Bf5 — the good bishop out.", highlights: [H('f5')] },
+    { atMove: 13, say: "…f6 strikes at White's e5-pawn, undermining the Advance chain at its head.", sayShort: "…f6 — undermine e5.", highlights: [H('e5')] },
+    { atMove: 19, say: "…Bd6 develops the dark bishop, your pieces coordinated against the loosened centre.", sayShort: "…Bd6 — develop, coordinate.", highlights: [H('d6')] },
+  ],
   sources: ['concept:pawn-chain', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
 };
 
 const N209: SublineNarration = {
   intro: { say: "exd5 — you've reached the Panov-Botvinnik tabiya, so pin the c3-knight with …Bb4 and pile pressure on the centre. White's c4 set up an isolated-queen's-pawn fight: pin and pressure c3, recapture on d5 when White trades, and blockade the d4-pawn with a knight on c6. Your b4-bishop fights for the central dark squares and stops White getting a free hand.", sayShort: "Panov — …Bb4 pins and pressures" },
+  beats: [
+    { atMove: 5, say: "…cxd5 recaptures into a solid Exchange structure, your pieces ready to develop freely.", sayShort: "…cxd5 — solid structure.", highlights: [H('d5')] },
+    { atMove: 11, say: "…Bd6 develops the dark bishop to an active post eyeing the kingside.", sayShort: "…Bd6 — active bishop.", highlights: [H('d6')] },
+    { atMove: 19, say: "…Nf5 plants the knight on a strong square, eyeing d4 and the kingside.", sayShort: "…Nf5 — strong knight.", highlights: [H('f5')] },
+  ],
   sources: ['concept:tac-pin', 'https://en.wikipedia.org/wiki/Panov%E2%80%93Botvinnik_Attack'],
 };
 
 const N210: SublineNarration = {
   intro: { say: "Bg5 — White develops the bishop, so answer with the full queenside rush: …c5 against d4, …c4 to clamp, then …c3 to wedge into White's camp. That c3-pawn cramps White and fixes the queenside while your good bishop stays active on f5 outside the chain. Play for the queenside space and the long-term squeeze — the Caro hands you the freer game with no bad bishop.", sayShort: "Advance — …c3 deep queenside wedge" },
+  beats: [
+    { atMove: 9, say: "…Qb6 sorties the queen, hitting b2 and the centre with tempo.", sayShort: "…Qb6 — hit b2.", arrows: [A('b6', 'b2')], highlights: [H('b2')] },
+    { atMove: 11, say: "…c5 strikes at White's centre, the standard Caro counterblow.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
+    { atMove: 19, say: "…Qxe5+ wins the central pawn with check, your queen active and a pawn ahead.", sayShort: "…Qxe5+ — win the pawn.", highlights: [H('e5')] },
+  ],
   sources: ['concept:pawn-chain', 'concept:pos-space'],
 };
 
 const N211: SublineNarration = {
   intro: { say: "Nc3 — White prepares g4 to harass your f5-bishop and roll h4-h5 for kingside space. When g4 comes, answer …h5 to freeze the pawns and keep your bishop, retreating it safely to g6. You hit d4 with …c5, so those kingside pawns are blunted before they roll — your structure stays sound, the good bishop survives, and …c5 gives clear counterplay against his overextended kingside.", sayShort: "Advance — …h5 stops the g4-h4 storm" },
+  beats: [
+    { atMove: 9, say: "…c5 strikes at White's centre, the Caro counter against the Advance.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
+    { atMove: 11, say: "…Bxc5 recaptures with an active bishop eyeing f2 and the centre.", sayShort: "…Bxc5 — active bishop.", arrows: [A('c5', 'f2')], highlights: [H('f2')] },
+    { atMove: 21, say: "…Nc6 develops with pressure, your pieces harmonious and equal.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
+  ],
   sources: ['concept:att-kingside-storm', 'concept:pos-space'],
 };
 
 const N212: SublineNarration = {
   intro: { say: "Nc3 — White develops the knight, questioning your grip on d5 and eyeing b5 and e4. Keep developing with …Nd7, preparing …c5 and …Ne7 or …Nb6 to reinforce the centre. Your pride is the good bishop on f5, sitting outside the pawn chain — you're playing a French-type position without the bad bishop, so aim the …c5 break at d4.", sayShort: "Advance — develop, prepare …c5" },
+  beats: [
+    { atMove: 9, say: "…c5 strikes at White's centre, the Caro break against the Advance.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
+    { atMove: 11, say: "…Bxc5 recaptures with an active developed bishop eyeing f2.", sayShort: "…Bxc5 — active bishop.", arrows: [A('c5', 'f2')], highlights: [H('f2')] },
+    { atMove: 21, say: "…Nc6 develops with pressure, your pieces harmonious and the game equal.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
+  ],
   sources: ['concept:pawn-chain', 'concept:pos-development'],
 };
 
 const N213: SublineNarration = {
   intro: { say: "a3 — White spends a quiet waiting move to take b4 away before developing Be2. Develop calmly with …Nd7 heading for f8 or b6, then prep the thematic …c5 against the base of the d4-e5 chain. Your good bishop on f5 sits outside the chain as your pride: play …c5, …Qb6 and …Nc6, fighting for d4 from the Caro's healthy, no-bad-bishop structure.", sayShort: "Advance — develop, ready …c5" },
+  beats: [
+    { atMove: 9, say: "…Nd7 develops toward e5 and the centre, building your solid Caro setup.", sayShort: "…Nd7 — develop the knight.", highlights: [H('d7')] },
+    { atMove: 13, say: "…dxc4 wins a pawn when White overextends, your pieces active.", sayShort: "…dxc4 — win the pawn.", highlights: [H('c4')] },
+    { atMove: 23, say: "…Nc4 lands the knight on a dominant outpost, pressing White's position.", sayShort: "…Nc4 — dominant outpost.", highlights: [H('c4')] },
+  ],
   sources: ['concept:pawn-chain', 'concept:pos-development'],
 };
 
 const N214: SublineNarration = {
   intro: { say: "c3 — you've already hit d4 with …c5, and White props the centre up with c3. With your good bishop on f5, knight on d7, and pawns on c5 and e6, keep pressing d4: pile on with …Qb6, …Nc6, or open lines with …cxd4. The whole point of the early …Bf5 pays off here — you've got a French-style position without the bad bishop, fighting for the centre from a healthy base.", sayShort: "Advance — …c5 hits d4's base" },
+  beats: [
+    { atMove: 13, say: "…cxd4 opens the centre, your active pieces springing out.", sayShort: "…cxd4 — open the centre.", highlights: [H('d4')] },
+    { atMove: 17, say: "…Ne7 reroutes the knight toward f5 and the centre, eyeing key squares.", sayShort: "…Ne7 — reroute toward f5.", highlights: [H('e7')] },
+    { atMove: 19, say: "…Rc8 loads the c-file, your rook joining the queenside pressure.", sayShort: "…Rc8 — load the c-file.", highlights: [H('c8')] },
+  ],
   sources: ['concept:pawn-chain', 'concept:pos-center'],
 };
 
 const N215: SublineNarration = {
   intro: { say: "c3 — White buttresses the d4-e5 chain and develops modestly with Be2. You've got the ideal Caro setup: good bishop on f5 outside the chain, knight on d7 heading for f8 or b6, …c5 break ready against d4. Play …c5, …Qb6 and …Nc6 to pressure d4 from a healthy structure where, unlike the French, your light-squared bishop is already a happy, active piece.", sayShort: "Advance — solid setup, prepare …c5" },
+  beats: [
+    { atMove: 9, say: "…c5 strikes the centre, undermining White's Advance pawns at the base.", sayShort: "…c5 — strike the base.", highlights: [H('c5')] },
+    { atMove: 11, say: "…Nc6 develops with pressure on d4, the Caro's standard equalising lever.", sayShort: "…Nc6 — pressure d4.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
+    { atMove: 13, say: "…cxd4 opens the centre, your active pieces giving a comfortable game.", sayShort: "…cxd4 — open the centre.", highlights: [H('d4')] },
+  ],
   sources: ['concept:pawn-chain', 'concept:pos-development'],
 };
 
 const N216: SublineNarration = {
   intro: { say: "c4 — White expands in the centre to challenge d5, so reroute your knight flexibly to e7 to support the centre and head for g6 or f5. Your good bishop already stands on f5 outside the chain; keep d5 defended while you prep the …c5 break or …Nbc6. Meet White's central ambition with sound development and contest d4 and e5 from the Caro's trademark healthy structure.", sayShort: "Advance — …Ne7 holds d5" },
+  beats: [
+    { atMove: 9, say: "…Bb4+ checks and develops, gaining tempo before you resolve the centre.", sayShort: "…Bb4+ — develop with check.", highlights: [H('b4')] },
+    { atMove: 15, say: "…dxc4 wins a pawn when White overextends, your pieces well-placed.", sayShort: "…dxc4 — win the pawn.", highlights: [H('c4')] },
+    { atMove: 23, say: "…Nbd5 centralises the knight on a dominant outpost, blockading and pressing.", sayShort: "…Nbd5 — dominant knight.", highlights: [H('d5')] },
+  ],
   sources: ['concept:pos-center', 'concept:pos-development'],
 };
 
 const N217: SublineNarration = {
   intro: { say: "h3 — White grabs g4, so launch the full queenside plan: …c5 against d4, …c4 to clamp, …c3 to wedge deep into White's camp. That c3-pawn cramps White and fixes the queenside while your good bishop stays active on f5 outside the chain. Play for the queenside space and the long-term restraint of White's pieces — the Caro structure pays off with no bad bishop to babysit.", sayShort: "Advance — …c3 wedges the queenside" },
+  beats: [
+    { atMove: 9, say: "…c5 strikes the centre, the Caro counter against White's quiet h3.", sayShort: "…c5 — strike the centre.", highlights: [H('c5')] },
+    { atMove: 15, say: "…dxc4 wins a pawn, exploiting White's loosened structure.", sayShort: "…dxc4 — win the pawn.", highlights: [H('c4')] },
+    { atMove: 17, say: "…Nd5 centralises the knight on a strong square, eyeing key points.", sayShort: "…Nd5 — central knight.", highlights: [H('d5')] },
+  ],
   sources: ['concept:pawn-chain', 'concept:pos-space'],
 };
 
 const N218: SublineNarration = {
   intro: { say: "h4 — White grabs kingside space, so meet h4-h5 with …h5 to freeze the pawns, then let the bishops trade on d3. You've already played …c5 against d4; now push …c4, gaining queenside space and a clamp while fixing White's queenside pawns. With your good bishop swapped on your own terms, you have a healthy structure and a clear plan: …Qb6, …Nc6 and a minority-style queenside expansion.", sayShort: "Advance — …c4 clamps the queenside" },
+  beats: [
+    { atMove: 7, say: "…h5 freezes White's h4-h5 thrust, the standard antidote to the advance.", sayShort: "…h5 — freeze the h-pawn.", highlights: [H('h5')] },
+    { atMove: 15, say: "…cxd5 opens the centre, your pieces developing freely against White's flank lunge.", sayShort: "…cxd5 — open the centre.", highlights: [H('d5')] },
+    { atMove: 19, say: "…Be7 completes development, your solid structure giving comfortable equality.", sayShort: "…Be7 — finish developing.", highlights: [H('e7')] },
+  ],
   sources: ['concept:pos-space', 'concept:pawn-chain'],
 };
 
 const N219: SublineNarration = {
   intro: { say: "Be2 — White tucks the bishop away with the queen already on f3, so slam the door with …d4: it grabs space and shuts the knight out of d5 and c4. You've traded the light bishop for the f3-knight, handing White the bishop pair, but in this closed structure that d4-pawn cramps him and hands you a clear queenside and central plan, neutralising the bishops on blocked terrain.", sayShort: "Two Knights — …d4 cramps White" },
+  beats: [
+    { atMove: 11, say: "…Bc5 develops the bishop actively, eyeing f2 and the centre.", sayShort: "…Bc5 — active bishop.", arrows: [A('c5', 'f2')], highlights: [H('f2')] },
+    { atMove: 13, say: "…Bd4 centralises the bishop on a dominant square, cramping White.", sayShort: "…Bd4 — dominant bishop.", highlights: [H('d4')] },
+    { atMove: 19, say: "…Qb6 sorties the queen, pressuring b2 and the queenside.", sayShort: "…Qb6 — pressure b2.", arrows: [A('b6', 'b2')], highlights: [H('b2')] },
+  ],
   sources: ['concept:pos-space', 'concept:pos-bishop-pair'],
 };
 
 const N220: SublineNarration = {
   intro: { say: "Be3 — White supports d4, so strike with …c5 to fight for the centre. You've traded the light bishop for the f3-knight, so open the position on your own terms: …c5 challenges d4 and frees your game. This dynamic break gives you active pieces and a sound structure, and keeping the position fluid stops his bishop pair from ever clamping down.", sayShort: "Two Knights — …c5 strikes the centre" },
+  beats: [
+    { atMove: 13, say: "…Qb6 sorties the queen, hitting b2 and the centre with tempo.", sayShort: "…Qb6 — hit b2.", arrows: [A('b6', 'b2')], highlights: [H('b2')] },
+    { atMove: 15, say: "…Bb4 pins and develops, gaining tempo against White's setup.", sayShort: "…Bb4 — pin and develop.", highlights: [H('b4')] },
+    { atMove: 23, say: "…Qxa2 grabs the loose pawn, your queen active and a pawn to the good.", sayShort: "…Qxa2 — grab the pawn.", highlights: [H('a2')] },
+  ],
   sources: ['concept:pos-center', 'concept:pos-initiative'],
 };
 
 const N221: SublineNarration = {
   intro: { say: "Bg5 — White pins your f6-knight, so hit back with …c5 against d4. Having given up the bishop for the f3-knight, only open the position on your own terms: …c5 challenges the centre and frees you. That pin isn't dangerous — meet it with …Be7 or …cxd4 — and the central tension favours you as the side with the sounder structure.", sayShort: "Two Knights — …c5 strikes the centre" },
+  beats: [
+    { atMove: 13, say: "…h6 questions the g5-bishop, gaining the bishop pair or a tempo.", sayShort: "…h6 — question the bishop.", arrows: [A('h6', 'g5')], highlights: [H('g5')] },
+    { atMove: 17, say: "…dxe4 opens the centre, your pieces active in the clarified position.", sayShort: "…dxe4 — open the centre.", highlights: [H('e4')] },
+    { atMove: 23, say: "…Qd5 centralises the queen, controlling key squares in the balanced game.", sayShort: "…Qd5 — centralise the queen.", highlights: [H('d5')] },
+  ],
   sources: ['concept:pos-center', 'concept:tac-pin'],
 };
 
 const N222: SublineNarration = {
   intro: { say: "d3 — White keeps the centre modest, so grab space with the …d4 wedge. You've traded the light bishop for the f3-knight, so neutralise his bishop pair by closing the position; that d4-pawn kicks the c3-knight and cramps White. Reroute your d7-knight toward the kingside or c5, and play comfortably for the queenside and the central clamp.", sayShort: "Two Knights — …d4 space clamp" },
+  beats: [
+    { atMove: 11, say: "…Nd7 develops toward the centre, building your solid Caro structure.", sayShort: "…Nd7 — develop the knight.", highlights: [H('d7')] },
+    { atMove: 13, say: "…Bd6 develops the dark bishop actively toward the kingside.", sayShort: "…Bd6 — active bishop.", highlights: [H('d6')] },
+    { atMove: 23, say: "…e5 strikes the centre, freeing your game with active pieces.", sayShort: "…e5 — strike the centre.", highlights: [H('e5')] },
+  ],
   sources: ['concept:pos-space', 'concept:pawn-chain'],
 };
 
 const N223: SublineNarration = {
   intro: { say: "d3 — this quiet King's-Indian-Attack treatment trades the queens off on d1 and leaves White's king stuck there after recapturing. You're fine: develop …Nf6 hitting e4, send the bishop to g7 on the long diagonal, and grab central space and a queenside majority with …c5. With no queens on, his king on d1 is more a liability than an asset — play for the better structure and smooth development.", sayShort: "Queenless — …c5 and …g7 bishop" },
+  beats: [
+    { atMove: 5, say: "…dxe4 wins the centre pawn when White plays the meek d3.", sayShort: "…dxe4 — grab the centre.", highlights: [H('e4')] },
+    { atMove: 9, say: "…Nf6 develops, the knight eyeing e4 and the centre in the endgame.", sayShort: "…Nf6 — develop, eye e4.", highlights: [H('f6')] },
+    { atMove: 11, say: "…g6 prepares the fianchetto, your bishop heading for the long diagonal.", sayShort: "…g6 — prep the fianchetto.", highlights: [H('g6')] },
+  ],
   sources: ['concept:pawn-majority', 'concept:pos-development'],
 };
 
 const N224: SublineNarration = {
   intro: { say: "exd5 — White releases the tension, so hit back at once with …c5 rather than recapture passively. Having traded the light bishop for the f3-knight, use …c5 to open lines and free the position on your own terms. The dynamic …c5 challenges d4 and d5, generating active pieces and keeping you from getting cramped against his bishop pair.", sayShort: "Two Knights — …c5 fights the centre" },
+  beats: [
+    { atMove: 13, say: "…cxd5 recaptures into the Panov structure, your pieces ready to pressure the centre.", sayShort: "…cxd5 — Panov structure.", highlights: [H('d5')] },
+    { atMove: 15, say: "…Nc6 develops with pressure on the centre, your pieces flowing out.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
+    { atMove: 21, say: "…Bd6 develops the dark bishop, coordinating for the middlegame.", sayShort: "…Bd6 — develop, coordinate.", highlights: [H('d6')] },
+  ],
   sources: ['concept:pos-center', 'concept:pos-initiative'],
 };
 
 const N225: SublineNarration = {
   intro: { say: "exd5 — White swaps in the centre, then posts the knight aggressively with Ne5 and pins with Bb5, but you're solidly placed in the lone d-pawn structure. Your knight on c6 and pawn on e6 support the centre; play …Bd7 to calmly unpin and offer to trade his active pieces. The structure is sound and symmetric — swap off the e5-knight and b5-bishop, finish developing, and reach a comfortable balanced middlegame.", sayShort: "Exchange — …Bd7 unpins, trades off" },
+  beats: [
+    { atMove: 5, say: "…cxd5 recaptures into a solid Exchange structure with free development.", sayShort: "…cxd5 — solid structure.", highlights: [H('d5')] },
+    { atMove: 11, say: "…Bd6 develops the dark bishop to an active post eyeing the kingside.", sayShort: "…Bd6 — active bishop.", highlights: [H('d6')] },
+    { atMove: 21, say: "…dxc4 wins a pawn when White overextends, your pieces well-placed.", sayShort: "…dxc4 — win the pawn.", highlights: [H('c4')] },
+  ],
   sources: ['concept:tac-pin', 'concept:pos-development'],
 };
 
 const N226: SublineNarration = {
   intro: { say: "g3 — White fianchettoes to activate the light-squared bishop, so answer with the …d4 space-grab. Having traded off the light bishop, blunt his bishop pair by closing the centre; that d4-pawn evicts the c3-knight and seizes territory. Play for the queenside and the central clamp, leaving his fianchettoed bishop biting on the granite of your pawn chain.", sayShort: "Two Knights — …d4 against the fianchetto" },
+  beats: [
+    { atMove: 11, say: "…Nd7 develops toward the centre, building your solid setup.", sayShort: "…Nd7 — develop the knight.", highlights: [H('d7')] },
+    { atMove: 13, say: "…Bc5 develops the bishop actively, eyeing f2.", sayShort: "…Bc5 — active bishop.", arrows: [A('c5', 'f2')], highlights: [H('f2')] },
+    { atMove: 19, say: "…b5 expands on the queenside, gaining space in the comfortable middlegame.", sayShort: "…b5 — queenside space.", highlights: [H('b5')] },
+  ],
   sources: ['concept:pos-space', 'concept:pawn-fianchetto'],
 };
 
 const N227: SublineNarration = {
   intro: { say: "gxf3 — White recaptures with the g-pawn, accepting doubled f-pawns and an open g-file for the bishop pair. Exploit that structural concession: your …e6, …Nf6 and …c5 break challenge the centre and hit his damaged kingside. With his king cover compromised, play for the better structure and target those weak f-pawns and the half-open files in the long game.", sayShort: "Two Knights — …c5, target doubled f-pawns" },
+  beats: [
+    { atMove: 9, say: "…d4 jams White's centre, gaining space when he recaptures the gambit pawn on f3.", sayShort: "…d4 — jam the centre.", highlights: [H('d4')] },
+    { atMove: 13, say: "…c5 supports the d4-spearhead, your pawns cramping White's position.", sayShort: "…c5 — support the spearhead.", highlights: [H('c5')] },
+    { atMove: 17, say: "…Nc6 develops with pressure, your space advantage telling.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
+  ],
   sources: ['concept:pawn-doubled', 'concept:pos-center'],
 };
 
 const N228: SublineNarration = {
   intro: { say: "Bb5 — a true isolated-queen's-pawn battle where the d-file and the d5/e5 squares decide everything. You've got the standard play: your bishop pinned the c3-knight, …Nxd5 centralised, and the knight on c6 blockades d4. White's Bb5 adds pressure and eyes your structure, so play …Be7 and castle, treating White's isolated d-pawn as your long-term target.", sayShort: "Panov — blockade the isolated d-pawn" },
+  beats: [
+    { atMove: 17, say: "…O-O tucks the king to safety, your active pieces ready for the middlegame.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 19, say: "…Nde7 reroutes the knight, reinforcing your kingside and the centre.", sayShort: "…Nde7 — reroute the knight.", highlights: [H('e7')] },
+    { atMove: 21, say: "…Bd6 develops the dark bishop to an active diagonal.", sayShort: "…Bd6 — active bishop.", highlights: [H('d6')] },
+  ],
   sources: ['concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Panov%E2%80%93Botvinnik_Attack'],
 };
 
 const N229: SublineNarration = {
   intro: { say: "Bc4 — White swings the bishop actively at your d5-knight and eyes f7 in this isolated-queen's-pawn fight. You're solidly placed: knight on c6 blockading d4, bishop on b4 pinning and pressuring the centre, and …Be7 or …Be6 completing development while neutralising that c4-bishop. Stick to the classic plan: restrain and target White's isolated d-pawn, anchoring on the d5 and c6 blockading squares.", sayShort: "Panov — meet Bc4, blockade d4" },
+  beats: [
+    { atMove: 17, say: "…O-O tucks the king to safety after White's Bc4 try, your pieces solid.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 19, say: "…Nb6 reroutes the knight to hit White's bishop and eye c4.", sayShort: "…Nb6 — hit the bishop.", highlights: [H('b6')] },
+    { atMove: 21, say: "…Nxd4 grabs the central pawn, your pieces active with the initiative.", sayShort: "…Nxd4 — grab the centre.", highlights: [H('d4')] },
+  ],
   sources: ['concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Panov%E2%80%93Botvinnik_Attack'],
 };
 
 const N230: SublineNarration = {
   intro: { say: "Bd3 — White builds the natural Exchange setup with the bishop on d3 and Bf4. You've got a comfortable mirror structure with the lone d-pawn and your knight already on c6 covering e5. Develop your bishop to g4 to pin or trade White's f3-knight and pressure d4, then complete with …e6 and …Bd6, contesting the dark squares White is trying to claim.", sayShort: "Exchange — meet Bf4 with …Bg4" },
+  beats: [
+    { atMove: 7, say: "…Nc6 develops with pressure on the centre, your pieces flowing out.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
+    { atMove: 11, say: "…Bd6 develops the dark bishop to an active post eyeing the kingside.", sayShort: "…Bd6 — active bishop.", highlights: [H('d6')] },
+    { atMove: 19, say: "…Nf5 plants the knight on a strong square, eyeing d4 and the kingside.", sayShort: "…Nf5 — strong knight.", highlights: [H('f5')] },
+  ],
   sources: ['concept:pos-development', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
 };
 
 const N231: SublineNarration = {
   intro: { say: "Nxd5 — White trades knights on d5, so recapture and keep the typical IQP setup with active pieces. Your bishop on b4, your knight on c6 blockading d4, and the half-open files hand you plenty of counterplay against his isolated d-pawn. Your task is clear: restrain and round up that d4-pawn, finish developing, and use the d5 and e4 squares as your outposts.", sayShort: "Panov — recapture, target d4" },
+  beats: [
+    { atMove: 19, say: "…Qxd5 recentralises the queen, simplifying toward comfortable equality.", sayShort: "…Qxd5 — recentralise.", highlights: [H('d5')] },
+    { atMove: 21, say: "…O-O tucks the king to safety, your pieces ready for the middlegame.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 23, say: "…Qa5 activates the queen, eyeing the queenside with tempo.", sayShort: "…Qa5 — active queen.", highlights: [H('a5')] },
+  ],
   sources: ['concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Panov%E2%80%93Botvinnik_Attack'],
 };
 
 const N232: SublineNarration = {
   intro: { say: "Nxd5 — White trades on d5 with both sides castled and developed, simplifying toward the isolated-queen's-pawn battle. Recapture and keep your standard plan: your knight on c6 blockades d4, your bishop on b4 pressures the dark squares, your pieces swarm the lone d-pawn. With sound development and active pieces, restrain and round up his isolated d4-pawn as the long-term weakness.", sayShort: "Panov — recapture, blockade d4" },
+  beats: [
+    { atMove: 19, say: "…exd5 recaptures, the position simplifying into comfortable equality.", sayShort: "…exd5 — recapture, simplify.", highlights: [H('d5')] },
+    { atMove: 21, say: "…Nxb4 trades and wins time, your pieces active and coordinated.", sayShort: "…Nxb4 — trade, win time.", highlights: [H('b4')] },
+    { atMove: 23, say: "…Bg4 develops with a pin, pressuring White's setup.", sayShort: "…Bg4 — pin and pressure.", highlights: [H('g4')] },
+  ],
   sources: ['concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Panov%E2%80%93Botvinnik_Attack'],
 };
 
 const N233: SublineNarration = {
   intro: { say: "a3 — White questions your b4-bishop in this isolated-queen's-pawn middlegame. You've got the typical strong setup: …Nxd5 centralised the knight, the knight on c6 blockades d4, and the bishop pressures the centre. Retreat the bishop to e7 or trade on c3, then settle your pieces around the d4-pawn — that's the long-term weakness you aim to restrain and win.", sayShort: "Panov — a3 questions the b4-bishop" },
+  beats: [
+    { atMove: 17, say: "…Be7 repositions the bishop, eyeing the kingside fianchetto regroup.", sayShort: "…Be7 — reposition the bishop.", highlights: [H('e7')] },
+    { atMove: 19, say: "…Bf6 develops the bishop toward the long diagonal and the centre.", sayShort: "…Bf6 — toward the diagonal.", highlights: [H('f6')] },
+    { atMove: 23, say: "…g6 prepares to fianchetto, completing a solid, equal setup.", sayShort: "…g6 — prep the fianchetto.", highlights: [H('g6')] },
+  ],
   sources: ['concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Panov%E2%80%93Botvinnik_Attack'],
 };
 
 const N234: SublineNarration = {
   intro: { say: "a3 — both sides castled and developed, and White asks your b4-bishop its intentions in this isolated-queen's-pawn middlegame. You've got the ideal setup: knight centralised on d5, knight on c6 blockading d4, bishop pressuring the centre. Retreat to e7 or trade on c3, then settle your pieces around the lone d-pawn and run the standard plan — restrain and eventually win White's isolated pawn.", sayShort: "Panov — a3 questions the bishop" },
+  beats: [
+    { atMove: 19, say: "…Be7 repositions the bishop toward the kingside fianchetto.", sayShort: "…Be7 — reposition the bishop.", highlights: [H('e7')] },
+    { atMove: 21, say: "…Bf6 develops toward the long diagonal and the centre.", sayShort: "…Bf6 — toward the diagonal.", highlights: [H('f6')] },
+    { atMove: 23, say: "…g6 prepares the fianchetto, completing a solid, equal setup.", sayShort: "…g6 — prep the fianchetto.", highlights: [H('g6')] },
+  ],
   sources: ['concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Panov%E2%80%93Botvinnik_Attack'],
 };
 
 const N235: SublineNarration = {
   intro: { say: "c5 — White advances to grab queenside space instead of holding the tension, so fianchetto with …g6 and …Bg7 to pressure the long diagonal and d4. With your g7-bishop bearing down on d4 and the …e5 or …b6 breaks available, undermine White's advanced c5-pawn and centre. Meet Bb5+ by blocking with …Nc6 or …Bd7, and keep fighting for the dark squares and the central breaks.", sayShort: "Panov — …g7 bishop hits d4" },
+  beats: [
+    { atMove: 9, say: "…e5 strikes the centre, seizing space against White's c5 thrust.", sayShort: "…e5 — strike the centre.", highlights: [H('e5')] },
+    { atMove: 11, say: "…Ne4 centralises the knight on a strong square, eyeing White's pieces.", sayShort: "…Ne4 — central knight.", highlights: [H('e4')] },
+    { atMove: 17, say: "…Nc6 develops with pressure, your pieces harmonious and active.", sayShort: "…Nc6 — develop with pressure.", highlights: [H('c6')] },
+  ],
   sources: ['concept:pawn-fianchetto', 'concept:pos-center'],
 };
 
 const N236: SublineNarration = {
   intro: { say: "cxd5 — you've reached the main isolated-queen's-pawn tabiya after the early cxd5 and …Nxd5. Pin the c3-knight with …Bb4, the standard plan to pressure the centre and the d4-pawn that's about to be isolated. With your knight centralised on d5 and your bishop fighting for the dark squares, your pieces are active and ready to blockade and round up White's lone d-pawn over the long game.", sayShort: "Panov — …Bb4, blockade d4" },
+  beats: [
+    { atMove: 9, say: "…Nxd5 recaptures into the Panov, the knight central and ready to be challenged.", sayShort: "…Nxd5 — recapture central.", highlights: [H('d5')] },
+    { atMove: 11, say: "…g6 prepares the fianchetto, your bishop heading for the long diagonal against the IQP.", sayShort: "…g6 — prep the fianchetto.", highlights: [H('g6')] },
+    { atMove: 13, say: "…Bg7 takes aim down the long diagonal at White's centre and isolated pawn.", sayShort: "…Bg7 — the long diagonal.", arrows: [A('g7', 'd4')], highlights: [H('d4')] },
+  ],
   sources: ['concept:pawn-isolated', 'concept:tac-pin'],
 };
 
 const N237: SublineNarration = {
   intro: { say: "Be2 — your …e5 broke the centre and White develops quietly, so seize space with …c5 and the …c4 clamp on the queenside. Your bishop on g4 still pins the f3-knight, pressuring d4, while the …c4 wedge fixes White's pawns and preps …b5-b4. You've got a healthy, spacious position with the e5-pawn anchoring the centre — exploit the soft spots the early f3 left in White's camp.", sayShort: "Fantasy — …c4 grabs queenside space" },
+  beats: [
+    { atMove: 11, say: "…Bxf3 trades to damage White's kingside structure, then you target the weakness.", sayShort: "…Bxf3 — damage the kingside.", highlights: [H('f3')] },
+    { atMove: 13, say: "…exd4 opens the centre, your pieces active as the tension resolves.", sayShort: "…exd4 — open the centre.", highlights: [H('d4')] },
+    { atMove: 17, say: "…Bb4+ develops with check, gaining tempo before you complete development.", sayShort: "…Bb4+ — develop with check.", highlights: [H('b4')] },
+  ],
   sources: ['concept:pos-space', 'concept:tac-pin'],
 };
 
 const N238: SublineNarration = {
   intro: { say: "Be3 — your …e5 broke the centre and White defends d4 with the bishop, so play …c5 and …c4 to fix the queenside and grab a clamp. Your bishop pins the f3-knight while the …c4 wedge restrains White's queenside pawns, giving you space and a clear plan. Push …c4 for territory and prepare …b5-b4, with the e5-pawn anchoring the centre against White's slightly loosened position.", sayShort: "Fantasy — …c4 clamps the queenside" },
+  beats: [
+    { atMove: 11, say: "…Nd7 develops toward the centre, building your solid Caro structure.", sayShort: "…Nd7 — develop the knight.", highlights: [H('d7')] },
+    { atMove: 15, say: "…Bd6 develops the dark bishop actively toward the kingside.", sayShort: "…Bd6 — active bishop.", highlights: [H('d6')] },
+    { atMove: 19, say: "…exd4 opens the centre, your pieces active in the clarified position.", sayShort: "…exd4 — open the centre.", highlights: [H('d4')] },
+  ],
   sources: ['concept:pos-space', 'concept:tac-pin'],
 };
 
 const N239: SublineNarration = {
   intro: { say: "Bg5 — your …e5 has fully contested the centre and White pins your f6-knight. You're comfortably developed: your bishop on g4 pins White's f3-knight right back, both knights are out, and the d4/e5 tension is balanced. Hold the e5 strongpoint, finish with …Be7 and castle, and treat White's loosened f-file as a feature to exploit, not something to fear.", sayShort: "Fantasy — …e5 holds, mutual pins" },
+  beats: [
+    { atMove: 15, say: "…h6 questions the g5-bishop, gaining the bishop pair or opening the g-file.", sayShort: "…h6 — question the bishop.", arrows: [A('h6', 'g5')], highlights: [H('g5')] },
+    { atMove: 17, say: "…gxf6 recaptures toward the centre, the open g-file pointing at White's king.", sayShort: "…gxf6 — open the g-file.", highlights: [H('f6')] },
+    { atMove: 19, say: "…Qb6 sorties the queen, pressuring b2 and the queenside.", sayShort: "…Qb6 — pressure b2.", arrows: [A('b6', 'b2')], highlights: [H('b2')] },
+  ],
   sources: ['concept:tac-pin', 'concept:pos-center'],
 };
 
 const N240: SublineNarration = {
   intro: { say: "c3 — your …e5 counterblow met White's f3-centre, and White props d4 up with c3. With your bishop pinning the f3-knight and your knight on d7, hold the e5 strongpoint — you're comfortably equal. Finish developing with …Ngf6 and …Be7, castle, and exploit the slight loosening White's early f3 left, knowing the centre is firmly contested.", sayShort: "Fantasy — …e5 strongpoint, develop" },
+  beats: [
+    { atMove: 13, say: "…Bh5 repositions the bishop, keeping the pin and preparing to develop.", sayShort: "…Bh5 — keep the pin.", highlights: [H('h5')] },
+    { atMove: 15, say: "…Bd6 develops the dark bishop to an active post.", sayShort: "…Bd6 — active bishop.", highlights: [H('d6')] },
+    { atMove: 17, say: "…exd4 opens the centre, your pieces active in the clarified position.", sayShort: "…exd4 — open the centre.", highlights: [H('d4')] },
+  ],
   sources: ['concept:pos-center', 'concept:tac-pin'],
 };
 
 const N241: SublineNarration = {
   intro: { say: "c3 — your …e5 counter met White's broad centre and the pawns locked, so grab queenside space with …c5-c4 and …a6. White's b3 challenges your c4-pawn, so support it with …a6 preparing …b5, building a queenside chain. Play for space and the …b5-b4 break against White's queenside — the early f3 and b3 loosened White's structure and hand you a comfortable game.", sayShort: "Fantasy — queenside chain with …c4, …a6" },
+  beats: [
+    { atMove: 9, say: "…Qh4+ — the Fantasy refutation; the check rakes White's loosened kingside after his f3.", sayShort: "…Qh4+ — punish the f3-weakness.", highlights: [H('h4')] },
+    { atMove: 11, say: "…Qxe4+ snaps the centre pawn with check, your queen grabbing material as White scrambles.", sayShort: "…Qxe4+ — grab with check.", highlights: [H('e4')] },
+    { atMove: 21, say: "…Bd6 develops the dark bishop, consolidating your extra pawn and active pieces.", sayShort: "…Bd6 — consolidate the edge.", highlights: [H('d6')] },
+  ],
   sources: ['concept:pawn-chain', 'concept:pos-space'],
 };
 
 const N242: SublineNarration = {
   intro: { say: "d5 — White locks the centre after your …e5, so roll the queenside with …c5, …c4 and …c3 to clamp and wedge into White's camp. With the centre fixed, the play shifts to the wings: your c3-pawn cramps White's queenside while you prep …b5-b4 and minor-piece manoeuvres behind the chain. Play for the queenside space in a locked position where White's early f3 left lasting soft spots.", sayShort: "Fantasy — locked centre, …c3 wedge" },
+  beats: [
+    { atMove: 9, say: "…Qh4+ checks and exploits White's loosened kingside in this sharp Fantasy line.", sayShort: "…Qh4+ — punish the weakness.", highlights: [H('h4')] },
+    { atMove: 11, say: "…Qxe4+ snaps the centre pawn with check, winning material in the complications.", sayShort: "…Qxe4+ — grab with check.", highlights: [H('e4')] },
+    { atMove: 19, say: "…cxd5 opens the centre, your extra pawn and active pieces giving the edge.", sayShort: "…cxd5 — open, consolidate.", highlights: [H('d5')] },
+  ],
   sources: ['concept:pawn-chain', 'concept:pos-space'],
 };
 
 const N243: SublineNarration = {
   intro: { say: "dxe5 — White released the centre, but don't rush to regain the pawn: expand with …c5 and …c4 to clamp the queenside. Your bishop on g4 pins the f3-knight, and you'll recover or pressure the e5-pawn while grabbing space with the …c4 wedge. Run the thematic queenside expansion with …b5-b4, exploiting the structure the early f3 loosened while keeping piece activity and the initiative.", sayShort: "Fantasy — …c4 space, regain e5" },
+  beats: [
+    { atMove: 13, say: "…Nd7 develops toward e5, building your central counterplay in the endgame.", sayShort: "…Nd7 — develop, prep …e5.", highlights: [H('d7')] },
+    { atMove: 15, say: "…O-O-O castles into the centre, your rook landing on the open d-file.", sayShort: "…O-O-O — rook to the centre.", highlights: [H('c8')] },
+    { atMove: 23, say: "…Ndxe5 regains the central pawn, your knights dominant and active.", sayShort: "…Ndxe5 — regain the pawn.", highlights: [H('e5')] },
+  ],
   sources: ['concept:pos-space', 'concept:pos-initiative'],
 };
 
 const N244: SublineNarration = {
   intro: { say: "dxe5 — you struck …e5 against White's broad pawn centre and White has just released the tension. With your bishop pinning the f3-knight and both knights heading to f6 and d7, regain the e5-pawn smoothly and reach an open, comfortable position. The point of …e5 was to break White's grip before it became a steamroller — you come out fully developed with no weaknesses.", sayShort: "Fantasy — …e5 break frees Black" },
+  beats: [
+    { atMove: 15, say: "…Bxf3 trades to damage White's kingside, then you regain the centre pawn.", sayShort: "…Bxf3 — damage the kingside.", highlights: [H('f3')] },
+    { atMove: 17, say: "…Nxe5 wins back the central pawn with an active centralised knight.", sayShort: "…Nxe5 — win back the pawn.", highlights: [H('e5')] },
+    { atMove: 21, say: "…g5 gains kingside space, your pawns rolling in the comfortable endgame.", sayShort: "…g5 — gain kingside space.", highlights: [H('g5')] },
+  ],
   sources: ['concept:pos-center', 'concept:tac-pin'],
 };
 
 const N245: SublineNarration = {
   intro: { say: "dxe5 — White captured, but rather than regain the pawn at once, roll the queenside with …c5, …c4 and …c3, wedging deep into White's camp. That c3-pawn cramps White and fixes the queenside while you round up the e5-pawn or build piece pressure to restore material. Play for the space advantage and long-term restraint, exploiting the weaknesses the early f3 and your queenside advances created.", sayShort: "Fantasy — …c3 wedge, regain e5" },
+  beats: [
+    { atMove: 9, say: "…Qh4+ — the queen check punishes White's loose centre, raking the kingside.", sayShort: "…Qh4+ — check the loose king.", highlights: [H('h4')] },
+    { atMove: 13, say: "…Qxe4+ grabs the centre pawn with check, your queen winning material.", sayShort: "…Qxe4+ — grab with check.", highlights: [H('e4')] },
+    { atMove: 19, say: "…O-O-O castles into the centre, your rook landing actively on the d-file.", sayShort: "…O-O-O — rook to the centre.", highlights: [H('c8')] },
+  ],
   sources: ['concept:pawn-chain', 'concept:pos-space'],
 };
 
 const N246: SublineNarration = {
   intro: { say: "Bg3 — White preserves the dark-squared bishop instead of trading it on d6. Your bishop on d6 still eyes the kingside dark squares, and with the structure fully symmetric, you're comfortably equal from sound development. Complete with …O-O, contest the e5 outpost the knights are eyeing, and consider trading the dark-squared bishops on g3 or e5 to leave a balanced, easy-to-play position.", sayShort: "Exchange — Bg3 keeps the bishop" },
+  beats: [
+    { atMove: 19, say: "…Bxg3 trades to damage White's kingside structure, the open h-file yours.", sayShort: "…Bxg3 — damage the kingside.", highlights: [H('g3')] },
+    { atMove: 21, say: "…Qc7 connects and centralises, your pieces coordinated for the middlegame.", sayShort: "…Qc7 — connect the pieces.", highlights: [H('c7')] },
+    { atMove: 23, say: "…O-O tucks the king to safety, your solid structure ready to press.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+  ],
   sources: ['concept:pos-development', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
 };
 
 const N247: SublineNarration = {
   intro: { say: "Ne2 — White develops the knight to e2 rather than f3, so start queenside operations with …a6, …a5 and …a4 to fix and pressure White's pawns. In this symmetric lone-d-pawn structure you're fully equal, and the minority-style …a4 advance provokes weaknesses once b3 chases it. Develop the rest naturally with …Nf6, …Bf5 or …Bg4 and …e6, playing for the queenside and better minor pieces.", sayShort: "Exchange — …a4 probes the queenside" },
+  beats: [
+    { atMove: 9, say: "…g6 prepares the fianchetto, your bishop heading for the long diagonal.", sayShort: "…g6 — prep the fianchetto.", highlights: [H('g6')] },
+    { atMove: 11, say: "…Bg7 takes the long diagonal, your bishop aimed at the centre and queenside.", sayShort: "…Bg7 — the long diagonal.", arrows: [A('g7', 'b2')], highlights: [H('b2')] },
+    { atMove: 19, say: "…e5 strikes the centre, freeing your game with active pieces.", sayShort: "…e5 — strike the centre.", highlights: [H('e5')] },
+  ],
   sources: ['concept:pawn-minority-attack', 'concept:pos-development'],
 };
 
 const N248: SublineNarration = {
   intro: { say: "Ne5 — White jumps to the e5 outpost it's been angling for, hitting your g4-bishop and d7-queen. You're well placed to meet it: trade on e5 or challenge with …Bxe5 to dissolve the outpost, and the symmetric structure means White gets no real edge. Your bishop on d6 already eyes e5, so contest the centre and keep the balanced lone-d-pawn position firmly in hand.", sayShort: "Exchange — challenge the e5 knight" },
+  beats: [
+    { atMove: 19, say: "…Qc7 connects and eyes the e5-knight and the c-file, coordinating your pieces.", sayShort: "…Qc7 — connect, eye e5.", highlights: [H('c7')] },
+    { atMove: 21, say: "…Nd7 challenges the e5-knight, simplifying toward a comfortable game.", sayShort: "…Nd7 — challenge e5.", highlights: [H('d7')] },
+    { atMove: 23, say: "…Bxe5 trades off the strong knight, your bishop active in the balanced position.", sayShort: "…Bxe5 — trade the knight.", highlights: [H('e5')] },
+  ],
   sources: ['concept:pos-outpost', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
 };
 
 const N249: SublineNarration = {
   intro: { say: "Qxb7 — White grabs the b7-pawn with the queen, a greedy raid that hands you the initiative. Your a8-rook is ready to hit the queen, and after …Rb8 or …O-O the lines open in your favour — that pawn was poison, not a real gain. Develop with tempo: your solid centre and lead in coordination more than pay for the pawn while the queen scrambles back and you seize the b-file.", sayShort: "Exchange — Qxb7 grab invites …Rb8" },
+  beats: [
+    { atMove: 21, say: "…Rb8 hits the intruding queen, gaining time as White's grab proves greedy.", sayShort: "…Rb8 — hit the queen.", arrows: [A('b8', 'b7')], highlights: [H('b7')] },
+    { atMove: 23, say: "…O-O tucks the king to safety, your lead in development worth more than the pawn.", sayShort: "…O-O — king safe, develop.", highlights: [H('g8')] },
+    { atMove: 25, say: "…Rb6 swings the rook to trap or chase the queen, your initiative mounting.", sayShort: "…Rb6 — chase the queen.", highlights: [H('b6')] },
+  ],
   sources: ['concept:pos-initiative', 'concept:pos-open-file'],
 };
 
 const N250: SublineNarration = {
   intro: { say: "Rae1 — the symmetrical Exchange with the dark-squared bishops already traded on d6. White lifts the rook to eye the half-open e-file and the e5 break, but you both own a lone d-pawn and the structure is balanced. With your queen settled on d6 and knight on c6 holding e5, keep developing harmoniously and contest the centre with the rook to c8 or a timely …e5 of your own.", sayShort: "Symmetrical Exchange — rook eyes e-file" },
+  beats: [
+    { atMove: 23, say: "…Bxf3 trades to damage White's kingside, easing your position.", sayShort: "…Bxf3 — damage the kingside.", highlights: [H('f3')] },
+    { atMove: 25, say: "…Qc7 centralises and connects, your pieces coordinated for the middlegame.", sayShort: "…Qc7 — connect the pieces.", highlights: [H('c7')] },
+    { atMove: 27, say: "…g6 makes luft and prepares to regroup, your solid structure holding.", sayShort: "…g6 — luft and regroup.", highlights: [H('g6')] },
+  ],
   sources: ['concept:pos-development', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
 };
 
 const N251: SublineNarration = {
   intro: { say: "h3 — White probes with Qb3 and then h3, questioning your b7-pawn and g4-bishop. You're fully prepared: your queen on d7 defends b7 and supports the bishop, which can retreat to h5 or trade on f3. The symmetric lone-d-pawn structure gives you full equality, so complete with …e6 and …Bd6, contesting the e5 outpost and the e-file in a balanced middlegame.", sayShort: "Exchange — …Qd7 covers b7, hold g4" },
+  beats: [
+    { atMove: 15, say: "…Bh5 keeps the bishop's pin, preparing to develop behind it.", sayShort: "…Bh5 — keep the pin.", highlights: [H('h5')] },
+    { atMove: 17, say: "…e6 braces the centre, your solid Caro structure complete.", sayShort: "…e6 — brace the centre.", highlights: [H('e6')] },
+    { atMove: 19, say: "…Bd6 develops the dark bishop to an active diagonal.", sayShort: "…Bd6 — active bishop.", highlights: [H('d6')] },
+  ],
   sources: ['concept:pos-development', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
 };
 
 const N252: SublineNarration = {
   intro: { say: "h3 — White questions your g4-bishop before finishing development. Retreat to h5 or trade on a knight, keeping the symmetric lone-d-pawn structure firmly balanced. With your queen on d7 covering b7 against the Qb3 probe and your pieces harmoniously placed, continue with …Bd6 and …O-O, reaching full equality where the e5 outpost and the e-file are the only fighting ground.", sayShort: "Exchange — h3 questions the bishop" },
+  beats: [
+    { atMove: 17, say: "…Bh5 keeps the pin, preparing to develop your pieces.", sayShort: "…Bh5 — keep the pin.", highlights: [H('h5')] },
+    { atMove: 19, say: "…Bd6 develops the dark bishop to an active post.", sayShort: "…Bd6 — active bishop.", highlights: [H('d6')] },
+    { atMove: 23, say: "…O-O tucks the king to safety, your solid setup ready for the middlegame.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+  ],
   sources: ['concept:pos-development', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
 };
 
 const N253: SublineNarration = {
   intro: { say: "h3 — the symmetrical Exchange with the dark bishops traded and both kings castled, and White questions your g4-bishop. You've got full equality: queen centralised on d6, knight on c6 holding e5, bishop free to retreat to h5 or trade on f3 into a totally balanced lone-d-pawn structure. With everything developed, play for the e5 break or piece pressure, comfortable in a position with no weaknesses.", sayShort: "Exchange — h3 nudges the g4-bishop" },
+  beats: [
+    { atMove: 23, say: "…Bh5 keeps the pin, your pieces well-placed in the solid Caro middlegame.", sayShort: "…Bh5 — keep the pin.", highlights: [H('h5')] },
+    { atMove: 25, say: "…Rfc8 loads the c-file, your rook joining the queenside pressure.", sayShort: "…Rfc8 — load the c-file.", highlights: [H('c8')] },
+  ],
   sources: ['concept:pos-development', 'concept:pos-king-safety'],
 };
 
 const N254: SublineNarration = {
   intro: { say: "Bc4 — you recaptured with …exf6 toward the centre for the half-open e-file and the bishop pair, and White swings the bishop at f7. Castle calmly, then play …Re8 to pressure the e-file while your bishop on d6 supports kingside play. Your doubled f-pawns grip e5 and g5, so you're structurally robust — play for the e-file and the two bishops, neutralising the c4-bishop with …Be6 or …Qc7 in time.", sayShort: "Tartakower — castle, then …Re8" },
+  beats: [
+    { atMove: 13, say: "…O-O tucks the king to safety, your pieces ready for the middlegame.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 19, say: "…Bf5 develops the bishop actively, eyeing c2 and the light squares.", sayShort: "…Bf5 — active bishop.", arrows: [A('f5', 'c2')], highlights: [H('c2')] },
+    { atMove: 21, say: "…Bxd3 trades off White's good bishop, easing your game toward equality.", sayShort: "…Bxd3 — trade the good bishop.", highlights: [H('d3')] },
+  ],
   sources: ['concept:pos-bishop-pair', 'concept:pos-open-file'],
 };
 
 const N255: SublineNarration = {
   intro: { say: "Bd2 — White connects the rooks and prepares queenside castling against your e8-rook check. Lean on your trademark structure: bishop on d6, rook pressuring the e-file, and …h5 grabbing kingside space while the doubled f-pawns hold e5 and g5. Continue with …Nd7-f8 and …Qc7, keeping your solid wall and aiming counterplay at whichever wing White commits its king.", sayShort: "Tartakower — e-file pressure builds" },
+  beats: [
+    { atMove: 19, say: "…Nd7 reroutes the knight toward f8 and g6, reinforcing your kingside.", sayShort: "…Nd7 — reroute the knight.", highlights: [H('d7')] },
+    { atMove: 21, say: "…Nf8 completes the reroute, the knight guarding the king and eyeing g6/e6.", sayShort: "…Nf8 — guard the king.", highlights: [H('f8')] },
+    { atMove: 23, say: "…Be6 develops the bishop to a fine post, your solid setup complete.", sayShort: "…Be6 — fine bishop post.", highlights: [H('e6')] },
+  ],
   sources: ['concept:pos-open-file', 'concept:pos-development'],
 };
 
 const N256: SublineNarration = {
   intro: { say: "Be3 — you recaptured …exf6 toward the centre for the half-open e-file and the bishop pair, so castle into safety while White defends d4. Your structure is full of resources: the doubled f-pawns control e5 and g5, your bishop on d6 supports kingside play, and …Re8 will pressure the e-file. Play for the two bishops and the e-file — a sound, dynamic position where the structural concession is well paid for.", sayShort: "Tartakower — castle, two bishops, e-file" },
+  beats: [
+    { atMove: 13, say: "…O-O tucks the king to safety, your solid setup ready for play.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 17, say: "…Nd7 reroutes the knight toward f8 and g6 to reinforce your kingside.", sayShort: "…Nd7 — reroute the knight.", highlights: [H('d7')] },
+    { atMove: 21, say: "…f5 stakes a kingside pawn front, gaining space in the comfortable middlegame.", sayShort: "…f5 — stake the kingside.", highlights: [H('f5')] },
+  ],
   sources: ['concept:pos-bishop-pair', 'concept:pos-open-file'],
 };
 
 const N257: SublineNarration = {
   intro: { say: "Be3 — you've got the half-open e-file and the bishop pair after recapturing toward the centre, and White blocks the check and defends d4. Keep building: your rook pressures the e-file, your bishop sits actively on d6, and …Nd7-f8 reroutes the knight to defend and prepare …Ng6. The doubled f-pawns are a feature gripping e5 and g5, so play for the e-file and a kingside or central break.", sayShort: "Tartakower — Be3 blocks the e-file check" },
+  beats: [
+    { atMove: 17, say: "…g6 braces the kingside, preparing to reroute the knight and hold firm.", sayShort: "…g6 — brace the kingside.", highlights: [H('g6')] },
+    { atMove: 19, say: "…Nd7 reroutes the knight toward f6 and the centre, reinforcing your setup.", sayShort: "…Nd7 — reroute the knight.", highlights: [H('d7')] },
+    { atMove: 21, say: "…f5 stakes a kingside pawn front, gaining space and the freer game.", sayShort: "…f5 — stake the kingside.", highlights: [H('f5')] },
+  ],
   sources: ['concept:pos-open-file', 'concept:pos-bishop-pair'],
 };
 
 const N258: SublineNarration = {
   intro: { say: "Nf3 — you recaptured …exf6 toward the centre for the half-open e-file and the bishop pair, so castle into safety. White develops naturally, but your structure is rich in resources: the doubled f-pawns control e5 and g5, and your bishop on d6 plus the coming …Re8 generate pressure. Play for the e-file and a kingside pawn break or central play, confident the bishop pair pays for the structural concession.", sayShort: "Tartakower — castle, claim the e-file" },
+  beats: [
+    { atMove: 13, say: "…O-O tucks the king to safety, your solid Caro structure ready for play.", sayShort: "…O-O — king safe.", highlights: [H('g8')] },
+    { atMove: 15, say: "…Re8 contests the e-file, your rook joining the central play.", sayShort: "…Re8 — contest the e-file.", highlights: [H('e8')] },
+    { atMove: 17, say: "…Bf5 develops the bishop actively, eyeing c2 and the queenside.", sayShort: "…Bf5 — active bishop.", arrows: [A('f5', 'c2')], highlights: [H('c2')] },
+  ],
   sources: ['concept:pos-bishop-pair', 'concept:pos-open-file'],
 };
 
 const N259: SublineNarration = {
   intro: { say: "Nf4 — opposite castling, and White plants the knight to aim at e6 and g6 and back a kingside push. Lean on your standard solid setup: rook on e8, bishop on d6, knight rerouted to f8, and …h5 restraining White's expansion. Your doubled f-pawns control e5 and g5, so you're structurally sound — turn to counterplay against White's king with …Qc7 and the queenside pawns.", sayShort: "Tartakower — knight to f4, counter on queenside" },
+  beats: [
+    { atMove: 23, say: "…Bxf4 trades off White's knight, your bishop active and the position balanced.", sayShort: "…Bxf4 — trade the knight.", highlights: [H('f4')] },
+    { atMove: 25, say: "…Be6 develops the light bishop to a fine post, your setup complete.", sayShort: "…Be6 — fine bishop post.", highlights: [H('e6')] },
+  ],
   sources: ['concept:pos-king-safety', 'concept:pawn-doubled'],
 };
 
 const N260: SublineNarration = {
   intro: { say: "Ng3 — opposite-side castling, and White reroutes the knight to eye f5 and h5. You're fully mobilised: rook controlling the e-file, bishop on d6, knight rerouted via f8 to defend and prepare …Ng6. The doubled f-pawns grip e5 and g5 for a sturdy kingside, so keep the e-file pressure going and prepare queenside counterplay with …Qc7 and …b5 toward White's king.", sayShort: "Tartakower — knight to g3, hold e-file" },
+  beats: [
+    { atMove: 23, say: "…g6 braces the kingside, preparing to regroup behind the solid structure.", sayShort: "…g6 — brace the kingside.", highlights: [H('g6')] },
+    { atMove: 25, say: "…Be7 repositions the bishop, eyeing the kingside and the f6-square.", sayShort: "…Be7 — reposition the bishop.", highlights: [H('e7')] },
+    { atMove: 27, say: "…Be6 develops the light bishop to a fine post, your setup complete and equal.", sayShort: "…Be6 — fine bishop post.", highlights: [H('e6')] },
+  ],
   sources: ['concept:pos-open-file', 'concept:pawn-doubled'],
 };
 
 const N261: SublineNarration = {
   intro: { say: "h3 — you recaptured toward the centre for the half-open e-file and the bishop pair, and White restrains your …Bg4 and …h4 ideas. Lean on your trademark structure: rook checking and pressuring on e8, bishop on d6, …h5 already grabbing kingside space. The doubled f-pawns grip e5 and g5, so continue with …Nd7-f8 and …Qc7, playing for the e-file and counterplay at whichever wing White commits its king.", sayShort: "Tartakower — h3 restrains Black's expansion" },
+  beats: [
+    { atMove: 19, say: "…Nd7 reroutes the knight toward f8 and g6, reinforcing your kingside.", sayShort: "…Nd7 — reroute the knight.", highlights: [H('d7')] },
+    { atMove: 21, say: "…Nf8 completes the reroute, the knight guarding the king and eyeing g6.", sayShort: "…Nf8 — guard the king.", highlights: [H('f8')] },
+    { atMove: 23, say: "…g6 braces the kingside, your solid structure holding firm.", sayShort: "…g6 — brace the kingside.", highlights: [H('g6')] },
+  ],
   sources: ['concept:pos-open-file', 'concept:pos-bishop-pair'],
 };
 
 const N262: SublineNarration = {
   intro: { say: "h3 — you recaptured …exf6 toward the centre, giving up the symmetrical pawn for the half-open e-file and the bishop pair. With your rook already checking on e8, bishop on d6, and knight rerouting via f8, you've got a rock-solid kingside and active pieces. White's h3 is slow prophylaxis — keep piling on the e-file and expand with …Ng6 and …Qc7, confident the doubled f-pawns are a strength controlling e5 and g5.", sayShort: "Tartakower — e-file and bishop pair" },
+  beats: [
+    { atMove: 23, say: "…Be6 develops the bishop to a fine post, your solid Caro structure complete.", sayShort: "…Be6 — fine bishop post.", highlights: [H('e6')] },
+    { atMove: 25, say: "…b5 expands on the queenside, gaining space in the balanced middlegame.", sayShort: "…b5 — queenside space.", highlights: [H('b5')] },
+    { atMove: 27, say: "…Qd7 connects the rooks, your pieces coordinated for the endgame.", sayShort: "…Qd7 — connect the rooks.", highlights: [H('d7')] },
+  ],
   sources: ['concept:pos-open-file', 'concept:pos-bishop-pair'],
 };
 
