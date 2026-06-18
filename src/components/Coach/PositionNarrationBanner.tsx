@@ -72,7 +72,7 @@ export function PositionNarrationBanner({ text, active, onDismiss }: PositionNar
           <div className="flex items-start gap-2">
             <Volume2 size={16} className="text-emerald-400 flex-shrink-0 mt-0.5" />
             <p
-              className="text-xs leading-relaxed flex-1 min-w-0"
+              className="text-xs leading-relaxed flex-1 min-w-0 max-h-[26vh] overflow-y-auto"
               style={{ color: 'var(--color-text)' }}
             >
               {text}
