@@ -513,6 +513,19 @@ class VoiceService {
   get currentStopGeneration(): number {
     return this.stopGeneration;
   }
+
+  constructor() {
+    // Silence narration the moment the tab/app is backgrounded. A browser
+    // tab-switch does NOT unmount React components, so the lesson's own
+    // cleanup never fires and the audio would keep streaming in the hidden
+    // tab (David 2026-06-18 "the narration is not stopping when I leave the
+    // tab"). Pairs with the route-change stop in AppLayout for in-app nav.
+    if (typeof document !== 'undefined') {
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') this.stop();
+      });
+    }
+  }
   // Default Polly playback rate. Bumped from 1.0 → 1.15 because the
   // User-configurable per-profile via `prefs.voiceSpeed` in Settings.
   // Default 1.0 (natural Polly rate); user request 2026-05-07: bumped

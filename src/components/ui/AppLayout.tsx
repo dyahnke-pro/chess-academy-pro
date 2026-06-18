@@ -19,6 +19,7 @@ import { OfflineBanner } from './OfflineBanner';
 import { GlobalCoachDrawer } from '../Coach/GlobalCoachDrawer';
 import { QuickFeedbackButton } from '../Feedback/QuickFeedbackButton';
 import { logAppAudit } from '../../services/appAuditor';
+import { voiceService } from '../../services/voiceService';
 
 interface NavItem {
   to: string;
@@ -145,6 +146,12 @@ export function AppLayout(): JSX.Element {
     if (path === lastRouteRef.current) return;
     const from = lastRouteRef.current || '(initial)';
     lastRouteRef.current = path;
+    // Stop any in-flight narration the moment the route changes — leaving a
+    // lesson/coach surface must silence its voice immediately, even if the
+    // unmounting component's own cleanup races the navigation (David 2026-06-18
+    // "the narration is not stopping when I leave the tab"). Each destination
+    // re-initiates its own voice on mount, so a blanket stop here is safe.
+    if (from !== '(initial)') voiceService.stop();
     void logAppAudit({
       kind: 'route-changed',
       category: 'app',
