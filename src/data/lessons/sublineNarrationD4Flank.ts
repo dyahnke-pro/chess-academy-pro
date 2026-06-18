@@ -163,35 +163,11 @@ const C47: SublineNarration = {
   sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence'],
 };
 // benoni-defence :: modern_main
-const C48: SublineNarration = {
-  intro: { say: "The Modern Benoni — you've traded the structure for dynamism: White's big d5-e4 pawn front against your queenside pawn majority and the long-diagonal g7-bishop. Your plan is all energy: …a6 and …b5 to roll the queenside, …Re8 and …Nbd7 pressure on e4, and the …c4 lever. Sharpest defence in the book, and a joy to attack with.", sayShort: "Modern Benoni — roll …a6-b5, press e4." },
-  sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
-};
 // benoni-defence :: czech_e5
-const C49: SublineNarration = {
-  intro: { say: "A Czech-Benoni flavoured structure with …e5 locking the centre. The play turns slow and manoeuvring: pieces reroute behind the locked pawns, and the breaks are …f5 on the kingside or …b5 on the queen's wing. Patience is everything — set up the right break and the cramped position uncoils with venom.", sayShort: "Locked centre — prepare …f5 or …b5." },
-  sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
-};
 // benoni-defence :: fianchetto_g3
-const C50: SublineNarration = {
-  intro: { say: "White fianchettoes with g3, the positional anti-Benoni. The g2-bishop guards e4 and the long diagonal, blunting your usual …b5 fireworks. Adapt: …a6 and …b5 still come, but more patiently, and …Re8 with …Nbd7 keeps the central tension. A slower Benoni where you grind the queenside majority instead of storming.", sayShort: "g3 — patient …a6-b5, grind the majority." },
-  sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
-};
 // benoni-defence :: classical_e4
-const C51: SublineNarration = {
-  intro: { say: "The Classical Benoni with e4 and the pieces developing naturally — White claims the centre, you claim the wings. The main tabiya: complete the fianchetto, castle, and unleash the queenside with …a6 and …b5 while pressuring e4 along the e-file. Dynamic imbalance where your activity answers his space.", sayShort: "Classical — …a6-b5 against his centre." },
-  sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
-};
 // benoni-defence :: taimanov_bb5
-const C52: SublineNarration = {
-  intro: { say: "White checks with Bb5+ — the dangerous Taimanov, the critical anti-Benoni. Block with …Nbd7 (or …Nfd7), tuck the king away, and ride out the early pressure: White's f4-e5 push is the threat, so neutralise it with …a6, …Re8 and accurate defence. Survive the storm and your queenside majority tells in the long game.", sayShort: "Bb5+ Taimanov — block …Nbd7, weather f4-e5." },
-  sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
-};
 // benoni-defence :: snake_dxe6
-const C53: SublineNarration = {
-  intro: { say: "White captures dxe6, opening the f-file and handing you a half-open file and a mobile centre. Recapture and develop with purpose: …Nc6, …e5 to claim the centre, and the rooks love the open lines. White traded his space for activity — match it and the dynamic balance favours the better-coordinated side, which is yours.", sayShort: "dxe6 — open the f-file, claim the centre." },
-  sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
-};
 // benko-gambit :: declined_e4
 // benko-gambit :: b6_declined
 // benko-gambit :: accepted_main
@@ -541,14 +517,6 @@ const DBUD: SublineNarration = {
 };
 // DEEP DDUT :: dutch-defence::3::e4@6
 // DEEP DBEN :: benoni-defence::0::e4@10 | benoni-defence::1::e4@10 | benoni-defence::2::e4@10 | benoni-defence::6::e4@10
-const DBEN: SublineNarration = {
-  intro: { say: "You've traded a quiet structure for pure energy: White's big d5-e4-f4 pawn front against your queenside pawn majority and that powerful g7-bishop. Your plan is all dynamism — fianchetto, castle, then roll …a6 and …b5 on the queenside while you needle his e4-pawn.", sayShort: "Modern Benoni — fianchetto, roll …a6-b5." },
-  beats: [
-    { atMove: 11, say: "…g6 — setting up the Benoni's signature fianchetto. The bishop heads for g7, where it'll anchor the dark squares and spring to life the moment you break with …b5 or open the centre.", sayShort: "…g6 — set up the fianchetto.", highlights: [_H('g6', SOFT)] },
-    { atMove: 13, say: "…Bg7 takes its post. Right now your own knight on f6 screens it, but here's the idea: the instant you play …b5 or trade in the centre, this bishop's pressure toward d4 and b2 roars to life. The imbalance is set — now you go play for the win.", sayShort: "…Bg7 — the dark-square anchor.", highlights: [_H('g7', KEY)] },
-  ],
-  sources: ['concept:pos-space', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
-};
 // DEEP DKID :: kings-indian-defence::0::b4@16
 const DKID: SublineNarration = {
   intro: { say: "White's just locked the centre with d5 and played b4 — he's launching on the queenside. The King's Indian race you've been waiting for, so throw everything at his king. Your e7-knight is rerouting toward g6, and then comes the avalanche: …f5, …f4, …g5-g4. Here's the key: in this opening the side that storms the king usually gets there first. Don't count material — attack.", sayShort: "KID race — storm the king, …f5-f4." },
@@ -957,16 +925,6 @@ const WQGDTAB: SublineNarration = {
   sources: ['book:qgd', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
 };
 // WAVE WBENTAIM :: 1 keys
-const WBENTAIM: SublineNarration = {
-  intro: { say: "Bb5+ — the dangerous Taimanov, White's most testing anti-Benoni: the check disrupts you before the f4-e5 storm. Block calmly with …Nfd7, throw in …Qh4+ to provoke g3 and weaken White's dark squares, then retreat and castle. Weather the early aggression and your queenside pawn majority tells in the long game.", sayShort: "Bb5+ — block …Nfd7, then …Qh4+" },
-  beats: [
-    { atMove: 14, say: "Bb5+ checks before you're coordinated, the sharp Taimanov idea aimed at the f4-e5 break to come. Don't panic — you have a calm, solid block.", sayShort: "Bb5+ — the dangerous check", arrows: [_A('b5', 'e8', ATK)], highlights: [_H('e8', KEY)] },
-    { atMove: 15, say: "…Nfd7 — block the check with the knight, keeping your structure intact and your king's path to safety open. The piece reroutes usefully toward e5 and b6 later.", sayShort: "…Nfd7 — block, stay solid", highlights: [_H('d7', KEY)] },
-    { atMove: 17, say: "…Qh4+ — a clever zwischenzug: with f4 played, the diagonal to e1 is open (follow the arrow), so the check forces g3 and permanently loosens White's dark squares around his king.", sayShort: "…Qh4+ — force g3, loosen dark squares", arrows: [_A('h4', 'e1', ATK)], highlights: [_H('e1', KEY)] },
-    { atMove: 21, say: "…O-O — king safely tucked away, the storm weathered. Now the Benoni's engine kicks in: your queenside pawn majority and the g7-bishop give you the long-term play.", sayShort: "…O-O — king safe, majority rolls", highlights: [_H('g8', KEY)] },
-  ],
-  sources: ['concept:pos-king-safety', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Modern_Benoni'],
-};
 // WAVE WCATNC6 :: 1 keys
 const WCATNC6: SublineNarration = {
   intro: { say: "…Nc6 — Black develops and clings to the c4-pawn in the Open Catalan, but it's a loan. Prepare Qe2 and Qxc4 to collect it, and lean on the long diagonal with the g2-bishop. Black's queenside stays awkward to untangle while you enjoy the bind and the more comfortable game.", sayShort: "…Nc6 — prepare Qe2-Qxc4, then bind" },
@@ -11299,7 +11257,714 @@ const AC_59: SublineNarration = {
   sources: ['concept:pos-development', 'https://lichess.org/opening/Queens-Pawn-Game'],
 };
 
+const BN_0: SublineNarration = {
+  intro: { say: "White recaptures Nxd5. Simplify the centre, set up the Benoni backbone with …d6, and strike …f5 — the thematic kingside break for dynamic counterplay.", sayShort: "…d6 then the …f5 break" },
+  beats: [
+    { atMove: 9, say: "Recapture …Nxd5, simplifying the centre on your terms.", sayShort: "…Nxd5, simplify", highlights: [_H('d5')] },
+    { atMove: 17, say: "Play …d6, the Benoni backbone supporting your breaks.", sayShort: "…d6, the backbone", highlights: [_H('d6')] },
+    { atMove: 21, say: "Strike …f5, the thematic Benoni kingside break challenging e4.", sayShort: "…f5, the kingside break", highlights: [_H('f5')] },
+    { atMove: 23, say: "Open …fxe4, prising the position open with counterplay; balanced.", sayShort: "…fxe4, open lines", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_1: SublineNarration = {
+  intro: { say: "White builds the Four Pawns centre. Fianchetto …g6, develop …Bg7, castle, and lift …Re8 — ready for the …b5 and …f5 counterplay.", sayShort: "Modern Benoni: …g6, …Bg7, …Re8" },
+  beats: [
+    { atMove: 11, say: "Fianchetto …g6, the Modern Benoni — your bishop bears down the long diagonal.", sayShort: "…g6, the Benoni", highlights: [_H('g6')] },
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 21, say: "Castle …O-O, completing your setup for the …b5 and …Re8 counterplay.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
+    { atMove: 23, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_2: SublineNarration = {
+  intro: { say: "White steers into a Symmetric structure. Release …cxd4, strike …d5, gain space with …e5, and develop to full equality.", sayShort: "Symmetric: …cxd4, …d5, …e5" },
+  beats: [
+    { atMove: 5, say: "Release …cxd4, steering into a balanced Symmetric structure.", sayShort: "…cxd4, release", highlights: [_H('d4')] },
+    { atMove: 9, say: "Strike …d5, freeing your game.", sayShort: "…d5, free the game", highlights: [_H('d5')] },
+    { atMove: 17, say: "Gain space with …e5, active piece play.", sayShort: "…e5, gain space", highlights: [_H('e5')] },
+    { atMove: 23, say: "Castle …O-O; balanced and equal.", sayShort: "…O-O, equal", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_3: SublineNarration = {
+  intro: { say: "White develops Bf4. Develop …Bg7, route …Na6, prepare the …b5 break with …Rb8, and lift …Re8 — dynamic Benoni counterplay.", sayShort: "…Bg7, …Na6, …Rb8 for …b5" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Develop …Na6, heading for c7 and the …b5 break.", sayShort: "…Na6, head for c7", highlights: [_H('a6')] },
+    { atMove: 19, say: "Lift …Rb8, preparing the …b5 Benoni break.", sayShort: "…Rb8, prepare …b5", highlights: [_H('b8')] },
+    { atMove: 23, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_4: SublineNarration = {
+  intro: { say: "White reroutes Nd2 toward c4. Develop …Bg7, route …Na6-c7 for the …b5 break, and lift …Re8 — dynamic Benoni counterplay.", sayShort: "…Bg7, …Na6-c7, …b5" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Develop …Na6, rerouting to c7 to support …b5.", sayShort: "…Na6, reroute", highlights: [_H('a6')] },
+    { atMove: 19, say: "Reroute …Nc7, eyeing b5 and e6 for the break.", sayShort: "…Nc7, eye b5", highlights: [_H('c7')] },
+    { atMove: 23, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_5: SublineNarration = {
+  intro: { say: "White fianchettoes. Develop …Bg7, lift …Re8, develop …Qc7 to support …b5, and complete with …Nbd7 — dynamic Benoni play.", sayShort: "Fianchetto: …Bg7, …Re8, …Qc7" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+    { atMove: 21, say: "Develop …Qc7, supporting …b5 and eyeing the long diagonal.", sayShort: "…Qc7, support …b5", highlights: [_H('c7')] },
+    { atMove: 23, say: "Develop …Nbd7, completing the Benoni setup; balanced.", sayShort: "…Nbd7, complete", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_6: SublineNarration = {
+  intro: { say: "White props with h3. Develop …Bg7, castle, lift …Re8, and reroute …Nbd7-e5 to the fine Benoni outpost — dynamic and balanced.", sayShort: "…Bg7, …Re8, …Ne5 outpost" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+    { atMove: 19, say: "Develop …Nbd7, heading for the e5-outpost.", sayShort: "…Nbd7, head for e5", highlights: [_H('d7')] },
+    { atMove: 21, say: "Centralise …Ne5, a fine Benoni outpost; dynamic and balanced.", sayShort: "…Ne5, the outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_7: SublineNarration = {
+  intro: { say: "White plays a quiet e3. Build …e6, expand …b5, fianchetto …Bb7, and pressure the c-file — comfortable equality.", sayShort: "Quiet e3: …e6, …b5, …Bb7" },
+  beats: [
+    { atMove: 5, say: "Build with …e6, a solid structure against White's quiet e3.", sayShort: "…e6, solid structure", highlights: [_H('e6')] },
+    { atMove: 13, say: "Expand …b5, gaining queenside space.", sayShort: "…b5, queenside space", highlights: [_H('b5')] },
+    { atMove: 21, say: "Fianchetto …Bb7, contesting the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Lift …Rc8, pressuring the c-file; balanced.", sayShort: "…Rc8, press the c-file", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_8: SublineNarration = {
+  intro: { say: "White builds e4 and h3. Develop …Bg7, castle, lift …Re8, and reroute …Nbd7-e5 to the outpost — dynamic Benoni play.", sayShort: "…Bg7, …Re8, …Ne5" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+    { atMove: 19, say: "Develop …Nbd7, heading for the e5-outpost.", sayShort: "…Nbd7, head for e5", highlights: [_H('d7')] },
+    { atMove: 21, say: "Centralise …Ne5, a fine Benoni outpost; balanced.", sayShort: "…Ne5, the outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_9: SublineNarration = {
+  intro: { say: "White pins with Bg5. Question with …h6, lunge …g5 to grab the bishop and space, hop …Nh5 to trade it off, and develop …Bg7 — dynamic and balanced.", sayShort: "…h6, …g5, …Nh5" },
+  beats: [
+    { atMove: 13, say: "Question the bishop with …h6.", sayShort: "…h6, question the bishop", highlights: [_H('g5')] },
+    { atMove: 15, say: "Lunge …g5, hitting White's bishop and grabbing kingside space.", sayShort: "…g5, grab space", highlights: [_H('g5')] },
+    { atMove: 17, say: "Hop …Nh5, attacking the g3-bishop to win the bishop pair.", sayShort: "…Nh5, win the bishop pair", highlights: [_H('h5')] },
+    { atMove: 23, say: "Develop …Bg7; dynamic and balanced.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_10: SublineNarration = {
+  intro: { say: "White recaptures Nxd5. Simplify the centre, set up the Benoni backbone with …d6, and strike …f5 — the thematic kingside break for dynamic counterplay.", sayShort: "…d6 then the …f5 break" },
+  beats: [
+    { atMove: 9, say: "Recapture …Nxd5, simplifying the centre on your terms.", sayShort: "…Nxd5, simplify", highlights: [_H('d5')] },
+    { atMove: 17, say: "Play …d6, the Benoni backbone supporting your breaks.", sayShort: "…d6, the backbone", highlights: [_H('d6')] },
+    { atMove: 21, say: "Strike …f5, the thematic Benoni kingside break challenging e4.", sayShort: "…f5, the kingside break", highlights: [_H('f5')] },
+    { atMove: 23, say: "Open …fxe4, prising the position open with counterplay; balanced.", sayShort: "…fxe4, open lines", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_11: SublineNarration = {
+  intro: { say: "White builds the Four Pawns centre. Fianchetto …g6, develop …Bg7, castle, and lift …Re8 — ready for the …b5 and …f5 counterplay.", sayShort: "Modern Benoni: …g6, …Bg7, …Re8" },
+  beats: [
+    { atMove: 11, say: "Fianchetto …g6, the Modern Benoni — your bishop bears down the long diagonal.", sayShort: "…g6, the Benoni", highlights: [_H('g6')] },
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 21, say: "Castle …O-O, completing your setup for the …b5 and …Re8 counterplay.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
+    { atMove: 23, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_12: SublineNarration = {
+  intro: { say: "White steers into a Symmetric structure. Release …cxd4, strike …d5, gain space with …e5, and develop to full equality.", sayShort: "Symmetric: …cxd4, …d5, …e5" },
+  beats: [
+    { atMove: 5, say: "Release …cxd4, steering into a balanced Symmetric structure.", sayShort: "…cxd4, release", highlights: [_H('d4')] },
+    { atMove: 9, say: "Strike …d5, freeing your game.", sayShort: "…d5, free the game", highlights: [_H('d5')] },
+    { atMove: 17, say: "Gain space with …e5, active piece play.", sayShort: "…e5, gain space", highlights: [_H('e5')] },
+    { atMove: 23, say: "Castle …O-O; balanced and equal.", sayShort: "…O-O, equal", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_13: SublineNarration = {
+  intro: { say: "White develops Bf4. Develop …Bg7, route …Na6, prepare the …b5 break with …Rb8, and lift …Re8 — dynamic Benoni counterplay.", sayShort: "…Bg7, …Na6, …Rb8 for …b5" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Develop …Na6, heading for c7 and the …b5 break.", sayShort: "…Na6, head for c7", highlights: [_H('a6')] },
+    { atMove: 19, say: "Lift …Rb8, preparing the …b5 Benoni break.", sayShort: "…Rb8, prepare …b5", highlights: [_H('b8')] },
+    { atMove: 23, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_14: SublineNarration = {
+  intro: { say: "White builds e4. Prepare the …b5 break with …a6, strike …b5, develop …Bg7, and complete with …Nbd7 — dynamic Benoni counterplay.", sayShort: "…a6-b5 break, …Bg7" },
+  beats: [
+    { atMove: 13, say: "Prepare …b5 with …a6, the Benoni queenside break.", sayShort: "…a6, prepare …b5", highlights: [_H('a6')] },
+    { atMove: 15, say: "Strike …b5, the thematic Benoni queenside break.", sayShort: "…b5, the break", highlights: [_H('b5')] },
+    { atMove: 17, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 23, say: "Develop …Nbd7, completing the setup; dynamic and balanced.", sayShort: "…Nbd7, complete", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_15: SublineNarration = {
+  intro: { say: "White reroutes Nd2 toward c4. Develop …Bg7, route …Na6-c7 for the …b5 break, and lift …Re8 — dynamic Benoni counterplay.", sayShort: "…Bg7, …Na6-c7, …b5" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Develop …Na6, rerouting to c7 to support …b5.", sayShort: "…Na6, reroute", highlights: [_H('a6')] },
+    { atMove: 19, say: "Reroute …Nc7, eyeing b5 and e6 for the break.", sayShort: "…Nc7, eye b5", highlights: [_H('c7')] },
+    { atMove: 23, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_16: SublineNarration = {
+  intro: { say: "White props with h3. Develop …Bg7, castle, lift …Re8, and reroute …Nbd7-e5 to the fine Benoni outpost — dynamic and balanced.", sayShort: "…Bg7, …Re8, …Ne5 outpost" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+    { atMove: 19, say: "Develop …Nbd7, heading for the e5-outpost.", sayShort: "…Nbd7, head for e5", highlights: [_H('d7')] },
+    { atMove: 21, say: "Centralise …Ne5, a fine Benoni outpost; dynamic and balanced.", sayShort: "…Ne5, the outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_17: SublineNarration = {
+  intro: { say: "White plays a quiet e3. Build …e6, expand …b5, fianchetto …Bb7, and pressure the c-file — comfortable equality.", sayShort: "Quiet e3: …e6, …b5, …Bb7" },
+  beats: [
+    { atMove: 5, say: "Build with …e6, a solid structure against White's quiet e3.", sayShort: "…e6, solid structure", highlights: [_H('e6')] },
+    { atMove: 13, say: "Expand …b5, gaining queenside space.", sayShort: "…b5, queenside space", highlights: [_H('b5')] },
+    { atMove: 21, say: "Fianchetto …Bb7, contesting the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Lift …Rc8, pressuring the c-file; balanced.", sayShort: "…Rc8, press the c-file", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_18: SublineNarration = {
+  intro: { say: "White pins with Bg5. Question with …h6, lunge …g5 to grab the bishop and space, hop …Nh5 to trade it off, and develop …Bg7 — dynamic and balanced.", sayShort: "…h6, …g5, …Nh5" },
+  beats: [
+    { atMove: 13, say: "Question the bishop with …h6.", sayShort: "…h6, question the bishop", highlights: [_H('g5')] },
+    { atMove: 15, say: "Lunge …g5, hitting White's bishop and grabbing kingside space.", sayShort: "…g5, grab space", highlights: [_H('g5')] },
+    { atMove: 17, say: "Hop …Nh5, attacking the g3-bishop to win the bishop pair.", sayShort: "…Nh5, win the bishop pair", highlights: [_H('h5')] },
+    { atMove: 23, say: "Develop …Bg7; dynamic and balanced.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_19: SublineNarration = {
+  intro: { say: "White fianchettoes early. Fianchetto …g6, develop …Bg7, lift …Re8, and leap …Ne4 — dynamic and balanced.", sayShort: "Fianchetto: …g6, …Bg7, …Ne4" },
+  beats: [
+    { atMove: 11, say: "Fianchetto …g6, the Modern Benoni.", sayShort: "…g6, the Benoni", highlights: [_H('g6')] },
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+    { atMove: 21, say: "Leap …Ne4, the active knight; dynamic and balanced.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_20: SublineNarration = {
+  intro: { say: "White recaptures Nxd5. Simplify the centre, set up the Benoni backbone with …d6, and strike …f5 — the thematic kingside break for dynamic counterplay.", sayShort: "…d6 then the …f5 break" },
+  beats: [
+    { atMove: 9, say: "Recapture …Nxd5, simplifying the centre on your terms.", sayShort: "…Nxd5, simplify", highlights: [_H('d5')] },
+    { atMove: 17, say: "Play …d6, the Benoni backbone supporting your breaks.", sayShort: "…d6, the backbone", highlights: [_H('d6')] },
+    { atMove: 21, say: "Strike …f5, the thematic Benoni kingside break challenging e4.", sayShort: "…f5, the kingside break", highlights: [_H('f5')] },
+    { atMove: 23, say: "Open …fxe4, prising the position open with counterplay; balanced.", sayShort: "…fxe4, open lines", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_21: SublineNarration = {
+  intro: { say: "White builds the Four Pawns centre. Fianchetto …g6, develop …Bg7, castle, and lift …Re8 — ready for the …b5 and …f5 counterplay.", sayShort: "Modern Benoni: …g6, …Bg7, …Re8" },
+  beats: [
+    { atMove: 11, say: "Fianchetto …g6, the Modern Benoni — your bishop bears down the long diagonal.", sayShort: "…g6, the Benoni", highlights: [_H('g6')] },
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 21, say: "Castle …O-O, completing your setup for the …b5 and …Re8 counterplay.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
+    { atMove: 23, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_22: SublineNarration = {
+  intro: { say: "White steers into a Symmetric structure. Release …cxd4, strike …d5, gain space with …e5, and develop to full equality.", sayShort: "Symmetric: …cxd4, …d5, …e5" },
+  beats: [
+    { atMove: 5, say: "Release …cxd4, steering into a balanced Symmetric structure.", sayShort: "…cxd4, release", highlights: [_H('d4')] },
+    { atMove: 9, say: "Strike …d5, freeing your game.", sayShort: "…d5, free the game", highlights: [_H('d5')] },
+    { atMove: 17, say: "Gain space with …e5, active piece play.", sayShort: "…e5, gain space", highlights: [_H('e5')] },
+    { atMove: 23, say: "Castle …O-O; balanced and equal.", sayShort: "…O-O, equal", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_23: SublineNarration = {
+  intro: { say: "White builds e4. Prepare the …b5 break with …a6, strike …b5, develop …Bg7, and complete with …Nbd7 — dynamic Benoni counterplay.", sayShort: "…a6-b5 break, …Bg7" },
+  beats: [
+    { atMove: 13, say: "Prepare …b5 with …a6, the Benoni queenside break.", sayShort: "…a6, prepare …b5", highlights: [_H('a6')] },
+    { atMove: 15, say: "Strike …b5, the thematic Benoni queenside break.", sayShort: "…b5, the break", highlights: [_H('b5')] },
+    { atMove: 17, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 23, say: "Develop …Nbd7, completing the setup; dynamic and balanced.", sayShort: "…Nbd7, complete", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_24: SublineNarration = {
+  intro: { say: "White reroutes Nd2 toward c4. Develop …Bg7, route …Na6-c7 for the …b5 break, and lift …Re8 — dynamic Benoni counterplay.", sayShort: "…Bg7, …Na6-c7, …b5" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Develop …Na6, rerouting to c7 to support …b5.", sayShort: "…Na6, reroute", highlights: [_H('a6')] },
+    { atMove: 19, say: "Reroute …Nc7, eyeing b5 and e6 for the break.", sayShort: "…Nc7, eye b5", highlights: [_H('c7')] },
+    { atMove: 23, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_25: SublineNarration = {
+  intro: { say: "White develops Bf4 and e3. Develop …Bg7, route …Na6, prepare …b5 with …Rb8, and lift …Re8 — dynamic Benoni counterplay.", sayShort: "…Bg7, …Na6, …Rb8" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Develop …Na6, heading for c7 and …b5.", sayShort: "…Na6, head for c7", highlights: [_H('a6')] },
+    { atMove: 19, say: "Lift …Rb8, preparing the …b5 break.", sayShort: "…Rb8, prepare …b5", highlights: [_H('b8')] },
+    { atMove: 23, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_26: SublineNarration = {
+  intro: { say: "White fianchettoes. Develop …Bg7, lift …Re8, develop …Qc7 to support …b5, and complete with …Nbd7 — dynamic Benoni play.", sayShort: "Fianchetto: …Bg7, …Re8, …Qc7" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+    { atMove: 21, say: "Develop …Qc7, supporting …b5 and eyeing the long diagonal.", sayShort: "…Qc7, support …b5", highlights: [_H('c7')] },
+    { atMove: 23, say: "Develop …Nbd7, completing the Benoni setup; balanced.", sayShort: "…Nbd7, complete", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_27: SublineNarration = {
+  intro: { say: "White props with h3. Develop …Bg7, castle, lift …Re8, and reroute …Nbd7-e5 to the fine Benoni outpost — dynamic and balanced.", sayShort: "…Bg7, …Re8, …Ne5 outpost" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+    { atMove: 19, say: "Develop …Nbd7, heading for the e5-outpost.", sayShort: "…Nbd7, head for e5", highlights: [_H('d7')] },
+    { atMove: 21, say: "Centralise …Ne5, a fine Benoni outpost; dynamic and balanced.", sayShort: "…Ne5, the outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_28: SublineNarration = {
+  intro: { say: "White plays a quiet e3. Build …e6, expand …b5, fianchetto …Bb7, and pressure the c-file — comfortable equality.", sayShort: "Quiet e3: …e6, …b5, …Bb7" },
+  beats: [
+    { atMove: 5, say: "Build with …e6, a solid structure against White's quiet e3.", sayShort: "…e6, solid structure", highlights: [_H('e6')] },
+    { atMove: 13, say: "Expand …b5, gaining queenside space.", sayShort: "…b5, queenside space", highlights: [_H('b5')] },
+    { atMove: 21, say: "Fianchetto …Bb7, contesting the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Lift …Rc8, pressuring the c-file; balanced.", sayShort: "…Rc8, press the c-file", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_29: SublineNarration = {
+  intro: { say: "White develops Bf4 and Bd3. Develop …Bg7, hop …Nh5 to provoke, develop …Qb6 to hit b2, and route …Na6 — dynamic and balanced.", sayShort: "…Bg7, …Nh5, …Qb6" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Hop …Nh5, eyeing f4 and provoking White.", sayShort: "…Nh5, provoke", highlights: [_H('h5')] },
+    { atMove: 19, say: "Develop …Qb6, pressuring b2 and d4.", sayShort: "…Qb6, pressure b2", highlights: [_H('b6')] },
+    { atMove: 23, say: "Develop …Na6, heading for the queenside; dynamic and balanced.", sayShort: "…Na6, head queenside", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_30: SublineNarration = {
+  intro: { say: "White recaptures Nxd5. Simplify the centre, set up the Benoni backbone with …d6, and strike …f5 — the thematic kingside break for dynamic counterplay.", sayShort: "…d6 then the …f5 break" },
+  beats: [
+    { atMove: 9, say: "Recapture …Nxd5, simplifying the centre on your terms.", sayShort: "…Nxd5, simplify", highlights: [_H('d5')] },
+    { atMove: 17, say: "Play …d6, the Benoni backbone supporting your breaks.", sayShort: "…d6, the backbone", highlights: [_H('d6')] },
+    { atMove: 21, say: "Strike …f5, the thematic Benoni kingside break challenging e4.", sayShort: "…f5, the kingside break", highlights: [_H('f5')] },
+    { atMove: 23, say: "Open …fxe4, prising the position open with counterplay; balanced.", sayShort: "…fxe4, open lines", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_31: SublineNarration = {
+  intro: { say: "White builds e4. Prepare the …b5 break with …a6, strike …b5, develop …Bg7, and complete with …Nbd7 — dynamic Benoni counterplay.", sayShort: "…a6-b5 break, …Bg7" },
+  beats: [
+    { atMove: 13, say: "Prepare …b5 with …a6, the Benoni queenside break.", sayShort: "…a6, prepare …b5", highlights: [_H('a6')] },
+    { atMove: 15, say: "Strike …b5, the thematic Benoni queenside break.", sayShort: "…b5, the break", highlights: [_H('b5')] },
+    { atMove: 17, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 23, say: "Develop …Nbd7, completing the setup; dynamic and balanced.", sayShort: "…Nbd7, complete", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_32: SublineNarration = {
+  intro: { say: "White steers into a Symmetric structure. Release …cxd4, strike …d5, gain space with …e5, and develop to full equality.", sayShort: "Symmetric: …cxd4, …d5, …e5" },
+  beats: [
+    { atMove: 5, say: "Release …cxd4, steering into a balanced Symmetric structure.", sayShort: "…cxd4, release", highlights: [_H('d4')] },
+    { atMove: 9, say: "Strike …d5, freeing your game.", sayShort: "…d5, free the game", highlights: [_H('d5')] },
+    { atMove: 17, say: "Gain space with …e5, active piece play.", sayShort: "…e5, gain space", highlights: [_H('e5')] },
+    { atMove: 23, say: "Castle …O-O; balanced and equal.", sayShort: "…O-O, equal", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_33: SublineNarration = {
+  intro: { say: "White builds e4 and Nf3. Prepare …b5 with …a6, strike …b5, develop …Bg7, and complete with …Nbd7 — dynamic Benoni counterplay.", sayShort: "…a6-b5 break, …Bg7" },
+  beats: [
+    { atMove: 13, say: "Prepare …b5 with …a6, the Benoni queenside break.", sayShort: "…a6, prepare …b5", highlights: [_H('a6')] },
+    { atMove: 15, say: "Strike …b5, the thematic Benoni break.", sayShort: "…b5, the break", highlights: [_H('b5')] },
+    { atMove: 17, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 23, say: "Develop …Nbd7, completing the setup; dynamic and balanced.", sayShort: "…Nbd7, complete", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_34: SublineNarration = {
+  intro: { say: "White plays a quiet e3. Build …e6, expand …b5, fianchetto …Bb7, and pressure the c-file — comfortable equality.", sayShort: "Quiet e3: …e6, …b5, …Bb7" },
+  beats: [
+    { atMove: 5, say: "Build with …e6, a solid structure against White's quiet e3.", sayShort: "…e6, solid structure", highlights: [_H('e6')] },
+    { atMove: 13, say: "Expand …b5, gaining queenside space.", sayShort: "…b5, queenside space", highlights: [_H('b5')] },
+    { atMove: 21, say: "Fianchetto …Bb7, contesting the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Lift …Rc8, pressuring the c-file; balanced.", sayShort: "…Rc8, press the c-file", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_35: SublineNarration = {
+  intro: { say: "White builds e4 and h3. Develop …Bg7, sacrifice with …b5 for activity, pile on with …Re8, and regain material with …Nxe4 — dynamic and balanced.", sayShort: "…Bg7, the …b5 sac, …Nxe4" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Strike …b5, the thematic Benoni break, sacrificing for activity.", sayShort: "…b5, the sac", highlights: [_H('b5')] },
+    { atMove: 19, say: "Lift …Re8, piling on the e4-pawn.", sayShort: "…Re8, pile on e4", highlights: [_H('e8')] },
+    { atMove: 21, say: "Snatch …Nxe4, regaining material with dynamic play; balanced.", sayShort: "…Nxe4, regain material", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_36: SublineNarration = {
+  intro: { say: "White develops Bd3. Develop …Nbd7, prepare …b5 with …a6, develop …Bg7, and lift …Re8 — dynamic Benoni counterplay.", sayShort: "…Nbd7, …a6, …Bg7" },
+  beats: [
+    { atMove: 13, say: "Develop …Nbd7, supporting the centre.", sayShort: "…Nbd7, develop", highlights: [_H('d7')] },
+    { atMove: 15, say: "Prepare …b5 with …a6.", sayShort: "…a6, prepare …b5", highlights: [_H('a6')] },
+    { atMove: 17, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 23, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_37: SublineNarration = {
+  intro: { say: "White plays the Four Pawns Attack. Develop …Bg7, castle, route …Nc7, and prepare the …b5 break with …a6 — dynamic Benoni counterplay.", sayShort: "Four Pawns: …Bg7, …Nc7, …a6-b5" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Castle …O-O, ready to counter the Four Pawns centre with …b5.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
+    { atMove: 21, say: "Reroute …Nc7, eyeing b5 and e6 for the break.", sayShort: "…Nc7, eye b5", highlights: [_H('c7')] },
+    { atMove: 23, say: "Prepare …b5 with …a6, striking at White's broad centre; dynamic and balanced.", sayShort: "…a6, prepare …b5", highlights: [_H('a6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_38: SublineNarration = {
+  intro: { say: "White plays the Saemisch-style f3. Develop …Bg7, prepare …b5 with …a6, develop …Nbd7, and pressure with …Qa5 — dynamic and balanced.", sayShort: "Saemisch: …Bg7, …a6, …Qa5" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Prepare …b5 with …a6.", sayShort: "…a6, prepare …b5", highlights: [_H('a6')] },
+    { atMove: 21, say: "Develop …Nbd7, completing the setup.", sayShort: "…Nbd7, develop", highlights: [_H('d7')] },
+    { atMove: 23, say: "Develop …Qa5, pressuring c3 and the queenside; dynamic and balanced.", sayShort: "…Qa5, pressure", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_39: SublineNarration = {
+  intro: { say: "White plays the Four Pawns Attack. Develop …Bg7, prepare …b5 with …a6, strike …b5, and push …b4 to seize space — dynamic Benoni counterplay.", sayShort: "Four Pawns: …a6-b5-b4" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Prepare …b5 with …a6.", sayShort: "…a6, prepare …b5", highlights: [_H('a6')] },
+    { atMove: 19, say: "Strike …b5, the Benoni break against the Four Pawns.", sayShort: "…b5, the break", highlights: [_H('b5')] },
+    { atMove: 23, say: "Push …b4, kicking White's knight and seizing space; dynamic and balanced.", sayShort: "…b4, seize space", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_40: SublineNarration = {
+  intro: { say: "White recaptures Nxd5. Simplify the centre, set up the Benoni backbone with …d6, and strike …f5 — the thematic kingside break for dynamic counterplay.", sayShort: "…d6 then the …f5 break" },
+  beats: [
+    { atMove: 9, say: "Recapture …Nxd5, simplifying the centre on your terms.", sayShort: "…Nxd5, simplify", highlights: [_H('d5')] },
+    { atMove: 17, say: "Play …d6, the Benoni backbone supporting your breaks.", sayShort: "…d6, the backbone", highlights: [_H('d6')] },
+    { atMove: 21, say: "Strike …f5, the thematic Benoni kingside break challenging e4.", sayShort: "…f5, the kingside break", highlights: [_H('f5')] },
+    { atMove: 23, say: "Open …fxe4, prising the position open with counterplay; balanced.", sayShort: "…fxe4, open lines", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_41: SublineNarration = {
+  intro: { say: "White lunges e5. Develop …Bg7, lift …Re8 to pressure e-file, take …dxe5, and hop …Ng4 — sharp, dynamic counterplay; balanced.", sayShort: "…Re8, …dxe5, …Ng4" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 19, say: "Take …dxe5, meeting White's break and opening the centre.", sayShort: "…dxe5, open the centre", highlights: [_H('e5')] },
+    { atMove: 21, say: "Hop …Ng4, hitting e5 and f2 with dynamic counterplay.", sayShort: "…Ng4, counterplay", highlights: [_H('g4')] },
+    { atMove: 23, say: "Take …fxe6, snapping off White's advanced pawn and consolidating; dynamic and balanced.", sayShort: "…fxe6, consolidate", highlights: [_H('e6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_42: SublineNarration = {
+  intro: { say: "White builds e4. Prepare the …b5 break with …a6, strike …b5, develop …Bg7, and complete with …Nbd7 — dynamic Benoni counterplay.", sayShort: "…a6-b5 break, …Bg7" },
+  beats: [
+    { atMove: 13, say: "Prepare …b5 with …a6, the Benoni queenside break.", sayShort: "…a6, prepare …b5", highlights: [_H('a6')] },
+    { atMove: 15, say: "Strike …b5, the thematic Benoni queenside break.", sayShort: "…b5, the break", highlights: [_H('b5')] },
+    { atMove: 17, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 23, say: "Develop …Nbd7, completing the setup; dynamic and balanced.", sayShort: "…Nbd7, complete", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_43: SublineNarration = {
+  intro: { say: "White steers into a Symmetric structure. Release …cxd4, strike …d5, gain space with …e5, and develop to full equality.", sayShort: "Symmetric: …cxd4, …d5, …e5" },
+  beats: [
+    { atMove: 5, say: "Release …cxd4, steering into a balanced Symmetric structure.", sayShort: "…cxd4, release", highlights: [_H('d4')] },
+    { atMove: 9, say: "Strike …d5, freeing your game.", sayShort: "…d5, free the game", highlights: [_H('d5')] },
+    { atMove: 17, say: "Gain space with …e5, active piece play.", sayShort: "…e5, gain space", highlights: [_H('e5')] },
+    { atMove: 23, say: "Castle …O-O; balanced and equal.", sayShort: "…O-O, equal", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_44: SublineNarration = {
+  intro: { say: "White lunges e5. Develop …Bg7, hop …Ng4 to hit e5, support with …Qb6, and grab …Nxe5 — sharp, dynamic counterplay; balanced.", sayShort: "…Bg7, …Ng4, …Nxe5" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 21, say: "Hop …Ng4, hitting White's e5-pawn with counterplay.", sayShort: "…Ng4, counterplay", highlights: [_H('g4')] },
+    { atMove: 25, say: "Grab …Nxe5, snatching the pawn with active pieces.", sayShort: "…Nxe5, win the pawn", highlights: [_H('e5')] },
+    { atMove: 27, say: "Grab …Qxb2, snatching material in the sharp tactics; dynamic and balanced.", sayShort: "…Qxb2, win material", highlights: [_H('b2')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_45: SublineNarration = {
+  intro: { say: "White lunges e5. Develop …Bg7, lift …Re8, hop …Ng4 to hit e5, and grab …Nxe5 — sharp, dynamic counterplay; balanced.", sayShort: "…Bg7, …Re8, …Ng4, …Nxe5" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+    { atMove: 21, say: "Hop …Ng4, hitting White's e5-pawn.", sayShort: "…Ng4, hit e5", highlights: [_H('g4')] },
+    { atMove: 23, say: "Grab …Nxe5, snatching the pawn with dynamic play; balanced.", sayShort: "…Nxe5, win the pawn", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_46: SublineNarration = {
+  intro: { say: "White builds the Four Pawns centre. Fianchetto …g6, develop …Bg7, castle, and lift …Re8 — ready for the …b5 and …f5 counterplay.", sayShort: "Modern Benoni: …g6, …Bg7, …Re8" },
+  beats: [
+    { atMove: 11, say: "Fianchetto …g6, the Modern Benoni — your bishop bears down the long diagonal.", sayShort: "…g6, the Benoni", highlights: [_H('g6')] },
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 21, say: "Castle …O-O, completing your setup for the …b5 and …Re8 counterplay.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
+    { atMove: 23, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_47: SublineNarration = {
+  intro: { say: "White lunges e5. Develop …Bg7, lift …Re8, hop …Ng4, and grab …Nxe5 — sharp, dynamic counterplay; balanced.", sayShort: "…Bg7, …Re8, …Ng4, …Nxe5" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+    { atMove: 21, say: "Hop …Ng4, hitting White's e5-pawn.", sayShort: "…Ng4, hit e5", highlights: [_H('g4')] },
+    { atMove: 23, say: "Grab …Nxe5, snatching the pawn with dynamic play; balanced.", sayShort: "…Nxe5, win the pawn", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_48: SublineNarration = {
+  intro: { say: "White builds e4 and Nf3. Prepare …b5 with …a6, strike …b5, develop …Bg7, and complete with …Nbd7 — dynamic Benoni counterplay.", sayShort: "…a6-b5 break, …Bg7" },
+  beats: [
+    { atMove: 13, say: "Prepare …b5 with …a6, the Benoni queenside break.", sayShort: "…a6, prepare …b5", highlights: [_H('a6')] },
+    { atMove: 15, say: "Strike …b5, the thematic Benoni break.", sayShort: "…b5, the break", highlights: [_H('b5')] },
+    { atMove: 17, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 23, say: "Develop …Nbd7, completing the setup; dynamic and balanced.", sayShort: "…Nbd7, complete", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_49: SublineNarration = {
+  intro: { say: "White plays a quiet e3. Build …e6, expand …b5, fianchetto …Bb7, and pressure the c-file — comfortable equality.", sayShort: "Quiet e3: …e6, …b5, …Bb7" },
+  beats: [
+    { atMove: 5, say: "Build with …e6, a solid structure against White's quiet e3.", sayShort: "…e6, solid structure", highlights: [_H('e6')] },
+    { atMove: 13, say: "Expand …b5, gaining queenside space.", sayShort: "…b5, queenside space", highlights: [_H('b5')] },
+    { atMove: 21, say: "Fianchetto …Bb7, contesting the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Lift …Rc8, pressuring the c-file; balanced.", sayShort: "…Rc8, press the c-file", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_50: SublineNarration = {
+  intro: { say: "White meets the Czech Benoni with …e5. Fianchetto …g6, route …Na6-c7 for the …b5 break, and maneuver patiently — solid and balanced.", sayShort: "Czech: …g6, …Na6-c7" },
+  beats: [
+    { atMove: 11, say: "Fianchetto …g6 in the Czech Benoni.", sayShort: "…g6, the Czech setup", highlights: [_H('g6')] },
+    { atMove: 13, say: "Develop …Na6, heading for c7 to support …b5.", sayShort: "…Na6, head for c7", highlights: [_H('a6')] },
+    { atMove: 15, say: "Reroute …Nc7, eyeing b5 and e6.", sayShort: "…Nc7, eye b5", highlights: [_H('c7')] },
+    { atMove: 21, say: "Develop …Be7, completing the Czech setup; balanced.", sayShort: "…Be7, complete", highlights: [_H('e7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_51: SublineNarration = {
+  intro: { say: "White takes …dxe6. Recapture …fxe6 for a strong centre, strike …d5, develop …Be7, and fianchetto …Bb7 — balanced.", sayShort: "…fxe6, …d5, …Bb7" },
+  beats: [
+    { atMove: 7, say: "Recapture …fxe6, opening the f-file and keeping a strong centre.", sayShort: "…fxe6, strong centre", highlights: [_H('e6')] },
+    { atMove: 9, say: "Strike …d5, claiming central space.", sayShort: "…d5, claim the centre", highlights: [_H('d5')] },
+    { atMove: 13, say: "Develop …Be7, preparing to castle.", sayShort: "…Be7, develop", highlights: [_H('e7')] },
+    { atMove: 23, say: "Fianchetto …Bb7, contesting the long diagonal; balanced.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_52: SublineNarration = {
+  intro: { say: "White meets …e5 with Nf3. Develop …Bd7, route …Na6-c7 for …b5, and fianchetto …g6 — solid Czech Benoni, balanced.", sayShort: "Czech: …Bd7, …Na6-c7" },
+  beats: [
+    { atMove: 11, say: "Develop …Bd7, completing the Czech Benoni structure.", sayShort: "…Bd7, complete the setup", highlights: [_H('d7')] },
+    { atMove: 13, say: "Develop …Na6, heading for c7.", sayShort: "…Na6, head for c7", highlights: [_H('a6')] },
+    { atMove: 17, say: "Reroute …Nc7, eyeing b5 for the break.", sayShort: "…Nc7, eye b5", highlights: [_H('c7')] },
+    { atMove: 23, say: "Fianchetto …g6, re-routing the bishop; balanced.", sayShort: "…g6, re-route", highlights: [_H('g6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_53: SublineNarration = {
+  intro: { say: "White breaks with f4. Take …exf4 to open lines, centralise …Ne5, develop …Bd6, and castle — balanced with active pieces.", sayShort: "Czech: …exf4, …Ne5, …Bd6" },
+  beats: [
+    { atMove: 11, say: "Take …exf4, opening lines and gaining the e5-square.", sayShort: "…exf4, open lines", highlights: [_H('f4')] },
+    { atMove: 15, say: "Centralise …Ne5, a powerful outpost in the Czech Benoni.", sayShort: "…Ne5, the outpost", highlights: [_H('e5')] },
+    { atMove: 19, say: "Develop …Bd6, eyeing the kingside.", sayShort: "…Bd6, aim kingside", highlights: [_H('d6')] },
+    { atMove: 23, say: "Castle …O-O; balanced with active pieces.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_54: SublineNarration = {
+  intro: { say: "White props with h3. Play …h5 to restrain the kingside, route …Na6-c7, fianchetto …g6, and castle — solid Czech Benoni, balanced.", sayShort: "Czech: …h5, …Na6-c7, …g6" },
+  beats: [
+    { atMove: 11, say: "Play …h5, restraining White's kingside expansion.", sayShort: "…h5, restrain the kingside", highlights: [_H('h5')] },
+    { atMove: 13, say: "Develop …Na6, heading for c7.", sayShort: "…Na6, head for c7", highlights: [_H('a6')] },
+    { atMove: 17, say: "Fianchetto …g6, re-routing the bishop.", sayShort: "…g6, re-route", highlights: [_H('g6')] },
+    { atMove: 21, say: "Castle …O-O; balanced.", sayShort: "…O-O, safe king", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_55: SublineNarration = {
+  intro: { say: "White develops Be2. Route …Na6, take …exf4 to open lines, castle, and hop …Nh5 to provoke — balanced with active pieces.", sayShort: "Czech: …Na6, …exf4, …Nh5" },
+  beats: [
+    { atMove: 11, say: "Develop …Na6, heading for c7 and the queenside.", sayShort: "…Na6, develop", highlights: [_H('a6')] },
+    { atMove: 13, say: "Take …exf4, opening lines and the e5-square.", sayShort: "…exf4, open lines", highlights: [_H('f4')] },
+    { atMove: 17, say: "Hop …Nh5, eyeing f4 and provoking White.", sayShort: "…Nh5, provoke", highlights: [_H('h5')] },
+    { atMove: 21, say: "Reposition …Nf6, maintaining the tension; balanced.", sayShort: "…Nf6, keep the tension", highlights: [_H('f6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_56: SublineNarration = {
+  intro: { say: "White pins with Bg5. Snatch …Nxd5 exploiting the pin, trade …Bxg5 with the extra pawn, castle, and develop …Nd7 — balanced or better.", sayShort: "…Nxd5 wins a pawn" },
+  beats: [
+    { atMove: 11, say: "Snatch …Nxd5, exploiting the pin to win a central pawn.", sayShort: "…Nxd5, win a pawn", highlights: [_H('d5')] },
+    { atMove: 13, say: "Trade …Bxg5, simplifying favourably with the extra pawn.", sayShort: "…Bxg5, simplify", highlights: [_H('g5')] },
+    { atMove: 17, say: "Play …a6, securing your queenside.", sayShort: "…a6, secure the queenside", highlights: [_H('a6')] },
+    { atMove: 23, say: "Develop …Nd7; balanced or better with the pawn.", sayShort: "…Nd7, develop", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_57: SublineNarration = {
+  intro: { say: "White plays the Saemisch-style f3. Route …Na6, castle, reroute …Ne8, and offer the bishop trade with …Bg5 — solid and balanced.", sayShort: "Czech Saemisch: …Na6, …Bg5" },
+  beats: [
+    { atMove: 11, say: "Develop …Na6, heading for c7.", sayShort: "…Na6, head for c7", highlights: [_H('a6')] },
+    { atMove: 13, say: "Castle …O-O, tucking your king to safety.", sayShort: "…O-O, safe king", highlights: [_H('g8')] },
+    { atMove: 17, say: "Develop …Bg5, offering to trade off White's dark bishop.", sayShort: "…Bg5, trade dark bishops", highlights: [_H('g5')] },
+    { atMove: 23, say: "Reroute …Nac7, eyeing b5 and e6; balanced.", sayShort: "…Nac7, reroute", highlights: [_H('c7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_58: SublineNarration = {
+  intro: { say: "White gambits with e4. Snatch …Nxe4, hold it with …f5, solidify …d6, and trade queens — a balanced ending up a pawn or even.", sayShort: "…Nxe4, …f5, balanced" },
+  beats: [
+    { atMove: 7, say: "Snatch …Nxe4, grabbing the gambited pawn.", sayShort: "…Nxe4, grab the pawn", highlights: [_H('e4')] },
+    { atMove: 9, say: "Support the knight with …f5, holding your extra pawn.", sayShort: "…f5, hold the pawn", highlights: [_H('f5')] },
+    { atMove: 19, say: "Solidify …d6, consolidating in a balanced position.", sayShort: "…d6, consolidate", highlights: [_H('d6')] },
+    { atMove: 23, say: "Trade queens with …Qxe2+, simplifying to a balanced ending.", sayShort: "…Qxe2+, balanced ending", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_59: SublineNarration = {
+  intro: { say: "White pins with Bg5. Question with …h6, play …d6, develop …Bf5 outside the chain, and leap …Ne4 — dynamic and balanced.", sayShort: "…h6, …d6, …Bf5, …Ne4" },
+  beats: [
+    { atMove: 7, say: "Question the bishop with …h6.", sayShort: "…h6, question the bishop", highlights: [_H('g5')] },
+    { atMove: 9, say: "Play …d6, the Benoni backbone.", sayShort: "…d6, the backbone", highlights: [_H('d6')] },
+    { atMove: 13, say: "Develop …Bf5, the active bishop outside the chain.", sayShort: "…Bf5, active bishop", highlights: [_H('f5')] },
+    { atMove: 15, say: "Leap …Ne4, the active knight; dynamic and balanced.", sayShort: "…Ne4, active knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_60: SublineNarration = {
+  intro: { say: "White recaptures Nxd5. Simplify the centre, set up the Benoni backbone with …d6, and strike …f5 — the thematic kingside break for dynamic counterplay.", sayShort: "…d6 then the …f5 break" },
+  beats: [
+    { atMove: 9, say: "Recapture …Nxd5, simplifying the centre on your terms.", sayShort: "…Nxd5, simplify", highlights: [_H('d5')] },
+    { atMove: 17, say: "Play …d6, the Benoni backbone supporting your breaks.", sayShort: "…d6, the backbone", highlights: [_H('d6')] },
+    { atMove: 21, say: "Strike …f5, the thematic Benoni kingside break challenging e4.", sayShort: "…f5, the kingside break", highlights: [_H('f5')] },
+    { atMove: 23, say: "Open …fxe4, prising the position open with counterplay; balanced.", sayShort: "…fxe4, open lines", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_61: SublineNarration = {
+  intro: { say: "White builds the Four Pawns centre. Fianchetto …g6, develop …Bg7, castle, and lift …Re8 — ready for the …b5 and …f5 counterplay.", sayShort: "Modern Benoni: …g6, …Bg7, …Re8" },
+  beats: [
+    { atMove: 11, say: "Fianchetto …g6, the Modern Benoni — your bishop bears down the long diagonal.", sayShort: "…g6, the Benoni", highlights: [_H('g6')] },
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 21, say: "Castle …O-O, completing your setup for the …b5 and …Re8 counterplay.", sayShort: "…O-O, finish developing", highlights: [_H('g8')] },
+    { atMove: 23, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_62: SublineNarration = {
+  intro: { say: "White steers into a Symmetric structure. Release …cxd4, strike …d5, gain space with …e5, and develop to full equality.", sayShort: "Symmetric: …cxd4, …d5, …e5" },
+  beats: [
+    { atMove: 5, say: "Release …cxd4, steering into a balanced Symmetric structure.", sayShort: "…cxd4, release", highlights: [_H('d4')] },
+    { atMove: 9, say: "Strike …d5, freeing your game.", sayShort: "…d5, free the game", highlights: [_H('d5')] },
+    { atMove: 17, say: "Gain space with …e5, active piece play.", sayShort: "…e5, gain space", highlights: [_H('e5')] },
+    { atMove: 23, say: "Castle …O-O; balanced and equal.", sayShort: "…O-O, equal", highlights: [_H('g8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_63: SublineNarration = {
+  intro: { say: "White develops Bf4. Develop …Bg7, route …Na6, prepare the …b5 break with …Rb8, and lift …Re8 — dynamic Benoni counterplay.", sayShort: "…Bg7, …Na6, …Rb8 for …b5" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Develop …Na6, heading for c7 and the …b5 break.", sayShort: "…Na6, head for c7", highlights: [_H('a6')] },
+    { atMove: 19, say: "Lift …Rb8, preparing the …b5 Benoni break.", sayShort: "…Rb8, prepare …b5", highlights: [_H('b8')] },
+    { atMove: 23, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_64: SublineNarration = {
+  intro: { say: "White reroutes Nd2 toward c4. Develop …Bg7, route …Na6-c7 for the …b5 break, and lift …Re8 — dynamic Benoni counterplay.", sayShort: "…Bg7, …Na6-c7, …b5" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Develop …Na6, rerouting to c7 to support …b5.", sayShort: "…Na6, reroute", highlights: [_H('a6')] },
+    { atMove: 19, say: "Reroute …Nc7, eyeing b5 and e6 for the break.", sayShort: "…Nc7, eye b5", highlights: [_H('c7')] },
+    { atMove: 23, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_65: SublineNarration = {
+  intro: { say: "White fianchettoes. Develop …Bg7, lift …Re8, develop …Qc7 to support …b5, and complete with …Nbd7 — dynamic Benoni play.", sayShort: "Fianchetto: …Bg7, …Re8, …Qc7" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+    { atMove: 21, say: "Develop …Qc7, supporting …b5 and eyeing the long diagonal.", sayShort: "…Qc7, support …b5", highlights: [_H('c7')] },
+    { atMove: 23, say: "Develop …Nbd7, completing the Benoni setup; balanced.", sayShort: "…Nbd7, complete", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_66: SublineNarration = {
+  intro: { say: "White props with h3. Develop …Bg7, castle, lift …Re8, and reroute …Nbd7-e5 to the fine Benoni outpost — dynamic and balanced.", sayShort: "…Bg7, …Re8, …Ne5 outpost" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+    { atMove: 19, say: "Develop …Nbd7, heading for the e5-outpost.", sayShort: "…Nbd7, head for e5", highlights: [_H('d7')] },
+    { atMove: 21, say: "Centralise …Ne5, a fine Benoni outpost; dynamic and balanced.", sayShort: "…Ne5, the outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_67: SublineNarration = {
+  intro: { say: "White plays a quiet e3. Build …e6, expand …b5, fianchetto …Bb7, and pressure the c-file — comfortable equality.", sayShort: "Quiet e3: …e6, …b5, …Bb7" },
+  beats: [
+    { atMove: 5, say: "Build with …e6, a solid structure against White's quiet e3.", sayShort: "…e6, solid structure", highlights: [_H('e6')] },
+    { atMove: 13, say: "Expand …b5, gaining queenside space.", sayShort: "…b5, queenside space", highlights: [_H('b5')] },
+    { atMove: 21, say: "Fianchetto …Bb7, contesting the long diagonal.", sayShort: "…Bb7, the long diagonal", highlights: [_H('b7')] },
+    { atMove: 23, say: "Lift …Rc8, pressuring the c-file; balanced.", sayShort: "…Rc8, press the c-file", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_68: SublineNarration = {
+  intro: { say: "White builds e4 and h3. Develop …Bg7, castle, lift …Re8, and reroute …Nbd7-e5 to the outpost — dynamic Benoni play.", sayShort: "…Bg7, …Re8, …Ne5" },
+  beats: [
+    { atMove: 13, say: "Develop …Bg7 on the long diagonal, the Modern Benoni bishop.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+    { atMove: 17, say: "Lift …Re8, backing the central break.", sayShort: "…Re8, back the break", highlights: [_H('e8')] },
+    { atMove: 19, say: "Develop …Nbd7, heading for the e5-outpost.", sayShort: "…Nbd7, head for e5", highlights: [_H('d7')] },
+    { atMove: 21, say: "Centralise …Ne5, a fine Benoni outpost; balanced.", sayShort: "…Ne5, the outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+const BN_69: SublineNarration = {
+  intro: { say: "White pins with Bg5. Question with …h6, lunge …g5 to grab the bishop and space, hop …Nh5 to trade it off, and develop …Bg7 — dynamic and balanced.", sayShort: "…h6, …g5, …Nh5" },
+  beats: [
+    { atMove: 13, say: "Question the bishop with …h6.", sayShort: "…h6, question the bishop", highlights: [_H('g5')] },
+    { atMove: 15, say: "Lunge …g5, hitting White's bishop and grabbing kingside space.", sayShort: "…g5, grab space", highlights: [_H('g5')] },
+    { atMove: 17, say: "Hop …Nh5, attacking the g3-bishop to win the bishop pair.", sayShort: "…Nh5, win the bishop pair", highlights: [_H('h5')] },
+    { atMove: 23, say: "Develop …Bg7; dynamic and balanced.", sayShort: "…Bg7, the long diagonal", highlights: [_H('g7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Benoni-Defense'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
+  'benoni-defence::6::Nxd5@8': BN_60,
+  'benoni-defence::4::Nxd5@8': BN_40,
+  'benoni-defence::3::Nxd5@8': BN_30,
+  'benoni-defence::2::Nxd5@8': BN_20,
+  'benoni-defence::1::Nxd5@8': BN_10,
+  'benoni-defence::0::Nxd5@8': BN_0,
   'nimzo-indian::7::Nf3@4': NI_69,
   'nimzo-indian::6::Nf3@4': NI_59,
   'nimzo-indian::5::Nf3@4': NI_49,
@@ -11988,70 +12653,70 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'grunfeld-defence::7::d5@16': C43,
   'grunfeld-defence::7::Bf4@6': C45,
   // ── benoni-defence ──
-  'benoni-defence::0::e4@10': DBEN,
-  'benoni-defence::0::Nf3@4': C49,
-  'benoni-defence::0::Bf4@12': C48,
-  'benoni-defence::0::Nd2@12': C48,
-  'benoni-defence::0::g3@12': C50,
-  'benoni-defence::0::h3@12': C48,
-  'benoni-defence::0::e3@4': C48,
-  'benoni-defence::0::h3@14': C51,
-  'benoni-defence::0::Bg5@12': C48,
-  'benoni-defence::1::e4@10': DBEN,
-  'benoni-defence::1::Nf3@4': C49,
-  'benoni-defence::1::Bf4@12': C48,
-  'benoni-defence::1::e4@12': C51,
-  'benoni-defence::1::Nd2@12': C48,
-  'benoni-defence::1::h3@12': C48,
-  'benoni-defence::1::e3@4': C48,
-  'benoni-defence::1::Bg5@12': C48,
-  'benoni-defence::1::g3@10': C50,
-  'benoni-defence::2::e4@10': DBEN,
-  'benoni-defence::2::Nf3@4': C49,
-  'benoni-defence::2::e4@12': C51,
-  'benoni-defence::2::Nd2@12': C48,
-  'benoni-defence::2::h3@16': C48,
-  'benoni-defence::2::g3@12': C50,
-  'benoni-defence::2::h3@12': C48,
-  'benoni-defence::2::e3@4': C48,
-  'benoni-defence::2::Bd3@16': C48,
-  'benoni-defence::3::Nf3@10': C48,
-  'benoni-defence::3::Nf3@4': C49,
-  'benoni-defence::3::Nf3@12': C51,
-  'benoni-defence::3::e3@4': C48,
-  'benoni-defence::3::h3@12': C51,
-  'benoni-defence::3::Bd3@12': C51,
-  'benoni-defence::3::Bc4@22': C52,
-  'benoni-defence::3::f3@12': C51,
-  'benoni-defence::3::Nf3@16': C52,
-  'benoni-defence::4::e6@22': C48,
-  'benoni-defence::4::Nf3@10': C48,
-  'benoni-defence::4::Nf3@4': C49,
-  'benoni-defence::4::d6@26': C48,
-  'benoni-defence::4::O-O@22': C48,
-  'benoni-defence::4::Bb5+@14': WBENTAIM,
-  'benoni-defence::4::Bf4@22': C48,
-  'benoni-defence::4::Nf3@12': C51,
-  'benoni-defence::4::e3@4': C48,
-  'benoni-defence::5::Bd3@10': C49,
-  'benoni-defence::5::dxe6@6': C53,
-  'benoni-defence::5::Nf3@10': C49,
-  'benoni-defence::5::f4@10': C49,
-  'benoni-defence::5::h3@10': C49,
-  'benoni-defence::5::Be2@10': C49,
-  'benoni-defence::5::Bg5@10': C49,
-  'benoni-defence::5::f3@10': C49,
-  'benoni-defence::5::e4@6': C49,
-  'benoni-defence::5::Bg5@6': C49,
-  'benoni-defence::6::e4@10': DBEN,
-  'benoni-defence::6::Nf3@4': C49,
-  'benoni-defence::6::Bf4@12': C48,
-  'benoni-defence::6::Nd2@12': C48,
-  'benoni-defence::6::g3@12': C50,
-  'benoni-defence::6::h3@12': C48,
-  'benoni-defence::6::e3@4': C48,
-  'benoni-defence::6::h3@14': C51,
-  'benoni-defence::6::Bg5@12': C48,
+  'benoni-defence::0::e4@10': BN_1,
+  'benoni-defence::0::Nf3@4': BN_2,
+  'benoni-defence::0::Bf4@12': BN_3,
+  'benoni-defence::0::Nd2@12': BN_4,
+  'benoni-defence::0::g3@12': BN_5,
+  'benoni-defence::0::h3@12': BN_6,
+  'benoni-defence::0::e3@4': BN_7,
+  'benoni-defence::0::h3@14': BN_8,
+  'benoni-defence::0::Bg5@12': BN_9,
+  'benoni-defence::1::e4@10': BN_11,
+  'benoni-defence::1::Nf3@4': BN_12,
+  'benoni-defence::1::Bf4@12': BN_13,
+  'benoni-defence::1::e4@12': BN_14,
+  'benoni-defence::1::Nd2@12': BN_15,
+  'benoni-defence::1::h3@12': BN_16,
+  'benoni-defence::1::e3@4': BN_17,
+  'benoni-defence::1::Bg5@12': BN_18,
+  'benoni-defence::1::g3@10': BN_19,
+  'benoni-defence::2::e4@10': BN_21,
+  'benoni-defence::2::Nf3@4': BN_22,
+  'benoni-defence::2::e4@12': BN_23,
+  'benoni-defence::2::Nd2@12': BN_24,
+  'benoni-defence::2::h3@16': BN_25,
+  'benoni-defence::2::g3@12': BN_26,
+  'benoni-defence::2::h3@12': BN_27,
+  'benoni-defence::2::e3@4': BN_28,
+  'benoni-defence::2::Bd3@16': BN_29,
+  'benoni-defence::3::Nf3@10': BN_31,
+  'benoni-defence::3::Nf3@4': BN_32,
+  'benoni-defence::3::Nf3@12': BN_33,
+  'benoni-defence::3::e3@4': BN_34,
+  'benoni-defence::3::h3@12': BN_35,
+  'benoni-defence::3::Bd3@12': BN_36,
+  'benoni-defence::3::Bc4@22': BN_37,
+  'benoni-defence::3::f3@12': BN_38,
+  'benoni-defence::3::Nf3@16': BN_39,
+  'benoni-defence::4::e6@22': BN_41,
+  'benoni-defence::4::Nf3@10': BN_42,
+  'benoni-defence::4::Nf3@4': BN_43,
+  'benoni-defence::4::d6@26': BN_44,
+  'benoni-defence::4::O-O@22': BN_45,
+  'benoni-defence::4::Bb5+@14': BN_46,
+  'benoni-defence::4::Bf4@22': BN_47,
+  'benoni-defence::4::Nf3@12': BN_48,
+  'benoni-defence::4::e3@4': BN_49,
+  'benoni-defence::5::Bd3@10': BN_50,
+  'benoni-defence::5::dxe6@6': BN_51,
+  'benoni-defence::5::Nf3@10': BN_52,
+  'benoni-defence::5::f4@10': BN_53,
+  'benoni-defence::5::h3@10': BN_54,
+  'benoni-defence::5::Be2@10': BN_55,
+  'benoni-defence::5::Bg5@10': BN_56,
+  'benoni-defence::5::f3@10': BN_57,
+  'benoni-defence::5::e4@6': BN_58,
+  'benoni-defence::5::Bg5@6': BN_59,
+  'benoni-defence::6::e4@10': BN_61,
+  'benoni-defence::6::Nf3@4': BN_62,
+  'benoni-defence::6::Bf4@12': BN_63,
+  'benoni-defence::6::Nd2@12': BN_64,
+  'benoni-defence::6::g3@12': BN_65,
+  'benoni-defence::6::h3@12': BN_66,
+  'benoni-defence::6::e3@4': BN_67,
+  'benoni-defence::6::h3@14': BN_68,
+  'benoni-defence::6::Bg5@12': BN_69,
   // ── benko-gambit ──
   'benko-gambit::0::Nf3@4': BK_0,
   'benko-gambit::0::b6@8': BK_1,
