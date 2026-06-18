@@ -199,15 +199,7 @@ const C47: SublineNarration = {
 // albin-countergambit :: underpromotion
 // albin-countergambit :: e4_lines
 // englund-gambit :: nc3_decline
-const C117: SublineNarration = {
-  intro: { say: "White declines the b2-pawn and develops Nc3, returning the gambit pawn for a clean lead in development. Be realistic: the Englund is a practical surprise, not full equality, so play actively — develop with tempo, contest the centre, and create problems before White consolidates his small edge. Your best chance is energy and initiative.", sayShort: "Nc3 — develop actively, create problems." },
-  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
-};
 // englund-gambit :: qxb2_bc3
-const C118: SublineNarration = {
-  intro: { say: "You've snatched on b2 and White challenges with Bc3, trying to trap the queen. The …Bb4 pin is the key resource — pinning the bishop so the queen escapes, and after the trades you reach a position where White's extra pawn is offset by your active pieces and his slightly loosened queenside. Stay alert: this is a tactics-rich, practical fight.", sayShort: "…Qxb2 — …Bb4 pins, free the queen." },
-  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
-};
 // anti-benoni-push :: benko_b5
 const C119: SublineNarration = {
   intro: { say: "Black tries the Benko-style …b5, sacrificing a pawn for queenside files against your d5-push. Accept and stay solid: take the pawns, give one back with the bishop trade on f1 if needed, and prioritise king safety with Nge2 and a quick castle. Your extra pawn or your big centre, plus a sound king, outweighs Black's open files when you defend accurately.", sayShort: "…b5 — accept, finish development, hold the edge." },
@@ -344,15 +336,7 @@ const C145: SublineNarration = {
   sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
 };
 // anti-budapest :: ne4
-const C146: SublineNarration = {
-  intro: { say: "Black tries the Fajarowicz …Ne4, planting the knight aggressively. Neutralise it calmly: Nf3 and Nbd2 challenge the intruder, and after the trades you keep a comfortable game with the extra space and sound development. The centralised knight looks scary but has no real support — chase it off and your structural edge remains.", sayShort: "Fajarowicz …Ne4 — Nf3, Nbd2, neutralise." },
-  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
-};
 // anti-budapest :: bf4_main
-const C147: SublineNarration = {
-  intro: { say: "Against the Budapest you hold the e5-pawn with Bf4 and Nf3, the principled anti-gambit. Black regains it with …Nc6 and …Bb4+/…Ngxe5, but you come out with the freer position: a small space edge, the bishop pair potential, and easy development. Don't cling greedily to the pawn — give it back on your terms and keep the structural pull.", sayShort: "Bf4 — hold e5, give back later." },
-  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
-};
 // anti-london-black :: c4_clamp
 const C148: SublineNarration = {
   intro: { say: "You've grabbed queenside space with …c4, clamping White's b3-and-c-pawn breaks and gaining a free hand on the wing. The plan from here: …b5-b4 to roll the pawns, …Na5-c4 or …Bf5 for piece activity, and patient pressure on White's now-static queenside. The London is at its weakest when you seize space first — keep rolling.", sayShort: "…c4 — clamp the queenside, roll …b5-b4." },
@@ -423,14 +407,6 @@ const DKID: SublineNarration = {
 // DEEP EQGA :: qga::3::e3@6
 // DEEP ETRO :: trompowsky-attack::6::d6@9
 // DEEP EENG :: englund-gambit::0::Nc3@10
-const EENG: SublineNarration = {
-  intro: { say: "Here's your trick — …Qb4+ and …Qxb2 swipe a pawn and the open b-file. Be honest with yourself though: this is a surprise weapon, not a guarantee of equality. You're betting White slips, so play sharp, keep that queen safe, and make problems fast before he gets organised.", sayShort: "Englund — swipe b2, play sharp." },
-  beats: [
-    { atMove: 7, say: "…Qb4+ — the whole point. It's a check that also forks down the b-file at b2 (follow the arrow). White has to answer the check, and the pawn drops into your lap.", sayShort: "…Qb4+ — check and hit b2.", arrows: [_A('b4', 'b2', ATK)], highlights: [_H('b2', ATK)] },
-    { atMove: 9, say: "…Qxb2 — the pawn's yours, and so is the half-open b-file. Just stay alert: that queen is exposed, so meet White's tempo moves, develop fast, and turn these open lines into genuine counterplay.", sayShort: "…Qxb2 — grab it, stay sharp.", highlights: [_H('b2', ATK)] },
-  ],
-  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
-};
 // DEEP EABEN :: anti-benoni-push::0::e6@5 | anti-benoni-push::2::e6@5 | anti-benoni-push::3::e6@5
 const EABEN: SublineNarration = {
   intro: { say: "Black goes Modern Benoni, and that hands you the dream White centre — pawns side by side on d5 and e4. So play for space and attack: f4 and Nf3, then the e4-e5 break, and keep his …b5 in check with a4. You've got more room; use it.", sayShort: "Modern Benoni — build e4-f4, attack." },
@@ -481,13 +457,6 @@ const EAQGD: SublineNarration = {
   sources: ['book:qgd', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
 };
 // DEEP EABUD :: anti-budapest::1::Nc6@7 | anti-budapest::2::Nc6@7
-const EABUD: SublineNarration = {
-  intro: { say: "Against the Budapest you hold the extra pawn with Bf4 — the principled way. Black will win it back with …Nc6 and …Ngxe5, but don't cling to it: give it back on your terms and you come out with the freer position, more space and easier development.", sayShort: "Anti-Budapest — hold, then give back." },
-  beats: [
-    { atMove: 8, say: "Nf3 — bolster the e5-pawn (follow the arrow) and develop toward the kingside. You'll return the pawn when it suits you, keeping that slightly freer game and the sounder structure that quietly refutes Black's gambit.", sayShort: "Nf3 — bolster e5, develop.", arrows: [_A('f3', 'e5', ATK)], highlights: [_H('e5', KEY)] },
-  ],
-  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
-};
 // DEEP EALON :: anti-london-black::1::c3@6
 const EALON: SublineNarration = {
   intro: { say: "You've hit White's d4 with …c5 and …Nc6, and now you clamp the queenside with …c4. The idea against the London is to grab space first — but know that …c4 commits you, so follow up energetically: …b5 and the queenside roll give you active counterplay on the wing where his slow setup is least prepared.", sayShort: "Anti-London — clamp with …c4." },
@@ -797,15 +766,6 @@ const WKIAB5: SublineNarration = {
 // WAVE WOLDH3 :: 4 keys
 // WAVE WALBLASK :: 1 keys
 // WAVE WENGRAID :: 1 keys
-const WENGRAID: SublineNarration = {
-  intro: { say: "Bxb4 — the trades clear the way for the Englund's notorious queen raid: …Qxa1, snatching the rook in the corner. Be clear-eyed — this is a desperado surprise, not a sound line: your queen is buried deep in White's camp and must scramble out, and with accurate play White stands better. Play it for the trap value and the practical chance that White goes wrong.", sayShort: "…Bxb4 — the risky …Qxa1 raid" },
-  beats: [
-    { atMove: 12, say: "Bxb4 — White trades to open lines toward your raiding queen on b2. You recapture and the corner rook beckons, but tread knowingly: this grab is double-edged at best.", sayShort: "Bxb4 — trades open lines", highlights: [_H('b4', KEY)] },
-    { atMove: 13, say: "…Nxb4 — recapture, eyeing the a1-rook and keeping the knight active near White's queenside. The raid is on, but so is the risk to your adventuring pieces.", sayShort: "…Nxb4 — recapture, eye a1", highlights: [_H('a1', KEY)] },
-    { atMove: 15, say: "…Qxa1 — you snatch the rook, but now the truth: your queen is marooned in the corner and White will hunt it with a3, Kc1 and the minor pieces. Material in hand, but you must find …Be6 and …Ba2 to free her — a practical gamble, not equality.", sayShort: "…Qxa1 — grab it, queen in peril", highlights: [_H('a1', KEY)] },
-  ],
-  sources: ['concept:pos-initiative', 'concept:tac-trap', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
-};
 // WAVE WNIMNE2 :: 1 keys
 
 const LN01: SublineNarration = {
@@ -14770,6 +14730,209 @@ const ALBR_27: SublineNarration = {
   sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
 };
 
+const ENGW_0: SublineNarration = {
+  intro: { say: "Here White finds the only defence — Nc3, protecting the rook and refusing the trap. You've grabbed the b2-pawn, but your queen gets chased to the rim. Be honest with yourself: White keeps the extra pawn and stands better. The Englund is a practical trap weapon, not an equaliser — play for activity and hope White slips.", sayShort: "Englund: White's only defence Nc3" },
+  beats: [
+    { atMove: 11, say: "Pin …Bb4, keeping White's knight tangled while your queen sits deep.", sayShort: "…Bb4, keep him tangled", highlights: [_H('b4')] },
+    { atMove: 13, say: "Slide …Qa3, dodging the rook — but notice the queen is drifting offside.", sayShort: "…Qa3, dodge the rook", highlights: [_H('a3')] },
+    { atMove: 17, say: "Trade …Bxd2+, simplifying since White has consolidated the extra pawn.", sayShort: "…Bxd2+, simplify", highlights: [_H('d2')] },
+    { atMove: 23, say: "Retreat …Qa5; you're down a pawn here — fight on for the practical chances.", sayShort: "…Qa5, fight on", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const ENGW_1: SublineNarration = {
+  intro: { say: "White blocks the check with Nc3 and goes pawn-grabbing — Nxc7 forking, then Nxa8 snatching the rook. Don't panic: that knight on a8 is buried in the corner with no escape. Snatch back the e5-pawn, tuck your king, and round the trapped knight up with …Qxa8 — the dust settles dead level.", sayShort: "Englund: trap the a8-knight" },
+  beats: [
+    { atMove: 9, say: "Grab …Qxf4! The check let your queen win the bishop on f4 for free.", sayShort: "…Qxf4, win the bishop", highlights: [_H('f4')] },
+    { atMove: 11, say: "Centralise …Qe4, hitting the loose knight and the long diagonal.", sayShort: "…Qe4, hit the knight", highlights: [_H('e4')] },
+    { atMove: 15, say: "Recapture …Nxe5, regaining the pawn while the a8-knight stays jailed.", sayShort: "…Nxe5, regain the pawn", highlights: [_H('e5')] },
+    { atMove: 21, say: "Collect …Qxa8; the cornered knight falls — the game is level.", sayShort: "…Qxa8, the knight falls", highlights: [_H('a8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const ENGW_2: SublineNarration = {
+  intro: { say: "White interposes with the knight, Nbd2 — but it leaves the f4-bishop hanging to your check. Win it with …Qxf4, retreat the queen to safety, then pick off the e5-pawn. You emerge a clean piece ahead with a winning game.", sayShort: "Englund: …Qxf4 wins the bishop" },
+  beats: [
+    { atMove: 9, say: "Capture …Qxf4! The check exposed the bishop — you win it outright.", sayShort: "…Qxf4, win the bishop", highlights: [_H('f4')] },
+    { atMove: 11, say: "Retreat …Qb4, steering the queen clear of White's tempo-gaining threats.", sayShort: "…Qb4, steer the queen clear", highlights: [_H('b4')] },
+    { atMove: 17, say: "Take …Nxe5, recovering the gambit pawn a whole piece up.", sayShort: "…Nxe5, regain it a piece up", highlights: [_H('e5')] },
+    { atMove: 21, say: "Recapture …Qxe5, centralising the queen — your extra piece decides.", sayShort: "…Qxe5, the piece decides", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const ENGW_3: SublineNarration = {
+  intro: { say: "This is the famous Englund trap sprung! After Bc3 to guard the rook, the bombshell …Bb4 pins it to the king. White trades on b4, but now …Qxa1 spears the rook in the corner — you've won the exchange and a pawn. Mop up cleanly and convert the material.", sayShort: "Englund: the …Bb4 trap, win the rook" },
+  beats: [
+    { atMove: 13, say: "Recapture …Nxb4, and the a1-rook is suddenly hanging with no defender.", sayShort: "…Nxb4, rook hangs", highlights: [_H('b4')] },
+    { atMove: 15, say: "Snatch …Qxa1! The queen grabs the trapped rook — you're up the exchange.", sayShort: "…Qxa1, win the rook", highlights: [_H('a1')] },
+    { atMove: 21, say: "Develop …Be6, untangling now that the extra material is banked.", sayShort: "…Be6, untangle", highlights: [_H('e6')] },
+    { atMove: 23, say: "Probe …Ba2, the bishop needling White's queenside — convert your edge.", sayShort: "…Ba2, needle and convert", highlights: [_H('a2')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const ENGW_4: SublineNarration = {
+  intro: { say: "White blocks with Qd2, but it walks straight into the trap. Take …Qxb2 attacking the rook, and when c3 tries to trap your queen, escape with …Qxa1 — snaffling the corner rook. Your queen dances out via a3 and the extra exchange is yours.", sayShort: "Englund: …Qxb2-a1 raids the rook" },
+  beats: [
+    { atMove: 9, say: "Grab …Qxb2, the queen biting into White's queenside and the a1-rook.", sayShort: "…Qxb2, bite the queenside", highlights: [_H('b2')] },
+    { atMove: 11, say: "Escape …Qxa1! The corner rook is yours; the queen slips the net.", sayShort: "…Qxa1, snaffle the rook", highlights: [_H('a1')] },
+    { atMove: 17, say: "Recapture …Qxa3, emerging a clean exchange to the good.", sayShort: "…Qxa3, a clean exchange up", highlights: [_H('a3')] },
+    { atMove: 23, say: "Develop …Ne7, completing your forces with the material edge banked.", sayShort: "…Ne7, bank the edge", highlights: [_H('e7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const ENGW_5: SublineNarration = {
+  intro: { say: "White blocks the check with c3 and again drops the f4-bishop. Scoop it with …Qxf4, and when White tries to harass your queen, keep grabbing: the rash g4 thrust loses another pawn to …Qxg4. Reroute the queen home and round up e5 — a piece and a pawn to the good.", sayShort: "Englund: …Qxf4, then …Qxg4 too" },
+  beats: [
+    { atMove: 9, say: "Take …Qxf4, the queen snapping off the undefended bishop.", sayShort: "…Qxf4, snap the bishop", highlights: [_H('f4')] },
+    { atMove: 15, say: "Snatch …Qxg4! White's loose pawn-thrust hangs — grab a second pawn.", sayShort: "…Qxg4, grab another pawn", highlights: [_H('g4')] },
+    { atMove: 21, say: "Collect …Nxe5, recovering the gambit pawn with a crushing material lead.", sayShort: "…Nxe5, crushing lead", highlights: [_H('e5')] },
+    { atMove: 23, say: "Recapture …Qxe5, centralising — a piece up, the game is over.", sayShort: "…Qxe5, game over", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const ENGW_6: SublineNarration = {
+  intro: { say: "After Bc3, White tries Qd3 to bolster the trapped rook — too late. Spear it with …Qxa1, then trade pieces off into a winning ending: …Bxc3 and the queens come off. With the exchange and a pawn in the bank, simplification is your friend.", sayShort: "Englund: …Qxa1, simplify to win" },
+  beats: [
+    { atMove: 13, say: "Grab …Qxa1! The rook in the corner is lost — you're up the exchange.", sayShort: "…Qxa1, win the exchange", highlights: [_H('a1')] },
+    { atMove: 17, say: "Trade …Qxc3, swapping queens to head for a winning endgame.", sayShort: "…Qxc3, swap into the win", highlights: [_H('c3')] },
+    { atMove: 19, say: "Snatch …Nxe5, regaining the pawn with the material edge intact.", sayShort: "…Nxe5, regain the pawn", highlights: [_H('e5')] },
+    { atMove: 23, say: "Tuck …Kd8, connecting up — the extra exchange decides the ending.", sayShort: "…Kd8, the exchange decides", highlights: [_H('d8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const ENGW_7: SublineNarration = {
+  intro: { say: "White unpins with Nfd2, but the c3-bishop is loose. Take it: …Bxc3, and after the recapture …Qxc3 nets a clean piece. Then help yourself to e5 as well. You're a piece and pawns to the good with an easy technical win ahead.", sayShort: "Englund: …Bxc3 wins the piece" },
+  beats: [
+    { atMove: 13, say: "Capture …Bxc3, removing the bishop that was guarding the dark squares.", sayShort: "…Bxc3, remove the guard", highlights: [_H('c3')] },
+    { atMove: 15, say: "Recapture …Qxc3, emerging a clean piece up with a dominant queen.", sayShort: "…Qxc3, a clean piece up", highlights: [_H('c3')] },
+    { atMove: 17, say: "Grab …Qxe5, hoovering the last loose pawn — totally winning.", sayShort: "…Qxe5, totally winning", highlights: [_H('e5')] },
+    { atMove: 23, say: "Reposition …Qf6, tidying up; convert the extra piece at leisure.", sayShort: "…Qf6, convert at leisure", highlights: [_H('f6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const ENGW_8: SublineNarration = {
+  intro: { say: "White recaptures with the knight, Nxc3 — but the a1-rook still hangs, now with check. Take it: …Qxa1+ forces the king to crawl and you pocket the exchange. Develop smoothly, regain e5, and trade into a won game.", sayShort: "Englund: …Qxa1+ with check" },
+  beats: [
+    { atMove: 15, say: "Snatch …Qxa1+! The rook falls with check — the exchange is yours.", sayShort: "…Qxa1+, win with check", highlights: [_H('a1')] },
+    { atMove: 17, say: "Develop …Nge7, bringing the kingside knight into play at last.", sayShort: "…Nge7, develop the knight", highlights: [_H('e7')] },
+    { atMove: 19, say: "Take …Nxe5, recovering the pawn with the material lead secured.", sayShort: "…Nxe5, recover the pawn", highlights: [_H('e5')] },
+    { atMove: 23, say: "Capture …Nxd4, trading down — the extra exchange wraps it up.", sayShort: "…Nxd4, trade down to win", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Englund-Gambit'],
+};
+const ENGW_9: SublineNarration = {
+  intro: { say: "White blocks with Nbd2 and Rb1 to save the rook — so you switch targets. Trade off on c3 and d2 to strip White's king of cover, then raid with …Qxa2, munching a pawn while the king sits exposed in the centre. Two pawns up with the safer king, you're winning.", sayShort: "Englund: strip the cover, …Qxa2" },
+  beats: [
+    { atMove: 13, say: "Take …Bxc3, ripping away a key defender of White's position.", sayShort: "…Bxc3, rip the defender", highlights: [_H('c3')] },
+    { atMove: 15, say: "Trade …Bxd2+, dragging the white king into the open centre.", sayShort: "…Bxd2+, expose the king", highlights: [_H('d2')] },
+    { atMove: 17, say: "Grab …Qxa2! A second pawn, and White's king has no shelter.", sayShort: "…Qxa2, snatch a pawn", highlights: [_H('a2')] },
+    { atMove: 23, say: "Check …Qa5+, harrying the stranded king — convert your two-pawn edge.", sayShort: "…Qa5+, harry the king", highlights: [_H('a5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Englund-Gambit'],
+};
+
+
+const ABUW2_0: SublineNarration = {
+  intro: { say: "Black tries the Fajarowicz, flicking the knight to e4 instead of g4. Take the air away from it: a3 stops any …Bb4 ideas, and b4 chases the knight off c5. Return the e5-pawn on your terms, develop harmoniously, and your extra space gives a comfortable edge.", sayShort: "Anti-Budapest: squeeze the Fajarowicz" },
+  beats: [
+    { atMove: 6, say: "Play a3 first, denying the knight the b4-square and any pin tricks.", sayShort: "a3, deny b4", highlights: [_H('a3')] },
+    { atMove: 10, say: "Expand with b4, kicking the c5-knight and grabbing queenside space.", sayShort: "b4, kick and expand", highlights: [_H('b4')] },
+    { atMove: 12, say: "Hand back the pawn with exd6 — you keep the space and the better structure.", sayShort: "exd6, return for structure", highlights: [_H('d6')] },
+    { atMove: 20, say: "Castle long, O-O-O, your king safe and your space advantage decisive.", sayShort: "O-O-O, safe and better", highlights: [_H('c1')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const ABUW2_1: SublineNarration = {
+  intro: { say: "Black overreaches with …g5 to harass your bishop. Retreat it safely to g3, then punish the loosened kingside with h4! The g5-pawn becomes a target, the h-file cracks open, and after the trades you swap rooks and hit with Qa4 — Black's king is stuck on f8 and you stand clearly better.", sayShort: "Anti-Budapest: punish …g5 with h4" },
+  beats: [
+    { atMove: 8, say: "Tuck the bishop to g3, keeping it safe while …g5 weakens Black's camp.", sayShort: "Bg3, keep it safe", highlights: [_H('g3')] },
+    { atMove: 12, say: "Strike h4! The g5-pawn is overextended — pry the kingside open.", sayShort: "h4, pry it open", highlights: [_H('h4')] },
+    { atMove: 20, say: "Swap on h8, Rxh8+, trading into a position where Black's king is stranded.", sayShort: "Rxh8+, strand the king", highlights: [_H('h8')] },
+    { atMove: 22, say: "Lance Qa4, eyeing loose targets — Black's king on f8 leaves you on top.", sayShort: "Qa4, hit and dominate", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const ABUW2_2: SublineNarration = {
+  intro: { say: "Black checks with …Bb4+ to win back the pawn. Block with Nd2 — the most solid interposition — and develop calmly. Let Black recapture on e5; you simply trade the knights, complete development with Be2, and your bishop pair plus the half-open lines hand you a small but lasting pull.", sayShort: "Anti-Budapest: block …Bb4+ with Nd2" },
+  beats: [
+    { atMove: 8, say: "Interpose Nd2, the sturdy block that keeps your structure intact.", sayShort: "Nd2, sturdy block", highlights: [_H('d2')] },
+    { atMove: 14, say: "Trade Nxe5, simplifying into a position where your bishops shine.", sayShort: "Nxe5, let the bishops shine", highlights: [_H('e5')] },
+    { atMove: 18, say: "Insert a3, questioning the b4-bishop before it settles in.", sayShort: "a3, question the bishop", highlights: [_H('a3')] },
+    { atMove: 22, say: "Break with c5, opening the centre where your bishop pair tells.", sayShort: "c5, open for the bishops", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const ABUW2_3: SublineNarration = {
+  intro: { say: "Black develops …Nc6 and pins with …Bb4+. Don't fear the doubled c-pawns from …Bxc3 — they hand you the half-open b-file and a broad pawn centre. The key blow is Qd5, hitting the g4-knight and f7 at once, forcing …f6; then exf6 returns the pawn and shatters Black's kingside. Fianchetto and aim at the long diagonal.", sayShort: "Anti-Budapest: Qd5 forks, exf6 cracks" },
+  beats: [
+    { atMove: 8, say: "Develop Nf3, guarding e5 and preparing to meet the coming pin.", sayShort: "Nf3, guard and prepare", highlights: [_H('f3')] },
+    { atMove: 14, say: "Centralise Qd5! It forks the g4-knight and f7 — Black must weaken with …f6.", sayShort: "Qd5, the double attack", highlights: [_H('d5')] },
+    { atMove: 16, say: "Capture exf6, returning the pawn but wrecking Black's kingside structure.", sayShort: "exf6, wreck the kingside", highlights: [_H('f6')] },
+    { atMove: 22, say: "Fianchetto Bg2, raking the long diagonal — your centre and structure dominate.", sayShort: "Bg2, rake the diagonal", highlights: [_H('g2')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const ABUW2_4: SublineNarration = {
+  intro: { say: "Black tries the Fajarowicz, flicking the knight to e4 instead of g4. Take the air away from it: a3 stops any …Bb4 ideas, and b4 chases the knight off c5. Return the e5-pawn on your terms, develop harmoniously, and your extra space gives a comfortable edge.", sayShort: "Anti-Budapest: squeeze the Fajarowicz" },
+  beats: [
+    { atMove: 6, say: "Play a3 first, denying the knight the b4-square and any pin tricks.", sayShort: "a3, deny b4", highlights: [_H('a3')] },
+    { atMove: 10, say: "Expand with b4, kicking the c5-knight and grabbing queenside space.", sayShort: "b4, kick and expand", highlights: [_H('b4')] },
+    { atMove: 12, say: "Hand back the pawn with exd6 — you keep the space and the better structure.", sayShort: "exd6, return for structure", highlights: [_H('d6')] },
+    { atMove: 20, say: "Castle long, O-O-O, your king safe and your space advantage decisive.", sayShort: "O-O-O, safe and better", highlights: [_H('c1')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const ABUW2_5: SublineNarration = {
+  intro: { say: "Black checks with …Bb4+ to win back the pawn. Block with Nd2 — the most solid interposition — and develop calmly. Let Black recapture on e5; you simply trade the knights, complete development with Be2, and your bishop pair plus the half-open lines hand you a small but lasting pull.", sayShort: "Anti-Budapest: block …Bb4+ with Nd2" },
+  beats: [
+    { atMove: 8, say: "Interpose Nd2, the sturdy block that keeps your structure intact.", sayShort: "Nd2, sturdy block", highlights: [_H('d2')] },
+    { atMove: 14, say: "Trade Nxe5, simplifying into a position where your bishops shine.", sayShort: "Nxe5, let the bishops shine", highlights: [_H('e5')] },
+    { atMove: 18, say: "Insert a3, questioning the b4-bishop before it settles in.", sayShort: "a3, question the bishop", highlights: [_H('a3')] },
+    { atMove: 22, say: "Break with c5, opening the centre where your bishop pair tells.", sayShort: "c5, open for the bishops", highlights: [_H('c5')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const ABUW2_6: SublineNarration = {
+  intro: { say: "Black overreaches with …g5 to harass your bishop. Retreat it safely to g3, then punish the loosened kingside with h4! The g5-pawn becomes a target, the h-file cracks open, and after the trades you swap rooks and hit with Qa4 — Black's king is stuck on f8 and you stand clearly better.", sayShort: "Anti-Budapest: punish …g5 with h4" },
+  beats: [
+    { atMove: 8, say: "Tuck the bishop to g3, keeping it safe while …g5 weakens Black's camp.", sayShort: "Bg3, keep it safe", highlights: [_H('g3')] },
+    { atMove: 12, say: "Strike h4! The g5-pawn is overextended — pry the kingside open.", sayShort: "h4, pry it open", highlights: [_H('h4')] },
+    { atMove: 20, say: "Swap on h8, Rxh8+, trading into a position where Black's king is stranded.", sayShort: "Rxh8+, strand the king", highlights: [_H('h8')] },
+    { atMove: 22, say: "Lance Qa4, eyeing loose targets — Black's king on f8 leaves you on top.", sayShort: "Qa4, hit and dominate", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const ABUW2_7: SublineNarration = {
+  intro: { say: "Black develops …Nc6 and pins with …Bb4+. Don't fear the doubled c-pawns from …Bxc3 — they hand you the half-open b-file and a broad pawn centre. The key blow is Qd5, hitting the g4-knight and f7 at once, forcing …f6; then exf6 returns the pawn and shatters Black's kingside. Fianchetto and aim at the long diagonal.", sayShort: "Anti-Budapest: Qd5 forks, exf6 cracks" },
+  beats: [
+    { atMove: 8, say: "Develop Nf3, guarding e5 and preparing to meet the coming pin.", sayShort: "Nf3, guard and prepare", highlights: [_H('f3')] },
+    { atMove: 14, say: "Centralise Qd5! It forks the g4-knight and f7 — Black must weaken with …f6.", sayShort: "Qd5, the double attack", highlights: [_H('d5')] },
+    { atMove: 16, say: "Capture exf6, returning the pawn but wrecking Black's kingside structure.", sayShort: "exf6, wreck the kingside", highlights: [_H('f6')] },
+    { atMove: 22, say: "Fianchetto Bg2, raking the long diagonal — your centre and structure dominate.", sayShort: "Bg2, rake the diagonal", highlights: [_H('g2')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const ABUW2_8: SublineNarration = {
+  intro: { say: "Black tries the Fajarowicz, flicking the knight to e4 instead of g4. Take the air away from it: a3 stops any …Bb4 ideas, and b4 chases the knight off c5. Return the e5-pawn on your terms, develop harmoniously, and your extra space gives a comfortable edge.", sayShort: "Anti-Budapest: squeeze the Fajarowicz" },
+  beats: [
+    { atMove: 6, say: "Play a3 first, denying the knight the b4-square and any pin tricks.", sayShort: "a3, deny b4", highlights: [_H('a3')] },
+    { atMove: 10, say: "Expand with b4, kicking the c5-knight and grabbing queenside space.", sayShort: "b4, kick and expand", highlights: [_H('b4')] },
+    { atMove: 12, say: "Hand back the pawn with exd6 — you keep the space and the better structure.", sayShort: "exd6, return for structure", highlights: [_H('d6')] },
+    { atMove: 20, say: "Castle long, O-O-O, your king safe and your space advantage decisive.", sayShort: "O-O-O, safe and better", highlights: [_H('c1')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Budapest-Defense'],
+};
+const ABUW2_9: SublineNarration = {
+  intro: { say: "Black overreaches with …g5 to harass your bishop. Retreat it safely to g3, then punish the loosened kingside with h4! The g5-pawn becomes a target, the h-file cracks open, and after the trades you swap rooks and hit with Qa4 — Black's king is stuck on f8 and you stand clearly better.", sayShort: "Anti-Budapest: punish …g5 with h4" },
+  beats: [
+    { atMove: 8, say: "Tuck the bishop to g3, keeping it safe while …g5 weakens Black's camp.", sayShort: "Bg3, keep it safe", highlights: [_H('g3')] },
+    { atMove: 12, say: "Strike h4! The g5-pawn is overextended — pry the kingside open.", sayShort: "h4, pry it open", highlights: [_H('h4')] },
+    { atMove: 20, say: "Swap on h8, Rxh8+, trading into a position where Black's king is stranded.", sayShort: "Rxh8+, strand the king", highlights: [_H('h8')] },
+    { atMove: 22, say: "Lance Qa4, eyeing loose targets — Black's king on f8 leaves you on top.", sayShort: "Qa4, hit and dominate", highlights: [_H('a4')] },
+  ],
+  sources: ['concept:pos-space', 'https://lichess.org/opening/Budapest-Defense'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'catalan-opening::6::Bb4+@5': CATR_60,
   'catalan-opening::5::c6@9': CATR_50,
@@ -16370,16 +16533,16 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'albin-countergambit::2::e3@4': ALBR_26,
   'albin-countergambit::2::a3@6': ALBR_27,
   // ── englund-gambit ──
-  'englund-gambit::0::Nc3@10': EENG,
-  'englund-gambit::0::Nc3@8': C117,
-  'englund-gambit::0::Nbd2@8': C117,
-  'englund-gambit::0::Bxb4@12': WENGRAID,
-  'englund-gambit::0::Qd2@8': C117,
-  'englund-gambit::0::c3@8': C117,
-  'englund-gambit::0::Qd3@12': C118,
-  'englund-gambit::0::Nfd2@12': C118,
-  'englund-gambit::0::Nxc3@14': C118,
-  'englund-gambit::0::Nbd2@12': C118,
+  'englund-gambit::0::Nc3@10': ENGW_0,
+  'englund-gambit::0::Nc3@8': ENGW_1,
+  'englund-gambit::0::Nbd2@8': ENGW_2,
+  'englund-gambit::0::Bxb4@12': ENGW_3,
+  'englund-gambit::0::Qd2@8': ENGW_4,
+  'englund-gambit::0::c3@8': ENGW_5,
+  'englund-gambit::0::Qd3@12': ENGW_6,
+  'englund-gambit::0::Nfd2@12': ENGW_7,
+  'englund-gambit::0::Nxc3@14': ENGW_8,
+  'englund-gambit::0::Nbd2@12': ENGW_9,
   // ── anti-benoni-push ──
   'anti-benoni-push::0::d6@13': C119,
   'anti-benoni-push::0::e6@5': EABEN,
@@ -16583,16 +16746,16 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'anti-qgd-exchange::1::Bb4@9': C145,
   'anti-qgd-exchange::1::Nbd7@9': C145,
   // ── anti-budapest ──
-  'anti-budapest::0::Ne4@5': C146,
-  'anti-budapest::0::g5@7': C147,
-  'anti-budapest::0::Bb4+@7': C147,
-  'anti-budapest::1::Nc6@7': EABUD,
-  'anti-budapest::1::Ne4@5': C146,
-  'anti-budapest::1::Bb4+@7': C147,
-  'anti-budapest::1::Nc6@9': C147,
-  'anti-budapest::2::Nc6@7': EABUD,
-  'anti-budapest::2::Ne4@5': C146,
-  'anti-budapest::2::g5@7': C147,
+  'anti-budapest::0::Ne4@5': ABUW2_0,
+  'anti-budapest::0::g5@7': ABUW2_1,
+  'anti-budapest::0::Bb4+@7': ABUW2_2,
+  'anti-budapest::1::Nc6@7': ABUW2_3,
+  'anti-budapest::1::Ne4@5': ABUW2_4,
+  'anti-budapest::1::Bb4+@7': ABUW2_5,
+  'anti-budapest::1::Nc6@9': ABUW2_6,
+  'anti-budapest::2::Nc6@7': ABUW2_7,
+  'anti-budapest::2::Ne4@5': ABUW2_8,
+  'anti-budapest::2::g5@7': ABUW2_9,
   // ── anti-london-black ──
   'anti-london-black::0::Nf3@8': C148,
   'anti-london-black::0::Nd2@8': C148,
