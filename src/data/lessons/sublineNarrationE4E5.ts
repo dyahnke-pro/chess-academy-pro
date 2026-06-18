@@ -587,6 +587,43 @@ const FK_CTR = ['book:four-knights-game', 'concept:pos-center', 'https://en.wiki
 const FK_INIT = ['book:four-knights-game', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Four_Knights_Game'];
 
 // Spanish Four Knights, symmetric Bb5…Bb4 maneuvering. Break symmetry first.
+// four-knights re-anchored line consts (student WHITE)
+const FK_ND4_RUBIN: SublineNarration = {
+  intro: { say: "…Nd4 — the Rubinstein, Black's sharpest Four Knights try, jumping in instead of defending. Trade and push: Nxd4 exd4, then e5! kicks the f6-knight, and after the dust you stand a step ahead in development with active pieces in an open, double-edged game.", sayShort: '…Nd4 — Nxd4, then e5.' },
+  beats: [
+    { atMove: 7, say: "…Nd4 leaps in expecting tricks — trade it off cleanly. Nxd4 exd4, and the recaptured pawn on d4 becomes a target.", sayShort: "…Nd4 — answer Nxd4.", arrows: [A('f3', 'd4')], highlights: [H('d4', KEY)] },
+    { atMove: 10, say: "e5! the pawn punches forward, kicking the f6-knight and seizing the centre while you rip open lines for your pieces.", sayShort: "e5 — kick the knight, open lines.", arrows: [A('e5', 'f6')], highlights: [H('f6', ATK)] },
+    { atMove: 12, say: "exf6 — after …Qxf6 you've traded into an open position a step ahead in development, the doubled c-pawns offset by the bishop pair and active play. Castle and press.", sayShort: "exf6 — open, lead in development.", highlights: [H('f6', SOFT)] },
+  ],
+  sources: FK_INIT,
+};
+const FK_BD6: SublineNarration = {
+  intro: { say: "…Bd6 — a passive bishop that blocks Black's own d-pawn. Develop smoothly and keep the bind: O-O, Ba4 and d3, then a4-a5 to grab queenside space while Black untangles. A small, pleasant, lasting pull.", sayShort: '…Bd6 — develop, a4-a5 squeeze.' },
+  beats: [
+    { atMove: 7, say: "…Bd6 blocks Black's own d-pawn — a passive square. Develop a step ahead: castle, and keep the bishop pinning down the a4-e8 road.", sayShort: "…Bd6 — castle, keep the pin.", arrows: [A('b5', 'c6')], highlights: [H('c6', KEY)] },
+    { atMove: 12, say: "d3 props the centre solidly; with Bb3 raking the a2-g8 diagonal and the a4-a5 push, you cramp Black and dictate the maneuvering battle.", sayShort: "d3 — solid, then a4-a5.", highlights: [H('d3', KEY)] },
+    { atMove: 16, say: "a4 grabs queenside space and prepares a5 to fix Black's pawns; with the freer game and the bishop on b3, you press a small, durable pull while Black shuffles for a plan.", sayShort: "a4 — queenside space, fix pawns.", arrows: [A('a4', 'a5')], highlights: [H('a5', KEY)] },
+  ],
+  sources: FK_CTR,
+};
+const FK_BC5_PAWN: SublineNarration = {
+  intro: { say: "…Bc5 develops actively — but it lets you snatch a pawn. Bxc6 and Nxe5 win the e5-pawn outright, and after the forced trades you reach an endgame a clean pawn up with the healthier structure.", sayShort: '…Bc5 — Bxc6, Nxe5 win a pawn.' },
+  beats: [
+    { atMove: 7, say: "…Bc5 develops actively, but it drops a pawn. Bxc6 first, smashing Black's structure.", sayShort: "…Bc5 — answer Bxc6.", arrows: [A('b5', 'c6')], highlights: [H('c6', ATK)] },
+    { atMove: 8, say: "Bxc6 — and after …dxc6 the e5-pawn hangs. Nxe5 snaps it off; Black's …Bd4 trick doesn't win it back.", sayShort: "Bxc6 — then Nxe5 wins e5.", highlights: [H('e5', ATK)] },
+    { atMove: 10, say: "Nxe5 takes the pawn cleanly; through the forced trades you emerge a clean pawn up with the better structure into the endgame. Convert the extra material.", sayShort: "Nxe5 — a pawn up, convert.", highlights: [H('e5', KEY)] },
+  ],
+  sources: FK_INIT,
+};
+const FK_D6_SCOTCH: SublineNarration = {
+  intro: { say: "…d6 props e5 solidly — strike the centre with d4, the Scotch Four Knights. After the exchanges, Bxc6 damages Black's pawns and e5 grabs space while you develop with the initiative.", sayShort: '…d6 — strike d4, Scotch style.' },
+  beats: [
+    { atMove: 7, say: "…d6 props e5 — break the centre at once with d4, transposing into a favourable Scotch Four Knights.", sayShort: "…d6 — answer d4.", arrows: [A('d2', 'd4')], highlights: [H('d4', KEY)] },
+    { atMove: 8, say: "d4 cracks the centre; after the exchanges you'll play Bxc6 to dent Black's pawns and e5 to grab space, developing with the initiative.", sayShort: "d4 — crack it, then Bxc6/e5.", arrows: [A('d4', 'e5')], highlights: [H('e5', ATK)] },
+    { atMove: 16, say: "e5 clamps the centre, kicking the f6-knight and seizing space while Black's doubled c-pawns tell. You press a clear, pleasant initiative.", sayShort: "e5 — clamp, grab space.", arrows: [A('e5', 'f6')], highlights: [H('f6', ATK)] },
+  ],
+  sources: FK_CTR,
+};
 const FK_SPANISH: SublineNarration = {
   intro: {
     say: "The Spanish Four Knights — symmetric, solid, and famously level. Your trump is the extra tempo of moving first, so break the symmetry on YOUR terms: the Metger unpin with Ne2 and Ng3 reroutes the knight to the kingside, Bg5 pins, and d4 grabs the centre a beat before Black can. Small and durable, but it's a pull, and it's yours.",
@@ -1984,11 +2021,11 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'two-knights-defence::3::Rxe7+@20': { ...TK_MAXLANGE, beats: [{ atMove: 20, say: "Rxe7+ — a desperado, but you're ready: …Nxe7 or …Kxe7 recaptures and the attack peters out. You emerge with the material and a safe king; the Canal's fireworks have spent themselves. Recapture and consolidate the win.", sayShort: "Rxe7+ — recapture, the attack ends.", arrows: [A('c6', 'e7')], highlights: [H('e7', KEY)] }] },
 
   // ── Four Knights Game ──
-  'four-knights-game::0::Bd6@7': { ...FK_BC5BD6, beats: [{ atMove: 7, say: "Bd6 — a passive bishop that blocks Black's own d-pawn. Press the tempo: d3 and the Nd5 leap put your knight on a commanding outpost, Bg5 pins, and you take the centre with d4 when ready. Develop a step ahead and keep a pleasant pull.", sayShort: "Bd6 — Nd5 and d4, press ahead.", arrows: [A('c3', 'd5')], highlights: [H('d5', KEY)] }] },
+  'four-knights-game::0::Bd6@7': FK_BD6,
   'four-knights-game::0::Bxc3@11': { ...FK_SPANISH, beats: [{ atMove: 11, say: "Bxc3 — Black trades to break the symmetry; bxc3 gives you the bishop pair and a half-open b-file. Now you're a tempo ahead with two bishops: Bg5 pins, Re1 and d4 expand, and the queenside file feeds your rook. Press the imbalance you've won.", sayShort: "Bxc3 — bxc3, bishop pair, press.", highlights: [H('c3', KEY)] }] },
-  'four-knights-game::0::Bc5@7': { ...FK_BC5BD6, beats: [{ atMove: 7, say: "Bc5 develops the bishop actively. Make the tempo tell: d3 and the Nd5 jump command the centre, Bg5 pins the f6-knight, and Bxc6 doubles Black's pawns if it suits. You're a step ahead in development — take the centre and the pull.", sayShort: "Bc5 — Nd5, develop a step ahead.", arrows: [A('c3', 'd5')], highlights: [H('d5', KEY)] }] },
+  'four-knights-game::0::Bc5@7': FK_BC5_PAWN,
   'four-knights-game::0::g6@5': FK_G6,
-  'four-knights-game::0::d6@7': { ...FK_SPANISH, beats: [{ atMove: 7, say: "d6 props e5 solidly. Break the symmetry on your terms: the Nd5 leap, Bxc6 to damage the structure, or d4 for the centre. With the extra tempo of moving first, claim the initiative — develop and out-manoeuvre.", sayShort: "d6 — Nd5 or d4, break symmetry.", arrows: [A('c3', 'd5')], highlights: [H('d5', KEY)] }] },
+  'four-knights-game::0::d6@7': FK_D6_SCOTCH,
   'four-knights-game::0::h6@15': { ...FK_SPANISH, beats: [{ atMove: 15, say: "h6 questions your g5-bishop — Bxf6 doubles Black's pawns and bares the king, or Bh4 keeps the pin. You hold the bishop pair and the half-open b-file from bxc3; with d4 and the rooks you press the structural imbalance. Keep the initiative.", sayShort: "h6 — Bxf6 doubles, press the file.", highlights: [H('c3', KEY)] }] },
   'four-knights-game::0::Bd7@15': { ...FK_SPANISH, beats: [{ atMove: 15, say: "Bd7 develops modestly. You've won the imbalance: the bishop pair, the half-open b-file, and the extra space. Play d4 to expand, swing the rook to b1, and press at the queenside and centre. The first-move tempo has become a lasting edge.", sayShort: "Bd7 — d4 and Rb1, press.", highlights: [H('c3', KEY)] }] },
   'four-knights-game::0::Ne7@13': { ...FK_SPANISH, beats: [{ atMove: 13, say: "Ne7 reroutes the knight toward g6. Seize the moment: Nd5 or d4 grabs the centre while the knight tours, and Bxf6 or the pin keeps Black tied. With the extra tempo and the bishop-pair option, press your small, durable pull.", sayShort: "Ne7 — Nd5 or d4, grab the centre.", arrows: [A('c3', 'd5')], highlights: [H('d5', KEY)] }] },
@@ -2024,11 +2061,11 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'four-knights-game::3::Nf6@19': FK_HALLOWEEN,
   'four-knights-game::3::Qh4+@19': FK_HALLOWEEN,
   'four-knights-game::3::Bxd6@19': FK_HALLOWEEN,
-  'four-knights-game::4::Bd6@7': { ...FK_BC5BD6, beats: [{ atMove: 7, say: "Bd6 — a passive bishop that blocks Black's own d-pawn. Press the tempo: d3 and the Nd5 leap put your knight on a commanding outpost, Bg5 pins, and you take the centre with d4 when ready. Develop a step ahead and keep a pleasant pull.", sayShort: "Bd6 — Nd5 and d4, press ahead.", arrows: [A('c3', 'd5')], highlights: [H('d5', KEY)] }] },
+  'four-knights-game::4::Bd6@7': FK_BD6,
   'four-knights-game::4::Bxc3@11': { ...FK_SPANISH, beats: [{ atMove: 11, say: "Bxc3 — Black trades to break the symmetry; bxc3 gives you the bishop pair and a half-open b-file. Now you're a tempo ahead with two bishops: Bg5 pins, Re1 and d4 expand, and the queenside file feeds your rook. Press the imbalance you've won.", sayShort: "Bxc3 — bxc3, bishop pair, press.", highlights: [H('c3', KEY)] }] },
-  'four-knights-game::4::Bc5@7': { ...FK_BC5BD6, beats: [{ atMove: 7, say: "Bc5 develops the bishop actively. Make the tempo tell: d3 and the Nd5 jump command the centre, Bg5 pins the f6-knight, and Bxc6 doubles Black's pawns if it suits. You're a step ahead in development — take the centre and the pull.", sayShort: "Bc5 — Nd5, develop a step ahead.", arrows: [A('c3', 'd5')], highlights: [H('d5', KEY)] }] },
+  'four-knights-game::4::Bc5@7': FK_BC5_PAWN,
   'four-knights-game::4::g6@5': FK_G6,
-  'four-knights-game::4::d6@7': { ...FK_SPANISH, beats: [{ atMove: 7, say: "d6 props e5 solidly. Break the symmetry on your terms: the Nd5 leap, Bxc6 to damage the structure, or d4 for the centre. With the extra tempo of moving first, claim the initiative — develop and out-manoeuvre.", sayShort: "d6 — Nd5 or d4, break symmetry.", arrows: [A('c3', 'd5')], highlights: [H('d5', KEY)] }] },
+  'four-knights-game::4::d6@7': FK_D6_SCOTCH,
   'four-knights-game::4::c6@17': { ...FK_SPANISH, beats: [{ atMove: 17, say: "c6 — Black props the centre in the deep symmetric line. You've broken the mirror first: Ng3 eyes f5, d4 expands, and Bc4 or Ba4 keeps the bishop active. The extra tempo tells — press the kingside and centre from the better setup.", sayShort: "c6 — Ng3 and d4, press first.", highlights: [H('d4', KEY)] }] },
   'four-knights-game::4::Bxc3@9': { ...FK_SPANISH, beats: [{ atMove: 9, say: "Bxc3 — an early trade; bxc3 hands you the bishop pair and the half-open b-file at once. Now you're a clear tempo ahead: d4 expands the centre, Bg5 and Re1 develop, and the open file feeds your rook. Press the imbalance.", sayShort: "Bxc3 — bxc3, two bishops, press.", highlights: [H('c3', KEY)] }] },
   'four-knights-game::4::Bg4@13': { ...FK_SPANISH, beats: [{ atMove: 13, say: "Bg4 — Black pins toward your rerouting knight. No bother: h3 puts the question, and your Ne2-g3 tour heads for f5 while d4 expands. With the first-move tempo and the bishop-pair option, the small edge is yours — keep improving.", sayShort: "Bg4 — h3, then Ng3 and d4.", highlights: [H('d4', KEY)] }] },
@@ -2050,14 +2087,14 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'four-knights-game::6::Qe7@11': FK_RUBINSTEIN,
   'four-knights-game::6::cxb2@13': FK_RUBINSTEIN,
   'four-knights-game::6::Be7@15': FK_RUBINSTEIN,
-  'four-knights-game::6::Bd6@7': { ...FK_BC5BD6, beats: [{ atMove: 7, say: "Bd6 — a passive bishop that blocks Black's own d-pawn. Press the tempo: d3 and the Nd5 leap put your knight on a commanding outpost, Bg5 pins, and you take the centre with d4 when ready. Develop a step ahead and keep a pleasant pull.", sayShort: "Bd6 — Nd5 and d4, press ahead.", arrows: [A('c3', 'd5')], highlights: [H('d5', KEY)] }] },
+  'four-knights-game::6::Bd6@7': FK_BD6,
   'four-knights-game::6::Ng8@11': FK_RUBINSTEIN,
   'four-knights-game::6::c6@11': FK_RUBINSTEIN,
-  'four-knights-game::7::Bd6@7': { ...FK_BC5BD6, beats: [{ atMove: 7, say: "Bd6 — a passive bishop that blocks Black's own d-pawn. Press the tempo: d3 and the Nd5 leap put your knight on a commanding outpost, Bg5 pins, and you take the centre with d4 when ready. Develop a step ahead and keep a pleasant pull.", sayShort: "Bd6 — Nd5 and d4, press ahead.", arrows: [A('c3', 'd5')], highlights: [H('d5', KEY)] }] },
+  'four-knights-game::7::Bd6@7': FK_BD6,
   'four-knights-game::7::Bxc3@11': { ...FK_SPANISH, beats: [{ atMove: 11, say: "Bxc3 — Black trades to break the symmetry; bxc3 gives you the bishop pair and a half-open b-file. Now you're a tempo ahead with two bishops: Bg5 pins, Re1 and d4 expand, and the queenside file feeds your rook. Press the imbalance you've won.", sayShort: "Bxc3 — bxc3, bishop pair, press.", highlights: [H('c3', KEY)] }] },
-  'four-knights-game::7::Bc5@7': { ...FK_BC5BD6, beats: [{ atMove: 7, say: "Bc5 develops the bishop actively. Make the tempo tell: d3 and the Nd5 jump command the centre, Bg5 pins the f6-knight, and Bxc6 doubles Black's pawns if it suits. You're a step ahead in development — take the centre and the pull.", sayShort: "Bc5 — Nd5, develop a step ahead.", arrows: [A('c3', 'd5')], highlights: [H('d5', KEY)] }] },
+  'four-knights-game::7::Bc5@7': FK_BC5_PAWN,
   'four-knights-game::7::g6@5': FK_G6,
-  'four-knights-game::7::d6@7': { ...FK_SPANISH, beats: [{ atMove: 7, say: "d6 props e5 solidly. Break the symmetry on your terms: the Nd5 leap, Bxc6 to damage the structure, or d4 for the centre. With the extra tempo of moving first, claim the initiative — develop and out-manoeuvre.", sayShort: "d6 — Nd5 or d4, break symmetry.", arrows: [A('c3', 'd5')], highlights: [H('d5', KEY)] }] },
+  'four-knights-game::7::d6@7': FK_D6_SCOTCH,
   'four-knights-game::7::h6@15': { ...FK_SPANISH, beats: [{ atMove: 15, say: "h6 questions your g5-bishop — Bxf6 doubles Black's pawns and bares the king, or Bh4 keeps the pin. You hold the bishop pair and the half-open b-file from bxc3; with d4 and the rooks you press the structural imbalance. Keep the initiative.", sayShort: "h6 — Bxf6 doubles, press the file.", highlights: [H('c3', KEY)] }] },
   'four-knights-game::7::c5@21': { ...FK_SPANISH, beats: [{ atMove: 21, say: "c5 — Black challenges your big centre in the deep symmetric line. You hold the bishop pair, the half-open b-file and the broad centre; meet c5 with d5 or keep the tension, and press the queenside and the two bishops. The first-move edge endures.", sayShort: "c5 — hold the centre, press the bishops.", highlights: [H('d4', KEY)] }] },
   'four-knights-game::7::Bd7@15': { ...FK_SPANISH, beats: [{ atMove: 15, say: "Bd7 develops modestly. You've won the imbalance: the bishop pair, the half-open b-file, and the extra space. Play d4 to expand, swing the rook to b1, and press at the queenside and centre. The first-move tempo has become a lasting edge.", sayShort: "Bd7 — d4 and Rb1, press.", highlights: [H('c3', KEY)] }] },
@@ -2895,9 +2932,9 @@ export const SUBLINE_NARRATION_E4E5: Record<string, SublineNarration> = {
   'two-knights-defence::5::Bb5@4': COV_TK_BB5,
   'two-knights-defence::6::Bb5@4': COV_TK_BB5,
   'two-knights-defence::7::Bb5@4': COV_TK_BB5,
-  'four-knights-game::0::Nd4@7': COV_FK_ND4,
-  'four-knights-game::4::Nd4@7': COV_FK_ND4,
-  'four-knights-game::7::Nd4@7': COV_FK_ND4,
+  'four-knights-game::0::Nd4@7': FK_ND4_RUBIN,
+  'four-knights-game::4::Nd4@7': FK_ND4_RUBIN,
+  'four-knights-game::7::Nd4@7': FK_ND4_RUBIN,
   'four-knights-game::8::Bg4@11': COV_FK_BG4,
   'scotch-game::0::d6@5': COV_SC_D6,
   'scotch-game::1::d6@5': COV_SC_D6,
