@@ -195,25 +195,9 @@ const C47: SublineNarration = {
 // birds-opening :: stonewall
 // birds-opening :: double_fpawn
 // albin-countergambit :: main_nf3
-const C112: SublineNarration = {
-  intro: { say: "The Albin Countergambit main line — you've thrown …e5 and pushed …d4, a thorn that cramps White and defines the whole game. After Nf3, Nc6 and g3 develop; the standard plan is …Bg4 (or …Nge7-g6), …Qd7 and the bold …O-O-O, throwing the kingside pawns at White while your d4-wedge cramps him. A genuine, aggressive surprise weapon.", sayShort: "Albin — guard d4, …Bg4, …Qd7, …O-O-O." },
-  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Albin_Countergambit'],
-};
 // albin-countergambit :: lasker_trap
-const C113: SublineNarration = {
-  intro: { say: "This is Lasker Trap territory — White grabbed with e3 against your d4-wedge, and the …dxe3! resource is poison. If White recaptures fxe3, …Qh4+ rakes the loosened kingside and you regain the material with a fine game. The whole point of the Albin: tempt White to win the pawn and spring the tactic. Know it cold and you score heavily.", sayShort: "Lasker Trap — …dxe3!, …Qh4+ punishes fxe3." },
-  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Albin_Countergambit'],
-};
 // albin-countergambit :: underpromotion
-const C114: SublineNarration = {
-  intro: { say: "The famous Albin underpromotion line — after …dxe3 and Bxb4, the …exf2+ shot drags White's king out, and the …fxg1=N+! knight-promotion trick wins material in the purest form. Here White has avoided the worst with Kxf2, but the king is exposed and you stand at least equal: develop with tempo and hunt the displaced monarch.", sayShort: "Underpromotion line — exposed king, press." },
-  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Albin_Countergambit'],
-};
 // albin-countergambit :: e4_lines
-const C115: SublineNarration = {
-  intro: { say: "White grabs more space with e4 against your Albin wedge. Hold your nerve and your pawn: …Nc6 and …f6 chip at the e5-pawn, recapturing on f6 to open lines, while the d4-pawn stays a cramping thorn. White's broad centre is overextended; surround it with pieces and the space he grabbed becomes a liability you exploit.", sayShort: "e4 — chip with …f6, keep the d4-thorn." },
-  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Albin_Countergambit'],
-};
 // englund-gambit :: nc3_decline
 const C117: SublineNarration = {
   intro: { say: "White declines the b2-pawn and develops Nc3, returning the gambit pawn for a clean lead in development. Be realistic: the Englund is a practical surprise, not full equality, so play actively — develop with tempo, contest the centre, and create problems before White consolidates his small edge. Your best chance is energy and initiative.", sayShort: "Nc3 — develop actively, create problems." },
@@ -812,16 +796,6 @@ const WKIAB5: SublineNarration = {
 // WAVE WQGAGAR :: 1 keys
 // WAVE WOLDH3 :: 4 keys
 // WAVE WALBLASK :: 1 keys
-const WALBLASK: SublineNarration = {
-  intro: { say: "fxe3 — White recaptures, and you spring the Lasker Trap. …Qh4+ rakes the diagonal opened by that very recapture, and after g3 the killer is …Qe4! — forking the e3-pawn and the h1-rook at once. You regain the material with a clean, equal game; the trap that punishes White's greed in the Albin, sprung perfectly.", sayShort: "fxe3 — …Qh4+ then …Qe4! forks" },
-  beats: [
-    { atMove: 10, say: "fxe3 — White grabs the pawn, but the recapture fatally opens the e1-h4 diagonal toward his own uncastled king. That is exactly what you were baiting.", sayShort: "fxe3 — the diagonal opens", highlights: [_H('e3', KEY)] },
-    { atMove: 11, say: "…Qh4+ — the trap springs. With f2 vacated, the queen checks straight down the open diagonal (follow the arrow) and White must block with g3, weakening himself further.", sayShort: "…Qh4+ — check down the diagonal", arrows: [_A('h4', 'e1', ATK)], highlights: [_H('e1', KEY)] },
-    { atMove: 13, say: "…Qe4! — the killer. The queen centralises and forks two targets at once: the e3-pawn and the h1-rook down the long diagonal (follow the arrow). You win the material straight back with a clean, equal game.", sayShort: "…Qe4 — fork e3 and h1", arrows: [_A('e4', 'h1', ATK)], highlights: [_H('e4', KEY), _H('e3', KEY)] },
-    { atMove: 17, say: "…Qxe3+ — collecting the pawn back with check, and after the queen trade you emerge fully equal, having punished White's grab. The Albin's most famous trap, executed.", sayShort: "…Qxe3+ — regain, then equal", highlights: [_H('e3', KEY)] },
-  ],
-  sources: ['concept:tac-trap', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Albin_Countergambit'],
-};
 // WAVE WENGRAID :: 1 keys
 const WENGRAID: SublineNarration = {
   intro: { say: "Bxb4 — the trades clear the way for the Englund's notorious queen raid: …Qxa1, snatching the rook in the corner. Be clear-eyed — this is a desperado surprise, not a sound line: your queen is buried deep in White's camp and must scramble out, and with accurate play White stands better. Play it for the trap value and the practical chance that White goes wrong.", sayShort: "…Bxb4 — the risky …Qxa1 raid" },
@@ -14514,6 +14488,288 @@ const CATR_69: SublineNarration = {
   sources: ['concept:pos-development', 'https://lichess.org/opening/Catalan-Opening'],
 };
 
+const ALBR_0: SublineNarration = {
+  intro: { say: "The Albin: you've sacrificed e5 for the cramping d4-pawn and fast development. Castle long and play for the initiative against White's king.", sayShort: "Albin: d4-wedge for the pawn" },
+  beats: [
+    { atMove: 15, say: "Undermine the e5-pawn with …f6, opening lines for your active pieces.", sayShort: "…f6, undermine e5", highlights: [_H('f6')] },
+    { atMove: 17, say: "Trade …Bh3, swapping off White's strong fianchetto bishop.", sayShort: "…Bh3, trade the bishop", highlights: [_H('h3')] },
+    { atMove: 21, say: "Grab …Bxb4, snatching a pawn back with full activity for the gambit.", sayShort: "…Bxb4, snatch a pawn", highlights: [_H('b4')] },
+    { atMove: 23, say: "Take …Bxd2, keeping the initiative — the d4-wedge is your compensation.", sayShort: "…Bxd2, keep the initiative", highlights: [_H('d2')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_1: SublineNarration = {
+  intro: { say: "White prepares a queenside expansion with a3. Reroute the knight to g6 to round up the e5-pawn, tidy the king, and recover material with active pieces.", sayShort: "Albin: …Nge7-g6 regains e5" },
+  beats: [
+    { atMove: 15, say: "Develop …Nge7, rerouting the knight toward g6 and the e5-pawn.", sayShort: "…Nge7, reroute to g6", highlights: [_H('e7')] },
+    { atMove: 17, say: "Hop …Ng6, attacking the e5-pawn you'll soon regain.", sayShort: "…Ng6, attack e5", highlights: [_H('g6')] },
+    { atMove: 19, say: "Tuck …Kb8, tidying the king before the action.", sayShort: "…Kb8, tidy the king", highlights: [_H('b8')] },
+    { atMove: 23, say: "Recapture …Rxd7; you've regained the pawn with active pieces.", sayShort: "…Rxd7, regain the pawn", highlights: [_H('d7')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_2: SublineNarration = {
+  intro: { say: "With kings on opposite wings, race White on the kingside. Launch …h5, tuck the king, and crash the h-pawn forward — your attack is real compensation for the gambit pawn.", sayShort: "Albin: opposite-side …h5 storm" },
+  beats: [
+    { atMove: 15, say: "Launch …h5, the thematic Albin pawn-storm at White's castled king.", sayShort: "…h5, the pawn-storm", highlights: [_H('h5')] },
+    { atMove: 17, say: "Tuck …Kb8, getting the king off the c-file before you attack.", sayShort: "…Kb8, off the c-file", highlights: [_H('b8')] },
+    { atMove: 19, say: "Develop …Be7, completing your forces for the assault.", sayShort: "…Be7, complete the forces", highlights: [_H('e7')] },
+    { atMove: 23, say: "Trade …Bxf3, damaging White's kingside as your attack builds.", sayShort: "…Bxf3, damage the king", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_3: SublineNarration = {
+  intro: { say: "White develops Bf4. Take the g5-square, reroute the knight to g6 against the e5-pawn, and keep the d4-wedge as your trump — active play for the gambit.", sayShort: "Albin: …h6, …Nge7-g6" },
+  beats: [
+    { atMove: 15, say: "Play …h6, taking the g5-square and preparing kingside expansion.", sayShort: "…h6, take g5", highlights: [_H('g5')] },
+    { atMove: 17, say: "Develop …Nge7, heading for g6 and the e5-pawn.", sayShort: "…Nge7, head for g6", highlights: [_H('e7')] },
+    { atMove: 19, say: "Hop …Ng6, hitting White's bishop and the e5-pawn.", sayShort: "…Ng6, hit e5", highlights: [_H('g6')] },
+    { atMove: 23, say: "Tuck …Kb8; your active pieces and d4-wedge are real compensation.", sayShort: "…Kb8, real compensation", highlights: [_H('b8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_4: SublineNarration = {
+  intro: { say: "White pins with Bg5. Challenge it with …Nge7, recapture when it takes, then grab a pawn back with …Qxb4 and infiltrate — full activity for the gambit.", sayShort: "Albin: …Nge7, …Qxb4 grab" },
+  beats: [
+    { atMove: 15, say: "Develop …Nge7, challenging White's pin.", sayShort: "…Nge7, challenge the pin", highlights: [_H('e7')] },
+    { atMove: 19, say: "Recapture …Qxe7, having traded off the pinning bishop.", sayShort: "…Qxe7, trade done", highlights: [_H('e7')] },
+    { atMove: 21, say: "Grab …Qxb4, snatching a pawn back with active play.", sayShort: "…Qxb4, snatch a pawn", highlights: [_H('b4')] },
+    { atMove: 23, say: "Infiltrate …Qa3, pressing White's queenside; full activity for the gambit.", sayShort: "…Qa3, infiltrate", highlights: [_H('a3')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_5: SublineNarration = {
+  intro: { say: "White fianchettoes the queenside with b3, and the kings sit on opposite wings. Storm …h5 at his king, reroute the knight toward e5, and ram …d3 to crack the position open — the trades that follow leave your rook dominant for the gambit pawn.", sayShort: "Albin: …h5 storm, …d3 break" },
+  beats: [
+    { atMove: 15, say: "Launch …h5 — with kings on opposite sides, your h-pawn is a battering ram.", sayShort: "…h5, the battering ram", highlights: [_H('h5')] },
+    { atMove: 17, say: "Reroute …Nge7, the knight heading for g6 and the e5-pawn.", sayShort: "…Nge7, head for g6", highlights: [_H('e7')] },
+    { atMove: 19, say: "Ram …d3! The wedge-pawn forces open lines before White consolidates.", sayShort: "…d3, crack it open", highlights: [_H('d3')] },
+    { atMove: 21, say: "Recapture …Qxd3, the queen storming into the heart of White's camp.", sayShort: "…Qxd3, storm the centre", highlights: [_H('d3')] },
+    { atMove: 23, say: "After the queen trade, …Rxd3 plants the rook actively — full play for the pawn.", sayShort: "…Rxd3, dominant rook", highlights: [_H('d3')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_6: SublineNarration = {
+  intro: { say: "White lifts Re1. Swap off the strong g2-bishop with …Bh3, then roll the h-pawn at White's exposed king while the knight heads for the e5-pawn — active compensation.", sayShort: "Albin: …Bh3 trade, …h5" },
+  beats: [
+    { atMove: 15, say: "Trade …Bh3, removing White's strong defensive bishop.", sayShort: "…Bh3, remove the bishop", highlights: [_H('h3')] },
+    { atMove: 17, say: "Take …Bxg2, weakening White's king before the storm.", sayShort: "…Bxg2, weaken the king", highlights: [_H('g2')] },
+    { atMove: 19, say: "Launch …h5, rolling the kingside pawns at White's king.", sayShort: "…h5, roll the pawns", highlights: [_H('h5')] },
+    { atMove: 23, say: "Bring …Ng6, eyeing the e5-pawn; active play for the gambit.", sayShort: "…Ng6, eye e5", highlights: [_H('g6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_7: SublineNarration = {
+  intro: { say: "White expands with a3 and b4. Reroute the knight to g6, and when White over-extends, regain both the e5- and c4-pawns with your active knights — you come out fine.", sayShort: "Albin: …Nge7-g6, …Ncxe5/…Nxc4" },
+  beats: [
+    { atMove: 9, say: "Develop …Nge7, rerouting toward g6 and e5.", sayShort: "…Nge7, reroute", highlights: [_H('e7')] },
+    { atMove: 11, say: "Hop …Ng6, attacking the e5-pawn.", sayShort: "…Ng6, attack e5", highlights: [_H('g6')] },
+    { atMove: 15, say: "Regain …Ncxe5, recovering the pawn with active knights.", sayShort: "…Ncxe5, regain e5", highlights: [_H('e5')] },
+    { atMove: 19, say: "Snatch …Nxc4, grabbing a second pawn; you're doing well.", sayShort: "…Nxc4, grab another", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_8: SublineNarration = {
+  intro: { say: "White develops Nbd2 and challenges the d4-pawn. Gain space with …a5, ram …d3 to keep the wedge alive, and develop actively with the bishop pinning — full play for the pawn.", sayShort: "Albin: …a5, …d3 wedge" },
+  beats: [
+    { atMove: 9, say: "Gain space with …a5, restraining White's queenside.", sayShort: "…a5, restrain the wing", highlights: [_H('a5')] },
+    { atMove: 15, say: "Ram …d3, the wedge jamming White's pieces.", sayShort: "…d3, the wedge", highlights: [_H('d3')] },
+    { atMove: 17, say: "Develop …Be7, completing development with active play.", sayShort: "…Be7, complete development", highlights: [_H('e7')] },
+    { atMove: 23, say: "Develop …Bg4, pinning and pressuring; full compensation for the pawn.", sayShort: "…Bg4, pin and pressure", highlights: [_H('g4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_9: SublineNarration = {
+  intro: { say: "White declines the gambit with e3. Now it's a balanced symmetrical game — check …Bb4+ to develop with tempo, recapture …Qxd5, and check …Re8+ to seize the open file.", sayShort: "Declined e3: …Bb4+, …Re8+" },
+  beats: [
+    { atMove: 7, say: "Check …Bb4+, developing with tempo when White declines the gambit.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 13, say: "Recapture …Qxd5, centralising the queen with even material.", sayShort: "…Qxd5, centralise", highlights: [_H('d5')] },
+    { atMove: 15, say: "Check …Re8+, developing the rook with tempo.", sayShort: "…Re8+, seize the file", highlights: [_H('e8')] },
+    { atMove: 23, say: "Reposition …Bh5, keeping the bishop active; fully equal.", sayShort: "…Bh5, stay active", highlights: [_H('h5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_10: SublineNarration = {
+  intro: { say: "White grabs with fxe3 — but the check …Qh4+ exposes his king. The queen raids to e4 and e3, recovering material; you equalise comfortably.", sayShort: "Albin: …Qh4+ and …Qxe3+" },
+  beats: [
+    { atMove: 11, say: "Check …Qh4+! White's e3-capture exposed his king to a decisive check.", sayShort: "…Qh4+, exploit the king", highlights: [_H('h4')] },
+    { atMove: 13, say: "Centralise …Qe4, forking e3 and raking along the rank.", sayShort: "…Qe4, fork e3", highlights: [_H('e4')] },
+    { atMove: 17, say: "Grab …Qxe3+, regaining material with a dominant queen.", sayShort: "…Qxe3+, regain material", highlights: [_H('e3')] },
+    { atMove: 21, say: "Develop …Nc6 into a balanced ending; you've equalised.", sayShort: "…Nc6, equalise", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_11: SublineNarration = {
+  intro: { say: "White tries Qa4+ to wriggle out. Block …Nc6, hunt the king with …Qh4, and the passed f-pawn plus checks force a perpetual — a safe draw for the gambiteer.", sayShort: "Albin: …Qh4 forces perpetual" },
+  beats: [
+    { atMove: 11, say: "Block …Nc6, parrying the check and developing.", sayShort: "…Nc6, parry and develop", highlights: [_H('c6')] },
+    { atMove: 13, say: "Swing …Qh4, hunting White's exposed king.", sayShort: "…Qh4, hunt the king", highlights: [_H('h4')] },
+    { atMove: 15, say: "Push …exf2+, the passed pawn forcing the king into the open.", sayShort: "…exf2+, force the king", highlights: [_H('f2')] },
+    { atMove: 17, say: "Check …Qd4+, beginning a perpetual that secures the draw.", sayShort: "…Qd4+, perpetual draw", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_12: SublineNarration = {
+  intro: { say: "White blocks with Nd2. The …Qh4+-e4 raid combines with …Nxe5, and …Qxh1 snaps off the rook in the corner — you've grabbed decisive material.", sayShort: "Albin: …Qe4 and …Qxh1 win material" },
+  beats: [
+    { atMove: 9, say: "Take …dxe3, opening lines toward White's king.", sayShort: "…dxe3, open lines", highlights: [_H('e3')] },
+    { atMove: 11, say: "Check …Qh4+, exposing the uncastled king.", sayShort: "…Qh4+, expose the king", highlights: [_H('h4')] },
+    { atMove: 19, say: "Grab …Nxe5, snatching material in the tactics.", sayShort: "…Nxe5, snatch material", highlights: [_H('e5')] },
+    { atMove: 21, say: "Snatch …Qxh1! You've won the rook in the corner and stand well on top.", sayShort: "…Qxh1, win the rook", highlights: [_H('h1')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_13: SublineNarration = {
+  intro: { say: "This is the famous Lasker Trap! White's natural Bxb4 walks straight into …exf2+ and …Qxd1 — the queen falls and you are winning. Spring it without hesitation.", sayShort: "The Lasker Trap wins the queen" },
+  beats: [
+    { atMove: 11, say: "Push …exf2+, the zwischenzug that wrecks White's king before you cash in.", sayShort: "…exf2+, the zwischenzug", highlights: [_H('f2')] },
+    { atMove: 13, say: "Win the queen with …Qxd1! The Lasker Trap is complete — you're winning.", sayShort: "…Qxd1, win the queen", highlights: [_H('d1')] },
+    { atMove: 15, say: "Develop …Bf5, bringing pieces out with your decisive material edge.", sayShort: "…Bf5, develop, winning", highlights: [_H('f5')] },
+    { atMove: 23, say: "Develop …Nbc6, completing development; you're winning comfortably.", sayShort: "…Nbc6, convert", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_14: SublineNarration = {
+  intro: { say: "White's Ke2 keeps the king stuck in the centre. Develop …Be6 and buttress the d4-wedge with …c5 — your better-placed pieces exploit the exposed king.", sayShort: "Albin: …c5 buttresses d4 vs Ke2" },
+  beats: [
+    { atMove: 9, say: "Develop …Be6, eyeing c4 while White's king is stuck on e2.", sayShort: "…Be6, eye c4", highlights: [_H('e6')] },
+    { atMove: 11, say: "Buttress …c5, defending the d4-wedge that cramps White.", sayShort: "…c5, defend d4", highlights: [_H('c5')] },
+    { atMove: 15, say: "Develop …Nc6, piling on the d4-strongpoint.", sayShort: "…Nc6, pile on d4", highlights: [_H('c6')] },
+    { atMove: 19, say: "Open …cxd4 with your better pieces; White's stuck king gives you the edge.", sayShort: "…cxd4, exploit the king", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_15: SublineNarration = {
+  intro: { say: "White expands with a3 and b4. Reroute the knight to g6, and when White over-extends, regain both the e5- and c4-pawns with your active knights — you come out fine.", sayShort: "Albin: …Nge7-g6, …Ncxe5/…Nxc4" },
+  beats: [
+    { atMove: 9, say: "Develop …Nge7, rerouting toward g6 and e5.", sayShort: "…Nge7, reroute", highlights: [_H('e7')] },
+    { atMove: 11, say: "Hop …Ng6, attacking the e5-pawn.", sayShort: "…Ng6, attack e5", highlights: [_H('g6')] },
+    { atMove: 15, say: "Regain …Ncxe5, recovering the pawn with active knights.", sayShort: "…Ncxe5, regain e5", highlights: [_H('e5')] },
+    { atMove: 19, say: "Snatch …Nxc4, grabbing a second pawn; you're doing well.", sayShort: "…Nxc4, grab another", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_16: SublineNarration = {
+  intro: { say: "White declines the gambit with e3. Now it's a balanced symmetrical game — check …Bb4+ to develop with tempo, recapture …Qxd5, and check …Re8+ to seize the open file.", sayShort: "Declined e3: …Bb4+, …Re8+" },
+  beats: [
+    { atMove: 7, say: "Check …Bb4+, developing with tempo when White declines the gambit.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 13, say: "Recapture …Qxd5, centralising the queen with even material.", sayShort: "…Qxd5, centralise", highlights: [_H('d5')] },
+    { atMove: 15, say: "Check …Re8+, developing the rook with tempo.", sayShort: "…Re8+, seize the file", highlights: [_H('e8')] },
+    { atMove: 23, say: "Reposition …Bh5, keeping the bishop active; fully equal.", sayShort: "…Bh5, stay active", highlights: [_H('h5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_17: SublineNarration = {
+  intro: { say: "White plays a3 and develops modestly. Develop …Nc6, undermine with …f6 to win the e5-pawn back, pin with …Bg4, and castle long — active play for the gambit.", sayShort: "Albin: …f6 regains, …Bg4" },
+  beats: [
+    { atMove: 7, say: "Develop …Nc6, pressing the e5-pawn and the centre.", sayShort: "…Nc6, press the centre", highlights: [_H('c6')] },
+    { atMove: 13, say: "Undermine …f6, opening lines against the e5-pawn.", sayShort: "…f6, undermine e5", highlights: [_H('f6')] },
+    { atMove: 17, say: "Develop …Bg4, pinning and pressuring.", sayShort: "…Bg4, pin and pressure", highlights: [_H('g4')] },
+    { atMove: 23, say: "Castle long with …O-O-O; active play for the gambit pawn.", sayShort: "…O-O-O, active play", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_18: SublineNarration = {
+  intro: { say: "White grabs the centre with e4. Develop …Nc6, ram …d3 to jam White's pieces, and open …gxf4 to pry lines toward his king — active play for the pawn.", sayShort: "Albin: …d3 jam, …gxf4" },
+  beats: [
+    { atMove: 7, say: "Develop …Nc6, eyeing d4 and e5.", sayShort: "…Nc6, eye the centre", highlights: [_H('c6')] },
+    { atMove: 11, say: "Ram …d3, jamming the wedge deep into White's camp.", sayShort: "…d3, jam the wedge", highlights: [_H('d3')] },
+    { atMove: 17, say: "Open …gxf4, prising lines open toward White's king.", sayShort: "…gxf4, prise it open", highlights: [_H('f4')] },
+    { atMove: 23, say: "Develop …Bg4, pinning; active play for the gambit.", sayShort: "…Bg4, pin", highlights: [_H('g4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_19: SublineNarration = {
+  intro: { say: "White builds e4 and Nf3. Reroute …Nge7-g6, ram …d3, and regain the e5-pawn with active knights — you simplify with full equality.", sayShort: "Albin: …d3, …Ngxe5 regains" },
+  beats: [
+    { atMove: 9, say: "Develop …Nge7, rerouting toward g6.", sayShort: "…Nge7, reroute", highlights: [_H('e7')] },
+    { atMove: 15, say: "Ram …d3, the wedge jamming White.", sayShort: "…d3, the wedge", highlights: [_H('d3')] },
+    { atMove: 21, say: "Regain …Ngxe5, recovering the pawn with active knights.", sayShort: "…Ngxe5, regain e5", highlights: [_H('e5')] },
+    { atMove: 23, say: "Trade …Nxf3+, simplifying with full activity; balanced or better.", sayShort: "…Nxf3+, simplify", highlights: [_H('f3')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_20: SublineNarration = {
+  intro: { say: "White overreaches with e4 and f4. Undermine …f6, and after …Bb4+ the …Ng4-e3 leap plants a monster knight forking White's pieces — active, dangerous play.", sayShort: "Albin: …Ng4-e3 fork" },
+  beats: [
+    { atMove: 13, say: "Check …Bb4+, developing with tempo.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 15, say: "Hop …Ng4, hitting White's e5-pawn and the f2 and e3 squares.", sayShort: "…Ng4, leap in", highlights: [_H('g4')] },
+    { atMove: 17, say: "Plant …Ne3! The knight forks White's queen and bishop — a brutal outpost.", sayShort: "…Ne3, the fork", highlights: [_H('e3')] },
+    { atMove: 23, say: "Trade …Bxd3, keeping the initiative; you're doing well for the pawn.", sayShort: "…Bxd3, keep the initiative", highlights: [_H('d3')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_21: SublineNarration = {
+  intro: { say: "White develops Bf4. Reroute the knight to g6, harry the bishop with …h5, and buttress the d4-wedge with …Bc5 — active, balanced play for the pawn.", sayShort: "Albin: …Nge7-g6, …Bc5" },
+  beats: [
+    { atMove: 9, say: "Develop …Nge7, rerouting to g6.", sayShort: "…Nge7, reroute", highlights: [_H('e7')] },
+    { atMove: 11, say: "Launch …h5, harrying White's bishop with a kingside push.", sayShort: "…h5, harry the bishop", highlights: [_H('h5')] },
+    { atMove: 15, say: "Develop …Bc5, the bishop buttressing the d4-wedge.", sayShort: "…Bc5, buttress d4", highlights: [_H('c5')] },
+    { atMove: 23, say: "Develop …Be6, completing development; active play for the gambit.", sayShort: "…Be6, complete development", highlights: [_H('e6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_22: SublineNarration = {
+  intro: { say: "White lashes out with f4-f5. Recapture …fxe5, sacrifice the bishop with …Bxf5 to open lines, and push the …e4-d3 wedge — sharp, dynamic play for the gambit.", sayShort: "Albin: …fxe5, …e4-d3 wedge" },
+  beats: [
+    { atMove: 11, say: "Recapture …fxe5, regaining the pawn and opening lines.", sayShort: "…fxe5, regain and open", highlights: [_H('e5')] },
+    { atMove: 15, say: "Push …e4, the pawn-wedge cramping White and hitting f3.", sayShort: "…e4, the wedge", highlights: [_H('e4')] },
+    { atMove: 19, say: "Develop …Qd7, connecting toward long castling.", sayShort: "…Qd7, connect", highlights: [_H('d7')] },
+    { atMove: 23, say: "Lift …Re8, pressing the e-file; active play.", sayShort: "…Re8, press the e-file", highlights: [_H('e8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_23: SublineNarration = {
+  intro: { say: "White develops Bd3. Regain the e5-pawn at once with …Nxe5, check …Bb4+, and ram …d3 to keep a cramping wedge — fully equal or better with the d3-pawn.", sayShort: "Albin: …Nxe5 regains, …d3" },
+  beats: [
+    { atMove: 9, say: "Regain …Nxe5 at once, recovering the gambit pawn.", sayShort: "…Nxe5, regain the pawn", highlights: [_H('e5')] },
+    { atMove: 11, say: "Check …Bb4+, developing with tempo.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 15, say: "Ram …d3, the wedge jamming White's coordination.", sayShort: "…d3, the wedge", highlights: [_H('d3')] },
+    { atMove: 23, say: "Develop …Be6; the cramping d3-pawn gives you a fine game.", sayShort: "…Be6, fine game", highlights: [_H('e6')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_24: SublineNarration = {
+  intro: { say: "White expands with a3 and b4. Reroute the knight to g6, and when White over-extends, regain both the e5- and c4-pawns with your active knights — you come out fine.", sayShort: "Albin: …Nge7-g6, …Ncxe5/…Nxc4" },
+  beats: [
+    { atMove: 9, say: "Develop …Nge7, rerouting toward g6 and e5.", sayShort: "…Nge7, reroute", highlights: [_H('e7')] },
+    { atMove: 11, say: "Hop …Ng6, attacking the e5-pawn.", sayShort: "…Ng6, attack e5", highlights: [_H('g6')] },
+    { atMove: 15, say: "Regain …Ncxe5, recovering the pawn with active knights.", sayShort: "…Ncxe5, regain e5", highlights: [_H('e5')] },
+    { atMove: 19, say: "Snatch …Nxc4, grabbing a second pawn; you're doing well.", sayShort: "…Nxc4, grab another", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_25: SublineNarration = {
+  intro: { say: "White returns the pawn with e6. Recapture …Bxe6, castle long, and march the knight via h6-g4 to the e3-fork — your active pieces give full play for the gambit.", sayShort: "Albin: …Bxe6, …Ng4-e3" },
+  beats: [
+    { atMove: 11, say: "Take …Bxe6, recovering material and developing the bishop.", sayShort: "…Bxe6, recover material", highlights: [_H('e6')] },
+    { atMove: 15, say: "Castle long with …O-O-O, connecting rooks for the attack.", sayShort: "…O-O-O, connect for attack", highlights: [_H('c8')] },
+    { atMove: 19, say: "Hop …Ng4, eyeing the e3-fork.", sayShort: "…Ng4, eye e3", highlights: [_H('g4')] },
+    { atMove: 21, say: "Plant …Ne3! The knight forks White's pieces — active play for the gambit.", sayShort: "…Ne3, the fork", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_26: SublineNarration = {
+  intro: { say: "White declines the gambit with e3. Now it's a balanced symmetrical game — check …Bb4+ to develop with tempo, recapture …Qxd5, and check …Re8+ to seize the open file.", sayShort: "Declined e3: …Bb4+, …Re8+" },
+  beats: [
+    { atMove: 7, say: "Check …Bb4+, developing with tempo when White declines the gambit.", sayShort: "…Bb4+, develop with tempo", highlights: [_H('b4')] },
+    { atMove: 13, say: "Recapture …Qxd5, centralising the queen with even material.", sayShort: "…Qxd5, centralise", highlights: [_H('d5')] },
+    { atMove: 15, say: "Check …Re8+, developing the rook with tempo.", sayShort: "…Re8+, seize the file", highlights: [_H('e8')] },
+    { atMove: 23, say: "Reposition …Bh5, keeping the bishop active; fully equal.", sayShort: "…Bh5, stay active", highlights: [_H('h5')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+const ALBR_27: SublineNarration = {
+  intro: { say: "White plays a3 and develops modestly. Develop …Nc6, undermine with …f6 to win the e5-pawn back, pin with …Bg4, and castle long — active play for the gambit.", sayShort: "Albin: …f6 regains, …Bg4" },
+  beats: [
+    { atMove: 7, say: "Develop …Nc6, pressing the e5-pawn and the centre.", sayShort: "…Nc6, press the centre", highlights: [_H('c6')] },
+    { atMove: 13, say: "Undermine …f6, opening lines against the e5-pawn.", sayShort: "…f6, undermine e5", highlights: [_H('f6')] },
+    { atMove: 17, say: "Develop …Bg4, pinning and pressuring.", sayShort: "…Bg4, pin and pressure", highlights: [_H('g4')] },
+    { atMove: 23, say: "Castle long with …O-O-O; active play for the gambit pawn.", sayShort: "…O-O-O, active play", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-initiative', 'https://lichess.org/opening/Albin-Countergambit'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'catalan-opening::6::Bb4+@5': CATR_60,
   'catalan-opening::5::c6@9': CATR_50,
@@ -16085,34 +16341,34 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'birds-opening::6::Bb4@9': BD_V6_BB4_9,
   'birds-opening::6::Nc6@7': BD_V6_NC6_7,
   // ── albin-countergambit ──
-  'albin-countergambit::0::Nbd2@14': C112,
-  'albin-countergambit::0::a3@14': C112,
-  'albin-countergambit::0::Qa4@14': C112,
-  'albin-countergambit::0::Bf4@14': C112,
-  'albin-countergambit::0::Bg5@14': C112,
-  'albin-countergambit::0::b3@14': C112,
-  'albin-countergambit::0::Re1@14': C112,
-  'albin-countergambit::0::a3@8': C112,
-  'albin-countergambit::0::Nbd2@8': C112,
-  'albin-countergambit::0::e3@4': C112,
-  'albin-countergambit::1::fxe3@10': WALBLASK,
-  'albin-countergambit::1::Qa4+@10': C113,
-  'albin-countergambit::1::Nd2@8': C113,
-  'albin-countergambit::1::Kxf2@12': C114,
-  'albin-countergambit::1::Ke2@8': C113,
-  'albin-countergambit::1::Nf3@6': C112,
-  'albin-countergambit::1::e3@4': C112,
-  'albin-countergambit::1::a3@6': C112,
-  'albin-countergambit::1::e4@6': C115,
-  'albin-countergambit::2::Nf3@8': C115,
-  'albin-countergambit::2::e5@12': C115,
-  'albin-countergambit::2::Bf4@8': C115,
-  'albin-countergambit::2::Nf3@10': C115,
-  'albin-countergambit::2::Bd3@8': C115,
-  'albin-countergambit::2::Nf3@6': C112,
-  'albin-countergambit::2::e6@10': C115,
-  'albin-countergambit::2::e3@4': C112,
-  'albin-countergambit::2::a3@6': C112,
+  'albin-countergambit::0::Nbd2@14': ALBR_0,
+  'albin-countergambit::0::a3@14': ALBR_1,
+  'albin-countergambit::0::Qa4@14': ALBR_2,
+  'albin-countergambit::0::Bf4@14': ALBR_3,
+  'albin-countergambit::0::Bg5@14': ALBR_4,
+  'albin-countergambit::0::b3@14': ALBR_5,
+  'albin-countergambit::0::Re1@14': ALBR_6,
+  'albin-countergambit::0::a3@8': ALBR_7,
+  'albin-countergambit::0::Nbd2@8': ALBR_8,
+  'albin-countergambit::0::e3@4': ALBR_9,
+  'albin-countergambit::1::fxe3@10': ALBR_10,
+  'albin-countergambit::1::Qa4+@10': ALBR_11,
+  'albin-countergambit::1::Nd2@8': ALBR_12,
+  'albin-countergambit::1::Kxf2@12': ALBR_13,
+  'albin-countergambit::1::Ke2@8': ALBR_14,
+  'albin-countergambit::1::Nf3@6': ALBR_15,
+  'albin-countergambit::1::e3@4': ALBR_16,
+  'albin-countergambit::1::a3@6': ALBR_17,
+  'albin-countergambit::1::e4@6': ALBR_18,
+  'albin-countergambit::2::Nf3@8': ALBR_19,
+  'albin-countergambit::2::e5@12': ALBR_20,
+  'albin-countergambit::2::Bf4@8': ALBR_21,
+  'albin-countergambit::2::Nf3@10': ALBR_22,
+  'albin-countergambit::2::Bd3@8': ALBR_23,
+  'albin-countergambit::2::Nf3@6': ALBR_24,
+  'albin-countergambit::2::e6@10': ALBR_25,
+  'albin-countergambit::2::e3@4': ALBR_26,
+  'albin-countergambit::2::a3@6': ALBR_27,
   // ── englund-gambit ──
   'englund-gambit::0::Nc3@10': EENG,
   'englund-gambit::0::Nc3@8': C117,
