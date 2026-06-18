@@ -2613,6 +2613,11 @@ const N516: SublineNarration = {
 
 const N517: SublineNarration = {
   intro: { say: "Bb5+ — the Moscow Variation, White sidestepping the open Sicilian with a check on move three. Block with …Bd7; after the trade your queen recaptures and you've swapped off White's good bishop for nothing. Develop naturally with …Nc6, …g6 or …e6 and you reach a sound, slightly easier Sicilian with the bishop pair already simplified away.", sayShort: "Bb5+ — …Bd7, trade off his bishop." },
+  beats: [
+    { atMove: 5, say: "…Bd7 blocks the check and offers the trade — after Bxd7+ Qxd7 you swap off White's good light-squared bishop for your own, and your slightly cramped Sicilian breathes easier.", sayShort: "…Bd7 — trade off his bishop.", arrows: [A('d7', 'b5')], highlights: [H('b5')] },
+    { atMove: 19, say: "…d5 — the freeing break. You strike at e4 and open the centre just as your development finishes; the pawn cracks White's grip and trades pieces toward a comfortable, equal middlegame.", sayShort: "…d5 — the freeing central break.", arrows: [A('d5', 'e4')], highlights: [H('e4')] },
+    { atMove: 23, say: "…cxd5 recaptures and the smoke clears — symmetrical pawns, no bad bishop, an easy game. The Moscow's early simplification has handed you a risk-free Sicilian.", sayShort: "…cxd5 — clean, equal structure.", highlights: [H('d5')] },
+  ],
   sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Moscow_Variation'],
 };
 
@@ -2646,6 +2651,11 @@ const N522: SublineNarration = {
 
 const N523: SublineNarration = {
   intro: { say: "c3 — the Alapin-flavoured Anti-Sicilian, White building a d4-pawn centre on the cheap. Don't let him have it free: your …Nf6 pressures e4, and …g6 with …Bg7 fianchettoes onto the long diagonal, eyeing the centre. Aim your …d5 or …Bg4 break to undermine d4, reaching a comfortable game where his slow setup gives you no trouble.", sayShort: "c3 — …Nf6, fianchetto, hit the centre." },
+  beats: [
+    { atMove: 5, say: "…Nf6 develops with a hit on e4, forcing White to defend his cheap centre instead of building it. You gain a tempo before he gets comfortable.", sayShort: "…Nf6 — develop, hit e4.", arrows: [A('f6', 'e4')], highlights: [H('e4')] },
+    { atMove: 7, say: "…e5 stakes your own centre. White's c3-d4 plan now runs into a wall; you've claimed equal space and your pieces flow out naturally.", sayShort: "…e5 — stake the centre.", highlights: [H('e5')] },
+    { atMove: 13, say: "…Bg4 pins the f3-knight against the queen and leans on d4, the loose end of White's centre. After the trades the queens come off into a dead-level endgame where your pieces are the freer.", sayShort: "…Bg4 — pin, pressure d4.", arrows: [A('g4', 'f3')], highlights: [H('f3')] },
+  ],
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation'],
 };
 
@@ -2807,6 +2817,11 @@ const N552: SublineNarration = {
 
 const N553: SublineNarration = {
   intro: { say: "h3 — the Adams Attack, a quiet waiting move preparing g4 without allowing …Ng4. Answer in kind: …e5 grabs the centre, the knight tucks to e2, and the cheeky …h5 stops g4 cold in its tracks. White's slow plan is neutralised and you get a comfortable Najdorf with the centre in hand.", sayShort: "h3 — …e5 then …h5 stops g4." },
+  beats: [
+    { atMove: 11, say: "…e5 grabs the centre and kicks the knight — exactly what the slow h3 invited. You stake the big central claim for free.", sayShort: "…e5 — grab the centre.", highlights: [H('e5')] },
+    { atMove: 13, say: "…h5 — the cheeky stopper. It freezes White's intended g4 in its tracks; the whole point of h3 evaporates and you've gained kingside space in the bargain.", sayShort: "…h5 — freeze White's g4.", arrows: [A('h5', 'g4')], highlights: [H('g4')] },
+    { atMove: 15, say: "…b5 rolls the queenside, gaining space and eyeing …b4 to chase the c3-knight off d5's guard. With the kingside locked, this is where your play flows.", sayShort: "…b5 — roll the queenside.", highlights: [H('b5')] },
+  ],
   sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
 };
 
@@ -2817,26 +2832,51 @@ const N554: SublineNarration = {
 
 const N555: SublineNarration = {
   intro: { say: "Bd3 — a slightly passive square, the bishop eyeing the kingside while White prepares to castle. Your Najdorf wall stands firm: …e5, …Be7, …Be6 guarding d5. Castle, bring the knight to d7, and break with …b5 — his modest bishop placement means you're comfortably equal with the easier middlegame plan.", sayShort: "Bd3 — castle and break …b5." },
+  beats: [
+    { atMove: 17, say: "…b5 — straight to the queenside, where the Najdorf always strikes. You gain space and prepare …b4 to drive off the c3-knight that guards d5.", sayShort: "…b5 — queenside space.", highlights: [H('b5')] },
+    { atMove: 21, say: "…b4 evicts the knight from c3 — the guardian of the d5-square. Dislodge it and the central outpost loosens, your light-squared play springing to life.", sayShort: "…b4 — kick the c3-knight.", arrows: [A('b4', 'c3')], highlights: [H('c3')] },
+    { atMove: 23, say: "…Bxd5 — when White jumps to d5 you simply take it, trading off the would-be monster and leaving a clean, equal middlegame with your structure intact.", sayShort: "…Bxd5 — trade the outpost knight.", highlights: [H('d5')] },
+  ],
   sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
 };
 
 const N556: SublineNarration = {
   intro: { say: "Be2 — White settles for the quiet English-Attack-without-the-storm, developing modestly instead of castling long. Your wall is built: …e5, …Be7, …Be6 nailing d5. Castle, play …Nbd7 and …b5, and you've got a rock-solid Najdorf where the d5-square is the only battleground — and you control its approaches.", sayShort: "Be2 — castle, …b5, contest d5." },
+  beats: [
+    { atMove: 17, say: "…Nbd7 reroutes the knight toward c5 and b6, the Najdorf's classic posts, eyeing the holes on White's queenside and supporting the …b5 break to come.", sayShort: "…Nbd7 — reroute to c5/b6.", arrows: [A('d7', 'c5')], highlights: [H('c5')] },
+    { atMove: 21, say: "…Rc8 loads the half-open c-file, the rook lining up on the c3-knight and White's queenside. Every piece now leans toward his king's eventual home.", sayShort: "…Rc8 — load the c-file.", arrows: [A('c8', 'c3')], highlights: [H('c3')] },
+    { atMove: 23, say: "…Nh5 — when White lunges g4-g5, the knight leaps to h5 rather than retreat, eyeing f4 and staying active. You keep counterplay rolling on both wings.", sayShort: "…Nh5 — leap active, eye f4.", arrows: [A('h5', 'f4')], highlights: [H('f4')] },
+  ],
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
 };
 
 const N557: SublineNarration = {
   intro: { say: "Nd5 — White plants the knight on the coveted outpost and offers a trade. Don't fear it: …Bxd5 exchanges the strong knight, and after exd5 your light-squared bishop is gone but so is his best piece, leaving a Boleslavsky-style structure where your dark-square play on the queenside and the half-open c-file give full equality.", sayShort: "Nd5 — trade it; play the dark squares." },
+  beats: [
+    { atMove: 17, say: "…Nxd5 — accept the trade. After exd5 White's powerful knight is gone, your worries with the light bishop fade, and the half-open c-file plus the dark squares become your playground.", sayShort: "…Nxd5 — trade the strong knight.", highlights: [H('d5')] },
+    { atMove: 19, say: "…Bf5 finds a beautiful active diagonal before White can prop up the d5-pawn, raking toward c2 and the queenside light squares.", sayShort: "…Bf5 — active bishop, eye c2.", arrows: [A('f5', 'c2')], highlights: [H('c2')] },
+    { atMove: 23, say: "…Bg5 activates the dark bishop, offering a trade that eases your position and steers toward a Boleslavsky structure where your queenside majority does the talking.", sayShort: "…Bg5 — activate, ease the game.", highlights: [H('g5')] },
+  ],
   sources: ['concept:pos-center', 'concept:tac-pin', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
 };
 
 const N558: SublineNarration = {
   intro: { say: "g4 — the English Attack storm without Qd2 first, White hurrying the kingside pawns. Your wall is set: …e5, …Be7, …Be6 on d5. Castle into the queenside and counter with …b5, …Nbd7-b6-c4, hammering the c3-knight and the light squares. The Najdorf race is on, and your queenside attack arrives first.", sayShort: "g4 — castle, …b5, race the queenside." },
+  beats: [
+    { atMove: 17, say: "…d5! — the textbook answer to a flank attack: strike the centre. White lunged with g4 on the wing, so you blow the middle open before his storm gets going.", sayShort: "…d5 — counter the wing in the centre.", arrows: [A('d5', 'e4')], highlights: [H('e4')] },
+    { atMove: 19, say: "…Nxd5 recaptures, centralising the knight on the very square White vacated, hitting his pieces and keeping the initiative in the opened centre.", sayShort: "…Nxd5 — centralise with tempo.", highlights: [H('d5')] },
+    { atMove: 21, say: "…Bh4+ — a zwischenzug check that punishes White's loosened kingside; g4 stripped cover from the e1-king. After Bf2 Bxf2+ you trade into a pleasant, equal game with his king exposed.", sayShort: "…Bh4+ — check the bare king.", arrows: [A('h4', 'e1')], highlights: [H('e1')] },
+  ],
   sources: ['concept:pos-space', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
 };
 
 const N559: SublineNarration = {
   intro: { say: "g4 — the English Attack's signature pawn storm, White flinging the g-pawn to pry open your king. You've set up perfectly: …e5 and …Be6 hold the centre, the knight sits on d7 ready to reroute. Meet the storm with queenside play — …b5, …Nb6, …Nc4 — and race him. Whoever's attack lands first wins, and yours is usually faster.", sayShort: "g4 — race him with …b5 queenside." },
+  beats: [
+    { atMove: 19, say: "…O-O — you castle straight into the storm, banking on your queenside counter being faster. Opposite-side castling means a flat-out race.", sayShort: "…O-O — castle into the storm.", highlights: [H('g8')] },
+    { atMove: 21, say: "…b5 opens the queenside assault, gaining space and preparing …b4 to blast the c3-knight from White's king's defence.", sayShort: "…b5 — open the assault.", highlights: [H('b5')] },
+    { atMove: 23, say: "…b4 drives off the c3-knight and tears lines open at the king on c1. The Najdorf race is on — and your attack lands first.", sayShort: "…b4 — tear open the king.", arrows: [A('b4', 'c3')], highlights: [H('c3')] },
+  ],
   sources: ['concept:pos-space', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
 };
 
@@ -2866,61 +2906,121 @@ const N562: SublineNarration = {
 
 const N563: SublineNarration = {
   intro: { say: "Bc4 — White aims the bishop at f7 inside the classical main line after Bg5 and f4. Calmly complete development: …Be7 breaks the pin, …O-O tucks the king away, then …b5 hits the bishop and rolls the queenside. His pieces look menacing, but your solid wall on e6 and timely …b5 neutralise the attack and turn the long-term chances your way.", sayShort: "Bc4 — …Be7, castle, …b5." },
+  beats: [
+    { atMove: 15, say: "…h6 puts the question to the g5-bishop. White usually takes on f6, and after …Bxf6 you own the bishop pair behind a solid wall — the menacing Bc4 finds nothing concrete.", sayShort: "…h6 — question the bishop.", arrows: [A('h6', 'g5')], highlights: [H('g5')] },
+    { atMove: 19, say: "…Qc7 connects to the queenside and the half-open c-file, eyeing the c4-bishop and supporting the …b5 break that drives it back.", sayShort: "…Qc7 — eye c4, prep …b5.", arrows: [A('c7', 'c4')], highlights: [H('c4')] },
+    { atMove: 23, say: "…Nc5 lands on its dream square, hitting the e4-pawn and unkickable, anchored on the hole. Your pieces have found their best posts and the long-term edge is yours.", sayShort: "…Nc5 — dream square, hit e4.", arrows: [A('c5', 'e4')], highlights: [H('e4')] },
+  ],
   sources: ['concept:pos-development', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
 };
 
 const N564: SublineNarration = {
   intro: { say: "Bd3 — after Bg5 and f4, the classical main line, White builds a big centre with the bishop pinning your f6-knight. Break the pin with …Be7; his bishop on d3 invites your …O-O and a later …b5 or …Qc7. Castle, finish development, and prepare your …b5/…Bb7 counter on the long diagonal against his ambitious but loosening setup.", sayShort: "Bg5 f4 — …Be7, castle, then …b5." },
+  beats: [
+    { atMove: 15, say: "…Qb6 — the thematic sortie, hitting the d4-knight and the b2-pawn, forcing White to react before he finishes his big-centre build-up.", sayShort: "…Qb6 — hit d4 and b2.", arrows: [A('b6', 'd4')], highlights: [H('d4')] },
+    { atMove: 19, say: "…Bxf6 recaptures the trade on f6, handing you the bishop pair and a half-open file while your dark squares stay solid against White's f4-pawn.", sayShort: "…Bxf6 — take the bishop pair.", highlights: [H('f6')] },
+    { atMove: 23, say: "…a5 rolls the queenside pawns, gaining space and prying at White's king after he castles long. The race is on, and your pawns point straight at his shelter.", sayShort: "…a5 — storm the long-castled king.", arrows: [A('a5', 'a4')], highlights: [H('a4')] },
+  ],
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
 };
 
 const N565: SublineNarration = {
   intro: { say: "Be2 — after Bg5 and f4, White develops modestly in the classical main line, declining the sharpest tries. Finish the standard setup: …Be7 unpins, …O-O, …Qc7 and …Nbd7, then …b5 and …Bb7 to fight for the long diagonal and e4. With White restrained, you get the classic Najdorf counterplay at no risk.", sayShort: "Be2 — …Be7, castle, …b5 and …Bb7." },
+  beats: [
+    { atMove: 15, say: "…h6 nudges the bishop; after Bh4 you keep the tension but reserve …g5 for later. A useful prod before you get on with the plan.", sayShort: "…h6 — prod the bishop.", arrows: [A('h6', 'g5')], highlights: [H('g5')] },
+    { atMove: 19, say: "…b5 — the Najdorf's heartbeat. The queenside pawns roll, gaining space and readying …b4 to chase the c3-knight off d5 and e4.", sayShort: "…b5 — queenside heartbeat.", highlights: [H('b5')] },
+    { atMove: 23, say: "…b4 evicts the c3-knight, loosening White's grip on the centre while your rook on a7 swings across to join the attack.", sayShort: "…b4 — kick the knight, attack.", arrows: [A('b4', 'c3')], highlights: [H('c3')] },
+  ],
   sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
 };
 
 const N566: SublineNarration = {
   intro: { say: "Qd2 — the main-line Najdorf, White connecting for queenside castling behind the Bg5/f4 build-up. Complete the classical setup with …Be7 and …O-O, then strike with …b5 and …Bb7, contesting the long diagonal and the e4-pawn. It's the great theoretical battleground where your queenside counterplay races his kingside pawns.", sayShort: "Qd2 — castle, then …b5 and …Bb7." },
+  beats: [
+    { atMove: 15, say: "…b5 — counterplay first. In the great Bg5/f4 main line you don't wait; the queenside pawns roll while White readies his kingside, and it's a straight race.", sayShort: "…b5 — counter, don't wait.", highlights: [H('b5')] },
+    { atMove: 17, say: "…dxe5 meets White's e5-thrust head-on. After fxe5 the pawn is loose and your knight reroutes via d7 with tempo — the centre opens in your favour.", sayShort: "…dxe5 — meet e5 head-on.", highlights: [H('e5')] },
+    { atMove: 23, say: "…O-O tucks the king away just as the position clarifies — queens on, structure sound, the queenside break already rolling. Fully equal and double-edged.", sayShort: "…O-O — king safe, break rolling.", highlights: [H('g8')] },
+  ],
   sources: ['concept:pos-center', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
 };
 
 const N567: SublineNarration = {
   intro: { say: "e5 — the critical thrust in the Bg5/f4 main line, White trying to blow open the centre while you're behind in development. Meet it precisely: …dxe5 fxe5 leaves the e5-pawn loose, or …Nfd7 sidesteps, and after the dust settles your extra centre pawn and his loosened structure favour you. Don't panic — the e5-break is double-edged for him too.", sayShort: "e5 — …dxe5 and exploit the loose pawn." },
+  beats: [
+    { atMove: 15, say: "…dxe5 — the e5-thrust met by a calm capture. White must recapture fxe5, leaving his centre pawn loose and handing your knight a superb square on d5.", sayShort: "…dxe5 — calm capture.", highlights: [H('e5')] },
+    { atMove: 17, say: "…Nd5 leaps to the hole, a dominant centralised knight that hits the c3-knight and forces trades defusing White's attack. The bold e5 has rebounded.", sayShort: "…Nd5 — dominate the hole.", arrows: [A('d5', 'c3')], highlights: [H('c3')] },
+    { atMove: 23, say: "…Qh4+ — the point. The check rakes White's drafty kingside and wins material or forces a favourable simplification; his over-ambitious e5 left the king exposed.", sayShort: "…Qh4+ — punish the bare king.", highlights: [H('h4'), H('e1')] },
+  ],
   sources: ['concept:pos-center', 'concept:tac-fork', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
 };
 
 const N568: SublineNarration = {
   intro: { say: "Be2 — the English Attack handled positionally; instead of charging with g4, White tucks the bishop to e2 and castles short. Your …e5 thrust has already claimed the centre and chased the knight to b3, so d5 is the whole battle: he eyes it, you cover it with the e6-bishop and the f6-knight. Roll out the standard Najdorf queenside expansion, …Nbd7, …b5 and …Nb6, fighting for d5 and gaining space toward his king's eventual home.", sayShort: "English Attack — fight for d5" },
+  beats: [
+    { atMove: 17, say: "…Nbd7 develops toward c5 and b6, reinforcing the fight for d5 — the single square this whole structure revolves around.", sayShort: "…Nbd7 — reinforce d5.", arrows: [A('d7', 'c5')], highlights: [H('c5')] },
+    { atMove: 19, say: "…Bxd5 — White commits the knight to d5, so you take it. After exd5 the dangerous piece is gone and your pieces have clean squares; fully equal.", sayShort: "…Bxd5 — remove the strong knight.", highlights: [H('d5')] },
+    { atMove: 21, say: "…b5 expands on the queenside, gaining space and a tempo, eyeing …b4 and …a5-a4 to pry at White while you finish developing.", sayShort: "…b5 — expand with tempo.", highlights: [H('b5')] },
+  ],
   sources: ['https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation', 'concept:pos-weak-squares', 'concept:pos-space'],
 };
 
 const N569: SublineNarration = {
   intro: { say: "Bg5 — White pins after the f3 setup, pressuring the f6-knight that guards d5. Your structure already answers it: …e5 and …Be6 own the centre and the key light square. Meet the pin with …Be7 and …Nbd7, and if he trades on f6 recapture toward the centre, keeping the d5-square firmly under control.", sayShort: "Bg5 — …Be7, hold d5." },
+  beats: [
+    { atMove: 15, say: "…Be7 breaks the pin and readies castling. White's Bg5 is answered calmly; your e5/e6 wall holds the centre and d5 stays guarded.", sayShort: "…Be7 — break the pin.", highlights: [H('e7')] },
+    { atMove: 17, say: "…b5 launches the queenside expansion just as White commits to castling long. The pawns race toward his king while yours sits safe behind the e5-wall.", sayShort: "…b5 — race the long-castled king.", highlights: [H('b5')] },
+    { atMove: 23, say: "…Bxd5 — when the knight jumps to d5 you take it, trading off the would-be octopus and keeping a sound, roughly level middlegame with chances on both wings.", sayShort: "…Bxd5 — trade the octopus.", highlights: [H('d5')] },
+  ],
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
 };
 
 const N570: SublineNarration = {
   intro: { say: "Nde2 — after f3, White reroutes the knight toward g3 to bear down on your d5- and f5-squares. Meet it with the standard wall: your …e5 staked the centre, now …Be6 guards d5 head-on. Continue …Nbd7, …b5 and …Nb6, fighting him for that one outpost — the entire strategic point of your whole Najdorf structure.", sayShort: "f3 — …Be6 guards d5." },
+  beats: [
+    { atMove: 13, say: "…Be6 takes its key post, guarding the d5-square head-on. With White's knight rerouting via e2, the whole battle is d5 — and you garrison it.", sayShort: "…Be6 — guard d5.", arrows: [A('e6', 'd5')], highlights: [H('d5')] },
+    { atMove: 19, say: "…Qa5 swings the queen to an active diagonal, leaning on c3 and supporting the …b5 break as both sides castle opposite and race.", sayShort: "…Qa5 — active, prep …b5.", arrows: [A('a5', 'c3')], highlights: [H('c3')] },
+    { atMove: 23, say: "…Bc4 infiltrates, hitting White's queen on d3 and jamming his queenside. Your attack on his king flows faster than his on yours.", sayShort: "…Bc4 — infiltrate, hit the queen.", arrows: [A('c4', 'd3')], highlights: [H('d3')] },
+  ],
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
 };
 
 const N571: SublineNarration = {
   intro: { say: "Nf5 — a tricky leap to the rim, the knight eyeing g7 and e7, but you can round it up. The cool …a5 prepares …a4 and …Ra6 to hunt the offside knight, or simply gains queenside space while you develop. His adventurous knight has no stable support, and you emerge with the bishop pair or a clear structural plus.", sayShort: "Nf5 — …a5, then round up the knight." },
+  beats: [
+    { atMove: 13, say: "…d5 — strike the centre to punish the knight's leap to the rim. You open lines while the f5-knight sits offside with no support.", sayShort: "…d5 — punish the rim knight.", arrows: [A('d5', 'e4')], highlights: [H('e4')] },
+    { atMove: 15, say: "…Bxf5 rounds up the adventurous knight; after exf5 you hold the bishop pair while White's pawn on f5 is more weakness than asset.", sayShort: "…Bxf5 — win the bishop pair.", highlights: [H('f5')] },
+    { atMove: 21, say: "…Qxb2 snatches the loose pawn — White's pieces can't coordinate to trap the queen, and after Rb1 she slips back to a3, leaving you a clean pawn up.", sayShort: "…Qxb2 — grab the pawn safely.", arrows: [A('b2', 'a3')], highlights: [H('a3')] },
+  ],
   sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
 };
 
 const N572: SublineNarration = {
   intro: { say: "g4 — the same English Attack storm by a different move order, f3 before Be3. Your structure is the model Najdorf wall: …e5, …Be6, …Be7, knight to d7. Answer the kingside thrust the Najdorf way — expand with …b5 and …Nc4, hammering c3 and the light squares while he commits his pawns forward. It's a race, and you're built to win it.", sayShort: "g4 — counter with …b5 and …Nc4." },
+  beats: [
+    { atMove: 19, say: "…O-O — you castle into the storm, trusting your queenside counter. With opposite-side castling set, it's a pure race of pawn-storms now.", sayShort: "…O-O — castle into the race.", highlights: [H('g8')] },
+    { atMove: 21, say: "…b5 fires the first shot, gaining space and aiming …b4 at the c3-knight that shields White's king and the centre.", sayShort: "…b5 — first shot of the race.", highlights: [H('b5')] },
+    { atMove: 23, say: "…b4 evicts the c3-knight and cracks open lines toward the king on c1. Your attack is rolling — and in these races the Najdorf usually strikes first.", sayShort: "…b4 — crack open the c-file.", arrows: [A('b4', 'c3')], highlights: [H('c3')] },
+  ],
   sources: ['concept:pos-space', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
 };
 
 const N573: SublineNarration = {
   intro: { say: "f3 — White braces e4 and prepares to castle long after the bishop's retreat to g3. You've already gained kingside space with …g5 and …h6; your g7-bishop completes the picture, glaring down the long diagonal at the heart of his position. You're in the sharp, modern Najdorf now — playing for the attack, not equality.", sayShort: "f3 — fianchetto g7, attack." },
+  beats: [
+    { atMove: 19, say: "…Ne3 crashes in, forking the queen on d1 and the light squares, exploiting the hole f3 left behind. White must drop everything to deal with the intruder.", sayShort: "…Ne3 — fork the queen.", arrows: [A('e3', 'd1')], highlights: [H('d1')] },
+    { atMove: 21, say: "…Bxd4 — the fianchettoed bishop smashes into d4, winning a piece off the long diagonal that f3 weakened. You take over the dark squares.", sayShort: "…Bxd4 — smash into d4.", highlights: [H('d4')] },
+    { atMove: 23, say: "…Qb6 piles onto the queenside, queen and bishop coordinating against White's loosened king. You've seized a powerful, aggressive game.", sayShort: "…Qb6 — pile on the attack.", highlights: [H('b6')] },
+  ],
   sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
 };
 
 const N574: SublineNarration = {
   intro: { say: "h3 — White ends the …Ng4 skirmish, having coaxed your kingside pawns forward with the Bg5-h4-g3 dance. Those …h6 and …g5 thrusts aren't weaknesses here — they're space. Fianchetto the bishop on g7 raking the long diagonal, and you've got a hyper-aggressive Najdorf where your kingside pawns roll while he's still untangling.", sayShort: "h3 — fianchetto g7, roll the pawns." },
+  beats: [
+    { atMove: 19, say: "…Ne5 retreats to a magnificent outpost, eyeing c4, d3 and f3 from the board's heart, immune to pawn kicks. h3 gained White nothing.", sayShort: "…Ne5 — central outpost.", arrows: [A('e5', 'd3')], highlights: [H('d3')] },
+    { atMove: 21, say: "…Bxf5 — when the knight jumps to f5 you snap it off; after exf5 you keep the bishop pair with your g7-bishop towering on the long diagonal.", sayShort: "…Bxf5 — keep the bishop pair.", highlights: [H('f5')] },
+    { atMove: 23, say: "…Nbc6 brings the last piece in, hitting d4 and completing a dream Najdorf — fianchettoed bishop, central knight, kingside space. You play for the win.", sayShort: "…Nbc6 — complete the dream setup.", arrows: [A('c6', 'd4')], highlights: [H('d4')] },
+  ],
   sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
 };
 
