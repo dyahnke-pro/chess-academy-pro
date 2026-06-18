@@ -475,35 +475,11 @@ const C95: SublineNarration = {
   sources: ['concept:pos-space', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/English_Opening'],
 };
 // reti-opening :: kia_e4
-const C96: SublineNarration = {
-  intro: { say: "You've reached a King's-Indian-Attack flavoured Réti — d3, Nbd2, e4, the central expansion behind the fianchetto. Now the kingside beckons: the e4-e5 clamp, the Nf1-g3 or Nh4 reroute, and the f4 lever. Black's solid centre simply becomes the thing you expand around. A rich, plan-rich middlegame on your terms.", sayShort: "KIA Réti — expand e4, swing the kingside." },
-  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
-};
 // reti-opening :: main_fianchetto
-const C97: SublineNarration = {
-  intro: { say: "The pure Réti — Nf3, c4 and the g3 fianchetto against Black's …d5. The hypermodern bet: let Black hold the centre so you can lean on it from the wings. The g2-bishop rakes the long diagonal, c4 pressures d5, and the d3/e4 or b4 breaks come at your leisure. Flexible, low-theory, and built to undermine what Black builds.", sayShort: "Réti — fianchetto, undermine the centre." },
-  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
-};
 // reti-opening :: dxc4
-const C98: SublineNarration = {
-  intro: { say: "Black grabs the c4-pawn. No matter — you regain it easily and the gain is positional: the g2-bishop's diagonal opens fully and Black has surrendered the centre. Recapture with Qa4+ or e3-Bxc4, complete development, and press d5 and b7 along the long light diagonal. A comfortable, space-flavoured Réti.", sayShort: "…dxc4 — regain it, open the diagonal." },
-  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
-};
 // reti-opening :: qxd4_endgame
-const C99: SublineNarration = {
-  intro: { say: "The line has simplified after an early queen trade or central exchange. The Réti's quiet technical face: the bishop pair or the better minor piece, sound structure, and the open files. Centralise, claim the open lines, and grind — with the long-diagonal bishop and a clean pawn skeleton, the small edge is real and durable.", sayShort: "Simplified — centralise and grind the edge." },
-  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
-};
 // reti-opening :: slav_reti
-const C100: SublineNarration = {
-  intro: { say: "Black props the centre with …c6, a Slav-Réti hybrid. Develop the standard way — g3, Bg2, b3, Bb2, the double fianchetto — and probe with the c4/e4 breaks. Black is solid but passive; lean on the long diagonals from both bishops and the small, durable space edge of the Réti slowly accumulates into pressure.", sayShort: "Slav-Réti — double fianchetto, probe c4/e4." },
-  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
-};
 // reti-opening :: d4_advance
-const C101: SublineNarration = {
-  intro: { say: "Black advances …d4, grabbing space and gaining a tempo on your knight. The hypermodern reply is to undermine, not block: b4 (the gambit) to chip at the c5/d4 pawn chain, or e3 to challenge the spearhead directly. Black's advanced pawn becomes overextended; surround it and the space he grabbed turns into a target.", sayShort: "…d4 — undermine with b4 or e3." },
-  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
-};
 // kings-indian-attack :: french_setup
 const C102: SublineNarration = {
   intro: { say: "The King's Indian Attack against a French structure — Black has …e6 and …d5, you've built d3, Nbd2, g3, Bg2 and e4. The KIA's bread and butter: trade on e4 or push e5 to clamp, then swing the kingside — Nf1-g3 or Nh4, the f4 lever, and the pawn storm at Black's king. The whole system is one long attacking plan.", sayShort: "KIA vs French — clamp e5, attack." },
@@ -2279,7 +2255,779 @@ const LN80: SublineNarration = {
   sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/London_System'],
 };
 
+const RT01: SublineNarration = {
+  intro: { say: "Black completes with …Bd6 over the big …e5/…d5 centre. You question the g4-bishop with h3, leap Ng5 to provoke and trade on e6, then centralise the queen — preparing to break against Black's static pawns.", sayShort: "…Bd6 — h3, Ng5, Nxe6, Qe2" },
+  beats: [
+    { atMove: 14, say: "h3 — questioning the g4-bishop before you manoeuvre. Make it commit: retreat or trade, but it cannot just sit and pin.", sayShort: "h3 — question the bishop", highlights: [_H('g4')] },
+    { atMove: 16, say: "Ng5 — the knight jumps in to harass the bishop pair and target e6 and f7, the squares Black's set-up left tender.", sayShort: "Ng5 — target e6 and f7", arrows: [_A('g5', 'e6')] },
+    { atMove: 18, say: "Nxe6 — trading to saddle Black with doubled, weak e-pawns. A permanent target for the rest of the game.", sayShort: "Nxe6 — doubled e-pawns", highlights: [_H('e6')] },
+    { atMove: 22, say: "Qe2 — centralising the queen and connecting the rooks, preparing to play against the fixed Black centre with f4 or d4.", sayShort: "Qe2 — centralise, prep a break", highlights: [_H('e2')] },
+  ],
+  sources: ['concept:pos-prophylaxis', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT02: SublineNarration = {
+  intro: { say: "Black grabs space with …d4. You undermine it at the base with c3, recapture toward the centre to build a broad pawn front, then develop the bishop to e3 and play for the c4/d4 expansion.", sayShort: "…d4 — c3, bxc3, Be3" },
+  beats: [
+    { atMove: 14, say: "c3 — striking the advanced d4-pawn at its base. You refuse to let Black's space-grab stand unchallenged.", sayShort: "c3 — undermine d4", arrows: [_A('c3', 'd4')] },
+    { atMove: 16, say: "bxc3 — recapturing toward the centre, opening the b-file for your rook and building a broad pawn front.", sayShort: "bxc3 — broad centre, open b-file", highlights: [_H('c3')] },
+    { atMove: 20, say: "Nxf3 — recapturing, the knight eyeing the central squares after the bishop trade. Your structure is sound and flexible.", sayShort: "Nxf3 — recapture, centralise", highlights: [_H('f3')] },
+    { atMove: 22, say: "Be3 — developing the bishop to eye the queenside dark squares and support the coming central expansion.", sayShort: "Be3 — develop, eye expansion", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pawn-chain', 'concept:pos-center', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT03: SublineNarration = {
+  intro: { say: "Black develops …Bc5 actively. You open the centre with exd5, question the g4-bishop with h3 to win the bishop pair, prepare b4 with Rb1, then simplify into a balanced position where the two bishops are your lasting trump.", sayShort: "…Bc5 — exd5, h3, Rb1, bishops" },
+  beats: [
+    { atMove: 14, say: "exd5 — opening the centre at the right moment, with your pieces the better coordinated.", sayShort: "exd5 — open the centre", highlights: [_H('d5')] },
+    { atMove: 16, say: "h3 — questioning the g4-bishop. When it takes on f3, you gain the bishop pair, a small lasting edge.", sayShort: "h3 — win the bishop pair", highlights: [_H('g4')] },
+    { atMove: 20, say: "Rb1 — preparing b4 to gain queenside space and harry the c5-bishop, claiming the initiative on that wing.", sayShort: "Rb1 — prepare b4", highlights: [_H('b4')] },
+    { atMove: 22, say: "Nxe5 — entering a series of trades into a balanced, comfortable middlegame where your two bishops are the lasting trump.", sayShort: "Nxe5 — trade, keep the bishops", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-bishop-pair', 'concept:pos-center', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT04: SublineNarration = {
+  intro: { say: "After the central trade Black plays …Be7. You question the bishop with h3, then expand on the kingside with g4 since the centre is fixed, target the g6-bishop with Nh4, and gain queenside space with a4.", sayShort: "…Be7 — h3, g4, Nh4, a4" },
+  beats: [
+    { atMove: 16, say: "h3 — questioning the g4-bishop, forcing it to the h5-g6 retreat where you can target it.", sayShort: "h3 — question the bishop", highlights: [_H('g4')] },
+    { atMove: 18, say: "g4 — gaining kingside space and chasing the bishop, possible now the centre is locked and your king is safe.", sayShort: "g4 — kingside space", arrows: [_A('g4', 'g5')] },
+    { atMove: 20, say: "Nh4 — targeting the g6-bishop, aiming to trade it and dominate the light squares it leaves behind.", sayShort: "Nh4 — target the bishop", arrows: [_A('h4', 'g6')] },
+    { atMove: 22, say: "a4 — gaining queenside space too, squeezing Black on both wings while the centre stays closed.", sayShort: "a4 — squeeze both wings", arrows: [_A('a4', 'a5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-prophylaxis', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT05: SublineNarration = {
+  intro: { say: "Black plays …Be7. You open with exd5, swing the rook to the open e-file pressuring e5, gain kingside space with g4, then plant the knight on the c4-outpost eyeing e5 and d6.", sayShort: "…Be7 — exd5, Re1, g4, Nc4" },
+  beats: [
+    { atMove: 14, say: "exd5 — opening the centre with your forces ready, the natural moment to release the tension.", sayShort: "exd5 — open the centre", highlights: [_H('d5')] },
+    { atMove: 16, say: "Re1 — the rook takes the open e-file, bearing down on Black's e5-pawn and the centre.", sayShort: "Re1 — seize the e-file", arrows: [_A('e1', 'e5')] },
+    { atMove: 20, say: "g4 — gaining kingside space and harassing the bishop, since the fixed centre keeps your king safe.", sayShort: "g4 — kingside space", arrows: [_A('g4', 'g5')] },
+    { atMove: 22, say: "Nc4 — the knight reaches the dominant c4-outpost, eyeing e5 and d6 with the better game.", sayShort: "Nc4 — c4-outpost", highlights: [_H('c4')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT06: SublineNarration = {
+  intro: { say: "Black centralises with …Qc7. You question the g4-bishop with h3, gain queenside space with a4, reroute the queen toward the kingside via e1, then target the bishop with Nh4 — a flexible space edge.", sayShort: "…Qc7 — h3, a4, Qe1, Nh4" },
+  beats: [
+    { atMove: 16, say: "h3 — questioning the pinning bishop, the standard preliminary before you manoeuvre on the wings.", sayShort: "h3 — question the bishop", highlights: [_H('g4')] },
+    { atMove: 18, say: "a4 — staking out queenside space and fixing Black's pawns where you can later target them.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+    { atMove: 20, say: "Qe1 — rerouting the queen toward the kingside, heading for g3 or h4 to join an attack on the fixed structure.", sayShort: "Qe1 — reroute toward kingside", highlights: [_H('e1')] },
+    { atMove: 22, say: "Nh4 — targeting the light-squared bishop, eyeing f5 and aiming to dominate the squares it guards.", sayShort: "Nh4 — target the bishop", arrows: [_A('h4', 'f5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-prophylaxis', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT07: SublineNarration = {
+  intro: { say: "Black plays a restrained …e6 then …Ne5. You break with e4 to challenge the centre, gain space with c4, and press b7 and d5 with Qb3 — turning your hypermodern set-up into a central clamp.", sayShort: "…e6 — e4, c4, Qb3" },
+  beats: [
+    { atMove: 10, say: "e4 — the central break, challenging Black's big pawn centre while every piece is harmoniously placed.", sayShort: "e4 — the central break", highlights: [_H('e4')] },
+    { atMove: 14, say: "c4 — gaining queenside space and pressuring d5, the classic Réti expansion.", sayShort: "c4 — gain space, hit d5", arrows: [_A('c4', 'd5')] },
+    { atMove: 16, say: "Qb3 — pressing b7 and d5 at once, exploiting the early …e6 to seize the initiative.", sayShort: "Qb3 — pressure b7 and d5", arrows: [_A('b3', 'b7')] },
+    { atMove: 22, say: "Qc3 — centralising the queen on the long diagonal, eyeing the kingside and Black's loosened position.", sayShort: "Qc3 — centralise on the diagonal", arrows: [_A('c3', 'g7')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT08: SublineNarration = {
+  intro: { say: "Black develops …Bd6 after the central trade. You leap the knight to the c4-outpost hitting the bishop, centralise with Qe2, question the g4-bishop with h3, then expand with a4.", sayShort: "…Bd6 — Nc4, Qe2, h3, a4" },
+  beats: [
+    { atMove: 16, say: "Nc4 — the knight jumps to its dream square, hitting the d6-bishop and eyeing e5 and d6.", sayShort: "Nc4 — c4-outpost", arrows: [_A('c4', 'd6')] },
+    { atMove: 18, say: "Qe2 — centralising and connecting the rooks, supporting the centre and the knight's outpost.", sayShort: "Qe2 — centralise, connect rooks", highlights: [_H('e2')] },
+    { atMove: 20, say: "h3 — questioning the g4-bishop, making it commit before you press on the wings.", sayShort: "h3 — question the bishop", highlights: [_H('g4')] },
+    { atMove: 22, say: "a4 — gaining queenside space, fixing Black's pawns and completing a comfortable bind.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-space', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT09: SublineNarration = {
+  intro: { say: "Black builds …e6 and …Bd6. You break with e4, centralise the queen on e2, prepare the second fianchetto with b3, then expand on the kingside with g4 to harass the bishop.", sayShort: "…e6 — e4, Qe2, b3, g4" },
+  beats: [
+    { atMove: 12, say: "e4 — the thematic central break, challenging Black's pawns with your pieces fully developed.", sayShort: "e4 — the central break", highlights: [_H('e4')] },
+    { atMove: 14, say: "Qe2 — centralising the queen, supporting e4 and eyeing the kingside.", sayShort: "Qe2 — centralise, support e4", highlights: [_H('e2')] },
+    { atMove: 18, say: "b3 — preparing Bb2, the second fianchetto that completes your control of the long diagonals.", sayShort: "b3 — prepare the fianchetto", highlights: [_H('b3')] },
+    { atMove: 20, say: "g4 — gaining kingside space and chasing the bishop, since your centre and king are secure.", sayShort: "g4 — kingside space", arrows: [_A('g4', 'g5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT10: SublineNarration = {
+  intro: { say: "Black reroutes …Nc5. You gain queenside space with a4 to deny it support, contest with Nc4, prepare the second fianchetto with b3, then complete it with Bb2 raking the long diagonal.", sayShort: "…Nc5 — a4, Nc4, b3, Bb2" },
+  beats: [
+    { atMove: 16, say: "a4 — gaining queenside space and denying the c5-knight its …b5 support, fixing Black's structure.", sayShort: "a4 — deny …b5", arrows: [_A('a4', 'a5')] },
+    { atMove: 18, say: "Nc4 — challenging the c5-knight and eyeing e5 and d6 from the strong outpost.", sayShort: "Nc4 — contest, eye e5", highlights: [_H('c4')] },
+    { atMove: 20, say: "b3 — preparing the second fianchetto to complete your grip on the long diagonals.", sayShort: "b3 — prepare Bb2", highlights: [_H('b3')] },
+    { atMove: 22, say: "Bb2 — the bishop rakes the long diagonal toward e5 and Black's kingside, the soul of the Réti.", sayShort: "Bb2 — rake the long diagonal", arrows: [_A('b2', 'g7')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT11: SublineNarration = {
+  intro: { say: "In the Closed Catalan Black grabs the pawn with …dxc4. You leap Ne5 to the central outpost, regain the pawn with Nxc4, gain queenside space with a4, then re-occupy e5 to keep the Catalan bind.", sayShort: "…dxc4 — Ne5, Nxc4, a4, Ne5" },
+  beats: [
+    { atMove: 14, say: "Ne5 — the Catalan knight leaps to the central outpost, eyeing c4 and c6 and dominating the board.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+    { atMove: 16, say: "Nxc4 — regaining the gambit pawn. The Catalan always recovers it; Black has merely helped your knight to a fine square.", sayShort: "Nxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 18, say: "a4 — gaining queenside space and fixing Black's pawns, denying the freeing …b5.", sayShort: "a4 — deny …b5", arrows: [_A('a4', 'a5')] },
+    { atMove: 20, say: "Ne5 — re-establishing the central outpost, pressing c6 and the kingside with a lasting bind.", sayShort: "Ne5 — re-occupy the outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+const RT12: SublineNarration = {
+  intro: { say: "Black fianchettoes with …b6. You occupy e5, open the c-file with cxd5, develop the bishop actively to f4, then re-occupy e5 — keeping the Catalan central grip.", sayShort: "…b6 — Ne5, cxd5, Bf4, Ne5" },
+  beats: [
+    { atMove: 14, say: "Ne5 — the knight grabs the central outpost, the heart of the Catalan, eyeing c6 and the kingside.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+    { atMove: 16, say: "cxd5 — opening the c-file and leaving Black with a slightly loose structure to defend.", sayShort: "cxd5 — open the c-file", highlights: [_H('d5')] },
+    { atMove: 18, say: "Bf4 — developing the bishop actively, eyeing c7 and supporting the e5-knight.", sayShort: "Bf4 — active, support e5", arrows: [_A('f4', 'c7')] },
+    { atMove: 22, say: "Ne5 — re-occupying the dominant central square, keeping Black tied to defence.", sayShort: "Ne5 — re-occupy e5", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+const RT13: SublineNarration = {
+  intro: { say: "Black plays …a6 to prepare …b5. You centralise the queen with Qd3, regain the pawn on c4, develop the bishop to e3, then leap Ne4 eyeing d6 and f6.", sayShort: "…a6 — Qd3, Qxc4, Be3, Ne4" },
+  beats: [
+    { atMove: 14, say: "Qd3 — centralising the queen, preparing to recapture on c4 and eyeing the kingside.", sayShort: "Qd3 — centralise the queen", highlights: [_H('d3')] },
+    { atMove: 16, say: "Qxc4 — regaining the pawn, the queen active and Black's queenside expansion held in check.", sayShort: "Qxc4 — regain the pawn", highlights: [_H('c4')] },
+    { atMove: 20, say: "Be3 — developing the last minor piece, eyeing the queenside dark squares and a4-c5.", sayShort: "Be3 — develop, eye c5", highlights: [_H('e3')] },
+    { atMove: 22, say: "Ne4 — the knight leaps to e4, offering trades and eyeing d6 and f6 with the better game.", sayShort: "Ne4 — leap, eye d6", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+const RT14: SublineNarration = {
+  intro: { say: "Black plays the solid …c6. You build the big centre with d4, take the Catalan square with Qc2, post the rook on d1, then complete the second fianchetto with b3 and Bb2.", sayShort: "…c6 — d4, Qc2, Rd1, Bb2" },
+  beats: [
+    { atMove: 12, say: "Qc2 — the queen takes its Catalan post, eyeing c4, c6 and the b1-h7 diagonal.", sayShort: "Qc2 — the Catalan square", arrows: [_A('c2', 'h7')] },
+    { atMove: 14, say: "Rd1 — the rook supports the centre and a future e4, lining up behind the d-pawn.", sayShort: "Rd1 — back the centre", arrows: [_A('d1', 'd8')] },
+    { atMove: 18, say: "Bb2 — completing the second fianchetto, the bishop raking the long diagonal toward Black's king.", sayShort: "Bb2 — rake the long diagonal", arrows: [_A('b2', 'g7')] },
+    { atMove: 22, say: "a4 — gaining queenside space, the slow minority idea that pressures Black's pawns.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+const RT15: SublineNarration = {
+  intro: { say: "Black plays the slow …h6. You prepare the second fianchetto with b3 and Bb2, reroute Nd2 to support the centre, then fire the e4 break opening lines for both bishops.", sayShort: "…h6 — b3, Bb2, Nd2, e4" },
+  beats: [
+    { atMove: 14, say: "b3 — preparing Bb2, the fianchetto that completes your control of the long diagonal.", sayShort: "b3 — prepare Bb2", highlights: [_H('b3')] },
+    { atMove: 16, say: "Bb2 — the bishop rakes the long diagonal toward e5 and the kingside, the Catalan's pride.", sayShort: "Bb2 — rake the diagonal", arrows: [_A('b2', 'g7')] },
+    { atMove: 18, say: "Nd2 — rerouting the knight to support the central e4 break and contest the e4-square.", sayShort: "Nd2 — support e4", highlights: [_H('e4')] },
+    { atMove: 20, say: "e4 — the thematic break, opening the centre so both fianchettoed bishops spring to life.", sayShort: "e4 — the central break", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+const RT16: SublineNarration = {
+  intro: { say: "After the e4 break and the knight trades, you recapture on e4 with the queen, dominating both diagonals from the centre, post the rook on d1, then tuck the queen back to c2 with the better game.", sayShort: "…Nxe4 — Qxe4, Rd1, Qc2" },
+  beats: [
+    { atMove: 20, say: "Qxe4 — recapturing into the centre. The queen on e4 rakes both diagonals and dominates the open position.", sayShort: "Qxe4 — centralise the queen", highlights: [_H('e4')] },
+    { atMove: 22, say: "Rd1 — the rook takes the open d-file, pressuring the centre and Black's slightly loose pieces.", sayShort: "Rd1 — seize the d-file", arrows: [_A('d1', 'd8')] },
+    { atMove: 24, say: "Qc2 — retreating the queen to safety while keeping the central grip and the more harmonious position.", sayShort: "Qc2 — retreat, keep the grip", highlights: [_H('c2')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+const RT17: SublineNarration = {
+  intro: { say: "Black plays …Re8. You prepare the fianchetto with b3 and Bb2, recapture on c3 with the bishop to keep the diagonal, swing Re1 to the centre, then centralise the queen on c2.", sayShort: "…Re8 — b3, Bb2, Bxc3, Qc2" },
+  beats: [
+    { atMove: 14, say: "b3 — preparing the second fianchetto, the engine of your Catalan pressure.", sayShort: "b3 — prepare Bb2", highlights: [_H('b3')] },
+    { atMove: 16, say: "Bb2 — the bishop rakes the long diagonal toward Black's king, the Catalan's main trump.", sayShort: "Bb2 — rake the diagonal", arrows: [_A('b2', 'g7')] },
+    { atMove: 18, say: "Bxc3 — recapturing with the bishop to preserve the long-diagonal pressure and a sound structure.", sayShort: "Bxc3 — keep the diagonal", highlights: [_H('c3')] },
+    { atMove: 22, say: "Qc2 — centralising the queen, lining up the central break and pressing the b1-h7 diagonal.", sayShort: "Qc2 — centralise, prep e4", arrows: [_A('c2', 'h7')] },
+  ],
+  sources: ['concept:pawn-fianchetto', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+const RT18: SublineNarration = {
+  intro: { say: "Black jumps …Ne4. You gain queenside space with a4 before it settles, challenge the knight with Qc2, occupy e5, then prepare Bb2 with b3 — keeping the central bind.", sayShort: "…Ne4 — a4, Qc2, Ne5, b3" },
+  beats: [
+    { atMove: 14, say: "a4 — gaining queenside space and fixing Black's pawns before the e4-knight gets support.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+    { atMove: 16, say: "Qc2 — challenging the e4-knight and eyeing the b1-h7 diagonal toward Black's king.", sayShort: "Qc2 — challenge the knight", arrows: [_A('c2', 'e4')] },
+    { atMove: 18, say: "Ne5 — the knight grabs the central outpost, eyeing c6 and f7 and dominating the centre.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+    { atMove: 22, say: "b3 — preparing Bb2 to complete the fianchetto and clamp the c4-square.", sayShort: "b3 — prepare Bb2", highlights: [_H('b3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+const RT19: SublineNarration = {
+  intro: { say: "Black grabs the pawn with …dxc4. You collect it back with the Catalan tax Qa4+ and Qxc4, build the big centre with d4, then post the rook on d1 — emerging with a clear central edge.", sayShort: "…dxc4 — Qa4+, Qxc4, d4, Rd1" },
+  beats: [
+    { atMove: 10, say: "Qa4+ — the check that recovers the gambit pawn, the Catalan's standard answer to …dxc4.", sayShort: "Qa4+ — regain via check", arrows: [_A('a4', 'c4')] },
+    { atMove: 12, say: "Qxc4 — collecting the pawn, the queen actively placed and the c-file pressure intact.", sayShort: "Qxc4 — collect the pawn", highlights: [_H('c4')] },
+    { atMove: 14, say: "d4 — building the broad centre now the material is restored, claiming a clear space edge.", sayShort: "d4 — build the big centre", highlights: [_H('d4')] },
+    { atMove: 18, say: "Rd1 — the rook supports d4 and pressures the centre, completing a commanding set-up.", sayShort: "Rd1 — back the centre", arrows: [_A('d1', 'd8')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+
+const RT20: SublineNarration = {
+  intro: { say: "In the Réti Accepted you have recaptured on c4 and Black plays …Be7. You build the centre with d4, centralise with Qe2, challenge …b5 with a4, then accept a well-supported isolated d-pawn with active pieces.", sayShort: "…Be7 — d4, Qe2, a4, exd4" },
+  beats: [
+    { atMove: 10, say: "d4 — building the classical centre now your bishop sits on c4, a comfortable Queen's-Gambit-Accepted structure.", sayShort: "d4 — build the centre", highlights: [_H('d4')] },
+    { atMove: 12, say: "Qe2 — centralising the queen, preparing Rd1 and the e4 advance.", sayShort: "Qe2 — centralise, prep e4", highlights: [_H('e2')] },
+    { atMove: 16, say: "a4 — challenging Black's …b5 expansion, prising open the queenside where your pieces are active.", sayShort: "a4 — challenge …b5", arrows: [_A('a4', 'b5')] },
+    { atMove: 22, say: "exd4 — recapturing into an isolated d-pawn position, where your active pieces and the half-open files give full compensation.", sayShort: "exd4 — active IQP play", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
+};
+const RT21: SublineNarration = {
+  intro: { say: "Black develops …Bd6. You build the centre with d4, gain space with e4-e5 kicking the knight, lunge d5 to open lines while ahead in development, then centralise the queen on e4.", sayShort: "…Bd6 — d4, e5, d5, Qe4" },
+  beats: [
+    { atMove: 10, say: "d4 — claiming the full centre, the QGA structure with your bishop already active on c4.", sayShort: "d4 — claim the centre", highlights: [_H('d4')] },
+    { atMove: 14, say: "e5 — gaining space and kicking the f6-knight, cramping Black's position.", sayShort: "e5 — gain space, kick the knight", highlights: [_H('e5')] },
+    { atMove: 16, say: "d5 — the central pawn lunges forward, opening lines while you lead in development.", sayShort: "d5 — open lines with the lead", highlights: [_H('d5')] },
+    { atMove: 20, say: "Qe4 — centralising the queen, eyeing h7 and the kingside with a clear initiative.", sayShort: "Qe4 — centralise, eye h7", arrows: [_A('e4', 'h7')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
+};
+const RT22: SublineNarration = {
+  intro: { say: "Black develops …Nc6. You build the centre with d4, tuck the rook to e1, reroute the bishop, then fire the e4 break and expand with b4 — a big space advantage.", sayShort: "…Nc6 — d4, Re1, e4, b4" },
+  beats: [
+    { atMove: 10, say: "d4 — building the central pawn duo, your bishop already eyeing f7 from c4.", sayShort: "d4 — build the centre", highlights: [_H('d4')] },
+    { atMove: 12, say: "Re1 — the rook backs the e-pawn, preparing the central e4 advance.", sayShort: "Re1 — prepare e4", arrows: [_A('e1', 'e4')] },
+    { atMove: 18, say: "e4 — the central break, seizing a broad pawn centre and cramping Black.", sayShort: "e4 — the central break", highlights: [_H('e4')] },
+    { atMove: 22, say: "b4 — gaining queenside space, the natural plan once the centre is settled.", sayShort: "b4 — queenside space", arrows: [_A('b4', 'b5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
+};
+const RT23: SublineNarration = {
+  intro: { say: "Black develops …Bc5. You build the centre with d4, post the rook on d1, retreat the bishop to b3 eyeing f7, develop Nc3, then challenge …b5 with a4.", sayShort: "…Bc5 — d4, Rd1, Bb3, a4" },
+  beats: [
+    { atMove: 10, say: "d4 — claiming the centre, gaining a tempo on the c5-bishop that must step back.", sayShort: "d4 — claim the centre", highlights: [_H('d4')] },
+    { atMove: 14, say: "Rd1 — the rook to the d-file, supporting d4 and pressuring down the centre.", sayShort: "Rd1 — back the centre", arrows: [_A('d1', 'd8')] },
+    { atMove: 18, say: "Nc3 — developing with pressure on d5 and b5, eyeing the e4 advance.", sayShort: "Nc3 — develop, eye d5", highlights: [_H('d5')] },
+    { atMove: 20, say: "a4 — challenging the …b5 expansion and gaining queenside space.", sayShort: "a4 — challenge …b5", arrows: [_A('a4', 'b5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
+};
+const RT24: SublineNarration = {
+  intro: { say: "Black plays …a6. You build the centre with d4, open with dxc5, then trade queens on d8 — stripping Black's castling and leaving the king stuck on d8 while your knight grabs e5.", sayShort: "…a6 — d4, dxc5, Qxd8+, Ne5" },
+  beats: [
+    { atMove: 10, say: "d4 — building the centre, your bishop already active on c4.", sayShort: "d4 — build the centre", highlights: [_H('d4')] },
+    { atMove: 12, say: "dxc5 — opening the position and gaining a tempo on the bishop recapture.", sayShort: "dxc5 — open with tempo", highlights: [_H('c5')] },
+    { atMove: 14, say: "Qxd8+ — trading queens to deny Black castling. The king is stranded on d8, a lasting inconvenience.", sayShort: "Qxd8+ — strip the castling", highlights: [_H('d8')] },
+    { atMove: 18, say: "Ne5 — the knight grabs the central outpost, pressing the awkward Black king and the queenside.", sayShort: "Ne5 — outpost, press the king", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pos-king-safety', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
+};
+const RT25: SublineNarration = {
+  intro: { say: "Black fianchettoes with …b6. You centralise with Qe2, build the centre with d4, hop the knight to a4 to exploit the …b4 weakening, then reposition the bishop to c2 on the b1-h7 diagonal.", sayShort: "…b6 — Qe2, d4, Na4, Bc2" },
+  beats: [
+    { atMove: 10, say: "Qe2 — centralising the queen, preparing d4 and Rd1.", sayShort: "Qe2 — centralise", highlights: [_H('e2')] },
+    { atMove: 12, say: "d4 — building the centre against the fianchetto, claiming space.", sayShort: "d4 — build the centre", highlights: [_H('d4')] },
+    { atMove: 18, say: "Na4 — the knight eyes c5 and b6, exploiting the holes the …b4 push left behind.", sayShort: "Na4 — into the holes", highlights: [_H('c5')] },
+    { atMove: 22, say: "Bc2 — repositioning the bishop to the long b1-h7 diagonal, aiming at the kingside.", sayShort: "Bc2 — to the diagonal", arrows: [_A('c2', 'h7')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
+};
+const RT26: SublineNarration = {
+  intro: { say: "Black plays …c6 then …c5. You build the centre with d4, develop Nc3, recapture into an isolated d-pawn, develop the bishop actively to f4, then plant the knight on e5.", sayShort: "…c6 — d4, exd4, Bf4, Ne5" },
+  beats: [
+    { atMove: 10, say: "d4 — building the centre, the QGA structure with the bishop active on c4.", sayShort: "d4 — build the centre", highlights: [_H('d4')] },
+    { atMove: 14, say: "exd4 — recapturing into an isolated d-pawn, accepting it for active pieces and open files.", sayShort: "exd4 — active IQP", highlights: [_H('d4')] },
+    { atMove: 16, say: "Bf4 — developing the bishop actively, eyeing c7 and supporting the e5 outpost.", sayShort: "Bf4 — active, support e5", arrows: [_A('f4', 'c7')] },
+    { atMove: 22, say: "Ne5 — the knight reaches the e5-outpost, the IQP's classic attacking square.", sayShort: "Ne5 — the IQP outpost", highlights: [_H('e5')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
+};
+const RT27: SublineNarration = {
+  intro: { say: "Black plays …c5 and …Nc6. You centralise with Qe2, develop Nc3, reposition the bishop to b3 eyeing f7, open with dxc5, then seize space with e4-e5.", sayShort: "…Nc6 — Qe2, Bb3, dxc5, e4-e5" },
+  beats: [
+    { atMove: 12, say: "Qe2 — centralising the queen, preparing the e4 advance.", sayShort: "Qe2 — centralise, prep e4", highlights: [_H('e2')] },
+    { atMove: 16, say: "Bb3 — repositioning the bishop to eye f7 and e6 on the a2-g8 diagonal.", sayShort: "Bb3 — eye f7", arrows: [_A('b3', 'f7')] },
+    { atMove: 18, say: "dxc5 — opening the position, gaining a tempo before the central break.", sayShort: "dxc5 — open with tempo", highlights: [_H('c5')] },
+    { atMove: 20, say: "e4 — the central break, seizing space and pointing every piece at Black's king.", sayShort: "e4 — the central break", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
+};
+const RT28: SublineNarration = {
+  intro: { say: "Black recaptures …Bxc5 and develops …Nc6. You restrain with a3, post the rook on d1, reposition the bishop to d3 aiming at h7, then gain queenside space with b4.", sayShort: "…Nc6 — a3, Rd1, Bd3, b4" },
+  beats: [
+    { atMove: 16, say: "a3 — preparing b4 and restraining Black's queenside, a useful little move.", sayShort: "a3 — prepare b4", highlights: [_H('b4')] },
+    { atMove: 18, say: "Rd1 — the rook to the d-file, eyeing the d6-bishop and pressing the centre.", sayShort: "Rd1 — to the d-file", arrows: [_A('d1', 'd8')] },
+    { atMove: 20, say: "Bd3 — repositioning the bishop to the b1-h7 diagonal, aiming at h7.", sayShort: "Bd3 — aim at h7", arrows: [_A('d3', 'h7')] },
+    { atMove: 22, say: "b4 — gaining queenside space, the minority plan that fixes a target on Black's pawns.", sayShort: "b4 — queenside space", arrows: [_A('b4', 'b5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
+};
+const RT30: SublineNarration = {
+  intro: { say: "In the King's Indian Attack Black trades …dxe4. You recapture, gain space with e5 to kick the knight, leap Ne4 to the great central square, then pin with Bg5 and build the kingside initiative.", sayShort: "…dxe4 — dxe4, e5, Ne4, Bg5" },
+  beats: [
+    { atMove: 14, say: "dxe4 — recapturing, opening the position for your KIA pieces.", sayShort: "dxe4 — recapture, open up", highlights: [_H('e4')] },
+    { atMove: 16, say: "e5 — the thematic KIA space gain, kicking the f6-knight and cramping Black's kingside.", sayShort: "e5 — gain space, kick the knight", highlights: [_H('e5')] },
+    { atMove: 18, say: "Ne4 — the knight leaps to the dominant e4-square, eyeing d6 and f6 and supporting the attack.", sayShort: "Ne4 — dominant central knight", highlights: [_H('e4')] },
+    { atMove: 20, say: "Bg5 — pinning and pressing, bringing the bishop into the kingside build-up.", sayShort: "Bg5 — pin, build the attack", arrows: [_A('g5', 'd8')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const RT31: SublineNarration = {
+  intro: { say: "Black plays …c6 and …Bf5. You expand with c4, hit b7 and d5 with Qb3, develop Nc3, then lift the rook to a4 to swing it to the queenside.", sayShort: "…c6 — c4, Qb3, Nc3, Ra4" },
+  beats: [
+    { atMove: 8, say: "c4 — challenging the centre, the Réti expansion against the solid …c6.", sayShort: "c4 — challenge the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 10, say: "Qb3 — pressing b7 and d5, exploiting the early …Bf5 that left the queenside loose.", sayShort: "Qb3 — pressure b7 and d5", arrows: [_A('b3', 'b7')] },
+    { atMove: 14, say: "Nc3 — developing with pressure on d5, completing your harmonious set-up.", sayShort: "Nc3 — pressure d5", highlights: [_H('d5')] },
+    { atMove: 20, say: "Ra4 — the rook lifts to the fourth, swinging to the queenside to press Black's weaknesses.", sayShort: "Ra4 — rook lift to press", arrows: [_A('a4', 'c4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT32: SublineNarration = {
+  intro: { say: "Black locks the centre with …d4. You gain queenside space with a4, reroute the knight via e1, then launch the classic King's Indian Attack pawn storm with f4 and g4.", sayShort: "…d4 — a4, Ne1, f4, g4" },
+  beats: [
+    { atMove: 14, say: "a4 — gaining queenside space; with the centre closed the game is decided on the wings.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+    { atMove: 16, say: "Ne1 — rerouting the knight toward the kingside and to pressure the d4-pawn, clearing f-pawn's path.", sayShort: "Ne1 — reroute the knight", highlights: [_H('e1')] },
+    { atMove: 18, say: "f4 — the kingside pawn storm begins, the heart of the KIA against a fixed centre.", sayShort: "f4 — start the storm", arrows: [_A('f4', 'f5')] },
+    { atMove: 22, say: "g4 — the storm rolls forward, prising open lines toward Black's castled king.", sayShort: "g4 — open the king", arrows: [_A('g4', 'g5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const RT33: SublineNarration = {
+  intro: { say: "Black fianchettoes with …b6. You open with exd5 to leave an isolated d-pawn, plant the knight on e5, reinforce with Ndf3, develop Bf4, then take the open e-file.", sayShort: "…b6 — exd5, Ne5, Bf4, Re1" },
+  beats: [
+    { atMove: 14, say: "exd5 — opening the centre and saddling Black with an isolated d-pawn to besiege.", sayShort: "exd5 — create the isolani", highlights: [_H('d5')] },
+    { atMove: 16, say: "Ne5 — the knight grabs the central outpost in front of the isolated pawn.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+    { atMove: 18, say: "Ndf3 — reinforcing the e5-knight with its partner, keeping the central bind.", sayShort: "Ndf3 — support e5", arrows: [_A('f3', 'e5')] },
+    { atMove: 22, say: "Re1 — the rook takes the open e-file, completing pressure on Black's isolated pawn.", sayShort: "Re1 — seize the e-file", arrows: [_A('e1', 'e8')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const RT34: SublineNarration = {
+  intro: { say: "Black plays …c5. You strike with d4 to open the centre, recapture with the knight, challenge Black's advanced d-pawn with c4, then leave an isolated pawn and take the e-file.", sayShort: "…c5 — d4, c4, exd4, Re1" },
+  beats: [
+    { atMove: 8, say: "d4 — striking the centre, opening lines into a Tarrasch-style structure.", sayShort: "d4 — strike the centre", highlights: [_H('d4')] },
+    { atMove: 14, say: "c4 — challenging Black's advanced d-pawn, refusing to let the space-grab stand.", sayShort: "c4 — challenge the d-pawn", arrows: [_A('c4', 'd5')] },
+    { atMove: 18, say: "exd4 — recapturing, leaving Black with an isolated d-pawn for you to blockade and besiege.", sayShort: "exd4 — create the isolani", highlights: [_H('d4')] },
+    { atMove: 20, say: "Re1 — the rook takes the open e-file, the natural post in these structures.", sayShort: "Re1 — seize the e-file", arrows: [_A('e1', 'e8')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT35: SublineNarration = {
+  intro: { say: "With the centre closed and the e5-spearhead set, Black plays …Bb7. You launch the kingside storm with h4, develop Bf4 to support e5, then reroute the knight via h2 toward g4 and the attack.", sayShort: "…Bb7 — h4, Bf4, N1h2" },
+  beats: [
+    { atMove: 20, say: "h4 — the kingside pawn storm begins, the KIA's attacking plan against the castled king.", sayShort: "h4 — start the storm", arrows: [_A('h4', 'h5')] },
+    { atMove: 22, say: "Bf4 — developing the bishop to support the e5-spearhead and eye c7.", sayShort: "Bf4 — support e5", arrows: [_A('f4', 'c7')] },
+    { atMove: 24, say: "N1h2 — rerouting the knight toward g4, bringing another attacker to the kingside.", sayShort: "N1h2 — reroute to g4", highlights: [_H('h2')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const RT36: SublineNarration = {
+  intro: { say: "Black centralises …Qc7. You develop Bf4 to support the e5-spearhead, launch the kingside storm with h4, then reroute the knight via h2 toward g4 and the attack.", sayShort: "…Qc7 — Bf4, h4, N1h2" },
+  beats: [
+    { atMove: 20, say: "Bf4 — developing the bishop to buttress the e5-pawn and eye the c7-queen.", sayShort: "Bf4 — support e5", arrows: [_A('f4', 'c7')] },
+    { atMove: 22, say: "h4 — the kingside pawn storm begins, prising open the king's cover.", sayShort: "h4 — start the storm", arrows: [_A('h4', 'h5')] },
+    { atMove: 24, say: "N1h2 — rerouting the knight toward g4 to join the kingside assault.", sayShort: "N1h2 — reroute to g4", highlights: [_H('h2')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const RT37: SublineNarration = {
+  intro: { say: "Black fianchettoes …g6 Grünfeld-style. You take the full centre with d4, expand with c4, recapture on b3 with the queen eyeing b7 and d5, then post the rook on d1.", sayShort: "…g6 — d4, c4, Qxb3, Rfd1" },
+  beats: [
+    { atMove: 6, say: "d4 — taking the full centre against the fianchetto, denying Black the hypermodern counter-strike.", sayShort: "d4 — take the centre", highlights: [_H('d4')] },
+    { atMove: 12, say: "c4 — challenging d5, the broad English/Réti pawn front.", sayShort: "c4 — challenge d5", arrows: [_A('c4', 'd5')] },
+    { atMove: 18, say: "Qxb3 — recapturing, the queen active and eyeing b7 and d5.", sayShort: "Qxb3 — active queen", arrows: [_A('b3', 'b7')] },
+    { atMove: 22, say: "Rfd1 — the rook to the d-file, pressing the centre and Black's d5-pawn.", sayShort: "Rfd1 — pressure the centre", arrows: [_A('d1', 'd8')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT38: SublineNarration = {
+  intro: { say: "Black expands with …b5. You plant the knight on e5, challenge the advance with a4, then reroute Ng4 toward the kingside — a double-edged, roughly balanced game where your kingside chances meet Black's queenside play.", sayShort: "…b5 — Ne5, a4, Ng4" },
+  beats: [
+    { atMove: 14, say: "Ne5 — the knight grabs the central outpost, eyeing the kingside and Black's loosened queenside.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+    { atMove: 16, say: "a4 — challenging the …b5 advance, opening the queenside to contest Black's space.", sayShort: "a4 — challenge …b5", arrows: [_A('a4', 'b5')] },
+    { atMove: 18, say: "Ng4 — rerouting the knight toward the kingside, where your chances lie in this double-edged race.", sayShort: "Ng4 — reroute to the kingside", highlights: [_H('g4')] },
+    { atMove: 22, say: "Qxg4 — recapturing, the queen joining the kingside with active play to balance Black's queenside push.", sayShort: "Qxg4 — active, balanced game", highlights: [_H('g4')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+};
+const RT39: SublineNarration = {
+  intro: { say: "Black develops …Bf5 early. You expand with c4, hit b7 and d5 with Qb3, then target the bishop with Nh4 and trade it on g6 to damage Black's kingside pawns.", sayShort: "…Bf5 — c4, Qb3, Nh4, Nxg6" },
+  beats: [
+    { atMove: 6, say: "c4 — challenging the centre, the Réti expansion against the early bishop sortie.", sayShort: "c4 — challenge the centre", arrows: [_A('c4', 'd5')] },
+    { atMove: 8, say: "Qb3 — pressing b7 and d5, punishing the loose queenside the early …Bf5 leaves.", sayShort: "Qb3 — pressure b7 and d5", arrows: [_A('b3', 'b7')] },
+    { atMove: 16, say: "Nh4 — targeting the f5-bishop, aiming to trade it and dominate the light squares.", sayShort: "Nh4 — target the bishop", arrows: [_A('h4', 'f5')] },
+    { atMove: 20, say: "Nxg6 — trading to damage Black's kingside pawns and open the h-file for your rook.", sayShort: "Nxg6 — damage the kingside", highlights: [_H('g6')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+
+const RT40: SublineNarration = {
+  intro: { say: "Black plays the solid …c6. You build the big centre with d4, take the Catalan square with Qc2, post the rook on d1, then complete the double fianchetto with b3 and Bb2.", sayShort: "…c6 — d4, Qc2, Bb2, a4" },
+  beats: [
+    { atMove: 10, say: "d4 — building the central duo, the broad Réti-Catalan pawn front.", sayShort: "d4 — build the centre", highlights: [_H('d4')] },
+    { atMove: 12, say: "Qc2 — the queen takes its Catalan post, eyeing c4, c6 and the b1-h7 diagonal.", sayShort: "Qc2 — the Catalan square", arrows: [_A('c2', 'h7')] },
+    { atMove: 18, say: "Bb2 — completing the second fianchetto, the bishop raking the long diagonal toward Black's king.", sayShort: "Bb2 — rake the long diagonal", arrows: [_A('b2', 'g7')] },
+    { atMove: 22, say: "a4 — gaining queenside space, the slow minority plan that pressures Black's pawns.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+const RT41: SublineNarration = {
+  intro: { say: "Black grabs the pawn with …dxc4. You recover it with the Catalan tax Qa4+ and Qxc4, build the centre with d4, then post the rook on d1 with a clear edge.", sayShort: "…dxc4 — Qa4+, Qxc4, d4, Rd1" },
+  beats: [
+    { atMove: 10, say: "Qa4+ — the check that recovers the gambit pawn, the Catalan's standard answer.", sayShort: "Qa4+ — regain via check", arrows: [_A('a4', 'c4')] },
+    { atMove: 12, say: "Qxc4 — collecting the pawn, the queen actively placed on the c-file.", sayShort: "Qxc4 — collect the pawn", highlights: [_H('c4')] },
+    { atMove: 14, say: "d4 — building the broad centre now the material is restored.", sayShort: "d4 — build the centre", highlights: [_H('d4')] },
+    { atMove: 18, say: "Rd1 — the rook supports d4 and pressures the centre, completing a commanding set-up.", sayShort: "Rd1 — back the centre", arrows: [_A('d1', 'd8')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+const RT42: SublineNarration = {
+  intro: { say: "Black grabs early with …dxc4. You recover it with Qa4+ and Qxc4, build the centre with d4, then trade queens on d8 — denying Black castling and pressing the king in the ending.", sayShort: "…dxc4 — Qa4+, d4, Qxd8+" },
+  beats: [
+    { atMove: 8, say: "Qa4+ — the check that recovers the gambit pawn, the Catalan's familiar tax.", sayShort: "Qa4+ — regain via check", arrows: [_A('a4', 'c4')] },
+    { atMove: 12, say: "d4 — building the broad centre with the pawn restored.", sayShort: "d4 — build the centre", highlights: [_H('d4')] },
+    { atMove: 18, say: "Qxd8+ — trading queens to deny Black castling; the king is stuck and you press in the ending.", sayShort: "Qxd8+ — strip the castling", highlights: [_H('d8')] },
+    { atMove: 22, say: "Nc3 — developing with the structural edge in hand, targeting the awkward Black set-up.", sayShort: "Nc3 — develop, press", highlights: [_H('c3')] },
+  ],
+  sources: ['concept:pos-king-safety', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+const RT43: SublineNarration = {
+  intro: { say: "Black grabs space with …d4. You hit it from the flank with b4, complete the fianchetto with Bb2, push b5 to chase the knight to the rim, then undermine the pawn with e3.", sayShort: "…d4 — b4, Bb2, b5, e3" },
+  beats: [
+    { atMove: 8, say: "b4 — the wing thrust, gaining queenside space and undermining the c5-support of Black's d4-pawn.", sayShort: "b4 — undermine from the flank", arrows: [_A('b4', 'c5')] },
+    { atMove: 12, say: "b5 — pushing on to chase the c6-knight to the rim, where it does little.", sayShort: "b5 — chase the knight", arrows: [_A('b5', 'c6')] },
+    { atMove: 16, say: "e3 — undermining the d4-pawn at its base, exposing Black's overextension.", sayShort: "e3 — undermine d4", arrows: [_A('e3', 'd4')] },
+    { atMove: 22, say: "Qc2 — centralising the queen around the d4 weakness, your pieces the better placed.", sayShort: "Qc2 — centralise on d4", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT44: SublineNarration = {
+  intro: { say: "Black fianchettoes with …b6. You build the centre with d4, occupy e5, swing the bishop to a3 to pin the e7-bishop and hit c5, then open lines with dxc5 and cxd5.", sayShort: "…b6 — d4, Ne5, Ba3, cxd5" },
+  beats: [
+    { atMove: 12, say: "d4 — building the centre against the double fianchetto.", sayShort: "d4 — build the centre", highlights: [_H('d4')] },
+    { atMove: 14, say: "Ne5 — the Catalan knight grabs the central outpost, eyeing c6 and the kingside.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+    { atMove: 16, say: "Ba3 — the bishop swings to a3, pinning the e7-bishop against the rook and pressing c5.", sayShort: "Ba3 — pin and press c5", arrows: [_A('a3', 'e7')] },
+    { atMove: 20, say: "cxd5 — opening lines, leaving Black with an isolated d-pawn to defend.", sayShort: "cxd5 — create the isolani", highlights: [_H('d5')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+const RT45: SublineNarration = {
+  intro: { say: "Black grabs the pawn early with …dxc4. You prepare recovery with Qc2, collect it on c4, develop d3 and the second fianchetto with b3 and Bb2 — raking the long diagonal.", sayShort: "…dxc4 — Qc2, Qxc4, Bb2" },
+  beats: [
+    { atMove: 10, say: "Qc2 — the queen prepares to regain the c4-pawn while eyeing the centre and the b1-h7 diagonal.", sayShort: "Qc2 — prepare to regain c4", highlights: [_H('c2')] },
+    { atMove: 12, say: "Qxc4 — collecting the gambit pawn, the queen actively placed.", sayShort: "Qxc4 — collect the pawn", highlights: [_H('c4')] },
+    { atMove: 16, say: "b3 — preparing the second fianchetto, completing your grip on the long diagonals.", sayShort: "b3 — prepare Bb2", highlights: [_H('b3')] },
+    { atMove: 20, say: "Bb2 — the bishop rakes the long diagonal toward e5 and the centre, the Réti's soul.", sayShort: "Bb2 — rake the long diagonal", arrows: [_A('b2', 'g7')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT46: SublineNarration = {
+  intro: { say: "Deep in the double-fianchetto Réti, Black trades …cxd4. You recapture with the knight, centralising it, then bring the queen to d4 on the long diagonal with the better-coordinated game.", sayShort: "…cxd4 — Nxd4, Qxd4" },
+  beats: [
+    { atMove: 20, say: "Nxd4 — recapturing, the knight centralised and eyeing c6 and f5.", sayShort: "Nxd4 — centralise the knight", highlights: [_H('d4')] },
+    { atMove: 22, say: "Qxd4 — the queen recaptures and dominates the long diagonal, your bishops raking toward Black's king.", sayShort: "Qxd4 — dominate the diagonal", arrows: [_A('d4', 'g7')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+const RT47: SublineNarration = {
+  intro: { say: "Black plays …c5 for a Tarrasch structure. You open with cxd5, fix the centre with d4, pin with Bg5, then plant the knight on e5 to press Black's hanging or isolated pawns.", sayShort: "…c5 — cxd5, Bg5, Ne5, Nxc6" },
+  beats: [
+    { atMove: 8, say: "cxd5 — opening the centre into a Tarrasch structure where Black must mind the hanging pawns.", sayShort: "cxd5 — Tarrasch structure", highlights: [_H('d5')] },
+    { atMove: 14, say: "Bg5 — pinning the f6-knight, adding pressure to the d5-pawn it defends.", sayShort: "Bg5 — pin, pressure d5", arrows: [_A('g5', 'd8')] },
+    { atMove: 20, say: "Ne5 — the knight grabs the central outpost, pressing Black's loose pawns.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+    { atMove: 22, say: "Nxc6 — trading to inflict doubled c-pawns, a fixed target for the rest of the game.", sayShort: "Nxc6 — doubled c-pawns", highlights: [_H('c6')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Tarrasch_Defense'],
+};
+const RT48: SublineNarration = {
+  intro: { say: "Deep in the line Black grabs …dxc4. You leap Ne5 to the central outpost as the position opens, then recapture exd4 with a supported centre, the bishops raking the diagonals.", sayShort: "…dxc4 — Ne5, exd4" },
+  beats: [
+    { atMove: 20, say: "Ne5 — the knight seizes the central outpost just as the centre cracks open.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+    { atMove: 22, say: "exd4 — recapturing with a supported centre, your fianchettoed bishops raking the long diagonals.", sayShort: "exd4 — supported centre", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-outpost', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+const RT49: SublineNarration = {
+  intro: { say: "Black advances …d4. You undermine it with e3, occupy e5, open lines with exd4, then swing the bishop to a3 to pin the e7-bishop and press the queenside.", sayShort: "…d4 — e3, Ne5, exd4, Ba3" },
+  beats: [
+    { atMove: 12, say: "e3 — striking the advanced d4-pawn at its base, refusing to let the space-grab stand.", sayShort: "e3 — undermine d4", arrows: [_A('e3', 'd4')] },
+    { atMove: 14, say: "Ne5 — the knight grabs the central outpost, eyeing d7 and f7.", sayShort: "Ne5 — central outpost", highlights: [_H('e5')] },
+    { atMove: 16, say: "exd4 — opening lines, winning the structural battle over the overextended pawn.", sayShort: "exd4 — open, win the battle", highlights: [_H('d4')] },
+    { atMove: 22, say: "Ba3 — the bishop swings to a3, pinning the e7-bishop and pressing the queenside.", sayShort: "Ba3 — pin and press", arrows: [_A('a3', 'e7')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
+};
+const RT50: SublineNarration = {
+  intro: { say: "Black's queen sits on d4. You develop d3, gain a tempo by attacking it with Be3, centralise the queen on f3, strike d4, then castle long for a quick initiative.", sayShort: "…Nf6 — d3, Be3, Qf3, O-O-O" },
+  beats: [
+    { atMove: 12, say: "d3 — developing and preparing to chase the centralised black queen with gain of tempo.", sayShort: "d3 — prepare to chase the queen", highlights: [_H('d3')] },
+    { atMove: 14, say: "Be3 — attacking the d4-queen, developing with tempo while Black must retreat.", sayShort: "Be3 — develop with tempo", arrows: [_A('e3', 'd4')] },
+    { atMove: 18, say: "Qf3 — centralising the queen on f3, eyeing the long diagonal and f7.", sayShort: "Qf3 — centralise, eye f7", highlights: [_H('f3')] },
+    { atMove: 22, say: "O-O-O — castling long, the rooks landing on the central files for a fast initiative.", sayShort: "O-O-O — rooks to the centre", highlights: [_H('c1')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-tempo', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT51: SublineNarration = {
+  intro: { say: "Black plays …c6. You develop d3, centralise with Qe2, then expand on the kingside with g4-g5 — gaining space and the initiative behind your bishop pair.", sayShort: "…c6 — d3, Qe2, g4, g5" },
+  beats: [
+    { atMove: 12, say: "d3 — developing and restraining Black's centre before you expand.", sayShort: "d3 — develop, restrain", highlights: [_H('d3')] },
+    { atMove: 14, say: "Qe2 — centralising the queen, preparing the kingside pawn advance.", sayShort: "Qe2 — centralise, prep g4", highlights: [_H('e2')] },
+    { atMove: 18, say: "g4 — gaining kingside space, the plan backed by your two bishops.", sayShort: "g4 — gain kingside space", arrows: [_A('g4', 'g5')] },
+    { atMove: 22, say: "g5 — the storm rolls on, kicking the h6-knight and prising open lines.", sayShort: "g5 — kick the knight", highlights: [_H('g5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT52: SublineNarration = {
+  intro: { say: "Black develops …Bf5. You develop d3, offer the queen trade with Qb3 hitting b7, trade into a structure with Black's doubled b-pawns, then develop the bishop to e3.", sayShort: "…Bf5 — d3, Qb3, Qxb6, Be3" },
+  beats: [
+    { atMove: 12, say: "d3 — developing and eyeing the centralised black queen, preparing to gain time on it.", sayShort: "d3 — develop", highlights: [_H('d3')] },
+    { atMove: 14, say: "Qb3 — offering the queen trade and hitting b7, contesting the queenside.", sayShort: "Qb3 — offer trade, hit b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 16, say: "Qxb6 — trading into a structure where Black has doubled, weak b-pawns.", sayShort: "Qxb6 — doubled b-pawns", highlights: [_H('b6')] },
+    { atMove: 18, say: "Be3 — developing the bishop, eyeing the queenside dark squares and the weak pawns.", sayShort: "Be3 — eye the weak pawns", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-development', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT53: SublineNarration = {
+  intro: { say: "Black blunders with …Bb4, hanging the bishop. You play Qa4+ to fork, and after the …Qd7 block you simply take it with Qxb4 — a clean extra piece. Develop and convert.", sayShort: "…Bb4 — Qa4+ then Qxb4 wins it" },
+  beats: [
+    { atMove: 14, say: "Qa4+ — the check that exploits the loose b4-bishop. Black must block, and the bishop has no defender.", sayShort: "Qa4+ — check, win the bishop", arrows: [_A('a4', 'b4')] },
+    { atMove: 16, say: "Qxb4 — collecting the piece. Black overlooked the tactic; you are up a clean bishop.", sayShort: "Qxb4 — win the piece", highlights: [_H('b4')] },
+    { atMove: 18, say: "Be2 — developing calmly with the extra piece. No swindles, just careful conversion.", sayShort: "Be2 — develop, consolidate", highlights: [_H('e2')] },
+    { atMove: 22, say: "Be3 — the second bishop develops, eyeing the queenside as you convert the material edge.", sayShort: "Be3 — develop, convert", highlights: [_H('e3')] },
+  ],
+  sources: ['concept:tac-double-attack', 'concept:pos-development', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT54: SublineNarration = {
+  intro: { say: "Black pins with …Bg4. You offer the queen trade with Qb3 hitting b7, develop d3, question the bishop with h3, then trade queens into a structure with Black's doubled b-pawns.", sayShort: "…Bg4 — Qb3, h3, Qxb6" },
+  beats: [
+    { atMove: 12, say: "Qb3 — offering the queen trade and pressing b7, contesting the queenside immediately.", sayShort: "Qb3 — offer trade, hit b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 16, say: "h3 — questioning the g4-bishop, forcing it to commit.", sayShort: "h3 — question the bishop", highlights: [_H('g4')] },
+    { atMove: 18, say: "Be3 — developing the bishop, eyeing the queenside dark squares.", sayShort: "Be3 — develop", highlights: [_H('e3')] },
+    { atMove: 22, say: "Qxb6 — trading into a better structure with Black's doubled b-pawns, a lasting target.", sayShort: "Qxb6 — doubled b-pawns", highlights: [_H('b6')] },
+  ],
+  sources: ['concept:pawn-doubled', 'concept:pos-development', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT55: SublineNarration = {
+  intro: { say: "Black develops …Nf6 with …e5. You gain a tempo with Be3 on the queen, centralise on f3, strike the centre with d4, then castle long for a quick initiative.", sayShort: "…Nf6 — Be3, Qf3, d4, O-O-O" },
+  beats: [
+    { atMove: 14, say: "Be3 — attacking the centralised d-queen and developing with tempo.", sayShort: "Be3 — develop with tempo", arrows: [_A('e3', 'd8')] },
+    { atMove: 18, say: "Qf3 — centralising the queen on the long diagonal, eyeing f7.", sayShort: "Qf3 — centralise, eye f7", highlights: [_H('f3')] },
+    { atMove: 20, say: "d4 — striking the centre, opening lines for the better-developed side.", sayShort: "d4 — strike the centre", highlights: [_H('d4')] },
+    { atMove: 22, say: "O-O-O — castling long, the rooks landing on the central files for the initiative.", sayShort: "O-O-O — rooks to the centre", highlights: [_H('c1')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-tempo', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT56: SublineNarration = {
+  intro: { say: "Black pins with …Bg4. You push d5 to gain space and chase the knight, recapture Qxf3, fianchetto with b3 and Bb2, castle long, then storm with f4 behind the bishop pair.", sayShort: "…Bg4 — d5, Qxf3, Bb2, f4" },
+  beats: [
+    { atMove: 8, say: "d5 — the passed pawn lunges, kicking the c6-knight and gaining central space.", sayShort: "d5 — push, gain space", highlights: [_H('d5')] },
+    { atMove: 10, say: "Qxf3 — recapturing, the queen centralised after Black gave up the bishop pair.", sayShort: "Qxf3 — centralise, keep bishops", highlights: [_H('f3')] },
+    { atMove: 16, say: "Bb2 — the bishop rakes the long diagonal, part of your two-bishop battery.", sayShort: "Bb2 — rake the diagonal", arrows: [_A('b2', 'g7')] },
+    { atMove: 22, say: "f4 — the kingside pawn storm, attacking with the bishop pair and a space edge.", sayShort: "f4 — storm with the bishops", arrows: [_A('f4', 'f5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-bishop-pair', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT57: SublineNarration = {
+  intro: { say: "Black plays …e6. You develop d3, gain a tempo on the queen with Be3, strike the centre with d4, then expand on the kingside with h4 as the better-developed side.", sayShort: "…e6 — d3, Be3, d4, h4" },
+  beats: [
+    { atMove: 12, say: "d3 — developing and preparing to gain time on the centralised queen.", sayShort: "d3 — develop", highlights: [_H('d3')] },
+    { atMove: 14, say: "Be3 — attacking the d4-queen, developing with tempo while it retreats.", sayShort: "Be3 — develop with tempo", arrows: [_A('e3', 'd4')] },
+    { atMove: 16, say: "d4 — striking the centre, seizing space and opening lines.", sayShort: "d4 — strike the centre", highlights: [_H('d4')] },
+    { atMove: 22, say: "h4 — gaining kingside space, the better-developed side pressing for the initiative.", sayShort: "h4 — gain kingside space", arrows: [_A('h4', 'h5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT58: SublineNarration = {
+  intro: { say: "Black develops …Be6. You offer the queen trade with Qb3, build the centre with d4, recapture on b3 opening the a-file, then fianchetto the bishop to rake the long diagonal.", sayShort: "…Be6 — Qb3, d4, axb3, Bg2" },
+  beats: [
+    { atMove: 12, say: "Qb3 — offering the queen trade and hitting b7, contesting the queenside.", sayShort: "Qb3 — offer trade, hit b7", arrows: [_A('b3', 'b7')] },
+    { atMove: 14, say: "d4 — building the centre, seizing space while Black's pieces are passive.", sayShort: "d4 — build the centre", highlights: [_H('d4')] },
+    { atMove: 18, say: "axb3 — recapturing toward the centre, opening the a-file for your rook.", sayShort: "axb3 — open the a-file", highlights: [_H('a1')] },
+    { atMove: 22, say: "Bg2 — fianchettoing the bishop to rake the long diagonal in the favourable ending.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pawn-fianchetto', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT59: SublineNarration = {
+  intro: { say: "Black plays …a6. You develop d3, gain a tempo on the queen with Be3, strike the centre with d4, then expand with f4 to seize the initiative against the loose Black pieces.", sayShort: "…a6 — d3, Be3, d4, f4" },
+  beats: [
+    { atMove: 12, say: "d3 — developing and restraining the centre before you chase the queen.", sayShort: "d3 — develop, restrain", highlights: [_H('d3')] },
+    { atMove: 14, say: "Be3 — attacking the d4-queen, developing with tempo.", sayShort: "Be3 — develop with tempo", arrows: [_A('e3', 'd4')] },
+    { atMove: 18, say: "d4 — striking the centre, opening lines for the better-placed pieces.", sayShort: "d4 — strike the centre", highlights: [_H('d4')] },
+    { atMove: 22, say: "f4 — gaining space and the initiative, harrying Black's loosely placed pieces.", sayShort: "f4 — seize the initiative", arrows: [_A('f4', 'f5')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+
+const RT60: SublineNarration = {
+  intro: { say: "Black develops …Bd6 in the double-fianchetto Réti. You open the c-file with cxd5, leaving Black an isolated d-pawn, develop d3 and Nc3 to pressure it, then question the bishop with h3.", sayShort: "…Bd6 — cxd5, Nc3, h3, Bxf3" },
+  beats: [
+    { atMove: 14, say: "cxd5 — opening the c-file and saddling Black with an isolated d-pawn to besiege.", sayShort: "cxd5 — create the isolani", highlights: [_H('d5')] },
+    { atMove: 18, say: "Nc3 — developing with pressure on the isolated d5-pawn, the standard blockading plan.", sayShort: "Nc3 — pressure d5", arrows: [_A('c3', 'd5')] },
+    { atMove: 20, say: "h3 — questioning the g4-bishop, forcing it to declare.", sayShort: "h3 — question the bishop", highlights: [_H('g4')] },
+    { atMove: 22, say: "Bxf3 — recapturing, the bishop on the long diagonal bearing down on d5.", sayShort: "Bxf3 — eye d5", arrows: [_A('f3', 'd5')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-development', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT61: SublineNarration = {
+  intro: { say: "Black contests with …Rc8. You take the c-file with Rc1, open it with cxd5 to isolate Black's d-pawn, then trade rooks keeping the small structural edge.", sayShort: "…Rc8 — Rc1, cxd5, Rxc8" },
+  beats: [
+    { atMove: 18, say: "Rc1 — contesting the c-file, the natural Réti rook post against …Rc8.", sayShort: "Rc1 — contest the c-file", arrows: [_A('c1', 'c8')] },
+    { atMove: 20, say: "cxd5 — opening the file and leaving Black with an isolated d-pawn.", sayShort: "cxd5 — create the isolani", highlights: [_H('d5')] },
+    { atMove: 22, say: "Rxc8 — trading rooks on the open file, keeping a nagging structural edge.", sayShort: "Rxc8 — trade, keep the edge", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT62: SublineNarration = {
+  intro: { say: "Black plays …h6. You open the c-file with cxd5 to isolate the d-pawn, develop Nc3 to pressure it, then fire the e4 break opening lines for the fianchettoed bishop.", sayShort: "…h6 — cxd5, Nc3, e4" },
+  beats: [
+    { atMove: 14, say: "cxd5 — opening the c-file and isolating Black's d-pawn.", sayShort: "cxd5 — create the isolani", highlights: [_H('d5')] },
+    { atMove: 18, say: "Nc3 — developing with pressure on the isolated d5-pawn.", sayShort: "Nc3 — pressure d5", arrows: [_A('c3', 'd5')] },
+    { atMove: 20, say: "e4 — the central break, opening lines so your fianchettoed bishop springs to life.", sayShort: "e4 — the central break", highlights: [_H('e4')] },
+    { atMove: 22, say: "dxe4 — recapturing, the centre opening to favour your better-placed pieces.", sayShort: "dxe4 — open the centre", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pawn-isolated', 'concept:pos-center', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT63: SublineNarration = {
+  intro: { say: "Black plays the slow …h6. You prepare queenside expansion with a3, develop Nbd2, centralise with Qc2, then reroute the bishop to c3 to eye the queenside.", sayShort: "…h6 — a3, Nbd2, Qc2, Bc3" },
+  beats: [
+    { atMove: 16, say: "a3 — preparing b4 and queenside expansion, the slow Réti squeeze.", sayShort: "a3 — prepare b4", highlights: [_H('b4')] },
+    { atMove: 18, say: "Nbd2 — developing the knight, preparing the e4 break.", sayShort: "Nbd2 — prepare e4", highlights: [_H('d2')] },
+    { atMove: 20, say: "Qc2 — centralising the queen, eyeing the b1-h7 diagonal and supporting e4.", sayShort: "Qc2 — centralise, support e4", arrows: [_A('c2', 'h7')] },
+    { atMove: 22, say: "Bc3 — rerouting the bishop to eye a5 and the queenside dark squares.", sayShort: "Bc3 — eye the queenside", highlights: [_H('c3')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT64: SublineNarration = {
+  intro: { say: "Deep in the line Black plays …Rc8. You open the c-file with cxd5 to isolate Black's d-pawn, then trade rooks keeping a small structural edge.", sayShort: "…Rc8 — cxd5, Rxc8" },
+  beats: [
+    { atMove: 20, say: "cxd5 — opening the c-file and leaving Black with an isolated d-pawn.", sayShort: "cxd5 — create the isolani", highlights: [_H('d5')] },
+    { atMove: 22, say: "Rxc8 — trading rooks on the open file, keeping the nagging structural plus.", sayShort: "Rxc8 — trade, keep the edge", highlights: [_H('c8')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT65: SublineNarration = {
+  intro: { say: "Black plays …a5. You meet it with a3 to restrain the advance and prepare b4, centralise with Qc2, then reroute the bishop to c3 to attack the a5-pawn.", sayShort: "…a5 — a3, Qc2, Bc3" },
+  beats: [
+    { atMove: 18, say: "a3 — restraining …a4 and preparing b4 to gain queenside space.", sayShort: "a3 — restrain, prepare b4", highlights: [_H('b4')] },
+    { atMove: 20, say: "Qc2 — centralising the queen, eyeing the b1-h7 diagonal.", sayShort: "Qc2 — centralise", arrows: [_A('c2', 'h7')] },
+    { atMove: 22, say: "Bc3 — rerouting the bishop to attack the a5-pawn and press the queenside.", sayShort: "Bc3 — attack a5", arrows: [_A('c3', 'a5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT66: SublineNarration = {
+  intro: { say: "Black plays …Re8. You target the f5-bishop with Nh4, question it with h3, then gain kingside space with g4 to chase it and dominate the light squares.", sayShort: "…Re8 — Nh4, h3, g4" },
+  beats: [
+    { atMove: 18, say: "Nh4 — targeting the f5-bishop, the thematic plan to trade or chase it.", sayShort: "Nh4 — target the bishop", arrows: [_A('h4', 'f5')] },
+    { atMove: 20, say: "h3 — questioning the bishop further, preparing the kingside advance.", sayShort: "h3 — question the bishop", highlights: [_H('g4')] },
+    { atMove: 22, say: "g4 — gaining kingside space and chasing the bishop, dominating the light squares it leaves.", sayShort: "g4 — chase, dominate light squares", arrows: [_A('g4', 'g5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-weak-squares', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT67: SublineNarration = {
+  intro: { say: "Black grabs …dxc4. You castle, prepare recovery with Qc2, recapture the bishop on f3 to keep the long diagonal, undermine with b3 to regain the pawn, then build the centre with d4.", sayShort: "…dxc4 — Qc2, b3, d4" },
+  beats: [
+    { atMove: 10, say: "Qc2 — preparing to regain the c4-pawn while eyeing the centre.", sayShort: "Qc2 — prepare to regain c4", highlights: [_H('c2')] },
+    { atMove: 14, say: "Bxf3 — recapturing toward the centre, the bishop on the long diagonal eyeing d5 and b7.", sayShort: "Bxf3 — long-diagonal bishop", arrows: [_A('f3', 'b7')] },
+    { atMove: 18, say: "b3 — undermining the c4-pawn to regain the material on your terms.", sayShort: "b3 — regain the pawn", arrows: [_A('b3', 'c4')] },
+    { atMove: 22, say: "d4 — building the centre with the material restored, a comfortable space edge.", sayShort: "d4 — build the centre", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT68: SublineNarration = {
+  intro: { say: "Deep in the line Black plays …a5. You restrain with a3, double on the c-file with Rc2, then tuck the queen to a1 behind the bishop — a long-diagonal battery aimed at Black's king.", sayShort: "…a5 — a3, Rc2, Qa1" },
+  beats: [
+    { atMove: 20, say: "a3 — restraining …a4 and preparing b4 on the queenside.", sayShort: "a3 — restrain, prepare b4", highlights: [_H('b4')] },
+    { atMove: 22, say: "Rc2 — doubling on the c-file, building the slow Réti pressure.", sayShort: "Rc2 — double the c-file", arrows: [_A('c2', 'c8')] },
+    { atMove: 24, say: "Qa1 — the queen tucks behind the b2-bishop, the long-diagonal battery aimed at Black's king.", sayShort: "Qa1 — long-diagonal battery", arrows: [_A('a1', 'g7')] },
+  ],
+  sources: ['concept:pos-open-file', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT69: SublineNarration = {
+  intro: { say: "Black centralises …Qc7. You target the f5-bishop with Nh4, question it with h3, then gain kingside space with g4 to chase it and seize the light squares.", sayShort: "…Qc7 — Nh4, h3, g4" },
+  beats: [
+    { atMove: 18, say: "Nh4 — targeting the f5-bishop, aiming to trade or chase it.", sayShort: "Nh4 — target the bishop", arrows: [_A('h4', 'f5')] },
+    { atMove: 20, say: "h3 — questioning the bishop, preparing the kingside advance.", sayShort: "h3 — question the bishop", highlights: [_H('g4')] },
+    { atMove: 22, say: "g4 — gaining kingside space and chasing the bishop, dominating the light squares.", sayShort: "g4 — chase, seize light squares", arrows: [_A('g4', 'g5')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-weak-squares', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT70: SublineNarration = {
+  intro: { say: "Black meets the b4 wing thrust with …c5. You undermine d4 with e3, grab on c5, pin the queenside with Ba3, then simplify favourably — a sharp, roughly balanced struggle where you hold the queenside trumps.", sayShort: "…c5 — e3, bxc5, Ba3, Nxd4" },
+  beats: [
+    { atMove: 6, say: "e3 — undermining Black's d4-pawn at its base, the Réti reply to the early …d4.", sayShort: "e3 — undermine d4", arrows: [_A('e3', 'd4')] },
+    { atMove: 8, say: "bxc5 — grabbing the pawn, the point of the b4 thrust: a queenside pawn to nurse.", sayShort: "bxc5 — grab the pawn", highlights: [_H('c5')] },
+    { atMove: 14, say: "Ba3 — the bishop pins down c5 from a3, defending the extra pawn and pressing the queenside.", sayShort: "Ba3 — pin and hold c5", arrows: [_A('a3', 'f8')] },
+    { atMove: 18, say: "Nxd4 — trading favourably, simplifying while you keep the queenside structure in hand.", sayShort: "Nxd4 — simplify favourably", highlights: [_H('d4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT71: SublineNarration = {
+  intro: { say: "Black props the centre with …f6. You disrupt with Qa4+, push b5 for queenside space, and undermine d4 with e3 — a sharp, double-edged wing gambit where you generate queenside play against Black's broad but loose centre.", sayShort: "…f6 — Qa4+, b5, e3" },
+  beats: [
+    { atMove: 6, say: "Qa4+ — the check disrupts Black's coordination before …f6 can settle into a solid centre.", sayShort: "Qa4+ — disrupt early", arrows: [_A('a4', 'd7')] },
+    { atMove: 8, say: "b5 — gaining queenside space, the wing-gambit thrust that gives you play on that flank.", sayShort: "b5 — queenside space", arrows: [_A('b5', 'b6')] },
+    { atMove: 12, say: "e3 — undermining the d4-pawn at its base, opening lines against Black's broad centre.", sayShort: "e3 — undermine d4", arrows: [_A('e3', 'd4')] },
+    { atMove: 18, say: "a3 — questioning the b4-bishop and gaining further queenside space in the double-edged fight.", sayShort: "a3 — question the bishop", highlights: [_H('b4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT72: SublineNarration = {
+  intro: { say: "In the fianchetto wing gambit Black plays …c6. You gain queenside space with a4, push b5 to prise it open, then reroute the knight via g5 to the dominant e4-square.", sayShort: "…c6 — a4, b5, Ng5, Ne4" },
+  beats: [
+    { atMove: 16, say: "a4 — gaining queenside space and preparing the b5 thrust.", sayShort: "a4 — queenside space", arrows: [_A('a4', 'a5')] },
+    { atMove: 18, say: "b5 — the wing thrust, prising open the queenside against Black's set-up.", sayShort: "b5 — prise open the queenside", arrows: [_A('b5', 'c6')] },
+    { atMove: 20, say: "Ng5 — rerouting the knight toward e4 and f7, eyeing the kingside.", sayShort: "Ng5 — reroute toward e4", highlights: [_H('g5')] },
+    { atMove: 22, say: "Ne4 — the knight reaches the dominant central square, eyeing d6 and the kingside.", sayShort: "Ne4 — dominant central knight", highlights: [_H('e4')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT73: SublineNarration = {
+  intro: { say: "Black pins with …Bg4. You fianchetto with g3 and Bg2, push b5 for queenside space, open with bxc6, then advance a4 and swing the bishop to a3 — a queenside initiative.", sayShort: "…Bg4 — b5, bxc6, a4, Ba3" },
+  beats: [
+    { atMove: 8, say: "b5 — the wing thrust, gaining queenside space and fixing the structure.", sayShort: "b5 — queenside space", arrows: [_A('b5', 'c6')] },
+    { atMove: 16, say: "bxc6 — opening the queenside, exploiting your advanced pawns to gain time.", sayShort: "bxc6 — open the queenside", highlights: [_H('c6')] },
+    { atMove: 20, say: "a4 — pushing the queenside majority forward, the engine of your initiative.", sayShort: "a4 — push the majority", arrows: [_A('a4', 'a5')] },
+    { atMove: 22, say: "Ba3 — the bishop swings to the a3-f8 diagonal, eyeing Black's king position.", sayShort: "Ba3 — eye the king", arrows: [_A('a3', 'f8')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT74: SublineNarration = {
+  intro: { say: "Black pins with …Bg4 in the fianchetto line. You develop Nbd2, push b5 for space, clamp with c5, then recapture on g2 keeping the queenside bind and a safe king.", sayShort: "…Bg4 — Nbd2, b5, c5, Kxg2" },
+  beats: [
+    { atMove: 16, say: "Nbd2 — developing the knight and preparing the queenside expansion.", sayShort: "Nbd2 — develop, prep b5", highlights: [_H('d2')] },
+    { atMove: 18, say: "b5 — the wing thrust, gaining queenside space.", sayShort: "b5 — queenside space", arrows: [_A('b5', 'b6')] },
+    { atMove: 20, say: "c5 — clamping the queenside, gripping the position with a space bind.", sayShort: "c5 — clamp the queenside", highlights: [_H('c5')] },
+    { atMove: 22, say: "Kxg2 — recapturing, the king safe behind the fianchetto and the queenside bind intact.", sayShort: "Kxg2 — safe, bind intact", highlights: [_H('g2')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT75: SublineNarration = {
+  intro: { say: "Black lashes out with …g5. You disrupt with Qa4+, sidestep the advance with Nh4, trade on g6 to damage Black's kingside, then push b5 for queenside space — a balanced, sharp fight.", sayShort: "…g5 — Qa4+, Nh4, Nxg6, b5" },
+  beats: [
+    { atMove: 6, say: "Qa4+ — the check disrupts Black before the wild …g5-g4 thrust gains momentum.", sayShort: "Qa4+ — disrupt early", arrows: [_A('a4', 'c6')] },
+    { atMove: 10, say: "Nh4 — sidestepping …g4 and rerouting the knight toward g6 and f5.", sayShort: "Nh4 — sidestep …g4", highlights: [_H('h4')] },
+    { atMove: 16, say: "Nxg6 — trading to damage Black's kingside pawns and open the h-file.", sayShort: "Nxg6 — damage the kingside", highlights: [_H('g6')] },
+    { atMove: 18, say: "b5 — gaining queenside space, the wing-gambit thrust to balance the sharp play.", sayShort: "b5 — queenside space", arrows: [_A('b5', 'c6')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT76: SublineNarration = {
+  intro: { say: "Black plays …a5. You push b5 to gain space and fix the queenside, develop Nbd2, support with a4, then swing the bishop to a3 on the long a3-f8 diagonal.", sayShort: "…a5 — b5, Nbd2, a4, Ba3" },
+  beats: [
+    { atMove: 16, say: "b5 — the wing thrust, gaining space and fixing the queenside after …a5.", sayShort: "b5 — fix the queenside", arrows: [_A('b5', 'b6')] },
+    { atMove: 18, say: "Nbd2 — developing the knight to support the queenside and prepare central play.", sayShort: "Nbd2 — develop, support", highlights: [_H('d2')] },
+    { atMove: 20, say: "a4 — cementing the b5-pawn and the queenside majority.", sayShort: "a4 — cement the majority", highlights: [_H('a4')] },
+    { atMove: 22, say: "Ba3 — the bishop takes the long a3-f8 diagonal, eyeing Black's king position.", sayShort: "Ba3 — eye the king", arrows: [_A('a3', 'f8')] },
+  ],
+  sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT77: SublineNarration = {
+  intro: { say: "Black develops …Nf6 and grabs the b4-pawn. You fianchetto with Bg2, regain the material with Qxb3, press with Qb5, then swing the bishop to a3 — a balanced, double-edged game with active piece play.", sayShort: "…Nf6 — Bg2, Qxb3, Qb5, Ba3" },
+  beats: [
+    { atMove: 8, say: "Bg2 — the fianchetto, raking the long diagonal at Black's loose centre.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+    { atMove: 14, say: "Qxb3 — regaining the gambit pawn, the queen actively placed.", sayShort: "Qxb3 — regain the pawn", highlights: [_H('b3')] },
+    { atMove: 18, say: "Qb5 — the queen presses the queenside, pinning down Black's pieces.", sayShort: "Qb5 — press the queenside", highlights: [_H('b5')] },
+    { atMove: 20, say: "Ba3 — the bishop swings to the a3-f8 diagonal, eyeing Black's king and pieces.", sayShort: "Ba3 — eye the king", arrows: [_A('a3', 'f8')] },
+  ],
+  sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT78: SublineNarration = {
+  intro: { say: "Black fianchettoes with …b6. You complete your own with Bg2, undermine d4 with e3, recapture fxe3 to open the f-file toward f7, then centralise the queen on b3.", sayShort: "…b6 — Bg2, e3, fxe3, Qb3" },
+  beats: [
+    { atMove: 12, say: "Bg2 — the fianchetto, raking the long diagonal toward Black's centre and king.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+    { atMove: 14, say: "e3 — undermining the d4-pawn at its base.", sayShort: "e3 — undermine d4", arrows: [_A('e3', 'd4')] },
+    { atMove: 16, say: "fxe3 — recapturing toward the centre, opening the f-file for your rook toward f7.", sayShort: "fxe3 — open the f-file", highlights: [_H('f1')] },
+    { atMove: 22, say: "Qb3 — centralising the queen, pressing b7 and the queenside.", sayShort: "Qb3 — press b7", arrows: [_A('b3', 'b7')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+const RT79: SublineNarration = {
+  intro: { say: "Black fianchettoes with …b6. You undermine d4 with e3, complete the fianchetto with Bg2, open the centre with exd4, castle to safety, then push b5 for queenside space.", sayShort: "…b6 — e3, Bg2, exd4, b5" },
+  beats: [
+    { atMove: 10, say: "e3 — undermining the advanced d4-pawn at its base.", sayShort: "e3 — undermine d4", arrows: [_A('e3', 'd4')] },
+    { atMove: 12, say: "Bg2 — completing the fianchetto, raking the long diagonal.", sayShort: "Bg2 — rake the diagonal", arrows: [_A('g2', 'b7')] },
+    { atMove: 14, say: "exd4 — opening the centre, winning the structural battle over the overextended pawn.", sayShort: "exd4 — open, win the battle", highlights: [_H('d4')] },
+    { atMove: 22, say: "b5 — the queenside thrust, gaining space and the initiative on that flank.", sayShort: "b5 — queenside space", arrows: [_A('b5', 'b6')] },
+  ],
+  sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
+};
+
 export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
+  'reti-opening::6::Bd6@13': RT60,
+  'reti-opening::0::Bd6@13': RT01,
   'london-system::2::Nc6@9': LN20,
   'old-indian-defence::0::h3@14': WOLDH3,
   'old-indian-defence::4::h3@14': WOLDH3,
@@ -3569,84 +4317,84 @@ export const SUBLINE_NARRATION_D4FLANK: Record<string, SublineNarration> = {
   'english-opening::7::b6@19': C93,
   'english-opening::7::e6@17': C93,
   // ── reti-opening ──
-  'reti-opening::0::d4@13': C96,
-  'reti-opening::0::Bc5@13': C96,
-  'reti-opening::0::Be7@15': C96,
-  'reti-opening::0::Be7@13': C96,
-  'reti-opening::0::Qc7@15': C96,
-  'reti-opening::0::e6@9': C97,
-  'reti-opening::0::Bd6@15': C96,
-  'reti-opening::0::e6@11': C97,
-  'reti-opening::0::Nc5@15': C96,
-  'reti-opening::1::dxc4@13': C98,
-  'reti-opening::1::b6@13': C97,
-  'reti-opening::1::a6@13': C97,
-  'reti-opening::1::c6@9': C97,
-  'reti-opening::1::h6@13': C97,
-  'reti-opening::1::Nxe4@19': C97,
-  'reti-opening::1::Re8@13': C97,
+  'reti-opening::0::d4@13': RT02,
+  'reti-opening::0::Bc5@13': RT03,
+  'reti-opening::0::Be7@15': RT04,
+  'reti-opening::0::Be7@13': RT05,
+  'reti-opening::0::Qc7@15': RT06,
+  'reti-opening::0::e6@9': RT07,
+  'reti-opening::0::Bd6@15': RT08,
+  'reti-opening::0::e6@11': RT09,
+  'reti-opening::0::Nc5@15': RT10,
+  'reti-opening::1::dxc4@13': RT11,
+  'reti-opening::1::b6@13': RT12,
+  'reti-opening::1::a6@13': RT13,
+  'reti-opening::1::c6@9': RT14,
+  'reti-opening::1::h6@13': RT15,
+  'reti-opening::1::Nxe4@19': RT16,
+  'reti-opening::1::Re8@13': RT17,
   'reti-opening::1::dxc4@11': WRETIDXC,
-  'reti-opening::1::Ne4@13': C97,
-  'reti-opening::1::dxc4@9': C98,
-  'reti-opening::2::Be7@9': C98,
-  'reti-opening::2::Bd6@9': C98,
-  'reti-opening::2::Nc6@9': C98,
-  'reti-opening::2::Bc5@9': C98,
-  'reti-opening::2::a6@9': C98,
-  'reti-opening::2::b6@9': C98,
-  'reti-opening::2::c6@9': C98,
+  'reti-opening::1::Ne4@13': RT18,
+  'reti-opening::1::dxc4@9': RT19,
+  'reti-opening::2::Be7@9': RT20,
+  'reti-opening::2::Bd6@9': RT21,
+  'reti-opening::2::Nc6@9': RT22,
+  'reti-opening::2::Bc5@9': RT23,
+  'reti-opening::2::a6@9': RT24,
+  'reti-opening::2::b6@9': RT25,
+  'reti-opening::2::c6@9': RT26,
   'reti-opening::2::Qxd1@13': WRETIQXD,
-  'reti-opening::2::Nc6@11': C98,
-  'reti-opening::2::Nc6@15': C98,
-  'reti-opening::3::dxe4@13': C96,
-  'reti-opening::3::c6@5': C100,
-  'reti-opening::3::d4@13': C96,
-  'reti-opening::3::b6@13': C96,
-  'reti-opening::3::c5@5': C97,
-  'reti-opening::3::Bb7@19': C96,
-  'reti-opening::3::Qc7@19': C96,
-  'reti-opening::3::g6@5': C97,
-  'reti-opening::3::b5@13': C96,
-  'reti-opening::3::Bf5@5': C97,
-  'reti-opening::4::c6@9': C97,
-  'reti-opening::4::dxc4@9': C98,
-  'reti-opening::4::dxc4@7': C98,
-  'reti-opening::4::d4@7': C97,
-  'reti-opening::4::b6@11': C97,
-  'reti-opening::4::dxc4@5': C98,
-  'reti-opening::4::cxd4@19': C97,
-  'reti-opening::4::c5@7': C97,
-  'reti-opening::4::dxc4@19': C98,
-  'reti-opening::4::d4@11': C97,
-  'reti-opening::5::Nf6@11': C99,
-  'reti-opening::5::c6@11': C99,
-  'reti-opening::5::Bf5@11': C99,
-  'reti-opening::5::Bb4@13': C99,
-  'reti-opening::5::Bg4@11': C99,
-  'reti-opening::5::Nf6@13': C99,
-  'reti-opening::5::Bg4@7': C101,
-  'reti-opening::5::e6@11': C99,
-  'reti-opening::5::Be6@11': C99,
-  'reti-opening::5::a6@11': C99,
-  'reti-opening::6::Rc8@17': C97,
-  'reti-opening::6::h6@13': C97,
-  'reti-opening::6::h6@15': C97,
-  'reti-opening::6::Rc8@19': C97,
-  'reti-opening::6::a5@17': C97,
-  'reti-opening::6::Re8@17': C97,
-  'reti-opening::6::dxc4@7': C98,
-  'reti-opening::6::a5@19': C97,
-  'reti-opening::6::Qc7@17': C97,
-  'reti-opening::7::c5@5': C101,
-  'reti-opening::7::f6@5': C101,
-  'reti-opening::7::c6@15': C101,
-  'reti-opening::7::Bg4@5': C101,
-  'reti-opening::7::Bg4@11': C101,
-  'reti-opening::7::g5@5': C101,
-  'reti-opening::7::a5@15': C101,
-  'reti-opening::7::Nf6@5': C101,
-  'reti-opening::7::b6@11': C101,
-  'reti-opening::7::b6@9': C101,
+  'reti-opening::2::Nc6@11': RT27,
+  'reti-opening::2::Nc6@15': RT28,
+  'reti-opening::3::dxe4@13': RT30,
+  'reti-opening::3::c6@5': RT31,
+  'reti-opening::3::d4@13': RT32,
+  'reti-opening::3::b6@13': RT33,
+  'reti-opening::3::c5@5': RT34,
+  'reti-opening::3::Bb7@19': RT35,
+  'reti-opening::3::Qc7@19': RT36,
+  'reti-opening::3::g6@5': RT37,
+  'reti-opening::3::b5@13': RT38,
+  'reti-opening::3::Bf5@5': RT39,
+  'reti-opening::4::c6@9': RT40,
+  'reti-opening::4::dxc4@9': RT41,
+  'reti-opening::4::dxc4@7': RT42,
+  'reti-opening::4::d4@7': RT43,
+  'reti-opening::4::b6@11': RT44,
+  'reti-opening::4::dxc4@5': RT45,
+  'reti-opening::4::cxd4@19': RT46,
+  'reti-opening::4::c5@7': RT47,
+  'reti-opening::4::dxc4@19': RT48,
+  'reti-opening::4::d4@11': RT49,
+  'reti-opening::5::Nf6@11': RT50,
+  'reti-opening::5::c6@11': RT51,
+  'reti-opening::5::Bf5@11': RT52,
+  'reti-opening::5::Bb4@13': RT53,
+  'reti-opening::5::Bg4@11': RT54,
+  'reti-opening::5::Nf6@13': RT55,
+  'reti-opening::5::Bg4@7': RT56,
+  'reti-opening::5::e6@11': RT57,
+  'reti-opening::5::Be6@11': RT58,
+  'reti-opening::5::a6@11': RT59,
+  'reti-opening::6::Rc8@17': RT61,
+  'reti-opening::6::h6@13': RT62,
+  'reti-opening::6::h6@15': RT63,
+  'reti-opening::6::Rc8@19': RT64,
+  'reti-opening::6::a5@17': RT65,
+  'reti-opening::6::Re8@17': RT66,
+  'reti-opening::6::dxc4@7': RT67,
+  'reti-opening::6::a5@19': RT68,
+  'reti-opening::6::Qc7@17': RT69,
+  'reti-opening::7::c5@5': RT70,
+  'reti-opening::7::f6@5': RT71,
+  'reti-opening::7::c6@15': RT72,
+  'reti-opening::7::Bg4@5': RT73,
+  'reti-opening::7::Bg4@11': RT74,
+  'reti-opening::7::g5@5': RT75,
+  'reti-opening::7::a5@15': RT76,
+  'reti-opening::7::Nf6@5': RT77,
+  'reti-opening::7::b6@11': RT78,
+  'reti-opening::7::b6@9': RT79,
   // ── kings-indian-attack ──
   'kings-indian-attack::0::O-O@13': C102,
   'kings-indian-attack::0::Bc5@9': C102,
