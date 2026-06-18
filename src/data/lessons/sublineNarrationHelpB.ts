@@ -121,7 +121,31 @@ const STAUNTON_NC6: SN = {
   sources: ['concept:pos-space', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
 };
 
+// ── anti-Englund (student WHITE) — the 1…e5 gambit refuted by a big centre.
+// Shared var-0 spine: d4 e5 dxe5 Nc6 Nf3 Qe7 Nc3 Nxe5 e4  (Black's move 9+ varies)
+const ANTI_ENGLUND: SN = {
+  intro: {
+    say: "1…e5 — the Englund Gambit, an unsound bid for cheap tricks. You grabbed the pawn with dxe5 and now just develop classically: Nf3, Nc3, and a broad e4-centre. Black scrambles to win the pawn back, but his queen is stranded on e7 and his pieces are loose — whatever he throws at you here, you come out with the centre, the development lead, and a clearly better game.",
+    sayShort: 'Englund refuted — build the e4 centre.',
+  },
+  beats: [
+    { atMove: 8, say: "e4 — the refutation in a single move. Black has clawed the pawn back, but you've planted a broad centre with the knight on c3 behind it and a clean lead in development, while his queen still languishes on e7. The Englund's tricks are spent; you are simply better.", highlights: [H('e4', KEY), H('e7', SOFT)] },
+  ],
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
+};
+
 export const SUBLINE_NARRATION_HELP_B: Record<string, SN> = {
+  // anti-Englund (var-0 e4-centre cluster)
+  'anti-englund::0::Nxf3+@9': ANTI_ENGLUND,
+  'anti-englund::0::Nf6@9': ANTI_ENGLUND,
+  'anti-englund::0::d6@9': ANTI_ENGLUND,
+  'anti-englund::0::Nc6@9': ANTI_ENGLUND,
+  'anti-englund::0::Nf6@11': ANTI_ENGLUND,
+  'anti-englund::0::d6@11': ANTI_ENGLUND,
+  'anti-englund::0::d5@11': ANTI_ENGLUND,
+  'anti-englund::0::Nxf3+@11': ANTI_ENGLUND,
+  'anti-englund::0::g6@11': ANTI_ENGLUND,
+  'anti-englund::0::h6@11': ANTI_ENGLUND,
   // anti-Budapest
   'anti-budapest::0::g5@7': AB_G5,
   'anti-budapest::2::g5@7': AB_G5,
