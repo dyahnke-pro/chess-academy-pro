@@ -688,18 +688,23 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   // ─── Game screen ──────────────────────────────────────────────────────────
   return (
     <div className="relative flex flex-col flex-1 overflow-hidden" data-testid="opening-play-mode">
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-theme-border">
-        <div className="flex items-center gap-3">
-          <button onClick={onExit} className="p-1.5 rounded-lg hover:bg-theme-surface">
+      {/* Header — wraps on narrow phones so the controls (esp. the coach
+          Chat toggle) are never clipped off the right edge by the surface's
+          `overflow-hidden`. The left title truncates to yield space; when
+          the toolbox can't fit beside it, the whole right cluster drops to a
+          second, right-aligned line instead of overflowing (David 2026-06-18
+          "no chat function under play"). */}
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-3 border-b border-theme-border">
+        <div className="flex items-center gap-3 min-w-0">
+          <button onClick={onExit} className="p-1.5 rounded-lg hover:bg-theme-surface shrink-0">
             <ArrowLeft size={18} className="text-theme-text" />
           </button>
-          <div>
+          <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <Swords size={14} className="text-theme-accent" />
-              <p className="text-sm font-semibold text-theme-text">{displayName}</p>
+              <Swords size={14} className="text-theme-accent shrink-0" />
+              <p className="text-sm font-semibold text-theme-text truncate">{displayName}</p>
             </div>
-            <p className="text-xs text-theme-text-muted">
+            <p className="text-xs text-theme-text-muted truncate">
               {playPhase === 'pregame' && 'Starting...'}
               {playPhase === 'opening' && `Opening phase: move ${Math.ceil(moveCountRef.current / 2)} / ${Math.ceil(openingPhaseLength / 2)}`}
               {playPhase === 'middlegame' && `~${targetStrength} ELO opponent`}
@@ -707,7 +712,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0 ml-auto flex-wrap justify-end">
           <AnalysisToggles
             showEvalBar={showEvalBarEffective}
             onToggleEvalBar={() => setEvalBarOverride((prev) => !(prev ?? settings.showEvalBar))}
@@ -852,7 +857,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
           Play lock. Q&A + arrows only (no move-mutation handlers). */}
       {chatOpen && (
         <div
-          className="absolute inset-x-0 bottom-0 z-30 flex flex-col bg-theme-bg border-t border-theme-border rounded-t-2xl shadow-2xl"
+          className="absolute inset-x-0 bottom-0 z-40 flex flex-col bg-theme-bg border-t border-theme-border rounded-t-2xl shadow-2xl"
           style={{ height: 'min(70%, 28rem)' }}
           data-testid="opening-play-chat"
         >

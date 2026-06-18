@@ -457,6 +457,13 @@ export function ModelGameViewer({
           )}
         </>
       }
+      chat={{
+        fen: currentFen,
+        history: moves.slice(0, currentIndex + 1).map((m) => m.san),
+        pgn: moves.slice(0, currentIndex + 1).map((m) => m.san).join(' '),
+        playerColor: boardOrientation,
+      }}
+      onChatOpenChange={(open) => { if (open && isAutoPlaying) setIsAutoPlaying(false); }}
     />
   );
 }

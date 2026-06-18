@@ -99,6 +99,13 @@ vi.mock('../../services/pieceSetService', () => ({
   PIECE_SETS: [],
 }));
 
+// LessonScaffold now mounts the inline coach chat (GameChatPanel) — a heavy,
+// Router-dependent component. Stub it so these player-logic tests stay focused
+// and don't need a Router / the full coach stack.
+vi.mock('../Coach/GameChatPanel', () => ({
+  GameChatPanel: () => <div data-testid="game-chat-panel" />,
+}));
+
 // ─── Helpers ──────────────────────────────────────────────────────────────
 
 // Use a real chess position where d4 is legal for White

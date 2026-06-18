@@ -729,6 +729,13 @@ export function PlayableLinePlayer({
           canNext: demoMoveIndex < line.moves.length - 1,
           playTestId: 'demo-play-pause',
         }}
+        chat={{
+          fen: demoFen,
+          history: line.moves.slice(0, Math.max(0, demoMoveIndex + 1)),
+          pgn: line.moves.slice(0, Math.max(0, demoMoveIndex + 1)).join(' '),
+          playerColor: boardOrientation,
+        }}
+        onChatOpenChange={(open) => { if (open && isPlaying) togglePlayPause(); }}
       />
     );
   }
@@ -874,6 +881,12 @@ export function PlayableLinePlayer({
           )}
         </>
       }
+      chat={{
+        fen: memoryFen,
+        history: line.moves.slice(0, memoryMoveIndex),
+        pgn: line.moves.slice(0, memoryMoveIndex).join(' '),
+        playerColor: boardOrientation,
+      }}
     />
   );
 }

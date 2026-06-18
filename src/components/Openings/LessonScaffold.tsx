@@ -1,6 +1,8 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ChevronLeft, ChevronRight, Play, Pause } from 'lucide-react';
+import { ArrowLeft, ChevronLeft, ChevronRight, Play, Pause, MessageCircle, X } from 'lucide-react';
+import { GameChatPanel } from '../Coach/GameChatPanel';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 /**
  * LessonScaffold — the ONE shared chrome for every Watch/Learn surface on the
@@ -23,6 +25,24 @@ import { ArrowLeft, ChevronLeft, ChevronRight, Play, Pause } from 'lucide-react'
 
 export type ProgressTone = 'accent' | 'green';
 export type NarrationTone = 'default' | 'warning' | 'success' | 'accent';
+
+/**
+ * Grounding context for the inline coach chat (David 2026-06-18: "add a chat
+ * function to all WLPP pages … use the same structure as Learn / Play with
+ * Coach"). The caller passes its CURRENT displayed position; the scaffold
+ * derives turn / move number and mounts the SAME `GameChatPanel` that
+ * `/coach/teach` + `/coach/play` use — Q&A grounded on the live board (no
+ * move-mutation handlers, so the lesson board is never hijacked). */
+export interface LessonChatContext {
+  /** The position currently shown on the board (FEN). */
+  fen: string;
+  /** Full PGN / move text for grounding. Falls back to `history.join(' ')`. */
+  pgn?: string;
+  /** SAN move history up to the current position. */
+  history?: string[];
+  /** The side the student plays / board orientation. Defaults to 'white'. */
+  playerColor?: 'white' | 'black';
+}
 
 interface LessonScaffoldControls {
   onPrev?: () => void;
@@ -65,6 +85,13 @@ interface LessonScaffoldProps {
   customControls?: ReactNode;
   /** Optional CTAs under the controls. */
   footer?: ReactNode;
+  /** When set, mounts the inline coach chat — a persistent right-hand column
+   *  at md+ (same two-column shape as Learn/Play with Coach) and a header
+   *  Chat button → bottom-sheet drawer on mobile. */
+  chat?: LessonChatContext;
+  /** Fired when the mobile chat drawer opens / closes, so an auto-playing
+   *  lesson can pause while the student is asking a question. */
+  onChatOpenChange?: (open: boolean) => void;
   testId?: string;
   /** Back-compat test-id overrides so existing tests + prod audits keep
    *  resolving the same elements after the chrome was unified. */
@@ -185,14 +212,50 @@ export function LessonScaffold({
   controls,
   customControls,
   footer,
+  chat,
+  onChatOpenChange,
   testId = 'lesson-scaffold',
   backTestId = 'lesson-back',
   titleTestId,
   narrationTestId = 'lesson-narration',
 }: LessonScaffoldProps): JSX.Element {
   const hasControls = Boolean(customControls) || Boolean(controls);
+  const isMobile = useIsMobile();
+
+  const [chatOpen, setChatOpen] = useState(false);
+  const toggleChat = (): void => {
+    setChatOpen((prev) => {
+      const next = !prev;
+      onChatOpenChange?.(next);
+      return next;
+    });
+  };
+
+  /** The shared chat panel — the SAME GameChatPanel /coach/teach + /coach/play
+   *  mount, grounded on the lesson's current position. Q&A + arrows only (no
+   *  move-mutation handlers), so the lesson board is never hijacked. */
+  const chatPanel = chat ? (
+    <GameChatPanel
+      fen={chat.fen}
+      getLiveFen={() => chat.fen}
+      pgn={chat.pgn ?? (chat.history ?? []).join(' ')}
+      moveNumber={chat.history?.length ?? 0}
+      playerColor={chat.playerColor ?? 'white'}
+      turn={chat.fen.split(' ')[1] === 'b' ? 'b' : 'w'}
+      isGameOver={false}
+      gameResult=""
+      history={chat.history}
+      hideHeader
+      className="h-full"
+    />
+  ) : null;
+
   return (
-    <div className="flex flex-col flex-1 min-h-0 overflow-hidden" data-testid={testId}>
+    <div className="relative flex flex-col md:flex-row flex-1 min-h-0 overflow-hidden" data-testid={testId}>
+      {/* LEFT: the lesson itself. When the chat column is present it takes 3/5
+          of the width at md+ (same split as Learn/Play with Coach); otherwise
+          it fills the surface. */}
+      <div className={`flex flex-col flex-1 min-h-0 overflow-hidden ${chat ? 'md:w-3/5 md:flex-none' : ''}`}>
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-theme-border">
         <div className="flex items-center gap-3 min-w-0">
@@ -210,7 +273,23 @@ export function LessonScaffold({
             {subtitle && <p className="text-xs text-theme-text-muted truncate">{subtitle}</p>}
           </div>
         </div>
-        {headerAction && <div className="flex items-center gap-2 shrink-0">{headerAction}</div>}
+        <div className="flex items-center gap-2 shrink-0">
+          {headerAction}
+          {/* Inline Chat button — mobile only (desktop shows the persistent
+              chat column). Opens the bottom-sheet GameChatPanel. */}
+          {chat && (
+            <button
+              type="button"
+              onClick={toggleChat}
+              className={`md:hidden p-2 rounded-lg hover:bg-theme-surface ${chatOpen ? 'text-theme-accent' : 'text-theme-text-muted'}`}
+              aria-label={chatOpen ? 'Close coach chat' : 'Ask the coach'}
+              aria-pressed={chatOpen}
+              data-testid="lesson-chat-toggle"
+            >
+              <MessageCircle size={18} />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Progress */}
@@ -223,21 +302,35 @@ export function LessonScaffold({
         />
       )}
 
-      {/* Board */}
-      <div className="flex-1 min-h-0 flex flex-col items-center justify-start pt-2 px-2 py-2">
-        <div className="w-full md:max-w-[420px]">{board}</div>
-        {boardExtra && <div className="w-full md:max-w-[420px] mt-2">{boardExtra}</div>}
+      {/* Board — height-capped so a square board never overflows its flex
+          region and paints OVER the narration card on short viewports
+          (David 2026-06-18 "text behind the board"). react-chessboard sizes
+          itself from its container WIDTH and renders square, so on a short
+          phone a `w-full` board's height exceeds the shrunken flex region and
+          spills onto the next sibling. The inner box takes the region's
+          height, derives a square width from it (`aspect-square`), and caps
+          that at the available width / 420px — so the board renders at
+          min(width, height) and always leaves room for the narration +
+          controls below. `overflow-hidden` is a belt-and-suspenders clip. */}
+      <div className="flex-1 min-h-0 flex flex-col items-center justify-start gap-2 pt-2 px-2 py-2 overflow-hidden">
+        <div className="flex-1 min-h-0 w-full flex items-start justify-center">
+          <div className="h-full aspect-square max-w-full md:max-w-[420px]">{board}</div>
+        </div>
+        {boardExtra && <div className="w-full md:max-w-[420px] shrink-0">{boardExtra}</div>}
       </div>
 
       {/* Narration */}
       {(narrationRaw || narration) && (
-        <div className="px-4 pb-2 min-h-[60px]">
+        <div className="px-4 pb-2 min-h-[60px] shrink-0">
           {narrationRaw ?? (
             <div
               className={`rounded-2xl p-3 ${NARRATION_TONE_CLASS[narrationTone]}`}
               data-testid={narrationTestId}
             >
-              <p className="text-sm text-theme-text leading-relaxed">{narration}</p>
+              {/* Cap the prose height so a long Watch beat (60-120 words)
+                  scrolls internally instead of pushing the controls off a
+                  short screen — full text stays readable + is spoken. */}
+              <p className="text-sm text-theme-text leading-relaxed max-h-[26vh] overflow-y-auto">{narration}</p>
             </div>
           )}
         </div>
@@ -245,14 +338,57 @@ export function LessonScaffold({
 
       {/* Controls */}
       {hasControls && (
-        <div className="px-4 py-3 pb-[calc(4.75rem+env(safe-area-inset-bottom,0px))] md:pb-4">
+        <div className="px-4 py-3 pb-[calc(4.75rem+env(safe-area-inset-bottom,0px))] md:pb-4 shrink-0">
           {customControls ?? <LessonControls {...controls} />}
         </div>
       )}
 
       {/* Footer */}
       {footer && (
-        <div className="px-4 pb-[calc(4.75rem+env(safe-area-inset-bottom,0px))] md:pb-4">{footer}</div>
+        <div className="px-4 pb-[calc(4.75rem+env(safe-area-inset-bottom,0px))] md:pb-4 shrink-0">{footer}</div>
+      )}
+      </div>
+      {/* end LEFT column */}
+
+      {/* RIGHT: persistent chat column at md+ (the same board+chat split as
+          Learn/Play with Coach). Mounted only on desktop so the mobile drawer
+          below never double-mounts GameChatPanel. */}
+      {chat && !isMobile && (
+        <div className="flex flex-col md:w-2/5 min-h-0 border-l border-theme-border bg-theme-bg" data-testid="lesson-chat-column">
+          <div className="flex items-center gap-2 px-4 py-3 border-b border-theme-border shrink-0">
+            <MessageCircle size={16} className="text-theme-accent" />
+            <span className="text-sm font-semibold text-theme-text">Ask the coach</span>
+          </div>
+          <div className="flex-1 min-h-0">{chatPanel}</div>
+        </div>
+      )}
+
+      {/* MOBILE: the inline Chat button opens GameChatPanel as a bottom sheet
+          (above the bottom nav via z-40), so the student can ask at any time
+          without losing the single-screen lesson. */}
+      {chat && isMobile && chatOpen && (
+        <div
+          className="absolute inset-x-0 bottom-0 z-40 flex flex-col bg-theme-bg border-t border-theme-border rounded-t-2xl shadow-2xl"
+          style={{ height: 'min(72%, 30rem)' }}
+          data-testid="lesson-chat"
+        >
+          <div className="flex items-center justify-between px-4 py-2 border-b border-theme-border shrink-0">
+            <div className="flex items-center gap-2">
+              <MessageCircle size={16} className="text-theme-accent" />
+              <span className="text-sm font-semibold text-theme-text">Ask the coach</span>
+            </div>
+            <button
+              type="button"
+              onClick={toggleChat}
+              className="p-1.5 rounded-lg hover:bg-theme-surface text-theme-text-muted"
+              aria-label="Close coach chat"
+              data-testid="lesson-chat-close"
+            >
+              <X size={18} />
+            </button>
+          </div>
+          <div className="flex-1 min-h-0">{chatPanel}</div>
+        </div>
       )}
     </div>
   );

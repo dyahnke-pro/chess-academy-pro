@@ -11,6 +11,12 @@ vi.mock('react-chessboard', () => ({
   ),
 }));
 
+// LessonScaffold now mounts the inline coach chat (GameChatPanel), which needs
+// a Router + the coach stack. Stub it so these viewer tests stay focused.
+vi.mock('../Coach/GameChatPanel', () => ({
+  GameChatPanel: () => <div data-testid="game-chat-panel" />,
+}));
+
 function renderViewer(
   overrides?: Partial<Parameters<typeof ModelGameViewer>[0]>,
 ): ReturnType<typeof render> {
