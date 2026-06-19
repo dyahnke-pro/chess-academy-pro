@@ -828,7 +828,12 @@ export function OpeningDetailPage(): JSX.Element {
           line={sublineLine}
           boardOrientation={opening.color}
           mode="watch"
-          onComplete={handleExit}
+          // Don't bounce back when the walkthrough ends — show the "Line
+          // Mastered!" screen so the student can CONTINUE PLAYING the line out
+          // (→ coach locked to it) or exit by choice (David 2026-06-19:
+          // "it just bounced me back… continue playing out the lines").
+          onComplete={() => undefined}
+          onContinuePlaying={() => setViewMode('subline-play')}
           onExit={handleExit}
         />
       );

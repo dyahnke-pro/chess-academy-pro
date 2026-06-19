@@ -29,7 +29,13 @@ export function SublinePanel({ opening, lineIndex, onWatch, onPlay }: {
 }): JSX.Element | null {
   const sublines = useMemo<CourseSubline[]>(() => {
     const course = buildCourse(opening);
-    return course.chapters.find((c) => c.lineIndex === lineIndex)?.sublines ?? [];
+    const list = course.chapters.find((c) => c.lineIndex === lineIndex)?.sublines ?? [];
+    // Most-common-first: sort by the displayed frequency (%) descending so the
+    // numbers read top-to-bottom (David 2026-06-19: "what order are these in?").
+    // The raw list is ranked by absolute game count across different plies, which
+    // left the per-node % column non-monotonic and looking random. Tie-break on
+    // absolute games.
+    return [...list].sort((a, b) => b.pct - a.pct || b.games - a.games);
   }, [opening, lineIndex]);
   const [expanded, setExpanded] = useState(false);
 
