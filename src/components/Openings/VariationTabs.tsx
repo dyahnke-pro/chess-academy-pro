@@ -24,7 +24,7 @@ export function VariationTabs({ tabs, selectedIndex, onSelect, mainLabel = 'Main
   if (tabs.length === 0) return null;
 
   return (
-    <div className="flex gap-2 overflow-x-auto pb-1 mb-4 -mx-1 px-1" role="tablist" data-testid="variation-tabs">
+    <div className="flex shrink-0 gap-2 overflow-x-auto pb-1 mb-4 -mx-1 px-1" role="tablist" data-testid="variation-tabs">
       <button
         type="button"
         role="tab"
