@@ -41,7 +41,7 @@ const GAMBIT: LessonScript = {
   orientation: 'white',
   beats: [
     b({ id: 'g1', moves: 'e4 e5 Nc3 Nf6 f4',
-      say: "Welcome to the Vienna Gambit, the opening's loudest weapon. After Nc3 Nf6 White does what Edward Lasker called the most natural reply at the side of the board: he plays f4, hurling a pawn at the centre to lure the e5-pawn away. Lasker wrote in *Chess Strategy*: 'It would seem a good plan to lure that pawn away, and this is rendered feasible by playing P-KB4 when he has a pawn on K4.' That is exactly the move you just saw. The pawn looks like a gift. It isn't.",
+      say: "Welcome to the Vienna Gambit, the opening's loudest weapon. After Nc3 Nf6, White rips the centre open with f4, throwing the f-pawn straight at Black's e5-pawn to drag it off its central post. Edward Lasker laid out the logic in *Chess Strategy*: with a pawn already sitting on e4, the f4 break is the natural way to lure that e5-pawn away. That is exactly the move you just saw. The pawn looks like a gift — Black can snatch it with exf4 — but it isn't.",
       sayShort: "f4 — Lasker's lure, pull e5 off-centre.",
       highlights: [H('f4', KEY), H('e5', KEY)] }),
     b({ id: 'g2', moves: 'e4 e5 Nc3 Nf6 f4 d5',
@@ -49,7 +49,7 @@ const GAMBIT: LessonScript = {
       sayShort: "d5! — Lasker's counterstrike, hit the centre back.",
       highlights: [H('d5', KEY), H('e4', KEY), H('f4', SOFT)] }),
     b({ id: 'g3', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4',
-      say: "Now Lasker's exact passage from the book describes the next four plies: 'In answer to 4. PxKP, Black can play KtxP without having the slightest difficulty with his development.' White captures with fxe5 — taking the gambit on the kingside, opening the f-file — and Black recaptures with Nxe4, the knight grabbing the e4-pawn that f4 originally protected. Pawn structures cracked open, knights racing through the centre, the e4-knight now sits inside White's territory begging to be hit.",
+      say: "Edward Lasker's analysis runs right through this position: he pointed out that after fxe5, Black can recapture with Nxe4 without the slightest trouble in development. That is exactly what happens — fxe5 takes the gambit pawn on the kingside and opens the f-file, and Nxe4 snaps off the e4-pawn that the c3-knight had been guarding. Pawn structures cracked open, knights racing through the centre, and the e4-knight now sits deep in White's territory, begging to be hit.",
       sayShort: "fxe5 Nxe4 — f-file opens, knight grabs e4.",
       highlights: [H('e4', KEY), H('e5', KEY), H('f4', SOFT)] }),
     b({ id: 'g4', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3',

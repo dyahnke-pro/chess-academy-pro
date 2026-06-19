@@ -136,7 +136,7 @@ export const VIENNA_GAME_LESSON: LessonScript = {
       id: 'branch-gambit',
       moves: ['e4', 'e5', 'Nc3', 'Nf6', 'f4'],
       highlights: [{ square: 'f4', color: KEY }, { square: 'e5', color: SOFT }],
-      say: "Now — Black doesn't have to walk into the slow squeeze. He can avoid the Classical entirely by playing more carefully. So White has a second weapon, the one that gives the opening its violent reputation: f4. Edward Lasker wrote: 'It would seem a good plan to lure that pawn away, and this is rendered feasible by playing P-KB4 when he has a pawn on K4.' That is exactly the Vienna Gambit — f4 strikes at Black's e5-pawn from the side. White doesn't wait for the centre to crack open — he RIPS it open. A completely different chapter, an entire tab of this masterclass, but it begins from the same Nc3 you've already seen.",
+      say: "Now — Black doesn't have to walk into the slow squeeze. He can avoid the Classical entirely by playing more carefully. So White has a second weapon, the one that gives the opening its violent reputation: f4. Edward Lasker wrote: 'It would seem a good plan to lure that pawn away, and this is rendered feasible by playing f4 when he already has a pawn on e4.' That is exactly the Vienna Gambit — f4 strikes at Black's e5-pawn. White doesn't wait for the centre to crack open — he RIPS it open. A completely different chapter, an entire tab of this masterclass, but it begins from the same Nc3 you've already seen.",
       sayShort: 'f4 — the Gambit lure, ripping the centre open.',
     },
     {
