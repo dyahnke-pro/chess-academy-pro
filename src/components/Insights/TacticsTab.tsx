@@ -27,11 +27,14 @@ const TACTIC_LABELS: Record<string, string> = {
 export function TacticsTab({ data }: TacticsTabProps): JSX.Element {
   const navigate = useNavigate();
 
+  // Donut now shows FOUND vs MISSED (David 2026-06-19: "fill in the pie chart a
+  // bit more") — the brilliant/great split plus the red missed slice, so the
+  // ring reads as your tactical-awareness rate at a glance. Center = that rate.
   const foundDonut = [
     { name: 'Brilliant', value: data.tacticsFound.brilliant, color: '#22d3ee' },
     { name: 'Great', value: data.tacticsFound.great, color: 'var(--color-success)' },
+    { name: 'Missed', value: data.foundVsMissed.missed, color: 'var(--color-error)' },
   ];
-  const totalFound = data.tacticsFound.brilliant + data.tacticsFound.great;
 
   const fvmBar = [
     { label: 'Found', value: data.foundVsMissed.found, color: '#22d3ee' },
@@ -41,9 +44,9 @@ export function TacticsTab({ data }: TacticsTabProps): JSX.Element {
   return (
     <div data-testid="tactics-tab">
       {/* Tactics Found */}
-      <Section title="Tactics Found in Games">
+      <Section title="Tactics Found vs Missed">
         <div className="flex items-center gap-5 py-3.5">
-          <InsightsDonutChart data={foundDonut} centerValue={totalFound} centerLabel="Found" />
+          <InsightsDonutChart data={foundDonut} centerValue={`${data.awarenessRate}%`} centerLabel="Found" />
           <div className="flex flex-col gap-1.5 flex-1">
             {foundDonut.map((d) => (
               <div key={d.name} className="flex items-center gap-2 text-xs" style={{ color: 'var(--color-text-muted)' }}>
@@ -102,9 +105,10 @@ export function TacticsTab({ data }: TacticsTabProps): JSX.Element {
         </Section>
       )}
 
-      {/* Found vs Missed */}
+      {/* Found vs Missed — magnitude bar + explicit rate (the donut above
+          shows the same split; this keeps the absolute counts + labeled rate). */}
       {(data.foundVsMissed.found + data.foundVsMissed.missed) > 0 && (
-        <Section title="Tactics Found vs Missed">
+        <Section title="Tactical Awareness">
           <InsightsStackedBar segments={fvmBar} />
           <DataRow label="Tactical awareness rate" value={`${data.awarenessRate}%`} color="#22d3ee" />
         </Section>

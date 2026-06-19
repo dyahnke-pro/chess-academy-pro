@@ -83,7 +83,9 @@ describe('TacticsTab', () => {
     render(<TacticsTab data={buildTacticData()} />);
     expect(screen.getByText('Brilliant')).toBeInTheDocument();
     expect(screen.getByText('Great')).toBeInTheDocument();
-    expect(screen.getByText('Tactics Found in Games')).toBeInTheDocument();
+    // The donut now shows found-vs-missed (Brilliant/Great/Missed slices).
+    expect(screen.getAllByText('Missed').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText('Tactics Found vs Missed')).toBeInTheDocument();
   });
 
   it('shows average per-game stats', () => {
@@ -123,7 +125,8 @@ describe('TacticsTab', () => {
   it('shows awareness rate', () => {
     render(<TacticsTab data={buildTacticData()} />);
     expect(screen.getByText('Tactical awareness rate')).toBeInTheDocument();
-    expect(screen.getByText('77%')).toBeInTheDocument();
+    // Awareness rate now appears in both the donut center and the rate row.
+    expect(screen.getAllByText('77%').length).toBeGreaterThanOrEqual(1);
   });
 
   it('shows strengths card when strengths exist', () => {

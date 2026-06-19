@@ -746,10 +746,23 @@ async function scanFoundTacticsByType(): Promise<Map<TacticType, number>> {
       const ann = game.annotations[i];
       if (ann.color !== color) continue;
       if (ann.classification !== 'brilliant' && ann.classification !== 'great') continue;
-      if (!ann.bestMove) continue;
       const preFen = preMoveFens[i];
-      if (!preFen) continue;
-      const type = detectTacticType(preFen, ann.bestMove);
+      if (!preFen || !ann.san) continue;
+      // The player FOUND the tactic — classify the move they PLAYED (`ann.san`),
+      // NOT `ann.bestMove`. On a brilliant/great move bestMove is null (the
+      // played move already IS the best), so the old `if (!ann.bestMove) continue`
+      // skipped every find → 0 tactic types / 0% in-game recognition despite
+      // hundreds of brilliants (David 2026-06-19). detectTacticType wants UCI, so
+      // resolve the played SAN to from-to via chess.js.
+      let uci: string;
+      try {
+        const probe = new Chess(preFen);
+        const mv = probe.move(ann.san);
+        uci = `${mv.from}${mv.to}${mv.promotion ?? ''}`;
+      } catch {
+        continue; // illegal/unparseable SAN against the reconstructed FEN
+      }
+      const type = detectTacticType(preFen, uci);
       if (type === 'tactical_sequence') continue; // catch-all bucket — skip
       counts.set(type, (counts.get(type) ?? 0) + 1);
     }
@@ -828,10 +841,14 @@ export async function firstTryMasteryAggregate(): Promise<FirstTryMastery> {
   ]);
   const endgameMastered = endgames.filter((e) => e.mastered).length;
   const endgameTotal = endgames.length;
-  const mistakeFirstTry = mistakes.filter(
+  // Denominator is ATTEMPTED mistake puzzles only — a freshly-mined mistake
+  // puzzle that's never been played (attempts === 0) is not a first-try sample.
+  // Counting all of them showed a meaningless "0 of 994" (David 2026-06-19).
+  const attemptedMistakes = mistakes.filter((m) => m.attempts >= 1);
+  const mistakeFirstTry = attemptedMistakes.filter(
     (m) => m.attempts === 1 && m.successes >= 1,
   ).length;
-  const mistakeTotal = mistakes.length;
+  const mistakeTotal = attemptedMistakes.length;
   const total = endgameTotal + mistakeTotal;
   const firstTry = endgameMastered + mistakeFirstTry;
   return {
@@ -864,13 +881,21 @@ export interface TacticTransferRow {
 export async function tacticTransferGap(): Promise<TacticTransferRow[]> {
   const mistakes = await db.mistakePuzzles.toArray();
 
-  // Build puzzle-side accuracy by tactic, using mistakePuzzles as the
-  // available puzzle proxy. attempts === 1 + successes >= 1 = first-try.
-  const puzzleByType = new Map<TacticType, { firstTry: number; total: number }>();
+  // Two distinct per-tactic counts that the old code wrongly conflated:
+  //  • puzzleByType   — ATTEMPTED mistake puzzles (attempts ≥ 1), the only
+  //    honest denominator for puzzle ACCURACY. Counting never-played puzzles
+  //    showed a misleading 0% across every type (David 2026-06-19).
+  //  • missedByType   — ALL mistake puzzles of that type = tactics MISSED in
+  //    games, the denominator for in-game recognition (independent of whether
+  //    the puzzle was later replayed).
+  const puzzleByType = new Map<TacticType, { firstTry: number; attempted: number }>();
+  const missedByType = new Map<TacticType, number>();
   for (const m of mistakes) {
     if (!m.tacticType) continue;
-    const bin = puzzleByType.get(m.tacticType) ?? { firstTry: 0, total: 0 };
-    bin.total++;
+    missedByType.set(m.tacticType, (missedByType.get(m.tacticType) ?? 0) + 1);
+    if (m.attempts < 1) continue;
+    const bin = puzzleByType.get(m.tacticType) ?? { firstTry: 0, attempted: 0 };
+    bin.attempted++;
     if (m.attempts === 1 && m.successes >= 1) bin.firstTry++;
     puzzleByType.set(m.tacticType, bin);
   }
@@ -885,17 +910,18 @@ export async function tacticTransferGap(): Promise<TacticTransferRow[]> {
 
   const types = new Set<TacticType>([
     ...puzzleByType.keys(),
+    ...missedByType.keys(),
     ...foundByType.keys(),
   ]);
   const rows: TacticTransferRow[] = [];
   for (const tt of types) {
     const puzzle = puzzleByType.get(tt);
     const found = foundByType.get(tt) ?? 0;
-    const missedInGames = puzzle?.total ?? 0;          // mistake puzzles = missed-in-games
+    const missedInGames = missedByType.get(tt) ?? 0;   // all mistake puzzles = missed-in-games
     const gameTotal = found + missedInGames;
 
-    const puzzleAccuracyPct = puzzle && puzzle.total > 0
-      ? Math.round((puzzle.firstTry / puzzle.total) * 100)
+    const puzzleAccuracyPct = puzzle && puzzle.attempted > 0
+      ? Math.round((puzzle.firstTry / puzzle.attempted) * 100)
       : null;
     const gameRecognitionPct = gameTotal > 0
       ? Math.round((found / gameTotal) * 100)
@@ -904,7 +930,7 @@ export async function tacticTransferGap(): Promise<TacticTransferRow[]> {
     rows.push({
       tacticType: tt,
       puzzleAccuracyPct,
-      puzzleSamples: puzzle?.total ?? 0,
+      puzzleSamples: puzzle?.attempted ?? 0,
       gameOccurrences: found,
       gameMissedOccurrences: missedInGames,
       gameRecognitionPct,
