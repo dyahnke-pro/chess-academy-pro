@@ -139,6 +139,10 @@ interface GameChatPanelProps {
 
 export interface GameChatPanelHandle {
   injectAssistantMessage: (text: string) => void;
+  /** Send a user message through the grounded coach pipeline, as if typed —
+   *  triggers a real (grounded) coach response. Used by the "Why?" button so
+   *  every Why explanation routes through the same grounded coach. */
+  ask: (text: string) => void;
 }
 
 export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>(
@@ -271,7 +275,13 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     }, [messages, streamingContent]);
 
     // Expose method for parent to inject assistant messages (hints, takeback msgs)
+    // Kept current with handleSend (defined below) so the imperative `ask`
+    // routes through the same grounded send path the textarea uses.
+    const handleSendRef = useRef<((text: string) => Promise<void>) | null>(null);
     useImperativeHandle(ref, () => ({
+      ask(text: string) {
+        void handleSendRef.current?.(text);
+      },
       injectAssistantMessage(text: string) {
         const msg: ChatMessageType = {
           id: `coach-${Date.now()}`,
@@ -1309,6 +1319,9 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps -- 'queueSpeak' is intentionally omitted to avoid recreating the callback every render; tracked for dedicated audit.
     }, [activeProfile, isStreaming, fen, getLiveFen, history, lastMoveBy, isGameOver, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, onPlayMove, onTakeBackMove, onSetBoardPosition, onResetBoard, onQuizUserForMove, onStartWalkthroughForOpening, setMessages, navigate, location, playerColor]);
+
+    // Keep the imperative `ask` routed to the live handleSend.
+    useEffect(() => { handleSendRef.current = handleSend; }, [handleSend]);
 
     // Auto-send initial prompt (from post-game practice bridge or search bar)
     useEffect(() => {

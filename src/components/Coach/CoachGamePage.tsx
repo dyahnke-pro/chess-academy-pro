@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, Lightbulb, AlertTriangle, GraduationCap, Compass, RotateCcw, Volume2, MessageCircle, Timer } from 'lucide-react';
+import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, Lightbulb, AlertTriangle, GraduationCap, Compass, RotateCcw, Volume2, MessageCircle, Timer, HelpCircle } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Chess, type Color } from 'chess.js';
 import { safeChessFromFen } from '../../services/chessSafe';
@@ -4845,6 +4845,21 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                 onRequestHint={handleHint}
                 disabled={isCoachThinking || hintState.isAnalyzing}
               />
+              {/* Why? — explains why the best move is best (distinct from Hint,
+                  which shows it). Routes through the same grounded coach. David
+                  2026-06-19: "boards need both — one shows the best move, the
+                  other explains why." */}
+              <button
+                type="button"
+                onClick={() => gameChatRef.current?.ask("What's the strongest move for me in this exact position, and why is it the best? Explain the key idea and why the natural alternatives are worse.")}
+                disabled={isCoachThinking}
+                className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-cyan-500/40 text-sm font-medium text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200"
+                data-testid="why-button"
+                aria-label="Why is the best move best?"
+              >
+                <HelpCircle size={16} />
+                <span>Why?</span>
+              </button>
               <button
                 onClick={handleTakeback}
                 disabled={gameState.moves.length === 0}

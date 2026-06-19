@@ -8,7 +8,7 @@ import { usePracticePosition } from '../../hooks/usePracticePosition';
 import { logAppAudit } from '../../services/appAuditor';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { MobileChatDrawer } from './MobileChatDrawer';
-import { GameChatPanel } from './GameChatPanel';
+import { GameChatPanel, type GameChatPanelHandle } from './GameChatPanel';
 import type { BoardAnnotationCommand, ChatMessage } from '../../types';
 
 const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -59,7 +59,7 @@ export function GlobalCoachDrawer(): JSX.Element | null {
 
   // Inject coach messages into the chat panel (reserved for future use by
   // other annotation types; keep the ref even if no current caller uses it).
-  const chatRef = useRef<{ injectAssistantMessage: (text: string) => void } | null>(null);
+  const chatRef = useRef<GameChatPanelHandle | null>(null);
 
   const handleClose = useCallback(() => {
     void logAppAudit({
