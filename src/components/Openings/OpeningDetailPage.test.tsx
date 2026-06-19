@@ -177,7 +177,10 @@ describe('OpeningDetailPage', () => {
     renderWithRoute();
     await waitFor(() => {
       expect(screen.getByText('Overview')).toBeInTheDocument();
-      expect(screen.getByText('A flexible opening that delays d4.')).toBeInTheDocument();
+      // The overview text now also appears as the main-line chapter summary in
+      // the course syllabus (the Academy-style chapter map), so it can render in
+      // more than one place — assert the Overview panel content is present.
+      expect(screen.getAllByText('A flexible opening that delays d4.').length).toBeGreaterThan(0);
     });
   });
 
