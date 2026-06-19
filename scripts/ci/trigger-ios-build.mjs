@@ -52,10 +52,40 @@ async function setWorkflowBranch(pattern) {
   return r.status < 400;
 }
 
+// Resolve the scmGitReference id for the `main` BRANCH so we can name the branch
+// EXPLICITLY in the ciBuildRuns POST (Apple's documented path) instead of relying
+// on the mutated workflow branch-condition. The implicit approach left the build
+// dependent on workflow state a cancelled run could corrupt; an explicit
+// sourceBranchOrTag sidesteps that. Returns null on any failure so the caller
+// falls back to the implicit POST (never makes a working path worse).
+async function resolveMainGitRef() {
+  try {
+    const repos = await api('GET', `/v1/ciProducts/${CI_PRODUCT}/primaryRepositories?limit=10`);
+    const repoId = repos.j.data?.[0]?.id;
+    if (!repoId) { console.error('::warning::no primary repository for ciProduct', JSON.stringify(repos.j).slice(0, 200)); return null; }
+    let path = `/v1/scmRepositories/${repoId}/gitReferences?limit=200`;
+    for (let page = 0; page < 5 && path; page += 1) {
+      const refs = await api('GET', path);
+      const hit = (refs.j.data || []).find((x) => x.attributes?.kind === 'BRANCH' && x.attributes?.name === 'main');
+      if (hit) { console.log(`resolved main gitReference ${hit.id} (repo ${repoId})`); return hit.id; }
+      const next = refs.j.links?.next;
+      path = next ? next.replace('https://api.appstoreconnect.apple.com', '') : null;
+    }
+    console.error('::warning::no BRANCH gitReference named main found');
+    return null;
+  } catch (e) { console.error('::warning::resolveMainGitRef failed:', String(e).slice(0, 200)); return null; }
+}
+
 const main = async () => {
   // Associate main so the manual build can be created, then disassociate
   // immediately after so no future push auto-builds.
   await setWorkflowBranch('main');
+  // Name the branch explicitly when we can (preferred); fall back to the
+  // workflow's branch condition when the reference can't be resolved.
+  const gitRefId = await resolveMainGitRef();
+  const relationships = { workflow: { data: { type: 'ciWorkflows', id: WORKFLOW } } };
+  if (gitRefId) relationships.sourceBranchOrTag = { data: { type: 'scmGitReferences', id: gitRefId } };
+  console.log(`build trigger: ${gitRefId ? 'explicit sourceBranchOrTag=main' : 'implicit (workflow branch condition)'}`);
   // Apple's POST /v1/ciBuildRuns intermittently returns a 500 UNEXPECTED_ERROR
   // (documented transient server bug — retrying the IDENTICAL request usually
   // succeeds). Previously a single 500 hard-failed the whole build; on a night
@@ -63,7 +93,7 @@ const main = async () => {
   // 429) with exponential backoff; a 4xx is a real client error, fail fast.
   let trig;
   for (let attempt = 1; attempt <= 6; attempt += 1) {
-    trig = await api('POST', '/v1/ciBuildRuns', { data: { type: 'ciBuildRuns', relationships: { workflow: { data: { type: 'ciWorkflows', id: WORKFLOW } } } } });
+    trig = await api('POST', '/v1/ciBuildRuns', { data: { type: 'ciBuildRuns', relationships } });
     if (trig.status < 400) break;
     if (trig.status < 500 && trig.status !== 429) break; // real client error — don't retry
     if (attempt === 6) break;
@@ -72,7 +102,9 @@ const main = async () => {
     await sleep(waitMs);
   }
   await setWorkflowBranch(IDLE_BRANCH_PATTERN);
-  if (trig.status >= 400) { console.error('::error::trigger failed after retries', JSON.stringify(trig.j).slice(0, 300)); process.exit(1); }
+  // Full (untruncated) error on final failure — the detail/meta may name the
+  // real cause (workflow/scm/signing) instead of the generic "UNEXPECTED_ERROR".
+  if (trig.status >= 400) { console.error(`::error::trigger failed after retries (status ${trig.status}):`, JSON.stringify(trig.j)); process.exit(1); }
   const runId = trig.j.data?.id;
   const number = trig.j.data?.attributes?.number;
   console.log(`triggered build run #${number} (${runId})`);
