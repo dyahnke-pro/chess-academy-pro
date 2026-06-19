@@ -10,6 +10,7 @@ import { SUBLINE_NARRATION_HELP_A2 } from './sublineNarrationHelpA2';
 import { SUBLINE_NARRATION_HELP_C } from './sublineNarrationHelpC';
 import { SUBLINE_NARRATION_HELP_D } from './sublineNarrationHelpD';
 import { SUBLINE_NARRATION_HELP_E } from './sublineNarrationHelpE';
+import { SUBLINE_NARRATION_HELP_F } from './sublineNarrationHelpF';
 import { SUBLINE_NARRATION_FIXES } from './sublineNarrationFixes';
 
 // HAND-AUTHORED subline narration (David 2026-06-17: "these are hand authored").
@@ -548,9 +549,12 @@ const MERGED_NARRATION: Record<string, SublineNarration> = {
   ...SUBLINE_NARRATION_HELP_C,
   ...SUBLINE_NARRATION_HELP_D,
   ...SUBLINE_NARRATION_HELP_E,
-  // Soundness-fix overrides — spread LAST so corrected, board-true intros win
-  // over entries whose moves were re-walked for soundness (David 2026-06-18).
+  // Soundness-fix overrides — spread before HELP_F so HELP_F's FULL (intro +
+  // board-verified beats) versions supersede the older intro-only soundness
+  // stopgaps for the 6 re-walked lines (Stafford/Pirc/Nimzo/QGD/Slav) that
+  // HELP_F now covers completely against the current move data (David 2026-06-19).
   ...SUBLINE_NARRATION_FIXES,
+  ...SUBLINE_NARRATION_HELP_F,
 };
 
 /** Hand-authored narration for a subline, or null to use the honest baseline. */
