@@ -51,7 +51,7 @@ const GAMBIT: LessonScript = {
     b({ id: 'g3', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4',
       say: "Edward Lasker's analysis runs right through this position: he pointed out that after fxe5, Black can recapture with Nxe4 without the slightest trouble in development. That is exactly what happens — fxe5 takes the gambit pawn on the kingside and opens the f-file, and Nxe4 snaps off the e4-pawn that the c3-knight had been guarding. Pawn structures cracked open, knights racing through the centre, and the e4-knight now sits deep in White's territory, begging to be hit.",
       sayShort: "fxe5 Nxe4 — f-file opens, knight grabs e4.",
-      highlights: [H('e4', KEY), H('e5', KEY), H('f4', SOFT)] }),
+      highlights: [H('e4', KEY), H('e5', KEY), H('c3', SOFT)] }),
     b({ id: 'g4', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3',
       arrows: [A('f3', 'e4', ATK)],
       highlights: [H('f3', KEY), H('e4', KEY), H('d5', SOFT)],
