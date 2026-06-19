@@ -56,9 +56,23 @@ const main = async () => {
   // Associate main so the manual build can be created, then disassociate
   // immediately after so no future push auto-builds.
   await setWorkflowBranch('main');
-  const trig = await api('POST', '/v1/ciBuildRuns', { data: { type: 'ciBuildRuns', relationships: { workflow: { data: { type: 'ciWorkflows', id: WORKFLOW } } } } });
+  // Apple's POST /v1/ciBuildRuns intermittently returns a 500 UNEXPECTED_ERROR
+  // (documented transient server bug — retrying the IDENTICAL request usually
+  // succeeds). Previously a single 500 hard-failed the whole build; on a night
+  // when Apple's API is flaky that means NO build ever ships. Retry 5xx (and
+  // 429) with exponential backoff; a 4xx is a real client error, fail fast.
+  let trig;
+  for (let attempt = 1; attempt <= 6; attempt += 1) {
+    trig = await api('POST', '/v1/ciBuildRuns', { data: { type: 'ciBuildRuns', relationships: { workflow: { data: { type: 'ciWorkflows', id: WORKFLOW } } } } });
+    if (trig.status < 400) break;
+    if (trig.status < 500 && trig.status !== 429) break; // real client error — don't retry
+    if (attempt === 6) break;
+    const waitMs = Math.min(60000, 5000 * 2 ** (attempt - 1));
+    console.error(`::warning::ciBuildRuns ${trig.status} (attempt ${attempt}/6) — retrying in ${waitMs / 1000}s: ${JSON.stringify(trig.j).slice(0, 150)}`);
+    await sleep(waitMs);
+  }
   await setWorkflowBranch(IDLE_BRANCH_PATTERN);
-  if (trig.status >= 400) { console.error('::error::trigger failed', JSON.stringify(trig.j).slice(0, 300)); process.exit(1); }
+  if (trig.status >= 400) { console.error('::error::trigger failed after retries', JSON.stringify(trig.j).slice(0, 300)); process.exit(1); }
   const runId = trig.j.data?.id;
   const number = trig.j.data?.attributes?.number;
   console.log(`triggered build run #${number} (${runId})`);
