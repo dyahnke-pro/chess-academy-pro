@@ -7,6 +7,7 @@ import { PageHelp } from '../Layout/PageHelp';
 import { PuzzleQuickSettings } from './PuzzleQuickSettings';
 import { THEME_MAP } from '../../services/puzzleService';
 import { useSettings } from '../../hooks/useSettings';
+import { useCollapseOnScroll } from '../../hooks/useCollapseOnScroll';
 import { scaledShadow } from '../../utils/neonColors';
 import { logAppAudit } from '../../services/appAuditor';
 
@@ -90,6 +91,7 @@ export function TacticsPage(): JSX.Element {
   const { settings } = useSettings();
   const gB = settings.glowBrightness;
   const gS = gB / 100;
+  const { collapsed, onScroll } = useCollapseOnScroll();
 
   // Hub-visit signal so the audit stream can attribute downstream
   // surface events to the entry path through /tactics. Mirrors the
@@ -132,39 +134,54 @@ export function TacticsPage(): JSX.Element {
 
   return (
     <div
-      className="flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6"
+      className="flex flex-col flex-1 overflow-hidden"
       style={{ color: 'var(--color-text)' }}
       data-testid="tactics-page"
     >
-      <div className="relative mt-2">
-        <h1 className="text-xl font-bold text-center">
-          Tactical Training
-        </h1>
-        <div className="absolute right-0 top-1/2 -translate-y-1/2">
-          <PageHelp
-            helpId="tactics"
-            title="How Tactics works"
-            steps={[
-              { label: 'Sharpen your eye', body: 'Puzzle training — forks, pins, mates, sacrifices — graded to your level. My Profile shows your strongest and weakest motifs.' },
-              { label: 'Themed sets', body: 'Drill one specific motif, or take a mixed set. Setup Trainer drills the quiet moves that set tactics up.' },
-              { label: 'From your games', body: 'My Mistakes turns the blunders logged from your imported games into puzzles — you re-solve the exact positions you got wrong.' },
-              { label: 'It sticks', body: 'Missed puzzles come back on a schedule so the pattern locks in. Tactics + Weaknesses are the drilling end of the loop.' },
-            ]}
-          />
+      {/* Fixed header — the title collapses on scroll-down (re-expands at the
+          top); the search row stays pinned so it's always reachable. Mirrors
+          the Game Insights collapse (David 2026-06-19). */}
+      <div className="px-4 pt-4 shrink-0 flex flex-col gap-4">
+        <div
+          className={`overflow-hidden transition-all duration-300 ease-out ${collapsed ? 'max-h-0 opacity-0 pointer-events-none' : 'max-h-24 opacity-100 mt-2'}`}
+          aria-hidden={collapsed}
+        >
+          <div className="relative">
+            <h1 className="text-xl font-bold text-center">
+              Tactical Training
+            </h1>
+            <div className="absolute right-0 top-1/2 -translate-y-1/2">
+              <PageHelp
+                helpId="tactics"
+                title="How Tactics works"
+                steps={[
+                  { label: 'Sharpen your eye', body: 'Puzzle training — forks, pins, mates, sacrifices — graded to your level. My Profile shows your strongest and weakest motifs.' },
+                  { label: 'Themed sets', body: 'Drill one specific motif, or take a mixed set. Setup Trainer drills the quiet moves that set tactics up.' },
+                  { label: 'From your games', body: 'My Mistakes turns the blunders logged from your imported games into puzzles — you re-solve the exact positions you got wrong.' },
+                  { label: 'It sticks', body: 'Missed puzzles come back on a schedule so the pattern locks in. Tactics + Weaknesses are the drilling end of the loop.' },
+                ]}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Search — pinned key row */}
+        <div className="max-w-lg mx-auto w-full">
+          <SmartSearchBar placeholder="Search tactics, games, openings..." />
         </div>
       </div>
 
-      {/* Search */}
-      <div className="max-w-lg mx-auto w-full">
-        <SmartSearchBar placeholder="Search tactics, games, openings..." />
-      </div>
+      {/* Scrollable body */}
+      <div
+        className="flex-1 overflow-y-auto px-4 pt-4 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 flex flex-col gap-4"
+        onScroll={onScroll}
+      >
+        {/* Quick settings — collapsible toggles for puzzle UX prefs
+            (timer, tactic name, hints, voice). Closed by default. */}
+        <PuzzleQuickSettings />
 
-      {/* Quick settings — collapsible toggles for puzzle UX prefs
-          (timer, tactic name, hints, voice). Closed by default. */}
-      <PuzzleQuickSettings />
-
-      {/* Grid */}
-      <div className="grid grid-cols-2 gap-3 flex-1 content-start max-w-lg mx-auto w-full">
+        {/* Grid */}
+        <div className="grid grid-cols-2 gap-3 content-start max-w-lg mx-auto w-full">
         {/* Priority row — My Mistakes / My Weaknesses, pinned to the top */}
         {TOP_BUTTONS.map((btn) => {
           const Icon = btn.icon;
@@ -258,6 +275,7 @@ export function TacticsPage(): JSX.Element {
             </button>
           );
         })}
+        </div>
       </div>
     </div>
   );
