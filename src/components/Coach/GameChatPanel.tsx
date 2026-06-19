@@ -1350,6 +1350,10 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           onSend={(text) => void handleSend(text)}
           disabled={isStreaming}
           placeholder={isStreaming ? 'Coach is typing…' : 'Ask your coach…'}
+          // The Game Chat always sits under a board — never grab focus on mount
+          // (that scrolled the page past the board on mobile). David 2026-06-19:
+          // "I don't want the chat to auto populate; board first."
+          autoFocus={false}
         />
 
         {/* Messages — reverse chronological. Newest at top with a

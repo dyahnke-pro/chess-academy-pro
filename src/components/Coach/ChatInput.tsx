@@ -20,9 +20,15 @@ interface ChatInputProps {
    *  its coachChoices state and submits the chosen text through
    *  onSend. */
   onPickCoachChoice?: (choice: string) => void;
+  /** Focus the textarea on mount. Default true (dedicated chat pages want
+   *  the cursor ready). Board-companion chats (the in-game/in-lesson
+   *  GameChatPanel) pass false so the input doesn't grab focus and scroll
+   *  the page past the board on mobile — the board must be seen first
+   *  (David 2026-06-19). Re-focus-after-send is unaffected. */
+  autoFocus?: boolean;
 }
 
-export function ChatInput({ onSend, disabled, placeholder, coachChoices, onPickCoachChoice }: ChatInputProps): JSX.Element {
+export function ChatInput({ onSend, disabled, placeholder, coachChoices, onPickCoachChoice, autoFocus = true }: ChatInputProps): JSX.Element {
   const [text, setText] = useState('');
   const [listening, setListening] = useState(false);
   const [micError, setMicError] = useState<string | null>(null);
@@ -30,10 +36,11 @@ export function ChatInput({ onSend, disabled, placeholder, coachChoices, onPickC
   const voiceSupported = voiceInputService.isSupported();
   const prefersReducedMotion = usePrefersReducedMotion();
 
-  // Auto-focus the textarea on mount
+  // Auto-focus the textarea on mount (dedicated chat pages). Board-companion
+  // chats opt out so the board stays the first thing seen on mobile.
   useEffect(() => {
-    textareaRef.current?.focus();
-  }, []);
+    if (autoFocus) textareaRef.current?.focus();
+  }, [autoFocus]);
 
   // Keep a ref to onSend so the voice handler subscription doesn't
   // re-register on every parent render (which creates a window where

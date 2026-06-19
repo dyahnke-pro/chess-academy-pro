@@ -58,8 +58,8 @@ export function SublinePanel({ opening, lineIndex, onWatch, onPlay }: {
       )}
       {shown.map((s) => (
         <div key={`${s.triggerMove}-${s.atPly}`} className="flex items-center gap-2 text-xs py-0.5">
-          <span className="font-mono font-semibold text-theme-accent shrink-0 w-12">{s.triggerMove}</span>
-          <span className="truncate flex-1" style={{ color: 'var(--color-text-muted)' }}>{subName(s.name)}</span>
+          <span className="font-mono font-semibold text-theme-accent shrink-0 w-14">{s.triggerMove}</span>
+          <span className="truncate flex-1" style={{ color: 'var(--color-text-muted)' }}>{sublineLabel(s.name)}</span>
           <span className="text-theme-text-muted/60 shrink-0 w-9 text-right">{s.pct}%</span>
           <button
             type="button"
@@ -95,8 +95,19 @@ export function SublinePanel({ opening, lineIndex, onWatch, onPlay }: {
   );
 }
 
-/** The specific tail of an ECO name ("…: Advance Variation, Tal" → "Advance
- *  Variation, Tal"), matching the Academy course presentation. */
-function subName(name: string): string {
-  return name.includes(':') ? name.split(':').slice(1).join(':').trim() : name;
+/**
+ * The DISTINCTIVE sub-variation name only — drop the redundant opening + parent-
+ * variation prefix, keep the most specific named segment (David 2026-06-19: the
+ * full ECO name like "Vienna Game: Vienna Gambit, Breyer Variation" was redundant
+ * and got cut off). With the key move shown alongside, the row reads as
+ * "name + key move":
+ *   "Vienna Game: Vienna Gambit, Breyer Variation"      → "Breyer Variation"
+ *   "Bishop's Opening: Vienna Hybrid, Spielmann Attack"  → "Spielmann Attack"
+ *   "Vienna Gambit, with Max Lange Defense: Knight Var…" → "Knight Variation"
+ *   "Vienna Game: Frankenstein-Dracula Variation"        → "Frankenstein-Dracula Variation"
+ */
+function sublineLabel(name: string): string {
+  const afterColon = name.includes(':') ? name.slice(name.lastIndexOf(':') + 1).trim() : name;
+  const tail = afterColon.includes(',') ? afterColon.slice(afterColon.lastIndexOf(',') + 1).trim() : afterColon;
+  return tail || name;
 }
