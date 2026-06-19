@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Chess } from 'chess.js';
-import { ArrowLeft, Volume2, VolumeX, Swords, RotateCcw, MessageCircle, X } from 'lucide-react';
+import { ArrowLeft, Volume2, VolumeX, Swords, RotateCcw, MessageCircle, X, HelpCircle } from 'lucide-react';
 import { useChessGame } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { useHintSystem } from '../../hooks/useHintSystem';
@@ -85,6 +85,15 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   // instrumentation. Q&A + arrows only here — the coach never mutates the play
   // board (no play_move/takeback handlers), so the WLPP Play LOCK is untouched.
   const [chatOpen, setChatOpen] = useState(false);
+  // The "Why?" button (David 2026-06-19) — a deeper, grounded explanation of why
+  // the best move is best. We open the coach chat with an auto-sent question so
+  // the SAME grounded coach (explainBestMoveGrounded + master-play + tactics)
+  // answers it — fuller than the hint's one-liner. Cleared once sent.
+  const [whyPrompt, setWhyPrompt] = useState<string | null>(null);
+  const askWhy = useCallback((): void => {
+    setWhyPrompt("What's the strongest move for me in this exact position, and why is it the best? Explain the key idea and why the natural alternatives are worse.");
+    setChatOpen(true);
+  }, []);
   const [chatArrows, setChatArrows] = useState<BoardArrow[]>([]);
   const [chatHighlights, setChatHighlights] = useState<BoardHighlight[]>([]);
   const handleChatBoardAnnotation = useCallback((commands: BoardAnnotationCommand[]) => {
@@ -808,13 +817,27 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
             onTakeback={handleTakeback}
             canTakeback={moveHistory.length >= 2}
             extraLeft={
-              settings.showHints ? (
-                <HintButton
-                  currentLevel={hintState.level}
-                  onRequestHint={requestHint}
-                  disabled={hintState.isAnalyzing}
-                />
-              ) : undefined
+              <div className="flex items-center gap-1.5">
+                {/* Why? — deeper grounded explanation of the best move (David
+                    2026-06-19), distinct from the Hint's quick reason. */}
+                <button
+                  type="button"
+                  onClick={askWhy}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-cyan-400 border border-cyan-500/40 hover:bg-cyan-500/10 transition-colors active:scale-95"
+                  data-testid="why-button"
+                  aria-label="Why is the best move best?"
+                >
+                  <HelpCircle size={16} />
+                  <span>Why?</span>
+                </button>
+                {settings.showHints && (
+                  <HintButton
+                    currentLevel={hintState.level}
+                    onRequestHint={requestHint}
+                    disabled={hintState.isAnalyzing}
+                  />
+                )}
+              </div>
             }
             extraRight={<ResignButton onResign={handleResign} disabled={moveHistory.length === 0} />}
           />
@@ -887,6 +910,8 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
               gameResult={game.isGameOver ? 'completed' : ''}
               history={game.history}
               onBoardAnnotation={handleChatBoardAnnotation}
+              initialPrompt={whyPrompt}
+              onInitialPromptSent={() => setWhyPrompt(null)}
               hideHeader
               className="h-full"
             />
