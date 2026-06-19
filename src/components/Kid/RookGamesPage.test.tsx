@@ -70,15 +70,15 @@ describe('RookGamesPage', () => {
     expect(screen.getByText('Row Clearer')).toBeInTheDocument();
   });
 
-  it('shows locked message when pawn chapter not completed', async () => {
+  it('is open even when the pawn chapter is not completed (David 2026-06-19: unlock everything)', async () => {
     mockIsPawnComplete.mockResolvedValue(false);
     render(<RookGamesPage />);
 
     await waitFor(() => {
-      expect(screen.getByTestId('rook-games-locked')).toBeInTheDocument();
+      expect(screen.getByText('Rook Maze')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('Locked')).toBeInTheDocument();
+    expect(screen.queryByTestId('rook-games-locked')).not.toBeInTheDocument();
   });
 
   it('renders maze level buttons', async () => {

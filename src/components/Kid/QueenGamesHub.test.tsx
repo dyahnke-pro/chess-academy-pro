@@ -35,12 +35,6 @@ function unlock(): void {
 describe('QueenGamesHub', () => {
   beforeEach(() => { vi.clearAllMocks(); });
 
-  it('shows loading state initially', () => {
-    mockGetGameProgress.mockReturnValue(new Promise(() => {})); // never resolves
-    render(<QueenGamesHub />);
-    expect(screen.getByTestId('queen-games-loading')).toBeInTheDocument();
-  });
-
   it('shows the game cards when unlocked', async () => {
     unlock();
     render(<QueenGamesHub />);
@@ -66,9 +60,10 @@ describe('QueenGamesHub', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/kid/queen-games/gauntlet');
   });
 
-  it('shows the locked state when progression is not met', async () => {
+  it('is open even with no journey progress (David 2026-06-19: unlock everything)', async () => {
     mockGetGameProgress.mockResolvedValue(null);
     render(<QueenGamesHub />);
-    await waitFor(() => expect(screen.getByTestId('queen-games-locked')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByTestId('queen-army-card')).toBeInTheDocument());
+    expect(screen.queryByTestId('queen-games-locked')).not.toBeInTheDocument();
   });
 });

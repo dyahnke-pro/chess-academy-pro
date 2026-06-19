@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Volume2, VolumeX, Lock } from 'lucide-react';
 import { voiceService } from '../../services/voiceService';
-import { getGameProgress } from '../../services/journeyService';
 
 export function KnightGamesPage(): JSX.Element {
   const navigate = useNavigate();
@@ -11,10 +10,10 @@ export function KnightGamesPage(): JSX.Element {
   const [bishopCompleted, setBishopCompleted] = useState(false);
 
   useEffect(() => {
-    void getGameProgress('pawns-journey').then((progress) => {
-      setBishopCompleted(progress?.chapters.bishop?.completed === true);
-      setLoading(false);
-    });
+    // Kids section: Knight Games are always open (David 2026-06-19: "unlock
+    // everything") — no longer gated behind the Bishop chapter.
+    setBishopCompleted(true);
+    setLoading(false);
   }, []);
 
   const kidSpeak = useCallback(

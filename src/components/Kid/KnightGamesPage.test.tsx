@@ -20,35 +20,15 @@ describe('KnightGamesPage', () => {
     vi.clearAllMocks();
   });
 
-  it('shows locked state when bishop chapter not completed', async () => {
-    mockGetGameProgress.mockResolvedValue({
-      chapters: {
-        pawn: { completed: true },
-        rook: { completed: true },
-        bishop: { completed: false },
-      },
-      currentChapterId: 'bishop',
-      startedAt: new Date().toISOString(),
-      completedAt: null,
-    });
-
-    render(<KnightGamesPage />);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('knight-games-locked')).toBeInTheDocument();
-    });
-    expect(screen.getByText('Locked')).toBeInTheDocument();
-    expect(screen.getByText(/Complete the Bishop chapter/)).toBeInTheDocument();
-  });
-
-  it('shows locked state when no journey progress exists', async () => {
+  it('is open even with no journey progress (David 2026-06-19: unlock everything)', async () => {
     mockGetGameProgress.mockResolvedValue(null);
 
     render(<KnightGamesPage />);
 
     await waitFor(() => {
-      expect(screen.getByTestId('knight-games-locked')).toBeInTheDocument();
+      expect(screen.getByTestId('leap-frog-card')).toBeInTheDocument();
     });
+    expect(screen.queryByTestId('knight-games-locked')).not.toBeInTheDocument();
   });
 
   it('shows game cards when bishop chapter completed', async () => {

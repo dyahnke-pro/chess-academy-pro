@@ -109,8 +109,6 @@ export function KidModePage(): JSX.Element {
     }, 1200);
   }, [findKingIdx, findKingScore, kingSquare, kidSpeak]);
 
-  const bishopGamesUnlocked = journeyProgress?.chapters['rook']?.completed ?? false;
-
   if (!activeProfile) return <></>;
 
   return (
@@ -223,13 +221,8 @@ export function KidModePage(): JSX.Element {
 
           {/* Per-piece games — Dashboard-style 2-col grid with semantic
               per-piece colors (non-negotiable #9). First Pawn tile
-              spans 2 columns to anchor the layout. Bishop tile gated
-              behind Pawn's Journey Rook-chapter completion. */}
-          {!bishopGamesUnlocked && (
-            <p className="text-xs text-center" style={{ color: 'var(--color-text-muted)' }} data-testid="bishop-games-locked-msg">
-              Complete the Rook chapter to unlock Bishop Games!
-            </p>
-          )}
+              spans 2 columns to anchor the layout. Every hub is open —
+              no cross-piece unlock gating (David 2026-06-19). */}
           <div className="grid grid-cols-2 gap-3 max-w-lg mx-auto w-full">
             <button
               onClick={() => void navigate('/kid/pawn-games')}
@@ -262,9 +255,8 @@ export function KidModePage(): JSX.Element {
             </button>
 
             <button
-              onClick={() => { if (bishopGamesUnlocked) void navigate('/kid/bishop-games'); }}
-              disabled={!bishopGamesUnlocked}
-              className={`aspect-square rounded-2xl border-2 bg-violet-500/10 border-violet-500/30 flex flex-col items-center justify-center gap-2 transition-colors ${!bishopGamesUnlocked ? 'opacity-50 cursor-not-allowed' : 'hover:bg-violet-500/20'}`}
+              onClick={() => void navigate('/kid/bishop-games')}
+              className="aspect-square rounded-2xl border-2 bg-violet-500/10 border-violet-500/30 flex flex-col items-center justify-center gap-2 transition-colors hover:bg-violet-500/20"
               data-testid="bishop-games-card"
             >
               <span className="text-4xl text-violet-300">♝</span>

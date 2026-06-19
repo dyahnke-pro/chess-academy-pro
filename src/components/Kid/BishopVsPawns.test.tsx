@@ -94,15 +94,11 @@ describe('BishopVsPawns', () => {
     expect(screen.getByTestId('bvp-level-3')).toBeInTheDocument();
   });
 
-  it('level 2 and 3 are locked initially', () => {
-    render(<BishopVsPawns onBack={mockOnBack} />);
-    expect(screen.getByTestId('bvp-level-2')).toBeDisabled();
-    expect(screen.getByTestId('bvp-level-3')).toBeDisabled();
-  });
-
-  it('level 1 is not locked', () => {
+  it('every level is open from the start (David 2026-06-19: unlock everything)', () => {
     render(<BishopVsPawns onBack={mockOnBack} />);
     expect(screen.getByTestId('bvp-level-1')).not.toBeDisabled();
+    expect(screen.getByTestId('bvp-level-2')).not.toBeDisabled();
+    expect(screen.getByTestId('bvp-level-3')).not.toBeDisabled();
   });
 
   it('clicking level 1 starts the game', () => {

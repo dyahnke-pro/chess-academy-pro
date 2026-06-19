@@ -3,10 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Volume2, VolumeX, Lock } from 'lucide-react';
 import { StarDisplay } from './StarDisplay';
 import { voiceService } from '../../services/voiceService';
-import {
-  getRookGameProgress,
-  isPawnChapterCompleted,
-} from '../../services/rookGameService';
+import { getRookGameProgress } from '../../services/rookGameService';
 import { ROOK_MAZE_LEVELS } from '../../data/rookMazeLevels';
 import { ROW_CLEARER_LEVELS } from '../../data/rowClearerLevels';
 import type { RookGameProgress, MiniGameLevelProgress } from '../../types/rookGames';
@@ -30,12 +27,11 @@ export function RookGamesPage(): JSX.Element {
   // Load progress and unlock state
   useEffect(() => {
     void (async () => {
-      const [prog, pawnDone] = await Promise.all([
-        getRookGameProgress(),
-        isPawnChapterCompleted(),
-      ]);
+      // Kids section: Rook Games are always open (David 2026-06-19: "unlock
+      // everything") — no longer gated behind completing the Pawn chapter.
+      const prog = await getRookGameProgress();
       setProgress(prog);
-      setUnlocked(pawnDone);
+      setUnlocked(true);
       setLoading(false);
     })();
   }, []);

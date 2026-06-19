@@ -129,7 +129,11 @@ export function MiniGamePage({ gameId }: MiniGamePageProps): JSX.Element {
   // ─── Handlers ───────────────────────────────────────────────────────────────
 
   const handleStart = useCallback((): void => {
-    voiceService.stop();
+    // Do NOT stop the voice here. The story intro carries the gameplay
+    // instructions ("red squares are dangerous, green squares are safe") at
+    // the END, and cutting it off on Start meant a kid who tapped through
+    // never heard them (David 2026-06-19). Letting it finish over the board —
+    // which is now showing those exact red/green squares — is the point.
     setPhase('playing');
   }, []);
 

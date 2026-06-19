@@ -334,13 +334,22 @@ export function ChessBoard({
         <div
           className="relative flex-1"
           data-testid="board-wrapper"
+          // `touch-action: none` is REQUIRED on the board on touch devices:
+          // without it, a drag that starts on a piece is interpreted as a
+          // page-scroll gesture (especially a VERTICAL drag inside a
+          // scrollable parent — e.g. pushing a pawn FORWARD in the kid
+          // mini-games, whose page is `overflow-y-auto`). The scroll steals
+          // the gesture and the piece never moves (David 2026-06-19: "couldn't
+          // move a pawn forward"). Dragging on an interactive board should
+          // never scroll the page, so this is correct on every surface.
           style={boardColorScheme.borderGlow
             ? {
                 boxShadow: `${boardColorScheme.borderGlow}, inset 0 0 40px 8px rgba(0, 229, 255, 0.06)`,
                 borderRadius: '4px',
                 border: '1px solid rgba(0, 229, 255, 0.15)',
+                touchAction: 'none',
               }
-            : undefined
+            : { touchAction: 'none' }
           }
         >
           <Chessboard

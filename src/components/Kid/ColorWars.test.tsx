@@ -103,15 +103,11 @@ describe('ColorWars', () => {
     expect(screen.getByTestId('cw-level-3')).toBeInTheDocument();
   });
 
-  it('level 2 and 3 are locked initially', () => {
-    render(<ColorWars onBack={mockOnBack} />);
-    expect(screen.getByTestId('cw-level-2')).toBeDisabled();
-    expect(screen.getByTestId('cw-level-3')).toBeDisabled();
-  });
-
-  it('level 1 is not locked', () => {
+  it('every level is open from the start (David 2026-06-19: unlock everything)', () => {
     render(<ColorWars onBack={mockOnBack} />);
     expect(screen.getByTestId('cw-level-1')).not.toBeDisabled();
+    expect(screen.getByTestId('cw-level-2')).not.toBeDisabled();
+    expect(screen.getByTestId('cw-level-3')).not.toBeDisabled();
   });
 
   it('clicking level 1 starts the game', () => {

@@ -410,7 +410,11 @@ describe('MiniGamePage', () => {
   });
 
   // 20. voiceService.stop is called when Start is clicked
-  it('calls voiceService.stop when Start button is clicked', async () => {
+  it('does NOT stop the voice when Start is clicked (intro instructions finish)', async () => {
+    // The story intro carries the gameplay instructions ("red squares are
+    // dangerous, green squares are safe") at the end; cutting it off on Start
+    // meant a kid never heard them (David 2026-06-19). Start must let the
+    // narration play on over the board.
     const { voiceService } = await import('../../services/voiceService');
 
     render(<MiniGamePage gameId="pawn-wars" />);
@@ -419,6 +423,8 @@ describe('MiniGamePage', () => {
 
     fireEvent.click(screen.getByTestId('mini-game-start'));
 
-    expect(voiceService.stop).toHaveBeenCalled();
+    expect(voiceService.stop).not.toHaveBeenCalled();
+    // The board is now showing — we transitioned into the playing phase.
+    expect(screen.getByTestId('mini-game-page')).toBeInTheDocument();
   });
 });
