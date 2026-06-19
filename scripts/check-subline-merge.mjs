@@ -24,10 +24,11 @@ const OVERRIDE = {
   HA2: 'src/data/lessons/sublineNarrationHelpA2.ts',
   HB: 'src/data/lessons/sublineNarrationHelpB.ts',
   HC: 'src/data/lessons/sublineNarrationHelpC.ts',
+  HD: 'src/data/lessons/sublineNarrationHelpD.ts',
   FIX: 'src/data/lessons/sublineNarrationFixes.ts',
 };
 const KEY_RE = /['"]([a-z0-9-]+::\d+::[^'"]+@\d+)['"]\s*:/g;
-const isOverride = (f) => f === 'HA' || f === 'HA2' || f === 'HB' || f === 'HC' || f === 'FIX';
+const isOverride = (f) => f === 'HA' || f === 'HA2' || f === 'HB' || f === 'HC' || f === 'HD' || f === 'FIX';
 
 const byKey = new Map(); // key -> [files]
 for (const [label, path] of Object.entries({ ...FILES, ...OVERRIDE })) {
@@ -46,7 +47,7 @@ for (const [label, path] of Object.entries({ ...FILES, ...OVERRIDE })) {
 // the lower layer is just shadowed dead code → cleanup, not danger).
 const dupes = [...byKey.entries()].filter(([, files]) => {
   const groups = files.filter((f) => f === 'A' || f === 'B' || f === 'C');
-  const helpers = files.filter((f) => f === 'HA' || f === 'HA2' || f === 'HB' || f === 'HC'); // two authoring helpers on one key = lost work; FIX is the top layer — never a collision
+  const helpers = files.filter((f) => f === 'HA' || f === 'HA2' || f === 'HB' || f === 'HC' || f === 'HD'); // two authoring helpers on one key = lost work; FIX is the top layer — never a collision
   return groups.length > 1 || helpers.length > 1;
 });
 const shadowedBase = [...byKey.entries()].filter(([, files]) => files.includes('base') && files.length > 1);
