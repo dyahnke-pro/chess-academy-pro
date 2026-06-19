@@ -17,7 +17,7 @@ import { ModelGameViewer } from './ModelGameViewer';
 import { MiddlegamePlanStudy } from './MiddlegamePlanStudy';
 import { MiddlegamePractice } from './MiddlegamePractice';
 import { PlayableLinePlayer } from './PlayableLinePlayer';
-import { OpeningSyllabus } from './OpeningSyllabus';
+import { SublinePanel } from './SublinePanel';
 import { sublineToPlayableLine, sublineToCustomLine } from '../../services/sublineLesson';
 import { getSublineNarration } from '../../data/lessons/sublineNarration';
 import type { CourseSubline } from '../../services/openingCourse';
@@ -1659,23 +1659,8 @@ export function OpeningDetailPage(): JSX.Element {
         </div>
       )}
 
-      {/* Course syllabus — the per-variation chapter map (David 2026-06-19, from
-          the Academy course layout). Each card shows its WLPP ladder status and
-          its "They might play" deviations; tapping a chapter FOCUSES it, syncing
-          the tabs + big WLPP buttons + sections below. Self-hides when the
-          opening has no variations. The single home for sublines. */}
-      <OpeningSyllabus
-        opening={opening}
-        selectedIndex={selectedTabIndex}
-        onSelectChapter={handleSelectTab}
-        onWatchSubline={handleSublineWatch}
-        onPlaySubline={handleSublinePlay}
-      />
-
       {/* Variation tabs — selecting one rescopes the whole page to that
-          variation. The main line is the default (leftmost pill). Kept as the
-          compact switcher beneath the syllabus map; the two stay in sync via
-          selectedTabIndex. */}
+          variation. The main line is the default (leftmost pill). */}
       <VariationTabs
         tabs={variationTabs}
         selectedIndex={selectedTabIndex}
@@ -1776,6 +1761,18 @@ export function OpeningDetailPage(): JSX.Element {
           </div>
         );
       })()}
+
+      {/* "They might play" — the selected variation's opponent deviations,
+          slotted into THIS variation (David 2026-06-19: keep the variation tabs,
+          add each subline into its correct variation). Each is Watchable
+          (narrated walkthrough) or Playable (coach locked to the line).
+          Self-hides on the main line and for openings outside the subline set. */}
+      <SublinePanel
+        opening={opening}
+        lineIndex={selectedTabIndex}
+        onWatch={handleSublineWatch}
+        onPlay={handleSublinePlay}
+      />
 
       {/* SRS trainer enrollment */}
       <div className="flex items-center gap-2 mb-5" data-testid="srs-enroll-row">
