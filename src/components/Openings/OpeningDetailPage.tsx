@@ -17,6 +17,10 @@ import { ModelGameViewer } from './ModelGameViewer';
 import { MiddlegamePlanStudy } from './MiddlegamePlanStudy';
 import { MiddlegamePractice } from './MiddlegamePractice';
 import { PlayableLinePlayer } from './PlayableLinePlayer';
+import { SublinePanel } from './SublinePanel';
+import { sublineToPlayableLine, sublineToCustomLine } from '../../services/sublineLesson';
+import { getSublineNarration } from '../../data/lessons/sublineNarration';
+import type { CourseSubline } from '../../services/openingCourse';
 import { CheckpointQuiz } from './CheckpointQuiz';
 import { ClassicWisdomSection } from './ClassicWisdomSection';
 import { ProAttributionNotice } from './ProAttributionNotice';
@@ -275,6 +279,8 @@ type ViewMode =
   | 'pitfall-learn'
   | 'pitfall-practice'
   | 'pitfall-play'
+  | 'subline-watch'
+  | 'subline-play'
   | 'model-game';
 
 function computeFenFromPgn(pgn: string, setupFen?: string): string {
@@ -308,6 +314,9 @@ export function OpeningDetailPage(): JSX.Element {
   const [activeWarningLineIndex, setActiveWarningLineIndex] = useState(-1);
   const [activeNamedTrapId, setActiveNamedTrapId] = useState<string | null>(null);
   const [activeGemId, setActiveGemId] = useState<string | null>(null);
+  // The Level-3 subline player: a frequency-ranked opponent deviation within the
+  // selected line, Watched (narrated) or Played (coach locked to its moves).
+  const [activeSubline, setActiveSubline] = useState<{ subline: CourseSubline; varIndex: number } | null>(null);
   const [narratingSection, setNarratingSection] = useState<string | null>(null);
   const [activeMiddlegamePlan, setActiveMiddlegamePlan] = useState<MiddlegamePlan | null>(null);
   const [activeMistake, setActiveMistake] = useState<CommonMistake | null>(null);
@@ -556,6 +565,19 @@ export function OpeningDetailPage(): JSX.Element {
     [],
   );
 
+  // Subline Watch/Play (Level-3): Watch plays the hand-authored narrated
+  // walkthrough; Play hands off to the coach LOCKED to the subline's exact
+  // moves (the same customLine lock used for variations/gems/traps — no new
+  // engine work). The SublinePanel reports which deviation + line was tapped.
+  const handleSublineWatch = useCallback((subline: CourseSubline, varIndex: number): void => {
+    setActiveSubline({ subline, varIndex });
+    setViewMode('subline-watch');
+  }, []);
+  const handleSublinePlay = useCallback((subline: CourseSubline, varIndex: number): void => {
+    setActiveSubline({ subline, varIndex });
+    setViewMode('subline-play');
+  }, []);
+
   const handleToggleFavorite = useCallback(async (): Promise<void> => {
     if (!opening) return;
     const newVal = await toggleFavorite(opening.id);
@@ -791,6 +813,39 @@ export function OpeningDetailPage(): JSX.Element {
       ? { name: `Punish ${gem.inaccuracy} with ${gem.punish}`, pgn: gem.playLine, explanation: gem.why }
       : undefined;
     return <OpeningPlayMode opening={opening} customLine={gemLine} onExit={handleExit} />;
+  }
+
+  // Subline WATCH — the opponent-deviation's hand-authored narrated walkthrough
+  // (PlayableLinePlayer, voice-gated). The line + beats come from the merged
+  // subline-narration map keyed by openingId/varIndex/deviation (G3 — DB moves
+  // only, board-verified). Falls through to detail if the line can't be built.
+  if (viewMode === 'subline-watch' && activeSubline) {
+    const narration = getSublineNarration(opening.id, activeSubline.varIndex, activeSubline.subline);
+    const sublineLine = sublineToPlayableLine(activeSubline.subline, narration);
+    if (sublineLine) {
+      return (
+        <PlayableLinePlayer
+          line={sublineLine}
+          boardOrientation={opening.color}
+          mode="watch"
+          onComplete={handleExit}
+          onExit={handleExit}
+        />
+      );
+    }
+  }
+
+  // Subline PLAY — the coach LOCKED to the subline's exact moves through the
+  // opening phase, then adaptive Stockfish (in-page OpeningPlayMode customLine,
+  // never the generic /coach/play room — same lock as variations/gems/traps).
+  if (viewMode === 'subline-play' && activeSubline) {
+    return (
+      <OpeningPlayMode
+        opening={opening}
+        customLine={sublineToCustomLine(activeSubline.subline)}
+        onExit={handleExit}
+      />
+    );
   }
 
   // Pitfall WLPP — the antidote line for a common mistake. Watch plays the
@@ -1706,6 +1761,17 @@ export function OpeningDetailPage(): JSX.Element {
           </div>
         );
       })()}
+
+      {/* Sublines (Level-3) — the opponent's frequency-ranked deviations WITHIN
+          the selected line, each Watchable (narrated) or Playable (coach locked
+          to its moves). Self-hides for the main line and for openings outside
+          the course-subline set. */}
+      <SublinePanel
+        opening={opening}
+        lineIndex={selectedTabIndex}
+        onWatch={handleSublineWatch}
+        onPlay={handleSublinePlay}
+      />
 
       {/* SRS trainer enrollment */}
       <div className="flex items-center gap-2 mb-5" data-testid="srs-enroll-row">
