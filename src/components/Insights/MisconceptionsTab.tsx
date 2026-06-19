@@ -38,6 +38,18 @@ function timeAgo(ts: number): string {
   return `${Math.floor(days / 30)}mo ago`;
 }
 
+// Concrete last-seen date so the relative "today / 3w ago" can be checked
+// against a real date — David 2026-06-19: "so I can know if it's an old error
+// or a mistake I am still making." Includes the year only when it isn't the
+// current year.
+function formatDate(ts: number): string {
+  const d = new Date(ts);
+  const opts: Intl.DateTimeFormatOptions = d.getFullYear() === new Date().getFullYear()
+    ? { month: 'short', day: 'numeric' }
+    : { month: 'short', day: 'numeric', year: 'numeric' };
+  return d.toLocaleDateString(undefined, opts);
+}
+
 export function MisconceptionsTab(): JSX.Element {
   const navigate = useNavigate();
   const [rows, setRows] = useState<MisconceptionAggregate[]>([]);
@@ -138,6 +150,7 @@ export function MisconceptionsTab(): JSX.Element {
                   {' · '}
                   <span className="inline-flex items-center gap-0.5">
                     <Clock size={10} />{timeAgo(row.lastSeenAt)}
+                    <span className="text-theme-text-muted/60"> ({formatDate(row.lastSeenAt)})</span>
                   </span>
                   {due
                     ? <span className="text-amber-400"> · {row.openCount} due now</span>
