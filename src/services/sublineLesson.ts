@@ -95,7 +95,20 @@ export function sublineToPlayableLine(
       if (pc && pc.type === 'p') pawnTargetHi.push({ square: a.to, color: TRIGGER });
       else visionArrows.push(a);
     }
-    arrows.push([moveArrow, ...visionArrows]);
+    // Arrow DEDUPE (David 2026-06-12, the chessboard-arrow-c2-c3 duplicate-key
+    // class): react-chessboard keys arrows by `${from}-${to}`, so a vision arrow
+    // that coincides with the move-arrow (or another vision arrow) would mount a
+    // duplicate React key and silently drop. Keep the move-arrow first, then only
+    // vision arrows on a fresh square-pair.
+    const arrowSeen = new Set<string>([`${moveArrow.from}-${moveArrow.to}`]);
+    const dedupedArrows: AnnotationArrow[] = [moveArrow];
+    for (const a of visionArrows) {
+      const id = `${a.from}-${a.to}`;
+      if (arrowSeen.has(id)) continue;
+      arrowSeen.add(id);
+      dedupedArrows.push(a);
+    }
+    arrows.push(dedupedArrows);
     const baseHi = beat?.highlights?.length
       ? beat.highlights
       : i === subline.atPly

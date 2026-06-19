@@ -7,6 +7,7 @@ import { SUBLINE_NARRATION_D4FLANK } from './sublineNarrationD4Flank';
 import { SUBLINE_NARRATION_HELP_A } from './sublineNarrationHelpA';
 import { SUBLINE_NARRATION_HELP_B } from './sublineNarrationHelpB';
 import { SUBLINE_NARRATION_HELP_A2 } from './sublineNarrationHelpA2';
+import { SUBLINE_NARRATION_HELP_C } from './sublineNarrationHelpC';
 import { SUBLINE_NARRATION_FIXES } from './sublineNarrationFixes';
 
 // HAND-AUTHORED subline narration (David 2026-06-17: "these are hand authored").
@@ -542,6 +543,7 @@ const MERGED_NARRATION: Record<string, SublineNarration> = {
   ...SUBLINE_NARRATION_HELP_A,
   ...SUBLINE_NARRATION_HELP_A2,
   ...SUBLINE_NARRATION_HELP_B,
+  ...SUBLINE_NARRATION_HELP_C,
   // Soundness-fix overrides — spread LAST so corrected, board-true intros win
   // over entries whose moves were re-walked for soundness (David 2026-06-18).
   ...SUBLINE_NARRATION_FIXES,
