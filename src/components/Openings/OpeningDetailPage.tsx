@@ -1120,9 +1120,11 @@ export function OpeningDetailPage(): JSX.Element {
       <PracticeMode
         opening={opening}
         variationIndex={viewMode === 'variation-practice' ? activeVariationIndex : undefined}
-        onComplete={() => { void markRungComplete(opening.id, practiceLineIdx, 'practice').then(() => loadOpening()); }}
+        // Play unlocks ONLY on a 100% (mistake-free) Practice pass (David
+        // 2026-06-19). An imperfect run still records progress inside
+        // PracticeMode but does NOT advance the rung, so Play stays locked.
+        onComplete={(perfect) => { if (perfect) { void markRungComplete(opening.id, practiceLineIdx, 'practice').then(() => loadOpening()); } }}
         onExit={handleExit}
-        onContinuePlaying={() => setViewMode(viewMode === 'variation-practice' ? 'variation-play' : 'play')}
       />
     );
   }

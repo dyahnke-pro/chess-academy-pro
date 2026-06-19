@@ -32,7 +32,6 @@ import {
   CheckCircle,
   XCircle,
   Trophy,
-  Play,
 } from 'lucide-react';
 
 export interface PracticeModeProps {
@@ -41,10 +40,6 @@ export interface PracticeModeProps {
   customLine?: OpeningVariation;
   onComplete: (correct: boolean) => void;
   onExit: () => void;
-  /** When provided, the completion screen shows a "Continue Playing"
-   *  button that hands off to Play mode locked to this line
-   *  (David 2026-05-26). */
-  onContinuePlaying?: () => void;
 }
 
 interface MoveInfo {
@@ -53,7 +48,7 @@ interface MoveInfo {
   to: string;
 }
 
-export function PracticeMode({ opening, variationIndex, customLine, onComplete, onExit, onContinuePlaying }: PracticeModeProps): JSX.Element {
+export function PracticeMode({ opening, variationIndex, customLine, onComplete, onExit }: PracticeModeProps): JSX.Element {
   const isVariation = variationIndex !== undefined && variationIndex >= 0;
   const variation = customLine ?? (isVariation ? opening.variations?.[variationIndex] : undefined);
   const activePgn = variation ? variation.pgn : opening.pgn;
@@ -85,7 +80,10 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
   const [lineComplete, setLineComplete] = useState(false);
   const [totalMistakes, setTotalMistakes] = useState(0);
   const [computerLastMove, setComputerLastMove] = useState<{ from: string; to: string } | null>(null);
-  const [hintCostApplied, setHintCostApplied] = useState(false);
+  // A hint anywhere in the line disqualifies a 100% pass (David 2026-06-19:
+  // "hints do not count as 100%"). Line-level — set on first hint, only reset
+  // on retry (NOT on a correct move), so one hint blocks the whole attempt.
+  const [hintUsed, setHintUsed] = useState(false);
   const startTimeRef = useRef<number>(Date.now());
 
   const { settings } = useSettings();
@@ -190,12 +188,11 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
   });
 
   const handleHint = useCallback((): void => {
-    if (!hintCostApplied) {
-      setTotalMistakes((prev) => prev + 1);
-      setHintCostApplied(true);
-    }
+    // A hint doesn't add a "mistake" (the student played no wrong move), but it
+    // DOES disqualify the 100% pass that unlocks Play.
+    setHintUsed(true);
     requestHint();
-  }, [hintCostApplied, requestHint]);
+  }, [requestHint]);
 
   // Auto-play opponent moves
   useEffect(() => {
@@ -218,7 +215,7 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
       playCelebration();
 
       const timeSeconds = (Date.now() - startTimeRef.current) / 1000;
-      const perfect = totalMistakes === 0;
+      const perfect = totalMistakes === 0 && !hintUsed;
       void recordDrillAttempt(opening.id, perfect, timeSeconds);
       if (isVariation) {
         void updateVariationProgress(opening.id, variationIndex, perfect);
@@ -230,12 +227,14 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
       const lineName = variation ? variation.name : opening.name;
       if (perfect) {
         void voiceService.speak(`Line perfected! You know the ${lineName} by heart.`);
-      } else {
+      } else if (totalMistakes > 0) {
         void voiceService.speak(`Good attempt on the ${lineName}. ${totalMistakes} mistake${totalMistakes !== 1 ? 's' : ''}.`);
+      } else {
+        void voiceService.speak(`Good attempt on the ${lineName}. Try again without a hint for a perfect pass.`);
       }
       onComplete(perfect);
     }
-  }, [currentMoveIndex, expectedMoves.length, lineComplete, totalMistakes, opening.id, isVariation, variationIndex, variation, opening.name, playCelebration, onComplete]);
+  }, [currentMoveIndex, expectedMoves.length, lineComplete, totalMistakes, hintUsed, opening.id, isVariation, variationIndex, variation, opening.name, playCelebration, onComplete]);
 
   // Handle player move
   const handleMove = useCallback(
@@ -247,7 +246,6 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
       if (result.from === expected.from && result.to === expected.to) {
         // Correct
         setComputerLastMove(null);
-        setHintCostApplied(false);
         resetHints();
         setShowCorrectFlash(true);
         setShowWrongMove(false);
@@ -366,7 +364,7 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
     setShowCorrectFlash(false);
     setWrongSquare(null);
     setComputerLastMove(null);
-    setHintCostApplied(false);
+    setHintUsed(false);
     resetHints();
     setLineComplete(false);
     setTotalMistakes(0);
@@ -382,7 +380,7 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
   const lineLabel = isVariation
     ? `Line ${variationIndex + 1} / ${opening.variations?.length ?? 1}`
     : opening.name;
-  const perfect = totalMistakes === 0;
+  const perfect = totalMistakes === 0 && !hintUsed;
 
   // ─── Line complete screen ───────────────────────────────────────────────
   if (lineComplete) {
@@ -390,33 +388,33 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
       <div className="flex flex-col flex-1 p-4 md:p-6 items-center justify-center" data-testid="practice-complete">
         <div className="w-full max-w-sm space-y-6">
           <div className="text-center">
-            <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${perfect ? 'bg-yellow-500/20' : 'bg-green-500/20'}`}>
+            <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${perfect ? 'bg-yellow-500/20' : 'bg-amber-500/20'}`}>
               {perfect
                 ? <Trophy size={32} className="text-yellow-500" />
-                : <CheckCircle size={32} className="text-green-500" />
+                : <CheckCircle size={32} className="text-amber-500" />
               }
             </div>
-            <h2 className="text-xl font-bold text-theme-text">
-              {perfect ? 'Line Perfected!' : 'Line Complete'}
-            </h2>
-            <p className="text-sm text-theme-text-muted mt-1">{title}</p>
+            {perfect ? (
+              <>
+                <h2 className="text-2xl font-extrabold tracking-wide text-yellow-500" data-testid="practice-success">
+                  SUCCESS! 100%
+                </h2>
+                <p className="text-sm font-semibold text-theme-text mt-1">{title} — Play unlocked!</p>
+              </>
+            ) : (
+              <>
+                <h2 className="text-xl font-bold text-theme-text">Line Complete</h2>
+                <p className="text-sm text-theme-text-muted mt-1">{title}</p>
+              </>
+            )}
           </div>
 
-          {totalMistakes > 0 && (
-            <p className="text-sm text-theme-text-muted text-center">
-              {totalMistakes} mistake{totalMistakes !== 1 ? 's' : ''} — practice again to perfect it!
+          {!perfect && (
+            <p className="text-sm text-amber-500 text-center font-medium" data-testid="practice-not-perfect">
+              {totalMistakes > 0
+                ? `${totalMistakes} mistake${totalMistakes !== 1 ? 's' : ''}${hintUsed ? ' + a hint' : ''} — reach 100% (no mistakes, no hints) to unlock Play. Try again!`
+                : 'You used a hint — reach 100% with no hints to unlock Play. Try again!'}
             </p>
-          )}
-
-          {onContinuePlaying && (
-            <button
-              onClick={onContinuePlaying}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-theme-accent text-white font-semibold hover:opacity-90 transition-opacity"
-              data-testid="practice-continue-playing"
-            >
-              <Play size={16} />
-              Continue Playing
-            </button>
           )}
 
           <div className="flex gap-3">
