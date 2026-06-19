@@ -687,7 +687,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
 
   // ─── Game screen ──────────────────────────────────────────────────────────
   return (
-    <div className="relative flex flex-col flex-1 overflow-hidden" data-testid="opening-play-mode">
+    <div className="relative flex flex-col flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-0" data-testid="opening-play-mode">
       {/* Header — wraps on narrow phones so the controls (esp. the coach
           Chat toggle) are never clipped off the right edge by the surface's
           `overflow-hidden`. The left title truncates to yield space; when
@@ -762,7 +762,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
       )}
 
       {/* Board */}
-      <div className="flex-1 flex flex-col items-center justify-start pt-2 px-2 py-2">
+      <div className="flex flex-col items-center justify-start pt-2 px-2 py-2">
         <div className="w-full md:max-w-[420px]">
           <ControlledChessBoard
             game={game}

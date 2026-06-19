@@ -361,7 +361,7 @@ export function OpeningSpeedrun({ onExit }: OpeningSpeedrunProps): JSX.Element {
 
   // ─── Playing ────────────────────────────────────────────────────────────────
   return (
-    <div className="flex flex-col flex-1 overflow-hidden" data-testid="speedrun-playing">
+    <div className="flex flex-col flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-0" data-testid="speedrun-playing">
       {/* Top bar: timer + combo + opening info */}
       <div className="flex items-center justify-between px-4 py-2 border-b border-theme-border">
         <div className="flex items-center gap-3">

@@ -490,7 +490,7 @@ export function MiddlegamePractice({
       </div>
 
       {/* Board */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-2 overflow-hidden">
+      <div className="flex flex-col items-center justify-center px-4 py-2 overflow-hidden">
         <div className="relative w-full max-w-lg">
           {/* Narration toggle — overlaid on the board so it sits at
               the user's natural focal point. Backdrop-blur + surface

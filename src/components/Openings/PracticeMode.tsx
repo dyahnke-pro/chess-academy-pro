@@ -444,7 +444,7 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
 
   // ─── Board screen ──────────────────────────────────────────────────────
   return (
-    <div className="flex flex-col flex-1 overflow-hidden" data-testid="practice-mode">
+    <div className="flex flex-col flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-0" data-testid="practice-mode">
       {/* Top bar */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-theme-border">
         <div className="flex items-center gap-3">
@@ -488,7 +488,7 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
       </div>
 
       {/* Board */}
-      <div className="flex-1 flex flex-col items-center justify-start pt-2 px-2 py-2">
+      <div className="flex flex-col items-center justify-start pt-2 px-2 py-2">
         <div className="w-full md:max-w-[420px]">
           <div className="relative">
             <ControlledChessBoard
