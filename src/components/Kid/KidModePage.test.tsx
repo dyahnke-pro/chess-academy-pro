@@ -265,12 +265,12 @@ describe('KidModePage', () => {
     expect(screen.getByText('Bishop Games')).toBeInTheDocument();
   });
 
-  it('Bishop Games tile is disabled when rook chapter not completed', () => {
+  it('Bishop Games tile is open even with no journey progress (David 2026-06-19: unlock everything)', () => {
     useAppStore.getState().setActiveProfile(createProfile());
     render(<KidModePage />);
 
-    expect(screen.getByTestId('bishop-games-card')).toBeDisabled();
-    expect(screen.getByTestId('bishop-games-locked-msg')).toBeInTheDocument();
+    expect(screen.getByTestId('bishop-games-card')).not.toBeDisabled();
+    expect(screen.queryByTestId('bishop-games-locked-msg')).not.toBeInTheDocument();
   });
 
   it('Bishop Games tile is enabled when rook chapter is completed', async () => {

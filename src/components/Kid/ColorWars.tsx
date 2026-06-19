@@ -239,16 +239,14 @@ export function ColorWars({ onBack }: ColorWarsProps): JSX.Element {
               Use both bishops to capture all enemies before time runs out!
             </p>
             {COLOR_WARS_LEVELS.map((level, idx) => {
-              const locked = idx > 0 && !levelsCompleted.has(idx - 1);
+              // Kids section: every level is open (David 2026-06-19: "unlock
+              // everything") — no "beat level N-1 first" gating.
               const completed = levelsCompleted.has(idx);
               return (
                 <button
                   key={level.level}
-                  onClick={() => { if (!locked) { initLevel(idx); kidSpeak(level.description); } }}
-                  disabled={locked}
-                  className={`w-full max-w-sm rounded-xl p-4 border-2 text-left transition-opacity ${
-                    locked ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-80'
-                  }`}
+                  onClick={() => { initLevel(idx); kidSpeak(level.description); }}
+                  className="w-full max-w-sm rounded-xl p-4 border-2 text-left transition-opacity hover:opacity-80"
                   style={{
                     background: 'var(--color-surface)',
                     borderColor: completed ? 'var(--color-accent)' : 'var(--color-border)',
@@ -263,7 +261,6 @@ export function ColorWars({ onBack }: ColorWarsProps): JSX.Element {
                       </span>
                     </div>
                     {completed && <span className="text-lg">&#11088;</span>}
-                    {locked && <span className="text-sm" style={{ color: 'var(--color-text-muted)' }}>Locked</span>}
                   </div>
                   <p className="text-sm mt-1" style={{ color: 'var(--color-text-muted)' }}>
                     {level.description}

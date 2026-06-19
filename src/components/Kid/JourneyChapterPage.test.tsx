@@ -150,7 +150,7 @@ vi.mock('../../services/journeyService', () => ({
 }));
 
 vi.mock('../../services/voiceService', () => ({
-  voiceService: { speak: vi.fn().mockResolvedValue(undefined), stop: vi.fn() },
+  voiceService: { speak: vi.fn().mockResolvedValue(undefined), speakLecture: vi.fn().mockResolvedValue(undefined), stop: vi.fn() },
 }));
 
 vi.mock('../../services/kidPuzzleService', () => ({

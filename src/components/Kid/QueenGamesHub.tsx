@@ -3,10 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Volume2, VolumeX } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { voiceService } from '../../services/voiceService';
-import { getGameProgress } from '../../services/journeyService';
 import { QueenVsArmy } from './QueenVsArmy';
 import { QueensGauntlet } from './QueensGauntlet';
-import type { JourneyProgress } from '../../types';
 
 // Pure routing hub — every game has its own route (no setView). The two
 // gauntlet-style games and the puzzle/maze/sweep tiles all navigate.
@@ -18,10 +16,10 @@ export function QueenGamesHub(): JSX.Element {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    void getGameProgress('pawns-journey').then((progress: JourneyProgress | null) => {
-      if (progress) setUnlocked(true); // DEV: unlocked for testing
-      setLoading(false);
-    });
+    // Kids section: Queen Games are always open (David 2026-06-19: "unlock
+    // everything") — no longer gated behind the Knight chapter.
+    setUnlocked(true);
+    setLoading(false);
   }, []);
 
   useEffect(() => {

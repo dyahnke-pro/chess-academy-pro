@@ -47,11 +47,16 @@ export async function completeMiniGameLevel(
   return progress;
 }
 
-/** Level 1 is always unlocked; subsequent levels require the previous one completed. */
+/**
+ * Every kid mini-game level is unlocked. The kids section ("for David's
+ * young brother") no longer gates games behind beating the previous level —
+ * David 2026-06-19: "unlock everything." Star tracking still records how a
+ * level was cleared (see `completeMiniGameLevel`); it just never blocks
+ * access. `progress` is kept in the signature so callers don't change.
+ */
 export function isLevelUnlocked(
-  progress: MiniGameProgress | null,
-  level: number,
+  _progress: MiniGameProgress | null,
+  _level: number,
 ): boolean {
-  if (level <= 1) return true;
-  return progress?.levels[level - 1]?.completed === true;
+  return true;
 }

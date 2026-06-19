@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { applyTheme, getThemeById } from '../../services/themeService';
@@ -7,6 +7,7 @@ import { voiceService } from '../../services/voiceService';
 
 export function KidLayout(): JSX.Element {
   const navigate = useNavigate();
+  const location = useLocation();
   const activeTheme = useAppStore((s) => s.activeTheme);
   const setActiveTheme = useAppStore((s) => s.setActiveTheme);
   const previousThemeId = useRef<string>(activeTheme?.id ?? 'dark-premium');
@@ -30,9 +31,24 @@ export function KidLayout(): JSX.Element {
     };
   }, [setActiveTheme]);
 
+  // The Kids header back arrow steps back ONE screen within Kids Mode. It
+  // used to always jump to the dashboard ('/'), which dumped a kid out of
+  // the whole section from inside a game (David 2026-06-19). Now: from a
+  // deeper kid surface it pops one entry of history; only from the Kids home
+  // (or a deep-link with no in-app history to pop) does it exit the section —
+  // home → '/', a stranded sub-page → '/kid'.
   const handleBackToMain = useCallback((): void => {
-    void navigate('/');
-  }, [navigate]);
+    if (location.pathname === '/kid') {
+      void navigate('/');
+      return;
+    }
+    const historyIdx = (window.history.state as { idx?: number } | null)?.idx ?? 0;
+    if (historyIdx > 0) {
+      void navigate(-1);
+    } else {
+      void navigate('/kid');
+    }
+  }, [navigate, location.pathname]);
 
   return (
     <div

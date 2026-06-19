@@ -94,42 +94,30 @@ describe('miniGameService', () => {
   });
 
   describe('isLevelUnlocked', () => {
-    it('level 1 is always unlocked with valid progress', () => {
+    // Kids section: every level is unlocked, regardless of progress
+    // (David 2026-06-19: "unlock everything"). The predicate is now a
+    // constant true; star tracking still records how a level was cleared.
+    it('every level is unlocked with empty progress', () => {
       const progress: MiniGameProgress = { levels: {} };
       expect(isLevelUnlocked(progress, 1)).toBe(true);
+      expect(isLevelUnlocked(progress, 2)).toBe(true);
+      expect(isLevelUnlocked(progress, 3)).toBe(true);
     });
 
-    it('level 1 is always unlocked with null progress', () => {
+    it('every level is unlocked with null progress', () => {
       expect(isLevelUnlocked(null, 1)).toBe(true);
+      expect(isLevelUnlocked(null, 2)).toBe(true);
+      expect(isLevelUnlocked(null, 3)).toBe(true);
     });
 
-    it('level 2 is locked when level 1 is not completed', () => {
-      const progress: MiniGameProgress = { levels: {} };
-      expect(isLevelUnlocked(progress, 2)).toBe(false);
-    });
-
-    it('level 2 is unlocked when level 1 is completed', () => {
+    it('stays unlocked when earlier levels are completed', () => {
       const progress: MiniGameProgress = {
         levels: {
           1: { completed: true, stars: 2, hintsUsed: 0 },
         },
       };
       expect(isLevelUnlocked(progress, 2)).toBe(true);
-    });
-
-    it('level 3 is locked without level 2 completed even if level 1 is complete', () => {
-      const progress: MiniGameProgress = {
-        levels: {
-          1: { completed: true, stars: 3, hintsUsed: 0 },
-        },
-      };
-      expect(isLevelUnlocked(progress, 3)).toBe(false);
-    });
-
-    it('returns only level 1 as unlocked when progress is null', () => {
-      expect(isLevelUnlocked(null, 1)).toBe(true);
-      expect(isLevelUnlocked(null, 2)).toBe(false);
-      expect(isLevelUnlocked(null, 3)).toBe(false);
+      expect(isLevelUnlocked(progress, 3)).toBe(true);
     });
   });
 
