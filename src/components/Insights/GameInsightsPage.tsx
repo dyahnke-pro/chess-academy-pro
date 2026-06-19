@@ -70,6 +70,11 @@ export function GameInsightsPage(): JSX.Element {
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Collapse the title + search above the stats row once the content list is
+  // scrolled, giving the list more screen (David 2026-06-19). The stats row and
+  // tabs stay pinned. Hysteresis (collapse > 24px, expand < 8px) avoids flicker.
+  const [headerCollapsed, setHeaderCollapsed] = useState(false);
+
   const [overview, setOverview] = useState<OverviewInsights | null>(null);
   const [openings, setOpenings] = useState<OpeningInsights | null>(null);
   const [mistakes, setMistakes] = useState<MistakeInsights | null>(null);
@@ -198,6 +203,13 @@ export function GameInsightsPage(): JSX.Element {
           notch inset on device — fixes the title cramming under the
           status bar David reported on the Weaknesses tab. */}
       <div className="px-5 pt-[max(1.25rem,calc(env(safe-area-inset-top,0px)+0.5rem))] pb-0 shrink-0">
+        {/* Collapsible top — title row + search. Hidden once the list scrolls
+            so the stats row + tabs (below, always shown) sit at the top and the
+            content gets more height (David 2026-06-19). */}
+        <div
+          className={`overflow-hidden transition-all duration-300 ease-out ${headerCollapsed ? 'max-h-0 opacity-0 pointer-events-none' : 'max-h-[520px] opacity-100'}`}
+          aria-hidden={headerCollapsed}
+        >
         {/* Title row */}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
@@ -287,8 +299,10 @@ export function GameInsightsPage(): JSX.Element {
             <ImportGamesButton variant="primary" />
           </div>
         )}
+        </div>
+        {/* ── end collapsible top ── */}
 
-        {/* Summary stats */}
+        {/* Summary stats — always visible (David: keep the win-rate row shown) */}
         {overview && overview.totalGames > 0 && (
           <div
             className="flex justify-between py-3 border-b"
@@ -344,7 +358,13 @@ export function GameInsightsPage(): JSX.Element {
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto px-5 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6">
+      <div
+        className="flex-1 overflow-y-auto px-5 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6"
+        onScroll={(e) => {
+          const top = e.currentTarget.scrollTop;
+          setHeaderCollapsed((prev) => (prev ? top >= 8 : top > 24));
+        }}
+      >
         {loading && gameDataTab && (
           <div className="flex items-center justify-center p-12" data-testid="insights-loading">
             <span className="text-sm" style={{ color: 'var(--color-text-muted)' }}>Analysing your games...</span>
