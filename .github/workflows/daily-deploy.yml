@@ -114,6 +114,7 @@ jobs:
       # not block the TestFlight/Beta-Review submission). The job still goes red
       # if web deploy failed, so the failure stays visible.
       - name: Build iOS (Xcode Cloud) and wait for VALID
+        id: iosbuild
         if: ${{ !cancelled() && steps.gate.outputs.run == 'true' && steps.changed.outputs.ship == 'true' }}
         env:
           APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
@@ -133,7 +134,7 @@ jobs:
       # descriptions on the What to Test"). Replaces the old generic
       # boilerplate. Manual override still wins via a TF_WHATS_NEW env.
       - name: Compose "What to Test" notes
-        if: ${{ !cancelled() && steps.gate.outputs.run == 'true' && steps.changed.outputs.ship == 'true' && env.SKIP_IOS != '1' }}
+        if: ${{ steps.iosbuild.outcome == 'success' && steps.gate.outputs.run == 'true' && steps.changed.outputs.ship == 'true' && env.SKIP_IOS != '1' }}
         run: |
           NOTES=$(git log --since="26 hours ago" --no-merges --pretty='%s' \
             | grep -iE '^(feat|fix|perf)(\(|!|:)' \
@@ -152,8 +153,16 @@ jobs:
             echo 'WTNEOF'
           } >> "$GITHUB_ENV"
 
+      # Gate on the iOS build step SUCCEEDING (not just `!cancelled()`): if the
+      # Xcode Cloud trigger failed — e.g. Apple's POST /v1/ciBuildRuns throws a
+      # transient 500 (2026-06-19 incident) — there is NO fresh build, and
+      # `!cancelled()` would wrongly distribute the previous VALID build (stale),
+      # then 422 on beta-review-submit because that build is already submitted.
+      # `steps.iosbuild.outcome == 'success'` still preserves the web-deploy
+      # decoupling (we don't reference the web step), while refusing to ship a
+      # stale build when no new one was produced.
       - name: Distribute iOS build to TestFlight (internal always; external only on the nightly run or explicit opt-in)
-        if: ${{ !cancelled() && steps.gate.outputs.run == 'true' && steps.changed.outputs.ship == 'true' && env.SKIP_IOS != '1' }}
+        if: ${{ steps.iosbuild.outcome == 'success' && steps.gate.outputs.run == 'true' && steps.changed.outputs.ship == 'true' && env.SKIP_IOS != '1' }}
         env:
           APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
           APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
