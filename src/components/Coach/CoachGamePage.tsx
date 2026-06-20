@@ -509,6 +509,24 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   const [coachLastMove, setCoachLastMove] = useState<{ from: string; to: string } | null>(null);
   const previousFenRef = useRef<string | null>(null);
   const [isCoachThinking, setIsCoachThinking] = useState(false);
+  // Foreground re-kick (David 2026-06-19: "Play with coach is frozen").
+  // iOS suspends the engine Web Worker AND `setTimeout` while the PWA is
+  // backgrounded, so an in-flight coach analysis dies and the 16s freeze
+  // watchdog is paused — when the user returns mid-coach-turn the board can
+  // sit locked. `stockfishEngine.handleAppResume()` already resets the dead
+  // worker on foreground; bumping this nonce makes the coach-move effect
+  // re-run on the same foreground, aborting the stale attempt and starting a
+  // FRESH analysis + watchdog against the reset engine. No-op when it isn't
+  // the coach's turn (the effect early-returns), and the exactly-once guard
+  // prevents a double move.
+  const [resumeNonce, setResumeNonce] = useState(0);
+  useEffect(() => {
+    const onVisible = (): void => {
+      if (document.visibilityState === 'visible') setResumeNonce((n) => n + 1);
+    };
+    document.addEventListener('visibilitychange', onVisible);
+    return () => document.removeEventListener('visibilitychange', onVisible);
+  }, []);
   const moveCountRef = useRef(0);
   // WO-RESUME-01: a resumed timed game stashes its saved clock here; the
   // clock hook is declared further down, so a dedicated effect below it
@@ -2739,7 +2757,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       setIsCoachThinking(false);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally depend on specific game properties, not the whole object
-  }, [game.turn, game.fen, game.isGameOver, gameState.status, playerColor, targetStrength, game.makeMove]);
+  }, [game.turn, game.fen, game.isGameOver, gameState.status, playerColor, targetStrength, game.makeMove, resumeNonce]);
 
   // Handle player move
   const handlePlayerMove = useCallback(async (moveResult: MoveResult) => {
