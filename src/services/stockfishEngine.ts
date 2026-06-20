@@ -262,10 +262,12 @@ class StockfishEngine {
   // 60. Tracks the first error timestamp + count in the current
   // dedup window.
   private _workerErrorWindow: { startedAt: number; count: number } | null = null;
-  // Phase 8 — single-thread OOM retry budget. Capped at one retry
-  // per session to avoid a tight spin if the host is genuinely out
-  // of memory. Reset on successful init.
-  private _singleThreadOomRetryUsed = false;
+  // Phase 8 — single-thread WASM init retry budget. Capped at one
+  // retry per session to avoid a tight spin if the host is genuinely
+  // out of memory or the WASM binary is incompatible (iOS Safari
+  // `call_indirect`, transient RuntimeError, etc.). Reset on
+  // successful init.
+  private _singleThreadWasmRetryUsed = false;
 
   get status(): StockfishStatus {
     return this._status;
@@ -486,27 +488,34 @@ class StockfishEngine {
               handleEarlyMultiFailure(msg);
               return true;
             }
-            // Phase 8 Bug C — single-thread also OOM'd. Retry once
-            // after a backoff so a transient memory-pressure event
-            // doesn't leave the engine permanently unavailable.
-            // Detect OOM by message content (WebAssembly.instantiate
-            // throws "Out of memory: Cannot allocate Wasm memory").
-            const isOom =
-              /out of memory|cannot allocate wasm memory/i.test(msg);
+            // Phase 8 Bug C — single-thread WASM init failed (OOM or
+            // RuntimeError). Retry once with a backoff so a transient
+            // failure — memory pressure, iOS Safari `call_indirect`
+            // signature mismatch, browser quirk — doesn't leave the
+            // engine permanently unavailable after one shot.
+            // Detect by message content: OOM is explicit ("Out of
+            // memory: Cannot allocate Wasm memory"); RuntimeError
+            // surfaces as either a worker error with a non-empty
+            // message containing "RuntimeError" OR the fallback
+            // string when error.message is empty (the common case for
+            // WASM crashes in workers — the browser provides no
+            // useful ErrorEvent details).
+            const isWasmInitFailure =
+              /out of memory|cannot allocate wasm memory|runtimeerror/i.test(msg);
             if (
               this.workerVariant === 'single' &&
-              isOom &&
-              !this._singleThreadOomRetryUsed
+              isWasmInitFailure &&
+              !this._singleThreadWasmRetryUsed
             ) {
-              this._singleThreadOomRetryUsed = true;
+              this._singleThreadWasmRetryUsed = true;
               console.warn(
-                `[Stockfish] Single-thread spawn OOM; retrying after ${SINGLE_THREAD_RETRY_DELAY_MS}ms`,
+                `[Stockfish] Single-thread WASM init failure; retrying after ${SINGLE_THREAD_RETRY_DELAY_MS}ms: ${msg.slice(0, 80)}`,
               );
               void logAppAudit({
                 kind: 'stockfish-variant-fallback',
                 category: 'subsystem',
                 source: 'stockfishEngine.initialize',
-                summary: `single-thread OOM; retry-with-backoff (${SINGLE_THREAD_RETRY_DELAY_MS}ms)`,
+                summary: `single-thread WASM init failure; retry-with-backoff (${SINGLE_THREAD_RETRY_DELAY_MS}ms): ${msg.slice(0, 120)}`,
               });
               this.worker?.terminate();
               this.worker = null;
@@ -568,7 +577,7 @@ class StockfishEngine {
               this._crashRetries = 0;
               this._initFailedAt = null; // clear cooldown on success
               // Reset Phase 8 retry budgets on successful ready.
-              this._singleThreadOomRetryUsed = false;
+              this._singleThreadWasmRetryUsed = false;
               this._workerErrorWindow = null;
               console.log(
                 `[Stockfish] Engine ready (${this.workerVariant}-threaded WASM)`,
