@@ -1632,6 +1632,15 @@ for every command, and the code already reads them:
   env-var config. When present, query analytics with
   `node scripts/posthog-query.mjs ["<HogQL>"]` (default = top events,
   last 7 days) — DO NOT ask David for a key; it lives in the env config.
+  **The PostHog project is on US cloud (`https://us.posthog.com`, project
+  390808) — the working `phx_` read key is also stored in Vercel env as
+  `POSTHOG_API_KEY` (David 2026-06-21: "that was on vercel"). ⚠️ Vercel's
+  API returns SENSITIVE env vars as an ENCRYPTED `{"v":"v2","c":…}` envelope,
+  NOT plaintext — so DON'T test that ciphertext and conclude the key is dead
+  (the 2026-06-21 mistake). Get the plaintext from the Vercel dashboard, or
+  use the value in the Claude env config. Auth-probe a candidate first:
+  `curl -s -o /dev/null -w "%{http_code}" -H "Authorization: Bearer <key>"
+  https://us.posthog.com/api/projects/` → 200 = good, 401 = wrong/encrypted.**
   NB: this is the READ key. The app's WRITE key is the public `phc_…`
   PostHog **project** key, which lives in Vercel as `VITE_POSTHOG_KEY`
   (+ `VITE_POSTHOG_HOST=https://us.i.posthog.com`) and bakes into the
