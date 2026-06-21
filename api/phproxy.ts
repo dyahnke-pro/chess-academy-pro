@@ -49,6 +49,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     upstream.headers.forEach((val, key) => {
       if (!DROP_RES_HEADERS.has(key.toLowerCase())) res.setHeader(key, val);
     });
+    // Option A (iOS cross-origin isolation): the iOS app posts analytics from
+    // origin capacitor://app.chessacademy.pro — cross-origin to this proxy.
+    // Echo CORS + mark embeddable so events keep flowing once the WebView is
+    // cross-origin isolated (COEP require-corp). Safe for same-origin web.
+    const origin = typeof req.headers.origin === 'string' ? req.headers.origin : '*';
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
     res.send(buf);
   } catch (e) {
     res.status(502).json({ error: 'posthog proxy failed', detail: String(e) });

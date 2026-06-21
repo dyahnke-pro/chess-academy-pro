@@ -1090,7 +1090,7 @@ describe('resolveWorkerUrl', () => {
     expect(result.reason).toContain('SharedArrayBuffer');
   });
 
-  it('routes iOS Safari to the asm.js build (WebKit-safe, no call_indirect)', async () => {
+  it('routes iOS Safari to the asm.js build when NOT cross-origin isolated', async () => {
     vi.stubGlobal('window', { crossOriginIsolated: false });
     vi.stubGlobal('navigator', {
       userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148',
@@ -1102,6 +1102,23 @@ describe('resolveWorkerUrl', () => {
     expect(result.variant).toBe('asm');
     expect(result.url).toBe('/stockfish/stockfish-asm.js');
     expect(result.workerType).toBe('classic');
+  });
+
+  it('routes iOS to the multi-threaded build once cross-origin isolated (Option A)', async () => {
+    // After the native COOP/COEP patch gives the iOS WebView SharedArrayBuffer,
+    // iPhone runs the same threaded build as desktop — the call_indirect bug is
+    // only in the SAB-free single build, not the threaded one.
+    vi.stubGlobal('window', { crossOriginIsolated: true });
+    vi.stubGlobal('SharedArrayBuffer', function SharedArrayBufferStub() { /* stub */ });
+    vi.stubGlobal('navigator', {
+      userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148',
+      maxTouchPoints: 5,
+    });
+    vi.resetModules();
+    const { resolveWorkerUrl } = await import('./stockfishEngine');
+    const result = resolveWorkerUrl();
+    expect(result.variant).toBe('multi');
+    expect(result.url).toBe('/stockfish/stockfish-18-lite.js');
   });
 
   it('falls back to single-threaded variant when crossOriginIsolated is false', async () => {

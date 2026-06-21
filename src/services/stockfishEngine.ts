@@ -116,31 +116,31 @@ export function resolveWorkerUrl(): ResolvedWorker {
   if (typeof window === 'undefined') {
     return { url: STOCKFISH_ST_URL, variant: 'single', reason: 'no-window', workerType: 'classic' };
   }
-  // ENGINE ROOT FIX (David 2026-06-15): iOS Capacitor is NOT cross-origin
-  // isolated, so SharedArrayBuffer is unavailable. EVERY threaded build —
-  // stockfish-18-lite (multi) AND lila's sf16-7/fsf14/sf171-79 (all 7+ SAB/
-  // pthread refs) — HANGS spawning pthread workers it can never start (the
-  // observed 45s init timeout). The SAB-free `stockfish-18-lite-single` is
-  // the only build that fits. (It previously crashed with `call_indirect` on
-  // iOS Safari 26, but the wasm+glue were rebuilt as a matched pair, which is
-  // the usual cause of that mismatch — so retry it here; if it still throws,
-  // handleWorkerCrash now reports the reason instead of failing dark.)
-  if (isIosSafari()) {
-    return {
-      url: STOCKFISH_IOS_ASM_URL,
-      variant: 'asm',
-      reason: 'iOS — asm.js build (WebKit-safe; the WASM single build call_indirect-traps, the threaded builds need unavailable SharedArrayBuffer)',
-      workerType: 'classic',
-    };
-  }
   const isolated =
     (window as { crossOriginIsolated?: boolean }).crossOriginIsolated === true;
   const sabAvailable = typeof SharedArrayBuffer !== 'undefined';
+  // Option A (David 2026-06-21): isolation check FIRST, before the iOS fallback.
+  // Once the iOS WebView is cross-origin isolated (SAB present — see the native
+  // COOP/COEP patch), iPhone runs the SAME multi-threaded build as desktop. The
+  // `call_indirect` trap is ONLY in the SAB-free single build, NOT the threaded
+  // one — so when SAB is genuinely available, prefer multi on ANY platform.
+  // Until the native patch lands, iOS has no SAB and falls through to asm below
+  // (identical to today), so this reorder is dormant/safe until then.
   if (isolated && sabAvailable) {
     return {
       url: STOCKFISH_MT_URL,
       variant: 'multi',
       reason: 'crossOriginIsolated + SharedArrayBuffer available',
+      workerType: 'classic',
+    };
+  }
+  // No SharedArrayBuffer. iOS Safari/WebKit MUST use the asm.js build — the WASM
+  // single build call_indirect-traps on WebKit (192 PostHog crashes, 2026-06-21).
+  if (isIosSafari()) {
+    return {
+      url: STOCKFISH_IOS_ASM_URL,
+      variant: 'asm',
+      reason: 'iOS, no SharedArrayBuffer — asm.js build (WebKit-safe; the WASM single build call_indirect-traps)',
       workerType: 'classic',
     };
   }
