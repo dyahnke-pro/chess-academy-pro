@@ -26,6 +26,10 @@ PROJECT = 'ios/App/App.xcodeproj'
 SCHEME = 'App'
 APP_ID = 'com.chessacademy.pro'
 TEAM_ID = '7KATVL9274'
+# Marketing version (CFBundleShortVersionString). The committed repo carries no
+# xcodeproj (cap add regenerates it to Capacitor's "1.0" default each build), so
+# this is the source of truth — bump it for a new App Store version.
+APP_VERSION = '2.8'
 
 platform :ios do
   desc 'Build a signed App Store IPA (upload handled by the workflow via altool)'
@@ -63,18 +67,33 @@ platform :ios do
     )
     profile_name = lane_context[SharedValues::SIGH_NAME]
 
-    # Build number must strictly increase on every upload. Deriving it from
-    # latest_testflight_build_number races against builds still "processing"
-    # on Apple's side — a just-uploaded build isn't counted yet, so the next
-    # run reuses the same number and altool 409s ("bundle version must be
-    # higher"). A Unix timestamp is monotonic, always larger than any prior
-    # build, and independent of Apple's processing state.
-    build_no = Time.now.to_i.to_s
+    # Marketing version — set explicitly because `cap add ios` regenerates the
+    # iOS project every build and RESETS the version to Capacitor's "1.0"
+    # default. The repo commits no xcodeproj, so the real App Store version
+    # (2.8) lived only in App Store Connect — which is why the macOS-runner
+    # builds landed under a stray "1.0" train and never appeared under 2.8
+    # (David 2026-06-21: "we are on version 2.8 ... send build 70"). Bump this
+    # string for a new version.
+    app_version = APP_VERSION
+    increment_version_number(
+      version_number: app_version,
+      xcodeproj: 'ios/App/App.xcodeproj',
+    )
+
+    # Sequential build number: next after the latest TestFlight build for THIS
+    # version (so 2.8's build 69 → 70, then 71…). Replaces the Unix-timestamp
+    # scheme that made TestFlight show 10-digit build numbers.
+    build_no = latest_testflight_build_number(
+      app_identifier: APP_ID,
+      version: app_version,
+      api_key: api_key,
+      initial_build_number: 0,
+    ) + 1
     increment_build_number(
       xcodeproj: 'ios/App/App.xcodeproj',
       build_number: build_no,
     )
-    UI.message("Build number set to #{build_no}")
+    UI.message("Version #{app_version}, build number set to #{build_no}")
 
     build_app(
       project: PROJECT,
