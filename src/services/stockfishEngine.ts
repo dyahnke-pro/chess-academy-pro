@@ -51,6 +51,14 @@ interface QueueEntry {
 const INIT_TIMEOUT_MS = 45_000;
 const STOCKFISH_MT_URL = '/stockfish/stockfish-18-lite.js';
 const STOCKFISH_ST_URL = '/stockfish/stockfish-18-lite-single.js';
+// Pure-asm.js Stockfish (Niklas Fiekas's build, the lila author) — NO WebAssembly,
+// so it can't hit the `call_indirect to a signature that does not match` trap that
+// kills stockfish-18-lite-single on iOS WebKit (192 crashes in PostHog, David
+// 2026-06-21). asm.js is plain JS: slower than WASM but bulletproof on iOS Safari,
+// needs no SharedArrayBuffer, and speaks standard UCI (incl. Skill Level) so the
+// rating-matched difficulty still works. iOS ONLY — desktop keeps multi-thread,
+// Android keeps the WASM single build (Chromium has no call_indirect bug).
+const STOCKFISH_IOS_ASM_URL = '/stockfish/stockfish-asm.js';
 // NOTE (David 2026-06-15): the lila/sf16-7 module-worker path was REMOVED from
 // routing — it needs SharedArrayBuffer (7+ SAB/pthread refs) which iOS
 // Capacitor lacks, so it hung 45s on init. iOS now uses the SAB-free
@@ -65,7 +73,7 @@ const MAX_CRASH_RETRIES = 3;
  *  slow first-load WASM compilation to finish. */
 const MT_EARLY_FAILURE_WINDOW_MS = 5_000;
 
-export type StockfishVariant = 'multi' | 'single' | 'lila';
+export type StockfishVariant = 'multi' | 'single' | 'lila' | 'asm';
 
 export interface ResolvedWorker {
   url: string;
@@ -119,9 +127,9 @@ export function resolveWorkerUrl(): ResolvedWorker {
   // handleWorkerCrash now reports the reason instead of failing dark.)
   if (isIosSafari()) {
     return {
-      url: STOCKFISH_ST_URL,
-      variant: 'single',
-      reason: 'iOS — single-threaded build (threaded builds need SharedArrayBuffer, unavailable on iOS Capacitor → init hang)',
+      url: STOCKFISH_IOS_ASM_URL,
+      variant: 'asm',
+      reason: 'iOS — asm.js build (WebKit-safe; the WASM single build call_indirect-traps, the threaded builds need unavailable SharedArrayBuffer)',
       workerType: 'classic',
     };
   }

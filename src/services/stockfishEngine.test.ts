@@ -1090,6 +1090,20 @@ describe('resolveWorkerUrl', () => {
     expect(result.reason).toContain('SharedArrayBuffer');
   });
 
+  it('routes iOS Safari to the asm.js build (WebKit-safe, no call_indirect)', async () => {
+    vi.stubGlobal('window', { crossOriginIsolated: false });
+    vi.stubGlobal('navigator', {
+      userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148',
+      maxTouchPoints: 5,
+    });
+    vi.resetModules();
+    const { resolveWorkerUrl } = await import('./stockfishEngine');
+    const result = resolveWorkerUrl();
+    expect(result.variant).toBe('asm');
+    expect(result.url).toBe('/stockfish/stockfish-asm.js');
+    expect(result.workerType).toBe('classic');
+  });
+
   it('falls back to single-threaded variant when crossOriginIsolated is false', async () => {
     vi.stubGlobal('window', { crossOriginIsolated: false });
     vi.stubGlobal('SharedArrayBuffer', function SharedArrayBufferStub() { /* stub */ });
