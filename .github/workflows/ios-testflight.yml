@@ -143,6 +143,42 @@ jobs:
           echo "Uploading build/App.ipa to TestFlight via altool…"
           xcrun altool --upload-app --type ios --file build/App.ipa --apiKey "$KEY_ID" --apiIssuer "$ISSUER_ID"
 
+      # Compose "What to Test" from this build's actual user-facing commits
+      # (feat/fix/perf since the last build), same as daily-deploy. Manual
+      # override via TF_WHATS_NEW still wins.
+      - name: Compose "What to Test" notes
+        run: |
+          NOTES=$(git log --since="36 hours ago" --no-merges --pretty='%s' \
+            | grep -iE '^(feat|fix|perf)(\(|!|:)' \
+            | sed -E 's/^(feat|fix|perf)(\([^)]*\))?!?:[[:space:]]*//' \
+            | sed -E 's/^(.)/\U\1/' \
+            | head -12 \
+            | sed 's/^/• /')
+          [ -z "$NOTES" ] && NOTES="• Bug fixes and stability improvements."
+          {
+            echo 'TF_WHATS_NEW<<WTNEOF'
+            echo "What's new in this build — please test these and report anything that looks off:"
+            echo ''
+            echo "$NOTES"
+            echo ''
+            echo 'Focus areas: Play-with-Coach (make a move, background the app, return — board should stay live), Learn-with-Coach, Tactics/Patterns insights, and general navigation.'
+            echo 'WTNEOF'
+          } >> "$GITHUB_ENV"
+
+      # Assign the just-uploaded build to the internal AND external beta groups,
+      # set "What to Test", and submit for Beta App Review. The macOS-runner path
+      # only uploaded via altool; without this the build never reaches the
+      # external group. TF_WAIT_FOR_VALID polls until Apple finishes PROCESSING
+      # the new build before assigning it.
+      - name: Distribute to TestFlight (internal + external) + What to Test
+        env:
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          TF_EXTERNAL: '1'
+          TF_WAIT_FOR_VALID: '1'
+        run: node scripts/ci/distribute-testflight.mjs
+
       - name: Upload .ipa artifact
         if: always()
         uses: actions/upload-artifact@v4

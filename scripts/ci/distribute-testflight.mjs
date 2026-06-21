@@ -59,13 +59,25 @@ async function apiRetry(method, path, body, tries = 4) {
   return last;
 }
 
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
 const main = async () => {
   let buildId = process.env.TF_BUILD_ID;
   if (!buildId) {
-    const builds = await api('GET', `/v1/builds?filter[app]=${APP}&filter[processingState]=VALID&limit=1&sort=-uploadedDate&fields[builds]=version`);
-    buildId = builds.j.data?.[0]?.id;
-    if (!buildId) { console.error('::error::no VALID build found'); process.exit(1); }
-    console.log(`Latest VALID build: ${builds.j.data[0].attributes.version} (${buildId})`);
+    // TF_WAIT_FOR_VALID: the macOS-runner path (ios-testflight.yml) uploads via
+    // altool and calls this immediately, before Apple finishes PROCESSING the
+    // build — so a plain "latest VALID" lookup would grab the PREVIOUS build (or
+    // none). Poll until the just-uploaded build turns VALID (up to ~20 min).
+    const waitForValid = process.env.TF_WAIT_FOR_VALID === '1';
+    const deadline = Date.now() + 20 * 60 * 1000;
+    for (;;) {
+      const builds = await api('GET', `/v1/builds?filter[app]=${APP}&filter[processingState]=VALID&limit=1&sort=-uploadedDate&fields[builds]=version`);
+      buildId = builds.j.data?.[0]?.id;
+      if (buildId) { console.log(`Latest VALID build: ${builds.j.data[0].attributes.version} (${buildId})`); break; }
+      if (!waitForValid || Date.now() > deadline) { console.error('::error::no VALID build found'); process.exit(1); }
+      console.log('no VALID build yet — still processing, re-checking in 45s…');
+      await sleep(45000);
+    }
   }
 
   // Export compliance (HTTPS-only = exempt) so the build is installable.
