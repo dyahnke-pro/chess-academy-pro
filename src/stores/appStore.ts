@@ -136,7 +136,7 @@ interface AppState {
     history: string[];
     timestamp: number;
   } | null;
-  globalPracticePosition: { fen: string; label: string } | null;
+  globalPracticePosition: { fen: string; label: string; orientation?: 'white' | 'black' } | null;
   /**
    * Last board the user looked at anywhere in the app. Unlike
    * `globalBoardContext`, this survives the source screen unmounting, so

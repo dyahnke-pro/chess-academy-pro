@@ -4856,8 +4856,11 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         {/* Controls */}
         {gameState.status === 'playing' && (
           <div className="flex flex-col gap-1.5 px-4 py-2 flex-shrink-0">
-            {/* Row 1: Hint, Takeback, Resign — primary actions */}
-            <div className="flex items-center justify-center gap-2">
+            {/* Row 1: Hint, Why?, Takeback — primary in-move actions. (David
+                2026-06-21: Restart + Resign moved to row 2 so this row stops
+                clipping Hint/Resign off the screen edges.) flex-wrap so nothing
+                ever clips on narrow phones. */}
+            <div className="flex items-center justify-center gap-2 flex-wrap">
               <HintButton
                 currentLevel={hintState.level}
                 onRequestHint={handleHint}
@@ -4890,24 +4893,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                 <Undo2 size={16} />
                 <span>Takeback</span>
               </button>
-              <button
-                onClick={() => handleRestart()}
-                disabled={gameState.moves.length === 0}
-                className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-cyan-500/30 text-sm font-medium text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200"
-                style={{ boxShadow: '0 0 10px rgba(6, 182, 212, 0.25), 0 0 3px rgba(6, 182, 212, 0.15)' }}
-                onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 18px rgba(6, 182, 212, 0.45), 0 0 6px rgba(6, 182, 212, 0.25)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 10px rgba(6, 182, 212, 0.25), 0 0 3px rgba(6, 182, 212, 0.15)'; }}
-                data-testid="restart-btn"
-                aria-label="Restart game"
-              >
-                <RotateCcw size={16} />
-                <span>Restart</span>
-              </button>
-              <ResignButton onResign={handleResign} disabled={gameState.moves.length === 0} />
             </div>
 
-            {/* Row 1.5: Read this position (coach narration) */}
-            <div className="flex justify-center">
+            {/* Row 2: Read this position, Restart, Resign — secondary actions. */}
+            <div className="flex items-center justify-center gap-2 flex-wrap">
               <button
                 onClick={handleReadPosition}
                 className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-emerald-500/30 text-sm font-medium text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 transition-all duration-200"
@@ -4924,6 +4913,20 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                 )}
                 <span>{positionNarration.isNarrating ? 'Reading…' : 'Read this position'}</span>
               </button>
+              <button
+                onClick={() => handleRestart()}
+                disabled={gameState.moves.length === 0}
+                className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-cyan-500/30 text-sm font-medium text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200"
+                style={{ boxShadow: '0 0 10px rgba(6, 182, 212, 0.25), 0 0 3px rgba(6, 182, 212, 0.15)' }}
+                onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 18px rgba(6, 182, 212, 0.45), 0 0 6px rgba(6, 182, 212, 0.25)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 10px rgba(6, 182, 212, 0.25), 0 0 3px rgba(6, 182, 212, 0.15)'; }}
+                data-testid="restart-btn"
+                aria-label="Restart game"
+              >
+                <RotateCcw size={16} />
+                <span>Restart</span>
+              </button>
+              <ResignButton onResign={handleResign} disabled={gameState.moves.length === 0} />
             </div>
 
             {/* Row 2: Ask (voice) button */}

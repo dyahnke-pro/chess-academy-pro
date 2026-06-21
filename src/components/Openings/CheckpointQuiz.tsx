@@ -60,6 +60,10 @@ export function CheckpointQuiz({
     setGlobalPractice({
       fen: quiz.fen,
       label: quiz.concept ? `Test Yourself: ${quiz.concept}` : 'Test Yourself',
+      // Orient to the STUDENT's side (the opening's color), not whoever is to
+      // move in the FEN — otherwise a white-repertoire checkpoint whose test
+      // position is black-to-move would flip the board (David 2026-06-21).
+      orientation: boardOrientation,
     });
     onComplete(true);
     void navigate('/coach/session/practice');

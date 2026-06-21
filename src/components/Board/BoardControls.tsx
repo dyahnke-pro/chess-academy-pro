@@ -30,7 +30,7 @@ export function BoardControls({
 
   return (
     <div
-      className="flex items-center justify-center gap-2 py-2"
+      className="flex flex-wrap items-center justify-center gap-2 py-2"
       data-testid="board-controls-bar"
     >
       {extraLeft}

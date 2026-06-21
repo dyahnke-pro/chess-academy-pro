@@ -63,9 +63,15 @@ export function CoachPracticeSessionView({
 
   const active = practicePosition ?? globalPractice;
   const orientation: 'white' | 'black' = useMemo(() => {
+    // Prefer the student's side passed by the launcher (CheckpointQuiz forwards
+    // the opening's color). Fall back to side-to-move only when none was given
+    // (e.g. chat-annotation practice positions). Using side-to-move alone
+    // flipped the board to black on white-repertoire checkpoints whose test
+    // position is black-to-move (David 2026-06-21: "why is it black's perspective?").
+    if (globalPractice?.orientation) return globalPractice.orientation;
     if (!active?.fen) return 'white';
     return active.fen.split(' ')[1] === 'b' ? 'black' : 'white';
-  }, [active?.fen]);
+  }, [globalPractice?.orientation, active?.fen]);
 
   const game = useChessGame(active?.fen, orientation);
   const [feedback, setFeedback] = useState<FeedbackState>({ kind: 'idle' });
@@ -122,7 +128,15 @@ export function CoachPracticeSessionView({
   }
 
   const header = (
-    <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-theme-border">
+    <div className="flex items-center gap-3 px-4 py-3 border-b border-theme-border">
+      <button
+        onClick={handleExit}
+        className="shrink-0 p-2 -ml-1 rounded-lg hover:bg-theme-surface transition-colors"
+        aria-label="Back"
+        data-testid="practice-back"
+      >
+        <ArrowLeft size={20} className="text-theme-text" />
+      </button>
       <div className="flex-1 min-w-0">
         <div className="text-xs text-theme-text-muted uppercase tracking-wide">
           Practice
@@ -131,14 +145,6 @@ export function CoachPracticeSessionView({
           {active.label}
         </h1>
       </div>
-      <button
-        onClick={handleExit}
-        className="shrink-0 flex items-center gap-1 px-3 py-2 rounded-lg bg-theme-surface border border-theme-border text-sm"
-        aria-label="Back to chat"
-      >
-        <ArrowLeft size={16} />
-        Chat
-      </button>
     </div>
   );
 
