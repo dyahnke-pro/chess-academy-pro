@@ -83,22 +83,34 @@ const main = async () => {
   // Name the branch explicitly when we can (preferred); fall back to the
   // workflow's branch condition when the reference can't be resolved.
   const gitRefId = await resolveMainGitRef();
-  const relationships = { workflow: { data: { type: 'ciWorkflows', id: WORKFLOW } } };
-  if (gitRefId) relationships.sourceBranchOrTag = { data: { type: 'scmGitReferences', id: gitRefId } };
-  console.log(`build trigger: ${gitRefId ? 'explicit sourceBranchOrTag=main' : 'implicit (workflow branch condition)'}`);
+  const baseRel = { workflow: { data: { type: 'ciWorkflows', id: WORKFLOW } } };
+  const explicitRel = gitRefId
+    ? { ...baseRel, sourceBranchOrTag: { data: { type: 'scmGitReferences', id: gitRefId } } }
+    : baseRel;
+  console.log(`build trigger: ${gitRefId ? 'explicit sourceBranchOrTag=main (implicit fallback armed)' : 'implicit (workflow branch condition)'}`);
   // Apple's POST /v1/ciBuildRuns intermittently returns a 500 UNEXPECTED_ERROR
   // (documented transient server bug — retrying the IDENTICAL request usually
   // succeeds). Previously a single 500 hard-failed the whole build; on a night
   // when Apple's API is flaky that means NO build ever ships. Retry 5xx (and
   // 429) with exponential backoff; a 4xx is a real client error, fail fast.
+  //
+  // 2026-06-21: a 3-day, 100%-consistent 500 on this POST (while reads + the
+  // ciWorkflows PATCH succeed with the same key) is NOT a transient blip. The
+  // explicit `sourceBranchOrTag` relationship is the prime suspect — Apple can
+  // 500 on a relationship shape it no longer accepts. So once the explicit form
+  // has 500'd, drop it and retry with the IMPLICIT form (workflow branch
+  // condition only), alternating, so we exercise both shapes before giving up.
   let trig;
   for (let attempt = 1; attempt <= 6; attempt += 1) {
+    // attempts 1-2 explicit; 3+ implicit (only meaningful when gitRefId exists)
+    const relationships = (attempt >= 3 || !gitRefId) ? baseRel : explicitRel;
     trig = await api('POST', '/v1/ciBuildRuns', { data: { type: 'ciBuildRuns', relationships } });
     if (trig.status < 400) break;
     if (trig.status < 500 && trig.status !== 429) break; // real client error — don't retry
     if (attempt === 6) break;
     const waitMs = Math.min(60000, 5000 * 2 ** (attempt - 1));
-    console.error(`::warning::ciBuildRuns ${trig.status} (attempt ${attempt}/6) — retrying in ${waitMs / 1000}s: ${JSON.stringify(trig.j).slice(0, 150)}`);
+    const shape = relationships === explicitRel ? 'explicit' : 'implicit';
+    console.error(`::warning::ciBuildRuns ${trig.status} [${shape}] (attempt ${attempt}/6) — retrying in ${waitMs / 1000}s: ${JSON.stringify(trig.j).slice(0, 150)}`);
     await sleep(waitMs);
   }
   await setWorkflowBranch(IDLE_BRANCH_PATTERN);
