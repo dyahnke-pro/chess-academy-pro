@@ -50,6 +50,32 @@ cross-origin from it.
 
 ## THE FILE-BY-FILE CHANGE MAP
 
+### ⚠️ §1 REALITY (researched 2026-06-21): this is an UNSOLVED Capacitor limitation
+Capacitor issue **#6182 ("SharedArrayBuffer support")** is **closed, needs-reproduction, NO
+accepted fix** — you cannot set top-level response headers in Capacitor iOS, and SAB needs COOP/
+COEP on the initial HTML + every init asset. There is **no AppDelegate / config hook**. The ONLY
+mechanism: **patch Capacitor's own native source** `node_modules/@capacitor/ios/Capacitor/
+Capacitor/WebViewAssetHandler.swift` — at the `headers` dict (~line 49, currently just
+`Content-Type` + `Cache-Control`) ADD:
+```swift
+headers["Cross-Origin-Opener-Policy"] = "same-origin"
+headers["Cross-Origin-Embedder-Policy"] = "require-corp"
+headers["Cross-Origin-Resource-Policy"] = "cross-origin"
+```
+so EVERY locally-served file carries them. Delivered via **`patch-package`** (postinstall) so it
+survives `npm ci`; Capacitor 8 consumes `@capacitor/ios` from `node_modules` via SPM, so the patch
+flows into `cap add ios`. **This patches a dependency's native code — invasive, must be re-verified
+on every Capacitor upgrade.**
+
+**Risk re-assessed (LOWER than feared):** all init-time resources (app JS/CSS/wasm, the Stockfish
+workers) are SAME-ORIGIN (served by this same handler) → `require-corp` does NOT block them → no
+white-screen at load. Cross-origin happens only at runtime (`/api/*`), already CORS+CORP (§3). And
+if WKWebView still won't flip `crossOriginIsolated` on the `capacitor://` scheme → no SAB →
+resolver falls back to asm (B) → no regression. Net: contained risk, degrades to B, **but the
+"does WKWebView actually isolate" question is still device-verify-only.**
+
+Setup needed: add `patch-package` devDep + `postinstall` hook + commit `patches/@capacitor+ios+8.1.0.patch`.
+
 ### 1. Native iOS — inject COOP/COEP on the served app (THE hard, uncertain part)
 - **`ios-patches/App/AppDelegate.swift`** — add WKWebView setup that makes the served local
   content carry `Cross-Origin-Opener-Policy: same-origin` + `Cross-Origin-Embedder-Policy:
