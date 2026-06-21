@@ -35,6 +35,11 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Need commit history (not the default shallow depth-1) so the
+          # "Compose What to Test" step can read feat/fix/perf subjects since the
+          # last build — otherwise it falls back to the generic note.
+          fetch-depth: 50
 
       - uses: actions/setup-node@v4
         with:
