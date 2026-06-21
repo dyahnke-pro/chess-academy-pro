@@ -7,7 +7,11 @@ import { pickBookMove } from './coachBookMove';
 import { logAppAudit } from './appAuditor';
 import type { StockfishAnalysis, CoachDifficulty } from '../types';
 
-const COACH_MOVE_TIMEOUT_MS = 5000;
+// Budget for the skill-limited opponent search before falling back to a
+// movetime best-move. 8s (was 5s) gives the slower single-threaded iOS engine
+// headroom to finish the (now depth-capped) search instead of timing out into
+// the weak/random fallback (David 2026-06-21: "coach is not playing good moves").
+const COACH_MOVE_TIMEOUT_MS = 8000;
 
 const FALLBACK_ANALYSIS: StockfishAnalysis = {
   bestMove: '',
@@ -193,7 +197,16 @@ export async function getAdaptiveMove(
   fen: string,
   targetElo: number,
 ): Promise<{ move: string; analysis: StockfishAnalysis; source: 'masters' | 'lichess-games' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random' }> {
-  const depth = getDepthForElo(targetElo);
+  // Single-threaded Stockfish (iOS / any context without SharedArrayBuffer +
+  // cross-origin isolation) is ~5-10x slower than the threaded build, so a
+  // depth 14-16 search blows the COACH_MOVE_TIMEOUT_MS budget → timeout →
+  // movetime fallback or, worse, the random floor (the documented "source=
+  // random after Stockfish timeout" failure that makes the coach play garbage
+  // on iPhone — David 2026-06-21). Cap the depth on single-threaded so the
+  // skill-limited best-move search actually COMPLETES and returns a real
+  // rating-matched move. Desktop (threaded) keeps full depth.
+  const threaded = typeof SharedArrayBuffer !== 'undefined' && globalThis.crossOriginIsolated;
+  const depth = threaded ? getDepthForElo(targetElo) : Math.min(getDepthForElo(targetElo), 10);
   const skillLevel = getSkillLevelForElo(targetElo);
 
   // Layer 0 — master play. Consult the canonical masters DB (local

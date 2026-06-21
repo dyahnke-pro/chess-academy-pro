@@ -96,7 +96,7 @@ import { applyCandidateArrows, candidateHighlightMarkers } from '../../services/
 import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
-import { getAdaptiveMove, getRandomLegalMove } from '../../services/coachGameEngine';
+import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
 import { withTimeout } from '../../coach/withTimeout';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -3352,9 +3352,13 @@ export function CoachTeachPage(): JSX.Element {
         return m?.san ?? null;
       } catch { return null; }
     };
-    // 2) Out of book / deviation — rating-matched engine.
+    // 2) Out of book / deviation — difficulty-adjusted engine. Uses the SAME
+    //    getTargetStrength(rating, difficulty) mapping /coach/play uses so the
+    //    Easy/Medium/Hard pill actually changes the opponent's strength (it was
+    //    ignored here — the coach always played at raw puzzleRating, David
+    //    2026-06-21 "coach is not playing good moves at all").
     try {
-      const rating = activeProfile?.puzzleRating ?? 1200;
+      const rating = getTargetStrength(activeProfile?.puzzleRating ?? 1200, difficulty);
       const adaptive = await getAdaptiveMove(fen, rating);
       if (adaptive.move) {
         const san = uciToSan(adaptive.move);
@@ -3364,7 +3368,7 @@ export function CoachTeachPage(): JSX.Element {
     // 3) Never freeze.
     const random = getRandomLegalMove(fen);
     return random ? uciToSan(random) : null;
-  }, [walkthrough.tree?.openingName, activeProfile?.puzzleRating]);
+  }, [walkthrough.tree?.openingName, activeProfile?.puzzleRating, difficulty]);
 
   // "Read this position" — the SAME on-demand affordance Play carries
   // (David 2026-06-15: "You didn't like the read this position button?").

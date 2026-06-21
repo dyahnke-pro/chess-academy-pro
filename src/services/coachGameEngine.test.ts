@@ -32,6 +32,10 @@ const mockAnalysis: StockfishAnalysis = {
 describe('coachGameEngine', () => {
   beforeEach(() => {
     analyzePositionMock.mockResolvedValue(mockAnalysis);
+    // Default to the threaded (desktop) path so the depth-by-ELO assertions
+    // below test the full curve. The single-threaded depth cap is covered by
+    // its own test.
+    vi.stubGlobal('crossOriginIsolated', true);
   });
 
   describe('getAdaptiveMove', () => {
@@ -100,6 +104,14 @@ describe('coachGameEngine', () => {
     it('uses depth 18 for 1800+ ELO', async () => {
       await getAdaptiveMove('startfen', 2000);
       expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 18, expect.any(Object));
+    });
+
+    it('caps depth at 10 on single-threaded (no cross-origin isolation)', async () => {
+      // iOS / no-SharedArrayBuffer path: a deep search blows the move-timeout
+      // budget and falls back to random, so the depth is capped (David 2026-06-21).
+      vi.stubGlobal('crossOriginIsolated', false);
+      await getAdaptiveMove('startfen', 1600); // depth 16 on threaded
+      expect(analyzePositionMock).toHaveBeenCalledWith(expect.any(String), 10, expect.any(Object));
     });
   });
 
