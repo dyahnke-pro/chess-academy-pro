@@ -1591,6 +1591,28 @@ header. The secret is in per-project memory.
   `x-audit-secret` header. Save the secret to memory so you don't have
   to re-ask each session.
 
+**🚨 DURABLE ANALYTICS = POSTHOG, NOT THE AUDIT-STREAM (David 2026-06-21,
+LOCKED — emphatic). The audit-stream is EPHEMERAL and is the WRONG place to
+look for anything historical.** The `/api/audit-stream` buffer is in-memory
+on Vercel (`storage: memory`) — it is **wiped on every deploy** (each push
+restarts the serverless function) and only records **while the app is open**.
+So it is useless for "what happened in my game / yesterday / over time" —
+those events are GONE the moment a deploy lands or the app closes. Do NOT
+answer historical/usage/event-history questions from the audit-stream.
+
+**When David asks to "check the audit data," "what happened in my game,"
+usage, engagement, errors over time, or any after-the-fact telemetry → query
+PostHog**, the durable analytics store: `node scripts/posthog-query.mjs
+"<HogQL>"` (events table, ClickHouse-flavored SQL). The app sends events via
+`src/services/analytics.ts` (write key `VITE_POSTHOG_KEY`). The audit-stream
+is ONLY for a LIVE watch during an active session (G1/G2 post-deploy audit) —
+never for history. STOP treating the Vercel audit buffer as the analytics
+backend; it isn't, and saying "the buffer was wiped, the data's gone" when
+the real data is sitting in PostHog is the mistake this rule exists to kill.
+(Read key: `Read_key_PostHog` / `POSTHOG_API_KEY` — refresh it in the env-var
+config if `posthog-query.mjs` returns 401; do NOT fall back to the
+audit-stream for history.)
+
 **Secrets — durable storage (stop re-pasting keys).** This container
 is ephemeral and re-cloned every web session, and `.env*` / `.claude/`
 are gitignored — so NOTHING on disk survives. The only durable secret
