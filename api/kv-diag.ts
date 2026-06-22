@@ -35,6 +35,14 @@ export default async function handler(req: Request): Promise<Response> {
     });
     info.status = r.status;
     info.body = (await r.text()).slice(0, 300);
+    // Read today's accumulated global spend the guard has been charging.
+    const day = new Date().toISOString().slice(0, 10);
+    const sr = await fetch(`${KV_URL}/get/spend:${day}`, {
+      headers: { authorization: `Bearer ${KV_TOKEN}` },
+    });
+    info.spendKey = `spend:${day}`;
+    info.spendToday = (await sr.text()).slice(0, 120);
+    info.ceiling = process.env.LLM_DAILY_USD_CEILING ?? '(default 25)';
   } catch (e) {
     info.fetchError = String(e);
   }
