@@ -23,6 +23,16 @@ async function api(path) {
 }
 
 const runId = process.argv[2]; // optional explicit ciBuildRun id
+const APP = '6776418777';
+// Print the highest already-uploaded build numbers (CFBundleVersion) per
+// version — this is the number a new build must EXCEED.
+const builds = await api(`/v1/builds?filter[app]=${APP}&sort=-uploadedDate&limit=10&fields[builds]=version,uploadedDate,processingState`);
+console.log('recent uploaded builds (version = CFBundleVersion):');
+for (const b of builds.j?.data ?? []) {
+  console.log(`   build ${b.attributes?.version}  ${b.attributes?.processingState}  ${b.attributes?.uploadedDate}`);
+}
+console.log('');
+
 let run;
 if (runId) {
   run = (await api(`/v1/ciBuildRuns/${runId}`)).j?.data;
