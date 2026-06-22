@@ -7,6 +7,7 @@ import { db } from '../db/schema';
 import { getCachedStockfish, setCachedStockfish } from './stockfishFenCache';
 import { coachService } from '../coach/coachService';
 import { isSpokenSentenceGrounded } from '../services/coachAnswerGates';
+import { buildFedTacticsContext } from '../services/liveTacticsContext';
 import type { CoachContext, PhaseNarrationVerbosity, StockfishAnalysis } from '../types';
 import type { PhaseTransitionEvent } from '../services/phaseTransitionDetector';
 
@@ -210,6 +211,21 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       const rating = profile?.currentRating ?? 1200;
       const { getPgn, getOpeningName } = argsRef.current;
 
+      // GROUNDING INVERSION (G0): hand the brain the REAL, code-computed tactics
+      // for this position so it can only VOICE them — instead of free-reasoning
+      // over the board and naming a pin/fork that isn't there (PostHog
+      // `phase-narration.tacticClaimGate … no tactics context`, David 2026-06-22).
+      // The prompt below already promises a "Tactics analysis block"; without
+      // this the block was never sent, so the LLM invented tactics and the gate
+      // stripped them. Reuses the Stockfish read just done — no extra round trip.
+      const phaseTactics = await buildFedTacticsContext(
+        event.fen,
+        event.playerColor === 'white' ? 'w' : 'b',
+        rating,
+        stockfishAnalysis,
+      ).catch(() => undefined);
+      if (token !== activeTokenRef.current) return;
+
       const transitionLabel = event.kind === 'opening-to-middlegame'
         ? 'Opening → Middlegame'
         : 'Middlegame → Endgame';
@@ -320,6 +336,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
                 moveHistory: undefined,
                 userJustDid: `Phase transition: ${event.kind} after ${event.triggeringMoveSan}`,
                 whoseTurn: event.fen.split(' ')[1] === 'b' ? 'black' : 'white',
+                tactics: phaseTactics,
               },
             },
             {
