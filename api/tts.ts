@@ -1,5 +1,7 @@
 export const config = { runtime: 'edge' };
 
+import { checkUsageGuard, POLLY_USD_PER_CHAR } from './_lib/usageGuard';
+
 const ALLOWED_ORIGINS = [
   // Native iOS WKWebView serves over `https://app.chessacademy.pro` once
   // `server.hostname` is set (in addition to the legacy `capacitor://`). The
@@ -253,6 +255,18 @@ async function synthesize(text: string, voice: string, req: Request, useSsml: bo
   const voiceConfig = ALLOWED_VOICES[voiceKey];
   if (!voiceConfig) {
     return new Response(`Unknown voice: ${voice}`, { status: 400, headers: cors });
+  }
+
+  // Cross-fleet cost guard: KV-backed per-IP rate limit + the shared global
+  // daily $ kill-switch (Polly is the bigger cost driver, ~$16/1M chars). This
+  // is the durable layer on top of the per-isolate in-memory limit above;
+  // no-op until KV is provisioned (api/_lib/usageGuard.ts).
+  const guard = await checkUsageGuard('tts', req, text.length * POLLY_USD_PER_CHAR);
+  if (!guard.allowed) {
+    return new Response('Usage limit reached. Voice is resting briefly.', {
+      status: 429,
+      headers: { ...cors, 'Retry-After': String(guard.retryAfterSec ?? 3600) },
+    });
   }
 
   try {

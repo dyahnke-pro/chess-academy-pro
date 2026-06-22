@@ -20,8 +20,11 @@
  * Origin allowlist + CORS mirror api/tts.ts (Capacitor app, prod vercel.app,
  * localhost dev, preview subdomains). The key is no longer extractable from
  * the bundle; the Origin gate matches the posture of the other first-party
- * proxies. KV-backed rate limiting is a flagged hardening follow-up.
+ * proxies. KV-backed rate limiting + a global daily $ kill-switch live in
+ * api/_lib/usageGuard.ts (no-op until a Vercel KV store is provisioned).
  */
+import { checkUsageGuard, LLM_CALL_COST_USD } from './_lib/usageGuard';
+
 export const config = { runtime: 'edge' };
 
 const ALLOWED_ORIGINS = [
@@ -120,6 +123,19 @@ export default async function handler(req: Request): Promise<Response> {
   const key = process.env[provider.env];
   if (!key) {
     return new Response(`${provider.env} not configured on the server`, { status: 503, headers: cors });
+  }
+
+  // Cost guard: per-IP rate limit + global daily $ kill-switch (no-op until
+  // KV is provisioned — see api/_lib/usageGuard.ts).
+  const guard = await checkUsageGuard('llm', req, LLM_CALL_COST_USD);
+  if (!guard.allowed) {
+    const msg = guard.reason === 'daily-ceiling'
+      ? 'Daily usage limit reached. The coach is resting until tomorrow.'
+      : 'Too many requests — slow down a moment.';
+    return new Response(JSON.stringify({ error: { message: msg, type: 'usage_cap', reason: guard.reason } }), {
+      status: 429,
+      headers: { ...cors, 'content-type': 'application/json', 'Retry-After': String(guard.retryAfterSec ?? 3600) },
+    });
   }
 
   const subPath = (url.searchParams.get('path') ?? '').replace(/^\/+/, '');
