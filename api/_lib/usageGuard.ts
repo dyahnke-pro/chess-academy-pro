@@ -22,22 +22,35 @@
  * injects KV_REST_API_URL + KV_REST_API_TOKEN. Until then this no-ops.
  */
 
-const KV_URL = (process.env.KV_REST_API_URL || '').replace(/\/+$/, '');
-const KV_TOKEN = process.env.KV_REST_API_TOKEN;
+export type GuardKind = 'llm' | 'tts';
+
+// 🚨 All env reads are LAZY (inside functions, at call time). On the Vercel Edge
+// runtime, runtime env vars (KV_REST_API_URL etc.) are NOT reliably bound when
+// a module's top-level code evaluates — a top-level `const KV_URL =
+// process.env.…` reads empty and the guard fails open on every call (verified
+// 2026-06-22: an isolated handler reading process.env lazily got the creds; the
+// guard reading them at module scope did not). Read them per request instead.
+
+interface KvCreds { url: string; token: string; }
+function kvCreds(): KvCreds {
+  return {
+    url: (process.env.KV_REST_API_URL || '').replace(/\/+$/, ''),
+    token: process.env.KV_REST_API_TOKEN || '',
+  };
+}
 
 /** Absolute ceiling on a single day's estimated spend, across everyone. */
-const DAILY_USD_CEILING = Number(process.env.LLM_DAILY_USD_CEILING ?? '25');
+function dailyUsdCeiling(): number {
+  return Number(process.env.LLM_DAILY_USD_CEILING ?? '25');
+}
 
 interface Limit { windowSec: number; maxPerWindow: number; }
-const LIMITS: Record<GuardKind, Limit> = {
+function limitFor(kind: GuardKind): Limit {
   // A real human coach session is ~30-80 calls; 60 / 10 min is generous for a
-  // person and tight on a loop.
-  llm: { windowSec: 600, maxPerWindow: Number(process.env.LLM_IP_LIMIT ?? '60') },
-  // Voice fires more often (per-sentence), so a looser window.
-  tts: { windowSec: 600, maxPerWindow: Number(process.env.TTS_IP_LIMIT ?? '180') },
-};
-
-export type GuardKind = 'llm' | 'tts';
+  // person, tight on a loop. Voice fires per-sentence, so a looser window.
+  if (kind === 'tts') return { windowSec: 600, maxPerWindow: Number(process.env.TTS_IP_LIMIT ?? '180') };
+  return { windowSec: 600, maxPerWindow: Number(process.env.LLM_IP_LIMIT ?? '60') };
+}
 
 export interface GuardResult {
   allowed: boolean;
@@ -55,12 +68,12 @@ function clientIp(req: Request): string {
  * Upstash REST pipeline. Returns the array of `result` values, or null on any
  * failure (caller treats null as fail-open).
  */
-async function kvPipeline(commands: (string | number)[][]): Promise<unknown[] | null> {
-  if (!KV_URL || !KV_TOKEN) return null;
+async function kvPipeline(creds: KvCreds, commands: (string | number)[][]): Promise<unknown[] | null> {
+  if (!creds.url || !creds.token) return null;
   try {
-    const r = await fetch(`${KV_URL}/pipeline`, {
+    const r = await fetch(`${creds.url}/pipeline`, {
       method: 'POST',
-      headers: { authorization: `Bearer ${KV_TOKEN}`, 'content-type': 'application/json' },
+      headers: { authorization: `Bearer ${creds.token}`, 'content-type': 'application/json' },
       body: JSON.stringify(commands),
     });
     if (!r.ok) return null;
@@ -85,16 +98,17 @@ export async function checkUsageGuard(
   req: Request,
   estimatedCostUsd: number,
 ): Promise<GuardResult> {
-  if (!KV_URL || !KV_TOKEN) return { allowed: true }; // not provisioned → no-op
+  const creds = kvCreds();
+  if (!creds.url || !creds.token) return { allowed: true }; // not provisioned → no-op
 
   const ip = clientIp(req);
-  const lim = LIMITS[kind];
+  const lim = limitFor(kind);
   const day = new Date().toISOString().slice(0, 10);
   const rlKey = `rl:${kind}:${ip}:${Math.floor(Date.now() / 1000 / lim.windowSec)}`;
   const spendKey = `spend:${day}`;
   const charge = Math.max(0, estimatedCostUsd).toFixed(6);
 
-  const res = await kvPipeline([
+  const res = await kvPipeline(creds, [
     ['INCR', rlKey],
     ['EXPIRE', rlKey, lim.windowSec],
     ['INCRBYFLOAT', spendKey, charge],
@@ -106,7 +120,7 @@ export async function checkUsageGuard(
   const daySpend = Number(res[2] ?? 0);
 
   // Daily ceiling is the harder stop — check it first.
-  if (Number.isFinite(daySpend) && daySpend > DAILY_USD_CEILING) {
+  if (Number.isFinite(daySpend) && daySpend > dailyUsdCeiling()) {
     return { allowed: false, reason: 'daily-ceiling', retryAfterSec: secondsUntilUtcMidnight() };
   }
   if (Number.isFinite(ipCount) && ipCount > lim.maxPerWindow) {
