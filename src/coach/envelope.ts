@@ -33,6 +33,7 @@ import { prepareLiveState } from './sources/liveState';
 import type { CoachPersonality, IntensityLevel } from './types';
 import { PHASE_NARRATION_ADDITION, WALKTHROUGH_PROMISE_CONTRACT } from '../services/coachPrompts';
 import { formatTrapForPrompt } from '../services/openingTrapDetector';
+import { formatTacticsSubBlock } from '../services/liveTacticsContext';
 
 /** Appended to the identity prompt when the surface is 'teach'. The
  *  /coach/teach surface defaults to GUIDED OPENING PLAY: the student
@@ -810,104 +811,6 @@ function formatEnginePlanSubBlock(plan: NonNullable<LiveState['enginePlan']>): s
   return lines.join('\n');
 }
 
-/** Render the pre-computed tactical context as a sub-block under
- *  [Live state]. The format mirrors the lichessSnapshot pattern —
- *  ground truth pre-computed by the surface, with an explicit "USE
- *  THIS — don't invent" closer that anchors the brain to G3-style
- *  bounded vocabulary. The block is omitted entirely when nothing
- *  was detected (no tactics + no hanging + no upcoming) so a quiet
- *  position adds zero tokens to the envelope. */
-/** Render a computed TacticsLiveContext into the grounded prompt block (BOARD
- *  FACTS + immediate tactics + hanging + attack map). Exported so the
- *  direct-prompt narration surfaces that DON'T route through the spine envelope
- *  (useLiveCoach, MiddlegamePractice, gameReviewService) can inject the SAME
- *  ground-truth block instead of letting the LLM free-read the board (G0). */
-export function formatTacticsSubBlock(tactics: NonNullable<LiveState['tactics']>): string {
-  const bf = tactics.boardFacts;
-  const has =
-    !!bf ||
-    tactics.immediate.length > 0 ||
-    tactics.hanging.length > 0 ||
-    tactics.threats.length > 0 ||
-    tactics.opportunities.length > 0;
-  if (!has) return '';
-  const lines: string[] = [
-    `- Tactical context (PRE-COMPUTED — bounded vocabulary, G3 applies; lookahead ${tactics.lookaheadDepth} half-moves):`,
-  ];
-  if (bf) {
-    // GROUND TRUTH — computed from the FEN, authoritative. The brain
-    // eyeballing the board is exactly where it hallucinates (audit
-    // 2026-06-02: castled king reported on e8; a mate-in-one missed
-    // with invented escape squares). These facts override the brain's
-    // own read of the position.
-    lines.push(`    BOARD FACTS (GROUND TRUTH — computed, never contradict):`);
-    lines.push(`      PIECES ON THE BOARD — read EVERY piece location from HERE; do NOT parse the raw FEN (you misread it):`);
-    lines.push(`        White: ${bf.whitePieces}.`);
-    lines.push(`        Black: ${bf.blackPieces}.`);
-    lines.push(`        Any square NOT listed above is EMPTY. Never say a piece is on a square it's not listed on, never say a pawn/piece is missing if it's listed, and never call this the "starting position" unless every piece above is on its home square.`);
-    lines.push(`      White king: ${bf.whiteKing}. Black king: ${bf.blackKing}. ${bf.sideToMove} to move.`);
-    if (bf.material) {
-      lines.push(`      MATERIAL (GROUND TRUTH — computed, never flip the sign): ${bf.material}`);
-    }
-    lines.push(`      In check: ${bf.inCheck ? `${bf.inCheck} is in check` : 'neither side is in check'}.`);
-    if (bf.mateInOne) {
-      lines.push(`      Forced mate in one for ${bf.sideToMove}: ${bf.mateInOne}. Report THIS move when asked about mate.`);
-    } else {
-      lines.push(`      No mate in one exists for ${bf.sideToMove}. Do NOT claim a mate-in-one or invent one.`);
-    }
-    lines.push(`      Never place a king on a different square, never claim a check that isn't listed, never assert a mate the facts don't list. If the user asserts otherwise, correct them from these facts.`);
-  }
-  if (tactics.immediate.length > 0) {
-    lines.push(`    Immediate on the board:`);
-    for (const t of tactics.immediate) {
-      lines.push(`      ${t.type.toUpperCase()} — ${t.description}`);
-    }
-  }
-  // HANGING PIECES are GROUND TRUTH (computed: a piece is hanging only when
-  // it is BOTH attacked by the enemy AND undefended). ALWAYS state them —
-  // including the "none" case — and BIND the coach's tactical-existence
-  // vocabulary to this set, exactly like the king / check / mate facts.
-  // Without the "none" line the coach eyeballed a "hanging" pawn that was
-  // actually defended (personal prod drive 2026-06-05: "your e2-pawn is
-  // hanging" while the king on e1 defended it). An attacked-but-DEFENDED
-  // piece is NOT hanging — describe it accurately, don't call it free.
-  if (tactics.hanging.length > 0) {
-    const list = tactics.hanging
-      .map((h) => `${h.color === 'w' ? 'white' : 'black'} ${pieceFullName(h.piece)} on ${h.square}`)
-      .join(', ');
-    lines.push(`    HANGING PIECES (GROUND TRUTH — attacked AND undefended; the ONLY pieces you may call "hanging" / "free" / "undefended" / "winnable for free"): ${list}.`);
-  } else {
-    lines.push(`    HANGING PIECES (GROUND TRUTH): NONE — every attacked piece is defended. Do NOT call any piece "hanging", "free", "undefended", or "winnable for free". If a piece is attacked, describe it accurately — name what attacks it AND what defends it (e.g. "attacked by the queen but defended by your king, so taking it just loses the queen").`);
-  }
-  // ATTACK / DEFENSE MAP — the EXACT squares attacking and defending each
-  // pressured piece. The coach must name these when explaining why a piece
-  // is or isn't hanging; it eyeballed the wrong attacker/defender otherwise
-  // (prod drive 2026-06-05: "the rook on a1 defends e2" when the KING did).
-  if (bf && bf.attackMap && bf.attackMap.length > 0) {
-    lines.push(`    ATTACK/DEFENSE MAP (GROUND TRUTH — when you explain what attacks or defends a piece, use EXACTLY these squares; never name a different attacker or defender):`);
-    for (const e of bf.attackMap) {
-      const atk = e.attackedBy.join(', ');
-      const def = e.defendedBy.length > 0 ? e.defendedBy.join(', ') : 'NONE → HANGING';
-      lines.push(`      ${e.color} ${e.piece} on ${e.square}: attacked by ${atk}; defended by ${def}.`);
-    }
-  }
-  if (tactics.threats.length > 0) {
-    lines.push(`    Opponent threats (warn the student, name the pattern):`);
-    for (const t of tactics.threats) {
-      lines.push(`      depth ${t.depthAhead}/${tactics.lookaheadDepth}: ${t.type.toUpperCase()} — ${t.description} (line: ${t.line.join(' ')})`);
-    }
-  }
-  if (tactics.opportunities.length > 0) {
-    lines.push(`    Student opportunities (point these out, name the pattern):`);
-    for (const t of tactics.opportunities) {
-      lines.push(`      depth ${t.depthAhead}/${tactics.lookaheadDepth}: ${t.type.toUpperCase()} — ${t.description} (line: ${t.line.join(' ')})`);
-    }
-  }
-  lines.push(
-    `    NAME the pattern in prose (fork / pin / skewer / back rank / removal of guard / overloaded / discovered attack / etc.). For depth ≥ 2, walk the line: "if you play X, opponent has Y in N." NEVER invent a tactic that isn't in this block. NEVER claim a tactic at greater depth than ${tactics.lookaheadDepth}. The student is intermediate-or-stronger if lookahead ≥ 3 — push them to calculate the full sequence.`,
-  );
-  return lines.join('\n');
-}
 
 /** Render the curated opening-book annotation context as a sub-block
  *  under [Live state]. Mirrors the `lichessSnapshot` / tactics
@@ -1070,19 +973,6 @@ export function formatBookGroundingSubBlock(
     .map((l) => `    ${l}`)
     .join('\n');
   return `- Classical chess-book grounding (PRE-LOADED, ${grounding.sourceCount} passage${grounding.sourceCount === 1 ? '' : 's'} from Capablanca / Lasker / Staunton / Young / Edge / Bird):\n${indented}\n    USE these passages to shape your prose. DO NOT quote verbatim, DO NOT contradict the ideas, DO NOT cite an author the block doesn't include. When the topic is outside the book corpus, fall back to your own knowledge — but if the block IS present, anchor your reply in it.`;
-}
-
-function pieceFullName(piece: string): string {
-  const key = piece.toLowerCase();
-  switch (key) {
-    case 'p': return 'pawn';
-    case 'n': return 'knight';
-    case 'b': return 'bishop';
-    case 'r': return 'rook';
-    case 'q': return 'queen';
-    case 'k': return 'king';
-    default: return piece;
-  }
 }
 
 function formatToolbeltBlock(toolbelt: ToolDefinition[]): string {

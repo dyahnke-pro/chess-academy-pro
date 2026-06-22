@@ -20,8 +20,7 @@
  */
 import { useCallback, useRef } from 'react';
 import { getCoachChatResponse } from '../services/coachApi';
-import { buildFedTacticsContext } from '../services/liveTacticsContext';
-import { formatTacticsSubBlock } from '../coach/envelope';
+import { buildFedTacticsContext, formatTacticsSubBlock } from '../services/liveTacticsContext';
 import { getCachedStockfish } from './stockfishFenCache';
 import { groundCoachReply, applyCandidateArrows } from '../services/coachAnswerGates';
 import { voiceService } from '../services/voiceService';

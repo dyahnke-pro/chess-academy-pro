@@ -1,5 +1,6 @@
 import type { CoachContext, CoachVerbosity, OpeningAnnotationContext } from '../types';
 import { detectTactics } from './tacticsDetector';
+import { buildTacticsLiveContext, formatTacticsSubBlock } from './liveTacticsContext';
 
 // ─── Verbosity Prompt Modifier ─────────────────────────────────────────────
 
@@ -1065,10 +1066,36 @@ export function buildChessContextMessage(ctx: CoachContext): string {
     lines.push(`Current weakness: ${ctx.playerProfile.weaknesses[0]}`);
   }
 
-  // Deterministic tactics analysis — always include when available
-  const tacticsResult = detectTactics(ctx.fen);
-  if (tacticsResult.summary) {
-    lines.push(`\nTactics analysis:\n${tacticsResult.summary}`);
+  // Deterministic tactics + BOARD-FACTS ground truth — the brain VOICES these,
+  // it never decides them (G0/G3). This is the SAME grounded block the spine
+  // envelope renders, so every getCoachCommentary surface (review, position
+  // narration, game review) is anchored identically instead of free-reading
+  // the board and inventing a pin/fork/mate. The perspective is the side to
+  // move (board facts are perspective-independent; only threat/opportunity
+  // labels use it). Guarded: an unparseable/partial FEN (or a starved engine)
+  // falls back to the thin detectTactics summary rather than throwing.
+  try {
+    const stm: 'w' | 'b' = ctx.fen.split(' ')[1] === 'b' ? 'b' : 'w';
+    const tactics = buildTacticsLiveContext(
+      ctx.fen,
+      ctx.stockfishAnalysis,
+      stm,
+      ctx.playerProfile.rating,
+    );
+    const block = formatTacticsSubBlock(tactics);
+    if (block) {
+      lines.push(`\n${block}`);
+    } else {
+      const tacticsResult = detectTactics(ctx.fen);
+      if (tacticsResult.summary) {
+        lines.push(`\nTactics analysis:\n${tacticsResult.summary}`);
+      }
+    }
+  } catch {
+    const tacticsResult = detectTactics(ctx.fen);
+    if (tacticsResult.summary) {
+      lines.push(`\nTactics analysis:\n${tacticsResult.summary}`);
+    }
   }
 
   if (ctx.additionalContext) {
