@@ -169,6 +169,8 @@ export function _resetLichessCircuitBreaker(): void {
   circuitOpenedAt = null;
   openCircuitLogged = false;
   lichessRateLimitedUntil = null;
+  cloudEvalCache.clear();
+  cloudEvalInflight.clear();
 }
 
 /** Shared rate-limit cooldown across the explorer + cloud-eval
@@ -182,6 +184,27 @@ export function _resetLichessCircuitBreaker(): void {
 const LICHESS_RATE_LIMIT_DEFAULT_MS = 30_000;
 const LICHESS_RATE_LIMIT_MAX_MS = 5 * 60 * 1000;
 let lichessRateLimitedUntil: number | null = null;
+
+/** Per-(fen,multiPv) cloud-eval cache — the eval is immutable per position, so
+ *  this turns the eval bar's repeated same-FEN requests into one network call.
+ *  Bounded (FIFO-evict) so a long session can't grow it unbounded. `null` values
+ *  cache the "not in Lichess cloud DB" 404 so those aren't re-asked either.
+ *  `cloudEvalInflight` dedups concurrent identical requests. */
+const CLOUD_EVAL_CACHE_MAX = 500;
+const cloudEvalCache = new Map<string, LichessCloudEval | null>();
+const cloudEvalInflight = new Map<string, Promise<LichessCloudEval | null>>();
+function setCloudEvalCache(key: string, value: LichessCloudEval | null): void {
+  if (cloudEvalCache.size >= CLOUD_EVAL_CACHE_MAX) {
+    const oldest = cloudEvalCache.keys().next().value;
+    if (oldest !== undefined) cloudEvalCache.delete(oldest);
+  }
+  cloudEvalCache.set(key, value);
+}
+/** Test/coordination hook — clear the cloud-eval cache (used by resetCircuit). */
+export function clearCloudEvalCache(): void {
+  cloudEvalCache.clear();
+  cloudEvalInflight.clear();
+}
 
 function isLichessRateLimited(): boolean {
   if (lichessRateLimitedUntil === null) return false;
@@ -386,43 +409,72 @@ export async function fetchCloudEval(
   fen: string,
   multiPv: number = 3,
 ): Promise<LichessCloudEval | null> {
+  // A Lichess cloud eval is IMMUTABLE for a given (fen, multiPv) — the same
+  // position always returns the same analysis. The eval bar re-requests the
+  // same FENs constantly (revisits, takebacks, hover scrubbing), and with no
+  // cache every one hit the network and hammered the shared Lichess proxy into
+  // 429s (PostHog `lichess_error` = 20 cloud-eval 429s, David 2026-06-22). Cache
+  // by FEN (incl. the `null` "not in cloud DB" answer so known-missing positions
+  // aren't re-asked) and dedup concurrent identical calls. This is the root fix
+  // for the 429s — a redundant-request eliminator, not a cooldown band-aid.
+  const cacheKey = `${fen}|${multiPv}`;
+  if (cloudEvalCache.has(cacheKey)) return cloudEvalCache.get(cacheKey) ?? null;
+  const inflight = cloudEvalInflight.get(cacheKey);
+  if (inflight) return inflight;
+
   // Short-circuit while the shared Lichess rate-limit cooldown is
   // active — see audit 2026-05-27 (6 parallel cloud-eval 429s). The
   // caller's "no cloud eval available" branch already handles null.
+  // (Not cached: the cooldown is transient, so a later call should retry.)
   if (isLichessRateLimited()) return null;
-  const params = new URLSearchParams({ fen, multiPv: String(multiPv) });
-  const url = withApiBase(`${CLOUD_EVAL_PROXY_PATH}?${params.toString()}`);
-  let response: Response;
-  try {
-    response = await fetch(url, {
-      headers: { Accept: 'application/json' },
-      signal: AbortSignal.timeout(LICHESS_FETCH_TIMEOUT_MS),
-    });
-  } catch (err) {
-    emitLichessFailure('lichessExplorerService.fetchCloudEval', url, err, null);
-    throw err;
-  }
-  if (response.status === 404) return null;
-  if (!response.ok) {
-    if (response.status === 429) {
-      recordLichessRateLimit(response, 'lichessExplorerService.fetchCloudEval');
-    }
-    let body: string | null = null;
+
+  const promise = (async (): Promise<LichessCloudEval | null> => {
+    const params = new URLSearchParams({ fen, multiPv: String(multiPv) });
+    const url = withApiBase(`${CLOUD_EVAL_PROXY_PATH}?${params.toString()}`);
+    let response: Response;
     try {
-      body = await response.text();
-    } catch {
-      body = null;
+      response = await fetch(url, {
+        headers: { Accept: 'application/json' },
+        signal: AbortSignal.timeout(LICHESS_FETCH_TIMEOUT_MS),
+      });
+    } catch (err) {
+      emitLichessFailure('lichessExplorerService.fetchCloudEval', url, err, null);
+      throw err;
     }
-    emitLichessFailure(
-      'lichessExplorerService.fetchCloudEval',
-      url,
-      new Error(`HTTP ${response.status}`),
-      response.status,
-      body,
-    );
-    throw new Error(`Cloud eval API error: ${response.status}`);
+    if (response.status === 404) {
+      setCloudEvalCache(cacheKey, null); // position not in cloud DB — don't re-ask
+      return null;
+    }
+    if (!response.ok) {
+      if (response.status === 429) {
+        recordLichessRateLimit(response, 'lichessExplorerService.fetchCloudEval');
+      }
+      let body: string | null = null;
+      try {
+        body = await response.text();
+      } catch {
+        body = null;
+      }
+      emitLichessFailure(
+        'lichessExplorerService.fetchCloudEval',
+        url,
+        new Error(`HTTP ${response.status}`),
+        response.status,
+        body,
+      );
+      throw new Error(`Cloud eval API error: ${response.status}`);
+    }
+    const result = (await response.json()) as LichessCloudEval;
+    setCloudEvalCache(cacheKey, result);
+    return result;
+  })();
+
+  cloudEvalInflight.set(cacheKey, promise);
+  try {
+    return await promise;
+  } finally {
+    cloudEvalInflight.delete(cacheKey);
   }
-  return response.json() as Promise<LichessCloudEval>;
 }
 
 /**

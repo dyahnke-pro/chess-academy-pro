@@ -176,6 +176,38 @@ describe('lichessExplorerService', () => {
       expect(result?.pvs[0].cp).toBe(28);
     });
 
+    it('caches by FEN — a second call for the same position does NOT refetch (429 root-cause fix)', async () => {
+      const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3';
+      const spy = vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve({ fen, knodes: 1, depth: 30, pvs: [{ moves: 'g8f6', cp: 20 }] }),
+      } as Response);
+      const a = await fetchCloudEval(fen);
+      const b = await fetchCloudEval(fen);
+      expect(a?.depth).toBe(30);
+      expect(b?.depth).toBe(30);
+      expect(spy).toHaveBeenCalledTimes(1); // second call served from cache
+    });
+
+    it('caches the 404 "not in cloud DB" answer so a missing position is not re-asked', async () => {
+      const spy = vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({ ok: false, status: 404 } as Response);
+      expect(await fetchCloudEval('missing-pos-fen')).toBeNull();
+      expect(await fetchCloudEval('missing-pos-fen')).toBeNull();
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    it('dedups concurrent identical requests into one fetch', async () => {
+      const fen = 'rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
+      const spy = vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve({ fen, knodes: 1, depth: 25, pvs: [{ moves: 'b1c3', cp: 15 }] }),
+      } as Response);
+      const [a, b] = await Promise.all([fetchCloudEval(fen), fetchCloudEval(fen)]);
+      expect(a?.depth).toBe(25);
+      expect(b?.depth).toBe(25);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
     it('returns null on 404 (no cloud eval for position)', async () => {
       vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
         ok: false,
