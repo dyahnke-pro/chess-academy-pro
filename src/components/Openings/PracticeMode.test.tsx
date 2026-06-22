@@ -243,6 +243,35 @@ describe('PracticeMode', () => {
     expect(screen.getByText(/Move 0 \/ 3/)).toBeInTheDocument();
   });
 
+  it('practices the lesson spine (lessonPgn), not the longer opening.pgn', () => {
+    // The repertoire pgn runs past the Watch/Learn lesson — Practice must teach
+    // the SAME (shorter) curated spine. With a 5-ply lessonPgn the counter reads
+    // "/ 5" even though opening.pgn is only 3 plies here (override always wins).
+    render(
+      <PracticeMode
+        opening={whiteOpening}
+        lessonPgn="e4 e5 Nc3 Nf6 Bc4"
+        onComplete={vi.fn()}
+        onExit={vi.fn()}
+      />,
+    );
+    expect(screen.getByText(/Move 0 \/ 5/)).toBeInTheDocument();
+  });
+
+  it('a trap/warning customLine overrides lessonPgn', () => {
+    // customLine (puzzle-derived) is never the masterclass spine — it wins.
+    render(
+      <PracticeMode
+        opening={whiteOpening}
+        customLine={{ name: 'Trap', pgn: 'e4 e5 Nc3 Nf6', explanation: 'x' }}
+        lessonPgn="e4 e5 Nc3 Nf6 Bc4 Bc5 d3"
+        onComplete={vi.fn()}
+        onExit={vi.fn()}
+      />,
+    );
+    expect(screen.getByText(/Move 0 \/ 4/)).toBeInTheDocument();
+  });
+
   it('correct move shows green flash and advances', async () => {
     renderPractice();
 

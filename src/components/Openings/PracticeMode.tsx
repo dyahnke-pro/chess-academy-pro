@@ -38,6 +38,14 @@ export interface PracticeModeProps {
   opening: OpeningRecord;
   variationIndex?: number;
   customLine?: OpeningVariation;
+  // The curated lesson's spine (space-separated SAN), when one exists. Practice
+  // must teach the SAME line as Watch and Learn — those run the masterclass
+  // LessonScript's deepest beat (e.g. the Vienna lesson ends at move ~12 / 23
+  // plies), NOT the full repertoire `opening.pgn` (44 plies for the Vienna).
+  // Without this override, Practice marched the student ~20 plies PAST where the
+  // Watch/Learn lesson stops (David 2026-06-22). The lesson spine is a prefix of
+  // `opening.pgn`, so the mistake-explanation annotation indices still align.
+  lessonPgn?: string;
   onComplete: (correct: boolean) => void;
   onExit: () => void;
 }
@@ -48,10 +56,13 @@ interface MoveInfo {
   to: string;
 }
 
-export function PracticeMode({ opening, variationIndex, customLine, onComplete, onExit }: PracticeModeProps): JSX.Element {
+export function PracticeMode({ opening, variationIndex, customLine, lessonPgn, onComplete, onExit }: PracticeModeProps): JSX.Element {
   const isVariation = variationIndex !== undefined && variationIndex >= 0;
   const variation = customLine ?? (isVariation ? opening.variations?.[variationIndex] : undefined);
-  const activePgn = variation ? variation.pgn : opening.pgn;
+  // Prefer the curated lesson spine so Practice teaches exactly what Watch/Learn
+  // taught. A trap/warning `customLine` (puzzle-derived, own setupFen) always
+  // wins — those aren't the masterclass spine.
+  const activePgn = customLine ? customLine.pgn : (lessonPgn ?? (variation ? variation.pgn : opening.pgn));
   // Puzzle-derived trap lines start from a middlegame setupFen.
   // See OpeningVariation type comment.
   const setupFen = variation?.setupFen;

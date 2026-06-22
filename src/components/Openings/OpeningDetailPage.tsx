@@ -1116,10 +1116,20 @@ export function OpeningDetailPage(): JSX.Element {
   // Practice mode (main line or variation)
   if (viewMode === 'practice' || viewMode === 'variation-practice') {
     const practiceLineIdx = viewMode === 'variation-practice' ? activeVariationIndex : MAIN_LINE_INDEX;
+    // Practice the SAME line Watch and Learn taught — the curated lesson's
+    // deepest-beat spine — not the full repertoire pgn (which runs ~20 plies
+    // past the lesson; David 2026-06-22). Falls back to opening.pgn when no
+    // curated lesson exists (the ~3,000 DB-only openings).
+    const practiceLesson = viewMode === 'variation-practice'
+      ? getVariationLessonScript(opening.id, opening.variations?.[activeVariationIndex]?.name)
+      : getLessonScript(opening.id);
+    const practiceLine = lessonToPlayableLine(practiceLesson);
+    const practicePgn = practiceLine ? practiceLine.moves.join(' ') : undefined;
     return (
       <PracticeMode
         opening={opening}
         variationIndex={viewMode === 'variation-practice' ? activeVariationIndex : undefined}
+        lessonPgn={practicePgn}
         // Play unlocks ONLY on a 100% (mistake-free) Practice pass (David
         // 2026-06-19). An imperfect run still records progress inside
         // PracticeMode but does NOT advance the rung, so Play stays locked.
