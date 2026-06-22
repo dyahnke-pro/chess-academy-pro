@@ -125,5 +125,17 @@ function secondsUntilUtcMidnight(): number {
 /** Flat conservative $ estimate for one LLM call (a heavy full-context turn). */
 export const LLM_CALL_COST_USD = Number(process.env.LLM_CALL_COST_USD ?? '0.005');
 
-/** Polly neural ≈ $16 / 1M characters. Generative is pricier — override via env. */
-export const POLLY_USD_PER_CHAR = Number(process.env.POLLY_USD_PER_CHAR ?? '0.000016');
+/**
+ * Polly's contribution to the global $ ceiling.
+ *
+ * Currently **0** — AWS Polly is inside its 12-month free tier (David
+ * 2026-06-22), so synthesis costs nothing and must NOT count toward the dollar
+ * kill-switch (otherwise the ceiling trips on phantom spend). The per-IP TTS
+ * rate limit still applies, which protects the free tier's monthly *character*
+ * allotment from a looping/abusive caller.
+ *
+ * 🔔 WHEN THE FREE TRIAL ENDS: set env `POLLY_USD_PER_CHAR=0.000016` (Neural
+ * ≈ $16 / 1M chars; Generative is pricier) so Polly re-enters the dollar
+ * ceiling.
+ */
+export const POLLY_USD_PER_CHAR = Number(process.env.POLLY_USD_PER_CHAR ?? '0');
