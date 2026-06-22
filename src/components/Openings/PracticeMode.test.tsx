@@ -41,6 +41,15 @@ vi.mock('../../services/openingService', () => ({
   markLinePerfected: (...args: unknown[]): unknown => mockMarkLinePerfected(...args),
 }));
 
+// Annotation set whose `san` fields DIVERGE from the practiced spine — mirrors
+// the 75 curated lines where the lesson spine disagrees with the repertoire pgn.
+// The guard must NOT surface this annotation's (wrong) move on the mistake card.
+const mockAnnotations = vi.fn<() => unknown>(() => null);
+vi.mock('../../services/annotationService', () => ({
+  loadAnnotations: (): unknown => Promise.resolve(mockAnnotations()),
+  loadSubLineAnnotations: (): unknown => Promise.resolve(mockAnnotations()),
+}));
+
 vi.mock('../Board/ChessBoard', () => ({
   ChessBoard: ({ initialFen, orientation, interactive, onMove }: {
     initialFen?: string;
@@ -294,6 +303,37 @@ describe('PracticeMode', () => {
       expect(screen.getByTestId('explanation-card')).toBeInTheDocument();
       expect(screen.getByTestId('undo-btn')).toBeInTheDocument();
     });
+  });
+
+  it('mistake card trusts the spine, not a divergent annotation san', async () => {
+    // annotations[0].san ('d4') disagrees with the practiced move ('e4') — the
+    // 75-divergent-line case. The card must name the spine move, not 'd4', and
+    // must NOT leak the stale annotation prose.
+    mockAnnotations.mockReturnValue([
+      { san: 'd4', annotation: 'STALE WRONG-LINE PROSE', alternatives: [] },
+    ]);
+    render(<PracticeMode opening={whiteOpening} onComplete={vi.fn()} onExit={vi.fn()} />);
+    await act(async () => { screen.getByTestId('make-wrong-move').click(); });
+    await waitFor(() => {
+      const card = screen.getByTestId('explanation-card');
+      expect(card).toHaveTextContent('The correct move is e4.');
+      expect(card).not.toHaveTextContent('STALE WRONG-LINE PROSE');
+    });
+    mockAnnotations.mockReturnValue(null);
+  });
+
+  it('mistake card shows annotation prose when its san matches the spine', async () => {
+    mockAnnotations.mockReturnValue([
+      { san: 'e4', annotation: 'Grabs the centre.', alternatives: [] },
+    ]);
+    render(<PracticeMode opening={whiteOpening} onComplete={vi.fn()} onExit={vi.fn()} />);
+    await act(async () => { screen.getByTestId('make-wrong-move').click(); });
+    await waitFor(() => {
+      const card = screen.getByTestId('explanation-card');
+      expect(card).toHaveTextContent('The correct move is e4.');
+      expect(card).toHaveTextContent('Grabs the centre.');
+    });
+    mockAnnotations.mockReturnValue(null);
   });
 
   it('undo button dismisses wrong state', async () => {

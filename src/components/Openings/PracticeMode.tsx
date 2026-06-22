@@ -142,9 +142,15 @@ export function PracticeMode({ opening, variationIndex, customLine, lessonPgn, o
     if (!showWrongMove || currentMoveIndex >= expectedMoves.length) {
       return 'Incorrect move. Try again.';
     }
+    // The spine move is the authoritative "correct move" — Practice now teaches
+    // the curated lesson spine, which can diverge from the repertoire-pgn-keyed
+    // annotation set (75 curated lines diverge). Trust the annotation prose ONLY
+    // when its `san` matches the move the student must actually play; past a
+    // divergence the indexed annotation would name the WRONG move.
+    const expectedSan = expectedMoves[currentMoveIndex].san;
     const ann: OpeningMoveAnnotation | undefined = annotations?.[currentMoveIndex];
-    if (!ann) {
-      return `Incorrect. The correct move is ${expectedMoves[currentMoveIndex].san}.`;
+    if (!ann || ann.san !== expectedSan) {
+      return `Incorrect. The correct move is ${expectedSan}.`;
     }
     const parts: string[] = [`The correct move is ${ann.san}.`];
     if (ann.annotation) parts.push(ann.annotation);
