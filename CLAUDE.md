@@ -4,8 +4,11 @@ This file is loaded automatically in every Claude Code session. Follow these ins
 
 ## 👋 The user
 
-The user is **David**. Address him by name when relevant. Single-user
-app, built for him. No multi-tenancy, no other accounts.
+The user is **David**, the developer/owner. Address him by name when
+relevant. The app is in **beta testing ahead of an App Store / Play
+Store release** (TestFlight today, public stores next) — it is NOT a
+private single-user app. Build it for real beta testers and public
+store users.
 
 ## 🚨 NON-NEGOTIABLE GATES (apply to every change, every session)
 
@@ -2004,7 +2007,7 @@ once it lands) is the runtime gate; this list is the design gate.
 
 Chess Academy Pro is an AI-powered chess training PWA built with React + TypeScript + Vite. It wraps as a native iOS app via Capacitor and is distributed through TestFlight. The app features an LLM-powered chess coach (Claude API), Stockfish WASM analysis, spaced repetition puzzles, opening training, and adaptive difficulty.
 
-**Single user app** — built for one person (the developer's brother). No multi-tenancy, no auth beyond optional Supabase cloud sync.
+**Beta-testing for App Store / Play Store release.** Distributed via TestFlight today, headed to the public stores. Currently no multi-tenancy and no auth beyond optional Supabase cloud sync, but it is being built for real beta testers and public store users — not a private one-person app.
 
 ## Tech Stack (exact versions)
 
