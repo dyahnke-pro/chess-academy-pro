@@ -23,8 +23,11 @@
  *                            itself unparseable.
  *   2. narration-misaligned— annotations / learnCues aren't parallel to moves
  *                            (a cue slid off its move).
- *   3. arrow-misaligned    — the lead arrow (arrows[i][0]) doesn't point at
- *                            move i's actual from→to.
+ *
+ * (A former `arrow-misaligned` code was removed 2026-06-22 — it assumed
+ *  `arrows[i][0]` was the move arrow, but the lead-the-eye convention uses
+ *  GREEN VISION arrows, so it false-positived on every real lesson. See the
+ *  note in `checkLineContinuity`.)
  *
  * Contract: pure check + fire-and-forget report. Never throws.
  */
@@ -32,7 +35,7 @@ import { Chess } from 'chess.js';
 import { logAppAudit } from './appAuditor';
 import type { PlayableMiddlegameLine } from '../types';
 
-export type ContinuityCode = 'illegal-move' | 'narration-misaligned' | 'arrow-misaligned';
+export type ContinuityCode = 'illegal-move' | 'narration-misaligned';
 
 export interface ContinuityViolation {
   code: ContinuityCode;
@@ -81,8 +84,20 @@ export function checkLineContinuity(line: ContinuityLine): ContinuityViolation[]
     });
   }
 
-  // 2. Replay the line: every move legal from the prior FEN, and the lead
-  //    arrow points at the move it accompanies.
+  // 2. Replay the line: every move must be legal from the prior FEN (the real
+  //    continuity bug — a board jump the memory-phase `catch { break; }`
+  //    silently swallows).
+  //    NB (David 2026-06-22): the old "lead arrow points at the move it
+  //    accompanies" check was REMOVED — it was a false-positive generator. The
+  //    lead-the-eye arrow convention (playbook §5a) is GREEN VISION arrows
+  //    (where a piece AIMS), never the move's from→to (the move squares are the
+  //    auto-painted ORANGE highlights). So `arrows[i][0]` is intentionally NOT
+  //    the move arrow, and the check fired `arrow-misaligned` on EVERY vision
+  //    arrow — 8 on the Vienna keystone alone, plus Réti/Ruy/etc., flooding
+  //    PostHog Error Tracking with non-bugs. Arrow legality (origin on a real
+  //    piece, clear sight-line) is already enforced at build time by
+  //    `lessonIntegrity`; a runtime move-equality check is both wrong and
+  //    redundant.
   let chess: Chess;
   try {
     chess = new Chess(line.fen);
@@ -93,12 +108,8 @@ export function checkLineContinuity(line: ContinuityLine): ContinuityViolation[]
 
   for (let i = 0; i < n; i++) {
     const san = line.moves[i];
-    let from: string;
-    let to: string;
     try {
-      const mv = chess.move(san);
-      from = mv.from;
-      to = mv.to;
+      chess.move(san);
     } catch {
       violations.push({
         code: 'illegal-move',
@@ -107,14 +118,6 @@ export function checkLineContinuity(line: ContinuityLine): ContinuityViolation[]
       });
       // Subsequent positions are meaningless once the board diverges.
       break;
-    }
-    const lead = line.arrows?.[i]?.[0];
-    if (lead && (lead.from !== from || lead.to !== to)) {
-      violations.push({
-        code: 'arrow-misaligned',
-        moveIndex: i,
-        detail: `lead arrow ${lead.from}-${lead.to} ≠ move ${san} (${from}-${to})`,
-      });
     }
   }
 

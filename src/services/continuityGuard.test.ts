@@ -62,12 +62,15 @@ describe('checkLineContinuity — narration/marker alignment', () => {
     expect(v.some((x) => x.code === 'narration-misaligned')).toBe(true);
   });
 
-  it('flags a lead arrow that does not match its move', () => {
+  it('does NOT flag green VISION arrows that point away from the move (the lead-the-eye convention)', () => {
+    // Lesson arrows are vision arrows (where a piece AIMS), never the move's
+    // from→to — e.g. on 1.e4 the arrow shows the bishop's future diagonal, not
+    // e2-e4. The old `arrow-misaligned` check false-positived on every one of
+    // these (Vienna keystone: 8, plus Réti/Ruy/…). Removed 2026-06-22.
     const v = checkLineContinuity(
-      line({ arrows: [[{ from: 'e2', to: 'e4' }], [{ from: 'd7', to: 'd5' }], [{ from: 'g1', to: 'f3' }]] }),
+      line({ arrows: [[{ from: 'f1', to: 'c4' }], [{ from: 'd8', to: 'h4' }], [{ from: 'b1', to: 'c3' }]] }),
     );
-    // move[1] is e5 (e7-e5) but the lead arrow says d7-d5
-    expect(v.some((x) => x.code === 'arrow-misaligned' && x.moveIndex === 1)).toBe(true);
+    expect(v).toHaveLength(0);
   });
 });
 
