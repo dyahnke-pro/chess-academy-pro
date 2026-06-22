@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { db } from '../db/schema';
-import { markRungComplete, unlockLineAll, unlockOpeningAllLines } from './openingService';
+import { markRungComplete, markWeaponRungComplete, unlockLineAll, unlockOpeningAllLines } from './openingService';
+import { isWeaponRungComplete } from '../utils/wlppLadder';
 import { buildOpeningRecord } from '../test/factories';
 
 describe('openingService — WLPP ladder marking', () => {
@@ -70,5 +71,55 @@ describe('openingService — WLPP ladder marking', () => {
     await unlockOpeningAllLines('x', 0);
     const a = await db.openings.get('x');
     expect(a?.linesUnlockedAll).toEqual([-1]);
+  });
+});
+
+describe('openingService — weapon (trap/gem) WLPP rung marking', () => {
+  beforeEach(async () => {
+    await db.openings.clear();
+  });
+
+  it('markWeaponRungComplete backfills every earlier rung (monotonic)', async () => {
+    await db.openings.put(buildOpeningRecord({ id: 'vienna-game' }));
+    await markWeaponRungComplete('vienna-game', 'trap-fishing-pole', 'practice');
+    const a = await db.openings.get('vienna-game');
+    expect(a?.weaponRungs?.['trap-fishing-pole']).toEqual(
+      expect.arrayContaining(['watch', 'learn', 'practice']),
+    );
+    expect(a?.weaponRungs?.['trap-fishing-pole']).not.toContain('play');
+    expect(isWeaponRungComplete(a!, 'trap-fishing-pole', 'practice')).toBe(true);
+    expect(isWeaponRungComplete(a!, 'trap-fishing-pole', 'play')).toBe(false);
+  });
+
+  it('play marks every weapon rung including played', async () => {
+    await db.openings.put(buildOpeningRecord({ id: 'x' }));
+    await markWeaponRungComplete('x', 'gem-1', 'play');
+    const a = await db.openings.get('x');
+    expect(a?.weaponRungs?.['gem-1']).toEqual(
+      expect.arrayContaining(['watch', 'learn', 'practice', 'play']),
+    );
+  });
+
+  it('is idempotent — re-marking does not duplicate rungs', async () => {
+    await db.openings.put(buildOpeningRecord({ id: 'x' }));
+    await markWeaponRungComplete('x', 'gem-1', 'watch');
+    await markWeaponRungComplete('x', 'gem-1', 'watch');
+    const a = await db.openings.get('x');
+    expect(a?.weaponRungs?.['gem-1']?.filter((r) => r === 'watch')).toHaveLength(1);
+  });
+
+  it('tracks weapons independently by key', async () => {
+    await db.openings.put(buildOpeningRecord({ id: 'x' }));
+    await markWeaponRungComplete('x', 'trap-a', 'learn');
+    await markWeaponRungComplete('x', 'gem-b', 'watch');
+    const a = await db.openings.get('x');
+    expect(isWeaponRungComplete(a!, 'trap-a', 'learn')).toBe(true);
+    expect(isWeaponRungComplete(a!, 'gem-b', 'learn')).toBe(false);
+    expect(isWeaponRungComplete(a!, 'gem-b', 'watch')).toBe(true);
+  });
+
+  it('isWeaponRungComplete is false for an opening with no weaponRungs', () => {
+    const o = buildOpeningRecord({ id: 'x' });
+    expect(isWeaponRungComplete(o, 'trap-a', 'watch')).toBe(false);
   });
 });

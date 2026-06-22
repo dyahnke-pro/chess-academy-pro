@@ -371,6 +371,33 @@ export async function markRungComplete(
   }
 }
 
+/** Marks a WLPP rung complete for a WEAPON (named trap / punish gem / warning,
+ *  keyed by its string id). Backfills every earlier rung (monotonic — finishing
+ *  Practice implies Watch + Learn). Mirrors `markRungComplete` but writes the
+ *  string-keyed `weaponRungs` map since weapons aren't variation indices. This
+ *  is what makes the trap/gem WLPP buttons check off when completed. */
+export async function markWeaponRungComplete(
+  id: string,
+  weaponKey: string,
+  rung: 'watch' | 'learn' | 'practice' | 'play',
+): Promise<void> {
+  const order: Array<'watch' | 'learn' | 'practice' | 'play'> = ['watch', 'learn', 'practice', 'play'];
+  const upto = order.slice(0, order.indexOf(rung) + 1);
+  const opening = await db.openings.get(id);
+  if (!opening) return;
+  const map: Record<string, Array<'watch' | 'learn' | 'practice' | 'play'>> = { ...(opening.weaponRungs ?? {}) };
+  const existing = map[weaponKey] as Array<'watch' | 'learn' | 'practice' | 'play'> | undefined;
+  const done = existing ? [...existing] : [];
+  let changed = false;
+  for (const r of upto) {
+    if (!done.includes(r)) { done.push(r); changed = true; }
+  }
+  if (changed) {
+    map[weaponKey] = done;
+    await db.openings.update(id, { weaponRungs: map });
+  }
+}
+
 /** Per-line "I already know this" escape — unlocks every rung + the weapons
  *  for one line without forcing the climb. Idempotent toggle-on. */
 export async function unlockLineAll(

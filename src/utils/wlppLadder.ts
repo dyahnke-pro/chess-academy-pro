@@ -37,6 +37,13 @@ export function isLineUnlockedAll(opening: OpeningRecord, line: number): boolean
   return has(opening.linesUnlockedAll, line);
 }
 
+/** Has this WEAPON (named trap / punish gem / warning, keyed by its string id)
+ *  completed a given rung? Weapons track completion in `weaponRungs` rather than
+ *  the numeric per-line arrays, since they aren't variation indices. */
+export function isWeaponRungComplete(opening: OpeningRecord, weaponKey: string, rung: Rung): boolean {
+  return !!opening.weaponRungs?.[weaponKey]?.includes(rung);
+}
+
 /** Is a rung unlocked (playable)? Watch is always open; each later rung needs
  *  the prior one complete. The "unlock all" escape opens everything. */
 export function isRungUnlocked(opening: OpeningRecord, line: number, rung: Rung): boolean {

@@ -196,12 +196,14 @@ import {
   getTotalLines,
   toggleFavorite,
   markRungComplete,
+  markWeaponRungComplete,
   unlockOpeningAllLines,
 } from '../../services/openingService';
 import {
   MAIN_LINE_INDEX,
   isRungComplete,
   isRungUnlocked,
+  isWeaponRungComplete,
   isLineUnlockedAll,
   areWeaponsUnlocked,
   nextRung,
@@ -209,6 +211,7 @@ import {
   RUNG_LABEL,
   WEAPONS_LOCK_HINT,
   unlockBudgetFor,
+  type Rung,
 } from '../../utils/wlppLadder';
 import { useAppStore } from '../../stores/appStore';
 import {
@@ -541,6 +544,12 @@ export function OpeningDetailPage(): JSX.Element {
   const handleNamedTrapAction = useCallback(
     (trapId: string, action: 'watch' | 'learn' | 'practice' | 'play'): void => {
       setActiveNamedTrapId(trapId);
+      // Play has no in-page completion signal (it hands off to OpeningPlayMode),
+      // so reaching it counts as played — same convention as the main ladder.
+      // Watch/Learn/Practice check off on their player's onComplete instead.
+      if (action === 'play' && opening) {
+        void markWeaponRungComplete(opening.id, trapId, 'play').then(() => loadOpening());
+      }
       setViewMode(
         action === 'watch'
           ? 'named-trap'
@@ -551,7 +560,7 @@ export function OpeningDetailPage(): JSX.Element {
               : 'named-trap-play',
       );
     },
-    [],
+    [opening, loadOpening],
   );
 
   // Punish-gem WLPP: Watch plays the punish out, Learn voice-guides the
@@ -560,9 +569,15 @@ export function OpeningDetailPage(): JSX.Element {
   const handleGemAction = useCallback(
     (id: string, action: 'watch' | 'learn' | 'practice' | 'play'): void => {
       setActiveGemId(id);
+      // Play hands off to OpeningPlayMode (no in-page completion signal), so
+      // reaching it counts as played; Watch/Learn/Practice check off on their
+      // player's onComplete instead.
+      if (action === 'play' && opening) {
+        void markWeaponRungComplete(opening.id, id, 'play').then(() => loadOpening());
+      }
       setViewMode(`gem-${action}` as ViewMode);
     },
-    [],
+    [opening, loadOpening],
   );
 
   // Subline Watch/Play (Level-3): Watch plays the hand-authored narrated
@@ -724,9 +739,11 @@ export function OpeningDetailPage(): JSX.Element {
       : opening.id === 'scotch-game' ? SCOTCH_GAME_TRAP_LESSONS
         : {};
   if (viewMode === 'named-trap' && activeNamedTrapId && activeNamedTrapId in namedTrapLessons) {
+    const trapId = activeNamedTrapId;
     return (
       <LessonPlayer
-        script={namedTrapLessons[activeNamedTrapId]}
+        script={namedTrapLessons[trapId]}
+        onComplete={() => { void markWeaponRungComplete(opening.id, trapId, 'watch').then(() => loadOpening()); }}
         onExit={handleExit}
       />
     );
@@ -747,12 +764,14 @@ export function OpeningDetailPage(): JSX.Element {
             : opening.id === 'scotch-game' ? getScotchTrapPlayableLine(activeNamedTrapId)
             : null;
     if (trapLine) {
+      const trapId = activeNamedTrapId;
+      const rung = viewMode === 'named-trap-learn' ? 'learn' : 'practice';
       return (
         <PlayableLinePlayer
           line={trapLine}
           boardOrientation={opening.color}
           mode={viewMode === 'named-trap-learn' ? 'learn' : 'practice'}
-          onComplete={handleExit}
+          onComplete={() => { void markWeaponRungComplete(opening.id, trapId, rung).then(() => handleExit()); }}
           onExit={handleExit}
         />
       );
@@ -791,12 +810,14 @@ export function OpeningDetailPage(): JSX.Element {
     const gem = getPunishGemById(activeGemId);
     const gemLine = gem ? gemToPlayableLine(gem) : null;
     if (gemLine) {
+      const key = activeGemId;
+      const rung = viewMode === 'gem-watch' ? 'watch' : viewMode === 'gem-learn' ? 'learn' : 'practice';
       return (
         <PlayableLinePlayer
           line={gemLine}
           boardOrientation={opening.color}
           mode={viewMode === 'gem-watch' ? 'watch' : viewMode === 'gem-learn' ? 'learn' : 'practice'}
-          onComplete={handleExit}
+          onComplete={() => { void markWeaponRungComplete(opening.id, key, rung).then(() => handleExit()); }}
           onExit={handleExit}
         />
       );
@@ -1517,20 +1538,26 @@ export function OpeningDetailPage(): JSX.Element {
   // warning). Watch = beat lesson; Learn = voice-guided play; Practice =
   // silent + hint; Play = coach locked to this opening.
   const NamedTrapWLPP = ({ trapId }: { trapId: string }): JSX.Element => {
-    const btn = 'flex flex-col items-center justify-center gap-0.5 py-1.5 rounded-lg bg-theme-surface border border-theme-border text-theme-text-muted hover:text-theme-text hover:bg-theme-border text-[10px] font-medium transition-colors';
+    const btn = 'relative flex flex-col items-center justify-center gap-0.5 py-1.5 rounded-lg bg-theme-surface border border-theme-border text-theme-text-muted hover:text-theme-text hover:bg-theme-border text-[10px] font-medium transition-colors';
+    const done = (rung: Rung): JSX.Element | null =>
+      isWeaponRungComplete(opening, trapId, rung) ? (
+        <span className="absolute top-0.5 right-0.5 text-emerald-400" data-testid={`named-trap-done-${rung}-${trapId}`}>
+          <Check size={10} strokeWidth={3} />
+        </span>
+      ) : null;
     return (
       <div className="grid grid-cols-4 gap-1.5 mt-2">
         <button onClick={() => handleNamedTrapAction(trapId, 'watch')} className={`${btn} opening-action-glow opening-action-glow-watch`} data-testid={`named-trap-watch-${trapId}`}>
-          <PlayCircle size={15} />Watch
+          <PlayCircle size={15} />Watch{done('watch')}
         </button>
         <button onClick={() => handleNamedTrapAction(trapId, 'learn')} className={`${btn} opening-action-glow opening-action-glow-learn`} data-testid={`named-trap-learn-${trapId}`}>
-          <LearnIcon size={15} />Learn
+          <LearnIcon size={15} />Learn{done('learn')}
         </button>
         <button onClick={() => handleNamedTrapAction(trapId, 'practice')} className={`${btn} opening-action-glow opening-action-glow-practice`} data-testid={`named-trap-practice-${trapId}`}>
-          <Brain size={15} />Practice
+          <Brain size={15} />Practice{done('practice')}
         </button>
         <button onClick={() => handleNamedTrapAction(trapId, 'play')} className={`${btn} opening-action-glow opening-action-glow-play`} data-testid={`named-trap-play-${trapId}`}>
-          <Swords size={15} />Play
+          <Swords size={15} />Play{done('play')}
         </button>
       </div>
     );
@@ -1539,20 +1566,26 @@ export function OpeningDetailPage(): JSX.Element {
   // Same WLPP row for a punish gem — Watch the crush played out, Learn it
   // (voice-guided), Practice (silent + hint), Play (coach locked to opening).
   const GemWLPP = ({ id }: { id: string }): JSX.Element => {
-    const btn = 'flex flex-col items-center justify-center gap-0.5 py-1.5 rounded-lg bg-theme-surface border border-theme-border text-theme-text-muted hover:text-theme-text hover:bg-theme-border text-[10px] font-medium transition-colors';
+    const btn = 'relative flex flex-col items-center justify-center gap-0.5 py-1.5 rounded-lg bg-theme-surface border border-theme-border text-theme-text-muted hover:text-theme-text hover:bg-theme-border text-[10px] font-medium transition-colors';
+    const done = (rung: Rung): JSX.Element | null =>
+      isWeaponRungComplete(opening, id, rung) ? (
+        <span className="absolute top-0.5 right-0.5 text-emerald-400" data-testid={`gem-done-${rung}-${id}`}>
+          <Check size={10} strokeWidth={3} />
+        </span>
+      ) : null;
     return (
       <div className="grid grid-cols-4 gap-1.5 mt-2">
         <button onClick={() => handleGemAction(id, 'watch')} className={`${btn} opening-action-glow opening-action-glow-watch`} data-testid={`gem-watch-${id}`}>
-          <PlayCircle size={15} />Watch
+          <PlayCircle size={15} />Watch{done('watch')}
         </button>
         <button onClick={() => handleGemAction(id, 'learn')} className={`${btn} opening-action-glow opening-action-glow-learn`} data-testid={`gem-learn-${id}`}>
-          <LearnIcon size={15} />Learn
+          <LearnIcon size={15} />Learn{done('learn')}
         </button>
         <button onClick={() => handleGemAction(id, 'practice')} className={`${btn} opening-action-glow opening-action-glow-practice`} data-testid={`gem-practice-${id}`}>
-          <Brain size={15} />Practice
+          <Brain size={15} />Practice{done('practice')}
         </button>
         <button onClick={() => handleGemAction(id, 'play')} className={`${btn} opening-action-glow opening-action-glow-play`} data-testid={`gem-play-${id}`}>
-          <Swords size={15} />Play
+          <Swords size={15} />Play{done('play')}
         </button>
       </div>
     );

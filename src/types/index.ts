@@ -548,6 +548,13 @@ export interface OpeningRecord {
   // Per-line "I already know this — unlock everything" escape (forward-lock
   // is for learners; this frees the rung + weapon gating for a given line).
   linesUnlockedAll?: number[];
+  // Per-WEAPON WLPP rung completion (named traps / punish gems / warning
+  // anti-traps). Keyed by the weapon's string id (trap.id / gemId / warning
+  // id) — weapons aren't variation indices, so they can't ride the numeric
+  // line arrays above. Value is the set of completed rungs; monotonic
+  // (finishing Play backfills Watch/Learn/Practice). Drives the green check
+  // on the trap/gem WLPP buttons.
+  weaponRungs?: Record<string, Array<'watch' | 'learn' | 'practice' | 'play'>>;
   // Favorites (WO-3)
   isFavorite: boolean;
   // Gambit flag (true for openings loaded from gambits.json)
