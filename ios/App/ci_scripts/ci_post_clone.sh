@@ -53,17 +53,35 @@ node scripts/verify-app-icon.mjs
 # Reapply the AVAudioSession AppDelegate patch (cap regenerates ios/).
 cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 
-# Pin the marketing version; Xcode Cloud bumps the build number (CI_BUILD_NUMBER
-# -> CFBundleVersion) every build on its own. Keeping ONE marketing version
-# means each new build is the SAME version with a higher build number, so once
-# this version clears Beta App Review the external testers get every subsequent
-# build with NO re-review (David 2026-06-13). Bump this when you cut a real
-# release; `cap add` scaffolds 1.0, which we must overwrite so it never regresses
-# below the shipped 2.x line.
+# Pin the marketing version. Keeping ONE marketing version means each new build
+# is the SAME version with a higher build number, so once this version clears
+# Beta App Review the external testers get every subsequent build with NO
+# re-review (David 2026-06-13). Bump this when you cut a real release; `cap add`
+# scaffolds 1.0, which we must overwrite so it never regresses below the shipped
+# 2.x line.
 IOS_MARKETING_VERSION="2.8"
 sed -i '' -e "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = ${IOS_MARKETING_VERSION};/g" \
   ios/App/App.xcodeproj/project.pbxproj
-echo "ci_post_clone: MARKETING_VERSION set to ${IOS_MARKETING_VERSION} (build ${CI_BUILD_NUMBER:-?})"
+echo "ci_post_clone: MARKETING_VERSION set to ${IOS_MARKETING_VERSION}"
+
+# Build number (CFBundleVersion) MUST strictly INCREASE across uploads for a
+# given marketing version, or App Store Connect rejects the archive with "The
+# bundle version must be higher than the previously uploaded version." This
+# script never pinned it, so it inherited Xcode Cloud's run number — which fell
+# BEHIND the already-uploaded 2.8 builds and collided: build run #70 (2026-06-22)
+# produced CFBundleVersion 70 while 2.8 already had 72 uploaded, so the archive
+# was rejected. Pin it to the Unix epoch instead: strictly monotonic (every build
+# gets a fresh, larger number), always above any prior small-integer build (<=72)
+# and above the earlier epoch builds (~1.782e9 on 2026-06-20). The marketing
+# version stays 2.8, so same-version uploads still need NO new Beta App Review —
+# only the build number bumps. CFBundleVersion is $(CURRENT_PROJECT_VERSION) in
+# the Capacitor Info.plist, so setting it in the pbxproj propagates (same
+# mechanism as MARKETING_VERSION above). NEVER revert to small integers once on
+# epoch — they would be lower and get rejected.
+IOS_BUILD_NUMBER="$(date +%s)"
+sed -i '' -e "s/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = ${IOS_BUILD_NUMBER};/g" \
+  ios/App/App.xcodeproj/project.pbxproj
+echo "ci_post_clone: CFBundleVersion (CURRENT_PROJECT_VERSION) set to ${IOS_BUILD_NUMBER}"
 
 # Declare export compliance (standard HTTPS/TLS only = exempt encryption) so
 # TestFlight never shows "Missing Compliance" and the build is installable for
