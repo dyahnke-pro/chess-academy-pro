@@ -84,13 +84,12 @@ const SYM_E5: LessonScript = {
       sayShort: 'Qxc3 — White keeps both bishops.',
     }),
     b({
-      id: 'mg-bb2',
-      moves: 'c4 e5 Nc3 Nf6 Nf3 Nc6 e3 Bb4 Qc2 Bxc3 Qxc3 Qe7 b3 d5 Bb2 d4',
-      arrows: [{ from: 'b2', to: 'g7', color: VIS }],
-      highlights: [{ square: 'b2', color: KEY }, { square: 'd4', color: SOFT }],
+      id: 'mg-d4',
+      moves: 'c4 e5 Nc3 Nf6 Nf3 Nc6 e3 Bb4 Qc2 Bxc3 Qxc3 Qe7 b3 d5 d4',
+      highlights: [{ square: 'd4', color: KEY }, { square: 'd5', color: SOFT }, { square: 'e5', color: SOFT }],
       say:
-        "We fianchetto with b3 and Bb2, aiming the bishop straight down the long diagonal at Black's king. Black grabs space with …d5-d4, but that just opens lines for our bishops. Here's the middlegame: the two bishops, the long diagonal, and pressure on Black's over-extended d4-pawn. We trade it off or undermine it, and the bishops do the rest. A clean, low-risk edge with the better pieces.",
-      sayShort: 'Bb2 — the bishops rule the long diagonal.',
+        "We prepare the fianchetto with b3 — but the instant Black strikes with …d5 we answer in the centre with d4, challenging e5 before committing the bishop. The careless Bb2 first would walk into …d4, forking our queen on c3 and handing Black the initiative; meeting …d5 with d4 keeps everything sound. The tension resolves into a balanced, risk-free middlegame where our two bishops and the extra tempo give the pleasant side of equality.",
+      sayShort: 'd4 — meet …d5 in the centre.',
     }),
   ],
 };

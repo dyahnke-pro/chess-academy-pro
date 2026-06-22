@@ -121,10 +121,10 @@ const E6_TAIMANOV: LessonScript = {
       sayShort: 'c4 — Maroczy bind.',
     }),
     b({
-      id: 'e6-nc3', moves: 'e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Bd3 Nf6 O-O Qc7 c4 Nc6 Nc3',
-      highlights: [{ square: 'c3', color: KEY }],
-      say: "…Nc6 Nc3 — both knights develop. The Maroczy Bind structure with c4 + Nc3 is one of the best positional setups against the Taimanov. We're locked in for a long positional fight where our central space + bishop pair pressure converts.",
-      sayShort: 'Nc3 — develop, Maroczy locked.',
+      id: 'e6-be3', moves: 'e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Bd3 Nf6 O-O Qc7 c4 Nc6 Be3',
+      highlights: [{ square: 'e3', color: KEY }, { square: 'd4', color: SOFT }],
+      say: "…Nc6 and now Be3 — the precise move order. With Black's queen on c7 and the knight on c6 both bearing down on d4, develop the bishop and reinforce the knight BEFORE the queen's knight: the careless Nc3 here drops a piece to …Nxd4. Be3 plugs the hole, completes development, and keeps the Maroczy Bind. Nc3 comes next move, safely.",
+      sayShort: 'Be3 — guard d4 first, then Nc3.',
     }),
   ],
 };
