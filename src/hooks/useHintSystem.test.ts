@@ -73,6 +73,7 @@ interface SpineCall {
   ask: string;
   maxToolRoundTrips: number | undefined;
   fen: string | undefined;
+  tactics: unknown;
 }
 const spineCalls: SpineCall[] = [];
 const spineResponses: string[] = [];
@@ -89,7 +90,7 @@ vi.mock('../coach/coachService', async () => {
     coachService: {
       ask: vi.fn(
         async (
-          input: { surface: string; ask: string; liveState?: { fen?: string } },
+          input: { surface: string; ask: string; liveState?: { fen?: string; tactics?: unknown } },
           options?: { maxToolRoundTrips?: number; onChunk?: (chunk: string) => void },
         ) => {
           spineCalls.push({
@@ -97,6 +98,7 @@ vi.mock('../coach/coachService', async () => {
             ask: input.ask,
             maxToolRoundTrips: options?.maxToolRoundTrips,
             fen: input.liveState?.fen,
+            tactics: input.liveState?.tactics,
           });
           // Brain-emitted tool call simulator: parse the canonical
           // record_hint_request action embedded in the ask text and
@@ -187,6 +189,31 @@ describe('useHintSystem — one tap reveals the full answer', () => {
     expect(result.current.hintState.arrows[0].endSquare).toBe('f3');
     // Sentence-streamed via Polly as the first sentence (chunk-driven).
     expect(speakRecords.some((r) => r.method === 'speakForced')).toBe(true);
+  });
+
+  it('feeds the brain a code-computed tactics context so the hint can NAME the tactic', async () => {
+    // The root fix for "tactics alert fired but the hint didn't say what the
+    // tactic was" (David 2026-06-22): the hint now hands the brain a real
+    // TacticsLiveContext (immediate tactics + hanging pieces + board facts),
+    // instead of nothing — which left the tactic gate stripping the mention
+    // as "out-of-vocab (no tactics context)".
+    spineResponses.push('Nf3 develops and eyes the e5-square.');
+    const { result } = renderHook(() =>
+      useHintSystem({
+        fen: FEN_AFTER_E4,
+        playerColor: 'black',
+        playerRating: 1400,
+        enabled: true,
+      }),
+    );
+    act(() => { result.current.requestHint(); });
+    await waitFor(() => expect(spineCalls.length).toBe(1));
+    const tactics = spineCalls[0].tactics as { boardFacts?: unknown; immediate?: unknown[] } | undefined;
+    expect(tactics).toBeDefined();
+    // Board facts are derived from the FEN alone, so they're always present
+    // even when the engine is unavailable — the context is never empty/missing.
+    expect(tactics?.boardFacts).toBeDefined();
+    expect(Array.isArray(tactics?.immediate)).toBe(true);
   });
 
   it('records the request to coach memory at tier 3 via the brain-emitted tool call', async () => {

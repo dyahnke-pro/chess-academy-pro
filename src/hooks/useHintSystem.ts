@@ -32,6 +32,7 @@ import {
 } from '../services/coachPrompts';
 import { coachService } from '../coach/coachService';
 import type { LiveState } from '../coach/types';
+import { buildFedTacticsContext } from '../services/liveTacticsContext';
 import { voiceService } from '../services/voiceService';
 import {
   validateBoardClaims,
@@ -73,6 +74,14 @@ export interface UseHintSystemConfig {
   gameId?: string;
   moveNumber?: number;
   ply?: number;
+  /** The student's rating, used to size the live-tactics lookahead
+   *  (`getTacticLookahead`). The hint now feeds the brain a real,
+   *  code-computed TacticsLiveContext so it can NAME the tactic on the
+   *  board (and the tactic-claim gate validates against it instead of
+   *  stripping an ungrounded mention — PostHog `hint.tacticClaimGate
+   *  audit-only (no tactics context)`, David 2026-06-22). Defaults to
+   *  1200 when omitted. */
+  playerRating?: number;
 }
 
 export interface HintState {
@@ -191,7 +200,7 @@ async function resolveBestMove(
 }
 
 export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn {
-  const { fen, enabled, knownMove, gameId, moveNumber, ply, playerColor } = config;
+  const { fen, enabled, knownMove, gameId, moveNumber, ply, playerColor, playerRating } = config;
 
   const [hintState, setHintState] = useState<HintState>(INITIAL_STATE);
   const fenRef = useRef(fen);
@@ -297,7 +306,7 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
             `Piece to move: ${pieceNameFromSymbol(pieceSymbol)} on ${from}.`;
         } else if (nextLevel === 3) {
           tierAddition = HINT_TIER_3_ADDITION;
-          tierContextLine = `Best move: ${best.bestMoveSan}. Give ONE tight reason it's best — what it does in THIS position (defends / attacks / develops / controls / prepares). Max 2 sentences, max 40 words. Do not invent tactics that aren't on the board.`;
+          tierContextLine = `Best move: ${best.bestMoveSan}. Give ONE tight reason it's best — what it does in THIS position (defends / attacks / develops / controls / prepares). If the live tactics context names a tactic on the board (fork, pin, skewer, back-rank, hanging piece, …), NAME that tactic and the squares it hits. Max 2 sentences, max 40 words. Only name a tactic that appears in the tactics context — never invent one.`;
         } else {
           tierContextLine = `Best move (for your reference, DO NOT state it): ${best.bestMoveSan}. Diagnose the WHY in 1-2 sentences without naming any piece or square.`;
         }
@@ -325,12 +334,32 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
           `Also call record_hint_request with these args so this tap lands in memory: [[ACTION:record_hint_request ${recordHintArgs}]]`,
         ].join('\n');
 
+        // Feed the brain the REAL, code-computed tactics on the board so the
+        // hint can NAME the tactic the alert flagged — instead of being told
+        // "don't invent tactics" and leaving the student with nothing (David
+        // 2026-06-22). Reuses `best.analysis` (no extra engine round trip);
+        // `buildFedTacticsContext` falls back to a FEN-only scan if that PV is
+        // thin. This also gives the tactic-claim gate a context to validate
+        // against — killing the `audit-only (no tactics context)` strips that
+        // were swallowing the tactic from the hint bubble.
+        let tactics: LiveState['tactics'];
+        try {
+          tactics = await buildFedTacticsContext(
+            fen,
+            playerColor === 'white' ? 'w' : 'b',
+            playerRating ?? 1200,
+            best.analysis,
+          );
+        } catch { /* engine down → no context; hint still grounds on best move */ }
+        if (fenRef.current !== fen) { setHintState((s) => ({ ...s, isAnalyzing: false })); return; }
+
         const liveState: LiveState = {
           surface: 'hint',
           fen,
           moveHistory: [],
           userJustDid: `requested hint tier ${nextLevel}`,
           currentRoute: '/coach/play',
+          tactics,
         };
         void logAppAudit({
           kind: 'coach-surface-migrated',
@@ -477,14 +506,11 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
           ghostMove: null,
           isAnalyzing: false,
         }));
-        // Suppress unused-var lint while preserving the reference for
-        // future tier prompts that may key off student color.
-        void playerColor;
       } finally {
         inFlightRef.current = false;
       }
     })();
-  }, [enabled, knownMove, fen, gameId, moveNumber, ply, playerColor]);
+  }, [enabled, knownMove, fen, gameId, moveNumber, ply, playerColor, playerRating]);
 
   const resetHints = useCallback((): void => {
     bestMoveRef.current = null;

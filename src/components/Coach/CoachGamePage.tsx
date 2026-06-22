@@ -985,6 +985,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   const { hintState, requestHint, resetHints } = useHintSystem({
     fen: game.fen,
     playerColor,
+    playerRating,
     enabled: gameState.status === 'playing' && isPlayersTurn && !game.isGameOver,
   });
 
