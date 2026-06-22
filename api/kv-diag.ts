@@ -13,16 +13,25 @@ export default async function handler(req: Request): Promise<Response> {
   }
   const KV_URL = (process.env.KV_REST_API_URL || '').replace(/\/+$/, '');
   const KV_TOKEN = process.env.KV_REST_API_TOKEN || '';
+  const xff = req.headers.get('x-forwarded-for');
+  const ip = (xff ? xff.split(',')[0]!.trim() : req.headers.get('x-real-ip')) ?? 'unknown';
+  const win = Math.floor(Date.now() / 1000 / 600);
+  const rlKey = `rl:llm:${ip}:${win}`;
   const info: Record<string, unknown> = {
     hasUrl: Boolean(KV_URL),
     hasToken: Boolean(KV_TOKEN),
     urlPrefix: KV_URL.slice(0, 30),
+    xForwardedFor: xff,
+    computedIp: ip,
+    rlKey,
   };
   try {
+    // INCR the SAME real rate-limit key the guard uses, so we see whether MY
+    // requests accumulate on one key or scatter across many.
     const r = await fetch(`${KV_URL}/pipeline`, {
       method: 'POST',
       headers: { authorization: `Bearer ${KV_TOKEN}`, 'content-type': 'application/json' },
-      body: JSON.stringify([['INCR', 'kvdiag:test'], ['EXPIRE', 'kvdiag:test', 60]]),
+      body: JSON.stringify([['INCR', rlKey], ['EXPIRE', rlKey, 600]]),
     });
     info.status = r.status;
     info.body = (await r.text()).slice(0, 300);
