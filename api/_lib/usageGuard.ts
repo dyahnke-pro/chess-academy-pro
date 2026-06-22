@@ -22,7 +22,7 @@
  * injects KV_REST_API_URL + KV_REST_API_TOKEN. Until then this no-ops.
  */
 
-const KV_URL = process.env.KV_REST_API_URL;
+const KV_URL = (process.env.KV_REST_API_URL || '').replace(/\/+$/, '');
 const KV_TOKEN = process.env.KV_REST_API_TOKEN;
 
 /** Absolute ceiling on a single day's estimated spend, across everyone. */
