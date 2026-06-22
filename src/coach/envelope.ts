@@ -817,7 +817,12 @@ function formatEnginePlanSubBlock(plan: NonNullable<LiveState['enginePlan']>): s
  *  bounded vocabulary. The block is omitted entirely when nothing
  *  was detected (no tactics + no hanging + no upcoming) so a quiet
  *  position adds zero tokens to the envelope. */
-function formatTacticsSubBlock(tactics: NonNullable<LiveState['tactics']>): string {
+/** Render a computed TacticsLiveContext into the grounded prompt block (BOARD
+ *  FACTS + immediate tactics + hanging + attack map). Exported so the
+ *  direct-prompt narration surfaces that DON'T route through the spine envelope
+ *  (useLiveCoach, MiddlegamePractice, gameReviewService) can inject the SAME
+ *  ground-truth block instead of letting the LLM free-read the board (G0). */
+export function formatTacticsSubBlock(tactics: NonNullable<LiveState['tactics']>): string {
   const bf = tactics.boardFacts;
   const has =
     !!bf ||

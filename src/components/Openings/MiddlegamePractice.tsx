@@ -5,6 +5,8 @@ import { useChessGame } from '../../hooks/useChessGame';
 import { useSettings } from '../../hooks/useSettings';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { getCoachChatResponse } from '../../services/coachApi';
+import { buildFedTacticsContext } from '../../services/liveTacticsContext';
+import { formatTacticsSubBlock } from '../../coach/envelope';
 import { groundCoachReply, applyCandidateArrows } from '../../services/coachAnswerGates';
 import { speechService } from '../../services/speechService';
 import { sanitizeForTTS } from '../../services/voiceService';
@@ -300,9 +302,20 @@ export function MiddlegamePractice({
         ? `Mate in ${analysis.mateIn}`
         : `${(analysis.evaluation / 100).toFixed(1)} pawns`;
 
+      // G0 INVERSION: this surface bypasses the spine, so inject the same
+      // code-computed BOARD FACTS + tactics block so the feedback VOICES the
+      // real tactics instead of free-reading the board (David 2026-06-22).
+      // Reuses the `analysis` just computed (PV present) — no extra engine read.
+      // Student's color = the side that just moved (opposite of side-to-move
+      // in the post-move FEN).
+      const studentCC = fen.split(' ')[1] === 'w' ? 'b' : 'w';
+      const mgTactics = await buildFedTacticsContext(fen, studentCC, 1200, analysis, () => Promise.resolve(null))
+        .catch(() => undefined);
+      const mgBlock = mgTactics ? formatTacticsSubBlock(mgTactics) : '';
+
       const userMsg: CoachMessage = {
         role: 'user',
-        content: `Position (FEN): ${fen}\nStudent played: ${moveSan} (move ${moveCount + 1})\nStockfish evaluation after this move: ${evalStr} (depth ${analysis.depth})\nBest move was: ${analysis.bestMove}\n\nGive brief feedback on this move in context of the middlegame plan.`,
+        content: `Position (FEN): ${fen}\nStudent played: ${moveSan} (move ${moveCount + 1})\nStockfish evaluation after this move: ${evalStr} (depth ${analysis.depth})\nBest move was: ${analysis.bestMove}\n\nGive brief feedback on this move in context of the middlegame plan.${mgBlock ? `\n\n${mgBlock}` : ''}`,
       };
 
       chatHistoryRef.current.push(userMsg);
