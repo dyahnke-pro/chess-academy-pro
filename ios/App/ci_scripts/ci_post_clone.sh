@@ -53,40 +53,23 @@ node scripts/verify-app-icon.mjs
 # Reapply the AVAudioSession AppDelegate patch (cap regenerates ios/).
 cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 
-# Pin the marketing version. Keeping ONE marketing version means each new build
-# is the SAME version with a higher build number, so once this version clears
-# Beta App Review the external testers get every subsequent build with NO
-# re-review (David 2026-06-13). Bump this when you cut a real release; `cap add`
-# scaffolds 1.0, which we must overwrite so it never regresses below the shipped
-# 2.x line.
+# Pin the marketing version; Xcode Cloud auto-increments the build number
+# (CFBundleVersion) to the build-run number every build on its own. Keeping ONE
+# marketing version means each new build is the SAME version with a higher build
+# number, so once this version clears Beta App Review the external testers get
+# every subsequent build with NO re-review (David 2026-06-13). Bump this when you
+# cut a real release; `cap add` scaffolds 1.0, which we must overwrite so it never
+# regresses below the shipped 2.x line.
+# NB (2026-06-22): builds #70/#71 were briefly rejected ("bundle version must be
+# higher than previously uploaded") because the auto-increment counter had fallen
+# behind the already-uploaded 2.8 build 72; it self-resolves once the run counter
+# passes 72 (next build = 73 > 72). Do NOT try to override the build number here
+# (epoch/agvtool tricks just fought the auto-increment and lost) — let Xcode Cloud
+# own it.
 IOS_MARKETING_VERSION="2.8"
 sed -i '' -e "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = ${IOS_MARKETING_VERSION};/g" \
   ios/App/App.xcodeproj/project.pbxproj
-echo "ci_post_clone: MARKETING_VERSION set to ${IOS_MARKETING_VERSION}"
-
-# Build number (CFBundleVersion) MUST strictly INCREASE across uploads for a
-# given marketing version, or App Store Connect rejects the archive with "The
-# bundle version must be higher than the previously uploaded version." By default
-# Xcode Cloud AUTO-INCREMENTS the build number to the build-run number (run #70 ->
-# build 70, #71 -> 71); that counter fell BEHIND the already-uploaded 2.8 builds
-# (which reached 72) and collided — builds #70 and #71 were both rejected
-# (2026-06-22). Apple's documented way to OVERRIDE the auto-increment is to set
-# the build number yourself in a CI script (developer.apple.com/documentation/
-# xcode/setting-the-next-build-number-for-xcode-cloud-builds). Pin it to the Unix
-# epoch: strictly monotonic, always above any prior small-integer build (<=72)
-# AND the earlier epoch builds (~1.782e9 on 2026-06-20). Set it THREE ways so it
-# wins regardless of whether CFBundleVersion is a literal or $(CURRENT_PROJECT_
-# VERSION): agvtool (Apple's tool, the documented override), a direct Info.plist
-# write, and the pbxproj build setting. Marketing version stays 2.8 so same-
-# version uploads need NO new Beta App Review — only the build number bumps.
-# NEVER revert to small integers once on epoch — they'd be lower and get rejected.
-IOS_BUILD_NUMBER="$(date +%s)"
-sed -i '' -e "s/CURRENT_PROJECT_VERSION = [^;]*;/CURRENT_PROJECT_VERSION = ${IOS_BUILD_NUMBER};/g" \
-  ios/App/App.xcodeproj/project.pbxproj
-( cd ios/App && xcrun agvtool new-version -all "${IOS_BUILD_NUMBER}" ) || true
-/usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${IOS_BUILD_NUMBER}" ios/App/App/Info.plist 2>/dev/null \
-  || /usr/libexec/PlistBuddy -c "Add :CFBundleVersion string ${IOS_BUILD_NUMBER}" ios/App/App/Info.plist 2>/dev/null || true
-echo "ci_post_clone: CFBundleVersion set to ${IOS_BUILD_NUMBER} (epoch override of Xcode Cloud auto-increment)"
+echo "ci_post_clone: MARKETING_VERSION set to ${IOS_MARKETING_VERSION} (build ${CI_BUILD_NUMBER:-?})"
 
 # Declare export compliance (standard HTTPS/TLS only = exempt encryption) so
 # TestFlight never shows "Missing Compliance" and the build is installable for
