@@ -26,12 +26,18 @@ const runId = process.argv[2]; // optional explicit ciBuildRun id
 const APP = '6776418777';
 // Print the highest already-uploaded build numbers (CFBundleVersion) per
 // version — this is the number a new build must EXCEED.
-const builds = await api(`/v1/builds?filter[app]=${APP}&sort=-uploadedDate&limit=10&fields[builds]=version,uploadedDate,processingState`);
-console.log('recent uploaded builds (version = CFBundleVersion):');
+const builds = await api(`/v1/builds?filter[app]=${APP}&sort=-uploadedDate&limit=20&fields[builds]=version,uploadedDate,processingState&include=preReleaseVersion&fields[preReleaseVersions]=version`);
+const pre = {};
+for (const inc of builds.j?.included ?? []) pre[inc.id] = inc.attributes?.version;
+console.log('recent uploaded builds (marketingVersion / CFBundleVersion):');
+let max28 = 0;
 for (const b of builds.j?.data ?? []) {
-  console.log(`   build ${b.attributes?.version}  ${b.attributes?.processingState}  ${b.attributes?.uploadedDate}`);
+  const mv = pre[b.relationships?.preReleaseVersion?.data?.id] ?? '?';
+  const bn = Number(b.attributes?.version);
+  if (mv === '2.8' && bn > max28) max28 = bn;
+  console.log(`   v${mv}  build ${b.attributes?.version}  ${b.attributes?.processingState}  ${b.attributes?.uploadedDate}`);
 }
-console.log('');
+console.log(`\n>>> highest uploaded build number for marketing version 2.8 = ${max28} (new build must EXCEED this)\n`);
 
 let run;
 if (runId) {
