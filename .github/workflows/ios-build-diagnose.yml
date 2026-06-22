@@ -1,0 +1,26 @@
+name: iOS build diagnose (fetch latest Xcode Cloud build issues)
+
+# On-demand: print the latest Xcode Cloud build run's actions + issues so a
+# failed build's reason is visible without App Store Connect UI access.
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: 'Optional ciBuildRun id (defaults to latest)'
+        type: string
+        default: ''
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Fetch latest build issues
+        env:
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+        run: node scripts/ci/fetch-build-issues.mjs "${{ github.event.inputs.run_id }}"
