@@ -24962,128 +24962,86 @@
   {
     "id": "mp-ruylopez-breyer",
     "openingId": "ruy-lopez",
-    "criticalPositionFen": "r2qrbk1/1bpn1ppp/p2p1n2/1p2p3/3PP3/2P2N1P/PPB2PP1/R1BQRNK1 w - - 7 14",
-    "title": "Breyer: The Knight Reroute",
-    "overview": "The Breyer is the Closed Ruy at its most refined. Black's startling Nb8 sends the knight home to reroute to d7, where it supports e5 and frees the b7-bishop's long diagonal. Both sides complete a slow, harmonious build-up — White with Nbd2-f1-g3 eyeing f5, Black with the Bb7/Bf8 fianchetto-style regrouping — before the centre clarifies. White probes the queenside with a4 while Black strikes with c5; once White locks with d5, the game splits into two-winged manoeuvring where understanding outweighs memorisation. Spassky, Karpov and Kasparov all leaned on it in title matches.",
+    "title": "Breyer: Wing Play on the Closed Center",
+    "criticalPositionFen": "r2qrbk1/1b1n1p1p/p2p1np1/1p1Pp1B1/P1p1P3/2P2NNP/1PB2PP1/R2QR1K1 b - - 1 17",
+    "overview": "Where the opening leaves off — the Breyer tabiya, the center locked by White’s d5 against Black’s e5. With the center shut, the game is decided on the wings. White’s lever is b3, striking the c4-pawn Black left behind when he closed the queenside; the b-file opens and b5 becomes a target. On the other wing the g3-knight eyes f5, and the Bc2 sits on the b1-h7 diagonal. Patient maneuvering, then a wing break.",
     "pawnBreaks": [
       {
-        "move": "a2-a4",
-        "explanation": "White's standard queenside lever — pressure b5 to open a file before Black completes the regroup.",
-        "fen": "r2qrbk1/1bpn1ppp/p2p1n2/1p2p3/3PP3/2P2N1P/PPB2PP1/R1BQRNK1 w - - 7 14"
-      },
-      {
-        "move": "c5 then c4",
-        "explanation": "Black's central counter and queenside clamp — fix White's pawns and claim the c5 outpost.",
-        "fen": "r2qrbk1/1bpn1ppp/p2p1n2/1p2p3/3PP3/2P2N1P/PPB2PP1/R1BQRNK1 w - - 7 14"
+        "move": "b2-b3",
+        "explanation": "White’s main lever. b3 hits the c4-pawn Black pushed past; after …cxb3 Bxb3 the b-file is half-open and Black’s b5-pawn becomes a lasting target on the queenside.",
+        "fen": "r2qrbk1/1b1n1p1p/p2p1np1/1p1Pp1B1/P1p1P3/2P2NNP/1PB2PP1/R2QR1K1 b - - 1 17"
       },
       {
         "move": "f2-f4",
-        "explanation": "After the kingside pieces are in place, f4 is the thematic break to open lines toward Black's king.",
-        "fen": "r2qrbk1/1bpn1ppp/p2p1n2/1p2p3/3PP3/2P2N1P/PPB2PP1/R1BQRNK1 w - - 7 14"
+        "explanation": "The kingside alternative. When Black commits to the queenside, f4 strikes e5 and opens the f-file toward the black king — sharper, played when White wants the attack rather than the squeeze.",
+        "fen": "r2qrbk1/1b1n1p1p/p2p1np1/1p1Pp1B1/P1p1P3/2P2NNP/1PB2PP1/R2QR1K1 b - - 1 17"
       }
     ],
     "pieceManeuvers": [
       {
         "piece": "Knight",
-        "route": "Nb8-d7",
-        "explanation": "The signature Breyer reroute: the knight goes home to d7, propping up e5 and unblocking the b7-bishop."
-      },
-      {
-        "piece": "Knight",
-        "route": "Nb1-d2-f1-g3",
-        "explanation": "White's queen-knight takes the long road to g3, aiming for the f5-outpost — the engine of White's kingside play."
-      },
-      {
-        "piece": "Bishop",
-        "route": "Bf8-g7",
-        "explanation": "Black refianchettoes the dark-squared bishop, reinforcing e5 and the long diagonal."
+        "route": "Ng3-f5",
+        "explanation": "The g3-knight jumps to f5 — the kingside outpost. If …gxf5 then exf5 rips open the g-file and the Bc2 diagonal toward the black king."
       }
     ],
     "strategicThemes": [
-      "The reroute buys harmony: every black piece reaches an ideal square before the centre opens, which is why the Breyer is so solid.",
-      "With the centre locked by d5, the game becomes two-winged manoeuvring — White presses the kingside with Ng3/f4, Black the queenside with ...c4 and minority play.",
-      "The f5-outpost is White's dream square; Black spends real energy preventing Ng3-f5 or making it harmless.",
-      "Patience over force: the Breyer rewards deep positional understanding, not memorised tactics."
+      "The center is LOCKED (White d5 vs Black e5) — so the game is fought on the wings, exactly as Capablanca taught: with the centre closed, attack where you have the space.",
+      "b3 is the key lever: it undermines Black’s over-extended c4-pawn, half-opens the b-file, and leaves b5 weak for White’s rooks and bishop to target.",
+      "On the kingside the g3-knight heads for the f5 outpost and the Bc2 trains on the b1-h7 diagonal — the second front White can switch to if the queenside stalls."
     ],
-    "endgameTransitions": [
-      "Mass exchanges down the half-open files often reach a balanced ending where Black's sound structure holds comfortably — the Breyer is a drawing weapon at the top precisely because the endgames are solid.",
-      "If White over-presses the kingside and trades into a queenside-majority ending, Black's ...c4 clamp can become the more dangerous trump."
-    ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "fen": "r2qrbk1/1bpn1ppp/p2p1n2/1p2p3/3PP3/2P2N1P/PPB2PP1/R1BQRNK1 w - - 7 14",
+        "title": "b3 — cracking the queenside on a closed center",
+        "fen": "r2qrbk1/1b1n1p1p/p2p1np1/1p1Pp1B1/P1p1P3/2P2NNP/1PB2PP1/R2QR1K1 b - - 1 17",
         "moves": [
-          "Ng3",
-          "g6",
-          "a4",
-          "c5",
-          "d5",
-          "c4",
-          "Bg5",
-          "h6"
+          "h6",
+          "Be3",
+          "Bg7",
+          "b3",
+          "cxb3",
+          "Bxb3"
         ],
         "annotations": [
-          "The knight completes its journey to g3, eyeing the f5- and h5-squares — the point of the whole reroute.",
-          "Black fianchettoes the bishop's shelter and prepares ...Bg7, the harmonious Breyer regrouping.",
-          "White probes the queenside, the standard lever to open a second front before Black is fully coordinated.",
-          "Black meets the flank thrust with the central counter, contesting d4 and gaining queenside space.",
-          "White locks the centre with d5, defining the structure: now it's a two-winged manoeuvring battle.",
-          "Black clamps the queenside with c4, fixing White's pawns and securing the c5-square for a piece.",
-          "White's bishop pins the f6-knight, beginning the kingside regroup toward an f5 break.",
-          "Black challenges the pin with …h6, questioning the bishop. White must decide: retreat to maintain the pin, or trade on f6 and play for the f5-break with a clear plan on both wings."
+          "Black challenges the pin with …h6, asking the g5-bishop to declare itself.",
+          "Be3 — the bishop steps back but keeps eyeing c5 and the queenside dark squares.",
+          "…Bg7 — Black completes the fianchetto, the bishop joining the long diagonal.",
+          "b3! — White strikes at the c4-pawn, the weakness Black left when he locked the queenside. Lines begin to open.",
+          "…cxb3 — Black gives up c4; the b-file half-opens.",
+          "…Bxb3 — the bishop recaptures on the a2-g8 diagonal. White has the half-open b-file and a lasting target on b5."
         ],
         "arrows": [
+          [],
           [
             {
-              "from": "g3",
-              "to": "f5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "g3",
-              "to": "h5",
+              "from": "e3",
+              "to": "c5",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [],
           [],
           [],
-          [],
-          [],
-          [
-            {
-              "from": "g5",
-              "to": "f6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
           []
         ],
-        "title": "Locking the Centre, Storming the Wings",
         "highlights": [
           [
             {
-              "square": "g3",
+              "square": "h6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "h5",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "g6",
+              "square": "e3",
               "color": "rgba(255, 165, 0, 0.55)"
             },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
             {
               "square": "g7",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -25091,87 +25049,45 @@
           ],
           [
             {
-              "square": "a4",
+              "square": "b3",
               "color": "rgba(255, 165, 0, 0.55)"
             },
-            {
-              "square": "a2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
             {
               "square": "c4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f6",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "f5",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "h6",
+              "square": "b3",
               "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "learnCues": [
+          "…h6 — question the bishop",
+          "Be3 — retreat, eye c5",
+          "…Bg7 — finish the fianchetto",
+          "b3 — strike the c4-pawn",
+          "…cxb3 — the b-file opens",
+          "…Bxb3 — target b5 on the half-open file"
         ],
         "sources": [
           "book:ruy-lopez",
           "concept:pos-center",
+          "concept:pos-open-file",
+          "concept:pos-outpost",
           "https://en.wikipedia.org/wiki/Ruy_Lopez"
-        ],
-        "learnCues": [
-          "Ng3 — the reroute completes",
-          "g6 — prepare …Bg7",
-          "a4 — probe the queenside",
-          "c5 — the central counter",
-          "d5 — lock the centre",
-          "c4 — clamp, secure c5",
-          "Bg5 — pin, regroup toward f5",
-          "…h6 — question the pinning bishop"
         ]
       }
     ]
