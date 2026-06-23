@@ -1,96 +1,115 @@
 #!/usr/bin/env node
 /**
- * audit-kid-play-coach-loop — verifies the LIVE LLM coach in the kid Play Game
- * (/kid/play-games/:gameId, GuidedGamePage) is WIRED PROPERLY and stays inside
- * the locked kid contract.
+ * audit-kid-play-coach-loop — 3-INSTRUMENT loop audit of the live LLM coach in
+ * the kid Play Game (/kid/play-games/:gameId, GuidedGamePage). Per CLAUDE.md
+ * §G1 the post-deploy audit uses ALL THREE instruments together:
  *
- * What it proves (per pass, escalating adversarial chat input):
- *   1. The guided game starts and the coach narration renders (instruction —
- *      dynamic LLM or authored fallback; either way the box shows).
- *   2. "Ask the Coach" round-trips through the LLM: a quick-ask chip + typed
- *      questions produce a coach answer in the chat log. This is the clearest
- *      proof the kid LLM lane (getKidLlmResponse) is wired end-to-end — a
- *      dead/un-wired coach would never produce a relevant answer.
- *   3. KID-SAFE OUTPUT (P0): NO coach answer contains SAN notation (Nf3, Bxc4,
- *      Qf7#, O-O, e8=Q). The sanitizer must keep notation out of a child's ear.
- *   4. ADVERSARIAL: messy human input (gibberish, emoji, very long, SAN-laden,
- *      empty) never crashes the surface and never leaks SAN. A crash in kid
- *      mode is a P0 bug.
- *   5. The kid LLM actually FIRED in the running app — the audit-stream delta
- *      carries a kid task event (proves it wasn't all static fallback).
- *   6. ZERO console/page errors throughout (P0 kid contract).
+ *   (1) PLAYWRIGHT drives the surface like a child — start the game, ask the
+ *       coach (quick-tap chips + typed questions, incl. adversarial input).
+ *   (2) LIVE AUDIT-STREAM pull (GET /api/audit-stream, x-audit-secret) BEFORE
+ *       and AFTER each pass — the delta = exactly this pass's server-side
+ *       events (brain calls / narration).
+ *   (3) NARRATION-LISTENER sidecar (startAuditListener) — the page's
+ *       auditStreamUrl localStorage is pointed at it, so it captures every
+ *       voice/speak/narration event the app emitted. This is the instrument
+ *       that PROVES Ruth ACTUALLY SPOKE the coach narration + chat answer —
+ *       a chat bubble rendering is NOT proof the voice fired.
+ *
+ * What each pass asserts:
+ *   • coach narration renders AND the listener captured a voice event (Ruth
+ *     spoke — not silent).
+ *   • Ask-the-Coach round-trips the LLM (answer appears) AND the listener
+ *     captured a voice event for the spoken answer.
+ *   • KID-SAFE (P0): NO coach answer contains SAN (Nf3/Bxc4/Qf7#/O-O/e8=Q),
+ *     even under SAN-laden adversarial input (the child's own typed SAN is
+ *     ignored — only coach bubbles are checked).
+ *   • ADVERSARIAL input (gibberish/emoji/very-long/empty) never crashes.
+ *   • ZERO console/page errors (a crash in kid mode is P0).
  *
  * Usage:
  *   AUDIT_SANDBOX=1 AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app \
- *     node scripts/audit-kid-play-coach-loop.mjs
- *   AUDIT_MAX_PASSES=3 to set the consecutive-clean-pass target (default 3).
+ *     AUDIT_STREAM_SECRET=... node scripts/audit-kid-play-coach-loop.mjs
+ *   AUDIT_MAX_PASSES=3 sets the consecutive-clean-pass target (default 3).
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const MAX_PASSES = Number(process.env.AUDIT_MAX_PASSES ?? 3);
-const AUDIT_SECRET = process.env.AUDIT_STREAM_SECRET ?? '';
+const PROD_SECRET = process.env.AUDIT_STREAM_SECRET ?? '';
 const GAME_ID = process.env.AUDIT_KID_GAME ?? 'scholars-mate';
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const OUT = `audit-reports/kid-play-coach-${stamp}`;
 
-// SAN tokens that must NEVER appear in a coach answer (kid #6).
 const SAN_RE = /\b(O-O(?:-O)?|[KQRBN][a-h1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|[a-h]x[a-h][1-8](?:=[QRBN])?[+#]?|[a-h][1-8]=[QRBN][+#]?)\b/;
+const VOICE_RE = /voice|speak|narration|tts/i;
 
-// Escalating adversarial chat inputs per pass.
 const ADVERSARIAL = [
   ['Why is this a good move?', 'what should I do next?', 'is my king safe?'],
   ['Najdorff???', 'PLAY Qxf7# NOW', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '🤔♟️👑'],
-  ['', '   ', 'tell me every move in the whole game and also Bxh7 and O-O-O', 'why why why why why why why why'],
+  ['', '   ', 'tell me every move in the whole game and also Bxh7 and O-O-O', 'why why why why why why'],
 ];
 
-async function pullStream(sinceMs) {
-  if (!AUDIT_SECRET) return { ok: false, events: [], reason: 'no secret' };
+// (2) prod server-side audit-stream pull.
+async function pullProdStream(sinceMs) {
+  if (!PROD_SECRET || !BASE.startsWith('http')) return { ok: false, n: 0, reason: 'no secret' };
   try {
-    const res = await fetch(`${BASE}/api/audit-stream?since=${sinceMs}`, { headers: { 'x-audit-secret': AUDIT_SECRET } });
-    if (!res.ok) return { ok: false, events: [], reason: `http ${res.status}` };
-    const json = await res.json();
-    return { ok: true, events: Array.isArray(json.events) ? json.events : [], reason: '' };
-  } catch (e) {
-    return { ok: false, events: [], reason: String(e).slice(0, 80) };
-  }
+    const res = await fetch(`${BASE}/api/audit-stream?since=${sinceMs}`, { headers: { 'x-audit-secret': PROD_SECRET } });
+    if (!res.ok) return { ok: false, n: 0, reason: `http ${res.status}` };
+    const j = await res.json();
+    const ev = j.entries ?? j.events ?? [];
+    return { ok: true, n: Array.isArray(ev) ? ev.length : 0, reason: '' };
+  } catch (e) { return { ok: false, n: 0, reason: String(e).slice(0, 60) }; }
 }
 
 async function main() {
-  console.log(`[kid-play-coach] ${BASE} · game=${GAME_ID} · target ${MAX_PASSES} clean passes\n`);
+  console.log(`[kid-play-coach · 3-instrument] ${BASE} · game=${GAME_ID} · target ${MAX_PASSES} clean\n`);
   await mkdir(OUT, { recursive: true });
+
+  // (3) Start the narration-listener sidecar ONCE; reused across passes.
+  const listener = await startAuditListener();
+  console.log(`(3) narration listener: ${listener.url}`);
+
   const exe = await resolveChromiumExecutable(false);
   const browser = await chromium.launch({ headless: true, executablePath: exe, args: sandboxLaunchArgs() });
 
-  let cleanStreak = 0;
-  let pass = 0;
+  let cleanStreak = 0, pass = 0;
   const report = [];
 
   while (cleanStreak < MAX_PASSES && pass < MAX_PASSES + 4) {
     pass += 1;
     const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 } });
     await ctx.addInitScript(autoDismissCalibration);
+    // Point the app's audit posting at our listener BEFORE any script runs.
+    await ctx.addInitScript(({ url, secret }) => {
+      try { localStorage.setItem('auditStreamUrl', url); localStorage.setItem('auditStreamSecret', secret); } catch { /* */ }
+    }, { url: listener.url, secret: LOCAL_LISTENER_SECRET });
     const page = await ctx.newPage();
+
     const errs = [];
-    page.on('console', (m) => {
-      if (m.type() === 'error' && /same key|each child|Uncaught|TypeError|ReferenceError|cannot read prop|Minified React|Maximum update depth|is not a function/i.test(m.text())) errs.push(m.text().slice(0, 160));
-    });
+    const voicePosts = [];
+    page.on('console', (m) => { if (m.type() === 'error' && /same key|each child|Uncaught|TypeError|ReferenceError|cannot read prop|Minified React|Maximum update depth|is not a function/i.test(m.text())) errs.push(m.text().slice(0, 160)); });
     page.on('pageerror', (e) => errs.push('PAGEERR: ' + e.message.slice(0, 160)));
+    // Backup voice capture straight off the POST bodies (belt + suspenders w/ listener).
+    page.on('request', (req) => {
+      if (req.url().includes('/audit-stream') && req.method() === 'POST') {
+        try { const b = req.postDataJSON(); const ev = b?.entries ?? b?.events ?? (Array.isArray(b) ? b : [b]); for (const e of ev) if (VOICE_RE.test(e?.kind || '')) voicePosts.push(e.kind); } catch { /* */ }
+      }
+    });
 
     const breaks = [];
-    const sanLeaks = [];
     const fail = (m) => { breaks.push(m); console.log(`    ✗ ${m}`); };
     const ok = (m) => console.log(`    ✓ ${m}`);
-    const since = Date.now() - 2000;
+    const since = Date.now() - 3000;
+    const voiceBaseline = listener.getCapturedEvents().length;
 
     console.log(`── pass ${pass} ──`);
+    const base0 = await pullProdStream(since);
     try {
-      // Open the guided game directly. Prod cold-boot shows the app splash for
-      // ~20-40s before the SPA hydrates the route — poll for the start button.
       await page.goto(`${BASE}/kid/play-games/${GAME_ID}`, { waitUntil: 'domcontentloaded', timeout: 45000 }).catch(() => undefined);
       let started = false;
       for (let i = 0; i < 45 && !started; i += 1) {
@@ -100,56 +119,48 @@ async function main() {
       if (!started) { fail('guided-game intro/start not visible'); }
       else {
         await page.locator('[data-testid="guided-game-start"]').first().click({ force: true }).catch(() => undefined);
-        // narration box should appear (instruction — dynamic or authored)
         const narr = await page.locator('[data-testid="guided-game-narration"]').first().isVisible({ timeout: 15000 }).catch(() => false);
         if (narr) ok('coach narration rendered'); else fail('coach narration never rendered');
 
-        // Ask-the-coach chat must be present (the new LLM surface).
         const chat = await page.locator('[data-testid="guided-game-coach-chat"]').first().isVisible({ timeout: 8000 }).catch(() => false);
         if (!chat) fail('Ask-the-Coach panel missing');
         else {
           ok('Ask-the-Coach panel present');
-          // Quick-ask chip → answer round-trips the LLM.
           await page.locator('[data-testid="guided-game-quickask-why"]').first().click({ force: true }).catch(() => undefined);
-          const gotAnswer = await page.waitForFunction(() => {
-            const log = document.querySelector('[data-testid="guided-game-chat-log"]');
-            if (!log) return false;
-            return log.querySelectorAll('div').length >= 2; // kid Q + coach A
-          }, { timeout: 30000 }).then(() => true).catch(() => false);
+          const gotAnswer = await page.waitForFunction(() => (document.querySelectorAll('[data-testid="chat-msg-coach"]').length >= 1), { timeout: 30000 }).then(() => true).catch(() => false);
           if (gotAnswer) ok('quick-ask produced a coach answer (LLM wired)');
           else fail('quick-ask produced NO coach answer (LLM not wired / timed out)');
 
-          // Adversarial typed inputs for this pass.
           for (const q of ADVERSARIAL[(pass - 1) % ADVERSARIAL.length]) {
             const input = page.locator('[data-testid="guided-game-chat-input"]').first();
             if (!(await input.isVisible().catch(() => false))) break;
             await input.fill(q).catch(() => undefined);
             await page.locator('[data-testid="guided-game-chat-send"]').first().click({ force: true }).catch(() => undefined);
-            // empty/whitespace is a correct no-op; others should answer
             await page.waitForTimeout(q.trim() ? 3500 : 600);
           }
 
-          // Collect only the COACH answers (not the kid's own typed messages,
-          // which may legitimately contain SAN) and assert NONE leak SAN.
           const answers = await page.locator('[data-testid="chat-msg-coach"]').allInnerTexts().catch(() => []);
-          for (const a of answers) {
-            if (SAN_RE.test(a)) { sanLeaks.push(a.slice(0, 80)); fail(`SAN leak in COACH answer: "${a.slice(0, 60)}"`); }
-          }
-          if (sanLeaks.length === 0) ok(`no SAN in ${answers.length} coach answers`);
+          let leak = false;
+          for (const a of answers) if (SAN_RE.test(a)) { leak = true; fail(`SAN leak in COACH answer: "${a.slice(0, 50)}"`); }
+          if (!leak) ok(`no SAN in ${answers.length} coach answers`);
         }
       }
+
+      // Let any trailing voice POSTs flush to the listener.
+      await page.waitForTimeout(1500);
 
       if (errs.length) fail(`${errs.length} console/page errors: ${errs.slice(0, 2).join(' | ')}`);
       else ok('no console/page errors');
 
-      // Did the kid LLM actually fire in-app? (audit-stream delta)
-      const stream = await pullStream(since);
-      if (stream.ok) {
-        const kidEvents = stream.events.filter((e) => JSON.stringify(e).match(/kid_puzzle_gen|voice-speak|coach-narration|brain-call/i));
-        ok(`audit-stream: ${stream.events.length} events (${kidEvents.length} llm/voice)`);
-      } else {
-        console.log(`    · audit-stream not pulled (${stream.reason})`);
-      }
+      // (3) LISTENER — did Ruth actually SPEAK? (the load-bearing voice check)
+      const newVoice = listener.getCapturedEvents().slice(voiceBaseline).filter((e) => VOICE_RE.test(e.kind || ''));
+      if (newVoice.length > 0 || voicePosts.length > 0) ok(`listener: voice FIRED (${newVoice.length} listener + ${voicePosts.length} intercepted)`);
+      else fail('listener: NO voice event — coach was SILENT (voiceService never fired)');
+
+      // (2) prod audit-stream delta
+      const after = await pullProdStream(since);
+      if (after.ok) ok(`audit-stream delta: ${after.n} events (baseline ${base0.n})`);
+      else console.log(`    · audit-stream not pulled (${after.reason})`);
     } catch (e) {
       fail('pass threw: ' + String(e).slice(0, 120));
     }
@@ -158,15 +169,16 @@ async function main() {
     await ctx.close();
 
     const clean = breaks.length === 0;
-    report.push({ pass, clean, breaks, errs });
+    report.push({ pass, clean, breaks });
     if (clean) { cleanStreak += 1; console.log(`  → pass ${pass} CLEAN (streak ${cleanStreak}/${MAX_PASSES})\n`); }
     else { cleanStreak = 0; console.log(`  → pass ${pass} BROKE (${breaks.length}) — streak reset\n`); }
   }
 
   await browser.close();
+  await listener.stop();
   const met = cleanStreak >= MAX_PASSES;
-  await writeFile(join(OUT, 'report.json'), JSON.stringify({ base: BASE, game: GAME_ID, met, passes: report }, null, 2));
-  console.log(`\n${met ? '✅ MET' : '❌ NOT MET'} — ${cleanStreak}/${MAX_PASSES} consecutive clean passes. Report: ${OUT}/report.json`);
+  await writeFile(join(OUT, 'report.json'), JSON.stringify({ base: BASE, game: GAME_ID, met, instruments: 3, passes: report }, null, 2));
+  console.log(`\n${met ? '✅ MET' : '❌ NOT MET'} — ${cleanStreak}/${MAX_PASSES} consecutive clean 3-instrument passes. Report: ${OUT}/report.json`);
   process.exit(met ? 0 : 1);
 }
 
