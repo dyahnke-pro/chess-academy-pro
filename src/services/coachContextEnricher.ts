@@ -23,6 +23,8 @@
  */
 import { fetchLichessExplorer } from './lichessExplorerService';
 import { stockfishEngine } from './stockfishEngine';
+import { buildFedTacticsContext, formatTacticsSubBlock } from './liveTacticsContext';
+import { getCachedStockfish } from '../hooks/stockfishFenCache';
 import { getRepertoireOpenings } from './openingService';
 import {
   getOverviewInsights,
@@ -42,7 +44,7 @@ const OPENING_QUESTION_RE =
 /** "Best move here", "blunder", "eval", "analyze this position" —
  *  triggers the current-board engine + explorer block. */
 const POSITION_QUESTION_RE =
-  /\b(best\s+move|blunder|mistake|eval|analy[sz]e|what\s+(?:should|do)\s+i\s+play\s+here|position|this\s+move|current\s+board|threat|winning|losing)\b/i;
+  /\b(best\s+move|blunder|mistake|eval|analy[sz]e|what\s+(?:should|do)\s+i\s+play\s+here|position|this\s+move|current\s+board|threat\w*|winning|losing|hang\w*|undefended|defend\w*|\bsafe\b|attack\w*|in\s+check|checkmate|mate\s+in)\b/i;
 
 /** "How am I doing?", "my games", "performance", "strengths / weaknesses",
  *  "accuracy", "am I improving", "stats" — triggers the deep
@@ -159,6 +161,7 @@ export async function buildGroundingBlock(input: EnricherInput): Promise<string>
     startingExplorerBlock,
     positionExplorerBlock,
     engineBlock,
+    liveTacticsBlock,
     tacticsBlock,
     mistakesBlock,
     studyBlock,
@@ -172,6 +175,11 @@ export async function buildGroundingBlock(input: EnricherInput): Promise<string>
     wantsOpening ? buildStartingPositionExplorerBlock() : Promise.resolve(null),
     wantsPosition && currentFen ? buildPositionExplorerBlock(currentFen) : Promise.resolve(null),
     wantsPosition && currentFen ? buildEngineBlock(currentFen) : Promise.resolve(null),
+    // Live board-facts ground truth — fires for BOTH position and tactics
+    // questions (a "is my knight hanging / can I fork here" question is a
+    // tactics question that still needs the live attack map, not just the
+    // historical awareness stats buildTacticsBlock provides).
+    (wantsPosition || wantsTactics) && currentFen ? buildLiveTacticsBlock(currentFen) : Promise.resolve(null),
     wantsTactics ? buildTacticsBlock() : Promise.resolve(null),
     wantsMistakes ? buildMistakesBlock() : Promise.resolve(null),
     wantsStudy ? buildStudyProgressBlock() : Promise.resolve(null),
@@ -189,6 +197,7 @@ export async function buildGroundingBlock(input: EnricherInput): Promise<string>
     startingExplorerBlock,
     positionExplorerBlock,
     engineBlock,
+    liveTacticsBlock,
     tacticsBlock,
     mistakesBlock,
     studyBlock,
@@ -368,6 +377,35 @@ async function buildEngineBlock(fen: string): Promise<string | null> {
       lines.push('Top candidate lines:', ...topLines);
     }
     return `[Stockfish Engine Analysis — current position, depth ~12]\n${lines.join('\n')}`;
+  } catch {
+    return null;
+  }
+}
+
+/** Live BOARD-FACTS + tactics ground truth for the current position (G0/G3).
+ *  buildEngineBlock above hands the brain the engine's best LINE, but NOT the
+ *  authoritative board facts — piece inventory, hanging-pieces (attacked AND
+ *  undefended), the attack/defense map, and the forced mate-in-one. Without
+ *  those the voice/agent coach free-reads the board and invents a pin/fork/
+ *  hanging piece that isn't there (PostHog tacticClaimGate / boardClaimGate
+ *  trips, David 2026-06-22). This block is the SAME one the spine envelope
+ *  renders, so the grounding-block surfaces (VoiceChatMic, coachAgentRunner)
+ *  speak from the same ground truth as the spine. Latency-safe: reuse the eval
+ *  bar's cached analysis, never a fresh engine read — and the board facts
+ *  (the anti-hallucination layer) are computed synchronously from the FEN even
+ *  on a cache miss, so the pin/fork/hanging ground truth is always present. */
+async function buildLiveTacticsBlock(fen: string): Promise<string | null> {
+  try {
+    const sideToMove: 'w' | 'b' = fen.split(' ')[1] === 'b' ? 'b' : 'w';
+    const tactics = await buildFedTacticsContext(
+      fen,
+      sideToMove,
+      1200,
+      getCachedStockfish(fen) ?? null,
+      () => Promise.resolve(null),
+    );
+    const block = formatTacticsSubBlock(tactics);
+    return block.length > 0 ? block : null;
   } catch {
     return null;
   }

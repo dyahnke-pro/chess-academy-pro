@@ -20,6 +20,8 @@
  */
 import { useCallback, useRef } from 'react';
 import { getCoachChatResponse } from '../services/coachApi';
+import { buildFedTacticsContext, formatTacticsSubBlock } from '../services/liveTacticsContext';
+import { getCachedStockfish } from './stockfishFenCache';
 import { groundCoachReply, applyCandidateArrows } from '../services/coachAnswerGates';
 import { voiceService } from '../services/voiceService';
 import { logAppAudit } from '../services/appAuditor';
@@ -204,7 +206,7 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
       inFlightRef.current = true;
       lastSpokenPlyRef.current = ctx.ply;
 
-      const userMessage = buildUserMessage(winner.trigger, {
+      let userMessage = buildUserMessage(winner.trigger, {
         playerSan: ctx.san,
         bestMoveSan: ctx.bestMoveSan,
         studentEvalBefore: ctx.studentEvalBefore,
@@ -212,6 +214,24 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
         worstEval: ctx.worstEval,
         last3Moves: ctx.last3Moves,
       });
+
+      // G0 INVERSION: this hook bypasses the spine envelope, so inject the SAME
+      // code-computed BOARD FACTS + tactics block the spine would — the live
+      // interjection then VOICES the real tactics instead of free-reasoning and
+      // inventing a pin/fork (PostHog liveCoach.tacticClaimGate + boardClaimGate,
+      // David 2026-06-22). Latency-safe: reuse the eval bar's cached analysis,
+      // never a fresh engine read (cache miss → sync FEN-only board facts).
+      if (ctx.fenAfter) {
+        const tactics = await buildFedTacticsContext(
+          ctx.fenAfter,
+          playerColor === 'white' ? 'w' : 'b',
+          1200,
+          getCachedStockfish(ctx.fenAfter) ?? null,
+          () => Promise.resolve(null),
+        ).catch(() => undefined);
+        const block = tactics ? formatTacticsSubBlock(tactics) : '';
+        if (block) userMessage = `${userMessage}\n\n${block}`;
+      }
 
       void logAppAudit({
         kind: 'live-coach-trigger-fired',
@@ -283,7 +303,7 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
 
       inFlightRef.current = false;
     },
-    [gameId],
+    [gameId, playerColor],
   );
 
   const notifyPlayerMove = useCallback(
