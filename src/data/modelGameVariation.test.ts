@@ -34,17 +34,34 @@ function uciList(pgn: string | undefined): string[] {
   }
   return out;
 }
+function posList(pgn: string | undefined): string[] {
+  const c = new Chess();
+  const out: string[] = [];
+  for (const m of (pgn || '').trim().split(/\s+/).filter(Boolean)) {
+    let mv;
+    try { mv = c.move(m); } catch { break; }
+    if (!mv) break;
+    out.push(c.fen().split(' ').slice(0, 4).join(' '));
+  }
+  return out;
+}
 const commonLen = (a: string[], b: string[]): number => { let i = 0; while (i < a.length && i < b.length && a[i] === b[i]) i++; return i; };
+function deepestReached(gameSet: Set<string>, line: string[]): number {
+  let best = 0;
+  for (let j = 0; j < line.length; j++) if (gameSet.has(line[j])) best = j + 1;
+  return best;
+}
+const T3_FLOOR = 8;
 
-function analyze(o: Opening): { mainU: string[]; ids: { name: string; u: string[]; prefix: string[]; L: number }[] } {
+function analyze(o: Opening): { mainU: string[]; ids: { name: string; u: string[]; p: string[]; prefix: string[]; L: number }[] } {
   const mainU = uciList(o.pgn);
-  const vars = (o.variations || []).map((v) => ({ name: v.name, u: uciList(v.pgn) })).filter((v) => v.u.length);
+  const vars = (o.variations || []).map((v) => ({ name: v.name, u: uciList(v.pgn), p: posList(v.pgn) })).filter((v) => v.u.length);
   const others = (i: number): string[][] => [mainU, ...vars.filter((_, j) => j !== i).map((v) => v.u)];
   const ids = vars.map((v, i) => {
     let maxShared = 0;
     for (const ou of others(i)) maxShared = Math.max(maxShared, commonLen(v.u, ou));
     const L = Math.min(maxShared + 1, v.u.length);
-    return { name: v.name, u: v.u, prefix: v.u.slice(0, L), L };
+    return { name: v.name, u: v.u, p: v.p, prefix: v.u.slice(0, L), L };
   });
   return { mainU, ids };
 }
@@ -54,6 +71,7 @@ function classify(g: Game): string | undefined {
   if (!o) return undefined;
   const { mainU, ids } = analyze(o);
   const gu = uciList(g.pgn);
+  const gset = new Set(posList(g.pgn));
   // Tier 1 — exact identifying-prefix match (most specific).
   let best: { name: string; u: string[]; L: number } | null = null;
   for (const v of ids) {
@@ -66,7 +84,13 @@ function classify(g: Game): string | undefined {
   let deepest: { name: string } | null = null;
   let deepestLen = commonLen(gu, mainU);
   for (const v of ids) { const cl = commonLen(gu, v.u); if (cl > deepestLen) { deepest = v; deepestLen = cl; } }
-  return deepest?.name;
+  if (deepest) return deepest.name;
+  // Tier 3 — transposition-aware: deepest variation reached by POSITION (immune
+  // to move-order), when uniquely deepest and deep enough to be specific.
+  const scored = ids.map((v) => ({ name: v.name, d: deepestReached(gset, v.p) })).sort((a, b) => b.d - a.d);
+  const top = scored[0], second = scored[1];
+  if (top && top.d >= T3_FLOOR && (!second || top.d > second.d)) return top.name;
+  return undefined;
 }
 
 describe('model-game variation tags are the deterministic classifier output', () => {

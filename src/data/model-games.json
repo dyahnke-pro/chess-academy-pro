@@ -408,7 +408,8 @@
       "book:italian-game",
       "concept:pos-center",
       "https://www.chess.com/openings/Italian-Game"
-    ]
+    ],
+    "variation": "Giuoco Pianissimo: Closed Italian with a4/Ba2"
   },
   {
     "id": "mg-lichess-55GlUBTE",
@@ -542,7 +543,8 @@
       "concept:att-queenside-attack",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
-    ]
+    ],
+    "variation": "Najdorf: Adams Attack (6.g3 Fianchetto)"
   },
   {
     "id": "mg-lichess-BTVJpaP6",
@@ -676,28 +678,29 @@
     "variation": "Stanley Variation"
   },
   {
-    "id": "mg-lichess-16Ihk2xR",
+    "id": "mg-lichess-BfvmTiCI",
     "openingId": "vienna-game",
     "studentSide": "white",
-    "white": "Kasparov, G.",
-    "black": "Caruana, F.",
-    "whiteElo": 2812,
-    "blackElo": 2795,
+    "white": "Nakamura, Hi",
+    "black": "Firouzja, Alireza",
+    "whiteElo": 2802,
+    "blackElo": 2767,
     "result": "1-0",
-    "year": 2016,
-    "event": "Ultimate Blitz Challenge",
-    "pgn": "e4 e5 Nc3 Nc6 Bc4 Nf6 d3 Bc5 f4 d6 Nf3 exf4 Bxf4 O-O Bg5 h6 Bh4 Be6 Bb3 Nd4 Rf1 Nxf3+ Qxf3 Bd4 Ne2 Bxb2 Rb1 Ba3 Nf4 Bb4+ Ke2 Bg4 Qxg4 Nxg4 Bxd8 Raxd8 Ng6 Bc5 Nxf8 Rxf8 h3 Nf6 c3 Bb6 Rf5 Re8 Rbf1 c6 Kd2 Re7 g4 d5 exd5 cxd5 Bxd5 Be3+ Kd1 Bg5 Bb3 b6 Re1 Rc7 Kc2 g6 Rfe5 Kf8 Rf1 Kg7 d4 Bh4 Kd3 Bg3 Re3 Bh4 a4 Nh7 a5 Ng5 axb6 axb6 Bc4 Ra7 Rb1 Rb7 Rb5 Bf2 Re8 Nxh3 Ke2 Bh4 Kf3 Ng5+ Kg2 Rc7 Rb4 Nh7 Kf3 Bf6 Ke2 Be7 Ra4 Nf6 Rb8 Nxg4 Rxb6 h5 Rba6 h4 Ra7 Rxa7 Rxa7 Kf6 Bd5 Nh6 c4 Nf5 Kd3 g5 c5 g4 c6 Bd6 Rxf7+ Kg5 c7 Bxc7 Rxc7 h3 Rh7 Nh4 Be6 Ng6 Rg7 h2 Bd5 Kf6 Rxg6+",
-    "overview": "Garry Kasparov beats Fabiano Caruana straight out of the Vienna's own move order — 2.Nc3 first, then Bc4 and the signature f4 lever. When Black grabs on f4, White recaptures and pours pieces toward the kingside, trading into a winning endgame and converting a passed pawn. The opening you're learning, in the hands of the 13th World Champion.",
-    "middlegameTheme": "The f4 lever and the kingside initiative",
-    "lessonSummary": "This is the Vienna proper — 2.Nc3, Bc4, then f4 to challenge e5 and rip open the f-file. Kasparov uses that same lever to seize the initiative against Caruana, simplifies into a clean endgame, and pushes a passer home. The f4 break is the engine of White's whole plan.",
+    "year": 2024,
+    "event": "SpeedChess Final 2024",
+    "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nc6 Bb5 Nxc3 dxc3 Be6 Ne2 Bc5 Be3 Bxe3 Qxe3 Qh4+ g3 Qe7 Nd4 Bd7 Bxc6 bxc6 O-O-O O-O Rhe1 Rfe8 Nb3 Bf5 Qc5 Qg5+ Kb1 Bg4 Rc1 Bd7 Nd4 Qg6 c4 dxc4 Qxc4 Rab8 b3 h6 Re3 Rb6 Rce1 Be6 Qc5 Bd5 Kb2 Qg5 c4 Bg2 Qa5 Rd8 Qc3 c5 Ne2 Bh3 Nf4 Be6 Rd3 Rxd3 Qxd3 Rb8 Qe3 Qe7 Nd3 Bxc4 Qxc5 Qxc5 Nxc5 Bd5 Na6 Rc8 Rc1 c6 Nb4 Re8 Re1 f6 Nd3 Kf7 Kc3 fxe5 Nxe5+ Kg8 Kd4 Rf8 Re2 Rf1 Rc2 Rd1+ Kc5 Be4 Re2 Rd5+ Kc4 Rxe5 Kd4 Rd5+ Kxe4 Kf7 Rc2 Rd6 Rc5 Rd2 Ra5 Rxh2 Rxa7+ Ke6 a4 Rb2 Rb7 g5 a5 Ra2 b4 h5 Rb6 Kd7 Kf5 h4 g4 h3 Kxg5 h2 Rb7+ Ke6 Rh7 c5 bxc5 Kd5 a6 Kxc5 a7 Kd4 Rxh2 Rxa7 Kg6 Ra6+ Kh5 Ra8 Re2 Kd3 Re6 Kd4 g5 Kd5 Re2 Rh8+ Kg6 Rg8+ Kh6 Rh8+ Kg7 Ra8 g6 Ra7+ Kh6 Ra8 g7 Ra6+ Kh7 Ra7 Kh8 Ra8+ g8=Q+ Rxg8+ Kxg8 Kd4 Kf7 Kd3 Re6 Kc4 Kf6 Kc3 Ke5 Kb2 Rd6 Kc3 Rd4 Kc2 Ke4 Kc3 Ke3 Kc2 Rc4+ Kb2 Kd3 Kb1 Kd2 Kb2 Rb4+ Ka3 Kc3 Ka2 Rb3 Ka1 Kc2",
+    "overview": "Hikaru Nakamura beats Alireza Firouzja with the Vienna's sharpest weapon — the Vienna Gambit, 3.f4 straight at e5. After 3...d5 White sacrifices a pawn for a lead in development and the open f-file, wins the bishop pair, castles long, and grinds the resulting endgame down to the last pawn. The gambit you're learning, in the hands of a world top-five.",
+    "middlegameTheme": "The Vienna Gambit — f4 and the open f-file",
+    "lessonSummary": "This is the Vienna Gambit: 3.f4 challenges e5 immediately, and after 3...d5 White gives a pawn for development and the half-open f-file. Nakamura converts the bishop pair into a long, clean endgame win. When the opponent meets your Vienna with ...Nf6, f4 is how you punch.",
     "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/16Ihk2xR",
+    "sourceUrl": "https://lichess.org/BfvmTiCI",
     "source": "lichess-masters",
     "sources": [
       "book:vienna-game",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Vienna_Game"
-    ]
+    ],
+    "variation": "Vienna Gambit"
   },
   {
     "id": "mg-caro-classical",
@@ -727,7 +730,8 @@
       "book:caro-kann",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-    ]
+    ],
+    "variation": "Classical Variation"
   },
   {
     "id": "mg-caro-advance",
@@ -819,7 +823,8 @@
       "book:caro-kann",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-    ]
+    ],
+    "variation": "Two Knights Variation"
   },
   {
     "id": "mg-caro-panov",
@@ -849,7 +854,8 @@
       "book:caro-kann",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-    ]
+    ],
+    "variation": "Panov-Botvinnik Attack"
   },
   {
     "id": "mg-caro-fantasy",
@@ -910,7 +916,8 @@
       "book:caro-kann",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-    ]
+    ],
+    "variation": "Tartakower/Breyer Variation"
   },
   {
     "id": "mg-lichess-aZ6oVKX6",
@@ -1275,7 +1282,8 @@
       "book:four-knights-game",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Four_Knights_Game"
-    ]
+    ],
+    "variation": "Italian Four Knights: 4.Bc4"
   },
   {
     "id": "mg-carlsen-rubinstein",
@@ -1319,7 +1327,8 @@
       "book:four-knights-game",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Four_Knights_Game"
-    ]
+    ],
+    "variation": "Rubinstein Variation: 4.Bb5 Nd4"
   },
   {
     "id": "mg-carlsen-london-main",
@@ -1542,7 +1551,8 @@
       "concept:pos-center",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Catalan_Opening"
-    ]
+    ],
+    "variation": "Closed Catalan: ...c6 System"
   },
   {
     "id": "mg-carlsen-catalan-slav",
@@ -1757,7 +1767,8 @@
       "concept:pos-development",
       "concept:pos-space",
       "https://en.wikipedia.org/wiki/R%C3%A9ti_Opening"
-    ]
+    ],
+    "variation": "Reti: Nimzo-English Hybrid"
   },
   {
     "id": "mg-giri-reti-antislav",
@@ -1802,7 +1813,7 @@
       "concept:pos-space",
       "https://en.wikipedia.org/wiki/R%C3%A9ti_Opening"
     ],
-    "variation": "Reti: KIA Setup g3 Bg2 d3 e4"
+    "variation": "Reti: LSB Fianchetto"
   },
   {
     "id": "mg-giri-kia-french",
@@ -1890,7 +1901,8 @@
       "concept:att-kingside-storm",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/King's_Indian_Attack"
-    ]
+    ],
+    "variation": "KIA vs Sicilian Structure"
   },
   {
     "id": "mg-mvl-evans-accepted",
@@ -2406,8 +2418,7 @@
       "book:scandinavian-defence",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Scandinavian_Defense"
-    ],
-    "variation": "Qa5 with Bd2 Main Line"
+    ]
   },
   {
     "id": "mg-scandi-modern",
@@ -2592,7 +2603,8 @@
       "concept:pos-center",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
-    ]
+    ],
+    "variation": "Modern Variation"
   },
   {
     "id": "mg-alekhine-fourpawns",
@@ -2901,7 +2913,8 @@
       "book:dutch-defence",
       "concept:att-kingside-storm",
       "https://en.wikipedia.org/wiki/Dutch_Defence"
-    ]
+    ],
+    "variation": "Leningrad g6 Main Line"
   },
   {
     "id": "mg-dutch-stonewall",
@@ -2962,7 +2975,8 @@
       "book:dutch-defence",
       "concept:att-kingside-storm",
       "https://en.wikipedia.org/wiki/Dutch_Defence"
-    ]
+    ],
+    "variation": "Classical Be7 Line"
   },
   {
     "id": "mg-dutch-ilyinzhenevsky",
@@ -2992,7 +3006,8 @@
       "book:dutch-defence",
       "concept:att-kingside-storm",
       "https://en.wikipedia.org/wiki/Dutch_Defence"
-    ]
+    ],
+    "variation": "Ilyin-Zhenevsky System"
   },
   {
     "id": "mg-dutch-leningrade5",
@@ -3022,7 +3037,8 @@
       "book:dutch-defence",
       "concept:att-kingside-storm",
       "https://en.wikipedia.org/wiki/Dutch_Defence"
-    ]
+    ],
+    "variation": "Hopton Attack Response"
   },
   {
     "id": "mg-nimzo-main",
@@ -3052,7 +3068,8 @@
       "concept:pawn-doubled",
       "concept:pos-outpost",
       "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
-    ]
+    ],
+    "variation": "Classical Variation (4.Qc2)"
   },
   {
     "id": "mg-nimzo-rubinstein",
@@ -3175,7 +3192,8 @@
       "concept:pawn-doubled",
       "concept:pos-outpost",
       "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
-    ]
+    ],
+    "variation": "Kasparov Variation (4.Nf3)"
   },
   {
     "id": "mg-nimzo-saemisch",
@@ -3475,8 +3493,7 @@
       "concept:pos-space",
       "https://en.wikipedia.org/wiki/Bird%27s_Opening"
     ],
-    "criticalMoments": [],
-    "variation": "Bird's: Leningrad Formation"
+    "criticalMoments": []
   },
   {
     "id": "mg-pro-naroditsky-caro-kann-advance",
@@ -6441,7 +6458,8 @@
       "concept:att-queenside-attack",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
-    ]
+    ],
+    "variation": "Najdorf: Classical (6.Be2 with ...e5)"
   },
   {
     "id": "mg-budapest-adler-anagnostopoulos",
@@ -6516,7 +6534,8 @@
     "sources": [
       "https://lichess.org/q52pJwFH",
       "https://en.wikipedia.org/wiki/Albin_Countergambit"
-    ]
+    ],
+    "variation": "Fianchetto Variation"
   },
   {
     "id": "mg-scotch-grischuk",
@@ -6655,7 +6674,8 @@
     "lessonSummary": "The Pirc: let White build the big centre, fianchetto the dark bishop, and break with …e5/…c5 to turn the centre into a target.",
     "sources": [
       "https://lichess.org/8I9uJNcI"
-    ]
+    ],
+    "variation": "Austrian Attack"
   },
   {
     "id": "mg-pirc-austrian",
@@ -6675,7 +6695,8 @@
     "lessonSummary": "Vs the Austrian's f4-pawn storm, Black counters in the centre with …c5 and …e5 before White's attack lands.",
     "sources": [
       "https://lichess.org/mrpHqUpQ"
-    ]
+    ],
+    "variation": "Austrian Attack"
   },
   {
     "id": "mg-pirc-classical",
@@ -6695,7 +6716,8 @@
     "lessonSummary": "Against the Classical Nf3/Be2, Black strikes …e5, frees the position, and plays for the better-coordinated pieces.",
     "sources": [
       "https://lichess.org/bBIyZdD5"
-    ]
+    ],
+    "variation": "Classical System"
   },
   {
     "id": "mg-pirc-150",
@@ -6715,7 +6737,8 @@
     "lessonSummary": "Vs the 150 Attack's Bh6 plan, Black accepts the bishop trade and races on the queenside before White's h-pawn arrives.",
     "sources": [
       "https://lichess.org/gzEK5lps"
-    ]
+    ],
+    "variation": "150 Attack"
   },
   {
     "id": "mg-pirc-byrne",
@@ -6798,7 +6821,8 @@
     "lessonSummary": "In the Three Knights, Black keeps the tension and converts a small structural edge with technique.",
     "sources": [
       "https://lichess.org/qustMeqJ"
-    ]
+    ],
+    "variation": "Three Knights Game"
   },
   {
     "id": "mg-philidor-main",
@@ -6818,7 +6842,8 @@
     "lessonSummary": "The Improved Hanham: build the …Nbd7/…c6 wall, castle, and free the game with …d5 at the right moment.",
     "sources": [
       "https://lichess.org/5NLQ2XbL"
-    ]
+    ],
+    "variation": "Hanham Variation"
   },
   {
     "id": "mg-philidor-exchange",
@@ -6879,7 +6904,8 @@
     "lessonSummary": "The Orthodox QGD: hold the solid …e6 wall, then free the game with …dxc4, …Nd5 and …e5.",
     "sources": [
       "https://lichess.org/WTUwzeuo"
-    ]
+    ],
+    "variation": "Orthodox Defense Main Line"
   },
   {
     "id": "mg-qgd-tartakower",
@@ -6899,7 +6925,8 @@
     "lessonSummary": "The Tartakower …b6: develop the bishop to b7, accept hanging pawns, and use their dynamism.",
     "sources": [
       "https://lichess.org/ZNL5oKqo"
-    ]
+    ],
+    "variation": "Tartakower Variation"
   },
   {
     "id": "mg-qgd-lasker",
@@ -6919,7 +6946,8 @@
     "lessonSummary": "The Lasker: play …Ne4 to trade pieces, ease the cramp, and reach a sound equal game.",
     "sources": [
       "https://lichess.org/kdZmeJ4i"
-    ]
+    ],
+    "variation": "Tartakower Variation"
   },
   {
     "id": "mg-qgd-exchange",
@@ -6939,7 +6967,8 @@
     "lessonSummary": "In the Exchange Carlsbad, Black meets White's minority attack with central/kingside counterplay.",
     "sources": [
       "https://lichess.org/Ca8D0bXs"
-    ]
+    ],
+    "variation": "Exchange Variation"
   },
   {
     "id": "mg-qga-main",
@@ -7020,7 +7049,8 @@
     "lessonSummary": "The a4 …Bf5 main: develop the light bishop before locking it in, hold the structure, and grind the better files.",
     "sources": [
       "https://lichess.org/umSRLHgD"
-    ]
+    ],
+    "variation": "Main Line (a4 Bf5)"
   },
   {
     "id": "mg-slav-geller",
@@ -7040,7 +7070,8 @@
     "lessonSummary": "Vs the sharp 5.e4 Geller, Black grabs the pawn, gives it back at the right moment, and keeps the safer game.",
     "sources": [
       "https://lichess.org/DdiRry8S"
-    ]
+    ],
+    "variation": "Geller Gambit"
   },
   {
     "id": "mg-slav-schlechter",
@@ -7060,7 +7091,8 @@
     "lessonSummary": "The Schlechter …g6: fianchetto the bishop, keep the centre flexible, and play a sound positional game.",
     "sources": [
       "https://lichess.org/1vkjoAU8"
-    ]
+    ],
+    "variation": "Schlechter Variation (...g6 Fianchetto)"
   },
   {
     "id": "mg-semislav-main",
@@ -7080,7 +7112,8 @@
     "lessonSummary": "The sharp Semi-Slav: take c4, hold with …b5, and free the position with …c5 for dynamic play.",
     "sources": [
       "https://lichess.org/pJExfJkG"
-    ]
+    ],
+    "variation": "Moscow Variation Bxf6"
   },
   {
     "id": "mg-semislav-meran",
@@ -7163,7 +7196,8 @@
     "lessonSummary": "Vs the Qc2 anti-Meran, Black releases the tension with …dxc4 and breaks in the centre.",
     "sources": [
       "https://lichess.org/760Lo8sq"
-    ]
+    ],
+    "variation": "Stoltz Qc2 Variation"
   },
   {
     "id": "mg-kid-main",
@@ -7245,7 +7279,8 @@
     "lessonSummary": "Vs the Russian Qb3, Black expands with …a6/…b5 and lets the g7-bishop pressure White's big centre.",
     "sources": [
       "https://lichess.org/yowy5wvt"
-    ]
+    ],
+    "variation": "Russian System (Qb3)"
   },
   {
     "id": "mg-benoni-main",
@@ -7285,7 +7320,8 @@
     "lessonSummary": "Vs the solid Fianchetto Benoni, Black prepares …b5 and activates the pieces toward the queenside.",
     "sources": [
       "https://lichess.org/hOrznatU"
-    ]
+    ],
+    "variation": "Classical Variation (Bf4 — d6 Pressure)"
   },
   {
     "id": "mg-benoni-taimanov",
@@ -7305,7 +7341,8 @@
     "lessonSummary": "Vs the aggressive Taimanov, Black develops accurately and strikes back before the kingside storm lands.",
     "sources": [
       "https://lichess.org/lMoEfxGB"
-    ]
+    ],
+    "variation": "Taimanov Variation (f4/Bb5+)"
   },
   {
     "id": "mg-benoni-fourpawns",
@@ -7325,7 +7362,8 @@
     "lessonSummary": "Vs the Four Pawns, Black uses …Ng4 and …Re8 to hit e5 and punish the broad centre.",
     "sources": [
       "https://lichess.org/LBhSfaJZ"
-    ]
+    ],
+    "variation": "Taimanov Variation (f4/Bb5+)"
   },
   {
     "id": "mg-qid-main",
@@ -7427,7 +7465,8 @@
     "lessonSummary": "The Czech setup: lock the centre with …c6/…e5 and regroup the pieces for a closed manoeuvring battle.",
     "sources": [
       "https://lichess.org/XtX3jnoT"
-    ]
+    ],
+    "variation": "Old Indian: Czech Variation"
   },
   {
     "id": "mg-oldindian-be2",
@@ -7488,7 +7527,8 @@
     "lessonSummary": "Vs 4.d4, Black takes on d4 and develops energetically, equalising with active pieces.",
     "sources": [
       "https://lichess.org/5AVBQ8Qs"
-    ]
+    ],
+    "variation": "Two Knights: Italian Two Knights d4"
   },
   {
     "id": "mg-twoknights-friedliver",

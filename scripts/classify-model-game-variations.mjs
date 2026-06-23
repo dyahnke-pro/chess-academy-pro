@@ -27,26 +27,47 @@ function uciList(pgnOrMoves) {
   for (const m of moves) { let mv; try { mv = c.move(m); } catch { break; } if (!mv) break; out.push(mv.from + mv.to + (mv.promotion || '')); }
   return out;
 }
+// Position list (board+turn+castling+ep, ignoring move counters) after each ply.
+// Transposition-aware matching keys off these — a line reached via a different
+// move order visits the SAME positions once it converges, so it still matches.
+function posList(pgnOrMoves) {
+  const c = new Chess();
+  const moves = Array.isArray(pgnOrMoves) ? pgnOrMoves : pgnOrMoves.trim().split(/\s+/).filter(Boolean);
+  const out = [];
+  for (const m of moves) { let mv; try { mv = c.move(m); } catch { break; } if (!mv) break; out.push(c.fen().split(' ').slice(0, 4).join(' ')); }
+  return out;
+}
 function commonLen(a, b) { let i = 0; while (i < a.length && i < b.length && a[i] === b[i]) i++; return i; }
+// Deepest ply of `linePositions` the game visits (set membership), transposition-proof.
+function deepestReached(gameSet, linePositions) {
+  let best = 0;
+  for (let j = 0; j < linePositions.length; j++) if (gameSet.has(linePositions[j])) best = j + 1;
+  return best;
+}
 
 // Per opening: the main-line UCI + each variation's full UCI and its
 // identifying-prefix length (unique once past the longest prefix shared with
 // the main line or any sibling).
 function analyze(o) {
   const mainU = uciList(o.pgn || '');
-  const vars = (o.variations || []).map((v) => ({ name: v.name, u: uciList(v.pgn || '') })).filter((v) => v.u.length);
+  const vars = (o.variations || []).map((v) => ({ name: v.name, u: uciList(v.pgn || ''), p: posList(v.pgn || '') })).filter((v) => v.u.length);
   const others = (i) => [mainU, ...vars.filter((_, j) => j !== i).map((v) => v.u)];
   const ids = vars.map((v, i) => {
     let maxShared = 0;
     for (const ou of others(i)) maxShared = Math.max(maxShared, commonLen(v.u, ou));
     const L = Math.min(maxShared + 1, v.u.length);
-    return { name: v.name, u: v.u, prefix: v.u.slice(0, L), L };
+    return { name: v.name, u: v.u, p: v.p, prefix: v.u.slice(0, L), L };
   });
   return { mainU, ids };
 }
 
+// Tier 3 floor: a transposition match must reach this many plies into the
+// variation (set membership) to count — deep enough that the position is
+// specific to that line, not a shared early tabiya.
+const T3_FLOOR = 8;
+
 const cache = new Map();
-let exact = 0, deep = 0, untagged = 0; const dist = {};
+let exact = 0, deep = 0, transpose = 0, untagged = 0; const dist = {};
 for (const g of games) {
   const o = byId.get(g.openingId);
   delete g.variation;
@@ -54,6 +75,7 @@ for (const g of games) {
   if (!cache.has(o.id)) cache.set(o.id, analyze(o));
   const { mainU, ids } = cache.get(o.id);
   const gu = uciList(g.pgn || '');
+  const gset = new Set(posList(g.pgn || ''));
 
   // Tier 1 — exact (identifying-prefix) match; prefer the most specific.
   let best = null;
@@ -75,14 +97,26 @@ for (const g of games) {
     if (deepest) { best = deepest; tier = 'deep'; }
   }
 
+  // Tier 3 — transposition-aware (David 2026-06-23): a game that reaches the
+  // taught variation via a different move order (e.g. Caro Classical via 2.Nd2,
+  // QGD via an early Nf3) never matches the UCI prefix, so it fell through to
+  // "untagged" and never surfaced under its variation tab. Tag it to the
+  // variation it reaches DEEPEST by position, when that is clearly the deepest
+  // (unique max) and deep enough (>= T3_FLOOR) to be specific to that line.
+  if (!best) {
+    const scored = ids.map((v) => ({ v, d: deepestReached(gset, v.p) })).sort((a, b) => b.d - a.d);
+    const top = scored[0], second = scored[1];
+    if (top && top.d >= T3_FLOOR && (!second || top.d > second.d)) { best = top.v; tier = 'transpose'; }
+  }
+
   if (best) {
     g.variation = best.name;
-    if (tier === 'exact') exact++; else deep++;
+    if (tier === 'exact') exact++; else if (tier === 'deep') deep++; else transpose++;
     const k = `${g.openingId} :: ${best.name} [${tier}]`;
     dist[k] = (dist[k] || 0) + 1;
   } else { untagged++; }
 }
-console.log(`exact ${exact}, deep-fallback ${deep}, untagged(main) ${untagged}, total ${games.length}`);
+console.log(`exact ${exact}, deep-fallback ${deep}, transpose ${transpose}, untagged(main) ${untagged}, total ${games.length}`);
 console.log('\ndistribution:');
 Object.entries(dist).sort().forEach(([k, n]) => console.log(`  ${n}  ${k}`));
 if (WRITE) { fs.writeFileSync('src/data/model-games.json', JSON.stringify(games, null, 2) + '\n'); console.log('\n[written]'); }
