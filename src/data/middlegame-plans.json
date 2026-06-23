@@ -28548,73 +28548,45 @@
   {
     "id": "mp-scandinaviandefence-modern",
     "openingId": "scandinavian-defence",
-    "criticalPositionFen": "rnbq1rk1/ppp1ppbp/1n4p1/8/2PP4/5N2/PP2BPPP/RNBQ1RK1 w - - 1 8",
-    "title": "Scandinavian: Fianchetto vs the Big Centre",
-    "overview": "The …Nf6 Modern with a King's-Indian-style fianchetto. White has a broad pawn centre on c4 and d4; Black treats it as a target. The plan: develop …Nc6, pressure d4, and use the g7-bishop on the long diagonal, ready to chop on c3 to wreck White's structure and win the centre pawn back with a superb knight.",
+    "title": "Modern Scandinavian: Active Knights vs the Doubled Pawns",
+    "criticalPositionFen": "r1bq1rk1/ppp1pp1p/2n3p1/2Pn4/3Q4/2P2N2/P3BPPP/R1B2RK1 w - - 2 13",
+    "overview": "Where the opening leaves off — Black has traded the fianchetto bishop to plant two centralized knights and saddle White with doubled c-pawns (c3 and c5). The knights on d5 and c6 hit White’s queen and screen the board; the plan is to undermine c5 with …b6, fix c3, and let dynamic piece play press the weak pawns. Compensation is activity, not material.",
     "pawnBreaks": [
-      "…c5 or …e6/…e5 to strike the centre",
-      "White's d5 push is met by piece play"
+      {
+        "move": "…b6",
+        "explanation": "Undermines the c5-pawn, the front of White’s doubled c-pawns; after cxb6 …axb6 the a-file opens and c3 is left a fixed target.",
+        "fen": "r1bq1rk1/ppp1pp1p/2n3p1/2Pn4/3Q4/2P2N2/P3BPPP/R1B2RK1 w - - 2 13"
+      },
+      {
+        "move": "…e5",
+        "explanation": "The central lever — …e5 gains space and challenges White’s queen and centre when Black is ready to open lines for the active pieces.",
+        "fen": "r1bq1rk1/ppp1pp1p/2n3p1/2Pn4/3Q4/2P2N2/P3BPPP/R1B2RK1 w - - 2 13"
+      }
     ],
-    "pieceManeuvers": [
-      "…Nc6 hitting d4",
-      "…Bg7 on the long diagonal",
-      "…Bxc3 to double White's pawns"
-    ],
+    "pieceManeuvers": [],
     "strategicThemes": [
-      "Attack the broad centre with pieces",
-      "The fianchettoed bishop",
-      "Win the structure"
+      "Black’s centralized knights on d5 and c6 are the compensation — active, hitting the white queen and dominating the centre.",
+      "White’s doubled c-pawns (c3 and c5) are the targets: …b6 undermines c5, …axb6 fixes c3 as a permanent weakness.",
+      "Black plays for dynamics, not the structure — open lines for the pieces and trade into a position where the weak c3-pawn tells."
     ],
-    "endgameTransitions": [
-      "Doubled white c-pawns tell in the ending"
-    ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "fen": "rnbq1rk1/ppp1ppbp/1n4p1/8/2PP4/5N2/PP2BPPP/RNBQ1RK1 w - - 1 8",
+        "title": "…b6 undermines the doubled c-pawns",
+        "fen": "r1bq1rk1/ppp1pp1p/2n3p1/2Pn4/3Q4/2P2N2/P3BPPP/R1B2RK1 w - - 2 13",
         "moves": [
-          "Nc3",
-          "Nc6",
-          "d5",
-          "Ne5",
-          "Nxe5",
-          "Bxe5",
-          "Bh6",
-          "Re8"
+          "Qd2",
+          "b6",
+          "cxb6",
+          "axb6"
         ],
         "annotations": [
-          "Nc3 develops and bolsters the broad e4-d4 centre.",
-          "…Nc6 leans straight on d4, the front pawn of White’s big centre.",
-          "d5 lunges forward, kicking the c6-knight and grabbing space.",
-          "…Ne5 bounds to the central outpost, eyeing c4 and the kingside dark squares the fianchettoed bishop already rakes.",
-          "White trades off the well-placed e5-knight.",
-          "…Bxe5! The fianchettoed bishop recaptures and lands on the e5-outpost, raking the long diagonal toward White's queenside — Black's pieces are wonderfully active for a 'cramped' Scandinavian.",
-          "White tries Bh6 to challenge the other bishop and weaken Black's kingside.",
-          "…Re8 calmly sidesteps, keeping the strong e5-bishop and putting the rook on the half-open e-file. Black has emerged from the Modern Scandinavian with a sound structure and the more active bishops."
+          "Qd2 — White’s queen steps away from the c6-knight’s pressure.",
+          "…b6 — Black strikes at c5, the front of White’s doubled c-pawns.",
+          "cxb6 — White captures.",
+          "…axb6 — Black recaptures, opening the a-file; the c3-pawn is now a fixed target."
         ],
-        "title": "Scandinavian: Fianchetto vs the Big Centre",
         "arrows": [
-          [
-            {
-              "from": "c3",
-              "to": "e4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c6",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [],
-          [
-            {
-              "from": "e5",
-              "to": "c4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
           [],
           [],
           [],
@@ -28623,106 +28595,47 @@
         "highlights": [
           [
             {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
               "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c6",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "h6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
         "learnCues": [
-          "Nc3 — back the centre",
-          "Nc6 — lean on d4",
-          "d5 — kick and grab",
-          "Ne5 — central outpost",
-          "Nxe5 — trade the outpost knight",
-          "…Bxe5 — recapture on the outpost",
-          "Bh6 — challenge the bishop",
-          "…Re8 — keep the e5-bishop, eye the e-file"
+          "Qd2 — queen retreats",
+          "…b6 — hit the c5-pawn",
+          "cxb6 — White takes",
+          "…axb6 — open the a-file"
         ],
         "sources": [
-          "book:scandinavian-defence",
-          "concept:pos-development",
+          "concept:pawn-doubled",
+          "concept:pos-center",
+          "concept:pos-outpost",
           "https://en.wikipedia.org/wiki/Scandinavian_Defense"
         ]
       }
@@ -28731,57 +28644,145 @@
   {
     "id": "mp-scandinaviandefence-portuguese",
     "openingId": "scandinavian-defence",
-    "criticalPositionFen": "rn2kb1r/ppp2ppp/4pn2/3q4/3P4/5N2/PPP1QPPP/RNB2RK1 b kq - 1 7",
-    "title": "Scandinavian Portuguese: Active Pieces, Pressure on d4",
-    "overview": "In the Portuguese, Black's lead in development is the whole point. The pieces pour out fast — …Nc6 leans on d4, …Bd6 takes an aggressive diagonal, the queen sidesteps the c4-kick to an active post, and …O-O-O slams a rook onto the open d-file against d4. Activity, not material, drives the position.",
+    "title": "Portuguese Scandinavian: Active Queen and the …e5 Break",
+    "criticalPositionFen": "r3kb1r/ppp2ppp/4pn2/5q2/2P5/5P2/PP2Q1PP/RNBR2K1 w kq - 1 12",
+    "overview": "Where the opening leaves off — the Portuguese gambit has simplified into a balanced middlegame. Black’s queen is active on f5, the structure is sound, and White’s f3 has loosened the light squares. The plan is straightforward: finish developing, pin the c3-knight, and break in the centre with …e5 (or …c5), pressing the squares White weakened.",
     "pawnBreaks": [
-      "…e6 — solid central support behind the active pieces"
+      {
+        "move": "…e5",
+        "explanation": "The central break, supported by the active queen on f5 — it claims the centre and opens lines for Black’s pieces.",
+        "fen": "r3kb1r/ppp2ppp/4pn2/5q2/2P5/5P2/PP2Q1PP/RNBR2K1 w kq - 1 12"
+      },
+      {
+        "move": "…c5",
+        "explanation": "The alternative freeing break, fixing White’s queenside and giving the queen and rooks open lines.",
+        "fen": "r3kb1r/ppp2ppp/4pn2/5q2/2P5/5P2/PP2Q1PP/RNBR2K1 w kq - 1 12"
+      }
     ],
-    "pieceManeuvers": [
-      "…Nb8-c6 — pressure the d4-pawn",
-      "…Bf8-d6 — claim the aggressive diagonal",
-      "…O-O-O — rook to the open d-file"
-    ],
+    "pieceManeuvers": [],
     "strategicThemes": [
-      "Lead in development as compensation",
-      "Pile on d4 with …Nc6 and the d-file rook",
-      "Opposite-side, attacking play"
+      "Black’s queen is active on f5 and the structure is sound — the position is equal, and Black completes development with tempo.",
+      "White’s f3 has weakened the light squares (e3, g3); Black’s pieces and the …e5/…c5 breaks press that soft complex.",
+      "A central majority and the active queen give Black comfortable, slightly easier play in a symmetrical-material middlegame."
     ],
-    "endgameTransitions": [
-      "Active pieces aim to win d4 before the structure matters"
-    ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "fen": "rn2kb1r/ppp2ppp/4pn2/3q4/3P4/5N2/PPP1QPPP/RNB2RK1 b kq - 1 7",
+        "title": "Pin, then break with …e5",
+        "fen": "r3kb1r/ppp2ppp/4pn2/5q2/2P5/5P2/PP2Q1PP/RNBR2K1 w kq - 1 12",
         "moves": [
-          "Nc6",
-          "Be3",
-          "Bd6",
-          "c4",
-          "Qh5",
           "Nc3",
-          "O-O-O"
+          "Bb4",
+          "Bd2",
+          "e5"
         ],
         "annotations": [
-          "…Nc6 develops with a hit on the d4-pawn.",
-          "Be3 props up d4 and develops.",
-          "…Bd6 takes the active b8-h2 diagonal toward White's king.",
-          "c4 puts the question to the centralised queen.",
-          "…Qh5 sidesteps to an active post, eyeing the kingside.",
-          "Nc3 develops, guarding e2 and d5.",
-          "…O-O-O brings the king to safety and swings the rook onto the open d-file, bearing down on d4."
-        ],
-        "learnCues": [
-          "…Nc6 — hit d4",
-          "Be3 — prop up d4",
-          "…Bd6 — active diagonal",
-          "c4 — question the queen",
-          "…Qh5 — active post",
-          "Nc3 — develop",
-          "…O-O-O — rook to the d-file"
+          "Nc3 — White develops the queenside knight.",
+          "…Bb4 — Black pins the c3-knight, completing development with tempo.",
+          "Bd2 — White breaks the pin.",
+          "…e5 — Black seizes the centre, the queen on f5 supporting the advance."
         ],
         "arrows": [
           [],
+          [
+            {
+              "from": "b4",
+              "to": "c3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nc3 — White develops",
+          "…Bb4 — pin the knight",
+          "Bd2 — break the pin",
+          "…e5 — seize the centre"
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-outpost",
+          "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-scandinaviandefence-qa5",
+    "openingId": "scandinavian-defence",
+    "title": "Scandinavian …Qa5: the Opposite-Castling Race",
+    "criticalPositionFen": "r4rk1/pp1n1ppp/2p1pn2/q4b2/1bBP4/2N2N2/PPPBQPPP/1K1R3R w - - 6 11",
+    "overview": "Where the opening leaves off — the …Qa5 mainline with kings castled on opposite wings. It is a race: White attacks Black’s kingside, Black storms the white king on b1. Black already has the queen on a5 and the bishop on b4 aimed at c3 — the knight shielding the king. The plan is …b5-b4, ripping open the b- and c-files. Speed beats material.",
+    "pawnBreaks": [
+      {
+        "move": "…b5-b4",
+        "explanation": "The storm. …b5 then …b4 pries open lines against the white king on b1; combined with …Bxc3 it tears away the knight that shields him.",
+        "fen": "r4rk1/pp1n1ppp/2p1pn2/q4b2/1bBP4/2N2N2/PPPBQPPP/1K1R3R w - - 6 11"
+      }
+    ],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "Opposite-side castling means a race — Black attacks the white king on b1 while White goes for Black’s kingside; whoever arrives first wins.",
+      "Black storms with …b5-b4 to pry open the b- and c-files; the queen on a5 and bishop on b4 are already trained on c3.",
+      "The …Bxc3 break removes the knight shielding the white king — the standard Scandinavian attacking motif."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "title": "…b5-b4 and …Bxc3 against the king",
+        "fen": "r4rk1/pp1n1ppp/2p1pn2/q4b2/1bBP4/2N2N2/PPPBQPPP/1K1R3R w - - 6 11",
+        "moves": [
+          "Bb3",
+          "b5",
+          "a3",
+          "Bxc3",
+          "Bxc3",
+          "b4"
+        ],
+        "annotations": [
+          "Bb3 — White tucks the bishop back.",
+          "…b5 — the queenside pawn storm begins, racing at the white king on b1.",
+          "a3 — White questions the b4-bishop.",
+          "…Bxc3 — Black trades off the knight shielding the white king.",
+          "Bxc3 — White recaptures.",
+          "…b4 — the storm crashes in, hitting the c3-bishop and tearing open lines to the white king."
+        ],
+        "arrows": [
           [],
           [],
           [],
@@ -28792,180 +28793,17 @@
         "highlights": [
           [
             {
-              "square": "c6",
+              "square": "b3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
-            {
-              "square": "e3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "h5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
-        ],
-        "sources": [
-          "concept:pos-development",
-          "concept:pos-initiative",
-          "https://en.wikipedia.org/wiki/Scandinavian_Defense"
-        ],
-        "title": "Active Pieces, Pressure on d4",
-        "intro": "Black develops with tempo and throws the d-file rook against d4."
-      }
-    ]
-  },
-  {
-    "id": "mp-scandinaviandefence-qa5",
-    "openingId": "scandinavian-defence",
-    "criticalPositionFen": "rn2kb1r/pp3ppp/2p1pn2/q4b2/2BP4/2N2N2/PPPBQPPP/R3K2R b KQkq - 1 8",
-    "title": "Scandinavian: The Queenside Race (…c6 Qa5)",
-    "overview": "The solid …c6 Qa5 setup with opposite-side castling. Black is rock-solid — the queen on a5, the bishop on f5, the pawn on c6 covering b5 and d5. With White castling long, Black throws the queenside pawns at the white king: …b5–b4 prising open lines while the a5-queen already glares down the wing.",
-    "pawnBreaks": [
-      "…b5–b4 the queenside storm",
-      "…c5 to open the c-file at the king"
-    ],
-    "pieceManeuvers": [
-      "…Bb4 pin",
-      "…Nbd7 and …b5",
-      "…O-O-O or …O-O depending on White's king"
-    ],
-    "strategicThemes": [
-      "Opposite-wing attacks",
-      "The a5-queen aimed at the queenside",
-      "Solid structure, sharp attack"
-    ],
-    "endgameTransitions": [
-      "Rare — the attacks decide first"
-    ],
-    "playableLines": [
-      {
-        "fen": "rn2kb1r/pp3ppp/2p1pn2/q4b2/2BP4/2N2N2/PPPBQPPP/R3K2R b KQkq - 1 8",
-        "moves": [
-          "Bb4",
-          "O-O-O",
-          "Nbd7",
-          "a3",
-          "Bxc3",
-          "Bxc3",
-          "Qc7",
-          "Ne5",
-          "Nxe5",
-          "dxe5",
-          "Nd5"
-        ],
-        "annotations": [
-          "…Bb4 pins the c3-knight, adding to the pressure from the a5-queen.",
-          "White commits to O-O-O — and now the kings are on opposite wings, so the race is on.",
-          "…Nbd7 develops and prepares the …b5 pawn lever against White's king on the queenside.",
-          "a3 questions the bishop, but Black's attack with …b5–b4 is already rolling toward the white king.",
-          "…Bxc3 — trading the bishop to fracture White’s queenside pawns, the structural half of the queenside plan.",
-          "Bxc3 — White recaptures, saddled with doubled c-pawns.",
-          "…Qc7 — the queen eyes the c3-pawns and the open lines toward White’s king.",
-          "Ne5 — White centralizes the knight aggressively.",
-          "…Nxe5 — trading off the active knight.",
-          "dxe5 — White recaptures, the centre shifting.",
-          "…Nd5 — the knight lands on the dominant d5-outpost, blockading and eyeing White’s weak c3-pawns."
-        ],
-        "title": "Scandinavian: The Queenside Race (…c6 Qa5)",
-        "arrows": [
-          [
-            {
-              "from": "b4",
-              "to": "c3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "b4",
-              "to": "a5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [
-            {
-              "from": "d5",
-              "to": "c3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
-        ],
-        "highlights": [
-          [
-            {
-              "square": "b4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c3",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "a5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "c1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
@@ -28973,91 +28811,23 @@
             {
               "square": "a3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "a2",
+              "square": "c3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "b5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
             {
               "square": "b4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c3",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
@@ -29066,24 +28836,18 @@
             }
           ]
         ],
-        "sources": [
-          "book:scandinavian-defence",
-          "concept:pos-development",
-          "https://en.wikipedia.org/wiki/Scandinavian_Defense",
-          "concept:pos-outpost"
-        ],
         "learnCues": [
-          "Bb4 — pin the c3-knight",
-          "O-O-O — opposite wings, race on",
-          "Nbd7 — prepare the …b5 lever",
-          "a3 — but …b5-b4 is rolling",
-          "Bxc3 — fracture the queenside",
-          "Bxc3 — doubled c-pawns",
-          "Qc7 — eye c3, open lines",
-          "Ne5 — White centralizes",
-          "Nxe5 — trade the active knight",
-          "dxe5 — centre shifts",
-          "Nd5 — the dominant outpost"
+          "Bb3 — White retreats",
+          "…b5 — start the storm",
+          "a3 — question the bishop",
+          "…Bxc3 — rip the king’s shield",
+          "Bxc3 — White recaptures",
+          "…b4 — the storm crashes in"
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Scandinavian_Defense"
         ]
       }
     ]
