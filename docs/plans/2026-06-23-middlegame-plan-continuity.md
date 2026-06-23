@@ -119,6 +119,40 @@ scandinavian-defence / sicilian-dragon (3 each). The deep replays:
 `EndgamePlansSection`, `narrationAccuracy`, `OpeningDetailPage.wiring`,
 `npm run ship-check`. Re-run the overlap detector after each batch → CLEAN.
 
+## Scope (David 2026-06-23): ALL 529 plans, accurate
+Not just the 66 overlaps. Every middlegame plan must be accurate: start where the
+opening leaves off + carry the real breaks/ideas. The 66 overlaps need
+re-anchoring + content rebuild; the 461 "clean" ones start correctly but need a
+breaks/ideas accuracy pass. "However long it takes."
+
+## The PROVEN per-plan recipe (battle-tested on Vienna + French Exchange)
+1. **New anchor** — from `scratchpad/suggested-anchors.json` (the anchor-gen
+   harness: import `getAllLessonScripts()`, deepest beat per lesson → terminal
+   FEN; match each plan to the deepest lesson line containing its old anchor).
+   For the 461 non-overlap plans the anchor is already right — skip step 1.
+2. **Real continuation + breaks** — query the explorer FEN endpoint:
+   `GET /api/lichess-explorer?source=masters&fen=<encoded FEN>` → frequency-ranked
+   master moves from the anchor. Pawn moves = candidate breaks; rook/piece moves
+   = the maneuvering plan. Thin data (deep/rare anchor) → lean on book corpus +
+   web + mainstream theory (still verify, never invent).
+3. **Ideas** — ground in `chess-concepts.json` (`pos-open-file`, `pos-center`,
+   `pos-outpost`, `pawn-minority-attack`, …) + `book:<id>` (classical openings) +
+   reputable URL. Record in `sources[]`; every source must resolve
+   (`isResolvableSource`).
+4. **Author** breaks + pieceManeuvers + ≥2 themes + ONE demo `playableLine` from
+   the anchor that DEMONSTRATES the plan (student move lands on a declared
+   break/maneuver square). Keep piece plans — accuracy, not a stub.
+5. **Validate locally BEFORE splicing** — legality (chess.js), lead-eye
+   groundedness (every vision-arrow target + yellow highlight NAMED in that
+   move's annotation; vision arrows have a CLEAR sight-line via the `sightClear`
+   helper — a blocked diagonal arrow fails `middlegamePlanner`), themes demo,
+   array-length parity, last annotation not a PROMISE phrase.
+6. **Splice** one object in place (find id line → `  {` open → next `  },` close),
+   keeping the other entries byte-identical. Re-run
+   `middlegamePlanner.test.ts` + `middlegamePlanThemes.test.ts`.
+
+Done so far: `mp-viennagame-classical`, `mp-frenchdefence-exchange`.
+
 ## Phased plan
 - **Phase 0 — scaffolding** (`pending`): commit this doc; fix the
   `bird-opening` id typo; commit the detector to `scripts/` so it's repeatable.

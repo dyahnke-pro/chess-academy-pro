@@ -8593,80 +8593,48 @@
   {
     "id": "mp-frenchdefence-exchange",
     "openingId": "french-defence",
-    "criticalPositionFen": "rnbqkb1r/ppp2ppp/5n2/3p4/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5",
-    "title": "French Exchange: Seize the Open e-File",
-    "overview": "The symmetrical Exchange gives one trump worth fighting for: the only open file, the e-file. Black mirrors White's development and then races to grab it first — …Rfe8 plants the rook on the file before White's, the small but real edge in a level position.",
-    "pawnBreaks": [],
+    "title": "French Exchange: the e-File and the …c5 Break",
+    "criticalPositionFen": "r2qr1k1/pp1n1pp1/2pb1n1p/3p4/3P2bB/2PB1N2/PPQN1PPP/R4RK1 w - - 0 12",
+    "overview": "Where the opening leaves off — the dead-symmetric Exchange French. The only open file is the e-file, so Black contests it at once, and the move that gives the structure life is …c5: it strikes d4, and after dxc5 …Bxc5 Black has the freer pieces and an isolated d-pawn to play around. Equal at the baseline; Black’s winning chances come from being first to use the file and the break.",
+    "pawnBreaks": [
+      {
+        "move": "…c5",
+        "explanation": "Black’s central break — the only way to escape the symmetry. …c5 hits d4; after dxc5 …Bxc5 Black gets the more active bishop and a mobile centre, accepting an isolated d5-pawn for the initiative.",
+        "fen": "r2q2k1/pp1n1pp1/2pb1n1p/3p4/3P2bB/2PB1N2/PPQN1PPP/4R1K1 b - - 0 14"
+      }
+    ],
     "pieceManeuvers": [
       {
-        "piece": "Rook",
-        "route": "…Rf8-e8 — the open e-file",
-        "explanation": "Black claims the lone open file before White, the one structural plus in the symmetrical Exchange."
-      },
-      {
-        "piece": "Bishop",
-        "route": "…Bc8-g4 — pin the knight",
-        "explanation": "The bishop develops actively, pinning the f3-knight before the symmetrical setup is complete."
+        "piece": "Knight",
+        "route": "Nd7-f8-g6",
+        "explanation": "The standard Exchange-French reroute: the knight swings to g6, eyeing f4 and e5 and adding a piece to the kingside once the rooks have fought over the e-file."
       }
     ],
     "strategicThemes": [
-      "Grab the open e-file first",
-      "Mirror, then out-coordinate",
-      "Patient pressure in a level position"
+      "The e-file is the ONLY open file in this symmetric position — Black contests it immediately, trading or doubling rooks so White can never own it alone.",
+      "…c5 is the break that escapes the symmetry: after dxc5 …Bxc5 Black has the more active bishop and a central pawn to push, in return for an isolated d5-pawn.",
+      "The knight reroutes Nd7-f8-g6 toward f4 and e5; with the file and the break in hand, Black is the side pressing for a win in a structure that is equal by default."
     ],
-    "endgameTransitions": [
-      "Owning the open file is the edge that carries into the endgame"
-    ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "fen": "rnbqkb1r/ppp2ppp/5n2/3p4/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5",
+        "title": "Contest the e-file, then break with …c5",
+        "fen": "r2qr1k1/pp1n1pp1/2pb1n1p/3p4/3P2bB/2PB1N2/PPQN1PPP/R4RK1 w - - 0 12",
         "moves": [
-          "Bd3",
-          "Bd6",
-          "O-O",
-          "O-O",
-          "Bg5",
-          "Bg4",
-          "Nbd2",
-          "Nbd7",
-          "c3",
-          "c6",
-          "Qc2",
-          "Qc7",
           "Rfe1",
-          "Rfe8"
+          "Rxe1+",
+          "Rxe1",
+          "c5",
+          "dxc5",
+          "Bxc5"
         ],
         "annotations": [
-          "Bd3 takes the natural diagonal in the symmetrical structure.",
-          "…Bd6 mirrors — Black matches White's setup.",
-          "O-O White castles.",
-          "…O-O Black castles.",
-          "Bg5 develops the bishop with a pin idea.",
-          "…Bg4 mirrors, pinning White's f3-knight in turn.",
-          "Nbd2 develops toward the centre.",
-          "…Nbd7 mirrors again.",
-          "c3 supports d4 and the structure.",
-          "…c6 supports d5 symmetrically.",
-          "Qc2 lines up on the b1-h7 diagonal.",
-          "…Qc7 mirrors.",
-          "Rfe1 contests the open e-file.",
-          "…Rfe8! Black claims the e-file too — and being a tempo behind, must hold it accurately. Owning the only open file is the whole game here."
-        ],
-        "learnCues": [
-          "Bd3 — the natural diagonal",
-          "…Bd6 — mirror",
-          "O-O — castle",
-          "…O-O — castle",
-          "Bg5 — pin idea",
-          "…Bg4 — pin in turn",
-          "Nbd2 — develop",
-          "…Nbd7 — mirror",
-          "c3 — support d4",
-          "…c6 — support d5",
-          "Qc2 — the diagonal",
-          "…Qc7 — mirror",
-          "Rfe1 — contest the e-file",
-          "…Rfe8 — claim the e-file!"
+          "White takes the open e-file with Rfe1 — the only open file in this symmetric position.",
+          "…Rxe1+ — Black refuses to cede the file, trading the first rook pair with check.",
+          "Rxe1 — White recaptures; one rook pair is gone, but the e-file is still the battleground.",
+          "…c5! — Black breaks the symmetry, striking at d4. This is the move that gives the Exchange French its life.",
+          "dxc5 — White accepts the trade and the centre opens.",
+          "…Bxc5 — the bishop swings to the active a7-g1 diagonal, eyeing f2; Black has the freer game, with only the isolated d5-pawn to nurse."
         ],
         "arrows": [
           [],
@@ -8674,86 +8642,18 @@
           [],
           [],
           [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          []
+          [
+            {
+              "from": "c5",
+              "to": "f2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
         ],
         "highlights": [
           [
             {
-              "square": "d3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c7",
+              "square": "e1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -8765,18 +8665,56 @@
           ],
           [
             {
-              "square": "e8",
+              "square": "e1",
               "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
-        "sources": [
-          "concept:pos-open-file",
-          "concept:pos-development",
-          "https://en.wikipedia.org/wiki/French_Defence"
+        "learnCues": [
+          "Rfe1 — White grabs the e-file",
+          "…Rxe1+ — trade, hold the file",
+          "Rxe1 — White recaptures",
+          "…c5 — break the symmetry",
+          "dxc5 — the centre opens",
+          "…Bxc5 — active bishop, freer game"
         ],
-        "title": "Exchange: the e-File",
-        "intro": "Black races to seize the only open file with …Rfe8."
+        "sources": [
+          "book:french-defence",
+          "concept:pos-open-file",
+          "concept:pos-center",
+          "concept:pos-outpost",
+          "https://en.wikipedia.org/wiki/French_Defence"
+        ]
       }
     ]
   },
