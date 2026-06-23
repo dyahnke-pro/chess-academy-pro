@@ -1,0 +1,263 @@
+/**
+ * kidGameCoach — the LIVE, kid-safe, GROUNDED coach voice for the kid
+ * "Play Game" surface (`/kid/play-games/:gameId`, GuidedGamePage).
+ *
+ * This is the kid-mode equivalent of the adult Play/Learn-with-Coach voice
+ * (coachMoveCommentary / useLiveCoach), built to the LOCKED kid contract:
+ *
+ *   • Every LLM call routes through `getKidLlmResponse` (skipPersonality +
+ *     KID_SAFETY_PROMPT — Ruth default, no SAN, age-appropriate). Importing the
+ *     adult coach chat entry point here is BANNED (kid non-negotiable #3) — the
+ *     kid-safe wrapper is the only sanctioned lane.
+ *   • The LLM NEVER decides chess content (G0/kid #1/#17). The move played is
+ *     the SCRIPTED san; the position facts are computed in code
+ *     (`describeKidMove` via chess.js, `buildFedTacticsContext` board facts).
+ *     The model only rephrases those computed facts into fresh kid prose.
+ *   • Every output is sanitized (`sanitizeKidCoachText`) and falls back to the
+ *     hand-authored static text on ANY anomaly (empty / no-key banner / SAN
+ *     leak / over-length / throw). A hallucination in kid mode is a P0 bug —
+ *     the authored text is always the safety net.
+ *   • No per-move praise (kid #5) — the prompt restates the move's EFFECT.
+ */
+import { Chess } from 'chess.js';
+import { getKidLlmResponse } from './coachApi';
+import { buildFedTacticsContext, formatTacticsSubBlock } from './liveTacticsContext';
+
+/** Single-letter piece type → kid word. */
+function pieceWord(piece: string): string {
+  switch (piece.toLowerCase()) {
+    case 'p': return 'pawn';
+    case 'n': return 'knight';
+    case 'b': return 'bishop';
+    case 'r': return 'rook';
+    case 'q': return 'queen';
+    case 'k': return 'king';
+    default: return 'piece';
+  }
+}
+
+/**
+ * Spell a SAN move into kid-friendly words, GROUNDED by chess.js applied to
+ * the real position (G3 — never invented). "Bc4" → "the bishop moves to c4";
+ * "Qxf7#" → "the queen captures on f7 — checkmate!". Square names (c4/f7) are
+ * fine in kid text; SAN tokens (Bc4/Qxf7#) are not (kid #6) — this is the
+ * code-side translator that keeps SAN out of the kid's ear. Returns '' when
+ * the move is illegal from `fenBefore` so callers can fall back.
+ */
+export function describeKidMove(fenBefore: string, san: string): string {
+  try {
+    const chess = new Chess(fenBefore);
+    const move = chess.move(san);
+    const piece = pieceWord(move.piece);
+    const verb = move.captured ? 'captures on' : 'moves to';
+    const castle = move.san.replace(/[+#]/g, '');
+    let text =
+      castle === 'O-O' ? 'the king castles to safety on the kingside'
+      : castle === 'O-O-O' ? 'the king castles to safety on the queenside'
+      : `the ${piece} ${verb} ${move.to}`;
+    if (move.promotion) {
+      text += `, becoming a ${pieceWord(move.promotion)}`;
+    }
+    if (chess.isCheckmate()) text += ' — checkmate!';
+    else if (chess.isCheck()) text += ', putting the king in check';
+    return text;
+  } catch {
+    return '';
+  }
+}
+
+/** SAN-token shapes we must never let reach a child (kid #6). Matches things
+ *  like Nf3, Bxc4, Qf7#, O-O, e8=Q, R1d2 — but NOT bare square names (c4) or
+ *  ordinary capitalized words at a sentence start (handled by the word
+ *  boundaries + required move punctuation/piece-letter structure). */
+const SAN_TOKEN_RE =
+  /\b(O-O(?:-O)?|[KQRBN][a-h1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|[a-h]x[a-h][1-8](?:=[QRBN])?[+#]?|[a-h][1-8]=[QRBN][+#]?)\b/g;
+
+/**
+ * Sanitize an LLM kid-coach string. Strips any leaked SAN token, collapses
+ * whitespace, and hard-caps length. Returns '' when nothing usable remains so
+ * the caller falls back to the authored static text. Shared by every path so
+ * a single model slip can't reach a child.
+ */
+export function sanitizeKidCoachText(raw: string, maxChars = 240): string {
+  if (!raw) return '';
+  // The no-key / offline banners the LLM lane can surface — never speak.
+  if (raw.includes('⚠️') || /no api key/i.test(raw)) return '';
+  let text = raw.replace(SAN_TOKEN_RE, '').replace(/\s{2,}/g, ' ').trim();
+  // Drop stray double-spaces / dangling punctuation left by a stripped token.
+  text = text.replace(/\s+([.,!?])/g, '$1').replace(/\(\s*\)/g, '').trim();
+  if (text.length === 0) return '';
+  if (text.length > maxChars) {
+    // Cut at the last sentence end within budget; else hard cut.
+    const slice = text.slice(0, maxChars);
+    const lastStop = Math.max(slice.lastIndexOf('.'), slice.lastIndexOf('!'), slice.lastIndexOf('?'));
+    text = (lastStop > 40 ? slice.slice(0, lastStop + 1) : slice).trim();
+  }
+  return text;
+}
+
+export interface KidMoveNarrationInput {
+  /** FEN BEFORE the move was played. */
+  fenBefore: string;
+  /** The scripted SAN that was just played (source of truth — kid #17). */
+  san: string;
+  /** True if the KID played this move; false if it was the opponent's. */
+  isPlayerMove: boolean;
+  /** The scripted teaching concept for this move, if any. */
+  teachingConcept?: string;
+  /** The hand-authored narration — the GROUNDED seed + the fallback. */
+  authoredNarration?: string;
+}
+
+/**
+ * Dynamic, kid-safe narration for a move that was just played. The LLM is
+ * HANDED the computed move + concept and asked only to phrase it freshly for a
+ * young child — it never decides what the move was. Falls back to the authored
+ * narration on any anomaly. Returns the authored text (or '') when no key /
+ * offline so the surface is never blocked.
+ */
+export async function generateKidMoveNarration(input: KidMoveNarrationInput): Promise<string> {
+  const fallback = input.authoredNarration ?? '';
+  const moveDesc = describeKidMove(input.fenBefore, input.san);
+  if (!moveDesc) return fallback; // illegal/desync → trust the script
+  const who = input.isPlayerMove ? 'You' : 'Your opponent';
+  const concept = input.teachingConcept ? ` This shows the idea of ${input.teachingConcept}.` : '';
+  const seed = input.authoredNarration ? `\nThe lesson note for this move: "${input.authoredNarration}"` : '';
+  const prompt = `A move was just played in a friendly chess game for a young child.
+GROUND TRUTH (do not contradict, do not name any other move): ${who} just played — ${moveDesc}.${concept}${seed}
+
+Say ONE warm, simple sentence (max ~20 words) describing what this move DOES, for a 5-to-10-year-old. Spell out pieces and squares in words; never use chess notation. Do not say "great move" or praise — just describe the idea so the child learns. Speak as the friendly coach.`;
+  try {
+    const reply = await getKidLlmResponse([{ role: 'user', content: prompt }], '', 160);
+    const clean = sanitizeKidCoachText(reply);
+    return clean || fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+export interface KidInstructionInput {
+  /** FEN of the position the child is about to move in. */
+  fenBefore: string;
+  /** The scripted SAN the child should play (source of truth — kid #17). */
+  expectedSan: string;
+  /** The scripted teaching concept, if any. */
+  teachingConcept?: string;
+  /** Hand-authored instruction — the GROUNDED seed + the fallback. */
+  authored?: string;
+}
+
+/**
+ * Dynamic, kid-safe instruction for the move the child should play next. A
+ * guided game GUIDES — telling the child which piece to move where IS the
+ * point — so the LLM is handed the computed move (`describeKidMove`) and asked
+ * to phrase it as a friendly instruction, spelled out, never notation. Falls
+ * back to the authored instruction on any anomaly.
+ */
+export async function generateKidMoveInstruction(input: KidInstructionInput): Promise<string> {
+  const fallback = input.authored ?? '';
+  const moveDesc = describeKidMove(input.fenBefore, input.expectedSan);
+  if (!moveDesc) return fallback;
+  const concept = input.teachingConcept ? ` This teaches the idea of ${input.teachingConcept}.` : '';
+  const prompt = `In a friendly chess game for a young child, it is the child's turn to move.
+GROUND TRUTH — the move to guide them toward is: ${moveDesc}.${concept} (Describe the piece and the square in words; never reveal it as notation.)
+
+Say ONE warm, simple instruction (max ~20 words) telling them which piece to move and where, for a 5-to-10-year-old. No praise. Speak as the friendly coach.`;
+  try {
+    const reply = await getKidLlmResponse([{ role: 'user', content: prompt }], '', 160);
+    const clean = sanitizeKidCoachText(reply);
+    return clean || fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+export interface KidWrongMoveInput {
+  /** FEN BEFORE the kid's wrong attempt (the position they should move in). */
+  fenBefore: string;
+  /** The scripted SAN the kid SHOULD play next (source of truth). */
+  expectedSan: string;
+  /** Hand-authored wrong-move response — the fallback. */
+  authoredResponse?: string;
+}
+
+/**
+ * Dynamic, kid-safe encouragement after a wrong move. Grounded by the EXPECTED
+ * scripted move (spelled out) so the nudge points at the right idea without
+ * ever inventing chess. Falls back to the authored response.
+ */
+export async function generateKidWrongMoveHint(input: KidWrongMoveInput): Promise<string> {
+  const fallback = input.authoredResponse ?? 'Not quite — try again!';
+  const moveDesc = describeKidMove(input.fenBefore, input.expectedSan);
+  if (!moveDesc) return fallback;
+  const prompt = `In a friendly chess game for a young child, the child tried a move that wasn't the one we're learning.
+GROUND TRUTH — the move to gently steer them toward is: ${moveDesc}. (Do not reveal it as notation; describe the piece and where it should go.)
+
+Say ONE kind, encouraging sentence (max ~20 words) nudging them toward that move, for a 5-to-10-year-old. No scolding, no praise, no chess notation. Speak as the friendly coach.`;
+  try {
+    const reply = await getKidLlmResponse([{ role: 'user', content: prompt }], '', 160);
+    const clean = sanitizeKidCoachText(reply);
+    return clean || fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+export interface KidGameQuestionInput {
+  /** The child's typed/spoken question. */
+  question: string;
+  /** Current board FEN (for grounded board facts). */
+  fen: string;
+  /** The scripted next move the child should play, if known (source of truth). */
+  expectedNextSan?: string;
+  /** The game's title (for friendly context). */
+  gameTitle: string;
+  /** Prior chat turns for continuity. */
+  history: { role: 'user' | 'assistant'; content: string }[];
+}
+
+const KID_QUESTION_FALLBACK =
+  "Great question! Keep looking at the board — what could each of your pieces do next?";
+
+/**
+ * "Ask the coach" — the kid-mode equivalent of Learn-with-Coach chat. The
+ * answer is GROUNDED by code-computed board facts (hanging pieces / attack map
+ * / mate-in-one via formatTacticsSubBlock) PLUS the scripted next move, so the
+ * coach can answer "what should I do?" / "why?" without inventing chess. Always
+ * kid-safe; falls back to a safe canned line on any anomaly.
+ */
+export async function answerKidGameQuestion(input: KidGameQuestionInput): Promise<string> {
+  let groundingBlock = '';
+  try {
+    const sideToMove: 'w' | 'b' = input.fen.split(' ')[1] === 'b' ? 'b' : 'w';
+    const tactics = await buildFedTacticsContext(
+      input.fen,
+      sideToMove,
+      1000,
+      null,
+      () => Promise.resolve(null),
+    );
+    groundingBlock = formatTacticsSubBlock(tactics);
+  } catch {
+    groundingBlock = '';
+  }
+  const nextMove = input.expectedNextSan ? describeKidMove(input.fen, input.expectedNextSan) : '';
+  const nextLine = nextMove
+    ? `\nThe move we're learning next is: ${nextMove}. If they ask what to play, gently point them toward THIS (describe the piece + square, never notation).`
+    : '';
+  const groundLine = groundingBlock
+    ? `\n\n[Board facts — GROUND TRUTH, the ONLY chess facts you may use; never invent a piece, square, capture, check, or mate not listed here]\n${groundingBlock}`
+    : '';
+  const systemAddition = `You are the friendly chess coach in a guided game ("${input.gameTitle}") for a child aged 5-10. Answer their question in 1-2 short, warm sentences. Describe pieces and squares in plain words; never use chess notation. Only use the board facts provided below — do not invent any move, capture, threat, or mate. Encourage curiosity.${nextLine}${groundLine}`;
+  try {
+    const reply = await getKidLlmResponse(
+      [...input.history, { role: 'user', content: input.question }],
+      systemAddition,
+      256,
+    );
+    const clean = sanitizeKidCoachText(reply, 300);
+    return clean || KID_QUESTION_FALLBACK;
+  } catch {
+    return KID_QUESTION_FALLBACK;
+  }
+}

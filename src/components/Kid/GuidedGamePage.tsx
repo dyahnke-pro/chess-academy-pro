@@ -2,18 +2,49 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Volume2, VolumeX, Play, SkipForward } from 'lucide-react';
+import { ArrowLeft, Volume2, VolumeX, Play, SkipForward, MessageCircle } from 'lucide-react';
 import { KidChessboard } from '../Chessboard/KidChessboard';
 import { StarDisplay } from './StarDisplay';
 import { voiceService } from '../../services/voiceService';
 import { GUIDED_GAMES } from '../../data/guidedGames';
+import {
+  generateKidMoveNarration,
+  generateKidMoveInstruction,
+  generateKidWrongMoveHint,
+  answerKidGameQuestion,
+} from '../../services/kidGameCoach';
 import type { GuidedMove } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 
 type GamePhase = 'intro' | 'playing' | 'complete';
 
+interface CoachChatMsg {
+  role: 'kid' | 'coach';
+  text: string;
+}
+
+// Quick-tap questions so a young child can talk to the coach without typing.
+const QUICK_ASKS: ReadonlyArray<{ label: string; question: string }> = [
+  { label: 'Why?', question: 'Why is this a good move?' },
+  { label: 'What now?', question: 'What should I do next?' },
+  { label: 'Help!', question: 'Can you help me find a good move?' },
+];
+
+// The dynamic LLM coach falls back to the authored line internally on any
+// failure, but a slow model shouldn't leave the child waiting — cap the wait
+// and use the authored text if the model is taking too long.
+const COACH_NARRATION_TIMEOUT_MS = 4500;
+function withCoachTimeout(p: Promise<string>, fallback: string): Promise<string> {
+  return Promise.race([
+    p,
+    new Promise<string>((resolve) => setTimeout(() => resolve(fallback), COACH_NARRATION_TIMEOUT_MS)),
+  ]);
+}
+
 const AUTO_PLAY_DELAY_MS = 1200;
-const WRONG_MOVE_DISPLAY_MS = 1800;
+// Long enough for the dynamic (LLM) wrong-move hint to land while the box is
+// still visible; the hint falls back to authored text well within this window.
+const WRONG_MOVE_DISPLAY_MS = 3600;
 // Per non-negotiable #5, per-move voice praise is banned. The
 // on-screen flash carries the per-move feedback; voice fires
 // only on milestone moves ('You earned a star!') and the
@@ -47,7 +78,12 @@ export function GuidedGamePage(): JSX.Element {
   const [narrationText, setNarrationText] = useState('');
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const [wrongAttempts, setWrongAttempts] = useState(0);
+  const [coachThinking, setCoachThinking] = useState(false);
+  const [chatMessages, setChatMessages] = useState<CoachChatMsg[]>([]);
+  const [chatInput, setChatInput] = useState('');
+  const [chatBusy, setChatBusy] = useState(false);
 
+  const chatHistoryRef = useRef<{ role: 'user' | 'assistant'; content: string }[]>([]);
   const autoPlayTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const feedbackTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const chessRef = useRef(new Chess(game?.startFen ?? 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'));
@@ -75,6 +111,107 @@ export function GuidedGamePage(): JSX.Element {
       return !prev;
     });
   }, []);
+
+  // ─── Live LLM coach (kid-safe, grounded) ───────────────────────────────
+  // The coach VOICE is now dynamic: the LLM rephrases the code-computed move
+  // (describeKidMove via chess.js) into fresh kid prose, routed through the
+  // kid-safe lane (getKidLlmResponse → Ruth, no SAN). The scripted move stays
+  // the source of truth (kid #17); the authored narration is the GROUNDED seed
+  // AND the fallback on any anomaly (kid P0). Mirrors the adult Play-with-Coach
+  // live commentary.
+  const narratePlayedMove = useCallback(
+    async (
+      fenBefore: string,
+      san: string,
+      isPlayerMove: boolean,
+      teachingConcept: string | undefined,
+      authored: string | undefined,
+    ): Promise<void> => {
+      const fallback = authored ?? '';
+      // Show the authored text instantly (no dead air / instant for tests),
+      // then swap in the dynamic version + speak it once it lands.
+      if (fallback) setNarrationText(fallback);
+      setCoachThinking(true);
+      let text = fallback;
+      try {
+        text = await withCoachTimeout(
+          generateKidMoveNarration({ fenBefore, san, isPlayerMove, teachingConcept, authoredNarration: authored }),
+          fallback,
+        );
+      } catch {
+        text = fallback;
+      }
+      setCoachThinking(false);
+      if (text) {
+        setNarrationText(text);
+        kidSpeak(text);
+      }
+    },
+    [kidSpeak],
+  );
+
+  // Dynamic, kid-safe instruction for the move the child should play next
+  // (a guided game GUIDES). Grounded by the scripted move; authored fallback.
+  const narrateInstruction = useCallback(
+    async (
+      fenBefore: string,
+      expectedSan: string,
+      teachingConcept: string | undefined,
+      authored: string | undefined,
+    ): Promise<void> => {
+      const fallback = authored ?? '';
+      // Instant authored display (no dead air / instant for tests), then the
+      // dynamic instruction swaps in + speaks when it lands.
+      if (fallback) setNarrationText(fallback);
+      setCoachThinking(true);
+      let text = fallback;
+      try {
+        text = await withCoachTimeout(
+          generateKidMoveInstruction({ fenBefore, expectedSan, teachingConcept, authored }),
+          fallback,
+        );
+      } catch {
+        text = fallback;
+      }
+      setCoachThinking(false);
+      if (text) {
+        setNarrationText(text);
+        kidSpeak(text);
+      }
+    },
+    [kidSpeak],
+  );
+
+  // "Ask the coach" — kid-mode Learn-with-Coach chat. Grounded by code-computed
+  // board facts + the scripted next move; kid-safe; safe canned fallback.
+  const handleAskCoach = useCallback(
+    async (question: string): Promise<void> => {
+      const q = question.trim();
+      if (!q || chatBusy) return;
+      setChatInput('');
+      setChatMessages((prev) => [...prev, { role: 'kid', text: q }]);
+      setChatBusy(true);
+      const nextMove = game?.moves[moveIndex + 1];
+      try {
+        const answer = await answerKidGameQuestion({
+          question: q,
+          fen: boardFen,
+          expectedNextSan: nextMove && !nextMove.autoPlay ? nextMove.san : undefined,
+          gameTitle: game?.title ?? 'our game',
+          history: chatHistoryRef.current.slice(-6),
+        });
+        chatHistoryRef.current.push({ role: 'user', content: q });
+        chatHistoryRef.current.push({ role: 'assistant', content: answer });
+        setChatMessages((prev) => [...prev, { role: 'coach', text: answer }]);
+        kidSpeak(answer);
+      } catch {
+        setChatMessages((prev) => [...prev, { role: 'coach', text: "Let's keep looking at the board together!" }]);
+      } finally {
+        setChatBusy(false);
+      }
+    },
+    [chatBusy, game, moveIndex, boardFen, kidSpeak],
+  );
 
   // Get the current move to play (next move after moveIndex)
   const currentMoveIdx = moveIndex + 1;
@@ -105,6 +242,8 @@ export function GuidedGamePage(): JSX.Element {
     setIsAutoPlaying(true);
 
     autoPlayTimeoutRef.current = setTimeout(() => {
+      // Capture the position BEFORE the move for grounded coach narration.
+      const fenBefore = chessRef.current.fen();
       // Apply the move
       try {
         chessRef.current.move(move.san);
@@ -118,9 +257,10 @@ export function GuidedGamePage(): JSX.Element {
       setMoveIndex(idx);
       setWrongAttempts(0);
 
+      // Dynamic, kid-safe coach commentary on the opponent's move (falls back
+      // to the authored narration). The opponent move IS narration-worthy.
       if (move.narration) {
-        setNarrationText(move.narration);
-        kidSpeak(move.narration);
+        void narratePlayedMove(fenBefore, move.san, false, move.teachingConcept, move.narration);
       }
 
       if (move.isMilestone) {
@@ -144,7 +284,7 @@ export function GuidedGamePage(): JSX.Element {
         }, 800);
       }
     }, AUTO_PLAY_DELAY_MS);
-  }, [game, kidSpeak]);
+  }, [game, kidSpeak, narratePlayedMove]);
 
   // Start the game
   const handleStartGame = useCallback((): void => {
@@ -156,23 +296,17 @@ export function GuidedGamePage(): JSX.Element {
     setMoveIndex(-1);
     setStarsEarned(0);
     setWrongAttempts(0);
+    setChatMessages([]);
+    chatHistoryRef.current = [];
 
-    // If first move is auto-play, play it
+    // First move: opponent → dynamic commentary + auto-play; kid → dynamic
+    // "what to play" instruction. Both kid-safe, grounded, authored fallback.
     if (game.moves[0]?.autoPlay) {
-      const firstNarration = game.moves[0].narration;
-      if (firstNarration) {
-        setNarrationText(firstNarration);
-        kidSpeak(firstNarration);
-      }
       playAutoMove(0);
-    } else {
-      const firstNarration = game.moves[0]?.narration;
-      if (firstNarration) {
-        setNarrationText(firstNarration);
-        kidSpeak(firstNarration);
-      }
+    } else if (game.moves[0]) {
+      void narrateInstruction(game.startFen, game.moves[0].san, game.moves[0].teachingConcept, game.moves[0].narration);
     }
-  }, [game, kidSpeak, playAutoMove]);
+  }, [game, playAutoMove, narrateInstruction]);
 
   // Handle player move
   const handlePlayerMove = useCallback((moveResult: MoveResult): void => {
@@ -180,6 +314,8 @@ export function GuidedGamePage(): JSX.Element {
 
     const expectedSan = currentMove.san;
     const playerSan = moveResult.san;
+    // Position the child moved in — the grounded `fenBefore` for coach voice.
+    const fenBefore = boardFen;
 
     // Normalize: strip + and # for comparison, then compare
     const normalize = (s: string): string => s.replace(/[+#]/g, '');
@@ -205,45 +341,63 @@ export function GuidedGamePage(): JSX.Element {
         setStarsEarned((s) => s + 1);
         kidSpeak(MILESTONE_VOICE);
       }
-      // Non-milestone correct moves: visual celebration only. The
-      // narration block (currentMove.narration) speaks separately
-      // when set, after the feedback timeout below.
+      // Non-milestone correct moves: visual celebration only. The dynamic
+      // coach voice fires after the feedback timeout below.
 
       feedbackTimeoutRef.current = setTimeout(() => {
         setFeedback(null);
         setCelebrationText('');
 
-        // Show narration for the move just played if it has one
-        if (currentMove.narration) {
-          setNarrationText(currentMove.narration);
-        }
-
-        // Check if game complete
         const nextIdx = currentMoveIdx + 1;
         if (nextIdx >= game.moves.length) {
-          autoPlayTimeoutRef.current = setTimeout(() => {
-            setPhase('complete');
-            kidSpeak(game.storyOutro);
-            setNarrationText(game.storyOutro);
-          }, 600);
+          // Final move — dynamic commentary on the child's move, then the outro.
+          void (async () => {
+            await narratePlayedMove(fenBefore, currentMove.san, true, currentMove.teachingConcept, currentMove.narration);
+            autoPlayTimeoutRef.current = setTimeout(() => {
+              setPhase('complete');
+              kidSpeak(game.storyOutro);
+              setNarrationText(game.storyOutro);
+            }, 900);
+          })();
           return;
         }
 
-        // If next move is auto-play, play it
         if (game.moves[nextIdx].autoPlay) {
+          // Dynamic commentary on the child's move, then the opponent replies
+          // (auto-play narrates the opponent's move itself).
+          void narratePlayedMove(fenBefore, currentMove.san, true, currentMove.teachingConcept, currentMove.narration);
           playAutoMove(nextIdx);
-        } else if (game.moves[nextIdx].narration) {
-          setNarrationText(game.moves[nextIdx].narration);
-          kidSpeak(game.moves[nextIdx].narration);
+        } else {
+          // Next is the child's move — guide them to it with a dynamic,
+          // kid-safe instruction (grounded by the scripted move).
+          void narrateInstruction(
+            currentMove.fen,
+            game.moves[nextIdx].san,
+            game.moves[nextIdx].teachingConcept,
+            game.moves[nextIdx].narration,
+          );
         }
       }, 1000);
     } else {
-      // Wrong move
+      // Wrong move — dynamic, kind, kid-safe nudge toward the right idea
+      // (grounded by the expected move; falls back to the authored response).
       setFeedback('wrong');
       setWrongAttempts((w) => w + 1);
-      const responseText = currentMove.wrongMoveResponse ?? 'Not quite — try again!';
-      setWrongText(responseText);
-      kidSpeak(responseText);
+      const authoredWrong = currentMove.wrongMoveResponse ?? 'Not quite — try again!';
+      setWrongText(authoredWrong);
+      void (async () => {
+        let hint = authoredWrong;
+        try {
+          hint = await withCoachTimeout(
+            generateKidWrongMoveHint({ fenBefore, expectedSan, authoredResponse: authoredWrong }),
+            authoredWrong,
+          );
+        } catch {
+          hint = authoredWrong;
+        }
+        setWrongText(hint);
+        kidSpeak(hint);
+      })();
 
       // Reset the board to before this move
       setBoardKey((k) => k + 1);
@@ -253,7 +407,10 @@ export function GuidedGamePage(): JSX.Element {
         setWrongText('');
       }, WRONG_MOVE_DISPLAY_MS);
     }
-  }, [game, currentMove, currentMoveIdx, isAutoPlaying, kidSpeak, playAutoMove]);
+  }, [
+    game, currentMove, currentMoveIdx, isAutoPlaying, boardFen,
+    kidSpeak, playAutoMove, narratePlayedMove, narrateInstruction,
+  ]);
 
   // Handle replay
   const handleReplay = useCallback((): void => {
@@ -266,6 +423,8 @@ export function GuidedGamePage(): JSX.Element {
     setFeedback(null);
     setNarrationText('');
     setWrongAttempts(0);
+    setChatMessages([]);
+    chatHistoryRef.current = [];
   }, [game]);
 
   if (!game) {
@@ -462,9 +621,92 @@ export function GuidedGamePage(): JSX.Element {
               </span>
             ) : isPlayerTurn ? (
               'Your turn — make a move!'
+            ) : coachThinking ? (
+              <span className="flex items-center justify-center gap-2" data-testid="guided-game-coach-thinking">
+                <MessageCircle size={14} className="animate-pulse" />
+                Coach is thinking...
+              </span>
             ) : (
               'Watch and learn!'
             )}
+          </div>
+
+          {/* ─── Ask the coach (kid-safe Learn-with-Coach chat) ───────────── */}
+          <div
+            className="rounded-2xl border-2 p-3 flex flex-col gap-2"
+            style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
+            data-testid="guided-game-coach-chat"
+          >
+            <div className="flex items-center gap-2 text-sm font-bold" style={{ color: 'var(--color-text)' }}>
+              <MessageCircle size={16} style={{ color: 'var(--color-accent)' }} />
+              Ask the Coach
+            </div>
+
+            {chatMessages.length > 0 && (
+              <div className="flex flex-col gap-2 max-h-44 overflow-y-auto" data-testid="guided-game-chat-log">
+                {chatMessages.map((m, i) => (
+                  <div
+                    key={i}
+                    className={`text-sm rounded-xl px-3 py-2 ${m.role === 'kid' ? 'self-end' : 'self-start'}`}
+                    style={
+                      m.role === 'kid'
+                        ? { background: 'var(--color-accent)', color: 'white', maxWidth: '85%' }
+                        : { background: 'var(--color-secondary)', color: 'var(--color-text)', maxWidth: '90%' }
+                    }
+                  >
+                    {m.text}
+                  </div>
+                ))}
+                {chatBusy && (
+                  <div className="self-start text-sm rounded-xl px-3 py-2" style={{ background: 'var(--color-secondary)', color: 'var(--color-text-muted)' }}>
+                    …
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Quick-tap questions so a young child can ask without typing */}
+            <div className="flex flex-wrap gap-2">
+              {QUICK_ASKS.map((qa) => (
+                <button
+                  key={qa.label}
+                  type="button"
+                  disabled={chatBusy}
+                  onClick={() => void handleAskCoach(qa.question)}
+                  className="px-3 py-1.5 rounded-full text-xs font-bold border-2 disabled:opacity-50"
+                  style={{ borderColor: 'var(--color-accent)', color: 'var(--color-accent)' }}
+                  data-testid={`guided-game-quickask-${qa.label.replace(/\W+/g, '').toLowerCase()}`}
+                >
+                  {qa.label}
+                </button>
+              ))}
+            </div>
+
+            <form
+              onSubmit={(e) => { e.preventDefault(); void handleAskCoach(chatInput); }}
+              className="flex items-center gap-2"
+            >
+              <input
+                type="text"
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                placeholder="Ask a question…"
+                disabled={chatBusy}
+                className="flex-1 rounded-xl px-3 py-2 text-sm border-2 disabled:opacity-50"
+                style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                data-testid="guided-game-chat-input"
+                maxLength={120}
+              />
+              <button
+                type="submit"
+                disabled={chatBusy || !chatInput.trim()}
+                className="px-4 py-2 rounded-xl text-sm font-bold disabled:opacity-50"
+                style={{ background: 'var(--color-accent)', color: 'white' }}
+                data-testid="guided-game-chat-send"
+              >
+                Ask
+              </button>
+            </form>
           </div>
         </>
       )}
