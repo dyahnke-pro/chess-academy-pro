@@ -17,7 +17,10 @@ const WRITE = process.argv.includes('--write');
 const rep = JSON.parse(fs.readFileSync('src/data/repertoire.json', 'utf8'));
 const pro = JSON.parse(fs.readFileSync('src/data/pro-repertoires.json', 'utf8'));
 const games = JSON.parse(fs.readFileSync('src/data/model-games.json', 'utf8'));
-const openings = [...(Array.isArray(rep) ? rep : []), ...(Array.isArray(pro) ? pro : [])];
+// pro-repertoires.json is { players, openings } — include its openings so pro
+// model games file under their variation tab too (David 2026-06-23).
+const proOpenings = Array.isArray(pro) ? pro : (pro.openings || []);
+const openings = [...(Array.isArray(rep) ? rep : []), ...proOpenings];
 const byId = new Map(openings.map((o) => [o.id, o]));
 
 function uciList(pgnOrMoves) {
