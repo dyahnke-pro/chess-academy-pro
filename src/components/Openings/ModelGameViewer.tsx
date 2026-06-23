@@ -1,5 +1,6 @@
-import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
-import { Chess } from 'chess.js';
+import { useState, useCallback, useMemo, useEffect, useRef, type CSSProperties } from 'react';
+import { Chess, type Square } from 'chess.js';
+import type { SquareHandlerArgs } from 'react-chessboard';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { voiceService } from '../../services/voiceService';
@@ -87,6 +88,11 @@ export function ModelGameViewer({
   const [exploreFen, setExploreFen] = useState<string | null>(null);
   const [exploreEval, setExploreEval] = useState<string | null>(null);
   const [exploreMoves, setExploreMoves] = useState<string[]>([]);
+  // Click-to-move selection (the board also supports drag; click is what makes
+  // explore mode work for users whose move method is "click" — drag-only left
+  // the compass dead for them).
+  const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
+  const [legalTargets, setLegalTargets] = useState<string[]>([]);
   const exploreChess = useRef<Chess | null>(null);
 
   const baseFen = currentIndex >= 0 && currentIndex < moves.length
@@ -153,6 +159,11 @@ export function ModelGameViewer({
     setIsAutoPlaying((p) => !p);
   }, []);
 
+  const clearSelection = useCallback((): void => {
+    setSelectedSquare(null);
+    setLegalTargets([]);
+  }, []);
+
   const toggleExplore = useCallback((): void => {
     if (isExploring) {
       // Exit explore mode
@@ -160,6 +171,7 @@ export function ModelGameViewer({
       setExploreFen(null);
       setExploreMoves([]);
       setExploreEval(null);
+      clearSelection();
       explorePlayerSide.current = null;
     } else {
       // Enter explore mode from current position
@@ -168,6 +180,7 @@ export function ModelGameViewer({
       const fen = baseFen;
       setExploreFen(fen);
       setExploreMoves([]);
+      clearSelection();
       exploreChess.current = new Chess(fen);
       // The student plays whichever side it is to move. The engine
       // will automatically reply for the opposite color after each move.
@@ -180,7 +193,7 @@ export function ModelGameViewer({
         setExploreEval(evalStr);
       }).catch(() => { /* engine not ready */ });
     }
-  }, [isExploring, baseFen]);
+  }, [isExploring, baseFen, clearSelection]);
 
   // Track whose turn it was when the student entered explore mode so we
   // only auto-reply after their move — not after the engine's own reply.
@@ -195,19 +208,18 @@ export function ModelGameViewer({
     }).catch(() => { /* engine not ready */ });
   }, []);
 
-  const handleExploreDrop = useCallback(
-    ({ sourceSquare, targetSquare }: { piece: unknown; sourceSquare: string; targetSquare: string | null }): boolean => {
-      if (!isExploring || !targetSquare || !exploreChess.current) return false;
+  // Apply a student move (from either drag or click), then let the engine
+  // reply for the opposite side. Returns true if the move was legal.
+  const applyExploreMove = useCallback(
+    (from: string, to: string): boolean => {
+      if (!isExploring || !exploreChess.current) return false;
 
       const chess = exploreChess.current;
-      const move = chess.move({
-        from: sourceSquare,
-        to: targetSquare,
-        promotion: 'q',
-      });
+      const move = chess.move({ from, to, promotion: 'q' });
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- chess.js throws on truly invalid moves but may return null for edge cases
       if (!move) return false;
 
+      clearSelection();
       const afterPlayerFen = chess.fen();
       setExploreFen(afterPlayerFen);
       setExploreMoves((prev) => [...prev, move.san]);
@@ -227,10 +239,10 @@ export function ModelGameViewer({
           // Guard: the student may have exited explore mode before the
           // engine responded.
           if (exploreChess.current.fen() !== afterPlayerFen) return;
-          const from = uci.slice(0, 2);
-          const to = uci.slice(2, 4);
+          const efrom = uci.slice(0, 2);
+          const eto = uci.slice(2, 4);
           const promotion = uci.length > 4 ? uci[4] : undefined;
-          const reply = exploreChess.current.move({ from, to, promotion });
+          const reply = exploreChess.current.move({ from: efrom, to: eto, promotion });
           // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- engine occasionally emits moves illegal under special rules (castling through check) even at low depth
           if (!reply) return;
           const afterEngineFen = exploreChess.current.fen();
@@ -242,7 +254,47 @@ export function ModelGameViewer({
 
       return true;
     },
-    [isExploring, updateExploreEval],
+    [isExploring, updateExploreEval, clearSelection],
+  );
+
+  const handleExploreDrop = useCallback(
+    ({ sourceSquare, targetSquare }: { piece: unknown; sourceSquare: string; targetSquare: string | null }): boolean => {
+      if (!targetSquare) return false;
+      return applyExploreMove(sourceSquare, targetSquare);
+    },
+    [applyExploreMove],
+  );
+
+  // Click-to-move: first click selects a piece (and shows its legal targets),
+  // second click on a legal target plays the move. Mirrors the rest of the
+  // app so explore mode works regardless of the user's move-method setting.
+  const handleExploreSquareClick = useCallback(
+    ({ square }: SquareHandlerArgs): void => {
+      if (!isExploring || !exploreChess.current) return;
+
+      // Clicking the selected square deselects it.
+      if (selectedSquare === square) {
+        clearSelection();
+        return;
+      }
+
+      // Clicking a legal target plays the move.
+      if (selectedSquare !== null && legalTargets.includes(square)) {
+        applyExploreMove(selectedSquare, square);
+        return;
+      }
+
+      // Otherwise try to select the clicked square if it has a movable piece.
+      const moves = exploreChess.current.moves({ square: square as Square, verbose: true });
+      const destinations = [...new Set(moves.map((m) => m.to))];
+      if (destinations.length > 0) {
+        setSelectedSquare(square);
+        setLegalTargets(destinations);
+      } else {
+        clearSelection();
+      }
+    },
+    [isExploring, selectedSquare, legalTargets, applyExploreMove, clearSelection],
   );
 
   const undoExploreMove = useCallback((): void => {
@@ -251,7 +303,34 @@ export function ModelGameViewer({
     const newFen = exploreChess.current.fen();
     setExploreFen(newFen);
     setExploreMoves((prev) => prev.slice(0, -1));
-  }, [exploreMoves.length]);
+    clearSelection();
+  }, [exploreMoves.length, clearSelection]);
+
+  // Square overlays for explore-mode selection + legal-move hints.
+  const exploreSquareStyles = useMemo((): Record<string, CSSProperties> => {
+    if (!isExploring) return {};
+    const styles: Record<string, CSSProperties> = {};
+    if (selectedSquare) {
+      styles[selectedSquare] = {
+        background: 'rgba(168, 85, 247, 0.35)',
+        boxShadow: 'inset 0 0 8px rgba(168, 85, 247, 0.45)',
+      };
+    }
+    for (const sq of legalTargets) {
+      const occupied = exploreChess.current?.get(sq as Square);
+      styles[sq] = occupied
+        ? {
+            background:
+              'radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(168, 85, 247, 0.35) 60%, rgba(168, 85, 247, 0.35) 80%, rgba(0,0,0,0) 80%)',
+            cursor: 'pointer',
+          }
+        : {
+            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.4) 25%, transparent 25%)',
+            cursor: 'pointer',
+          };
+    }
+    return styles;
+  }, [isExploring, selectedSquare, legalTargets]);
 
   // Auto-play
   useEffect(() => {
@@ -362,6 +441,8 @@ export function ModelGameViewer({
             boardOrientation={boardOrientation}
             interactive={isExploring}
             onPieceDrop={isExploring ? handleExploreDrop : undefined}
+            onSquareClick={isExploring ? handleExploreSquareClick : undefined}
+            squareStyles={isExploring ? exploreSquareStyles : undefined}
             arrows={isExploring ? [] : customArrows}
           />
         </BoardVoiceOverlay>
