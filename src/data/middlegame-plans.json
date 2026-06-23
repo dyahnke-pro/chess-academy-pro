@@ -30022,93 +30022,46 @@
   {
     "id": "mp-sicilianalapin-d5",
     "openingId": "sicilian-alapin",
-    "title": "Alapin 2…d5: The d5 Outpost and Easy Equality",
-    "criticalPositionFen": "rnb1kbnr/pp2pppp/8/2pq4/8/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 4",
-    "overview": "Against the Alapin, 2…d5 is the cleanest equalizer. Black develops, trades on d4 at the right moment, and plants a knight on d5 — a dominant central outpost no white pawn can challenge. After the minors come off, Black stands comfortably with a sound structure and no targets.",
+    "title": "Alapin …d5: Bishop Pair and the Central Pawn",
+    "criticalPositionFen": "r3kb1r/1p3ppp/p1n1pn2/3q3b/3p4/2P2N1P/PPN1BPP1/R1BQ1RK1 w kq - 0 11",
+    "overview": "Where the opening leaves off — the Alapin met by the equalizing …d5. Black’s queen is centralized on d5, the bishop pair is intact, and an advanced d4-pawn cramps White. The simple plan is to regain the pawn by force, centralize, and steer toward a comfortable game where the two bishops give Black the easier side of equality.",
     "pawnBreaks": [
       {
-        "move": "…cxd4 — liquidate the centre",
-        "explanation": "…cxd4 opens the centre exactly when the trades favour Black, clearing the way for the d5-knight.",
-        "fen": "r1b1kb1r/pp3ppp/2n1pn2/2pq4/3P4/N1P1BN2/PP3PPP/R2QKB1R b KQkq - 3 7"
+        "move": "…e5",
+        "explanation": "The central lever — …e5 supports the advanced pawn and grabs space, opening lines for the bishop pair when Black wants more than equality.",
+        "fen": "r3kb1r/1p3ppp/p1n1pn2/3q3b/3p4/2P2N1P/PPN1BPP1/R1BQ1RK1 w kq - 0 11"
       }
     ],
     "pieceManeuvers": [
       {
-        "piece": "Knight",
-        "route": "…Nf6-d5 — the central outpost",
-        "explanation": "After the trades the knight settles on d5, the dominant blockading post that gives Black easy, equal play."
+        "piece": "Queen",
+        "route": "…Nxd4 and …Qxd4 — regain the pawn, centralize",
+        "explanation": "Black regains the central pawn by force and recentralizes the queen on d4, reaching a comfortable, balanced middlegame with the bishop pair."
       }
     ],
     "strategicThemes": [
-      "Trade down to a clean structure",
-      "Plant the knight on the d5 outpost",
-      "Equalize with no weaknesses"
+      "Black’s queen is centralized on d5 and the bishop pair is intact — the position is comfortable, equal-or-better for Black.",
+      "The advanced d4-pawn cramps White; Black regains it by force and centralizes.",
+      "With the two bishops Black has the easier side — open the position and they outshine White’s pieces."
     ],
-    "endgameTransitions": [
-      "The sound structure and active knight hold easily into an endgame"
-    ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "fen": "rnb1kbnr/pp2pppp/8/2pq4/8/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 4",
+        "title": "Regain the pawn, centralize the queen",
+        "fen": "r3kb1r/1p3ppp/p1n1pn2/3q3b/3p4/2P2N1P/PPN1BPP1/R1BQ1RK1 w kq - 0 11",
         "moves": [
-          "d4",
-          "Nf6",
-          "Nf3",
-          "e6",
-          "Na3",
-          "Nc6",
-          "Be3",
-          "cxd4",
-          "Nb5",
-          "Qd8",
-          "Nbxd4",
-          "Nd5",
-          "Nxc6",
-          "bxc6"
+          "Ncxd4",
+          "Nxd4",
+          "Nxd4",
+          "Qxd4"
         ],
         "annotations": [
-          "d4 stakes the centre; White hopes the c3-pawn lends a small space pull.",
-          "…Nf6 develops and eyes the central light squares — d5 above all.",
-          "Nf3 brings the knight toward the centre.",
-          "…e6 opens the f8-bishop and braces to meet d4 calmly.",
-          "Na3 heads for b5, angling at Black's queenside.",
-          "…Nc6 develops and adds a second attacker to d4.",
-          "Be3 props the d4-pawn.",
-          "…cxd4 liquidates the centre at the right moment — the trades only help Black.",
-          "Nb5 jumps in with the Nc7-fork threat, forcing Black to be accurate.",
-          "…Qd8 steps back and covers c7, defusing the fork.",
-          "Nbxd4 regains the pawn; the dust settles with level material.",
-          "…Nd5! The knight reaches its dream square — a central outpost hitting the e3-bishop, the heart of Black's easy equality.",
-          "Nxc6 trades a pair of knights.",
-          "…bxc6 recaptures, and Black is fully equal: the d5-knight dominates and there are no weaknesses to target."
-        ],
-        "learnCues": [
-          "d4 — White takes the centre",
-          "…Nf6 — eye the d5 square",
-          "Nf3 — develop",
-          "…e6 — open the bishop",
-          "Na3 — knight heads to b5",
-          "…Nc6 — pressure d4",
-          "Be3 — prop d4",
-          "…cxd4 — liquidate the centre",
-          "Nb5 — the Nc7 fork threat",
-          "…Qd8 — defuse the fork",
-          "Nbxd4 — regain the pawn",
-          "…Nd5 — the dream outpost!",
-          "Nxc6 — trade knights",
-          "…bxc6 — equal, d5-knight rules"
+          "Ncxd4 — White regains the gambit pawn.",
+          "…Nxd4 — Black recaptures, trading into simplification.",
+          "Nxd4 — White recaptures.",
+          "…Qxd4 — the queen recaptures, centralized; with the bishop pair Black has an easy, balanced game."
         ],
         "arrows": [
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
           [],
           [],
           [],
@@ -30123,37 +30076,7 @@
           ],
           [
             {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "a3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e3",
+              "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -30165,150 +30088,64 @@
           ],
           [
             {
-              "square": "b5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
               "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "sources": [
-          "concept:pos-center",
-          "concept:pos-development",
-          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation"
+        "learnCues": [
+          "Ncxd4 — White regains",
+          "…Nxd4 — trade",
+          "Nxd4 — White recaptures",
+          "…Qxd4 — centralize"
         ],
-        "title": "The …Nd5 Outpost",
-        "intro": "Black trades down and dominates the d5 outpost with easy equality."
+        "sources": [
+          "concept:pos-bishop-pair",
+          "concept:pos-center",
+          "concept:pawn-passed",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence"
+        ]
       }
     ]
   },
   {
     "id": "mp-sicilianalapin-main",
     "openingId": "sicilian-alapin",
-    "title": "Alapin: Undermine the Centre",
-    "criticalPositionFen": "r1bqkb1r/pp2pppp/1nnp4/4P3/2BP4/5N2/PP3PPP/RNBQK2R w KQkq - 2 8",
-    "overview": "Black's plan against the Alapin: hit e4 with Nf6, strike with cxd4 and d6 to undermine White's e5-spearhead, and trade the centre away into a comfortable, equal game.",
-    "pawnBreaks": [
-      {
-        "move": "d6",
-        "explanation": "d6 challenges the e5-spearhead directly.",
-        "fen": "r1bqkb1r/pp2pppp/1nnp4/4P3/2BP4/5N2/PP3PPP/RNBQK2R w KQkq - 2 8"
-      }
-    ],
+    "title": "Alapin Main: Blockade the Isolated d4-Pawn",
+    "criticalPositionFen": "r3k2r/pp1qbppp/1nn1p3/1B6/3P4/2N5/PP3PPP/R1BQ1RK1 w kq - 2 13",
+    "overview": "Where the opening leaves off — the Alapin IQP, where White’s isolated d4-pawn gives space and piece activity in return for a long-term weakness. Black’s plan is the textbook IQP fight: blockade the pawn with a knight on d5, trade off White’s attacking pieces, and grind toward an endgame where the isolani falls. Watch White’s Qg4 for kingside tricks.",
+    "pawnBreaks": [],
     "pieceManeuvers": [
       {
         "piece": "Knight",
-        "route": "Nb8-c6",
-        "explanation": "Nc6 leans on the d4-pawn."
+        "route": "Nb6-d5 blockade",
+        "explanation": "The knight reroutes to d5, the perfect blockading square in front of the isolated pawn — it can never be driven off by a pawn, and from there it dominates."
       }
     ],
     "strategicThemes": [
-      "Hit e4 with Nf6.",
-      "Undermine the centre with cxd4 and d6.",
-      "Trade White's space into equality."
+      "White’s isolated d4-pawn is the permanent weakness — Black blockades it and trades down toward an endgame where it cannot be held.",
+      "The blockading square is d5: a knight there can never be chased by a pawn and smothers White’s dynamism.",
+      "White’s compensation is activity (Qg4, the half-open files) — Black neutralizes it with trades and accurate defence (…g6 blunts Qg4)."
     ],
-    "endgameTransitions": [
-      "Trades lead to a level endgame."
-    ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "title": "Alapin: Undermine the Centre",
-        "fen": "r1bqkb1r/pp2pppp/1nnp4/4P3/2BP4/5N2/PP3PPP/RNBQK2R w KQkq - 2 8",
+        "title": "…Nd5 blockades the isolani",
+        "fen": "r3k2r/pp1qbppp/1nn1p3/1B6/3P4/2N5/PP3PPP/R1BQ1RK1 w kq - 2 13",
         "moves": [
-          "Bb5",
-          "dxe5",
-          "Nxe5",
-          "Bd7",
-          "Nxd7",
-          "Qxd7",
-          "Nc3",
-          "e6",
-          "O-O",
-          "Be7",
           "Qg4",
-          "O-O",
-          "Bxc6",
-          "bxc6"
+          "g6",
+          "Bh6",
+          "Nd5"
         ],
         "annotations": [
-          "Bb5 — White pins the c6-knight.",
-          "dxe5 — Black removes the spearhead.",
-          "Nxe5 — White recaptures.",
-          "Bd7 — Black offers trades to ease the game.",
-          "Nxd7 — pieces come off.",
-          "Qxd7 — Black is fully equal, the queen active.",
-          "Nc3 — White develops, eyeing d5 and e4.",
-          "…e6 — a small, solid move shoring up d5 and opening the f8-bishop’s path.",
-          "O-O — White castles.",
-          "…Be7 — the bishop takes its natural square; Black’s setup is rock-solid.",
-          "Qg4 — White probes the kingside, hoping for play against g7.",
-          "…O-O — Black castles; there is nothing real against the king.",
-          "Bxc6 — White trades to damage Black’s pawns.",
-          "…bxc6 — recapturing toward the centre; the doubled c-pawns cover d5 and b5, and the comfortable, equal game is reached exactly as planned."
+          "Qg4 — White swings the queen to the kingside, the isolani’s dynamic compensation.",
+          "…g6 — Black blunts the queen and the long light diagonal.",
+          "Bh6 — White probes the dark squares.",
+          "…Nd5 — Black blockades, planting a knight in front of the isolated d4-pawn — the square it can never be driven from."
         ],
         "arrows": [
-          [
-            {
-              "from": "b5",
-              "to": "c6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
           [],
-          [],
-          [],
-          [],
-          [],
-          [
-            {
-              "from": "c3",
-              "to": "d5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "c3",
-              "to": "e4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [],
-          [],
-          [],
-          [
-            {
-              "from": "g4",
-              "to": "g7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
           [],
           [],
           []
@@ -30316,197 +30153,44 @@
         "highlights": [
           [
             {
-              "square": "b5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c6",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "e4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "f8",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "g1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
               "square": "g4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g7",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e8",
+              "square": "g6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b5",
+              "square": "h6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "d5",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "b5",
+              "square": "d4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
-        "sources": [
-          "concept:pos-center",
-          "concept:pos-development",
-          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation"
-        ],
         "learnCues": [
-          "Bb5 — pin the c6-knight",
-          "dxe5 — remove the spearhead",
-          "Nxe5 — recapture",
-          "Bd7 — offer trades",
-          "Nxd7 — pieces off",
-          "Qxd7 — fully equal, active queen",
-          "Nc3 — White develops",
-          "e6 — shore up d5",
-          "O-O — White castles",
-          "Be7 — solid setup",
-          "Qg4 — White probes g7",
-          "O-O — castle, king safe",
-          "Bxc6 — White trades",
-          "bxc6 — centre control, equal"
+          "Qg4 — White’s kingside try",
+          "…g6 — blunt the queen",
+          "Bh6 — White probes",
+          "…Nd5 — blockade the isolani"
+        ],
+        "sources": [
+          "concept:pawn-isolated",
+          "concept:pos-outpost",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence"
         ]
       }
     ]
@@ -30947,54 +30631,51 @@
   {
     "id": "mp-siciliandragon-chinese",
     "openingId": "sicilian-dragon",
-    "title": "Chinese Dragon: the b-File Avalanche",
-    "criticalPositionFen": "1r1q1rk1/pp1bppbp/2np1np1/8/3NP3/1BN1BP2/PPPQ2PP/2KR3R b - - 8 11",
-    "overview": "The Chinese Dragon plan: with the rook already on b8, Black charges the b-pawn — b5 then b4 — to blast open the b-file straight at White's king, often a full tempo faster than White's kingside play.",
+    "title": "Chinese Dragon: the …Rb8/…b5-b4 Storm",
+    "criticalPositionFen": "1r1q1rk1/p2bppbp/2np1np1/1p6/3NP3/1BN1BP2/PPPQ2PP/2KR3R w - - 0 12",
+    "overview": "Where the opening leaves off — the Chinese Dragon, where Black puts the rook on b8 behind the b-pawn and storms. With kings on opposite wings it is a race: White attacks the kingside, Black tears open the queenside. …b5-b4 hits the c3-knight that shields the white king, the g7-bishop rakes the long diagonal, and the open files do the rest.",
     "pawnBreaks": [
       {
-        "move": "b4",
-        "explanation": "b4 hits the c3-knight and rips the b-file open in front of White's king.",
-        "fen": "1r1q1rk1/pp1bppbp/2np1np1/8/3NP3/1BN1BP2/PPPQ2PP/2KR3R b - - 8 11"
+        "move": "…b4",
+        "explanation": "The storm’s hammer-blow — …b4 hits the c3-knight shielding the white king; if it moves, the long diagonal and the c-file open straight onto c2 and the king.",
+        "fen": "1r1q1rk1/p2bppbp/2np1np1/1p6/3NP3/1BN1BP2/PPPQ2PP/2KR3R w - - 0 12"
+      },
+      {
+        "move": "…a5",
+        "explanation": "Reinforces the storm — …a5-a4 adds a second pawn to the assault and drives White’s light-squared bishop from b3.",
+        "fen": "1r1q1rk1/p2bppbp/2np1np1/1p6/3NP3/1BN1BP2/PPPQ2PP/2KR3R w - - 0 12"
       }
     ],
     "pieceManeuvers": [
       {
         "piece": "Rook",
         "route": "Rb8 behind the b-pawn",
-        "explanation": "The rook waits on b8 so every pawn push comes with heavy support."
+        "explanation": "The Chinese Dragon’s signature — the rook lurks on b8 behind the storming b-pawn, ready to blast open the b-file at the white king."
       }
     ],
     "strategicThemes": [
-      "The b-pawn storm arrives with the rook already behind it.",
-      "b4 tears open the file at the king.",
-      "Raw speed — attack first, ask questions never."
+      "Opposite-side castling makes it a race — Black storms the white king on c1 while White attacks the kingside; speed is everything.",
+      "The …Rb8/…b5-b4 storm hits the c3-knight shielding the king; …a5-a4 reinforces it.",
+      "The g7-bishop rakes the long diagonal at c3 and b2 — when the pawns crash through, it is already aimed at the king."
     ],
-    "endgameTransitions": [
-      "The open b-file gives Black a lasting initiative even if pieces come off."
-    ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "title": "Chinese Dragon: the b-File Avalanche",
-        "fen": "1r1q1rk1/pp1bppbp/2np1np1/8/3NP3/1BN1BP2/PPPQ2PP/2KR3R b - - 8 11",
+        "title": "…b5-b4 against the c1-king",
+        "fen": "1r1q1rk1/p2bppbp/2np1np1/1p6/3NP3/1BN1BP2/PPPQ2PP/2KR3R w - - 0 12",
         "moves": [
-          "b5",
-          "h4",
-          "b4",
-          "Nd5",
-          "Nxd5",
-          "Bxd5"
+          "Nxc6",
+          "Bxc6",
+          "Kb1",
+          "b4"
         ],
         "annotations": [
-          "b5 — the b-pawn charges, the rook waiting behind it.",
-          "h4 — White races on the other wing.",
-          "b4 — the pawn hits the c3-knight, tearing open the b-file.",
-          "Nd5 — White jumps the knight in rather than retreat.",
-          "Nxd5 — Black trades it off.",
-          "Bxd5 — and the b-file stands open at the king."
+          "Nxc6 — White trades to slow Black’s build-up.",
+          "…Bxc6 — the bishop recaptures onto the long light diagonal.",
+          "Kb1 — White tucks the king into the corner, off the c-file.",
+          "…b4 — the Chinese Dragon storm, the b-pawn hitting the c3-knight that shields the white king."
         ],
         "arrows": [
-          [],
-          [],
           [],
           [],
           [],
@@ -31003,21 +30684,19 @@
         "highlights": [
           [
             {
-              "square": "b5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b7",
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "h4",
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "h2",
+              "square": "b1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -31027,57 +30706,22 @@
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "b5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
               "square": "c3",
               "color": "rgba(255, 235, 59, 0.5)"
             }
-          ],
-          [
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
           ]
+        ],
+        "learnCues": [
+          "Nxc6 — White trades",
+          "…Bxc6 — onto the diagonal",
+          "Kb1 — White hides the king",
+          "…b4 — the storm hits c3"
         ],
         "sources": [
           "concept:att-queenside-attack",
-          "concept:pos-open-file",
-          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
-        ],
-        "learnCues": [
-          "b5 — the b-pawn charges",
-          "h4 — White races the other wing",
-          "b4 — hit Nc3, open the b-file",
-          "Nd5 — jump in, not retreat",
-          "Nxd5 — trade it off",
-          "Bxd5 — the b-file stands open"
+          "concept:pos-center",
+          "concept:pos-outpost",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence"
         ]
       }
     ]
@@ -31291,79 +30935,52 @@
   {
     "id": "mp-siciliandragon-levenfish",
     "openingId": "sicilian-dragon",
-    "title": "Dragon vs Levenfish: Trade and Expand on the Queenside",
-    "criticalPositionFen": "r1b2rk1/ppqnppbp/3p1np1/8/4PP2/2NB1N2/PPP3PP/R1BQ1RK1 w - - 7 10",
-    "overview": "Against the Levenfish (early f4), Black plays the standard Dragon counterplay: the knight comes to c5 hitting White’s centre and bishop, the light bishop trades itself for the f3-knight to ease the pressure, and Black expands with …a6-…b5. The fianchettoed g7-bishop and the half-open c-file are Black’s long-term assets. Balanced.",
+    "title": "Classical Dragon: Queenside Expansion and Pressure on e4",
+    "criticalPositionFen": "r1b2rk1/ppq1ppbp/3p1np1/2n5/4PP2/2NB1N2/PPP3PP/R1B1QRK1 w - - 9 11",
+    "overview": "Where the opening leaves off — a Classical Dragon where both sides castled kingside, so it is a positional fight rather than a race. Black expands on the queenside with …b5-a5-b4 and trains his pieces on e4: the c5-knight and the g7-bishop both press it, and trading off White’s light-squared bishop softens the light squares.",
     "pawnBreaks": [
-      "…b5 to expand on the queenside",
-      "…a6 to prepare it"
+      {
+        "move": "…b5",
+        "explanation": "The queenside expansion — …b5-b4 gains space and drives the c3-knight, loosening White’s grip on the centre and the e4-pawn.",
+        "fen": "r1b2rk1/ppq1ppbp/3p1np1/2n5/4PP2/2NB1N2/PPP3PP/R1B1QRK1 w - - 9 11"
+      },
+      {
+        "move": "…d5",
+        "explanation": "The freeing central break — once Black’s pieces press e4, …d5 strikes the centre and opens the position for the g7-bishop.",
+        "fen": "r1b2rk1/ppq1ppbp/3p1np1/2n5/4PP2/2NB1N2/PPP3PP/R1B1QRK1 w - - 9 11"
+      }
     ],
     "pieceManeuvers": [
-      "…Nd7-c5 hitting e4 and the d3-bishop",
-      "…Bc8-g4 to trade the f3-knight",
-      "…a6 and …b5 queenside expansion"
+      {
+        "piece": "Knight",
+        "route": "Nc5 hitting e4",
+        "explanation": "The knight on c5 pressures e4 and eyes the b3/d3 outposts; trading off White’s d3-bishop weakens his light squares."
+      }
     ],
     "strategicThemes": [
-      "Queenside expansion with …a6-…b5",
-      "Trade the f3-knight to ease the centre",
-      "The Dragon bishop on g7"
+      "Both kings are on the kingside — this is a positional Dragon, not a race; Black plays on the queenside and against e4.",
+      "Black expands with …b5-a5-b4, gaining space and driving the c3-knight that guards the centre.",
+      "The c5-knight and g7-bishop both press e4; trading White’s d3-bishop softens the light squares for the …d5 break."
     ],
-    "endgameTransitions": [
-      "The g7-bishop and queenside majority tell as the game opens"
-    ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "title": "Dragon vs Levenfish: Trade and Expand on the Queenside",
-        "fen": "r1b2rk1/ppqnppbp/3p1np1/8/4PP2/2NB1N2/PPP3PP/R1BQ1RK1 w - - 7 10",
+        "title": "…b5 begins the queenside expansion",
+        "fen": "r1b2rk1/ppq1ppbp/3p1np1/2n5/4PP2/2NB1N2/PPP3PP/R1B1QRK1 w - - 9 11",
         "moves": [
-          "Qe1",
-          "Nc5",
-          "a4",
-          "Bg4",
-          "Be3",
-          "Bxf3",
-          "Rxf3",
-          "a6"
+          "Kh1",
+          "b5",
+          "a3",
+          "a5"
         ],
         "annotations": [
-          "Qe1 reroutes the queen toward the kingside.",
-          "…Nc5 leaps to the outpost, hitting e4 and the d3-bishop.",
-          "a4 restrains …b5 for now.",
-          "…Bg4 pins and prepares to trade the f3-knight.",
-          "Be3 challenges the c5-knight.",
-          "…Bxf3 trades — easing White’s pressure and exchanging an attacker.",
-          "Rxf3 recaptures.",
-          "…a6 — Black prepares …b5 anyway; the queenside expansion and the g7-bishop are Black’s trumps in a balanced game."
+          "Kh1 — White steps the king off the a7-g1 diagonal.",
+          "…b5 — Black begins the queenside expansion.",
+          "a3 — White restrains …b4.",
+          "…a5 — Black supports the …b4 break and gains queenside space."
         ],
         "arrows": [
           [],
-          [
-            {
-              "from": "c5",
-              "to": "e4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "c5",
-              "to": "d3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [],
-          [
-            {
-              "from": "g4",
-              "to": "f3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e3",
-              "to": "c5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
           [],
           [],
           []
@@ -31371,345 +30988,141 @@
         "highlights": [
           [
             {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d1",
+              "square": "h1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
-            {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "d3",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "a4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "b5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "g4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f3",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f1",
+              "square": "a3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "a6",
+              "square": "a5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "a7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "g7",
+              "square": "b4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "learnCues": [
+          "Kh1 — White steps aside",
+          "…b5 — expand queenside",
+          "a3 — White restrains",
+          "…a5 — support …b4"
         ],
         "sources": [
           "concept:att-queenside-attack",
-          "concept:pos-open-file",
-          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
-        ],
-        "learnCues": [
-          "Qe1 — reroute the queen",
-          "…Nc5 — leap to the outpost",
-          "a4 — restrain …b5",
-          "…Bg4 — pin, prep the trade",
-          "Be3 — challenge the knight",
-          "…Bxf3 — trade the attacker",
-          "Rxf3 — recapture",
-          "…a6 — prepare …b5"
-        ],
-        "intro": {
-          "say": "Against the Levenfish, Black plays standard Dragon counterplay: the knight to c5 hitting the centre, the light bishop trades off the f3-knight to ease White’s pressure, and Black rolls …a6-…b5 on the queenside behind the g7-bishop.",
-          "sayShort": "Knight to c5, trade on f3, expand with …b5.",
-          "arrows": [
-            {
-              "from": "d7",
-              "to": "c5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "c8",
-              "to": "g4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "b7",
-              "to": "b5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "c5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "b5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ]
-        }
+          "concept:pos-center",
+          "concept:pos-outpost",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence"
+        ]
       }
     ]
   },
   {
     "id": "mp-siciliandragon-main",
     "openingId": "sicilian-dragon",
-    "title": "Yugoslav: Black's c-File Attack",
-    "criticalPositionFen": "r2q1rk1/pp1bppbp/2np1np1/8/2BNP3/2N1BP2/PPPQ2PP/2KR3R b - - 6 10",
-    "overview": "The Dragon's core plan: Black piles down the half-open c-file, swings the knight into the c4 outpost, and trades into a raging attack on White's queenside king. Speed is everything — Black aims to crash through before White's h-pawn arrives.",
-    "pawnBreaks": [
-      {
-        "move": "b5-b4",
-        "explanation": "Black often follows with b5 and b4 to pry the c3-knight away and open more lines at the king.",
-        "fen": "r2q1rk1/pp1bppbp/2np1np1/8/2BNP3/2N1BP2/PPPQ2PP/2KR3R b - - 6 10"
-      }
-    ],
+    "title": "Yugoslav Dragon: the …Rxc3 Exchange Sacrifice",
+    "criticalPositionFen": "3q1rk1/pp1bppb1/3p2p1/7n/2rNP1p1/2N1BP2/PPPQ4/1K1R3R w - - 0 17",
+    "overview": "Where the opening leaves off — deep in the Yugoslav Attack, the sharpest race in chess. Black’s whole plan is the …Rxc3 exchange sacrifice: give up the rook for the knight that shields White’s king, shatter the b- and c-pawns, and pour the queen and the g7-bishop down the long diagonal and the open c-file. It is a pure race; the side that breaks through first wins.",
+    "pawnBreaks": [],
     "pieceManeuvers": [
       {
-        "piece": "Knight",
-        "route": "Nc6-e5-c4",
-        "explanation": "The knight reroutes to the c4 outpost, where it pressures b2, e3 and the king."
+        "piece": "Rook",
+        "route": "Exchange sac …Rxc3",
+        "explanation": "The defining Dragon idea — …Rxc3 trades the rook for the c3-knight that shields White’s king; after bxc3 the pawn shield is wrecked and the long diagonal and c-file open onto the king."
       }
     ],
     "strategicThemes": [
-      "The half-open c-file is the highway to White's king.",
-      "The knight on c4 is the Dragon's spearhead.",
-      "Trade pieces toward the king — speed beats material."
+      "The Yugoslav Attack is a pure opposite-wing race — Black must crash through on the queenside before White’s h-file attack lands.",
+      "The …Rxc3 exchange sacrifice is the engine of Black’s attack: it removes the knight shielding the king and shatters the pawn cover.",
+      "The g7-bishop rakes the long diagonal at c3 and b2; once the pawns fall it bears straight down on the white king."
     ],
-    "endgameTransitions": [
-      "The attack usually decides; if it simplifies, Black's active rook holds the edge."
-    ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "title": "Yugoslav: Black's c-File Attack",
-        "fen": "r2q1rk1/pp1bppbp/2np1np1/8/2BNP3/2N1BP2/PPPQ2PP/2KR3R b - - 6 10",
+        "title": "…Rxc3 shatters the king’s shield",
+        "fen": "3q1rk1/pp1bppb1/3p2p1/7n/2rNP1p1/2N1BP2/PPPQ4/1K1R3R w - - 0 17",
         "moves": [
-          "Rc8",
-          "Bb3",
-          "Ne5",
-          "h4",
-          "Nc4",
-          "Bxc4",
-          "Rxc4",
-          "h5"
+          "Rdg1",
+          "Rxc3",
+          "bxc3",
+          "Qa5"
         ],
         "annotations": [
-          "Rc8 — the rook seizes the half-open c-file, aimed at the king.",
-          "Bb3 — White tucks the bishop off the c-file.",
-          "Ne5 — the knight heads for the c4 outpost.",
-          "h4 — White begins the kingside storm.",
-          "Nc4 — the knight leaps in, hitting the queen on d2 and b2.",
-          "Bxc4 — White trades off the powerful knight.",
-          "Rxc4 — the rook recaptures, pressure pouring down the c-file.",
-          "White lunges with h5, racing the kingside pawn storm against Black's queenside pressure. This is the Yugoslav's defining contest: both sides attack the enemy king at full speed, and Black's c-file play must arrive first."
+          "Rdg1 — White piles onto the g-file, attacking the g4-pawn.",
+          "…Rxc3 — the thematic Dragon exchange sacrifice, removing the knight that shields the white king.",
+          "bxc3 — White accepts; the queenside pawn shield is wrecked.",
+          "…Qa5 — the queen joins the hunt, hitting the wrecked c3-pawn and bearing down on the white king."
         ],
         "arrows": [
           [],
           [],
-          [
-            {
-              "from": "e5",
-              "to": "c4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
           [],
           [
             {
-              "from": "c4",
-              "to": "d2",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "c4",
-              "to": "b2",
+              "from": "a5",
+              "to": "c3",
               "color": "rgba(34, 197, 94, 0.85)"
             }
-          ],
-          [],
-          [],
-          []
+          ]
         ],
         "highlights": [
           [
             {
-              "square": "c8",
+              "square": "g1",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "a8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "b3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c4",
+              "square": "g4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "h4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h2",
+              "square": "c3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c4",
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d2",
+              "square": "c3",
               "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "b2",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "c4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "h5",
-              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
+        "learnCues": [
+          "Rdg1 — White hits g4",
+          "…Rxc3 — the exchange sac",
+          "bxc3 — shield wrecked",
+          "…Qa5 — the queen joins"
+        ],
         "sources": [
           "concept:att-queenside-attack",
-          "concept:pos-open-file",
-          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
-        ],
-        "learnCues": [
-          "Rc8 — seize the c-file",
-          "Bb3 — tuck off the c-file",
-          "Ne5 — head for c4",
-          "h4 — start the kingside storm",
-          "Nc4 — leap in, hit the queen",
-          "Bxc4 — trade the strong knight",
-          "Rxc4 — pressure down the c-file",
-          "h5 — the kingside storm races in"
+          "concept:pos-center",
+          "concept:pos-outpost",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence"
         ]
       }
     ]
@@ -32571,58 +31984,63 @@
   {
     "id": "mp-siciliannajdorf-6g3",
     "openingId": "sicilian-najdorf",
-    "title": "Najdorf 6.g3: Easy Equality",
-    "criticalPositionFen": "rnbq1rk1/1p2bppp/p2p1n2/4p3/4P3/2N3P1/PPP1NPBP/R1BQ1RK1 b - - 5 9",
-    "overview": "Against the quiet 6.g3 Najdorf, Black takes the centre with …e5, develops …Be7 and …O-O, then expands with …b5 on the queenside. When White posts a knight on d5, Black simply challenges and trades it — …Nbd7 and …Nxd5 — reaching a healthy, equal middlegame with no weaknesses.",
+    "title": "Najdorf 6.g3: …Nc5, …b5 and the d5 Break",
+    "criticalPositionFen": "1rbq1rk1/1p1nbppp/p2p1n2/4p3/P3P3/2N3P1/1PP1NPBP/R1BQ1RK1 w - - 1 11",
+    "overview": "Where the opening leaves off — the fianchetto Najdorf with Black’s e5/d6 Boleslavsky centre. The fight is over d5: White wants a knight there, Black wants the …d5 break. Meanwhile Black expands on the queenside — …Nc5 hits e4, …b5 strikes the a4-pawn and opens lines for the b8-rook. Patient Najdorf two-front play.",
     "pawnBreaks": [
-      "…b5 — the queenside expansion"
+      {
+        "move": "…b5",
+        "explanation": "The queenside expansion. …b5 hits the a4-pawn and opens the a- and b-files for Black’s rooks — the standard Najdorf counter against White’s fianchetto setup.",
+        "fen": "1rbq1rk1/1p1nbppp/p2p1n2/4p3/P3P3/2N3P1/1PP1NPBP/R1BQ1RK1 w - - 1 11"
+      },
+      {
+        "move": "…d5",
+        "explanation": "The thematic central break of the …e5 Najdorf — when Black achieves …d5 the cramping pull of White’s control over that square is broken and the position opens for Black’s pieces.",
+        "fen": "1rbq1rk1/1p1nbppp/p2p1n2/4p3/P3P3/2N3P1/1PP1NPBP/R1BQ1RK1 w - - 1 11"
+      }
     ],
     "pieceManeuvers": [
-      "…Nb8-d7 — challenge the d5-outpost",
-      "…Nf6xd5 — trade off the outpost knight"
+      {
+        "piece": "Knight",
+        "route": "Nd7-c5",
+        "explanation": "The knight jumps to c5, hitting e4 and eyeing the queenside outposts on b3 and a4."
+      }
     ],
     "strategicThemes": [
-      "Claim the centre with …e5",
-      "Expand on the queenside with …b5",
-      "Trade off the d5-knight"
+      "Black’s e5/d6 Boleslavsky centre fixes the struggle on d5 — White angles a knight onto it, Black works toward the …d5 break.",
+      "On the queenside Black expands with …Nc5 (hitting e4) and …b5 (hitting a4), opening files for the b8-rook.",
+      "…d5 is the freeing central break; until it lands, Black plays on the wing and presses e4."
     ],
-    "endgameTransitions": [
-      "A sound, symmetrical structure heads into a level ending"
-    ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "fen": "rnbq1rk1/1p2bppp/p2p1n2/4p3/4P3/2N3P1/PPP1NPBP/R1BQ1RK1 b - - 5 9",
+        "title": "…Nc5 hits e4, …b5 opens the queenside",
+        "fen": "1rbq1rk1/1p1nbppp/p2p1n2/4p3/P3P3/2N3P1/1PP1NPBP/R1BQ1RK1 w - - 1 11",
         "moves": [
+          "h3",
+          "Nc5",
+          "Qd3",
           "b5",
-          "Nd5",
-          "Nbd7",
-          "Nec3",
-          "Nxd5",
-          "Nxd5",
-          "Nf6"
+          "axb5",
+          "axb5"
         ],
         "annotations": [
-          "…b5 expands on the queenside, grabbing space.",
-          "Nd5 posts a knight on the central outpost.",
-          "…Nbd7 prepares to challenge the d5-knight.",
-          "Nec3 brings the second knight to support d5.",
-          "…Nxd5 trades off the strong outpost knight.",
-          "Nxd5 recaptures with the other knight.",
-          "…Nf6 challenges the d5-knight a second time; trades leave Black comfortable and equal."
-        ],
-        "learnCues": [
-          "…b5 — queenside space",
-          "Nd5 — central outpost",
-          "…Nbd7 — challenge d5",
-          "Nec3 — support d5",
-          "…Nxd5 — trade the outpost",
-          "Nxd5 — recapture",
-          "…Nf6 — challenge again"
+          "h3 — a useful waiting move, taking g4 from Black’s pieces.",
+          "…Nc5 — the knight jumps to c5, hitting e4 and eyeing the queenside.",
+          "Qd3 — White defends e4 and eyes the kingside.",
+          "…b5 — Black expands on the queenside, striking at the a4-pawn.",
+          "axb5 — White captures.",
+          "…axb5 — Black recaptures; the a-file opens and the queenside initiative is Black’s."
         ],
         "arrows": [
           [],
-          [],
-          [],
+          [
+            {
+              "from": "c5",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
           [],
           [],
           [],
@@ -32631,112 +32049,116 @@
         "highlights": [
           [
             {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
               "square": "b5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f6",
+              "square": "b5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "sources": [
-          "concept:pos-outpost",
-          "concept:pos-space",
-          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
+        "learnCues": [
+          "h3 — White waits",
+          "…Nc5 — hit e4",
+          "Qd3 — defend e4",
+          "…b5 — expand queenside",
+          "axb5 — White takes",
+          "…axb5 — open the a-file"
         ],
-        "title": "Easy Equality",
-        "intro": "Black takes the centre with …e5, expands with …b5, and trades off the d5-knight."
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-outpost",
+          "concept:att-queenside-attack",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence"
+        ]
       }
     ]
   },
   {
     "id": "mp-siciliannajdorf-classical",
     "openingId": "sicilian-najdorf",
-    "title": "Classical 6.Be2: Cover d5, Play for Equality",
-    "criticalPositionFen": "rnbq1rk1/1p2bppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQ1RK1 w - - 4 9",
-    "overview": "Against the quiet Be2, Black trades off the d5-knight, accepts a small structural concession, and plays comfortably on the queenside with a5 and the half-open c-file.",
+    "title": "Najdorf Classical: Trade the d5-Knight, Press the Queenside",
+    "criticalPositionFen": "r2q1rk1/1p1nbppp/p2pbn2/3Np3/4P3/1N2B3/PPP1BPPP/R2Q1RK1 w - - 8 11",
+    "overview": "Where the opening leaves off — the Classical Najdorf with White’s knight planted on d5. Black’s first job is to challenge that outpost (…Bxd5) and then turn to the queenside: …a5-a4 harasses the b3-knight, …b5 opens lines, and a knight reroutes to c4. Trade the strong d5-knight, then play against White’s loosening queenside.",
     "pawnBreaks": [
       {
-        "move": "…b5-b4 — the queenside lever",
-        "explanation": "Black expands with …b5 and pushes …b4 to kick the c3-knight, the Najdorf’s thematic counterplay.",
-        "fen": "rnbq1rk1/1p2bppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQ1RK1 w - - 4 9"
+        "move": "…a5",
+        "explanation": "Gains queenside space and drives at the b3-knight — …a5-a4 forces it to a passive square and clamps White’s queenside.",
+        "fen": "r2q1rk1/1p1nbppp/p2pbn2/3Np3/4P3/1N2B3/PPP1BPPP/R2Q1RK1 w - - 8 11"
+      },
+      {
+        "move": "…b5",
+        "explanation": "The thematic Najdorf expansion — …b5 opens the b-file and gains space for the queenside minority once the d5-knight has been traded.",
+        "fen": "r2q1rk1/1p1nbppp/p2pbn2/3Np3/4P3/1N2B3/PPP1BPPP/R2Q1RK1 w - - 8 11"
       }
     ],
     "pieceManeuvers": [
       {
-        "piece": "Bishop",
-        "route": "…Bc8-b7 — the long diagonal",
-        "explanation": "The bishop rakes toward e4 and White’s king, supporting the queenside attack."
-      },
-      {
         "piece": "Knight",
-        "route": "…Nc6 — eye b4 and d4",
-        "explanation": "The knight supports the central and queenside breaks."
+        "route": "Nd7-b6-c4",
+        "explanation": "After trading on d5, the knight reroutes via b6 (hitting a4 and the d5-pawn) to the c4 outpost, hitting White’s queenside."
       }
     ],
     "strategicThemes": [
-      "No king hunt — solid positional play.",
-      "Trade the d5-knight to ease the position.",
-      "Queenside space with a5."
+      "White’s knight on d5 is a powerful outpost — Black’s first task is to trade it off with …Bxd5, accepting a Benoni-style structure he knows how to handle.",
+      "After the trade, Black plays on the queenside: …a5-a4 harasses the b3-knight and …b5 opens lines.",
+      "The knight reroutes …Nd7-b6-c4, blockading and attacking White’s queenside pawns."
     ],
-    "endgameTransitions": [
-      "A sound structure gives Black a pleasant endgame."
-    ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "fen": "rnbq1rk1/1p2bppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQ1RK1 w - - 4 9",
+        "title": "…Bxd5, then …a5 and …Nb6 hit the queenside",
+        "fen": "r2q1rk1/1p1nbppp/p2pbn2/3Np3/4P3/1N2B3/PPP1BPPP/R2Q1RK1 w - - 8 11",
         "moves": [
-          "Kh1",
-          "Nc6",
-          "f4",
-          "b5",
-          "Be3",
-          "Bb7",
+          "Qd3",
+          "Bxd5",
+          "exd5",
+          "a5",
           "a4",
-          "exf4"
+          "Nb6"
         ],
         "annotations": [
-          "White tucks the king to h1, unpinning the f-pawn for the coming f4-break.",
-          "…Nc6 develops, eyeing the d4- and b4-squares and supporting Black's central and queenside play.",
-          "White strikes with f4, challenging the e5-wedge and opening the f-file.",
-          "…b5! The Najdorf's signature: Black expands on the queenside, gaining space and preparing …b4 to hit the c3-knight.",
-          "White develops the bishop to e3.",
-          "…Bb7 completes development, the bishop raking the long diagonal toward White's king and the e4-pawn.",
-          "White grabs queenside space with a4, probing b5.",
-          "…exf4! Black opens the position with all pieces ideally placed — the central wedge has done its job, the queenside is rolling, and the long-diagonal bishop bears down on e4. Nepomniachtchi outplayed Carlsen from exactly this dynamic footing."
+          "Qd3 — White centralizes the queen, defending and eyeing the kingside.",
+          "…Bxd5 — Black trades off the powerful outpost knight.",
+          "exd5 — White recaptures, the structure now Benoni-like.",
+          "…a5 — Black gains queenside space and prepares …a4.",
+          "a4 — White stops …a4, but commits a pawn Black can target.",
+          "…Nb6 — the knight reroutes, hitting the a4- and d5-pawns on its way to c4."
         ],
         "arrows": [
           [],
@@ -32744,50 +32166,37 @@
           [],
           [],
           [],
-          [],
-          [],
-          []
+          [
+            {
+              "from": "b6",
+              "to": "a4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
         ],
-        "title": "The Classical Najdorf Counterplay (Carlsen–Nepomniachtchi)",
         "highlights": [
           [
             {
-              "square": "h1",
+              "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c6",
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f4",
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b5",
+              "square": "a5",
               "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "b7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e4",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
@@ -32798,26 +32207,32 @@
           ],
           [
             {
-              "square": "f4",
+              "square": "b6",
               "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
-        "intro": "Black meets 6.Be2 with the ...e5 wedge and ...b5 expansion.",
-        "sources": [
-          "concept:pos-initiative",
-          "concept:pos-center",
-          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
-        ],
         "learnCues": [
-          "Kh1 — unpin for f4",
-          "…Nc6 — develop, eye b4",
-          "f4 — challenge the e5-wedge",
-          "…b5 — the queenside expansion",
-          "Be3 — White develops",
-          "…Bb7 — rake the long diagonal",
-          "a4 — White probes b5",
-          "…exf4 — open with pieces ready"
+          "Qd3 — White centralizes",
+          "…Bxd5 — trade the outpost",
+          "exd5 — White recaptures",
+          "…a5 — gain queenside space",
+          "a4 — White clamps",
+          "…Nb6 — hit a4 and d5"
+        ],
+        "sources": [
+          "concept:pos-outpost",
+          "concept:pos-center",
+          "concept:att-queenside-attack",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence"
         ]
       }
     ]
@@ -33522,64 +32937,51 @@
   {
     "id": "mp-siciliansveshnikov-9bxf6",
     "openingId": "sicilian-sveshnikov",
-    "title": "Sveshnikov 9.Bxf6: The Bishop Pair and the g-file",
-    "criticalPositionFen": "r2qkb1r/5p1p/p1npb3/1p1Npp2/4P3/N2B4/PPP2PPP/R2QK2R w KQkq - 2 12",
-    "overview": "After 9.Bxf6 gxf6, Black accepts damaged kingside pawns in return for two lasting trumps: the bishop pair and the half-open g-file. The dark bishop belongs on g7, raking the long diagonal at White’s centre and king; the king castles short straight onto the open g-file. The d5-knight is White’s one good piece — Black keeps …Bxd5 in reserve to trade it. Dynamically balanced, with long-term trumps Black is happy to nurse.",
+    "title": "Sveshnikov 9.Bxf6: Bishop Pair and the …f5-f4 Roll",
+    "criticalPositionFen": "r2qk2r/5pbp/p1npb3/1p1Npp1Q/4P3/N2B4/PPP2PPP/R3K2R w KQkq - 4 13",
+    "overview": "Where the opening leaves off — the sharp Sveshnikov where White took on f6 to plant a knight on d5, leaving Black with doubled f-pawns but the bishop pair and the …f5 thrust already on the board. Black’s trumps are the two bishops and kingside space: …f5-f4 rolls forward, …b4 expands the queenside, and …Ne7 challenges the d5-knight.",
     "pawnBreaks": [
-      "…f5-f4 to gain kingside space",
-      "…b4 to chase the a3-knight"
+      {
+        "move": "…f4",
+        "explanation": "The doubled f-pawn becomes an asset — …f5-f4 grabs kingside space, locks White’s pieces out of e3/g3 and opens lines for the bishop pair.",
+        "fen": "r2qk2r/5pbp/p1npb3/1p1Npp1Q/4P3/N2B4/PPP2PPP/R3K2R w KQkq - 4 13"
+      },
+      {
+        "move": "…b4",
+        "explanation": "Queenside expansion — …b4 gains space and harasses White’s offside a3-knight, opening a second front.",
+        "fen": "r2qk2r/5pbp/p1npb3/1p1Npp1Q/4P3/N2B4/PPP2PPP/R3K2R w KQkq - 4 13"
+      }
     ],
     "pieceManeuvers": [
-      "…Bf8-g7 onto the long diagonal",
-      "…O-O onto the half-open g-file",
-      "…Bxd5 in reserve to trade White’s strong knight"
+      {
+        "piece": "Knight",
+        "route": "Nc6-e7",
+        "explanation": "…Ne7 challenges the strong d5-knight directly, offering to trade off White’s best piece and free Black’s game."
+      }
     ],
     "strategicThemes": [
-      "The bishop pair",
-      "The half-open g-file",
-      "Trading off White’s d5-knight"
+      "Black’s bishop pair (g7 and e6) is the compensation for the doubled f-pawns — open the position and the two bishops dominate.",
+      "…f5-f4 turns the doubled pawn into kingside space, shutting White’s pieces out of e3 and g3.",
+      "…Ne7 challenges the d5-knight; …b4 opens the queenside — Black presses on both wings."
     ],
-    "endgameTransitions": [
-      "The two bishops are the trump if the game simplifies"
-    ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "title": "Sveshnikov 9.Bxf6: The Bishop Pair and the g-file",
-        "fen": "r2qkb1r/5p1p/p1npb3/1p1Npp2/4P3/N2B4/PPP2PPP/R2QK2R w KQkq - 2 12",
+        "title": "…f4 grabs space, …b4 opens the queenside",
+        "fen": "r2qk2r/5pbp/p1npb3/1p1Npp1Q/4P3/N2B4/PPP2PPP/R3K2R w KQkq - 4 13",
         "moves": [
-          "c3",
-          "Bg7",
-          "Qh5",
-          "O-O",
           "O-O",
           "f4",
-          "Rfd1",
-          "Rb8",
-          "Nc2",
-          "Qd7",
-          "h3"
+          "c4",
+          "b4"
         ],
         "annotations": [
-          "c3 supports d4 and restrains …b4.",
-          "…Bg7 — the bishop takes the long diagonal, the heart of Black’s setup, bearing down on the centre.",
-          "Qh5 probes the kingside.",
-          "…O-O — the king tucks safely away. Black’s trumps are set: the two bishops and the half-open g-file, lasting assets in a dynamically balanced game.",
-          "O-O — White castles.",
-          "…f4 — the thematic Sveshnikov break, grabbing kingside space and opening the f-file behind it.",
-          "Rfd1 — White’s rook eyes the d-file and the backward d6-pawn.",
-          "…Rb8 — loading the b-file for the …b4 push at White’s queenside.",
-          "Nc2 — the offside a3-knight reroutes toward the centre.",
-          "…Qd7 — the queen connects the rooks; Black has the bishop pair and space on both wings.",
-          "h3 — White makes luft; Black’s bishop pair and f4-space give a comfortable, double-edged game."
+          "O-O — White castles into safety.",
+          "…f4 — the doubled f-pawn rolls forward, grabbing kingside space and shutting White’s pieces out of e3 and g3.",
+          "c4 — White strikes at Black’s b5-pawn.",
+          "…b4 — Black holds the queenside space and harasses the offside a3-knight."
         ],
         "arrows": [
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
           [],
           [],
           [],
@@ -33588,181 +32990,41 @@
         "highlights": [
           [
             {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "b4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "g7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "h5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
               "square": "g1",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f5",
-              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d1",
+              "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d6",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
-            {
-              "square": "b8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "b4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "c2",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "h3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f4",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
-        ],
-        "sources": [
-          "concept:pos-outpost",
-          "concept:pos-center",
-          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation",
-          "concept:pos-space",
-          "concept:pos-bishop-pair"
         ],
         "learnCues": [
-          "c3 — support d4",
-          "…Bg7 — onto the long diagonal",
-          "Qh5 — probe the kingside",
-          "…O-O — castle onto the g-file",
           "O-O — White castles",
-          "f4 — the thematic break, space",
-          "Rfd1 — eye the d6-pawn",
-          "Rb8 — load …b4",
-          "Nc2 — reroute the knight",
-          "Qd7 — connect rooks, press on",
-          "h3 — White makes luft"
+          "…f4 — grab kingside space",
+          "c4 — White hits b5",
+          "…b4 — hold the space"
         ],
-        "intro": {
-          "say": "After the early Bxf6, Black’s trumps are the bishop pair and the half-open g-file. The dark bishop swings to g7 on the long diagonal, bearing down on White’s centre, and the king castles right onto the g-file.",
-          "sayShort": "Bishop to g7, castle onto the g-file.",
-          "arrows": [
-            {
-              "from": "f8",
-              "to": "g7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "g7",
-              "to": "b2",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "g7",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "g8",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ]
-        }
+        "sources": [
+          "concept:pos-bishop-pair",
+          "concept:pawn-doubled",
+          "concept:pos-outpost",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence"
+        ]
       }
     ]
   },
@@ -33909,141 +33171,117 @@
   {
     "id": "mp-siciliansveshnikov-chelyabinsk",
     "openingId": "sicilian-sveshnikov",
-    "title": "Chelyabinsk: Challenge the c4 Bind",
-    "criticalPositionFen": "r1bqk2r/5ppp/p1np1b2/3Np3/1pP1P3/8/PPN2PPP/R2QKB1R b KQkq - 1 12",
-    "overview": "Against the c4 bind Black jabs with b4, claims the c5 outpost, supports it with a5, and challenges the d5-knight with Be6 — the two bishops fighting the clamp.",
+    "title": "Sveshnikov Chelyabinsk: Dark Bishop, …Bg5 and the …f5 Break",
+    "criticalPositionFen": "r1bq1rk1/5ppp/p1np1b2/3Np3/1pP1P3/8/PPN2PPP/R2QKB1R w KQ - 2 13",
+    "overview": "Where the opening leaves off — the Chelyabinsk mainline with White’s d5-knight and c4-bind against Black’s dark-squared bishop and queenside space. Black’s pride is the f6-bishop on the long dark diagonal; the plan is …Bg5 to clear f6 for the …f5 break, …a5 to anchor the b4-pawn, and pressure on the d5-knight and the bind.",
     "pawnBreaks": [
       {
-        "move": "a5",
-        "explanation": "a5 cements the b4-pawn and the queenside space.",
-        "fen": "r1bqk2r/5ppp/p1np1b2/3Np3/1pP1P3/8/PPN2PPP/R2QKB1R b KQkq - 1 12"
+        "move": "…f5",
+        "explanation": "The thematic Sveshnikov break — once the f6-bishop steps aside, …f5 strikes at e4, challenges White’s central grip and opens lines for the bishops and rooks.",
+        "fen": "r1bq1rk1/5ppp/p1np1b2/3Np3/1pP1P3/8/PPN2PPP/R2QKB1R w KQ - 2 13"
+      },
+      {
+        "move": "…a5",
+        "explanation": "Anchors the b4-pawn and gains queenside space, fixing White’s queenside and preparing …a4 to clamp.",
+        "fen": "r1bq1rk1/5ppp/p1np1b2/3Np3/1pP1P3/8/PPN2PPP/R2QKB1R w KQ - 2 13"
       }
     ],
     "pieceManeuvers": [
       {
         "piece": "Bishop",
-        "route": "Bc8-e6",
-        "explanation": "The bishop challenges the d5-knight."
+        "route": "Bf6-g5",
+        "explanation": "The dark-squared bishop reroutes to g5, clearing f6 for the …f5 break and eyeing the kingside, leaving Black dominant on the dark squares."
       }
     ],
     "strategicThemes": [
-      "b4 challenges the bind at once.",
-      "The c5 outpost is Black's.",
-      "Two bishops vs the clamp."
+      "Black’s dark-squared bishop is the trump — with White’s dark-squared bishop traded on f6, the long dark diagonal is Black’s.",
+      "…Bg5 clears f6 so that …f5 can challenge e4 and the d5-bind, opening lines for the bishops and rooks.",
+      "…a5 anchors the b4-pawn and gains queenside space; Black presses both the centre and the queenside."
     ],
-    "endgameTransitions": [
-      "If the bind cracks, the bishops take over."
-    ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "title": "Chelyabinsk: Challenge the c4 Bind",
-        "fen": "r1bqk2r/5ppp/p1np1b2/3Np3/1pP1P3/8/PPN2PPP/R2QKB1R b KQkq - 1 12",
+        "title": "…Bg5 clears f6, then the …f5 break",
+        "fen": "r1bq1rk1/5ppp/p1np1b2/3Np3/1pP1P3/8/PPN2PPP/R2QKB1R w KQ - 2 13",
         "moves": [
-          "O-O",
-          "Be2",
-          "Be6",
-          "O-O",
-          "a5"
+          "g3",
+          "Bg5",
+          "Bg2",
+          "f5",
+          "exf5",
+          "Bxf5"
         ],
         "annotations": [
-          "…O-O — Black finishes developing, ready to fight for the d5- and c5-squares.",
-          "Be2 — White develops toward the bind.",
-          "Be6 — the bishop challenges the d5-knight.",
-          "O-O — White castles; the struggle is now over the central light squares.",
-          "a5 — Black cements b4 and the queenside."
+          "g3 — White prepares to fianchetto, shoring up the light squares.",
+          "…Bg5 — the dark-squared bishop steps off f6, clearing the way for …f5.",
+          "Bg2 — White completes the fianchetto.",
+          "…f5 — now the break lands, striking at e4 and challenging White’s central grip.",
+          "exf5 — White captures.",
+          "…Bxf5 — the light-squared bishop recaptures; the position opens for Black’s pieces."
         ],
         "arrows": [
           [],
           [],
-          [
-            {
-              "from": "e6",
-              "to": "d5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
           [],
           []
         ],
         "highlights": [
           [
             {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "c5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f1",
+              "square": "g3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "g1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e1",
+              "square": "g5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "a5",
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "a6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b4",
+              "square": "e4",
               "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "sources": [
-          "concept:pos-outpost",
-          "concept:pos-center",
-          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
-        ],
         "learnCues": [
-          "O-O — complete development",
-          "Be2 — develop toward the bind",
-          "Be6 — challenge the d5-knight",
-          "O-O — castle",
-          "a5 — cement b4"
+          "g3 — White shores up",
+          "…Bg5 — clear f6",
+          "Bg2 — White fianchettoes",
+          "…f5 — strike at e4",
+          "exf5 — White takes",
+          "…Bxf5 — active recapture"
+        ],
+        "sources": [
+          "concept:pos-bishop-pair",
+          "concept:pos-center",
+          "concept:att-queenside-attack",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence"
         ]
       }
     ]
