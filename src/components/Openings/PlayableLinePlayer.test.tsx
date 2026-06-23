@@ -197,6 +197,19 @@ describe('PlayableLinePlayer', () => {
     expect(screen.getByText(/Move 0 \/ 4/)).toBeInTheDocument();
   });
 
+  it('shows a "Learn" header button (not "Practice") when onAdvanceToLearn is provided', async () => {
+    vi.useRealTimers();
+    const onAdvanceToLearn = vi.fn();
+    renderPlayer({ onAdvanceToLearn });
+    expect(screen.getByTestId('advance-to-learn')).toBeInTheDocument();
+    expect(screen.getByText('Learn')).toBeInTheDocument();
+    // The silent un-guided memory-replay shortcut is bypassed for the WLPP
+    // ladder — Watch hands off to the Learn rung instead.
+    expect(screen.queryByTestId('skip-to-memory')).not.toBeInTheDocument();
+    await userEvent.click(screen.getByTestId('advance-to-learn'));
+    expect(onAdvanceToLearn).toHaveBeenCalled();
+  });
+
   it('shows wrong flash on incorrect move in memory phase', async () => {
     vi.useRealTimers();
     renderPlayer();
