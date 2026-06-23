@@ -1868,7 +1868,7 @@
   },
   {
     "id": "mp-bird-classical-attack",
-    "openingId": "bird-opening",
+    "openingId": "birds-opening",
     "criticalPositionFen": "rnbq1rk1/pp2ppbp/5np1/2pp4/5P2/3PPN2/PPP1B1PP/RNB1QRK1 b - - 1 7",
     "title": "Classical kingside attack with Bd3 + Qe2",
     "overview": "The Bird Opening's classical attacking plan. White builds slowly behind the f4 pawn, completes development with Nf3 + e3 + Bd3 (or Be2) + O-O, and then swings the queen to h4 or g3 for direct kingside attack. The f-pawn provides space and supports the eventual e4 break.",
@@ -1888,11 +1888,87 @@
     "typicalMistakes": [
       "Pushing f4-f5 too early without piece coordination — Black's …e5 or …gxf5 counter-strikes derail the attack.",
       "Trading queens early — the Bird's only good attacking piece is the queen."
+    ],
+    "strategicThemes": [
+      "The Bird’s reversed-Dutch setup aims the whole army at the black kingside, with the queen swinging to h4 and ideas of Bxh7+.",
+      "The e4 break activates White’s pieces and opens the e-file for the rook.",
+      "The half-open f-file and the dark-squared bishop combine for a direct kingside attack."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "title": "e4 opens the centre for the attack",
+        "fen": "rnbq1rk1/pp2ppbp/5np1/2pp4/5P2/3PPN2/PPP1B1PP/RNB1QRK1 b - - 1 7",
+        "moves": [
+          "Nc6",
+          "e4",
+          "dxe4",
+          "dxe4"
+        ],
+        "annotations": [
+          "…Nc6 — Black develops the knight.",
+          "e4 — White’s central break, striking d5 and activating the whole army.",
+          "…dxe4 — Black takes.",
+          "dxe4 — White recaptures; the centre opens and the queen heads for the h4-square and the black king."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "…Nc6 — develop",
+          "e4 — central break",
+          "…dxe4 — Black takes",
+          "dxe4 — open the centre"
+        ],
+        "sources": [
+          "concept:att-kingside-storm",
+          "concept:pos-center",
+          "concept:pos-outpost",
+          "https://en.wikipedia.org/wiki/Bird%27s_Opening"
+        ]
+      }
     ]
   },
   {
     "id": "mp-bird-stonewall-formation",
-    "openingId": "bird-opening",
+    "openingId": "birds-opening",
     "criticalPositionFen": "r2qkb1r/pp3ppp/2n1pn2/2pp4/3P1Pb1/2P1PN2/PP2B1PP/RNBQK2R w KQkq - 1 7",
     "title": "Stonewall formation with f4 + d4 + e3 + c3",
     "overview": "The Bird can transpose into a Reversed Dutch Stonewall. The plan is to build a permanent kingside pawn wall (f4-d4-e3-c3) and use the dark-squared bishop's mobility for a slow positional grind. Black's …c5 typically forces the c3-pawn into permanent residence, but White's Bf4-g3-h4 maneuver creates kingside attacking chances.",
@@ -1912,80 +1988,30 @@
     "typicalMistakes": [
       "Allowing Black's …f6 break — challenges the Stonewall structure and Black equalizes.",
       "Trading the dark-squared bishop for a knight — gives up the main attacking piece."
-    ]
-  },
-  {
-    "id": "mp-birdsopening-main",
-    "openingId": "birds-opening",
-    "title": "Bird's: the e5 Knight Outpost",
-    "criticalPositionFen": "rnbqk1nr/ppp1ppbp/6p1/3p4/5P2/5NP1/PPPPP2P/RNBQKB1R w KQkq - 1 4",
-    "overview": "Bird's 1.f4 stakes a claim on e5. The plan is to plant a knight there — an outpost the f4-pawn guards and no black pawn can ever kick — and to build kingside play behind it. The fianchettoed g2-bishop and the d3/c3 backbone give a clean, durable setup around the e5 knight.",
-    "pawnBreaks": [],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nf3-e5 — the outpost",
-        "explanation": "The knight settles on e5, a permanent outpost the f4-pawn defends and no black pawn can challenge."
-      }
     ],
     "strategicThemes": [
-      "Plant the knight on the e5 outpost",
-      "The f4 + d3 backbone",
-      "Kingside play behind the outpost"
+      "The Stonewall Bird builds an unassailable e5-outpost and a kingside pawn wall, then attacks the black king.",
+      "g2-g4-g5 storms the kingside, supported by Rg1 and the queen on h4.",
+      "The dark-squared bishop reroutes via f4-g3-h4 to pressure h6 and prepare sacrifices on the black king."
     ],
-    "endgameTransitions": [
-      "The space and outpost carry a small pull into the endgame"
-    ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "fen": "rnbqk1nr/ppp1ppbp/6p1/3p4/5P2/5NP1/PPPPP2P/RNBQKB1R w KQkq - 1 4",
+        "title": "g4 launches the kingside storm",
+        "fen": "r2qkb1r/pp3ppp/2n1pn2/2pp4/3P1Pb1/2P1PN2/PP2B1PP/RNBQK2R w KQkq - 1 7",
         "moves": [
-          "Bg2",
-          "Nf6",
-          "O-O",
-          "O-O",
-          "d3",
-          "c5",
-          "c3",
-          "Nc6",
-          "Na3",
-          "Rb8",
-          "Ne5"
+          "h3",
+          "Bh5",
+          "g4",
+          "Bg6"
         ],
         "annotations": [
-          "Bg2 fianchettoes; the bishop eyes the long diagonal and the centre.",
-          "…Nf6 develops, contesting e4 and the centre.",
-          "O-O White castles.",
-          "…O-O Black castles.",
-          "d3 backs up the f4-pawn and the future e5 outpost — the structural backbone.",
-          "…c5 grabs queenside space and eyes d4.",
-          "c3 props d4 and keeps Black's …d4 break in check.",
-          "…Nc6 develops, pressing toward d4 and e5.",
-          "Na3 heads for c2/c4, supporting the centre.",
-          "…Rb8 readies a queenside expansion with …b5.",
-          "Ne5! The outpost. The knight lands on e5, guarded by the f4-pawn and unkickable by any black pawn — the heart of the Bird's setup and the springboard for kingside play."
-        ],
-        "learnCues": [
-          "Bg2 — fianchetto",
-          "…Nf6 — contest the centre",
-          "O-O — castle",
-          "…O-O — castle",
-          "d3 — the backbone",
-          "…c5 — queenside space",
-          "c3 — prop d4",
-          "…Nc6 — press d4/e5",
-          "Na3 — knight toward c4",
-          "…Rb8 — ready …b5",
-          "Ne5 — the outpost!"
+          "h3 — White questions the g4-bishop before launching the storm.",
+          "…Bh5 — the bishop retreats along the diagonal.",
+          "g4 — the kingside storm begins, gaining space and chasing the bishop.",
+          "…Bg6 — the bishop retreats again as White’s pawns roll forward."
         ],
         "arrows": [
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
           [],
           [],
           [],
@@ -1994,7 +2020,194 @@
         "highlights": [
           [
             {
-              "square": "g2",
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "h3 — question the bishop",
+          "…Bh5 — retreat",
+          "g4 — start the storm",
+          "…Bg6 — retreat again"
+        ],
+        "sources": [
+          "concept:att-kingside-storm",
+          "concept:pos-outpost",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Bird%27s_Opening"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-birdsopening-main",
+    "openingId": "birds-opening",
+    "title": "Bird’s Leningrad: the f-File and Long Diagonal",
+    "criticalPositionFen": "r1b2rk1/pp3pbp/2n2np1/2p1p3/4PP2/2N2NP1/PPP3BP/R1BR2K1 w - - 0 11",
+    "overview": "Where the opening leaves off — a Leningrad-style Bird’s where White’s f4 meets Black’s …e5. Trading on e5 opens the f-file and leaves a cramping pawn on e5, while the g2-bishop rakes the long diagonal — the assets the reversed Dutch is built around. White plays in an open position where his kingside pieces are the more active.",
+    "pawnBreaks": [
+      {
+        "move": "f4xe5",
+        "explanation": "Opens the f-file and leaves a cramping pawn on e5, while the g2-bishop rakes the long diagonal — the reversed-Leningrad break that activates White’s kingside.",
+        "fen": "r1b2rk1/pp3pbp/2n2np1/2p1p3/4PP2/2N2NP1/PPP3BP/R1BR2K1 w - - 0 11"
+      }
+    ],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "The g2-bishop on the long diagonal and the half-open f-file are the Leningrad Bird’s twin assets.",
+      "Trading on e5 opens the f-file and plants a cramping e5-pawn, activating White’s kingside pieces.",
+      "White’s f-file pressure and the long light diagonal both aim at the black king."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "title": "Trade on e5, open the f-file",
+        "fen": "r1b2rk1/pp3pbp/2n2np1/2p1p3/4PP2/2N2NP1/PPP3BP/R1BR2K1 w - - 0 11",
+        "moves": [
+          "Nxe5",
+          "Nxe5",
+          "fxe5",
+          "Nd7"
+        ],
+        "annotations": [
+          "Nxe5 — White captures, beginning to open lines on the kingside.",
+          "…Nxe5 — Black recaptures with the knight.",
+          "fxe5 — White recaptures with the pawn; the f-file opens and the e5-pawn cramps Black.",
+          "…Nd7 — the knight retreats from the e5-pawn to challenge it."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nxe5 — capture",
+          "…Nxe5 — Black recaptures",
+          "fxe5 — open the f-file",
+          "…Nd7 — challenge e5"
+        ],
+        "sources": [
+          "concept:att-kingside-storm",
+          "concept:pos-center",
+          "concept:pos-outpost",
+          "https://en.wikipedia.org/wiki/Bird%27s_Opening"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-birdsopening-nimzo",
+    "openingId": "birds-opening",
+    "title": "Nimzo-Larsen Bird: Central Break and the g-File",
+    "criticalPositionFen": "r1bq1r2/pp1nppkp/6p1/2pp4/5P2/1P2P3/P1PPB1PP/RN1Q1RK1 w - - 0 11",
+    "overview": "Where the opening leaves off — a Bird’s with a Nimzo-Larsen flavour where the dark-squared bishops have been traded off Black’s king. White’s plan is to open the centre with d4, freeing his pieces, while the f4-f5 lever and the half-open g-file (Black recaptured with the king on g7) give play against the slightly airy black king.",
+    "pawnBreaks": [
+      {
+        "move": "d2-d4",
+        "explanation": "The central break — d4 opens the centre and frees White’s pieces, striking at Black’s c5-pawn.",
+        "fen": "r1bq1r2/pp1nppkp/6p1/2pp4/5P2/1P2P3/P1PPB1PP/RN1Q1RK1 w - - 0 11"
+      },
+      {
+        "move": "f4-f5",
+        "explanation": "The kingside lever — f5 strikes at g6 and opens lines toward Black’s slightly exposed king on g7.",
+        "fen": "r1bq1r2/pp1nppkp/6p1/2pp4/5P2/1P2P3/P1PPB1PP/RN1Q1RK1 w - - 0 11"
+      }
+    ],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "With the dark-squared bishops traded, the dark squares around Black’s king on g7 are slightly weak.",
+      "d4 opens the centre and frees White’s pieces; f4-f5 pries at the kingside.",
+      "The half-open g-file (from …Kxg7) and the f5 lever give White play against the exposed king."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "title": "d4 opens the centre",
+        "fen": "r1bq1r2/pp1nppkp/6p1/2pp4/5P2/1P2P3/P1PPB1PP/RN1Q1RK1 w - - 0 11",
+        "moves": [
+          "d4",
+          "cxd4",
+          "exd4",
+          "Nf6"
+        ],
+        "annotations": [
+          "d4 — White breaks in the centre, striking at the c5-pawn and freeing his pieces.",
+          "…cxd4 — Black takes.",
+          "exd4 — White recaptures, with a mobile centre.",
+          "…Nf6 — Black brings the knight back to defend."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -2003,204 +2216,19 @@
               "square": "f6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
-          ],
-          [
-            {
-              "square": "g1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "a3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "b8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
           ]
-        ],
-        "sources": [
-          "concept:pos-outpost",
-          "concept:pos-development",
-          "https://en.wikipedia.org/wiki/Bird%27s_Opening"
-        ],
-        "title": "The e5 Outpost",
-        "intro": "White builds around a knight outpost on e5, guarded by the f4-pawn."
-      }
-    ]
-  },
-  {
-    "id": "mp-birdsopening-nimzo",
-    "openingId": "birds-opening",
-    "title": "Nimzo-Larsen Bird: b2-Bishop plus Qh4",
-    "criticalPositionFen": "r1bq1rk1/pp2ppbp/2n2np1/2pp4/5P2/1P2PN2/PBPPB1PP/RN1Q1RK1 w - - 2 8",
-    "overview": "With the bishop already raking the long diagonal from b2, White adds the Qe1-h4 lift — two attacking ideas converging on Black's king while the f4-pawn grips e5.",
-    "pawnBreaks": [],
-    "pieceManeuvers": [
-      {
-        "piece": "Queen",
-        "route": "Qe1-h4",
-        "explanation": "The queen swings to h4 to join the b2-bishop against the king."
-      }
-    ],
-    "strategicThemes": [
-      "Combine the b2-bishop's long diagonal with the f4 grip.",
-      "Lift the queen to h4 for the attack.",
-      "Keep the e5-square under control."
-    ],
-    "endgameTransitions": [
-      "The bishop pair and space favour White if the game simplifies."
-    ],
-    "playableLines": [
-      {
-        "title": "Nimzo-Larsen Bird: b2-Bishop plus Qh4",
-        "fen": "r1bq1rk1/pp2ppbp/2n2np1/2pp4/5P2/1P2PN2/PBPPB1PP/RN1Q1RK1 w - - 2 8",
-        "moves": [
-          "Qe1",
-          "d4",
-          "Qh4",
-          "dxe3",
-          "dxe3",
-          "Bg4"
-        ],
-        "annotations": [
-          "Qe1 — the queen prepares its lift to the kingside.",
-          "…d4 — Black grabs space and challenges e3.",
-          "Qh4 — the queen lands on h4, joining the b2-bishop against the king.",
-          "…dxe3 — Black releases the central tension.",
-          "dxe3 — recapturing keeps the structure and opens the d-file.",
-          "…Bg4 — Black develops with a pin, but White's attack is the faster."
         ],
         "learnCues": [
-          "Qe1 — prepare the lift",
-          "…d4 — Black grabs space",
-          "Qh4 — queen joins the attack",
-          "…dxe3 — Black releases",
-          "dxe3 — recapture, open the d-file",
-          "…Bg4 — Black pins, too slow"
+          "d4 — break the centre",
+          "…cxd4 — Black takes",
+          "exd4 — mobile centre",
+          "…Nf6 — Black defends"
         ],
         "sources": [
-          "concept:pos-bishop-pair",
-          "concept:pos-space",
+          "concept:pos-center",
+          "concept:att-kingside-storm",
+          "concept:pos-outpost",
           "https://en.wikipedia.org/wiki/Bird%27s_Opening"
-        ],
-        "arrows": [
-          [],
-          [],
-          [],
-          [],
-          [],
-          []
-        ],
-        "highlights": [
-          [
-            {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e3",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "h4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b2",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
         ]
       }
     ]
@@ -2208,165 +2236,88 @@
   {
     "id": "mp-birdsopening-stonewall",
     "openingId": "birds-opening",
-    "title": "Stonewall: e5 Outpost and the Rook Lift",
-    "criticalPositionFen": "r1bq1rk1/pp3ppp/2nbpn2/2pp4/3P1P2/2PBPN2/PP4PP/RNBQ1RK1 w - - 5 8",
-    "overview": "Behind the d4-e3-f4 wall White plants a knight on e5 and lifts a rook via f3 to the kingside, the classic Stonewall attacking machine.",
-    "pawnBreaks": [],
+    "title": "Stonewall Bird: the Rook Lift Attack",
+    "criticalPositionFen": "r1bq1rk1/p3npp1/1p1bpn1p/2ppN3/3P1P2/2PBPR2/PP1N2PP/R1BQ2K1 w - - 0 11",
+    "overview": "Where the opening leaves off — the Stonewall Bird, the most direct attacking version. White’s e3/f4/d4 wall anchors a knight on e5, and the rook has already lifted to f3. The plan is a kingside assault: swing the rook to h3, batter h7 with the Bd3, push g4-g5, and let the e5-knight screen the attack.",
+    "pawnBreaks": [
+      {
+        "move": "g2-g4",
+        "explanation": "The storm — g4-g5 pries open lines toward the black king, supported by the lifted rook and the e5-knight.",
+        "fen": "r1bq1rk1/p3npp1/1p1bpn1p/2ppN3/3P1P2/2PBPR2/PP1N2PP/R1BQ2K1 w - - 0 11"
+      }
+    ],
     "pieceManeuvers": [
       {
-        "piece": "Knight",
-        "route": "Nf3-e5",
-        "explanation": "The knight occupies the protected e5 outpost."
-      },
-      {
         "piece": "Rook",
-        "route": "Rf1-f3",
-        "explanation": "The rook lifts to the third rank to swing to the kingside."
+        "route": "Rf3-h3",
+        "explanation": "The Stonewall rook lift — the rook swings to h3, joining the Bd3 in battering h7 and the black king."
       }
     ],
     "strategicThemes": [
-      "Plant the knight on the e5 outpost.",
-      "Lift the rook via f3 toward the king.",
-      "Attack behind the d4-e3-f4 pawn wall."
+      "The Stonewall wall (e3/f4/d4) anchors the e5-knight, which screens White’s kingside attack.",
+      "The Rf3-h3 rook lift and the Bd3 batter h7; g4-g5 storms the king.",
+      "The e5-knight cannot be chased by a pawn — it is the spearhead and the screen of the attack."
     ],
-    "endgameTransitions": [
-      "The space and outpost give White the pull even if pieces come off."
-    ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "title": "Stonewall: e5 Outpost and the Rook Lift",
-        "fen": "r1bq1rk1/pp3ppp/2nbpn2/2pp4/3P1P2/2PBPN2/PP4PP/RNBQ1RK1 w - - 5 8",
+        "title": "Rh3 swings to the kingside",
+        "fen": "r1bq1rk1/p3npp1/1p1bpn1p/2ppN3/3P1P2/2PBPR2/PP1N2PP/R1BQ2K1 w - - 0 11",
         "moves": [
-          "Ne5",
-          "Ne7",
-          "Nd2",
-          "b6",
-          "Rf3",
-          "h6"
+          "Rh3",
+          "Bxe5",
+          "fxe5",
+          "Nd7"
         ],
         "annotations": [
-          "Ne5 — the knight seizes the protected central outpost.",
-          "…Ne7 — Black reroutes to challenge and defend.",
-          "Nd2 — the second knight comes toward the kingside, supporting e5 and eyeing f3.",
-          "…b6 — Black seeks queenside counterplay.",
-          "Rf3 — the rook lifts, ready to swing to g3 or h3.",
-          "…h6 — Black makes luft, but hands the attack a hook."
-        ],
-        "learnCues": [
-          "Ne5 — seize the outpost",
-          "…Ne7 — Black reroutes",
-          "Nd2 — bring the knight over",
-          "…b6 — Black seeks play",
-          "Rf3 — lift the rook",
-          "…h6 — a hook to attack"
-        ],
-        "sources": [
-          "concept:pawn-chain",
-          "concept:pos-outpost",
-          "https://en.wikipedia.org/wiki/Bird%27s_Opening"
+          "Rh3 — the Stonewall rook lift swings to the h-file, joining the attack on the black king.",
+          "…Bxe5 — Black trades off the powerful e5-knight.",
+          "fxe5 — White recaptures, the f-file opening and the e5-pawn cramping Black.",
+          "…Nd7 — Black’s knight retreats to challenge the e5-pawn."
         ],
         "arrows": [
           [],
           [],
-          [
-            {
-              "from": "d2",
-              "to": "f3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
           [],
-          [
-            {
-              "from": "f3",
-              "to": "g3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "f3",
-              "to": "h3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
           []
         ],
         "highlights": [
           [
             {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "f3",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "b6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g3",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
               "square": "h3",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "h6",
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "h7",
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "learnCues": [
+          "Rh3 — the rook lift",
+          "…Bxe5 — trade the knight",
+          "fxe5 — open the f-file",
+          "…Nd7 — challenge e5"
+        ],
+        "sources": [
+          "concept:att-kingside-storm",
+          "concept:pos-outpost",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Bird%27s_Opening"
         ]
       }
     ]
@@ -20490,65 +20441,46 @@
   {
     "id": "mp-pronaroFantasyCaro-bishop-pair-attack",
     "openingId": "pro-naroditsky-fantasy-caro",
-    "criticalPositionFen": "rnbqkbnr/pp3ppp/2p5/4p3/3PP3/8/PPP3PP/RNBQKBNR w KQkq - 0 5",
-    "title": "Naroditsky's Fantasy Caro: Hold the Centre, Strike e6 with Ng5",
-    "overview": "Playing the Fantasy himself, Naroditsky meets Black's …e5 counter by simply developing behind the broad e4/d4 centre — Nf3, Bd3, O-O. When Black resolves the tension with …exd4, the knight leaps to g5, hammering the e6-square and f7 where the Fantasy bishop dreams of landing. White's lead in development becomes a direct attack on the light squares.",
-    "pawnBreaks": [],
+    "title": "Fantasy Caro: Win the Bishop Pair, Attack the King",
+    "criticalPositionFen": "r2qkb1r/pp1n1ppp/2p1bn2/6N1/3pP3/3B4/PPP3PP/RNB1QRK1 b kq - 3 9",
+    "overview": "Where the opening leaves off — a Fantasy Caro where White’s knight has reached g5, eyeing the e6-bishop. The plan is direct: capture on e6 to win the bishop pair and shatter Black’s kingside, then swing the queen to the kingside and use the Bd3 and the lead in development to attack — full compensation for the d4-pawn.",
+    "pawnBreaks": [
+      {
+        "move": "e4-e5",
+        "explanation": "The central lever — e5 gains space and opens lines for the Bd3 toward the black king once White has won the bishop pair.",
+        "fen": "r2qkb1r/pp1n1ppp/2p1bn2/6N1/3pP3/3B4/PPP3PP/RNB1QRK1 b kq - 3 9"
+      }
+    ],
     "pieceManeuvers": [
-      "Ng1-f3 — guard the centre",
-      "Bf1-d3 — eye the kingside light squares",
-      "Nf3-g5 — strike at e6 and f7"
+      {
+        "piece": "Knight",
+        "route": "Ng5xe6 — win the bishop pair",
+        "explanation": "Capturing on e6 wins the bishop pair and shatters Black’s kingside pawns, opening the f-file and the light squares for White’s attack."
+      }
     ],
     "strategicThemes": [
-      "Develop behind the e4/d4 centre",
-      "Target the light squares e6 and f7",
-      "Turn the lead in development into an attack"
+      "Ng5xe6 wins the bishop pair and shatters Black’s kingside — White’s central attacking asset.",
+      "The Bd3 trains on h7 and the queen swings to the kingside for the attack.",
+      "White’s lead in development is full compensation for the d4-pawn Black grabbed."
     ],
-    "endgameTransitions": [
-      "The central pull persists into a more pleasant ending if attacks fizzle"
-    ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "fen": "rnbqkbnr/pp3ppp/2p5/4p3/3PP3/8/PPP3PP/RNBQKBNR w KQkq - 0 5",
+        "title": "Nxe6 wins the bishop pair",
+        "fen": "r2qkb1r/pp1n1ppp/2p1bn2/6N1/3pP3/3B4/PPP3PP/RNB1QRK1 b kq - 3 9",
         "moves": [
-          "Nf3",
-          "Be6",
-          "Bd3",
-          "Nd7",
-          "O-O",
-          "exd4",
-          "Qe1",
-          "Ngf6",
-          "Ng5"
+          "Qc7",
+          "Nxe6",
+          "fxe6",
+          "Qg3"
         ],
         "annotations": [
-          "Nf3 develops and leans on the e5-pawn.",
-          "…Be6 develops the problem bishop and bolsters d5/f7.",
-          "Bd3 trains the bishop on the b1-h7 diagonal.",
-          "…Nd7 prepares to recapture and reroute.",
-          "O-O tucks the king away, rook eyeing the f-file.",
-          "…exd4 finally resolves the central tension.",
-          "Qe1 swings the queen toward the kingside, eyeing g3/h4.",
-          "…Ngf6 develops the last knight.",
-          "Ng5 leaps in, hammering e6 and f7 — the lead in development turns into an attack."
-        ],
-        "learnCues": [
-          "Nf3 — lean on e5",
-          "…Be6 — develop the bishop",
-          "Bd3 — the b1-h7 diagonal",
-          "…Nd7 — prepare to reroute",
-          "O-O — castle",
-          "…exd4 — release the tension",
-          "Qe1 — swing the queen",
-          "…Ngf6 — develop",
-          "Ng5 — strike e6/f7"
+          "…Qc7 — Black centralizes the queen.",
+          "Nxe6 — White captures, winning the bishop pair and shattering Black’s kingside pawns.",
+          "…fxe6 — Black recaptures with the pawn, his structure now ruined.",
+          "Qg3 — the queen swings to the kingside, hitting g7 and joining the attack."
         ],
         "arrows": [
-          [],
-          [],
-          [],
-          [],
-          [],
           [],
           [],
           [],
@@ -20557,7 +20489,7 @@
         "highlights": [
           [
             {
-              "square": "f3",
+              "square": "c7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -20569,54 +20501,33 @@
           ],
           [
             {
-              "square": "d3",
+              "square": "e6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d7",
+              "square": "g3",
               "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
+            },
             {
-              "square": "g1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g5",
-              "color": "rgba(255, 165, 0, 0.55)"
+              "square": "g7",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
-        "sources": [
-          "concept:pos-center",
-          "concept:pos-development",
-          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+        "learnCues": [
+          "…Qc7 — centralize",
+          "Nxe6 — win the bishop pair",
+          "…fxe6 — ruined structure",
+          "Qg3 — swing to the king"
         ],
-        "title": "Hold the Centre, Strike e6 with Ng5",
-        "intro": "White develops behind the centre and jumps Ng5 to hammer e6 and f7."
+        "sources": [
+          "concept:pos-bishop-pair",
+          "concept:att-kingside-storm",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+        ]
       }
     ]
   },
@@ -24162,478 +24073,107 @@
   {
     "id": "mp-ruylopez-d4",
     "openingId": "ruy-lopez",
-    "criticalPositionFen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQ1RK1 w - - 0 8",
-    "title": "Ruy Lopez: Prepare and Land the d4 Break",
-    "overview": "The d4-break is White’s thematic central lever in the Closed Ruy — but played raw it achieves nothing. White first builds the Spanish bind: Re1, c3 (supporting d4), Bc2 (retreating the bishop onto the b1-h7 diagonal), and h3 (a luft and a clamp on g4). Only THEN does d4 land with full force, seizing the centre.",
+    "title": "Closed Ruy after d4: the Nf5 Outpost Attack",
+    "criticalPositionFen": "r2q1rk1/1b2bppp/p2p1n2/np6/3NP3/7P/PPB2PP1/RNBQR1K1 b - - 0 14",
+    "overview": "Where the opening leaves off — after the Closed Ruy resolves its centre with the d4 break and the exchanges, White has a knight centralized on d4 and the c2-bishop poised behind the queen. The plan flows naturally to the kingside: the knight jumps to the f5 outpost, the Bc2/Qd3 battery trains on h7, and White attacks the black king.",
     "pawnBreaks": [
-      "d4 — the central break, prepared by c3",
-      "meet …c5 with d4-d5 or capture"
+      {
+        "move": "e4-e5",
+        "explanation": "The central thrust — e5 strikes d6 and opens lines for the battery and the f5-knight when White wants to crack the position open.",
+        "fen": "r2q1rk1/1b2bppp/p2p1n2/np6/3NP3/7P/PPB2PP1/RNBQR1K1 b - - 0 14"
+      },
+      {
+        "move": "f2-f4",
+        "explanation": "The kingside lever — f4-f5 supports the outpost and storms toward the black king.",
+        "fen": "r2q1rk1/1b2bppp/p2p1n2/np6/3NP3/7P/PPB2PP1/RNBQR1K1 b - - 0 14"
+      }
     ],
     "pieceManeuvers": [
-      "Bb3-c2 onto the diagonal",
-      "Nb1-d2-f1-g3 (the Spanish knight)",
-      "Re1 behind the e-pawn"
+      {
+        "piece": "Knight",
+        "route": "Nd4-f5",
+        "explanation": "The centralized knight jumps to the f5 outpost — the immovable square that presses d6 and h6 and spearheads the kingside attack."
+      }
     ],
     "strategicThemes": [
-      "Prepare d4 before playing it",
-      "The Spanish centre",
-      "Bishop on the b1-h7 diagonal"
+      "White’s knight is centralized on d4 and heads for the f5 outpost, the immovable square the Closed Ruy aims at.",
+      "The Bc2 and queen form a battery on the b1-h7 diagonal, trained on h7.",
+      "With the centre resolved, White attacks the black king on the kingside."
     ],
-    "endgameTransitions": [
-      "The central majority carries into the ending"
-    ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQ1RK1 w - - 0 8",
+        "title": "Nf5 plants the outpost",
+        "fen": "r2q1rk1/1b2bppp/p2p1n2/np6/3NP3/7P/PPB2PP1/RNBQR1K1 b - - 0 14",
         "moves": [
-          "Re1",
-          "d6",
-          "c3",
-          "Na5",
-          "Bc2",
-          "c5",
-          "h3",
-          "Bb7",
-          "d4",
-          "exd4",
-          "cxd4",
-          "cxd4",
-          "Nxd4"
+          "Re8",
+          "Nf5",
+          "Bf8",
+          "Qd3"
         ],
         "annotations": [
-          "Re1 puts the rook behind the e-pawn — preparation, not yet the break.",
-          "",
-          "c3 — the key prep: it builds the pawn-support for d4.",
-          "…Na5 hits the bishop, a standard Ruy regrouping.",
-          "Bc2 retreats onto the long b1-h7 diagonal, eyeing Black’s king.",
-          "",
-          "h3 makes luft and denies …Bg4 — the last prep before the break.",
-          "",
-          "d4! now the break lands with full support — White seizes the centre.",
-          "",
-          "",
-          "",
-          "Nxd4 — White stands in the centre with the freer game and the better bishop. The break worked because it was prepared."
+          "…Re8 — Black contests the e-file.",
+          "Nf5 — the knight leaps to the f5 outpost, pressing d6 and h6.",
+          "…Bf8 — Black retreats the bishop from the knight’s reach.",
+          "Qd3 — White loads the battery on the b1-h7 diagonal, aimed at h7."
         ],
         "arrows": [
           [],
-          [],
-          [],
-          [],
           [
             {
-              "from": "c2",
-              "to": "b1",
+              "from": "f5",
+              "to": "h6",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
           []
         ],
-        "title": "Ruy Lopez: Prepare and Land the d4 Break",
         "highlights": [
           [
             {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f1",
+              "square": "e8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d6",
+              "square": "f5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
+              "square": "h6",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "a5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c6",
+              "square": "f8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c2",
+              "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b1",
-              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "h7",
               "color": "rgba(255, 235, 59, 0.5)"
             }
-          ],
-          [
-            {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "h3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "b7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
           ]
-        ],
-        "sources": [
-          "book:ruy-lopez",
-          "concept:pos-center",
-          "https://en.wikipedia.org/wiki/Ruy_Lopez"
         ],
         "learnCues": [
-          "Re1 — rook behind the e-pawn",
-          "",
-          "c3 — support the coming d4",
-          "…Na5 — hit the bishop",
-          "Bc2 — onto the diagonal",
-          "",
-          "h3 — luft, deny …Bg4",
-          "",
-          "d4 — now the break lands",
-          "",
-          "",
-          "",
-          "Nxd4 — centre seized, freer game"
-        ],
-        "intro": {
-          "say": "White’s thematic lever is the d4-break — but raw it’s nothing. First build the Spanish bind: rook to e1, c3 to support the push, the bishop back to c2 on the long diagonal, h3 for luft. THEN d4 lands and seizes the centre.",
-          "sayShort": "Prepare with c3/Bc2/Re1 — then d4 lands.",
-          "arrows": [
-            {
-              "from": "d2",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "b3",
-              "to": "c2",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "c2",
-              "to": "h7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "c3",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ]
-        }
-      },
-      {
-        "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQ1RK1 w - - 0 8",
-        "moves": [
-          "d3",
-          "d6",
-          "Nbd2",
-          "Be6",
-          "Re1",
-          "Nd7",
-          "Nf1",
-          "Nc5"
-        ],
-        "annotations": [
-          "White plays d3, a quiet preparatory move keeping options flexible for the knight maneuver",
-          "Black solidifies with d6, maintaining the closed center",
-          "The knight heads to d2, the first step of the famous Ruy Lopez maneuver Nb1-d2-f1-g3",
-          "Black develops the bishop to e6, challenging the b3 bishop",
-          "White moves the rook to e1, freeing the f1 square for the knight",
-          "Black reroutes the f6 knight to d7, preparing to bring it to c5 or f8",
-          "The knight arrives on f1, one step from the ideal g3 outpost",
-          "Black places the knight on c5, pressuring the b3 bishop and controlling d3"
-        ],
-        "arrows": [
-          [],
-          [],
-          [
-            {
-              "from": "d2",
-              "to": "f1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e6",
-              "to": "b3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [],
-          [
-            {
-              "from": "d7",
-              "to": "c5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "d7",
-              "to": "f8",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f1",
-              "to": "g3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c5",
-              "to": "b3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "c5",
-              "to": "d3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
-        ],
-        "title": "Slow Maneuver: Nbd2-f1-g3",
-        "highlights": [
-          [
-            {
-              "square": "d3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f1",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "g3",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b3",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "f8",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "f1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g3",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b3",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "d3",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ]
+          "…Re8 — contest the e-file",
+          "Nf5 — plant the outpost",
+          "…Bf8 — retreat",
+          "Qd3 — load the battery"
         ],
         "sources": [
-          "book:ruy-lopez",
+          "concept:pos-outpost",
+          "concept:att-kingside-storm",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Ruy_Lopez"
-        ],
-        "learnCues": [
-          "d3 — quiet, keep flexibility",
-          "d6 — the closed centre",
-          "Nbd2 — start the f1-g3 tour",
-          "Be6 — challenge the b3-bishop",
-          "Re1 — free f1 for the knight",
-          "Nd7 — reroute toward c5/f8",
-          "Nf1 — one step from g3",
-          "Nc5 — pressure Bb3, control d3"
         ]
       }
     ]
