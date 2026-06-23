@@ -125,6 +125,46 @@ opening leaves off + carry the real breaks/ideas. The 66 overlaps need
 re-anchoring + content rebuild; the 461 "clean" ones start correctly but need a
 breaks/ideas accuracy pass. "However long it takes."
 
+## PROGRESS (2026-06-23)
+
+### DONE — all 60 MIDDLEGAME overlap plans re-anchored + rebuilt to the accuracy bar
+Every one now starts at the opening terminus (0 replay), real breaks from the
+masters-explorer FEN endpoint + book-corpus/theory grounding, lead-the-eye
+arrows with verified sightlines, two-register cues, resolvable sources — all
+gate-green (`middlegamePlanner` + `middlegamePlanThemes` + `MiddlegamePlansSection`
++ ship-check). By cluster: vienna; french-exchange; ruy breyer/chigorin/zaitsev/d4;
+nimzo x4; scandi x3; alekhine x2; pirc x2; sicilian najdorf x2 / sveshnikov x2 /
+dragon x3 / alapin x2; benko x3; benoni; dutch x2; kid; old-indian; qga;
+semi-slav; four-knights x2; evans; scotch; kia; london; trompowsky; pro-aman
+anti-caro x2 / french x2 / open-sicilian / rossolimo x2 / ruy x2; pro-gothamchess
+caro-panov; pro-naroditsky caro / fantasy-caro; pro-samay french / ruy;
+birds-opening x3. Also fixed the **bird-opening→birds-opening id typo** on 2
+plans (+ gave them playableLines).
+
+### REMAINING
+1. **6 `-endgame` plans** (ruy-lopez berlin/breyer/chigorin/exchange/open/zaitsev
+   `-endgame`). These are ENDGAME-section plans whose `playableLines[0].fen`
+   currently starts from move 1 (walks the whole game). They need the ENDGAME
+   doctrine (§ENDGAME LAYER): re-anchor `criticalPositionFen` to the opening→
+   endgame TRANSITION fen and set the playable line to the real endgame tail of
+   a master game that played the SAME variation (`scripts/pick-endgame-game.mjs`).
+   NOT a middlegame rebuild — separate, per-plan game research.
+2. **The 461 "clean" plans** — already start in the right place; need a
+   breaks/ideas ACCURACY review per the recipe above. The bulk of the "all 529"
+   scope; multi-session.
+
+### Reusable tooling built this pass
+- `scratchpad/suggested-anchors.json` — opening terminus per overlapping plan
+  (anchor-gen harness: `getAllLessonScripts()` → deepest beat terminal FEN →
+  match each plan to the deepest lesson line containing its old anchor).
+- The build recipe is a self-contained node script per cluster: define plan
+  objects → validate (legality + lead-eye sightlines via `sightClear` + themes
+  demo + PROMISE-ending check + array-length parity) → splice one object in place
+  (find id → `  {` → next `  },`) keeping other entries byte-identical → run the
+  two gates. Explorer data via the FEN endpoint
+  `GET /api/lichess-explorer?source=masters&fen=<encoded>`.
+
+
 ## The PROVEN per-plan recipe (battle-tested on Vienna + French Exchange)
 1. **New anchor** — from `scratchpad/suggested-anchors.json` (the anchor-gen
    harness: import `getAllLessonScripts()`, deepest beat per lesson → terminal

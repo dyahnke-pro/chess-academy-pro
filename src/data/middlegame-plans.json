@@ -20349,9 +20349,9 @@
   {
     "id": "mp-pronarocaro-twoknights-b5-coord",
     "openingId": "pro-naroditsky-caro-kann",
-    "title": "Caro Two Knights: the …c5 Break and the Bishop Pair",
+    "title": "Caro Two Knights: the …c5 Break and Active Pieces",
     "criticalPositionFen": "r1b2rk1/p1q2ppp/2pbpn2/1p2N3/3P4/1B6/PPP1QPPP/R1B2RK1 w - - 3 13",
-    "overview": "Where the opening leaves off — a Caro Two Knights where White has a knight on e5 but Black holds the bishop pair and queenside space. Black’s plan is to break the centre with …c5, hitting d4 to free his bishops, while …b5-b4 expands on the queenside and the dark-squared bishop eyes the white king.",
+    "overview": "Where the opening leaves off — a Caro Two Knights where White has a knight on e5 but Black has easy development and queenside space. Black’s plan is to break the centre with …c5, hitting d4 to open lines for his pieces, while …b5-b4 expands on the queenside and the dark-squared bishop eyes the white king.",
     "pawnBreaks": [
       {
         "move": "…c5",
@@ -20366,9 +20366,9 @@
     ],
     "pieceManeuvers": [],
     "strategicThemes": [
-      "Black holds the bishop pair — opening the position with …c5 lets the two bishops dominate.",
-      "…c5 strikes d4, the freeing break; …b5-b4 expands on the queenside.",
-      "Black challenges White’s e5-knight and aims the dark-squared bishop at the white king."
+      "…c5 strikes at d4 — the freeing break that opens lines for Black’s actively-placed pieces.",
+      "…b5-b4 expands on the queenside, gaining space and harassing White’s knights.",
+      "Black challenges White’s strong e5-knight and aims the dark-squared bishop at the white king."
     ],
     "endgameTransitions": [],
     "playableLines": [
@@ -20430,9 +20430,9 @@
           "…Bxc5 — active recapture"
         ],
         "sources": [
-          "concept:pos-bishop-pair",
           "concept:pos-center",
           "concept:pos-outpost",
+          "concept:att-kingside-storm",
           "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
         ]
       }
