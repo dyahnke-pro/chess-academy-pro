@@ -25505,182 +25505,73 @@
   {
     "id": "mp-ruylopez-chigorin",
     "openingId": "ruy-lopez",
-    "criticalPositionFen": "r1b2rk1/2q1bppp/p2p1n2/npp1p3/3PP3/2P2N1P/PPB2PP1/RNBQR1K1 w - - 1 12",
-    "title": "Chigorin: Queenside Expansion",
-    "overview": "For decades the Chigorin WAS the main line of the Ruy Lopez — the tabiya through which world titles were fought. Black settles accounts with the Spanish bishop immediately: ...Na5 hits it, ...c5 grabs queenside space, and ...Qc7 props up e5. White retreats the bishop to c2, builds the c3/d4 centre, and when Black completes the structure White locks it with d5. The play then revolves around the manoeuvring duel — White's knight tours toward the kingside, Black reroutes the offside a5-knight back into the game and expands on the queenside.",
+    "title": "Chigorin: Wing Play on the Closed Center",
+    "criticalPositionFen": "r1bn1rk1/2q1bppp/p2p1n2/1ppPp3/4P3/2P2N1P/PPB2PP1/R1BQRNK1 b - - 2 14",
+    "overview": "Where the opening leaves off — the Chigorin Ruy with the center locked, White’s d5 against Black’s e5. With the middle shut, both sides play on the wings. White’s main asset is the f5 outpost: the f1-knight reroutes via g3 to f5, the square Black can never chase with a pawn. The available pawn breaks are b4, hitting Black’s c5, and the prepared f4 (after the f3-knight steps aside) to open the kingside.",
     "pawnBreaks": [
       {
-        "move": "c2-c3 then d2-d4",
-        "explanation": "White's classical centre — build c3/d4 to meet ...c5 and create the option of locking with d5 or capturing on e5.",
-        "fen": "r1b2rk1/2q1bppp/p2p1n2/npp1p3/3PP3/2P2N1P/PPB2PP1/RNBQR1K1 w - - 1 12"
-      },
-      {
-        "move": "c7-c5",
-        "explanation": "Black's queenside space-grab that defines the Chigorin, claiming room and hitting White's centre.",
-        "fen": "r1b2rk1/2q1bppp/p2p1n2/npp1p3/3PP3/2P2N1P/PPB2PP1/RNBQR1K1 w - - 1 12"
+        "move": "b2-b4",
+        "explanation": "The queenside lever. b4 strikes Black’s c5-pawn; after …cxb4 cxb4 the c-file opens for White’s rooks — the immediately available break while the kingside knight maneuvers.",
+        "fen": "r1bn1rk1/2q1bppp/p2p1n2/1ppPp3/4P3/2P2N1P/PPB2PP1/R1BQRNK1 b - - 2 14"
       },
       {
         "move": "f2-f4",
-        "explanation": "Once the kingside pieces arrive, f4 is the break that opens the f-file toward Black's king.",
-        "fen": "r1b2rk1/2q1bppp/p2p1n2/npp1p3/3PP3/2P2N1P/PPB2PP1/RNBQR1K1 w - - 1 12"
+        "explanation": "The kingside break, prepared by stepping the f3-knight aside (Nh2). f4 hits e5 and opens the f-file toward the black king when White commits to the attack.",
+        "fen": "r1bn1rk1/2q1bppp/p2p1n2/1ppPp3/4P3/2P2N1P/PPB2PP1/R1BQRNK1 b - - 2 14"
       }
     ],
     "pieceManeuvers": [
       {
         "piece": "Knight",
-        "route": "Nc6-a5-c6/b7",
-        "explanation": "Black's knight hits the Spanish bishop on a5, then must reroute back into play — the Chigorin's signature (and its main practical headache)."
-      },
-      {
-        "piece": "Knight",
-        "route": "Nb1-d2-f1-g3",
-        "explanation": "White's queen-knight tours to g3, eyeing f5 — the heart of the kingside attack."
-      },
-      {
-        "piece": "Queen",
-        "route": "Qd8-c7",
-        "explanation": "The queen settles on c7, defending e5 and supporting the ...c5 break and queenside expansion."
+        "route": "Nf1-g3-f5",
+        "explanation": "The signature closed-Ruy reroute. The knight steers to f5 — the outpost Black cannot chase with a pawn — pressing d6, h6 and the kingside."
       }
     ],
     "strategicThemes": [
-      "It's bedrock theory, not a sideline: the Chigorin sends the knight forward to a5 to challenge the bishop, where the Breyer reroutes it backward — same spine, different answer to the bishop question.",
-      "With the centre locked by d5 the battle is two-winged: White attacks on the kingside via Ng3/f4-f5, Black expands on the queenside.",
-      "Black's a5-knight is the structural theme — getting it back into the game efficiently often decides who stands better.",
-      "Space and the f5-outpost are White's assets; Black's queenside majority and piece activity are the counterweight."
+      "The center is LOCKED (White d5 vs Black e5) — so play shifts to the wings, the way Capablanca taught: with the centre closed, expand where you hold the space.",
+      "White’s main asset is the f5 outpost: the f1-knight reroutes via g3, and from f5 it presses d6 and h6 and screens a kingside attack.",
+      "The pawn breaks are b4 against Black’s c5 (queenside) and the prepared f4 (kingside); Black’s own counter is …f5, so White must judge which wing to open first."
     ],
-    "endgameTransitions": [
-      "If White's kingside attack is neutralised, the game frequently simplifies into a queenside-majority ending where Black's space tells.",
-      "Trading into a knight ending often favours whoever solved the offside-knight problem first — coordination converts."
-    ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "fen": "r1b2rk1/2q1bppp/p2p1n2/npp1p3/3PP3/2P2N1P/PPB2PP1/RNBQR1K1 w - - 1 12",
+        "title": "Nf1-g3 toward f5, then the b4 wing break",
+        "fen": "r1bn1rk1/2q1bppp/p2p1n2/1ppPp3/4P3/2P2N1P/PPB2PP1/R1BQRNK1 b - - 2 14",
         "moves": [
-          "Nbd2",
-          "Nc6",
-          "d5",
-          "Nd8",
-          "Nf1",
           "Ne8",
-          "g4",
+          "Ng3",
           "g6",
-          "Ng3"
+          "b4"
         ],
         "annotations": [
-          "White develops the queen-knight toward f1-g3, beginning the standard kingside regroup.",
-          "Black brings the offside knight back from a5 toward the centre — the Chigorin's perennial regrouping problem.",
-          "White locks the centre with d5, gaining space and defining a two-winged manoeuvring battle.",
-          "Black's knight steps to d8, heading for e6 or f7 to pressure White's space and the kingside.",
-          "White's knight reaches f1 en route to g3, lining up the f5-outpost and a kingside build-up.",
-          "…Ne8 — Black reroutes the knight toward the kingside in the locked position.",
-          "g4 — with the centre locked, White expands on the kingside where he has more space.",
-          "…g6 — Black braces the kingside against the pawn advance.",
-          "Ng3 — the knight completes its long tour Nb1-d2-f1-g3, arriving for the kingside attack as the pawns roll."
+          "…Ne8 — Black reroutes the knight toward g7 and f5 to blunt White’s kingside.",
+          "Ng3 — the knight heads for the f5 outpost behind the locked center.",
+          "…g6 — Black takes the f5-square away from the knight.",
+          "b4! — with the kingside walled off by …g6, White switches wings, striking c5 to open the queenside."
         ],
         "arrows": [
-          [
-            {
-              "from": "d2",
-              "to": "f1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [],
           [],
           [
             {
-              "from": "d8",
-              "to": "e6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "d8",
-              "to": "f7",
+              "from": "g3",
+              "to": "f5",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
-          [
-            {
-              "from": "f1",
-              "to": "g3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [],
-          [],
           [],
           []
         ],
-        "title": "The Knight Tour and the Locked Centre",
         "highlights": [
           [
             {
-              "square": "d2",
+              "square": "e8",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f1",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
+            }
+          ],
+          [
             {
               "square": "g3",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e6",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "f7",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "f1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g3",
-              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "f5",
@@ -25689,65 +25580,37 @@
           ],
           [
             {
-              "square": "e8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
               "square": "g6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "g7",
-              "color": "rgba(255, 165, 0, 0.55)"
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "g3",
+              "square": "b4",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "f1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d2",
+              "square": "c5",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
+        "learnCues": [
+          "…Ne8 — reroute the knight",
+          "Ng3 — head for f5",
+          "…g6 — deny the outpost",
+          "b4 — switch wings, hit c5"
+        ],
         "sources": [
           "book:ruy-lopez",
           "concept:pos-center",
-          "https://en.wikipedia.org/wiki/Ruy_Lopez",
-          "concept:pos-space"
-        ],
-        "learnCues": [
-          "Nbd2 — start the f1-g3 regroup",
-          "Nc6 — bring the knight back",
-          "d5 — lock the centre, grab space",
-          "Nd8 — reroute toward e6/f7",
-          "Nf1 — en route to g3",
-          "Ne8 — Black reroutes",
-          "g4 — kingside expansion",
-          "g6 — brace the kingside",
-          "Ng3 — the tour completes"
+          "concept:att-kingside-storm",
+          "concept:pos-outpost",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez"
         ]
       }
     ]
@@ -28180,220 +28043,119 @@
   {
     "id": "mp-ruylopez-zaitsev",
     "openingId": "ruy-lopez",
-    "criticalPositionFen": "r2qrbk1/1bp2pp1/p1np1n1p/1p2p3/P2PP3/2P2N1P/1PBN1PP1/R1BQR1K1 b - - 1 13",
-    "title": "Zaitsev: Tension and the Ra3 Lift",
-    "overview": "The Zaitsev was Karpov's lifelong main weapon, fed to him by the trainer it's named for, and it carried the highest-stakes matches in history. Black commits the bishop early to b7 and the rook to e8, holding the centre at maximum tension. The play turns concrete fast: Black releases the tension with ...exd4, jumps the knight to b4 to harass the c2-bishop, and strikes with ...c5. White clamps with d5 and unveils the signature idea — the rook lift Ra3, swinging across the third rank toward the kingside. A tense, theory-heavy battle where a single tempo decides the evaluation.",
+    "title": "Zaitsev: The Rook Lift Attack",
+    "criticalPositionFen": "r2qrbk1/1b1n1pp1/p2p3p/1ppP4/Pn2P3/R4N1P/1P1N1PP1/1BBQR1K1 b - - 2 17",
+    "overview": "Where the opening leaves off — the Zaitsev with White’s d5 locking the center and the rook already lifting via a3. The signature plan is the Ra1-a3-g3 swing: the rook joins a kingside attack the closed center makes safe. Black locks the queenside with …c4 (or counters with …f5); White clears f3 with Nh2, completes the lift to g3, and storms with g4.",
     "pawnBreaks": [
       {
-        "move": "exd4 then c5",
-        "explanation": "Black's two-step in the centre: release the tension, then strike with c5 to challenge d4 and grab queenside space.",
-        "fen": "r2qrbk1/1bp2pp1/p1np1n1p/1p2p3/P2PP3/2P2N1P/1PBN1PP1/R1BQR1K1 b - - 1 13"
+        "move": "g2-g4",
+        "explanation": "White’s kingside storm-lever. Backed by the rook on g3 and the knight rerouting to g4, g4-g5 pries open lines against the black king while the center stays shut.",
+        "fen": "r2qrbk1/1b1n1pp1/p2p3p/1ppP4/Pn2P3/R4N1P/1P1N1PP1/1BBQR1K1 b - - 2 17"
       },
       {
-        "move": "d4-d5",
-        "explanation": "White's clamp — lock the centre, gain space, and crucially free the third rank for Ra3.",
-        "fen": "r2qrbk1/1bp2pp1/p1np1n1p/1p2p3/P2PP3/2P2N1P/1PBN1PP1/R1BQR1K1 b - - 1 13"
-      },
-      {
-        "move": "f2-f4 / g2-g4",
-        "explanation": "After Ra3 swings over, White's kingside pawns can join the attack against Black's king.",
-        "fen": "r2qrbk1/1bp2pp1/p1np1n1p/1p2p3/P2PP3/2P2N1P/1PBN1PP1/R1BQR1K1 b - - 1 13"
+        "move": "b2-b3",
+        "explanation": "The queenside lever once Black plays …c4. b3 undermines the c4-pawn and half-opens the b-file — the alternative when White targets the queenside instead of storming.",
+        "fen": "r2qrbk1/1b1n1pp1/p2p3p/1ppP4/Pn2P3/R4N1P/1P1N1PP1/1BBQR1K1 b - - 2 17"
       }
     ],
     "pieceManeuvers": [
       {
         "piece": "Rook",
         "route": "Ra1-a3-g3",
-        "explanation": "The signature Zaitsev rook lift: once d5 frees the third rank, Ra3 swings toward the kingside to spearhead the attack."
+        "explanation": "The Zaitsev rook lift. The rook travels the third rank to g3, joining the kingside attack — the move that gives this line its character."
       },
       {
         "piece": "Knight",
-        "route": "Nc6-b4 then Nf6-d7",
-        "explanation": "Black's knights reposition — ...Nb4 harasses the bishop, ...Nd7 heads for the c5/e5 outposts behind the locked centre."
-      },
-      {
-        "piece": "Bishop",
-        "route": "Bc2-b1",
-        "explanation": "White retreats the bishop to b1, preserving the deadly b1-h7 diagonal for the kingside assault."
+        "route": "Nf3-h2-g4",
+        "explanation": "The f3-knight steps to h2 (clearing the third rank for the rook) and heads to g4, adding a piece to the kingside and supporting the g-pawn’s advance."
       }
     ],
     "strategicThemes": [
-      "The Zaitsev is precision under fire: the early ...Bb7/...Re8 hold maximum central tension, and a single tempo can flip the evaluation — a line to know cold, not dabble in.",
-      "After d5 the position locks and the Ra3 lift defines White's play — the rook joins a kingside attack the other Closed systems can't generate as fast.",
-      "Black's counterplay is the queenside majority and the active knights on c5/e5; the race is attack-versus-counterattack.",
-      "Where the Breyer is patience and the Chigorin is queenside space, the Zaitsev is the sharpest, most concrete of the Closed Ruy systems."
+      "The center is LOCKED by d5 — so White attacks the king on the kingside, the closed centre guaranteeing his own king’s safety while he commits forces.",
+      "The Ra1-a3-g3 rook lift is the signature: the rook reaches g3 the long way round to spearhead the attack, after Nh2 clears the third rank.",
+      "Black answers with …c4 (locking the queenside) or …f5 (central counter); White storms with g4 once the rook and knight are in place."
     ],
-    "endgameTransitions": [
-      "If White's kingside attack burns out, the d4-d5 structure can leave a slightly loose centre that Black targets in the ending.",
-      "Simplifying with the c5/e5 knight outposts intact usually favours Black; White must make the attack count before the heavy pieces come off."
-    ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "fen": "r2qrbk1/1bp2pp1/p1np1n1p/1p2p3/P2PP3/2P2N1P/1PBN1PP1/R1BQR1K1 b - - 1 13",
+        "title": "The Ra3-g3 rook lift onto the closed center",
+        "fen": "r2qrbk1/1b1n1pp1/p2p3p/1ppP4/Pn2P3/R4N1P/1P1N1PP1/1BBQR1K1 b - - 2 17",
         "moves": [
-          "exd4",
-          "cxd4",
-          "Nb4",
-          "Bb1",
-          "c5",
-          "d5",
-          "Nd7",
-          "Ra3"
+          "c4",
+          "Nh2",
+          "g6",
+          "Rg3"
         ],
         "annotations": [
-          "Black releases the central tension, opening the position before White completes the build-up.",
-          "White recaptures, accepting an isolated-leaning d4-pawn in return for central space and open lines.",
-          "Black's knight leaps to b4 to harass the c2-bishop and fight for the central light squares.",
-          "White tucks the bishop back to b1, keeping the b1-h7 diagonal alive for a future kingside attack.",
-          "Black strikes with c5, challenging d4 and claiming queenside space — the critical Zaitsev tension.",
-          "White clamps with d5, fixing the centre and freeing the third rank for the rook lift.",
-          "Black's knight reroutes to d7, heading for the strong c5/e5 squares behind the locked centre.",
-          "Ra3 — the signature Zaitsev rook lift, swinging the rook across the third rank toward Black's king."
+          "…c4 — Black locks the queenside, committing both sides to the wings; the center is dead.",
+          "Nh2 — clearing f3 for the rook and rerouting the knight toward g4.",
+          "…g6 — Black bolsters f5 against the coming knight and rook.",
+          "Rg3! — the Zaitsev rook lift completes, swinging behind a g4 push toward g6 and the black king."
         ],
         "arrows": [
           [],
-          [],
           [
             {
-              "from": "b4",
-              "to": "c2",
+              "from": "h2",
+              "to": "g4",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [],
-          [],
-          [],
           [
             {
-              "from": "d7",
-              "to": "c5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "d7",
-              "to": "e5",
+              "from": "g3",
+              "to": "g6",
               "color": "rgba(34, 197, 94, 0.85)"
             }
-          ],
-          []
+          ]
         ],
-        "title": "The Rook Swings to the Kingside",
         "highlights": [
           [
             {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
+              "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d4",
+              "square": "h2",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "b4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c2",
+              "square": "g4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "b1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h7",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
+              "square": "g6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d7",
+              "square": "g3",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c5",
+              "square": "g6",
               "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "e5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "a3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a1",
-              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "learnCues": [
+          "…c4 — lock the queenside",
+          "Nh2 — clear f3, head to g4",
+          "…g6 — guard f5",
+          "Rg3 — the Zaitsev rook lift"
         ],
         "sources": [
           "book:ruy-lopez",
           "concept:pos-center",
+          "concept:att-kingside-storm",
+          "concept:pos-outpost",
           "https://en.wikipedia.org/wiki/Ruy_Lopez"
-        ],
-        "learnCues": [
-          "exd4 — release the tension",
-          "cxd4 — central space, open lines",
-          "Nb4 — harass the c2-bishop",
-          "Bb1 — keep the b1-h7 diagonal",
-          "c5 — challenge d4",
-          "d5 — clamp, free the third rank",
-          "Nd7 — reroute toward c5/e5",
-          "Ra3 — the signature rook lift"
         ]
       }
     ]
