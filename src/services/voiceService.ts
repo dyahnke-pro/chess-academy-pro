@@ -379,6 +379,15 @@ export function sanitizeForTTS(text: string): string {
   // markdown straight to TTS. formatForSpeech strips bold/italic
   // markers and stray `*`/`_` runs without touching SAN notation.
   out = formatForSpeech(out);
+  // Normalise Unicode smart quotes/apostrophes to ASCII equivalents so
+  // the PIECE_LETTER_AFTER_CONTEXT_RE regex's `black's|white's|opponent's`
+  // also matches when the LLM or user input uses typographic apostrophes
+  // (’ / ‘). Prod audit 2026-06-23: the leak detector's pattern
+  // uses a character class `['’]` that catches these, but the expander
+  // only had literal `'`, causing a false-positive sanitizer-leak audit.
+  out = out
+    .replace(/[‘’]/g, "'")
+    .replace(/[“”]/g, '"');
   // FEN strings FIRST so they can't get tokenized into nonsense by the
   // SAN regex below (a FEN's "K" / "Q" / "B" / "N" letters look like
   // piece-letter SAN to the SAN_MOVE_RE pattern).

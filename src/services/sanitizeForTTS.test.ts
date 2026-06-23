@@ -158,6 +158,38 @@ describe('sanitizeForTTS', () => {
     }
   });
 
+  describe('unicode apostrophe/quote normalization (sanitizer-leak prod fix 2026-06-23)', () => {
+    // The PIECE_LETTER_AFTER_CONTEXT_RE has literal `black's|white's|opponent's`
+    // but LLM output can contain Unicode apostrophes (’ left / ‘ right).
+    // Without normalization these bypass the expander but the LEAK_DETECTOR_RE
+    // (which uses a character class `['’]`) still catches them, causing a
+    // false-positive sanitizer-leak audit post-sanitization.
+    it('"black’s P on f3" expands the piece letter and does not leak', () => {
+      const input = 'Capture black’s P on f3';
+      const sanitized = sanitizeForTTS(input);
+      expect(sanitized).toContain("black's pawn on f3");
+      expect(detectSanitizerLeak(sanitized)).toBe(false);
+    });
+    it('"white‘s R" with left single quote expands and does not leak', () => {
+      const input = 'Watch white‘s R';
+      const sanitized = sanitizeForTTS(input);
+      expect(sanitized).toContain("white's rook");
+      expect(detectSanitizerLeak(sanitized)).toBe(false);
+    });
+    it('"opponent’s Q is" normalizes apostrophe then expands Q-is via ISOLATED', () => {
+      const input = 'Trade opponent’s Q is risky';
+      const sanitized = sanitizeForTTS(input);
+      expect(sanitized).toContain("opponent's queen is risky");
+      expect(detectSanitizerLeak(sanitized)).toBe(false);
+    });
+    it('double smart quotes are normalized to ASCII', () => {
+      const input = '“Avoid the hanging P”';
+      const sanitized = sanitizeForTTS(input);
+      expect(sanitized).toContain('"Avoid the hanging pawn"');
+      expect(detectSanitizerLeak(sanitized)).toBe(false);
+    });
+  });
+
   describe('edge cases', () => {
     it('handles empty string', () => {
       expect(sanitizeForTTS('')).toBe('');
