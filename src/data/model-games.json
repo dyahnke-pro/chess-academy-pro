@@ -2375,7 +2375,8 @@
       "book:scandinavian-defence",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Scandinavian_Defense"
-    ]
+    ],
+    "variation": "Qa5 Main Line"
   },
   {
     "id": "mg-scandi-qa5",
@@ -2405,7 +2406,8 @@
       "book:scandinavian-defence",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Scandinavian_Defense"
-    ]
+    ],
+    "variation": "Qa5 with Bd2 Main Line"
   },
   {
     "id": "mg-scandi-modern",
