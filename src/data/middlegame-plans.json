@@ -1311,180 +1311,44 @@
   {
     "id": "mp-benkogambit-declined",
     "openingId": "benko-gambit",
-    "criticalPositionFen": "rnbqk2r/p3ppbp/3p1np1/2pP4/2B1P3/2N2N2/PP3PPP/R1BQK2R w KQkq - 1 8",
-    "title": "Benko Declined: Trade the Light Bishops, Press the Queenside",
-    "overview": "When White declines the Benko and keeps the extra space, Black eases the cramp by trading the light-squared bishops with …Ba6. The freed knight then reroutes via b4 toward the d3-outpost, pressing the d5-pawn, with the thematic …b5 lever held in reserve for later.",
+    "title": "Benko Declined: Queenside Files and the …e6 Break",
+    "criticalPositionFen": "r1bq1rk1/p3ppbp/1n1p1np1/2pP4/4P3/2N2N1P/PP3PP1/R1BQRBK1 b - - 4 11",
+    "overview": "Where the opening leaves off — White declined the gambit with d5, but the Benko’s soul remains: the half-open a- and b-files and a queenside pawn majority. The b6-knight eyes the c4 outpost, the g7-bishop rakes the long diagonal, and the …e6 break opens the centre to convert Black’s pressure into concrete play.",
     "pawnBreaks": [
-      "…b5 — the thematic queenside lever, held in reserve"
-    ],
-    "pieceManeuvers": [
-      "…Bc8-a6 — trade the light-squared bishops",
-      "…Na6-b4 — reroute to pressure d5 and the d3-outpost"
-    ],
-    "strategicThemes": [
-      "Trade off the light bishops to ease the cramp",
-      "Reroute the knight to b4 and d3",
-      "Slow queenside pressure"
-    ],
-    "endgameTransitions": [
-      "Trading into an ending leaves Black's queenside play intact"
-    ],
-    "playableLines": [
       {
-        "fen": "rnbqk2r/p3ppbp/3p1np1/2pP4/2B1P3/2N2N2/PP3PPP/R1BQK2R w KQkq - 1 8",
-        "moves": [
-          "O-O",
-          "O-O",
-          "h3",
-          "Ba6",
-          "Bxa6",
-          "Nxa6",
-          "Qe2",
-          "Nb4"
-        ],
-        "annotations": [
-          "O-O White castles, content with the extra central space.",
-          "…O-O Black castles, the fianchettoed bishop already raking the long diagonal.",
-          "h3 gives the king luft and prevents …Bg4/…Ng4 ideas.",
-          "…Ba6 offers the trade of light-squared bishops to relieve the cramp.",
-          "Bxa6 accepts the swap.",
-          "…Nxa6 recaptures with the knight, which now heads for b4.",
-          "Qe2 develops the queen and connects the rooks.",
-          "…Nb4 lands on its reroute square, eyeing the d3-outpost and pressing the d5-pawn."
-        ],
-        "learnCues": [
-          "O-O — keep the space",
-          "…O-O — castle",
-          "h3 — luft",
-          "…Ba6 — offer the trade",
-          "Bxa6 — White swaps",
-          "…Nxa6 — knight toward b4",
-          "Qe2 — connect the rooks",
-          "…Nb4 — eye d3 and d5"
-        ],
-        "arrows": [
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          []
-        ],
-        "highlights": [
-          [
-            {
-              "square": "g1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "h3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "a6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "a6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "a6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "b4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
-        ],
-        "sources": [
-          "concept:pos-outpost",
-          "concept:att-queenside-attack",
-          "https://en.wikipedia.org/wiki/Benko_Gambit"
-        ],
-        "title": "Trade the Bishops, Reroute to b4",
-        "intro": "Black trades the light bishops and reroutes the knight to b4 for queenside pressure."
+        "move": "…e6",
+        "explanation": "The central break against d5 — …e6 opens the centre and the e-file, turning Black’s queenside pressure into central play.",
+        "fen": "r1bq1rk1/p3ppbp/1n1p1np1/2pP4/4P3/2N2N1P/PP3PP1/R1BQRBK1 b - - 4 11"
       }
-    ]
-  },
-  {
-    "id": "mp-benkogambit-halfaccepted",
-    "openingId": "benko-gambit",
-    "criticalPositionFen": "rn2kb1r/1b1ppppp/1q3n2/1BpP4/8/2N1P3/PP1B1PPP/R2QK1NR w KQkq - 5 9",
-    "title": "Benko Half-Accepted: Active Initiative",
-    "overview": "White returned the pawn with e3, but Black's pieces are the active ones — the queen on b6, the bishop on the long diagonal, and the knight ready to grab d5. The plan: regain the central pawn with …Nxd5, complete development, and press with the bishop pair and the open a-file.",
-    "pawnBreaks": [
-      "…e6 to support …Nxd5",
-      "…d6/…e6 freeing"
     ],
     "pieceManeuvers": [
-      "…Nxd5 regaining the pawn",
-      "…Bb7 long diagonal",
-      "…Qb6 active queen"
+      {
+        "piece": "Knight",
+        "route": "Nb6-c4",
+        "explanation": "The b6-knight heads for the c4 outpost — hitting b2 and e3, it cannot be driven off and dominates White’s queenside."
+      }
     ],
     "strategicThemes": [
-      "Initiative with the pawn returned",
-      "Active bishops",
-      "Open a-file"
+      "The half-open a- and b-files plus the queenside majority are Black’s lasting compensation — rooks and queen press a2 and b2.",
+      "The b6-knight aims at the c4 outpost; the g7-bishop rakes the long diagonal.",
+      "…e6 is the central break that opens lines and converts Black’s pressure into a concrete game."
     ],
-    "endgameTransitions": [
-      "Comfortable, equal endings with the initiative"
-    ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "fen": "rn2kb1r/1b1ppppp/1q3n2/1BpP4/8/2N1P3/PP1B1PPP/R2QK1NR w KQkq - 5 9",
+        "title": "…e6 opens the centre",
+        "fen": "r1bq1rk1/p3ppbp/1n1p1np1/2pP4/4P3/2N2N1P/PP3PP1/R1BQRBK1 b - - 4 11",
         "moves": [
-          "Nf3",
-          "Nxd5",
-          "a4",
           "e6",
-          "O-O",
-          "Be7",
-          "e4",
-          "Nb4"
+          "dxe6",
+          "Bxe6"
         ],
         "annotations": [
-          "Nf3 develops.",
-          "…Nxd5! regains the central pawn, the knight landing on a dominant square.",
-          "a4 grabs space.",
-          "…e6 secures the knight and frees the kingside — Black is fully developed with active pieces and the initiative.",
-          "White castles into safety.",
-          "…Be7 develops and completes Black's harmonious setup — the half-accepted Benko gives Black easy development and long-term queenside pressure for the pawn.",
-          "White stakes out the centre with e4.",
-          "…Nb4! The knight leaps to the powerful b4-outpost, eyeing c2 and d3 and adding to the queenside pressure that is the Benko's whole point — Black's activity fully compensates the gambit pawn."
+          "…e6 — Black strikes at the d5-pawn, opening the centre to feed his queenside pressure.",
+          "dxe6 — White captures.",
+          "…Bxe6 — the bishop develops with gain of open lines; now Black has play in the centre as well as on the files."
         ],
-        "title": "Benko Half-Accepted: Active Initiative",
         "arrows": [
-          [],
-          [],
-          [],
-          [],
-          [],
           [],
           [],
           []
@@ -1492,31 +1356,17 @@
         "highlights": [
           [
             {
-              "square": "f3",
+              "square": "e6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
-            {
-              "square": "g1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
             {
               "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "a4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a2",
+              "square": "e6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -1524,24 +1374,83 @@
             {
               "square": "e6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e7",
-              "color": "rgba(255, 165, 0, 0.55)"
             }
-          ],
+          ]
+        ],
+        "learnCues": [
+          "…e6 — strike at d5",
+          "dxe6 — White takes",
+          "…Bxe6 — develop, open lines"
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-open-file",
+          "concept:pawn-majority",
+          "https://en.wikipedia.org/wiki/Benko_Gambit"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-benkogambit-halfaccepted",
+    "openingId": "benko-gambit",
+    "title": "Benko Half-Accepted: Active Knight and the Files",
+    "criticalPositionFen": "rn2k2r/1b1pbppp/1q2p3/1Bpn4/P7/2N1PN2/1P1B1PPP/R2Q1RK1 w kq - 2 12",
+    "overview": "Where the opening leaves off — Black regained the gambit pawn on d5 and keeps the Benko’s open files plus an active knight. The plan blends both trumps: …Nb4 leaps at the queenside light squares, the b7-bishop and rooks press the open files, and …a5 fixes White’s a4-pawn while Black completes development.",
+    "pawnBreaks": [
+      {
+        "move": "…a5",
+        "explanation": "Gains queenside space, supports the active knight, and fixes White’s a4-pawn as a target on the half-open file.",
+        "fen": "rn2k2r/1b1pbppp/1q2p3/1Bpn4/P7/2N1PN2/1P1B1PPP/R2Q1RK1 w kq - 2 12"
+      },
+      {
+        "move": "…d5",
+        "explanation": "The central break — once developed, …d5 strikes the centre and opens lines for the b7-bishop and the rooks.",
+        "fen": "rn2k2r/1b1pbppp/1q2p3/1Bpn4/P7/2N1PN2/1P1B1PPP/R2Q1RK1 w kq - 2 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nd5-b4",
+        "explanation": "When e4 challenges the d5-knight, …Nb4 keeps it active, hitting a2 and the queenside light squares rather than retreating."
+      }
+    ],
+    "strategicThemes": [
+      "Black keeps the Benko’s open a- and b-files plus an extra active piece — the b7-bishop and rooks press, the knight jumps in.",
+      "…Nb4 hits a2 and the queenside light squares; …a5 fixes White’s a4-pawn as a target.",
+      "With development nearly complete, Black has full compensation and a long-term queenside initiative."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "title": "…Nb4 leaps at the queenside",
+        "fen": "rn2k2r/1b1pbppp/1q2p3/1Bpn4/P7/2N1PN2/1P1B1PPP/R2Q1RK1 w kq - 2 12",
+        "moves": [
+          "e4",
+          "Nb4",
+          "Qe2",
+          "O-O"
+        ],
+        "annotations": [
+          "e4 — White grabs the centre and challenges the d5-knight.",
+          "…Nb4 — the knight leaps in, hitting a2 and the queenside light squares.",
+          "Qe2 — White centralizes the queen and connects the rooks.",
+          "…O-O — Black castles, completing development with the queenside pressure intact."
+        ],
+        "arrows": [
+          [],
           [
             {
-              "square": "g1",
-              "color": "rgba(255, 165, 0, 0.55)"
+              "from": "b4",
+              "to": "a2",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
-          [
-            {
-              "square": "e7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
+          [],
+          []
+        ],
+        "highlights": [
           [
             {
               "square": "e4",
@@ -1554,25 +1463,34 @@
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "c2",
+              "square": "a2",
               "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
+        "learnCues": [
+          "e4 — White hits the knight",
+          "…Nb4 — leap to b4",
+          "Qe2 — White centralizes",
+          "…O-O — castle, keep pressure"
+        ],
         "sources": [
           "concept:att-queenside-attack",
+          "concept:pos-outpost",
           "concept:pos-open-file",
           "https://en.wikipedia.org/wiki/Benko_Gambit"
-        ],
-        "learnCues": [
-          "Nf3 — develop",
-          "Nxd5 — regain the pawn",
-          "a4 — grab space",
-          "e6 — secure the knight, active",
-          "O-O — White castles",
-          "…Be7 — complete development",
-          "e4 — White claims the centre",
-          "…Nb4 — the queenside outpost"
         ]
       }
     ]
@@ -1770,42 +1688,45 @@
   {
     "id": "mp-benkogambit-zaitsev",
     "openingId": "benko-gambit",
-    "criticalPositionFen": "rnbqk2r/4ppbp/3p1np1/1NpP4/1pB1P3/5N2/PP3PPP/R1BQK2R w KQkq - 2 10",
-    "title": "Benko Zaitsev: The b4-Pawn Bind",
-    "overview": "White clung to the extra pawn, but the …b4-pawn cramps his entire queenside and the a-file is Black's. The plan: castle, fianchetto, and use the b4-pawn as a permanent thorn while the rook works the open a-file. Full compensation and an easy, pressing game.",
+    "title": "Benko Accepted: the Classic File Pressure",
+    "criticalPositionFen": "rnbq1rk1/4ppbp/3p1np1/1NpP4/1pB1P3/5N2/PP3PPP/R1BQ1RK1 w - - 4 11",
+    "overview": "Where the opening leaves off — the fully accepted Benko, the purest version of the gambit. Black has the a- and b-files wide open, the g7-bishop on the long diagonal, and a healthy queenside pawn majority. The plan is timeless: …Nbd7, …Qb6 and …Rfb8 pound a2 and b2 while White struggles to untangle.",
     "pawnBreaks": [
-      "the …b4-pawn fixes White's queenside",
-      "…e6 to hit d5 later"
+      {
+        "move": "…e6",
+        "explanation": "The central break against d5 — …e6 opens the centre when Black wants to add a second front to the queenside pressure.",
+        "fen": "rnbq1rk1/4ppbp/3p1np1/1NpP4/1pB1P3/5N2/PP3PPP/R1BQ1RK1 w - - 4 11"
+      }
     ],
     "pieceManeuvers": [
-      "…Bg7 long diagonal",
-      "…Nbd7 development",
-      "…Ra-file pressure"
+      {
+        "piece": "Queen",
+        "route": "…Qb6 — pressure on b2",
+        "explanation": "The queen lands on b6, joining the rooks on the open files and bearing down on b2 behind the advanced b-pawn."
+      }
     ],
     "strategicThemes": [
-      "The cramping b4-pawn",
-      "Open a-file",
-      "Full Benko compensation"
+      "The fully open a- and b-files are Black’s gambit pay-off — rooks and queen pile on a2 and b2 for the whole game.",
+      "The g7-bishop rakes the long diagonal and the queenside pawn majority is a permanent asset, decisive in the endgame.",
+      "White’s knight on b5 is loose; the file pressure forces him into passive defence."
     ],
-    "endgameTransitions": [
-      "The b4-pawn and queenside bind persist into the ending"
-    ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "fen": "rnbqk2r/4ppbp/3p1np1/1NpP4/1pB1P3/5N2/PP3PPP/R1BQK2R w KQkq - 2 10",
+        "title": "…Nbd7 and …Qb6 build the queenside pressure",
+        "fen": "rnbq1rk1/4ppbp/3p1np1/1NpP4/1pB1P3/5N2/PP3PPP/R1BQ1RK1 w - - 4 11",
         "moves": [
-          "O-O",
-          "O-O",
           "Re1",
-          "Nbd7"
+          "Nbd7",
+          "Bf4",
+          "Qb6"
         ],
         "annotations": [
-          "White castles.",
-          "…O-O — Black is fully developed with the fianchettoed bishop.",
-          "Re1 centralises.",
-          "…Nbd7 completes development; the b4-pawn cramps White's queenside and Black presses down the a-file with full compensation."
+          "Re1 — White centralizes the rook.",
+          "…Nbd7 — the knight develops toward c5 and e5 and the queenside.",
+          "Bf4 — White develops, eyeing d6.",
+          "…Qb6 — the queen joins the queenside pressure, eyeing b2 behind the advanced b-pawn."
         ],
-        "title": "Benko Zaitsev: The b4-Pawn Bind",
         "arrows": [
           [],
           [],
@@ -1815,31 +1736,7 @@
         "highlights": [
           [
             {
-              "square": "g1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
               "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -1847,27 +1744,36 @@
             {
               "square": "d7",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "b8",
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "b4",
+              "square": "b2",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
+        "learnCues": [
+          "Re1 — White centralizes",
+          "…Nbd7 — develop the knight",
+          "Bf4 — White develops",
+          "…Qb6 — queenside pressure"
+        ],
         "sources": [
           "concept:att-queenside-attack",
           "concept:pos-open-file",
+          "concept:pawn-majority",
           "https://en.wikipedia.org/wiki/Benko_Gambit"
-        ],
-        "learnCues": [
-          "O-O — castle",
-          "O-O — fully developed, fianchetto",
-          "Re1 — centralise",
-          "Nbd7 — complete; b4 cramps White"
         ]
       }
     ]
@@ -1875,215 +1781,88 @@
   {
     "id": "mp-benonidefence-main",
     "openingId": "benoni-defence",
-    "criticalPositionFen": "r1bqr1k1/ppn2pbp/3p1np1/2pP4/P3P3/2N5/1P1NBPPP/R1BQR1K1 b - - 0 12",
-    "title": "Benoni: Queenside Expansion with …b5",
-    "overview": "The Modern Benoni is all about Black’s queenside pawn majority and the dark-squared bishop. Black rolls the rook to b8, prepares with …a6, and breaks with …b5 to open lines for the pieces, while the fianchettoed bishop rakes the long diagonal. Dynamic, double-edged equality.",
+    "title": "Modern Benoni: the …b5 Queenside Break",
+    "criticalPositionFen": "1rbq2k1/2n1rpbp/p2p1np1/1ppP4/P1N1P3/2N4P/1P3PP1/R1BQRBK1 w - - 0 17",
+    "overview": "Where the opening leaves off — the Modern Benoni, where Black’s queenside pawn majority and the g7-bishop are the whole point. Black has just struck with …b5, the thematic break: it opens the a- and b-files, sets the c- and b-pawns rolling, and clears lines for the long-diagonal bishop. Sharp, double-edged, dynamic.",
     "pawnBreaks": [
-      "…b5 — the queenside majority break",
-      "…a6 prepares it"
+      {
+        "move": "…b5",
+        "explanation": "The defining Benoni break — …b5 mobilizes the queenside majority, opens the a- and b-files, and is often a pawn sacrifice for the long diagonal and piece activity.",
+        "fen": "1rbq2k1/2n1rpbp/p2p1np1/1ppP4/P1N1P3/2N4P/1P3PP1/R1BQRBK1 w - - 0 17"
+      },
+      {
+        "move": "…c4",
+        "explanation": "The follow-up — the c-pawn rolls forward, cramping White’s queenside and clamping a knight out of the b3/d3 squares.",
+        "fen": "1rbq2k1/2n1rpbp/p2p1np1/1ppP4/P1N1P3/2N4P/1P3PP1/R1BQRBK1 w - - 0 17"
+      }
     ],
-    "pieceManeuvers": [
-      "…Rb8 behind the b-pawn",
-      "…a6 and …b5 expansion",
-      "…Bd7-b5 / …Nb5 to the queenside"
-    ],
+    "pieceManeuvers": [],
     "strategicThemes": [
-      "The queenside pawn majority",
-      "…b5 to open lines",
-      "The g7-bishop on the long diagonal"
+      "Black’s queenside pawn majority is the Benoni’s engine — …b5 mobilizes it and opens the a- and b-files for the rooks.",
+      "The g7-bishop rakes the long diagonal at e4 and d5; …b5 clears the lines it needs.",
+      "…b5 is often a true pawn sacrifice — Black gives material for the open files, the diagonal and lasting initiative."
     ],
-    "endgameTransitions": [
-      "The queenside majority is a long-term winning asset into the endgame"
-    ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "fen": "r1bqr1k1/ppn2pbp/3p1np1/2pP4/P3P3/2N5/1P1NBPPP/R1BQR1K1 b - - 0 12",
+        "title": "…b5 mobilizes the majority, …c4 rolls on",
+        "fen": "1rbq2k1/2n1rpbp/p2p1np1/1ppP4/P1N1P3/2N4P/1P3PP1/R1BQRBK1 w - - 0 17",
         "moves": [
-          "Rb8",
-          "Bf1",
-          "a6",
-          "a5",
-          "Bd7",
-          "Nc4",
-          "Nb5"
+          "axb5",
+          "axb5",
+          "Ne3",
+          "c4"
         ],
         "annotations": [
-          "…Rb8 lines the rook up behind the coming …b5 break.",
-          "Bf1 reroutes to defend the queenside light squares.",
-          "…a6 prepares …b5.",
-          "a5 — White tries to freeze the queenside.",
-          "…Bd7 supports …b5 anyway and eyes the a4/b5 squares.",
-          "Nc4 hops in.",
-          "…Nb5! the knight reaches a strong square, hitting d4 and c3 — Black’s queenside play is in full swing. Dynamically balanced."
+          "axb5 — White takes, opening the a-file.",
+          "…axb5 — Black recaptures; the a-file opens for the rook.",
+          "Ne3 — the knight steps back from Black’s advancing pawns.",
+          "…c4 — the c-pawn rolls forward, the queenside majority on the march."
         ],
-        "learnCues": [
-          "…Rb8 — behind the b-pawn",
-          "Bf1 — reroute to defend",
-          "…a6 — prepare …b5",
-          "a5 — freeze attempt",
-          "…Bd7 — support …b5",
-          "Nc4 — hop in",
-          "…Nb5 — strong knight, hit d4"
-        ],
-        "sources": [
-          "concept:pawn-majority",
-          "concept:pos-initiative",
-          "https://en.wikipedia.org/wiki/Modern_Benoni"
-        ],
-        "title": "Benoni: Queenside Expansion with …b5",
         "arrows": [
           [],
           [],
           [],
-          [],
-          [
-            {
-              "from": "d7",
-              "to": "b5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "d7",
-              "to": "a4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [],
-          [
-            {
-              "from": "b5",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "b5",
-              "to": "c3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
+          []
         ],
         "highlights": [
           [
             {
-              "square": "b8",
+              "square": "b5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
               "square": "b5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "f1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "a6",
+              "square": "e3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "a5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "a4",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "b5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "c3",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
-        "intro": {
-          "say": "The Benoni is about Black’s queenside majority and the long-diagonal bishop. Black lines the rook up on b8, prepares with …a6, and aims the …b5 break to open lines — while the g7-bishop rakes the centre.",
-          "sayShort": "…Rb8, …a6, break with …b5.",
-          "arrows": [
-            {
-              "from": "b7",
-              "to": "b5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "b8",
-              "to": "b5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "b5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ]
-        }
+        "learnCues": [
+          "axb5 — White takes",
+          "…axb5 — open the a-file",
+          "Ne3 — White retreats",
+          "…c4 — the majority rolls"
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pawn-majority",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/Benoni_Defense"
+        ]
       }
     ]
   },
