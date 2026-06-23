@@ -800,24 +800,49 @@ export function OpeningDetailPage(): JSX.Element {
     );
   }
 
-  // Punish-gem WLPP — Watch the crush played out, Learn it (voice-guided),
-  // Practice it (silent + hint). The line is built from the gem's played-out
-  // playLine; every move carries its lead-the-eye arrow.
-  if (
-    (viewMode === 'gem-watch' || viewMode === 'gem-learn' || viewMode === 'gem-practice') &&
-    activeGemId
-  ) {
+  // Punish-gem WATCH — auto-play the crush, then hand off to the Learn rung
+  // (same board, pieces reset, voice now guides you to play the punish). The
+  // in-player silent memory replay is bypassed via onAdvanceToLearn — its
+  // header button reads "Learn", not "Practice" (David 2026-06-23: the old
+  // "Practice" button dropped you into an un-guided replay that wouldn't take
+  // a move).
+  if (viewMode === 'gem-watch' && activeGemId) {
     const gem = getPunishGemById(activeGemId);
     const gemLine = gem ? gemToPlayableLine(gem) : null;
     if (gemLine) {
       const key = activeGemId;
-      const rung = viewMode === 'gem-watch' ? 'watch' : viewMode === 'gem-learn' ? 'learn' : 'practice';
       return (
         <PlayableLinePlayer
           line={gemLine}
           boardOrientation={opening.color}
-          mode={viewMode === 'gem-watch' ? 'watch' : viewMode === 'gem-learn' ? 'learn' : 'practice'}
+          mode="watch"
+          onComplete={() => { void markWeaponRungComplete(opening.id, key, 'watch').then(() => loadOpening()); }}
+          onAdvanceToLearn={() => {
+            void markWeaponRungComplete(opening.id, key, 'watch').then(() => handleGemAction(key, 'learn'));
+          }}
+          onExit={handleExit}
+        />
+      );
+    }
+  }
+
+  // Punish-gem LEARN / PRACTICE — Learn voice-guides each move you play;
+  // Practice is silent + hint. The line is built from the gem's played-out
+  // playLine; every move carries its lead-the-eye arrow. Learn → Play closes
+  // the loop (coach locked to this gem's line).
+  if ((viewMode === 'gem-learn' || viewMode === 'gem-practice') && activeGemId) {
+    const gem = getPunishGemById(activeGemId);
+    const gemLine = gem ? gemToPlayableLine(gem) : null;
+    if (gemLine) {
+      const key = activeGemId;
+      const rung = viewMode === 'gem-learn' ? 'learn' : 'practice';
+      return (
+        <PlayableLinePlayer
+          line={gemLine}
+          boardOrientation={opening.color}
+          mode={viewMode === 'gem-learn' ? 'learn' : 'practice'}
           onComplete={() => { void markWeaponRungComplete(opening.id, key, rung).then(() => handleExit()); }}
+          onContinuePlaying={viewMode === 'gem-learn' ? () => handleGemAction(key, 'play') : undefined}
           onExit={handleExit}
         />
       );
@@ -885,6 +910,7 @@ export function OpeningDetailPage(): JSX.Element {
   ) {
     const pitfallMode = viewMode === 'pitfall-watch' ? 'watch' : viewMode === 'pitfall-learn' ? 'learn' : 'practice';
     const pitfallLine = commonMistakeToPlayableLine(activeMistake, pitfallMode);
+    const mistake = activeMistake;
     if (pitfallLine) {
       return (
         <PlayableLinePlayer
@@ -892,6 +918,11 @@ export function OpeningDetailPage(): JSX.Element {
           boardOrientation={opening.color}
           mode={pitfallMode}
           onComplete={handleExit}
+          onAdvanceToLearn={
+            viewMode === 'pitfall-watch'
+              ? () => handlePitfallAction(mistake, 'learn')
+              : undefined
+          }
           onExit={handleExit}
         />
       );

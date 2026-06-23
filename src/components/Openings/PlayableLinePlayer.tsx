@@ -43,6 +43,13 @@ interface PlayableLinePlayerProps {
    *  "Continue Playing" button that hands off to Play mode locked to
    *  this same line (David 2026-05-26). */
   onContinuePlaying?: () => void;
+  /** Watch-mode only. When provided, the demo's header button becomes
+   *  "Learn" and hands off to the Learn rung (voice-guided, same board,
+   *  pieces reset) instead of the in-player silent memory replay
+   *  (David 2026-06-23: the post-Watch button on Weapons WLPP said
+   *  "Practice" and dropped you into an un-guided replay that wouldn't
+   *  take a move — it should say "Learn"). */
+  onAdvanceToLearn?: () => void;
 }
 
 export type PlayMode = 'watch' | 'learn' | 'practice';
@@ -67,6 +74,7 @@ export function PlayableLinePlayer({
   onExit,
   mode = 'watch',
   onContinuePlaying,
+  onAdvanceToLearn,
 }: PlayableLinePlayerProps): JSX.Element {
   const { playMoveSound, playCelebration, playEncouragement } = usePieceSound();
 
@@ -699,14 +707,25 @@ export function PlayableLinePlayer({
         subtitle="Watch & Learn"
         onExit={onExit}
         headerAction={
-          <button
-            onClick={skipToMemory}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-theme-accent text-white text-xs font-medium hover:opacity-90 transition-opacity"
-            data-testid="skip-to-memory"
-          >
-            <SkipForward size={14} />
-            Practice
-          </button>
+          onAdvanceToLearn ? (
+            <button
+              onClick={onAdvanceToLearn}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-theme-accent text-white text-xs font-medium hover:opacity-90 transition-opacity"
+              data-testid="advance-to-learn"
+            >
+              <SkipForward size={14} />
+              Learn
+            </button>
+          ) : (
+            <button
+              onClick={skipToMemory}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-theme-accent text-white text-xs font-medium hover:opacity-90 transition-opacity"
+              data-testid="skip-to-memory"
+            >
+              <SkipForward size={14} />
+              Practice
+            </button>
+          )
         }
         progress={{ current: Math.max(0, demoMoveIndex + 1), total: line.moves.length }}
         board={
