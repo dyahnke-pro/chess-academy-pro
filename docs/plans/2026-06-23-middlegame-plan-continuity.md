@@ -16,10 +16,17 @@ Two defects to fix on every affected plan:
    opening Watch lesson's terminus, so the plan REPLAYS moves the student
    already watched and terminates at the same move. It must instead start at
    the opening's terminal position and go FORWARD.
-2. **Scope** — plans should carry only **key pawn break(s) + ideas**, nothing
-   more. Surface ALL breaks when the data shows 2+. Most positions have ≥2
-   ideas. A genuinely positional/maneuvering structure can correctly come back
-   **0 pawn breaks** — empty beats invented.
+2. **Accuracy (NOT reduction) — David 2026-06-23: "I do not want a reduction
+   everywhere, I want accurate middle game plans throughout my app."** The
+   content TYPE is key pawn breaks + ideas (not an opening replay), but each
+   plan must be as RICH and COMPLETE as the position genuinely is — all the
+   real breaks (surface every one when 2+), all the real ideas (typically ≥2),
+   and the real piece maneuvers/plans where they exist (piece plans ARE ideas —
+   do NOT strip them). A rich position gets a full plan; a simple/positional one
+   gets fewer breaks (or 0 — empty beats invented). The bar is TRUTH for that
+   position, never a mechanical trim to a stub. The Vienna proof was rebuilt to
+   this bar: e5 + …d5 breaks, the f5 outpost, the Bc2-Qd3 battery, the h4 answer
+   to …g6 — kept the queen-lift + outpost maneuvers, did not reduce.
 
 Proof case (`mp-viennagame-classical`): the Vienna Watch (`vienna.ts`) walks
 `…Ne2 Bb6 c3 Nc5 Bc2 Bg4 Ng3 Nh5 d4 …Nf5`; the plan anchors at move 8 (before
@@ -67,12 +74,18 @@ scandinavian-defence / sicilian-dragon (3 each). The deep replays:
 1. **Re-anchor** `criticalPositionFen` to the opening Watch lesson's TERMINAL
    position for that variation (the FEN the last beat leaves the student on).
    Opening→middlegame is one continuous line (G9.3 Gate C).
-2. **Reduce to key pawn break(s) + ideas.** Keep `pawnBreaks` (all that the data
-   supports) and `strategicThemes` (≥2 where the position has them). Drop the
-   long replayed maneuver `playableLines` that re-taught the opening. (Any
-   retained playable line must begin at/after the terminus and must satisfy the
-   `middlegamePlanThemes` gate — a student move landing on a declared
-   break/maneuver goal square.)
+2. **Rebuild the content ACCURATELY for the new (post-opening) position — not a
+   trim.** Replace the opening-replay with the REAL plan from the terminus:
+   `pawnBreaks` (every break the position genuinely has), `pieceManeuvers` (the
+   real piece plans — keep them, they're ideas), `strategicThemes` (all the real
+   ideas, typically ≥2). The `playableLines` demo must START at/after the
+   terminus and DEMONSTRATE the plan (a student move landing on a declared
+   break/maneuver goal square — `middlegamePlanThemes` gate), with lead-the-eye
+   arrows/highlights whose targets are NAMED in each move's annotation and whose
+   vision arrows have a genuinely CLEAR sight-line (`middlegamePlanner` gate —
+   verify sightlines with chess.js, a blocked diagonal arrow fails). Rich
+   position → full plan; simple/positional → fewer breaks (or 0). Truth, not a
+   stub.
 
 ## How the two things are determined + sourced
 

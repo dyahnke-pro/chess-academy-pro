@@ -36599,184 +36599,79 @@
   {
     "id": "mp-viennagame-classical",
     "openingId": "vienna-game",
-    "title": "Classical Vienna: the f5 Outpost Plan",
-    "criticalPositionFen": "r1bq1rk1/pp1n1ppp/2pp1n2/2b1p3/4P3/1BNP1N2/PPP2PPP/R1BQ1RK1 w - - 2 8",
-    "overview": "The Classical Vienna's middlegame plan: White's c3-knight reroutes via e2 to g3, aiming for the f5 outpost — Lasker's immovable square. The Bb3-Bc2 bishop pivot loads a new diagonal toward h7, and d4 cracks the centre when White is fully coordinated. Patient build, decisive break.",
+    "title": "Classical Vienna: the f5 Outpost Attack",
+    "criticalPositionFen": "r2q1rk1/pp3ppp/1bppn3/5N1n/3PP1b1/5N2/PPB2PPP/R1BQ1RK1 b - - 2 14",
+    "overview": "Where the opening leaves off — the knight planted on f5, the bishop reloaded on c2. White’s middlegame is a kingside attack organised around the f5 outpost: the queen lifts to d3 to double with the bishop on the b1-h7 diagonal, the e5 break opens lines toward the black king, and if Black challenges the knight with …g6 the h-pawn joins the storm. Black’s one freeing counter is …d5. The chances are balanced, but White’s attack is the easier side to play.",
     "pawnBreaks": [
       {
-        "move": "d3-d4",
-        "explanation": "After all minor pieces reach their attacking squares (Ne2-g3 toward f5, Bc2 toward h7), d4 opens the centre at the moment White is best coordinated.",
-        "fen": "r2q1rk1/pp3ppp/1bpp4/2n1p2n/4P1b1/2PP1NN1/PPB2PPP/R1BQ1RK1 w - - 5 12"
+        "move": "e4-e5",
+        "explanation": "White’s central break. The pawn strikes d6 and clears e4 off the b1-h7 diagonal, so the f5-knight and the Bc2–Qd3 battery both fire toward the black king.",
+        "fen": "r2qr1k1/pp3ppp/1bppn3/5N1n/3PP1b1/5N2/PPB2PPP/R1BQ1RK1 w - - 3 15"
+      },
+      {
+        "move": "…d5",
+        "explanation": "Black’s freeing counter-break, hitting e4 and the f5-knight’s support. White meets it with exd5 (or pre-empts with e5) so Black never frees the position for free — this is the break White must always be ready for.",
+        "fen": "r2q1rk1/pp3ppp/1bppn3/5N1n/3PP1b1/5N2/PPB2PPP/R1BQ1RK1 b - - 2 14"
       }
     ],
     "pieceManeuvers": [
       {
-        "piece": "Knight",
-        "route": "Nc3-e2-g3-f5",
-        "explanation": "The signature Vienna knight reroute. From f5 the knight cannot be chased by a pawn (Lasker) and pressures d6, h6, and the kingside."
+        "piece": "Queen",
+        "route": "Qd1-d3",
+        "explanation": "The queen lifts to d3, doubling with the c2-bishop on the b1-h7 diagonal. Behind the f5-knight, the battery points straight at h7 — the engine of the kingside attack."
       },
       {
-        "piece": "Bishop",
-        "route": "Bf1-c4-b3-c2",
-        "explanation": "The Italian-Vienna bishop dance. After Black harasses with c6, the bishop swings to b3 then c2, abandoning the a2-g8 diagonal for the b1-h7 diagonal aimed at h7."
+        "piece": "Knight",
+        "route": "Nf5 outpost",
+        "explanation": "The knight sits on f5 permanently — no Black pawn can chase it (Lasker’s rule). From f5 it presses d6 and h6 and screens the attack; if …g6 ever hits it, h4-h5 pries the kingside open."
       }
     ],
     "strategicThemes": [
-      "The f5 outpost is the prize the whole middlegame organises around — White spends three tempi to plant a knight there.",
-      "The Bc2 reloads on the b1-h7 diagonal, loaded for the moment the centre opens.",
-      "Black's …c6 and …Nbd7 setup creates the d6-c6 chain; d4 opens lines and exposes that pawn structure."
+      "The knight on f5 is a permanent outpost (Lasker) — it presses d6 and h6 and anchors the entire kingside attack.",
+      "Queen d3 plus bishop c2 form a battery on the b1-h7 diagonal; the e5 break removes White’s own e4-pawn from that diagonal and trains it on h7.",
+      "If Black plays …g6 to challenge the f5-knight, White answers with h4-h5, using the pawn to pry open the h-file rather than retreating the knight for free.",
+      "Black’s only equaliser is …d5 — White times e5, or answers …d5 with exd5, so Black never frees the centre without a concession."
     ],
+    "endgameTransitions": [],
     "playableLines": [
       {
-        "title": "Classical: Ne2-g3-f5 maneuver into the d4 break",
-        "fen": "r1bq1rk1/pp1n1ppp/2pp1n2/2b1p3/4P3/1BNP1N2/PPP2PPP/R1BQ1RK1 w - - 2 8",
+        "title": "The e5 break — opening lines for the f5 outpost and the Bc2-Qd3 battery",
+        "fen": "r2q1rk1/pp3ppp/1bppn3/5N1n/3PP1b1/5N2/PPB2PPP/R1BQ1RK1 b - - 2 14",
         "moves": [
-          "Ne2",
-          "Bb6",
-          "c3",
-          "Nc5",
-          "Bc2",
-          "Bg4",
-          "Ng3",
-          "Nh5",
-          "d4"
+          "Re8",
+          "Qd3",
+          "h6",
+          "e5"
         ],
         "annotations": [
-          "Ne2 begins the Vienna knight reroute. The c3-knight steps aside to clear the c-pawn for c3 next, then rides via g3 toward f5 — the immovable outpost.",
-          "…Bb6 — Black tucks the bishop back, anticipating c3 + d4 lines that would attack the Bc5.",
-          "c3 — the modest pawn move that prepares the d4 break and opens c2 as a future bishop square. Pure Vienna prep.",
-          "…Nc5 — Black's knight jumps to c5 attacking the Bb3, forcing the bishop to commit to its destination.",
-          "Bc2 — the bishop reloads on the b1-h7 diagonal, aimed at h7 once the centre opens. The Italian-Vienna pivot is complete.",
-          "…Bg4 — Black pins the f3-knight, preparing his own kingside expansion with Nh5.",
-          "Ng3 — the knight reaches g3, one square from the f5 outpost. The Vienna middlegame is fully coordinated.",
-          "…Nh5 — Black's knight jumps to h5, the typical Vienna kingside-counter-expansion. The f6-knight wants to swing to f4 or contest g3.",
-          "d4! — the central break lands. After ten moves of preparation, White cracks the centre at the moment every White piece is optimally placed."
+          "…Re8 — Black completes development, the rook backing the e-file behind the e6-knight. A quiet moment.",
+          "Qd3 — the queen lifts behind the bishop, doubling on the b1-h7 diagonal. The battery is loaded toward h7, screened by the knight on f5.",
+          "…h6 — Black makes luft and clamps g5, a typical defensive pause.",
+          "e5! — now the central break lands. The pawn hits d6 and clears e4, opening the diagonal so the Qd3-Bc2 battery and the f5-knight bear down on the black king."
         ],
         "arrows": [
-          [
-            {
-              "from": "e2",
-              "to": "g3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b6",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
           [],
           [],
           [
             {
-              "from": "c2",
-              "to": "b1",
+              "from": "f5",
+              "to": "d6",
               "color": "rgba(34, 197, 94, 0.85)"
             }
-          ],
-          [
-            {
-              "from": "g4",
-              "to": "f3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "g3",
-              "to": "f5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "h5",
-              "to": "f4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "h5",
-              "to": "g3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          []
+          ]
         ],
         "highlights": [
           [
             {
-              "square": "e2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g3",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "f5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "b6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c3",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d7",
+              "square": "e8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c2",
+              "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b1",
-              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "h7",
@@ -36785,76 +36680,37 @@
           ],
           [
             {
-              "square": "g4",
+              "square": "h6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f3",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "g3",
+              "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "e2",
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "f5",
+              "square": "d6",
               "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "h5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "g3",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d3",
-              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
+        "learnCues": [
+          "…Re8 — Black finishes developing",
+          "Qd3 — load the b1-h7 battery",
+          "…h6 — Black makes luft",
+          "e5 — the central break opens lines"
+        ],
         "sources": [
           "book:vienna-game",
-          "concept:pos-development",
+          "concept:pos-outpost",
+          "concept:pos-center",
+          "concept:att-kingside-storm",
           "https://en.wikipedia.org/wiki/Vienna_Game"
-        ],
-        "learnCues": [
-          "Ne2 — start the g3-f5 reroute",
-          "Bb6 — tuck the bishop back",
-          "c3 — prepare the d4 break",
-          "Nc5 — hit the b3-bishop",
-          "Bc2 — reload toward h7",
-          "Bg4 — pin the f3-knight",
-          "Ng3 — toward the f5 outpost",
-          "Nh5 — Black’s kingside counter",
-          "d4 — the central break lands"
         ]
       }
     ]
