@@ -813,12 +813,23 @@ export function OpeningDetailPage(): JSX.Element {
       const key = activeGemId;
       return (
         <PlayableLinePlayer
+          // Distinct key per rung so the Watch→Learn handoff REMOUNTS the
+          // player (Watch and Learn both render PlayableLinePlayer at the same
+          // tree position; without a changing key React reuses the instance and
+          // the phase state stays stuck in 'demo' — David's "after Watch it's
+          // still the demo / won't take a move" glitch).
+          key={`gem-watch-${key}`}
           line={gemLine}
           boardOrientation={opening.color}
           mode="watch"
           onComplete={() => { void markWeaponRungComplete(opening.id, key, 'watch').then(() => loadOpening()); }}
           onAdvanceToLearn={() => {
-            void markWeaponRungComplete(opening.id, key, 'watch').then(() => handleGemAction(key, 'learn'));
+            // Navigate to Learn IMMEDIATELY; mark Watch complete in the
+            // background. Gating the nav on the IndexedDB write left the user
+            // stuck whenever that write stalled — the masterclass main line
+            // advances synchronously too (onContinueToNext → setViewMode).
+            void markWeaponRungComplete(opening.id, key, 'watch');
+            handleGemAction(key, 'learn');
           }}
           onExit={handleExit}
         />
@@ -838,6 +849,7 @@ export function OpeningDetailPage(): JSX.Element {
       const rung = viewMode === 'gem-learn' ? 'learn' : 'practice';
       return (
         <PlayableLinePlayer
+          key={`gem-${rung}-${key}`}
           line={gemLine}
           boardOrientation={opening.color}
           mode={viewMode === 'gem-learn' ? 'learn' : 'practice'}
@@ -914,6 +926,9 @@ export function OpeningDetailPage(): JSX.Element {
     if (pitfallLine) {
       return (
         <PlayableLinePlayer
+          // Remount per rung so the Watch→Learn handoff resets the phase
+          // (same instance-reuse fix as the gems).
+          key={`pitfall-${pitfallMode}`}
           line={pitfallLine}
           boardOrientation={opening.color}
           mode={pitfallMode}
