@@ -301,7 +301,22 @@ export function detectSanitizerLeak(text: string): boolean {
  *  Pure function — safe to call on any string. */
 export function normalizePieceShorthand(text: string): string {
   if (!text) return text;
-  let out = text;
+  let out = text
+    // Normalise smart/Unicode punctuation to ASCII equivalents before
+    // the piece-letter regexes run. The LLM can emit RIGHT SINGLE
+    // QUOTATION MARK (’) in "white’s" / "black’s" /
+    // "opponent’s", which the LEAK_DETECTOR_RE handles (it uses
+    // `['’]`) but the context-regex below does not — it only
+    // knows ASCII `'`. Without this normalisation, a smart apostrophe
+    // keeps the regex from matching → the piece letter survives the
+    // sanitizer → `detectSanitizerLeak` fires. Same principle applies
+    // to smart double quotes and en/em dashes (which could interfere
+    // with the hyphen-based adjacent-square regex). Safe here because
+    // this function only runs on speech-bound text; the on-screen
+    // chat bubble renders the raw text unchanged.
+    .replace(/[‘’]/g, "'")
+    .replace(/[“”]/g, '"')
+    .replace(/[–—]/g, '-');
   // Bracketed / arrowed piece-on-square shorthand: "P(f3)" → "pawn on f3".
   out = out.replace(PIECE_LETTER_ADJACENT_SQUARE_RE, (_, piece: string, square: string) => {
     const name = PIECE_LETTER_NAMES[piece] ?? piece;

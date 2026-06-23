@@ -36,6 +36,20 @@ describe('sanitizeForTTS', () => {
         expect(sanitizeForTTS(input)).toBe(expected);
       });
     }
+    // Smart-apostrophe regression: the LLM sometimes emits RIGHT SINGLE
+    // QUOTATION MARK (U+2019) in "white's" / "black's" / "opponent's"
+    // instead of ASCII '. normalizePieceShorthand now normalises these
+    // to ASCII before the regexes run, so the piece letter still expands.
+    // Same for smart double quotes and en/em dashes.
+    it('white’s R expands via smart-apostrophe normalisation', () => {
+      expect(sanitizeForTTS("white’s R is active")).toBe("white's rook is active");
+    });
+    it('black’s N expands via smart-apostrophe normalisation', () => {
+      expect(sanitizeForTTS("black’s N to c6")).toBe("black's knight to c6");
+    });
+    it('opponent’s Q expands via smart-apostrophe normalisation', () => {
+      expect(sanitizeForTTS("opponent’s Q on d5")).toBe("opponent's queen on d5");
+    });
   });
 
   describe('bracketed / arrowed piece-on-square shorthand', () => {
@@ -143,6 +157,9 @@ describe('sanitizeForTTS', () => {
     const shouldNotLeak = [
       'hanging pawn on f3',
       'the queen attacks',
+      "white's rook is active",
+      "black's knight to c6",
+      "opponent's queen on d5",
       'Plan B',
       'Section R',
       'Q and A',
