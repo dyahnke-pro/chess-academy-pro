@@ -647,6 +647,7 @@ export function GuidedGamePage(): JSX.Element {
                 {chatMessages.map((m, i) => (
                   <div
                     key={i}
+                    data-testid={m.role === 'coach' ? 'chat-msg-coach' : 'chat-msg-kid'}
                     className={`text-sm rounded-xl px-3 py-2 ${m.role === 'kid' ? 'self-end' : 'self-start'}`}
                     style={
                       m.role === 'kid'
