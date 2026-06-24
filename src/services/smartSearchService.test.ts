@@ -39,6 +39,30 @@ describe('smartSearchService', () => {
       expect(results.some((r) => r.title.includes('Ruy Lopez'))).toBe(true);
     });
 
+    it('surfaces a pro repertoire entry distinctly from the masterclass one', async () => {
+      // Both the masterclass and GothamChess pro repertoire are named "Vienna
+      // Game" and share the openings store — searching "Vienna" returns both.
+      // The pro entry must be labeled (so they aren't indistinguishable) and
+      // routed to the pro path (so it opens in its pro context).
+      await db.openings.bulkAdd([
+        buildOpeningRecord({ id: 'vienna-game', name: 'Vienna Game', eco: 'C25', color: 'white' }),
+        buildOpeningRecord({ id: 'pro-gothamchess-vienna', name: 'Vienna Game', eco: 'C25', color: 'white', proPlayerId: 'gothamchess' }),
+      ]);
+
+      const results = await basicTextSearch('Vienna');
+      const master = results.find((r) => r.id === 'vienna-game');
+      const pro = results.find((r) => r.id === 'pro-gothamchess-vienna');
+
+      expect(master).toBeDefined();
+      expect(pro).toBeDefined();
+      // Pro entry routes to the pro path, not the generic /openings/:id.
+      expect(pro?.route).toBe('/openings/pro/gothamchess/pro-gothamchess-vienna');
+      expect(master?.route).toBe('/openings/vienna-game');
+      // Pro entry is labeled so it's distinguishable in the dropdown.
+      expect(pro?.subtitle.startsWith('Pro ·')).toBe(true);
+      expect(master?.subtitle.startsWith('Pro ·')).toBe(false);
+    });
+
     it('finds games by player name', async () => {
       await db.games.add(
         buildGameRecord({ id: 'game-1', white: 'Magnus', black: 'Hikaru', result: '1-0', date: '2024-01-01' }),
