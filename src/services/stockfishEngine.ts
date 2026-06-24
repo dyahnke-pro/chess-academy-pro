@@ -494,6 +494,21 @@ class StockfishEngine {
               handleEarlyMultiFailure(msg);
               return true;
             }
+            // Multi-thread bundle's fallback to single was already
+            // initiated (handleEarlyMultiFailure set
+            // _runtimeFallbackAttempted). The crash cascade can emit
+            // 60+ ErrorEvents in ~100ms — ANY subsequent event for
+            // the multi variant MUST be suppressed here, NOT fall
+            // through to the reject path below, or the initPromise
+            // is rejected BEFORE the scheduled tryStart(true) fallback
+            // has a chance to boot the single-thread worker. The
+            // caller then sees `stockfish-error (attempt 1/3) →
+            // retry → same multi probe → same fallback → waste).
+            // If the single-thread fallback ALSO fails, THAT worker's
+            // onerror handler will reject at the right time.
+            if (this.workerVariant === 'multi') {
+              return true;
+            }
             // Phase 8 Bug C — single-thread also OOM'd. Retry once
             // after a backoff so a transient memory-pressure event
             // doesn't leave the engine permanently unavailable.
