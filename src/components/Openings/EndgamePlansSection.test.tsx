@@ -10,6 +10,9 @@ import type { MiddlegameAction } from './MiddlegamePlansSection';
 vi.mock('../../services/middlegamePlanService', () => ({
   getPlansForOpening: vi.fn(),
 }));
+vi.mock('../../services/dataLoader', () => ({
+  whenFullySeeded: vi.fn().mockResolvedValue(undefined),
+}));
 
 import { getPlansForOpening } from '../../services/middlegamePlanService';
 
@@ -41,6 +44,20 @@ describe('EndgamePlansSection', () => {
       expect(screen.getByTestId('endgame-plans-empty')).toBeInTheDocument();
     });
     expect(screen.queryByTestId('endgame-plans-section')).not.toBeInTheDocument();
+  });
+
+  it('re-queries after the seed lands when the first query is empty (cold-load race)', async () => {
+    // Mount can precede the deferred seed; the first query is []. It must wait
+    // for whenFullySeeded and re-query rather than self-hide until a reload
+    // (David 2026-06-24).
+    const eg = buildMiddlegamePlan({ id: 'mp-ruylopez-berlin-endgame', title: 'Berlin Endgame' });
+    mockGetPlans.mockResolvedValueOnce([]).mockResolvedValue([eg]);
+    renderSection('ruy-lopez');
+
+    await waitFor(() => {
+      expect(screen.getByTestId('endgame-plans-section')).toBeInTheDocument();
+    });
+    expect(mockGetPlans).toHaveBeenCalledTimes(2);
   });
 
   it('renders only plans whose id ends in -endgame', async () => {

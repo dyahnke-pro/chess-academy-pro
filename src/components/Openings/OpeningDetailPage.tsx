@@ -199,6 +199,7 @@ import {
   markWeaponRungComplete,
   unlockOpeningAllLines,
 } from '../../services/openingService';
+import { whenFullySeeded } from '../../services/dataLoader';
 import {
   MAIN_LINE_INDEX,
   isRungComplete,
@@ -349,6 +350,14 @@ export function OpeningDetailPage(): JSX.Element {
     // true, so the user sees a spinner, not a false miss) before giving up.
     for (let i = 0; i < 10 && !result; i++) {
       await new Promise((r) => setTimeout(r, 400));
+      result = await getOpeningById(id);
+    }
+    // PRO openings (and the full ECO catalog) land in the DEFERRED seed, which
+    // finishes ~30-50s after boot — well past the 4s quick-retry above. Without
+    // this, a cold first visit to a pro opening got stuck on "Loading opening…"
+    // / a false "not found" (David 2026-06-24). Wait for the seed, then retry.
+    if (!result) {
+      await whenFullySeeded();
       result = await getOpeningById(id);
     }
     setOpening(result ?? null);
@@ -800,24 +809,61 @@ export function OpeningDetailPage(): JSX.Element {
     );
   }
 
-  // Punish-gem WLPP — Watch the crush played out, Learn it (voice-guided),
-  // Practice it (silent + hint). The line is built from the gem's played-out
-  // playLine; every move carries its lead-the-eye arrow.
-  if (
-    (viewMode === 'gem-watch' || viewMode === 'gem-learn' || viewMode === 'gem-practice') &&
-    activeGemId
-  ) {
+  // Punish-gem WATCH — auto-play the crush, then hand off to the Learn rung
+  // (same board, pieces reset, voice now guides you to play the punish). The
+  // in-player silent memory replay is bypassed via onAdvanceToLearn — its
+  // header button reads "Learn", not "Practice" (David 2026-06-23: the old
+  // "Practice" button dropped you into an un-guided replay that wouldn't take
+  // a move).
+  if (viewMode === 'gem-watch' && activeGemId) {
     const gem = getPunishGemById(activeGemId);
     const gemLine = gem ? gemToPlayableLine(gem) : null;
     if (gemLine) {
       const key = activeGemId;
-      const rung = viewMode === 'gem-watch' ? 'watch' : viewMode === 'gem-learn' ? 'learn' : 'practice';
       return (
         <PlayableLinePlayer
+          // Distinct key per rung so the Watch→Learn handoff REMOUNTS the
+          // player (Watch and Learn both render PlayableLinePlayer at the same
+          // tree position; without a changing key React reuses the instance and
+          // the phase state stays stuck in 'demo' — David's "after Watch it's
+          // still the demo / won't take a move" glitch).
+          key={`gem-watch-${key}`}
           line={gemLine}
           boardOrientation={opening.color}
-          mode={viewMode === 'gem-watch' ? 'watch' : viewMode === 'gem-learn' ? 'learn' : 'practice'}
+          mode="watch"
+          onComplete={() => { void markWeaponRungComplete(opening.id, key, 'watch').then(() => loadOpening()); }}
+          onAdvanceToLearn={() => {
+            // Navigate to Learn IMMEDIATELY; mark Watch complete in the
+            // background. Gating the nav on the IndexedDB write left the user
+            // stuck whenever that write stalled — the masterclass main line
+            // advances synchronously too (onContinueToNext → setViewMode).
+            void markWeaponRungComplete(opening.id, key, 'watch');
+            handleGemAction(key, 'learn');
+          }}
+          onExit={handleExit}
+        />
+      );
+    }
+  }
+
+  // Punish-gem LEARN / PRACTICE — Learn voice-guides each move you play;
+  // Practice is silent + hint. The line is built from the gem's played-out
+  // playLine; every move carries its lead-the-eye arrow. Learn → Play closes
+  // the loop (coach locked to this gem's line).
+  if ((viewMode === 'gem-learn' || viewMode === 'gem-practice') && activeGemId) {
+    const gem = getPunishGemById(activeGemId);
+    const gemLine = gem ? gemToPlayableLine(gem) : null;
+    if (gemLine) {
+      const key = activeGemId;
+      const rung = viewMode === 'gem-learn' ? 'learn' : 'practice';
+      return (
+        <PlayableLinePlayer
+          key={`gem-${rung}-${key}`}
+          line={gemLine}
+          boardOrientation={opening.color}
+          mode={viewMode === 'gem-learn' ? 'learn' : 'practice'}
           onComplete={() => { void markWeaponRungComplete(opening.id, key, rung).then(() => handleExit()); }}
+          onContinuePlaying={viewMode === 'gem-learn' ? () => handleGemAction(key, 'play') : undefined}
           onExit={handleExit}
         />
       );
@@ -885,13 +931,22 @@ export function OpeningDetailPage(): JSX.Element {
   ) {
     const pitfallMode = viewMode === 'pitfall-watch' ? 'watch' : viewMode === 'pitfall-learn' ? 'learn' : 'practice';
     const pitfallLine = commonMistakeToPlayableLine(activeMistake, pitfallMode);
+    const mistake = activeMistake;
     if (pitfallLine) {
       return (
         <PlayableLinePlayer
+          // Remount per rung so the Watch→Learn handoff resets the phase
+          // (same instance-reuse fix as the gems).
+          key={`pitfall-${pitfallMode}`}
           line={pitfallLine}
           boardOrientation={opening.color}
           mode={pitfallMode}
           onComplete={handleExit}
+          onAdvanceToLearn={
+            viewMode === 'pitfall-watch'
+              ? () => handlePitfallAction(mistake, 'learn')
+              : undefined
+          }
           onExit={handleExit}
         />
       );

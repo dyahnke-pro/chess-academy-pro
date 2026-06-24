@@ -1,14 +1,38 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MotionConfig } from 'framer-motion';
 import { ModelGameViewer } from './ModelGameViewer';
 import { buildModelGame } from '../../test/factories';
 
+interface BoardOptions {
+  position?: string;
+  onSquareClick?: (args: { square: string; piece: null }) => void;
+}
+
+// Stub the board but expose onSquareClick via clickable square buttons so the
+// click-to-move explore path can be exercised.
 vi.mock('react-chessboard', () => ({
-  Chessboard: ({ position }: { position: string }) => (
-    <div data-testid="chessboard" data-position={position} />
+  Chessboard: ({ options }: { options: BoardOptions }) => (
+    <div data-testid="chessboard" data-position={options?.position}>
+      {options?.onSquareClick &&
+        ['e2', 'e4', 'e7', 'e5'].map((sq) => (
+          <button
+            key={sq}
+            type="button"
+            data-testid={`sq-${sq}`}
+            onClick={() => options.onSquareClick?.({ square: sq, piece: null })}
+          />
+        ))}
+    </div>
   ),
+}));
+
+vi.mock('../../services/stockfishEngine', () => ({
+  stockfishEngine: {
+    analyzePosition: vi.fn().mockResolvedValue({ evaluation: 0.2, isMate: false }),
+    getBestMove: vi.fn().mockResolvedValue('e7e5'),
+  },
 }));
 
 // LessonScaffold now mounts the inline coach chat (GameChatPanel), which needs
@@ -103,6 +127,22 @@ describe('ModelGameViewer', () => {
     const firstBtn = screen.getByTestId('model-game-first');
     await userEvent.click(firstBtn);
     expect(screen.getByTestId('model-game-overview')).toBeInTheDocument();
+  });
+
+  it('enters explore mode and accepts a click-to-move (works without dragging)', async () => {
+    renderViewer();
+    // Enter explore mode via the compass button.
+    await userEvent.click(screen.getByTestId('model-game-explore'));
+    expect(screen.getByText(/Make a move to see what happens/)).toBeInTheDocument();
+
+    // Click source then target — no drag required.
+    await userEvent.click(screen.getByTestId('sq-e2'));
+    await userEvent.click(screen.getByTestId('sq-e4'));
+
+    // The student's move registered, and the engine replied (mocked e7e5).
+    await waitFor(() => {
+      expect(screen.getByText(/Exploring:/)).toHaveTextContent('e4');
+    });
   });
 
   it('calls onExit when back button is clicked', async () => {

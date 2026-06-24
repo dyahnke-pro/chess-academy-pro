@@ -1,6 +1,7 @@
 import { db } from '../db/schema';
 import { getCoachChatResponse } from './coachApi';
 import { searchOpenings } from './openingService';
+import { getPlayerById } from './proRepertoireService';
 import type {
   SmartSearchResult,
   SmartSearchCategory,
@@ -172,6 +173,22 @@ async function executeIntent(intent: SearchIntent): Promise<SmartSearchResult[]>
 
 function openingToResult(o: OpeningRecord): SmartSearchResult {
   const accuracy = o.drillAttempts > 0 ? `${Math.round(o.drillAccuracy * 100)}% accuracy` : 'Not studied';
+  // Pro-repertoire entries live in the same openings store as the masterclass
+  // set, so a search like "Vienna" returns both. Label the pro entry with its
+  // repertoire name (the set was depersonalized 2026-06-02 — show the repertoire
+  // title, not a player name) so the two aren't indistinguishable, and route it
+  // to the pro path so it opens in its pro context (back button → the player's
+  // page) instead of the generic /openings/:id route.
+  if (o.proPlayerId) {
+    const repertoire = getPlayerById(o.proPlayerId)?.name ?? 'Pro repertoire';
+    return {
+      category: 'opening',
+      id: o.id,
+      title: o.name,
+      subtitle: `Pro · ${repertoire} · ${o.color}`,
+      route: `/openings/pro/${o.proPlayerId}/${o.id}`,
+    };
+  }
   return {
     category: 'opening',
     id: o.id,
