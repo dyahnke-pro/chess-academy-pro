@@ -9,6 +9,9 @@ vi.mock('../../services/modelGameService', async (importActual) => ({
   ...(await importActual<typeof import('../../services/modelGameService')>()),
   getModelGamesForOpening: vi.fn(),
 }));
+vi.mock('../../services/dataLoader', () => ({
+  whenFullySeeded: vi.fn().mockResolvedValue(undefined),
+}));
 
 import { getModelGamesForOpening } from '../../services/modelGameService';
 
@@ -82,6 +85,20 @@ describe('ModelGamesSection', () => {
     await waitFor(() => {
       expect(screen.getByTestId('model-games-empty')).toBeInTheDocument();
     });
+  });
+
+  it('re-queries after the seed lands when the first query is empty (cold-load race)', async () => {
+    // On a cold first visit the section can mount before the deferred seed has
+    // landed the model games — the first query returns []. It must wait for the
+    // seed and re-query, not self-hide until a reload (David 2026-06-24).
+    const game = buildModelGame({ id: 'late', white: 'Nakamura', black: 'Firouzja', result: '1-0' });
+    mockGetGames.mockResolvedValueOnce([]).mockResolvedValue([game]);
+    renderSection('vienna-game', vi.fn(), 'white');
+
+    await waitFor(() => {
+      expect(screen.getByTestId('model-game-card-late')).toBeInTheDocument();
+    });
+    expect(mockGetGames).toHaveBeenCalledTimes(2);
   });
 
   it('calls onSelectGame when a game card is clicked', async () => {

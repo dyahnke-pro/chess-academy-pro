@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Trophy, PlayCircle } from 'lucide-react';
 import { getModelGamesForOpening, isNarratedModelGame } from '../../services/modelGameService';
+import { whenFullySeeded } from '../../services/dataLoader';
 import type { ModelGame } from '../../types';
 
 interface ModelGamesSectionProps {
@@ -34,26 +35,36 @@ export function ModelGamesSection({
 
   useEffect(() => {
     let cancelled = false;
-    void getModelGamesForOpening(openingId).then((result) => {
-      if (!cancelled) {
-        // Surface only REAL games: drop any where the student's side loses
-        // (never showcase the opening losing), AND drop thin/boilerplate games
-        // with no authored overview (no thin-narration ships — David 2026-05-24).
-        // On a variation tab, narrow to games that played THAT variation; the
-        // main tab (variationName null) shows the full library so nothing is
-        // hidden (David 2026-05-30, fix #1). The section self-hides when nothing
-        // qualifies.
-        setGames(
-          result.filter(
-            (g) =>
-              !studentLost(g, studentColor) &&
-              isNarratedModelGame(g) &&
-              (variationName == null || g.variation === variationName),
-          ),
-        );
-        setLoading(false);
+    // Surface only REAL games: drop any where the student's side loses (never
+    // showcase the opening losing), AND drop thin/boilerplate games with no
+    // authored overview (no thin-narration ships — David 2026-05-24). On a
+    // variation tab, narrow to games that played THAT variation; the main tab
+    // (variationName null) shows the full library so nothing is hidden (David
+    // 2026-05-30, fix #1). The section self-hides when nothing qualifies.
+    const select = (result: ModelGame[]): ModelGame[] =>
+      result.filter(
+        (g) =>
+          !studentLost(g, studentColor) &&
+          isNarratedModelGame(g) &&
+          (variationName == null || g.variation === variationName),
+      );
+    async function load(): Promise<void> {
+      let result = await getModelGamesForOpening(openingId);
+      // Cold-load seeding race: on a first visit the section can mount BEFORE
+      // the deferred seed lands the model games into Dexie, so the first query
+      // returns nothing and the section wrongly self-hides until a reload
+      // (David 2026-06-24). When empty, wait for the seed to finish and
+      // re-query. Resolves immediately for warm / returning users.
+      if (result.length === 0) {
+        await whenFullySeeded();
+        if (cancelled) return;
+        result = await getModelGamesForOpening(openingId);
       }
-    });
+      if (cancelled) return;
+      setGames(select(result));
+      setLoading(false);
+    }
+    void load();
     return () => { cancelled = true; };
   }, [openingId, studentColor, variationName]);
 
