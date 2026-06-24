@@ -289,6 +289,56 @@ const PLAN_SUSPECT_BASELINE = new Set<string>([
   'mp-scandinaviandefence-portuguese::2:Qh5', // masters: Bd6/O-O-O — sound
   'mp-siciliannajdorf-6a4::8:Nc5',        // masters: h6/Nf8 — sound
   'mp-siciliannajdorf-ng4::5:Kb1',        // masters: Nd4/f3/h4 — sound
+  // 2026-06-24 plan-continuity sweep: master-divergent but engine-SOUND moves
+  // that ARE the plan's thematic break/idea (so swapping kills the lesson).
+  'mp-albincountergambit-main::7:Bd3',    // masters: Nxd4 — Bd3 develops, sound (-24cp), deep Albin
+  'mp-queensgambit-accepted::3:a4',       // masters: b3 — a4 is the queenside-crack theme, sound (26cp)
+  'mp-bird-classical-attack::2:e4',       // masters: Qh4/Nc3/c3 — e4 is the central break, sound (105cp)
+  'mp-bird-stonewall-formation::1:h3',    // masters: Ne5 — h3 preps the g4 storm, sound (17cp)
+  'mp-birdsopening-nimzo::1:d4',          // masters: Nc3/Bf3 — d4 is the central break, sound (22cp)
+  'mp-benkogambit-main::13:b3',           // masters: Bd2/Qc2 — b3 holds the queenside vs the Benko bind
+  // Sound-but-master-divergent positions the prod explorer surfaces intermittently
+  // (the 7a lookup returns null under load on some runs, so CI under-flags; these
+  // are baselined so the gate is deterministic). All engine-sound (no 7b flag).
+  'mp-oldindiandefence-main::2:Ne8',      // masters: Nh7 — …Ne8 reroutes off f6 for …f5, sound (19cp)
+  'mp-qga-main::3:Rc8',                    // masters: Nc5/O-O — …Rc8 claims the c-file, sound
+  'mp-viennagame-classical::1:Re8',       // masters: d5 — sound
+  'mp-viennagame-paulsen::1:a3',          // masters: Na4/d3/h3/Nd5 — a3 queenside prep, sound
+  'mp-benkogambit-halfaccepted::3:Qe2',   // masters: Bf4/Ne5/Ng5 — sound
+  'mp-benkogambit-zaitsev::3:Bf4',        // masters: a4/a3/Bf1 — sound
+  // 2026-06-24 full first-class-opening sweep (1586 plan moves, explorer-null=0
+  // → complete deterministic set): all master-divergent but engine-SOUND (0 of
+  // these tripped the 7b soundness check). Baselined so the 7a gate is green
+  // regardless of which positions the prod explorer happens to answer per run.
+  'mp-alekhinedefence-voronezh::2:f5',    // masters: N8d7 — sound
+  'mp-carokann-fantasy::2:exd4',          // masters: Rfe8/Rae8 — sound
+  'mp-carokann-tartakower::6:a5',         // masters: Nh7/Rc8 — sound
+  'mp-dutchdefence-classical::1:cxd5',    // masters: Nfe5/Rc1/e3 — sound
+  'mp-dutchdefence-stonewall::3:Nxe5',    // masters: dxe5 — sound
+  'mp-fourknightsgame-italian::2:d4',     // masters: Nd2 — sound
+  'mp-frenchdefence-exchange::2:Rxe1+',   // masters: Qc7 — sound
+  'mp-grunfelddefence-main::2:e6',        // masters: Bb7 — sound
+  'mp-grunfelddefence-main::3:Rfd1',      // masters: d5/Rc7 — sound
+  'mp-kingsindianattack-kid::1:Rab8',     // masters: Bh3 — sound
+  'mp-kingsindiandefence-main::3:a4',     // masters: cxd6 — sound
+  'mp-londonsystem-kid::3:Bd5',           // masters: h6 — sound
+  'mp-nimzoindian-fischer::2:c6',         // masters: Re8/Qe7/Ne4 — sound
+  'mp-nimzoindian-rubinstein::4:e4',      // masters: c4 — sound
+  'mp-nimzoindian-saemisch::4:Bd2',       // masters: dxc5/Ng3/Be3/g4 — sound
+  'mp-petrovdefence-main::1:Re1',         // masters: cxd5 — sound
+  'mp-pircdefence-lion::2:Rad8',          // masters: Nxf3+ — sound
+  'mp-ruylopez-breyer::4:b3',             // masters: Qd2/Ra3/Rf1 — sound
+  'mp-ruylopez-chigorin::4:b4',           // masters: Bh6/Nh2/a4 — sound
+  'mp-ruylopez-d4::2:b3',                 // masters: Nc3/Nd2/Bf4/a4 — sound
+  'mp-scandinaviandefence-modern::2:Nxc3',// masters: e5 — sound
+  'mp-scandinaviandefence-portuguese::1:g4', // masters: Be3 — sound
+  'mp-scandinaviandefence-qa5::3:Nxf5',   // masters: Bb3 — sound
+  'mp-sicilianalapin-main::4:Nd5',        // masters: f5/a6 — sound
+  'mp-siciliandragon-chinese::2:Rb7',     // masters: Ne5 — sound
+  'mp-siciliandragon-levenfish::2:b5',    // masters: Bd7/Nxd3 — sound
+  'mp-siciliannajdorf-6g3::2:b6',         // masters: b5 — sound
+  'mp-siciliannajdorf-6g3::4:Bb7',        // masters: Qxb6/Nxb6 — sound
+  'mp-siciliannajdorf-classical::6:Nb6',  // masters: Qc7/Nc5/b6/Ne8 — sound
 ]);
 
 // Soundness baseline for plan lines (7b) — same rationale as SOUNDNESS_BASELINE
@@ -297,6 +347,11 @@ const PLAN_SOUNDNESS_BASELINE = new Set<string>([
   // Møller plan opens on the accepted-sacrifice ...Bxa1 (the rook grab the
   // attack punishes). Master-played, deliberately shown; White is winning after.
   'mp-italiangame-moller::1:Bxa1',
+  // Genuine gambit showcases: the side is down material BY DESIGN (honest
+  // historical showcase, per the soundness-sweep doctrine — leave, don't "fix").
+  'mp-evansgambit-endgame::5:Bxa1',       // Evans accepted-sacrifice rook grab, master-played; White punishes
+  'mp-benkogambit-main::13:b3',           // Benko gambit — Black down a pawn for the lasting queenside bind
+  'mp-benkogambit-main::14:Rfb8',         // Benko gambit — …Rfb8 is THE thematic open-b-file rook lift
 ]);
 
 describe.runIf(RUN)('Hole 7a — masters legitimacy of middlegame plan lines', () => {

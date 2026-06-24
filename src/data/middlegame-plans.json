@@ -1771,25 +1771,25 @@
     "pieceManeuvers": [],
     "strategicThemes": [
       "Black’s queenside pawn majority is the Benoni’s engine — …b5 mobilizes it and opens the a- and b-files for the rooks.",
-      "The g7-bishop rakes the long diagonal at e4; …b5 and …Bb7 clear and load that diagonal.",
+      "The g7-bishop already rakes the long diagonal at e4; …b5 opens the a- and b-files to feed the attack.",
       "…b5 is often a true pawn sacrifice — Black gives material for the open files, the diagonal and lasting initiative."
     ],
     "endgameTransitions": [],
     "playableLines": [
       {
-        "title": "…b5 opens lines, …Bb7 loads the diagonal",
+        "title": "…b5 opens lines, …Bd7 backs the push",
         "fen": "1rbq2k1/2n1rpbp/p2p1np1/1ppP4/P1N1P3/2N4P/1P3PP1/R1BQRBK1 w - - 0 17",
         "moves": [
           "axb5",
           "axb5",
           "Na5",
-          "Bb7"
+          "Bd7"
         ],
         "annotations": [
           "axb5 — White takes, opening the a-file.",
           "…axb5 — Black recaptures; the a-file opens and the queenside majority rolls.",
           "Na5 — White’s knight hops to a5, eyeing the queenside.",
-          "…Bb7 — the bishop swings to the long diagonal, raking e4 behind the …b5 break."
+          "…Bd7 — the bishop develops, eyeing the open a-file and backing the queenside push."
         ],
         "arrows": [
           [],
@@ -1818,12 +1818,8 @@
           ],
           [
             {
-              "square": "b7",
+              "square": "d7",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e4",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
@@ -1831,7 +1827,7 @@
           "axb5 — White takes",
           "…axb5 — open the a-file",
           "Na5 — White hops in",
-          "…Bb7 — the long diagonal"
+          "…Bd7 — back the push"
         ],
         "sources": [
           "concept:att-queenside-attack",
@@ -2062,13 +2058,13 @@
           "Nxe5",
           "Nxe5",
           "fxe5",
-          "Nd7"
+          "Ng4"
         ],
         "annotations": [
           "Nxe5 — White captures, beginning to open lines on the kingside.",
           "…Nxe5 — Black recaptures with the knight.",
           "fxe5 — White recaptures with the pawn; the f-file opens and the e5-pawn cramps Black.",
-          "…Nd7 — the knight retreats from the e5-pawn to challenge it."
+          "…Ng4 — the knight jumps to g4, hitting the e5-pawn and eyeing f2."
         ],
         "arrows": [
           [],
@@ -2097,8 +2093,12 @@
           ],
           [
             {
-              "square": "d7",
+              "square": "g4",
               "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
@@ -2106,7 +2106,7 @@
           "Nxe5 — capture",
           "…Nxe5 — Black recaptures",
           "fxe5 — open the f-file",
-          "…Nd7 — challenge e5"
+          "…Ng4 — hit e5 and f2"
         ],
         "sources": [
           "concept:att-kingside-storm",
@@ -21027,13 +21027,13 @@
     "openingId": "qga",
     "criticalPositionFen": "r2qk2r/1b1nbppp/p3pn2/1p6/3NP3/1BN5/PP2QPPP/R1BR2K1 b kq - 0 12",
     "title": "QGA: The c5-Outpost, then Simplify",
-    "overview": "In the Queen’s Gambit Accepted, Black has freed the position and aims a knight at the c5-outpost — a fine square hitting e4 and the queenside. From there Black is happy to trade pieces: with no weaknesses, simplification leads straight to comfortable equality.",
+    "overview": "In the Queen’s Gambit Accepted, Black has freed the position and contests the c-file while posting a piece on the c5-outpost. With no weaknesses, Black trades toward comfortable equality.",
     "pawnBreaks": [
       "…b5 to expand the queenside",
       "centre already resolved — play on pieces"
     ],
     "pieceManeuvers": [
-      "…Nd7-c5 to the outpost (hits e4)",
+      "…Bc5 to the c5 outpost",
       "trade pieces toward an equal middlegame",
       "…Rc8 on the c-file"
     ],
@@ -21049,57 +21049,33 @@
       {
         "fen": "r2qk2r/1b1nbppp/p3pn2/1p6/3NP3/1BN5/PP2QPPP/R1BR2K1 b kq - 0 12",
         "moves": [
-          "O-O",
+          "Qc7",
           "Bg5",
-          "Nc5",
-          "Nxe6",
-          "Nxe6",
-          "Rxd8",
-          "Raxd8",
-          "Bxe6"
+          "Rc8",
+          "Rac1",
+          "Bc5"
         ],
         "annotations": [
-          "…O-O tucks the king safely.",
-          "Bg5 pins the f6-knight.",
-          "…Nc5 leaps to the outpost, hitting e4 and eyeing the queenside.",
-          "Nxe6 forces simplification.",
-          "…Nxe6 recaptures.",
-          "Rxd8",
-          "…Raxd8 — the rooks come off.",
-          "Bxe6 — the dust settles on a balanced, weakness-free position. Black has comfortably equalised."
+          "…Qc7 — the queen steps off the back rank, eyeing the c-file and freeing the rooks.",
+          "Bg5 — White develops with pressure on the f6-knight.",
+          "…Rc8 — the rook claims the half-open c-file behind the queen.",
+          "Rac1 — White contests the same file.",
+          "…Bc5 — the bishop takes the c5 outpost, raking the centre; Black is comfortable."
         ],
         "learnCues": [
-          "…O-O — castle",
-          "Bg5 — White pins",
-          "…Nc5 — to the outpost",
-          "Nxe6 — White simplifies",
-          "…Nxe6 — recapture",
-          "Rxd8",
-          "…Raxd8 — trade rooks",
-          "Bxe6 — equal, no weaknesses"
+          "…Qc7 — eye the c-file",
+          "Bg5 — White presses f6",
+          "…Rc8 — seize the c-file",
+          "Rac1 — contest the file",
+          "…Bc5 — the c5 outpost"
         ],
         "sources": [
           "concept:pos-outpost",
           "concept:pos-development",
           "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted"
         ],
-        "title": "QGA: The c5-Outpost, then Simplify",
+        "title": "QGA: contest the c-file, post on c5",
         "arrows": [
-          [],
-          [
-            {
-              "from": "g5",
-              "to": "f6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c5",
-              "to": "e4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
           [],
           [],
           [],
@@ -21109,11 +21085,7 @@
         "highlights": [
           [
             {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e8",
+              "square": "c7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -21121,77 +21093,23 @@
             {
               "square": "g5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
             {
               "square": "c1",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f6",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
@@ -21501,27 +21419,21 @@
           "axb4",
           "axb4",
           "Bd6",
-          "b5",
-          "cxb5",
-          "Bxb5"
+          "b5"
         ],
         "annotations": [
           "b4 — the minority attack begins; the lone b-pawn advances toward c6.",
           "…axb4 — Black trades to open the a-file, but the plan rolls on.",
           "axb4 — White recaptures and the b-pawn stands ready on b4.",
           "…Bd6 — Black eyes the kingside, hunting counterplay before the queenside cracks.",
-          "b5 — the break! The pawn strikes c6 and forces a concession.",
-          "…cxb5 — Black captures, and the c-file swings open onto his position.",
-          "Bxb5 — White owns the open c-file and the lone d5-pawn to besiege; the minority attack has done its work."
+          "b5 — the minority-attack break lands, striking the base of Black's c6-pawn."
         ],
         "learnCues": [
           "b4 — start the minority attack",
           "…axb4 — Black opens the a-file",
           "axb4 — recapture, b-pawn ready",
           "…Bd6 — Black seeks kingside play",
-          "b5 — the break hits c6",
-          "…cxb5 — the c-file opens",
-          "Bxb5 — open file, d5 weak"
+          "b5 — the break hits c6"
         ],
         "sources": [
           "book:queens-gambit",
@@ -21530,8 +21442,6 @@
           "https://en.wikipedia.org/wiki/Minority_attack"
         ],
         "arrows": [
-          [],
-          [],
           [],
           [],
           [],
@@ -21594,30 +21504,6 @@
             },
             {
               "square": "c6",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "b5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "b5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
@@ -32826,227 +32712,6 @@
             }
           ]
         }
-      },
-      {
-        "title": "The practical squeeze: punishing the natural setup",
-        "fen": "rnbqkb1r/ppp3pp/8/3pPp2/4n3/2NP1Q2/PPP3PP/R1B1KBNR b KQkq - 0 6",
-        "moves": [
-          "Nxc3",
-          "bxc3",
-          "Nc6",
-          "Bd2",
-          "Be7",
-          "Nh3",
-          "O-O",
-          "Nf4"
-        ],
-        "annotations": [
-          "…Nxc3 — Black trades the e4-knight off.",
-          "bxc3 — the b-file opens and the c-pawns double; White keeps the bishop pair and the e5-wedge.",
-          "…Nc6 — Black develops naturally. Objectively …d4 is stronger, freeing the game at once; this line shows how White punishes the slower setup.",
-          "Bd2 — the queen-bishop comes to d2, eyeing the a5-e1 diagonal and clearing c1 for the rook.",
-          "…Be7 — a modest post for the bishop; …Bd6 would walk into e5-tactics.",
-          "Nh3 — the knight heads for f4 by the rim route, leaving the queen unobstructed on f3.",
-          "…O-O — Black castles into a purely positional fight.",
-          "Nf4 — the knight lands on f4, gripping d5 and guarding e5 while the queen on f3 and the open b-file aim at Black's king. With the slow setup, White's pieces dominate the practical middlegame."
-        ],
-        "learnCues": [
-          "Nxc3 — trade off the knight",
-          "bxc3 — open the b-file",
-          "Nc6 — natural, but …d4 is best",
-          "Bd2 — develop, clear c1",
-          "Be7 — the safe square",
-          "Nh3 — rim route to f4",
-          "O-O — castle to safety",
-          "Nf4 — grip d5, guard e5"
-        ],
-        "arrows": [
-          [],
-          [],
-          [
-            {
-              "from": "c6",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d2",
-              "to": "e1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [],
-          [
-            {
-              "from": "h3",
-              "to": "f4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [],
-          [
-            {
-              "from": "f4",
-              "to": "d5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
-        ],
-        "highlights": [
-          [
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "d2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "e1",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "h3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "f3",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "e5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "f3",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ]
-        ],
-        "sources": [
-          "book:vienna-game",
-          "concept:pos-initiative",
-          "concept:pos-center",
-          "https://en.wikipedia.org/wiki/Vienna_Game"
-        ],
-        "intro": {
-          "say": "When Black develops naturally instead of the freeing …d4, White's setup hums. The king-knight reroutes by the rim — h3 then f4 — to grip d5 and prop the e5-wedge, the queen presses from f3, and the open b-file feeds the rook. Slow play by Black hands White a lasting initiative.",
-          "sayShort": "Knight to f4, queen on f3 — White presses.",
-          "arrows": [
-            {
-              "from": "g1",
-              "to": "f4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "f4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "d5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "e5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ]
-        }
       }
     ]
   },
@@ -33091,8 +32756,7 @@
           "Bg4",
           "h3",
           "Be6",
-          "Nd5",
-          "Bb6"
+          "Nd5"
         ],
         "annotations": [
           "a3 — modest queenside expansion, preventing …Nb4 and preparing b4 in some lines.",
@@ -33101,8 +32765,7 @@
           "…Bg4 — Black pins the e2-knight, hoping to gain a small structural concession.",
           "h3 — White asks the bishop to decide: take and double White's pawns, or retreat.",
           "…Be6 — bishop retreats. The pin is gone; the position settles into pure manoeuvring.",
-          "Nd5! — White lands the dream outpost. The knight on d5 attacks Black's f6-knight and e7 (covered by the bishop), supported by the e4-pawn and the c-pawn.",
-          "…Bb6 — Black's bishop tucks away from the knight's reach. White has the outpost; the long Paulsen squeeze begins."
+          "Nd5! — White lands the dream outpost. The knight on d5 attacks Black's f6-knight and e7 (covered by the bishop), supported by the e4-pawn and the c-pawn."
         ],
         "arrows": [
           [],
@@ -33134,8 +32797,7 @@
               "to": "e7",
               "color": "rgba(34, 197, 94, 0.85)"
             }
-          ],
-          []
+          ]
         ],
         "highlights": [
           [
@@ -33235,16 +32897,6 @@
               "square": "e4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
-          ],
-          [
-            {
-              "square": "b6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
           ]
         ],
         "sources": [
@@ -33259,8 +32911,7 @@
           "Bg4 — pin the e2-knight",
           "h3 — question the bishop",
           "Be6 — retreat; manoeuvring begins",
-          "Nd5 — land the dream outpost",
-          "Bb6 — tuck away; the squeeze begins"
+          "Nd5 — land the dream outpost"
         ]
       }
     ]
@@ -33307,7 +32958,7 @@
           "Bh4",
           "Be6",
           "Nd5",
-          "Qd7"
+          "Bxd5"
         ],
         "annotations": [
           "O-O — White castles short, completing kingside development. Both sides head into the middlegame fully coordinated.",
@@ -33317,7 +32968,7 @@
           "Bh4 — bishop retreats but stays on the diagonal, keeping the pin alive on the now-vulnerable f6-knight.",
           "…Be6 — Black challenges the Bc4 by offering a trade on the a2-g8 diagonal.",
           "Nd5! — the central knight jump. From d5 the knight forks the Nf6 AND threatens Nxc7 winning the rook. Black must defend twice.",
-          "…Qd7 — Black sidesteps the queen off d8, unpinning the f6-knight AND defending c7 in one move. White has reached the standard middlegame with a small but enduring edge."
+          "…Bxd5 — Black gives the bishop pair to remove the d5-knight; after exd5 White keeps the centre and space."
         ],
         "arrows": [
           [],
@@ -33345,13 +32996,7 @@
             }
           ],
           [],
-          [
-            {
-              "from": "d7",
-              "to": "c7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
+          []
         ],
         "highlights": [
           [
@@ -33442,20 +33087,8 @@
           ],
           [
             {
-              "square": "d7",
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f6",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "c7",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
@@ -33472,7 +33105,7 @@
           "Bh4 — retreat, keep the pin",
           "Be6 — challenge the c4-bishop",
           "Nd5 — fork f6, threaten Nxc7",
-          "Qd7 — unpin and defend c7"
+          "…Bxd5 — remove the knight"
         ]
       }
     ]
