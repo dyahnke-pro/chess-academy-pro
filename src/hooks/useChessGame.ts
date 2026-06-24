@@ -229,6 +229,14 @@ export function useChessGame(
     sourceSquare: string,
     targetSquare: string,
   ): MoveResult | null => {
+    // Dropping on the same square is a no-op (drag-cancel / imprecise touch).
+    // Without this guard, executeMove reaches chess.js with from===to, which
+    // throws "Invalid move" that escapes as an unhandled-rejection.
+    if (sourceSquare === targetSquare) {
+      clearSelection();
+      return null;
+    }
+
     const piece = chessRef.current.get(sourceSquare as Square);
     const isPromotion =
       piece?.type === 'p' &&
