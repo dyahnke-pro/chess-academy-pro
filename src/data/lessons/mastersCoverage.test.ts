@@ -44,6 +44,14 @@ const RUN = !!process.env.RUN_MASTERS_AUDIT;
 // sandbox; runs on David's machine / CI where stockfish is installed.
 const SF_DEPTH = 16;
 const MAX_CP_LOSS = 120; // a past-book move losing >120cp vs best = suspect
+// A position is only "real masters' theory" once enough games reached it
+// (mirrors the MIN_BRANCH_GAMES=5 spine-build doctrine). Below this, the
+// position is treated as PAST BOOK and deferred to Stockfish soundness — NOT
+// flagged as master-divergent. This is also the determinism fix for the live
+// explorer's rate-limiting: a sparse (1-2 game) position that the proxy
+// intermittently returns as "1 reply" vs empty no longer flip-flops between
+// the 6a/7a legitimacy flag and the 6b/7b soundness check; it always defers.
+const MIN_LEGIT_MASTER_GAMES = 5;
 
 function resolveStockfish(): string | null {
   const env = process.env.STOCKFISH_PATH;
@@ -167,8 +175,9 @@ describe.runIf(RUN)('Hole 6a — masters legitimacy of past-book moves (main + v
         if (ply > anchor) {
           const moves = await mastersMoves(before);
           if (moves !== null) {
-            if (moves.length === 0) {
-              beyondBook++; // past masters' depth — Stockfish's job, not a suspect
+            const totalGames = moves.reduce((s, m) => s + m.games, 0);
+            if (moves.length === 0 || totalGames < MIN_LEGIT_MASTER_GAMES) {
+              beyondBook++; // past masters' depth (or below theory threshold) — Stockfish's job
             } else if (!moves.some((m) => m.san === mv.san) && !SUSPECT_BASELINE.has(`${key}::${ply}:${mv.san}`)) {
               suspects.push(`ply ${ply} ${mv.san} — masters reached this position (${moves.length} replies: ${moves.slice(0, 4).map((m) => m.san).join('/')}) but did not play it`);
             }
@@ -420,7 +429,8 @@ describe.runIf(RUN)('Hole 7a — masters legitimacy of middlegame plan lines', (
             try { mv = c.move(line.moves[i]); } catch { break; }
             const moves = await mastersMovesByFen(fenBefore);
             if (moves !== null) {
-              if (moves.length === 0) beyondBook++;
+              const totalGames = moves.reduce((s, m) => s + m.games, 0);
+              if (moves.length === 0 || totalGames < MIN_LEGIT_MASTER_GAMES) beyondBook++;
               else if (!moves.some((m) => m.san === mv.san) && !PLAN_SUSPECT_BASELINE.has(`${plan.id}::${i + 1}:${mv.san}`)) {
                 suspects.push(`${plan.id} move ${i + 1} ${mv.san} — masters reached this position (${moves.slice(0, 4).map((m) => m.san).join('/')}) but did not play it`);
               }
