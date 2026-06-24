@@ -498,7 +498,7 @@ export function useEndgamePlayout(options: EndgamePlayoutOptions): EndgamePlayou
 
   const onPieceDrop = useCallback(
     (args: PieceDropHandlerArgs): boolean => {
-      if (!args.sourceSquare || !args.targetSquare) return false;
+      if (!args.sourceSquare || !args.targetSquare || args.sourceSquare === args.targetSquare) return false;
       return playMove(args.sourceSquare, args.targetSquare);
     },
     [playMove],

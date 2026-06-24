@@ -541,7 +541,7 @@ function LessonView({
 
   const handlePieceDrop = useCallback(
     (args: PieceDropHandlerArgs): boolean => {
-      if (!args.sourceSquare || !args.targetSquare) return false;
+      if (!args.sourceSquare || !args.targetSquare || args.sourceSquare === args.targetSquare) return false;
       return tryForkMove(args.sourceSquare, args.targetSquare);
     },
     [tryForkMove],

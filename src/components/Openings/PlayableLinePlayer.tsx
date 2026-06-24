@@ -525,7 +525,7 @@ export function PlayableLinePlayer({
 
   const handlePieceDrop = useCallback(
     ({ sourceSquare, targetSquare }: PieceDropHandlerArgs): boolean => {
-      if (phase !== 'memory' || !targetSquare) {
+      if (phase !== 'memory' || !targetSquare || sourceSquare === targetSquare) {
         clearSelection();
         return false;
       }

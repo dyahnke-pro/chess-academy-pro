@@ -210,7 +210,7 @@ export function CoachPlaySessionView({
 
   const handlePieceDrop = useCallback(
     ({ sourceSquare, targetSquare }: { sourceSquare: string; targetSquare: string | null }): boolean => {
-      if (!targetSquare) return false;
+      if (!targetSquare || sourceSquare === targetSquare) return false;
       try {
         chessRef.current.move({ from: sourceSquare, to: targetSquare, promotion: 'q' });
       } catch {

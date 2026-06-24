@@ -259,7 +259,7 @@ export function ModelGameViewer({
 
   const handleExploreDrop = useCallback(
     ({ sourceSquare, targetSquare }: { piece: unknown; sourceSquare: string; targetSquare: string | null }): boolean => {
-      if (!targetSquare) return false;
+      if (!targetSquare || sourceSquare === targetSquare) return false;
       return applyExploreMove(sourceSquare, targetSquare);
     },
     [applyExploreMove],
