@@ -766,10 +766,10 @@
           "Bxc3"
         ],
         "annotations": [
-          "exf6 — captures on f6, opening lines.",
-          "Qxf6 — takes on f6.",
-          "O-O — castles to safety.",
-          "Bxc3 — takes on c3."
+          "exf6 — White grabs the pawn, but the e5-spearhead is gone and Black's pieces all wake at once.",
+          "…Qxf6 — the queen recaptures straight onto f6, glaring down the long diagonal at d4 and b2. This is the post the whole plan was built around.",
+          "O-O — White hurries the king to safety, but the centre is already cracked open.",
+          "…Bxc3 — Black snaps off the c3-knight, fracturing White's queenside pawns and baring the loosened d4-pawn."
         ],
         "arrows": [
           [],
@@ -804,10 +804,10 @@
           ]
         ],
         "learnCues": [
-          "exf6 — reply",
-          "Qxf6 — our move",
-          "O-O — reply",
-          "Bxc3 — our move"
+          "exf6 — the spearhead falls",
+          "…Qxf6 — queen rakes d4 and b2",
+          "O-O — White hides the king",
+          "…Bxc3 — wreck the queenside"
         ],
         "sources": [
           "concept:pos-center",
@@ -1322,8 +1322,8 @@
         ],
         "annotations": [
           "…e6 — Black strikes at the d5-pawn, opening the centre to feed his queenside pressure.",
-          "dxe6 — White captures.",
-          "…Bxe6 — the bishop develops with gain of open lines; now Black has play in the centre as well as on the files."
+          "dxe6 — White grabs the pawn, but this hands Black the open files he was angling for.",
+          "…Bxe6 — the bishop develops with tempo; now Black has play in the centre as well as down the a- and b-files."
         ],
         "arrows": [
           [],
@@ -1356,8 +1356,8 @@
         ],
         "learnCues": [
           "…e6 — strike at d5",
-          "dxe6 — White takes",
-          "…Bxe6 — develop, open lines"
+          "dxe6 — files swing open",
+          "…Bxe6 — develop, lines open"
         ],
         "sources": [
           "concept:att-queenside-attack",
@@ -1878,10 +1878,10 @@
           "dxe4"
         ],
         "annotations": [
-          "…Nc6 — Black develops the knight.",
-          "e4 — White’s central break, striking d5 and activating the whole army.",
-          "…dxe4 — Black takes.",
-          "dxe4 — White recaptures; the centre opens and the queen heads for the h4-square and the black king."
+          "…Nc6 — Black develops the knight, eyeing d4 and e5 to fight for the centre.",
+          "e4 — White's central break, striking d5 and waking the whole army.",
+          "…dxe4 — Black takes, and the position rips open just as White hoped.",
+          "dxe4 — White recaptures; the centre clears and the queen sets its sights on h4 and the black king."
         ],
         "arrows": [
           [],
@@ -1924,10 +1924,10 @@
           ]
         ],
         "learnCues": [
-          "…Nc6 — develop",
-          "e4 — central break",
-          "…dxe4 — Black takes",
-          "dxe4 — open the centre"
+          "…Nc6 — fight for the centre",
+          "e4 — the central break",
+          "…dxe4 — the centre opens",
+          "dxe4 — queen heads for h4"
         ],
         "sources": [
           "concept:att-kingside-storm",
@@ -2153,10 +2153,10 @@
           "Nf6"
         ],
         "annotations": [
-          "d4 — White breaks in the centre, striking at the c5-pawn and freeing his pieces.",
-          "…cxd4 — Black takes.",
-          "exd4 — White recaptures, with a mobile centre.",
-          "…Nf6 — Black brings the knight back to defend."
+          "d4 — White breaks in the centre, hitting the c5-pawn and freeing his pieces.",
+          "…cxd4 — Black trades, but only hands White the open centre he wanted.",
+          "exd4 — White recaptures, left with a broad, mobile pawn centre.",
+          "…Nf6 — the knight hurries back to blunt that centre and the coming f4-f5 lever."
         ],
         "arrows": [
           [],
@@ -2196,9 +2196,9 @@
         ],
         "learnCues": [
           "d4 — break the centre",
-          "…cxd4 — Black takes",
+          "…cxd4 — centre opens",
           "exd4 — mobile centre",
-          "…Nf6 — Black defends"
+          "…Nf6 — blunt the centre"
         ],
         "sources": [
           "concept:pos-center",
@@ -5145,10 +5145,10 @@
           "g5"
         ],
         "annotations": [
-          "Nfe5 — White challenges in the centre.",
-          "…Nxe5 — Black trades, keeping the e4-knight as the Stonewall’s pride.",
-          "Nxe5 — White recaptures.",
-          "…g5 — the kingside pawn storm rolls; …g4 will pry open lines at the white king."
+          "Nfe5 — White plants a knight on e5, contesting the hole in Black's wall.",
+          "…Nxe5 — Black trades it off, and the e4-knight still towers as the Stonewall's pride.",
+          "Nxe5 — White recaptures on e5, but that proud e4-knight is going nowhere.",
+          "…g5 — the kingside pawn storm rolls; …g4 next will pry open lines at the white king."
         ],
         "arrows": [
           [],
@@ -5187,9 +5187,9 @@
           ]
         ],
         "learnCues": [
-          "Nfe5 — White challenges",
+          "Nfe5 — contest e5",
           "…Nxe5 — keep the e4-knight",
-          "Nxe5 — White recaptures",
+          "Nxe5 — e4 still rules",
           "…g5 — start the storm"
         ],
         "sources": [
@@ -6419,10 +6419,10 @@
           "Re8"
         ],
         "annotations": [
-          "Qa4 — the queen goes to a4.",
-          "Nxc4 — takes on c4.",
-          "Qxc4 — takes on c4.",
-          "Re8 — the rook goes to e8."
+          "Qa4 — the queen swings to the rim, but from a4 she pins her glare on the offside a5-knight.",
+          "…Nxc4 — Black gives up that stranded a5-knight to swap off White's strong c4-bishop and ease the pressure.",
+          "Qxc4 — the queen recaptures dead-centre on c4, glaring back down the diagonal at f7.",
+          "…Re8 — Black's last piece joins in, the rook lining up on the e-file against White's e5-spearhead."
         ],
         "arrows": [
           [],
@@ -6457,10 +6457,10 @@
           ]
         ],
         "learnCues": [
-          "Qa4 — our move",
-          "Nxc4 — reply",
-          "Qxc4 — our move",
-          "Re8 — reply"
+          "Qa4 — hit the a5-knight",
+          "…Nxc4 — trade the bishop off",
+          "Qxc4 — queen eyes f7",
+          "…Re8 — line up on e5"
         ],
         "sources": [
           "concept:att-greek-gift",
@@ -6638,10 +6638,10 @@
           "cxd4"
         ],
         "annotations": [
-          "…Bd7 — Black develops the last minor piece.",
-          "d4 — White strikes at the centre, hitting the e5-pawn — the break that gives this symmetric position life.",
-          "…exd4 — Black takes.",
-          "cxd4 — White recaptures, with a broad pawn centre and the more active bishops."
+          "…Bd7 — Black tucks the bishop away, completing development before the break.",
+          "d4 — White strikes at the e5-pawn — the break that gives this symmetric position life.",
+          "…exd4 — Black takes, conceding White the broad centre.",
+          "cxd4 — White recaptures, left with a wide pawn centre and the more active bishops."
         ],
         "arrows": [
           [],
@@ -6680,9 +6680,9 @@
           ]
         ],
         "learnCues": [
-          "…Bd7 — Black develops",
+          "…Bd7 — finish developing",
           "d4 — strike the centre",
-          "…exd4 — Black takes",
+          "…exd4 — centre concedes",
           "cxd4 — broad centre"
         ],
         "sources": [
@@ -6996,10 +6996,10 @@
           "Bxf6"
         ],
         "annotations": [
-          "Rb8 — the rook goes to b8.",
-          "Nd1 — the knight goes to d1.",
-          "h6 — the pawn advances to h6.",
-          "Bxf6 — takes on f6."
+          "…Rb8 — Black lifts the rook off a8, looking for queenside counterplay.",
+          "Nd1 — the knight begins its journey, Nc3-d1-e3, rerouting to blockade and besiege the isolated d5-pawn.",
+          "…h6 — Black puts the question to the g5-bishop, hoping to break the pin on the f6-knight.",
+          "Bxf6 — White trades the bishop for the knight, stripping the f6-defender away from the weak d5-pawn."
         ],
         "arrows": [
           [],
@@ -7034,10 +7034,10 @@
           ]
         ],
         "learnCues": [
-          "Rb8 — reply",
-          "Nd1 — our move",
-          "h6 — reply",
-          "Bxf6 — our move"
+          "…Rb8 — seek counterplay",
+          "Nd1 — reroute to besiege d5",
+          "…h6 — question the bishop",
+          "Bxf6 — strip the d5 defender"
         ],
         "sources": [
           "concept:pawn-isolated",
@@ -10435,9 +10435,9 @@
           "dxe5"
         ],
         "annotations": [
-          "…Rab8 — Black prepares queenside counterplay.",
-          "e5 — the King’s Indian Attack’s signature break, gaining kingside space and striking d6.",
-          "…dxe5 — Black takes.",
+          "…Rab8 — Black readies queenside counterplay before the storm.",
+          "e5 — the King's Indian Attack's signature break, grabbing kingside space and hitting d6.",
+          "…dxe5 — Black takes, but the recapture only feeds White's space.",
           "dxe5 — White recaptures; the e5-pawn cramps Black and the g2-bishop rakes the long diagonal."
         ],
         "arrows": [
@@ -10483,7 +10483,7 @@
         "learnCues": [
           "…Rab8 — queenside play",
           "e5 — the KIA break",
-          "…dxe5 — Black takes",
+          "…dxe5 — feeds White's space",
           "dxe5 — cramp Black"
         ],
         "sources": [
@@ -11150,10 +11150,10 @@
           "c4"
         ],
         "annotations": [
-          "Qd8 — the queen goes to d8.",
-          "Qd1 — the queen goes to d1.",
-          "Bd5 — the bishop goes to d5.",
-          "c4 — the pawn advances to c4."
+          "…Qd8 — Black's queen slips back to regroup behind the lines.",
+          "Qd1 — the queen steps to d1, quietly backing the d-pawn and the c4 push to come.",
+          "…Bd5 — Black centralises the bishop, trying to blunt White's space before c4 lands.",
+          "c4 — White expands, claiming central and queenside space and challenging the d5-bishop at once."
         ],
         "arrows": [
           [],
@@ -11188,10 +11188,10 @@
           ]
         ],
         "learnCues": [
-          "Qd8 — reply",
-          "Qd1 — our move",
-          "Bd5 — reply",
-          "c4 — our move"
+          "…Qd8 — regroup",
+          "Qd1 — back the d-pawn",
+          "…Bd5 — blunt the centre",
+          "c4 — claim space, hit d5"
         ],
         "sources": [
           "concept:pos-center",
@@ -11580,10 +11580,10 @@
           "Bxc6"
         ],
         "annotations": [
-          "b5 — White pushes by, fixing the queenside.",
+          "b5 — White pushes past, fixing the queenside pawns.",
           "…c6 — Black strikes at the b5-pawn, refusing to let White settle.",
-          "bxc6 — White captures.",
-          "…Bxc6 — the bishop recaptures onto the long diagonal; the queenside files open for Black’s rooks."
+          "bxc6 — White takes, and the b-file cracks open.",
+          "…Bxc6 — the bishop recaptures onto the long diagonal; the queenside files swing open for Black's rooks."
         ],
         "arrows": [
           [],
@@ -11622,10 +11622,10 @@
           ]
         ],
         "learnCues": [
-          "b5 — White fixes the queenside",
+          "b5 — fix the queenside",
           "…c6 — strike the b-pawn",
-          "bxc6 — White takes",
-          "…Bxc6 — open the files"
+          "bxc6 — the b-file opens",
+          "…Bxc6 — rake the long diagonal"
         ],
         "sources": [
           "concept:pawn-doubled",
@@ -13245,10 +13245,10 @@
         ],
         "annotations": [
           "…a6 — Black prepares …b5, the queenside expansion.",
-          "f5 — White strikes on the kingside, the other wing of this opposite-plans battle.",
-          "…b5 — Black’s queenside pawns roll, hitting the a4-pawn and opening lines.",
-          "axb5 — White captures.",
-          "…axb5 — Black recaptures; the a-file opens toward White’s queenside."
+          "f5 — White strikes on the kingside, the other wing of this opposite-plans race.",
+          "…b5 — Black's queenside pawns roll, hitting the a4-pawn and prying open lines.",
+          "axb5 — White takes, but it only opens the a-file for Black's attack.",
+          "…axb5 — Black recaptures; the a-file is now a highway toward White's queenside."
         ],
         "arrows": [
           [],
@@ -13299,10 +13299,10 @@
         ],
         "learnCues": [
           "…a6 — prepare …b5",
-          "f5 — White’s kingside",
+          "f5 — White's kingside",
           "…b5 — roll the queenside",
-          "axb5 — White takes",
-          "…axb5 — open the a-file"
+          "axb5 — opens the a-file",
+          "…axb5 — a-file highway"
         ],
         "sources": [
           "concept:att-queenside-attack",
@@ -14085,10 +14085,10 @@
           "h6"
         ],
         "annotations": [
-          "Ba2 — the bishop goes to a2.",
-          "Rad8 — the rook goes to d8.",
-          "Nd4 — the knight goes to d4.",
-          "h6 — the pawn advances to h6."
+          "Ba2 — White slips the bishop back to a2, clear of …b5 but still raking the diagonal toward f7.",
+          "…Rad8 — Black swings the rook to d8, loading the d-file behind the …d5 break to come.",
+          "Nd4 — White centralises the knight on d4, eyeing the c6 and f5 holes.",
+          "…h6 — Black questions the g5-bishop, easing the pressure on the f6-knight before freeing with …d5."
         ],
         "arrows": [
           [],
@@ -14123,10 +14123,10 @@
           ]
         ],
         "learnCues": [
-          "Ba2 — reply",
-          "Rad8 — our move",
-          "Nd4 — reply",
-          "h6 — our move"
+          "Ba2 — safe, still aimed at f7",
+          "…Rad8 — load the d-file",
+          "Nd4 — centralise the knight",
+          "…h6 — question the bishop"
         ],
         "sources": [
           "concept:pos-center",
@@ -20265,8 +20265,8 @@
         "annotations": [
           "c3 — White braces the d4-pawn.",
           "…c5 — Black strikes at d4, the freeing break.",
-          "dxc5 — White takes.",
-          "…Bxc5 — the bishop recaptures actively, eyeing the white king as Black’s pieces spring to life."
+          "dxc5 — White takes, but it only springs Black's pieces loose.",
+          "…Bxc5 — the bishop recaptures actively, eyeing the white king as Black's pieces come alive."
         ],
         "arrows": [
           [],
@@ -20307,7 +20307,7 @@
         "learnCues": [
           "c3 — brace d4",
           "…c5 — strike d4",
-          "dxc5 — White takes",
+          "dxc5 — Black frees up",
           "…Bxc5 — active recapture"
         ],
         "sources": [
@@ -20350,10 +20350,10 @@
           "Nd2"
         ],
         "annotations": [
-          "Bd6 — the bishop goes to d6.",
-          "Nxe6 — takes on e6.",
-          "fxe6 — captures on e6, opening lines.",
-          "Nd2 — the knight goes to d2."
+          "…Bd6 — Black slides the bishop to d6, but it abandons the e6-bishop to its fate.",
+          "Nxe6 — White grabs the bishop, winning the two bishops and tearing open Black's kingside.",
+          "…fxe6 — forced to recapture with the pawn, leaving the king bared on the f-file and the e6-pawn weak.",
+          "Nd2 — the knight reroutes toward the light-square holes — the lasting spoils of the bishop pair."
         ],
         "arrows": [
           [],
@@ -20388,10 +20388,10 @@
           ]
         ],
         "learnCues": [
-          "Bd6 — reply",
-          "Nxe6 — our move",
-          "fxe6 — reply",
-          "Nd2 — our move"
+          "…Bd6 — abandons e6",
+          "Nxe6 — win the two bishops",
+          "…fxe6 — king bared",
+          "Nd2 — reroute to the light squares"
         ],
         "sources": [
           "concept:pos-bishop-pair",
@@ -23857,10 +23857,10 @@
           "Bb2"
         ],
         "annotations": [
-          "Re8 — the rook goes to e8.",
-          "b3 — the pawn advances to b3.",
-          "Rc8 — the rook goes to c8.",
-          "Bb2 — the bishop goes to b2."
+          "…Re8 — Black centralises the rook on the half-open e-file.",
+          "b3 — White opens a home for the bishop on the long diagonal and clamps the c4-square.",
+          "…Rc8 — Black lines the other rook up on the half-open c-file.",
+          "Bb2 — the bishop settles on the long diagonal, glaring through the centre at the black kingside."
         ],
         "arrows": [
           [],
@@ -23895,10 +23895,10 @@
           ]
         ],
         "learnCues": [
-          "Re8 — reply",
-          "b3 — our move",
-          "Rc8 — reply",
-          "Bb2 — our move"
+          "…Re8 — rook to the e-file",
+          "b3 — prep the fianchetto",
+          "…Rc8 — rook to the c-file",
+          "Bb2 — rake the long diagonal"
         ],
         "sources": [
           "concept:pos-outpost",
@@ -25390,10 +25390,10 @@
           "Nd4"
         ],
         "annotations": [
-          "c4 — the pawn advances to c4.",
-          "axb5 — captures on b5, opening lines.",
-          "axb5 — captures on b5, opening lines.",
-          "Nd4 — the knight goes to d4."
+          "…c4 — Black clamps the queenside, but closing that wing only frees White to throw everything at the king.",
+          "axb5 — White cracks open the a-file before launching the rook-swing.",
+          "…axb5 — Black recaptures; the a-file is open, but White's rook is already heading the other way.",
+          "Nd4 — the knight leaps to d4, clamping c6 and clearing f3 for the Ra3-g3 swing at the king."
         ],
         "arrows": [
           [],
@@ -25428,10 +25428,10 @@
           ]
         ],
         "learnCues": [
-          "c4 — reply",
-          "axb5 — our move",
-          "axb5 — reply",
-          "Nd4 — our move"
+          "…c4 — clamp the queenside",
+          "axb5 — crack the a-file",
+          "…axb5 — a-file opens",
+          "Nd4 — clear the path to g3"
         ],
         "sources": [
           "book:ruy-lopez",
@@ -26284,10 +26284,10 @@
           "e6"
         ],
         "annotations": [
-          "Qh4 — the queen goes to h4.",
-          "Nxc3 — takes on c3.",
-          "Bc4 — the bishop goes to c4.",
-          "e6 — the pawn advances to e6."
+          "Qh4 — White's queen swings to h4, hunting for kingside play.",
+          "…Nxc3 — the centralised knight crashes in, snatching the doubled c3-pawn and hitting the e2-bishop.",
+          "Bc4 — White rescues the bishop, swinging it to the a2-g8 diagonal toward f7.",
+          "…e6 — Black blunts the c4-bishop and shores up the light squares, a clean pawn to the good."
         ],
         "arrows": [
           [],
@@ -26322,10 +26322,10 @@
           ]
         ],
         "learnCues": [
-          "Qh4 — reply",
-          "Nxc3 — our move",
-          "Bc4 — reply",
-          "e6 — our move"
+          "Qh4 — White seeks the kingside",
+          "…Nxc3 — snatch the pawn, hit e2",
+          "Bc4 — bishop eyes f7",
+          "…e6 — blunt it, up a pawn"
         ],
         "sources": [
           "concept:pawn-doubled",
@@ -26367,10 +26367,10 @@
           "Qc6"
         ],
         "annotations": [
-          "g4 — the pawn advances to g4.",
-          "Qc5+ — the queen goes to c5.",
-          "Be3 — the bishop goes to e3.",
-          "Qc6 — the queen goes to c6."
+          "g4 — White lunges to kick the queen, but every pawn push bleeds more light squares around his own king.",
+          "…Qc5+ — the queen sidesteps with check, hitting the c4-pawn and the king at once.",
+          "Be3 — White blocks the check, the bishop stepping in front of its own king.",
+          "…Qc6 — the queen regroups to c6, still gnawing at c4 and the airy squares near the white king."
         ],
         "arrows": [
           [],
@@ -26405,10 +26405,10 @@
           ]
         ],
         "learnCues": [
-          "g4 — reply",
-          "Qc5+ — our move",
-          "Be3 — reply",
-          "Qc6 — our move"
+          "g4 — White lunges, loosens",
+          "…Qc5+ — check, hit c4",
+          "Be3 — block the check",
+          "…Qc6 — gnaw the light squares"
         ],
         "sources": [
           "concept:pos-center",
@@ -26448,10 +26448,10 @@
           "exf5"
         ],
         "annotations": [
-          "Nh4 — the knight goes to h4.",
-          "b5 — the pawn advances to b5.",
-          "Nxf5 — takes on f5.",
-          "exf5 — captures on f5, opening lines."
+          "Nh4 — White jabs at the f5-bishop, snatching a tempo for his own kingside designs.",
+          "…b5 — the pawnstorm begins, hitting the c4-bishop and rolling toward the white king on b1.",
+          "Nxf5 — White grabs the bishop, but every trade brings Black's attack a move closer.",
+          "…exf5 — Black recaptures, opening the e-file at White's centre while the b-pawn keeps rolling."
         ],
         "arrows": [
           [],
@@ -26486,10 +26486,10 @@
           ]
         ],
         "learnCues": [
-          "Nh4 — reply",
-          "b5 — our move",
-          "Nxf5 — reply",
-          "exf5 — our move"
+          "Nh4 — jab at the bishop",
+          "…b5 — start the pawnstorm",
+          "Nxf5 — White trades",
+          "…exf5 — open the e-file"
         ],
         "sources": [
           "concept:att-queenside-attack",
@@ -27145,10 +27145,10 @@
           "a6"
         ],
         "annotations": [
-          "Qe2 — the queen goes to e2.",
-          "Na5 — the knight goes to a5.",
-          "Rf2 — the rook goes to f2.",
-          "a6 — the pawn advances to a6."
+          "Qe2 — the queen steps to e2, backing the e4/f4 centre and freeing the rook to lift.",
+          "…Na5 — Black's knight heads for c4, but it drifts to the rim while White builds.",
+          "Rf2 — White lifts the rook, ready to double on the f-file and pour fire at f7.",
+          "…a6 — Black questions the b5-bishop, but the clock is ticking on the kingside."
         ],
         "arrows": [
           [],
@@ -27183,10 +27183,10 @@
           ]
         ],
         "learnCues": [
-          "Qe2 — our move",
-          "Na5 — reply",
-          "Rf2 — our move",
-          "a6 — reply"
+          "Qe2 — back the centre",
+          "…Na5 — knight to the rim",
+          "Rf2 — lift the rook",
+          "…a6 — question the bishop"
         ],
         "sources": [
           "concept:att-kingside-storm",
@@ -27915,10 +27915,10 @@
           "Bxe2"
         ],
         "annotations": [
-          "Ncxd4 — takes on d4.",
-          "Nxd4 — takes on d4.",
-          "Nxd4 — takes on d4.",
-          "Bxe2 — takes on e2."
+          "Ncxd4 — White finally rounds up the cramping d4-pawn.",
+          "…Nxd4 — Black recaptures, his pieces flooding into the centre.",
+          "Nxd4 — White takes again; the d4-square is a revolving door.",
+          "…Bxe2 — Black snaps off the e2-bishop and trades down into a clean, equal game, the cramp long forgotten."
         ],
         "arrows": [
           [],
@@ -27953,10 +27953,10 @@
           ]
         ],
         "learnCues": [
-          "Ncxd4 — reply",
-          "Nxd4 — our move",
-          "Nxd4 — reply",
-          "Bxe2 — our move"
+          "Ncxd4 — round up the d-pawn",
+          "…Nxd4 — flood the centre",
+          "Nxd4 — take again",
+          "…Bxe2 — trade into equality"
         ],
         "sources": [
           "concept:pos-bishop-pair",
@@ -28518,10 +28518,10 @@
           "Qb8"
         ],
         "annotations": [
-          "Ndxb5 — takes on b5.",
-          "Rb7 — the rook goes to b7.",
-          "Nd4 — the knight goes to d4.",
-          "Qb8 — the queen goes to b8."
+          "Ndxb5 — White snatches the b5-pawn, but cracking open the b-file is playing with fire against the Dragon.",
+          "…Rb7 — the signature Chinese-Dragon lift: the rook loads the half-open b-file, ready to double behind the queen.",
+          "Nd4 — White scurries the knight back to d4, but the b-file is already a battering ram.",
+          "…Qb8 — the queen swings in behind the rook; the whole battery bears down the b-file at the white king."
         ],
         "arrows": [
           [],
@@ -28556,10 +28556,10 @@
           ]
         ],
         "learnCues": [
-          "Ndxb5 — reply",
-          "Rb7 — our move",
-          "Nd4 — reply",
-          "Qb8 — our move"
+          "Ndxb5 — White grabs b5",
+          "…Rb7 — the Chinese-Dragon lift",
+          "Nd4 — knight scurries back",
+          "…Qb8 — load the b-file battery"
         ],
         "sources": [
           "concept:att-queenside-attack",
@@ -28905,10 +28905,10 @@
           "e5"
         ],
         "annotations": [
-          "fxg4 — captures on g4, opening lines.",
-          "Bxg4 — takes on g4.",
-          "Rdg1 — the rook goes to g1.",
-          "e5 — the pawn advances to e5."
+          "fxg4 — White grabs the pawn and hits the h5-knight, but it rips open the f-file and the long diagonal.",
+          "…Bxg4 — Black recaptures, the bishop crashing in with tempo against the d1-rook.",
+          "Rdg1 — the rook dodges to g1, but Black's pieces are swarming the white king.",
+          "…e5 — the spear thrust: …e5 kicks the d4-knight and unleashes the g7-bishop down the long diagonal at the king."
         ],
         "arrows": [
           [],
@@ -28943,10 +28943,10 @@
           ]
         ],
         "learnCues": [
-          "fxg4 — reply",
-          "Bxg4 — our move",
-          "Rdg1 — reply",
-          "e5 — our move"
+          "fxg4 — White grabs, lines open",
+          "…Bxg4 — recapture with tempo",
+          "Rdg1 — the rook dodges",
+          "…e5 — unleash the Dragon bishop"
         ],
         "sources": [
           "concept:att-queenside-attack",
@@ -29841,10 +29841,10 @@
           "Bb7"
         ],
         "annotations": [
-          "a5 — the pawn advances to a5.",
-          "b6 — the pawn advances to b6.",
-          "axb6 — captures on b6, opening lines.",
-          "Bb7 — the bishop goes to b7."
+          "a5 — White clamps the queenside, fixing the dark squares and eyeing the b6-hole.",
+          "…b6 — Black strikes back at the a5-pawn, refusing the cramp and freeing the c8-bishop's path.",
+          "axb6 — White takes, but it hands Black the open b-file and a clear queenside target.",
+          "…Bb7 — the bishop swings to the long diagonal, pressing e4 while the rook eyes the open b-file."
         ],
         "arrows": [
           [],
@@ -29879,10 +29879,10 @@
           ]
         ],
         "learnCues": [
-          "a5 — reply",
-          "b6 — our move",
-          "axb6 — reply",
-          "Bb7 — our move"
+          "a5 — White clamps the queenside",
+          "…b6 — strike the a5-pawn",
+          "axb6 — the b-file opens",
+          "…Bb7 — press e4, eye the b-file"
         ],
         "sources": [
           "concept:pos-center",
@@ -30982,10 +30982,10 @@
           "Be6"
         ],
         "annotations": [
-          "g3 — the pawn advances to g3.",
-          "a5 — the pawn advances to a5.",
-          "h4 — the pawn advances to h4.",
-          "Be6 — the bishop goes to e6."
+          "g3 — White prepares to fianchetto, shoring up the light squares around the d5-knight.",
+          "…a5 — Black bolsters the b4-pawn and grabs queenside space, the slow squeeze the Sveshnikov lives on.",
+          "h4 — White grabs space on the other wing, hoping to soften Black's kingside.",
+          "…Be6 — Black challenges the proud d5-knight head-on, offering to trade off White's best piece."
         ],
         "arrows": [
           [],
@@ -31020,10 +31020,10 @@
           ]
         ],
         "learnCues": [
-          "g3 — reply",
-          "a5 — our move",
-          "h4 — reply",
-          "Be6 — our move"
+          "g3 — White shores up d5",
+          "…a5 — bolster b4, gain space",
+          "h4 — White's kingside space",
+          "…Be6 — challenge the d5-knight"
         ],
         "sources": [
           "concept:pos-bishop-pair",
@@ -64643,10 +64643,10 @@
           "Bh5"
         ],
         "annotations": [
-          "Be3 — the bishop goes to e3.",
-          "c5 — the pawn advances to c5.",
-          "h3 — the pawn advances to h3.",
-          "Bh5 — the bishop goes to h5."
+          "Be3 — White develops the last bishop, bracing d4 before the minority attack rolls.",
+          "…c5 — Black strikes back at d4, trying to free his game before White's queenside push.",
+          "h3 — White puts the question to the g4-bishop, nudging it back before expanding.",
+          "…Bh5 — the bishop slides to h5, keeping its eye on the f3-knight from afar."
         ],
         "arrows": [
           [],
@@ -64681,10 +64681,10 @@
           ]
         ],
         "learnCues": [
-          "Be3 — our move",
-          "c5 — reply",
-          "h3 — our move",
-          "Bh5 — reply"
+          "Be3 — brace d4",
+          "…c5 — strike back at d4",
+          "h3 — question the bishop",
+          "…Bh5 — keep eyeing f3"
         ],
         "sources": [
           "concept:pawn-minority-attack",
@@ -70192,10 +70192,10 @@
           "Qe3"
         ],
         "annotations": [
-          "d6 — the pawn advances to d6.",
-          "Bh6 — the bishop goes to h6.",
-          "Ne6 — the knight goes to e6.",
-          "Qe3 — the queen goes to e3."
+          "…d6 — Black jabs at the cramping e5-pawn, trying to break White's bind.",
+          "Bh6 — White offers to swap off Black's prize g7-bishop, the linchpin of his kingside.",
+          "…Ne6 — Black plants the knight on e6, hitting the d4-queen and bidding for the dark squares.",
+          "Qe3 — the queen sidesteps to e3, dodging the knight while keeping the dark-square pressure alive."
         ],
         "arrows": [
           [],
@@ -70230,10 +70230,10 @@
           ]
         ],
         "learnCues": [
-          "d6 — reply",
-          "Bh6 — our move",
-          "Ne6 — reply",
-          "Qe3 — our move"
+          "…d6 — jab at e5",
+          "Bh6 — swap off the g7-bishop",
+          "…Ne6 — hit the queen, grab dark squares",
+          "Qe3 — sidestep, keep pressing"
         ],
         "sources": [
           "concept:pos-center",
@@ -70373,10 +70373,10 @@
           "Qxe4"
         ],
         "annotations": [
-          "Re8 — the rook goes to e8.",
-          "Ne4 — the knight goes to e4.",
-          "Nxe4 — takes on e4.",
-          "Qxe4 — takes on e4."
+          "…Re8 — Black shifts the rook to the e-file, eyeing the centre.",
+          "Ne4 — White's knight jumps to the e4-outpost, hitting the d6-bishop and clearing the queen's path to h7.",
+          "…Nxe4 — Black trades off the dangerous knight before it grows roots.",
+          "Qxe4 — the queen recaptures dead-centre on e4, glaring at h7 down the long diagonal."
         ],
         "arrows": [
           [],
@@ -70411,10 +70411,10 @@
           ]
         ],
         "learnCues": [
-          "Re8 — reply",
-          "Ne4 — our move",
-          "Nxe4 — reply",
-          "Qxe4 — our move"
+          "…Re8 — rook to the e-file",
+          "Ne4 — leap to the outpost",
+          "…Nxe4 — trade it off",
+          "Qxe4 — queen eyes h7"
         ],
         "sources": [
           "concept:pos-center",
@@ -71881,9 +71881,9 @@
         ],
         "annotations": [
           "…Re8 — Black contests the e-file.",
-          "d4 — White breaks in the centre, striking e5 and using his healthier structure.",
-          "…exd4 — Black takes.",
-          "cxd4 — White recaptures, a broad centre against Black’s doubled c-pawns."
+          "d4 — White breaks in the centre, striking e5 and leaning on his healthier structure.",
+          "…exd4 — Black takes, opening the very file White wanted.",
+          "cxd4 — White recaptures into a broad centre against Black's doubled c-pawns."
         ],
         "arrows": [
           [],
@@ -71924,7 +71924,7 @@
         "learnCues": [
           "…Re8 — contest the e-file",
           "d4 — break the centre",
-          "…exd4 — Black takes",
+          "…exd4 — the file opens",
           "cxd4 — broad centre"
         ],
         "sources": [
@@ -71966,10 +71966,10 @@
           "Qc7"
         ],
         "annotations": [
-          "exd5 — captures on d5, opening lines.",
-          "Nxd5 — takes on d5.",
-          "Bb5 — the bishop goes to b5.",
-          "Qc7 — the queen goes to c7."
+          "exd5 — White rips open the centre the instant Black strikes with …d5 — the standard race-opener.",
+          "…Nxd5 — Black recaptures with the knight, but trading wood only speeds White's attack.",
+          "Bb5 — White develops with tempo, the bishop jabbing at the c6-pawn and the light squares.",
+          "…Qc7 — Black's queen steps to c7, shoring up c6 and bracing for the pawnstorm to come."
         ],
         "arrows": [
           [],
@@ -72004,10 +72004,10 @@
           ]
         ],
         "learnCues": [
-          "exd5 — our move",
-          "Nxd5 — reply",
-          "Bb5 — our move",
-          "Qc7 — reply"
+          "exd5 — rip open the centre",
+          "…Nxd5 — Black recaptures",
+          "Bb5 — develop with tempo",
+          "…Qc7 — shore up c6"
         ],
         "sources": [
           "concept:att-kingside-storm",
@@ -72049,10 +72049,10 @@
           "h3"
         ],
         "annotations": [
-          "Bd7 — the bishop goes to d7.",
-          "Nf3 — the knight goes to f3.",
-          "Qc7 — the queen goes to c7.",
-          "h3 — the pawn advances to h3."
+          "…Bd7 — Black develops the bishop, completing the Hedgehog setup.",
+          "Nf3 — White slides the knight back to f3, declining trades and keeping every piece on for the squeeze.",
+          "…Qc7 — the queen settles on c7, the classic Hedgehog post behind the pawns.",
+          "h3 — White makes luft and takes the g4-square, in no hurry while the bind does the work."
         ],
         "arrows": [
           [],
@@ -72087,10 +72087,10 @@
           ]
         ],
         "learnCues": [
-          "Bd7 — reply",
-          "Nf3 — our move",
-          "Qc7 — reply",
-          "h3 — our move"
+          "…Bd7 — complete the Hedgehog",
+          "Nf3 — decline trades",
+          "…Qc7 — Hedgehog post",
+          "h3 — patient prophylaxis"
         ],
         "sources": [
           "concept:pos-center",
