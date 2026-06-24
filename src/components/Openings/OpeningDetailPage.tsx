@@ -199,6 +199,7 @@ import {
   markWeaponRungComplete,
   unlockOpeningAllLines,
 } from '../../services/openingService';
+import { whenFullySeeded } from '../../services/dataLoader';
 import {
   MAIN_LINE_INDEX,
   isRungComplete,
@@ -349,6 +350,14 @@ export function OpeningDetailPage(): JSX.Element {
     // true, so the user sees a spinner, not a false miss) before giving up.
     for (let i = 0; i < 10 && !result; i++) {
       await new Promise((r) => setTimeout(r, 400));
+      result = await getOpeningById(id);
+    }
+    // PRO openings (and the full ECO catalog) land in the DEFERRED seed, which
+    // finishes ~30-50s after boot — well past the 4s quick-retry above. Without
+    // this, a cold first visit to a pro opening got stuck on "Loading opening…"
+    // / a false "not found" (David 2026-06-24). Wait for the seed, then retry.
+    if (!result) {
+      await whenFullySeeded();
       result = await getOpeningById(id);
     }
     setOpening(result ?? null);

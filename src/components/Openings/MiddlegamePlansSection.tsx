@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Compass, PlayCircle, BookOpen as LearnIcon, Brain, Swords } from 'lucide-react';
 import { getPlansForOpening } from '../../services/middlegamePlanService';
+import { whenFullySeeded } from '../../services/dataLoader';
 import { MiniBoard } from '../Board/MiniBoard';
 import type { MiddlegamePlan } from '../../types';
 
@@ -35,19 +36,29 @@ export function MiddlegamePlansSection({
 
   useEffect(() => {
     let cancelled = false;
-    void getPlansForOpening(openingId)
-      .then((result) => {
-        if (!cancelled) {
-          setAllPlans(result);
-          setLoading(false);
+    async function load(): Promise<void> {
+      try {
+        let result = await getPlansForOpening(openingId);
+        // Cold-load seeding race: the section can mount before the deferred
+        // seed lands the plans into Dexie, so the first query returns [] and
+        // the section self-hides until a reload (David 2026-06-24). When empty,
+        // wait for the seed and re-query. Instant for warm / returning users.
+        if (result.length === 0) {
+          await whenFullySeeded();
+          if (cancelled) return;
+          result = await getPlansForOpening(openingId);
         }
-      })
-      .catch((err: unknown) => {
+        if (cancelled) return;
+        setAllPlans(result);
+        setLoading(false);
+      } catch (err: unknown) {
         // Don't pin `loading` forever on a Dexie read failure — degrade to the
         // empty (self-hiding) state rather than an infinite spinner.
         console.warn('[MiddlegamePlansSection] getPlansForOpening failed:', err);
         if (!cancelled) { setAllPlans([]); setLoading(false); }
-      });
+      }
+    }
+    void load();
     return () => {
       cancelled = true;
     };

@@ -9,6 +9,9 @@ import type { MiddlegamePlan } from '../../types';
 vi.mock('../../services/middlegamePlanService', () => ({
   getPlansForOpening: vi.fn(),
 }));
+vi.mock('../../services/dataLoader', () => ({
+  whenFullySeeded: vi.fn().mockResolvedValue(undefined),
+}));
 
 import { getPlansForOpening } from '../../services/middlegamePlanService';
 
@@ -37,6 +40,20 @@ describe('MiddlegamePlansSection', () => {
     await waitFor(() => {
       expect(screen.getByTestId('middlegame-plans-empty')).toBeInTheDocument();
     });
+  });
+
+  it('re-queries after the seed lands when the first query is empty (cold-load race)', async () => {
+    // Mount can precede the deferred seed landing the plans — the first query is
+    // []. It must wait for whenFullySeeded and re-query, not self-hide until a
+    // reload (David 2026-06-24).
+    const plan = buildMiddlegamePlan({ id: 'late', openingId: 'vienna-game' });
+    mockGetPlans.mockResolvedValueOnce([]).mockResolvedValue([plan]);
+    renderSection('vienna-game');
+
+    await waitFor(() => {
+      expect(screen.getByTestId('middlegame-plans-section')).toBeInTheDocument();
+    });
+    expect(mockGetPlans).toHaveBeenCalledTimes(2);
   });
 
   it('states the fact instead of hiding when an emptyNote is given (main-line tab)', async () => {
