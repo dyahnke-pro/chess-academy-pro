@@ -173,7 +173,7 @@ export function ControlledChessBoard({
   // Move handlers — delegate to parent-owned game object
   const handlePieceDrop = useCallback(
     ({ sourceSquare, targetSquare }: PieceDropHandlerArgs): boolean => {
-      if (!interactive || !targetSquare) {
+      if (!interactive || !targetSquare || sourceSquare === targetSquare) {
         game.clearSelection();
         return false;
       }

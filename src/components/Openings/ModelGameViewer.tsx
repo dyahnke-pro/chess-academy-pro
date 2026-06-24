@@ -213,10 +213,18 @@ export function ModelGameViewer({
   const applyExploreMove = useCallback(
     (from: string, to: string): boolean => {
       if (!isExploring || !exploreChess.current) return false;
+      // Dropping a piece on its own square is not a move — react-chessboard
+      // fires onPieceDrop on same-square drops, so guard before chess.js
+      // throws (which becomes an unhandled rejection in the static board path).
+      if (from === to) return false;
 
       const chess = exploreChess.current;
-      const move = chess.move({ from, to, promotion: 'q' });
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- chess.js throws on truly invalid moves but may return null for edge cases
+      let move: ReturnType<typeof chess.move> | null = null;
+      try {
+        move = chess.move({ from, to, promotion: 'q' });
+      } catch {
+        return false;
+      }
       if (!move) return false;
 
       clearSelection();

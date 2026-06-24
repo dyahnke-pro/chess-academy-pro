@@ -202,6 +202,19 @@ function StaticBoard({
     return base;
   }, [theme.baseGlow, squareStyles, lastMove, checkSquare]);
 
+  // Guard onPieceDrop against same-square drops. react-chessboard fires
+  // onPieceDrop when a user drags and drops on the same square (a common
+  // fumble) — without this guard every consumer that passes a custom
+  // onPieceDrop must remember to check from===to themselves, or
+  // chess.move({from, to}) throws an unhandled rejection.
+  const safeOnPieceDrop = useMemo(() => {
+    if (!onPieceDrop) return undefined;
+    return (args: PieceDropHandlerArgs): boolean => {
+      if (args.sourceSquare === args.targetSquare) return false;
+      return onPieceDrop(args);
+    };
+  }, [onPieceDrop]);
+
   return (
     <div
       className={`relative ${className}`}
@@ -224,7 +237,7 @@ function StaticBoard({
             ? { arrows, clearArrowsOnPositionChange: true }
             : {}),
           arrowOptions: BOARD_ARROW_OPTIONS,
-          ...(onPieceDrop ? { onPieceDrop } : {}),
+          ...(safeOnPieceDrop ? { onPieceDrop: safeOnPieceDrop } : {}),
           ...(onSquareClick ? { onSquareClick } : {}),
           ...(onPieceDrag ? { onPieceDrag } : {}),
         }}

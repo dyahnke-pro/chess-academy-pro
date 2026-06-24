@@ -169,7 +169,7 @@ export function ChessBoard({
   // react-chessboard v5 passes an object, not positional args
   const handlePieceDrop = useCallback(
     ({ sourceSquare, targetSquare }: PieceDropHandlerArgs): boolean => {
-      if (!interactive || !targetSquare) {
+      if (!interactive || !targetSquare || sourceSquare === targetSquare) {
         game.clearSelection();
         return false;
       }
