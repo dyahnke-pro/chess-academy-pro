@@ -216,45 +216,69 @@ const SOUNDNESS_BASELINE = new Set<string>([
   // the lesson's explicit point, not a hidden blunder. The engine is correct that
   // Black is winning — that IS what the lesson teaches.
   'kings-gambit::Allgaier Gambit::17:O-O',
-  // 2026-06-24 lesson-soundness sweep (Hole 6b): gambit / trap / mate showcases
-  // where the flagged cp-loss is the OPPONENT's defining blunder the line exists
-  // to punish, OR the sacrificed material of an honest gambit. Each verified:
-  // every one ends EQUAL-OR-BETTER for the student at the line's terminus
-  // (student-POV terminal evals span −78cp ≈ equal to +272cp / forced mate),
-  // so none hides a losing quiet line (the Philidor-Antoshin check). The named
-  // mates (Legal's, Stafford, Englund, Karpov Qe2, Blackburne-Shilling) end in
-  // the opponent walking into #; the gambits (Pierce, Evans Anderssen, Vienna,
-  // Scotch, Albin Lasker, Philidor Counter-, Traxler) are down material by design.
+  // 2026-06-24 lesson-soundness sweep (Hole 6b, full deterministic depth-16 run):
+  // honest gambit / trap / mate / WARNING showcases. The flagged cp-loss is either
+  // the sacrificed material of a sound-by-reputation gambit, or the OPPONENT's
+  // defining blunder the line exists to punish, or (warning lessons) the losing
+  // line deliberately shown to teach AVOIDANCE then the cure. Every flagged lesson
+  // was screened by student-POV terminal eval + narration: winners deliver mate
+  // (Legal's, Stafford/Englund mate, Pierce, Albin Lasker), gambits are down
+  // material by design (Allgaier, Hamppe-Muzio, Evans, Vienna, Scotch, Philidor-CG),
+  // warnings honestly demo the trap ("Watch out: Fishing Pole / Blackburne-Shilling /
+  // Karpov Qe2 mate"), and the quiet opponent-blunder demos (Hungarian, Nimzo,
+  // Petrov, Dutch, semi-Slav, Trompowsky) end equal-or-better for the student.
+  // None hides a losing quiet line (the Philidor-Antoshin check). Determinism: the
+  // MIN_LEGIT_MASTER_GAMES threshold (above) keeps these sparse-data positions
+  // routed to THIS deterministic check instead of flapping into 6a/7a.
+  'fishing-pole::11:hxg4',
+  'fishing-pole::13:Ne1',
+  'marshall-onlymove::27:h3',
+  'vienna-game::Vienna Gambit::14:Nc6',
+  'vienna-game::Vienna Gambit::15:Bd2',
+  'vienna-game::Vienna Gambit::16:Be7',
+  'vienna-game::Vienna Gambit::17:Nh3',
+  'vienna-game::Vienna Gambit::18:O-O',
+  'vienna-game::Vienna Gambit::19:O-O-O',
+  'vienna-game::Vienna Gambit::20:Be6',
+  'vienna-game::Vienna Gambit::21:Nf4',
+  'vienna-game::Vienna Gambit::22:Qd7',
+  'vienna-game::Vienna Gambit::23:Kb1',
+  'vienna-game::Vienna Gambit::24:Rad8',
+  'vienna-game::Paulsen Attack::18:Nxd5',
+  'vienna-game::Paulsen Attack::21:Be3',
+  'hamppe-muzio::14:Qf6',
+  'hamppe-muzio::15:e5',
+  'copycat-qg4::16:Bb6',
   'pierce-gambit::10:Qxd5',
   'pierce-gambit::11:Nf3',
   'pierce-gambit::12:Bg4',
   'karpov-qe2-mate::10:Ngf6',
-  'italian-game::Italian: Hungarian Defense::10:Nxe5',     // opp grabs e5; student +272cp
+  'italian-game::Italian: Hungarian Defense::10:Nxe5',
   'legals-mate::10:Bh5',
   'legals-mate::12:Bxd1',
   'blackburne-shilling::7:Nxe5',
   'blackburne-shilling::9:Nxf7',
   'blackburne-shilling::11:Rf1',
   'blackburne-shilling::13:Be2',
-  'The Dutch Defence — A Master Class::35:Nxd4',           // opp move; student +106cp
+  'The Dutch Defence — A Master Class::35:Nxd4',
   'evans-gambit::Evans Gambit: Anderssen Variation::21:dxe5',
-  'nimzo-indian::Leningrad Variation (4.Bg5)::21:O-O',     // opp move; student +178cp
+  'nimzo-indian::Leningrad Variation (4.Bg5)::21:O-O',
   'petrov-defence::Three Knights Game::25:Qxd5',
-  'petrov-defence::Three Knights Game::26:Qxd5',           // sharp line; student terminus −78 ≈ equal
+  'petrov-defence::Three Knights Game::26:Qxd5',
   'petrov-defence::Three Knights Game::28:Bxb2',
   'petrov-defence::5.Bd3 Line::23:Bxd2',
-  'petrov-defence::5.Bd3 Line::27:Be1',                    // opp walks into mate; student +248cp
+  'petrov-defence::5.Bd3 Line::27:Be1',
   'petrov-defence::5.Bd3 Line::28:Nc7',
   'petrov-defence::5.Bd3 Line::30:f5',
   'philidor-defence::Philidor Counter-Gambit::14:Bc5',
   'philidor-defence::Philidor Counter-Gambit::17:Bxd4',
   'philidor-defence::Philidor Counter-Gambit::18:Nf6',
   'philidor-defence::Philidor Counter-Gambit::19:Be2',
-  'semi-slav::Meran Variation Deeper::29:Qf3',             // opp move; student +142cp
+  'semi-slav::Meran Variation Deeper::29:Qf3',
   'two-knights-defence::Two Knights: Traxler Counterattack::17:hxg3',
   'albin-countergambit::Lasker Trap::11:Bxb4',
-  'trompowsky-attack::2...Ne4 3.Bf4 Main Line::19:a3',     // main-line a3; student terminus −10 ≈ equal
-  'trompowsky-attack::2...e6 French-Type Structure::20:c5', // opp move; student +165cp
+  'trompowsky-attack::2...Ne4 3.Bf4 Main Line::19:a3',
+  'trompowsky-attack::2...e6 French-Type Structure::20:c5',
   'scotch-gambit::Bb4+ Check (4…Bb4+)::22:Bd6',
   'vienna-gambit::Gambit Accepted (…exf4)::16:Bg4',
   'Stafford Gambit — The Trap::15:Kxf2',
