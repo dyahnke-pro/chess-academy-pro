@@ -207,6 +207,57 @@ const SOUNDNESS_BASELINE = new Set<string>([
   // the lesson's explicit point, not a hidden blunder. The engine is correct that
   // Black is winning — that IS what the lesson teaches.
   'kings-gambit::Allgaier Gambit::17:O-O',
+  // 2026-06-24 lesson-soundness sweep (Hole 6b): gambit / trap / mate showcases
+  // where the flagged cp-loss is the OPPONENT's defining blunder the line exists
+  // to punish, OR the sacrificed material of an honest gambit. Each verified:
+  // every one ends EQUAL-OR-BETTER for the student at the line's terminus
+  // (student-POV terminal evals span −78cp ≈ equal to +272cp / forced mate),
+  // so none hides a losing quiet line (the Philidor-Antoshin check). The named
+  // mates (Legal's, Stafford, Englund, Karpov Qe2, Blackburne-Shilling) end in
+  // the opponent walking into #; the gambits (Pierce, Evans Anderssen, Vienna,
+  // Scotch, Albin Lasker, Philidor Counter-, Traxler) are down material by design.
+  'pierce-gambit::10:Qxd5',
+  'pierce-gambit::11:Nf3',
+  'pierce-gambit::12:Bg4',
+  'karpov-qe2-mate::10:Ngf6',
+  'italian-game::Italian: Hungarian Defense::10:Nxe5',     // opp grabs e5; student +272cp
+  'legals-mate::10:Bh5',
+  'legals-mate::12:Bxd1',
+  'blackburne-shilling::7:Nxe5',
+  'blackburne-shilling::9:Nxf7',
+  'blackburne-shilling::11:Rf1',
+  'blackburne-shilling::13:Be2',
+  'The Dutch Defence — A Master Class::35:Nxd4',           // opp move; student +106cp
+  'evans-gambit::Evans Gambit: Anderssen Variation::21:dxe5',
+  'nimzo-indian::Leningrad Variation (4.Bg5)::21:O-O',     // opp move; student +178cp
+  'petrov-defence::Three Knights Game::25:Qxd5',
+  'petrov-defence::Three Knights Game::26:Qxd5',           // sharp line; student terminus −78 ≈ equal
+  'petrov-defence::Three Knights Game::28:Bxb2',
+  'petrov-defence::5.Bd3 Line::23:Bxd2',
+  'petrov-defence::5.Bd3 Line::27:Be1',                    // opp walks into mate; student +248cp
+  'petrov-defence::5.Bd3 Line::28:Nc7',
+  'petrov-defence::5.Bd3 Line::30:f5',
+  'philidor-defence::Philidor Counter-Gambit::14:Bc5',
+  'philidor-defence::Philidor Counter-Gambit::17:Bxd4',
+  'philidor-defence::Philidor Counter-Gambit::18:Nf6',
+  'philidor-defence::Philidor Counter-Gambit::19:Be2',
+  'semi-slav::Meran Variation Deeper::29:Qf3',             // opp move; student +142cp
+  'two-knights-defence::Two Knights: Traxler Counterattack::17:hxg3',
+  'albin-countergambit::Lasker Trap::11:Bxb4',
+  'trompowsky-attack::2...Ne4 3.Bf4 Main Line::19:a3',     // main-line a3; student terminus −10 ≈ equal
+  'trompowsky-attack::2...e6 French-Type Structure::20:c5', // opp move; student +165cp
+  'scotch-gambit::Bb4+ Check (4…Bb4+)::22:Bd6',
+  'vienna-gambit::Gambit Accepted (…exf4)::16:Bg4',
+  'Stafford Gambit — The Trap::15:Kxf2',
+  'stafford-gambit::Bg5 — the Stafford Mate::11:Bg5',
+  'stafford-gambit::Bg5 — the Stafford Mate::13:Bxd8',
+  'stafford-gambit::Nc3 — the Knight Raid::11:d3',
+  'stafford-gambit::Nc3 — the Knight Raid::13:Bf4',
+  'stafford-gambit::Nc3 — the Knight Raid::15:Qd2',
+  'Englund Gambit — The Trap::11:Bc3',
+  'englund-gambit::The Englund Mate (Qc1#)::11:Bc3',
+  'englund-gambit::The Englund Mate (Qc1#)::13:Qd2',
+  'englund-gambit::The Englund Mate (Qc1#)::15:Qxc3',
 ]);
 
 // ── Hole 6b — Stockfish SOUNDNESS (all lessons, incl. traps) ────────────
