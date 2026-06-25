@@ -207,6 +207,7 @@ const GATE_TESTS = [
   'src/data/narrationProvenance.test.ts',
   'src/data/gambitSources.test.ts',
   'src/data/contentConsistency.test.ts',  // opening-tab content fix gate (shrinking baseline → 0)
+  'src/data/narrationFactCheck.test.ts',  // chess.js verifies authored attack/fork/coverage claims (was drifting unguarded)
 ];
 
 runStep('typecheck   ', 'npm', ['run', 'typecheck']);

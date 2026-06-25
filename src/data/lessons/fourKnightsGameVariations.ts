@@ -39,7 +39,7 @@ export const FOUR_KNIGHTS_GAME_VARIATION_LESSONS: Record<string, LessonScript> =
     openingId: "four-knights-game", title: "Four Knights — The Belgrade Gambit", minutes: 7, orientation: "white", kind: "roadmap",
     sources: ['book:four-knights-game', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Belgrade_Gambit'],
     beats: [
-      b({ id: "bg1", moves: "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nd5", say: "The Belgrade Gambit — out of a quiet Four Knights, White springs Nd5!?, offering the d4-pawn. The knight forks the f6-knight and the c7-square, and in return for the pawn White gets fast development and immediate attacking chances. A sharp surprise that drags Black out of comfortable theory.", sayShort: "Nd5!? — offer the pawn, attack fast.", highlights: [H("d5", KEY)] }),
+      b({ id: "bg1", moves: "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nd5", say: "The Belgrade Gambit — out of a quiet Four Knights, White springs Nd5!?, offering the d4-pawn. The knight hits the f6-knight and lunges at the c7-square, and in return for the pawn White gets fast development and immediate attacking chances. A sharp surprise that drags Black out of comfortable theory.", sayShort: "Nd5!? — offer the pawn, attack fast.", highlights: [H("d5", KEY)] }),
       b({ id: "bg2", moves: "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nd5 Nxe4 Qe2 f5 Ng5 d3 cxd3 Nd4 Qh5+ g6", say: "Black grabs …Nxe4, but White's pieces swarm: Qe2 pins down the e-file, Ng5 jumps in, and Qh5+ forces …g6, prising open the black kingside. There is the Belgrade tabiya: White is a pawn down, but every piece is attacking and Black's king is loose — a dangerous practical gambit that scores 57% at club.", sayShort: "Qh5+ — prise the kingside open.", highlights: [H("h5", KEY), H("g6", SOFT)] }),
     ],
   },
