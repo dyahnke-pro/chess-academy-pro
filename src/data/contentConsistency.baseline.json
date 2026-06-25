@@ -1,0 +1,31 @@
+{
+  "duplicateModelGames": [],
+  "duplicateVariationTabs": [
+    "pro-hikaru-closed-sicilian::Grand Prix f4 + f5==vs ...g6",
+    "vienna-game::Falkbeer Variation==Frankenstein-Dracula"
+  ],
+  "duplicatePlanLines": [
+    "pro-gothamchess-caro-advance-white::mp-progothamchess-caro-advance-h4-pin==mp-progothamchess-caroadv-bf5-c4break",
+    "pro-gothamchess-french-defense::mp-progothamchess-french-defense-rubinstein==mp-progothamchess-french-tarrasch-b5gambit",
+    "pro-gothamchess-qgd::mp-progothamchess-qgd-classical==mp-progothamchess-qgd-carlsbad-e5",
+    "pro-naroditsky-alekhine::mp-pronaroAlek-twoknights-equality==mp-pronaroAlek-twoknights-trade",
+    "pro-naroditsky-kia::mp-pronaroKIA-kid-transposition==mp-pronaroKIA-pirc-nh4",
+    "pro-naroditsky-kia::mp-pronaroKIA-reti-attack==mp-pronaroKIA-reti-nc4",
+    "pro-naroditsky-kid::mp-pronaroKID-classical-kingside==mp-pronaroKID-classical-c5",
+    "pro-naroditsky-rossolimo::mp-pronaroRoss-nc6-maroczy==mp-pronaroRoss-nc6-b4push",
+    "sicilian-najdorf::mp-siciliannajdorf-6f3==mp-siciliannajdorf-main"
+  ],
+  "classicWisdomBookClash": [
+    "four-knights-game::bird, h. e. (henry edward)|capablanca, josé raúl",
+    "petrov-defence::capablanca, josé raúl|staunton, howard",
+    "philidor-defence::staunton, howard|lasker, edward",
+    "queens-gambit::capablanca, josé raúl|lasker, edward",
+    "ruy-lopez::capablanca, josé raúl|lasker, edward",
+    "vienna-game::bird, h. e. (henry edward)|lasker, edward"
+  ],
+  "studentLosingModelGames": [
+    "sicilian-alapin::mg-adams-sicilian-alapin",
+    "sicilian-najdorf::mg-lichess-BTVJpaP6",
+    "sicilian-najdorf::mg-lichess-jMVMo1Ua"
+  ]
+}

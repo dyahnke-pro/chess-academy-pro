@@ -206,6 +206,7 @@ const GATE_TESTS = [
   'src/data/proRepertoireSources.test.ts',
   'src/data/narrationProvenance.test.ts',
   'src/data/gambitSources.test.ts',
+  'src/data/contentConsistency.test.ts',  // opening-tab content fix gate (shrinking baseline → 0)
 ];
 
 runStep('typecheck   ', 'npm', ['run', 'typecheck']);

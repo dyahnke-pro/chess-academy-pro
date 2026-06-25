@@ -17,7 +17,7 @@
 ## Grounded findings inventory (current `main`)
 | Class | Count | Mechanically confirmed? | Fix type |
 |---|---|---|---|
-| Duplicate model games (field-for-field) | 3 | yes | delete dup |
+| Duplicate model games (field-for-field) | 0 (was 3 — packet-truncation artifact; full-PGN gate = 0) | yes | n/a — Sveshnikov shared-overview pair moved to Phase 3 |
 | Duplicate/mislabeled variation tabs | 2 | yes | remove/differentiate |
 | Classic-Wisdom == From-the-Books, conflicting author | 6 | yes | de-dupe + de-attribute (decision) |
 | Duplicate middlegame plans (identical line) | 9 | yes | merge / re-derive |
@@ -40,7 +40,8 @@ Confirmed examples: Vienna "Falkbeer" tab = verbatim Frankenstein-Dracula dup (a
 
 ## PHASES (each phase = one batched deploy to `main`; gates + ship-check before push; post-deploy audit per G1)
 
-### Phase 0 — Verification harness + regression gates  `[pending]`
+### Phase 0 — Verification harness + regression gates  `[DONE 2026-06-25]`
+Shipped: `src/data/contentConsistency.ts` (shared detectors) + `contentConsistency.test.ts` (gate) + `contentConsistency.baseline.json` (20 violations: 0 dup games, 2 dup tabs, 9 dup plans, 6 CW/FTB, 3 student-losing). Wired into `scripts/ship-check.mjs`. Baseline can only shrink. Original spec below.
 Promote the detectors into a permanent gate `src/data/contentConsistency.test.ts` that FAILS on:
 - duplicate model games (same white|black|result|year|openingSan, different id)
 - duplicate variation tabs (identical first-beat `say` OR identical `sanLine` within an opening)
@@ -51,8 +52,8 @@ Promote the detectors into a permanent gate `src/data/contentConsistency.test.ts
 
 Starts RED = the backlog; each fix turns rows green. Add to the ship-check content-gate list. **This phase makes every later fix provable and prevents re-introduction.**
 
-### Phase 1 — Safe mechanical dedup (data-only, low risk)  `[pending]`
-- Delete the 3 duplicate model games (keep canonical id).
+### Phase 1 — Safe mechanical dedup (data-only, low risk)  `[next]`
+- (Dup model games: none — see inventory correction.)
 - Resolve the 9 duplicate plans per Decision 4.
 - Remove Vienna "Falkbeer" tab; differentiate or merge the Hikaru closed-sicilian pair.
 - Bump `model-games` reconcile revision + `PRO_DATA_REVISION` + plan revision so seeded devices update and orphans sweep (G8).

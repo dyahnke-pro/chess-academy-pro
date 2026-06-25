@@ -27,10 +27,10 @@ One **partial false positive**, to show the failure mode: the Najdorf "model gam
 
 ## TIER 1 — Mechanically confirmed against current data (20)
 
-### Duplicate model games — same game listed twice (3)
-- **sicilian-sveshnikov**: `mg-lichess-gnCbmvaX` and `mg-lichess-9hRmnVXz` are field-for-field identical (Caruana, F. v Carlsen, M. 1/2-1/2 2018).
-- **pro-naroditsky-alapin**: `mg-pro-naroditsky-alapin-0` and `mg-pro-naroditsky-alapin-1` are field-for-field identical (DanielNaroditsky v Jospem 1-0 2023).
-- **pro-naroditsky-kid**: `mg-pro-naroditsky-kid-antikidnf3-1` and `mg-pro-naroditsky-kid-antikidnf3-2` are field-for-field identical (Opponent v DanielNaroditsky 0-1 2019).
+### Duplicate model games — CORRECTED (was 3, real count 0)
+The initial "3 duplicate games" was a packet artifact — the packet stored only the first 20 plies, so different games sharing an opening+players+result looked identical. Full-PGN check (now the `contentConsistency` gate) shows **0 true duplicate games**. Reclassified:
+- **sicilian-sveshnikov** `mg-lichess-gnCbmvaX` / `mg-lichess-9hRmnVXz`: two DIFFERENT games (different PGNs) with the **same overview pasted on both** → an overview-accuracy bug, handled in Phase 3, not a dedup.
+- **pro-naroditsky-alapin**, **pro-naroditsky-kid**: different PGNs AND different overviews → legitimate distinct games, **not** bugs.
 
 ### Duplicate / mislabeled variation tabs (2)
 - **vienna-game**: "Falkbeer Variation" and "Frankenstein-Dracula" share the identical Watch narration.
