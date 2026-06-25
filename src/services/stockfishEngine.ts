@@ -462,8 +462,14 @@ class StockfishEngine {
             const loc = ee.filename
               ? ` @ ${ee.filename}:${ee.lineno ?? '?'}:${ee.colno ?? '?'}`
               : '';
+            // ErrorEvent.error carries the original thrown Error with a
+            // meaningful .message (e.g. "RuntimeError: call_indirect...").
+            // ErrorEvent.message alone can be '[object ErrorEvent]' on some
+            // browser/WASM-engine crash paths — useless for diagnostics.
+            const originalError: unknown = (error as unknown as Record<string, unknown>).error;
+            const originalMsg = originalError instanceof Error ? originalError.message : '';
             const msg =
-              (error.message || 'Uncaught RuntimeError or worker load failure') + loc;
+              (originalMsg || error.message || 'Uncaught RuntimeError or worker load failure') + loc;
             // Phase 8 Bug A — suppress the bubble to window.onerror.
             // A crashing multi-thread bundle emits 60+ ErrorEvents
             // in ~100ms; if any of those reach the global error
