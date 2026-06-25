@@ -459,11 +459,19 @@ class StockfishEngine {
             // is empty, but `filename`/`lineno` name the resource that died,
             // which is what was missing when the iOS lila crash logged blank.
             const ee = error as Partial<ErrorEvent>;
+            // Extract the underlying Error FIRST — ee.error?.message carries
+            // the real diagnosis (e.g. WASM out-of-memory, script syntax error).
+            // error.message alone can be '[object ErrorEvent]' (browser-specific
+            // for certain Emscripten pthread crashes), which is useless for
+            // diagnosis. Same extraction pattern as installGlobalErrorHooks in
+            // appAuditor.ts:1488.
+            const underlyingMsg =
+              ee.error instanceof Error ? ee.error.message : '';
             const loc = ee.filename
               ? ` @ ${ee.filename}:${ee.lineno ?? '?'}:${ee.colno ?? '?'}`
               : '';
             const msg =
-              (error.message || 'Uncaught RuntimeError or worker load failure') + loc;
+              (underlyingMsg || error.message || 'Uncaught RuntimeError or worker load failure') + loc;
             // Phase 8 Bug A — suppress the bubble to window.onerror.
             // A crashing multi-thread bundle emits 60+ ErrorEvents
             // in ~100ms; if any of those reach the global error
