@@ -56,7 +56,8 @@ Starts RED = the backlog; each fix turns rows green. Add to the ship-check conte
 Grounding (2026-06-25) showed none of the "dedup" items are safe deletions; blind-deleting would create new bugs:
 - **9 "duplicate plans" → distinct plans collapsed onto one line.** Each pair has DIFFERENT titles/breaks/maneuvers (QGD …c5 vs …e5; KID trade-down vs …c5 lock; French Rubinstein vs Tarrasch …b5 gambit; etc.) but identical playable lines — a side effect of the recent plan-rebuild anchoring both to the same terminus. FIX = re-derive EACH plan's line to demonstrate its OWN declared break, grounded in the opening's data, re-passing `middlegamePlanThemes` + `narrationAccuracy`. NOT a deletion. (6 openings, ~9 pairs.)
 - **Hikaru closed-sicilian "Grand Prix f4+f5" vs "vs …g6":** same — two distinct named variations sharing one line; re-derive, don't delete.
-- **🟡 DECISION NEEDED — Vienna F-D tabs.** `repertoire.json` has BOTH "Falkbeer Variation" (PGN = F-D MAIN line, **matches** the FRANKENSTEIN_DRACULA lesson) and "Frankenstein-Dracula" (PGN = quieter …Be7 subline, **mismatches** that same main-line lesson). Plus `narrationFactCheck.test.ts` references the Falkbeer name. **REC:** rename "Falkbeer Variation" → "Frankenstein-Dracula" (its main-line PGN matches the lesson), drop the mis-wired …Be7-subline tab, remove the `::Falkbeer Variation` lesson key → 7 correctly-named tabs, no dup, no pgn/lesson mismatch. Confirm before I touch it (it deletes the …Be7 subline).
+- **✅ DONE 2026-06-25 — Vienna F-D tabs (David: full autonomy).** Renamed the mislabeled "Falkbeer Variation" (F-D main line, matches the lesson) → "Frankenstein-Dracula"; dropped the mis-wired …Be7-subline tab; lowered the manifest floor honestly 8→7; removed the stale lesson key + factcheck entry. `duplicateVariationTabs` now = 1 (only the Hikaru pair left). Original note:
+- **🟡 (superseded) DECISION — Vienna F-D tabs.** `repertoire.json` has BOTH "Falkbeer Variation" (PGN = F-D MAIN line, **matches** the FRANKENSTEIN_DRACULA lesson) and "Frankenstein-Dracula" (PGN = quieter …Be7 subline, **mismatches** that same main-line lesson). Plus `narrationFactCheck.test.ts` references the Falkbeer name. **REC:** rename "Falkbeer Variation" → "Frankenstein-Dracula" (its main-line PGN matches the lesson), drop the mis-wired …Be7-subline tab, remove the `::Falkbeer Variation` lesson key → 7 correctly-named tabs, no dup, no pgn/lesson mismatch. Confirm before I touch it (it deletes the …Be7 subline).
 - When done: bump revisions (G8), prune the corresponding `contentConsistency.baseline.json` keys.
 
 ### Phase 2 — Classic-Wisdom / From-the-Books (Decision 1)  `[DONE 2026-06-25 — David: "de-attribute, keep prose"]`
@@ -70,6 +71,17 @@ Root cause confirmed: `rewrite-book-voice.mjs` recast the mined text into a mode
 
 ### Phase 4 — Variation explanation ≠ line (~19)  `[pending]`
 - Per case, fix the explanation prose to match the data-derived line (moves canonical, prose editable). Vienna Stanley/Gambit, Italian Ba3, Pirc Qa5, etc.
+
+### Phase 4b — Pre-existing narrationFactCheck drift (discovered 2026-06-25)  `[pending]`
+7 board-FALSE attack claims drifted onto `main` from other sessions (narrationFactCheck is NOT in ship-check, so it went unguarded). Each fix is determinate (chess.js facts captured); reword to be board-true AND unambiguous-subject, then ADD narrationFactCheck to ship-check GATE_TESTS so it can't drift again:
+1. `italianGameVariations.ts` Greco-Attack `gc2`: "Qb3! — hits d5 and eyes f7" → drop "eyes f7" (diagonal blocked at d5).
+2. `fourKnightsGameVariations.ts` Belgrade `bg1`: "Nd5 forks the f6-knight…" → Nd5 hits ONLY f6 (one piece) — not a fork; reword to "hits/attacks".
+3. `pircVariations.ts` najdorf-bishop beat: "…eyes c3" — Nc6 does NOT attack c3 (attacks d4/e5/b4/a5); name the real squares.
+4. `semiSlavVariations.ts` `bo4`: "…Qa6 steps off the fork" — Qa6 attacks only a4; drop "fork".
+5. `oldIndianDefenceVariations.ts` `ou3`: "…Re8 eyes e4" parsed against the a5-queen — disambiguate ("the e8-rook eyes e4").
+6. `italian` `gn3` (Main Line w/ Nc3): "…hits the bishop with …d5; White retreats it to d3" — reword so the attack subject is the d5-pawn on the c4-bishop, not Bd3.
+7. `middlegame-plans.json` `mp-scotchgame-steinitz` move 2: "Nb5 jabs at c7 and the a7-fork" — Nb5 forks nothing here; drop "fork"/correct.
+(NB: the exact phrase "hits the bishop with" also appears in `proAmanRuyLopezVariations.ts` — locate the ITALIAN gn3 beat specifically, don't edit the Ruy one.)
 
 ### Phase 5 — Medium/low sweep + final re-audit  `[pending]`
 - Work the remaining medium/low by opening.
