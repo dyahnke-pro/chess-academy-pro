@@ -592,7 +592,7 @@
       {
         "name": "Najdorf: English Attack (6.Be3 Main Line)",
         "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be7 f3 Be6 Qd2 Nbd7 O-O-O b5 g4 b4 Na4",
-        "explanation": "The English Attack is White's most dangerous system against the Najdorf. After castling queenside, White launches a kingside pawn storm with g4-g5 while Black counters on the queenside with ...b5-b4. The critical tension is whether White's g5 breakthrough against the f6 knight arrives before Black's queenside attack cracks open the a- and b-files against the white king. The knight maneuver Na5 targets c6 and pressures the queenside, but Black's thematic ...d5 break in the center often arrives just in time to seize the initiative."
+        "explanation": "The English Attack is White’s most dangerous system against the Najdorf. After castling queenside, White launches a kingside pawn storm with g4-g5 while Black counters on the queenside with …b5-b4. The critical tension is whether White’s g5 breakthrough against the f6-knight arrives before Black’s queenside attack cracks open the a- and b-files against the white king. When …b4 hits the c3-knight, White swings it to the rim with Na4, eyeing the b6- and c5-outposts as both attacks race."
       },
       {
         "name": "Najdorf: Classical (6.Be2 with ...e5)",
@@ -790,7 +790,7 @@
       {
         "name": "Sveshnikov: Kalashnikov (4...e5 5.Nb5 d6)",
         "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 e5 Nb5 d6 N1c3 a6 Na3 b5 Nd5 Nf6 c4 b4 Nc2",
-        "explanation": "The Kalashnikov is the Sveshnikov's close cousin where Black plays 4...e5 before ...Nf6, avoiding the Bg5 pin entirely. After 5.Nb5 d6 and Nd5, Black develops with ...Nf6 and responds to c4 with ...b4, trading pieces to reach a position where the knight on g6 aims for f4. The strategic ideas parallel the Sveshnikov but the different move order gives Black unique options."
+        "explanation": "The Kalashnikov is the Sveshnikov’s close cousin where Black plays 4...e5 before …Nf6, avoiding the Bg5 pin entirely. After 5.Nb5 d6 and Nd5, Black develops with …Nf6 and meets c4 with …b4, when White’s knight reroutes via c2 to target the b4-pawn. Black plays for control of the d4-square and dark-square counterplay. The strategic ideas parallel the Sveshnikov, but the different move order gives Black unique options."
       },
       {
         "name": "Sveshnikov: ...Rb8 Expansion Plan",
@@ -2720,7 +2720,7 @@
       {
         "name": "Reti: KIA Setup g3 Bg2 d3 e4",
         "pgn": "Nf3 d5 g3 c6 Bg2 Bg4 O-O Nd7 d3 Ngf6 Nbd2 e5 e4 dxe4 dxe4 Bc5 h3 Bh5 Qe1 O-O",
-        "explanation": "White transposes from the Reti into a King's Indian Attack formation with g3, Bg2, d3, and the key e4 break. After e4 opens the long diagonal, the g2 bishop becomes a monster targeting the queenside. The Qe1 maneuver allows redeployment to g3 or h4 for kingside pressure. This flexible setup works against virtually any Black defensive scheme and gives White a straightforward attacking plan."
+        "explanation": "White transposes from the Reti into a King’s Indian Attack with g3, Bg2, d3 and the e4 break. The e4 push stakes out central space; after …dxe4 dxe4 the pawn sits on the g2-bishop’s long diagonal, so White’s play comes from that central space and the Qe1–g3/h4 redeployment swinging the queen toward Black’s king, not from an opened diagonal. This flexible setup works against virtually any Black defensive scheme and gives White a straightforward attacking plan."
       },
       {
         "name": "Reti: Advance c4 d4",
@@ -2730,7 +2730,7 @@
       {
         "name": "Reti: Accepted dxc4 Bxc4",
         "pgn": "Nf3 d5 c4 dxc4 e3 Nf6 Bxc4 e6 O-O c5 d4 a6 dxc5 Bxc5 Qe2 O-O",
-        "explanation": "Black grabs the c4 pawn but White recovers it immediately with Bxc4, gaining rapid development and open lines. The d-file becomes a highway for White's rooks after dxc5, and the Bb3 applies sustained pressure on the a2-g8 diagonal targeting f7. White's lead in development and central control provide a lasting initiative. Black must be careful not to fall behind in piece coordination while holding the queenside."
+        "explanation": "Black grabs the c4 pawn but White recovers it immediately with Bxc4, gaining rapid development and open lines. The d-file becomes a highway for White’s rooks after dxc5, and the bishop on c4 applies sustained pressure on the a2-g8 diagonal targeting f7. White’s lead in development and central control provide a lasting initiative. Black must be careful not to fall behind in piece coordination."
       },
       {
         "name": "Reti: LSB Fianchetto",
@@ -2745,7 +2745,7 @@
       {
         "name": "Reti: Reti Gambit",
         "pgn": "Nf3 d5 c4 d4 e3 Nc6 exd4 Nxd4 Nxd4 Qxd4 Nc3 e5 d3 Bc5 Be3",
-        "explanation": "White provokes d4 with c4 and then undermines the advanced pawn with e3, leading to a gambit-like situation. After exd4 Nxd4 Nxd4 Qxd4, Black's queen is exposed in the center and becomes a target for Nc3 with tempo. White's piece activity and development advantage more than compensate for any structural concessions. The Bg5 pin creates immediate tactical pressure, and Qd8 costs Black another tempo to regroup."
+        "explanation": "White provokes …d4 with c4 and then undermines the advanced pawn with e3, leading to a gambit-like situation. After exd4 Nxd4 Nxd4 Qxd4, Black’s queen is exposed in the centre, and Nc3 hits it with tempo. After …e5 d3 …Bc5, White completes development with Be3, challenging the c5-bishop. White’s piece activity and development lead more than compensate for any structural concessions."
       },
       {
         "name": "Reti: Anti-Slav",
