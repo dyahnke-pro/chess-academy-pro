@@ -11,8 +11,7 @@
     "pro-naroditsky-kia::mp-pronaroKIA-kid-transposition==mp-pronaroKIA-pirc-nh4",
     "pro-naroditsky-kia::mp-pronaroKIA-reti-attack==mp-pronaroKIA-reti-nc4",
     "pro-naroditsky-kid::mp-pronaroKID-classical-kingside==mp-pronaroKID-classical-c5",
-    "pro-naroditsky-rossolimo::mp-pronaroRoss-nc6-maroczy==mp-pronaroRoss-nc6-b4push",
-    "sicilian-najdorf::mp-siciliannajdorf-6f3==mp-siciliannajdorf-main"
+    "pro-naroditsky-rossolimo::mp-pronaroRoss-nc6-maroczy==mp-pronaroRoss-nc6-b4push"
   ],
   "classicWisdomBookClash": [],
   "studentLosingModelGames": []
