@@ -494,6 +494,20 @@ class StockfishEngine {
               handleEarlyMultiFailure(msg);
               return true;
             }
+            // Stale/spurious ErrorEvents from the terminated multi-thread
+            // worker. handleEarlyMultiFailure already terminated it and
+            // scheduled the single-thread fallback. Any residual errors
+            // from the dying WASM heap — which can fire in the same event-
+            // loop cycle before the fallback setTimeout runs — must NOT
+            // reject the initPromise; doing so sabotages the fallback
+            // before it starts and logs a misleading `variant=multi`
+            // failure to PostHog error tracking.
+            if (
+              this.workerVariant === 'multi' &&
+              this._runtimeFallbackAttempted
+            ) {
+              return true;
+            }
             // Phase 8 Bug C — single-thread also OOM'd. Retry once
             // after a backoff so a transient memory-pressure event
             // doesn't leave the engine permanently unavailable.
@@ -622,7 +636,12 @@ class StockfishEngine {
       // ALSO record the failure timestamp so subsequent initialize()
       // calls in the next 30s fail-fast instead of re-OOMing.
       this._initFailedAt = Date.now();
-      this.handleWorkerCrash(err instanceof Error ? err.message : String(err));
+      const reason = err instanceof Error
+        ? err.message
+        : typeof err === 'object' && err !== null && 'message' in err && typeof (err as Record<string, unknown>).message === 'string'
+          ? (err as Record<string, unknown>).message as string
+          : `worker init failed (${typeof err})`;
+      this.handleWorkerCrash(reason);
       throw err;
     });
   }
