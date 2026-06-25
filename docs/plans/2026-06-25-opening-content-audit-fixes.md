@@ -73,7 +73,8 @@ Root cause confirmed: `rewrite-book-voice.mjs` recast the mined text into a mode
 ### Phase 4 — Variation explanation ≠ line (~19)  `[pending]`
 - Per case, fix the explanation prose to match the data-derived line (moves canonical, prose editable). Vienna Stanley/Gambit, Italian Ba3, Pirc Qa5, etc.
 
-### Phase 4b — Pre-existing narrationFactCheck drift (discovered 2026-06-25)  `[pending]`
+### Phase 4b — Pre-existing narrationFactCheck drift (discovered 2026-06-25)  `[DONE 2026-06-25]`
+All 7 fixed board-true + narrationFactCheck added to ship-check GATE_TESTS (so it can't drift unguarded again). Gate green 3/3. Original list below.
 7 board-FALSE attack claims drifted onto `main` from other sessions (narrationFactCheck is NOT in ship-check, so it went unguarded). Each fix is determinate (chess.js facts captured); reword to be board-true AND unambiguous-subject, then ADD narrationFactCheck to ship-check GATE_TESTS so it can't drift again:
 1. `italianGameVariations.ts` Greco-Attack `gc2`: "Qb3! — hits d5 and eyes f7" → drop "eyes f7" (diagonal blocked at d5).
 2. `fourKnightsGameVariations.ts` Belgrade `bg1`: "Nd5 forks the f6-knight…" → Nd5 hits ONLY f6 (one piece) — not a fork; reword to "hits/attacks".
