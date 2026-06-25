@@ -309,7 +309,14 @@ const DEEPSEEK_PROXY_BASE = `${apiOrigin()}/api/llm/deepseek`;
 const ANTHROPIC_PROXY_BASE = `${apiOrigin()}/api/llm/anthropic`;
 
 function getAnthropicKey(): string | undefined {
-  return PROXY_SENTINEL_KEY;
+  // ANTHROPIC KEY REMOVED (David 2026-06-25): back-to-back charges on a leaked
+  // Anthropic key. Returning undefined makes the client treat Anthropic as
+  // having NO key, so getProviderConfig / getForcedProviderConfig / the
+  // fallback chain never select it — every coach call routes to DeepSeek (the
+  // primary). The provider wiring/types stay in place (dormant) so this is a
+  // one-line revert if a key is ever re-added. The server proxy also no longer
+  // injects ANTHROPIC_KEY (api/llm-proxy.ts).
+  return undefined;
 }
 
 function getDeepseekKey(): string | undefined {

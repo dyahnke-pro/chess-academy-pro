@@ -88,16 +88,18 @@ interface ProviderSpec {
   auth: (key: string) => Record<string, string>;
 }
 
+// ANTHROPIC KEY REMOVED (David 2026-06-25): a leaked Anthropic key was being
+// drained ($15 back-to-back charges). The proxy no longer holds or injects
+// ANTHROPIC_KEY — the `anthropic` provider entry is gone, so any
+// /api/llm/anthropic request now 400s ("unknown provider") instead of
+// authenticating with the key. DeepSeek is the only proxied provider; the
+// coach already routes everything to it (getAnthropicKey returns undefined).
+// Re-add the anthropic entry to restore Anthropic support.
 const PROVIDERS: Record<string, ProviderSpec> = {
   deepseek: {
     base: 'https://api.deepseek.com',
     env: 'DEEPSEEK_KEY',
     auth: (key) => ({ authorization: `Bearer ${key}` }),
-  },
-  anthropic: {
-    base: 'https://api.anthropic.com',
-    env: 'ANTHROPIC_KEY',
-    auth: (key) => ({ 'x-api-key': key }),
   },
 };
 
