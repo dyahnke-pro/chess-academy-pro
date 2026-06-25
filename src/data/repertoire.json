@@ -1566,7 +1566,7 @@
       {
         "name": "London vs Grunfeld Setup",
         "pgn": "d4 Nf6 Bf4 g6 e3 Bg7 Nf3 d5 Be2 O-O O-O c5 c3 Nc6 Nbd2 Nd7",
-        "explanation": "Against Black's Grunfeld-style setup with ...g6 and ...d5, White completes development before choosing a plan. The Nh4 maneuver eyes the f5 square, a powerful outpost in this pawn structure. After Black's ...e5 break, the central exchanges lead to a position where White's bishop pair and better pawn structure give a lasting advantage. The Qb3 move creates pressure on b7 and d5 simultaneously."
+        "explanation": "Against Black’s Grünfeld-style setup with …g6 and …d5, White completes the London structure — Bf4, e3, Nf3, Be2, O-O, c3 and Nbd2 — before committing to a plan. The solid pawn chain and harmonious development give White a small, durable edge; the typical breaks (a later e3-e4 or a queenside minority push) come once Black declares his intentions with …c5, …Nc6 and …Nd7."
       },
       {
         "name": "London vs Dutch",
@@ -2537,7 +2537,7 @@
       {
         "name": "Budapest Gambit: Alekhine Variation with Bc5",
         "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Nf3 Bc5 e3 Nc6 Nc3 Ngxe5 Nxe5 Nxe5 Be2 d6 O-O O-O b3 Re8",
-        "explanation": "In the Alekhine Variation with the bishop developed early to c5, Black combines rapid piece activity with pressure on the dark squares. After recovering the pawn with Ngxe5, Black develops naturally with d6, O-O, and Bf5 obtaining a harmonious position with no structural weaknesses. The bishop pair and central control give Black comfortable equality, and the rooks activate on the central files to maintain dynamic balance. White must play accurately to avoid drifting into a slightly passive position where Black's active minor pieces dominate the middlegame."
+        "explanation": "In the Alekhine Variation with the bishop developed early to c5, Black combines rapid piece activity with pressure on the dark squares. After recovering the pawn with Ngxe5, Black develops naturally with …d6, …O-O and …Re8, obtaining a harmonious position with no structural weaknesses. The bishop pair and central control give Black comfortable equality, and the rooks activate on the central files to maintain dynamic balance. White must play accurately to avoid drifting into a slightly passive position where Black's active minor pieces dominate the middlegame."
       },
       {
         "name": "Budapest Gambit: 3...Ne4 Trappy Line",
