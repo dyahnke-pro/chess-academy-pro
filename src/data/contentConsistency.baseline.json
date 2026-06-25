@@ -23,9 +23,5 @@
     "ruy-lopez::capablanca, josé raúl|lasker, edward",
     "vienna-game::bird, h. e. (henry edward)|lasker, edward"
   ],
-  "studentLosingModelGames": [
-    "sicilian-alapin::mg-adams-sicilian-alapin",
-    "sicilian-najdorf::mg-lichess-BTVJpaP6",
-    "sicilian-najdorf::mg-lichess-jMVMo1Ua"
-  ]
+  "studentLosingModelGames": []
 }

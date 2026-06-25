@@ -52,12 +52,12 @@ Promote the detectors into a permanent gate `src/data/contentConsistency.test.ts
 
 Starts RED = the backlog; each fix turns rows green. Add to the ship-check content-gate list. **This phase makes every later fix provable and prevents re-introduction.**
 
-### Phase 1 — Safe mechanical dedup (data-only, low risk)  `[next]`
-- (Dup model games: none — see inventory correction.)
-- Resolve the 9 duplicate plans per Decision 4.
-- Remove Vienna "Falkbeer" tab; differentiate or merge the Hikaru closed-sicilian pair.
-- Bump `model-games` reconcile revision + `PRO_DATA_REVISION` + plan revision so seeded devices update and orphans sweep (G8).
-- Gate dedup rows → green.
+### Phase 1 — RE-SCOPED: collapsed-distinct content (NOT mechanical dedup)  `[grounding done — needs work + 1 decision]`
+Grounding (2026-06-25) showed none of the "dedup" items are safe deletions; blind-deleting would create new bugs:
+- **9 "duplicate plans" → distinct plans collapsed onto one line.** Each pair has DIFFERENT titles/breaks/maneuvers (QGD …c5 vs …e5; KID trade-down vs …c5 lock; French Rubinstein vs Tarrasch …b5 gambit; etc.) but identical playable lines — a side effect of the recent plan-rebuild anchoring both to the same terminus. FIX = re-derive EACH plan's line to demonstrate its OWN declared break, grounded in the opening's data, re-passing `middlegamePlanThemes` + `narrationAccuracy`. NOT a deletion. (6 openings, ~9 pairs.)
+- **Hikaru closed-sicilian "Grand Prix f4+f5" vs "vs …g6":** same — two distinct named variations sharing one line; re-derive, don't delete.
+- **🟡 DECISION NEEDED — Vienna F-D tabs.** `repertoire.json` has BOTH "Falkbeer Variation" (PGN = F-D MAIN line, **matches** the FRANKENSTEIN_DRACULA lesson) and "Frankenstein-Dracula" (PGN = quieter …Be7 subline, **mismatches** that same main-line lesson). Plus `narrationFactCheck.test.ts` references the Falkbeer name. **REC:** rename "Falkbeer Variation" → "Frankenstein-Dracula" (its main-line PGN matches the lesson), drop the mis-wired …Be7-subline tab, remove the `::Falkbeer Variation` lesson key → 7 correctly-named tabs, no dup, no pgn/lesson mismatch. Confirm before I touch it (it deletes the …Be7 subline).
+- When done: bump revisions (G8), prune the corresponding `contentConsistency.baseline.json` keys.
 
 ### Phase 2 — Classic-Wisdom / From-the-Books (Decision 1)  `[pending]`
 - De-duplicate + de-attribute per Decision 1 across all affected openings.

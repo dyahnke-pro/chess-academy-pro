@@ -352,43 +352,6 @@
     "lessonSummary": "The Four Knights Game can lead to rich positional play when one side achieves a central pawn majority. Rubinstein demonstrated the classic strategy of building a broad center, restraining counterplay, and then advancing to create attacking chances. This game teaches that patience and structural advantages can overcome even world-class defenders like Lasker."
   },
   {
-    "id": "mg-adams-sicilian-alapin",
-    "openingId": "sicilian-alapin",
-    "white": "Deep Blue (Computer)",
-    "black": "Garry Kasparov",
-    "whiteElo": 2741,
-    "blackElo": 2804,
-    "result": "1-0",
-    "year": 1996,
-    "event": "Deep Blue vs Kasparov Match, Philadelphia (Game 1, February 10, 1996)",
-    "pgn": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 Bg4 Be2 e6 h3 Bh5 O-O Nc6 Be3 cxd4 cxd4 Bb4 a3 Ba5 Nc3 Qd6 Nb5 Qe7 Ne5 Bxe2 Qxe2 O-O Rac1 Rac8 Bg5 Bb6 Bxf6 gxf6 Nc4 Rfd8 Nxb6 axb6 Rfd1 f5 Qe3 Qf6 d5 Rxd5 Rxd5 exd5 b3 Kh8 Qxb6 Rg8 Qc5 d4 Nd6 f4 Nxb7 Ne5 Qd5 f3 g3 Nd3 Rc7 Re8 Nd6 Re1+ Kh2 Nxf2 Nxf7+ Kg7 Ng5+ Kh6 Rxh7+",
-    "overview": "Kasparov demonstrated masterful handling of the Black side of the Alapin Sicilian, neutralizing Adams' central play and seizing the initiative. Black exploited the isolated d-pawn weakness and generated powerful piece activity to win the game.",
-    "criticalMoments": [
-      {
-        "moveNumber": 14,
-        "color": "black",
-        "fen": "r3k2r/pp2qppp/2n1pn2/bN2N3/3P4/P3B2P/1P2bPP1/R2Q1RK1 w kq - 0 15",
-        "annotation": "Kasparov castled and prepared to target the isolated d4 pawn, a structural weakness inherent in the Alapin. Black's pieces coordinate naturally against the isolated pawn, creating long-term pressure.",
-        "concept": "Exploiting an isolated pawn"
-      },
-      {
-        "moveNumber": 15,
-        "color": "white",
-        "fen": "r3k2r/pp2qppp/2n1pn2/bN2N3/3P4/P3B2P/1P2QPP1/R4RK1 b kq - 0 15",
-        "annotation": "Adams pushed d5 to resolve the tension, but this advance allowed Black to establish a strong outpost and activate the pieces. The resulting position gave Black targets and superior minor piece coordination.",
-        "concept": "Premature pawn advance"
-      }
-    ],
-    "middlegameTheme": "Isolated pawn exploitation",
-    "lessonSummary": "The Alapin Sicilian gives White a straightforward development scheme but often creates an isolated d-pawn that Black can target. Kasparov showed how to methodically pressure structural weaknesses while maintaining active piece play. This game is a textbook example of converting a positional advantage against a strong opponent.",
-    "sources": [
-      "concept:pos-center",
-      "concept:pos-development",
-      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation"
-    ],
-    "variation": "Alapin: 2...d5 Central Counter (IQP Play)"
-  },
-  {
     "id": "mg-lichess-8I2YuiTC",
     "openingId": "italian-game",
     "white": "Kramnik, V.",
@@ -523,50 +486,6 @@
       "https://en.wikipedia.org/wiki/King%27s_Gambit"
     ],
     "variation": "Bishop's Gambit (3.Bc4)"
-  },
-  {
-    "id": "mg-lichess-jMVMo1Ua",
-    "openingId": "sicilian-najdorf",
-    "white": "Carlsen, M.",
-    "black": "Grischuk, A.",
-    "whiteElo": 2876,
-    "blackElo": 2781,
-    "result": "1-0",
-    "year": 2015,
-    "event": "2015-2015-06 master game",
-    "pgn": "Nf3 c5 e4 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 g3 e5 Nde2 Be7 Bg2 b5 Nd5 Nbd7 Nec3 Bb7 a4 Nxd5 Nxd5 Nf6 axb5 Nxd5 exd5 axb5 Rxa8 Qxa8 Qd3 O-O O-O Bc8 Be3 Bd7 Rc1 h6 Qd1 Qb7 Ra1 Ra8 h4 Ra6 b3 Bd8 c4 bxc4 bxc4 Bb6 c5 Bxc5 Bxc5 dxc5 d6 Qb6 Rxa6 Qxa6 Bd5 Qc8 Qb3 Be8 Qc3 c4 Bxc4 Bd7 Qb3 Qe8 Qf3 Kf8 h5 Kg8 Qe4 Bc6 Bd5 Bd7 Kg2 Kh8 f4 exf4 Qxe8+ Bxe8 Bxf7 Bc6+ Kf2 fxg3+ Kxg3 Bd7 Bg6",
-    "overview": "Master game from the Lichess masters database. Carlsen, M. vs Grischuk, A., 2015. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/jMVMo1Ua",
-    "source": "lichess-masters",
-    "sources": [
-      "concept:att-queenside-attack",
-      "concept:pos-center",
-      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
-    ],
-    "variation": "Najdorf: Adams Attack (6.g3 Fianchetto)"
-  },
-  {
-    "id": "mg-lichess-BTVJpaP6",
-    "openingId": "sicilian-najdorf",
-    "white": "Carlsen, Magnus",
-    "black": "Ding, Liren",
-    "whiteElo": 2863,
-    "blackElo": 2791,
-    "result": "1-0",
-    "year": 2020,
-    "event": "2020-2020-08 master game",
-    "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 Qd2 Be7 f3 h5 Be2 Nbd7 Nd5 Bxd5 exd5 b6 O-O-O Qc7 Kb1 b5 Na5 Nb6 Bxb6 Qxb6 Nc6 Bd8 c4 bxc4 Bxc4 O-O Rhe1 Nd7 g4 hxg4 fxg4 Bh4 g5 g6 Rf1 Kg7 Qg2 Rh8 Qg4 Qc7 Rf3 f5 gxf6+ Nxf6 Qg2 Qd7 Rg1 Rh6 a3 Nh5 Rb3 Nf4 Qc2 Kh8 Ka2 Qf5 Qd2 Qe4 Rc1 Bg5 Rcc3 Ne6 Qc2 Qxc2 Rxc2 Nd4 Nxd4 exd4 Rb6 Bf4 Rxa6 Rxa6 Bxa6 Rh3 a4 Kg7 Rf2 Be3 Bf1 Rh5 Rg2 Rxd5 Bd3 Rg5 Rxg5 Bxg5 a5 Bd8 a6 Bb6 Kb3 Kf6 Kc4 Ke5 Kb5 Ba7 Kc6",
-    "overview": "Master game from the Lichess masters database. Carlsen, Magnus vs Ding, Liren, 2020. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/BTVJpaP6",
-    "source": "lichess-masters",
-    "sources": [
-      "concept:att-queenside-attack",
-      "concept:pos-center",
-      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
-    ],
-    "variation": "Najdorf: English Attack (6.Be3 Main Line)"
   },
   {
     "id": "mg-lichess-6ra0xjZ4",
