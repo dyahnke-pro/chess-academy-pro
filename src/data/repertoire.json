@@ -1283,8 +1283,8 @@
       },
       {
         "name": "Two Pawns Attack",
-        "pgn": "e4 Nf6 e5 Nd5 c4 Nb6 d4 d6 exd6 exd6 Nf3 Be7 Be2 O-O O-O Bf5 Nc3 Nc6 Be3 d5 c5 Nc4 Bxc4 dxc4 Qa4",
-        "explanation": "A more restrained version of the Four Pawns Attack — White builds with c4 and d4 without overextending with f4. Black develops actively against the d4 pawn with ...Bf5 and ...Nc6. The ...d5 break followed by ...Nc4 exchanges pieces and isolates the c-pawn after Bxc4. Qa4 attacks the queenside while Black has the bishop pair to compensate.",
+        "pgn": "e4 Nf6 e5 Nd5 c4 Nb6 d4 d6 exd6 cxd6 Nc3 g6 Nf3 Bg7 Be3 O-O Be2 Nc6 O-O Bg4 b3 e5",
+        "explanation": "A more restrained version of the Four Pawns Attack — White builds with c4 and d4 without the committal f4. Black recaptures …cxd6, opening the c-file, and adopts a modern fianchetto: …g6, …Bg7, …O-O, then …Nc6 and …Bg4 to pressure d4 before striking with …e5 to challenge White’s centre. The half-open c-file and the active g7-bishop give Black sound, dynamic counterplay.",
         "shortExplanation": "Restrained two-pawn center. ...Bf5-Nc6 hits d4, then ...d5-Nc4 break wins the bishop pair."
       },
       {
@@ -2925,8 +2925,8 @@
       },
       {
         "name": "Two Knights: Traxler Counterattack",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Bxf7+ Ke7 Bd5 Rf8 O-O d6 c3 Bg4",
-        "explanation": "The Traxler Counterattack with 4...Bc5 is the most audacious response to 4.Ng5, ignoring the f7 threat entirely and daring White to accept the sacrifice. After Bxf7+ Ke7, Black loses castling rights but gains a tremendous initiative with rapid piece development and threats against f2. White must tread extremely carefully because the Black attack develops almost automatically. The key for Black is to keep the pressure relentless and avoid allowing White to consolidate the extra material."
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Nxf7 Bxf2+ Kxf2 Nxe4+ Kg1 Qh4 g3 Nxg3 hxg3 Qxg3+",
+        "explanation": "The Traxler Counterattack with 4…Bc5 is the most audacious answer to 4.Ng5 — Black ignores the f7 threat and dares White to grab it. After the greedy 5.Nxf7, Black crashes in with …Bxf2+! 6.Kxf2 Nxe4+, dragging the white king into the open: …Qh4, …Nxg3 and …Qxg3+ keep a ferocious initiative rolling. A razor-sharp gambit where Black’s lead in development and the exposed white king are the compensation for the sacrificed material."
       },
       {
         "name": "Two Knights: Max Lange Attack",
