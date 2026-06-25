@@ -355,7 +355,7 @@
       {
         "name": "Vienna Gambit",
         "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7 Qe2 Nxc3 dxc3 c5",
-        "explanation": "The Vienna Gambit with 3.f4 is White's most aggressive choice, sacrificing a pawn for rapid central control. After exf4 e5, the knight is driven back and White builds a massive center with d4. The queen exchange on d8 looks tame but White gets a tremendous endgame advantage with superior piece activity and development. The bishop develops to f4 recapturing the pawn, and O-O-O puts the rook directly on the open d-file. The Nd5 jump is the key positional idea, dominating from the center.",
+        "explanation": "The Vienna Gambit with 3.f4 is White’s most aggressive try, striking at e5. Black’s soundest reply is the counter-thrust …d5, meeting fire with fire: after fxe5 Nxe4 Nf3 Be7 Qe2, the knights come off with …Nxc3 and dxc3 leaves White doubled c-pawns but the bishop pair and a lead in development. With …c5 Black stakes out the centre. The resulting positions are open and roughly balanced — White’s activity and two bishops against Black’s healthier pawn structure.",
         "keyIdeas": [
           "Use Lasker's f4 lever — pull Black's e5-pawn away with a thrust from the side, exactly the principle from Chess Strategy.",
           "After 3…d5 (the principled reply) accept with 4.fxe5 Nxe4 and play 5.Qf3! — the modern Bardeleben main line that attacks the e4-knight AND threatens Qxd5 with tempo.",
@@ -377,7 +377,7 @@
       {
         "name": "Stanley Variation",
         "pgn": "e4 e5 Nc3 Nf6 Bc4 Bc5 d3 d6 Nf3 O-O O-O Bg4",
-        "explanation": "The Stanley Variation with 3.Bc4 creates an Italian-Vienna hybrid with harmonious development. White gets Bc4, d3, and Nf3, maintaining flexibility to play d4 at the right moment. The Na4 maneuver targets the dark-squared bishop, and after Nxb6, White has the bishop pair which is a significant long-term advantage. Black must play actively with ...Nc6 and ...Re8 to generate counterplay before White's bishops dominate the open position. The Qb3 battery on the a2-g8 diagonal creates persistent pressure."
+        "explanation": "The Stanley Variation with 3.Bc4 creates an Italian-Vienna hybrid with harmonious development. White gets Bc4, d3 and Nf3, keeping the flexibility to strike with d4 at the right moment. Both sides castle short and Black develops actively — …Bc5, …d6, …O-O and …Bg4, pinning the f3-knight and pressuring the centre. The middlegame turns on the timing of the d4 break and the contest for the half-open lines once the centre clarifies; White’s harmonious set-up promises a small, lasting pull."
       },
       {
         "name": "Vienna vs 2...Nc6",
