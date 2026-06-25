@@ -70,8 +70,11 @@ Root cause confirmed: `rewrite-book-voice.mjs` recast the mined text into a mode
 - Enumerate the ~44 overview/theme mismatches (judge findings + tightened player-name detector); per record, correct fields or re-author overview grounded in the real game. Sub-batch by opening.
 - Gate overview-stray-surname rows → green.
 
-### Phase 4 — Variation explanation ≠ line (~19)  `[pending]`
-- Per case, fix the explanation prose to match the data-derived line (moves canonical, prose editable). Vienna Stanley/Gambit, Italian Ba3, Pirc Qa5, etc.
+### Phase 4 — Variation explanation ≠ line  `[in progress — Vienna done]`
+**75 variation findings (high+med)** across ~25 openings — full list in `audit-reports/content-audit/_findings-revalidated.json` (filter `section` starts with "variations"). Per case, fix the explanation prose to match the data-derived line (moves canonical, prose editable).
+- ✅ Vienna Stanley + Vienna Gambit explanations rewritten (2026-06-25).
+- ⚠️ JUDGMENT CASES — some findings flag the LINE itself, not just the prose (scotch: "lesson teaches an entirely different line from the sanLine"; sicilian-dragon Levenfish: sanLine/finalFen describe a different structure). For these, decide which is canonical (repertoire pgn vs lesson vs DB) BEFORE rewording — don't reword prose to match a line that's itself wrong. Verify each against the packet `sanLine`/`finalFen` first (the judge wording is a pointer, not gospel — cf. the Najdorf orientation false-positive in the audit doc).
+- Determinate square-corrections (safe): reti (bishop on c4, not b3), najdorf (Na4, not Na5/c6), sveshnikov (Nf6, not g6→f4) — reword to the real square.
 
 ### Phase 4b — Pre-existing narrationFactCheck drift (discovered 2026-06-25)  `[DONE 2026-06-25]`
 All 7 fixed board-true + narrationFactCheck added to ship-check GATE_TESTS (so it can't drift unguarded again). Gate green 3/3. Original list below.
