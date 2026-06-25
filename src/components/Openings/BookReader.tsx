@@ -283,7 +283,9 @@ export function BookReader({ openingName, overview, keyIdeas }: BookReaderProps)
           );
         })}
         <footer className="text-xs text-theme-text-muted/60 mt-2 italic">
-          Drawn from {authorName(passage.author)}, {shortTitle(passage.bookTitle)}
+          {passage.gutenbergId
+            ? <>Drawn from {authorName(passage.author)}, {shortTitle(passage.bookTitle)}</>
+            : <>A modern retelling, distilled from the classical masters.</>}
         </footer>
       </div>
 
@@ -316,30 +318,38 @@ export function BookReader({ openingName, overview, keyIdeas }: BookReaderProps)
         </div>
       )}
 
-      {/* Sources — the public-domain works these retellings draw on. */}
-      {sources.length > 0 && (
-        <div className="mt-4 pt-3 border-t border-theme-border/60" data-testid="book-reader-sources">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-theme-text-muted/70 mb-1.5">Sources</p>
-          <ul className="space-y-1">
-            {sources.map((s) => (
-              <li key={s.gutenbergId} className="text-[11px] text-theme-text-muted/70 leading-snug">
-                {s.author}, <span className="italic">{s.bookTitle}</span>{' '}
-                <a
-                  href={`https://www.gutenberg.org/ebooks/${s.gutenbergId}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-amber-400/70 hover:text-amber-300 underline"
-                >
-                  (Project Gutenberg)
-                </a>
-              </li>
-            ))}
-          </ul>
-          <p className="text-[10px] text-theme-text-muted/50 mt-2 leading-snug">
-            Public-domain classics, retold in a single teaching voice. Ideas adapted; wording original.
-          </p>
-        </div>
-      )}
+      {/* Sources — list only genuinely-mined works (gutenbergId > 0); the
+          de-attributed retellings (id 0) carry the honest credit line below. */}
+      {(() => {
+        const realSources = sources.filter((s) => s.gutenbergId > 0);
+        return (
+          <div className="mt-4 pt-3 border-t border-theme-border/60" data-testid="book-reader-sources">
+            {realSources.length > 0 && (
+              <>
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-theme-text-muted/70 mb-1.5">Sources</p>
+                <ul className="space-y-1">
+                  {realSources.map((s) => (
+                    <li key={s.gutenbergId} className="text-[11px] text-theme-text-muted/70 leading-snug">
+                      {s.author}, <span className="italic">{s.bookTitle}</span>{' '}
+                      <a
+                        href={`https://www.gutenberg.org/ebooks/${s.gutenbergId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-amber-400/70 hover:text-amber-300 underline"
+                      >
+                        (Project Gutenberg)
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+            <p className="text-[10px] text-theme-text-muted/50 mt-2 leading-snug">
+              Modern retellings, distilled from the public-domain classics in a single teaching voice. Ideas adapted; wording original.
+            </p>
+          </div>
+        );
+      })()}
     </div>
   );
 }

@@ -124,15 +124,21 @@ export function ClassicWisdomSection({ openingName, renderNarrationButton, onAct
                   <WisdomParagraphRow key={para.id} para={para} reader={reader} />
                 ))}
                 <footer className="text-xs text-theme-text-muted/60 mt-1.5 italic">
-                  Drawn from {author},{' '}
-                  <a
-                    href={`https://www.gutenberg.org/ebooks/${p.gutenbergId}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-amber-400/80 hover:text-amber-300 underline not-italic"
-                  >
-                    {title}
-                  </a>
+                  {p.gutenbergId ? (
+                    <>
+                      Drawn from {author},{' '}
+                      <a
+                        href={`https://www.gutenberg.org/ebooks/${p.gutenbergId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-amber-400/80 hover:text-amber-300 underline not-italic"
+                      >
+                        {title}
+                      </a>
+                    </>
+                  ) : (
+                    <>A modern retelling, distilled from the classical masters.</>
+                  )}
                 </footer>
               </blockquote>
             );

@@ -59,9 +59,9 @@ Grounding (2026-06-25) showed none of the "dedup" items are safe deletions; blin
 - **🟡 DECISION NEEDED — Vienna F-D tabs.** `repertoire.json` has BOTH "Falkbeer Variation" (PGN = F-D MAIN line, **matches** the FRANKENSTEIN_DRACULA lesson) and "Frankenstein-Dracula" (PGN = quieter …Be7 subline, **mismatches** that same main-line lesson). Plus `narrationFactCheck.test.ts` references the Falkbeer name. **REC:** rename "Falkbeer Variation" → "Frankenstein-Dracula" (its main-line PGN matches the lesson), drop the mis-wired …Be7-subline tab, remove the `::Falkbeer Variation` lesson key → 7 correctly-named tabs, no dup, no pgn/lesson mismatch. Confirm before I touch it (it deletes the …Be7 subline).
 - When done: bump revisions (G8), prune the corresponding `contentConsistency.baseline.json` keys.
 
-### Phase 2 — Classic-Wisdom / From-the-Books (Decision 1)  `[pending]`
-- De-duplicate + de-attribute per Decision 1 across all affected openings.
-- Gate CW/FTB rows → green.
+### Phase 2 — Classic-Wisdom / From-the-Books (Decision 1)  `[DONE 2026-06-25 — David: "de-attribute, keep prose"]`
+Root cause confirmed: `rewrite-book-voice.mjs` recast the mined text into a modern teaching voice but KEPT the historical author/title/gutenbergId citation — so both sections presented app-written retellings as real public-domain quotes (same passage even credited to two different authors across the two sections). Fix shipped: de-attributed all 19 From-the-Books pages + 16 Classic-Wisdom opening passages to a single honest credit (`author: "Chess Academy"`, `gutenbergId: 0`), preserved the prose + the top-level book bibliography. UI (ClassicWisdomSection + BookReader) renders "A modern retelling, distilled from the classical masters" and suppresses the Gutenberg link for the sentinel. `classicWisdomBookClash` → 0; baseline pruned. Reads from JSON directly (no Dexie reconcile). Gates green (chessConceptService/coachesLibrary/middlegameBookLessons/groundedAnswer/contentConsistency).
+- Follow-up flagged: the chess-concepts CONCEPT passages (coach-grounding library, a different surface) carry the same rewritten-but-attributed prose — de-attribute in a later pass if David wants the coach to stop citing historical authors for retold ideas.
 
 ### Phase 3 — Model-game integrity (the big class)  `[pending]`
 - Fix the 3 student-side-losing games (replace with a real student-side win, fix a mistagged result/colour, or remove junk like the Alapin Deep Blue/Adams record).

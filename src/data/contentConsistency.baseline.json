@@ -15,13 +15,6 @@
     "pro-naroditsky-rossolimo::mp-pronaroRoss-nc6-maroczy==mp-pronaroRoss-nc6-b4push",
     "sicilian-najdorf::mp-siciliannajdorf-6f3==mp-siciliannajdorf-main"
   ],
-  "classicWisdomBookClash": [
-    "four-knights-game::bird, h. e. (henry edward)|capablanca, josé raúl",
-    "petrov-defence::capablanca, josé raúl|staunton, howard",
-    "philidor-defence::staunton, howard|lasker, edward",
-    "queens-gambit::capablanca, josé raúl|lasker, edward",
-    "ruy-lopez::capablanca, josé raúl|lasker, edward",
-    "vienna-game::bird, h. e. (henry edward)|lasker, edward"
-  ],
+  "classicWisdomBookClash": [],
   "studentLosingModelGames": []
 }

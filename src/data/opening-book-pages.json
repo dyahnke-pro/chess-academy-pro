@@ -48,9 +48,9 @@
     "ruy-lopez": [
       {
         "bookSlug": "edward-lasker-chess-strategy",
-        "bookTitle": "Chess Strategy",
-        "author": "Lasker, Edward",
-        "gutenbergId": 5614,
+        "bookTitle": "Distilled from the classical masters",
+        "author": "Chess Academy",
+        "gutenbergId": 0,
         "chapter": null,
         "section": null,
         "text": "The Ruy Lopez is a siege, not a skirmish. Your bishop fixes its gaze on the c6-knight and refuses to release the tension until the terms favour you. When you push the a-pawn to a4, you are not grabbing ground — you are forcing the question: Black must lock the queenside with ...b4 or concede the file. But beware over-reaching. If he answers ...b4, a further pawn thrust is wasted breath, and worse, it leaves your own rook's pawn a mark for the long campaign of the endgame. Guard the bishop's diagonal as you would a mountain pass: should a black knight ever plant itself on f5, you cannot evict it but by the ugly g3 — a wound before your own king that never heals. Patience wins this opening. Restrain ...d5, bring up every piece, then open the kingside once the centre is yours.",
@@ -58,9 +58,9 @@
       },
       {
         "bookSlug": "capablanca-chess-fundamentals",
-        "bookTitle": "Chess Fundamentals",
-        "author": "Capablanca, José Raúl",
-        "gutenbergId": 33870,
+        "bookTitle": "Distilled from the classical masters",
+        "author": "Chess Academy",
+        "gutenbergId": 0,
         "chapter": null,
         "section": null,
         "text": "The deepest truth of the Ruy is that White plays for a small, lasting edge and a superior endgame, not a quick kill. By trading the bishop for the c6-knight at the right moment, White can saddle Black with a backward c-pawn and a half-open file to besiege it — a structural wound a master converts with patience over forty moves. So do not hurry. Build the broad pawn centre, restrain Black's freeing breaks, and keep the pieces coiled. Every champion of the modern age has been a master of exactly this: the slow accumulation of small advantages until the endgame quietly collects them. Learn to handle the Ruy and you have learned a great deal about chess itself.",
@@ -70,9 +70,9 @@
     "petrov-defence": [
       {
         "bookSlug": "staunton-blue-book-of-chess",
-        "bookTitle": "The blue book of chess: teaching the rudiments of the game, and giving an analysis of all the recognized openings",
-        "author": "Staunton, Howard",
-        "gutenbergId": 16377,
+        "bookTitle": "Distilled from the classical masters",
+        "author": "Chess Academy",
+        "gutenbergId": 0,
         "chapter": null,
         "section": null,
         "text": "The Petroff answers aggression with symmetry: where White attacks the king's pawn, Black does not defend it but counterattacks White's in turn. The result is one of the soundest, most equalising defences in all of chess — the choice of the disciplined player content to neutralise White's first-move edge and play for the long, level middlegame. Do not mistake its calm for passivity; behind the symmetry lie sharp traps for the careless, and Black must know the precise retreats that hold the balance. The Petroff is a fortress, not a battering ram — and against an impatient opponent, an unbreakable one.",
@@ -82,9 +82,9 @@
     "french-defence": [
       {
         "bookSlug": "edward-lasker-chess-strategy",
-        "bookTitle": "Chess Strategy",
-        "author": "Lasker, Edward",
-        "gutenbergId": 5614,
+        "bookTitle": "Distilled from the classical masters",
+        "author": "Chess Academy",
+        "gutenbergId": 0,
         "chapter": null,
         "section": null,
         "text": "The French is a defence for the patient and the stubborn. Black answers the king's pawn not by contesting the centre head-on but by building a wall — pawns at e6 and d5 — and inviting White to advance and overextend. The board divides along a diagonal: White takes the greater space and the attacking chances on the kingside, Black the counterattack on the queenside, aimed at the base of White's pawn chain. The one sorrow of the French is the queen's bishop, hemmed in behind its own pawns; solving that bishop is Black's lifelong problem in this opening. Strike the chain at its base with ...c5 and ...f6, and what looked a cramped position uncoils like a spring.",
@@ -92,9 +92,9 @@
       },
       {
         "bookSlug": "edward-lasker-chess-strategy",
-        "bookTitle": "Chess Strategy",
-        "author": "Lasker, Edward",
-        "gutenbergId": 5614,
+        "bookTitle": "Distilled from the classical masters",
+        "author": "Chess Academy",
+        "gutenbergId": 0,
         "chapter": null,
         "section": null,
         "text": "Understand the French as a battle of pawn chains. White's chain slants upward from its base; Black does not assault its head but undermines its foundation, knowing that when the base falls the whole structure totters. White, for his part, must use the extra space to mass forces on the kingside before Black's counterstroke arrives — for this is a race of opposite ambitions on opposite wings. The side that strikes the base of the enemy chain first, with pieces already massed behind the break, wins the argument. Time your break; never launch it before the army stands behind it.",
@@ -104,9 +104,9 @@
     "four-knights-game": [
       {
         "bookSlug": "capablanca-chess-fundamentals",
-        "bookTitle": "Chess Fundamentals",
-        "author": "Capablanca, José Raúl",
-        "gutenbergId": 33870,
+        "bookTitle": "Distilled from the classical masters",
+        "author": "Chess Academy",
+        "gutenbergId": 0,
         "chapter": null,
         "section": null,
         "text": "The Four Knights is the most natural opening in chess — both sides bring the knights to their best squares and the position breathes symmetry and good sense. For generations it was dismissed as drawish, fit only for a quiet day. The modern verdict is kinder: behind the calm surface lie real plans, and one in particular rewards study — to manoeuvre a knight to the f5 outpost, pry open the f-file with a pawn break, and turn a placid centre into a kingside attack. Develop soundly, castle, then choose a plan with purpose. Even the quietest opening rewards the player who knows what he is building toward.",
@@ -116,9 +116,9 @@
     "queens-gambit": [
       {
         "bookSlug": "edward-lasker-chess-and-checkers",
-        "bookTitle": "Chess and Checkers : the Way to Mastership",
-        "author": "Lasker, Edward",
-        "gutenbergId": 4913,
+        "bookTitle": "Distilled from the classical masters",
+        "author": "Chess Academy",
+        "gutenbergId": 0,
         "chapter": null,
         "section": null,
         "text": "The Queen's Gambit is no true gambit at all — the offered c-pawn cannot be safely held, and White knows it. The real aim is to lure Black's d-pawn away from the centre, win a free hand in development, and command the greater space. It is the most respected of all queen's-pawn openings, the battleground of world championships, precisely because its ideas are deep and lasting rather than tactical fireworks. Decline it soundly, free the cramped queen's bishop — Black's eternal task in these structures — and contest the centre with ...c5 once the pieces stand ready. This is positional chess at its purest: space, structure, and the slow squeeze.",
@@ -126,9 +126,9 @@
       },
       {
         "bookSlug": "capablanca-chess-fundamentals",
-        "bookTitle": "Chess Fundamentals",
-        "author": "Capablanca, José Raúl",
-        "gutenbergId": 33870,
+        "bookTitle": "Distilled from the classical masters",
+        "author": "Chess Academy",
+        "gutenbergId": 0,
         "chapter": null,
         "section": null,
         "text": "The heart of the Queen's Gambit is the fight for the open file and the freeing break. White, holding the centre and the greater space, often turns to the minority attack — pushing the b-pawn forward on the queenside to force a trade that leaves Black a weak, backward pawn to besiege for the rest of the game. Black's salvation is counterplay in the centre: the breaks ...c5 and ...e5, prepared with care, that free the position and give the cramped pieces air before the squeeze turns fatal. So the struggle is plain — White grinds on the wing, Black breaks in the centre. Whoever reaches his plan a move sooner writes the story of the game.",
@@ -138,9 +138,9 @@
     "qgd": [
       {
         "bookSlug": "capablanca-chess-fundamentals",
-        "bookTitle": "Chess Fundamentals",
-        "author": "Capablanca, José Raúl",
-        "gutenbergId": 33870,
+        "bookTitle": "Distilled from the classical masters",
+        "author": "Chess Academy",
+        "gutenbergId": 0,
         "chapter": null,
         "section": null,
         "text": "The Queen's Gambit Declined is the bedrock of classical defence — Black braces the centre with ...e6, declines the offered pawn, and builds a sound, slightly cramped position with no weaknesses to attack. The price, as ever in these structures, is the queen's bishop shut behind the e6-pawn; freeing it is the whole strategic struggle. White enjoys the greater space and presses with the minority attack — advancing the queenside pawns to manufacture a weakness in Black's camp — while Black seeks the freeing breaks ...c5 or ...e5. It is the most reliable answer to the queen's pawn there is: hard to break, deep to master, the choice of champions for a hundred years.",
@@ -148,9 +148,9 @@
       },
       {
         "bookSlug": "capablanca-chess-fundamentals",
-        "bookTitle": "Chess Fundamentals",
-        "author": "Capablanca, José Raúl",
-        "gutenbergId": 33870,
+        "bookTitle": "Distilled from the classical masters",
+        "author": "Chess Academy",
+        "gutenbergId": 0,
         "chapter": null,
         "section": null,
         "text": "In the Declined, everything turns on a single piece: Black's queen's bishop, walled in behind the e6-pawn from the first moves. The whole middlegame is the campaign to set it free — by ...dxc4 and ...e5, by the manoeuvre ...b6 and ...Bb7 onto the long diagonal, or by trading it off at the first clean chance. Solve the bishop and Black stands fully equal; fail, and he is condemned to defend a cramped position a piece short of his real strength. White, meanwhile, presses exactly where Black is slow. Grasp this one strategic thread and you understand the QGD better than the man who has memorised twenty moves of theory.",
@@ -160,9 +160,9 @@
     "vienna-game": [
       {
         "bookSlug": "edward-lasker-chess-strategy",
-        "bookTitle": "Chess Strategy",
-        "author": "Lasker, Edward",
-        "gutenbergId": 5614,
+        "bookTitle": "Distilled from the classical masters",
+        "author": "Chess Academy",
+        "gutenbergId": 0,
         "chapter": null,
         "section": null,
         "text": "The Vienna is the King's Gambit's patient cousin — White develops the queen's knight first, keeps the f-pawn thrust in reserve, and asks Black to commit before the storm breaks. It can settle into quiet positional play or erupt into a gambit attack, and that flexibility is its charm: White chooses the weather. Hold the f4-break in hand like a sheathed blade, develop with a plan, and draw it only when Black's setup offers the most return. Against the unprepared it is a trap; against the well-booked it is a sound, flexible system that keeps the first move's edge.",
@@ -172,9 +172,9 @@
     "caro-kann": [
       {
         "bookSlug": "edward-lasker-chess-strategy",
-        "bookTitle": "Chess Strategy",
-        "author": "Lasker, Edward",
-        "gutenbergId": 5614,
+        "bookTitle": "Distilled from the classical masters",
+        "author": "Chess Academy",
+        "gutenbergId": 0,
         "chapter": null,
         "section": null,
         "text": "The Caro-Kann is the French built on firmer ground. Black again challenges the centre with ...d5, but prepares it with ...c6 instead of ...e6 — and so keeps the diagonal open for the queen's bishop, the very piece the French leaves entombed. That single difference buys Black a sound, solid game with no chronic weakness, at the cost of a tempo. It is the choice of the player who would sooner suffer a small disadvantage in space than carry a lasting one in structure. Develop the light bishop outside the pawn chain before you close it, weather White's spatial pressure, and steer for an endgame where a flawless structure tells.",
@@ -182,9 +182,9 @@
       },
       {
         "bookSlug": "edward-lasker-chess-strategy",
-        "bookTitle": "Chess Strategy",
-        "author": "Lasker, Edward",
-        "gutenbergId": 5614,
+        "bookTitle": "Distilled from the classical masters",
+        "author": "Chess Academy",
+        "gutenbergId": 0,
         "chapter": null,
         "section": null,
         "text": "The Caro's whole philosophy is structure over speed. By preparing ...d5 with the modest ...c6, Black accepts a tempo's delay in return for a camp with no organic weakness and a healthy light-squared bishop developed before the centre closes. Against White's space the plan is endurance: trade off the attackers, blunt the initiative, and head for an endgame where a sound house outlasts a furious siege. This is why the Caro is the weapon of patient, technically minded players — it concedes the early initiative on purpose, trusting that good structure has the last word. Develop the bishop, hold the centre, and play for the long game.",
@@ -194,9 +194,9 @@
     "dutch-defence": [
       {
         "bookSlug": "edward-lasker-chess-strategy",
-        "bookTitle": "Chess Strategy",
-        "author": "Lasker, Edward",
-        "gutenbergId": 5614,
+        "bookTitle": "Distilled from the classical masters",
+        "author": "Chess Academy",
+        "gutenbergId": 0,
         "chapter": null,
         "section": null,
         "text": "The Dutch is Black's fighting answer to the queen's pawn — ...f5 on the first move, staking a claim to the e4-square and the kingside, refusing the symmetrical quiet White invites. It is double-edged by nature: the f-pawn's advance grants Black attacking chances and a foothold in the centre, but it loosens the king's own shelter, and White may give a pawn early to blast the position open. Choose a setup — the solid Stonewall, or the flexible Leningrad with its fianchettoed bishop — and commit to the kingside ambitions it implies. The Dutch rewards the player who wants to attack with the black pieces, and punishes the one who forgets the cost to his own king.",
@@ -206,9 +206,9 @@
     "kings-gambit": [
       {
         "bookSlug": "staunton-blue-book-of-chess",
-        "bookTitle": "The blue book of chess: teaching the rudiments of the game, and giving an analysis of all the recognized openings",
-        "author": "Staunton, Howard",
-        "gutenbergId": 16377,
+        "bookTitle": "Distilled from the classical masters",
+        "author": "Chess Academy",
+        "gutenbergId": 0,
         "chapter": null,
         "section": null,
         "text": "The King's Gambit is the most romantic opening in chess — White offers a pawn on the second move to rip open the f-file and hurl every piece at the enemy king. For two centuries it was the proving ground of attacking genius. Modern defence has tamed its wildest claims, but in a practical game it remains a loaded pistol: Black must defend with precision or be swept from the board. The price is real — a pawn, and a weakened king of one's own — so this is a wager, not a free lunch. Bring the rooks to the open file and attack before the debt comes due. Fortune favours the bold here, but only the bold who calculate.",
@@ -216,9 +216,9 @@
       },
       {
         "bookSlug": "staunton-blue-book-of-chess",
-        "bookTitle": "The blue book of chess: teaching the rudiments of the game, and giving an analysis of all the recognized openings",
-        "author": "Staunton, Howard",
-        "gutenbergId": 16377,
+        "bookTitle": "Distilled from the classical masters",
+        "author": "Chess Academy",
+        "gutenbergId": 0,
         "chapter": null,
         "section": null,
         "text": "The logic of the King's Gambit is brutal and clear: give a pawn to open the f-file, post the bishop on the diagonal that points at f7, castle the rook into the attack, and reach the enemy king before he reaches safety. Every tempo is mortgaged to the assault, so there is no turning back — a King's Gambit played half-heartedly is merely a pawn down. Black's defence rests on giving the pawn back at the right moment to blunt the attack and reach an endgame where the extra structure tells. So it is a duel of clocks: White must break through before the storm spends itself; Black must survive the first wave and consolidate.",
@@ -228,9 +228,9 @@
     "evans-gambit": [
       {
         "bookSlug": "staunton-blue-book-of-chess",
-        "bookTitle": "The blue book of chess: teaching the rudiments of the game, and giving an analysis of all the recognized openings",
-        "author": "Staunton, Howard",
-        "gutenbergId": 16377,
+        "bookTitle": "Distilled from the classical masters",
+        "author": "Chess Academy",
+        "gutenbergId": 0,
         "chapter": null,
         "section": null,
         "text": "The Evans Gambit, the invention of a Welsh sea-captain in 1830, is aggression distilled — White flings a wing pawn to wrench the enemy bishop offside, then seizes the centre with tempo and bears down on f7 before Black can draw breath. For a generation it crushed all comers; the masters of the romantic age wielded it like a sabre. Black may decline it, or hand the pawn back for safety, but accept it greedily and the initiative becomes a torrent. Take the centre, develop with threats, and do not pause to count pawns while the enemy king stands in the open. This is a gambit for the player who would rather attack than eat.",
@@ -240,9 +240,9 @@
     "old-indian-defence": [
       {
         "bookSlug": "edward-lasker-chess-and-checkers",
-        "bookTitle": "Chess and Checkers : the Way to Mastership",
-        "author": "Lasker, Edward",
-        "gutenbergId": 4913,
+        "bookTitle": "Distilled from the classical masters",
+        "author": "Chess Academy",
+        "gutenbergId": 0,
         "chapter": null,
         "section": null,
         "text": "The Old Indian is the patient elder of the king's-pawn-d6 defences — Black sets up a solid, modest structure with ...d6 and ...e5, content to cede the centre for a time and strike back later. It is the conservative cousin of the King's Indian, trading that opening's fierce kingside storms for sound, flexible, low-risk development. The plan is restraint, then rupture: complete the setup, choose the right moment for ...e5 or ...c5, and uncoil against an opponent who has overextended in the broad centre you allowed him. It asks for patience and a cool head, and rewards both.",
@@ -252,9 +252,9 @@
     "philidor-defence": [
       {
         "bookSlug": "edward-lasker-chess-strategy",
-        "bookTitle": "Chess Strategy",
-        "author": "Lasker, Edward",
-        "gutenbergId": 5614,
+        "bookTitle": "Distilled from the classical masters",
+        "author": "Chess Academy",
+        "gutenbergId": 0,
         "chapter": null,
         "section": null,
         "text": "The Philidor is solid and cramped — Black props up the king's pawn with the modest ...d6 rather than a knight, choosing safety and a sound structure over space. It carries the name of the greatest player of the eighteenth century, who taught that the pawns are the soul of chess. Its danger is passivity: handled carelessly, Black is simply squeezed for room and never breathes. Handled well, it is a tough nut — a coiled defensive setup that invites White to overreach and then breaks free with a timely central thrust. Develop patiently, keep the position sound, and wait for the overconfident attacker to hand you the counterstroke.",
