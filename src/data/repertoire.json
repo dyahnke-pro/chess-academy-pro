@@ -364,7 +364,7 @@
         ]
       },
       {
-        "name": "Falkbeer Variation",
+        "name": "Frankenstein-Dracula",
         "pgn": "e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Nc6 Nb5 g6 Qf3 f5 Qd5 Qe7 Nxc7+ Kd8 Nxa8 b6 d3 Bb7",
         "explanation": "The Falkbeer Variation arises when Black plays ...Nxe4, allowing the dangerous Qh5 strike. White threatens both f7 and the piece on e4, and after ...Nd6, the knight is awkwardly placed blocking Black's development. The Nb5 jump creates additional pressure on c7 and d6, and if Black is not careful, White's initiative becomes overwhelming. The Nxc7+ fork wins the exchange, and White emerges from the complications with material advantage and a strong initiative.",
         "keyIdeas": [
@@ -378,17 +378,6 @@
         "name": "Stanley Variation",
         "pgn": "e4 e5 Nc3 Nf6 Bc4 Bc5 d3 d6 Nf3 O-O O-O Bg4",
         "explanation": "The Stanley Variation with 3.Bc4 creates an Italian-Vienna hybrid with harmonious development. White gets Bc4, d3, and Nf3, maintaining flexibility to play d4 at the right moment. The Na4 maneuver targets the dark-squared bishop, and after Nxb6, White has the bishop pair which is a significant long-term advantage. Black must play actively with ...Nc6 and ...Re8 to generate counterplay before White's bishops dominate the open position. The Qb3 battery on the a2-g8 diagonal creates persistent pressure."
-      },
-      {
-        "name": "Frankenstein-Dracula",
-        "pgn": "e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Be7 Nf3 Nc6 Nxe5 g6 Qe2",
-        "explanation": "The Frankenstein-Dracula variation leads to wild tactical complications after Black takes on e4 and White responds with Qh5. The name comes from the monstrous tactical complexities that arise. White sacrifices material for a dangerous initiative, but Black can defend with precise play starting with ...Be7 and ...g6. After the dust settles, the position is roughly equal but requires both sides to navigate accurately through the tactical minefield. White must maintain the initiative or the extra material will tell.",
-        "keyIdeas": [
-          "The calmer 5…Be7 (instead of 5…Nc6) lets White recover the pawn cleanly with Qxe5 and build a d4 centre.",
-          "White's queen tour Qh5-Qxe5-Qf4 keeps the queen active throughout the opening; Black wastes time chasing it.",
-          "Black's Nd6 is misplaced and blocks the d-pawn — Black needs multiple tempi to redeploy it via e8.",
-          "White's Bb3 + Qf4 + d4 + future Nge2 build a coherent attacking position; Black's pieces are awkwardly placed."
-        ]
       },
       {
         "name": "Vienna vs 2...Nc6",

@@ -332,12 +332,10 @@ export const VIENNA_VARIATION_LESSONS: Record<string, LessonScript> = {
   'vienna-game::Copycat Variation': COPYCAT,
   'vienna-game::Vienna Gambit': GAMBIT,
   'vienna-game::Vienna vs 2...Nc6': VS_NC6,
-  // Frankenstein-Dracula tab — the CURATED regex matches the "Falkbeer
-  // Variation" repertoire.json entry FIRST (its PGN is the wild Nxa8 line,
-  // canonically the F-D main line per the lichess DB naming). The repertoire
-  // also has a separate "Frankenstein-Dracula" entry (the calmer Be7 sub-
-  // line). Key the lesson under BOTH names so the tab finds it either way.
-  'vienna-game::Falkbeer Variation': FRANKENSTEIN_DRACULA,
+  // Frankenstein-Dracula tab (the wild Nxa8 main line). The mislabeled
+  // "Falkbeer Variation" duplicate tab + its calmer …Be7-subline twin were
+  // removed 2026-06-25 (audit: Falkbeer isn't a Vienna line, and the two
+  // tabs shared this one lesson). One correctly-named F-D tab remains.
   'vienna-game::Frankenstein-Dracula': FRANKENSTEIN_DRACULA,
   'vienna-game::Paulsen Attack': PAULSEN,
 };

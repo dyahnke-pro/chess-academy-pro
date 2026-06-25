@@ -329,7 +329,6 @@ const BASELINE_VIOLATIONS = new Set<string>([
   'VARIATION albin-countergambit::Lasker Trap :: l3',
   'VARIATION albin-countergambit::Lasker Trap :: l3 (short)',
   'VARIATION queens-gambit::Exchange Variation :: battery (short)',
-  'VARIATION vienna-game::Falkbeer Variation :: fd-3 (short)',
   'VARIATION vienna-game::Frankenstein-Dracula :: fd-3 (short)',
   'VARIATION vienna-game::Vienna vs 2...Nc6 :: nc6-6',
   // Plans — existing claims that don't verify
