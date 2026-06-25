@@ -25,8 +25,8 @@
     "variations": [
       {
         "name": "Giuoco Piano: Main Line with Nc3",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3 Nxe4 O-O Bxc3 bxc3 d5 Ba3 dxc4",
-        "explanation": "The main theoretical battleground of the Giuoco Piano. White sacrifices a pawn for a massive development lead and the bishop pair. After 9.Ba3 preventing Black from castling easily, White gets long-term compensation. The key position after 12.Qb3 has been debated at the highest levels — Black returns material but White's piece activity persists well into the endgame.",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3 Nxe4 O-O Bxc3 bxc3 d5 Bd3 O-O",
+        "explanation": "The main theoretical battleground of the Giuoco Piano. White gambits the c3-pawn for a big development lead and the two bishops. When …d5 hits the c4-bishop, the precise retreat is Bd3 — not the greedy Ba3, which simply hangs the bishop to …dxc4 — keeping it on the b1-h7 diagonal trained on the e4-knight and h7. After …O-O Black stands a slender pawn to the good, but White’s bishop pair, half-open b-file and clear lead in development supply real, lasting compensation. (The deeper piece sacrifice is the Møller Attack, on its own line.)",
         "frequency": "very common",
         "deviationMove": 8
       },
