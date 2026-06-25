@@ -462,8 +462,20 @@ class StockfishEngine {
             const loc = ee.filename
               ? ` @ ${ee.filename}:${ee.lineno ?? '?'}:${ee.colno ?? '?'}`
               : '';
-            const msg =
-              (error.message || 'Uncaught RuntimeError or worker load failure') + loc;
+            // Extract the best available error description. The ErrorEvent
+            // carries `.error` (the actual Error thrown inside the worker)
+            // AND `.message` (the event-level summary). `.message` can be
+            // the useless default `[object ErrorEvent]` in certain browser
+            // environments — prefer `.error` when available, and guard
+            // against meaningless `[object X]` toString defaults.
+            const innerError: unknown = (error).error;
+            const rawMessage = innerError instanceof Error
+              ? innerError.message
+              : (error.message || '');
+            const cleanMessage = rawMessage && !/^\[object\s/.test(rawMessage)
+              ? rawMessage
+              : 'Uncaught RuntimeError or worker load failure';
+            const msg = cleanMessage + loc;
             // Phase 8 Bug A — suppress the bubble to window.onerror.
             // A crashing multi-thread bundle emits 60+ ErrorEvents
             // in ~100ms; if any of those reach the global error
