@@ -1213,8 +1213,8 @@
       },
       {
         "name": "Qd6 Tiviakov Variation",
-        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nf6 Nf3 a6 Be2 Bf5 O-O e6 Ne5",
-        "explanation": "The Qd6 variation, popularized by Tiviakov, keeps the queen centrally and avoids the theoretical battles of the Qa5 lines. The piece on d6 supports ...e5 if needed and can swing to b6 or c7 depending on White's setup. Black develops with ...a6 preparing ...b5, and ...Bf5 remains the priority bishop development. The Ne5 jump by White is the critical test of Black's setup.",
+        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nf6 Nf3 a6 g3 Bg4 Bg2 Nc6 O-O-O d5 Ne5 Bf4 Nxf3+ Bxf3 Bxf3",
+        "explanation": "The Qd6 Variation, popularized by Tiviakov, keeps the queen centrally and sidesteps the heavy theory of the Qa5 lines. Against White’s g3 fianchetto, Black develops actively — …Bg4 to pressure the f3-knight, …Nc6 and rapid development — and the light bishops are traded on f3. The result is a balanced, manoeuvring middlegame where Black’s solid structure equalises comfortably.",
         "shortExplanation": "Tiviakov ...Qd6 setup. ...a6 prepares ...b5; ...Bf5 + ...e6 + flexible structure; Ne5 is critical test."
       },
       {
@@ -1231,8 +1231,8 @@
       },
       {
         "name": "Qa5 with Bd2 Main Line",
-        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bd2 c6 Bc4 e6 Qe2 Bb4 O-O-O Nbd7 Kb1 Qc7 Ne5",
-        "explanation": "When White plays Bd2 instead of the sharper Bc4 lines, a slower strategic battle develops where both sides maneuver for advantage. Black's key idea is ...Bb4 pinning the c3 knight, and after O-O-O the position becomes a mutual attack. The ...Qc7 covers important central squares while the Ne5 jump by White is the critical test — Black must find precise responses to maintain coordination.",
+        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Bd2 Bg4 Be2 Bxe2 Ngxe2 Nc6 O-O O-O-O Ne4 Qf5 Nxf6 gxf6 c3 Rg8",
+        "explanation": "Against the quiet Bd2 in the Qa5 Scandinavian, Black trades the light bishops with …Bg4 and …Bxe2, develops …Nc6 and castles queenside. When White jumps Ne4, …Qf5 holds the queen actively, and after the knights come off on f6 Black recaptures …gxf6, opening the g-file for the rook — a sound, double-edged middlegame with chances for both sides.",
         "shortExplanation": "Bd2 line: ...Bb4 pin, opposite-side castle, ...Qc7 centralizes; Ne5 is White's critical test."
       }
     ],
