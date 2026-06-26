@@ -397,8 +397,8 @@
       },
       {
         "name": "Paulsen Attack",
-        "pgn": "e4 e5 Nc3 Nf6 g3 d5 exd5 Nxd5 Bg2 Nxc3 bxc3 Nc6 Nf3 Bc5 O-O O-O d3 Re8 Rb1",
-        "explanation": "The Paulsen Attack with g3 and Bg2 is a quiet but poisonous approach where White fianchettoes and plays for long-term positional pressure. After ...d5 exd5 Nxd5, the position resembles a reversed Sicilian where White's bishop on g2 rakes the long diagonal. The Nxc3 bxc3 recapture gives White the semi-open b-file and a flexible pawn structure. White's plan involves d3, Rb1, and Ne4, slowly building pressure against Black's queenside while the g2 bishop dominates the center.",
+        "pgn": "e4 e5 Nc3 Nf6 g3 Bc5 Bg2 d6 Nge2 Nc6 O-O a6 a4 O-O d3",
+        "explanation": "The Paulsen Attack is the modern grandmaster’s Vienna — a quiet g3 fianchetto rather than the sharp gambit. White develops Bg2 and Nge2 and castles, keeping the e4-pawn and the long diagonal; Black sets up with …Bc5, …d6, …Nc6 and …a6. A flexible, low-theory positional system where White plays for a slow build-up instead of an early attack.",
         "keyIdeas": [
           "The fianchettoed Bg2 rakes the long light diagonal — screened by e4 until the centre opens, then decisive.",
           "The Nc3-Nge2 setup keeps both knights flexible — Nge2 can reroute via f4 (attacking) or g3 (supporting).",
@@ -465,8 +465,8 @@
       },
       {
         "name": "King's Gambit Declined",
-        "pgn": "e4 e5 f4 Bc5 Nf3 d6 Nc3 Nf6 Bc4 O-O d3 Nc6 f5 Na5 Bb3 Nxb3 axb3 c6",
-        "explanation": "Black declines with 2...Bc5, developing naturally and maintaining the center. White continues with Nf3 and normal development. The f5 push targets g6 and prepares a kingside attack. Black counters with ...Na5 exchanging the dangerous Bc4 and then ...c6, ...b5 with queenside expansion. The position is calmer than accepted lines but White retains a slight initiative through the space advantage."
+        "pgn": "e4 e5 f4 Bc5 Nf3 d6 c3 Nf6 d4 exd4 cxd4 Bb6 Nc3 O-O e5 dxe5 fxe5 Nd5 Bg5 Nxc3 bxc3 Qd5",
+        "explanation": "Black declines the gambit with 2…Bc5, planting the bishop on the a7-g1 diagonal and keeping the …Qh4+ resource alive. Rather than the f4-f5 plan, White builds the centre with c3 and d4; after …d6, …Nf6 and the d4 break the centre opens, and the e5 push gains space, leading to a sharp, open middlegame where White’s centre and development weigh against Black’s solid pieces."
       },
       {
         "name": "Kieseritzky Gambit",
@@ -1006,8 +1006,8 @@
       },
       {
         "name": "Two Knights Variation",
-        "pgn": "e4 c6 Nf3 d5 Nc3 Bg4 h3 Bxf3 Qxf3 e6 d4 Nf6 Bd3 dxe4 Nxe4 Nxe4 Qxe4 Nd7 O-O Nf6 Qh4 Be7 Re1 Nd5",
-        "explanation": "The Two Knights sidesteps the main Classical tabiya by developing knights before pushing d4. Black responds with active ...Bg4, pinning the f3 knight and forcing h3. After ...Bxf3 Qxf3, Black has traded the light-squared bishop for a knight — a worthy exchange since the bishop has already done its job. The Qh4 swing prepares kingside threats, but Black's ...Nd5 centralization blocks them and Black equalizes with solid piece play.",
+        "pgn": "e4 c6 Nc3 d5 Nf3 Bg4 h3 Bxf3 Qxf3 e6 Be2 Nf6 O-O Nbd7 d4 dxe4 Nxe4 Nxe4 Qxe4 Nf6 Qd3 Be7 c4 O-O",
+        "explanation": "In the Two Knights (Nc3 and Nf3), White develops naturally and invites …Bg4. After …Bg4 h3 Bxf3 Qxf3, White has the bishop pair while Black keeps the rock-solid Caro structure with …e6, …Nf6 and …Nbd7. White completes development with Be2, O-O, d4 and c4; the central exchanges on e4 leave a sound, slightly easier game for White thanks to the two bishops, with Black very solid.",
         "shortExplanation": "Two Knights: ...Bg4 pin, ...Bxf3 trade. Master line ends with Qh4-Re1; Black centralizes ...Nd5."
       },
       {
@@ -1555,13 +1555,13 @@
       },
       {
         "name": "London vs King's Indian",
-        "pgn": "d4 Nf6 Bf4 g6 e3 Bg7 Nf3 O-O Be2 d6 O-O Nbd7 h3 b6 c3 Bb7 Nbd2 Ne8",
-        "explanation": "Against the King's Indian fianchetto, White develops with Be2 instead of Bd3 since Black hasn't committed to a piece on e6. The h3 move prevents ...Ng4 tricks and Bh2 preserves the London bishop from exchange attempts. White reroutes the knight via Nbd2-c4 to pressure d6, then strikes with e4 to open the center when Black's knight has retreated."
+        "pgn": "d4 Nf6 Nf3 g6 Bf4 Bg7 e3 d6 h3 c5 Be2 Qb6 Qc1 O-O O-O Nc6 c3 Be6 Nbd2 cxd4 exd4 Rac8 Re1 Rfe8 Be3",
+        "explanation": "Against a King’s-Indian-style setup (…g6, …Bg7, …d6), White builds the solid London structure — Bf4, e3, Nf3, h3, Be2, O-O, c3 and Nbd2 — and keeps things compact. Black expands with …c5 and …Qb6 hitting b2/d4; White holds the centre, meets …cxd4 with exd4 and regroups the bishop to e3, reaching a balanced middlegame where the durable structure gives White a small, lasting edge."
       },
       {
         "name": "Jobava London",
-        "pgn": "d4 Nf6 Bf4 d5 Nc3 e6 e3 c5 Nf3 a6 Be2 Nc6 O-O Bd6",
-        "explanation": "The Jobava London uses Nc3 instead of c3, creating a fundamentally more aggressive setup with immediate ideas of Nb5 or e4. The knight jumps to b5 to harass the queen or threaten Nd6+. After the central break with e4, White seizes space and opens lines for the bishops. This variation has surged in popularity because it gives White active piece play while maintaining the London's solid foundation."
+        "pgn": "d4 d5 Nc3 Nf6 Bf4 e6 Nb5 Na6 e3 Be7 Nf3 O-O h4 c6 Nc3 Qb6 a3 c5 Ne5 Bd7 Rh3",
+        "explanation": "The Jobava London (Nc3 + Bf4) is the aggressive, modern London — White eyes the e5- and b5-squares and can lunge Nb5 to hit c7/d6. Black answers with …d5, …e6 and …Be7; after Nb5 …Na6 White expands with h4 and piece play while Black solidifies with …c6 and …c5. Sharper and more forcing than the classical London, with real attacking chances for White."
       },
       {
         "name": "London vs Grunfeld Setup",
@@ -2677,8 +2677,8 @@
       },
       {
         "name": "Mikenas Attack",
-        "pgn": "c4 Nf6 Nc3 e6 e4 d5 e5 d4 exf6 dxc3 bxc3 Qxf6 d4 e5 Nf3 exd4 Bg5 Qe6+ Be2 Be7",
-        "explanation": "The Mikenas Attack with 3.e4 is an aggressive system where White immediately seizes central space in a way that catches many English Opening players off guard. After e5 d4, the position transforms into a sharp tactical battle where both sides must calculate accurately. White gets the bishop pair and open lines after the pawn exchanges, while Black relies on active piece play and the d-file pressure. The resulting middlegame features asymmetric pawn structures that favor the player with better piece coordination."
+        "pgn": "c4 e6 Nc3 Nf6 e4 d5 e5 d4 exf6 dxc3 bxc3 Qxf6 Nf3 e5 Bd3 Na6 O-O Bd6 Bc2 Bg4 d4 Bxf3",
+        "explanation": "The Mikenas–Carls Attack (3.e4) is the English’s sharpest line, grabbing the centre and meeting …d5 with e5 to hit the f6-knight. After the forcing …d4 exf6 dxc3 bxc3 Qxf6, White accepts doubled c-pawns for a lead in development and the two bishops; Black strikes back with …e5 and develops with …Na6, …Bd6 and …Bg4. A double-edged middlegame — White’s activity and bishop pair against Black’s healthier pawn structure."
       },
       {
         "name": "Bremen System",
