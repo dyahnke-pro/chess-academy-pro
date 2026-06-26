@@ -28,7 +28,8 @@ Done so far this effort (gate baseline 20→9): consistency+factcheck gates, 3 s
 
 ## PHASES (ordered by value × tractability)
 
-### Phase A — lesson≠pgn EARLY-diverge (10)  `[next — recipe ready]`
+### Phase A — lesson≠pgn EARLY-diverge (10)  `[DONE 2026-06-26]`
+Aligned 7 genuine different-line variations to their beats: english Mikenas; london Jobava + vs-KID; caro Two Knights; vienna Paulsen; kings-gambit Declined; pro-naroditsky-kia d5-mainline. **2 benign** (naroditsky-kia g6-Modern, fantasy-caro Modern-g6 = transposition-then-extension, card is a fine opening terminus — left). **1 DEFERRED:** pro-naroditsky-kia "d4 KID transposition" — its beats play g3-first while the name+explanation say "d4 instead of g3"; aligning would contradict the tab intent → needs a decision on whether the beats or the name/explanation is right. Original note:
 The 10 (from `_lesson-pgn.json`, divergePly ≤6):
 `english::Mikenas Attack` · `london::Jobava London` · `london::London vs King's Indian` · `caro-kann::Two Knights Variation` · `vienna::Paulsen Attack` · `kings-gambit::King's Gambit Declined` · `pro-naroditsky-kia::{d4 KID transposition, d5 KIA mainline, g6 Modern setup}` · `pro-naroditsky-fantasy-caro::Modern setup with g6`
 **Recipe (PROVEN):** per variation — (1) confirm it's a genuine different line, not a near-transposition (compare beats finalFen vs card finalFen by hand); (2) align card `pgn` → the beats' final `moves` (beats are the gated Watch content the student sees); (3) rewrite the `explanation` to the new line; (4) run the 6-gate set: `variationMiddlegameDepth narrationAccuracy lessonTabIntegrity repertoire-orientation modelGames-orientation contentConsistency`. ⚠️ caro-kann is a flagship — extra care.

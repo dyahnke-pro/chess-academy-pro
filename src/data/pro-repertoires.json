@@ -1384,8 +1384,8 @@
       "variations": [
         {
           "name": "d5 KIA mainline",
-          "pgn": "Nf3 d5 g3 Nf6 Bg2 g6 O-O Bg7 d3 O-O Nbd2 c5 e4",
-          "explanation": "The most-faced KIA setup (4,382 games, 66.3%). Black plays d5 first, we mirror our system, then the e4 break opens the centre when our development is complete.",
+          "pgn": "Nf3 d5 g3 Nf6 Bg2 c5 O-O Nc6 d3 e6 Nbd2 Bd6 e4 dxe4 dxe4 O-O Re1",
+          "explanation": "The most-faced KIA setup (4,382 games, 66.3%). Black plays …d5 and builds the French-style structure with …c5, …Nc6, …e6 and …Bd6; we mirror our system, and the e4 break opens the centre once development is complete.",
           "sources": [
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
           ]
