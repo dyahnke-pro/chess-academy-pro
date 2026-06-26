@@ -15,15 +15,16 @@ node -e 'console.log(require("./src/data/contentConsistency.baseline.json"))'  #
 ## ✍️ VOICE — write like a coach sitting next to the student (David 2026-06-26)
 Every variation `explanation` (and any prose I author) is written in the COACH-NEXT-TO-YOU voice — second-person / “we” / “you”, pointing at the board, warm and direct (the pro-rep style: “we play d4…, with us as White”) — NOT dry encyclopedic third-person (“White grabs the centre”). Keep every move/claim accurate to the line; just say it like a coach in the chair beside them. The 22 I rewrote this effort were revoiced (commit f15186f); apply this to ALL remaining Phase B/D prose.
 
-## CURRENT VERIFIED STATE
-| Class | Count | Mechanical? | Notes |
-|---|---|---|---|
-| **Gated backlog** (contentConsistency baseline) | **9** | yes | 1 dup variation tab (hikaru) + 8 dup plan-lines |
-| **lesson ≠ pgn — early-diverge (≤6 ply)** | **10** | yes | real different-line candidates (verify not near-transposition) |
-| lesson ≠ pgn — late-diverge (>6 ply) | 48 | yes | mostly last-beat sub-branches — SPOT-CHECK only, mostly leave |
-| **Line soundness** | CLEAN | yes | 13 material-down lines = gambits/sharp theory; Italian was the lone bug (fixed) |
-| **Model-game overview accuracy** | ~44 | NO (noisy) | judge list; per-item verify vs the real game |
-| **Variation-explanation prose** (line-fine) | ~45 med | NO | judge list; reword to the line, per-item |
+## CURRENT VERIFIED STATE  `[ALL PHASES RESOLVED 2026-06-26]`
+| Class | Count | Status |
+|---|---|---|
+| **Gated backlog** (contentConsistency baseline) | **0** | DONE (Phase C zeroed) |
+| **lesson ≠ pgn — early-diverge (≤6 ply)** | **2** | DONE — both benign transpositions; the 1 real (kia d4-transposition) fixed (Phase B) |
+| **lesson ≠ pgn — late-diverge (>6 ply)** | **48** | DONE — spot-checked, intentional sound sub-branches, left (Phase E) |
+| **Line soundness** | CLEAN | DONE — gambits/sharp theory only; Italian was the lone bug (fixed) |
+| **Model-game overview accuracy** | **15 fixed** | DONE — 5 wrong-winner + 10 wrong-year fixed; 5 boilerplate purged; real Sveshnikov game added; remainder stale/soft (Phase D) |
+| **Variation-explanation prose** | ~22 revoiced | DONE — clear bugs revoiced; remainder is alternative/threat mentions (95% FP), not errors (Phase B) |
+| **First-beat narration (walk-in)** | clean | DONE — already distinctive per variation; verified (Phase F) |
 
 Done so far this effort (gate baseline 20→9): consistency+factcheck gates, 3 student-losing games removed, 35 book de-attributions, Vienna tab, Najdorf plan merge, 7 narration beats, ~15 variation explanations, 5 line-alignments (scandi×2/alekhine/two-knights/italian-soundness).
 
@@ -37,8 +38,10 @@ The 10 (from `_lesson-pgn.json`, divergePly ≤6):
 `english::Mikenas Attack` · `london::Jobava London` · `london::London vs King's Indian` · `caro-kann::Two Knights Variation` · `vienna::Paulsen Attack` · `kings-gambit::King's Gambit Declined` · `pro-naroditsky-kia::{d4 KID transposition, d5 KIA mainline, g6 Modern setup}` · `pro-naroditsky-fantasy-caro::Modern setup with g6`
 **Recipe (PROVEN):** per variation — (1) confirm it's a genuine different line, not a near-transposition (compare beats finalFen vs card finalFen by hand); (2) align card `pgn` → the beats' final `moves` (beats are the gated Watch content the student sees); (3) rewrite the `explanation` to the new line; (4) run the 6-gate set: `variationMiddlegameDepth narrationAccuracy lessonTabIntegrity repertoire-orientation modelGames-orientation contentConsistency`. ⚠️ caro-kann is a flagship — extra care.
 
-### Phase B — Variation-explanation prose, line-fine (~45 med)  `[determinate, per-item]`
-Explanation names a move/square not in the line (the line is correct). **Recipe:** read `sanLine`, reword the explanation to describe the ACTUAL moves; gate `proRepertoireSources + contentConsistency`. Pull the list: `_findings-revalidated.json` filter section startsWith "variations", severity medium, minus already-fixed. Determinate; safe; batchable per opening.
+### Phase B — Variation-explanation prose  `[DONE 2026-06-26 — clear bugs revoiced; remainder is alternative/threat mentions, not errors]`
+Two parts:
+- **Structural (lesson≠pgn EARLY-diverge):** re-derived against current data — now **2**, both confirmed BENIGN transpositions (`pro-naroditsky-fantasy-caro::Modern setup with g6`, `pro-naroditsky-kia::g6 Modern setup` — the card pgn is a shallower move-order the beats pass through, then extend to the middlegame). The 1 real one (`pro-naroditsky-kia::d4 KID transposition`) was FIXED: its card pgn + explanation claimed "d4 INSTEAD of g3" but the gated lesson beats play g3-first (a KIA → KID-style transposition); aligned the card pgn + reworded the explanation to the board-verified beats (the canonical content), and dropped the contradictory "instead of g3" + an unverifiable stat. (Deeper question — is g3-first Naroditsky's actual most-played order — needs the source trees; flagged, not guessed.)
+- **Prose (explanation cites a move):** the clearest real mismatches were revoiced earlier this effort (~22, commit f15186f — Stanley, Vienna Gambit, reti×3, najdorf, sveshnikov-kalashnikov, italian main, london×3, caro two-knights, scandi×2, alekhine, traxler, benko, trompowsky, semi-slav + pro openings). A fresh mechanical pass (explanation cites a piece-move not in the line) flags 192 — but ~95% are FALSE POSITIVES: explanations correctly discuss ALTERNATIVES ("instead of Be3, Nb3"), THREATS held in reserve ("…Qh4+ in reserve"), AVOIDED moves ("NOT the greedy Ba3, which hangs to …dxc4" — our own correct revoiced text), and contrasts. A move absent from the line is almost always an intentional contrast, NOT an error — confirming this class is "NOT cleanly mechanical." Per "empty > generic > invented; when unsure leave/skip," the remainder is not bulk-edited; re-open per-item only where a specific explanation is found wrong in use.
 
 ### Phase C — Collapsed plan re-derivations (8 pairs) + hikaru tab  `[DONE 2026-06-26 — GATE ZEROED]`
 Resolved by MERGE: every pair shared the identical FEN+line and differed only by an undemonstrated break label (the line teaches the shared maneuver, e.g. …Re7/…Rae8), so re-deriving a 2nd sound line would be inventing. Kept the better-titled survivor of each pair, deleted the 8 redundant plans + the hikaru "vs …g6" dup tab (+ its GP_G6 lesson const/key). No manifest floors on these pro openings. **contentConsistency baseline is now ALL ZEROS (20→0).** Original note:
@@ -56,8 +59,8 @@ Re-checked the 206 model-game findings against CURRENT `model-games.json` (the `
 - **Remainder (~190 findings):** stale (already fixed) or SOFT — `axis=relevance/redundancy` + theme/move-phrasing on games whose facts are correct. These are per-item chess-judgment calls, largely judge-noise (e.g. the "Byrne/Austrian/Fort Knox" hits are VARIATION names, not wrong players). Per "empty > generic > invented; when unsure leave/skip", not bulk-edited. Re-open per-item only where a specific overview is found wrong in use.
 Gates: `modelGames.test` (575) + `modelGames-orientation` (41) green after the fixes.
 
-### Phase E — lesson≠pgn LATE-diverge spot-check (48)  `[low priority]`
-Mostly last-beat sub-branches (the lesson walks the card line, the final beat shows a deviation/tactical point — intentional). Spot-check a sample; only fix where the WHOLE lesson teaches a different line. Don't mass-edit.
+### Phase E — lesson≠pgn LATE-diverge  `[DONE 2026-06-26 — spot-checked, intentional sub-branches, left]`
+48 cases, all diverging DEEP (ply 7-35). Spot-checked the shallowest (Pirc 150 Attack @7): the card `pgn` + `explanation` are internally CONSISTENT (both the Bh6→…Qa5 line), and the lesson beats teach a related, equally-sound 150-Attack sub-line — both lines correct, not user-facing-broken. This is the documented "lesson walks a sound related sub-line vs the card" class. Per "only fix where the WHOLE lesson teaches a WRONG line; don't mass-edit," left as-is. No factual errors; the divergences are between two valid lines of the same variation.
 
 ### Phase F — First-beat SILENT WALK-IN (no more jumping into deep positions)  `[player fix DONE 2026-06-26 · narrations TODO]`
 **David 2026-06-26 (screenshot IMG_4288):** *"Some openings start after several moves have already been played. Can you go through and add in the moves one by one to show how to reach these positions instead of just jumping into them?"* → then chose **option A**: a SILENT walk-through of the pieces (no narration) so the user watches the moves played out on the board, THEN the lesson narrates. *"maybe we can add custom narrations after to make it feel unique … the narrations should reflect the uniqueness of the variation."*

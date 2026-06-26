@@ -1400,8 +1400,8 @@
         },
         {
           "name": "d4 KID transposition",
-          "pgn": "Nf3 Nf6 d4 g6 c4 Bg7 Nc3 d6",
-          "explanation": "Sometimes we play d4 instead of g3 (1,341 games, 71.2%) — transposing to a KID-style game with us as White. Same broad-centre middlegame as the regular KID, just from a slightly different move-order.",
+          "pgn": "Nf3 d6 g3 g6 Bg2 Bg7 O-O Nf6 d4 O-O c4 e5 Nc3 Nbd7 d5 a5 e4",
+          "explanation": "Through our KIA move-order — Nf3, g3, Bg2, castle — we then claim the broad centre with d4 and c4, transposing into a King’s-Indian-style middlegame with us as White. Same KID structure and plans (the d5 space-grab, the e4 clamp), just entered from our flexible setup rather than an early d4.",
           "sources": [
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
           ]
