@@ -23,16 +23,6 @@ const GP_F4: LessonScript = {
   ],
 };
 
-const GP_G6: LessonScript = {
-  openingId: 'pro-hikaru-closed-sicilian', title: "Grand Prix vs ...g6 — f5 at the Fianchetto", minutes: 8, orientation: 'white', kind: 'variation', sources: SRC,
-  beats: [
-    b({ id: 'f4', moves: 'e4 c5 Nc3 Nc6 f4 g6', highlights: [H('f4')], say: "Black commits to the kingside fianchetto early with ...g6. That makes the f5-break even more potent — it strikes right at the squares around the king the fianchetto is supposed to shelter.", sayShort: 'f4 vs ...g6 — f5 looms larger.' }),
-    b({ id: 'bc4', moves: 'e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bc4', arrows: [A('f1', 'c4')], highlights: [H('c4')], say: "This repertoire sets up the attack: Nf3 and Bc4, the bishop trained on f7. Every piece points toward the kingside while Black is still getting organised.", sayShort: 'Bc4 — aim at the king.' }),
-    b({ id: 'f5', moves: 'e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bc4 e6 f5 Nge7 fxe6 dxe6', arrows: [A('f5', 'e6')], highlights: [H('e6')], say: "f5 cracks it open and the e6-pawns trade — Black's structure is shattered and the f-file is a highway for White's rook. The fianchetto that was meant to be safe is now full of holes.", sayShort: 'f5 — shatter the structure.' }),
-    b({ id: 'mid', moves: 'e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bc4 e6 f5 Nge7 fxe6 dxe6 O-O O-O d3 a6 a4 Nd4 Nxd4', arrows: [A('f3', 'd4')], highlights: [H('d4')], say: "White castles, clamps the queenside with a4, and trades the d4-knight. The open f-file, the bishop pair, and Black's weak e6-pawn hand White a comfortable attacking middlegame.", sayShort: 'Nxd4 — comfortable attack.' }),
-  ],
-};
-
 const GP_E6: LessonScript = {
   openingId: 'pro-hikaru-closed-sicilian', title: "Grand Prix vs ...e6 — the Bb5 Plan", minutes: 8, orientation: 'white', kind: 'variation', sources: SRC,
   beats: [
@@ -45,6 +35,5 @@ const GP_E6: LessonScript = {
 
 export const PRO_HIKARU_CLOSED_SICILIAN_VARIATION_LESSONS: Record<string, LessonScript> = {
   'pro-hikaru-closed-sicilian::Grand Prix f4 + f5': GP_F4,
-  'pro-hikaru-closed-sicilian::vs ...g6': GP_G6,
   'pro-hikaru-closed-sicilian::vs ...e6': GP_E6,
 };

@@ -2437,16 +2437,6 @@
           ]
         },
         {
-          "name": "vs ...g6",
-          "pgn": "e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bc4 e6 f5 Nge7 fxe6 dxe6 O-O O-O d3 a6 a4 Nd4 Nxd4",
-          "explanation": "501 games. Against the kingside fianchetto, f5 is even more potent — it strikes directly at the squares around Black's king.",
-          "sources": [
-            "book:chess-fundamentals",
-            "concept:pos-development",
-            "https://api.chess.com/pub/player/hikaru/games/archives"
-          ]
-        },
-        {
           "name": "vs ...e6",
           "pgn": "e4 c5 Nc3 Nc6 f4 e6 Nf3 d5 Bb5 Ne7 exd5 exd5 Qe2 f6 Bxc6+ bxc6 O-O Kf7 b3 Nf5 Na4",
           "explanation": "142 games. Against the solid ...e6, White switches to the Bb5 plan — Bxc6 damages Black's structure and the e-file opens.",

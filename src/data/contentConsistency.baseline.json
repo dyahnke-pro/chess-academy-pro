@@ -1,18 +1,7 @@
 {
   "duplicateModelGames": [],
-  "duplicateVariationTabs": [
-    "pro-hikaru-closed-sicilian::Grand Prix f4 + f5==vs ...g6"
-  ],
-  "duplicatePlanLines": [
-    "pro-gothamchess-caro-advance-white::mp-progothamchess-caro-advance-h4-pin==mp-progothamchess-caroadv-bf5-c4break",
-    "pro-gothamchess-french-defense::mp-progothamchess-french-defense-rubinstein==mp-progothamchess-french-tarrasch-b5gambit",
-    "pro-gothamchess-qgd::mp-progothamchess-qgd-classical==mp-progothamchess-qgd-carlsbad-e5",
-    "pro-naroditsky-alekhine::mp-pronaroAlek-twoknights-equality==mp-pronaroAlek-twoknights-trade",
-    "pro-naroditsky-kia::mp-pronaroKIA-kid-transposition==mp-pronaroKIA-pirc-nh4",
-    "pro-naroditsky-kia::mp-pronaroKIA-reti-attack==mp-pronaroKIA-reti-nc4",
-    "pro-naroditsky-kid::mp-pronaroKID-classical-kingside==mp-pronaroKID-classical-c5",
-    "pro-naroditsky-rossolimo::mp-pronaroRoss-nc6-maroczy==mp-pronaroRoss-nc6-b4push"
-  ],
+  "duplicateVariationTabs": [],
+  "duplicatePlanLines": [],
   "classicWisdomBookClash": [],
   "studentLosingModelGames": []
 }
