@@ -12,6 +12,9 @@ node scripts/content-audit/detect-modelgame-mismatch.cjs # student-side-losing g
 node -e 'console.log(require("./src/data/contentConsistency.baseline.json"))'  # gated backlog
 ```
 
+## ✍️ VOICE — write like a coach sitting next to the student (David 2026-06-26)
+Every variation `explanation` (and any prose I author) is written in the COACH-NEXT-TO-YOU voice — second-person / “we” / “you”, pointing at the board, warm and direct (the pro-rep style: “we play d4…, with us as White”) — NOT dry encyclopedic third-person (“White grabs the centre”). Keep every move/claim accurate to the line; just say it like a coach in the chair beside them. The 22 I rewrote this effort were revoiced (commit f15186f); apply this to ALL remaining Phase B/D prose.
+
 ## CURRENT VERIFIED STATE
 | Class | Count | Mechanical? | Notes |
 |---|---|---|---|
