@@ -1706,7 +1706,7 @@
       {
         "name": "Vaganian Gambit 2...Ne4 3.Bf4 c5",
         "pgn": "d4 Nf6 Bg5 Ne4 Bf4 c5 d5 Qb6 Bc1 e6 f3 Nf6 e4 exd5",
-        "explanation": "The Vaganian Gambit arises when Black plays 3...c5 instead of 3...d5 in the Ne4 Bf4 line. After 4.d5 Qb6, White offers the b2 pawn to accelerate development. If Black accepts with Qxb2, White gets rapid piece play with Nd2, e4, and quick development. The open b-file and central pawn wedge on d5 give White long-lasting compensation. Black must be very precise to hold the extra pawn while fending off White's initiative."
+        "explanation": "The Vaganian Gambit arises when Black meets 3.Bf4 with 3…c5 instead of 3…d5. After 4.d5 Qb6, White offers the b2-pawn. Here Black declines the poisoned pawn — the queen drops back and White tucks the bishop to c1 — and White builds the centre with f3 and e4, the d5-wedge granting a useful space advantage. (Grabbing b2 is the sharp acceptance; declining is the solid main road shown here.)"
       },
       {
         "name": "2...Ne4 3.Bf4 c5 4.f3 Sideline",
@@ -1950,7 +1950,7 @@
       {
         "name": "Botvinnik Variation Deep",
         "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 Bg5 dxc4 e4 b5 e5 h6 Bh4 g5 Nxg5 hxg5 Bxg5 Nbd7 exf6 Bb7 g3 c5 d5 Qb6 Bg2 O-O-O O-O b4 Na4 Qa6",
-        "explanation": "The deep Botvinnik is among the most heavily analyzed positions in chess history. Black grabs two pawns and a piece for the exchange, creating a wildly unbalanced position. After ...Bb7 and ...c5, Black's queenside majority and bishop pair provide long-term compensation. The critical sequence d5 Qb6 Bg2 O-O-O O-O sees both sides castling, after which the real battle begins. White's passed f6 pawn looks dangerous but Black's queenside pawns and active pieces create counter-threats that demand precise calculation."
+        "explanation": "The deep Botvinnik is among the most heavily analysed positions in chess — a wildly unbalanced fight born of White's thematic knight sacrifice on g5. The material balance is murky and dynamic (no exchange is given — both sides keep their rooks); Black's trumps are the queenside pawn majority and the bishop pair, while White banks on the f6-wedge, the central pawns and a raging initiative. This is the sharpest forced territory in all of chess — enter only with deep, memorised preparation."
       },
       {
         "name": "Anti-Meran Bd3 Line",
@@ -2386,7 +2386,7 @@
       {
         "name": "King Walk Variation",
         "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 a4 Qa5 Re1 Rfb8",
-        "explanation": "White's king walks via f1-g2 to safety. After Re1 and Qc2, White aims to consolidate the extra pawn. Black builds the classic Benko pressure with ...Qa5, ...Rfb8 and ...Ne8-c7 supporting ...Nb5 infiltration."
+        "explanation": "White's king walks via f1-g2 to safety. After Re1 and a4, White looks to consolidate the extra pawn. Black builds the classic Benko pressure with …Qa5 and …Rfb8, massing the major pieces on the half-open a- and b-files against White's queenside — the standard long-term compensation for the gambit pawn."
       },
       {
         "name": "Benko Declined: Nf3 System",
