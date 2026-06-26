@@ -525,6 +525,19 @@ class StockfishEngine {
               setTimeout(() => tryStart(true), SINGLE_THREAD_RETRY_DELAY_MS);
               return true;
             }
+            // Post-init crash (engine was already ready): the init promise
+            // has already resolved so `reject` below is a silent no-op.
+            // Route through handleWorkerCrash so the crash IS counted in
+            // _crashRetries, _this.pending gets rejected immediately
+            // (instead of hanging for the 30s hard timeout), and the
+            // engine eventually self-marks _permanentlyUnavailable after
+            // MAX_CRASH_RETRIES. Without this, post-init crashes leak
+            // pending analyses and never exhaust retries (David 2026-06-26
+            // PostHog error watch — "stockfish-error: [object ErrorEvent]").
+            if (this.isReady) {
+              this.handleWorkerCrash(msg);
+              return true;
+            }
             clearTimeout(overallTimeoutId);
             if (earlyFailureTimer !== null) {
               clearTimeout(earlyFailureTimer);
@@ -622,7 +635,21 @@ class StockfishEngine {
       // ALSO record the failure timestamp so subsequent initialize()
       // calls in the next 30s fail-fast instead of re-OOMing.
       this._initFailedAt = Date.now();
-      this.handleWorkerCrash(err instanceof Error ? err.message : String(err));
+      // Extract a useful summary from unknown-type thrown objects.
+      // ErrorEvent (browser worker-crash signal) is NOT instanceof Error
+      // (it extends Event) and String(err) produces "[object ErrorEvent]" —
+      // useless in crash reports. Extract .message when present; for
+      // ErrorEvent also grab .filename/.lineno so the report names the
+      // failing resource (David 2026-06-26 PostHog error watch).
+      const reason = (() => {
+        if (err instanceof Error) return err.message;
+        if (err && typeof (err as ErrorEvent).message === 'string' && (err as ErrorEvent).message) return (err as ErrorEvent).message;
+        if (err && typeof (err as ErrorEvent).filename === 'string') {
+          return `worker-crash @ ${(err as ErrorEvent).filename}:${(err as ErrorEvent).lineno ?? '?'}`;
+        }
+        return String(err);
+      })();
+      this.handleWorkerCrash(reason);
       throw err;
     });
   }
