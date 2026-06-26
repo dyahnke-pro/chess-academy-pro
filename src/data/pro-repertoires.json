@@ -456,7 +456,7 @@
         {
           "name": "Main Line Qa5",
           "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 c6 Qe2 Bb4 O-O-O Nbd7",
-          "explanation": "The full mainline as this repertoire teaches it. 3.Nc3 Qa5 places the queen on the magic square; 4.d4 Nf6 5.Nf3 Bf5 — the bishop comes out BEFORE …e6 (this is the Scandinavian's whole point). 6.Bc4 e6 7.Bd2 (preparing O-O-O) c6 8.Qe2 Bb4! — there's the pin and attack: Bb4 hits Nc3, which is pinned by Qa5 against the king on e1. White's response: 9.O-O-O Nbd7 reaches the critical position. Both kings have committed: White queenside, Black kingside (after …Be7 and …O-O). The game becomes opposite-side castle race, but Black is fully developed and has the …c5 break ready. This repertoire's signature line — easy to play, easy to remember, gets you a real game from move 1.",
+          "explanation": "The full main line as we play it. 3.Nc3 Qa5 puts our queen on her magic square; 4.d4 Nf6 5.Nf3 Bf5 — and there's the whole point of the Scandinavian: our bishop gets OUT before …e6 ever shuts it in. 6.Bc4 e6 7.Bd2 c6 8.Qe2 Bb4 — now our bishop and queen both lean on White's c3-knight. (Heads up: White's Bd2 already covers the pin, so this is pressure rather than a clean pin — but it's still annoying to meet.) After 9.O-O-O Nbd7 we reach the critical position — opposite-side castling, but we're fully developed with the …c5 break loaded and ready. Our signature line: easy to play, easy to remember, a real game from move one.",
           "sources": [
             "book:scandinavian-defence",
             "concept:pos-development",
@@ -565,7 +565,7 @@
         {
           "name": "3...d5 Central Counter",
           "pgn": "e4 e5 Nf3 Nc6 c3 d5 Qa4 Nf6 Nxe5 Bd6 Nxc6 bxc6 d3 O-O Be2 Re8 Nd2",
-          "explanation": "The principled refutation — Black challenges the centre immediately. White's reply is the brilliant 4.Qa4! pinning the c6-knight against the e8-king (via the diagonal a4-d7-e8 with the d-pawn on d5 blocking). Black plays 4...Nf6 developing, but White grabs the loose e5-pawn with 5.Nxe5! — possible because c6 is pinned. Black tries 5...Bd6 hitting the knight on e5, but after 6.Nxc6 bxc6, White has won a pawn. The structural cost: Black has doubled c-pawns and the bishop pair. Theoretically balanced (Black has dynamic compensation), but at amateur level the extra pawn often holds.",
+          "explanation": "The principled try — Black hits our centre right away. Our reply is the slick 4.Qa4!, pinning the c6-knight to the e8-king down the a4-e8 diagonal (it's …d5 that just vacated d7, and that's exactly what lets the pin bite). Black develops with …Nf6, but we snatch the loose e5-pawn with 5.Nxe5! — legal precisely because c6 is pinned and can't recapture. After 5…Bd6 6.Nxc6 bxc6 we're a clean pawn up; the price is Black's doubled c-pawns and the bishop pair. Theory calls it balanced thanks to Black's activity, but at club level that extra pawn often just holds.",
           "sources": [
             "book:chess-fundamentals",
             "https://www.chess.com/openings/Ponziani-Opening",
@@ -726,7 +726,7 @@
         {
           "name": "Rossolimo 3.Bb5 e6",
           "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1 d5 exd5 Nxd5 d4 cxd4 Nxd4 Nxd4 Qxd4",
-          "explanation": "The flagship Rossolimo line. Black plays 3...e6 (preparing …d5 to challenge the centre) and …Nge7 (the knight goes to e7 supporting …d5). You set up with 4.O-O Nge7 5.Re1 a6 — and now the unusual retreat 6.Bf1! The bishop goes back to f1 to keep the b1-h7 diagonal open AND get out of the way of a future d4 push. After 6...d5 (Black's break) 7.exd5 Nxd5 8.d4! cxd4 9.Nxd4 Nxd4 10.Qxd4, you've reached an IQP-style position with the queen centralised, knight on d4, and Black's pieces still scrambled. The bishop on f1 will come out later to a more active square once the position settles. Classic Rossolimo squeeze.",
+          "explanation": "The flagship Rossolimo. Black plays 3…e6 (prepping the …d5 break) and …Nge7 to back it up. We set up with 4.O-O Nge7 5.Re1 a6, then the quiet little retreat 6.Bf1! — tucking the bishop back to keep the b1-h7 diagonal and clear the way for d4. After 6…d5 7.exd5 Nxd5 8.d4 cxd4 9.Nxd4 Nxd4 10.Qxd4 we've traded into an open, near-symmetric middlegame — no d-pawns left on the board, our queen centralised on d4 and Black's pieces a step behind. We'll bring that f1-bishop back to life once things settle. Classic Rossolimo squeeze.",
           "sources": [
             "book:chess-fundamentals",
             "https://www.chess.com/openings/Sicilian-Defense",
