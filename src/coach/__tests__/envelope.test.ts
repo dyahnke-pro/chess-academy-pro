@@ -39,6 +39,22 @@ describe('assembleEnvelope', () => {
     expect(env.ask).toBe('hello');
   });
 
+  it('renders the universal MOVE-RECOMMENDATION grounding rule on every surface', () => {
+    // G0: a specific move-to-play must be grounded; the rule must appear in the
+    // live-state block of EVERY coach call regardless of surface, so the coach
+    // can't invent a recommendation (the "develop the knight to f3" bug).
+    for (const surface of ['ping', 'teach', 'game-chat', 'review', 'standalone-chat'] as const) {
+      const env = assembleEnvelope({
+        toolbelt: getToolDefinitions(),
+        input: { surface, ask: 'what should I play?', liveState: { surface, fen: 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3' } },
+      });
+      const userMsg = formatEnvelopeAsUserMessage(env);
+      expect(userMsg).toContain('MOVE-RECOMMENDATION RULE');
+      expect(userMsg).toMatch(/MUST come from a grounded block/);
+      expect(userMsg).toMatch(/NEVER pull a specific move from opening principles/);
+    }
+  });
+
   it('throws when ask is empty', () => {
     expect(() =>
       assembleEnvelope({

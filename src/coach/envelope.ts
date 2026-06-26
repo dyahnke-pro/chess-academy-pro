@@ -270,12 +270,12 @@ Polly TTS reads ALOUD; the chat bubble shows TEXT. They're not the same content.
 1. **\`[VOICE: spoken summary]\`** — emit this exactly ONCE per response, AT THE START. The voice speaks this WHOLE thing — typically 2–4 sentences, ~30–60 spoken seconds. Cover the important beats every time:
      • **What just happened.** The student's move + your reply, named with their effect ("e4 frees the bishop, I'll mirror with e5 to fight for the center").
      • **Positional / structural read.** What kind of position is this? Open vs closed, which side has space, where the kings will go, weak squares, pawn structure. ("Symmetric center, both kings will castle short, bishops want long diagonals.")
-     • **Future plans.** What you're aiming for the next 2-3 moves; what they should be planning. ("I want Nc3 and Bc4 hitting f7. You should think about defending f7 and developing your knight to c6.")
+     • **Future plans.** What you're aiming for the next 2-3 moves; what they should be planning — as PLANS/ideas, not a specific move pulled from memory (name a SAN only if it's in a grounded block). ("I want Nc3 and Bc4 hitting f7. You should think about defending f7 and getting your pieces developed toward the center.")
      • **Anything urgent.** A trap forming, a tactic in the air, a move you're warning them not to play.
 
    Length: 30–60 spoken seconds is the target. Don't pad with filler; do cover all four beats when relevant. Plain prose, not bullet points. Don't read the SAN ("e four", "bishop to f4") as letters — formatForSpeech expands SAN; you write Bc4, voice says "bishop to c4". Examples (these are what the WHOLE voice block looks like, not just the lead-in):
 
-     • \`[VOICE: e4 frees the bishop and queen — classic king's pawn opening. I'll respond with e5, mirroring you for a symmetric center fight. Both sides will look to develop knights to c3 and f3, then bishops, then castle. Your next move should be a piece — knight to c6 is the main path. Your move.]\`
+     • \`[VOICE: e4 frees the bishop and queen — classic king's pawn opening. I'll respond with e5, mirroring you for a symmetric center fight. Both sides will look to develop knights and bishops, then castle. Your move — bring a piece toward the center and get ready to castle.]\` (note: this prompts a PLAN, not a specific move — only name a SAN when it's in a grounded block; see the MOVE-RECOMMENDATION RULE in the live state)
      • \`[VOICE: That's the Vienna Gambit — f4 is a sharp pawn sac to blow open the f-file. I'll hit back with d5 to contest the center, planning to follow up with knight to c6 and developing fast. The position is going to get tactical quickly; watch for queen-and-bishop attacks on f7 from your side. Your move.]\`
 
 2. **The full teaching text** — the rest of your response, AFTER the \`[VOICE: ...]\` marker. Chat-only (marker strips it from voice). Depth goes here: opening names, master-game references, Stockfish eval numbers, multi-move variations, candidate-move comparisons. The student reads this at their pace while listening to the spoken summary. Length is up to you — substance over brevity, but every sentence earns its place.
@@ -768,6 +768,16 @@ function formatLiveStateBlock(state: LiveState): string {
     const block = formatPlayerGamesSubBlock(state.playerGames);
     if (block) parts.push(block);
   }
+  // UNIVERSAL MOVE-RECOMMENDATION RULE (G0 — applies on EVERY surface, every
+  // turn). The grounded blocks above each say "use this, don't invent" for
+  // their own data, but nothing bound the coach's PROACTIVE move suggestions to
+  // them — so when no engine-plan/lichess/book block was present (the common
+  // case), the coach recommended a move from generic opening reflexes and told a
+  // student to "develop the knight to f3" with a knight ALREADY on f3. A named
+  // move-to-play is grounded-only; a plan/idea is free.
+  parts.push(
+    `- 🚫 MOVE-RECOMMENDATION RULE (grounding — read before you suggest anything): when you tell the student a SPECIFIC move to PLAY (a SAN like "Nf3" or "develop the knight to f3"), it MUST come from a grounded block above — the Engine plan line, the Lichess top master moves, the opening-book annotations, or the middlegame plan — OR a move you JUST demonstrated with play_move and its real Stockfish eval. If NONE of those gives you a move, do NOT name a specific move: teach the PLAN or idea instead ("develop a piece toward the center and get your king safe", "your move — what's your plan for the d-file?") and let the student choose. NEVER pull a specific move from opening principles, theory recall, or memory — that is exactly how the coach recommended developing a knight to a square a knight already sat on. Plans, ideas, structures, and strategic themes in prose need NO grounding and are encouraged; only a named move-to-a-square must be grounded. Before naming any move, cross-check the BOARD FACTS piece list above — never tell the student to move a piece to a square it already occupies, or to develop a piece that is already developed.`,
+  );
   if (state.moveHistory && state.moveHistory.length > 0) {
     parts.push(`- Move history: ${state.moveHistory.join(' ')}`);
   }
