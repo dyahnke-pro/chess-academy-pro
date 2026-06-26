@@ -52,6 +52,31 @@ Overview describes the wrong game/player/result (e.g. Pirc "Adams beats Kotronia
 ### Phase E — lesson≠pgn LATE-diverge spot-check (48)  `[low priority]`
 Mostly last-beat sub-branches (the lesson walks the card line, the final beat shows a deviation/tactical point — intentional). Spot-check a sample; only fix where the WHOLE lesson teaches a different line. Don't mass-edit.
 
+### Phase F — First-beat SILENT WALK-IN (no more jumping into deep positions)  `[player fix DONE 2026-06-26 · narrations TODO]`
+**David 2026-06-26 (screenshot IMG_4288):** *"Some openings start after several moves have already been played. Can you go through and add in the moves one by one to show how to reach these positions instead of just jumping into them?"* → then chose **option A**: a SILENT walk-through of the pieces (no narration) so the user watches the moves played out on the board, THEN the lesson narrates. *"maybe we can add custom narrations after to make it feel unique … the narrations should reflect the uniqueness of the variation."*
+
+**SWEEP (full, all 684 registered lessons via `getAllLessonScripts()`):**
+| | count | avg first-beat plies |
+|---|---|---|
+| Lessons opening >2 plies deep (jump-in) | **655 / 684 (96%)** | — |
+| ↳ main-line lessons | **106** (of 130 mains) | 5.5 |
+| ↳ subline/variation lessons | **549** | 8.5 |
+| Main lessons opening >4 plies (*several* moves in) | **70** | — |
+| Deepest jump-ins | Sveshnikov Chelyabinsk 21 plies · Breyer/Chigorin/Zaitsev 18 · Caro Classical Capablanca 19 | |
+
+**Root cause:** `LessonPlayer.tsx` — the per-beat animation effect plays only the NEW moves vs the previous beat (longest-common-prefix), but `prevIdxRef` inited to `0`, so for beat 0 `prevMoves === curMoves` → common prefix = whole line → the **snap branch** fired and the board jumped straight to the deep position. (Two secondary bugs: `displayFen` inited to `fens[0]` = the deep position → would flash it; and the runtime's first `applyStep` bumped `applyNonce`, forcing a 2nd effect run whose cleanup tore down the build and snapped.)
+
+**FIX (player-level, one change covers ALL 655 — `[DONE 2026-06-26]`):**
+- `prevIdxRef` init `-1` → beat 0's `prevMoves` is `[]`, so its opening plays out one move at a time from the empty board.
+- `displayFen` init = the START position (not `fens[0]`) → no flash of the deep position before the build.
+- `applyStep` skips the `applyNonce` bump on its FIRST call → no spurious 2nd effect run snapping the build (resume/nav still bump).
+- First-beat narration is **SEQUENCED AFTER the silent walk**: in the player's `speak`, when `appliedIdxRef.current === 0`, it `await`s the board-animation promise, THEN schedules the lead-the-eye reveals + speaks — so the coach talks about the ARRIVAL position, never over a half-built board. Other beats keep narrating in parallel with their 1-2 new moves.
+- First-beat step cadence `500ms/ply` (brisk; no voice pacing it) vs `1300ms` for teaching beats. A 10-ply main ≈ 5s, an 18-ply subline ≈ 9s, then the lesson begins.
+- Test: `LessonPlayer.test.tsx` — asserts beat 0 starts at the START position, passes THROUGH the intermediate move positions, and arrives at the deep FEN (never snaps).
+- Caveat (flag): with VOICE OFF + autoplay, the runtime's no-narration auto-advance (800ms) can outrun a long silent build — pre-existing behavior in `useStrictNarration`, rare path (Watch is voice-on by default). Not addressed here; note for a later hook-level fix if it matters.
+
+**TODO — per-variation custom first-beat narration `[pending]`:** The first beat's `say`/`sayShort` now plays at the arrival position after the walk-in. Author UNIQUE first-beat narration per variation so the walk-in feels tailored ("the Breyer — the knight reroutes Nb8-d7 to refeed the centre" vs a generic "here's the starting position"). Scope: the 130 main lessons (106 that walk in) + 549 sublines — prioritize the masterclass set + the deepest/most-played sublines first. Each must stay board-accurate at the arrival FEN (narrationAccuracy gate) and carry both registers (full `say` + ≤8-word `sayShort`) with `sources[]`. This is the "make it feel unique" layer on top of the now-correct walk-in.
+
 ---
 
 ## SEQUENCING

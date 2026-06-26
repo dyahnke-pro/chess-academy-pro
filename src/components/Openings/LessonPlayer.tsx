@@ -58,12 +58,34 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
   const [applyNonce, setApplyNonce] = useState(0);
   // The board is animated independently of the beat index: we play a
   // beat's moves one at a time (see the effect below), so `displayFen`
-  // lags `beatIndex` while the sequence runs.
-  const [displayFen, setDisplayFen] = useState(fens[0]);
+  // lags `beatIndex` while the sequence runs. Init at the START position
+  // (not fens[0]) so the FIRST beat builds its opening moves up from the
+  // empty board instead of flashing the deep position — see prevIdxRef.
+  const [displayFen, setDisplayFen] = useState(() => fenForMoves([]));
   const [trailArrows, setTrailArrows] = useState<BoardArrow[]>([]);
   const [settled, setSettled] = useState(true);
 
-  const prevIdxRef = useRef(0);
+  // Init at -1 (NOT 0) so the first beat's prevMoves is [] and its opening
+  // moves play out ONE AT A TIME from the start — David 2026-06-26: "add in
+  // the moves one by one to show how to reach these positions instead of just
+  // jumping into them." With 0 here, beat 0's prevMoves === curMoves, the
+  // common prefix is the full line, and the effect hit the snap branch — so
+  // every lesson jumped straight into its deep starting position.
+  const prevIdxRef = useRef(-1);
+  // The index currently applied to the board (set by applyStep, read inside the
+  // speak closure). The FIRST beat (0) plays its opening moves SILENTLY and only
+  // narrates once they've settled — David 2026-06-26: "a silent walk through of
+  // the pieces ... so users can see the moves played out again on the board",
+  // then teach.
+  const appliedIdxRef = useRef(0);
+  // The animation effect runs once on mount, and the narration runtime's first
+  // applyStep re-applies beat 0. If that first applyStep bumped applyNonce it
+  // would force a SECOND effect run whose cleanup tears down the just-scheduled
+  // first-beat build and snaps to the deep position. So applyStep skips the
+  // applyNonce bump on its very first call — the mount run already builds beat
+  // 0 (prevIdxRef = -1 → it plays the opening up from the start). Later applies
+  // (resume/nav) DO bump, so a same-index resume still re-runs the effect.
+  const firstApplyDoneRef = useRef(false);
   const timersRef = useRef<number[]>([]);
   // Animation-complete promise. applyStep (which runs synchronously inside
   // playStep, before speak) arms a fresh one; the animation effect resolves
@@ -106,10 +128,14 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
     clearRevealTimers();
     const b = beats[i];
     beatRef.current = b;
+    appliedIdxRef.current = i;
     // Voice off → no narration to pace the reveal, so show every marker now.
     setRevealedSquares(voiceEnabledRef.current ? new Set() : new Set(beatSquares(b)));
     setBeatIndex(i);
-    setApplyNonce((n) => n + 1);
+    // Skip the nonce bump on the FIRST apply so it doesn't force a second
+    // effect run that would snap the first beat instead of building it.
+    if (firstApplyDoneRef.current) setApplyNonce((n) => n + 1);
+    firstApplyDoneRef.current = true;
   }, [beats, beatSquares, clearRevealTimers]);
   const getNarration = useCallback((i: number) => beats[i]?.say ?? '', [beats]);
 
@@ -126,24 +152,39 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
     // the full narration AND the board animation.
     speak: (t: string) => {
       const myToken = playTokenRef.current;
-      const segments = buildNarrationSegments(t, beatSquares(beatRef.current));
-      // Rough speech-duration estimate (~55ms/char, floor 1.2s) — we only
-      // need the RELATIVE pacing of the reveals across the utterance, not a
-      // precise sync (voice isn't driving it; this is a cosmetic timer).
-      const totalChars = segments.reduce((n, s) => n + s.text.length, 0) || 1;
-      const estMs = Math.max(totalChars * 55, 1200);
-      let accChars = 0;
-      for (const seg of segments) {
-        const at = (accChars / totalChars) * estMs;
-        accChars += seg.text.length;
-        if (seg.revealSquares.length === 0) continue;
-        const squares = seg.revealSquares;
-        const timer = window.setTimeout(() => {
-          if (playTokenRef.current !== myToken) return;
-          setRevealedSquares((prev) => new Set([...prev, ...squares]));
-        }, at);
-        revealTimersRef.current.push(timer);
+      // Schedule the lead-the-eye square reveals paced across the utterance.
+      const scheduleReveals = (): void => {
+        const segments = buildNarrationSegments(t, beatSquares(beatRef.current));
+        // Rough speech-duration estimate (~55ms/char, floor 1.2s) — we only
+        // need the RELATIVE pacing of the reveals across the utterance, not a
+        // precise sync (voice isn't driving it; this is a cosmetic timer).
+        const totalChars = segments.reduce((n, s) => n + s.text.length, 0) || 1;
+        const estMs = Math.max(totalChars * 55, 1200);
+        let accChars = 0;
+        for (const seg of segments) {
+          const at = (accChars / totalChars) * estMs;
+          accChars += seg.text.length;
+          if (seg.revealSquares.length === 0) continue;
+          const squares = seg.revealSquares;
+          const timer = window.setTimeout(() => {
+            if (playTokenRef.current !== myToken) return;
+            setRevealedSquares((prev) => new Set([...prev, ...squares]));
+          }, at);
+          revealTimersRef.current.push(timer);
+        }
+      };
+      // FIRST beat → SILENT walk: let the opening moves play out fully, THEN
+      // start the narration (and its reveals) at the arrival position, so the
+      // coach speaks about the position the eye has just been led to — not over
+      // a half-built board. Other beats play their move(s) and narrate together.
+      if (appliedIdxRef.current === 0) {
+        return animPromiseRef.current.then(() => {
+          if (playTokenRef.current !== myToken) return undefined;
+          scheduleReveals();
+          return voiceService.speakLecture(t);
+        });
       }
+      scheduleReveals();
       return Promise.all([voiceService.speakLecture(t), animPromiseRef.current]).then(() => undefined);
     },
     // The story plays itself — beats auto-advance as each line finishes.
@@ -208,7 +249,12 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
     setSettled(false);
     setTrailArrows([]);
     setDisplayFen(fenForMoves(curMoves.slice(0, cp))); // start at the fork
-    const STEP_MS = 1300;
+    // The first beat builds the WHOLE opening up from the start as a SILENT
+    // walk, so pace it briskly (a long Ruy/Sveshnikov prefix at 1300ms/ply
+    // would crawl for 20s+ before the lesson begins; and there's no narration
+    // to pace against here). Mid-lesson beats play only a move or two of new
+    // material under the voice — those stay at the deliberate teaching cadence.
+    const STEP_MS = idx === 0 ? 500 : 1300;
     const TRAIL = 'rgba(255,170,60,0.6)';
     const accumulated: BoardArrow[] = [];
     let delay = 300; // brief look at the fork before the first move
