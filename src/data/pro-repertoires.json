@@ -1692,7 +1692,7 @@
         {
           "name": "Berlin Defense",
           "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 dxc6 dxe5",
-          "explanation": "The Berlin (955 games, 58.8%). Black trades into a queenless middlegame; we get the structural game with the better pawn structure and bishop pair compensation.",
+          "explanation": "The Berlin (955 games, 58.8%). Black trades straight into that famous queenless middlegame. We come out with the healthier pawn structure — Black is the one saddled with the doubled c-pawns — while Black’s compensation is the bishop pair. It’s a long technical grind, and we’re the side doing the pressing.",
           "sources": [
             "book:ruy-lopez",
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
@@ -2157,7 +2157,7 @@
         {
           "name": "Closed Sicilian Main",
           "pgn": "e4 c5 Nc3 Nc6 Bb5 Nd4 Nf3 Nxb5 Nxb5 a6 Nc3 d6 d4 cxd4 Qxd4",
-          "explanation": "The 2.Nc3 spine reaching a positional middlegame. The doubled a-pawn on Black's side is the long-term weakness that decides — Black's defence must keep pieces active or get slowly outplayed.",
+          "explanation": "Our 2.Nc3 spine, steering into a positional middlegame. We trade on c6 with Bb5 and then break with d4; after Qxd4 we sit on an open, comfortable position where our lead in development and central grip do the talking. Black has to keep his pieces busy — or get slowly squeezed.",
           "sources": [
             "concept:pos-development",
             "https://www.chess.com/openings/Closed-Sicilian-Defense",
