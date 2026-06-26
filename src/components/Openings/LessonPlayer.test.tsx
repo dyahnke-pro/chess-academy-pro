@@ -98,5 +98,15 @@ describe('LessonPlayer — first beat builds move-by-move (David 2026-06-26)', (
     expect(fenCalls[fenCalls.length - 1]).toBe(deep);
     // A real build shows many distinct positions, not 1-2.
     expect(new Set(fenCalls).size).toBeGreaterThanOrEqual(8);
+
+    // Once the walk has landed, firstWalkDoneRef flips so further re-runs SNAP
+    // and never rebuild — the board must NOT loop back to the start. Keep
+    // advancing and assert it stays settled at the deep position.
+    const framesAfterSettle = fenCalls.length;
+    for (let i = 0; i < 10; i += 1) {
+      await act(async () => { await vi.advanceTimersByTimeAsync(500); });
+    }
+    const tail = fenCalls.slice(framesAfterSettle);
+    expect(tail.every((f) => f === deep)).toBe(true); // no rebuild-loop back to START
   });
 });

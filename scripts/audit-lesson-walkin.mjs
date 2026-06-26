@@ -119,6 +119,44 @@ async function main() {
       console.log(`[walkin] ${id}: ERROR ${r.note}`);
     }
     results.push(r);
+
+    // SUBLINE pass — variation lessons launch through a DIFFERENT path
+    // (handleStartVariationWalkthrough), so verify one builds too. Select the
+    // first variation tab, then Watch.
+    const sub = { id: `${id}::variation-1`, mounted: false, frames: [], verdict: 'SKIP', note: '' };
+    try {
+      await page.goto(`${BASE_URL}/openings/${id}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+      await dismiss(page);
+      await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 15000 }).catch(() => {});
+      await page.waitForTimeout(1200);
+      await dismiss(page);
+      const tab = page.locator('[data-testid="variation-tab-1"]').first();
+      if (!(await tab.isVisible().catch(() => false))) { sub.note = 'no variation-tab-1'; results.push(sub); continue; }
+      await tab.click({ timeout: 8000 }).catch(() => {});
+      await page.waitForTimeout(400);
+      const watch = page.locator('[data-testid="walkthrough-btn"]').first();
+      await watch.scrollIntoViewIfNeeded({ timeout: 5000 }).catch(() => {});
+      await watch.click({ timeout: 8000 }).catch(() => {});
+      const lp = await page.locator('[data-testid="lesson-player"]').waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
+      sub.mounted = lp;
+      if (!lp) { sub.note = 'variation lesson-player did not mount'; results.push(sub); continue; }
+      for (let k = 0; k < 55; k += 1) {
+        const snap = await page.evaluate(OFF_HOME).catch(() => ({ count: 0, off: -1 }));
+        sub.frames.push({ t: k * 110, ...snap });
+        await page.waitForTimeout(110);
+      }
+      const offs = sub.frames.map((f) => f.off).filter((n) => n >= 0);
+      const minOff = Math.min(...offs); const maxOff = Math.max(...offs); const distinct = new Set(offs).size;
+      if (minOff <= 1 && distinct >= 2) { sub.verdict = 'PASS'; sub.note = `built up: off-home ${minOff} → ${maxOff} (${distinct} distinct)`; }
+      else if (minOff >= 4) { sub.verdict = 'FAIL'; sub.note = `SNAP: never showed the start — min off-home ${minOff}`; }
+      else { sub.verdict = 'WARN'; sub.note = `min off=${minOff} max=${maxOff} distinct=${distinct}`; }
+      console.log(`[walkin] ${sub.id}: ${sub.verdict} — ${sub.note}`);
+      console.log(`         off-home: ${offs.join(' ')}`);
+    } catch (e) {
+      sub.note = `threw: ${e.message.slice(0, 160)}`;
+      console.log(`[walkin] ${sub.id}: ERROR ${sub.note}`);
+    }
+    results.push(sub);
   }
 
   await writeFile(join(OUT_DIR, 'report.json'), JSON.stringify({ base: BASE_URL, pageErrors, results }, null, 2));
