@@ -2685,11 +2685,11 @@ export function CoachTeachPage(): JSX.Element {
       (STEP_BY_STEP_RE.test(text) || engineDrivenStep) && !walkthrough.isActive;
     const effectiveAsk =
       replyPlayed && replyPlayed.length > 0
-        ? `${text}\n\n[STEP-BY-STEP NARRATION — the engine already played the coach's reply ${replyPlayed}; it is ALREADY on the board. ${opts?.coachReplyFact ?? ''} You do NOT and CANNOT play moves (play_move is disabled). NARRATE ${replyPlayed} using ONLY the grounded fact above for what it captured — never invent a captured piece. Name the idea behind the move, draw [BOARD: arrow:from-to:green] on that move AND on every SAN you mention in prose. Put your SPOKEN narration in a [VOICE: ...] marker — one or two plain sentences naming the move and its idea — so the coach speaks it aloud (this is REQUIRED; without it the student hears nothing). Do NOT summarize or continue any earlier topic; narrate this reply and prompt the student's next move.]`
+        ? `${text}\n\n[STEP-BY-STEP NARRATION — the engine already played the coach's reply ${replyPlayed}; it is ALREADY on the board. ${opts?.coachReplyFact ?? ''} You do NOT and CANNOT play moves (play_move is disabled). NARRATE ${replyPlayed} using ONLY the grounded fact above for what it captured — never invent a captured piece. Name the idea behind the move, draw [BOARD: arrow:from-to:green] on that move AND on every SAN you mention in prose. Put your SPOKEN narration in a [VOICE: ...] marker — one or two plain sentences naming the move and its idea — so the coach speaks it aloud (this is REQUIRED; without it the student hears nothing). Do NOT summarize or continue any earlier topic; narrate this reply, then prompt the student's turn. If you name a move for the student to play, it MUST be the engine move named in the grounded facts above — recommend ONLY that one. If the facts name no engine move, do NOT name any move; just say it's their turn. NEVER invent a move, NEVER tell them to move a piece to a square it already occupies, and NEVER recommend a move that isn't in the facts above.]`
         : engineDrivenStep
           ? text // no legal coach reply (game over) — narrate the student's move only
           : isStepByStepReport
-            ? `${text}\n\n[STEP-BY-STEP: the student reported THEIR move. The coach's reply has NOT been computed by the engine — you do NOT know it. You MUST NOT name, narrate, or invent ANY coach reply move: no "queen takes queen", no fabricated capture, no guessed continuation. Inventing a move that wasn't played is a hallucination and is forbidden. Acknowledge ONLY the student's reported move and its idea, draw an arrow on every SAN you ACTUALLY mention, then prompt for their next move. If you have nothing grounded to say about THEIR move, be brief or stay silent — never fill the gap with an invented reply.]`
+            ? `${text}\n\n[STEP-BY-STEP: the student reported THEIR move. The coach's reply has NOT been computed by the engine — you do NOT know it. You MUST NOT name, narrate, or invent ANY coach reply move: no "queen takes queen", no fabricated capture, no guessed continuation. Inventing a move that wasn't played is a hallucination and is forbidden. Acknowledge ONLY the student's reported move and its idea, draw an arrow on every SAN you ACTUALLY mention, then prompt for their next move WITHOUT naming a specific move for them to play — you have no engine recommendation here, so just say it's their turn. If you have nothing grounded to say about THEIR move, be brief or stay silent — never fill the gap with an invented reply OR an invented move suggestion.]`
             : text;
     if (isStepByStepReport) {
       void logAppAudit({
@@ -3484,6 +3484,25 @@ export function CoachTeachPage(): JSX.Element {
                 const tctx = buildTacticsLiveContext(probe.fen(), null, studentCC, rating);
                 if (tctx.immediate.length > 0) facts.push(`Real tactics on the board now: ${tctx.immediate.map((t) => t.description).join('; ')}.`);
                 if (tctx.hanging.length > 0) facts.push(`Undefended/attacked: ${tctx.hanging.map((h) => `${NAME[h.piece] ?? h.piece} on ${h.square}`).join(', ')}.`);
+                // The STUDENT'S recommended next move — COMPUTED in code, never the
+                // LLM's pick (G0). The coach was telling the student to "develop the
+                // knight to f3" with a knight ALREADY on f3, because the move it
+                // recommended was invented from generic opening reflexes, not derived
+                // from the board it was handed. Hand it the engine's move so it voices
+                // a real one (or stays general when the engine is down). The read is
+                // cached on a warm engine; the board already unlocked above, so this
+                // only delays the async narration, never the student's next move.
+                try {
+                  const studentBest = await stockfishEngine.analyzeWithBudget(probe.fen(), 12, 1200);
+                  const recUci = studentBest?.bestMove;
+                  if (recUci && recUci.length >= 4) {
+                    const recProbe = new Chess(probe.fen());
+                    const recMove = recProbe.move({ from: recUci.slice(0, 2), to: recUci.slice(2, 4), promotion: recUci.slice(4, 5) || undefined });
+                    if (recMove) {
+                      facts.push(`The student's strongest reply in THIS position is ${recMove.san} (engine). If you point them toward a move, name ONLY ${recMove.san} — never suggest any other move, and never tell them to move a piece to a square it already occupies.`);
+                    }
+                  }
+                } catch { /* engine down → no move named; the prompt keeps the prompt-for-next-move general */ }
                 replyFact = `GROUNDED FACTS (voice ONLY these — never invent a capture, check, tactic, or threat not listed here): ${facts.join(' ')}`;
               }
             } catch {
