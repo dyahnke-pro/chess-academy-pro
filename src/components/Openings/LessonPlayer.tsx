@@ -86,6 +86,10 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
   // 0 (prevIdxRef = -1 → it plays the opening up from the start). Later applies
   // (resume/nav) DO bump, so a same-index resume still re-runs the effect.
   const firstApplyDoneRef = useRef(false);
+  // Flipped true once the first beat's silent walk-in has played all the way
+  // through. Until then the animation effect rebuilds beat 0 from the empty
+  // board on every re-run (StrictMode / resume) instead of snapping.
+  const firstWalkDoneRef = useRef(false);
   const timersRef = useRef<number[]>([]);
   // Animation-complete promise. applyStep (which runs synchronously inside
   // playStep, before speak) arms a fresh one; the animation effect resolves
@@ -230,7 +234,15 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
     timersRef.current = [];
     const prevIdx = prevIdxRef.current;
     prevIdxRef.current = idx;
-    const prevMoves = beats[prevIdx]?.moves ?? [];
+    // First beat: until its silent walk has finished ONCE, always (re)build from
+    // the empty board. The effect can re-run for the same beat 0 before the walk
+    // completes — React StrictMode double-invokes it in dev, a parent re-render
+    // or a resume bumps applyNonce — and each re-run would otherwise see
+    // prevIdxRef already advanced to 0 (prevMoves === curMoves) and SNAP straight
+    // to the deep position. Forcing prevMoves=[] keeps it building from the start
+    // across those re-runs; once the walk lands we flip the ref so a later
+    // resume/nav-back correctly snaps.
+    const prevMoves = idx === 0 && !firstWalkDoneRef.current ? [] : (beats[prevIdx]?.moves ?? []);
     const curMoves = beat.moves;
 
     let cp = 0;
@@ -265,7 +277,7 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
       const t = window.setTimeout(() => {
         setDisplayFen(fen);
         if (sq) { accumulated.push({ startSquare: sq.from, endSquare: sq.to, color: TRAIL }); setTrailArrows([...accumulated]); }
-        if (isLast) { setSettled(true); animResolveRef.current?.(); }
+        if (isLast) { if (idx === 0) firstWalkDoneRef.current = true; setSettled(true); animResolveRef.current?.(); }
       }, delay);
       timersRef.current.push(t);
       delay += STEP_MS;

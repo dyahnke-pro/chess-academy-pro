@@ -1,3 +1,4 @@
+import { StrictMode } from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, act } from '@testing-library/react';
 import { Chess } from 'chess.js';
@@ -69,8 +70,15 @@ describe('LessonPlayer — first beat builds move-by-move (David 2026-06-26)', (
   afterEach(() => { vi.useRealTimers(); vi.clearAllMocks(); });
 
   it('does NOT snap straight to the deep first-beat position; it plays the opening moves up from the start', async () => {
+    // Render under StrictMode: it double-invokes the animation effect on mount
+    // (setup → cleanup → setup), which is exactly the re-run that used to
+    // advance prevIdxRef and SNAP the first beat. The build must survive it.
     await act(async () => {
-      render(<LessonPlayer script={DEEP_FIRST_BEAT} onExit={() => {}} />);
+      render(
+        <StrictMode>
+          <LessonPlayer script={DEEP_FIRST_BEAT} onExit={() => {}} />
+        </StrictMode>,
+      );
     });
     // Advance the build-out timers in small steps (they fire ~500ms apart in the
     // real app, one render each — advancing all at once would let React batch
