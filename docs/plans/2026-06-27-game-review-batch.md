@@ -128,6 +128,22 @@ board (Phase 9) lets the student show a line; voice in/out for the conversation.
 review), then the discussion surface on top. The Phase 1 grounding + Phase 2 why
 are the foundation for BOTH review and this — not wasted.
 
+## Phase 10 refinements (David, while playing the live tab)
+- GOOD: it already cycles ~5 grounded questions per position on one layout
+  (buildReadingQuestions × nextQuestion works).
+- DEEPER DIVES wanted: plans, each side's WEAKNESSES, and "what I should be
+  TARGETING" — concrete targeting advice grounded on piece-quality
+  (findPieceQuality) + pawn structure (backward/isolated/passed) + the engine PV
+  (assemblePlanAnswer). Add targeting question(s): "what should you target / what
+  is your opponent's weakness here?" with the grounded answer.
+- "I need to SEE the correct answer if I get one wrong." NOTE: already
+  implemented (verdict !== 'correct' → renders "Answer: {correctAnswer}",
+  AnalysisPracticePage ~:302). If he's not seeing it, it's the LAYOUT (answer
+  card below the board, off-screen on mobile — the recurring overlap/scroll
+  bug). Fix = make the answer card reachable + verify `correctAnswer` is
+  populated for EVERY question type (incl. the new who's-winning /
+  strengths-weaknesses / targeting ones).
+
 ## Decisions for David
 - D1: Reading gate default ON, or stay opt-in with a clearer prompt? (Phase 4)
 - D2: Re-analysis on the depth bump — prioritize open game + throttle vs full
