@@ -417,6 +417,20 @@ class StockfishEngine {
           });
           this.worker?.terminate();
           this.worker = null;
+          // Phase 8 Bug D — reset the worker-error dedup window so the
+          // fallback single-thread worker's errors are NOT silently
+          // dedup'd against the multi-thread crash's dedup window.
+          // Without this, if the single worker ALSO fails within the
+          // 500ms dedup window (which it often does — the multi crash
+          // emits 60+ events in ~100ms, the fallback spawns 100ms later,
+          // and a failing single worker's error lands at ~150ms, well
+          // within the window), its `onerror` is swallowed and
+          // `initPromise` is NEVER rejected — hanging until the 45s
+          // overall timeout (David 2026-06-27 PostHog: `[object ErrorEvent]`
+          // with `variant=multi, attempt 1/3` — the fallback's real error
+          // was dedup'd, so the caller saw a stale `variant=multi` from
+          // the first init attempt when the timeout eventually fired).
+          this._workerErrorWindow = null;
           // Phase 8 Bug B — give the browser time to reclaim the
           // multi-thread WASM heap BEFORE spawning the single-thread
           // worker. Without this delay, the single-thread spawn OOMs
@@ -459,11 +473,20 @@ class StockfishEngine {
             // is empty, but `filename`/`lineno` name the resource that died,
             // which is what was missing when the iOS lila crash logged blank.
             const ee = error as Partial<ErrorEvent>;
+            // Phase 8 Bug E — prefer the ACTUAL thrown error (ErrorEvent.error)
+            // over the event's message. On some browser/runtime configurations
+            // the ErrorEvent's `message` can be the unhelpful `toString()` of
+            // the event itself (producing "[object ErrorEvent]") rather than
+            // the underlying error text (e.g. "RuntimeError: memory access out
+            // of bounds"). `ErrorEvent.error` carries the real thrown object.
+            const underlyingMsg = ee.error instanceof Error ? ee.error.message
+              : typeof ee.error === 'string' ? ee.error
+              : '';
             const loc = ee.filename
               ? ` @ ${ee.filename}:${ee.lineno ?? '?'}:${ee.colno ?? '?'}`
               : '';
             const msg =
-              (error.message || 'Uncaught RuntimeError or worker load failure') + loc;
+              (underlyingMsg || ee.message || 'Uncaught RuntimeError or worker load failure') + loc;
             // Phase 8 Bug A — suppress the bubble to window.onerror.
             // A crashing multi-thread bundle emits 60+ ErrorEvents
             // in ~100ms; if any of those reach the global error
