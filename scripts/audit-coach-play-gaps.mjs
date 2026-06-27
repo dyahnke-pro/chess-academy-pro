@@ -434,14 +434,22 @@ async function main() {
         await select.selectOption({ index: Math.min(1, optCount - 1) }).catch(() => undefined);
       }
       await page.waitForTimeout(400);
-      const clocksBefore = await page.locator(sel('player-clock')).count();
-      if (clocksBefore < 2) throw new Error(`timed control did not render 2 player-clock chips (got ${clocksBefore})`);
 
       // Play two moves so a resumable snapshot persists with clock state.
+      // NOTE: the player-info bars (which carry the clock chips) mount with
+      // the ACTIVE game view, not the pre-move setup screen — so the clock
+      // assertion happens AFTER the first move, not before (the old pre-move
+      // check counted 0 because the bars weren't mounted yet — harness
+      // timing, not a missing clock).
       await tryMove('e2', 'e4');
       await tryMove('g1', 'f3').catch(() => undefined);
       const cellsBefore = await moveCells();
       if (cellsBefore === 0) throw new Error('moves did not register before leaving the tab');
+
+      // Now the game is active — the timed control MUST render both clocks.
+      await page.waitForTimeout(400);
+      const clocksBefore = await page.locator(sel('player-clock')).count();
+      if (clocksBefore < 2) throw new Error(`active timed game did not render 2 player-clock chips (got ${clocksBefore})`);
 
       // Leave the Play tab, then return.
       await page.getByRole('link', { name: 'Coach' }).first().click({ timeout: 8000 })
