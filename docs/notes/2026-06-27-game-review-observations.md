@@ -267,6 +267,32 @@ majority incl. his example.
 Build location: next to explainBestMoveGrounded; voice via the review grounded
 spine (recap + per-move). Pending David's go for the batch.
 
+## DESIGN — the "why" is a CHOREOGRAPHED board demo synced to the voice (David)
+Verbatim: "take my wrong move back, show me the correct one, tell me why it was
+better and move other pieces or draw other arrows to illustrate that point as
+it's being spoken." A synchronized demonstration, not a static board.
+
+HAVE (reuse, don't reinvent):
+- `narrationSegments` = sentence-grained reveal (markers appear as THEIR sentence
+  is spoken) → "without missing a beat."
+- `useWalkthroughRunner`/`useStrictNarration` = voice-promise-gated advance (no
+  timer racing the voice).
+- Lead-the-eye color grammar: orange=move squares, green=vision arrows,
+  yellow=key square named.
+- Review board already drives itself for "Show me"/"Explore" → take-back +
+  replay is a known move.
+
+BUILD (on grounded facts):
+- Move-order comparator (prev section) → the why + the DEMONSTRATION line.
+- Beat ASSEMBLER: grounded why → `{ fen, move, arrows[], highlights[], say }[]`
+  (same shape as a masterclass beat).
+- Review "why-demo" MODE: pause walk → take back wrong move → play correct
+  (orange + spoken) → demonstrate the reason by playing the contrast/refutation
+  line with arrows on the named squares AS the voice speaks → restore to the ply.
+DISCIPLINE (G0/G3): every demonstrated move + arrow comes from the COMPUTED line
+(engine PV / refutation / chess.js geometry), never invented. No line to show →
+show less, never fake a piece dance. Voice-gated reveal, not timer-raced.
+
 ## State of in-flight work (NOT shipped, awaiting his go)
 - Accuracy depth 12→16 (`gameAnalysisService.ts`) + `analysisDepth` stamp +
   re-analyze-when-stale gate + type field: **edited locally, uncommitted.**
