@@ -35,17 +35,33 @@ ARTIFACTS / config (NOT app bugs):
 - **`gap3-explore-stockfish-reply`** (review) — Playwright couldn't perform the
   board drag. Harness limitation; consider `force`/coordinate drag.
 
-REAL findings to confirm + fix:
-- [ ] **`clock-restore-on-resume`** (play) — timed game rendered 0 clock chips.
-- [ ] **`gap5-deeplink-move-jumps`** (review) — `?move=5` doesn't jump to ply 5
-      (started at 0), yet out-of-range `?move=9999` clamps fine → param is read
-      but the valid jump doesn't land. Look at the review mount's
-      `initialMoveIndex`/Start-walk consumption.
-- [ ] **`gap2-automated-mistake-enrollment`** (review) — no `mistakePuzzles` row
-      / no auto-enroll audit in 45s. May be synthetic-game artifact (no real
-      mistakes) — re-test with the real-data fixture before calling it a bug.
+Findings — resolved:
+- [x] **`gap5-deeplink-move-jumps`** (review) — REAL bug, FIXED. The deep link
+      seeded only legacy `reviewState`; the walk header reads
+      `walkPlayback.currentPly` which booted at 0 and the narration-load effect
+      snapped back to 0. Added `initialPly` to `useReviewPlayback` (lands the
+      ply on first narration load + when narration never arrives, clamped,
+      applied once). +4 regression tests. (commit ce117f9)
+- [x] **`clock-restore-on-resume`** (play) — HARNESS-timing artifact, probe
+      FIXED. `useChessClock` enables + seeds the base time on selection, but the
+      player-info bars (clock chips) mount with the ACTIVE game view, not the
+      pre-move setup screen — so the pre-move count was 0. Moved the clock
+      assertion to after the first move. (commit 221dde2)
+
+Findings — need a LIVE run to distinguish real-vs-artifact (NOT blind-fixed):
+- [ ] **`voice-pref-variance`** (teach) — identical evDelta/transcriptLen across
+      full/brief/silent → the setting isn't reaching the measured voice. The
+      probe writes `profiles.preferences.coachNarration` + full-reloads (which
+      should re-hydrate `activeProfile`), and the app reads exactly that field
+      (`coachCommentaryPolicy.ts:42`, `coachNarration.ts:77`). So either the
+      probe writes a non-active profile row, or the Vienna walkthrough voice
+      path bypasses the gate. Confirm on a live browser: read back the value
+      post-reload + check which path the listener counts, THEN fix probe-or-app.
+- [ ] **`gap2-automated-mistake-enrollment`** (review) — fixture was "not found"
+      → cold synthetic game with no classifiable mistakes to enroll. Re-run with
+      the real-data fixture before calling it an app bug.
 - [ ] **`face-mode`** (teach) — flaky (passed one run, failed next at the
-      picker). Intermittent FACE routing — investigate timing vs real race.
+      picker). Confirm timing vs real race on a live run.
 
 NOT-TESTED (correctly, LLM-tool/reachability dependent): `quiz-wrong-answer`,
 `play-variation-and-return`, `trap-prompt-accept/skip`, retired blunder-capture.
