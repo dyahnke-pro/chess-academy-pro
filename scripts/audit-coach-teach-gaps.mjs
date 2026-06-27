@@ -437,7 +437,14 @@ async function main() {
           ...local,
           ...prod.filter((e) => ['voice-speak-invoked', 'coach-narration-spoken', 'voice-speak-silenced'].includes(e.kind)),
         ];
-        const spoken = all.filter((e) => e.kind === 'voice-speak-invoked' || e.kind === 'coach-narration-spoken');
+        // ACTUAL speech is `coach-narration-spoken` (emitted post-gate, only
+        // when audio really fires). `voice-speak-invoked` is logged at the TOP
+        // of speakForced/speakReadAloud — BEFORE speakInternal's silent gate —
+        // so it fires even when the speak is silenced. Counting it as "spoken"
+        // made silent look like it spoke (audit 2026-06-27: 14 invoked + 1
+        // silenced on silent). Count only real speech; the silent contract is
+        // coach-narration-spoken == 0 (invocations may still log + be silenced).
+        const spoken = all.filter((e) => e.kind === 'coach-narration-spoken');
         const silenced = all.filter((e) => e.kind === 'voice-speak-silenced');
         const transcriptLen = (await page.locator('[data-testid="teach-transcript"]').innerText().catch(() => '')).length;
         return { spoken: spoken.length, silenced: silenced.length, total: all.length, evDelta: ([...listener.getCapturedEvents(), ...intercepted].length - evBefore), transcriptLen };
