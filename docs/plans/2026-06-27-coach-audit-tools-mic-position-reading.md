@@ -144,11 +144,52 @@ check, not attacked-and-undefended**, or it will miss real hangs and mis-flag
 safe pieces. SEE builder is a v1 dependency for the "hanging" category (or lean
 on the engine eval delta as the ground truth instead).
 
-### Build order (when greenlit)
+### Surface B — "Analysis Practice" under the Tactics tab (David 2026-06-27)
+
+A standalone drill (NOT tied to a blunder) under `/tactics`: pull a position
+from the user's IMPORTED games (Dexie `games` store — real games), ask a
+question, grade the free-text answer against the computed key, and **show the
+computed right answer when they get it wrong**. "Ask about tactics, good or bad
+pieces, plans, pawn breaks — a whole bunch of different questions!"
+
+Same engine as Surface A (the answer key read backwards + the `gradePositionRead`
+CoachTask) — only the position SOURCE and the question MIX differ. Two surfaces,
+one grader.
+
+**Position source (deterministic, NOT the LLM):** sample middlegame positions
+(≈ply 12-30) from the `games` store; optionally bias toward structural moments.
+Cold-empty when no games imported → empty state prompts an import.
+
+**Question taxonomy → grounding source (every answer COMPUTED; G0):**
+| Question | Answer key (computed) | v |
+|---|---|---|
+| Tactics ("any tactic? what's the threat?") | `TacticsLiveContext.immediate/threats/hanging/mateInOne` (engine) | v1 |
+| Pawn breaks ("what's the right pawn break?") | `middlegame-plans.json pawnBreaks[]` (matched FEN) + a deterministic pawn-lever enumerator (a pawn push that attacks an enemy pawn / opens a file) | v1-v2 |
+| Good / bad pieces | NEW deterministic piece-quality computer — bad bishop (own pawns on its colour), knight outpost (protected, in enemy half, unchallengeable by an enemy pawn), rook on open/semi-open file, bishop pair. Pure FEN geometry. | v2 |
+| Plans ("what's the plan here?") | `middlegame-plans.json strategicThemes/pieceManeuvers` when the position matches a known plan; else the engine PV gives the concrete continuation. SOFT — grade ONLY where a ground source exists, else skip (empty > invented). | v2 |
+| Material / king safety / hanging | `boardFacts.{material,inCheck,attackMap}` | v1 |
+
+**Show-answer-on-wrong is free:** the grader already computes the key, so on a
+MISS we render the computed correct answer (the hanging piece, the real break,
+the threat) — no extra work.
+
+**New surface checklist (standing orders):** register `/tactics/analysis-practice`
+in `router.tsx` + a Tactics-tab nav/tile entry; loading/empty/error states (empty
+= "import games to practice"); feature-flag name + activation cue + post-completion
+route; PostHog events (`analysis_practice_started`, `analysis_practice_answer`
+{questionType, correct}, `analysis_practice_completed`).
+
+### Build order (when greenlit) — shared core first, two surfaces on top
 1. SEE-based hanging (or engine-delta) answer-key helper.
-2. `gradePositionRead` CoachTask + grader prompt (closed-world).
-3. Pre-mistake FEN selection in review + the question/answer UI in `/coach/review`.
-4. Per-category score persistence + weaknesses write-back.
-5. Voice-in wiring (after mic fix verified on device).
-6. Audit tool: `audit-coach-position-reading.mjs` (drives the review drill,
-   asserts grade matches a known-package fixture).
+2. `gradePositionRead` CoachTask + grader prompt (closed-world: HIT/MISS/MISREAD,
+   cite a package fact, introduce nothing). Produces the score + the right answer.
+3. Question-type pack: tactics + pawn-breaks + material/king-safety (v1
+   grounded set); the piece-quality computer + plans (v2).
+4. **Surface A** — pre-mistake FEN selection in review + the Q/A UI in `/coach/review`.
+5. **Surface B** — `/tactics/analysis-practice`: game-position sampler + the
+   Q/A UI + show-right-answer-on-wrong (router + nav + states + events above).
+6. Per-category score persistence + weaknesses write-back (both surfaces feed it).
+7. Voice-in wiring (after the mic fix is verified on device).
+8. Audit tools: `audit-coach-position-reading.mjs` (review drill) +
+   `audit-tactics-analysis-practice.mjs` (the Tactics-tab drill) — each asserts
+   the grade matches a known-package fixture and the right answer shows on a miss.
