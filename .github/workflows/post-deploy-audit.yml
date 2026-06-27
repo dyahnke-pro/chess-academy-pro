@@ -83,6 +83,9 @@ jobs:
         env:
           AUDIT_SMOKE_URL: https://chess-academy-pro.vercel.app
           INPUT_SCRIPTS: ${{ github.event.inputs.scripts }}
+          # Gap audits (play/review) pull the live audit-stream delta to prove
+          # phase-narration / ask-routed events fired — needs the G2 secret.
+          AUDIT_STREAM_SECRET: ${{ secrets.AUDIT_STREAM_SECRET }}
         run: |
           set +e
           SCRIPTS="$INPUT_SCRIPTS"
