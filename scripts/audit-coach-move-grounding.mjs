@@ -40,8 +40,9 @@ const PIECE_LETTER = { p: 'p', n: 'n', b: 'b', r: 'r', q: 'q', k: 'k' };
 const WORD_TO_LETTER = { pawn: 'p', knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k' };
 
 // Read the live board off the DOM (react-chessboard data-piece + data-square)
-// into a { square: 'wN' } map.
-const BOARD_MAP = `() => {
+// into a { square: 'wN' } map. Pass a REAL function to page.evaluate — a
+// string arrow returns the function UNINVOKED (the a8-undefined crash).
+const readBoardMap = () => {
   const m = {};
   document.querySelectorAll('[data-piece]').forEach((p) => {
     let n = p, sq = p.getAttribute('data-square');
@@ -50,7 +51,7 @@ const BOARD_MAP = `() => {
     if (sq && /^[a-h][1-8]$/.test(sq) && code) m[sq] = code;
   });
   return m;
-}`;
+};
 
 /** Normalise a data-piece code ('wN', 'whiteN', 'wn'...) to { color:'w'|'b', type:'n' }. */
 function parsePiece(code) {
@@ -178,7 +179,7 @@ async function main() {
     const answered = await page.evaluate(() => document.body.innerText).catch(() => '');
 
     // The board the recommendation is made ON (student = White to move).
-    const map = await page.evaluate(BOARD_MAP).catch(() => ({}));
+    const map = await page.evaluate(readBoardMap).catch(() => ({}));
     const studentColor = 'w';
     const fen = mapToFen(map, studentColor);
     let chess = null;
