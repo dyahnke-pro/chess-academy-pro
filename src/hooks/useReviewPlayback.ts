@@ -86,6 +86,10 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
   /** Deep-link landing applied once — so user navigation afterward is
    *  never overridden, and a same-component narration reopen snaps to 0. */
   const appliedInitialRef = useRef(false);
+  /** True once we've processed the first narration bundle. Lets the reset
+   *  effect tell a FIRST load (keep the deep-linked ply) from a genuine
+   *  reopen (snap to 0). */
+  const narrationSeenRef = useRef(false);
 
   const segments = useMemo(() => narration?.segments ?? [], [narration]);
   // lastPly is the authoritative nav ceiling. Prefer the caller-supplied
@@ -94,36 +98,37 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
   // LLM's segment completeness — silent plies still walk the board.
   const lastPly = totalPlies ?? (segments.length > 0 ? segments[segments.length - 1].ply : 0);
 
+  // Deep-link landing (?move=N): apply the requested ply ONCE, as soon as the
+  // ply count is known — independent of narration. This is the single source
+  // of truth for the deep link; the narration-reset effect below defers to it.
+  // (The earlier two-effect version FOUGHT itself: a no-narration effect
+  // applied+marked the ply while narration was still null, then the reset
+  // effect saw `applied=true` and snapped back to 0 — audit 2026-06-27 showed
+  // Ply 0 on prod even though the unit test, which renders with narration
+  // already present, passed.)
+  useEffect(() => {
+    if (appliedInitialRef.current) return;
+    if (initialPly === undefined || initialPly <= 0) return;
+    if (lastPly < 1) return; // moves/plies not known yet — wait
+    appliedInitialRef.current = true;
+    setCurrentPly(Math.min(initialPly, lastPly));
+  }, [initialPly, lastPly]);
+
   // Reset when a new narration bundle loads (e.g. user reopens review).
   useEffect(() => {
     if (!narration) return;
     introSpokenRef.current = false;
     activeTokenRef.current += 1;
     voiceService.stop();
-    // Deep-link: on the FIRST narration load, land the requested ply
-    // (e.g. ?move=N) instead of snapping to 0 — otherwise this reset
-    // clobbers the deep link the moment narration arrives.
-    if (!appliedInitialRef.current && initialPly !== undefined && initialPly > 0) {
-      appliedInitialRef.current = true;
-      setCurrentPly(Math.min(initialPly, lastPly));
-    } else {
-      setCurrentPly(0);
-    }
     setNarrationState('idle');
-  }, [narration, initialPly, lastPly]);
-
-  // Deep-link WITHOUT narration: if the game's plies are known but the
-  // narration bundle never arrives (generation failed / still pending),
-  // still land the requested ply once so the header reflects ?move=N.
-  // The narration-load effect above handles the with-narration path.
-  useEffect(() => {
-    if (appliedInitialRef.current) return;
-    if (initialPly === undefined || initialPly <= 0) return;
-    if (lastPly < 1) return;     // moves not loaded yet — wait
-    if (narration) return;       // the reset effect owns this case
-    appliedInitialRef.current = true;
-    setCurrentPly(Math.min(initialPly, lastPly));
-  }, [initialPly, lastPly, narration]);
+    // The FIRST narration load on a deep-linked mount must NOT snap to 0 —
+    // the apply-once effect above landed (or will land) the requested ply.
+    // Only a genuine REOPEN (a second narration bundle) resets to the start.
+    const firstLoad = !narrationSeenRef.current;
+    narrationSeenRef.current = true;
+    if (firstLoad && appliedInitialRef.current) return; // keep the deep-linked ply
+    setCurrentPly(0);
+  }, [narration]);
 
   // Unmount: make sure we don't leave audio playing.
   useEffect(() => {

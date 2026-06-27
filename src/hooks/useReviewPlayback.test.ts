@@ -90,6 +90,26 @@ describe('useReviewPlayback', () => {
     await waitFor(() => expect(result.current.currentPly).toBe(5));
   });
 
+  it('keeps the deep-link ply when narration arrives AFTER the moves (the prod ordering)', async () => {
+    // The bug that shipped: on a deep-linked mount, the walk header only
+    // renders once narration loads, and narration arrives asynchronously
+    // AFTER the PGN is parsed (moves known first). The first fix applied the
+    // ply while narration was null, marked it applied, then the narration
+    // reset snapped it back to 0. This rerender reproduces that exact order.
+    const narration = makeNarration({ segments: [makeSegment({ ply: 5, narration: 'Move five.' })] });
+    const { result, rerender } = renderHook(
+      ({ n }) => useReviewPlayback({ narration: n, totalPlies: 33, initialPly: 5 }),
+      { initialProps: { n: null as ReviewNarration | null } },
+    );
+    // Moves known, narration still pending → the ply must already be landed.
+    await waitFor(() => expect(result.current.currentPly).toBe(5));
+    // Narration now arrives — must NOT snap back to 0 (the prod regression).
+    rerender({ n: narration });
+    // Let all narration-load effects flush, then assert the ply held.
+    await new Promise((r) => setTimeout(r, 50));
+    expect(result.current.currentPly).toBe(5);
+  });
+
   it('clamps an out-of-range initialPly to the game length', async () => {
     const narration = makeNarration({ segments: [makeSegment({ ply: 1 })] });
     const { result } = renderHook(() =>
