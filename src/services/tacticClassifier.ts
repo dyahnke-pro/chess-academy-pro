@@ -494,7 +494,35 @@ function detectRemovalOfGuard(
 // ─── Hanging Piece Detection ────────────────────────────────────────────────
 
 /**
- * Find all hanging pieces (attacked with no defender) for both sides.
+ * Whether `enemyColor` has a LEGAL capture of `square`. Returns null when it
+ * can't be determined (the position can't be legally re-cast with enemy to
+ * move — e.g. the other king would be in check). `chess.attackers` counts
+ * PINNED attackers that can't actually capture (the 2026-06-27 "pawn on e5
+ * hanging" false positive — its only attacker was a pinned knight), so this
+ * legality check is what lets `findHangingPieces` prune those.
+ */
+function enemyHasLegalCapture(chess: Chess, square: Square, enemyColor: Color): boolean | null {
+  try {
+    if (chess.turn() === enemyColor) {
+      return chess.moves({ verbose: true }).some((m) => m.to === square && m.captured);
+    }
+    // Flip the side to move to the enemy so we can generate their legal moves.
+    // Clear en-passant/castling fields to avoid spurious illegal-FEN throws.
+    const parts = chess.fen().split(' ');
+    parts[1] = enemyColor;
+    parts[3] = '-';
+    const probe = new Chess(parts.join(' '));
+    return probe.moves({ verbose: true }).some((m) => m.to === square && m.captured);
+  } catch {
+    return null; // undeterminable — caller falls back to the naive test
+  }
+}
+
+/**
+ * Find all hanging pieces (attacked, undefended, AND legally capturable) for
+ * both sides. The legal-capture guard prunes pinned-attacker false positives;
+ * it only ever REMOVES a piece the naive attacked-and-undefended test would
+ * have wrongly flagged, never adds one (so real hangs stay detected).
  */
 export function findHangingPieces(chess: Chess): HangingPiece[] {
   const hanging: HangingPiece[] = [];
@@ -513,13 +541,18 @@ export function findHangingPieces(chess: Chess): HangingPiece[] {
       if (attackers === 0) continue;
 
       const defended = isDefended(chess, sq, piece.color);
-      if (!defended) {
-        hanging.push({
-          square: sq,
-          piece: piece.type,
-          color: piece.color,
-        });
-      }
+      if (defended) continue;
+
+      // Pin-aware: drop the piece if the enemy provably has NO legal capture
+      // of it (its "attackers" are all pinned). null = undeterminable → keep
+      // the naive result rather than risk hiding a real hang.
+      if (enemyHasLegalCapture(chess, sq, enemyColor) === false) continue;
+
+      hanging.push({
+        square: sq,
+        piece: piece.type,
+        color: piece.color,
+      });
     }
   }
 

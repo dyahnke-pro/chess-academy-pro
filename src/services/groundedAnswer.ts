@@ -13,7 +13,8 @@
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
 import { Chess } from 'chess.js';
-import { findHangingPieces } from './tacticClassifier';
+import type { Square, PieceSymbol } from 'chess.js';
+import { seeGain } from './positionReadingService';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { BadHabit } from '../types';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -210,21 +211,29 @@ export function explainBestMoveGrounded(
     try {
       const c = new Chess(fenBefore);
       if (c.move(playedSan)) {
-        const hung = findHangingPieces(c).filter((h) => h.color === mc);
-        if (hung.length > 0) {
-          hung.sort((a, b) => (REVIEW_PIECE_VALUE[b.piece] ?? 0) - (REVIEW_PIECE_VALUE[a.piece] ?? 0));
-          const h = hung[0];
-          const captures = c.moves({ verbose: true }).filter((mm) => mm.to === h.square && mm.captured);
-          if (captures.length > 0) {
-            captures.sort((a, b) => (REVIEW_PIECE_VALUE[a.piece] ?? 0) - (REVIEW_PIECE_VALUE[b.piece] ?? 0));
-            const punish = captures[0];
-            const punisher = mc === 'w' ? 'Black' : 'White';
-            let givesCheck = false;
-            try { const after = new Chess(c.fen()); after.move(punish.san); givesCheck = after.inCheck(); } catch { /* keep false */ }
-            costClause = `your move let ${punisher} play ${punish.san}, winning the ${REVIEW_PIECE_NAME[h.piece]}${givesCheck ? ' with check' : ''}`;
-          } else {
-            costClause = `your move left the ${REVIEW_PIECE_NAME[h.piece]} on ${h.square} hanging`;
+        // A piece is only a real loss if the opponent has a LEGAL capture that
+        // wins material by static-exchange eval. `findHangingPieces` /
+        // `chess.attackers` count PINNED attackers that can't actually capture
+        // — the 2026-06-27 "your move left the pawn on e5 hanging" false
+        // positive, whose only attacker was a pinned knight (no legal capture
+        // existed). Drive off legal captures + SEE so a pin can never be read
+        // as a hang, and a defended-but-exchange-losing piece still is.
+        const legalCaps = c.moves({ verbose: true }).filter((m) => m.captured);
+        let worst: { square: Square; piece: PieceSymbol; gain: number; san: string } | null = null;
+        for (const cap of legalCaps) {
+          const to = cap.to as Square;
+          const victim = c.get(to);
+          if (!victim || victim.color !== mc) continue; // must capture the mover's own piece
+          const gain = seeGain(c, to); // material the opponent wins on that square
+          if (gain > 0 && (!worst || gain > worst.gain)) {
+            worst = { square: to, piece: victim.type, gain, san: cap.san };
           }
+        }
+        if (worst) {
+          const punisher = mc === 'w' ? 'Black' : 'White';
+          let givesCheck = false;
+          try { const after = new Chess(c.fen()); after.move(worst.san); givesCheck = after.inCheck(); } catch { /* keep false */ }
+          costClause = `your move let ${punisher} play ${worst.san}, winning the ${REVIEW_PIECE_NAME[worst.piece]}${givesCheck ? ' with check' : ''}`;
         }
       }
     } catch { /* board fact unavailable — stay silent */ }

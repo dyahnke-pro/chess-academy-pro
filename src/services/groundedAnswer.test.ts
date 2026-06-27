@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -265,5 +265,25 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
   it('returns null when there is nothing computed to say (no eval, no tactic)', () => {
     expect(assemblePositionAssessment({ evalCp: null, mateIn: null, studentColor: 'white' })).toBeNull();
     expect(assemblePositionAssessment({ evalCp: null, mateIn: null, studentColor: 'white', tactics: tactics() })).toBeNull();
+  });
+});
+
+describe('explainBestMoveGrounded — hanging is legal-capture + SEE grounded (no pinned-attacker false positive)', () => {
+  it('does NOT call a pawn hanging when its only attacker is PINNED (the 2026-06-27 e5 bug)', () => {
+    // White Pe5 is "attacked" by Black Nd7, but the knight is pinned to the
+    // Black king on d8 by the white rook on d1 — it can't legally capture, so
+    // e5 is NOT hanging. White plays a quiet a3; best move (a3) wins nothing.
+    const out = explainBestMoveGrounded('3k4/3n4/8/4P3/8/8/P7/3RK3 w - - 0 1', 'a3', 'a2a3', 'white');
+    expect(out).toBeNull(); // never "left the pawn on e5 hanging"
+  });
+
+  it('reports the punishing capture when the played move hangs a piece to a LEGAL capture', () => {
+    // White Pd4 is undefended and attacked by Black Nc6 (NOT pinned). White
+    // plays the quiet Ke2 (best move d4-d5 escapes); after Ke2, Black has the
+    // legal, material-winning Nxd4. bestMoveUci must be non-null or the helper
+    // short-circuits before the cost clause.
+    const out = explainBestMoveGrounded('4k3/8/2n5/8/3P4/8/8/4K3 w - - 0 1', 'Ke2', 'd4d5', 'white');
+    expect(out).toContain('Nxd4'); // a real, legal, material-winning capture
+    expect(out).toContain('winning the pawn');
   });
 });
