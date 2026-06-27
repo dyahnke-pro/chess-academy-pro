@@ -129,7 +129,7 @@ export function AnalysisPracticePage(): JSX.Element {
       captureEvent('analysis_practice_position_loaded', { questions: next.questions.length, source: src });
     } catch (err) {
       void logAppAudit({
-        kind: 'app-error', category: 'subsystem', source: 'AnalysisPracticePage.loadNext',
+        kind: 'stockfish-error', category: 'subsystem', source: 'AnalysisPracticePage.loadNext',
         summary: `failed to load a position: ${err instanceof Error ? err.message : String(err)}`,
       });
       setPhase('error');
@@ -186,9 +186,13 @@ export function AnalysisPracticePage(): JSX.Element {
         <Lightbulb size={22} className="text-indigo-400" />
         <h1 className="text-xl font-bold text-center" style={{ color: 'var(--color-text)' }}>Analysis Practice</h1>
         <PageHelp
-          pageKey="analysis-practice"
+          helpId="analysis-practice"
           title="Analysis Practice"
-          body="Read a position from one of your games and answer out loud (well — in the box). The coach checks your read against the engine + board facts and shows you the right answer when you miss. Tactics, threats, hanging pieces, material, pawn breaks — a real position-reading workout."
+          steps={[
+            { label: 'Read the position', body: 'A position from one of your games appears. Answer the question in the box — tactics, threats, hanging pieces, material, pawn breaks.' },
+            { label: 'Get graded', body: 'The coach checks your read against the engine + board facts and shows you the right answer when you miss. Nothing is invented — every answer is computed.' },
+            { label: 'From my mistakes', body: 'Switch the source to drill the exact positions you faced right before your own inaccuracies and blunders — the diagnostic workout.' },
+          ]}
         />
       </div>
 

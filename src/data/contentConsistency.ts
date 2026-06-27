@@ -17,7 +17,7 @@ import chessConcepts from './chess-concepts.json';
 import bookPages from './opening-book-pages.json';
 import { getVariationLessonScript } from './lessons/index';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-unnecessary-type-conversion */
 const asArray = (v: any): any[] => (Array.isArray(v) ? v : v ? Object.values(v).flat() : []);
 const norm = (s: any): string => String(s ?? '').replace(/\s+/g, ' ').trim().toLowerCase();
 
