@@ -77,6 +77,86 @@ David said: take notes, don't fix yet. Raw observations from the screenshot
   overlapped zone / correct the sticky stacking. (CoachReview/Review-with-Coach
   list — find the component that renders "Pick a game" + the source tabs.)
 
+## IMG_4297 — "Where you left the book" is WRONG (web/Vercel) 🐞🐞 (David: "Left book after move 1 I don't think is accurate. I know it's not.")
+Game review summary, Vienna (C25). Banner reads:
+> "At move 1 you went your own way. e4 is a common choice here and untested
+>  for White, from thousands of master games."
+
+Two distinct defects, same code path (`theoryDeviationScan.ts` +
+`explorerTranslate.ts` + `lookupMasterPlay({localOnly:true})` over
+`public/data/openings-masters-db.json`). Rendered by
+`GameReviewWeaknessCapture.tsx:125`.
+
+**Defect 1 — false "left book at move 1."** The Vienna IS 1.e4 — the single
+most-booked move in chess; you cannot leave book by playing it. The scan flags
+the FIRST player move whose SAN isn't found in the masters move-list at that
+position (`inBook = masters.moves.some(m => m.san === san)`,
+`theoryDeviationScan.ts:68`). It returned a deviation at ply 0 even though the
+masters TOP move there is e4 (the banner literally describes e4 as moves[0]).
+So `m.san === san` is FAILING for e4-vs-e4 → the local masters records' `san`
+values don't string-equal the tokenized played SAN (whitespace / notation /
+shape mismatch in `openings-masters-db.json`, or the start position maps to a
+sparse/normalized record). Net: the in-book test is unreliable → first move
+gets flagged. Likely affects EVERY game's marker, not just this one.
+
+**Defect 2 — self-contradictory masters text.** "a common choice … **untested**
+… **thousands of master games**" is impossible: `translateScore` only returns
+"untested" when `white+draws+black === 0` (`explorerTranslate.ts:27-29`), yet
+`describeSampleSize` said "thousands" (games ≥ 10000) and `translatePopularity`
+said "a common choice" (share ≥ 0.2). So the local masters move record for e4
+has a `games` count (≥10k) but a ZERO W/D/L breakdown. The
+`openings-masters-db.json` records (or the `localOnly` lookup mapping into
+`MasterPlayMove`) are missing/!populating white/draws/black → every score reads
+"untested."
+
+**Root cause (hypothesis):** the LOCAL masters DB shape doesn't match what
+`lookupMasterPlay(localOnly)` → `MasterPlayMove` (san + games + white/draws/
+black) expects: SANs don't string-match the played move AND W/D/L are absent.
+Confirm by: (a) inspecting `openings-masters-db.json` at the start FEN, and
+(b) running `scanTheoryDeviation` on his actual PGN. Fix in the batch:
+normalize SAN comparison (strip/standardize), require real W/D/L (or guard the
+"untested"+"thousands" contradiction), and add a regression test that 1.e4 in a
+Vienna is NOT flagged as off-book.
+
+## IMG_4298 — FEATURE: board previews for the positions the summary names (David: "I don't have any visual reference for these words. Could we include a preview that shows the board in the positions it's talking about?")
+The coach's game-summary prose cites specific moves/positions:
+"Move 8. Qa4 — an inaccuracy", "Move 12. c4 — the biggest mistake … 12.Bg5
+would have pinned …", "Move 20. Qf5", "Move 21. Kg7 — a blunder hanging
+everything on g7 and f8." None have a visual; the student reads squares
+they can't see.
+
+**Ask:** show a board preview at each cited position.
+
+**Design (grounded — G0/G3):**
+- We already have the game PGN + per-move annotations, so every cited ply's
+  FEN is computable via chess.js. Played move → FEN AFTER that ply (arrow on
+  the move). Suggested/alternative move ("would have", "instead": e.g. 12.Bg5)
+  → FEN BEFORE that ply + the suggestion as a GREEN arrow (validate it's legal;
+  if illegal, don't render).
+- Render an inline static `ConsistentChessboard` (static mode) mini-board under
+  / beside each citation, with the move arrow + key-square highlights the prose
+  names (g7/f8 for the 21.Kg7 line). Tapping it jumps the MAIN review board to
+  that ply (reuse the existing board+eval, no duplicate runtime).
+- Parse citations from the prose: `Move N. SAN`, `N.SAN`, `…SAN`. For EACH,
+  cross-check the SAN against the real game at that ply (annotations) — only
+  render a preview when it matches a real/legal position. A mismatch = the
+  prose hallucinated (see the "left book" bug) → skip + flag, never render a
+  fabricated board.
+
+**Better architecture (the real fix, ties to G0):** the summary's move
+references should be COMPUTED from the analysis data (the annotations already
+know which plies were inaccuracy/mistake/blunder + the engine's best
+alternative + the cited squares), and the LLM should only PHRASE them. Then
+each citation is a structured object `{ply, playedSan, suggestedSan?, squares[]}`
+and the preview is trivially grounded (no prose-parsing, no hallucinated
+boards). This is the same G0 inversion that also kills the "left book at move 1"
+class of inaccuracy. Recommend building the previews on top of structured,
+code-supplied citations rather than regexing the LLM prose.
+
+- Scope: largest of the batch. Net-new component (inline preview) + the
+  citation-structuring on the summary generator. Worth a small PLAN section
+  when we build.
+
 ## State of in-flight work (NOT shipped, awaiting his go)
 - Accuracy depth 12→16 (`gameAnalysisService.ts`) + `analysisDepth` stamp +
   re-analyze-when-stale gate + type field: **edited locally, uncommitted.**
