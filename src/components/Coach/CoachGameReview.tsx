@@ -428,6 +428,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     totalPlies: moves.length,
     // ship-5: scope hint callouts to this specific game.
     gameId: props.gameId,
+    // Deep-link: /coach/review/:id?move=N → the page hands us a
+    // 0-indexed initialMoveIndex; the walk's ply is 1-indexed (ply =
+    // moveIndex + 1). Without this the deep link only seeded the legacy
+    // reviewState and the walk header stayed at Ply 0 (audit 2026-06-27).
+    initialPly: initialMoveIndex !== undefined && initialMoveIndex >= 0
+      ? initialMoveIndex + 1
+      : undefined,
   });
 
   // Move sound on every walk advance — Polly + voice narration is

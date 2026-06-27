@@ -26,6 +26,14 @@ export interface UseReviewPlaybackArgs {
    *  parent to sync the board FEN / arrows). Called with the new
    *  currentPly (0 = starting position). */
   onPlyChange?: (ply: number) => void;
+  /** Deep-link landing ply (1-indexed) for `/coach/review/:id?move=N`.
+   *  The walk normally boots at ply 0, and the narration-load effect
+   *  snaps back to 0 — so a deep link set only via the legacy
+   *  reviewState never reached the walk header (audit 2026-06-27:
+   *  `?move=5` showed Ply 0). When set (>0), the walk lands here on
+   *  first paint and survives the narration reset. Clamped to the game
+   *  length. */
+  initialPly?: number;
 }
 
 export interface UseReviewPlaybackResult {
@@ -70,11 +78,14 @@ export interface UseReviewPlaybackResult {
  * enough.
  */
 export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybackResult {
-  const { narration, totalPlies, gameId, onPlyChange } = args;
+  const { narration, totalPlies, gameId, onPlyChange, initialPly } = args;
   const [currentPly, setCurrentPly] = useState(0);
   const [narrationState, setNarrationState] = useState<ReviewNarrationState>('idle');
   const introSpokenRef = useRef(false);
   const activeTokenRef = useRef(0);
+  /** Deep-link landing applied once — so user navigation afterward is
+   *  never overridden, and a same-component narration reopen snaps to 0. */
+  const appliedInitialRef = useRef(false);
 
   const segments = useMemo(() => narration?.segments ?? [], [narration]);
   // lastPly is the authoritative nav ceiling. Prefer the caller-supplied
@@ -89,9 +100,30 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     introSpokenRef.current = false;
     activeTokenRef.current += 1;
     voiceService.stop();
-    setCurrentPly(0);
+    // Deep-link: on the FIRST narration load, land the requested ply
+    // (e.g. ?move=N) instead of snapping to 0 — otherwise this reset
+    // clobbers the deep link the moment narration arrives.
+    if (!appliedInitialRef.current && initialPly !== undefined && initialPly > 0) {
+      appliedInitialRef.current = true;
+      setCurrentPly(Math.min(initialPly, lastPly));
+    } else {
+      setCurrentPly(0);
+    }
     setNarrationState('idle');
-  }, [narration]);
+  }, [narration, initialPly, lastPly]);
+
+  // Deep-link WITHOUT narration: if the game's plies are known but the
+  // narration bundle never arrives (generation failed / still pending),
+  // still land the requested ply once so the header reflects ?move=N.
+  // The narration-load effect above handles the with-narration path.
+  useEffect(() => {
+    if (appliedInitialRef.current) return;
+    if (initialPly === undefined || initialPly <= 0) return;
+    if (lastPly < 1) return;     // moves not loaded yet — wait
+    if (narration) return;       // the reset effect owns this case
+    appliedInitialRef.current = true;
+    setCurrentPly(Math.min(initialPly, lastPly));
+  }, [initialPly, lastPly, narration]);
 
   // Unmount: make sure we don't leave audio playing.
   useEffect(() => {

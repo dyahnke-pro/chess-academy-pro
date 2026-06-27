@@ -77,6 +77,48 @@ describe('useReviewPlayback', () => {
     expect(result.current.narrationState).toBe('speaking');
   });
 
+  it('lands the deep-link initialPly when narration loads (instead of snapping to 0)', async () => {
+    // /coach/review/:id?move=5 → initialPly 5. Regression: the deep link
+    // only seeded the legacy reviewState, and the narration-load reset
+    // snapped the walk header back to ply 0 (audit 2026-06-27).
+    const narration = makeNarration({
+      segments: [makeSegment({ ply: 1 }), makeSegment({ ply: 5, narration: 'Move five.' })],
+    });
+    const { result } = renderHook(() =>
+      useReviewPlayback({ narration, totalPlies: 33, initialPly: 5 }),
+    );
+    await waitFor(() => expect(result.current.currentPly).toBe(5));
+  });
+
+  it('clamps an out-of-range initialPly to the game length', async () => {
+    const narration = makeNarration({ segments: [makeSegment({ ply: 1 })] });
+    const { result } = renderHook(() =>
+      useReviewPlayback({ narration, totalPlies: 8, initialPly: 9999 }),
+    );
+    await waitFor(() => expect(result.current.currentPly).toBe(8));
+  });
+
+  it('lands the deep-link initialPly even when narration never arrives', async () => {
+    // Narration generation failed/pending — the header must still reflect
+    // ?move=N once the ply count is known.
+    const { result } = renderHook(() =>
+      useReviewPlayback({ narration: null, totalPlies: 20, initialPly: 7 }),
+    );
+    await waitFor(() => expect(result.current.currentPly).toBe(7));
+  });
+
+  it('does not override user navigation after the deep-link landed', async () => {
+    const narration = makeNarration({
+      segments: [makeSegment({ ply: 1 }), makeSegment({ ply: 2 }), makeSegment({ ply: 5 })],
+    });
+    const { result } = renderHook(() =>
+      useReviewPlayback({ narration, totalPlies: 33, initialPly: 5 }),
+    );
+    await waitFor(() => expect(result.current.currentPly).toBe(5));
+    act(() => { result.current.goForward(); });
+    expect(result.current.currentPly).toBe(6);
+  });
+
   it('goForward advances ply + cancels prior voice + speaks new segment', async () => {
     const narration = makeNarration({
       segments: [
