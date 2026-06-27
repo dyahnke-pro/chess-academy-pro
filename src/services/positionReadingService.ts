@@ -39,12 +39,12 @@ export function seeGain(chess: Chess, square: Square): number {
   if (!victim) return 0;
   const them: Color = victim.color === 'w' ? 'b' : 'w';
   const us = victim.color;
-  const attackers = chess.attackers(square, them)
-    .map((s) => PIECE_VALUE[chess.get(s)!.type])
-    .sort((a, b) => a - b);
-  const defenders = chess.attackers(square, us)
-    .map((s) => PIECE_VALUE[chess.get(s)!.type])
-    .sort((a, b) => a - b);
+  const valueAt = (s: Square): number[] => {
+    const p = chess.get(s);
+    return p ? [PIECE_VALUE[p.type]] : [];
+  };
+  const attackers = chess.attackers(square, them).flatMap(valueAt).sort((a, b) => a - b);
+  const defenders = chess.attackers(square, us).flatMap(valueAt).sort((a, b) => a - b);
   if (attackers.length === 0) return 0;
 
   // Swap list, from the capturing side's perspective (them captures first).
@@ -117,7 +117,7 @@ export function findPawnBreaks(fen: string): Square[] {
     // Play the push, then check whether the new pawn touches an enemy pawn.
     const probe = new Chess(fen);
     try { probe.move(mv); } catch { continue; }
-    const to = mv.to as Square;
+    const to: Square = mv.to;
     const file = to.charCodeAt(0) - 97;
     const rank = Number(to[1]);
     const forward = mover === 'w' ? 1 : -1;
