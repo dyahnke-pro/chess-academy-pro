@@ -135,6 +135,97 @@ export function findPawnBreaks(fen: string): Square[] {
   return [...breaks];
 }
 
+export interface PieceQualityNote {
+  square: Square;
+  piece: PieceSymbol;
+  color: Color;
+  quality: 'good' | 'bad';
+  /** Short reason: 'knight outpost' | 'bad bishop' | 'rook on the open file' | 'rook on a semi-open file'. */
+  reason: string;
+}
+
+/** Square colour: 'light' | 'dark' (a1 is dark). */
+function squareColor(sq: Square): 'light' | 'dark' {
+  const file = sq.charCodeAt(0) - 97;
+  const rank = Number(sq[1]) - 1;
+  return (file + rank) % 2 === 0 ? 'dark' : 'light';
+}
+
+/**
+ * Notable GOOD / BAD pieces in the position — the deterministic answer key for
+ * "is there a good or bad piece here?". Pure chess.js geometry, no engine:
+ *  - knight OUTPOST: a knight in enemy territory, defended by an own pawn, that
+ *    no enemy pawn can ever challenge (good).
+ *  - BAD bishop: a bishop with ≥4 of its own pawns fixed on its own colour (bad).
+ *  - rook on an OPEN / SEMI-OPEN file (good).
+ * Returns at most a handful, good ones first.
+ */
+export function findPieceQuality(fen: string): PieceQualityNote[] {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return []; }
+  const notes: PieceQualityNote[] = [];
+
+  // Pre-index pawns by file for the bad-bishop + rook-file checks.
+  const board = chess.board();
+  for (const row of board) {
+    for (const cell of row) {
+      if (!cell) continue;
+      const { square, type, color } = cell;
+      const file = square.charCodeAt(0) - 97;
+      const rank = Number(square[1]);
+
+      if (type === 'n') {
+        const inEnemyHalf = color === 'w' ? rank >= 4 && rank <= 6 : rank >= 3 && rank <= 5;
+        if (!inEnemyHalf) continue;
+        const pawnDefends = chess.attackers(square, color).some((s) => chess.get(s)?.type === 'p');
+        if (!pawnDefends) continue;
+        // Can an enemy pawn ever attack this square? Enemy pawns on an adjacent
+        // file, ahead of the knight (from their advance direction), could.
+        let challengeable = false;
+        for (const df of [-1, 1]) {
+          const af = file + df;
+          if (af < 0 || af > 7) continue;
+          const fileLetter = String.fromCharCode(97 + af);
+          for (let r = 1; r <= 8; r += 1) {
+            const occ = chess.get(`${fileLetter}${r}` as Square);
+            if (occ && occ.type === 'p' && occ.color !== color) {
+              // white knight challenged by a black pawn on a higher rank; black knight by a white pawn on a lower rank
+              if (color === 'w' ? r > rank : r < rank) challengeable = true;
+            }
+          }
+        }
+        if (!challengeable) notes.push({ square, piece: 'n', color, quality: 'good', reason: 'knight outpost' });
+      }
+
+      if (type === 'b') {
+        const bishopColor = squareColor(square);
+        let ownPawnsOnColor = 0;
+        for (const r2 of board) {
+          for (const c2 of r2) {
+            if (c2 && c2.type === 'p' && c2.color === color && squareColor(c2.square) === bishopColor) ownPawnsOnColor += 1;
+          }
+        }
+        if (ownPawnsOnColor >= 4) notes.push({ square, piece: 'b', color, quality: 'bad', reason: 'bad bishop (hemmed in by its own pawns)' });
+      }
+
+      if (type === 'r') {
+        const fileLetter = String.fromCharCode(97 + file);
+        let ownPawns = 0;
+        let enemyPawns = 0;
+        for (let r = 1; r <= 8; r += 1) {
+          const occ = chess.get(`${fileLetter}${r}` as Square);
+          if (occ && occ.type === 'p') { if (occ.color === color) ownPawns += 1; else enemyPawns += 1; }
+        }
+        if (ownPawns === 0 && enemyPawns === 0) notes.push({ square, piece: 'r', color, quality: 'good', reason: 'rook on the open file' });
+        else if (ownPawns === 0 && enemyPawns > 0) notes.push({ square, piece: 'r', color, quality: 'good', reason: 'rook on a semi-open file' });
+      }
+    }
+  }
+
+  // Good pieces first (more satisfying to spot), then cap.
+  return notes.sort((a, b) => (a.quality === b.quality ? 0 : a.quality === 'good' ? -1 : 1)).slice(0, 4);
+}
+
 export interface SampledPosition {
   fen: string;
   /** 1-indexed ply this position is BEFORE (i.e. the side to move is on move). */
@@ -187,7 +278,7 @@ export function samplePositionsFromGame(
   return picks;
 }
 
-export type ReadingQuestionType = 'tactic' | 'threat' | 'hanging' | 'material' | 'mate' | 'check' | 'pawn-break';
+export type ReadingQuestionType = 'tactic' | 'threat' | 'hanging' | 'material' | 'mate' | 'check' | 'pawn-break' | 'piece';
 
 export interface ReadingQuestion {
   id: string;
@@ -294,7 +385,21 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext):
     });
   }
 
-  // 6) MATERIAL — always answerable from ground truth.
+  // 6) GOOD / BAD PIECE — the deterministic piece-quality read.
+  const quality = findPieceQuality(fen);
+  if (quality.length > 0) {
+    const note = quality[0];
+    const side = note.color === (sideToMove === 'white' ? 'w' : 'b') ? 'your' : "your opponent's";
+    out.push({
+      id: 'piece', type: 'piece',
+      prompt: 'Is there a notably good or bad piece on the board? Which one?',
+      answer: `${side[0].toUpperCase()}${side.slice(1)} ${PIECE_NAME[note.piece]} on ${note.square} is a ${note.reason}.`,
+      acceptTokens: [sq(note.square), PIECE_NAME[note.piece], note.quality, ...note.reason.toLowerCase().split(/\s+/).filter((w) => w.length > 3)],
+      negative: false,
+    });
+  }
+
+  // 7) MATERIAL — always answerable from ground truth.
   if (facts?.material) {
     out.push({
       id: 'material', type: 'material',

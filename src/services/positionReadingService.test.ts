@@ -4,6 +4,7 @@ import {
   seeGain,
   findHangingBySee,
   findPawnBreaks,
+  findPieceQuality,
   samplePositionsFromGame,
   buildReadingQuestions,
   gradeReadingAnswerDeterministic,
@@ -64,6 +65,39 @@ describe('findPawnBreaks', () => {
 
   it('returns [] when no pawn lever exists', () => {
     expect(findPawnBreaks('4k3/8/8/8/8/8/4P3/4K3 w - - 0 1')).toEqual([]);
+  });
+});
+
+describe('findPieceQuality', () => {
+  it('flags a knight outpost (enemy half, pawn-defended, unchallengeable)', () => {
+    const notes = findPieceQuality('4k3/8/8/3N4/4P3/8/8/4K3 w - - 0 1');
+    const outpost = notes.find((n) => n.square === 'd5');
+    expect(outpost?.quality).toBe('good');
+    expect(outpost?.reason).toContain('outpost');
+  });
+
+  it('does NOT flag a knight as an outpost when an enemy pawn can challenge it', () => {
+    // Black c-pawn on c6 can play …c6-? no — put a black pawn on c7 that can advance to c6 and hit d5.
+    const notes = findPieceQuality('4k3/2p5/8/3N4/4P3/8/8/4K3 w - - 0 1');
+    expect(notes.find((n) => n.square === 'd5' && n.reason.includes('outpost'))).toBeUndefined();
+  });
+
+  it('flags a bad bishop hemmed in by ≥4 of its own pawns on its colour', () => {
+    const notes = findPieceQuality('4k3/8/8/8/4P3/8/P1P1B1P1/4K3 w - - 0 1');
+    const bishop = notes.find((n) => n.square === 'e2');
+    expect(bishop?.quality).toBe('bad');
+    expect(bishop?.reason).toContain('bishop');
+  });
+
+  it('flags a rook on an open file', () => {
+    const notes = findPieceQuality('4k3/8/8/8/8/8/8/3RK3 w - - 0 1');
+    const rook = notes.find((n) => n.square === 'd1');
+    expect(rook?.quality).toBe('good');
+    expect(rook?.reason).toContain('open');
+  });
+
+  it('returns [] on an invalid FEN', () => {
+    expect(findPieceQuality('garbage')).toEqual([]);
   });
 });
 
