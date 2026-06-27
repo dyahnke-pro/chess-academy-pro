@@ -157,6 +157,35 @@ code-supplied citations rather than regexing the LLM prose.
   citation-structuring on the summary generator. Worth a small PLAN section
   when we build.
 
+## IMG_4299 — review per-move narration HALLUCINATES a hanging pawn (web/Vercel) 🐞🐞 (David: "narration said I left the pawn on e5 hanging. Knight is pinned, it's not hanging.")
+Game Review, Ply 15/42, eval -0.3, badge INACCURACY.
+
+**Defect A — false hanging claim (G0/G3, narration-accuracy).** Narration said
+the e5 pawn is hanging. Verified from the board: the white e5 pawn (dark square)
+is attacked by NOTHING — no black pawn on d6/f6, only black knight is on g8
+(can't reach e5), c8 bishop is light-squared (can't touch dark e5), d8 queen has
+no line to e5. **Not hanging.** The real motif is a PINNED knight (David), which
+is a different thing and is not "hanging." So the REVIEW per-move narration is
+eyeballing the board and inventing a hanging piece — the exact disease the
+narrationAccuracy gate + the grounded board-facts (liveTacticsContext HANGING =
+attacked-AND-undefended, now also SEE via positionReadingService) exist to kill.
+→ The review walk narration is NOT routed through the grounded hanging/pin
+facts (or isn't gated). Same inversion as the recap (#6) and read-position: the
+narration must VOICE computed hanging/pin facts, never decide them. A correct
+grounded block would say "the knight is pinned" / "nothing is hanging," not
+"e5 hangs." Tie this fix to the recap grounding — it's the same surface's
+ungrounded voice.
+  - Bonus: the grounded set needs PIN awareness surfaced to the narration (so
+    it can say "pinned" correctly), not just hanging/SEE.
+
+**Defect B — can't scroll to the narration text (overlap again).** David:
+"I cannot scroll down here and see the text." During the WALK (not game-end),
+the narration/subtitle below the board is unreachable — the bottom stack
+("Replay narration"/"Ask" + bottom-nav) covers it and the area doesn't scroll.
+Same root as #2 (footer/bottom overlap) but confirmed mid-walk too: the review
+content region isn't scrollable / lacks bottom inset for the fixed controls +
+nav. Whatever the student is supposed to READ is getting clipped on every ply.
+
 ## State of in-flight work (NOT shipped, awaiting his go)
 - Accuracy depth 12→16 (`gameAnalysisService.ts`) + `analysisDepth` stamp +
   re-analyze-when-stale gate + type field: **edited locally, uncommitted.**
