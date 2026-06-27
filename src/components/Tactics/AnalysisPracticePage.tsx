@@ -14,6 +14,7 @@ import {
   type ReadingGrade,
 } from '../../services/positionReadingService';
 import { gradeReadingAnswer } from '../../services/positionReadingGrader';
+import { recordReadingResult } from '../../services/analysisPracticeStats';
 import { captureEvent } from '../../services/analytics';
 import { logAppAudit } from '../../services/appAuditor';
 
@@ -107,6 +108,7 @@ export function AnalysisPracticePage(): JSX.Element {
     setGrading(false);
     askedRef.current += 1;
     if (g.verdict === 'correct') correctRef.current += 1;
+    void recordReadingResult(question.type, g.verdict === 'correct');
     captureEvent('analysis_practice_answer', { questionType: question.type, verdict: g.verdict });
   }, [question, answer, grade, grading]);
 
