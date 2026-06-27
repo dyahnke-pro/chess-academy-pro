@@ -278,6 +278,63 @@ export function samplePositionsFromGame(
   return picks;
 }
 
+/** Minimal annotation shape for mistake-sourcing (matches GameRecord.annotations). */
+export interface MistakeAnnotation {
+  moveNumber: number;
+  color: 'white' | 'black';
+  classification: string | null;
+}
+
+/**
+ * The positions the student faced RIGHT BEFORE their own mistakes — the
+ * "analyze positions from games right before a critical mistake" source. Walks
+ * the game's annotations, and for each inaccuracy/mistake/blunder on the
+ * student's side returns the `fenBefore` (the clean position they had to read).
+ * Robust to annotation ordering: matches by (moveNumber, color), not array
+ * index. Skips in-check positions (forced) and unparseable games.
+ */
+export function findMistakePositions(
+  pgn: string,
+  annotations: MistakeAnnotation[],
+  studentColor: 'white' | 'black',
+  opts: { count?: number } = {},
+): SampledPosition[] {
+  const count = opts.count ?? 8;
+  let game: Chess;
+  try { game = new Chess(); game.loadPgn(pgn); } catch { return []; }
+  const history = game.history({ verbose: true });
+  if (history.length === 0) return [];
+
+  const flagged = new Set<string>();
+  for (const a of annotations) {
+    if (a.color !== studentColor) continue;
+    if (a.classification === 'inaccuracy' || a.classification === 'mistake' || a.classification === 'blunder') {
+      flagged.add(`${a.moveNumber}:${a.color}`);
+    }
+  }
+  if (flagged.size === 0) return [];
+
+  const replay = new Chess();
+  const out: SampledPosition[] = [];
+  for (let i = 0; i < history.length; i += 1) {
+    const ply = i + 1;
+    const color: 'white' | 'black' = ply % 2 === 1 ? 'white' : 'black';
+    const moveNumber = Math.ceil(ply / 2);
+    const before = replay.fen();
+    const mv = history[i];
+    if (color === studentColor && flagged.has(`${moveNumber}:${color}`) && !replay.inCheck()) {
+      out.push({ fen: before, ply, playedNext: mv.san });
+    }
+    try { replay.move(mv.san); } catch { break; }
+  }
+  if (out.length <= count) return out;
+  // Even spread across the game.
+  const picks: SampledPosition[] = [];
+  const step = out.length / count;
+  for (let i = 0; i < count; i += 1) picks.push(out[Math.floor(i * step)]);
+  return picks;
+}
+
 export type ReadingQuestionType = 'tactic' | 'threat' | 'hanging' | 'material' | 'mate' | 'check' | 'pawn-break' | 'piece';
 
 export interface ReadingQuestion {

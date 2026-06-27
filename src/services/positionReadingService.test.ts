@@ -6,6 +6,7 @@ import {
   findPawnBreaks,
   findPieceQuality,
   samplePositionsFromGame,
+  findMistakePositions,
   buildReadingQuestions,
   gradeReadingAnswerDeterministic,
 } from './positionReadingService';
@@ -119,6 +120,39 @@ describe('samplePositionsFromGame', () => {
 
   it('returns [] for an unparseable PGN', () => {
     expect(samplePositionsFromGame('1. zz9 qq8')).toEqual([]);
+  });
+});
+
+describe('findMistakePositions', () => {
+  const PGN = '1. e4 e5 2. Qh5 Nc6 3. Bc4 g6 4. Qf3 Nf6';
+
+  it('returns the position BEFORE a student-side flagged move (fenBefore)', () => {
+    const positions = findMistakePositions(
+      PGN,
+      [{ moveNumber: 2, color: 'white', classification: 'inaccuracy' }],
+      'white',
+    );
+    expect(positions.length).toBe(1);
+    expect(positions[0].playedNext).toBe('Qh5');
+    // The position before 2.Qh5 is after 1.e4 e5 — White to move.
+    expect(new Chess(positions[0].fen).turn()).toBe('w');
+  });
+
+  it('ignores flags on the opponent\'s side', () => {
+    const positions = findMistakePositions(
+      PGN,
+      [{ moveNumber: 2, color: 'black', classification: 'blunder' }],
+      'white',
+    );
+    expect(positions).toEqual([]);
+  });
+
+  it('returns [] when the student made no flagged moves', () => {
+    expect(findMistakePositions(PGN, [{ moveNumber: 3, color: 'white', classification: 'good' }], 'white')).toEqual([]);
+  });
+
+  it('returns [] for an unparseable PGN', () => {
+    expect(findMistakePositions('1. zz9', [{ moveNumber: 1, color: 'white', classification: 'blunder' }], 'white')).toEqual([]);
   });
 });
 

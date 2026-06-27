@@ -9,16 +9,21 @@ import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { buildFedTacticsContext } from '../../services/liveTacticsContext';
 import {
   samplePositionsFromGame,
+  findMistakePositions,
   buildReadingQuestions,
   type ReadingQuestion,
   type ReadingGrade,
+  type SampledPosition,
 } from '../../services/positionReadingService';
 import { gradeReadingAnswer } from '../../services/positionReadingGrader';
 import { recordReadingResult } from '../../services/analysisPracticeStats';
+import { determinePlayerColor } from '../../services/mistakePuzzleService';
 import { captureEvent } from '../../services/analytics';
 import { logAppAudit } from '../../services/appAuditor';
+import type { GameRecord } from '../../types';
 
 type Phase = 'loading' | 'empty' | 'error' | 'ready';
+export type PositionSource = 'any' | 'mistakes';
 
 interface LoadedPosition {
   fen: string;
@@ -27,28 +32,58 @@ interface LoadedPosition {
   gameLabel: string;
 }
 
-/** Pull a fresh, analysable middlegame position from the user's stored games. */
-async function loadRandomPosition(rating: number): Promise<LoadedPosition | null> {
+interface Usernames { chesscom?: string; lichess?: string }
+
+/** Build the answer-key question set for a sampled position (shared by both
+ *  sources). Returns null when the position yields no concrete question. */
+async function buildLoaded(pick: SampledPosition, game: GameRecord, rating: number): Promise<LoadedPosition | null> {
+  let sideToMove: 'w' | 'b' = 'w';
+  try { sideToMove = new Chess(pick.fen).turn(); } catch { return null; }
+  const tactics = await buildFedTacticsContext(pick.fen, sideToMove, rating);
+  const questions = buildReadingQuestions(pick.fen, tactics);
+  if (questions.length === 0) return null;
+  return {
+    fen: pick.fen,
+    orientation: sideToMove === 'w' ? 'white' : 'black',
+    questions,
+    gameLabel: `${game.white || 'White'} – ${game.black || 'Black'}`,
+  };
+}
+
+/** Pull a position from the user's games — either ANY middlegame position, or
+ *  one they faced RIGHT BEFORE a mistake (the diagnostic source). */
+async function loadPosition(rating: number, source: PositionSource, usernames: Usernames): Promise<LoadedPosition | null> {
   const games = await db.games.toArray();
   if (games.length === 0) return null;
-  // Try a handful of random games until one yields a usable position.
+
+  if (source === 'mistakes') {
+    const annotated = games.filter((g) => g.pgn && g.annotations && g.annotations.length > 0);
+    const order = [...annotated].sort(() => Math.random() - 0.5).slice(0, 12);
+    for (const game of order) {
+      const username = game.source === 'chesscom' ? usernames.chesscom : game.source === 'lichess' ? usernames.lichess : undefined;
+      const studentColor = determinePlayerColor(game, username);
+      if (!studentColor) continue;
+      const positions = findMistakePositions(
+        game.pgn,
+        (game.annotations ?? []).map((a) => ({ moveNumber: a.moveNumber, color: a.color, classification: a.classification })),
+        studentColor,
+        { count: 6 },
+      );
+      if (positions.length === 0) continue;
+      const loaded = await buildLoaded(positions[Math.floor(Math.random() * positions.length)], game, rating);
+      if (loaded) return loaded;
+    }
+    return null;
+  }
+
+  // 'any' — a random middlegame position from any game.
   const order = [...games].sort(() => Math.random() - 0.5).slice(0, 8);
   for (const game of order) {
     if (!game.pgn) continue;
     const positions = samplePositionsFromGame(game.pgn, { count: 6 });
     if (positions.length === 0) continue;
-    const pick = positions[Math.floor(Math.random() * positions.length)];
-    let sideToMove: 'w' | 'b' = 'w';
-    try { sideToMove = new Chess(pick.fen).turn(); } catch { continue; }
-    const tactics = await buildFedTacticsContext(pick.fen, sideToMove, rating);
-    const questions = buildReadingQuestions(pick.fen, tactics);
-    if (questions.length === 0) continue;
-    return {
-      fen: pick.fen,
-      orientation: sideToMove === 'w' ? 'white' : 'black',
-      questions,
-      gameLabel: `${game.white || 'White'} – ${game.black || 'Black'}`,
-    };
+    const loaded = await buildLoaded(positions[Math.floor(Math.random() * positions.length)], game, rating);
+    if (loaded) return loaded;
   }
   return null;
 }
@@ -63,7 +98,12 @@ export function AnalysisPracticePage(): JSX.Element {
   const navigate = useNavigate();
   const activeProfile = useAppStore((s) => s.activeProfile);
   const rating = activeProfile?.currentRating ?? 1200;
+  const usernames: Usernames = {
+    chesscom: activeProfile?.preferences?.chessComUsername,
+    lichess: activeProfile?.preferences?.lichessUsername,
+  };
 
+  const [source, setSource] = useState<PositionSource>('any');
   const [phase, setPhase] = useState<Phase>('loading');
   const [position, setPosition] = useState<LoadedPosition | null>(null);
   const [qIndex, setQIndex] = useState(0);
@@ -72,18 +112,21 @@ export function AnalysisPracticePage(): JSX.Element {
   const [grading, setGrading] = useState(false);
   const askedRef = useRef(0);
   const correctRef = useRef(0);
+  // Keep usernames out of loadNext's dep array (object identity churns each render).
+  const usernamesRef = useRef(usernames);
+  usernamesRef.current = usernames;
 
-  const loadNext = useCallback(async () => {
+  const loadNext = useCallback(async (src: PositionSource) => {
     setPhase('loading');
     setGrade(null);
     setAnswer('');
     setQIndex(0);
     try {
-      const next = await loadRandomPosition(rating);
+      const next = await loadPosition(rating, src, usernamesRef.current);
       if (!next) { setPhase('empty'); return; }
       setPosition(next);
       setPhase('ready');
-      captureEvent('analysis_practice_position_loaded', { questions: next.questions.length });
+      captureEvent('analysis_practice_position_loaded', { questions: next.questions.length, source: src });
     } catch (err) {
       void logAppAudit({
         kind: 'app-error', category: 'subsystem', source: 'AnalysisPracticePage.loadNext',
@@ -93,10 +136,20 @@ export function AnalysisPracticePage(): JSX.Element {
     }
   }, [rating]);
 
+  const switchSource = useCallback((src: PositionSource) => {
+    if (src === source) return;
+    setSource(src);
+    captureEvent('analysis_practice_source_changed', { source: src });
+    void loadNext(src);
+  }, [source, loadNext]);
+
   useEffect(() => {
     captureEvent('analysis_practice_started', {});
-    void loadNext();
-  }, [loadNext]);
+    void loadNext('any');
+    // Mount-only; subsequent loads go through loadNext/switchSource with the
+    // chosen source.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const question = position?.questions[qIndex] ?? null;
 
@@ -116,13 +169,13 @@ export function AnalysisPracticePage(): JSX.Element {
     if (!position) return;
     if (qIndex + 1 >= position.questions.length) {
       captureEvent('analysis_practice_completed', { asked: askedRef.current, correct: correctRef.current });
-      void loadNext();
+      void loadNext(source);
       return;
     }
     setQIndex((i) => i + 1);
     setGrade(null);
     setAnswer('');
-  }, [position, qIndex, loadNext]);
+  }, [position, qIndex, loadNext, source]);
 
   return (
     <div
@@ -137,6 +190,24 @@ export function AnalysisPracticePage(): JSX.Element {
           title="Analysis Practice"
           body="Read a position from one of your games and answer out loud (well — in the box). The coach checks your read against the engine + board facts and shows you the right answer when you miss. Tactics, threats, hanging pieces, material, pawn breaks — a real position-reading workout."
         />
+      </div>
+
+      {/* Position source: any middlegame position, or the ones you faced right
+          before your own mistakes (the diagnostic). */}
+      <div className="flex items-center justify-center gap-1 max-w-lg mx-auto w-full" data-testid="analysis-practice-source">
+        {([['any', 'Any position'], ['mistakes', 'From my mistakes']] as const).map(([val, label]) => (
+          <button
+            key={val}
+            onClick={() => switchSource(val)}
+            className="px-3 py-1.5 rounded-lg text-xs font-semibold border-2 transition-colors"
+            style={source === val
+              ? { borderColor: 'rgba(99,102,241,0.6)', background: 'rgba(99,102,241,0.15)', color: 'var(--color-text)' }
+              : { borderColor: 'var(--color-border)', background: 'transparent', color: 'var(--color-text-muted)' }}
+            data-testid={`analysis-practice-source-${val}`}
+          >
+            {label}
+          </button>
+        ))}
       </div>
 
       {phase === 'loading' && (
@@ -169,7 +240,7 @@ export function AnalysisPracticePage(): JSX.Element {
           <X size={36} className="text-red-400" />
           <p style={{ color: 'var(--color-text)' }}>Something went wrong loading a position.</p>
           <button
-            onClick={() => void loadNext()}
+            onClick={() => void loadNext(source)}
             className="px-4 py-2 rounded-xl border-2 font-semibold"
             style={{ borderColor: 'rgba(99,102,241,0.4)', background: 'rgba(99,102,241,0.1)', color: 'var(--color-text)' }}
             data-testid="analysis-practice-retry"
