@@ -226,6 +226,60 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
   return notes.sort((a, b) => (a.quality === b.quality ? 0 : a.quality === 'good' ? -1 : 1)).slice(0, 4);
 }
 
+/**
+ * GROUNDED reading-facts block for the coach's "Read this position" narration
+ * (G0 — the coach VOICES these, never invents beyond them). Complements the
+ * tactics sub-block already in `buildChessContextMessage`: that one covers naive
+ * (attacked-AND-undefended) hanging + the attack/defense map; THIS one adds the
+ * three facts it lacks — SEE-accurate (value-aware) material at risk, candidate
+ * pawn breaks, and good/bad piece quality. Framed to REINFORCE, not contradict,
+ * the naive block: the SEE list says "loses material in the exchange" (a piece
+ * here may be DEFENDED yet still drop material to a cheaper attacker), never
+ * "undefended". Returns '' when there's nothing notable to add.
+ */
+export function formatReadingFacts(fen: string, studentColor: 'white' | 'black'): string {
+  const me: Color = studentColor === 'white' ? 'w' : 'b';
+  const hanging = findHangingBySee(fen);
+  const breaks = findPawnBreaks(fen);
+  const quality = findPieceQuality(fen);
+  if (hanging.length === 0 && breaks.length === 0 && quality.length === 0) return '';
+
+  const side = (c: Color): string => (c === 'w' ? 'white' : 'black');
+  const lines: string[] = [
+    'READING FACTS (GROUND TRUTH — Static Exchange Eval + structure, computed in code; VOICE these, never invent beyond them):',
+  ];
+
+  // SEE material-at-risk, split by whose piece it is relative to the student.
+  const mine = hanging.filter((h) => h.color === me);
+  const theirs = hanging.filter((h) => h.color !== me);
+  if (mine.length > 0 || theirs.length > 0) {
+    lines.push('  MATERIAL AT RISK (SEE — a forced capture sequence wins material here; the piece may be DEFENDED yet still lose to a cheaper attacker — say "loses the exchange", NOT "undefended"):');
+    if (mine.length > 0) {
+      const list = mine.map((h) => `${PIECE_NAME[h.piece]} on ${h.square} (drops ${h.gain})`).join(', ');
+      lines.push(`    YOUR material at risk — WARN the student: ${list}.`);
+    }
+    if (theirs.length > 0) {
+      const list = theirs.map((h) => `${side(h.color)} ${PIECE_NAME[h.piece]} on ${h.square} (wins ${h.gain})`).join(', ');
+      lines.push(`    material YOU can win — point out the opportunity: ${list}.`);
+    }
+  } else {
+    lines.push('  MATERIAL AT RISK (SEE): NONE — no piece loses material to a forced exchange.');
+  }
+
+  if (breaks.length > 0) {
+    lines.push(`  PAWN BREAKS for the side to move (legal pushes that strike the enemy pawn structure): ${breaks.join(', ')}.`);
+  }
+
+  if (quality.length > 0) {
+    const good = quality.filter((q) => q.quality === 'good').map((q) => `${side(q.color)} ${PIECE_NAME[q.piece]} on ${q.square} (${q.reason})`);
+    const bad = quality.filter((q) => q.quality === 'bad').map((q) => `${side(q.color)} ${PIECE_NAME[q.piece]} on ${q.square} (${q.reason})`);
+    if (good.length > 0) lines.push(`  GOOD PIECES: ${good.join(', ')}.`);
+    if (bad.length > 0) lines.push(`  BAD PIECES: ${bad.join(', ')}.`);
+  }
+
+  return lines.join('\n');
+}
+
 export interface SampledPosition {
   fen: string;
   /** 1-indexed ply this position is BEFORE (i.e. the side to move is on move). */

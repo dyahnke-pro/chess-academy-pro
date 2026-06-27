@@ -9,6 +9,7 @@ import {
   findMistakePositions,
   buildReadingQuestions,
   gradeReadingAnswerDeterministic,
+  formatReadingFacts,
 } from './positionReadingService';
 import type { TacticsLiveContext } from '../coach/types';
 
@@ -241,5 +242,41 @@ describe('gradeReadingAnswerDeterministic', () => {
     const negQ = { ...hangingQ, answer: 'No — nothing is hanging.', acceptTokens: [], negative: true };
     expect(gradeReadingAnswerDeterministic(negQ, 'nothing, everything is defended').verdict).toBe('correct');
     expect(gradeReadingAnswerDeterministic(negQ, 'the rook on a1').verdict).toBe('wrong');
+  });
+});
+
+describe('formatReadingFacts (grounded read-this-position block)', () => {
+  it('flags the student\'s own at-risk material as a WARNING (SEE, value-aware)', () => {
+    // White (student) queen d5 loses the exchange to the black knight on f6.
+    const block = formatReadingFacts('4k3/8/5n2/3Q4/4P3/8/8/4K3 w - - 0 1', 'white');
+    expect(block).toContain('MATERIAL AT RISK');
+    expect(block).toContain('YOUR material at risk');
+    expect(block).toContain('queen on d5');
+    // Frames the risk as an EXCHANGE loss, not as "undefended" (the piece may
+    // well be defended — the instruction tells the coach to say so).
+    expect(block).toContain('loses the exchange');
+  });
+
+  it('flags enemy material the student can win as an OPPORTUNITY', () => {
+    // Same board read from Black's seat: the d5 queen is now THEIRS to win.
+    const block = formatReadingFacts('4k3/8/5n2/3Q4/4P3/8/8/4K3 w - - 0 1', 'black');
+    expect(block).toContain('material YOU can win');
+    expect(block).toContain('white queen on d5');
+  });
+
+  it('names pawn breaks and good/bad pieces when present', () => {
+    // White knight outpost on d5 (pawn-supported, unchallengeable) + an e4/d5
+    // pawn-break tension.
+    const block = formatReadingFacts('4k3/8/8/3N4/4P3/8/8/4K3 w - - 0 1', 'white');
+    expect(block).toContain('GOOD PIECES');
+    expect(block).toContain('knight outpost');
+  });
+
+  it('returns an empty string when there is nothing notable to add', () => {
+    expect(formatReadingFacts('4k3/8/8/8/8/8/8/4K3 w - - 0 1', 'white')).toBe('');
+  });
+
+  it('returns an empty string on an invalid FEN (never throws)', () => {
+    expect(formatReadingFacts('not a fen', 'white')).toBe('');
   });
 });

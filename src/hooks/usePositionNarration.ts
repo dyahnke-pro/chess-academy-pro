@@ -4,6 +4,7 @@ import { isSpokenSentenceGrounded } from '../services/coachAnswerGates';
 import { voiceService } from '../services/voiceService';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { buildChessContextMessage, POSITION_NARRATION_ADDITION } from '../services/coachPrompts';
+import { formatReadingFacts } from '../services/positionReadingService';
 import { logAppAudit } from '../services/appAuditor';
 import { db } from '../db/schema';
 import {
@@ -197,6 +198,18 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       const profile = await db.profiles.get('main');
       const rating = profile?.currentRating ?? 1200;
 
+      // G0 — compute the extra reading facts (SEE-accurate material at risk,
+      // pawn breaks, good/bad piece quality) in code and hand them to the coach
+      // so its spoken read is grounded, not eyeballed. Complements the tactics
+      // sub-block buildChessContextMessage already injects. Wrapped defensively:
+      // a bad FEN returns '' and the narration falls back to the base facts.
+      let readingFacts = '';
+      try {
+        readingFacts = formatReadingFacts(args.fen, args.playerColor);
+      } catch {
+        readingFacts = '';
+      }
+
       const context: CoachContext = {
         fen: args.fen,
         lastMoveSan: null,
@@ -207,7 +220,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         playerMove: null,
         moveClassification: null,
         playerProfile: { rating, weaknesses: [] },
-        additionalContext: `The student is playing as ${args.playerColor}. They just tapped "Read this position" — give them a live, spoken narration of what you see.`,
+        additionalContext: `${readingFacts ? `${readingFacts}\n\n` : ''}The student is playing as ${args.playerColor}. They just tapped "Read this position" — give them a live, spoken narration of what you see.`,
       };
 
       const userMessage = buildChessContextMessage(context);

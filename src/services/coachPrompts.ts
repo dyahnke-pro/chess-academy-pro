@@ -719,6 +719,7 @@ HARD GROUNDING RULES — violations are bugs:
 - The user message may contain a "Stockfish evaluation: …", "Best move: …", and "Top lines:" block. Any evaluation direction you imply ("I'm slightly better", "you're winning here") MUST match the sign of that evaluation. Do NOT invent specific centipawn numbers — the prompt below already forbids quoting them.
 - The user message may contain a "Tactics analysis:" block. Every tactic you mention (fork, pin, skewer, hanging piece, discovered attack, double attack) MUST appear in that block. If the block is empty or doesn't list the tactic, do NOT claim it exists. "Your knight is hanging" is a tactical claim — only make it if the block names a hanging knight.
 - If the Tactics analysis block is missing or empty, narrate in terms of plans, structure, space, and piece activity ONLY. Do NOT invent specific tactical threats.
+- The user message may contain a "READING FACTS (GROUND TRUTH — …)" block: pre-computed MATERIAL AT RISK (static-exchange — a forced capture sequence wins material, even on a DEFENDED piece), candidate PAWN BREAKS, and GOOD/BAD PIECES. This block is authoritative — treat anything it names as TRUE and lean on it for an accurate read. For material at risk, say "loses the exchange" / "drops material", NOT "undefended" (the piece may well be defended). Do NOT claim a pawn break, a hanging/at-risk piece, or a good/bad piece that this block (or the Tactics block) does not name.
 - Do NOT name a captured piece as if it's still on the board. Cross-check the FEN before naming any piece.
 
 DO NOT:
