@@ -293,6 +293,40 @@ DISCIPLINE (G0/G3): every demonstrated move + arrow comes from the COMPUTED line
 (engine PV / refutation / chess.js geometry), never invented. No line to show →
 show less, never fake a piece dance. Voice-gated reveal, not timer-raced.
 
+## AUDIT-STREAM FINDINGS (pulled live, AUDIT_STREAM_SECRET) — 2 big ones
+**Finding 1 — NO-SOUND root cause (#3): Polly is FAILING → Web Speech fallover
+on ~every line.** The live stream showed a `voice-fallover` ("Polly failed →
+Web Speech") paired with nearly every `review-narration-spoken` /
+`voice-speak-invoked` in David's session. On iOS TestFlight the Web Speech
+fallback is the likely silence. Server-side `/api/tts` (Polly) is failing.
+Prime suspect: `AWS_*_POLLY` creds (present in Vercel, encrypted — can't read
+values; symptom is Polly failing). ACTION (batch): verify /api/tts returns a
+Polly stream on prod (G4), check the AWS Polly creds/region, and confirm the
+iOS audio path actually plays the Web Speech fallback (or make Polly not fail).
+This is the no-sound bug, root-caused from the audit data.
+
+**Finding 2 — the per-move review narration is THIN (proves the "why" gap).**
+ply 39 (the 20.Qf5 mistake David showed; Be4 was best): spoken =
+"Mistake. The best move was bishop to e4." / on-screen =
+"Mistake. The best move was Be4. Drops about [N]…". It names the better move +
+the cp drop and STOPS — no WHY, no demonstration. Exactly the grounded-why +
+choreographed-demo work. (Also: the per-move lines are template-generated
+"Mistake. The best move was X. Drops about N" — fine as a floor, but the rich
+"why" must replace/augment it on flagged plies.) The arrow engine DID inject
+code-arrows (Qf5:red; recap Nd5/Bg5/Qf5:red), so the arrow plumbing works.
+
+## PostHog access — STATUS (need David)
+Read key is in Vercel under BOTH `POSTHOG_API_KEY` (type=encrypted) AND
+`PostHog_Read_API_KEY` (type=sensitive). Vercel API returns NEITHER in plaintext
+(by design for encrypted/sensitive). `VITE_POSTHOG_KEY` = public `phc_` write
+key (401 on read API). Bulk `vercel env pull` (the only thing that decrypts) is
+security-blocked (dumps all prod secrets). → To give Claude standing PostHog
+access, add the `phx_` read key to the **Claude Code env-var config** as
+`POSTHOG_API_KEY` (best; every session), or paste inline per-session, or approve
+a non-auto `vercel env pull`. Until then PostHog history is unreachable; the
+live audit-stream (ephemeral, wiped on deploy) is the only window and it has the
+narration_text + voice-fallover signal.
+
 ## State of in-flight work (NOT shipped, awaiting his go)
 - Accuracy depth 12→16 (`gameAnalysisService.ts`) + `analysisDepth` stamp +
   re-analyze-when-stale gate + type field: **edited locally, uncommitted.**
