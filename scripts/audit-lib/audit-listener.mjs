@@ -124,7 +124,15 @@ export async function startAuditListener({ port = 0 } = {}) {
       return captured.filter(f);
     },
     async stop() {
-      await new Promise((res) => server.close(() => res()));
+      // Force-destroy any lingering keep-alive sockets (the Playwright page
+      // holds one open via auditStreamUrl) BEFORE server.close(), or close()
+      // hangs forever draining that connection — the cause of the 39-minute
+      // teach-gaps teardown stall (2026-06-27) that ate a whole runner job.
+      try { server.closeAllConnections?.(); } catch { /* node < 18.2 */ }
+      await new Promise((res) => {
+        const t = setTimeout(res, 2000); // hard cap — teardown must never block
+        server.close(() => { clearTimeout(t); res(); });
+      });
     },
   };
 }

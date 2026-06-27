@@ -81,23 +81,51 @@ function mapToFen(map, sideToMove) {
   return `${rows.join('/')} ${sideToMove} KQkq - 0 1`;
 }
 
+// Sentence/window around a match index — used to classify a bare SAN as a
+// recommendation vs a recap of a move already played (G7 #4 discrimination).
+function ctxWindow(text, idx, len) {
+  const start = Math.max(0, idx - 90);
+  const end = Math.min(text.length, idx + len + 90);
+  return text.slice(start, end).replace(/\s+/g, ' ').trim();
+}
+// A bare SAN can appear as a RECOMMENDATION ("you should play Nc3") or as a
+// RECAP of a move already on the board ("after you played Nc3…", "3. Nc3").
+// Only a recommendation onto an own-occupied square is the bug; a recap names
+// an occupied square legitimately. classifySan returns 'recommend' | 'recap'
+// | 'ambiguous'.
+const RECAP_RE = /\b(you(?:'ve| have)?\s+(?:already\s+)?played|you\s+just\s+played|after|once\s+you|so\s+far|up\s+to\s+now|history|your\s+last\s+move|we\s+(?:have|reached|got)|led\s+to|resulted|followed|on\s+the\s+board|currently|sits?\s+on|now\s+on)\b/i;
+const RECOMMEND_RE = /\b(should|i'?d\s+(?:suggest|recommend|go)|recommend|consider|try|best\s+(?:move|is|here)|go\s+for|how\s+about|look\s+at|the\s+move\s+is|play\b|your\s+move|next\s+move|i\s+suggest|aim\s+for|continue\s+with)\b/i;
+function classifySan(ctx, raw) {
+  // A move-number prefix ("3.Nc3", "3...Nc3") or several SANs in a row = a
+  // move list / recap, never a single recommendation.
+  if (/\d{1,2}\s*\.{1,3}\s*$/.test(ctx.slice(0, ctx.indexOf(raw)))) return 'recap';
+  const recap = RECAP_RE.test(ctx);
+  const rec = RECOMMEND_RE.test(ctx);
+  if (rec && !recap) return 'recommend';
+  if (recap && !rec) return 'recap';
+  return 'ambiguous';
+}
+
 /** Pull move recommendations out of coach prose: SAN tokens + "[piece] to
  *  [square]" + "develop/play/push the [piece] to [square]". Returns
- *  { raw, to, pieceType } entries. */
+ *  { raw, to, pieceType, kind, ctx, sanClass? } entries. */
 function extractNamedMoves(text) {
   const out = [];
   // "develop/play/push/bring/move the knight to f3" (most explicit — a clear
   // recommendation to move a piece to a square).
   const verbRe = /\b(?:develop|play|push|bring|move|put|reroute|retreat)\s+(?:the\s+|your\s+|my\s+)?(pawn|knight|bishop|rook|queen|king)\s+(?:back\s+)?to\s+([a-h][1-8])\b/gi;
-  for (const m of text.matchAll(verbRe)) out.push({ raw: m[0], pieceType: WORD_TO_LETTER[m[1].toLowerCase()], to: m[2].toLowerCase(), kind: 'verb' });
+  for (const m of text.matchAll(verbRe)) out.push({ raw: m[0], pieceType: WORD_TO_LETTER[m[1].toLowerCase()], to: m[2].toLowerCase(), kind: 'verb', ctx: ctxWindow(text, m.index, m[0].length) });
   // "knight to f3" without a verb.
   const pieceToRe = /\b(pawn|knight|bishop|rook|queen|king)\s+to\s+([a-h][1-8])\b/gi;
-  for (const m of text.matchAll(pieceToRe)) out.push({ raw: m[0], pieceType: WORD_TO_LETTER[m[1].toLowerCase()], to: m[2].toLowerCase(), kind: 'pieceTo' });
+  for (const m of text.matchAll(pieceToRe)) out.push({ raw: m[0], pieceType: WORD_TO_LETTER[m[1].toLowerCase()], to: m[2].toLowerCase(), kind: 'pieceTo', ctx: ctxWindow(text, m.index, m[0].length) });
   // SAN tokens (Nf3, Bc4, exd5, O-O). Capture the destination square.
   const sanRe = /\b([KQRBN]?[a-h]?[1-8]?x?([a-h][1-8])(?:=[QRBN])?[+#]?|O-O(?:-O)?)\b/g;
   for (const m of text.matchAll(sanRe)) {
     if (m[1].startsWith('O-O')) continue; // castling — not the bug class
-    if (m[2]) out.push({ raw: m[1], pieceType: /^[KQRBN]/.test(m[1]) ? m[1][0].toLowerCase() : 'p', to: m[2].toLowerCase(), kind: 'san' });
+    if (m[2]) {
+      const ctx = ctxWindow(text, m.index, m[1].length);
+      out.push({ raw: m[1], pieceType: /^[KQRBN]/.test(m[1]) ? m[1][0].toLowerCase() : 'p', to: m[2].toLowerCase(), kind: 'san', ctx, sanClass: classifySan(ctx, m[1]) });
+    }
   }
   return out;
 }
@@ -202,17 +230,32 @@ async function main() {
       }
       const entry = { ...nm, ownOccupied: !!ownOccupied, destPiece: destPiece ? `${destPiece.color}${destPiece.type}` : null, legalForStudent: legal };
       report.recommendations.push(entry);
-      // HARD violation: the coach told the student to move a piece to a square
-      // the student's OWN piece already occupies (the exact "develop knight to
-      // f3 with a knight on f3" bug). Verb / pieceTo phrasings are unambiguous
-      // recommendations; a bare SAN to an own square is also impossible.
-      if (ownOccupied) report.violations.push({ ...entry, why: 'recommended a move to a square the student already occupies' });
+      if (!ownOccupied) continue;
+      // The coach NAMED a move onto a square the student's own piece already
+      // occupies. Whether that's a BUG depends on whether it's a recommendation
+      // or a recap of a move already played (G7 #4 — discriminate, don't blindly
+      // fail). A verb ("develop the knight to c3") or "[piece] to c3" phrasing is
+      // an unambiguous recommendation → HARD violation (the exact David bug). A
+      // bare SAN is only a violation when its sentence reads as a recommendation;
+      // a recap ("after you played Nc3", "3.Nc3") names the occupied square
+      // legitimately and is NOT a bug.
+      const isUnambiguousRec = nm.kind === 'verb' || nm.kind === 'pieceTo';
+      const sanIsRec = nm.kind === 'san' && nm.sanClass === 'recommend';
+      if (isUnambiguousRec || sanIsRec) {
+        report.violations.push({ ...entry, why: 'recommended a move to a square the student already occupies' });
+      } else {
+        // own-occupied bare SAN that reads as a recap / ambiguous — record for
+        // the report, do NOT fail the run on it.
+        report.recapOrAmbiguous = report.recapOrAmbiguous || [];
+        report.recapOrAmbiguous.push(entry);
+      }
     }
 
     report.streamAfter = await pullStream('after');
     const pass = report.violations.length === 0;
+    const recapNote = report.recapOrAmbiguous?.length ? ` (+${report.recapOrAmbiguous.length} own-occupied SAN read as recap/ambiguous — not failed)` : '';
     step('NO illegal/own-occupied recommendation', pass,
-      pass ? `${report.recommendations.length} named moves, all legal` : `${report.violations.length} VIOLATION(S): ${report.violations.map((v) => v.raw).join(', ')}`);
+      pass ? `${report.recommendations.length} named moves, no recommendation onto an own square${recapNote}` : `${report.violations.length} VIOLATION(S): ${report.violations.map((v) => `${v.raw} [${v.kind}${v.sanClass ? ':' + v.sanClass : ''}]`).join(', ')}`);
     report.verdict = pass ? 'PASS' : 'FAIL';
   } catch (e) {
     report.error = String(e).slice(0, 240);

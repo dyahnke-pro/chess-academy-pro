@@ -75,6 +75,16 @@ function record(gap, status, detail) {
 }
 
 async function main() {
+  // Hard watchdog — a hung teardown (or a brain round-trip that never
+  // returns) must NEVER block the runner's script loop again. Fires
+  // independent of the event-loop's open handles via .unref(), and an
+  // unresolved teardown promise can't stop it. 12 min is well above a
+  // healthy full run (~1.5 min).
+  setTimeout(() => {
+    console.error('[gaps] WATCHDOG: forced exit after 12 min — teardown or a brain call hung');
+    process.exit(1);
+  }, 12 * 60 * 1000).unref();
+
   await mkdir(OUT, { recursive: true });
   const listener = await startAuditListener();
   console.log(`[gaps] base=${BASE} listener=${listener.url} out=${OUT}`);
@@ -491,8 +501,10 @@ async function main() {
   await writeFile(join(OUT, 'report.json'), JSON.stringify(report, null, 2), 'utf-8');
   console.log(`  report: ${join(OUT, 'report.json')}`);
 
+  // Close the browser FIRST so the page's keep-alive socket to the listener
+  // is gone before we stop the listener (else server.close() drains forever).
+  await browser.close().catch(() => undefined);
   await listener.stop?.().catch?.(() => undefined);
-  await browser.close();
 
   // Exit 1 on any FAIL or any captured app error during a gap test. NOT-
   // TESTED gaps are reported but don't fail the run (the gap was genuinely
