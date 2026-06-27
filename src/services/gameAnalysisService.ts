@@ -21,7 +21,14 @@ export interface BatchAnalysisProgress {
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
-const ANALYSIS_DEPTH = 12;
+// Per-move eval-curve depth. Raised 12→16 (David 2026-06-27) after a real
+// game read 87% in-app vs 83.5% on chess.com: depth 12 missed the punishment
+// of dubious moves, so cp-loss was under-counted and accuracy rounded HIGH.
+// The accuracy FORMULA already matches chess.com's published model
+// (accuracyService) — eval QUALITY (depth) was the gap. Bumping this stamps
+// `analysisDepth` on each game; `gameNeedsAnalysis` re-analyzes anything below
+// it, so existing depth-12 games refresh to the deeper number once.
+export const ANALYSIS_DEPTH = 16;
 const BEST_MOVE_DEPTH = 18;
 const BLUNDER_CP = 300;
 const MISTAKE_CP = 100;
@@ -438,7 +445,7 @@ export async function analyzeSingleGame(
   if (!annotations) return null;
 
   // Store back to DB
-  await db.games.update(gameId, { annotations, fullyAnalyzed: true });
+  await db.games.update(gameId, { annotations, fullyAnalyzed: true, analysisDepth: ANALYSIS_DEPTH });
 
   return annotations;
 }
@@ -470,7 +477,13 @@ export function gameNeedsAnalysis(game: GameRecord): boolean {
   const first = game.annotations[0];
   if (first.bestMoveEval === undefined) return true;
 
-  if (game.fullyAnalyzed === true) return false;
+  if (game.fullyAnalyzed === true) {
+    // Re-analyze a fully-analyzed game whose eval curve was produced at a
+    // shallower depth than we now use — the deeper search is the accuracy
+    // fix. Records predating `analysisDepth` (depth 12) read as stale and
+    // refresh once. (One-time per game; re-stamped on completion.)
+    return (game.analysisDepth ?? 0) < ANALYSIS_DEPTH;
+  }
 
   // Legacy fallback for games imported before the fullyAnalyzed flag.
   const { moves } = replayPgnToFens(game.pgn);
@@ -530,7 +543,7 @@ export async function analyzeRecentGames(
     try {
       const annotations = await analyzeGamePositions(game);
       if (annotations && annotations.length > 0) {
-        await db.games.update(game.id, { annotations, fullyAnalyzed: true });
+        await db.games.update(game.id, { annotations, fullyAnalyzed: true, analysisDepth: ANALYSIS_DEPTH });
         analyzed++;
       }
     } catch (err) {
@@ -647,7 +660,7 @@ export async function analyzeAllGames(
 
           const annotations = await analyzeGameOnWorker(game, worker);
           if (annotations && annotations.length > 0) {
-            await db.games.update(game.id, { annotations, fullyAnalyzed: true });
+            await db.games.update(game.id, { annotations, fullyAnalyzed: true, analysisDepth: ANALYSIS_DEPTH });
             analyzedGameIds.push(game.id);
             analyzed++;
             // Generate this game's mistakes NOW — don't wait for the whole
@@ -673,7 +686,7 @@ export async function analyzeAllGames(
 
         const annotations = await analyzeGamePositions(game);
         if (annotations && annotations.length > 0) {
-          await db.games.update(game.id, { annotations, fullyAnalyzed: true });
+          await db.games.update(game.id, { annotations, fullyAnalyzed: true, analysisDepth: ANALYSIS_DEPTH });
           analyzedGameIds.push(game.id);
           analyzed++;
           await generateInsightsForGame(game.id, game.source, annotations);
