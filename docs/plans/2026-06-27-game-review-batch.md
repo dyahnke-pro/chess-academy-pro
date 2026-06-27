@@ -72,6 +72,62 @@ features. Do it first. UI/sound/accuracy are independent and can land alongside.
 ## Phase 8 — Piece-glow (#7)
 - Verify the white-green / black-purple glow is intended vs noise.
 
+## Phase 9 — Analysis Practice + coach-comms polish (IMG_4301, David)
+- **Mic not working (RECURRING — 2nd surface).** David hit "mic unavailable" on
+  coach chat earlier AND on Analysis Practice now → likely SYSTEMIC, not
+  per-surface. Investigate the voice-input path (Web Speech / Capacitor mic
+  permission + the iOS AVAudioSession; getUserMedia in the in-app browser vs
+  standalone). Prioritize — it's blocking "communication with coach."
+- **No Send button** for typed answers on Analysis Practice
+  (`AnalysisPracticePage.tsx` — I built submit on the input; needs a visible
+  Send button, not Enter-only).
+- **Turn indicator too subtle.** "· White to move" is low-contrast grey under
+  the board; make whose-move prominent (badge / bold) on Analysis Practice (and
+  check the review board has a clear turn indicator too).
+- Tie the "better communication with coach here" to the same grounded-why +
+  voice work — the Analysis Practice grader already exists; make its I/O (mic +
+  send + turn) actually usable.
+- **Interactive board (David).** Analysis Practice renders a STATIC board
+  (`ConsistentChessboard` display mode). Make it interactive: let the student
+  PLAY the answer move on the board (drag/click squares), graded deterministically
+  the same way the reading "tactic/best-move" questions resolve — reuse the
+  walkthrough `Board/ChessBoard` (emits SAN via onMove) or ConsistentChessboard
+  controlled mode + a chess.js instance. The played move is the answer for
+  tactic/find-the-move questions; verbal answer stays for plan/why questions.
+
+## Phase 10 — Analysis Practice = a GROUNDED DISCUSSION COACH (David, expands #9)
+Verbatim: "it's also only asking about tactics, i want it asking about who is
+winning, what are the strengths and weaknesses of each side. this is a
+discussion based training exercise with a personal coach."
+
+So Analysis Practice is NOT one-shot tactic Q&A — it's a multi-turn DISCUSSION
+about a position, coach-led, covering every dimension. Crucially it's the SAME
+grounded substrate as the review "why" (build once, both surfaces consume):
+
+Discussion dimensions (each grounded, LLM only converses — G0):
+- **Who's winning + by how much** → `assemblePositionAssessment` (eval/mate,
+  already in groundedAnswer.ts). buildReadingQuestions needs the eval passed in
+  (it currently only gets the tactics context).
+- **Strengths / weaknesses of EACH side** → `findPieceQuality` (outposts, bad
+  bishops, open rooks) + `findPawnBreaks` + pawn-structure facts (isolated/
+  doubled/passed — may need a small structure computer) + king safety. Summarize
+  per side.
+- **Tactics / threats / hanging** → the existing tactics context (now pin-aware).
+- **Plans / pawn breaks** → pawn breaks + the engine PV (`assemblePlanAnswer`).
+- **The "why" of a move** → the move-order/tempo comparator (Phase 2).
+
+Shape: coach asks an open question ("Who do you think is better here, and why?"),
+student answers (TYPED + MIC + by MOVING ON THE BOARD), coach responds grounded +
+follows up — a real back-and-forth, not a quiz. Reuse `getCoachChatResponse`
+routed through `voiceFacts` with the grounded dimension facts injected (the
+Discussion Practice / coach-chat grounding pattern already exists). Interactive
+board (Phase 9) lets the student show a line; voice in/out for the conversation.
+
+⚠️ Because this is a discussion redesign, do NOT over-build the OLD one-shot UI
+(static board + single textarea). Build the grounded substrate first (shared with
+review), then the discussion surface on top. The Phase 1 grounding + Phase 2 why
+are the foundation for BOTH review and this — not wasted.
+
 ## Decisions for David
 - D1: Reading gate default ON, or stay opt-in with a clearer prompt? (Phase 4)
 - D2: Re-analysis on the depth bump — prioritize open game + throttle vs full
