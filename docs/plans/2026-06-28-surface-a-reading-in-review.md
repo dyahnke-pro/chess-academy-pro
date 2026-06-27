@@ -122,6 +122,29 @@ ships dark and David flips it on). Mirror `coachedReview` exactly: type, default
    them commit first). *Recommend: independent — opt-in means opt-in.* But this
    is the one where his taste might differ (he may want the commit-first nudge).
 
+## BUILD STATUS (2026-06-28) — COMPLETE, pending prod audit
+
+Reframed mid-build (David): the question must be asked BEFORE the move is shown,
+and it's NOT a pop-up. Landed as an **inline gate in the walk** + the Tactics
+"from my mistakes" source. All on `main`:
+
+- [x] **Phase 1** — `ReviewReadingChallenge` card (isolated, +2 tests).
+- [x] **Gate mechanic** — the walk is manual-only, so `handleWalkForward` guards
+      the forward action (button + ArrowRight): if quiz mode is on and the next
+      move is a student inaccuracy/mistake/blunder, it opens the inline gate on
+      the clean pre-move position instead of revealing. Skip / Reveal proceed.
+      No hook change, no board override, no spoiler arrow, never a modal.
+- [x] **Phase 4** — opt-in setting `readingChallengesInReview` (default OFF):
+      type + `useSettings` + a "Quiz Me As I Review" Settings toggle.
+- [x] **Tactics "from my mistakes" source** — `findMistakePositions` (+4 tests)
+      + a segmented source toggle on the Analysis Practice page.
+- [x] **Phase 5** — `gap6-reading-gate` scenario in `audit-coach-review-gaps.mjs`
+      (seed a student-blunder game, turn the setting on, walk to the mistake,
+      assert the gate appears with a prompt+input BEFORE the move).
+
+Owed: run `gap6` + the analysis-practice audit on the runner (prod), and David's
+own dial-in pass on the UX.
+
 ## Definition of done
 Opt-in setting ships; at a flagged ply the Read button appears; tapping it quizzes
 the student on `fenBefore` with a computed answer key; grading + computed answer +

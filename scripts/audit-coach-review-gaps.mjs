@@ -88,6 +88,7 @@ const BRAIN_ANSWER_MS = 60_000;
 const SHOWME_ANIM_MS = 20_000;
 
 const MORPHY_ID = 'sample-morphy-opera-1858';
+const SEED_GAME_ID = 'audit-coach-blunder-1'; // gap2 enrollment + gap6 reading-gate seed
 
 // ── Coverage grid ────────────────────────────────────────────────────────────
 // Every GAP function declared up-front so an unreached one is reported, never
@@ -105,6 +106,7 @@ const GAP_FUNCTIONS = [
   'gap4-corrupt-pgn-error-ui',
   'gap5-deeplink-move-jumps',
   'gap5-deeplink-out-of-range-clamps',
+  'gap6-reading-gate', // Surface A: "quiz me as I review" pauses before a mistake
 ];
 const GRID = new Map(GAP_FUNCTIONS.map((fn) => [fn, { fn, reached: false, pass: false, detail: 'NOT REACHED' }]));
 function mark(fn, { reached = true, pass, detail }) {
@@ -262,6 +264,68 @@ async function main() {
     // ───────────────────────────────────────────────────────────────────
     await runGap5();
 
+    // GAP 6 — Surface A: the reading gate pauses before a student mistake.
+    await runGap6();
+
+    // Surface A: with `readingChallengesInReview` ON, seed a student-blunder
+    // coach game, walk it, and assert the reading gate appears BEFORE the move
+    // is revealed (a prompt + input on the clean position). Reuses the gap2
+    // blunder-game seeder + SEED_GAME_ID.
+    async function runGap6() {
+      const seeded = await seedCoachBlunderGame();
+      if (!seeded) { notTested('gap6-reading-gate', 'could not seed the blunder game'); return; }
+      const wrote = await page.evaluate(async () => {
+        return await new Promise((resolve) => {
+          const req = indexedDB.open('ChessAcademyDB');
+          req.onsuccess = () => {
+            const db = req.result;
+            if (!db.objectStoreNames.contains('profiles')) { db.close(); resolve(false); return; }
+            const tx = db.transaction('profiles', 'readwrite');
+            const all = tx.objectStore('profiles').getAll();
+            all.onsuccess = () => {
+              const rows = all.result || [];
+              if (!rows.length) { db.close(); resolve(false); return; }
+              for (const r of rows) { r.preferences = { ...(r.preferences || {}), readingChallengesInReview: true }; tx.objectStore('profiles').put(r); }
+              tx.oncomplete = () => { db.close(); resolve(true); };
+              tx.onerror = () => { db.close(); resolve(false); };
+            };
+            all.onerror = () => { db.close(); resolve(false); };
+          };
+          req.onerror = () => resolve(false);
+        });
+      });
+      if (!wrote) { notTested('gap6-reading-gate', 'could not enable readingChallengesInReview'); return; }
+
+      // Full reload re-hydrates the setting, then open the review + start the walk.
+      await page.goto(`${BASE}/coach/review/${SEED_GAME_ID}`, { waitUntil: 'domcontentloaded', timeout: BOOT_MS });
+      if (!await until(() => visible('[data-testid="coach-game-review"]'), SUMMARY_MS)) { notTested('gap6-reading-gate', 'review did not mount'); return; }
+      const startable = await until(async () => {
+        const b = page.locator('[data-testid="start-walk-btn"]').first();
+        return (await b.isVisible().catch(() => false)) && (await b.isEnabled().catch(() => false));
+      }, START_ENABLE_MS);
+      if (!startable) { notTested('gap6-reading-gate', 'walk Start never enabled (narration may have failed)'); return; }
+      await page.locator('[data-testid="start-walk-btn"]').click({ force: true }).catch(() => undefined);
+      await until(() => visible('[data-testid="coach-game-review-walk"]'), 15_000);
+
+      // Step forward; the gate must appear before passing the blunder (3.Qxe5+ = ply 5).
+      let gate = false;
+      for (let i = 0; i < 8 && !gate; i += 1) {
+        gate = await page.locator('[data-testid="review-reading-challenge"]').isVisible().catch(() => false);
+        if (gate) break;
+        await page.locator('[data-testid="review-forward-btn"]').click({ force: true }).catch(() => undefined);
+        await page.waitForTimeout(800);
+      }
+      if (!gate) gate = await page.locator('[data-testid="review-reading-challenge"]').isVisible().catch(() => false);
+      if (!gate) { mark('gap6-reading-gate', { reached: true, pass: false, detail: 'reading gate never appeared while walking a student blunder with the setting ON' }); return; }
+
+      const promptUp = await page.locator('[data-testid="review-reading-prompt"]').waitFor({ timeout: 30_000 }).then(() => true).catch(() => false);
+      const inputUp = await page.locator('[data-testid="review-reading-input"]').isVisible().catch(() => false);
+      mark('gap6-reading-gate', {
+        reached: true, pass: promptUp && inputUp,
+        detail: promptUp && inputUp ? 'gate paused before the mistake with a reading question + input (move not yet revealed)' : `gate appeared but prompt/input missing (prompt=${promptUp} input=${inputUp})`,
+      });
+    }
+
     // GAP 2 interactive prompt — declared NOT TESTED (hook retired stub).
     notTested(
       'gap2-interactive-capture-prompt',
@@ -378,7 +442,6 @@ async function main() {
     // on a game with no enrollable student moves). So SEED a coach-vs-Stockfish-
     // Bot game (student = white) with a real white blunder (cpLoss ≈ 900), open
     // ITS review, and assert enrollment scoped to that game.
-    const SEED_GAME_ID = 'audit-coach-blunder-1';
     async function seedCoachBlunderGame() {
       return await page.evaluate(async (seedId) => {
         // coach game, black = Stockfish Bot → determinePlayerColor returns
