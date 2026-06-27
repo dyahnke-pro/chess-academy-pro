@@ -186,6 +186,87 @@ Same root as #2 (footer/bottom overlap) but confirmed mid-walk too: the review
 content region isn't scrollable / lacks bottom inset for the fixed controls +
 nav. Whatever the student is supposed to READ is getting clipped on every ply.
 
+## ASK — "I want to hear the coach SAY why the move was better" (review)
+On a mistake/inaccuracy/blunder ply, the review shows the better move + arrow
+("Show me") but doesn't SPEAK the reasoning. David wants the coach to voice WHY
+the engine's move is better.
+- We ALREADY have the grounded, LLM-free computer: `explainBestMoveGrounded`
+  (`groundedAnswer.ts:180`) — the no-LLM "why" the review path is meant to use
+  (G0 names it explicitly). And `assembleMoveEvalAnswer` (`:117`) wraps it.
+- Review "Show me" lives in `CoachGameReview.tsx` (~:1048-1090, has
+  `seg.bestMoveUci`). Wire: on Show-me (or on landing a flagged ply), compute
+  `explainBestMoveGrounded(fen, …, bestMoveUci, mover)`, phrase it, and SPEAK it
+  via voiceService (gated by verbosity per G5; this is automatic in-game
+  narration → `speakForced`, not a read-aloud). Same grounded spine as the
+  recap/per-move fixes — the "why" is COMPUTED, the LLM only voices it (G0).
+- Pairs with the no-sound bug (#3): make sure the voice actually FIRES on iOS
+  for this.
+
+## ASK — "finished the review, it never asked why I made a mistake :("
+David expects the review to ENGAGE him about his mistakes, not just narrate.
+Three possible reasons it didn't, untangle in the batch:
+1. The opt-in reading gate we built (Surface A, `readingChallengesInReview`)
+   defaults **OFF** → nothing prompts. Decide: default it ON, or surface a
+   clearer toggle. NOTE that gate asks "what do you SEE" (vision) BEFORE the
+   move — not literally "why did you make this mistake."
+2. The old per-ply "why did you play that?" capture was RETIRED (2026-06-11,
+   the pop-up he killed). So there's an intentional gap he now wants filled —
+   but in the non-modal, in-flow way (the reading gate is that vehicle).
+3. ⚠️ Possibly MASKED by the overlap bug (#2 / #B): if a prompt DID render, the
+   footer/bottom-stack overlap + unscrollable content could have HIDDEN it, so
+   "it never asked" may partly be "I never saw it." Fix the layout first, then
+   re-check whether the gate fires.
+Pairs with the "say why the move was better" ask: together they're the
+diagnostic loop David wants — ask (what do you see / why) → reveal the better
+move → SPEAK the grounded why. Build on the reading gate + explainBestMoveGrounded.
+
+## PostHog — what to pull (BLOCKED on read key this session)
+`POSTHOG_API_KEY` is NOT in this session (SessionStart hook flagged it; a live
+`posthog-query.mjs` returned 401). Can't pull it from Vercel (stored encrypted
+there + credential-materialization is security-blocked). Need David to add the
+`phx_` read key to the Claude env-var config, or paste inline. THEN query —
+the app mirrors audit events to PostHog (`mirrorAuditEvent`, autocapture OFF),
+and `buildEventProps` stores **`narration_text`** (full spoken line). High-value
+queries the moment the key lands:
+- `coach_narration_spoken` / `coach_narration_fired` with `narration_text` →
+  find hallucinated board claims at scale (the "e5 hanging" class, bug #5/#A).
+- `coach_narration_skipped` + `tts_failure` + `voice_spoken` → diagnose the
+  NO-SOUND-in-review bug (#3): is voice being SKIPPED, FAILING, or never invoked
+  on iOS/review?
+- `lesson_started`/`lesson_completed`, `coach_question_asked`, `llm_call`
+  (cost), `strength_calibrated`, `user_report` → review usage + engagement.
+- Filter `route` ~ review / `source` for the review surfaces.
+
+## DESIGN — the grounded "why" (two whys + move-order/tempo)
+David confirmed BOTH whys are wanted: (1) why YOUR move was a mistake (what it
+ALLOWED) and (2) why the BETTER move is better (what it ACHIEVES) — taught as a
+CONTRAST. His sharp test case: "why move the bishop out BEFORE the queen?" = a
+MOVE-ORDER / tempo why.
+
+What `explainBestMoveGrounded` (groundedAnswer.ts:180) does TODAY: material-win
+("wins the [piece] on [sq]", capture + value/recapture check) + "comes with
+check" + cost ("your move left [piece] hanging / let them play X winning [piece]").
+That's the tactical/material why only — NO move-order, NO tempo.
+
+NEW computer to build (the move-order comparator), all on primitives we already
+have — chess.js `attackers` + legal-move geometry, Stockfish eval/PV,
+`seeGain` (positionReadingService):
+1. Eval BOTH orders (bishop-first vs queen-first) → confirm which is better.
+2. Play the WORSE order, take the opponent's best reply, classify its MECHANISM:
+   - reply ATTACKS the queen (`chess.attackers(queenSq, them)`) → TEMPO loss
+     ("queen comes out, …Nd4 hits it, you lose the move") ← the bishop-before-
+     queen reason.
+   - reply WINS material → `seeGain`.
+   - reply SEIZES the square the queen wanted → geometry.
+   That mechanism IS the spoken why.
+HONEST LIMIT (hold the G0 line): if the better order is preferred only for
+subtle positional feel with NO concrete refutation of the other order, do NOT
+fabricate a tempo story — say less ("engine prefers finishing development
+first") or stay quiet. Grounded tempo/material/square cases cover the large
+majority incl. his example.
+Build location: next to explainBestMoveGrounded; voice via the review grounded
+spine (recap + per-move). Pending David's go for the batch.
+
 ## State of in-flight work (NOT shipped, awaiting his go)
 - Accuracy depth 12→16 (`gameAnalysisService.ts`) + `analysisDepth` stamp +
   re-analyze-when-stale gate + type field: **edited locally, uncommitted.**
