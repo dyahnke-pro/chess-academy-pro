@@ -380,11 +380,11 @@ async function main() {
     // ITS review, and assert enrollment scoped to that game.
     const SEED_GAME_ID = 'audit-coach-blunder-1';
     async function seedCoachBlunderGame() {
-      return await page.evaluate(async (gid) => {
+      return await page.evaluate(async (seedId) => {
         // coach game, black = Stockfish Bot → determinePlayerColor returns
         // 'white'; the white Qxe5+ is a blunder (prevEval 20 → -880 = 900cp).
         const game = {
-          id: gid,
+          id: seedId,
           pgn: '1. e4 e5 2. Qh5 Nc6 3. Qxe5+ Nxe5 0-1',
           white: 'Audit Student', black: 'Stockfish Bot', result: '0-1',
           date: '2026-06-27', event: 'Audit', eco: 'C20',
@@ -411,7 +411,7 @@ async function main() {
             tx.onerror = () => { db.close(); resolve(false); };
           };
         });
-      }, gid);
+      }, SEED_GAME_ID);
     }
     async function runGap2Automated() {
       const since = Date.now() - 90_000;
