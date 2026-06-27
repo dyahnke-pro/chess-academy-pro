@@ -10,10 +10,10 @@ import { buildFedTacticsContext } from '../../services/liveTacticsContext';
 import {
   samplePositionsFromGame,
   buildReadingQuestions,
-  gradeReadingAnswerDeterministic,
   type ReadingQuestion,
   type ReadingGrade,
 } from '../../services/positionReadingService';
+import { gradeReadingAnswer } from '../../services/positionReadingGrader';
 import { captureEvent } from '../../services/analytics';
 import { logAppAudit } from '../../services/appAuditor';
 
@@ -68,6 +68,7 @@ export function AnalysisPracticePage(): JSX.Element {
   const [qIndex, setQIndex] = useState(0);
   const [answer, setAnswer] = useState('');
   const [grade, setGrade] = useState<ReadingGrade | null>(null);
+  const [grading, setGrading] = useState(false);
   const askedRef = useRef(0);
   const correctRef = useRef(0);
 
@@ -98,14 +99,16 @@ export function AnalysisPracticePage(): JSX.Element {
 
   const question = position?.questions[qIndex] ?? null;
 
-  const submit = useCallback(() => {
-    if (!question || !answer.trim() || grade) return;
-    const g = gradeReadingAnswerDeterministic(question, answer);
+  const submit = useCallback(async () => {
+    if (!question || !answer.trim() || grade || grading) return;
+    setGrading(true);
+    const g = await gradeReadingAnswer(question, answer);
     setGrade(g);
+    setGrading(false);
     askedRef.current += 1;
     if (g.verdict === 'correct') correctRef.current += 1;
     captureEvent('analysis_practice_answer', { questionType: question.type, verdict: g.verdict });
-  }, [question, answer, grade]);
+  }, [question, answer, grade, grading]);
 
   const nextQuestion = useCallback(() => {
     if (!position) return;
@@ -149,7 +152,7 @@ export function AnalysisPracticePage(): JSX.Element {
             Analysis Practice pulls positions from your own games. Play or import a few games first, then come back.
           </p>
           <button
-            onClick={() => navigate('/coach/play')}
+            onClick={() => { void navigate('/coach/play'); }}
             className="px-4 py-2 rounded-xl border-2 font-semibold"
             style={{ borderColor: 'rgba(99,102,241,0.4)', background: 'rgba(99,102,241,0.1)', color: 'var(--color-text)' }}
             data-testid="analysis-practice-empty-cta"
@@ -193,7 +196,7 @@ export function AnalysisPracticePage(): JSX.Element {
                 <textarea
                   value={answer}
                   onChange={(e) => setAnswer(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) submit(); }}
+                  onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) void submit(); }}
                   rows={2}
                   placeholder="What do you see? Name the square or the idea…"
                   className="w-full rounded-xl p-3 text-sm resize-none outline-none"
@@ -202,13 +205,13 @@ export function AnalysisPracticePage(): JSX.Element {
                   autoFocus
                 />
                 <button
-                  onClick={submit}
-                  disabled={!answer.trim()}
+                  onClick={() => void submit()}
+                  disabled={!answer.trim() || grading}
                   className="mt-3 w-full px-4 py-2.5 rounded-xl border-2 font-semibold disabled:opacity-40"
                   style={{ borderColor: 'rgba(99,102,241,0.5)', background: 'rgba(99,102,241,0.12)', color: 'var(--color-text)' }}
                   data-testid="analysis-practice-submit"
                 >
-                  Check my read
+                  {grading ? 'Checking…' : 'Check my read'}
                 </button>
               </>
             )}
