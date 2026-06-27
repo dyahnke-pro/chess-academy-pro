@@ -415,6 +415,17 @@ class StockfishEngine {
               totalErrors === 1 ? '' : 's'
             } coalesced)`,
           });
+          // Reject any in-flight analysis from the dead worker so
+          // callers (coach eval, eval bar, hint system, game review)
+          // don't hang until the 30s hard timeout in _dispatchAnalysis.
+          // The single-thread fallback initializes asynchronously;
+          // the caller retries naturally on the next analyzePosition call.
+          if (this.pending) {
+            if (this.pending.hardTimeout) clearTimeout(this.pending.hardTimeout);
+            const p = this.pending;
+            this.pending = null;
+            p.reject(new Error(`analysis aborted: multi-thread worker crashed (${reason})`));
+          }
           this.worker?.terminate();
           this.worker = null;
           // Phase 8 Bug B — give the browser time to reclaim the
@@ -529,6 +540,16 @@ class StockfishEngine {
             if (earlyFailureTimer !== null) {
               clearTimeout(earlyFailureTimer);
               earlyFailureTimer = null;
+            }
+            // Reject any in-flight analysis from the crashed worker so
+            // callers don't hang until the 30s hard timeout. For init-time
+            // crashes this.pending is null (no analysis has started), so
+            // the guard is correct for both init and post-init crashes.
+            if (this.pending) {
+              if (this.pending.hardTimeout) clearTimeout(this.pending.hardTimeout);
+              const p = this.pending;
+              this.pending = null;
+              p.reject(new Error(`analysis aborted: worker crashed (${msg})`));
             }
             this.setStatus('error', msg);
             this.initPromise = null;
