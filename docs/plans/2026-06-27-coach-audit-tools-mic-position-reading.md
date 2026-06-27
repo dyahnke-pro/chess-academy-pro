@@ -139,15 +139,27 @@ NEXT (needs David's on-device confirm — the native path can't run headless):
   events. Pulls a position from the user's `games`, asks, grades the typed read,
   shows the right answer on a miss.
 
-**Still TODO on this feature (morning):**
-- [ ] Surface A — the pre-mistake question injection in `/coach/review`.
-- [ ] LLM grader (`gradeReadingAnswer` via getCoachChatResponse, closed-world)
-      layered over the deterministic fallback — for fuzzier natural-language reads.
-- [ ] Good/bad-piece + plans question types (v2 — need the piece-quality computer).
-- [ ] Weaknesses write-back (per-category reading score → `openingWeakSpots` etc.).
+**Also shipped overnight (continued build):**
+- [x] LLM grader (`positionReadingGrader.ts`) — closed-world match to the
+      computed key, deterministic fallback, +5 tests.
+- [x] Good/bad-piece read (`findPieceQuality` — knight outpost / bad bishop /
+      rook on open file, pure geometry) wired as the `piece` question type, +5 tests.
+- [x] Loop-back: durable per-category reading accuracy
+      (`analysisPracticeStats.ts`, meta store, no migration) — `weakestCategory()`
+      is the weakness signal, +6 tests. Wired into the page submit.
+- [x] Component tests for AnalysisPracticePage (+2).
+- [x] `audit-tactics-analysis-practice.mjs` (registered in AUDIT_INDEX).
+- **Feature test total: 38 green; typecheck + lint clean.**
+
+**Still TODO on this feature (morning, with David to steer):**
+- [ ] Surface A — pre-mistake question injection in `/coach/review` (touches the
+      2,500-line review component → held for an awake review).
+- [ ] "Plans" question type (v2 — softer grounding; only where middlegame-plans
+      DB or engine PV gives a concrete answer).
+- [ ] Surface the `weakestCategory()` signal in the `/weaknesses` UI.
 - [ ] Voice-in (after the mic fix is verified on device).
-- [ ] Component test for AnalysisPracticePage (service core is tested; page is wiring).
-- [ ] `audit-tactics-analysis-practice.mjs`.
+- [ ] Run `audit-tactics-analysis-practice.mjs` on the runner once prod is past
+      the deploy cap.
 
 ### Original design notes (forks decided) follow.
 
