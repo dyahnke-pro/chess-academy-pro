@@ -397,6 +397,14 @@ class StockfishEngine {
           // Persist so a fresh page load on this device doesn't
           // re-probe the known-broken multi-thread bundle.
           writePersistedMultiFallback();
+          // Clear BOTH timers — the 5s early-failure window AND the
+          // 45s overall init timeout. The fallback below creates a
+          // new worker with its own failure path through onerror;
+          // keeping `overallTimeoutId` alive means a stale timeout
+          // can fire after the fallback starts, rejecting the init
+          // promise with a confusing "timed out after 45s" message
+          // while the single-thread worker is still booting.
+          clearTimeout(overallTimeoutId);
           if (earlyFailureTimer !== null) {
             clearTimeout(earlyFailureTimer);
             earlyFailureTimer = null;
@@ -462,8 +470,15 @@ class StockfishEngine {
             const loc = ee.filename
               ? ` @ ${ee.filename}:${ee.lineno ?? '?'}:${ee.colno ?? '?'}`
               : '';
+            // ErrorEvent carries the actual thrown Error in `.error` (David
+            // 2026-06-15 root-cause hunt). For WASM runtime crashes
+            // (`call_indirect`, OOM, pthread spawn), `error.message` is
+            // frequently `""` or `"[object ErrorEvent]"` — useless for
+            // debugging. Extract the underlying Error FIRST so the log says
+            // "RuntimeError: out of memory" not "[object ErrorEvent]".
+            const underlyingMsg = ee.error instanceof Error ? ee.error.message : '';
             const msg =
-              (error.message || 'Uncaught RuntimeError or worker load failure') + loc;
+              (underlyingMsg || error.message || 'Uncaught RuntimeError or worker load failure') + loc;
             // Phase 8 Bug A — suppress the bubble to window.onerror.
             // A crashing multi-thread bundle emits 60+ ErrorEvents
             // in ~100ms; if any of those reach the global error
