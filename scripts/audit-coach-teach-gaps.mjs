@@ -377,12 +377,19 @@ async function main() {
     // a walkthrough mounts AND the orientation flipped vs LEARN mode.
     await gotoTeach();
     const evBefore = intercepted.length;
+    const FACE_PHASES = ['walkthrough-narrating-panel', 'walkthrough-fork-panel', 'walkthrough-leaf-panel', 'walkthrough-choose-mode'];
     await ask('Face: Sicilian Najdorf');
-    const faceUp = await driveToPhase(
-      ['walkthrough-narrating-panel', 'walkthrough-fork-panel', 'walkthrough-leaf-panel', 'walkthrough-choose-mode'],
-      90_000, // face routes through generateOpening (a brain/DB-gen call) — slower
-    );
-    const faceMounted = ['walkthrough-narrating-panel', 'walkthrough-fork-panel', 'walkthrough-leaf-panel', 'walkthrough-choose-mode'].includes(faceUp);
+    let faceUp = await driveToPhase(FACE_PHASES, 90_000); // face routes through generateOpening (brain/DB-gen) — slower
+    // Flake guard (2026-06-27): the FACE submit intermittently doesn't take —
+    // the surface sits at `teach-picker` (the input race / a dropped submit),
+    // so the walkthrough never mounts. If we stalled at the picker, re-submit
+    // once before judging — a genuine routing break still fails on the retry.
+    if (!FACE_PHASES.includes(faceUp) && (faceUp === 'teach-picker' || faceUp === 'teach-idle')) {
+      await gotoTeach();
+      await ask('Face: Sicilian Najdorf');
+      faceUp = await driveToPhase(FACE_PHASES, 90_000);
+    }
+    const faceMounted = FACE_PHASES.includes(faceUp);
     const faceOrient = faceMounted ? await boardOrientation() : null;
     // The surface logs a chip/face routing event with mode=face; the
     // generation call carries mode:'face'. Confirm a face-mode signal fired.

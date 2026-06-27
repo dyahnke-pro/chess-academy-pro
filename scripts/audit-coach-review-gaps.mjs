@@ -370,14 +370,61 @@ async function main() {
     // ── GAP 2 (automated path) ──────────────────────────────────────────
     // The interactive prompt is retired; the real contract is that opening a
     // review auto-enrolls THIS game's mistakes (generateMistakePuzzlesFromGame
-    // + autoAnalyzeGameMisconceptions on mount). Assert a mistakePuzzle row
-    // scoped to the morphy game appears in Dexie, OR the auto-enroll audit
-    // fired ("auto-enrolled N mistake puzzle(s) from reviewed game").
+    // + autoAnalyzeGameMisconceptions on mount, CoachGameReview.tsx:158).
+    //
+    // The Morphy Opera SAMPLE can NEVER enroll: enrollment needs the STUDENT to
+    // be a player in the game (determinePlayerColor), and a famous sample has no
+    // student side → returns 0 (audit 2026-06-27: the probe expected enrollment
+    // on a game with no enrollable student moves). So SEED a coach-vs-Stockfish-
+    // Bot game (student = white) with a real white blunder (cpLoss ≈ 900), open
+    // ITS review, and assert enrollment scoped to that game.
+    const SEED_GAME_ID = 'audit-coach-blunder-1';
+    async function seedCoachBlunderGame() {
+      return await page.evaluate(async (gid) => {
+        // coach game, black = Stockfish Bot → determinePlayerColor returns
+        // 'white'; the white Qxe5+ is a blunder (prevEval 20 → -880 = 900cp).
+        const game = {
+          id: gid,
+          pgn: '1. e4 e5 2. Qh5 Nc6 3. Qxe5+ Nxe5 0-1',
+          white: 'Audit Student', black: 'Stockfish Bot', result: '0-1',
+          date: '2026-06-27', event: 'Audit', eco: 'C20',
+          whiteElo: 1200, blackElo: 1200, source: 'coach',
+          annotations: [
+            { moveNumber: 1, color: 'white', san: 'e4', evaluation: 30, bestMove: 'e2e4', bestMoveEval: 30, classification: 'good', comment: null },
+            { moveNumber: 1, color: 'black', san: 'e5', evaluation: 25, bestMove: null, bestMoveEval: null, classification: 'good', comment: null },
+            { moveNumber: 2, color: 'white', san: 'Qh5', evaluation: 20, bestMove: 'g1f3', bestMoveEval: 30, classification: 'good', comment: null },
+            { moveNumber: 2, color: 'black', san: 'Nc6', evaluation: 20, bestMove: null, bestMoveEval: null, classification: 'good', comment: null },
+            { moveNumber: 3, color: 'white', san: 'Qxe5+', evaluation: -880, bestMove: 'g1f3', bestMoveEval: 20, classification: 'blunder', comment: null },
+            { moveNumber: 3, color: 'black', san: 'Nxe5', evaluation: -880, bestMove: null, bestMoveEval: null, classification: 'good', comment: null },
+          ],
+          coachAnalysis: null, isMasterGame: false, openingId: null, fullyAnalyzed: true,
+        };
+        return await new Promise((resolve) => {
+          const req = indexedDB.open('ChessAcademyDB');
+          req.onerror = () => resolve(false);
+          req.onsuccess = () => {
+            const db = req.result;
+            if (!db.objectStoreNames.contains('games')) { db.close(); resolve(false); return; }
+            const tx = db.transaction('games', 'readwrite');
+            tx.objectStore('games').put(game);
+            tx.oncomplete = () => { db.close(); resolve(true); };
+            tx.onerror = () => { db.close(); resolve(false); };
+          };
+        });
+      }, gid);
+    }
     async function runGap2Automated() {
       const since = Date.now() - 90_000;
-      // Give the background enrollment time to run (it self-analyzes with
-      // Stockfish when annotations are thin; samples are pre-annotated so it's
-      // fast, but allow slack).
+      const seeded = await seedCoachBlunderGame();
+      if (!seeded) {
+        notTested('gap2-automated-mistake-enrollment', 'could not seed the coach-blunder game into Dexie');
+        return;
+      }
+      // Open the seeded game's review — the mount effect auto-enrolls.
+      await page.goto(`${BASE}/coach/review/${SEED_GAME_ID}`, { waitUntil: 'domcontentloaded', timeout: BOOT_MS });
+      await until(() => visible('[data-testid="coach-game-review"]'), SUMMARY_MS);
+      // Annotations are pre-set → generateFromAnnotations is instant (no
+      // Stockfish), so enrollment lands fast; allow slack for the mount effect.
       const enrolled = await until(async () => {
         const count = await page.evaluate(async (gid) => {
           return await new Promise((resolve) => {
@@ -387,19 +434,14 @@ async function main() {
               const db = req.result;
               if (!db.objectStoreNames.contains('mistakePuzzles')) { db.close(); resolve(-2); return; }
               const tx = db.transaction('mistakePuzzles', 'readonly');
-              const store = tx.objectStore('mistakePuzzles');
-              const all = store.getAll();
-              all.onsuccess = () => {
-                const rows = all.result || [];
-                db.close();
-                resolve(rows.filter((r) => r && r.sourceGameId === gid).length);
-              };
+              const all = tx.objectStore('mistakePuzzles').getAll();
+              all.onsuccess = () => { const rows = all.result || []; db.close(); resolve(rows.filter((r) => r && r.sourceGameId === gid).length); };
               all.onerror = () => { db.close(); resolve(-3); };
             };
           });
-        }, MORPHY_ID);
+        }, SEED_GAME_ID);
         return typeof count === 'number' && count > 0;
-      }, 45_000, 1500);
+      }, 30_000, 1500);
 
       let auditFired = false;
       if (!enrolled) {
@@ -412,8 +454,8 @@ async function main() {
       mark('gap2-automated-mistake-enrollment', {
         pass,
         detail: pass
-          ? (enrolled ? 'mistakePuzzles enrolled for the reviewed game' : 'auto-enroll audit fired (no Dexie row — may be a no-op re-review)')
-          : 'no mistakePuzzles row for game AND no auto-enroll audit in 45s',
+          ? (enrolled ? 'mistakePuzzles enrolled for the seeded coach-blunder game' : 'auto-enroll audit fired')
+          : 'no mistakePuzzles row AND no auto-enroll audit in 30s for the seeded blunder game',
       });
       step('gap2-automated', 'automated mistake enrollment', { enrolled, auditFired });
     }
