@@ -9,6 +9,7 @@ import { ReviewSummaryCard } from './ReviewSummaryCard';
 import { GameReviewWeaknessCapture } from './GameReviewWeaknessCapture';
 import { KeyMomentNav } from './KeyMomentNav';
 import { ChatInput } from './ChatInput';
+import { ReviewReadingChallenge } from './ReviewReadingChallenge';
 import { useReviewBlunderCapture } from '../../hooks/useReviewBlunderCapture';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import { useSettings } from '../../hooks/useSettings';
@@ -437,6 +438,44 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       : undefined,
   });
 
+  // ── Surface A: "quiz me as I review" reading gate (opt-in, default OFF) ──
+  // When the setting is on, advancing the walk PAUSES on the position before
+  // each of the student's mistakes and asks them to READ it — graded against
+  // the engine — BEFORE the move (and its better-move arrow) is revealed. The
+  // walk is manual-only (no auto-advance), so we just guard the forward action;
+  // the board already shows the pre-move position, so no override is needed.
+  // Inline + skippable; NEVER a modal (the retired blunder-capture's mistake).
+  const readingQuizOn = settings.readingChallengesInReview;
+  const studentColorWB: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
+  const [readingGate, setReadingGate] = useState<{ ply: number; fen: string } | null>(null);
+  const quizzedPliesRef = useRef<Set<number>>(new Set());
+  useEffect(() => {
+    quizzedPliesRef.current = new Set();
+    setReadingGate(null);
+  }, [props.gameId]);
+
+  const handleWalkForward = useCallback((): void => {
+    if (readingGate) return; // a gate is already open
+    if (readingQuizOn) {
+      const nextPly = walkPlayback.currentPly + 1;
+      const seg = walkNarration?.segments.find((s) => s.ply === nextPly) ?? null;
+      const isStudentMistake = !!seg
+        && seg.playerColor === playerColor
+        && (seg.classification === 'inaccuracy' || seg.classification === 'mistake' || seg.classification === 'blunder');
+      if (seg && isStudentMistake && !quizzedPliesRef.current.has(nextPly)) {
+        // The board already shows seg.fenBefore (the position before the move).
+        setReadingGate({ ply: nextPly, fen: seg.fenBefore });
+        return;
+      }
+    }
+    walkPlayback.goForward();
+  }, [readingGate, readingQuizOn, walkPlayback, walkNarration, playerColor]);
+
+  const resolveReadingGate = useCallback((): void => {
+    setReadingGate((g) => { if (g) quizzedPliesRef.current.add(g.ply); return null; });
+    walkPlayback.goForward();
+  }, [walkPlayback]);
+
   // Move sound on every walk advance — Polly + voice narration is
   // great pedagogy but the silent piece transition makes it hard to
   // pick out which piece moved. usePieceSound matches the chime the
@@ -839,7 +878,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           walkPlayback.goBack();
         } else if (e.key === 'ArrowRight') {
           e.preventDefault();
-          walkPlayback.goForward();
+          handleWalkForward();
         }
         return;
       }
@@ -854,7 +893,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [reviewState.mode, navigateMove, walkUiActive, walkPlayback]);
+  }, [reviewState.mode, navigateMove, walkUiActive, walkPlayback, handleWalkForward]);
 
   // ship-4: handleMoveClick / handleBoardMove / handleBackToReview
   // removed alongside the analysis-phase what-if board. Walk-phase
@@ -1420,7 +1459,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 <ChevronLeft size={24} style={{ color: 'var(--color-text)' }} />
               </button>
               <button
-                onClick={walkPlayback.goForward}
+                onClick={handleWalkForward}
                 className="w-[52px] h-[52px] rounded-xl border-2 disabled:opacity-30 flex items-center justify-center transition-transform active:scale-[0.96]"
                 disabled={walkPlayback.currentPly >= lastPly}
                 style={{
@@ -1474,6 +1513,18 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
           {/* ── Scrollable middle: narration, move list, tactics, ask ── */}
           <div className="flex-1 min-h-0 overflow-y-auto" data-testid="review-scroll-middle">
+            {/* Surface A: reading gate — paused before the student's next
+                mistake, asks them to read the (clean) position before the move
+                is revealed. The board already shows readingGate.fen. */}
+            {readingGate && (
+              <ReviewReadingChallenge
+                key={readingGate.ply}
+                fen={readingGate.fen}
+                studentColor={studentColorWB}
+                rating={playerRating ?? 1200}
+                onProceed={resolveReadingGate}
+              />
+            )}
             {/* Current-move narration banner */}
             <div className="px-3 pt-2 pb-1">
               <div

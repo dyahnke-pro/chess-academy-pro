@@ -30,6 +30,7 @@ export interface EffectiveSettings {
   coachReviewVoice: boolean;
   coachInGameDiscussion: boolean;
   coachedReview: boolean;
+  readingChallengesInReview: boolean;
   coachVerbosity: CoachVerbosity;
   // Neon glow
   glowBrightness: number;
@@ -84,6 +85,7 @@ const DEFAULT_SETTINGS: EffectiveSettings = {
   coachReviewVoice: true,
   coachInGameDiscussion: true,
   coachedReview: true,
+  readingChallengesInReview: false,
   coachVerbosity: 'unlimited',
   glowBrightness: 100,
   boardGlowColor: '0, 229, 255',
@@ -127,6 +129,7 @@ export function useSettings(): UseSettingsReturn {
       coachReviewVoice: raw.coachReviewVoice ?? true,
       coachInGameDiscussion: raw.coachInGameDiscussion ?? true,
       coachedReview: raw.coachedReview ?? true,
+      readingChallengesInReview: raw.readingChallengesInReview ?? false,
       coachVerbosity: raw.coachVerbosity ?? 'unlimited',
       glowBrightness: raw.glowBrightness ?? 100,
       boardGlowColor: raw.boardGlowColor ?? '0, 229, 255',

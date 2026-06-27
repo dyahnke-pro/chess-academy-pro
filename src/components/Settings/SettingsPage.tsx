@@ -945,7 +945,7 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
 // ─── Coach Gameplay Section ──────────────────────────────────────────────────
 
 function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
-  const handleToggle = async (key: 'coachBlunderAlerts' | 'coachTacticAlerts' | 'coachPositionalTips' | 'coachMissedTacticTakeback' | 'coachReviewVoice' | 'coachInGameDiscussion' | 'coachedReview', value: boolean): Promise<void> => {
+  const handleToggle = async (key: 'coachBlunderAlerts' | 'coachTacticAlerts' | 'coachPositionalTips' | 'coachMissedTacticTakeback' | 'coachReviewVoice' | 'coachInGameDiscussion' | 'coachedReview' | 'readingChallengesInReview', value: boolean): Promise<void> => {
     const updatedPrefs = { ...profile.preferences, [key]: value };
     await db.profiles.update(profile.id, { preferences: updatedPrefs });
     setProfile({ ...profile, preferences: updatedPrefs });
@@ -1017,6 +1017,13 @@ function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
         checked={profile.preferences.coachedReview ?? true}
         onChange={(v) => void handleToggle('coachedReview', v)}
         testId="coach-coached-review-toggle"
+      />
+      <ToggleRow
+        label="Quiz Me As I Review"
+        tooltip="A vision test at your own mistakes. During game review, just before each move you got wrong, the board pauses and asks you to READ the position — what's the threat, what's hanging — and grades your answer against the engine before revealing the move. Inline and skippable, never a pop-up. Off by default."
+        checked={profile.preferences.readingChallengesInReview ?? false}
+        onChange={(v) => void handleToggle('readingChallengesInReview', v)}
+        testId="coach-reading-challenges-toggle"
       />
       <ToggleRow
         label="Review Voice Narration"

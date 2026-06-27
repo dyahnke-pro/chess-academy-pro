@@ -846,6 +846,11 @@ export interface UserPreferences {
    *  review is STANDALONE — a plain walk-through with no coach interjection
    *  (the manual "add this game's mistakes" button still works). Defaults to on. */
   coachedReview?: boolean;
+  /** Opt-in (default OFF): "quiz me as we walk" — during a game review, pause on
+   *  the position BEFORE each of the student's mistakes and ask them to read it
+   *  (graded against the engine + board) before revealing the move. A vision
+   *  test at your own mistakes; non-blocking, skippable, inline (never a modal). */
+  readingChallengesInReview?: boolean;
   coachVerbosity?: CoachVerbosity;
   /** Live phase-transition narration verbosity. 'off' silences the
    *  coach at phase boundaries; 'brief'/'standard'/'full' set the

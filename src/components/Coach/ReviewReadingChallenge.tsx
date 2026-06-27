@@ -18,6 +18,11 @@ interface ReviewReadingChallengeProps {
   rating: number;
   /** Fired after each graded read so the parent can react (analytics, etc.). */
   onGraded?: (type: ReadingQuestionType, correct: boolean) => void;
+  /** When set, the card is a GATE in the review walk: it shows a "Skip" before
+   *  answering and a "Reveal the move" after grading; both call this to let the
+   *  walk advance + reveal the move the student missed. Omit for the standalone
+   *  (Tactics) use where there's no walk to advance. */
+  onProceed?: () => void;
 }
 
 const VERDICT = {
@@ -35,7 +40,7 @@ const VERDICT = {
  * whole Analysis-Practice stack — answer-key service, two-tier grader, the
  * per-category loop-back stat.
  */
-export function ReviewReadingChallenge({ fen, studentColor, rating, onGraded }: ReviewReadingChallengeProps): JSX.Element {
+export function ReviewReadingChallenge({ fen, studentColor, rating, onGraded, onProceed }: ReviewReadingChallengeProps): JSX.Element {
   const [questions, setQuestions] = useState<ReadingQuestion[]>([]);
   const [qIdx, setQIdx] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -133,15 +138,27 @@ export function ReviewReadingChallenge({ fen, studentColor, rating, onGraded }: 
                 style={{ background: 'var(--color-bg)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }}
                 data-testid="review-reading-input"
               />
-              <button
-                onClick={() => void submit()}
-                disabled={!answer.trim() || grading}
-                className="self-start px-3 py-1.5 rounded-lg text-xs font-semibold disabled:opacity-40"
-                style={{ background: 'rgba(129,140,248,0.15)', color: 'var(--color-text)', border: '1px solid rgba(129,140,248,0.4)' }}
-                data-testid="review-reading-submit"
-              >
-                {grading ? 'Checking…' : 'Check my read'}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => void submit()}
+                  disabled={!answer.trim() || grading}
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold disabled:opacity-40"
+                  style={{ background: 'rgba(129,140,248,0.15)', color: 'var(--color-text)', border: '1px solid rgba(129,140,248,0.4)' }}
+                  data-testid="review-reading-submit"
+                >
+                  {grading ? 'Checking…' : 'Check my read'}
+                </button>
+                {onProceed && (
+                  <button
+                    onClick={onProceed}
+                    className="px-3 py-1.5 rounded-lg text-xs"
+                    style={{ color: 'var(--color-text-muted)' }}
+                    data-testid="review-reading-skip"
+                  >
+                    Skip
+                  </button>
+                )}
+              </div>
             </div>
           )}
 
@@ -159,16 +176,28 @@ export function ReviewReadingChallenge({ fen, studentColor, rating, onGraded }: 
                   <span style={{ color: 'var(--color-text-muted)' }}>Answer: </span>{grade.correctAnswer}
                 </p>
               )}
-              {qIdx + 1 < questions.length && (
-                <button
-                  onClick={another}
-                  className="self-start flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold"
-                  style={{ background: 'rgba(129,140,248,0.15)', color: 'var(--color-text)', border: '1px solid rgba(129,140,248,0.4)' }}
-                  data-testid="review-reading-another"
-                >
-                  Ask me another <ArrowRight size={12} />
-                </button>
-              )}
+              <div className="flex items-center gap-2">
+                {onProceed && (
+                  <button
+                    onClick={onProceed}
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold"
+                    style={{ background: 'rgba(129,140,248,0.15)', color: 'var(--color-text)', border: '1px solid rgba(129,140,248,0.4)' }}
+                    data-testid="review-reading-reveal"
+                  >
+                    Reveal the move <ArrowRight size={12} />
+                  </button>
+                )}
+                {!onProceed && qIdx + 1 < questions.length && (
+                  <button
+                    onClick={another}
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold"
+                    style={{ background: 'rgba(129,140,248,0.15)', color: 'var(--color-text)', border: '1px solid rgba(129,140,248,0.4)' }}
+                    data-testid="review-reading-another"
+                  >
+                    Ask me another <ArrowRight size={12} />
+                  </button>
+                )}
+              </div>
             </div>
           )}
         </>
