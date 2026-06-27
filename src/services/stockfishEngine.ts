@@ -462,8 +462,19 @@ class StockfishEngine {
             const loc = ee.filename
               ? ` @ ${ee.filename}:${ee.lineno ?? '?'}:${ee.colno ?? '?'}`
               : '';
-            const msg =
-              (error.message || 'Uncaught RuntimeError or worker load failure') + loc;
+            // Use ErrorEvent.error?.message FIRST — the underlying Error
+            // object carries the actual WASM crash detail (e.g.
+            // "RuntimeError: call_indirect to a signature that does not
+            // match"). ErrorEvent.message can produce an unhelpful
+            // "[object ErrorEvent]" string in certain browser/error
+            // combinations (PostHog 2026-06-27). Fall back to the event's
+            // own message, then to a generic placeholder.
+            const underlyingMsg = (error as { error?: Error }).error?.message;
+            const rawMsg =
+              underlyingMsg ||
+              (error as { message?: string }).message ||
+              'Uncaught RuntimeError or worker load failure';
+            const msg = rawMsg + loc;
             // Phase 8 Bug A — suppress the bubble to window.onerror.
             // A crashing multi-thread bundle emits 60+ ErrorEvents
             // in ~100ms; if any of those reach the global error
@@ -492,6 +503,16 @@ class StockfishEngine {
               !this._runtimeFallbackAttempted
             ) {
               handleEarlyMultiFailure(msg);
+              return true;
+            }
+            // Stale multi-thread worker events — the init was already
+            // handled by handleEarlyMultiFailure and the single-thread
+            // fallback is pending (or running). This error arrived from
+            // the old multi worker AFTER the fallback was triggered but
+            // BEFORE tryStart(true) switched workerVariant to 'single'.
+            // Reaching the reject path would consume a crash retry for
+            // a worker that's already been discarded (PostHog 2026-06-27).
+            if (this.workerVariant === 'multi') {
               return true;
             }
             // Phase 8 Bug C — single-thread also OOM'd. Retry once
