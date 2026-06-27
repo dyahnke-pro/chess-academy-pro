@@ -382,22 +382,45 @@ class VoiceInputService {
   private async startNative(): Promise<void> {
     try {
       const { SpeechRecognition } = await import('@capacitor-community/speech-recognition');
-      const avail = await SpeechRecognition.available().catch(() => ({ available: false }));
-      if (!avail.available) {
+
+      // PERMISSIONS FIRST. On iOS, SFSpeechRecognizer.isAvailable can read
+      // FALSE until speech-recognition is authorized — so the old order
+      // (available() before requestPermissions()) dead-ended on a bogus
+      // "unavailable" before the user was ever asked (David 2026-06-27: the
+      // external app says "mic is unavailable" on tap). requestPermissions()
+      // asks for BOTH microphone + speech recognition. We also stop
+      // swallowing the raw error (the old `.catch(() => ({available:false}))`
+      // hid the real cause): a THROW here means the plugin isn't registered
+      // or the Info.plist usage strings are missing → that's 'unavailable',
+      // not a user denial.
+      let permState = 'unknown';
+      try {
+        const perm = await SpeechRecognition.requestPermissions();
+        permState = perm.speechRecognition;
+      } catch (e) {
+        permState = `threw:${(e as Error)?.message ?? e}`;
+      }
+      if (permState !== 'granted') {
         this.nativeListening = false;
-        this.audit('mic-start-failed', 'native speech recognition unavailable', this.capabilitySnapshot());
-        this.errorHandler?.('unavailable');
+        this.audit('mic-start-failed', `native permission ${permState}`, { permState, ...this.capabilitySnapshot() });
+        // A real 'denied'/'prompt' → the user can re-grant (permission-denied
+        // copy). A throw (missing Info.plist string / unregistered plugin) is
+        // a build problem, not a user choice → 'unavailable' copy.
+        this.errorHandler?.(permState.startsWith('threw:') ? 'unavailable' : 'permission-denied');
         this.endHandler?.();
         return;
       }
-      const perm = await SpeechRecognition.requestPermissions().catch(() => ({ speechRecognition: 'denied' as const }));
-      if (perm.speechRecognition !== 'granted') {
-        this.nativeListening = false;
-        this.audit('mic-start-failed', `native permission ${perm.speechRecognition}`, this.capabilitySnapshot());
-        this.errorHandler?.('permission-denied');
-        this.endHandler?.();
-        return;
-      }
+
+      // available() is now ADVISORY — capture it for diagnosis but do NOT
+      // hard-bail on false. Some plugin/locale combos report available:false
+      // immediately after a fresh grant; if it's genuinely unusable, start()
+      // throws below and we surface the REAL reason instead of a swallowed
+      // default.
+      let availRaw: unknown = 'unknown';
+      try { availRaw = await SpeechRecognition.available(); }
+      catch (e) { availRaw = `threw:${(e as Error)?.message ?? e}`; }
+      this.audit('mic-start-requested', 'native permission granted; starting', { available: availRaw, permState });
+
       await SpeechRecognition.removeAllListeners();
       await SpeechRecognition.addListener('partialResults', (data: { matches: string[] }) => {
         const m = data.matches?.[0]?.trim();

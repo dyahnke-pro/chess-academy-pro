@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
+import { Capacitor } from '@capacitor/core';
 import { Mic, MicOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { voiceInputService } from '../../services/voiceInputService';
@@ -749,9 +750,13 @@ export function VoiceChatMic({ fen, pgn, turn, playerColor = 'white', onOpeningR
         setInterimTranscript('');
         setMicError(
           reason === 'permission-denied'
-            ? 'Mic blocked. On iPhone: Settings → General → Keyboard → Enable Dictation, and allow Safari mic access.'
+            ? (Capacitor.isNativePlatform()
+                ? 'Mic blocked. Open iOS Settings → Chess Academy and turn ON Microphone and Speech Recognition, then tap the mic again.'
+                : 'Mic blocked. On iPhone: Settings → General → Keyboard → Enable Dictation, and allow Safari mic access.')
             : reason === 'unavailable'
-              ? 'Mic unavailable — voice recognition couldn’t reach the speech service. Check your connection, or use the native app.'
+              ? (Capacitor.isNativePlatform()
+                  ? 'Mic unavailable. Enable Dictation (Settings → General → Keyboard → Enable Dictation) and allow Microphone + Speech Recognition for Chess Academy in Settings, then tap again.'
+                  : 'Mic unavailable — your browser couldn’t reach the speech service. Try the iOS app, or check your connection.')
               : 'Mic reconnect failed. Tap again to retry.'
         );
         setTimeout(() => setMicError(null), 6000);
