@@ -48,20 +48,31 @@ Findings — resolved:
       pre-move setup screen — so the pre-move count was 0. Moved the clock
       assertion to after the first move. (commit 221dde2)
 
-Findings — need a LIVE run to distinguish real-vs-artifact (NOT blind-fixed):
-- [ ] **`voice-pref-variance`** (teach) — identical evDelta/transcriptLen across
-      full/brief/silent → the setting isn't reaching the measured voice. The
-      probe writes `profiles.preferences.coachNarration` + full-reloads (which
-      should re-hydrate `activeProfile`), and the app reads exactly that field
-      (`coachCommentaryPolicy.ts:42`, `coachNarration.ts:77`). So either the
-      probe writes a non-active profile row, or the Vienna walkthrough voice
-      path bypasses the gate. Confirm on a live browser: read back the value
-      post-reload + check which path the listener counts, THEN fix probe-or-app.
-- [ ] **`gap2-automated-mistake-enrollment`** (review) — fixture was "not found"
-      → cold synthetic game with no classifiable mistakes to enroll. Re-run with
-      the real-data fixture before calling it an app bug.
-- [ ] **`face-mode`** (teach) — flaky (passed one run, failed next at the
-      picker). Confirm timing vs real race on a live run.
+Findings — root-caused + fixed (all were PROBE bugs, not app regressions):
+- [x] **`gap5-deeplink-move-jumps`** RE-FIXED (the first fix was wrong). The app
+      bug was real; my first patch passed its unit test but still showed Ply 0 on
+      prod because my two effects fought (no-narration effect applied+marked the
+      ply while narration was null, then the reset effect snapped to 0 when
+      narration arrived). Unified to one apply-once source of truth + a
+      regression test for the narration-after-moves ordering. (commit 315ccb5)
+- [x] **`voice-pref-variance`** — PROBE measurement bug. It counted
+      `voice-speak-invoked`, which `logSpeakInvoked` emits at the TOP of
+      speakForced — BEFORE `speakInternal`'s silent gate — so silenced speaks
+      still logged it (14 invoked + 1 silenced on silent = the identical-numbers
+      signature). The silent gate (`voiceService.ts` speakInternal) is REAL and
+      correct. Count only `coach-narration-spoken` (post-gate). (commit c162bb3)
+- [x] **`gap2-automated-mistake-enrollment`** — PROBE design bug. The Morphy
+      sample can never enroll (no student side → `determinePlayerColor` null).
+      Seed a coach-vs-Stockfish-Bot game with a real white blunder (cpLoss 900),
+      review THAT, assert enrollment. (commit e04d2be)
+- [x] **`face-mode`** — flaky FACE submit (stalls at teach-picker). Re-submit
+      once before judging; a genuine routing break still fails on retry. (e04d2be)
+
+Findings — config/harness (NOT app bugs), need David / env:
+- [ ] **`gap1-voice-marker-audit-fired`** (review) — CI repo secret
+      `AUDIT_STREAM_SECRET` is empty (401). Set it.
+- [ ] **`gap3-explore-stockfish-reply`** (review) — Playwright board-drag
+      mechanics; consider a coordinate/force drag.
 
 NOT-TESTED (correctly, LLM-tool/reachability dependent): `quiz-wrong-answer`,
 `play-variation-and-return`, `trap-prompt-accept/skip`, retired blunder-capture.
