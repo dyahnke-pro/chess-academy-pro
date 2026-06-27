@@ -70,9 +70,25 @@ Findings — root-caused + fixed (all were PROBE bugs, not app regressions):
 
 Findings — config/harness (NOT app bugs), need David / env:
 - [ ] **`gap1-voice-marker-audit-fired`** (review) — CI repo secret
-      `AUDIT_STREAM_SECRET` is empty (401). Set it.
+      `AUDIT_STREAM_SECRET` is empty (401). Set it. (Also makes voice-pref
+      observable instead of not-tested.)
 - [ ] **`gap3-explore-stockfish-reply`** (review) — Playwright board-drag
       mechanics; consider a coordinate/force drag.
+
+### Confirmation runs (prod)
+- clock-restore ✅ PASS (8d59d8e), face-mode ✅ PASS (8d59d8e) — both probe
+  fixes verified green on prod.
+- deeplink + mistake-enrollment: a `gid` ReferenceError I introduced in the
+  enrollment seed aborted the review suite before they ran; fixed in ec686eb,
+  re-dispatched to confirm.
+- voice-pref → not-tested without the repo secret (honest).
+
+### Loop-audit (punish-gems 3-pass) — INFRA finding
+The full-sweep `audit-punish-gems-loop.mjs` never completed in any run — it
+runs to the runner's 75-min cap across all masterclass + pro-rep openings. To
+get a clean loop-audit verdict it must be scoped per-opening via `AUDIT_OPENING`
+(or the job timeout raised / sharded). Not a code regression — a runtime-budget
+mismatch in the audit job. Flag for David.
 
 NOT-TESTED (correctly, LLM-tool/reachability dependent): `quiz-wrong-answer`,
 `play-variation-and-return`, `trap-prompt-accept/skip`, retired blunder-capture.
@@ -110,7 +126,30 @@ NEXT (needs David's on-device confirm — the native path can't run headless):
 
 ---
 
-## Thread 3 — Position-Reading evaluation (DESIGN; forks decided)
+## Thread 3 — Position-Reading / Analysis Practice (BUILD STARTED 2026-06-27 night)
+
+**Shipped (main) — the vertical slice + Surface B:**
+- `src/services/positionReadingService.ts` (+ 20 tests) — the deterministic core:
+  proper **SEE** for hanging (David's iff — a defended piece still hangs when a
+  cheaper attacker wins the exchange; verified: Q-def-by-pawn-atk-by-knight → +6),
+  PGN→middlegame-FEN sampler, question builder off `TacticsLiveContext`
+  (tactic/threat/hanging/material/mate/pawn-break), offline deterministic grader.
+- `src/components/Tactics/AnalysisPracticePage.tsx` + route `/tactics/analysis-
+  practice` + Tactics-tab tile + PageHelp + loading/empty/error states + PostHog
+  events. Pulls a position from the user's `games`, asks, grades the typed read,
+  shows the right answer on a miss.
+
+**Still TODO on this feature (morning):**
+- [ ] Surface A — the pre-mistake question injection in `/coach/review`.
+- [ ] LLM grader (`gradeReadingAnswer` via getCoachChatResponse, closed-world)
+      layered over the deterministic fallback — for fuzzier natural-language reads.
+- [ ] Good/bad-piece + plans question types (v2 — need the piece-quality computer).
+- [ ] Weaknesses write-back (per-category reading score → `openingWeakSpots` etc.).
+- [ ] Voice-in (after the mic fix is verified on device).
+- [ ] Component test for AnalysisPracticePage (service core is tested; page is wiring).
+- [ ] `audit-tactics-analysis-practice.mjs`.
+
+### Original design notes (forks decided) follow.
 
 A conversational drill that grades the user's ability to READ a position by
 comparing their natural-language answer to the deterministic package the coach
