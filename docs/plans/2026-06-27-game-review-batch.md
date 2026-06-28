@@ -156,6 +156,32 @@ material) replayed per position → feels samey. Fix in the discussion redesign:
   vary by what the position actually offers (a sharp position leads with tactics;
   a quiet one leads with plans/weaknesses).
 
+## Phase 10 — Analysis Practice interaction (David 2026-06-28, live)
+- **Auto-advance on CORRECT** — no "Next question" click; when the answer is
+  right, advance automatically (after the demo/voice finishes — voice-gated, not
+  a fixed timer). The Next button stays only for the wrong→reveal path.
+- **Play the SEE swap-off OUT on the board (tell AND show)** — DONE in the data
+  layer: `seeSequence` returns the exchange as legal SAN; `demoLine` is on the
+  greedy-grab + hanging questions. The board animates `demoLine` while the coach
+  narrates each capture ("Queen takes b7 — bishop takes back; you gave a queen
+  for a pawn"). Reuse the voice-gated lesson player (narrationSegments) for the
+  animation. This is the choreographed why-demo applied to SEE.
+- **Progressive GROUNDED hint system** (David: "talk before building") — on a
+  WRONG answer, escalate hints that point the way WITHOUT handing the answer, all
+  derived from the COMPUTED answer key (G0), never the LLM:
+  - Tier 1 (where to look): a cue from the question TYPE — hanging→"a piece
+    attacked more than it's defended"; weak-square→"a square no enemy pawn can
+    challenge"; target→"the opponent's softest point"; greedy-grab→"count the
+    defenders before you take". Generic-to-type, no square named.
+  - Tier 2 (narrow it): name the REGION/PIECE from the answer key — "it's on the
+    queenside" / "it involves a knight" (derived from answerSquares' file +
+    piece on that square).
+  - Tier 3 (almost): name the square's neighbourhood / the piece, still not the
+    exact answer.
+  - Then: full answer + the board demo (demoLine) if still stuck.
+  Each tier is a pure function of the answer key — deterministic, grounded,
+  testable. Mirrors the existing HINT_TIER ladder but for reading questions.
+
 ## Decisions for David
 - D1: Reading gate default ON, or stay opt-in with a clearer prompt? (Phase 4)
 - D2: Re-analysis on the depth bump — prioritize open game + throttle vs full
