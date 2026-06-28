@@ -40,14 +40,20 @@ features. Do it first. UI/sound/accuracy are independent and can land alongside.
   only phrases. Kills recap hallucinations + is the data source for previews.
 
 ## Phase 2 — The grounded "why" (two whys + move-order comparator)
-- Two whys as CONTRAST: why your move was a mistake (what it ALLOWED) + why the
-  better move is better (what it ACHIEVES).
-- New `explainMoveOrder`: eval both orders, take the worse order's refutation,
-  classify mechanism (attacks-the-queen=TEMPO via `chess.attackers` / wins-material
-  =`seeGain` / seizes-square=geometry). Honest limit: no concrete line → say less,
-  never invent (the "bishop-before-queen" case is the tempo branch).
-- The current per-move line is thin ("Mistake. Best move was Be4. Drops 2.7 pawns.")
-  — augment flagged plies with the why.
+- ✅ **Two whys already exist** in `explainBestMoveGrounded` (bestClause = what the
+  better move ACHIEVES + costClause = what your move ALLOWED) — material/check.
+- ✅ **`explainMoveOrder` BUILT (e7a487a) — the move-order/tempo comparator David
+  asked for ("WHY the bishop before the queen — the geometry").** Pure fact-computer
+  in groundedAnswer.ts (G0 leaf). Classifies the better move's mechanism from the
+  board: CHECK / PIN (full ray-walk geometry — "pins the knight on f6 to the queen
+  on d8") / TEMPO (attacks an enemy piece via `chess.attackers`) / MATERIAL (SEE).
+  Caller passes the engine eval-delta (decides WHICH order) + optional refutation
+  (spells the cost of the wrong order). Returns null with no concrete geometry —
+  empty > generic > invented. 8 unit tests (pin/check/tempo/material/cost/2×null).
+- ⏳ **REMAINING — wire it in.** Augment flagged review plies + Analysis-Practice
+  why-demo: when a mistake is a move-order error, compute better/worse orders +
+  engine refutation, call `explainMoveOrder`, voice via `voiceFacts`, and feed the
+  mechanism to the Phase 3 board demo. Needs the engine (eval both orders) + UI.
 
 ## Phase 3 — Choreographed why-demo (board + voice synced) [#6 previews ride here]
 - Beat ASSEMBLER: grounded why → `{fen, move, arrows[], highlights[], say}[]`.
