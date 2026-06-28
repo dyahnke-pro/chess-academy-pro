@@ -239,23 +239,38 @@ async function driveAnalysisPractice(page, pass) {
     return { hint: r, twoCol: r, source: r };
   }
 
-  // Two-column rectangle: board column + panel both present.
-  const turn = await visible(page, '[data-testid="analysis-practice-turn"]');
-  const board = await page.locator('[data-testid="analysis-practice-page"] [data-testid="board"], [data-testid="analysis-practice-turn"] ~ * .cg-wrap, [data-square]').count();
-  const twoCol = { reached: true, pass: turn, detail: turn ? 'turn indicator + board column render' : 'turn indicator missing' };
+  // Two-column rectangle — GEOMETRY proof: at md+ width the turn indicator
+  // (left/board column) must sit clearly LEFT of the prompt panel (right
+  // column), sharing roughly the same top. Stacked (mobile) → prompt is BELOW.
+  let twoCol = { reached: true, pass: false, detail: 'could not measure columns' };
+  const turnBox = await page.locator('[data-testid="analysis-practice-turn"]').boundingBox().catch(() => null);
+  const promptBox = await page.locator('[data-testid="analysis-practice-prompt"]').boundingBox().catch(() => null);
+  if (turnBox && promptBox) {
+    const sideBySide = promptBox.x > turnBox.x + 200 && Math.abs(promptBox.y - turnBox.y) < 250;
+    twoCol = {
+      reached: true, pass: sideBySide,
+      detail: sideBySide
+        ? `two columns side-by-side (turn.x=${Math.round(turnBox.x)} < panel.x=${Math.round(promptBox.x)}, Δy=${Math.round(Math.abs(promptBox.y - turnBox.y))})`
+        : `NOT side-by-side (turn.x=${Math.round(turnBox.x)} panel.x=${Math.round(promptBox.x)} Δy=${Math.round(Math.abs(promptBox.y - turnBox.y))})`,
+    };
+  }
 
-  // Source toggle.
+  // Source toggle — verify the ACTIVE state actually flips (the clicked button
+  // gains the indigo active background), not just that it's clickable.
   let source = { reached: false, pass: false, detail: 'source toggle not found' };
   const anyBtn = page.locator('[data-testid="analysis-practice-source-any"]');
   const mistBtn = page.locator('[data-testid="analysis-practice-source-mistakes"]');
   if ((await anyBtn.count()) && (await mistBtn.count())) {
     await mistBtn.click({ force: true }).catch(() => {});
     await sleep(800);
+    const mistActive = await mistBtn.evaluate((el) => getComputedStyle(el).backgroundColor).catch(() => '');
     await anyBtn.click({ force: true }).catch(() => {});
     await sleep(800);
-    source = { reached: true, pass: true, detail: 'source toggle any/mistakes both clickable' };
+    const anyActive = await anyBtn.evaluate((el) => getComputedStyle(el).backgroundColor).catch(() => '');
+    // Active background is a non-transparent indigo; inactive is transparent.
+    const flipped = /rgba?\(\s*99/.test(mistActive) && /rgba?\(\s*99/.test(anyActive);
+    source = { reached: true, pass: flipped, detail: flipped ? 'source toggle flips active state (mistakes→any)' : `clickable but active-state unclear (mist="${mistActive}" any="${anyActive}")` };
     await dismissBubbles(page);
-    // Re-wait for a prompt after toggling.
     for (let i = 0; i < 20; i++) { if (await visible(page, '[data-testid="analysis-practice-prompt"]')) break; await sleep(800); }
   }
 
@@ -272,16 +287,25 @@ async function driveAnalysisPractice(page, pass) {
   // Click Hint up to 3 times; assert the grounded hint surfaces.
   if (await hintBtn.count()) {
     let tiers = 0;
+    let hintText = '';
     for (let t = 0; t < 3; t++) {
       if (await hintBtn.isDisabled().catch(() => false)) break;
       await hintBtn.click({ force: true }).catch(() => {});
       await sleep(500);
-      if (await visible(page, '[data-testid="analysis-practice-hint"]')) tiers = t + 1;
+      if (await visible(page, '[data-testid="analysis-practice-hint"]')) {
+        tiers = t + 1;
+        hintText = await page.locator('[data-testid="analysis-practice-hint"]').innerText().catch(() => '');
+      }
     }
+    // Accurate: require the hint to carry real GROUNDED text (a sentence), not
+    // just an empty element — strip the "Hint N:" prefix before measuring.
+    const body = hintText.replace(/Hint\s*\d+:?/i, '').trim();
     hint = {
       reached: true,
-      pass: tiers >= 1,
-      detail: tiers >= 1 ? `grounded hint ladder surfaced (reached tier ${tiers})` : 'Hint button present but no hint text appeared (question type may have no ladder)',
+      pass: tiers >= 1 && body.length >= 12,
+      detail: tiers >= 1
+        ? (body.length >= 12 ? `grounded hint ladder surfaced (tier ${tiers}): "${body.slice(0, 60)}"` : `hint element shown but text too thin ("${body}")`)
+        : 'Hint button present but no hint text appeared (question type may have no ladder)',
     };
   } else {
     const sawAnswer = await visible(page, '[data-testid="analysis-practice-answer"]') || await visible(page, '[data-testid="analysis-practice-verdict"]');
@@ -325,29 +349,37 @@ async function driveSetupTrainer(page, pass) {
 }
 
 async function driveTacticalProfile(page, pass) {
+  // Shrink to a phone-ish viewport so the profile content OVERFLOWS — that's
+  // the only way to prove the scroll FIX actually scrolls (the bug was the
+  // content clipping with no scroll). Restore afterwards.
+  const prevVp = page.viewportSize();
+  // Very short viewport so even a sparse profile overflows → proves a REAL scroll.
+  await page.setViewportSize({ width: 390, height: 340 }).catch(() => {});
   await goto(page, '/tactics/profile');
   let mounted = false;
   for (let i = 0; i < 12; i++) { if (await visible(page, '[data-testid="tactical-profile-page"]')) { mounted = true; break; } await sleep(800); }
-  if (!mounted) return { reached: false, pass: false, detail: 'tactical-profile-page never mounted' };
-  // Scroll fix: the container must be scrollable (overflow-y-auto + content taller than viewport),
-  // OR short enough that it fits (also fine). The bug was overflow:visible clipping content.
+  if (!mounted) { if (prevVp) await page.setViewportSize(prevVp).catch(() => {}); return { reached: false, pass: false, detail: 'tactical-profile-page never mounted' }; }
   const scrollInfo = await page.locator('[data-testid="tactical-profile-page"]').evaluate((el) => {
     const cs = getComputedStyle(el);
-    return { overflowY: cs.overflowY, scrollH: el.scrollHeight, clientH: el.clientHeight, canScroll: el.scrollHeight > el.clientHeight };
+    return { overflowY: cs.overflowY, scrollH: el.scrollHeight, clientH: el.clientHeight, canScroll: el.scrollHeight > el.clientHeight + 4 };
   }).catch(() => null);
-  if (!scrollInfo) return { reached: true, pass: false, detail: 'could not read scroll metrics' };
-  // Try to actually scroll if there's overflow.
   let scrolled = false;
-  if (scrollInfo.canScroll) {
+  if (scrollInfo?.canScroll) {
     await page.locator('[data-testid="tactical-profile-page"]').evaluate((el) => { el.scrollTop = el.scrollHeight; }).catch(() => {});
     await sleep(300);
     const top = await page.locator('[data-testid="tactical-profile-page"]').evaluate((el) => el.scrollTop).catch(() => 0);
     scrolled = top > 0;
   }
-  const ok = scrollInfo.overflowY === 'auto' || scrollInfo.overflowY === 'scroll';
+  if (prevVp) await page.setViewportSize(prevVp).catch(() => {});
+  if (!scrollInfo) return { reached: true, pass: false, detail: 'could not read scroll metrics' };
+  // Accurate proof: overflow-y is auto/scroll AND, when content overflows the
+  // small viewport, scrollTop actually moved. If content fits even at 390x600,
+  // pass on the CSS being correct (nothing to scroll is not a bug).
+  const overflowOk = scrollInfo.overflowY === 'auto' || scrollInfo.overflowY === 'scroll';
+  const ok = overflowOk && (!scrollInfo.canScroll || scrolled);
   return {
     reached: true, pass: ok,
-    detail: `overflowY=${scrollInfo.overflowY} canScroll=${scrollInfo.canScroll} scrolled=${scrolled} (h ${scrollInfo.scrollH}/${scrollInfo.clientH})`,
+    detail: `overflowY=${scrollInfo.overflowY} canScroll=${scrollInfo.canScroll} scrolled=${scrolled} (h ${scrollInfo.scrollH}/${scrollInfo.clientH} @390x340)`,
   };
 }
 
