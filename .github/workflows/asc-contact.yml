@@ -1,0 +1,25 @@
+name: ASC review contact + notes
+
+on:
+  workflow_dispatch:
+
+jobs:
+  contact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Set review contact
+        env:
+          ASC_KEY_P8: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APP_BUNDLE_ID: com.chessacademy.pro
+          APP_VERSION: '2.8'
+          CONTACT_FIRST: David
+          CONTACT_LAST: Yahnke
+          CONTACT_PHONE: '+16305182417'
+          CONTACT_EMAIL: dyahnke@gmail.com
+        run: node scripts/ci/asc-contact.mjs
