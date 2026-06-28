@@ -744,7 +744,13 @@ export type AuditKind =
   | 'mic-started'
   | 'mic-start-failed'
   | 'mic-error'
-  | 'mic-gave-up';
+  | 'mic-gave-up'
+  // Billing / subscriptions (Productization Phase 4 — RevenueCat). Fired by
+  // billingService. `billing-error` forwards to PostHog Error Tracking as a
+  // defect; purchase/restore are conversion-funnel signals.
+  | 'billing-error'
+  | 'billing-purchase'
+  | 'billing-restore';
 
 export interface AuditEntry {
   timestamp: number;

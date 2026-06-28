@@ -104,7 +104,35 @@ thresholds. Tracked as **Phase 4.5** below.
   project settings to watch a crash repro; optionally wire Sentry later if a
   dedicated error-management tool is wanted (needs a real DSN).
 
-### Phase 2 — Entitlement scaffold + hard Paywall ⏳ next
+> **STATUS UPDATE 2026-06-28 (branch `claude/focused-pascal-x5kqil`) — Apple-first
+> launch push (David: "$7.99/mo + 1-week free trial; get it on Apple first").**
+> Phases 2 + 4 landed, flag-gated and dormant:
+> - **Phase 2 (Paywall UI + gate):** `src/components/Paywall/PaywallPage.tsx`
+>   (Apple 3.1.2-compliant: price, 7-day trial terms, auto-renew disclosure,
+>   Restore Purchases, Terms/Privacy links, loading/empty/error) +
+>   `PaywallGate.tsx` wrapping `<AppLayout>` in `App.tsx`. Shows only when
+>   `VITE_PAYWALL_ENABLED=true` AND `!isPro`.
+> - **Phase 4 (RevenueCat):** `src/services/billingService.ts` — NATIVE-ONLY
+>   (iOS/Android) for launch; web stays open/free (web-Stripe deferred). Feeds
+>   `entitlementStore`. `initBilling` wired at boot in `App.tsx`. No-ops without
+>   a platform key. Tests: `billingService.test.ts`.
+> - **Legal/Support:** `/terms` (EULA w/ subscription terms) + `/support` routes
+>   added alongside `/privacy`, mounted OUTSIDE the gate.
+> - **Android project** generated (`cap add android` + patches; gitignored,
+>   regen in CI). `@revenuecat/purchases-capacitor` added to package.json.
+> - **Docs for David:** `docs/APPLE_LAUNCH_GUIDE.md` (click-by-click),
+>   `docs/store-listing-copy.md` (verified copy), `docs/store-compliance-package.md`.
+> - **Phase 3 (Supabase Auth) DEFERRED & likely UNNEEDED for v1:** RevenueCat
+>   uses an anonymous app-user-id, so a paid launch needs no account system —
+>   which also avoids Apple's account-deletion mandate. Restore Purchases covers
+>   cross-device. Build auth later only if cloud accounts are wanted.
+> - **REMAINING before the wall goes live:** David's console steps (Apple Paid
+>   Apps Agreement + banking, RevenueCat keys, ASC subscription product) per the
+>   guide; set `VITE_PAYWALL_ENABLED=true` + `VITE_REVENUECAT_IOS_KEY`; on-device
+>   sandbox purchase QA; and **Phase 4.5 cost caps** (below) before the trial
+>   opens to real users.
+
+### Phase 2 — Entitlement scaffold + hard Paywall ✅ DONE (this branch, flag-gated)
 - `src/stores/entitlementStore.ts` (Zustand) — `isPro`, `status`, `source`. Single source of truth.
 - `src/hooks/useEntitlement.ts`.
 - `src/components/Paywall/` — full-screen Paywall (loading/empty/error states). Wraps the app: not Pro → Paywall renders instead of routes (except account/auth/restore).

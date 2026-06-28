@@ -99,6 +99,10 @@ import { DebugAuditPage } from './components/Debug/DebugAuditPage';
 import { OpeningBlundersPage } from './components/Debug/OpeningBlundersPage';
 import { useAndroidBackButton } from './hooks/useAndroidBackButton';
 import { PrivacyPolicyPage } from './components/Legal/PrivacyPolicyPage';
+import { TermsOfServicePage } from './components/Legal/TermsOfServicePage';
+import { SupportPage } from './components/Legal/SupportPage';
+import { PaywallGate } from './components/Paywall/PaywallGate';
+import { initBilling } from './services/billingService';
 
 /**
  * Mounted inside BrowserRouter so it can use router hooks. Wires the
@@ -198,6 +202,12 @@ export function App(): JSX.Element {
         // opt-out. Stays anonymous until auth lands (Phase 3) — never
         // identify with the shared 'main' profile id.
         initAnalytics({ optedOut: profile.preferences.analyticsOptOut === true });
+
+        // Productization Phase 4 — resolve subscription entitlement via
+        // RevenueCat. No-op without a platform SDK key (keyless build stays
+        // fully usable, source='unconfigured' → isPro). The hard paywall only
+        // engages when VITE_PAYWALL_ENABLED=true AND the user isn't Pro.
+        void initBilling();
 
         // Establish baseline strength so difficulty is adaptive from the
         // first session. Imported games are the source of truth; with no
@@ -312,7 +322,13 @@ export function App(): JSX.Element {
             (/privacy) doubles as the hosted privacy-policy link the App
             Store + Google Play both require. */}
         <Route path="/privacy" element={<PrivacyPolicyPage />} />
-        <Route element={<AppLayout />}>
+        {/* Standalone Terms + Support routes — hosted Terms/Support URLs the
+            stores require, and the EULA/Privacy links the subscription paywall
+            must carry. Mounted OUTSIDE the PaywallGate so a walled user (and a
+            store reviewer) can always reach them. */}
+        <Route path="/terms" element={<TermsOfServicePage />} />
+        <Route path="/support" element={<SupportPage />} />
+        <Route element={<PaywallGate><AppLayout /></PaywallGate>}>
           <Route path="/" element={<ErrorBoundary><DashboardPage /></ErrorBoundary>} />
           <Route path="/academy" element={<ErrorBoundary><AcademyPage /></ErrorBoundary>} />
           <Route path="/academy/course/:id" element={<ErrorBoundary><CourseSyllabusPage /></ErrorBoundary>} />
