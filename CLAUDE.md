@@ -268,6 +268,30 @@ This is David's directive verbatim (2026-05-18):
 even remove the other form of streaming so it can't get
 confused or forgotten again."*
 
+**🔒 PLANNED TTS PROVIDER MIGRATION — Polly → Google Cloud TTS when the
+AWS free tier ends (David 2026-06-28, LOCKED: "lock the google TTS into
+memory, we will do that later").** AWS Polly is on its **12-month free
+tier** (1M Neural chars/month, free for the first year from David's first
+Polly API call). The exact expiry is in **AWS Console → Billing → Free
+Tier** (~Dec 2026/Jan 2027 by David's estimate). When it ends, Polly
+becomes the app's dominant variable cost (~$16/M Neural chars) — and with
+DeepSeek-only LLM, voice is the ENTIRE marginal cost per user. The plan,
+to be done LATER (not now):
+- Build a **TTS provider seam** so `/api/tts` can route across providers
+  behind the SAME streaming contract (G4 stays — chunked, no buffered
+  path; Google + Azure both support streaming synthesis).
+- Make **Google Cloud TTS the primary** replacement: unlike Polly's
+  one-time 12-month tier, Google's free tier is **perpetual + monthly**
+  (~1M Neural/WaveNet chars + 4M standard chars, free every month), so at
+  launch scale voice likely stays ~$0 indefinitely at comparable quality.
+- Keep the existing **`web-speech` device-TTS tier as the always-free
+  floor** (free forever, offline, lower quality), and Azure Neural
+  (0.5M/mo free) as a backup leg.
+- Until then: ride Polly free, and `POLLY_USD_PER_CHAR` stays `0` in
+  `usageGuard` until the AWS expiry date (then set `0.000016`). The
+  provider migration is the durable fix so the app is never cliff-edged
+  by a single TTS vendor again.
+
 ### G5. Verbosity setting is RESPECTED, not hinted at.
 
 `coachNarration` has three values: `silent` / `brief` / `full`.
