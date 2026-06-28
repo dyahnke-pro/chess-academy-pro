@@ -131,9 +131,14 @@ Learn, drill, improve at chess
 
 ### Promotional text (≤170 chars — editable any time, no review)
 ```
-Your AI chess coach talks you through every opening, tactic, and endgame — arrows on the board, plans named, difficulty adapting to your level as you improve.
+Stop guessing what to study. Your AI coach watches your games, finds your weaknesses, and trains you on exactly what you need — out loud, move by move. Free for 7 days.
 ```
-*(157 chars)*
+*(168 chars)*
+
+> Promo text shows above the description and you can change it anytime WITHOUT
+> a review — use it for the current hook / seasonal angle. The line above leads
+> with the pain ("guessing what to study") + the unique mechanism + the free
+> trial as risk-reversal.
 
 ### Keyword field (≤100 chars — comma-separated, NO spaces, no repeats from name/subtitle)
 ```
@@ -141,32 +146,72 @@ opening,tactics,puzzle,endgame,trainer,grandmaster,stockfish,analysis,strategy,l
 ```
 *(100 chars exactly — "chess", "coach", "learn", "drill", "improve" omitted because they're already in the app name/subtitle, which Apple also indexes.)*
 
-### Description (front-loaded hook first)
+### Hook line (the first line — make-or-break; it's all most people read before "more")
+
+Pick ONE. They're ranked by how directly they sell:
+1. **A chess coach that actually watches your games — and tells you exactly what to fix.** ← recommended
+2. **Stop grinding random puzzles. Get a coach that knows your game.**
+3. **The first chess app that trains you like a real coach would.**
+
+### Description (front-loaded hook first — optimized to CONVERT, since iOS doesn't index the body for search)
 
 ```
-Your AI chess coach that talks you through every move.
+A chess coach that actually watches your games — and tells you exactly what to fix.
 
-Chess Academy Pro teaches chess out loud, move by move, with the board lighting up exactly where to look — arrows on the threats, the plan named, the difficulty adapting to your level. It's the coach in your pocket that never gets tired of explaining, and never loses track of what you need to work on next.
+Most chess apps hand you puzzles in one corner and opening videos in another, then leave you to guess what to study. Chess Academy Pro is different. It watches the games you play, finds the mistakes you keep making, and builds every puzzle, opening, and lesson around YOUR weaknesses — out loud, move by move, with the board lighting up exactly where to look.
 
-ONE CONNECTED TRAINING LOOP
-The games you play are analyzed, your mistakes are sorted into the patterns you keep missing, and those weaknesses flow straight into your next puzzles, openings, and lessons. Spaced repetition brings the hard ones back until they stick. Learn, play, identify your weaknesses, drill them shut.
+A private coach in your pocket, for less than the price of one lesson.
 
-OPENINGS THAT TEACH, NOT MEMORIZE
-Dozens of openings come as guided masterclasses: Watch the coach narrate the main line, Learn it move by move, Practice in silence, then Play it against the engine — all on one screen. Lines are built from real master games, with over 3,000 opening lines, middlegame plans, model games, and traps. Lead-the-eye arrows move your attention to the right square as the coach speaks.
+ONE CONNECTED LOOP — THE PART NO OTHER APP DOES
+Your games are reviewed by a full-strength Stockfish engine. Your mistakes are sorted into the patterns you keep missing. Those weaknesses flow straight into your next puzzles and lessons, and spaced repetition brings the hard ones back until they stick. Stop guessing what to study — the app always knows what's next.
 
-THOUSANDS OF TACTICS THAT STICK
-Train forks, pins, skewers, sacrifices, and mating nets with spaced repetition, difficulty adapting to your rating automatically.
+— EVERYTHING INSIDE —
 
-REAL ANALYSIS
-A full-strength Stockfish engine reviews your games and the coach explains, in plain language, why a move was wrong and what to play instead.
+YOUR AI COACH
+• A talking coach that narrates every move and answers your questions mid-game, in plain English
+• Voice coaching with lead-the-eye arrows and highlights — your eye lands exactly where the coach is pointing
+• Tells you WHY a move was wrong and what to play instead — never cryptic engine numbers
 
-ENDGAMES, PLANS & A KIDS MODE
-Master the endgames that decide games, learn the middlegame plans that grow out of your openings, and hand the dedicated kids mode to a young player.
+OPENINGS — BUILT FROM REAL MASTER GAMES
+• 42 guided masterclasses using the Watch → Learn → Practice → Play method
+• Over 3,600 opening lines to explore
+• 15 pro-player repertoires across 81 openings — study the exact lines top players use
+• 570 annotated model games
+• 520 middlegame plans that grow naturally out of your openings
+• 296 traps and tactical "gems" hidden in the lines
+• Common pitfalls flagged across 125 openings
 
-Engine analysis runs on your device; the AI coach's voice and chat are powered by secure cloud services. Cloud sync is optional.
+TACTICS & PUZZLES
+• 15,000 hand-curated puzzles across 72 themes — forks, pins, skewers, sacrifices, mating nets and more
+• Spaced repetition brings your misses back until they're automatic
+• Difficulty adapts to your rating, every puzzle in the sweet spot
+• 37 named mating patterns to recognize on sight
+
+ANALYSIS & IMPROVEMENT
+• Full-strength Stockfish 18 runs on your device
+• Import your Chess.com and Lichess games for instant review
+• Every mistake becomes a weakness your training targets next
+• Shareable insight cards built from your own games
+
+ENDGAMES
+• Master the rook, pawn, and minor-piece endgames that actually decide games
+
+A KIDS MODE
+• A dedicated, friendly mode with encouraging lessons for young players
+
+Try it free for 7 days. Then keep your coach for $7.99/month — less than a single hour with a human coach. Cancel anytime.
+
+Engine analysis runs on your device; the coach's voice and chat are powered by secure cloud services.
 
 Pick an opening and start improving today.
 ```
+
+> Structure = sell THEN moat: the hook + the one-thing-nobody-else-does
+> (the closed loop) earn the read, then the **full feature list** lays out the
+> arsenal — every line carrying a **specific verified number** (42 / 3,600 / 15
+> pros / 570 / 520 / 296 / 15,000 / 72 / 37) so the breadth reads as *proof*,
+> not fluff. Scannable bullets are how people actually read an App Store body.
+> All numbers verified in the table at the top. ~2,700 chars, well under 4,000.
 
 ---
 
