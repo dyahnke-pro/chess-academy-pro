@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -265,5 +265,114 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
   it('returns null when there is nothing computed to say (no eval, no tactic)', () => {
     expect(assemblePositionAssessment({ evalCp: null, mateIn: null, studentColor: 'white' })).toBeNull();
     expect(assemblePositionAssessment({ evalCp: null, mateIn: null, studentColor: 'white', tactics: tactics() })).toBeNull();
+  });
+});
+
+describe('explainBestMoveGrounded — hanging is legal-capture + SEE grounded (no pinned-attacker false positive)', () => {
+  it('does NOT call a pawn hanging when its only attacker is PINNED (the 2026-06-27 e5 bug)', () => {
+    // White Pe5 is "attacked" by Black Nd7, but the knight is pinned to the
+    // Black king on d8 by the white rook on d1 — it can't legally capture, so
+    // e5 is NOT hanging. White plays a quiet a3; best move (a3) wins nothing.
+    const out = explainBestMoveGrounded('3k4/3n4/8/4P3/8/8/P7/3RK3 w - - 0 1', 'a3', 'a2a3', 'white');
+    expect(out).toBeNull(); // never "left the pawn on e5 hanging"
+  });
+
+  it('reports the punishing capture when the played move hangs a piece to a LEGAL capture', () => {
+    // White Pd4 is undefended and attacked by Black Nc6 (NOT pinned). White
+    // plays the quiet Ke2 (best move d4-d5 escapes); after Ke2, Black has the
+    // legal, material-winning Nxd4. bestMoveUci must be non-null or the helper
+    // short-circuits before the cost clause.
+    const out = explainBestMoveGrounded('4k3/8/2n5/8/3P4/8/8/4K3 w - - 0 1', 'Ke2', 'd4d5', 'white');
+    expect(out).toContain('Nxd4'); // a real, legal, material-winning capture
+    expect(out).toContain('winning the pawn');
+  });
+});
+
+describe('explainMoveOrder — grounded "why THIS move first" (David 2026-06-27)', () => {
+  // White Bc1, Black Qd8 + Nf6 + Kg8. Bg5 pins the f6-knight to the d8-queen
+  // along the g5-d8 diagonal — the exact "bishop out before the queen" geometry.
+  const PIN_FEN = '3q1rk1/8/5n2/8/8/8/8/2B1K3 w - - 0 1';
+
+  it('names the PIN geometry (knight pinned to the queen)', () => {
+    const out = explainMoveOrder({ fenBefore: PIN_FEN, betterSan: 'Bg5', worseSan: 'Ke2', moverColor: 'white' });
+    expect(out).not.toBeNull();
+    expect(out!.mechanism).toBe('pin');
+    expect(out!.text).toContain('pins the knight on f6 to the queen on d8');
+  });
+
+  it('reports a CHECK as the forcing mechanism', () => {
+    // Ra1 → a8 checks the e8-king along the 8th rank.
+    const out = explainMoveOrder({ fenBefore: '4k3/8/8/8/8/8/8/R3K3 w - - 0 1', betterSan: 'Ra8+', worseSan: 'Kd2', moverColor: 'white' });
+    expect(out!.mechanism).toBe('check');
+    expect(out!.text).toContain('comes with check');
+  });
+
+  it('reports a developing TEMPO (attacks an enemy piece)', () => {
+    // Bf1 → c4 attacks the d5-knight; nothing valuable behind it → tempo, not pin.
+    const out = explainMoveOrder({ fenBefore: '4k3/8/8/3n4/8/8/8/4KB2 w - - 0 1', betterSan: 'Bc4', worseSan: 'Ke2', moverColor: 'white' });
+    expect(out!.mechanism).toBe('tempo');
+    expect(out!.text).toContain('attacks the knight on d5');
+  });
+
+  it('reports MATERIAL when the better move wins a piece outright', () => {
+    // Bc4 x d5 wins the pawn; Black can't recapture.
+    const out = explainMoveOrder({ fenBefore: '4k3/8/8/3p4/2B5/8/8/4K3 w - - 0 1', betterSan: 'Bxd5', worseSan: 'Ke2', moverColor: 'white' });
+    expect(out!.mechanism).toBe('material');
+    expect(out!.text).toContain('wins the pawn on d5');
+  });
+
+  it('spells out the COST of the wrong order when a refutation is supplied', () => {
+    const out = explainMoveOrder({ fenBefore: PIN_FEN, betterSan: 'Bg5', worseSan: 'Ke2', moverColor: 'white', worseRefutationSan: 'Qd4' });
+    expect(out!.text).toContain('Ke2');
+    expect(out!.text).toContain('Qd4');
+  });
+
+  it('returns null when the better move has no concrete geometry (empty > generic)', () => {
+    const out = explainMoveOrder({ fenBefore: PIN_FEN, betterSan: 'Ke2', worseSan: 'Bg5', moverColor: 'white' });
+    expect(out).toBeNull();
+  });
+
+  it('returns null when a move is illegal (never invents)', () => {
+    const out = explainMoveOrder({ fenBefore: PIN_FEN, betterSan: 'Qh7', worseSan: 'Ke2', moverColor: 'white' });
+    expect(out).toBeNull();
+  });
+});
+
+describe('describeMoveGeometry — grounded one-phrase "what the move does" (David 2026-06-28)', () => {
+  it('names a FORK (royal: king + rook)', () => {
+    // Ng4 → f6 hits the g8-king (check) and the e8-rook (white king on g1 so
+    // white isn't in check, making Nf6 legal).
+    const out = describeMoveGeometry('4r1k1/8/8/8/6N1/8/8/6K1 w - - 0 1', 'Nf6+', 'white');
+    expect(out).toContain('forks');
+    expect(out).toContain('king on g8');
+    expect(out).toContain('rook on e8');
+  });
+
+  it('names a PIN (knight to the queen)', () => {
+    const out = describeMoveGeometry('3q1rk1/8/5n2/8/8/8/8/2B1K3 w - - 0 1', 'Bg5', 'white');
+    expect(out).toBe('pins the knight on f6 to the queen on d8');
+  });
+
+  it('names a MATERIAL win', () => {
+    const out = describeMoveGeometry('4k3/8/8/3p4/2B5/8/8/4K3 w - - 0 1', 'Bxd5', 'white');
+    expect(out).toBe('wins the pawn on d5');
+  });
+
+  it('names a CHECK when the move only hits the king', () => {
+    const out = describeMoveGeometry('4k3/8/8/8/8/8/8/R3K3 w - - 0 1', 'Ra8+', 'white');
+    expect(out).toBe('gives check');
+  });
+
+  it('names a single ATTACK (tempo)', () => {
+    const out = describeMoveGeometry('4k3/8/8/3n4/8/8/8/4KB2 w - - 0 1', 'Bc4', 'white');
+    expect(out).toBe('attacks the knight on d5');
+  });
+
+  it('returns null for a quiet move with no threat (G3 — stay silent)', () => {
+    expect(describeMoveGeometry('4k3/8/8/8/8/8/4P3/4K3 w - - 0 1', 'e3', 'white')).toBeNull();
+  });
+
+  it('returns null for an illegal move (never invents)', () => {
+    expect(describeMoveGeometry('4k3/8/8/8/8/8/4P3/4K3 w - - 0 1', 'Qh7', 'white')).toBeNull();
   });
 });

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { db } from '../db/schema';
-import { countGamesNeedingAnalysis, analyzeAllGames, analyzeRecentGames } from './gameAnalysisService';
+import { countGamesNeedingAnalysis, analyzeAllGames, analyzeRecentGames, gameNeedsAnalysis, ANALYSIS_DEPTH } from './gameAnalysisService';
 import { buildGameRecord, buildUserProfile } from '../test/factories';
 import { useAppStore } from '../stores/appStore';
 import type { StockfishAnalysis } from '../types';
@@ -75,11 +75,31 @@ describe('gameAnalysisService', () => {
       await db.games.bulkAdd([
         buildGameRecord({ id: 'g1', annotations: null }),
         buildGameRecord({ id: 'g2', annotations: [] }),
-        buildGameRecord({ id: 'g3', pgn: fullPgn, annotations: fullAnnotations, fullyAnalyzed: true }),
+        // Fully analyzed AT THE CURRENT DEPTH → up to date, not counted.
+        buildGameRecord({ id: 'g3', pgn: fullPgn, annotations: fullAnnotations, fullyAnalyzed: true, analysisDepth: ANALYSIS_DEPTH }),
       ]);
 
       const count = await countGamesNeedingAnalysis();
       expect(count).toBe(2);
+    });
+
+    it('does NOT batch-count depth-stale games — the deepening is lazy, on-open only (David 2026-06-27)', async () => {
+      const fullPgn = '1. e4 e5 1/2-1/2';
+      const fullAnnotations = [
+        { moveNumber: 1, color: 'white' as const, san: 'e4', evaluation: 30, bestMove: null, bestMoveEval: 0, classification: 'good' as const, comment: null },
+        { moveNumber: 1, color: 'black' as const, san: 'e5', evaluation: 20, bestMove: null, bestMoveEval: 30, classification: 'good' as const, comment: null },
+      ];
+      const shallow = buildGameRecord({ id: 'shallow', pgn: fullPgn, annotations: fullAnnotations, fullyAnalyzed: true, analysisDepth: 12 });
+      await db.games.bulkAdd([shallow]);
+
+      // The background batch sweep MUST NOT re-crunch all 690 depth-12
+      // games — depthUpgrade is suppressed there, so the count is 0.
+      expect(await countGamesNeedingAnalysis()).toBe(0);
+
+      // But the on-open path (default depthUpgrade) DOES flag it so opening
+      // the game for review refreshes it to the deeper depth.
+      expect(gameNeedsAnalysis(shallow)).toBe(true);
+      expect(gameNeedsAnalysis(shallow, { depthUpgrade: false })).toBe(false);
     });
 
     it('excludes master games', async () => {
@@ -179,6 +199,7 @@ describe('gameAnalysisService', () => {
           { moveNumber: 1, color: 'black', san: 'e5', evaluation: 20, bestMove: null, bestMoveEval: 30, classification: 'good', comment: null },
         ],
         fullyAnalyzed: true,
+        analysisDepth: ANALYSIS_DEPTH,
         isMasterGame: false,
       }));
 

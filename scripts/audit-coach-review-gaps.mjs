@@ -107,6 +107,7 @@ const GAP_FUNCTIONS = [
   'gap5-deeplink-move-jumps',
   'gap5-deeplink-out-of-range-clamps',
   'gap6-reading-gate', // Surface A: "quiz me as I review" pauses before a mistake
+  'gap7-citation-previews', // Phase 1c: grounded board previews for the student's flagged moves
 ];
 const GRID = new Map(GAP_FUNCTIONS.map((fn) => [fn, { fn, reached: false, pass: false, detail: 'NOT REACHED' }]));
 function mark(fn, { reached = true, pass, detail }) {
@@ -267,6 +268,9 @@ async function main() {
     // GAP 6 — Surface A: the reading gate pauses before a student mistake.
     await runGap6();
 
+    // GAP 7 — Phase 1c: grounded board previews for the student's flagged moves.
+    await runGap7();
+
     // Surface A: with `readingChallengesInReview` ON, seed a student-blunder
     // coach game, walk it, and assert the reading gate appears BEFORE the move
     // is revealed (a prompt + input on the clean position). Reuses the gap2
@@ -323,6 +327,55 @@ async function main() {
       mark('gap6-reading-gate', {
         reached: true, pass: promptUp && inputUp,
         detail: promptUp && inputUp ? 'gate paused before the mistake with a reading question + input (move not yet revealed)' : `gate appeared but prompt/input missing (prompt=${promptUp} input=${inputUp})`,
+      });
+    }
+
+    // ── GAP 7 implementation — grounded citation previews (Phase 1c) ──────
+    // Seed the SAME student-blunder game (white's 3.Qxe5+ is the blunder,
+    // engine wanted Nf3). buildReviewCitations must surface that one student
+    // mistake, ReviewCitationPreviews must render a card with the grounded
+    // "why better" line, and tapping it must jump the main board. This is the
+    // game the morphy sample can't prove (Morphy, the student, never errs).
+    async function runGap7() {
+      const seeded = await seedCoachBlunderGame();
+      if (!seeded) { notTested('gap7-citation-previews', 'could not seed the blunder game'); return; }
+      await page.goto(`${BASE}/coach/review/${SEED_GAME_ID}`, { waitUntil: 'domcontentloaded', timeout: BOOT_MS });
+      if (!await until(() => visible('[data-testid="coach-game-review"]'), SUMMARY_MS)) { notTested('gap7-citation-previews', 'review did not mount'); return; }
+      const startable = await until(async () => {
+        const b = page.locator('[data-testid="start-walk-btn"]').first();
+        return (await b.isVisible().catch(() => false)) && (await b.isEnabled().catch(() => false));
+      }, START_ENABLE_MS);
+      if (!startable) { notTested('gap7-citation-previews', 'walk Start never enabled'); return; }
+      await page.locator('[data-testid="start-walk-btn"]').click({ force: true }).catch(() => undefined);
+      if (!await until(() => visible('[data-testid="coach-game-review-walk"]'), 15_000)) { notTested('gap7-citation-previews', 'walk never mounted'); return; }
+
+      // Previews live below the move list in the scroll-middle — scroll to them.
+      await page.locator('[data-testid="review-scroll-middle"]')
+        .evaluate((el) => { el.scrollTop = el.scrollHeight; }).catch(() => undefined);
+      await page.waitForTimeout(600);
+
+      const previewsUp = await page.locator('[data-testid="review-citation-previews"]').isVisible().catch(() => false);
+      if (!previewsUp) {
+        mark('gap7-citation-previews', { reached: true, pass: false, detail: 'ReviewCitationPreviews did not render for a game with a student blunder' });
+        return;
+      }
+      // Card is a <button>; the why-line is a <div>. Scope to buttons so the
+      // count is cards, not cards+why-divs.
+      const cardCount = await page.locator('[data-testid="review-citation-previews"] button[data-testid^="review-citation-"]').count();
+      const whyCount = await page.locator('[data-testid^="review-citation-why-"]').count();
+      // Tap the first card → should jump the main board (emits review-nav).
+      const tapTs = Date.now();
+      await page.locator('[data-testid="review-citation-previews"] button[data-testid^="review-citation-"]').first().click({ force: true }).catch(() => undefined);
+      await page.waitForTimeout(800);
+      const afterTap = await pullAudit(tapTs);
+      const jumped = afterTap.events.some((e) => String(e.kind) === 'review-nav');
+
+      const pass = cardCount >= 1 && whyCount >= 1;
+      mark('gap7-citation-previews', {
+        reached: true, pass,
+        detail: pass
+          ? `rendered ${cardCount} preview card(s), ${whyCount} grounded why-line(s); tap-jump fired review-nav=${jumped}`
+          : `previews up but card/why missing (cards=${cardCount} why=${whyCount})`,
       });
     }
 

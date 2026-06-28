@@ -19,12 +19,14 @@ import { detectMissedTactics } from '../../services/missedTacticService';
 import {
   generateNarrativeSummary,
   generateReviewNarration,
+  buildReviewCitations,
 } from '../../services/coachFeatureService';
 import type {
   NarrativeMoveData,
   ReviewNarration,
   ReviewMoveInput,
 } from '../../services/coachFeatureService';
+import { ReviewCitationPreviews } from './ReviewCitationPreviews';
 import { useReviewPlayback } from '../../hooks/useReviewPlayback';
 import { useReviewEngineLines } from '../../hooks/useReviewEngineLines';
 import { SkipBack, SkipForward, ChevronLeft, ChevronRight, Cpu } from 'lucide-react';
@@ -342,6 +344,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       fenAfter: m.fen,
     })),
     [moves],
+  );
+
+  // Grounded preview spine (Phase 1c) — the student's flagged moves as
+  // structured citations (position + played/suggested squares), computed from
+  // the engine annotations, never the LLM. Feeds the inline board previews.
+  const reviewCitations = useMemo(
+    () => buildReviewCitations(reviewMoveInputs, playerColor),
+    [reviewMoveInputs, playerColor],
   );
 
   useEffect(() => {
@@ -1233,7 +1243,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             </div>
 
             <div className="px-2 pt-1 pb-2 flex justify-center relative">
-              <div className="w-full md:max-w-[420px] relative">
+              {/* Cap the board to a viewport-relative width on mobile so the
+                  square board can't eat the screen and STARVE the flex-1
+                  scroll middle (narration banner + Ask chat). David 2026-06-27:
+                  "Play Again / Back to Coach … preventing me from seeing the
+                  chat" — the top block is shrink-0, so an uncapped full-width
+                  board left the middle ~0px tall. 46vh keeps >50vh for the
+                  scrollable narration/chat above the bottom bar. Desktop keeps
+                  the original 420px (height is not the constraint there). */}
+              <div className="w-full max-w-[46vh] mx-auto md:max-w-[420px] relative">
                 <ChessBoard
                   // Re-key on exploration toggle so the underlying chess
                   // instance resets cleanly when the user enters or
@@ -1720,6 +1738,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 />
               </div>
             </div>
+
+            {/* Grounded board previews for the student's flagged moves
+                (Phase 1c, David IMG_4298). Each mini-board shows the position
+                with the played move (red) + the engine's better move (green);
+                tapping jumps the main board to that ply. */}
+            <ReviewCitationPreviews
+              citations={reviewCitations}
+              onJumpToPly={(ply: number) => walkPlayback.jumpToPly(ply)}
+            />
 
             {/* Missed tactics — ship-1 made this non-empty for every
                 reviewed game. Tapping a row jumps to the ply; the

@@ -95,12 +95,11 @@ export function canStreamProgressivePlaybackFor(
 // pairing in Settings. The personality drives the *prompt* (what the
 // coach says); the voice drives the *timbre* (who says it). Any voice
 // can deliver any personality — Ruth doing drill-sergeant, Stephen
-// doing flirtatious, etc.
+// doing edgy, etc.
 export const PERSONALITY_VOICE_DEFAULTS: Record<CoachPersonality, string> = {
-  default: 'ruth',         // generative — sultry low female (David's pick 2026-06-07: Joanna reverted)
+  default: 'ruth',         // generative — warm low female (David's pick 2026-06-07: Joanna reverted)
   soft: 'joanna',          // neural — warm, encouraging female
   edgy: 'stephen',         // neural — dry, sharper male
-  flirtatious: 'ruth',     // generative — sultry, low female
   'drill-sergeant': 'matthew', // generative — direct, deep male
 };
 
@@ -113,7 +112,6 @@ export const PERSONALITY_SECONDARY_VOICE_DEFAULTS: Record<CoachPersonality, stri
   default: 'matthew',          // generative male contrasts Ruth (default primary)
   soft: 'stephen',             // neural male contrasts Joanna
   edgy: 'kendra',              // neural female contrasts Stephen
-  flirtatious: 'gregory',      // generative male contrasts Ruth — sultry partner-voice
   'drill-sergeant': 'salli',   // neural female contrasts Matthew
 };
 
@@ -180,9 +178,8 @@ export function getTtsUrl(text: string, voice: string, useSsml = true, style?: s
   // on generative voices, prosody slowdown on neural). Short clips
   // / warmups opt out to avoid empty-SSML edge cases.
   // The optional `style` param tunes per-personality prosody on
-  // Neural voices (rate / pitch / volume) — e.g., flirtatious ⇒
-  // slower + lower pitch (sultry register), drill-sergeant ⇒
-  // faster + louder. Generative voices ignore it.
+  // Neural voices (rate / pitch / volume) — e.g., drill-sergeant ⇒
+  // faster + louder, soft ⇒ gentler. Generative voices ignore it.
   const ssmlParam = useSsml ? '&ssml=1' : '';
   const styleParam = style ? `&style=${encodeURIComponent(style)}` : '';
   return `${base}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice)}${ssmlParam}${styleParam}`;
@@ -1162,7 +1159,7 @@ class VoiceService {
       void this.logNarrationSpoken(text, voiceForSpeak, prefs);
       // WO-VOICE-LAYER-01 (a): per-personality SSML prosody. Neural
       // voices respect rate/pitch/volume so the same Joanna can sound
-      // sultry under flirtatious, clipped under drill-sergeant, etc.
+      // gentler under soft, clipped under drill-sergeant, etc.
       // Generative voices (Ruth/Matthew/Danielle/Gregory) ignore
       // prosody — pass the style through anyway for consistency.
       // Pass the personality as the Neural-prosody style ONLY for a

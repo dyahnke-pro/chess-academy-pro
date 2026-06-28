@@ -65,12 +65,23 @@ export function translateMasterMove(
   const popularity = translatePopularity(move.games, totalGames);
   const score = translateScore(move, perspective);
   const sample = describeSampleSize(move.games);
+  const side = perspective === 'white' ? 'White' : 'Black';
+  // The bundled local masters DB is sparse — many moves carry a game
+  // COUNT but no W/D/L breakdown, so `translateScore` reads 'untested'.
+  // Don't pair that with a big sample ("the main move … and untested …
+  // from thousands of master games" is a self-contradiction David
+  // caught 2026-06-27). When results aren't tracked, speak popularity +
+  // sample only and stay silent on the score.
+  const sentence =
+    score === 'untested'
+      ? `${move.san} is ${popularity} here, from ${sample}.`
+      : `${move.san} is ${popularity} here and ${score} for ${side}, from ${sample}.`;
   return {
     san: move.san,
     popularity,
     score,
     sample,
-    sentence: `${move.san} is ${popularity} here and ${score} for ${perspective === 'white' ? 'White' : 'Black'}, from ${sample}.`,
+    sentence,
   };
 }
 

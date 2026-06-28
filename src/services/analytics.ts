@@ -142,6 +142,13 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   'asset-load-error': 'asset_load_error',
   'auto-import-failed': 'auto_import_failed',
   'polly-fallback': 'polly_fallback',
+  // The IN-FLOW Polly → Web Speech demotion (voiceService.speakInternal).
+  // `polly-fallback` only fires on noFallback skips; this is the silent
+  // every-line demotion that IS the no-sound signal on iOS, and it was
+  // invisible in durable analytics — "the buffer's wiped, data's gone"
+  // when the real answer is here (David 2026-06-27). Event (not $exception)
+  // so we see the RATE of Polly degradation per session/device.
+  'voice-fallover': 'voice_fallover',
 };
 
 /** Map a forensic audit kind to its product-event name, or undefined

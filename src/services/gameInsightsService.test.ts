@@ -115,7 +115,8 @@ describe('gameInsightsService', () => {
       expect(result.avgAccuracy).toBe(0);
       expect(result.highestBeaten).toBeNull();
       expect(result.lowestLostTo).toBeNull();
-    });
+    }, 15000); // first dynamic import + module init runs ~4s; tight against the
+    // default 5s under ship-check's parallel CPU load. Generous ceiling.
 
     it('returns correct W/L/D counts and win rates', async () => {
       await db.profiles.add(buildUserProfile({ id: 'p1', name: 'TestUser' }));

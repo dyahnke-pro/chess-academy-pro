@@ -23,11 +23,12 @@ export type CoachIdentity = 'danya' | 'kasparov' | 'fischer';
 // they want. Each personality ships sensible per-dial defaults but every
 // dial is independently overridable from Settings.
 
+// All-ages contract (David 2026-06-28): 'flirtatious' removed — no romantic /
+// suggestive register anywhere in the app.
 export type CoachPersonality =
   | 'default'
   | 'soft'
   | 'edgy'
-  | 'flirtatious'
   | 'drill-sergeant';
 
 export type IntensityLevel = 'none' | 'medium' | 'hard';
@@ -46,11 +47,12 @@ export const PERSONALITY_DIAL_DEFAULTS: Record<
   CoachPersonality,
   Pick<PersonalitySettings, 'profanity' | 'mockery' | 'flirt'>
 > = {
+  // Profanity + flirt are hard-locked to 'none' for the all-ages contract;
+  // only mockery (clean competitive ribbing) varies by personality.
   default: { profanity: 'none', mockery: 'none', flirt: 'none' },
   soft: { profanity: 'none', mockery: 'none', flirt: 'none' },
-  edgy: { profanity: 'medium', mockery: 'hard', flirt: 'none' },
-  flirtatious: { profanity: 'medium', mockery: 'none', flirt: 'hard' },
-  'drill-sergeant': { profanity: 'hard', mockery: 'hard', flirt: 'none' },
+  edgy: { profanity: 'none', mockery: 'hard', flirt: 'none' },
+  'drill-sergeant': { profanity: 'none', mockery: 'hard', flirt: 'none' },
 };
 
 // ─── Memory snapshot ─────────────────────────────────────────────────────────

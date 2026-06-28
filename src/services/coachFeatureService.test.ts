@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { db } from '../db/schema';
-import { detectBadHabits, detectBadHabitsFromGame, buildProfileContext, buildReviewSegments } from './coachFeatureService';
+import { detectBadHabits, detectBadHabitsFromGame, buildProfileContext, buildReviewSegments, buildReviewCitations } from './coachFeatureService';
 import { explainBestMoveGrounded } from './groundedAnswer';
 import type { ReviewMoveInput } from './coachFeatureService';
 import { buildUserProfile, buildBadHabit } from '../test/factories';
@@ -412,6 +412,75 @@ describe('coachFeatureService', () => {
       // bad SAN. Better one usable ply than refusing the whole review.
       expect(segments).toHaveLength(1);
       expect(segments[0].san).toBe('e4');
+    });
+  });
+
+  describe('buildReviewCitations (Phase 1c — grounded recap/preview spine)', () => {
+    function move(overrides: Partial<ReviewMoveInput> & { ply: number; san: string }): ReviewMoveInput {
+      return { isCoachMove: false, classification: 'good', evaluation: 0, preMoveEval: 0, bestMove: null, fenAfter: '', ...overrides };
+    }
+
+    it('extracts only the STUDENT\'s flagged moves with grounded squares + suggestion', () => {
+      // White student. Qh5 is a white blunder (engine wanted Nf3); the black
+      // f6 blunder is the OPPONENT and must be excluded.
+      const cites = buildReviewCitations([
+        move({ ply: 1, san: 'e4', classification: 'book' }),
+        move({ ply: 2, san: 'e5', classification: 'book' }),
+        move({ ply: 3, san: 'Qh5', classification: 'blunder', bestMove: 'g1f3', preMoveEval: 25, evaluation: -300 }),
+        move({ ply: 4, san: 'f6', classification: 'blunder', preMoveEval: -300, evaluation: 200 }), // opponent — excluded
+        move({ ply: 5, san: 'Bc4', classification: 'good' }),
+      ], 'white');
+
+      expect(cites).toHaveLength(1);
+      const c = cites[0];
+      expect(c.ply).toBe(3);
+      expect(c.moveNumber).toBe(2);          // ceil(3/2) — White's 2nd move
+      expect(c.moverColor).toBe('white');
+      expect(c.playedSan).toBe('Qh5');
+      expect(c.suggestedSan).toBe('Nf3');    // g1f3 → SAN at the pre-move FEN
+      expect(c.classification).toBe('blunder');
+      expect(c.playedSquares).toEqual(['d1', 'h5']);
+      expect(c.suggestedSquares).toEqual(['g1', 'f3']);
+      expect(c.evalSwingCp).toBe(325);       // |25 − (−300)|
+      expect(c.fenBefore).toContain(' w ');   // White to move at the cited ply
+      // Grounded "why better": Nf3 attacks the e5 pawn (a developing tempo).
+      expect(c.whyBetter).not.toBeNull();
+      expect(c.whyBetter).toContain('e5');
+    });
+
+    it('filters to the BLACK student\'s moves when playerColor is black', () => {
+      const moves = [
+        move({ ply: 1, san: 'e4', classification: 'book' }),
+        move({ ply: 2, san: 'e5', classification: 'book' }),
+        move({ ply: 3, san: 'Nf3', classification: 'inaccuracy', bestMove: 'b1c3' }), // white — excluded for black student
+        move({ ply: 4, san: 'Qf6', classification: 'mistake', bestMove: 'b8c6', preMoveEval: 30, evaluation: 160 }), // black student
+      ];
+      const cites = buildReviewCitations(moves, 'black');
+      expect(cites).toHaveLength(1);
+      expect(cites[0].ply).toBe(4);
+      expect(cites[0].moverColor).toBe('black');
+      expect(cites[0].playedSan).toBe('Qf6');
+      expect(cites[0].suggestedSan).toBe('Nc6');
+    });
+
+    it('leaves suggestion fields null when no bestMove is stored (never guesses)', () => {
+      const cites = buildReviewCitations([
+        move({ ply: 1, san: 'e4', classification: 'book' }),
+        move({ ply: 2, san: 'e5', classification: 'book' }),
+        move({ ply: 3, san: 'Bc4', classification: 'inaccuracy', bestMove: null, preMoveEval: null, evaluation: null }),
+      ], 'white');
+      expect(cites).toHaveLength(1);
+      expect(cites[0].suggestedSan).toBeNull();
+      expect(cites[0].suggestedSquares).toBeNull();
+      expect(cites[0].evalSwingCp).toBeNull();
+    });
+
+    it('returns empty when the student made no flagged moves', () => {
+      const cites = buildReviewCitations([
+        move({ ply: 1, san: 'e4', classification: 'book' }),
+        move({ ply: 2, san: 'e5', classification: 'good' }),
+      ], 'white');
+      expect(cites).toEqual([]);
     });
   });
 });

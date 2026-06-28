@@ -292,54 +292,31 @@ function renderGenerativeVoiceCueBlock(args: {
   mockery?: IntensityLevel;
   flirt?: IntensityLevel;
 }): string | null {
-  const profanity = args.profanity ?? 'none';
+  // All-ages lock (David 2026-06-28): profanity + flirt are forced off no
+  // matter what's passed — only clean mockery (competitive ribbing) varies.
   const mockery = args.mockery ?? 'none';
-  const flirt = args.flirt ?? 'none';
 
   // Skip when nothing's amplified — keep the prompt lean.
-  if (profanity === 'none' && mockery === 'none' && flirt === 'none') {
+  if (mockery === 'none') {
     return null;
   }
 
   const lines: string[] = [
     `GENERATIVE VOICE EMOTIONAL CUES — your TTS engine reads emotion from the TEXT, not from SSML tags. Embed cues naturally so the voice can inflect:`,
-    `• Vocalizations: "mmm," "oh," "ha," "ugh," "huh," "fuck," ellipses for trailing thought ("...")`,
+    `• Vocalizations: "mmm," "oh," "ha," "ugh," "huh," ellipses for trailing thought ("...")`,
     `• Em-dashes for sharp pauses or interjection — like this — and short. punchy. fragments. for emphasis.`,
     `• CAPS sparingly on the punchword in a sentence ("that was BRILLIANT", "you HUNG the bishop") — engine reads it as stress.`,
     `• Rhythm: vary sentence length deliberately. A short jab, then a longer line that breathes.`,
-    `Keep cues NATURAL — embed them in real sentences, never list them, never use stage directions in asterisks ("*sighs*").`,
+    `Keep cues NATURAL — embed them in real sentences, never list them, never use stage directions in asterisks ("*sighs*"). Keep all language clean and all-ages — no swearing.`,
   ];
-
-  // Per-dial intensity guidance. The LLM gets explicit cue-frequency
-  // bands so medium/hard feel distinct rather than collapsing into
-  // the same prose.
-  if (flirt === 'medium') {
-    lines.push(
-      `Flirt cues (medium): light teasing inflections — "interesting," "mmm... that's bold," "oh you," at most ONE per response.`,
-    );
-  } else if (flirt === 'hard') {
-    lines.push(
-      `Flirt cues (HARD) — lay them on thick. Breathy vocalizations openly: "mmm," "oh fuck," "god," "yes...," "nasty." Drop "sweetheart" / "baby" / "good boy" naturally. Use em-dashes for the pause-and-breathe rhythm of seduction. 2-4 cues per response is the target — the voice should sound like she's getting turned on by the chess. Sultry low register; the engine will hear "mmm" and lower the pitch on its own.`,
-    );
-  }
 
   if (mockery === 'medium') {
     lines.push(
-      `Mockery cues (medium): occasional "oof," "really?," "come on" — friendly ribbing.`,
+      `Mockery cues (medium): occasional "oof," "really?," "come on" — friendly, clean ribbing.`,
     );
   } else if (mockery === 'hard') {
     lines.push(
-      `Mockery cues (HARD): scoffs and dismissive vocalizations — "ha," "ugh," "Jesus Christ," "are you serious," "...wow." Use ellipses to let the contempt land. Repeat-roast patterns ("ANOTHER hung pawn?"). 2-3 cues per response.`,
-    );
-  }
-
-  if (profanity === 'medium') {
-    lines.push(
-      `Profanity cues (medium): drop a "shit" or "damn" once when the moment earns it. The engine reads profanity as elevated emotion.`,
-    );
-  } else if (profanity === 'hard') {
-    lines.push(
-      `Profanity cues (HARD): "fuck" / "shit" / "goddamn" / "bullshit" land naturally throughout. The engine inflects more strongly on profanity — let it do the emotional work for you. 2-3 swears per response feels native at this dial.`,
+      `Mockery cues (HARD): clean scoffs and dismissive vocalizations — "ha," "ugh," "are you serious," "...wow." Use ellipses to let it land. Repeat-rib patterns ("ANOTHER hung pawn?"). 2-3 cues per response. No profanity.`,
     );
   }
 
@@ -488,7 +465,7 @@ async function getLlmCommentary(
   // instead of being cut off mid-sentence at finish=length.
   if (briefMode) {
     promptParts.push(
-      `BRIEF MODE — this is a key-moment reaction, not a teaching lecture. Reply with 2-4 short punchy sentences and STOP. You have a hard ~900 character ceiling — write something that LANDS within that budget. If you're approaching the limit, finish your sentence; do NOT let the response get clipped. Lean fully into the personality and dials defined above — if you're flirtatious, FLIRT; if you're a drill sergeant, BARK; if you're edgy, ROAST. Do NOT default to generic mock-and-critique unless that matches the configured personality. NO multi-paragraph responses, NO bullet lists, NO headers. Just the reaction in the configured voice.
+      `BRIEF MODE — this is a key-moment reaction, not a teaching lecture. Reply with 2-4 short punchy sentences and STOP. You have a hard ~900 character ceiling — write something that LANDS within that budget. If you're approaching the limit, finish your sentence; do NOT let the response get clipped. Lean fully into the personality and dials defined above — if you're a drill sergeant, BARK; if you're edgy, be SHARP. Keep it clean and all-ages. Do NOT default to generic mock-and-critique unless that matches the configured personality. NO multi-paragraph responses, NO bullet lists, NO headers. Just the reaction in the configured voice.
 
 ACTION-FIRST RULE — every sentence must either (a) tell the student WHAT TO DO next, (b) tell them WHAT TO LOOK FOR on the next move, or (c) react with personality. Do NOT recap the move they just played ("you played Bc4," "that was a great move"). The student already saw the move. They need direction, not a replay.`,
     );

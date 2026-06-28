@@ -13,7 +13,8 @@
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
 import { Chess } from 'chess.js';
-import { findHangingPieces } from './tacticClassifier';
+import type { Square, PieceSymbol } from 'chess.js';
+import { seeGain } from './positionReadingService';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { BadHabit } from '../types';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -210,21 +211,29 @@ export function explainBestMoveGrounded(
     try {
       const c = new Chess(fenBefore);
       if (c.move(playedSan)) {
-        const hung = findHangingPieces(c).filter((h) => h.color === mc);
-        if (hung.length > 0) {
-          hung.sort((a, b) => (REVIEW_PIECE_VALUE[b.piece] ?? 0) - (REVIEW_PIECE_VALUE[a.piece] ?? 0));
-          const h = hung[0];
-          const captures = c.moves({ verbose: true }).filter((mm) => mm.to === h.square && mm.captured);
-          if (captures.length > 0) {
-            captures.sort((a, b) => (REVIEW_PIECE_VALUE[a.piece] ?? 0) - (REVIEW_PIECE_VALUE[b.piece] ?? 0));
-            const punish = captures[0];
-            const punisher = mc === 'w' ? 'Black' : 'White';
-            let givesCheck = false;
-            try { const after = new Chess(c.fen()); after.move(punish.san); givesCheck = after.inCheck(); } catch { /* keep false */ }
-            costClause = `your move let ${punisher} play ${punish.san}, winning the ${REVIEW_PIECE_NAME[h.piece]}${givesCheck ? ' with check' : ''}`;
-          } else {
-            costClause = `your move left the ${REVIEW_PIECE_NAME[h.piece]} on ${h.square} hanging`;
+        // A piece is only a real loss if the opponent has a LEGAL capture that
+        // wins material by static-exchange eval. `findHangingPieces` /
+        // `chess.attackers` count PINNED attackers that can't actually capture
+        // — the 2026-06-27 "your move left the pawn on e5 hanging" false
+        // positive, whose only attacker was a pinned knight (no legal capture
+        // existed). Drive off legal captures + SEE so a pin can never be read
+        // as a hang, and a defended-but-exchange-losing piece still is.
+        const legalCaps = c.moves({ verbose: true }).filter((m) => m.captured);
+        let worst: { square: Square; piece: PieceSymbol; gain: number; san: string } | null = null;
+        for (const cap of legalCaps) {
+          const to = cap.to;
+          const victim = c.get(to);
+          if (!victim || victim.color !== mc) continue; // must capture the mover's own piece
+          const gain = seeGain(c, to); // material the opponent wins on that square
+          if (gain > 0 && (!worst || gain > worst.gain)) {
+            worst = { square: to, piece: victim.type, gain, san: cap.san };
           }
+        }
+        if (worst) {
+          const punisher = mc === 'w' ? 'Black' : 'White';
+          let givesCheck = false;
+          try { const after = new Chess(c.fen()); after.move(worst.san); givesCheck = after.inCheck(); } catch { /* keep false */ }
+          costClause = `your move let ${punisher} play ${worst.san}, winning the ${REVIEW_PIECE_NAME[worst.piece]}${givesCheck ? ' with check' : ''}`;
         }
       }
     } catch { /* board fact unavailable — stay silent */ }
@@ -234,6 +243,239 @@ export function explainBestMoveGrounded(
   if (bestClause) return `${cap(bestClause)}.`;
   if (costClause) return `${cap(costClause)}.`;
   return null;
+}
+
+/** Ray-walk from a slider's square to find a PIN it creates: the first enemy
+ *  piece on a ray, with a HIGHER-value enemy piece directly behind it on the
+ *  same ray (a relative pin; absolute when the rear piece is the king). Pure
+ *  board geometry — this is the "bishop pins the knight to the queen" fact
+ *  David asked for (2026-06-27). Returns null when no pin exists. */
+function findPinFrom(
+  c: Chess,
+  from: Square,
+  pieceType: PieceSymbol,
+  moverColor: 'white' | 'black',
+): { pinned: Square; pinnedPiece: PieceSymbol; rear: Square; rearPiece: PieceSymbol } | null {
+  const DIAG = [[1, 1], [1, -1], [-1, 1], [-1, -1]];
+  const ORTHO = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+  const dirs = pieceType === 'b' ? DIAG : pieceType === 'r' ? ORTHO : pieceType === 'q' ? [...DIAG, ...ORTHO] : [];
+  if (dirs.length === 0) return null;
+  const enemy = moverColor === 'white' ? 'b' : 'w';
+  const f0 = from.charCodeAt(0) - 97;
+  const r0 = Number(from[1]) - 1;
+
+  for (const [df, dr] of dirs) {
+    let f = f0 + df;
+    let r = r0 + dr;
+    let first: { sq: Square; piece: PieceSymbol } | null = null;
+    while (f >= 0 && f < 8 && r >= 0 && r < 8) {
+      const sq = (String.fromCharCode(97 + f) + String(r + 1)) as Square;
+      const pc = c.get(sq);
+      if (pc) {
+        if (pc.color !== enemy) break; // friendly blocker — no pin on this ray
+        if (!first) {
+          first = { sq, piece: pc.type };
+        } else {
+          // Second enemy piece behind the first — a pin if it's worth more.
+          if ((REVIEW_PIECE_VALUE[pc.type] ?? 0) > (REVIEW_PIECE_VALUE[first.piece] ?? 0)) {
+            return { pinned: first.sq, pinnedPiece: first.piece, rear: sq, rearPiece: pc.type };
+          }
+          break;
+        }
+      }
+      f += df;
+      r += dr;
+    }
+  }
+  return null;
+}
+
+/** The highest-value enemy piece the piece on `from` now attacks (a developing
+ *  TEMPO — the move makes a threat the opponent must answer). Pure board fact. */
+function bestAttackFrom(
+  c: Chess,
+  from: Square,
+  moverColor: 'white' | 'black',
+): { square: Square; piece: PieceSymbol } | null {
+  const mc = moverColor === 'white' ? 'w' : 'b';
+  let best: { square: Square; piece: PieceSymbol } | null = null;
+  for (const sq of c.board().flat()) {
+    if (!sq || sq.color === mc) continue;
+    if (sq.type === 'k') continue; // a check is reported separately
+    if (c.attackers(sq.square, mc).includes(from)) {
+      if (!best || (REVIEW_PIECE_VALUE[sq.type] ?? 0) > (REVIEW_PIECE_VALUE[best.piece] ?? 0)) {
+        best = { square: sq.square, piece: sq.type };
+      }
+    }
+  }
+  return best;
+}
+
+/**
+ * describeMoveGeometry — a grounded one-phrase description of what a SINGLE
+ * move DOES on the board (David 2026-06-28: "ground the tactics trainers with
+ * the new tools"). Detects, in salience order: FORK (hits 2+ enemy pieces),
+ * PIN (slider pins a piece to a bigger one), CHECK, MATERIAL win (a capture
+ * that holds by SEE), or a single ATTACK (tempo). Pure board geometry — the
+ * tactics trainers speak THIS instead of generic "the setup's in" templates.
+ * Returns null when the move makes no concrete threat (stay silent, G3).
+ */
+export function describeMoveGeometry(
+  fenBefore: string,
+  san: string,
+  moverColor: 'white' | 'black',
+): string | null {
+  let c: Chess;
+  let mv;
+  try {
+    c = new Chess(fenBefore);
+    mv = c.move(san);
+  } catch {
+    return null;
+  }
+  if (!mv) return null;
+  const to = mv.to;
+  const mc = moverColor === 'white' ? 'w' : 'b';
+
+  // Every enemy piece the moved piece now attacks (king included).
+  const targets: { square: Square; piece: PieceSymbol }[] = [];
+  for (const sq of c.board().flat()) {
+    if (!sq || sq.color === mc) continue;
+    if (c.attackers(sq.square, mc).includes(to)) targets.push({ square: sq.square, piece: sq.type });
+  }
+
+  // FORK — the moved piece hits two enemy pieces at once (royal fork when the
+  // king is one of them).
+  if (targets.length >= 2) {
+    const sorted = [...targets].sort((a, b) => (REVIEW_PIECE_VALUE[b.piece] ?? 0) - (REVIEW_PIECE_VALUE[a.piece] ?? 0));
+    return `forks the ${REVIEW_PIECE_NAME[sorted[0].piece]} on ${sorted[0].square} and the ${REVIEW_PIECE_NAME[sorted[1].piece]} on ${sorted[1].square}`;
+  }
+
+  // PIN.
+  if (mv.piece === 'b' || mv.piece === 'r' || mv.piece === 'q') {
+    const pin = findPinFrom(c, to, mv.piece, moverColor);
+    if (pin) return `pins the ${REVIEW_PIECE_NAME[pin.pinnedPiece]} on ${pin.pinned} to the ${REVIEW_PIECE_NAME[pin.rearPiece]} on ${pin.rear}`;
+  }
+
+  // CHECK.
+  if (c.inCheck()) return 'gives check';
+
+  // MATERIAL — a capture the opponent can't profitably recapture.
+  if (mv.captured && seeGain(c, to) <= 0) {
+    return `wins the ${REVIEW_PIECE_NAME[mv.captured]} on ${to}`;
+  }
+
+  // Single ATTACK (tempo) on a non-king piece.
+  if (targets.length === 1 && targets[0].piece !== 'k') {
+    return `attacks the ${REVIEW_PIECE_NAME[targets[0].piece]} on ${targets[0].square}`;
+  }
+
+  return null;
+}
+
+export interface MoveOrderExplanation {
+  /** Grounded prose: why the better order is stronger (+ the cost of the wrong
+   *  order when a refutation is supplied). */
+  text: string;
+  /** Mechanism behind the better move, for telemetry / board-demo selection. */
+  mechanism: 'check' | 'pin' | 'tempo' | 'material';
+}
+
+/**
+ * explainMoveOrder — the grounded "why THIS move first" comparator (David
+ * 2026-06-27: "WHY moving my bishop out before bringing the queen to the
+ * attack was best — do we have the geometry?"). Same pieces, different order;
+ * one order is stronger because the better move makes a threat the wrong order
+ * squanders. Names the MECHANISM purely from the board: it comes with CHECK,
+ * it PINS an enemy piece to a bigger one, it develops with a TEMPO (attacks an
+ * enemy piece), or it wins MATERIAL (SEE). The engine's eval delta (computed
+ * by the caller) is what decides the order is better; this names WHY. When a
+ * refutation to the worse move is supplied, the cost of the wrong order is
+ * spelled out too. Returns null when a move is illegal or no concrete
+ * mechanism is found — empty > generic > invented (G3).
+ */
+export function explainMoveOrder(opts: {
+  fenBefore: string;
+  betterSan: string;
+  worseSan: string;
+  moverColor: 'white' | 'black';
+  /** Opponent's best reply to the WORSE move (engine PV ply 1), if known. */
+  worseRefutationSan?: string | null;
+}): MoveOrderExplanation | null {
+  const { fenBefore, betterSan, worseSan, moverColor, worseRefutationSan } = opts;
+  const mc = moverColor === 'white' ? 'w' : 'b';
+
+  let mv;
+  const c = new Chess(fenBefore);
+  try {
+    mv = c.move(betterSan);
+  } catch {
+    return null;
+  }
+  if (!mv) return null;
+  // The worse move must also be legal from the SAME position (it's an
+  // alternative order, not a fantasy) — verify on a fresh board.
+  try {
+    const probe = new Chess(fenBefore);
+    if (!probe.move(worseSan)) return null;
+  } catch {
+    return null;
+  }
+
+  const to = mv.to;
+  let mechanism: MoveOrderExplanation['mechanism'];
+  let whyBetter: string;
+
+  if (c.inCheck()) {
+    mechanism = 'check';
+    whyBetter = `playing ${betterSan} first comes with check, forcing the reply`;
+  } else {
+    const pin = (mv.piece === 'b' || mv.piece === 'r' || mv.piece === 'q')
+      ? findPinFrom(c, to, mv.piece, moverColor)
+      : null;
+    if (pin) {
+      mechanism = 'pin';
+      whyBetter = `playing ${betterSan} first pins the ${REVIEW_PIECE_NAME[pin.pinnedPiece]} on ${pin.pinned} to the ${REVIEW_PIECE_NAME[pin.rearPiece]} on ${pin.rear}`;
+    } else {
+      const captured = mv.captured;
+      // seeGain(c, to) = what the OPPONENT wins back by recapturing on `to`.
+      // A genuine material win means they can't recapture profitably (≤ 0).
+      const oppRecapGain = captured ? seeGain(c, to) : 1;
+      const attack = bestAttackFrom(c, to, moverColor);
+      if (captured && oppRecapGain <= 0) {
+        mechanism = 'material';
+        whyBetter = `playing ${betterSan} first wins the ${REVIEW_PIECE_NAME[captured]} on ${to}`;
+      } else if (attack) {
+        mechanism = 'tempo';
+        whyBetter = `playing ${betterSan} first develops with a threat — it attacks the ${REVIEW_PIECE_NAME[attack.piece]} on ${attack.square}, so the opponent must respond instead of freeing their game`;
+      } else {
+        return null; // no concrete geometry — stay silent
+      }
+    }
+  }
+
+  // Cost of the wrong order, when the engine gave us the refutation.
+  let cost: string | null = null;
+  if (worseRefutationSan) {
+    try {
+      const w = new Chess(fenBefore);
+      if (w.move(worseSan)) {
+        const reply = w.move(worseRefutationSan);
+        if (reply) {
+          const opp = mc === 'w' ? 'Black' : 'White';
+          if (w.inCheck()) {
+            cost = `play ${worseSan} first and ${opp} hits back with ${worseRefutationSan}, check`;
+          } else if (reply.captured) {
+            cost = `play ${worseSan} first and ${opp} gets ${worseRefutationSan}, taking the ${REVIEW_PIECE_NAME[reply.captured]}`;
+          } else {
+            cost = `play ${worseSan} first and ${opp} equalizes with ${worseRefutationSan}`;
+          }
+        }
+      }
+    } catch { /* refutation didn't replay — drop the cost clause */ }
+  }
+
+  return { text: cost ? `${cap(whyBetter)}; ${cost}.` : `${cap(whyBetter)}.`, mechanism };
 }
 
 /**

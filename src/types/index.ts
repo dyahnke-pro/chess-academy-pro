@@ -667,6 +667,14 @@ export interface GameRecord {
    *  annotation density (the old `annotations.length >= moves/2`
    *  heuristic). */
   fullyAnalyzed?: boolean;
+  /** Stockfish search depth the per-move eval curve was produced at
+   *  (gameAnalysisService `ANALYSIS_DEPTH`). Drives accuracy: a shallow
+   *  search misses the punishment of dubious moves and reads accuracy
+   *  HIGH. When this is below the current `ANALYSIS_DEPTH`, the game is
+   *  re-analyzed so the percentage tracks the deeper, more chess.com-
+   *  aligned number. Undefined on records analyzed before this field
+   *  existed (depth 12) → treated as stale and refreshed once. */
+  analysisDepth?: number;
   /** Time control the game was played under (chessClock TIME_CONTROLS id).
    *  Undefined for unlimited / untimed games. */
   timeControlId?: string;

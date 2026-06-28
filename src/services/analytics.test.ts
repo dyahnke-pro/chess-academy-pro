@@ -87,6 +87,10 @@ describe('auditKindToEvent — curated allowlist', () => {
     // The actual playback failure (iOS autoplay rejection / decode / non-200)
     // must reach PostHog so "no voice" reports are diagnosable (David 2026-06-06).
     expect(auditKindToEvent('tts-failure')).toBe('tts_failure');
+    // The in-flow Polly → Web Speech demotion — the every-line no-sound
+    // signal on iOS — must be visible in durable analytics (David 2026-06-27).
+    expect(auditKindToEvent('voice-fallover')).toBe('voice_fallover');
+    expect(auditKindToEvent('polly-fallback')).toBe('polly_fallback');
   });
 
   it('returns undefined for forensic/high-volume kinds that should NOT mirror', () => {

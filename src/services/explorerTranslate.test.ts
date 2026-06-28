@@ -64,6 +64,18 @@ describe('translateMasterMove', () => {
     expect(t.sentence).toContain('Nf3');
     expect(t.sentence).toContain('White');
   });
+
+  it('does not pair a big sample with "untested" when W/D/L is absent (sparse local DB)', () => {
+    // Local masters DB carries a game COUNT but no W/D/L → score reads
+    // 'untested'. The sentence must NOT say "… and untested … from
+    // thousands of master games" (the contradiction David caught
+    // 2026-06-27). Speak popularity + sample only.
+    const t = translateMasterMove(move({ san: 'e4', games: 50000, white: 0, draws: 0, black: 0 }), 80000, 'white');
+    expect(t.score).toBe('untested');
+    expect(t.sentence).not.toContain('untested');
+    expect(t.sentence).toContain('the main move');
+    expect(t.sentence).toContain('thousands of master games');
+  });
 });
 
 describe('describeTopMasterMove', () => {

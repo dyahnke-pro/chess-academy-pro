@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import {
   seeGain,
+  seeSequence,
   findHangingBySee,
   findPawnBreaks,
   findPieceQuality,
@@ -10,7 +11,16 @@ import {
   buildReadingQuestions,
   gradeReadingAnswerDeterministic,
   formatReadingFacts,
+  findWeakSquares,
+  strongestWeakestPiece,
+  findWeakPawns,
+  findAttackTargets,
+  kingSafetyRead,
+  developmentRead,
+  findPawnGrabs,
+  readingHint,
 } from './positionReadingService';
+import type { WeaknessCategory } from '../types';
 import type { TacticsLiveContext } from '../coach/types';
 
 describe('seeGain (static exchange evaluation)', () => {
@@ -217,7 +227,7 @@ describe('buildReadingQuestions', () => {
 
 describe('gradeReadingAnswerDeterministic', () => {
   const hangingQ = {
-    id: 'hanging', type: 'hanging' as const,
+    id: 'hanging', type: 'hanging' as const, bucket: 'tactics' as const,
     prompt: 'Is anything hanging?', answer: 'Yes — the queen on d5 is hanging.',
     acceptTokens: ['d5', 'queen', 'hanging', 'yes'], negative: false,
   };
@@ -280,3 +290,267 @@ describe('formatReadingFacts (grounded read-this-position block)', () => {
     expect(formatReadingFacts('not a fen', 'white')).toBe('');
   });
 });
+
+describe('positional computers (David 2026-06-28 — weak squares / piece activity / targets)', () => {
+  it('findWeakSquares flags a hole no pawn can guard (black has no c/e pawns → d5 hole)', () => {
+    // Black pawns a7 b7 d7 f7 g7 h7 (no c-, no e-pawn) → d5 is unguardable by black.
+    const w = findWeakSquares('4k3/pp1p1ppp/8/8/8/8/PPPPPPPP/4K3 w - - 0 1');
+    expect(w.black).toContain('d5');
+  });
+
+  it('findWeakSquares returns nothing absurd on the start position (full pawn shields)', () => {
+    const w = findWeakSquares('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+    expect(w.white.length).toBe(0);
+    expect(w.black.length).toBe(0);
+  });
+
+  it('findWeakSquares is safe on a bad FEN', () => {
+    expect(findWeakSquares('garbage')).toEqual({ white: [], black: [] });
+  });
+
+  it('strongestWeakestPiece ranks by board scope; a rook on an open file beats a boxed-in bishop', () => {
+    // White rook d1 (open d-file, wide scope) + bishop a1 hemmed by own b2 pawn.
+    const { strongest, weakest } = strongestWeakestPiece('4k3/8/8/8/8/8/1P6/B2RK3 w - - 0 1', 'w');
+    expect(strongest).not.toBeNull();
+    expect(weakest).not.toBeNull();
+    expect(strongest!.scope).toBeGreaterThanOrEqual(weakest!.scope);
+    expect(strongest!.piece).toBe('r'); // the rook is the most active
+  });
+
+  it('findWeakPawns flags an isolated pawn', () => {
+    // White pawns a4 (isolated — no b-pawn) + e2,f2.
+    const wp = findWeakPawns('4k3/8/8/8/P7/8/4PP2/4K3 w - - 0 1', 'w');
+    expect(wp.isolated).toContain('a4');
+  });
+
+  it('findAttackTargets surfaces a loose enemy piece', () => {
+    // Black knight e5 is undefended and attacked by the white d4 pawn (dxe5 wins it).
+    const t = findAttackTargets('4k3/8/8/4n3/3P4/8/8/4K3 w - - 0 1', 'w');
+    expect(t).toContain('e5');
+  });
+});
+
+describe('buildReadingQuestions — bucket coverage (David 2026-06-28: all buckets grounded)', () => {
+  const VALID: WeaknessCategory[] = ['tactics', 'openings', 'opening_weakspots', 'endgame', 'calculation', 'positional', 'time_management'];
+
+  it('tags every question with a valid weakness bucket', () => {
+    const qs = buildReadingQuestions('r2qkbnr/ppp2ppp/2np4/4p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 0 1', emptyTactics({ boardFacts: { ...emptyTactics().boardFacts!, sideToMove: 'black' } }));
+    expect(qs.length).toBeGreaterThan(0);
+    for (const q of qs) expect(VALID).toContain(q.bucket);
+  });
+
+  it('covers the positional bucket with click-gradable answer squares', () => {
+    const qs = buildReadingQuestions('r2qkbnr/ppp2ppp/2np4/4p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 0 1', emptyTactics({ boardFacts: { ...emptyTactics().boardFacts!, sideToMove: 'black' } }));
+    const positional = qs.filter((q) => q.bucket === 'positional');
+    expect(positional.length).toBeGreaterThan(0);
+    // at least one positional question carries answerSquares for click-to-ID
+    expect(positional.some((q) => (q.answerSquares?.length ?? 0) > 0)).toBe(true);
+  });
+
+  it('covers the tactics bucket', () => {
+    const qs = buildReadingQuestions('4k3/8/5n2/3Q4/4P3/8/8/4K3 w - - 0 1', emptyTactics());
+    expect(qs.some((q) => q.bucket === 'tactics')).toBe(true);
+  });
+})
+
+describe('buildReadingQuestions — calculation bucket (engine eval + PV grounded)', () => {
+  it('asks who-is-winning from the engine eval (White winning on a big +eval)', () => {
+    const qs = buildReadingQuestions('4k3/8/8/8/8/8/8/4K3 w - - 0 1', emptyTactics(), { evalCp: 600 });
+    const win = qs.find((q) => q.type === 'who-is-winning');
+    expect(win).toBeDefined();
+    expect(win?.bucket).toBe('calculation');
+    expect(win?.answer.toLowerCase()).toContain('white');
+    expect(win?.acceptTokens).toContain('white');
+  });
+
+  it('calls it roughly equal near 0 and Black better on a -eval', () => {
+    const eq = buildReadingQuestions('4k3/8/8/8/8/8/8/4K3 w - - 0 1', emptyTactics(), { evalCp: 15 }).find((q) => q.type === 'who-is-winning');
+    expect(eq?.acceptTokens).toContain('equal');
+    const blk = buildReadingQuestions('4k3/8/8/8/8/8/8/4K3 w - - 0 1', emptyTactics(), { evalCp: -250 }).find((q) => q.type === 'who-is-winning');
+    expect(blk?.answer.toLowerCase()).toContain('black');
+  });
+
+  it('does NOT ask who-is-winning when no eval is supplied (never a guess)', () => {
+    const qs = buildReadingQuestions('4k3/8/8/8/8/8/8/4K3 w - - 0 1', emptyTactics());
+    expect(qs.find((q) => q.type === 'who-is-winning')).toBeUndefined();
+  });
+
+  it('asks a plan question grounded in the engine PV, with the first move playable', () => {
+    const qs = buildReadingQuestions('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', emptyTactics(), { pvSan: ['e4', 'e5', 'Nf3'] });
+    const plan = qs.find((q) => q.type === 'plan');
+    expect(plan).toBeDefined();
+    expect(plan?.answerMoves).toContain('e4');
+    expect(plan?.answerSquares).toContain('e4');
+  });
+
+  it('tags the plan as the endgame bucket when isEndgame is set', () => {
+    const qs = buildReadingQuestions('8/8/8/4k3/8/8/4P3/4K3 w - - 0 1', emptyTactics(), { pvSan: ['Kd2'], isEndgame: true });
+    const plan = qs.find((q) => q.type === 'plan');
+    expect(plan?.bucket).toBe('endgame');
+  });
+})
+
+describe('king safety + development computers (17-tag buckets)', () => {
+  it('kingSafetyRead: a castled king with an intact shield is NOT exposed', () => {
+    const ks = kingSafetyRead('4k3/8/8/8/8/8/5PPP/6K1 w - - 0 1', 'w');
+    expect(ks?.castled).toBe(true);
+    expect(ks?.exposed).toBe(false);
+    expect(ks?.shieldPawns).toBe(3);
+  });
+
+  it('kingSafetyRead: a king with no pawn shield IS exposed (open files toward it)', () => {
+    const ks = kingSafetyRead('4k3/8/8/8/8/8/8/6K1 w - - 0 1', 'w');
+    expect(ks?.exposed).toBe(true);
+    expect(ks?.openFilesNearKing.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('kingSafetyRead: a king on its home centre square reads as in-center', () => {
+    const ks = kingSafetyRead('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'w');
+    expect(ks?.inCenter).toBe(true);
+  });
+
+  it('developmentRead: start position has 0 developed minors of 4', () => {
+    const d = developmentRead('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'w');
+    expect(d?.developedMinors).toBe(0);
+    expect(d?.totalMinors).toBe(4);
+  });
+
+  it('developmentRead: counts developed minors off their home squares', () => {
+    // White Nf3 + Bc4 developed, Nb1 + Bc1 still home → 2 of 4 developed.
+    const d = developmentRead('rnbqkbnr/pppp1ppp/8/4p3/2B5/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1', 'w');
+    expect(d?.developedMinors).toBe(2);
+    expect(d?.totalMinors).toBe(4);
+  });
+});
+
+describe('buildReadingQuestions — questions carry their misconception tag (1:1 with weakness data)', () => {
+  it('tags the hanging question hung-material and the plan question no-plan', () => {
+    const hang = buildReadingQuestions('4k3/8/5n2/3Q4/4P3/8/8/4K3 w - - 0 1', emptyTactics()).find((q) => q.type === 'hanging');
+    expect(hang?.misconceptionTag).toBe('hung-material');
+    const plan = buildReadingQuestions('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', emptyTactics(), { pvSan: ['e4'] }).find((q) => q.type === 'plan');
+    expect(plan?.misconceptionTag).toBe('no-plan');
+  });
+
+  it('asks a development question tagged neglected-development when minors are home', () => {
+    const qs = buildReadingQuestions('rnbqkb1r/pppp1ppp/5n2/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1', emptyTactics());
+    const dev = qs.find((q) => q.type === 'development');
+    expect(dev?.misconceptionTag).toBe('neglected-development');
+  });
+})
+
+describe('findPawnGrabs — greedy-pawn-grab grounded by SEE (David 2026-06-28)', () => {
+  it('marks a clean free pawn as SAFE to grab', () => {
+    // White rook on a1, undefended black pawn on a7 → Rxa7 wins a clean pawn.
+    const grabs = findPawnGrabs('4k3/p7/8/8/8/8/8/R3K3 w - - 0 1');
+    const a7 = grabs.find((g) => g.square === 'a7');
+    expect(a7).toBeDefined();
+    expect(a7?.safe).toBe(true);
+    expect(a7?.see).toBeGreaterThan(0);
+  });
+
+  it('marks a POISONED pawn as unsafe (winning it loses material in the swap)', () => {
+    // White queen can take b7 pawn, but it's defended by the a8 rook AND c8
+    // bishop → Qxb7 wins a pawn then drops the queen. seeGain ≤ 0.
+    const grabs = findPawnGrabs('2b1k3/1p6/8/8/8/1Q6/8/4K3 w - - 0 1');
+    const b7 = grabs.find((g) => g.square === 'b7');
+    expect(b7).toBeDefined();
+    expect(b7?.safe).toBe(false);
+    expect(b7?.see).toBeLessThanOrEqual(0);
+  });
+
+  it('asks a COUNTING question (not greedy) on a poisoned pawn — calculate the recapture', () => {
+    const qs = buildReadingQuestions('2b1k3/1p6/8/8/8/1Q6/8/4K3 w - - 0 1', emptyTactics());
+    const counting = qs.find((q) => q.id === 'counting-recapture');
+    expect(counting).toBeDefined();
+    expect(counting?.misconceptionTag).toBeUndefined(); // counting isn't one of the 17 (yet)
+    expect(counting?.answer.toLowerCase()).toContain('loses material');
+  });
+
+  it('asks the TRUE greedy-pawn-grab only when the grab is SAFE but the engine prefers another move', () => {
+    // White Ra1 can safely take a7 (clean pawn), but pass a PV that prefers a
+    // developing/positional move instead → grabbing is greedy.
+    const qs = buildReadingQuestions('4k3/p7/8/8/8/8/8/R3K3 w - - 0 1', emptyTactics(), { pvSan: ['Kd2'] });
+    const greedy = qs.find((q) => q.misconceptionTag === 'greedy-pawn-grab');
+    expect(greedy).toBeDefined();
+    expect(greedy?.answer.toLowerCase()).toContain('greedy');
+  });
+})
+
+describe('seeSequence — the swap-off line to PLAY OUT on the board (tell AND show)', () => {
+  it('returns the poisoned-pawn exchange as real legal moves', () => {
+    // Qb3 grabs b7, Bc8 takes back → ['Qxb7','Bxb7'].
+    const seq = seeSequence('2b1k3/1p6/8/8/8/1Q6/8/4K3 w - - 0 1', 'b7');
+    expect(seq[0]).toBe('Qxb7');
+    expect(seq[1]).toBe('Bxb7');
+  });
+
+  it('returns the clean grab as a single capture (no recapture)', () => {
+    const seq = seeSequence('4k3/p7/8/8/8/8/8/R3K3 w - - 0 1', 'a7');
+    expect(seq).toEqual(['Rxa7']);
+  });
+
+  it('the greedy-grab question carries the demo line', () => {
+    const q = buildReadingQuestions('2b1k3/1p6/8/8/8/1Q6/8/4K3 w - - 0 1', emptyTactics()).find((x) => x.id === 'counting-recapture');
+    expect(q?.demoLine?.[0]).toBe('Qxb7');
+    expect(q?.demoLine?.[1]).toBe('Bxb7');
+  });
+})
+
+describe('calculation practice — student names the LAST move, adaptive depth (David 2026-06-28)', () => {
+  it('asks for the LAST move of a 3-ply winning capture chain (weak-player depth)', () => {
+    // Black knight d5 attacked by white c4+e4 pawns, defended only by c6 →
+    // cxd5 cxd5 exd5 wins the knight by force (3 plies, nets White material).
+    const qs = buildReadingQuestions('4k3/8/2p5/3n4/2P1P3/8/8/4K3 w - - 0 1', emptyTactics(), { rating: 1200 });
+    const calc = qs.find((q) => q.id === 'calculation');
+    expect(calc).toBeDefined();
+    expect(calc?.bucket).toBe('calculation');
+    expect(calc?.demoLine?.length).toBeGreaterThanOrEqual(3);
+    // the prompt asks for the LAST move (does NOT reveal it)
+    expect(calc?.prompt).toContain('LAST move');
+    const last = calc!.demoLine![calc!.demoLine!.length - 1];
+    expect(calc?.prompt).not.toContain(last);
+    // the answer the student must give IS the last move
+    expect(calc?.answerMoves?.[0]).toBe(last);
+  });
+
+  it('adapts depth to rating — an advanced player needs a deeper (6+) line', () => {
+    // The 3-ply line above is below the advanced floor (6), so no calc drill.
+    const qs = buildReadingQuestions('4k3/8/2p5/3n4/2P1P3/8/8/4K3 w - - 0 1', emptyTactics(), { rating: 2100 });
+    expect(qs.find((q) => q.id === 'calculation')).toBeUndefined();
+  });
+
+  it('uses the engine PV forcing prefix when supplied', () => {
+    // A forcing prefix (captures/checks) from the PV; quiet moves end the line.
+    const qs = buildReadingQuestions('4k3/8/2p5/3n4/2P1P3/8/8/4K3 w - - 0 1', emptyTactics(), { rating: 1200, pvSan: ['cxd5', 'cxd5', 'exd5'] });
+    const calc = qs.find((q) => q.id === 'calculation');
+    const demoLine = calc?.demoLine ?? [];
+    expect(demoLine[demoLine.length - 1]).toBe('exd5');
+    expect(calc?.answerMoves?.[0]).toBe('exd5');
+  });
+})
+
+describe('readingHint — progressive GROUNDED hint ladder (David 2026-06-28, approved)', () => {
+  const hangingQ = buildReadingQuestions('4k3/8/5n2/3Q4/4P3/8/8/4K3 w - - 0 1', emptyTactics()).find((q) => q.type === 'hanging')!;
+
+  it('tier 1 is a type cue that names NO square', () => {
+    const h = readingHint(hangingQ, 1);
+    expect(h).toBeTruthy();
+    expect(h).not.toMatch(/[a-h][1-8]/); // no coordinate leaked
+  });
+
+  it('tier 2 narrows to a board region', () => {
+    const h = readingHint(hangingQ, 2);
+    expect(h).toMatch(/queenside|kingside|center/);
+  });
+
+  it('tier 3 names the file but not the exact square', () => {
+    const h = readingHint(hangingQ, 3);
+    expect(h).toContain('d-file'); // the hanging queen is on d5
+    expect(h).not.toContain('d5');
+  });
+
+  it('a negative question hints toward "nothing" at tier 2 instead of a square', () => {
+    const negQ = buildReadingQuestions('4k3/8/8/8/8/8/8/4K3 w - - 0 1', emptyTactics()).find((q) => q.type === 'hanging' && q.negative)!;
+    expect(readingHint(negQ, 2)?.toLowerCase()).toContain('nothing');
+  });
+})

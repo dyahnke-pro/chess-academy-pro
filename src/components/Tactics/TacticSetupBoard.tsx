@@ -11,6 +11,7 @@ import type { MoveResult } from '../../hooks/useChessGame';
 import { tacticTypeLabel } from '../../services/tacticalProfileService';
 import { voiceService } from '../../services/voiceService';
 import { setupIntro, setupPrepPlanted, setupRevealComplete, setupIncorrect } from '../../services/tacticNarrationService';
+import { describeMoveGeometry } from '../../services/groundedAnswer';
 import { recordTacticOutcome } from '../../services/tacticAlertService';
 import type { CoachingTier } from '../../services/tacticAlertService';
 import type { SetupPuzzle } from '../../types';
@@ -57,6 +58,31 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
   const isPlayerTurn = moveIndex % 2 === 0; // student plays even indices
 
   const orientation = puzzle.playerColor === 'black' ? 'black' : 'white';
+
+  // GROUNDED payoff geometry (David 2026-06-28): replay the line to compute
+  // what the FINAL (decisive) move actually does on the board — "forks the
+  // king and rook", "wins the queen", "pins the knight to the queen" — so the
+  // solved narration speaks the real tactic, not a generic "fork" template.
+  const payoffGeometry = useMemo((): string | null => {
+    try {
+      const c = new Chess(puzzle.setupFen);
+      let fenBeforeLast = puzzle.setupFen;
+      let lastSan = '';
+      for (let i = 0; i < line.length; i += 1) {
+        fenBeforeLast = c.fen();
+        const p = parseUciMove(line[i]);
+        const r = c.move({ from: p.from, to: p.to, promotion: p.promotion });
+        lastSan = r.san;
+      }
+      if (!lastSan) return null;
+      // Last index is even → the student's (orientation) move; odd → opponent.
+      const lastIdx = line.length - 1;
+      const mover = lastIdx % 2 === 0 ? orientation : (orientation === 'white' ? 'black' : 'white');
+      return describeMoveGeometry(fenBeforeLast, lastSan, mover);
+    } catch {
+      return null;
+    }
+  }, [puzzle.setupFen, line, orientation]);
 
   const { settings } = useSettings();
   const activeProfile = useAppStore((s) => s.activeProfile);
@@ -136,7 +162,12 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
     if (hasCompleted.current) return;
     hasCompleted.current = true;
     setBoardState('solved');
-    const msg = setupRevealComplete(puzzle.tacticType);
+    // Speak the GROUNDED payoff geometry when we computed it ("That forks the
+    // king on g8 and the rook on a8."), else the generic completion line.
+    const base = setupRevealComplete(puzzle.tacticType);
+    const msg = payoffGeometry
+      ? `${base} That ${payoffGeometry}.`
+      : base;
     setMessage(msg);
     void voiceService.speak(msg);
     recordTacticOutcome({
@@ -146,7 +177,7 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
       context: 'setup',
     });
     setTimeout(() => onComplete(true), 1400);
-  }, [puzzle.tacticType, onComplete]);
+  }, [puzzle.tacticType, onComplete, payoffGeometry]);
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (boardState !== 'thinking' || !isPlayerTurn) return;
