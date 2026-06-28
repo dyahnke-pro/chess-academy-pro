@@ -221,7 +221,7 @@ export function explainBestMoveGrounded(
         const legalCaps = c.moves({ verbose: true }).filter((m) => m.captured);
         let worst: { square: Square; piece: PieceSymbol; gain: number; san: string } | null = null;
         for (const cap of legalCaps) {
-          const to = cap.to as Square;
+          const to = cap.to;
           const victim = c.get(to);
           if (!victim || victim.color !== mc) continue; // must capture the mover's own piece
           const gain = seeGain(c, to); // material the opponent wins on that square

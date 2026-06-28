@@ -3,7 +3,6 @@ import { Chess } from 'chess.js';
 import {
   seeGain,
   seeSequence,
-  forcingPrefix,
   findHangingBySee,
   findPawnBreaks,
   findPieceQuality,
@@ -524,7 +523,8 @@ describe('calculation practice — student names the LAST move, adaptive depth (
     // A forcing prefix (captures/checks) from the PV; quiet moves end the line.
     const qs = buildReadingQuestions('4k3/8/2p5/3n4/2P1P3/8/8/4K3 w - - 0 1', emptyTactics(), { rating: 1200, pvSan: ['cxd5', 'cxd5', 'exd5'] });
     const calc = qs.find((q) => q.id === 'calculation');
-    expect(calc?.demoLine?.[calc!.demoLine!.length - 1]).toBe('exd5');
+    const demoLine = calc?.demoLine ?? [];
+    expect(demoLine[demoLine.length - 1]).toBe('exd5');
     expect(calc?.answerMoves?.[0]).toBe('exd5');
   });
 })
