@@ -158,40 +158,41 @@ Pick ONE. They're ranked by how directly they sell:
 ```
 A chess coach that actually watches your games — and tells you exactly what to fix.
 
-Most chess apps hand you puzzles in one corner and opening videos in another, then leave you to guess what to study. Chess Academy Pro is different. It watches the games you play, finds the mistakes you keep making, and builds every puzzle, opening, and lesson around YOUR weaknesses — out loud, move by move, with the board lighting up exactly where to look.
+Most chess apps hand you puzzles in one corner and opening videos in another, then leave you to guess what to study. Chess Academy Pro is different. It watches the games you play, finds the mistakes you keep making, and builds your training around YOUR weaknesses — out loud, move by move, with the board lighting up exactly where to look. And you can ask it anything, anytime: a coach in your pocket you can actually talk to.
 
-A private coach in your pocket, for less than the price of one lesson.
+For less than the price of one lesson.
 
 ONE CONNECTED LOOP — THE PART NO OTHER APP DOES
-Your games are reviewed by a full-strength Stockfish engine. Your mistakes are sorted into the patterns you keep missing. Those weaknesses flow straight into your next puzzles and lessons, and spaced repetition brings the hard ones back until they stick. Stop guessing what to study — the app always knows what's next.
+Import your Chess.com and Lichess games and a full-strength Stockfish engine reviews every move. Your blunders become tactics puzzles made from your OWN games, your mistakes are ranked on a personal Weaknesses page, and your worst patterns feed straight into your next puzzles and lessons. Spaced repetition brings the hard ones back until they stick. Stop guessing what to study — the app always knows what's next.
 
 — EVERYTHING INSIDE —
 
-YOUR AI COACH
-• A talking coach that narrates every move and answers your questions mid-game, in plain English
-• Voice coaching with lead-the-eye arrows and highlights — your eye lands exactly where the coach is pointing
-• Tells you WHY a move was wrong and what to play instead — never cryptic engine numbers
+TALK TO YOUR AI COACH
+• Ask it ANY question, anytime — "why was that a blunder?", "what's the plan here?", "how do I beat the London?" — and get a real answer
+• A talking coach that narrates every move in plain English, never cryptic engine numbers
+• Lead-the-eye arrows and highlights land your eye exactly where the coach is pointing
 
-OPENINGS — BUILT FROM REAL MASTER GAMES
-• 42 guided masterclasses using the Watch → Learn → Practice → Play method
-• Over 3,600 opening lines to explore
-• 15 pro-player repertoires across 81 openings — study the exact lines top players use
-• 570 annotated model games
-• 520 middlegame plans that grow naturally out of your openings
-• 296 traps and tactical "gems" hidden in the lines
+3,654 OPENINGS TO STUDY — WITH EVERY VARIATION AND SUBLINE
+• 3,654 openings, variations, and sublines to explore — you will not run out of theory
+• 42 of them built into guided masterclasses (Watch → Learn → Practice → Play)
+• 15 pro-player repertoires across 81 openings — the exact lines top players use
+• 570 annotated model games, 520 middlegame plans, and 296 traps
 • Common pitfalls flagged across 125 openings
 
-TACTICS & PUZZLES
-• 15,000 hand-curated puzzles across 72 themes — forks, pins, skewers, sacrifices, mating nets and more
-• Spaced repetition brings your misses back until they're automatic
-• Difficulty adapts to your rating, every puzzle in the sweet spot
+IMPORT YOUR GAMES, GET REAL ANALYSIS
+• Import your Chess.com and Lichess games in seconds
+• Full-strength Stockfish 18 reviews every move, right on your device
+• The coach explains why a move was wrong and what to play instead — in plain English
+
+TACTICS BUILT FROM YOUR OWN MISTAKES
+• Your blunders become puzzles you replay until the leak is fixed
+• Plus 15,000 hand-curated puzzles across 72 themes — forks, pins, skewers, sacrifices, mating nets
+• Spaced repetition and difficulty that adapts to your rating
 • 37 named mating patterns to recognize on sight
 
-ANALYSIS & IMPROVEMENT
-• Full-strength Stockfish 18 runs on your device
-• Import your Chess.com and Lichess games for instant review
-• Every mistake becomes a weakness your training targets next
-• Shareable insight cards built from your own games
+A WEAKNESSES PAGE THAT KNOWS YOUR GAME
+• See exactly which patterns are costing you games, ranked worst-first
+• Drill any weakness on demand — the app turns your worst habits into your next session
 
 ENDGAMES
 • Master the rook, pawn, and minor-piece endgames that actually decide games
@@ -199,7 +200,7 @@ ENDGAMES
 A KIDS MODE
 • A dedicated, friendly mode with encouraging lessons for young players
 
-Try it free for 7 days. Then keep your coach for $7.99/month — less than a single hour with a human coach. Cancel anytime.
+Try it free for 7 days. Then $7.99/month — less than a single hour with a human coach. Cancel anytime.
 
 Engine analysis runs on your device; the coach's voice and chat are powered by secure cloud services.
 
