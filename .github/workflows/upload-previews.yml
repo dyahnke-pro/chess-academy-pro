@@ -1,0 +1,30 @@
+name: Upload App Preview videos (ASC API)
+
+# fastlane deliver silently drops app-preview videos, so this uploads them
+# straight through the App Store Connect API (reserve → chunked PUT → commit →
+# poll). Videos live at fastlane/screenshots/en-US/IPHONE_67_*.mov. No binary,
+# no submit. Manual trigger only.
+on:
+  workflow_dispatch:
+
+jobs:
+  upload-previews:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Upload app previews
+        env:
+          ASC_KEY_P8: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APP_BUNDLE_ID: com.chessacademy.pro
+          APP_VERSION: '2.8'
+          PREVIEW_LOCALE: en-US
+          PREVIEW_TYPE: IPHONE_67
+          PREVIEW_DIR: fastlane/screenshots/en-US
+        run: node scripts/ci/upload-app-previews.mjs
