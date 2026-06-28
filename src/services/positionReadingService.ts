@@ -346,6 +346,69 @@ export function findAttackTargets(fen: string, attackerColor: Color): Square[] {
   return [...new Set(targets)].slice(0, 5);
 }
 
+export interface KingSafetyNote {
+  square: Square;
+  castled: boolean;
+  inCenter: boolean;
+  /** Files adjacent-or-on the king with NO friendly pawn (avenues of attack). */
+  openFilesNearKing: string[];
+  /** Friendly pawns shielding the king (on the 3 files around it, just ahead). */
+  shieldPawns: number;
+  exposed: boolean;
+}
+
+/** Grounded KING SAFETY read for `color` — castled?, pawn shield, open files
+ *  toward the king, king-in-center. Pure chess.js geometry (G3). */
+export function kingSafetyRead(fen: string, color: Color): KingSafetyNote | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  let ksq: Square | null = null;
+  for (const row of chess.board()) for (const cell of row) if (cell && cell.type === 'k' && cell.color === color) ksq = cell.square;
+  if (!ksq) return null;
+  const file = ksq.charCodeAt(0) - 97;
+  const homeRank = color === 'w' ? 1 : 8;
+  const inCenter = (file === 3 || file === 4) && Number(ksq[1]) === homeRank; // d/e on home rank
+  const castled = (file >= 6 || file <= 2) && Number(ksq[1]) === homeRank; // king-/queen-side corner-ish
+  // Pawn shield: friendly pawns on the king's file ± adjacent, one rank ahead.
+  const ahead = color === 'w' ? 1 : -1;
+  let shieldPawns = 0;
+  const openFilesNearKing: string[] = [];
+  for (const df of [-1, 0, 1]) {
+    const f = file + df;
+    if (f < 0 || f > 7) continue;
+    const fileLetter = String.fromCharCode(97 + f);
+    const shieldSq = `${fileLetter}${homeRank + ahead}` as Square;
+    const occ = chess.get(shieldSq);
+    if (occ && occ.type === 'p' && occ.color === color) shieldPawns += 1;
+    // Open toward king: no friendly pawn anywhere on this file.
+    let hasOwnPawn = false;
+    for (let r = 1; r <= 8; r += 1) { const o = chess.get(`${fileLetter}${r}` as Square); if (o && o.type === 'p' && o.color === color) { hasOwnPawn = true; break; } }
+    if (!hasOwnPawn) openFilesNearKing.push(fileLetter);
+  }
+  const exposed = inCenter || shieldPawns <= 1 || openFilesNearKing.length >= 2;
+  return { square: ksq, castled, inCenter, openFilesNearKing, shieldPawns, exposed };
+}
+
+export interface DevelopmentNote { developedMinors: number; totalMinors: number; castled: boolean }
+
+/** Grounded DEVELOPMENT read for `color` — minor pieces off their home squares
+ *  + castled. The answer key for "are you developed?" (neglected-development). */
+export function developmentRead(fen: string, color: Color): DevelopmentNote | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const homes: Record<Color, Square[]> = { w: ['b1', 'g1', 'c1', 'f1'], b: ['b8', 'g8', 'c8', 'f8'] };
+  let developedMinors = 0;
+  let totalMinors = 0;
+  for (const row of chess.board()) for (const cell of row) {
+    if (!cell || cell.color !== color || (cell.type !== 'n' && cell.type !== 'b')) continue;
+    totalMinors += 1;
+    if (!homes[color].includes(cell.square)) developedMinors += 1;
+  }
+  // Castled ≈ king off its home square toward a corner.
+  const ks = kingSafetyRead(fen, color);
+  return { developedMinors, totalMinors, castled: ks?.castled ?? false };
+}
+
 /**
  * GROUNDED reading-facts block for the coach's "Read this position" narration
  * (G0 — the coach VOICES these, never invents beyond them). Complements the
@@ -513,7 +576,7 @@ export type ReadingQuestionType =
   | 'tactic' | 'threat' | 'hanging' | 'material' | 'mate' | 'check' | 'pawn-break' | 'piece'
   // Positional / discussion dimensions (David 2026-06-28 — "all buckets"):
   | 'weak-square' | 'strong-piece' | 'weak-piece' | 'target' | 'weak-pawn'
-  | 'bishop-pair' | 'outpost' | 'space' | 'open-file' | 'king-safety' | 'plan' | 'who-is-winning';
+  | 'bishop-pair' | 'outpost' | 'space' | 'open-file' | 'king-safety' | 'development' | 'plan' | 'who-is-winning';
 
 export interface ReadingQuestion {
   id: string;
@@ -521,6 +584,10 @@ export interface ReadingQuestion {
   /** Weakness bucket this question trains — maps to the Weaknesses tab taxonomy
    *  so practice targets exactly what the app diagnoses (David 2026-06-28). */
   bucket: WeaknessCategory;
+  /** The specific MISCONCEPTION_TAG id this question trains (the granular ~17
+   *  buckets the app collects per game), so practice lines up 1:1 with the
+   *  weakness data. Optional — a few questions are general (material/who-wins). */
+  misconceptionTag?: string;
   /** The prompt shown to the student. */
   prompt: string;
   /** The canonical correct answer, shown when the student is wrong. */
@@ -586,7 +653,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   if (tactics.immediate.length > 0) {
     const t = tactics.immediate[0];
     out.push({
-      id: 'tactic', type: 'tactic', bucket: 'tactics',
+      id: 'tactic', type: 'tactic', bucket: 'tactics', misconceptionTag: 'missed-tactic',
       prompt: 'Is there a tactic in this position? What is it?',
       answer: t.description,
       acceptTokens: [t.type.replace(/_/g, ' '), ...t.squares.map(sq), ...t.type.split('_')],
@@ -606,7 +673,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   if (tactics.threats.length > 0) {
     const th = tactics.threats[0];
     out.push({
-      id: 'threat', type: 'threat', bucket: 'tactics',
+      id: 'threat', type: 'threat', bucket: 'tactics', misconceptionTag: 'missed-opponents-threat',
       prompt: "What is your opponent threatening?",
       answer: th.description,
       acceptTokens: [th.type.replace(/_/g, ' '), ...th.type.split('_'), ...(th.line[0] ? [sq(th.line[0])] : [])],
@@ -620,7 +687,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
     const h = hanging[0];
     const where = h.color === me ? 'one of YOUR pieces' : "one of your OPPONENT's pieces";
     out.push({
-      id: 'hanging', type: 'hanging', bucket: 'tactics',
+      id: 'hanging', type: 'hanging', bucket: 'tactics', misconceptionTag: 'hung-material',
       prompt: 'Is any piece hanging — can material be won by force here?',
       answer: `Yes — the ${PIECE_NAME[h.piece]} on ${h.square} (${where}) is hanging; capturing wins about ${h.gain} point${h.gain === 1 ? '' : 's'}.`,
       acceptTokens: [sq(h.square), PIECE_NAME[h.piece], 'hanging', 'yes'],
@@ -667,7 +734,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
     let firstTo: Square | null = null;
     try { const c = new Chess(fen); const mv = c.move(pv[0]); if (mv) firstTo = mv.to as Square; } catch { firstTo = null; }
     out.push({
-      id: 'plan', type: 'plan', bucket: opts.isEndgame ? 'endgame' : 'positional',
+      id: 'plan', type: 'plan', bucket: opts.isEndgame ? 'endgame' : 'positional', misconceptionTag: 'no-plan',
       prompt: opts.isEndgame ? "What's the winning plan in this endgame?" : "What's the best plan / continuation here?",
       answer: `The engine's plan starts ${pv.join(' ')}.`,
       acceptTokens: [sq(pv[0]), ...(firstTo ? [sq(firstTo)] : [])],
@@ -682,7 +749,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   const breaks = findPawnBreaks(fen);
   if (breaks.length > 0) {
     out.push({
-      id: 'pawn-break', type: 'pawn-break', bucket: 'positional',
+      id: 'pawn-break', type: 'pawn-break', bucket: 'positional', misconceptionTag: 'mistimed-pawn-break',
       prompt: 'What pawn break is available to challenge the structure?',
       answer: `The break${breaks.length > 1 ? 's' : ''} ${breaks.map((b) => `…${b}`).join(' and ')} challenge${breaks.length > 1 ? '' : 's'} the opponent's pawns.`,
       acceptTokens: breaks.map(sq),
@@ -759,7 +826,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   if (activity.weakest && (!activity.strongest || activity.weakest.square !== activity.strongest.square)) {
     const w = activity.weakest;
     out.push({
-      id: 'weak-piece', type: 'weak-piece', bucket: 'positional',
+      id: 'weak-piece', type: 'weak-piece', bucket: 'positional', misconceptionTag: 'misplaced-piece',
       prompt: 'Which of your pieces is the weakest (most passive) — the one to improve?',
       answer: `Your ${PIECE_NAME[w.piece]} on ${w.square} is your least active piece — it only covers ${w.scope} squares; reroute it.`,
       acceptTokens: [sq(w.square), PIECE_NAME[w.piece]],
@@ -786,7 +853,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   const weakPawnSquares = [...new Set([...wp.isolated, ...wp.doubled])];
   if (weakPawnSquares.length > 0) {
     out.push({
-      id: 'weak-pawn', type: 'weak-pawn', bucket: 'positional',
+      id: 'weak-pawn', type: 'weak-pawn', bucket: 'positional', misconceptionTag: 'created-pawn-weakness',
       prompt: 'Do you have any weak pawns? Where are they?',
       answer: `Weak pawn${weakPawnSquares.length > 1 ? 's' : ''}: ${weakPawnSquares.join(', ')}${wp.isolated.length ? ` (isolated: ${wp.isolated.join(', ')})` : ''}${wp.doubled.length ? ` (doubled: ${wp.doubled.join(', ')})` : ''}.`,
       acceptTokens: weakPawnSquares.map(sq),
@@ -812,6 +879,39 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
       id: 'bishop-pair', type: 'bishop-pair', bucket: 'positional',
       prompt: 'Who has the bishop pair?', answer: 'Black has the bishop pair.',
       acceptTokens: ['black'], negative: false,
+    });
+  }
+
+  // KING SAFETY — weakened-king-safety / king-stuck-center (the 17-tag buckets).
+  const ks = kingSafetyRead(fen, me);
+  if (ks && ks.exposed) {
+    const why = ks.inCenter
+      ? 'your king is still in the center — castle before it gets opened up'
+      : ks.openFilesNearKing.length >= 2
+        ? `the ${ks.openFilesNearKing.join('- and ')}-file${ks.openFilesNearKing.length > 1 ? 's are' : ' is'} open toward your king`
+        : 'your king has lost its pawn shield';
+    out.push({
+      id: 'king-safety', type: 'king-safety', bucket: ks.inCenter ? 'openings' : 'positional',
+      misconceptionTag: ks.inCenter ? 'king-stuck-center' : 'weakened-king-safety',
+      prompt: 'Is your king safe? If not, what is the problem?',
+      answer: `Your king on ${ks.square} is exposed — ${why}.`,
+      acceptTokens: [sq(ks.square), 'king', 'exposed', 'unsafe', ...(ks.inCenter ? ['center', 'castle'] : ['open', 'shield', 'weak']), ...ks.openFilesNearKing],
+      answerSquares: [ks.square],
+      negative: false,
+    });
+  }
+
+  // DEVELOPMENT — neglected-development (opening bucket).
+  const devMe = developmentRead(fen, me);
+  if (devMe && devMe.totalMinors > 0 && devMe.developedMinors < devMe.totalMinors) {
+    const undev = devMe.totalMinors - devMe.developedMinors;
+    out.push({
+      id: 'development', type: 'development', bucket: 'openings',
+      misconceptionTag: 'neglected-development',
+      prompt: 'Are all your pieces developed? How many minor pieces are still at home?',
+      answer: `${undev} of your ${devMe.totalMinors} minor pieces ${undev === 1 ? 'is' : 'are'} still undeveloped${devMe.castled ? '' : ', and you have not castled yet'}.`,
+      acceptTokens: [String(undev), 'undeveloped', 'development', 'develop', ...(devMe.castled ? [] : ['castle'])],
+      negative: false,
     });
   }
 

@@ -14,6 +14,8 @@ import {
   strongestWeakestPiece,
   findWeakPawns,
   findAttackTargets,
+  kingSafetyRead,
+  developmentRead,
 } from './positionReadingService';
 import type { WeaknessCategory } from '../types';
 import type { TacticsLiveContext } from '../coach/types';
@@ -382,5 +384,53 @@ describe('buildReadingQuestions — calculation bucket (engine eval + PV grounde
     const qs = buildReadingQuestions('8/8/8/4k3/8/8/4P3/4K3 w - - 0 1', emptyTactics(), { pvSan: ['Kd2'], isEndgame: true });
     const plan = qs.find((q) => q.type === 'plan');
     expect(plan?.bucket).toBe('endgame');
+  });
+})
+
+describe('king safety + development computers (17-tag buckets)', () => {
+  it('kingSafetyRead: a castled king with an intact shield is NOT exposed', () => {
+    const ks = kingSafetyRead('4k3/8/8/8/8/8/5PPP/6K1 w - - 0 1', 'w');
+    expect(ks?.castled).toBe(true);
+    expect(ks?.exposed).toBe(false);
+    expect(ks?.shieldPawns).toBe(3);
+  });
+
+  it('kingSafetyRead: a king with no pawn shield IS exposed (open files toward it)', () => {
+    const ks = kingSafetyRead('4k3/8/8/8/8/8/8/6K1 w - - 0 1', 'w');
+    expect(ks?.exposed).toBe(true);
+    expect(ks?.openFilesNearKing.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('kingSafetyRead: a king on its home centre square reads as in-center', () => {
+    const ks = kingSafetyRead('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'w');
+    expect(ks?.inCenter).toBe(true);
+  });
+
+  it('developmentRead: start position has 0 developed minors of 4', () => {
+    const d = developmentRead('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'w');
+    expect(d?.developedMinors).toBe(0);
+    expect(d?.totalMinors).toBe(4);
+  });
+
+  it('developmentRead: counts developed minors off their home squares', () => {
+    // White Nf3 + Bc4 developed, Nb1 + Bc1 still home → 2 of 4 developed.
+    const d = developmentRead('rnbqkbnr/pppp1ppp/8/4p3/2B5/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1', 'w');
+    expect(d?.developedMinors).toBe(2);
+    expect(d?.totalMinors).toBe(4);
+  });
+});
+
+describe('buildReadingQuestions — questions carry their misconception tag (1:1 with weakness data)', () => {
+  it('tags the hanging question hung-material and the plan question no-plan', () => {
+    const hang = buildReadingQuestions('4k3/8/5n2/3Q4/4P3/8/8/4K3 w - - 0 1', emptyTactics()).find((q) => q.type === 'hanging');
+    expect(hang?.misconceptionTag).toBe('hung-material');
+    const plan = buildReadingQuestions('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', emptyTactics(), { pvSan: ['e4'] }).find((q) => q.type === 'plan');
+    expect(plan?.misconceptionTag).toBe('no-plan');
+  });
+
+  it('asks a development question tagged neglected-development when minors are home', () => {
+    const qs = buildReadingQuestions('rnbqkb1r/pppp1ppp/5n2/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1', emptyTactics());
+    const dev = qs.find((q) => q.type === 'development');
+    expect(dev?.misconceptionTag).toBe('neglected-development');
   });
 })
