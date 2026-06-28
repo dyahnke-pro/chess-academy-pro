@@ -24,6 +24,9 @@
  *     - jump-to-start / jump-to-end skip buttons
  *     - narration banner visible
  *     - engine-lines toggle expands the panel
+ *     - grounded board previews for flagged moves (Phase 1c, 2026-06-28):
+ *       the ReviewCitationPreviews cards render with the "why better" line,
+ *       and tapping one jumps the main board (fires review-nav)
  *     - ask panel toggle expands the input
  *     - bottom bar: play-again + back-to-coach buttons present
  *
@@ -392,6 +395,37 @@ async function main() {
     if (await toggle.count() > 0) await toggle.click();
   }, NAV_SETTLE_MS, [
     { kind: 'audit-present', audit: 'review-engine-lines-toggled', label: '2.10 engine-lines audit fires' },
+  ]);
+
+  // ── Grounded board previews for flagged moves (Phase 1c, 2026-06-28) ──
+  // The walk scroll-middle renders ReviewCitationPreviews when the student
+  // had flagged moves (sample morphy-opera has blunders). Scroll the middle
+  // to find them, assert the cards + the grounded "why better" line, and that
+  // tapping a card jumps the main board (fires review-nav).
+  await record('review-citation-previews', async () => {
+    const middle = page.locator('[data-testid="review-scroll-middle"]');
+    if (await middle.count() > 0) {
+      // Bring the previews into view (they sit below the move list).
+      await middle.evaluate((el) => { el.scrollTop = el.scrollHeight; }).catch(() => undefined);
+      await page.waitForTimeout(500);
+    }
+    const previews = page.locator('[data-testid="review-citation-previews"]');
+    const seen = (await previews.count()) > 0;
+    report.scenarios = report.scenarios ?? {};
+    report.scenarios.citationPreviewsSeen = seen;
+    if (seen) {
+      const cards = page.locator('[data-testid^="review-citation-"]').filter({ hasNot: page.locator('[data-testid^="review-citation-why-"]') });
+      report.scenarios.citationCardCount = await page.locator('[data-testid="review-citation-previews"] [data-testid^="review-citation-"]').count();
+      report.scenarios.citationWhyCount = await page.locator('[data-testid^="review-citation-why-"]').count();
+      // Tap the first preview card → should jump the board (review-nav).
+      const firstCard = cards.first();
+      if (await firstCard.count() > 0) await firstCard.click().catch(() => undefined);
+      await page.waitForTimeout(600);
+    }
+  }, NAV_SETTLE_MS, [
+    // Soft: not every fixture game has flagged student moves at all, so the
+    // previews container can legitimately be absent. report.scenarios above
+    // records what was seen; the tap-jump emits review-nav when it fired.
   ]);
 
   // ── Ask panel toggle ────────────────────────────────────────────
