@@ -79,8 +79,12 @@ jobs:
         run: |
           set -e
           if [ -z "$ANDROID_KEYSTORE_B64" ]; then
-            echo "::error::ANDROID_KEYSTORE_B64 secret is not set — cannot sign the release. Add the 4 ANDROID_* secrets."
-            exit 1
+            # No signing secrets yet → build an UNSIGNED release bundle. This still
+            # validates the whole cap-add/sync/patch/gradle pipeline; the AAB just
+            # can't be uploaded to Play until the 4 ANDROID_* secrets are added.
+            echo "::warning::ANDROID_KEYSTORE_B64 not set — building UNSIGNED (validation only; add the 4 ANDROID_* secrets to ship)."
+            echo "UNSIGNED_BUILD=1" >> "$GITHUB_ENV"
+            exit 0
           fi
           printf '%s' "$ANDROID_KEYSTORE_B64" | base64 -d > android/upload-keystore.jks
           echo "keystore bytes: $(wc -c < android/upload-keystore.jks)"
@@ -103,17 +107,19 @@ jobs:
           echo "--- AAB output ---"
           ls -la app/build/outputs/bundle/release/
 
-      - name: Verify the AAB is signed with the upload key
+      - name: Verify the AAB was produced
         run: |
-          AAB=android/app/build/outputs/bundle/release/app-release.aab
-          test -f "$AAB" || { echo "::error::AAB not found at $AAB"; exit 1; }
-          echo "Signed AAB present: $(wc -c < "$AAB") bytes"
+          DIR=android/app/build/outputs/bundle/release
+          AAB=$(ls "$DIR"/*.aab 2>/dev/null | head -1 || true)
+          test -n "$AAB" || { echo "::error::no .aab produced in $DIR"; ls -la "$DIR" || true; exit 1; }
+          echo "AAB present: $AAB ($(wc -c < "$AAB") bytes)"
+          [ "${UNSIGNED_BUILD:-0}" = "1" ] && echo "::warning::This AAB is UNSIGNED (validation build)."
 
       - name: Upload .aab artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-release-aab
-          path: android/app/build/outputs/bundle/release/app-release.aab
+          path: android/app/build/outputs/bundle/release/*.aab
           if-no-files-found: error
 
       - name: Set up Ruby (for fastlane supply)
@@ -131,6 +137,10 @@ jobs:
           PLAY_RELEASE_STATUS: ${{ inputs.release_status }}
         run: |
           set -e
+          if [ "${UNSIGNED_BUILD:-0}" = "1" ]; then
+            echo "::error::Build is UNSIGNED (no ANDROID_* secrets) — refusing to upload to Play. Add the signing secrets first."
+            exit 1
+          fi
           if [ -z "$PLAY_SERVICE_ACCOUNT_JSON_B64" ]; then
             echo "::error::PLAY_SERVICE_ACCOUNT_JSON_B64 not set — cannot upload. The AAB artifact is still available to upload manually."
             exit 1
