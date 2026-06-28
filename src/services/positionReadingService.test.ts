@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import {
   seeGain,
+  seeSequence,
   findHangingBySee,
   findPawnBreaks,
   findPieceQuality,
@@ -16,6 +17,7 @@ import {
   findAttackTargets,
   kingSafetyRead,
   developmentRead,
+  findPawnGrabs,
 } from './positionReadingService';
 import type { WeaknessCategory } from '../types';
 import type { TacticsLiveContext } from '../coach/types';
@@ -432,5 +434,53 @@ describe('buildReadingQuestions — questions carry their misconception tag (1:1
     const qs = buildReadingQuestions('rnbqkb1r/pppp1ppp/5n2/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1', emptyTactics());
     const dev = qs.find((q) => q.type === 'development');
     expect(dev?.misconceptionTag).toBe('neglected-development');
+  });
+})
+
+describe('findPawnGrabs — greedy-pawn-grab grounded by SEE (David 2026-06-28)', () => {
+  it('marks a clean free pawn as SAFE to grab', () => {
+    // White rook on a1, undefended black pawn on a7 → Rxa7 wins a clean pawn.
+    const grabs = findPawnGrabs('4k3/p7/8/8/8/8/8/R3K3 w - - 0 1');
+    const a7 = grabs.find((g) => g.square === 'a7');
+    expect(a7).toBeDefined();
+    expect(a7?.safe).toBe(true);
+    expect(a7?.see).toBeGreaterThan(0);
+  });
+
+  it('marks a POISONED pawn as unsafe (winning it loses material in the swap)', () => {
+    // White queen can take b7 pawn, but it's defended by the a8 rook AND c8
+    // bishop → Qxb7 wins a pawn then drops the queen. seeGain ≤ 0.
+    const grabs = findPawnGrabs('2b1k3/1p6/8/8/8/1Q6/8/4K3 w - - 0 1');
+    const b7 = grabs.find((g) => g.square === 'b7');
+    expect(b7).toBeDefined();
+    expect(b7?.safe).toBe(false);
+    expect(b7?.see).toBeLessThanOrEqual(0);
+  });
+
+  it('buildReadingQuestions asks a greedy-grab question tagged greedy-pawn-grab', () => {
+    const qs = buildReadingQuestions('2b1k3/1p6/8/8/8/1Q6/8/4K3 w - - 0 1', emptyTactics());
+    const grab = qs.find((q) => q.misconceptionTag === 'greedy-pawn-grab');
+    expect(grab).toBeDefined();
+    expect(grab?.answer.toLowerCase()).toContain('poisoned');
+  });
+})
+
+describe('seeSequence — the swap-off line to PLAY OUT on the board (tell AND show)', () => {
+  it('returns the poisoned-pawn exchange as real legal moves', () => {
+    // Qb3 grabs b7, Bc8 takes back → ['Qxb7','Bxb7'].
+    const seq = seeSequence('2b1k3/1p6/8/8/8/1Q6/8/4K3 w - - 0 1', 'b7');
+    expect(seq[0]).toBe('Qxb7');
+    expect(seq[1]).toBe('Bxb7');
+  });
+
+  it('returns the clean grab as a single capture (no recapture)', () => {
+    const seq = seeSequence('4k3/p7/8/8/8/8/8/R3K3 w - - 0 1', 'a7');
+    expect(seq).toEqual(['Rxa7']);
+  });
+
+  it('the greedy-grab question carries the demo line', () => {
+    const q = buildReadingQuestions('2b1k3/1p6/8/8/8/1Q6/8/4K3 w - - 0 1', emptyTactics()).find((x) => x.misconceptionTag === 'greedy-pawn-grab');
+    expect(q?.demoLine?.[0]).toBe('Qxb7');
+    expect(q?.demoLine?.[1]).toBe('Bxb7');
   });
 })

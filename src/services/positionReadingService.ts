@@ -73,6 +73,28 @@ export function seeGain(chess: Chess, square: Square): number {
   return gains[0];
 }
 
+/**
+ * The actual capture SEQUENCE (SAN) of the static exchange on `square` — each
+ * side recaptures with its least-valuable attacker, in order. This is the
+ * grounded line we PLAY OUT ON THE BOARD so the student SEES why a pawn is
+ * poisoned / a piece hangs (David 2026-06-28: "tell AND show the why"). Real,
+ * legal moves only (chess.js); capped so a pathological loop can't run away.
+ */
+export function seeSequence(fen: string, square: Square): string[] {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return []; }
+  const seq: string[] = [];
+  for (let guard = 0; guard < 8; guard += 1) {
+    const caps = chess.moves({ verbose: true }).filter((m) => m.to === square && m.captured);
+    if (caps.length === 0) break;
+    caps.sort((a, b) => (PIECE_VALUE[a.piece] ?? 0) - (PIECE_VALUE[b.piece] ?? 0)); // least-valuable attacker
+    const mv = caps[0];
+    try { chess.move(mv); } catch { break; }
+    seq.push(mv.san);
+  }
+  return seq;
+}
+
 export interface HangingPiece {
   square: Square;
   piece: PieceSymbol;
@@ -346,6 +368,39 @@ export function findAttackTargets(fen: string, attackerColor: Color): Square[] {
   return [...new Set(targets)].slice(0, 5);
 }
 
+export interface PawnGrabNote {
+  /** The enemy pawn's square (the grab target). */
+  square: Square;
+  /** A legal SAN that captures it. */
+  capture: string;
+  /** SEE material the side to move nets by grabbing (≤0 ⇒ poisoned/greedy). */
+  see: number;
+  safe: boolean;
+}
+
+/**
+ * Capturable enemy PAWNS for the side to move, each graded by SEE — the
+ * deterministic answer key for "should you take this pawn, or is it greedy?"
+ * (David 2026-06-28). safe = the swap-off wins material; !safe = poisoned (you
+ * win the pawn but lose more in the recapture). The positional-greed case
+ * (materially fine but the engine prefers another move) layers on top when an
+ * eval is supplied — this is the pure-material floor (G3, no engine needed).
+ */
+export function findPawnGrabs(fen: string): PawnGrabNote[] {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return []; }
+  const bySquare = new Map<Square, PawnGrabNote>();
+  for (const mv of chess.moves({ verbose: true })) {
+    if (mv.captured !== 'p') continue;
+    const to = mv.to as Square;
+    if (bySquare.has(to)) continue;
+    const see = seeGain(chess, to); // material the side to move wins on that square
+    bySquare.set(to, { square: to, capture: mv.san, see, safe: see > 0 });
+  }
+  // Poisoned (greedy) grabs first — those are the teachable ones.
+  return [...bySquare.values()].sort((a, b) => Number(a.safe) - Number(b.safe) || a.see - b.see);
+}
+
 export interface KingSafetyNote {
   square: Square;
   castled: boolean;
@@ -604,6 +659,11 @@ export interface ReadingQuestion {
   /** Answer MOVES (SAN) — for grading a played-on-the-board answer (the tactic /
    *  best move). Any of these SANs played is correct. */
   answerMoves?: string[];
+  /** A grounded move sequence (SAN) to PLAY OUT on the board while the coach
+   *  narrates — the "tell AND show the why" demo (David 2026-06-28). E.g. the
+   *  SEE swap-off that proves a pawn is poisoned (Qxb7, Bxb7). Real legal moves
+   *  from `fen`; the board animates them and the voice narrates each step. */
+  demoLine?: string[];
 }
 
 const NEG_TOKENS = ['nothing', 'none', 'no', 'safe', 'fine', 'equal', 'even', 'quiet', "nothing's", 'nope'];
@@ -692,6 +752,8 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
       answer: `Yes — the ${PIECE_NAME[h.piece]} on ${h.square} (${where}) is hanging; capturing wins about ${h.gain} point${h.gain === 1 ? '' : 's'}.`,
       acceptTokens: [sq(h.square), PIECE_NAME[h.piece], 'hanging', 'yes'],
       answerSquares: [h.square],
+      // Play the win out on the board (the capture sequence) — show, don't just tell.
+      demoLine: seeSequence(fen, h.square),
       negative: false,
     });
   } else {
@@ -897,6 +959,31 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
       answer: `Your king on ${ks.square} is exposed — ${why}.`,
       acceptTokens: [sq(ks.square), 'king', 'exposed', 'unsafe', ...(ks.inCenter ? ['center', 'castle'] : ['open', 'shield', 'weak']), ...ks.openFilesNearKing],
       answerSquares: [ks.square],
+      negative: false,
+    });
+  }
+
+  // GREEDY PAWN GRAB — greedy-pawn-grab (David 2026-06-28). Present a capturable
+  // pawn and ask if it's safe to take; SEE grounds greedy vs OK. Prefer a
+  // POISONED pawn (the teachable case) when one exists.
+  const grabs = findPawnGrabs(fen);
+  if (grabs.length > 0) {
+    const g = grabs[0]; // poisoned-first ordering
+    let firstTo: Square | null = null;
+    try { const c = new Chess(fen); const mv = c.move(g.capture); if (mv) firstTo = mv.to as Square; } catch { firstTo = null; }
+    out.push({
+      id: 'greedy-grab', type: 'target', bucket: 'calculation', misconceptionTag: 'greedy-pawn-grab',
+      prompt: `Can you safely grab the pawn on ${g.square}, or is it poisoned?`,
+      answer: g.safe
+        ? `Yes — ${g.capture} wins a clean pawn (the exchange nets ${g.see}).`
+        : `No — ${g.capture} is greedy: the pawn is poisoned and the recapture wins material back (the exchange nets ${g.see} for you).`,
+      acceptTokens: g.safe
+        ? [sq(g.square), 'yes', 'safe', 'take', 'free', 'clean']
+        : [sq(g.square), 'no', 'poisoned', 'greedy', 'trap', 'unsafe', "don't"],
+      answerSquares: firstTo ? [firstTo] : [g.square],
+      // Play the exchange out so the student SEES the queen come back off (or the
+      // clean grab) — tell AND show the why.
+      demoLine: seeSequence(fen, g.square),
       negative: false,
     });
   }
