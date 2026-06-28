@@ -73,29 +73,20 @@ async function main() {
       const pid = s.attributes?.productId || '';
       const isYearly = pid.includes('yearly') || pid.includes('annual');
 
-      // ── B. Monthly availability (territory-list form) ──
+      // ── B. Monthly availability ──
+      // Correct schema: attribute is availableInNewTerritories (NOT
+      // availableInAllTerritories), plus the full availableTerritories list.
       if (!isYearly) {
         const avail = await api('GET', `/v1/subscriptions/${s.id}/subscriptionAvailability`, null, { soft: true });
         if (!avail.data?.id) {
-          // Try 1: explicit all-territory list (no availableInAllTerritories attr).
-          let made = await api('POST', '/v1/subscriptionAvailabilities', {
+          const made = await api('POST', '/v1/subscriptionAvailabilities', {
             data: { type: 'subscriptionAvailabilities',
-              attributes: { availableInAllTerritories: true },
+              attributes: { availableInNewTerritories: true },
               relationships: {
                 subscription: { data: { type: 'subscriptions', id: s.id } },
                 availableTerritories: { data: territoryIds.map((id) => ({ type: 'territories', id })) },
               } },
           }, { soft: true });
-          if (made.__error) {
-            // Try 2: territories only, no attribute.
-            made = await api('POST', '/v1/subscriptionAvailabilities', {
-              data: { type: 'subscriptionAvailabilities',
-                relationships: {
-                  subscription: { data: { type: 'subscriptions', id: s.id } },
-                  availableTerritories: { data: territoryIds.map((id) => ({ type: 'territories', id })) },
-                } },
-            }, { soft: true });
-          }
           console.log(made.__error ? `B. ⚠️  ${pid} availability failed: ${made.__error} ${short(made)}` : `B. ✅ ${pid} availability set (${territoryIds.length} territories)`);
         } else { console.log(`B. ${pid} availability: already set`); }
       }
