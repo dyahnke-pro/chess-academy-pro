@@ -95,6 +95,9 @@ vi.mock('../../services/coachFeatureService', () => ({
     segments: [],
     closing: 'That concludes the review.',
   }),
+  // Phase 1c — grounded citation spine. Empty here so the inline previews
+  // render nothing in these mount tests (covered by their own unit test).
+  buildReviewCitations: vi.fn().mockReturnValue([]),
 }));
 
 vi.mock('../../services/coachPrompts', () => ({

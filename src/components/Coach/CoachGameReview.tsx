@@ -19,12 +19,14 @@ import { detectMissedTactics } from '../../services/missedTacticService';
 import {
   generateNarrativeSummary,
   generateReviewNarration,
+  buildReviewCitations,
 } from '../../services/coachFeatureService';
 import type {
   NarrativeMoveData,
   ReviewNarration,
   ReviewMoveInput,
 } from '../../services/coachFeatureService';
+import { ReviewCitationPreviews } from './ReviewCitationPreviews';
 import { useReviewPlayback } from '../../hooks/useReviewPlayback';
 import { useReviewEngineLines } from '../../hooks/useReviewEngineLines';
 import { SkipBack, SkipForward, ChevronLeft, ChevronRight, Cpu } from 'lucide-react';
@@ -342,6 +344,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       fenAfter: m.fen,
     })),
     [moves],
+  );
+
+  // Grounded preview spine (Phase 1c) — the student's flagged moves as
+  // structured citations (position + played/suggested squares), computed from
+  // the engine annotations, never the LLM. Feeds the inline board previews.
+  const reviewCitations = useMemo(
+    () => buildReviewCitations(reviewMoveInputs, playerColor),
+    [reviewMoveInputs, playerColor],
   );
 
   useEffect(() => {
@@ -1728,6 +1738,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 />
               </div>
             </div>
+
+            {/* Grounded board previews for the student's flagged moves
+                (Phase 1c, David IMG_4298). Each mini-board shows the position
+                with the played move (red) + the engine's better move (green);
+                tapping jumps the main board to that ply. */}
+            <ReviewCitationPreviews
+              citations={reviewCitations}
+              onJumpToPly={(ply: number) => walkPlayback.jumpToPly(ply)}
+            />
 
             {/* Missed tactics — ship-1 made this non-empty for every
                 reviewed game. Tapping a row jumps to the ply; the
