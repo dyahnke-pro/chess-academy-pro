@@ -311,6 +311,68 @@ function bestAttackFrom(
   return best;
 }
 
+/**
+ * describeMoveGeometry — a grounded one-phrase description of what a SINGLE
+ * move DOES on the board (David 2026-06-28: "ground the tactics trainers with
+ * the new tools"). Detects, in salience order: FORK (hits 2+ enemy pieces),
+ * PIN (slider pins a piece to a bigger one), CHECK, MATERIAL win (a capture
+ * that holds by SEE), or a single ATTACK (tempo). Pure board geometry — the
+ * tactics trainers speak THIS instead of generic "the setup's in" templates.
+ * Returns null when the move makes no concrete threat (stay silent, G3).
+ */
+export function describeMoveGeometry(
+  fenBefore: string,
+  san: string,
+  moverColor: 'white' | 'black',
+): string | null {
+  let c: Chess;
+  let mv;
+  try {
+    c = new Chess(fenBefore);
+    mv = c.move(san);
+  } catch {
+    return null;
+  }
+  if (!mv) return null;
+  const to = mv.to;
+  const mc = moverColor === 'white' ? 'w' : 'b';
+
+  // Every enemy piece the moved piece now attacks (king included).
+  const targets: { square: Square; piece: PieceSymbol }[] = [];
+  for (const sq of c.board().flat()) {
+    if (!sq || sq.color === mc) continue;
+    if (c.attackers(sq.square, mc).includes(to)) targets.push({ square: sq.square, piece: sq.type });
+  }
+
+  // FORK — the moved piece hits two enemy pieces at once (royal fork when the
+  // king is one of them).
+  if (targets.length >= 2) {
+    const sorted = [...targets].sort((a, b) => (REVIEW_PIECE_VALUE[b.piece] ?? 0) - (REVIEW_PIECE_VALUE[a.piece] ?? 0));
+    return `forks the ${REVIEW_PIECE_NAME[sorted[0].piece]} on ${sorted[0].square} and the ${REVIEW_PIECE_NAME[sorted[1].piece]} on ${sorted[1].square}`;
+  }
+
+  // PIN.
+  if (mv.piece === 'b' || mv.piece === 'r' || mv.piece === 'q') {
+    const pin = findPinFrom(c, to, mv.piece, moverColor);
+    if (pin) return `pins the ${REVIEW_PIECE_NAME[pin.pinnedPiece]} on ${pin.pinned} to the ${REVIEW_PIECE_NAME[pin.rearPiece]} on ${pin.rear}`;
+  }
+
+  // CHECK.
+  if (c.inCheck()) return 'gives check';
+
+  // MATERIAL — a capture the opponent can't profitably recapture.
+  if (mv.captured && seeGain(c, to) <= 0) {
+    return `wins the ${REVIEW_PIECE_NAME[mv.captured]} on ${to}`;
+  }
+
+  // Single ATTACK (tempo) on a non-king piece.
+  if (targets.length === 1 && targets[0].piece !== 'k') {
+    return `attacks the ${REVIEW_PIECE_NAME[targets[0].piece]} on ${targets[0].square}`;
+  }
+
+  return null;
+}
+
 export interface MoveOrderExplanation {
   /** Grounded prose: why the better order is stronger (+ the cost of the wrong
    *  order when a refutation is supplied). */

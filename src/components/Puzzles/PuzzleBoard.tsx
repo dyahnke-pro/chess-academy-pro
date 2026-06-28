@@ -14,6 +14,7 @@ import { voiceService } from '../../services/voiceService';
 import { getWrongMoveHint } from '../../utils/puzzleHints';
 import { recordTacticOutcome } from '../../services/tacticAlertService';
 import { getTacticTypeFromThemes, getPrimaryThemeLabel } from '../../services/tacticClassifierService';
+import { describeMoveGeometry } from '../../services/groundedAnswer';
 import { useAppStore } from '../../stores/appStore';
 import { logAppAudit } from '../../services/appAuditor';
 import type { CoachingTier } from '../../services/tacticAlertService';
@@ -75,6 +76,30 @@ export function PuzzleBoard({
   // Determine which color the user plays (opposite of who moves first in the FEN)
   const fenTurn = puzzle.fen.split(' ')[1];
   const userColor: 'white' | 'black' = fenTurn === 'w' ? 'black' : 'white';
+
+  // GROUNDED solve geometry (David 2026-06-28): replay the puzzle to compute
+  // what the FINAL (solving) move actually does — "forks the king and rook",
+  // "wins the queen" — so the solve narration speaks the real tactic instead
+  // of the banned generic "Excellent! Puzzle solved!" (voice rule #5). The
+  // line ends on the solver's (userColor) decisive move.
+  const solveGeometry = useMemo((): string | null => {
+    try {
+      const c = new Chess(puzzle.fen);
+      const moves = parseUciMoves(puzzle.moves);
+      if (moves.length === 0) return null;
+      let fenBeforeLast = puzzle.fen;
+      let lastSan = '';
+      for (const m of moves) {
+        fenBeforeLast = c.fen();
+        const r = c.move({ from: m.from, to: m.to, promotion: m.promotion });
+        lastSan = r.san;
+      }
+      if (!lastSan) return null;
+      return describeMoveGeometry(fenBeforeLast, lastSan, userColor);
+    } catch {
+      return null;
+    }
+  }, [puzzle.fen, puzzle.moves, userColor]);
 
   // Game state owned at page level — ControlledChessBoard renders from this
   const game = useChessGame(puzzle.fen, userColor);
@@ -189,11 +214,14 @@ export function PuzzleBoard({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [puzzle, playMoveSound, resetHints, resetStruggle]);
 
-  // Voice feedback on correct solve (respects user voice setting)
+  // Voice feedback on correct solve — speak the GROUNDED geometry of the
+  // solving move (the position changing in the student's favor IS the
+  // acknowledgment; no "Excellent!" filler, voice rule #5). Falls silent when
+  // the geometry isn't computable rather than emit a generic line.
   useEffect(() => {
     if (!settings.voiceEnabled) return;
-    if (state === 'correct') void voiceService.speak('Excellent! Puzzle solved!');
-  }, [state, settings.voiceEnabled]);
+    if (state === 'correct' && solveGeometry) void voiceService.speak(`That ${solveGeometry}.`);
+  }, [state, settings.voiceEnabled, solveGeometry]);
 
   // Complete the puzzle with outcome metadata
   const completePuzzle = useCallback((correct: boolean): void => {
@@ -429,8 +457,13 @@ export function PuzzleBoard({
 
       {/* Status message — only show for correct (incorrect uses flash-only feedback) */}
       {state === 'correct' && (
-        <div className="flex items-center gap-2" style={{ color: 'var(--color-success)' }} data-testid="puzzle-correct">
+        <div className="flex flex-col items-center gap-0.5" style={{ color: 'var(--color-success)' }} data-testid="puzzle-correct">
           <span className="text-sm font-medium">Correct!</span>
+          {solveGeometry && (
+            <span className="text-xs" style={{ color: 'var(--color-text-muted)' }} data-testid="puzzle-solve-geometry">
+              That {solveGeometry}.
+            </span>
+          )}
         </div>
       )}
       {state === 'loading' && (

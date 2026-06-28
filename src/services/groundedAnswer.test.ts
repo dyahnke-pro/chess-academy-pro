@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -335,5 +335,44 @@ describe('explainMoveOrder — grounded "why THIS move first" (David 2026-06-27)
   it('returns null when a move is illegal (never invents)', () => {
     const out = explainMoveOrder({ fenBefore: PIN_FEN, betterSan: 'Qh7', worseSan: 'Ke2', moverColor: 'white' });
     expect(out).toBeNull();
+  });
+});
+
+describe('describeMoveGeometry — grounded one-phrase "what the move does" (David 2026-06-28)', () => {
+  it('names a FORK (royal: king + rook)', () => {
+    // Ng4 → f6 hits the g8-king (check) and the e8-rook (white king on g1 so
+    // white isn't in check, making Nf6 legal).
+    const out = describeMoveGeometry('4r1k1/8/8/8/6N1/8/8/6K1 w - - 0 1', 'Nf6+', 'white');
+    expect(out).toContain('forks');
+    expect(out).toContain('king on g8');
+    expect(out).toContain('rook on e8');
+  });
+
+  it('names a PIN (knight to the queen)', () => {
+    const out = describeMoveGeometry('3q1rk1/8/5n2/8/8/8/8/2B1K3 w - - 0 1', 'Bg5', 'white');
+    expect(out).toBe('pins the knight on f6 to the queen on d8');
+  });
+
+  it('names a MATERIAL win', () => {
+    const out = describeMoveGeometry('4k3/8/8/3p4/2B5/8/8/4K3 w - - 0 1', 'Bxd5', 'white');
+    expect(out).toBe('wins the pawn on d5');
+  });
+
+  it('names a CHECK when the move only hits the king', () => {
+    const out = describeMoveGeometry('4k3/8/8/8/8/8/8/R3K3 w - - 0 1', 'Ra8+', 'white');
+    expect(out).toBe('gives check');
+  });
+
+  it('names a single ATTACK (tempo)', () => {
+    const out = describeMoveGeometry('4k3/8/8/3n4/8/8/8/4KB2 w - - 0 1', 'Bc4', 'white');
+    expect(out).toBe('attacks the knight on d5');
+  });
+
+  it('returns null for a quiet move with no threat (G3 — stay silent)', () => {
+    expect(describeMoveGeometry('4k3/8/8/8/8/8/4P3/4K3 w - - 0 1', 'e3', 'white')).toBeNull();
+  });
+
+  it('returns null for an illegal move (never invents)', () => {
+    expect(describeMoveGeometry('4k3/8/8/8/8/8/4P3/4K3 w - - 0 1', 'Qh7', 'white')).toBeNull();
   });
 });
