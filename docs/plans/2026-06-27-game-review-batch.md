@@ -10,6 +10,37 @@ hallucination + that `voice-fallover` is NOT mirrored to PostHog).
 Sequencing logic: GROUNDING is the spine — it fixes 3 bugs and unblocks 2
 features. Do it first. UI/sound/accuracy are independent and can land alongside.
 
+## SESSION STATUS — 2026-06-28 (staged on `claude/app-functions-mapping-cxbpx2`, NOT pushed; batched for one build)
+
+**DONE + green (ship-check READY TO PUSH):**
+- TacticalProfile scroll fix + 4 ship-check lint errors cleared.
+- Phase 7 — lazy depth-16 (open/import only; batch sweeps + insights guards skip it).
+- Phase 1b — theory-deviation now position-based (no false "left book at move 1");
+  `1...e5` tokenizer; killed the "untested … from thousands" contradiction.
+- **Phase 1b+ — amateur DB strengthens the scan** (`amateurPlayLookup.ts`): masters
+  primary, amateur extends depth + fills W/D/L; source-tagged honestly.
+- Phase 4 — reading-quiz default ON (retroactive: explicit-off stays off).
+- Phase 5 — clipped filter tabs already resolved in current code; walk board
+  height capped on mobile so chat/narration aren't starved.
+- Phase 6 — `voice-fallover` mirrored to PostHog (no-sound now visible in analytics).
+- **Phase 2 core — `explainMoveOrder`** (pin/tempo/check/material geometry, 8 tests).
+- Flake fix: bumped the slow gameInsights cold-import test timeout.
+
+**DEVICE-GATED (need the next build to verify/fix — David's device: iOS 18.7,
+Safari 26.5, standalone PWA, confirmed via live audit stream):**
+- Phase 6 — no-sound: iOS `<audio>` `code=3` decode of the MPEG-2 24kHz MP3
+  (84% of failures). Server is healthy. Try: strip ID3v2.4 from the blob; alt
+  Polly sample-rate/format. Verify on device.
+- Phase 9 — mic: `audio-capture`/`aborted` from `voiceInputService`; iOS PWA
+  audio-session conflict with TTS playback + un-awaited prewarm race. Fix:
+  yield/stop TTS before mic start, await prewarm. Verify on device.
+
+**REMAINING CODE WORK (not device-gated):**
+- Phase 1c — structured recap citations (G0 inversion of the review summary prose).
+- Phase 2/3 wiring — feed `explainMoveOrder` + engine refutation into flagged
+  review plies + the Analysis-Practice why-demo board animation (needs visual verify).
+- Phase 8 — piece-glow intentional vs noise (verify).
+
 ## Phase 1 — Ground the review voice (the spine) [fixes #5, #A; unblocks #6, why, demo]
 - **1a. Hanging = a LEGAL capture wins material.** Root cause: `findHangingPieces`
   (tacticClassifier.ts:499) counts pinned/illegal attackers; `explainBestMoveGrounded`
@@ -120,11 +151,18 @@ features. Do it first. UI/sound/accuracy are independent and can land alongside.
 - Verify the white-green / black-purple glow is intended vs noise.
 
 ## Phase 9 — Analysis Practice + coach-comms polish (IMG_4301, David)
-- **Mic not working (RECURRING — 2nd surface).** David hit "mic unavailable" on
-  coach chat earlier AND on Analysis Practice now → likely SYSTEMIC, not
-  per-surface. Investigate the voice-input path (Web Speech / Capacitor mic
-  permission + the iOS AVAudioSession; getUserMedia in the in-app browser vs
-  standalone). Prioritize — it's blocking "communication with coach."
+- **Mic not working — ROOT-CAUSED via LIVE audit stream (2026-06-28).** David's
+  device: **iOS 18.7, Safari 26.5, standalone PWA** (capacitor=false). The stream
+  shows `mic-error: audio-capture` + `aborted` from `voiceInputService` (web
+  `webkitSpeechRecognition` path). `audio-capture` → errorHandler('unavailable')
+  → the exact "mic unavailable" copy David sees. Cause class: on iOS PWA the mic
+  can't be captured while the audio session is held by TTS playback (Polly
+  `<audio>` / speechSynthesis), and iOS Safari's `webkitSpeechRecognition` in
+  standalone PWA mode is flaky. `prewarmMic()` getUserMedia is fired fire-and-
+  forget (`void`, not awaited) by the surfaces, so there's also a race where
+  recognition.start() runs before the grant settles. NEEDS DEVICE to fix safely
+  (audio-session coordination: pause/yield TTS before mic start; await prewarm).
+  ⏱️ This is device-gated like the no-sound decode — pairs with the next build.
 - **No Send button** for typed answers on Analysis Practice
   (`AnalysisPracticePage.tsx` — I built submit on the input; needs a visible
   Send button, not Enter-only).
