@@ -90,9 +90,9 @@ async function main() {
   if (!CREATE_USAGES) { console.log('\n(discovery only — set CREATE_USAGES=1 to create)'); return; }
 
   // ── 3. Create the four declarations (category × protection × purpose) ─────
-  const catId = (code) => (cats.find((c) => c.id === code) ? code : null);
+  // Discovery returned empty reference lists, so try the known enum codes
+  // directly — the POST will report the valid ids if these are wrong.
   for (const d of DECLARATIONS) {
-    if (!catId(d.category)) { console.log(`⚠️  category ${d.category} not in reference list — skipping`); continue; }
     for (const prot of PROTECTIONS) {
       const made = await api('POST', '/v1/appDataUsages', {
         data: { type: 'appDataUsages',
