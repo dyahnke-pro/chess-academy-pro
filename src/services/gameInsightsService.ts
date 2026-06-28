@@ -235,7 +235,7 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
     // contribute — sparse `detectBlunders()` annotations on import would
     // otherwise zero out every average (and produce a misleading "zero
     // blunders" strength) because most moves have no classification.
-    if (!gameNeedsAnalysis(game)) {
+    if (!gameNeedsAnalysis(game, { depthUpgrade: false })) {
       const moves = reconstructMovesFromGame(game, playerColor);
       if (moves.length === 0) continue;
 
@@ -332,7 +332,7 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
   let analyzedGameCount = 0;
   let gamesNeedingAnalysis = 0;
   for (const { game, playerColor } of playerGames) {
-    if (gameNeedsAnalysis(game)) {
+    if (gameNeedsAnalysis(game, { depthUpgrade: false })) {
       gamesNeedingAnalysis++;
       continue;
     }
