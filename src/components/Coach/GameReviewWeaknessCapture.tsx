@@ -122,7 +122,10 @@ export function GameReviewWeaknessCapture({
             <h4 className="text-sm font-semibold text-theme-text">Where you left the book</h4>
           </div>
           <p className="text-sm text-theme-text-muted leading-relaxed">
-            At move {deviation.moveNumber} you went your own way. {deviation.mastersTop.sentence}
+            {deviation.source === 'masters'
+              ? `At move ${deviation.moveNumber} you left established theory. `
+              : `At move ${deviation.moveNumber} you went off the beaten path — past where theory is recorded, here's what players at your level usually do. `}
+            {deviation.mastersTop.sentence}
           </p>
           {openingId && (
             <button
