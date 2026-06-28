@@ -6,12 +6,17 @@
  * resets every cold start):
  *
  *   1. GLOBAL DAILY $ KILL-SWITCH — one running total of estimated spend
- *      across ALL users + both providers + Polly. When the day's estimate
+ *      across ALL users (DeepSeek LLM + Polly). When the day's estimate
  *      crosses LLM_DAILY_USD_CEILING (default $25) every request 429s until
  *      midnight UTC. This is the absolute ceiling on a day's bleed, auth or
  *      no auth — the number David picks.
- *   2. PER-IP RATE LIMIT — fixed window per caller IP, catches runaway loops
- *      and casual abuse that slips past the Origin gate.
+ *   2. PER-IP DAILY $ CAP — each caller IP gets its own daily budget
+ *      (PER_IP_DAILY_USD_CAP, default $1.00) so one looping/abusive caller
+ *      self-limits instead of pushing the shared global counter to the ceiling
+ *      and 429-ing every paying user. The real protection for a public trial.
+ *   3. PER-IP RATE LIMIT — fixed window per caller IP, catches runaway loops
+ *      and casual abuse that slips past the Origin gate. (Also guards the Polly
+ *      free-tier *character* allotment while POLLY_USD_PER_CHAR is 0.)
  *
  * FAIL-OPEN by design: if KV isn't provisioned (no KV_REST_API_URL /
  * KV_REST_API_TOKEN) or a KV call errors, the guard ALLOWS the request. A
@@ -44,6 +49,20 @@ function dailyUsdCeiling(): number {
   return Number(process.env.LLM_DAILY_USD_CEILING ?? '25');
 }
 
+/**
+ * Per-IP daily $ cap. The global ceiling alone has a hole: a single looping
+ * caller's spend lands in the SHARED `spend:<day>` counter, so an abuser can
+ * push the global total to the ceiling and 429 *everyone* (including paying
+ * users) until UTC midnight. This per-IP daily cap makes an abuser self-limit
+ * — their own day's budget trips first, leaving the global ceiling for genuine
+ * fleet-wide protection. Default $1.00/day/IP is generous for a real human
+ * (DeepSeek-only ≈ $0.001/call → ~1000 calls/day) and tight on a loop. Set 0
+ * to disable.
+ */
+function perIpDailyUsdCap(): number {
+  return Number(process.env.PER_IP_DAILY_USD_CAP ?? '1.00');
+}
+
 interface Limit { windowSec: number; maxPerWindow: number; }
 function limitFor(kind: GuardKind): Limit {
   // A real human coach session is ~30-80 calls; 60 / 10 min is generous for a
@@ -54,7 +73,7 @@ function limitFor(kind: GuardKind): Limit {
 
 export interface GuardResult {
   allowed: boolean;
-  reason?: 'rate-limit' | 'daily-ceiling';
+  reason?: 'rate-limit' | 'daily-ceiling' | 'ip-daily-cap';
   retryAfterSec?: number;
 }
 
@@ -106,6 +125,7 @@ export async function checkUsageGuard(
   const day = new Date().toISOString().slice(0, 10);
   const rlKey = `rl:${kind}:${ip}:${Math.floor(Date.now() / 1000 / lim.windowSec)}`;
   const spendKey = `spend:${day}`;
+  const ipSpendKey = `spend:${day}:${ip}`;
   const charge = Math.max(0, estimatedCostUsd).toFixed(6);
 
   const res = await kvPipeline(creds, [
@@ -113,15 +133,24 @@ export async function checkUsageGuard(
     ['EXPIRE', rlKey, lim.windowSec],
     ['INCRBYFLOAT', spendKey, charge],
     ['EXPIRE', spendKey, 172800], // 2 days, so the key self-cleans
+    ['INCRBYFLOAT', ipSpendKey, charge],
+    ['EXPIRE', ipSpendKey, 172800],
   ]);
   if (!res) return { allowed: true }; // KV error → fail open
 
   const ipCount = Number(res[0] ?? 0);
   const daySpend = Number(res[2] ?? 0);
+  const ipDaySpend = Number(res[4] ?? 0);
 
-  // Daily ceiling is the harder stop — check it first.
+  // Global daily ceiling is the hardest stop — check it first.
   if (Number.isFinite(daySpend) && daySpend > dailyUsdCeiling()) {
     return { allowed: false, reason: 'daily-ceiling', retryAfterSec: secondsUntilUtcMidnight() };
+  }
+  // Per-IP daily $ cap — an abuser self-limits before they can poison the
+  // global counter for everyone else. Disabled when cap <= 0.
+  const ipCap = perIpDailyUsdCap();
+  if (ipCap > 0 && Number.isFinite(ipDaySpend) && ipDaySpend > ipCap) {
+    return { allowed: false, reason: 'ip-daily-cap', retryAfterSec: secondsUntilUtcMidnight() };
   }
   if (Number.isFinite(ipCount) && ipCount > lim.maxPerWindow) {
     return { allowed: false, reason: 'rate-limit', retryAfterSec: lim.windowSec };
@@ -136,8 +165,15 @@ function secondsUntilUtcMidnight(): number {
   return Math.max(60, Math.floor((next.getTime() - now) / 1000));
 }
 
-/** Flat conservative $ estimate for one LLM call (a heavy full-context turn). */
-export const LLM_CALL_COST_USD = Number(process.env.LLM_CALL_COST_USD ?? '0.005');
+/**
+ * Flat conservative $ estimate for one LLM call (a heavy full-context turn).
+ * DeepSeek-only (David 2026-06-28: Anthropic dropped). DeepSeek is ~$0.27/M
+ * input + $1.10/M output, so a heavy full-context turn lands near $0.001 — the
+ * old $0.005 default was an Anthropic-blended figure that over-counted spend
+ * ~5× and tripped the daily ceiling far too early for paying users. Override
+ * with env LLM_CALL_COST_USD if the model/pricing changes.
+ */
+export const LLM_CALL_COST_USD = Number(process.env.LLM_CALL_COST_USD ?? '0.001');
 
 /**
  * Polly's contribution to the global $ ceiling.

@@ -71,6 +71,26 @@ describe('usageGuard', () => {
     expect(r.reason).toBe('rate-limit');
   });
 
+  it('blocks on the per-IP daily $ cap before the global ceiling is reached', async () => {
+    process.env.KV_REST_API_URL = 'https://kv.example';
+    process.env.KV_REST_API_TOKEN = 'tok';
+    process.env.LLM_DAILY_USD_CEILING = '25';
+    process.env.PER_IP_DAILY_USD_CAP = '1.00';
+    // pipeline: [INCR rl→5, EXPIRE, spend(day)→0.40, EXPIRE, spend(ip)→1.20, EXPIRE]
+    // global 0.40 < 25 (under), but this IP's day spend 1.20 > 1.00 cap.
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(
+      JSON.stringify([
+        { result: 5 }, { result: 1 }, { result: '0.40' }, { result: 1 }, { result: '1.20' }, { result: 1 },
+      ]),
+      { status: 200 },
+    )));
+    const { checkUsageGuard } = await import('./usageGuard');
+    const r = await checkUsageGuard('llm', makeReq(), 0.001);
+    expect(r.allowed).toBe(false);
+    expect(r.reason).toBe('ip-daily-cap');
+    expect(r.retryAfterSec).toBeGreaterThan(0);
+  });
+
   it('allows a normal call under both limits', async () => {
     process.env.KV_REST_API_URL = 'https://kv.example';
     process.env.KV_REST_API_TOKEN = 'tok';

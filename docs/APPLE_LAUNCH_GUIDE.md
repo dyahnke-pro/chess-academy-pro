@@ -75,6 +75,25 @@ will sit in "Missing Metadata"/"Developer Action Needed" forever.
 
 ---
 
+## STEP 2.5 — Enroll in the Apple Small Business Program [YOU] 💰 (do this — it's free money)
+
+Apple takes **30%** of every subscription by default. The **Small Business
+Program** drops that to **15%** for anyone earning under $1M/year — which is
+you. On a $7.99 sub that's ~$1.20 more per subscriber per month, straight to
+your pocket. It takes 5 minutes.
+
+1. You must have **agreed to the Paid Applications Agreement first** (Step 2).
+2. Go to <https://appstoreconnect.apple.com> → **Business** (Agreements, Tax,
+   and Banking) — or search "Small Business Program" in App Store Connect.
+3. Open **App Store Small Business Program** → **Enroll**.
+4. Confirm your eligibility (under $1M proceeds) and submit. Approval is
+   typically quick; the 15% rate applies going forward once enrolled.
+
+> Do this before you have any revenue — there's no downside, and you don't want
+> to be paying 30% on your first subscribers because you forgot.
+
+---
+
 ## STEP 3 — Create a RevenueCat account + project [YOU + CLAUDE wired the code]
 
 The app's purchase code is **[CLAUDE DONE]** (`src/services/billingService.ts`)
