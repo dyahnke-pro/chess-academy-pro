@@ -103,6 +103,7 @@ import { TermsOfServicePage } from './components/Legal/TermsOfServicePage';
 import { SupportPage } from './components/Legal/SupportPage';
 import { PaywallGate } from './components/Paywall/PaywallGate';
 import { initBilling } from './services/billingService';
+import { ReviewPrompt } from './components/Feedback/ReviewPrompt';
 
 /**
  * Mounted inside BrowserRouter so it can use router hooks. Wires the
@@ -504,6 +505,10 @@ export function App(): JSX.Element {
     {needsCalibration && activeProfile && (
       <StrengthCalibrationBubble onDone={() => setNeedsCalibration(false)} />
     )}
+    {/* Two-step review prompt — armed by reviewPromptService after enough
+        positive moments; renders only when open. Global so it can surface
+        from any surface that recorded the win. */}
+    <ReviewPrompt />
     </>
   );
 }

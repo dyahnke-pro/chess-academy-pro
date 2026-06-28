@@ -750,7 +750,13 @@ export type AuditKind =
   // defect; purchase/restore are conversion-funnel signals.
   | 'billing-error'
   | 'billing-purchase'
-  | 'billing-restore';
+  | 'billing-restore'
+  // Two-step App Store review prompt (reviewPromptService). `shown` = the soft
+  // gate armed; `positive` = user tapped "yes" → native store dialog requested;
+  // `negative` = user tapped "not really" → routed to private feedback.
+  | 'review-prompt-shown'
+  | 'review-prompt-positive'
+  | 'review-prompt-negative';
 
 export interface AuditEntry {
   timestamp: number;

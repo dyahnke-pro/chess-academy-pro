@@ -26,6 +26,7 @@ import { PuzzleBoard } from './PuzzleBoard';
 import { AdaptiveSessionPanel } from './AdaptiveSessionPanel';
 import { AdaptiveSessionSummary } from './AdaptiveSessionSummary';
 import { db } from '../../db/schema';
+import { recordPositiveMoment } from '../../services/reviewPromptService';
 
 type Phase = 'select' | 'loading' | 'solving' | 'checkpoint' | 'rep-complete' | 'summary';
 
@@ -150,6 +151,8 @@ export function AdaptivePuzzlePage(): JSX.Element {
     if (outcome.correct && !outcome.usedHint && !outcome.hadRetry && !outcome.showedSolution) {
       // Clean solve: no hints, 1st try
       delta = RATING_DELTA_CLEAN;
+      // A clean solve is a genuine "win" — feed the review-prompt gate.
+      void recordPositiveMoment('puzzle-clean-solve');
     } else if (outcome.correct) {
       // Correct but used hint or had retry
       delta = RATING_DELTA_ASSISTED;
