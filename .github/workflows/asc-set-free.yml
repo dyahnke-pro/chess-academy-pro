@@ -1,0 +1,20 @@
+name: ASC set app price to Free
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setfree:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Set price Free
+        env:
+          ASC_KEY_P8: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APP_BUNDLE_ID: com.chessacademy.pro
+        run: node scripts/ci/asc-set-free.mjs
