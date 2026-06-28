@@ -1,0 +1,34 @@
+name: Finalize ASC version (build + age rating, no submit)
+
+# Selects the build + sets the age-rating declaration for the App Store version
+# via the ASC API. Reversible; does NOT submit. Manual trigger.
+on:
+  workflow_dispatch:
+    inputs:
+      set_build:
+        description: 'Build number to attach (blank = skip)'
+        required: false
+        default: '79'
+      set_age_rating:
+        description: 'Set age-rating declaration (1 = yes)'
+        required: false
+        default: '1'
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Finalize version
+        env:
+          ASC_KEY_P8: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APP_BUNDLE_ID: com.chessacademy.pro
+          APP_VERSION: '2.8'
+          SET_BUILD: ${{ github.event.inputs.set_build }}
+          SET_AGE_RATING: ${{ github.event.inputs.set_age_rating }}
+        run: node scripts/ci/finalize-asc-version.mjs
