@@ -16,14 +16,15 @@ const VERSION = process.env.APP_VERSION || '2.8';
 
 // Per-product display name (≤30) + description shown on the manage-subscription
 // screen. Keyed by productId suffix.
+// Apple limits: subscription display name ≤ 30 chars, description ≤ 55 chars.
 const SUB_COPY = {
   monthly: {
     name: 'Chess Academy Pro Monthly',
-    description: 'Unlimited AI coach, 42 opening masterclasses, tactics built from your games, and full Stockfish analysis. Auto-renews monthly until canceled.',
+    description: 'Unlimited AI coach, lessons, tactics & analysis.', // 48
   },
   yearly: {
     name: 'Chess Academy Pro Annual',
-    description: 'A full year of Pro at the best price: unlimited AI coach, masterclasses, tactics, and analysis. Auto-renews yearly until canceled.',
+    description: 'A full year of Pro: coach, lessons & tactics.', // 45
   },
 };
 
