@@ -54,12 +54,12 @@ async function main() {
       relationships: {
         app: { data: { type: 'apps', id: app.id } },
         baseTerritory: { data: { type: 'territories', id: 'USA' } },
-        manualPrices: { data: [{ type: 'appPrices', id: 'price1' }] },
+        manualPrices: { data: [{ type: 'appPrices', id: '${price1}' }] },
       },
     },
     included: [{
       type: 'appPrices',
-      id: 'price1',
+      id: '${price1}',
       attributes: { startDate: null, endDate: null },
       relationships: { appPricePoint: { data: { type: 'appPricePoints', id: freeId } } },
     }],
