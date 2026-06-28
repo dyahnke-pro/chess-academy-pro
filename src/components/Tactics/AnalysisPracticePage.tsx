@@ -354,30 +354,37 @@ export function AnalysisPracticePage(): JSX.Element {
         if (selectedSquare) squareStyles[selectedSquare] = { background: 'rgba(99,102,241,0.45)' };
         if (grade) for (const s of question.answerSquares ?? []) squareStyles[s] = { background: 'rgba(34,197,94,0.45)' };
         const hint = hintTier > 0 ? readingHint(question, Math.min(hintTier, 3) as 1 | 2 | 3) : null;
+        // Two-column rectangle (David 2026-06-28): board + turn indicator on
+        // the left, the discussion/answer panel on the right at md+, stacked
+        // on mobile. Wider container so the board gets real room.
         return (
-        <div className="flex flex-col gap-3 max-w-lg mx-auto w-full">
-          {/* Prominent turn indicator (David: "I don't know whose turn it is"). */}
-          <div className="flex items-center justify-center gap-2" data-testid="analysis-practice-turn">
-            <span className="inline-block w-3 h-3 rounded-full border" style={{ background: toMove === 'White' ? '#f8fafc' : '#0f172a', borderColor: 'var(--color-border)' }} />
-            <span className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>{toMove} to move</span>
-            <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>· {position.gameLabel}</span>
+        <div className="flex flex-col md:flex-row md:items-start gap-4 max-w-4xl mx-auto w-full">
+          {/* Left column — board */}
+          <div className="flex flex-col gap-2 w-full md:flex-1 md:max-w-[460px]">
+            {/* Prominent turn indicator (David: "I don't know whose turn it is"). */}
+            <div className="flex items-center justify-center gap-2" data-testid="analysis-practice-turn">
+              <span className="inline-block w-3 h-3 rounded-full border" style={{ background: toMove === 'White' ? '#f8fafc' : '#0f172a', borderColor: 'var(--color-border)' }} />
+              <span className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>{toMove} to move</span>
+              <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>· {position.gameLabel}</span>
+            </div>
+
+            <div className="w-full">
+              <ConsistentChessboard
+                fen={demoFen ?? position.fen}
+                boardOrientation={position.orientation}
+                interactive={!grade && !demoing}
+                squareStyles={squareStyles}
+                onSquareClick={(a) => onSquareClick(a.square)}
+                onPieceDrop={(a) => onPieceDrop(a.sourceSquare, a.targetSquare ?? '')}
+              />
+            </div>
+            <p className="text-xs text-center" style={{ color: 'var(--color-text-muted)' }}>
+              Answer by typing, clicking a square, or playing the move on the board.
+            </p>
           </div>
 
-          <div className="w-full md:max-w-[420px] mx-auto">
-            <ConsistentChessboard
-              fen={demoFen ?? position.fen}
-              boardOrientation={position.orientation}
-              interactive={!grade && !demoing}
-              squareStyles={squareStyles}
-              onSquareClick={(a) => onSquareClick(a.square)}
-              onPieceDrop={(a) => onPieceDrop(a.sourceSquare, a.targetSquare ?? '')}
-            />
-          </div>
-          <p className="text-xs text-center" style={{ color: 'var(--color-text-muted)' }}>
-            Answer by typing, clicking a square, or playing the move on the board.
-          </p>
-
-          <div className="rounded-2xl border-2 p-4" style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}>
+          {/* Right column — discussion / answer panel */}
+          <div className="rounded-2xl border-2 p-4 w-full md:flex-1 md:self-stretch" style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}>
             <p className="font-semibold mb-3" style={{ color: 'var(--color-text)' }} data-testid="analysis-practice-prompt">
               {question.prompt}
             </p>
