@@ -360,7 +360,7 @@ export function explainMoveOrder(opts: {
     return null;
   }
 
-  const to = mv.to as Square;
+  const to = mv.to;
   let mechanism: MoveOrderExplanation['mechanism'];
   let whyBetter: string;
 
