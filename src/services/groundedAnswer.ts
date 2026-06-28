@@ -245,6 +245,177 @@ export function explainBestMoveGrounded(
   return null;
 }
 
+/** Ray-walk from a slider's square to find a PIN it creates: the first enemy
+ *  piece on a ray, with a HIGHER-value enemy piece directly behind it on the
+ *  same ray (a relative pin; absolute when the rear piece is the king). Pure
+ *  board geometry — this is the "bishop pins the knight to the queen" fact
+ *  David asked for (2026-06-27). Returns null when no pin exists. */
+function findPinFrom(
+  c: Chess,
+  from: Square,
+  pieceType: PieceSymbol,
+  moverColor: 'white' | 'black',
+): { pinned: Square; pinnedPiece: PieceSymbol; rear: Square; rearPiece: PieceSymbol } | null {
+  const DIAG = [[1, 1], [1, -1], [-1, 1], [-1, -1]];
+  const ORTHO = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+  const dirs = pieceType === 'b' ? DIAG : pieceType === 'r' ? ORTHO : pieceType === 'q' ? [...DIAG, ...ORTHO] : [];
+  if (dirs.length === 0) return null;
+  const enemy = moverColor === 'white' ? 'b' : 'w';
+  const f0 = from.charCodeAt(0) - 97;
+  const r0 = Number(from[1]) - 1;
+
+  for (const [df, dr] of dirs) {
+    let f = f0 + df;
+    let r = r0 + dr;
+    let first: { sq: Square; piece: PieceSymbol } | null = null;
+    while (f >= 0 && f < 8 && r >= 0 && r < 8) {
+      const sq = (String.fromCharCode(97 + f) + String(r + 1)) as Square;
+      const pc = c.get(sq);
+      if (pc) {
+        if (pc.color !== enemy) break; // friendly blocker — no pin on this ray
+        if (!first) {
+          first = { sq, piece: pc.type };
+        } else {
+          // Second enemy piece behind the first — a pin if it's worth more.
+          if ((REVIEW_PIECE_VALUE[pc.type] ?? 0) > (REVIEW_PIECE_VALUE[first.piece] ?? 0)) {
+            return { pinned: first.sq, pinnedPiece: first.piece, rear: sq, rearPiece: pc.type };
+          }
+          break;
+        }
+      }
+      f += df;
+      r += dr;
+    }
+  }
+  return null;
+}
+
+/** The highest-value enemy piece the piece on `from` now attacks (a developing
+ *  TEMPO — the move makes a threat the opponent must answer). Pure board fact. */
+function bestAttackFrom(
+  c: Chess,
+  from: Square,
+  moverColor: 'white' | 'black',
+): { square: Square; piece: PieceSymbol } | null {
+  const mc = moverColor === 'white' ? 'w' : 'b';
+  let best: { square: Square; piece: PieceSymbol } | null = null;
+  for (const sq of c.board().flat()) {
+    if (!sq || sq.color === mc) continue;
+    if (sq.type === 'k') continue; // a check is reported separately
+    if (c.attackers(sq.square, mc).includes(from)) {
+      if (!best || (REVIEW_PIECE_VALUE[sq.type] ?? 0) > (REVIEW_PIECE_VALUE[best.piece] ?? 0)) {
+        best = { square: sq.square, piece: sq.type };
+      }
+    }
+  }
+  return best;
+}
+
+export interface MoveOrderExplanation {
+  /** Grounded prose: why the better order is stronger (+ the cost of the wrong
+   *  order when a refutation is supplied). */
+  text: string;
+  /** Mechanism behind the better move, for telemetry / board-demo selection. */
+  mechanism: 'check' | 'pin' | 'tempo' | 'material';
+}
+
+/**
+ * explainMoveOrder — the grounded "why THIS move first" comparator (David
+ * 2026-06-27: "WHY moving my bishop out before bringing the queen to the
+ * attack was best — do we have the geometry?"). Same pieces, different order;
+ * one order is stronger because the better move makes a threat the wrong order
+ * squanders. Names the MECHANISM purely from the board: it comes with CHECK,
+ * it PINS an enemy piece to a bigger one, it develops with a TEMPO (attacks an
+ * enemy piece), or it wins MATERIAL (SEE). The engine's eval delta (computed
+ * by the caller) is what decides the order is better; this names WHY. When a
+ * refutation to the worse move is supplied, the cost of the wrong order is
+ * spelled out too. Returns null when a move is illegal or no concrete
+ * mechanism is found — empty > generic > invented (G3).
+ */
+export function explainMoveOrder(opts: {
+  fenBefore: string;
+  betterSan: string;
+  worseSan: string;
+  moverColor: 'white' | 'black';
+  /** Opponent's best reply to the WORSE move (engine PV ply 1), if known. */
+  worseRefutationSan?: string | null;
+}): MoveOrderExplanation | null {
+  const { fenBefore, betterSan, worseSan, moverColor, worseRefutationSan } = opts;
+  const mc = moverColor === 'white' ? 'w' : 'b';
+
+  let mv;
+  const c = new Chess(fenBefore);
+  try {
+    mv = c.move(betterSan);
+  } catch {
+    return null;
+  }
+  if (!mv) return null;
+  // The worse move must also be legal from the SAME position (it's an
+  // alternative order, not a fantasy) — verify on a fresh board.
+  try {
+    const probe = new Chess(fenBefore);
+    if (!probe.move(worseSan)) return null;
+  } catch {
+    return null;
+  }
+
+  const to = mv.to as Square;
+  let mechanism: MoveOrderExplanation['mechanism'];
+  let whyBetter: string;
+
+  if (c.inCheck()) {
+    mechanism = 'check';
+    whyBetter = `playing ${betterSan} first comes with check, forcing the reply`;
+  } else {
+    const pin = (mv.piece === 'b' || mv.piece === 'r' || mv.piece === 'q')
+      ? findPinFrom(c, to, mv.piece, moverColor)
+      : null;
+    if (pin) {
+      mechanism = 'pin';
+      whyBetter = `playing ${betterSan} first pins the ${REVIEW_PIECE_NAME[pin.pinnedPiece]} on ${pin.pinned} to the ${REVIEW_PIECE_NAME[pin.rearPiece]} on ${pin.rear}`;
+    } else {
+      const captured = mv.captured;
+      // seeGain(c, to) = what the OPPONENT wins back by recapturing on `to`.
+      // A genuine material win means they can't recapture profitably (≤ 0).
+      const oppRecapGain = captured ? seeGain(c, to) : 1;
+      const attack = bestAttackFrom(c, to, moverColor);
+      if (captured && oppRecapGain <= 0) {
+        mechanism = 'material';
+        whyBetter = `playing ${betterSan} first wins the ${REVIEW_PIECE_NAME[captured]} on ${to}`;
+      } else if (attack) {
+        mechanism = 'tempo';
+        whyBetter = `playing ${betterSan} first develops with a threat — it attacks the ${REVIEW_PIECE_NAME[attack.piece]} on ${attack.square}, so the opponent must respond instead of freeing their game`;
+      } else {
+        return null; // no concrete geometry — stay silent
+      }
+    }
+  }
+
+  // Cost of the wrong order, when the engine gave us the refutation.
+  let cost: string | null = null;
+  if (worseRefutationSan) {
+    try {
+      const w = new Chess(fenBefore);
+      if (w.move(worseSan)) {
+        const reply = w.move(worseRefutationSan);
+        if (reply) {
+          const opp = mc === 'w' ? 'Black' : 'White';
+          if (w.inCheck()) {
+            cost = `play ${worseSan} first and ${opp} hits back with ${worseRefutationSan}, check`;
+          } else if (reply.captured) {
+            cost = `play ${worseSan} first and ${opp} gets ${worseRefutationSan}, taking the ${REVIEW_PIECE_NAME[reply.captured]}`;
+          } else {
+            cost = `play ${worseSan} first and ${opp} equalizes with ${worseRefutationSan}`;
+          }
+        }
+      }
+    } catch { /* refutation didn't replay — drop the cost clause */ }
+  }
+
+  return { text: cost ? `${cap(whyBetter)}; ${cost}.` : `${cap(whyBetter)}.`, mechanism };
+}
+
 /**
  * assemblePlanAnswer — Phase 3 of the grounding inversion: plan / strategy
  * questions ("what's my plan?", "next three moves?"). The fact source is the

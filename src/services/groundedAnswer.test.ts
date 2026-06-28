@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, explainBestMoveGrounded, explainMoveOrder } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -285,5 +285,55 @@ describe('explainBestMoveGrounded — hanging is legal-capture + SEE grounded (n
     const out = explainBestMoveGrounded('4k3/8/2n5/8/3P4/8/8/4K3 w - - 0 1', 'Ke2', 'd4d5', 'white');
     expect(out).toContain('Nxd4'); // a real, legal, material-winning capture
     expect(out).toContain('winning the pawn');
+  });
+});
+
+describe('explainMoveOrder — grounded "why THIS move first" (David 2026-06-27)', () => {
+  // White Bc1, Black Qd8 + Nf6 + Kg8. Bg5 pins the f6-knight to the d8-queen
+  // along the g5-d8 diagonal — the exact "bishop out before the queen" geometry.
+  const PIN_FEN = '3q1rk1/8/5n2/8/8/8/8/2B1K3 w - - 0 1';
+
+  it('names the PIN geometry (knight pinned to the queen)', () => {
+    const out = explainMoveOrder({ fenBefore: PIN_FEN, betterSan: 'Bg5', worseSan: 'Ke2', moverColor: 'white' });
+    expect(out).not.toBeNull();
+    expect(out!.mechanism).toBe('pin');
+    expect(out!.text).toContain('pins the knight on f6 to the queen on d8');
+  });
+
+  it('reports a CHECK as the forcing mechanism', () => {
+    // Ra1 → a8 checks the e8-king along the 8th rank.
+    const out = explainMoveOrder({ fenBefore: '4k3/8/8/8/8/8/8/R3K3 w - - 0 1', betterSan: 'Ra8+', worseSan: 'Kd2', moverColor: 'white' });
+    expect(out!.mechanism).toBe('check');
+    expect(out!.text).toContain('comes with check');
+  });
+
+  it('reports a developing TEMPO (attacks an enemy piece)', () => {
+    // Bf1 → c4 attacks the d5-knight; nothing valuable behind it → tempo, not pin.
+    const out = explainMoveOrder({ fenBefore: '4k3/8/8/3n4/8/8/8/4KB2 w - - 0 1', betterSan: 'Bc4', worseSan: 'Ke2', moverColor: 'white' });
+    expect(out!.mechanism).toBe('tempo');
+    expect(out!.text).toContain('attacks the knight on d5');
+  });
+
+  it('reports MATERIAL when the better move wins a piece outright', () => {
+    // Bc4 x d5 wins the pawn; Black can't recapture.
+    const out = explainMoveOrder({ fenBefore: '4k3/8/8/3p4/2B5/8/8/4K3 w - - 0 1', betterSan: 'Bxd5', worseSan: 'Ke2', moverColor: 'white' });
+    expect(out!.mechanism).toBe('material');
+    expect(out!.text).toContain('wins the pawn on d5');
+  });
+
+  it('spells out the COST of the wrong order when a refutation is supplied', () => {
+    const out = explainMoveOrder({ fenBefore: PIN_FEN, betterSan: 'Bg5', worseSan: 'Ke2', moverColor: 'white', worseRefutationSan: 'Qd4' });
+    expect(out!.text).toContain('Ke2');
+    expect(out!.text).toContain('Qd4');
+  });
+
+  it('returns null when the better move has no concrete geometry (empty > generic)', () => {
+    const out = explainMoveOrder({ fenBefore: PIN_FEN, betterSan: 'Ke2', worseSan: 'Bg5', moverColor: 'white' });
+    expect(out).toBeNull();
+  });
+
+  it('returns null when a move is illegal (never invents)', () => {
+    const out = explainMoveOrder({ fenBefore: PIN_FEN, betterSan: 'Qh7', worseSan: 'Ke2', moverColor: 'white' });
+    expect(out).toBeNull();
   });
 });
