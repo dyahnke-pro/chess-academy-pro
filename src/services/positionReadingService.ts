@@ -549,7 +549,20 @@ function sq(square: string): string { return square.toLowerCase(); }
  * Returns questions ordered tactic → threat → hanging → break → material so the
  * UI can pick a mix.
  */
-export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext): ReadingQuestion[] {
+export interface ReadingQuestionOpts {
+  /** Engine eval (centipawns, White-perspective) — grounds the who's-winning
+   *  read. Omit when no analysis is available (the question is then skipped). */
+  evalCp?: number | null;
+  /** Forced mate distance (+ = side to move mates) — supersedes evalCp. */
+  mateIn?: number | null;
+  /** Engine principal variation (SAN) — grounds the "what's the plan?" read. */
+  pvSan?: readonly string[];
+  /** Whether the position is an endgame (few pieces) — gates the endgame bucket
+   *  question. Computed by the caller (or left false). */
+  isEndgame?: boolean;
+}
+
+export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, opts: ReadingQuestionOpts = {}): ReadingQuestion[] {
   const out: ReadingQuestion[] = [];
   const facts = tactics.boardFacts;
   const sideToMove = facts?.sideToMove ?? 'white';
@@ -631,6 +644,35 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext):
       prompt: 'Who is ahead in material, and by how much?',
       answer: facts.material,
       acceptTokens: materialTokens(facts.material),
+      negative: false,
+    });
+  }
+
+  // WHO IS WINNING — grounded in the ENGINE eval (never a vibe). Only asked when
+  // an eval was supplied; otherwise skipped (no fabricated assessment, G3).
+  const verdict = evalToVerdict(opts.evalCp, opts.mateIn, sideToMove);
+  if (verdict) {
+    out.push({
+      id: 'who-is-winning', type: 'who-is-winning', bucket: 'calculation',
+      prompt: 'Who is winning here, and roughly by how much?',
+      answer: verdict.answer,
+      acceptTokens: verdict.tokens,
+      negative: false,
+    });
+  }
+
+  // PLAN — grounded in the engine PRINCIPAL VARIATION (real, legal moves).
+  if (opts.pvSan && opts.pvSan.length > 0) {
+    const pv = opts.pvSan.slice(0, 3);
+    let firstTo: Square | null = null;
+    try { const c = new Chess(fen); const mv = c.move(pv[0]); if (mv) firstTo = mv.to as Square; } catch { firstTo = null; }
+    out.push({
+      id: 'plan', type: 'plan', bucket: opts.isEndgame ? 'endgame' : 'positional',
+      prompt: opts.isEndgame ? "What's the winning plan in this endgame?" : "What's the best plan / continuation here?",
+      answer: `The engine's plan starts ${pv.join(' ')}.`,
+      acceptTokens: [sq(pv[0]), ...(firstTo ? [sq(firstTo)] : [])],
+      answerMoves: [pv[0]],
+      answerSquares: firstTo ? [firstTo] : undefined,
       negative: false,
     });
   }
@@ -774,6 +816,29 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext):
   }
 
   return out;
+}
+
+/** Translate an ENGINE eval into a grounded who's-winning verdict (words +
+ *  accept tokens). Returns null when no eval is available — never a guess (G3). */
+function evalToVerdict(
+  evalCp: number | null | undefined,
+  mateIn: number | null | undefined,
+  sideToMove: 'white' | 'black',
+): { answer: string; tokens: string[] } | null {
+  if (mateIn != null && mateIn !== 0) {
+    const winnerWhite = (mateIn > 0) === (sideToMove === 'white');
+    const w = winnerWhite ? 'White' : 'Black';
+    return { answer: `${w} has a forced mate — completely winning.`, tokens: [winnerWhite ? 'white' : 'black', 'winning', 'mate', 'decisive'] };
+  }
+  if (evalCp == null) return null;
+  const winnerWhite = evalCp > 0;
+  const w = winnerWhite ? 'White' : 'Black';
+  const tok = winnerWhite ? 'white' : 'black';
+  const a = Math.abs(evalCp);
+  if (a < 50) return { answer: 'The position is roughly equal.', tokens: ['equal', 'even', 'balanced', 'roughly'] };
+  if (a < 150) return { answer: `${w} is slightly better.`, tokens: [tok, 'slightly', 'edge', 'better'] };
+  if (a < 400) return { answer: `${w} is clearly better.`, tokens: [tok, 'better', 'clearly'] };
+  return { answer: `${w} is winning.`, tokens: [tok, 'winning', 'much'] };
 }
 
 /** Tokens that count as a correct material read ("even" / "white up …" / a number). */

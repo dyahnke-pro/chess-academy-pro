@@ -347,3 +347,40 @@ describe('buildReadingQuestions — bucket coverage (David 2026-06-28: all bucke
     expect(qs.some((q) => q.bucket === 'tactics')).toBe(true);
   });
 })
+
+describe('buildReadingQuestions — calculation bucket (engine eval + PV grounded)', () => {
+  it('asks who-is-winning from the engine eval (White winning on a big +eval)', () => {
+    const qs = buildReadingQuestions('4k3/8/8/8/8/8/8/4K3 w - - 0 1', emptyTactics(), { evalCp: 600 });
+    const win = qs.find((q) => q.type === 'who-is-winning');
+    expect(win).toBeDefined();
+    expect(win?.bucket).toBe('calculation');
+    expect(win?.answer.toLowerCase()).toContain('white');
+    expect(win?.acceptTokens).toContain('white');
+  });
+
+  it('calls it roughly equal near 0 and Black better on a -eval', () => {
+    const eq = buildReadingQuestions('4k3/8/8/8/8/8/8/4K3 w - - 0 1', emptyTactics(), { evalCp: 15 }).find((q) => q.type === 'who-is-winning');
+    expect(eq?.acceptTokens).toContain('equal');
+    const blk = buildReadingQuestions('4k3/8/8/8/8/8/8/4K3 w - - 0 1', emptyTactics(), { evalCp: -250 }).find((q) => q.type === 'who-is-winning');
+    expect(blk?.answer.toLowerCase()).toContain('black');
+  });
+
+  it('does NOT ask who-is-winning when no eval is supplied (never a guess)', () => {
+    const qs = buildReadingQuestions('4k3/8/8/8/8/8/8/4K3 w - - 0 1', emptyTactics());
+    expect(qs.find((q) => q.type === 'who-is-winning')).toBeUndefined();
+  });
+
+  it('asks a plan question grounded in the engine PV, with the first move playable', () => {
+    const qs = buildReadingQuestions('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', emptyTactics(), { pvSan: ['e4', 'e5', 'Nf3'] });
+    const plan = qs.find((q) => q.type === 'plan');
+    expect(plan).toBeDefined();
+    expect(plan?.answerMoves).toContain('e4');
+    expect(plan?.answerSquares).toContain('e4');
+  });
+
+  it('tags the plan as the endgame bucket when isEndgame is set', () => {
+    const qs = buildReadingQuestions('8/8/8/4k3/8/8/4P3/4K3 w - - 0 1', emptyTactics(), { pvSan: ['Kd2'], isEndgame: true });
+    const plan = qs.find((q) => q.type === 'plan');
+    expect(plan?.bucket).toBe('endgame');
+  });
+})
