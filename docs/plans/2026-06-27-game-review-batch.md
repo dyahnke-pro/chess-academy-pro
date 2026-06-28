@@ -36,7 +36,7 @@ Safari 26.5, standalone PWA, confirmed via live audit stream):**
   yield/stop TTS before mic start, await prewarm. Verify on device.
 
 **REMAINING CODE WORK (not device-gated):**
-- Phase 1c — structured recap citations (G0 inversion of the review summary prose).
+- ✅ Phase 1c — DONE (structured citation spine + inline board previews).
 - Phase 2/3 wiring — feed `explainMoveOrder` + engine refutation into flagged
   review plies + the Analysis-Practice why-demo board animation (needs visual verify).
 - Phase 8 — piece-glow intentional vs noise (verify).
@@ -66,9 +66,17 @@ Safari 26.5, standalone PWA, confirmed via live audit stream):**
     that's count-only borrows amateur W/D/L so the score is real not "untested".
     UI leads in honestly by source. Tests: theoryDeviationScan (9) +
     amateurPlayLookup (5) + explorerTranslate (untested case).
-- **1c. Structured recap citations (G0 inversion).** Recap move-references come
-  from the analysis annotations as `{ply, playedSan, suggestedSan, squares}`; LLM
-  only phrases. Kills recap hallucinations + is the data source for previews.
+- **1c. Structured recap citations (G0 inversion). ✅ DONE (b32cebe, 2f0acd0).**
+  `buildReviewCitations(moves, playerColor)` → `ReviewMoveCitation[]` (ply,
+  moveNumber, moverColor, playedSan, suggestedSan, classification, fenBefore,
+  fenAfter, evalSwingCp, played/suggestedSquares) — all COMPUTED from the engine
+  annotations + chess.js, never the LLM. Filters to the STUDENT's flagged moves
+  (color parity, not isCoachMove — handles imported games). The intro prompt was
+  already barred from citing move numbers, so the win here is the structured
+  spine + the **inline board previews** David asked for (IMG_4298):
+  `ReviewCitationPreviews` renders a mini board per flagged move (played = red
+  arrow, engine best = green), most-costly-swing first, tap → jumps the main
+  board to that ply. Tests: buildReviewCitations (4) + ReviewCitationPreviews (6).
 
 ## Phase 2 — The grounded "why" (two whys + move-order comparator)
 - ✅ **Two whys already exist** in `explainBestMoveGrounded` (bestClause = what the
