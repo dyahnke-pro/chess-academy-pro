@@ -10,6 +10,15 @@ Android; only config.
 
 ---
 
+## Build validated ✅
+`android-play.yml` ran GREEN on CI (2026-06-28, run 28334961943): web build →
+`cap add android` → sync → patches → assets → `./gradlew bundleRelease` → AAB
+produced + uploaded as the `app-release-aab` artifact. Built UNSIGNED (signing
+secrets not added yet) — that's expected; it proves the pipeline compiles. Once
+the 4 `ANDROID_*` secrets are in, the same workflow emits a SIGNED AAB.
+> Still owed: on-device runtime QA (WebView mic, streaming TTS, Stockfish WASM,
+> back-button, insets) per `android-patches/README.md` — needs a real phone.
+
 ## What's DONE in the repo (this session)
 
 - **Android signing** wired in `android/app/build.gradle`: release builds sign
