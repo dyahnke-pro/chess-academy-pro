@@ -587,6 +587,40 @@ export interface ReviewMoveInput {
 // only fed the legacy LLM segments call (REVIEW_MOVE_SEGMENT_ADDITION),
 // which has been replaced by `buildReviewSegments` (deterministic).
 
+/**
+ * A grounded, structured citation for ONE of the student's flagged moves —
+ * the G0 spine for the game recap + the inline board previews David asked for
+ * (IMG_4298: "I don't have any visual reference for these words"). Every field
+ * is COMPUTED from the engine annotations + chess.js, never the LLM: the LLM
+ * only PHRASES from these, so it can't hallucinate a move/square (the "left
+ * book at move 1" / "12.Bg5 would have pinned" class). The preview board
+ * renders `fenBefore` with the played + suggested arrows from the squares here.
+ */
+export interface ReviewMoveCitation {
+  /** Zero-based ply. */
+  ply: number;
+  /** 1-based full move number for display ("Move 12"). */
+  moveNumber: number;
+  /** The mover's side, so the UI can orient the preview board. */
+  moverColor: 'white' | 'black';
+  /** What the student actually played (SAN). */
+  playedSan: string;
+  /** The engine's best move at this position (SAN), or null if unknown. */
+  suggestedSan: string | null;
+  classification: 'inaccuracy' | 'mistake' | 'blunder';
+  /** Position the student FACED (before the move) — the preview anchor. */
+  fenBefore: string;
+  /** Position after the played move. */
+  fenAfter: string;
+  /** Centipawns conceded by the played move (≥ 0), or null when eval data is
+   *  missing. Used to rank "the biggest mistake". */
+  evalSwingCp: number | null;
+  /** [from, to] of the played move, for a red preview arrow. */
+  playedSquares: [string, string] | null;
+  /** [from, to] of the engine's best move, for a green preview arrow. */
+  suggestedSquares: [string, string] | null;
+}
+
 /** Reconstruct the FEN at each ply from the move list. Uses chess.js
  *  to replay the SAN sequence — if any SAN is invalid we bail with a
  *  shorter list (better to narrate the moves we can than refuse the
@@ -626,6 +660,71 @@ function uciToSanAt(uci: string | null, fenBefore: string): string | null {
   } catch {
     return null;
   }
+}
+
+/**
+ * buildReviewCitations — extract the student's flagged moves as a structured,
+ * grounded list (G0). The recap phrases from these and the board previews
+ * render from these; nothing about a cited move comes from the LLM. Returned
+ * in ply order (chronological); the caller sorts by `evalSwingCp` / severity
+ * for "the biggest mistake". Coach moves and clean moves are excluded.
+ */
+export function buildReviewCitations(
+  moves: ReviewMoveInput[],
+  playerColor: 'white' | 'black',
+): ReviewMoveCitation[] {
+  const FLAGGED = new Set(['inaccuracy', 'mistake', 'blunder']);
+  // `ply` is 1-based (ply 1 = White's first move), so White moves on ODD plies.
+  const studentIsWhite = playerColor === 'white';
+  const chain = buildFenChain(moves);
+  const out: ReviewMoveCitation[] = [];
+
+  for (let i = 0; i < chain.length; i++) {
+    const m = moves[i];
+    const isWhiteMove = m.ply % 2 === 1;
+    // Only the STUDENT's flagged moves belong in the recap. In an imported
+    // game the opponent isn't `isCoachMove`, so filter by color (and skip
+    // coach moves defensively for vs-coach games).
+    if (m.isCoachMove) continue;
+    if (isWhiteMove !== studentIsWhite) continue;
+    if (!m.classification || !FLAGGED.has(m.classification)) continue;
+    const fenBefore = chain[i].fenBefore;
+
+    // Played-move squares — replay the SAN on the pre-move position.
+    let playedSquares: [string, string] | null = null;
+    try {
+      const c = new Chess(fenBefore);
+      const mv = c.move(m.san);
+      if (mv) playedSquares = [mv.from, mv.to];
+    } catch { /* leave null — never guess squares */ }
+
+    const suggestedSan = uciToSanAt(m.bestMove, fenBefore);
+    const suggestedSquares: [string, string] | null =
+      m.bestMove && m.bestMove.length >= 4
+        ? [m.bestMove.slice(0, 2), m.bestMove.slice(2, 4)]
+        : null;
+
+    const evalSwingCp =
+      m.preMoveEval !== null && m.evaluation !== null
+        ? Math.abs(m.preMoveEval - m.evaluation)
+        : null;
+
+    out.push({
+      ply: m.ply,
+      moveNumber: Math.ceil(m.ply / 2),
+      moverColor: isWhiteMove ? 'white' : 'black',
+      playedSan: m.san,
+      suggestedSan,
+      classification: m.classification as 'inaccuracy' | 'mistake' | 'blunder',
+      fenBefore,
+      fenAfter: chain[i].fenAfter,
+      evalSwingCp,
+      playedSquares,
+      suggestedSquares,
+    });
+  }
+
+  return out;
 }
 
 /**
