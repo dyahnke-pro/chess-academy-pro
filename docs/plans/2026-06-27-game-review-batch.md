@@ -63,11 +63,20 @@ features. Do it first. UI/sound/accuracy are independent and can land alongside.
   mistake?" → reveal → speak the grounded why (Phase 2). Must be visible (Phase 5).
 
 ## Phase 5 — Review-UI layout [#1, #2, #B]
-- Footer (Play Again / Back to Coach) shouldn't sit over chat/narration; show at
-  game-end or make the region scroll with bottom inset for fixed controls+nav.
-- Clipped filter-tab row behind "Pick a game" (header overlaps scroll top).
-- Mid-walk narration text must be reachable every ply (this also unmasks Phase 4's
-  prompt).
+- ✅ **Clipped filter-tab row — already RESOLVED in current code.** `CoachReviewListPage`
+  is now a clean `flex flex-col gap-4 p-4 flex-1 overflow-y-auto` column: header →
+  "Pick a game" subtitle → `overflow-x-auto` filter row → list. No sticky/overlap.
+  David's screenshot was an older bundle; the next TestFlight build carries the fix.
+- ⏳ **Footer (Play Again / Back to Coach) over chat — needs DEVICE verification.**
+  The walk surface ALREADY has the right shape: root `flex flex-col h-full
+  overflow-hidden`, a `flex-1 min-h-0 overflow-y-auto` scroll middle
+  (`review-scroll-middle`: narration banner + Ask panel + move list + tactics), and
+  a `shrink-0` bottom bar. So in a height-bounded parent it can't overlap. The
+  likely real cause on David's device is the board area STARVING the scroll middle
+  (board not height-capped → middle collapses → narration clipped + Ask unreachable
+  under the bar). This surface is heavily audit-tuned; rather than blind-edit, cap
+  the board height (ChessLessonLayout-style) and CONFIRM on the next build with a
+  device/browser. Mid-walk narration reachability rides on the same fix.
 
 ## Phase 6 — No-sound (#3)
 - ✅ **Server is HEALTHY** — `curl` prod `/api/tts` returns HTTP 200,

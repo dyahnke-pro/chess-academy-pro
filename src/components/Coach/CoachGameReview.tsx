@@ -1233,7 +1233,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             </div>
 
             <div className="px-2 pt-1 pb-2 flex justify-center relative">
-              <div className="w-full md:max-w-[420px] relative">
+              {/* Cap the board to a viewport-relative width on mobile so the
+                  square board can't eat the screen and STARVE the flex-1
+                  scroll middle (narration banner + Ask chat). David 2026-06-27:
+                  "Play Again / Back to Coach … preventing me from seeing the
+                  chat" — the top block is shrink-0, so an uncapped full-width
+                  board left the middle ~0px tall. 46vh keeps >50vh for the
+                  scrollable narration/chat above the bottom bar. Desktop keeps
+                  the original 420px (height is not the constraint there). */}
+              <div className="w-full max-w-[46vh] mx-auto md:max-w-[420px] relative">
                 <ChessBoard
                   // Re-key on exploration toggle so the underlying chess
                   // instance resets cleanly when the user enters or
