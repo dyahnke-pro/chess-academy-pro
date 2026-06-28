@@ -76,13 +76,34 @@ export default async function handler(req: Request): Promise<Response> {
       signal: AbortSignal.timeout(PROXY_TIMEOUT_MS),
     });
     const body = await upstream.text();
+    // Status-aware caching. The old flat `max-age=60` had two problems that
+    // produced the 429 cascade seen in prod (David's /coach/play session,
+    // 2026-06-28): (1) 60s is far too short — a cloud eval for a FEN is
+    // deterministic and effectively permanent, yet ultra-common opening
+    // positions (Italian, Two Knights, …) expired every minute and re-hit
+    // Lichess, and the coach prefetches 4 new FENs per move, so bursts blew
+    // through Lichess's per-IP rate limit; (2) it cached ERROR responses too,
+    // so a single upstream 429 got served from the CDN for 60s. Fix: cache
+    // successful evals hard (they don't change), cache "not in cloud" briefly,
+    // and NEVER cache errors — let the client's own 30s cooldown back off.
+    let cacheControl: string;
+    if (upstream.status === 200) {
+      // Deterministic + stable → cache a day at the edge, serve stale for a
+      // week while revalidating so repeat/cross-user positions never re-hit.
+      cacheControl = 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800';
+    } else if (upstream.status === 404) {
+      // "Not in the cloud" — true for now; re-ask in an hour, not every move.
+      cacheControl = 'public, max-age=3600, s-maxage=3600';
+    } else {
+      // 429 / 5xx — do NOT cache; one rate-limit must not become 60s of them.
+      cacheControl = 'no-store';
+    }
     return new Response(body, {
       status: upstream.status,
       headers: {
         ...cors,
         'Content-Type': 'application/json',
-        // Cloud-eval entries are deterministic per FEN; cache 60s.
-        'Cache-Control': 'public, max-age=60, s-maxage=60',
+        'Cache-Control': cacheControl,
       },
     });
   } catch (err) {

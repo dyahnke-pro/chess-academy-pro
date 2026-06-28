@@ -87,7 +87,9 @@ export default async function handler(req: Request): Promise<Response> {
       headers: {
         ...cors,
         'Content-Type': 'application/x-chess-pgn; charset=utf-8',
-        'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+        // Cache only successes (master games are immutable); never cache an
+        // error so one upstream 429/5xx can't be served from the CDN.
+        'Cache-Control': upstream.ok ? 'public, max-age=3600, s-maxage=3600' : 'no-store',
       },
     });
   } catch (err) {

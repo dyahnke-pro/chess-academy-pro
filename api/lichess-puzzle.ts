@@ -86,8 +86,9 @@ export default async function handler(req: Request): Promise<Response> {
       headers: {
         ...cors,
         'Content-Type': 'application/json',
-        // Puzzles are immutable — cache a full day.
-        'Cache-Control': 'public, max-age=86400, s-maxage=86400',
+        // Puzzles are immutable — cache successes a full day; never cache an
+        // error so one upstream 429/5xx can't be served from the CDN.
+        'Cache-Control': upstream.ok ? 'public, max-age=86400, s-maxage=86400' : 'no-store',
       },
     });
   } catch (err) {
