@@ -1,0 +1,36 @@
+name: Upload App Store listing (metadata + screenshots)
+
+# Pushes the App Store listing copy + 10 screenshots into App Store Connect via
+# fastlane deliver, using the App Store Connect API key already in secrets. No
+# binary, no submit — David finishes privacy/age/IAP/submit in the console.
+# Manual trigger only.
+on:
+  workflow_dispatch:
+
+jobs:
+  deliver:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Prepare ASC SEC1 key (spaceship/deliver)
+        env:
+          ASC_KEY_P8_B64: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+        run: |
+          set -e
+          printf '%s' "$ASC_KEY_P8_B64" | base64 -d > "$RUNNER_TEMP/asc.p8"
+          # SEC1 form for fastlane spaceship (PKCS#8 → "invalid curve name").
+          openssl ec -in "$RUNNER_TEMP/asc.p8" -out "$RUNNER_TEMP/asc_sec1.pem"
+
+      - name: Fastlane deliver (metadata + screenshots)
+        env:
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+        run: |
+          export APP_STORE_CONNECT_API_KEY_B64="$(openssl base64 -A -in "$RUNNER_TEMP/asc_sec1.pem")"
+          bundle exec fastlane ios upload_listing

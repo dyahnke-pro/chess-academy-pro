@@ -1,0 +1,1 @@
+First release — your AI chess coach: openings, tactics from your own games, full Stockfish review, and a coach you can talk to.
