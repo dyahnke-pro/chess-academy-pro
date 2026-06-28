@@ -1,16 +1,19 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, type CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Lightbulb, ArrowRight, RefreshCw, Check, X, Minus } from 'lucide-react';
+import { Lightbulb, ArrowRight, RefreshCw, Check, X, Minus, HelpCircle, Play } from 'lucide-react';
 import { Chess } from 'chess.js';
+import type { Square } from 'chess.js';
 import { db } from '../../db/schema';
 import { useAppStore } from '../../stores/appStore';
 import { PageHelp } from '../Layout/PageHelp';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { buildFedTacticsContext } from '../../services/liveTacticsContext';
+import { stockfishEngine } from '../../services/stockfishEngine';
 import {
   samplePositionsFromGame,
   findMistakePositions,
   buildReadingQuestions,
+  readingHint,
   type ReadingQuestion,
   type ReadingGrade,
   type SampledPosition,
@@ -21,6 +24,16 @@ import { determinePlayerColor } from '../../services/mistakePuzzleService';
 import { captureEvent } from '../../services/analytics';
 import { logAppAudit } from '../../services/appAuditor';
 import type { GameRecord } from '../../types';
+
+const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
+
+/** Few-piece positions read as endgames (gates the endgame question bucket). */
+function isEndgameFen(fen: string): boolean {
+  try {
+    const pieces = new Chess(fen).board().flat().filter(Boolean).length;
+    return pieces <= 12;
+  } catch { return false; }
+}
 
 type Phase = 'loading' | 'empty' | 'error' | 'ready';
 export type PositionSource = 'any' | 'mistakes';
@@ -39,8 +52,29 @@ interface Usernames { chesscom?: string; lichess?: string }
 async function buildLoaded(pick: SampledPosition, game: GameRecord, rating: number): Promise<LoadedPosition | null> {
   let sideToMove: 'w' | 'b' = 'w';
   try { sideToMove = new Chess(pick.fen).turn(); } catch { return null; }
-  const tactics = await buildFedTacticsContext(pick.fen, sideToMove, rating);
-  const questions = buildReadingQuestions(pick.fen, tactics);
+  // One engine analysis: feeds the tactics package AND grounds who's-winning.
+  let evalCp: number | null = null;
+  let mateIn: number | null = null;
+  let analysis = null;
+  try {
+    analysis = await stockfishEngine.analyzePosition(pick.fen, 14);
+    evalCp = analysis.evaluation; // white-perspective cp (mate encodes as a huge value)
+    mateIn = analysis.isMate ? analysis.mateIn : null;
+  } catch { /* engine down → who's-winning is simply skipped, never guessed */ }
+  // Convert the engine PV (UCI) to SAN for the plan + calculation drills.
+  let pvSan: string[] = [];
+  if (analysis?.topLines?.[0]?.moves?.length) {
+    const c = new Chess(pick.fen);
+    for (const uci of analysis.topLines[0].moves.slice(0, 8)) {
+      try {
+        const mv = c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.length > 4 ? uci[4] : undefined });
+        if (!mv) break;
+        pvSan.push(mv.san);
+      } catch { break; }
+    }
+  }
+  const tactics = await buildFedTacticsContext(pick.fen, sideToMove, rating, analysis);
+  const questions = buildReadingQuestions(pick.fen, tactics, { evalCp, mateIn, isEndgame: isEndgameFen(pick.fen), rating, pvSan });
   if (questions.length === 0) return null;
   return {
     fen: pick.fen,
@@ -110,17 +144,27 @@ export function AnalysisPracticePage(): JSX.Element {
   const [answer, setAnswer] = useState('');
   const [grade, setGrade] = useState<ReadingGrade | null>(null);
   const [grading, setGrading] = useState(false);
+  const [hintTier, setHintTier] = useState(0);            // 0 = none, 1-3
+  const [selectedSquare, setSelectedSquare] = useState<Square | null>(null);
+  const [demoFen, setDemoFen] = useState<string | null>(null); // non-null while the line plays out
+  const [demoing, setDemoing] = useState(false);
   const askedRef = useRef(0);
   const correctRef = useRef(0);
-  // Keep usernames out of loadNext's dep array (object identity churns each render).
+  const attemptsRef = useRef(0);
+  const advanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const usernamesRef = useRef(usernames);
   usernamesRef.current = usernames;
 
+  const question = position?.questions[qIndex] ?? null;
+
+  const resetForQuestion = useCallback(() => {
+    setGrade(null); setAnswer(''); setHintTier(0); setSelectedSquare(null); setDemoFen(null);
+    attemptsRef.current = 0;
+  }, []);
+
   const loadNext = useCallback(async (src: PositionSource) => {
-    setPhase('loading');
-    setGrade(null);
-    setAnswer('');
-    setQIndex(0);
+    if (advanceTimer.current) clearTimeout(advanceTimer.current);
+    setPhase('loading'); resetForQuestion(); setQIndex(0);
     try {
       const next = await loadPosition(rating, src, usernamesRef.current);
       if (!next) { setPhase('empty'); return; }
@@ -134,7 +178,7 @@ export function AnalysisPracticePage(): JSX.Element {
       });
       setPhase('error');
     }
-  }, [rating]);
+  }, [rating, resetForQuestion]);
 
   const switchSource = useCallback((src: PositionSource) => {
     if (src === source) return;
@@ -146,26 +190,12 @@ export function AnalysisPracticePage(): JSX.Element {
   useEffect(() => {
     captureEvent('analysis_practice_started', {});
     void loadNext('any');
-    // Mount-only; subsequent loads go through loadNext/switchSource with the
-    // chosen source.
+    return () => { if (advanceTimer.current) clearTimeout(advanceTimer.current); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const question = position?.questions[qIndex] ?? null;
-
-  const submit = useCallback(async () => {
-    if (!question || !answer.trim() || grade || grading) return;
-    setGrading(true);
-    const g = await gradeReadingAnswer(question, answer);
-    setGrade(g);
-    setGrading(false);
-    askedRef.current += 1;
-    if (g.verdict === 'correct') correctRef.current += 1;
-    void recordReadingResult(question.type, g.verdict === 'correct');
-    captureEvent('analysis_practice_answer', { questionType: question.type, verdict: g.verdict });
-  }, [question, answer, grade, grading]);
-
-  const nextQuestion = useCallback(() => {
+  const next = useCallback(() => {
+    if (advanceTimer.current) clearTimeout(advanceTimer.current);
     if (!position) return;
     if (qIndex + 1 >= position.questions.length) {
       captureEvent('analysis_practice_completed', { asked: askedRef.current, correct: correctRef.current });
@@ -173,9 +203,72 @@ export function AnalysisPracticePage(): JSX.Element {
       return;
     }
     setQIndex((i) => i + 1);
-    setGrade(null);
-    setAnswer('');
-  }, [position, qIndex, loadNext, source]);
+    resetForQuestion();
+  }, [position, qIndex, loadNext, source, resetForQuestion]);
+
+  // Play the grounded demo line out on the board (tell AND show the why).
+  const playDemo = useCallback(async (line?: string[]) => {
+    if (!line || line.length === 0 || !position) return;
+    setDemoing(true);
+    const c = new Chess(position.fen);
+    for (const san of line) {
+      try { c.move(san); } catch { break; }
+      setDemoFen(c.fen());
+      await sleep(750);
+    }
+    setDemoing(false);
+  }, [position]);
+
+  // The single grading path — text, a clicked square, or a played move all flow
+  // through here (the answer key already carries acceptTokens for each mode).
+  const gradeAnswer = useCallback(async (text: string) => {
+    if (!question || grading || grade || demoing || !text.trim()) return;
+    setGrading(true);
+    const g = await gradeReadingAnswer(question, text);
+    setGrading(false);
+    askedRef.current += 1;
+    void recordReadingResult(question.type, g.verdict === 'correct');
+    captureEvent('analysis_practice_answer', { questionType: question.type, verdict: g.verdict, hintTier });
+    if (g.verdict === 'correct') {
+      correctRef.current += 1;
+      setGrade(g);
+      await playDemo(question.demoLine);               // show the why
+      advanceTimer.current = setTimeout(() => next(), 900); // auto-advance, no click
+      return;
+    }
+    // Wrong / partial → progressive GROUNDED hint, let them retry.
+    attemptsRef.current += 1;
+    if (attemptsRef.current >= 3) {
+      setHintTier(3);
+      setGrade(g);                                     // reveal answer + Next
+      await playDemo(question.demoLine);
+    } else {
+      setHintTier(attemptsRef.current);
+      setAnswer(''); setSelectedSquare(null);          // keep going
+    }
+  }, [question, grading, grade, demoing, hintTier, playDemo, next]);
+
+  const onSquareClick = useCallback((sqr: string) => {
+    if (grade || demoing) return;
+    setSelectedSquare(sqr as Square);
+    void gradeAnswer(sqr);
+  }, [grade, demoing, gradeAnswer]);
+
+  const onPieceDrop = useCallback((from: string, to: string): boolean => {
+    if (grade || demoing || !position) return false;
+    try {
+      const c = new Chess(position.fen);
+      const mv = c.move({ from, to, promotion: 'q' });
+      if (!mv) return false;
+      void gradeAnswer(mv.san);
+      return true;
+    } catch { return false; }
+  }, [grade, demoing, position, gradeAnswer]);
+
+  const showHint = useCallback(() => {
+    if (grade) return;
+    setHintTier((t) => Math.min((t || 0) + 1, 3));
+  }, [grade]);
 
   return (
     <div
@@ -254,13 +347,34 @@ export function AnalysisPracticePage(): JSX.Element {
         </div>
       )}
 
-      {phase === 'ready' && position && question && (
-        <div className="flex flex-col gap-4 max-w-lg mx-auto w-full">
+      {phase === 'ready' && position && question && (() => {
+        const toMove = position.orientation === 'white' ? 'White' : 'Black';
+        // Highlight the clicked square (and, once answered, the grounded answer squares).
+        const squareStyles: Record<string, CSSProperties> = {};
+        if (selectedSquare) squareStyles[selectedSquare] = { background: 'rgba(99,102,241,0.45)' };
+        if (grade) for (const s of question.answerSquares ?? []) squareStyles[s] = { background: 'rgba(34,197,94,0.45)' };
+        const hint = hintTier > 0 ? readingHint(question, Math.min(hintTier, 3) as 1 | 2 | 3) : null;
+        return (
+        <div className="flex flex-col gap-3 max-w-lg mx-auto w-full">
+          {/* Prominent turn indicator (David: "I don't know whose turn it is"). */}
+          <div className="flex items-center justify-center gap-2" data-testid="analysis-practice-turn">
+            <span className="inline-block w-3 h-3 rounded-full border" style={{ background: toMove === 'White' ? '#f8fafc' : '#0f172a', borderColor: 'var(--color-border)' }} />
+            <span className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>{toMove} to move</span>
+            <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>· {position.gameLabel}</span>
+          </div>
+
           <div className="w-full md:max-w-[420px] mx-auto">
-            <ConsistentChessboard fen={position.fen} boardOrientation={position.orientation} />
+            <ConsistentChessboard
+              fen={demoFen ?? position.fen}
+              boardOrientation={position.orientation}
+              interactive={!grade && !demoing}
+              squareStyles={squareStyles}
+              onSquareClick={(a) => onSquareClick(a.square)}
+              onPieceDrop={(a) => onPieceDrop(a.sourceSquare, a.targetSquare ?? '')}
+            />
           </div>
           <p className="text-xs text-center" style={{ color: 'var(--color-text-muted)' }}>
-            {position.gameLabel} · {position.orientation === 'white' ? 'White' : 'Black'} to move
+            Answer by typing, clicking a square, or playing the move on the board.
           </p>
 
           <div className="rounded-2xl border-2 p-4" style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}>
@@ -270,26 +384,45 @@ export function AnalysisPracticePage(): JSX.Element {
 
             {!grade && (
               <>
-                <textarea
-                  value={answer}
-                  onChange={(e) => setAnswer(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) void submit(); }}
-                  rows={2}
-                  placeholder="What do you see? Name the square or the idea…"
-                  className="w-full rounded-xl p-3 text-sm resize-none outline-none"
-                  style={{ background: 'var(--color-bg)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }}
-                  data-testid="analysis-practice-input"
-                  autoFocus
-                />
-                <button
-                  onClick={() => void submit()}
-                  disabled={!answer.trim() || grading}
-                  className="mt-3 w-full px-4 py-2.5 rounded-xl border-2 font-semibold disabled:opacity-40"
-                  style={{ borderColor: 'rgba(99,102,241,0.5)', background: 'rgba(99,102,241,0.12)', color: 'var(--color-text)' }}
-                  data-testid="analysis-practice-submit"
-                >
-                  {grading ? 'Checking…' : 'Check my read'}
-                </button>
+                {hint && (
+                  <div className="rounded-xl p-3 text-sm mb-3 flex items-start gap-2" style={{ background: 'rgba(245,158,11,0.1)', color: 'var(--color-text)' }} data-testid="analysis-practice-hint">
+                    <HelpCircle size={16} className="text-amber-400 shrink-0 mt-0.5" />
+                    <span><span style={{ color: 'var(--color-text-muted)' }}>Hint {hintTier}: </span>{hint}</span>
+                  </div>
+                )}
+                <div className="flex gap-2">
+                  <textarea
+                    value={answer}
+                    onChange={(e) => setAnswer(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void gradeAnswer(answer); } }}
+                    rows={2}
+                    placeholder="What do you see? Name the square, move, or idea…"
+                    className="flex-1 rounded-xl p-3 text-sm resize-none outline-none"
+                    style={{ background: 'var(--color-bg)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }}
+                    data-testid="analysis-practice-input"
+                    autoFocus
+                  />
+                </div>
+                <div className="flex gap-2 mt-3">
+                  <button
+                    onClick={showHint}
+                    disabled={hintTier >= 3 || grading}
+                    className="px-4 py-2.5 rounded-xl border-2 font-semibold disabled:opacity-40 flex items-center gap-2"
+                    style={{ borderColor: 'rgba(245,158,11,0.4)', background: 'rgba(245,158,11,0.1)', color: 'var(--color-text)' }}
+                    data-testid="analysis-practice-hint-btn"
+                  >
+                    <HelpCircle size={16} /> Hint
+                  </button>
+                  <button
+                    onClick={() => void gradeAnswer(answer)}
+                    disabled={!answer.trim() || grading}
+                    className="flex-1 px-4 py-2.5 rounded-xl border-2 font-semibold disabled:opacity-40"
+                    style={{ borderColor: 'rgba(99,102,241,0.5)', background: 'rgba(99,102,241,0.12)', color: 'var(--color-text)' }}
+                    data-testid="analysis-practice-submit"
+                  >
+                    {grading ? 'Checking…' : 'Send'}
+                  </button>
+                </div>
               </>
             )}
 
@@ -298,26 +431,31 @@ export function AnalysisPracticePage(): JSX.Element {
                 <div className="flex items-center gap-2" style={{ color: VERDICT_STYLE[grade.verdict].color }}>
                   {(() => { const Icon = VERDICT_STYLE[grade.verdict].icon; return <Icon size={18} />; })()}
                   <span className="font-bold" data-testid="analysis-practice-verdict">{VERDICT_STYLE[grade.verdict].label}</span>
+                  {demoing && <span className="text-xs flex items-center gap-1" style={{ color: 'var(--color-text-muted)' }}><Play size={12} /> showing the line…</span>}
                 </div>
                 {grade.verdict !== 'correct' && (
                   <div className="rounded-xl p-3 text-sm" style={{ background: 'var(--color-bg)', color: 'var(--color-text)' }} data-testid="analysis-practice-answer">
                     <span style={{ color: 'var(--color-text-muted)' }}>Answer: </span>{grade.correctAnswer}
                   </div>
                 )}
-                <button
-                  onClick={nextQuestion}
-                  className="w-full px-4 py-2.5 rounded-xl border-2 font-semibold flex items-center justify-center gap-2"
-                  style={{ borderColor: 'rgba(99,102,241,0.5)', background: 'rgba(99,102,241,0.12)', color: 'var(--color-text)' }}
-                  data-testid="analysis-practice-next"
-                >
-                  {qIndex + 1 >= position.questions.length ? 'New position' : 'Next question'}
-                  <ArrowRight size={16} />
-                </button>
+                {/* On a correct read the surface auto-advances; only the miss path needs a button. */}
+                {grade.verdict !== 'correct' && (
+                  <button
+                    onClick={next}
+                    className="w-full px-4 py-2.5 rounded-xl border-2 font-semibold flex items-center justify-center gap-2"
+                    style={{ borderColor: 'rgba(99,102,241,0.5)', background: 'rgba(99,102,241,0.12)', color: 'var(--color-text)' }}
+                    data-testid="analysis-practice-next"
+                  >
+                    {qIndex + 1 >= position.questions.length ? 'New position' : 'Next question'}
+                    <ArrowRight size={16} />
+                  </button>
+                )}
               </div>
             )}
           </div>
         </div>
-      )}
+        );
+      })()}
     </div>
   );
 }

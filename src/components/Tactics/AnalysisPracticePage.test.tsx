@@ -58,10 +58,30 @@ describe('AnalysisPracticePage', () => {
     await waitFor(() => expect(screen.getByTestId('analysis-practice-prompt')).toBeInTheDocument(), { timeout: 5000 });
     expect(screen.getByTestId('board')).toBeInTheDocument();
 
-    // Answer + submit → the grade surfaces.
+    // Answer + Send → a CORRECT read surfaces the verdict and AUTO-ADVANCES
+    // (no manual Next button on correct — David 2026-06-28).
     fireEvent.change(screen.getByTestId('analysis-practice-input'), { target: { value: 'material is even' } });
     fireEvent.click(screen.getByTestId('analysis-practice-submit'));
     await waitFor(() => expect(screen.getByTestId('analysis-practice-verdict')).toBeInTheDocument());
-    expect(screen.getByTestId('analysis-practice-next')).toBeInTheDocument();
+    expect(screen.queryByTestId('analysis-practice-next')).not.toBeInTheDocument();
+  });
+
+  it('shows a progressive grounded HINT on a wrong answer (no answer handed over)', async () => {
+    const grader = await import('../../services/positionReadingGrader');
+    vi.mocked(grader.gradeReadingAnswer).mockResolvedValueOnce({ verdict: 'wrong', correctAnswer: 'Material is even', note: 'no' });
+    await db.games.add({
+      id: 'g1', pgn: GAME_PGN, white: 'Me', black: 'Them', result: '1-0',
+      date: '2026-06-27', event: 'Test', eco: null, whiteElo: null, blackElo: null,
+      source: 'coach', annotations: null, coachAnalysis: null, isMasterGame: false, openingId: null,
+    } as never);
+    render(<AnalysisPracticePage />);
+    await waitFor(() => expect(screen.getByTestId('analysis-practice-prompt')).toBeInTheDocument(), { timeout: 5000 });
+
+    fireEvent.change(screen.getByTestId('analysis-practice-input'), { target: { value: 'totally wrong' } });
+    fireEvent.click(screen.getByTestId('analysis-practice-submit'));
+    // First miss → a hint appears, the answer is NOT revealed, retry stays open.
+    await waitFor(() => expect(screen.getByTestId('analysis-practice-hint')).toBeInTheDocument());
+    expect(screen.queryByTestId('analysis-practice-answer')).not.toBeInTheDocument();
+    expect(screen.getByTestId('analysis-practice-input')).toBeInTheDocument();
   });
 });

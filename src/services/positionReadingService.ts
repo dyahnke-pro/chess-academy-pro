@@ -687,6 +687,27 @@ export interface ReadingQuestionOpts {
   /** Whether the position is an endgame (few pieces) — gates the endgame bucket
    *  question. Computed by the caller (or left false). */
   isEndgame?: boolean;
+  /** Student rating — adapts the CALCULATION drill depth (David 2026-06-28:
+   *  weak ~3 plies, intermediate ~4, advanced 6+). */
+  rating?: number;
+}
+
+/** The FORCING prefix of a line — moves that are a capture or give check, in
+ *  order, stopping at the first quiet move. A genuinely forcing sequence the
+ *  student can be asked to calculate to its end (G3 — real legal moves only). */
+export function forcingPrefix(fen: string, line: readonly string[]): string[] {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return []; }
+  const out: string[] = [];
+  for (const san of line) {
+    let mv;
+    try { mv = chess.move(san); } catch { break; }
+    if (!mv) break;
+    const isForcing = !!mv.captured || chess.inCheck(); // capture, or it gives check
+    if (!isForcing) break;
+    out.push(mv.san);
+  }
+  return out;
 }
 
 export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, opts: ReadingQuestionOpts = {}): ReadingQuestion[] {
@@ -813,24 +834,27 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   // the whole line plays out on the board (demoLine). Prefer the engine PV when
   // supplied (deeper combos); fall back to the SEE line.
   {
+    // The forcing line: the engine PV's forcing (check/capture) prefix when
+    // available (can run deep), else the SEE swap-off. The STUDENT calculates it
+    // to the end and names the LAST move (David 2026-06-28 — an advanced skill).
     const enemyWins = findHangingBySee(fen).filter((h) => h.color === enemy);
     let calcSeq: string[] = [];
-    if (opts.pvSan && opts.pvSan.length >= 2) {
-      calcSeq = opts.pvSan.slice(0, 6); // engine PV = the forcing line (deeper)
-    } else if (enemyWins.length > 0) {
-      calcSeq = seeSequence(fen, enemyWins[0].square); // SEE swap-off
-    }
-    if (calcSeq.length >= 2) {
+    if (opts.pvSan && opts.pvSan.length >= 2) calcSeq = forcingPrefix(fen, opts.pvSan);
+    if (calcSeq.length < 2 && enemyWins.length > 0) calcSeq = seeSequence(fen, enemyWins[0].square);
+    // Adaptive depth floor: weak ~3 plies, intermediate ~4, advanced 6+.
+    const r = opts.rating ?? 1200;
+    const minLen = r < 1400 ? 3 : r < 1900 ? 4 : 6;
+    if (calcSeq.length >= minLen) {
       const last = calcSeq[calcSeq.length - 1];
-      let firstTo: Square | null = null;
-      try { const c = new Chess(fen); const mv = c.move(calcSeq[0]); if (mv) firstTo = mv.to as Square; } catch { firstTo = null; }
+      let lastTo: Square | null = null;
+      try { const c = new Chess(fen); for (const m of calcSeq) { const mv = c.move(m); if (mv) lastTo = mv.to as Square; } } catch { lastTo = null; }
       out.push({
         id: 'calculation', type: 'plan', bucket: 'calculation', misconceptionTag: 'missed-tactic',
-        prompt: `There's material to be won by force — the combination ENDS with ${last}. What move STARTS it?`,
-        answer: `Start with ${calcSeq[0]} — the full line is ${calcSeq.join(' ')}.`,
-        acceptTokens: [sq(calcSeq[0]), ...(firstTo ? [sq(firstTo)] : [])],
-        answerMoves: [calcSeq[0]],
-        answerSquares: firstTo ? [firstTo] : undefined,
+        prompt: `There's a forcing line that wins material here. Calculate it to the end — what is the LAST move of the combination?`,
+        answer: `The line is ${calcSeq.join(' ')} — it ends with ${last}.`,
+        acceptTokens: [sq(last), ...(lastTo ? [sq(lastTo)] : [])],
+        answerMoves: [last],
+        answerSquares: lastTo ? [lastTo] : undefined,
         demoLine: calcSeq,
         negative: false,
       });

@@ -3,6 +3,7 @@ import { Chess } from 'chess.js';
 import {
   seeGain,
   seeSequence,
+  forcingPrefix,
   findHangingBySee,
   findPawnBreaks,
   findPieceQuality,
@@ -496,26 +497,35 @@ describe('seeSequence — the swap-off line to PLAY OUT on the board (tell AND s
   });
 })
 
-describe('calculation practice — forcing sequence, last move first, plays out (David 2026-06-28)', () => {
-  it('asks for the START of a forcing line, reveals the LAST move, and carries the demo', () => {
-    // White e4 pawn can take the black queen on d5; black recaptures cxd5 →
-    // forcing 2-ply line ['exd5','cxd5'] that nets White ~8 (queen for pawn).
-    const qs = buildReadingQuestions('4k3/8/2p5/3q4/4P3/8/8/4K3 w - - 0 1', emptyTactics());
+describe('calculation practice — student names the LAST move, adaptive depth (David 2026-06-28)', () => {
+  it('asks for the LAST move of a 3-ply winning capture chain (weak-player depth)', () => {
+    // Black knight d5 attacked by white c4+e4 pawns, defended only by c6 →
+    // cxd5 cxd5 exd5 wins the knight by force (3 plies, nets White material).
+    const qs = buildReadingQuestions('4k3/8/2p5/3n4/2P1P3/8/8/4K3 w - - 0 1', emptyTactics(), { rating: 1200 });
     const calc = qs.find((q) => q.id === 'calculation');
     expect(calc).toBeDefined();
     expect(calc?.bucket).toBe('calculation');
-    expect(calc?.demoLine && calc.demoLine.length).toBeGreaterThanOrEqual(2);
-    // the prompt reveals the LAST move of the line
-    expect(calc?.prompt).toContain(calc!.demoLine![calc!.demoLine!.length - 1]);
-    // the answer/start move is the first of the line
-    expect(calc?.answerMoves?.[0]).toBe(calc!.demoLine![0]);
+    expect(calc?.demoLine?.length).toBeGreaterThanOrEqual(3);
+    // the prompt asks for the LAST move (does NOT reveal it)
+    expect(calc?.prompt).toContain('LAST move');
+    const last = calc!.demoLine![calc!.demoLine!.length - 1];
+    expect(calc?.prompt).not.toContain(last);
+    // the answer the student must give IS the last move
+    expect(calc?.answerMoves?.[0]).toBe(last);
   });
 
-  it('uses the engine PV as the forcing line when supplied', () => {
-    const qs = buildReadingQuestions('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', emptyTactics(), { pvSan: ['e4', 'e5', 'Nf3', 'Nc6'] });
+  it('adapts depth to rating — an advanced player needs a deeper (6+) line', () => {
+    // The 3-ply line above is below the advanced floor (6), so no calc drill.
+    const qs = buildReadingQuestions('4k3/8/2p5/3n4/2P1P3/8/8/4K3 w - - 0 1', emptyTactics(), { rating: 2100 });
+    expect(qs.find((q) => q.id === 'calculation')).toBeUndefined();
+  });
+
+  it('uses the engine PV forcing prefix when supplied', () => {
+    // A forcing prefix (captures/checks) from the PV; quiet moves end the line.
+    const qs = buildReadingQuestions('4k3/8/2p5/3n4/2P1P3/8/8/4K3 w - - 0 1', emptyTactics(), { rating: 1200, pvSan: ['cxd5', 'cxd5', 'exd5'] });
     const calc = qs.find((q) => q.id === 'calculation');
-    expect(calc?.demoLine?.[0]).toBe('e4');
-    expect(calc?.answerMoves?.[0]).toBe('e4');
+    expect(calc?.demoLine?.[calc!.demoLine!.length - 1]).toBe('exd5');
+    expect(calc?.answerMoves?.[0]).toBe('exd5');
   });
 })
 
