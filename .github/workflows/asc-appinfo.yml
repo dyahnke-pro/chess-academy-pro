@@ -1,0 +1,32 @@
+name: ASC app info (copyright + category + content rights + age probe)
+
+on:
+  workflow_dispatch:
+    inputs:
+      set_age_rating:
+        description: 'Set age-rating declaration if reachable (1 = yes)'
+        required: false
+        default: '1'
+
+jobs:
+  appinfo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: App info
+        env:
+          ASC_KEY_P8: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APP_BUNDLE_ID: com.chessacademy.pro
+          APP_VERSION: '2.8'
+          COPYRIGHT: 2026 David Yahnke
+          PRIMARY_CATEGORY: GAMES
+          PRIMARY_SUBCAT: GAMES_BOARD
+          SECONDARY_CATEGORY: EDUCATION
+          CONTENT_RIGHTS: DOES_NOT_USE_THIRD_PARTY_CONTENT
+          SET_AGE_RATING: ${{ github.event.inputs.set_age_rating }}
+        run: node scripts/ci/asc-appinfo.mjs
