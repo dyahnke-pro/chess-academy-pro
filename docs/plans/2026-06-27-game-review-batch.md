@@ -144,6 +144,18 @@ are the foundation for BOTH review and this — not wasted.
   populated for EVERY question type (incl. the new who's-winning /
   strengths-weaknesses / targeting ones).
 
+## Phase 10 refinement — question VARIETY (David: "same questions in rotation, just a different position")
+Current = a FIXED template of question types (tactic/hanging/pawn-break/piece/
+material) replayed per position → feels samey. Fix in the discussion redesign:
+- MORE dimensions per position (who's-winning, strengths/weaknesses each side,
+  plans, what-to-target) so the slot set isn't always the same five.
+- VARY THE STEMS (narration rule #9 — 3-5 phrasings per dimension, rotate; never
+  verbatim repeats across positions).
+- CONVERSATIONAL FOLLOW-UPS keyed off the student's answer (coach-chat grounded)
+  so it's a discussion, not a recurring quiz form. The dimension MIX should also
+  vary by what the position actually offers (a sharp position leads with tactics;
+  a quiet one leads with plans/weaknesses).
+
 ## Decisions for David
 - D1: Reading gate default ON, or stay opt-in with a clearer prompt? (Phase 4)
 - D2: Re-analysis on the depth bump — prioritize open game + throttle vs full
