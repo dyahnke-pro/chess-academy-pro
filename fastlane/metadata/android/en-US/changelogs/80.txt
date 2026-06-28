@@ -1,0 +1,5 @@
+First Google Play release of Chess Academy Pro.
+
+Your AI coach watches your games, finds the mistakes you keep making, and builds every puzzle, opening, and lesson around your weaknesses — out loud, move by move. 42 opening masterclasses, 15,000 puzzles, on-device Stockfish 18, and a kids mode.
+
+Try free for 7 days.

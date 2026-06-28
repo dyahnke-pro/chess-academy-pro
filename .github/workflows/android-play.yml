@@ -1,0 +1,140 @@
+name: Android → Google Play
+
+# Build a signed Android App Bundle (.aab) from the Capacitor project and
+# (optionally) upload it to a Google Play track via the service-account API.
+#
+# Until the Play Console account exists + the service account is linked, this
+# workflow still BUILDS the signed .aab and uploads it as a CI artifact you can
+# download and upload to the console by hand for the very first release.
+#
+# Required GitHub secrets:
+#   ANDROID_KEYSTORE_B64        — base64 of the upload keystore (.jks)
+#   ANDROID_KEYSTORE_PASSWORD   — keystore store password
+#   ANDROID_KEY_ALIAS           — key alias (e.g. "upload")
+#   ANDROID_KEY_PASSWORD        — key password
+#   PLAY_SERVICE_ACCOUNT_JSON_B64 — base64 of the Play Developer API service
+#                                   account JSON (only needed for `upload: true`)
+
+on:
+  workflow_dispatch:
+    inputs:
+      track:
+        description: 'Play track to upload to (internal | alpha | beta | production)'
+        required: false
+        default: 'internal'
+        type: string
+      release_status:
+        description: 'Release status (draft | completed | inProgress | halted)'
+        required: false
+        default: 'draft'
+        type: string
+      upload:
+        description: 'Upload to Play after building (requires PLAY_SERVICE_ACCOUNT_JSON_B64 + the app to exist in the console)'
+        required: false
+        default: false
+        type: boolean
+      version_code:
+        description: 'Override the Android versionCode (monotonic integer). Blank = build.gradle default.'
+        required: false
+        type: string
+
+concurrency:
+  group: android-play
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Install JS deps
+        run: npm ci --no-audit --no-fund
+
+      - name: Build web bundle
+        run: npm run build
+
+      # Regenerate the gitignored android/ from scratch and re-apply our native
+      # patches (manifest perms + WebView mic MainActivity + signed/env-version
+      # build.gradle) + brand icons — the canonical path, same shape as iOS.
+      - name: Add + sync Android project, apply patches, generate assets
+        run: npm run setup:android
+
+      - name: Materialize the upload keystore + signing props
+        env:
+          ANDROID_KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -e
+          if [ -z "$ANDROID_KEYSTORE_B64" ]; then
+            echo "::error::ANDROID_KEYSTORE_B64 secret is not set — cannot sign the release. Add the 4 ANDROID_* secrets."
+            exit 1
+          fi
+          printf '%s' "$ANDROID_KEYSTORE_B64" | base64 -d > android/upload-keystore.jks
+          echo "keystore bytes: $(wc -c < android/upload-keystore.jks)"
+          cat > android/keystore.properties <<EOF
+          storeFile=upload-keystore.jks
+          storePassword=${ANDROID_KEYSTORE_PASSWORD}
+          keyAlias=${ANDROID_KEY_ALIAS}
+          keyPassword=${ANDROID_KEY_PASSWORD}
+          EOF
+          echo "wrote android/keystore.properties (storeFile=upload-keystore.jks, alias=${ANDROID_KEY_ALIAS})"
+
+      - name: Build signed release bundle (.aab)
+        env:
+          APP_VERSION: '2.8'
+          ANDROID_VERSION_CODE: ${{ inputs.version_code }}
+        run: |
+          cd android
+          chmod +x ./gradlew
+          ./gradlew bundleRelease --no-daemon
+          echo "--- AAB output ---"
+          ls -la app/build/outputs/bundle/release/
+
+      - name: Verify the AAB is signed with the upload key
+        run: |
+          AAB=android/app/build/outputs/bundle/release/app-release.aab
+          test -f "$AAB" || { echo "::error::AAB not found at $AAB"; exit 1; }
+          echo "Signed AAB present: $(wc -c < "$AAB") bytes"
+
+      - name: Upload .aab artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-aab
+          path: android/app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
+
+      - name: Set up Ruby (for fastlane supply)
+        if: ${{ inputs.upload }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Upload to Google Play
+        if: ${{ inputs.upload }}
+        env:
+          PLAY_SERVICE_ACCOUNT_JSON_B64: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON_B64 }}
+          PLAY_TRACK: ${{ inputs.track }}
+          PLAY_RELEASE_STATUS: ${{ inputs.release_status }}
+        run: |
+          set -e
+          if [ -z "$PLAY_SERVICE_ACCOUNT_JSON_B64" ]; then
+            echo "::error::PLAY_SERVICE_ACCOUNT_JSON_B64 not set — cannot upload. The AAB artifact is still available to upload manually."
+            exit 1
+          fi
+          printf '%s' "$PLAY_SERVICE_ACCOUNT_JSON_B64" | base64 -d > "$RUNNER_TEMP/play-sa.json"
+          export PLAY_JSON_KEY_PATH="$RUNNER_TEMP/play-sa.json"
+          bundle exec fastlane android play_beta

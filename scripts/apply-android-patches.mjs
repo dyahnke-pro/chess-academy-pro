@@ -53,6 +53,26 @@ async function mergeManifestPermissions() {
   console.log(`  ✓ added ${toAdd.length} permission(s) to AndroidManifest.xml`);
 }
 
+async function copyBuildGradle() {
+  // Full-file copy (like MainActivity) — the committed patch carries the
+  // complete app/build.gradle WITH our release signing config + env-driven
+  // version on top of Capacitor's defaults. Safe because @capacitor/android is
+  // pinned (8.1.0); if that's ever bumped, re-sync this patch from a fresh
+  // `cap add android` and re-apply the signing/version edits.
+  const src = resolve(ROOT, 'android-patches/app/build.gradle');
+  const dest = resolve(ANDROID, 'app/build.gradle');
+  if (!(await exists(src))) {
+    console.log('  · no build.gradle patch (skipping)');
+    return;
+  }
+  if (!(await exists(dest))) {
+    console.error(`✗ ${dest} not found — cap add not run.`);
+    process.exit(1);
+  }
+  await copyFile(src, dest);
+  console.log('  ✓ copied app/build.gradle (release signing + env version)');
+}
+
 async function copyMainActivity() {
   const src = resolve(
     ROOT,
@@ -77,6 +97,7 @@ async function main() {
   }
   console.log('Applying android-patches/:');
   await mergeManifestPermissions();
+  await copyBuildGradle();
   await copyMainActivity();
   console.log('Done. Verify on a real Android device (see android-patches/README.md).');
 }

@@ -147,3 +147,52 @@ platform :ios do
     UI.success('Listing metadata + screenshots uploaded. Finish privacy/age/IAP/submit in App Store Connect.')
   end
 end
+
+# ── Android / Google Play ────────────────────────────────────────────────────
+# Auth: a Google Play Developer API SERVICE ACCOUNT JSON (analog of the ASC API
+# key). The CI workflow decodes PLAY_SERVICE_ACCOUNT_JSON_B64 to a file and
+# points PLAY_JSON_KEY_PATH at it. The signed .aab is built by the workflow
+# (./gradlew bundleRelease) BEFORE these lanes run.
+#
+# NOTE: supply CANNOT create the app — the Play Console app must already exist
+# and the service account must be granted access. The very first AAB usually has
+# to be uploaded by hand in the console; after that these lanes drive it.
+PLAY_PACKAGE = 'com.chessacademy.pro'
+PLAY_AAB = 'android/app/build/outputs/bundle/release/app-release.aab'
+
+platform :android do
+  desc 'Upload the signed .aab to a Play track (default: internal, draft). '\
+       'Set PLAY_TRACK / PLAY_RELEASE_STATUS to override.'
+  lane :play_beta do
+    upload_to_play_store(
+      package_name: PLAY_PACKAGE,
+      json_key: ENV.fetch('PLAY_JSON_KEY_PATH'),
+      aab: PLAY_AAB,
+      track: ENV.fetch('PLAY_TRACK', 'internal'),
+      release_status: ENV.fetch('PLAY_RELEASE_STATUS', 'draft'),
+      skip_upload_apk: true,
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+    )
+    UI.success("Uploaded #{PLAY_AAB} to the #{ENV.fetch('PLAY_TRACK', 'internal')} track.")
+  end
+
+  desc 'Upload Play store listing (text + graphics), NO binary. '\
+       'David finishes content-rating / data-safety / pricing / submit in the console.'
+  lane :play_listing do
+    upload_to_play_store(
+      package_name: PLAY_PACKAGE,
+      json_key: ENV.fetch('PLAY_JSON_KEY_PATH'),
+      metadata_path: './fastlane/metadata/android',
+      skip_upload_aab: true,
+      skip_upload_apk: true,
+      skip_upload_changelogs: false,
+      skip_upload_metadata: false,
+      skip_upload_images: false,
+      skip_upload_screenshots: false,
+    )
+    UI.success('Play listing metadata + graphics uploaded. Finish content-rating / data-safety / pricing / submit in the console.')
+  end
+end

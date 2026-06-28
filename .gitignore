@@ -17,7 +17,10 @@ dist
 !/ios/App
 /ios/App/*
 !/ios/App/ci_scripts
-android
+# Capacitor-generated Android platform — regenerated in CI (npm run
+# setup:android) from android-patches/. Anchored with a leading slash so it
+# ONLY ignores the root platform dir, NOT paths like fastlane/metadata/android.
+/android
 coverage
 playwright-report
 test-results
