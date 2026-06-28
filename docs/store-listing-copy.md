@@ -8,6 +8,36 @@ Resolves the TODO in `LAUNCH_PLAYBOOK.md` §5.
 
 ---
 
+## ASO strategy — how we actually rank (read this before pasting)
+
+**Honest expectation on the word "chess":** a brand-new app will NOT rank #1
+for the bare term "chess" at launch. That term is owned by Chess.com, Lichess,
+and Play Magnus — apps with millions of ratings and download velocity, which
+are the dominant ranking signals. Keywords make you *eligible*; downloads,
+ratings, retention, and conversion rate are what actually *rank* you. So the
+plan is:
+
+1. **Win the long tail first.** Target "ai chess coach", "chess trainer", "chess
+   opening trainer", "learn chess openings", "chess tactics trainer" — lower
+   competition, and exactly what our app delivers. We can realistically rank top
+   results for these at launch.
+2. **What each store indexes (this dictates where keywords go):**
+   - **Apple App Store:** ONLY the app name (30) + subtitle (30) + keyword field
+     (100) are searched. **The description is NOT indexed.** So our two target
+     phrases must live in name/subtitle/keywords — which they now do (name →
+     `chess`+`ai`+`coach`; subtitle → `trainer`+`openings`+`tactics`).
+   - **Google Play:** the title (30) + short description (80) + full description
+     (4000) are ALL indexed. So on Play we repeat "AI chess coach" and "chess
+     trainer" naturally in the short + full description (done below).
+3. **Climb broad terms over time** as ratings + downloads accumulate. Ask happy
+   users for a review at a good moment (after a winning streak / a level
+   cleared) — ratings are a top-3 ranking AND conversion factor.
+4. **The phrases you asked for are covered:** "ai chess coach" and "chess
+   trainer" are both in the Apple indexed fields and the Play title/short/full
+   description. See each field below.
+
+---
+
 ## Verification table — every specific claim → real number → source
 
 | Claim in copy | Verified number | How counted | Source file |
@@ -66,45 +96,47 @@ Chess Academy Pro: AI Coach
 ```
 *(27 chars)*
 
-### Short description (≤80 chars)
+### Short description (≤80 chars) — Play DOES index this, weight it with keywords
 ```
-Your AI chess coach: learn openings, drill tactics, fix weaknesses, improve.
+AI chess coach & trainer: learn openings, drill tactics, fix weaknesses.
 ```
-*(76 chars)*
+*(73 chars — leads with both target phrases "AI chess coach" + "chess trainer",
+plus openings/tactics. On Google Play the title + short + full description are
+all search-indexed, so the phrases living here genuinely move ranking.)*
 
 ### Full description (≤4000 chars — keyword-rich, human)
 
 ```
-Chess Academy Pro — your AI chess coach
+Chess Academy Pro — the AI chess coach and trainer that watches your games and tells you exactly what to fix.
 
-Learn chess the way a grandmaster would teach you: out loud, move by move, with the board lighting up exactly where to look. Chess Academy Pro is an AI-powered chess coach that talks you through every opening, tactic, and endgame — pointing arrows at the threats, naming the plan, and adapting to your level as you improve.
+Most chess apps hand you puzzles in one corner and opening videos in another, then leave you to guess what to study. Chess Academy Pro is different. It watches the games you play, finds the mistakes you keep making, and builds your training around YOUR weaknesses — out loud, move by move, with the board lighting up exactly where to look. And you can ask it anything, anytime: a chess coach in your pocket you can actually talk to.
 
-ONE CONNECTED TRAINING LOOP — NOT A PILE OF FEATURES
-Most chess apps hand you puzzles in one corner and openings in another and leave you to figure out what to study. Chess Academy Pro closes the loop. The games you play are analyzed, your mistakes are sorted into the patterns you keep missing, and those weaknesses flow straight into your next puzzles, openings, and lessons. Spaced repetition brings the hard ones back until they stick, the coach teaches the idea behind each one, and your progress feeds the next session. Learn, play, identify your weaknesses, drill them shut — a complete training loop that always knows what you should work on next.
+TALK TO YOUR AI CHESS COACH
+Ask any question, anytime — "why was that a blunder?", "what's the plan here?", "how do I beat the London?" — and get a real answer in plain English. The coach narrates every move and points lead-the-eye arrows at exactly what matters, so you learn the idea, not just the move.
 
-OPENINGS THAT TEACH, NOT MEMORIZE
-Dozens of openings are built into guided masterclasses. Watch the coach narrate the main line, then Learn it move by move, Practice it in silence, and Play it against the engine — all on one screen. The lines aren't pulled from a dusty book; they're built from real master games, so you study what strong players actually play. Lead-the-eye arrows and highlights move your attention to the right square as the coach speaks, so you understand the idea instead of just copying moves. Explore over 3,000 opening lines, complete with middlegame plans, model games, traps, and the pitfalls to avoid.
+3,654 OPENINGS — WITH EVERY VARIATION AND SUBLINE
+Study 3,654 openings, variations, and sublines. 42 are built into guided masterclasses using the Watch → Learn → Practice → Play method, plus 15 pro-player repertoires across 81 openings, 570 model games, 520 middlegame plans, and 296 traps. Every line is built from real master games — so you study what strong players actually play.
 
-TACTICS AND PUZZLES THAT STICK
-Train with thousands of tactics puzzles — forks, pins, skewers, sacrifices, mating nets, and dozens more themes — backed by spaced repetition so the patterns you miss come back until they're automatic. Difficulty adapts to your rating, keeping every puzzle in the sweet spot between too easy and too hard.
+IMPORT YOUR GAMES, GET REAL ANALYSIS
+Import your Chess.com and Lichess games in seconds. A full-strength Stockfish 18 engine reviews every move right on your device, and the coach explains why a move was wrong and what to play instead — no cryptic engine numbers.
 
-REAL ANALYSIS, REAL FEEDBACK
-A full-strength Stockfish engine reviews your games, finds your mistakes, and the coach explains why a move was wrong and what to play instead — in plain language, not engine jargon. Those mistakes don't just disappear; they become the weaknesses your training loop targets next.
+TACTICS BUILT FROM YOUR OWN MISTAKES
+Your blunders become tactics puzzles you replay until the leak is fixed. Plus 15,000 hand-curated puzzles across 72 themes — forks, pins, skewers, sacrifices, mating nets — with spaced repetition and difficulty that adapts to your rating, keeping every puzzle in the sweet spot.
 
-ENDGAMES, MIDDLEGAME PLANS, AND MORE
-Master the rook, pawn, and minor-piece endgames that decide real games. Learn the middlegame plans that flow naturally out of your openings, and study the traps and tactical shots hiding in every line — each one taught with the same voice-guided, arrow-led clarity.
+A WEAKNESSES PAGE THAT KNOWS YOUR GAME
+See exactly which patterns are costing you games, ranked worst-first, and drill any weakness on demand. The app turns your worst habits into your next training session — a complete loop that always knows what you should work on next. Learn, play, identify your weaknesses, drill them shut.
 
-BUILT FOR EVERY LEVEL
-From your first opening to advanced play, the coach meets you where you are and pushes you forward. There's even a dedicated kids mode with friendly, encouraging lessons designed for young players.
+PLUS
+Rook, pawn, and minor-piece endgames that decide real games. A dedicated kids mode with friendly, encouraging lessons for young players. Shareable insight cards built from your own games.
 
 A NOTE ON PRIVACY
 Engine analysis runs on your device. The AI coach's voice and chat are powered by secure cloud services so the coaching feels natural and responsive. Cloud sync is optional.
 
-Chess Academy Pro is the coach in your pocket that never gets tired of explaining — and never loses track of what you need to work on. Install it, pick an opening, and start improving today.
+Try Chess Academy Pro free for 7 days. Then $7.99/month or $79.99/year — less than a single hour with a human coach. Cancel anytime. Pick an opening and start improving today.
 
 Keywords: chess, chess coach, chess trainer, learn chess, chess openings, chess tactics, chess puzzles, endgames, Stockfish analysis, chess lessons, improve at chess, chess strategy.
 ```
-*(~3,250 chars — within the 4,000 limit; keyword line at the end aids Play search indexing.)*
+*(~3,000 chars — within the 4,000 limit; keyword line at the end aids Play search indexing.)*
 
 ---
 
@@ -119,15 +151,25 @@ Chess Academy Pro: AI Coach
 ```
 *(27 chars)*
 
-### Subtitle (≤30 chars)
+### Subtitle (≤30 chars) — carries the keywords the NAME doesn't
 ```
-Learn, drill & improve at chess
+Trainer for openings & tactics
 ```
-*(31 → use:)* 
+*(30 chars). Rationale: the app NAME already gives Apple the tokens
+`chess` + `ai` + `coach`, so "ai chess coach" is covered there. The subtitle's
+job is to add NEW high-value tokens — `trainer`, `openings`, `tactics` — which
+combine with `chess` from the name to rank you for "chess trainer", "chess
+openings", and "chess tactics". Apple builds search phrases by combining tokens
+ACROSS name + subtitle + keyword field, so you don't need the literal phrase in
+one field.*
+
+Alternate (if you want the literal phrase visible to humans):
 ```
-Learn, drill, improve at chess
+AI chess coach & trainer
 ```
-*(30 chars)*
+*(24 chars — reads great, but "chess"/"coach" duplicate the name, wasting a
+little of your limited keyword budget. Pick this only if you value the human-
+facing line over squeezing out max keyword coverage.)*
 
 ### Promotional text (≤170 chars — editable any time, no review)
 ```
@@ -142,9 +184,15 @@ Stop guessing what to study. Your AI coach watches your games, finds your weakne
 
 ### Keyword field (≤100 chars — comma-separated, NO spaces, no repeats from name/subtitle)
 ```
-opening,tactics,puzzle,endgame,trainer,grandmaster,stockfish,analysis,strategy,lesson,study,checkmate
+puzzles,endgame,study,learn,grandmaster,stockfish,analysis,strategy,lessons,checkmate,review,improve
 ```
-*(100 chars exactly — "chess", "coach", "learn", "drill", "improve" omitted because they're already in the app name/subtitle, which Apple also indexes.)*
+*(100 chars. `chess`/`ai`/`coach` come from the name; `trainer`/`openings`/`tactics`
+come from the subtitle — so they're DROPPED here to avoid wasting the budget on
+duplicates. Apple indexes name + subtitle + this field together, so the full
+token set you rank for is: chess, ai, coach, trainer, openings, tactics, puzzles,
+endgame, study, learn, grandmaster, stockfish, analysis, strategy, lessons,
+checkmate, review, improve — covering "chess trainer", "ai chess coach", "chess
+openings", "chess tactics", "chess puzzles", "learn chess", "chess analysis".)*
 
 ### Hook line (the first line — make-or-break; it's all most people read before "more")
 
@@ -200,7 +248,7 @@ ENDGAMES
 A KIDS MODE
 • A dedicated, friendly mode with encouraging lessons for young players
 
-Try it free for 7 days. Then $7.99/month — less than a single hour with a human coach. Cancel anytime.
+Try it free for 7 days. Then $7.99/month or $79.99/year — less than a single hour with a human coach. Cancel anytime.
 
 Engine analysis runs on your device; the coach's voice and chat are powered by secure cloud services.
 

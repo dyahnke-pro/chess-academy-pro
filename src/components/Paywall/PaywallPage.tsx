@@ -34,6 +34,7 @@ export function PaywallPage(): JSX.Element {
   const [busy, setBusy] = useState(false);
   const [restoring, setRestoring] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -50,15 +51,16 @@ export function PaywallPage(): JSX.Element {
     };
   }, []);
 
-  const primary = packages?.[0] ?? null;
-  const trialPkg = packages?.find((p) => p.hasFreeTrial) ?? primary;
-  const offer = trialPkg ?? primary;
+  // Packages arrive annual-first (best value). Default the selection to the
+  // first one; the user can tap to switch between annual and monthly.
+  const selected = packages?.find((p) => p.id === selectedId) ?? packages?.[0] ?? null;
+  const periodLabel = selected?.isAnnual ? 'year' : 'month';
 
   async function handleSubscribe(): Promise<void> {
-    if (!offer) return;
+    if (!selected) return;
     setBusy(true);
     setNotice(null);
-    const ok = await purchasePackage(offer.id);
+    const ok = await purchasePackage(selected.id);
     setBusy(false);
     if (!ok) setNotice('Purchase didn’t complete. You can try again.');
     // On success the entitlement updates and PaywallGate swaps to the app.
@@ -98,24 +100,41 @@ export function PaywallPage(): JSX.Element {
 
         <div className="flex-1" />
 
-        {/* Plan / price block */}
-        <div className="mb-4 rounded-2xl border-2 border-[#c9a84c]/40 bg-[#c9a84c]/5 p-4 text-center">
+        {/* Plan picker — annual + monthly, annual badged best value */}
+        <div className="mb-4 space-y-2">
           {isResolving || packages === null ? (
-            <div className="flex items-center justify-center gap-2 py-2 text-sm text-zinc-400">
+            <div className="flex items-center justify-center gap-2 rounded-2xl border-2 border-[#c9a84c]/40 bg-[#c9a84c]/5 py-4 text-sm text-zinc-400">
               <Loader2 className="h-4 w-4 animate-spin" /> Loading plans…
             </div>
-          ) : offer ? (
-            <>
-              <p className="text-lg font-semibold">
-                {offer.hasFreeTrial ? '7-day free trial' : offer.title || 'Monthly'}
-              </p>
-              <p className="mt-1 text-sm text-zinc-300">
-                {offer.hasFreeTrial ? 'then ' : ''}
-                {offer.priceString}/month
-              </p>
-            </>
+          ) : packages.length > 0 ? (
+            packages.map((p) => {
+              const isSel = selected?.id === p.id;
+              return (
+                <button
+                  type="button"
+                  key={p.id}
+                  onClick={() => setSelectedId(p.id)}
+                  className={`relative flex w-full items-center justify-between rounded-2xl border-2 px-4 py-3 text-left transition ${
+                    isSel ? 'border-[#c9a84c] bg-[#c9a84c]/10' : 'border-zinc-700 bg-transparent'
+                  }`}
+                >
+                  <div>
+                    <p className="font-semibold">{p.isAnnual ? 'Yearly' : 'Monthly'}</p>
+                    <p className="mt-0.5 text-sm text-zinc-400">
+                      {p.priceString}/{p.isAnnual ? 'year' : 'month'}
+                      {p.hasFreeTrial ? ' · 7-day free trial' : ''}
+                    </p>
+                  </div>
+                  {p.isAnnual && (
+                    <span className="rounded-full bg-[#c9a84c] px-2 py-0.5 text-[11px] font-bold text-[#0f0f0f]">
+                      BEST VALUE
+                    </span>
+                  )}
+                </button>
+              );
+            })
           ) : (
-            <p className="text-sm text-zinc-400">
+            <p className="rounded-2xl border-2 border-zinc-700 py-4 text-center text-sm text-zinc-400">
               {billingReady
                 ? 'No plans are available right now. Please try again later.'
                 : 'Subscriptions aren’t available on this device yet.'}
@@ -134,12 +153,12 @@ export function PaywallPage(): JSX.Element {
         <button
           type="button"
           onClick={() => void handleSubscribe()}
-          disabled={busy || !offer}
+          disabled={busy || !selected}
           className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#c9a84c] py-4 text-base font-bold text-[#0f0f0f] transition active:scale-[0.99] disabled:opacity-50"
         >
           {busy ? (
             <Loader2 className="h-5 w-5 animate-spin" />
-          ) : offer?.hasFreeTrial ? (
+          ) : selected?.hasFreeTrial ? (
             'Start free trial'
           ) : (
             'Subscribe'
@@ -157,13 +176,13 @@ export function PaywallPage(): JSX.Element {
 
         {/* Apple 3.1.2 required disclosure + legal links */}
         <p className="mt-5 text-center text-[11px] leading-relaxed text-zinc-500">
-          {offer?.hasFreeTrial
-            ? 'Your 7-day free trial converts to a $7.99/month subscription unless cancelled at least 24 hours before it ends. '
+          {selected?.hasFreeTrial && selected
+            ? `Your 7-day free trial converts to a ${selected.priceString}/${periodLabel} subscription unless cancelled at least 24 hours before it ends. `
             : ''}
           Payment is charged to your store account at confirmation of purchase.
-          The subscription renews automatically each month unless auto-renew is
-          turned off at least 24 hours before the period ends. Manage or cancel
-          anytime in your store account settings.
+          The subscription renews automatically each {periodLabel} unless
+          auto-renew is turned off at least 24 hours before the period ends.
+          Manage or cancel anytime in your store account settings.
         </p>
         <p className="mt-3 text-center text-[11px] text-zinc-500">
           <Link to="/terms" className="underline">

@@ -43,6 +43,11 @@ export interface BillingPackage {
   hasFreeTrial: boolean;
   /** Human trial length when known, e.g. "7 days". */
   trialDescription: string | null;
+  /** RevenueCat package type — 'ANNUAL' | 'MONTHLY' | 'CUSTOM' | … — for
+   *  labeling/sorting the plan picker. */
+  packageType: string;
+  /** True for the annual plan, so the paywall can badge it "best value". */
+  isAnnual: boolean;
 }
 
 let configured = false;
@@ -141,10 +146,11 @@ export async function getBillingPackages(): Promise<BillingPackage[]> {
   const { Purchases } = await import('@revenuecat/purchases-capacitor');
   const { current } = await Purchases.getOfferings();
   if (!current) return [];
-  return current.availablePackages.map((pkg) => {
+  const packages = current.availablePackages.map((pkg) => {
     const product = pkg.product;
     const intro = product.introPrice;
     const isFree = intro != null && intro.price === 0;
+    const packageType: string = pkg.packageType;
     return {
       id: pkg.identifier,
       priceString: product.priceString,
@@ -152,8 +158,12 @@ export async function getBillingPackages(): Promise<BillingPackage[]> {
       description: product.description,
       hasFreeTrial: isFree,
       trialDescription: isFree ? `${intro.periodNumberOfUnits} ${intro.periodUnit.toLowerCase()}` : null,
+      packageType,
+      isAnnual: packageType === 'ANNUAL',
     };
   });
+  // Annual first so the paywall can present it as the headline "best value".
+  return packages.sort((a, b) => Number(b.isAnnual) - Number(a.isAnnual));
 }
 
 /** Purchase a package by id. Resolves true on success, false on user cancel. */

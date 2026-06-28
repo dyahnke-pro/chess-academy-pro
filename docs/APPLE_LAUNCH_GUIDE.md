@@ -135,18 +135,32 @@ If `com.chessacademy.pro` already shows under **Apps**, skip this.
 1. Open the app → sidebar **Monetization → Subscriptions** (or
    "In-App Purchases → Subscriptions").
 2. **Create a Subscription Group** first → name it e.g. **"Chess Academy
-   Pro"** (users can only have one active subscription per group — that's
-   what you want).
-3. Inside the group, **Create a Subscription**:
-   - **Reference Name:** `Pro Monthly` (internal only).
-   - **Product ID:** `chess_academy_pro_monthly` ← **write this down
-     exactly; you paste it into RevenueCat in Step 6.**
-   - **Duration:** 1 Month.
-   - **Price:** $7.99 (pick the USD tier; Apple auto-fills other
-     currencies).
-4. **Add the 7-day free trial:** in the subscription, go to
+   Pro"** (users can only have one active subscription per group — so the
+   monthly and yearly plans live in the SAME group and the user picks one).
+3. Inside the group, create **TWO subscriptions** (both in this one group):
+
+   **a) Monthly**
+   - **Reference Name:** `Pro Monthly` (internal only)
+   - **Product ID:** `chess_academy_pro_monthly` ← exact, paste into RevenueCat
+   - **Duration:** 1 Month
+   - **Price:** **$7.99** (USD tier; Apple auto-fills other currencies)
+
+   **b) Yearly**
+   - **Reference Name:** `Pro Yearly`
+   - **Product ID:** `chess_academy_pro_yearly` ← exact, paste into RevenueCat
+   - **Duration:** 1 Year
+   - **Price:** **$79.99** (≈ 2 months free vs monthly — that's your upsell)
+
+4. **Add the 7-day free trial to BOTH:** on each subscription →
    **Subscription Prices → Introductory Offers → +** → Type: **Free**,
    Duration: **1 week**, Eligibility: **New subscribers**.
+
+   > **"Credit card required at sign-up" is automatic — you don't build it.**
+   > On the App Store a free trial of an auto-renewable subscription REQUIRES
+   > the user to confirm with their Apple ID (which has a payment method on
+   > file). They tap "Start Free Trial," confirm with Face ID, and are
+   > auto-charged when the 7 days end unless they cancel. There's no card form
+   > for you to build — Apple handles payment. Same on Google Play.
 5. **Localization (required or the product stays "Missing Metadata"):**
    add a display name **"Chess Academy Pro"** and a short description like
    *"Full access to the AI coach, masterclasses, and tactics."*

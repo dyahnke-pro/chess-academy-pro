@@ -43,14 +43,17 @@ export function TermsOfServicePage(): JSX.Element {
         <Section title="Subscriptions, free trial, and billing">
           <ul className="mt-2 list-disc space-y-2 pl-5">
             <li>
-              Chess Academy Pro is offered as an auto-renewable subscription at{' '}
-              <strong>$7.99 per month</strong> (or the equivalent in your local
-              currency as shown in the App at purchase).
+              Chess Academy Pro is offered as an auto-renewable subscription:{' '}
+              <strong>$7.99 per month</strong> or <strong>$79.99 per year</strong>{' '}
+              (or the equivalent in your local currency as shown in the App at
+              purchase). You choose the plan at checkout.
             </li>
             <li>
               New subscribers may be offered a <strong>7-day free trial</strong>.
-              If you don't cancel at least 24 hours before the trial ends, it
-              automatically converts to a paid monthly subscription.
+              Starting the trial requires confirming the subscription with your
+              store account (a payment method on file). If you don't cancel at
+              least 24 hours before the trial ends, it automatically converts to
+              the paid plan you selected.
             </li>
             <li>
               Payment is charged to your Apple ID (App Store) or Google account
