@@ -1,0 +1,32 @@
+name: ASC app privacy (URL + data label)
+
+on:
+  workflow_dispatch:
+    inputs:
+      create_usages:
+        description: 'Create data-usage declarations (1 = yes)'
+        required: false
+        default: '0'
+      publish:
+        description: 'Publish the privacy label (1 = yes)'
+        required: false
+        default: '0'
+
+jobs:
+  privacy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: App privacy
+        env:
+          ASC_KEY_P8: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APP_BUNDLE_ID: com.chessacademy.pro
+          PRIVACY_URL: https://chess-academy-pro.vercel.app/privacy
+          CREATE_USAGES: ${{ github.event.inputs.create_usages }}
+          PUBLISH: ${{ github.event.inputs.publish }}
+        run: node scripts/ci/asc-privacy.mjs
