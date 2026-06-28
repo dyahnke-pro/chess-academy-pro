@@ -806,6 +806,37 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
     });
   }
 
+  // CALCULATION PRACTICE — "find the forcing sequence that wins material; I'll
+  // tell you the LAST move, you find the first" (David 2026-06-28). Grounded in
+  // the SEE swap-off: the deepest winnable enemy piece gives a real forcing line
+  // (≥2 plies) whose finish we reveal and whose start the student must find;
+  // the whole line plays out on the board (demoLine). Prefer the engine PV when
+  // supplied (deeper combos); fall back to the SEE line.
+  {
+    const enemyWins = findHangingBySee(fen).filter((h) => h.color === enemy);
+    let calcSeq: string[] = [];
+    if (opts.pvSan && opts.pvSan.length >= 2) {
+      calcSeq = opts.pvSan.slice(0, 6); // engine PV = the forcing line (deeper)
+    } else if (enemyWins.length > 0) {
+      calcSeq = seeSequence(fen, enemyWins[0].square); // SEE swap-off
+    }
+    if (calcSeq.length >= 2) {
+      const last = calcSeq[calcSeq.length - 1];
+      let firstTo: Square | null = null;
+      try { const c = new Chess(fen); const mv = c.move(calcSeq[0]); if (mv) firstTo = mv.to as Square; } catch { firstTo = null; }
+      out.push({
+        id: 'calculation', type: 'plan', bucket: 'calculation', misconceptionTag: 'missed-tactic',
+        prompt: `There's material to be won by force — the combination ENDS with ${last}. What move STARTS it?`,
+        answer: `Start with ${calcSeq[0]} — the full line is ${calcSeq.join(' ')}.`,
+        acceptTokens: [sq(calcSeq[0]), ...(firstTo ? [sq(firstTo)] : [])],
+        answerMoves: [calcSeq[0]],
+        answerSquares: firstTo ? [firstTo] : undefined,
+        demoLine: calcSeq,
+        negative: false,
+      });
+    }
+  }
+
   // ─── POSITIONAL bucket ────────────────────────────────────────────────────
   // 5) PAWN BREAK.
   const breaks = findPawnBreaks(fen);
@@ -963,27 +994,41 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
     });
   }
 
-  // GREEDY PAWN GRAB — greedy-pawn-grab (David 2026-06-28). Present a capturable
-  // pawn and ask if it's safe to take; SEE grounds greedy vs OK. Prefer a
-  // POISONED pawn (the teachable case) when one exists.
+  // COUNTING — "calculate the recapture before you take" (David 2026-06-28:
+  // this is a COUNTING issue, NOT greedy). The SEE swap-off grounds whether a
+  // capturable pawn is actually safe; a POISONED one means you'd lose material
+  // back if you miscounted. Plays the exchange out (demoLine) so you SEE it.
+  // NOTE: 'counting' isn't one of the current 17 misconception tags — left
+  // untagged (flagged to add a counting bucket).
   const grabs = findPawnGrabs(fen);
-  if (grabs.length > 0) {
-    const g = grabs[0]; // poisoned-first ordering
+  const poisoned = grabs.find((x) => !x.safe);
+  if (poisoned) {
     let firstTo: Square | null = null;
-    try { const c = new Chess(fen); const mv = c.move(g.capture); if (mv) firstTo = mv.to as Square; } catch { firstTo = null; }
+    try { const c = new Chess(fen); const mv = c.move(poisoned.capture); if (mv) firstTo = mv.to as Square; } catch { firstTo = null; }
+    out.push({
+      id: 'counting-recapture', type: 'target', bucket: 'calculation',
+      prompt: `Calculate it out: is the pawn on ${poisoned.square} actually safe to take?`,
+      answer: `No — ${poisoned.capture} loses material: count the recapture (the exchange nets ${poisoned.see} for you).`,
+      acceptTokens: [sq(poisoned.square), 'no', 'poisoned', 'unsafe', 'lose', "don't", 'defended'],
+      answerSquares: firstTo ? [firstTo] : [poisoned.square],
+      demoLine: seeSequence(fen, poisoned.square), // play the recapture out — SEE it
+      negative: false,
+    });
+  }
+
+  // TRUE GREEDY PAWN GRAB — greedy-pawn-grab = "grabbed material, ignored
+  // position" (David 2026-06-28): the grab is MATERIALLY SAFE (you don't lose it
+  // back — that's counting), but taking it is still WRONG because the position
+  // suffers. That's an ENGINE judgement, so it's only asked when an eval + PV
+  // are supplied AND the engine's best move is NOT the safe grab.
+  const safeGrab = grabs.find((x) => x.safe);
+  if (safeGrab && opts.pvSan && opts.pvSan.length > 0 && opts.pvSan[0] !== safeGrab.capture) {
     out.push({
       id: 'greedy-grab', type: 'target', bucket: 'calculation', misconceptionTag: 'greedy-pawn-grab',
-      prompt: `Can you safely grab the pawn on ${g.square}, or is it poisoned?`,
-      answer: g.safe
-        ? `Yes — ${g.capture} wins a clean pawn (the exchange nets ${g.see}).`
-        : `No — ${g.capture} is greedy: the pawn is poisoned and the recapture wins material back (the exchange nets ${g.see} for you).`,
-      acceptTokens: g.safe
-        ? [sq(g.square), 'yes', 'safe', 'take', 'free', 'clean']
-        : [sq(g.square), 'no', 'poisoned', 'greedy', 'trap', 'unsafe', "don't"],
-      answerSquares: firstTo ? [firstTo] : [g.square],
-      // Play the exchange out so the student SEES the queen come back off (or the
-      // clean grab) — tell AND show the why.
-      demoLine: seeSequence(fen, g.square),
+      prompt: `The pawn on ${safeGrab.square} can be safely taken — but should you? Is grabbing it greedy here?`,
+      answer: `Yes — grabbing on ${safeGrab.square} is greedy: you win the pawn but the engine prefers ${opts.pvSan[0]}; taking neglects the position.`,
+      acceptTokens: [sq(safeGrab.square), 'greedy', 'yes', 'no', 'position', 'develop', sq(opts.pvSan[0])],
+      answerMoves: [opts.pvSan[0]],
       negative: false,
     });
   }

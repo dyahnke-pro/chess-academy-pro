@@ -457,11 +457,21 @@ describe('findPawnGrabs — greedy-pawn-grab grounded by SEE (David 2026-06-28)'
     expect(b7?.see).toBeLessThanOrEqual(0);
   });
 
-  it('buildReadingQuestions asks a greedy-grab question tagged greedy-pawn-grab', () => {
+  it('asks a COUNTING question (not greedy) on a poisoned pawn — calculate the recapture', () => {
     const qs = buildReadingQuestions('2b1k3/1p6/8/8/8/1Q6/8/4K3 w - - 0 1', emptyTactics());
-    const grab = qs.find((q) => q.misconceptionTag === 'greedy-pawn-grab');
-    expect(grab).toBeDefined();
-    expect(grab?.answer.toLowerCase()).toContain('poisoned');
+    const counting = qs.find((q) => q.id === 'counting-recapture');
+    expect(counting).toBeDefined();
+    expect(counting?.misconceptionTag).toBeUndefined(); // counting isn't one of the 17 (yet)
+    expect(counting?.answer.toLowerCase()).toContain('loses material');
+  });
+
+  it('asks the TRUE greedy-pawn-grab only when the grab is SAFE but the engine prefers another move', () => {
+    // White Ra1 can safely take a7 (clean pawn), but pass a PV that prefers a
+    // developing/positional move instead → grabbing is greedy.
+    const qs = buildReadingQuestions('4k3/p7/8/8/8/8/8/R3K3 w - - 0 1', emptyTactics(), { pvSan: ['Kd2'] });
+    const greedy = qs.find((q) => q.misconceptionTag === 'greedy-pawn-grab');
+    expect(greedy).toBeDefined();
+    expect(greedy?.answer.toLowerCase()).toContain('greedy');
   });
 })
 
@@ -479,8 +489,31 @@ describe('seeSequence — the swap-off line to PLAY OUT on the board (tell AND s
   });
 
   it('the greedy-grab question carries the demo line', () => {
-    const q = buildReadingQuestions('2b1k3/1p6/8/8/8/1Q6/8/4K3 w - - 0 1', emptyTactics()).find((x) => x.misconceptionTag === 'greedy-pawn-grab');
+    const q = buildReadingQuestions('2b1k3/1p6/8/8/8/1Q6/8/4K3 w - - 0 1', emptyTactics()).find((x) => x.id === 'counting-recapture');
     expect(q?.demoLine?.[0]).toBe('Qxb7');
     expect(q?.demoLine?.[1]).toBe('Bxb7');
+  });
+})
+
+describe('calculation practice — forcing sequence, last move first, plays out (David 2026-06-28)', () => {
+  it('asks for the START of a forcing line, reveals the LAST move, and carries the demo', () => {
+    // White e4 pawn can take the black queen on d5; black recaptures cxd5 →
+    // forcing 2-ply line ['exd5','cxd5'] that nets White ~8 (queen for pawn).
+    const qs = buildReadingQuestions('4k3/8/2p5/3q4/4P3/8/8/4K3 w - - 0 1', emptyTactics());
+    const calc = qs.find((q) => q.id === 'calculation');
+    expect(calc).toBeDefined();
+    expect(calc?.bucket).toBe('calculation');
+    expect(calc?.demoLine && calc.demoLine.length).toBeGreaterThanOrEqual(2);
+    // the prompt reveals the LAST move of the line
+    expect(calc?.prompt).toContain(calc!.demoLine![calc!.demoLine!.length - 1]);
+    // the answer/start move is the first of the line
+    expect(calc?.answerMoves?.[0]).toBe(calc!.demoLine![0]);
+  });
+
+  it('uses the engine PV as the forcing line when supplied', () => {
+    const qs = buildReadingQuestions('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', emptyTactics(), { pvSan: ['e4', 'e5', 'Nf3', 'Nc6'] });
+    const calc = qs.find((q) => q.id === 'calculation');
+    expect(calc?.demoLine?.[0]).toBe('e4');
+    expect(calc?.answerMoves?.[0]).toBe('e4');
   });
 })
