@@ -43,23 +43,24 @@ masterclasses, 15 pro repertoires, 570 model games, 15,000 puzzles.
 Apple needs only the 6.7" set; it scales to other iPhones. Upload in this order
 (first 3 show in search):
 
+FINAL SET — all captured, all from the installed app. Upload in this order:
+
 | # | Shot | Caption |
 |---|---|---|
-| 1 | 4307 — "Play the scandi against me" 🤖 | Just tell your coach what to play. |
-| 2 | 4300 — Game review finds your mistake 🤖 | It watches your games and shows you exactly what to fix. |
-| 3 | 4303 — Vienna masterclass (sublines + WLPP) | Openings that teach, not memorize. |
-| 4 | 4309 — Tactics: My Mistakes / My Weaknesses | Tactics built from your own mistakes. |
-| 5 | **Weaknesses page** *(retake on device)* | See the patterns costing you games — ranked. |
-| 6 | 4304 — Vienna depth (model games + plans) | Real master games and the plans behind them. |
-| 7 | 4306 — Coach hub | One coach: learn, play, analyze. |
-| 8 | 4302 — Openings library | 3,654 openings, variations, and sublines. |
-| 9 | 01-dashboard | Your whole training loop, one tap away. |
-| 10 | **Analysis Practice** *(retake on device, no Safari bar)* 🤖 | Spot the tactic — trained from your blunders. |
+| 1 | IMG_4300 — Game review finds your mistake 🤖 | It watches your games and shows you exactly what to fix. |
+| 2 | IMG_4314 — Weaknesses: 888 games, ranked errors 🤖 | Every game analyzed. Your leaks, ranked worst-first. |
+| 3 | IMG_4307 — "Play the scandi against me" 🤖 | Or just tell your coach what to play. |
+| 4 | IMG_4303 — Vienna masterclass (sublines + WLPP) | Openings that teach, not memorize. |
+| 5 | IMG_4316 — Patterns: phase + tactic heatmaps | Your strengths and weaknesses, mapped over time. |
+| 6 | IMG_4313 — Analysis Practice 🤖 | Train your tactical eye — explain what you see. |
+| 7 | IMG_4304 — Vienna depth (model games + plans) | Real master games and the plans behind them. |
+| 8 | IMG_4306 — Coach hub | One coach: learn, play, analyze. |
+| 9 | IMG_4302 — Openings library | 3,654 openings, variations, and sublines. |
+| 10 | 01-dashboard | Your whole training loop, one tap away. |
 
-🤖 = AI interaction (3 total — requirement met).
-**Two retakes owed** (need the fresh TestFlight build): the Weaknesses page and
-Analysis Practice (the earlier shot showed the Safari URL bar — must be from the
-installed app).
+🤖 = AI interaction (4 here — requirement of 3 exceeded).
+Bench (swap in if you want): IMG_4315 (opening win-rates), IMG_4305 (Vienna
+Gambit frequency table), IMG_4309 (Tactics hub), IMG_4308 (coach playing).
 
 ---
 
