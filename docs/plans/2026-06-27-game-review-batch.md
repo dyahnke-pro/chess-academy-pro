@@ -44,9 +44,25 @@ Safari 26.5, standalone PWA, confirmed via live audit stream):**
 - ✅ Phase 8 — RESOLVED: the green-white / purple-black piece glow is INTENTIONAL
   (`whitePieceGlowColor: '0,255,136'`, `blackPieceGlowColor: '168,85,247'` —
   configurable side-visibility defaults), not noise.
-- ⏳ Phase 3 — the voice-synced board DEMO animation (take back the wrong move,
-  play the correct line out with arrows as the coach speaks) + the same on
-  Analysis-Practice. Needs a browser to verify the animation/voice sync.
+- ◑ Phase 3 — the animated "show the why" ALREADY EXISTS via the review **show-me**
+  playout (gap3-show-me-animates, audited) + Analysis-Practice **playDemo**
+  (`demoLine`). The new previews now SURFACE entry points: tap a preview → jump to
+  the mistake ply → the show-me button is right there to animate the better line.
+  Remaining polish (optional): auto-trigger show-me on preview tap, and a bespoke
+  voice-synced take-back→replay choreography — both need a browser to verify the
+  voice/animation timing.
+
+## AUDIT TOOLING FOR THE NEW BUILD (David 2026-06-28: "make sure we also have audit tools")
+- `scripts/audit-coach-review.mjs` — added a `review-citation-previews` scenario
+  (soft; records cards/why-count, taps to jump). Header + AUDIT_INDEX updated.
+- `scripts/audit-coach-review-gaps.mjs` — added **gap7-citation-previews** (HARD):
+  seeds a student-blunder game, asserts `ReviewCitationPreviews` renders cards +
+  the grounded "why better" line + tap-to-jump fires `review-nav`. **PROVEN GREEN
+  on localhost** (2 cards, 2 why-lines, tap-jump=true — the on-open depth-16
+  re-analysis flagged both Qh5 and Qxe5+, so the pipeline ran end-to-end).
+- Both run from the sandbox against a dev server today and against prod after the
+  deploy. The device-gated fixes (no-sound, mic) still use the 3-instrument audit
+  (Playwright + audit-stream + narration listener) on the next build.
 
 ## Phase 1 — Ground the review voice (the spine) [fixes #5, #A; unblocks #6, why, demo]
 - **1a. Hanging = a LEGAL capture wins material.** Root cause: `findHangingPieces`
