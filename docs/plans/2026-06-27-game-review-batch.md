@@ -70,12 +70,28 @@ features. Do it first. UI/sound/accuracy are independent and can land alongside.
   prompt).
 
 ## Phase 6 — No-sound (#3)
-- Polly failing → Web-Speech fallover on ~every line (audit-stream). Verify
-  `/api/tts` returns a Polly stream on prod (G4); check `AWS_*_POLLY` creds/region;
-  confirm iOS plays the fallback (or stop Polly failing).
-- Mirror `voice-fallover` → a PostHog event (it's the no-sound signal and is
-  currently invisible in durable analytics; only `tts_failure`=4 was captured vs
-  near-universal fallover in the stream).
+- ✅ **Server is HEALTHY** — `curl` prod `/api/tts` returns HTTP 200,
+  `content-type: audio/mpeg`, valid streamed MP3 (ID3 + LAME). Polly is NOT
+  failing server-side; G4 streaming intact. So this is a CLIENT playback bug.
+- ✅ **ROOT CAUSE (PostHog, 14-day, 121 `tts_failure`):** ~84% are iOS `<audio>`
+  **`code=3 Media failed to decode`** — 70× object-url path
+  (`playViaElementBuffered` → full-MP3 blob), 20× direct tts-url, 12× untagged.
+  The rest (~16×) are `play() rejected: operation was aborted` (next-narration
+  supersede — benign) + 3 phase-narration timeouts. So the no-sound is iOS
+  WKWebView failing to DECODE the buffered MP3 even as a complete object URL.
+  voice_spoken=899 over the same window, so the failure RATE is ~12% of attempts
+  (concentrated on the affected devices/iOS versions).
+- ✅ **Mirror `voice-fallover` → PostHog (DONE, 0195990).** The in-flow Polly →
+  Web Speech demotion was the one voice kind NOT mirrored; now `voice_fallover`
+  is on the allowlist so the per-session/device demotion RATE is visible
+  alongside the decode failures.
+- ⏳ **The decode fix needs a DEVICE repro (route to David's TestFlight).** Prior
+  sessions iterated this path hard (Web Audio silent on older iPhones → moved to
+  `<audio>` element → element now code=3 on some devices). Editing it blind risks
+  breaking the devices it currently works on. Next: on a real device, confirm
+  whether (a) it's specific iOS versions, (b) the `max-age=86400` CDN cache is
+  replaying a once-corrupted body (cache-bust the TTS URL to test), or (c) a
+  codec/sample-rate mismatch — then fix with device confirmation.
 
 ## Phase 7 — Accuracy depth 16 (#4) ✅ DONE (4bae6dc)
 - Re-analysis made LAZY: `gameNeedsAnalysis(game, {depthUpgrade})`. On-open /
