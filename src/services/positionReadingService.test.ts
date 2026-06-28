@@ -18,6 +18,7 @@ import {
   kingSafetyRead,
   developmentRead,
   findPawnGrabs,
+  readingHint,
 } from './positionReadingService';
 import type { WeaknessCategory } from '../types';
 import type { TacticsLiveContext } from '../coach/types';
@@ -515,5 +516,31 @@ describe('calculation practice — forcing sequence, last move first, plays out 
     const calc = qs.find((q) => q.id === 'calculation');
     expect(calc?.demoLine?.[0]).toBe('e4');
     expect(calc?.answerMoves?.[0]).toBe('e4');
+  });
+})
+
+describe('readingHint — progressive GROUNDED hint ladder (David 2026-06-28, approved)', () => {
+  const hangingQ = buildReadingQuestions('4k3/8/5n2/3Q4/4P3/8/8/4K3 w - - 0 1', emptyTactics()).find((q) => q.type === 'hanging')!;
+
+  it('tier 1 is a type cue that names NO square', () => {
+    const h = readingHint(hangingQ, 1);
+    expect(h).toBeTruthy();
+    expect(h).not.toMatch(/[a-h][1-8]/); // no coordinate leaked
+  });
+
+  it('tier 2 narrows to a board region', () => {
+    const h = readingHint(hangingQ, 2);
+    expect(h).toMatch(/queenside|kingside|center/);
+  });
+
+  it('tier 3 names the file but not the exact square', () => {
+    const h = readingHint(hangingQ, 3);
+    expect(h).toContain('d-file'); // the hanging queen is on d5
+    expect(h).not.toContain('d5');
+  });
+
+  it('a negative question hints toward "nothing" at tier 2 instead of a square', () => {
+    const negQ = buildReadingQuestions('4k3/8/8/8/8/8/8/4K3 w - - 0 1', emptyTactics()).find((q) => q.type === 'hanging' && q.negative)!;
+    expect(readingHint(negQ, 2)?.toLowerCase()).toContain('nothing');
   });
 })

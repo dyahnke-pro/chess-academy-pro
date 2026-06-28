@@ -1073,6 +1073,65 @@ function evalToVerdict(
   return { answer: `${w} is winning.`, tokens: [tok, 'winning', 'much'] };
 }
 
+/** Board region of a square — for the "narrow it" hint tier. */
+function regionOf(square: Square): string {
+  const f = square.charCodeAt(0) - 97;
+  if (f <= 2) return 'the queenside';
+  if (f >= 5) return 'the kingside';
+  return 'the center';
+}
+
+/** Tier-1 "where to look" cue keyed off the question TYPE — a nudge, never a
+ *  specific square. Pure (no board needed). */
+const HINT_TIER1: Partial<Record<ReadingQuestionType, string>> = {
+  hanging: "Look for a piece that's attacked more times than it's defended.",
+  tactic: 'Look for a forcing move — a check, a capture, or a threat.',
+  threat: "Pretend it's the opponent's move — what would they hit?",
+  mate: 'Is there a forcing check the king cannot escape?',
+  'weak-square': 'Find a square no enemy pawn can ever challenge.',
+  'strong-piece': 'Which of your pieces sees the most squares?',
+  'weak-piece': 'Which of your pieces is doing the least — boxed in or offside?',
+  target: "Where is the opponent softest — loose material, a weak pawn, or a hole?",
+  'weak-pawn': 'Scan your pawns — any with no friendly pawn on a neighboring file?',
+  'pawn-break': "Which pawn push strikes the base of the opponent's chain?",
+  'king-safety': 'Look at the shelter directly around your king.',
+  development: 'Count the pieces still sitting on their starting squares.',
+  outpost: 'Is there a square for a knight that no pawn can ever kick away?',
+  'bishop-pair': 'Count the bishops on each side.',
+  'who-is-winning': 'Weigh material, king safety, and piece activity together.',
+  material: 'Count the points of material on each side.',
+  plan: 'Look for the most forcing, most active continuation.',
+};
+
+/**
+ * Progressive GROUNDED hint for a reading question (David 2026-06-28). Tier 1 =
+ * where to look (type cue); Tier 2 = narrow it to a board region; Tier 3 =
+ * almost there (the file of the key square). Derived purely from the COMPUTED
+ * answer key — never the LLM, never the exact answer (that's the reveal). Returns
+ * null when there's no more to give before showing the answer.
+ */
+export function readingHint(q: ReadingQuestion, tier: 1 | 2 | 3): string | null {
+  if (tier === 1) {
+    return HINT_TIER1[q.type] ?? 'Compare the most active piece against the loosest target.';
+  }
+  const sqs = q.answerSquares ?? [];
+  if (tier === 2) {
+    if (q.negative) return "Don't force a move — the honest read here may be that there's nothing concrete.";
+    if (sqs.length > 0) return `It's on ${regionOf(sqs[0])}.`;
+    return HINT_TIER1[q.type] ?? null;
+  }
+  // tier 3 — almost handing it: the file (still leaves the rank to find).
+  if (sqs.length > 0) return `Look hard at the ${sqs[0][0]}-file.`;
+  if (q.answerMoves && q.answerMoves.length > 0) {
+    const m = q.answerMoves[0];
+    const piece = /^[NBRQK]/.test(m)
+      ? ({ N: 'knight', B: 'bishop', R: 'rook', Q: 'queen', K: 'king' }[m[0]] ?? 'piece')
+      : 'pawn';
+    return `The move that starts it is a ${piece} move.`;
+  }
+  return null;
+}
+
 /** Tokens that count as a correct material read ("even" / "white up …" / a number). */
 function materialTokens(material: string): string[] {
   const lower = material.toLowerCase();
