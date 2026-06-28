@@ -133,6 +133,11 @@ platform :ios do
       metadata_path: './fastlane/metadata',
       screenshots_path: './fastlane/screenshots',
       skip_binary_upload: true,        # no IPA — the build already shipped via the beta lane
+      # Text metadata uploaded fine on the first run; the screenshot/review step
+      # hit a known spaceship bug (fetch_app_store_review_detail "No data" on a
+      # brand-new version). Skip metadata so the screenshots upload via their own
+      # clean code path. Flip back to false once the version has review detail.
+      skip_metadata: ENV['DELIVER_SKIP_METADATA'] != 'false',
       overwrite_screenshots: true,
       submit_for_review: false,        # account-gated final submit stays with David
       run_precheck_before_submit: false,
