@@ -1,0 +1,23 @@
+name: Upload subscription review screenshots (ASC API)
+
+# Attaches the paywall review screenshot to each auto-renewable subscription via
+# the ASC API. Manual trigger.
+on:
+  workflow_dispatch:
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Upload subscription review screenshots
+        env:
+          ASC_KEY_P8: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APP_BUNDLE_ID: com.chessacademy.pro
+          SCREENSHOT_PATH: fastlane/review/paywall.png
+        run: node scripts/ci/upload-subscription-screenshots.mjs
