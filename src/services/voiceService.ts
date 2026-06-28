@@ -681,7 +681,13 @@ class VoiceService {
         // Probe uses plain text (SSML=false) — no need to pay the
         // SSML parse cost for a one-char warmup, and it avoids any
         // chance of empty-SSML edge cases on Polly.
-        const url = getTtsUrl('.', prefs.pollyVoice, false);
+        // Cache-bust the probe: the shared `text=.` URL is CDN-cached 24h, and a
+        // cache entry populated by a no-origin/disallowed request lacks the
+        // per-origin CORS header — which CORS-failed this probe on Android and
+        // silently disabled Polly (the server now Vary's on Origin, but the
+        // bust guarantees correct detection without waiting for the cache to
+        // cycle). Negligible cost for a one-char synth.
+        const url = `${getTtsUrl('.', prefs.pollyVoice, false)}&_cb=${Date.now()}`;
         const res = await fetch(url, { signal: controller.signal });
         clearTimeout(timeout);
 

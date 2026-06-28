@@ -37,8 +37,11 @@ function getCorsHeaders(req: Request): Record<string, string> {
     origin === ''
   ) {
     base['Access-Control-Allow-Origin'] = origin || '*';
-    base['Vary'] = 'Origin';
   }
+  // Vary on Origin ALWAYS so the CDN keys the cache per-origin — a no-origin /
+  // disallowed request must not poison the shared cache with an ACAO-less body
+  // (the bug that CORS-blocked the Android WebView; see api/tts.ts).
+  base['Vary'] = 'Origin';
   return base;
 }
 

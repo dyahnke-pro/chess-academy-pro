@@ -62,9 +62,16 @@ function getCorsHeaders(req?: Request): Record<string, string> {
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
   };
+  // Vary on Origin ALWAYS so the CDN keys the cache per-origin. Without it a
+  // no-origin / disallowed request (a bot, a health probe) populated a cacheable
+  // /api/tts response with NO Access-Control-Allow-Origin that then got served to
+  // EVERY origin — which CORS-blocked the Android WebView's cached warmup probe
+  // (https://app.chessacademy.pro) and silently downgraded Polly voice to the
+  // robotic Web Speech fallback on Android. (Caught by the emulator smoke,
+  // 2026-06-28.)
+  base['Vary'] = 'Origin';
   if (isAllowedOrigin(origin)) {
     base['Access-Control-Allow-Origin'] = origin;
-    base['Vary'] = 'Origin';
   }
   return base;
 }
