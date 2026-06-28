@@ -64,4 +64,23 @@ describe('scanTheoryDeviation', () => {
     const dev = await scanTheoryDeviation('e4 zz9', 'white');
     expect(dev).toBeNull();
   });
+
+  it('matches an in-book move whose SAN glyph differs (no false "left book")', async () => {
+    // Black's mating move is stored as "Qh4#" but the masters set spells
+    // it "Qh4" (no glyph). A raw `san ===` would miss it and falsely flag
+    // a deviation; position-compare matches → no deviation (David 2026-06-27).
+    mocked.mockImplementation(async () => {
+      const call = mocked.mock.calls.length;
+      if (call === 1) return res([m('e5', 1000)]);      // ...e5 in book
+      return res([m('Qh4', 1000)]);                      // ...Qh4 (no #) in book
+    });
+    const dev = await scanTheoryDeviation('f4 e5 g4 Qh4#', 'black');
+    expect(dev).toBeNull();
+  });
+
+  it('handles black-continuation move numbers (1...e5) in the pgn', async () => {
+    mocked.mockResolvedValueOnce(res([m('e4', 1000)])).mockResolvedValueOnce(res([], 'none'));
+    const dev = await scanTheoryDeviation('1. e4 e5 2. Nf3', 'white');
+    expect(dev).toBeNull();
+  });
 });

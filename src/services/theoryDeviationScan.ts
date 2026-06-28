@@ -26,11 +26,56 @@ export interface TheoryDeviation {
 /** Tokenize a space-separated SAN pgn (the app's stored form). */
 function tokenizePgn(pgn: string): string[] {
   return pgn
-    .replace(/\d+\./g, ' ')        // strip move numbers if present
+    // Strip move numbers: "1." AND black-continuation "1..." / "12...".
+    // Order matters — kill the "..." form first so the lone "." regex
+    // doesn't leave dangling dots ("1...e5" → "..e5" → illegal token).
+    .replace(/\d+\.\.\./g, ' ')
+    .replace(/\d+\./g, ' ')
     .replace(/[10]-[10]|1\/2-1\/2|\*/g, ' ') // strip result tokens
     .trim()
     .split(/\s+/)
     .filter(Boolean);
+}
+
+/** Position signature (placement + side + castling + ep) — drops the
+ *  move counters so two routes to the same position compare equal. */
+function posKey(fen: string): string {
+  return fen.split(' ').slice(0, 4).join(' ');
+}
+
+/** Is the played SAN one of the masters' moves? Compared by RESULTING
+ *  POSITION, not by raw SAN string — disambiguation ("Ngf3" vs "Nf3"),
+ *  capture spelling ("exd5" vs "ed5"), and check/mate glyphs all spell
+ *  the same move differently, and a raw `===` would miss them and
+ *  falsely flag an in-book move as a deviation (David 2026-06-27:
+ *  "Left book after move 1 … I know it's not"). */
+function playedMoveIsInBook(
+  fenBefore: string,
+  playedSan: string,
+  masterSans: string[],
+): boolean {
+  // Fast path: exact SAN already matches.
+  if (masterSans.includes(playedSan)) return true;
+
+  // Resulting-position match — the bulletproof path.
+  let playedKey: string | null = null;
+  try {
+    const c = new Chess(fenBefore);
+    c.move(playedSan);
+    playedKey = posKey(c.fen());
+  } catch {
+    return false; // can't even apply the played move; don't claim in-book
+  }
+  for (const ms of masterSans) {
+    try {
+      const c = new Chess(fenBefore);
+      c.move(ms);
+      if (posKey(c.fen()) === playedKey) return true;
+    } catch {
+      // Master SAN didn't apply to this position — skip it.
+    }
+  }
+  return false;
 }
 
 /** Scan for the first point the player left masters theory. Returns null
@@ -65,7 +110,7 @@ export async function scanTheoryDeviation(
       if (!masters || masters.source === 'none' || masters.moves.length === 0) {
         return null;
       }
-      const inBook = masters.moves.some((m) => m.san === san);
+      const inBook = playedMoveIsInBook(fenBefore, san, masters.moves.map((m) => m.san));
       if (!inBook) {
         return {
           ply,
