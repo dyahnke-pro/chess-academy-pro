@@ -37,9 +37,16 @@ Safari 26.5, standalone PWA, confirmed via live audit stream):**
 
 **REMAINING CODE WORK (not device-gated):**
 - ✅ Phase 1c — DONE (structured citation spine + inline board previews).
-- Phase 2/3 wiring — feed `explainMoveOrder` + engine refutation into flagged
-  review plies + the Analysis-Practice why-demo board animation (needs visual verify).
-- Phase 8 — piece-glow intentional vs noise (verify).
+- ✅ Phase 2 review-side WIRED (bfbf6f2) — each flagged-move preview now shows the
+  grounded "why the engine's move was better" (pin/tempo/check/material geometry
+  via `explainMoveOrder`), no engine call needed (uses the citation's own
+  fenBefore + played/suggested). Delivers "say WHY the move was better" on review.
+- ✅ Phase 8 — RESOLVED: the green-white / purple-black piece glow is INTENTIONAL
+  (`whitePieceGlowColor: '0,255,136'`, `blackPieceGlowColor: '168,85,247'` —
+  configurable side-visibility defaults), not noise.
+- ⏳ Phase 3 — the voice-synced board DEMO animation (take back the wrong move,
+  play the correct line out with arrows as the coach speaks) + the same on
+  Analysis-Practice. Needs a browser to verify the animation/voice sync.
 
 ## Phase 1 — Ground the review voice (the spine) [fixes #5, #A; unblocks #6, why, demo]
 - **1a. Hanging = a LEGAL capture wins material.** Root cause: `findHangingPieces`
