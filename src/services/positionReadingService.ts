@@ -18,6 +18,7 @@
 import { Chess } from 'chess.js';
 import type { Square, Color, PieceSymbol } from 'chess.js';
 import type { TacticsLiveContext } from '../coach/types';
+import type { WeaknessCategory } from '../types';
 
 /** Centipawn-free piece values for SEE + material reasoning (king ~ ∞). */
 const PIECE_VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -226,6 +227,125 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
   return notes.sort((a, b) => (a.quality === b.quality ? 0 : a.quality === 'good' ? -1 : 1)).slice(0, 4);
 }
 
+/** Every square a1..h8. */
+function allSquares(): Square[] {
+  const out: Square[] = [];
+  for (let f = 0; f < 8; f += 1) for (let r = 1; r <= 8; r += 1) out.push(`${String.fromCharCode(97 + f)}${r}` as Square);
+  return out;
+}
+
+/**
+ * WEAK SQUARES (holes) for each side — a square in the contestable zone that NO
+ * pawn of that side can ever guard (no friendly pawn on an adjacent file able to
+ * advance to attack it). These are the squares the OPPONENT wants to occupy. A
+ * white hole is a weakness in White's position. Deterministic geometry (G3).
+ */
+export function findWeakSquares(fen: string): { white: Square[]; black: Square[] } {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return { white: [], black: [] }; }
+  const out: { white: Square[]; black: Square[] } = { white: [], black: [] };
+  // Index pawns by file for each color.
+  const pawns: Record<Color, { file: number; rank: number }[]> = { w: [], b: [] };
+  for (const row of chess.board()) for (const cell of row) {
+    if (cell && cell.type === 'p') pawns[cell.color].push({ file: cell.square.charCodeAt(0) - 97, rank: Number(cell.square[1]) });
+  }
+  for (const sq of allSquares()) {
+    const file = sq.charCodeAt(0) - 97;
+    const rank = Number(sq[1]);
+    if (rank < 3 || rank > 6) continue; // only the contestable middle zone matters
+    const occ = chess.get(sq);
+    for (const color of ['w', 'b'] as Color[]) {
+      if (occ && occ.type === 'p' && occ.color === color) continue; // own pawn there → not a hole
+      // Can a pawn of `color` ever attack `sq`? White pawns attack one rank UP;
+      // a white pawn on an adjacent file at rank ≤ rank-1 could advance to do it.
+      const guardRankBound = color === 'w' ? rank - 1 : rank + 1;
+      const canGuard = pawns[color].some((p) =>
+        Math.abs(p.file - file) === 1 && (color === 'w' ? p.rank <= guardRankBound : p.rank >= guardRankBound),
+      );
+      if (!canGuard) (color === 'w' ? out.white : out.black).push(sq);
+    }
+  }
+  // Most central first, cap to a handful.
+  const central = (s: Square): number => Math.abs((s.charCodeAt(0) - 97) - 3.5) + Math.abs(Number(s[1]) - 4.5);
+  out.white.sort((a, b) => central(a) - central(b));
+  out.black.sort((a, b) => central(a) - central(b));
+  out.white = out.white.slice(0, 4);
+  out.black = out.black.slice(0, 4);
+  return out;
+}
+
+/** How many squares the piece on `sq` attacks (its board scope) — turn-independent
+ *  activity proxy. A long-diagonal bishop scores high; a hemmed one scores low. */
+export function pieceScope(chess: Chess, sq: Square): number {
+  const p = chess.get(sq);
+  if (!p) return 0;
+  let n = 0;
+  for (const t of allSquares()) {
+    if (t === sq) continue;
+    if (chess.attackers(t, p.color).includes(sq)) n += 1;
+  }
+  return n;
+}
+
+export interface ActivePieceNote { square: Square; piece: PieceSymbol; scope: number }
+
+/** The most- and least-active non-pawn, non-king piece of `color` by board scope.
+ *  "Strongest" / "weakest" piece, grounded as activity (G3 — not a vibe). */
+export function strongestWeakestPiece(fen: string, color: Color): { strongest: ActivePieceNote | null; weakest: ActivePieceNote | null } {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return { strongest: null, weakest: null }; }
+  const notes: ActivePieceNote[] = [];
+  for (const row of chess.board()) for (const cell of row) {
+    if (!cell || cell.color !== color || cell.type === 'p' || cell.type === 'k') continue;
+    notes.push({ square: cell.square, piece: cell.type, scope: pieceScope(chess, cell.square) });
+  }
+  if (notes.length === 0) return { strongest: null, weakest: null };
+  notes.sort((a, b) => b.scope - a.scope);
+  return { strongest: notes[0], weakest: notes[notes.length - 1] };
+}
+
+/** STRUCTURAL pawn weaknesses for `color` — isolated (no friendly pawn on an
+ *  adjacent file) and doubled (≥2 on a file). The squares the opponent targets. */
+export function findWeakPawns(fen: string, color: Color): { isolated: Square[]; doubled: Square[] } {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return { isolated: [], doubled: [] }; }
+  const byFile: Record<number, Square[]> = {};
+  for (const row of chess.board()) for (const cell of row) {
+    if (cell && cell.type === 'p' && cell.color === color) {
+      const f = cell.square.charCodeAt(0) - 97;
+      (byFile[f] ??= []).push(cell.square);
+    }
+  }
+  const isolated: Square[] = [];
+  const doubled: Square[] = [];
+  for (const fStr of Object.keys(byFile)) {
+    const f = Number(fStr);
+    const sqs = byFile[f];
+    if (sqs.length >= 2) doubled.push(...sqs);
+    const hasNeighbor = !!byFile[f - 1] || !!byFile[f + 1];
+    if (!hasNeighbor) isolated.push(...sqs);
+  }
+  return { isolated, doubled };
+}
+
+/** The best squares for `attackerColor` to TARGET — the enemy's concrete
+ *  weaknesses: loose pieces (SEE), structural weak pawns, and holes the attacker
+ *  can occupy. Deterministic; the coach voices these, never invents a target. */
+export function findAttackTargets(fen: string, attackerColor: Color): Square[] {
+  const enemy: Color = attackerColor === 'w' ? 'b' : 'w';
+  const targets: Square[] = [];
+  // 1) Loose enemy material (value-aware).
+  for (const h of findHangingBySee(fen)) if (h.color === enemy) targets.push(h.square);
+  // 2) Enemy structural weak pawns.
+  const wp = findWeakPawns(fen, enemy);
+  targets.push(...wp.isolated, ...wp.doubled);
+  // 3) Enemy holes the attacker can plant a piece on.
+  const holes = findWeakSquares(fen);
+  targets.push(...(enemy === 'w' ? holes.white : holes.black));
+  // Dedupe, preserve priority order.
+  return [...new Set(targets)].slice(0, 5);
+}
+
 /**
  * GROUNDED reading-facts block for the coach's "Read this position" narration
  * (G0 — the coach VOICES these, never invents beyond them). Complements the
@@ -389,11 +509,18 @@ export function findMistakePositions(
   return picks;
 }
 
-export type ReadingQuestionType = 'tactic' | 'threat' | 'hanging' | 'material' | 'mate' | 'check' | 'pawn-break' | 'piece';
+export type ReadingQuestionType =
+  | 'tactic' | 'threat' | 'hanging' | 'material' | 'mate' | 'check' | 'pawn-break' | 'piece'
+  // Positional / discussion dimensions (David 2026-06-28 — "all buckets"):
+  | 'weak-square' | 'strong-piece' | 'weak-piece' | 'target' | 'weak-pawn'
+  | 'bishop-pair' | 'outpost' | 'space' | 'open-file' | 'king-safety' | 'plan' | 'who-is-winning';
 
 export interface ReadingQuestion {
   id: string;
   type: ReadingQuestionType;
+  /** Weakness bucket this question trains — maps to the Weaknesses tab taxonomy
+   *  so practice targets exactly what the app diagnoses (David 2026-06-28). */
+  bucket: WeaknessCategory;
   /** The prompt shown to the student. */
   prompt: string;
   /** The canonical correct answer, shown when the student is wrong. */
@@ -404,6 +531,12 @@ export interface ReadingQuestion {
   /** True when the correct answer is "nothing" (no tactic / nothing hanging /
    *  no break) — the student is right to say so. */
   negative: boolean;
+  /** Answer SQUARES — the grounded square set, for grading a CLICK answer
+   *  (David's "click on the board to ID"). Any clicked square in here is correct. */
+  answerSquares?: Square[];
+  /** Answer MOVES (SAN) — for grading a played-on-the-board answer (the tactic /
+   *  best move). Any of these SANs played is correct. */
+  answerMoves?: string[];
 }
 
 const NEG_TOKENS = ['nothing', 'none', 'no', 'safe', 'fine', 'equal', 'even', 'quiet', "nothing's", 'nope'];
@@ -420,14 +553,18 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext):
   const out: ReadingQuestion[] = [];
   const facts = tactics.boardFacts;
   const sideToMove = facts?.sideToMove ?? 'white';
+  const me: Color = sideToMove === 'white' ? 'w' : 'b';
+  const enemy: Color = me === 'w' ? 'b' : 'w';
 
+  // ─── TACTICS bucket ───────────────────────────────────────────────────────
   // 1) MATE-IN-ONE — highest priority when present.
   if (facts?.mateInOne) {
     out.push({
-      id: 'mate', type: 'mate',
+      id: 'mate', type: 'mate', bucket: 'tactics',
       prompt: `${sideToMove === 'white' ? 'White' : 'Black'} to move — is there a forced mate in one? If so, what is it?`,
       answer: `Yes — ${facts.mateInOne} is mate.`,
       acceptTokens: [sq(facts.mateInOne), 'mate', 'checkmate', 'yes'],
+      answerMoves: [facts.mateInOne],
       negative: false,
     });
   }
@@ -436,15 +573,16 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext):
   if (tactics.immediate.length > 0) {
     const t = tactics.immediate[0];
     out.push({
-      id: 'tactic', type: 'tactic',
+      id: 'tactic', type: 'tactic', bucket: 'tactics',
       prompt: 'Is there a tactic in this position? What is it?',
       answer: t.description,
       acceptTokens: [t.type.replace(/_/g, ' '), ...t.squares.map(sq), ...t.type.split('_')],
+      answerSquares: t.squares as Square[],
       negative: false,
     });
   } else {
     out.push({
-      id: 'tactic', type: 'tactic',
+      id: 'tactic', type: 'tactic', bucket: 'tactics',
       prompt: 'Is there a tactic for the side to move here?',
       answer: 'No concrete tactic — this is a quiet position; play on general principles.',
       acceptTokens: [], negative: true,
@@ -455,7 +593,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext):
   if (tactics.threats.length > 0) {
     const th = tactics.threats[0];
     out.push({
-      id: 'threat', type: 'threat',
+      id: 'threat', type: 'threat', bucket: 'tactics',
       prompt: "What is your opponent threatening?",
       answer: th.description,
       acceptTokens: [th.type.replace(/_/g, ' '), ...th.type.split('_'), ...(th.line[0] ? [sq(th.line[0])] : [])],
@@ -467,31 +605,46 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext):
   const hanging = findHangingBySee(fen);
   if (hanging.length > 0) {
     const h = hanging[0];
-    const where = h.color === (sideToMove === 'white' ? 'w' : 'b') ? 'one of YOUR pieces' : "one of your OPPONENT's pieces";
+    const where = h.color === me ? 'one of YOUR pieces' : "one of your OPPONENT's pieces";
     out.push({
-      id: 'hanging', type: 'hanging',
+      id: 'hanging', type: 'hanging', bucket: 'tactics',
       prompt: 'Is any piece hanging — can material be won by force here?',
       answer: `Yes — the ${PIECE_NAME[h.piece]} on ${h.square} (${where}) is hanging; capturing wins about ${h.gain} point${h.gain === 1 ? '' : 's'}.`,
       acceptTokens: [sq(h.square), PIECE_NAME[h.piece], 'hanging', 'yes'],
+      answerSquares: [h.square],
       negative: false,
     });
   } else {
     out.push({
-      id: 'hanging', type: 'hanging',
+      id: 'hanging', type: 'hanging', bucket: 'tactics',
       prompt: 'Is any piece hanging right now?',
       answer: 'No — every attacked piece is adequately defended (nothing wins material by force).',
       acceptTokens: [], negative: true,
     });
   }
 
+  // ─── CALCULATION bucket ───────────────────────────────────────────────────
+  // 7) MATERIAL — always answerable from ground truth.
+  if (facts?.material) {
+    out.push({
+      id: 'material', type: 'material', bucket: 'calculation',
+      prompt: 'Who is ahead in material, and by how much?',
+      answer: facts.material,
+      acceptTokens: materialTokens(facts.material),
+      negative: false,
+    });
+  }
+
+  // ─── POSITIONAL bucket ────────────────────────────────────────────────────
   // 5) PAWN BREAK.
   const breaks = findPawnBreaks(fen);
   if (breaks.length > 0) {
     out.push({
-      id: 'pawn-break', type: 'pawn-break',
+      id: 'pawn-break', type: 'pawn-break', bucket: 'positional',
       prompt: 'What pawn break is available to challenge the structure?',
       answer: `The break${breaks.length > 1 ? 's' : ''} ${breaks.map((b) => `…${b}`).join(' and ')} challenge${breaks.length > 1 ? '' : 's'} the opponent's pawns.`,
       acceptTokens: breaks.map(sq),
+      answerSquares: breaks,
       negative: false,
     });
   }
@@ -500,24 +653,123 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext):
   const quality = findPieceQuality(fen);
   if (quality.length > 0) {
     const note = quality[0];
-    const side = note.color === (sideToMove === 'white' ? 'w' : 'b') ? 'your' : "your opponent's";
+    const side = note.color === me ? 'your' : "your opponent's";
     out.push({
-      id: 'piece', type: 'piece',
+      id: 'piece', type: 'piece', bucket: 'positional',
       prompt: 'Is there a notably good or bad piece on the board? Which one?',
       answer: `${side[0].toUpperCase()}${side.slice(1)} ${PIECE_NAME[note.piece]} on ${note.square} is a ${note.reason}.`,
       acceptTokens: [sq(note.square), PIECE_NAME[note.piece], note.quality, ...note.reason.toLowerCase().split(/\s+/).filter((w) => w.length > 3)],
+      answerSquares: [note.square],
+      negative: false,
+    });
+    // Knight-outpost variant (a distinct, click-gradable positional read).
+    const outpost = quality.find((q) => q.reason === 'knight outpost' && q.color === me);
+    if (outpost) {
+      out.push({
+        id: 'outpost', type: 'outpost', bucket: 'positional',
+        prompt: 'Do you have a knight outpost? Which square?',
+        answer: `Yes — your knight on ${outpost.square} sits on a protected outpost no enemy pawn can challenge.`,
+        acceptTokens: [sq(outpost.square), 'outpost', 'yes'],
+        answerSquares: [outpost.square],
+        negative: false,
+      });
+    }
+  }
+
+  // WEAK SQUARES — yours and the opponent's (click-to-ID).
+  const weak = findWeakSquares(fen);
+  const myHoles = me === 'w' ? weak.white : weak.black;
+  const oppHoles = me === 'w' ? weak.black : weak.white;
+  if (myHoles.length > 0) {
+    out.push({
+      id: 'weak-square-own', type: 'weak-square', bucket: 'positional',
+      prompt: 'Where are the weak squares in YOUR position? (squares your pawns can no longer guard)',
+      answer: `Your weak square${myHoles.length > 1 ? 's' : ''}: ${myHoles.join(', ')} — no pawn of yours can defend ${myHoles.length > 1 ? 'them' : 'it'}.`,
+      acceptTokens: myHoles.map(sq),
+      answerSquares: myHoles,
+      negative: false,
+    });
+  }
+  if (oppHoles.length > 0) {
+    out.push({
+      id: 'weak-square-opp', type: 'weak-square', bucket: 'positional',
+      prompt: "Where are your OPPONENT's weak squares — the holes you can occupy?",
+      answer: `Your opponent's weak square${oppHoles.length > 1 ? 's' : ''}: ${oppHoles.join(', ')} — land a piece there.`,
+      acceptTokens: oppHoles.map(sq),
+      answerSquares: oppHoles,
       negative: false,
     });
   }
 
-  // 7) MATERIAL — always answerable from ground truth.
-  if (facts?.material) {
+  // STRONGEST / WEAKEST PIECE (by board scope) — click the piece.
+  const activity = strongestWeakestPiece(fen, me);
+  if (activity.strongest) {
+    const s = activity.strongest;
     out.push({
-      id: 'material', type: 'material',
-      prompt: 'Who is ahead in material, and by how much?',
-      answer: facts.material,
-      acceptTokens: materialTokens(facts.material),
+      id: 'strong-piece', type: 'strong-piece', bucket: 'positional',
+      prompt: 'Which of your pieces is the strongest (most active) right now?',
+      answer: `Your ${PIECE_NAME[s.piece]} on ${s.square} is your most active piece — it covers ${s.scope} squares.`,
+      acceptTokens: [sq(s.square), PIECE_NAME[s.piece]],
+      answerSquares: [s.square],
       negative: false,
+    });
+  }
+  if (activity.weakest && (!activity.strongest || activity.weakest.square !== activity.strongest.square)) {
+    const w = activity.weakest;
+    out.push({
+      id: 'weak-piece', type: 'weak-piece', bucket: 'positional',
+      prompt: 'Which of your pieces is the weakest (most passive) — the one to improve?',
+      answer: `Your ${PIECE_NAME[w.piece]} on ${w.square} is your least active piece — it only covers ${w.scope} squares; reroute it.`,
+      acceptTokens: [sq(w.square), PIECE_NAME[w.piece]],
+      answerSquares: [w.square],
+      negative: false,
+    });
+  }
+
+  // BEST TARGET TO ATTACK — the opponent's concrete weaknesses.
+  const targets = findAttackTargets(fen, me);
+  if (targets.length > 0) {
+    out.push({
+      id: 'target', type: 'target', bucket: 'positional',
+      prompt: 'What should you target — where is your opponent weakest?',
+      answer: `Target ${targets.join(', ')} — ${targets.length > 1 ? 'these are' : 'this is'} the opponent's weakest point${targets.length > 1 ? 's' : ''} (loose material, weak pawns, or holes).`,
+      acceptTokens: targets.map(sq),
+      answerSquares: targets,
+      negative: false,
+    });
+  }
+
+  // WEAK PAWNS — your structural weaknesses (isolated / doubled).
+  const wp = findWeakPawns(fen, me);
+  const weakPawnSquares = [...new Set([...wp.isolated, ...wp.doubled])];
+  if (weakPawnSquares.length > 0) {
+    out.push({
+      id: 'weak-pawn', type: 'weak-pawn', bucket: 'positional',
+      prompt: 'Do you have any weak pawns? Where are they?',
+      answer: `Weak pawn${weakPawnSquares.length > 1 ? 's' : ''}: ${weakPawnSquares.join(', ')}${wp.isolated.length ? ` (isolated: ${wp.isolated.join(', ')})` : ''}${wp.doubled.length ? ` (doubled: ${wp.doubled.join(', ')})` : ''}.`,
+      acceptTokens: weakPawnSquares.map(sq),
+      answerSquares: weakPawnSquares,
+      negative: false,
+    });
+  }
+
+  // BISHOP PAIR — who holds it (positional asset).
+  const bishops: Record<Color, number> = { w: 0, b: 0 };
+  try {
+    const c = new Chess(fen);
+    for (const row of c.board()) for (const cell of row) if (cell && cell.type === 'b') bishops[cell.color] += 1;
+  } catch { /* ignore */ }
+  if (bishops.w >= 2 && bishops.b < 2) {
+    out.push({
+      id: 'bishop-pair', type: 'bishop-pair', bucket: 'positional',
+      prompt: 'Who has the bishop pair?', answer: 'White has the bishop pair.',
+      acceptTokens: ['white'], negative: false,
+    });
+  } else if (bishops.b >= 2 && bishops.w < 2) {
+    out.push({
+      id: 'bishop-pair', type: 'bishop-pair', bucket: 'positional',
+      prompt: 'Who has the bishop pair?', answer: 'Black has the bishop pair.',
+      acceptTokens: ['black'], negative: false,
     });
   }
 

@@ -10,7 +10,12 @@ import {
   buildReadingQuestions,
   gradeReadingAnswerDeterministic,
   formatReadingFacts,
+  findWeakSquares,
+  strongestWeakestPiece,
+  findWeakPawns,
+  findAttackTargets,
 } from './positionReadingService';
+import type { WeaknessCategory } from '../types';
 import type { TacticsLiveContext } from '../coach/types';
 
 describe('seeGain (static exchange evaluation)', () => {
@@ -217,7 +222,7 @@ describe('buildReadingQuestions', () => {
 
 describe('gradeReadingAnswerDeterministic', () => {
   const hangingQ = {
-    id: 'hanging', type: 'hanging' as const,
+    id: 'hanging', type: 'hanging' as const, bucket: 'tactics' as const,
     prompt: 'Is anything hanging?', answer: 'Yes — the queen on d5 is hanging.',
     acceptTokens: ['d5', 'queen', 'hanging', 'yes'], negative: false,
   };
@@ -280,3 +285,65 @@ describe('formatReadingFacts (grounded read-this-position block)', () => {
     expect(formatReadingFacts('not a fen', 'white')).toBe('');
   });
 });
+
+describe('positional computers (David 2026-06-28 — weak squares / piece activity / targets)', () => {
+  it('findWeakSquares flags a hole no pawn can guard (black has no c/e pawns → d5 hole)', () => {
+    // Black pawns a7 b7 d7 f7 g7 h7 (no c-, no e-pawn) → d5 is unguardable by black.
+    const w = findWeakSquares('4k3/pp1p1ppp/8/8/8/8/PPPPPPPP/4K3 w - - 0 1');
+    expect(w.black).toContain('d5');
+  });
+
+  it('findWeakSquares returns nothing absurd on the start position (full pawn shields)', () => {
+    const w = findWeakSquares('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+    expect(w.white.length).toBe(0);
+    expect(w.black.length).toBe(0);
+  });
+
+  it('findWeakSquares is safe on a bad FEN', () => {
+    expect(findWeakSquares('garbage')).toEqual({ white: [], black: [] });
+  });
+
+  it('strongestWeakestPiece ranks by board scope; a rook on an open file beats a boxed-in bishop', () => {
+    // White rook d1 (open d-file, wide scope) + bishop a1 hemmed by own b2 pawn.
+    const { strongest, weakest } = strongestWeakestPiece('4k3/8/8/8/8/8/1P6/B2RK3 w - - 0 1', 'w');
+    expect(strongest).not.toBeNull();
+    expect(weakest).not.toBeNull();
+    expect(strongest!.scope).toBeGreaterThanOrEqual(weakest!.scope);
+    expect(strongest!.piece).toBe('r'); // the rook is the most active
+  });
+
+  it('findWeakPawns flags an isolated pawn', () => {
+    // White pawns a4 (isolated — no b-pawn) + e2,f2.
+    const wp = findWeakPawns('4k3/8/8/8/P7/8/4PP2/4K3 w - - 0 1', 'w');
+    expect(wp.isolated).toContain('a4');
+  });
+
+  it('findAttackTargets surfaces a loose enemy piece', () => {
+    // Black knight e5 is undefended and attacked by the white d4 pawn (dxe5 wins it).
+    const t = findAttackTargets('4k3/8/8/4n3/3P4/8/8/4K3 w - - 0 1', 'w');
+    expect(t).toContain('e5');
+  });
+});
+
+describe('buildReadingQuestions — bucket coverage (David 2026-06-28: all buckets grounded)', () => {
+  const VALID: WeaknessCategory[] = ['tactics', 'openings', 'opening_weakspots', 'endgame', 'calculation', 'positional', 'time_management'];
+
+  it('tags every question with a valid weakness bucket', () => {
+    const qs = buildReadingQuestions('r2qkbnr/ppp2ppp/2np4/4p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 0 1', emptyTactics({ boardFacts: { ...emptyTactics().boardFacts!, sideToMove: 'black' } }));
+    expect(qs.length).toBeGreaterThan(0);
+    for (const q of qs) expect(VALID).toContain(q.bucket);
+  });
+
+  it('covers the positional bucket with click-gradable answer squares', () => {
+    const qs = buildReadingQuestions('r2qkbnr/ppp2ppp/2np4/4p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 0 1', emptyTactics({ boardFacts: { ...emptyTactics().boardFacts!, sideToMove: 'black' } }));
+    const positional = qs.filter((q) => q.bucket === 'positional');
+    expect(positional.length).toBeGreaterThan(0);
+    // at least one positional question carries answerSquares for click-to-ID
+    expect(positional.some((q) => (q.answerSquares?.length ?? 0) > 0)).toBe(true);
+  });
+
+  it('covers the tactics bucket', () => {
+    const qs = buildReadingQuestions('4k3/8/5n2/3Q4/4P3/8/8/4K3 w - - 0 1', emptyTactics());
+    expect(qs.some((q) => q.bucket === 'tactics')).toBe(true);
+  });
+})
