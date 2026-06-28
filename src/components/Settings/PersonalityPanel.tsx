@@ -51,17 +51,12 @@ const PERSONALITY_OPTIONS: readonly PersonalityOption[] = [
   {
     id: 'edgy',
     label: 'Edgy',
-    blurb: 'Sharp, sarcastic. Calls bullshit on hopeful moves.',
-  },
-  {
-    id: 'flirtatious',
-    label: 'Flirtatious',
-    blurb: 'Playful and teasing — chess as a flirtation.',
+    blurb: 'Sharp and dry — tells it straight, no padded praise.',
   },
   {
     id: 'drill-sergeant',
     label: 'Drill Sergeant',
-    blurb: 'Loud, urgent, no-bullshit. Move now, soldier.',
+    blurb: 'Loud, urgent, no-nonsense. Move now, soldier.',
   },
 ];
 
@@ -92,7 +87,6 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
       default: stored.default ?? PERSONALITY_VOICE_DEFAULTS.default,
       soft: stored.soft ?? PERSONALITY_VOICE_DEFAULTS.soft,
       edgy: stored.edgy ?? PERSONALITY_VOICE_DEFAULTS.edgy,
-      flirtatious: stored.flirtatious ?? PERSONALITY_VOICE_DEFAULTS.flirtatious,
       'drill-sergeant': stored['drill-sergeant'] ?? PERSONALITY_VOICE_DEFAULTS['drill-sergeant'],
     };
   }, [profile.preferences.coachPersonalityVoices]);
@@ -106,20 +100,18 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
       default: stored.default ?? PERSONALITY_SECONDARY_VOICE_DEFAULTS.default,
       soft: stored.soft ?? PERSONALITY_SECONDARY_VOICE_DEFAULTS.soft,
       edgy: stored.edgy ?? PERSONALITY_SECONDARY_VOICE_DEFAULTS.edgy,
-      flirtatious: stored.flirtatious ?? PERSONALITY_SECONDARY_VOICE_DEFAULTS.flirtatious,
       'drill-sergeant': stored['drill-sergeant'] ?? PERSONALITY_SECONDARY_VOICE_DEFAULTS['drill-sergeant'],
     };
   }, [profile.preferences.coachPersonalitySecondaryVoices]);
 
   // Read current settings from profile, defaulting to 'default' / 'none'.
+  // All-ages contract (David 2026-06-28): only personality + mockery are
+  // user-controllable. Profanity and flirt dials are removed — the coach is
+  // always family-friendly (enforced at the prompt chokepoint too).
   const currentPersonality: CoachPersonality =
     profile.preferences.coachPersonality ?? 'default';
-  const currentProfanity: IntensityLevel =
-    profile.preferences.coachProfanity ?? 'none';
   const currentMockery: IntensityLevel =
     profile.preferences.coachMockery ?? 'none';
-  const currentFlirt: IntensityLevel =
-    profile.preferences.coachFlirt ?? 'none';
   // Response-length dial — clamps how much the coach says per turn.
   // Default 'normal' matches post-38d4ace tightness; 'verbose' is the
   // legacy lecture shape; 'minimal' is one-sentence-or-bust. Distinct
@@ -132,9 +124,7 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
   // exists for instant UI feedback; the autosave effect below mirrors
   // it back into Dexie + the parent profile store.
   const [draftPersonality, setDraftPersonality] = useState<CoachPersonality>(currentPersonality);
-  const [draftProfanity, setDraftProfanity] = useState<IntensityLevel>(currentProfanity);
   const [draftMockery, setDraftMockery] = useState<IntensityLevel>(currentMockery);
-  const [draftFlirt, setDraftFlirt] = useState<IntensityLevel>(currentFlirt);
   const [draftVerbosity, setDraftVerbosity] = useState<'minimal' | 'normal' | 'verbose'>(currentVerbosity);
   const [draftVoiceMap, setDraftVoiceMap] = useState<Record<CoachPersonality, string>>(currentVoiceMap);
   const [draftSecondaryVoiceMap, setDraftSecondaryVoiceMap] = useState<Record<CoachPersonality, string>>(currentSecondaryVoiceMap);
@@ -144,36 +134,24 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
   useEffect(() => {
     if (open) {
       setDraftPersonality(currentPersonality);
-      setDraftProfanity(currentProfanity);
       setDraftMockery(currentMockery);
-      setDraftFlirt(currentFlirt);
       setDraftVerbosity(currentVerbosity);
       setDraftVoiceMap(currentVoiceMap);
       setDraftSecondaryVoiceMap(currentSecondaryVoiceMap);
     }
-  }, [open, currentPersonality, currentProfanity, currentMockery, currentFlirt, currentVerbosity, currentVoiceMap, currentSecondaryVoiceMap]);
+  }, [open, currentPersonality, currentMockery, currentVerbosity, currentVoiceMap, currentSecondaryVoiceMap]);
 
   const summaryLabel = PERSONALITY_OPTIONS.find((p) => p.id === currentPersonality)?.label ?? 'Default';
-  const summaryDials =
-    currentProfanity === 'none' && currentMockery === 'none' && currentFlirt === 'none'
-      ? 'all dials off'
-      : `P:${INTENSITY_LABELS[currentProfanity]} M:${INTENSITY_LABELS[currentMockery]} F:${INTENSITY_LABELS[currentFlirt]}`;
+  const summaryDials = currentMockery === 'none' ? 'all clean' : `Mockery: ${INTENSITY_LABELS[currentMockery]}`;
 
   const pickPersonality = (id: CoachPersonality): void => {
     setDraftPersonality(id);
-    // Auto-seed the dials to the picked personality's defaults — the
-    // user can still override individually before saving.
-    const defaults = PERSONALITY_DIAL_DEFAULTS[id];
-    setDraftProfanity(defaults.profanity);
-    setDraftMockery(defaults.mockery);
-    setDraftFlirt(defaults.flirt);
+    // Auto-seed the mockery dial to the picked personality's default.
+    setDraftMockery(PERSONALITY_DIAL_DEFAULTS[id].mockery);
   };
 
   const resetDialsToPersonalityDefaults = (): void => {
-    const defaults = PERSONALITY_DIAL_DEFAULTS[draftPersonality];
-    setDraftProfanity(defaults.profanity);
-    setDraftMockery(defaults.mockery);
-    setDraftFlirt(defaults.flirt);
+    setDraftMockery(PERSONALITY_DIAL_DEFAULTS[draftPersonality].mockery);
   };
 
   // Auto-save effect: persist every change to draft state with a
@@ -191,20 +169,16 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
     }, 250);
     return () => clearTimeout(handle);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [draftPersonality, draftProfanity, draftMockery, draftFlirt, draftVerbosity, draftVoiceMap, draftSecondaryVoiceMap]);
+  }, [draftPersonality, draftMockery, draftVerbosity, draftVoiceMap, draftSecondaryVoiceMap]);
 
   const persistPersonality = async (): Promise<void> => {
     const before = {
       personality: currentPersonality,
-      profanity: currentProfanity,
       mockery: currentMockery,
-      flirt: currentFlirt,
     };
     const after = {
       personality: draftPersonality,
-      profanity: draftProfanity,
       mockery: draftMockery,
-      flirt: draftFlirt,
     };
     // R8 (audit): persist ALL voice-map entries explicitly, not just
     // the ones that differ from defaults. The old "diff-only"
@@ -219,9 +193,10 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
     const updatedPrefs = {
       ...profile.preferences,
       coachPersonality: draftPersonality,
-      coachProfanity: draftProfanity,
+      // All-ages lock: profanity + flirt are forced off and not user-set.
+      coachProfanity: 'none' as IntensityLevel,
       coachMockery: draftMockery,
-      coachFlirt: draftFlirt,
+      coachFlirt: 'none' as IntensityLevel,
       coachResponseLength: draftVerbosity,
       coachPersonalityVoices: voiceOverrides,
       coachPersonalitySecondaryVoices: secondaryVoiceOverrides,
@@ -235,7 +210,7 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
       kind: 'coach-personality-changed',
       category: 'subsystem',
       source: 'PersonalityPanel.autosave',
-      summary: `${before.personality} (${before.profanity}/${before.mockery}/${before.flirt}) → ${after.personality} (${after.profanity}/${after.mockery}/${after.flirt}); voice@active=${draftVoiceMap[draftPersonality]}`,
+      summary: `${before.personality} (mockery ${before.mockery}) → ${after.personality} (mockery ${after.mockery}); voice@active=${draftVoiceMap[draftPersonality]}`,
       details: JSON.stringify({ before, after, voiceOverrides, voiceMap: draftVoiceMap }),
     });
   };
@@ -397,28 +372,15 @@ export function PersonalityPanel({ profile, setProfile }: PersonalityPanelProps)
                 </div>
               </div>
 
-              {/* Dial controls */}
+              {/* Dial controls — all-ages: Mockery (clean ribbing) only.
+                  Profanity + Flirt dials removed (David 2026-06-28). */}
               <div className="space-y-3 mb-4">
                 <DialRow
-                  label="Profanity"
-                  hint="How freely the coach swears."
-                  value={draftProfanity}
-                  onChange={setDraftProfanity}
-                  testIdPrefix="dial-profanity"
-                />
-                <DialRow
                   label="Mockery"
-                  hint="How hard the coach roasts bad moves."
+                  hint="How much the coach (cleanly) ribs bad moves."
                   value={draftMockery}
                   onChange={setDraftMockery}
                   testIdPrefix="dial-mockery"
-                />
-                <DialRow
-                  label="Flirt"
-                  hint="How much sexual subtext the coach leans into."
-                  value={draftFlirt}
-                  onChange={setDraftFlirt}
-                  testIdPrefix="dial-flirt"
                 />
                 <VerbosityRow
                   value={draftVerbosity}

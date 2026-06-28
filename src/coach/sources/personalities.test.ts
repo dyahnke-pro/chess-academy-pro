@@ -1,11 +1,10 @@
 /**
  * Snapshot + structural tests for the personality + dial composition.
  *
- * Snapshot tests pin the assembled prompt for each personality at its
- * default dial settings — a behavioral change to a personality body or
- * a dial modulator will fail the snapshot, forcing the change to be
- * acknowledged in the diff. Structural tests verify each dial's clause
- * lands independently.
+ * ALL-AGES CONTRACT (David 2026-06-28): no swearing, no flirting. The
+ * profanity and flirt dials are LOCKED to NONE regardless of input, the
+ * 'flirtatious' personality is gone, and only the (clean) mockery dial varies.
+ * These tests pin that lock so it can't silently regress.
  */
 import { describe, it, expect } from 'vitest';
 import {
@@ -24,7 +23,6 @@ const PERSONALITIES: readonly CoachPersonality[] = [
   'default',
   'soft',
   'edgy',
-  'flirtatious',
   'drill-sergeant',
 ];
 
@@ -64,9 +62,9 @@ describe('composeIdentityPrompt — invariants', () => {
   it('renders exactly one PERSONALITY clause and one of each dial clause', () => {
     const prompt = composeIdentityPrompt({
       personality: 'edgy',
-      profanity: 'medium',
+      profanity: 'hard',
       mockery: 'hard',
-      flirt: 'none',
+      flirt: 'hard',
     });
     expect(prompt.match(/PERSONALITY:/g)?.length).toBe(1);
     expect(prompt.match(/PROFANITY DIAL:/g)?.length).toBe(1);
@@ -74,34 +72,38 @@ describe('composeIdentityPrompt — invariants', () => {
     expect(prompt.match(/FLIRT DIAL:/g)?.length).toBe(1);
   });
 
-  it('selects the correct dial level body for each setting', () => {
+  it('LOCKS profanity + flirt to NONE even when HARD is requested (all-ages)', () => {
     const prompt = composeIdentityPrompt({
       personality: 'default',
       profanity: 'hard',
       mockery: 'medium',
-      flirt: 'none',
+      flirt: 'hard',
     });
-    expect(prompt).toMatch(/PROFANITY DIAL: HARD/);
-    expect(prompt).toMatch(/MOCKERY DIAL: MEDIUM/);
+    expect(prompt).toMatch(/PROFANITY DIAL: NONE/);
+    expect(prompt).not.toMatch(/PROFANITY DIAL: HARD/);
     expect(prompt).toMatch(/FLIRT DIAL: NONE/);
+    expect(prompt).not.toMatch(/FLIRT DIAL: HARD/);
+    // Mockery still varies.
+    expect(prompt).toMatch(/MOCKERY DIAL: MEDIUM/);
+  });
+
+  it('never emits swearing or sexual-subtext instructions at any setting', () => {
+    for (const profanity of INTENSITY_LEVELS) {
+      for (const flirt of INTENSITY_LEVELS) {
+        const block = renderPersonalityBlock({ personality: 'edgy', profanity, mockery: 'hard', flirt });
+        expect(block).toMatch(/PROFANITY DIAL: NONE/);
+        expect(block).toMatch(/FLIRT DIAL: NONE/);
+        expect(block.toLowerCase()).not.toContain('swear freely');
+        expect(block.toLowerCase()).not.toContain('sexual subtext');
+        expect(block.toLowerCase()).not.toContain('promote me, daddy');
+      }
+    }
   });
 });
 
-// ─── Dial-level coverage ────────────────────────────────────────────────────
+// ─── Dial-level coverage — only mockery varies now ──────────────────────────
 
-describe('renderPersonalityBlock — every dial level renders distinct text', () => {
-  for (const profanity of INTENSITY_LEVELS) {
-    it(`profanity=${profanity} produces a distinct clause`, () => {
-      const block = renderPersonalityBlock({
-        personality: 'default',
-        profanity,
-        mockery: 'none',
-        flirt: 'none',
-      });
-      expect(block).toMatch(new RegExp(`PROFANITY DIAL: ${profanity.toUpperCase()}`));
-    });
-  }
-
+describe('renderPersonalityBlock — mockery is the only live dial', () => {
   for (const mockery of INTENSITY_LEVELS) {
     it(`mockery=${mockery} produces a distinct clause`, () => {
       const block = renderPersonalityBlock({
@@ -114,26 +116,20 @@ describe('renderPersonalityBlock — every dial level renders distinct text', ()
     });
   }
 
-  for (const flirt of INTENSITY_LEVELS) {
-    it(`flirt=${flirt} produces a distinct clause`, () => {
-      const block = renderPersonalityBlock({
-        personality: 'default',
-        profanity: 'none',
-        mockery: 'none',
-        flirt,
-      });
-      expect(block).toMatch(new RegExp(`FLIRT DIAL: ${flirt.toUpperCase()}`));
+  it('an unknown / removed personality falls back to default (e.g. stored "flirtatious")', () => {
+    const block = renderPersonalityBlock({
+      // Simulate a stored pre-lock value that no longer exists in the union.
+      personality: 'flirtatious' as CoachPersonality,
+      mockery: 'none',
     });
-  }
+    expect(block).toMatch(/PERSONALITY: Default/);
+    expect(block).not.toMatch(/Flirtatious/);
+  });
 });
 
 // ─── Hard-rules safety: every personality preserves the contract ────────────
 
 describe('every personality preserves the OPERATOR contract', () => {
-  // The whole point of the personality split is voice-only modulation.
-  // If a personality body somehow shadows or removes a hard rule, that
-  // would let an "edgy" or "drill-sergeant" coach refuse a commanded
-  // move — exactly the bug we already shipped a fix for. Pin the rules.
   for (const personality of PERSONALITIES) {
     it(`${personality} keeps "you have hands" + the hard rules`, () => {
       const prompt = composeIdentityPrompt({

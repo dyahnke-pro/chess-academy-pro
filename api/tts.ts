@@ -188,7 +188,7 @@ function escapeForSsml(text: string): string {
  *     to help the engine parse it cleanly.
  *   - NEURAL voices support prosody / break / emphasis / amazon:domain.
  *     We tune `<prosody rate>` and `<prosody pitch>` per personality
- *     so the same Joanna voice can sound sultry for flirtatious,
+ *     so the same Joanna voice can sound gentler for soft,
  *     clipped for drill-sergeant, etc.
  *
  * Plain text is always safe to fall back to — SSML is opt-in.
@@ -196,7 +196,8 @@ function escapeForSsml(text: string): string {
  * @param style — optional personality string for prosody tuning. When
  *   absent, falls back to the previous default 'rate=95%'.
  */
-type PersonalityStyle = 'default' | 'soft' | 'edgy' | 'flirtatious' | 'drill-sergeant';
+// All-ages contract (David 2026-06-28): no 'flirtatious' style.
+type PersonalityStyle = 'default' | 'soft' | 'edgy' | 'drill-sergeant';
 
 const NEURAL_PROSODY_BY_STYLE: Record<PersonalityStyle, { rate: string; pitch?: string; volume?: string }> = {
   // Default: mild slowdown for warmth — matches the previous behavior.
@@ -205,10 +206,6 @@ const NEURAL_PROSODY_BY_STYLE: Record<PersonalityStyle, { rate: string; pitch?: 
   soft: { rate: '92%', volume: 'soft' },
   // Edgy: faster, sharper. Slight pitch lift for cutting tone.
   edgy: { rate: '105%', pitch: '+2%' },
-  // Flirtatious: slower, lower pitch — sultry register. The cap on
-  // generative engines means Ruth ignores this; Joanna / Salli /
-  // Kendra (neural) get the full effect.
-  flirtatious: { rate: '88%', pitch: '-8%' },
   // Drill sergeant: crisp, loud, no slowdown.
   'drill-sergeant': { rate: '108%', volume: 'x-loud' },
 };

@@ -214,12 +214,12 @@ describe('formatEnvelopeAsSystemPrompt', () => {
     expect(prompt).toMatch(/set_intended_opening/);
   });
 
-  it('threads personality + dial settings into the assembled identity (WO-COACH-PERSONALITIES PR B)', () => {
+  it('threads personality + dial settings into the assembled identity, all-ages locked (WO-COACH-PERSONALITIES PR B)', () => {
     const env = assembleEnvelope({
       personality: 'drill-sergeant',
       profanity: 'hard',
       mockery: 'hard',
-      flirt: 'none',
+      flirt: 'hard',
       toolbelt: getToolDefinitions(),
       input: { surface: 'ping', ask: 'q', liveState: { surface: 'ping' } },
     });
@@ -228,11 +228,13 @@ describe('formatEnvelopeAsSystemPrompt', () => {
     expect(prompt).toMatch(/OPERATOR MODE/);
     // Personality body landed.
     expect(prompt).toMatch(/Drill Sergeant/);
-    expect(prompt).toMatch(/Full Metal Jacket/);
-    // Dial clauses match the requested levels.
-    expect(prompt).toMatch(/PROFANITY DIAL: HARD/);
+    expect(prompt).toMatch(/military cadence/);
+    // Mockery still varies; profanity + flirt are LOCKED to NONE (all-ages).
     expect(prompt).toMatch(/MOCKERY DIAL: HARD/);
+    expect(prompt).toMatch(/PROFANITY DIAL: NONE/);
+    expect(prompt).not.toMatch(/PROFANITY DIAL: HARD/);
     expect(prompt).toMatch(/FLIRT DIAL: NONE/);
+    expect(prompt).not.toMatch(/FLIRT DIAL: HARD/);
   });
 
   it('suppressToolbelt=true drops the [Toolbelt] block from the system prompt', () => {

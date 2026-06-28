@@ -5,6 +5,7 @@ import {
   generateMoveCommentary,
 } from './coachMoveCommentary';
 import * as coachApi from './coachApi';
+import { coachService } from '../coach/coachService';
 
 function gameAfter(moves: string[]): Chess {
   const c = new Chess();
@@ -110,33 +111,36 @@ describe('generateMoveCommentary', () => {
   });
 
   it('passes review tone when reviewTone=true', async () => {
+    // The per-move prompt rides as `systemPromptAddition` into coachService.ask;
+    // inspect it there (a blunder swing so the LLM path is actually reached).
     const spy = vi
-      .spyOn(coachApi, 'getCoachChatResponse')
-      .mockImplementation(async (_m, systemPrompt) => systemPrompt);
-    const out = await generateMoveCommentary({
-      gameAfter: gameAfter(['e4', 'e5', 'Nf3']),
+      .spyOn(coachService, 'ask')
+      .mockResolvedValue({ text: 'ok' } as never);
+    await generateMoveCommentary({
+      gameAfter: gameAfter(['e4', 'e5', 'f4']),
       mover: 'w',
-      evalBefore: 0,
-      evalAfter: 10,
+      evalBefore: 20,
+      evalAfter: -30,
       reviewTone: true,
     });
-    // The mock returns the system prompt; it should mention the review context.
-    expect(out.toLowerCase()).toContain('reviewing');
     expect(spy).toHaveBeenCalled();
+    const opts = spy.mock.calls[0]?.[1] as { systemPromptAddition?: string } | undefined;
+    expect(String(opts?.systemPromptAddition).toLowerCase()).toContain('reviewing');
   });
 
   it('uses the play-context system prompt when reviewTone is omitted', async () => {
     const spy = vi
-      .spyOn(coachApi, 'getCoachChatResponse')
-      .mockImplementation(async (_m, systemPrompt) => systemPrompt);
-    const out = await generateMoveCommentary({
-      gameAfter: gameAfter(['e4', 'e5', 'Nf3']),
+      .spyOn(coachService, 'ask')
+      .mockResolvedValue({ text: 'ok' } as never);
+    await generateMoveCommentary({
+      gameAfter: gameAfter(['e4', 'e5', 'f4']),
       mover: 'w',
-      evalBefore: 0,
-      evalAfter: 10,
+      evalBefore: 20,
+      evalAfter: -30,
     });
-    expect(out.toLowerCase()).toContain('game-against-ai');
     expect(spy).toHaveBeenCalled();
+    const opts = spy.mock.calls[0]?.[1] as { systemPromptAddition?: string } | undefined;
+    expect(String(opts?.systemPromptAddition).toLowerCase()).toContain('game-against-ai');
   });
 
   it('includes the best reply suggestion when provided', async () => {
