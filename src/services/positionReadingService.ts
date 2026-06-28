@@ -392,7 +392,7 @@ export function findPawnGrabs(fen: string): PawnGrabNote[] {
   const bySquare = new Map<Square, PawnGrabNote>();
   for (const mv of chess.moves({ verbose: true })) {
     if (mv.captured !== 'p') continue;
-    const to = mv.to as Square;
+    const to = mv.to;
     if (bySquare.has(to)) continue;
     const see = seeGain(chess, to); // material the side to move wins on that square
     bySquare.set(to, { square: to, capture: mv.san, see, safe: see > 0 });
@@ -815,7 +815,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   if (opts.pvSan && opts.pvSan.length > 0) {
     const pv = opts.pvSan.slice(0, 3);
     let firstTo: Square | null = null;
-    try { const c = new Chess(fen); const mv = c.move(pv[0]); if (mv) firstTo = mv.to as Square; } catch { firstTo = null; }
+    try { const c = new Chess(fen); const mv = c.move(pv[0]); if (mv) firstTo = mv.to; } catch { firstTo = null; }
     out.push({
       id: 'plan', type: 'plan', bucket: opts.isEndgame ? 'endgame' : 'positional', misconceptionTag: 'no-plan',
       prompt: opts.isEndgame ? "What's the winning plan in this endgame?" : "What's the best plan / continuation here?",
@@ -847,7 +847,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
     if (calcSeq.length >= minLen) {
       const last = calcSeq[calcSeq.length - 1];
       let lastTo: Square | null = null;
-      try { const c = new Chess(fen); for (const m of calcSeq) { const mv = c.move(m); if (mv) lastTo = mv.to as Square; } } catch { lastTo = null; }
+      try { const c = new Chess(fen); for (const m of calcSeq) { const mv = c.move(m); if (mv) lastTo = mv.to; } } catch { lastTo = null; }
       out.push({
         id: 'calculation', type: 'plan', bucket: 'calculation', misconceptionTag: 'missed-tactic',
         prompt: `There's a forcing line that wins material here. Calculate it to the end — what is the LAST move of the combination?`,
@@ -1028,7 +1028,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
   const poisoned = grabs.find((x) => !x.safe);
   if (poisoned) {
     let firstTo: Square | null = null;
-    try { const c = new Chess(fen); const mv = c.move(poisoned.capture); if (mv) firstTo = mv.to as Square; } catch { firstTo = null; }
+    try { const c = new Chess(fen); const mv = c.move(poisoned.capture); if (mv) firstTo = mv.to; } catch { firstTo = null; }
     out.push({
       id: 'counting-recapture', type: 'target', bucket: 'calculation',
       prompt: `Calculate it out: is the pawn on ${poisoned.square} actually safe to take?`,

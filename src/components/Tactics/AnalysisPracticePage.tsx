@@ -62,7 +62,7 @@ async function buildLoaded(pick: SampledPosition, game: GameRecord, rating: numb
     mateIn = analysis.isMate ? analysis.mateIn : null;
   } catch { /* engine down → who's-winning is simply skipped, never guessed */ }
   // Convert the engine PV (UCI) to SAN for the plan + calculation drills.
-  let pvSan: string[] = [];
+  const pvSan: string[] = [];
   if (analysis?.topLines?.[0]?.moves?.length) {
     const c = new Chess(pick.fen);
     for (const uci of analysis.topLines[0].moves.slice(0, 8)) {
