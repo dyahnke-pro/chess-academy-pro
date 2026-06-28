@@ -59,7 +59,7 @@ export function usePracticePosition(): UsePracticePositionReturn {
 
     try {
       // Analyze the position BEFORE the player's move to get the best eval
-      const analysisBefore = await stockfishEngine.analyzePosition(practicePosition.fen, 16);
+      const analysisBefore = await stockfishEngine.analyzePosition(practicePosition.fen, 12);
       const bestEval = analysisBefore.evaluation;
       const bestMoveUci = analysisBefore.bestMove;
       const playerUci = `${moveResult.from}${moveResult.to}${moveResult.promotion ?? ''}`;
@@ -83,7 +83,7 @@ export function usePracticePosition(): UsePracticePositionReturn {
           promotion: moveResult.promotion as 'q' | 'r' | 'b' | 'n' | undefined,
         });
 
-        const analysisAfter = await stockfishEngine.analyzePosition(tempChess.fen(), 16);
+        const analysisAfter = await stockfishEngine.analyzePosition(tempChess.fen(), 12);
         const playerMoveEval = -analysisAfter.evaluation;
         const evalLoss = bestEval - playerMoveEval;
 
