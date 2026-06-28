@@ -1,5 +1,5 @@
 import { Chess } from 'chess.js';
-import { explainBestMoveGrounded } from './groundedAnswer';
+import { explainBestMoveGrounded, explainMoveOrder } from './groundedAnswer';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { getCoachCommentary } from './coachApi';
@@ -619,6 +619,12 @@ export interface ReviewMoveCitation {
   playedSquares: [string, string] | null;
   /** [from, to] of the engine's best move, for a green preview arrow. */
   suggestedSquares: [string, string] | null;
+  /** Grounded one-line "why the engine's move was better" — the board
+   *  geometry (pin / tempo / check / material) from `explainMoveOrder`,
+   *  computed not LLM'd. Null when there's no suggestion or no concrete
+   *  mechanism (empty > generic > invented). David 2026-06-27: "I want to
+   *  hear the coach say why the move was better." */
+  whyBetter: string | null;
 }
 
 /** Reconstruct the FEN at each ply from the move list. Uses chess.js
@@ -709,6 +715,18 @@ export function buildReviewCitations(
         ? Math.abs(m.preMoveEval - m.evaluation)
         : null;
 
+    // Grounded "why the engine's move was better" — same position, the
+    // suggestion is the better order, the played move the worse. Pure board
+    // geometry (pin/tempo/check/material); null when no concrete mechanism.
+    const whyBetter = suggestedSan
+      ? explainMoveOrder({
+          fenBefore,
+          betterSan: suggestedSan,
+          worseSan: m.san,
+          moverColor: isWhiteMove ? 'white' : 'black',
+        })?.text ?? null
+      : null;
+
     out.push({
       ply: m.ply,
       moveNumber: Math.ceil(m.ply / 2),
@@ -721,6 +739,7 @@ export function buildReviewCitations(
       evalSwingCp,
       playedSquares,
       suggestedSquares,
+      whyBetter,
     });
   }
 

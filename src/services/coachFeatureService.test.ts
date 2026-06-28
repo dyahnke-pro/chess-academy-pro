@@ -443,6 +443,9 @@ describe('coachFeatureService', () => {
       expect(c.suggestedSquares).toEqual(['g1', 'f3']);
       expect(c.evalSwingCp).toBe(325);       // |25 − (−300)|
       expect(c.fenBefore).toContain(' w ');   // White to move at the cited ply
+      // Grounded "why better": Nf3 attacks the e5 pawn (a developing tempo).
+      expect(c.whyBetter).not.toBeNull();
+      expect(c.whyBetter).toContain('e5');
     });
 
     it('filters to the BLACK student\'s moves when playerColor is black', () => {

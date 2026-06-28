@@ -101,6 +101,11 @@ export function ReviewCitationPreviews({ citations, onJumpToPly, limit }: Review
                 </>
               ) : null}
             </div>
+            {c.whyBetter ? (
+              <div className="mt-1 text-[10px] leading-snug" style={{ color: 'var(--color-text)' }} data-testid={`review-citation-why-${c.ply}`}>
+                {c.whyBetter}
+              </div>
+            ) : null}
           </button>
         ))}
       </div>

@@ -22,6 +22,7 @@ function cite(overrides: Partial<ReviewMoveCitation> & { ply: number }): ReviewM
     evalSwingCp: 325,
     playedSquares: ['d1', 'h5'],
     suggestedSquares: ['g1', 'f3'],
+    whyBetter: null,
     ...overrides,
   };
 }
@@ -65,6 +66,11 @@ describe('ReviewCitationPreviews', () => {
     );
     const cards = screen.getAllByTestId(/review-citation-\d+/);
     expect(cards[0].getAttribute('data-testid')).toBe('review-citation-9'); // biggest swing first
+  });
+
+  it('shows the grounded "why better" line when present', () => {
+    render(<ReviewCitationPreviews citations={[cite({ ply: 3, whyBetter: 'Playing Nf3 first develops with a threat.' })]} onJumpToPly={() => {}} />);
+    expect(screen.getByTestId('review-citation-why-3')).toHaveTextContent('develops with a threat');
   });
 
   it('omits the suggestion clause when there is no engine best move', () => {
