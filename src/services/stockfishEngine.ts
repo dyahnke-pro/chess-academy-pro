@@ -487,11 +487,17 @@ class StockfishEngine {
             console.error('[Stockfish] worker.onerror:', msg);
             // Multi-thread bundle failed early — try the runtime
             // fallback before treating this as a fatal init error.
-            if (
-              this.workerVariant === 'multi' &&
-              !this._runtimeFallbackAttempted
-            ) {
-              handleEarlyMultiFailure(msg);
+            if (this.workerVariant === 'multi') {
+              if (!this._runtimeFallbackAttempted) {
+                handleEarlyMultiFailure(msg);
+              }
+              // Second (or later) ErrorEvent after the fallback is already
+              // armed — the handleEarlyMultiFailure ↦ scheduled tryStart(true)
+              // owns the promise lifecycle from here.  Rejecting the promise
+              // would fire handleWorkerCrash with a stale variant=multi tag
+              // (the real attempt count and variant will be recorded when
+              // tryStart(true) resolves or exhausts), producing a misleading
+              // stockfish-error in PostHog (2026-06-28, David's error watch).
               return true;
             }
             // Phase 8 Bug C — single-thread also OOM'd. Retry once
