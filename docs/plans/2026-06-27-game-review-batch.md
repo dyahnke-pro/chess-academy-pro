@@ -19,10 +19,22 @@ features. Do it first. UI/sound/accuracy are independent and can land alongside.
   Remove the no-legal-capture "hanging" branch. Add PIN detection so the coach can
   say "the knight is pinned" instead. Regression test: David's exact ply-15 FEN →
   NOT hanging.
-- **1b. "Where you left the book" (theoryDeviationScan).** Fix the SAN-equality
-  miss (1.e4 flagged off-book) + the masters-DB records with games but zero W/D/L
-  → "common choice / untested / thousands" contradiction (explorerTranslate). Test:
-  1.e4 in a Vienna is NOT a deviation.
+- **1b. "Where you left the book" (theoryDeviationScan). ✅ DONE (e4ea515,
+  9ddc8ef).** Fixed: (a) SAN-equality miss → now POSITION-based match (glyph /
+  disambiguation / capture-spelling all compare equal), so an in-book move can't
+  be falsely flagged ("left book at move 1"); (b) tokenizer handles `1...e5`
+  black-continuation numbers; (c) explorerTranslate no longer pairs a big sample
+  with "untested" (the "untested … from thousands" contradiction).
+  - **1b+. STRENGTHENED with the AMATEUR DB (David 2026-06-28: "use the amateur
+    DB in conjunction with the masters"). ✅ DONE (e4ea515).** New
+    `amateurPlayLookup.ts` (Lichess `source:'lichess'`, ratings 1600-2500, full
+    W/D/L, own cache). The scan was `localOnly:true` (bundled sparse masters file
+    ONLY — the real root of thin coverage). Now: masters = theory primary; when
+    masters coverage runs out the scan CONTINUES against amateur (deeper) →
+    `source:'amateur'` deviation phrased "off the beaten path"; and a masters move
+    that's count-only borrows amateur W/D/L so the score is real not "untested".
+    UI leads in honestly by source. Tests: theoryDeviationScan (9) +
+    amateurPlayLookup (5) + explorerTranslate (untested case).
 - **1c. Structured recap citations (G0 inversion).** Recap move-references come
   from the analysis annotations as `{ply, playedSan, suggestedSan, squares}`; LLM
   only phrases. Kills recap hallucinations + is the data source for previews.
@@ -65,9 +77,13 @@ features. Do it first. UI/sound/accuracy are independent and can land alongside.
   currently invisible in durable analytics; only `tts_failure`=4 was captured vs
   near-universal fallover in the stream).
 
-## Phase 7 — Accuracy depth 16 (#4) [coded+committed locally: 4ede3d8]
-- Decide 690-game re-analysis handling: prioritize the OPEN game first / throttle
-  background, don't crunch all 690 at once. Then ship.
+## Phase 7 — Accuracy depth 16 (#4) ✅ DONE (4bae6dc)
+- Re-analysis made LAZY: `gameNeedsAnalysis(game, {depthUpgrade})`. On-open /
+  import path (analyzeSingleGame, CoachReviewSessionPage) refreshes a depth-stale
+  game to depth 16; the BACKGROUND batch sweeps (countGamesNeedingAnalysis,
+  analyzeAllGames, analyzeRecentGames) AND the insights stat-guards pass
+  `depthUpgrade:false`, so the 690 already-analyzed games are NOT re-crunched
+  en masse (David: "Only new/opened games").
 
 ## Phase 8 — Piece-glow (#7)
 - Verify the white-green / black-purple glow is intended vs noise.
