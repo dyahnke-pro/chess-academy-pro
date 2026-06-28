@@ -1104,10 +1104,12 @@ describe('resolveWorkerUrl', () => {
     expect(result.workerType).toBe('classic');
   });
 
-  it('routes iOS to the multi-threaded build once cross-origin isolated (Option A)', async () => {
-    // After the native COOP/COEP patch gives the iOS WebView SharedArrayBuffer,
-    // iPhone runs the same threaded build as desktop — the call_indirect bug is
-    // only in the SAB-free single build, not the threaded one.
+  it('routes iOS to the asm.js build EVEN cross-origin isolated (Option A reversed — multi OOMs the iPhone)', async () => {
+    // "Option A" bet iOS+SAB could run the threaded build like desktop.
+    // Production disproved it: with SAB present the picker chose multi and the
+    // threaded WASM heap OOM'd on iPhone memory limits — 100% of the Stockfish
+    // crashes in PostHog (7 days, 2026-06-28) were iOS "Out of memory" on multi.
+    // iOS now ALWAYS uses asm regardless of SAB.
     vi.stubGlobal('window', { crossOriginIsolated: true });
     vi.stubGlobal('SharedArrayBuffer', function SharedArrayBufferStub() { /* stub */ });
     vi.stubGlobal('navigator', {
@@ -1117,8 +1119,8 @@ describe('resolveWorkerUrl', () => {
     vi.resetModules();
     const { resolveWorkerUrl } = await import('./stockfishEngine');
     const result = resolveWorkerUrl();
-    expect(result.variant).toBe('multi');
-    expect(result.url).toBe('/stockfish/stockfish-18-lite.js');
+    expect(result.variant).toBe('asm');
+    expect(result.url).toBe('/stockfish/stockfish-asm.js');
   });
 
   it('falls back to single-threaded variant when crossOriginIsolated is false', async () => {

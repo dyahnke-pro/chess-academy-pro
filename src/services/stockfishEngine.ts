@@ -119,28 +119,31 @@ export function resolveWorkerUrl(): ResolvedWorker {
   const isolated =
     (window as { crossOriginIsolated?: boolean }).crossOriginIsolated === true;
   const sabAvailable = typeof SharedArrayBuffer !== 'undefined';
-  // Option A (David 2026-06-21): isolation check FIRST, before the iOS fallback.
-  // Once the iOS WebView is cross-origin isolated (SAB present — see the native
-  // COOP/COEP patch), iPhone runs the SAME multi-threaded build as desktop. The
-  // `call_indirect` trap is ONLY in the SAB-free single build, NOT the threaded
-  // one — so when SAB is genuinely available, prefer multi on ANY platform.
-  // Until the native patch lands, iOS has no SAB and falls through to asm below
-  // (identical to today), so this reorder is dormant/safe until then.
-  if (isolated && sabAvailable) {
-    return {
-      url: STOCKFISH_MT_URL,
-      variant: 'multi',
-      reason: 'crossOriginIsolated + SharedArrayBuffer available',
-      workerType: 'classic',
-    };
-  }
-  // No SharedArrayBuffer. iOS Safari/WebKit MUST use the asm.js build — the WASM
-  // single build call_indirect-traps on WebKit (192 PostHog crashes, 2026-06-21).
+  // iOS ALWAYS uses the asm.js build — NEVER multi, even with SharedArrayBuffer.
+  // "Option A" (David 2026-06-21) bet that once the native COOP/COEP patch made
+  // the iOS WebView cross-origin-isolated, iPhone could run the same threaded
+  // `multi` build as desktop. Production disproved it: with SAB now present on
+  // iOS, the picker chose `multi` and the threaded WASM heap OOMs on iPhone
+  // memory limits — 100% of the Stockfish crashes in PostHog over the last 7
+  // days were iOS, "RangeError: Out of memory" on multi → crash cascade (David
+  // 2026-06-28). So the iOS check goes FIRST and short-circuits to asm: it's the
+  // bulletproof build (plain JS, no SAB, no `call_indirect` trap that kills the
+  // WASM single build on WebKit, no threaded-heap OOM). Slower than WASM, but a
+  // working engine beats a crashing one. Desktop/Android keep `multi`.
   if (isIosSafari()) {
     return {
       url: STOCKFISH_IOS_ASM_URL,
       variant: 'asm',
-      reason: 'iOS, no SharedArrayBuffer — asm.js build (WebKit-safe; the WASM single build call_indirect-traps)',
+      reason: 'iOS — asm.js build (multi OOMs the iPhone heap; the WASM single build call_indirect-traps on WebKit)',
+      workerType: 'classic',
+    };
+  }
+  // Non-iOS with cross-origin isolation + SAB → the fast multi-threaded build.
+  if (isolated && sabAvailable) {
+    return {
+      url: STOCKFISH_MT_URL,
+      variant: 'multi',
+      reason: 'crossOriginIsolated + SharedArrayBuffer available (non-iOS)',
       workerType: 'classic',
     };
   }
@@ -347,13 +350,13 @@ class StockfishEngine {
 
       const tryStart = (forceSingle: boolean): void => {
         let resolved: ResolvedWorker;
-        // ENGINE ROOT FIX (David 2026-06-15): iOS routes to the SAB-free
-        // single build (threaded builds — multi AND lila — hang on iOS
-        // Capacitor for lack of SharedArrayBuffer). This used to force lila
-        // to dodge a `call_indirect` crash in the single bundle, but lila
-        // HANGS (no SAB) which is worse; the single wasm was rebuilt as a
-        // matched pair so the crash should be gone. force-single / sticky
-        // already target the single bundle, so iOS just falls through.
+        // iOS ALWAYS delegates to resolveWorkerUrl(), which pins iOS to the
+        // asm.js build — never multi (it OOMs the iPhone heap) and never the
+        // WASM single build (it `call_indirect`-traps on WebKit). The
+        // force-single / sticky-fallback branches below are for NON-iOS hosts
+        // recovering from a multi-thread failure; iOS short-circuits before
+        // them so a multi crash there can never route iOS to the broken single
+        // build (David 2026-06-28, after the iOS multi-OOM cascade in PostHog).
         if (isIosSafari()) {
           resolved = resolveWorkerUrl();
         } else if (forceSingle) {

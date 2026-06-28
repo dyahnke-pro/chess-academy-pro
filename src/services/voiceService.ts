@@ -1465,6 +1465,10 @@ audio.playbackRate = this.speed;
       };
       audio.onended = (): void => finish(true);
       audio.onerror = (): void => {
+        // A newer utterance (or a stop()) reset this shared element out from
+        // under us — the resulting error is supersession, not a real playback
+        // failure. Bail silently so it doesn't inflate the tts-failure signal.
+        if (myGen !== this.stopGeneration) { finish(false); return; }
         const err = audio.error;
         const detail = `element playback error: code=${err?.code ?? '?'} ${err?.message ?? ''}`.trim();
         this.lastSpeakDiagnostic.error = detail;
@@ -1490,6 +1494,12 @@ audio.playbackRate = this.speed;
           }
         })
         .catch((err: unknown) => {
+          // An AbortError (or a generation bump) means a newer utterance/stop()
+          // superseded this one mid-play() — intentional abandonment, NOT a
+          // failure. Only a play() rejection while we're still the current
+          // generation is a real iOS autoplay/decode problem worth surfacing.
+          const aborted = err instanceof DOMException && err.name === 'AbortError';
+          if (aborted || myGen !== this.stopGeneration) { finish(false); return; }
           const detail = `element play() rejected: ${err instanceof Error ? err.message : String(err)}`;
           this.lastSpeakDiagnostic.error = detail;
           this.logElementPlaybackFailure(detail, isObjectUrl);
@@ -1935,6 +1945,18 @@ audio.playbackRate = this.speed;
     }
     const buf = await res.arrayBuffer();
     this.abortController = null;
+    // A streamed /api/tts response that gets interrupted mid-flight resolves
+    // arrayBuffer() with PARTIAL bytes (no throw) — a truncated MP3 that iOS
+    // then rejects with MEDIA_ERR_DECODE (code=3). A real narration clip is
+    // multiple KB; anything tiny is a truncated/empty body, not a decodable
+    // clip. Don't cache or attempt to play garbage — fail clean so the caller
+    // drops to Web Speech, and audit a DISTINCT reason so truncation is
+    // separable from a genuine iOS decode failure in the telemetry.
+    if (buf.byteLength < 512) {
+      this.lastSpeakDiagnostic.error = `iOS buffered body too small (${buf.byteLength}B) — truncated /api/tts stream`;
+      this.logElementPlaybackFailure(`empty/truncated body ${buf.byteLength}B`, true);
+      return false;
+    }
     this.setAudioCacheEntry(cacheKey, buf);
     const blobUrl = URL.createObjectURL(new Blob([buf], { type: 'audio/mpeg' }));
     return this.playViaElement(blobUrl, true);
