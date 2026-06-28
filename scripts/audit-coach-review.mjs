@@ -414,8 +414,9 @@ async function main() {
     report.scenarios = report.scenarios ?? {};
     report.scenarios.citationPreviewsSeen = seen;
     if (seen) {
-      const cards = page.locator('[data-testid^="review-citation-"]').filter({ hasNot: page.locator('[data-testid^="review-citation-why-"]') });
-      report.scenarios.citationCardCount = await page.locator('[data-testid="review-citation-previews"] [data-testid^="review-citation-"]').count();
+      // Card is a <button>; why-line is a <div>. Count buttons for cards.
+      const cards = page.locator('[data-testid="review-citation-previews"] button[data-testid^="review-citation-"]');
+      report.scenarios.citationCardCount = await cards.count();
       report.scenarios.citationWhyCount = await page.locator('[data-testid^="review-citation-why-"]').count();
       // Tap the first preview card → should jump the board (review-nav).
       const firstCard = cards.first();
