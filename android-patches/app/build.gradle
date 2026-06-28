@@ -10,6 +10,14 @@ if (keystorePropsFile.exists()) {
 }
 def hasReleaseSigning = keystorePropsFile.exists()
 
+// Resolve version from env with iOS-parity fallbacks (2.8 / build 80). Computed
+// in locals so the Groovy DSL doesn't parse `versionCode (expr).toInteger()` as
+// `versionCode(expr).toInteger()` (which chains .toInteger() onto the setter's
+// null return → "Value is null").
+def envVersionCode = System.getenv("ANDROID_VERSION_CODE")
+def releaseVersionCode = (envVersionCode == null || envVersionCode.trim().isEmpty()) ? 80 : envVersionCode.trim().toInteger()
+def releaseVersionName = System.getenv("APP_VERSION") ?: "2.8"
+
 android {
     namespace = "com.chessacademy.pro"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -21,8 +29,8 @@ android {
         // CI overrides via env (APP_VERSION / ANDROID_VERSION_CODE) so a new
         // upload bumps the code without a code edit; the fallbacks keep parity
         // with the iOS build (2.8 / build 80).
-        versionCode (System.getenv("ANDROID_VERSION_CODE") ?: "80").toInteger()
-        versionName (System.getenv("APP_VERSION") ?: "2.8")
+        versionCode releaseVersionCode
+        versionName releaseVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
