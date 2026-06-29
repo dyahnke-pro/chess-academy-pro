@@ -82,4 +82,25 @@ export const KINGS_INDIAN_ATTACK_VARIATION_LESSONS: Record<string, LessonScript>
     b({ id: "k4", moves: "Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d3 d6 Nbd2 e5 e4 Nc6 c3 h6 b4 Be6 b5 Ne7 d4 exd4 cxd4 Qd7 Qe2", say: "exd4 cxd4 Qd7 Qe2 — White recaptures toward the centre, building a broad d4-and-e4 pawn duo with the bishops and rooks springing to life. The KID-style KIA tabiya: White owns the central space and the more active pieces, a comfortable and flexible pull — the universal system delivering once again.", sayShort: "cxd4 — the broad d4/e4 centre, easy pull.", highlights: [H("d4", KEY), H("e4", SOFT)] }),
   ],
 },
+
+  "kings-indian-attack::Keres Variation": {
+    openingId: "kings-indian-attack",
+    // Grounded: anchors 8 plies on the DB Keres line (Nf3 d5 g3 c6 Bg2 Bg4 O-O
+    // Nd7), extended to a sound middlegame (Stockfish-best both sides, terminal
+    // +0.04 — the Keres is one of Black's most reliable, fully-equalising KIA
+    // answers, taught honestly as such). Concepts: the reversed-KID system, the
+    // e4 break (pos-center), the Qe1 kingside lift (att-kingside-storm).
+    sources: ['concept:pos-development', 'concept:pos-center', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
+    title: "KIA — The Keres Variation (with ...Bg4)",
+    minutes: 9,
+    orientation: "white",
+    beats: [
+      b({ id: "ke1", moves: "Nf3 d5 g3 c6 Bg2 Bg4", say: "The Keres is Black's most solid answer to the King's Indian Attack: ...c6 to brace the d5-pawn, and ...Bg4 to pin the f3-knight before White ever gets rolling. White is unbothered — the whole KIA idea is to fianchetto and play a reversed King's Indian no matter what Black builds. The pin on f3 looks annoying, but White is not relying on that knight yet.", sayShort: "...Bg4 pins, ...c6 holds d5.", highlights: [H("g4", KEY), H("f3", SOFT)] }),
+      b({ id: "ke2", moves: "Nf3 d5 g3 c6 Bg2 Bg4 O-O Nd7 d3 Ngf6", say: "White castles and plays the modest d3 — the KIA never grabs the centre, it coils behind it. Black completes a rock-solid set-up with ...Nd7 and ...Ngf6, both knights home and the ...c6/...d5 wall intact. Two sides quietly building, nobody committed. This is the calm before White's central break.", sayShort: "d3 — coil behind the centre.", highlights: [H("d3", KEY)] }),
+      b({ id: "ke3", moves: "Nf3 d5 g3 c6 Bg2 Bg4 O-O Nd7 d3 Ngf6 Nbd2 e5 e4", say: "Nbd2 finishes development, Black claims the centre with ...e5, and now White uncoils: e4! The thematic King's Indian Attack break, striking at the d5-pawn and fighting for the centre White deliberately ceded early. The coiled spring is released — the position finally opens on White's terms.", sayShort: "e4 — the KIA break, release the spring.", highlights: [H("e4", KEY), H("d5", SOFT)] }),
+      b({ id: "ke4", moves: "Nf3 d5 g3 c6 Bg2 Bg4 O-O Nd7 d3 Ngf6 Nbd2 e5 e4 dxe4 dxe4 Bc5", say: "...dxe4 dxe4 clarifies the centre, and Black develops the bishop to c5, eyeing the f2-square next to White's king. The pawns have resolved — White holds the e4-pawn and the half-open d-file, Black has the active pieces. A fair fight, and White's structure is the easier of the two to play.", sayShort: "...Bc5 — Black's bishop eyes f2.", highlights: [H("c5", SOFT), H("e4", KEY)] }),
+      b({ id: "ke5", moves: "Nf3 d5 g3 c6 Bg2 Bg4 O-O Nd7 d3 Ngf6 Nbd2 e5 e4 dxe4 dxe4 Bc5 h3 Bh5 Qe1", say: "h3 questions the bishop, ...Bh5 keeps it on the board, and then the King's Indian Attack's signature move: Qe1! The queen steps off the d-file and lifts toward the kingside — heading for e2 to support an f4 push, or for h4 to throw itself at Black's king. This quiet re-route is the whole soul of the KIA's kingside ambitions.", sayShort: "Qe1 — the KIA queen lift.", highlights: [H("e1", KEY)] }),
+      b({ id: "ke6", moves: "Nf3 d5 g3 c6 Bg2 Bg4 O-O Nd7 d3 Ngf6 Nbd2 e5 e4 dxe4 dxe4 Bc5 h3 Bh5 Qe1 O-O Nc4 Re8", say: "Black castles into safety, White's knight jumps to the active c4-square, and Black centralises the rook. There is the Keres tabiya: a balanced reversed-King's-Indian where both sides stand sound. The honest verdict — the Keres is one of Black's most reliable answers to the KIA, and White's reward is a comfortable, easy-to-play structure rather than an opening edge. Learn the plan, not a forced win.", sayShort: "Nc4 — active, balanced, easy.", highlights: [H("c4", KEY)] }),
+    ],
+  },
 };
