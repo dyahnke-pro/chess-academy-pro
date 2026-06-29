@@ -2823,6 +2823,12 @@
         "name": "KIA: e5 Wedge System",
         "pgn": "e4 e6 d3 d5 Nd2 Nf6 Ngf3 Nc6 g3 dxe4 dxe4 Bc5 Bg2 O-O O-O",
         "explanation": "The e5 Wedge System arises when White pushes e5 after the initial e4 break, clamping down on the center and creating a space advantage. The piece on e5 restricts Black's knight and carves out outposts on d4 and f4 for White's pieces. After Nb3 and Bg5, White develops rapid initiative against Black's somewhat cramped position. The knight reroutes to d4 where it becomes a dominant centralized piece supported by the e3 pawn. Black must play precisely to equalize or risk being slowly squeezed on both flanks."
+      },
+      {
+        "name": "Keres Variation",
+        "pgn": "Nf3 d5 g3 c6 Bg2 Bg4 O-O Nd7 d3 Ngf6 Nbd2 e5 e4 dxe4 dxe4 Bc5 h3 Bh5 Qe1 O-O Nc4 Re8",
+        "explanation": "The Keres is Black's most reliable answer to the King's Indian Attack: the solid ...c6 to brace d5 and ...Bg4 to pin the f3-knight before White gets rolling. White is unbothered and builds the reversed-King's-Indian set-up — d3, Nbd2, the g3 fianchetto — then uncoils with the thematic e4 break. After the center clarifies, White's signature Qe1 queen-lift swings toward the kingside (e2 to support f4, or h4 to attack). The honest verdict: the Keres equalizes cleanly, and White's reward is a comfortable, easy-to-play structure rather than an opening edge. Know the plan, not a forced win.",
+        "shortExplanation": "...c6 + ...Bg4 pin; White plays the reversed-KID, e4 break, Qe1 kingside lift. Equal but comfortable for White."
       }
     ],
     "trapLines": [],
