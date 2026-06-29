@@ -155,7 +155,7 @@ const studCp = (e, color) => { const w = e.mate != null ? (e.mate > 0 ? 100000 :
     }
     const worst = flags.filter((f) => f.kind === 'SUBOPTIMAL').sort((a, b) => b.loss - a.loss)[0];
     const il = flags.find((f) => f.kind === 'ILLEGAL');
-    report.push({ id: l.id, name: l.name, isGambit: l.isGambit, lastBook, plies: sans.length, flags });
+    report.push({ id: l.id, name: l.name, isGambit: l.isGambit, pgn: l.pgn, lastBook, plies: sans.length, flags });
     const tag = il ? 'ILLEGAL ' : worst ? (l.isGambit ? 'GAMBIT? ' : 'SUBOPT  ') : 'CLEAN   ';
     const msg = il ? `illegal ${il.move}@${il.ply}` : worst ? `ply ${worst.ply} our ${worst.move} loses ${(worst.loss / 100).toFixed(2)} vs best ${worst.best} (${(worst.cpBefore / 100).toFixed(2)}→${(worst.cpAfter / 100).toFixed(2)})` : `book→${lastBook}, tail clean`;
     console.log(`  ${tag} ${l.id.padEnd(22)} ${msg}`);
