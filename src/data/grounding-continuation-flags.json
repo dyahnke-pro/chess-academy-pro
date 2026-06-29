@@ -1,10 +1,136 @@
 {
-  "source": "lessons",
+  "source": "lessons+repertoire",
   "margin": 100,
   "filter": "cpAfter<0",
   "generated": "2026-06-29",
-  "count": 24,
+  "count": 38,
   "flags": [
+    {
+      "name": "Alekhine's Defence :: Voronezh Variation",
+      "id": "alekhine-defence",
+      "isGambit": false,
+      "move": "h6",
+      "ply": 20,
+      "loss": 121,
+      "kind": "SUBOPTIMAL"
+    },
+    {
+      "name": "Benoni Defence — main",
+      "id": "benoni-defence",
+      "isGambit": false,
+      "move": "Nfe8",
+      "ply": 36,
+      "loss": 144,
+      "kind": "SUBOPTIMAL"
+    },
+    {
+      "name": "Evans Gambit :: Evans Gambit: Anderssen Variation",
+      "id": "evans-gambit",
+      "isGambit": false,
+      "move": "dxe5",
+      "ply": 21,
+      "loss": 296,
+      "kind": "SUBOPTIMAL"
+    },
+    {
+      "name": "Evans Gambit — main",
+      "id": "evans-gambit",
+      "isGambit": false,
+      "move": "d5",
+      "ply": 25,
+      "loss": 144,
+      "kind": "SUBOPTIMAL"
+    },
+    {
+      "name": "Four Knights Game :: Halloween Gambit: 4.Nxe5",
+      "id": "four-knights-game",
+      "isGambit": false,
+      "move": "Nxe5",
+      "ply": 7,
+      "loss": 160,
+      "kind": "SUBOPTIMAL"
+    },
+    {
+      "name": "King's Gambit — main",
+      "id": "kings-gambit",
+      "isGambit": false,
+      "move": "Nxc7",
+      "ply": 27,
+      "loss": 134,
+      "kind": "SUBOPTIMAL"
+    },
+    {
+      "name": "Nimzo-Indian Defence :: Leningrad Variation (4.Bg5)",
+      "id": "nimzo-indian",
+      "isGambit": false,
+      "move": "Qe7",
+      "ply": 20,
+      "loss": 105,
+      "kind": "SUBOPTIMAL"
+    },
+    {
+      "name": "Petrov Defence :: Kaufmann Attack",
+      "id": "petrov-defence",
+      "isGambit": false,
+      "move": "c6",
+      "ply": 28,
+      "loss": 716,
+      "kind": "SUBOPTIMAL"
+    },
+    {
+      "name": "Petrov Defence :: Kaufmann Attack",
+      "id": "petrov-defence",
+      "isGambit": false,
+      "move": "d5",
+      "ply": 30,
+      "loss": 461,
+      "kind": "SUBOPTIMAL"
+    },
+    {
+      "name": "Philidor Defence :: Philidor Counter-Gambit",
+      "id": "philidor-defence",
+      "isGambit": false,
+      "move": "Nf6",
+      "ply": 18,
+      "loss": 510,
+      "kind": "SUBOPTIMAL"
+    },
+    {
+      "name": "Reti Opening :: Reti: Nimzo-English Hybrid",
+      "id": "reti-opening",
+      "isGambit": false,
+      "move": "Rc1",
+      "ply": 21,
+      "loss": 101,
+      "kind": "SUBOPTIMAL"
+    },
+    {
+      "name": "Scandinavian Defence :: Qd6 Tiviakov Variation",
+      "id": "scandinavian-defence",
+      "isGambit": false,
+      "move": "O-O-O",
+      "ply": 15,
+      "loss": null,
+      "kind": "ILLEGAL"
+    },
+    {
+      "name": "Scandinavian Defence — main",
+      "id": "scandinavian-defence",
+      "isGambit": false,
+      "move": "h6",
+      "ply": 28,
+      "loss": 121,
+      "kind": "SUBOPTIMAL"
+    },
+    {
+      "name": "Stafford Gambit — main",
+      "id": "stafford-gambit",
+      "isGambit": true,
+      "move": "Nxe4",
+      "ply": 12,
+      "loss": 114,
+      "kind": "SUBOPTIMAL"
+    },
     {
       "name": "alekhine-defence :: alekhineDefenceVariations.ts :: 22-ply",
       "id": "alekhine-defence",
@@ -12,7 +138,7 @@
       "move": "h6",
       "ply": 20,
       "loss": 121,
-      "cpAfter": -77
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "caro-kann :: caroKannTrapLessons.ts :: 11-ply",
@@ -21,7 +147,7 @@
       "move": "Ngf6",
       "ply": 10,
       "loss": 99982,
-      "cpAfter": -100000
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "evans-gambit :: evansGambitVariations.ts :: 21-ply",
@@ -30,7 +156,7 @@
       "move": "dxe5",
       "ply": 21,
       "loss": 296,
-      "cpAfter": -143
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "nimzo-indian :: nimzoIndianVariations.ts :: 23-ply",
@@ -39,7 +165,7 @@
       "move": "Qe7",
       "ply": 20,
       "loss": 105,
-      "cpAfter": -38
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "philidor-defence :: philidorDefenceVariations.ts :: 22-ply",
@@ -48,7 +174,7 @@
       "move": "Nf6",
       "ply": 18,
       "loss": 510,
-      "cpAfter": -276
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "pro-gothamchess-fantasy-caro :: proGothamchessFantasyCaroVariations.ts :: 15-ply",
@@ -57,7 +183,7 @@
       "move": "Bd3",
       "ply": 15,
       "loss": 104,
-      "cpAfter": -56
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "pro-gothamchess-stafford-refute :: proGothamchessStaffordRefuteVariations.ts :: 13-ply",
@@ -66,7 +192,7 @@
       "move": "d3",
       "ply": 11,
       "loss": 426,
-      "cpAfter": -263
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "pro-gothamchess-stafford-refute :: proGothamchessStaffordRefuteVariations.ts :: 15-ply",
@@ -75,7 +201,7 @@
       "move": "d3",
       "ply": 11,
       "loss": 426,
-      "cpAfter": -263
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "pro-naroditsky-alekhine :: proNaroditskyAlekhineVariations.ts :: 14-ply",
@@ -84,7 +210,7 @@
       "move": "Nc6",
       "ply": 14,
       "loss": 110,
-      "cpAfter": -153
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "pro-naroditsky-caro-kann :: proNaroditskyCaroTrapLessons.ts :: 12-ply",
@@ -93,7 +219,7 @@
       "move": "Bg4",
       "ply": 12,
       "loss": 457,
-      "cpAfter": -499
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "pro-naroditsky-fantasy-caro :: proNaroditskyFantasyTrapLessons.ts :: 15-ply",
@@ -102,7 +228,7 @@
       "move": "Nxd4",
       "ply": 15,
       "loss": 127,
-      "cpAfter": -30
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "pro-naroditsky-fantasy-caro :: proNaroditskyFantasyTrapLessons.ts :: 17-ply",
@@ -111,7 +237,7 @@
       "move": "Nxd4",
       "ply": 15,
       "loss": 127,
-      "cpAfter": -30
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "pro-naroditsky-fantasy-caro :: proNaroditskyFantasyTrapLessons.ts :: 17-ply",
@@ -120,7 +246,7 @@
       "move": "Nc3",
       "ply": 17,
       "loss": 140,
-      "cpAfter": -136
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "pro-naroditsky-kia :: proNaroditskyKIATrapLessons.ts :: 10-ply",
@@ -129,7 +255,7 @@
       "move": "e4",
       "ply": 5,
       "loss": 113,
-      "cpAfter": -95
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "pro-naroditsky-kia :: proNaroditskyKIATrapLessons.ts :: 13-ply",
@@ -138,7 +264,7 @@
       "move": "e4",
       "ply": 5,
       "loss": 113,
-      "cpAfter": -95
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "pro-naroditsky-kia :: proNaroditskyKIATrapLessons.ts :: 7-ply",
@@ -147,7 +273,7 @@
       "move": "e4",
       "ply": 5,
       "loss": 113,
-      "cpAfter": -95
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "pro-naroditsky-kia :: proNaroditskyKIATrapLessons.ts :: 8-ply",
@@ -156,7 +282,7 @@
       "move": "e4",
       "ply": 5,
       "loss": 113,
-      "cpAfter": -95
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "pro-samayraina-scandi :: proSamayRainaScandiVariations.ts :: 12-ply",
@@ -165,7 +291,7 @@
       "move": "Bg4",
       "ply": 12,
       "loss": 144,
-      "cpAfter": -220
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "pro-samayraina-scandi :: proSamayRainaScandiVariations.ts :: 16-ply",
@@ -174,7 +300,7 @@
       "move": "Bg4",
       "ply": 12,
       "loss": 144,
-      "cpAfter": -220
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "reti-opening :: retiOpeningVariations.ts :: 22-ply",
@@ -183,7 +309,7 @@
       "move": "Rc1",
       "ply": 21,
       "loss": 101,
-      "cpAfter": -67
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "scandinavian-defence :: scandinavianDefence.ts :: 28-ply",
@@ -192,7 +318,7 @@
       "move": "h6",
       "ply": 28,
       "loss": 121,
-      "cpAfter": -80
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "stafford-gambit :: staffordGambit.ts :: 14-ply",
@@ -201,7 +327,7 @@
       "move": "Nxe4",
       "ply": 12,
       "loss": 114,
-      "cpAfter": -114
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "stafford-gambit :: staffordGambit.ts :: 16-ply",
@@ -210,7 +336,7 @@
       "move": "Nxe4",
       "ply": 12,
       "loss": 114,
-      "cpAfter": -114
+      "kind": "SUBOPTIMAL"
     },
     {
       "name": "two-knights-defence :: twoKnightsDefenceVariations.ts :: 8-ply",
@@ -219,7 +345,7 @@
       "move": "Bc5",
       "ply": 8,
       "loss": 111,
-      "cpAfter": -112
+      "kind": "SUBOPTIMAL"
     }
   ]
 }
