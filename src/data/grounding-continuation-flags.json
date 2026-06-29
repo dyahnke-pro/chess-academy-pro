@@ -1,8 +1,9 @@
 {
   "source": "lessons",
   "margin": 100,
+  "filter": "cpAfter<0",
   "generated": "2026-06-29",
-  "count": 86,
+  "count": 24,
   "flags": [
     {
       "name": "alekhine-defence :: alekhineDefenceVariations.ts :: 22-ply",
@@ -10,7 +11,8 @@
       "isGambit": false,
       "move": "h6",
       "ply": 20,
-      "loss": 112
+      "loss": 121,
+      "cpAfter": -77
     },
     {
       "name": "caro-kann :: caroKannTrapLessons.ts :: 11-ply",
@@ -18,7 +20,8 @@
       "isGambit": false,
       "move": "Ngf6",
       "ply": 10,
-      "loss": 99982
+      "loss": 99982,
+      "cpAfter": -100000
     },
     {
       "name": "evans-gambit :: evansGambitVariations.ts :: 21-ply",
@@ -26,47 +29,17 @@
       "isGambit": true,
       "move": "dxe5",
       "ply": 21,
-      "loss": 214
+      "loss": 296,
+      "cpAfter": -143
     },
     {
-      "name": "petrov-defence :: petrovDefenceVariations.ts :: 32-ply",
-      "id": "petrov-defence",
+      "name": "nimzo-indian :: nimzoIndianVariations.ts :: 23-ply",
+      "id": "nimzo-indian",
       "isGambit": false,
-      "move": "Bxb2",
-      "ply": 28,
-      "loss": 398
-    },
-    {
-      "name": "petrov-defence :: petrovDefenceVariations.ts :: 34-ply",
-      "id": "petrov-defence",
-      "isGambit": false,
-      "move": "Nc7",
-      "ply": 28,
-      "loss": 99655
-    },
-    {
-      "name": "petrov-defence :: petrovDefenceVariations.ts :: 34-ply",
-      "id": "petrov-defence",
-      "isGambit": false,
-      "move": "f5",
-      "ply": 30,
-      "loss": 242
-    },
-    {
-      "name": "philidor-defence :: philidorDefenceVariations.ts :: 14-ply",
-      "id": "philidor-defence",
-      "isGambit": false,
-      "move": "Bc5",
-      "ply": 14,
-      "loss": 135
-    },
-    {
-      "name": "philidor-defence :: philidorDefenceVariations.ts :: 22-ply",
-      "id": "philidor-defence",
-      "isGambit": false,
-      "move": "Bc5",
-      "ply": 14,
-      "loss": 135
+      "move": "Qe7",
+      "ply": 20,
+      "loss": 105,
+      "cpAfter": -38
     },
     {
       "name": "philidor-defence :: philidorDefenceVariations.ts :: 22-ply",
@@ -74,207 +47,8 @@
       "isGambit": false,
       "move": "Nf6",
       "ply": 18,
-      "loss": 478
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStafford.ts :: 10-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStafford.ts :: 12-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStafford.ts :: 14-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStafford.ts :: 16-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStafford.ts :: 18-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStafford.ts :: 6-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStafford.ts :: 8-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStaffordVariations.ts :: 10-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStaffordVariations.ts :: 10-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStaffordVariations.ts :: 10-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStaffordVariations.ts :: 12-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStaffordVariations.ts :: 12-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStaffordVariations.ts :: 12-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStaffordVariations.ts :: 14-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStaffordVariations.ts :: 14-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStaffordVariations.ts :: 16-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStaffordVariations.ts :: 16-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStaffordVariations.ts :: 16-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStaffordVariations.ts :: 19-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStaffordVariations.ts :: 20-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStaffordVariations.ts :: 7-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStaffordVariations.ts :: 7-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStaffordVariations.ts :: 8-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStaffordVariations.ts :: 9-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "pro-ericrosen-stafford :: proEricRosenStaffordVariations.ts :: 9-ply",
-      "id": "pro-ericrosen-stafford",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
+      "loss": 510,
+      "cpAfter": -276
     },
     {
       "name": "pro-gothamchess-fantasy-caro :: proGothamchessFantasyCaroVariations.ts :: 15-ply",
@@ -282,7 +56,8 @@
       "isGambit": false,
       "move": "Bd3",
       "ply": 15,
-      "loss": 109
+      "loss": 104,
+      "cpAfter": -56
     },
     {
       "name": "pro-gothamchess-stafford-refute :: proGothamchessStaffordRefuteVariations.ts :: 13-ply",
@@ -290,7 +65,8 @@
       "isGambit": true,
       "move": "d3",
       "ply": 11,
-      "loss": 406
+      "loss": 426,
+      "cpAfter": -263
     },
     {
       "name": "pro-gothamchess-stafford-refute :: proGothamchessStaffordRefuteVariations.ts :: 15-ply",
@@ -298,47 +74,8 @@
       "isGambit": true,
       "move": "d3",
       "ply": 11,
-      "loss": 406
-    },
-    {
-      "name": "pro-naroditsky-alapin :: proNaroditskyAlapinTrapLessons.ts :: 14-ply",
-      "id": "pro-naroditsky-alapin",
-      "isGambit": false,
-      "move": "Nf3",
-      "ply": 13,
-      "loss": 461
-    },
-    {
-      "name": "pro-naroditsky-alapin :: proNaroditskyAlapinTrapLessons.ts :: 14-ply",
-      "id": "pro-naroditsky-alapin",
-      "isGambit": false,
-      "move": "h3",
-      "ply": 11,
-      "loss": 123
-    },
-    {
-      "name": "pro-naroditsky-alapin :: proNaroditskyAlapinTrapLessons.ts :: 20-ply",
-      "id": "pro-naroditsky-alapin",
-      "isGambit": false,
-      "move": "O-O",
-      "ply": 15,
-      "loss": 314
-    },
-    {
-      "name": "pro-naroditsky-alapin :: proNaroditskyAlapinTrapLessons.ts :: 20-ply",
-      "id": "pro-naroditsky-alapin",
-      "isGambit": false,
-      "move": "Nbd2",
-      "ply": 17,
-      "loss": 371
-    },
-    {
-      "name": "pro-naroditsky-alapin :: proNaroditskyAlapinTrapLessons.ts :: 20-ply",
-      "id": "pro-naroditsky-alapin",
-      "isGambit": false,
-      "move": "Re1",
-      "ply": 19,
-      "loss": 375
+      "loss": 426,
+      "cpAfter": -263
     },
     {
       "name": "pro-naroditsky-alekhine :: proNaroditskyAlekhineVariations.ts :: 14-ply",
@@ -346,39 +83,8 @@
       "isGambit": false,
       "move": "Nc6",
       "ply": 14,
-      "loss": 106
-    },
-    {
-      "name": "pro-naroditsky-caro-kann :: proNaroditskyCaroKannVariations.ts :: 10-ply",
-      "id": "pro-naroditsky-caro-kann",
-      "isGambit": false,
-      "move": "Bc5",
-      "ply": 10,
-      "loss": 165
-    },
-    {
-      "name": "pro-naroditsky-caro-kann :: proNaroditskyCaroKannVariations.ts :: 12-ply",
-      "id": "pro-naroditsky-caro-kann",
-      "isGambit": false,
-      "move": "Bc5",
-      "ply": 10,
-      "loss": 165
-    },
-    {
-      "name": "pro-naroditsky-caro-kann :: proNaroditskyCaroKannVariations.ts :: 15-ply",
-      "id": "pro-naroditsky-caro-kann",
-      "isGambit": false,
-      "move": "Bc5",
-      "ply": 10,
-      "loss": 165
-    },
-    {
-      "name": "pro-naroditsky-caro-kann :: proNaroditskyCaroKannVariations.ts :: 18-ply",
-      "id": "pro-naroditsky-caro-kann",
-      "isGambit": false,
-      "move": "Bc5",
-      "ply": 10,
-      "loss": 165
+      "loss": 110,
+      "cpAfter": -153
     },
     {
       "name": "pro-naroditsky-caro-kann :: proNaroditskyCaroTrapLessons.ts :: 12-ply",
@@ -386,7 +92,8 @@
       "isGambit": false,
       "move": "Bg4",
       "ply": 12,
-      "loss": 451
+      "loss": 457,
+      "cpAfter": -499
     },
     {
       "name": "pro-naroditsky-fantasy-caro :: proNaroditskyFantasyTrapLessons.ts :: 15-ply",
@@ -394,7 +101,8 @@
       "isGambit": false,
       "move": "Nxd4",
       "ply": 15,
-      "loss": 132
+      "loss": 127,
+      "cpAfter": -30
     },
     {
       "name": "pro-naroditsky-fantasy-caro :: proNaroditskyFantasyTrapLessons.ts :: 17-ply",
@@ -402,7 +110,8 @@
       "isGambit": false,
       "move": "Nxd4",
       "ply": 15,
-      "loss": 132
+      "loss": 127,
+      "cpAfter": -30
     },
     {
       "name": "pro-naroditsky-fantasy-caro :: proNaroditskyFantasyTrapLessons.ts :: 17-ply",
@@ -410,7 +119,8 @@
       "isGambit": false,
       "move": "Nc3",
       "ply": 17,
-      "loss": 133
+      "loss": 140,
+      "cpAfter": -136
     },
     {
       "name": "pro-naroditsky-kia :: proNaroditskyKIATrapLessons.ts :: 10-ply",
@@ -418,7 +128,8 @@
       "isGambit": false,
       "move": "e4",
       "ply": 5,
-      "loss": 127
+      "loss": 113,
+      "cpAfter": -95
     },
     {
       "name": "pro-naroditsky-kia :: proNaroditskyKIATrapLessons.ts :: 13-ply",
@@ -426,7 +137,8 @@
       "isGambit": false,
       "move": "e4",
       "ply": 5,
-      "loss": 127
+      "loss": 113,
+      "cpAfter": -95
     },
     {
       "name": "pro-naroditsky-kia :: proNaroditskyKIATrapLessons.ts :: 7-ply",
@@ -434,7 +146,8 @@
       "isGambit": false,
       "move": "e4",
       "ply": 5,
-      "loss": 127
+      "loss": 113,
+      "cpAfter": -95
     },
     {
       "name": "pro-naroditsky-kia :: proNaroditskyKIATrapLessons.ts :: 8-ply",
@@ -442,15 +155,8 @@
       "isGambit": false,
       "move": "e4",
       "ply": 5,
-      "loss": 127
-    },
-    {
-      "name": "pro-samayraina-kings-gambit :: proSamayRainaKingsGambit.ts :: 3-ply",
-      "id": "pro-samayraina-kings-gambit",
-      "isGambit": true,
-      "move": "f4",
-      "ply": 3,
-      "loss": 102
+      "loss": 113,
+      "cpAfter": -95
     },
     {
       "name": "pro-samayraina-scandi :: proSamayRainaScandiVariations.ts :: 12-ply",
@@ -458,7 +164,8 @@
       "isGambit": false,
       "move": "Bg4",
       "ply": 12,
-      "loss": 153
+      "loss": 144,
+      "cpAfter": -220
     },
     {
       "name": "pro-samayraina-scandi :: proSamayRainaScandiVariations.ts :: 16-ply",
@@ -466,103 +173,44 @@
       "isGambit": false,
       "move": "Bg4",
       "ply": 12,
-      "loss": 153
+      "loss": 144,
+      "cpAfter": -220
     },
     {
-      "name": "stafford-gambit :: staffordGambit.ts :: 10-ply",
-      "id": "stafford-gambit",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
+      "name": "reti-opening :: retiOpeningVariations.ts :: 22-ply",
+      "id": "reti-opening",
+      "isGambit": false,
+      "move": "Rc1",
+      "ply": 21,
+      "loss": 101,
+      "cpAfter": -67
     },
     {
-      "name": "stafford-gambit :: staffordGambit.ts :: 11-ply",
-      "id": "stafford-gambit",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
+      "name": "scandinavian-defence :: scandinavianDefence.ts :: 28-ply",
+      "id": "scandinavian-defence",
+      "isGambit": false,
+      "move": "h6",
+      "ply": 28,
+      "loss": 121,
+      "cpAfter": -80
     },
     {
       "name": "stafford-gambit :: staffordGambit.ts :: 14-ply",
       "id": "stafford-gambit",
       "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
+      "move": "Nxe4",
+      "ply": 12,
+      "loss": 114,
+      "cpAfter": -114
     },
     {
       "name": "stafford-gambit :: staffordGambit.ts :: 16-ply",
       "id": "stafford-gambit",
       "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "stafford-gambit :: staffordGambit.ts :: 6-ply",
-      "id": "stafford-gambit",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "stafford-gambit :: staffordGambit.ts :: 8-ply",
-      "id": "stafford-gambit",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "stafford-gambit :: staffordGambitVariations.ts :: 11-ply",
-      "id": "stafford-gambit",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "stafford-gambit :: staffordGambitVariations.ts :: 12-ply",
-      "id": "stafford-gambit",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "stafford-gambit :: staffordGambitVariations.ts :: 13-ply",
-      "id": "stafford-gambit",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "stafford-gambit :: staffordGambitVariations.ts :: 14-ply",
-      "id": "stafford-gambit",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "stafford-gambit :: staffordGambitVariations.ts :: 16-ply",
-      "id": "stafford-gambit",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
-    },
-    {
-      "name": "stafford-gambit :: staffordGambitVariations.ts :: 16-ply",
-      "id": "stafford-gambit",
-      "isGambit": true,
-      "move": "Nc6",
-      "ply": 6,
-      "loss": 133
+      "move": "Nxe4",
+      "ply": 12,
+      "loss": 114,
+      "cpAfter": -114
     },
     {
       "name": "two-knights-defence :: twoKnightsDefenceVariations.ts :: 8-ply",
@@ -570,127 +218,8 @@
       "isGambit": false,
       "move": "Bc5",
       "ply": 8,
-      "loss": 119
-    },
-    {
-      "name": "vienna-game :: viennaVariations.ts :: 18-ply",
-      "id": "vienna-game",
-      "isGambit": false,
-      "move": "Bd2",
-      "ply": 15,
-      "loss": 181
-    },
-    {
-      "name": "vienna-game :: viennaVariations.ts :: 18-ply",
-      "id": "vienna-game",
-      "isGambit": false,
-      "move": "Nh3",
-      "ply": 17,
-      "loss": 223
-    },
-    {
-      "name": "vienna-game :: viennaVariations.ts :: 20-ply",
-      "id": "vienna-game",
-      "isGambit": false,
-      "move": "Bd2",
-      "ply": 15,
-      "loss": 181
-    },
-    {
-      "name": "vienna-game :: viennaVariations.ts :: 20-ply",
-      "id": "vienna-game",
-      "isGambit": false,
-      "move": "Nh3",
-      "ply": 17,
-      "loss": 223
-    },
-    {
-      "name": "vienna-game :: viennaVariations.ts :: 20-ply",
-      "id": "vienna-game",
-      "isGambit": false,
-      "move": "O-O-O",
-      "ply": 19,
-      "loss": 313
-    },
-    {
-      "name": "vienna-game :: viennaVariations.ts :: 21-ply",
-      "id": "vienna-game",
-      "isGambit": false,
-      "move": "Be3",
-      "ply": 21,
-      "loss": 350
-    },
-    {
-      "name": "vienna-game :: viennaVariations.ts :: 22-ply",
-      "id": "vienna-game",
-      "isGambit": false,
-      "move": "Bd2",
-      "ply": 15,
-      "loss": 181
-    },
-    {
-      "name": "vienna-game :: viennaVariations.ts :: 22-ply",
-      "id": "vienna-game",
-      "isGambit": false,
-      "move": "Nh3",
-      "ply": 17,
-      "loss": 223
-    },
-    {
-      "name": "vienna-game :: viennaVariations.ts :: 22-ply",
-      "id": "vienna-game",
-      "isGambit": false,
-      "move": "O-O-O",
-      "ply": 19,
-      "loss": 313
-    },
-    {
-      "name": "vienna-game :: viennaVariations.ts :: 22-ply",
-      "id": "vienna-game",
-      "isGambit": false,
-      "move": "Nf4",
-      "ply": 21,
-      "loss": 144
-    },
-    {
-      "name": "vienna-game :: viennaVariations.ts :: 24-ply",
-      "id": "vienna-game",
-      "isGambit": false,
-      "move": "Bd2",
-      "ply": 15,
-      "loss": 181
-    },
-    {
-      "name": "vienna-game :: viennaVariations.ts :: 24-ply",
-      "id": "vienna-game",
-      "isGambit": false,
-      "move": "Nh3",
-      "ply": 17,
-      "loss": 223
-    },
-    {
-      "name": "vienna-game :: viennaVariations.ts :: 24-ply",
-      "id": "vienna-game",
-      "isGambit": false,
-      "move": "O-O-O",
-      "ply": 19,
-      "loss": 313
-    },
-    {
-      "name": "vienna-game :: viennaVariations.ts :: 24-ply",
-      "id": "vienna-game",
-      "isGambit": false,
-      "move": "Nf4",
-      "ply": 21,
-      "loss": 144
-    },
-    {
-      "name": "vienna-game :: viennaVariations.ts :: 24-ply",
-      "id": "vienna-game",
-      "isGambit": false,
-      "move": "Kb1",
-      "ply": 23,
-      "loss": 184
+      "loss": 111,
+      "cpAfter": -112
     }
   ]
 }
