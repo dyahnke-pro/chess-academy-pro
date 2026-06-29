@@ -58,6 +58,40 @@ that need truncation, not a move-swap. **The instrument works; the auto-fix surf
 is small; the judgment surface is large.** That's why these are flagged for you,
 not guessed.
 
+## UPDATE (later in the run): the bug set is TINY — most flags were artifacts
+
+On per-line scrutiny, almost every "must-fix" flag turned out NOT to be a bug:
+- **Philidor Bc5** = the **Counter-Gambit** (a deliberate sharp gambit showcase —
+  the lesson says so). Keep.
+- **Petrov Bxb2** = a mid-sequence recapture; the line ends in a **level endgame**
+  exactly as narrated (terminal-soundness gate agrees). False positive.
+- **Petrov Nc7** = Black is **winning** (forced …Qxh2# available); the lesson
+  teaches a slower winning attack. Declining a faster mate ≠ a bug.
+- **two-knights Bc5** = the **Traxler**; **caro Ngf6** = the **smothered-mate
+  trap**; **Evans/Stafford** = gambits; **12 pro-* lines** = the pros' real games.
+
+**Root cause — a method limitation in the stage-2 check:** the eval-before/after
+metric over-flags (a) forcing-sequence recaptures (eval mid-capture is noisy) and
+(b) "declined a faster win" (still winning after the move). FIXED 2026-06-29: the
+check now only flags a move that concedes ≥1.0 AND lands the student **worse than
+equal** (cpAfter < 0) — a real bad-position move, not a squandered-faster-win. Re-
+swept; the flag count collapses to the genuine cases.
+
+**The genuinely-broken set was ~2, both FIXED:**
+1. ✅ Vienna Gambit `Bd2` dawdle → re-spined to `d4` + two scenarios.
+2. ✅ Vienna Paulsen `Be3` (missed `dxc6` fork, mis-narrated squeeze) → truncated
+   to the sound `Nd5` jump.
+
+Possible-real, pro-content, flagged for your eye: **gotham-stafford-refute** plays
+the passive `d3` where `d4` is the active refutation (terminal still sound, so
+likely a soft inaccuracy, not a loss) — verify against his actual recommendation.
+
+**So the honest headline: the app's opening content is in far better shape than
+"44 flags" implied.** The decaying-tail disease was REAL but RARE (the Vienna
+pair). The instrument now has its false-positive filter, the gate holds the line,
+and the rest of the flags are intentional/provenance/artifact — documented, not
+guessed.
+
 ## Bottom line for the morning
 
 I fixed the **one genuinely-clean bug** (Vienna `Bd2` dawdle) to the full locked

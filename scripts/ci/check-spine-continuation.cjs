@@ -150,7 +150,13 @@ const studCp = (e, color) => { const w = e.mate != null ? (e.mate > 0 ? 100000 :
         const cpBefore = studCp(evBefore, l.color);   // best-play eval for us at this position
         const cpAfter = studCp(evAfter, l.color);      // eval after we committed our move
         const loss = cpBefore - cpAfter;
-        if (loss >= MARGIN) flags.push({ ply: i + 1, kind: 'SUBOPTIMAL', move: sans[i], best: evBefore.best, loss, cpBefore, cpAfter });
+        // Only a REAL "teaching a bad move": concedes >= MARGIN AND lands the
+        // student actually worse than equal. Filters the artifacts that flooded
+        // the first pass — forcing-sequence recaptures (the line ends level) and
+        // "declined a faster win" (still winning after the move). The Vienna
+        // dawdle still trips it (Bd2 lands −0.76); Petrov Bxb2 (ends level) and
+        // Nc7 (Black still winning) no longer do.
+        if (loss >= MARGIN && cpAfter < 0) flags.push({ ply: i + 1, kind: 'SUBOPTIMAL', move: sans[i], best: evBefore.best, loss, cpBefore, cpAfter });
       }
     }
     const worst = flags.filter((f) => f.kind === 'SUBOPTIMAL').sort((a, b) => b.loss - a.loss)[0];
