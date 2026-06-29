@@ -70,7 +70,11 @@ async function respineFrom(c, target, eng) {
     const sub = (r.flags || []).filter((f) => f.kind === 'SUBOPTIMAL' && f.loss >= MUST_FIX).sort((a, b) => a.ply - b.ply)[0];
     const ill = (r.flags || []).find((f) => f.kind === 'ILLEGAL');
     if (!sub && !ill) continue;
-    if (r.isGambit) { gambitSkips.push({ id: r.id, name: r.name, flag: sub || ill }); continue; }
+    if (r.isGambit) { gambitSkips.push({ id: r.id, name: r.name, reason: 'gambit', flag: sub || ill }); continue; }
+    // TRAP-lesson files deliberately show a victim's blunder then the punish —
+    // the flagged move is usually the INTENDED blunder, so re-spining would
+    // delete the trap. Hand-triage these, never auto-rewrite.
+    if (/trap/i.test(r.name || '')) { gambitSkips.push({ id: r.id, name: r.name, reason: 'trap-lesson', flag: sub || ill }); continue; }
     targets.push({ ...r, fix: sub || ill });
   }
   console.log(`Flagged to re-spine: ${targets.length} non-gambit | gambit (manual): ${gambitSkips.length}\n`);
