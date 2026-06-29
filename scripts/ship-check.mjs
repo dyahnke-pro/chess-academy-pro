@@ -218,6 +218,7 @@ const GATE_TESTS = [
   'src/data/groundingGems.test.ts',       // punish-gems still leave a real student edge (engine)
   'src/data/groundingLessons.test.ts',    // lesson sublines (deep Watch/Learn tails) sound for the student (engine)
   'src/data/groundingPlans.test.ts',      // middlegame-plan lines sound for the student (engine)
+  'src/data/lessons/groundingContinuation.test.ts', // no NEW out-of-book decaying-tail line (stage-2 best-move tripwire)
 ];
 
 runStep('typecheck   ', 'npm', ['run', 'typecheck']);
