@@ -235,7 +235,7 @@ const FRANKENSTEIN_DRACULA: LessonScript = {
 // pure positional Vienna.
 const PAULSEN: LessonScript = {
   openingId: 'vienna-game',
-  sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
+  sources: ['book:vienna-game', 'concept:pos-development', 'concept:end-two-bishops', 'concept:pos-outpost', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Vienna_Game'],
   title: 'Vienna Game — The Paulsen (g3)',
   minutes: 9,
   orientation: 'white',
@@ -261,17 +261,27 @@ const PAULSEN: LessonScript = {
       sayShort: "Setup done — Nd5 the dream, slow expansion.",
       arrows: [A('c3', 'd5', INTENT)],
       highlights: [H('d5', KEY)] }),
-    // ── Paulsen spine to the Nd5 jump (p7) ─────────────────────────
-    // Truncated 2026-06-29: the old p8→p10 walked …Nxd5 exd5 …Bd7 Be3,
+    // ── Paulsen spine: Nd5 jump → the sound trade line (p7→p9) ─────
+    // Re-spined 2026-06-29: the old p8→p10 walked …Nxd5 exd5 …Bd7 Be3,
     // where Be3 quietly throws away a tactic — after exd5 the d5-pawn
     // FORKS the c6-knight and e6-bishop, so dxc6 wins material (Be3
-    // concedes ~3.5 vs best). The "quiet squeeze" narration mischaracter-
-    // ised a tactical position. Ends at the sound positional high point —
-    // the Nd5 jump — rather than teach the mis-narrated tactical line.
+    // concedes ~3.5 vs best), and the "quiet squeeze" narration mis-
+    // characterised a tactical position. Replaced with the genuinely
+    // quiet line …Bg4 h3 Bxe2 Nxf6+ Qxf6 Qxe2 Nd4 (Stockfish-best both
+    // sides, terminal +0.49): Black trades to relieve the cramp, White
+    // keeps the bishop pair + space — the real small-edge Paulsen squeeze.
     b({ id: 'p7', moves: 'e4 e5 Nc3 Nf6 g3 Bc5 Bg2 d6 Nge2 Nc6 O-O a6 a4 O-O d3 Be6 Nd5',
-      say: "Black develops the queen-bishop: Be6, eyeing the d5-outpost AND the long diagonal that the Bg2 has been claiming. And now White strikes: Nd5! — the knight finally lands on the dream square the whole opening has been pointing at since move three. The c3-knight became this knight, and the Bg2 backs it down the long diagonal. Black must decide how to meet it — trade it off with …Nxd5, or challenge it with …c6 — but planting the knight on d5 is the Paulsen's whole positional point: patient setup, then the central jump the slow maneuvering was always building toward.",
+      say: "Black develops the queen-bishop: Be6, eyeing the d5-outpost AND the long diagonal that the Bg2 has been claiming. And now White strikes: Nd5! — the knight finally lands on the dream square the whole opening has been pointing at since move three. The c3-knight became this knight, and the Bg2 backs it down the long diagonal. Black must decide how to meet it — trade it off, or challenge it — but planting the knight on d5 is the Paulsen's whole positional point: patient setup, then the central jump the slow maneuvering was always building toward.",
       sayShort: "Nd5! — the knight lands on the dream square.",
       highlights: [H('e6', KEY), H('d5', KEY)] }),
+    b({ id: 'p8', moves: 'e4 e5 Nc3 Nf6 g3 Bc5 Bg2 d6 Nge2 Nc6 O-O a6 a4 O-O d3 Be6 Nd5 Bg4 h3 Bxe2 Nxf6+ Qxf6 Qxe2',
+      say: "Black does the right thing against a squeeze — he trades pieces to breathe. Bg4 hits the e2-knight, and after h3 the bishop takes it, Bxe2. White recaptures cleverly: Nxf6+ first, forcing Qxf6, and only then Qxe2 to collect the bishop. When the dust settles White has parted with a knight but kept BOTH bishops — the long-range pair that thrives in exactly this kind of half-open position the trades have created. That is the Paulsen's quiet dividend: no knockout, just the bishop pair and a shade more space.",
+      sayShort: "Trades clear — White keeps the two bishops.",
+      highlights: [H('e2', KEY)] }),
+    b({ id: 'p9', moves: 'e4 e5 Nc3 Nf6 g3 Bc5 Bg2 d6 Nge2 Nc6 O-O a6 a4 O-O d3 Be6 Nd5 Bg4 h3 Bxe2 Nxf6+ Qxf6 Qxe2 Nd4',
+      say: "Black claims a square in return — Nd4, the knight leaping to its own outpost and hitting the queen on e2. And here is the honest truth about the Paulsen: the position is near-level. White's two bishops and the extra central space are a pull worth playing for, not a winning advantage. You are not here for fireworks — you are here to grind a small, durable edge with the long-range pieces, move after patient move. That is exactly why the modern elite reaches for it.",
+      sayShort: "…Nd4 — Black's outpost; White grinds a small edge.",
+      highlights: [H('d4', KEY), H('e2', SOFT)] }),
     b({ id: 'p6', moves: 'e4 e5 Nc3 Nf6 g3 Bc5 Bg2 d6 Nge2 Nc6 O-O a6 a4 O-O d3',
       say: "Why is the Paulsen the modern grandmaster's choice when amateurs rarely see it? Two reasons. First, the FORCED LINES are extremely short — there is no fifteen-move memorised waterfall like the Frankenstein-Dracula. The student of the Paulsen only needs to understand the structure, not memorise the moves. Second, the Vienna Gambit at the very top has been worked out so thoroughly that even Black has computer-verified equalising paths; the Paulsen sidesteps all that prep, the e4-pawn unchallenged for now and the long diagonal aimed at the centre. Treat the Paulsen as the Vienna's grown-up form: less spectacle, more solidity. Mamedyarov has built half his Vienna career on it.",
       sayShort: "The Paulsen — no theory, Mamedyarov's pick.",
