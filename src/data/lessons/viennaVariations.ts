@@ -35,7 +35,12 @@ function b(init: BeatInit): LessonBeat {
 // Hamppe sacrifices live in the WEAPONS layer.
 const GAMBIT: LessonScript = {
   openingId: 'vienna-game',
-  sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
+  // Idea-grounding (verified against chess-concepts.json passages, not recall):
+  // the d4 break + two-bishops/open-position teaching is Lasker (end-two-bishops,
+  // "open the position… it grinds"); the b-file rook-raid is Lasker (pos-open-file,
+  // "a highway for the rooks… bear down to the seventh"); the f5/f6 holes are
+  // Lasker (pos-weak-squares); the e5 cramp is pos-space; d4 is pos-center.
+  sources: ['book:vienna-game', 'concept:pos-development', 'concept:pos-center', 'concept:pos-bishop-pair', 'concept:end-two-bishops', 'concept:pos-open-file', 'concept:end-rook-7th', 'concept:pos-weak-squares', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Vienna_Game'],
   title: 'Vienna Game — The Gambit (f4)',
   minutes: 11,
   orientation: 'white',
