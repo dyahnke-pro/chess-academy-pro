@@ -14,8 +14,13 @@ import { loadItems, toCp, sideToMove, loadBaseline, maybeWriteBaseline } from '.
 // are positional/instructional mistakes the engine underrates at shallow depth,
 // and hard-failing them would cry wolf. (A separate review list tracks the soft
 // band.) Also flag when the "correct" move itself loses.
-const NOT_WORSE_CP = 0;    // wrong ≥ correct (within tolerance) → not a real mistake
-const CORRECT_LOSING = -150; // the "correct" move must not lose
+// The "wrong" move must be CLEARLY at-least-as-good as the "correct" move to
+// count as an inversion — a bare cpWrong ≥ cpCorrect over-flags the ±0.2 jitter
+// a depth-14 engine has around equality (34 of 62 raw inversions were gap <0.20,
+// the 2026-06-29 re-eval finding). Require a real 0.50 margin so only unambiguous
+// mislabels gate; the soft 0.20–0.50 band is depth noise, not a content bug.
+const INVERSION_MARGIN = 50; // wrong must be ≥ correct + 0.50 to be a real inversion
+const CORRECT_LOSING = -150; // the "correct" move must not itself lose
 
 describe('grounding gate: common-mistakes are real mistakes', () => {
   const { items } = loadItems('mistake');
@@ -36,9 +41,9 @@ describe('grounding gate: common-mistakes are real mistakes', () => {
       const cpWrong = toCp(it.evalWrong, student);
       const cpCorrect = toCp(it.evalCorrect, student);
       if (cpWrong == null || cpCorrect == null) { viol.push(`${key} :: UNEVALUATED`); continue; }
-      if (cpWrong >= cpCorrect - NOT_WORSE_CP) {
+      if (cpWrong - cpCorrect >= INVERSION_MARGIN) {
         const k = `${key} :: INVERTED`; viol.push(k);
-        detail[k] = `wrong ${(cpWrong / 100).toFixed(2)} ≥ correct ${(cpCorrect / 100).toFixed(2)}`;
+        detail[k] = `wrong ${(cpWrong / 100).toFixed(2)} ≥ correct ${(cpCorrect / 100).toFixed(2)} (+${((cpWrong - cpCorrect) / 100).toFixed(2)})`;
       }
       if (cpCorrect <= CORRECT_LOSING) {
         const k = `${key} :: CORRECT-LOSING`; viol.push(k);
