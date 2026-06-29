@@ -131,11 +131,12 @@ const studCp = (e, color) => { const w = e.mate != null ? (e.mate > 0 ? 100000 :
     for (let i = 0; i < sans.length; i++) {
       const t = await explorerTotal(uci);
       if (t >= FLOOR) lastBook = i; else break;
-      const mv = c0.move(sans[i]); if (!mv) break; uci.push(mv.from + mv.to + (mv.promotion || ''));
+      let mv; try { mv = c0.move(sans[i]); } catch { mv = null; } // chess.js THROWS on illegal
+      if (!mv) break; uci.push(mv.from + mv.to + (mv.promotion || ''));
     }
     // from lastBook onward, compare each OUR move to the engine best
     const c = new Chess();
-    for (let i = 0; i < lastBook; i++) c.move(sans[i]);
+    try { for (let i = 0; i < lastBook; i++) c.move(sans[i]); } catch { /* illegal prefix — flags below catch it */ }
     const flags = [];
     const studentChar = l.color === 'black' ? 'b' : 'w';
     for (let i = lastBook; i < sans.length; i++) {
