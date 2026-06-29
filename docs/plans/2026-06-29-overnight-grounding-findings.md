@@ -110,6 +110,33 @@ Philidor losing-line, deep-Petrov truncation, and whether the pro-provenance
 −4.5 outliers are real games or transcription errors. Each has the engine data
 + my recommendation above.
 
+## FINAL STATE (run complete)
+
+**Fixed (3 real bugs, all gate-green on the branch):**
+1. ✅ Vienna Gambit `Bd2` dawdle → `d4` + two real Declined scenarios.
+2. ✅ Vienna Paulsen `Be3` (missed `dxc6` fork) → the sound trade line
+   `…Bg4 h3 Bxe2 Nxf6+ Qxf6 Qxe2 Nd4` (+0.49, bishop pair), 24 plies.
+3. ✅ Scandinavian Qd6 Tiviakov **illegal `O-O-O`** → truncated to the legal
+   sound setup `…Nc6` (−0.77).
+
+**Inventory complete:** lessons (2,711) + repertoire (374) both stage-2 swept.
+Repertoire: 357/374 clean; the rest mild softs / gambit showcases. NO new
+dramatic decaying tails beyond the Vienna pair.
+
+**Durable protection:** the stage-2 continuation gate (artifact-filtered) now
+covers BOTH lessons + repertoire, 38 flags baselined (intentional/provenance/
+mild). A NEW real decaying tail fails ship-check.
+
+**ship-check: READY TO PUSH** — typecheck ✓, lint ✓ (0 errors), all content
+gates ✓.
+
+**Still your call (documented, not guessed):** the pro-provenance lines (keep
+the pros' real moves), the Traxler/Evans/Stafford gambit showcases, the
+smothered-mate trap, and the soft −0.4 to −0.8 masterclass inaccuracies
+(alekhine/scandi/nimzo/reti `h6`-type slow moves — not losing, low priority).
+The Gotham Stafford-refutation passive `d3` is the one worth a look (a
+refutation playing a soft line). None ship to prod until you push.
+
 ## What's DONE / DURABLE this run
 - Stage-2 out-of-book best-move check (`check-spine-continuation.cjs`) — the
   instrument that finds this whole bug class. Validated (catches the Caro Bg4
