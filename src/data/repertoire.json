@@ -1213,7 +1213,7 @@
       },
       {
         "name": "Qd6 Tiviakov Variation",
-        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nf6 Nf3 a6 g3 Bg4 Bg2 Nc6 O-O-O d5 Ne5 Bf4 Nxf3+ Bxf3 Bxf3",
+        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nf6 Nf3 a6 g3 Bg4 Bg2 Nc6",
         "explanation": "Tiviakov's …Qd6 keeps the queen home and central, sidestepping the heavy …Qa5 theory. White goes for a g3 fianchetto, and we get busy: …Bg4 to lean on the f3-knight, …Nc6, quick development, and we happily trade the light bishops on f3. What's left is a balanced, manoeuvring game where our solid structure equalises with no fuss.",
         "shortExplanation": "Tiviakov ...Qd6 setup. ...a6 prepares ...b5; ...Bf5 + ...e6 + flexible structure; Ne5 is critical test."
       },
