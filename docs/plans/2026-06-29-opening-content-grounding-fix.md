@@ -76,6 +76,39 @@ known Caro `Bg4??` hang at 4.57 loss; pinpoints the Vienna bug. Persistent
   backlog, burn down. So a future build cannot reintroduce a decaying tail.
 - **Phase 4 — Ship + audit.** Per the post-deploy ritual.
 
+## Expansion mandate — teach as many lines as possible (David 2026-06-29)
+
+Beyond fixing flagged lines, ADD new sublines wherever a real, sound, distinct
+branch can be IDENTIFIED — maximize the teaching surface (the Vienna A/B
+queen-trade vs …Be6 rook-raid pattern, generalized to every opening).
+
+**Method to identify an addable line (grounded, never padded):** at each branch
+point, find candidate continuations two ways —
+1. **DB branches** — the masters explorer's alternative moves at that position
+   that carry a meaningful share of games (a recognized variation), and
+2. **Engine forks** — eval each legal reply; any sound continuation within
+   ~0.3–0.5 of the best (a genuinely playable alternative, not a blunder).
+A candidate becomes a new subline ONLY if it is (a) sound for the side taught,
+(b) distinct in idea/plan from the lines already taught, and (c) groundable
+(real DB/engine move + board-true narration + a corpus concept behind the idea).
+
+**Guardrail (unchanged):** empty > invented. A branch I cannot ground or verify
+as sound is NOT added. "As many lines as possible" is bounded by soundness and
+groundability — never by padding the count. Each added line is authored to the
+full locked standard (coach voice, two registers, lead-the-eye, cited sources).
+
+## The locked narration standard (David 2026-06-29)
+
+1. Coach voice — explain the WHY behind each move, to the student.
+2. Engine invisible — the position teaches, never "the engine says."
+3. Moves grounded — DB-most-played in book, Stockfish-best out of book.
+4. Board-facts gated — narrationAccuracy; never name a piece/square not there.
+5. Ideas grounded in the books — verified against chess-concepts.json passages
+   (checked, not recalled) and cited in sources[].
+6. Two registers — full `say` (the why) + ≤8-word `sayShort` cue.
+7. Lead-the-eye — arrows/highlights only on squares the narration names.
+8. When unsure — leave blank / flag it. Empty > invented.
+
 ## Decisions for David
 
 - **Fix threshold.** Recommend: concede ≥ **1.0** = must-fix (re-spine);
