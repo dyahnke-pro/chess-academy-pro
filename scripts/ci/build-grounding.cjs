@@ -46,6 +46,21 @@ function fenAfter(fen, san) {
 function fenAfterMoves(fen, moves) {
   try { const c = new Chess(fen); for (const m of moves) { if (!c.move(m)) return null; } return c.fen(); } catch { return null; }
 }
+// Terminal positions are adjudicated by chess.js, NOT the engine — a checkmate
+// is deterministic and the engine's `score mate 0` drops its sign (the bug that
+// made student-delivered mates read as the student getting mated). Returns a
+// white-POV eval for a terminal FEN, or null if the position isn't terminal.
+function terminalAdjudicate(fen) {
+  let c; try { c = new Chess(fen); } catch { return null; }
+  if (c.isCheckmate()) {
+    // side to move is mated → it loses. white-POV sentinel by side to move.
+    return { cp: null, mate: c.turn() === 'w' ? -100000 : 100000, depth: 99, terminal: 'checkmate' };
+  }
+  if (c.isStalemate() || c.isInsufficientMaterial() || c.isThreefoldRepetition() || c.isDraw()) {
+    return { cp: 0, mate: null, depth: 99, terminal: 'draw' };
+  }
+  return null;
+}
 const BLACK_RE = /caro|sicilian|najdorf|dragon|french|pirc|scandinav|alekhine|king'?s?.?indian|kingsindian|grunfeld|gruenfeld|benoni|dutch|nimzo|slav|qgd|semi.?slav|petrov|philidor|budapest/i;
 function inferColor(id, name) { return COLOR[id] || (BLACK_RE.test(id || '') || BLACK_RE.test(name || '') ? 'black' : 'white'); }
 const GAMBIT_RE = /gambit|muzio|allgaier|max.?lange|counter.?gambit|sacrifice|king'?s.?gambit|evans|smith.?mor|danish|halloween|fishing.?pole|fried.?liver|stafford/i;
@@ -173,7 +188,15 @@ function enumPlans() {
     for (const k of ['terminalFen', 'fenWrong', 'fenCorrect']) if (it[k]) fenSet.add(it[k]);
   }
   const allFens = [...fenSet];
-  const todo = allFens.filter((f) => !(cache[f] && cache[f].depth >= DEPTH));
+  // Adjudicate every terminal FEN up front (chess.js, no engine) — this also
+  // overwrites stale {mate:0} entries from before the sign fix.
+  let adjudicated = 0;
+  for (const f of allFens) {
+    const t = terminalAdjudicate(f);
+    if (t) { cache[f] = t; adjudicated++; }
+  }
+  if (adjudicated) console.log(`Adjudicated ${adjudicated} terminal FENs via chess.js (checkmate/draw).`);
+  const todo = allFens.filter((f) => !(cache[f] && cache[f].depth >= DEPTH) && !cache[f]?.terminal);
   console.log(`Items: ${items.length} (lines ${lines.length}, mistakes ${mistakes.length}, traps ${traps.length}, gems ${gems.length})`);
   console.log(`Unique FENs: ${allFens.length} | already cached@${DEPTH}: ${allFens.length - todo.length} | to eval: ${todo.length}`);
 

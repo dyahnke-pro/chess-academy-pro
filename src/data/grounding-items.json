@@ -5897,8 +5897,9 @@
       "terminalFen": "r2Bk2r/ppp2ppp/2p5/8/4n1b1/3P4/PPP1KbPP/RN1Q1B1R w kq - 2 9",
       "eval": {
         "cp": null,
-        "mate": 0,
-        "depth": 14
+        "mate": -100000,
+        "depth": 99,
+        "terminal": "checkmate"
       }
     },
     {
@@ -5977,8 +5978,9 @@
       "terminalFen": "r1b1k1nr/pppp1ppp/2n5/4P3/8/2Q2N2/P1P1PPPP/RNq1KB1R w KQkq - 1 9",
       "eval": {
         "cp": null,
-        "mate": 0,
-        "depth": 14
+        "mate": -100000,
+        "depth": 99,
+        "terminal": "checkmate"
       }
     },
     {
@@ -15774,8 +15776,9 @@
       },
       "evalCorrect": {
         "cp": null,
-        "mate": 0,
-        "depth": 14
+        "mate": -100000,
+        "depth": 99,
+        "terminal": "checkmate"
       }
     },
     {
@@ -17609,8 +17612,9 @@
       "terminalFen": "r1b1k2r/ppppqppp/2n5/8/1PP2B2/3n1N2/1P1NPPPP/R2QKB1R w KQkq - 1 9",
       "eval": {
         "cp": null,
-        "mate": 0,
-        "depth": 14
+        "mate": -100000,
+        "depth": 99,
+        "terminal": "checkmate"
       }
     },
     {
@@ -18376,8 +18380,9 @@
       "terminalFen": "r2Bk2r/ppp2ppp/2p5/8/4n1b1/3P4/PPP1KbPP/RN1Q1B1R w kq - 2 9",
       "eval": {
         "cp": null,
-        "mate": 0,
-        "depth": 14
+        "mate": -100000,
+        "depth": 99,
+        "terminal": "checkmate"
       }
     },
     {
@@ -18402,8 +18407,9 @@
       "terminalFen": "r1b1k2r/ppppqppp/2n5/8/1PP2B2/3n1N2/1P1NPPPP/R2QKB1R w KQkq - 1 9",
       "eval": {
         "cp": null,
-        "mate": 0,
-        "depth": 14
+        "mate": -100000,
+        "depth": 99,
+        "terminal": "checkmate"
       }
     },
     {
@@ -18571,8 +18577,9 @@
       "terminalFen": "r1bqkb1r/pp1npppp/2pN1n2/8/8/5N2/PPPPQPPP/R1B1KB1R b KQkq - 4 6",
       "eval": {
         "cp": null,
-        "mate": 0,
-        "depth": 14
+        "mate": 100000,
+        "depth": 99,
+        "terminal": "checkmate"
       }
     },
     {
@@ -22780,8 +22787,9 @@
       "terminalFen": "r1bqkb1r/pp1npppp/2pN1n2/8/8/5N2/PPPPQPPP/R1B1KB1R b KQkq - 4 6",
       "eval": {
         "cp": null,
-        "mate": 0,
-        "depth": 14
+        "mate": 100000,
+        "depth": 99,
+        "terminal": "checkmate"
       }
     },
     {

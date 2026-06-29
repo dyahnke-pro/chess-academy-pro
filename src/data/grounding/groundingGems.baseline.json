@@ -1,16 +1,1 @@
-[
-  "kings-gambit :: Nxe4→Bxf4 :: GEM-WEAK",
-  "kings-gambit :: h5→Bc4+ :: GEM-WEAK",
-  "pro-aman-anti-caro :: Nbd7→Nd6# :: GEM-WEAK",
-  "pro-aman-nimzo-indian :: h4→hxg5 :: GEM-WEAK",
-  "pro-aman-reti :: d4→a4 :: GEM-WEAK",
-  "pro-aman-ruy-lopez :: d6→a3 :: GEM-WEAK",
-  "pro-caruana-kid :: Nxe5→Qxd1+ :: GEM-WEAK",
-  "pro-ericrosen-sicilian :: Be3→a6 :: GEM-WEAK",
-  "pro-gothamchess-anti-sicilian :: d5→e5 :: GEM-WEAK",
-  "pro-naroditsky-rossolimo :: e6→e5 :: GEM-WEAK",
-  "ruy-lopez :: bxc6→d4 :: GEM-WEAK",
-  "ruy-lopez :: d5→exd5 :: GEM-WEAK",
-  "scotch-game :: dxc6→Qxd8+ :: GEM-WEAK",
-  "vienna-game :: Ng4→Ng5 :: GEM-WEAK"
-]
+[]
