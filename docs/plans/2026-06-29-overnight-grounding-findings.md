@@ -58,6 +58,24 @@ that need truncation, not a move-swap. **The instrument works; the auto-fix surf
 is small; the judgment surface is large.** That's why these are flagged for you,
 not guessed.
 
+## Bottom line for the morning
+
+I fixed the **one genuinely-clean bug** (Vienna `Bd2` dawdle) to the full locked
+standard, built the **instrument** that finds the whole class, built the
+**permanent gate** so it can't silently return, and **classified every other
+flag** with a specific recommendation instead of guessing. The honest result:
+the auto-fix surface was tiny (1), the judgment surface is large (~20), and
+blind automation would have done real damage (deleted the Traxler + the
+smothered-mate trap, overwritten pros' real games). That's the disciplined
+outcome — not "15 openings rewritten," but "the real bug fixed, the class
+sealed, and a precise grounded work-list for your calls." Nothing shipped to
+prod; everything is on the branch, gate-green.
+
+**Your decisions needed (the ⚠️ FLAG rows):** Paulsen tactic, Traxler showcase,
+Philidor losing-line, deep-Petrov truncation, and whether the pro-provenance
+−4.5 outliers are real games or transcription errors. Each has the engine data
++ my recommendation above.
+
 ## What's DONE / DURABLE this run
 - Stage-2 out-of-book best-move check (`check-spine-continuation.cjs`) — the
   instrument that finds this whole bug class. Validated (catches the Caro Bg4
