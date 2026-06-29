@@ -88,3 +88,6 @@ src/data/main-line-report.json
 src/data/spine-continuation-report.json
 src/data/spine-eval-cache.json
 src/data/grounding-respine-proposals.json
+src/data/spine-report-lessons.json
+src/data/spine-report-repertoire.json
+src/data/spine-report-plans.json
