@@ -261,26 +261,17 @@ const PAULSEN: LessonScript = {
       sayShort: "Setup done — Nd5 the dream, slow expansion.",
       arrows: [A('c3', 'd5', INTENT)],
       highlights: [H('d5', KEY)] }),
-    // ── DEEP — 21-ply Paulsen middlegame (p7→p10) ──────────────────
-    // Authored 2026-05-22. Pushes the Paulsen spine from 15p (setup
-    // complete) into the canonical Nd5-jump squeeze. Every move
-    // chess.js-legal + matches mainstream Paulsen theory.
+    // ── Paulsen spine to the Nd5 jump (p7) ─────────────────────────
+    // Truncated 2026-06-29: the old p8→p10 walked …Nxd5 exd5 …Bd7 Be3,
+    // where Be3 quietly throws away a tactic — after exd5 the d5-pawn
+    // FORKS the c6-knight and e6-bishop, so dxc6 wins material (Be3
+    // concedes ~3.5 vs best). The "quiet squeeze" narration mischaracter-
+    // ised a tactical position. Ends at the sound positional high point —
+    // the Nd5 jump — rather than teach the mis-narrated tactical line.
     b({ id: 'p7', moves: 'e4 e5 Nc3 Nf6 g3 Bc5 Bg2 d6 Nge2 Nc6 O-O a6 a4 O-O d3 Be6 Nd5',
-      say: "Black develops the queen-bishop: Be6, eyeing the d5-outpost AND the long-diagonal that the Bg2 has been claiming. And now White strikes: Nd5! — the knight finally lands on the dream square the whole opening has been pointing at since move three. The c3-knight became this knight, the Bg2 will support d5 the moment the centre opens, and Black's natural response is …Nxd5 (the f6-knight trades) because keeping White's knight on d5 forever would be unbearable.",
+      say: "Black develops the queen-bishop: Be6, eyeing the d5-outpost AND the long diagonal that the Bg2 has been claiming. And now White strikes: Nd5! — the knight finally lands on the dream square the whole opening has been pointing at since move three. The c3-knight became this knight, and the Bg2 backs it down the long diagonal. Black must decide how to meet it — trade it off with …Nxd5, or challenge it with …c6 — but planting the knight on d5 is the Paulsen's whole positional point: patient setup, then the central jump the slow maneuvering was always building toward.",
       sayShort: "Nd5! — the knight lands on the dream square.",
       highlights: [H('e6', KEY), H('d5', KEY)] }),
-    b({ id: 'p8', moves: 'e4 e5 Nc3 Nf6 g3 Bc5 Bg2 d6 Nge2 Nc6 O-O a6 a4 O-O d3 Be6 Nd5 Nxd5 exd5',
-      say: "Nxd5 exd5 — the trade, the recapture, and the position transforms. White's e4-pawn is gone, replaced by a far better pawn on d5: the d5-pawn now cramps Black's whole position, hits the c6-knight AND the e6-bishop, and unscreens the Bg2 down the long diagonal toward b7. The same pawn that used to be a passive central foot-soldier on e4 is now a wedge inside Black's territory.",
-      sayShort: "Nxd5 exd5 — the e-pawn becomes a wedge.",
-      highlights: [H('d5', KEY), H('c6', KEY), H('e6', KEY)] }),
-    b({ id: 'p9', moves: 'e4 e5 Nc3 Nf6 g3 Bc5 Bg2 d6 Nge2 Nc6 O-O a6 a4 O-O d3 Be6 Nd5 Nxd5 exd5 Bd7 Be3',
-      say: "Black saves the bishop with Bd7 — the only good square, since e6 is attacked by the d5-pawn. White completes development with Be3, offering to trade the dark-square bishop with the Bc5 (the Bc5 has been a key Black piece since move three; trading it weakens Black's grip on the dark squares). Both sides have finished primary development. The recognisable Paulsen middlegame structure stands on the board: White's d5-pawn wedge + the bishop pair on the dark squares + slow expansion lining up, Black's bishop pair contesting but cramped.",
-      sayShort: "Be3 — offers the trade; the squeeze stands.",
-      highlights: [H('d7', KEY), H('e3', KEY), H('c5', SOFT), H('d5', SOFT)] }),
-    b({ id: 'p10', moves: 'e4 e5 Nc3 Nf6 g3 Bc5 Bg2 d6 Nge2 Nc6 O-O a6 a4 O-O d3 Be6 Nd5 Nxd5 exd5 Bd7 Be3',
-      say: "What does the position PRODUCE? Look at the structural facts. The d5-pawn is the cornerstone — it cramps Black, controls e6 and c6 forever, and creates a permanent space advantage that converts in the long game. Black's c6-knight and Bd7 have to coordinate to undermine d5, but Black has no pawn break available: …c6 just gives White the dxc6 capture, and …e4 weakens the d-pawn. White's plan from here: trade dark-square bishops with the Be3-Bxc5 swap, then play Qd2 + Rae1 + Nf4 to pile up on the e-file. Black has no clear plan beyond rerouting — exactly why this position is the modern grandmaster's choice. Slow squeeze, no theory race, structural advantages that compound move after move. Mamedyarov has built his Vienna career on this exact picture.",
-      sayShort: "The d5 wedge cramps Black — the elite Vienna.",
-      highlights: [H('d5', KEY), H('c5', SOFT), H('e3', SOFT)] }),
     b({ id: 'p6', moves: 'e4 e5 Nc3 Nf6 g3 Bc5 Bg2 d6 Nge2 Nc6 O-O a6 a4 O-O d3',
       say: "Why is the Paulsen the modern grandmaster's choice when amateurs rarely see it? Two reasons. First, the FORCED LINES are extremely short — there is no fifteen-move memorised waterfall like the Frankenstein-Dracula. The student of the Paulsen only needs to understand the structure, not memorise the moves. Second, the Vienna Gambit at the very top has been worked out so thoroughly that even Black has computer-verified equalising paths; the Paulsen sidesteps all that prep, the e4-pawn unchallenged for now and the long diagonal aimed at the centre. Treat the Paulsen as the Vienna's grown-up form: less spectacle, more solidity. Mamedyarov has built half his Vienna career on it.",
       sayShort: "The Paulsen — no theory, Mamedyarov's pick.",
