@@ -36,11 +36,11 @@ function b(init: BeatInit): LessonBeat {
 const GAMBIT: LessonScript = {
   openingId: 'vienna-game',
   // Idea-grounding (verified against chess-concepts.json passages, not recall):
-  // the d4 break + two-bishops/open-position teaching is Lasker (end-two-bishops,
-  // "open the position… it grinds"); the b-file rook-raid is Lasker (pos-open-file,
-  // "a highway for the rooks… bear down to the seventh"); the f5/f6 holes are
-  // Lasker (pos-weak-squares); the e5 cramp is pos-space; d4 is pos-center.
-  sources: ['book:vienna-game', 'concept:pos-development', 'concept:pos-center', 'concept:pos-bishop-pair', 'concept:end-two-bishops', 'concept:pos-open-file', 'concept:end-rook-7th', 'concept:pos-weak-squares', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Vienna_Game'],
+  // Nf3 + Qe2 development = pos-development; the e5-pawn wedge cramping Black =
+  // pos-space; the dxc3 recapture's half-open d-file = pos-open-file; the doubled
+  // c-pawns (small lasting debt vs central space) = pawn-doubled. Spine is the
+  // masters' main line (Nf3, 52%) — honest balanced terminal, not a forced edge.
+  sources: ['book:vienna-game', 'concept:pos-development', 'concept:pos-space', 'concept:pos-open-file', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Vienna_Game'],
   title: 'Vienna Game — The Gambit (f4)',
   minutes: 11,
   orientation: 'white',
@@ -57,53 +57,39 @@ const GAMBIT: LessonScript = {
       say: "Edward Lasker's analysis runs right through this position: he pointed out that after fxe5, Black can recapture with Nxe4 without the slightest trouble in development. That is exactly what happens — fxe5 takes the gambit pawn on the kingside and opens the f-file, and Nxe4 snaps off the e4-pawn that the c3-knight had been guarding. Pawn structures cracked open, knights racing through the centre, and the e4-knight now sits deep in White's territory, begging to be hit.",
       sayShort: "fxe5 Nxe4 — f-file opens, knight grabs e4.",
       highlights: [H('e4', KEY), H('e5', KEY), H('c3', SOFT)] }),
-    b({ id: 'g4', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3',
-      arrows: [A('f3', 'e4', ATK)],
-      highlights: [H('f3', KEY), H('e4', KEY), H('d5', SOFT)],
-      say: "Qf3! And THIS is the move that has turned the Vienna Gambit from a dusty 19th-century opening into one of the hottest weapons on Lichess in the 2020s. The queen leaps to f3, attacks the e4-knight directly, AND lines up against the d5-pawn down the f3-a8 diagonal. Black is suddenly facing two threats at once, and his natural moves are all walking into something. This is the Bardeleben Variation, and Eric Rosen's video tutorials on it have rebuilt the Vienna Gambit's whole online reputation. Older books recommend Nf3 — the calm developmental move — but in modern theory Qf3 is the main line: hit the knight, threaten d5, dare Black to defend BOTH at once.",
-      sayShort: "Qf3! — Bardeleben main line, hits e4 and d5." }),
-    b({ id: 'g5', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 f5',
-      highlights: [H('f5', KEY), H('e4', KEY)],
-      say: "f5! — Black's best try. The pawn comes to f5 doing two jobs: it shields the d5-pawn from the Qf3, and it defends the e4-knight from being captured. It looks like the perfect answer. But every Black move costs structure, and this one is no exception — the f5-pawn now sits as a permanent weakness on a light square, and the f7-pawn that used to shield Black's king has surrendered the f6 hole behind it. Black has solved the immediate tactical problem and walked into a long-term positional one.",
-      sayShort: "f5 — saves the knight, weakens the structure." }),
-    b({ id: 'g6', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 f5 d3',
-      highlights: [H('d3', KEY), H('e4', KEY)],
-      say: "d3 — the simple kick. The d3-pawn attacks the e4-knight a second time, and Black cannot defend it a second time. Black is forced to trade with …Nxc3 next move, and after bxc3 White ends up with the bishop pair, the open b-file for the rook, the Qf3 already active, and a permanent grip on the dark squares (f6, e5) the …f5 push abandoned.",
-      sayShort: "d3 — kicks the knight again; Black must trade." }),
-    b({ id: 'g7', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 f5 d3 Nxc3 bxc3',
-      arrows: [A('a1', 'b1', INTENT)],
-      highlights: [H('b1', KEY), H('c3', KEY)],
-      say: "Nxc3 bxc3 — and here is what makes this whole line a quiet positional masterpiece. The b-file is wide open for the rook to come to b1, the doubled c-pawns are a tiny structural cost for the bishop pair, and the Qf3 stays active on its central square. Eric Rosen's mantra in his Vienna tutorials: 'open the b-file and let the queen sit on f3 — everything else is set up by those two facts.' White's plan from here writes itself: Rb1 to seize the b-file, Bd2 to complete development, and Nh3 (yes, Nh3 — the king-knight to the rim — because it's heading to f4 to support the e5-pawn and pressure d5).",
-      sayShort: "bxc3 — open b-file, bishop pair, Qf3 hot." }),
-    b({ id: 'g8', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 f5 d3 Nxc3 bxc3 Nc6 d4',
-      highlights: [H('e5', KEY), H('f5', KEY), H('f6', SOFT)],
-      say: "Here's the picture: you've got the two bishops, your queen is active on f3, and the b-file is wide open — and every one of those advantages wants an OPEN position to breathe. So don't sit and shuffle pieces. Strike with d4 and tear the centre open while your pieces are the better-placed ones. Your e5-pawn is already a thorn deep in Black's camp, and look at the weaknesses Black handed you — the f5-pawn is loose and f6 is a permanent hole. Open the position and those start to hurt. The real mistake here is drifting, letting Black untangle and consolidate. You open lines because your bishops are hungry for them.",
-      sayShort: "d4 — open it up for your two bishops." }),
-    // ── DEEP — d4 break, then the two Declined scenarios (2026-06-29) ──
-    // Re-spined: the old g8/g11–g14 taught a slow Bd2/Nh3/O-O-O/Nf4/Kb1
-    // dawdle that the engine scores +1.0 → −2.0 (White squanders a winning
-    // edge by never playing d4). Corrected to the engine-best d4 break, then
-    // the two real Vienna Gambit Declined scenarios after it — the thematic
-    // queen trade (…Qh4+) and the …Be6 develop met by the b-file rook-raid.
-    // Every move chess.js-legal + Stockfish-verified (terminal +1.0 / +1.35).
-    b({ id: 'g8a', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 f5 d3 Nxc3 bxc3 Nc6 d4 Qh4+ Qf2 Qxf2+ Kxf2',
-      highlights: [H('f2', KEY), H('e5', SOFT), H('d4', SOFT), H('f5', SOFT)],
-      say: "Black's most testing move is the check, Qh4+ — but you should be glad to see it. Block with Qf2, and after Qxf2+ Kxf2 the queens come off. Why is that good for you? Because your whole edge here is structural — the two bishops, the e5 and d4 pawns cramping the centre, Black's weak f5 and d5 pawns — and structural edges convert best with the queens OFF, when Black has no way to stir up an attack against your king. And your king is perfectly safe on f2 with no queens left to bother it. This trade is the heartbeat of the Declined: you're not hunting a knockout, you're steering into a position where your long-term pluses simply grind Black down.",
-      sayShort: "…Qh4+? Trade — your structure wins the long game." }),
-    b({ id: 'g8b', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 f5 d3 Nxc3 bxc3 Nc6 d4 Be6 Rb1',
-      arrows: [A('b1', 'b7', INTENT)],
-      highlights: [H('b7', KEY), H('e6', SOFT), H('d5', SOFT)],
-      say: "Say Black sidesteps the trade and develops instead — Be6, propping up the d5-pawn. Now ask yourself the coach's question: what's my biggest asset in this position? The open b-file. So you play Rb1, and the rook glares straight down it at the b7-pawn, which has nothing defending it. This is the whole reason the earlier bxc3 recapture mattered — it didn't just give you the two bishops, it opened a file pointing right at Black's queenside. When the centre is stable, you attack where you're strongest, and here that's the b-file.",
-      sayShort: "…Be6? Rb1 — hit b7 down the open file." }),
-    b({ id: 'g8c', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 f5 d3 Nxc3 bxc3 Nc6 d4 Be6 Rb1 Qh4+ g3 Qe4+ Qxe4 dxe4 Rxb7',
-      highlights: [H('b7', KEY), H('e4', SOFT)],
-      say: "Black throws in the same check, Qh4+, but now g3 blocks it cleanly, and after Qe4+ you simply trade — Qxe4 dxe4 — and snap off the pawn with Rxb7. Count what you've won: a clean pawn, your rook planted on the seventh rank where it rakes Black's back, and the two bishops still in hand. And that's the lesson tying both these lines together — whether Black trades queens on move fifteen or develops with Be6, it's the same three things deciding the game: the d4-break, your two bishops, and that open b-file. Same advantages, two different ways to cash them in.",
-      sayShort: "…Qe4+ trade, Rxb7 — a pawn and the seventh." }),
-    b({ id: 'g9', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7',
-      highlights: [H('f3', SOFT)],
-      say: "Now the alternative — older books recommend Nf3 instead of Qf3. The Nf3 line is calmer: White just develops, doesn't engage the e4-knight immediately, and steers toward the same big-centre middlegame Lasker described in *Chess Strategy*. After Nf3 Be7, White plays d4 and builds a giant d4-e5 pawn duo. The Nf3 line is less ambitious tactically — it doesn't punish Black's natural moves the way Qf3 does — but it's structurally sound and gives White a free positional edge.",
-      sayShort: "Nf3 — the calm Lasker line, build the centre." }),
-    b({ id: 'g10', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 f5 d3 Nxc3 bxc3 Nc6 d4',
+    // ── Gambit Declined MAIN LINE (Nf3) — rebuilt 2026-06-29 ──────────
+    // The old spine taught Qf3 (a real but #2 line, 29%) followed by …f5 +
+    // …Nc6 — both thin SIDELINES dressed up as "the main line." The masters'
+    // main line is Nf3 (52%) → …Be7 Qe2 → …Nxc3 dxc3 → …c5 Bf4 Nc6, a roughly
+    // BALANCED game (the …d5 decline equalises; honest terminal −0.28). Qf3 is
+    // mentioned as the sharp modern alternative, no longer mislabelled.
+    b({ id: 'g4', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3',
+      highlights: [H('f3', KEY), H('e5', KEY)],
+      say: "Nf3 — the main line, and the most-played move here by a wide margin. No flashy queen sortie: White just develops the king-knight, defends the e5-pawn that cramps Black's centre, and prepares to castle. The e4-knight sits there looking active, but it has no support — White will simply pile pressure on it with Qe2 next, and Black will have to resolve the tension. Sound, patient, and the move the masters trust.",
+      sayShort: "Nf3 — the main line, sound development.",
+      arrows: [A('f3', 'e5', INTENT)] }),
+    b({ id: 'g5', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7 Qe2',
+      highlights: [H('e4', KEY), H('e2', SOFT)],
+      say: "Be7, and now the key idea: Qe2. The queen tucks in behind the e-pawn and stares straight up the e-file at the e4-knight, which has nothing to defend it. Black can't comfortably hold the knight where it is, so the tension is about to break. This is why Nf3 needed no rush — the simple Qe2 does the work, pressuring the knight and clearing d1 for a rook all at once.",
+      sayShort: "Qe2 — pile up on the loose e4-knight.",
+      arrows: [A('e2', 'e4', ATK)] }),
+    b({ id: 'g6', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7 Qe2 Nxc3 dxc3',
+      highlights: [H('e5', KEY), H('c3', SOFT)],
+      say: "Nxc3 dxc3 — Black gives up the knight and White recaptures toward the centre. Yes, you've doubled your c-pawns, but look what you got: a half-open d-file your queen and rooks will use, and that e5-pawn still wedged in Black's half of the board, cramping his pieces. The doubled pawns are a small, permanent debt; the central space and open lines are the lasting compensation.",
+      sayShort: "dxc3 — recapture toward the centre, open the d-file." }),
+    b({ id: 'g7', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7 Qe2 Nxc3 dxc3 c5 Bf4 Nc6',
+      highlights: [H('f4', KEY), H('e5', SOFT)],
+      say: "c5 Bf4 Nc6 — Black grabs queenside space with c5, and White completes development with the natural Bf4, the dark-square bishop landing on an active diagonal that guards the e5-pawn and eyes Black's queenside. Both sides finish developing into a normal, fighting middlegame. Be honest with yourself about this position: it is roughly level. The …d5 decline is Black's soundest answer to the Gambit, and with accurate play he equalises. White plays on for activity, not a won game.",
+      sayShort: "c5 Bf4 Nc6 — a balanced fighting middlegame." }),
+    b({ id: 'g8', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7 Qe2 Nxc3 dxc3 c5 Bf4 Nc6 O-O-O Be6',
+      highlights: [H('c1', KEY), H('d1', SOFT), H('e6', SOFT)],
+      say: "O-O-O — White castles long, the king tucking onto c1 and the rook landing on d1, right behind the half-open d-file the dxc3 recapture opened. Black answers Be6, developing and reinforcing d5. This is the practical point of the whole setup: White's pieces find active homes — the rook on the open file, the bishop on f4, the e5-pawn cramping — so even from a level position White has the easier, more natural moves to make.",
+      sayShort: "O-O-O — castle long, rook to the open d-file." }),
+    b({ id: 'g9', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7 Qe2 Nxc3 dxc3 c5 Bf4 Nc6 O-O-O Be6 h4 h6 g3 Qd7',
+      highlights: [H('e5', KEY), H('h4', SOFT)],
+      say: "h4, g3, and the position settles. Here is the honest verdict on the Vienna Gambit Declined: it is balanced. White owns the e5-spike and the easier development; Black is solid and fully equal. You are not memorising a forced win — you are learning a fighting structure where White presses with space and active pieces. If you want the Gambit's real bite, it lives one tab over, in the ACCEPTED line where the named sacrifices wait. And if you crave the sharp modern try here, Qf3 — Eric Rosen's online weapon — is the aggressive #2 alternative: it hits the e4-knight at once, though best play still holds for Black.",
+      sayShort: "Balanced — White presses with space and activity." }),
+    b({ id: 'g10', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7 Qe2 Nxc3 dxc3 c5 Bf4 Nc6',
       highlights: [H('f4', SOFT)],
       say: "And one branch you must know — if Black plays the OTHER reply and takes the gambit with exf4, you are no longer in this strategic line. You are in territory that has been studied for two centuries: the Vienna Gambit Accepted. That is where the Wurzburger Trap waits if Black develops too naturally into the old d3 line, where Hamppe-Allgaier and Hamppe-Muzio sacrifices live if Black ALSO played Nc6 instead of Nf6, and where Steinitz himself walked his king to e2 and attacked. The Vienna Gambit has TWO completely different personalities: this strategic Lasker spine, and a tactical jungle one tab away. Learn this calm-but-clinical one first; the named weapons are the reward when Black drifts.",
       sayShort: "exf4 — the Gambit Accepted, where the weapons live." }),
