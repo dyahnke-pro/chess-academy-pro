@@ -29,7 +29,7 @@ describe('grounding gate: lesson sublines are sound for the student', () => {
       if (it.isGambit) continue;
       const cp = toCp(it.eval, it.color);
       if (cp == null) { viol.push(`${key} :: UNEVALUATED`); continue; }
-      if (cp <= LOSING_CP) { const k = `${key} :: LOSING`; viol.push(k); detail[k] = `${(cp / 100).toFixed(2)}`; }
+      if (cp <= LOSING_CP) { const k = `${key} :: LOSING`; viol.push(k); detail[k] = (cp / 100).toFixed(2); }
     }
     if (maybeWriteBaseline('groundingLessons', viol)) return;
     const baseline = loadBaseline('groundingLessons');

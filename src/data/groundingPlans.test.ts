@@ -26,7 +26,7 @@ describe('grounding gate: middlegame-plan lines are sound for the student', () =
       if (!it.eval) { viol.push(`${key} :: UNEVALUATED`); continue; }
       const cp = toCp(it.eval, it.color);
       if (cp == null) { viol.push(`${key} :: UNEVALUATED`); continue; }
-      if (cp <= LOSING_CP) { const k = `${key} :: LOSING`; viol.push(k); detail[k] = `${(cp / 100).toFixed(2)}`; }
+      if (cp <= LOSING_CP) { const k = `${key} :: LOSING`; viol.push(k); detail[k] = (cp / 100).toFixed(2); }
     }
     if (maybeWriteBaseline('groundingPlans', viol)) return;
     const baseline = loadBaseline('groundingPlans');
