@@ -22,14 +22,29 @@ const DATA = path.resolve(__dirname, '..', '..', 'src', 'data');
 const readJson = (p) => JSON.parse(fs.readFileSync(p, 'utf8'));
 const args = process.argv.slice(2);
 const argv = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d; };
-const DEPTH = Number(argv('--depth', 16));
+const DEPTH = Number(argv('--depth', 14));
 const MARGIN = Number(argv('--margin', 80));   // concede >= 0.8 vs best = flagged sub-optimal move
 const FLOOR = Number(argv('--floor', 30));     // position is "in book" while it has >= this many master games
+const SOURCE = argv('--source', 'repertoire'); // repertoire | lessons
 const ONLY = (argv('--only', '') || '').split(',').filter(Boolean);
 const PROXY = 'https://chess-academy-pro.vercel.app/api/lichess-explorer';
 const CACHE = path.join(DATA, 'main-line-cache.json');
 const cache = fs.existsSync(CACHE) ? readJson(CACHE) : {};
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// persistent fen@depth -> eval cache so the big lesson-subline run dedupes the
+// many shared tail positions (and survives restarts).
+const EVAL_CACHE = path.join(DATA, 'spine-eval-cache.json');
+const evalCache = fs.existsSync(EVAL_CACHE) ? readJson(EVAL_CACHE) : {};
+let evalCacheDirty = 0;
+async function cachedEval(eng, fen, depth) {
+  const k = `${fen}@${depth}`;
+  if (evalCache[k]) return evalCache[k];
+  const r = await eng.evalFen(fen, depth);
+  evalCache[k] = r;
+  if (++evalCacheDirty % 100 === 0) fs.writeFileSync(EVAL_CACHE, JSON.stringify(evalCache));
+  return r;
+}
 
 async function explorerTotal(uciPath) {
   const key = uciPath.join(',');
@@ -48,7 +63,10 @@ async function explorerTotal(uciPath) {
   cache[key] = null; return -1;
 }
 
-function lines() {
+const GAMBIT_RE = /gambit|muzio|allgaier|max.?lange|counter.?gambit|sacrifice|king'?s.?gambit|evans|smith.?mor|danish|halloween|fishing.?pole|fried.?liver|stafford/i;
+const BLACK_RE = /caro|sicilian|najdorf|dragon|french|pirc|scandinav|alekhine|king'?s?.?indian|kingsindian|grunfeld|gruenfeld|benoni|dutch|nimzo|slav|qgd|semi.?slav|petrov|philidor|budapest/i;
+
+function repertoireLines() {
   const out = [];
   for (const f of ['repertoire.json', 'gambits.json']) {
     const d = readJson(path.join(DATA, f)); const a = Array.isArray(d) ? d : (d.openings || []);
@@ -58,6 +76,41 @@ function lines() {
       for (const v of o.variations || []) { const p = (v.pgn || v.moves || '').trim(); if (p) out.push({ id: o.id, name: `${o.name} :: ${v.name}`, pgn: p, color: o.color || 'white', isGambit }); }
     }
   }
+  return out;
+}
+
+// lesson sublines — the deep Watch/Learn tails (where the Vienna-class bug
+// lives). Color resolved from repertoire/gambits/pro color map, falling back to
+// the OID const + a name regex (same robust resolver as build-grounding).
+function lessonLines() {
+  const COLOR = {};
+  for (const f of ['repertoire.json', 'gambits.json', 'pro-repertoires.json']) {
+    if (!fs.existsSync(path.join(DATA, f))) continue;
+    const d = readJson(path.join(DATA, f)); const a = Array.isArray(d) ? d : (d.openings || []);
+    for (const o of a) if (o && o.id) COLOR[o.id] = o.color || 'white';
+  }
+  const dir = path.join(DATA, 'lessons');
+  const out = [];
+  for (const f of fs.readdirSync(dir).filter((x) => x.endsWith('.ts') && !x.endsWith('.test.ts'))) {
+    const txt = fs.readFileSync(path.join(dir, f), 'utf8');
+    let id;
+    const q = txt.match(/openingId:\s*'([^']+)'/);
+    if (q) id = q[1]; else { const ref = txt.match(/openingId:\s*([A-Za-z_$][\w$]*)/); if (ref) { const cm = txt.match(new RegExp(`const\\s+${ref[1]}\\s*=\\s*'([^']+)'`)); if (cm) id = cm[1]; } }
+    if (!id) id = f.replace(/\.ts$/, '');
+    const color = COLOR[id] || (BLACK_RE.test(id) || BLACK_RE.test(f) ? 'black' : 'white');
+    const isGambit = GAMBIT_RE.test(id) || GAMBIT_RE.test(f);
+    const seen = new Set();
+    for (const m of txt.matchAll(/moves:\s*'([^']+)'/g)) {
+      const pgn = m[1].trim();
+      if (pgn.split(/\s+/).length < 2 || seen.has(pgn)) continue; seen.add(pgn);
+      out.push({ id, name: `${id} :: ${f} :: ${pgn.split(/\s+/).length}-ply`, pgn, color, isGambit });
+    }
+  }
+  return out;
+}
+
+function lines() {
+  const out = SOURCE === 'lessons' ? lessonLines() : repertoireLines();
   return ONLY.length ? out.filter((l) => ONLY.includes(l.id)) : out;
 }
 
@@ -88,9 +141,10 @@ const studCp = (e, color) => { const w = e.mate != null ? (e.mate > 0 ? 100000 :
     for (let i = lastBook; i < sans.length; i++) {
       const before = c.fen();
       const turn = before.split(' ')[1];
-      const evBefore = await eng.evalFen(before, DEPTH);
-      const mv = c.move(sans[i]); if (!mv) { flags.push({ ply: i + 1, kind: 'ILLEGAL', move: sans[i] }); break; }
-      const evAfter = await eng.evalFen(c.fen(), DEPTH);
+      const evBefore = await cachedEval(eng, before, DEPTH);
+      let mv; try { mv = c.move(sans[i]); } catch { mv = null; }
+      if (!mv) { flags.push({ ply: i + 1, kind: 'ILLEGAL', move: sans[i] }); break; }
+      const evAfter = await cachedEval(eng, c.fen(), DEPTH);
       // only grade OUR (student's) moves
       if (turn === studentChar) {
         const cpBefore = studCp(evBefore, l.color);   // best-play eval for us at this position
@@ -109,7 +163,8 @@ const studCp = (e, color) => { const w = e.mate != null ? (e.mate > 0 ? 100000 :
     if (n % 10 === 0) fs.writeFileSync(path.join(DATA, 'spine-continuation-report.json'), JSON.stringify({ depth: DEPTH, margin: MARGIN, report }, null, 2));
   }
   eng.quit();
-  fs.writeFileSync(path.join(DATA, 'spine-continuation-report.json'), JSON.stringify({ depth: DEPTH, margin: MARGIN, report }, null, 2));
+  fs.writeFileSync(EVAL_CACHE, JSON.stringify(evalCache));
+  fs.writeFileSync(path.join(DATA, 'spine-continuation-report.json'), JSON.stringify({ depth: DEPTH, margin: MARGIN, source: SOURCE, report }, null, 2));
   const subopt = report.filter((r) => r.flags.some((f) => f.kind === 'SUBOPTIMAL' && !r.isGambit)).length;
   const illegal = report.filter((r) => r.flags.some((f) => f.kind === 'ILLEGAL')).length;
   console.log(`\nSummary: ${report.length} lines | SUBOPTIMAL ${subopt} | ILLEGAL ${illegal} | clean ${report.length - subopt - illegal}`);
