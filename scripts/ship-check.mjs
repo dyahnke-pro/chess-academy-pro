@@ -208,6 +208,14 @@ const GATE_TESTS = [
   'src/data/gambitSources.test.ts',
   'src/data/contentConsistency.test.ts',  // opening-tab content fix gate (shrinking baseline → 0)
   'src/data/narrationFactCheck.test.ts',  // chess.js verifies authored attack/fork/coverage claims (was drifting unguarded)
+  // ── CONTENT-GROUNDING GATES (David 2026-06-29 "gate the shit out of everything"). ──
+  // Stockfish 18 (offline → grounding-items.json) adjudicates every line / mistake
+  // / trap / gem; shrinking baselines grandfather the current backlog so NEW
+  // un-grounded content fails the build. Rebuild data: node scripts/ci/build-grounding.cjs
+  'src/data/groundingLines.test.ts',      // opening lines sound for the student (engine)
+  'src/data/groundingMistakes.test.ts',   // common-mistakes are really mistakes (wrong engine-worse than right)
+  'src/data/groundingTraps.test.ts',      // trap weapons win / warnings punish (engine)
+  'src/data/groundingGems.test.ts',       // punish-gems still leave a real student edge (engine)
 ];
 
 runStep('typecheck   ', 'npm', ['run', 'typecheck']);
