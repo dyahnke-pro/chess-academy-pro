@@ -30,6 +30,15 @@ describe('sanitizeForTTS', () => {
       ['Grab the P!', 'Grab the pawn!'],
       ['the B attacks the R', 'the bishop attacks the rook'],
       ['the piece at f3 (P) is hanging', 'the piece at f3 (pawn) is hanging'],
+      // Lowercase piece letters — the case-sensitivity gap that caused
+      // the prod sanitizer-leak (2026-06-28).
+      ['the p on f3', 'the pawn on f3'],
+      ['hanging p', 'hanging pawn'],
+      ['hanging q', 'hanging queen'],
+      ['your n on c3', 'your knight on c3'],
+      ['weak b on d4', 'weak bishop on d4'],
+      ['the r attacks the k', 'the rook attacks the king'],
+      ['the piece at f3 (p) is hanging', 'the piece at f3 (pawn) is hanging'],
     ];
     for (const [input, expected] of expandCases) {
       it(`${JSON.stringify(input)} → ${JSON.stringify(expected)}`, () => {
@@ -43,6 +52,9 @@ describe('sanitizeForTTS', () => {
       // We accept the trailing ")" left behind — downstream TTS handles it fine.
       expect(sanitizeForTTS('The P(f3) is hanging')).toContain('pawn on f3');
     });
+    it('lowercase "p(f3)" is expanded to "pawn on f3"', () => {
+      expect(sanitizeForTTS('The p(f3) is hanging')).toContain('pawn on f3');
+    });
     it('arrow shorthand "P → f3" → "pawn on f3"', () => {
       expect(sanitizeForTTS('P → f3')).toBe('pawn on f3');
     });
@@ -51,6 +63,44 @@ describe('sanitizeForTTS', () => {
     });
     it('parenthesized "(on f3)" form still expands', () => {
       expect(sanitizeForTTS('P (on f3)')).toContain('pawn on f3');
+    });
+  });
+
+  describe('isolated lowercase piece letter with no preceding context word', () => {
+    // The prod sanitizer-leak gap (2026-06-28): ISOLATED_PIECE_LETTER_RE
+    // was case-sensitive, so "p on f3" with NO context word slipped through.
+    it('"p on f3" → "pawn on f3" and no leak', () => {
+      const out = sanitizeForTTS('p on f3');
+      expect(out).toBe('pawn on f3');
+      expect(detectSanitizerLeak(out)).toBe(false);
+    });
+    it('"q to d1" → "queen to d1" and no leak', () => {
+      const out = sanitizeForTTS('q to d1');
+      expect(out).toBe('queen to d1');
+      expect(detectSanitizerLeak(out)).toBe(false);
+    });
+    it('"n from b1 to c3" → "knight from b1 to c3" and no leak', () => {
+      const out = sanitizeForTTS('n from b1 to c3');
+      expect(out).toBe('knight from b1 to c3');
+      expect(detectSanitizerLeak(out)).toBe(false);
+    });
+    it('"b attacks" → "bishop attacks" and no leak', () => {
+      const out = sanitizeForTTS('b attacks');
+      expect(out).toBe('bishop attacks');
+      expect(detectSanitizerLeak(out)).toBe(false);
+    });
+    it('"k is hanging" → "king is hanging" and no leak', () => {
+      const out = sanitizeForTTS('k is hanging');
+      expect(out).toBe('king is hanging');
+      expect(detectSanitizerLeak(out)).toBe(false);
+    });
+    it('mixed lower/upper in one sentence: "trade the b for r on f7"', () => {
+      const out = sanitizeForTTS('trade the b for r on f7');
+      // "trade the b" hits PIECE_LETTER_AFTER_CONTEXT_RE (lowercase via /gi).
+      // "r on f7" hits ISOLATED (lowercase now via /gi).
+      expect(out).toContain('trade the bishop');
+      expect(out).toContain('rook on f7');
+      expect(detectSanitizerLeak(out)).toBe(false);
     });
   });
 
