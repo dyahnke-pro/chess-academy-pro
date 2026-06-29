@@ -146,8 +146,17 @@ function enumLessons() {
   const out = [];
   for (const f of fs.readdirSync(dir).filter((x) => x.endsWith('.ts') && !x.endsWith('.test.ts'))) {
     const txt = fs.readFileSync(path.join(dir, f), 'utf8');
-    const idm = txt.match(/openingId:\s*'([^']+)'/);
-    const id = idm ? idm[1] : f.replace(/\.ts$/, '');
+    // openingId is usually a quoted literal, but variation files write
+    // `openingId: OID` referencing a `const OID = '...'` — resolve that, else a
+    // bare-identifier id falls to the color-regex GUESS (the eval-flipping risk).
+    let id;
+    const q = txt.match(/openingId:\s*'([^']+)'/);
+    if (q) { id = q[1]; }
+    else {
+      const ref = txt.match(/openingId:\s*([A-Za-z_$][\w$]*)/);
+      if (ref) { const cm = txt.match(new RegExp(`const\\s+${ref[1]}\\s*=\\s*'([^']+)'`)); if (cm) id = cm[1]; }
+    }
+    if (!id) id = f.replace(/\.ts$/, '');
     const seen = new Set();
     for (const m of txt.matchAll(/moves:\s*'([^']+)'/g)) {
       const pgn = m[1].trim();
@@ -177,10 +186,13 @@ function enumPlans() {
   let items = [];
   const want = (c) => !ONLY || ONLY === c || (ONLY === 'traps' && (c === 'trap' || c === 'warning'));
   const lines = enumLines(), mistakes = enumMistakes(), traps = enumTraps(), gems = enumGems();
+  const lessons = enumLessons(), plans = enumPlans();
   if (want('lines')) for (const l of lines) items.push({ ...l, terminalFen: terminalFen(l.pgn) });
   if (want('mistakes')) for (const m of mistakes) items.push({ ...m, fenWrong: fenAfter(m.fen, m.wrongMove), fenCorrect: fenAfter(m.fen, m.correctMove) });
   if (want('traps')) for (const t of [...traps]) items.push({ ...t, terminalFen: terminalFen(t.pgn) });
   if (want('gems')) for (const g of gems) items.push({ ...g, terminalFen: terminalFen(g.pgn) });
+  if (want('lessons')) for (const l of lessons) items.push({ ...l, terminalFen: terminalFen(l.pgn) });
+  if (want('plans')) for (const p of plans) items.push({ ...p, terminalFen: fenAfterMoves(p.startFen, p.moves) });
 
   // unique FENs needing eval
   const fenSet = new Set();
@@ -197,7 +209,7 @@ function enumPlans() {
   }
   if (adjudicated) console.log(`Adjudicated ${adjudicated} terminal FENs via chess.js (checkmate/draw).`);
   const todo = allFens.filter((f) => !(cache[f] && cache[f].depth >= DEPTH) && !cache[f]?.terminal);
-  console.log(`Items: ${items.length} (lines ${lines.length}, mistakes ${mistakes.length}, traps ${traps.length}, gems ${gems.length})`);
+  console.log(`Items: ${items.length} (lines ${lines.length}, mistakes ${mistakes.length}, traps ${traps.length}, gems ${gems.length}, lessons ${lessons.length}, plans ${plans.length})`);
   console.log(`Unique FENs: ${allFens.length} | already cached@${DEPTH}: ${allFens.length - todo.length} | to eval: ${todo.length}`);
 
   if (todo.length) {

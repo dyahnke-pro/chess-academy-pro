@@ -216,6 +216,8 @@ const GATE_TESTS = [
   'src/data/groundingMistakes.test.ts',   // common-mistakes are really mistakes (wrong engine-worse than right)
   'src/data/groundingTraps.test.ts',      // trap weapons win / warnings punish (engine)
   'src/data/groundingGems.test.ts',       // punish-gems still leave a real student edge (engine)
+  'src/data/groundingLessons.test.ts',    // lesson sublines (deep Watch/Learn tails) sound for the student (engine)
+  'src/data/groundingPlans.test.ts',      // middlegame-plan lines sound for the student (engine)
 ];
 
 runStep('typecheck   ', 'npm', ['run', 'typecheck']);
