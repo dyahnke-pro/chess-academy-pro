@@ -148,7 +148,9 @@ export function generateCardsForOpening(opening: OpeningRecord): SrsOpeningCard[
 
 /** Enroll an opening: write any cards that don't yet exist in the DB.
  *  Existing cards (by id) are left alone so prior SRS state survives a
- *  re-enroll. Returns counts: { added, alreadyEnrolled }. */
+ *  re-enroll. Returns counts: { added, alreadyEnrolled }.
+ *  Wrapped in explicit rw so the check-then-insert doesn't race with a
+ *  concurrent enrollment on the same store. */
 export async function enrollOpening(opening: OpeningRecord): Promise<{
   added: number;
   alreadyEnrolled: number;
@@ -156,22 +158,26 @@ export async function enrollOpening(opening: OpeningRecord): Promise<{
   const cards = generateCardsForOpening(opening);
   if (cards.length === 0) return { added: 0, alreadyEnrolled: 0 };
 
-  const ids = cards.map((c) => c.id);
-  const existing = await db.srsOpeningCards.where('id').anyOf(ids).toArray();
-  const existingIds = new Set(existing.map((c) => c.id));
-  const toAdd = cards.filter((c) => !existingIds.has(c.id));
+  return db.transaction('rw', db.srsOpeningCards, async () => {
+    const ids = cards.map((c) => c.id);
+    const existing = await db.srsOpeningCards.where('id').anyOf(ids).toArray();
+    const existingIds = new Set(existing.map((c) => c.id));
+    const toAdd = cards.filter((c) => !existingIds.has(c.id));
 
-  if (toAdd.length > 0) {
-    await db.srsOpeningCards.bulkAdd(toAdd);
-  }
-  return { added: toAdd.length, alreadyEnrolled: existing.length };
+    if (toAdd.length > 0) {
+      await db.srsOpeningCards.bulkAdd(toAdd);
+    }
+    return { added: toAdd.length, alreadyEnrolled: existing.length };
+  });
 }
 
 /** Enroll only ONE line (the main line via MAIN_LINE_INDEX, or a variation
  *  index) into SRS. Used to auto-enroll on Learn completion so spaced review
  *  tracks exactly the lines you've actually learned — NOT every line in the
  *  opening (which would flood "due" with material you've never seen). New
- *  cards only; existing SRS state survives. Returns the count added. */
+ *  cards only; existing SRS state survives. Returns the count added.
+ *  Wrapped in explicit rw so a concurrent enrollment on the same line
+ *  doesn't race the check-then-insert. */
 export async function enrollOpeningLine(
   opening: OpeningRecord,
   variationIndex: number,
@@ -184,12 +190,15 @@ export async function enrollOpeningLine(
 
   const cards = extractCardsFromPgn(pgn, name, opening.color, opening.id, now);
   if (cards.length === 0) return 0;
-  const ids = cards.map((c) => c.id);
-  const existing = await db.srsOpeningCards.where('id').anyOf(ids).toArray();
-  const existingIds = new Set(existing.map((c) => c.id));
-  const toAdd = cards.filter((c) => !existingIds.has(c.id));
-  if (toAdd.length > 0) await db.srsOpeningCards.bulkAdd(toAdd);
-  return toAdd.length;
+
+  return db.transaction('rw', db.srsOpeningCards, async () => {
+    const ids = cards.map((c) => c.id);
+    const existing = await db.srsOpeningCards.where('id').anyOf(ids).toArray();
+    const existingIds = new Set(existing.map((c) => c.id));
+    const toAdd = cards.filter((c) => !existingIds.has(c.id));
+    if (toAdd.length > 0) await db.srsOpeningCards.bulkAdd(toAdd);
+    return toAdd.length;
+  });
 }
 
 /** Remove all cards for an opening. Used when un-enrolling. */
@@ -378,11 +387,17 @@ export function applySm2(card: SrsOpeningCard, correct: boolean): SrsOpeningCard
   }
 }
 
-/** Apply a review result to a card and persist. */
+/** Apply a review result to a card and persist.
+ *  Wrapped in an explicit rw transaction so the read (get) and write
+ *  (put) share one scope — otherwise the implicit transaction from get
+ *  commits before put starts, creating a race with concurrent reviews
+ *  on the same store. */
 export async function recordReview(cardId: string, correct: boolean): Promise<SrsOpeningCard | null> {
-  const card = await db.srsOpeningCards.get(cardId);
-  if (!card) return null;
-  const next = applySm2(card, correct);
-  await db.srsOpeningCards.put(next);
-  return next;
+  return db.transaction('rw', db.srsOpeningCards, async () => {
+    const card = await db.srsOpeningCards.get(cardId);
+    if (!card) return null;
+    const next = applySm2(card, correct);
+    await db.srsOpeningCards.put(next);
+    return next;
+  });
 }
