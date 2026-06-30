@@ -112,6 +112,14 @@ jobs:
 
             If none of the items is a genuinely fixable code bug, open NO PR — instead
             comment your triage conclusion on the `🐛 PostHog error watch` tracking issue.
+          # --max-turns was 30 — too low: EVERY run that actually fired hit
+          # `error_max_turns` and opened no PR (David 2026-06-30, run
+          # 28476260047 — 31 turns, errored). The task is read the ~400KB
+          # CLAUDE.md + triage + sweep + FIX + `npm run ship-check` (~4 min =
+          # a whole turn) + open a draft PR; that can't complete in 30. 100
+          # gives headroom and only fires on NEW deduped errors, so cost stays
+          # bounded. (The watcher's "success" runs were just no-new-error
+          # cycles where this autofix job was skipped.)
           claude_args: |
-            --max-turns 30
+            --max-turns 100
             --allowedTools Edit,Write,Read,Grep,Glob,Bash
