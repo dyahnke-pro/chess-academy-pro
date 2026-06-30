@@ -1,5 +1,8 @@
 {
   "installCommand": "npm install",
+  "crons": [
+    { "path": "/api/voice-failure-watch", "schedule": "*/10 * * * *" }
+  ],
   "rewrites": [
     { "source": "/voice-packs/:file", "destination": "/api/voice-packs/:file" },
     { "source": "/api/ph/:path*", "destination": "/api/phproxy?p=:path*" },

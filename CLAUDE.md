@@ -1648,10 +1648,11 @@ config** (set once in the web UI). Keys set there land in `process.env`
 for every command, and the code already reads them:
 - `DEEPSEEK_KEY` — primary brain LLM; baked into the build (`vite.config.ts`),
   read by audit scripts. `ANTHROPIC_KEY` — fallback provider.
-- `AUDIT_STREAM_SECRET` — `x-audit-secret` for the audit-stream pull
-  AND the GitHub Action's G2 step (add it as a repo secret too:
-  Settings → Secrets → Actions). Must match prod's Vercel env value
-  and the app's `profile.preferences.auditStreamSecret`, or you get 401.
+- `AUDIT_STREAM_SECRET` — `x-audit-secret` for the audit-stream pull.
+  Must match prod's Vercel env value and the app's
+  `profile.preferences.auditStreamSecret`, or you get 401. **It is ALREADY
+  in Vercel** (project env, below) — that's the source of truth; never
+  hardcode it (see the AUDIT-STREAM SECRET + WATCHER lesson below).
 - `POSTHOG_API_KEY` — **PostHog product-analytics read access (David
   2026-06-02: "make sure claude code can always have access to posthog
   data, don't ask every time").** A PostHog PERSONAL API key (`phx_…`,
@@ -1682,6 +1683,58 @@ shows "NOT set", it isn't in the env config yet — pass it inline for
 that session and tell David to add it to the env-var config. For local
 runs, a gitignored `.env.local` is auto-loaded by audit scripts
 (`scripts/audit-lib/env.mjs`) and by vite. NEVER commit secret values.
+
+**🔒 AUDIT-STREAM SECRET + THE VOICE-FAILURE WATCHER — the lesson, locked
+(David 2026-06-30, after the watcher was found silently dead for weeks).**
+A live beta tester hit `tts-failure` / `voice-fallover` events overnight and
+NO alert fired — because the watcher's whole auth chain was rotted. Three
+root causes, three permanent rules:
+
+1. **THE AUDIT INFRA CREDS ALL LIVE IN VERCEL — read/manage them with
+   `VERCEL_TOKEN`; never claim "I can't reach it."** The chess-academy-pro
+   Vercel project (`team_EG9m215w9cQHWilBOPnOtIFS` /
+   `prj_qYJMwF1apaxdp6sIZzcvZMz9BcZN`, plan = **pro**) holds every server
+   credential — `AUDIT_STREAM_SECRET`, `BLOB_READ_WRITE_TOKEN`, the Upstash
+   Redis creds (`KV_REST_API_URL` / `KV_REST_API_TOKEN` / `REDIS_URL` — the
+   audit-stream's backing store), `POSTHOG_API_KEY` + `PostHog_Read_API_KEY`,
+   the Polly AWS keys, `SENTRY_AUTH_TOKEN`, even `VERCEL_TOKEN` itself. A
+   session has `VERCEL_TOKEN` in env, so list the keys with
+   `GET https://api.vercel.com/v10/projects/<proj>/env?teamId=<team>` (values
+   come back ENCRYPTED — that's expected, per the PostHog note above; the
+   working plaintext audit secret is also in the session env). The Vercel API
+   is NOT proxy-blocked. So "the secret isn't reachable" is never true.
+
+2. **NEVER HARDCODE `AUDIT_STREAM_SECRET` IN COMMITTED SCRIPTS — env-only.**
+   The secret was rotated, but 25 audit scripts still shipped the OLD 64-hex
+   value as a `process.env.AUDIT_STREAM_SECRET ?? '<stale>'` fallback. Prod
+   401s that stale value, so every CI audit's stream attach silently fell
+   back to a dead credential AND the repo leaked a (now-invalid) secret in
+   plaintext. All 25 were stripped to `?? ''` (env-only, graceful when
+   absent). Do not reintroduce a literal secret fallback in any script —
+   read it from `process.env.AUDIT_STREAM_SECRET` and degrade gracefully.
+
+3. **THE WATCHER IS VERCEL-NATIVE, NOT A GITHUB-ACTIONS SECRET.** The old
+   `audit-watch.yml` cron pulled prod with `${{ secrets.AUDIT_STREAM_SECRET }}`
+   — a GitHub Actions repo secret that **was never synced** to the rotated
+   value, so the cron ran green every 10 min doing NOTHING (a silent no-op
+   that reports success is the worst failure mode — surface it with a
+   `::warning::`, never a silent log). And it CAN'T be fixed from a session:
+   **the GitHub Actions secrets API is org-policy-BLOCKED through the agent
+   proxy** (`403 Access to this GitHub Actions path is not permitted`), with
+   no MCP secret-write tool either. So do NOT design audit/monitoring infra
+   around a GitHub Actions secret. The correct home is a **Vercel cron**
+   (`vercel.json` `crons`) hitting an `api/*` route that runs WHERE the
+   secret already lives — it reads Redis directly (no secret needed
+   server-side) and persists to durable storage, no GitHub dependency.
+
+4. **BLOB IS FOR SINGLE-OBJECT PERIODIC SNAPSHOTS ONLY — never per-event.**
+   A per-event Blob tier once wrote one object PER audit event and `list()`d
+   all of them per read → 79K billed ops against a 2K cap → **the account got
+   paused** (see the warning in `api/audit-stream.ts`). A watcher may
+   read-modify-write ONE Blob object per cron run (≈2 ops); it must never
+   write a Blob object per event. Rate-limit the trigger via a cheap Redis
+   `lastrun` key so an unauthenticated cron hit can't be spammed into blob
+   ops.
 
 **iOS AVAudioSession patch — DONE.** Lives in
 `ios-patches/App/AppDelegate.swift` and is copied over the Capacitor

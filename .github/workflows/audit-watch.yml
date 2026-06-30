@@ -7,12 +7,21 @@ name: Voice failure watch (cron)
 # dedicated tracking issue.
 #
 # State (the "last alerted" cursor) lives in the issue body as a
-# `<!--cursor:MS-->` marker, so we never re-alert the same events and
-# need no external store. AUDIT_STREAM_SECRET is already a repo secret.
+# `<!--cursor:MS-->` marker, so we never re-alert the same events.
+#
+# 🔒 SUPERSEDED (David 2026-06-30): the scheduled trigger is DISABLED. This
+# cron depended on a GitHub Actions `AUDIT_STREAM_SECRET` repo secret that was
+# never synced to the rotated value, so it ran green every 10 min doing
+# NOTHING (the GitHub Actions secrets API is org-policy-blocked, so it can't
+# be set from a session). The watcher now lives WHERE the secret already does
+# — the Vercel cron `/api/voice-failure-watch` (vercel.json `crons`), which
+# reads the audit-stream Redis directly and persists to Vercel Blob. Kept here
+# as a manual-only fallback: if the repo secret is ever set, run it via
+# workflow_dispatch.
 
 on:
-  schedule:
-    - cron: '*/10 * * * *'
+  # schedule:                 # disabled — superseded by the Vercel cron above
+  #   - cron: '*/10 * * * *'
   workflow_dispatch:
 
 concurrency:
