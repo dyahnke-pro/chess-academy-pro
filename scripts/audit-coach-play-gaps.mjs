@@ -51,7 +51,7 @@ import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } f
 const BASE = process.env.AUDIT_SMOKE_URL ?? process.env.PROD_URL ?? 'https://chess-academy-pro.vercel.app';
 const SECRET =
   process.env.AUDIT_STREAM_SECRET ??
-  '06fe5f2383534090df8b6ba11e79088eb665ec780175df4f032befc02a530782';
+  '';
 const STREAM_URL = `${BASE}/api/audit-stream`;
 const HEADED = process.env.AUDIT_SMOKE_HEADED === '1';
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');

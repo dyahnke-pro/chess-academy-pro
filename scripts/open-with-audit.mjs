@@ -15,7 +15,7 @@ import { chromium } from 'playwright';
 
 const URL = 'https://chess-academy-pro.vercel.app/openings';
 const CHROMIUM_PATH = process.env.WATCH_CHROMIUM_PATH;
-const SECRET = '06fe5f2383534090df8b6ba11e79088eb665ec780175df4f032befc02a530782';
+const SECRET = '';
 const STREAM_URL = 'https://chess-academy-pro.vercel.app/api/audit-stream';
 
 const browser = await chromium.launch({

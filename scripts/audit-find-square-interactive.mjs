@@ -42,7 +42,7 @@ import { join } from 'node:path';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const STREAM_URL = `${BASE_URL}/api/audit-stream`;
-const SECRET = process.env.AUDIT_STREAM_SECRET ?? '06fe5f2383534090df8b6ba11e79088eb665ec780175df4f032befc02a530782';
+const SECRET = process.env.AUDIT_STREAM_SECRET ?? '';
 const HEADED = process.env.AUDIT_SMOKE_HEADED === '1';
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const OUT_DIR = `audit-reports/find-square-interactive-${stamp}`;

@@ -27,7 +27,7 @@ import { join } from 'node:path';
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const SECRET =
   process.env.AUDIT_STREAM_SECRET ??
-  '06fe5f2383534090df8b6ba11e79088eb665ec780175df4f032befc02a530782';
+  '';
 const HEADED = process.env.AUDIT_SMOKE_HEADED === '1';
 const STREAM_URL_PROD = 'https://chess-academy-pro.vercel.app/api/audit-stream';
 const STREAM_URL_LOCAL = `${BASE_URL}/api/audit-stream`;
