@@ -1423,6 +1423,23 @@ class VoiceService {
     return isIosUserAgent(navigator.userAgent, 'ontouchend' in document);
   }
 
+  /** Forensic snapshot of an MP3 buffer we're about to hand to the iOS
+   *  `<audio>` element — captured so a code=3 "Media failed to decode"
+   *  failure can be root-caused: a server-side bad/empty body (INVALID
+   *  header, wrong content-type) vs. a genuine client decode/race on a
+   *  byte-valid clip. Attached to the tts-failure audit; no behavior change. */
+  private audioSourceDiag(buf: ArrayBuffer, contentType: string | null): Record<string, unknown> {
+    const head = new Uint8Array(buf.slice(0, 4));
+    const isId3 = head[0] === 0x49 && head[1] === 0x44 && head[2] === 0x33; // "ID3"
+    const isMpegSync = head[0] === 0xff && (head[1] & 0xe0) === 0xe0; // MPEG frame sync
+    return {
+      byteLength: buf.byteLength,
+      contentType: contentType ?? 'none',
+      mp3Header: isId3 ? 'id3' : isMpegSync ? 'mpeg-sync' : 'INVALID',
+      headHex: Array.from(head).map((b) => b.toString(16).padStart(2, '0')).join(' '),
+    };
+  }
+
   /** Play a complete MP3 via the persistent, gesture-primed `<audio>`
    *  element — the same mechanism the Settings voice-test button uses,
    *  which is the ONLY audio path proven to work on the affected older
@@ -1435,7 +1452,7 @@ class VoiceService {
    *  Bypasses Web Audio (`decodeAudioData` + AudioContext) entirely, so
    *  it is immune to both the silent-output footgun above AND the iOS
    *  hardware-mute switch (element playback counts as media). */
-  private async playViaElement(src: string, isObjectUrl: boolean): Promise<boolean> {
+  private async playViaElement(src: string, isObjectUrl: boolean, sourceDiag?: Record<string, unknown>): Promise<boolean> {
     const myGen = this.stopGeneration;
     const audio = this.streamAudioEl ?? new Audio();
     this.streamAudioEl = audio;
@@ -1475,7 +1492,7 @@ audio.playbackRate = this.speed;
         // Observability: this is the iOS-audio failure mode. Emit a
         // streamed audit so it surfaces in the audit-stream / cron watch
         // instead of dying silently on the device.
-        this.logElementPlaybackFailure(detail, isObjectUrl);
+        this.logElementPlaybackFailure(detail, isObjectUrl, sourceDiag);
         finish(false);
       };
       // A stop() (or rapid Next-press) between entry and here makes this
@@ -1502,7 +1519,7 @@ audio.playbackRate = this.speed;
           if (aborted || myGen !== this.stopGeneration) { finish(false); return; }
           const detail = `element play() rejected: ${err instanceof Error ? err.message : String(err)}`;
           this.lastSpeakDiagnostic.error = detail;
-          this.logElementPlaybackFailure(detail, isObjectUrl);
+          this.logElementPlaybackFailure(detail, isObjectUrl, sourceDiag);
           finish(false);
         });
     });
@@ -1512,7 +1529,11 @@ audio.playbackRate = this.speed;
    *  path fails (decode error, autoplay rejection). This is the exact
    *  failure mode behind "no audio on older iPhones," so it must reach
    *  the audit-stream / cron watch rather than dying on-device. */
-  private logElementPlaybackFailure(detail: string, isObjectUrl: boolean): void {
+  private logElementPlaybackFailure(
+    detail: string,
+    isObjectUrl: boolean,
+    sourceDiag?: Record<string, unknown>,
+  ): void {
     void import('./appAuditor').then(({ logAppAudit }) => {
       void logAppAudit({
         kind: 'tts-failure',
@@ -1523,6 +1544,10 @@ audio.playbackRate = this.speed;
           detail,
           srcKind: isObjectUrl ? 'object-url' : 'tts-url',
           userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown',
+          // Forensics on the exact bytes iOS rejected — names the layer:
+          // INVALID header / wrong content-type ⇒ bad server body; a valid
+          // header at a real byteLength ⇒ a client-side decode/race.
+          ...(sourceDiag ? { audioSource: sourceDiag } : {}),
         }),
       });
     }).catch(() => undefined);
@@ -1781,7 +1806,7 @@ audio.playbackRate = this.speed;
         let played: boolean;
         if (this.isIosPlatform()) {
           const blobUrl = URL.createObjectURL(new Blob([cachedBuffer], { type: 'audio/mpeg' }));
-          played = await this.playViaElement(blobUrl, true);
+          played = await this.playViaElement(blobUrl, true, this.audioSourceDiag(cachedBuffer, 'cached'));
         } else {
           played = await this.playAudioBuffer(cachedBuffer.slice(0));
         }
@@ -1945,6 +1970,7 @@ audio.playbackRate = this.speed;
     }
     const buf = await res.arrayBuffer();
     this.abortController = null;
+    const srcDiag = this.audioSourceDiag(buf, res.headers.get('content-type'));
     // A streamed /api/tts response that gets interrupted mid-flight resolves
     // arrayBuffer() with PARTIAL bytes (no throw) — a truncated MP3 that iOS
     // then rejects with MEDIA_ERR_DECODE (code=3). A real narration clip is
@@ -1954,12 +1980,12 @@ audio.playbackRate = this.speed;
     // separable from a genuine iOS decode failure in the telemetry.
     if (buf.byteLength < 512) {
       this.lastSpeakDiagnostic.error = `iOS buffered body too small (${buf.byteLength}B) — truncated /api/tts stream`;
-      this.logElementPlaybackFailure(`empty/truncated body ${buf.byteLength}B`, true);
+      this.logElementPlaybackFailure(`empty/truncated body ${buf.byteLength}B`, true, srcDiag);
       return false;
     }
     this.setAudioCacheEntry(cacheKey, buf);
     const blobUrl = URL.createObjectURL(new Blob([buf], { type: 'audio/mpeg' }));
-    return this.playViaElement(blobUrl, true);
+    return this.playViaElement(blobUrl, true, srcDiag);
   }
 
   /** Buffered-Polly fallback (David 2026-05-31). Runs when the
