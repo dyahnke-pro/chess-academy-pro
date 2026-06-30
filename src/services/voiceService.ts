@@ -1456,15 +1456,25 @@ class VoiceService {
     const myGen = this.stopGeneration;
     const audio = this.streamAudioEl ?? new Audio();
     this.streamAudioEl = audio;
-    // Tear down any prior stream/MediaSource wiring on the shared element.
-    try { audio.pause(); audio.removeAttribute('src'); audio.load(); } catch { /* fresh element */ }
+    // Reset the shared, gesture-primed element by PAUSING only — do NOT
+    // `removeAttribute('src') + load()` first. That kicked off an EMPTY-source
+    // load that, on iOS, collided with the new `src =` assignment below and
+    // surfaced as a spurious code=3 "Media failed to decode" on a byte-valid
+    // clip — the intermittent failure testers hit under rapid back-to-back
+    // beats (server body confirmed valid: id3 header, 20-77KB, audio/mpeg).
+    // Assigning the real source and committing ONE clean `load()` (below)
+    // replaces whatever the element previously held, with no racing empty-load.
+    try { audio.pause(); } catch { /* fresh element */ }
     // Dispose a different in-flight element if one is live.
     if (this.currentAudioElement && this.currentAudioElement !== audio) {
       try { this.currentAudioElement.pause(); this.currentAudioElement.removeAttribute('src'); this.currentAudioElement.load(); } catch { /* gone */ }
     }
     audio.preload = 'auto';
     audio.src = src;
-audio.playbackRate = this.speed;
+    audio.playbackRate = this.speed;
+    // Single clean load of the COMPLETE object-URL (replaces the old
+    // empty-load + implicit-load race). Errors surface via onerror below.
+    try { audio.load(); } catch { /* will surface through onerror */ }
     this.currentAudioElement = audio;
     this.playing = true;
 
