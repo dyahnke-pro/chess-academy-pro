@@ -19,6 +19,11 @@ const OUT_FILE = process.env.OUT_FILE ?? '';
 
 async function main() {
   if (!SECRET) {
+    // Visible warning annotation, not a silent log: without the secret the
+    // G2 audit-stream pull is skipped and the post-deploy audit can't prove
+    // what the app emitted (David 2026-06-30 — the repo secret was unset, so
+    // every G2 step quietly no-op'd while the job still went green).
+    console.log('::warning title=G2 audit-stream pull skipped::AUDIT_STREAM_SECRET repo secret is not set — gate G2 cannot pull the live audit-stream. Add it under Settings → Secrets and variables → Actions (must match prod Vercel AUDIT_STREAM_SECRET).');
     console.log('[pull-audit-stream] AUDIT_STREAM_SECRET not set — skipping (configure the repo secret to enable).');
     process.exit(0);
   }

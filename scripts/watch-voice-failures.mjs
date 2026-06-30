@@ -34,6 +34,13 @@ async function setOutput(key, value) {
 
 async function main() {
   if (!SECRET) {
+    // Surface as a GitHub Actions warning annotation, not a silent log — a
+    // missing secret makes this cron a no-op that still reports "success",
+    // so the voice-failure watcher dies invisibly (David 2026-06-30: a live
+    // tester hit tts-failures overnight and no alert fired because this repo
+    // secret was unset). The yellow annotation makes the dead wire visible
+    // without red-spamming an email every 10 minutes.
+    console.log('::warning title=Voice watcher disabled::AUDIT_STREAM_SECRET repo secret is not set — the voice-failure watcher cannot pull the audit-stream and is a no-op. Add it under Settings → Secrets and variables → Actions (must match prod Vercel AUDIT_STREAM_SECRET).');
     console.log('[watch] AUDIT_STREAM_SECRET not set — skipping.');
     await setOutput('count', '0');
     await setOutput('hasFailures', 'false');
