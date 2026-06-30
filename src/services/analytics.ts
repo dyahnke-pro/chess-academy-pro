@@ -109,6 +109,10 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   // decode error, /api/tts non-200) to PostHog. It was NOT mirrored, so
   // "no voice" reports were invisible in analytics (David 2026-06-06).
   'tts-failure': 'tts_failure',
+  // Mic start failures (iOS native-speech unavailable, permission denial,
+  // unsupported platform) — the ONE voice failure kind that wasn't mirrored,
+  // so dead-mic reports were invisible in analytics (David 2026-06-30).
+  'mic-start-failed': 'mic_start_failed',
   // Stockfish engine selection (David 2026-06-15: dead eval bar on iOS).
   // Mirrors WHICH variant the device resolved (multi / single / lila) and
   // any runtime fallback — so we can see that init actually ran and which

@@ -1,7 +1,8 @@
 {
   "installCommand": "npm install",
   "crons": [
-    { "path": "/api/voice-failure-watch", "schedule": "*/10 * * * *" }
+    { "path": "/api/voice-failure-watch", "schedule": "*/10 * * * *" },
+    { "path": "/api/monitor", "schedule": "*/10 * * * *" }
   ],
   "rewrites": [
     { "source": "/voice-packs/:file", "destination": "/api/voice-packs/:file" },
