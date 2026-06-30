@@ -255,9 +255,9 @@ const PAWN_CAPTURE_RE = /\b([a-h])x([a-h][1-8])\b/g;
  *  e.g. "P(f3)", "P [f3]", "P <f3>", "P →f3", "P->f3", "P—f3",
  *  "P (on f3)". Covers the "piece-and-location" shorthand that doesn't
  *  use the word "on" (or wraps it in parens). */
-const PIECE_LETTER_ADJACENT_SQUARE_RE = /\b([PNBRQK])\s*[([<\-\u2013\u2014\u2192]+\s*(?:on\s+)?([a-h][1-8])\b/g;
+const PIECE_LETTER_ADJACENT_SQUARE_RE = /\b([PNBRQK])\s*[([<\-\u2013\u2014\u2192]+\s*(?:on\s+)?([a-h][1-8])\b/gi;
 /** Parenthesized bare piece letter: "piece at f3 (P)" → "piece at f3 (pawn)". */
-const PIECE_LETTER_IN_PARENS_RE = /([([<])([PNBRQK])(?=[)\]>.,;:\s])/g;
+const PIECE_LETTER_IN_PARENS_RE = /([([<])([PNBRQK])(?=[)\]>.,;:\s])/gi;
 /** Isolated piece-letter shorthand after a chess-context word. Kept
  *  narrow enough not to touch "Plan B" in non-chess prose, but broad
  *  enough to cover the verbs and qualifiers LLMs actually emit
@@ -268,7 +268,7 @@ const PIECE_LETTER_AFTER_CONTEXT_RE =
  *  Runs after the "after-context" pass so both halves of a sentence
  *  like "your P on f3" get caught. */
 const ISOLATED_PIECE_LETTER_RE =
-  /\b([PNBRQK])\b(?=\s+(?:on|to|at|from|of|takes|is|was|were|are|hangs|hanging|sits|sitting|stands|standing|attacks|attacking|defends|defending|moves|moved|moving|can|could|should|would|will|might|may|goes|going|covers|covering|controls|controlling|threatens|threatening|protects|protecting|supports|supporting)\b)/g;
+  /\b([PNBRQK])\b(?=\s+(?:on|to|at|from|of|takes|is|was|were|are|hangs|hanging|sits|sitting|stands|standing|attacks|attacking|defends|defending|moves|moved|moving|can|could|should|would|will|might|may|goes|going|covers|covering|controls|controlling|threatens|threatening|protects|protecting|supports|supporting)\b)/gi;
 /** Castling shorthand → plain English. "O-O" sounds nothing like
  *  "castle kingside" when read aloud. */
 const CASTLE_KING_RE = /\bO-O\b(?!-)/g;
@@ -301,12 +301,12 @@ export function normalizePieceShorthand(text: string): string {
   let out = text;
   // Bracketed / arrowed piece-on-square shorthand: "P(f3)" → "pawn on f3".
   out = out.replace(PIECE_LETTER_ADJACENT_SQUARE_RE, (_, piece: string, square: string) => {
-    const name = PIECE_LETTER_NAMES[piece] ?? piece;
+    const name = PIECE_LETTER_NAMES[piece.toUpperCase()] ?? piece;
     return `${name} on ${square}`;
   });
   // Bare piece letter in parens/brackets: "(P)" → "(pawn)".
   out = out.replace(PIECE_LETTER_IN_PARENS_RE, (_, bracket: string, piece: string) => {
-    const name = PIECE_LETTER_NAMES[piece] ?? piece;
+    const name = PIECE_LETTER_NAMES[piece.toUpperCase()] ?? piece;
     return `${bracket}${name}`;
   });
   // Isolated piece letters after a chess-context word ("hanging P",
@@ -316,7 +316,7 @@ export function normalizePieceShorthand(text: string): string {
     return `${lead} ${name}`;
   });
   // Piece letter followed by an action word ("P on f3", "N attacks").
-  out = out.replace(ISOLATED_PIECE_LETTER_RE, (_, piece: string) => PIECE_LETTER_NAMES[piece] ?? piece);
+  out = out.replace(ISOLATED_PIECE_LETTER_RE, (_, piece: string) => PIECE_LETTER_NAMES[piece.toUpperCase()] ?? piece);
   return out;
 }
 
