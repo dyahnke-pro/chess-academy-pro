@@ -80,8 +80,13 @@ jobs:
 
             ${{ inputs.error_digest }}
 
-            You are working in the chess-academy-pro repo. Read CLAUDE.md first — its
-            gates and voice rules apply. Your job:
+            You are working in the chess-academy-pro repo. Read
+            `.github/AUTOFIX_GUIDE.md` first — it is the CONDENSED operating
+            guide (gates, voice rules, triage, code conventions) for autofix.
+            Do NOT read the full CLAUDE.md (~400KB) — pulling it into context
+            every turn exhausts your token/turn budget (it crashed earlier runs
+            at max-turns). Grep CLAUDE.md ONLY for rules specific to the files
+            you change (e.g. `grep -n "<subsystem>" CLAUDE.md`). Your job:
 
             1. TRIAGE: pick the single highest-impact GENUINE CODE BUG in the list
                (prefer high occurrence-count crashes: uncaught-error /
