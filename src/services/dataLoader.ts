@@ -152,6 +152,14 @@ function yieldToEventLoop(): Promise<void> {
  *
  * Idempotent: each batch is a bulkPut upsert. Returns the full built array so
  * callers that prune orphans can compute the valid-id set without re-mapping.
+ *
+ * 🚨 Retry-once protection for a Dexie 4 IndexedDB race (PostHog 2026-06-30):
+ * `yieldToEventLoop()` creates a bare setTimeout Promise between batches.
+ * When React processes events during the yield, component effects can call
+ * other Dexie operations. In rare timing, Dexie's zone system leaves
+ * `PSD.trans` referencing a stale already-committed transaction, and the
+ * next `bulkPut` hits a browser-native "without an in-progress transaction"
+ * DOMException. The retry gives that operation a clean zone scope.
  */
 async function buildAndBulkPutChunked<S, R>(
   table: Table<R>,
@@ -164,11 +172,40 @@ async function buildAndBulkPutChunked<S, R>(
     const end = Math.min(i + batchSize, source.length);
     const batch: R[] = [];
     for (let j = i; j < end; j++) batch.push(build(source[j]));
-    await table.bulkPut(batch);
+    await retryOnStaleTx(() => table.bulkPut(batch));
     built.push(...batch);
     if (end < source.length) await yieldToEventLoop();
   }
   return built;
+}
+
+/**
+ * Retry a Dexie operation once if it fails with an IndexedDB "transaction
+ * not active" DOMException. This catches the rare race where Dexie's zone
+ * system hands a stale `PSD.trans` to `_trans()` after an event-loop yield
+ * (the PostHog 2026-06-30 "without an in-progress transaction" unhandled
+ * rejection). The retry runs on a clean zone scope because the failed call
+ * already unwound the stale PSD reference.
+ *
+ * Detects the error by name — across browsers it surfaces as
+ * `TransactionInactiveError`, `InvalidStateError`, or a wrapped `UnknownError`
+ * with the "without an in-progress transaction" message substring.
+ */
+async function retryOnStaleTx<T>(fn: () => Promise<T>): Promise<T> {
+  try {
+    return await fn();
+  } catch (err: unknown) {
+    const shouldRetry =
+      err instanceof DOMException &&
+      (err.name === 'TransactionInactiveError' ||
+       err.name === 'InvalidStateError' ||
+       (err.name === 'UnknownError' &&
+        /without an in-progress transaction/i.test(err.message)));
+    if (!shouldRetry) throw err;
+    // Retry once — the stale PSD.trans was already unwound by the throw,
+    // so this call creates a clean tempTransaction.
+    return fn();
+  }
 }
 
 // ─── ECO Loader ───────────────────────────────────────────────────────────────
