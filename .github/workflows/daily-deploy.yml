@@ -1,23 +1,27 @@
 name: Daily deploy + TestFlight external (21:00 America/Chicago)
 
-# David's cadence (2026-06-13): hold releases during the day, ship once nightly
-# at 21:00 Chicago. This single scheduled job:
+# David's cadence (2026-06-13): hold releases during the day, ship nightly. This
+# scheduled job, but ONLY when main actually advanced since the last build:
 #   1. Deploys the web app to Vercel production (git auto-deploy is disabled at
 #      the Vercel side — project Ignored Build Step = `exit 0` — so this job is
-#      the ONLY thing that promotes main to production: one deploy per day).
-#   2. Sends the latest VALID iOS build to the external "Beta Test" group
+#      the ONLY thing that promotes main to production).
+#   2. Sends the latest VALID iOS build (marketing version pinned to 2.8 in
+#      ios/App/ci_scripts/ci_post_clone.sh) to the external "Beta Test" group
 #      (+ internal), and submits it for Beta App Review.
 #
-# GitHub cron is UTC and DST-blind, so we fire at both 02:00 and 03:00 UTC and
-# gate on the actual Chicago wall-clock hour: exactly one of the two runs sees
-# hour 21 (02:00 UTC in CDT/summer, 03:00 UTC in CST/winter), so we ship once
-# per day at 21:00 Chicago year-round.
+# We fire at both 02:00 and 03:00 UTC — ~21:00 Chicago, and two crons for
+# delivery redundancy (GitHub drops/delays scheduled runs under load). There is
+# NO wall-clock hour gate: it silently skipped every run because GitHub delivers
+# these crons hours late (David 2026-07-01). The real gate is "Detect changes
+# since last build" below — main-changed.mjs ships ONLY when main advanced past
+# the last built commit, so a no-work day = no build. concurrency + main-changed
+# dedup the two crons (the second sees the first build's commit == HEAD, skips).
 
 on:
   schedule:
     - cron: '0 2 * * *'   # 21:00 CDT (summer, UTC-5)
     - cron: '0 3 * * *'   # 21:00 CST (winter, UTC-6)
-  workflow_dispatch:       # manual on-demand run (bypasses the hour gate)
+  workflow_dispatch:       # manual on-demand run (external opt-in below)
     inputs:
       external:
         description: 'Also push to EXTERNAL beta testers (sends a tester email). Default OFF — internal-only, no tester email.'
