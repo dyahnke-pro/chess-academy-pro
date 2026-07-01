@@ -322,100 +322,108 @@ export async function loadProRepertoireData(): Promise<void> {
  * some JSON content (G8, David 2026-05-28).
  */
 export async function reconcileProRepertoires(): Promise<void> {
-  const meta = await db.meta.get(PRO_REVISION_KEY);
-  if (meta?.value === PRO_DATA_REVISION) return;
+  // Wrap the entire reconcile in a single read-write transaction so all
+  // reads (get, toArray) and writes (bulkPut, bulkDelete, meta.put) share
+  // one scope. Without this, each await in the for-of loop creates its own
+  // transient transaction, and the bulkPut + orphan sweep + revision bump
+  // can race → "Attempt to get records from database without an in-progress
+  // transaction" (Dexie runtime error, caught in prod 2026-06-30).
+  await db.transaction('rw', db.openings, db.meta, async () => {
+    const meta = await db.meta.get(PRO_REVISION_KEY);
+    if (meta?.value === PRO_DATA_REVISION) return;
 
-  const defaults = createDefaultSrsFields();
-  const entries = (proRepertoireData as { openings: ProRepertoireEntry[] }).openings;
+    const defaults = createDefaultSrsFields();
+    const entries = (proRepertoireData as { openings: ProRepertoireEntry[] }).openings;
 
-  const toPut: OpeningRecord[] = [];
-  for (const entry of entries) {
-    const { fen, uci } = computePosition(entry.pgn);
-    const existing = await db.openings.get(entry.id);
+    const toPut: OpeningRecord[] = [];
+    for (const entry of entries) {
+      const { fen, uci } = computePosition(entry.pgn);
+      const existing = await db.openings.get(entry.id);
 
-    if (existing) {
-      toPut.push({
-        ...existing,
-        eco: entry.eco,
-        name: entry.name,
-        pgn: entry.pgn,
-        uci,
-        fen,
-        color: entry.color,
-        style: entry.style,
-        proPlayerId: entry.playerId,
-        overview: entry.overview,
-        keyIdeas: entry.keyIdeas,
-        traps: entry.traps,
-        warnings: entry.warnings,
-        variations: entry.variations,
-        trapLines: entry.trapLines ?? null,
-        warningLines: entry.warningLines ?? null,
-      });
-    } else {
-      toPut.push({
-        id: entry.id,
-        eco: entry.eco,
-        name: entry.name,
-        pgn: entry.pgn,
-        uci,
-        fen,
-        color: entry.color,
-        style: entry.style,
-        isRepertoire: false,
-        proPlayerId: entry.playerId,
-        overview: entry.overview,
-        keyIdeas: entry.keyIdeas,
-        traps: entry.traps,
-        warnings: entry.warnings,
-        variations: entry.variations,
-        trapLines: entry.trapLines ?? null,
-        warningLines: entry.warningLines ?? null,
-        drillAccuracy: 0,
-        drillAttempts: 0,
-        lastStudied: null,
-        woodpeckerReps: 0,
-        woodpeckerSpeed: null,
-        woodpeckerLastDate: null,
-        isFavorite: false,
-        ...defaults,
-      });
+      if (existing) {
+        toPut.push({
+          ...existing,
+          eco: entry.eco,
+          name: entry.name,
+          pgn: entry.pgn,
+          uci,
+          fen,
+          color: entry.color,
+          style: entry.style,
+          proPlayerId: entry.playerId,
+          overview: entry.overview,
+          keyIdeas: entry.keyIdeas,
+          traps: entry.traps,
+          warnings: entry.warnings,
+          variations: entry.variations,
+          trapLines: entry.trapLines ?? null,
+          warningLines: entry.warningLines ?? null,
+        });
+      } else {
+        toPut.push({
+          id: entry.id,
+          eco: entry.eco,
+          name: entry.name,
+          pgn: entry.pgn,
+          uci,
+          fen,
+          color: entry.color,
+          style: entry.style,
+          isRepertoire: false,
+          proPlayerId: entry.playerId,
+          overview: entry.overview,
+          keyIdeas: entry.keyIdeas,
+          traps: entry.traps,
+          warnings: entry.warnings,
+          variations: entry.variations,
+          trapLines: entry.trapLines ?? null,
+          warningLines: entry.warningLines ?? null,
+          drillAccuracy: 0,
+          drillAttempts: 0,
+          lastStudied: null,
+          woodpeckerReps: 0,
+          woodpeckerSpeed: null,
+          woodpeckerLastDate: null,
+          isFavorite: false,
+          ...defaults,
+        });
+      }
     }
-  }
 
-  await db.openings.bulkPut(toPut);
+    await db.openings.bulkPut(toPut);
 
-  // Delete orphan pro-rep entries: for each player we have current JSON
-  // data for, drop any Dexie row with that proPlayerId whose id isn't in
-  // the current JSON. Prevents scrapped entries from surfacing in the
-  // player list with stale LLM-synthesised narration when their
-  // LessonScript no longer exists (David 2026-05-28, audit caught
-  // pro-naroditsky-fantasy-caro lingering after the Naroditsky rebuild).
-  // Scoped per player so a partial rebuild doesn't accidentally delete
-  // other players' content. Seed the map from the full player roster
-  // (not just players who still have openings) so a player whose builds
-  // were wiped entirely gets an empty valid-set → all their Dexie rows
-  // are swept as orphans (slate-wipe, David 2026-05-28).
-  const idsByPlayer: Record<string, Set<string>> = {};
-  const roster = (proRepertoireData as { players: { id: string }[] }).players;
-  for (const player of roster) idsByPlayer[player.id] = new Set();
-  for (const entry of entries) {
-    if (!idsByPlayer[entry.playerId]) idsByPlayer[entry.playerId] = new Set();
-    idsByPlayer[entry.playerId].add(entry.id);
-  }
-  // proPlayerId isn't a Dexie-indexed column — full-table scan + filter.
-  // ~3,400 rows total at steady state; cost is negligible.
-  const allOpenings = await db.openings.toArray();
-  for (const [playerId, validIds] of Object.entries(idsByPlayer)) {
-    const orphanIds = allOpenings
-      .filter((o) => o.proPlayerId === playerId && !validIds.has(o.id))
-      .map((o) => o.id);
-    if (orphanIds.length > 0) {
-      await db.openings.bulkDelete(orphanIds);
+    // Delete orphan pro-rep entries: for each player we have current JSON
+    // data for, drop any Dexie row with that proPlayerId whose id isn't in
+    // the current JSON. Prevents scrapped entries from surfacing in the
+    // player list with stale LLM-synthesised narration when their
+    // LessonScript no longer exists (David 2026-05-28, audit caught
+    // pro-naroditsky-fantasy-caro lingering after the Naroditsky rebuild).
+    // Scoped per player so a partial rebuild doesn't accidentally delete
+    // other players' content. Seed the map from the full player roster
+    // (not just players who still have openings) so a player whose builds
+    // were wiped entirely gets an empty valid-set → all their Dexie rows
+    // are swept as orphans (slate-wipe, David 2026-05-28).
+    const idsByPlayer: Record<string, Set<string>> = {};
+    const roster = (proRepertoireData as { players: { id: string }[] }).players;
+    for (const player of roster) idsByPlayer[player.id] = new Set();
+    for (const entry of entries) {
+      if (!idsByPlayer[entry.playerId]) idsByPlayer[entry.playerId] = new Set();
+      idsByPlayer[entry.playerId].add(entry.id);
     }
-  }
+    // proPlayerId isn't a Dexie-indexed column — full-table scan + filter.
+    // ~3,400 rows total at steady state; cost is negligible.
+    const allOpenings = await db.openings.toArray();
+    for (const [playerId, validIds] of Object.entries(idsByPlayer)) {
+      const orphanIds = allOpenings
+        .filter((o) => o.proPlayerId === playerId && !validIds.has(o.id))
+        .map((o) => o.id);
+      if (orphanIds.length > 0) {
+        await db.openings.bulkDelete(orphanIds);
+      }
+    }
 
-  await db.meta.put({ key: PRO_REVISION_KEY, value: PRO_DATA_REVISION });
+    await db.meta.put({ key: PRO_REVISION_KEY, value: PRO_DATA_REVISION });
+  });
 }
 
 /**
@@ -428,53 +436,53 @@ export async function reconcileProRepertoires(): Promise<void> {
  * Revision-gated so it no-ops once applied.
  */
 export async function reconcileBaseRepertoire(): Promise<void> {
-  const meta = await db.meta.get(BASE_REVISION_KEY);
-  if (meta?.value === BASE_DATA_REVISION) return;
+  // Single rw transaction so the for-of get() loop, bulkPut, orphan sweep,
+  // and revision bump share one scope (David 2026-06-30, prod catch).
+  await db.transaction('rw', db.openings, db.meta, async () => {
+    const meta = await db.meta.get(BASE_REVISION_KEY);
+    if (meta?.value === BASE_DATA_REVISION) return;
 
-  const toPut: OpeningRecord[] = [];
-  for (const entry of repertoireData as RepertoireEntry[]) {
-    const existing = await db.openings.get(entry.id);
-    if (!existing) continue; // first-install seed handles brand-new entries
-    const { fen, uci } = computePosition(entry.pgn);
-    toPut.push({
-      ...existing,
-      eco: entry.eco,
-      name: entry.name,
-      pgn: entry.pgn,
-      uci,
-      fen,
-      color: entry.color,
-      style: entry.style,
-      overview: entry.overview,
-      keyIdeas: entry.keyIdeas,
-      traps: entry.traps,
-      warnings: entry.warnings,
-      isGambit: entry.isGambit ?? existing.isGambit ?? false,
-      variations: entry.variations,
-      trapLines: entry.trapLines ?? null,
-      warningLines: entry.warningLines ?? null,
-    });
-  }
+    const toPut: OpeningRecord[] = [];
+    for (const entry of repertoireData as RepertoireEntry[]) {
+      const existing = await db.openings.get(entry.id);
+      if (!existing) continue; // first-install seed handles brand-new entries
+      const { fen, uci } = computePosition(entry.pgn);
+      toPut.push({
+        ...existing,
+        eco: entry.eco,
+        name: entry.name,
+        pgn: entry.pgn,
+        uci,
+        fen,
+        color: entry.color,
+        style: entry.style,
+        overview: entry.overview,
+        keyIdeas: entry.keyIdeas,
+        traps: entry.traps,
+        warnings: entry.warnings,
+        isGambit: entry.isGambit ?? existing.isGambit ?? false,
+        variations: entry.variations,
+        trapLines: entry.trapLines ?? null,
+        warningLines: entry.warningLines ?? null,
+      });
+    }
 
-  if (toPut.length > 0) await db.openings.bulkPut(toPut);
+    if (toPut.length > 0) await db.openings.bulkPut(toPut);
 
-  // G8 orphan sweep: the King's/Evans/Benko/Budapest Gambits used to live on the
-  // Gambit tab as shallow `gambit-*` dupes in gambits.json. They're now the
-  // fully-built canonical entries (kings-gambit, …) flagged isGambit above, so
-  // the dupes are retired from gambits.json — delete their lingering Dexie rows
-  // on already-seeded devices so the tab shows ONE (curated) entry, not two.
-  const RETIRED_GAMBIT_DUPES = [
-    'gambit-kings-gambit',
-    'gambit-evans-gambit',
-    'gambit-benko-gambit',
-    'gambit-budapest-gambit',
-  ];
-  const orphans = (await db.openings.bulkGet(RETIRED_GAMBIT_DUPES))
-    .filter((o): o is OpeningRecord => !!o)
-    .map((o) => o.id);
-  if (orphans.length > 0) await db.openings.bulkDelete(orphans);
+    // G8 orphan sweep: the King's/Evans/Benko/Budapest Gambits
+    const RETIRED_GAMBIT_DUPES = [
+      'gambit-kings-gambit',
+      'gambit-evans-gambit',
+      'gambit-benko-gambit',
+      'gambit-budapest-gambit',
+    ];
+    const orphans = (await db.openings.bulkGet(RETIRED_GAMBIT_DUPES))
+      .filter((o): o is OpeningRecord => !!o)
+      .map((o) => o.id);
+    if (orphans.length > 0) await db.openings.bulkDelete(orphans);
 
-  await db.meta.put({ key: BASE_REVISION_KEY, value: BASE_DATA_REVISION });
+    await db.meta.put({ key: BASE_REVISION_KEY, value: BASE_DATA_REVISION });
+  });
 }
 
 // ─── Gambit Loader ───────────────────────────────────────────────────────────

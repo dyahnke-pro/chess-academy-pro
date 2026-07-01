@@ -1,4 +1,5 @@
 import { db } from '../db/schema';
+import type { IndexableType } from 'dexie';
 import type { OpeningRecord, DrillAttempt } from '../types';
 import { fuzzyScore } from '../utils/fuzzySearch';
 import { MAIN_LINE_INDEX } from '../utils/wlppLadder';
@@ -33,7 +34,7 @@ export function getOpeningFamily(name: string): string {
 export async function getRepertoireOpenings(
   color?: 'white' | 'black',
 ): Promise<OpeningRecord[]> {
-  const all = await db.openings.filter((o) => o.isRepertoire).toArray();
+  const all = await db.openings.where('isRepertoire').equals(true as unknown as IndexableType).toArray();
   const filtered = color ? all.filter((o) => o.color === color) : all;
   return filtered.sort((a, b) => getMasteryPercent(a) - getMasteryPercent(b));
 }
@@ -559,7 +560,7 @@ export async function saveOpeningToRepertoire(id: string): Promise<string | null
 
 /** Returns all favorited repertoire openings. */
 export async function getFavoriteOpenings(): Promise<OpeningRecord[]> {
-  return db.openings.filter((o) => o.isFavorite).toArray();
+  return db.openings.where('isFavorite').equals(true as unknown as IndexableType).toArray();
 }
 
 /** Favorited openings that still have at least one un-learned line (the

@@ -64,17 +64,27 @@ export async function buildCoachContextSnapshot(): Promise<CoachContextSnapshot>
   const sessionState = useCoachSessionStore.getState();
   const appState = useAppStore.getState();
 
-  const [totalGames, recentGames, weaknessProfile, profile] = await Promise.all([
-    db.games.filter((g) => !g.isMasterGame && g.result !== '*').count(),
-    db.games
-      .orderBy('date')
-      .reverse()
-      .filter((g) => !g.isMasterGame && g.result !== '*')
-      .limit(RECENT_GAMES_FOR_SNAPSHOT)
-      .toArray(),
+  // Run all Dexie reads inside ONE shared read transaction so they don't
+  // fight over concurrent transient transactions (fixes
+  // "Attempt to get records from database without an in-progress transaction"
+  // that happens when filter()+Promise.all() race transient tx lifetimes).
+  const [dexieData, weaknessProfile] = await Promise.all([
+    db.transaction('r', db.games, db.profiles, async () => {
+      const totalGames = await db.games
+        .filter((g) => !g.isMasterGame && g.result !== '*')
+        .count();
+      const recentGames = await db.games
+        .orderBy('date')
+        .reverse()
+        .filter((g) => !g.isMasterGame && g.result !== '*')
+        .limit(RECENT_GAMES_FOR_SNAPSHOT)
+        .toArray();
+      const profile = await db.profiles.get('main');
+      return { totalGames, recentGames, profile };
+    }),
     getStoredWeaknessProfile().catch(() => null),
-    db.profiles.get('main').catch(() => undefined),
   ]);
+  const { totalGames, recentGames, profile } = dexieData;
 
   const board = appState.globalBoardContext?.fen
     ? { fen: appState.globalBoardContext.fen }
