@@ -87,7 +87,15 @@ async function main() {
   let ready = 0; let total = 0;
   for (const g of subs) {
     const ss = (await api(`/v1/subscriptionGroups/${g.id}/subscriptions?limit=20`)).data;
-    for (const s of ss) { total++; if (s.attributes?.state === 'READY_TO_SUBMIT' || s.attributes?.state === 'APPROVED') ready++; }
+    for (const s of ss) {
+      total++;
+      const st = s.attributes?.state;
+      if (st === 'READY_TO_SUBMIT' || st === 'APPROVED') ready++;
+      // Per-subscription state so a "0/N ready" result is diagnosable — a
+      // sub sitting in WAITING_FOR_REVIEW is fine (reviewed with the app);
+      // MISSING_METADATA / DEVELOPER_ACTION_NEEDED will get the app rejected.
+      console.log(`   • ${s.attributes?.name || s.attributes?.productId || s.id}: ${st}`);
+    }
   }
   mark(ready === total && total > 0, 'Subscriptions ready', `${ready}/${total} READY_TO_SUBMIT`);
 }
