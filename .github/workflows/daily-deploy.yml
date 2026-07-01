@@ -61,6 +61,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
+          # Full history so the "What to Test" step's `git log --since` sees
+          # every commit since the last build, not just the tip. Default
+          # depth-1 (shallow) made the tester notes list only the HEAD commit
+          # and drop the real user-facing changes (David 2026-07-01, build 83).
+          fetch-depth: 0
 
       - name: Setup Node
         if: steps.gate.outputs.run == 'true'
