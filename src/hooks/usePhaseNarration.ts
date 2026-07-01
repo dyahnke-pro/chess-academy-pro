@@ -16,6 +16,11 @@ export interface UsePhaseNarrationArgs {
   getPgn: () => string;
   /** Opening name as detected by the coach game screen. */
   getOpeningName: () => string | null;
+  /** Persist the finished phase-transition report as a chat message (David
+   *  2026-07-01: the report should live in the messages under the board, not
+   *  a transient banner that pops up then disappears). Called once with the
+   *  final report text when the narration content is finalized. */
+  onReport?: (text: string) => void;
 }
 
 export interface UsePhaseNarrationResult {
@@ -158,6 +163,8 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
     let fullText = '';
     let apiResponse = '';
     let apiTimedOut = false;
+    // The final display text to persist as a chat message (David 2026-07-01).
+    let reportText = '';
 
     try {
       // WO-PHASE-LAG-02: check the shared Stockfish FEN cache first.
@@ -404,6 +411,9 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         dispatchSentence(sentenceBuffer);
         sentenceBuffer = '';
       }
+      // The streamed path produced the whole report in fullText — that's what
+      // persists as the chat message.
+      if (fullText.trim()) reportText = fullText.trim();
 
       // Fallback: if nothing streamed and nothing dispatched but the
       // API returned a usable response (non-streaming provider, rare),
@@ -413,6 +423,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         const apiTrimmed = apiResponse.trim();
         if (apiTrimmed && !apiTrimmed.startsWith('⚠️')) {
           setCurrentText(apiTrimmed);
+          reportText = apiTrimmed;
           dispatchSentence(apiTrimmed);
         } else if (apiTimedOut || apiTrimmed.startsWith('⚠️') || !apiTrimmed) {
           // WO-REAL-FIXES — render the deterministic template so the
@@ -437,6 +448,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             fen: event.fen,
           });
           setCurrentText(fallback);
+          reportText = fallback;
           // Strip the leading `* ` before TTS — the asterisk is a
           // chat-banner affordance flagging the fallback path; Polly
           // reads the literal "asterisk" out loud otherwise (production
@@ -452,6 +464,15 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
           return;
         }
       }
+      // Persist the finished report as a chat message so it lives in the
+      // messages under the board instead of a transient banner that pops up
+      // then disappears (David 2026-07-01). Fires once for BOTH the streamed
+      // and fallback paths; the voice is handled separately, so this is
+      // text-only (the chat panel's inject path mutes re-speaking).
+      if (reportText.trim() && token === activeTokenRef.current) {
+        argsRef.current.onReport?.(reportText.trim());
+      }
+
       // Fallback path: don't await Polly — we already kicked it off
       // fire-and-forget above. Awaiting firstSpeakPromise (which is
       // null on this branch since we didn't go through dispatchSentence)

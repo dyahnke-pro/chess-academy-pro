@@ -1664,6 +1664,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   const phaseNarration = usePhaseNarration({
     getPgn: () => game.history.join(' '),
     getOpeningName: () => detectedOpening?.name ?? null,
+    // Persist the phase-transition report in the chat messages under the board
+    // (David 2026-07-01) instead of the transient narration banner that pops
+    // up then disappears. Voice still plays live via the hook.
+    onReport: (text) => gameChatRef.current?.injectAssistantMessage(text),
   });
 
   // Fire phase-transition narration when the student's move completes a
@@ -4681,20 +4685,16 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           )}
         </AnimatePresence>
 
-        {/* Narration subtitle — reused for both "Read this position"
-            (user-triggered) and phase-transition narration (auto).
-            Position narration wins if both are active, but that's
-            guarded out above so this is really just "whichever one is
-            currently streaming." (WO-PHASE-NARRATION-01) */}
+        {/* Narration subtitle — "Read this position" (user-triggered) ONLY.
+            Phase-transition reports no longer render here; they persist as
+            chat messages under the board via onReport → injectAssistantMessage
+            (David 2026-07-01), instead of this transient banner that pops up
+            then disappears. Voice for phase narration still plays live. */}
         <PositionNarrationBanner
-          text={positionNarration.isNarrating || positionNarration.currentText
-            ? positionNarration.currentText
-            : phaseNarration.currentText}
-          active={positionNarration.isNarrating || phaseNarration.isNarrating}
+          text={positionNarration.currentText}
+          active={positionNarration.isNarrating}
           // "Read this position" (user-tapped) PERSISTS until dismissed via the
-          // X or a board move (David 2026-06-15). Phase narration (auto) keeps
-          // its transient auto-linger — so onDismiss only when the banner is
-          // showing the position narration.
+          // X or a board move (David 2026-06-15).
           onDismiss={
             positionNarration.isNarrating || positionNarration.currentText
               ? () => positionNarration.cancel()
