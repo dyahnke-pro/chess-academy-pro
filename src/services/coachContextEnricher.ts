@@ -475,10 +475,16 @@ async function buildStudyProgressBlock(): Promise<string | null> {
   try {
     const [flashcardCount, flashcardsDue, repertoire] = await withTimeout(
       Promise.all([
-        db.flashcards.count(),
-        db.flashcards.filter((f) => new Date(f.srsDueDate).getTime() <= Date.now()).count(),
+        // Single transaction so count+filter don't race disjoint transient tx lifetimes.
+        db.transaction('r', db.flashcards, async () => {
+          const total = await db.flashcards.count();
+          const due = await db.flashcards
+            .filter((f) => new Date(f.srsDueDate).getTime() <= Date.now())
+            .count();
+          return { total, due };
+        }).then((r) => [r.total, r.due] as const),
         getRepertoireOpenings(),
-      ]),
+      ]).then(([[count, due], rep]) => [count, due, rep] as const),
       FETCH_TIMEOUT_MS,
     );
     const lines: string[] = [];
