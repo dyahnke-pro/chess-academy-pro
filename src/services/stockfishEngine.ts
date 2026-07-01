@@ -696,6 +696,25 @@ class StockfishEngine {
     const p = this.pending;
     this.pending = null;
     if (p.hardTimeout) clearTimeout(p.hardTimeout);
+    // A MULTI worker that inited fine (uciok+readyok) then never returned
+    // bestmove is the SAB/pthread search-deadlock some non-iOS browsers hit.
+    // It fires no `onerror`, so handleEarlyMultiFailure never runs and the
+    // demote flag stays false — the next initialize() respawns `multi` and
+    // stalls again (the beta WEB loop: reset → multi → stall → reset …).
+    // Wire the runtime stall into the SAME session-permanent + device-
+    // persistent demote the init-failure path uses, so the next init takes
+    // the sticky-single branch and future loads skip multi entirely. iOS is
+    // already `asm`, so guarding on `multi` is sufficient.
+    if (this.workerVariant === 'multi' && !this._runtimeFallbackAttempted) {
+      this._runtimeFallbackAttempted = true;
+      writePersistedMultiFallback();
+      void logAppAudit({
+        kind: 'stockfish-variant-fallback',
+        category: 'subsystem',
+        source: 'stockfishEngine.recoverStuckAnalysis',
+        summary: `multi stalled at runtime (${reason}); demoted to single for the session + persisted`,
+      });
+    }
     void logAppAudit({
       kind: 'stockfish-analysis-stalled',
       category: 'subsystem',
