@@ -70,6 +70,9 @@ jobs:
           # returns a proper Anthropic message from deepseek-v4-flash.
           ANTHROPIC_BASE_URL: https://chess-academy-pro.vercel.app/api/llm/deepseek/anthropic
           ANTHROPIC_MODEL: deepseek-chat
+          # Lets the triage step run `gh pr list` to check for prior autofix
+          # attempts on the same error (the anti-bandaid gate) before patching.
+          GH_TOKEN: ${{ github.token }}
         with:
           # Dummy sentinel — satisfies the action's credential precheck. The
           # real auth is injected by the Vercel proxy; whatever Claude Code
@@ -105,8 +108,23 @@ jobs:
                phrasing — broaden the matching router the same way
                src/coach/questionIntents.test.ts does (the "thesaurus" pattern),
                and add the failing phrasing to that test.
+            1.5 CHECK PRIOR ATTEMPTS (anti-bandaid gate — MANDATORY, do this before
+               writing any code). Each autofix run is stateless, so without this it
+               re-patches the same symptom forever. Run
+               `gh pr list --state all --search "fix <keyword>" --limit 20` AND
+               `git branch -r --list 'origin/fix/*<keyword>*'` (keyword = the crashing
+               subsystem, e.g. stockfish / transaction / sanitizer). If ≥2 prior
+               PRs/branches already target this SAME error or symptom, DO NOT open
+               another patch — per CLAUDE.md "if fix N+1 treats the same symptom from a
+               different angle, the disease is architectural — stop and invert."
+               Either implement the architectural ROOT CAUSE the prior bandaids danced
+               around, or open NO PR and comment the escalation on the tracking issue.
+               A better error MESSAGE, a dedup window, a wider try/catch, or "suppress
+               spurious X" is DIAGNOSTICS, not a crash fix (see AUTOFIX_GUIDE.md).
             2. ROOT CAUSE: find the disease, not just the symptom. Grep for every
                other instance of the same pattern (CLAUDE.md "sweep, don't spot-fix").
+               For a crash (OOM / worker init-fail / uncaught), the fix must change
+               WHY it happens (resource/lifecycle/variant/guard), not how it's reported.
             3. FIX: minimal, surgical changes. No unrelated refactors.
             4. VERIFY: run `npm run ship-check` — typecheck + lint + content gates
                must pass.
