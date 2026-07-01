@@ -35,26 +35,21 @@ jobs:
       VERCEL_ORG_ID: team_EG9m215w9cQHWilBOPnOtIFS
       VERCEL_PROJECT_ID: prj_qYJMwF1apaxdp6sIZzcvZMz9BcZN
     steps:
-      - name: Gate to 21:00 America/Chicago (skip the off-DST scheduled run)
+      - name: Gate (schedule fires whenever GitHub delivers it; main-changed is the work-gate)
         id: gate
-        env:
-          # One-night pause (David 2026-06-13: "I don't want a build tonight").
-          # Scheduled runs before this UTC instant are skipped; it auto-clears
-          # after — tonight's 21:00 CT run (2026-06-14 ~02:00 UTC) is paused,
-          # tomorrow's resumes normally. Safe to delete this env once past.
-          RESUME_AFTER_UTC: '2026-06-14T12:00:00Z'
-        run: |
-          hour=$(TZ=America/Chicago date +%H)
-          echo "Chicago hour: $hour (event: ${{ github.event_name }})"
-          if [ "${{ github.event_name }}" = "schedule" ] && [ "$(date -u +%s)" -lt "$(date -u -d "$RESUME_AFTER_UTC" +%s)" ]; then
-            echo "Paused until $RESUME_AFTER_UTC — skipping tonight's run."
-            echo "run=false" >> "$GITHUB_OUTPUT"
-          elif [ "${{ github.event_name }}" = "schedule" ] && [ "$hour" != "21" ]; then
-            echo "Off-hour scheduled trigger — skipping."
-            echo "run=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "run=true" >> "$GITHUB_OUTPUT"
-          fi
+        # The old gate proceeded ONLY when the Chicago wall-clock hour == 21. That
+        # silently skipped EVERY scheduled run: GitHub Actions delivers scheduled
+        # crons late and unevenly (the 02:00/03:00 UTC crons were observed firing
+        # at 06:00-07:00 UTC → Chicago 01:00-02:00, never "21"), so the job 4-8s
+        # no-op'd while reporting green — the nightly external build hadn't fired in
+        # a week (David 2026-07-01). Timing is intentionally flexible now (David:
+        # "changing the timing is fine"): the deploy fires whenever the cron is
+        # delivered. The REAL gate is the "Detect changes since last build" step
+        # below — `main-changed.mjs` ships ONLY when main advanced past the last
+        # built commit, so no new work => no build, no deploy, no TestFlight email.
+        # The two daily crons + `concurrency` are pure delivery redundancy: the
+        # second run's main-changed sees the first build's commit == HEAD and skips.
+        run: echo "run=true" >> "$GITHUB_OUTPUT"
 
       - name: Checkout main
         if: steps.gate.outputs.run == 'true'
