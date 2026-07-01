@@ -253,8 +253,18 @@ export const useAppStore = create<AppState & AppActions>()(
       const nextClockTarget = typeof persistedClockTarget === 'number' && persistedClockTarget > 0
         ? persistedClockTarget
         : 60;
+      // Heal a NaN-poisoned puzzleRating on load. `??` never catches NaN, so a
+      // once-corrupted rating (see src/utils/ratingKey.ts) would persist across
+      // reloads and re-throw on every rating range query. Coerce to a finite
+      // value here — the single chokepoint every reader (display, persist base,
+      // queries) draws from — so the in-memory profile is always valid and the
+      // next rating write persists a healed finite value back to Dexie.
+      const safeProfile: UserProfile | null =
+        profile && !Number.isFinite(profile.puzzleRating)
+          ? { ...profile, puzzleRating: 1200 }
+          : profile;
       set({
-        activeProfile: profile,
+        activeProfile: safeProfile,
         coachVoiceOn: nextVoiceOn,
         puzzleShowTacticName: nextPuzzleShowTacticName,
         puzzleTimerOn: nextPuzzleTimerOn,

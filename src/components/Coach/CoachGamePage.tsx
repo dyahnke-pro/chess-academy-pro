@@ -1899,6 +1899,12 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // still transitions to the review (status set above) so the user sees
     // the game ended; only persistence + analysis is gated.
     if (!shouldPersistFinishedGame(gameState.moves.length)) return;
+    // Never persist a keyless game: `db.games` keyPath is `id`, so an empty/
+    // undefined gameId throws "Provided data is inadequate" (DataError) — and
+    // this add is wrapped around the mistake/misconception analysis pipeline,
+    // so the throw takes the whole post-game analysis down with it (caught in
+    // prod 2026-07-01 during a game-analysis session).
+    if (!gameState.gameId) return;
 
     void db.games.add(gameRecord).then(() => {
       if (!activeProfile) return;

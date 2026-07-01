@@ -1,4 +1,5 @@
 import { db } from '../db/schema';
+import { safeRatingKey } from '../utils/ratingKey';
 import { calculateNextInterval, createDefaultSrsFields } from './srsEngine';
 import { getMistakePuzzlesDue } from './mistakePuzzleService';
 import { getPuzzleIdsByOpening, type PuzzleIdsByOpening } from './puzzlesByOpening';
@@ -159,6 +160,11 @@ export function calculateRatingDelta(
   puzzleRating: number,
   correct: boolean,
 ): number {
+  // Never mint a NaN delta: a non-finite input (a poisoned profile feeding
+  // back in, or a puzzle record with a missing `rating`) would make `expected`
+  // NaN → the delta NaN → a NaN rating persisted to the profile → every future
+  // rating range query throws IDBKeyRange.bound(NaN). Guard at the source.
+  if (!Number.isFinite(userRating) || !Number.isFinite(puzzleRating)) return 0;
   const expected = 1 / (1 + Math.pow(10, (puzzleRating - userRating) / 400));
   const score = correct ? 1 : 0;
   return Math.round(K_FACTOR * (score - expected));
@@ -251,6 +257,7 @@ export async function getPuzzleForThemeAtRating(
   seenIds: Set<string>,
   bandWidth: number = 200,
 ): Promise<PuzzleRecord | null> {
+  targetRating = safeRatingKey(targetRating);
   const themeSet = new Set(themes);
   for (const mult of [1, 2, 3]) {
     const bw = bandWidth * mult;
@@ -316,6 +323,7 @@ export async function getPuzzleForOpeningAtRating(
   seenIds: Set<string>,
   bandWidth: number = 200,
 ): Promise<PuzzleRecord | null> {
+  targetRating = safeRatingKey(targetRating);
   const resolution = getCachedOpeningIds(openingName);
   if (resolution.ids.length === 0) return null;
   const idSet = new Set(resolution.ids);
@@ -378,8 +386,9 @@ export async function getPuzzlesInRatingBand(
   bandWidth: number = 200,
   limit: number = 20,
 ): Promise<PuzzleRecord[]> {
-  const min = userRating - bandWidth;
-  const max = userRating + bandWidth;
+  const r = safeRatingKey(userRating);
+  const min = r - bandWidth;
+  const max = r + bandWidth;
   const candidates = await db.puzzles
     .where('rating')
     .between(min, max)
@@ -665,8 +674,9 @@ export async function getKidPiecePuzzles(
   count: number = 10,
 ): Promise<PuzzleRecord[]> {
   const letter = PIECE_TO_LETTER[piece];
-  const lo = Math.max(0, kidRating - KID_PUZZLE_BAND_HALF_WIDTH);
-  const hi = kidRating + KID_PUZZLE_BAND_HALF_WIDTH;
+  const kr = safeRatingKey(kidRating, 100);
+  const lo = Math.max(0, kr - KID_PUZZLE_BAND_HALF_WIDTH);
+  const hi = kr + KID_PUZZLE_BAND_HALF_WIDTH;
   // No movingPiece index on the table — pull by rating band first
   // (indexed), then filter by piece in JS. Bands are narrow (~100
   // points) so the IndexedDB cost stays tiny.

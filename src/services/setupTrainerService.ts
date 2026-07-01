@@ -219,6 +219,9 @@ const WRONG_PENALTY = 40;
 const EXTRA_WRONG_PENALTY = 20;
 
 function clampRating(r: number): number {
+  // Math.max/min propagate NaN, so a non-finite input would pass straight
+  // through and later throw as an IDBKeyRange key. Collapse to a mid default.
+  if (!Number.isFinite(r)) return 1200;
   return Math.max(RATING_FLOOR, Math.min(RATING_CEILING, r));
 }
 

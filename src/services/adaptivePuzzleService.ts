@@ -1,5 +1,6 @@
 import { db } from '../db/schema';
 import { getWeakestThemes } from './puzzleService';
+import { safeRatingKey } from '../utils/ratingKey';
 import type { PuzzleRecord } from '../types';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -245,8 +246,9 @@ async function findPuzzleInBand(
   seenIds: Set<string>,
   theme?: string,
 ): Promise<PuzzleRecord | null> {
-  const min = targetRating - bandWidth;
-  const max = targetRating + bandWidth;
+  const r = safeRatingKey(targetRating);
+  const min = r - bandWidth;
+  const max = r + bandWidth;
 
   let puzzles = await db.puzzles
     .where('rating')
