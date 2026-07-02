@@ -122,6 +122,7 @@ import { PRO_CARUANA_RUY_LOPEZ_VARIATION_LESSONS } from './proCaruanaRuyLopezVar
 import { PRO_CARUANA_NIMZO_INDIAN_LESSON } from './proCaruanaNimzoIndian';
 import { PRO_CARUANA_NIMZO_INDIAN_VARIATION_LESSONS } from './proCaruanaNimzoIndianVariations';
 import { PRO_CARUANA_NAJDORF_LESSON } from './proCaruanaNajdorf';
+import { PRO_CARUANA_NAJDORF_VARIATION_LESSONS } from './proCaruanaNajdorfVariations';
 import { PRO_CARUANA_TAIMANOV_LESSON } from './proCaruanaTaimanov';
 import { PRO_CARUANA_TAIMANOV_VARIATION_LESSONS } from './proCaruanaTaimanovVariations';
 import { PRO_CARUANA_ITALIAN_LESSON } from './proCaruanaItalian';
@@ -542,6 +543,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...PRO_CARUANA_FRENCH_VARIATION_LESSONS,
   ...PRO_CARUANA_CARO_KANN_VARIATION_LESSONS,
   ...PRO_CARUANA_KID_VARIATION_LESSONS,
+  ...PRO_CARUANA_NAJDORF_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {

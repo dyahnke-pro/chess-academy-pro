@@ -3296,16 +3296,37 @@
       "color": "black",
       "style": "aggressive",
       "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Be3 Be6 Nd5 Nbd7",
-      "overview": "This repertoire's fighting weapon against 1.e4. The …a6 move controls b5 and waits; against the solid Be2 it grabs the centre with …e5, develops harmoniously, and contests the d5-outpost — a sound, rich Najdorf where Black plays on the queenside and the half-open c-file.",
+      "overview": "This repertoire's fighting weapon against 1.e4, built from Caruana's real over-the-board games. The …a6 move controls b5 and waits; …e5 grabs the centre and contests the d5-outpost. Against the sharp English Attack (Be3, f3, Qd2, O-O-O) Black castles into the storm and wins the …b5-b4 race; against the solid Classical (Be2) he plays a calm, sound game on the queenside and the half-open c-file.",
       "keyIdeas": [
         "The …a6 move is the Najdorf's soul — controlling b5 and keeping every plan open.",
         "The …e5 break grabs central space and kicks the d4-knight — the heart of the Najdorf.",
         "…Be6 and …Nbd7 fight for the key d5-square against White's knight outpost.",
-        "Black's plans flow on the queenside and the half-open c-file."
+        "In the English Attack, opposite-side castling makes it a race — Black's …b5-b4 storm on the queenside usually strikes White's king first."
       ],
       "traps": [],
       "warnings": [],
-      "variations": [],
+      "variations": [
+        {
+          "name": "English Attack 6.Be3",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 f3 Be7 Qd2 O-O O-O-O Nbd7 g4 b5",
+          "explanation": "White's most dangerous try and the line Caruana faces most over the board: Be3, f3, Qd2 and O-O-O, then the g4-g5 pawn storm. Black meets it head-on — …e5 grabs the centre, …Be6 and …Nbd7 hold the d5-square, and the …b5-b4 race hits White's king on the queenside first.",
+          "sources": [
+            "concept:pos-king-safety",
+            "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation",
+            "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation"
+          ]
+        },
+        {
+          "name": "Classical 6.Be2",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Be3 Be6 Nd5 Nbd7 Qd2 Rc8",
+          "explanation": "The solid main line: Be2 and O-O. Black claims the centre with …e5, develops …Be7, …Be6 and …Nbd7 to contest White's d5-outpost, and generates play on the queenside and the half-open c-file. A calm, fully sound Najdorf.",
+          "sources": [
+            "concept:pos-king-safety",
+            "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation",
+            "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation"
+          ]
+        }
+      ],
       "sources": [
         "concept:pos-king-safety",
         "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation",
