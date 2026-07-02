@@ -213,10 +213,20 @@ export function ModelGameViewer({
   const applyExploreMove = useCallback(
     (from: string, to: string): boolean => {
       if (!isExploring || !exploreChess.current) return false;
+      // Same-square drop or any illegal drag in free-explore: chess.js `.move()`
+      // THROWS "Invalid move" (it does not merely return null), which was
+      // uncaught here and crashed the viewer (prod, 2026-07-01). Explore lets
+      // the user drag anywhere, so guard the no-op and catch illegal attempts —
+      // same as the other free-move handlers (handleMemoryMoveResult/tryForkMove).
+      if (from === to) return false;
 
       const chess = exploreChess.current;
-      const move = chess.move({ from, to, promotion: 'q' });
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- chess.js throws on truly invalid moves but may return null for edge cases
+      let move: ReturnType<typeof chess.move> | null = null;
+      try {
+        move = chess.move({ from, to, promotion: 'q' });
+      } catch {
+        return false;
+      }
       if (!move) return false;
 
       clearSelection();

@@ -16,7 +16,7 @@
 // pick up the same visual signature as teach/play. Opt out per board via
 // `enableMoveSound={false}` / `showLastMoveHighlight={false}`.
 
-import { useMemo, useEffect, useRef, useState, type ReactNode, type CSSProperties } from 'react';
+import { useMemo, useEffect, useRef, useState, useCallback, type ReactNode, type CSSProperties } from 'react';
 import { Chess } from 'chess.js';
 import { Chessboard } from 'react-chessboard';
 import type {
@@ -150,6 +150,21 @@ function StaticBoard({
     animationDurationInMs ?? pieceAnimationSpeedToMs(settings.pieceAnimationSpeed) ?? BOARD_ANIMATION_MS;
   const dragAllowed = interactive && settings.moveMethod !== 'click';
 
+  // A same-square drop (drag a piece and release it on its own square) is NOT a
+  // move — but react-chessboard still fires onPieceDrop for it, and some
+  // consumers pass it straight to chess.js `.move()`, which THROWS "Invalid
+  // move" uncaught (prod crash, 2026-07-01; e.g. ModelGameViewer explore mode).
+  // Short-circuit it at the board boundary so no drop handler ever sees a no-op
+  // same-square "move". One guard here protects every static-board consumer.
+  const guardedPieceDrop = useCallback(
+    (args: PieceDropHandlerArgs): boolean => {
+      if (!onPieceDrop) return false;
+      if (args.sourceSquare === args.targetSquare) return false;
+      return onPieceDrop(args);
+    },
+    [onPieceDrop],
+  );
+
   const fenString = typeof position === 'string' ? position : null;
   const prevFenRef = useRef<string | null>(fenString);
   const [lastMove, setLastMove] = useState<{ from: string; to: string } | null>(null);
@@ -224,7 +239,7 @@ function StaticBoard({
             ? { arrows, clearArrowsOnPositionChange: true }
             : {}),
           arrowOptions: BOARD_ARROW_OPTIONS,
-          ...(onPieceDrop ? { onPieceDrop } : {}),
+          ...(onPieceDrop ? { onPieceDrop: guardedPieceDrop } : {}),
           ...(onSquareClick ? { onSquareClick } : {}),
           ...(onPieceDrag ? { onPieceDrag } : {}),
         }}
