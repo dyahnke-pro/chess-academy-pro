@@ -69,8 +69,8 @@ export const PRO_NARODITSKY_DRAGODORF_LESSON: LessonScript = {
       arrows: [{ from: 'd4', to: 'e6', color: VIS }, { from: 'd4', to: 'f5', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }],
       say:
-        "White strikes with d4, we take, and White recaptures with the knight — the Open Sicilian. Now that knight sits proudly on d4, eyeing e6 and f5 and the whole centre. This is the position both sides wanted: White has a lead in space and a big central knight; Black has the half-open c-file and a pawn majority on the queenside to work with. The battle is drawn.",
-      sayShort: 'Nxd4 — the Open Sicilian centre.',
+        "White strikes with d4, we take, and White recaptures with the knight — the Open Sicilian. This is the crucial signpost: the Dragodorf is our answer WHENEVER White enters the Open Sicilian like this, and against every setup White tries here — the fianchetto, the Classical, the h3 lines, the English Attack. If instead White dodges with an anti-Sicilian that never plays d4 — the Alapin c3, the Rossolimo Bb5, the Grand Prix — there is no Open Sicilian and we reach for those separate systems, not this one. Here White has committed to d4, so the Dragodorf is on. The knight on d4 eyes e6 and f5; we have the half-open c-file and a queenside majority.",
+      sayShort: 'Nxd4 — Open Sicilian: Dragodorf is on.',
     }),
     b({
       id: 'najdorf-hub',

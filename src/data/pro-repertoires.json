@@ -5664,7 +5664,35 @@
         "The g7-bishop is only as strong as the diagonal is open. If Black lets the centre stay closed and the f6-knight never clears, the bishop bites on granite - look for the e5 or d5 break to give it scope.",
         "Do not rush b5 into a loose structure. Timed well it expands and frees the bishop; played carelessly it can leave c6 and d5 weak for White's pieces to occupy."
       ],
-      "variations": [],
+      "variations": [
+        {
+          "name": "English Attack (Be3)",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 g6 f3 Bg7 Qd2 O-O O-O-O Nc6 Nxc6 bxc6",
+          "explanation": "Play this when White sets up with Be3 and f3 - the English Attack, the sharpest test of the Dragodorf. White castles long and storms the kingside, so we meet it Dragon-style: fianchetto, castle, and race with Nc6 and the b-file. The key is the ...Nc6 trade and ...bxc6 recapture, which keeps Black sound (engine near-level) where the greedy ...b5/...e5 tries fall short.",
+          "sources": [
+            "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation",
+            "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
+          ]
+        },
+        {
+          "name": "Classical (Be2)",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 g6 O-O Bg7 Be3 O-O f4 Nbd7",
+          "explanation": "Play this when White develops quietly with Be2 - the Classical, White's calmest and most common try. There is no pawn storm to survive, so this is a manoeuvring middlegame: we fianchetto, castle, route the knight to c5, and play for b5 and the long diagonal against White's slightly loosened e4-pawn.",
+          "sources": [
+            "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation",
+            "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
+          ]
+        },
+        {
+          "name": "h3 Adams Attack",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 h3 g6 g4 Bg7 Bg2 O-O Be3 Nc6",
+          "explanation": "Play this when White plays the modern h3 - the Adams Attack, preparing g4 and a slow kingside expansion while denying our pieces the g4-square. We invite the storm: fianchetto, castle, develop Nc6, and use the fact that every pawn White advances is a pawn that cannot come back, leaving holes we target through the centre and queenside.",
+          "sources": [
+            "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation",
+            "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
+          ]
+        }
+      ],
       "trapLines": [],
       "sources": [
         "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation",

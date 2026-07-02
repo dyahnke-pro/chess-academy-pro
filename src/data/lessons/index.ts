@@ -67,6 +67,7 @@ import { PRO_GOTHAMCHESS_CLOSED_SICILIAN_VARIATION_LESSONS } from './proGothamch
 import { PRO_GOTHAMCHESS_FRENCH_DEFENSE_VARIATION_LESSONS } from './proGothamchessFrenchDefenseVariations';
 import { PRO_GOTHAMCHESS_PIRC_DEFENSE_VARIATION_LESSONS } from './proGothamchessPircDefenseVariations';
 import { PRO_NARODITSKY_CARO_KANN_VARIATION_LESSONS } from './proNaroditskyCaroKannVariations';
+import { PRO_NARODITSKY_DRAGODORF_VARIATION_LESSONS } from './proNaroditskyDragodorfVariations';
 import { PRO_NARODITSKY_ALAPIN_VARIATION_LESSONS } from './proNaroditskyAlapinVariations';
 import { PRO_NARODITSKY_KID_VARIATION_LESSONS } from './proNaroditskyKIDVariations';
 import { PRO_NARODITSKY_KIA_VARIATION_LESSONS } from './proNaroditskyKIAVariations';
@@ -461,6 +462,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...BIRDS_OPENING_VARIATION_LESSONS,
   // Pro repertoires
   ...PRO_NARODITSKY_CARO_KANN_VARIATION_LESSONS,
+  ...PRO_NARODITSKY_DRAGODORF_VARIATION_LESSONS,
   ...PRO_NARODITSKY_ALAPIN_VARIATION_LESSONS,
   ...PRO_NARODITSKY_KID_VARIATION_LESSONS,
   ...PRO_NARODITSKY_KIA_VARIATION_LESSONS,
