@@ -259,3 +259,23 @@ narration. Transcribe the YouTube videos!").**
   (Nf3 → take cxd4 first). His teaching IS the house voice. Wired + gate green
   (30618). Combined with GothamChess (41) = 55 transcript-grounded intros.
 - Backlog: deepen coverage (more deviations per opening) + remaining pros.
+
+## PROGRESS 2026-07-02 (session 2, cont.) — FULL-REPERTOIRE subline move-data + Hikaru/Rosen narration
+- Sublines now cover 81 of 82 pro openings (1722 total) across ALL 8 pros
+  (added Hikaru/Rosen/Caruana/Samay/Carlsen/Aman via tree + explorer fallback).
+  Only pro-caruana-najdorf is empty — it has NO variation tabs to branch on.
+  Verifier 0 failures across every pro; sublineNarration gate green.
+  NB: two concurrent background batches raced course-sublines.json (last-writer-
+  wins) — cost 2 openings, both re-filled sequentially. LESSON: never run two
+  subline --write batches at once (they read-modify-write the same file).
+- sublineNarrationProExtra.ts — 12 transcript-grounded intros (Hikaru 4: nimzo-
+  larsen/reti/pirc-modern[teach-both f4→b5]/caro-kann; Rosen 8: stafford[teach-
+  both h3→Qe7]/london/sicilian/qgd/budapest/closed-sicilian/scandinavian/french).
+- Transcript-grounded subline intros now = 67 across 4 pros (Gotham 41, Nar 14,
+  Hikaru+Rosen 12).
+
+## BACKLOG (all render on the honest silent baseline meanwhile)
+- Subline narration for Caruana / Samay / Carlsen / Aman (move-data shipped;
+  pull their transcripts + author top intros, same pipeline).
+- Deepen narration coverage (more deviations per opening) for every pro.
+- pro-caruana-najdorf: add variation tabs if desired, then it can carry sublines.

@@ -14,6 +14,7 @@ import { SUBLINE_NARRATION_HELP_F } from './sublineNarrationHelpF';
 import { SUBLINE_NARRATION_FIXES } from './sublineNarrationFixes';
 import { SUBLINE_NARRATION_PRO_GOTHAM } from './sublineNarrationProGotham';
 import { SUBLINE_NARRATION_PRO_NARODITSKY } from './sublineNarrationProNaroditsky';
+import { SUBLINE_NARRATION_PRO_EXTRA } from './sublineNarrationProExtra';
 
 // HAND-AUTHORED subline narration (David 2026-06-17: "these are hand authored").
 // Each entry is written by hand, grounded in the real DB line + verified against
@@ -563,6 +564,8 @@ const MERGED_NARRATION: Record<string, SublineNarration> = {
   // Pro repertoire — Naroditsky subline narration, grounded in his own YouTube
   // teaching (which IS the house voice); transcripts reference-only.
   ...SUBLINE_NARRATION_PRO_NARODITSKY,
+  // Pro repertoire — Hikaru + Eric Rosen subline narration (transcript-grounded).
+  ...SUBLINE_NARRATION_PRO_EXTRA,
 };
 
 /** Hand-authored narration for a subline, or null to use the honest baseline. */
