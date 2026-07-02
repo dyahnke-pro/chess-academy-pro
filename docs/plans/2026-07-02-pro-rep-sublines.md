@@ -205,3 +205,47 @@ voice, when-to-play, arrows only from real pieces on clear sight-lines, sayShort
 ## Next-session pickup
 Start at STEP 1 — the generator. Pilot `pro-naroditsky-caro-kann` (color black,
 10 variations, tree at `data/sources/danielnaroditsky-trees/caro-kann.json`).
+
+## PROGRESS 2026-07-02 (session 2) — sublines shipped across BOTH pros
+
+**Naroditsky sublines: ALL 11 openings now covered** (281 sublines total).
+- Extended `build-pro-sublines.mjs` with a DIVERGENCE FLOOR: sublines branch
+  PAST where a variation forks from the main line, so they are genuine deep
+  deviations WITHIN the variation, not duplicates of the tab set. (Only applies
+  when the variation actually forks — a trunk-equal variation still gets sublines.)
+- KIA `vs ...e5 (Reti gambit)` spine EXTENDED to a 13-ply middlegame
+  (`Nf3 e5 Nxe5 Nc6 Nf3 d5 d4 Bd6 e3 Nf6 Be2 O-O O-O`), removed from the Gate-B
+  baseline (shrank 13→12). SHIPPED to main (a77f4b8).
+- Fixed `verify-pro-sublines.mjs` name-leak false positives (the pro "players"
+  are DEPERSONALIZED repertoire titles, so their tokens "classical"/"gambit"
+  wrongly matched ECO names; now whole-word match on real surnames only).
+
+**GothamChess sublines: ALL 18 openings now covered** (262 sublines total).
+- Tree path for the 9 that had rich trees (`build-pro-sublines.mjs` + aliases:
+  anti-sicilian→rossolimo, french-defense→french-black, pirc-defense→pirc-black).
+- NEW general `build-explorer-sublines.mjs` (generalises the Dragodorf script:
+  color-aware, divergence-floor) for the 5 thin openings (stafford-refute=1 game,
+  milner-barry=14, london/anti-sicilian/kia deep) — masters/club explorer + SF,
+  teach-both dubious flagging. "Leave no sublines out" (David).
+
+**NARRATION — transcript-grounded (David 2026-07-02: "do not generalize the
+narration. Transcribe the YouTube videos!").**
+- yt-dlp WORKS in this env — pulled all 18 GothamChess opening teaching-video
+  transcripts to gitignored `data/sources/gothamchess-voice/transcripts/`
+  (+ `vtt-to-text.mjs` cleaner). REFERENCE ONLY, never quoted/committed.
+- Authored `sublineNarrationProGotham.ts` — 18 hand-authored, transcript-grounded,
+  board-verified subline intros (house voice, when-to-play + the idea) across 5
+  signature openings: Caro-Kann (10), Vienna (2), Scandinavian (2), French (2,
+  incl. a teach-both Bd3→Nbd7), London (2). Wired into the merged narration map;
+  `sublineNarration.test.ts` green (30322).
+- Un-authored sublines stay on the honest SILENT baseline (not generalized prose)
+  — no harm; narration is layered incrementally, most-common deviations first.
+
+**REMAINING (backlog, all render fine on silent baseline meanwhile):**
+- Author transcript-grounded subline narration for the other 13 GothamChess
+  openings (trompowsky/english/pirc/qgd/ponziani/anti-sicilian/kia/closed-sic/
+  fantasy/italian/milner-barry/caro-advance/stafford) — transcripts already pulled.
+- Author subline narration for the 11 Naroditsky openings (pull his per-opening
+  YouTube transcripts first, as with the Dragodorf).
+- Then the remaining pros (Hikaru, Rosen, Caruana, Samay, Carlsen, Aman): trees
+  exist for several; same tree→explorer→transcript-narration pipeline.

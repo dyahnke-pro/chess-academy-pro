@@ -100,7 +100,12 @@ function treePathFor(opening) {
   const slug = opening.id.replace(new RegExp(`^pro-${opening.playerId}-`), '');
   // Tree filenames don't always match the opening slug (e.g. `alapin` opening →
   // `alapin-sicilian.json` tree). Aliases bridge the known mismatches.
-  const ALIAS = { alapin: 'alapin-sicilian' };
+  const ALIAS = {
+    alapin: 'alapin-sicilian',
+    'anti-sicilian': 'rossolimo', // GothamChess anti-Sicilian = the Bb5 Rossolimo tree
+    'french-defense': 'french-black',
+    'pirc-defense': 'pirc-black',
+  };
   const candidates = [slug, slug.replace(/^pro-/, ''), ALIAS[slug]].filter(Boolean);
   for (const s of candidates) {
     const p = `${root}data/sources/${dir}-trees/${s}.json`;
@@ -205,7 +210,12 @@ async function buildSublinesForVariation(tree, variationPgn, studentColor, minPr
   if (mainSpine.length) {
     let div = 0;
     while (div < spine.length && div < mainSpine.length && spine[div] === mainSpine[div]) div++;
-    establishment = Math.max(establishment, div + 1);
+    // Only push past a REAL fork. If the variation never diverges within its own
+    // length (div === spine.length → it IS the main trunk, e.g. a Giuoco-Piano
+    // tab whose pgn equals the opening's main pgn), don't suppress its sublines —
+    // its opponent deviations are genuine, not duplicate tabs. Branch from the
+    // normal establishment like any trunk line.
+    if (div < spine.length) establishment = Math.max(establishment, div + 1);
   }
 
   const c = new Chess();

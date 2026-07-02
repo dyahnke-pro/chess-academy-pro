@@ -12,6 +12,7 @@ import { SUBLINE_NARRATION_HELP_D } from './sublineNarrationHelpD';
 import { SUBLINE_NARRATION_HELP_E } from './sublineNarrationHelpE';
 import { SUBLINE_NARRATION_HELP_F } from './sublineNarrationHelpF';
 import { SUBLINE_NARRATION_FIXES } from './sublineNarrationFixes';
+import { SUBLINE_NARRATION_PRO_GOTHAM } from './sublineNarrationProGotham';
 
 // HAND-AUTHORED subline narration (David 2026-06-17: "these are hand authored").
 // Each entry is written by hand, grounded in the real DB line + verified against
@@ -555,6 +556,9 @@ const MERGED_NARRATION: Record<string, SublineNarration> = {
   // HELP_F now covers completely against the current move data (David 2026-06-19).
   ...SUBLINE_NARRATION_FIXES,
   ...SUBLINE_NARRATION_HELP_F,
+  // Pro repertoire — GothamChess (Levy) subline narration, grounded in his own
+  // YouTube teaching (transcripts reference-only, prose original; house voice).
+  ...SUBLINE_NARRATION_PRO_GOTHAM,
 };
 
 /** Hand-authored narration for a subline, or null to use the honest baseline. */
