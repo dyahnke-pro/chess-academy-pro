@@ -512,22 +512,25 @@ export function App(): JSX.Element {
       </Routes>
       <BuildVersionWidget />
       <StarAnimationLayer />
+      {/* First-run strength bubble — the first coach-mark to pop, blocking
+          until answered, so a beginner's difficulty is set before anything
+          else. Imports bypass it (calibrated silently at boot). */}
+      {needsCalibration && activeProfile && (
+        <StrengthCalibrationBubble onDone={() => setNeedsCalibration(false)} />
+      )}
+      {/* AI data-sharing consent — blocking, shown once after calibration and
+          re-shown just-in-time if a user who declined later tries the coach.
+          Guideline 5.1.1(i): permission before any gameplay data is shared with
+          the third-party AI + voice providers. Must live INSIDE BrowserRouter —
+          it renders a <Link to="/privacy">, and a router consumer outside the
+          Router throws "Cannot destructure property 'basename' from null" and
+          white-screens the whole app (P0, David 2026-07-02). */}
+      <AiConsentModal />
+      {/* Two-step review prompt — armed by reviewPromptService after enough
+          positive moments; renders only when open. Global so it can surface
+          from any surface that recorded the win. */}
+      <ReviewPrompt />
     </BrowserRouter>
-    {/* First-run strength bubble — the first coach-mark to pop, blocking
-        until answered, so a beginner's difficulty is set before anything
-        else. Imports bypass it (calibrated silently at boot). */}
-    {needsCalibration && activeProfile && (
-      <StrengthCalibrationBubble onDone={() => setNeedsCalibration(false)} />
-    )}
-    {/* AI data-sharing consent — blocking, shown once after calibration and
-        re-shown just-in-time if a user who declined later tries the coach.
-        Guideline 5.1.1(i): permission before any gameplay data is shared with
-        the third-party AI + voice providers. */}
-    <AiConsentModal />
-    {/* Two-step review prompt — armed by reviewPromptService after enough
-        positive moments; renders only when open. Global so it can surface
-        from any surface that recorded the win. */}
-    <ReviewPrompt />
     </>
   );
 }
