@@ -25,6 +25,7 @@ import { SUBLINE_NARRATION_PRO_NAR_NAJ_ALEK_RUY } from './sublineNarrationProNar
 import { SUBLINE_NARRATION_PRO_NAR_JOB_FAN } from './sublineNarrationProNaroditskyJobFan';
 import { SUBLINE_NARRATION_PRO_NAR_DRAGO_TAIL } from './sublineNarrationProNaroditskyDragoTail';
 import { SUBLINE_NARRATION_PRO_GOTHAM_W1 } from './sublineNarrationProGothamW1';
+import { SUBLINE_NARRATION_PRO_GOTHAM_W2 } from './sublineNarrationProGothamW2';
 
 // HAND-AUTHORED subline narration (David 2026-06-17: "these are hand authored").
 // Each entry is written by hand, grounded in the real DB line + verified against
@@ -596,6 +597,8 @@ const MERGED_NARRATION: Record<string, SublineNarration> = {
   ...SUBLINE_NARRATION_PRO_NAR_DRAGO_TAIL,
   // Deep coverage — GothamChess London/Trompowsky/Rossolimo/KIA (transcript-grounded).
   ...SUBLINE_NARRATION_PRO_GOTHAM_W1,
+  // Deep coverage — GothamChess Stafford/Scandi/Milner-Barry/French/Caro (batch 2).
+  ...SUBLINE_NARRATION_PRO_GOTHAM_W2,
 };
 
 /** Hand-authored narration for a subline, or null to use the honest baseline. */
