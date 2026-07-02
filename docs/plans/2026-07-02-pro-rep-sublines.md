@@ -279,3 +279,14 @@ narration. Transcribe the YouTube videos!").**
   pull their transcripts + author top intros, same pipeline).
 - Deepen narration coverage (more deviations per opening) for every pro.
 - pro-caruana-najdorf: add variation tabs if desired, then it can carry sublines.
+
+## PROGRESS 2026-07-02 (session 2, cont.) — subline narration for ALL 8 pros
+- sublineNarrationProElite.ts (Caruana 6 + Carlsen 13) + sublineNarrationProSamayAman.ts
+  (Samay 8 + Aman 8) added. Transcript-grounded (pulled per-opening YouTube
+  teaching to gitignored *-voice/transcripts/, reference-only) / line-grounded,
+  board-verified, correct student-color "you" framing, incl. teach-both lines.
+- TOTAL transcript/line-grounded subline intros now = 102 across all 8 pros
+  (Gotham 41, Nar 14, Hikaru+Rosen 12, Caruana+Carlsen 19, Samay+Aman 16).
+- Combined with the move-data: every pro opening with sublines has at least its
+  top deviation narrated in the house voice; the long tail stays on the honest
+  silent baseline (incremental deepening is the remaining backlog).
