@@ -49,6 +49,50 @@ caruana→fabianocaruana, carlsen→magnuscarlsen, ericrosen→imrosen,
 gothamchess→gothamchess, hikaru→hikaru, samayraina→samayraina.
 Opening slug = `pro-<player>-<slug>` → `<slug>`.
 
+## 🔒 THE STYLE STANDARD — whole pro rep, "played out + explained every step" (David 2026-07-02)
+After watching a Naroditsky Dragodorf video (`IHjt6amFgyE`), David locked the bar
+for the ENTIRE pro rep:
+> "He played both lines out on the board so you could see it and explained it
+> every step of the way. I want the entire pro rep done in this style."
+
+Concretely, every opening / variation / subline is a Watch lesson that:
+- **plays the line out on the board move-by-move** (LessonScript beats via the
+  LessonPlayer — the existing WLPP Watch);
+- **explains EVERY step** — the *idea behind each move*, not just the move
+  (the "why": fight for the weak square, trade its defender, plant the outpost,
+  the concrete tactic), in his teaching register;
+- **shows BOTH lines** — his practical choice AND the sound alternative
+  (the teach-both decision below);
+- **names no player** (depersonalized) and speaks in two registers.
+
+### 🔒 TRANSCRIPT GROUNDING — the enabler, and the PLAGIARISM GUARDRAIL
+- yt-dlp WORKS from this env (the old "YouTube sandbox-blocked" note is STALE) —
+  `yt-dlp --write-auto-sub --skip-download --sub-langs en <url>` pulled a full
+  auto-caption VTT. So every opening can be grounded in his ACTUAL video teaching.
+- **🚨 REFERENCE ONLY — NEVER QUOTE (David 2026-07-02: "Do not quote him exactly,
+  I do not want to be hit with plagiarism").** The transcript tells us WHICH
+  established ideas he teaches at each move; the narration is ORIGINAL prose
+  teaching those (public-domain) ideas, grounded in the concept corpus + DB +
+  engine. ZERO verbatim lifting — "translation, not invention" (the masterclass
+  doctrine). Raw transcripts live in gitignored `data/sources/*-voice/transcripts/`
+  as research notes — never committed, never shipped as narration.
+
+### The per-opening recipe (the "this style" production line)
+1. Find his speedrun/theory video for the opening → pull transcript (yt-dlp).
+2. Move-skeleton FIRST (Gate D): main + variations + sublines to the middlegame,
+   from his tree (or the DB where his tree is thin), every move chess.js-legal.
+3. Engine-verify every tactic/eval; teach-both on dubious lines.
+4. Author Watch beats EVERY STEP in his voice — ORIGINAL prose from the ideas,
+   arrows/highlights on every named square, two registers, no name.
+5. Self-verify (legality / narrationAccuracy / soundness) → next opening.
+
+### HONEST FINDING — his blitz tree ≠ every video line
+His chess.com corpus is overwhelmingly the STANDARD Najdorf `...e5` (6.Be3 e5 =
+224g); the **Dragodorf `...g6` is thin (~27g scattered)** — it's a *teaching*
+line he showcased, not his blitz weapon. So the Dragodorf's moves ground on the
+video + theory DB + engine (all G3-legal), NOT primarily his own games. Flag any
+opening where the tree is thin so depth is never faked from games that aren't there.
+
 ## Decisions (David, 2026-07-02)
 1. **Teach BOTH.** The subline follows the pro's actual practical line
    (grounded in their tree, no names in narration). Engine-eval the terminus
