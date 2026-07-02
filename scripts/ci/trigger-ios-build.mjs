@@ -14,6 +14,11 @@ const WORKFLOW = '9DB6F815-51CF-4E96-A4DB-F533F24B1EF7';
 const CI_PRODUCT = 'B64A226C-C522-4D72-8815-27552E3E67DE';
 const APP = '6776418777';
 const TIMEOUT_MS = 40 * 60 * 1000;
+// Which branch Xcode Cloud builds. Defaults to `main` so the nightly
+// daily-deploy is unchanged; overridable (e.g. to build a release branch that
+// deliberately excludes content on main — the App Store rejection resubmission
+// builds the pro-free corrections branch, David 2026-07-02).
+const BUILD_BRANCH = process.env.BUILD_BRANCH || 'main';
 
 const need = (n) => { const v = process.env[n]; if (!v) { console.error(`::error::missing env ${n}`); process.exit(1); } return v; };
 const KEY_ID = need('APP_STORE_CONNECT_API_KEY_ID');
@@ -52,13 +57,13 @@ async function setWorkflowBranch(pattern) {
   return r.status < 400;
 }
 
-// Resolve the scmGitReference id for the `main` BRANCH so we can name the branch
+// Resolve the scmGitReference id for the target BRANCH so we can name the branch
 // EXPLICITLY in the ciBuildRuns POST (Apple's documented path) instead of relying
 // on the mutated workflow branch-condition. The implicit approach left the build
 // dependent on workflow state a cancelled run could corrupt; an explicit
 // sourceBranchOrTag sidesteps that. Returns null on any failure so the caller
 // falls back to the implicit POST (never makes a working path worse).
-async function resolveMainGitRef() {
+async function resolveGitRef(branchName) {
   try {
     const repos = await api('GET', `/v1/ciProducts/${CI_PRODUCT}/primaryRepositories?limit=10`);
     const repoId = repos.j.data?.[0]?.id;
@@ -66,28 +71,29 @@ async function resolveMainGitRef() {
     let path = `/v1/scmRepositories/${repoId}/gitReferences?limit=200`;
     for (let page = 0; page < 5 && path; page += 1) {
       const refs = await api('GET', path);
-      const hit = (refs.j.data || []).find((x) => x.attributes?.kind === 'BRANCH' && x.attributes?.name === 'main');
-      if (hit) { console.log(`resolved main gitReference ${hit.id} (repo ${repoId})`); return hit.id; }
+      const hit = (refs.j.data || []).find((x) => x.attributes?.kind === 'BRANCH' && x.attributes?.name === branchName);
+      if (hit) { console.log(`resolved ${branchName} gitReference ${hit.id} (repo ${repoId})`); return hit.id; }
       const next = refs.j.links?.next;
       path = next ? next.replace('https://api.appstoreconnect.apple.com', '') : null;
     }
-    console.error('::warning::no BRANCH gitReference named main found');
+    console.error(`::warning::no BRANCH gitReference named ${branchName} found`);
     return null;
-  } catch (e) { console.error('::warning::resolveMainGitRef failed:', String(e).slice(0, 200)); return null; }
+  } catch (e) { console.error('::warning::resolveGitRef failed:', String(e).slice(0, 200)); return null; }
 }
 
 const main = async () => {
-  // Associate main so the manual build can be created, then disassociate
-  // immediately after so no future push auto-builds.
-  await setWorkflowBranch('main');
+  // Associate the target branch so the manual build can be created, then
+  // disassociate immediately after so no future push auto-builds.
+  console.log(`building branch: ${BUILD_BRANCH}`);
+  await setWorkflowBranch(BUILD_BRANCH);
   // Name the branch explicitly when we can (preferred); fall back to the
   // workflow's branch condition when the reference can't be resolved.
-  const gitRefId = await resolveMainGitRef();
+  const gitRefId = await resolveGitRef(BUILD_BRANCH);
   const baseRel = { workflow: { data: { type: 'ciWorkflows', id: WORKFLOW } } };
   const explicitRel = gitRefId
     ? { ...baseRel, sourceBranchOrTag: { data: { type: 'scmGitReferences', id: gitRefId } } }
     : baseRel;
-  console.log(`build trigger: ${gitRefId ? 'explicit sourceBranchOrTag=main (implicit fallback armed)' : 'implicit (workflow branch condition)'}`);
+  console.log(`build trigger: ${gitRefId ? `explicit sourceBranchOrTag=${BUILD_BRANCH} (implicit fallback armed)` : 'implicit (workflow branch condition)'}`);
   // Apple's POST /v1/ciBuildRuns intermittently returns a 500 UNEXPECTED_ERROR
   // (documented transient server bug — retrying the IDENTICAL request usually
   // succeeds). Previously a single 500 hard-failed the whole build; on a night

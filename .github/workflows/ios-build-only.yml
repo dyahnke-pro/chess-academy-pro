@@ -1,0 +1,36 @@
+name: iOS build only (no TestFlight distribution)
+
+# Cut an Xcode Cloud build of a chosen branch and wait until it's VALID on App
+# Store Connect — WITHOUT distributing it to any TestFlight tester group. Used
+# to upload a build for an App Store review resubmission (e.g. the pro-free
+# corrections branch) so it can be attached to the version and submitted,
+# without pushing it to beta testers.
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch for Xcode Cloud to build (default main)'
+        required: false
+        default: 'main'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Check out main so we run the current trigger script; it tells Xcode
+      # Cloud which BRANCH to clone + build (inputs.branch), so the built
+      # source comes from that branch, not this checkout.
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Trigger Xcode Cloud build of ${{ github.event.inputs.branch }} and wait for VALID
+        env:
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          BUILD_BRANCH: ${{ github.event.inputs.branch }}
+        run: node scripts/ci/trigger-ios-build.mjs
