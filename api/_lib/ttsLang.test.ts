@@ -44,3 +44,18 @@ describe('detectVoiceForText', () => {
     }
   });
 });
+
+// Closes the localization loop: the ACTUAL shipped Spanish narration pack's
+// beats must each route to the Spanish Polly voice (not English). Proves the
+// translate→localize→speak chain end-to-end at the voice-selection layer.
+import esViennaPack from '../../src/data/lessons/i18n/vienna-game.es.json';
+describe('shipped Spanish narration → Spanish voice', () => {
+  it('every Vienna Spanish beat selects the es Polly voice', () => {
+    const beats = esViennaPack.beats as Record<string, { say: string }>;
+    const entries = Object.values(beats);
+    expect(entries.length).toBeGreaterThan(10);
+    for (const b of entries) {
+      expect(detectVoiceForText(b.say)?.voiceId, `not es: ${b.say.slice(0, 50)}`).toBe(LANG_VOICES.es.voiceId);
+    }
+  });
+});
