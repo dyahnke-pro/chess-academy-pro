@@ -1,5 +1,4 @@
 import { db } from '../db/schema';
-import type { IndexableType } from 'dexie';
 import type { OpeningRecord, DrillAttempt } from '../types';
 import { fuzzyScore } from '../utils/fuzzySearch';
 import { MAIN_LINE_INDEX } from '../utils/wlppLadder';
@@ -38,7 +37,7 @@ export async function getRepertoireOpenings(
   // .equals(true)` throws DataError ("parameter is not a valid key") and — since
   // this powers the Openings tab load — leaves it stuck on "Loading openings…".
   // Filter in JS instead (the pattern seedFlashcardsForRepertoire already uses).
-  const all = await db.openings.filter((o) => o.isRepertoire === true).toArray();
+  const all = await db.openings.filter((o) => o.isRepertoire).toArray();
   const filtered = color ? all.filter((o) => o.color === color) : all;
   return filtered.sort((a, b) => getMasteryPercent(a) - getMasteryPercent(b));
 }
@@ -567,7 +566,7 @@ export async function getFavoriteOpenings(): Promise<OpeningRecord[]> {
   // IndexedDB has no boolean keys — filter in JS, not via the index (see
   // getRepertoireOpenings above: `.where('isFavorite').equals(true)` throws
   // DataError).
-  return db.openings.filter((o) => o.isFavorite === true).toArray();
+  return db.openings.filter((o) => o.isFavorite).toArray();
 }
 
 /** Favorited openings that still have at least one un-learned line (the

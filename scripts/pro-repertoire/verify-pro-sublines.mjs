@@ -20,8 +20,13 @@ import { reachesMiddlegame } from '../../src/data/variationMiddlegameDepth.share
 const root = new URL('../../', import.meta.url).pathname;
 const subs = JSON.parse(readFileSync(root + 'src/data/course-sublines.json', 'utf8'));
 const pro = JSON.parse(readFileSync(root + 'src/data/pro-repertoires.json', 'utf8'));
-const players = pro.players.map((p) => p.name.toLowerCase());
-const nameTokens = [...players.flatMap((n) => n.split(/\s+/)), 'naroditsky', 'hikaru', 'carlsen', 'caruana', 'rosen', 'gotham', 'levy', 'samay', 'aman'].filter((t) => t.length > 3);
+// NB: pro.players holds DEPERSONALIZED repertoire titles ("Classical Attacking
+// Repertoire", "The Gambit & Trap Repertoire") — NOT player names — so their
+// tokens ("classical", "gambit") must NOT be leak-tokens or they false-match
+// legitimate ECO names ("Classical Fianchetto", "Ross Gambit"). Only distinctive
+// real pro surnames count, matched WHOLE-WORD so "rosen" ≠ "Rosenthal Variation".
+const nameTokens = ['naroditsky', 'hikaru', 'carlsen', 'caruana', 'gotham', 'levy', 'samay', 'aman', 'rozman', 'firouzja'];
+const wordSet = (blob) => new Set(blob.toLowerCase().split(/[^a-z]+/).filter(Boolean));
 
 const only = process.argv[2];
 const proIds = Object.keys(subs).filter((id) => id.startsWith('pro-') && (!only || id === only));
@@ -85,9 +90,9 @@ for (const id of proIds) {
         fail(`not flagged dubious but evalCp ${s.evalCp} < -100`);
       }
 
-      // 8. name leak
-      const blob = `${s.name}`.toLowerCase();
-      for (const t of nameTokens) if (blob.includes(t)) fail(`possible player-name leak "${t}" in name`);
+      // 8. name leak — whole-word match against distinctive pro surnames only.
+      const words = wordSet(`${s.name}`);
+      for (const t of nameTokens) if (words.has(t)) fail(`possible player-name leak "${t}" in name`);
     }
   }
 }

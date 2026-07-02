@@ -98,7 +98,10 @@ function treePathFor(opening) {
   const dir = TREE_DIR[opening.playerId];
   if (!dir) return null;
   const slug = opening.id.replace(new RegExp(`^pro-${opening.playerId}-`), '');
-  const candidates = [slug, slug.replace(/^pro-/, '')];
+  // Tree filenames don't always match the opening slug (e.g. `alapin` opening →
+  // `alapin-sicilian.json` tree). Aliases bridge the known mismatches.
+  const ALIAS = { alapin: 'alapin-sicilian' };
+  const candidates = [slug, slug.replace(/^pro-/, ''), ALIAS[slug]].filter(Boolean);
   for (const s of candidates) {
     const p = `${root}data/sources/${dir}-trees/${s}.json`;
     if (existsSync(p)) return p;
@@ -184,7 +187,7 @@ async function studentEval(fen, studentIsWhite) {
 
 const DUBIOUS_CP = -100; // student worse than ~ -1.0 pawn = label as dubious (teach the fix too)
 
-async function buildSublinesForVariation(tree, variationPgn, studentColor, minPrefixLen) {
+async function buildSublinesForVariation(tree, variationPgn, studentColor, minPrefixLen, mainSpine = []) {
   const spine = sansFromPgn(variationPgn);
   if (spine.length < 2) return [];
   const studentIsWhite = studentColor === 'white';
@@ -194,6 +197,16 @@ async function buildSublinesForVariation(tree, variationPgn, studentColor, minPr
   // moves 1-2 (that's the system-level fork = another variation, not a subline).
   let establishment = 4;
   for (let k = 2; k <= spine.length; k++) { const nm = nameFor(spine.slice(0, k)); if (nm && nm.includes(':')) { establishment = Math.max(4, k); break; } }
+  // Divergence floor: don't branch AT (or before) the ply where this variation
+  // parts from the main line — at that ply the "siblings" are literally the OTHER
+  // variation tabs (e.g. every Najdorf var diverges at White's 6th; branching
+  // there just re-derives Be3/Be2/h3/Bc4). Push establishment past it so sublines
+  // are genuine deviations WITHIN this variation, not duplicates of the tab set.
+  if (mainSpine.length) {
+    let div = 0;
+    while (div < spine.length && div < mainSpine.length && spine[div] === mainSpine[div]) div++;
+    establishment = Math.max(establishment, div + 1);
+  }
 
   const c = new Chess();
   const subs = [];
@@ -270,11 +283,12 @@ const tree = treeDoc.tree;
 const minPrefixLen = (treeDoc.minPrefix || []).length;
 console.log(`opening ${opening.id} | color ${opening.color} | tree ${treePath.replace(root, '')} | games ${treeDoc.totals?.games ?? treeDoc.tree?.games} | minPrefix ${JSON.stringify(treeDoc.minPrefix)} (${minPrefixLen} plies)`);
 
+const mainSpine = sansFromPgn(opening.pgn || '');
 const perVar = {};
 let count = 0;
 for (let idx = 0; idx < (opening.variations || []).length; idx++) {
   const v = opening.variations[idx];
-  const subs = await buildSublinesForVariation(tree, v.pgn, opening.color, minPrefixLen);
+  const subs = await buildSublinesForVariation(tree, v.pgn, opening.color, minPrefixLen, mainSpine);
   if (subs.length) { perVar[idx] = subs; count += subs.length; }
   console.log(`  [${idx}] ${v.name.padEnd(34)} sublines=${subs.length}` +
     (subs.length ? ` (dubious=${subs.filter((s) => s.dubious).length})` : ''));

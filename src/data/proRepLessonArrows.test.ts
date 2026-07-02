@@ -92,7 +92,6 @@ const BASELINE = new Set<string>([
   'pro-gothamchess-vienna :: Vienna Gambit Main Line :: qg3-nf3 :: f3-g3',
   'pro-hikaru-reti :: vs ...d5 :: mid :: f1-d3',
   'pro-naroditsky-alapin :: 2…Nc6 Line :: nc6-bd3 :: f1-d3',
-  'pro-naroditsky-najdorf (main) :: castling-race :: c1-g7',
   // Pre-existing in parallel Caruana/Samay builds (merged 2026-06-01) — their
   // lessons predate this gate; grandfathered, to be fixed by those builds.
   'pro-caruana-najdorf (main) :: be7 :: f8-e7',
