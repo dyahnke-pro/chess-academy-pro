@@ -34,7 +34,11 @@ export function getOpeningFamily(name: string): string {
 export async function getRepertoireOpenings(
   color?: 'white' | 'black',
 ): Promise<OpeningRecord[]> {
-  const all = await db.openings.where('isRepertoire').equals(true as unknown as IndexableType).toArray();
+  // NOTE: IndexedDB does not support boolean keys, so `.where('isRepertoire')
+  // .equals(true)` throws DataError ("parameter is not a valid key") and — since
+  // this powers the Openings tab load — leaves it stuck on "Loading openings…".
+  // Filter in JS instead (the pattern seedFlashcardsForRepertoire already uses).
+  const all = await db.openings.filter((o) => o.isRepertoire === true).toArray();
   const filtered = color ? all.filter((o) => o.color === color) : all;
   return filtered.sort((a, b) => getMasteryPercent(a) - getMasteryPercent(b));
 }
@@ -560,7 +564,10 @@ export async function saveOpeningToRepertoire(id: string): Promise<string | null
 
 /** Returns all favorited repertoire openings. */
 export async function getFavoriteOpenings(): Promise<OpeningRecord[]> {
-  return db.openings.where('isFavorite').equals(true as unknown as IndexableType).toArray();
+  // IndexedDB has no boolean keys — filter in JS, not via the index (see
+  // getRepertoireOpenings above: `.where('isFavorite').equals(true)` throws
+  // DataError).
+  return db.openings.filter((o) => o.isFavorite === true).toArray();
 }
 
 /** Favorited openings that still have at least one un-learned line (the
