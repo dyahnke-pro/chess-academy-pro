@@ -17,7 +17,7 @@ import { Link } from 'react-router-dom';
  *    text-to-speech, and to Lichess / Chess.com when the user imports
  *    their games. No data is sold.
  */
-const LAST_UPDATED = 'June 1, 2026';
+const LAST_UPDATED = 'July 2, 2026';
 const CONTACT_EMAIL = 'dyahnke@gmail.com';
 
 export function PrivacyPolicyPage(): JSX.Element {
@@ -69,8 +69,10 @@ export function PrivacyPolicyPage(): JSX.Element {
           <ul className="mt-2 list-disc space-y-1 pl-5">
             <li>
               <strong>AI providers (DeepSeek, Anthropic):</strong> the chess
-              position, your question, and relevant context are sent to generate
-              coaching responses.
+              position, your typed or spoken question, and relevant game context
+              are sent to generate coaching responses. When you talk to the
+              coach, your speech is transcribed to text and that text is what's
+              sent — we don't send the raw audio.
             </li>
             <li>
               <strong>AWS Polly:</strong> the coach's text response is sent to
@@ -84,7 +86,17 @@ export function PrivacyPolicyPage(): JSX.Element {
           <p className="mt-2">
             These providers process the data to deliver the feature and under
             their own privacy terms. We do not send them your name, email, or
-            payment information.
+            payment information, and none of these providers is authorized to
+            use your data to train their models.
+          </p>
+          <p className="mt-2">
+            <strong>We ask before we share.</strong> The first time you use the
+            AI coach, the app shows an in-app consent prompt that names exactly
+            what is sent and to whom, and asks your permission before any of
+            your gameplay data leaves your device. If you decline, the AI coach
+            and voice features stay off and nothing is sent to these AI
+            providers — the rest of the app still works. You can change this
+            decision at any time in <strong>Settings → Privacy</strong>.
           </p>
         </Section>
 
