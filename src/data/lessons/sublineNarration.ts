@@ -23,6 +23,7 @@ import { SUBLINE_NARRATION_PRO_NAR_ALAPIN } from './sublineNarrationProNaroditsk
 import { SUBLINE_NARRATION_PRO_NAR_KIA_ROSS } from './sublineNarrationProNaroditskyKiaRoss';
 import { SUBLINE_NARRATION_PRO_NAR_NAJ_ALEK_RUY } from './sublineNarrationProNaroditskyNajAlekRuy';
 import { SUBLINE_NARRATION_PRO_NAR_JOB_FAN } from './sublineNarrationProNaroditskyJobFan';
+import { SUBLINE_NARRATION_PRO_NAR_DRAGO_TAIL } from './sublineNarrationProNaroditskyDragoTail';
 
 // HAND-AUTHORED subline narration (David 2026-06-17: "these are hand authored").
 // Each entry is written by hand, grounded in the real DB line + verified against
@@ -590,6 +591,8 @@ const MERGED_NARRATION: Record<string, SublineNarration> = {
   ...SUBLINE_NARRATION_PRO_NAR_NAJ_ALEK_RUY,
   // Deep coverage — Naroditsky Jobava + Fantasy deviations (line-grounded).
   ...SUBLINE_NARRATION_PRO_NAR_JOB_FAN,
+  // Deep coverage — Naroditsky Dragodorf sublines + the deep tail (completes his set).
+  ...SUBLINE_NARRATION_PRO_NAR_DRAGO_TAIL,
 };
 
 /** Hand-authored narration for a subline, or null to use the honest baseline. */
