@@ -27,7 +27,7 @@ function b(init: BeatInit): LessonBeat {
 export const PRO_NAR_FANTASY_CARO_LESSON: LessonScript = {
   openingId: 'pro-naroditsky-fantasy-caro',
   title: "This repertoire's Fantasy — f3 against the Caro",
-  minutes: 6,
+  minutes: 8,
   orientation: 'white',
   kind: 'variation',
   sources: ['https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation'],
@@ -65,11 +65,23 @@ export const PRO_NAR_FANTASY_CARO_LESSON: LessonScript = {
       sayShort: 'bxc3 — bishop pair + big centre.',
     }),
     b({
-      id: 'plan', moves: 'e4 c6 d4 d5 f3 e6 Nc3 Bb4 a3 Bxc3+ bxc3',
-      arrows: [{ from: 'f1', to: 'a6', color: VIS }, { from: 'c1', to: 'h6', color: VIS }],
-      highlights: [{ square: 'd3', color: KEY }, { square: 'e2', color: KEY }],
-      say: "The plan from here: develop Bd3 or Be2, castle short, push e5 at the right moment cramping Black's kingside, and use the bishop pair to attack down both diagonals. The doubled c-pawns become a strength — they support the centre and the c-file opens for our rook.",
-      sayShort: 'Plan: Bd3, O-O, e5, bishop pair attacks.',
+      id: 'recapture-centre', moves: 'e4 c6 d4 d5 f3 e6 Nc3 Bb4 a3 Bxc3+ bxc3 dxe4 fxe4',
+      highlights: [{ square: 'e4', color: KEY }, { square: 'f1', color: SOFT }],
+      say: "Black challenges the centre with dxe4, and we recapture with the f-pawn — fxe4. This is the moment the Fantasy pays off: we still have the broad e4-d4 pawn duo, and now the f-file is wide open, so once we castle the rook will bear down toward f7. The structural concession from move three has turned into an attacking asset.",
+      sayShort: 'fxe4 — keep the duo, open the f-file.',
+    }),
+    b({
+      id: 'develop-knight', moves: 'e4 c6 d4 d5 f3 e6 Nc3 Bb4 a3 Bxc3+ bxc3 dxe4 fxe4 c5 Nf3',
+      arrows: [{ from: 'f3', to: 'e5', color: VIS }],
+      highlights: [{ square: 'c5', color: SOFT }, { square: 'f3', color: KEY }],
+      say: "Black strikes at our centre again with c5, and we develop naturally with Nf3 — eyeing the e5-square, the outpost our whole setup is built to occupy. The doubled c-pawns actually help here: the c3-pawn guards d4, so our centre holds firm while our pieces flow to their best squares.",
+      sayShort: 'Nf3 — develop, eye the e5 outpost.',
+    }),
+    b({
+      id: 'plan', moves: 'e4 c6 d4 d5 f3 e6 Nc3 Bb4 a3 Bxc3+ bxc3 dxe4 fxe4 c5 Nf3 Nc6 Bd3',
+      highlights: [{ square: 'd3', color: KEY }, { square: 'e4', color: SOFT }, { square: 'e5', color: SOFT }],
+      say: "Nc6 develops for Black and we bring the bishop to d3 — completing the ideal Fantasy setup. The plan is clear and strong: castle short so the rook lands on the open f-file, then push e5 at the right moment to cramp Black and spring the bishop's diagonal open toward h7, with both bishops trained on the kingside. The engine confirms White is clearly better here — the aggressive bet of move three has paid off in full.",
+      sayShort: 'Bd3 — ideal setup, White is better.',
     }),
   ],
 };
