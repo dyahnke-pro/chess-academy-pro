@@ -31,6 +31,15 @@ import { SUBLINE_NARRATION_PRO_HIKARU_B3 } from './sublineNarrationProHikaruB3';
 import { SUBLINE_NARRATION_PRO_HIKARU_B } from './sublineNarrationProHikaruB';
 import { SUBLINE_NARRATION_PRO_ROSEN } from './sublineNarrationProRosen';
 import { SUBLINE_NARRATION_PRO_CARUANA } from './sublineNarrationProCaruana';
+import { SUBLINE_NARRATION_PRO_CARLSEN_SIC_A } from './sublineNarrationProCarlsenSicA';
+import { SUBLINE_NARRATION_PRO_CARLSEN_SIC_B } from './sublineNarrationProCarlsenSicB';
+import { SUBLINE_NARRATION_PRO_CARLSEN_SO } from './sublineNarrationProCarlsenSO';
+import { SUBLINE_NARRATION_PRO_CARLSEN_E5 } from './sublineNarrationProCarlsenE5';
+import { SUBLINE_NARRATION_PRO_CARLSEN_D4 } from './sublineNarrationProCarlsenD4';
+import { SUBLINE_NARRATION_PRO_SAMAY_A } from './sublineNarrationProSamayA';
+import { SUBLINE_NARRATION_PRO_SAMAY_B } from './sublineNarrationProSamayB';
+import { SUBLINE_NARRATION_PRO_AMAN_A } from './sublineNarrationProAmanA';
+import { SUBLINE_NARRATION_PRO_AMAN_B } from './sublineNarrationProAmanB';
 
 // HAND-AUTHORED subline narration (David 2026-06-17: "these are hand authored").
 // Each entry is written by hand, grounded in the real DB line + verified against
@@ -614,6 +623,18 @@ const MERGED_NARRATION: Record<string, SublineNarration> = {
   ...SUBLINE_NARRATION_PRO_ROSEN,
   // Deep coverage — Caruana Ruy/Italian (White) + Nimzo/Taimanov/French/Caro/KID (Black).
   ...SUBLINE_NARRATION_PRO_CARUANA,
+  // Deep coverage — Carlsen: Sicilian complex, 1.e4 e5, 1.d4, and the semi-open set.
+  ...SUBLINE_NARRATION_PRO_CARLSEN_SIC_A,
+  ...SUBLINE_NARRATION_PRO_CARLSEN_SIC_B,
+  ...SUBLINE_NARRATION_PRO_CARLSEN_SO,
+  ...SUBLINE_NARRATION_PRO_CARLSEN_E5,
+  ...SUBLINE_NARRATION_PRO_CARLSEN_D4,
+  // Deep coverage — Samay Raina full repertoire (both colours).
+  ...SUBLINE_NARRATION_PRO_SAMAY_A,
+  ...SUBLINE_NARRATION_PRO_SAMAY_B,
+  // Deep coverage — Aman Hambleton full repertoire (both colours).
+  ...SUBLINE_NARRATION_PRO_AMAN_A,
+  ...SUBLINE_NARRATION_PRO_AMAN_B,
 };
 
 /** Hand-authored narration for a subline, or null to use the honest baseline. */
