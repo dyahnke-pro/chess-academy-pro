@@ -1,6 +1,7 @@
 export const config = { runtime: 'edge' };
 
 import { checkUsageGuard, POLLY_USD_PER_CHAR } from './_lib/usageGuard';
+import { detectVoiceForText } from './_lib/ttsLang';
 
 const ALLOWED_ORIGINS = [
   // Native iOS WKWebView serves over `https://app.chessacademy.pro` once
@@ -261,6 +262,17 @@ async function synthesize(text: string, voice: string, req: Request, useSsml: bo
     return new Response(`Unknown voice: ${voice}`, { status: 400, headers: cors });
   }
 
+  // Language-aware voice (the coach answers in the user's language, but the
+  // voice map is all US-English — an English voice mangles Spanish/French and
+  // can't read Japanese/Arabic/Cyrillic at all). If the passage is non-English,
+  // speak it with a native Polly voice. When detection isn't confident it
+  // returns null → we keep the requested English voice, so English is unchanged.
+  // The catch below falls back to English on any synth failure, so a detected
+  // voice can never make narration go silent.
+  const englishVoice = { voiceId: voiceConfig.voiceId, engine: voiceConfig.engine, languageCode: undefined as string | undefined };
+  const langVoice = detectVoiceForText(text);
+  const effectiveVoice = langVoice ?? englishVoice;
+
   // Cross-fleet cost guard: KV-backed per-IP rate limit + the shared global
   // daily $ kill-switch (Polly is the bigger cost driver, ~$16/1M chars). This
   // is the durable layer on top of the per-isolate in-memory limit above;
@@ -284,14 +296,18 @@ async function synthesize(text: string, voice: string, req: Request, useSsml: bo
 
     // Build the command for a given mode. `asSsml=false` is the safe
     // fallback path — plain text can never raise InvalidSsmlException.
-    const buildCommand = (asSsml: boolean) =>
+    const buildCommand = (asSsml: boolean, vc: { voiceId: string; engine: string; languageCode?: string }) =>
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic import loses type info
       new SynthesizeSpeechCommand({
-        Text: asSsml ? buildSsmlForEngine(text, voiceConfig.engine, style) : text,
+        Text: asSsml ? buildSsmlForEngine(text, vc.engine, style) : text,
         TextType: asSsml ? 'ssml' : 'text',
         OutputFormat: 'mp3',
-        VoiceId: voiceConfig.voiceId,
-        Engine: voiceConfig.engine,
+        VoiceId: vc.voiceId,
+        Engine: vc.engine,
+        // Pin the locale for the language voices (harmless for English, where
+        // it's undefined and omitted). Helps Polly pick the right pronunciation
+        // for bilingual voices.
+        ...(vc.languageCode ? { LanguageCode: vc.languageCode } : {}),
       } as any);
 
     // Keep server timeout ≥ client timeout (voiceService uses 10s) so
@@ -309,7 +325,7 @@ async function synthesize(text: string, voice: string, req: Request, useSsml: bo
 
     let result;
     try {
-      result = await send(buildCommand(useSsml));
+      result = await send(buildCommand(useSsml, effectiveVoice));
     } catch (err: unknown) {
       // SSML safety net (the silent-narration bug, David 2026-06-12): a
       // friend on an iOS standalone PWA heard NO narration because the
@@ -321,7 +337,24 @@ async function synthesize(text: string, voice: string, req: Request, useSsml: bo
       const errName = err instanceof Error ? err.name : '';
       if (useSsml && errName === 'InvalidSsmlException') {
         console.warn('[TTS] InvalidSsmlException — retrying as plain text');
-        result = await send(buildCommand(false));
+        try {
+          result = await send(buildCommand(false, effectiveVoice));
+        } catch (err2) {
+          // Plain text still failed on a detected language voice → fall back
+          // to the English voice so narration never goes silent.
+          if (langVoice) {
+            console.warn(`[TTS] language voice ${effectiveVoice.voiceId} failed — falling back to English ${englishVoice.voiceId}`);
+            result = await send(buildCommand(false, englishVoice));
+          } else {
+            throw err2;
+          }
+        }
+      } else if (langVoice) {
+        // A non-SSML failure while using a detected language voice (e.g. an
+        // unexpected voice/engine mismatch Polly rejects) must never go silent
+        // — fall back to the requested English voice, i.e. today's behavior.
+        console.warn(`[TTS] language voice ${effectiveVoice.voiceId} failed (${errName}) — falling back to English ${englishVoice.voiceId}`);
+        result = await send(buildCommand(useSsml, englishVoice));
       } else {
         throw err;
       }
