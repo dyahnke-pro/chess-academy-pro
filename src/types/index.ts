@@ -762,6 +762,14 @@ export interface UserPreferences {
    *  disabling all in-app audio. Defaults to true (trainer-mode
    *  default) and syncs with appStore.coachVoiceOn. */
   coachVoiceOn?: boolean;
+  /** Language for hand-authored lesson narration (say/sayShort). Default 'en'
+   *  (English source of truth). When set to a supported code (e.g. 'es'), the
+   *  masterclass Watch narration is shown + spoken in that language from the
+   *  lazy-loaded per-language pack (src/data/lessons/i18n/), falling back to
+   *  English for any beat/opening without a translation. The spoken voice
+   *  follows automatically (the TTS layer picks a native Polly voice by the
+   *  text's language). UI chrome stays English. */
+  narrationLanguage?: string;
   /** Show the named tactic (Skewer / Fork / Pin / etc.) at the top
    *  of every mistake-puzzle. When OFF the chip is hidden so the
    *  student can find the tactic blind. Toggle lives next to the

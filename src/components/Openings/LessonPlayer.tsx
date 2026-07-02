@@ -6,6 +6,7 @@ import { useStrictNarration } from '../../hooks/useStrictNarration';
 import { voiceService } from '../../services/voiceService';
 import { useSettings } from '../../hooks/useSettings';
 import { buildNarrationSegments } from '../../services/narrationSegments';
+import { useLocalizedBeats } from '../../services/narrationI18n';
 import type { LessonScript, LessonBeat } from '../../types';
 
 interface LessonPlayerProps {
@@ -46,7 +47,11 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
   const { settings } = useSettings();
   const voiceEnabled = settings.voiceEnabled;
 
-  const beats = script.beats;
+  // Localize the hand-authored narration to the profile's narrationLanguage
+  // (English source of truth; swaps to the lazy per-language pack when one
+  // exists, else stays English). Only say/sayShort change — moves/positions/
+  // arrows are identical, so the board is untouched. Voice follows via TTS.
+  const beats = useLocalizedBeats(script.openingId, script.beats);
   const fens = useMemo(() => beats.map((b) => fenForMoves(b.moves)), [beats]);
 
   const [beatIndex, setBeatIndex] = useState(0);

@@ -1,0 +1,74 @@
+{
+  "openingId": "vienna-game",
+  "lang": "es",
+  "beats": {
+    "open": {
+      "say": "Bienvenidos. Hoy estudiamos la apertura forjada en los clubes de ajedrez vieneses de la década de 1860 — el arma elegida por Steinitz, el primer campeón mundial, y una favorita en los grandes torneos del siglo XIX. La Viena comienza como toda lucha clásica: e4 contra e5, dos peones mirándose fijamente. La pregunta no es quién controla e5 todavía. La pregunta es qué caballo desarrolla primero el blanco — y esa única decisión es lo que hace que la Viena sea diferente de todo lo demás.",
+      "sayShort": "…e5 — la Viena gira en torno a la elección del caballo."
+    },
+    "the-queens-knight": {
+      "say": "Aquí está. En la Italiana y la Ruy, las blancas siempre juegan Cf3 primero — comprometiendo el caballo de rey de inmediato a la presión sobre e5. La Viena se niega. Las blancas desarrollan el caballo de dama a c3, lo que hace DOS trabajos: apoya el peón de e4 para que las negras nunca puedan atacarlo sin lucha, y — mucho más importante — mantiene libre el caballo de rey. La casilla c3 sostiene toda la opcionalidad de la apertura. Desde c3 solo, las blancas aún pueden elegir entre tres configuraciones de ataque completamente diferentes, dependiendo enteramente de lo que las negras les den.",
+      "sayShort": "Cc3 — caballo de dama primero, caballo de rey mantenido libre."
+    },
+    "mirror": {
+      "say": "Las negras responden a la jugada más jugada — Cf6 — devolviendo la mirada al peón de e4. Ahora ambos bandos reclaman el centro con un caballo. Esta es la posición canónica de Viena, y Edward Lasker llamó a este el momento de la verdadera elección para las blancas: debe decidir CÓMO luchar por el centro. Tres configuraciones se presentan ahora ante él, cada una con su propia personalidad, y cada una una lección diferente en esta clase.",
+      "sayShort": "…Cf6 — Las negras reflejan; las blancas eligen su arma."
+    },
+    "the-arsenal": {
+      "say": "Aquí está el menú. f4 — el Gambito de Viena, el arma más afilada, donde las Blancas lanzan un peón al centro exactamente como Lasker prescribió: atraer al peón de e5 con un empuje lateral. Bc4 — la Clásica, donde el alfil perfora la larga diagonal hacia f7, construyendo una olla a presión Italiana-Vienesa. Y g3 — la Paulsen, donde las Blancas fianchettan con calma y aprietan desde la distancia. La lección de hoy recorre la columna vertebral de la Clásica, porque es la línea que un jugador negro cuidadoso invita con más frecuencia. Pero cada otra pestaña en esta clase magistral es un diente en la misma mandíbula.",
+      "sayShort": "Tres armas — f4, Bc4, g3 — un caballo."
+    },
+    "classical-bishop": {
+      "say": "La Clásica comienza con Bc4 — el alfil italiano. Desde c4 apunta directamente por la larga diagonal clara hacia f7, la casilla más vulnerable frente al rey de las negras. Si alguna vez has jugado la Apertura Italiana, ya conoces este alfil. La Viena lo toma prestado, pero aquí el Nc3 ya está en el tablero detrás de él — lo que significa que las blancas pueden apoyar una futura ruptura con d4 con fuerza extra en el momento en que la posición se abra.",
+      "sayShort": "Bc4 — el alfil italiano, apuntando a f7."
+    },
+    "black-mirrors": {
+      "say": "Las negras replican con Bc5, apuntando su propio alfil a f2 — exactamente como el Bc4 de las blancas mira a f7. La posición ahora es simétrica. Ambos bandos apuntan al peón-f del otro. La regla de Capablanca es la ley de esta posición: el control del centro es de gran importancia, y ningún ataque violento puede tener éxito sin controlar al menos dos de las casillas centrales. Así que quien rompa la simetría PRIMERO a su favor gana la apertura.",
+      "sayShort": "…Bc5 — simetría; romper el centro primero para liderar."
+    },
+    "quiet-d3": {
+      "say": "d3 — tranquilo, modesto, fundamental. Hace tres trabajos a la vez: sobreprotege e4, libera el alfil de c1 para salir vía Bg5 o Be3, y, crucialmente, MANTIENE viva la opción de d3-d4 para más adelante, cuando las piezas estén coordinadas. La Clásica de Viena es el hermano paciente de la Italiana — las blancas construyen primero, luchan después.",
+      "sayShort": "d3 — protege e4, libera el alfil, guarda d4."
+    },
+    "castle-and-stabilize": {
+      "say": "Ahora el caballo de rey finalmente sale — Nf3 — y aterriza donde habría estado en el segundo movimiento en cualquier otra apertura. Ambos bandos enrocan. Las negras juegan d6 para apuntalar e5. La posición es estable, los reyes están seguros, y el verdadero juego — la lucha en el medio juego — está a punto de comenzar. Esta es exactamente la estructura que Blackburne alcanzó cuando jugó la Viena en los grandes eventos del siglo XIX; Bird registra sus partidas con Mason en esta posición como 'emprendedoras y llenas de interés.'",
+      "sayShort": "O-O — reyes seguros, …d6 apuntala e5, comienza la lucha."
+    },
+    "preparation": {
+      "say": "Las negras juegan c6 para liberar su alfil de dama, lo que obliga al alfil blanco a salir de la gran diagonal. Pero observa: el blanco no retrocede a e2 ni a d2. Juega Bb3, manteniendo el alfil apuntando a f7 desde la MISMA diagonal, una casilla atrás. Esta es la seña del Viena: cuando las negras hostigan, el alfil se reubica SIN perder su ángulo de ataque. Compáralo con la Ruy López, donde el alfil en a4-b3-c2 ejecuta exactamente el mismo baile: las geometrías riman.",
+      "sayShort": "Bb3 — retrocede, mantiene la diagonal hacia f7."
+    },
+    "the-vienna-knight": {
+      "say": "Ahora la jugada que define la Viena Clásica: ¡Ce2!? Las blancas retiran su propio caballo para iniciar una lenta travesía — c3 a e2 a g3, y desde g3 el caballo saltará hacia f5. La regla de Edward Lasker de la Española se aplica palabra por palabra en la Viena: un caballo en f5 no puede ser repelido. Todo el medio juego se organiza alrededor de esta casilla. Las blancas están dispuestas a gastar tres tiempos para llevar un caballo allí.",
+      "sayShort": "Ce2 — rumbo al puesto avanzado de f5 vía g3."
+    },
+    "bishop-tour": {
+      "say": "El negro retira su alfil a b6 — fuera del camino de las ideas de …c6 y …c5 — y lleva su caballo a c5 para atacar el Bb3. Así que el blanco desliza el alfil una vez más: Bc2. Ahora apunta por una NUEVA diagonal, la diagonal b1-h7 — por ahora bloqueada por su propio peón en e4, pero cargada para el momento en que el centro se abra y despeje la línea. La casilla c2 es el arma cargada de la Viena, de la misma manera que Bc2 carga en la Ruy. Dos diagonales desde una pieza, elegidas según el lado del tablero donde caiga el ataque.",
+      "sayShort": "Bc2 — recarga en la diagonal b1-h7."
+    },
+    "the-break": {
+      "say": "Después de casi una docena de movimientos tranquilos de preparación, la ruptura central finalmente llega. ¡d4! El peón que las blancas retuvieron desde la jugada tres avanza, golpeando el peón e5 de las negras. El peón de c3 apoya a d4, el Ac2 lo respalda desde atrás, cada pieza en el tablero apunta al centro exactamente como lo describió Capablanca — ningún ataque violento puede tener éxito sin controlar el centro, y ahora las blancas lo hacen. Este es el momento en que la Viena se convierte en LA MISMA APERTURA que has estado estudiando todo el tiempo: una lenta presión Italiana-Viena que detona en el centro.",
+      "sayShort": "¡d4! — la ruptura central largamente preparada detona."
+    },
+    "f5-arrival": {
+      "say": "Y aquí está el premio. Después de d4 exd4 cxd4, la columna e se abre, el caballo negro se apresura a e6, y las blancas colocan el caballo de c3-e2-g3 en f5 — el puesto avanzado inamovible que Lasker nombró. Desde f5, el caballo presiona d6 y h6, vigila el flanco de rey y no puede ser expulsado por un peón. Todo el plan de la Viena Clásica, doce movimientos tranquilos de largo, era alcanzar ESTA casilla. La lenta preparación se recompensa con una pieza hermosa.",
+      "sayShort": "Cf5 — el puesto avanzado de Lasker al que apuntaba el plan."
+    },
+    "branch-gambit": {
+      "say": "Ahora — las negras no tienen por qué caer en el lento estrangulamiento. Pueden evitar la Clásica por completo jugando con más cuidado. Así que las blancas tienen una segunda arma, la que le da a la apertura su reputación violenta: f4. Edward Lasker escribió: 'Parecería un buen plan atraer ese peón, y esto se vuelve factible jugando f4 cuando él ya tiene un peón en e4.' Eso es exactamente el Gambito de Viena — f4 ataca el peón e5 de las negras. Las blancas no esperan a que el centro se abra — lo DESGARRAN. Un capítulo completamente diferente, una pestaña entera de esta clase magistral, pero comienza desde el mismo Nc3 que ya has visto.",
+      "sayShort": "f4 — el señuelo del gambito, desgarrando el centro."
+    },
+    "branch-paulsen": {
+      "say": "O bien, las blancas pueden rechazar los fuegos artificiales y jugar g3: la Variante Paulsen. El alfil se fianchetta en g2, barriendo la larga diagonal clara desde una esquina del tablero, y las blancas construyen una presión lenta desde la distancia: el Bg2 eventualmente presionará a través del centro una vez que la estructura se abra. La Paulsen es la elección del gran maestro moderno: Carlsen y Caruana la juegan al más alto nivel, aunque en rangos amateur rara vez se ve. Misma columna vertebral Nc3, tercera personalidad completamente diferente. Toda la propuesta de la Viena está aquí: un movimiento, tres armas, dependiendo de lo que las negras te den.",
+      "sayShort": "g3 — la Paulsen, la presión moderna de élite."
+    },
+    "branch-nc6": {
+      "say": "Y una última rama — las negras no tienen que jugar …Cf6. A nivel amateur, las negras juegan Cc6 incluso más a menudo que Cf6, defendiendo e5 con el caballo al estilo clásico de la Ruy. La respuesta de las blancas puede ser Ac4 — volviendo a temas italianos — pero las brillanteces históricas de la Viena VIVEN AQUÍ: el Hamppe-Allgaier, el Hamppe-Muzio, los gambitos Pierce y Steinitz. Sacrifica el peón del gambito, sacrifica un caballo en f7, sacrifica el derecho a enrocar — el propio Steinitz llevó a su rey a e2 y ganó. Una pestaña completa de esta clase magistral está dedicada a las líneas que surgen de Cc6.",
+      "sayShort": "…Cc6 — la otra respuesta, hogar de los gambitos."
+    },
+    "close": {
+      "say": "Y esa es la Apertura Viena. No una apertura — un lanzador flexible. El caballo en c3 apoya e4, mantiene libre el caballo del rey, y permite que las blancas elijan su arma según lo que las negras ofrezcan. Bc4 clásico contra juego cuidadoso, con el plan a largo plazo de un caballo plantado en f5 y un alfil perforando f7; Gambito f4 contra juego pasivo; Paulsen g3 contra complicaciones; y contra Nc6, todo un arsenal de sacrificios históricos. Aprende las cuatro armas en las cuatro pestañas siguientes, y no solo sabrás la Viena. Sabrás cómo pensaba Steinitz sobre el ajedrez: la posición dicta el plan, no al revés.",
+      "sayShort": "Un caballo, cuatro armas — premio en f5, objetivo en f7."
+    }
+  }
+}

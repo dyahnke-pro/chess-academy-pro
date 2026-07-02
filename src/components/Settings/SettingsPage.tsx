@@ -23,6 +23,7 @@ import { NarrationAuditPanel } from './NarrationAuditPanel';
 import { AnalyticsAuditPanel } from './AnalyticsAuditPanel';
 import { BugReportPanel } from './BugReportPanel';
 import { AiConsentSetting } from './AiConsentSetting';
+import { NarrationLanguageSetting } from './NarrationLanguageSetting';
 import { ScrollHintBar } from '../Common/ScrollHintBar';
 import { APP_VERSION, BETA_MODE } from '../../utils/constants';
 import { hardRefresh } from '../../utils/hardRefresh';
@@ -1378,6 +1379,9 @@ function AboutTab(): JSX.Element {
       {/* AI data-sharing consent control (Apple 5.1.1 — the privacy policy
           links users here to manage it). */}
       <AiConsentSetting />
+
+      {/* Lesson-narration language (localization pilot). */}
+      <NarrationLanguageSetting />
 
       {/* In-app bug report — the human feedback channel (David 2026-06-02). */}
       <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
