@@ -130,7 +130,7 @@ const STEINITZ: LessonScript = {
     b({
       id: 'c3', moves: `${RUY} a6 Ba4 d6 c3`,
       highlights: [{ square: 'c3', color: KEY }, { square: 'd4', color: SOFT }],
-      say: "c3 — the preparation move. It braces the coming d4 push, so that when we grab the centre the d4-pawn is fully supported. We are building an ideal big centre against Black's cramped position, and c3 is the quiet foundation for it.",
+      say: "c3 — the preparation move. It braces the coming d4 push, so that when we grab the centre that pawn will be fully supported. We are building an ideal big centre against Black's cramped position, and c3 is the quiet foundation for it.",
       sayShort: 'c3 — prepare the big d4.',
     }),
     b({
@@ -142,7 +142,7 @@ const STEINITZ: LessonScript = {
     b({
       id: 'g6', moves: `${RUY} a6 Ba4 d6 c3 Bd7 d4 g6`,
       highlights: [{ square: 'g6', color: SOFT }, { square: 'd4', color: KEY }],
-      say: "Black fianchettos with g6, hoping the g7-bishop will pressure our centre. We are happy: the engine confirms White is clearly better here, with more space and easier development. Our plan is to complete development, keep the centre strong with pieces behind it, and slowly convert the space edge — the reward for meeting a passive defence with energy.",
+      say: "Black fianchettos with g6, planning to develop the bishop to the long diagonal and pressure our centre. We are happy: the engine confirms White is clearly better here, with more space and easier development. Our plan is to complete development, keep the centre strong with pieces behind it, and slowly convert the space edge — the reward for meeting a passive defence with energy.",
       sayShort: 'g6 — White is clearly better.',
     }),
   ],
