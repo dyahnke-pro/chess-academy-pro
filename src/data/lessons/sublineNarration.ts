@@ -40,6 +40,11 @@ import { SUBLINE_NARRATION_PRO_SAMAY_A } from './sublineNarrationProSamayA';
 import { SUBLINE_NARRATION_PRO_SAMAY_B } from './sublineNarrationProSamayB';
 import { SUBLINE_NARRATION_PRO_AMAN_A } from './sublineNarrationProAmanA';
 import { SUBLINE_NARRATION_PRO_AMAN_B } from './sublineNarrationProAmanB';
+import { SUBLINE_NARRATION_PRO_GOTHAM_X1 } from './sublineNarrationProGothamX1';
+import { SUBLINE_NARRATION_PRO_GOTHAM_X2 } from './sublineNarrationProGothamX2';
+import { SUBLINE_NARRATION_PRO_HIKARU_X } from './sublineNarrationProHikaruX';
+import { SUBLINE_NARRATION_PRO_ROSEN_X1 } from './sublineNarrationProRosenX1';
+import { SUBLINE_NARRATION_PRO_ROSEN_X2 } from './sublineNarrationProRosenX2';
 
 // HAND-AUTHORED subline narration (David 2026-06-17: "these are hand authored").
 // Each entry is written by hand, grounded in the real DB line + verified against
@@ -635,6 +640,13 @@ const MERGED_NARRATION: Record<string, SublineNarration> = {
   // Deep coverage — Aman Hambleton full repertoire (both colours).
   ...SUBLINE_NARRATION_PRO_AMAN_A,
   ...SUBLINE_NARRATION_PRO_AMAN_B,
+  // Full frequent-silent coverage — remaining GothamChess/Hikaru/Rosen/Naroditsky
+  // deviations (completes every pro's frequent-deviation subline set).
+  ...SUBLINE_NARRATION_PRO_GOTHAM_X1,
+  ...SUBLINE_NARRATION_PRO_GOTHAM_X2,
+  ...SUBLINE_NARRATION_PRO_HIKARU_X,
+  ...SUBLINE_NARRATION_PRO_ROSEN_X1,
+  ...SUBLINE_NARRATION_PRO_ROSEN_X2,
 };
 
 /** Hand-authored narration for a subline, or null to use the honest baseline. */
