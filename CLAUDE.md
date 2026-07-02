@@ -623,16 +623,26 @@ David's directive verbatim across this session:
 7. **Multi-game model games.** Not one per variation; 3-5 per
    variation showing different facets of the same plan.
 
-8. **Voice research per opening.** Pull HIS specific teaching
-   content for THAT opening:
-   - YouTube speedrun videos for that opening (URLs from web
-     search; transcripts via WebFetch / third-party transcript
-     sites; yt-dlp blocked from sandbox by YouTube bot-check on
-     datacenter IPs — route to David's machine if direct
-     transcripts are needed)
+8. **Voice research per opening — INSTRUCTIONAL CONTENT IS FIRST-CLASS
+   (David 2026-07-02).** Pull the player's specific TEACHING content for
+   THAT opening — this is now a primary source, not a nice-to-have,
+   because what a pro TEACHES is what the public wants to learn (even a
+   line they don't play professionally — e.g. a showcase/teaching line —
+   is valid and desirable; see the INSTRUCTIONAL-CONTENT doctrine locked
+   in the standing notes):
+   - **YouTube speedrun / theory videos — TRANSCRIPTS PULL FROM THIS ENV.**
+     `yt-dlp --write-auto-sub --skip-download --sub-langs en <url>` WORKS
+     here (the old "sandbox-blocked, route to David's Mac" note was STALE
+     and is deleted — David 2026-07-02). Save the VTT to gitignored
+     `data/sources/<player>-voice/transcripts/`. **REFERENCE ONLY — NEVER
+     QUOTE (plagiarism guard, David 2026-07-02):** the transcript tells you
+     WHICH established ideas the pro teaches at each move; the narration is
+     ORIGINAL prose teaching those (public-domain) ideas. Zero verbatim
+     lifting. Raw transcripts stay local research notes, never committed,
+     never shipped as narration.
    - Chessable course pages
-   - Lichess studies he authored
-   - Chess.com articles he wrote
+   - Lichess studies they authored
+   - Chess.com articles they wrote
    - Podcast / interview transcripts
    - For Naroditsky baseline: the Listudy "25 Lessons" distilled
      principles article as the floor; per-opening research is the
@@ -937,17 +947,28 @@ WebFetch <chess blog URL>     # third-party Naroditsky-content summaries
 per-source attribution. Reference these in lesson `sources[]`
 arrays.
 
-**YouTube transcripts are sandbox-blocked** (Google bot-check on
-datacenter IPs, confirmed 2026-05-28). When transcript-level voice
-is needed, route to David's machine via yt-dlp:
+**YouTube transcripts PULL DIRECTLY FROM THIS ENV (David 2026-07-02 —
+SUPERSEDES the old "sandbox-blocked, route to David's Mac" note, which
+was stale and is DELETED).** yt-dlp works here via its android/vr player
+API (the datacenter-IP bot-check no longer blocks it):
 ```bash
-# David runs on his Mac:
 yt-dlp --write-auto-sub --skip-download --sub-format vtt \
-  --sub-langs en <youtube-url>
-# drops the .en.vtt into data/sources/<player>-voice/transcripts/
+  --sub-langs en -o "data/sources/<player>-voice/transcripts/<slug>.%(ext)s" \
+  "<youtube-url>"
 ```
-Don't burn time fighting YouTube from sandbox — accept the
-limitation, work with what's reachable, route the rest to David.
+The signed `timedtext` track URL is IP-locked (returns 0 bytes) and
+third-party transcript sites 403 through the proxy — so **use yt-dlp**,
+not those. `data/sources/*-voice/transcripts/` is gitignored, so the raw
+VTT never enters the repo.
+
+🚨 **REFERENCE-ONLY / NO QUOTING (David 2026-07-02, plagiarism guard).**
+The transcript is a COMPREHENSION aid — it tells you WHICH established
+chess ideas the pro teaches at each move (fight for the weak square,
+trade off its defender, plant the outpost, the concrete tactic). Those
+ideas are public-domain (Capablanca/Lasker). All shipped narration is
+ORIGINAL prose teaching those ideas — ZERO verbatim lifting ("translation,
+not invention"). Never store the pro's sentences as narration; never
+commit or ship the raw transcript.
 
 #### STEP 7 — Author the lessons (🚨 NOT OPTIONAL — see G9.3 Gate A)
 
@@ -2198,6 +2219,55 @@ Lesson playback (TTS + auto-advance) must use `useStrictNarration` (`src/hooks/u
 Spoken text comes from `pickNarrationText(annotation, length)` (`src/services/walkthroughNarration.ts`). New annotations should populate the optional `narration` and `shortNarration` fields on `OpeningMoveAnnotation` so the spoken script can diverge from the displayed annotation when needed; otherwise the helper falls back to the display text.
 
 ### Narration Voice Rules (IMPORTANT)
+
+### 🔒🔒 THE NARODITSKY HOUSE VOICE + PLAYED-OUT / EVERY-STEP STANDARD — the ENTIRE repertoire (David 2026-07-02, LOCKED. "I want the entire repertoire to be in Naroditsky's teaching/language style. It's beautiful.")
+
+David watched a Naroditsky Dragodorf teaching video and locked three things
+for the WHOLE pro rep (and every narrated opening surface):
+
+1. **NARODITSKY'S TEACHING/LANGUAGE STYLE IS THE HOUSE VOICE — for the ENTIRE
+   repertoire, regardless of whose lines/games are being taught.** Not "each pro
+   in their own voice" — his pedagogical REGISTER is the single narration voice
+   across all pros and all openings: concept-first, warm but rigorous, explains
+   the IDEA behind every move (fight for the weak square → trade off its defender
+   → plant the outpost → the concrete tactic), reaches for a clarifying
+   illustrative idea, never robotic. It is a STYLE, not attribution — the app is
+   depersonalized (no names, ever). Author every beat as if it were his clear,
+   idea-driven teaching, in ORIGINAL words.
+
+2. **EVERY LINE IS PLAYED OUT ON THE BOARD AND EXPLAINED EVERY STEP.** The Watch
+   lesson plays the line move-by-move (LessonPlayer beats) and narrates the *why*
+   at EVERY step — not just the move, the idea. Arrows/highlights lead the eye to
+   exactly the squares the narration names, every move (the lead-the-eye rule).
+
+3. **SHOW BOTH LINES.** Teach the pro's practical choice AND the sound
+   alternative — the teach-both rule (see below): the practical line the player
+   actually rode (grounded in their games/teaching), plus, when the engine judges
+   it dubious, the objectively-soundest reply, stated honestly ("dangerous at
+   human speed; the engine prefers X"). Humans aren't computers — teach both.
+
+### 🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)
+
+> "We can do this for Levy too, even if it's not what he plays professionally —
+> it's what he TEACHES, and that's what the public will want to learn. So we get
+> both instructional content and their live game content."
+
+- A pro's **teaching content (YouTube videos, courses, studies, articles)** is a
+  PRIMARY grounding source alongside their **live game corpus (the tree)** — use
+  BOTH. Per opening, pull their video transcript (yt-dlp, this env — see the
+  voice-research standing note) to learn the ideas, and their game tree for the
+  real lines they play.
+- A **teaching/showcase line the pro does NOT play in their own rated games is
+  VALID and desirable** (e.g. the Dragodorf — a line Naroditsky teaches but whose
+  ...g6 barely appears in his blitz corpus; Levy's instructional lines likewise).
+  The public wants to learn what the coach TEACHES. When a taught line is thin in
+  the pro's own games, ground its MOVES on the theory DB + masters/club explorer +
+  engine (all G3-legal) and FLAG it as "taught, not from their own games" — never
+  fake game-derived depth that isn't there.
+- This applies to every pro (Naroditsky, Levy/GothamChess, Hikaru, Rosen,
+  Caruana, Carlsen, Aman, Samay, …). Content sourced per-pro; VOICE uniformly
+  Naroditsky-style (doctrine above).
+- The full build/recipe lives in `docs/plans/2026-07-02-pro-rep-sublines.md`.
 
 **THE BAR — right ideas, elegantly taught (David 2026-05-21, verbatim):**
 *"The bar is right ideas, elegantly taught. I take the established,

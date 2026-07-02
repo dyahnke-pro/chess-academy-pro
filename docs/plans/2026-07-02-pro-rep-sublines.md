@@ -121,6 +121,26 @@ opening where the tree is thin so depth is never faked from games that aren't th
 - [ ] STEP 6 — gates (pro soundness = label not reject) + audit script.
 - [ ] STEP 7 — scale to all 8 players; ship to main; 3-instrument audit.
 
+## 🔒 SPEEDRUN-DRIVEN REPERTOIRE EXPANSION (David 2026-07-02: "look up all his speedrun videos and use them to expand his repertoire")
+Enumerated his channel via `yt-dlp --flat-playlist` (607 videos, **427 speedrun
+episodes**). Each title lists the openings it covers → parsed into an
+opening→video-IDs catalog at `data/sources/danielnaroditsky-voice/speedrun-catalog.json`
+(gitignored research map). His TEACHING repertoire spans ~33 families; the app
+has 10. Build order = his teaching frequency (video count), NEW first:
+
+**NEW openings to add (ranked by how much he teaches them):**
+Sicilian complex (Open/Sozin/Classical/Scheveningen 42, Taimanov/Kan 23, Dragon
+3, Grand Prix 5, Moscow/Canal 1) · French 11 · Philidor 10 · Scandinavian 9 ·
+Smith-Morra 9 · Nimzo 9 · Scotch 8 · London 4 · Vienna 4 · English 3 · Elephant 2
+· Pirc 2 · Latvian 2 · Trompowsky/Catalan/Bird/Benoni 1 each.
+**HAVE (10):** Caro-Kann, Alapin, Najdorf, KID, Alekhine, Glek/KIA, Rossolimo,
+Jobava London, Ruy Lopez, Fantasy-Caro (+ the Dragodorf pilot in flight).
+
+Per opening: look up its speedrun ID(s) in the catalog → pull transcript
+(yt-dlp) → move-skeleton (tree where rich, DB/explorer where his tree is thin —
+flag it) → engine-verify → author Watch beats every-step in the Naroditsky house
+voice (ORIGINAL prose, no quoting) → self-verify → next. ONE AT A TIME.
+
 ## Pilot: Naroditsky (danielnaroditsky-trees present; 10 openings).
 ```
 
