@@ -31,7 +31,7 @@ const NGE7_DOUBLED_PAWNS: LessonScript = {
   openingId: 'pro-naroditsky-rossolimo', title: 'Weapon: Nge7 walks into Bxc6 doubled-pawns', minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
   beats: [
     b({ id: 'ross-nge7-setup', moves: 'e4 c5 Nf3 Nc6 Bb5 e6 O-O', highlights: [H('b5'), H('c6', SOFT)],
-      say: "After Bb5 in the Rossolimo proper + Black's ...e6 setup, we castle calmly. Black's classical development move would be ...a6 chasing the bishop OR ...Nge7 preparing development. The Nge7 move walks into a structural trap.",
+      say: "After Bb5 in the Rossolimo proper + Black's ...e6 setup, we castle calmly. Black's classical development move would be ...a6 chasing the bishop or ...Nge7 preparing development. The Nge7 move walks into a structural trap.",
       sayShort: 'O-O — set the trap.' }),
     b({ id: 'ross-nge7-blunder', moves: 'e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7', highlights: [H('e7', ATK), H('c6', SOFT)],
       say: "...Nge7?? — the natural-looking development move actually concedes the structural fight. 58 opponents played this including Firouzja2003 (3068) and dogsofwar (2946). The trick is the Bxc6 trade timing.",

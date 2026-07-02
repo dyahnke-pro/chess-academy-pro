@@ -114,7 +114,7 @@
       {
         "fen": "6k1/pp4pp/3p4/8/8/3P4/PP4PP/3R2K1 w - - 0 1",
         "title": "Isolated d-pawn under fire",
-        "explanation": "Black's d6 pawn has no neighbor — no c-pawn, no e-pawn — and sits on a half-open file. White's rook on d1 is already exerting pressure. Black must commit a rook OR king to defend; either way that piece is passive for the rest of the game. Compare to White's d3 pawn: defended by c2 and e2 if needed, mobile, healthy.",
+        "explanation": "Black's d6 pawn has no neighbor — no c-pawn, no e-pawn — and sits on a half-open file. White's rook on d1 is already exerting pressure. Black must commit a rook or king to defend; either way that piece is passive for the rest of the game. Compare to White's d3 pawn: defended by c2 and e2 if needed, mobile, healthy.",
         "result": "white-wins",
         "bestMove": "Rd2",
         "source": "Teaching position — isolated pawn pressure",
@@ -223,7 +223,7 @@
     "order": 6,
     "narration": {
       "intro": "A rook on the same file as a passed pawn — same color or opposite — belongs BEHIND the pawn, not in front of it. Behind your own passed pawn, the rook supports every push. Behind your opponent's passed pawn, the rook restrains every push.",
-      "rule": "Place rooks behind passed pawns. Yours OR your opponent's.",
+      "rule": "Place rooks behind passed pawns. Yours or your opponent's.",
       "why": "A rook in front of a pawn loses scope every time the pawn advances. Pawn pushes from a4 to a5 to a6 — a rook on a8 (in front) progressively boxes itself into the corner with nothing left to attack. Behind the pawn (rook on a1, pawn on a4 → a5 → a6), the rook's range increases with every push: it covers more squares on the file as the pawn vacates them. Same rule applies to opponent's pawns: a rook BEHIND the enemy passed pawn forces the pawn to advance INTO the rook's attack, slowing it down. A rook in front of the enemy pawn just gets pushed back.",
       "history": "Siegbert Tarrasch stated this in his 1931 book 'The Game of Chess': 'Rooks belong behind passed pawns.' The principle has been folklore since the 1860s — Tarrasch named it.",
       "tip": "Look at every passed pawn on the board. Where's the rook? If it's not behind, move it there."

@@ -672,7 +672,7 @@ const NXE4_NO_QH5: LessonScript = {
       id: 'wn4',
       moves: ['e4','e5','Nc3','Nf6','Bc4','Nxe4','Qh5'],
       highlights: [H('h5', SOFT), H('f7', SOFT), H('d6', SOFT)],
-      say: "Why is Qh5 the ONLY move? Because every other White reply lets Black equalise OR seize the initiative. Nxe4 d5! forks the c4-bishop and the e4-knight — Black wins a piece back with an active centre. Bxf7+ Kxf7 Nxe4 d5 — same idea, Black just trades pieces and emerges with central control. d3 Nxc3 — Black trades into a clean position a pawn up. The Qh5 leap is the ONLY move that fights for an edge because it threatens Qxf7 MATE in one — a threat so concrete it forces Black to play the awkward Nd6 burying his own knight on a square it doesn't want. Memorise this: in the Vienna's Bc4 line, …Nxe4 is the moment the Qh5 must come out. No development move, no recapture — just Qh5.",
+      say: "Why is Qh5 the ONLY move? Because every other White reply lets Black equalise or seize the initiative. Nxe4 d5! forks the c4-bishop and the e4-knight — Black wins a piece back with an active centre. Bxf7+ Kxf7 Nxe4 d5 — same idea, Black just trades pieces and emerges with central control. d3 Nxc3 — Black trades into a clean position a pawn up. The Qh5 leap is the ONLY move that fights for an edge because it threatens Qxf7 MATE in one — a threat so concrete it forces Black to play the awkward Nd6 burying his own knight on a square it doesn't want. Memorise this: in the Vienna's Bc4 line, …Nxe4 is the moment the Qh5 must come out. No development move, no recapture — just Qh5.",
       sayShort: "Only Qh5 keeps the edge — others allow …d5.",
     },
   ],

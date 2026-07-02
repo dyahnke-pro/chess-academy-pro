@@ -145,7 +145,7 @@ const D5_OPEN_NB5: LessonScript = {
       id: 'nb5-jump',
       moves: 'e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 e6 Na3 Nc6 Be3 cxd4 Nb5',
       highlights: [H('b5'), H('d5', ATK), H('c7', SOFT), H('d6', SOFT)],
-      say: "Nb5! — the trip pays off. The knight forks d4 AND the c7/d6 outpost squares. Black's queen on d5 has to move OR risk getting trapped, and the d4-pawn is hanging. Either way we win the tempo battle.",
+      say: "Nb5! — the trip pays off. The knight forks d4 AND the c7/d6 outpost squares. Black's queen on d5 has to move or risk getting trapped, and the d4-pawn is hanging. Either way we win the tempo battle.",
       sayShort: 'Nb5! — fork d4 + c7/d6.',
     }),
     b({

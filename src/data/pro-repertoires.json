@@ -334,7 +334,7 @@
         {
           "name": "Classical 4...Bf5 (Main Line)",
           "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7 h5 Bh7 Bd3 Bxd3 Qxd3 e6 Bd2 Ngf6 O-O-O Be7",
-          "explanation": "The Caro's headline variation — the one any 1.e4 player you face has prepared. Walk it carefully. 3...dxe4 4.Nxe4 Bf5 — the move that separates the Caro from the French. Your bishop comes out of the chain BEFORE …e6 traps it. 5.Ng3 Bg6 (the bishop steps back to keep the diagonal). White's 6.h4 h6 7.Nf3 Nd7 8.h5 Bh7 is the classical chase — your bishop ends on h7 looking passive, but it's not actually lost a tempo because h2-h5 also cost White two pawn moves. 9.Bd3 Bxd3 10.Qxd3 trades off the light-squared bishops and centralises White's queen. Black completes development with 10...e6 11.Bd2 Ngf6, and 12.O-O-O Be7 reaches the critical position. White's queenside castling promises kingside attack with g4-g5; Black's plan is …Qa5 + …O-O-O too, OR …c5 break to open the c-file before White can mount the storm. The position is one of the most analysed in chess history — full of subtleties, but Black's position is genuinely fine.",
+          "explanation": "The Caro's headline variation — the one any 1.e4 player you face has prepared. Walk it carefully. 3...dxe4 4.Nxe4 Bf5 — the move that separates the Caro from the French. Your bishop comes out of the chain BEFORE …e6 traps it. 5.Ng3 Bg6 (the bishop steps back to keep the diagonal). White's 6.h4 h6 7.Nf3 Nd7 8.h5 Bh7 is the classical chase — your bishop ends on h7 looking passive, but it's not actually lost a tempo because h2-h5 also cost White two pawn moves. 9.Bd3 Bxd3 10.Qxd3 trades off the light-squared bishops and centralises White's queen. Black completes development with 10...e6 11.Bd2 Ngf6, and 12.O-O-O Be7 reaches the critical position. White's queenside castling promises kingside attack with g4-g5; Black's plan is …Qa5 + …O-O-O too, or …c5 break to open the c-file before White can mount the storm. The position is one of the most analysed in chess history — full of subtleties, but Black's position is genuinely fine.",
           "sources": [
             "book:caro-kann",
             "concept:pos-center",
@@ -1050,7 +1050,7 @@
         {
           "name": "Premature d4 push — Black equalises with …d5",
           "pgn": "e4 c5 c3 Nc6 d4 cxd4 cxd4 d5 exd5 Qxd5 Nc3 e6 Nf3 Nf6",
-          "explanation": "ERROR: White rushes d4 on move 3 BEFORE Black declares with Nf6 or e6. CONSEQUENCE shown by the line: Black plays …cxd4 cxd4 …d5! exd5 …Qxd5 — Black's queen comes out with tempo and gets free development, reaching a Scandinavian-style position with Black equalising completely. White's whole Alapin plan (the supported central pawn duo + Nc3-tempo-on-the-queen) is dead because Black struck FIRST. FIX: WAIT. After 2.c3, do NOT play d4 immediately. Let Black declare with …Nf6 (then 3.e5 Nd5 4.d4 forces Black to react) OR …e6 (then 3.d4 d5 4.e5 transitions into French-Advance lines you know) OR …d6 (then 3.d4 wins time because Black committed). The d4-push timing is the whole opening — get it wrong and you're playing a worse Open Sicilian."
+          "explanation": "ERROR: White rushes d4 on move 3 BEFORE Black declares with Nf6 or e6. CONSEQUENCE shown by the line: Black plays …cxd4 cxd4 …d5! exd5 …Qxd5 — Black's queen comes out with tempo and gets free development, reaching a Scandinavian-style position with Black equalising completely. White's whole Alapin plan (the supported central pawn duo + Nc3-tempo-on-the-queen) is dead because Black struck FIRST. FIX: WAIT. After 2.c3, do NOT play d4 immediately. Let Black declare with …Nf6 (then 3.e5 Nd5 4.d4 forces Black to react) or …e6 (then 3.d4 d5 4.e5 transitions into French-Advance lines you know) or …d6 (then 3.d4 wins time because Black committed). The d4-push timing is the whole opening — get it wrong and you're playing a worse Open Sicilian."
         },
         {
           "name": "Bc2 retreat instead of Bxe6 trade",
@@ -3296,7 +3296,7 @@
       "color": "black",
       "style": "aggressive",
       "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Be3 Be6 Nd5 Nbd7",
-      "overview": "This repertoire's fighting weapon against 1.e4, built from Caruana's real over-the-board games. The …a6 move controls b5 and waits; …e5 grabs the centre and contests the d5-outpost. Against the sharp English Attack (Be3, f3, Qd2, O-O-O) Black castles into the storm and wins the …b5-b4 race; against the solid Classical (Be2) he plays a calm, sound game on the queenside and the half-open c-file.",
+      "overview": "This repertoire's fighting weapon against 1.e4, built from real over-the-board grandmaster games. The …a6 move controls b5 and waits; …e5 grabs the centre and contests the d5-outpost. Against the sharp English Attack (Be3, f3, Qd2, O-O-O) Black castles into the storm and wins the …b5-b4 race; against the solid Classical (Be2) he plays a calm, sound game on the queenside and the half-open c-file.",
       "keyIdeas": [
         "The …a6 move is the Najdorf's soul — controlling b5 and keeping every plan open.",
         "The …e5 break grabs central space and kicks the d4-knight — the heart of the Najdorf.",
@@ -3309,7 +3309,7 @@
         {
           "name": "English Attack 6.Be3",
           "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 f3 Be7 Qd2 O-O O-O-O Nbd7 g4 b5",
-          "explanation": "White's most dangerous try and the line Caruana faces most over the board: Be3, f3, Qd2 and O-O-O, then the g4-g5 pawn storm. Black meets it head-on — …e5 grabs the centre, …Be6 and …Nbd7 hold the d5-square, and the …b5-b4 race hits White's king on the queenside first.",
+          "explanation": "White's most dangerous try and the line you’ll face most over the board: Be3, f3, Qd2 and O-O-O, then the g4-g5 pawn storm. Black meets it head-on — …e5 grabs the centre, …Be6 and …Nbd7 hold the d5-square, and the …b5-b4 race hits White's king on the queenside first.",
           "sources": [
             "concept:pos-king-safety",
             "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation",

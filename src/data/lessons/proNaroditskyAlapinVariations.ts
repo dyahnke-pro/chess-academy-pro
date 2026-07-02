@@ -85,7 +85,7 @@ const D5_OPEN: LessonScript = {
       moves: 'e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 e6 Na3',
       arrows: [{ from: 'b1', to: 'a3', color: VIS }, { from: 'a3', to: 'b5', color: ATK }],
       highlights: [{ square: 'a3', color: KEY }, { square: 'b5', color: SOFT }],
-      say: "Na3 — the rim-knight that gives this line its character. The textbook move at this position is Nbd2 developing toward the centre, but Danya routes the knight to b5 instead, attacking the queen on d5 and aiming at the c7 prize square. The knight on a3 looks passive but it's en route, and the moment Black moves the queen it lands on b5 with tempo.",
+      say: "Na3 — the rim-knight that gives this line its character. The textbook move at this position is Nbd2 developing toward the centre, but this repertoire routes the knight to b5 instead, attacking the queen on d5 and aiming at the c7 prize square. The knight on a3 looks passive but it's en route, and the moment Black moves the queen it lands on b5 with tempo.",
       sayShort: 'Na3 — knight heads for b5.',
     }),
     b({
@@ -101,7 +101,7 @@ const D5_OPEN: LessonScript = {
       moves: 'e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 e6 Na3 Nc6 Be3 cxd4 Nb5',
       arrows: [{ from: 'a3', to: 'b5', color: ATK }, { from: 'b5', to: 'd4', color: VIS }],
       highlights: [{ square: 'b5', color: KEY }, { square: 'd4', color: ATK }, { square: 'c7', color: SOFT }, { square: 'd6', color: SOFT }],
-      say: "Nb5! — the trip pays off. The knight attacks the d4-pawn AND threatens the c7 + d6 outpost squares. Black has to defend d4 OR move the queen off d5 (where Nbxd4 next would attack her). Either way we're already winning the opening battle.",
+      say: "Nb5! — the trip pays off. The knight attacks the d4-pawn AND threatens the c7 + d6 outpost squares. Black has to defend d4 or move the queen off d5 (where Nbxd4 next would attack her). Either way we're already winning the opening battle.",
       sayShort: 'Nb5 — attack d4, threaten c7.',
     }),
     b({
@@ -240,7 +240,7 @@ const D6_MAINLINE: LessonScript = {
       id: 'd6-open',
       moves: 'e4 c5 c3 d6',
       highlights: [{ square: 'd6', color: KEY }, { square: 'c5', color: SOFT }],
-      say: "…d6 — Black tries to keep his options open, refusing to commit to d5 OR Nf6. The Alapin's promise is to take control of the game as early as move two, and the wait-and-see reply hands us exactly that. The dream classical centre goes up unchallenged, our pieces find their squares with logical development, and Black ends up reacting to a setup he never tried to disrupt.",
+      say: "…d6 — Black tries to keep his options open, refusing to commit to d5 or Nf6. The Alapin's promise is to take control of the game as early as move two, and the wait-and-see reply hands us exactly that. The dream classical centre goes up unchallenged, our pieces find their squares with logical development, and Black ends up reacting to a setup he never tried to disrupt.",
       sayShort: '…d6 — Black plays passively.',
     }),
     b({
@@ -424,7 +424,7 @@ const NF6_D6_SUB: LessonScript = {
       id: 'd6sub-open',
       moves: 'e4 c5 c3 Nf6 e5 Nd5 Nf3 d6',
       highlights: [{ square: 'd6', color: KEY }],
-      say: "Inside the main …Nf6 spine — Black's …d6 attempt to challenge the e5-pawn. This is the line where Gordima's distillation flags Danya's distinguishing trick: against this exact setup he mixes Bb5/Moscow ideas with the Alapin, then transposes to Bc4 once the pieces commit. Instead of the textbook dxe5 trade, the whole position becomes a forcing tactical sequence that punishes Black's classical response.",
+      say: "Inside the main …Nf6 spine — Black's …d6 attempt to challenge the e5-pawn. This is the line where Gordima's distillation flags this repertoire's distinguishing trick: against this exact setup it mixes Bb5/Moscow ideas with the Alapin, then transposes to Bc4 once the pieces commit. Instead of the textbook dxe5 trade, the whole position becomes a forcing tactical sequence that punishes Black's classical response.",
       sayShort: '…d6 — challenge the e5-pawn.',
     }),
     b({

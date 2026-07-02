@@ -19,7 +19,7 @@ const RUY_DEV = ['book:ruy-lopez', 'concept:pos-development', 'https://en.wikipe
 
 // ── Ruy Lopez (student WHITE). triggerMove is BLACK's deviation; narrate White's plan. ──
 
-// Nf6@5 — the Berlin Defence (Bb5 Nf6). Berlin Wall endgame OR quiet d3.
+// Nf6@5 — the Berlin Defence (Bb5 Nf6). Berlin Wall endgame or quiet d3.
 export const RUY_BERLIN: SublineNarration = {
   intro: {
     say: "Nf6 — the Berlin Defence, the granite wall Kramnik used to take Kasparov's crown. Black ignores the hit on e5 and just develops, daring you into the famous Berlin endgame. Castle: after …Nxe4, d4, …Nd6, Bxc6 dxc6, dxe5 the queens come off and you nurse a small, nagging pull — Black's doubled c-pawns against your healthy kingside majority. Want queens on? d3 keeps a quiet, lasting Italian-style squeeze.",
