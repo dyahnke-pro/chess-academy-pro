@@ -29,6 +29,7 @@ import { SUBLINE_NARRATION_PRO_GOTHAM_W2 } from './sublineNarrationProGothamW2';
 import { SUBLINE_NARRATION_PRO_GOTHAM_W3 } from './sublineNarrationProGothamW3';
 import { SUBLINE_NARRATION_PRO_HIKARU_B3 } from './sublineNarrationProHikaruB3';
 import { SUBLINE_NARRATION_PRO_HIKARU_B } from './sublineNarrationProHikaruB';
+import { SUBLINE_NARRATION_PRO_ROSEN } from './sublineNarrationProRosen';
 
 // HAND-AUTHORED subline narration (David 2026-06-17: "these are hand authored").
 // Each entry is written by hand, grounded in the real DB line + verified against
@@ -607,6 +608,9 @@ const MERGED_NARRATION: Record<string, SublineNarration> = {
   // Deep coverage — Hikaru Nimzo-Larsen + Reti (b3 system) and Caro/Pirc/Closed-Sicilian.
   ...SUBLINE_NARRATION_PRO_HIKARU_B3,
   ...SUBLINE_NARRATION_PRO_HIKARU_B,
+  // Deep coverage — Eric Rosen London/Closed-Sicilian (White) + Stafford/Taimanov/
+  // QGD/Budapest/Scandinavian/French (Black); several teach-both lines.
+  ...SUBLINE_NARRATION_PRO_ROSEN,
 };
 
 /** Hand-authored narration for a subline, or null to use the honest baseline. */
