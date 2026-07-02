@@ -249,3 +249,13 @@ narration. Transcribe the YouTube videos!").**
   YouTube transcripts first, as with the Dragodorf).
 - Then the remaining pros (Hikaru, Rosen, Caruana, Samay, Carlsen, Aman): trees
   exist for several; same tree→explorer→transcript-narration pipeline.
+
+## PROGRESS 2026-07-02 (session 2, cont.) — Naroditsky subline narration
+- Pulled Naroditsky per-opening YouTube transcripts (10 openings) to gitignored
+  data/sources/danielnaroditsky-voice/transcripts/ (reference-only).
+- `sublineNarrationProNaroditsky.ts` — 14 hand-authored, board-verified subline
+  intros across ALL 10 of his non-Dragodorf openings (Caro/Najdorf/KID/Alekhine/
+  KIA/Rossolimo/Jobava/Ruy/Fantasy/Alapin), incl. a teach-both Advance-Caro
+  (Nf3 → take cxd4 first). His teaching IS the house voice. Wired + gate green
+  (30618). Combined with GothamChess (41) = 55 transcript-grounded intros.
+- Backlog: deepen coverage (more deviations per opening) + remaining pros.
