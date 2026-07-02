@@ -144,6 +144,39 @@ voice (ORIGINAL prose, no quoting) → self-verify → next. ONE AT A TIME.
 ## Pilot: Naroditsky (danielnaroditsky-trees present; 10 openings).
 ```
 
+## PROGRESS LOG (autonomous grind, 2026-07-02 night)
+**Shipped to `main` + gate-verified (narrationAccuracy / proRepNarrationAccuracy /
+lessonIntegrity / proRepNarrationVoice / typecheck all green each batch):**
+- ✅ **P0 FIX** — openings tab was stuck on "Loading…" from a pre-existing boolean
+  IndexedDB-key crash (`getRepertoireOpenings`/`getFavoriteOpenings` used
+  `.where('isRepertoire'/'isFavorite').equals(true)`; IndexedDB has no boolean
+  keys → DataError). Fixed to JS `.filter()`. NOT caused by this build (present
+  on the prior deploy). Live.
+- ✅ **Dragodorf** — full course: main (every-step, with when-to-play scope) +
+  3 variation tabs (English Attack / Classical / h3 Adams, every-step,
+  engine-sound) + **22 sublines** (explorer+Stockfish, teach-both floor).
+- ✅ **Naroditsky mains deepened to every-step** (were 4-6 beats): Najdorf 5→12,
+  Ruy 5→12, KIA 4→8, Alekhine 4→8, Rossolimo 4→8, KID 5→10, Jobava 6→9.
+  (Caro-Kann 18 + Alapin 12 were already deep.)
+
+**REMAINING (the grind continues here):**
+1. Fantasy-Caro main (6 beats, `proNaroditskyFantasyCaro.ts`) → every-step.
+2. ALL Naroditsky VARIATION lessons (many 5-8 beats) → every-step, per file
+   `proNaroditsky*Variations.ts`. Use the brief→author→gate loop.
+3. Sublines for every Naroditsky opening (most have none) → `build-pro-sublines.mjs`
+   (tree) where his games are rich, `build-dragodorf-sublines.mjs` pattern
+   (explorer+Stockfish) where thin — none left out — then author every-step.
+4. Then **Levy / GothamChess**: pull his YouTube speedrun/theory videos (yt-dlp),
+   build/deepen his 18 openings + variations + sublines to the same standard.
+   His speedrun catalog approach = the Naroditsky one (enumerate channel, map
+   openings→videos, transcript-ground, house voice, no quoting).
+
+**The recipe per lesson (proven this session):** get the spine → `node` brief
+script prints per-ply piece from→to + terminus engine eval (student POV; must be
+≥ ~-1.0 or an honest gambit) → author every-step beats (original prose, house
+voice, when-to-play, arrows only from real pieces on clear sight-lines, sayShort
+≤8 words and NO apostrophes in single-quoted sayShort) → gate → commit → ship.
+
 ## Next-session pickup
 Start at STEP 1 — the generator. Pilot `pro-naroditsky-caro-kann` (color black,
 10 variations, tree at `data/sources/danielnaroditsky-trees/caro-kann.json`).
