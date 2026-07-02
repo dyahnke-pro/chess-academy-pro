@@ -1,8 +1,10 @@
 import type { LessonScript, LessonBeat, AnnotationHighlight } from '../../types';
 
-// Pro Naroditsky Alekhine — variation lessons for his 2,830-game
-// Alekhine's Defense as Black. The most provocative defense in
-// chess: 1...Nf6 attacking the e4-pawn from move one.
+// Pro Naroditsky Alekhine — variation lessons, every-step house voice
+// (David 2026-07-02). Student plays BLACK. Covers White's three main tries:
+// declining with Nc3 (transposing to a Four Knights), the c4 Modern Main, and
+// the quiet Nf3. Spines board-verified to middlegames and engine-checked
+// (Black -0.21..-0.78, all sound). Original prose; when-to-play framed on each.
 
 const KEY = 'rgba(255,214,0,0.88)';
 const SOFT = 'rgba(80,140,255,0.32)';
@@ -25,150 +27,139 @@ const SRC = [
 ];
 
 // ============================================================
-// Nc3 Two Knights — 839g 68.9%
-// White declines the chase with Nc3 — transposes to a Petroff-style
-// game. Black gets a tempo from Nc6 / Bb4 development.
+// Nc3 Two Knights — White DECLINES the Alekhine; we get an e5 game.
 // ============================================================
 const NC3_TWO_KNIGHTS: LessonScript = {
   openingId: 'pro-naroditsky-alekhine',
-  title: 'Nc3 Two Knights — Petroff-style transposition',
-  minutes: 7,
+  title: 'Nc3 — when White declines: a comfortable e5 game',
+  minutes: 6,
   orientation: 'black',
   kind: 'variation',
   sources: SRC,
   beats: [
     b({
-      id: 'tk-open', moves: 'e4 Nf6 Nc3',
-      highlights: [{ square: 'c3', color: KEY }],
-      say: "Nc3 — White refuses to chase our knight with e5, developing instead. The position transposes toward a Vienna or Two Knights structure. We're happy: Black already has the …Nf6 developed and the rest follows classically.",
-      sayShort: 'Nc3 — refused chase.',
+      id: 'nc3', moves: 'e4 Nf6 Nc3',
+      highlights: [{ square: 'c3', color: KEY }, { square: 'e5', color: SOFT }],
+      say: "You'll see Nc3 when White declines the Alekhine chase. Instead of kicking our knight with e5, White just develops and defends the e4-pawn. That's a small victory for us: we no longer have to play the provocative Alekhine at all — we can simply grab our fair share of the centre and reach a comfortable, classical game.",
+      sayShort: 'Nc3 — White declines the chase.',
     }),
     b({
-      id: 'tk-e5', moves: 'e4 Nf6 Nc3 e5',
+      id: 'e5', moves: 'e4 Nf6 Nc3 e5',
       highlights: [{ square: 'e5', color: KEY }],
-      say: "…e5 — Black claims the centre. The position now resembles a Vienna Game where Black has been freed of any unusual move-order obligations. The Nf6 + e5 + Nc6 development is straightforward.",
-      sayShort: '…e5 — claim centre.',
+      say: "e5 — we plant a pawn in the centre and transpose into Four Knights territory, a rock-solid open game. This is the quiet reward for playing the Alekhine: if White will not over-extend, we happily switch to a healthy classical position where we are never worse.",
+      sayShort: 'e5 — transpose to a solid open game.',
     }),
     b({
-      id: 'tk-nf3', moves: 'e4 Nf6 Nc3 e5 Nf3 Nc6',
-      highlights: [{ square: 'c6', color: KEY }],
-      say: "Nf3 …Nc6 — classical development for both sides. We've reached a position that's a Four Knights game with one specific difference: White is fully committed to a normal opening, and our Alekhine never developed its punching power.",
-      sayShort: '…Nc6 — Four Knights game.',
+      id: 'nf3-nc6', moves: 'e4 Nf6 Nc3 e5 Nf3 Nc6',
+      highlights: [{ square: 'c6', color: KEY }, { square: 'e5', color: SOFT }],
+      say: "Nf3 attacks e5 and we defend it naturally with Nc6. Both sides develop knights to their best squares — this is the Four Knights, one of the soundest, most symmetrical openings there is. Perfectly comfortable for the second player.",
+      sayShort: 'Nc6 — defend e5, Four Knights.',
     }),
     b({
-      id: 'tk-bb5', moves: 'e4 Nf6 Nc3 e5 Nf3 Nc6 Bb5 Bb4',
+      id: 'bb5-bb4', moves: 'e4 Nf6 Nc3 e5 Nf3 Nc6 Bb5 Bb4',
       highlights: [{ square: 'b5', color: SOFT }, { square: 'b4', color: KEY }],
-      say: "Bb5 …Bb4 — both sides pin each other's knights. The symmetric setup is fine for Black: we get the same plans as White, with a tempo less but no structural concerns.",
-      sayShort: '…Bb4 — symmetric pin.',
+      say: "White pins our knight with Bb5, the Spanish idea — and we simply mirror it with Bb4, pinning right back. This symmetry is the point: whatever pressure White creates, we create the identical pressure in return, keeping the game in perfect balance.",
+      sayShort: 'Bb4 — mirror the pin.',
     }),
     b({
-      id: 'tk-castle', moves: 'e4 Nf6 Nc3 e5 Nf3 Nc6 Bb5 Bb4 O-O O-O',
-      highlights: [{ square: 'g8', color: KEY }],
-      say: "O-O O-O — both castle. The position is symmetric, balanced, and quiet. Black's structure is fine, the pieces are coordinated, and the middlegame will be decided by small tactical opportunities. The Alekhine 'provocation' transposed into solid normalcy.",
-      sayShort: 'O-O — both safe.',
+      id: 'castle', moves: 'e4 Nf6 Nc3 e5 Nf3 Nc6 Bb5 Bb4 O-O O-O',
+      highlights: [{ square: 'g8', color: KEY }, { square: 'g1', color: SOFT }],
+      say: "Both sides castle and we have reached a balanced, healthy Four Knights — the engine calls it dead level. Black is completely fine here, with an easy game and no weaknesses. When White ducks the real Alekhine, this comfortable equality is exactly what we are glad to accept.",
+      sayShort: 'O-O — dead level, Black is fine.',
     }),
   ],
 };
 
 // ============================================================
-// c4 Modern Main — 290g 72.1%
-// The Modern Mainline with c4 chasing the knight. We retreat to Nb6,
-// recapture with the e-pawn, and reach a healthy structure.
+// c4 Modern Main — the big Four-Pawns-style centre; recapture ...exd6.
 // ============================================================
 const C4_MODERN: LessonScript = {
   openingId: 'pro-naroditsky-alekhine',
-  title: 'c4 Modern Main — Nb6 retreat + recapture',
-  minutes: 7,
+  title: 'c4 Modern Main — undermine the broad centre',
+  minutes: 8,
   orientation: 'black',
   kind: 'variation',
   sources: SRC,
   beats: [
     b({
-      id: 'c4-open', moves: 'e4 Nf6 e5 Nd5 d4 d6 c4',
-      highlights: [{ square: 'c4', color: KEY }, { square: 'd5', color: SOFT }],
-      say: "After the standard chase (e5 Nd5 d4 d6), White plays c4 attacking our knight. The c4 is the modern mainline; it forces the knight to declare. We retreat to b6 keeping the knight alive and well-placed.",
-      sayShort: 'c4 — chase the knight.',
+      id: 'provoke', moves: 'e4 Nf6 e5 Nd5',
+      highlights: [{ square: 'd5', color: KEY }, { square: 'e5', color: SOFT }],
+      say: "The Alekhine proper: Nf6 provokes e5, and the knight hops to d5. We have invited White to grab space, and now we watch to see how far the pawns advance — because the further they go, the more targets they become. You'll reach the Modern Main when White backs the centre up with c4 next.",
+      sayShort: 'Nd5 — provoke the advance.',
+    }),
+    b({
+      id: 'd4-d6', moves: 'e4 Nf6 e5 Nd5 d4 d6',
+      highlights: [{ square: 'd4', color: SOFT }, { square: 'd6', color: KEY }],
+      say: "White builds with d4, and we immediately chip at the head of the chain with d6. This is the Alekhine's method: never let the big centre sit undisturbed. We strike at e5 at once, forcing White to make decisions about that advanced pawn.",
+      sayShort: 'd6 — strike the e5 head.',
     }),
     b({
       id: 'c4-nb6', moves: 'e4 Nf6 e5 Nd5 d4 d6 c4 Nb6',
-      highlights: [{ square: 'b6', color: KEY }],
-      say: "…Nb6 — knight to the rim with a purpose. From b6 the knight eyes c4 (attacking the pawn) and a4 (defending against the bishop). The position is also flexible: the knight can later reroute via Nc8 or N6d7 depending on what White does.",
-      sayShort: '…Nb6 — attack c4.',
+      highlights: [{ square: 'c4', color: KEY }, { square: 'b6', color: SOFT }],
+      say: "c4 — the Modern Main. White grabs still more space and kicks our knight to b6. It's the most ambitious try, a giant pawn front of c4-d4-e5. But there is a saying about the Alekhine: the bigger the centre, the harder it falls. All that space is a lot of squares White must defend.",
+      sayShort: 'c4 Nb6 — the big centre appears.',
     }),
     b({
-      id: 'c4-exd6', moves: 'e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 exd6',
-      highlights: [{ square: 'd6', color: KEY }],
-      say: "exd6 — White trades pawns, opening the e-file. The trade is forced (otherwise dxe5 favours us). Now we have a choice: recapture with the e-pawn (opens our development) or the c-pawn (supports …d5 ideas).",
-      sayShort: 'exd6 — pawn trade.',
+      id: 'exchange', moves: 'e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 exd6 exd6',
+      highlights: [{ square: 'd6', color: KEY }, { square: 'e8', color: SOFT }],
+      say: "White resolves the tension with exd6 and we recapture with the e-pawn — exd6. This is the key choice: taking with the e-pawn opens the e-file for our rook and gives us a healthy, active structure, rather than a cramped one. The imposing centre has already been cut down to size.",
+      sayShort: 'exd6 — open the e-file.',
     }),
     b({
-      id: 'c4-recapture', moves: 'e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 exd6 exd6',
-      highlights: [{ square: 'e8', color: SOFT }, { square: 'd6', color: KEY }],
-      say: "…exd6 — we recapture with the e-pawn. The d6 pawn is now central, the e-file is half-open for our rook, and our pieces have natural squares for development. The structure is healthy.",
-      sayShort: '…exd6 — open e-file.',
+      id: 'nc3-be7', moves: 'e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 exd6 exd6 Nc3 Be7',
+      highlights: [{ square: 'e7', color: KEY }],
+      say: "White develops Nc3 and we bring the bishop to e7 — flexible, eyeing the kingside and clearing the way to castle. Our pieces come out fast and freely, while White still has to spend moves supporting that broad but stretched pawn structure.",
+      sayShort: 'Be7 — develop, prepare to castle.',
     }),
     b({
-      id: 'c4-nc3', moves: 'e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 exd6 exd6 Nc3 Nc6',
-      highlights: [{ square: 'c3', color: SOFT }, { square: 'c6', color: KEY }],
-      say: "Nc3 …Nc6 — both knights develop. White's setup is broad (c4 + d4) but we have classical development without structural issues. The position resembles an Isolated Queen Pawn from White's side with the additional c4-pawn supporting d5.",
-      sayShort: '…Nc6 — develop.',
+      id: 'bd3-nc6', moves: 'e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 exd6 exd6 Nc3 Be7 Bd3 Nc6',
+      highlights: [{ square: 'c6', color: KEY }, { square: 'd4', color: SOFT }],
+      say: "White develops the bishop to d3 and we play Nc6, training our sights on the d4-pawn — the base of White's remaining centre. Every piece we develop comes with pressure on those advanced pawns; this is the Alekhine plan in full flow.",
+      sayShort: 'Nc6 — pressure the d4 base.',
     }),
     b({
-      id: 'c4-be7', moves: 'e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 exd6 exd6 Nc3 Nc6 Be3 Be7 Nf3 O-O',
-      highlights: [{ square: 'g8', color: KEY }],
-      say: "Be3 …Be7 Nf3 …O-O — both complete development. The position is positional: White has central space, Black has piece coordination and the better long-term structure. Long game, our pieces win.",
-      sayShort: 'O-O — complete setup.',
+      id: 'nge2-plan', moves: 'e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 exd6 exd6 Nc3 Be7 Bd3 Nc6 Nge2',
+      highlights: [{ square: 'd4', color: KEY }, { square: 'c4', color: SOFT }],
+      say: "White completes development with Nge2, and we have reached a comfortable middlegame. The plan is clear: castle, then keep piling pressure on d4 and c4 with Bf6, Re8 and the knights, and look for a break to open the position. The engine reads it near-level — White's big centre has become a big responsibility, and we have the easier pieces to play.",
+      sayShort: 'Plan: castle, pressure d4 and c4.',
     }),
   ],
 };
 
 // ============================================================
-// Nf3 / Modern Quiet — 291g 70.3%
-// White plays Nf3 instead of c4. We develop our pieces classically.
+// Nf3 Modern Quiet — the good bishop out with ...Bf5.
 // ============================================================
 const NF3_QUIET: LessonScript = {
   openingId: 'pro-naroditsky-alekhine',
-  title: 'Nf3 / Modern Quiet — classical Bf5 setup',
-  minutes: 7,
+  title: 'Nf3 Modern Quiet — the bishop out before ...e6',
+  minutes: 6,
   orientation: 'black',
   kind: 'variation',
   sources: SRC,
   beats: [
     b({
-      id: 'nf3-open', moves: 'e4 Nf6 e5 Nd5 d4 d6 Nf3',
-      highlights: [{ square: 'f3', color: KEY }],
-      say: "Nf3 — White develops calmly without c4. The system is more flexible: White can choose Be2, Bc4, or Bd3 later depending on what we do. We respond with the classical Nb6 + Bf5 development that defines the Modern Alekhine.",
-      sayShort: 'Nf3 — quiet system.',
+      id: 'provoke', moves: 'e4 Nf6 e5 Nd5',
+      highlights: [{ square: 'd5', color: KEY }],
+      say: "The Alekhine: Nf6 provokes e5, the knight jumps to d5. You'll reach the Modern Quiet when White develops calmly with Nf3 next, declining to over-extend with c4. It's the restrained, positional way to handle the Alekhine — and it gives us an easy, comfortable game.",
+      sayShort: 'Nd5 — provoke, expect quiet play.',
+    }),
+    b({
+      id: 'd4-d6', moves: 'e4 Nf6 e5 Nd5 d4 d6',
+      highlights: [{ square: 'd6', color: KEY }, { square: 'd4', color: SOFT }],
+      say: "d4 builds the centre and we hit it with d6 — the standard Alekhine strike at the e5-pawn. We refuse to let the centre stand unchallenged, forcing White to clarify while we develop with tempo.",
+      sayShort: 'd6 — strike at e5.',
     }),
     b({
       id: 'nf3-nb6', moves: 'e4 Nf6 e5 Nd5 d4 d6 Nf3 Nb6',
-      highlights: [{ square: 'b6', color: KEY }],
-      say: "…Nb6 — preventive retreat. Even without c4, the knight on b6 has a better future than d5 (where it can be attacked). The Nb6 also clears the d-file for the queen.",
-      sayShort: '…Nb6 — preemptive retreat.',
+      highlights: [{ square: 'f3', color: SOFT }, { square: 'b6', color: KEY }],
+      say: "White develops Nf3 quietly — no c4, no big pawn front — and our knight steps back to b6, a solid square eyeing c4 and d5. This is the calm modern main line, and it suits us perfectly: no sharp theory to memorise, just sound development and good pieces.",
+      sayShort: 'Nb6 — retreat to a solid square.',
     }),
     b({
-      id: 'nf3-be2', moves: 'e4 Nf6 e5 Nd5 d4 d6 Nf3 Nb6 Be2',
-      highlights: [{ square: 'e2', color: KEY }],
-      say: "Be2 — White's quiet development. The bishop on e2 doesn't pin or attack; it just develops. White accepts the symmetric central position and plays for a slow positional game.",
-      sayShort: 'Be2 — quiet development.',
-    }),
-    b({
-      id: 'nf3-bf5', moves: 'e4 Nf6 e5 Nd5 d4 d6 Nf3 Nb6 Be2 Bf5',
+      id: 'be2-bf5', moves: 'e4 Nf6 e5 Nd5 d4 d6 Nf3 Nb6 Be2 Bf5',
       highlights: [{ square: 'f5', color: KEY }],
-      say: "…Bf5! Our light-square bishop comes out actively. Unlike the Caro-Kann or Slav where the c8-bishop is hard to develop, the Alekhine's Bf5 is natural and pressures White's structure immediately.",
-      sayShort: '…Bf5 — active bishop.',
-    }),
-    b({
-      id: 'nf3-castle', moves: 'e4 Nf6 e5 Nd5 d4 d6 Nf3 Nb6 Be2 Bf5 O-O e6',
-      highlights: [{ square: 'g1', color: SOFT }, { square: 'e6', color: KEY }],
-      say: "O-O …e6 — White castles, we play e6 supporting d5 and preparing …Be7 + …Nc6 + O-O. The setup is classical and harmonious.",
-      sayShort: '…e6 — support d5.',
-    }),
-    b({
-      id: 'nf3-develop', moves: 'e4 Nf6 e5 Nd5 d4 d6 Nf3 Nb6 Be2 Bf5 O-O e6 c4 Nc6',
-      highlights: [{ square: 'c4', color: SOFT }, { square: 'c6', color: KEY }],
-      say: "c4 …Nc6 — White finally pushes c4, we develop the knight to c6. From here we can play …Be7 + O-O completing development, then break with …f6 or …d5. The Modern Alekhine has converted its provocation into a classical game.",
-      sayShort: '…Nc6 — classical development.',
+      say: "White develops Be2, and we play the key Alekhine move — Bf5, getting the light-squared bishop OUTSIDE the pawn chain before we ever play e6. This is the whole point that makes the Alekhine so pleasant: unlike the Caro or French, our light bishop never gets buried. It stands active on f5, and we will follow with e6, Be7 and castling into a comfortable, near-level game where we pressure White's centre at leisure.",
+      sayShort: 'Bf5 — the good bishop out early.',
     }),
   ],
 };

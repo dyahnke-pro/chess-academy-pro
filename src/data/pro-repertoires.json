@@ -1304,7 +1304,7 @@
       "variations": [
         {
           "name": "Nc3 Two Knights",
-          "pgn": "e4 Nf6 Nc3 e5 Nf3 Nc6 Bb5 Bb4",
+          "pgn": "e4 Nf6 Nc3 e5 Nf3 Nc6 Bb5 Bb4 O-O O-O",
           "explanation": "White declines the chase with Nc3 (839 games, 68.9%). We get a Petroff-style game with a tempo for the …Nc6 / …Bb4 development. Solid, equal, and Black's score is excellent.",
           "sources": [
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
@@ -1312,7 +1312,7 @@
         },
         {
           "name": "c4 Modern Main",
-          "pgn": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 exd6 exd6 Nc3",
+          "pgn": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 exd6 exd6 Nc3 Be7 Bd3 Nc6 Nge2",
           "explanation": "The Modern Mainline with c4 (290 games, 72.1%). We retreat Nb6, recapture with e-pawn, and reach a healthy structure with the open e-file.",
           "sources": [
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
