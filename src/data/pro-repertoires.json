@@ -1408,7 +1408,7 @@
         },
         {
           "name": "vs ...e5 (Reti gambit)",
-          "pgn": "Nf3 e5 Nxe5 Nc6 Nf3 d5 d4",
+          "pgn": "Nf3 e5 Nxe5 Nc6 Nf3 d5 d4 Bd6 e3 Nf6 Be2 O-O O-O",
           "explanation": "Black plays the aggressive ...e5 challenging our knight (582 games, 72.2%). We accept the Reti gambit-style pawn with Nxe5. After the knight retreat and central play, White has a clean extra pawn AND a structurally solid position — the conversion runs reliably at amateur level.",
           "sources": [
             "https://www.chess.com/openings/Kings-Indian-Attack",
