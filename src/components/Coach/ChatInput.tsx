@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { voiceInputService } from '../../services/voiceInputService';
 import { voiceService } from '../../services/voiceService';
 import { useAppStore } from '../../stores/appStore';
+import { hasAiConsent, useAiConsentStore } from '../../stores/aiConsentStore';
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
 
 interface ChatInputProps {
@@ -53,6 +54,13 @@ export function ChatInput({ onSend, disabled, placeholder, coachChoices, onPickC
     const unsubscribe = voiceInputService.onResult((transcript) => {
       const trimmed = transcript.trim();
       if (!trimmed) return;
+      // Gate on AI data-sharing consent (Apple 5.1.1) before the transcript
+      // is sent to the coach. If not yet granted, surface the consent modal
+      // instead of sending — the user talks again once they've allowed it.
+      if (!hasAiConsent()) {
+        void useAiConsentStore.getState().requestConsent();
+        return;
+      }
       // Voice turns auto-send with modality='voice' so the assistant
       // reply plays as TTS only — no text bubble. The input field
       // stays empty (no appending) so the user can keep talking.
@@ -61,10 +69,8 @@ export function ChatInput({ onSend, disabled, placeholder, coachChoices, onPickC
     return unsubscribe;
   }, []);
 
-  const handleSend = useCallback(() => {
-    const trimmed = text.trim();
-    if (!trimmed || disabled) return;
-    onSend(trimmed, 'text');
+  const finishSend = useCallback((trimmed: string, modality: 'voice' | 'text') => {
+    onSend(trimmed, modality);
     setText('');
     // Reset textarea height
     if (textareaRef.current) {
@@ -74,7 +80,22 @@ export function ChatInput({ onSend, disabled, placeholder, coachChoices, onPickC
     requestAnimationFrame(() => {
       textareaRef.current?.focus();
     });
-  }, [text, disabled, onSend]);
+  }, [onSend]);
+
+  const handleSend = useCallback(() => {
+    const trimmed = text.trim();
+    if (!trimmed || disabled) return;
+    // Gate on AI data-sharing consent (Apple 5.1.1) before the question +
+    // board position are sent to the coach. If not yet granted, surface the
+    // consent modal; send only once the user allows it.
+    if (!hasAiConsent()) {
+      void useAiConsentStore.getState().requestConsent().then((granted) => {
+        if (granted) finishSend(trimmed, 'text');
+      });
+      return;
+    }
+    finishSend(trimmed, 'text');
+  }, [text, disabled, finishSend]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {

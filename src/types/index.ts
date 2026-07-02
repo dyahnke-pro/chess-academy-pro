@@ -1009,6 +1009,17 @@ export interface UserProfile {
    *  (imports) or an explicit picker choice has seeded BOTH currentRating
    *  and puzzleRating. See strengthCalibrationService. */
   strengthCalibrated?: boolean;
+  /** Consent for sending gameplay data (board positions, chat questions,
+   *  and — when the mic is used — the spoken transcript) to the third-party
+   *  AI + voice providers (DeepSeek, Anthropic, AWS Polly) that power the
+   *  coach. Apple Guideline 5.1.1(i)/5.1.2(i) require an explicit in-app
+   *  permission BEFORE any such data is shared — the privacy policy alone is
+   *  not sufficient. Undefined ⇒ not yet asked; the blocking first-run
+   *  AiConsentModal prompts once (this is also how existing profiles, which
+   *  predate the field, get asked on their next launch). 'granted' ⇒ AI
+   *  coach features are enabled; 'denied' ⇒ every coach call is blocked and
+   *  re-prompts. Revocable in Settings. */
+  aiDataConsent?: 'granted' | 'denied';
   preferences: UserPreferences;
 }
 

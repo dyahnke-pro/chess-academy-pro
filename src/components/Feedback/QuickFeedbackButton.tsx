@@ -1,9 +1,9 @@
 import { useState, useCallback, useRef } from 'react';
-import { MessageSquarePlus, Camera, X, Send, Loader2, Check } from 'lucide-react';
+import { MessageSquarePlus, X, Send, Loader2, Check } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 
 /**
- * QuickFeedbackButton — always-on floating feedback surface.
+ * QuickFeedbackButton — always-on feedback pill in the header bar.
  *
  * Rendered inside AppLayout so it appears on every page. Tapping
  * opens a slide-in panel that lives over the current screen without
@@ -11,26 +11,30 @@ import { useAppStore } from '../../stores/appStore';
  *
  * The panel supports:
  *   - A one-sentence "what's on your mind" capture
- *   - One-tap screenshot of the current page via html2canvas
  *   - Optional email for reply
  *
- * Submission prefers navigator.share (so screenshots attach on mobile
- * via the native share sheet), falling back to a mailto: link when
- * share-with-files isn't available. This keeps "minimum overhead"
- * intact — no third-party form service, no backend.
+ * Submission prefers navigator.share (native share sheet), falling
+ * back to a mailto: link. No third-party form service, no backend.
+ *
+ * NOTE: the in-app screenshot-capture affordance was removed
+ * (2026-07-02). It relied on html2canvas rendering document.body,
+ * which throws on the app's Tailwind v4 `oklch()` colors — so the
+ * button silently no-op'd and Apple review flagged it as
+ * unresponsive (Guideline 2.1). Users can attach their own
+ * screenshot from the native share sheet / mail app instead. A
+ * robust native (Capacitor) capture can be re-added later.
  *
  * IMPORTANT: Update SUPPORT_EMAIL when the real address is decided.
  */
 const SUPPORT_EMAIL = 'chessacademypro@gmail.com';
 
-type SubmitState = 'idle' | 'capturing' | 'sending' | 'sent';
+type SubmitState = 'idle' | 'sending' | 'sent';
 
 export function QuickFeedbackButton(): JSX.Element {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [email, setEmail] = useState('');
   const [submitState, setSubmitState] = useState<SubmitState>('idle');
-  const [screenshot, setScreenshot] = useState<{ blob: Blob; url: string } | null>(null);
   const activeProfile = useAppStore((s) => s.activeProfile);
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -41,52 +45,9 @@ export function QuickFeedbackButton(): JSX.Element {
     setTimeout(() => {
       setMessage('');
       setEmail('');
-      if (screenshot) URL.revokeObjectURL(screenshot.url);
-      setScreenshot(null);
       setSubmitState('idle');
     }, 300);
-  }, [screenshot]);
-
-  const captureScreenshot = useCallback(async () => {
-    setSubmitState('capturing');
-    try {
-      // html2canvas is client-only and ~48KB gzipped — dynamic-import
-      // so it doesn't block the initial app bundle. Panel is closed
-      // during capture so it doesn't appear in the screenshot.
-      setOpen(false);
-      await new Promise((resolve) => setTimeout(resolve, 150));
-      const { default: html2canvas } = await import('html2canvas');
-      const canvas = await html2canvas(document.body, {
-        logging: false,
-        useCORS: true,
-        backgroundColor: null,
-        // Keep the output reasonable — most screens compress fine at
-        // half resolution, and mail clients reject huge attachments.
-        scale: Math.min(window.devicePixelRatio || 1, 1.5),
-      });
-      const blob = await new Promise<Blob | null>((resolve) => {
-        canvas.toBlob((b) => resolve(b), 'image/png', 0.9);
-      });
-      if (!blob) {
-        setSubmitState('idle');
-        setOpen(true);
-        return;
-      }
-      const url = URL.createObjectURL(blob);
-      setScreenshot({ blob, url });
-      setSubmitState('idle');
-      setOpen(true);
-    } catch (err) {
-      console.warn('[QuickFeedback] screenshot capture failed:', err);
-      setSubmitState('idle');
-      setOpen(true);
-    }
   }, []);
-
-  const removeScreenshot = useCallback(() => {
-    if (screenshot) URL.revokeObjectURL(screenshot.url);
-    setScreenshot(null);
-  }, [screenshot]);
 
   const handleSubmit = useCallback(async () => {
     if (!message.trim()) return;
@@ -108,33 +69,20 @@ export function QuickFeedbackButton(): JSX.Element {
       `Route: ${route}`,
       `App: ${appVersion}`,
       `Device: ${userAgent}`,
-      screenshot ? '(Screenshot attached via share sheet)' : '(No screenshot)',
     ];
     const body = bodyLines.join('\n');
 
-    // Prefer native share sheet on mobile/Safari — it supports files
-    // so the screenshot attaches automatically. Fallback to mailto
-    // when share-with-files isn't available (desktop browsers
-    // mostly). For mailto + screenshot, the user is instructed to
-    // attach the downloaded file manually.
+    // Prefer the native share sheet on mobile/Safari; fall back to a
+    // mailto: link on desktop browsers that don't support share.
     try {
-      if (screenshot && typeof navigator.canShare === 'function') {
-        const file = new File([screenshot.blob], 'chess-academy-feedback.png', {
-          type: 'image/png',
-        });
-        if (navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            title: subject,
-            text: body,
-            files: [file],
-          });
-          setSubmitState('sent');
-          return;
-        }
+      if (typeof navigator.share === 'function') {
+        await navigator.share({ title: subject, text: body });
+        setSubmitState('sent');
+        return;
       }
     } catch (err) {
-      // User cancelled the share sheet, or the browser lied about
-      // canShare. Fall through to mailto.
+      // User cancelled the share sheet, or share isn't available.
+      // Fall through to mailto.
       if (err instanceof DOMException && err.name === 'AbortError') {
         setSubmitState('idle');
         return;
@@ -142,23 +90,12 @@ export function QuickFeedbackButton(): JSX.Element {
       console.warn('[QuickFeedback] share failed, falling back to mailto:', err);
     }
 
-    // Mailto fallback. If there's a screenshot, also trigger a file
-    // download so the user can attach it to the email themselves.
-    if (screenshot) {
-      const link = document.createElement('a');
-      link.href = screenshot.url;
-      link.download = 'chess-academy-feedback.png';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
     const mailto = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailto;
     setSubmitState('sent');
-  }, [message, email, screenshot, activeProfile]);
+  }, [message, email, activeProfile]);
 
-  const isBusy = submitState === 'capturing' || submitState === 'sending';
+  const isBusy = submitState === 'sending';
 
   return (
     <>
@@ -280,59 +217,6 @@ export function QuickFeedbackButton(): JSX.Element {
                   }}
                   data-testid="quick-feedback-message"
                 />
-
-                {/* Screenshot row — capture button OR thumbnail preview */}
-                {screenshot ? (
-                  <div
-                    className="flex items-center gap-3 rounded-lg border p-2"
-                    style={{
-                      background: 'var(--color-bg)',
-                      borderColor: 'var(--color-border)',
-                    }}
-                    data-testid="quick-feedback-screenshot-preview"
-                  >
-                    <img
-                      src={screenshot.url}
-                      alt="Screenshot"
-                      className="w-14 h-14 object-cover rounded"
-                      style={{ borderColor: 'var(--color-border)' }}
-                    />
-                    <div className="flex-1 min-w-0 text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                      Screenshot attached
-                    </div>
-                    <button
-                      onClick={removeScreenshot}
-                      className="p-1 rounded hover:opacity-80"
-                      style={{ color: 'var(--color-text-muted)' }}
-                      aria-label="Remove screenshot"
-                      data-testid="quick-feedback-remove-screenshot"
-                    >
-                      <X size={14} />
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => { void captureScreenshot(); }}
-                    disabled={isBusy}
-                    className="flex items-center justify-center gap-2 py-2 rounded-lg border text-sm font-medium disabled:opacity-60"
-                    style={{
-                      background: 'var(--color-bg)',
-                      borderColor: 'var(--color-border)',
-                      color: 'var(--color-text)',
-                    }}
-                    data-testid="quick-feedback-capture"
-                  >
-                    {submitState === 'capturing' ? (
-                      <>
-                        <Loader2 size={14} className="animate-spin" /> Capturing…
-                      </>
-                    ) : (
-                      <>
-                        <Camera size={14} /> Attach screenshot
-                      </>
-                    )}
-                  </button>
-                )}
 
                 <input
                   type="email"
