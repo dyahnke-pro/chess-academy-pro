@@ -159,6 +159,16 @@ lessonIntegrity / proRepNarrationVoice / typecheck all green each batch):**
   Ruy 5→12, KIA 4→8, Alekhine 4→8, Rossolimo 4→8, KID 5→10, Jobava 6→9.
   (Caro-Kann 18 + Alapin 12 were already deep.)
 
+**UPDATE (later same night):** ✅ ALL 11 Naroditsky MAINS every-step (Najdorf,
+Ruy, KIA, Alekhine, Rossolimo, KID, Jobava, Fantasy deepened; Caro/Alapin/
+Dragodorf already deep). ✅ **Najdorf variations** (Be3/Be2/h3/Bc4) all every-step
+→ Najdorf is a fully every-step opening (main + 4 variations + trap lessons).
+⚠️ FLAG for the variation grind: some variation `pgn`s in pro-repertoires.json
+are SHORT / don't reach a middlegame (e.g. `pro-naroditsky-alekhine` "c4 Modern
+Main" mg=FALSE at 11 plies; "Nc3 Two Knights" only 8 plies). Those must be
+EXTENDED (explorer most-played + Stockfish, engine-sound) BEFORE authoring the
+every-step lesson — same Gate B rule as the Fantasy main fix.
+
 **REMAINING (the grind continues here):**
 1. Fantasy-Caro main (6 beats, `proNaroditskyFantasyCaro.ts`) → every-step.
 2. ALL Naroditsky VARIATION lessons (many 5-8 beats) → every-step, per file
