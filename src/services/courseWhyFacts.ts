@@ -60,3 +60,35 @@ export function frequencyWhyFact(pct: number, games: number, seed = 0): WhyFact 
 export function sublineWhyFact(subline: CourseSubline, seed = 0): WhyFact {
   return frequencyWhyFact(subline.pct, subline.games, seed);
 }
+
+/**
+ * TEACH-BOTH grounded caption for a PRO-REP subline (David 2026-07-02). Built
+ * ONLY from computed facts — the pro's real record, the engine eval, and (when
+ * the practical line is dubious) the engine's best fix — never invented, never
+ * naming the player (pro-rep is depersonalized). Returns '' for unremarkable
+ * sound lines (selective rule §9). `fix` carries the engine-best SAN when the
+ * caption teaches the objective correction alongside the practical line.
+ */
+export function proSublineFact(s: CourseSubline): { text: string; fix?: string } {
+  if (!s.record) return { text: '' }; // not a pro subline
+  const games = Math.max(1, s.games);
+  const score = Math.round(((s.record.wins + s.record.draws / 2) / games) * 100);
+  const tier = frequencyTier(s.pct);
+  const faced =
+    tier === 'dominant' ? "The move you'll face most here"
+      : tier === 'rare' ? 'A rare try here, but one to know'
+        : 'A move you can meet here';
+  if (s.dubious && s.engineBest) {
+    // Practical line the pro rode + the honest engine caveat + the sound fix.
+    return {
+      text: `${faced}. This practical line scored ${score}% in real games — dangerous at human speed — but the engine prefers ${s.engineBest} as the objectively soundest reply.`,
+      fix: s.engineBest,
+    };
+  }
+  // Sound line: speak only when notable (a move you'll mostly face, or a strong
+  // practical result), else stay silent so the caption isn't robotic.
+  if (tier === 'dominant' || score >= 60) {
+    return { text: `${faced}. ${score}% in practice across ${games} game${games === 1 ? '' : 's'}.` };
+  }
+  return { text: '' };
+}

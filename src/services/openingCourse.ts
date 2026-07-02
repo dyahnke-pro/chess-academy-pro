@@ -13,7 +13,10 @@ import sublinesData from '../data/course-sublines.json';
 
 /** A frequency-derived subline of a chapter — an opponent deviation, ranked by
  *  how often it's played, walked to the middlegame. Precomputed offline by
- *  `scripts/build-course-sublines.mjs` from the masters DB (G3 — never invented). */
+ *  `scripts/build-course-sublines.mjs` from the masters DB (masterclass openings)
+ *  or `scripts/pro-repertoire/build-pro-sublines.mjs` from the PRO'S OWN GAME
+ *  TREE (pro-rep openings). Either way G3 — every move DB/engine-derived, never
+ *  invented. */
 export interface CourseSubline {
   /** The opponent move that triggers this subline (SAN). */
   triggerMove: string;
@@ -29,6 +32,25 @@ export interface CourseSubline {
   atPly: number;
   /** Whether the trimmed line reaches a middlegame. */
   reachesMiddlegame: boolean;
+  // --- PRO-REP-only fields (David 2026-07-02: "teach both") ---------------
+  // Present on pro-* sublines (from the pro's own game tree); absent on the
+  // masters-DB masterclass sublines. All optional so masterclass consumers are
+  // unaffected. The pro line is the PRACTICAL line the player actually played;
+  // when the engine judges it dubious we ALSO teach the sound fix.
+  /** The pro's real record on this deviation, from their game corpus. */
+  record?: { wins: number; draws: number; losses: number };
+  /** Stockfish eval at the subline terminus, STUDENT's perspective (centipawns). */
+  evalCp?: number;
+  /** True when the practical line is objectively dubious (student worse than
+   *  ~ -1.0). We do NOT hide it — we label it and teach the fix ("humans aren't
+   *  computers"). */
+  dubious?: boolean;
+  /** When dubious: the engine's best reply (SAN) from the position right AFTER
+   *  the opponent's deviation — the objectively-cleanest fix to teach alongside. */
+  engineBest?: string;
+  /** When dubious: the engine's short best continuation (SAN[]) from that same
+   *  post-deviation position (the fix, a few plies). */
+  engineBestLine?: string[];
 }
 
 type SublinesByOpening = Record<string, Record<string, CourseSubline[]>>;

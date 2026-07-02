@@ -6,7 +6,7 @@ import type {
   PlayableMiddlegameLine,
 } from '../types';
 import type { CourseSubline } from './openingCourse';
-import { sublineWhyFact } from './courseWhyFacts';
+import { sublineWhyFact, proSublineFact } from './courseWhyFacts';
 
 /**
  * HAND-AUTHORED narration for a subline (David 2026-06-17: "these are hand
@@ -134,6 +134,14 @@ export function sublineToPlayableLine(
   if (narration?.intro) {
     introSay = narration.intro.say;
     introShort = narration.intro.sayShort ?? `${trigger} — your reply`;
+  } else if (subline.record) {
+    // PRO-REP baseline: TEACH BOTH (David 2026-07-02) — the pro's practical line
+    // plus, when the engine judges it dubious, the sound fix. Grounded facts only.
+    const pf = proSublineFact(subline);
+    introSay = pf.text
+      ? `${trigger} — ${shortName(subline.name)}. ${pf.text}`
+      : `${trigger} — ${shortName(subline.name)}.`;
+    introShort = pf.fix ? `${trigger} — practical; ${pf.fix} is sound` : `${trigger} — your reply`;
   } else {
     const why = sublineWhyFact(subline);
     introSay = why.text

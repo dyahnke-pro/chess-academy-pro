@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Eye, Swords, GitBranch } from 'lucide-react';
 import { buildCourse, type CourseSubline } from '../../services/openingCourse';
-import { sublineWhyFact } from '../../services/courseWhyFacts';
+import { sublineWhyFact, proSublineFact } from '../../services/courseWhyFacts';
 import type { OpeningRecord } from '../../types';
 
 /**
@@ -43,9 +43,10 @@ export function SublinePanel({ opening, lineIndex, onWatch, onPlay }: {
 
   const OPEN_COUNT = 3;
   const shown = expanded ? sublines : sublines.slice(0, OPEN_COUNT);
-  // Selective frequency caption — speak the % only when the top deviation is
-  // dominant or rare (the rule: only when it adds value).
-  const why = sublineWhyFact(sublines[0]);
+  // Selective caption for the top deviation. Pro-rep sublines (which carry a
+  // real `record`) get the teach-both practical/eval fact; masterclass sublines
+  // get the frequency fact. Both speak only when it adds value (rule §9).
+  const why = sublines[0].record ? proSublineFact(sublines[0]) : sublineWhyFact(sublines[0]);
 
   return (
     <div
