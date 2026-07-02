@@ -169,7 +169,22 @@ Main" mg=FALSE at 11 plies; "Nc3 Two Knights" only 8 plies). Those must be
 EXTENDED (explorer most-played + Stockfish, engine-sound) BEFORE authoring the
 every-step lesson — same Gate B rule as the Fantasy main fix.
 
-**REMAINING (the grind continues here):**
+**UPDATE 2 (deep in the night):** Fully every-step openings now (main + all
+variations): **Dragodorf** (+22 sublines), **Najdorf** (+4 var), **Alekhine**
+(+3 var, spines extended + baseline shrunk), **Ruy** (+3 var). All 11 mains done.
+⚠️ Process note: run the gate as a SEPARATE verified step before commit+push —
+one narration-nit red (future-tense "d4-pawn"/"g7-bishop" claims) briefly shipped
+in d00a070, fixed in c520733. Not a runtime break, but don't chain commit after
+gate without checking the exit.
+⚠️ Short variation spines still to EXTEND before authoring (Gate B): KIA
+`vs ...e5 (Reti gambit)` (7 plies, mg=FALSE) — walk it to a middlegame
+(explorer+Stockfish, White is +1.2 so sound) like the Alekhine c4 / Fantasy fixes.
+
+**REMAINING variation sets to deepen (each: brief→eval→author→gate→ship):**
+KIA (7 var, extend Reti), Rossolimo (5), Alapin (2 thin), Caro-Kann (2 thin:
+Advance Bf5 + d3), Jobava (3), Fantasy (3), KID (already ~8-beat, light touch).
+
+**THEN:**
 1. Fantasy-Caro main (6 beats, `proNaroditskyFantasyCaro.ts`) → every-step.
 2. ALL Naroditsky VARIATION lessons (many 5-8 beats) → every-step, per file
    `proNaroditsky*Variations.ts`. Use the brief→author→gate loop.
