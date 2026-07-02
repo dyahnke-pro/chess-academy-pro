@@ -18,6 +18,7 @@ import { SUBLINE_NARRATION_PRO_EXTRA } from './sublineNarrationProExtra';
 import { SUBLINE_NARRATION_PRO_ELITE } from './sublineNarrationProElite';
 import { SUBLINE_NARRATION_PRO_SAMAY_AMAN } from './sublineNarrationProSamayAman';
 import { SUBLINE_NARRATION_PRO_NAR_CARO } from './sublineNarrationProNaroditskyCaro';
+import { SUBLINE_NARRATION_PRO_NAR_KID } from './sublineNarrationProNaroditskyKid';
 
 // HAND-AUTHORED subline narration (David 2026-06-17: "these are hand authored").
 // Each entry is written by hand, grounded in the real DB line + verified against
@@ -575,6 +576,8 @@ const MERGED_NARRATION: Record<string, SublineNarration> = {
   ...SUBLINE_NARRATION_PRO_SAMAY_AMAN,
   // Deep coverage — every frequent Naroditsky Caro-Kann deviation (transcript-grounded).
   ...SUBLINE_NARRATION_PRO_NAR_CARO,
+  // Deep coverage — frequent Naroditsky King's Indian deviations (transcript-grounded).
+  ...SUBLINE_NARRATION_PRO_NAR_KID,
 };
 
 /** Hand-authored narration for a subline, or null to use the honest baseline. */
