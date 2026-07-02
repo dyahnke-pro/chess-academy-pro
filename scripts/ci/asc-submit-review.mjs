@@ -15,8 +15,10 @@
 //   5. Re-read and report the resulting states.
 //
 // Env: ASC_KEY_P8 / ASC_KEY_ID / ASC_ISSUER_ID, APP_BUNDLE_ID, APP_VERSION,
-//   DRY_RUN — "1" to inspect + scaffold (create submission + item) but NOT
-//             flip submitted=true. Default: submit for real.
+//   DRY_RUN   — "1" to inspect + scaffold (create submission + item) but NOT
+//               flip submitted=true.
+//   DIAGNOSE  — "1" to ONLY read + print existing reviewSubmissions and their
+//               items/states, then exit (no writes at all).
 
 import { createPrivateKey, sign as cryptoSign } from 'node:crypto';
 
@@ -26,6 +28,7 @@ const ISSUER_ID = req('ASC_ISSUER_ID');
 const BUNDLE_ID = process.env.APP_BUNDLE_ID || 'com.chessacademy.pro';
 const VERSION = process.env.APP_VERSION || '2.8';
 const DRY_RUN = process.env.DRY_RUN === '1';
+const DIAGNOSE = process.env.DIAGNOSE === '1';
 
 function req(n) { const v = process.env[n]; if (!v) throw new Error(`Missing env ${n}`); return v; }
 function loadKey() {
@@ -69,6 +72,25 @@ async function main() {
   const state = version.attributes?.appStoreState;
   console.log(`app=${app.id} version=${VERSION} (${version.id}) state=${state}`);
 
+  // Always print the current review-submission landscape (idempotency needs it).
+  const allSubs = (await api('GET', `/v1/apps/${app.id}/reviewSubmissions?filter[platform]=IOS&limit=50`, null, { soft: true }))?.data || [];
+  console.log(`\nexisting reviewSubmissions (${allSubs.length}):`);
+  let subWithVersion = null;
+  for (const s of allSubs) {
+    const its = (await api('GET', `/v1/reviewSubmissions/${s.id}/items?include=appStoreVersion&limit=50`, null, { soft: true }))?.data || [];
+    const verIds = its.map((it) => it.relationships?.appStoreVersion?.data?.id).filter(Boolean);
+    const hasV = verIds.includes(version.id);
+    if (hasV) subWithVersion = subWithVersion || s;
+    console.log(`   • ${s.id} state=${s.attributes?.state} items=${its.length} hasV2.8=${hasV}`);
+  }
+
+  if (DIAGNOSE) {
+    console.log(subWithVersion
+      ? `\n🔎 v${VERSION} already sits on reviewSubmission ${subWithVersion.id} (state=${subWithVersion.attributes?.state}).`
+      : `\n🔎 no reviewSubmission currently contains v${VERSION}.`);
+    return;
+  }
+
   // Guard: only submit a version that ASC itself says is ready.
   const SUBMITTABLE = new Set(['READY_FOR_REVIEW', 'PREPARE_FOR_SUBMISSION', 'DEVELOPER_REJECTED', 'REJECTED', 'METADATA_REJECTED', 'INVALID_BINARY']);
   if (['WAITING_FOR_REVIEW', 'IN_REVIEW', 'PENDING_DEVELOPER_RELEASE', 'PROCESSING_FOR_APP_STORE', 'READY_FOR_SALE'].includes(state)) {
@@ -85,11 +107,12 @@ async function main() {
   const buildNum = (await api('GET', `/v1/builds/${build.id}`)).data?.attributes?.version;
   console.log(`build attached: #${buildNum} (${build.id})`);
 
-  // 1. Reuse an existing open review submission, or create one.
-  let sub = (await api('GET', `/v1/apps/${app.id}/reviewSubmissions?filter[platform]=IOS&limit=50`, null, { soft: true }))?.data
-    ?.find((s) => OPEN_SUB_STATES.has(s.attributes?.state));
+  // 1. Prefer the submission that already carries v2.8; else an open one; else create.
+  let sub = subWithVersion
+    || allSubs.find((s) => OPEN_SUB_STATES.has(s.attributes?.state))
+    || null;
   if (sub) {
-    console.log(`reusing open reviewSubmission ${sub.id} (state=${sub.attributes?.state})`);
+    console.log(`\nreusing reviewSubmission ${sub.id} (state=${sub.attributes?.state}, hasV2.8=${!!subWithVersion})`);
   } else {
     const created = await api('POST', '/v1/reviewSubmissions', {
       data: {
@@ -99,16 +122,14 @@ async function main() {
       },
     });
     sub = created.data;
-    console.log(`created reviewSubmission ${sub.id} (state=${sub.attributes?.state})`);
+    console.log(`\ncreated reviewSubmission ${sub.id} (state=${sub.attributes?.state})`);
   }
 
-  // 2. Ensure the version is an item on this submission.
-  const items = (await api('GET', `/v1/reviewSubmissions/${sub.id}/items?limit=50`, null, { soft: true }))?.data || [];
-  const hasVersion = items.some((it) => it.relationships?.appStoreVersion?.data?.id === version.id);
-  if (hasVersion) {
-    console.log(`version already an item on submission ${sub.id}`);
+  // 2. Ensure the version is an item on this submission (skip if already present).
+  if (subWithVersion && subWithVersion.id === sub.id) {
+    console.log(`version ${VERSION} already an item on submission ${sub.id} — skipping add`);
   } else {
-    await api('POST', '/v1/reviewSubmissionItems', {
+    const add = await api('POST', '/v1/reviewSubmissionItems', {
       data: {
         type: 'reviewSubmissionItems',
         relationships: {
@@ -116,8 +137,14 @@ async function main() {
           appStoreVersion: { data: { type: 'appStoreVersions', id: version.id } },
         },
       },
-    });
-    console.log(`added version ${VERSION} as a reviewSubmissionItem`);
+    }, { soft: true });
+    if (add.__error) {
+      // 409 "state does not allow adding more items" means the submission is
+      // already sealed with its items — fine, proceed to submit as-is.
+      console.log(`add item → ${add.__error} (proceeding; submission likely already sealed)`);
+    } else {
+      console.log(`added version ${VERSION} as a reviewSubmissionItem`);
+    }
   }
 
   if (DRY_RUN) {
@@ -125,7 +152,12 @@ async function main() {
     return;
   }
 
-  // 3. Submit.
+  // 3. Submit — only if still awaiting submission; else it's already in flight.
+  const subState = (await api('GET', `/v1/reviewSubmissions/${sub.id}`)).data?.attributes?.state;
+  if (subState !== 'READY_FOR_REVIEW') {
+    console.log(`\n✅ reviewSubmission ${sub.id} is already ${subState} — already submitted / in review. Nothing to do.`);
+    return;
+  }
   const patched = await api('PATCH', `/v1/reviewSubmissions/${sub.id}`, {
     data: { type: 'reviewSubmissions', id: sub.id, attributes: { submitted: true } },
   });

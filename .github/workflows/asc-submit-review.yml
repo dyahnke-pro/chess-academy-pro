@@ -7,6 +7,10 @@ on:
         description: 'Scaffold the submission but do NOT flip submitted=true'
         required: false
         default: 'false'
+      diagnose:
+        description: 'Read-only: list existing reviewSubmissions + items, no writes'
+        required: false
+        default: 'false'
 
 jobs:
   submit:
@@ -24,4 +28,5 @@ jobs:
           APP_BUNDLE_ID: com.chessacademy.pro
           APP_VERSION: '2.8'
           DRY_RUN: ${{ github.event.inputs.dry_run == 'true' && '1' || '0' }}
+          DIAGNOSE: ${{ github.event.inputs.diagnose == 'true' && '1' || '0' }}
         run: node scripts/ci/asc-submit-review.mjs
