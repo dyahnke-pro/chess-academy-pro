@@ -4,6 +4,8 @@ import { useAppStore } from './stores/appStore';
 import { getOrCreateMainProfile } from './services/dbService';
 import { calibrateStrength } from './services/strengthCalibrationService';
 import { StrengthCalibrationBubble } from './components/Settings/StrengthCalibrationBubble';
+import { AiConsentModal } from './components/Legal/AiConsentModal';
+import { useAiConsentStore } from './stores/aiConsentStore';
 import { getThemeById, applyTheme } from './services/themeService';
 import { seedDatabase } from './services/dataLoader';
 import { seedVerifiedLibraryNote } from './services/coachMemoryService';
@@ -120,6 +122,18 @@ export function App(): JSX.Element {
     useAppStore();
   const [onboardingSkipped, setOnboardingSkipped] = useState(true);
   const [needsCalibration, setNeedsCalibration] = useState(false);
+
+  // First-run AI data-sharing consent (Apple 5.1.1). Once strength
+  // calibration is out of the way, if this profile has never answered the
+  // consent prompt (undefined ⇒ new install OR an existing profile that
+  // predates the field), surface the blocking AiConsentModal before any
+  // coach call can share gameplay data with the third-party AI providers.
+  useEffect(() => {
+    if (needsCalibration || !activeProfile) return;
+    if (activeProfile.aiDataConsent !== undefined) return;
+    if (useAiConsentStore.getState().promptOpen) return;
+    void useAiConsentStore.getState().requestConsent();
+  }, [needsCalibration, activeProfile]);
 
   // Unlock Web Speech API on first user gesture (required on iOS/WKWebView)
   useEffect(() => {
@@ -505,6 +519,11 @@ export function App(): JSX.Element {
     {needsCalibration && activeProfile && (
       <StrengthCalibrationBubble onDone={() => setNeedsCalibration(false)} />
     )}
+    {/* AI data-sharing consent — blocking, shown once after calibration and
+        re-shown just-in-time if a user who declined later tries the coach.
+        Guideline 5.1.1(i): permission before any gameplay data is shared with
+        the third-party AI + voice providers. */}
+    <AiConsentModal />
     {/* Two-step review prompt — armed by reviewPromptService after enough
         positive moments; renders only when open. Global so it can surface
         from any surface that recorded the win. */}

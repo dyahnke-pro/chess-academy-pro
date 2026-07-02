@@ -22,6 +22,7 @@ import { BoardGlowButton, BoardGlowSettings } from './BoardGlowSettings';
 import { NarrationAuditPanel } from './NarrationAuditPanel';
 import { AnalyticsAuditPanel } from './AnalyticsAuditPanel';
 import { BugReportPanel } from './BugReportPanel';
+import { AiConsentSetting } from './AiConsentSetting';
 import { ScrollHintBar } from '../Common/ScrollHintBar';
 import { APP_VERSION, BETA_MODE } from '../../utils/constants';
 import { hardRefresh } from '../../utils/hardRefresh';
@@ -1374,6 +1375,10 @@ function AboutTab(): JSX.Element {
               /api/audit-stream so Claude can watch in near-real time)
             - "Copy for Claude" — markdown export of the visible
               findings for pasting into a Claude Code session. */}
+      {/* AI data-sharing consent control (Apple 5.1.1 — the privacy policy
+          links users here to manage it). */}
+      <AiConsentSetting />
+
       {/* In-app bug report — the human feedback channel (David 2026-06-02). */}
       <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
         <BugReportPanel />

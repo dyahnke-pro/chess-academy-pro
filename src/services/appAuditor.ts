@@ -80,6 +80,10 @@ export type AuditKind =
   | 'user-report'
   // First-run / retroactive strength calibration (imports or skill picker)
   | 'strength-calibrated'
+  // AI data-sharing consent decision (Apple 5.1.1(i) — AiConsentModal).
+  // Records the user's Allow/Don't-allow choice for sending gameplay data to
+  // the third-party AI + voice providers before any such call is made.
+  | 'ai-consent-decision'
   // Voice instrumentation (WO-LEGACY-VOICE-01)
   | 'voice-speak-invoked'
   | 'voice-speak-silenced'
