@@ -5643,6 +5643,34 @@
         "concept:pos-initiative",
         "https://api.chess.com/pub/player/magnuscarlsen/games/archives"
       ]
+    },
+    {
+      "id": "pro-naroditsky-dragodorf",
+      "playerId": "naroditsky",
+      "eco": "B70",
+      "name": "Dragodorf",
+      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 g3 g6 Bg2 Bg7 O-O O-O h3 Nc6",
+      "color": "black",
+      "style": "Hybrid, Counterattacking",
+      "overview": "The Dragodorf is a hybrid weapon that fuses the Najdorf's a6 with the Dragon's g6 and Bg7. This repertoire meets e4 with the flexible d6 Sicilian, reaches the Najdorf crossroads after a6, then adds g6 to hand the king's bishop the long diagonal. Against White's calm g3 fianchetto - the most common practical try to sidestep sharp theory - Black reaches a sound, comfortable middlegame (the engine reads it near-level from Black's side, around a third of a pawn) with three clear plans: the b5 queenside expansion, pressure down the half-open c-file, and the Dragon's own exchange sacrifice on c3. A specialist's hybrid: light on forcing named theory, rich in ideas - the kind of teaching line that rewards understanding over memorisation.",
+      "keyIdeas": [
+        "The a6-and-g6 fusion. The a6 pawn, borrowed from the Najdorf, denies the b5 square to White's pieces and prepares Black's own b5 expansion; g6 and Bg7, borrowed from the Dragon, place the king's bishop on the long diagonal. One setup, two classical plans in a single package.",
+        "The g7-bishop is the engine of the position. Masked by the f6-knight at first, it comes alive the moment the centre opens - with e5, or e6 and d5, or a knight reroute - aiming straight down the long dark diagonal at White's queenside and centre.",
+        "Same-side kings mean a manoeuvring fight. Because White's fianchetto castles short, both kings sit on the kingside, so there is no opposite-wing pawn-storm race. The better plan wins slowly here: queenside space with b5, the half-open c-file, and steady piece activity.",
+        "The Dragon exchange sacrifice. A rook sacrifice on c3, inherited straight from the Dragon, can shatter White's queenside pawn shield and tear open the long diagonal for the g7-bishop - a recurring tactical resource whenever White's king position loosens."
+      ],
+      "traps": [],
+      "warnings": [
+        "The g7-bishop is only as strong as the diagonal is open. If Black lets the centre stay closed and the f6-knight never clears, the bishop bites on granite - look for the e5 or d5 break to give it scope.",
+        "Do not rush b5 into a loose structure. Timed well it expands and frees the bishop; played carelessly it can leave c6 and d5 weak for White's pieces to occupy."
+      ],
+      "variations": [],
+      "trapLines": [],
+      "sources": [
+        "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation",
+        "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation",
+        "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
+      ]
     }
   ]
 }

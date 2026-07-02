@@ -1,6 +1,7 @@
 import { Chess } from 'chess.js';
 import type { LessonScript, AnnotationArrow, AnnotationHighlight, PlayableMiddlegameLine } from '../../types';
 import { PRO_NARODITSKY_CARO_KANN_LESSON } from './proNaroditskyCaroKann';
+import { PRO_NARODITSKY_DRAGODORF_LESSON } from './proNaroditskyDragodorf';
 import { PRO_GOTHAMCHESS_CARO_ADVANCE_LESSON } from './proGothamchessCaroAdvance';
 import { PRO_GOTHAMCHESS_ITALIAN_LESSON } from './proGothamchessItalian';
 import { PRO_GOTHAMCHESS_LONDON_LESSON } from './proGothamchessLondon';
@@ -324,6 +325,7 @@ const LESSONS: Record<string, LessonScript> = {
   // don't apply. The verbosity contract (G5 — long/short on every beat)
   // does apply and is enforced at the file level.
   [PRO_NARODITSKY_CARO_KANN_LESSON.openingId]: PRO_NARODITSKY_CARO_KANN_LESSON,
+  [PRO_NARODITSKY_DRAGODORF_LESSON.openingId]: PRO_NARODITSKY_DRAGODORF_LESSON,
   [PRO_NAR_ALAPIN_LESSON.openingId]: PRO_NAR_ALAPIN_LESSON,
   [PRO_NAR_NAJDORF_LESSON.openingId]: PRO_NAR_NAJDORF_LESSON,
   [PRO_NAR_KID_LESSON.openingId]: PRO_NAR_KID_LESSON,
