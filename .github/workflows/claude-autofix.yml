@@ -8,11 +8,14 @@ name: Claude auto-fix (from error digest)
 #
 # Claude opens a DRAFT PR only; it never pushes to main. David reviews + merges.
 #
-# Brain: DeepSeek, via the app's OWN Vercel proxy — NO repo secret required.
-#   The proxy (/api/llm/deepseek/anthropic) holds the DeepSeek key server-side
-#   and injects it, so this workflow ships no LLM credential. See the env on the
-#   "Claude triage + fix" step. (Earlier this needed an Anthropic key, which was
-#   out of credits and errored at $0 — David's call to route through the proxy.)
+# Brain: the REAL frontier Claude model (David 2026-07-01: "can't it just trigger
+#   YOU to start a fix?"). The prior DeepSeek-via-proxy routing is retired — the
+#   headless DeepSeek agent could NOT complete a real triage within the turn
+#   budget (effectiveness test 2026-07-01: 100 turns, no PR). Auth comes from a
+#   Claude subscription OAuth token `CLAUDE_CODE_OAUTH_TOKEN` (run `claude
+#   setup-token` to mint one) OR a funded `ANTHROPIC_API_KEY` — add EITHER as a
+#   repo Actions secret (Settings → Secrets → Actions). If neither is set the run
+#   SKIPS cleanly with a ::warning:: (no hard failure on the watcher cron).
 
 on:
   workflow_call:
@@ -45,39 +48,50 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
+      # Gate on a frontier-Claude credential. Secrets can't be read in a job-level
+      # `if:`, so check here and skip the rest cleanly when neither is set — this
+      # keeps the watcher cron GREEN (no hard failure) until the token is added.
+      - name: Require a frontier-Claude credential
+        id: cred
+        env:
+          OAUTH: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          APIKEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -n "$OAUTH" ] || [ -n "$APIKEY" ]; then
+            echo "have=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::No CLAUDE_CODE_OAUTH_TOKEN or ANTHROPIC_API_KEY secret set — skipping real-Claude autofix. Add one (run \`claude setup-token\` for the OAuth token) under Settings → Secrets → Actions to enable it."
+            echo "have=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/checkout@v4
+        if: steps.cred.outputs.have == 'true'
         with:
           fetch-depth: 0
 
       - uses: actions/setup-node@v4
+        if: steps.cred.outputs.have == 'true'
         with:
           node-version: '20'
 
       - name: Install deps
+        if: steps.cred.outputs.have == 'true'
         run: npm ci --no-audit --no-fund
 
       - name: Claude triage + fix
+        if: steps.cred.outputs.have == 'true'
         uses: anthropics/claude-code-action@v1
         env:
-          # DeepSeek is the PRIMARY brain — reached through the app's OWN Vercel
-          # proxy, which already holds the DeepSeek key server-side (David
-          # 2026-06-14: "the app already has the key — make deepseek primary").
-          # No GitHub secret needed: Claude Code speaks the Anthropic protocol to
-          # DeepSeek's Anthropic-compatible endpoint via the proxy; the proxy
-          # strips the client auth and injects the real DeepSeek key. A GitHub
-          # Action sends no Origin header, which the proxy's gate allows.
-          # Verified 2026-06-14: POST …/api/llm/deepseek/anthropic/v1/messages
-          # returns a proper Anthropic message from deepseek-v4-flash.
-          ANTHROPIC_BASE_URL: https://chess-academy-pro.vercel.app/api/llm/deepseek/anthropic
-          ANTHROPIC_MODEL: deepseek-chat
           # Lets the triage step run `gh pr list` to check for prior autofix
           # attempts on the same error (the anti-bandaid gate) before patching.
           GH_TOKEN: ${{ github.token }}
         with:
-          # Dummy sentinel — satisfies the action's credential precheck. The
-          # real auth is injected by the Vercel proxy; whatever Claude Code
-          # sends here is stripped upstream.
-          anthropic_api_key: proxy
+          # Real frontier Claude — a subscription OAuth token is preferred (no
+          # per-token bill); a funded API key also works. One of these is
+          # guaranteed present by the `cred` gate above. Model defaults to a
+          # current Claude model (no ANTHROPIC_MODEL / base-url override).
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           prompt: |
             Beta testers hit these live errors in production (from PostHog Error Tracking):
 
