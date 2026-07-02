@@ -152,12 +152,19 @@ async function main() {
     return;
   }
 
-  // 3. Submit — only if still awaiting submission; else it's already in flight.
+  // 3. Submit / resubmit.
+  //   READY_FOR_REVIEW  → first submit.
+  //   UNRESOLVED_ISSUES → resubmit-after-rejection (issues resolved: new build
+  //                       #90 + updated metadata). PATCH submitted=true again —
+  //                       the API equivalent of "Resubmit to App Review".
+  //   already in flight  → nothing to do.
   const subState = (await api('GET', `/v1/reviewSubmissions/${sub.id}`)).data?.attributes?.state;
-  if (subState !== 'READY_FOR_REVIEW') {
+  const RESUBMITTABLE = new Set(['READY_FOR_REVIEW', 'UNRESOLVED_ISSUES']);
+  if (!RESUBMITTABLE.has(subState)) {
     console.log(`\n✅ reviewSubmission ${sub.id} is already ${subState} — already submitted / in review. Nothing to do.`);
     return;
   }
+  console.log(`\n${subState === 'UNRESOLVED_ISSUES' ? 'resubmitting after rejection' : 'submitting'} reviewSubmission ${sub.id} …`);
   const patched = await api('PATCH', `/v1/reviewSubmissions/${sub.id}`, {
     data: { type: 'reviewSubmissions', id: sub.id, attributes: { submitted: true } },
   });
