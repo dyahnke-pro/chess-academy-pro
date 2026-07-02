@@ -17,6 +17,7 @@ import { SUBLINE_NARRATION_PRO_NARODITSKY } from './sublineNarrationProNaroditsk
 import { SUBLINE_NARRATION_PRO_EXTRA } from './sublineNarrationProExtra';
 import { SUBLINE_NARRATION_PRO_ELITE } from './sublineNarrationProElite';
 import { SUBLINE_NARRATION_PRO_SAMAY_AMAN } from './sublineNarrationProSamayAman';
+import { SUBLINE_NARRATION_PRO_NAR_CARO } from './sublineNarrationProNaroditskyCaro';
 
 // HAND-AUTHORED subline narration (David 2026-06-17: "these are hand authored").
 // Each entry is written by hand, grounded in the real DB line + verified against
@@ -572,6 +573,8 @@ const MERGED_NARRATION: Record<string, SublineNarration> = {
   ...SUBLINE_NARRATION_PRO_ELITE,
   // Pro repertoire — Samay + Aman subline narration (house voice, line-grounded).
   ...SUBLINE_NARRATION_PRO_SAMAY_AMAN,
+  // Deep coverage — every frequent Naroditsky Caro-Kann deviation (transcript-grounded).
+  ...SUBLINE_NARRATION_PRO_NAR_CARO,
 };
 
 /** Hand-authored narration for a subline, or null to use the honest baseline. */
