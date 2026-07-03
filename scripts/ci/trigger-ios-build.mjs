@@ -13,7 +13,13 @@ import crypto from 'node:crypto';
 const WORKFLOW = '9DB6F815-51CF-4E96-A4DB-F533F24B1EF7';
 const CI_PRODUCT = 'B64A226C-C522-4D72-8815-27552E3E67DE';
 const APP = '6776418777';
-const TIMEOUT_MS = 40 * 60 * 1000;
+// 75 min. Bumped from 40 (David 2026-07-03): the FIRST Xcode Cloud build after
+// adding the @capgo native pod compiled the pod from scratch (no cache) and ran
+// past 40 min while still RUNNING, so the poll loop false-timed-out even though
+// the build itself was fine. Later builds cache the pod and finish faster, but
+// keep the generous ceiling so a cold pod build (or a slow ASC processing tail)
+// never trips a false failure again.
+const TIMEOUT_MS = 75 * 60 * 1000;
 // Which branch Xcode Cloud builds. Defaults to `main` so the nightly
 // daily-deploy is unchanged; overridable (e.g. to build a release branch that
 // deliberately excludes content on main — the App Store rejection resubmission
